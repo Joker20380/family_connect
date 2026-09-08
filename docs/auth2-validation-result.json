@@ -1,0 +1,31 @@
+{
+  "source_commit": "c8ff141",
+  "checked_at_utc": "2026-09-08T20:54:22Z",
+  "environment": "single Russian Docker host; generated QUIC payload, no Android TUN",
+  "rust_tests_passed": 2,
+  "python_tests_passed": 6,
+  "failover": {
+    "bytes": 16777216,
+    "sha256": "55c7e25571a69216de25162f191bb2847201a09ee7efe46b5bada034acc695d5",
+    "seconds": 13.788,
+    "path_switches": 1,
+    "quic_connections": 1,
+    "mutual_tls": true,
+    "catalog_epoch": 5
+  },
+  "unauthorized_device": "rejected: device not authorized",
+  "offline": {
+    "bytes": 16777216,
+    "sha256": "55c7e25571a69216de25162f191bb2847201a09ee7efe46b5bada034acc695d5",
+    "seconds": 12.217,
+    "path_switches": 0,
+    "quic_connections": 1,
+    "mutual_tls": true,
+    "catalog_epoch": 5
+  },
+  "revocation": {
+    "revocation_epoch": 4,
+    "closed_within_seconds": 2.477088084910065,
+    "client_exit_code": 1
+  }
+}

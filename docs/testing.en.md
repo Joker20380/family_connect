@@ -39,3 +39,14 @@ volunteer anti-abuse hardening, perfect transport recovery or production availab
 The reported connection count refers to the one inner QUIC connection, not to the two separate
 outer relay connections. No reconnect/resume of the application download is used to claim
 inner-session survival.
+
+## Verified run on September 8, 2026
+
+Source revision `c8ff141` passed 2 Rust and 6 Python tests on the server, plus all four
+integration checks. A 16 MiB transfer survived relay replacement in 13.788 s with one inner
+QUIC connection; revocation closed the device session after 2.48 s. These are observed test
+timings, not a guaranteed SLA. [Machine-readable report](auth2-validation-result.json).
+
+Real Russian IPv4 egress was tested separately for both WireGuard profiles in Linux
+containers; a physical Android test remains pending.
+[WireGuard report](wireguard-pilot-result.json) · [Connect](pilot.en.md).
