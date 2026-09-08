@@ -3,3 +3,5 @@ state
 artifacts
 core/target
 **/__pycache__
+
+state-v2

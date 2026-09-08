@@ -1,0 +1,18 @@
+{
+  "pilot": "Europe to Russia",
+  "endpoint": "185.251.89.19:51820",
+  "transport": "direct WireGuard",
+  "test_environment": "isolated Linux Docker clients; no physical Android test",
+  "profiles": {
+    "linux": {
+      "ip": "185.251.89.19",
+      "loc": "RU",
+      "ipv6_egress": "blocked"
+    },
+    "android": {
+      "ip": "185.251.89.19",
+      "loc": "RU",
+      "ipv6_egress": "blocked"
+    }
+  }
+}

@@ -1,20 +1,21 @@
 #!/bin/sh
 set -eu
 umask 077
-mkdir -p state
-if [ ! -f state/gateway.der ]; then
-  openssl req -x509 -newkey ec -pkeyopt ec_paramgen_curve:P-256 -nodes \
-    -keyout state/gateway-key.pem -out state/gateway.pem -days 30 \
-    -subj /CN=gateway.test -addext subjectAltName=DNS:gateway.test \
-    -addext basicConstraints=critical,CA:FALSE
-  openssl x509 -in state/gateway.pem -outform DER -out state/gateway.der
-  openssl pkcs8 -topk8 -nocrypt -in state/gateway-key.pem -outform DER -out state/gateway-key.der
-fi
-if [ ! -f state/relay-token ]; then openssl rand -hex 32 > state/relay-token; fi
-# Root-owned directory: allow unprivileged core to traverse and read only its lab credentials.
-chmod 711 state
-chown 65532:65532 state/gateway.der state/gateway-key.der state/relay-token
-chmod 400 state/gateway.der state/gateway-key.der state/relay-token
-# Other credentials remain root-only; never copy state into Git.
-docker run --rm --network none --read-only --cap-drop ALL \
-  -v "$PWD/state:/state:rw" family-connect-control:phase0 python scripts/init_state.py
+mkdir -p state-v2
+# RU: ключи создаются отдельно; в issuer передаётся только CSR.
+# EN: keys are created separately; only the CSR is consumed by the issuer.
+for name in gateway-lab relay-a relay-b client outsider; do
+  mkdir -p "state-v2/$name"
+  docker run --rm --network none --read-only \
+    -v "$PWD/state-v2/$name:/device:rw" family-connect-control:auth2 \
+    python scripts/identity.py --directory /device --name "$name" >/dev/null
+done
+docker run --rm --network none --read-only \
+  -v "$PWD/state-v2:/provision:rw" family-connect-control:auth2 python scripts/init_state.py
+for name in gateway-lab relay-a relay-b client outsider; do
+  mkdir -p "state-v2/cache-$name"
+  chown -R 65532:65532 "state-v2/$name" "state-v2/cache-$name"
+  chmod 700 "state-v2/$name" "state-v2/cache-$name"
+done
+chmod 755 state-v2/trust
+chmod 444 state-v2/trust/*

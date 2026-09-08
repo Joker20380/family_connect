@@ -14,7 +14,7 @@ import json
 from pathlib import Path
 r=json.loads(Path('artifacts/failover.json').read_text())
 assert r['bytes']==16*1024*1024
-assert r['quic_connections']==1
+assert r['quic_connections']==1 and r['mutual_tls']
 assert r['path_switches']>=1
 print('PASS: 16 MiB transfer survived relay loss over the same QUIC connection')
 PY

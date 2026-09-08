@@ -18,6 +18,9 @@ jobs:
       - run: docker compose build
       - run: sudo ./scripts/provision.sh
       - run: ./scripts/test_failover.sh
+      - run: ./scripts/test_auth.sh
+      - run: ./scripts/test_offline.sh
+      - run: python3 scripts/test_revocation.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:

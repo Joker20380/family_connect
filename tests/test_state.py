@@ -11,8 +11,11 @@ from control.app import sign_state, verify_state
 def fixture():
     key = Ed25519PrivateKey.generate()
     pub = key.public_key().public_bytes(Encoding.Raw, PublicFormat.Raw)
-    state = {"version": 1, "epoch": 4, "issued_at": 100, "expires_at": 200,
-             "nodes": [{"role": "relay", "internet_exit": False}]}
+    state = {"version": 2, "epoch": 4, "issued_at": 100, "expires_at": 200,
+             "nodes": [{"role": "relay", "internet_exit": False, "identity": "a"*64,
+                        "cert_sha256": "b"*64, "name": "relay-a",
+                        "endpoint": "127.0.0.1:4433", "server_name": "relay-a.test"}],
+             "devices": []}
     return key, pub, state
 
 
@@ -40,3 +43,14 @@ def test_other_root_not_trusted():
     key, pub, state = fixture()
     with pytest.raises(InvalidSignature):
         verify_state(sign_state(state, Ed25519PrivateKey.generate()), pub, now=150)
+
+
+def test_signed_duplicate_or_unknown_fields_rejected():
+    key, pub, state = fixture()
+    state["devices"] = [{"identity": "a"*64, "cert_sha256": "c"*64}]
+    with pytest.raises(ValueError):
+        verify_state(sign_state(state, key), pub, now=150)
+    state["devices"] = []
+    state["nodes"][0]["connect_anywhere"] = True
+    with pytest.raises(ValueError):
+        verify_state(sign_state(state, key), pub, now=150)
