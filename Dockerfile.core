@@ -1,0 +1,9 @@
+FROM rust:1-bookworm AS build
+WORKDIR /build
+COPY core/ .
+RUN cargo build --locked && cargo test --locked
+FROM debian:bookworm-slim
+COPY --from=build /build/target/debug/family-connect-core /usr/local/bin/family-connect-core
+COPY --from=build /build/Cargo.lock /usr/share/family-connect/Cargo.lock
+USER 65532:65532
+ENTRYPOINT ["family-connect-core"]

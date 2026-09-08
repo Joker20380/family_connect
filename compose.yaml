@@ -1,0 +1,63 @@
+name: family-connect
+x-core: &core
+  image: family-connect-core:phase0
+  restart: unless-stopped
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  pids_limit: 128
+  mem_limit: 256m
+  environment:
+    RELAY_TOKEN_FILE: /state/relay-token
+services:
+  control:
+    build:
+      context: .
+      dockerfile: Dockerfile.control
+    image: family-connect-control:phase0
+    restart: unless-stopped
+    ports: ["127.0.0.1:18080:8080"]
+    volumes: ["./state:/state:ro"]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 128m
+    networks: [management]
+  gateway:
+    <<: *core
+    build:
+      context: .
+      dockerfile: Dockerfile.core
+    volumes: ["./state/gateway.der:/state/gateway.der:ro", "./state/gateway-key.der:/state/gateway-key.der:ro"]
+    command: [gateway, "0.0.0.0:4433", /state/gateway.der, /state/gateway-key.der]
+    networks:
+      lab:
+        ipv4_address: 172.29.91.10
+  relay-a:
+    <<: *core
+    volumes: ["./state/relay-token:/state/relay-token:ro"]
+    command: [relay, "0.0.0.0:4444", "172.29.91.10:4433"]
+    networks:
+      lab:
+        ipv4_address: 172.29.91.11
+  relay-b:
+    <<: *core
+    volumes: ["./state/relay-token:/state/relay-token:ro"]
+    command: [relay, "0.0.0.0:4444", "172.29.91.10:4433"]
+    networks:
+      lab:
+        ipv4_address: 172.29.91.12
+  client:
+    <<: *core
+    profiles: [test]
+    restart: "no"
+    volumes: ["./state/gateway.der:/state/gateway.der:ro", "./state/relay-token:/state/relay-token:ro"]
+    command: [client, /state/gateway.der, "172.29.91.11:4444", "172.29.91.12:4444"]
+    networks: [lab]
+networks:
+  management: {}
+  lab:
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.29.91.0/24

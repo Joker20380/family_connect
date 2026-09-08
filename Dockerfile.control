@@ -1,0 +1,10 @@
+FROM python:3.13-slim
+WORKDIR /app
+COPY control/requirements.txt control/requirements.lock ./
+RUN pip install --no-cache-dir -r requirements.lock
+COPY control /app/control
+COPY tests /app/tests
+COPY scripts /app/scripts
+RUN python -m pytest -q
+ENV PYTHONPATH=/app
+CMD ["uvicorn", "control.app:app", "--host", "0.0.0.0", "--port", "8080", "--no-access-log"]

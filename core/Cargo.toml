@@ -1,0 +1,12 @@
+[package]
+name = "family-connect-core"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1"
+quinn = "0.11"
+rustls = { version = "0.23", default-features = false, features = ["ring", "std"] }
+tokio = { version = "1", features = ["full"] }
+sha2 = "0.10"
+hex = "0.4"
