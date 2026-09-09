@@ -68,6 +68,10 @@ Obtaining a certificate requires publisher registration and verification with a 
 
 ## Signing as an individual
 
-For the owner without a company, the selected option is Certum Standard Code Signing in the Cloud (SimplySign), which supports individual certificate details. As of 2026-09-09 the shop lists prices from €209; confirm duration and final cost at checkout. [Product and requirements](https://shop.certum.eu/standard-code-signing-in-the-cloud.html).
+For the owner without a company, one available option is Certum Standard Code Signing in the Cloud (SimplySign), which supports individual certificate details. As of 2026-09-09 the shop lists prices from €209; confirm duration and final cost at checkout. [Product and requirements](https://shop.certum.eu/standard-code-signing-in-the-cloud.html).
 
 Verify identity and address directly with the provider; never put documents in Git or chat. [Individual verification](https://support.certum.eu/en/code-signing-required-documents/). Once issued, install SimplySign Desktop on the publisher's signing computer and unlock certificate access. Customers do not need it. `build.ps1 -SignedRelease` uses the certificate through SignTool. Signing does not automatically eliminate SmartScreen warnings.
+
+## Free signing
+
+TLS and EXE signing use different certificate types; [Let’s Encrypt does not issue code-signing certificates](https://letsencrypt.org/docs/faq/). [SignPath Foundation](https://signpath.org/terms) offers free signing to approved open-source projects, subject to OSI licensing, verifiable builds and program requirements. A public GitHub repository alone does not make the project open source. No license has been changed or application submitted; SignPath signing has not been obtained and is not guaranteed. Purchasing a commercial certificate is not required for development.

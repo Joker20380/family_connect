@@ -14,12 +14,16 @@ if(-not(Test-Path $vendor)) {
     git clone https://git.zx2c4.com/wireguard-windows $vendor
     Check-Exit
 }
-git -C $vendor checkout --detach a4b7f47672b393698127ca14a58f5953bc8b5217
+git -C $vendor checkout --force --detach a4b7f47672b393698127ca14a58f5953bc8b5217
 Check-Exit
-# Git's curl uses its maintained TLS backend; keep certificate verification enabled.
-# The Windows system curl can fail on a peer's TLS close_notify during these downloads.
-$gitCurl="${env:ProgramFiles}\Git\mingw64\bin"
-if(Test-Path "$gitCurl/curl.exe") { $env:PATH="$gitCurl;$env:PATH" }
+# Keep upstream dependency hashes and URLs; use PowerShell's downloader to avoid
+# system curl's intermittent Schannel close_notify failures on the archive server.
+$upstream=Join-Path $vendor 'build.bat'
+$batch=Get-Content $upstream -Raw
+$original='curl -#fLo %1 %2 || exit /b 1'
+if(-not $batch.Contains($original)){throw 'Upstream download instruction changed'}
+$replacement='pwsh.exe -NoProfile -NonInteractive -File "'+$PSScriptRoot+'\download-dependency.ps1" -Url "%2" -Output "%1" || exit /b 1'
+$batch.Replace($original,$replacement)|Set-Content $upstream -Encoding ascii
 Push-Location "$vendor/embeddable-dll-service"
 try {
     for($attempt=1;$attempt -le 3;$attempt++) {
