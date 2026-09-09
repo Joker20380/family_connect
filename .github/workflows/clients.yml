@@ -36,6 +36,9 @@ jobs:
           dotnet-version: '10.0.x'
       - shell: pwsh
         run: ./clients/windows/build.ps1
+      - name: Defender scan when available
+        shell: pwsh
+        run: ./clients/windows/scan.ps1
       - name: Install and check broker without connecting VPN
         shell: pwsh
         run: |
