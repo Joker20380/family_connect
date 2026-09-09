@@ -13,7 +13,7 @@ internal sealed class Broker:ServiceBase
     }
     protected override void OnStop()
     {
-        stop.Cancel();loop?.GetAwaiter().GetResult();Native.StopTunnel();
+        RequestAdditionalTime(60000);stop.Cancel();loop?.GetAwaiter().GetResult();Native.StopTunnel();
     }
     async Task Listen()
     {

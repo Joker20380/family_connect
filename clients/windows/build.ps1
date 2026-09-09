@@ -1,5 +1,10 @@
 param([switch]$SignedRelease, [string]$SigningThumbprint=$env:FC_SIGNING_THUMBPRINT)
 $ErrorActionPreference='Stop'
+trap {
+    $message=($_.Exception.Message+' at '+$_.InvocationInfo.PositionMessage).Replace('%','%25').Replace("`r",'%0D').Replace("`n",'%0A')
+    Write-Host "::error::$message"
+    exit 1
+}
 Set-Location $PSScriptRoot
 function Check-Exit { if($LASTEXITCODE -ne 0){throw "Build command failed: $LASTEXITCODE"} }
 if($SignedRelease -and $SigningThumbprint -notmatch '^[0-9a-fA-F]{40}$') { throw 'A trusted code-signing certificate is required for signed releases.' }
@@ -12,7 +17,14 @@ if(-not(Test-Path $vendor)) {
 git -C $vendor checkout --detach a4b7f47672b393698127ca14a58f5953bc8b5217
 Check-Exit
 Push-Location "$vendor/embeddable-dll-service"
-try { & cmd.exe /d /c build.bat; Check-Exit } finally { Pop-Location }
+try {
+    & cmd.exe /d /c build.bat 2>&1 | Tee-Object -Variable vendorLog
+    if($LASTEXITCODE -ne 0){
+        $tail=($vendorLog|Select-Object -Last 15|Out-String).Replace('%','%25').Replace("`r",'%0D').Replace("`n",'%0A')
+        Write-Host "::error::WireGuard build: $tail"
+        throw 'WireGuard native build failed'
+    }
+} finally { Pop-Location }
 dotnet run --project Tests/Tests.csproj -c Release
 Check-Exit
 dotnet publish FamilyConnect.csproj -c Release -r win-x64 --self-contained true -o build/publish
