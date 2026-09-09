@@ -2,6 +2,7 @@
 import hashlib
 import json
 import os
+import ipaddress
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
@@ -38,10 +39,12 @@ if not (control / 'signing.key').exists():
     (control / 'signing.key').chmod(0o600)
 root_key = ed25519.Ed25519PrivateKey.from_private_bytes((control / 'signing.key').read_bytes())
 (trust / 'root.pub').write_bytes(root_key.public_key().public_bytes_raw())
+prefix = os.environ.get('LAB_NETWORK_PREFIX', '172.29.92')
+ipaddress.IPv4Network(prefix + '.0/24')
 nodes, devices = [], []
-for name, role, endpoint in [('gateway-lab','gateway','172.29.92.10:4433'),
-                             ('relay-a','relay','172.29.92.11:4444'),
-                             ('relay-b','relay','172.29.92.12:4444'),
+for name, role, endpoint in [('gateway-lab','gateway',f'{prefix}.10:4433'),
+                             ('relay-a','relay',f'{prefix}.11:4444'),
+                             ('relay-b','relay',f'{prefix}.12:4444'),
                              ('client','device',None),('outsider','device',None)]:
     directory = root / name
     # Issuer consumes a public CSR, never the device private key.

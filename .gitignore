@@ -7,3 +7,5 @@ __pycache__/
 .env
 
 state-v2/
+
+state-v3/

@@ -1,6 +1,7 @@
-//! Authenticated, catalog-discovered Phase 0 laboratory; no public egress.
+//! Authenticated discovery and relay core with an opt-in controlled packet gateway.
 mod discovery;
 mod tls;
+mod packet;
 use anyhow::{bail, Context, Result};
 use discovery::{Discovery, Node};
 use quinn::{Connection, Endpoint};
@@ -14,7 +15,7 @@ async fn monitor(connection: Connection, discovery: Arc<Discovery>, own: Node, d
             _=connection.closed()=>return,
             _=tokio::time::sleep(Duration::from_secs(1))=>{
                 let state=discovery.state.read().await;
-                if !state.device_allowed(&device_pin) || state.node(&own.name,&own.role).map(|n|n.cert_sha256 != own.cert_sha256).unwrap_or(true) {
+                if !state.device_allowed(&device_pin) || state.node(&own.name,&own.role).map(|n|n.cert_sha256 != own.cert_sha256 || n.internet_exit != own.internet_exit).unwrap_or(true) {
                     eprintln!("authorization lease ended");
                     connection.close(1u32.into(),b"authorization lease ended"); return;
                 }
@@ -33,6 +34,9 @@ async fn authorized(incoming: quinn::Incoming, discovery: &Arc<Discovery>) -> Re
 async fn server(role: &str, name: &str, discovery: Arc<Discovery>) -> Result<()> {
     let own=discovery.state.read().await.node(name,role)?;
     if own.cert_sha256 != tls::local_pin()? { bail!("local certificate does not match signed identity"); }
+    if role=="gateway" && std::env::var("ENABLE_PACKET_GATEWAY").as_deref()==Ok("1") && !own.internet_exit {
+        bail!("signed gateway does not authorize internet exit");
+    }
     let endpoint=Endpoint::server(tls::server(role=="relay")?, own.endpoint)?;
     let slots=Arc::new(Semaphore::new(64));
     eprintln!("authenticated lab node ready");
@@ -44,8 +48,8 @@ async fn server(role: &str, name: &str, discovery: Arc<Discovery>) -> Result<()>
             let _permit=permit;
             let result:Result<()>=async {
                 let (connection,pin)=authorized(incoming,&discovery).await?;
-                let watcher=tokio::spawn(monitor(connection.clone(),discovery.clone(),own,pin));
-                let result=if relay {relay_session(connection.clone(),discovery).await} else {gateway_session(connection.clone()).await};
+                let watcher=tokio::spawn(monitor(connection.clone(),discovery.clone(),own.clone(),pin));
+                let result=if relay {relay_session(connection.clone(),discovery).await} else {gateway_session(connection.clone(), &discovery, &own).await};
                 watcher.abort(); connection.close(0u32.into(),b"session ended"); result
             }.await;
             if result.is_err() {eprintln!("connection rejected or ended");}
@@ -53,9 +57,17 @@ async fn server(role: &str, name: &str, discovery: Arc<Discovery>) -> Result<()>
     }
     Ok(())
 }
-async fn gateway_session(connection: Connection) -> Result<()> {
+async fn gateway_session(connection: Connection, discovery: &Discovery, own: &Node) -> Result<()> {
     let (mut send,mut recv)=connection.accept_bi().await?;
     let mut request=[0u8;1]; recv.read_exact(&mut request).await?;
+    if request == [2] {
+        // Recheck the current signed grant for every new packet session, not only at startup.
+        let current=discovery.state.read().await.node(&own.name,"gateway")?;
+        if !current.internet_exit || current.cert_sha256 != own.cert_sha256 {bail!("packet gateway grant withdrawn");}
+        if std::env::var("ENABLE_PACKET_GATEWAY").as_deref() != Ok("1") {bail!("packet gateway disabled");}
+        send.write_all(&[2]).await?;
+        return packet::gateway(send, recv).await;
+    }
     if request != [1] {bail!("unsupported lab operation");}
     let block=vec![0x5au8;65536];
     for _ in 0..256 {send.write_all(&block).await?;tokio::time::sleep(Duration::from_millis(40)).await;}
@@ -99,7 +111,7 @@ async fn connect_node(endpoint: &Endpoint,node: &Node) -> Result<Connection> {
     }
     Ok(connection)
 }
-async fn client(discovery: Arc<Discovery>, probe: bool) -> Result<()> {
+async fn client(discovery: Arc<Discovery>, probe: bool, packets: bool) -> Result<()> {
     let state=discovery.state.read().await.clone();
     let gateway=state.node("gateway-lab","gateway")?;
     let mut endpoint=Endpoint::client("0.0.0.0:0".parse()?)?;
@@ -168,6 +180,12 @@ async fn client(discovery: Arc<Discovery>, probe: bool) -> Result<()> {
     // independent of traffic and never exposes the device private key.
     let watcher=tokio::spawn(monitor(connection.clone(),discovery.clone(),gateway,local_pin));
     let (mut send,mut recv)=connection.open_bi().await?;
+    if packets {
+        let result=packet::client(send,recv).await;
+        eprintln!("packet tunnel ended; inner_quic_connections=1 path_switches={}",switches.load(Ordering::Relaxed));
+        watcher.abort(); connection.close(0u32.into(),b"packet session ended");
+        return result;
+    }
     send.write_all(&[1]).await?; send.finish()?;
     let started=Instant::now();
     let data=tokio::time::timeout(Duration::from_secs(60),recv.read_to_end(16*1024*1024)).await??;
@@ -185,9 +203,10 @@ async fn main()->Result<()> {
     match args.get(1).map(String::as_str) {
         Some("gateway")=>server("gateway",args.get(2).context("node name required")?,discovery).await,
         Some("relay")=>server("relay",args.get(2).context("node name required")?,discovery).await,
-        Some("client")=>client(discovery,false).await,
-        Some("probe-relay")=>client(discovery,true).await,
+        Some("client")=>client(discovery,false,false).await,
+        Some("packet-client")=>client(discovery,false,true).await,
+        Some("probe-relay")=>client(discovery,true,false).await,
         Some("verify-state")=>{println!("verified catalog epoch {}",discovery.state.read().await.epoch);Ok(())},
-        _=>bail!("expected gateway|relay|client|probe-relay|verify-state")
+        _=>bail!("expected gateway|relay|client|packet-client|probe-relay|verify-state")
     }
 }

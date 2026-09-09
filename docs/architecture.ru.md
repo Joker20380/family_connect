@@ -97,3 +97,9 @@ mounts для ролей. Сеть данных — Docker internal. У control 
 Источники: [миграция QUIC](https://www.rfc-editor.org/rfc/rfc9000.html#section-9),
 [проверка клиентов rustls](https://docs.rs/rustls/latest/rustls/server/struct.WebPkiClientVerifier.html),
 [соединения и датаграммы Quinn](https://docs.rs/quinn/latest/quinn/struct.Connection.html).
+
+## Отдельный стенд реального трафика
+
+Следующий шаг реализован отдельно от описанного выше стенда аутентификации:
+[WireGuard-интерфейс через QUIC и relay](data-plane.ru.md). Он включает управляемый
+IPv4-выход и сохраняет прежний запрет выхода на relay.

@@ -96,3 +96,9 @@ an egress-anchor/state design and separate fault tests. Relay path migration alo
 References: [QUIC migration](https://www.rfc-editor.org/rfc/rfc9000.html#section-9),
 [rustls client verifier](https://docs.rs/rustls/latest/rustls/server/struct.WebPkiClientVerifier.html),
 [Quinn connections/datagrams](https://docs.rs/quinn/latest/quinn/struct.Connection.html).
+
+## Separate real-traffic testbed
+
+The next step is implemented separately from the authentication lab described above:
+[WireGuard interface over QUIC and relays](data-plane.en.md). It enables controlled IPv4
+egress while retaining the relay non-exit invariant.

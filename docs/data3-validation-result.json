@@ -1,0 +1,27 @@
+{
+  "gateway_ip": "185.251.89.19",
+  "country": "RU",
+  "bytes": 8388608,
+  "bytes_before_relay_loss": 708608,
+  "sha256_observed": "f38469a7ac373e721e1591bbf5755647f669ddc76042d713b1047435368eae7b",
+  "https_connections": 1,
+  "seconds": 28.993352,
+  "inner_quic_connections": 1,
+  "relay_switches": 1,
+  "ipv6_egress": "blocked",
+  "both_relays_down": "no public connectivity",
+  "environment": "single-host Linux/WireGuard namespaces; public HTTPS destination",
+  "recorded_at_utc": "2026-09-09T09:35:38.992935+00:00",
+  "rust_tests_passed": 4,
+  "python_tests_passed": 6,
+  "unauthorized_device": "rejected: device not authorized (code 2)",
+  "download_rate_limit_bytes_per_second": 262144,
+  "tested_sources_sha256": {
+    "core/src/main.rs": "9ff2be816e6625a4dcdfa93e73f6b8ef5c3d7ebebd3431d9ec6ebb5b9ce8ce0f",
+    "core/src/packet.rs": "d69fdc5ec586b90580ad6fa6dffd1a25a35c8fe8f39aca5dcb0238ce8a967cd5",
+    "core/src/tls.rs": "14b0f759b63441090b5b12042333683371540054e3a6584d0d2c73f22a7133be",
+    "core/src/discovery.rs": "3ade6619ae861ccac083c90ce0de5bd8d9ddac1252c4ec2b59d7c87f22c2f101",
+    "core/Cargo.lock": "5c22912140faeb6ad904479e397ea9aac5a471d6e391cb434aa4f750b47295b6",
+    "scripts/test_data.py": "5d7e5fdcd3fe23189585cf717d82720860414deae60dd87c41e4db6becaaadb0"
+  }
+}

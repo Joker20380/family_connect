@@ -13,6 +13,12 @@ and Linux, with distinct device keys. It provides real IPv4 Internet egress but 
 integrated with Rust discovery, family accounts or automatic relay selection.
 [Connection instructions and limits](docs/pilot.en.md).
 
+## Real traffic through relays
+
+A separate Linux testbed connects a real WireGuard interface through the inner QUIC session
+to controlled IPv4 egress. [Design and tests](docs/data-plane.en.md).
+Existing user profiles remain direct; the Android application is not implemented yet.
+
 ## Current increment: authenticated discovery laboratory
 
 - TLS 1.3 mutual authentication on outer client-to-relay QUIC connections and on the
@@ -51,8 +57,9 @@ See [operations](docs/operations.en.md) for restart, key protection and local in
 
 ## Boundaries
 
-This is still Phase 0, not an Android VPN, public volunteer network or censorship-resistance
-claim. It transfers generated test bytes rather than TUN Internet packets. Gateway replacement,
+The authentication lab above still transfers generated test bytes. The separate data testbed
+now carries real IP traffic, but neither is an Android app, public volunteer network or
+censorship-resistance claim. Gateway replacement,
 mobile network migration, general transport diversity and public enrollment remain pending.
 
 The lab uses one CA and an online Ed25519 state signer. A production design still needs

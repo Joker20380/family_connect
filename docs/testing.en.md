@@ -50,3 +50,9 @@ timings, not a guaranteed SLA. [Machine-readable report](auth2-validation-result
 Real Russian IPv4 egress was tested separately for both WireGuard profiles in Linux
 containers; a physical Android test remains pending.
 [WireGuard report](wireguard-pilot-result.json) · [Connect](pilot.en.md).
+
+## Separate real-traffic testbed
+
+The next step is implemented separately from the authentication lab described above:
+[WireGuard interface over QUIC and relays](data-plane.en.md). It enables controlled IPv4
+egress while retaining the relay non-exit invariant.

@@ -1,0 +1,125 @@
+name: family-connect-data
+x-core: &core
+  image: family-connect-core:data3
+  restart: unless-stopped
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  pids_limit: 128
+  mem_limit: 256m
+  depends_on:
+    control:
+      condition: service_healthy
+  environment: &environment
+    IDENTITY_DIR: /identity
+    TRUST_ROOT_FILE: /trust/root.pub
+    CATALOG_CACHE: /cache/catalog.json
+    BOOTSTRAP_URLS: http://172.29.93.2:8080/v1/network-state
+    GATEWAY_NAME: gateway-lab
+services:
+  control:
+    build:
+      context: .
+      dockerfile: Dockerfile.control
+    image: family-connect-control:data3
+    restart: unless-stopped
+    ports: ["127.0.0.1:18081:8080"]
+    volumes: ["./state-v3/control:/state:ro"]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 128m
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/v1/network-state', timeout=2).read()"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      management: {}
+      lab3:
+        ipv4_address: 172.29.93.2
+  gateway:
+    <<: *core
+    build:
+      context: .
+      dockerfile: Dockerfile.core
+    volumes: ["./state-v3/gateway-lab:/identity:ro", "./state-v3/trust:/trust:ro", "./state-v3/cache-gateway-lab:/cache:rw"]
+    environment:
+      <<: *environment
+      ENABLE_PACKET_GATEWAY: "1"
+    sysctls:
+      net.ipv4.ip_forward: "1"
+      net.ipv6.conf.all.forwarding: "0"
+    command: [gateway, gateway-lab]
+    networks:
+      lab3:
+        ipv4_address: 172.29.93.10
+      egress: {}
+  relay-a:
+    <<: *core
+    volumes: ["./state-v3/relay-a:/identity:ro", "./state-v3/trust:/trust:ro", "./state-v3/cache-relay-a:/cache:rw"]
+    command: [relay, relay-a]
+    networks:
+      lab3:
+        ipv4_address: 172.29.93.11
+  relay-b:
+    <<: *core
+    volumes: ["./state-v3/relay-b:/identity:ro", "./state-v3/trust:/trust:ro", "./state-v3/cache-relay-b:/cache:rw"]
+    command: [relay, relay-b]
+    networks:
+      lab3:
+        ipv4_address: 172.29.93.12
+  client:
+    <<: *core
+    restart: "no"
+    volumes: ["./state-v3/client:/identity:ro", "./state-v3/trust:/trust:ro", "./state-v3/cache-client:/cache:rw"]
+    command: [packet-client]
+    networks: [lab3]
+  outsider:
+    <<: *core
+    profiles: [test]
+    restart: "no"
+    volumes: ["./state-v3/outsider:/identity:ro", "./state-v3/trust:/trust:ro", "./state-v3/cache-outsider:/cache:rw"]
+    command: [probe-relay]
+    networks: [lab3]
+  gateway-wg:
+    build:
+      context: .
+      dockerfile: pilot/Dockerfile
+    image: family-connect-wireguard:data3
+    restart: unless-stopped
+    network_mode: service:gateway
+    depends_on: [gateway]
+    cap_drop: [ALL]
+    cap_add: [NET_ADMIN]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    volumes:
+      - ./state-v3/wg-gateway:/keys:ro
+      - ./data/gateway.sh:/gateway.sh:ro
+    entrypoint: [sh, /gateway.sh]
+    mem_limit: 128m
+    pids_limit: 64
+  client-wg:
+    image: family-connect-wireguard:data3
+    restart: "no"
+    network_mode: service:client
+    depends_on: [client]
+    cap_drop: [ALL]
+    cap_add: [NET_ADMIN]
+    security_opt: [no-new-privileges:true]
+    volumes:
+      - ./state-v3/wg-client:/keys:ro
+      - ./data/client.sh:/client.sh:ro
+    entrypoint: [sh, /client.sh]
+    mem_limit: 128m
+    pids_limit: 64
+
+networks:
+  egress: {}
+  management: {}
+  lab3:
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.29.93.0/24

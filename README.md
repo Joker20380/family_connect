@@ -9,3 +9,5 @@
 RU: Изолированный исследовательский стенд защищённой связи для семей. Это ещё не VPN-приложение для конечных пользователей.
 
 EN: An isolated research laboratory for private family connectivity. This is not yet an end-user VPN application.
+
+- Реальный IP-трафик / Real IP traffic: [Русский](docs/data-plane.ru.md) · [English](docs/data-plane.en.md)
