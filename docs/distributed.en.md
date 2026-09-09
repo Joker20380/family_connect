@@ -2,6 +2,8 @@
 
 [Русский](distributed.ru.md) · [Home](../README.en.md)
 
+**Status: the cross-server deployment was decommissioned at the owner’s request.** Family Connect code, keys, containers, networks, images and installation archives were removed from `186.246.51.201`. The server is reserved for websites; do not redeploy VPN services there without a new explicit instruction from the owner. The primary site tunnel was removed and catalog epoch 3 contains gateway-lab, relay-a and relay-b. The material below is historical test documentation, not the current deployment.
+
 ## Deployed topology
 
 - `185.251.89.19`: control plane, controlled Russian gateway and backup relay-a.

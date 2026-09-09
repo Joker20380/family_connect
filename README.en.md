@@ -8,7 +8,7 @@ Family Plan, invitations and one Connect button with automatic route selection.
 
 ## Two server sites
 
-Remote relay on a second VPS and failover on its loss: [topology and results](docs/distributed.en.md).
+Server `186.246.51.201` has been removed from the VPN; its code, keys and containers were deleted. The current network remains on `185.251.89.19`. [Historical two-VPS test](docs/distributed.en.md).
 
 ## Practical pilot: Europe → Russia
 
