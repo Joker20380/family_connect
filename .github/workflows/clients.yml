@@ -5,6 +5,9 @@ on:
   pull_request:
     paths: ['clients/**', '.github/workflows/clients.yml']
   workflow_dispatch:
+concurrency:
+  group: family-connect-clients-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
@@ -29,6 +32,7 @@ jobs:
           path: clients/android/app/build/outputs/apk/debug/*.apk
   windows:
     runs-on: windows-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
@@ -39,21 +43,23 @@ jobs:
       - name: Defender scan when available
         shell: pwsh
         run: ./clients/windows/scan.ps1
-      - name: Install and check broker without connecting VPN
+      - name: Install application and service
         shell: pwsh
-        run: |
-          $installer = Resolve-Path clients/windows/dist/*pilot-unsigned.exe
-          $p = Start-Process $installer -ArgumentList '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP- /LOG=install.log' -Wait -PassThru
-          if ($p.ExitCode -ne 0) { $tail=(Get-Content install.log -Tail 12) -join '%0A'; Write-Host "::error::Installation failed: $($p.ExitCode) $tail"; throw 'Installation failed' }
-          ./clients/windows/verify-driver.ps1
-          $app = "$env:ProgramFiles/Family Connect/FamilyConnect.exe"
-          $p = Start-Process $app -ArgumentList '/broker-test' -Wait -PassThru
-          if ($p.ExitCode -ne 0) { $detail=Get-Content "$env:TEMP/fc-broker-check.txt" -ErrorAction SilentlyContinue; Write-Host "::error::Broker check failed: $($p.ExitCode) $detail"; throw "Broker check failed" }
-          $p = Start-Process $app -ArgumentList '/smoke' -Wait -PassThru
-          if ($p.ExitCode -ne 0) { throw 'UI smoke failed' }
-          $p = Start-Process "$env:ProgramFiles/Family Connect/unins000.exe" -ArgumentList '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART' -Wait -PassThru
-          if ($p.ExitCode -ne 0) { throw 'Uninstall failed' }
-          if (Get-Service FamilyConnectBroker -ErrorAction SilentlyContinue) { throw 'Broker left behind' }
+        run: ./clients/windows/test-install.ps1 -Stage Install
+      - name: Load signed driver without routes
+        shell: pwsh
+        timeout-minutes: 2
+        run: ./clients/windows/verify-driver.ps1
+      - name: Check broker activation API
+        shell: pwsh
+        run: ./clients/windows/test-install.ps1 -Stage Broker
+      - name: Check user interface
+        shell: pwsh
+        run: ./clients/windows/test-install.ps1 -Stage UI
+      - name: Uninstall application and service
+        if: always()
+        shell: pwsh
+        run: ./clients/windows/test-install.ps1 -Stage Uninstall
       - uses: actions/upload-artifact@v4
         with:
           name: FamilyConnect-Windows-Installer-pilot-unsigned
