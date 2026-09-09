@@ -6,7 +6,8 @@ import sys
 import tkinter as tk
 from tkinter import filedialog,ttk,messagebox
 import urllib.request
-from backend import backend
+from backend import backend, BackendError
+import webbrowser
 
 RU=locale.getlocale()[0] and locale.getlocale()[0].lower().startswith('ru')
 WORDS={
@@ -18,6 +19,8 @@ WORDS={
  'hint':('Прямое подключение','Direct connection'),
  'pending':('Выполняется…','Working…'),
  'error':('Не удалось выполнить действие. Проверьте профиль, системный VPN и разрешения.','Operation failed. Check the profile, system VPN and permissions.'),
+ 'retry':('Повторить проверку','Retry setup'),
+ 'install':('Установить WireGuard','Install WireGuard'),
  'system':('Linux: нужен NetworkManager. Windows: официальный WireGuard и запуск от администратора.','Linux: NetworkManager required. Windows: official WireGuard and administrator rights required.'),
  'quality':('Включённый туннель не подтверждает доступность интернета.','An active tunnel does not confirm Internet connectivity.'),
  'closing':('Закрытие окна не отключает VPN. Продолжить?','Closing this window keeps the VPN running. Continue?'),
@@ -43,6 +46,9 @@ class App:
         self.check=ttk.Button(row,command=self.check_ip);self.check.pack(side='right')
         self.note=tk.Label(self.frame,bg='#101923',fg='#91a9bd',wraplength=390,justify='center');self.note.pack(pady=(20,8))
         self.detail=tk.Label(self.frame,bg='#101923',fg='#e8cda4',wraplength=390,justify='center');self.detail.pack()
+        self.setup=tk.Frame(self.frame,bg='#101923');self.setup.pack(pady=8)
+        self.retry=ttk.Button(self.setup,command=lambda:self.submit(self.initialize))
+        self.install=ttk.Button(self.setup,command=lambda:webbrowser.open('https://www.wireguard.com/install/'))
         ttk.Button(self.frame,text='RU / EN',command=self.language).pack(side='bottom',pady=10)
         root.protocol('WM_DELETE_WINDOW',self.close)
         self.paint();root.after(100,self.drain)
@@ -54,6 +60,11 @@ class App:
         self.toggle.config(text=self.t('disconnect' if self.active else 'connect'),state='disabled' if self.busy or not self.items or self.active is None else 'normal')
         self.add.config(text=self.t('import'),state='disabled' if self.busy or self.driver is None else 'normal')
         self.check.config(text=self.t('check'),state='normal' if self.active and not self.busy else 'disabled')
+        self.retry.config(text=self.t('retry'),state='disabled' if self.busy else 'normal');self.install.config(text=self.t('install'))
+        if self.driver is None:
+            self.retry.pack(side='left')
+            if sys.platform=='win32':self.install.pack(side='left',padx=5)
+        else:self.retry.pack_forget();self.install.pack_forget()
         self.note.config(text=self.t('quality'));self.choose.config(state='disabled' if self.busy else 'readonly')
     def language(self):self.ru=not self.ru;self.paint()
     def selected(self):
@@ -79,9 +90,21 @@ class App:
                         self.detail.config(text='' if answer else self.t('empty'));self.active=None
                     elif kind=='state':self.active=answer
                     elif kind=='ip':self.detail.config(text=answer)
-                except Exception:
-                    if kind=='state':self.active=None
-                    self.detail.config(text=self.t('error')+'\n'+self.t('system'))
+                except Exception as exc:
+                    self.active=None
+                    messages={
+                        'WireGuard not installed':('Установите официальный WireGuard, затем нажмите «Повторить проверку».','Install official WireGuard, then click Retry setup.'),
+                        'Administrator rights required':('Перезапустите Family Connect от имени администратора.','Run Family Connect as administrator.'),
+                        'WireGuard signature verification failed':('Подпись WireGuard не прошла проверку. Переустановите его с официального сайта.','WireGuard signature verification failed. Reinstall it from the official website.')}
+                    if isinstance(exc,BackendError):
+                        code=str(exc)
+                        text=messages[code][0 if self.ru else 1] if code in messages else self.t('error')+'\n'+code
+                    elif isinstance(exc,ValueError):
+                        text=('Профиль не поддерживается: нужен отдельный полный профиль WireGuard для Windows.' if self.ru else 'Unsupported profile: import a separate full-tunnel WireGuard profile for Windows.')
+                    elif isinstance(exc,PermissionError):
+                        text=('Нет доступа к файлу или хранилищу профилей. Проверьте права администратора.' if self.ru else 'Access to the file or profile store denied. Check administrator permissions.')
+                    else:text=self.t('error')+'\n'+type(exc).__name__
+                    self.detail.config(text=text)
                 self.paint()
         except queue.Empty:pass
         self.root.after(100,self.drain)

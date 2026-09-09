@@ -108,3 +108,7 @@ Integration references: [WireGuard embedding](https://www.wireguard.com/embeddin
 [Windows services and secure storage](https://git.zx2c4.com/wireguard-windows/about/docs/enterprise.md).
 
 The local debug signing key is retained only on the laptop under `state-client-build/android-signing/`, outside Git. Keep it to support updates over the locally installed build.
+
+### Windows troubleshooting
+
+If the profile list is empty and setup fails, install official WireGuard using Install WireGuard, then select Retry setup. Run Family Connect as administrator. WireGuard signature verification remains mandatory. After setup succeeds, import a separate Windows device profile using Add profile. The client displays specific setup failures without exposing profile contents or system command output.

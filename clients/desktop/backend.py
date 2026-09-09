@@ -21,7 +21,8 @@ class BackendError(Exception): pass
 def run(*args):
     result=subprocess.run(args,capture_output=True,text=True,timeout=30,
         creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0) if sys.platform=='win32' else 0)
-    if result.returncode: raise BackendError('System VPN operation failed')
+    if result.returncode:
+        raise BackendError('System VPN operation failed: '+Path(args[0]).name+'; exit='+str(result.returncode))
     return result.stdout.strip()
 
 
@@ -61,7 +62,15 @@ class Windows:
     def __init__(self):
         if not ctypes.windll.shell32.IsUserAnAdmin(): raise BackendError('Administrator rights required')
         script=Path(getattr(sys,'_MEIPASS',Path(__file__).parent))/'verify-wireguard.ps1'
-        self.exe=Path(run('powershell.exe','-NoProfile','-NonInteractive','-Command',script.read_text(encoding='utf-8')))
+        try:
+            answer=subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-Command',script.read_text(encoding='utf-8')],capture_output=True,text=True,timeout=30,creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+        except FileNotFoundError:
+            raise BackendError('PowerShell unavailable') from None
+        errors={20:'WireGuard not installed',21:'WireGuard signature verification failed'}
+        if answer.returncode:
+            raise BackendError(errors.get(answer.returncode,'WireGuard verification failed; exit='+str(answer.returncode)))
+        self.exe=Path(answer.stdout.strip())
+        if not self.exe.is_file(): raise BackendError('WireGuard not installed')
         self.directory=self.exe.parent/'Data'/'Configurations'
     def _state(self,name):
         from ctypes import wintypes as w
