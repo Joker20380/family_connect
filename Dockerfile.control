@@ -1,10 +1,22 @@
-FROM python:3.13-slim
+FROM python:3.13-slim AS base
 WORKDIR /app
 COPY control/requirements.txt control/requirements.lock ./
 RUN pip install --no-cache-dir -r requirements.lock
+
+FROM base AS tests
+COPY device_identity/requirements.lock /tmp/identity-requirements.lock
+RUN pip install --no-cache-dir -r /tmp/identity-requirements.lock
 COPY control /app/control
 COPY tests /app/tests
 COPY scripts /app/scripts
-RUN python -m pytest -q
+COPY device_identity /app/device_identity
+COPY provisioning /app/provisioning
+COPY telemetry /app/telemetry
+RUN python -m pytest -q && touch /tmp/tests-passed
+
+FROM base AS runtime
+COPY --from=tests /tmp/tests-passed /app/tests-passed
+COPY control /app/control
+COPY scripts /app/scripts
 ENV PYTHONPATH=/app
 CMD ["uvicorn", "control.app:app", "--host", "0.0.0.0", "--port", "8080", "--no-access-log"]
