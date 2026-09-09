@@ -8,7 +8,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - run: pip install -r control/requirements.lock
+      - run: pip install -r control/requirements.lock -r device_identity/requirements.lock
       - run: python -m pytest -q
       - run: cargo test --manifest-path core/Cargo.toml --locked
   failover:

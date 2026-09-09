@@ -1,0 +1,4 @@
+# Reference identity/provisioning experiment. Do not bundle into native clients yet.
+rns==1.5.1
+pyserial==3.5
+cryptography==46.0.7
