@@ -43,11 +43,12 @@ jobs:
         shell: pwsh
         run: |
           $installer = Resolve-Path clients/windows/dist/*pilot-unsigned.exe
-          $p = Start-Process $installer -ArgumentList '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-' -Wait -PassThru
-          if ($p.ExitCode -ne 0) { throw 'Installation failed' }
+          $p = Start-Process $installer -ArgumentList '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP- /LOG=install.log' -Wait -PassThru
+          if ($p.ExitCode -ne 0) { $tail=(Get-Content install.log -Tail 12) -join '%0A'; Write-Host "::error::Installation failed: $($p.ExitCode) $tail"; throw 'Installation failed' }
+          ./clients/windows/verify-driver.ps1
           $app = "$env:ProgramFiles/Family Connect/FamilyConnect.exe"
           $p = Start-Process $app -ArgumentList '/broker-test' -Wait -PassThru
-          if ($p.ExitCode -ne 0) { throw "Broker check failed: $($p.ExitCode)" }
+          if ($p.ExitCode -ne 0) { $detail=Get-Content "$env:TEMP/fc-broker-check.txt" -ErrorAction SilentlyContinue; Write-Host "::error::Broker check failed: $($p.ExitCode) $detail"; throw "Broker check failed" }
           $p = Start-Process $app -ArgumentList '/smoke' -Wait -PassThru
           if ($p.ExitCode -ne 0) { throw 'UI smoke failed' }
           $p = Start-Process "$env:ProgramFiles/Family Connect/unins000.exe" -ArgumentList '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART' -Wait -PassThru

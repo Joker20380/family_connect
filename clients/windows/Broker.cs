@@ -21,7 +21,7 @@ internal sealed class Broker:ServiceBase
         acl.AddAccessRule(new PipeAccessRule(new SecurityIdentifier(WellKnownSidType.NetworkSid,null),PipeAccessRights.FullControl,AccessControlType.Deny));
         acl.AddAccessRule(new PipeAccessRule(new SecurityIdentifier(WellKnownSidType.LocalSystemSid,null),PipeAccessRights.FullControl,AccessControlType.Allow));
         acl.AddAccessRule(new PipeAccessRule(new SecurityIdentifier(WellKnownSidType.AuthenticatedUserSid,null),
-            PipeAccessRights.ReadData|PipeAccessRights.WriteData|PipeAccessRights.ReadAttributes|PipeAccessRights.WriteAttributes|PipeAccessRights.ReadPermissions|PipeAccessRights.Synchronize,AccessControlType.Allow));
+            PipeAccessRights.ReadWrite|PipeAccessRights.Synchronize,AccessControlType.Allow));
         while(!stop.IsCancellationRequested){
             try{
                 using var pipe=NamedPipeServerStreamAcl.Create(Wire.Pipe,PipeDirection.InOut,1,PipeTransmissionMode.Byte,

@@ -62,3 +62,12 @@ Build-machine requirements: .NET SDK 10, Git and Inno Setup 6. VPN dependencies 
 The certificate key must be available to SignTool through the supported hardware/cloud provider. Do not put private keys or passwords in chat or Git. The script signs the application EXE/DLL, tunnel.dll, installer and uninstaller, verifying Authenticode trust and the expected certificate. The official driver retains WireGuard's signature. `-SignedRelease` fails without a certificate; it never substitutes a self-signed certificate.
 
 Obtaining a certificate requires publisher registration and verification with a signing provider. A trusted signature still does not guarantee absence of SmartScreen/antivirus warnings: clean-Windows testing, Defender scans, investigation of specific detections and reputation are necessary. Do not alter builds to evade detection or disable protection.
+
+
+2026-09-09: primary gateway `185.251.89.19` was upgraded to support new peers. Existing Android/Linux peers were preserved and gateway public egress IP was checked. No Windows peer has been created yet: a code from the Windows device is required first.
+
+## Signing as an individual
+
+For the owner without a company, the selected option is Certum Standard Code Signing in the Cloud (SimplySign), which supports individual certificate details. As of 2026-09-09 the shop lists prices from €209; confirm duration and final cost at checkout. [Product and requirements](https://shop.certum.eu/standard-code-signing-in-the-cloud.html).
+
+Verify identity and address directly with the provider; never put documents in Git or chat. [Individual verification](https://support.certum.eu/en/code-signing-required-documents/). Once issued, install SimplySign Desktop on the publisher's signing computer and unlock certificate access. Customers do not need it. `build.ps1 -SignedRelease` uses the certificate through SignTool. Signing does not automatically eliminate SmartScreen warnings.

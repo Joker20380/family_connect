@@ -25,8 +25,8 @@ public static class Wire
     public static async Task<Reply> Call(Request request)
     {
         using var timeout=new CancellationTokenSource(TimeSpan.FromSeconds(35));
-        using var pipe=new NamedPipeClientStream(".",Pipe,PipeDirection.InOut,PipeOptions.Asynchronous,
-            System.Security.Principal.TokenImpersonationLevel.Impersonation);
+        using var pipe=new NamedPipeClientStream(".",Pipe,PipeAccessRights.ReadWrite,PipeOptions.Asynchronous,
+            System.Security.Principal.TokenImpersonationLevel.Impersonation,HandleInheritability.None);
         await pipe.ConnectAsync(timeout.Token);
         Native.VerifyPipeServer(pipe.SafePipeHandle);
         await Write(pipe,request,timeout.Token);return await Read<Reply>(pipe,timeout.Token);

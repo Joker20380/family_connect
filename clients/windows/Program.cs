@@ -18,7 +18,8 @@ internal static class Program
             if(args.Length>0&&args[0]!="/smoke")return 2;
             ApplicationConfiguration.Initialize();
             using var form=new MainForm(args.Contains("/smoke"));Application.Run(form);return 0;
-        }catch(Exception){
+        }catch(Exception e){
+            if(args.Contains("/broker-test"))File.WriteAllText(Path.Combine(Path.GetTempPath(),"fc-broker-check.txt"),e.GetType().Name+"; hresult="+e.HResult.ToString("X"));
             if(args.Length==0)MessageBox.Show("Family Connect could not start. / Не удалось запустить Family Connect.");
             return 1;
         }
