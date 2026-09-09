@@ -6,6 +6,10 @@ Reliable private connectivity for families across borders. The buyer is a Europe
 member; the first intended users are relatives in Russia. The eventual product offers a
 Family Plan, invitations and one Connect button with automatic route selection.
 
+## Two server sites
+
+Remote relay on a second VPS and failover on its loss: [topology and results](docs/distributed.en.md).
+
 ## Practical pilot: Europe → Russia
 
 A separate direct WireGuard pilot targets the Russian server `185.251.89.19` for Android

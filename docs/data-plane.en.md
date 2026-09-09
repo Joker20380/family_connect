@@ -105,3 +105,8 @@ connection and one inner QUIC session survived, with one relay switch. Egress wa
 `185.251.89.19`, RU. With both relays stopped, hostname and direct-IP checks failed.
 The unlisted certificate was rejected; 4 Rust and 6 Python tests passed. This is a functional
 test result, not a maximum-throughput benchmark. [Machine-readable report](data3-validation-result.json).
+
+## Next deployed increment
+
+The current network extends to a second VPS: [cross-server relay and failure test](distributed.en.md).
+The results above remain the historical single-host validation.

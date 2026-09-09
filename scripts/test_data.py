@@ -22,6 +22,11 @@ def request(url, seconds=10):
 def main():
     ARTIFACTS.mkdir(parents=True, exist_ok=True)
     download = None
+    if run('ps', '--status', 'running', '-q', 'control').stdout.strip():
+        topology = run('exec', '-T', 'control', 'python', '-c',
+            "import json; print(','.join(n['name'] for n in json.load(open('/state/network.json'))['nodes']))").stdout
+        if 'relay-remote' in topology:
+            raise RuntimeError('distributed catalog active; use test_distributed.py from the operator laptop')
     try:
         # Fresh namespaces remove old firewall/interface state; no host routes change.
         run('down', timeout=60)

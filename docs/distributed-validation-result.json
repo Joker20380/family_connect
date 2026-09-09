@@ -1,0 +1,21 @@
+{
+  "gateway_ip": "185.251.89.19",
+  "gateway_country": "RU",
+  "remote_host": "186.246.51.201",
+  "bytes": 8388608,
+  "bytes_before_remote_stop": 1454080,
+  "remote_site_transfer_delta": 6791584,
+  "seconds": 27.739799,
+  "https_connections": 1,
+  "inner_quic_connections": 1,
+  "relay_switches": 1,
+  "sha256_observed": "f38469a7ac373e721e1591bbf5755647f669ddc76042d713b1047435368eae7b",
+  "fault": "stop remote relay AND site-router containers",
+  "underlay": "operator WireGuard site link over public IPv4",
+  "scope": "two VPS; client namespace and gateway on primary VPS",
+  "recorded_at_utc": "2026-09-09T10:23:31.993512+00:00",
+  "python_tests_passed": 9,
+  "download_rate_limit_bytes_per_second": 262144,
+  "remote_public_egress": "blocked: direct HTTPS connection to 1.1.1.1 refused by routing",
+  "remote_verified_catalog_epoch": 2
+}

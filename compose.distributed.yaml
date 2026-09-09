@@ -1,0 +1,5 @@
+# Overlay: docker compose -f compose.data.yaml -f compose.distributed.yaml ...
+services:
+  client-wg:
+    environment:
+      REMOTE_RELAY_ROUTE: "1"

@@ -1,0 +1,31 @@
+name: family-connect-site
+services:
+  router:
+    image: family-connect-wireguard:data3
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [NET_ADMIN]
+    security_opt: [no-new-privileges:true]
+    sysctls:
+      net.ipv4.ip_forward: "1"
+    ports: ["51830:51830/udp"]
+    environment:
+      SITE_ROLE: primary
+      PEER_ENDPOINT: 186.246.51.201:51830
+      REMOTE_NETWORK: 172.29.94.11/32
+    volumes:
+      - ./state-site:/keys:ro
+      - ./distributed/site.sh:/site.sh:ro
+    entrypoint: [sh, /site.sh]
+    mem_limit: 64m
+    pids_limit: 32
+    networks:
+      uplink: {}
+      lab:
+        ipv4_address: 172.29.93.254
+networks:
+  uplink: {}
+  lab:
+    external: true
+    name: family-connect-data_lab3

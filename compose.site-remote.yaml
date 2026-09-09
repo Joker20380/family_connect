@@ -1,0 +1,75 @@
+name: family-connect-remote
+services:
+  router:
+    image: family-connect-wireguard:data3
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [NET_ADMIN]
+    security_opt: [no-new-privileges:true]
+    sysctls:
+      net.ipv4.ip_forward: "1"
+    ports: ["51830:51830/udp"]
+    environment:
+      SITE_ROLE: remote
+      PEER_ENDPOINT: 185.251.89.19:51830
+      REMOTE_NETWORK: 172.29.93.0/24
+    volumes:
+      - ./state-site:/keys:ro
+      - ./distributed/site.sh:/site.sh:ro
+    entrypoint: [sh, /site.sh]
+    mem_limit: 64m
+    pids_limit: 32
+    networks:
+      uplink: {}
+      relay:
+        ipv4_address: 172.29.94.254
+  relay:
+    image: family-connect-core:data3
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    environment:
+      IDENTITY_DIR: /identity
+      TRUST_ROOT_FILE: /trust/root.pub
+      CATALOG_CACHE: /cache/catalog.json
+      BOOTSTRAP_URLS: http://172.29.93.2:8080/v1/network-state
+      GATEWAY_NAME: gateway-lab
+    volumes:
+      - ./state-remote/identity:/identity:ro
+      - ./state-remote/trust:/trust:ro
+      - ./state-remote/cache:/cache:rw
+    command: [relay, relay-remote]
+    mem_limit: 256m
+    pids_limit: 128
+    network_mode: service:routes
+    depends_on:
+      routes:
+        condition: service_healthy
+  routes:
+    image: family-connect-wireguard:data3
+    depends_on: [router]
+    restart: unless-stopped
+    cap_drop: [ALL]
+    cap_add: [NET_ADMIN]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    entrypoint: [sh, -c, "set -e; ip route replace 172.29.93.0/24 via 172.29.94.254; exec sleep infinity"]
+    mem_limit: 32m
+    pids_limit: 32
+    healthcheck:
+      test: [CMD, ip, route, get, 172.29.93.2]
+      interval: 5s
+      timeout: 4s
+      retries: 12
+    networks:
+      relay:
+        ipv4_address: 172.29.94.11
+networks:
+  uplink: {}
+  relay:
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.29.94.0/24

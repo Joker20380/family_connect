@@ -102,3 +102,8 @@ References: [QUIC migration](https://www.rfc-editor.org/rfc/rfc9000.html#section
 The next step is implemented separately from the authentication lab described above:
 [WireGuard interface over QUIC and relays](data-plane.en.md). It enables controlled IPv4
 egress while retaining the relay non-exit invariant.
+
+## Next deployed increment
+
+The current network extends to a second VPS: [cross-server relay and failure test](distributed.en.md).
+The results above remain the historical single-host validation.
