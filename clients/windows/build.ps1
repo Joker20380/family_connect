@@ -16,13 +16,22 @@ if(-not(Test-Path $vendor)) {
 }
 git -C $vendor checkout --detach a4b7f47672b393698127ca14a58f5953bc8b5217
 Check-Exit
+# Git's curl uses its maintained TLS backend; keep certificate verification enabled.
+# The Windows system curl can fail on a peer's TLS close_notify during these downloads.
+$gitCurl="${env:ProgramFiles}\Git\mingw64\bin"
+if(Test-Path "$gitCurl/curl.exe") { $env:PATH="$gitCurl;$env:PATH" }
 Push-Location "$vendor/embeddable-dll-service"
 try {
-    & cmd.exe /d /c build.bat 2>&1 | Tee-Object -Variable vendorLog
-    if($LASTEXITCODE -ne 0){
-        $tail=($vendorLog|Select-Object -Last 15|Out-String).Replace('%','%25').Replace("`r",'%0D').Replace("`n",'%0A')
-        Write-Host "::error::WireGuard build: $tail"
-        throw 'WireGuard native build failed'
+    for($attempt=1;$attempt -le 3;$attempt++) {
+        & cmd.exe /d /c build.bat 2>&1 | Tee-Object -Variable vendorLog
+        if($LASTEXITCODE -eq 0){break}
+        if($attempt -eq 3){
+            $tail=($vendorLog|Select-Object -Last 15|Out-String).Replace('%','%25').Replace("`r",'%0D').Replace("`n",'%0A')
+            Write-Host "::error::WireGuard build: $tail"
+            throw 'WireGuard native build failed'
+        }
+        Write-Host "Retrying verified upstream dependency build ($attempt/3)."
+        Start-Sleep -Seconds 2
     }
 } finally { Pop-Location }
 dotnet run --project Tests/Tests.csproj -c Release
