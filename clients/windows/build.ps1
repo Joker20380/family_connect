@@ -16,28 +16,7 @@ if(-not(Test-Path $vendor)) {
 }
 git -C $vendor checkout --force --detach a4b7f47672b393698127ca14a58f5953bc8b5217
 Check-Exit
-# Keep upstream dependency hashes and URLs; use PowerShell's downloader to avoid
-# system curl's intermittent Schannel close_notify failures on the archive server.
-$upstream=Join-Path $vendor 'build.bat'
-$batch=Get-Content $upstream -Raw
-$original='curl -#fLo %1 %2 || exit /b 1'
-if(-not $batch.Contains($original)){throw 'Upstream download instruction changed'}
-$replacement='pwsh.exe -NoProfile -NonInteractive -File "'+$PSScriptRoot+'\download-dependency.ps1" -Url "%2" -Output "%1" || exit /b 1'
-$batch.Replace($original,$replacement)|Set-Content $upstream -Encoding ascii
-Push-Location "$vendor/embeddable-dll-service"
-try {
-    for($attempt=1;$attempt -le 3;$attempt++) {
-        & cmd.exe /d /c build.bat 2>&1 | Tee-Object -Variable vendorLog
-        if($LASTEXITCODE -eq 0){break}
-        if($attempt -eq 3){
-            $tail=($vendorLog|Select-Object -Last 15|Out-String).Replace('%','%25').Replace("`r",'%0D').Replace("`n",'%0A')
-            Write-Host "::error::WireGuard build: $tail"
-            throw 'WireGuard native build failed'
-        }
-        Write-Host "Retrying verified upstream dependency build ($attempt/3)."
-        Start-Sleep -Seconds 2
-    }
-} finally { Pop-Location }
+& "$PSScriptRoot/build-tunnel.ps1" -Vendor $vendor
 dotnet run --project Tests/Tests.csproj -c Release
 Check-Exit
 dotnet publish FamilyConnect.csproj -c Release -r win-x64 --self-contained true -o build/publish
