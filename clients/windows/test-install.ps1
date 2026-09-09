@@ -17,6 +17,11 @@ try {
             $installer=(Resolve-Path "$PSScriptRoot/dist/*pilot-unsigned.exe").Path
             Invoke-Checked $installer '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP- /LOG=install.log' 180
             if((Get-Service FamilyConnectBroker).Status -ne 'Running'){throw 'Broker service did not start'}
+            $acl=Get-Acl "$env:ProgramData/FamilyConnect"
+            if(-not $acl.AreAccessRulesProtected -or $acl.GetOwner([System.Security.Principal.SecurityIdentifier]).Value -ne 'S-1-5-32-544') {throw 'Key store owner or inheritance is unsafe'}
+            foreach($rule in $acl.GetAccessRules($true,$true,[System.Security.Principal.SecurityIdentifier])) {
+                if($rule.AccessControlType -eq 'Allow' -and $rule.IdentityReference.Value -notin @('S-1-5-18','S-1-5-32-544')) {throw 'Unexpected key store access'}
+            }
         }
         'Broker' {Invoke-Checked $app '/broker-test' 60}
         'UI' {Invoke-Checked $app '/smoke' 30}

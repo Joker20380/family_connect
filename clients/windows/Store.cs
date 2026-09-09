@@ -14,7 +14,15 @@ internal static class Store
     {
         var dir=Directory.CreateDirectory(Root);
         if((dir.Attributes&FileAttributes.ReparsePoint)!=0)throw new IOException("unsafe store");
+        var administrators=new SecurityIdentifier(WellKnownSidType.BuiltinAdministratorsSid,null);
+        var system=new SecurityIdentifier(WellKnownSidType.LocalSystemSid,null);
+        var owner=dir.GetAccessControl(AccessControlSections.Owner).GetOwner(typeof(SecurityIdentifier));
+        // Reject an unprivileged pre-created directory: removing its DACL alone
+        // would still let its owner restore access to subsequently stored keys.
+        if(!administrators.Equals(owner)&&!system.Equals(owner)
+            && !(Native.Admin&&WindowsIdentity.GetCurrent().User?.Equals(owner)==true))throw new IOException("unsafe store owner");
         var acl=new DirectorySecurity();acl.SetAccessRuleProtection(true,false);
+        acl.SetOwner(administrators);
         foreach(var role in new[]{WellKnownSidType.LocalSystemSid,WellKnownSidType.BuiltinAdministratorsSid})
             acl.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(role,null),FileSystemRights.FullControl,
                 InheritanceFlags.ContainerInherit|InheritanceFlags.ObjectInherit,PropagationFlags.None,AccessControlType.Allow));
