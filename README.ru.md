@@ -89,3 +89,9 @@ python3 scripts/test_revocation.py
 проверка доступности простаивающих соединений.
 
 [Архитектура и безопасность](docs/architecture.ru.md) · [План](docs/roadmap.ru.md)
+
+## Регистрация устройств и provisioning
+
+Отдельный продуктовый модуль: приглашения, одноразовые challenge и entitlement. Пока не подключён к приложениям и gateway. [API / runbook](docs/registration.ru.md) · [ADR](docs/adr/001-identity-provisioning.ru.md).
+
+[Implementation log / Журнал реализации](docs/implementation-log.ru.md).

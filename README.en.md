@@ -86,3 +86,9 @@ for this Docker test, not proven across arbitrary mobile paths. The path detecto
 responses during an active download and is not a complete production idle-health algorithm.
 
 [Architecture and security](docs/architecture.en.md) · [Roadmap](docs/roadmap.en.md)
+
+## Device registration and provisioning
+
+Separate product module: invitations, single-use challenges and entitlement. Not yet connected to the apps or gateway. [API / runbook](docs/registration.en.md) · [ADR](docs/adr/001-identity-provisioning.en.md).
+
+[Implementation log / Журнал реализации](docs/implementation-log.en.md).

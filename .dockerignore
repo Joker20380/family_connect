@@ -25,3 +25,5 @@ clients/windows/**/bin/
 clients/windows/**/obj/
 clients/windows/build/
 clients/windows/dist/
+
+state-product/
