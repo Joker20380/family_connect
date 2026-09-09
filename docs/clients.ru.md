@@ -1,3 +1,5 @@
+> **Текущая Windows-версия:** [Windows 0.2](windows-native.ru.md). Раздел Windows ниже описывает старый прототип 0.1.
+
 # Приложения Family Connect 0.1
 
 [English](clients.en.md) · [Главная](../README.ru.md)

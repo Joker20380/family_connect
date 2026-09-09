@@ -1,3 +1,5 @@
+> **Current Windows version:** [Windows 0.2](windows-native.en.md). The Windows section below describes the legacy 0.1 prototype.
+
 # Family Connect applications 0.1
 
 [Русский](clients.ru.md) · [Home](../README.en.md)

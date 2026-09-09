@@ -1,3 +1,5 @@
+[Windows 0.2 — автономный установщик и активация](docs/windows-native.ru.md)
+
 # Family Connect — русский
 
 [English](README.en.md) · [Оглавление документации](README.md)

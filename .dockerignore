@@ -21,3 +21,7 @@ clients/desktop/dist/
 clients/desktop/*.spec
 
 state-client-build/
+clients/windows/**/bin/
+clients/windows/**/obj/
+clients/windows/build/
+clients/windows/dist/

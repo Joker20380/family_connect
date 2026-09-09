@@ -1,3 +1,5 @@
+[Windows 0.2 — standalone installer and activation](docs/windows-native.en.md)
+
 # Family Connect — English
 
 [Русский](README.ru.md) · [Documentation index](README.md)

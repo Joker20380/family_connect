@@ -6,6 +6,12 @@ ip -6 address add fd77:92::1/64 dev wg0
 wg set wg0 listen-port 51820 private-key /keys/server.key \
   peer "$(cat /keys/android.pub)" allowed-ips 10.77.0.2/32,fd77:92::2/128 \
   peer "$(cat /keys/linux.pub)" allowed-ips 10.77.0.3/32,fd77:92::3/128
+# family-connect-dynamic-peers-v1
+# Public enrollment records only; preserve the original Android/Linux peers.
+for peer in /keys/peers/*.conf; do
+  [ -f "$peer" ] || continue
+  wg addconf wg0 "$peer"
+done
 ip link set wg0 mtu 1380 up
 nft -f - <<'RULES'
 table inet family_connect {
