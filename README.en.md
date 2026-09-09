@@ -6,6 +6,10 @@ Reliable private connectivity for families across borders. The buyer is a Europe
 member; the first intended users are relatives in Russia. The eventual product offers a
 Family Plan, invitations and one Connect button with automatic route selection.
 
+## Client applications
+
+Android and Windows/Linux: [installation, capabilities and limitations](docs/clients.en.md).
+
 ## Two server sites
 
 Server `186.246.51.201` has been removed from the VPN; its code, keys and containers were deleted. The current network remains on `185.251.89.19`. [Historical two-VPS test](docs/distributed.en.md).

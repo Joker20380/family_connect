@@ -1,0 +1,17 @@
+<resources>
+    <string name="tagline">Связь для вашей семьи</string>
+    <string name="off">VPN выключен</string><string name="on">Туннель включён</string>
+    <string name="connecting">Подключение…</string><string name="connect">Подключить</string><string name="disconnect">Отключить</string>
+    <string name="import_profile">Добавить профиль устройства</string><string name="profile_ready">Профиль устройства сохранён</string>
+    <string name="no_profile">Сначала импортируйте .conf-файл этого устройства</string>
+    <string name="route">Прямое подключение</string>
+    <string name="check_ip">Проверить внешний IP</string>
+    <string name="checking">Проверка через Cloudflare по текущему соединению…</string>
+    <string name="hint">Включённый туннель не подтверждает доступность интернета.</string>
+    <string name="failed">Не удалось выполнить действие. Проверьте профиль, разрешение VPN и сеть.</string>
+    <string name="import_failed">Профиль не поддерживается. Нужны один peer, числовой endpoint, DNS и полные маршруты IPv4/IPv6.</string>
+    <string name="disconnect_first">Перед заменой профиля отключите VPN.</string>
+    <string name="notification">VPN Family Connect</string>
+    <string name="permission_denied">Разрешение на VPN не предоставлено.</string>
+    <string name="forget">Удалить сохранённый профиль</string>
+</resources>

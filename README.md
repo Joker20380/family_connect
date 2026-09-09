@@ -13,3 +13,5 @@ EN: An isolated research laboratory for private family connectivity. This is not
 - Реальный IP-трафик / Real IP traffic: [Русский](docs/data-plane.ru.md) · [English](docs/data-plane.en.md)
 
 - Две VPS / Two VPSs: [Русский](docs/distributed.ru.md) · [English](docs/distributed.en.md)
+
+- Приложения / Applications: [Русский](docs/clients.ru.md) · [English](docs/clients.en.md)

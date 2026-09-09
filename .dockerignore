@@ -11,3 +11,13 @@ state-v3/
 state-site/
 state-remote/
 state-enroll/
+
+clients/android/.gradle/
+clients/android/local.properties
+clients/android/**/build/
+clients/android/.android/
+clients/desktop/build/
+clients/desktop/dist/
+clients/desktop/*.spec
+
+state-client-build/

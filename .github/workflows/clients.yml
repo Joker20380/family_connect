@@ -1,0 +1,61 @@
+name: Client builds
+on:
+  push:
+    paths: ['clients/**', '.github/workflows/clients.yml']
+  pull_request:
+    paths: ['clients/**', '.github/workflows/clients.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+      - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - run: gradle --no-daemon :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
+        working-directory: clients/android
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FamilyConnect-Android-debug
+          path: clients/android/app/build/outputs/apk/debug/*.apk
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest==9.1.1
+      - run: python -m pytest clients/desktop/tests -q
+      - shell: pwsh
+        run: ./clients/desktop/build-windows.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FamilyConnect-Windows
+          path: clients/desktop/dist/FamilyConnect/
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: sudo apt-get update && sudo apt-get install -y python3-tk xvfb
+      - run: python -m pip install pytest==9.1.1
+      - run: python -m pytest clients/desktop/tests -q
+      - run: xvfb-run -a /usr/bin/python3 clients/desktop/app.py --smoke
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FamilyConnect-Linux
+          path: |
+            clients/desktop/*.py
+            clients/desktop/*.sh

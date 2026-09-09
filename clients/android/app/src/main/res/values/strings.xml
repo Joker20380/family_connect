@@ -1,0 +1,17 @@
+<resources>
+    <string name="tagline">Connectivity for your family</string>
+    <string name="off">VPN is off</string><string name="on">Tunnel is on</string>
+    <string name="connecting">Connecting…</string><string name="connect">Connect</string><string name="disconnect">Disconnect</string>
+    <string name="import_profile">Add device profile</string><string name="profile_ready">Device profile saved</string>
+    <string name="no_profile">Import this device’s .conf file first</string>
+    <string name="route">Direct connection</string>
+    <string name="check_ip">Check public IP</string>
+    <string name="checking">Contacting Cloudflare over the current connection…</string>
+    <string name="hint">An active tunnel does not confirm Internet connectivity.</string>
+    <string name="failed">Operation failed. Check the profile, VPN permission and network.</string>
+    <string name="import_failed">Unsupported profile. One peer, numeric endpoint, DNS and full IPv4/IPv6 routes are required.</string>
+    <string name="disconnect_first">Disconnect before replacing the profile.</string>
+    <string name="notification">Family Connect VPN</string>
+    <string name="permission_denied">VPN permission was not granted.</string>
+    <string name="forget">Remove saved profile</string>
+</resources>
