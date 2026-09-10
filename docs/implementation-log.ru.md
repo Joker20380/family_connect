@@ -73,3 +73,11 @@ remain pending. Current facts and next steps: [STATUS](STATUS.md), [PLAN](PLAN.m
 Refreshed desktop appearance and temporary dodecahedron icon. CI passed, release
 published, catalog sequence 2 signed. Linux upgraded using 0.2.1 updater with rollback
 preserved. Windows update available; personal installation pending. See STATUS.
+
+
+## 2026-09-10 — 0.2.3 quiet polling
+
+Rounded buttons and rotated dodecahedron; polling separated from user-action busy state.
+Unchanged polls do not repaint; stale replies discarded. Windows/Linux regression checks
+passed; signed catalog sequence 3 published; Linux upgraded with rollback preserved.
+See STATUS and release report for exact evidence.

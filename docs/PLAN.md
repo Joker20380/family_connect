@@ -12,10 +12,11 @@ Desktop artifacts published, platform CI passed, signed catalog sequence 2 publi
 Linux installed through the existing 0.2.1 updater; Windows update available in app.
 Temporary editable dodecahedron icon; revisit icon design later.
 
-## Active: 0.2.3 polish and quiet polling
+## Completed: 0.2.3 polish and quiet polling
 
-Verify Windows polling/layout regression, publish artifacts and signed catalog sequence 3,
-install Linux and document outcomes.
+Windows/Linux polling and layout regressions passed. Artifacts and signed catalog
+sequence 3 published; Linux installed with previous version retained. Windows update
+available through Check for updates; awaiting user confirmation of 0.2.3 behavior.
 
 ## Next, in order
 
