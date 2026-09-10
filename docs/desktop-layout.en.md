@@ -1,3 +1,5 @@
+> Update 2026-09-10: Windows CI 34469456791 passed runtime layout checks (144 cases); Linux installed 0.2.1. Hardware DPI testing remains pending. Earlier local-only results below are historical.
+
 # Linux and Windows application layout
 
 2026-09-10. Source fixes; installed user applications have not been replaced.

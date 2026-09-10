@@ -58,3 +58,11 @@ Docker: **118 Python 3.13 tests passed**; build succeeded. Legacy health and scr
 Current next steps: client runtime application/ACK/known-good recovery, Linux flow integration, native secure storage and real Windows DPI validation, Reticulum delivery, then distributed gateway agents/topology migration. Fetch/cache and local gateway reconciliation are implemented; tunnel-application ACK remains pending.
 
 Final validation: **155 Python tests passed**, control Docker build succeeded with **143 Python 3.13 tests**, two existing upstream warnings.
+
+
+## 2026-09-10 — 0.2.1 rollout
+
+Published immutable Linux/Windows release from 8cd0f2d; all client CI passed.
+Linux replaced with backup; server gateway/API/worker deployed, 3 peers preserved.
+Signed catalog sequence 1 added. Reticulum notifications and personal Windows install
+remain pending. Current facts and next steps: [STATUS](STATUS.md), [PLAN](PLAN.md).

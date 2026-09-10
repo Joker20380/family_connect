@@ -5,9 +5,8 @@ Requires=docker.service
 
 [Service]
 Type=oneshot
-WorkingDirectory=/opt/family-connect
 EnvironmentFile=/etc/family-connect/product.env
-ExecStart=/opt/family-connect/.venv/bin/python -m control.product.admin --database ${FC_PRODUCT_DB} reconcile-peers --gateways ${FC_GATEWAYS}
+ExecStart=/usr/bin/docker run --rm --network none --read-only --cap-drop ALL --security-opt no-new-privileges --volume /var/run/docker.sock:/var/run/docker.sock --volume /usr/bin/docker:/usr/local/bin/docker:ro --volume ${FC_PROJECT_ROOT}:${FC_PROJECT_ROOT}:ro --volume ${FC_PRODUCT_DB_DIRECTORY}:${FC_PRODUCT_DB_DIRECTORY} --volume ${FC_GATEWAY_KEYS}:${FC_GATEWAY_KEYS} --workdir ${FC_PROJECT_ROOT} family-connect-product:0.2.1 python -m control.product.admin --database ${FC_PRODUCT_DB} reconcile-peers --gateways ${FC_GATEWAYS}
 UMask=0077
 TimeoutStartSec=60
 KillMode=control-group

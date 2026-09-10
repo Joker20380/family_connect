@@ -58,3 +58,11 @@ Docker: **118 Python 3.13 tests passed**; build succeeded. Legacy health and scr
 * [Gateway protocol/operator/rollback](gateway-reconciliation.ru.md), [UI и снимок](desktop-layout.ru.md). На рабочий сервер не развёрнуто, установленные приложения не заменены.
 
 Итог: **155 Python tests passed**, Docker control собран, **143 tests passed** в Python 3.13 stage; два прежних upstream warnings.
+
+
+## 2026-09-10 — 0.2.1 rollout
+
+Published immutable Linux/Windows release from 8cd0f2d; all client CI passed.
+Linux replaced with backup; server gateway/API/worker deployed, 3 peers preserved.
+Signed catalog sequence 1 added. Reticulum notifications and personal Windows install
+remain pending. Current facts and next steps: [STATUS](STATUS.md), [PLAN](PLAN.md).

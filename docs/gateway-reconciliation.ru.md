@@ -1,6 +1,8 @@
+> Current deployment: 0.2.1 is deployed; API and Docker worker verified. See [STATUS](STATUS.md).
+
 # Согласование peers и отзыв на gateway
 
-10.09.2026. Реализован односерверный продуктовый механизм; на рабочий сервер не развёрнут.
+10.09.2026. Реализован односерверный продуктовый механизм; развёрнут на рабочий сервер, см. STATUS.
 
 ## Порядок работы
 
@@ -74,11 +76,11 @@ Docker гарантии мгновенного удаления нет. Оста
 
 Шаблоны находятся в `deploy/systemd/family-connect-peers.service` и `.timer`: проход
 через 15 секунд после старта и после завершения предыдущего, timeout 60 секунд.
-Пути `/opt/family-connect` и `.venv` адаптировать к установке. EnvironmentFile
+Рабочий путь `/opt/apps/family_connect`. Worker запускается в Docker image `family-connect-product:0.2.1`; см. установленный шаблон unit. EnvironmentFile
 `/etc/family-connect/product.env` содержит `FC_PRODUCT_DB` и `FC_GATEWAYS` — абсолютные
 пути к БД и операторскому JSON. Unit по умолчанию запускается от root; выбранный service
 UID должен владеть БД/каталогами 0700 и файлами 0600 и иметь доступ к Docker. Публичный
-HTTP-процесс не получает Docker socket. В этом этапе unit не установлен и не запущен.
+HTTP-процесс не получает Docker socket. Unit установлен; timer активен, worker завершился с кодом 0.
 
 Для остановки/отката остановить timer и product API, сохранить БД v3 и записи peers.
 Не понижать схему. Отдельно решить судьбу уже разрешённых peers; отключение timer их

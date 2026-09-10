@@ -1,3 +1,5 @@
+> Current deployment: 0.2.1 is deployed; API and Docker worker verified. See [STATUS](STATUS.md).
+
 # Gateway peer reconciliation and revocation
 
 2026-09-10. Implemented for a single product host; not deployed to production.
