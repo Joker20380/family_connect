@@ -5,6 +5,7 @@ Start with [STATUS](STATUS.md) (what is actually installed/deployed) and [PLAN](
 
 | Topic | Русский | English |
 |---|---|---|
+| Native Linux UI 0.2.7 | [GTK report](releases/0.2.7.ru.md) | [GTK report](releases/0.2.7.en.md) |
 | Release 0.2.1 | [Release](releases/0.2.1.ru.md) | [Release](releases/0.2.1.en.md) |
 | Client updates | [Updates](updates.ru.md) | [Updates](updates.en.md) |
 | Product registration | [Registration](registration.ru.md) | [Registration](registration.en.md) |

@@ -30,3 +30,9 @@ that known restriction recurs. Linux layout check needs a display/Xvfb. Windows 
 must pass Windows CI; a Linux cross-build alone is not a runtime validation.
 
 Do not enable subagents unless the user explicitly requests delegation.
+
+Linux frontend is GTK 4/libadwaita from 0.2.7, not Tk. System Python must provide GI
+and Gtk 4.8+/Adw 1.2+. Run GUI checks with dbus-run-session and Xvfb; headless CI uses
+GSK_RENDERER=cairo, GTK_A11Y=none only in CI. Never set those for the installed app.
+Keep the six-file Linux archive compatible with existing updaters. Never publish before
+rendering and interaction checks; preserve immutable releases and offline signing.

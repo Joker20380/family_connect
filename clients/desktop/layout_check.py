@@ -1,113 +1,95 @@
-"""Display-backed geometry regression. No backend, network or VPN operations."""
+"""GTK display-backed checks: geometry, state updates and asynchronous operations."""
 import argparse
+from concurrent.futures import Future
 import json
-import tkinter as tk
+import os
 from pathlib import Path
+import subprocess
+import sys
+import threading
+import time
+from app import App,Adw,Gtk,GLib
 
-from app import App
+
+def pump(seconds=.08):
+    context=GLib.MainContext.default();end=time.monotonic()+seconds
+    while time.monotonic()<end:
+        while context.pending():context.iteration(False)
+        time.sleep(.001)
 
 
-def check_polling():
-    from concurrent.futures import Future
-    class Pool:
-        def __init__(self):self.pending=[]
-        def submit(self,fn):
-            future=Future();self.pending.append((fn,future));return future
-        def finish(self):
-            fn,future=self.pending.pop(0);future.set_result(fn())
-        def shutdown(self,**kwargs):pass
+def regressions():
+    Adw.init();app=App(smoke=True)
     class Driver:
-        value=False
-        def active(self,ident):
-            if self.value is None:raise RuntimeError('unavailable')
-            return self.value
-    root=tk.Tk();app=App(root,smoke=True);app.pool.shutdown(wait=True);app.pool=Pool();app.poll_pool.shutdown(wait=True);app.poll_pool=Pool()
-    app.driver=Driver();app.items=[('one','Family')];app.choose['values']=['Family'];app.choose.current(0)
-    app.next_poll=float('inf');app.paint();root.update()
-    paints=[];original=app.paint
-    def paint():paints.append(True);original()
-    app.paint=paint
-    def drain():root.after_cancel(app.drain_timer);app.drain();root.update()
+        def profiles(self):return [('first','First'),('last','Last')]
+        def active(self,ident):return ident=='last'
     try:
-        before=(app.state['text'],str(app.toggle['state']),app.toggle.winfo_height())
-        for _ in range(4):
-            app.refresh();assert not app.busy
-            assert (app.state['text'],str(app.toggle['state']),app.toggle.winfo_height())==before
-            app.refresh();assert len(app.poll_pool.pending)==1
-            app.poll_pool.finish();drain()
-        assert not paints,'Unchanged polls must not repaint'
-        app.driver.value=True;app.refresh();app.poll_pool.finish();drain();assert app.active is True and len(paints)==1
-        app.refresh();app.submit(lambda:False,'state')
-        app.poll_pool.finish();drain();assert app.busy and app.active is True
-        app.pool.finish();drain();assert app.active is False and not app.busy
-        app.driver.value=None;app.refresh();app.poll_pool.finish();drain();assert app.active is None
-        app.driver.value=False;app.refresh();app.poll_pool.finish();drain();assert app.active is False and not app.detail['text']
-    finally:app.active=False;app.close()
-    print('Polling checks passed: no flicker, single poll, stale result, error recovery')
+        import app as module
+        original=module.backend;module.backend=Driver
+        try:driver,items,active=app.initialize()
+        finally:module.backend=original
+        assert app.driver is None and not app.items,'Worker mutated UI state'
+        done=Future();done.set_result((driver,items,active))
+        app.complete('initialized',done,0,None);app.present();pump()
+        assert app.selected()=='last' and app.active is True
+        changes=app.widget_changes;renders=app.render_count;size=(app.window.get_width(),app.window.get_height())
+        for _ in range(20):app.paint()
+        pump();assert app.widget_changes==changes and app.render_count==renders+1
+        assert size==(app.window.get_width(),app.window.get_height())
+        renders=app.render_count;app.set_detail('First');app.set_detail('Final');pump()
+        assert app.detail.get_label()=='Final' and app.render_count==renders+1
+        status=app.status.get_label();app.busy=True;app.paint();pump();assert app.status.get_label()==status;app.busy=False
+        current=Future();current.set_result(True);changes=app.widget_changes
+        app.complete('poll',current,app.revision,app.selected());pump();assert app.widget_changes==changes
+        stale=Future();stale.set_result(False);app.revision+=1
+        app.complete('poll',stale,app.revision-1,app.selected());pump();assert app.active is True
+        failed=Future();failed.set_exception(RuntimeError('unavailable'))
+        app.complete('poll',failed,app.revision,app.selected());pump();assert app.active is None and app.detail.get_visible()
+        app.complete('poll',current,app.revision,app.selected());pump();assert app.active is True and not app.detail.get_visible()
+        accepted=[];dialog=app.confirm('Test confirmation','Accept',lambda:accepted.append(True))
+        dialog.emit('response','cancel');dialog.destroy();pump();assert not accepted
+        started=threading.Event();release=threading.Event();action=threading.Event()
+        class Slow:
+            def active(self,ident):started.set();release.wait(3);return False
+        app.driver=Slow();app.refresh();assert started.wait(1)
+        app.submit(lambda:(action.set(),True)[1],'state');assert action.wait(1),'Foreground action waits behind poll'
+        pump();release.set();pump();assert app.active is True,'Late poll replaced user action'
+    finally:app.busy=False;app.close(True);pump()
+    print('GTK state/poll/confirmation regressions passed',flush=True)
 
 
-def check_slow_poll():
-    import threading,time
-    started=threading.Event();release=threading.Event();action=threading.Event()
-    class Driver:
-        def active(self,ident):started.set();release.wait(3);return False
-    root=tk.Tk();app=App(root,smoke=True);app.driver=Driver()
-    app.items=[('test','Family')];app.choose['values']=['Family'];app.choose.current(0);app.next_poll=float('inf')
-    try:
-        app.refresh();assert started.wait(1)
-        app.submit(lambda:(action.set(),False)[1],'state')
-        assert action.wait(1),'User action queued behind slow poll'
-    finally:
-        release.set();app.busy=False;app.close()
-    print('Slow poll does not block user actions')
-
-
-def check(output=None):
-    import faulthandler
-    faulthandler.dump_traceback_later(20,exit=True)
-    check_polling();check_slow_poll()
-    results=[]
-    for scale in (1.0,1.5,2.0,2.5):
-        root=tk.Tk();root.tk.call('tk','scaling',scale*96/72)
-        app=App(root,smoke=True)
-        root.update()
-        if root.winfo_screenheight()>=2000:
-            natural=app.frame.winfo_reqheight()+app.language_button.master.winfo_reqheight()
-            assert abs(root.winfo_height()-min(root.winfo_screenheight()-100,max(420,natural)))<=2,(scale,'height must follow content')
-            for button in (app.toggle,app.add,app.check,app.update_button):
-                assert button.winfo_rooty()+button.winfo_height()<=app.canvas.winfo_rooty()+app.canvas.winfo_height(),(scale,'startup action hidden')
+def layouts(scale):
+    Adw.init();results=[]
+    for ru in (True,False):
+        app=App(smoke=True);app.ru=ru;app.driver=object();app.items=[('demo','Family connection')];app.active=False;app.paint();app.present();pump(.15)
         try:
-            for ru in (True,False):
-                app.ru=ru
-                for size in ('360x420','480x620','800x700'):
-                    root.geometry(size)
-                    app.detail.configure(text=app.t('error')+'\n'+app.t('system'))
-                    app.paint();root.update()
-                    assert app.check.winfo_rooty()>=app.add.winfo_rooty()+app.add.winfo_height(),(size,scale,"actions must remain in one column")
-                    # Every child fits horizontally; all actions remain reachable
-                    # in the scroll region, including with long localized errors.
-                    for widget in (app.brand,app.state,app.choose,app.toggle,app.add,app.check,app.note,app.detail,app.retry,app.update_button):
-                        left=widget.winfo_rootx()-app.canvas.winfo_rootx()
-                        assert left>=0,(size,scale,'left',str(widget))
-                        assert left+widget.winfo_width()<=app.canvas.winfo_width(),(size,scale,'right',str(widget))
-                    for button in (app.toggle,app.add,app.check,app.retry,app.update_button):
-                        assert button.winfo_width()>=button.winfo_reqwidth(),(size,scale,'button text clipped')
-                    app.language_button.focus_force();root.update();app.retry.focus_force();root.update()
-                    top=app.retry.winfo_rooty()-app.canvas.winfo_rooty()
-                    assert 0<=top and top+app.retry.winfo_height()<=app.canvas.winfo_height(),(size,scale,'focus')
-                    assert app.language_button.winfo_viewable()
-                    results.append(dict(scale=scale,ru=ru,size=size))
-                    if output and scale==1.0 and size=='480x620' and ru:
-                        from PIL import ImageGrab
-                        app.canvas.yview_moveto(0);root.update()
-                        x,y=root.winfo_rootx(),root.winfo_rooty()
-                        ImageGrab.grab(bbox=(x,y,x+root.winfo_width(),y+root.winfo_height())).save(output)
-        finally:
-            app.close()
-    faulthandler.cancel_dump_traceback_later()
-    print(json.dumps({'layout_cases_passed':len(results)}))
+            for width in (360,420,680):
+                app.window.set_default_size(width,-1)
+                app.set_detail(app.t('error')+'\n'+app.t('system'));pump(.1)
+                previous=-1
+                for widget in (app.toggle,app.add,app.check,app.update_button):
+                    ok,rect=widget.compute_bounds(app.body);assert ok
+                    assert rect.get_y()>=previous,'Buttons must stay in one column'
+                    previous=rect.get_y()+rect.get_height()
+                    assert rect.get_x()>=0 and rect.get_x()+rect.get_width()<=app.body.get_width()+1,'Horizontal clipping'
+                    minimum,natural,_,_=widget.measure(Gtk.Orientation.HORIZONTAL,-1)
+                    assert widget.get_width()>=minimum,'Clipped button label'
+                for label in (app.status,app.hint,app.note,app.detail):
+                    _,height=label.get_layout().get_pixel_size()
+                    assert label.get_height()>=height,'Clipped label'
+                app.update_button.grab_focus();pump()
+                assert app.update_button.has_focus(),'Keyboard focus lost'
+                results.append(dict(scale=scale,ru=ru,width=width))
+        finally:app.close(True);pump()
+    print(json.dumps({'gtk_layout_cases_passed':len(results),'scale':scale}),flush=True)
 
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('--screenshot',type=Path)
-    check(parser.parse_args().screenshot)
+    parser=argparse.ArgumentParser();parser.add_argument('--scale',type=float);args=parser.parse_args()
+    if args.scale:layouts(args.scale)
+    else:
+        regressions()
+        for scale in (1,1.5,2,2.5):
+            env=dict(os.environ,GDK_SCALE=str(1 if scale<2 else 2),GDK_DPI_SCALE=str(scale/(1 if scale<2 else 2)))
+            subprocess.run([sys.executable,__file__,'--scale',str(scale)],env=env,check=True,timeout=35)
+        print('GTK: 24 layout cases passed',flush=True)

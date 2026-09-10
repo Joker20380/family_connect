@@ -9,7 +9,10 @@ The unsigned release.json on GitHub is informational, never install authorizatio
 Linux stores code under `~/.local/share/family-connect/releases`, smoke-checks it and
 atomically switches `current`, retaining `previous`. The desktop shortcut uses
 current/app.py. Floors/cache are in `~/.local/state/family-connect-updates`; NetworkManager
-profiles remain untouched. Python Tk and python3-cryptography are required. Old clients
+profiles remain untouched. From 0.2.7, Python GI, GTK 4, libadwaita and python3-cryptography are required.
+Ubuntu/Debian: `sudo apt install python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 python3-cryptography`.
+These dependencies are already present on the current laptop. Other Linux hosts must
+install them before upgrading; smoke failure preserves the previous application. Old clients
 without an updater need one manual install-linux.sh transition.
 
 Windows uses `%LOCALAPPDATA%/FamilyConnect/updates`, verifies downloaded bytes again

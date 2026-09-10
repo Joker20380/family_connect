@@ -13,8 +13,10 @@
 Linux сохраняет код в `~/.local/share/family-connect/releases/`, выполняет smoke-проверку
 и атомарно переключает `current`, сохраняя `previous`. Ярлык использует current/app.py.
 Данные обновлений/floors отдельно: `~/.local/state/family-connect-updates`. Профили
-NetworkManager не переносятся и не удаляются. Для Tk-клиента нужен системный пакет
-`python3-cryptography` (на этом ноутбуке проверен). Первую установку старого клиента
+NetworkManager не переносятся и не удаляются. Начиная с 0.2.7 нужны GTK 4/libadwaita, Python GI и
+`python3-cryptography`: `sudo apt install python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 python3-cryptography`.
+На текущем ноутбуке зависимости уже установлены. На других Linux сначала установить
+зависимости; неуспешная smoke-проверка сохраняет старую версию. Первую установку старого клиента
 0.1/0.2 без обновлятора выполняет install-linux.sh; последующие — кнопка приложения.
 
 Windows хранит состояние проверки в `%LOCALAPPDATA%/FamilyConnect/updates`, скачивает

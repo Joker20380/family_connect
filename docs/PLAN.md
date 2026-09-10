@@ -31,6 +31,13 @@ User preference: narrow window, one action per row at every width, height by con
 Platform CI and real-display checks passed; catalog sequence 5 published; Linux
 installed with previous version 0.2.5 retained. Await user visual confirmation.
 
+## Active: 0.2.7 native Linux frontend
+
+User reports sequential redraw and wants a finished visual design. GTK 4/libadwaita
+implementation passed local and real-Wayland checks; publish CI-verified release,
+sign catalog sequence 6, upgrade Linux and record outcomes. Tk is no longer the Linux
+frontend. Preserve one-column, narrow/content-sized layout and backend behavior.
+
 ## Next, in order
 
 1. Run an isolated live product enrollment → stage → reconcile → publish/fetch → revoke

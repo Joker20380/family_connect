@@ -1,3 +1,5 @@
+> Linux 0.2.7+: native GTK 4/libadwaita. Prerequisites and current installation: [release](releases/0.2.7.en.md), [STATUS](STATUS.md). The 0.1 prototype below is historical.
+
 > **Current Windows version:** [Windows 0.2](windows-native.en.md). The Windows section below describes the legacy 0.1 prototype.
 
 # Family Connect applications 0.1

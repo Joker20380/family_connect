@@ -45,7 +45,7 @@ for face,n in sorted(faces.values(),key=lambda f:rotate(f[1])[2]):
  svg+='<polygon points="'+' '.join(f'{x:.2f},{y:.2f}' for x,y in points)+'" fill="'+hexcolor+'" stroke="#e0e7ff" stroke-width="1.7" stroke-linejoin="round"/>'
  coords=[(round(x*4),round(y*4)) for x,y in points];d.polygon(coords,fill=color);d.line(coords+[coords[0]],fill='#e0e7ff',width=7,joint='curve')
 (p/'clients/assets/dodecahedron.svg').write_text(svg+'</svg>\n');im=im.resize((256,256),Image.Resampling.LANCZOS);im.save(p/'clients/assets/dodecahedron.png');im.save(p/'clients/windows/app.ico',sizes=[(16,16),(24,24),(32,32),(48,48),(64,64),(128,128),(256,256)])
-b=io.BytesIO();im.resize((80,80),Image.Resampling.LANCZOS).save(b,format='PNG')
+b=io.BytesIO();im.save(b,format='PNG')
 
 f=p/'clients/desktop/app.py';s=f.read_text();start=s.index("ICON_PNG='");end=s.index("'",start+10)
 s=s[:start]+"ICON_PNG='"+base64.b64encode(b.getvalue()).decode()+s[end:];f.write_text(s)
