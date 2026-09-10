@@ -121,3 +121,7 @@ persistent gateway records. Windows reinstall request matched its old public key
 fresh signed import grant issued for existing 10.77.0.4 (24h import validity). No private
 keys printed or committed, no peer changes. User imports and phone/Windows connectivity
 checks pending.
+
+User reports Windows 0.2.7 installed. Main catalog propagation to 0.2.8 now verified
+using the installed updater. Documented in-app update steps and distinction from
+activation restoration. Windows 0.2.8 install/import and Android connectivity pending.

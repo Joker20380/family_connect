@@ -43,7 +43,9 @@ layout and backend behavior preserved. User explicitly approved its appearance a
 
 User approved Linux 0.2.7 appearance and behavior. Windows now follows its compact composition. Runtime layout/interaction checks passed;
 immutable release and signed catalog sequence 7 published. Next: user updates Windows
-and confirms its appearance. Linux 0.2.7 remains installed; server unchanged.
+and confirms its appearance (currently reports 0.2.7). Main catalog propagation verified.
+User still needs to import the Windows activation and Android profile and test connectivity.
+Linux 0.2.7 remains installed; server unchanged.
 
 ## Next, in order
 

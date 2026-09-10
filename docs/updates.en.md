@@ -43,3 +43,12 @@ Failed verification/download/smoke preserves the existing application. Linux ret
 previous code for manual rollback; do not reset floors to accept old catalogs. Owner/root
 backup rollback is not hardware-prevented. Unattended installation, stable channel,
 signed root rotation/recovery and Android update integration remain future work.
+
+
+### Updating versus activation
+
+Use Check for updates → Install update → confirmation. Manual installer transfer is
+optional. GitHub may briefly cache an older catalog; check again later. Updates retain
+the device key and activation. A separate `.fcactivation` file is needed only when
+activation must be restored after reinstalling; ordinary updates do not need a new
+grant. The operator verifies the current device code before issuing a restoration grant.
