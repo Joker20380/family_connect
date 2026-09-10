@@ -1,41 +1,40 @@
 # Current state / Текущее состояние
 
-Updated: 2026-09-10. **0.2.5 Linux HiDPI/responsiveness fixes: release pending.** Desktop **0.2.3 published and installed on Linux**, source `79eb6db`. Server remains **0.2.1**, source `8cd0f2d`.
+Updated: 2026-09-10. Desktop **0.2.5 published and installed on Linux**, source `d7d9c87`.
+Server remains **0.2.1**, source `8cd0f2d`.
 
-- Linux: 0.2.3 installed from verified GitHub archive using the existing 0.2.2 updater; startup smoke passed. New icon registered; `previous` retains 0.2.2.
-  Current: `~/.local/share/family-connect/current`; backup:
-  `~/.local/share/family-connect-backups/20260910-131353`.
-- Windows: 0.2.3 installer published; Windows CI passed broker, UI and 144 layout cases.
-  User can install 0.2.3 through Check for updates; user confirmed 0.2.1 works on both systems.
-  User confirmed Windows and Linux 0.2.1 both work. Further hardware DPI testing remains optional.
-- Tests: 171 Python tests, 18 Linux layouts, shared Python/C# signed catalog checks.
-- Server: `185.251.89.19:/opt/apps/family_connect`, product API health OK, schema 3,
-  localhost `127.0.0.1:18082`; Docker reconciliation worker succeeded, timer active.
-  Gateway recreated with all 3 existing peers and gateway public key preserved.
-  Existing manually managed peers are not automatically enrolled into the product DB.
-- Server rollback: `/opt/backups/family-connect/20260910-110930`, gateway image
-  `family-connect-wireguard:rollback-20260910-110930`. Other existing labs preserved.
-- Signed update catalog: `updates/pilot.json`, sequence 3, version 0.2.3, 90-day validity.
-  Local signing key: `state-client-build/update-signing/ed25519.key` (never Git/CI/server).
-  HTTPS downloads, user-confirmed installation; Reticulum notifications not implemented.
-- Product registration/provisioning and reconciliation code deployed. Public HTTPS ingress,
-  native client runtime provisioning/ACK and a full live product enrollment/revoke smoke
-  remain pending. Actual WireGuard install/remove/restart was verified locally.
+- Linux: installed from verified GitHub archive with the existing 0.2.3 updater;
+  startup smoke passed, `~/.local/share/family-connect/previous` retains 0.2.3.
+  Current: `~/.local/share/family-connect/current`.
+- User reported 0.2.3 HiDPI clipping and sluggishness. Fixed font-aware startup sizing,
+  redundant layout work, shared poll/action queue, selector and confirmation styling.
+  Real laptop: effective font scale 2.06 despite Tk reporting 1.0; window 988×1028,
+  all main actions visible. Small screens retain scrolling; scrollbar hides when unneeded.
+- Real read-only VPN/UI probe: first 5-second sample included an 850 ms callback gap.
+  Follow-up after a 2-second warm-up: maximum 17.9 ms / p95 16.3 ms at 16 ms target;
+  paint <=3.2 ms, drain <=1.6 ms. Steady-state stalls were not reproduced; startup pause
+  not conclusively attributed. Confirm perceived responsiveness with the user.
+- Tests: 27 desktop Python tests; 24 Linux layouts (100–250%), initial action visibility,
+  quiet polling/stale replies and slow-poll action independence. Windows CI passed
+  broker, UI, polling regression and 144 layouts. Client and phase0 CI succeeded.
+- Windows: 0.2.5 installer available. Changes this release target Linux; Windows behavior
+  unchanged. User installation of 0.2.5 has not been confirmed.
+- Catalog `updates/pilot.json`: sequence 4, version 0.2.5, 90-day validity. HTTPS downloads,
+  Ed25519 verification and user-confirmed installation. Reticulum delivery remains planned.
+  Private release key stays local under `state-client-build/update-signing/ed25519.key`.
+- Intermediate 0.2.4 assets were published from e60d9e6 before final sizing polish;
+  no catalog was signed for 0.2.4. Immutable release retained; clients update directly to 0.2.5.
+- Server `185.251.89.19:/opt/apps/family_connect`: product API schema 3, localhost
+  `127.0.0.1:18082`, gateway/worker/timer deployed in 0.2.1, 3 legacy peers preserved.
+  Backup `/opt/backups/family-connect/20260910-110930`; rollback gateway image
+  `family-connect-wireguard:rollback-20260910-110930`. Server unchanged by desktop release.
+- Pending: live product enrollment/revoke smoke, runtime provisioning/ACK and public
+  HTTPS ingress, Reticulum update delivery, native invitation/storage flows.
 
-[Release assets](https://github.com/Joker20380/family_connect/releases/tag/v0.2.3)
-· [Client CI](https://github.com/Joker20380/family_connect/actions/runs/34497885075)
-· [Phase 0 CI](https://github.com/Joker20380/family_connect/actions/runs/34497884671)
-· [Next actions](PLAN.md) · [Release report](releases/0.2.3.ru.md)
+[Release](https://github.com/Joker20380/family_connect/releases/tag/v0.2.5)
+· [Client CI](https://github.com/Joker20380/family_connect/actions/runs/34500466930)
+· [Phase0 CI](https://github.com/Joker20380/family_connect/actions/runs/34500466896)
+· [Release report](releases/0.2.5.ru.md) · [Plan](PLAN.md)
 
-Desktop appearance: graphite/indigo theme, accessible controls, temporary dodecahedron icon.
-Editable icon source: `clients/assets/dodecahedron.svg`. Final icon design remains deferred.
-Windows 0.2.3 installation on the user PC is not yet confirmed.
-
-0.2.3: rounded native buttons and tilted dodecahedron. Background polling keeps the
-last visible state without busy flashes or unchanged-state redraws; revisions reject
-late responses after user actions. Poll failure/recovery remain visible. Polling
-regressions passed on Linux and Windows alongside layout checks. Icon generator:
-`python scripts/generate_app_icon.py` (Pillow), editable SVG/PNG/ICO/embedded Tk output.
-
-0.2.4 assets were published from e60d9e6 before final size/scrollbar polish. No update
-catalog was signed for 0.2.4. Immutable artifacts retained; final polish ships as 0.2.5.
+Temporary icon: `clients/assets/dodecahedron.svg`; regenerate PNG/ICO/embedded icon
+with `python scripts/generate_app_icon.py` (Pillow). Final icon design deferred.

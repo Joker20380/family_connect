@@ -18,11 +18,12 @@ Windows/Linux polling and layout regressions passed. Artifacts and signed catalo
 sequence 3 published; Linux installed with previous version retained. Windows update
 available through Check for updates; awaiting user confirmation of 0.2.3 behavior.
 
-## Active: 0.2.5 Linux fit and responsiveness
+## Completed: 0.2.5 Linux fit and responsiveness
 
-Publish platform-verified release, sign catalog sequence 4, upgrade Linux and record
-actual results. User reported 0.2.3 startup clipping and sluggishness; corrected using
-real laptop font metrics, separate polling queue, styled selector/dialogs.
+Platform CI passed; catalog sequence 4 published; Linux upgraded from 0.2.3 with
+rollback retained. Real laptop startup visibility and themed-dialog cancellation checked.
+Confirm user perception of startup/steady-state responsiveness: a first probe had an
+850 ms gap, follow-up warm measurement max 17.9 ms. See STATUS for exact evidence.
 
 ## Next, in order
 

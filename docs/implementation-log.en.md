@@ -81,3 +81,13 @@ Rounded buttons and rotated dodecahedron; polling separated from user-action bus
 Unchanged polls do not repaint; stale replies discarded. Windows/Linux regression checks
 passed; signed catalog sequence 3 published; Linux upgraded with rollback preserved.
 See STATUS and release report for exact evidence.
+
+
+## 2026-09-10 — Linux 0.2.5
+
+User-reported clipping reproduced with actual font metrics (effective scale 2.06).
+Font-aware window sizing, themed selector/dialogs, hidden unused scrollbar, cached
+layout, separate polling queue and 3s polling timeout. Platform checks passed; signed
+catalog sequence 4 published; Linux installed with 0.2.3 retained. Real warm runtime
+probe max callback interval 17.9 ms; initial probe gap 850 ms remains documented.
+See STATUS and release report for evidence and remaining confirmation.
