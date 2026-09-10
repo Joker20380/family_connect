@@ -66,6 +66,9 @@ jobs:
           $process = Start-Process $app.FullName -ArgumentList '/layout-test' -PassThru
           if (-not $process.WaitForExit(90000)) { $process.Kill(); throw 'Layout checks timed out' }
           if ($process.ExitCode -ne 0) { Get-Content "$env:TEMP/fc-layout-check.txt" -ErrorAction SilentlyContinue; throw "Layout checks failed: $($process.ExitCode)" }
+      - name: Save Windows UI preview
+        shell: pwsh
+        run: Copy-Item "$env:TEMP/Windows-0.2.8.png" clients/windows/dist/
       - name: Uninstall application and service
         if: always()
         shell: pwsh
@@ -112,7 +115,9 @@ jobs:
           name: FamilyConnect-Linux
           path: release-linux
       - name: Prepare versioned release files
-        run: python3 scripts/package_desktop.py --release-files
+        run: |
+          python3 scripts/package_desktop.py --release-files
+          cp release-windows/Windows-0.2.8.png release-files/
       - name: Publish tested pilot release
         env:
           GH_TOKEN: ${{ github.token }}

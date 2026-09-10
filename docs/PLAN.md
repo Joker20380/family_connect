@@ -40,6 +40,12 @@ rollback retained. Tk is no longer the Linux frontend. One-column, narrow/conten
 layout and backend behavior preserved. Next user check: reopen and confirm appearance
 and smoothness; see STATUS for the measured result and its limits.
 
+## Active: Windows 0.2.8 visual alignment
+
+User approved Linux 0.2.7 appearance and behavior. Match its compact composition on
+Windows, verify runtime layout/interaction in Windows CI, then publish immutable release
+and signed catalog sequence 7. Personal Windows installation remains user-managed.
+
 ## Next, in order
 
 1. Run an isolated live product enrollment → stage → reconcile → publish/fetch → revoke

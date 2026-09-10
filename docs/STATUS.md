@@ -1,6 +1,6 @@
 # Current state / Текущее состояние
 
-Updated: 2026-09-10. Desktop **0.2.7 published and installed on Linux**, source `68b6ffb`.
+Updated: 2026-09-10. **0.2.8 Windows refresh in progress; not released.** Desktop **0.2.7 published and installed on Linux**, source `68b6ffb`.
 Server remains **0.2.1**, source `8cd0f2d`.
 
 - Linux frontend now uses GTK 4/libadwaita. Compact header, rounded connection card,
@@ -13,8 +13,7 @@ Server remains **0.2.1**, source `8cd0f2d`.
   Eight-second read-only probe: two initial state renders, no periodic property updates;
   after two seconds warm-up, max/p95 timer interval 16.2 ms at a 16 ms target,
   0.154 CPU seconds. Earlier Tk sample had a 1.4-second gap outside Python handlers.
-  This short measurement is not a universal performance guarantee; user should reopen
-  the app and confirm perceived smoothness and appearance.
+  User confirmed Linux 0.2.7 appearance and behavior are good.
 - Checks: 27 desktop Python tests, 24 GTK layouts (100–250%), coherent initial state,
   unchanged/stale polling, action independence and confirmation cancellation. GTK 4.8 /
   libadwaita 1.2 compatibility verified locally. Windows CI passed broker/UI/layout
