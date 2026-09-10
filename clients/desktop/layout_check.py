@@ -21,7 +21,7 @@ def check_polling():
         def active(self,ident):
             if self.value is None:raise RuntimeError('unavailable')
             return self.value
-    root=tk.Tk();app=App(root,smoke=True);app.pool.shutdown(wait=True);app.pool=Pool()
+    root=tk.Tk();app=App(root,smoke=True);app.pool.shutdown(wait=True);app.pool=Pool();app.poll_pool.shutdown(wait=True);app.poll_pool=Pool()
     app.driver=Driver();app.items=[('one','Family')];app.choose['values']=['Family'];app.choose.current(0)
     app.next_poll=float('inf');app.paint();root.update()
     paints=[];original=app.paint
@@ -33,27 +33,47 @@ def check_polling():
         for _ in range(4):
             app.refresh();assert not app.busy
             assert (app.state['text'],str(app.toggle['state']),app.toggle.winfo_height())==before
-            app.refresh();assert len(app.pool.pending)==1
-            app.pool.finish();drain()
+            app.refresh();assert len(app.poll_pool.pending)==1
+            app.poll_pool.finish();drain()
         assert not paints,'Unchanged polls must not repaint'
-        app.driver.value=True;app.refresh();app.pool.finish();drain();assert app.active is True and len(paints)==1
+        app.driver.value=True;app.refresh();app.poll_pool.finish();drain();assert app.active is True and len(paints)==1
         app.refresh();app.submit(lambda:False,'state')
-        app.pool.finish();drain();assert app.busy and app.active is True
+        app.poll_pool.finish();drain();assert app.busy and app.active is True
         app.pool.finish();drain();assert app.active is False and not app.busy
-        app.driver.value=None;app.refresh();app.pool.finish();drain();assert app.active is None
-        app.driver.value=False;app.refresh();app.pool.finish();drain();assert app.active is False and not app.detail['text']
+        app.driver.value=None;app.refresh();app.poll_pool.finish();drain();assert app.active is None
+        app.driver.value=False;app.refresh();app.poll_pool.finish();drain();assert app.active is False and not app.detail['text']
     finally:app.active=False;app.close()
     print('Polling checks passed: no flicker, single poll, stale result, error recovery')
+
+
+def check_slow_poll():
+    import threading,time
+    started=threading.Event();release=threading.Event();action=threading.Event()
+    class Driver:
+        def active(self,ident):started.set();release.wait(3);return False
+    root=tk.Tk();app=App(root,smoke=True);app.driver=Driver()
+    app.items=[('test','Family')];app.choose['values']=['Family'];app.choose.current(0);app.next_poll=float('inf')
+    try:
+        app.refresh();assert started.wait(1)
+        app.submit(lambda:(action.set(),False)[1],'state')
+        assert action.wait(1),'User action queued behind slow poll'
+    finally:
+        release.set();app.busy=False;app.close()
+    print('Slow poll does not block user actions')
 
 
 def check(output=None):
     import faulthandler
     faulthandler.dump_traceback_later(20,exit=True)
-    check_polling()
+    check_polling();check_slow_poll()
     results=[]
-    for scale in (1.0,1.5,2.0):
+    for scale in (1.0,1.5,2.0,2.5):
         root=tk.Tk();root.tk.call('tk','scaling',scale*96/72)
         app=App(root,smoke=True)
+        root.update()
+        if root.winfo_screenheight()>=2000:
+            for button in (app.toggle,app.add,app.check,app.update_button):
+                assert button.winfo_rooty()+button.winfo_height()<=app.canvas.winfo_rooty()+app.canvas.winfo_height(),(scale,'startup action hidden')
         try:
             for ru in (True,False):
                 app.ru=ru

@@ -1,6 +1,6 @@
 # Current state / Текущее состояние
 
-Updated: 2026-09-10. Desktop **0.2.3 published and installed on Linux**, source `79eb6db`. Server remains **0.2.1**, source `8cd0f2d`.
+Updated: 2026-09-10. **0.2.4 Linux HiDPI/responsiveness fixes: release pending.** Desktop **0.2.3 published and installed on Linux**, source `79eb6db`. Server remains **0.2.1**, source `8cd0f2d`.
 
 - Linux: 0.2.3 installed from verified GitHub archive using the existing 0.2.2 updater; startup smoke passed. New icon registered; `previous` retains 0.2.2.
   Current: `~/.local/share/family-connect/current`; backup:

@@ -18,8 +18,8 @@ PREFIX='fc-app-'
 class BackendError(Exception): pass
 
 
-def run(*args):
-    result=subprocess.run(args,capture_output=True,text=True,timeout=30,
+def run(*args,timeout=30):
+    result=subprocess.run(args,capture_output=True,text=True,timeout=timeout,
         creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0) if sys.platform=='win32' else 0)
     if result.returncode:
         raise BackendError('System VPN operation failed: '+Path(args[0]).name+'; exit='+str(result.returncode))
@@ -35,7 +35,7 @@ class Linux:
                 result.append((parts[0],parts[1]))
         return result
     def active(self,ident):
-        return ident in run('nmcli','-t','-f','UUID','connection','show','--active').splitlines()
+        return ident in run('nmcli','-t','-f','UUID','connection','show','--active',timeout=3).splitlines()
     def connect(self,ident): run('nmcli','connection','up','uuid',ident)
     def disconnect(self,ident): run('nmcli','connection','down','uuid',ident)
     def import_profile(self,path):
