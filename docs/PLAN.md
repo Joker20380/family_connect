@@ -6,6 +6,11 @@ Platform CI and immutable release published; Linux installed with backup; gatewa
 product DB/API and periodic worker deployed. Health and preservation of three legacy
 peers verified. Signed catalog sequence 1 published. See STATUS for exact evidence.
 
+## Active user priority: 0.2.2 visual refresh
+
+Publish verified desktop artifacts and signed catalog sequence 2; install Linux.
+Temporary editable dodecahedron icon; revisit icon design later.
+
 ## Next, in order
 
 1. Run an isolated live product enrollment → stage → reconcile → publish/fetch → revoke
@@ -15,8 +20,7 @@ peers verified. Signed catalog sequence 1 published. See STATUS for exact eviden
    recovery. Add public HTTPS ingress when the client flow is ready.
 3. Reticulum update announcements/catalog delivery through the existing signature verifier.
    Notifications never authorize installation. HTTPS delivers the larger release files.
-4. Native secure storage/invitation flow for Windows and Android. Install 0.2.1 manually
-   on the user's Windows PC once; verify real DPI, VPN and in-place update there.
+4. Native secure storage/invitation flow for Windows and Android. User confirmed 0.2.1 works on Windows and Linux; validate future updates there.
 5. Signed update root rotation/recovery and stable release channel. Renew the catalog
    before its 90-day expiry even if binaries have not changed (increase sequence).
 6. Distributed gateway agents/topology migration and real Reticulum failover.

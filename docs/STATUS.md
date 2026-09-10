@@ -1,12 +1,12 @@
 # Current state / Текущее состояние
 
-Updated: 2026-09-10. Release **0.2.1 published and deployed**. Source: `8cd0f2d`.
+Updated: 2026-09-10. **0.2.2 visual refresh: release checks in progress.** Release **0.2.1 published and deployed**. Source: `8cd0f2d`.
 
 - Linux: installed from verified GitHub archive; startup smoke and file comparison passed.
   Current: `~/.local/share/family-connect/current`; backup:
   `~/.local/share/family-connect-backups/20260910-131353`.
 - Windows: installer published; Windows CI passed broker, UI and 144 layout cases.
-  Installation on the user's Windows PC remains pending; no machine access supplied.
+  User confirmed Windows and Linux 0.2.1 both work. Further hardware DPI testing remains optional.
 - Tests: 171 Python tests, 18 Linux layouts, shared Python/C# signed catalog checks.
 - Server: `185.251.89.19:/opt/apps/family_connect`, product API health OK, schema 3,
   localhost `127.0.0.1:18082`; Docker reconciliation worker succeeded, timer active.

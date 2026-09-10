@@ -5,10 +5,11 @@
     <UseWindowsForms>true</UseWindowsForms><ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode><EnableWindowsTargeting>true</EnableWindowsTargeting>
     <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
     <ApplicationManifest>app.manifest</ApplicationManifest><AssemblyName>FamilyConnect</AssemblyName>
-    <Version>0.2.1</Version><Company>Family Connect</Company><Product>Family Connect</Product>
+    <Version>0.2.2</Version><ApplicationIcon>app.ico</ApplicationIcon><Company>Family Connect</Company><Product>Family Connect</Product>
     <PublishSingleFile>false</PublishSingleFile><PublishTrimmed>false</PublishTrimmed>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="../assets/dodecahedron.png" LogicalName="FamilyConnect.Brand.png" />
     <Compile Remove="Tests/**/*.cs" />
     <PackageReference Include="BouncyCastle.Cryptography" Version="2.7.0" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="10.0.12" />

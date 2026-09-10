@@ -5,6 +5,7 @@ command -v nmcli >/dev/null
 source_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 python3 - "$source_dir" <<'PY'
 import ast
+import base64
 import os
 from pathlib import Path
 import secrets
@@ -22,8 +23,10 @@ for name in ('app.py','backend.py','profile_config.py','updates.py','update.pub'
 if (root/'current').is_symlink():
     previous=root/('.previous-'+secrets.token_hex(6));previous.symlink_to(os.readlink(root/'current'));os.replace(previous,root/'previous')
 link=root/('.current-'+secrets.token_hex(6));link.symlink_to(release.relative_to(root));os.replace(link,root/'current')
+icon_data=next(node.value.value for node in ast.parse((source/'app.py').read_text()).body if isinstance(node,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='ICON_PNG' for t in node.targets))
+(root/'app.png').write_bytes(base64.b64decode(icon_data))
 folder=Path.home()/'.local/share/applications';folder.mkdir(parents=True,exist_ok=True)
 command=str(root/'current/app.py').replace('\\','\\\\').replace('"','\\"').replace('`','\\`').replace('$','\\$')
-(folder/'family-connect.desktop').write_text('[Desktop Entry]\nType=Application\nName=Family Connect\nExec=python3 "'+command+'"\nTerminal=false\nCategories=Network;\nComment=Family VPN client\n')
+(folder/'family-connect.desktop').write_text('[Desktop Entry]\nType=Application\nName=Family Connect\nExec=python3 "'+command+'"\nIcon='+str(root/'app.png')+'\nStartupWMClass=FamilyConnect\nTerminal=false\nCategories=Network;\nComment=Family VPN client\n')
 print('Installed Family Connect',version)
 PY
