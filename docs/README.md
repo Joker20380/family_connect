@@ -22,3 +22,5 @@ Windows visual alignment: [RU](releases/0.2.8.ru.md), [EN](releases/0.2.8.en.md)
 Live product enrollment/revoke validation (2026-09-10): [report](live-product-smoke.ru.md).
 
 Connection resilience / AWG pilot: [rollout](releases/2026-09-10-awg.ru.md).
+
+Linux established-session recovery: [report](releases/2026-09-10-recovery.ru.md).

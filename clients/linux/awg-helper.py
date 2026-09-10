@@ -14,6 +14,7 @@ import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from profile_config import parse, validate, AWG_FIELDS, MAX_PROFILE
+from backend import probe_interface, BackendError
 
 ROOT = Path('/etc/family-connect/awg')
 BIN = '/usr/local/lib/family-connect-awg'
@@ -50,12 +51,8 @@ def write(path, text, mode):
     finally: temporary.unlink(missing_ok=True)
 
 def healthy(ident, expected):
-    # Bind the probe to this interface; a working normal route cannot produce success.
-    raw=command('curl','--noproxy','*','--interface',ident,'--fail','--silent',
-        '--connect-timeout','4','--max-time','8','--max-filesize','4096',
-        'https://1.1.1.1/cdn-cgi/trace',timeout=10)
-    values=dict(line.split('=',1) for line in raw.splitlines() if '=' in line)
-    if values.get('ip')!=expected: raise RuntimeError('AWG egress check failed')
+    # Same bound, independent HTTPS checks as the unprivileged monitor.
+    probe_interface(ident,expected)
     stamps=command(BIN+'/awg','show',ident,'latest-handshakes')
     if not any(0<=time.time()-int(line.split()[1])<180 for line in stamps.splitlines()):
         raise RuntimeError('AWG handshake unavailable')

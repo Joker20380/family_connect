@@ -1,9 +1,9 @@
 name: AmneziaWG pilot
 on:
   pull_request:
-    paths: ['pilot/awg/**', 'clients/linux/**', 'clients/desktop/backend.py', 'clients/desktop/profile_config.py', 'clients/desktop/tests/test_awg.py', 'scripts/test_awg_gateway.py', 'compose.awg.yaml', '.github/workflows/awg.yml']
+    paths: ['pilot/awg/**', 'clients/linux/**', 'clients/desktop/backend.py', 'clients/desktop/profile_config.py', 'clients/desktop/tests/**', 'scripts/test_awg_gateway.py', 'compose.awg.yaml', '.github/workflows/awg.yml']
   push:
-    paths: ['pilot/awg/**', 'clients/linux/**', 'clients/desktop/backend.py', 'clients/desktop/profile_config.py', 'clients/desktop/tests/test_awg.py', 'scripts/test_awg_gateway.py', 'compose.awg.yaml', '.github/workflows/awg.yml']
+    paths: ['pilot/awg/**', 'clients/linux/**', 'clients/desktop/backend.py', 'clients/desktop/profile_config.py', 'clients/desktop/tests/**', 'scripts/test_awg_gateway.py', 'compose.awg.yaml', '.github/workflows/awg.yml']
   workflow_dispatch:
 permissions:
   contents: read

@@ -1,0 +1,25 @@
+{
+  "helper_backup": "/usr/local/lib/family-connect-awg-before-recovery-1789075817",
+  "established_wg_recovered": true,
+  "failed_health_cycles": 2,
+  "recovery_seconds": 44.05,
+  "unprivileged_health_probe": true,
+  "explicit_disconnect_stops_recovery": true,
+  "passed": true,
+  "test_firewall_and_tunnels_removed": true,
+  "full_python_tests": 199,
+  "desktop_tests": 55,
+  "gtk_layouts": 24,
+  "gtk_recovery_checks": true,
+  "background_scope": "while pilot app is open; sessions explicitly started in this app",
+  "interval_seconds": 15,
+  "failure_threshold": 2,
+  "max_attempts": 3,
+  "backoff_seconds": [
+    15,
+    30,
+    60
+  ],
+  "stable_reset_seconds": 60,
+  "release_published": false
+}

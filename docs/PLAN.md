@@ -64,9 +64,11 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
 ## Next, in order
 
-1. Add bounded recovery for established connections and a TCP alternative (VLESS +
-   REALITY), preserving working profiles. Connection-time WG → AWG fallback is implemented.
-   Expand health checks beyond one HTTPS endpoint; validate in users' actual networks.
+1. Add a TCP alternative (VLESS + REALITY), preserving working profiles, and validate in
+   users' actual networks. Connection-time fallback and open-app established-session
+   recovery are implemented: two independent HTTPS checks, bounded retries and explicit
+   cancellation. Real established WG block → AWG recovery passed in 44.05 seconds.
+   See [recovery report](releases/2026-09-10-recovery.ru.md).
 2. Integrate the tested transports into native Windows/Android. Complete platform CI,
    installation/UI checks and signed release before upgrading the stable client channel.
 3. Integrate provisioning/runtime/ACK and known-good recovery with real Reticulum

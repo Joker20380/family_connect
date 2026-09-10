@@ -14,7 +14,7 @@ import gi
 gi.require_version('Gtk','4.0')
 gi.require_version('Adw','1')
 from gi.repository import Gtk, Adw, Gdk, Gio, GLib, Pango
-from backend import backend, BackendError
+from backend import backend, BackendError, AuthorizationError, RecoveryPolicy
 
 CSS='''
 window.fc-window { background: #0e1423; color: #e9edf7; }
@@ -45,6 +45,7 @@ class App:
         self.ru=bool(locale.getlocale()[0] and locale.getlocale()[0].lower().startswith('ru'))
         self.driver=None;self.items=[];self.selected_id=None;self.active=None;self.busy=False;self.initializing=False
         self.closed=False;self.revision=0;self.polling=False;self.poll_error=False
+        self.recovery=RecoveryPolicy()
         self.detail_text='';self.update_plan=None;self.updater=None;self.render_source=0;self.fit_source=0;self.fitted_height=None
         self.render_count=0;self.widget_changes=0;self.rendering=False
         self.pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
@@ -151,6 +152,7 @@ class App:
         return self.selected_id
     def selection_changed(self,*_):
         if not self.rendering:
+            self.recovery.stop()
             index=self.choose.get_selected();self.selected_id=self.items[index][0] if 0<=index<len(self.items) else None
             self.refresh()
     def initialize(self):
@@ -164,6 +166,26 @@ class App:
         future.add_done_callback(lambda f:GLib.idle_add(self.complete,kind,f,revision,None))
     def complete(self,kind,future,revision,ident):
         if self.closed:return GLib.SOURCE_REMOVE
+        if kind=='health':
+            self.polling=False
+            if revision!=self.revision or ident!=self.selected() or self.busy or self.recovery.identity!=ident:
+                return GLib.SOURCE_REMOVE
+            try:self.active,healthy=future.result()
+            except Exception:healthy=False
+            should_recover=self.recovery.observe(healthy)
+            if should_recover:
+                self.detail_text='Восстанавливаем соединение…' if self.ru else 'Restoring connection…'
+                driver=self.driver
+                def restore():
+                    driver.recover(ident);return driver.active(ident)
+                self.submit(restore,'recovered')
+            elif self.recovery.exhausted:
+                self.detail_text='Автовосстановление остановлено. Повторите подключение.' if self.ru else 'Recovery stopped. Reconnect to try again.'
+            elif healthy and self.detail_text in ('Связь нестабильна. Проверяем повторно…','Connection unstable. Checking again…'):
+                self.detail_text=''
+            elif not healthy:
+                self.detail_text='Связь нестабильна. Проверяем повторно…' if self.ru else 'Connection unstable. Checking again…'
+            self.paint();return GLib.SOURCE_REMOVE
         if kind=='poll':
             self.polling=False
             if revision!=self.revision or ident!=self.selected() or self.busy:return GLib.SOURCE_REMOVE
@@ -179,6 +201,14 @@ class App:
             result=future.result()
             if kind=='initialized':self.driver,self.items,self.active=result;self.selected_id=self.items[-1][0] if self.items else None;self.initializing=False;self.detail_text='' if self.items else self.t('empty')
             elif kind=='profiles':self.items=result;self.active=None;self.detail_text='' if result else self.t('empty')
+            elif kind=='connected':
+                self.active=result
+                if result and hasattr(self.driver,'supports_recovery') and self.driver.supports_recovery(self.selected()):
+                    self.recovery.arm(self.selected())
+                self.detail_text=''
+            elif kind=='recovered':
+                self.active=result;self.recovery.recovered(bool(result))
+                self.detail_text=('Соединение восстановлено.' if self.ru else 'Connection restored.') if result else self.t('error')
             elif kind=='state':self.active=result
             elif kind=='ip':self.detail_text=result
             elif kind=='updates':
@@ -186,6 +216,9 @@ class App:
             elif kind=='update_installed':
                 subprocess.Popen([sys.executable,str(result)],start_new_session=True);self.close(True);return GLib.SOURCE_REMOVE
         except Exception as exc:
+            if kind=='recovered':
+                if isinstance(exc,AuthorizationError):self.recovery.stop()
+                else:self.recovery.recovered(False)
             if kind in ('updates','update_installed'):
                 self.detail_text='Обновление недоступно или не прошло проверку. Текущая версия сохранена.' if self.ru else 'Update unavailable or verification failed. Current version preserved.'
             else:
@@ -198,16 +231,21 @@ class App:
         ident=self.selected()
         if self.busy or self.polling or self.driver is None or not ident:return GLib.SOURCE_CONTINUE
         self.polling=True;revision=self.revision;driver=self.driver
-        future=self.poll_pool.submit(lambda:driver.active(ident))
-        future.add_done_callback(lambda f:GLib.idle_add(self.complete,'poll',f,revision,ident))
+        if self.recovery.due(ident):
+            kind='health'
+            future=self.poll_pool.submit(lambda:(driver.active(ident),driver.healthy(ident)))
+        else:
+            kind='poll';future=self.poll_pool.submit(lambda:driver.active(ident))
+        future.add_done_callback(lambda f:GLib.idle_add(self.complete,kind,f,revision,ident))
         return GLib.SOURCE_CONTINUE
     def toggle_vpn(self):
         ident=self.selected();active=self.active
         if self.busy or not ident or active is None:return
+        self.recovery.stop()
         driver=self.driver
         def action():
             (driver.disconnect if active else driver.connect)(ident);return driver.active(ident)
-        self.submit(action,'state')
+        self.submit(action,'state' if active else 'connected')
     def import_profile(self):
         if self.busy:return
         if self.active:self.set_detail('Сначала отключите туннель.' if self.ru else 'Disconnect the tunnel first.');return
@@ -251,11 +289,15 @@ class App:
     def on_close(self,*_):
         if self.closed:return False
         if self.busy:return True
-        if self.active:self.confirm(self.t('closing'),'Закрыть окно' if self.ru else 'Close window',lambda:self.close(True));return True
+        if self.active:
+            message=self.t('closing')
+            if self.recovery.identity:message+='\n'+('Автовосстановление работает только при открытом приложении.' if self.ru else 'Automatic recovery runs only while the app is open.')
+            self.confirm(message,'Закрыть окно' if self.ru else 'Close window',lambda:self.close(True));return True
         self.close(True);return True
     def close(self,confirmed=False):
         if self.closed or self.busy:return False
         if self.active and not confirmed:return self.on_close()
+        self.recovery.stop()
         self.closed=True
         if self.render_source:GLib.source_remove(self.render_source);self.render_source=0
         if self.fit_source:GLib.source_remove(self.fit_source);self.fit_source=0

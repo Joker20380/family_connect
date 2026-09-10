@@ -27,6 +27,7 @@ path.write_text(text.replace(old,new))
 PY
 install -o root -g root -m 755 "$source_dir/clients/linux/awg-helper.py" "$destination/helper"
 install -o root -g root -m 644 "$source_dir/clients/desktop/profile_config.py" "$destination/profile_config.py"
+install -o root -g root -m 644 "$source_dir/clients/desktop/backend.py" "$destination/backend.py"
 for name in LICENSE-go LICENSE-tools; do
  install -o root -g root -m 644 "$binary_dir/$name" "$destination/$name"
 done

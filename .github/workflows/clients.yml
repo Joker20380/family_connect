@@ -91,6 +91,7 @@ jobs:
       - run: python -m pytest clients/desktop/tests -q
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/app.py --smoke
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a -s "-screen 0 2560x2160x24" /usr/bin/python3 clients/desktop/layout_check.py
+      - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/recovery_check.py
       - run: python3 scripts/package_desktop.py
       - uses: actions/upload-artifact@v4
         with:

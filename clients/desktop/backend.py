@@ -18,6 +18,7 @@ def read_profile(path, *, allow_awg=False):
 
 PREFIX='fc-app-'
 class BackendError(Exception): pass
+class AuthorizationError(BackendError): pass
 
 
 def run(*args,timeout=30):
@@ -26,6 +27,56 @@ def run(*args,timeout=30):
     if result.returncode:
         raise BackendError('System VPN operation failed: '+Path(args[0]).name+'; exit='+str(result.returncode))
     return result.stdout.strip()
+
+
+HEALTH_TARGETS=(('https://1.1.1.1/cdn-cgi/trace','trace'),('https://api.ipify.org','plain'))
+
+
+def probe_interface(interface, expected):
+    import ipaddress
+    if not re.fullmatch(r'[a-zA-Z0-9_.-]{1,15}',interface):raise BackendError('Invalid VPN interface')
+    expected=str(ipaddress.ip_address(expected))
+    for url,kind in HEALTH_TARGETS:
+        try:
+            raw=run('/usr/bin/curl','--disable','--noproxy','*','--interface',interface,'--fail','--silent',
+                '--connect-timeout','3','--max-time','5','--max-filesize','4096',url,timeout=7)
+            actual=dict(line.split('=',1) for line in raw.splitlines() if '=' in line).get('ip') if kind=='trace' else raw.strip()
+            if actual==expected:return
+        except (BackendError,subprocess.TimeoutExpired):pass
+    raise BackendError('VPN internet checks failed')
+
+
+class RecoveryPolicy:
+    """UI-thread policy; health workers never change connection intent or routing."""
+    interval=15
+    max_attempts=3
+    def __init__(self,clock=time.monotonic):
+        self.clock=clock;self.stop()
+    def stop(self):
+        self.identity=None;self.failures=0;self.attempts=0;self.next_check=0
+        self.good_since=None;self.exhausted=False
+    def arm(self,identity):
+        self.stop();self.identity=identity;self.next_check=self.clock()+self.interval
+    def due(self,identity):
+        return self.identity is not None and self.identity==identity and not self.exhausted and self.clock()>=self.next_check
+    def observe(self,healthy):
+        if self.identity is None or self.exhausted:return False
+        now=self.clock();self.next_check=now+self.interval
+        if healthy:
+            self.failures=0
+            if self.good_since is None:self.good_since=now
+            if now-self.good_since>=60:self.attempts=0
+            return False
+        self.good_since=None;self.failures+=1
+        if self.failures<2:return False
+        if self.attempts>=self.max_attempts:self.exhausted=True;return False
+        self.attempts+=1;return True
+    def recovered(self,success):
+        self.good_since=None
+        if success:self.failures=0
+        else:self.failures=2
+        self.exhausted=not success and self.attempts>=self.max_attempts
+        self.next_check=self.clock()+min(60,15*2**max(0,self.attempts-1))
 
 
 class Linux:
@@ -56,7 +107,8 @@ class Linux:
             p=subprocess.run(args,input=data,capture_output=True,text=True,timeout=120)
         except subprocess.TimeoutExpired:
             raise BackendError('AWG authorization or operation timed out') from None
-        if p.returncode:raise BackendError('AmneziaWG operation failed or authorization cancelled')
+        if p.returncode in (126,127):raise AuthorizationError('AmneziaWG authorization cancelled or unavailable')
+        if p.returncode:raise BackendError('AmneziaWG operation failed')
         return p.stdout.strip()
     def _fallback(self,ident):
         matches=[key for key,value in self._awg_records().items() if value.get('primary')==ident]
@@ -67,11 +119,31 @@ class Linux:
     def _probe(self,ident,expected):
         interface=run('nmcli','-g','GENERAL.DEVICES','connection','show',ident,timeout=3)
         if not re.fullmatch(r'[a-zA-Z0-9_.-]{1,15}',interface): raise BackendError('Missing VPN interface')
-        raw=run('curl','--noproxy','*','--interface',interface,'--fail','--silent',
-            '--connect-timeout','4','--max-time','8','--max-filesize','4096',
-            'https://1.1.1.1/cdn-cgi/trace',timeout=10)
-        values=dict(line.split('=',1) for line in raw.splitlines() if '=' in line)
-        if values.get('ip')!=expected:raise BackendError('VPN internet check failed')
+        probe_interface(interface,expected)
+    def supports_recovery(self,ident):
+        return ident in self._awg_records() or self._fallback(ident) is not None
+    def healthy(self,ident):
+        records=self._awg_records();fallback=self._fallback(ident)
+        awg=ident if ident in records else fallback
+        if not awg:return self.active(ident)
+        primary=records.get(ident,{}).get('primary') or ident
+        try:
+            if Path('/sys/class/net',awg).exists():probe_interface(awg,records[awg]['endpoint'])
+            elif self._nm_active(primary):self._probe(primary,records[awg]['endpoint'])
+            else:return False
+            return True
+        except (BackendError,subprocess.TimeoutExpired):return False
+    def recover(self,ident):
+        # Called only after UI intent/revision checks; serialized with user operations.
+        # A failed AWG may reconnect to a working original WG, then fall back again.
+        records=self._awg_records()
+        primary=records.get(ident,{}).get('primary') or ident
+        fallback=self._fallback(primary)
+        failed_wg=bool(fallback and not Path('/sys/class/net',fallback).exists() and self._nm_active(primary))
+        self.disconnect(primary)
+        if failed_wg:self._awg('up',fallback)
+        else:self.connect(primary)
+        if not self.healthy(primary):raise BackendError('Connection recovery failed')
     def profiles(self):
         result=[]
         for line in run('nmcli','-t','--escape','no','-f','UUID,NAME,TYPE','connection','show').splitlines():
@@ -81,7 +153,10 @@ class Linux:
         result.extend((ident,'AmneziaWG · '+ident) for ident in self._awg_records())
         return result
     def active(self,ident):
-        if ident in self._awg_records():return Path('/sys/class/net',ident).exists()
+        records=self._awg_records()
+        if ident in records:
+            primary=records[ident].get('primary')
+            return Path('/sys/class/net',ident).exists() or bool(primary and self._nm_active(primary))
         fallback=self._fallback(ident)
         if fallback and Path('/sys/class/net',fallback).exists():return True
         return ident in run('nmcli','-t','-f','UUID','connection','show','--active',timeout=3).splitlines()
@@ -114,7 +189,11 @@ class Linux:
             self._awg('up',fallback)
     def disconnect(self,ident):
         records=self._awg_records()
-        if ident in records:self._awg('down',ident);return
+        if ident in records:
+            self._awg('down',ident)
+            primary=records[ident].get('primary')
+            if primary and self._nm_active(primary):run('nmcli','connection','down','uuid',primary)
+            return
         fallback=self._fallback(ident)
         if fallback and Path('/sys/class/net',fallback).exists():self._awg('down',fallback)
         if self._nm_active(ident):run('nmcli','connection','down','uuid',ident)

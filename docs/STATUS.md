@@ -11,10 +11,16 @@ Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `1176
   handshake/HTTPS verified. Real blocked-WG → AWG fallback test passed, then cleaned up.
   Client implementation is an unreleased working-tree pilot; installed stable 0.2.7
   and published 0.2.8 catalog remain unchanged. Separate AWG pilot launcher available.
-  Full Python suite: 189 passed (45 desktop). Upstream engine tests, isolated AWG data
+  AWG milestone: 189 Python tests passed (45 desktop). Upstream engine tests, isolated AWG data
   test, 24 GTK layouts and six additional pilot-label layouts passed.
-  Connection-time fallback only; background recovery, native Windows/Android AWG,
-  TCP alternative and Reticulum delivery remain pending. Same server/IP and UDP limitation.
+  Established-session monitoring/recovery now implemented in the open Linux pilot:
+  15-second checks, two failed cycles, three bounded attempts with 15/30/60-second backoff.
+  Explicit disconnect/selection/close/auth cancellation stop recovery. Two independent
+  bound HTTPS probes; 199 Python tests and GTK recovery/layout checks passed.
+  Established WG endpoint block recovered through AWG in 44.05 seconds on the laptop.
+  Updated root helper installed; no new stable release or server change in this stage.
+  Native Windows/Android AWG, TCP alternative and Reticulum delivery remain pending.
+  Same server/IP and UDP limitation. [Recovery report](releases/2026-09-10-recovery.ru.md).
   [AWG rollout report](releases/2026-09-10-awg.ru.md) · [evidence](awg-resilience-result.json).
 
 - Windows now follows the Linux 0.2.7 composition: compact branding, rounded status card,
