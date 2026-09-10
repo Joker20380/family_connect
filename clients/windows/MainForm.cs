@@ -130,7 +130,7 @@ internal sealed class MainForm:Form
         using(var preview=new MainForm(true,true)){
             preview.ru=true;preview.state="off";preview.Show();preview.PaintState();preview.FitWindow();Application.DoEvents();
             using var bitmap=new Bitmap(preview.Width,preview.Height);preview.DrawToBitmap(bitmap,new Rectangle(Point.Empty,preview.Size));
-            string path=Path.Combine(Path.GetTempPath(),"Windows-0.2.8.png");
+            string path=Path.Combine(Path.GetTempPath(),"Windows-preview.png");
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);bitmap.Save(path);
         }
         // No broker requests: test visible runtime layout.
@@ -168,6 +168,10 @@ internal sealed class MainForm:Form
     static void CheckPolling()
     {
         using var form=new MainForm(true,true);form.state="off";form.Show();form.PaintState();
+        using(var cancel=new System.Windows.Forms.Timer{Interval=50}){
+            cancel.Tick+=(_,_)=>{foreach(Form dialog in Application.OpenForms)if(dialog!=form){dialog.DialogResult=DialogResult.Cancel;break;}};
+            cancel.Start();if(form.Confirm("Confirmation cancellation check"))throw new Exception("Cancelled confirmation accepted");cancel.Stop();
+        }
         int changes=0;form.status.TextChanged+=(_,_)=>changes++;
         var response=new TaskCompletionSource<Reply>();int calls=0;
         form.call=_=>{calls++;return response.Task;};
@@ -204,6 +208,15 @@ internal sealed class MainForm:Form
         foreach(var label in new[]{title,detail,notice})label.MaximumSize=new Size(textWidth,0);
         foreach(var label in new[]{status,description})label.MaximumSize=new Size(Math.Max(1,textWidth-card.Padding.Horizontal),0);
         content.ResumeLayout(true);
+    }
+    [System.Runtime.InteropServices.DllImport("dwmapi.dll")]
+    static extern int DwmSetWindowAttribute(IntPtr window,int attribute,ref int value,int size);
+    protected override void OnHandleCreated(EventArgs e)
+    {
+        base.OnHandleCreated(e);
+        int enabled=1;
+        // Unsupported Windows builds ignore the optional dark title-bar request.
+        DwmSetWindowAttribute(Handle,20,ref enabled,sizeof(int));
     }
     void FitWindow()
     {
