@@ -66,3 +66,10 @@ Published immutable Linux/Windows release from 8cd0f2d; all client CI passed.
 Linux replaced with backup; server gateway/API/worker deployed, 3 peers preserved.
 Signed catalog sequence 1 added. Reticulum notifications and personal Windows install
 remain pending. Current facts and next steps: [STATUS](STATUS.md), [PLAN](PLAN.md).
+
+
+## 2026-09-10 — Desktop 0.2.2
+
+Refreshed desktop appearance and temporary dodecahedron icon. CI passed, release
+published, catalog sequence 2 signed. Linux upgraded using 0.2.1 updater with rollback
+preserved. Windows update available; personal installation pending. See STATUS.

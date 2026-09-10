@@ -6,9 +6,10 @@ Platform CI and immutable release published; Linux installed with backup; gatewa
 product DB/API and periodic worker deployed. Health and preservation of three legacy
 peers verified. Signed catalog sequence 1 published. See STATUS for exact evidence.
 
-## Active user priority: 0.2.2 visual refresh
+## Completed user priority: 0.2.2 visual refresh
 
-Publish verified desktop artifacts and signed catalog sequence 2; install Linux.
+Desktop artifacts published, platform CI passed, signed catalog sequence 2 published.
+Linux installed through the existing 0.2.1 updater; Windows update available in app.
 Temporary editable dodecahedron icon; revisit icon design later.
 
 ## Next, in order
