@@ -47,19 +47,38 @@ and confirms its appearance (currently reports 0.2.7). Main catalog propagation 
 User still needs to import the Windows activation and Android profile and test connectivity.
 Linux 0.2.7 remains installed; server unchanged.
 
+## Completed: live product enrollment/revoke smoke
+
+2026-09-10: isolated test identity enrolled through the deployed HTTP API, staged,
+installed by the periodic worker, provisioning published/fetched and verified locally.
+Replay and post-revoke fetch rejected; worker removed the live and persisted test peer.
+All three legacy peers preserved; test entitlement/device revoked, audit/reservation kept.
+No client runtime application or real handshake claimed. See [report](live-product-smoke.ru.md).
+
+## User priority: resilience against blocked servers/protocols
+
+2026-09-10: AWG 2.0 added alongside WG on separate UDP/51821. Linux helper/profile
+installed, actual host connection and blocked-WG → AWG fallback passed. Original WG
+peers preserved. Working-tree client pilot available separately from stable releases.
+See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
+
 ## Next, in order
 
-1. Run an isolated live product enrollment → stage → reconcile → publish/fetch → revoke
-   smoke on the server, cleaning up its test peer and entitlement. Local integration
-   passed; do not describe live end-to-end enrollment as already checked.
-2. Integrate provisioning into client runtime application and ACK, with known-good VPN
-   recovery. Add public HTTPS ingress when the client flow is ready.
-3. Reticulum update announcements/catalog delivery through the existing signature verifier.
-   Notifications never authorize installation. HTTPS delivers the larger release files.
-4. Native secure storage/invitation flow for Windows and Android. User confirmed 0.2.1 works on Windows and Linux; validate future updates there.
-5. Signed update root rotation/recovery and stable release channel. Renew the catalog
-   before its 90-day expiry even if binaries have not changed (increase sequence).
-6. Distributed gateway agents/topology migration and real Reticulum failover.
+1. Add bounded recovery for established connections and a TCP alternative (VLESS +
+   REALITY), preserving working profiles. Connection-time WG → AWG fallback is implemented.
+   Expand health checks beyond one HTTPS endpoint; validate in users' actual networks.
+2. Integrate the tested transports into native Windows/Android. Complete platform CI,
+   installation/UI checks and signed release before upgrading the stable client channel.
+3. Integrate provisioning/runtime/ACK and known-good recovery with real Reticulum
+   delivery: independent service paths available when the VPN endpoint and ordinary
+   HTTPS API are blocked; queued/replayed-safe settings and update notifications.
+4. Provision a second VPS only when supplied/authorized by the user. Test complete
+   endpoint loss → independent control delivery → alternate gateway connection.
+   The excluded 186.246.51.201 host remains excluded. One VPS does not prove redundancy.
+5. Native invitation/storage flows; signed update root rotation/recovery and stable channel.
+   Renew the catalog before expiry with increasing sequence. Update notifications do not
+   authorize installation; installer files continue to use HTTPS initially.
 
-Accounts, billing, public production ingress and hardware rollback protection remain
-outside the current pilot. Unattended updates require a separate explicit policy.
+Payment integration is not implemented. Entitlements are operator-issued; signed status
+and subscription notifications can later use the same authenticated service channel.
+Unattended software updates still require a separate explicit policy.

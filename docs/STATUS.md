@@ -4,7 +4,18 @@ Updated: 2026-09-10. Desktop **0.2.8 published**, source `5f0303d`.
 Windows 0.2.8 installer and signed update available. User reports Windows is currently
 on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
-Server remains **0.2.1**, source `8cd0f2d`.
+Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
+
+- User priority: connection resilience. AWG 2.0 pilot deployed separately on UDP/51821;
+  existing WG/three peers preserved. Linux root helper installed and real host AWG
+  handshake/HTTPS verified. Real blocked-WG → AWG fallback test passed, then cleaned up.
+  Client implementation is an unreleased working-tree pilot; installed stable 0.2.7
+  and published 0.2.8 catalog remain unchanged. Separate AWG pilot launcher available.
+  Full Python suite: 189 passed (45 desktop). Upstream engine tests, isolated AWG data
+  test, 24 GTK layouts and six additional pilot-label layouts passed.
+  Connection-time fallback only; background recovery, native Windows/Android AWG,
+  TCP alternative and Reticulum delivery remain pending. Same server/IP and UDP limitation.
+  [AWG rollout report](releases/2026-09-10-awg.ru.md) · [evidence](awg-resilience-result.json).
 
 - Windows now follows the Linux 0.2.7 composition: compact branding, rounded status card,
   single-column buttons, smaller typography, content-sized startup window, themed
@@ -58,8 +69,14 @@ Server remains **0.2.1**, source `8cd0f2d`.
   `127.0.0.1:18082`, gateway/worker/timer deployed in 0.2.1, three legacy peers preserved.
   Backup `/opt/backups/family-connect/20260910-110930`; rollback gateway image
   `family-connect-wireguard:rollback-20260910-110930`. No server changes for this release.
-- Pending: live product enrollment/revoke smoke, runtime provisioning/ACK and public
-  HTTPS ingress, Reticulum update delivery, native invitation/storage flows.
+- Live product smoke passed on 2026-09-10: HTTP enrollment/replay rejection, staging,
+  periodic worker install/persistence, revision 1 publish/fetch and local signature/decryption
+  verification, revoke and rejection of an outstanding fetch proof, periodic worker removal.
+  All three legacy peers and allowed IPs unchanged. Test device/entitlement revoked;
+  audit and address reservation retained. No real client handshake/runtime apply tested.
+  See [live report](live-product-smoke.ru.md) and [result](live-product-smoke-result.json).
+- Pending: runtime provisioning/ACK and public HTTPS ingress, Reticulum update delivery,
+  native invitation/storage flows; physical Windows/Android connection checks.
 
 [Release](https://github.com/Joker20380/family_connect/releases/tag/v0.2.8)
 · [Client CI](https://github.com/Joker20380/family_connect/actions/runs/34522112485)

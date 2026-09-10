@@ -1,13 +1,19 @@
 """Strict pilot profile parsing: one peer, full tunnel, no executable hooks."""
 import base64
 import ipaddress
+import re
 
 MAX_PROFILE=16384
 FIELDS={'Interface':{'PrivateKey','Address','DNS','MTU','ListenPort'},
         'Peer':{'PublicKey','PresharedKey','Endpoint','AllowedIPs','PersistentKeepalive'}}
 
 
-def validate(text):
+AWG_FIELDS=set("Jc Jmin Jmax S1 S2 S3 S4 H1 H2 H3 H4 I1 I2 I3 I4 I5".split())
+
+
+def parse(text, *, allow_awg=False):
+    allowed={k:set(v) for k,v in FIELDS.items()}
+    if allow_awg: allowed["Interface"].update(AWG_FIELDS)
     if len(text.encode('utf-8'))>MAX_PROFILE or '\x00' in text:
         raise ValueError('Invalid profile size')
     sections={}; current=None
@@ -20,7 +26,7 @@ def validate(text):
             current=sections[name]={}; section=name; continue
         if current is None or '=' not in line: raise ValueError('Invalid profile')
         key,value=map(str.strip,line.split('=',1))
-        if key not in FIELDS[section] or key in current or not value: raise ValueError('Unsupported field')
+        if key not in allowed[section] or key in current or not value: raise ValueError('Unsupported field')
         current[key]=value
     if set(sections)!=set(FIELDS): raise ValueError('Incomplete profile')
     interface,peer=sections['Interface'],sections['Peer']
@@ -38,4 +44,42 @@ def validate(text):
     for field,low,high in [('MTU',1280,1500),('ListenPort',0,65535)]:
         if field in interface and not low<=int(interface[field])<=high: raise ValueError('Invalid interface option')
     if 'PersistentKeepalive' in peer and not 0<=int(peer['PersistentKeepalive'])<=65535: raise ValueError('Invalid keepalive')
+    if set(interface) & AWG_FIELDS:
+        validate_awg(interface)
+    return sections
+
+
+def validate(text, *, allow_awg=False):
+    sections=parse(text, allow_awg=allow_awg)
     return '\n\n'.join('['+name+']\n'+'\n'.join(k+' = '+v for k,v in fields.items()) for name,fields in sections.items())+'\n'
+
+
+def validate_awg(fields):
+    required=AWG_FIELDS-{f'I{i}' for i in range(1,6)}
+    if not required <= set(fields): raise ValueError('Incomplete AWG 2 profile')
+    for name, low, high in [('Jc',0,12),('Jmin',0,1280),('Jmax',0,1280)]+[(f'S{i}',0,256) for i in range(1,5)]:
+        if not re.fullmatch(r'[0-9]{1,5}',fields[name]) or not low<=int(fields[name])<=high:
+            raise ValueError('Invalid AWG padding')
+    if int(fields['Jmin'])>int(fields['Jmax']): raise ValueError('Invalid AWG junk range')
+    ranges=[]
+    for name in ('H1','H2','H3','H4'):
+        if not re.fullmatch(r'[0-9]{1,10}(?:-[0-9]{1,10})?',fields[name]): raise ValueError('Invalid AWG header')
+        limits=list(map(int,fields[name].split('-')))
+        lo,hi=limits[0],limits[-1]
+        if not 5<=lo<=hi<=4294967295 or any(lo<=b and a<=hi for a,b in ranges):
+            raise ValueError('Overlapping or invalid AWG headers')
+        ranges.append((lo,hi))
+    # Strict grammar: no hooks, arbitrary shell text or oversized signature packets.
+    for name in (f'I{i}' for i in range(1,6)):
+        if name not in fields: continue
+        text=fields[name]; pos=0; size=0
+        while pos<len(text):
+            match=re.match(r'<(?:b 0x([0-9a-fA-F]+)|(r|rd|rc) ([0-9]{1,4})|(t))>',text[pos:])
+            if not match: raise ValueError('Invalid AWG signature packet')
+            if match[1]:
+                if len(match[1])%2: raise ValueError('Invalid AWG bytes')
+                size+=len(match[1])//2
+            elif match[2]: size+=int(match[3])
+            else: size+=4
+            pos+=len(match[0])
+        if not 1<=size<=1280: raise ValueError('Oversized AWG signature packet')

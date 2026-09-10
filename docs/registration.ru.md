@@ -1,3 +1,7 @@
+> Current state (2026-09-10): product API schema 3 and gateway worker are deployed;
+> live enrollment → provisioning fetch → revoke passed. See [STATUS](STATUS.md) and
+> [live report](live-product-smoke.ru.md). Descriptions of v1-only behavior below are historical.
+
 # Регистрация устройств: односерверный продуктовый контур
 
 Обновление 10.09.2026: реализованы [выдача provisioning, migration v2 и кеш](provisioning-provider.ru.md). Ниже сохранено описание этапа регистрации v1; текущий мигратор обновляет БД до [v3](gateway-reconciliation.ru.md).

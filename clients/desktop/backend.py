@@ -1,4 +1,6 @@
 import ctypes
+import json
+import stat
 import os
 from pathlib import Path
 import re
@@ -7,11 +9,11 @@ import sys
 import tempfile
 import time
 import uuid
-from profile_config import validate, MAX_PROFILE
+from profile_config import validate, parse, AWG_FIELDS, MAX_PROFILE
 
-def read_profile(path):
+def read_profile(path, *, allow_awg=False):
     with Path(path).open("rb") as source:
-        return validate(source.read(MAX_PROFILE+1).decode("utf-8-sig"))
+        return validate(source.read(MAX_PROFILE+1).decode("utf-8-sig"),allow_awg=allow_awg)
 
 
 PREFIX='fc-app-'
@@ -27,19 +29,99 @@ def run(*args,timeout=30):
 
 
 class Linux:
+    awg_root=Path('/etc/family-connect/awg')
+    awg_helper='/usr/local/lib/family-connect-awg/helper'
+    def _awg_records(self):
+        if not self.awg_root.exists(): return {}
+        info=self.awg_root.lstat()
+        if not stat.S_ISDIR(info.st_mode) or info.st_uid!=0 or info.st_mode&0o022:
+            raise BackendError('Unsafe AWG installation')
+        records={}
+        for path in self.awg_root.glob('fcawg*.json'):
+            fd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+            try:
+                info=os.fstat(fd)
+                if not stat.S_ISREG(info.st_mode) or info.st_uid!=0 or info.st_mode&0o022 or info.st_nlink!=1:
+                    raise BackendError('Unsafe AWG metadata')
+                record=json.loads(os.read(fd,4097))
+            finally:os.close(fd)
+            if record['owner']!=os.getuid():continue
+            if not re.fullmatch(r'fcawg[0-9a-f]{8}',record['id']) or path.stem!=record['id']:
+                raise BackendError('Invalid AWG metadata')
+            records[record['id']]=record
+        return records
+    def _awg(self,action,ident=None,data=None):
+        args=['pkexec',self.awg_helper,action]+([ident] if ident else [])
+        try:
+            p=subprocess.run(args,input=data,capture_output=True,text=True,timeout=120)
+        except subprocess.TimeoutExpired:
+            raise BackendError('AWG authorization or operation timed out') from None
+        if p.returncode:raise BackendError('AmneziaWG operation failed or authorization cancelled')
+        return p.stdout.strip()
+    def _fallback(self,ident):
+        matches=[key for key,value in self._awg_records().items() if value.get('primary')==ident]
+        if len(matches)>1:raise BackendError('Ambiguous fallback configuration')
+        return matches[0] if matches else None
+    def _nm_active(self,ident):
+        return ident in run('nmcli','-t','-f','UUID','connection','show','--active',timeout=3).splitlines()
+    def _probe(self,ident,expected):
+        interface=run('nmcli','-g','GENERAL.DEVICES','connection','show',ident,timeout=3)
+        if not re.fullmatch(r'[a-zA-Z0-9_.-]{1,15}',interface): raise BackendError('Missing VPN interface')
+        raw=run('curl','--noproxy','*','--interface',interface,'--fail','--silent',
+            '--connect-timeout','4','--max-time','8','--max-filesize','4096',
+            'https://1.1.1.1/cdn-cgi/trace',timeout=10)
+        values=dict(line.split('=',1) for line in raw.splitlines() if '=' in line)
+        if values.get('ip')!=expected:raise BackendError('VPN internet check failed')
     def profiles(self):
         result=[]
         for line in run('nmcli','-t','--escape','no','-f','UUID,NAME,TYPE','connection','show').splitlines():
             parts=line.split(':')
             if len(parts)==3 and parts[2]=='wireguard' and (parts[1].startswith(PREFIX) or parts[1]=='fc-ru-linux'):
                 result.append((parts[0],parts[1]))
+        result.extend((ident,'AmneziaWG · '+ident) for ident in self._awg_records())
         return result
     def active(self,ident):
+        if ident in self._awg_records():return Path('/sys/class/net',ident).exists()
+        fallback=self._fallback(ident)
+        if fallback and Path('/sys/class/net',fallback).exists():return True
         return ident in run('nmcli','-t','-f','UUID','connection','show','--active',timeout=3).splitlines()
-    def connect(self,ident): run('nmcli','connection','up','uuid',ident)
-    def disconnect(self,ident): run('nmcli','connection','down','uuid',ident)
+    def connect(self,ident):
+        records=self._awg_records()
+        if ident in records:
+            primary=records[ident].get('primary')
+            was_active=bool(primary and self._nm_active(primary))
+            if was_active:run('nmcli','connection','down','uuid',primary)
+            try:self._awg('up',ident)
+            except Exception:
+                if was_active:run('nmcli','connection','up','uuid',primary)
+                raise
+            return
+        fallback=self._fallback(ident)
+        if fallback and Path('/sys/class/net',fallback).exists():
+            self._awg('up',fallback);return
+        if not fallback:
+            run('nmcli','connection','up','uuid',ident);return
+        # Bounded connection-time failover. No routing changes during status polling.
+        try:
+            run('nmcli','connection','up','uuid',ident)
+            for attempt in range(2):
+                try:self._probe(ident,records[fallback]['endpoint']);return
+                except BackendError:
+                    if attempt:raise
+                    time.sleep(1)
+        except (BackendError,subprocess.TimeoutExpired):
+            if self._nm_active(ident):run('nmcli','connection','down','uuid',ident)
+            self._awg('up',fallback)
+    def disconnect(self,ident):
+        records=self._awg_records()
+        if ident in records:self._awg('down',ident);return
+        fallback=self._fallback(ident)
+        if fallback and Path('/sys/class/net',fallback).exists():self._awg('down',fallback)
+        if self._nm_active(ident):run('nmcli','connection','down','uuid',ident)
     def import_profile(self,path):
-        data=read_profile(path)
+        data=read_profile(path,allow_awg=True)
+        if set(parse(data,allow_awg=True)['Interface'])&AWG_FIELDS:
+            return self._awg('import',data=data)
         name=PREFIX+uuid.uuid4().hex[:8]
         with tempfile.TemporaryDirectory(prefix='family-connect-') as folder:
             file=Path(folder)/(name+'.conf')

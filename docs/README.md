@@ -18,3 +18,7 @@ Historical descriptions of an earlier stage are not the deployment state. STATUS
 updated after verification; plans and unrun checks must never be marked complete.
 
 Windows visual alignment: [RU](releases/0.2.8.ru.md), [EN](releases/0.2.8.en.md).
+
+Live product enrollment/revoke validation (2026-09-10): [report](live-product-smoke.ru.md).
+
+Connection resilience / AWG pilot: [rollout](releases/2026-09-10-awg.ru.md).

@@ -1,0 +1,39 @@
+{
+  "deployment": {
+    "image": "sha256:1b5baed851f4b100d1541348af9c92a1dad02ded2d66df0944b3bca312237c6b",
+    "server": "185.251.89.19",
+    "port": 51821,
+    "legacy_peers_preserved": true,
+    "awg_go": "v0.2.19",
+    "awg_tools": "v1.0.20260618-2",
+    "status": "deployed; isolated and real Linux host acceptance passed"
+  },
+  "isolated_remote_acceptance": {
+    "handshake_and_bound_https": true,
+    "connect_seconds": 0.7,
+    "dns_and_https": true,
+    "route_cleanup": true,
+    "blocked_endpoint_rejected_and_cleaned": true,
+    "reconnect_after_unblock": true,
+    "passed": true
+  },
+  "host": {
+    "id": "fcawg6c19c559",
+    "primary": "ca453659-ff38-4993-bb04-0d62878d39c4",
+    "installed": true,
+    "host_smoke": true,
+    "cleaned": true
+  },
+  "failover": {
+    "passed": true,
+    "wg_endpoint_blocked": true,
+    "real_backend_switched_to_awg": true,
+    "recovery_seconds": 10.7,
+    "test_firewall_and_tunnels_removed": true
+  },
+  "python_tests": 45,
+  "gtk_layouts": 24,
+  "release_published": false,
+  "full_python_tests": 189,
+  "pilot_label_layouts": 6
+}

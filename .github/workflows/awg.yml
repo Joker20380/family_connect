@@ -1,0 +1,22 @@
+name: AmneziaWG pilot
+on:
+  pull_request:
+    paths: ['pilot/awg/**', 'clients/linux/**', 'clients/desktop/backend.py', 'clients/desktop/profile_config.py', 'clients/desktop/tests/test_awg.py', 'scripts/test_awg_gateway.py', 'compose.awg.yaml', '.github/workflows/awg.yml']
+  push:
+    paths: ['pilot/awg/**', 'clients/linux/**', 'clients/desktop/backend.py', 'clients/desktop/profile_config.py', 'clients/desktop/tests/test_awg.py', 'scripts/test_awg_gateway.py', 'compose.awg.yaml', '.github/workflows/awg.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  awg:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r control/requirements.lock -r device_identity/requirements.lock
+      - run: python -m pytest -q clients/desktop/tests
+      - run: docker build -f pilot/awg/Dockerfile -t family-connect-amneziawg:2-pilot1 .
+      - run: python -m scripts.test_awg_gateway

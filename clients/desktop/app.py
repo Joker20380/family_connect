@@ -72,7 +72,7 @@ class App:
         self.status=self.label('fc-status');status_row.append(self.status);self.card.append(status_row)
         self.hint=self.label('fc-caption');self.card.append(self.hint);self.body.append(self.card)
         self.model=Gtk.StringList.new([]);self.choose=Gtk.DropDown(model=self.model);self.choose.set_hexpand(True)
-        self.choose.set_tooltip_text('WireGuard');self.choose.connect('notify::selected',self.selection_changed);self.body.append(self.choose)
+        self.choose.set_tooltip_text('WireGuard / AmneziaWG');self.choose.connect('notify::selected',self.selection_changed);self.body.append(self.choose)
         self.toggle=self.button('fc-primary',self.toggle_vpn)
         self.add=self.button('fc-secondary',self.import_profile)
         self.check=self.button('fc-quiet',self.check_ip)
@@ -86,7 +86,7 @@ class App:
         self.height_limit=max(360,monitors.get_item(0).get_geometry().height-160) if monitors.get_n_items() else 720
         self.scroll.set_max_content_height(self.height_limit);self.scroll.set_child(self.body);shell.append(self.scroll)
         footer=Gtk.Box(spacing=8);footer.set_margin_start(20);footer.set_margin_end(20);footer.set_margin_bottom(14)
-        version=Gtk.Label(label='v'+APP_VERSION,xalign=0);version.add_css_class('fc-caption');version.set_hexpand(True);footer.append(version)
+        version=Gtk.Label(label='v'+APP_VERSION+(' · AWG pilot' if '--awg-pilot' in sys.argv else ''),xalign=0);version.add_css_class('fc-caption');version.set_hexpand(True);footer.append(version)
         self.language_button=Gtk.Button(label='RU / EN');self.language_button.add_css_class('flat');self.language_button.connect('clicked',lambda _:self.language());footer.append(self.language_button)
         shell.append(footer);self.window.set_content(shell)
         self.last_profiles=None

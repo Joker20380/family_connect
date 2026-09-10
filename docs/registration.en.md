@@ -1,3 +1,7 @@
+> Current state (2026-09-10): product API schema 3 and gateway worker are deployed;
+> live enrollment → provisioning fetch → revoke passed. See [STATUS](STATUS.md) and
+> [live report](live-product-smoke.ru.md). Descriptions of v1-only behavior below are historical.
+
 # Device registration: single-host product-plane stage
 
 Update 2026-09-10: [provisioning delivery, migration v2 and cache](provisioning-provider.en.md) are implemented. The v1 registration stage is described below; the current migrator upgrades the database to [v3](gateway-reconciliation.en.md).

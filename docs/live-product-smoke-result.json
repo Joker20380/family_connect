@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-10T20:24:52Z",
+  "device_identity": "c9814caab7902a9a1639244fa208295b",
+  "server_image": "family-connect-product:0.2.1",
+  "test_address": "10.77.0.253/32",
+  "checks": [
+    "HTTP enrollment and replay rejection",
+    "periodic worker installed and persisted isolated peer; legacy peers preserved",
+    "published revision 1 fetched over HTTP, decrypted and signature verified locally; replay rejected",
+    "pre-revoke fetch proof rejected after device and entitlement revoke",
+    "test peer absent in live WireGuard and persistence; all three legacy peers unchanged"
+  ],
+  "entitlement_id": "4c5c57eae2acdf2def49018e602a144d",
+  "backup": "/opt/apps/family_connect/state-product/db/pre-live-smoke-1789071894.sqlite-backup",
+  "cleanup": "device and entitlement revoked; audit and address reservation retained",
+  "passed": true
+}

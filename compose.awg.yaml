@@ -1,0 +1,21 @@
+name: family-connect-awg
+services:
+  gateway:
+    build:
+      context: .
+      dockerfile: pilot/awg/Dockerfile
+    image: family-connect-amneziawg:2-pilot1
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [NET_ADMIN]
+    security_opt: [no-new-privileges:true]
+    devices: ["/dev/net/tun:/dev/net/tun"]
+    tmpfs: ["/run:mode=0755", "/tmp:mode=1777"]
+    sysctls:
+      net.ipv4.ip_forward: "1"
+      net.ipv6.conf.all.forwarding: "0"
+    ports: ["51821:51821/udp"]
+    volumes: ["./state-awg:/keys:ro"]
+    mem_limit: 256m
+    pids_limit: 64
