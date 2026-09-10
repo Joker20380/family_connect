@@ -108,3 +108,16 @@ UI, native dialogs/dropdown, coherent state updates and content-sized window. 27
 tests, 24 GTK layouts, native Wayland probe and platform CI passed. Published immutable
 release and signed catalog sequence 6; installed through 0.2.6 updater with rollback.
 No server changes. User visual confirmation pending. See STATUS and release report.
+
+
+## 2026-09-10 — Windows 0.2.8
+
+User approved Linux 0.2.7. Windows visually aligned; platform CI passed, immutable
+release published and catalog sequence 7 signed. Personal Windows update pending.
+Linux 0.2.7 and server 0.2.1 retained. See STATUS and release report. Source `5f0303d`.
+
+Android APK link supplied; existing separate Android profile checked against live and
+persistent gateway records. Windows reinstall request matched its old public key;
+fresh signed import grant issued for existing 10.77.0.4 (24h import validity). No private
+keys printed or committed, no peer changes. User imports and phone/Windows connectivity
+checks pending.

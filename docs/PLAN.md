@@ -37,14 +37,13 @@ User reports sequential redraw and wants a finished visual design. GTK 4/libadwa
 implementation passed local, real-Wayland and platform CI checks. Immutable release
 published, catalog sequence 6 signed, Linux upgraded through the 0.2.6 updater with
 rollback retained. Tk is no longer the Linux frontend. One-column, narrow/content-sized
-layout and backend behavior preserved. Next user check: reopen and confirm appearance
-and smoothness; see STATUS for the measured result and its limits.
+layout and backend behavior preserved. User explicitly approved its appearance and behavior; see STATUS for measured evidence.
 
-## Active: Windows 0.2.8 visual alignment
+## Completed: Windows 0.2.8 visual alignment
 
-User approved Linux 0.2.7 appearance and behavior. Match its compact composition on
-Windows, verify runtime layout/interaction in Windows CI, then publish immutable release
-and signed catalog sequence 7. Personal Windows installation remains user-managed.
+User approved Linux 0.2.7 appearance and behavior. Windows now follows its compact composition. Runtime layout/interaction checks passed;
+immutable release and signed catalog sequence 7 published. Next: user updates Windows
+and confirms its appearance. Linux 0.2.7 remains installed; server unchanged.
 
 ## Next, in order
 

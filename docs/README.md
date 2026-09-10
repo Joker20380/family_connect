@@ -16,3 +16,5 @@ Start with [STATUS](STATUS.md) (what is actually installed/deployed) and [PLAN](
 
 Historical descriptions of an earlier stage are not the deployment state. STATUS is
 updated after verification; plans and unrun checks must never be marked complete.
+
+Windows visual alignment: [RU](releases/0.2.8.ru.md), [EN](releases/0.2.8.en.md).
