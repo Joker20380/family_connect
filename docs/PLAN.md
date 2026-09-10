@@ -12,6 +12,11 @@ Desktop artifacts published, platform CI passed, signed catalog sequence 2 publi
 Linux installed through the existing 0.2.1 updater; Windows update available in app.
 Temporary editable dodecahedron icon; revisit icon design later.
 
+## Active: 0.2.3 polish and quiet polling
+
+Verify Windows polling/layout regression, publish artifacts and signed catalog sequence 3,
+install Linux and document outcomes.
+
 ## Next, in order
 
 1. Run an isolated live product enrollment → stage → reconcile → publish/fetch → revoke

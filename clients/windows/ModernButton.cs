@@ -13,7 +13,7 @@ internal sealed class ModernButton : Button
     {
         e.Graphics.Clear(Parent?.BackColor??BackColor);
         e.Graphics.SmoothingMode=SmoothingMode.AntiAlias;
-        float inset=2,diameter=Math.Min(20*DeviceDpi/96f,Math.Min(Width,Height)-4);
+        float inset=2,diameter=Math.Min(24*DeviceDpi/96f,Math.Min(Width,Height)-4);
         var rect=new RectangleF(inset,inset,Width-2*inset-1,Height-2*inset-1);
         if(rect.Width<=diameter||rect.Height<=diameter)return;
         using var path=new GraphicsPath();

@@ -4,6 +4,8 @@ internal sealed class MainForm:Form
 {
     bool ru=CultureInfo.CurrentUICulture.TwoLetterISOLanguageName=="ru",busy;
     string state="unknown";
+    bool polling,pollError;long revision;
+    Func<Request,Task<Reply>> call=Wire.Call;
     readonly Label title=new(),status=new(),description=new(),detail=new(),notice=new();
     readonly Button connect=new ModernButton(),request=new ModernButton(),activate=new ModernButton(),language=new ModernButton(),update=new ModernButton();
     AppUpdate? availableUpdate;
@@ -58,7 +60,7 @@ internal sealed class MainForm:Form
         viewport.SizeChanged+=(_,_)=>FitContent();
         DpiChanged+=(_,_)=>BeginInvoke((Action)FitContent);
         update.Click+=async(_,_)=>{
-            if(busy)return;busy=true;PaintState();
+            if(busy)return;revision++;busy=true;PaintState();
             try{
                 if(availableUpdate is null){
                     availableUpdate=await Updates.Check(Application.ProductVersion.Split('+')[0]);
@@ -95,7 +97,7 @@ internal sealed class MainForm:Form
             }catch(Exception){detail.Text=T("Не удалось прочитать файл активации.","Could not read the activation file.");}
         };
         language.Click+=(_,_)=>{ru=!ru;PaintState();};
-        poll.Tick+=async(_,_)=>{if(!busy)await Execute(new("status"),true);};
+        poll.Tick+=async(_,_)=>await PollStatus();
         FormClosing+=(_,e)=>{if(busy){e.Cancel=true;return;}if(!smoke&&state=="on"&&MessageBox.Show(T("Закрыть окно? VPN продолжит работать.","Close this window? The VPN will keep running."),Text,MessageBoxButtons.OKCancel)!=DialogResult.OK)e.Cancel=true;};
         FormClosed+=(_,_)=>poll.Dispose();
         PaintState();
@@ -107,7 +109,8 @@ internal sealed class MainForm:Form
     }
     internal static void CheckLayouts()
     {
-        // No broker requests: test real layout while the form remains unshown.
+        CheckPolling();
+        // No broker requests: test visible runtime layout.
         foreach(float scale in new[]{1f,1.5f,2f})
         foreach(bool russian in new[]{true,false})
         foreach(string connection in new[]{"inactive","on","other-user","unknown"})
@@ -132,6 +135,35 @@ internal sealed class MainForm:Form
                 throw new InvalidOperationException("Horizontal overflow");
             if(form.language.Bottom>form.language.Parent!.ClientSize.Height)
                 throw new InvalidOperationException("Clipped footer");
+        }
+    }
+    static void CheckPolling()
+    {
+        using var form=new MainForm(true,true);form.state="off";form.Show();form.PaintState();
+        int changes=0;form.status.TextChanged+=(_,_)=>changes++;
+        var response=new TaskCompletionSource<Reply>();int calls=0;
+        form.call=_=>{calls++;return response.Task;};
+        Task pending=form.PollStatus();
+        if(form.busy||!form.connect.Enabled||changes!=0)throw new Exception("Poll changed visible state");
+        form.PollStatus().GetAwaiter().GetResult();
+        if(calls!=1)throw new Exception("Overlapping polls");
+        response.SetResult(new(true,"off"));
+        Pump(pending);if(changes!=0)throw new Exception("Unchanged poll repainted state");
+        form.call=_=>Task.FromResult(new Reply(true,"on"));Pump(form.PollStatus());
+        if(form.state!="on")throw new Exception("State change ignored");
+        response=new TaskCompletionSource<Reply>();form.call=_=>response.Task;pending=form.PollStatus();
+        form.call=_=>Task.FromResult(new Reply(true,"off"));Pump(form.Execute(new("disconnect")));
+        response.SetResult(new(true,"on"));Pump(pending);
+        if(form.state!="off")throw new Exception("Stale poll overwrote user action");
+        form.call=_=>Task.FromException<Reply>(new IOException());Pump(form.PollStatus());
+        if(form.state!="unknown")throw new Exception("Poll error hidden");
+        form.call=_=>Task.FromResult(new Reply(true,"off"));Pump(form.PollStatus());
+        if(form.state!="off"||form.detail.Text!="")throw new Exception("Poll recovery failed");
+        static void Pump(Task task){
+            var deadline=DateTime.UtcNow.AddSeconds(5);
+            while(!task.IsCompleted&&DateTime.UtcNow<deadline)Application.DoEvents();
+            if(!task.IsCompleted)throw new TimeoutException("UI test continuation");
+            task.GetAwaiter().GetResult();
         }
     }
     void FitContent()
@@ -160,11 +192,29 @@ internal sealed class MainForm:Form
         update.Text=availableUpdate is null?T("Проверить обновления","Check for updates"):T("Установить обновление","Install update");update.Enabled=!busy;
         language.Text="RU / EN";FitContent();
     }
+    async Task PollStatus()
+    {
+        if(busy||polling||IsDisposed)return;
+        polling=true;long started=revision;
+        try{
+            Reply reply;
+            try{reply=await call(new("status"));}
+            catch(Exception){reply=new(false,"unknown");}
+            if(IsDisposed||Disposing||busy||started!=revision)return;
+            bool error=!reply.Ok;
+            string next=error?"unknown":reply.State;
+            if(next==state&&error==pollError)return;
+            state=next;
+            if(error)detail.Text=T("Служба Family Connect недоступна. Повторно запустите установщик приложения.","Family Connect service is unavailable. Run the application installer again.");
+            else if(pollError)detail.Text="";
+            pollError=error;PaintState();
+        }finally{polling=false;}
+    }
     async Task<Reply?> Execute(Request action,bool quiet=false)
     {
-        if(busy)return null;busy=true;PaintState();
+        if(busy)return null;revision++;busy=true;PaintState();
         try{
-            var reply=await Wire.Call(action);
+            var reply=await call(action);
             if(action.Action!="request")state=reply.State;
             if(!reply.Ok)detail.Text=reply.Error switch{
                 "activation-invalid"=>T("Активация недействительна, истекла или выдана другому устройству.","Activation is invalid, expired or belongs to another device."),

@@ -1,6 +1,6 @@
 # Current state / Текущее состояние
 
-Updated: 2026-09-10. Desktop **0.2.2 published and installed on Linux**, source `72c1570`. Server remains **0.2.1**, source `8cd0f2d`.
+Updated: 2026-09-10. **0.2.3 fixes in progress; CI/release pending.** Desktop **0.2.2 published and installed on Linux**, source `72c1570`. Server remains **0.2.1**, source `8cd0f2d`.
 
 - Linux: 0.2.2 installed from verified GitHub archive using the existing 0.2.1 updater; startup smoke passed. New icon registered; `previous` retains 0.2.1.
   Current: `~/.local/share/family-connect/current`; backup:
