@@ -61,7 +61,7 @@ class App:
         style.map('Primary.TButton',background=[('disabled','#0b1020'),('active','#0b1020')],foreground=[('disabled','#9caaca')])
         style.configure('FC.TCombobox',fieldbackground='#1b2440',background='#1b2440',foreground='#e8edff',arrowcolor='#aab6d3',bordercolor='#334164',lightcolor='#334164',darkcolor='#334164',padding=9)
         style.map('FC.TCombobox',fieldbackground=[('readonly','#1b2440'),('disabled','#1b2440')],foreground=[('disabled','#8894b2')])
-        self.chevron=tk.PhotoImage(data='iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAABZklEQVR4nO2UvU7CUBiG3xbRyeBgVBIJeg/cCgS8AS/j1EsgTiyghhRzSiIlhhpUWFQgaToIRQ0wORBXEn+Ikc9BSxAtFgmTvFOH7zxPv/ekBWaZZWphjIlEJDibJXEs+BB4pITRB9zpy/QHE7yyxnltftRhC37Ay5t2vC+rMcZEAEidVH2eJc+NuCjsA0BIUb7VFdN1944g9GTViKz6/HWeq4YBgHPushVIkkQSILg63Q5RL+dd94cVzYwrodDboCSm6+7tQOBVVo3I8opX7j4/ttETbhljomma5KgiAEhrZvyq9kSKZsatSqzaZNWI5EttyhZajWT60j9Y2a8hIiH4uaoyJAGAVNbYsuCJVHEDAFixOOcIbicp11+I56q7h8fXwXy5TWqh2fwz/CdJ+sTcO6s8kHZxT5nzRitxVJoMbrNJMnN61+x3Pil8UGI9R6PRBWCMCx0jfYn1vUwljn8Js/yfvAN8Z99AqUP7MQAAAABJRU5ErkJggg==').zoom(max(1,round(self.scale)))
+        self.chevron=tk.PhotoImage(data='iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAABZklEQVR4nO2UvU7CUBiG3xbRyeBgVBIJeg/cCgS8AS/j1EsgTiyghhRzSiIlhhpUWFQgaToIRQ0wORBXEn+Ikc9BSxAtFgmTvFOH7zxPv/ekBWaZZWphjIlEJDibJXEs+BB4pITRB9zpy/QHE7yyxnltftRhC37Ay5t2vC+rMcZEAEidVH2eJc+NuCjsA0BIUb7VFdN1944g9GTViKz6/HWeq4YBgHPushVIkkQSILg63Q5RL+dd94cVzYwrodDboCSm6+7tQOBVVo3I8opX7j4/ttETbhljomma5KgiAEhrZvyq9kSKZsatSqzaZNWI5EttyhZajWT60j9Y2a8hIiH4uaoyJAGAVNbYsuCJVHEDAFixOOcIbicp11+I56q7h8fXwXy5TWqh2fwz/CdJ+sTcO6s8kHZxT5nzRitxVJoMbrNJMnN61+x3Pil8UGI9R6PRBWCMCx0jfYn1vUwljn8Js/yfvAN8Z99AqUP7MQAAAABJRU5ErkJggg==')
         style.element_create('FC.chevron','image',self.chevron,sticky='e')
         style.layout('FC.TCombobox',[('FC.rounded',{'sticky':'nsew','children':[
             ('FC.chevron',{'side':'right','sticky':'ns'}),('Combobox.padding',{'sticky':'nsew','children':[
@@ -77,7 +77,7 @@ class App:
         root.rowconfigure(0,weight=1);root.columnconfigure(0,weight=1)
         self.canvas=tk.Canvas(root,bg='#0b1020',highlightthickness=0,bd=0)
         self.scrollbar=ttk.Scrollbar(root,style='FC.Vertical.TScrollbar',orient='vertical',command=self.canvas.yview)
-        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+        self.canvas.configure(yscrollcommand=self.scroll_status)
         self.canvas.grid(row=0,column=0,sticky='nsew');self.scrollbar.grid(row=0,column=1,sticky='ns')
         self.frame=tk.Frame(self.canvas,bg='#0b1020',padx=24,pady=18)
         self.content=self.canvas.create_window(0,0,anchor='nw',window=self.frame)
@@ -115,6 +115,11 @@ class App:
         if not smoke:
             self.register_icon()
             self.submit(self.initialize)
+    def scroll_status(self,first,last):
+        self.scrollbar.set(first,last)
+        visible=float(last)-float(first)<0.999
+        if visible and not self.scrollbar.winfo_manager():self.scrollbar.grid()
+        elif not visible and self.scrollbar.winfo_manager():self.scrollbar.grid_remove()
     def update_scroll_region(self,event=None):
         bounds=self.canvas.bbox('all')
         if bounds!=self.scroll_bounds:
@@ -129,7 +134,7 @@ class App:
             max(heading.measure(self.t(key)) for key in ('off','on','unknown'))+72))
         root.geometry(f'{width}x{min(available_h,round(680*self.scale))}')
         root.update_idletasks();self.layout();root.update_idletasks()
-        height=min(available_h,max(round(680*self.scale),self.frame.winfo_reqheight()+self.language_button.master.winfo_reqheight()+48))
+        height=min(available_h,max(round(500*self.scale),self.frame.winfo_reqheight()+self.language_button.master.winfo_reqheight()+48))
         root.geometry(f'{width}x{max(420,height)}')
         root.deiconify()
     def confirm(self,text,action):
