@@ -25,11 +25,11 @@ rollback retained. Real laptop startup visibility and themed-dialog cancellation
 Confirm user perception of startup/steady-state responsiveness: a first probe had an
 850 ms gap, follow-up warm measurement max 17.9 ms. See STATUS for exact evidence.
 
-## Active: 0.2.6 narrow window
+## Completed: 0.2.6 narrow window
 
-User requests a narrower window, one action per row and height strictly by content.
-Implementation and local/real-display checks passed; publish platform-verified release,
-sign sequence 5, install Linux and record exact results.
+User preference: narrow window, one action per row at every width, height by content.
+Platform CI and real-display checks passed; catalog sequence 5 published; Linux
+installed with previous version 0.2.5 retained. Await user visual confirmation.
 
 ## Next, in order
 

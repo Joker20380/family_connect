@@ -91,3 +91,11 @@ layout, separate polling queue and 3s polling timeout. Platform checks passed; s
 catalog sequence 4 published; Linux installed with 0.2.3 retained. Real warm runtime
 probe max callback interval 17.9 ms; initial probe gap 850 ms remains documented.
 See STATUS and release report for evidence and remaining confirmation.
+
+
+## 2026-09-10 — 0.2.6 narrow Linux layout
+
+At user request: narrower window, one action per row even at wide sizes, height exactly
+content + footer. Real laptop 658×1078 (993 + 85), all actions visible. Platform checks
+passed; signed catalog sequence 5 published; Linux upgraded with 0.2.5 rollback retained.
+See STATUS, PLAN and release report for current state and evidence.
