@@ -44,7 +44,7 @@ class App:
         self.icon=tk.PhotoImage(data=ICON_PNG);root.iconphoto(True,self.icon)
         style=ttk.Style(root);style.theme_use('clam')
         style.configure('FC.TButton',background='#0b1020',foreground='#e8edff',bordercolor='#334164',lightcolor='#1b2440',darkcolor='#1b2440',borderwidth=0,padding=(14,10),font=('Segoe UI',10))
-        style.map('FC.TButton',background=[('active','#0b1020')],foreground=[('disabled','#8894b2')])
+        style.map('FC.TButton',background=[('disabled','#0b1020'),('active','#0b1020')],foreground=[('disabled','#8894b2')])
         self.button_images={name:tk.PhotoImage(data=data) for name,data in BUTTON_IMAGES.items()}
         for prefix,normal,hover,focus in [('FC','normal','hover','focus'),('Primary','primary','primaryhover','primaryfocus')]:
             element=prefix+'.rounded'
@@ -53,7 +53,7 @@ class App:
                 ('focus',self.button_images[focus]),('active',self.button_images[hover]),border=8,sticky='nsew')
             style.layout(prefix+'.TButton',[(element,{'sticky':'nsew','children':[('Button.padding',{'sticky':'nsew','children':[('Button.label',{'sticky':'nsew'})]})]})])
         style.configure('Primary.TButton',background='#0b1020',padding=(14,12),foreground='#0b1020',font=('Segoe UI',14,'bold'))
-        style.map('Primary.TButton',foreground=[('disabled','#9caaca')])
+        style.map('Primary.TButton',background=[('disabled','#0b1020'),('active','#0b1020')],foreground=[('disabled','#9caaca')])
         style.configure('FC.TCombobox',fieldbackground='#1b2440',background='#1b2440',foreground='#e8edff',arrowcolor='#aab6d3',bordercolor='#334164',lightcolor='#334164',darkcolor='#334164',padding=9)
         style.map('FC.TCombobox',fieldbackground=[('readonly','#1b2440'),('disabled','#1b2440')],foreground=[('disabled','#8894b2')])
         style.configure('FC.Vertical.TScrollbar',background='#273452',troughcolor='#0b1020',arrowcolor='#99a6c6',bordercolor='#0b1020',lightcolor='#273452',darkcolor='#273452',arrowsize=10)
