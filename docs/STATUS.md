@@ -1,45 +1,47 @@
 # Current state / Текущее состояние
 
-Updated: 2026-09-10. **0.2.7 GTK migration: local verification passed; release pending.** Desktop **0.2.6 published and installed on Linux**, source `c5c27c6`.
+Updated: 2026-09-10. Desktop **0.2.7 published and installed on Linux**, source `68b6ffb`.
 Server remains **0.2.1**, source `8cd0f2d`.
 
-- Linux: installed from verified GitHub archive with the existing 0.2.5 updater;
-  startup smoke passed, `~/.local/share/family-connect/previous` retains 0.2.5.
-  Current: `~/.local/share/family-connect/current`.
-- User reported 0.2.3 HiDPI clipping and sluggishness. Fixed font-aware startup sizing,
-  redundant layout work, shared poll/action queue, selector and confirmation styling.
-  Real laptop font scale 2.06 despite Tk reporting 1.0. Final 0.2.6 window 658×1078:
-  content 993 px + footer 85 px, all actions visible, one button per row at every width.
-  No scaled minimum height/spare vertical space. Small screens retain scrolling.
-- Previous 0.2.5 read-only VPN/UI probe: first 5-second sample included an 850 ms callback gap.
-  Follow-up after a 2-second warm-up: maximum 17.9 ms / p95 16.3 ms at 16 ms target;
-  paint <=3.2 ms, drain <=1.6 ms. Steady-state stalls were not reproduced; startup pause
-  not conclusively attributed. Confirm perceived responsiveness with the user.
-- Tests: 27 desktop Python tests; 24 Linux layouts (100–250%), initial action visibility,
-  quiet polling/stale replies and slow-poll action independence. Windows CI passed
-  broker, UI, polling regression and 144 layouts. Client and phase0 CI succeeded.
-- Windows: 0.2.6 installer available. Changes this release target Linux; Windows behavior
-  unchanged. User installation of 0.2.6 has not been confirmed.
-- Catalog `updates/pilot.json`: sequence 5, version 0.2.6, 90-day validity. HTTPS downloads,
-  Ed25519 verification and user-confirmed installation. Reticulum delivery remains planned.
-  Private release key stays local under `state-client-build/update-signing/ed25519.key`.
-- Intermediate 0.2.4 assets were published from e60d9e6 before final sizing polish;
-  no catalog was signed for 0.2.4. Immutable release retained; clients update directly to 0.2.5.
+- Linux frontend now uses GTK 4/libadwaita. Compact header, rounded connection card,
+  native selector/dialogs, one column of actions and content-sized height. Initial data
+  is applied together; unchanged polling does not change widget properties.
+- Installed from checksum-verified GitHub archive using the existing 0.2.6 updater;
+  new GTK startup smoke passed. Current: `~/.local/share/family-connect/current`;
+  `~/.local/share/family-connect/previous` retains 0.2.6. Launcher icon/app ID refreshed.
+- Real laptop GTK 4.22/libadwaita 1.9 on native Wayland: 390×548 logical pixels.
+  Eight-second read-only probe: two initial state renders, no periodic property updates;
+  after two seconds warm-up, max/p95 timer interval 16.2 ms at a 16 ms target,
+  0.154 CPU seconds. Earlier Tk sample had a 1.4-second gap outside Python handlers.
+  This short measurement is not a universal performance guarantee; user should reopen
+  the app and confirm perceived smoothness and appearance.
+- Checks: 27 desktop Python tests, 24 GTK layouts (100–250%), coherent initial state,
+  unchanged/stale polling, action independence and confirmation cancellation. GTK 4.8 /
+  libadwaita 1.2 compatibility verified locally. Windows CI passed broker/UI/layout
+  checks; all client jobs and phase0 passed.
+- Windows: 0.2.7 installer available; native Windows behavior unchanged by this release.
+  Personal Windows installation of this version is not confirmed.
+- Linux prerequisites: Python GI, GTK >=4.8, libadwaita >=1.2, cryptography and
+  NetworkManager. Ubuntu/Debian packages: `python3-gi gir1.2-gtk-4.0 gir1.2-adw-1
+  python3-cryptography`. Already present on this laptop; no system packages changed.
+  Other hosts must install prerequisites before updating; failed smoke retains old app.
+- Catalog `updates/pilot.json`: sequence 6, version 0.2.7, 90-day validity. HTTPS
+  downloads, Ed25519 verification, user-confirmed installation. Reticulum delivery
+  remains planned. Private signing key stays local under
+  `state-client-build/update-signing/ed25519.key` and is never committed.
+- Intermediate 0.2.4 release remains immutable without a signed catalog; later versions
+  supersede it. Do not overwrite published binaries/tags.
 - Server `185.251.89.19:/opt/apps/family_connect`: product API schema 3, localhost
-  `127.0.0.1:18082`, gateway/worker/timer deployed in 0.2.1, 3 legacy peers preserved.
+  `127.0.0.1:18082`, gateway/worker/timer deployed in 0.2.1, three legacy peers preserved.
   Backup `/opt/backups/family-connect/20260910-110930`; rollback gateway image
-  `family-connect-wireguard:rollback-20260910-110930`. Server unchanged by desktop release.
+  `family-connect-wireguard:rollback-20260910-110930`. No server changes for this release.
 - Pending: live product enrollment/revoke smoke, runtime provisioning/ACK and public
   HTTPS ingress, Reticulum update delivery, native invitation/storage flows.
 
-[Release](https://github.com/Joker20380/family_connect/releases/tag/v0.2.6)
-· [Client CI](https://github.com/Joker20380/family_connect/actions/runs/34515537043)
-· [Phase0 CI](https://github.com/Joker20380/family_connect/actions/runs/34515537218)
-· [Release report](releases/0.2.6.ru.md) · [Plan](PLAN.md)
+[Release](https://github.com/Joker20380/family_connect/releases/tag/v0.2.7)
+· [Client CI](https://github.com/Joker20380/family_connect/actions/runs/34519568050)
+· [Phase0 CI](https://github.com/Joker20380/family_connect/actions/runs/34519567996)
+· [Release report](releases/0.2.7.ru.md) · [Plan](PLAN.md)
 
 Temporary icon: `clients/assets/dodecahedron.svg`; regenerate PNG/ICO/embedded icon
 with `python scripts/generate_app_icon.py` (Pillow). Final icon design deferred.
-
-0.2.6 supersedes the wider 0.2.5 layout at user request. Height follows content changes;
-identical content does not request geometry. Added regressions for one-column ordering
-at every tested width and equality of startup window height to content + footer.

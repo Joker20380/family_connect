@@ -99,3 +99,12 @@ At user request: narrower window, one action per row even at wide sizes, height 
 content + footer. Real laptop 658×1078 (993 + 85), all actions visible. Platform checks
 passed; signed catalog sequence 5 published; Linux upgraded with 0.2.5 rollback retained.
 See STATUS, PLAN and release report for current state and evidence.
+
+
+## 2026-09-10 — 0.2.7 native Linux frontend
+
+Replaced Tk with GTK 4/libadwaita after real-display redraw stalls. Compact one-column
+UI, native dialogs/dropdown, coherent state updates and content-sized window. 27 Python
+tests, 24 GTK layouts, native Wayland probe and platform CI passed. Published immutable
+release and signed catalog sequence 6; installed through 0.2.6 updater with rollback.
+No server changes. User visual confirmation pending. See STATUS and release report.
