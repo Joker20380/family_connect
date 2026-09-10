@@ -1,0 +1,655 @@
+{
+  "status": "experimental_unstable",
+  "date": "2026-09-11",
+  "deployment": {
+    "image": "sha256:865c9e3311707e87476611c4fd65dc840ef5b4addf7bac5822e08245e59a5453",
+    "wg_peers_preserved": true,
+    "port": 443,
+    "server": "185.251.89.19",
+    "source": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0"
+  },
+  "target": "www.cloudflare.com",
+  "host_short_check": {
+    "id": "fctcp75850269",
+    "native_tun_https_and_dns": true,
+    "both_udp_blocked": true,
+    "real_chain_reached_tcp": true,
+    "fallback_seconds": 16.81,
+    "routes_firewall_tunnels_cleaned": true
+  },
+  "cleanup": {
+    "service_inactive": true,
+    "tun_absent": true,
+    "ownership_marker_absent": true,
+    "ipv4_ipv6_policy_rules_removed": true,
+    "test_firewall_tables_removed": true
+  },
+  "python_tests": 222,
+  "desktop_tests": 78,
+  "gtk_layouts": 24,
+  "ci_run": false,
+  "released": false,
+  "container_check": {
+    "tun_https": true,
+    "dns_over_tcp": true,
+    "both_udp_ports_blocked": true,
+    "unregistered_identity_rejected": true
+  },
+  "series": [
+    {
+      "name": "short",
+      "connect_max_seconds": [
+        3,
+        5
+      ],
+      "requests": 24,
+      "successful_requests": 17,
+      "pairs": 12,
+      "pairs_with_any_success": 9,
+      "samples": [
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 172.67.74.152",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 104.26.13.205",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 172.67.74.152",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 172.67.74.152",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 28,
+            "status": "000 ",
+            "expected_ip": false,
+            "error": "curl: (28) Resolving timed out after 3001 milliseconds"
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 104.26.12.205",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 172.67.74.152",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 172.67.74.152",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 28,
+            "status": "000 ",
+            "expected_ip": false,
+            "error": "curl: (28) Connection timed out after 3002 milliseconds"
+          },
+          {
+            "target": "plain",
+            "exit": 28,
+            "status": "000 ",
+            "expected_ip": false,
+            "error": "curl: (28) Resolving timed out after 3000 milliseconds"
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 104.26.13.205",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 28,
+            "status": "000 ",
+            "expected_ip": false,
+            "error": "curl: (28) Connection timed out after 3002 milliseconds"
+          },
+          {
+            "target": "plain",
+            "exit": 28,
+            "status": "000 ",
+            "expected_ip": false,
+            "error": "curl: (28) Connection timed out after 3002 milliseconds"
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 28,
+            "status": "000 ",
+            "expected_ip": false,
+            "error": "curl: (28) Connection timed out after 3001 milliseconds"
+          },
+          {
+            "target": "plain",
+            "exit": 28,
+            "status": "000 ",
+            "expected_ip": false,
+            "error": "curl: (28) Resolving timed out after 3001 milliseconds"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "-long",
+      "connect_max_seconds": [
+        8,
+        12
+      ],
+      "requests": 24,
+      "successful_requests": 17,
+      "pairs": 12,
+      "pairs_with_any_success": 10,
+      "samples": [
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.546836 0.000865 0.438752",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 104.26.12.205 1.353626 0.431815 0.967708",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.737393 0.000391 0.383373",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 172.67.74.152 1.155909 0.407818 0.912410",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.551089 0.000995 0.395870",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 104.26.13.205 1.003006 0.386071 0.774741",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.662798 0.000611 0.521343",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 104.26.12.205 1.356753 0.474109 1.107107",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.922827 0.000574 0.699993",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 172.67.74.152 1.905622 0.808429 1.534344",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 1.536675 0.000630 1.423796",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 104.26.12.205 1.087540 0.394919 0.870687",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.620722 0.000787 0.472299",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 172.67.74.152 1.082336 0.399265 0.856605",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.763965 0.000828 0.582976",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 28,
+            "status": "000  8.000771 0.000000 0.000000",
+            "expected_ip": false,
+            "error": "curl: (28) Connection timed out after 8000 milliseconds"
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.501812 0.000342 0.384094",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 28,
+            "status": "000  8.001129 0.000000 0.000000",
+            "expected_ip": false,
+            "error": "curl: (28) Resolving timed out after 8001 milliseconds"
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 28,
+            "status": "000  8.002499 0.000000 0.000000",
+            "expected_ip": false,
+            "error": "curl: (28) Connection timed out after 8002 milliseconds"
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 104.26.13.205 6.050697 5.385884 5.838503",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 28,
+            "status": "000  8.002797 0.000000 0.000000",
+            "expected_ip": false,
+            "error": "curl: (28) Connection timed out after 8002 milliseconds"
+          },
+          {
+            "target": "plain",
+            "exit": 28,
+            "status": "000  8.001803 0.000000 0.000000",
+            "expected_ip": false,
+            "error": "curl: (28) Resolving timed out after 8001 milliseconds"
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 28,
+            "status": "000  8.002152 0.000000 0.000000",
+            "expected_ip": false,
+            "error": "curl: (28) Connection timed out after 8002 milliseconds"
+          },
+          {
+            "target": "plain",
+            "exit": 28,
+            "status": "000  8.000806 0.000000 0.000000",
+            "expected_ip": false,
+            "error": "curl: (28) Resolving timed out after 8000 milliseconds"
+          }
+        ]
+      ]
+    },
+    {
+      "name": "-state",
+      "connect_max_seconds": [
+        8,
+        12
+      ],
+      "requests": 24,
+      "successful_requests": 21,
+      "pairs": 12,
+      "pairs_with_any_success": 12,
+      "samples": [
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.507503 0.000786 0.387512",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 172.67.74.152 1.026907 0.350964 0.807670",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.620102 0.000769 0.476877",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 104.26.12.205 0.980504 0.368134 0.766003",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.529821 0.000718 0.414982",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 104.26.13.205 1.032386 0.382477 0.802976",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.518766 0.000818 0.412325",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 28,
+            "status": "000 104.26.12.205 12.002721 0.328456 0.730196",
+            "expected_ip": false,
+            "error": "curl: (28) Operation timed out after 12002 milliseconds with 0 bytes received"
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.547974 0.000660 0.407801",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 104.26.13.205 6.417562 5.760660 6.196001",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.583788 0.000742 0.442631",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 28,
+            "status": "000  8.000509 0.000000 0.000000",
+            "expected_ip": false,
+            "error": "curl: (28) Connection timed out after 8000 milliseconds"
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.566246 0.000717 0.429451",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 104.26.13.205 1.036100 0.387788 0.803984",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 1.813710 0.000557 1.642017",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 104.26.13.205 1.082946 0.451721 0.859374",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.629236 0.000800 0.426068",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 172.67.74.152 1.112096 0.447570 0.898369",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.629504 0.000833 0.487225",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 104.26.13.205 0.938553 0.389125 0.727798",
+            "expected_ip": true,
+            "error": ""
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.971121 0.000654 0.662726",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 28,
+            "status": "000  8.001141 0.000000 0.000000",
+            "expected_ip": false,
+            "error": "curl: (28) Connection timed out after 8001 milliseconds"
+          }
+        ],
+        [
+          {
+            "target": "trace",
+            "exit": 0,
+            "status": "200 1.1.1.1 0.587594 0.000786 0.454285",
+            "expected_ip": true,
+            "error": ""
+          },
+          {
+            "target": "plain",
+            "exit": 0,
+            "status": "200 104.26.12.205 1.118682 0.445538 0.899649",
+            "expected_ip": true,
+            "error": ""
+          }
+        ]
+      ]
+    }
+  ]
+}

@@ -1,10 +1,21 @@
 # Current state / Текущее состояние
 
-Updated: 2026-09-10. Desktop **0.2.8 published**, source `5f0303d`.
+Updated: 2026-09-11. Desktop **0.2.8 published**, source `5f0303d`.
 Windows 0.2.8 installer and signed update available. User reports Windows is currently
 on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
+
+- TCP experiment: VLESS + REALITY deployed separately on TCP/443; Xray 26.3.27.
+  Linux TUN/helper installed; isolated HTTPS/DNS and unauthorized-client rejection passed.
+  One real blocked-WG/AWG → TCP run passed in 16.81 seconds. Repeated requests still
+  time out; increasing probe timeouts did not resolve this. Cause remains unknown.
+  222 Python tests (78 desktop), GTK layout/recovery checks passed locally; no CI/release.
+  Source checkpoint `fa3c71e` is preserved separately in local branch `pilot/tcp-reality-2026-09-11`;
+  main WG/AWG launcher and stable app remain on previous code. TCP service is inactive
+  on the laptop; interface, policy rules and test firewall tables verified removed.
+  Server TCP container remains deployed. Resume diagnosis before integrating/releasing TCP.
+  [Checkpoint and next diagnostic step](releases/2026-09-11-tcp.ru.md).
 
 - User priority: connection resilience. AWG 2.0 pilot deployed separately on UDP/51821;
   existing WG/three peers preserved. Linux root helper installed and real host AWG
@@ -19,7 +30,7 @@ Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `1176
   bound HTTPS probes; 199 Python tests and GTK recovery/layout checks passed.
   Established WG endpoint block recovered through AWG in 44.05 seconds on the laptop.
   Updated root helper installed; no new stable release or server change in this stage.
-  Native Windows/Android AWG, TCP alternative and Reticulum delivery remain pending.
+  Native Windows/Android AWG, stable TCP integration and Reticulum delivery remain pending.
   Same server/IP and UDP limitation. [Recovery report](releases/2026-09-10-recovery.ru.md).
   [AWG rollout report](releases/2026-09-10-awg.ru.md) · [evidence](awg-resilience-result.json).
 

@@ -64,11 +64,14 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
 ## Next, in order
 
-1. Add a TCP alternative (VLESS + REALITY), preserving working profiles, and validate in
-   users' actual networks. Connection-time fallback and open-app established-session
-   recovery are implemented: two independent HTTPS checks, bounded retries and explicit
-   cancellation. Real established WG block → AWG recovery passed in 44.05 seconds.
-   See [recovery report](releases/2026-09-10-recovery.ru.md).
+1. Diagnose and stabilize the TCP experiment before integrating it. VLESS + REALITY
+   is deployed and one real WG/AWG-block → TCP run passed in 16.81 seconds, but repeated
+   requests still time out; 8/12-second limits did not resolve the issue. Cause unknown.
+   Local source branch: `pilot/tcp-reality-2026-09-11`; main WG/AWG remains unchanged.
+   Compare SOCKS and TUN with the same outbound, inspect DNS and outer TCP during faults,
+   then repeat sustained traffic, cleanup and established-session AWG → TCP recovery.
+   [TCP checkpoint](releases/2026-09-11-tcp.ru.md). Existing WG → AWG established-session
+   recovery passed in 44.05 seconds; [previous report](releases/2026-09-10-recovery.ru.md).
 2. Integrate the tested transports into native Windows/Android. Complete platform CI,
    installation/UI checks and signed release before upgrading the stable client channel.
 3. Integrate provisioning/runtime/ACK and known-good recovery with real Reticulum
