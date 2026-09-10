@@ -1,0 +1,13 @@
+[Unit]
+Description=Reconcile Family Connect product peers
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/family-connect
+EnvironmentFile=/etc/family-connect/product.env
+ExecStart=/opt/family-connect/.venv/bin/python -m control.product.admin --database ${FC_PRODUCT_DB} reconcile-peers --gateways ${FC_GATEWAYS}
+UMask=0077
+TimeoutStartSec=60
+KillMode=control-group

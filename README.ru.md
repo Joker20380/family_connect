@@ -1,3 +1,5 @@
+> **Current status / Текущий статус:** [docs/STATUS.md](docs/STATUS.md) · [Plan / План](docs/PLAN.md) · [Documentation map](docs/README.md)
+
 [Windows 0.2 — автономный установщик и активация](docs/windows-native.ru.md)
 
 # Family Connect — русский

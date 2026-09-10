@@ -1,5 +1,7 @@
 # Device registration: single-host product-plane stage
 
+Update 2026-09-10: [provisioning delivery, migration v2 and cache](provisioning-provider.en.md) are implemented. The v1 registration stage is described below; the current migrator upgrades the database to [v3](gateway-reconciliation.en.md).
+
 Date: 2026-09-09. Implemented in source and tested locally; not deployed to the public gateway. Existing Linux/Android/Windows clients still use their previous onboarding. [Identity/provisioning ADR](adr/001-identity-provisioning.en.md).
 
 ## What is working

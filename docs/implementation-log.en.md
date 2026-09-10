@@ -31,3 +31,30 @@ Not deployed. No VPN was connected, no gateway peers were changed, no mobile/Win
 Account authentication, paid-subscription integration, family-owner UI, distributed PostgreSQL deployment and production public exposure are not completed by the pilot operator grant mechanism.
 
 Final validation for the registration stage: Docker build passed with **90 Python 3.13 tests** in its test stage. A network-disabled runtime smoke test passed for legacy `control.app.health()` and `scripts/admin.py --help`. These checks do not activate a VPN or replace physical platform regression tests.
+
+
+## 2026-09-10 — authenticated provisioning provider and Linux cache
+
+* Migration v2 preserves enrollment and adds single-use fetch challenges and immutable envelope history.
+* Separate domain/audience proof, transactional device/key/entitlement checks, replay prevention and no fallback to old server versions. Lost responses recover through a fresh challenge without issuing another version.
+* Operator signer initialization, publication with --peers-ready, and version listing. HTTP delivery needs no signing private key. Operators prepare peers manually; automatic reconciliation remains pending.
+* HTTPS reference client and atomic Linux cache with durable floors, lease verification, exact redelivery and fail-closed corruption/observed clock rollback handling. No tunnel ACK, native integration or hardware backup rollback protection.
+* Full suite: **130 passed**, two existing upstream warnings. HTTP tests ran outside the sandbox because of its known TestClient event-loop restriction.
+* [Protocol, commands and limitations](provisioning-provider.en.md). Next: gateway reconciliation/outbox, peer application/revocation, then client VPN lifecycle integration.
+
+Docker: **118 Python 3.13 tests passed**; build succeeded. Legacy health and scripts/admin.py --help smoke checks passed in a container with networking disabled.
+
+
+## 2026-09-10 — gateway reconciliation and desktop layout fixes
+
+* Migration v3 adds deployments, address reservations and a durable peer outbox. Publish/fetch require confirmed deployments; manual --peers-ready is removed.
+* Revoke atomically queues removal. Worker checks expiry/key/revoke, repairs drift and retries with backoff. The Docker helper rereads current persisted intent under a lock, including delayed operations after timeout.
+* Pilot adapter verifies gateway key/port/mount, persists public peer records atomically and protects unmanaged/static peers. Systemd templates are prepared, not installed.
+* Linux gets responsive actions/wrapping, scrolling/focus access, fixed footer, consistent dark styling, HiDPI-aware minimum width and timer cleanup. Windows gets explicit auto-size rows, constrained labels, scrolling/footer, PerMonitorV2 and a responsive code dialog.
+* Linux: 18 RU/EN layout cases at three sizes and 100/150/200% scale; screenshot reviewed. Windows cross-build: zero warnings/errors. WinForms /layout-test is added to CI but was not run on this Linux host; manual Windows DPI validation remains required before release.
+* Real WG in an isolated Docker namespace without networking: install/remove/restart, delayed command after removal, unmanaged peer preservation and read-only /keys passed.
+* [Gateway protocol/operations/rollback](gateway-reconciliation.en.md), [UI details/screenshot](desktop-layout.en.md). Not deployed; installed applications have not been replaced.
+
+Current next steps: client runtime application/ACK/known-good recovery, Linux flow integration, native secure storage and real Windows DPI validation, Reticulum delivery, then distributed gateway agents/topology migration. Fetch/cache and local gateway reconciliation are implemented; tunnel-application ACK remains pending.
+
+Final validation: **155 Python tests passed**, control Docker build succeeded with **143 Python 3.13 tests**, two existing upstream warnings.

@@ -1,0 +1,11 @@
+[Unit]
+Description=Reconcile Family Connect peer grants and revocations periodically
+
+[Timer]
+OnBootSec=15s
+OnUnitInactiveSec=15s
+AccuracySec=1s
+Unit=family-connect-peers.service
+
+[Install]
+WantedBy=timers.target

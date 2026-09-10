@@ -1,9 +1,11 @@
 name: Client builds
 on:
   push:
-    paths: ['clients/**', '.github/workflows/clients.yml']
+    branches: ['**']
+    tags: ['v*']
+    paths: ['clients/**', '.github/workflows/clients.yml', 'scripts/package_desktop.py', 'VERSION']
   pull_request:
-    paths: ['clients/**', '.github/workflows/clients.yml']
+    paths: ['clients/**', '.github/workflows/clients.yml', 'scripts/package_desktop.py', 'VERSION']
   workflow_dispatch:
 concurrency:
   group: family-connect-clients-${{ github.ref }}
@@ -56,6 +58,14 @@ jobs:
       - name: Check user interface
         shell: pwsh
         run: ./clients/windows/test-install.ps1 -Stage UI
+      - name: Check compact and scaled window layouts
+        shell: pwsh
+        run: |
+          $app = Get-ChildItem clients/windows -Filter FamilyConnect.exe -Recurse | Where-Object { $_.FullName -notmatch '[\\/]obj[\\/]' } | Select-Object -First 1
+          if (-not $app) { throw "Application executable missing" }
+          $process = Start-Process $app.FullName -ArgumentList '/layout-test' -PassThru
+          if (-not $process.WaitForExit(90000)) { $process.Kill(); throw 'Layout checks timed out' }
+          if ($process.ExitCode -ne 0) { Get-Content "$env:TEMP/fc-layout-check.txt" -ErrorAction SilentlyContinue; throw "Layout checks failed: $($process.ExitCode)" }
       - name: Uninstall application and service
         if: always()
         shell: pwsh
@@ -71,13 +81,42 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: sudo apt-get update && sudo apt-get install -y python3-tk xvfb
-      - run: python -m pip install pytest==9.1.1
+      - run: sudo apt-get update && sudo apt-get install -y python3-tk python3-cryptography xvfb
+      - run: python -m pip install pytest==9.1.1 cryptography==46.0.7
       - run: python -m pytest clients/desktop/tests -q
       - run: xvfb-run -a /usr/bin/python3 clients/desktop/app.py --smoke
+      - run: xvfb-run -a /usr/bin/python3 clients/desktop/layout_check.py
+      - run: python3 scripts/package_desktop.py
       - uses: actions/upload-artifact@v4
         with:
           name: FamilyConnect-Linux
           path: |
             clients/desktop/*.py
             clients/desktop/*.sh
+            artifacts/clients/FamilyConnect-Linux-*.tar.gz
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v') || (github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'Release '))
+    needs: [windows, linux]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: FamilyConnect-Windows-Installer-pilot-unsigned
+          path: release-windows
+      - uses: actions/download-artifact@v4
+        with:
+          name: FamilyConnect-Linux
+          path: release-linux
+      - name: Prepare versioned release files
+        run: python3 scripts/package_desktop.py --release-files
+      - name: Publish tested pilot release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="$(cat VERSION)"
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then test "$GITHUB_REF_NAME" = "v$version"; fi
+          gh release create "v$version" release-files/* --target "$GITHUB_SHA" --prerelease --title "Family Connect v$version" --notes-file "docs/releases/$version.en.md"

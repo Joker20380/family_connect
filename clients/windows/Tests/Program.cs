@@ -27,3 +27,12 @@ var bad=Convert.FromBase64String(parsed.Signature);bad[0]^=1;
 Reject(JsonSerializer.Serialize(parsed with{Signature=Convert.ToBase64String(bad)},Activation.Json),device,now);
 Reject(new string('a',8193),device,now);
 Console.WriteLine("9 activation checks passed.");
+var updateRoot=Path.Combine(AppContext.BaseDirectory,"fixtures");
+var updateRaw=File.ReadAllBytes(Path.Combine(updateRoot,"update-v1.json"));
+var updatePublic=Convert.FromBase64String(File.ReadAllText(Path.Combine(updateRoot,"update-v1.pub")).Trim());
+if(Updates.Verify(updateRaw,updatePublic,1000).Update.Version!="0.2.2")throw new Exception("update interoperability");
+void RejectUpdate(byte[] raw,byte[] anchor,long clock){try{Updates.Verify(raw,anchor,clock);}catch(Exception){return;}throw new Exception("accepted invalid update");}
+RejectUpdate(updateRaw,root,1000);RejectUpdate(updateRaw,updatePublic,2000);RejectUpdate(updateRaw,updatePublic,998);
+RejectUpdate(new byte[65537],updatePublic,1000);
+var changed=updateRaw.ToArray();changed[changed.Length/2]^=1;RejectUpdate(changed,updatePublic,1000);
+Console.WriteLine("6 update catalog checks passed, including shared Python fixture.");

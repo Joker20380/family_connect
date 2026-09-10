@@ -4,10 +4,12 @@ import os
 import sqlite3
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from starlette.concurrency import run_in_threadpool
 
 from .store import EnrollmentRejected, ProductStore
+from .provisioning import ProvisioningService
+from provisioning.envelope import ProvisioningRejected
 
 MAX_BODY = 8192
 
@@ -52,7 +54,8 @@ def create_app(store):
 
     @app.exception_handler(sqlite3.Error)
     async def unavailable(request, error):
-        return JSONResponse({'code': 'REGISTRATION_UNAVAILABLE'}, status_code=503)
+        code = 'PROVISIONING_UNAVAILABLE' if request.url.path.startswith('/v2/provisioning/') else 'REGISTRATION_UNAVAILABLE'
+        return JSONResponse({'code': code}, status_code=503)
 
     async def parse(request, fields=None):
         try:
@@ -62,6 +65,11 @@ def create_app(store):
             return value
         except (ValueError, TypeError, UnicodeError, RecursionError):
             return None
+
+    @app.get('/healthz')
+    async def health():
+        await run_in_threadpool(store.check_ready)
+        return {'status': 'ok', 'service': 'family-connect-product', 'schema_version': 3}
 
     @app.post('/v2/registration/challenge')
     async def challenge(request: Request):
@@ -76,6 +84,27 @@ def create_app(store):
         if proof is None:
             return JSONResponse({'code': 'INVALID_REQUEST'}, status_code=400)
         return await run_in_threadpool(store.enroll, proof)
+
+    service = ProvisioningService(store)
+
+    @app.exception_handler(ProvisioningRejected)
+    async def provisioning_rejected(request, error):
+        return JSONResponse({'code': 'PROVISIONING_REJECTED'}, status_code=403)
+
+    @app.post('/v2/provisioning/challenge')
+    async def provisioning_challenge(request: Request):
+        value = await parse(request, {'public_identity', 'wireguard_public_key'})
+        if value is None:
+            return JSONResponse({'code': 'INVALID_REQUEST'}, status_code=400)
+        return await run_in_threadpool(service.challenge, **value)
+
+    @app.post('/v2/provisioning/fetch')
+    async def provisioning_fetch(request: Request):
+        proof = await parse(request)
+        if proof is None:
+            return JSONResponse({'code': 'INVALID_REQUEST'}, status_code=400)
+        envelope = await run_in_threadpool(service.fetch, proof)
+        return Response(envelope, media_type='application/json')
 
     return app
 

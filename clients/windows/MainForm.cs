@@ -5,38 +5,77 @@ internal sealed class MainForm:Form
     bool ru=CultureInfo.CurrentUICulture.TwoLetterISOLanguageName=="ru",busy;
     string state="unknown";
     readonly Label title=new(),status=new(),description=new(),detail=new(),notice=new();
-    readonly Button connect=new(),request=new(),activate=new(),language=new();
+    readonly Button connect=new(),request=new(),activate=new(),language=new(),update=new();
+    AppUpdate? availableUpdate;
     readonly System.Windows.Forms.Timer poll=new(){Interval=3000};
+    readonly TableLayoutPanel content=new();
+    readonly Panel viewport=new();
     readonly Color mint=Color.FromArgb(102,219,192);
     string T(string russian,string english)=>ru?russian:english;
-    public MainForm(bool smoke)
+    public MainForm(bool smoke,bool layoutTest=false)
     {
-        Text="Family Connect";Size=new(540,700);MinimumSize=new(480,650);
+        AutoScaleMode=AutoScaleMode.Dpi;AutoScaleDimensions=new SizeF(96,96);
+        Text=$"Family Connect · {Application.ProductVersion.Split('+')[0]}";ClientSize=new(480,620);MinimumSize=new(360,420);
         BackColor=Color.FromArgb(16,25,35);ForeColor=Color.White;
         Font=new Font("Segoe UI",11);StartPosition=FormStartPosition.CenterScreen;
-        var panel=new TableLayoutPanel{Dock=DockStyle.Fill,Padding=new Padding(28),ColumnCount=1,RowCount=9};
-        Controls.Add(panel);
-        title.Text="FAMILY CONNECT";title.ForeColor=mint;title.Font=new Font(Font.FontFamily,24,FontStyle.Bold);
-        status.Font=new Font(Font.FontFamily,22,FontStyle.Bold);
-        foreach(var label in new[]{title,status,description,detail,notice}){label.AutoSize=true;label.Dock=DockStyle.Fill;label.TextAlign=ContentAlignment.MiddleCenter;label.Margin=new Padding(0,12,0,12);}
-        foreach(var button in new[]{connect,request,activate,language}){
-            button.AutoSize=true;button.MinimumSize=new Size(0,46);button.Dock=DockStyle.Fill;
-            button.FlatStyle=FlatStyle.Flat;button.Margin=new Padding(0,6,0,6);
+        var shell=new TableLayoutPanel{Dock=DockStyle.Fill,ColumnCount=1,RowCount=2,Margin=Padding.Empty};
+        shell.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
+        shell.RowStyles.Add(new RowStyle(SizeType.Percent,100));shell.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        Controls.Add(shell);
+        viewport.Dock=DockStyle.Fill;viewport.AutoScroll=true;viewport.Margin=Padding.Empty;
+        shell.Controls.Add(viewport,0,0);
+        content.AutoSize=true;content.AutoSizeMode=AutoSizeMode.GrowAndShrink;
+        content.ColumnCount=1;content.RowCount=9;content.Padding=new Padding(24,18,24,12);
+        content.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
+        for(int i=0;i<9;i++)content.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        viewport.Controls.Add(content);
+        title.Text="FAMILY CONNECT";title.ForeColor=mint;title.Font=new Font(Font.FontFamily,20,FontStyle.Bold);
+        status.Font=new Font(Font.FontFamily,20,FontStyle.Bold);
+        foreach(var label in new[]{title,status,description,detail,notice}){
+            label.AutoSize=true;label.Dock=DockStyle.Fill;label.TextAlign=ContentAlignment.MiddleCenter;
+            label.Margin=new Padding(0,8,0,8);
+        }
+        foreach(var button in new[]{connect,request,activate,language,update}){
+            button.AutoSize=true;button.MinimumSize=new Size(0,44);button.Dock=DockStyle.Fill;
+            button.BackColor=Color.FromArgb(32,48,64);button.FlatAppearance.BorderColor=Color.FromArgb(54,80,100);
+            button.FlatStyle=FlatStyle.Flat;button.Margin=new Padding(0,4,0,4);
         }
         connect.BackColor=mint;connect.ForeColor=BackColor;connect.Font=new Font(Font.FontFamily,14,FontStyle.Bold);
         detail.ForeColor=Color.FromArgb(232,205,164);notice.ForeColor=Color.LightSlateGray;
-        panel.Controls.Add(title);panel.Controls.Add(status);panel.Controls.Add(description);panel.Controls.Add(connect);
-        panel.Controls.Add(request);panel.Controls.Add(activate);panel.Controls.Add(detail);panel.Controls.Add(notice);panel.Controls.Add(language);
+        int row=0;
+        foreach(Control child in new Control[]{title,status,description,connect,request,activate,detail,notice,update})
+            content.Controls.Add(child,0,row++);
+        var footer=new Panel{Dock=DockStyle.Fill,Height=60,Padding=new Padding(24,4,24,8),Margin=Padding.Empty};
+        language.Dock=DockStyle.Right;language.Width=100;footer.Controls.Add(language);shell.Controls.Add(footer,0,1);
+        viewport.SizeChanged+=(_,_)=>FitContent();
+        DpiChanged+=(_,_)=>BeginInvoke((Action)FitContent);
+        update.Click+=async(_,_)=>{
+            if(busy)return;busy=true;PaintState();
+            try{
+                if(availableUpdate is null){
+                    availableUpdate=await Updates.Check(Application.ProductVersion.Split('+')[0]);
+                    detail.Text=availableUpdate is null?T("Установлена последняя версия.","You are up to date."):T("Доступна версия ","Version available: ")+availableUpdate.Version;
+                }else if(MessageBox.Show(T("Скачать и установить обновление? VPN может кратко прерваться. Ключи и профили сохранятся.","Download and install the update? VPN may briefly disconnect. Keys and profiles will be preserved."),Text,MessageBoxButtons.OKCancel)==DialogResult.OK){
+                    string installer=await Updates.Download(availableUpdate);Updates.LaunchInstaller(installer,availableUpdate);
+                    busy=false;state="off";Close();
+                }
+            }catch(Exception){detail.Text=T("Обновление недоступно или не прошло проверку. Текущая версия сохранена.","Update unavailable or verification failed. The current version is preserved.");}
+            finally{busy=false;if(!IsDisposed)PaintState();}
+        };
         connect.Click+=async(_,_)=>await Execute(new(state=="on"?"disconnect":"connect"));
         request.Click+=async(_,_)=>{
             var reply=await Execute(new("request"));
             if(reply?.Code is not string code)return;
-            using var dialog=new Form{Text=T("Код устройства","Device code"),Size=new(580,230),StartPosition=FormStartPosition.CenterParent};
-            var text=new TextBox{Text=code,ReadOnly=true,Multiline=true,Dock=DockStyle.Top,Height=65};
-            var copy=new Button{Text=T("Скопировать код","Copy code"),Dock=DockStyle.Bottom,Height=45};
+            using var dialog=new Form{Text=T("Код устройства","Device code"),ClientSize=new(500,230),MinimumSize=new(340,240),StartPosition=FormStartPosition.CenterParent,AutoScaleMode=AutoScaleMode.Dpi};
+            var layout=new TableLayoutPanel{Dock=DockStyle.Fill,Padding=new Padding(16),ColumnCount=1,RowCount=3};
+            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
+            layout.RowStyles.Add(new RowStyle(SizeType.Percent,45));layout.RowStyles.Add(new RowStyle(SizeType.Percent,55));layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            var text=new TextBox{Text=code,ReadOnly=true,Multiline=true,WordWrap=true,ScrollBars=ScrollBars.Vertical,Dock=DockStyle.Fill};
+            var copy=new Button{Text=T("Скопировать код","Copy code"),Dock=DockStyle.Fill,AutoSize=true,MinimumSize=new(0,44)};
             copy.Click+=(_,_)=>{Clipboard.SetText(code);dialog.Close();};
-            dialog.Controls.Add(new Label{Text=T("Передайте этот код оператору для активации. Закрытый ключ остаётся на устройстве.","Send this code to the operator for activation. Your private key stays on this device."),Dock=DockStyle.Fill});
-            dialog.Controls.Add(text);dialog.Controls.Add(copy);dialog.ShowDialog(this);
+            var help=new Label{Text=T("Передайте этот код оператору для активации. Закрытый ключ остаётся на устройстве.","Send this code to the operator for activation. Your private key stays on this device."),Dock=DockStyle.Fill};
+            layout.Controls.Add(text,0,0);layout.Controls.Add(help,0,1);layout.Controls.Add(copy,0,2);
+            dialog.Controls.Add(layout);dialog.ShowDialog(this);
         };
         activate.Click+=async(_,_)=>{
             using var dialog=new OpenFileDialog{Filter="Family Connect activation|*.fcactivation",CheckFileExists=true};
@@ -53,9 +92,49 @@ internal sealed class MainForm:Form
         FormClosed+=(_,_)=>poll.Dispose();
         PaintState();
         Shown+=async(_,_)=>{
+            if(layoutTest)return;
             if(smoke){Close();return;}
             await Execute(new("status"));poll.Start();
         };
+    }
+    internal static void CheckLayouts()
+    {
+        // No broker requests: test real layout while the form remains unshown.
+        foreach(float scale in new[]{1f,1.5f,2f})
+        foreach(bool russian in new[]{true,false})
+        foreach(string connection in new[]{"inactive","on","other-user","unknown"})
+        foreach(Size size in new[]{new Size(360,420),new Size(480,620),new Size(800,700)}){
+            using var form=new MainForm(true,true);
+            form.ru=russian;form.state=connection;
+            form.Scale(new SizeF(scale,scale));
+            form.ClientSize=new Size((int)(size.Width*scale),(int)(size.Height*scale));
+            form.detail.Text=russian?"Служба Family Connect недоступна. Повторно запустите установщик приложения.":"Family Connect service is unavailable. Run the application installer again.";
+            form.Show();Application.DoEvents();form.PaintState();form.PerformLayout();form.content.PerformLayout();
+            int bottom=0;
+            foreach(Control control in form.content.Controls){
+                if(control.Left<0||control.Right>form.content.ClientSize.Width||control.Top<bottom)
+                    throw new InvalidOperationException("Clipped or overlapping content");
+                bottom=control.Bottom;
+                if(control is Label label && label.Height<label.GetPreferredSize(new Size(label.Width,0)).Height)
+                    throw new InvalidOperationException("Clipped label");
+                if(control is Button button && button.Width<button.GetPreferredSize(Size.Empty).Width)
+                    throw new InvalidOperationException("Clipped button");
+            }
+            if(form.content.Width>form.viewport.ClientSize.Width)
+                throw new InvalidOperationException("Horizontal overflow");
+            if(form.language.Bottom>form.language.Parent!.ClientSize.Height)
+                throw new InvalidOperationException("Clipped footer");
+        }
+    }
+    void FitContent()
+    {
+        if(viewport.ClientSize.Width<=0)return;
+        int width=Math.Max(1,viewport.ClientSize.Width-SystemInformation.VerticalScrollBarWidth);
+        content.SuspendLayout();
+        content.MinimumSize=new Size(width,0);content.MaximumSize=new Size(width,0);content.Width=width;
+        int textWidth=Math.Max(1,width-content.Padding.Horizontal);
+        foreach(var label in new[]{title,status,description,detail,notice})label.MaximumSize=new Size(textWidth,0);
+        content.ResumeLayout(true);
     }
     void PaintState()
     {
@@ -69,7 +148,8 @@ internal sealed class MainForm:Form
         request.Text=T("1. Получить код устройства","1. Get device code");request.Enabled=!busy;
         activate.Text=T("2. Открыть файл активации","2. Open activation file");activate.Enabled=!busy&&(state=="off"||state=="inactive");
         notice.Text=T("Туннель не подтверждает доступность интернета. Активация пилота выполняется оператором.","Tunnel status does not verify Internet access. Pilot activation is handled by the operator.");
-        language.Text="RU / EN";
+        update.Text=availableUpdate is null?T("Проверить обновления","Check for updates"):T("Установить обновление","Install update");update.Enabled=!busy;
+        language.Text="RU / EN";FitContent();
     }
     async Task<Reply?> Execute(Request action,bool quiet=false)
     {

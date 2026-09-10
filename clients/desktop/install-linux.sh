@@ -1,17 +1,29 @@
 #!/bin/sh
 set -eu
-python3 -c 'import tkinter'
+python3 -c 'import tkinter, cryptography'
 command -v nmcli >/dev/null
 source_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
-install_dir="$HOME/.local/share/family-connect"
-mkdir -p "$install_dir" "$HOME/.local/share/applications"
-cp "$source_dir/app.py" "$source_dir/backend.py" "$source_dir/profile_config.py" "$install_dir/"
-python3 - "$install_dir" <<'PY'
+python3 - "$source_dir" <<'PY'
+import ast
+import os
 from pathlib import Path
+import secrets
+import shutil
 import sys
-folder=Path(sys.argv[1])
-entry=Path.home()/'.local/share/applications/family-connect.desktop'
-command=str(folder/'app.py').replace('\\','\\\\').replace('"','\\"').replace('`','\\`').replace('$','\\$')
-entry.write_text('[Desktop Entry]\nType=Application\nName=Family Connect\nExec=python3 "'+command+'"\nTerminal=false\nCategories=Network;\nComment=Family VPN client\n')
-print('Installed / Установлено:',entry)
+source=Path(sys.argv[1])
+version=next(node.value.value for node in ast.parse((source/'app.py').read_text()).body if isinstance(node,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='APP_VERSION' for t in node.targets))
+root=Path.home()/'.local/share/family-connect';root.mkdir(parents=True,exist_ok=True)
+if root.is_symlink():raise ValueError('Unsafe application directory')
+releases=root/'releases';releases.mkdir(mode=0o700,exist_ok=True)
+if releases.is_symlink():raise ValueError('Unsafe release directory')
+release=releases/(version+'-'+secrets.token_hex(6));release.mkdir(mode=0o700)
+for name in ('app.py','backend.py','profile_config.py','updates.py','update.pub','install-linux.sh'):
+    shutil.copyfile(source/name,release/name);(release/name).chmod(0o600)
+if (root/'current').is_symlink():
+    previous=root/('.previous-'+secrets.token_hex(6));previous.symlink_to(os.readlink(root/'current'));os.replace(previous,root/'previous')
+link=root/('.current-'+secrets.token_hex(6));link.symlink_to(release.relative_to(root));os.replace(link,root/'current')
+folder=Path.home()/'.local/share/applications';folder.mkdir(parents=True,exist_ok=True)
+command=str(root/'current/app.py').replace('\\','\\\\').replace('"','\\"').replace('`','\\`').replace('$','\\$')
+(folder/'family-connect.desktop').write_text('[Desktop Entry]\nType=Application\nName=Family Connect\nExec=python3 "'+command+'"\nTerminal=false\nCategories=Network;\nComment=Family VPN client\n')
+print('Installed Family Connect',version)
 PY

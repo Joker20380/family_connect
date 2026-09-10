@@ -1,3 +1,5 @@
+> **Current status / Текущий статус:** [docs/STATUS.md](docs/STATUS.md) · [Plan / План](docs/PLAN.md) · [Documentation map](docs/README.md)
+
 # Family Connect
 
 **Русский:** [Руководство](README.ru.md) · [Архитектура](docs/architecture.ru.md) · [Эксплуатация](docs/operations.ru.md) · [Проверки](docs/testing.ru.md) · [План](docs/roadmap.ru.md)

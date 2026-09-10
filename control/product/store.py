@@ -66,21 +66,21 @@ class ProductStore:
             pass
         else:
             os.close(fd)
-        script = (Path(__file__).resolve().parents[1] / 'migrations/001_product.sql').read_text()
         with self._transaction() as db:
             version = db.execute('PRAGMA user_version').fetchone()[0]
-            if version == 1:
-                return
-            if version != 0:
+            if version not in (0, 1, 2, 3):
                 raise RuntimeError('unsupported product database version')
-            # Avoid executescript(), which implicitly commits an open transaction.
-            for statement in script.split(';'):
-                if statement.strip():
-                    db.execute(statement)
+            for target, name in ((1, '001_product.sql'), (2, '002_provisioning.sql'), (3, '003_gateway.sql')):
+                if version < target:
+                    script = (Path(__file__).resolve().parents[1] / 'migrations' / name).read_text()
+                    # executescript implicitly commits, so execute statements individually.
+                    for statement in script.split(';'):
+                        if statement.strip():
+                            db.execute(statement)
 
     def check_ready(self):
         with self._transaction() as db:
-            if db.execute('PRAGMA user_version').fetchone()[0] != 1:
+            if db.execute('PRAGMA user_version').fetchone()[0] != 3:
                 raise RuntimeError('product database migration required')
 
     @staticmethod
@@ -241,6 +241,8 @@ class ProductStore:
                                  (now, identity)).rowcount
             db.execute('UPDATE transport_keys SET revoked_at=? WHERE device_identity=? AND revoked_at IS NULL',
                        (now, identity))
+            from .gateways import GatewayReconciler
+            GatewayReconciler.revoke(db, identity)
             if changed:
                 self._audit(db, 'device_revoked', identity, now)
 
@@ -249,6 +251,9 @@ class ProductStore:
             now = int(self.clock())
             changed = db.execute('UPDATE entitlements SET revoked_at=?,revision=revision+1 '
                                  'WHERE id=? AND revoked_at IS NULL', (now, entitlement_id)).rowcount
+            from .gateways import GatewayReconciler
+            for member in db.execute('SELECT device_identity FROM device_entitlements WHERE entitlement_id=?', (entitlement_id,)):
+                GatewayReconciler.revoke(db, member[0])
             if changed:
                 self._audit(db, 'entitlement_revoked', entitlement_id, now)
 
@@ -263,4 +268,7 @@ class ProductStore:
     def prune_challenges(self):
         """Maintenance: no plaintext nonce retained, replay stays rejected after deletion."""
         with self._transaction() as db:
-            return db.execute('DELETE FROM challenges WHERE expires_at<=?', (int(self.clock()),)).rowcount
+            now = int(self.clock())
+            count = db.execute('DELETE FROM challenges WHERE expires_at<=?', (now,)).rowcount
+            count += db.execute('DELETE FROM provisioning_challenges WHERE expires_at<=?', (now,)).rowcount
+            return count

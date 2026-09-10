@@ -1,0 +1,17 @@
+# Documentation map
+
+Start with [STATUS](STATUS.md) (what is actually installed/deployed) and [PLAN](PLAN.md)
+(the next work). `AGENTS.md` in the repository root directs new sessions here.
+
+| Topic | Русский | English |
+|---|---|---|
+| Release 0.2.1 | [Release](releases/0.2.1.ru.md) | [Release](releases/0.2.1.en.md) |
+| Client updates | [Updates](updates.ru.md) | [Updates](updates.en.md) |
+| Product registration | [Registration](registration.ru.md) | [Registration](registration.en.md) |
+| Provisioning and cache | [Provider](provisioning-provider.ru.md) | [Provider](provisioning-provider.en.md) |
+| Gateway operations | [Reconciliation](gateway-reconciliation.ru.md) | [Reconciliation](gateway-reconciliation.en.md) |
+| Desktop layout | [Layout](desktop-layout.ru.md) | [Layout](desktop-layout.en.md) |
+| Implementation history | [Log](implementation-log.ru.md) | [Log](implementation-log.en.md) |
+
+Historical descriptions of an earlier stage are not the deployment state. STATUS is
+updated after verification; plans and unrun checks must never be marked complete.

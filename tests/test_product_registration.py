@@ -219,11 +219,11 @@ def test_database_requires_private_storage(tmp_path):
 def test_migration_rejects_newer_schema_without_changes(setup):
     store = setup[0]
     with sqlite3.connect(store.path) as db:
-        db.execute('PRAGMA user_version=2')
+        db.execute('PRAGMA user_version=4')
     with pytest.raises(RuntimeError, match='unsupported'):
         store.migrate()
     with sqlite3.connect(store.path) as db:
-        assert db.execute('PRAGMA user_version').fetchone()[0] == 2
+        assert db.execute('PRAGMA user_version').fetchone()[0] == 4
 
 
 def test_sqlite_unavailable_response_is_sanitized(setup, monkeypatch):
@@ -256,7 +256,7 @@ def test_api_factory_requires_migrated_database(setup, monkeypatch):
     monkeypatch.setenv('FC_PRODUCT_DB', store.path)
     assert app_from_env() is not None
     with sqlite3.connect(store.path) as db:
-        db.execute('PRAGMA user_version=2')
+        db.execute('PRAGMA user_version=4')
     with pytest.raises(RuntimeError, match='migration required'):
         app_from_env()
 
@@ -278,3 +278,11 @@ def test_admin_invitation_output_is_private_and_not_printed(setup, monkeypatch, 
     assert len(json.loads(output.read_text())['invitation_token']) == 64
     with pytest.raises(FileExistsError):
         main()
+
+
+def test_product_health_checks_current_database_schema(setup):
+    with TestClient(create_app(setup[0])) as client:
+        response = client.get('/healthz')
+        assert response.status_code == 200
+        assert response.json() == {'status':'ok','service':'family-connect-product','schema_version':3}
+        assert response.headers['cache-control'] == 'no-store'

@@ -1,0 +1,19 @@
+name: family-connect-product
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.product
+    image: family-connect-product:0.2.1
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    environment:
+      FC_PRODUCT_DB: /state/product.db
+    volumes:
+      - ./state-product/db:/state
+    ports:
+      - 127.0.0.1:18082:8080
+    mem_limit: 256m
+    pids_limit: 64

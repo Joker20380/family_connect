@@ -21,13 +21,40 @@
 
 Не развёрнуто на рабочем сервере. VPN не включался, gateway peers не менялись, сборки мобильного/Windows-клиента не изменялись, снятый с VPN сервер сайтов не использовался. Отзыв в БД пока влияет только на последующую продуктовую авторизацию; отзыв действующего WireGuard требует следующего этапа reconciliation.
 
-## Следующие этапы
+## Следующие этапы (актуализировано 10.09.2026)
 
-1. Аутентифицированные recovery/fetch challenges и долговременное неизменяемое provisioning: подписанное состояние, атомарная выдача версий/ACK, защищённый клиентский кеш/version floors.
-2. Gateway peer reconciliation/outbox до публикации рабочего provisioning; распространение device revoke.
-3. HTTPS provider и автоматическое подключение Linux рядом со старым flow; затем нативное secure storage Android/Windows.
-4. Реальная Reticulum-доставка тех же envelopes, ограниченные retry/recovery/failover, сбор beta telemetry, health и осторожная policy.
+1. Клиентский lifecycle: построение и применение runtime из VerifiedProvisioningState, подтверждение результата (ACK), known-good recovery.
+2. Подключение нового flow к Linux; нативное secure storage Android/Windows и ручная проверка Windows UI на реальном DPI перед выпуском.
+3. Реальная Reticulum-доставка тех же envelopes, ограниченные retry/recovery/failover, beta telemetry, health и policy.
+4. Расширение локального gateway adapter на распределённые gateway agents с отдельной аутентификацией и миграцией топологии.
+
+Аутентифицированный fetch, кеш/version floors и локальный gateway reconciliation завершены в исходниках; ACK применения остаётся впереди.
 
 Аутентификация аккаунта, платные подписки, интерфейс владельца семьи, распределённый PostgreSQL и публичная production-эксплуатация не заменяются механизмом операторских разрешений пилота.
 
 Итоговая проверка этапа регистрации: Docker build прошёл, **90 Python 3.13 tests** в его test stage. В контейнере без сети прошли smoke-проверки старых `control.app.health()` и `scripts/admin.py --help`. Они не включают VPN и не заменяют физические регрессии платформ.
+
+
+## 10.09.2026 — аутентифицированный provisioning provider и Linux cache
+
+* Migration v2 сохраняет продуктовую регистрацию и добавляет одноразовые fetch challenges и историю неизменяемых envelopes.
+* Отдельный fetch proof с domain/audience, транзакционная проверка revoke/key/entitlement, запрет replay и fallback к старым версиям. Потеря ответа восстанавливается новым challenge без выпуска лишней версии.
+* Операторские init-provisioning-signer, publish-provisioning (--peers-ready), provisioning-versions; signing key не нужен HTTP-процессу. Публикация вручную после подготовки peers, автоматического reconciliation пока нет.
+* HTTPS reference client и атомарный Linux cache: floors, повторная проверка lease, точная повторная доставка, отказ при повреждении и обнаруженном откате часов. Нет ACK применения туннеля, нативной интеграции и аппаратной защиты от rollback backup.
+* Полный suite: **130 passed**, два прежних upstream warnings; HTTP-тесты запускались вне sandbox из-за известной блокировки TestClient.
+* [Протокол, команды, ограничения](provisioning-provider.ru.md). Следующий этап — gateway reconciliation/outbox и применение/отзыв peers; затем интеграция клиента с lifecycle VPN.
+
+Docker: **118 Python 3.13 tests passed**; build succeeded. Legacy health and scripts/admin.py --help smoke checks passed in a container with networking disabled.
+
+
+## 10.09.2026 — gateway reconciliation и исправление desktop UI
+
+* Migration v3: deployment, адресные резервации и durable peer outbox. Publish/fetch требуют подтверждённого deployment; ручной --peers-ready удалён.
+* Revoke атомарно ставит удаление в очередь. Worker проверяет expiry/key/revoke, восстанавливает drift, повторяет ошибки с backoff, подтверждает фактическое состояние. Docker helper перечитывает актуальную запись под lock, включая запоздалые операции после timeout.
+* Pilot adapter проверяет gateway key/port/mount, сохраняет публичные peer records атомарно, защищает чужие/static peers. Systemd service/timer подготовлены, не установлены.
+* Linux: адаптивные кнопки/перенос, прокрутка и доступность по Tab, постоянный footer, согласованная тёмная тема, HiDPI minimum и отмена timer при закрытии. Windows: явные auto-size строки, ограниченная ширина текста, scroll/footer, PerMonitorV2 и адаптивный диалог кода.
+* Linux: 18 layout cases RU/EN, размеры 360×420/480×620/800×700, Scale 100/150/200%; снимок проверен. Windows cross-build: 0 warnings/errors. WinForms /layout-test добавлен в CI, на этой Linux-машине не запускался; ручная DPI-проверка Windows остаётся перед выпуском.
+* Настоящий WG в отдельном Docker namespace без сети: install/remove/restart, delayed command после удаления, сохранение чужого peer, read-only /keys — passed.
+* [Gateway protocol/operator/rollback](gateway-reconciliation.ru.md), [UI и снимок](desktop-layout.ru.md). На рабочий сервер не развёрнуто, установленные приложения не заменены.
+
+Итог: **155 Python tests passed**, Docker control собран, **143 tests passed** в Python 3.13 stage; два прежних upstream warnings.
