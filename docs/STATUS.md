@@ -14,7 +14,9 @@ Server remains **0.2.1**, source `8cd0f2d`.
   nested card labels, polling/stale replies and confirmation cancellation; broker,
   installed UI and driver checks passed. CI-generated preview saved below.
 - 0.2.8 artifacts downloaded and SHA256SUMS verified before offline catalog signing.
-  Catalog sequence 7; existing Windows client offers verified download/installation.
+  Catalog sequence 7; signature verified from published commit 3171fed. At 19:59 UTC
+  the main raw URL still served cached sequence 6 (Cache-Control max-age=300); live
+  main-URL propagation remains to be confirmed. Direct 0.2.8 installer is available.
   No personal Windows machine was accessed; user must run the installer or in-app update.
 
 - Android test APK from successful CI shared with user (debug build, profile import).
