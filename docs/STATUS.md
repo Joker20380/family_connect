@@ -1,6 +1,6 @@
 # Current state / Текущее состояние
 
-Updated: 2026-09-10. **0.2.4 Linux HiDPI/responsiveness fixes: release pending.** Desktop **0.2.3 published and installed on Linux**, source `79eb6db`. Server remains **0.2.1**, source `8cd0f2d`.
+Updated: 2026-09-10. **0.2.5 Linux HiDPI/responsiveness fixes: release pending.** Desktop **0.2.3 published and installed on Linux**, source `79eb6db`. Server remains **0.2.1**, source `8cd0f2d`.
 
 - Linux: 0.2.3 installed from verified GitHub archive using the existing 0.2.2 updater; startup smoke passed. New icon registered; `previous` retains 0.2.2.
   Current: `~/.local/share/family-connect/current`; backup:
@@ -36,3 +36,6 @@ last visible state without busy flashes or unchanged-state redraws; revisions re
 late responses after user actions. Poll failure/recovery remain visible. Polling
 regressions passed on Linux and Windows alongside layout checks. Icon generator:
 `python scripts/generate_app_icon.py` (Pillow), editable SVG/PNG/ICO/embedded Tk output.
+
+0.2.4 assets were published from e60d9e6 before final size/scrollbar polish. No update
+catalog was signed for 0.2.4. Immutable artifacts retained; final polish ships as 0.2.5.

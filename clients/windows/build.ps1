@@ -55,7 +55,7 @@ if($SignedRelease){
 & $iscc @argsList
 Check-Exit
 if($SignedRelease){
-    $sig=Get-AuthenticodeSignature 'dist/FamilyConnect-Setup-0.2.4-signed.exe'
+    $sig=Get-AuthenticodeSignature 'dist/FamilyConnect-Setup-0.2.5-signed.exe'
     if($sig.Status -ne 'Valid' -or $sig.SignerCertificate.Thumbprint -ne $SigningThumbprint){throw 'Installer signature verification failed'}
 }
 Get-ChildItem dist/*.exe|ForEach-Object { $h=Get-FileHash $_ -Algorithm SHA256; "$($h.Hash.ToLower())  $($_.Name)" }|Set-Content dist/SHA256SUMS

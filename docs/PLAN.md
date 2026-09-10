@@ -18,7 +18,7 @@ Windows/Linux polling and layout regressions passed. Artifacts and signed catalo
 sequence 3 published; Linux installed with previous version retained. Windows update
 available through Check for updates; awaiting user confirmation of 0.2.3 behavior.
 
-## Active: 0.2.4 Linux fit and responsiveness
+## Active: 0.2.5 Linux fit and responsiveness
 
 Publish platform-verified release, sign catalog sequence 4, upgrade Linux and record
 actual results. User reported 0.2.3 startup clipping and sluggishness; corrected using
