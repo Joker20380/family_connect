@@ -1,6 +1,6 @@
 # Current state / Текущее состояние
 
-Updated: 2026-09-10. Desktop **0.2.5 published and installed on Linux**, source `d7d9c87`.
+Updated: 2026-09-10. **0.2.6 narrow/content-sized window: release pending.** Desktop **0.2.5 published and installed on Linux**, source `d7d9c87`.
 Server remains **0.2.1**, source `8cd0f2d`.
 
 - Linux: installed from verified GitHub archive with the existing 0.2.3 updater;

@@ -72,6 +72,8 @@ def check(output=None):
         app=App(root,smoke=True)
         root.update()
         if root.winfo_screenheight()>=2000:
+            natural=app.frame.winfo_reqheight()+app.language_button.master.winfo_reqheight()
+            assert abs(root.winfo_height()-min(root.winfo_screenheight()-100,max(420,natural)))<=2,(scale,'height must follow content')
             for button in (app.toggle,app.add,app.check,app.update_button):
                 assert button.winfo_rooty()+button.winfo_height()<=app.canvas.winfo_rooty()+app.canvas.winfo_height(),(scale,'startup action hidden')
         try:
@@ -81,6 +83,7 @@ def check(output=None):
                     root.geometry(size)
                     app.detail.configure(text=app.t('error')+'\n'+app.t('system'))
                     app.paint();root.update()
+                    assert app.check.winfo_rooty()>=app.add.winfo_rooty()+app.add.winfo_height(),(size,scale,"actions must remain in one column")
                     # Every child fits horizontally; all actions remain reachable
                     # in the scroll region, including with long localized errors.
                     for widget in (app.brand,app.state,app.choose,app.toggle,app.add,app.check,app.note,app.detail,app.retry,app.update_button):

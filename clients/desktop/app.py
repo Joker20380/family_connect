@@ -10,7 +10,7 @@ import urllib.request
 from backend import backend, BackendError
 import webbrowser
 
-APP_VERSION='0.2.5'
+APP_VERSION='0.2.6'
 
 # Generated from clients/assets/dodecahedron.svg; embedded for 0.2.1 updater compatibility.
 ICON_PNG='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'
@@ -39,7 +39,7 @@ class App:
     def __init__(self,root,smoke=False):
         self.root=root;self.ru=bool(RU);self.driver=None;self.items=[];self.active=False;self.busy=False
         self.poll_inflight=False;self.revision=0;self.poll_error=False
-        self.layout_key=None;self.scroll_bounds=None;self.layout_timer=None
+        self.layout_key=None;self.scroll_bounds=None;self.layout_timer=None;self.fit_timer=None
         self.poll_pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
         self.closed=False;self.pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
         self.events=queue.SimpleQueue();self.update_plan=None;self.updater=None
@@ -91,9 +91,11 @@ class App:
         self.choose=ttk.Combobox(self.frame,style='FC.TCombobox',state='readonly',width=1);self.choose.grid(row=5,column=0,sticky='ew');self.choose.bind('<<ComboboxSelected>>',lambda _:self.refresh())
         self.toggle=ttk.Button(self.frame,style='Primary.TButton',command=self.toggle_vpn,cursor='hand2');self.toggle.grid(row=6,column=0,sticky='ew',pady=(12,8))
         self.actions=tk.Frame(self.frame,bg='#0b1020');self.actions.grid(row=7,column=0,sticky='ew')
-        self.actions.columnconfigure(0,weight=1);self.actions.columnconfigure(1,weight=1)
+        self.actions.columnconfigure(0,weight=1)
         self.add=ttk.Button(self.actions,style='FC.TButton',command=self.import_profile)
         self.check=ttk.Button(self.actions,style='FC.TButton',command=self.check_ip)
+        self.add.grid(row=0,column=0,sticky='ew',pady=3)
+        self.check.grid(row=1,column=0,sticky='ew',pady=3)
         self.note=tk.Label(self.frame,bg='#0b1020',fg='#99a6c6',justify='center');self.note.grid(row=8,column=0,sticky='ew',pady=(16,8))
         self.detail=tk.Label(self.frame,bg='#0b1020',fg='#e8cda4',justify='center');self.detail.grid(row=9,column=0,sticky='ew')
         self.setup=tk.Frame(self.frame,bg='#0b1020');self.setup.grid(row=10,column=0,sticky='ew',pady=8);self.setup.columnconfigure(0,weight=1)
@@ -102,6 +104,7 @@ class App:
         self.update_button=ttk.Button(self.frame,style='FC.TButton',command=self.update_application)
         self.update_button.grid(row=11,column=0,sticky='ew',pady=(4,8))
         footer=tk.Frame(root,bg='#0b1020',padx=24,pady=8);footer.grid(row=1,column=0,columnspan=2,sticky='ew')
+        footer.bind('<Configure>',lambda _:self.schedule_fit())
         tk.Label(footer,text=f'v{APP_VERSION}',bg='#0b1020',fg='#99a6c6').pack(side='left')
         self.language_button=ttk.Button(footer,style='FC.TButton',text='RU / EN',command=self.language);self.language_button.pack(side='right')
         self.frame.bind('<Configure>',self.update_scroll_region)
@@ -124,19 +127,27 @@ class App:
         bounds=self.canvas.bbox('all')
         if bounds!=self.scroll_bounds:
             self.scroll_bounds=bounds;self.canvas.configure(scrollregion=bounds)
+            self.schedule_fit()
+    def schedule_fit(self):
+        if not self.closed and self.fit_timer is None:self.fit_timer=self.root.after_idle(self.fit_content_height)
+    def fit_content_height(self):
+        self.fit_timer=None
+        if self.closed or not hasattr(self,'initial_width'):return
+        height=min(max(420,self.root.winfo_screenheight()-100),
+                   max(420,self.frame.winfo_reqheight()+self.language_button.master.winfo_reqheight()))
+        # Content drives height; identical polling results never request geometry.
+        if getattr(self,'_fitted_height',None)!=height:
+            self._fitted_height=height
+            width=self.root.winfo_width()
+            self.root.geometry(f'{self.initial_width if width<=1 else width}x{height}')
     def fit_initial_window(self):
-        root=self.root
+        root=self.root;self._fitted_height=None
         available_w=max(360,root.winfo_screenwidth()-64)
-        available_h=max(420,root.winfo_screenheight()-100)
-        heading=tkfont.Font(font=self.state['font'])
-        title=tkfont.Font(font=self.brand['font'])
-        width=min(available_w,max(round(480*self.scale),title.measure('Family Connect')+72,
-            max(heading.measure(self.t(key)) for key in ('off','on','unknown'))+72))
-        root.geometry(f'{width}x{min(available_h,round(680*self.scale))}')
+        minimum=max(w.winfo_reqwidth() for w in (self.add,self.check,self.retry,self.install,self.toggle,self.update_button))+48+self.scrollbar.winfo_reqwidth()
+        self.initial_width=min(available_w,max(360,round(320*self.scale),minimum))
+        root.geometry(f'{self.initial_width}x420')
         root.update_idletasks();self.layout();root.update_idletasks()
-        height=min(available_h,max(round(500*self.scale),self.frame.winfo_reqheight()+self.language_button.master.winfo_reqheight()+48))
-        root.geometry(f'{width}x{max(420,height)}')
-        root.deiconify()
+        self.fit_content_height();root.deiconify()
     def confirm(self,text,action):
         dialog=tk.Toplevel(self.root,bg='#0b1020');dialog.withdraw();dialog.title('Family Connect')
         dialog.transient(self.root);dialog.resizable(False,False)
@@ -210,17 +221,6 @@ class App:
         usable=max(80,width-48)
         for label in (self.brand,self.subtitle,self.state,self.hint,self.note,self.detail):
             label.configure(wraplength=usable)
-        needed=self.add.winfo_reqwidth()+self.check.winfo_reqwidth()+12
-        stacked=needed>usable
-        if getattr(self,'_stacked',None)==stacked:return
-        self._stacked=stacked
-        self.add.grid_forget();self.check.grid_forget()
-        if needed>usable:
-            self.add.grid(row=0,column=0,columnspan=2,sticky='ew',pady=3)
-            self.check.grid(row=1,column=0,columnspan=2,sticky='ew',pady=3)
-        else:
-            self.add.grid(row=0,column=0,sticky='ew',padx=(0,4),pady=3)
-            self.check.grid(row=0,column=1,sticky='ew',padx=(4,0),pady=3)
     def reveal_focus(self,event):
         widget=event.widget
         if widget==self.canvas or not str(widget).startswith(str(self.frame)+'.'):return
@@ -350,6 +350,7 @@ class App:
         if self.active and not confirmed and not self.confirm(self.t('closing'),'Закрыть окно' if self.ru else 'Close window'):return
         self.root.after_cancel(self.drain_timer)
         if self.layout_timer is not None:self.root.after_cancel(self.layout_timer)
+        if self.fit_timer is not None:self.root.after_cancel(self.fit_timer)
         self.closed=True;self.pool.shutdown(wait=False,cancel_futures=True);self.poll_pool.shutdown(wait=False,cancel_futures=True);self.root.destroy()
 
 
