@@ -72,7 +72,7 @@ internal sealed class MainForm:Form
             content.Controls.Add(child,0,row++);
         var footer=new Panel{Dock=DockStyle.Fill,Height=48,Padding=new Padding(24,4,24,8),Margin=Padding.Empty};
         footer.Controls.Add(new Label{Text="v"+Application.ProductVersion.Split('+')[0],AutoSize=true,ForeColor=Color.FromArgb(153,166,198),Location=new Point(24,16)});
-        language.Dock=DockStyle.Right;language.Width=100;footer.Controls.Add(language);shell.Controls.Add(footer,0,1);
+        language.MinimumSize=new Size(0,32);language.Dock=DockStyle.Right;language.Width=100;footer.Controls.Add(language);shell.Controls.Add(footer,0,1);
         viewport.SizeChanged+=(_,_)=>FitContent();
         DpiChanged+=(_,_)=>BeginInvoke((Action)FitContent);
         update.Click+=async(_,_)=>{
@@ -93,6 +93,7 @@ internal sealed class MainForm:Form
             var reply=await Execute(new("request"));
             if(reply?.Code is not string code)return;
             using var dialog=new Form{Text=T("Код устройства","Device code"),BackColor=BackColor,ForeColor=ForeColor,Font=Font,Icon=Icon,ClientSize=new(500,230),MinimumSize=new(340,240),StartPosition=FormStartPosition.CenterParent,AutoScaleMode=AutoScaleMode.Dpi};
+            dialog.HandleCreated+=(_,_)=>DarkFrame(dialog);
             var layout=new TableLayoutPanel{Dock=DockStyle.Fill,Padding=new Padding(16),ColumnCount=1,RowCount=3};
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
             layout.RowStyles.Add(new RowStyle(SizeType.Percent,45));layout.RowStyles.Add(new RowStyle(SizeType.Percent,55));layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -214,10 +215,9 @@ internal sealed class MainForm:Form
     protected override void OnHandleCreated(EventArgs e)
     {
         base.OnHandleCreated(e);
-        int enabled=1;
-        // Unsupported Windows builds ignore the optional dark title-bar request.
-        DwmSetWindowAttribute(Handle,20,ref enabled,sizeof(int));
+        DarkFrame(this);
     }
+    static void DarkFrame(Form form){int enabled=1;DwmSetWindowAttribute(form.Handle,20,ref enabled,sizeof(int));}
     void FitWindow()
     {
         if(fitting)return;fitting=true;
@@ -233,6 +233,7 @@ internal sealed class MainForm:Form
         using var dialog=new Form{Text="Family Connect",BackColor=BackColor,ForeColor=ForeColor,Font=Font,Icon=Icon,
             AutoScaleMode=AutoScaleMode.Dpi,ClientSize=new Size(370,280),StartPosition=FormStartPosition.CenterParent,
             FormBorderStyle=FormBorderStyle.FixedDialog,MaximizeBox=false,MinimizeBox=false};
+        dialog.HandleCreated+=(_,_)=>DarkFrame(dialog);
         var panel=new TableLayoutPanel{Dock=DockStyle.Fill,Padding=new Padding(24),ColumnCount=1,RowCount=3};
         panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
         panel.RowStyles.Add(new RowStyle(SizeType.Percent,100));
