@@ -10,7 +10,7 @@ permissions:
 jobs:
   native:
     runs-on: windows-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
@@ -48,11 +48,18 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           New-Item -ItemType Directory "$env:RUNNER_TEMP/fc-awg-broker/awg" | Out-Null
           Copy-Item "$env:RUNNER_TEMP/fc-windows-awg/fc-awg.exe","$env:RUNNER_TEMP/fc-windows-awg/wintun.dll" "$env:RUNNER_TEMP/fc-awg-broker/awg/"
+      - name: Build pinned TCP peer for automatic transport acceptance
+        shell: pwsh
+        run: |
+          ./pilot/windows-tcp/build.ps1 -Output "$env:RUNNER_TEMP/fc-auto-tcp"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          New-Item -ItemType Directory "$env:RUNNER_TEMP/fc-awg-broker/tcp" | Out-Null
+          Copy-Item "$env:RUNNER_TEMP/fc-auto-tcp/xray.exe","$env:RUNNER_TEMP/fc-auto-tcp/wintun.dll" "$env:RUNNER_TEMP/fc-awg-broker/tcp/"
       - name: Signed AWG activation and actual LocalSystem data cleanup
         shell: pwsh
-        timeout-minutes: 8
+        timeout-minutes: 14
         run: |
-          python pilot/windows-awg/broker_check.py "$env:RUNNER_TEMP/fc-awg-broker" "$env:RUNNER_TEMP/fc-windows-awg" "$env:RUNNER_TEMP/awg-broker-result.json" 2>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP/awg-broker.log"
+          python pilot/windows-awg/broker_check.py "$env:RUNNER_TEMP/fc-awg-broker" "$env:RUNNER_TEMP/fc-windows-awg" "$env:RUNNER_TEMP/awg-broker-result.json" "$env:RUNNER_TEMP/fc-auto-tcp" 2>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP/awg-broker.log"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Remove isolated AWG broker
         if: always()

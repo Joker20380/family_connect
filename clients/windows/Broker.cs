@@ -5,17 +5,17 @@ using System.ServiceProcess;
 namespace FamilyConnect;
 internal sealed class Broker:ServiceBase
 {
-    readonly CancellationTokenSource stop=new();Task? loop;readonly TcpSession tcp=new();
-    public Broker(){ServiceName=Native.BrokerName;CanStop=true;CanShutdown=true;AutoLog=false;}
+    readonly CancellationTokenSource stop=new();Task? loop;readonly TcpSession tcp=new();readonly AutoSession automatic;
+    public Broker(){automatic=new(tcp);ServiceName=Native.BrokerName;CanStop=true;CanShutdown=true;AutoLog=false;}
     protected override void OnStart(string[] args)
     {
-        Store.SecureRoot();RequestAdditionalTime(60000);TcpSession.Recover().GetAwaiter().GetResult();loop=Task.Run(Listen);
+        Store.SecureRoot();RequestAdditionalTime(120000);AutoSession.Recover().GetAwaiter().GetResult();loop=Task.Run(Listen);
     }
     protected override void OnStop()
     {
         RequestAdditionalTime(120000);ShutdownCore();
     }
-    void ShutdownCore(){stop.Cancel();loop?.GetAwaiter().GetResult();tcp.Shutdown().GetAwaiter().GetResult();Native.StopTunnel();}
+    void ShutdownCore(){stop.Cancel();loop?.GetAwaiter().GetResult();automatic.Shutdown().GetAwaiter().GetResult();tcp.Shutdown().GetAwaiter().GetResult();Native.StopTunnel();}
     protected override void OnShutdown()=>ShutdownCore();
     async Task Listen()
     {
@@ -46,14 +46,22 @@ internal sealed class Broker:ServiceBase
     }
     Reply Handle(string sid,Request request)
     {
-        var session=tcp.Status;
+        var auto=automatic.Status;bool autoActive=auto.State!="off";
+        var session=autoActive?auto:tcp.Status;
         var state=session.State!="off"?session.State:Native.TunnelState();
         var owner=session.State!="off"?session.Owner:File.Exists(Store.OwnerPath)?File.ReadAllText(Store.OwnerPath):null;
         var ready=File.Exists(Store.UserPath(sid,".conf.dpapi"));
-        if(request.Action=="status")return new(true,state!="off"&&owner!=sid?"other-user":state!="off"?state:ready?"off":"inactive",Error:session.Owner==sid?session.Error:null,TcpReady:File.Exists(Store.UserPath(sid,".tcp.dpapi")),Transport:session.State!="off"?session.Transport:"wg",AwgReady:File.Exists(Store.UserPath(sid,".awg.dpapi")));
+        if(request.Action=="status")return new(true,state!="off"&&owner!=sid?"other-user":state!="off"?state:ready?"off":"inactive",Error:auto.Owner==sid&&auto.Error is not null?auto.Error:session.Owner==sid?session.Error:null,TcpReady:File.Exists(Store.UserPath(sid,".tcp.dpapi")),Transport:session.State!="off"?session.Transport:"wg",AwgReady:File.Exists(Store.UserPath(sid,".awg.dpapi")),Automatic:autoActive);
         if(request.Action=="request")return new(true,"inactive",Code:"FC1-"+Convert.ToHexString(Convert.FromBase64String(Store.Public(sid))));
         if(state!="off"&&owner!=sid)return new(false,"other-user",Error:"other-user");
+        if(request.Action.StartsWith("connect",StringComparison.Ordinal)&&state=="off")automatic.ClearError();
         switch(request.Action){
+            case "connect-auto":
+                if(state!="off")return new(false,state,Error:"busy");
+                var autoAwg=Store.Awg(sid);var autoTcp=Store.Tcp(sid);
+                if(!ready&&autoAwg is null&&autoTcp is null)return new(false,"inactive",Error:"activation-required");
+                automatic.Start(sid,ready,autoAwg,autoTcp);
+                return new(true,"pending",Transport:automatic.Status.Transport,Automatic:true);
             case "connect-awg":
                 if(state!="off")return new(false,state,Error:"busy");
                 var awg=Store.Awg(sid);if(awg is null)return new(false,"inactive",Error:"activation-required");
@@ -86,6 +94,7 @@ internal sealed class Broker:ServiceBase
                 try{Native.StartTunnel(Store.TunnelPath);}catch{Native.StopTunnel();throw;}
                 return new(true,Native.TunnelState());
             case "disconnect":
+                if(autoActive){automatic.Stop();return new(true,"pending",Transport:auto.Transport,Automatic:true);}
                 if(session.State!="off"){tcp.Stop();return new(true,tcp.Status.State,Transport:tcp.Status.Transport);}
                 Native.StopTunnel();return new(true,"off");
             default:return new(false,"unknown",Error:"unsupported-action");

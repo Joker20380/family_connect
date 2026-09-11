@@ -105,3 +105,5 @@ Windows TCP tunnel health monitoring: [report](releases/2026-09-11-windows-tcp-h
 Windows AWG native worker: [report](releases/2026-09-11-windows-awg-engine.ru.md), [build/CI](../pilot/windows-awg/README.md).
 
 - [Windows AWG: активация и эксплуатация](windows-awg.ru.md).
+
+Windows Auto: [implementation and acceptance](releases/2026-09-12-windows-auto.ru.md).

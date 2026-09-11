@@ -1,4 +1,5 @@
 """Actual LocalSystem AWG broker; synthetic signed grants, scoped routes and UDP data."""
+import http.client,http.server
 import base64,ctypes,json,os,socket,struct,subprocess,sys,threading,time,uuid,queue,secrets
 from pathlib import Path
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
@@ -8,7 +9,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'scripts'))
 from activate_windows_awg import issue
 host=Path(sys.argv[1]).resolve();engine=Path(sys.argv[2]).resolve();out=Path(sys.argv[3]).resolve()
 exe=host/'FamilyConnect.exe';root=Path(os.environ['ProgramData'])/'FamilyConnect'
-result={'rounds':[],'passed':False};installed=False;peer=None;account=None;other_token=None
+result={'rounds':[],'passed':False};installed=False;peer=None;account=None;other_token=None;tcp_server=None;http_fixture=None
 def ps(code):
  p=subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-Command',"$ErrorActionPreference='Stop'; "+code+'; exit 0'],capture_output=True,text=True,timeout=100)
  if p.returncode:raise RuntimeError(p.stderr[-1800:])
@@ -40,7 +41,7 @@ def wait_state(wanted,timeout=100):
   try:reply=call('status')
   except OSError:time.sleep(.2);continue
   if reply['state']==wanted:return reply
-  if reply.get('error') and reply['error']!='tcp-reconnecting':raise RuntimeError('Session failed: '+reply['error'])
+  if reply.get('error') and reply['error'] not in ('tcp-reconnecting','auto-switching'):raise RuntimeError('Session failed: '+reply['error'])
   time.sleep(.25)
  raise RuntimeError('Session did not reach '+wanted+': '+str(reply))
 
@@ -73,6 +74,9 @@ def wait_retry():
 
 def clean():
  assert not (root/'tcp-session.json').exists(),'Journal remains'
+ assert not (root/'auto-session.json').exists(),'Automatic journal remains'
+ assert not ps("Get-NetAdapter -IncludeHidden | Where-Object {$_.Name -like 'fctcp*' -or $_.Name -eq 'fc-native'} | Select-Object -ExpandProperty Name"),'Other transport adapter remains'
+ assert not ps("Get-CimInstance Win32_Process -Filter \"Name='xray.exe'\" | Where-Object {$_.ExecutablePath -like '*fc-awg-broker*tcp*xray.exe'} | Select-Object -ExpandProperty ProcessId"),'Client Xray remains'
  assert not ps("Get-Process fc-awg -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Id"),'AWG worker remains'
  assert not ps("Get-NetAdapter -IncludeHidden | Where-Object {$_.Name -like 'fcawg*'} | Select-Object -ExpandProperty Name"),'AWG adapter remains'
  assert not ps("Get-NetRoute | Where-Object {$_.DestinationPrefix -in @('198.18.0.1/32','fd79:fc::1/128')} | Select-Object -ExpandProperty DestinationPrefix"),'Route remains'
@@ -155,6 +159,57 @@ try:
    ps("$s=Get-CimInstance Win32_Service -Filter \"Name='FamilyConnectBroker'\"; Stop-Process -Id $s.ProcessId -Force");time.sleep(2);wait_state('inactive')
   else:assert call('disconnect')['ok'];wait_state('inactive')
   clean();row['clean']=True
+ # Automatic mode: real encrypted AWG -> real VLESS/TUN TCP; unavailable WG service first.
+ from activate_windows import issue as issue_wg
+ wg_envelope,_=issue_wg(code,4,profile['gatewayPublicKey'],'192.0.2.10:51820',signing,int(time.time()))
+ assert call('activate',json.dumps(wg_envelope))['ok']
+ class Handler(http.server.BaseHTTPRequestHandler):
+  def do_GET(self):
+   self.send_response(204 if self.path.startswith('/health/') else 200);self.end_headers()
+   if not self.path.startswith('/health/'):self.wfile.write(b'auto-flow')
+  def log_message(self,*args):pass
+ http_fixture=http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler)
+ threading.Thread(target=http_fixture.serve_forever,daemon=True).start()
+ with socket.socket() as sock:sock.bind(('127.0.0.1',0));tcp_port=sock.getsockname()[1]
+ ident=str(uuid.uuid4());tcp_config={'log':{'loglevel':'none'},'inbounds':[{'listen':'127.0.0.1','port':tcp_port,'protocol':'vless','settings':{'clients':[{'id':ident}],'decryption':'none'}}],'outbounds':[{'protocol':'freedom','settings':{'redirect':'127.0.0.1:'+str(http_fixture.server_port)}}]}
+ tcp_server=subprocess.Popen([str(Path(sys.argv[4])/'xray.exe'),'run','-config','stdin:'],stdin=subprocess.PIPE,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+ tcp_server.stdin.write(json.dumps(tcp_config).encode());tcp_server.stdin.close()
+ grant=dict(version=1,devicePublicKey=base64.b64encode(bytes.fromhex(code[4:])).decode(),sequence=1,expiresAt=int(time.time())+86400,server='192.0.2.10',port=tcp_port,id=ident,publicKey=base64.urlsafe_b64encode(bytes(range(1,33))).decode().rstrip('='),serverName='example.com',shortId='01')
+ raw=json.dumps(grant,separators=(',',':')).encode();activation_tcp=json.dumps(dict(payload=base64.b64encode(raw).decode(),signature=base64.b64encode(signing.sign(b'family-connect/windows-tcp-activation/v1\0'+raw)).decode()))
+ assert call('activate-tcp',activation_tcp)['ok']
+ result['automatic']=[]
+ def auto_wait(transport,state='on',timeout=150):
+  until=time.monotonic()+timeout
+  while time.monotonic()<until:
+   reply=call('status')
+   if reply['state']==state and reply['transport']==transport and reply['automatic']:return reply
+   if reply.get('error') not in (None,'auto-switching'):raise RuntimeError('Automatic connection: '+reply['error'])
+   time.sleep(.2)
+  raise TimeoutError('Automatic transport did not reach '+transport)
+ def own_check():
+  assert api.ImpersonateLoggedOnUser(other_token)
+  try:
+   assert call('status')['state']=='other-user';assert call('disconnect')['error']=='other-user';assert call('connect-auto')['error']=='other-user'
+  finally:api.RevertToSelf()
+ row={'mode':'auto-fallback-restart','ipv4':0,'ipv6':0,'http':0,'clean':False};result['automatic'].append(row)
+ assert call('connect-auto')['automatic'];own_check();auto_wait('awg');traffic(row);own_check()
+ peer.kill();peer.wait(timeout=10);auto_wait('tcp');own_check()
+ for target,source in [('198.18.0.1','198.18.0.2'),('fd79:fc::1','fd79:fc::2')]:
+  for _ in range(3):
+   c=http.client.HTTPConnection(target,http_fixture.server_port,timeout=7,source_address=(source,0))
+   try:c.request('GET','/');reply=c.getresponse();assert reply.status==200 and reply.read()==b'auto-flow';row['http']+=1
+   finally:c.close()
+ assert not ps("Get-Process fc-awg -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Id")
+ ps("$s=Get-CimInstance Win32_Service -Filter \"Name='FamilyConnectBroker'\"; Stop-Process -Id $s.ProcessId -Force")
+ time.sleep(2);wait_state('off');clean();row['clean']=True
+ row={'mode':'auto-exhaustion','clean':False};result['automatic'].append(row)
+ assert call('connect-auto')['automatic'];auto_wait('tcp');tcp_server.kill();tcp_server.wait(timeout=10)
+ reply=wait_state('off',timeout=150);assert reply['error']=='auto-exhausted';clean();row['clean']=True
+ row={'mode':'auto-cancel','clean':False};result['automatic'].append(row)
+ assert call('connect-auto')['automatic'];assert call('disconnect')['ok'];wait_state('off');clean();row['clean']=True
+ row={'mode':'auto-cancel-probe','clean':False};result['automatic'].append(row)
+ assert call('connect-auto')['automatic'];auto_wait('awg',state='pending');assert call('disconnect')['ok'];wait_state('off');clean();row['clean']=True
+ result['automatic_passed']=all(x['clean'] for x in result['automatic']);assert result['automatic_passed']
  result['passed']=all(x['clean'] and (x['mode']=='cancel-start' or x['ipv4']>=3 and x['ipv6']>=3 and x['other_user_denied']) for x in result['rounds']);assert result['passed']
 except Exception as e:
  import traceback
@@ -167,4 +222,6 @@ finally:
   if account:
    net.NetUserDel.argtypes=[wintypes.LPCWSTR,wintypes.LPCWSTR];assert net.NetUserDel(None,account)==0
   if peer and peer.poll() is None:peer.kill();peer.wait(timeout=10)
+  if tcp_server and tcp_server.poll() is None:tcp_server.kill();tcp_server.wait(timeout=10)
+  if http_fixture:http_fixture.shutdown();http_fixture.server_close()
   out.write_text(json.dumps(result,indent=2));print(json.dumps(result),flush=True)

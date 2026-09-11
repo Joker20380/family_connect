@@ -3,7 +3,7 @@ using System.IO.Pipes;
 using System.Text.Json;
 namespace FamilyConnect;
 public sealed record Request(string Action, string? Activation=null);
-public sealed record Reply(bool Ok, string State, string? Code=null, string? Error=null, bool TcpReady=false, string? Transport=null, bool AwgReady=false);
+public sealed record Reply(bool Ok, string State, string? Code=null, string? Error=null, bool TcpReady=false, string? Transport=null, bool AwgReady=false,bool Automatic=false);
 public static class Wire
 {
     public const string Pipe="FamilyConnect.Broker.v1";

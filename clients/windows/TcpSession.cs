@@ -17,19 +17,19 @@ internal sealed class TcpSession
         TcpNetwork.ValidateAdapter(record.Adapter);
         await TcpNetwork.Call("cleanup",record.Adapter,record.Awg);File.Delete(Marker);
     }
-    public void Start(string sid,TcpGrant grant)=>StartCore(sid,grant,null,null);
-    public void StartAwg(string sid,AwgGrant grant,string key)=>StartCore(sid,null,grant,key);
-    void StartCore(string sid,TcpGrant? grant,AwgGrant? awg,string? key)
+    public void Start(string sid,TcpGrant grant,bool recover=true)=>StartCore(sid,grant,null,null,recover);
+    public void StartAwg(string sid,AwgGrant grant,string key,bool recover=true)=>StartCore(sid,null,grant,key,recover);
+    void StartCore(string sid,TcpGrant? grant,AwgGrant? awg,string? key,bool recover)
     {
         lock(gate){
             if(state!="off"||File.Exists(Marker))throw new InvalidOperationException("TCP session busy or needs cleanup");
             owner=sid;error=null;transport=awg is null?"tcp":"awg";state="pending";cancel=new CancellationTokenSource();
-            worker=Run(grant,awg,key,cancel.Token);
+            worker=Run(grant,awg,key,cancel.Token,recover);
         }
     }
     public void Stop(){lock(gate){if(state is "on" or "pending"){state="pending";cancel?.Cancel();}}}
     public async Task Shutdown(){Stop();Task? task;lock(gate)task=worker;if(task is not null)await task;}
-    async Task Run(TcpGrant? grant,AwgGrant? awg,string? key,CancellationToken token)
+    async Task Run(TcpGrant? grant,AwgGrant? awg,string? key,CancellationToken token,bool recover)
     {
         // Yield before slow operations so the pipe can accept cancellation and status while starting.
         await Task.Yield();
@@ -58,6 +58,7 @@ internal sealed class TcpSession
                 }
                 await TcpNetwork.Call("apply",alias,awg?.Number);token.ThrowIfCancellationRequested();
                 if(!engine.Running)throw new IOException("TCP exited during start");
+                if(!recover&&!await TcpHealth.Ready(alias,token,awg?.Number))throw new IOException("transport unavailable");
                 lock(gate){token.ThrowIfCancellationRequested();established=true;state="on";error=null;}
                 health=TcpHealth.Watch(alias,monitoring.Token,awg?.Number);
                 var ended=await Task.WhenAny(engine.WaitForExitAsync(),health);
@@ -76,7 +77,7 @@ internal sealed class TcpSession
             }
             lock(gate){
                 // Never reconnect after user cancellation, failed cleanup, or an initial setup failure.
-                if(!clean||token.IsCancellationRequested||!established||retries==3){
+                if(!clean||token.IsCancellationRequested||!established||!recover||retries==3){
                     state=clean?"off":"pending";
                     error=!clean?failure:token.IsCancellationRequested?null:established&&retries==3?"tcp-recovery-exhausted":failure;
                     cancel?.Dispose();cancel=null;return;

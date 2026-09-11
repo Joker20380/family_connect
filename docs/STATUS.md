@@ -7,6 +7,13 @@ checkout117611c; TCP component **0.1.0** unchanged.
 
 ## Latest checkpoint — 2026-09-12
 
+- Windows Auto WG→AWG→TCP implemented: bound initial/ongoing health, SID ownership,
+  cleanup before transitions, cancellation and SCM recovery. Platform/policy/actual
+  AWG→TCP CI pending. [Report](releases/2026-09-12-windows-auto.ru.md).
+  No release/device/server changes. Next after acceptance: Android AWG/TCP.
+
+### Previous accepted AWG checkpoint
+
 - Windows AWG signed profile/DPAPI, broker session/shared recovery, installer and UI
   implemented after native engine acceptance12/12 in CI34648502108/source29f8f27.
   325 Python tests passed. Clients 34652500879: 504 layouts/install/uninstall;

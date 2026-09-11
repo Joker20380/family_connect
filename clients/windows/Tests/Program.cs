@@ -111,3 +111,25 @@ AwgProfile.Verify(awgText,awgRoot,awgDevice,null);
 var awgConfig=AwgProfile.Config(awg,Convert.ToBase64String(Enumerable.Range(1,32).Select(x=>(byte)x).ToArray()),"fcawg12345678","Wi-Fi");
 using(var doc=JsonDocument.Parse(awgConfig)){if(!doc.RootElement.GetProperty("config").GetString()!.Contains("h1=1001-1010\n"))throw new Exception("AWG UAPI config mismatch");}
 Console.WriteLine("AWG shared fixture, 16 rejection cases, replacement ordering and UAPI config passed.");
+
+// Policy tests execute the real async sequencing with controlled transport lifetimes.
+async Task SequenceCase(string mode){
+ var log=new List<string>();using var stop=new CancellationTokenSource();
+ var choices=mode=="skip"?new[]{"tcp"}:new[]{"wg","awg","tcp"};
+ if(mode=="cancel-before")stop.Cancel();
+ try{
+  await TransportSequence.Run(choices,(name,connected,ct)=>{
+   log.Add("start:"+name);
+   if(mode=="cancel-start"){stop.Cancel();ct.ThrowIfCancellationRequested();}
+   if(mode=="established"||mode=="cancel-established"){connected();log.Add("on:"+name);}
+   if(mode=="cancel-established"){stop.Cancel();ct.ThrowIfCancellationRequested();}
+   throw new IOException("synthetic transport unavailable");
+  },name=>{log.Add("clean:"+name);if(mode=="cleanup-failure")throw new IOException("synthetic cleanup failure");return Task.CompletedTask;},(_,_)=>{},stop.Token);
+  if(mode.StartsWith("cancel")||mode=="cleanup-failure")throw new Exception("Expected terminal policy outcome missing");
+ }catch(OperationCanceledException) when(stop.IsCancellationRequested){}
+ catch(TransportSequence.CleanupException) when(mode=="cleanup-failure"){}
+ var expected=mode=="cancel-before"?Array.Empty<string>():mode=="cleanup-failure"||mode=="cancel-start"?new[]{"start:wg","clean:wg"}:mode=="cancel-established"?new[]{"start:wg","on:wg","clean:wg"}:choices.SelectMany(n=>mode=="established"?new[]{"start:"+n,"on:"+n,"clean:"+n}:new[]{"start:"+n,"clean:"+n}).ToArray();
+ if(!log.SequenceEqual(expected))throw new Exception("Transport policy order/cancellation/cleanup: "+mode);
+}
+foreach(var mode in new[]{"failure","skip","established","cancel-before","cancel-start","cancel-established","cleanup-failure"})await SequenceCase(mode);
+Console.WriteLine("7 automatic transport policy order, cancellation, cleanup and exhaustion scenarios passed.");

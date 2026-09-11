@@ -75,7 +75,7 @@ jobs:
           $app = Get-ChildItem clients/windows -Filter FamilyConnect.exe -Recurse | Where-Object { $_.FullName -notmatch '[\\/]obj[\\/]' } | Select-Object -First 1
           if (-not $app) { throw "Application executable missing" }
           $process = Start-Process $app.FullName -ArgumentList '/layout-test' -PassThru
-          if (-not $process.WaitForExit(150000)) { $process.Kill(); throw 'Layout checks timed out' }
+          if (-not $process.WaitForExit(200000)) { $process.Kill(); throw 'Layout checks timed out' }
           if (Test-Path "$env:TEMP/fc-layout-check.txt") { $failure = (Get-Content "$env:TEMP/fc-layout-check.txt" -Raw).Replace('%','%25').Replace("`r",'%0D').Replace("`n",'%0A'); Write-Output "::error title=Layout detail::$failure" }
           if (Test-Path "$env:TEMP/Windows-preview.png") { $preview = [Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:TEMP/Windows-preview.png")); Write-Output "::notice title=Windows preview::$preview" }
           if ($process.ExitCode -ne 0) { Get-Content "$env:TEMP/fc-layout-check.txt" -ErrorAction SilentlyContinue; throw "Layout checks failed: $($process.ExitCode)" }
