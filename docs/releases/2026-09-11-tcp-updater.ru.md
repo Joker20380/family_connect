@@ -47,7 +47,10 @@ Xvfb: 24 прежних layout cases (1/1.5/2/2.5), state/poll/confirmation regr
 host timing observation не объявлено исправленным изменением UI. X11-снимок на host
 не поддержался XWayland (X get_image); использован снимок из изолированного Xvfb.
 Шестифайловый Linux archive сохранён, локальный тестовый архив не публиковался поверх 0.2.8.
-Новый GTK install check добавлен в Client builds CI; remote CI этой ревизии pending.
+Новый GTK install check добавлен в Client builds CI. Для source 92308a4 прошли
+[Client builds](https://github.com/Joker20380/family_connect/actions/runs/34596445633)
+(Linux/Windows/Android), phase0 34596445538, TCP 34596445537 и AWG 34596445499.
+Существующие desktop/TCP releases не заменялись; release jobs skipped.
 
 ## Установка на ноутбук и откат
 
@@ -73,7 +76,7 @@ Root-owned каталог backup остаётся 0755. Published TCP 0.1.0/cata
 
 ## Дальше
 
-Platform CI этой ревизии, отдельная проверка реального Cancel нового broker, доставка
+Platform CI этой ревизии завершён. Далее отдельная проверка реального Cancel нового broker, доставка
 bootstrap на чистые машины и новый Linux client release после UI/installation gates.
 Затем native Windows/Android; VM/оборудование перед широким rollout. Reticulum и второй
 gateway остаются этапами 5/6. [Результаты](../tcp-updater-result.json).

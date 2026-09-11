@@ -13,7 +13,8 @@ Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `1176
   260 tests, 24 Xvfb layouts, 6 pilot geometries and recovery passed; screenshot reviewed.
   Host layout timing assertion also fails on previous UI; retained observation.
   Backup directory root:root mode corrected 0775→0755 after safe bootstrap refusal.
-  Stable app/server unchanged; next pilot launch exposes button. New remote CI pending;
+  Stable app/server unchanged; next pilot launch exposes button. All remote CI passed
+  for 92308a4 (clients/TCP/AWG/phase0);
   fresh-machine bootstrap distribution, manual Cancel and new client release remain.
   [Updater/UI report](releases/2026-09-11-tcp-updater.ru.md).
 

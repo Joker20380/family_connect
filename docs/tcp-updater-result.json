@@ -32,7 +32,14 @@
     "bootstrap_backup": "/var/backups/family-connect/tcp-updater-w6uqnpyt",
     "backup_directory_mode": "0o755"
   },
-  "remote_ci": "pending",
+  "remote_ci": {
+    "source": "92308a4",
+    "conclusion": "success",
+    "clients": 34596445633,
+    "phase0": 34596445538,
+    "tcp": 34596445537,
+    "awg": 34596445499
+  },
   "stable_app_upgraded": false,
   "test_container_removed": true
 }
