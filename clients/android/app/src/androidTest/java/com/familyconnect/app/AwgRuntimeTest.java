@@ -45,6 +45,20 @@ public class AwgRuntimeTest {
             }
         }
     }
+    void revokeThroughSystemDialog()throws Exception{
+        String testPackage=InstrumentationRegistry.getInstrumentation().getContext().getPackageName();
+        context.startActivity(new Intent().setComponent(new ComponentName(testPackage,RevokeVpnActivity.class.getName())).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        long until=System.currentTimeMillis()+15000;boolean clicked=false;
+        while(System.currentTimeMillis()<until&&!clicked){
+            android.view.accessibility.AccessibilityNodeInfo root=InstrumentationRegistry.getInstrumentation().getUiAutomation().getRootInActiveWindow();
+            if(root!=null&&"com.android.vpndialogs".contentEquals(root.getPackageName())){
+                for(android.view.accessibility.AccessibilityNodeInfo node:root.findAccessibilityNodeInfosByViewId("android:id/button1"))
+                    if(node.isEnabled()&&node.performAction(android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK)){clicked=true;break;}
+            }
+            if(!clicked)Thread.sleep(100);
+        }
+        assertTrue("System VPN confirmation not found",clicked);
+    }
     @Test public void profilesDataSwitchCancelAndRevoke()throws Exception{
         assertTrue(android.os.Build.FINGERPRINT.contains("generic")||android.os.Build.MODEL.contains("sdk"));assertFalse(vpn());
         shell("appops set "+context.getPackageName()+" ACTIVATE_VPN allow");shell("pm grant "+context.getPackageName()+" android.permission.POST_NOTIFICATIONS");
@@ -64,7 +78,9 @@ public class AwgRuntimeTest {
             context.startForegroundService(new Intent(context,ConnectionService.class).setAction("connect").putExtra("transport","awg"));
             context.startService(new Intent(context,ConnectionService.class).setAction("disconnect"));Thread.sleep(500);waitState("off");clean();
             context.startForegroundService(new Intent(context,ConnectionService.class).setAction("connect").putExtra("transport","awg"));waitState("on");
-            shell("appops set "+context.getPackageName()+" ACTIVATE_VPN deny");waitState("off");clean();
+            android.util.Log.i("FamilyConnect","System VPN revoke");revokeThroughSystemDialog();waitState("off");clean();
+            assertNotNull("VPN authorization remains",android.net.VpnService.prepare(context));
+            android.util.Log.i("FamilyConnect","PASS: 24 encrypted UDP, 4 stops, pending cancel, system revoke");
             assertTrue(wg.exists());assertTrue(awg.exists());
         }finally{
             context.stopService(new Intent(context,ConnectionService.class));wg.clear();awg.clear();

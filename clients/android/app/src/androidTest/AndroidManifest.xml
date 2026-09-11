@@ -1,0 +1,8 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+ <application>
+  <activity android:name="com.familyconnect.app.RevokeVpnActivity" android:exported="true" android:theme="@android:style/Theme.Material.Light.NoActionBar"/>
+  <service android:name="com.familyconnect.app.OtherVpnService" android:exported="false" android:permission="android.permission.BIND_VPN_SERVICE">
+   <intent-filter><action android:name="android.net.VpnService"/></intent-filter>
+  </service>
+ </application>
+</manifest>
