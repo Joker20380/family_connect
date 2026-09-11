@@ -4,7 +4,7 @@
 а при полной недоступности старого сервера получает проверенные новые настройки
 по независимому служебному каналу и подключается к другому серверу.
 
-**Сейчас: этап4. Desktop0.2.9 опубликован, exact platform CI прошёл, catalog sequence8 подписан офлайн. На устройствах обновление ещё не применялось. TCP Setup0.1.0 опубликован с отдельной офлайн-подписью. Windows TCP-движок прошёл изолированную приёмку TUN/VLESS 12/12 и очистку. Подписанный REALITY-профиль и DPAPI-импорт через Windows broker прошли приёмку. Владение TCP-процессом и очистка прошли CI18/18. Далее связать с Windows broker/маршрутами/DNS и UI/fallback, Windows AWG, затем Android transports; Android updater отложен. Сетевые тайм-ауты остаются известным ограничением; нагрузочные испытания отложены пользователем.**
+**Сейчас: этап4. Desktop0.2.9 опубликован, exact platform CI прошёл, catalog sequence8 подписан офлайн. На устройствах обновление ещё не применялось. TCP Setup0.1.0 опубликован с отдельной офлайн-подписью. Windows TCP-движок прошёл изолированную приёмку TUN/VLESS 12/12 и очистку. Подписанный REALITY-профиль и DPAPI-импорт через Windows broker прошли приёмку. Владение TCP-процессом и очистка прошли CI18/18. Сетевая сессия broker/SCM с маршрутами/DNS прошла ограниченную LocalSystem-приёмку24/24. Далее упаковка/UI/recovery, full-routing acceptance и Windows AWG, затем Android transports; Android updater отложен. Сетевые тайм-ауты остаются известным ограничением; нагрузочные испытания отложены пользователем.**
 Предыдущая серия первого ноутбука120/120 — исторический результат, не подтверждение
 устойчивости текущего второго устройства. Последний offload A/B/A неоднозначен из-за
 сбоев прямого контрольного пути; исходные настройки адаптера восстановлены.
@@ -32,7 +32,7 @@
 1. Сетевые/нагрузочные испытания отложены пользователем; не возобновлять автоматически.
 2. Интеграция setup и ревью client patch выполнены; desktop0.2.9 уже опубликован.
 3. Client0.2.9 и подписанный TCP Setup0.1.0 опубликованы; первичный verifier/anchor получают доверенным каналом.
-4. По подтверждённому порядку: завершить Windows (TCP lifecycle/маршруты/DNS/UI и AWG), затем Android transports.
+4. По подтверждённому порядку: завершить Windows (TCP packaging/UI/recovery, full-routing acceptance и AWG), затем Android transports.
 5. Сразу после интеграции Windows/Android — этап5 Reticulum: доставка/проверка/применение/ACK/откат. Google Play и Android updater не являются условием старта. Второй VPS нужен для этапа6, не для реализации обмена Reticulum.
 
 TCP setup и signed component установлены на втором Ubuntu, независимая Debian VM прошла
@@ -59,3 +59,5 @@ Windows TCP engine: [приёмка и границы](releases/2026-09-11-windo
 Windows TCP profile/broker: [приёмка](releases/2026-09-11-windows-tcp-profile.ru.md).
 
 Windows TCP lifecycle: [результат и границы](releases/2026-09-11-windows-tcp-lifecycle.ru.md).
+
+Windows TCP broker session: [полный итог](releases/2026-09-11-windows-tcp-session.ru.md) · [runbook](windows-tcp-session.ru.md).

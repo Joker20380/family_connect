@@ -1,8 +1,9 @@
 # Windows TCP native engine acceptance
 
-Operator/CI-only preview component. It is not included in the stable desktop installer
-and does not yet add connect/fallback actions to the Windows broker or GUI. Signed profile import
-exists separately in the broker, as documented in docs/windows-tcp-profile.ru.md.
+Operator/CI-only preview component. It is not included in the stable desktop installer.
+The broker now implements connect-tcp and session cleanup; the regular installer still
+lacks the engine payload and GUI controls. Signed profile import is described in
+docs/windows-tcp-profile.ru.md; the session in docs/windows-tcp-session.ru.md.
 
 Xray is built on Windows amd64 from the same revision as Linux TCP:
 d2758a023cd7f4174a5a5fa4ff66e487d4342ba0, Go1.26.1. Wintun0.14.1 is obtained from
@@ -25,7 +26,15 @@ engine diagnostics are compiled only into the CI harness (TCP_ENGINE_TEST).
 
 The build manifest records source/toolchain and binary hashes. The CI artifact is a
 preview, not an authenticated updater payload or release. Protected profile import
-is already implemented; broker/SCM network session integration,
-routing/DNS lifecycle, REALITY network acceptance and WG→AWG→TCP recovery remain gates. User network/load tests stay deferred.
+and broker/SCM network session are implemented and locally exercised. Packaging/UI,
+full external REALITY routing acceptance and WG→AWG→TCP recovery remain gates. User network/load tests stay deferred.
 
 Upstream source: https://github.com/XTLS/Xray-core/blob/d2758a023cd7f4174a5a5fa4ff66e487d4342ba0/proxy/tun/tun_windows.go
+
+The additional SessionHost compiles the actual broker under TCP_SESSION_TEST with
+scoped IPv4/IPv6 routes and DNS namespace, plus local VLESS instead of REALITY.
+It runs as LocalSystem through SCM and the normal pipe. Four connected scenarios each
+verify3 IPv4 +3 IPv6 HTTP requests, OS resolver through NRPT/UDP and foreign-SID refusals;
+a fifth cancels startup. All verify no child/TUN/routes/journal and unchanged host network
+settings. The test account is created/deleted by Windows APIs without a shell password.
+The compile-time test mode is absent from the normal client and cannot be selected by IPC.

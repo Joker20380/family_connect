@@ -150,7 +150,7 @@ finally:
    ctypes.windll.kernel32.CloseHandle(other_token)
   if account:
    net.NetUserDel.argtypes=[wintypes.LPCWSTR,wintypes.LPCWSTR]
-   assert net.NetUserDel(None,account)==0,'Test account deletion failed' 
+   assert net.NetUserDel(None,account)==0,'Test account deletion failed'
   if server and server.poll() is None:server.kill();server.wait(timeout=10)
   dns_stop.set()
   if udp:udp.close()

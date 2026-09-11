@@ -1,0 +1,101 @@
+{
+  "implementation": "9f32b0c",
+  "acceptance_source": "6d207a2",
+  "native_session_ci": 34639769072,
+  "client_ci": 34639148397,
+  "phase0_ci": 34639769135,
+  "build": {
+    "xray_revision": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+    "go": "go version go1.26.1 windows/amd64",
+    "wintun_signer": "CN=WireGuard LLC, O=WireGuard LLC, L=Boulder, S=Colorado, C=US, SERIALNUMBER=4227913, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=Ohio, OID.1.3.6.1.4.1.311.60.2.1.3=US",
+    "wintun": "0.14.1",
+    "files": {
+      "wintun.dll": "e5da8447dc2c320edc0fc52fa01885c103de8c118481f683643cacc3220dafce",
+      "xray.exe": "74475d8c4f68dd07bef754e56778eb2a9061e4dfcc954fa008b912a989bd848a"
+    }
+  },
+  "session": {
+    "rounds": [
+      {
+        "mode": "disconnect",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true
+      },
+      {
+        "mode": "engine-crash",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true
+      },
+      {
+        "mode": "broker-crash",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true
+      },
+      {
+        "mode": "service-stop",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true
+      },
+      {
+        "mode": "cancel-start",
+        "http4": 0,
+        "http6": 0,
+        "dns": false,
+        "clean": true
+      }
+    ],
+    "passed": true
+  },
+  "lifecycle": {
+    "source": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+    "rounds": [
+      {
+        "iteration": 1,
+        "https": false,
+        "local_http": 6,
+        "stop_mode": "explicit",
+        "process_exit": true,
+        "address_state": "Preferred",
+        "adapter_removed": true
+      },
+      {
+        "iteration": 2,
+        "https": false,
+        "local_http": 6,
+        "stop_mode": "owner-crash",
+        "process_exit": true,
+        "address_state": "Preferred",
+        "adapter_removed": true
+      },
+      {
+        "iteration": 3,
+        "https": false,
+        "local_http": 6,
+        "stop_mode": "engine-crash",
+        "process_exit": true,
+        "address_state": "Preferred",
+        "adapter_removed": true
+      }
+    ],
+    "tamper_refused": [
+      "xray.exe",
+      "wintun.dll"
+    ],
+    "default_routes_unchanged": true,
+    "dns_unchanged": true,
+    "test_route_absent": true,
+    "passed": true
+  }
+}

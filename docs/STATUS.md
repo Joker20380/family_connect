@@ -7,6 +7,22 @@ checkout117611c; TCP component **0.1.0** unchanged.
 
 ## Latest checkpoint — 2026-09-11
 
+- Windows TCP broker network session implemented9f32b0c, accepted with harness6d207a2.
+  Async connect/cancel, SID ownership, own IPv4/IPv6 routes/DNS/NRPT, durable journal,
+  engine-exit cleanup and SCM restart recovery. Actual LocalSystem scoped CI passed
+  24/24 IPv4/IPv6 HTTP,4 OS DNS checks, other-user refusals and5 cleanup scenarios;
+  prior native lifecycle18/18 retained. Native/session CI34639769072, phase0
+  CI34639769135 and implementation platform CI34639148397 passed. Downloaded hashes verified.
+  Test account setup changed from PowerShell to direct WinAPI; password stays in memory.
+  Full external REALITY/default-route path not accepted here; CI uses scoped routes/domain.
+  Normal installer has no tcp engine directory and GUI has no TCP control yet. Next:
+  packaging/UI/recovery, full-routing acceptance before distribution, then Windows AWG.
+  No release/device/server changes; Android then Reticulum and deferred user tests retained.
+  [Complete session evidence](releases/2026-09-11-windows-tcp-session.ru.md) ·
+  [Operations and limits](windows-tcp-session.ru.md).
+
+### Earlier process lifetime checkpoint
+
 - Windows TCP process lifetime primitive completed, sourcedc8df7d. Pinned binary checks,
   kill-on-close Job Object, stdin-only config after job assignment, unexpected-exit
   observation. Native CI34637235553 passed18/18 local TUN/VLESS requests across explicit

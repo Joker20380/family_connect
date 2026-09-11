@@ -82,9 +82,14 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
    all platform CI34633788708 and phase0 passed. TCP connect is still not exposed.
    Process ownership primitive now passed18/18 local requests across explicit/owner-crash/
    engine-crash stop, binary tamper rejection and cleanup; native/platform/phase0 CI passed.
-   It is not yet connected to broker IPC/SCM. Next: one broker TCP network session with
-   route/DNS apply/restore, readiness and cleanup on broker crash/restart;
-   then GUI/fallback and Windows AWG. Finish Windows before moving to Android, per user.
+   Broker IPC/SCM session now implemented: async connect/cancel, SID ownership,
+   routes/DNS/NRPT journal and cleanup/restart. Scoped LocalSystem acceptance passed24/24
+   IPv4/IPv6 HTTP,4 OS DNS checks and5 cleanup scenarios; other account actions refused.
+   CI34639769072/phase0/platform passed. External REALITY/full default routing remains
+   unaccepted; installer still lacks tcp engine payload and UI controls. Next: packaging,
+   GUI/recovery and full-routing acceptance before distribution, then Windows AWG.
+   Finish Windows before moving to Android, per user.
+   [Session checkpoint](releases/2026-09-11-windows-tcp-session.ru.md).
    [Lifecycle checkpoint](releases/2026-09-11-windows-tcp-lifecycle.ru.md) ·
    [Profile checkpoint](releases/2026-09-11-windows-tcp-profile.ru.md).
    This preview is not in stable installer; physical/network acceptance remains open.
