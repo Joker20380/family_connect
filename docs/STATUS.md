@@ -6,12 +6,21 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+- Established AWG → TCP backend/policy recovery exercised on the laptop: one initial
+  unlocalized AssertionError, then two successive passes at 45.32 s and 45.57 s after
+  two failed health cycles. Real endpoint UDP blocks counted 1047/1154 packets.
+  Unprivileged TCP health, resolved query, disconnect policy stop and cleanup passed.
+  All three attempts cleaned up; no tunnels/test firewall left. No product code change.
+  First failure remains an open observation; not a GTK/polkit end-to-end acceptance.
+  Next: real experimental Linux UI/recovery/authorization-cancel acceptance before release.
+  [Recovery evidence and limits](releases/2026-09-11-awg-tcp-recovery.ru.md).
+
 - Corrected TCP helper installed and short laptop smoke passed: 3 bound HTTPS health
   checks, resolved query, gateway bypass/public TUN route, 3 local routes preserved.
   Cleanup restored complete IPv4/IPv6 policy-rule baseline; TUN/marker absent.
   Backup: /var/backups/family-connect/tcp-routing-1789119289/helper.
   New helper remains installed; test tunnel stopped. Main launcher/stable releases unchanged.
-  Next: bounded established AWG → TCP recovery acceptance with watchdog and exact cleanup.
+  Bounded backend/policy recovery now has two passes; see latest report above.
   [Installed-helper report](releases/2026-09-11-tcp-host-smoke.ru.md).
 
 - New Wi-Fi baseline and TCP retest completed: gateway max 53.9 ms (was 496),

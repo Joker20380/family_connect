@@ -42,3 +42,5 @@ Local Wi-Fi/gateway/VPS comparison: [report](releases/2026-09-11-local-link.ru.m
 Retest after Wi-Fi change (120/120 isolated probes): [report](releases/2026-09-11-network-change.ru.md).
 
 Corrected TCP helper installed; short laptop smoke passed: [report](releases/2026-09-11-tcp-host-smoke.ru.md).
+
+Established AWG → TCP backend recovery (two passes; GUI acceptance pending): [report](releases/2026-09-11-awg-tcp-recovery.ru.md).

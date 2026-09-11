@@ -1,0 +1,37 @@
+{
+  "scope": "Host backend/RecoveryPolicy, root helper harness; not GTK/polkit end-to-end",
+  "attempts": [
+    {
+      "passed": false,
+      "established_awg_healthy": true,
+      "error": "AssertionError",
+      "cleanup_passed": true
+    },
+    {
+      "passed": true,
+      "established_awg_healthy": true,
+      "stage": "firewall_counter",
+      "recovery_seconds": 45.32,
+      "failed_health_cycles": 2,
+      "tcp_healthy": true,
+      "blocked_udp_packets": 1047,
+      "unprivileged_health": true,
+      "dns_query": true,
+      "disconnect_stops_policy": true,
+      "cleanup_passed": true
+    },
+    {
+      "passed": true,
+      "established_awg_healthy": true,
+      "stage": "firewall_counter",
+      "recovery_seconds": 45.57,
+      "failed_health_cycles": 2,
+      "tcp_healthy": true,
+      "blocked_udp_packets": 1154,
+      "unprivileged_health": true,
+      "dns_query": true,
+      "disconnect_stops_policy": true,
+      "cleanup_passed": true
+    }
+  ]
+}

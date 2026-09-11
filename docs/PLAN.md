@@ -66,14 +66,14 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
 ## Next, in order
 
-1. Verify established AWG → TCP recovery on the new network: establish AWG, apply a
-   narrowly scoped temporary UDP endpoint block, exercise runtime health/recovery and
-   check TCP egress/DNS plus exact cleanup. Use an independent bounded watchdog.
-   Corrected helper is installed; short host smoke passed including 3 HTTPS checks,
-   resolved query, 3 local routes and complete IPv4/IPv6 rule restoration.
-   [Installation and rollback](releases/2026-09-11-tcp-host-smoke.ru.md).
-   Main WG/AWG launcher and stable release remain unchanged. Do not claim recovery
-   complete from isolated 120/120 tests or the short host smoke alone.
+1. Run real GTK/polkit end-to-end acceptance of the experimental Linux client:
+   recovered transport/status, user Disconnect/close/authorization cancellation and
+   bounded cleanup. Backend/RecoveryPolicy AWG → TCP passed twice (45.32/45.57 s),
+   after one unlocalized AssertionError. Retain the initial failure as an open observation;
+   record exact health/transport errors if it recurs, without secrets.
+   [Recovery evidence](releases/2026-09-11-awg-tcp-recovery.ru.md).
+   Main stable launcher remains unchanged. Do not equate root-helper harness success
+   with GUI authorization flow or stable-channel release acceptance.
 2. Integrate the tested transports into native Windows/Android. Complete platform CI,
    installation/UI checks and signed release before upgrading the stable client channel.
 3. Integrate provisioning/runtime/ACK and known-good recovery with real Reticulum
