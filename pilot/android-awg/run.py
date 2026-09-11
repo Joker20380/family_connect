@@ -10,7 +10,10 @@ try:
   config='private_key='+'02'*32+'\nlisten_port='+str(port)+'\n'+params+'public_key=a4e09292b651c278b9772c569f5fa9bb13d906b46ab68c9df9dc2b4409f8a209\nallowed_ip='+address+'\n\n'
   peer=subprocess.Popen([str(r/'clients/android/awg-generated/peer-fixture')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True);processes.append(peer)
   peer.stdin.write(json.dumps({'config':config}));peer.stdin.close();q=queue.Queue();threading.Thread(target=lambda:q.put(peer.stdout.readline().strip()),daemon=True).start();assert q.get(timeout=20)=='ready'
- subprocess.run(['gradle','--no-daemon',':app:connectedDebugAndroidTest'],cwd=r/'clients/android',check=True)
+ with (r/'android-awg-runtime.log').open('w') as log:
+  result=subprocess.run(['gradle','--no-daemon',':app:connectedDebugAndroidTest'],cwd=r/'clients/android',stdout=log,stderr=subprocess.STDOUT)
+ print((r/'android-awg-runtime.log').read_text(),flush=True)
+ result.check_returncode()
 finally:
  with (r/'android-awg-crash.log').open('w') as log:
   subprocess.run(['adb','logcat','-d','-b','crash'],stdout=log,stderr=subprocess.STDOUT,timeout=20)
