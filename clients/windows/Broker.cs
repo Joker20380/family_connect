@@ -46,10 +46,13 @@ internal sealed class Broker:ServiceBase
     {
         var state=Native.TunnelState();var owner=File.Exists(Store.OwnerPath)?File.ReadAllText(Store.OwnerPath):null;
         var ready=File.Exists(Store.UserPath(sid,".conf.dpapi"));
-        if(request.Action=="status")return new(true,state!="off"&&owner!=sid?"other-user":ready?state:"inactive");
+        if(request.Action=="status")return new(true,state!="off"&&owner!=sid?"other-user":ready?state:"inactive",TcpReady:File.Exists(Store.UserPath(sid,".tcp.dpapi")));
         if(request.Action=="request")return new(true,"inactive",Code:"FC1-"+Convert.ToHexString(Convert.FromBase64String(Store.Public(sid))));
         if(state!="off"&&owner!=sid)return new(false,"other-user",Error:"other-user");
         switch(request.Action){
+            case "activate-tcp":
+                if(state!="off")return new(false,state,Error:"disconnect-first");
+                Store.ActivateTcp(sid,request.Activation??"");return new(true,ready?"off":"inactive",TcpReady:true);
             case "activate":
                 if(state!="off")return new(false,state,Error:"disconnect-first");
                 Store.Activate(sid,request.Activation??"");return new(true,"off");

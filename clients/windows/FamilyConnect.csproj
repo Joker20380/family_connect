@@ -10,7 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="../assets/dodecahedron.png" LogicalName="FamilyConnect.Brand.png" />
-    <Compile Remove="Tests/**/*.cs" />
+    <Compile Remove="Tests/**/*.cs;BrokerTests/**/*.cs" />
     <PackageReference Include="BouncyCastle.Cryptography" Version="2.7.0" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="10.0.12" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.12" />

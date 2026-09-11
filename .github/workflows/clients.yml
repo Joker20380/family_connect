@@ -41,7 +41,11 @@ jobs:
         with:
           dotnet-version: '10.0.x'
       - shell: pwsh
-        run: ./clients/windows/build.ps1
+        run: |
+          New-Item -ItemType Directory -Force clients/windows/dist | Out-Null
+          $log = Join-Path $env:GITHUB_WORKSPACE 'clients/windows/dist/build-check.txt'
+          ./clients/windows/build.ps1 *>&1 | Tee-Object -FilePath $log
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Defender scan when available
         shell: pwsh
         run: ./clients/windows/scan.ps1
@@ -55,6 +59,9 @@ jobs:
       - name: Check broker activation API
         shell: pwsh
         run: ./clients/windows/test-install.ps1 -Stage Broker
+      - name: Check TCP profile broker storage and replacement
+        shell: pwsh
+        run: dotnet run --project clients/windows/BrokerTests/BrokerTests.csproj -c Release -- clients/windows/dist/tcp-broker-check.txt
       - name: Check user interface
         shell: pwsh
         run: ./clients/windows/test-install.ps1 -Stage UI
@@ -76,6 +83,7 @@ jobs:
         shell: pwsh
         run: ./clients/windows/test-install.ps1 -Stage Uninstall
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: FamilyConnect-Windows-Installer-pilot-unsigned
           path: clients/windows/dist/

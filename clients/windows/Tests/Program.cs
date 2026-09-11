@@ -36,3 +36,49 @@ RejectUpdate(updateRaw,root,1000);RejectUpdate(updateRaw,updatePublic,2000);Reje
 RejectUpdate(new byte[65537],updatePublic,1000);
 var changed=updateRaw.ToArray();changed[changed.Length/2]^=1;RejectUpdate(changed,updatePublic,1000);
 Console.WriteLine("6 update catalog checks passed, including shared Python fixture.");
+
+var tcp=new TcpGrant(1,device,1,now+3600,"192.0.2.10",443,"11111111-2222-4333-8444-555555555555",
+    Convert.ToBase64String(Enumerable.Range(1,32).Select(x=>(byte)x).ToArray()).TrimEnd('=').Replace('+','-').Replace('/','_'),"example.com","0123456789abcdef");
+string SignTcpRaw(string text,byte[]? domain=null){
+ var raw=System.Text.Encoding.UTF8.GetBytes(text);var signer=new Ed25519Signer();signer.Init(true,key);
+ var prefix=domain??TcpProfile.Domain;signer.BlockUpdate(prefix,0,prefix.Length);signer.BlockUpdate(raw,0,raw.Length);
+ return JsonSerializer.Serialize(new Envelope(Convert.ToBase64String(raw),Convert.ToBase64String(signer.GenerateSignature())),Activation.Json);
+}
+string SignTcp(TcpGrant value)=>SignTcpRaw(JsonSerializer.Serialize(value,Activation.Json));
+int tcpChecks=0;
+void RejectTcp(Action action){try{action();}catch(Exception){tcpChecks++;return;}throw new Exception("accepted invalid TCP profile");}
+var tcpEnvelope=SignTcp(tcp);
+if(TcpProfile.Verify(tcpEnvelope,root,device,now)!=tcp)throw new Exception("TCP round trip");
+RejectTcp(()=>TcpProfile.Verify(tcpEnvelope,root,gateway,now));
+RejectTcp(()=>TcpProfile.Verify(tcpEnvelope,root,device,now+3600));
+RejectTcp(()=>TcpProfile.Verify(SignTcp(tcp with{ExpiresAt=now+604801}),root,device,now));
+if(TcpProfile.Verify(tcpEnvelope,root,device,null)!=tcp)throw new Exception("Stored offline profile");
+foreach(var invalid in new[]{tcp with{Version=2},tcp with{Sequence=0},tcp with{Sequence=9007199254740992},
+ tcp with{Server="127.0.0.1"},tcp with{Server="224.0.0.1"},tcp with{Server="192.0.2.10; bad"},tcp with{Server="example.com"},
+ tcp with{Port=0},tcp with{Port=65536},tcp with{Id=Guid.Empty.ToString()},tcp with{PublicKey=new string('A',43)},
+ tcp with{PublicKey=tcp.PublicKey+"="},tcp with{ServerName="example.com\nInjected=1"},tcp with{ShortId="0"},
+ tcp with{DevicePublicKey=null!},tcp with{PublicKey=null!},tcp with{ShortId=null!}})
+ RejectTcp(()=>TcpProfile.Verify(SignTcp(invalid),root,device,now));
+RejectTcp(()=>TcpProfile.Verify(SignTcpRaw(JsonSerializer.Serialize(tcp,Activation.Json),Activation.Domain),root,device,now));
+var tcpRaw=JsonSerializer.Serialize(tcp,Activation.Json);
+RejectTcp(()=>TcpProfile.Verify(SignTcpRaw(tcpRaw.Replace("\"version\":1","\"version\":1,\"version\":1")),root,device,now));
+RejectTcp(()=>TcpProfile.Verify(SignTcpRaw(tcpRaw.TrimEnd('}')+",\"command\":\"bad\"}"),root,device,now));
+RejectTcp(()=>TcpProfile.Verify(tcpEnvelope.Replace("\"payload\":","\"payload\":\"\",\"payload\":"),root,device,now));
+RejectTcp(()=>TcpProfile.Verify(new string('a',8193),root,device,now));
+var altered=JsonSerializer.Deserialize<Envelope>(tcpEnvelope,Activation.Json)!;
+var signature=Convert.FromBase64String(altered.Signature);signature[0]^=1;
+RejectTcp(()=>TcpProfile.Verify(JsonSerializer.Serialize(altered with{Signature=Convert.ToBase64String(signature)},Activation.Json),root,device,now));
+TcpProfile.CheckReplacement(tcp,tcp);TcpProfile.CheckReplacement(tcp with{Sequence=2},tcp);
+RejectTcp(()=>TcpProfile.CheckReplacement(tcp,tcp with{Sequence=2}));
+RejectTcp(()=>TcpProfile.CheckReplacement(tcp with{ServerName="other.example"},tcp));
+RejectTcp(()=>TcpProfile.Config(tcp,"Ethernet"));
+using(var config=JsonDocument.Parse(TcpProfile.Config(tcp,"fctcp1234abcd"))){
+ var outbound=config.RootElement.GetProperty("outbounds")[0];
+ if(outbound.GetProperty("streamSettings").GetProperty("security").GetString()!="reality"||
+    config.RootElement.GetProperty("inbounds")[0].GetProperty("protocol").GetString()!="tun")throw new Exception("TCP config");
+}
+var fixtureEnvelope=File.ReadAllText(Path.Combine(updateRoot,"windows-tcp-v1.json"));
+var fixtureRoot=Convert.FromBase64String(File.ReadAllText(Path.Combine(updateRoot,"windows-tcp-v1.pub")).Trim());
+var fixtureDevice=Convert.ToBase64String(Enumerable.Range(1,32).Select(x=>(byte)x).ToArray());
+if(TcpProfile.Verify(fixtureEnvelope,fixtureRoot,fixtureDevice,1000).Sequence!=7)throw new Exception("Python TCP interoperability");
+Console.WriteLine($"TCP profile interoperability, config, replacement and {tcpChecks} rejection checks passed.");

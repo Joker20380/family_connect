@@ -59,4 +59,24 @@ internal static class Store
         try{Atomic(UserPath(sid,".conf.dpapi"),Native.EncryptTunnel(Encoding.UTF8.GetBytes(Activation.Config(grant,Convert.ToBase64String(key)))));}
         finally{CryptographicOperations.ZeroMemory(key);}
     }
+    static byte[] ActivationRoot()=>Convert.FromBase64String(File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"activation.pub")).Trim());
+    public static TcpGrant? Tcp(string sid)
+    {
+        var path=UserPath(sid,".tcp.dpapi");
+        if(!File.Exists(path))return null;
+        if(new FileInfo(path).Length>16384)throw new FormatException("stored profile size");
+        // DPAPI runs as the broker (LocalSystem); per-user ownership is enforced by the pipe SID and protected store.
+        var raw=ProtectedData.Unprotect(File.ReadAllBytes(path),null,DataProtectionScope.CurrentUser);
+        try{return TcpProfile.Verify(Encoding.UTF8.GetString(raw),ActivationRoot(),Public(sid),null);}
+        finally{CryptographicOperations.ZeroMemory(raw);}
+    }
+    public static void ActivateTcp(string sid,string envelope)
+    {
+        var next=TcpProfile.Verify(envelope,ActivationRoot(),Public(sid),DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+        TcpProfile.CheckReplacement(next,Tcp(sid));
+        var raw=Encoding.UTF8.GetBytes(envelope);
+        try{Atomic(UserPath(sid,".tcp.dpapi"),ProtectedData.Protect(raw,null,DataProtectionScope.CurrentUser));}
+        finally{CryptographicOperations.ZeroMemory(raw);}
+    }
+
 }
