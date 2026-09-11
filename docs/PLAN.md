@@ -64,14 +64,16 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
 ## Next, in order
 
-1. Diagnose and stabilize the TCP experiment before integrating it. VLESS + REALITY
-   is deployed and one real WG/AWG-block → TCP run passed in 16.81 seconds, but repeated
-   requests still time out; 8/12-second limits did not resolve the issue. Cause unknown.
-   Local source branch: `pilot/tcp-reality-2026-09-11`; main WG/AWG remains unchanged.
-   Compare SOCKS and TUN with the same outbound, inspect DNS and outer TCP during faults,
-   then repeat sustained traffic, cleanup and established-session AWG → TCP recovery.
-   [TCP checkpoint](releases/2026-09-11-tcp.ru.md). Existing WG → AWG established-session
-   recovery passed in 44.05 seconds; [previous report](releases/2026-09-10-recovery.ru.md).
+1. Correct the reviewed TCP routing defect in the experimental branch: preserve
+   more-specific main-table routes and explicitly route gateway control packets outside
+   the TUN, including kernel-generated RST that may lack the socket mark. Verify ownership
+   and exact cleanup of every added rule. Then validate in an isolated network namespace
+   before another host-wide test; include local/Docker/LAN routes and gateway bypass.
+   Repeat matched-load SOCKS/TUN trials and established AWG → TCP recovery after correction.
+   Trace found gateway RST on TUN, not SYN recursion. Root cause of all timeouts is not
+   proven; do not declare the engine or network repaired based on this finding alone.
+   [Diagnosis](releases/2026-09-11-tcp-diagnosis.ru.md), [original checkpoint](releases/2026-09-11-tcp.ru.md).
+   Main WG/AWG remains unchanged; source branch `pilot/tcp-reality-2026-09-11`.
 2. Integrate the tested transports into native Windows/Android. Complete platform CI,
    installation/UI checks and signed release before upgrading the stable client channel.
 3. Integrate provisioning/runtime/ACK and known-good recovery with real Reticulum

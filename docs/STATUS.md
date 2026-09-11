@@ -6,6 +6,15 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+- TCP diagnosis update: direct server HTTPS 36/36; long SOCKS-only comparison 216/216
+  checks passed, but long full-TUN comparison degraded (including independent SOCKS).
+  Local HTTP stayed 36/36. Packet capture confirms gateway-directed RST on TUN;
+  no gateway SYN on TUN was found. Code review found missing preservation of more-specific
+  main-table routes before TUN lookup. This is a concrete routing defect; it does not yet
+  prove the cause of every timeout. No correction installed or release published.
+  TCP service/tunnel/test rules are verified off/removed; main WG/AWG code unchanged.
+  [Diagnosis and evidence](releases/2026-09-11-tcp-diagnosis.ru.md).
+
 - TCP experiment: VLESS + REALITY deployed separately on TCP/443; Xray 26.3.27.
   Linux TUN/helper installed; isolated HTTPS/DNS and unauthorized-client rejection passed.
   One real blocked-WG/AWG → TCP run passed in 16.81 seconds. Repeated requests still

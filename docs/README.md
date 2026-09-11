@@ -26,3 +26,5 @@ Connection resilience / AWG pilot: [rollout](releases/2026-09-10-awg.ru.md).
 Linux established-session recovery: [report](releases/2026-09-10-recovery.ru.md).
 
 TCP experiment (unstable; resume here): [checkpoint](releases/2026-09-11-tcp.ru.md).
+
+TCP diagnosis and routing defect: [report](releases/2026-09-11-tcp-diagnosis.ru.md).

@@ -1,0 +1,222 @@
+{
+  "result": {
+    "tun/numeric": {
+      "passed": 6,
+      "total": 12
+    },
+    "tun/hostname": {
+      "passed": 3,
+      "total": 12
+    },
+    "socks/numeric": {
+      "passed": 5,
+      "total": 12
+    },
+    "socks/hostname": {
+      "passed": 4,
+      "total": 12
+    },
+    "dns_udp": {
+      "passed": 5,
+      "total": 12
+    },
+    "dns_tcp": {
+      "passed": 5,
+      "total": 12
+    }
+  },
+  "socks-only": {
+    "socks/numeric": {
+      "passed": 8,
+      "total": 12
+    },
+    "socks/hostname": {
+      "passed": 9,
+      "total": 12
+    }
+  },
+  "socks-stages": {
+    "socks/numeric": {
+      "passed": 12,
+      "total": 12
+    },
+    "socks/hostname": {
+      "passed": 10,
+      "total": 12
+    }
+  },
+  "local-control": {
+    "socks/numeric": {
+      "passed": 12,
+      "total": 12
+    },
+    "socks/hostname": {
+      "passed": 11,
+      "total": 12
+    },
+    "local_http": {
+      "passed": 12,
+      "total": 12
+    },
+    "python_socks": {
+      "passed": 12,
+      "total": 12
+    }
+  },
+  "python-tun": {
+    "tun/numeric": {
+      "passed": 11,
+      "total": 12
+    },
+    "tun/hostname": {
+      "passed": 8,
+      "total": 12
+    },
+    "socks/numeric": {
+      "passed": 8,
+      "total": 12
+    },
+    "socks/hostname": {
+      "passed": 8,
+      "total": 12
+    },
+    "dns_udp": {
+      "passed": 9,
+      "total": 12
+    },
+    "dns_tcp": {
+      "passed": 9,
+      "total": 12
+    },
+    "local_http": {
+      "passed": 12,
+      "total": 12
+    },
+    "python_socks": {
+      "passed": 9,
+      "total": 12
+    },
+    "python_tun": {
+      "passed": 11,
+      "total": 12
+    }
+  },
+  "outer-control": {
+    "socks/numeric": {
+      "passed": 12,
+      "total": 12
+    },
+    "socks/hostname": {
+      "passed": 12,
+      "total": 12
+    },
+    "local_http": {
+      "passed": 12,
+      "total": 12
+    },
+    "python_socks": {
+      "passed": 12,
+      "total": 12
+    },
+    "direct/numeric": {
+      "passed": 12,
+      "total": 12
+    },
+    "reflection/numeric": {
+      "passed": 11,
+      "total": 12
+    }
+  },
+  "long": {
+    "socks/numeric": {
+      "passed": 36,
+      "total": 36
+    },
+    "socks/hostname": {
+      "passed": 36,
+      "total": 36
+    },
+    "local_http": {
+      "passed": 36,
+      "total": 36
+    },
+    "python_socks": {
+      "passed": 36,
+      "total": 36
+    },
+    "direct/numeric": {
+      "passed": 36,
+      "total": 36
+    },
+    "reflection/numeric": {
+      "passed": 36,
+      "total": 36
+    }
+  },
+  "trace": {
+    "tun/numeric": {
+      "passed": 13,
+      "total": 36
+    },
+    "tun/hostname": {
+      "passed": 3,
+      "total": 36
+    },
+    "socks/numeric": {
+      "passed": 9,
+      "total": 36
+    },
+    "socks/hostname": {
+      "passed": 8,
+      "total": 36
+    },
+    "dns_udp": {
+      "passed": 6,
+      "total": 36
+    },
+    "dns_tcp": {
+      "passed": 11,
+      "total": 36
+    },
+    "local_http": {
+      "passed": 36,
+      "total": 36
+    },
+    "python_socks": {
+      "passed": 8,
+      "total": 36
+    },
+    "python_tun": {
+      "passed": 9,
+      "total": 36
+    }
+  },
+  "server_https": {
+    "passed": 36,
+    "total": 36
+  },
+  "cleanup": {
+    "service_inactive": true,
+    "tun_absent": true,
+    "ownership_marker_absent": true,
+    "ipv4_ipv6_policy_rules_removed": true,
+    "test_firewall_tables_removed": true
+  },
+  "trace_headers": {
+    "interfaces": {
+      "wlp0s20f3": 13972,
+      "fctcp75850269": 191
+    },
+    "flags": {
+      "S": 6837,
+      "S.": 6131,
+      "R": 1136,
+      "R.": 59
+    },
+    "outgoing_flows": 5959,
+    "flows_with_synack": 5959,
+    "flows_with_repeated_syn": 259
+  },
+  "root_cause_of_all_timeouts_confirmed": false,
+  "routing_review": "Missing preservation of more-specific main-table routes before full-tunnel lookup; gateway RST packets observed on TUN. No fix deployed."
+}
