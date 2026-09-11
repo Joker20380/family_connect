@@ -69,7 +69,8 @@ def main():
                             finally:pool.shutdown(wait=False)
                     until=time.monotonic()+30
                     while time.monotonic()<until:
-                        assert server.poll() is None and client.poll() is None,'Engine exited before adapter readiness'
+                        assert server.poll() is None,'Server exited before adapter readiness'
+                        assert client.poll() is None,'Engine exited before adapter readiness: '+client.stderr.read()[-1500:]
                         index=adapter(ident)
                         if index is not None:break
                         time.sleep(.25)
@@ -96,8 +97,8 @@ def main():
                     elif iteration==1:stop(client)
                     else:
                         ps(f'Stop-Process -Id {child_pid} -Force')
-                        client.stdin.write('stop\n');client.stdin.flush();client.wait(timeout=15)
-                        assert client.returncode==0,'Stop after engine crash failed'
+                        client.wait(timeout=15)
+                        assert client.returncode!=0,'Owner did not report engine crash'
                     assert not ps(f'Get-Process -Id {child_pid} -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Id'),'Orphan Xray process'
                     row['process_exit']=True
                 finally:

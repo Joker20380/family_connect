@@ -18,6 +18,8 @@ internal sealed class TcpEngine : IDisposable
     TcpEngine(Process process,JobHandle job,FileStream[] binaries){this.process=process;this.job=job;this.binaries=binaries;}
     public int Id=>process.Id;
     public bool Running=>!disposed&&!process.HasExited;
+    public Task WaitForExitAsync()=>process.WaitForExitAsync();
+    public int ExitCode=>process.ExitCode;
     static FileStream Verified(string folder,string name,string hash)
     {
         var path=Path.Combine(folder,name);
@@ -68,7 +70,16 @@ internal sealed class TcpEngine : IDisposable
             foreach(var file in files)file.Dispose();throw;
         }
     }
-    static async Task Drain(Stream stream){try{await stream.CopyToAsync(Stream.Null);}catch(IOException){}catch(ObjectDisposedException){}}
+    static async Task Drain(Stream stream){
+        try {
+#if TCP_ENGINE_TEST
+            // Compiled only into the isolated synthetic CI harness, never the desktop executable.
+            await stream.CopyToAsync(Console.OpenStandardError());
+#else
+            await stream.CopyToAsync(Stream.Null);
+#endif
+        }catch(IOException){}catch(ObjectDisposedException){}
+    }
     public void Dispose()
     {
         if(disposed)return;disposed=true;
