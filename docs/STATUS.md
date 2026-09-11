@@ -6,12 +6,22 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+- Real systemd acceptance passed in a fresh Debian 12 Docker container (shared host kernel).
+  Found/fixed missing procps/sysctl dependency: installer now refuses before writes.
+  Corrected bundle: fresh install, actual resolved + application DNS, 6 VPN HTTPS checks,
+  active-install refusal, stop/reinstall/profile preservation and SIGKILL ExecStopPost cleanup.
+  IPv4/IPv6 rules restored, table/TUN/marker absent; both test containers removed.
+  230 tests passed; filesystem tamper/rollback suite passed again. No host/server upgrade.
+  Next: authenticated component delivery, native Windows/Android and platform CI;
+  independent VM/hardware clean-install coverage remains a rollout gate.
+  [Systemd evidence](releases/2026-09-11-tcp-systemd.ru.md).
+
 - Separate Linux amd64 TCP component bundle implemented: deterministic archive, checksum
   preflight, active-service refusal, private backups, per-file atomic replacement and
   rollback on failure; existing profiles preserved and service never auto-started.
   229 Python tests passed; isolated filesystem install/tamper/upgrade/reload rollback passed.
   Xray matches cached pinned-revision image; repeated archive SHA256 identical.
-  Container systemd/resolved/pkexec were stubbed: booted clean-system acceptance pending.
+  Initial filesystem test used stubs; real systemd container acceptance is now recorded above.
   CI artifact steps added but remote CI/signing/release not run; host install unchanged.
   [Bundle report](releases/2026-09-11-tcp-bundle.ru.md) · [Install runbook](linux-tcp-install.ru.md).
 

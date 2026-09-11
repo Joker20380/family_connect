@@ -26,3 +26,14 @@ def test_packager_rejects_wrong_architecture(tmp_path):
  binary=elf(tmp_path/'xray');raw=bytearray(binary.read_bytes());struct.pack_into('<H',raw,18,183);binary.write_bytes(raw)
  with pytest.raises(ValueError):package.build(binary,tmp_path/'result')
  assert not (tmp_path/'result').exists()
+
+def test_installer_refuses_missing_sysctl_before_destination_writes(monkeypatch):
+ spec=importlib.util.spec_from_file_location('tcp_installer',ROOT/'clients/linux/install-tcp-bundle.py')
+ installer=importlib.util.module_from_spec(spec);spec.loader.exec_module(installer)
+ monkeypatch.setattr(installer.os,'geteuid',lambda:0)
+ from types import SimpleNamespace
+ monkeypatch.setattr(installer.os,'uname',lambda:SimpleNamespace(machine='x86_64'))
+ monkeypatch.setattr(installer,'verify',lambda root:{})
+ monkeypatch.setattr(installer.shutil,'which',lambda name:None if name=='sysctl' else '/usr/bin/'+name)
+ monkeypatch.setattr(installer.os,'open',lambda *a,**kw:pytest.fail('wrote state before dependency preflight'))
+ with pytest.raises(ValueError,match='Missing dependency: sysctl'):installer.main()

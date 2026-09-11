@@ -1,6 +1,6 @@
 # Working plan / Рабочий план
 
-Общий план и критерии этапов: [ROADMAP](ROADMAP.ru.md). Сейчас этап 3 — TCP-пилот.
+Общий план и критерии этапов: [ROADMAP](ROADMAP.ru.md). Сейчас этап 4 — упаковка, платформы и стабильный выпуск.
 
 ## Completed: 0.2.1 rollout
 
@@ -66,13 +66,13 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
 ## Next, in order
 
-1. Validate the separate amd64 TCP bundle on a clean booted Linux/systemd machine/VM:
-   install dependencies, fresh install, actual service/DNS/HTTPS, stop/cleanup and upgrade.
-   Filesystem container tests passed but explicitly stubbed systemd/resolved/pkexec.
-   [Bundle and rollback runbook](linux-tcp-install.ru.md). Archive is locally reproducible
-   for identical inputs, not a signed/public release; add authenticated component delivery
-   before broader rollout. Existing six-file app updater unchanged, ARM64 unsupported.
-   Keep earlier unlocalized health observation visible. Do not claim clean boot acceptance yet.
+1. Linux bundle passed fresh Debian 12 real-systemd container acceptance: install,
+   DNS/HTTPS, stop/reinstall and SIGKILL cleanup; missing procps dependency fixed.
+   230 tests passed. [Evidence](releases/2026-09-11-tcp-systemd.ru.md).
+   Next implement authenticated component delivery before broader rollout; preserve
+   six-file app updater compatibility. Independent VM/hardware clean-install remains
+   a rollout gate: Docker shares the host kernel. ARM64 and interactive polkit in a
+   clean system remain untested. Keep earlier unlocalized health observation visible.
 2. Integrate the tested transports into native Windows/Android. Complete platform CI,
    installation/UI checks and signed release before upgrading the stable client channel.
 3. Integrate provisioning/runtime/ACK and known-good recovery with real Reticulum

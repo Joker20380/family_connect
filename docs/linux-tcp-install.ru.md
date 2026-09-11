@@ -25,8 +25,8 @@ ELF-проверка сама по себе не подтверждает рев
 
 ## Установка на машину с загруженным systemd
 
-Нужны Linux x86_64, /dev/net/tun, Python 3, iproute2, curl, systemd-resolved и pkexec.
-Для Debian 12 зависимости: python3 iproute2 curl systemd systemd-resolved pkexec.
+Нужны Linux x86_64, /dev/net/tun, Python 3, iproute2, procps (sysctl), curl, systemd-resolved и pkexec.
+Для Debian 12 зависимости: python3 iproute2 procps curl systemd systemd-resolved pkexec.
 Сначала настроить resolved согласно окружению машины; установщик его не перенастраивает.
 
 Из доверенного локального архива, распакованного обычным пользователем:
@@ -56,9 +56,10 @@ component files с указанными правами; удалить толь�
 не восстанавливать из component backup и не удалять.
 
 Не импортировать профили и не запускать VPN до завершения установки. Профили импортируются
-существующим root broker/приложением. На чистой машине ещё предстоит booted-systemd
-acceptance (service start/stop, DNS/HTTPS и очистка). Контейнерный тест проверяет
-файловую установку с подставными systemd/resolved/pkexec и не заменяет этот этап.
+существующим root broker/приложением. Чистая установка проверена на Debian 12
+с настоящим systemd PID 1 в контейнере: start/stop, DNS/HTTPS, переустановка и
+ExecStopPost после SIGKILL. Отдельная VM/оборудование и чистая интерактивная
+polkit-сессия ещё не проверены. Файловый тест с подставными командами сохранён отдельно.
 
 ## Проверки и артефакты
 
@@ -66,3 +67,25 @@ TCP workflow собирает архив из образа и сохраняет
 Операторская проверка: scripts/check_tcp_bundle.py внутри Docker --network none,
 /dev/net/tun и read-only mounts архива /bundle.tar.gz и scripts /checks.
 Полный отчёт: [2026-09-11](releases/2026-09-11-tcp-bundle.ru.md).
+
+
+## Повторение проверки с настоящим systemd
+
+Операторский сценарий `scripts/check_tcp_systemd.py` требует одноразовый Docker-контейнер,
+systemd PID 1, работающий resolved и отсутствие установленного TCP helper. Он импортирует
+локальный профиль `/keys/linux.conf`, обращается к действующему gateway 185.251.89.19,
+меняет `/etc/resolv.conf` только контейнера на resolved stub и выполняет SIGKILL службы.
+Не запускать на ноутбуке/сервере напрямую. Профиль подключать read-only, никогда не в CI.
+
+Образ для повторения: `pilot/tcp/systemd-test.Dockerfile` (включает procps).
+Для systemd/TUN использован privileged Docker с private cgroup namespace, отдельной
+сетевой namespace и tmpfs /run,/tmp; host network/PID/rootfs не подключались.
+Это привилегированный операторский тест на общем ядре, не изолированная VM.
+Перед сценарием распаковать доверенный комплект в `/tmp/FamilyConnect-TCP-amd64`.
+Затем выполнить `python3 /checks/check_tcp_systemd.py`; результат записывается в
+`/tmp/acceptance-result.json`. Читать через docker exec (docker cp в /tmp tmpfs в этом
+окружении не дал видимых процессам файлов). После извлечения обезличенного результата
+остановить и удалить контейнер, включая импортированную копию профиля.
+
+Последний комплект: SHA256 `860c8e0fbf4808e5235e9649c3d6e53f00e7ad4d81a36146f70c7ea144e48494`.
+Архив остаётся локальным неподписанным пилотом; [отчёт](releases/2026-09-11-tcp-systemd.ru.md).

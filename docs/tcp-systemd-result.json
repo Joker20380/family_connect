@@ -1,0 +1,22 @@
+{
+  "systemd_stubbed": false,
+  "environment": "Debian 12 Docker, private network/cgroup, shared host kernel",
+  "real_systemd_resolved": true,
+  "fresh_corrected_install": true,
+  "start_dns_https": true,
+  "active_install_refused": true,
+  "normal_stop_cleanup": true,
+  "reinstall_profile_preserved": true,
+  "restart_dns_https": true,
+  "sigkill_execstoppost_cleanup": true,
+  "final_cleanup": true,
+  "date": "2026-09-11",
+  "bundle_sha256": "860c8e0fbf4808e5235e9649c3d6e53f00e7ad4d81a36146f70c7ea144e48494",
+  "missing_sysctl_refused_before_writes": true,
+  "pytest_passed": 230,
+  "https_checks": 6,
+  "fresh_container_image": "7c2062dbf708",
+  "procps_installed_before_acceptance": true,
+  "vm_or_independent_kernel": false,
+  "polkit_interactive_test": false
+}

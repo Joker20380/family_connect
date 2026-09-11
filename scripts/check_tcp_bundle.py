@@ -12,7 +12,7 @@ with tarfile.open('/bundle.tar.gz') as archive:
   target=Path('/tmp/bundle')/relative;target.parent.mkdir(parents=True,exist_ok=True)
   target.write_bytes(archive.extractfile(item).read());target.chmod(item.mode&0o777)
 bundle=Path('/tmp/bundle/FamilyConnect-TCP-amd64');mock=Path('/tmp/mock');mock.mkdir()
-for name,body in {'resolvectl':'exit 0','pkexec':'exit 0','systemctl':'''echo "$1" >> /tmp/systemctl-calls
+for name,body in {'sysctl':'exit 0','resolvectl':'exit 0','pkexec':'exit 0','systemctl':'''echo "$1" >> /tmp/systemctl-calls
 if [ "$1" = list-units ] && [ -e /tmp/active ]; then echo family-connect-tcp@test.service; fi
 if [ "$1" = daemon-reload ] && [ -e /tmp/fail-reload ]; then rm /tmp/fail-reload; exit 1; fi
 exit 0'''}.items():

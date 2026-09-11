@@ -46,7 +46,7 @@ def main():
     if os.geteuid()!=0:raise ValueError('Run the trusted installer as root')
     if os.uname().machine!='x86_64':raise ValueError('This bundle requires x86_64')
     payload=verify(Path(__file__).resolve().parent)
-    for program in ('ip','curl','resolvectl','systemctl','pkexec'):
+    for program in ('ip','curl','resolvectl','systemctl','pkexec','sysctl'):
         if not shutil.which(program):raise ValueError('Missing dependency: '+program)
     if not stat.S_ISCHR(Path('/dev/net/tun').stat().st_mode):raise ValueError('TUN device required')
     fd=os.open('/run/family-connect-tcp.lock',os.O_CREAT|os.O_RDWR|os.O_NOFOLLOW,0o600)

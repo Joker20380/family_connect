@@ -13,8 +13,8 @@ def build(binary,output):
         'install.py':'clients/linux/install-tcp-bundle.py'}
     files={name:(ROOT/src).read_bytes() for name,src in sources.items()};files['bin/xray']=raw
     files['README.txt']=b'''Family Connect TCP components (Linux amd64 pilot)
-Requires Python 3, iproute2, curl, systemd + systemd-resolved, pkexec, /dev/net/tun.
-On Debian 12: apt install python3 iproute2 curl systemd systemd-resolved pkexec
+Requires Python 3, iproute2, procps, curl, systemd + systemd-resolved, pkexec, /dev/net/tun.
+On Debian 12: apt install python3 iproute2 procps curl systemd systemd-resolved pkexec
 Use only a trusted archive; manifest hashes detect corruption, NOT authenticity.
 Extract as a normal user, then: sudo python3 -I install.py
 Installer refuses active TCP, preserves backups, never imports keys or starts VPN.

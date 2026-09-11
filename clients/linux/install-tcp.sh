@@ -6,6 +6,7 @@ binary_dir=$(realpath "$2")
 test -c /dev/net/tun
 command -v resolvectl >/dev/null
 command -v curl >/dev/null
+command -v sysctl >/dev/null
 command -v systemctl >/dev/null
 # Refuse replacement before any file mutation while a service/cleanup owns routing.
 test ! -e /run/family-connect-tcp/active
