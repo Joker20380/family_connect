@@ -8,6 +8,59 @@ Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `1176
 
 ## Latest checkpoint — 2026-09-11
 
+- User deferred further network/load tests and requested moving development forward.
+  Functionality demonstrated; ordinary-load stability remains an open known limitation.
+  Standalone TCP Setup sources/tests/CI/VM recipes integrated from bootstrap worktree
+  into main; existing5 client prompt/recovery edits preserved/reviewed. pytest.ini now
+  excludes operator archives from discovery.273 tests and display-backed GTK recovery
+  passed; setup builds reproducibly to the previously VM-tested hash, six-file desktop
+  compatibility retained. No install/server/network changes, CI/push/release not run.
+  Next: source checkpoint/platform CI and trusted setup/new client release preparation.
+  [Integration and deferred tests](releases/2026-09-11-setup-integration.ru.md).
+
+### Earlier network evidence (further testing deferred by user)
+
+- Isolated fresh-engine matched checks passed twice: TUN60/60, SOCKS60/60,
+  direct60/60 concurrent +80/80 before/after. Installed Xray hash verified in container.
+  All60 local TUN handshakes matched, max0.482ms; capture drops0, external socket peak6.
+  Short low-load windows13.6/27.5s did not reproduce host failures; background load vs
+  namespace/path remains unresolved. Containers removed, host rules unchanged, VPN off.
+  Next: bounded isolated concurrency steps with fresh engines and per-request capture.
+  [Isolated comparison](releases/2026-09-11-first-laptop-isolated.ru.md).
+
+### Earlier offload comparison
+
+- First-laptop pinned-all offload comparison completed. Final exact A/B/A VPN16/20→18/20→14/20,
+  direct20/20 in all five phases. Twelve VPN TCP-connect timeouts; no DNS dependency.
+  Offload disabling did not eliminate failures. Xray FD64→89→157 far below limit;
+  sockets/queues grew, causal attribution remains open. Ettool TSO restoration also
+  toggled mangleid; operator restore now uses two calls and full-feature equality passed.
+  VPN off, exact rules cleanup and all feature restoration verified; no test timers.
+  Next: isolated matched TUN/SOCKS/pinned direct with fresh engine and request timing.
+  [Offload report](releases/2026-09-11-first-laptop-offload.ru.md).
+
+### Earlier paired capture
+
+- First-laptop paired headers completed: VPN35/40, direct39/40 during VPN,
+  direct20/20 before/after. Four VPN TCP-connect timeouts and one DNS timeout;
+  direct failure also DNS (shared resolver); pinned direct32/32. Zero capture drops.
+  78 matched flows with outbound missing suffix retried >=10s, including53 with
+  server prefix1327/no payload response; NIC vs external loss remains unproven.
+  Exact cleanup passed, VPN off, server unchanged. Next: pinned-all control and bounded
+  offload A/B/A with socket snapshots and restoration guard.
+  [Paired report](releases/2026-09-11-first-laptop-paired.ru.md).
+
+### Earlier first-laptop baseline
+
+- First-laptop off→on→off now completed: normal-user direct20/20, pkexec→runuser
+  direct20/20 before, VPN19/20 with direct20/20, direct20/20 after. Baseline contexts
+  identical. One VPN HTTP-response timeout AFTER successful TLS; earlier second-laptop
+  TLS timeout cause not established. Full IPv4/IPv6 rules restored, TUN/marker absent,
+  VPN off. No code/install/server changes. Next: paired headers with current peer filters.
+  [First-laptop result](releases/2026-09-11-first-laptop-resume.ru.md).
+
+### Previous handoff (superseded for first-laptop test status)
+
 - User paused second-laptop diagnosis and requested moving subsequent tests to first laptop.
   Transfer/tests on first have NOT started. Second last checked: TCP inactive; TSO/GSO on/on,
   rollback timers absent. Offload A/B/A completed, but control path failed too; inconclusive.

@@ -1,0 +1,7 @@
+FROM debian:bookworm-slim
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends linux-image-amd64 initramfs-tools systemd-sysv systemd-resolved dbus python3 python3-cryptography iproute2 procps curl pkexec ca-certificates && rm -rf /var/lib/apt/lists/*
+COPY setup.tar.gz /opt/fc-setup.tar.gz
+COPY accept.py /opt/fc-accept.py
+RUN mkdir -p /etc/systemd/network && printf '[Match]\nName=en* eth*\n[Network]\nDHCP=yes\n' > /etc/systemd/network/10-test.network
+RUN printf '[Unit]\nAfter=network-online.target systemd-resolved.service\nWants=network-online.target\n[Service]\nType=oneshot\nExecStartPre=/sbin/modprobe tun\nExecStart=/usr/bin/python3 /opt/fc-accept.py\nTimeoutStartSec=900\nStandardOutput=journal+console\nStandardError=journal+console\n[Install]\nWantedBy=multi-user.target\n' > /etc/systemd/system/fc-accept.service && systemctl enable systemd-networkd systemd-networkd-wait-online systemd-resolved fc-accept.service
+CMD ["/sbin/init"]

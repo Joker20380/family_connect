@@ -119,3 +119,30 @@ def test_installer_refuses_active_or_unreadable_service_state(tmp_path,systemctl
     result=subprocess.run(['sh',str(script),str(tmp_path),str(tmp_path)],capture_output=True,
         env={**os.environ,'PATH':str(commands)+':'+os.environ['PATH'],'INSTALL_MARKER':str(marker)})
     assert result.returncode!=0 and not marker.exists()
+
+
+def test_single_tcp_monitored_without_automatic_restart(chain,monkeypatch):
+    driver,events,live=chain
+    assert driver.allows_automatic_recovery('wg-id')
+    monkeypatch.setattr(driver,'_awg_records',lambda:{})
+    monkeypatch.setattr(driver,'_tcp_records',lambda:{'fctcp12345678':dict(primary=None,endpoint='192.0.2.1')})
+    assert driver.supports_recovery('fctcp12345678')
+    assert not driver.allows_automatic_recovery('fctcp12345678')
+
+
+def test_final_tcp_self_stopped_failure_does_not_prompt_cleanup(chain,monkeypatch):
+    driver,events,live=chain
+    def failed(action,ident):
+        events.append(('tcp',action))
+        raise backend.BackendError('root start failed and stopped service')
+    monkeypatch.setattr(driver,'_tcp',failed)
+    with pytest.raises(backend.BackendError):driver.connect('fctcp12345678')
+    assert events==[('tcp','up')]
+
+
+def test_final_live_tcp_failure_still_requires_cleanup(chain,monkeypatch):
+    driver,events,live=chain
+    monkeypatch.setattr(driver,'_check',lambda _: (_ for _ in ()).throw(backend.BackendError('probe failed')))
+    with pytest.raises(backend.BackendError):driver.connect('fctcp12345678')
+    assert events==[('tcp','up'),('tcp','down')]
+    assert not live

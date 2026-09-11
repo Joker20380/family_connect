@@ -176,16 +176,19 @@ class App:
                 return GLib.SOURCE_REMOVE
             try:self.active,healthy=future.result()
             except Exception:healthy=False
-            should_recover=self.recovery.observe(healthy)
+            automatic=getattr(self.driver,'allows_automatic_recovery',lambda _:True)(ident)
+            should_recover=self.recovery.observe(healthy,allow_recovery=automatic)
             if should_recover:
                 self.detail_text='Восстанавливаем соединение…' if self.ru else 'Restoring connection…'
                 driver=self.driver
                 def restore():
                     driver.recover(ident);return driver.active(ident)
                 self.submit(restore,'recovered')
+            elif not healthy and not automatic and self.recovery.failures>=2:
+                self.detail_text=('Проверки связи не проходят. При необходимости переподключитесь вручную.' if self.ru else 'Connection checks are failing. Reconnect manually if needed.')
             elif self.recovery.exhausted:
                 self.detail_text='Автовосстановление остановлено. Повторите подключение.' if self.ru else 'Recovery stopped. Reconnect to try again.'
-            elif healthy and self.detail_text in ('Связь нестабильна. Проверяем повторно…','Connection unstable. Checking again…'):
+            elif healthy and self.detail_text in ('Связь нестабильна. Проверяем повторно…','Connection unstable. Checking again…','Проверки связи не проходят. При необходимости переподключитесь вручную.','Connection checks are failing. Reconnect manually if needed.'):
                 self.detail_text=''
             elif not healthy:
                 self.detail_text='Связь нестабильна. Проверяем повторно…' if self.ru else 'Connection unstable. Checking again…'

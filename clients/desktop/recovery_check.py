@@ -36,6 +36,15 @@ def main():
         cancelled=Future();cancelled.set_exception(AuthorizationError('cancelled'))
         app.complete('recovered',cancelled,app.revision,None)
         assert app.recovery.identity is None, 'Authorization cancellation would repeat prompts'
+        # A standalone TCP keeps monitoring without opening authorization dialogs.
+        d.allows_automatic_recovery=lambda _:False
+        app.active=True;app.recovery.arm('vpn')
+        for _ in range(5):app.complete('health',done((True,False)),app.revision,'vpn')
+        assert d.repairs==1 and not app.busy and app.active
+        assert app.recovery.identity=='vpn' and app.recovery.attempts==0
+        assert 'вручную' in app.detail_text or 'manually' in app.detail_text
+        app.complete('health',done((True,True)),app.revision,'vpn')
+        assert app.detail_text=='' and app.recovery.failures==0
         # Changing selection must not let old results resume another profile.
         app.recovery.arm('vpn');app.selected_id='other'
         app.complete('health',done((False,False)),app.revision,'vpn')

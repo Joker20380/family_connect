@@ -24,6 +24,12 @@ jobs:
           -v "$PWD/clients/linux:/fix:ro" -v "$PWD/clients/desktop:/desktop:ro"
           -v "$PWD/scripts:/checks:ro" --entrypoint python3
           family-connect-xray:26.3.27-pilot1 /checks/check_tcp_routes.py
+      - name: Package standalone TCP updater setup
+        run: python3 scripts/package_tcp_setup.py --output "$RUNNER_TEMP/FamilyConnect-TCP-Setup.tar.gz"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FamilyConnect-TCP-Setup-unsigned-pilot
+          path: ${{ runner.temp }}/FamilyConnect-TCP-Setup.tar.gz
       - name: Package separate Linux TCP components
         run: |
           mkdir -p artifacts/tcp

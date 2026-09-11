@@ -84,3 +84,12 @@ def test_paired_awg_alias_tracks_recovered_wg(monkeypatch):
     monkeypatch.setattr(driver,'_nm_active',lambda ident:ident=='wg')
     monkeypatch.setattr(driver,'_probe',lambda *args:None)
     assert driver.active('fcawg12345678') and driver.healthy('fcawg12345678')
+
+
+def test_monitor_only_does_not_spend_retries_or_stop_checks():
+    policy=backend.RecoveryPolicy(clock=lambda:100)
+    policy.arm('tcp')
+    for _ in range(10):assert not policy.observe(False,allow_recovery=False)
+    assert policy.attempts==0 and not policy.exhausted and policy.identity=='tcp'
+    assert not policy.observe(True,allow_recovery=False)
+    assert policy.failures==0

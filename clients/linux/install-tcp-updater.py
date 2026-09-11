@@ -1,6 +1,6 @@
 #!/usr/bin/python3 -I
 """One-time bootstrap from a trusted checkout; never run an unverified download as root."""
-import fcntl,json,os,stat,sys,tempfile
+import fcntl,json,os,shutil,stat,subprocess,sys,tempfile
 from pathlib import Path
 ROOT=Path('/usr/local/lib/family-connect-tcp-updater')
 SOURCE=Path(__file__).resolve().parents[2]
@@ -20,6 +20,11 @@ def atomic(path,raw,mode):
         if os.path.exists(name):os.unlink(name)
 def main():
     if os.geteuid()!=0 or len(sys.argv)!=1:raise ValueError('Run trusted bootstrap as root without arguments')
+    if os.uname().machine!='x86_64':raise ValueError('TCP setup requires Linux amd64')
+    for program in ('ip','sysctl','curl','resolvectl','systemctl','pkexec'):
+        if not shutil.which(program):raise ValueError('Missing setup dependency: '+program)
+    if not stat.S_ISCHR(Path('/dev/net/tun').stat().st_mode):raise ValueError('TUN device required')
+    subprocess.run(['systemctl','show','--property=Version','--value'],check=True,capture_output=True,timeout=30)
     from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
     import base64
     payload={name:(SOURCE/path).read_bytes() for name,path in FILES.items()}

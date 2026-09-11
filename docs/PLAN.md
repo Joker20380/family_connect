@@ -66,19 +66,18 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
 ## Next, in order
 
-1. Continue diagnosis on FIRST laptop, per user decision. Second-laptop work paused.
-   Read actual first-laptop active state/interfaces before any test; preserve current connection.
-   Compare identical direct probes in normal-user and sudo→runuser contexts without VPN;
-   then bounded off→on→off with first-laptop profile,20 probes per phase and direct control.
-   If direct control degrades with VPN, inspect routing/filtering/socket accumulation;
-   if direct stable and TUN fails, resume paired headers/offload hypothesis testing;
-   if direct fails without VPN, diagnose external network first. No permanent MTU/timeout changes.
-2. Repeat confirmed correction on second Ubuntu. Offload A/B/A already executed and restored;
-   failed direct control makes it inconclusive. Do not ask to rerun the old pending capture
-   blindly: old scripts contain device-specific interfaces/profile ids and peer filters.
-3. Preserve/review main client fix (264 tests, GTK passed), integrate standalone setup work
-   from /tmp/fc-tcp-bootstrap/local archive, then platform CI and trusted immutable release.
-   No new remote CI/release for current changes yet. Keep six-file desktop update compatibility.
+1. User deferred further network/load testing. Functionality demonstrated, stability
+   remains open; do not resume concurrency/second-laptop experiments automatically.
+   Standalone setup integrated into main; existing prompt/recovery patch reviewed,
+   273 tests + GTK recovery passed, setup hash equals previously VM-tested artifact.
+2. Prepare source checkpoint and platform CI for combined client/setup. Then trusted
+   immutable standalone setup publication and new client release after artifact checks
+   and offline signing. Current main changes uncommitted; no new CI/push/release yet.
+   Preserve six-file desktop updates; never replace existing published tags/artifacts.
+3. Deferred backlog: isolated concurrency1→4→8/request-to-flow diagnosis, then repeat
+   confirmed correction on second Ubuntu. Current timeouts are known pilot limitations,
+   not a completed stability gate. Resume these tests later per user direction.
+   See [integration checkpoint](releases/2026-09-11-setup-integration.ru.md).
 4. Native Windows/Android transport integration and device acceptance.
 5. Provisioning/runtime/ACK and actual Reticulum service-message delivery, with alternate
    reachable entrypoints. Independent second VPS only when supplied by user; not the test laptop.

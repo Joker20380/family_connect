@@ -59,7 +59,7 @@ class RecoveryPolicy:
         self.stop();self.identity=identity;self.next_check=self.clock()+self.interval
     def due(self,identity):
         return self.identity is not None and self.identity==identity and not self.exhausted and self.clock()>=self.next_check
-    def observe(self,healthy):
+    def observe(self,healthy,*,allow_recovery=True):
         if self.identity is None or self.exhausted:return False
         now=self.clock();self.next_check=now+self.interval
         if healthy:
@@ -68,7 +68,7 @@ class RecoveryPolicy:
             if now-self.good_since>=60:self.attempts=0
             return False
         self.good_since=None;self.failures+=1
-        if self.failures<2:return False
+        if self.failures<2 or not allow_recovery:return False
         if self.attempts>=self.max_attempts:self.exhausted=True;return False
         self.attempts+=1;return True
     def recovered(self,success):
@@ -270,11 +270,18 @@ class LinuxTCP(Linux):
             except AuthorizationError:raise
             except (BackendError,subprocess.TimeoutExpired):
                 # A cleanup failure stops the chain; never stack conflicting routes.
-                self._stop(item)
+                # No later transport will start: an inactive final TCP needs no
+                # second authorization. Any residual root state remains guarded
+                # by the helper on the next explicit start.
+                if not (kind=='tcp' and index==len(chain)-1 and not self._live(item)):
+                    self._stop(item)
                 if index==len(chain)-1:raise BackendError('All VPN transports failed') from None
     def profiles(self):
         return super().profiles()+[(ident,'VLESS + REALITY · '+ident) for ident in self._tcp_records()]
     def supports_recovery(self,ident):return bool(self._chain(ident)) or super().supports_recovery(ident)
+    def allows_automatic_recovery(self,ident):
+        chain=self._chain(ident)
+        return not (chain and len(chain)==1 and chain[0][0]=='tcp')
     def active(self,ident):
         chain=self._chain(ident)
         return any(self._live(item) for item in chain) if chain else super().active(ident)

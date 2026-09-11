@@ -71,3 +71,13 @@ Standalone TCP setup, independent VM and second Ubuntu laptop: [checkpoint](rele
 Second Ubuntu laptop dedicated TCP profile: [checkpoint](releases/2026-09-11-ubuntu-profile.ru.md).
 
 Ubuntu TCP network timeout diagnosis: [report](releases/2026-09-11-ubuntu-network.ru.md).
+
+First-laptop context comparison and TCP cycle: [result](releases/2026-09-11-first-laptop-resume.ru.md).
+
+First-laptop paired headers and remaining loss hypothesis: [report](releases/2026-09-11-first-laptop-paired.ru.md).
+
+First-laptop pinned-control offload comparison: [report](releases/2026-09-11-first-laptop-offload.ru.md).
+
+First-laptop isolated TUN/SOCKS/direct: [report](releases/2026-09-11-first-laptop-isolated.ru.md).
+
+Standalone setup integrated; network tests deferred by user: [checkpoint](releases/2026-09-11-setup-integration.ru.md).
