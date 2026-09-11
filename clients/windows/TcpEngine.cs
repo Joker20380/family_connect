@@ -12,10 +12,10 @@ internal sealed class TcpEngine : IDisposable
     const string XraySha="74475d8c4f68dd07bef754e56778eb2a9061e4dfcc954fa008b912a989bd848a";
     const string WintunSha="e5da8447dc2c320edc0fc52fa01885c103de8c118481f683643cacc3220dafce";
     readonly Process process;
-    readonly JobHandle job;
+    readonly ProcessJob job;
     readonly FileStream[] binaries;
     bool disposed;
-    TcpEngine(Process process,JobHandle job,FileStream[] binaries){this.process=process;this.job=job;this.binaries=binaries;}
+    TcpEngine(Process process,ProcessJob job,FileStream[] binaries){this.process=process;this.job=job;this.binaries=binaries;}
     public int Id=>process.Id;
     public bool Running=>!disposed&&!process.HasExited;
     public Task WaitForExitAsync()=>process.WaitForExitAsync();
@@ -37,13 +37,10 @@ internal sealed class TcpEngine : IDisposable
         if(Encoding.UTF8.GetByteCount(config)>16384)throw new FormatException("TCP config size");
         string folder=Path.GetFullPath(trustedDirectory);
         if((File.GetAttributes(folder)&FileAttributes.ReparsePoint)!=0)throw new IOException("Unsafe engine directory");
-        var files=new List<FileStream>();Process? child=null;JobHandle? owner=null;
+        var files=new List<FileStream>();Process? child=null;ProcessJob? owner=null;
         try {
             files.Add(Verified(folder,"xray.exe",XraySha));files.Add(Verified(folder,"wintun.dll",WintunSha));
-            owner=CreateJobObject(IntPtr.Zero,null);
-            if(owner.IsInvalid)throw new Win32Exception(Marshal.GetLastWin32Error());
-            var limits=new ExtendedLimits{Basic=new BasicLimits{LimitFlags=0x2000}};
-            if(!SetInformationJobObject(owner,9,ref limits,(uint)Marshal.SizeOf<ExtendedLimits>()))throw new Win32Exception(Marshal.GetLastWin32Error());
+            owner=new ProcessJob();
             var start=new ProcessStartInfo(Path.Combine(folder,"xray.exe")){
                 WorkingDirectory=folder,UseShellExecute=false,CreateNoWindow=true,
                 RedirectStandardInput=true,RedirectStandardOutput=true,RedirectStandardError=true,
@@ -69,7 +66,7 @@ internal sealed class TcpEngine : IDisposable
             foreach(var arg in new[]{"run","-format","json","-config","stdin:"})start.ArgumentList.Add(arg);
             child=Process.Start(start)??throw new IOException("TCP engine start failed");
             // Xray's pinned loader waits for stdin EOF. Before assignment it cannot parse a config/create TUN.
-            if(!AssignProcessToJobObject(owner,child.Handle))throw new Win32Exception(Marshal.GetLastWin32Error());
+            owner.Attach(child);
             // Drain without retaining/printing engine diagnostics, which can include a credential on errors.
             _=Drain(child.StandardOutput.BaseStream);_=Drain(child.StandardError.BaseStream);
             child.StandardInput.Write(config);child.StandardInput.Close();
@@ -100,28 +97,4 @@ internal sealed class TcpEngine : IDisposable
             if(!process.WaitForExit(10000))throw new TimeoutException("TCP process did not stop");
         }finally{process.Dispose();foreach(var file in binaries)file.Dispose();}
     }
-    sealed class JobHandle:SafeHandleZeroOrMinusOneIsInvalid
-    {
-        public JobHandle():base(true){}
-        protected override bool ReleaseHandle()=>CloseHandle(handle);
-    }
-    [StructLayout(LayoutKind.Sequential)]struct BasicLimits
-    {
-        public long PerProcessTime,PerJobTime;
-        public uint LimitFlags;
-        public UIntPtr MinWorkingSet,MaxWorkingSet;
-        public uint ActiveProcessLimit;
-        public UIntPtr Affinity;
-        public uint Priority,Scheduling;
-    }
-    [StructLayout(LayoutKind.Sequential)]struct IoCounters{public ulong ReadOps,WriteOps,OtherOps,ReadBytes,WriteBytes,OtherBytes;}
-    [StructLayout(LayoutKind.Sequential)]struct ExtendedLimits
-    {
-        public BasicLimits Basic;public IoCounters Io;
-        public UIntPtr ProcessMemoryLimit,JobMemoryLimit,PeakProcessMemory,PeakJobMemory;
-    }
-    [DllImport("kernel32.dll",CharSet=CharSet.Unicode,SetLastError=true)]static extern JobHandle CreateJobObject(IntPtr security,string? name);
-    [DllImport("kernel32.dll",SetLastError=true)]static extern bool SetInformationJobObject(JobHandle job,int informationClass,ref ExtendedLimits info,uint length);
-    [DllImport("kernel32.dll",SetLastError=true)]static extern bool AssignProcessToJobObject(JobHandle job,IntPtr process);
-    [DllImport("kernel32.dll")]static extern bool CloseHandle(IntPtr handle);
 }

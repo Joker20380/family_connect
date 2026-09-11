@@ -27,7 +27,7 @@ try {
         'UI' {Invoke-Checked $app '/smoke' 30}
         'Uninstall' {
             $uninstaller="$env:ProgramFiles/Family Connect/unins000.exe"
-            if(Test-Path $uninstaller){Invoke-Checked $uninstaller '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART' 90}
+            if(Test-Path $uninstaller){Invoke-Checked $uninstaller '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART' 180}
             if(Get-Service FamilyConnectBroker -ErrorAction SilentlyContinue){throw 'Broker left behind'}
         }
     }

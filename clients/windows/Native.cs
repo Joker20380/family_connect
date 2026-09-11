@@ -68,13 +68,14 @@ internal static class Native
         Store.SecureRoot();
         Sc("create",BrokerName,"binPath=",$"\"{Exe}\" /broker","start=","auto","DisplayName=","Family Connect Connection Service");
         Sc("description",BrokerName,"Manages local Family Connect activation and encrypted VPN sessions.");
+        Sc("failure",BrokerName,"reset=","86400","actions=","restart/1000/restart/5000/restart/10000");
         Sc("start",BrokerName);
     }
     public static void Remove()
     {
         if(!Admin)throw new UnauthorizedAccessException();
         using var broker=new ServiceController(BrokerName);
-        try{if(broker.Status!=ServiceControllerStatus.Stopped){broker.Stop();broker.WaitForStatus(ServiceControllerStatus.Stopped,TimeSpan.FromSeconds(25));}}
+        try{if(broker.Status!=ServiceControllerStatus.Stopped){broker.Stop();broker.WaitForStatus(ServiceControllerStatus.Stopped,TimeSpan.FromSeconds(130));}}
         catch(InvalidOperationException e) when(e.InnerException is Win32Exception {NativeErrorCode:1060}){}
         StopTunnel();
         foreach(var name in new[]{TunnelName,BrokerName}) {

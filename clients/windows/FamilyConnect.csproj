@@ -9,6 +9,7 @@
     <PublishSingleFile>false</PublishSingleFile><PublishTrimmed>false</PublishTrimmed>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="TcpNetwork.ps1" LogicalName="FamilyConnect.TcpNetwork.ps1" />
     <EmbeddedResource Include="../assets/dodecahedron.png" LogicalName="FamilyConnect.Brand.png" />
     <Compile Remove="Tests/**/*.cs;BrokerTests/**/*.cs" />
     <PackageReference Include="BouncyCastle.Cryptography" Version="2.7.0" />

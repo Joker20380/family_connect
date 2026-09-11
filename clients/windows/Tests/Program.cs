@@ -82,3 +82,8 @@ var fixtureRoot=Convert.FromBase64String(File.ReadAllText(Path.Combine(updateRoo
 var fixtureDevice=Convert.ToBase64String(Enumerable.Range(1,32).Select(x=>(byte)x).ToArray());
 if(TcpProfile.Verify(fixtureEnvelope,fixtureRoot,fixtureDevice,1000).Sequence!=7)throw new Exception("Python TCP interoperability");
 Console.WriteLine($"TCP profile interoperability, config, replacement and {tcpChecks} rejection checks passed.");
+
+using(var config=JsonDocument.Parse(TcpProfile.Config(tcp,"fctcp1234abcd","Ethernet \"uplink\""))){
+ if(config.RootElement.GetProperty("outbounds")[0].GetProperty("streamSettings").GetProperty("sockopt").GetProperty("interface").GetString()!="Ethernet \"uplink\"")throw new Exception("uplink serialization");
+}
+Console.WriteLine("TCP uplink binding serialization passed.");

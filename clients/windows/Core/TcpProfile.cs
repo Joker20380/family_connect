@@ -71,7 +71,7 @@ public static class TcpProfile
         if(previous is not null&&(next.Sequence<previous.Sequence||(next.Sequence==previous.Sequence&&next!=previous)))
             throw new FormatException("profile rollback");
     }
-    public static string Config(TcpGrant p,string adapter)
+    public static string Config(TcpGrant p,string adapter,string? uplink=null)
     {
         Validate(p);
         if(!Regex.IsMatch(adapter,@"\Afctcp[0-9a-f]{8}\z"))throw new FormatException("adapter");
@@ -80,7 +80,7 @@ public static class TcpProfile
             inbounds=new[]{new {tag="tun",protocol="tun",settings=new {name=adapter,MTU=1280}}},
             outbounds=new[]{new {tag="vpn",protocol="vless",settings=new {vnext=new[]{new {
                 address=p.Server,port=p.Port,users=new[]{new {id=p.Id,encryption="none",flow="xtls-rprx-vision"}}
-            }}},streamSettings=new {network="raw",security="reality",realitySettings=new {
+            }}},streamSettings=new {network="raw",security="reality",sockopt=new {@interface=uplink??""},realitySettings=new {
                 fingerprint="chrome",serverName=p.ServerName,password=p.PublicKey,shortId=p.ShortId
             }}}}
         });

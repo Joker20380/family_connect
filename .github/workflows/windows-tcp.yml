@@ -1,16 +1,16 @@
 name: Windows TCP native pilot
 on:
   push:
-    paths: ['pilot/windows-tcp/**', 'clients/windows/TcpEngine.cs', '.github/workflows/windows-tcp.yml']
+    paths: ['pilot/windows-tcp/**', 'clients/windows/*.cs', 'clients/windows/*.ps1', 'clients/windows/Core/**', '.github/workflows/windows-tcp.yml']
   pull_request:
-    paths: ['pilot/windows-tcp/**', 'clients/windows/TcpEngine.cs', '.github/workflows/windows-tcp.yml']
+    paths: ['pilot/windows-tcp/**', 'clients/windows/*.cs', 'clients/windows/*.ps1', 'clients/windows/Core/**', '.github/workflows/windows-tcp.yml']
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
   native:
     runs-on: windows-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
@@ -36,6 +36,27 @@ jobs:
         run: |
           python pilot/windows-tcp/check.py "$env:RUNNER_TEMP/fc-windows-tcp-engine" "$env:RUNNER_TEMP/fc-windows-tcp-engine/acceptance.json" "$env:RUNNER_TEMP/fc-windows-tcp-owner/Host.exe" 2>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP/fc-windows-tcp-engine/acceptance.log"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Build isolated LocalSystem session broker
+        shell: pwsh
+        run: |
+          dotnet publish pilot/windows-tcp/broker/SessionHost.csproj -c Release -r win-x64 --self-contained true -o "$env:RUNNER_TEMP/fc-windows-session" 2>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP/fc-session-build.txt"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          New-Item -ItemType Directory "$env:RUNNER_TEMP/fc-windows-session/tcp" | Out-Null
+          Copy-Item "$env:RUNNER_TEMP/fc-windows-tcp-engine/xray.exe","$env:RUNNER_TEMP/fc-windows-tcp-engine/wintun.dll" "$env:RUNNER_TEMP/fc-windows-session/tcp/"
+      - name: LocalSystem session routes DNS cancellation and crash recovery
+        timeout-minutes: 12
+        shell: pwsh
+        run: |
+          python -m pip install cryptography==46.0.7
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python pilot/windows-tcp/session_check.py "$env:RUNNER_TEMP/fc-windows-session" "$env:RUNNER_TEMP/fc-windows-tcp-engine" "$env:RUNNER_TEMP/session-acceptance.json" 2>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP/session-acceptance.log"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Remove isolated session service
+        if: always()
+        shell: pwsh
+        run: |
+          $hostExe="$env:RUNNER_TEMP/fc-windows-session/FamilyConnect.exe"
+          if (Test-Path $hostExe) { & $hostExe /remove-service }
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -43,3 +64,6 @@ jobs:
           path: |
             ${{ runner.temp }}/fc-windows-tcp-engine/
             ${{ runner.temp }}/fc-owner-build.txt
+            ${{ runner.temp }}/fc-session-build.txt
+            ${{ runner.temp }}/session-acceptance.*
+            ${{ runner.temp }}/fc-windows-session/*error.txt
