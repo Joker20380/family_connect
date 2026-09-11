@@ -3,7 +3,7 @@ import hashlib,http.client,http.server,json,os,secrets,subprocess,sys,tempfile,t
 from pathlib import Path
 PREFIX='198.18.0.1/32';LOCAL='198.18.0.2';TARGET='198.18.0.1'
 def ps(code):
-    p=subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-Command',"$ErrorActionPreference='Stop'; "+code],capture_output=True,text=True,timeout=30)
+    p=subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-Command',"$ErrorActionPreference='Stop'; "+code+"; exit 0"],capture_output=True,text=True,timeout=30)
     if p.returncode:raise RuntimeError('Windows network operation failed: '+p.stderr[-500:])
     return p.stdout.strip()
 def snapshot():
@@ -78,4 +78,12 @@ def main():
         result['passed']=len(result['rounds'])==2 and all(x['local_http']==6 and x['forced_process_exit'] and x['adapter_removed'] for x in result['rounds']) and result['default_routes_unchanged'] and result['dns_unchanged'] and result['test_route_absent']
         output.write_text(json.dumps(result,indent=2));print(json.dumps(result),flush=True)
     assert result['passed']
-if __name__=='__main__':main()
+if __name__=='__main__':
+    try:main()
+    except Exception as error:
+        import traceback
+        output=Path(sys.argv[2])
+        result=json.loads(output.read_text()) if output.exists() else {}
+        result.update(passed=False,error_type=type(error).__name__,error=str(error),traceback=traceback.format_exc())
+        output.write_text(json.dumps(result,indent=2))
+        raise

@@ -25,7 +25,9 @@ jobs:
         run: ./pilot/windows-tcp/build.ps1 -Output "$env:RUNNER_TEMP/fc-windows-tcp-engine"
       - name: Native TUN and local VLESS data, forced stop and cleanup
         shell: pwsh
-        run: python pilot/windows-tcp/check.py "$env:RUNNER_TEMP/fc-windows-tcp-engine" "$env:RUNNER_TEMP/fc-windows-tcp-engine/acceptance.json"
+        run: |
+          python pilot/windows-tcp/check.py "$env:RUNNER_TEMP/fc-windows-tcp-engine" "$env:RUNNER_TEMP/fc-windows-tcp-engine/acceptance.json" 2>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP/fc-windows-tcp-engine/acceptance.log"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - uses: actions/upload-artifact@v4
         if: always()
         with:
