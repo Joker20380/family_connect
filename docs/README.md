@@ -89,3 +89,5 @@ Published desktop0.2.9 and offline signed update: [report](releases/2026-09-11-r
 Signed standalone TCP Setup: [trust/install runbook](tcp-setup-trust.ru.md), [release evidence](releases/2026-09-11-tcp-setup-release.ru.md).
 
 Windows TCP native engine: [CI result and next integration](releases/2026-09-11-windows-tcp-engine.ru.md).
+
+Windows TCP profile: [operator runbook](windows-tcp-profile.ru.md) · [broker acceptance](releases/2026-09-11-windows-tcp-profile.ru.md).

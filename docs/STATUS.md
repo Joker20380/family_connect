@@ -7,6 +7,18 @@ checkout117611c; TCP component **0.1.0** unchanged.
 
 ## Latest checkpoint — 2026-09-11
 
+- Windows TCP signed profile/broker storage completed, source4ba46e1. Strict device-bound
+  Ed25519 grant, sequence floor, atomic LocalSystem DPAPI storage and offline issuer.
+  300 Python tests; C# shared fixture/config +29 rejection checks; actual installed
+  Windows broker18 checks passed. Client CI34633788708 all platforms and phase0
+  CI34633788755 passed. Docker test-stage dependency and test-client ValueTask wait fixed.
+  No release/device/server change. TCP connect remains unimplemented in broker/GUI;
+  next lifecycle/routes/DNS, then UI/recovery and Windows AWG. User order confirmed:
+  finish Windows, then Android transports, then stage5 Reticulum; updater/Play not gates.
+  [Profile and CI evidence](releases/2026-09-11-windows-tcp-profile.ru.md).
+
+### Earlier Windows engine checkpoint
+
 - Windows TCP engine foundation completed, source ba929a0. Pinned Xray/Go and signed
   Wintun build passed actual Windows CI 34629412460; phase0 passed. Two fresh TUN/VLESS
   runs delivered 12/12 local HTTP responses; forced exit/adapter cleanup passed twice,

@@ -77,8 +77,12 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
    update deferred by user; do not prioritize in-app updater/Google Play distribution.
    Windows TCP engine foundation now passed: pinned build, actual TUN/VLESS 12/12,
    forced cleanup and default routes/DNS preservation (Windows CI34629412460).
-   Next concrete task: broker ownership/process lifecycle, protected and validated
-   REALITY profile, safe route/DNS apply/restore; then GUI/fallback and Windows AWG.
+   Signed REALITY profile + device binding/sequence floor/LocalSystem DPAPI import now
+   passed:300 Python tests, C# fixture +29 rejection cases,18 real Windows broker checks;
+   all platform CI34633788708 and phase0 passed. TCP connect is still not exposed.
+   Next concrete task: broker process ownership/lifecycle and safe route/DNS apply/restore;
+   then GUI/fallback and Windows AWG. Finish Windows before moving to Android, per user.
+   [Profile checkpoint](releases/2026-09-11-windows-tcp-profile.ru.md).
    This preview is not in stable installer; physical/network acceptance remains open.
    See [Windows evidence](releases/2026-09-11-windows-tcp-engine.ru.md) and
    [setup evidence](releases/2026-09-11-tcp-setup-release.ru.md).
@@ -87,8 +91,10 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
    not a completed stability gate. Resume these tests later per user direction.
    See [integration checkpoint](releases/2026-09-11-setup-integration.ru.md).
 4. Native Windows/Android transport integration and device acceptance.
-5. Provisioning/runtime/ACK and actual Reticulum service-message delivery, with alternate
+5. After Windows and Android transport integration, stage5 Reticulum: provisioning/runtime/ACK
+   and actual service-message delivery, with alternate
    reachable entrypoints. Independent second VPS only when supplied by user; not the test laptop.
+   Android updater/Google Play and deferred load experiments do not gate Reticulum implementation.
 6. Native enrollment/storage, signing-root rotation/recovery, then payments/notifications.
 
 Current stage4, not stable multi-platform resilience. Details, results, backups and unfinished
