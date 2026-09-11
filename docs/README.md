@@ -99,3 +99,5 @@ Windows TCP broker network session: [runbook](windows-tcp-session.ru.md) · [Loc
 Windows TCP installer/transport UI: [report](releases/2026-09-11-windows-tcp-ui.ru.md), [runbook](windows-tcp-session.ru.md).
 
 Windows TCP engine-crash recovery: [report](releases/2026-09-11-windows-tcp-recovery.ru.md).
+
+Windows TCP tunnel health monitoring: [report](releases/2026-09-11-windows-tcp-health.ru.md).

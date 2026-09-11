@@ -19,7 +19,9 @@ redirect/proxy/cookies выключены, адреса фиксированы �
 
 ## Проверки
 
-Локально Python harness компилируется, git diff --check прошёл. Windows CI ожидается.
+Локально Python harness компилируется, git diff --check прошёл. Первый Windows CI34645816684 остановился при компиляции: .NET enum SocketOptionName
+не содержит UnicastInterface. Исправлено на Windows IP_UNICAST_IF=31 с прежним
+network-byte-order индексом; политика binding не ослаблялась. Повторный CI ожидается.
 Синтетический TCP_SESSION_TEST использует два локальных HTTP пути через scoped TUN/VLESS,
 тот же binding/timer/retry код. Не подменяет production TLS-проверку. Добавлены сценарии:
 отказ одной цели не перезапускает сессию, отказ обеих при живом Xray вызывает

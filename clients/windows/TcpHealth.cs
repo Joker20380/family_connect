@@ -37,7 +37,7 @@ internal static class TcpHealth
                 ConnectCallback=async(context,ct)=>{
                     var socket=new Socket(AddressFamily.InterNetwork,SocketType.Stream,ProtocolType.Tcp);
                     try {
-                        socket.SetSocketOption(SocketOptionLevel.IP,SocketOptionName.UnicastInterface,IPAddress.HostToNetworkOrder(index));
+                        socket.SetSocketOption(SocketOptionLevel.IP,(SocketOptionName)31 /* Windows IP_UNICAST_IF (not exposed by the .NET enum) */,IPAddress.HostToNetworkOrder(index));
                         socket.Bind(new IPEndPoint(source,0));
                         var addresses=await Dns.GetHostAddressesAsync(context.DnsEndPoint.Host,AddressFamily.InterNetwork,ct);
                         await socket.ConnectAsync(addresses,context.DnsEndPoint.Port,ct);
