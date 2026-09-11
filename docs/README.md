@@ -1,5 +1,8 @@
 # Documentation map
 
+Latest work/rollbacks: [complete session checkpoint](releases/2026-09-11-session-checkpoint.ru.md).
+Ubuntu appearance/terminal: [settings and rollback](ubuntu-laptop-settings.ru.md).
+
 Start with [STATUS](STATUS.md) (what is actually installed/deployed) and [PLAN](PLAN.md)
 (the next work). `AGENTS.md` in the repository root directs new sessions here.
 
@@ -62,3 +65,9 @@ Published signed TCP 0.1.0: [release evidence](releases/2026-09-11-tcp-release.r
 Root-owned TCP updater and GTK pilot install: [acceptance](releases/2026-09-11-tcp-updater.ru.md).
 
 Manual TCP updater authorization cancellation: [report](releases/2026-09-11-tcp-updater-cancel.ru.md).
+
+Standalone TCP setup, independent VM and second Ubuntu laptop: [checkpoint](releases/2026-09-11-tcp-setup.ru.md).
+
+Second Ubuntu laptop dedicated TCP profile: [checkpoint](releases/2026-09-11-ubuntu-profile.ru.md).
+
+Ubuntu TCP network timeout diagnosis: [report](releases/2026-09-11-ubuntu-network.ru.md).

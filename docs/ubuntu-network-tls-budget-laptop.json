@@ -1,0 +1,290 @@
+[
+  {
+    "round": 1,
+    "link": "wlp0s20f3",
+    "target": "cloudflare",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000032 0.068393 0.197524 0.248824 0.248885",
+    "error": ""
+  },
+  {
+    "round": 1,
+    "link": "fctcp724eec27",
+    "target": "cloudflare",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000014 0.000547 0.519275 0.666552 0.666627",
+    "error": ""
+  },
+  {
+    "round": 1,
+    "link": "wlp0s20f3",
+    "target": "cloudflare",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000028 0.068631 0.197782 0.249031 0.249085",
+    "error": ""
+  },
+  {
+    "round": 1,
+    "link": "fctcp724eec27",
+    "target": "ipify",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000012 0.000474 0.517947 0.827624 0.827674",
+    "error": ""
+  },
+  {
+    "round": 1,
+    "link": "fctcp724eec27",
+    "target": "cloudflare",
+    "budget": 3,
+    "exit": 28,
+    "metrics": "000 0.000045 0.000491 0.000000 0.000000 3.002498",
+    "error": "curl: (28) SSL connection timeout"
+  },
+  {
+    "round": 1,
+    "link": "fctcp724eec27",
+    "target": "ipify",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000025 0.000524 0.571467 0.882363 0.882415",
+    "error": ""
+  },
+  {
+    "round": 1,
+    "link": "wlp0s20f3",
+    "target": "ipify",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000026 0.148260 0.232170 0.465247 0.465316",
+    "error": ""
+  },
+  {
+    "round": 1,
+    "link": "wlp0s20f3",
+    "target": "ipify",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000017 0.071019 0.161791 0.368003 0.368090",
+    "error": ""
+  },
+  {
+    "round": 2,
+    "link": "fctcp724eec27",
+    "target": "ipify",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000030 0.000419 0.402833 0.635377 0.635420",
+    "error": ""
+  },
+  {
+    "round": 2,
+    "link": "wlp0s20f3",
+    "target": "ipify",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000030 0.046511 0.132872 0.287633 0.287709",
+    "error": ""
+  },
+  {
+    "round": 2,
+    "link": "fctcp724eec27",
+    "target": "cloudflare",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000030 0.000271 0.448105 0.592060 0.592149",
+    "error": ""
+  },
+  {
+    "round": 2,
+    "link": "wlp0s20f3",
+    "target": "cloudflare",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000048 0.054087 0.145644 0.207243 0.207334",
+    "error": ""
+  },
+  {
+    "round": 2,
+    "link": "wlp0s20f3",
+    "target": "ipify",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000012 0.061601 0.123624 0.255651 0.255714",
+    "error": ""
+  },
+  {
+    "round": 2,
+    "link": "fctcp724eec27",
+    "target": "cloudflare",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000038 0.000425 0.400930 0.521050 0.521129",
+    "error": ""
+  },
+  {
+    "round": 2,
+    "link": "wlp0s20f3",
+    "target": "cloudflare",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000024 0.047591 0.124620 0.184443 0.184525",
+    "error": ""
+  },
+  {
+    "round": 2,
+    "link": "fctcp724eec27",
+    "target": "ipify",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000026 0.000471 0.417661 0.646987 0.647058",
+    "error": ""
+  },
+  {
+    "round": 3,
+    "link": "wlp0s20f3",
+    "target": "cloudflare",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000022 0.070751 0.143452 0.190555 0.190669",
+    "error": ""
+  },
+  {
+    "round": 3,
+    "link": "fctcp724eec27",
+    "target": "ipify",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000011 0.000143 0.481060 0.715559 0.715636",
+    "error": ""
+  },
+  {
+    "round": 3,
+    "link": "wlp0s20f3",
+    "target": "cloudflare",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000020 0.069967 0.150067 0.244440 0.244507",
+    "error": ""
+  },
+  {
+    "round": 3,
+    "link": "fctcp724eec27",
+    "target": "cloudflare",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000011 0.000216 0.470798 0.600153 0.600216",
+    "error": ""
+  },
+  {
+    "round": 3,
+    "link": "fctcp724eec27",
+    "target": "ipify",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000025 0.000334 0.452663 0.665232 0.665317",
+    "error": ""
+  },
+  {
+    "round": 3,
+    "link": "wlp0s20f3",
+    "target": "ipify",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000024 0.041170 0.145247 0.280659 0.280746",
+    "error": ""
+  },
+  {
+    "round": 3,
+    "link": "wlp0s20f3",
+    "target": "ipify",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000024 0.081806 0.146621 0.282203 0.282267",
+    "error": ""
+  },
+  {
+    "round": 3,
+    "link": "fctcp724eec27",
+    "target": "cloudflare",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000028 0.000580 0.408873 0.529019 0.529079",
+    "error": ""
+  },
+  {
+    "round": 4,
+    "link": "fctcp724eec27",
+    "target": "cloudflare",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000028 0.000386 0.430025 0.593729 0.593820",
+    "error": ""
+  },
+  {
+    "round": 4,
+    "link": "wlp0s20f3",
+    "target": "cloudflare",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000031 0.046466 0.110235 0.197483 0.197588",
+    "error": ""
+  },
+  {
+    "round": 4,
+    "link": "wlp0s20f3",
+    "target": "ipify",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000015 0.046591 0.108524 0.268049 0.268133",
+    "error": ""
+  },
+  {
+    "round": 4,
+    "link": "fctcp724eec27",
+    "target": "ipify",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000019 0.000232 0.366086 0.599794 0.599864",
+    "error": ""
+  },
+  {
+    "round": 4,
+    "link": "fctcp724eec27",
+    "target": "cloudflare",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000038 0.000624 0.349540 0.455633 0.455686",
+    "error": ""
+  },
+  {
+    "round": 4,
+    "link": "wlp0s20f3",
+    "target": "ipify",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000025 0.059368 0.113521 0.243214 0.243278",
+    "error": ""
+  },
+  {
+    "round": 4,
+    "link": "wlp0s20f3",
+    "target": "cloudflare",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000028 0.060276 0.119002 0.177149 0.177213",
+    "error": ""
+  },
+  {
+    "round": 4,
+    "link": "fctcp724eec27",
+    "target": "ipify",
+    "budget": 10,
+    "exit": 28,
+    "metrics": "000 0.000036 0.000334 0.000000 0.000000 10.001673",
+    "error": "curl: (28) SSL connection timeout"
+  }
+]

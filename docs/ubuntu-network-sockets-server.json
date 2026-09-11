@@ -1,0 +1,64 @@
+{
+  "side": "server",
+  "sockets": 1001,
+  "states": {
+    "FIN-WAIT-1": 688,
+    "ESTAB": 223,
+    "CLOSE-WAIT": 89,
+    "FIN-WAIT-2": 1
+  },
+  "with_retransmits": 28,
+  "with_queued_data": 690,
+  "no_payload_received": 20,
+  "only_syn_acked": 770,
+  "sample": [
+    {
+      "state": "FIN-WAIT-1",
+      "recv_q": 0,
+      "send_q": 4040,
+      "bytes_sent": 16766.0,
+      "bytes_received": 1824.0,
+      "bytes_acked": 0,
+      "bytes_retrans": 12727.0,
+      "rtt": 70.907,
+      "pmtu": 1500.0,
+      "mss": 1448.0
+    },
+    {
+      "state": "FIN-WAIT-1",
+      "recv_q": 0,
+      "send_q": 4039,
+      "bytes_sent": 15316.0,
+      "bytes_received": 1728.0,
+      "bytes_acked": 0,
+      "bytes_retrans": 11278.0,
+      "rtt": 39.843,
+      "pmtu": 1500.0,
+      "mss": 1448.0
+    },
+    {
+      "state": "ESTAB",
+      "recv_q": 0,
+      "send_q": 1033,
+      "bytes_sent": 13858.0,
+      "bytes_received": 2025.0,
+      "bytes_acked": 4040.0,
+      "bytes_retrans": 8785.0,
+      "rtt": 49.816,
+      "pmtu": 1500.0,
+      "mss": 1448.0
+    },
+    {
+      "state": "CLOSE-WAIT",
+      "recv_q": 25,
+      "send_q": 0,
+      "bytes_sent": 5696.0,
+      "bytes_received": 2419.0,
+      "bytes_acked": 4552.0,
+      "bytes_retrans": 1144.0,
+      "rtt": 45.475,
+      "pmtu": 1500.0,
+      "mss": 1448.0
+    }
+  ]
+}

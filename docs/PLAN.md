@@ -66,35 +66,23 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
 ## Next, in order
 
-1. Linux bundle passed fresh Debian 12 real-systemd container acceptance: install,
-   DNS/HTTPS, stop/reinstall and SIGKILL cleanup; missing procps dependency fixed.
-   230 tests passed. [Evidence](releases/2026-09-11-tcp-systemd.ru.md).
-   Authenticated delivery CLI implemented (250 local tests); remote platform/TCP/AWG/phase0
-   CI passed. TCP 0.1.0 and production-signed catalog sequence 1 published; downloaded
-   artifact acceptance and real public HTTPS fetch/root install passed.
-   [Release evidence](releases/2026-09-11-tcp-release.ru.md).
-   Root-owned broker/bootstrap and explicit Linux pilot UI install now implemented;
-   bootstrap installed on laptop, real desktop GTK/pkexec signed install passed.
-   260 tests + GTK geometry/recovery passed; six-file archive preserved.
-   Remote platform CI passed for 92308a4 (Linux/Windows/Android, TCP/AWG/phase0).
-   Manual Cancel for the new broker now passed: actual pkexec 126, unchanged files/backups,
-   no repeated prompt for 18 seconds. [Evidence](releases/2026-09-11-tcp-updater-cancel.ru.md).
-   Next: trusted fresh-machine bootstrap distribution and new client release after acceptance. [Report](releases/2026-09-11-tcp-updater.ru.md).
-   Independent VM/hardware clean-install remains a broad-rollout gate: Docker shares
-   the host kernel. ARM64 and clean-system interactive polkit remain untested.
-   Keep earlier unlocalized health observation visible.
-2. Integrate the tested transports into native Windows/Android. Complete platform CI,
-   installation/UI checks and signed release before upgrading the stable client channel.
-3. Integrate provisioning/runtime/ACK and known-good recovery with real Reticulum
-   delivery: independent service paths available when the VPN endpoint and ordinary
-   HTTPS API are blocked; queued/replayed-safe settings and update notifications.
-4. Provision a second VPS only when supplied/authorized by the user. Test complete
-   endpoint loss → independent control delivery → alternate gateway connection.
-   The excluded 186.246.51.201 host remains excluded. One VPS does not prove redundancy.
-5. Native invitation/storage flows; signed update root rotation/recovery and stable channel.
-   Renew the catalog before expiry with increasing sequence. Update notifications do not
-   authorize installation; installer files continue to use HTTPS initially.
+1. Continue diagnosis on FIRST laptop, per user decision. Second-laptop work paused.
+   Read actual first-laptop active state/interfaces before any test; preserve current connection.
+   Compare identical direct probes in normal-user and sudo→runuser contexts without VPN;
+   then bounded off→on→off with first-laptop profile,20 probes per phase and direct control.
+   If direct control degrades with VPN, inspect routing/filtering/socket accumulation;
+   if direct stable and TUN fails, resume paired headers/offload hypothesis testing;
+   if direct fails without VPN, diagnose external network first. No permanent MTU/timeout changes.
+2. Repeat confirmed correction on second Ubuntu. Offload A/B/A already executed and restored;
+   failed direct control makes it inconclusive. Do not ask to rerun the old pending capture
+   blindly: old scripts contain device-specific interfaces/profile ids and peer filters.
+3. Preserve/review main client fix (264 tests, GTK passed), integrate standalone setup work
+   from /tmp/fc-tcp-bootstrap/local archive, then platform CI and trusted immutable release.
+   No new remote CI/release for current changes yet. Keep six-file desktop update compatibility.
+4. Native Windows/Android transport integration and device acceptance.
+5. Provisioning/runtime/ACK and actual Reticulum service-message delivery, with alternate
+   reachable entrypoints. Independent second VPS only when supplied by user; not the test laptop.
+6. Native enrollment/storage, signing-root rotation/recovery, then payments/notifications.
 
-Payment integration is not implemented. Entitlements are operator-issued; signed status
-and subscription notifications can later use the same authenticated service channel.
-Unattended software updates still require a separate explicit policy.
+Current stage4, not stable multi-platform resilience. Details, results, backups and unfinished
+work: [session checkpoint](releases/2026-09-11-session-checkpoint.ru.md).

@@ -1,0 +1,20 @@
+{
+  "laptop_packets": 3916,
+  "server_packets": 4766,
+  "packet_types_laptop": {
+    "0": 1769,
+    "4": 2147
+  },
+  "packet_types_server": {
+    "4": 2580,
+    "0": 2186
+  },
+  "socket_drops_laptop": 0,
+  "socket_drops_server": 0,
+  "limit_laptop": false,
+  "limit_server": false,
+  "new_client_syns": 175,
+  "paired_early_flows": 116,
+  "client_data_gap_flows": 23,
+  "server_data_gap_flows": 0
+}

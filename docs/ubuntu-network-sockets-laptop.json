@@ -1,0 +1,66 @@
+{
+  "side": "laptop",
+  "sockets": 1002,
+  "states": {
+    "CLOSE-WAIT": 119,
+    "LAST-ACK": 274,
+    "ESTAB": 525,
+    "FIN-WAIT-2": 67,
+    "FIN-WAIT-1": 14,
+    "CLOSING": 3
+  },
+  "with_retransmits": 805,
+  "with_queued_data": 804,
+  "no_payload_received": 864,
+  "only_syn_acked": 404,
+  "sample": [
+    {
+      "state": "ESTAB",
+      "recv_q": 0,
+      "send_q": 1824,
+      "bytes_sent": 15232.0,
+      "bytes_received": 0,
+      "bytes_acked": 1.0,
+      "bytes_retrans": 13408.0,
+      "rtt": 54.268,
+      "pmtu": 1500.0,
+      "mss": 1448.0
+    },
+    {
+      "state": "ESTAB",
+      "recv_q": 0,
+      "send_q": 1824,
+      "bytes_sent": 15232.0,
+      "bytes_received": 0,
+      "bytes_acked": 1.0,
+      "bytes_retrans": 13408.0,
+      "rtt": 39.402,
+      "pmtu": 1500.0,
+      "mss": 1448.0
+    },
+    {
+      "state": "ESTAB",
+      "recv_q": 0,
+      "send_q": 1824,
+      "bytes_sent": 15232.0,
+      "bytes_received": 0,
+      "bytes_acked": 1.0,
+      "bytes_retrans": 13408.0,
+      "rtt": 39.266,
+      "pmtu": 1500.0,
+      "mss": 1448.0
+    },
+    {
+      "state": "ESTAB",
+      "recv_q": 0,
+      "send_q": 1824,
+      "bytes_sent": 15232.0,
+      "bytes_received": 0,
+      "bytes_acked": 1.0,
+      "bytes_retrans": 13408.0,
+      "rtt": 37.397,
+      "pmtu": 1500.0,
+      "mss": 1448.0
+    }
+  ]
+}

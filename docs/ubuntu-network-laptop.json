@@ -1,0 +1,325 @@
+{
+  "server": false,
+  "results": [
+    {
+      "round": 1,
+      "link": "fctcp724eec27",
+      "target": "cloudflare",
+      "exit": 28,
+      "metrics": "000 1.1.1.1 0.000033 0.000240 0.000000 0.000000 3.002253",
+      "error": "curl: (28) SSL connection timeout"
+    },
+    {
+      "round": 1,
+      "link": "fctcp724eec27",
+      "target": "ipify-12",
+      "exit": 0,
+      "metrics": "200 104.26.12.205 0.000013 0.000267 0.279786 0.464844 0.464901",
+      "error": ""
+    },
+    {
+      "round": 1,
+      "link": "fctcp724eec27",
+      "target": "ipify-13",
+      "exit": 0,
+      "metrics": "200 104.26.13.205 0.000022 0.000417 0.316653 0.506101 0.506177",
+      "error": ""
+    },
+    {
+      "round": 1,
+      "link": "fctcp724eec27",
+      "target": "ipify-172",
+      "exit": 28,
+      "metrics": "000 172.67.74.152 0.000022 0.000159 0.000000 0.000000 3.002642",
+      "error": "curl: (28) SSL connection timeout"
+    },
+    {
+      "round": 1,
+      "link": "fctcp724eec27",
+      "target": "example",
+      "exit": 0,
+      "metrics": "200 104.20.23.154 0.294912 0.295307 0.655284 0.775549 0.775640",
+      "error": ""
+    },
+    {
+      "round": 1,
+      "link": "wlp0s20f3",
+      "target": "cloudflare",
+      "exit": 0,
+      "metrics": "200 1.1.1.1 0.000037 0.009828 0.033363 0.043846 0.043893",
+      "error": ""
+    },
+    {
+      "round": 1,
+      "link": "wlp0s20f3",
+      "target": "ipify-12",
+      "exit": 0,
+      "metrics": "200 104.26.12.205 0.000013 0.004899 0.052719 0.149914 0.149976",
+      "error": ""
+    },
+    {
+      "round": 1,
+      "link": "wlp0s20f3",
+      "target": "ipify-13",
+      "exit": 0,
+      "metrics": "200 104.26.13.205 0.000029 0.004610 0.028866 0.139134 0.139195",
+      "error": ""
+    },
+    {
+      "round": 1,
+      "link": "wlp0s20f3",
+      "target": "ipify-172",
+      "exit": 0,
+      "metrics": "200 172.67.74.152 0.000018 0.005875 0.027855 0.131925 0.131983",
+      "error": ""
+    },
+    {
+      "round": 1,
+      "link": "wlp0s20f3",
+      "target": "example",
+      "exit": 0,
+      "metrics": "200 104.20.23.154 0.001241 0.005203 0.027122 0.048859 0.048931",
+      "error": ""
+    },
+    {
+      "round": 2,
+      "link": "fctcp724eec27",
+      "target": "cloudflare",
+      "exit": 0,
+      "metrics": "200 1.1.1.1 0.000041 0.000334 0.360014 0.458698 0.458794",
+      "error": ""
+    },
+    {
+      "round": 2,
+      "link": "fctcp724eec27",
+      "target": "ipify-12",
+      "exit": 28,
+      "metrics": "000 104.26.12.205 0.000024 0.000251 0.000000 0.000000 3.002877",
+      "error": "curl: (28) SSL connection timeout"
+    },
+    {
+      "round": 2,
+      "link": "fctcp724eec27",
+      "target": "ipify-13",
+      "exit": 28,
+      "metrics": "000 104.26.13.205 0.000025 0.000248 0.000000 0.000000 3.002478",
+      "error": "curl: (28) SSL connection timeout"
+    },
+    {
+      "round": 2,
+      "link": "fctcp724eec27",
+      "target": "ipify-172",
+      "exit": 28,
+      "metrics": "000 172.67.74.152 0.000018 0.000315 0.000000 0.000000 3.002136",
+      "error": "curl: (28) SSL connection timeout"
+    },
+    {
+      "round": 2,
+      "link": "fctcp724eec27",
+      "target": "example",
+      "exit": 28,
+      "metrics": "000 172.66.147.243 0.001297 0.001806 0.000000 0.000000 3.000923",
+      "error": "curl: (28) SSL connection timeout"
+    },
+    {
+      "round": 2,
+      "link": "wlp0s20f3",
+      "target": "cloudflare",
+      "exit": 0,
+      "metrics": "200 1.1.1.1 0.000040 0.007104 0.043437 0.059440 0.059481",
+      "error": ""
+    },
+    {
+      "round": 2,
+      "link": "wlp0s20f3",
+      "target": "ipify-12",
+      "exit": 0,
+      "metrics": "200 104.26.12.205 0.000023 0.009238 0.035663 0.133778 0.133836",
+      "error": ""
+    },
+    {
+      "round": 2,
+      "link": "wlp0s20f3",
+      "target": "ipify-13",
+      "exit": 0,
+      "metrics": "200 104.26.13.205 0.000022 0.008742 0.042613 0.137934 0.137979",
+      "error": ""
+    },
+    {
+      "round": 2,
+      "link": "wlp0s20f3",
+      "target": "ipify-172",
+      "exit": 0,
+      "metrics": "200 172.67.74.152 0.000013 0.004397 0.022773 0.152446 0.152508",
+      "error": ""
+    },
+    {
+      "round": 2,
+      "link": "wlp0s20f3",
+      "target": "example",
+      "exit": 0,
+      "metrics": "200 104.20.23.154 0.286847 0.308708 0.354273 0.379160 0.379404",
+      "error": ""
+    },
+    {
+      "round": 3,
+      "link": "fctcp724eec27",
+      "target": "cloudflare",
+      "exit": 0,
+      "metrics": "200 1.1.1.1 0.000014 0.000209 0.328387 0.427886 0.427950",
+      "error": ""
+    },
+    {
+      "round": 3,
+      "link": "fctcp724eec27",
+      "target": "ipify-12",
+      "exit": 28,
+      "metrics": "000 104.26.12.205 0.000027 0.000461 0.000000 0.000000 3.002789",
+      "error": "curl: (28) SSL connection timeout"
+    },
+    {
+      "round": 3,
+      "link": "fctcp724eec27",
+      "target": "ipify-13",
+      "exit": 28,
+      "metrics": "000 104.26.13.205 0.000028 0.000291 0.000000 0.000000 3.002802",
+      "error": "curl: (28) SSL connection timeout"
+    },
+    {
+      "round": 3,
+      "link": "fctcp724eec27",
+      "target": "ipify-172",
+      "exit": 28,
+      "metrics": "000 172.67.74.152 0.000010 0.000197 0.000000 0.000000 3.002604",
+      "error": "curl: (28) SSL connection timeout"
+    },
+    {
+      "round": 3,
+      "link": "fctcp724eec27",
+      "target": "example",
+      "exit": 28,
+      "metrics": "000 104.20.23.154 0.001174 0.001740 0.000000 0.000000 3.001993",
+      "error": "curl: (28) SSL connection timeout"
+    },
+    {
+      "round": 3,
+      "link": "wlp0s20f3",
+      "target": "cloudflare",
+      "exit": 0,
+      "metrics": "200 1.1.1.1 0.000035 0.004419 0.039644 0.055950 0.056013",
+      "error": ""
+    },
+    {
+      "round": 3,
+      "link": "wlp0s20f3",
+      "target": "ipify-12",
+      "exit": 0,
+      "metrics": "200 104.26.12.205 0.000011 0.003826 0.030208 0.135186 0.135229",
+      "error": ""
+    },
+    {
+      "round": 3,
+      "link": "wlp0s20f3",
+      "target": "ipify-13",
+      "exit": 0,
+      "metrics": "200 104.26.13.205 0.000025 0.005129 0.031602 0.130983 0.131050",
+      "error": ""
+    },
+    {
+      "round": 3,
+      "link": "wlp0s20f3",
+      "target": "ipify-172",
+      "exit": 0,
+      "metrics": "200 172.67.74.152 0.000025 0.004736 0.031604 0.130683 0.130760",
+      "error": ""
+    },
+    {
+      "round": 3,
+      "link": "wlp0s20f3",
+      "target": "example",
+      "exit": 0,
+      "metrics": "200 104.20.23.154 0.001370 0.009920 0.064171 0.085722 0.085803",
+      "error": ""
+    },
+    {
+      "round": 4,
+      "link": "fctcp724eec27",
+      "target": "cloudflare",
+      "exit": 0,
+      "metrics": "200 1.1.1.1 0.000016 0.000300 0.229475 0.317390 0.317448",
+      "error": ""
+    },
+    {
+      "round": 4,
+      "link": "fctcp724eec27",
+      "target": "ipify-12",
+      "exit": 28,
+      "metrics": "000 104.26.12.205 0.000032 0.000262 0.000000 0.000000 3.002405",
+      "error": "curl: (28) SSL connection timeout"
+    },
+    {
+      "round": 4,
+      "link": "fctcp724eec27",
+      "target": "ipify-13",
+      "exit": 28,
+      "metrics": "000 104.26.13.205 0.000024 0.000267 0.000000 0.000000 3.002829",
+      "error": "curl: (28) SSL connection timeout"
+    },
+    {
+      "round": 4,
+      "link": "fctcp724eec27",
+      "target": "ipify-172",
+      "exit": 0,
+      "metrics": "200 172.67.74.152 0.000027 0.000166 0.267359 0.448986 0.449055",
+      "error": ""
+    },
+    {
+      "round": 4,
+      "link": "fctcp724eec27",
+      "target": "example",
+      "exit": 28,
+      "metrics": "000 172.66.147.243 0.001533 0.001907 0.000000 0.000000 3.001067",
+      "error": "curl: (28) SSL connection timeout"
+    },
+    {
+      "round": 4,
+      "link": "wlp0s20f3",
+      "target": "cloudflare",
+      "exit": 0,
+      "metrics": "200 1.1.1.1 0.000035 0.005942 0.035989 0.063830 0.063884",
+      "error": ""
+    },
+    {
+      "round": 4,
+      "link": "wlp0s20f3",
+      "target": "ipify-12",
+      "exit": 0,
+      "metrics": "200 104.26.12.205 0.000070 0.005452 0.042062 0.147719 0.147783",
+      "error": ""
+    },
+    {
+      "round": 4,
+      "link": "wlp0s20f3",
+      "target": "ipify-13",
+      "exit": 0,
+      "metrics": "200 104.26.13.205 0.000018 0.004078 0.025531 0.140698 0.140767",
+      "error": ""
+    },
+    {
+      "round": 4,
+      "link": "wlp0s20f3",
+      "target": "ipify-172",
+      "exit": 0,
+      "metrics": "200 172.67.74.152 0.000017 0.005145 0.051190 0.145950 0.146457",
+      "error": ""
+    },
+    {
+      "round": 4,
+      "link": "wlp0s20f3",
+      "target": "example",
+      "exit": 28,
+      "metrics": "000  0.000000 0.000000 0.000000 0.000000 3.000939",
+      "error": "curl: (28) Resolving timed out after 3000 milliseconds"
+    }
+  ]
+}

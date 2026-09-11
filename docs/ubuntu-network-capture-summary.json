@@ -1,0 +1,5 @@
+{
+  "capture_limitation": "ETH_P_IP socket captured inbound packets only; outgoing comparison unavailable",
+  "paired_syn_synack": 285,
+  "flows_repeating_payload_after_ack_received_at_client": 0
+}

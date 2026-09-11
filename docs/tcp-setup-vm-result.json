@@ -1,0 +1,14 @@
+{
+  "vm": true,
+  "kernel": "6.1.0-53-amd64",
+  "repository_present": false,
+  "standalone_bootstrap": true,
+  "public_signed_tcp_install": true,
+  "tcp_version": "0.1.0",
+  "engine_exec": true,
+  "no_vpn_started": true,
+  "bootstrap_reinstall": true,
+  "arbitrary_argument_refused": true,
+  "root_modes": true,
+  "passed": true
+}

@@ -6,6 +6,31 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+## Latest checkpoint — 2026-09-11
+
+- User paused second-laptop diagnosis and requested moving subsequent tests to first laptop.
+  Transfer/tests on first have NOT started. Second last checked: TCP inactive; TSO/GSO on/on,
+  rollback timers absent. Offload A/B/A completed, but control path failed too; inconclusive.
+- TCP bootstrap and signed component installed on Ubuntu24.04.5 amd64, separate client
+  provisioned, GUI import/connect/disconnect verified. New TCP identity added on gateway;
+  previous TCP/WG/AWG identities preserved. Stable release versions above unchanged.
+- Repeated password mechanism reproduced and client fix installed on second: standalone
+  TCP monitors without automatic privileged restart; no redundant down for inactive final TCP.
+  Main264 tests and GTK recovery passed. Fix is in uncommitted main files, not a published release.
+  Repo pilot on first reads changed main on next launch; installed stable0.2.7 remains unchanged.
+- Network failures unresolved: new Wi-Fi improved VPN36/40 vs direct40/40; timeout persists
+  at10s. Bidirectional capture zero drops,23/116 selected flows show outbound payload gap.
+  Offload A/B/A VPN1/20→3/20→1/20; direct0/20→1/20→0/20, so no causal offload conclusion.
+- Standalone setup sources remain /tmp/fc-tcp-bootstrap, archived locally;269 tests originally,
+  combined worktree273 after client fix. Independent-kernel Debian VM installation passed.
+  Packaging integration, remote CI, trusted setup publication and new client release pending.
+- Ubuntu appearance/terminal transfer, backups, all tests and next actions are recorded in
+  [complete checkpoint](releases/2026-09-11-session-checkpoint.ru.md),
+  [network report](releases/2026-09-11-ubuntu-network.ru.md),
+  [appearance/rollback](ubuntu-laptop-settings.ru.md).
+
+## Earlier milestones (historical state)
+
 - Manual cancellation of the new TCP updater passed on laptop: genuine pkexec 126,
   GTK cancellation message, busy cleared/selection preserved, no repeat for 18 seconds.
   Component hashes and backup list unchanged; no policy/cache changes. Source unchanged.
@@ -115,7 +140,7 @@ Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `1176
   User has completed network change; no further switch is pending.
   [Network-change comparison](releases/2026-09-11-network-change.ru.md).
 
-- Current roadmap: **stage 3, Linux TCP-reserve diagnosis/acceptance**. WG works;
+- Current roadmap: **stage 4, client packaging/platform acceptance**. WG works;
   AWG/recovery passed in Linux pilot, not yet a cross-platform stable rollout.
   [Development roadmap](ROADMAP.ru.md).
 - Local-link comparison completed: Wi-Fi gateway 30/30, median 31.35 ms, max 496 ms;

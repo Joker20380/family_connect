@@ -1,0 +1,146 @@
+[
+  {
+    "round": 1,
+    "link": "server",
+    "target": "ipify",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000067 0.046330 0.103386 0.236260 0.236384",
+    "error": ""
+  },
+  {
+    "round": 1,
+    "link": "server",
+    "target": "cloudflare",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000034 0.035837 0.082185 0.121449 0.121621",
+    "error": ""
+  },
+  {
+    "round": 1,
+    "link": "server",
+    "target": "cloudflare",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000023 0.044736 0.103086 0.151656 0.151775",
+    "error": ""
+  },
+  {
+    "round": 1,
+    "link": "server",
+    "target": "ipify",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000067 0.036667 0.083920 0.392124 0.392226",
+    "error": ""
+  },
+  {
+    "round": 2,
+    "link": "server",
+    "target": "ipify",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000023 0.047586 0.104137 0.239402 0.239492",
+    "error": ""
+  },
+  {
+    "round": 2,
+    "link": "server",
+    "target": "cloudflare",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000032 0.020565 0.059173 0.083570 0.083654",
+    "error": ""
+  },
+  {
+    "round": 2,
+    "link": "server",
+    "target": "ipify",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000018 0.045174 0.105832 0.404695 0.404828",
+    "error": ""
+  },
+  {
+    "round": 2,
+    "link": "server",
+    "target": "cloudflare",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000030 0.036272 0.081108 0.119155 0.119371",
+    "error": ""
+  },
+  {
+    "round": 3,
+    "link": "server",
+    "target": "cloudflare",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000040 0.047049 0.109649 0.163341 0.163443",
+    "error": ""
+  },
+  {
+    "round": 3,
+    "link": "server",
+    "target": "ipify",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000020 0.036877 0.089474 0.222027 0.222110",
+    "error": ""
+  },
+  {
+    "round": 3,
+    "link": "server",
+    "target": "ipify",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000013 0.040317 0.090790 0.214307 0.214397",
+    "error": ""
+  },
+  {
+    "round": 3,
+    "link": "server",
+    "target": "cloudflare",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000041 0.036487 0.082245 0.120981 0.121223",
+    "error": ""
+  },
+  {
+    "round": 4,
+    "link": "server",
+    "target": "ipify",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000027 0.020990 0.053142 0.185058 0.185129",
+    "error": ""
+  },
+  {
+    "round": 4,
+    "link": "server",
+    "target": "cloudflare",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000033 0.021760 0.059216 0.083646 0.083743",
+    "error": ""
+  },
+  {
+    "round": 4,
+    "link": "server",
+    "target": "ipify",
+    "budget": 3,
+    "exit": 0,
+    "metrics": "200 0.000019 0.048116 0.107323 0.247285 0.247491",
+    "error": ""
+  },
+  {
+    "round": 4,
+    "link": "server",
+    "target": "cloudflare",
+    "budget": 10,
+    "exit": 0,
+    "metrics": "200 0.000027 0.020803 0.055217 0.087153 0.087289",
+    "error": ""
+  }
+]
