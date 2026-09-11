@@ -8,7 +8,9 @@ checkout117611c; TCP component **0.1.0** unchanged.
 ## Android AWG — implementation in progress, 2026-09-12
 
 Android WG/AWG selector, separate encrypted stores and pinned AWG JNI added; CI
-build, validation and emulator encrypted traffic/lifecycle acceptance pending.
+four-ABI build, 12 unit methods, lint (0 errors/7 warnings) and packaged hashes passed.
+Emulator runtime crashed; acceptance pending diagnosis. The initial green step
+masked failure through tee; XML was checked, propagation fixed. Python325 passed.
 No APK installation or server change. [Report](releases/2026-09-12-android-awg.ru.md).
 Next after acceptance: Android TCP and automatic fallback, then stage5 Reticulum.
 

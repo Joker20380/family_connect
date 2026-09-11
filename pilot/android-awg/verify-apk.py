@@ -8,7 +8,7 @@ with zipfile.ZipFile(apk) as z:
  assert set(manifest['abis'])=={'arm64-v8a','armeabi-v7a','x86','x86_64'}
  for abi,digest in manifest['abis'].items():
   assert hashlib.sha256(z.read('lib/'+abi+'/libfc-awg.so')).hexdigest()==digest
-  assert 'lib/'+abi+'/libwg-go.so' in z.namelist()
+  assert 'lib/'+abi+'/libwg-go.so' not in z.namelist()
  for name in ('Android.txt','Engine.txt'):assert z.read('assets/awg-licenses/'+name)
  assert not any('peer-fixture' in n for n in z.namelist())
 result={'apk_sha256':hashlib.sha256(apk.read_bytes()).hexdigest(),'bytes':apk.stat().st_size,'build':manifest}

@@ -1,4 +1,4 @@
-"""Build pinned AWG JNI alongside the existing WG AAR. No root tools or public UAPI."""
+"""Build one pinned WG-compatible/AWG JNI runtime. No root tools or public UAPI."""
 import hashlib,json,os,shutil,subprocess,tempfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2];OUT=ROOT/'clients/android/awg-generated'
@@ -49,6 +49,11 @@ with tempfile.TemporaryDirectory(prefix='fc-android-awg-') as temporary:
  # Same in-memory encrypted UDP echo peer used for isolated Windows acceptance, portable source.
  peer=engine/'cmd/fc-android-peer';peer.mkdir(parents=True);shutil.copy2(ROOT/'pilot/android-awg/peer.go',peer/'main.go')
  run('go','build','-trimpath','-buildvcs=false','-o',str(OUT/'peer-fixture'),'./cmd/fc-android-peer',cwd=engine,env=env)
+ wg=temp/'wireguard'
+ checkout('https://github.com/WireGuard/wireguard-go','ecfc5a8d54462e18e13c72173e2623d16d8e25a0',wg)
+ wgpeer=wg/'cmd/fc-android-peer';wgpeer.mkdir(parents=True)
+ (wgpeer/'main.go').write_text((ROOT/'pilot/android-awg/peer.go').read_text().replace('github.com/amnezia-vpn/amneziawg-go','golang.zx2c4.com/wireguard'))
+ run('go','build','-trimpath','-buildvcs=false','-o',str(OUT/'wg-peer-fixture'),'./cmd/fc-android-peer',cwd=wg,env=env)
  ndk=Path(os.environ['ANDROID_NDK_HOME'])/'toolchains/llvm/prebuilt/linux-x86_64/bin'
  hashes={};abis={'arm64-v8a':('arm64','aarch64-linux-android26-clang'),'armeabi-v7a':('arm','armv7a-linux-androideabi26-clang'),'x86':('386','i686-linux-android26-clang'),'x86_64':('amd64','x86_64-linux-android26-clang')}
  for abi,(arch,cc) in abis.items():
@@ -59,6 +64,6 @@ with tempfile.TemporaryDirectory(prefix='fc-android-awg-') as temporary:
   hashes[abi]=hashlib.sha256(output.read_bytes()).hexdigest()
  licenses=OUT/'assets/awg-licenses';licenses.mkdir(parents=True)
  shutil.copy2(android/'COPYING',licenses/'Android.txt');shutil.copy2(engine/'LICENSE',licenses/'Engine.txt')
- manifest={'android_revision':ANDROID,'engine_revision':ENGINE,'go':'1.26.1','ndk':'28.2.13676358','abis':hashes,'jni_source_sha256':hashlib.sha256(api.read_bytes()).hexdigest(),'public_uapi':False,'root_backend':False}
+ manifest={'android_revision':ANDROID,'engine_revision':ENGINE,'go':'1.26.1','ndk':'28.2.13676358','abis':hashes,'jni_source_sha256':hashlib.sha256(api.read_bytes()).hexdigest(),'public_uapi':False,'root_backend':False,'single_runtime':True,'wg_peer_revision':'ecfc5a8d54462e18e13c72173e2623d16d8e25a0'}
  (OUT/'assets/awg-build.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print(json.dumps(manifest))

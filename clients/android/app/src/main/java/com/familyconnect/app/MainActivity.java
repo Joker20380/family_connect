@@ -8,7 +8,7 @@ import android.net.VpnService;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
-import com.wireguard.config.Config;
+import org.amnezia.awg.config.Config;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.net.URL;
@@ -106,8 +106,7 @@ public final class MainActivity extends Activity {
                 if(input==null)throw new IOException();ByteArrayOutputStream bytes=new ByteArrayOutputStream();byte[] buffer=new byte[1024];int count;
                 while((count=input.read(buffer))!=-1){if(bytes.size()+count>ProfileValidator.LIMIT)throw new IOException();bytes.write(buffer,0,count);}
                 String profile=ProfileValidator.validate(bytes.toString(StandardCharsets.UTF_8.name()),importing);
-                if(importing==Transport.WG)Config.parse(new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8)));
-                else org.amnezia.awg.config.Config.parse(new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8)));
+                Config.parse(new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8)));
                 importingStore.save(profile);ConnectionService.failed=false;
             }catch(Exception e){message=R.string.import_failed;}
             int finalMessage=message;runOnUiThread(()->{busy=false;detail.setText(finalMessage);render();});

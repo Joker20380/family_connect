@@ -15,7 +15,12 @@ WG сохраняет прежние файл и AndroidKeyStore alias; AWG им
 Исходники: [официальный Android backend](https://github.com/amnezia-vpn/amneziawg-android/tree/5420011143f9dd42831cc95fcdb0d6ac9bde868f),
 [движок](https://github.com/amnezia-vpn/amneziawg-go/tree/1cc94272ca8e9e223a5fe76382f5880f09d3c12d).
 Go 1.26.1, NDK 28.2.13676358; arm64-v8a, armeabi-v7a, x86, x86_64.
-AWG имеет отдельное имя libfc-awg.so, WG сохраняет libwg-go.so.
+Один libfc-awg.so обслуживает WG (без AWG-полей) и AWG. Прежний WG AAR удалён.
+В исходном варианте с двумя Go runtime повтор WG после AWG вызывал SIGSEGV
+(CI34658624840/sourcef4051f0, Zygote signal11). Это согласуется с
+[ограничением Go на Android](https://github.com/golang/go/issues/73841); точный native stack
+не получен. Повторная приёмка выполняется с одним runtime, WG peer теперь независимый
+WireGuard/wireguard-go ecfc5a8d54462e18e13c72173e2623d16d8e25a0.
 Сборщик исключает root backend, публичный UAPI, сигнальный дамп стеков,
 отключает журналирование движка, синхронизирует JNI handles и закрывает
 устройство при ошибке конфигурации. Проверяется результат protect UDP-сокетов.
