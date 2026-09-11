@@ -70,11 +70,12 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
    remains open; do not resume concurrency/second-laptop experiments automatically.
    Standalone setup integrated into main; existing prompt/recovery patch reviewed,
    273 tests + GTK recovery passed, setup hash equals previously VM-tested artifact.
-2. Desktop0.2.9 published from42f9d32, exact platform/TCP/phase0 CI passed;
-   downloaded artifacts verified, catalog sequence8 signed offline. Devices not updated.
-   Next: trusted immutable initial TCP Setup distribution; do not treat its unsigned CI
-   archive/manifest as publisher authentication. Then native platform transport work.
-   See [release evidence](releases/2026-09-11-release-0.2.9.ru.md).
+2. Desktop0.2.9/catalogseq8 and standalone TCP Setup0.1.0 published. Setup source7eee3c3,
+   all CI passed, downloaded archive matches trusted build, detached signature published.
+   Initial verifier/anchor must still be trusted independently. Next: native Windows
+   AWG/TCP integration, then Android transports/device acceptance. Android manual APK
+   update deferred by user; do not prioritize in-app updater/Google Play distribution.
+   See [setup evidence](releases/2026-09-11-tcp-setup-release.ru.md).
 3. Deferred backlog: isolated concurrency1→4→8/request-to-flow diagnosis, then repeat
    confirmed correction on second Ubuntu. Current timeouts are known pilot limitations,
    not a completed stability gate. Resume these tests later per user direction.

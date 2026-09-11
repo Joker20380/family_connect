@@ -42,3 +42,14 @@ SHA256/воспроизводимость/CI → локально sign чере�
 существующий offline key → verify доверенным anchor → опубликовать versioned signature
 в updates/tcp-setup-X.Y.Z.json. Не передавать key в CI и не заменять published assets.
 Доверенная подпись публикуется после проверки; её отсутствие не разрешает sudo.
+
+## Опубликованный setup0.1.0
+
+- [Архив и SHA256SUMS](https://github.com/Joker20380/family_connect/releases/tag/tcp-setup-v0.1.0)
+- [Офлайн-подпись](https://raw.githubusercontent.com/Joker20380/family_connect/main/updates/tcp-setup-0.1.0.json)
+- [Verifier source](../scripts/tcp_setup_signature.py), source7eee3c3; его получение
+  должно быть доверенным до исполнения. Наличие подписи рядом с архивом не заменяет anchor.
+
+Архив8214B, SHA256 c16c924cac52acc5d3555c38a5260b6f4cdc530b4484a831dc35a47dab025c17.
+Fingerprint SHA256 декодированных32B public key: `6a09fb42468acdb4cfcb4f0888e27c13705ac437a45a6624fc21dddbe83fed83`.
+Этот fingerprint сверяют по независимо доверенному каналу, не только по этой странице.

@@ -7,6 +7,16 @@ checkout117611c; TCP component **0.1.0** unchanged.
 
 ## Latest checkpoint — 2026-09-11
 
+- Standalone TCP Setup0.1.0 published separately, source7eee3c3.281 tests and exact
+  platform/TCP/AWG/phase0 CI passed. Downloaded archive matches prior VM-tested hash;
+  detached setup signature created offline/verified with production anchor and published
+  as updates/tcp-setup-0.1.0.json. Trusted verifier/anchor are required before bootstrap.
+  No device/server changes. User keeps Android manual APK updates deferred; no Android
+  update-check button/Google Play rollout. Next: native Windows AWG/TCP transport work.
+  [Setup release/trust evidence](releases/2026-09-11-tcp-setup-release.ru.md).
+
+### Earlier desktop release
+
 - Desktop0.2.9 published from42f9d32 after exact Linux/Windows/Android CI; TCP and
   phase0 passed. Downloaded SHA256SUMS/Linux contents verified, Windows preview reviewed.
   Catalog signed offline, sequence8; signature/new-version/rollback checks passed in

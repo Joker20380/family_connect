@@ -85,3 +85,5 @@ Standalone setup integrated; network tests deferred by user: [checkpoint](releas
 Platform CI180d79f and release preparation: [checkpoint](releases/2026-09-11-platform-ci.ru.md).
 
 Published desktop0.2.9 and offline signed update: [report](releases/2026-09-11-release-0.2.9.ru.md).
+
+Signed standalone TCP Setup: [trust/install runbook](tcp-setup-trust.ru.md), [release evidence](releases/2026-09-11-tcp-setup-release.ru.md).
