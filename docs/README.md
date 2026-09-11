@@ -60,3 +60,5 @@ TCP authenticated delivery: [runbook](tcp-delivery.ru.md), [validation](releases
 Published signed TCP 0.1.0: [release evidence](releases/2026-09-11-tcp-release.ru.md).
 
 Root-owned TCP updater and GTK pilot install: [acceptance](releases/2026-09-11-tcp-updater.ru.md).
+
+Manual TCP updater authorization cancellation: [report](releases/2026-09-11-tcp-updater-cancel.ru.md).

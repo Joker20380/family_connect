@@ -77,8 +77,9 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
    bootstrap installed on laptop, real desktop GTK/pkexec signed install passed.
    260 tests + GTK geometry/recovery passed; six-file archive preserved.
    Remote platform CI passed for 92308a4 (Linux/Windows/Android, TCP/AWG/phase0).
-   Next: manual Cancel for the new broker, fresh-machine bootstrap
-   distribution and new client release after acceptance. [Report](releases/2026-09-11-tcp-updater.ru.md).
+   Manual Cancel for the new broker now passed: actual pkexec 126, unchanged files/backups,
+   no repeated prompt for 18 seconds. [Evidence](releases/2026-09-11-tcp-updater-cancel.ru.md).
+   Next: trusted fresh-machine bootstrap distribution and new client release after acceptance. [Report](releases/2026-09-11-tcp-updater.ru.md).
    Independent VM/hardware clean-install remains a broad-rollout gate: Docker shares
    the host kernel. ARM64 and clean-system interactive polkit remain untested.
    Keep earlier unlocalized health observation visible.

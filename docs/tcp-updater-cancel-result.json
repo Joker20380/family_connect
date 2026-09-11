@@ -1,0 +1,15 @@
+{
+  "manual_cancel_passed": true,
+  "calls": [
+    {
+      "started": true,
+      "returncode": 126
+    }
+  ],
+  "ui_message": "Установка TCP отменена.",
+  "no_repeat_seconds": 18,
+  "files_and_backups_unchanged": true,
+  "profile_selection_preserved": true,
+  "real_desktop_pkexec": true,
+  "authorization_policy_changed": false
+}

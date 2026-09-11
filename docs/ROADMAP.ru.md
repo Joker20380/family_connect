@@ -41,7 +41,8 @@
    Доставка с подписью реализована в CLI, 250 local tests passed; platform CI прошёл.
    TCP 0.1.0 и production catalog sequence 1 опубликованы, публичный HTTPS smoke прошёл.
    Broker/UI Linux-пилота установлен и проверен на ноутбуке (260 tests, GTK/pkexec).
-   Platform CI пройден; далее новый client release/доставка bootstrap, VM и native платформы.
+   Platform CI и ручная отмена нового updater пройдены; далее доставка bootstrap
+   на чистые машины, VM, новый client release и native платформы.
    [Первый TCP-выпуск](releases/2026-09-11-tcp-release.ru.md).
    [Systemd-приёмка](releases/2026-09-11-tcp-systemd.ru.md).
    [Интеграция и ограничения](releases/2026-09-11-tcp-integration.ru.md).
@@ -54,7 +55,8 @@
 - Сервер: 0.2.1; WG, отдельные AWG UDP/51821 и TCP/443 пилоты на одном VPS/IP.
 - AWG и автоматическое восстановление проверены в отдельном Linux-пилоте.
 - TCP: сервер развёрнут, исправленный host helper установлен, но служба выключена;
-  исправленный helper установлен и прошёл короткий host smoke, backend recovery прошёл дважды, GUI-приёмка впереди.
+  host smoke, backend recovery и GTK-приёмка пройдены; системный updater установлен,
+  установка через GTK и ручная отмена авторизации проверены.
 - Платёжной интеграции нет; уведомления не означают автоматическую установку обновлений.
 
 Сроки не назначены: переход между этапами определяется критериями приёмки,

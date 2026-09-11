@@ -6,6 +6,13 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+- Manual cancellation of the new TCP updater passed on laptop: genuine pkexec 126,
+  GTK cancellation message, busy cleared/selection preserved, no repeat for 18 seconds.
+  Component hashes and backup list unchanged; no policy/cache changes. Source unchanged.
+  Next: trusted bootstrap distribution for clean Linux machines, VM/hardware acceptance
+  and new client release. Stable app/server/published TCP unchanged.
+  [Manual updater cancellation](releases/2026-09-11-tcp-updater-cancel.ru.md).
+
 - Root-owned TCP updater and GTK pilot install implemented and installed on laptop.
   Fixed-operation broker verifies its trusted files and signed catalog; GUI confirms,
   handles cancellation and blocks busy/connected installs. Real desktop GTK→pkexec→broker
@@ -15,7 +22,7 @@ Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `1176
   Backup directory root:root mode corrected 0775→0755 after safe bootstrap refusal.
   Stable app/server unchanged; next pilot launch exposes button. All remote CI passed
   for 92308a4 (clients/TCP/AWG/phase0);
-  fresh-machine bootstrap distribution, manual Cancel and new client release remain.
+  manual Cancel now passed; fresh-machine bootstrap distribution and new client release remain.
   [Updater/UI report](releases/2026-09-11-tcp-updater.ru.md).
 
 - TCP component **0.1.0 published and signed**, source/tag 7d1e738, catalog sequence 1
