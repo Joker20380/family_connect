@@ -18,6 +18,6 @@ finally:
  with (r/'android-awg-crash.log').open('w') as log:
   subprocess.run(['adb','logcat','-d','-b','crash'],stdout=log,stderr=subprocess.STDOUT,timeout=20)
  with (r/'android-awg-app.log').open('w') as log:
-  subprocess.run(['adb','logcat','-d','-s','FamilyConnect:I','AndroidRuntime:E','Go:E','libc:F'],stdout=log,stderr=subprocess.STDOUT,timeout=20)
+  subprocess.run(['adb','logcat','-d'],stdout=log,stderr=subprocess.STDOUT,timeout=20)
  for peer in processes:
   if peer.poll() is None:peer.kill();peer.wait(timeout=10)
