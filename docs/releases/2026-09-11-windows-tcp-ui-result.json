@@ -1,0 +1,59 @@
+{
+  "source": "34a3211",
+  "ui_source": "f7448b8",
+  "installer_sha256": "f16a7ab01b3ec1fcd4550a84b04c90c03a64c8911472bdcb2b3126609fafb4bc",
+  "installer": "FamilyConnect-Setup-0.2.9-pilot-unsigned.exe",
+  "layouts": 288,
+  "ci": {
+    "clients": 34641891335,
+    "native": 34641891317,
+    "phase0": 34641891414
+  },
+  "session": {
+    "rounds": [
+      {
+        "mode": "disconnect",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true
+      },
+      {
+        "mode": "engine-crash",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true
+      },
+      {
+        "mode": "broker-crash",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true
+      },
+      {
+        "mode": "service-stop",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true
+      },
+      {
+        "mode": "cancel-start",
+        "http4": 0,
+        "http6": 0,
+        "dns": false,
+        "clean": true
+      }
+    ],
+    "passed": true
+  },
+  "release_published": false,
+  "device_install": false,
+  "external_reality_accepted": false
+}

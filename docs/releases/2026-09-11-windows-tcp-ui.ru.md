@@ -15,7 +15,16 @@ WG-активации, отмена pending и отображение асинх
 в окружении свой Go1.26.2-zx2c4 вместо Go1.26.1 для Xray. Установщик не был создан.
 Исправление сохраняет/восстанавливает переменные toolchain вокруг WG build; Xray
 дополнительно отказывает до сборки при неверном Go. Закреплённые хеши не менялись.
-Повторный Windows runtime/platform CI ожидается.
+Повторный CI исходника **34a3211** прошёл:
+- [Client builds 34641891335](https://github.com/Joker20380/family_connect/actions/runs/34641891335): Windows/Linux/Android success; release skipped.
+- [TCP native/session 34641891317](https://github.com/Joker20380/family_connect/actions/runs/34641891317): success, прежние lifecycle18/18, session24/24 HTTP, 4 DNS и 5 очисток сохранены.
+- [phase0 34641891414](https://github.com/Joker20380/family_connect/actions/runs/34641891414): tests/failover success.
+
+Windows runtime: установка, хеши обоих TCP binaries/лицензии, драйвер, broker activation,
+18 TCP storage checks, UI smoke, 288 макетов/регрессии и удаление прошли.
+Архив установщика скачан, SHA256SUMS перепроверен; SHA256 установщика: `f16a7ab01b3ec1fcd4550a84b04c90c03a64c8911472bdcb2b3126609fafb4bc`.
+CI-снимок окна просмотрен. [Машинный результат](2026-09-11-windows-tcp-ui-result.json).
+
 
 Версии: source/installer 0.2.9 только CI preview; опубликованный 0.2.9 не заменяется.
 Нового релиза, подписи каталога, установки на устройства и изменений сервера нет.

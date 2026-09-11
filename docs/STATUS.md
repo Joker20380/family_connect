@@ -9,7 +9,9 @@ checkout117611c; TCP component **0.1.0** unchanged.
 
 - Windows TCP packaging/UI implemented: pinned engine bundled with licenses/hash checks,
   WG/TCP selection, separate activation, TCP-only connect, pending cancellation and
-  asynchronous error visibility. Platform runtime CI pending; no release/device/server change.
+  asynchronous error visibility. Platform runtime CI34641891335 passed (288 layouts, installed payload/broker/uninstall);
+  native/session34641891317 and phase0 34641891414 passed, source34a3211.
+  Downloaded installer hash verified; no release/device/server change.
   [Packaging and UI report](releases/2026-09-11-windows-tcp-ui.ru.md).
 
 ### Earlier broker session checkpoint

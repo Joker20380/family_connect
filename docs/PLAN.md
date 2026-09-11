@@ -79,15 +79,16 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
    forced cleanup and default routes/DNS preservation (Windows CI34629412460).
    Signed REALITY profile + device binding/sequence floor/LocalSystem DPAPI import now
    passed:300 Python tests, C# fixture +29 rejection cases,18 real Windows broker checks;
-   all platform CI34633788708 and phase0 passed. TCP connect is still not exposed.
+   all platform CI34633788708 and phase0 passed (profile milestone).
    Process ownership primitive now passed18/18 local requests across explicit/owner-crash/
    engine-crash stop, binary tamper rejection and cleanup; native/platform/phase0 CI passed.
    Broker IPC/SCM session now implemented: async connect/cancel, SID ownership,
    routes/DNS/NRPT journal and cleanup/restart. Scoped LocalSystem acceptance passed24/24
    IPv4/IPv6 HTTP,4 OS DNS checks and5 cleanup scenarios; other account actions refused.
    CI34639769072/phase0/platform passed. External REALITY/full default routing remains
-   unaccepted; installer payload and TCP GUI now implemented; current platform CI pending.
-   Next: UI/installer acceptance, recovery/full-routing acceptance before distribution,
+   unaccepted; installer payload and TCP GUI passed platform CI34641891335, 288 layouts,
+   installed hash checks and uninstall; native/session and phase0 also passed.
+   Next: recovery/full-routing acceptance before distribution,
    then Windows AWG. [UI checkpoint](releases/2026-09-11-windows-tcp-ui.ru.md).
    Finish Windows before moving to Android, per user.
    [Session checkpoint](releases/2026-09-11-windows-tcp-session.ru.md).
