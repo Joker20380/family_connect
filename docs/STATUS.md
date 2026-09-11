@@ -6,6 +6,15 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+- Separate Linux amd64 TCP component bundle implemented: deterministic archive, checksum
+  preflight, active-service refusal, private backups, per-file atomic replacement and
+  rollback on failure; existing profiles preserved and service never auto-started.
+  229 Python tests passed; isolated filesystem install/tamper/upgrade/reload rollback passed.
+  Xray matches cached pinned-revision image; repeated archive SHA256 identical.
+  Container systemd/resolved/pkexec were stubbed: booted clean-system acceptance pending.
+  CI artifact steps added but remote CI/signing/release not run; host install unchanged.
+  [Bundle report](releases/2026-09-11-tcp-bundle.ru.md) · [Install runbook](linux-tcp-install.ru.md).
+
 - TCP source integration into main completed after targeted review: installer refuses
   active/pending TCP state before writes; WG health prefers paired AWG endpoint when
   TCP differs. Full main suite 226 passed, GTK regression/kernel namespace checks passed,

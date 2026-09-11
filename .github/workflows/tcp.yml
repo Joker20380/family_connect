@@ -22,4 +22,21 @@ jobs:
           -v "$PWD/clients/linux:/fix:ro" -v "$PWD/clients/desktop:/desktop:ro"
           -v "$PWD/scripts:/checks:ro" --entrypoint python3
           family-connect-xray:26.3.27-pilot1 /checks/check_tcp_routes.py
+      - name: Package separate Linux TCP components
+        run: |
+          mkdir -p artifacts/tcp
+          tcp_container=$(docker create family-connect-xray:26.3.27-pilot1)
+          trap 'docker rm "$tcp_container" >/dev/null' EXIT
+          docker cp "$tcp_container:/usr/local/bin/xray" "$RUNNER_TEMP/xray"
+          python3 scripts/package_tcp.py --xray "$RUNNER_TEMP/xray" --output artifacts/tcp/FamilyConnect-TCP-amd64.tar.gz
+      - name: Verify isolated component install and rollback (systemd stub)
+        run: >-
+          docker run --rm --network none --user 0 --device /dev/net/tun
+          -v "$PWD/artifacts/tcp/FamilyConnect-TCP-amd64.tar.gz:/bundle.tar.gz:ro"
+          -v "$PWD/scripts:/checks:ro" --entrypoint python3
+          family-connect-xray:26.3.27-pilot1 /checks/check_tcp_bundle.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FamilyConnect-TCP-amd64-unsigned-pilot
+          path: artifacts/tcp/FamilyConnect-TCP-amd64.tar.gz
 # Live gateway checks are operator-run with a local 0600 profile; never a CI secret.

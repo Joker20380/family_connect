@@ -50,3 +50,5 @@ Real GTK/pkexec recovery and remaining manual acceptance: [report](releases/2026
 Manual polkit cancellation passed: [report](releases/2026-09-11-polkit-cancel.ru.md).
 
 TCP integration into main, review fixes and packaging gap: [report](releases/2026-09-11-tcp-integration.ru.md).
+
+Linux TCP component bundle: [installation](linux-tcp-install.ru.md), [validation](releases/2026-09-11-tcp-bundle.ru.md).

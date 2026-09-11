@@ -1,0 +1,19 @@
+{
+  "python_passed": 229,
+  "namespace": "Docker network none; filesystem installer, systemctl/resolvectl/pkexec stubbed",
+  "fresh_install": true,
+  "xray_executable": true,
+  "root_permissions": true,
+  "active_refusal": true,
+  "tamper_refusal": true,
+  "failed_reload_rollback": true,
+  "upgrade_profile_preservation": true,
+  "private_backups": true,
+  "service_not_started": true,
+  "archive_repeat_identical": true,
+  "archive_sha256": "c5f46b710f7f1442269a41db807e8af77eb6bb69652d6430a86ecb36d1ee15ed",
+  "xray_sha256": "4f7a4436f86798bbb5c875014e352021a1673710a45e170ccc507c5f59341940",
+  "booted_systemd_install_test": false,
+  "remote_ci_run": false,
+  "signed_release": false
+}

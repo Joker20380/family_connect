@@ -66,13 +66,13 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
 ## Next, in order
 
-1. Prepare reproducible TCP component build/install for clean Linux while preserving
-   the existing six-file updater contract. Main source integration passed 226 tests,
-   GTK regression and kernel routing checks; no stable installation/release performed.
-   [Review, checks and packaging gap](releases/2026-09-11-tcp-integration.ru.md).
-   Account for Xray/root helper/systemd dependencies, backup/refusal of active updates,
-   and clean-machine validation. Keep the earlier unlocalized health failure visible.
-   Repository pilot launcher now uses integrated source; installed stable launcher does not.
+1. Validate the separate amd64 TCP bundle on a clean booted Linux/systemd machine/VM:
+   install dependencies, fresh install, actual service/DNS/HTTPS, stop/cleanup and upgrade.
+   Filesystem container tests passed but explicitly stubbed systemd/resolved/pkexec.
+   [Bundle and rollback runbook](linux-tcp-install.ru.md). Archive is locally reproducible
+   for identical inputs, not a signed/public release; add authenticated component delivery
+   before broader rollout. Existing six-file app updater unchanged, ARM64 unsupported.
+   Keep earlier unlocalized health observation visible. Do not claim clean boot acceptance yet.
 2. Integrate the tested transports into native Windows/Android. Complete platform CI,
    installation/UI checks and signed release before upgrading the stable client channel.
 3. Integrate provisioning/runtime/ACK and known-good recovery with real Reticulum
