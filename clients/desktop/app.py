@@ -250,7 +250,7 @@ class App:
         if self.busy:return
         if self.active:self.set_detail('Сначала отключите туннель.' if self.ru else 'Disconnect the tunnel first.');return
         chooser=Gtk.FileChooserNative(title=self.t('import'),transient_for=self.window,action=Gtk.FileChooserAction.OPEN,accept_label=self.t('import'),cancel_label='Отмена' if self.ru else 'Cancel')
-        filter_=Gtk.FileFilter();filter_.set_name('WireGuard (*.conf)');filter_.add_pattern('*.conf');chooser.add_filter(filter_)
+        filter_=Gtk.FileFilter();filter_.set_name('VPN profiles (*.conf)');filter_.add_pattern('*.conf');chooser.add_filter(filter_)
         def response(dialog,result):
             file=dialog.get_file() if result==Gtk.ResponseType.ACCEPT else None;dialog.destroy();self.file_chooser=None
             if file and file.get_path():

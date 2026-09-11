@@ -1,0 +1,19 @@
+[Unit]
+Description=Family Connect TCP pilot
+After=network-online.target systemd-resolved.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/lib/family-connect-tcp/helper serve %i
+ExecStopPost=/usr/local/lib/family-connect-tcp/helper cleanup %i
+TimeoutStopSec=15
+KillMode=control-group
+Restart=no
+UMask=0077
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/run
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_RAW
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX AF_NETLINK

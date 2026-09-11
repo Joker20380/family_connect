@@ -2,6 +2,8 @@
 import base64
 import ipaddress
 import re
+import json
+import uuid
 
 MAX_PROFILE=16384
 FIELDS={'Interface':{'PrivateKey','Address','DNS','MTU','ListenPort'},
@@ -9,6 +11,46 @@ FIELDS={'Interface':{'PrivateKey','Address','DNS','MTU','ListenPort'},
 
 
 AWG_FIELDS=set("Jc Jmin Jmax S1 S2 S3 S4 H1 H2 H3 H4 I1 I2 I3 I4 I5".split())
+
+
+def parse_tcp(text):
+    """Credential envelope, never arbitrary Xray configuration or executable hooks."""
+    if len(text.encode('utf-8')) > MAX_PROFILE: raise ValueError('Oversized TCP profile')
+    def unique(pairs):
+        result={}
+        for key,value in pairs:
+            if key in result: raise ValueError('Duplicate TCP field')
+            result[key]=value
+        return result
+    p=json.loads(text,object_pairs_hook=unique)
+    fields={'type','server','port','id','public_key','server_name','short_id'}
+    if not isinstance(p,dict) or set(p)!=fields or p['type']!='vless-reality-v1':
+        raise ValueError('Unsupported TCP profile')
+    if not all(isinstance(p[k],str) for k in fields-{'port'}):raise ValueError('Invalid TCP field')
+    if type(p['port']) is not int or not 1<=p['port']<=65535:raise ValueError('Invalid TCP port')
+    if str(ipaddress.IPv4Address(p['server']))!=p['server']:raise ValueError('IPv4 gateway required')
+    if str(uuid.UUID(p['id']))!=p['id']:raise ValueError('Invalid TCP identity')
+    key=p['public_key']
+    if not re.fullmatch(r'[A-Za-z0-9_-]{43}',key) or base64.urlsafe_b64encode(base64.urlsafe_b64decode(key+'=')).decode().rstrip('=')!=key:
+        raise ValueError('Invalid REALITY public key')
+    if not re.fullmatch(r'(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}',p['server_name']) or len(p['server_name'])>253:
+        raise ValueError('Invalid REALITY server name')
+    if not re.fullmatch(r'(?:[0-9a-f]{2}){1,8}',p['short_id']):raise ValueError('Invalid REALITY short id')
+    return p
+
+
+def tcp_config(profile, interface):
+    p=parse_tcp(json.dumps(profile))
+    if not re.fullmatch(r'fctcp[0-9a-f]{8}',interface):raise ValueError('Invalid TCP interface')
+    return {'log':{'loglevel':'none'},
+        'inbounds':[{'tag':'tun','protocol':'tun','settings':{'name':interface,'MTU':1280}}],
+        'outbounds':[{'tag':'vpn','protocol':'vless','settings':{'vnext':[{
+            'address':p['server'],'port':p['port'],'users':[{'id':p['id'],
+            'encryption':'none','flow':'xtls-rprx-vision'}]}]},
+            'streamSettings':{'network':'raw','security':'reality',
+                'realitySettings':{'fingerprint':'chrome','serverName':p['server_name'],
+                    'password':p['public_key'],'shortId':p['short_id']},
+                'sockopt':{'mark':64630}}}]}
 
 
 def parse(text, *, allow_awg=False):

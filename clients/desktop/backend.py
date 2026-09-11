@@ -9,7 +9,7 @@ import sys
 import tempfile
 import time
 import uuid
-from profile_config import validate, parse, AWG_FIELDS, MAX_PROFILE
+from profile_config import validate, parse, parse_tcp, AWG_FIELDS, MAX_PROFILE
 
 def read_profile(path, *, allow_awg=False):
     with Path(path).open("rb") as source:
@@ -83,12 +83,14 @@ class Linux:
     awg_root=Path('/etc/family-connect/awg')
     awg_helper='/usr/local/lib/family-connect-awg/helper'
     def _awg_records(self):
-        if not self.awg_root.exists(): return {}
-        info=self.awg_root.lstat()
+        return self._records(self.awg_root,'fcawg')
+    def _records(self,root,prefix):
+        if not root.exists(): return {}
+        info=root.lstat()
         if not stat.S_ISDIR(info.st_mode) or info.st_uid!=0 or info.st_mode&0o022:
             raise BackendError('Unsafe AWG installation')
         records={}
-        for path in self.awg_root.glob('fcawg*.json'):
+        for path in root.glob(prefix+'*.json'):
             fd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
             try:
                 info=os.fstat(fd)
@@ -97,7 +99,7 @@ class Linux:
                 record=json.loads(os.read(fd,4097))
             finally:os.close(fd)
             if record['owner']!=os.getuid():continue
-            if not re.fullmatch(r'fcawg[0-9a-f]{8}',record['id']) or path.stem!=record['id']:
+            if not re.fullmatch(prefix+r'[0-9a-f]{8}',record['id']) or path.stem!=record['id']:
                 raise BackendError('Invalid AWG metadata')
             records[record['id']]=record
         return records
@@ -219,6 +221,97 @@ class Linux:
         return ident
 
 
+class LinuxTCP(Linux):
+    tcp_root=Path('/etc/family-connect/tcp')
+    tcp_helper='/usr/local/lib/family-connect-tcp/helper'
+    def _tcp_records(self):return self._records(self.tcp_root,'fctcp')
+    def _tcp(self,action,ident=None,data=None):
+        try:
+            p=subprocess.run(['pkexec',self.tcp_helper,action]+([ident] if ident else []),
+                input=data,capture_output=True,text=True,timeout=120)
+        except subprocess.TimeoutExpired:raise BackendError('TCP operation timed out') from None
+        if p.returncode in (126,127):raise AuthorizationError('TCP authorization cancelled or unavailable')
+        if p.returncode:raise BackendError('TCP operation failed')
+        return p.stdout.strip()
+    def _chain(self,ident):
+        awg=self._awg_records();tcp=self._tcp_records()
+        primary={**awg,**tcp}.get(ident,{}).get('primary') or ident
+        matches=[key for key,value in tcp.items() if key==primary or value.get('primary')==primary]
+        if len(matches)>1:raise BackendError('Ambiguous TCP fallback')
+        if not matches:return None
+        end=matches[0]
+        fallback=self._fallback(primary)
+        expected=awg[fallback]['endpoint'] if fallback else tcp[end]['endpoint']
+        chain=[] if primary==end else [('wg',primary,expected)]
+        if fallback:chain.append(('awg',fallback,awg[fallback]['endpoint']))
+        chain.append(('tcp',end,tcp[end]['endpoint']))
+        return chain
+    def _live(self,item):
+        kind,ident,_=item
+        return self._nm_active(ident) if kind=='wg' else Path('/sys/class/net',ident).exists()
+    def _stop(self,item):
+        kind,ident,_=item
+        if kind=='wg':
+            if self._nm_active(ident):run('nmcli','connection','down','uuid',ident)
+        elif kind=='awg':self._awg('down',ident)
+        else:self._tcp('down',ident)
+    def _check(self,item):
+        kind,ident,expected=item
+        if kind=='wg':self._probe(ident,expected)
+        else:probe_interface(ident,expected)
+    def _attempt(self,chain):
+        for index,item in enumerate(chain):
+            kind,ident,_=item
+            try:
+                if kind=='wg':run('nmcli','connection','up','uuid',ident)
+                elif kind=='awg':self._awg('up',ident)
+                else:self._tcp('up',ident)
+                self._check(item);return
+            except AuthorizationError:raise
+            except (BackendError,subprocess.TimeoutExpired):
+                # A cleanup failure stops the chain; never stack conflicting routes.
+                self._stop(item)
+                if index==len(chain)-1:raise BackendError('All VPN transports failed') from None
+    def profiles(self):
+        return super().profiles()+[(ident,'VLESS + REALITY · '+ident) for ident in self._tcp_records()]
+    def supports_recovery(self,ident):return bool(self._chain(ident)) or super().supports_recovery(ident)
+    def active(self,ident):
+        chain=self._chain(ident)
+        return any(self._live(item) for item in chain) if chain else super().active(ident)
+    def healthy(self,ident):
+        chain=self._chain(ident)
+        if not chain:return super().healthy(ident)
+        live=[item for item in chain if self._live(item)]
+        if len(live)!=1:return False
+        try:self._check(live[0]);return True
+        except (BackendError,subprocess.TimeoutExpired):return False
+    def disconnect(self,ident):
+        chain=self._chain(ident)
+        if not chain:return super().disconnect(ident)
+        for item in reversed(chain):
+            if self._live(item):self._stop(item)
+    def connect(self,ident):
+        chain=self._chain(ident)
+        if not chain:return super().connect(ident)
+        selected=next((item for item in chain if item[1]==ident),chain[0])
+        if self.healthy(ident) and (selected==chain[0] or self._live(selected)):return
+        self.disconnect(ident)
+        start=next((i for i,item in enumerate(chain) if item[1]==ident),0)
+        self._attempt(chain[start:])
+    def recover(self,ident):
+        chain=self._chain(ident)
+        if not chain:return super().recover(ident)
+        live=[i for i,item in enumerate(chain) if self._live(item)]
+        start=(live[0]+1)%len(chain) if len(live)==1 else 0
+        self.disconnect(ident)
+        self._attempt(chain[start:]+chain[:start])
+    def import_profile(self,path):
+        with Path(path).open('rb') as source:raw=source.read(MAX_PROFILE+1).decode('utf-8-sig')
+        if raw.lstrip().startswith('{'):
+            return self._tcp('import',data=json.dumps(parse_tcp(raw)))
+        return super().import_profile(path)
+
+
 class Windows:
     def __init__(self):
         if not ctypes.windll.shell32.IsUserAnAdmin(): raise BackendError('Administrator rights required')
@@ -288,5 +381,5 @@ class Windows:
 
 def backend():
     if sys.platform=='win32':return Windows()
-    if sys.platform.startswith('linux'):return Linux()
+    if sys.platform.startswith('linux'):return LinuxTCP()
     raise BackendError('Unsupported operating system')

@@ -48,3 +48,5 @@ Established AWG → TCP backend recovery (two passes; GUI acceptance pending): [
 Real GTK/pkexec recovery and remaining manual acceptance: [report](releases/2026-09-11-tcp-gtk.ru.md).
 
 Manual polkit cancellation passed: [report](releases/2026-09-11-polkit-cancel.ru.md).
+
+TCP integration into main, review fixes and packaging gap: [report](releases/2026-09-11-tcp-integration.ru.md).

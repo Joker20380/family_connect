@@ -6,6 +6,16 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+- TCP source integration into main completed after targeted review: installer refuses
+  active/pending TCP state before writes; WG health prefers paired AWG endpoint when
+  TCP differs. Full main suite 226 passed, GTK regression/kernel namespace checks passed,
+  six-file updater archive compatibility verified. Review fix ca2a63a retained in pilot branch.
+  Stable installed app/server unchanged; repository-based AWG pilot launcher now uses TCP
+  backend on next launch. System helper dependencies were not reinstalled automatically.
+  Next: reproducible clean-Linux component packaging/install, native platform integration,
+  then fresh platform CI/new signed release. No push/remote CI/release yet.
+  [Integration review and rollout limits](releases/2026-09-11-tcp-integration.ru.md).
+
 - Manual system authorization cancellation passed: real TCP-helper pkexec returned 126,
   actual AuthorizationError reached recovery completion, policy stopped; no repeat pkexec
   for 18 s and no TUN. Watchdog/controller cleanup passed, no UDP fault or polkit changes.

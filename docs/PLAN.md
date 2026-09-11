@@ -66,14 +66,13 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
 ## Next, in order
 
-1. Review the complete experimental TCP diff against main and prepare integration:
-   root ownership/cleanup/error handling, packaging dependencies and preservation of WG/AWG.
-   Functional Linux pilot scenarios now include actual manual polkit Cancel (exit 126,
-   real AuthorizationError, 18 s without repeat prompts) and prior GTK network recovery.
-   [Completed cancellation gate](releases/2026-09-11-polkit-cancel.ru.md).
-   Keep initial unlocalized backend AssertionError visible; inspect health diagnostics
-   during review. Run appropriate fresh Python/GTK/platform CI checks after integration.
-   Stable main launcher remains unchanged until reviewed code is integrated; no release yet.
+1. Prepare reproducible TCP component build/install for clean Linux while preserving
+   the existing six-file updater contract. Main source integration passed 226 tests,
+   GTK regression and kernel routing checks; no stable installation/release performed.
+   [Review, checks and packaging gap](releases/2026-09-11-tcp-integration.ru.md).
+   Account for Xray/root helper/systemd dependencies, backup/refusal of active updates,
+   and clean-machine validation. Keep the earlier unlocalized health failure visible.
+   Repository pilot launcher now uses integrated source; installed stable launcher does not.
 2. Integrate the tested transports into native Windows/Android. Complete platform CI,
    installation/UI checks and signed release before upgrading the stable client channel.
 3. Integrate provisioning/runtime/ACK and known-good recovery with real Reticulum

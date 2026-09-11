@@ -1,0 +1,16 @@
+name: family-connect-tcp
+services:
+  gateway:
+    build:
+      context: .
+      dockerfile: pilot/tcp/Dockerfile
+    image: family-connect-xray:26.3.27-pilot1
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    ports: ["443:8443/tcp"]
+    volumes: ["./state-tcp:/keys:ro"]
+    tmpfs: ["/tmp:mode=1777"]
+    mem_limit: 256m
+    pids_limit: 64
