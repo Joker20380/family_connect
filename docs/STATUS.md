@@ -1,8 +1,7 @@
 # Current state / Текущее состояние
 
 Updated:2026-09-11. Desktop **0.2.9 published**, source `42f9d32`.
-Linux/Windows release assets checked; signed update catalog sequence8 prepared/published
-with this checkpoint. Linux **0.2.7 remains installed**; Windows last reported0.2.7.
+Linux/Windows release assets checked; signed update catalog sequence8 published in7650f32 and verified at the canonical URL. Linux **0.2.7 remains installed**; Windows last reported0.2.7.
 No device installation performed. Server **0.2.1**, deployment source8cd0f2d/server
 checkout117611c; TCP component **0.1.0** unchanged.
 
