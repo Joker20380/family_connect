@@ -44,3 +44,5 @@ Retest after Wi-Fi change (120/120 isolated probes): [report](releases/2026-09-1
 Corrected TCP helper installed; short laptop smoke passed: [report](releases/2026-09-11-tcp-host-smoke.ru.md).
 
 Established AWG → TCP backend recovery (two passes; GUI acceptance pending): [report](releases/2026-09-11-awg-tcp-recovery.ru.md).
+
+Real GTK/pkexec recovery and remaining manual acceptance: [report](releases/2026-09-11-tcp-gtk.ru.md).

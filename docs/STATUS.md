@@ -6,6 +6,16 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+- Real GTK/production LinuxTCP/pkexec recovery passed: established AWG → TCP in 59.88 s;
+  connected/restored UI, selected profile preserved, actual Disconnect and close-after-
+  disconnect passed. Root controller applied only endpoint UDP fault and verified cleanup.
+  GTK recovery regression also passed, including injected AuthorizationError.
+  Close-while-connected real dialog also passed: cancel preserves monitoring, confirm
+  stops monitoring and leaves VPN as warned; controller then disconnected/cleaned it.
+  Real polkit Cancel click remains pending; no policy changes
+  or temporary-authorization revocation were used. Stable launcher/releases unchanged.
+  [GTK live evidence and acceptance limits](releases/2026-09-11-tcp-gtk.ru.md).
+
 - Established AWG → TCP backend/policy recovery exercised on the laptop: one initial
   unlocalized AssertionError, then two successive passes at 45.32 s and 45.57 s after
   two failed health cycles. Real endpoint UDP blocks counted 1047/1154 packets.

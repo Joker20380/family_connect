@@ -1,0 +1,36 @@
+{
+  "real_ui": {
+    "real_ui_awg_connected": true,
+    "recovered": true,
+    "recovery_seconds": 59.88,
+    "status_connected": true,
+    "selected_profile_preserved": true,
+    "detail": "Соединение восстановлено.",
+    "ui_disconnect_stopped_recovery": true,
+    "ui_close_passed": true,
+    "passed": true
+  },
+  "root_guard": {
+    "udp_fault_applied": true,
+    "cleanup_passed": true
+  },
+  "regression": {
+    "threshold": true,
+    "disconnect": true,
+    "stale_selection": true,
+    "close": true,
+    "authorization_error_injected": true
+  },
+  "real_polkit_cancel_clicked": false,
+  "real_close_ui": {
+    "connected_close_warning": true,
+    "cancel_close_preserved_monitoring": true,
+    "confirmed_close_stopped_monitoring": true,
+    "vpn_left_connected_as_warned": true,
+    "passed": true
+  },
+  "close_guard": {
+    "udp_fault_applied": false,
+    "cleanup_passed": true
+  }
+}
