@@ -11,10 +11,22 @@ import (
  "strings"
  "time"
  "strconv"
+ "sync/atomic"
+ "golang.org/x/sys/windows"
  "github.com/amnezia-vpn/amneziawg-go/conn"
  "github.com/amnezia-vpn/amneziawg-go/device"
  "github.com/amnezia-vpn/amneziawg-go/tun"
 )
+// RIO reports ICMP port-unreachable as a receive error after the test kills a client.
+// Keep the synthetic gateway listening; all other errors retain native handling.
+type peerBind struct{conn.Bind; resets atomic.Uint64}
+func(b *peerBind)Open(port uint16)([]conn.ReceiveFunc,uint16,error){
+ fs,p,e:=b.Bind.Open(port);if e!=nil{return nil,0,e}
+ for i,f:=range fs{fs[i]=func(bufs [][]byte,sizes []int,eps []conn.Endpoint)(int,error){
+  for{n,e:=f(bufs,sizes,eps);if errors.Is(e,windows.WSAECONNRESET){b.resets.Add(1);continue};return n,e}
+ }}
+ return fs,p,nil
+}
 type memory struct { packets chan []byte; events chan tun.Event; done chan struct{}; once sync.Once }
 func (m *memory) File()*os.File{return nil}
 func (m *memory) Name()(string,error){return "fixture",nil}
@@ -51,14 +63,13 @@ func run()error{
    if strings.Contains(format,label){countsMu.Lock();counts[label]++;countsMu.Unlock()}
   }
  }
- // The peer models the Linux gateway. Use standard UDP sockets: Windows RIO can
- // terminate its receive loop on ICMP from the deliberately killed client port.
- dev:=device.NewDevice(m,conn.NewStdNetBind(),&device.Logger{Verbosef:logf,Errorf:logf});defer dev.Close()
+ bind:=&peerBind{Bind:conn.NewDefaultBind()}
+ dev:=device.NewDevice(m,bind,&device.Logger{Verbosef:logf,Errorf:logf});defer dev.Close()
  if e=dev.IpcSet(cfg.Config);e!=nil{return e};if e=dev.Up();e!=nil{return e};os.Stdout.WriteString("ready\n")
  ticker:=time.NewTicker(time.Second);defer ticker.Stop()
  for {select {case <-dev.Wait():return nil;case <-ticker.C:
   // CI-only aggregate counters, never key/config material.
-  raw,e:=dev.IpcGet();if e!=nil{continue};stats:=map[string]string{}
+  raw,e:=dev.IpcGet();if e!=nil{continue};stats:=map[string]string{"connection_reset_ignored":strconv.FormatUint(bind.resets.Load(),10)}
   for _,line:=range strings.Split(raw,"\n"){k,v,ok:=strings.Cut(line,"=");if ok&&(k=="last_handshake_time_sec"||k=="rx_bytes"||k=="tx_bytes"){stats[k]=v}}
   countsMu.Lock();for k,v:=range counts{stats[k]=strconv.Itoa(v)};countsMu.Unlock();json.NewEncoder(os.Stdout).Encode(stats)
  }}
