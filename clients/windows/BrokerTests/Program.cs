@@ -58,5 +58,5 @@ try {
  Check(!Call("activate-tcp","{}").GetProperty("ok").GetBoolean(),"malformed import");
  File.WriteAllText(output,$"PASS: {checks} broker TCP import, DPAPI and replacement checks. No tunnel started.\n");
  Console.WriteLine(File.ReadAllText(output));
-}catch(Exception e){File.WriteAllText(output,"FAIL: "+e.GetType().Name+": "+e.Message+"\n");throw;}
+}catch(Exception e){File.WriteAllText(output,"FAIL after "+checks+" checks: "+e.GetType().Name+": "+e.Message+"\n"+e.StackTrace+"\n");throw;}
 finally{File.WriteAllBytes(anchor,originalAnchor);File.Delete(profile);}
