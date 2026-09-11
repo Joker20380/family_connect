@@ -47,6 +47,7 @@ def nrpt_snapshot():
  return ps('Get-DnsClientNrptRule | Sort-Object Name | Select-Object Name,Namespace,NameServers,DisplayName | ConvertTo-Json -Compress')
 def clean():
  assert not (root/'tcp-session.json').exists(),'Journal remains'
+ assert not ps("Get-CimInstance Win32_Process -Filter \"Name='xray.exe'\" | Where-Object {$_.ExecutablePath -like '*tcp\\xray.exe'} | Select-Object -ExpandProperty ProcessId"),'Xray process remains'
  assert not ps("Get-NetAdapter -IncludeHidden | Where-Object {$_.Name -match '^fctcp[0-9a-f]{8}$'} | Select-Object -ExpandProperty Name"),'Adapter remains'
  assert not ps("Get-NetRoute | Where-Object {$_.DestinationPrefix -in @('198.18.0.1/32','fd79:fc::1/128')} | Select-Object -ExpandProperty DestinationPrefix"),'Route remains'
  assert baseline()==before and dns_snapshot()==dns_before and nrpt_snapshot()==nrpt_before,'Network settings changed'
@@ -85,14 +86,21 @@ try:
  key=Ed25519PrivateKey.generate();(host/'activation.pub').write_text(base64.b64encode(key.public_key().public_bytes_raw()).decode())
  installed=True;subprocess.run([str(exe),'/install-service'],check=True,timeout=60)
  # A second local account exercises actual pipe SID ownership while TCP is active.
- account='fctcpci'+uuid.uuid4().hex[:6];password=secrets.token_urlsafe(24)+'aA1!'
- command="$p=ConvertTo-SecureString ([Console]::In.ReadToEnd()) -AsPlainText -Force; New-LocalUser -Name '"+account+"' -Password $p | Out-Null"
- subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-Command',"$ErrorActionPreference='Stop'; "+command],input=password,text=True,check=True,capture_output=True,timeout=30)
  from ctypes import wintypes
+ candidate='fctcpci'+uuid.uuid4().hex[:6];password=secrets.token_urlsafe(24)+'aA1!'
+ class UserInfo(ctypes.Structure):
+  _fields_=[('name',wintypes.LPWSTR),('password',wintypes.LPWSTR),('age',wintypes.DWORD),('privilege',wintypes.DWORD),('home',wintypes.LPWSTR),('comment',wintypes.LPWSTR),('flags',wintypes.DWORD),('script',wintypes.LPWSTR)]
+ net=ctypes.WinDLL('netapi32');net.NetUserAdd.argtypes=[wintypes.LPCWSTR,wintypes.DWORD,ctypes.c_void_p,ctypes.POINTER(wintypes.DWORD)]
+ info=UserInfo(candidate,password,0,1,None,None,0x10201,None);parameter=wintypes.DWORD()
+ code=net.NetUserAdd(None,1,ctypes.byref(info),ctypes.byref(parameter));assert code==0,'Test account creation code='+str(code)
+ account=candidate
+ net.NetLocalGroupAddMembers.argtypes=[wintypes.LPCWSTR,wintypes.LPCWSTR,wintypes.DWORD,ctypes.c_void_p,wintypes.DWORD]
+ member=ctypes.c_wchar_p(account);code=net.NetLocalGroupAddMembers(None,'Users',3,ctypes.byref(member),1)
+ assert code in (0,1378),'Test account group code='+str(code)
  api=ctypes.WinDLL('advapi32',use_last_error=True);other_token=wintypes.HANDLE()
  api.LogonUserW.argtypes=[wintypes.LPCWSTR,wintypes.LPCWSTR,wintypes.LPCWSTR,wintypes.DWORD,wintypes.DWORD,ctypes.POINTER(wintypes.HANDLE)]
  api.ImpersonateLoggedOnUser.argtypes=[wintypes.HANDLE]
- assert api.LogonUserW(account,'.',password,2,0,ctypes.byref(other_token)), 'Test account logon failed'
+ assert api.LogonUserW(account,'.',password,2,0,ctypes.byref(other_token)), 'Test account logon code='+str(ctypes.get_last_error())
  device=base64.b64encode(bytes.fromhex(call('request')['code'][4:])).decode()
  grant=dict(version=1,devicePublicKey=device,sequence=1,expiresAt=int(time.time())+3600,server='192.0.2.10',port=port,id=ident,publicKey=base64.urlsafe_b64encode(secrets.token_bytes(32)).decode().rstrip('='),serverName='example.com',shortId='0123456789abcdef')
  raw=json.dumps(grant,separators=(',',':')).encode();envelope=json.dumps(dict(payload=base64.b64encode(raw).decode(),signature=base64.b64encode(key.sign(b'family-connect/windows-tcp-activation/v1\0'+raw)).decode()))
@@ -140,7 +148,9 @@ finally:
  finally:
   if other_token and other_token.value:
    ctypes.windll.kernel32.CloseHandle(other_token)
-  if account:ps("Remove-LocalUser -Name '"+account+"' -ErrorAction SilentlyContinue")
+  if account:
+   net.NetUserDel.argtypes=[wintypes.LPCWSTR,wintypes.LPCWSTR]
+   assert net.NetUserDel(None,account)==0,'Test account deletion failed' 
   if server and server.poll() is None:server.kill();server.wait(timeout=10)
   dns_stop.set()
   if udp:udp.close()
