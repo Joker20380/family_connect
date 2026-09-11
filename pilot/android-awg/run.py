@@ -12,5 +12,9 @@ try:
   peer.stdin.write(json.dumps({'config':config}));peer.stdin.close();q=queue.Queue();threading.Thread(target=lambda:q.put(peer.stdout.readline().strip()),daemon=True).start();assert q.get(timeout=20)=='ready'
  subprocess.run(['gradle','--no-daemon',':app:connectedDebugAndroidTest'],cwd=r/'clients/android',check=True)
 finally:
+ with (r/'android-awg-crash.log').open('w') as log:
+  subprocess.run(['adb','logcat','-d','-b','crash'],stdout=log,stderr=subprocess.STDOUT,timeout=20)
+ with (r/'android-awg-app.log').open('w') as log:
+  subprocess.run(['adb','logcat','-d','-s','FamilyConnect:I','AndroidRuntime:E','Go:E','libc:F'],stdout=log,stderr=subprocess.STDOUT,timeout=20)
  for peer in processes:
   if peer.poll() is None:peer.kill();peer.wait(timeout=10)

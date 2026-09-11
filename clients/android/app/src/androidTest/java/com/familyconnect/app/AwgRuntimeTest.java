@@ -29,6 +29,7 @@ public class AwgRuntimeTest {
     boolean vpn(){ConnectivityManager cm=context.getSystemService(ConnectivityManager.class);for(Network n:cm.getAllNetworks()){NetworkCapabilities c=cm.getNetworkCapabilities(n);if(c!=null&&c.hasTransport(NetworkCapabilities.TRANSPORT_VPN))return true;}return false;}
     void clean()throws Exception{long until=System.currentTimeMillis()+15000;while(vpn()&&System.currentTimeMillis()<until)Thread.sleep(100);assertFalse("VPN remains",vpn());}
     void traffic(Transport type)throws Exception{
+        android.util.Log.i("FamilyConnect","Traffic "+type);
         String[] sources=type==Transport.WG?new String[]{"10.77.0.4","fd77:92::4"}:new String[]{"10.78.0.4","fd78:92::4"};
         String[] targets={"198.19.0.1","fd78:fccc::1"};
         for(int family=0;family<2;family++)try(DatagramSocket socket=new DatagramSocket(new InetSocketAddress(InetAddress.getByName(sources[family]),0))){
@@ -54,8 +55,10 @@ public class AwgRuntimeTest {
             assertEquals(ProfileValidator.validate(profile(Transport.WG),Transport.WG),wg.load());assertTrue(awg.load().contains("Jc = 3"));
             awg.clear();assertTrue(wg.exists());assertFalse(awg.exists());awg.save(ProfileValidator.validate(profile(Transport.AWG),Transport.AWG));
             for(Transport type:new Transport[]{Transport.WG,Transport.AWG,Transport.WG,Transport.AWG}){
+                android.util.Log.i("FamilyConnect","Connect "+type);
                 context.startForegroundService(new Intent(context,ConnectionService.class).setAction("connect").putExtra("transport",type.id));
                 waitState("on");assertEquals(type.id,ConnectionService.activeTransport);traffic(type);
+                android.util.Log.i("FamilyConnect","Disconnect "+type);
                 context.startService(new Intent(context,ConnectionService.class).setAction("disconnect"));waitState("off");clean();
             }
             context.startForegroundService(new Intent(context,ConnectionService.class).setAction("connect").putExtra("transport","awg"));

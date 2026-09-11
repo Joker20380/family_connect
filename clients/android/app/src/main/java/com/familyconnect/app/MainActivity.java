@@ -69,7 +69,12 @@ public final class MainActivity extends Activity {
     }
     private void render(){
         if(toggle==null||detail==null)return;
-        String value=ConnectionService.status;boolean on=value.equals("on"),waiting=value.equals("connecting")||value.equals("cleanup-required");
+        String value=ConnectionService.status;
+        if(!value.equals("off")){
+            Transport active=Transport.parse(ConnectionService.activeTransport);
+            if(selected!=active){selected=active;store=new ProfileStore(this,active);transportPicker.setSelection(active.ordinal());getPreferences(MODE_PRIVATE).edit().putString("transport",active.id).apply();}
+        }
+        boolean on=value.equals("on"),waiting=value.equals("connecting")||value.equals("cleanup-required");
         state.setText(on?R.string.on:waiting?R.string.connecting:R.string.off);
         dot.setTextColor(on?Color.rgb(102,219,192):Color.GRAY);toggle.setText(on||waiting?R.string.disconnect:R.string.connect);
         toggle.setEnabled(!busy&&(on||waiting||store.exists()));transportPicker.setEnabled(!busy&&!on&&!waiting);importButton.setEnabled(!busy&&!on&&!waiting);
@@ -89,7 +94,7 @@ public final class MainActivity extends Activity {
     @Override public void onRequestPermissionsResult(int request,String[] permissions,int[] results){
         super.onRequestPermissionsResult(request,permissions,results);if(request==12)startVpn();
     }
-    private void startVpn(){ConnectionService.status="connecting";startForegroundService(new Intent(this,ConnectionService.class).setAction("connect").putExtra("transport",pendingTransport));render();}
+    private void startVpn(){ConnectionService.activeTransport=pendingTransport;ConnectionService.status="connecting";startForegroundService(new Intent(this,ConnectionService.class).setAction("connect").putExtra("transport",pendingTransport));render();}
     @Override protected void onActivityResult(int request,int result,Intent data){
         super.onActivityResult(request,result,data);
         if(request==11){if(result==RESULT_OK)continueStart();else detail.setText(R.string.permission_denied);return;}

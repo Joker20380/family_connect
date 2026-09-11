@@ -32,7 +32,7 @@
 1. Сетевые/нагрузочные испытания отложены пользователем; не возобновлять автоматически.
 2. Интеграция setup и ревью client patch выполнены; desktop0.2.9 уже опубликован.
 3. Client0.2.9 и подписанный TCP Setup0.1.0 опубликованы; первичный verifier/anchor получают доверенным каналом.
-4. По подтверждённому порядку: Windows transport implementation завершена и принята в scoped CI; перейти к Android AWG/TCP. Full-routing/device acceptance остаётся условием выпуска, отложенные тесты не возобновлять автоматически.
+4. По подтверждённому порядку: Windows transport implementation завершена и принята в scoped CI; Android WG/AWG реализован, ожидает CI-приёмки; далее TCP и Auto. Full-routing/device acceptance остаётся условием выпуска, отложенные тесты не возобновлять автоматически.
 5. Сразу после интеграции Windows/Android — этап5 Reticulum: доставка/проверка/применение/ACK/откат. Google Play и Android updater не являются условием старта. Второй VPS нужен для этапа6, не для реализации обмена Reticulum.
 
 TCP setup и signed component установлены на втором Ubuntu, независимая Debian VM прошла

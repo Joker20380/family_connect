@@ -19,6 +19,7 @@ public final class ConnectionService extends Service {
         if(started||stopping||closing)return START_NOT_STICKY;
         started=true;status="connecting";failed=false;
         String id=intent==null?"wg":intent.getStringExtra("transport");
+        try{activeTransport=Transport.parse(id==null?"wg":id).id;notifyState();}catch(IllegalArgumentException ignored){}
         worker.execute(()->{
             try{
                 Transport transport=Transport.parse(id==null?"wg":id);activeTransport=transport.id;
