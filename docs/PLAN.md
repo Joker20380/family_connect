@@ -69,12 +69,15 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 1. Linux bundle passed fresh Debian 12 real-systemd container acceptance: install,
    DNS/HTTPS, stop/reinstall and SIGKILL cleanup; missing procps dependency fixed.
    230 tests passed. [Evidence](releases/2026-09-11-tcp-systemd.ru.md).
-   Authenticated delivery CLI now implemented/tested (250 passed); next remote CI,
-   downloaded artifact validation, first signed TCP pilot release/catalog and real HTTPS
-   smoke. Trusted broker/bootstrap and UI integration remain before broad rollout;
-   preserve six-file app updater compatibility. [Runbook](tcp-delivery.ru.md). Independent VM/hardware clean-install remains
-   a rollout gate: Docker shares the host kernel. ARM64 and interactive polkit in a
-   clean system remain untested. Keep earlier unlocalized health observation visible.
+   Authenticated delivery CLI implemented (250 local tests); remote platform/TCP/AWG/phase0
+   CI passed. TCP 0.1.0 and production-signed catalog sequence 1 published; downloaded
+   artifact acceptance and real public HTTPS fetch/root install passed.
+   [Release evidence](releases/2026-09-11-tcp-release.ru.md).
+   Next implement trusted root-owned broker/bootstrap and explicit component installation
+   in the Linux UI; preserve six-file app updater compatibility. [Runbook](tcp-delivery.ru.md).
+   Independent VM/hardware clean-install remains a broad-rollout gate: Docker shares
+   the host kernel. ARM64 and clean-system interactive polkit remain untested.
+   Keep earlier unlocalized health observation visible.
 2. Integrate the tested transports into native Windows/Android. Complete platform CI,
    installation/UI checks and signed release before upgrading the stable client channel.
 3. Integrate provisioning/runtime/ACK and known-good recovery with real Reticulum

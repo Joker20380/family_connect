@@ -1,0 +1,53 @@
+{
+  "version": "0.1.0",
+  "release_url": "https://github.com/Joker20380/family_connect/releases/tag/tcp-v0.1.0",
+  "size": 22715184,
+  "sha256": "860c8e0fbf4808e5235e9649c3d6e53f00e7ad4d81a36146f70c7ea144e48494",
+  "manifest_valid": true,
+  "local_source_repack_identical": true,
+  "xray_sha256": "4f7a4436f86798bbb5c875014e352021a1673710a45e170ccc507c5f59341940",
+  "downloaded_bundle_acceptance": {
+    "systemd_stubbed": false,
+    "environment": "Debian 12 Docker, private network/cgroup, shared host kernel",
+    "real_systemd_resolved": true,
+    "fresh_corrected_install": true,
+    "start_dns_https": true,
+    "active_install_refused": true,
+    "normal_stop_cleanup": true,
+    "reinstall_profile_preserved": true,
+    "restart_dns_https": true,
+    "sigkill_execstoppost_cleanup": true,
+    "final_cleanup": true
+  },
+  "public_delivery": {
+    "public_https_catalog": true,
+    "public_https_archive": true,
+    "production_anchor_verified": true,
+    "unprivileged_fetch": true,
+    "version": "0.1.0",
+    "sequence": 1,
+    "sha256": "860c8e0fbf4808e5235e9649c3d6e53f00e7ad4d81a36146f70c7ea144e48494"
+  },
+  "signed_install_acceptance": {
+    "root_signature_install": true,
+    "post_signed_install_dns_https": true,
+    "profile_preserved": true,
+    "final_cleanup": true
+  },
+  "source": "7d1e738",
+  "catalog_commit": "53a000c",
+  "date": "2026-09-11",
+  "ci_runs": {
+    "clients": 34592235854,
+    "tcp_main": 34592235909,
+    "awg_main": 34592235967,
+    "phase0_main": 34592235862,
+    "tcp_tag": 34592556621,
+    "awg_tag": 34592556600,
+    "phase0_tag": 34592556585
+  },
+  "host_app_upgraded": false,
+  "server_upgraded": false,
+  "independent_vm_tested": false,
+  "test_container_removed": true
+}

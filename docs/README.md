@@ -56,3 +56,5 @@ Linux TCP component bundle: [installation](linux-tcp-install.ru.md), [validation
 Real Linux TCP systemd acceptance: [report](releases/2026-09-11-tcp-systemd.ru.md), [sanitized result](tcp-systemd-result.json).
 
 TCP authenticated delivery: [runbook](tcp-delivery.ru.md), [validation](releases/2026-09-11-tcp-delivery.ru.md).
+
+Published signed TCP 0.1.0: [release evidence](releases/2026-09-11-tcp-release.ru.md).
