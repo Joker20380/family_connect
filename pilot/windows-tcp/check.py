@@ -16,21 +16,34 @@ def stop(process):
         process.kill();process.wait(timeout=10)
 def main():
     assert sys.platform=='win32' and os.environ.get('GITHUB_ACTIONS')=='true','Isolated Windows CI runner required'
-    engine=Path(sys.argv[1]).resolve();output=Path(sys.argv[2]);exe=engine/'xray.exe'
+    engine=Path(sys.argv[1]).resolve();output=Path(sys.argv[2]);exe=engine/'xray.exe';owner=Path(sys.argv[3]).resolve()
     record=json.loads((engine/'build.json').read_text(encoding='utf-8-sig'))
     for name,digest in record['files'].items():assert hashlib.sha256((engine/name).read_bytes()).hexdigest()==digest
     assert not ps("Get-NetRoute -DestinationPrefix '"+PREFIX+"' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty InterfaceIndex"),'Test route already exists'
     before=snapshot();dns_before=ps('Get-DnsClientServerAddress | Where-Object { $_.ServerAddresses.Count -gt 0 } | Sort-Object InterfaceIndex,AddressFamily | Select-Object InterfaceIndex,AddressFamily,ServerAddresses | ConvertTo-Json -Compress')
-    token=secrets.token_hex(16).encode();result={'source':record['xray_revision'],'rounds':[],'default_routes_unchanged':False}
+    # Tampered files must be rejected before creating an engine or adapter.
+    import shutil
+    refused=[]
+    with tempfile.TemporaryDirectory(prefix='fc-engine-tamper-') as folder:
+        target=Path(folder)
+        for name in ('xray.exe','wintun.dll'):shutil.copyfile(engine/name,target/name)
+        for name in ('xray.exe','wintun.dll'):
+            with (target/name).open('r+b') as file:
+                original=file.read(1);file.seek(0);file.write(bytes([original[0]^1]))
+            failed=subprocess.run([str(owner),str(target)],input='{}\n',capture_output=True,text=True,timeout=20)
+            assert failed.returncode!=0 and 'checksum mismatch' in failed.stderr,'Tampered binary accepted'
+            refused.append(name)
+            with (target/name).open('r+b') as file:file.write(original)
+    token=secrets.token_hex(16).encode();result={'source':record['xray_revision'],'rounds':[],'tamper_refused':refused,'default_routes_unchanged':False}
     class Handler(http.server.BaseHTTPRequestHandler):
         def do_GET(self):
             self.send_response(200);self.send_header('Content-Length',str(len(token)));self.end_headers();self.wfile.write(token)
         def log_message(self,*args):pass
     fixture=http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler);thread=threading.Thread(target=fixture.serve_forever,daemon=True);thread.start()
     try:
-        for iteration in range(2):
+        for iteration in range(3):
             ident='fctcpci'+uuid.uuid4().hex[:8];assert adapter(ident) is None
-            server=None;client=None;index=None;row={'iteration':iteration+1,'https':False,'local_http':0,'forced_process_exit':False}
+            server=None;client=None;child_pid=None;index=None;row={'iteration':iteration+1,'https':False,'local_http':0,'stop_mode':('explicit','owner-crash','engine-crash')[iteration],'process_exit':False}
             with tempfile.TemporaryDirectory(prefix='fc-win-tcp-') as folder:
                 root=Path(folder);server_port=fixture.server_port+iteration+1
                 # Separate temporary VLESS listener; connection readiness is checked below.
@@ -41,10 +54,19 @@ def main():
                 client_config={'log':{'loglevel':'none'},'inbounds':[{'protocol':'tun','settings':{'name':ident,'MTU':1280}}],'outbounds':[{'protocol':'vless','settings':{'vnext':[{'address':'127.0.0.1','port':server_port,'users':[{'id':client_id,'encryption':'none'}]}]}}]}
                 try:
                     for name,config in [('server',server_config),('client',client_config)]:
-                        path=root/(name+'.json');path.write_text(json.dumps(config))
-                        p=subprocess.Popen([str(exe),'run','-config',str(path)],cwd=engine,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-                        if name=='server':server=p
-                        else:client=p
+                        if name=='server':
+                            path=root/(name+'.json');path.write_text(json.dumps(config))
+                            server=subprocess.Popen([str(exe),'run','-config',str(path)],cwd=engine,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+                        else:
+                            client=subprocess.Popen([str(owner),str(engine)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+                            client.stdin.write(json.dumps(config)+'\n');client.stdin.flush()
+                            from concurrent.futures import ThreadPoolExecutor
+                            pool=ThreadPoolExecutor(1)
+                            try:
+                                line=pool.submit(client.stdout.readline).result(timeout=20)
+                                assert line,'Owner failed: '+client.stderr.read()[-500:]
+                                child_pid=json.loads(line)['pid']
+                            finally:pool.shutdown(wait=False)
                     until=time.monotonic()+30
                     while time.monotonic()<until:
                         assert server.poll() is None and client.poll() is None,'Engine exited before adapter readiness'
@@ -67,12 +89,24 @@ def main():
                         c=http.client.HTTPConnection(TARGET,fixture.server_port,timeout=5,source_address=(LOCAL,0))
                         try:c.request('GET','/');reply=c.getresponse();assert reply.status==200 and reply.read()==token;row['local_http']+=1
                         finally:c.close()
-                    # Forced termination exercises cleanup of an actual adapter, not a mock.
-                    stop(client);row['forced_process_exit']=True
+                    # Exercise production process ownership with a real adapter and local traffic.
+                    if iteration==0:
+                        client.stdin.write('stop\n');client.stdin.flush();client.wait(timeout=15)
+                        assert client.returncode==0,'Explicit stop failed'
+                    elif iteration==1:stop(client)
+                    else:
+                        ps(f'Stop-Process -Id {child_pid} -Force')
+                        client.stdin.write('stop\n');client.stdin.flush();client.wait(timeout=15)
+                        assert client.returncode==0,'Stop after engine crash failed'
+                    assert not ps(f'Get-Process -Id {child_pid} -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Id'),'Orphan Xray process'
+                    row['process_exit']=True
                 finally:
-                    if index is not None:
-                        ps(f"Get-NetRoute -InterfaceIndex {index} -DestinationPrefix '{PREFIX}' -ErrorAction SilentlyContinue | Remove-NetRoute -Confirm:$false -ErrorAction SilentlyContinue; Get-NetIPAddress -InterfaceIndex {index} -IPAddress '{LOCAL}' -ErrorAction SilentlyContinue | Remove-NetIPAddress -Confirm:$false -ErrorAction SilentlyContinue")
-                    stop(client);stop(server)
+                    try:
+                        if index is not None:
+                            ps(f"Get-NetRoute -InterfaceIndex {index} -DestinationPrefix '{PREFIX}' -ErrorAction SilentlyContinue | Remove-NetRoute -Confirm:$false -ErrorAction SilentlyContinue; Get-NetIPAddress -InterfaceIndex {index} -IPAddress '{LOCAL}' -ErrorAction SilentlyContinue | Remove-NetIPAddress -Confirm:$false -ErrorAction SilentlyContinue")
+                    finally:
+                        try:stop(client)
+                        finally:stop(server)
                     for _ in range(20):
                         if adapter(ident) is None:break
                         time.sleep(.25)
@@ -83,7 +117,7 @@ def main():
         result['default_routes_unchanged']=snapshot()==before
         result['dns_unchanged']=dns_before==ps('Get-DnsClientServerAddress | Where-Object { $_.ServerAddresses.Count -gt 0 } | Sort-Object InterfaceIndex,AddressFamily | Select-Object InterfaceIndex,AddressFamily,ServerAddresses | ConvertTo-Json -Compress')
         result['test_route_absent']=not ps("Get-NetRoute -DestinationPrefix '"+PREFIX+"' -ErrorAction SilentlyContinue | Select-Object -ExpandProperty InterfaceIndex")
-        result['passed']=len(result['rounds'])==2 and all(x['local_http']==6 and x['forced_process_exit'] and x['adapter_removed'] for x in result['rounds']) and result['default_routes_unchanged'] and result['dns_unchanged'] and result['test_route_absent']
+        result['passed']=len(result['rounds'])==3 and all(x['local_http']==6 and x['process_exit'] and x['adapter_removed'] for x in result['rounds']) and result['default_routes_unchanged'] and result['dns_unchanged'] and result['test_route_absent']
         output.write_text(json.dumps(result,indent=2));print(json.dumps(result),flush=True)
     assert result['passed']
 if __name__=='__main__':

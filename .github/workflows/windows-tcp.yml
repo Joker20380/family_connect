@@ -1,9 +1,9 @@
 name: Windows TCP native pilot
 on:
   push:
-    paths: ['pilot/windows-tcp/**', '.github/workflows/windows-tcp.yml']
+    paths: ['pilot/windows-tcp/**', 'clients/windows/TcpEngine.cs', '.github/workflows/windows-tcp.yml']
   pull_request:
-    paths: ['pilot/windows-tcp/**', '.github/workflows/windows-tcp.yml']
+    paths: ['pilot/windows-tcp/**', 'clients/windows/TcpEngine.cs', '.github/workflows/windows-tcp.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -20,16 +20,26 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build lifecycle owner harness
+        shell: pwsh
+        run: |
+          dotnet publish pilot/windows-tcp/owner/Host.csproj -c Release -r win-x64 --self-contained false -o "$env:RUNNER_TEMP/fc-windows-tcp-owner" 2>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP/fc-owner-build.txt"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Build pinned Xray and verify signed Wintun
         shell: pwsh
         run: ./pilot/windows-tcp/build.ps1 -Output "$env:RUNNER_TEMP/fc-windows-tcp-engine"
       - name: Native TUN and local VLESS data, forced stop and cleanup
         shell: pwsh
         run: |
-          python pilot/windows-tcp/check.py "$env:RUNNER_TEMP/fc-windows-tcp-engine" "$env:RUNNER_TEMP/fc-windows-tcp-engine/acceptance.json" 2>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP/fc-windows-tcp-engine/acceptance.log"
+          python pilot/windows-tcp/check.py "$env:RUNNER_TEMP/fc-windows-tcp-engine" "$env:RUNNER_TEMP/fc-windows-tcp-engine/acceptance.json" "$env:RUNNER_TEMP/fc-windows-tcp-owner/Host.exe" 2>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP/fc-windows-tcp-engine/acceptance.log"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: FamilyConnect-Windows-TCP-engine-preview
-          path: ${{ runner.temp }}/fc-windows-tcp-engine/
+          path: |
+            ${{ runner.temp }}/fc-windows-tcp-engine/
+            ${{ runner.temp }}/fc-owner-build.txt

@@ -1,0 +1,105 @@
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text;
+using Microsoft.Win32.SafeHandles;
+namespace FamilyConnect;
+
+// Internal primitive for the broker's forthcoming network session. No IPC action accepts a path or raw config.
+internal sealed class TcpEngine : IDisposable
+{
+    const string XraySha="74475d8c4f68dd07bef754e56778eb2a9061e4dfcc954fa008b912a989bd848a";
+    const string WintunSha="e5da8447dc2c320edc0fc52fa01885c103de8c118481f683643cacc3220dafce";
+    readonly Process process;
+    readonly JobHandle job;
+    readonly FileStream[] binaries;
+    bool disposed;
+    TcpEngine(Process process,JobHandle job,FileStream[] binaries){this.process=process;this.job=job;this.binaries=binaries;}
+    public int Id=>process.Id;
+    public bool Running=>!disposed&&!process.HasExited;
+    static FileStream Verified(string folder,string name,string hash)
+    {
+        var path=Path.Combine(folder,name);
+        if((File.GetAttributes(path)&FileAttributes.ReparsePoint)!=0)throw new IOException("Unsafe engine file");
+        // Keep a non-write/delete-shared handle open until the child has exited.
+        var stream=new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.Read);
+        try {
+            if(Convert.ToHexString(SHA256.HashData(stream)).ToLowerInvariant()!=hash)throw new IOException("TCP engine checksum mismatch");
+            return stream;
+        }catch{stream.Dispose();throw;}
+    }
+    public static TcpEngine Start(string trustedDirectory,string config)
+    {
+        if(!OperatingSystem.IsWindows())throw new PlatformNotSupportedException();
+        if(Encoding.UTF8.GetByteCount(config)>16384)throw new FormatException("TCP config size");
+        string folder=Path.GetFullPath(trustedDirectory);
+        if((File.GetAttributes(folder)&FileAttributes.ReparsePoint)!=0)throw new IOException("Unsafe engine directory");
+        var files=new List<FileStream>();Process? child=null;JobHandle? owner=null;
+        try {
+            files.Add(Verified(folder,"xray.exe",XraySha));files.Add(Verified(folder,"wintun.dll",WintunSha));
+            owner=CreateJobObject(IntPtr.Zero,null);
+            if(owner.IsInvalid)throw new Win32Exception(Marshal.GetLastWin32Error());
+            var limits=new ExtendedLimits{Basic=new BasicLimits{LimitFlags=0x2000}};
+            if(!SetInformationJobObject(owner,9,ref limits,(uint)Marshal.SizeOf<ExtendedLimits>()))throw new Win32Exception(Marshal.GetLastWin32Error());
+            var start=new ProcessStartInfo(Path.Combine(folder,"xray.exe")){
+                WorkingDirectory=folder,UseShellExecute=false,CreateNoWindow=true,
+                RedirectStandardInput=true,RedirectStandardOutput=true,RedirectStandardError=true,
+                StandardInputEncoding=new UTF8Encoding(false)
+            };
+            // Do not inherit user-configurable Xray paths, proxy or DLL search environment.
+            start.Environment.Clear();
+            var windows=Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+            start.Environment["SystemRoot"]=windows;start.Environment["WINDIR"]=windows;
+            start.Environment["PATH"]=Environment.GetFolderPath(Environment.SpecialFolder.System);
+            start.Environment["XRAY_LOCATION_ASSET"]=folder;start.Environment["XRAY_LOCATION_CONFIG"]=folder;
+            foreach(var arg in new[]{"run","-format","json","-config","stdin:"})start.ArgumentList.Add(arg);
+            child=Process.Start(start)??throw new IOException("TCP engine start failed");
+            // Xray's pinned loader waits for stdin EOF. Before assignment it cannot parse a config/create TUN.
+            if(!AssignProcessToJobObject(owner,child.Handle))throw new Win32Exception(Marshal.GetLastWin32Error());
+            // Drain without retaining/printing engine diagnostics, which can include a credential on errors.
+            _=Drain(child.StandardOutput.BaseStream);_=Drain(child.StandardError.BaseStream);
+            child.StandardInput.Write(config);child.StandardInput.Close();
+            if(child.WaitForExit(150))throw new IOException("TCP engine rejected configuration");
+            return new TcpEngine(child,owner,files.ToArray());
+        }catch{
+            owner?.Dispose();
+            if(child is not null){try{if(!child.HasExited){child.Kill();child.WaitForExit(10000);}}finally{child.Dispose();}}
+            foreach(var file in files)file.Dispose();throw;
+        }
+    }
+    static async Task Drain(Stream stream){try{await stream.CopyToAsync(Stream.Null);}catch(IOException){}catch(ObjectDisposedException){}}
+    public void Dispose()
+    {
+        if(disposed)return;disposed=true;
+        try {
+            // Closing the sole non-inheritable handle terminates every process in the job.
+            job.Dispose();
+            if(!process.WaitForExit(10000))throw new TimeoutException("TCP process did not stop");
+        }finally{process.Dispose();foreach(var file in binaries)file.Dispose();}
+    }
+    sealed class JobHandle:SafeHandleZeroOrMinusOneIsInvalid
+    {
+        public JobHandle():base(true){}
+        protected override bool ReleaseHandle()=>CloseHandle(handle);
+    }
+    [StructLayout(LayoutKind.Sequential)]struct BasicLimits
+    {
+        public long PerProcessTime,PerJobTime;
+        public uint LimitFlags;
+        public UIntPtr MinWorkingSet,MaxWorkingSet;
+        public uint ActiveProcessLimit;
+        public UIntPtr Affinity;
+        public uint Priority,Scheduling;
+    }
+    [StructLayout(LayoutKind.Sequential)]struct IoCounters{public ulong ReadOps,WriteOps,OtherOps,ReadBytes,WriteBytes,OtherBytes;}
+    [StructLayout(LayoutKind.Sequential)]struct ExtendedLimits
+    {
+        public BasicLimits Basic;public IoCounters Io;
+        public UIntPtr ProcessMemoryLimit,JobMemoryLimit,PeakProcessMemory,PeakJobMemory;
+    }
+    [DllImport("kernel32.dll",CharSet=CharSet.Unicode,SetLastError=true)]static extern JobHandle CreateJobObject(IntPtr security,string? name);
+    [DllImport("kernel32.dll",SetLastError=true)]static extern bool SetInformationJobObject(JobHandle job,int informationClass,ref ExtendedLimits info,uint length);
+    [DllImport("kernel32.dll",SetLastError=true)]static extern bool AssignProcessToJobObject(JobHandle job,IntPtr process);
+    [DllImport("kernel32.dll")]static extern bool CloseHandle(IntPtr handle);
+}
