@@ -6,11 +6,19 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+- Corrected TCP helper installed and short laptop smoke passed: 3 bound HTTPS health
+  checks, resolved query, gateway bypass/public TUN route, 3 local routes preserved.
+  Cleanup restored complete IPv4/IPv6 policy-rule baseline; TUN/marker absent.
+  Backup: /var/backups/family-connect/tcp-routing-1789119289/helper.
+  New helper remains installed; test tunnel stopped. Main launcher/stable releases unchanged.
+  Next: bounded established AWG → TCP recovery acceptance with watchdog and exact cleanup.
+  [Installed-helper report](releases/2026-09-11-tcp-host-smoke.ru.md).
+
 - New Wi-Fi baseline and TCP retest completed: gateway max 53.9 ms (was 496),
   Wi-Fi retries +7 (was +433); all baseline targets/HTTPS 30/30. Matched TCP test
   passed 120/120: direct/TUN/SOCKS HTTPS and direct/TUN DNS each 24/24, cleanup passed.
   Code/timeouts unchanged. Bounded isolated acceptance passed; not a long-run guarantee.
-  Next: backup/install corrected helper and short host smoke, then AWG → TCP recovery.
+  Corrected helper installation/short smoke now passed; AWG → TCP recovery remains.
   User has completed network change; no further switch is pending.
   [Network-change comparison](releases/2026-09-11-network-change.ru.md).
 

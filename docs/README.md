@@ -40,3 +40,5 @@ Development stages and acceptance criteria: [roadmap](ROADMAP.ru.md).
 Local Wi-Fi/gateway/VPS comparison: [report](releases/2026-09-11-local-link.ru.md).
 
 Retest after Wi-Fi change (120/120 isolated probes): [report](releases/2026-09-11-network-change.ru.md).
+
+Corrected TCP helper installed; short laptop smoke passed: [report](releases/2026-09-11-tcp-host-smoke.ru.md).

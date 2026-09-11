@@ -1,0 +1,12 @@
+{
+  "backup": "/var/backups/family-connect/tcp-routing-1789119289",
+  "helper_sha256": "a4eafb70cedbfdd4ba77fd2c636ba4fd40c9f43c5a9ba62c5c1037bd1ff8a232",
+  "installed": true,
+  "smoke_passed": true,
+  "https_checks": 3,
+  "dns_query_passed": true,
+  "local_routes_preserved": 3,
+  "gateway_bypass": true,
+  "public_route_tun": true,
+  "cleanup_passed": true
+}

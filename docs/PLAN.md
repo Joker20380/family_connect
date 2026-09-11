@@ -66,13 +66,14 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
 ## Next, in order
 
-1. Back up the installed TCP helper, install the corrected experimental helper and run
-   a short host smoke: routing, LAN/Docker preservation, DNS/HTTPS and exact cleanup.
-   Then verify established AWG → TCP recovery on the new network. Isolated retest passed
-   120/120 without code/timeout changes after the user changed Wi-Fi; baseline improved.
-   [Accepted bounded comparison](releases/2026-09-11-network-change.ru.md).
-   Network switch is complete. Avoid immediately returning to long uncontrolled host tests.
-   Main WG/AWG unchanged; corrected TCP helper remains uninstalled until this next step.
+1. Verify established AWG → TCP recovery on the new network: establish AWG, apply a
+   narrowly scoped temporary UDP endpoint block, exercise runtime health/recovery and
+   check TCP egress/DNS plus exact cleanup. Use an independent bounded watchdog.
+   Corrected helper is installed; short host smoke passed including 3 HTTPS checks,
+   resolved query, 3 local routes and complete IPv4/IPv6 rule restoration.
+   [Installation and rollback](releases/2026-09-11-tcp-host-smoke.ru.md).
+   Main WG/AWG launcher and stable release remain unchanged. Do not claim recovery
+   complete from isolated 120/120 tests or the short host smoke alone.
 2. Integrate the tested transports into native Windows/Android. Complete platform CI,
    installation/UI checks and signed release before upgrading the stable client channel.
 3. Integrate provisioning/runtime/ACK and known-good recovery with real Reticulum
