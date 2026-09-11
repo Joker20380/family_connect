@@ -8,6 +8,8 @@ import (
  "io"
  "os"
  "sync"
+ "strings"
+ "time"
  "github.com/amnezia-vpn/amneziawg-go/conn"
  "github.com/amnezia-vpn/amneziawg-go/device"
  "github.com/amnezia-vpn/amneziawg-go/tun"
@@ -43,6 +45,13 @@ func run()error{
  var cfg struct{Config string `json:"config"`};d:=json.NewDecoder(bytes.NewReader(raw));d.DisallowUnknownFields();if e=d.Decode(&cfg);e!=nil{return e}
  m:=&memory{packets:make(chan []byte,64),events:make(chan tun.Event,1),done:make(chan struct{})};m.events<-tun.EventUp
  dev:=device.NewDevice(m,conn.NewDefaultBind(),device.NewLogger(device.LogLevelSilent,""));defer dev.Close()
- if e=dev.IpcSet(cfg.Config);e!=nil{return e};if e=dev.Up();e!=nil{return e};os.Stdout.WriteString("ready\n");<-dev.Wait();return nil
+ if e=dev.IpcSet(cfg.Config);e!=nil{return e};if e=dev.Up();e!=nil{return e};os.Stdout.WriteString("ready\n")
+ ticker:=time.NewTicker(time.Second);defer ticker.Stop()
+ for {select {case <-dev.Wait():return nil;case <-ticker.C:
+  // CI-only aggregate counters, never key/config material.
+  raw,e:=dev.IpcGet();if e!=nil{continue};stats:=map[string]string{}
+  for _,line:=range strings.Split(raw,"\n"){k,v,ok:=strings.Cut(line,"=");if ok&&(k=="last_handshake_time_sec"||k=="rx_bytes"||k=="tx_bytes"){stats[k]=v}}
+  json.NewEncoder(os.Stdout).Encode(stats)
+ }}
 }
 func main(){if run()!=nil{os.Stderr.WriteString("AWG fixture failed\n");os.Exit(1)}}

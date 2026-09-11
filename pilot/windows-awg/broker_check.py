@@ -90,7 +90,10 @@ def traffic(row):
       if reply!=payload:continue
       row[key]+=1;break
      except socket.timeout:
-      if time.monotonic()>=deadline:raise
+      if time.monotonic()>=deadline:
+       result['failed_status']=call('status')
+       result['failed_network']=ps("Get-NetIPAddress | Where-Object {$_.InterfaceAlias -like 'fcawg*'} | Select-Object InterfaceAlias,IPAddress,AddressState | ConvertTo-Json -Compress")
+       raise
 try:
  assert not root.exists(),'Existing store';assert not ps('Get-Service FamilyConnectBroker -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name'),'Existing service'
  before=baseline();dns_before=dns_snapshot();nrpt_before=nrpt_snapshot()
@@ -119,6 +122,11 @@ try:
  config='private_key='+gateway.private_bytes_raw().hex()+'\nlisten_port='+str(port)+'\n'+''.join(k.lower()+'='+v+'\n' for k,v in params.items())+'public_key='+device_public+'\nallowed_ip=198.18.0.2/32\nallowed_ip=fd79:fc::2/128\n\n'
  peer=subprocess.Popen([str(engine/'peer-fixture.exe')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True);peer.stdin.write(json.dumps({'config':config}));peer.stdin.close()
  q=queue.Queue();threading.Thread(target=lambda:q.put(peer.stdout.readline().strip()),daemon=True).start();assert q.get(timeout=30)=='ready'
+ def peer_stats():
+  for line in peer.stdout:
+   try:result['peer_stats']=json.loads(line)
+   except ValueError:pass
+ threading.Thread(target=peer_stats,daemon=True).start()
  profile=dict(gatewayPublicKey=base64.b64encode(gateway.public_key().public_bytes_raw()).decode(),server='192.0.2.10',port=port,number=4,parameters=params)
  def activation(sequence=1,change=None):return json.dumps(issue(code,json.dumps(profile|(change or {})),sequence,signing,int(time.time())))
  envelope=activation();assert call('activate-awg',envelope)['ok'];assert call('status')['awgReady']
