@@ -41,7 +41,9 @@ TCP workflow получил отдельный setup_release job для tcp-setu
   Bootstrap payload не менялся, VM/устройства повторно не устанавливались.
 - После всех CI и скачивания подпись создана существующим локальным ключом, проверена
   production anchor. Private key не передавался в CI/сеть и не выводился.
-  Публикуется updates/tcp-setup-0.1.0.json; public retrieval verification выполняется после push.
+  Подпись updates/tcp-setup-0.1.0.json опубликована commit e6752df.
+  Канонический public URL скачан; verify с anchor уже установленного Linux-клиента
+  прошёл для архива0.1.0. Установленный клиент и его состояние не менялись.
 
 ## Состояние и откат
 
