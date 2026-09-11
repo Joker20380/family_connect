@@ -32,3 +32,5 @@ TCP diagnosis and routing defect: [report](releases/2026-09-11-tcp-diagnosis.ru.
 TCP routing correction (isolated tests passed; not installed): [report](releases/2026-09-11-tcp-routing.ru.md).
 
 Matched TCP/direct/SOCKS timing and remaining errors: [report](releases/2026-09-11-tcp-matched.ru.md).
+
+Paired client/server TCP-header diagnosis: [report](releases/2026-09-11-tcp-packets.ru.md).

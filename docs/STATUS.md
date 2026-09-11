@@ -6,13 +6,22 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+- Paired TCP-header diagnosis completed (experiment `2674d20`): 72/72 handshakes matched across client/server.
+  In the failing round client SYN→SYN-ACK took 0.788–1.315 s, while server response
+  took 9–73 microseconds (max across all flows 0.846 ms); two SYN retries were observed
+  at both ends. Delay is outside server SYN processing; loss location is not proven.
+  Full series: direct/TUN HTTPS 24/24, SOCKS 23/24, both DNS 24/24, server HTTPS 30/30.
+  Post-test host routes use Wi-Fi/main. Next: compare local gateway/VPS latency and
+  wireless counters before any host rollout. Capture cleanup passed; no deployment.
+  [Paired capture report](releases/2026-09-11-tcp-packets.ru.md).
+
 - Matched TCP diagnostics completed (experiment `d776b41`): two isolated 24-round series with identical HTTPS
   endpoint/timeouts. TUN 48/48, SOCKS 47/48, direct 47/48; tunnel UDP DNS 46/48,
   direct UDP DNS 45/48. SOCKS failure was TLS setup timeout; direct failure occurred
   after TLS while waiting for HTTP data. Gateway TCP snapshots show SYN-SENT/retrans,
   without per-request socket attribution. Root cause/censorship not established.
   Both cleanup checks passed. No host install, server mutation or release.
-  Next: synchronized client/server TCP-header evidence and server HTTPS control.
+  Paired TCP-header comparison is now complete; see latest report above.
   [Matched diagnosis](releases/2026-09-11-tcp-matched.ru.md).
 
 - TCP routing correction implemented in experimental commit `6d7f569`: preserve more-specific

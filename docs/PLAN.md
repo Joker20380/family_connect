@@ -64,16 +64,16 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
 ## Next, in order
 
-1. Collect synchronized, bounded TCP-header evidence at the isolated client and allowed
-   gateway 185.251.89.19; correlate SYN/SYN-ACK/ACK and data timing per flow, with direct
-   server HTTPS control. Matched client trials completed: TUN 48/48, SOCKS/direct each
-   47/48; direct HTTPS and DNS also failed. Gateway snapshots show SYN-SENT/retrans,
-   but cannot identify the loss location or establish censorship.
-   [Matched results](releases/2026-09-11-tcp-matched.ru.md).
-   Keep raw restricted diagnostics/private profiles out of Git; preserve sanitized evidence.
-   No host rollout until remaining failures are understood; then backup/install, short host
-   test and established AWG → TCP recovery. Main WG/AWG remains unchanged.
-   Source branch `pilot/tcp-reality-2026-09-11`; routing correction remains uninstalled.
+1. Localize the client-to-gateway delay using bounded simultaneous local Wi-Fi gateway
+   and VPS latency checks plus wireless/link retry counters, without recording SSID/BSSID.
+   Paired capture matched 72/72 handshakes: slow client RTT 0.788–1.315 s vs server
+   SYN response 9–73 microseconds in the failing round. This excludes slow server SYN
+   handling for those flows, not every server/REALITY issue or a specific network cause.
+   [Paired capture and limits](releases/2026-09-11-tcp-packets.ru.md).
+   ICMP alone cannot establish TCP loss; compare with actual HTTPS behavior.
+   Do not change timeouts or deploy the helper blindly. After localization: backup/install,
+   short host test, established AWG → TCP recovery. Main WG/AWG remains unchanged;
+   source branch `pilot/tcp-reality-2026-09-11`, routing correction remains uninstalled.
 2. Integrate the tested transports into native Windows/Android. Complete platform CI,
    installation/UI checks and signed release before upgrading the stable client channel.
 3. Integrate provisioning/runtime/ACK and known-good recovery with real Reticulum

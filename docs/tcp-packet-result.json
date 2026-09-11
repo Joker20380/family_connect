@@ -1,0 +1,788 @@
+{
+  "capture_counts": {
+    "client": 2486,
+    "server": 2596,
+    "client_outgoing": 1268,
+    "server_outgoing": 1265
+  },
+  "flows": [
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.159574,
+      "server_response_seconds": 6.1e-05,
+      "server_ack_seconds": 0.199405,
+      "start_relative": 0.075
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.144437,
+      "server_response_seconds": 8.9e-05,
+      "server_ack_seconds": 0.199387,
+      "start_relative": 0.08
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.15125,
+      "server_response_seconds": 6.3e-05,
+      "server_ack_seconds": 0.199407,
+      "start_relative": 0.083
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.10293,
+      "server_response_seconds": 7.7e-05,
+      "server_ack_seconds": 0.125428,
+      "start_relative": 3.252
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.095894,
+      "server_response_seconds": 8e-06,
+      "server_ack_seconds": 0.125712,
+      "start_relative": 3.259
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.095105,
+      "server_response_seconds": 3.3e-05,
+      "server_ack_seconds": 0.125148,
+      "start_relative": 3.26
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.041054,
+      "server_response_seconds": 0.000846,
+      "server_ack_seconds": 0.039928,
+      "start_relative": 6.261
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.042144,
+      "server_response_seconds": 3.8e-05,
+      "server_ack_seconds": 0.040427,
+      "start_relative": 6.266
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.04891,
+      "server_response_seconds": 1.2e-05,
+      "server_ack_seconds": 0.047473,
+      "start_relative": 6.266
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.041271,
+      "server_response_seconds": 6.8e-05,
+      "server_ack_seconds": 0.040315,
+      "start_relative": 9.255
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.038699,
+      "server_response_seconds": 2.8e-05,
+      "server_ack_seconds": 0.03945,
+      "start_relative": 9.261
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.043341,
+      "server_response_seconds": 1.3e-05,
+      "server_ack_seconds": 0.042686,
+      "start_relative": 9.262
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.043814,
+      "server_response_seconds": 3.1e-05,
+      "server_ack_seconds": 0.044752,
+      "start_relative": 11.777
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.04593,
+      "server_response_seconds": 5.3e-05,
+      "server_ack_seconds": 0.045018,
+      "start_relative": 11.783
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.045663,
+      "server_response_seconds": 3.4e-05,
+      "server_ack_seconds": 0.044227,
+      "start_relative": 11.783
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.043417,
+      "server_response_seconds": 4.4e-05,
+      "server_ack_seconds": 0.046944,
+      "start_relative": 14.234
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.049868,
+      "server_response_seconds": 7.7e-05,
+      "server_ack_seconds": 0.04776,
+      "start_relative": 14.242
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.049882,
+      "server_response_seconds": 1.2e-05,
+      "server_ack_seconds": 0.047584,
+      "start_relative": 14.243
+    },
+    {
+      "client_syns": 2,
+      "server_syns": 2,
+      "server_synacks": 2,
+      "client_synacks": 2,
+      "client_handshake_seconds": 1.314923,
+      "server_response_seconds": 1e-05,
+      "server_ack_seconds": 1.261971,
+      "start_relative": 16.795
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.787732,
+      "server_response_seconds": 9e-06,
+      "server_ack_seconds": 0.696461,
+      "start_relative": 16.802
+    },
+    {
+      "client_syns": 2,
+      "server_syns": 2,
+      "server_synacks": 2,
+      "client_synacks": 2,
+      "client_handshake_seconds": 1.308216,
+      "server_response_seconds": 7.3e-05,
+      "server_ack_seconds": 1.260295,
+      "start_relative": 16.802
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.048868,
+      "server_response_seconds": 3e-05,
+      "server_ack_seconds": 0.052196,
+      "start_relative": 21.817
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.058037,
+      "server_response_seconds": 1.6e-05,
+      "server_ack_seconds": 0.044817,
+      "start_relative": 21.828
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.057672,
+      "server_response_seconds": 7.9e-05,
+      "server_ack_seconds": 0.044781,
+      "start_relative": 21.828
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.038034,
+      "server_response_seconds": 3.1e-05,
+      "server_ack_seconds": 0.100381,
+      "start_relative": 24.356
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.039762,
+      "server_response_seconds": 4.6e-05,
+      "server_ack_seconds": 0.082093,
+      "start_relative": 24.372
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.043047,
+      "server_response_seconds": 2.9e-05,
+      "server_ack_seconds": 0.07745,
+      "start_relative": 24.376
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.051109,
+      "server_response_seconds": 7.2e-05,
+      "server_ack_seconds": 0.060863,
+      "start_relative": 26.877
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.06959,
+      "server_response_seconds": 1e-05,
+      "server_ack_seconds": 0.047826,
+      "start_relative": 26.882
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.068255,
+      "server_response_seconds": 6e-05,
+      "server_ack_seconds": 0.048717,
+      "start_relative": 26.882
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.03778,
+      "server_response_seconds": 4.3e-05,
+      "server_ack_seconds": 0.039365,
+      "start_relative": 29.405
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.059519,
+      "server_response_seconds": 3.4e-05,
+      "server_ack_seconds": 0.043917,
+      "start_relative": 29.417
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.059569,
+      "server_response_seconds": 1.3e-05,
+      "server_ack_seconds": 0.043904,
+      "start_relative": 29.417
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.050078,
+      "server_response_seconds": 2.3e-05,
+      "server_ack_seconds": 0.047976,
+      "start_relative": 31.843
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.044938,
+      "server_response_seconds": 2.5e-05,
+      "server_ack_seconds": 0.042572,
+      "start_relative": 31.848
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.043947,
+      "server_response_seconds": 2.4e-05,
+      "server_ack_seconds": 0.042992,
+      "start_relative": 31.849
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.044457,
+      "server_response_seconds": 3.9e-05,
+      "server_ack_seconds": 0.043664,
+      "start_relative": 34.231
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.096512,
+      "server_response_seconds": 3.6e-05,
+      "server_ack_seconds": 0.05797,
+      "start_relative": 34.237
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.096519,
+      "server_response_seconds": 1.8e-05,
+      "server_ack_seconds": 0.058,
+      "start_relative": 34.237
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.045411,
+      "server_response_seconds": 3.9e-05,
+      "server_ack_seconds": 0.040594,
+      "start_relative": 36.735
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.041859,
+      "server_response_seconds": 0.000342,
+      "server_ack_seconds": 0.039714,
+      "start_relative": 36.741
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.04223,
+      "server_response_seconds": 0.000291,
+      "server_ack_seconds": 0.040334,
+      "start_relative": 36.741
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.051218,
+      "server_response_seconds": 2.6e-05,
+      "server_ack_seconds": 0.059343,
+      "start_relative": 39.316
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.044985,
+      "server_response_seconds": 4.2e-05,
+      "server_ack_seconds": 0.053173,
+      "start_relative": 39.322
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.061339,
+      "server_response_seconds": 1e-05,
+      "server_ack_seconds": 0.063641,
+      "start_relative": 39.322
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.140786,
+      "server_response_seconds": 2.1e-05,
+      "server_ack_seconds": 0.131079,
+      "start_relative": 42.226
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.253918,
+      "server_response_seconds": 5.5e-05,
+      "server_ack_seconds": 0.257888,
+      "start_relative": 42.233
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.134379,
+      "server_response_seconds": 2e-05,
+      "server_ack_seconds": 0.130463,
+      "start_relative": 42.233
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.052659,
+      "server_response_seconds": 8.5e-05,
+      "server_ack_seconds": 0.053666,
+      "start_relative": 46.227
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.042278,
+      "server_response_seconds": 0.000157,
+      "server_ack_seconds": 0.112836,
+      "start_relative": 46.245
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.041214,
+      "server_response_seconds": 0.000126,
+      "server_ack_seconds": 0.042609,
+      "start_relative": 46.246
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.038133,
+      "server_response_seconds": 3.5e-05,
+      "server_ack_seconds": 0.042291,
+      "start_relative": 48.798
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.044119,
+      "server_response_seconds": 3.4e-05,
+      "server_ack_seconds": 0.048398,
+      "start_relative": 48.819
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.041391,
+      "server_response_seconds": 4e-05,
+      "server_ack_seconds": 0.04176,
+      "start_relative": 48.821
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.0491,
+      "server_response_seconds": 2.9e-05,
+      "server_ack_seconds": 0.065889,
+      "start_relative": 51.277
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.052361,
+      "server_response_seconds": 2.7e-05,
+      "server_ack_seconds": 0.060812,
+      "start_relative": 51.282
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.050677,
+      "server_response_seconds": 1.4e-05,
+      "server_ack_seconds": 0.059743,
+      "start_relative": 51.283
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.056826,
+      "server_response_seconds": 3.6e-05,
+      "server_ack_seconds": 0.044179,
+      "start_relative": 53.772
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.045318,
+      "server_response_seconds": 7e-05,
+      "server_ack_seconds": 0.04122,
+      "start_relative": 53.782
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.048053,
+      "server_response_seconds": 2.5e-05,
+      "server_ack_seconds": 0.046237,
+      "start_relative": 53.783
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.045965,
+      "server_response_seconds": 3.1e-05,
+      "server_ack_seconds": 0.046806,
+      "start_relative": 56.276
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.040946,
+      "server_response_seconds": 3.5e-05,
+      "server_ack_seconds": 0.052873,
+      "start_relative": 56.294
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.051486,
+      "server_response_seconds": 2.2e-05,
+      "server_ack_seconds": 0.051311,
+      "start_relative": 56.296
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.092596,
+      "server_response_seconds": 2.6e-05,
+      "server_ack_seconds": 0.059687,
+      "start_relative": 58.757
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.086934,
+      "server_response_seconds": 8e-06,
+      "server_ack_seconds": 0.059736,
+      "start_relative": 58.763
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.086832,
+      "server_response_seconds": 3.3e-05,
+      "server_ack_seconds": 0.059686,
+      "start_relative": 58.763
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.038557,
+      "server_response_seconds": 3.6e-05,
+      "server_ack_seconds": 0.037815,
+      "start_relative": 61.308
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.042952,
+      "server_response_seconds": 0.000123,
+      "server_ack_seconds": 0.040686,
+      "start_relative": 61.326
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.048396,
+      "server_response_seconds": 4.4e-05,
+      "server_ack_seconds": 0.044404,
+      "start_relative": 61.328
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.050154,
+      "server_response_seconds": 2.9e-05,
+      "server_ack_seconds": 0.047424,
+      "start_relative": 63.863
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.047879,
+      "server_response_seconds": 3.6e-05,
+      "server_ack_seconds": 0.049085,
+      "start_relative": 63.88
+    },
+    {
+      "client_syns": 1,
+      "server_syns": 1,
+      "server_synacks": 1,
+      "client_synacks": 1,
+      "client_handshake_seconds": 0.044658,
+      "server_response_seconds": 2.1e-05,
+      "server_ack_seconds": 0.045886,
+      "start_relative": 63.883
+    }
+  ],
+  "https": {
+    "direct": {
+      "passed": 24,
+      "total": 24
+    },
+    "tun": {
+      "passed": 24,
+      "total": 24
+    },
+    "socks": {
+      "passed": 23,
+      "total": 24
+    },
+    "dns": {
+      "passed": 24,
+      "total": 24
+    },
+    "dns_direct": {
+      "passed": 24,
+      "total": 24
+    }
+  },
+  "failures": [
+    {
+      "round": 7,
+      "kind": "socks",
+      "t": 16.793,
+      "ok": false,
+      "code": 28,
+      "http": "000",
+      "timing": [
+        "0.000000",
+        "0.000000",
+        "0.000000",
+        "3.000512"
+      ],
+      "error": "curl: (28) SSL connection timeout",
+      "seconds": 3.016
+    }
+  ],
+  "server_https": {
+    "passed": 30,
+    "total": 30
+  },
+  "cleanup": true,
+  "handshake_summary": {
+    "flows": 72,
+    "median_client_seconds": 0.049005,
+    "max_server_response_seconds": 0.000846,
+    "repeated_client_syn_flows": 2,
+    "missing_server_syn_flows": 0,
+    "missing_client_synack_flows": 0
+  },
+  "post_test_route": {
+    "vpn_server": "wireless/main",
+    "control_target": "wireless/main",
+    "scope": "Read after tests; not proof of route throughout capture"
+  }
+}
