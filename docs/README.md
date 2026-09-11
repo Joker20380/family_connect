@@ -107,3 +107,5 @@ Windows AWG native worker: [report](releases/2026-09-11-windows-awg-engine.ru.md
 - [Windows AWG: активация и эксплуатация](windows-awg.ru.md).
 
 Windows Auto: [implementation and acceptance](releases/2026-09-12-windows-auto.ru.md).
+
+Android WG/AWG: [implementation and acceptance](releases/2026-09-12-android-awg.ru.md).

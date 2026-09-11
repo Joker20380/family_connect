@@ -12,19 +12,21 @@ import javax.crypto.*;
 import javax.crypto.spec.GCMParameterSpec;
 
 final class ProfileStore {
+    private final String alias;
     private static final String ALIAS="family-connect-profile-v1";
     private final AtomicFile file;
-    ProfileStore(Context context) {file=new AtomicFile(new File(context.getNoBackupFilesDir(),"profile.enc"));}
+    ProfileStore(Context context){this(context,Transport.WG);}
+    ProfileStore(Context context,Transport transport){alias=ALIAS+(transport==Transport.WG?"":"-awg");file=new AtomicFile(new File(context.getNoBackupFilesDir(),transport==Transport.WG?"profile.enc":"awg-profile.enc"));}
     boolean exists() {return file.getBaseFile().exists();}
     private javax.crypto.SecretKey key() throws Exception {
         KeyStore store=KeyStore.getInstance("AndroidKeyStore");store.load(null);
-        if(!store.containsAlias(ALIAS)) {
+        if(!store.containsAlias(alias)) {
             KeyGenerator generator=KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES,"AndroidKeyStore");
-            generator.init(new KeyGenParameterSpec.Builder(ALIAS,KeyProperties.PURPOSE_ENCRYPT|KeyProperties.PURPOSE_DECRYPT)
+            generator.init(new KeyGenParameterSpec.Builder(alias,KeyProperties.PURPOSE_ENCRYPT|KeyProperties.PURPOSE_DECRYPT)
                 .setBlockModes(KeyProperties.BLOCK_MODE_GCM).setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
                 .setKeySize(256).build());generator.generateKey();
         }
-        return (javax.crypto.SecretKey)store.getKey(ALIAS,null);
+        return (javax.crypto.SecretKey)store.getKey(alias,null);
     }
     void save(String profile) throws Exception {
         Cipher cipher=Cipher.getInstance("AES/GCM/NoPadding");cipher.init(Cipher.ENCRYPT_MODE,key());
@@ -41,5 +43,5 @@ final class ProfileStore {
         byte[] plaintext=cipher.doFinal(raw,13,raw.length-13);
         try{return new String(plaintext,StandardCharsets.UTF_8);}finally{Arrays.fill(plaintext,(byte)0);}
     }
-    void clear() throws Exception {file.delete();KeyStore store=KeyStore.getInstance("AndroidKeyStore");store.load(null);store.deleteEntry(ALIAS);}
+    void clear() throws Exception {file.delete();KeyStore store=KeyStore.getInstance("AndroidKeyStore");store.load(null);store.deleteEntry(alias);}
 }

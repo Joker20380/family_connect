@@ -21,17 +21,31 @@ public final class MainActivity extends Activity {
     private TextView state,dot,detail;
     private Button toggle,importButton,checkButton,forgetButton;
     private ProfileStore store;
+    private Spinner transportPicker;
+    private Transport selected=Transport.WG;
+    private String pendingTransport="wg";
     private boolean busy=false;
     private final Runnable refresh=new Runnable(){public void run(){render();handler.postDelayed(this,500);}};
     @Override public void onCreate(Bundle saved) {
         super.onCreate(saved);getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-        store=new ProfileStore(this);
+        try{selected=Transport.parse(getPreferences(MODE_PRIVATE).getString("transport","wg"));}catch(IllegalArgumentException ignored){}
+        pendingTransport=saved==null?selected.id:saved.getString("pendingTransport",selected.id);
+        store=new ProfileStore(this,selected);
         LinearLayout content=new LinearLayout(this);content.setOrientation(LinearLayout.VERTICAL);content.setGravity(Gravity.CENTER);
         content.setPadding(dp(28),dp(28),dp(28),dp(28));content.setBackgroundColor(Color.rgb(16,25,35));
         ScrollView scroll=new ScrollView(this);scroll.setFillViewport(true);scroll.addView(content);setContentView(scroll);
         label(content,"FAMILY CONNECT",25,Color.rgb(102,219,192));label(content,getString(R.string.tagline),15,Color.LTGRAY);
         dot=label(content,"●",88,Color.GRAY);state=label(content,"",27,Color.WHITE);
         label(content,getString(R.string.route),15,Color.LTGRAY);
+        transportPicker=new Spinner(this);transportPicker.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,new String[]{"WireGuard","AmneziaWG 2"}));
+        transportPicker.setSelection(selected.ordinal());content.addView(transportPicker);
+        transportPicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            public void onNothingSelected(AdapterView<?> parent){}
+            public void onItemSelected(AdapterView<?> parent,View view,int position,long id){
+                if(!ConnectionService.status.equals("off"))return;
+                selected=Transport.values()[position];store=new ProfileStore(MainActivity.this,selected);getPreferences(MODE_PRIVATE).edit().putString("transport",selected.id).apply();render();
+            }
+        });
         toggle=button(content,R.string.connect,()->toggle());
         importButton=button(content,R.string.import_profile,()->{
             if(!ConnectionService.status.equals("off")){detail.setText(R.string.disconnect_first);return;}
@@ -54,16 +68,17 @@ public final class MainActivity extends Activity {
         LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(-1,dp(55));params.topMargin=dp(8);parent.addView(view,params);return view;
     }
     private void render(){
-        String value=ConnectionService.status;boolean on=value.equals("on"),waiting=value.equals("connecting");
+        if(toggle==null||detail==null)return;
+        String value=ConnectionService.status;boolean on=value.equals("on"),waiting=value.equals("connecting")||value.equals("cleanup-required");
         state.setText(on?R.string.on:waiting?R.string.connecting:R.string.off);
-        dot.setTextColor(on?Color.rgb(102,219,192):Color.GRAY);toggle.setText(on?R.string.disconnect:R.string.connect);
-        toggle.setEnabled(!busy&&!waiting&&store.exists());importButton.setEnabled(!busy&&!on&&!waiting);
+        dot.setTextColor(on?Color.rgb(102,219,192):Color.GRAY);toggle.setText(on||waiting?R.string.disconnect:R.string.connect);
+        toggle.setEnabled(!busy&&(on||waiting||store.exists()));transportPicker.setEnabled(!busy&&!on&&!waiting);importButton.setEnabled(!busy&&!on&&!waiting);
         forgetButton.setEnabled(!busy&&!on&&!waiting&&store.exists());checkButton.setEnabled(!busy&&on);
         if(ConnectionService.failed)detail.setText(R.string.failed);
     }
     private void toggle(){
-        if(ConnectionService.status.equals("on")){startService(new Intent(this,ConnectionService.class).setAction("disconnect"));return;}
-        Intent permission=VpnService.prepare(this);
+        if(!ConnectionService.status.equals("off")){startService(new Intent(this,ConnectionService.class).setAction("disconnect"));return;}
+        pendingTransport=selected.id;Intent permission=VpnService.prepare(this);
         if(permission!=null)startActivityForResult(permission,11);else continueStart();
     }
     private void continueStart(){
@@ -74,20 +89,21 @@ public final class MainActivity extends Activity {
     @Override public void onRequestPermissionsResult(int request,String[] permissions,int[] results){
         super.onRequestPermissionsResult(request,permissions,results);if(request==12)startVpn();
     }
-    private void startVpn(){ConnectionService.status="connecting";startForegroundService(new Intent(this,ConnectionService.class).setAction("connect"));render();}
+    private void startVpn(){ConnectionService.status="connecting";startForegroundService(new Intent(this,ConnectionService.class).setAction("connect").putExtra("transport",pendingTransport));render();}
     @Override protected void onActivityResult(int request,int result,Intent data){
         super.onActivityResult(request,result,data);
         if(request==11){if(result==RESULT_OK)continueStart();else detail.setText(R.string.permission_denied);return;}
         if(request!=10||result!=RESULT_OK||data==null||data.getData()==null)return;
-        busy=true;render();android.net.Uri uri=data.getData();
+        busy=true;render();android.net.Uri uri=data.getData();final Transport importing=selected;final ProfileStore importingStore=store;
         worker.execute(()->{
             int message=R.string.profile_ready;
             try(InputStream input=getContentResolver().openInputStream(uri)) {
                 if(input==null)throw new IOException();ByteArrayOutputStream bytes=new ByteArrayOutputStream();byte[] buffer=new byte[1024];int count;
                 while((count=input.read(buffer))!=-1){if(bytes.size()+count>ProfileValidator.LIMIT)throw new IOException();bytes.write(buffer,0,count);}
-                String profile=ProfileValidator.validate(bytes.toString(StandardCharsets.UTF_8.name()));
-                Config.parse(new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8)));
-                store.save(profile);ConnectionService.failed=false;
+                String profile=ProfileValidator.validate(bytes.toString(StandardCharsets.UTF_8.name()),importing);
+                if(importing==Transport.WG)Config.parse(new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8)));
+                else org.amnezia.awg.config.Config.parse(new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8)));
+                importingStore.save(profile);ConnectionService.failed=false;
             }catch(Exception e){message=R.string.import_failed;}
             int finalMessage=message;runOnUiThread(()->{busy=false;detail.setText(finalMessage);render();});
         });
@@ -111,6 +127,7 @@ public final class MainActivity extends Activity {
             String message=result;runOnUiThread(()->{busy=false;detail.setText(message);render();});
         });
     }
+    @Override protected void onSaveInstanceState(Bundle saved){saved.putString("pendingTransport",pendingTransport);super.onSaveInstanceState(saved);}
     @Override protected void onResume(){super.onResume();handler.post(refresh);}
     @Override protected void onPause(){handler.removeCallbacks(refresh);super.onPause();}
     @Override protected void onDestroy(){handler.removeCallbacks(refresh);worker.shutdownNow();super.onDestroy();}

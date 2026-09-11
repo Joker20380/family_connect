@@ -64,6 +64,13 @@ installed, actual host connection and blocked-WG → AWG fallback passed. Origin
 peers preserved. Working-tree client pilot available separately from stable releases.
 See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
+## Active Android step
+
+WG/AWG integration is implemented; four-ABI native build, unit/lint and API35
+emulator WG/AWG encrypted traffic, cancellation and VPN revocation checks pending.
+Then Android TCP and Auto; Reticulum follows in stage5. Device update/testing stays deferred.
+See [Android report](releases/2026-09-12-android-awg.ru.md).
+
 ## Next, in order
 
 1. User deferred further network/load testing. Functionality demonstrated, stability

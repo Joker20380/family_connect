@@ -5,7 +5,14 @@ Linux/Windows release assets checked; signed update catalog sequence8 published 
 No device installation performed. Server **0.2.1**, deployment source8cd0f2d/server
 checkout117611c; TCP component **0.1.0** unchanged.
 
-## Latest checkpoint — 2026-09-12
+## Android AWG — implementation in progress, 2026-09-12
+
+Android WG/AWG selector, separate encrypted stores and pinned AWG JNI added; CI
+build, validation and emulator encrypted traffic/lifecycle acceptance pending.
+No APK installation or server change. [Report](releases/2026-09-12-android-awg.ru.md).
+Next after acceptance: Android TCP and automatic fallback, then stage5 Reticulum.
+
+## Latest accepted Windows checkpoint — 2026-09-12
 
 - Windows Auto WG→AWG→TCP implemented: bound initial/ongoing health, SID ownership,
   cleanup before transitions, cancellation and SCM recovery. Source `1e13c74` accepted:

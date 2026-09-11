@@ -31,3 +31,5 @@ clients/windows/dist/
 state-product/
 
 state-awg/
+
+clients/android/awg-generated/
