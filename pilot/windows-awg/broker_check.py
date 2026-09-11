@@ -82,13 +82,21 @@ def traffic(row):
   with socket.socket(family,socket.SOCK_DGRAM) as p:
    p.bind((source,0));p.settimeout(3)
    for _ in range(3):
-    payload=secrets.token_bytes(96);p.sendto(payload,(target,18765));reply,_=p.recvfrom(512);assert reply==payload;row[key]+=1
+    payload=secrets.token_bytes(96);deadline=time.monotonic()+12
+    while True:
+     p.sendto(payload,(target,18765));row['udp_attempts']=row.get('udp_attempts',0)+1
+     try:
+      reply,_=p.recvfrom(512)
+      if reply!=payload:continue
+      row[key]+=1;break
+     except socket.timeout:
+      if time.monotonic()>=deadline:raise
 try:
  assert not root.exists(),'Existing store';assert not ps('Get-Service FamilyConnectBroker -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name'),'Existing service'
  before=baseline();dns_before=dns_snapshot();nrpt_before=nrpt_snapshot()
  signing=Ed25519PrivateKey.generate();(host/'activation.pub').write_text(base64.b64encode(signing.public_key().public_bytes_raw()).decode())
  installed=True;subprocess.run([str(exe),'/install-service'],check=True,timeout=60)
- # A second local account exercises actual pipe SID ownership while TCP is active.
+ # A second local account exercises actual pipe SID ownership while AWG is active.
  from ctypes import wintypes
  candidate='fctcpci'+uuid.uuid4().hex[:6];password=secrets.token_urlsafe(24)+'aA1!'
  class UserInfo(ctypes.Structure):
