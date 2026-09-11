@@ -86,9 +86,13 @@ try:
  assert not ps('Get-Service FamilyConnectBroker -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Name'),'Refuse existing service'
  assert not root.exists(),'Refuse existing store'
  before=baseline();dns_before=dns_snapshot();nrpt_before=nrpt_snapshot()
- token=secrets.token_hex(16).encode()
+ token=secrets.token_hex(16).encode();health_fail={'a':False,'b':False};health_counts={'a':0,'b':0}
  class Handler(http.server.BaseHTTPRequestHandler):
   def do_GET(self):
+   if self.path in ('/health/a','/health/b'):
+    which=self.path[-1];health_counts[which]+=1
+    if health_fail[which]=='stall':time.sleep(12);return
+    self.send_response(503 if health_fail[which] else 204);self.end_headers();return
    self.send_response(200);self.send_header('Content-Length',str(len(token)));self.end_headers();self.wfile.write(token)
   def log_message(self,*args):pass
  fixture=http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler)
@@ -134,7 +138,7 @@ try:
  grant=dict(version=1,devicePublicKey=device,sequence=1,expiresAt=int(time.time())+3600,server='192.0.2.10',port=port,id=ident,publicKey=base64.urlsafe_b64encode(secrets.token_bytes(32)).decode().rstrip('='),serverName='example.com',shortId='0123456789abcdef')
  raw=json.dumps(grant,separators=(',',':')).encode();envelope=json.dumps(dict(payload=base64.b64encode(raw).decode(),signature=base64.b64encode(key.sign(b'family-connect/windows-tcp-activation/v1\0'+raw)).decode()))
  assert call('activate-tcp',envelope)['ok']
- for mode in ('disconnect','engine-crash','broker-crash','service-stop','cancel-start','cancel-recovery','service-stop-recovery','recovery-exhaustion'):
+ for mode in ('disconnect','engine-crash','broker-crash','service-stop','cancel-start','cancel-recovery','service-stop-recovery','recovery-exhaustion','health-recovery','health-cancel'):
   row={'mode':mode,'http4':0,'http6':0,'dns':False,'clean':False};result['rounds'].append(row)
   reply=call('connect-tcp');assert reply['ok'] and reply['state']=='pending'
   if mode=='cancel-start':
@@ -174,6 +178,26 @@ try:
     else:
      reply=wait_state('inactive');assert reply.get('error')=='tcp-recovery-exhausted'
    time.sleep(20);assert call('status')['state']=='inactive','Retry budget reset'
+  elif mode in ('health-recovery','health-cancel'):
+   old=json.loads((root/'tcp-session.json').read_text())['adapter']
+   health_fail['a']=True
+   counts=health_counts.copy();time.sleep(50)
+   assert all(health_counts[k]>=counts[k]+2 for k in counts),'Monitor did not probe both targets'
+   assert call('status')['state']=='on' and json.loads((root/'tcp-session.json').read_text())['adapter']==old,'Single target failure restarted VPN'
+   row['single_failure_tolerated']=True
+   health_fail['b']=True
+   # No process kill: only HTTP fixture answers change while Xray remains alive.
+   if mode=='health-cancel':
+    health_fail.update(a='stall',b='stall');counts=health_counts.copy();until=time.monotonic()+30
+    while not all(health_counts[k]>counts[k] for k in counts):
+     assert time.monotonic()<until;time.sleep(.1)
+    assert call('disconnect')['ok'];wait_state('inactive');health_fail.update(a=False,b=False)
+    counts=health_counts.copy();time.sleep(20)
+    assert call('status')['state']=='inactive' and health_counts==counts;row['probe_cancelled']=True
+   else:
+    wait_retry();health_fail.update(a=False,b=False);wait_state('on');traffic(row)
+    assert json.loads((root/'tcp-session.json').read_text())['adapter']!=old
+    row['health_recovered']=True;assert call('disconnect')['ok'];wait_state('inactive')
   elif mode=='broker-crash':
    ps("$s=Get-CimInstance Win32_Service -Filter \"Name='FamilyConnectBroker'\"; Stop-Process -Id $s.ProcessId -Force")
    time.sleep(2);wait_state('inactive')

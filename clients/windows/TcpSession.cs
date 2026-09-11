@@ -35,6 +35,7 @@ internal sealed class TcpSession
         int retries=0;bool established=false;
         while(true){
             TcpEngine? engine=null;string? failure=null;bool clean=false;
+            using var monitoring=CancellationTokenSource.CreateLinkedTokenSource(token);Task? health=null;
             var alias="fctcp"+Guid.NewGuid().ToString("N")[..8];
             try {
                 token.ThrowIfCancellationRequested();
@@ -52,12 +53,15 @@ internal sealed class TcpSession
                 await TcpNetwork.Call("apply",alias);token.ThrowIfCancellationRequested();
                 if(!engine.Running)throw new IOException("TCP exited during start");
                 lock(gate){token.ThrowIfCancellationRequested();established=true;state="on";error=null;}
-                await Task.WhenAny(engine.WaitForExitAsync(),Task.Delay(Timeout.Infinite,token));
-                if(!token.IsCancellationRequested)failure="tcp-engine-exited";
+                health=TcpHealth.Watch(alias,monitoring.Token);
+                var ended=await Task.WhenAny(engine.WaitForExitAsync(),health);
+                if(!token.IsCancellationRequested)failure=ended==health?"tcp-health-failed":"tcp-engine-exited";
             }catch(OperationCanceledException) when(token.IsCancellationRequested){}
             catch(Exception){failure="tcp-session-failed";}
             finally {
                 lock(gate)state="pending";
+                monitoring.Cancel();
+                if(health is not null){try{await health;}catch(OperationCanceledException){}}
                 try {
                     engine?.Dispose();
                     if(File.Exists(Marker))await Recover();

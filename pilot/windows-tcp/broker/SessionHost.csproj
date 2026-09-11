@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 <PropertyGroup><OutputType>Exe</OutputType><AssemblyName>FamilyConnect</AssemblyName><TargetFramework>net10.0-windows</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><DefineConstants>$(DefineConstants);TCP_SESSION_TEST</DefineConstants></PropertyGroup>
 <ItemGroup>
-<Compile Include="../../../clients/windows/Broker.cs;../../../clients/windows/Native.cs;../../../clients/windows/Store.cs;../../../clients/windows/Wire.cs;../../../clients/windows/TcpEngine.cs;../../../clients/windows/ProcessJob.cs;../../../clients/windows/TcpNetwork.cs;../../../clients/windows/TcpSession.cs;../../../clients/windows/Core/*.cs" />
+<Compile Include="../../../clients/windows/Broker.cs;../../../clients/windows/Native.cs;../../../clients/windows/Store.cs;../../../clients/windows/Wire.cs;../../../clients/windows/TcpEngine.cs;../../../clients/windows/ProcessJob.cs;../../../clients/windows/TcpNetwork.cs;../../../clients/windows/TcpSession.cs;../../../clients/windows/TcpHealth.cs;../../../clients/windows/Core/*.cs" />
 <EmbeddedResource Include="../../../clients/windows/TcpNetwork.ps1" LogicalName="FamilyConnect.TcpNetwork.ps1"/>
 <PackageReference Include="BouncyCastle.Cryptography" Version="2.7.0"/><PackageReference Include="System.ServiceProcess.ServiceController" Version="10.0.12"/><PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.12"/>
 </ItemGroup>
