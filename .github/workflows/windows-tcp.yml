@@ -1,0 +1,33 @@
+name: Windows TCP native pilot
+on:
+  push:
+    paths: ['pilot/windows-tcp/**', '.github/workflows/windows-tcp.yml']
+  pull_request:
+    paths: ['pilot/windows-tcp/**', '.github/workflows/windows-tcp.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.1'
+          cache: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Build pinned Xray and verify signed Wintun
+        shell: pwsh
+        run: ./pilot/windows-tcp/build.ps1 -Output "$env:RUNNER_TEMP/fc-windows-tcp-engine"
+      - name: Native TUN and local VLESS data, forced stop and cleanup
+        shell: pwsh
+        run: python pilot/windows-tcp/check.py "$env:RUNNER_TEMP/fc-windows-tcp-engine" "$env:RUNNER_TEMP/fc-windows-tcp-engine/acceptance.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: FamilyConnect-Windows-TCP-engine-preview
+          path: ${{ runner.temp }}/fc-windows-tcp-engine/
