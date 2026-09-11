@@ -66,14 +66,14 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
 ## Next, in order
 
-1. Complete remaining Linux GUI acceptance with user interaction: actual polkit Cancel.
-   Close-while-connected dialog cancel/confirm already passed. Use bounded cleanup and avoid
-   revoking unrelated authorizations. Real GTK/pkexec recovery already passed (59.88 s),
-   including selected-profile/status, Disconnect and close-after-disconnect.
-   [Live vs regression coverage](releases/2026-09-11-tcp-gtk.ru.md).
-   AuthorizationError cancellation is only injected-regression coverage so far.
-   Preserve the first unlocalized backend AssertionError as an open observation; capture
-   exact health/transport stage if it recurs. Then review/integrate experimental code.
+1. Review the complete experimental TCP diff against main and prepare integration:
+   root ownership/cleanup/error handling, packaging dependencies and preservation of WG/AWG.
+   Functional Linux pilot scenarios now include actual manual polkit Cancel (exit 126,
+   real AuthorizationError, 18 s without repeat prompts) and prior GTK network recovery.
+   [Completed cancellation gate](releases/2026-09-11-polkit-cancel.ru.md).
+   Keep initial unlocalized backend AssertionError visible; inspect health diagnostics
+   during review. Run appropriate fresh Python/GTK/platform CI checks after integration.
+   Stable main launcher remains unchanged until reviewed code is integrated; no release yet.
 2. Integrate the tested transports into native Windows/Android. Complete platform CI,
    installation/UI checks and signed release before upgrading the stable client channel.
 3. Integrate provisioning/runtime/ACK and known-good recovery with real Reticulum

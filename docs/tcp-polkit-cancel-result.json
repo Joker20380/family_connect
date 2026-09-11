@@ -1,0 +1,21 @@
+{
+  "ui": {
+    "recovery_stopped": true,
+    "no_repeat_prompt_seconds": 18,
+    "tun_absent": true,
+    "passed": true,
+    "pkexec_calls": [
+      {
+        "action": "up",
+        "exit": 126
+      }
+    ],
+    "completion_errors": [
+      "AuthorizationError"
+    ]
+  },
+  "guard": {
+    "udp_fault_applied": false,
+    "cleanup_passed": true
+  }
+}

@@ -6,13 +6,22 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+- Manual system authorization cancellation passed: real TCP-helper pkexec returned 126,
+  actual AuthorizationError reached recovery completion, policy stopped; no repeat pkexec
+  for 18 s and no TUN. Watchdog/controller cleanup passed, no UDP fault or polkit changes.
+  Recovery state was staged for this cancellation case; earlier full GTK network recovery
+  supplies separate end-to-end coverage. Functional Linux pilot checklist now exercised.
+  Next: review/integrate experimental diff, then current tests/CI and release preparation.
+  Initial unlocalized backend AssertionError remains an open observation; not a reliability guarantee.
+  [Manual cancellation evidence](releases/2026-09-11-polkit-cancel.ru.md).
+
 - Real GTK/production LinuxTCP/pkexec recovery passed: established AWG → TCP in 59.88 s;
   connected/restored UI, selected profile preserved, actual Disconnect and close-after-
   disconnect passed. Root controller applied only endpoint UDP fault and verified cleanup.
   GTK recovery regression also passed, including injected AuthorizationError.
   Close-while-connected real dialog also passed: cancel preserves monitoring, confirm
   stops monitoring and leaves VPN as warned; controller then disconnected/cleaned it.
-  Real polkit Cancel click remains pending; no policy changes
+  Real polkit Cancel now passed in a separate test; no policy changes
   or temporary-authorization revocation were used. Stable launcher/releases unchanged.
   [GTK live evidence and acceptance limits](releases/2026-09-11-tcp-gtk.ru.md).
 
