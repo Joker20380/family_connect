@@ -34,6 +34,16 @@ $expected=@{'xray.exe'='74475d8c4f68dd07bef754e56778eb2a9061e4dfcc954fa008b912a9
 foreach($name in $expected.Keys){if((Get-FileHash "$tcpOutput/$name" -Algorithm SHA256).Hash.ToLower() -ne $expected[$name]){throw "Unaccepted TCP binary: $name"}}
 New-Item -ItemType Directory -Force build/publish/tcp | Out-Null
 Copy-Item "$tcpOutput/*" build/publish/tcp/ -Recurse -Force
+$awgOutput=Join-Path $env:RUNNER_TEMP ('fc-client-awg-'+[guid]::NewGuid().ToString('N'))
+& "$PSScriptRoot/../../pilot/windows-awg/build.ps1" -Output $awgOutput
+Check-Exit
+if((Get-FileHash "$awgOutput/fc-awg.exe" -Algorithm SHA256).Hash.ToLower() -ne '0ff643eee68ce94183b6f5dde75fc9c03eeff96d6731349c9431fc2771be1a70'){throw 'Unaccepted AWG worker'}
+New-Item -ItemType Directory -Force build/publish/awg | Out-Null
+Copy-Item "$awgOutput/fc-awg.exe","$awgOutput/wintun.dll","$awgOutput/build.json" build/publish/awg/
+Copy-Item "$awgOutput/licenses" build/publish/awg/ -Recurse -Force
+$awgManifest=Get-Content "$awgOutput/build.json" -Raw | ConvertFrom-Json -AsHashtable
+$awgManifest.files.Remove('peer-fixture.exe')
+$awgManifest | ConvertTo-Json -Depth 4 | Set-Content build/publish/awg/build.json
 
 Invoke-WebRequest 'https://download.wireguard.com/wireguard-nt/wireguard-nt-1.1.zip' -OutFile build/wireguard-nt.zip
 if((Get-FileHash build/wireguard-nt.zip -Algorithm SHA256).Hash -ne 'DCEB30A9BC4BE48CCE0F74160FC88A585A2C2627366E8F846FC6658F9038DACE'){throw 'WireGuardNT checksum mismatch'}

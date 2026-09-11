@@ -2,13 +2,14 @@ $ErrorActionPreference='Stop'
 [Console]::InputEncoding=[Text.UTF8Encoding]::new($false)
 [Console]::OutputEncoding=[Text.UTF8Encoding]::new($false)
 $p=[Console]::In.ReadToEnd() | ConvertFrom-Json
-if($p.adapter -notmatch '^fctcp[0-9a-f]{8}$'){throw 'invalid adapter'}
+if($p.adapter -notmatch '^fc(tcp|awg)[0-9a-f]{8}$'){throw 'invalid adapter'}
 $test=$p.test -eq $true
 $dns=if($test){'198.18.0.1'}else{'1.1.1.1'}
 $namespace=if($test){'.fctcp-ci.invalid'}else{'.'}
 $routes=if($test){@('198.18.0.1/32','fd79:fc::1/128')}else{@('0.0.0.0/1','128.0.0.0/1','::/1','8000::/1')}
-$local4=if($test){'198.18.0.2'}else{'10.79.0.2'}
-$local6='fd79:fc::2'
+if($null -ne $p.awg -and ($p.awg -lt 4 -or $p.awg -gt 254)){throw 'invalid AWG address'}
+$local4=if($test){'198.18.0.2'}elseif($null -ne $p.awg){'10.78.0.'+$p.awg}else{'10.79.0.2'}
+$local6=if(!$test -and $null -ne $p.awg){'fd78:92::'+('{0:x}' -f [int]$p.awg)}else{'fd79:fc::2'}
 $label='FamilyConnect TCP '+$p.adapter
 function Adapter {Get-NetAdapter -Name $p.adapter -IncludeHidden -ErrorAction SilentlyContinue}
 switch($p.operation){
@@ -21,7 +22,7 @@ switch($p.operation){
   if($test -and ($rules | Where-Object {$_.Namespace -contains $namespace})){throw 'test DNS policy conflict'}
   if($test){$uplink=(Get-NetIPAddress -IPAddress '127.0.0.1' -AddressFamily IPv4).InterfaceAlias}
   else {
-   $route=Get-NetRoute -DestinationPrefix '0.0.0.0/0' | Where-Object {$_.InterfaceAlias -notlike 'fctcp*'} | Sort-Object @{Expression={$_.RouteMetric+$_.InterfaceMetric}} | Select-Object -First 1
+   $route=Get-NetRoute -DestinationPrefix '0.0.0.0/0' | Where-Object {$_.InterfaceAlias -notmatch '^fc(tcp|awg)' } | Sort-Object @{Expression={$_.RouteMetric+$_.InterfaceMetric}} | Select-Object -First 1
    if(!$route){throw 'no uplink'}
    $uplink=$route.InterfaceAlias
   }

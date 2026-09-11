@@ -1,9 +1,9 @@
 name: Windows AWG native pilot
 on:
   push:
-    paths: ['pilot/windows-awg/**', 'clients/windows/ProcessJob.cs', '.github/workflows/windows-awg.yml']
+    paths: ['pilot/windows-awg/**', 'clients/windows/*.cs', 'clients/windows/*.ps1', 'clients/windows/Core/**', '.github/workflows/windows-awg.yml']
   pull_request:
-    paths: ['pilot/windows-awg/**', 'clients/windows/ProcessJob.cs', '.github/workflows/windows-awg.yml']
+    paths: ['pilot/windows-awg/**', 'clients/windows/*.cs', 'clients/windows/*.ps1', 'clients/windows/Core/**', '.github/workflows/windows-awg.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -41,6 +41,25 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python pilot/windows-awg/check.py "$env:RUNNER_TEMP/fc-windows-awg" "$env:RUNNER_TEMP/fc-awg-owner/Host.exe" "$env:RUNNER_TEMP/awg-acceptance.json" 2>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP/awg-acceptance.log"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Build actual broker for scoped AWG session
+        shell: pwsh
+        run: |
+          dotnet publish pilot/windows-tcp/broker/SessionHost.csproj -c Release -r win-x64 --self-contained true -o "$env:RUNNER_TEMP/fc-awg-broker"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          New-Item -ItemType Directory "$env:RUNNER_TEMP/fc-awg-broker/awg" | Out-Null
+          Copy-Item "$env:RUNNER_TEMP/fc-windows-awg/fc-awg.exe","$env:RUNNER_TEMP/fc-windows-awg/wintun.dll" "$env:RUNNER_TEMP/fc-awg-broker/awg/"
+      - name: Signed AWG activation and actual LocalSystem data cleanup
+        shell: pwsh
+        timeout-minutes: 8
+        run: |
+          python pilot/windows-awg/broker_check.py "$env:RUNNER_TEMP/fc-awg-broker" "$env:RUNNER_TEMP/fc-windows-awg" "$env:RUNNER_TEMP/awg-broker-result.json" 2>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP/awg-broker.log"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Remove isolated AWG broker
+        if: always()
+        shell: pwsh
+        run: |
+          $exe="$env:RUNNER_TEMP/fc-awg-broker/FamilyConnect.exe"
+          if(Test-Path $exe){& $exe /remove-service}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -49,3 +68,5 @@ jobs:
             ${{ runner.temp }}/fc-windows-awg/
             ${{ runner.temp }}/awg-build.log
             ${{ runner.temp }}/awg-acceptance.*
+            ${{ runner.temp }}/awg-broker*
+            ${{ runner.temp }}/fc-awg-broker/*error.txt

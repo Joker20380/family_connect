@@ -1,0 +1,49 @@
+{
+  "source": "29f8f27",
+  "ci": 34648502108,
+  "phase0": 34648502241,
+  "engine": {
+    "files": {
+      "wintun.dll": "e5da8447dc2c320edc0fc52fa01885c103de8c118481f683643cacc3220dafce",
+      "peer-fixture.exe": "89b83a97da1f3c55e6bf0522d9f7b8e5a8ffaa1e632d85fdd9eccac4d0e6b535",
+      "fc-awg.exe": "0ff643eee68ce94183b6f5dde75fc9c03eeff96d6731349c9431fc2771be1a70"
+    },
+    "revision": "1cc94272ca8e9e223a5fe76382f5880f09d3c12d",
+    "worker_source_sha256": "d125d847ae9fd22727c81be21c12717b130b0b63a42d2c53d9ca2cd349b7dc87",
+    "go": "go version go1.26.1 windows/amd64"
+  },
+  "acceptance": {
+    "rounds": [
+      {
+        "mode": "engine-stop",
+        "ipv4": 3,
+        "ipv6": 3,
+        "rejected": 0,
+        "clean": true
+      },
+      {
+        "mode": "owner-crash",
+        "ipv4": 3,
+        "ipv6": 3,
+        "rejected": 0,
+        "clean": true
+      },
+      {
+        "mode": "wrong-header",
+        "ipv4": 0,
+        "ipv6": 0,
+        "rejected": 2,
+        "clean": true
+      },
+      {
+        "mode": "wrong-key",
+        "ipv4": 0,
+        "ipv6": 0,
+        "rejected": 2,
+        "clean": true
+      }
+    ],
+    "passed": true,
+    "invalid_inputs_rejected": 3
+  }
+}

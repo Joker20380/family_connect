@@ -7,6 +7,14 @@ checkout117611c; TCP component **0.1.0** unchanged.
 
 ## Latest checkpoint — 2026-09-11
 
+- Windows AWG signed profile/DPAPI, broker session/shared recovery, installer and UI
+  implemented after native engine acceptance12/12 in CI34648502108/source29f8f27.
+  Local issuer25 checks passed; platform/AWG broker/TCP regression CI pending.
+  Explicit transport switching only; automatic WG→AWG→TCP remains next.
+  No release/device/gateway changes. [Integration report](releases/2026-09-11-windows-awg-integration.ru.md).
+
+### AWG engine foundation
+
 - Windows AWG worker prepared from pinned amneziawg-go with stdin-only config,
   fresh Wintun, bound IPv4 outer UDP and no UAPI listener; native Windows CI pending.
   No broker/profile/GUI AWG integration or rollout yet; TCP remains accepted separately.

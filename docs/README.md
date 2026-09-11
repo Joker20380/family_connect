@@ -101,3 +101,5 @@ Windows TCP installer/transport UI: [report](releases/2026-09-11-windows-tcp-ui.
 Windows TCP engine-crash recovery: [report](releases/2026-09-11-windows-tcp-recovery.ru.md).
 
 Windows TCP tunnel health monitoring: [report](releases/2026-09-11-windows-tcp-health.ru.md).
+
+Windows AWG native worker: [report](releases/2026-09-11-windows-awg-engine.ru.md), [build/CI](../pilot/windows-awg/README.md).

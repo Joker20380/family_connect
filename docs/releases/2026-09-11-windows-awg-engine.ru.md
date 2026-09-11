@@ -17,7 +17,10 @@ CI-only memory-TUN peer возвращает UDP-пакеты через нас�
 
 ## Проверки
 
-Локально синтаксис Python и diff --check. Windows native CI ожидается.
+Локально синтаксис Python и diff --check. [Windows AWG CI34648502108](https://github.com/Joker20380/family_connect/actions/runs/34648502108) и phase0 34648502241 прошли для29f8f27.
+12/12 UDP echo (IPv4/IPv6), четыре отрицательных обмена, четыре очистки и три
+неверных входа прошли. Скачанные hashes сверены с manifest.
+[Машинный результат](2026-09-11-windows-awg-engine-result.json).
 Проверки: IPv4/IPv6 echo через AWG2, S1-S4/H1-H4 ranges/I1, неправильный H1 и чужой
 server public key не дают ответа; остановка движка и убийство владельца убирают
 процесс/адаптер/маршруты; три неверных входа отклоняются; UAPI pipe отсутствует,

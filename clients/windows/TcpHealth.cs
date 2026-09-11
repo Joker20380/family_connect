@@ -6,17 +6,17 @@ namespace FamilyConnect;
 internal static class TcpHealth
 {
     // No IPC/profile supplied URLs. Probes must never silently use the physical uplink.
-    public static async Task Watch(string adapter,CancellationToken token)
+    public static async Task Watch(string adapter,CancellationToken token,int? awg=null)
     {
         int failures=0;
         while(true){
             await Task.Delay(TimeSpan.FromSeconds(15),token);
-            var results=await Task.WhenAll(Probe(adapter,false,token),Probe(adapter,true,token));
+            var results=await Task.WhenAll(Probe(adapter,false,token,awg),Probe(adapter,true,token,awg));
             failures=results.Any(x=>x)?0:failures+1;
             if(failures==2)return;
         }
     }
-    static async Task<bool> Probe(string adapter,bool second,CancellationToken token)
+    static async Task<bool> Probe(string adapter,bool second,CancellationToken token,int? awg)
     {
         using var deadline=CancellationTokenSource.CreateLinkedTokenSource(token);
         deadline.CancelAfter(TimeSpan.FromSeconds(8));
@@ -27,7 +27,7 @@ internal static class TcpHealth
             var source=IPAddress.Parse("198.18.0.2");
 #else
             var uri=new Uri(second?"https://www.gstatic.com/generate_204":"https://1.1.1.1/cdn-cgi/trace");
-            var source=IPAddress.Parse("10.79.0.2");
+            var source=IPAddress.Parse(awg is int n?"10.78.0."+n:"10.79.0.2");
 #endif
             var nic=NetworkInterface.GetAllNetworkInterfaces().Single(n=>n.Name==adapter);
             var properties=nic.GetIPProperties();

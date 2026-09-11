@@ -5,10 +5,10 @@ using System.Text.RegularExpressions;
 namespace FamilyConnect;
 internal static class TcpNetwork
 {
-    public static void ValidateAdapter(string alias){if(!Regex.IsMatch(alias,@"\Afctcp[0-9a-f]{8}\z"))throw new FormatException("session adapter");}
-    public static async Task<JsonElement> Call(string operation,string adapter)
+    public static void ValidateAdapter(string alias){if(!Regex.IsMatch(alias,@"\Afc(?:tcp|awg)[0-9a-f]{8}\z"))throw new FormatException("session adapter");}
+    public static async Task<JsonElement> Call(string operation,string adapter,int? awg=null)
     {
-        ValidateAdapter(adapter);
+        ValidateAdapter(adapter);if(awg is int n&&(n<4||n>254))throw new FormatException("AWG address");
         using var resource=typeof(TcpNetwork).Assembly.GetManifestResourceStream("FamilyConnect.TcpNetwork.ps1")!;
         using var reader=new StreamReader(resource);
         var code=await reader.ReadToEndAsync();
@@ -31,7 +31,7 @@ internal static class TcpNetwork
 #else
             const bool test=false;
 #endif
-            await process.StandardInput.WriteAsync(JsonSerializer.Serialize(new{operation,adapter,test}));process.StandardInput.Close();
+            await process.StandardInput.WriteAsync(JsonSerializer.Serialize(new{operation,adapter,test,awg}));process.StandardInput.Close();
             using var deadline=new CancellationTokenSource(TimeSpan.FromSeconds(55));
             await process.WaitForExitAsync(deadline.Token);await error;
             var text=await output;

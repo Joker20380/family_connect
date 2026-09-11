@@ -31,17 +31,21 @@ internal sealed class TcpEngine : IDisposable
             return stream;
         }catch{stream.Dispose();throw;}
     }
-    public static TcpEngine Start(string trustedDirectory,string config)
+    public static TcpEngine Start(string trustedDirectory,string config)=>StartCore(trustedDirectory,config,false);
+    public static TcpEngine StartAwg(string trustedDirectory,string config)=>StartCore(trustedDirectory,config,true);
+    static TcpEngine StartCore(string trustedDirectory,string config,bool awg)
     {
+        string executable=awg?"fc-awg.exe":"xray.exe";
+        string hash=awg?"0ff643eee68ce94183b6f5dde75fc9c03eeff96d6731349c9431fc2771be1a70":XraySha;
         if(!OperatingSystem.IsWindows())throw new PlatformNotSupportedException();
         if(Encoding.UTF8.GetByteCount(config)>16384)throw new FormatException("TCP config size");
         string folder=Path.GetFullPath(trustedDirectory);
         if((File.GetAttributes(folder)&FileAttributes.ReparsePoint)!=0)throw new IOException("Unsafe engine directory");
         var files=new List<FileStream>();Process? child=null;ProcessJob? owner=null;
         try {
-            files.Add(Verified(folder,"xray.exe",XraySha));files.Add(Verified(folder,"wintun.dll",WintunSha));
+            files.Add(Verified(folder,executable,hash));files.Add(Verified(folder,"wintun.dll",WintunSha));
             owner=new ProcessJob();
-            var start=new ProcessStartInfo(Path.Combine(folder,"xray.exe")){
+            var start=new ProcessStartInfo(Path.Combine(folder,executable)){
                 WorkingDirectory=folder,UseShellExecute=false,CreateNoWindow=true,
                 RedirectStandardInput=true,RedirectStandardOutput=true,RedirectStandardError=true,
                 StandardInputEncoding=new UTF8Encoding(false)
@@ -63,7 +67,7 @@ internal sealed class TcpEngine : IDisposable
             start.Environment["ComSpec"]=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System),"cmd.exe");
             start.Environment["PATH"]=Environment.GetFolderPath(Environment.SpecialFolder.System);
             start.Environment["XRAY_LOCATION_ASSET"]=folder;start.Environment["XRAY_LOCATION_CONFIG"]=folder;
-            foreach(var arg in new[]{"run","-format","json","-config","stdin:"})start.ArgumentList.Add(arg);
+            if(!awg)foreach(var arg in new[]{"run","-format","json","-config","stdin:"})start.ArgumentList.Add(arg);
             child=Process.Start(start)??throw new IOException("TCP engine start failed");
             // Xray's pinned loader waits for stdin EOF. Before assignment it cannot parse a config/create TUN.
             owner.Attach(child);

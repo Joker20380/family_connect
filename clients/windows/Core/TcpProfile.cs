@@ -24,7 +24,7 @@ public static class TcpProfile
             }
         }else if(element.ValueKind==JsonValueKind.Array)foreach(var item in element.EnumerateArray())Unique(item);
     }
-    static T Parse<T>(string text)
+    internal static T Parse<T>(string text)
     {
         using var document=JsonDocument.Parse(text,new JsonDocumentOptions{MaxDepth=8});
         Unique(document.RootElement);

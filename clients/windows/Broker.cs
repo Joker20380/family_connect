@@ -50,10 +50,20 @@ internal sealed class Broker:ServiceBase
         var state=session.State!="off"?session.State:Native.TunnelState();
         var owner=session.State!="off"?session.Owner:File.Exists(Store.OwnerPath)?File.ReadAllText(Store.OwnerPath):null;
         var ready=File.Exists(Store.UserPath(sid,".conf.dpapi"));
-        if(request.Action=="status")return new(true,state!="off"&&owner!=sid?"other-user":state!="off"?state:ready?"off":"inactive",Error:session.Owner==sid?session.Error:null,TcpReady:File.Exists(Store.UserPath(sid,".tcp.dpapi")),Transport:session.State!="off"?"tcp":"wg");
+        if(request.Action=="status")return new(true,state!="off"&&owner!=sid?"other-user":state!="off"?state:ready?"off":"inactive",Error:session.Owner==sid?session.Error:null,TcpReady:File.Exists(Store.UserPath(sid,".tcp.dpapi")),Transport:session.State!="off"?session.Transport:"wg",AwgReady:File.Exists(Store.UserPath(sid,".awg.dpapi")));
         if(request.Action=="request")return new(true,"inactive",Code:"FC1-"+Convert.ToHexString(Convert.FromBase64String(Store.Public(sid))));
         if(state!="off"&&owner!=sid)return new(false,"other-user",Error:"other-user");
         switch(request.Action){
+            case "connect-awg":
+                if(state!="off")return new(false,state,Error:"busy");
+                var awg=Store.Awg(sid);if(awg is null)return new(false,"inactive",Error:"activation-required");
+                if(!Directory.Exists(Path.Combine(AppContext.BaseDirectory,"awg")))return new(false,"off",Error:"awg-engine-missing");
+                var key=Store.Key(sid);
+                try{tcp.StartAwg(sid,awg,Convert.ToBase64String(key));}finally{System.Security.Cryptography.CryptographicOperations.ZeroMemory(key);}
+                return new(true,"pending",Transport:"awg",AwgReady:true);
+            case "activate-awg":
+                if(state!="off")return new(false,state,Error:"disconnect-first");
+                Store.ActivateAwg(sid,request.Activation??"");return new(true,ready?"off":"inactive",AwgReady:true);
             case "connect-tcp":
                 if(state!="off")return new(false,state,Error:"busy");
                 var profile=Store.Tcp(sid);
@@ -76,7 +86,7 @@ internal sealed class Broker:ServiceBase
                 try{Native.StartTunnel(Store.TunnelPath);}catch{Native.StopTunnel();throw;}
                 return new(true,Native.TunnelState());
             case "disconnect":
-                if(session.State!="off"){tcp.Stop();return new(true,tcp.Status.State,Transport:"tcp");}
+                if(session.State!="off"){tcp.Stop();return new(true,tcp.Status.State,Transport:tcp.Status.Transport);}
                 Native.StopTunnel();return new(true,"off");
             default:return new(false,"unknown",Error:"unsupported-action");
         }

@@ -79,4 +79,20 @@ internal static class Store
         finally{CryptographicOperations.ZeroMemory(raw);}
     }
 
+    public static AwgGrant? Awg(string sid)
+    {
+        var path=UserPath(sid,".awg.dpapi");if(!File.Exists(path))return null;
+        if(new FileInfo(path).Length>16384)throw new FormatException("stored profile size");
+        var raw=ProtectedData.Unprotect(File.ReadAllBytes(path),null,DataProtectionScope.CurrentUser);
+        try{return AwgProfile.Verify(Encoding.UTF8.GetString(raw),ActivationRoot(),Public(sid),null);}
+        finally{CryptographicOperations.ZeroMemory(raw);}
+    }
+    public static void ActivateAwg(string sid,string envelope)
+    {
+        var next=AwgProfile.Verify(envelope,ActivationRoot(),Public(sid),DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+        AwgProfile.CheckReplacement(next,Awg(sid));var raw=Encoding.UTF8.GetBytes(envelope);
+        try{Atomic(UserPath(sid,".awg.dpapi"),ProtectedData.Protect(raw,null,DataProtectionScope.CurrentUser));}
+        finally{CryptographicOperations.ZeroMemory(raw);}
+    }
+
 }

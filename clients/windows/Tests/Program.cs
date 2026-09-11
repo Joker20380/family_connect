@@ -87,3 +87,27 @@ using(var config=JsonDocument.Parse(TcpProfile.Config(tcp,"fctcp1234abcd","Ether
  if(config.RootElement.GetProperty("outbounds")[0].GetProperty("streamSettings").GetProperty("sockopt").GetProperty("interface").GetString()!="Ethernet \"uplink\"")throw new Exception("uplink serialization");
 }
 Console.WriteLine("TCP uplink binding serialization passed.");
+
+var awgRoot=Convert.FromBase64String(File.ReadAllText(Path.Combine(updateRoot,"windows-awg-v1.pub")).Trim());
+var awgDevice=Convert.ToBase64String(Enumerable.Range(1,32).Select(x=>(byte)x).ToArray());
+var awgText=File.ReadAllText(Path.Combine(updateRoot,"windows-awg-v1.json"));
+var awg=AwgProfile.Verify(awgText,awgRoot,awgDevice,1000);
+if(awg.Number!=4||awg.Sequence!=7)throw new Exception("AWG Python fixture mismatch");
+var testAwgKey=new Ed25519PrivateKeyParameters(Enumerable.Range(0,32).Select(x=>(byte)x).ToArray(),0);
+string SignAwg(AwgGrant value){
+ var raw=JsonSerializer.SerializeToUtf8Bytes(value,Activation.Json);var signer=new Ed25519Signer();signer.Init(true,testAwgKey);signer.BlockUpdate(AwgProfile.Domain,0,AwgProfile.Domain.Length);signer.BlockUpdate(raw,0,raw.Length);
+ return JsonSerializer.Serialize(new Envelope(Convert.ToBase64String(raw),Convert.ToBase64String(signer.GenerateSignature())),Activation.Json);
+}
+void AwgReject(Action action){try{action();}catch(Exception){return;}throw new Exception("Invalid AWG profile accepted");}
+AwgReject(()=>AwgProfile.Verify(awgText,awgRoot,gateway,1000));AwgReject(()=>AwgProfile.Verify(awgText,awgRoot,awgDevice,90000));
+AwgReject(()=>AwgProfile.Verify(awgText,root,awgDevice,1000));
+foreach(var invalid in new[]{awg with{Number=3},awg with{Port=0},awg with{Server="127.0.0.1"},awg with{Sequence=0}})AwgReject(()=>AwgProfile.Verify(SignAwg(invalid),awgRoot,awgDevice,1000));
+foreach(var (name,value) in new[]{("Jc","0"),("Jmax","10"),("H1","2005"),("H1","4294967296"),("I1","<r 1281>"),("I1","<b 0x1>"),("I1","bad\nprivate_key=evil")}){
+ var parameters=new Dictionary<string,string>(awg.Parameters){[name]=value};AwgReject(()=>AwgProfile.Verify(SignAwg(awg with{Parameters=parameters}),awgRoot,awgDevice,1000));
+}
+AwgProfile.CheckReplacement(awg with{Parameters=awg.Parameters.Reverse().ToDictionary(x=>x.Key,x=>x.Value)},awg);
+AwgReject(()=>AwgProfile.CheckReplacement(awg with{Sequence=6},awg));AwgReject(()=>AwgProfile.CheckReplacement(awg with{Number=5},awg));
+AwgProfile.Verify(awgText,awgRoot,awgDevice,null);
+var awgConfig=AwgProfile.Config(awg,Convert.ToBase64String(Enumerable.Range(1,32).Select(x=>(byte)x).ToArray()),"fcawg12345678","Wi-Fi");
+using(var doc=JsonDocument.Parse(awgConfig)){if(!doc.RootElement.GetProperty("config").GetString()!.Contains("h1=1001-1010\n"))throw new Exception("AWG UAPI config mismatch");}
+Console.WriteLine("AWG shared fixture, 16 rejection cases, replacement ordering and UAPI config passed.");
