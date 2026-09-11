@@ -46,6 +46,10 @@ public class AwgRuntimeTest {
         }
     }
     void revokeThroughSystemDialog()throws Exception{
+        android.app.UiAutomation automation=InstrumentationRegistry.getInstrumentation().getUiAutomation();
+        android.accessibilityservice.AccessibilityServiceInfo info=automation.getServiceInfo();
+        info.flags|=android.accessibilityservice.AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
+        automation.setServiceInfo(info);
         String testPackage=InstrumentationRegistry.getInstrumentation().getContext().getPackageName();
         context.startActivity(new Intent().setComponent(new ComponentName(testPackage,RevokeVpnActivity.class.getName())).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         long until=System.currentTimeMillis()+15000;boolean clicked=false;
