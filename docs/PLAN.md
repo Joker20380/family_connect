@@ -73,8 +73,11 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
    CI passed. TCP 0.1.0 and production-signed catalog sequence 1 published; downloaded
    artifact acceptance and real public HTTPS fetch/root install passed.
    [Release evidence](releases/2026-09-11-tcp-release.ru.md).
-   Next implement trusted root-owned broker/bootstrap and explicit component installation
-   in the Linux UI; preserve six-file app updater compatibility. [Runbook](tcp-delivery.ru.md).
+   Root-owned broker/bootstrap and explicit Linux pilot UI install now implemented;
+   bootstrap installed on laptop, real desktop GTK/pkexec signed install passed.
+   260 tests + GTK geometry/recovery passed; six-file archive preserved.
+   Next: remote platform CI, manual Cancel for the new broker, fresh-machine bootstrap
+   distribution and new client release after acceptance. [Report](releases/2026-09-11-tcp-updater.ru.md).
    Independent VM/hardware clean-install remains a broad-rollout gate: Docker shares
    the host kernel. ARM64 and clean-system interactive polkit remain untested.
    Keep earlier unlocalized health observation visible.

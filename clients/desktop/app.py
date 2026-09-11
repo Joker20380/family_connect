@@ -81,6 +81,7 @@ class App:
         self.detail=self.label('fc-detail');self.body.append(self.detail)
         self.retry=self.button('fc-secondary',lambda:self.submit(self.initialize,'initialized'))
         self.update_button=self.button('fc-quiet',self.update_application)
+        self.tcp_button=self.button('fc-quiet',self.install_tcp)
         self.scroll=Gtk.ScrolledWindow();self.scroll.set_policy(Gtk.PolicyType.NEVER,Gtk.PolicyType.AUTOMATIC)
         self.scroll.set_propagate_natural_height(True)
         monitors=self.window.get_display().get_monitors()
@@ -125,6 +126,9 @@ class App:
                 self.model.splice(0,self.model.get_n_items(),list(names))
                 self.choose.set_selected(next((i for i,item in enumerate(self.items) if item[0]==selected),max(0,len(self.items)-1)))
                 self.widget_changes+=1
+            self.set_value(self.tcp_button,'visible','--awg-pilot' in sys.argv)
+            self.set_value(self.tcp_button,'label','Установить / обновить TCP' if self.ru else 'Install / update TCP')
+            self.set_value(self.tcp_button,'sensitive',not self.busy and self.active is False)
             self.set_value(self.choose,'sensitive',bool(self.items) and not self.busy)
             for widget,text,enabled in (
                 (self.toggle,self.t('disconnect' if connected else 'connect'),not self.busy and bool(self.items) and self.active is not None),
@@ -213,13 +217,17 @@ class App:
             elif kind=='ip':self.detail_text=result
             elif kind=='updates':
                 self.update_plan=result;self.detail_text=(('Доступна версия ' if self.ru else 'Version available: ')+result['version']) if result else ('Установлена последняя версия.' if self.ru else 'You are up to date.')
+            elif kind=='tcp_installed':
+                self.detail_text='TCP установлен. Добавьте TCP-профиль для подключения.' if self.ru else 'TCP installed. Add a TCP profile to connect.'
             elif kind=='update_installed':
                 subprocess.Popen([sys.executable,str(result)],start_new_session=True);self.close(True);return GLib.SOURCE_REMOVE
         except Exception as exc:
             if kind=='recovered':
                 if isinstance(exc,AuthorizationError):self.recovery.stop()
                 else:self.recovery.recovered(False)
-            if kind in ('updates','update_installed'):
+            if kind=='tcp_installed':
+                self.detail_text=(('Установка TCP отменена.' if self.ru else 'TCP installation cancelled.') if isinstance(exc,AuthorizationError) else ('Не удалось установить TCP. Проверьте интернет и системный установщик; TCP должен быть отключён.' if self.ru else 'TCP installation failed. Check Internet access and system updater; TCP must be disconnected.'))
+            elif kind in ('updates','update_installed'):
                 self.detail_text='Обновление недоступно или не прошло проверку. Текущая версия сохранена.' if self.ru else 'Update unavailable or verification failed. Current version preserved.'
             else:
                 self.active=None;self.initializing=False
@@ -276,6 +284,17 @@ class App:
         dialog.set_default_response('cancel');dialog.set_close_response('cancel')
         dialog.connect('response',lambda _,response:accepted() if response=='accept' and not self.closed else None)
         dialog.present();return dialog
+    def install_tcp(self):
+        if self.busy or self.active is not False:return
+        from backend import tcp_updater_available,install_tcp_component
+        if not tcp_updater_available():
+            self.set_detail('Для установки TCP требуется настройка системного установщика администратором.' if self.ru else 'An administrator must set up the TCP system updater first.')
+            return
+        text=('Скачать проверенный TCP-компонент и установить его? Система запросит права администратора. Профили сохранятся; VPN автоматически не включится.' if self.ru else 'Download and install the verified TCP component? Administrator authorization is required. Profiles will be preserved; VPN will not start automatically.')
+        def install():
+            if not self.busy and self.active is False:self.submit(install_tcp_component,'tcp_installed')
+        self.confirm(text,'Установить TCP' if self.ru else 'Install TCP',install)
+
     def update_application(self):
         if self.busy:return
         from updates import Updater

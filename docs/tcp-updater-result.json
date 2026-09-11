@@ -1,0 +1,38 @@
+{
+  "date": "2026-09-11",
+  "python_tests_passed": 260,
+  "gtk_xvfb_layout_cases": 24,
+  "tcp_ui_geometry_cases": 6,
+  "gtk_recovery_passed": true,
+  "six_file_archive_compatible": true,
+  "container": {
+    "real_gtk_button": true,
+    "real_confirmation": true,
+    "real_pkexec": true,
+    "real_broker": true,
+    "production_signed_install": true,
+    "gui_user": "root in disposable container",
+    "interactive_authorization_tested": false
+  },
+  "host_ui": {
+    "real_gtk_button": true,
+    "real_confirmation": true,
+    "real_pkexec": true,
+    "real_broker": true,
+    "production_signed_install": true,
+    "gui_user": "desktop user on laptop",
+    "real_desktop_pkexec": true,
+    "interactive_authorization_dialog_observed": false
+  },
+  "host_files": {
+    "root_bootstrap_verified": true,
+    "component_matches_published_0_1_0": true,
+    "tcp_inactive": true,
+    "backup": "/var/backups/family-connect/tcp-bundle-6twafqb7",
+    "bootstrap_backup": "/var/backups/family-connect/tcp-updater-w6uqnpyt",
+    "backup_directory_mode": "0o755"
+  },
+  "remote_ci": "pending",
+  "stable_app_upgraded": false,
+  "test_container_removed": true
+}

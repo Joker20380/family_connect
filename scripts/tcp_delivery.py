@@ -1,7 +1,8 @@
 """Authenticated Linux TCP delivery. Run only from an already trusted checkout."""
 import argparse,base64,gzip,hashlib,io,json,os,re,stat,subprocess,sys,tarfile,tempfile,time
 from pathlib import Path
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'clients/desktop'))
+MODULE_ROOT=Path(__file__).resolve().parent
+sys.path.insert(0,str(MODULE_ROOT if (MODULE_ROOT/'updates.py').is_file() else MODULE_ROOT.parent/'clients/desktop'))
 import updates as storage
 DOMAIN=b'family-connect/tcp-component/v1\x00'
 CATALOG_URL='https://raw.githubusercontent.com/Joker20380/family_connect/main/updates/tcp-pilot.json'

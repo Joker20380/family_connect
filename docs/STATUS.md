@@ -6,6 +6,17 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+- Root-owned TCP updater and GTK pilot install implemented and installed on laptop.
+  Fixed-operation broker verifies its trusted files and signed catalog; GUI confirms,
+  handles cancellation and blocks busy/connected installs. Real desktop GTK→pkexec→broker
+  signed installation passed; installed files match source/published TCP 0.1.0, TCP inactive.
+  260 tests, 24 Xvfb layouts, 6 pilot geometries and recovery passed; screenshot reviewed.
+  Host layout timing assertion also fails on previous UI; retained observation.
+  Backup directory root:root mode corrected 0775→0755 after safe bootstrap refusal.
+  Stable app/server unchanged; next pilot launch exposes button. New remote CI pending;
+  fresh-machine bootstrap distribution, manual Cancel and new client release remain.
+  [Updater/UI report](releases/2026-09-11-tcp-updater.ru.md).
+
 - TCP component **0.1.0 published and signed**, source/tag 7d1e738, catalog sequence 1
   in commit 53a000c. All main platform/TCP/AWG/phase0 CI and TCP tag release passed.
   Downloaded artifact matches local repack; fresh systemd DNS/HTTPS/reinstall/SIGKILL

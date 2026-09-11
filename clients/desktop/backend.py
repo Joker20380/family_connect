@@ -383,3 +383,24 @@ def backend():
     if sys.platform=='win32':return Windows()
     if sys.platform.startswith('linux'):return LinuxTCP()
     raise BackendError('Unsupported operating system')
+
+
+TCP_UPDATER=Path('/usr/local/lib/family-connect-tcp-updater/broker')
+
+def tcp_updater_available():
+    try:
+        for p in (TCP_UPDATER.parent,*TCP_UPDATER.parent.parents):
+            info=p.lstat()
+            if not stat.S_ISDIR(info.st_mode) or info.st_uid!=0 or info.st_mode&0o022:return False
+        info=TCP_UPDATER.lstat()
+        return stat.S_ISREG(info.st_mode) and info.st_uid==0 and info.st_nlink==1 and not info.st_mode&0o022 and os.access(TCP_UPDATER,os.X_OK)
+    except OSError:return False
+
+def install_tcp_component():
+    if not tcp_updater_available():raise BackendError('TCP system updater is not installed')
+    try:
+        result=subprocess.run(['pkexec',str(TCP_UPDATER),'install'],stdin=subprocess.DEVNULL,capture_output=True,text=True,timeout=900)
+    except subprocess.TimeoutExpired as error:raise BackendError('TCP installation timed out; check system state before retrying') from error
+    if result.returncode in (126,127):raise AuthorizationError('TCP installation authorization cancelled or unavailable')
+    if result.returncode:raise BackendError('TCP installation failed')
+    return True
