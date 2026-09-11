@@ -15,7 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: docker compose build
+      - name: Build isolated failover stack
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          docker compose build 2>&1 | tee artifacts/build.log
       - run: sudo ./scripts/provision.sh
       - run: ./scripts/test_failover.sh
       - run: ./scripts/test_auth.sh
