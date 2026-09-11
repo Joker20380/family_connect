@@ -64,15 +64,14 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
 ## Next, in order
 
-1. Correct the reviewed TCP routing defect in the experimental branch: preserve
-   more-specific main-table routes and explicitly route gateway control packets outside
-   the TUN, including kernel-generated RST that may lack the socket mark. Verify ownership
-   and exact cleanup of every added rule. Then validate in an isolated network namespace
-   before another host-wide test; include local/Docker/LAN routes and gateway bypass.
-   Repeat matched-load SOCKS/TUN trials and established AWG → TCP recovery after correction.
-   Trace found gateway RST on TUN, not SYN recursion. Root cause of all timeouts is not
-   proven; do not declare the engine or network repaired based on this finding alone.
-   [Diagnosis](releases/2026-09-11-tcp-diagnosis.ru.md), [original checkpoint](releases/2026-09-11-tcp.ru.md).
+1. Localize remaining errors using identical direct/SOCKS/TUN HTTPS requests and timeouts
+   in an isolated container; retain curl exit codes/error phases and simultaneous external
+   TCP evidence, plus direct DNS control. Routing correction and kernel cleanup tests pass.
+   Live TUN probe passed 24/24 twice, but expanded trial still had SOCKS/DNS failures;
+   direct UDP DNS also failed 2/24. This does not establish censorship or a common cause.
+   [Correction and measured results](releases/2026-09-11-tcp-routing.ru.md).
+   Before rollout, resolve remaining failures; then back up/install the helper, perform
+   a short host test and established AWG → TCP recovery. No correction installed yet.
    Main WG/AWG remains unchanged; source branch `pilot/tcp-reality-2026-09-11`.
 2. Integrate the tested transports into native Windows/Android. Complete platform CI,
    installation/UI checks and signed release before upgrading the stable client channel.

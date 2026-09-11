@@ -6,6 +6,17 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+- TCP routing correction implemented in experimental commit `6d7f569`: preserve more-specific
+  main routes; explicit gateway /32 bypass plus prohibit-on-missing-route; exact cleanup,
+  collision checks, legacy marker support and retry after cleanup failure.
+  Real-kernel network-none container checks passed; 222 Python tests passed.
+  Not installed on the laptop; no host VPN test or server change in this stage.
+  Isolated live traffic: first TUN/SOCKS 24/24 each, UDP DNS 23/24; expanded comparison
+  TUN 24/24, SOCKS 22/24, tunnel UDP DNS 23/24, TCP DNS 22/24, direct UDP DNS 22/24.
+  Cleanup passed. Direct DNS also timed out; all prior instability is not resolved.
+  Next: matched direct/SOCKS/TUN HTTPS with error-phase and external TCP evidence.
+  [Routing correction](releases/2026-09-11-tcp-routing.ru.md).
+
 - TCP diagnosis update: direct server HTTPS 36/36; long SOCKS-only comparison 216/216
   checks passed, but long full-TUN comparison degraded (including independent SOCKS).
   Local HTTP stayed 36/36. Packet capture confirms gateway-directed RST on TUN;

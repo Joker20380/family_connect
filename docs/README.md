@@ -28,3 +28,5 @@ Linux established-session recovery: [report](releases/2026-09-10-recovery.ru.md)
 TCP experiment (unstable; resume here): [checkpoint](releases/2026-09-11-tcp.ru.md).
 
 TCP diagnosis and routing defect: [report](releases/2026-09-11-tcp-diagnosis.ru.md).
+
+TCP routing correction (isolated tests passed; not installed): [report](releases/2026-09-11-tcp-routing.ru.md).
