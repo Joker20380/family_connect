@@ -66,14 +66,13 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
 ## Next, in order
 
-1. Repeat the local-link baseline on a more stable connection: user connects Ethernet
-   or moves closer to the access point; do not change host connectivity remotely.
-   Current gateway max 496 ms correlates with external HTTPS delays; Wi-Fi retries +433.
-   [Local-link diagnosis](releases/2026-09-11-local-link.ru.md).
-   Then repeat matched TCP acceptance. If gateway jitter improves but TLS failures remain,
-   investigate remaining external/engine causes separately. No blind timeout increase.
-   After localization: backup/install corrected helper, short host test, established
-   AWG → TCP recovery. Main WG/AWG unchanged; experimental routing remains uninstalled.
+1. Back up the installed TCP helper, install the corrected experimental helper and run
+   a short host smoke: routing, LAN/Docker preservation, DNS/HTTPS and exact cleanup.
+   Then verify established AWG → TCP recovery on the new network. Isolated retest passed
+   120/120 without code/timeout changes after the user changed Wi-Fi; baseline improved.
+   [Accepted bounded comparison](releases/2026-09-11-network-change.ru.md).
+   Network switch is complete. Avoid immediately returning to long uncontrolled host tests.
+   Main WG/AWG unchanged; corrected TCP helper remains uninstalled until this next step.
 2. Integrate the tested transports into native Windows/Android. Complete platform CI,
    installation/UI checks and signed release before upgrading the stable client channel.
 3. Integrate provisioning/runtime/ACK and known-good recovery with real Reticulum

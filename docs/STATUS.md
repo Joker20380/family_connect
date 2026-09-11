@@ -6,6 +6,14 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+- New Wi-Fi baseline and TCP retest completed: gateway max 53.9 ms (was 496),
+  Wi-Fi retries +7 (was +433); all baseline targets/HTTPS 30/30. Matched TCP test
+  passed 120/120: direct/TUN/SOCKS HTTPS and direct/TUN DNS each 24/24, cleanup passed.
+  Code/timeouts unchanged. Bounded isolated acceptance passed; not a long-run guarantee.
+  Next: backup/install corrected helper and short host smoke, then AWG → TCP recovery.
+  User has completed network change; no further switch is pending.
+  [Network-change comparison](releases/2026-09-11-network-change.ru.md).
+
 - Current roadmap: **stage 3, Linux TCP-reserve diagnosis/acceptance**. WG works;
   AWG/recovery passed in Linux pilot, not yet a cross-platform stable rollout.
   [Development roadmap](ROADMAP.ru.md).
@@ -13,8 +21,8 @@ Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `1176
   VPS 26/30, control 28/30, direct HTTPS 30/30 (up to 2.608 s). Correlated gateway,
   control and HTTPS delays; Wi-Fi retries +433 including background traffic.
   Local network contributes jitter; this does not explain every prior TLS failure.
-  Next: user connects via Ethernet or improves Wi-Fi placement, repeat baseline then
-  matched TCP acceptance before host rollout. No settings or installed code changed.
+  Superseded by successful retest after user changed Wi-Fi; see latest result above.
+  No installed code changed.
   [Local-link evidence](releases/2026-09-11-local-link.ru.md).
 
 - Paired TCP-header diagnosis completed (experiment `2674d20`): 72/72 handshakes matched across client/server.
