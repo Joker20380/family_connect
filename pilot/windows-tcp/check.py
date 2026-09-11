@@ -53,7 +53,15 @@ def main():
                         time.sleep(.25)
                     assert index is not None,'No Wintun adapter'
                     ps(f"Set-NetIPInterface -InterfaceIndex {index} -AddressFamily IPv4 -Dhcp Disabled; New-NetIPAddress -InterfaceIndex {index} -IPAddress '{LOCAL}' -PrefixLength 32 -PolicyStore ActiveStore | Out-Null; New-NetRoute -InterfaceIndex {index} -DestinationPrefix '{PREFIX}' -NextHop 0.0.0.0 -PolicyStore ActiveStore | Out-Null")
-                    time.sleep(1)
+                    # Windows address creation returns before duplicate-address detection finishes.
+                    until=time.monotonic()+30
+                    while time.monotonic()<until:
+                        state=ps(f"Get-NetIPAddress -InterfaceIndex {index} -IPAddress '{LOCAL}' | Select-Object -ExpandProperty AddressState")
+                        if state=='Preferred':break
+                        assert state not in ('Duplicate','Invalid'), 'Test address state: '+state
+                        time.sleep(.25)
+                    assert state=='Preferred','Test address did not become usable: '+state
+                    row['address_state']=state
                     assert snapshot()==before,'Default route changed'
                     for _ in range(6):
                         c=http.client.HTTPConnection(TARGET,fixture.server_port,timeout=5,source_address=(LOCAL,0))
