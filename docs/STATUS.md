@@ -8,9 +8,11 @@ checkout117611c; TCP component **0.1.0** unchanged.
 ## Latest checkpoint — 2026-09-12
 
 - Windows Auto WG→AWG→TCP implemented: bound initial/ongoing health, SID ownership,
-  cleanup before transitions, cancellation and SCM recovery. Platform/policy/actual
-  AWG→TCP CI pending. [Report](releases/2026-09-12-windows-auto.ru.md).
-  No release/device/server changes. Next after acceptance: Android AWG/TCP.
+  cleanup before transitions, cancellation and SCM recovery. Source `1e13c74` accepted:
+  clients 34654036404 (672 layouts/install/uninstall), AWG/Auto 34654036463
+  (4 automatic scenarios, 6 UDP then 6 HTTP), TCP 34654036431 (84 HTTP/14 DNS/10 cleanup),
+  phase0 34654036425. Python 325 and 7 C# policy scenarios passed; downloaded hashes verified. [Report](releases/2026-09-12-windows-auto.ru.md).
+  No release/device/server changes. Next implementation: Android AWG/TCP, then stage5 Reticulum.
 
 ### Previous accepted AWG checkpoint
 

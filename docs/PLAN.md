@@ -91,7 +91,7 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
    Engine-crash recovery passed (3 retries, 15/30/60s), source7de6e69; clients/native/phase0 green.
    Health monitor passed Windows/platform/native CI, source9863427. Next implementation: Windows AWG
    and transport switching; AWG worker passed CI12/12; signed profile/DPAPI, broker/installer/UI now implemented,
-   integration CI passed2026-09-12 (24/24 LocalSystem UDP,504 layouts; TCP regression green). Next: automatic transport policy/acceptance. Full-routing/production probe acceptance before distribution. [UI checkpoint](releases/2026-09-11-windows-tcp-ui.ru.md).
+   integration CI passed2026-09-12 (24/24 LocalSystem UDP,504 layouts; TCP regression green). Automatic transport policy accepted in scoped CI2026-09-12, source1e13c74. Next implementation: Android AWG/TCP. Full-routing/production probe acceptance before distribution. [UI checkpoint](releases/2026-09-11-windows-tcp-ui.ru.md).
    Finish Windows before moving to Android, per user.
    [Session checkpoint](releases/2026-09-11-windows-tcp-session.ru.md).
    [Lifecycle checkpoint](releases/2026-09-11-windows-tcp-lifecycle.ru.md) ·
@@ -113,12 +113,13 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 Current stage4, not stable multi-platform resilience. Details, results, backups and unfinished
 work: [session checkpoint](releases/2026-09-11-session-checkpoint.ru.md).
 
-## Оставшийся объём до Android (уточнено 2026-09-11)
+## Windows реализован; следующий блок — Android (2026-09-12)
 
 Текущий engine-crash recovery завершён отдельным отчётом; новых подпунктов в него не добавлять.
 Мониторинг недоступного соединения при живом процессе завершён и проверен в scoped CI.
 Интеграция AWG принята в scoped CI2026-09-12; [результат](releases/2026-09-11-windows-awg-integration.ru.md).
-Автоматическое переключение транспортов реализовано; Windows CI ожидается.
+Автоматическое переключение Windows принято в scoped CI2026-09-12:672 макета,7 policy-сценариев,
+живой AWG→TCP, отмена, исчерпание и очистка после SCM restart. Следующая реализация — Android AWG/TCP.
 [Отчёт и границы приёмки](releases/2026-09-12-windows-auto.ru.md). Полный маршрут/REALITY требуют отдельной
 приёмки до выпуска. Отложенные пользователем испытания на устройствах/под нагрузкой
 не возобновлять автоматически и не смешивать с реализацией.

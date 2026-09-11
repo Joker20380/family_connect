@@ -1,0 +1,272 @@
+{
+  "source": "1e13c74",
+  "date": "2026-09-12",
+  "ci": {
+    "clients": "34654036404",
+    "awg_auto": "34654036463",
+    "tcp": "34654036431",
+    "phase0": "34654036425"
+  },
+  "python_passed": 325,
+  "policy_scenarios": 7,
+  "layouts": 672,
+  "installer_sha256": "b4aae557757c4e5eed820fd34c0eb4696b1d38e0d354d327649188a428ddaca6",
+  "engine_hashes": {
+    "fc-awg.exe": "0ff643eee68ce94183b6f5dde75fc9c03eeff96d6731349c9431fc2771be1a70",
+    "wintun.dll": "e5da8447dc2c320edc0fc52fa01885c103de8c118481f683643cacc3220dafce",
+    "xray.exe": "74475d8c4f68dd07bef754e56778eb2a9061e4dfcc954fa008b912a989bd848a"
+  },
+  "native_awg": {
+    "rounds": [
+      {
+        "mode": "engine-stop",
+        "ipv4": 3,
+        "ipv6": 3,
+        "rejected": 0,
+        "clean": true
+      },
+      {
+        "mode": "owner-crash",
+        "ipv4": 3,
+        "ipv6": 3,
+        "rejected": 0,
+        "clean": true
+      },
+      {
+        "mode": "wrong-header",
+        "ipv4": 0,
+        "ipv6": 0,
+        "rejected": 2,
+        "clean": true
+      },
+      {
+        "mode": "wrong-key",
+        "ipv4": 0,
+        "ipv6": 0,
+        "rejected": 2,
+        "clean": true
+      }
+    ],
+    "passed": true,
+    "invalid_inputs_rejected": 3
+  },
+  "broker_awg_auto": {
+    "rounds": [
+      {
+        "mode": "disconnect",
+        "ipv4": 3,
+        "ipv6": 3,
+        "clean": true,
+        "other_user_denied": true,
+        "peer_before": {
+          "Received handshake initiation": "1",
+          "connection_reset_ignored": "0",
+          "disallowed source": "29",
+          "last_handshake_time_sec": "1789165847",
+          "rx_bytes": "4068",
+          "tx_bytes": "395"
+        },
+        "udp_attempts": 6
+      },
+      {
+        "mode": "engine-crash",
+        "ipv4": 6,
+        "ipv6": 6,
+        "clean": true,
+        "other_user_denied": true,
+        "peer_before": {
+          "Received handshake initiation": "2",
+          "connection_reset_ignored": "0",
+          "disallowed source": "58",
+          "last_handshake_time_sec": "1789165861",
+          "rx_bytes": "9144",
+          "tx_bytes": "1852"
+        },
+        "udp_attempts": 12,
+        "recovery_peer_before": {
+          "Received handshake initiation": "3",
+          "connection_reset_ignored": "5",
+          "disallowed source": "90",
+          "last_handshake_time_sec": "1789165885",
+          "rx_bytes": "14812",
+          "tx_bytes": "3946"
+        },
+        "recovered": true
+      },
+      {
+        "mode": "broker-crash",
+        "ipv4": 3,
+        "ipv6": 3,
+        "clean": true,
+        "other_user_denied": true,
+        "peer_before": {
+          "Received handshake initiation": "4",
+          "connection_reset_ignored": "5",
+          "disallowed source": "119",
+          "last_handshake_time_sec": "1789165898",
+          "rx_bytes": "19808",
+          "tx_bytes": "5403"
+        },
+        "udp_attempts": 6
+      },
+      {
+        "mode": "cancel-start",
+        "ipv4": 0,
+        "ipv6": 0,
+        "clean": true
+      }
+    ],
+    "passed": true,
+    "profile_replacement_checked": true,
+    "peer_stats": {
+      "Received handshake initiation": "5",
+      "connection_reset_ignored": "10",
+      "disallowed source": "149",
+      "last_handshake_time_sec": "1789165923",
+      "rx_bytes": "25508",
+      "tx_bytes": "7644"
+    },
+    "automatic": [
+      {
+        "mode": "auto-fallback-restart",
+        "ipv4": 3,
+        "ipv6": 3,
+        "http": 6,
+        "clean": true,
+        "peer_before": {
+          "Received handshake initiation": "5",
+          "connection_reset_ignored": "10",
+          "disallowed source": "149",
+          "last_handshake_time_sec": "1789165923",
+          "rx_bytes": "25508",
+          "tx_bytes": "7644"
+        },
+        "udp_attempts": 6
+      },
+      {
+        "mode": "auto-exhaustion",
+        "clean": true
+      },
+      {
+        "mode": "auto-cancel",
+        "clean": true
+      },
+      {
+        "mode": "auto-cancel-probe",
+        "clean": true
+      }
+    ],
+    "automatic_passed": true
+  },
+  "tcp_regression": {
+    "rounds": [
+      {
+        "mode": "disconnect",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1
+      },
+      {
+        "mode": "engine-crash",
+        "http4": 6,
+        "http6": 6,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 2,
+        "recovered": true
+      },
+      {
+        "mode": "broker-crash",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1
+      },
+      {
+        "mode": "service-stop",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1
+      },
+      {
+        "mode": "cancel-start",
+        "http4": 0,
+        "http6": 0,
+        "dns": false,
+        "clean": true
+      },
+      {
+        "mode": "cancel-recovery",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1,
+        "retry_cancelled": true
+      },
+      {
+        "mode": "service-stop-recovery",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1,
+        "retry_cancelled": true
+      },
+      {
+        "mode": "recovery-exhaustion",
+        "http4": 12,
+        "http6": 12,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 4,
+        "restarts": 3,
+        "recovery_seconds": [
+          24.6,
+          39.82,
+          69.99
+        ]
+      },
+      {
+        "mode": "health-recovery",
+        "http4": 6,
+        "http6": 6,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 2,
+        "single_failure_tolerated": true,
+        "health_recovered": true
+      },
+      {
+        "mode": "health-cancel",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1,
+        "single_failure_tolerated": true,
+        "probe_cancelled": true
+      }
+    ],
+    "passed": true
+  },
+  "limits": [
+    "WG service startup failure exercised, not live WG packet transfer",
+    "AWG health uses test-only nonce UDP; installed build uses HTTPS",
+    "Scoped routes only; external/full-route/device acceptance deferred"
+  ]
+}
