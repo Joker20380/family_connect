@@ -8,6 +8,16 @@ Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `1176
 
 ## Latest checkpoint — 2026-09-11
 
+- Source checkpoint180d79f pushed to main. All exact-source CI passed: clients
+  (Linux/Windows/Android), TCP, AWG, phase0. No release job ran. Downloaded CI setup
+  matches previously tested SHA256; downloaded Linux archive six files match git180d79f.
+  Versions remain0.2.8 in source; review archive must not replace published0.2.8.
+  Draft0.2.9 notes prepared; next version bump/exact-source CI/immutable publication
+  and offline catalog signing. Installed versions/server unchanged, network tests deferred.
+  [CI and artifacts](releases/2026-09-11-platform-ci.ru.md).
+
+### Previous integration checkpoint
+
 - User deferred further network/load tests and requested moving development forward.
   Functionality demonstrated; ordinary-load stability remains an open known limitation.
   Standalone TCP Setup sources/tests/CI/VM recipes integrated from bootstrap worktree

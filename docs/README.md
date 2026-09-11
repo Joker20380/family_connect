@@ -81,3 +81,5 @@ First-laptop pinned-control offload comparison: [report](releases/2026-09-11-fir
 First-laptop isolated TUN/SOCKS/direct: [report](releases/2026-09-11-first-laptop-isolated.ru.md).
 
 Standalone setup integrated; network tests deferred by user: [checkpoint](releases/2026-09-11-setup-integration.ru.md).
+
+Platform CI180d79f and release preparation: [checkpoint](releases/2026-09-11-platform-ci.ru.md).
