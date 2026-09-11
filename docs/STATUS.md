@@ -6,6 +6,17 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+- Current roadmap: **stage 3, Linux TCP-reserve diagnosis/acceptance**. WG works;
+  AWG/recovery passed in Linux pilot, not yet a cross-platform stable rollout.
+  [Development roadmap](ROADMAP.ru.md).
+- Local-link comparison completed: Wi-Fi gateway 30/30, median 31.35 ms, max 496 ms;
+  VPS 26/30, control 28/30, direct HTTPS 30/30 (up to 2.608 s). Correlated gateway,
+  control and HTTPS delays; Wi-Fi retries +433 including background traffic.
+  Local network contributes jitter; this does not explain every prior TLS failure.
+  Next: user connects via Ethernet or improves Wi-Fi placement, repeat baseline then
+  matched TCP acceptance before host rollout. No settings or installed code changed.
+  [Local-link evidence](releases/2026-09-11-local-link.ru.md).
+
 - Paired TCP-header diagnosis completed (experiment `2674d20`): 72/72 handshakes matched across client/server.
   In the failing round client SYN→SYN-ACK took 0.788–1.315 s, while server response
   took 9–73 microseconds (max across all flows 0.846 ms); two SYN retries were observed

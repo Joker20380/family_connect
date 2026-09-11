@@ -1,0 +1,1920 @@
+{
+  "summary": {
+    "gateway": {
+      "passed": 30,
+      "total": 30,
+      "median_ms": 31.35,
+      "max_ms": 496.0
+    },
+    "vps": {
+      "passed": 26,
+      "total": 30,
+      "median_ms": 87.94999999999999,
+      "max_ms": 827.0
+    },
+    "control": {
+      "passed": 28,
+      "total": 30,
+      "median_ms": 40.2,
+      "max_ms": 451.0
+    },
+    "https": {
+      "passed": 30,
+      "total": 30
+    },
+    "wifi_available": true,
+    "seconds": 44.784
+  },
+  "rows": [
+    {
+      "t": 0.001,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -78.0,
+        "tx retries": 53612.0,
+        "tx failed": 65.0,
+        "tx packets": 327817.0,
+        "rx packets": 776690.0,
+        "tx bitrate": 137.6,
+        "rx bitrate": 48.7,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -74.0,
+        "signal avg": -77.0,
+        "tx retries": 53616.0,
+        "tx failed": 65.0,
+        "tx packets": 327844.0,
+        "rx packets": 776714.0,
+        "tx bitrate": 137.6,
+        "rx bitrate": 65.0,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 4.72
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 45.8
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 6.56
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.013992",
+            "0.066739",
+            "0.081527",
+            "0.081563"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 1.102,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -78.0,
+        "tx retries": 53638.0,
+        "tx failed": 65.0,
+        "tx packets": 327936.0,
+        "rx packets": 776827.0,
+        "tx bitrate": 137.6,
+        "rx bitrate": 48.7,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -74.0,
+        "signal avg": -76.0,
+        "tx retries": 53641.0,
+        "tx failed": 65.0,
+        "tx packets": 327975.0,
+        "rx packets": 776865.0,
+        "tx bitrate": 48.7,
+        "rx bitrate": 48.7,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 3.15
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 64.6
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 6.47
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.004450",
+            "0.047572",
+            "0.107698",
+            "0.107763"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 2.227,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -76.0,
+        "tx retries": 53656.0,
+        "tx failed": 65.0,
+        "tx packets": 328029.0,
+        "rx packets": 776949.0,
+        "tx bitrate": 65.0,
+        "rx bitrate": 32.4,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -77.0,
+        "tx retries": 53657.0,
+        "tx failed": 65.0,
+        "tx packets": 328049.0,
+        "rx packets": 776972.0,
+        "tx bitrate": 65.0,
+        "rx bitrate": 68.8,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 3.9
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 43.5
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 7.72
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.005517",
+            "0.048509",
+            "0.064490",
+            "0.064543"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 3.326,
+      "before": {
+        "available": true,
+        "signal": -73.0,
+        "signal avg": -74.0,
+        "tx retries": 53678.0,
+        "tx failed": 65.0,
+        "tx packets": 328135.0,
+        "rx packets": 777104.0,
+        "tx bitrate": 65.0,
+        "rx bitrate": 65.0,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -73.0,
+        "signal avg": -74.0,
+        "tx retries": 53678.0,
+        "tx failed": 65.0,
+        "tx packets": 328155.0,
+        "rx packets": 777124.0,
+        "tx bitrate": 65.0,
+        "rx bitrate": 68.8,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 22.0
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 119.0
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 24.1
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.020944",
+            "0.039618",
+            "0.053964",
+            "0.054011"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 4.453,
+      "before": {
+        "available": true,
+        "signal": -73.0,
+        "signal avg": -75.0,
+        "tx retries": 53684.0,
+        "tx failed": 65.0,
+        "tx packets": 328267.0,
+        "rx packets": 777282.0,
+        "tx bitrate": 65.0,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -73.0,
+        "signal avg": -76.0,
+        "tx retries": 53684.0,
+        "tx failed": 65.0,
+        "tx packets": 328298.0,
+        "rx packets": 777325.0,
+        "tx bitrate": 65.0,
+        "rx bitrate": 65.0,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 59.4
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 110.0
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 60.7
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.055324",
+            "0.118035",
+            "0.172028",
+            "0.172081"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 5.647,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -76.0,
+        "tx retries": 53696.0,
+        "tx failed": 65.0,
+        "tx packets": 328385.0,
+        "rx packets": 777418.0,
+        "tx bitrate": 65.0,
+        "rx bitrate": 48.7,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -74.0,
+        "signal avg": -74.0,
+        "tx retries": 53702.0,
+        "tx failed": 65.0,
+        "tx packets": 328486.0,
+        "rx packets": 778200.0,
+        "tx bitrate": 65.0,
+        "rx bitrate": 48.7,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 9.75
+        },
+        {
+          "kind": "vps",
+          "ok": false,
+          "ms": null
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 48.8
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.050836",
+            "0.158633",
+            "0.409329",
+            "0.409385"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 7.658,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -74.0,
+        "tx retries": 53711.0,
+        "tx failed": 65.0,
+        "tx packets": 328582.0,
+        "rx packets": 779255.0,
+        "tx bitrate": 48.7,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -74.0,
+        "tx retries": 53712.0,
+        "tx failed": 65.0,
+        "tx packets": 328658.0,
+        "rx packets": 779871.0,
+        "tx bitrate": 48.7,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 40.7
+        },
+        {
+          "kind": "vps",
+          "ok": false,
+          "ms": null
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 78.4
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.075157",
+            "0.108576",
+            "0.286326",
+            "0.286471"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 9.672,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -73.0,
+        "tx retries": 53712.0,
+        "tx failed": 65.0,
+        "tx packets": 328697.0,
+        "rx packets": 780079.0,
+        "tx bitrate": 48.7,
+        "rx bitrate": 65.0,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -74.0,
+        "signal avg": -73.0,
+        "tx retries": 53713.0,
+        "tx failed": 65.0,
+        "tx packets": 328834.0,
+        "rx packets": 780775.0,
+        "tx bitrate": 48.7,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 450.0
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 827.0
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 451.0
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.817640",
+            "1.055775",
+            "1.251302",
+            "1.251392"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 11.951,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -72.0,
+        "tx retries": 53718.0,
+        "tx failed": 65.0,
+        "tx packets": 328919.0,
+        "rx packets": 781428.0,
+        "tx bitrate": 48.7,
+        "rx bitrate": 32.5,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -74.0,
+        "tx retries": 53727.0,
+        "tx failed": 65.0,
+        "tx packets": 329036.0,
+        "rx packets": 782086.0,
+        "tx bitrate": 48.7,
+        "rx bitrate": 73.1,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 229.0
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 343.0
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 228.0
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.224017",
+            "0.724465",
+            "1.042990",
+            "1.043100"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 14.017,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -74.0,
+        "tx retries": 53727.0,
+        "tx failed": 65.0,
+        "tx packets": 329207.0,
+        "rx packets": 782822.0,
+        "tx bitrate": 48.7,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -75.0,
+        "tx retries": 53730.0,
+        "tx failed": 65.0,
+        "tx packets": 329455.0,
+        "rx packets": 783794.0,
+        "tx bitrate": 129.9,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 496.0
+        },
+        {
+          "kind": "vps",
+          "ok": false,
+          "ms": null
+        },
+        {
+          "kind": "control",
+          "ok": false,
+          "ms": null
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.489211",
+            "1.443903",
+            "1.581581",
+            "1.581701"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 16.62,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -75.0,
+        "tx retries": 53735.0,
+        "tx failed": 65.0,
+        "tx packets": 329635.0,
+        "rx packets": 784694.0,
+        "tx bitrate": 129.9,
+        "rx bitrate": 64.9,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -75.0,
+        "tx retries": 53738.0,
+        "tx failed": 65.0,
+        "tx packets": 329712.0,
+        "rx packets": 785073.0,
+        "tx bitrate": 129.9,
+        "rx bitrate": 68.8,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 143.0
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 176.0
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 148.0
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.139240",
+            "0.201693",
+            "0.284596",
+            "0.284649"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 17.924,
+      "before": {
+        "available": true,
+        "signal": -74.0,
+        "signal avg": -75.0,
+        "tx retries": 53745.0,
+        "tx failed": 65.0,
+        "tx packets": 329863.0,
+        "rx packets": 785919.0,
+        "tx bitrate": 129.9,
+        "rx bitrate": 32.5,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -74.0,
+        "signal avg": -76.0,
+        "tx retries": 53747.0,
+        "tx failed": 65.0,
+        "tx packets": 329978.0,
+        "rx packets": 786406.0,
+        "tx bitrate": 129.9,
+        "rx bitrate": 48.7,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 47.7
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 167.0
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 102.0
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.104237",
+            "0.300936",
+            "0.683998",
+            "0.684105"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 19.622,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -76.0,
+        "tx retries": 53748.0,
+        "tx failed": 65.0,
+        "tx packets": 330128.0,
+        "rx packets": 787002.0,
+        "tx bitrate": 129.9,
+        "rx bitrate": 64.9,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -73.0,
+        "signal avg": -73.0,
+        "tx retries": 53762.0,
+        "tx failed": 65.0,
+        "tx packets": 330597.0,
+        "rx packets": 789585.0,
+        "tx bitrate": 68.8,
+        "rx bitrate": 32.5,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 328.0
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 585.0
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 328.0
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "1.200063",
+            "2.541439",
+            "2.607910",
+            "2.607965"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 23.247,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -73.0,
+        "tx retries": 53768.0,
+        "tx failed": 65.0,
+        "tx packets": 330811.0,
+        "rx packets": 790931.0,
+        "tx bitrate": 154.8,
+        "rx bitrate": 25.8,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -74.0,
+        "signal avg": -76.0,
+        "tx retries": 53770.0,
+        "tx failed": 65.0,
+        "tx packets": 330921.0,
+        "rx packets": 791616.0,
+        "tx bitrate": 154.8,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 45.9
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 190.0
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 56.5
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.203004",
+            "0.398719",
+            "0.525593",
+            "0.525741"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 24.796,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -74.0,
+        "tx retries": 53778.0,
+        "tx failed": 65.0,
+        "tx packets": 331086.0,
+        "rx packets": 792400.0,
+        "tx bitrate": 154.8,
+        "rx bitrate": 48.7,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -74.0,
+        "signal avg": -74.0,
+        "tx retries": 53778.0,
+        "tx failed": 65.0,
+        "tx packets": 331108.0,
+        "rx packets": 792427.0,
+        "tx bitrate": 154.8,
+        "rx bitrate": 48.7,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 48.5
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 114.0
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 51.1
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.048263",
+            "0.112143",
+            "0.121668",
+            "0.121715"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 25.931,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -74.0,
+        "tx retries": 53790.0,
+        "tx failed": 65.0,
+        "tx packets": 331229.0,
+        "rx packets": 793113.0,
+        "tx bitrate": 68.8,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -74.0,
+        "signal avg": -73.0,
+        "tx retries": 53790.0,
+        "tx failed": 65.0,
+        "tx packets": 331291.0,
+        "rx packets": 793588.0,
+        "tx bitrate": 103.2,
+        "rx bitrate": 24.3,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 72.2
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 139.0
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 72.6
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.067026",
+            "0.204590",
+            "0.309288",
+            "0.309495"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 27.267,
+      "before": {
+        "available": true,
+        "signal": -74.0,
+        "signal avg": -75.0,
+        "tx retries": 53793.0,
+        "tx failed": 65.0,
+        "tx packets": 331394.0,
+        "rx packets": 794684.0,
+        "tx bitrate": 103.2,
+        "rx bitrate": 68.8,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -73.0,
+        "signal avg": -74.0,
+        "tx retries": 53802.0,
+        "tx failed": 65.0,
+        "tx packets": 331511.0,
+        "rx packets": 795437.0,
+        "tx bitrate": 103.2,
+        "rx bitrate": 32.5,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 127.0
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 267.0
+        },
+        {
+          "kind": "control",
+          "ok": false,
+          "ms": null
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.123117",
+            "0.325927",
+            "0.747623",
+            "0.747702"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 29.28,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -74.0,
+        "tx retries": 53802.0,
+        "tx failed": 65.0,
+        "tx packets": 331652.0,
+        "rx packets": 796525.0,
+        "tx bitrate": 103.2,
+        "rx bitrate": 24.3,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -73.0,
+        "tx retries": 53804.0,
+        "tx failed": 65.0,
+        "tx packets": 331760.0,
+        "rx packets": 797630.0,
+        "tx bitrate": 103.2,
+        "rx bitrate": 24.3,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 154.0
+        },
+        {
+          "kind": "vps",
+          "ok": false,
+          "ms": null
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 154.0
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.148839",
+            "0.331843",
+            "0.473416",
+            "0.473475"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 31.292,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -73.0,
+        "tx retries": 53814.0,
+        "tx failed": 65.0,
+        "tx packets": 331857.0,
+        "rx packets": 797804.0,
+        "tx bitrate": 68.8,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -73.0,
+        "tx retries": 53821.0,
+        "tx failed": 65.0,
+        "tx packets": 331881.0,
+        "rx packets": 797833.0,
+        "tx bitrate": 68.8,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 45.1
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 108.0
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 48.7
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.036755",
+            "0.111911",
+            "0.137587",
+            "0.137640"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 32.458,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -73.0,
+        "tx retries": 53841.0,
+        "tx failed": 65.0,
+        "tx packets": 331956.0,
+        "rx packets": 797914.0,
+        "tx bitrate": 68.8,
+        "rx bitrate": 64.9,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -73.0,
+        "tx retries": 53842.0,
+        "tx failed": 65.0,
+        "tx packets": 331978.0,
+        "rx packets": 797936.0,
+        "tx bitrate": 68.8,
+        "rx bitrate": 68.8,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 6.9
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 47.7
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 8.0
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.004459",
+            "0.038867",
+            "0.059710",
+            "0.059816"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 33.54,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -73.0,
+        "tx retries": 53870.0,
+        "tx failed": 65.0,
+        "tx packets": 332078.0,
+        "rx packets": 798036.0,
+        "tx bitrate": 68.8,
+        "rx bitrate": 77.4,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -76.0,
+        "signal avg": -73.0,
+        "tx retries": 53870.0,
+        "tx failed": 65.0,
+        "tx packets": 332099.0,
+        "rx packets": 798056.0,
+        "tx bitrate": 137.6,
+        "rx bitrate": 68.8,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 7.16
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 40.9
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 7.61
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.006394",
+            "0.034095",
+            "0.045056",
+            "0.045100"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 34.597,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -76.0,
+        "tx retries": 53880.0,
+        "tx failed": 65.0,
+        "tx packets": 332275.0,
+        "rx packets": 799205.0,
+        "tx bitrate": 154.8,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -74.0,
+        "signal avg": -76.0,
+        "tx retries": 53886.0,
+        "tx failed": 65.0,
+        "tx packets": 332332.0,
+        "rx packets": 799649.0,
+        "tx bitrate": 154.8,
+        "rx bitrate": 48.7,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 58.1
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 89.8
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 58.1
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.054435",
+            "0.155379",
+            "0.333336",
+            "0.333420"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 35.946,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -74.0,
+        "tx retries": 53894.0,
+        "tx failed": 65.0,
+        "tx packets": 332435.0,
+        "rx packets": 800150.0,
+        "tx bitrate": 51.6,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -74.0,
+        "tx retries": 53899.0,
+        "tx failed": 65.0,
+        "tx packets": 332457.0,
+        "rx packets": 800170.0,
+        "tx bitrate": 51.6,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 9.37
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 65.2
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 11.3
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.008703",
+            "0.074253",
+            "0.085411",
+            "0.085456"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 37.045,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -73.0,
+        "tx retries": 53917.0,
+        "tx failed": 65.0,
+        "tx packets": 332540.0,
+        "rx packets": 800293.0,
+        "tx bitrate": 103.2,
+        "rx bitrate": 73.1,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -74.0,
+        "tx retries": 53919.0,
+        "tx failed": 65.0,
+        "tx packets": 332560.0,
+        "rx packets": 800312.0,
+        "tx bitrate": 103.2,
+        "rx bitrate": 77.4,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 2.95
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 39.7
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 4.76
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.003658",
+            "0.022475",
+            "0.030271",
+            "0.030314"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 38.093,
+      "before": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -74.0,
+        "tx retries": 53959.0,
+        "tx failed": 65.0,
+        "tx packets": 332685.0,
+        "rx packets": 800464.0,
+        "tx bitrate": 137.6,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -75.0,
+        "signal avg": -73.0,
+        "tx retries": 53964.0,
+        "tx failed": 65.0,
+        "tx packets": 332717.0,
+        "rx packets": 800490.0,
+        "tx bitrate": 137.6,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 1.9
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 48.9
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 3.77
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.006838",
+            "0.032163",
+            "0.044996",
+            "0.045044"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 39.158,
+      "before": {
+        "available": true,
+        "signal": -73.0,
+        "signal avg": -73.0,
+        "tx retries": 53989.0,
+        "tx failed": 65.0,
+        "tx packets": 332821.0,
+        "rx packets": 800615.0,
+        "tx bitrate": 68.8,
+        "rx bitrate": 68.8,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -73.0,
+        "signal avg": -73.0,
+        "tx retries": 53992.0,
+        "tx failed": 65.0,
+        "tx packets": 332844.0,
+        "rx packets": 800639.0,
+        "tx bitrate": 68.8,
+        "rx bitrate": 97.4,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 2.58
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 40.4
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 31.7
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.029090",
+            "0.044825",
+            "0.053572",
+            "0.053615"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 40.229,
+      "before": {
+        "available": true,
+        "signal": -73.0,
+        "signal avg": -73.0,
+        "tx retries": 54012.0,
+        "tx failed": 65.0,
+        "tx packets": 332946.0,
+        "rx packets": 800749.0,
+        "tx bitrate": 68.8,
+        "rx bitrate": 48.7,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -72.0,
+        "signal avg": -72.0,
+        "tx retries": 54014.0,
+        "tx failed": 65.0,
+        "tx packets": 332966.0,
+        "rx packets": 800766.0,
+        "tx bitrate": 68.8,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 1.44
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 39.2
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 4.37
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.006474",
+            "0.020606",
+            "0.031765",
+            "0.031813"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 41.279,
+      "before": {
+        "available": true,
+        "signal": -73.0,
+        "signal avg": -72.0,
+        "tx retries": 54018.0,
+        "tx failed": 65.0,
+        "tx packets": 333070.0,
+        "rx packets": 800871.0,
+        "tx bitrate": 51.6,
+        "rx bitrate": 32.4,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -73.0,
+        "signal avg": -73.0,
+        "tx retries": 54018.0,
+        "tx failed": 65.0,
+        "tx packets": 333095.0,
+        "rx packets": 800897.0,
+        "tx bitrate": 51.6,
+        "rx bitrate": 48.7,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 3.02
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 86.1
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 18.4
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.088567",
+            "0.107274",
+            "0.158557",
+            "0.158634"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 42.453,
+      "before": {
+        "available": true,
+        "signal": -69.0,
+        "signal avg": -73.0,
+        "tx retries": 54027.0,
+        "tx failed": 65.0,
+        "tx packets": 333140.0,
+        "rx packets": 800985.0,
+        "tx bitrate": 103.2,
+        "rx bitrate": 51.6,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -74.0,
+        "signal avg": -73.0,
+        "tx retries": 54031.0,
+        "tx failed": 65.0,
+        "tx packets": 333169.0,
+        "rx packets": 801026.0,
+        "tx bitrate": 103.2,
+        "rx bitrate": 65.0,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 5.78
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 48.9
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 6.26
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.039686",
+            "0.191309",
+            "0.202514",
+            "0.202567"
+          ],
+          "error": ""
+        }
+      ]
+    },
+    {
+      "t": 43.685,
+      "before": {
+        "available": true,
+        "signal": -73.0,
+        "signal avg": -72.0,
+        "tx retries": 54044.0,
+        "tx failed": 65.0,
+        "tx packets": 333236.0,
+        "rx packets": 801117.0,
+        "tx bitrate": 137.6,
+        "rx bitrate": 65.0,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "after": {
+        "available": true,
+        "signal": -73.0,
+        "signal avg": -72.0,
+        "tx retries": 54045.0,
+        "tx failed": 65.0,
+        "tx packets": 333263.0,
+        "rx packets": 801145.0,
+        "tx bitrate": 137.6,
+        "rx bitrate": 68.8,
+        "tx_errors": 0,
+        "rx_errors": 0,
+        "tx_dropped": 255,
+        "rx_dropped": 3
+      },
+      "results": [
+        {
+          "kind": "gateway",
+          "ok": true,
+          "ms": 1.26
+        },
+        {
+          "kind": "vps",
+          "ok": true,
+          "ms": 83.9
+        },
+        {
+          "kind": "control",
+          "ok": true,
+          "ms": 3.69
+        },
+        {
+          "kind": "https",
+          "ok": true,
+          "code": 0,
+          "timing": [
+            "200",
+            "0.004366",
+            "0.020204",
+            "0.028832",
+            "0.028898"
+          ],
+          "error": ""
+        }
+      ]
+    }
+  ]
+}

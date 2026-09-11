@@ -34,3 +34,7 @@ TCP routing correction (isolated tests passed; not installed): [report](releases
 Matched TCP/direct/SOCKS timing and remaining errors: [report](releases/2026-09-11-tcp-matched.ru.md).
 
 Paired client/server TCP-header diagnosis: [report](releases/2026-09-11-tcp-packets.ru.md).
+
+Development stages and acceptance criteria: [roadmap](ROADMAP.ru.md).
+
+Local Wi-Fi/gateway/VPS comparison: [report](releases/2026-09-11-local-link.ru.md).

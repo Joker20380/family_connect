@@ -1,5 +1,7 @@
 # Working plan / Рабочий план
 
+Общий план и критерии этапов: [ROADMAP](ROADMAP.ru.md). Сейчас этап 3 — TCP-пилот.
+
 ## Completed: 0.2.1 rollout
 
 Platform CI and immutable release published; Linux installed with backup; gateway,
@@ -64,16 +66,14 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
 ## Next, in order
 
-1. Localize the client-to-gateway delay using bounded simultaneous local Wi-Fi gateway
-   and VPS latency checks plus wireless/link retry counters, without recording SSID/BSSID.
-   Paired capture matched 72/72 handshakes: slow client RTT 0.788–1.315 s vs server
-   SYN response 9–73 microseconds in the failing round. This excludes slow server SYN
-   handling for those flows, not every server/REALITY issue or a specific network cause.
-   [Paired capture and limits](releases/2026-09-11-tcp-packets.ru.md).
-   ICMP alone cannot establish TCP loss; compare with actual HTTPS behavior.
-   Do not change timeouts or deploy the helper blindly. After localization: backup/install,
-   short host test, established AWG → TCP recovery. Main WG/AWG remains unchanged;
-   source branch `pilot/tcp-reality-2026-09-11`, routing correction remains uninstalled.
+1. Repeat the local-link baseline on a more stable connection: user connects Ethernet
+   or moves closer to the access point; do not change host connectivity remotely.
+   Current gateway max 496 ms correlates with external HTTPS delays; Wi-Fi retries +433.
+   [Local-link diagnosis](releases/2026-09-11-local-link.ru.md).
+   Then repeat matched TCP acceptance. If gateway jitter improves but TLS failures remain,
+   investigate remaining external/engine causes separately. No blind timeout increase.
+   After localization: backup/install corrected helper, short host test, established
+   AWG → TCP recovery. Main WG/AWG unchanged; experimental routing remains uninstalled.
 2. Integrate the tested transports into native Windows/Android. Complete platform CI,
    installation/UI checks and signed release before upgrading the stable client channel.
 3. Integrate provisioning/runtime/ACK and known-good recovery with real Reticulum
