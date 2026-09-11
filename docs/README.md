@@ -95,3 +95,5 @@ Windows TCP profile: [operator runbook](windows-tcp-profile.ru.md) · [broker ac
 Windows TCP process lifetime: [native stop/crash acceptance](releases/2026-09-11-windows-tcp-lifecycle.ru.md).
 
 Windows TCP broker network session: [runbook](windows-tcp-session.ru.md) · [LocalSystem acceptance](releases/2026-09-11-windows-tcp-session.ru.md).
+
+Windows TCP installer/transport UI: [report](releases/2026-09-11-windows-tcp-ui.ru.md), [runbook](windows-tcp-session.ru.md).

@@ -1,5 +1,6 @@
 param([Parameter(Mandatory)][string]$Output)
 $ErrorActionPreference='Stop'
+if((go version) -ne 'go version go1.26.1 windows/amd64'){throw 'Xray requires the accepted Go 1.26.1 Windows amd64 toolchain'}
 $revision='d2758a023cd7f4174a5a5fa4ff66e487d4342ba0'
 $source=Join-Path $env:RUNNER_TEMP 'fc-xray-windows-source'
 if(Test-Path $Output){throw 'Use a fresh output directory'}

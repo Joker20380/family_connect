@@ -16,7 +16,12 @@ if(-not(Test-Path $vendor)) {
 }
 git -C $vendor checkout --force --detach a4b7f47672b393698127ca14a58f5953bc8b5217
 Check-Exit
-& "$PSScriptRoot/build-tunnel.ps1" -Vendor $vendor
+# WireGuard uses its own Go fork; do not leak that toolchain into the pinned Xray build.
+$toolchainNames=@('PATH','GOROOT','GOPATH','GOTOOLCHAIN','GOWORK','GOOS','GOARCH','CGO_ENABLED','CC','CGO_CFLAGS')
+$toolchainBefore=@{}
+foreach($name in $toolchainNames){$toolchainBefore[$name]=[Environment]::GetEnvironmentVariable($name,'Process')}
+try { & "$PSScriptRoot/build-tunnel.ps1" -Vendor $vendor }
+finally { foreach($name in $toolchainNames){[Environment]::SetEnvironmentVariable($name,$toolchainBefore[$name],'Process')} }
 dotnet run --project Tests/Tests.csproj -c Release
 Check-Exit
 dotnet publish FamilyConnect.csproj -c Release -r win-x64 --self-contained true -o build/publish
