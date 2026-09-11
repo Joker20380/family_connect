@@ -144,10 +144,10 @@ internal sealed class MainForm:Form
         foreach(float scale in new[]{1f,1.5f,2f,2.5f})
         foreach(bool russian in new[]{true,false})
         foreach(bool tcp in new[]{false,true})
-        foreach(string connection in new[]{"inactive","off","pending","on","other-user","unknown"})
+        foreach(string connection in new[]{"inactive","off","pending","recovering","on","other-user","unknown"})
         foreach(Size size in new[]{new Size(360,420),new Size(480,620),new Size(800,700)}){
             using var form=new MainForm(true,true);
-            form.ru=russian;form.state=connection;form.tcpReady=tcp;form.transport=tcp?"tcp":"wg";form.mode.SelectedIndex=tcp?1:0;
+            form.ru=russian;form.state=connection=="recovering"?"pending":connection;form.lastError=connection=="recovering"?"tcp-reconnecting":null;form.tcpReady=tcp;form.transport=tcp?"tcp":"wg";form.mode.SelectedIndex=tcp?1:0;
             form.Scale(new SizeF(scale,scale));
             form.ClientSize=new Size((int)(size.Width*scale),(int)(size.Height*scale));
             form.detail.Text=russian?"Служба Family Connect недоступна. Повторно запустите установщик приложения.":"Family Connect service is unavailable. Run the application installer again.";
@@ -208,6 +208,12 @@ internal sealed class MainForm:Form
         if(form.detail.Text!=form.ErrorText("tcp-engine-exited"))throw new Exception("Same-state TCP error hidden");
         form.call=_=>Task.FromResult(new Reply(true,"inactive",TcpReady:false,Transport:"wg"));Pump(form.PollStatus());
         if(form.connect.Enabled||form.detail.Text!="")throw new Exception("TCP readiness or recovery stale");
+        form.call=_=>Task.FromResult(new Reply(true,"pending",Error:"tcp-reconnecting",TcpReady:true,Transport:"tcp"));Pump(form.PollStatus());
+        if(!form.connect.Enabled||form.ConnectionAction()!="disconnect"||form.mode.Enabled||form.detail.Text!=form.ErrorText("tcp-reconnecting"))throw new Exception("Recovery cancellation UI broken");
+        form.call=_=>Task.FromResult(new Reply(true,"on",TcpReady:true,Transport:"tcp"));Pump(form.PollStatus());
+        if(form.detail.Text!=""||form.state!="on")throw new Exception("Recovery success UI stale");
+        form.call=_=>Task.FromResult(new Reply(true,"inactive",Error:"tcp-recovery-exhausted",TcpReady:true,Transport:"wg"));Pump(form.PollStatus());
+        if(!form.connect.Enabled||form.ConnectionAction()!="connect-tcp"||form.detail.Text!=form.ErrorText("tcp-recovery-exhausted"))throw new Exception("Manual retry unavailable");
         static void Pump(Task task){
             var deadline=DateTime.UtcNow.AddSeconds(5);
             while(!task.IsCompleted&&DateTime.UtcNow<deadline)Application.DoEvents();
@@ -267,7 +273,7 @@ internal sealed class MainForm:Form
         status.Text=state switch{
             "on"=>T("Туннель включён","Tunnel is on"),"off"=>T("Готов к подключению","Ready to connect"),
             "inactive"=>T("Активируйте устройство","Activate your device"),"other-user"=>T("VPN занят другим пользователем","VPN used by another user"),
-            "pending"=>T("Подключение меняется…","Connection changing…"),_=>T("Статус недоступен","Status unavailable")};
+            "pending"=>lastError=="tcp-reconnecting"?T("Восстанавливаем подключение…","Reconnecting…"):T("Подключение меняется…","Connection changing…"),_=>T("Статус недоступен","Status unavailable")};
         description.Text=(state is "on" or "pending"?transport=="tcp":TcpSelected)?T("TCP · предварительная версия","TCP · preview"):T("Защищённое подключение · Россия","Private connection · Russia");
         connect.Text=state=="on"?T("Отключить","Disconnect"):state=="pending"&&transport=="tcp"?T("Отменить подключение","Cancel connection"):T("Подключить","Connect");
         connect.Enabled=!busy&&(state=="on"||(state=="pending"&&transport=="tcp")||((state is "off" or "inactive")&&(TcpSelected?tcpReady:state=="off")));
@@ -288,6 +294,8 @@ internal sealed class MainForm:Form
         "other-user"=>T("Сначала отключите VPN в другой учётной записи Windows.","Disconnect the VPN in the other Windows account first."),
         "disconnect-first" or "busy"=>T("Сначала отключите VPN.","Disconnect the VPN first."),
         "tcp-engine-missing"=>T("Компонент TCP отсутствует. Повторно запустите установщик.","TCP component is missing. Run the installer again."),
+        "tcp-reconnecting"=>T("TCP прервался. Повторяем подключение; можно отменить.","TCP was interrupted. Retrying; you can cancel."),
+        "tcp-recovery-exhausted"=>T("TCP не удалось восстановить за три попытки. Проверьте сеть и подключитесь вручную.","TCP recovery stopped after three attempts. Check your network and connect manually."),
         "tcp-engine-exited"=>T("TCP остановился. Можно подключиться повторно.","TCP stopped. You can connect again."),
         "tcp-session-failed"=>T("Не удалось включить TCP. Проверьте настройки сети и повторите попытку.","Could not start TCP. Check network settings and try again."),
         "tcp-cleanup-required"=>T("Не удалось восстановить настройки сети. Перезапустите службу Family Connect или Windows.","Could not restore network settings. Restart the Family Connect service or Windows."),

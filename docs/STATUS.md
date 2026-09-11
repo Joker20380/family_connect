@@ -7,6 +7,14 @@ checkout117611c; TCP component **0.1.0** unchanged.
 
 ## Latest checkpoint — 2026-09-11
 
+- Windows TCP engine-crash recovery implemented: three retries after successful cleanup,
+  15/30/60s backoff, SID ownership retained, cancellation/service stop prevents reconnect,
+  exhausted budget visible in UI. Runtime CI pending; no release/device/server change.
+  Health monitoring/external REALITY/full routing still pending.
+  [Recovery report](releases/2026-09-11-windows-tcp-recovery.ru.md).
+
+### Earlier packaging/UI checkpoint
+
 - Windows TCP packaging/UI implemented: pinned engine bundled with licenses/hash checks,
   WG/TCP selection, separate activation, TCP-only connect, pending cancellation and
   asynchronous error visibility. Platform runtime CI34641891335 passed (288 layouts, installed payload/broker/uninstall);

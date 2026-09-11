@@ -88,7 +88,8 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
    CI34639769072/phase0/platform passed. External REALITY/full default routing remains
    unaccepted; installer payload and TCP GUI passed platform CI34641891335, 288 layouts,
    installed hash checks and uninstall; native/session and phase0 also passed.
-   Next: recovery/full-routing acceptance before distribution,
+   Engine-crash recovery implemented (3 retries, 15/30/60s); Windows CI pending.
+   Next: recovery acceptance, health monitoring/full-routing acceptance before distribution,
    then Windows AWG. [UI checkpoint](releases/2026-09-11-windows-tcp-ui.ru.md).
    Finish Windows before moving to Android, per user.
    [Session checkpoint](releases/2026-09-11-windows-tcp-session.ru.md).

@@ -31,35 +31,53 @@ internal sealed class TcpSession
     {
         // Yield before slow operations so the pipe can accept cancellation and status while starting.
         await Task.Yield();
-        TcpEngine? engine=null;string? failure=null;bool clean=false;
-        var alias="fctcp"+Guid.NewGuid().ToString("N")[..8];
-        try {
-            token.ThrowIfCancellationRequested();
-            var route=await TcpNetwork.Call("preflight",alias);token.ThrowIfCancellationRequested();
-            Store.Atomic(Marker,JsonSerializer.SerializeToUtf8Bytes(new Journal(1,alias),Activation.Json));
-            var uplink=route.GetProperty("uplink").GetString()!;
-#if TCP_SESSION_TEST
-            var config=JsonSerializer.Serialize(new{log=new{loglevel="none"},inbounds=new[]{new{protocol="tun",settings=new{name=alias,MTU=1280}}},
-                outbounds=new[]{new{protocol="vless",settings=new{vnext=new[]{new{address="127.0.0.1",port=grant.Port,users=new[]{new{id=grant.Id,encryption="none"}}}}},
-                    streamSettings=new{sockopt=new{@interface=uplink}}}}});
-#else
-            var config=TcpProfile.Config(grant,alias,uplink);
-#endif
-            engine=TcpEngine.Start(Path.Combine(AppContext.BaseDirectory,"tcp"),config);
-            await TcpNetwork.Call("apply",alias);token.ThrowIfCancellationRequested();
-            if(!engine.Running)throw new IOException("TCP exited during start");
-            lock(gate){token.ThrowIfCancellationRequested();state="on";}
-            await Task.WhenAny(engine.WaitForExitAsync(),Task.Delay(Timeout.Infinite,token));
-            if(!token.IsCancellationRequested)failure="tcp-engine-exited";
-        }catch(OperationCanceledException) when(token.IsCancellationRequested){}
-        catch(Exception){failure="tcp-session-failed";}
-        finally {
+        // One retry budget per explicit Connect; successful restarts do not reset it.
+        int retries=0;bool established=false;
+        while(true){
+            TcpEngine? engine=null;string? failure=null;bool clean=false;
+            var alias="fctcp"+Guid.NewGuid().ToString("N")[..8];
             try {
-                engine?.Dispose();
-                if(File.Exists(Marker))await Recover();
-                clean=true;
-            }catch{failure="tcp-cleanup-required";}
-            lock(gate){state=clean?"off":"pending";error=failure;cancel?.Dispose();cancel=null;}
+                token.ThrowIfCancellationRequested();
+                var route=await TcpNetwork.Call("preflight",alias);token.ThrowIfCancellationRequested();
+                Store.Atomic(Marker,JsonSerializer.SerializeToUtf8Bytes(new Journal(1,alias),Activation.Json));
+                var uplink=route.GetProperty("uplink").GetString()!;
+#if TCP_SESSION_TEST
+                var config=JsonSerializer.Serialize(new{log=new{loglevel="none"},inbounds=new[]{new{protocol="tun",settings=new{name=alias,MTU=1280}}},
+                    outbounds=new[]{new{protocol="vless",settings=new{vnext=new[]{new{address="127.0.0.1",port=grant.Port,users=new[]{new{id=grant.Id,encryption="none"}}}}},
+                        streamSettings=new{sockopt=new{@interface=uplink}}}}});
+#else
+                var config=TcpProfile.Config(grant,alias,uplink);
+#endif
+                engine=TcpEngine.Start(Path.Combine(AppContext.BaseDirectory,"tcp"),config);
+                await TcpNetwork.Call("apply",alias);token.ThrowIfCancellationRequested();
+                if(!engine.Running)throw new IOException("TCP exited during start");
+                lock(gate){token.ThrowIfCancellationRequested();established=true;state="on";error=null;}
+                await Task.WhenAny(engine.WaitForExitAsync(),Task.Delay(Timeout.Infinite,token));
+                if(!token.IsCancellationRequested)failure="tcp-engine-exited";
+            }catch(OperationCanceledException) when(token.IsCancellationRequested){}
+            catch(Exception){failure="tcp-session-failed";}
+            finally {
+                lock(gate)state="pending";
+                try {
+                    engine?.Dispose();
+                    if(File.Exists(Marker))await Recover();
+                    clean=true;
+                }catch{failure="tcp-cleanup-required";}
+            }
+            lock(gate){
+                // Never reconnect after user cancellation, failed cleanup, or an initial setup failure.
+                if(!clean||token.IsCancellationRequested||!established||retries==3){
+                    state=clean?"off":"pending";
+                    error=!clean?failure:token.IsCancellationRequested?null:established&&retries==3?"tcp-recovery-exhausted":failure;
+                    cancel?.Dispose();cancel=null;return;
+                }
+                state="pending";error="tcp-reconnecting";
+            }
+            var delay=TimeSpan.FromSeconds(15*(1<<retries++));
+            try {await Task.Delay(delay,token);}
+            catch(OperationCanceledException) when(token.IsCancellationRequested){
+                lock(gate){state="off";error=null;cancel?.Dispose();cancel=null;}return;
+            }
         }
     }
 }

@@ -36,7 +36,7 @@ def wait_state(wanted,timeout=100):
   try:reply=call('status')
   except OSError:time.sleep(.2);continue
   if reply['state']==wanted:return reply
-  if reply.get('error'):raise RuntimeError('Session failed: '+reply['error'])
+  if reply.get('error') and reply['error']!='tcp-reconnecting':raise RuntimeError('Session failed: '+reply['error'])
   time.sleep(.25)
  raise RuntimeError('Session did not reach '+wanted+': '+str(reply))
 def baseline():
@@ -51,6 +51,35 @@ def clean():
  assert not ps("Get-NetAdapter -IncludeHidden | Where-Object {$_.Name -match '^fctcp[0-9a-f]{8}$'} | Select-Object -ExpandProperty Name"),'Adapter remains'
  assert not ps("Get-NetRoute | Where-Object {$_.DestinationPrefix -in @('198.18.0.1/32','fd79:fc::1/128')} | Select-Object -ExpandProperty DestinationPrefix"),'Route remains'
  assert baseline()==before and dns_snapshot()==dns_before and nrpt_snapshot()==nrpt_before,'Network settings changed'
+
+def kill_engine():
+ ps("Get-CimInstance Win32_Process -Filter \"Name='xray.exe'\" | Where-Object {$_.ExecutablePath -like '*tcp\\xray.exe'} | ForEach-Object {Stop-Process -Id $_.ProcessId -Force}")
+def wait_retry():
+ until=time.monotonic()+100
+ while time.monotonic()<until:
+  reply=call('status')
+  if reply.get('error')=='tcp-reconnecting':
+   assert reply['state']=='pending' and reply['transport']=='tcp'
+   assert not (root/'tcp-session.json').exists(),'Retry before cleanup'
+   assert api.ImpersonateLoggedOnUser(other_token)
+   try:
+    assert call('status')['state']=='other-user'
+    assert call('disconnect')['error']=='other-user'
+    assert call('connect-tcp')['error']=='other-user'
+   finally:api.RevertToSelf()
+   return
+  if reply.get('error'):raise RuntimeError('Recovery failed: '+reply['error'])
+  time.sleep(.1)
+ raise TimeoutError('Recovery did not enter backoff')
+def traffic(row):
+ answer=socket.getaddrinfo(uuid.uuid4().hex+'.fctcp-ci.invalid',fixture.server_port,socket.AF_UNSPEC,socket.SOCK_STREAM)
+ assert {'198.18.0.1','fd79:fc::1'}<={a[4][0] for a in answer};row['dns']=True
+ row['dns_checks']=row.get('dns_checks',0)+1
+ for target,source,counter in [('198.18.0.1','198.18.0.2','http4'),('fd79:fc::1','fd79:fc::2','http6')]:
+  for _ in range(3):
+   c=http.client.HTTPConnection(target,fixture.server_port,timeout=7,source_address=(source,0))
+   try:c.request('GET','/');r=c.getresponse();assert r.status==200 and r.read()==token;row[counter]+=1
+   finally:c.close()
 
 server=None;fixture=None;udp=None;installed=False;dns_stop=threading.Event();account=None;other_token=None
 try:
@@ -105,7 +134,7 @@ try:
  grant=dict(version=1,devicePublicKey=device,sequence=1,expiresAt=int(time.time())+3600,server='192.0.2.10',port=port,id=ident,publicKey=base64.urlsafe_b64encode(secrets.token_bytes(32)).decode().rstrip('='),serverName='example.com',shortId='0123456789abcdef')
  raw=json.dumps(grant,separators=(',',':')).encode();envelope=json.dumps(dict(payload=base64.b64encode(raw).decode(),signature=base64.b64encode(key.sign(b'family-connect/windows-tcp-activation/v1\0'+raw)).decode()))
  assert call('activate-tcp',envelope)['ok']
- for mode in ('disconnect','engine-crash','broker-crash','service-stop','cancel-start'):
+ for mode in ('disconnect','engine-crash','broker-crash','service-stop','cancel-start','cancel-recovery','service-stop-recovery','recovery-exhaustion'):
   row={'mode':mode,'http4':0,'http6':0,'dns':False,'clean':False};result['rounds'].append(row)
   reply=call('connect-tcp');assert reply['ok'] and reply['state']=='pending'
   if mode=='cancel-start':
@@ -120,25 +149,38 @@ try:
    assert call('connect-tcp')['error']=='other-user','Other account replaced session'
    row['other_user_denied']=True
   finally:api.RevertToSelf()
-  # Actual OS resolver uses the scoped NRPT rule and UDP through VLESS.
-  answer=socket.getaddrinfo(uuid.uuid4().hex+'.fctcp-ci.invalid',fixture.server_port,socket.AF_UNSPEC,socket.SOCK_STREAM)
-  assert {'198.18.0.1','fd79:fc::1'}<={a[4][0] for a in answer};row['dns']=True
-  for target,source,counter in [('198.18.0.1','198.18.0.2','http4'),('fd79:fc::1','fd79:fc::2','http6')]:
-   for _ in range(3):
-    c=http.client.HTTPConnection(target,fixture.server_port,timeout=7,source_address=(source,0))
-    try:c.request('GET','/');r=c.getresponse();assert r.status==200 and r.read()==token;row[counter]+=1
-    finally:c.close()
+  traffic(row)
   if mode=='disconnect':assert call('disconnect')['ok'];wait_state('inactive')
   elif mode=='engine-crash':
-   ps("Get-CimInstance Win32_Process -Filter \"Name='xray.exe'\" | Where-Object {$_.ExecutablePath -like '*tcp\\xray.exe'} | ForEach-Object {Stop-Process -Id $_.ProcessId -Force}")
-   reply=wait_state('inactive');assert reply['error']=='tcp-engine-exited'
+   old=json.loads((root/'tcp-session.json').read_text())['adapter'];kill_engine();wait_retry()
+   wait_state('on');assert json.loads((root/'tcp-session.json').read_text())['adapter']!=old
+   traffic(row);row['recovered']=True
+   assert call('disconnect')['ok'];wait_state('inactive')
+  elif mode in ('cancel-recovery','service-stop-recovery'):
+   kill_engine();wait_retry()
+   if mode=='cancel-recovery':assert call('disconnect')['ok'];wait_state('inactive')
+   else:ps('Stop-Service FamilyConnectBroker');ps('Start-Service FamilyConnectBroker');wait_state('inactive')
+   time.sleep(20);assert call('status')['state']=='inactive','Cancelled recovery restarted'
+   row['retry_cancelled']=True
+  elif mode=='recovery-exhaustion':
+   row['restarts']=0;row['recovery_seconds']=[]
+   for attempt in range(4):
+    kill_engine()
+    if attempt<3:
+     started=time.monotonic();wait_retry();wait_state('on',timeout=150)
+     elapsed=time.monotonic()-started;assert elapsed>=15*(2**attempt),'Backoff shorter than policy'
+     row['recovery_seconds'].append(round(elapsed,2))
+     traffic(row);row['restarts']+=1
+    else:
+     reply=wait_state('inactive');assert reply.get('error')=='tcp-recovery-exhausted'
+   time.sleep(20);assert call('status')['state']=='inactive','Retry budget reset'
   elif mode=='broker-crash':
    ps("$s=Get-CimInstance Win32_Service -Filter \"Name='FamilyConnectBroker'\"; Stop-Process -Id $s.ProcessId -Force")
    time.sleep(2);wait_state('inactive')
   else:
    ps('Stop-Service FamilyConnectBroker');clean();ps('Start-Service FamilyConnectBroker');wait_state('inactive')
   clean();row['clean']=True
- result['passed']=all(x['clean'] and (x['mode']=='cancel-start' or x['http4']==3 and x['http6']==3 and x['dns'] and x['other_user_denied']) for x in result['rounds'])
+ result['passed']=all(x['clean'] and (x['mode']=='cancel-start' or x['http4']>=3 and x['http6']>=3 and x['dns'] and x['other_user_denied']) for x in result['rounds'])
 except Exception as error:
  import traceback
  result.update(error_type=type(error).__name__,error=str(error),traceback=traceback.format_exc());raise

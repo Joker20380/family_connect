@@ -10,7 +10,7 @@ permissions:
 jobs:
   native:
     runs-on: windows-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
@@ -44,7 +44,7 @@ jobs:
           New-Item -ItemType Directory "$env:RUNNER_TEMP/fc-windows-session/tcp" | Out-Null
           Copy-Item "$env:RUNNER_TEMP/fc-windows-tcp-engine/xray.exe","$env:RUNNER_TEMP/fc-windows-tcp-engine/wintun.dll" "$env:RUNNER_TEMP/fc-windows-session/tcp/"
       - name: LocalSystem session routes DNS cancellation and crash recovery
-        timeout-minutes: 12
+        timeout-minutes: 18
         shell: pwsh
         run: |
           python -m pip install cryptography==46.0.7
