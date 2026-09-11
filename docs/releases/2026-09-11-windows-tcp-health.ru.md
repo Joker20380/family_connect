@@ -21,7 +21,15 @@ redirect/proxy/cookies выключены, адреса фиксированы �
 
 Локально Python harness компилируется, git diff --check прошёл. Первый Windows CI34645816684 остановился при компиляции: .NET enum SocketOptionName
 не содержит UnicastInterface. Исправлено на Windows IP_UNICAST_IF=31 с прежним
-network-byte-order индексом; политика binding не ослаблялась. Повторный CI ожидается.
+network-byte-order индексом; политика binding не ослаблялась. Повторный CI исходника **9863427** прошёл:
+- [Client builds34646258699](https://github.com/Joker20380/family_connect/actions/runs/34646258699): Windows/Linux/Android success, release skipped; установленный payload/broker, UI336 layouts и uninstall.
+- [Native/session34646258684](https://github.com/Joker20380/family_connect/actions/runs/34646258684): lifecycle18/18, session 84/84 HTTP, 14 OS DNS, 10 cleanup scenarios, health recovery и отмена текущих проб success.
+- [phase0 34646258740](https://github.com/Joker20380/family_connect/actions/runs/34646258740): success.
+
+Артефакты скачаны, engine сверён с manifest; installer SHA256SUMS проверен:
+`f5df2ff522cbb476dacf2e16b27d7510ddc482b4fe036e74f5d831cc51080f29`. CI-снимок окна просмотрен.
+[Машинный результат](2026-09-11-windows-tcp-health-result.json).
+
 Синтетический TCP_SESSION_TEST использует два локальных HTTP пути через scoped TUN/VLESS,
 тот же binding/timer/retry код. Не подменяет production TLS-проверку. Добавлены сценарии:
 отказ одной цели не перезапускает сессию, отказ обеих при живом Xray вызывает

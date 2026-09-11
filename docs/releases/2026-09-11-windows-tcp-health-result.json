@@ -1,0 +1,169 @@
+{
+  "source": "9863427",
+  "initial_source": "19c2817",
+  "ci": {
+    "clients": 34646258699,
+    "native": 34646258684,
+    "phase0": 34646258740
+  },
+  "layouts": 336,
+  "installer_sha256": "f5df2ff522cbb476dacf2e16b27d7510ddc482b4fe036e74f5d831cc51080f29",
+  "engine": {
+    "go": "go version go1.26.1 windows/amd64",
+    "xray_revision": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+    "files": {
+      "wintun.dll": "e5da8447dc2c320edc0fc52fa01885c103de8c118481f683643cacc3220dafce",
+      "xray.exe": "74475d8c4f68dd07bef754e56778eb2a9061e4dfcc954fa008b912a989bd848a"
+    },
+    "wintun": "0.14.1",
+    "wintun_signer": "CN=WireGuard LLC, O=WireGuard LLC, L=Boulder, S=Colorado, C=US, SERIALNUMBER=4227913, OID.2.5.4.15=Private Organization, OID.1.3.6.1.4.1.311.60.2.1.2=Ohio, OID.1.3.6.1.4.1.311.60.2.1.3=US"
+  },
+  "native": {
+    "source": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+    "rounds": [
+      {
+        "iteration": 1,
+        "https": false,
+        "local_http": 6,
+        "stop_mode": "explicit",
+        "process_exit": true,
+        "address_state": "Preferred",
+        "adapter_removed": true
+      },
+      {
+        "iteration": 2,
+        "https": false,
+        "local_http": 6,
+        "stop_mode": "owner-crash",
+        "process_exit": true,
+        "address_state": "Preferred",
+        "adapter_removed": true
+      },
+      {
+        "iteration": 3,
+        "https": false,
+        "local_http": 6,
+        "stop_mode": "engine-crash",
+        "process_exit": true,
+        "address_state": "Preferred",
+        "adapter_removed": true
+      }
+    ],
+    "tamper_refused": [
+      "xray.exe",
+      "wintun.dll"
+    ],
+    "default_routes_unchanged": true,
+    "dns_unchanged": true,
+    "test_route_absent": true,
+    "passed": true
+  },
+  "session": {
+    "rounds": [
+      {
+        "mode": "disconnect",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1
+      },
+      {
+        "mode": "engine-crash",
+        "http4": 6,
+        "http6": 6,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 2,
+        "recovered": true
+      },
+      {
+        "mode": "broker-crash",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1
+      },
+      {
+        "mode": "service-stop",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1
+      },
+      {
+        "mode": "cancel-start",
+        "http4": 0,
+        "http6": 0,
+        "dns": false,
+        "clean": true
+      },
+      {
+        "mode": "cancel-recovery",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1,
+        "retry_cancelled": true
+      },
+      {
+        "mode": "service-stop-recovery",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1,
+        "retry_cancelled": true
+      },
+      {
+        "mode": "recovery-exhaustion",
+        "http4": 12,
+        "http6": 12,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 4,
+        "restarts": 3,
+        "recovery_seconds": [
+          25.75,
+          39.93,
+          69.98
+        ]
+      },
+      {
+        "mode": "health-recovery",
+        "http4": 6,
+        "http6": 6,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 2,
+        "single_failure_tolerated": true,
+        "health_recovered": true
+      },
+      {
+        "mode": "health-cancel",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1,
+        "single_failure_tolerated": true,
+        "probe_cancelled": true
+      }
+    ],
+    "passed": true
+  },
+  "external_https_reality_accepted": false,
+  "release_or_device_rollout": false
+}

@@ -8,7 +8,9 @@ checkout117611c; TCP component **0.1.0** unchanged.
 ## Latest checkpoint — 2026-09-11
 
 - Windows TCP bound health monitoring implemented: two targets, two failed cycles,
-  shared bounded recovery, in-flight cancellation before cleanup. Windows CI pending.
+  shared bounded recovery, in-flight cancellation before cleanup. Source9863427 passed
+  clients34646258699 (336 layouts), native/session34646258684 (84/84 HTTP,
+  14 DNS, 10 cleanup scenarios) and phase0 34646258740. Downloaded hashes verified.
   External REALITY/full routing/production probes remain unaccepted; no rollout.
   [Health report](releases/2026-09-11-windows-tcp-health.ru.md).
 
