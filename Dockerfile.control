@@ -12,6 +12,7 @@ COPY scripts /app/scripts
 COPY device_identity /app/device_identity
 COPY provisioning /app/provisioning
 COPY telemetry /app/telemetry
+COPY clients/desktop/profile_config.py /app/clients/desktop/profile_config.py
 RUN python -m pytest -q && touch /tmp/tests-passed
 
 FROM base AS runtime
