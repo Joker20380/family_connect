@@ -1,0 +1,51 @@
+name: Windows AWG native pilot
+on:
+  push:
+    paths: ['pilot/windows-awg/**', 'clients/windows/ProcessJob.cs', '.github/workflows/windows-awg.yml']
+  pull_request:
+    paths: ['pilot/windows-awg/**', 'clients/windows/ProcessJob.cs', '.github/workflows/windows-awg.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.1'
+          cache: false
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Build pinned AWG worker and synthetic peer
+        shell: pwsh
+        run: |
+          ./pilot/windows-awg/build.ps1 -Output "$env:RUNNER_TEMP/fc-windows-awg" *>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP/awg-build.log"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Build isolated owner using broker job primitive
+        shell: pwsh
+        run: |
+          dotnet publish pilot/windows-awg/owner/Host.csproj -c Release -r win-x64 --self-contained false -o "$env:RUNNER_TEMP/fc-awg-owner"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Actual AWG 2 IPv4 IPv6 data rejection and owner-crash cleanup
+        timeout-minutes: 8
+        shell: pwsh
+        run: |
+          python -m pip install cryptography==46.0.7
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python pilot/windows-awg/check.py "$env:RUNNER_TEMP/fc-windows-awg" "$env:RUNNER_TEMP/fc-awg-owner/Host.exe" "$env:RUNNER_TEMP/awg-acceptance.json" 2>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP/awg-acceptance.log"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: FamilyConnect-Windows-AWG-engine-preview
+          path: |
+            ${{ runner.temp }}/fc-windows-awg/
+            ${{ runner.temp }}/awg-build.log
+            ${{ runner.temp }}/awg-acceptance.*

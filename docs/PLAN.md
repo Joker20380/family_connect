@@ -90,7 +90,8 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
    installed hash checks and uninstall; native/session and phase0 also passed.
    Engine-crash recovery passed (3 retries, 15/30/60s), source7de6e69; clients/native/phase0 green.
    Health monitor passed Windows/platform/native CI, source9863427. Next implementation: Windows AWG
-   and transport switching; full-routing/production probe acceptance before distribution. [UI checkpoint](releases/2026-09-11-windows-tcp-ui.ru.md).
+   and transport switching; AWG native worker implemented, CI pending. Next within AWG:
+   signed profile/DPAPI + broker/installer/UI integration. Full-routing/production probe acceptance before distribution. [UI checkpoint](releases/2026-09-11-windows-tcp-ui.ru.md).
    Finish Windows before moving to Android, per user.
    [Session checkpoint](releases/2026-09-11-windows-tcp-session.ru.md).
    [Lifecycle checkpoint](releases/2026-09-11-windows-tcp-lifecycle.ru.md) ·

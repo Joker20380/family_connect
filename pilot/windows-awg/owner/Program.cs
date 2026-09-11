@@ -1,0 +1,15 @@
+using System.Diagnostics;
+using System.Text;
+using FamilyConnect;
+if(Environment.GetEnvironmentVariable("GITHUB_ACTIONS")!="true")return 2;
+var config=await Console.In.ReadToEndAsync();
+using var job=new ProcessJob();
+var info=new ProcessStartInfo(Path.GetFullPath(args[0])){UseShellExecute=false,RedirectStandardInput=true,RedirectStandardOutput=true,RedirectStandardError=true,WorkingDirectory=Path.GetDirectoryName(Path.GetFullPath(args[0]))!,StandardInputEncoding=new UTF8Encoding(false)};
+using var process=Process.Start(info)!;
+job.Attach(process);
+_ = process.StandardError.BaseStream.CopyToAsync(Stream.Null);
+await process.StandardInput.WriteAsync(config);process.StandardInput.Close();
+using var timeout=new CancellationTokenSource(TimeSpan.FromSeconds(30));
+if(await process.StandardOutput.ReadLineAsync(timeout.Token)!="ready")return 3;
+Console.WriteLine(process.Id);Console.Out.Flush();
+await process.WaitForExitAsync();return process.ExitCode;

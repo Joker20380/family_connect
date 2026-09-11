@@ -7,6 +7,13 @@ checkout117611c; TCP component **0.1.0** unchanged.
 
 ## Latest checkpoint — 2026-09-11
 
+- Windows AWG worker prepared from pinned amneziawg-go with stdin-only config,
+  fresh Wintun, bound IPv4 outer UDP and no UAPI listener; native Windows CI pending.
+  No broker/profile/GUI AWG integration or rollout yet; TCP remains accepted separately.
+  [AWG engine report](releases/2026-09-11-windows-awg-engine.ru.md).
+
+### Earlier TCP health checkpoint
+
 - Windows TCP bound health monitoring implemented: two targets, two failed cycles,
   shared bounded recovery, in-flight cancellation before cleanup. Source9863427 passed
   clients34646258699 (336 layouts), native/session34646258684 (84/84 HTTP,
