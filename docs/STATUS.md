@@ -6,6 +6,14 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+- Authenticated TCP delivery implemented as an operator CLI: separate Ed25519 domain,
+  component sequence/version floors, bounded HTTPS/hash/archive checks and root reverify.
+  250 tests passed; ephemeral-key real bundle install/reinstall passed in Debian systemd.
+  No production signature or public TCP catalog/release; real public HTTPS smoke pending.
+  Next: remote CI/downloaded artifact validation, first signed TCP pilot publication;
+  trusted broker/bootstrap and UI integration remain before broad rollout.
+  [Delivery report](releases/2026-09-11-tcp-delivery.ru.md) · [Runbook](tcp-delivery.ru.md).
+
 - Real systemd acceptance passed in a fresh Debian 12 Docker container (shared host kernel).
   Found/fixed missing procps/sysctl dependency: installer now refuses before writes.
   Corrected bundle: fresh install, actual resolved + application DNS, 6 VPN HTTPS checks,
