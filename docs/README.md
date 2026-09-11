@@ -91,3 +91,5 @@ Signed standalone TCP Setup: [trust/install runbook](tcp-setup-trust.ru.md), [re
 Windows TCP native engine: [CI result and next integration](releases/2026-09-11-windows-tcp-engine.ru.md).
 
 Windows TCP profile: [operator runbook](windows-tcp-profile.ru.md) · [broker acceptance](releases/2026-09-11-windows-tcp-profile.ru.md).
+
+Windows TCP process lifetime: [native stop/crash acceptance](releases/2026-09-11-windows-tcp-lifecycle.ru.md).

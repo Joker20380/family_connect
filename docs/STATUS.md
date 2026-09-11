@@ -7,6 +7,19 @@ checkout117611c; TCP component **0.1.0** unchanged.
 
 ## Latest checkpoint — 2026-09-11
 
+- Windows TCP process lifetime primitive completed, sourcedc8df7d. Pinned binary checks,
+  kill-on-close Job Object, stdin-only config after job assignment, unexpected-exit
+  observation. Native CI34637235553 passed18/18 local TUN/VLESS requests across explicit
+  stop, owner crash and engine crash; no orphan process/adapter, routes/DNS preserved.
+  Both binary tamper cases refused. Wintun first-install Windows environment defect fixed.
+  Client CI34637235600 all platforms and phase0 CI34637235589 passed; downloaded hashes
+  reverified. Actual owner is isolated CI harness, not broker/SCM; TCP connect still
+  unexposed. Next: broker network session/routes/DNS + crash/restart cleanup, then UI/AWG.
+  No release/device/server change; Android then Reticulum order and deferred tests retained.
+  [Lifecycle evidence](releases/2026-09-11-windows-tcp-lifecycle.ru.md).
+
+### Earlier Windows profile checkpoint
+
 - Windows TCP signed profile/broker storage completed, source4ba46e1. Strict device-bound
   Ed25519 grant, sequence floor, atomic LocalSystem DPAPI storage and offline issuer.
   300 Python tests; C# shared fixture/config +29 rejection checks; actual installed

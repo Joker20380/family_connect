@@ -80,8 +80,12 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
    Signed REALITY profile + device binding/sequence floor/LocalSystem DPAPI import now
    passed:300 Python tests, C# fixture +29 rejection cases,18 real Windows broker checks;
    all platform CI34633788708 and phase0 passed. TCP connect is still not exposed.
-   Next concrete task: broker process ownership/lifecycle and safe route/DNS apply/restore;
+   Process ownership primitive now passed18/18 local requests across explicit/owner-crash/
+   engine-crash stop, binary tamper rejection and cleanup; native/platform/phase0 CI passed.
+   It is not yet connected to broker IPC/SCM. Next: one broker TCP network session with
+   route/DNS apply/restore, readiness and cleanup on broker crash/restart;
    then GUI/fallback and Windows AWG. Finish Windows before moving to Android, per user.
+   [Lifecycle checkpoint](releases/2026-09-11-windows-tcp-lifecycle.ru.md) ·
    [Profile checkpoint](releases/2026-09-11-windows-tcp-profile.ru.md).
    This preview is not in stable installer; physical/network acceptance remains open.
    See [Windows evidence](releases/2026-09-11-windows-tcp-engine.ru.md) and
