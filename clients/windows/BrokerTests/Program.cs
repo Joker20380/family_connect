@@ -23,10 +23,10 @@ JsonElement Call(string action,string? activation=null){
  using var pipe=new NamedPipeClientStream(".","FamilyConnect.Broker.v1",PipeDirection.InOut,PipeOptions.Asynchronous,TokenImpersonationLevel.Impersonation);
  pipe.ConnectAsync(timeout.Token).GetAwaiter().GetResult();
  var raw=JsonSerializer.SerializeToUtf8Bytes(new{action,activation});byte[] header=new byte[4];BinaryPrimitives.WriteInt32LittleEndian(header,raw.Length);
- pipe.WriteAsync(header,timeout.Token).GetAwaiter().GetResult();pipe.WriteAsync(raw,timeout.Token).GetAwaiter().GetResult();
- pipe.ReadExactlyAsync(header,timeout.Token).GetAwaiter().GetResult();int length=BinaryPrimitives.ReadInt32LittleEndian(header);
+ pipe.WriteAsync(header,timeout.Token).AsTask().GetAwaiter().GetResult();pipe.WriteAsync(raw,timeout.Token).AsTask().GetAwaiter().GetResult();
+ pipe.ReadExactlyAsync(header,timeout.Token).AsTask().GetAwaiter().GetResult();int length=BinaryPrimitives.ReadInt32LittleEndian(header);
  if(length<1||length>16384)throw new Exception("reply size");
- byte[] result=new byte[length];pipe.ReadExactlyAsync(result,timeout.Token).GetAwaiter().GetResult();
+ byte[] result=new byte[length];pipe.ReadExactlyAsync(result,timeout.Token).AsTask().GetAwaiter().GetResult();
  using var document=JsonDocument.Parse(result);return document.RootElement.Clone();
 }
 void Check(bool passed,string label){if(!passed)throw new Exception(label);checks++;}
