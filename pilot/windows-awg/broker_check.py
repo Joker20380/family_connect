@@ -82,7 +82,7 @@ def traffic(row):
   with socket.socket(family,socket.SOCK_DGRAM) as p:
    p.bind((source,0));p.settimeout(3)
    for _ in range(3):
-    payload=secrets.token_bytes(96);deadline=time.monotonic()+12
+    row.setdefault('peer_before',dict(result.get('peer_stats',{})));payload=secrets.token_bytes(96);deadline=time.monotonic()+12
     while True:
      p.sendto(payload,(target,18765));row['udp_attempts']=row.get('udp_attempts',0)+1
      try:
@@ -92,6 +92,7 @@ def traffic(row):
      except socket.timeout:
       if time.monotonic()>=deadline:
        result['failed_status']=call('status')
+       result['failed_routes']=ps("Get-NetRoute | Where-Object {$_.DestinationPrefix -in @('198.18.0.1/32','fd79:fc::1/128')} | Select-Object InterfaceAlias,InterfaceIndex,DestinationPrefix,NextHop,State | ConvertTo-Json -Compress")
        result['failed_network']=ps("Get-NetIPAddress | Where-Object {$_.InterfaceAlias -like 'fcawg*'} | Select-Object InterfaceAlias,IPAddress,AddressState | ConvertTo-Json -Compress")
        raise
 try:
@@ -149,7 +150,7 @@ try:
   finally:api.RevertToSelf()
   traffic(row)
   if mode=='engine-crash':
-   ps('Get-Process fc-awg | Stop-Process -Force');wait_retry();assert wait_state('on')['transport']=='awg';traffic(row);row['recovered']=True
+   ps('Get-Process fc-awg | Stop-Process -Force');wait_retry();assert wait_state('on')['transport']=='awg';row['recovery_peer_before']=dict(result.get('peer_stats',{}));traffic(row);row['recovered']=True
   if mode=='broker-crash':
    ps("$s=Get-CimInstance Win32_Service -Filter \"Name='FamilyConnectBroker'\"; Stop-Process -Id $s.ProcessId -Force");time.sleep(2);wait_state('inactive')
   else:assert call('disconnect')['ok'];wait_state('inactive')
