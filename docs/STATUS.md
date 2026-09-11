@@ -7,6 +7,18 @@ checkout117611c; TCP component **0.1.0** unchanged.
 
 ## Latest checkpoint — 2026-09-11
 
+- Windows TCP engine foundation completed, source ba929a0. Pinned Xray/Go and signed
+  Wintun build passed actual Windows CI 34629412460; phase0 passed. Two fresh TUN/VLESS
+  runs delivered 12/12 local HTTP responses; forced exit/adapter cleanup passed twice,
+  default IPv4/IPv6 routes and DNS preserved. Downloaded binaries match build manifest.
+  Preview only: REALITY/external VPN, broker/profile/routes/DNS integration, AWG and
+  physical Windows acceptance remain pending. No release/install/server change.
+  Next: Windows broker TCP lifecycle and validated protected REALITY profile.
+  User network/load tests and Android updates remain deferred.
+  [Windows engine evidence](releases/2026-09-11-windows-tcp-engine.ru.md).
+
+### Earlier setup release
+
 - Standalone TCP Setup0.1.0 published separately, source7eee3c3.281 tests and exact
   platform/TCP/AWG/phase0 CI passed. Downloaded archive matches prior VM-tested hash;
   detached setup signature created offline/verified with production anchor and published

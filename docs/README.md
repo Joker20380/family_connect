@@ -87,3 +87,5 @@ Platform CI180d79f and release preparation: [checkpoint](releases/2026-09-11-pla
 Published desktop0.2.9 and offline signed update: [report](releases/2026-09-11-release-0.2.9.ru.md).
 
 Signed standalone TCP Setup: [trust/install runbook](tcp-setup-trust.ru.md), [release evidence](releases/2026-09-11-tcp-setup-release.ru.md).
+
+Windows TCP native engine: [CI result and next integration](releases/2026-09-11-windows-tcp-engine.ru.md).

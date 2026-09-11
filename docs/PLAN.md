@@ -75,7 +75,13 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
    Initial verifier/anchor must still be trusted independently. Next: native Windows
    AWG/TCP integration, then Android transports/device acceptance. Android manual APK
    update deferred by user; do not prioritize in-app updater/Google Play distribution.
-   See [setup evidence](releases/2026-09-11-tcp-setup-release.ru.md).
+   Windows TCP engine foundation now passed: pinned build, actual TUN/VLESS 12/12,
+   forced cleanup and default routes/DNS preservation (Windows CI34629412460).
+   Next concrete task: broker ownership/process lifecycle, protected and validated
+   REALITY profile, safe route/DNS apply/restore; then GUI/fallback and Windows AWG.
+   This preview is not in stable installer; physical/network acceptance remains open.
+   See [Windows evidence](releases/2026-09-11-windows-tcp-engine.ru.md) and
+   [setup evidence](releases/2026-09-11-tcp-setup-release.ru.md).
 3. Deferred backlog: isolated concurrency1→4→8/request-to-flow diagnosis, then repeat
    confirmed correction on second Ubuntu. Current timeouts are known pilot limitations,
    not a completed stability gate. Resume these tests later per user direction.
