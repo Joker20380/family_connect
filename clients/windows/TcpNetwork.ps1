@@ -1,4 +1,6 @@
 $ErrorActionPreference='Stop'
+[Console]::InputEncoding=[Text.UTF8Encoding]::new($false)
+[Console]::OutputEncoding=[Text.UTF8Encoding]::new($false)
 $p=[Console]::In.ReadToEnd() | ConvertFrom-Json
 if($p.adapter -notmatch '^fctcp[0-9a-f]{8}$'){throw 'invalid adapter'}
 $test=$p.test -eq $true
