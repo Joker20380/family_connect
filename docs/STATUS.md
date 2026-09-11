@@ -9,7 +9,9 @@ checkout117611c; TCP component **0.1.0** unchanged.
 
 - Windows TCP engine-crash recovery implemented: three retries after successful cleanup,
   15/30/60s backoff, SID ownership retained, cancellation/service stop prevents reconnect,
-  exhausted budget visible in UI. Runtime CI pending; no release/device/server change.
+  exhausted budget visible in UI. Source7de6e69 passed clients34643426316 (336 layouts),
+  native/session34643426300 (66/66 HTTP, 11 DNS, 8 cleanup scenarios), phase0 34643426354.
+  Downloaded artifact hashes verified; no release/device/server change.
   Health monitoring/external REALITY/full routing still pending.
   [Recovery report](releases/2026-09-11-windows-tcp-recovery.ru.md).
 

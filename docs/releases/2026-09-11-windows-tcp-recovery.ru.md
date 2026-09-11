@@ -17,7 +17,15 @@ GUI показывает восстановление и оставляет от
 
 ## Проверки
 
-Локально: синтаксис Python harness и git diff --check. Windows runtime CI ожидается.
+Локально: синтаксис Python harness и git diff --check. CI исходника **7de6e69** прошёл:
+- [Client builds34643426316](https://github.com/Joker20380/family_connect/actions/runs/34643426316): Windows/Linux/Android success, release skipped; установленный broker/driver, хеши payload, 18 TCP storage checks, UI336 layouts/interaction и uninstall.
+- [Native/session34643426300](https://github.com/Joker20380/family_connect/actions/runs/34643426300): lifecycle18/18 и расширенная сессия 66/66 HTTP, 11 OS DNS, 8 сценариев очистки success.
+- [phase0 34643426354](https://github.com/Joker20380/family_connect/actions/runs/34643426354): tests/failover success.
+
+Артефакты скачаны: engine сверён с manifest, installer — с SHA256SUMS.
+SHA256 installer: `7432298d8010d8dd695cff33765b883aa67d3a1399083f20705391f043abad7b`. CI-снимок окна просмотрен.
+[Машинный результат](2026-09-11-windows-tcp-recovery-result.json).
+
 Изолированный LocalSystem CI расширен: повтор после engine crash с реальными
 IPv4/IPv6 HTTP и OS DNS, отмена/stop службы во время backoff, три повтора и
 исчерпание лимита после четырёх падений, проверки владельца во время ожидания,

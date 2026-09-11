@@ -1,0 +1,136 @@
+{
+  "source": "7de6e69",
+  "ci": {
+    "clients": 34643426316,
+    "native": 34643426300,
+    "phase0": 34643426354
+  },
+  "layouts": 336,
+  "installer_sha256": "7432298d8010d8dd695cff33765b883aa67d3a1399083f20705391f043abad7b",
+  "native": {
+    "source": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+    "rounds": [
+      {
+        "iteration": 1,
+        "https": false,
+        "local_http": 6,
+        "stop_mode": "explicit",
+        "process_exit": true,
+        "address_state": "Preferred",
+        "adapter_removed": true
+      },
+      {
+        "iteration": 2,
+        "https": false,
+        "local_http": 6,
+        "stop_mode": "owner-crash",
+        "process_exit": true,
+        "address_state": "Preferred",
+        "adapter_removed": true
+      },
+      {
+        "iteration": 3,
+        "https": false,
+        "local_http": 6,
+        "stop_mode": "engine-crash",
+        "process_exit": true,
+        "address_state": "Preferred",
+        "adapter_removed": true
+      }
+    ],
+    "tamper_refused": [
+      "xray.exe",
+      "wintun.dll"
+    ],
+    "default_routes_unchanged": true,
+    "dns_unchanged": true,
+    "test_route_absent": true,
+    "passed": true
+  },
+  "session": {
+    "rounds": [
+      {
+        "mode": "disconnect",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1
+      },
+      {
+        "mode": "engine-crash",
+        "http4": 6,
+        "http6": 6,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 2,
+        "recovered": true
+      },
+      {
+        "mode": "broker-crash",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1
+      },
+      {
+        "mode": "service-stop",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1
+      },
+      {
+        "mode": "cancel-start",
+        "http4": 0,
+        "http6": 0,
+        "dns": false,
+        "clean": true
+      },
+      {
+        "mode": "cancel-recovery",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1,
+        "retry_cancelled": true
+      },
+      {
+        "mode": "service-stop-recovery",
+        "http4": 3,
+        "http6": 3,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 1,
+        "retry_cancelled": true
+      },
+      {
+        "mode": "recovery-exhaustion",
+        "http4": 12,
+        "http6": 12,
+        "dns": true,
+        "clean": true,
+        "other_user_denied": true,
+        "dns_checks": 4,
+        "restarts": 3,
+        "recovery_seconds": [
+          25.16,
+          40.88,
+          70.8
+        ]
+      }
+    ],
+    "passed": true
+  },
+  "no_release_or_rollout": true,
+  "external_reality_accepted": false
+}
