@@ -17,5 +17,11 @@ it does not itself provide broker SID/DPAPI policy. No worker is installed on de
 CI uses ephemeral X25519 keys and loopback UDP, actual Windows Wintun IPv4/IPv6,
 AWG2 S1-S4/header ranges/I1, wrong-header/key rejection and engine/owner crash cleanup.
 Only /32 and /128 routes are added, default routes and DNS must match the baseline.
-It does not accept an external AWG gateway, full routing, broker/profile/UI integration
-or automatic transport fallback. Those integrations are the next part of Windows AWG.
+The workflow also runs the actual LocalSystem broker with signed activation, DPAPI,
+SID ownership, IPv4/IPv6 data, crash/recovery and cancellation. The synthetic peer
+keeps RIO reception alive after WSAECONNRESET from the killed client port and reports
+only counters (no key/config logs). It is excluded from the installer.
+Profile, broker, installer and manual transport UI passed CI; automatic switching,
+external AWG, full routing and production health probes remain unaccepted.
+See [integration evidence](../../docs/releases/2026-09-11-windows-awg-integration.ru.md)
+and [operator runbook](../../docs/windows-awg.ru.md).

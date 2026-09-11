@@ -1,23 +1,27 @@
 # Current state / Текущее состояние
 
-Updated:2026-09-11. Desktop **0.2.9 published**, source `42f9d32`.
+Updated:2026-09-12. Desktop **0.2.9 published**, source `42f9d32`.
 Linux/Windows release assets checked; signed update catalog sequence8 published in7650f32 and verified at the canonical URL. Linux **0.2.7 remains installed**; Windows last reported0.2.7.
 No device installation performed. Server **0.2.1**, deployment source8cd0f2d/server
 checkout117611c; TCP component **0.1.0** unchanged.
 
-## Latest checkpoint — 2026-09-11
+## Latest checkpoint — 2026-09-12
 
 - Windows AWG signed profile/DPAPI, broker session/shared recovery, installer and UI
   implemented after native engine acceptance12/12 in CI34648502108/source29f8f27.
-  Local issuer25 checks passed; platform/AWG broker/TCP regression CI pending.
+  325 Python tests passed. Clients 34652500879: 504 layouts/install/uninstall;
+  AWG 34652500922: native 12/12 + LocalSystem 24/24 UDP,4 cleanup.
+  TCP regression 34650231930: 84 HTTP/14 DNS/10 cleanup; phase0 34652500921 passed.
+  App source ad30827; CI fixture fix 53fe266. Downloaded hashes verified.
   Explicit transport switching only; automatic WG→AWG→TCP remains next.
   No release/device/gateway changes. [Integration report](releases/2026-09-11-windows-awg-integration.ru.md).
 
 ### AWG engine foundation
 
 - Windows AWG worker prepared from pinned amneziawg-go with stdin-only config,
-  fresh Wintun, bound IPv4 outer UDP and no UAPI listener; native Windows CI pending.
-  No broker/profile/GUI AWG integration or rollout yet; TCP remains accepted separately.
+  fresh Wintun, bound IPv4 outer UDP and no UAPI listener; native CI34648502108
+  accepted12/12 UDP exchanges,4 negative probes and4 cleanup scenarios.
+  Subsequent broker/profile/GUI integration is tracked above; no rollout.
   [AWG engine report](releases/2026-09-11-windows-awg-engine.ru.md).
 
 ### Earlier TCP health checkpoint

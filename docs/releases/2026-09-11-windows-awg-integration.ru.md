@@ -24,12 +24,37 @@ Installer содержит только принятый worker/Wintun и лиц
 
 ## Проверки
 
-25 Python issuer checks прошли локально. Windows/platform/TCP regression CI ожидается.
-Добавлены C# shared fixture,16 отказов, порядок replacement и UAPI serialization;
-504 GUI layouts и AWG-only/cancel interaction. Installer checks проверяют hashes,
-лицензии, отсутствие peer fixture и удаление worker. Actual LocalSystem AWG CI:
-подписанный импорт/rollback, передача IPv4/IPv6 через memory-TUN peer, чужой SID,
-запрет одновременных транспортов, crash recovery, restart cleanup и отмена запуска.
+Завершено 2026-09-12. Приложение/source ad30827; исправление стенда/source53fe266.
+Локально:325 Python tests passed (включая25 issuer),2 dependency deprecation warnings.
+[Client CI](https://github.com/Joker20380/family_connect/actions/runs/34652500879) прошёл
+Windows/Linux/Android,504 Windows layouts, AWG-only/cancel interaction, установку,
+проверку payload/hash/license/отсутствия CI peer и удаление.
+C# shared fixture и16 rejection checks прошли. [phase0](https://github.com/Joker20380/family_connect/actions/runs/34652500921) прошёл.
+[AWG CI](https://github.com/Joker20380/family_connect/actions/runs/34652500922): native12/12 UDP,
+4 negative probes,4 cleanup; actual LocalSystem24/24 UDP IPv4/IPv6 за24 отправок,
+4 cleanup scenarios: disconnect, engine crash/recovery, broker crash/SCM cleanup,
+cancel-start. Подпись/DPAPI/replacement/rollback, SID ownership и взаимное исключение
+транспортов проверены. Успешное переключение нескольких реальных профилей и auto fallback
+этот стенд не проверяет.
+[TCP regression](https://github.com/Joker20380/family_connect/actions/runs/34650231930) на том же
+production-коде ad30827:84/84 HTTP,14 DNS,10 cleanup scenarios; health recovery/cancel passed.
+После ad30827 менялись только AWG CI fixture/harness и документация.
+Скачанные AWG/Wintun сверены; installer SHA256: `1fc8686373fa822fc44e142ec8730cfc1816b4c59b9a761563e1a87c30fd47bb`.
+[Машинные результаты](2026-09-12-windows-awg-result.json),
+[инструкция](../windows-awg.ru.md). Превью интерфейса просмотрено.
+
+Первоначальные AWG runs34650232595/34650685249/34651112753/34651674223 провалили
+обмен после engine crash. Повторы UDP не исправили сбой. Счётчики показали остановку
+приёма синтетического Windows RIO peer: Failed to receive, handshake count остаётся2,
+при корректных новых адресах/маршрутах клиента. Попытка заменить backend на StdNetBind не прошла базовую native-проверку
+(CI34652257938) и убрана. Исходный RIO оставлен, CI peer теперь продолжает приём
+после конкретного WSAECONNRESET и считает такие события. Успешный run зафиксировал
+5 таких ошибок; число принятых handshake выросло с2 до3 после восстановления,
+все24 UDP-проверки прошли с первой отправки. Клиентский worker и его hash
+не менялись. Предполагаемый сетевой триггер — ICMP закрытого порта; пакет ICMP не снимался.
+[Неудачные результаты сохранены](2026-09-12-windows-awg-diagnostics.json).
+Это исправление Windows-стенда, действующий Linux gateway не менялся.
+
 Синтетический peer отвечает только UDP echo: AWG HTTPS health/full routing этим
 стендом не принимаются. TCP regression проверяет общий механизм отдельно.
 

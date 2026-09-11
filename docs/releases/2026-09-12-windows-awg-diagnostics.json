@@ -1,0 +1,171 @@
+{
+  "34650232595": {
+    "rounds": [
+      {
+        "mode": "disconnect",
+        "ipv4": 3,
+        "ipv6": 3,
+        "clean": true,
+        "other_user_denied": true
+      },
+      {
+        "mode": "engine-crash",
+        "ipv4": 3,
+        "ipv6": 3,
+        "clean": false,
+        "other_user_denied": true
+      }
+    ],
+    "passed": false,
+    "profile_replacement_checked": true,
+    "error_type": "TimeoutError",
+    "error": "timed out",
+    "traceback": "Traceback (most recent call last):\n  File \"D:\\a\\family_connect\\family_connect\\pilot\\windows-awg\\broker_check.py\", line 136, in <module>\n    ps('Get-Process fc-awg | Stop-Process -Force');wait_retry();assert wait_state('on')['transport']=='awg';traffic(row);row['recovered']=True\n                                                                                                            ~~~~~~~^^^^^\n  File \"D:\\a\\family_connect\\family_connect\\pilot\\windows-awg\\broker_check.py\", line 85, in traffic\n    payload=secrets.token_bytes(96);p.sendto(payload,(target,18765));reply,_=p.recvfrom(512);assert reply==payload;row[key]+=1\n                                                                             ~~~~~~~~~~^^^^^\nTimeoutError: timed out\n"
+  },
+  "34650685249": {
+    "rounds": [
+      {
+        "mode": "disconnect",
+        "ipv4": 3,
+        "ipv6": 3,
+        "clean": true,
+        "other_user_denied": true,
+        "udp_attempts": 6
+      },
+      {
+        "mode": "engine-crash",
+        "ipv4": 3,
+        "ipv6": 3,
+        "clean": false,
+        "other_user_denied": true,
+        "udp_attempts": 10
+      }
+    ],
+    "passed": false,
+    "profile_replacement_checked": true,
+    "error_type": "TimeoutError",
+    "error": "timed out",
+    "traceback": "Traceback (most recent call last):\n  File \"D:\\a\\family_connect\\family_connect\\pilot\\windows-awg\\broker_check.py\", line 144, in <module>\n    ps('Get-Process fc-awg | Stop-Process -Force');wait_retry();assert wait_state('on')['transport']=='awg';traffic(row);row['recovered']=True\n                                                                                                            ~~~~~~~^^^^^\n  File \"D:\\a\\family_connect\\family_connect\\pilot\\windows-awg\\broker_check.py\", line 89, in traffic\n    reply,_=p.recvfrom(512)\n            ~~~~~~~~~~^^^^^\nTimeoutError: timed out\n"
+  },
+  "34651112753": {
+    "rounds": [
+      {
+        "mode": "disconnect",
+        "ipv4": 3,
+        "ipv6": 3,
+        "clean": true,
+        "other_user_denied": true,
+        "udp_attempts": 6
+      },
+      {
+        "mode": "engine-crash",
+        "ipv4": 3,
+        "ipv6": 3,
+        "clean": false,
+        "other_user_denied": true,
+        "udp_attempts": 10
+      }
+    ],
+    "passed": false,
+    "profile_replacement_checked": true,
+    "peer_stats": {
+      "last_handshake_time_sec": "1789163581",
+      "rx_bytes": "10728",
+      "tx_bytes": "4636"
+    },
+    "failed_status": {
+      "ok": true,
+      "state": "on",
+      "code": null,
+      "error": null,
+      "tcpReady": false,
+      "transport": "awg",
+      "awgReady": true
+    },
+    "failed_network": "[{\"InterfaceAlias\":\"fcawg23c34cbf\",\"IPAddress\":\"fe80::a463:8267:ea4f:68f4%19\",\"AddressState\":4},{\"InterfaceAlias\":\"fcawg23c34cbf\",\"IPAddress\":\"fd79:fc::2\",\"AddressState\":4},{\"InterfaceAlias\":\"fcawg23c34cbf\",\"IPAddress\":\"198.18.0.2\",\"AddressState\":4}]",
+    "error_type": "TimeoutError",
+    "error": "timed out",
+    "traceback": "Traceback (most recent call last):\n  File \"D:\\a\\family_connect\\family_connect\\pilot\\windows-awg\\broker_check.py\", line 152, in <module>\n    ps('Get-Process fc-awg | Stop-Process -Force');wait_retry();assert wait_state('on')['transport']=='awg';traffic(row);row['recovered']=True\n                                                                                                            ~~~~~~~^^^^^\n  File \"D:\\a\\family_connect\\family_connect\\pilot\\windows-awg\\broker_check.py\", line 89, in traffic\n    reply,_=p.recvfrom(512)\n            ~~~~~~~~~~^^^^^\nTimeoutError: timed out\n"
+  },
+  "34651674223": {
+    "rounds": [
+      {
+        "mode": "disconnect",
+        "ipv4": 3,
+        "ipv6": 3,
+        "clean": true,
+        "other_user_denied": true,
+        "peer_before": {
+          "Received handshake initiation": "1",
+          "disallowed source": "30",
+          "last_handshake_time_sec": "1789163954",
+          "rx_bytes": "4164",
+          "tx_bytes": "395"
+        },
+        "udp_attempts": 6
+      },
+      {
+        "mode": "engine-crash",
+        "ipv4": 3,
+        "ipv6": 3,
+        "clean": false,
+        "other_user_denied": true,
+        "peer_before": {
+          "Received handshake initiation": "2",
+          "disallowed source": "64",
+          "last_handshake_time_sec": "1789163966",
+          "rx_bytes": "9528",
+          "tx_bytes": "1852"
+        },
+        "udp_attempts": 10,
+        "recovery_peer_before": {
+          "Failed to receive": "1",
+          "Received handshake initiation": "2",
+          "disallowed source": "68",
+          "last_handshake_time_sec": "1789163966",
+          "rx_bytes": "11800",
+          "tx_bytes": "4152"
+        }
+      }
+    ],
+    "passed": false,
+    "profile_replacement_checked": true,
+    "peer_stats": {
+      "Failed to receive": "1",
+      "Received handshake initiation": "2",
+      "disallowed source": "68",
+      "last_handshake_time_sec": "1789163966",
+      "rx_bytes": "11800",
+      "tx_bytes": "5293"
+    },
+    "failed_status": {
+      "ok": true,
+      "state": "on",
+      "code": null,
+      "error": null,
+      "tcpReady": false,
+      "transport": "awg",
+      "awgReady": true
+    },
+    "failed_routes": "[{\"InterfaceAlias\":\"fcawga6fd1dee\",\"InterfaceIndex\":19,\"DestinationPrefix\":\"198.18.0.1/32\",\"NextHop\":\"0.0.0.0\",\"State\":0},{\"InterfaceAlias\":\"fcawga6fd1dee\",\"InterfaceIndex\":19,\"DestinationPrefix\":\"fd79:fc::1/128\",\"NextHop\":\"::\",\"State\":0}]",
+    "failed_network": "[{\"InterfaceAlias\":\"fcawga6fd1dee\",\"IPAddress\":\"fe80::a463:8267:ea4f:68f4%19\",\"AddressState\":4},{\"InterfaceAlias\":\"fcawga6fd1dee\",\"IPAddress\":\"fd79:fc::2\",\"AddressState\":4},{\"InterfaceAlias\":\"fcawga6fd1dee\",\"IPAddress\":\"198.18.0.2\",\"AddressState\":4}]",
+    "error_type": "TimeoutError",
+    "error": "timed out",
+    "traceback": "Traceback (most recent call last):\n  File \"D:\\a\\family_connect\\family_connect\\pilot\\windows-awg\\broker_check.py\", line 153, in <module>\n    ps('Get-Process fc-awg | Stop-Process -Force');wait_retry();assert wait_state('on')['transport']=='awg';row['recovery_peer_before']=dict(result.get('peer_stats',{}));traffic(row);row['recovered']=True\n                                                                                                                                                                          ~~~~~~~^^^^^\n  File \"D:\\a\\family_connect\\family_connect\\pilot\\windows-awg\\broker_check.py\", line 89, in traffic\n    reply,_=p.recvfrom(512)\n            ~~~~~~~~~~^^^^^\nTimeoutError: timed out\n"
+  },
+  "34652257938": {
+    "rounds": [
+      {
+        "mode": "engine-stop",
+        "ipv4": 0,
+        "ipv6": 0,
+        "rejected": 0,
+        "clean": false
+      }
+    ],
+    "passed": false,
+    "error_type": "AssertionError",
+    "error": "AWG echo timed out",
+    "traceback": "Traceback (most recent call last):\n  File \"D:\\a\\family_connect\\family_connect\\pilot\\windows-awg\\check.py\", line 67, in <module>\n    try:reply,_=p.recvfrom(512)\n                ~~~~~~~~~~^^^^^\nTimeoutError: timed out\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"D:\\a\\family_connect\\family_connect\\pilot\\windows-awg\\check.py\", line 69, in <module>\n    assert mode in ('wrong-header','wrong-key'),'AWG echo timed out';row['rejected']+=1;continue\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: AWG echo timed out\n"
+  }
+}
