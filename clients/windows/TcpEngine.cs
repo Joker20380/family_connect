@@ -50,9 +50,20 @@ internal sealed class TcpEngine : IDisposable
                 StandardInputEncoding=new UTF8Encoding(false)
             };
             // Do not inherit user-configurable Xray paths, proxy or DLL search environment.
+            var inherited=start.Environment.ToDictionary(x=>x.Key,x=>x.Value,StringComparer.OrdinalIgnoreCase);
             start.Environment.Clear();
+            // SetupAPI/Wintun needs the standard Windows environment to install its signed driver.
+            // In production this is the LocalSystem service environment, never supplied over IPC.
+            foreach(var name in new[]{"SystemDrive","ProgramData","ALLUSERSPROFILE","ProgramFiles","ProgramFiles(x86)",
+                "ProgramW6432","CommonProgramFiles","CommonProgramFiles(x86)","CommonProgramW6432",
+                "TEMP","TMP","USERPROFILE","LOCALAPPDATA","APPDATA","PUBLIC","COMPUTERNAME",
+                "PROCESSOR_ARCHITECTURE","PROCESSOR_IDENTIFIER","PROCESSOR_LEVEL","PROCESSOR_REVISION",
+                "NUMBER_OF_PROCESSORS","OS"})
+                if(inherited.TryGetValue(name,out var value)&&value is not null)start.Environment[name]=value;
             var windows=Environment.GetFolderPath(Environment.SpecialFolder.Windows);
             start.Environment["SystemRoot"]=windows;start.Environment["WINDIR"]=windows;
+            start.Environment["SystemDrive"]=Path.GetPathRoot(windows)!.TrimEnd('\\');
+            start.Environment["ComSpec"]=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System),"cmd.exe");
             start.Environment["PATH"]=Environment.GetFolderPath(Environment.SpecialFolder.System);
             start.Environment["XRAY_LOCATION_ASSET"]=folder;start.Environment["XRAY_LOCATION_CONFIG"]=folder;
             foreach(var arg in new[]{"run","-format","json","-config","stdin:"})start.ArgumentList.Add(arg);
