@@ -64,15 +64,16 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
 ## Next, in order
 
-1. Localize remaining errors using identical direct/SOCKS/TUN HTTPS requests and timeouts
-   in an isolated container; retain curl exit codes/error phases and simultaneous external
-   TCP evidence, plus direct DNS control. Routing correction and kernel cleanup tests pass.
-   Live TUN probe passed 24/24 twice, but expanded trial still had SOCKS/DNS failures;
-   direct UDP DNS also failed 2/24. This does not establish censorship or a common cause.
-   [Correction and measured results](releases/2026-09-11-tcp-routing.ru.md).
-   Before rollout, resolve remaining failures; then back up/install the helper, perform
-   a short host test and established AWG → TCP recovery. No correction installed yet.
-   Main WG/AWG remains unchanged; source branch `pilot/tcp-reality-2026-09-11`.
+1. Collect synchronized, bounded TCP-header evidence at the isolated client and allowed
+   gateway 185.251.89.19; correlate SYN/SYN-ACK/ACK and data timing per flow, with direct
+   server HTTPS control. Matched client trials completed: TUN 48/48, SOCKS/direct each
+   47/48; direct HTTPS and DNS also failed. Gateway snapshots show SYN-SENT/retrans,
+   but cannot identify the loss location or establish censorship.
+   [Matched results](releases/2026-09-11-tcp-matched.ru.md).
+   Keep raw restricted diagnostics/private profiles out of Git; preserve sanitized evidence.
+   No host rollout until remaining failures are understood; then backup/install, short host
+   test and established AWG → TCP recovery. Main WG/AWG remains unchanged.
+   Source branch `pilot/tcp-reality-2026-09-11`; routing correction remains uninstalled.
 2. Integrate the tested transports into native Windows/Android. Complete platform CI,
    installation/UI checks and signed release before upgrading the stable client channel.
 3. Integrate provisioning/runtime/ACK and known-good recovery with real Reticulum

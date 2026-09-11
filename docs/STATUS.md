@@ -6,6 +6,15 @@ on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
 Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
 Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
 
+- Matched TCP diagnostics completed (experiment `d776b41`): two isolated 24-round series with identical HTTPS
+  endpoint/timeouts. TUN 48/48, SOCKS 47/48, direct 47/48; tunnel UDP DNS 46/48,
+  direct UDP DNS 45/48. SOCKS failure was TLS setup timeout; direct failure occurred
+  after TLS while waiting for HTTP data. Gateway TCP snapshots show SYN-SENT/retrans,
+  without per-request socket attribution. Root cause/censorship not established.
+  Both cleanup checks passed. No host install, server mutation or release.
+  Next: synchronized client/server TCP-header evidence and server HTTPS control.
+  [Matched diagnosis](releases/2026-09-11-tcp-matched.ru.md).
+
 - TCP routing correction implemented in experimental commit `6d7f569`: preserve more-specific
   main routes; explicit gateway /32 bypass plus prohibit-on-missing-route; exact cleanup,
   collision checks, legacy marker support and retry after cleanup failure.
@@ -14,7 +23,7 @@ Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `1176
   Isolated live traffic: first TUN/SOCKS 24/24 each, UDP DNS 23/24; expanded comparison
   TUN 24/24, SOCKS 22/24, tunnel UDP DNS 23/24, TCP DNS 22/24, direct UDP DNS 22/24.
   Cleanup passed. Direct DNS also timed out; all prior instability is not resolved.
-  Next: matched direct/SOCKS/TUN HTTPS with error-phase and external TCP evidence.
+  Matched comparison completed below the routing milestone; see latest diagnosis above.
   [Routing correction](releases/2026-09-11-tcp-routing.ru.md).
 
 - TCP diagnosis update: direct server HTTPS 36/36; long SOCKS-only comparison 216/216

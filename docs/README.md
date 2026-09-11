@@ -30,3 +30,5 @@ TCP experiment (unstable; resume here): [checkpoint](releases/2026-09-11-tcp.ru.
 TCP diagnosis and routing defect: [report](releases/2026-09-11-tcp-diagnosis.ru.md).
 
 TCP routing correction (isolated tests passed; not installed): [report](releases/2026-09-11-tcp-routing.ru.md).
+
+Matched TCP/direct/SOCKS timing and remaining errors: [report](releases/2026-09-11-tcp-matched.ru.md).
