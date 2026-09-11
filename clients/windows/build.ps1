@@ -22,6 +22,14 @@ Check-Exit
 dotnet publish FamilyConnect.csproj -c Release -r win-x64 --self-contained true -o build/publish
 Check-Exit
 Copy-Item "$vendor/embeddable-dll-service/amd64/tunnel.dll" build/publish/
+$tcpOutput=Join-Path $env:RUNNER_TEMP ('fc-client-tcp-'+[guid]::NewGuid().ToString('N'))
+& "$PSScriptRoot/../../pilot/windows-tcp/build.ps1" -Output $tcpOutput
+Check-Exit
+$expected=@{'xray.exe'='74475d8c4f68dd07bef754e56778eb2a9061e4dfcc954fa008b912a989bd848a';'wintun.dll'='e5da8447dc2c320edc0fc52fa01885c103de8c118481f683643cacc3220dafce'}
+foreach($name in $expected.Keys){if((Get-FileHash "$tcpOutput/$name" -Algorithm SHA256).Hash.ToLower() -ne $expected[$name]){throw "Unaccepted TCP binary: $name"}}
+New-Item -ItemType Directory -Force build/publish/tcp | Out-Null
+Copy-Item "$tcpOutput/*" build/publish/tcp/ -Recurse -Force
+
 Invoke-WebRequest 'https://download.wireguard.com/wireguard-nt/wireguard-nt-1.1.zip' -OutFile build/wireguard-nt.zip
 if((Get-FileHash build/wireguard-nt.zip -Algorithm SHA256).Hash -ne 'DCEB30A9BC4BE48CCE0F74160FC88A585A2C2627366E8F846FC6658F9038DACE'){throw 'WireGuardNT checksum mismatch'}
 Expand-Archive build/wireguard-nt.zip -DestinationPath build/driver -Force

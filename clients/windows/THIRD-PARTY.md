@@ -13,3 +13,5 @@ Dependency source / исходники зависимостей:
 - https://git.zx2c4.com/wireguard-nt/
 - https://github.com/bcgit/bc-csharp/
 - https://github.com/dotnet/runtime/
+
+TCP preview includes pinned Xray-core (MPL-2.0) and official Wintun 0.14.1. Original license texts and build hashes are installed under `tcp/licenses` and `tcp/build.json`. Xray source revision: d2758a023cd7f4174a5a5fa4ff66e487d4342ba0, https://github.com/XTLS/Xray-core . Wintun: https://www.wintun.net/ .

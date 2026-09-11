@@ -7,6 +7,13 @@ checkout117611c; TCP component **0.1.0** unchanged.
 
 ## Latest checkpoint — 2026-09-11
 
+- Windows TCP packaging/UI implemented: pinned engine bundled with licenses/hash checks,
+  WG/TCP selection, separate activation, TCP-only connect, pending cancellation and
+  asynchronous error visibility. Platform runtime CI pending; no release/device/server change.
+  [Packaging and UI report](releases/2026-09-11-windows-tcp-ui.ru.md).
+
+### Earlier broker session checkpoint
+
 - Windows TCP broker network session implemented9f32b0c, accepted with harness6d207a2.
   Async connect/cancel, SID ownership, own IPv4/IPv6 routes/DNS/NRPT, durable journal,
   engine-exit cleanup and SCM restart recovery. Actual LocalSystem scoped CI passed

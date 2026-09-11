@@ -4,6 +4,9 @@ internal sealed class MainForm:Form
 {
     bool ru=CultureInfo.CurrentUICulture.TwoLetterISOLanguageName=="ru",busy;
     string state="unknown";
+    bool tcpReady;string? transport,lastError;
+    readonly ComboBox mode=new(){DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill};
+    bool TcpSelected=>mode.SelectedIndex==1;
     bool polling,pollError;long revision;
     Func<Request,Task<Reply>> call=Wire.Call;
     readonly Label title=new(),status=new(),description=new(),detail=new(),notice=new();
@@ -31,9 +34,9 @@ internal sealed class MainForm:Form
         viewport.Dock=DockStyle.Fill;viewport.AutoScroll=true;viewport.Margin=Padding.Empty;
         shell.Controls.Add(viewport,0,0);
         content.AutoSize=true;content.AutoSizeMode=AutoSizeMode.GrowAndShrink;
-        content.ColumnCount=1;content.RowCount=9;content.Padding=new Padding(24,12,24,8);
+        content.ColumnCount=1;content.RowCount=10;content.Padding=new Padding(24,12,24,8);
         content.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
-        for(int i=0;i<9;i++)content.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        for(int i=0;i<10;i++)content.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         viewport.Controls.Add(content);
         title.Text="Family Connect";title.ForeColor=Color.FromArgb(238,242,255);title.Font=new Font(Font.FontFamily,14,FontStyle.Bold);
         using var brandStream=typeof(MainForm).Assembly.GetManifestResourceStream("FamilyConnect.Brand.png")!;
@@ -67,8 +70,11 @@ internal sealed class MainForm:Form
         description.ForeColor=Color.FromArgb(153,166,198);
         foreach(var button in new[]{request,activate,language,update})button.Font=new Font(Font.FontFamily,10,FontStyle.Bold);
         update.BackColor=BackColor;language.BackColor=BackColor;
+        mode.Items.AddRange(new object[]{"WireGuard","TCP · preview"});mode.SelectedIndex=0;
+        mode.Margin=new Padding(0,4,0,8);mode.BackColor=Color.FromArgb(32,43,65);mode.ForeColor=ForeColor;
+        mode.SelectedIndexChanged+=(_,_)=>PaintState();
         int row=0;
-        foreach(Control child in new Control[]{header,tagline,card,connect,request,activate,detail,notice,update})
+        foreach(Control child in new Control[]{header,tagline,card,mode,connect,request,activate,detail,notice,update})
             content.Controls.Add(child,0,row++);
         var footer=new Panel{Dock=DockStyle.Fill,Height=48,Padding=new Padding(24,4,24,8),Margin=Padding.Empty};
         footer.Controls.Add(new Label{Text="v"+Application.ProductVersion.Split('+')[0],AutoSize=true,ForeColor=Color.FromArgb(153,166,198),Location=new Point(24,16)});
@@ -88,7 +94,7 @@ internal sealed class MainForm:Form
             }catch(Exception){detail.Text=T("Обновление недоступно или не прошло проверку. Текущая версия сохранена.","Update unavailable or verification failed. The current version is preserved.");}
             finally{busy=false;if(!IsDisposed)PaintState();}
         };
-        connect.Click+=async(_,_)=>await Execute(new(state=="on"?"disconnect":"connect"));
+        connect.Click+=async(_,_)=>await Execute(new(ConnectionAction()));
         request.Click+=async(_,_)=>{
             var reply=await Execute(new("request"));
             if(reply?.Code is not string code)return;
@@ -105,17 +111,17 @@ internal sealed class MainForm:Form
             dialog.Controls.Add(layout);dialog.ShowDialog(this);
         };
         activate.Click+=async(_,_)=>{
-            using var dialog=new OpenFileDialog{Filter="Family Connect activation|*.fcactivation",CheckFileExists=true};
+            using var dialog=new OpenFileDialog{Filter=TcpSelected?"Family Connect TCP activation|*.fctcpactivation":"Family Connect activation|*.fcactivation",CheckFileExists=true};
             if(dialog.ShowDialog(this)!=DialogResult.OK)return;
             try{
                 using var stream=File.OpenRead(dialog.FileName);
                 if(stream.Length>8192)throw new IOException();
-                using var reader=new StreamReader(stream);await Execute(new("activate",await reader.ReadToEndAsync()));
+                using var reader=new StreamReader(stream);await Execute(new(TcpSelected?"activate-tcp":"activate",await reader.ReadToEndAsync()));
             }catch(Exception){detail.Text=T("Не удалось прочитать файл активации.","Could not read the activation file.");}
         };
         language.Click+=(_,_)=>{ru=!ru;PaintState();FitWindow();};
         poll.Tick+=async(_,_)=>await PollStatus();
-        FormClosing+=(_,e)=>{if(busy){e.Cancel=true;return;}if(!smoke&&state=="on"&&!Confirm(T("Закрыть окно? VPN продолжит работать.","Close this window? The VPN will keep running.")))e.Cancel=true;};
+        FormClosing+=(_,e)=>{if(busy){e.Cancel=true;return;}if(!smoke&&(state is "on" or "pending")&&!Confirm(T("Закрыть окно? VPN продолжит работать.","Close this window? The VPN will keep running.")))e.Cancel=true;};
         FormClosed+=(_,_)=>poll.Dispose();
         PaintState();
         Shown+=async(_,_)=>{
@@ -137,10 +143,11 @@ internal sealed class MainForm:Form
         // No broker requests: test visible runtime layout.
         foreach(float scale in new[]{1f,1.5f,2f,2.5f})
         foreach(bool russian in new[]{true,false})
-        foreach(string connection in new[]{"inactive","on","other-user","unknown"})
+        foreach(bool tcp in new[]{false,true})
+        foreach(string connection in new[]{"inactive","off","pending","on","other-user","unknown"})
         foreach(Size size in new[]{new Size(360,420),new Size(480,620),new Size(800,700)}){
             using var form=new MainForm(true,true);
-            form.ru=russian;form.state=connection;
+            form.ru=russian;form.state=connection;form.tcpReady=tcp;form.transport=tcp?"tcp":"wg";form.mode.SelectedIndex=tcp?1:0;
             form.Scale(new SizeF(scale,scale));
             form.ClientSize=new Size((int)(size.Width*scale),(int)(size.Height*scale));
             form.detail.Text=russian?"Служба Family Connect недоступна. Повторно запустите установщик приложения.":"Family Connect service is unavailable. Run the application installer again.";
@@ -192,6 +199,15 @@ internal sealed class MainForm:Form
         if(form.state!="unknown")throw new Exception("Poll error hidden");
         form.call=_=>Task.FromResult(new Reply(true,"off"));Pump(form.PollStatus());
         if(form.state!="off"||form.detail.Text!="")throw new Exception("Poll recovery failed");
+        form.state="inactive";form.tcpReady=true;form.mode.SelectedIndex=1;form.PaintState();
+        if(!form.connect.Enabled||form.ConnectionAction()!="connect-tcp")throw new Exception("TCP-only activation unavailable");
+        form.state="pending";form.transport="tcp";form.PaintState();
+        if(!form.connect.Enabled||form.mode.Enabled||form.ConnectionAction()!="disconnect")throw new Exception("TCP cancellation unavailable");
+        form.state="inactive";form.lastError=null;form.transport="wg";
+        form.call=_=>Task.FromResult(new Reply(true,"inactive",Error:"tcp-engine-exited",TcpReady:true,Transport:"wg"));Pump(form.PollStatus());
+        if(form.detail.Text!=form.ErrorText("tcp-engine-exited"))throw new Exception("Same-state TCP error hidden");
+        form.call=_=>Task.FromResult(new Reply(true,"inactive",TcpReady:false,Transport:"wg"));Pump(form.PollStatus());
+        if(form.connect.Enabled||form.detail.Text!="")throw new Exception("TCP readiness or recovery stale");
         static void Pump(Task task){
             var deadline=DateTime.UtcNow.AddSeconds(5);
             while(!task.IsCompleted&&DateTime.UtcNow<deadline)Application.DoEvents();
@@ -252,11 +268,12 @@ internal sealed class MainForm:Form
             "on"=>T("Туннель включён","Tunnel is on"),"off"=>T("Готов к подключению","Ready to connect"),
             "inactive"=>T("Активируйте устройство","Activate your device"),"other-user"=>T("VPN занят другим пользователем","VPN used by another user"),
             "pending"=>T("Подключение меняется…","Connection changing…"),_=>T("Статус недоступен","Status unavailable")};
-        description.Text=T("Защищённое подключение · Россия","Private connection · Russia");
-        connect.Text=state=="on"?T("Отключить","Disconnect"):T("Подключить","Connect");
-        connect.Enabled=!busy&&(state=="on"||state=="off");
+        description.Text=(state is "on" or "pending"?transport=="tcp":TcpSelected)?T("TCP · предварительная версия","TCP · preview"):T("Защищённое подключение · Россия","Private connection · Russia");
+        connect.Text=state=="on"?T("Отключить","Disconnect"):state=="pending"&&transport=="tcp"?T("Отменить подключение","Cancel connection"):T("Подключить","Connect");
+        connect.Enabled=!busy&&(state=="on"||(state=="pending"&&transport=="tcp")||((state is "off" or "inactive")&&(TcpSelected?tcpReady:state=="off")));
+        mode.Enabled=!busy&&(state is "off" or "inactive");
         request.Text=T("Получить код устройства","Get device code");request.Enabled=!busy;
-        activate.Text=T("Открыть файл активации","Open activation file");activate.Enabled=!busy&&(state=="off"||state=="inactive");
+        activate.Text=TcpSelected?T("Открыть TCP-активацию","Open TCP activation"):T("Открыть файл активации","Open activation file");activate.Enabled=!busy&&(state=="off"||state=="inactive");
         notice.Text=T("Туннель не подтверждает доступность интернета. Активация пилота выполняется оператором.","Tunnel status does not verify Internet access. Pilot activation is handled by the operator.");
         update.Text=availableUpdate is null?T("Проверить обновления","Check for updates"):T("Установить обновление","Install update");update.Enabled=!busy;
         language.Text="RU / EN";
@@ -264,6 +281,18 @@ internal sealed class MainForm:Form
         detail.Visible=detail.Text.Length>0;FitContent();
         if(Visible)FitWindow();
     }
+    string ConnectionAction()=>state=="on"||(state=="pending"&&transport=="tcp")?"disconnect":TcpSelected?"connect-tcp":"connect";
+    string ErrorText(string? error)=>error switch{
+        "activation-invalid"=>T("Активация недействительна, истекла или выдана другому устройству.","Activation is invalid, expired or belongs to another device."),
+        "activation-required"=>T("Откройте файл активации выбранного подключения.","Open the activation file for the selected connection."),
+        "other-user"=>T("Сначала отключите VPN в другой учётной записи Windows.","Disconnect the VPN in the other Windows account first."),
+        "disconnect-first" or "busy"=>T("Сначала отключите VPN.","Disconnect the VPN first."),
+        "tcp-engine-missing"=>T("Компонент TCP отсутствует. Повторно запустите установщик.","TCP component is missing. Run the installer again."),
+        "tcp-engine-exited"=>T("TCP остановился. Можно подключиться повторно.","TCP stopped. You can connect again."),
+        "tcp-session-failed"=>T("Не удалось включить TCP. Проверьте настройки сети и повторите попытку.","Could not start TCP. Check network settings and try again."),
+        "tcp-cleanup-required"=>T("Не удалось восстановить настройки сети. Перезапустите службу Family Connect или Windows.","Could not restore network settings. Restart the Family Connect service or Windows."),
+        _=>T("Не удалось выполнить действие. Код: ","Operation failed. Code: ")+error
+    };
     async Task PollStatus()
     {
         if(busy||polling||IsDisposed)return;
@@ -275,10 +304,11 @@ internal sealed class MainForm:Form
             if(IsDisposed||Disposing||busy||started!=revision)return;
             bool error=!reply.Ok;
             string next=error?"unknown":reply.State;
-            if(next==state&&error==pollError)return;
-            state=next;
+            if(next==state&&error==pollError&&tcpReady==reply.TcpReady&&transport==reply.Transport&&lastError==reply.Error)return;
+            state=next;tcpReady=reply.TcpReady;transport=reply.Transport;lastError=reply.Error;
+            if(state is "on" or "pending")mode.SelectedIndex=transport=="tcp"?1:0;
             if(error)detail.Text=T("Служба Family Connect недоступна. Повторно запустите установщик приложения.","Family Connect service is unavailable. Run the application installer again.");
-            else if(pollError)detail.Text="";
+            else detail.Text=reply.Error is null?"":ErrorText(reply.Error);
             pollError=error;PaintState();
         }finally{polling=false;}
     }
@@ -287,13 +317,12 @@ internal sealed class MainForm:Form
         if(busy)return null;revision++;busy=true;PaintState();
         try{
             var reply=await call(action);
-            if(action.Action!="request")state=reply.State;
-            if(!reply.Ok)detail.Text=reply.Error switch{
-                "activation-invalid"=>T("Активация недействительна, истекла или выдана другому устройству.","Activation is invalid, expired or belongs to another device."),
-                "other-user"=>T("Сначала отключите VPN в другой учётной записи Windows.","Disconnect the VPN in the other Windows account first."),
-                "disconnect-first"=>T("Сначала отключите VPN.","Disconnect the VPN first."),
-                _=>T("Не удалось выполнить действие. Код: ","Operation failed. Code: ")+reply.Error};
-            else if(!quiet)detail.Text=action.Action=="activate"?T("Устройство активировано. Нажмите «Подключить».","Device activated. Click Connect."):"";
+            if(action.Action!="request"){
+                state=reply.State;transport=reply.Transport;lastError=reply.Error;
+                if(action.Action is "status" or "activate-tcp" or "connect-tcp")tcpReady=reply.TcpReady;
+            }
+            if(!reply.Ok||reply.Error is not null)detail.Text=ErrorText(reply.Error);
+            else if(!quiet)detail.Text=(action.Action is "activate" or "activate-tcp")?T("Устройство активировано. Нажмите «Подключить».","Device activated. Click Connect."):"";
             return reply;
         }catch(Exception){state="unknown";detail.Text=T("Служба Family Connect недоступна. Повторно запустите установщик приложения.","Family Connect service is unavailable. Run the application installer again.");return null;}
         finally{busy=false;PaintState();}
