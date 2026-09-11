@@ -51,7 +51,9 @@ func run()error{
    if strings.Contains(format,label){countsMu.Lock();counts[label]++;countsMu.Unlock()}
   }
  }
- dev:=device.NewDevice(m,conn.NewDefaultBind(),&device.Logger{Verbosef:logf,Errorf:logf});defer dev.Close()
+ // The peer models the Linux gateway. Use standard UDP sockets: Windows RIO can
+ // terminate its receive loop on ICMP from the deliberately killed client port.
+ dev:=device.NewDevice(m,conn.NewStdNetBind(),&device.Logger{Verbosef:logf,Errorf:logf});defer dev.Close()
  if e=dev.IpcSet(cfg.Config);e!=nil{return e};if e=dev.Up();e!=nil{return e};os.Stdout.WriteString("ready\n")
  ticker:=time.NewTicker(time.Second);defer ticker.Stop()
  for {select {case <-dev.Wait():return nil;case <-ticker.C:
