@@ -70,12 +70,11 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
    remains open; do not resume concurrency/second-laptop experiments automatically.
    Standalone setup integrated into main; existing prompt/recovery patch reviewed,
    273 tests + GTK recovery passed, setup hash equals previously VM-tested artifact.
-2. Source checkpoint180d79f pushed; all platform/TCP/AWG/phase0 CI passed. Downloaded
-   setup matches trusted local hash; Linux six-file archive matches source. Draft0.2.9
-   notes prepared. Next: synchronized new version, exact-version CI, immutable client
-   publication and offline catalog signing(sequence>7), plus trusted initial setup delivery.
-   Current source VERSION0.2.8; never publish the new CI review archive as existing0.2.8.
-   See [CI evidence](releases/2026-09-11-platform-ci.ru.md).
+2. Desktop0.2.9 published from42f9d32, exact platform/TCP/phase0 CI passed;
+   downloaded artifacts verified, catalog sequence8 signed offline. Devices not updated.
+   Next: trusted immutable initial TCP Setup distribution; do not treat its unsigned CI
+   archive/manifest as publisher authentication. Then native platform transport work.
+   See [release evidence](releases/2026-09-11-release-0.2.9.ru.md).
 3. Deferred backlog: isolated concurrency1→4→8/request-to-flow diagnosis, then repeat
    confirmed correction on second Ubuntu. Current timeouts are known pilot limitations,
    not a completed stability gate. Resume these tests later per user direction.

@@ -83,3 +83,5 @@ First-laptop isolated TUN/SOCKS/direct: [report](releases/2026-09-11-first-lapto
 Standalone setup integrated; network tests deferred by user: [checkpoint](releases/2026-09-11-setup-integration.ru.md).
 
 Platform CI180d79f and release preparation: [checkpoint](releases/2026-09-11-platform-ci.ru.md).
+
+Published desktop0.2.9 and offline signed update: [report](releases/2026-09-11-release-0.2.9.ru.md).

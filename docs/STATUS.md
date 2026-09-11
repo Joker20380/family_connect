@@ -1,12 +1,21 @@
 # Current state / Текущее состояние
 
-Updated: 2026-09-11. Desktop **0.2.8 published**, source `5f0303d`.
-Windows 0.2.8 installer and signed update available. User reports Windows is currently
-on 0.2.7; installation and visual confirmation of 0.2.8 remain pending.
-Linux **0.2.7 installed and explicitly approved by the user**; 0.2.8 changes only its version.
-Server remains **0.2.1**, deployment source `8cd0f2d`; server Git checkout `117611c`.
+Updated:2026-09-11. Desktop **0.2.9 published**, source `42f9d32`.
+Linux/Windows release assets checked; signed update catalog sequence8 prepared/published
+with this checkpoint. Linux **0.2.7 remains installed**; Windows last reported0.2.7.
+No device installation performed. Server **0.2.1**, deployment source8cd0f2d/server
+checkout117611c; TCP component **0.1.0** unchanged.
 
 ## Latest checkpoint — 2026-09-11
+
+- Desktop0.2.9 published from42f9d32 after exact Linux/Windows/Android CI; TCP and
+  phase0 passed. Downloaded SHA256SUMS/Linux contents verified, Windows preview reviewed.
+  Catalog signed offline, sequence8; signature/new-version/rollback checks passed in
+  isolated updater state. Devices/server unchanged, network tests deferred. Next:
+  trusted initial TCP Setup delivery, native Windows/Android transports/device acceptance.
+  [Release evidence](releases/2026-09-11-release-0.2.9.ru.md).
+
+### Earlier release preparation
 
 - Source checkpoint180d79f pushed to main. All exact-source CI passed: clients
   (Linux/Windows/Android), TCP, AWG, phase0. No release job ran. Downloaded CI setup
