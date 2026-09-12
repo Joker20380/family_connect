@@ -18,6 +18,19 @@ def pump(seconds=.08):
         time.sleep(.001)
 
 
+def settled_size(window):
+    # Wayland acknowledges initial content-fit resizing asynchronously. Measure
+    # invariance only after that startup negotiation, not after a fixed 80 ms.
+    previous=None;stable=0;deadline=time.monotonic()+3
+    while time.monotonic()<deadline:
+        pump(.05)
+        size=(window.get_width(),window.get_height())
+        stable=stable+1 if size==previous and min(size)>0 else 0
+        if stable>=4:return size
+        previous=size
+    raise AssertionError('Initial window geometry did not settle')
+
+
 def regressions():
     Adw.init();app=App(smoke=True)
     class Driver:
@@ -32,7 +45,7 @@ def regressions():
         done=Future();done.set_result((driver,items,active))
         app.complete('initialized',done,0,None);app.present();pump()
         assert app.selected()=='last' and app.active is True
-        changes=app.widget_changes;renders=app.render_count;size=(app.window.get_width(),app.window.get_height())
+        size=settled_size(app.window);changes=app.widget_changes;renders=app.render_count
         for _ in range(20):app.paint()
         pump();assert app.widget_changes==changes and app.render_count==renders+1
         assert size==(app.window.get_width(),app.window.get_height())

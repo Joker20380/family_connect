@@ -1,9 +1,62 @@
 # Current state / Текущее состояние
 
+## Paired Linux control preview — 2026-09-12
+
+Operator GUI/core bundle added with an explicit public-file allowlist, integrity
+manifest, runtime-only pinned dependencies and extracted launcher. Legacy six-file
+desktop archive unchanged. Local405 Python passed; extracted real RNS lifecycle
+and GTK smoke passed. Scoped Linux control CI added, remote result pending.
+No release/install/catalog/server changes. Next: CI acceptance and paired preview
+rollout preparation; native Windows/Android binding, AWG3.1 and TD-1 remain open.
+[Preview checkpoint](releases/2026-09-12-control-preview.ru.md).
+
+
 Updated:2026-09-12. Desktop **0.2.9 published**, source `42f9d32`.
 Linux/Windows release assets checked; signed update catalog sequence8 published in7650f32 and verified at the canonical URL. Linux **0.2.7 remains installed**; Windows last reported0.2.7.
 No device installation performed. Server **0.2.1**, deployment source8cd0f2d/server
 checkout117611c; TCP component **0.1.0** unchanged.
+
+## Short matched HTTPS diagnosis — 2026-09-12
+
+Two bounded same-destination direct/TUN runs passed: Python verified TLS/HTTP1.1
+6/6 direct +6/6 TUN; curl default ALPN/HTTP2 with original3s/5s budgets also6/6+6/6.
+24/24 requests total, pinned IPv4 targets, sequential alternating pairs. Both runs
+verified independent direct routing/egress, TUN egress and complete cleanup.
+Curl median total: direct0.207s, TUN0.577s; TUN TLS completion0.343–0.472s.
+Previous HTTPS4/6 timeouts did not reproduce. No causal fix, timeout/profile/binary/
+server changes, packet capture or load campaign. TD-1 stability remains open;
+no physical blocking/Stage6 resilience claim. Next development: coordinated Stage5
+GUI/core packaging and scoped CI; capture request-to-flow evidence on a failing
+bounded network run before changing transport settings. [Matched HTTPS result](releases/2026-09-12-matched-https.ru.md).
+
+## Stage 5 Linux GUI coordination — local acceptance
+
+Shared nonblocking process/thread arbiter added to Linux GUI and control apply/recovery.
+Durable pending ownership survives process death and blocks GUI mutations until the
+same journal recovers. Generation checks reject stale automatic recovery and refresh
+GUI selection after a control commit; automatic recovery preserves its retry budget.
+402 Python tests, GTK recovery, interaction checks and all 24 GTK layouts passed.
+Six-file archive preserved; no application/helper installation, release or remote CI.
+Older installed GUI does not participate; coordinated rollout of GUI/core remains required.
+User authorized short network tests after GUI work: resumed on existing installed TCP.
+Ready-TUN run: correct endpoint bypass/public routing, DNS3/3, HTTPS4/6 (two timeouts),
+all cleanup assertions passed. Initial harness raced Type=simple startup; fixed readiness
+wait before rerun. Network stability debt remains open; no long load/device campaign.
+[GUI coordination and short network checkpoint](releases/2026-09-12-control-gui-network.ru.md).
+
+## Stage 5 reference control core — local acceptance, 2026-09-12
+
+Verified Reticulum delivery + transactional stage/apply/health/commit/rollback/ACK
+implemented in a carrier-independent Python core with an existing Linux backend
+boundary. 381 Python tests passed (56 new), including actual two-process loopback
+RNS delivery, commit/ACK, failed health/rollback/ACK and duplicate safety. No HTTP
+service required. Existing offline Ed25519 root reused; catalog sequence8 untouched.
+AWG3.1 is explicitly versioned and rejected by the current capability before apply;
+runtime migration remains TD-2. TD-1 device/load/full-routing remains deferred.
+No commit, remote CI, native packaging, release, installation or server mutation.
+Next: common GUI operation ownership/native binding and scoped CI before background
+rollout. Independent control entry and alternate gateway remain Stage6.
+[Stage 5 checkpoint](releases/2026-09-12-reticulum-control.ru.md) · [Architecture](stage5-architecture.ru.md).
 
 ## Android Auto — accepted in isolated CI, 2026-09-12
 

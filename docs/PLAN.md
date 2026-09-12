@@ -1,6 +1,39 @@
 # Working plan / Рабочий план
 
-Общий план и критерии этапов: [ROADMAP](ROADMAP.ru.md). Реализация транспортов Windows/Android завершена и принята в scoped CI. Следующий этап разработки — 5, Reticulum; выпуск и отложенная приёмка этапа4 остаются открытыми.
+## Paired Linux control preview — 2026-09-12
+
+Operator GUI/core bundle added with an explicit public-file allowlist, integrity
+manifest, runtime-only pinned dependencies and extracted launcher. Legacy six-file
+desktop archive unchanged. Local405 Python passed; extracted real RNS lifecycle
+and GTK smoke passed. Scoped Linux control CI added, remote result pending.
+No release/install/catalog/server changes. Next: CI acceptance and paired preview
+rollout preparation; native Windows/Android binding, AWG3.1 and TD-1 remain open.
+[Preview checkpoint](releases/2026-09-12-control-preview.ru.md).
+
+
+Общий план и критерии этапов: [ROADMAP](ROADMAP.ru.md). Реализация транспортов Windows/Android завершена и принята в scoped CI. Reference core этапа 5 реализован и проверен локально; далее интеграция/приёмка перед распространением; выпуск и отложенная приёмка этапа4 остаются открытыми.
+
+## Current next work after Linux GUI coordination
+
+Shared GUI/control operation ownership implemented and locally accepted (402 Python,
+GTK recovery/24 layouts). [GUI coordination and short network checkpoint](releases/2026-09-12-control-gui-network.ru.md). Coordinated GUI/core packaging and scoped CI,
+then native Windows/Android binding remain before background distribution.
+Short network tests are now explicitly authorized and resumed: routes/DNS/cleanup
+passed, HTTPS4/6 with two timeouts. Matched direct/TUN diagnosis now passed24/24
+across Python HTTP1.1 and curl HTTP2; failures did not reproduce, no causal fix.
+TD-1 remains open: obtain request-to-flow evidence when a bounded run fails.
+Continue coordinated Stage5 GUI/core packaging and scoped CI. No automatic long
+load/device campaign. AWG3.1 migration remains TD-2.
+Independent entry/alternate gateway acceptance remains Stage6.
+
+## Stage 5 reference protocol/application core — implemented locally
+
+2026-09-12: carrier-independent signed config, journal, apply/health/commit/rollback,
+device-signed ACK/outbox and real RNS delivery pass 381 Python tests. [Stage 5 checkpoint](releases/2026-09-12-reticulum-control.ru.md).
+Current acceptance is reference Python/Linux; native/background distribution needs
+common operation ownership with GUI, native storage/binding, packaging and scoped CI.
+AWG3.1 stays a separate migration; Stage5 has explicit transport-version refusal.
+Stage6 infrastructure independence and user-deferred device/load tests remain open.
 
 ## Completed: 0.2.1 rollout
 
@@ -77,12 +110,13 @@ See [Android WG/AWG report](releases/2026-09-12-android-awg.ru.md) and [Auto acc
 
 ## Next, in order
 
-1. Implement stage5 Reticulum now: signed provisioning delivery,
-   verification/application/ACK/rollback and replay protection. Android updater/Google Play
-   and user-deferred device/load tests do not gate this implementation.
+1. Stage5 reference core is implemented locally (381 tests): shared Linux GUI
+   operation ownership now passes local checks; native binding, coordinated packaging
+   and scoped CI remain before background distribution.
+   Android updater/Google Play and user-deferred device/load tests do not gate this work.
 2. Before distribution: full-routing/external gateway/REALITY and actual device acceptance,
-   Android release signing/versioning. User deferred APK updates and real/load tests;
-   do not resume them automatically. Desktop0.2.9/catalogseq8 and TCP Setup0.1.0 remain published.
+   Android release signing/versioning. APK updates and extended device/load tests remain deferred;
+   short network checks were explicitly resumed and found HTTPS timeouts. Desktop0.2.9/catalogseq8 and TCP Setup0.1.0 remain published.
 3. Deferred resilience experiments: concurrency1→4→8, request-to-flow diagnosis and
    second Ubuntu retest. Second independent VPS only when supplied by user; never use
    the test laptop or neighbouring services. Current timeout/stability limits remain open.
@@ -102,3 +136,5 @@ work: [session checkpoint](releases/2026-09-11-session-checkpoint.ru.md).
 приёмки до выпуска. Отложенные пользователем испытания на устройствах/под нагрузкой
 не возобновлять автоматически и не смешивать с реализацией.
 Android WG/AWG/TCP/Auto принят в эмуляторе; следующий шаг — этап5 Reticulum.
+
+Latest bounded network comparison: [Matched HTTPS result](releases/2026-09-12-matched-https.ru.md).

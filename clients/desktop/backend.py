@@ -21,6 +21,141 @@ class BackendError(Exception): pass
 class AuthorizationError(BackendError): pass
 
 
+# Self-contained so the existing six-file desktop archive remains compatible.
+import functools
+import threading
+from contextlib import contextmanager
+from dataclasses import dataclass
+
+
+class ConnectionBusy(BackendError):
+    pass
+
+
+class StaleConnection(BackendError):
+    pass
+
+
+_operation_mutex = threading.RLock()
+_operation_local = threading.local()
+
+
+def operation_directory():
+    return Path.home()/'.local/state/family-connect-operations'
+
+
+class OperationLease:
+    def __init__(self, directory, owner, record):
+        self.directory, self.owner, self.record = directory, owner, record
+
+    def save(self):
+        raw=json.dumps(self.record,separators=(',',':')).encode()
+        temporary='.operation-'+uuid.uuid4().hex
+        fd=os.open(temporary,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600,dir_fd=self.directory)
+        try:
+            with os.fdopen(fd,'wb') as stream:
+                stream.write(raw);stream.flush();os.fsync(stream.fileno())
+            os.replace(temporary,'state.json',src_dir_fd=self.directory,dst_dir_fd=self.directory)
+            os.fsync(self.directory)
+        finally:
+            try:os.unlink(temporary,dir_fd=self.directory)
+            except FileNotFoundError:pass
+
+    def reserve(self):
+        if self.owner is None:raise BackendError('Control owner required')
+        if self.record['pending'] is None:
+            self.record['pending']=self.owner;self.record['generation']+=1;self.save()
+
+    def finish(self):
+        if self.record['pending'] is not None:
+            if self.record['pending']!=self.owner:raise ConnectionBusy('Connection recovery is pending')
+            self.record['pending']=None;self.record['generation']+=1;self.save()
+
+
+@contextmanager
+def connection_operation(*, owner=None, mutate=False, expected=None):
+    """Nonblocking process/thread exclusion plus durable pending-control ownership.
+
+    Normal operations never bypass an interrupted control transaction. Only the
+    same local journal owner can finish recovery and clear its durable marker.
+    """
+    import fcntl
+    if owner is not None and (type(owner) is not str or not re.fullmatch('[0-9a-f]{64}',owner)):
+        raise BackendError('Invalid control owner')
+    if not _operation_mutex.acquire(blocking=False):
+        raise ConnectionBusy('Connection settings are being updated')
+    directory=lock=None
+    try:
+        current=getattr(_operation_local,'lease',None)
+        if current is not None:
+            if owner is not None and owner!=current.owner:raise ConnectionBusy('Another control owner is active')
+            yield current;return
+        path=operation_directory()
+        path.parent.mkdir(mode=0o700,parents=True,exist_ok=True)
+        fresh=False
+        try:path.mkdir(mode=0o700);fresh=True
+        except FileExistsError:pass
+        directory=os.open(path,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
+        info=os.fstat(directory)
+        if info.st_uid!=os.getuid() or stat.S_IMODE(info.st_mode)!=0o700:
+            raise BackendError('Unsafe connection coordination directory')
+        def safe(fd):
+            info=os.fstat(fd)
+            if not stat.S_ISREG(info.st_mode) or info.st_uid!=os.getuid() or stat.S_IMODE(info.st_mode)!=0o600 or info.st_nlink!=1:
+                raise BackendError('Unsafe connection coordination file')
+        lock=os.open('.lock',os.O_RDWR|os.O_CREAT|os.O_NOFOLLOW|os.O_NONBLOCK,0o600,dir_fd=directory)
+        safe(lock)
+        try:fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        except BlockingIOError:raise ConnectionBusy('Connection settings are being updated') from None
+        try:
+            fd=os.open('state.json',os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK,dir_fd=directory)
+        except FileNotFoundError:
+            if not fresh:raise BackendError('Missing connection coordination state') from None
+            record=dict(generation=0,pending=None)
+            OperationLease(directory,owner,record).save()
+        else:
+            try:
+                safe(fd);raw=os.read(fd,1025)
+                record=json.loads(raw)
+                if (len(raw)>1024 or type(record) is not dict or set(record)!={'generation','pending'} or
+                    type(record['generation']) is not int or not 0<=record['generation']<2**63 or
+                    (record['pending'] is not None and (type(record['pending']) is not str or not re.fullmatch('[0-9a-f]{64}',record['pending'])))):
+                    raise ValueError()
+            except (ValueError,TypeError,UnicodeError,RecursionError):
+                raise BackendError('Invalid connection coordination state') from None
+            finally:os.close(fd)
+        if record['pending'] is not None and record['pending']!=owner:
+            raise ConnectionBusy('Connection recovery is pending; resume the control client')
+        if expected is not None and expected!=record['generation']:
+            raise StaleConnection('Connection settings changed; refresh the selection')
+        lease=OperationLease(directory,owner,record)
+        if mutate:
+            lease.record['generation']+=1;lease.save()
+        _operation_local.lease=lease
+        try:yield lease
+        finally:_operation_local.lease=None
+    finally:
+        if lock is not None:os.close(lock)
+        if directory is not None:os.close(directory)
+        _operation_mutex.release()
+
+
+def serialized_connection(method):
+    @functools.wraps(method)
+    def call(*args,**kwargs):
+        with connection_operation(mutate=True):return method(*args,**kwargs)
+    return call
+
+
+@dataclass(frozen=True)
+class ConnectionSnapshot:
+    generation: int
+    items: list
+    active_ids: list
+    active: bool
+    healthy: bool | None
+
+
 def run(*args,timeout=30):
     result=subprocess.run(args,capture_output=True,text=True,timeout=timeout,
         creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0) if sys.platform=='win32' else 0)
@@ -80,6 +215,23 @@ class RecoveryPolicy:
 
 
 class Linux:
+    def control_transaction(self, owner):
+        return connection_operation(owner=owner)
+
+    def poll_state(self, ident, health=False):
+        with connection_operation() as lease:
+            items=self.profiles()
+            active_ids=[key for key,_ in items if self.active(key)]
+            return ConnectionSnapshot(lease.record['generation'],items,active_ids,
+                ident in active_ids,self.healthy(ident) if health else None)
+
+    def recover_if_current(self, ident, generation):
+        # Recovery preserves connection intent and its finite retry budget.
+        # Nested driver mutations are already covered by this exclusive lease.
+        with connection_operation(expected=generation):
+            self.recover(ident)
+            return self.active(ident)
+
     awg_root=Path('/etc/family-connect/awg')
     awg_helper='/usr/local/lib/family-connect-awg/helper'
     def _awg_records(self):
@@ -135,6 +287,7 @@ class Linux:
             else:return False
             return True
         except (BackendError,subprocess.TimeoutExpired):return False
+    @serialized_connection
     def recover(self,ident):
         # Called only after UI intent/revision checks; serialized with user operations.
         # A failed AWG may reconnect to a working original WG, then fall back again.
@@ -162,6 +315,7 @@ class Linux:
         fallback=self._fallback(ident)
         if fallback and Path('/sys/class/net',fallback).exists():return True
         return ident in run('nmcli','-t','-f','UUID','connection','show','--active',timeout=3).splitlines()
+    @serialized_connection
     def connect(self,ident):
         records=self._awg_records()
         if ident in records:
@@ -189,6 +343,7 @@ class Linux:
         except (BackendError,subprocess.TimeoutExpired):
             if self._nm_active(ident):run('nmcli','connection','down','uuid',ident)
             self._awg('up',fallback)
+    @serialized_connection
     def disconnect(self,ident):
         records=self._awg_records()
         if ident in records:
@@ -199,6 +354,7 @@ class Linux:
         fallback=self._fallback(ident)
         if fallback and Path('/sys/class/net',fallback).exists():self._awg('down',fallback)
         if self._nm_active(ident):run('nmcli','connection','down','uuid',ident)
+    @serialized_connection
     def import_profile(self,path):
         data=read_profile(path,allow_awg=True)
         if set(parse(data,allow_awg=True)['Interface'])&AWG_FIELDS:
@@ -292,11 +448,13 @@ class LinuxTCP(Linux):
         if len(live)!=1:return False
         try:self._check(live[0]);return True
         except (BackendError,subprocess.TimeoutExpired):return False
+    @serialized_connection
     def disconnect(self,ident):
         chain=self._chain(ident)
         if not chain:return super().disconnect(ident)
         for item in reversed(chain):
             if self._live(item):self._stop(item)
+    @serialized_connection
     def connect(self,ident):
         chain=self._chain(ident)
         if not chain:return super().connect(ident)
@@ -305,6 +463,7 @@ class LinuxTCP(Linux):
         self.disconnect(ident)
         start=next((i for i,item in enumerate(chain) if item[1]==ident),0)
         self._attempt(chain[start:])
+    @serialized_connection
     def recover(self,ident):
         chain=self._chain(ident)
         if not chain:return super().recover(ident)
@@ -312,6 +471,7 @@ class LinuxTCP(Linux):
         start=(live[0]+1)%len(chain) if len(live)==1 else 0
         self.disconnect(ident)
         self._attempt(chain[start:]+chain[:start])
+    @serialized_connection
     def import_profile(self,path):
         with Path(path).open('rb') as source:raw=source.read(MAX_PROFILE+1).decode('utf-8-sig')
         if raw.lstrip().startswith('{'):
@@ -403,6 +563,7 @@ def tcp_updater_available():
         return stat.S_ISREG(info.st_mode) and info.st_uid==0 and info.st_nlink==1 and not info.st_mode&0o022 and os.access(TCP_UPDATER,os.X_OK)
     except OSError:return False
 
+@serialized_connection
 def install_tcp_component():
     if not tcp_updater_available():raise BackendError('TCP system updater is not installed')
     try:

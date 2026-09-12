@@ -1,0 +1,57 @@
+name: Linux control preview
+on:
+  push:
+    paths: ['provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
+  pull_request:
+    paths: ['provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: control-preview-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  linux-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install -r control/requirements.lock -r device_identity/requirements.lock
+      - name: Protocol, crash recovery, arbiter and packaging regression
+        run: python -m pytest -q
+      - name: System GTK dependencies
+        run: sudo apt-get update && sudo apt-get install -y python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 python3-cryptography xvfb dbus-x11
+      - name: Render and interaction regression
+        env:
+          GSK_RENDERER: cairo
+          GTK_A11Y: none
+        run: |
+          dbus-run-session -- xvfb-run -a -s '-screen 0 2560x2160x24' /usr/bin/python3 clients/desktop/layout_check.py
+          dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/recovery_check.py
+          dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/tcp_install_check.py
+      - name: Build paired preview and legacy six-file archive
+        run: |
+          python scripts/package_control.py
+          python scripts/package_desktop.py
+          mkdir -p /tmp/fc-preview-extracted
+          tar -xzf artifacts/control/*.tar.gz -C /tmp/fc-preview-extracted
+          python -m venv /tmp/fc-preview-env
+          /tmp/fc-preview-env/bin/pip install -r /tmp/fc-preview-extracted/FamilyConnect-Control-preview/provisioning/requirements.lock
+      - name: Run extracted artifacts outside checkout
+        env:
+          GSK_RENDERER: cairo
+          GTK_A11Y: none
+        run: |
+          cd /tmp
+          /tmp/fc-preview-env/bin/python fc-preview-extracted/FamilyConnect-Control-preview/scripts/run_control_preview.py control --help
+          dbus-run-session -- xvfb-run -a /usr/bin/python3 fc-preview-extracted/FamilyConnect-Control-preview/scripts/run_control_preview.py gui --smoke
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-control-preview
+          path: |
+            artifacts/control/*.tar.gz
+            artifacts/clients/FamilyConnect-Linux-*.tar.gz
+          if-no-files-found: error

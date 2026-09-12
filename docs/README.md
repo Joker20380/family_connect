@@ -1,5 +1,16 @@
 # Documentation map
 
+## Paired Linux control preview — 2026-09-12
+
+Operator GUI/core bundle added with an explicit public-file allowlist, integrity
+manifest, runtime-only pinned dependencies and extracted launcher. Legacy six-file
+desktop archive unchanged. Local405 Python passed; extracted real RNS lifecycle
+and GTK smoke passed. Scoped Linux control CI added, remote result pending.
+No release/install/catalog/server changes. Next: CI acceptance and paired preview
+rollout preparation; native Windows/Android binding, AWG3.1 and TD-1 remain open.
+[Preview checkpoint](releases/2026-09-12-control-preview.ru.md).
+
+
 Latest work/rollbacks: [complete session checkpoint](releases/2026-09-11-session-checkpoint.ru.md).
 Ubuntu appearance/terminal: [settings and rollback](ubuntu-laptop-settings.ru.md).
 
@@ -113,3 +124,9 @@ Android WG/AWG: [implementation and acceptance](releases/2026-09-12-android-awg.
 Android TCP: [implementation and acceptance](releases/2026-09-12-android-tcp.ru.md).
 
 Android Auto: [implementation and acceptance](releases/2026-09-12-android-auto.ru.md).
+
+Stage 5 control channel: [architecture](stage5-architecture.ru.md), [runbook](reticulum-control.ru.md), [Stage 5 checkpoint](releases/2026-09-12-reticulum-control.ru.md).
+
+[GUI coordination and short network checkpoint](releases/2026-09-12-control-gui-network.ru.md).
+
+[Matched HTTPS result](releases/2026-09-12-matched-https.ru.md).

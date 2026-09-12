@@ -14,7 +14,7 @@ import gi
 gi.require_version('Gtk','4.0')
 gi.require_version('Adw','1')
 from gi.repository import Gtk, Adw, Gdk, Gio, GLib, Pango
-from backend import backend, BackendError, AuthorizationError, RecoveryPolicy
+from backend import backend, BackendError, AuthorizationError, RecoveryPolicy, ConnectionBusy, StaleConnection, ConnectionSnapshot
 
 CSS='''
 window.fc-window { background: #0e1423; color: #e9edf7; }
@@ -45,7 +45,7 @@ class App:
         self.ru=bool(locale.getlocale()[0] and locale.getlocale()[0].lower().startswith('ru'))
         self.driver=None;self.items=[];self.selected_id=None;self.active=None;self.busy=False;self.initializing=False
         self.closed=False;self.revision=0;self.polling=False;self.poll_error=False
-        self.recovery=RecoveryPolicy()
+        self.recovery=RecoveryPolicy();self.operation_generation=None
         self.detail_text='';self.update_plan=None;self.updater=None;self.render_source=0;self.fit_source=0;self.fitted_height=None
         self.render_count=0;self.widget_changes=0;self.rendering=False
         self.pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
@@ -170,6 +170,33 @@ class App:
         future.add_done_callback(lambda f:GLib.idle_add(self.complete,kind,f,revision,None))
     def complete(self,kind,future,revision,ident):
         if self.closed:return GLib.SOURCE_REMOVE
+        if kind in ('poll','health'):
+            try:observed=future.result()
+            except ConnectionBusy:
+                if revision!=self.revision or ident!=self.selected() or self.busy:
+                    self.polling=False;return GLib.SOURCE_REMOVE
+                self.polling=False;self.recovery.stop()
+                self.detail_text=('Обновляются настройки подключения. Ожидаем завершения.' if self.ru else 'Connection settings are being updated. Waiting for completion.')
+                self.paint();return GLib.SOURCE_REMOVE
+            except Exception:observed=None
+            if isinstance(observed,ConnectionSnapshot):
+                if revision!=self.revision or ident!=self.selected() or self.busy:
+                    self.polling=False;return GLib.SOURCE_REMOVE
+                if observed.generation!=self.operation_generation:
+                    self.operation_generation=observed.generation
+                    self.polling=False;self.recovery.stop();self.revision+=1
+                    self.items=observed.items
+                    ids=[key for key,_ in self.items]
+                    self.selected_id=(observed.active_ids[0] if observed.active_ids else
+                        (ident if ident in ids else (ids[-1] if ids else None)))
+                    self.active=self.selected_id in observed.active_ids
+                    self.detail_text=''
+                    if self.active:self.recovery.arm(self.selected_id)
+                    self.paint();return GLib.SOURCE_REMOVE
+                from concurrent.futures import Future
+                completed=Future()
+                completed.set_result((observed.active,observed.healthy) if kind=='health' else observed.active)
+                future=completed
         if kind=='health':
             self.polling=False
             if revision!=self.revision or ident!=self.selected() or self.busy or self.recovery.identity!=ident:
@@ -180,8 +207,10 @@ class App:
             should_recover=self.recovery.observe(healthy,allow_recovery=automatic)
             if should_recover:
                 self.detail_text='Восстанавливаем соединение…' if self.ru else 'Restoring connection…'
-                driver=self.driver
+                driver=self.driver;generation=self.operation_generation
                 def restore():
+                    if hasattr(driver,'recover_if_current'):
+                        return driver.recover_if_current(ident,generation)
                     driver.recover(ident);return driver.active(ident)
                 self.submit(restore,'recovered')
             elif not healthy and not automatic and self.recovery.failures>=2:
@@ -226,7 +255,7 @@ class App:
                 subprocess.Popen([sys.executable,str(result)],start_new_session=True);self.close(True);return GLib.SOURCE_REMOVE
         except Exception as exc:
             if kind=='recovered':
-                if isinstance(exc,AuthorizationError):self.recovery.stop()
+                if isinstance(exc,(AuthorizationError,ConnectionBusy,StaleConnection)):self.recovery.stop()
                 else:self.recovery.recovered(False)
             if kind=='tcp_installed':
                 self.detail_text=(('Установка TCP отменена.' if self.ru else 'TCP installation cancelled.') if isinstance(exc,AuthorizationError) else ('Не удалось установить TCP. Проверьте интернет и системный установщик; TCP должен быть отключён.' if self.ru else 'TCP installation failed. Check Internet access and system updater; TCP must be disconnected.'))
@@ -244,9 +273,9 @@ class App:
         self.polling=True;revision=self.revision;driver=self.driver
         if self.recovery.due(ident):
             kind='health'
-            future=self.poll_pool.submit(lambda:(driver.active(ident),driver.healthy(ident)))
+            future=self.poll_pool.submit(lambda:driver.poll_state(ident,True) if hasattr(driver,'poll_state') else (driver.active(ident),driver.healthy(ident)))
         else:
-            kind='poll';future=self.poll_pool.submit(lambda:driver.active(ident))
+            kind='poll';future=self.poll_pool.submit(lambda:driver.poll_state(ident) if hasattr(driver,'poll_state') else driver.active(ident))
         future.add_done_callback(lambda f:GLib.idle_add(self.complete,kind,f,revision,ident))
         return GLib.SOURCE_CONTINUE
     def toggle_vpn(self):

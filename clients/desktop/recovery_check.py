@@ -1,7 +1,7 @@
 """Display-backed recovery intent and stale-completion regressions."""
 from concurrent.futures import Future
 from app import App,Adw
-from backend import AuthorizationError
+from backend import AuthorizationError,ConnectionSnapshot,ConnectionBusy
 from layout_check import pump
 
 def done(value):
@@ -45,6 +45,17 @@ def main():
         assert 'вручную' in app.detail_text or 'manually' in app.detail_text
         app.complete('health',done((True,True)),app.revision,'vpn')
         assert app.detail_text=='' and app.recovery.failures==0
+        # A control transaction committed a new profile while an old GUI health
+        # check was in flight: sync selection and never recover the old profile.
+        app.operation_generation=1;app.recovery.arm('vpn')
+        snapshot=ConnectionSnapshot(2,[('vpn','Old'),('new','New')],['new'],False,False)
+        app.complete('health',done(snapshot),app.revision,'vpn')
+        assert app.selected_id=='new' and app.active and d.repairs==1
+        assert app.recovery.identity=='new'
+        busy=Future();busy.set_exception(ConnectionBusy('pending'))
+        app.complete('poll',busy,app.revision,'new')
+        assert app.recovery.identity is None and not app.polling
+        app.selected_id='vpn'
         # Changing selection must not let old results resume another profile.
         app.recovery.arm('vpn');app.selected_id='other'
         app.complete('health',done((False,False)),app.revision,'vpn')
