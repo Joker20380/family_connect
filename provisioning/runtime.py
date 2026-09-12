@@ -31,7 +31,7 @@ class DiagnosticFormatter(logging.Formatter):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('operation', choices=['init-client', 'once', 'serve', 'init-relay', 'publish'])
+    parser.add_argument('operation', choices=['init-client', 'once', 'recover', 'serve', 'init-relay', 'publish'])
     parser.add_argument('--state', type=Path, required=True)
     parser.add_argument('--identity', type=Path)
     parser.add_argument('--anchor', type=Path)
@@ -81,7 +81,7 @@ def main():
     journal = ControlJournal(args.state, verifier)
     if args.operation == 'init-client':
         journal.initialize(); return
-    if not args.rns_config or not args.provider_public:
+    if args.operation == 'once' and (not args.rns_config or not args.provider_public):
         parser.error('once requires --rns-config and --provider-public')
     # No native Windows/Android claim: these have separate protected application
     # boundaries. This reference runner calls the existing Linux backend only.
@@ -93,7 +93,13 @@ def main():
     core = ProvisioningCore(journal=journal, application=BackendApplication(LinuxTCP(), device),
         device=device, clock=clock)
     # Recover local pending application even if the carrier cannot start.
-    core.recover()
+    recovered = core.recover()
+    if args.operation == 'recover':
+        # Local recovery only: retain pending ACKs and never fetch another config.
+        print(json.dumps(dict(result=recovered)))
+        if recovered == 'FAILED':
+            raise SystemExit(1)
+        return
     RNS.Reticulum(configdir=str(args.rns_config), loglevel=RNS.LOG_CRITICAL)
     cancel = threading.Event()
     for number in (signal.SIGTERM, signal.SIGINT):

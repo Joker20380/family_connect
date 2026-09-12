@@ -452,8 +452,9 @@ def test_private_key_placeholder_cannot_be_hidden_in_comment(environment):
     assert not e.application.applied
 
 
+@pytest.mark.parametrize('recovery',['core','cli'])
 @pytest.mark.parametrize('phase',['STAGED','APPLYING','APPLIED_PENDING'])
-def test_gui_blocked_until_control_journal_recovery(environment,monkeypatch,phase):
+def test_gui_blocked_until_control_journal_recovery(environment,monkeypatch,phase,recovery,capsys):
     from pathlib import Path
     monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1]/'clients/desktop'))
     import backend
@@ -475,6 +476,47 @@ def test_gui_blocked_until_control_journal_recovery(environment,monkeypatch,phas
     with pytest.raises(backend.ConnectionBusy):
         with backend.connection_operation(mutate=True):pass
     recovered=ProvisioningCore(journal=e.journal,application=BackendApplication(driver,e.device),device=e.device,clock=lambda:1000)
-    assert recovered.recover()=='ROLLED_BACK'
+    if recovery == 'core':
+        assert recovered.recover()=='ROLLED_BACK'
+    else:
+        from provisioning import runtime
+        prepare_recovery_cli(e, monkeypatch)
+        runtime.main()
+        assert json.loads(capsys.readouterr().out)['result']=='ROLLED_BACK'
+        outbox = state(e)['outbox']
+        runtime.main()
+        assert json.loads(capsys.readouterr().out)['result']=='IDLE'
+        assert state(e)['outbox']==outbox
     with backend.connection_operation() as lease:assert lease.record['pending'] is None
     assert simulated.live=={simulated.baseline}
+
+
+def prepare_recovery_cli(e, monkeypatch):
+    import sys
+    from provisioning import runtime
+    anchor = e.journal.path.parent / 'anchor.pub'
+    anchor.write_text(base64.b64encode(e.anchor).decode())
+    monkeypatch.setattr(runtime, 'load_or_create', lambda _: e.device)
+    monkeypatch.setattr(runtime.time, 'time', lambda: 1000)
+    def unexpected(*args, **kwargs):
+        raise AssertionError('recovery must not start or contact the carrier')
+    monkeypatch.setattr(runtime.RNS, 'Reticulum', unexpected)
+    monkeypatch.setattr(runtime, 'ReticulumAdapter', unexpected)
+    monkeypatch.setattr(sys, 'argv', ['control', 'recover', '--state', str(e.journal.path),
+        '--identity', str(e.journal.path.parent / 'device'), '--anchor', str(anchor)])
+
+
+def test_recovery_cli_reports_failed_rollback(environment, monkeypatch, capsys):
+    from pathlib import Path
+    from provisioning import runtime, application
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1]/'clients/desktop'))
+    e = environment
+    e.application.fail_apply = e.application.fail_rollback = True
+    assert e.core.receive(e.raw) == 'FAILED'
+    prepare_recovery_cli(e, monkeypatch)
+    monkeypatch.setattr(application, 'BackendApplication', lambda *_: e.application)
+    with pytest.raises(SystemExit) as error:
+        runtime.main()
+    assert error.value.code == 1
+    assert json.loads(capsys.readouterr().out)['result'] == 'FAILED'
+    assert state(e)['phase'] == 'ROLLING_BACK' and state(e)['staged'] is not None
