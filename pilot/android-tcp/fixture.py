@@ -27,8 +27,8 @@ def peers(root):
     reply=data[:2]+b'\x81\x80'+struct.pack('!HHHH',1,bool(value),0,0)+data[12:end]+answer;sock.sendto(reply,self.client_address)
     with lock:counts['dns']+=1
    except (IndexError,struct.error):pass
- http=http.server.ThreadingHTTPServer(('127.0.0.1',0),HTTP);dns=socketserver.ThreadingUDPServer(('127.0.0.1',0),DNS)
- for server in (http,dns):threading.Thread(target=server.serve_forever,daemon=True).start()
+ http_server=http.server.ThreadingHTTPServer(('127.0.0.1',0),HTTP);dns=socketserver.ThreadingUDPServer(('127.0.0.1',0),DNS)
+ for server in (http_server,dns):threading.Thread(target=server.serve_forever,daemon=True).start()
  with tempfile.TemporaryDirectory(prefix='fc-tcp-fixture-') as directory:
   temp=Path(directory);key=rsa.generate_private_key(public_exponent=65537,key_size=2048);name=x509.Name([x509.NameAttribute(NameOID.COMMON_NAME,'android.test')]);now=datetime.datetime.now(datetime.timezone.utc)
   cert=x509.CertificateBuilder().subject_name(name).issuer_name(name).public_key(key.public_key()).serial_number(x509.random_serial_number()).not_valid_before(now-datetime.timedelta(days=1)).not_valid_after(now+datetime.timedelta(days=1)).add_extension(x509.SubjectAlternativeName([x509.DNSName('android.test')]),False).sign(key,hashes.SHA256())
@@ -45,7 +45,7 @@ def peers(root):
     except socket.timeout:pass
     except OSError:break
   threading.Thread(target=accept,daemon=True).start()
-  config={'log':{'loglevel':'warning'},'inbounds':[{'listen':'0.0.0.0','port':51900,'protocol':'vless','settings':{'clients':[{'id':ID,'flow':'xtls-rprx-vision'}],'decryption':'none'},'streamSettings':{'network':'raw','security':'reality','realitySettings':{'show':False,'target':'127.0.0.1:'+str(camouflage.getsockname()[1]),'xver':0,'serverNames':['android.test'],'privateKey':'AgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgI','shortIds':['0102030405060708']}}}], 'outbounds':[{'tag':'http','protocol':'freedom','settings':{'redirect':'127.0.0.1:'+str(http.server_port)}},{'tag':'dns','protocol':'freedom','settings':{'redirect':'127.0.0.1:'+str(dns.server_address[1])}}], 'routing':{'rules':[{'type':'field','network':'udp','outboundTag':'dns'}]}}
+  config={'log':{'loglevel':'warning'},'inbounds':[{'listen':'0.0.0.0','port':51900,'protocol':'vless','settings':{'clients':[{'id':ID,'flow':'xtls-rprx-vision'}],'decryption':'none'},'streamSettings':{'network':'raw','security':'reality','realitySettings':{'show':False,'target':'127.0.0.1:'+str(camouflage.getsockname()[1]),'xver':0,'serverNames':['android.test'],'privateKey':'AgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgI','shortIds':['0102030405060708']}}}], 'outbounds':[{'tag':'http','protocol':'freedom','settings':{'redirect':'127.0.0.1:'+str(http_server.server_port)}},{'tag':'dns','protocol':'freedom','settings':{'redirect':'127.0.0.1:'+str(dns.server_address[1])}}], 'routing':{'rules':[{'type':'field','network':'udp','outboundTag':'dns'}]}}
   log=(root/'android-tcp-peer.log').open('w');process=subprocess.Popen([str(root/'clients/android/awg-generated/xray-peer'),'run','-config','stdin:'],stdin=subprocess.PIPE,stdout=log,stderr=subprocess.STDOUT,text=True);process.stdin.write(json.dumps(config));process.stdin.close()
   try:
    until=time.monotonic()+15
@@ -59,5 +59,5 @@ def peers(root):
    yield counts
   finally:
    if process.poll() is None:process.kill();process.wait(timeout=10)
-   log.close();stop.set();camouflage.close();http.shutdown();http.server_close();dns.shutdown();dns.server_close()
+   log.close();stop.set();camouflage.close();http_server.shutdown();http_server.server_close();dns.shutdown();dns.server_close()
    (root/'android-tcp-peer-result.json').write_text(json.dumps(counts,indent=2)+'\n')

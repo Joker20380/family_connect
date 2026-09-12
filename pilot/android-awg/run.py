@@ -1,5 +1,5 @@
 """Two synthetic Linux peers; tests run on a disposable emulator only."""
-import json,os,subprocess,threading,queue,sys
+import json,os,subprocess,threading,queue,sys,traceback
 from pathlib import Path
 assert os.environ.get('GITHUB_ACTIONS')=='true'
 r=Path(__file__).resolve().parents[2];processes=[]
@@ -17,6 +17,9 @@ try:
  print((r/'android-awg-runtime.log').read_text(),flush=True)
  result.check_returncode()
  assert counts["http"]>=18 and counts["dns"]>=3
+except BaseException:
+ with (r/"android-tcp-runner.log").open("w") as log:traceback.print_exc(file=log)
+ raise
 finally:
  with (r/'android-awg-crash.log').open('w') as log:
   subprocess.run(['adb','logcat','-d','-b','crash'],stdout=log,stderr=subprocess.STDOUT,timeout=20)
