@@ -1,8 +1,10 @@
-# Android WG / AmneziaWG 2
+# Android WG / AmneziaWG 2 / TCP REALITY
 
 Состояние приёмки и точные артефакты: [отчёт](releases/2026-09-12-android-awg.ru.md).
 
-В приложении выбрать WireGuard или AmneziaWG 2, импортировать соответствующий
+TCP: [отчёт](releases/2026-09-12-android-tcp.ru.md).
+
+В приложении выбрать WireGuard, AmneziaWG 2 или TCP · REALITY, импортировать соответствующий
 конфигурационный файл, затем подключить и разрешить системный VPN-запрос.
 Перед сменой протокола нужно отключить соединение. Во время запуска кнопка
 «Отключить» отменяет подключение. Удаление профиля действует только на выбранный
@@ -10,7 +12,8 @@
 это ещё не результат проверки доступности Интернета.
 
 WG использует прежние `profile.enc` и AndroidKeyStore alias
-`family-connect-profile-v1`; AWG — `awg-profile.enc` и отдельный alias с `-awg`.
+`family-connect-profile-v1`; AWG — `awg-profile.enc` и отдельный alias с `-awg`;
+TCP — `tcp-profile.enc` и alias с `-tcp`.
 Файлы находятся в noBackupFilesDir, содержат AES-256-GCM ciphertext; backup
 приложения отключён. Открытые конфигурации сохранять в Git/CI/логах запрещено.
 Импорт AWG проверяет обязательные J/S/H и необязательные I-поля, диапазоны,
@@ -39,8 +42,31 @@ Debug APK не опубликован как обновление. Android0.1.0/
 перед реальной установкой нужны отдельная подпись, увеличение версии и принятие
 на устройстве. Пользователь отложил это действие. Сервер и существующие клиенты
 этим шагом не обновляются. Откат исходников — checkpoint13fffe9 до Android AWG;
+для возврата до TCP — checkpoint3eaf368;
 откат установленного APK не требуется, поскольку rollout не выполнялся.
 
-TCP, Auto, bound-health, Android delivery/activation, сон/Doze и смена сетей пока
+Auto, bound-health, Android delivery/activation, сон/Doze и смена сетей пока
 не приняты. Используется стандартный Go runtime без upstream CLOCK_BOOTTIME patch.
 ELF alignment16KB не заменяет проверку на устройстве с размером страницы16KB.
+
+TCP импортирует flat JSON `vless-reality-v1` с ровно семью полями: `type`,
+`server` (числовой IPv4), `port` (целое 1–65535), `id` (UUID), `public_key`
+(32-byte base64url), `server_name` (DNS SNI), `short_id` (2–16 чётных hex символов).
+Формат совместим с Linux. JSON с неизвестными/повторными полями, вложениями или
+escape-последовательностями отклоняется. Произвольный Xray config не принимается.
+Состояние «подключено» для TCP также не является проверкой здоровья Интернета.
+
+TCP использует Xray в том же Go runtime, собственный TcpVpnService и TUN с обеими
+маршрутами по умолчанию. Внешний dial разрешён только на endpoint профиля после
+успешного VpnService.protect. Остановка отменяет dial, закрывает соединения/Xray
+и принадлежащую native копию FD; Java освобождает исходный ParcelFileDescriptor.
+При ошибке очистки ConnectionService оставляет cleanup-required.
+
+CI runner дополнительно запускает `pilot/android-tcp/fixture.py`: локальные
+REALITY gateway, TLS1.3 camouflage, HTTP/DNS. Для fixture нужна cryptography46.0.7.
+AndroidTest проверяет TCP→WG→TCP→AWG→TCP, IPv4/IPv6 HTTP и системный resolver,
+отмену и системный отзыв. Перед каждым отзывом сбрасывается сохранённое разрешение
+конкурирующего тестового APK, иначе Android законно пропускает повторный диалог.
+Peer направляет весь принятый трафик только на локальные fixtures, включая фоновые
+запросы эмулятора; его DNS counter поэтому выше числа целевых resolver-проверок.
+На реальном gateway/телефоне эти проверки не выполнялись.

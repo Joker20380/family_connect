@@ -64,33 +64,30 @@ installed, actual host connection and blocked-WG → AWG fallback passed. Origin
 peers preserved. Working-tree client pilot available separately from stable releases.
 See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
-## Active Android step — WG/AWG accepted
+## Android WG/AWG/TCP accepted; next Auto
 
 Android WG/AWG passed four-ABI build, 12 unit methods, lint and real API35 x86_64
 emulator:24 encrypted UDP,4 stops,cancel,system revoke (clients34660308853).
 One runtime fixed WG→AWG→WG crash; profiles remain independent and encrypted.
-Active: Android TCP implementation, build/runtime CI pending. Then Auto and stage5 Reticulum.
+TCP accepted: clients34676190826/source8d748f5, four ABI,18 unit,18 REALITY HTTP,
+3 OS DNS calls,36 WG/AWG UDP and13 cleanup scenarios. Next Auto and stage5 Reticulum.
 Device update/testing stays deferred. [TCP report](releases/2026-09-12-android-tcp.ru.md).
 See [Android report](releases/2026-09-12-android-awg.ru.md).
 
 ## Next, in order
 
-1. Implement Android TCP: native engine/VpnService integration, separate protected
-   profile, explicit selection, startup cancellation and cleanup. Accept on isolated CI.
-   Windows WG/AWG/TCP/Auto is accepted in scoped CI; Android WG/AWG is accepted in
-   the emulator. Do not restart completed Windows implementation as the next task.
-2. Android Auto WG→AWG→TCP: health checks, cleanup before transitions, cancellation
+1. Android Auto WG→AWG→TCP: health checks, cleanup before transitions, cancellation
    and bounded recovery. Keep existing WG/AWG profiles intact.
-3. After Android transport integration, stage5 Reticulum: signed provisioning delivery,
+2. After Android transport integration, stage5 Reticulum: signed provisioning delivery,
    verification/application/ACK/rollback and replay protection. Android updater/Google Play
    and user-deferred device/load tests do not gate this implementation.
-4. Before distribution: full-routing/external gateway/REALITY and actual device acceptance,
+3. Before distribution: full-routing/external gateway/REALITY and actual device acceptance,
    Android release signing/versioning. User deferred APK updates and real/load tests;
    do not resume them automatically. Desktop0.2.9/catalogseq8 and TCP Setup0.1.0 remain published.
-5. Deferred resilience experiments: concurrency1→4→8, request-to-flow diagnosis and
+4. Deferred resilience experiments: concurrency1→4→8, request-to-flow diagnosis and
    second Ubuntu retest. Second independent VPS only when supplied by user; never use
    the test laptop or neighbouring services. Current timeout/stability limits remain open.
-6. Native enrollment/storage, signing-root rotation/recovery, then payments/notifications.
+5. Native enrollment/storage, signing-root rotation/recovery, then payments/notifications.
 
 Current stage4, not stable multi-platform resilience. Details, results, backups and unfinished
 work: [session checkpoint](releases/2026-09-11-session-checkpoint.ru.md).
@@ -101,8 +98,8 @@ work: [session checkpoint](releases/2026-09-11-session-checkpoint.ru.md).
 Мониторинг недоступного соединения при живом процессе завершён и проверен в scoped CI.
 Интеграция AWG принята в scoped CI2026-09-12; [результат](releases/2026-09-11-windows-awg-integration.ru.md).
 Автоматическое переключение Windows принято в scoped CI2026-09-12:672 макета,7 policy-сценариев,
-живой AWG→TCP, отмена, исчерпание и очистка после SCM restart. Android WG/AWG также принят; далее TCP/Auto.
+живой AWG→TCP, отмена, исчерпание и очистка после SCM restart. Android WG/AWG/TCP также принят; далее Auto.
 [Отчёт и границы приёмки](releases/2026-09-12-windows-auto.ru.md). Полный маршрут/REALITY требуют отдельной
 приёмки до выпуска. Отложенные пользователем испытания на устройствах/под нагрузкой
 не возобновлять автоматически и не смешивать с реализацией.
-Android WG/AWG принят в эмуляторе; следующий шаг — Android TCP и Auto, затем этап5 Reticulum.
+Android WG/AWG/TCP принят в эмуляторе; следующий шаг — Android Auto, затем этап5 Reticulum.

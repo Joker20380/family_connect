@@ -5,12 +5,18 @@ Linux/Windows release assets checked; signed update catalog sequence8 published 
 No device installation performed. Server **0.2.1**, deployment source8cd0f2d/server
 checkout117611c; TCP component **0.1.0** unchanged.
 
-## Android TCP — implementation in progress, 2026-09-12
+## Android TCP — accepted in isolated CI, 2026-09-12
 
-Xray added to the single Go runtime, own VpnService, separate encrypted TCP profile,
-explicit selector, startup cancellation and cleanup. Four-ABI build, strict-profile
-unit tests and emulator REALITY/TUN/HTTP/DNS/lifecycle acceptance pending.
-No rollout/device/server changes. [Report](releases/2026-09-12-android-tcp.ru.md).
+Application sourcef42afb5, accepted test source8d748f5. Clients34676190826 and
+phase034676190780 passed. Four ABI build,18 unit methods,lint0 errors/7 warnings;
+API35 x86_64:18 REALITY HTTP (9 IPv4/9 IPv6),3 OS resolver calls,36 WG/AWG UDP,
+13 cleanup scenarios across two instrumentation methods. Downloaded APK/native
+hashes and absence of test helpers verified. Python325 passed.
+One Go runtime, protected endpoint-only dialer, separate encrypted TCP profile,
+explicit selector and VpnService lifecycle. [Report](releases/2026-09-12-android-tcp.ru.md).
+Android0.1.0/versionCode1, no release/install/server/device changes.
+Next: Android Auto WG→AWG→TCP, then stage5 Reticulum. External gateway, phone,
+other ABI runtime, sleep/Doze/handover/health remain unaccepted; user tests deferred.
 
 ## Latest accepted Android WG/AWG checkpoint — 2026-09-12
 
@@ -22,7 +28,7 @@ Clients34660308853: four ABI build, 12 unit methods, lint0 errors/7 warnings,
 emulator passed; downloaded APK/native hashes checked. Phase034660308767 and
 Python325 passed. [Report](releases/2026-09-12-android-awg.ru.md).
 Android0.1.0/versionCode1; no APK release/install, no server/device change.
-Next implementation: Android TCP + Auto; then stage5 Reticulum. External gateway,
+TCP accepted in the checkpoint above. Next implementation: Android Auto; then stage5 Reticulum. External gateway,
 phone/other ABI runtime, sleep/handover remain unaccepted; user tests still deferred.
 
 ## Latest accepted Windows checkpoint — 2026-09-12
