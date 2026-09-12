@@ -5,14 +5,18 @@ Linux/Windows release assets checked; signed update catalog sequence8 published 
 No device installation performed. Server **0.2.1**, deployment source8cd0f2d/server
 checkout117611c; TCP component **0.1.0** unchanged.
 
-## Android AWG — implementation in progress, 2026-09-12
+## Latest Android checkpoint — 2026-09-12
 
-Android WG/AWG selector, separate encrypted stores and pinned AWG JNI added; CI
-four-ABI build, 12 unit methods, lint (0 errors/7 warnings) and packaged hashes passed.
-Emulator runtime crashed; acceptance pending diagnosis. The initial green step
-masked failure through tee; XML was checked, propagation fixed. Python325 passed.
-No APK installation or server change. [Report](releases/2026-09-12-android-awg.ru.md).
-Next after acceptance: Android TCP and automatic fallback, then stage5 Reticulum.
+Android WG/AWG accepted in API35 x86_64 emulator: 24 encrypted IPv4/IPv6 UDP
+exchanges, 4 normal stops, pending cancellation and real system VPN permission
+handover/revocation; separate encrypted stores preserved. One native Go runtime
+replaces the crashing dual-runtime design. Application sourceba6ec3e, test sourcea93558a.
+Clients34660308853: four ABI build, 12 unit methods, lint0 errors/7 warnings,
+emulator passed; downloaded APK/native hashes checked. Phase034660308767 and
+Python325 passed. [Report](releases/2026-09-12-android-awg.ru.md).
+Android0.1.0/versionCode1; no APK release/install, no server/device change.
+Next implementation: Android TCP + Auto; then stage5 Reticulum. External gateway,
+phone/other ABI runtime, sleep/handover remain unaccepted; user tests still deferred.
 
 ## Latest accepted Windows checkpoint — 2026-09-12
 

@@ -64,11 +64,12 @@ installed, actual host connection and blocked-WG → AWG fallback passed. Origin
 peers preserved. Working-tree client pilot available separately from stable releases.
 See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 
-## Active Android step
+## Active Android step — WG/AWG accepted
 
-WG/AWG integration is implemented; four-ABI native build and unit/lint passed.
-API35 emulator runtime crashed; fix and accept encrypted traffic/cancel/revoke before completing this step.
-Then Android TCP and Auto; Reticulum follows in stage5. Device update/testing stays deferred.
+Android WG/AWG passed four-ABI build, 12 unit methods, lint and real API35 x86_64
+emulator:24 encrypted UDP,4 stops,cancel,system revoke (clients34660308853).
+One runtime fixed WG→AWG→WG crash; profiles remain independent and encrypted.
+Next: Android TCP and Auto, then stage5 Reticulum. Device update/testing stays deferred.
 See [Android report](releases/2026-09-12-android-awg.ru.md).
 
 ## Next, in order
@@ -130,4 +131,4 @@ work: [session checkpoint](releases/2026-09-11-session-checkpoint.ru.md).
 [Отчёт и границы приёмки](releases/2026-09-12-windows-auto.ru.md). Полный маршрут/REALITY требуют отдельной
 приёмки до выпуска. Отложенные пользователем испытания на устройствах/под нагрузкой
 не возобновлять автоматически и не смешивать с реализацией.
-Следующий платформенный блок — Android AWG/TCP; затем этап5 Reticulum.
+Android WG/AWG принят в эмуляторе; следующий шаг — Android TCP и Auto, затем этап5 Reticulum.
