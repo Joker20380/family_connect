@@ -38,7 +38,7 @@ This does not yet prove recovery from loss/blocking of the only known infrastruc
   вне sandbox. Portal teardown warnings не привели к ошибке smoke.
 - Добавлен `.github/workflows/control.yml`: Python regression, GTK layout/recovery/
   TCP install checks, fresh venv с preview lockfile, extracted CLI/GUI smoke,
-  upload preview и legacy desktop archive. Remote result: pending.
+  upload preview и legacy desktop archive. Remote result: **success**, [run34720569558](https://github.com/Joker20380/family_connect/actions/runs/34720569558), source `d8aef8a`.
 
 ## Запуск и откат
 
@@ -84,3 +84,27 @@ Stage6 не принят. Следующий шаг после CI — приём
 
 Предыдущая Stage5/GUI реализация сохранена без изменения; её списки файлов и
 результаты находятся в отдельных checkpoint-документах.
+
+## Remote CI и artifact evidence
+
+Ветка `stage5-linux-control-preview`, source `d8aef8a`; исходный рабочий checkout
+сохранён, изменений main/merge нет. Scoped Linux run34720569558 прошёл полностью,
+включая fresh pinned venv, extracted CLI/GTK и layout/recovery checks.
+[AWG34720569522](https://github.com/Joker20380/family_connect/actions/runs/34720569522)
+и [TCP34720569485](https://github.com/Joker20380/family_connect/actions/runs/34720569485) passed.
+[phase034720569486](https://github.com/Joker20380/family_connect/actions/runs/34720569486):
+Python/Rust job passed, failover job **failed** на `Build isolated failover stack`.
+Аннотация сообщает exit1 без причины. API скачивания logs вернул403 без GitHub
+auth; причина не установлена, не объявляется infrastructure flake.
+[Clients34720569537](https://github.com/Joker20380/family_connect/actions/runs/34720569537):
+Linux passed, Windows/Android ещё выполнялись на момент checkpoint.
+Полная regression acceptance до разбора failover не закрыта.
+
+Локальный воспроизводимый preview:
+`FamilyConnect-Control-Linux-preview-d04140683bf95aba.tar.gz`,
+SHA256 `2411cfea4eeff19684629a24ff7180ce2243618c0e02b9792e0da3f76ec7e671`.
+Повторная сборка в другом checkout byte-identical. Legacy archive проверен:6 files.
+GitHub upload `linux-control-preview`:101090 bytes, artifact ZIP digest
+`45490613eb501cd617d79d14da7032dcf596a769d25b68acc948f126d8606936`.
+Это digest ZIP-контейнера GitHub, не digest внутреннего tar.gz; remote artifact
+не скачан/не установлен. Нет нового релиза, catalog подписи или server mutation.

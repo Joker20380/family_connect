@@ -5,9 +5,12 @@
 Operator GUI/core bundle added with an explicit public-file allowlist, integrity
 manifest, runtime-only pinned dependencies and extracted launcher. Legacy six-file
 desktop archive unchanged. Local405 Python passed; extracted real RNS lifecycle
-and GTK smoke passed. Scoped Linux control CI added, remote result pending.
-No release/install/catalog/server changes. Next: CI acceptance and paired preview
-rollout preparation; native Windows/Android binding, AWG3.1 and TD-1 remain open.
+and GTK smoke passed. Scoped Linux control CI34720569558 passed on source d8aef8a.
+AWG/TCP pilot and phase0 Python/Rust passed. General phase0 failover failed at
+isolated Docker build; exact cause unavailable (logs API403). Client builds Linux
+passed; Windows/Android still running at checkpoint.
+No release/install/catalog/server changes. Next: resolve general failover build evidence and prepare paired preview
+rollout; native Windows/Android binding, AWG3.1 and TD-1 remain open.
 [Preview checkpoint](releases/2026-09-12-control-preview.ru.md).
 
 
