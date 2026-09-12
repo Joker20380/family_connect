@@ -16,6 +16,8 @@ COPY telemetry /app/telemetry
 # complete public six-file bundle and its version. These stay in the tests stage.
 COPY VERSION /app/VERSION
 COPY clients/desktop/app.py clients/desktop/backend.py clients/desktop/profile_config.py clients/desktop/updates.py clients/desktop/update.pub clients/desktop/install-linux.sh /app/clients/desktop/
+# Extracted-package acceptance also exercises the shared operation arbiter.
+COPY clients/desktop/tests/conftest.py clients/desktop/tests/test_operations.py /app/clients/desktop/tests/
 RUN python -m pytest -q && touch /tmp/tests-passed
 
 FROM base AS runtime
