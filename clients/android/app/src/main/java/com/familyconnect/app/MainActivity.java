@@ -22,6 +22,7 @@ public final class MainActivity extends Activity {
     private Button toggle,importButton,checkButton,forgetButton;
     private ProfileStore store;
     private Spinner transportPicker;
+    private Switch autoMode;
     private Transport selected=Transport.WG;
     private String pendingTransport="wg";
     private boolean busy=false;
@@ -37,6 +38,8 @@ public final class MainActivity extends Activity {
         label(content,"FAMILY CONNECT",25,Color.rgb(102,219,192));label(content,getString(R.string.tagline),15,Color.LTGRAY);
         dot=label(content,"●",88,Color.GRAY);state=label(content,"",27,Color.WHITE);
         label(content,getString(R.string.route),15,Color.LTGRAY);
+        autoMode=new Switch(this);autoMode.setText("Auto · WG → AWG → TCP");autoMode.setTextColor(Color.WHITE);autoMode.setChecked(getPreferences(MODE_PRIVATE).getBoolean("auto",false));content.addView(autoMode);
+        autoMode.setOnCheckedChangeListener((v,on)->{getPreferences(MODE_PRIVATE).edit().putBoolean("auto",on).apply();render();});
         transportPicker=new Spinner(this);transportPicker.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,new String[]{"WireGuard","AmneziaWG 2","TCP · REALITY"}));
         transportPicker.setSelection(selected.ordinal());content.addView(transportPicker);
         transportPicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
@@ -70,20 +73,22 @@ public final class MainActivity extends Activity {
     private void render(){
         if(toggle==null||detail==null)return;
         String value=ConnectionService.status;
-        if(!value.equals("off")){
+        if(!value.equals("off")&&!"auto".equals(ConnectionService.requestedTransport)){
             Transport active=Transport.parse(ConnectionService.activeTransport);
             if(selected!=active){selected=active;store=new ProfileStore(this,active);transportPicker.setSelection(active.ordinal());getPreferences(MODE_PRIVATE).edit().putString("transport",active.id).apply();}
         }
         boolean on=value.equals("on"),waiting=value.equals("connecting")||value.equals("cleanup-required");
         state.setText(on?R.string.on:waiting?R.string.connecting:R.string.off);
         dot.setTextColor(on?Color.rgb(102,219,192):Color.GRAY);toggle.setText(on||waiting?R.string.disconnect:R.string.connect);
-        toggle.setEnabled(!busy&&(on||waiting||store.exists()));transportPicker.setEnabled(!busy&&!on&&!waiting);importButton.setEnabled(!busy&&!on&&!waiting);
+        boolean available=store.exists();if(autoMode.isChecked()){available=false;for(Transport t:Transport.values())available|=new ProfileStore(this,t).exists();}
+        autoMode.setEnabled(!busy&&!on&&!waiting);toggle.setEnabled(!busy&&(on||waiting||available));transportPicker.setEnabled(!busy&&!on&&!waiting);importButton.setEnabled(!busy&&!on&&!waiting);
         forgetButton.setEnabled(!busy&&!on&&!waiting&&store.exists());checkButton.setEnabled(!busy&&on);
         if(ConnectionService.failed)detail.setText(R.string.failed);
+        else if(!value.equals("off")&&"auto".equals(ConnectionService.requestedTransport))detail.setText("Auto · "+ConnectionService.activeTransport.toUpperCase(java.util.Locale.ROOT));
     }
     private void toggle(){
         if(!ConnectionService.status.equals("off")){startService(new Intent(this,ConnectionService.class).setAction("disconnect"));return;}
-        pendingTransport=selected.id;Intent permission=VpnService.prepare(this);
+        pendingTransport=autoMode.isChecked()?"auto":selected.id;Intent permission=VpnService.prepare(this);
         if(permission!=null)startActivityForResult(permission,11);else continueStart();
     }
     private void continueStart(){
@@ -94,7 +99,7 @@ public final class MainActivity extends Activity {
     @Override public void onRequestPermissionsResult(int request,String[] permissions,int[] results){
         super.onRequestPermissionsResult(request,permissions,results);if(request==12)startVpn();
     }
-    private void startVpn(){ConnectionService.activeTransport=pendingTransport;ConnectionService.status="connecting";startForegroundService(new Intent(this,ConnectionService.class).setAction("connect").putExtra("transport",pendingTransport));render();}
+    private void startVpn(){ConnectionService.requestedTransport=pendingTransport;if(!pendingTransport.equals("auto"))ConnectionService.activeTransport=pendingTransport;ConnectionService.status="connecting";startForegroundService(new Intent(this,ConnectionService.class).setAction("connect").putExtra("transport",pendingTransport));render();}
     @Override protected void onActivityResult(int request,int result,Intent data){
         super.onActivityResult(request,result,data);
         if(request==11){if(result==RESULT_OK)continueStart();else detail.setText(R.string.permission_denied);return;}

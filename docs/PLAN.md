@@ -76,7 +76,8 @@ See [Android report](releases/2026-09-12-android-awg.ru.md).
 
 ## Next, in order
 
-1. Android Auto WG→AWG→TCP: health checks, cleanup before transitions, cancellation
+1. Active: Android Auto implementation prepared; isolated CI pending.
+   WG→AWG→TCP: health checks, cleanup before transitions, cancellation
    and bounded recovery. Keep existing WG/AWG profiles intact.
 2. After Android transport integration, stage5 Reticulum: signed provisioning delivery,
    verification/application/ACK/rollback and replay protection. Android updater/Google Play

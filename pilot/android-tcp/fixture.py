@@ -17,6 +17,7 @@ def peers(root):
   def log_message(self,*args):pass
  class DNS(socketserver.BaseRequestHandler):
   def handle(self):
+   if (root/"android-auto-tcp.drop").exists():return
    data,sock=self.request
    try:
     pos=12
@@ -27,6 +28,18 @@ def peers(root):
     reply=data[:2]+b'\x81\x80'+struct.pack('!HHHH',1,bool(value),0,0)+data[12:end]+answer;sock.sendto(reply,self.client_address)
     with lock:counts['dns']+=1
    except (IndexError,struct.error):pass
+ class Control(http.server.BaseHTTPRequestHandler):
+  def do_GET(self):
+   modes={'/up':(),'/wg-down':('wg',),'/udp-down':('wg','awg'),'/all-down':('wg','awg','tcp')}
+   if self.path not in modes:self.send_error(404);return
+   for name in ('wg','awg','tcp'):
+    path=root/('android-auto-'+name+'.drop')
+    if name in modes[self.path]:path.touch()
+    else:path.unlink(missing_ok=True)
+   self.send_response(200);self.end_headers()
+  def log_message(self,*args):pass
+ control=http.server.ThreadingHTTPServer(('0.0.0.0',51902),Control)
+ threading.Thread(target=control.serve_forever,daemon=True).start()
  http_server=http.server.ThreadingHTTPServer(('127.0.0.1',0),HTTP);dns=socketserver.ThreadingUDPServer(('127.0.0.1',0),DNS)
  for server in (http_server,dns):threading.Thread(target=server.serve_forever,daemon=True).start()
  with tempfile.TemporaryDirectory(prefix='fc-tcp-fixture-') as directory:
@@ -59,5 +72,5 @@ def peers(root):
    yield counts
   finally:
    if process.poll() is None:process.kill();process.wait(timeout=10)
-   log.close();stop.set();camouflage.close();http_server.shutdown();http_server.server_close();dns.shutdown();dns.server_close()
+   control.shutdown();control.server_close();log.close();stop.set();camouflage.close();http_server.shutdown();http_server.server_close();dns.shutdown();dns.server_close()
    (root/'android-tcp-peer-result.json').write_text(json.dumps(counts,indent=2)+'\n')

@@ -31,7 +31,7 @@ jobs:
           go-version: '1.26.1'
           cache: false
       - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0' 'ndk;28.2.13676358'
-      - name: Build pinned Android AWG library
+      - name: Build pinned unified Android VPN library
         run: ANDROID_NDK_HOME="$ANDROID_HOME/ndk/28.2.13676358" python3 -u pilot/android-awg/build.py 2>&1 | tee android-awg-build.log
       - run: gradle --no-daemon :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
         working-directory: clients/android
@@ -42,7 +42,7 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      - name: Real WG AWG encrypted data lifecycle on Android emulator
+      - name: Real WG AWG TCP and Auto lifecycle on Android emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35

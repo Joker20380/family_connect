@@ -5,6 +5,13 @@ Linux/Windows release assets checked; signed update catalog sequence8 published 
 No device installation performed. Server **0.2.1**, deployment source8cd0f2d/server
 checkout117611c; TCP component **0.1.0** unchanged.
 
+## Android Auto — implementation pending CI, 2026-09-12
+
+WG→AWG→TCP over saved profiles, VPN-bound DNS reachability, two failed cycles,
+cleanup before advancing, finite attempt budget, cancellation and terminal revoke.
+CI acceptance pending. No device/server/release changes.
+[Report](releases/2026-09-12-android-auto.ru.md). Next after acceptance: stage5 Reticulum.
+
 ## Android TCP — accepted in isolated CI, 2026-09-12
 
 Application sourcef42afb5, accepted test source8d748f5. Clients34676190826 and

@@ -23,6 +23,15 @@ func (m *memory) Read(b [][]byte,sizes []int,offset int)(int,error){select{case 
 func sum(p []byte)uint16{var s uint32;for len(p)>1{s+=uint32(binary.BigEndian.Uint16(p));p=p[2:]} ;if len(p)>0{s+=uint32(p[0])<<8};for s>>16!=0{s=(s&65535)+(s>>16)};return ^uint16(s)}
 func echo(in []byte)[]byte{
  p:=append([]byte(nil),in...);var n int;var pseudo []byte
+ header:=0;if len(p)>=28&&p[0]>>4==4&&p[9]==17{header=int(p[0]&15)*4}else if len(p)>=48&&p[0]>>4==6&&p[6]==17{header=40}
+ if header>=20&&len(p)>=header+20&&binary.BigEndian.Uint16(p[header+2:header+4])==53{
+  // Synthetic DNS response for the actual production health packet parser.
+  q:=p[header+8:];if q[2]!=1||q[4]!=0||q[5]!=1{return nil}
+  q[2]=0x81;q[3]=0x80;q[6]=0;q[7]=1
+  p=append(p,0xc0,0x0c,0,1,0,1,0,0,0,0,0,4,198,19,1,1)
+  binary.BigEndian.PutUint16(p[header+4:header+6],uint16(len(p)-header))
+  if header==40{binary.BigEndian.PutUint16(p[4:6],uint16(len(p)-40))}else{binary.BigEndian.PutUint16(p[2:4],uint16(len(p)))}
+ }
  if len(p)>=28&&p[0]>>4==4&&p[9]==17 {
   n=int(p[0]&15)*4;if n<20||len(p)<n+8{return nil}
   src:=append([]byte(nil),p[12:16]...);copy(p[12:16],p[16:20]);copy(p[16:20],src)
@@ -36,7 +45,7 @@ func echo(in []byte)[]byte{
  port:=binary.BigEndian.Uint16(p[n:n+2]);copy(p[n:n+2],p[n+2:n+4]);binary.BigEndian.PutUint16(p[n+2:n+4],port)
  p[n+6]=0;p[n+7]=0;c:=sum(append(pseudo,p[n:]...));if c==0{c=65535};binary.BigEndian.PutUint16(p[n+6:n+8],c);return p
 }
-func(m *memory)Write(b [][]byte,offset int)(int,error){for _,p:=range b{if r:=echo(p[offset:]);r!=nil{select{case m.packets<-r:case <-m.done:return 0,os.ErrClosed}}};return len(b),nil}
+func(m *memory)Write(b [][]byte,offset int)(int,error){for _,p:=range b{if path:=os.Getenv("FC_PEER_DROP_FILE");path!=""{if _,err:=os.Stat(path);err==nil{continue}};if r:=echo(p[offset:]);r!=nil{select{case m.packets<-r:case <-m.done:return 0,os.ErrClosed}}};return len(b),nil}
 func run()error{
  if os.Getenv("GITHUB_ACTIONS")!="true"{return errors.New("CI required")}
  raw,e:=io.ReadAll(io.LimitReader(os.Stdin,16385));if e!=nil||len(raw)>16384{return errors.New("size")}
