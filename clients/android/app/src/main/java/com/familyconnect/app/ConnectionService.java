@@ -52,7 +52,7 @@ public final class ConnectionService extends Service {
         String profile=ProfileValidator.validate(new ProfileStore(this,type).load(),type);
         if(stopping||closing){stopConnection();return;}
         activeTransport=type.id;status="connecting";main.post(this::notifyState);
-        source=type==Transport.TCP?"10.79.0.2":org.amnezia.awg.config.Config.parse(new java.io.ByteArrayInputStream(profile.getBytes(java.nio.charset.StandardCharsets.UTF_8))).getInterface().getAddresses().stream().filter(a->a.getAddress() instanceof java.net.Inet4Address).findFirst().orElseThrow(()->new IllegalArgumentException("IPv4 required")).getAddress().getHostAddress();
+        if(automatic)source=type==Transport.TCP?"10.79.0.2":org.amnezia.awg.config.Config.parse(new java.io.ByteArrayInputStream(profile.getBytes(java.nio.charset.StandardCharsets.UTF_8))).getInterface().getAddresses().stream().filter(a->a.getAddress() instanceof java.net.Inet4Address).findFirst().orElseThrow(()->new IllegalArgumentException("IPv4 required")).getAddress().getHostAddress();
         final long token=++generation;
         engine=TunnelEngine.create(this,type,up->{if(!up&&token==generation&&!stopping&&!closing){cancel();worker.execute(this::stopConnection);}});
         engine.up(profile);
