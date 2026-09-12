@@ -30,6 +30,10 @@ with tempfile.TemporaryDirectory(prefix='fc-android-awg-') as temporary:
             currentTunnel = tunnel;
             currentConfig = config;''')
  text=text.replace('            service.protect(awgGetSocketV4(currentTunnelHandle));','').replace('            service.protect(awgGetSocketV6(currentTunnelHandle));','')
+ # Await Android service destruction before another backend can reuse its ready future.
+ text=text.replace('                vpnService.get(0, TimeUnit.NANOSECONDS).stopSelf();', '                final VpnService stoppingService=vpnService.get(0, TimeUnit.NANOSECONDS);\n                stoppingService.stopSelf();\n                try { stoppingService.destroyed.get(3, TimeUnit.SECONDS); }\n                catch (final TimeoutException e) { throw new IllegalStateException("VPN service shutdown timed out"); }')
+ text=text.replace('public static class VpnService extends android.net.VpnService {', 'public static class VpnService extends android.net.VpnService {\n        public final java.util.concurrent.CompletableFuture<Void> destroyed=new java.util.concurrent.CompletableFuture<>();')
+ text=text.replace('            super.onDestroy();', '            super.onDestroy();\n            destroyed.complete(null);')
  backend.write_text(text)
  native=android/'tunnel/tools/libwg-go';api=native/'api-android.go';text=api.read_text()
  for imp in ('net','os','os/signal','runtime','runtime/debug','strings'):text=text.replace('\n\t"'+imp+'"','')
