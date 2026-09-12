@@ -82,7 +82,9 @@ public class AwgRuntimeTest {
             context.startForegroundService(new Intent(context,ConnectionService.class).setAction("connect").putExtra("transport","awg"));
             context.startService(new Intent(context,ConnectionService.class).setAction("disconnect"));Thread.sleep(500);waitState("off");clean();
             context.startForegroundService(new Intent(context,ConnectionService.class).setAction("connect").putExtra("transport","awg"));waitState("on");
-            android.util.Log.i("FamilyConnect","System VPN revoke");revokeThroughSystemDialog();waitState("off");clean();
+            android.util.Log.i("FamilyConnect","System VPN revoke");
+            shell("appops set "+context.getPackageName()+" ACTIVATE_VPN deny");
+            revokeThroughSystemDialog();waitState("off");clean();
             assertNotNull("VPN authorization remains",android.net.VpnService.prepare(context));
             android.util.Log.i("FamilyConnect","PASS: 24 encrypted UDP, 4 stops, pending cancel, system revoke");
             assertTrue(wg.exists());assertTrue(awg.exists());
