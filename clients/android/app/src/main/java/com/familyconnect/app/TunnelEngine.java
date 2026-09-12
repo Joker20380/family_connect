@@ -14,7 +14,7 @@ interface TunnelEngine {
                 public void onStateChange(State s){state.accept(s==State.UP);}
             };
             public void up(String profile)throws Exception{backend.setState(tunnel,org.amnezia.awg.backend.Tunnel.State.UP,org.amnezia.awg.config.Config.parse(new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8))));}
-            public void down()throws Exception{backend.setState(tunnel,org.amnezia.awg.backend.Tunnel.State.DOWN,null);}
+            public void down()throws Exception{backend.setState(tunnel,org.amnezia.awg.backend.Tunnel.State.DOWN,null);backend.awaitShutdown();}
         };
     }
 }
