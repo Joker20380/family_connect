@@ -43,10 +43,10 @@ public class AutoRuntimeTest {
    control("udp-down");on("tcp");new TcpRuntimeTest().traffic();stop();
    control("up");start();on("wg");helper.traffic(Transport.WG);stop();
    control("all-down");start();Thread.sleep(500);off();assertTrue(ConnectionService.failed);
-   start();Thread.sleep(500);stop();Thread.sleep(3000);assertEquals("off",ConnectionService.status);helper.clean();
-   control("up");start();on("wg");helper.shell("appops set "+context.getPackageName()+" ACTIVATE_VPN deny");helper.revokeThroughSystemDialog();off();assertNotNull(VpnService.prepare(context));
+   start();Thread.sleep(1500);long cancelledAt=System.currentTimeMillis();stop();assertTrue("Cancel exceeded socket timeout budget",System.currentTimeMillis()-cancelledAt<5000);Thread.sleep(3000);assertEquals("off",ConnectionService.status);helper.clean();
+   control("up");wg.clear();start();on("awg");wg.save(ProfileValidator.validate(AwgRuntimeTest.profile(Transport.WG)));helper.shell("appops set "+context.getPackageName()+" ACTIVATE_VPN deny");helper.revokeThroughSystemDialog();off();assertNotNull(VpnService.prepare(context));
    assertTrue(wg.exists());assertTrue(awg.exists());assertTrue(tcp.exists());
-   android.util.Log.i("FamilyConnect","AUTO PASS: blocked WG to AWG, live AWG loss to TCP, WG priority, exhaustion, cancel, system revoke; 12 UDP, 6 REALITY HTTP, 1 OS DNS; 5 cleanup scenarios");
+   android.util.Log.i("FamilyConnect","AUTO PASS: blocked WG to AWG, live AWG loss to TCP, WG priority, missing WG, exhaustion, in-flight cancel, system revoke; 12 UDP, 6 REALITY HTTP, 1 OS DNS; 5 cleanup scenarios");
   }finally{control("up");context.stopService(new Intent(context,ConnectionService.class));wg.clear();awg.clear();tcp.clear();InstrumentationRegistry.getInstrumentation().runOnMainSync(activity::finish);}
  }
 }
