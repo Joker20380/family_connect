@@ -1,0 +1,52 @@
+{
+  "artifact_sha256": "d10fc27e9300fea1b22d210c2a13bb6b1f721a61a3fa8ca3e01c3d846dc3ad5d",
+  "source": "a51aa52",
+  "application_source": "a51aa52",
+  "test_source": "6fa2bc7",
+  "clients_run": "34679094884",
+  "phase0_run": "34679094921",
+  "android_artifact": "34679094884-10293136813.zip",
+  "apk": {
+    "apk_sha256": "7d79204dec7c3f8e2fa265282d3b79c819edd33ab95aa2574da410f3ee15b4f0",
+    "bytes": 185981772,
+    "build": {
+      "android_revision": "5420011143f9dd42831cc95fcdb0d6ac9bde868f",
+      "engine_revision": "1cc94272ca8e9e223a5fe76382f5880f09d3c12d",
+      "go": "1.26.1",
+      "ndk": "28.2.13676358",
+      "abis": {
+        "arm64-v8a": "ced99db16c15cf2b1e5f486edc57e4d9e719c8e29706a454ea1f14eed27c7538",
+        "armeabi-v7a": "680d0f858fec0c93e0420d915cf62fe772d30a8fab43587edaeced6aa70dc47b",
+        "x86": "3777e87caa314d204085ce097775a500505e4a1a35d5ebc643c8ebc1dc60e176",
+        "x86_64": "4c205043adc5f65586f08d52dc4fde583cf79a1e153ff738b5db21c74ddb6c1a"
+      },
+      "jni_source_sha256": "ecb039ec3e952ba699f8121bbe8de76ce0437264e2295a7fa4ae9b05dc7cb094",
+      "public_uapi": false,
+      "root_backend": false,
+      "single_runtime": true,
+      "xray_revision": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+      "tcp_source_sha256": "f5ec5e4908e56ebd595f1b96bf5d83fafad996105a75a73f9bbd4ee469eec1a6",
+      "tcp_jni_sha256": "6ef06b63b6d19a1160819a7fd5ac9bf19dc07db8ba32e9cc0903e1fcb4a1470b",
+      "go_sum_sha256": "9979cda04f77d776b1567e32e6e8d6b1373c4b67eac3418690c944b6d0b22a18",
+      "wg_peer_revision": "ecfc5a8d54462e18e13c72173e2623d16d8e25a0"
+    }
+  },
+  "tests": {
+    "unit": 23,
+    "instrumentation": 3
+  },
+  "fixture_counts": {
+    "http": 24,
+    "dns": 62
+  },
+  "target_http": 24,
+  "target_os_resolver_calls": 4,
+  "encrypted_udp": 48,
+  "cleanup_scenarios": 18,
+  "python_tests": 325,
+  "installed": false,
+  "lint": {
+    "errors": 0,
+    "warnings": 10
+  }
+}

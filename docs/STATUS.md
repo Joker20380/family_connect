@@ -5,12 +5,18 @@ Linux/Windows release assets checked; signed update catalog sequence8 published 
 No device installation performed. Server **0.2.1**, deployment source8cd0f2d/server
 checkout117611c; TCP component **0.1.0** unchanged.
 
-## Android Auto — implementation pending CI, 2026-09-12
+## Android Auto — accepted in isolated CI, 2026-09-12
 
-WG→AWG→TCP over saved profiles, VPN-bound DNS reachability, two failed cycles,
-cleanup before advancing, finite attempt budget, cancellation and terminal revoke.
-CI acceptance pending. No device/server/release changes.
-[Report](releases/2026-09-12-android-auto.ru.md). Next after acceptance: stage5 Reticulum.
+Application sourcea51aa52, accepted tests6fa2bc7. Clients34679094884 and
+phase034679094921 passed: four ABI,23 unit methods,lint0 errors/10 warnings,3 API35 x86_64 instrumentation
+methods. Auto: blocked WG→AWG, live AWG health loss→TCP, WG priority, missing WG,
+finite exhaustion, startup cancellation, system revoke;12 UDP,6 REALITY HTTP,
+1 OS resolver call,5 cleanup scenarios. Full regression:48 UDP,24 HTTP,4 OS DNS,
+18 cleanup scenarios. Local Python325 passed. APK/native hashes verified.
+VPN-bound DNS reachability uses two endpoints; HTTPS/general Internet availability
+is outside this health criterion. One pass WG→AWG→TCP, cleanup before transitions.
+[Report](releases/2026-09-12-android-auto.ru.md). No release/install/server changes.
+Next implementation: stage5 Reticulum. Device/full-routing/sleep/handover remain deferred.
 
 ## Android TCP — accepted in isolated CI, 2026-09-12
 
@@ -22,7 +28,7 @@ hashes and absence of test helpers verified. Python325 passed.
 One Go runtime, protected endpoint-only dialer, separate encrypted TCP profile,
 explicit selector and VpnService lifecycle. [Report](releases/2026-09-12-android-tcp.ru.md).
 Android0.1.0/versionCode1, no release/install/server/device changes.
-Next: Android Auto WG→AWG→TCP, then stage5 Reticulum. External gateway, phone,
+Auto accepted in the checkpoint above; next stage5 Reticulum. External gateway, phone,
 other ABI runtime, sleep/Doze/handover/health remain unaccepted; user tests deferred.
 
 ## Latest accepted Android WG/AWG checkpoint — 2026-09-12
@@ -35,7 +41,7 @@ Clients34660308853: four ABI build, 12 unit methods, lint0 errors/7 warnings,
 emulator passed; downloaded APK/native hashes checked. Phase034660308767 and
 Python325 passed. [Report](releases/2026-09-12-android-awg.ru.md).
 Android0.1.0/versionCode1; no APK release/install, no server/device change.
-TCP accepted in the checkpoint above. Next implementation: Android Auto; then stage5 Reticulum. External gateway,
+TCP accepted in the checkpoint above. Auto accepted above; next implementation stage5 Reticulum. External gateway,
 phone/other ABI runtime, sleep/handover remain unaccepted; user tests still deferred.
 
 ## Latest accepted Windows checkpoint — 2026-09-12

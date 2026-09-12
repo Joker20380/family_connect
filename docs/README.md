@@ -111,3 +111,5 @@ Windows Auto: [implementation and acceptance](releases/2026-09-12-windows-auto.r
 Android WG/AWG: [implementation and acceptance](releases/2026-09-12-android-awg.ru.md), [операции и сборка](android-transports.ru.md).
 
 Android TCP: [implementation and acceptance](releases/2026-09-12-android-tcp.ru.md).
+
+Android Auto: [implementation and acceptance](releases/2026-09-12-android-auto.ru.md).
