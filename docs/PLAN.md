@@ -74,48 +74,21 @@ See [Android report](releases/2026-09-12-android-awg.ru.md).
 
 ## Next, in order
 
-1. User deferred further network/load testing. Functionality demonstrated, stability
-   remains open; do not resume concurrency/second-laptop experiments automatically.
-   Standalone setup integrated into main; existing prompt/recovery patch reviewed,
-   273 tests + GTK recovery passed, setup hash equals previously VM-tested artifact.
-2. Desktop0.2.9/catalogseq8 and standalone TCP Setup0.1.0 published. Setup source7eee3c3,
-   all CI passed, downloaded archive matches trusted build, detached signature published.
-   Initial verifier/anchor must still be trusted independently. Next: native Windows
-   AWG/TCP integration, then Android transports/device acceptance. Android manual APK
-   update deferred by user; do not prioritize in-app updater/Google Play distribution.
-   Windows TCP engine foundation now passed: pinned build, actual TUN/VLESS 12/12,
-   forced cleanup and default routes/DNS preservation (Windows CI34629412460).
-   Signed REALITY profile + device binding/sequence floor/LocalSystem DPAPI import now
-   passed:300 Python tests, C# fixture +29 rejection cases,18 real Windows broker checks;
-   all platform CI34633788708 and phase0 passed (profile milestone).
-   Process ownership primitive now passed18/18 local requests across explicit/owner-crash/
-   engine-crash stop, binary tamper rejection and cleanup; native/platform/phase0 CI passed.
-   Broker IPC/SCM session now implemented: async connect/cancel, SID ownership,
-   routes/DNS/NRPT journal and cleanup/restart. Scoped LocalSystem acceptance passed24/24
-   IPv4/IPv6 HTTP,4 OS DNS checks and5 cleanup scenarios; other account actions refused.
-   CI34639769072/phase0/platform passed. External REALITY/full default routing remains
-   unaccepted; installer payload and TCP GUI passed platform CI34641891335, 288 layouts,
-   installed hash checks and uninstall; native/session and phase0 also passed.
-   Engine-crash recovery passed (3 retries, 15/30/60s), source7de6e69; clients/native/phase0 green.
-   Health monitor passed Windows/platform/native CI, source9863427. Next implementation: Windows AWG
-   and transport switching; AWG worker passed CI12/12; signed profile/DPAPI, broker/installer/UI now implemented,
-   integration CI passed2026-09-12 (24/24 LocalSystem UDP,504 layouts; TCP regression green). Automatic transport policy accepted in scoped CI2026-09-12, source1e13c74. Next implementation: Android AWG/TCP. Full-routing/production probe acceptance before distribution. [UI checkpoint](releases/2026-09-11-windows-tcp-ui.ru.md).
-   Finish Windows before moving to Android, per user.
-   [Session checkpoint](releases/2026-09-11-windows-tcp-session.ru.md).
-   [Lifecycle checkpoint](releases/2026-09-11-windows-tcp-lifecycle.ru.md) ·
-   [Profile checkpoint](releases/2026-09-11-windows-tcp-profile.ru.md).
-   This preview is not in stable installer; physical/network acceptance remains open.
-   See [Windows evidence](releases/2026-09-11-windows-tcp-engine.ru.md) and
-   [setup evidence](releases/2026-09-11-tcp-setup-release.ru.md).
-3. Deferred backlog: isolated concurrency1→4→8/request-to-flow diagnosis, then repeat
-   confirmed correction on second Ubuntu. Current timeouts are known pilot limitations,
-   not a completed stability gate. Resume these tests later per user direction.
-   See [integration checkpoint](releases/2026-09-11-setup-integration.ru.md).
-4. Native Windows/Android transport integration and device acceptance.
-5. After Windows and Android transport integration, stage5 Reticulum: provisioning/runtime/ACK
-   and actual service-message delivery, with alternate
-   reachable entrypoints. Independent second VPS only when supplied by user; not the test laptop.
-   Android updater/Google Play and deferred load experiments do not gate Reticulum implementation.
+1. Implement Android TCP: native engine/VpnService integration, separate protected
+   profile, explicit selection, startup cancellation and cleanup. Accept on isolated CI.
+   Windows WG/AWG/TCP/Auto is accepted in scoped CI; Android WG/AWG is accepted in
+   the emulator. Do not restart completed Windows implementation as the next task.
+2. Android Auto WG→AWG→TCP: health checks, cleanup before transitions, cancellation
+   and bounded recovery. Keep existing WG/AWG profiles intact.
+3. After Android transport integration, stage5 Reticulum: signed provisioning delivery,
+   verification/application/ACK/rollback and replay protection. Android updater/Google Play
+   and user-deferred device/load tests do not gate this implementation.
+4. Before distribution: full-routing/external gateway/REALITY and actual device acceptance,
+   Android release signing/versioning. User deferred APK updates and real/load tests;
+   do not resume them automatically. Desktop0.2.9/catalogseq8 and TCP Setup0.1.0 remain published.
+5. Deferred resilience experiments: concurrency1→4→8, request-to-flow diagnosis and
+   second Ubuntu retest. Second independent VPS only when supplied by user; never use
+   the test laptop or neighbouring services. Current timeout/stability limits remain open.
 6. Native enrollment/storage, signing-root rotation/recovery, then payments/notifications.
 
 Current stage4, not stable multi-platform resilience. Details, results, backups and unfinished
@@ -127,7 +100,7 @@ work: [session checkpoint](releases/2026-09-11-session-checkpoint.ru.md).
 Мониторинг недоступного соединения при живом процессе завершён и проверен в scoped CI.
 Интеграция AWG принята в scoped CI2026-09-12; [результат](releases/2026-09-11-windows-awg-integration.ru.md).
 Автоматическое переключение Windows принято в scoped CI2026-09-12:672 макета,7 policy-сценариев,
-живой AWG→TCP, отмена, исчерпание и очистка после SCM restart. Следующая реализация — Android AWG/TCP.
+живой AWG→TCP, отмена, исчерпание и очистка после SCM restart. Android WG/AWG также принят; далее TCP/Auto.
 [Отчёт и границы приёмки](releases/2026-09-12-windows-auto.ru.md). Полный маршрут/REALITY требуют отдельной
 приёмки до выпуска. Отложенные пользователем испытания на устройствах/под нагрузкой
 не возобновлять автоматически и не смешивать с реализацией.
