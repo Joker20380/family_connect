@@ -11,5 +11,5 @@ public class AwgProfileTest {
     @Test public void rejectsBadPadding()throws Exception{reject(profile().replace("Jc = 3","Jc = 0"),Transport.AWG);reject(profile().replace("Jmax = 80","Jmax = 30"),Transport.AWG);reject(profile().replace("S1 = 17","S1 = 257"),Transport.AWG);}
     @Test public void rejectsPacketsAndHooks()throws Exception{for(String p:new String[]{"<b 0x1>","<r 1281>","<r 0>","<r 1> bad","bad"})reject(profile().replace("<b 0x11223344><r 16>",p),Transport.AWG);reject(profile()+"PostUp = command\n",Transport.AWG);}
     @Test public void rejectsDuplicatesAndSize()throws Exception{reject(profile().replace("Jc = 3","Jc = 3\nJc = 3"),Transport.AWG);reject(profile()+"#"+"x".repeat(ProfileValidator.LIMIT),Transport.AWG);}
-    @Test public void unknownTransportRejected(){try{Transport.parse("tcp");fail("unimplemented transport");}catch(IllegalArgumentException expected){}}
+    @Test public void unknownTransportRejected(){try{Transport.parse("unknown");fail("unimplemented transport");}catch(IllegalArgumentException expected){}}
 }

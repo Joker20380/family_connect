@@ -14,6 +14,9 @@ with tempfile.TemporaryDirectory(prefix='fc-android-awg-') as temporary:
  temp=Path(temporary);android=temp/'android';engine=temp/'engine'
  checkout('https://github.com/amnezia-vpn/amneziawg-android',ANDROID,android)
  checkout('https://github.com/amnezia-vpn/amneziawg-go',ENGINE,engine)
+ xray=temp/'xray'
+ checkout('https://github.com/XTLS/Xray-core','d2758a023cd7f4174a5a5fa4ff66e487d4342ba0',xray)
+ tun=xray/'proxy/tun/tun_android.go';code=tun.read_text().replace('\terr = unix.SetNonblock(fd, true)','\tif err != nil || fd < 3 { return nil, errors.New("invalid Android TUN descriptor") }\n\terr = unix.SetNonblock(fd, true)').replace('\t\t_ = unix.Close(fd)\n','');tun.write_text(code)
  source=android/'tunnel/src/main/java';dest=OUT/'java'
  for file in source.rglob('*.java'):
   if file.name in ('AwgQuickBackend.java','RootShell.java','ToolsInstaller.java'):continue
@@ -44,8 +47,14 @@ with tempfile.TemporaryDirectory(prefix='fc-android-awg-') as temporary:
   start=text.index('func '+name+'(');brace=text.index('{',start);lock='Lock' if name in ('awgTurnOn','awgTurnOff') else 'RLock';unlock='Unlock' if lock=='Lock' else 'RUnlock'
   text=text[:brace+1]+'\n handlesMu.'+lock+'();defer handlesMu.'+unlock+'()'+text[brace+1:]
  start=text.index('func awgVersion()');end=text.index('\nfunc main()',start);text=text[:start]+'func awgVersion() *C.char {return C.CString("FamilyConnect/'+ENGINE+'") }\n'+text[end:];api.write_text(text)
+ text=api.read_text().replace(' handlesMu.Lock();defer handlesMu.Unlock()',' handlesMu.Lock();defer handlesMu.Unlock()\n if tcpRunning.Load(){unix.Close(int(tunFd));return -1}',1)
+ api.write_text(text)
+ for name in ('tcp-android.go','tcp-jni.c'):shutil.copy2(ROOT/'pilot/android-tcp'/name,native/name)
+ run('go','mod','edit','-replace','github.com/xtls/xray-core='+str(xray),cwd=native)
+ run('go','mod','edit','-require','github.com/xtls/xray-core@v0.0.0',cwd=native)
  run('go','mod','edit','-replace','github.com/amnezia-vpn/amneziawg-go='+str(engine),cwd=native)
  env=os.environ.copy();env['GOTOOLCHAIN']='local';run('go','mod','tidy',cwd=native,env=env)
+ run('go','build','-trimpath','-buildvcs=false','-o',str(OUT/'xray-peer'),'./main',cwd=xray,env=env)
  # Same in-memory encrypted UDP echo peer used for isolated Windows acceptance, portable source.
  peer=engine/'cmd/fc-android-peer';peer.mkdir(parents=True);shutil.copy2(ROOT/'pilot/android-awg/peer.go',peer/'main.go')
  run('go','build','-trimpath','-buildvcs=false','-o',str(OUT/'peer-fixture'),'./cmd/fc-android-peer',cwd=engine,env=env)
@@ -63,7 +72,9 @@ with tempfile.TemporaryDirectory(prefix='fc-android-awg-') as temporary:
   run('go','build','-trimpath','-buildvcs=false','-ldflags=-buildid=','-buildmode=c-shared','-o',str(output),cwd=native,env=cross)
   hashes[abi]=hashlib.sha256(output.read_bytes()).hexdigest()
  licenses=OUT/'assets/awg-licenses';licenses.mkdir(parents=True)
+ shutil.copy2(xray/'LICENSE',licenses/'Xray.txt')
+ gvisor=Path(subprocess.check_output(['go','list','-m','-f','{{.Dir}}','gvisor.dev/gvisor'],cwd=native,env=env,text=True).strip());shutil.copy2(gvisor/'LICENSE',licenses/'gVisor.txt')
  shutil.copy2(android/'COPYING',licenses/'Android.txt');shutil.copy2(engine/'LICENSE',licenses/'Engine.txt')
- manifest={'android_revision':ANDROID,'engine_revision':ENGINE,'go':'1.26.1','ndk':'28.2.13676358','abis':hashes,'jni_source_sha256':hashlib.sha256(api.read_bytes()).hexdigest(),'public_uapi':False,'root_backend':False,'single_runtime':True,'wg_peer_revision':'ecfc5a8d54462e18e13c72173e2623d16d8e25a0'}
+ manifest={'android_revision':ANDROID,'engine_revision':ENGINE,'go':'1.26.1','ndk':'28.2.13676358','abis':hashes,'jni_source_sha256':hashlib.sha256(api.read_bytes()).hexdigest(),'public_uapi':False,'root_backend':False,'single_runtime':True,'xray_revision':'d2758a023cd7f4174a5a5fa4ff66e487d4342ba0','tcp_source_sha256':hashlib.sha256((native/'tcp-android.go').read_bytes()).hexdigest(),'tcp_jni_sha256':hashlib.sha256((native/'tcp-jni.c').read_bytes()).hexdigest(),'go_sum_sha256':hashlib.sha256((native/'go.sum').read_bytes()).hexdigest(),'wg_peer_revision':'ecfc5a8d54462e18e13c72173e2623d16d8e25a0'}
  (OUT/'assets/awg-build.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print(json.dumps(manifest))

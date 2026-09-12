@@ -13,6 +13,7 @@ public final class ProfileValidator {
     private static void require(boolean condition) { if(!condition)throw new IllegalArgumentException("Unsupported profile"); }
     public static String validate(String raw) throws Exception {return validate(raw,Transport.WG);}
     public static String validate(String raw,Transport transport) throws Exception {
+        if(transport==Transport.TCP)return TcpProfile.validate(raw);
         require(raw.getBytes(StandardCharsets.UTF_8).length<=LIMIT && !raw.contains("\0"));
         if(raw.startsWith("\uFEFF"))raw=raw.substring(1);
         Map<String,Map<String,String>> sections=new LinkedHashMap<>(); String section=null;

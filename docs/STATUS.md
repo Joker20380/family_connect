@@ -5,7 +5,14 @@ Linux/Windows release assets checked; signed update catalog sequence8 published 
 No device installation performed. Server **0.2.1**, deployment source8cd0f2d/server
 checkout117611c; TCP component **0.1.0** unchanged.
 
-## Latest Android checkpoint — 2026-09-12
+## Android TCP — implementation in progress, 2026-09-12
+
+Xray added to the single Go runtime, own VpnService, separate encrypted TCP profile,
+explicit selector, startup cancellation and cleanup. Four-ABI build, strict-profile
+unit tests and emulator REALITY/TUN/HTTP/DNS/lifecycle acceptance pending.
+No rollout/device/server changes. [Report](releases/2026-09-12-android-tcp.ru.md).
+
+## Latest accepted Android WG/AWG checkpoint — 2026-09-12
 
 Android WG/AWG accepted in API35 x86_64 emulator: 24 encrypted IPv4/IPv6 UDP
 exchanges, 4 normal stops, pending cancellation and real system VPN permission

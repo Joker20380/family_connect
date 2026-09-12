@@ -6,6 +6,7 @@ interface TunnelEngine {
     void up(String profile)throws Exception;
     void down()throws Exception;
     static TunnelEngine create(Context context,Transport type,java.util.function.Consumer<Boolean> state){
+        if(type==Transport.TCP)return new TcpTunnelEngine(context,state);
         return new TunnelEngine(){
             final org.amnezia.awg.backend.GoBackend backend=new org.amnezia.awg.backend.GoBackend(context);
             final org.amnezia.awg.backend.Tunnel tunnel=new org.amnezia.awg.backend.Tunnel(){

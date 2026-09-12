@@ -69,7 +69,8 @@ See [rollout and remaining checks](releases/2026-09-10-awg.ru.md).
 Android WG/AWG passed four-ABI build, 12 unit methods, lint and real API35 x86_64
 emulator:24 encrypted UDP,4 stops,cancel,system revoke (clients34660308853).
 One runtime fixed WG→AWG→WG crash; profiles remain independent and encrypted.
-Next: Android TCP and Auto, then stage5 Reticulum. Device update/testing stays deferred.
+Active: Android TCP implementation, build/runtime CI pending. Then Auto and stage5 Reticulum.
+Device update/testing stays deferred. [TCP report](releases/2026-09-12-android-tcp.ru.md).
 See [Android report](releases/2026-09-12-android-awg.ru.md).
 
 ## Next, in order

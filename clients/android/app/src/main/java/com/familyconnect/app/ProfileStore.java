@@ -16,7 +16,7 @@ final class ProfileStore {
     private static final String ALIAS="family-connect-profile-v1";
     private final AtomicFile file;
     ProfileStore(Context context){this(context,Transport.WG);}
-    ProfileStore(Context context,Transport transport){alias=ALIAS+(transport==Transport.WG?"":"-awg");file=new AtomicFile(new File(context.getNoBackupFilesDir(),transport==Transport.WG?"profile.enc":"awg-profile.enc"));}
+    ProfileStore(Context context,Transport transport){alias=ALIAS+(transport==Transport.WG?"":"-"+transport.id);file=new AtomicFile(new File(context.getNoBackupFilesDir(),transport==Transport.WG?"profile.enc":transport.id+"-profile.enc"));}
     boolean exists() {return file.getBaseFile().exists();}
     private javax.crypto.SecretKey key() throws Exception {
         KeyStore store=KeyStore.getInstance("AndroidKeyStore");store.load(null);

@@ -37,7 +37,7 @@ public final class MainActivity extends Activity {
         label(content,"FAMILY CONNECT",25,Color.rgb(102,219,192));label(content,getString(R.string.tagline),15,Color.LTGRAY);
         dot=label(content,"●",88,Color.GRAY);state=label(content,"",27,Color.WHITE);
         label(content,getString(R.string.route),15,Color.LTGRAY);
-        transportPicker=new Spinner(this);transportPicker.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,new String[]{"WireGuard","AmneziaWG 2"}));
+        transportPicker=new Spinner(this);transportPicker.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,new String[]{"WireGuard","AmneziaWG 2","TCP · REALITY"}));
         transportPicker.setSelection(selected.ordinal());content.addView(transportPicker);
         transportPicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onNothingSelected(AdapterView<?> parent){}
@@ -106,7 +106,7 @@ public final class MainActivity extends Activity {
                 if(input==null)throw new IOException();ByteArrayOutputStream bytes=new ByteArrayOutputStream();byte[] buffer=new byte[1024];int count;
                 while((count=input.read(buffer))!=-1){if(bytes.size()+count>ProfileValidator.LIMIT)throw new IOException();bytes.write(buffer,0,count);}
                 String profile=ProfileValidator.validate(bytes.toString(StandardCharsets.UTF_8.name()),importing);
-                Config.parse(new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8)));
+                if(importing!=Transport.TCP)Config.parse(new ByteArrayInputStream(profile.getBytes(StandardCharsets.UTF_8)));
                 importingStore.save(profile);ConnectionService.failed=false;
             }catch(Exception e){message=R.string.import_failed;}
             int finalMessage=message;runOnUiThread(()->{busy=false;detail.setText(finalMessage);render();});
