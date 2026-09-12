@@ -12,7 +12,10 @@ COPY scripts /app/scripts
 COPY device_identity /app/device_identity
 COPY provisioning /app/provisioning
 COPY telemetry /app/telemetry
-COPY clients/desktop/profile_config.py /app/clients/desktop/profile_config.py
+# Stage 5 reuses desktop verification/backend code; package tests need the
+# complete public six-file bundle and its version. These stay in the tests stage.
+COPY VERSION /app/VERSION
+COPY clients/desktop/app.py clients/desktop/backend.py clients/desktop/profile_config.py clients/desktop/updates.py clients/desktop/update.pub clients/desktop/install-linux.sh /app/clients/desktop/
 RUN python -m pytest -q && touch /tmp/tests-passed
 
 FROM base AS runtime
