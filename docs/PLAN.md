@@ -6,10 +6,13 @@ Operator GUI/core bundle added with an explicit public-file allowlist, integrity
 manifest, runtime-only pinned dependencies and extracted launcher. Legacy six-file
 desktop archive unchanged. Local405 Python passed; extracted real RNS lifecycle
 and GTK smoke passed. Scoped Linux control CI34720569558 passed on source d8aef8a.
-AWG/TCP pilot and phase0 Python/Rust passed. General phase0 failover failed at
-isolated Docker build; exact cause unavailable (logs API403). Client builds Linux
-passed; Windows/Android still running at checkpoint.
-No release/install/catalog/server changes. Next: resolve general failover build evidence and prepare paired preview
+AWG/TCP pilot passed. Docker test-stage dependency omission reproduced and fixed
+in ac6a22f: complete public desktop bundle + VERSION copied into tests stage only.
+Local Docker250 tests passed; phase0 run34720868247 fully passed including build,
+failover/auth/offline/revocation/cleanup and Python/Rust. Clients Windows/Linux
+passed; Android still running at this checkpoint.
+[Docker fix evidence](releases/2026-09-12-control-docker-fix.ru.md).
+No release/install/catalog/server changes. Next: finish client CI acceptance and prepare paired preview
 rollout; native Windows/Android binding, AWG3.1 and TD-1 remain open.
 [Preview checkpoint](releases/2026-09-12-control-preview.ru.md).
 
