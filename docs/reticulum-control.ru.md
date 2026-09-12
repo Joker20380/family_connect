@@ -53,7 +53,10 @@ python -m provisioning.runtime once --state /private/control-client \
 должны быть установлены. Новый GUI этой версии участвует в общем arbiter и может оставаться открытым. Старый GUI и ручные NetworkManager/root operations должны быть исключены. Системная
 авторизация остаётся штатной; её отмена прекращает apply и запускает rollback.
 Не запускать как отложенный host/device test без отдельного решения пользователя.
-После ошибки повторить тот же state: recovery и outbox идемпотентны. Ошибка rollback
+После ошибки повторить тот же state: recovery и outbox идемпотентны.
+Для локального завершения pending без новой доставки использовать
+`python -m provisioning.runtime recover --state ... --identity ... --anchor ...`.
+Carrier не стартует; ACK остаётся в outbox. FAILED возвращает exit1. Ошибка rollback
 оставляет pending intent; новый apply не допускается, пока cleanup не завершён.
 Не восстанавливать старый journal как способ отката. Last-known-good ciphertext
 и sequence floors остаются в state, отмена rollout — остановить reference runner.
@@ -78,7 +81,9 @@ python -m pytest -q
 
 После GUI integration pending marker хранится в
 `~/.local/state/family-connect-operations/state.json`. Не удалять его для обхода
-recovery. Запустить `once` с тем же journal: IDLE/успешный rollback снимает блокировку.
+recovery. Запустить `recover` с тем же journal: IDLE/успешный rollback снимает блокировку.
 Другой journal не может забрать незавершённую транзакцию. Флаг
 `--exclusive-connection-owner` сохранён для совместимости, но для новых GUI/core
 больше не обязателен. Старые приложения блокировку не соблюдают.
+
+Пилот paired Linux bundle и порядок возврата: [runbook](linux-control-preview-rollout.ru.md).

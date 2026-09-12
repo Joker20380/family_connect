@@ -1,5 +1,20 @@
 # Working plan / Рабочий план
 
+## Paired preview acceptance — 2026-09-13
+
+Local409 Python passed, including66 extracted protocol/arbiter scenarios. Scoped
+Linux CI34722755860 passed on247d16b; Docker272 tests and full phase034722963403
+passed on3a28be7. CI tar.gz SHA256 matches the local preview. Previous Clients
+Windows/Linux/Android all passed. Added local-only recover CLI, retaining ACKs
+and pending state on failure. Manual paired pilot/return plan prepared.
+Observed installed Linux **0.2.8**, previous0.2.7; old GUI has no arbiter. No
+installation, profile mutation, release, catalog update or server changes.
+Next: separate-directory manual paired preview pilot, then native Stage5 binding.
+AWG3.1, TD-1 and Stage6 remain open.
+[Acceptance evidence](releases/2026-09-13-linux-control-acceptance.ru.md) ·
+[Manual rollout/return](linux-control-preview-rollout.ru.md).
+
+
 ## Paired Linux control preview — 2026-09-12
 
 Operator GUI/core bundle added with an explicit public-file allowlist, integrity
@@ -10,10 +25,9 @@ AWG/TCP pilot passed. Docker test-stage dependency omission reproduced and fixed
 in ac6a22f: complete public desktop bundle + VERSION copied into tests stage only.
 Local Docker250 tests passed; phase0 run34720868247 fully passed including build,
 failover/auth/offline/revocation/cleanup and Python/Rust. Clients Windows/Linux
-passed; Android still running at this checkpoint.
+passed; Android subsequently passed (see 13.09 acceptance above).
 [Docker fix evidence](releases/2026-09-12-control-docker-fix.ru.md).
-No release/install/catalog/server changes. Next: finish client CI acceptance and prepare paired preview
-rollout; native Windows/Android binding, AWG3.1 and TD-1 remain open.
+No release/install/catalog/server changes. CI acceptance completed; manual paired pilot next; native Windows/Android binding, AWG3.1 and TD-1 remain open.
 [Preview checkpoint](releases/2026-09-12-control-preview.ru.md).
 
 

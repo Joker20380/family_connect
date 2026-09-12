@@ -1,5 +1,7 @@
 # Documentation map
 
+[Linux paired preview acceptance13.09](releases/2026-09-13-linux-control-acceptance.ru.md) · [Pilot/return runbook](linux-control-preview-rollout.ru.md).
+
 ## Paired Linux control preview — 2026-09-12
 
 Operator GUI/core bundle added with an explicit public-file allowlist, integrity
