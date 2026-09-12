@@ -48,6 +48,23 @@ jobs:
           cd /tmp
           /tmp/fc-preview-env/bin/python fc-preview-extracted/FamilyConnect-Control-preview/scripts/run_control_preview.py control --help
           dbus-run-session -- xvfb-run -a /usr/bin/python3 fc-preview-extracted/FamilyConnect-Control-preview/scripts/run_control_preview.py gui --smoke
+      - name: Extracted GTK recovery and public bundle digest
+        env:
+          GSK_RENDERER: cairo
+          GTK_A11Y: none
+        run: |
+          mkdir -p /tmp/fc-preview-harness
+          cp clients/desktop/recovery_check.py clients/desktop/layout_check.py /tmp/fc-preview-harness/
+          cd /tmp
+          PYTHONPATH=/tmp/fc-preview-extracted/FamilyConnect-Control-preview/clients/desktop dbus-run-session -- xvfb-run -a /usr/bin/python3 fc-preview-harness/recovery_check.py
+          cd "$GITHUB_WORKSPACE"
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          artifact, = Path('artifacts/control').glob('*.tar.gz')
+          digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
+          print(f'::notice title=Control preview SHA256::{artifact.name} {digest}')
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: linux-control-preview

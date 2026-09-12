@@ -36,8 +36,11 @@ def test_extracted_preview(tmp_path):
     (root / 'tests').mkdir()
     for name in ('test_control_channel.py', 'reticulum_control_peer.py'):
         shutil.copyfile(ROOT / 'tests' / name, root / 'tests' / name)
+    (root / 'clients/desktop/tests').mkdir()
+    for name in ('conftest.py', 'test_operations.py'):
+        shutil.copyfile(ROOT / 'clients/desktop/tests' / name, root / 'clients/desktop/tests' / name)
     lifecycle = subprocess.run([sys.executable, '-m', 'pytest', '-q',
-        'tests/test_control_channel.py::test_real_rns_complete_lifecycle'],
+        'tests/test_control_channel.py', 'clients/desktop/tests/test_operations.py'],
         cwd=root, capture_output=True, text=True, timeout=90)
     assert lifecycle.returncode == 0, lifecycle.stdout + lifecycle.stderr
     (root / 'clients/desktop/backend.py').write_text('raise RuntimeError("must not execute")')
