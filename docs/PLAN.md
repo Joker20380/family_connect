@@ -1,17 +1,18 @@
 # Working plan / Рабочий план
 
-## Android AWG3.1 integration in progress — 2026-09-13
+## Android AWG3.1 beta02 ready for first phone — 2026-09-13
 
-User requested AWG3.1 after Android WG handshake succeeded but WhatsApp call failed;
-web/DNS acceptance on the physical phone remains unconfirmed. This is not proof of
-a general WireGuard block. Android native pin moving to b5928ef + existing S4 patch.
-Manual profiles add HeaderProtectionKey, ContentPaddingAddition, RandomTrailers and
-DisableCookies with bounded validation and wrapper UAPI conversion. Custom timings
-and signed Reticulum schema3.1 remain unsupported. Version0.1.1-beta02/code2 prepared
-in source; no new APK delivered yet. Next gates: JVM/lint, native4ABI build, Android
-emulator encrypted traffic/lifecycle, separate Amsterdam AWG endpoint and live smoke,
-then beta signing and physical-phone acceptance. Existing WG remains available.
-See [integration evidence](releases/2026-09-13-android-awg31.ru.md).
+Source d0709bc: Android CI34768083248/job103752559759 passed native4ABI build,
+JVM30+lint and5 emulator runtime tests. Engine b5928ef + S4 patch, manual HPK/
+content padding/trailers/cookies fields; custom timings and signed control3.1 unsupported.
+ARM64 APK0.1.1-beta02/code2 packaged from accepted payload,51,154,127bytes, signed
+with the same beta01 key; v2/v3/alignment/hash verified. Remains a debug technical pilot.
+Separate Amsterdam AWG3.1 UDP443/fcawg31 service active+enabled. DNS/HTTPS(NL),
+1MiB download, reconnect and namespace cleanup passed. Existing WG/RNS preserved.
+Python485 passed/2 warnings. Phone/WhatsApp acceptance still pending; no claim of
+DPI resistance in the user's network. Next: install over beta01, Auto off, import new
+AWG profile, verify IP/sites/messages/calls, then sleep/handover.
+[Phone instructions](testing/android-beta02-awg31.ru.md) · [Evidence and rollback](releases/2026-09-13-android-awg31.ru.md).
 
 ## Android-first technical beta01 prepared — 2026-09-13
 
