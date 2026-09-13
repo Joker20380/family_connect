@@ -18,7 +18,10 @@ def snapshot():return {name:run(*args) for name,args in {
     'default4':['ip','-4','route','show','default'],'default6':['ip','-6','route','show','default']}.items()}
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--state',type=Path,required=True);a=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--state',type=Path,required=True)
+    parser.add_argument('--peer-index',type=int,choices=range(2,255),default=2)
+    parser.add_argument('--skip-server-restart',action='store_true')
+    a=parser.parse_args()
     assert os.geteuid()==0
     state=a.state.resolve();owner=(state/'client.key').stat().st_uid;user=pwd.getpwuid(owner).pw_name
     wg=str(state/'wg');assert (state/'client-uapi.conf').is_file()
@@ -37,8 +40,8 @@ def main():
         run('ip','link','add',IFACE,'type','wireguard')
         run(wg,'setconf',IFACE,str(state/'client-uapi.conf'))
         run('ip','link','set',IFACE,'netns',NS)
-        inside('ip','link','set','lo','up');inside('ip','address','add','10.79.0.2/32','dev',IFACE)
-        inside('ip','-6','address','add','fd79:92::2/128','dev',IFACE)
+        inside('ip','link','set','lo','up');inside('ip','address','add',f'10.79.0.{a.peer_index}/32','dev',IFACE)
+        inside('ip','-6','address','add',f'fd79:92::{a.peer_index:x}/128','dev',IFACE)
         inside('ip','link','set',IFACE,'mtu','1280','up')
         inside('ip','route','add','default','dev',IFACE);inside('ip','-6','route','add','default','dev',IFACE)
     try:
@@ -59,23 +62,25 @@ def main():
         assert blocked.returncode!=0;result['tests'].append(dict(test=stage,passed=True))
         stage='ipv6_block';blocked=inside('ping','-6','-n','-c','1','-W','2','2606:4700:4700::1111',check=False)
         assert blocked.returncode!=0;result['tests'].append(dict(test=stage,passed=True))
-        stage='server_restart'
-        call(['runuser','-u',user,'--','/tmp/fc-amsterdam-ssh','systemctl restart wg-quick@fcams.service && systemctl is-active wg-quick@fcams.service'],timeout=30)
-        result['server_restart_command_succeeded']=True
-        stage='post_restart_readiness';start=time.monotonic()
-        while time.monotonic()-start<35:
-            ready=inside('ping','-n','-c','1','-W','1','10.79.0.1',check=False,timeout=3)
-            if ready.returncode==0:break
-            time.sleep(.5)
-        else:raise TimeoutError('WireGuard did not recover within 35s')
-        result['post_restart_readiness_seconds']=round(time.monotonic()-start,3)
-        stage='https_after_server_restart'
-        # Application HTTP budgets stay unchanged after bounded tunnel readiness.
-        for attempt in range(3):
-            try:https('https_after_server_restart');break
-            except (subprocess.CalledProcessError,AssertionError):
-                if attempt==2:raise
-                time.sleep(1)
+        result['server_restart_tested']=not a.skip_server_restart
+        if not a.skip_server_restart:
+            stage='server_restart'
+            call(['runuser','-u',user,'--','/tmp/fc-amsterdam-ssh','systemctl restart wg-quick@fcams.service && systemctl is-active wg-quick@fcams.service'],timeout=30)
+            result['server_restart_command_succeeded']=True
+            stage='post_restart_readiness';start=time.monotonic()
+            while time.monotonic()-start<35:
+                ready=inside('ping','-n','-c','1','-W','1','10.79.0.1',check=False,timeout=3)
+                if ready.returncode==0:break
+                time.sleep(.5)
+            else:raise TimeoutError('WireGuard did not recover within 35s')
+            result['post_restart_readiness_seconds']=round(time.monotonic()-start,3)
+            stage='https_after_server_restart'
+            # Application HTTP budgets stay unchanged after bounded tunnel readiness.
+            for attempt in range(3):
+                try:https('https_after_server_restart');break
+                except (subprocess.CalledProcessError,AssertionError):
+                    if attempt==2:raise
+                    time.sleep(1)
         stage='client_reconnect';inside('ip','link','del',IFACE);connect()
         start=time.monotonic()
         while time.monotonic()-start<35:

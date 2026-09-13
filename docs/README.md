@@ -1,5 +1,7 @@
 # Documentation map
 
+- [Android beta01: tester instructions](testing/android-beta01.ru.md) · [Preparation evidence](releases/2026-09-13-android-beta01.ru.md).
+
 - [AWG3.1: managed recovery experiment](releases/2026-09-13-awg31-managed-recovery.ru.md).
 - [Own transport: milestones and actual dependencies](own-transport-roadmap.ru.md).
 

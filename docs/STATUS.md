@@ -1,5 +1,18 @@
 # Current state / Текущее состояние
 
+## Android-first technical beta01 prepared — 2026-09-13
+
+User selected Android for initial testers. Accepted CI34758085225 APK downloaded;
+archive matched official GitHub digest, all4 ABI hashes/licenses/fixture exclusion
+checked. Local persistent beta signing key created; final APK v2/v3 verified,
+only signing META-INF changed. APK0.1.0/code1 debug, not a mass-release build.
+Separate Amsterdam WG peer10.79.0.4/fd79:92::4 prepared; prior peers preserved,
+no server restart. DNS/HTTPS(NL)/download/reconnect passed in Linux namespace.
+Physical Android install/network not yet tested: next gate is one real phone,
+then sleep/handover/device matrix before expanding testers. AWG3.1/recovery is
+not in this APK; Reticulum native onboarding still pending. No public release.
+[Tester steps](testing/android-beta01.ru.md) · [Hashes, signing and rollback](releases/2026-09-13-android-beta01.ru.md).
+
 ## AWG3.1 managed recovery prototype — 2026-09-13
 
 Three isolated repeats recovered server restart in3.7529/3.7665/3.7531s vs previous

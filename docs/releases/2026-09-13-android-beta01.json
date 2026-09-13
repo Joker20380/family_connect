@@ -1,0 +1,155 @@
+{
+  "source_artifact": {
+    "id": 10318435675,
+    "node_id": "MDg6QXJ0aWZhY3QxMDMxODQzNTY3NQ==",
+    "name": "FamilyConnect-Android-debug",
+    "size_in_bytes": 93800235,
+    "url": "https://api.github.com/repos/Joker20380/family_connect/actions/artifacts/10318435675",
+    "archive_download_url": "https://api.github.com/repos/Joker20380/family_connect/actions/artifacts/10318435675/zip",
+    "expired": false,
+    "digest": "sha256:5a920c650de967f3203d24ed4c7deea963792b19e9121ec65697ef236949cace",
+    "created_at": "2026-09-13T12:57:32Z",
+    "updated_at": "2026-09-13T12:57:32Z",
+    "expires_at": "2026-12-12T12:48:11Z",
+    "workflow_run": {
+      "id": 34758085225,
+      "repository_id": 1361237966,
+      "head_repository_id": 1361237966,
+      "head_branch": "stage5-linux-control-preview",
+      "head_sha": "7ad40c03eb66d34f4698dad1a5a7255cda08992e"
+    }
+  },
+  "original_apk": {
+    "apk": "FamilyConnect-Android-pilot-7ad40c0.apk",
+    "sha256": "119384ac9e5e1615c869c84eb00134b18679f3692f8bab062fa1442600448a66",
+    "bytes": 189808229,
+    "build": {
+      "android_revision": "5420011143f9dd42831cc95fcdb0d6ac9bde868f",
+      "engine_revision": "1cc94272ca8e9e223a5fe76382f5880f09d3c12d",
+      "go": "1.26.1",
+      "ndk": "28.2.13676358",
+      "abis": {
+        "arm64-v8a": "f72eaa80fc1dbcc7fadb2921263b243a5efb7ac05a5373d4c87880841463f5e8",
+        "armeabi-v7a": "ed38452f30f672dbef8468831997b279a0ec232195097ad39e61141c6ac2f07f",
+        "x86": "719dd00833c44ded010a68136e008992d7600b932c4b756ef0a73d8df1467dec",
+        "x86_64": "6110b6f9a89cb34b7545eb29730a7d04d1205866a2c39b853bf9346375cc6a69"
+      },
+      "jni_source_sha256": "ecb039ec3e952ba699f8121bbe8de76ce0437264e2295a7fa4ae9b05dc7cb094",
+      "public_uapi": false,
+      "root_backend": false,
+      "single_runtime": true,
+      "xray_revision": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+      "tcp_source_sha256": "f5ec5e4908e56ebd595f1b96bf5d83fafad996105a75a73f9bbd4ee469eec1a6",
+      "tcp_jni_sha256": "6ef06b63b6d19a1160819a7fd5ac9bf19dc07db8ba32e9cc0903e1fcb4a1470b",
+      "go_sum_sha256": "9979cda04f77d776b1567e32e6e8d6b1373c4b67eac3418690c944b6d0b22a18",
+      "wg_peer_revision": "ecfc5a8d54462e18e13c72173e2623d16d8e25a0"
+    },
+    "fixture_absence_checked": true
+  },
+  "beta_apk": {
+    "apk": "FamilyConnect-Android-0.1.0-beta01.apk",
+    "sha256": "84223b1ad790cbca6dd1cf9e61e55c334a0e42b505a2779ad3396f633f050ebb",
+    "bytes": 189816224,
+    "non_meta_inf_entries_identical_to_ci": true,
+    "version_name": "0.1.0",
+    "version_code": 1,
+    "package": "com.familyconnect.app",
+    "min_sdk": 26,
+    "target_sdk": 35,
+    "debuggable": true
+  },
+  "signature": {
+    "v2": true,
+    "v3": true,
+    "sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+    "only_zip_changes": [
+      "META-INF/FAMILY-C.RSA",
+      "META-INF/FAMILY-C.SF",
+      "META-INF/MANIFEST.MF"
+    ]
+  },
+  "peer": {
+    "server_public_key": "M5HLfjTQHHY3k7K1/4ITv9MUVz0Xtwt+pYn2Oz2wrAw=",
+    "peer_public_key": "45RnWEy7fh1o+iSpeqipvwDdGVy30o95HoS12crdJ2Q=",
+    "allowed_ips": [
+      "10.79.0.4/32",
+      "fd79:92::4/128"
+    ],
+    "previous_peers_preserved": true,
+    "persisted": true,
+    "server_restarted": false
+  },
+  "network": {
+    "host": "186.246.45.246",
+    "namespace": "fc-ams-check",
+    "started_at": 1789310690,
+    "tests": [
+      {
+        "test": "gateway_ping",
+        "summary": [
+          "3 packets transmitted, 3 received, 0% packet loss, time 2002ms",
+          "rtt min/avg/max/mdev = 8.378/14.281/20.172/4.814 ms"
+        ],
+        "passed": true
+      },
+      {
+        "test": "dns",
+        "passed": true
+      },
+      {
+        "test": "https",
+        "egress": "186.246.45.246",
+        "country": "NL",
+        "passed": true
+      },
+      {
+        "test": "second_https",
+        "egress": "186.246.45.246",
+        "passed": true
+      },
+      {
+        "test": "bounded_download",
+        "bytes": 1048576,
+        "bytes_per_second": 1367871.0,
+        "seconds": 0.766575,
+        "passed": true
+      },
+      {
+        "test": "private_network_block",
+        "passed": true
+      },
+      {
+        "test": "ipv6_block",
+        "passed": true
+      },
+      {
+        "test": "https_after_client_reconnect",
+        "egress": "186.246.45.246",
+        "country": "NL",
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "server_restart_tested": false,
+    "client_reconnect_readiness_seconds": 0.028,
+    "recent_handshake": 1789310695,
+    "host_routes_rules_unchanged": true,
+    "host_resolver_unchanged": true,
+    "namespace_removed": true,
+    "interface_removed": true,
+    "finished_at": 1789310695
+  },
+  "android_physical_device_tested": false,
+  "distribution": "closed technical pilot, not mass beta",
+  "signing_note": "Initial attempt reached EOF reading one password file twice; corrected PKCS12 store password use",
+  "validation": {
+    "python_suite_passed": 485,
+    "existing_warnings": 2,
+    "seconds": 9.9,
+    "operator_idempotence_passed": true
+  },
+  "local_handoff": {
+    "apk": "state-client-build/android-pilots/beta01/FamilyConnect-Android-0.1.0-beta01.apk",
+    "profile": "state-enroll/android-amsterdam-beta-01/Amsterdam-Android-beta-01.conf"
+  }
+}
