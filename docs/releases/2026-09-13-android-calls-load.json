@@ -94,14 +94,23 @@
       "Telegram voice calls"
     ],
     "quality": "clear audio, no interruptions (user report)",
-    "reported_times_msk": [
+    "durations_minutes": null,
+    "timezone_clarification": "User: apparently Brussels time",
+    "reported_times_brussels": [
       "19:07",
       "19:17"
     ],
-    "durations_minutes": null
+    "converted_times_msk": [
+      "20:07",
+      "20:17"
+    ],
+    "initial_reported_times_msk": [
+      "19:07",
+      "19:17"
+    ]
   },
   "correlation": {
-    "status": "unresolved timestamp mismatch",
+    "status": "Call windows matched assuming clarified Europe/Brussels timezone",
     "awg_service_started_msk": "2026-09-13 19:24:59",
     "reported_time_windows_cpu_work_percent": [
       {
@@ -113,6 +122,18 @@
         "percent": 3.23
       }
     ],
-    "limitation": "10-minute host averages; no per-call or historical per-process CPU samples; no call content inspected"
+    "limitation": "10-minute host averages; no per-call or historical per-process CPU samples; no call content inspected",
+    "matched_cpu_windows": [
+      {
+        "call_time_msk": "20:07",
+        "window_msk": "20:00:16–20:10:16",
+        "host_cpu_work_percent": 0.53
+      },
+      {
+        "call_time_msk": "20:17",
+        "window_msk": "20:10:16–20:20:16",
+        "host_cpu_work_percent": 1.56
+      }
+    ]
   }
 }
