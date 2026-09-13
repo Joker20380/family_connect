@@ -168,3 +168,5 @@ Stage 5 control channel: [architecture](stage5-architecture.ru.md), [runbook](re
 [Matched HTTPS result](releases/2026-09-12-matched-https.ru.md).
 
 - [Android AWG3.1 beta02: установка](testing/android-beta02-awg31.ru.md) · [приёмка](releases/2026-09-13-android-awg31.ru.md)
+
+- [Android beta03: проверка связи и установка](testing/android-beta03.ru.md) · [приёмка и ограничения CI](releases/2026-09-13-android-stability.ru.md)

@@ -1,0 +1,67 @@
+{
+  "source": "63831305f063350fd21af44c93d6a8bef122b795",
+  "ci_run": 34776015693,
+  "ci_job": 103774142634,
+  "artifact": {
+    "id": 10324116069,
+    "node_id": "MDg6QXJ0aWZhY3QxMDMyNDExNjA2OQ==",
+    "name": "FamilyConnect-Android-debug",
+    "size_in_bytes": 93980194,
+    "url": "https://api.github.com/repos/Joker20380/family_connect/actions/artifacts/10324116069",
+    "archive_download_url": "https://api.github.com/repos/Joker20380/family_connect/actions/artifacts/10324116069/zip",
+    "expired": false,
+    "digest": "sha256:ea37765eb126790bd3945f3f38fc82213ad6b8287ce419f75151c63c521d946d",
+    "created_at": "2026-09-13T19:04:26Z",
+    "updated_at": "2026-09-13T19:04:26Z",
+    "expires_at": "2026-12-12T18:53:33Z",
+    "workflow_run": {
+      "id": 34776015693,
+      "repository_id": 1361237966,
+      "head_repository_id": 1361237966,
+      "head_branch": "stage5-linux-control-preview",
+      "head_sha": "63831305f063350fd21af44c93d6a8bef122b795"
+    }
+  },
+  "apk": "FamilyConnect-Android-0.1.2-beta03-arm64.apk",
+  "bytes": 51154127,
+  "sha256": "c6bb7df99d55a53a8da0d7fb9f177855976d91c6cf8b8bb1adf1fb652399649a",
+  "certificate_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+  "version_code": 3,
+  "version_name": "0.1.2-beta03",
+  "abi": "arm64-v8a",
+  "retained_payload_matches_ci": true,
+  "debuggable": true,
+  "physical_device_tested": false,
+  "instrumentation_cases": [
+    "com.familyconnect.app.AutoRuntimeTest.automaticFallbackHealthLossExhaustionCancelAndRevoke",
+    "com.familyconnect.app.AwgRuntimeTest.profilesDataSwitchCancelAndRevoke",
+    "com.familyconnect.app.ControlProtocolRuntimeTest.strictJson",
+    "com.familyconnect.app.ControlProtocolRuntimeTest.immutableCorpus",
+    "com.familyconnect.app.ManualAwgStabilityTest.screenOffOutageRecoveryAndExplicitDisconnect",
+    "com.familyconnect.app.TcpRuntimeTest.realityDataSwitchCancelRevokeAndProtectedStorage"
+  ],
+  "manual_stability_evidence": [
+    "MANUAL AWG STABILITY PASS: screen off 5s, UDP outage 20s, recovery_ms=7, disconnect during outage remains off"
+  ],
+  "signature_verified": {
+    "v2": true,
+    "v3": true,
+    "alignment_16k": true
+  },
+  "python_focused": {
+    "tests": [
+      "test_extracted_preview",
+      "test_real_rns_complete_lifecycle"
+    ],
+    "passed": 2,
+    "seconds": 6.22
+  },
+  "other_ci": {
+    "phase0_run": 34776015673,
+    "tests": "success",
+    "failover": "failure before runtime scenarios",
+    "failed_test": "test_extracted_preview -> test_real_rns_complete_lifecycle",
+    "error": "Reticulum operation timed out in initial challenge",
+    "production_control_changed": false
+  }
+}

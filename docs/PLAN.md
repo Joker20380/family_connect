@@ -1,17 +1,19 @@
 # Working plan / Рабочий план
 
-## Android manual AWG stability acceptance in progress — 2026-09-13
+## Android beta03 health feedback accepted in emulator — 2026-09-13
 
-Next step after successful reported calls: screen sleep, outage recovery and real
-Wi-Fi/mobile handover. Added synthetic emulator test: verified screen off5s, UDP
-blackhole20s, real encrypted IPv4/IPv6 echo after restoration, explicit Disconnect
-during outage stays off after recovery. Compilation/runtime results pending.
-User postponed physical5-minute screen lock and Wi-Fi→MTS→Wi-Fi checks (currently
-in Ghent). Beta02 remains installed; beta03/code3 source now adds manual DNS health
-feedback and binds public-IP checks to the current VPN/session, refusing stale
-results after reconnect. No automatic manual-tunnel resets. JVM/lint/runtime pending;
-no beta03 APK delivered. Emulator outage is not physical handover/Doze acceptance.
-[Acceptance record](releases/2026-09-13-android-stability.ru.md).
+Source6383130: manual VPN-bound DNS health feedback, session-bound public-IP
+HTTPS checks and stale-result refusal. Manual probe failures retain the tunnel.
+Client CI34776015693 Android/Linux/Windows success;JVM30+lint,6 instrumentation
+cases including screen-off5s,≥20s UDP outage/recovery, terminal Disconnect and
+new session IDs passed. ARM64 beta03/code3 signed with existing beta key,
+51,154,127bytes;v2/v3/alignment/payload verified. Existing beta02 profile reused.
+User postponed Russian-phone tests while in Ghent: physical5min sleep, Doze,
+battery and Wi-Fi/mobile handover remain open. No server/profile changes.
+Separate phase0 failover build failed on extracted-preview RNS initial challenge
+timeout;local focused2 tests passed, root cause not fixed. Next: diagnose RNS
+startup/request intermittency and later physical Android checks.
+[Beta03 instructions](testing/android-beta03.ru.md) · [Evidence/CI limits](releases/2026-09-13-android-stability.ru.md).
 
 ## Android beta02 calls reported working; load checked — 2026-09-13
 
