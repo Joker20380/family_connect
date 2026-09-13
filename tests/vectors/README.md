@@ -1,7 +1,10 @@
 # Stage 5 conformance inputs — PUBLIC TEST ONLY
 
 `control-v1/manifest.json` is the portable contract for Python and future native
-runners. This corpus does not implement a native verifier or use a VPN/carrier.
+runners. The corpus itself does not implement a verifier or use a VPN/carrier.
+The Windows C# runner now consumes all30 configuration and15 ACK vectors via
+`dotnet run --project clients/windows/Tests/Tests.csproj -c Release`.
+Transcripts remain Python-only until the native journal is implemented.
 All fixture keys are intentionally public, derived from named TEST ONLY labels.
 Never import them into a device, relay, signing configuration or deployment.
 The generator has no key-file argument and reads no production key/profile file.

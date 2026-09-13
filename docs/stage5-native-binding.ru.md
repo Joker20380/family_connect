@@ -1,8 +1,9 @@
 # Stage 5: следующий блок native binding
 
-Статус13.09.2026: общий corpus/Python runner и CI приняты (source598454b); native verifier следующий.
+Статус13.09.2026: Windows verifier реализован, локальные45 vectors+31 structural checks прошли; Windows CI ожидается.
+[Windows checkpoint](releases/2026-09-13-windows-control.ru.md).
 [Первый implementation checkpoint](releases/2026-09-13-control-vectors.ru.md).
-Native Stage5 ещё не реализован; успешные native WG/AWG/TCP/Auto тесты относятся
+Native Stage5 broker/carrier/journal ещё не реализованы; успешные native WG/AWG/TCP/Auto тесты относятся
 к data plane. Linux протокол и живой paired pilot приняты отдельно.
 
 ## Обнаруженные точки интеграции

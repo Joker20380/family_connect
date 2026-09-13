@@ -1,5 +1,7 @@
 # Documentation map
 
+[Windows Stage5 verifier](releases/2026-09-13-windows-control.ru.md).
+
 [Stage5 conformance corpus](releases/2026-09-13-control-vectors.ru.md) · [Vector format](../tests/vectors/README.md).
 
 [CI results and Android retry](releases/2026-09-13-linux-control-ci.ru.md) · [Next native binding](stage5-native-binding.ru.md).

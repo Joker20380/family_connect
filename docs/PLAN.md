@@ -1,5 +1,17 @@
 # Working plan / Рабочий план
 
+## Windows Stage5 verifier — 2026-09-13
+
+Native C# schema2 configuration/ACK verifier implemented without broker/carrier
+integration. Local .NET10 Docker:30 immutable configurations,15 ACKs,31 extra
+structure refusals and existing activation/update/TCP/AWG/Auto checks passed.
+Corpus SHA256 c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd.
+Windows CI and full Python regression pending at this source checkpoint.
+Next: native Android verifier, then protected Windows identity/journal/outbox and
+shared broker ownership. Transcript scenarios remain Python-only until native journal.
+No release/install/catalog/server/main changes; desktop0.2.9, installed Linux0.2.8.
+[Implementation and acceptance](releases/2026-09-13-windows-control.ru.md).
+
 ## Stage5 conformance corpus accepted — 2026-09-13
 
 Source598454bad71fdf290a673c0f10a7f4afa61e2b18: immutable PUBLIC TEST ONLY
