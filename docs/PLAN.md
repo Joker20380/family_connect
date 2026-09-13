@@ -1,5 +1,20 @@
 # Working plan / Рабочий план
 
+## Closed messenger ingress and bounded spool — 2026-09-13
+
+Authenticated Family Connect RNS put endpoint, closed sender/recipient allowlist,
+pre-insert global/per-sender byte+count limits, rate limiting, FULL commit ACK and
+stable encrypted retries. Native anonymous LXMF uploads/peering not registered;
+closed ingress requires Mailbox.publish (not unmodified PROPAGATED clients).
+SQLite file ceiling plus actual16MiB ext4 ENOSPC test passed: no false ACK,
+previous message preserved, recovery/reopen successful. Combined521 passed/2 existing
+warnings (58.46s), including31 messenger checks. No server/APK changes.
+Next: dedicated bounded runtime volume and service/identity/bootstrap in Amsterdam;
+Android RNS carrier plus versioned AWG3.1 signed schema for automatic conf delivery.
+Linux signed conf delivery via Amsterdam RNS already has live acceptance; Android
+currently uses manual AWG3.1 import. Chat remains separate from VPN control.
+[Evidence, conf status and limits](releases/2026-09-13-closed-mailbox.ru.md).
+
 ## Offline messenger delivery and commit-before-purge — 2026-09-13
 
 LXMF1.1.1/RNS1.5.1: explicit propagated send with relayed status; new bounded

@@ -12,10 +12,10 @@ import pytest
 
 
 class Peer:
-    def __init__(self, role, directory, port):
+    def __init__(self, role, directory, port, *, script="wire_peer.py", extra=()):
         root=Path(__file__).resolve().parents[2]
-        self.process=subprocess.Popen([sys.executable,str(root/'messenger/tests/wire_peer.py'),
-            role,str(directory),str(port)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,
+        self.process=subprocess.Popen([sys.executable,str(root/'messenger/tests'/script),
+            role,str(directory),str(port),*extra],stdin=subprocess.PIPE,stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,text=True,
             env={**os.environ,'PYTHONPATH':str(root)+os.pathsep+os.environ.get('PYTHONPATH','')})
         try:self.info=self.read()

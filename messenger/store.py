@@ -132,6 +132,21 @@ class Store:
             self._put(ident, message)
             return token, bytes.fromhex(message['packed'])
 
+    def relay_blob(self, message_id, create):
+        """Persist one encrypted envelope so a lost ingress ACK can be retried."""
+        with self._lock, self._db:
+            ident='message:'+message_id
+            message=self._get(ident)
+            if message is None or not message['outgoing']:
+                raise ValueError('Outgoing message required')
+            if 'relay_blob' not in message:
+                blob=create()
+                if type(blob) is not bytes or not 112<=len(blob)<=4864:
+                    raise ValueError('Invalid relay ciphertext')
+                message['relay_blob']=blob.hex()
+                self._put(ident,message)
+            return bytes.fromhex(message['relay_blob'])
+
     def finish_attempt(self, message_id, token, *, delivered, relayed=False):
         if delivered and relayed:
             raise ValueError('Relay acceptance is not recipient delivery')
