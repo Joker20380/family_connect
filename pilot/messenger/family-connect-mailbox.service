@@ -1,0 +1,43 @@
+[Unit]
+Description=Family Connect closed messenger pilot
+RequiresMountsFor=/opt/apps/family_connect/mailbox-pilot/state
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=3
+
+[Service]
+Type=simple
+User=fc-mailbox
+Group=fc-mailbox
+WorkingDirectory=/opt/apps/family_connect/mailbox-pilot/app
+ExecStartPre=/opt/apps/family_connect/mailbox-pilot/venv/bin/python -B -m messenger.server --settings /opt/apps/family_connect/mailbox-pilot/settings.json --check
+ExecStart=/opt/apps/family_connect/mailbox-pilot/venv/bin/python -B -m messenger.server --settings /opt/apps/family_connect/mailbox-pilot/settings.json
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=15
+KillMode=control-group
+UMask=0077
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateDevices=yes
+PrivateTmp=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
+ReadWritePaths=/opt/apps/family_connect/mailbox-pilot/state
+Environment=TMPDIR=/opt/apps/family_connect/mailbox-pilot/state/tmp
+MemoryMax=192M
+TasksMax=64
+CPUQuota=25%
+LimitNOFILE=256
+LogRateLimitIntervalSec=30s
+LogRateLimitBurst=20
+
+[Install]
+WantedBy=multi-user.target

@@ -12,7 +12,7 @@ peer offers и автоматическое peering не регистрирую�
 - Ciphertext всего262144 байта/128 сообщений; одному отправителю65536 байт/32.
 - Не более4864 байт на envelope, до10 сообщений/48KB в ответе.
 - Срок хранения86400 секунд, удаление при get/put/явном expire. Фоновый вызов
-  expire должен обеспечить будущий service loop; secure erase не заявляется.
+  expire выполняется daemon loop каждые60с; secure erase не заявляется.
 - Жёсткий размер SQLite-файла:192 страницы по4096 байт =786432 байта. Индексы и
   свободные страницы входят в лимит. DELETE journal и RNS runtime требуют отдельного
   ограниченного файлового тома; max_page_count не выдаётся за квоту всей службы.
@@ -35,11 +35,15 @@ peer offers и автоматическое peering не регистрирую�
 Результат13.09: ENOSPC=true, false_ack=false, previous_message_preserved=true,
 recovery_and_reopen=true. Production volume/service этим тестом не создавались.
 
-Для Amsterdam следующий шаг — постоянный отдельный том под **всё** runtime state
-(RNS storage/cache плюс spool), отдельная OS identity/service, root-owned code/venv,
-публичный allowlist, приватная node identity, MemoryMax/TasksMax, проверка путей и
-fail-closed запуск при отсутствующем mount. Том16MiB — размер стресс-теста, не
-рекомендация ёмкости сервера. Rate/size checks выполняются на уровне приложения;
-RNS может принять часть request resource до callback, поэтому отдельный том и
-ограничение памяти обязательны для серверного пилота. На рабочем сервере это пока
-не развёрнуто; текущая служба доставки конфигураций и AWG не изменены.
+## Развёрнутый Amsterdam-пилот
+
+Отдельная служба на TCP4243, том64MiB и две диагностические identity приняты вживую.
+`install_amsterdam.py` создаёт новую установку из проверенного публичного bundle,
+`family-connect-mailbox.service` ограничивает права/ресурсы, `messenger.server --check`
+отказывает без отдельного тома. `amsterdam_peer.py` — диагностический клиент,
+выводящий размеры LXMF/ciphertext и счётчики RNS без раскрытия ключей.
+
+Инструкции, bootstrap, лимиты, тесты и откат:
+[отчёт](../../docs/releases/2026-09-13-amsterdam-mailbox.ru.md).
+RNS может принять часть request resource до callback: прикладные квоты не заменяют
+ограничения памяти/тома и не доказывают устойчивость к произвольной нагрузке.

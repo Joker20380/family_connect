@@ -1,0 +1,125 @@
+{
+  "before": {
+    "count": 0,
+    "bytes": 0,
+    "services": {
+      "family-connect-mailbox": "active",
+      "family-connect-awg31": "active",
+      "family-connect-reticulum": "active",
+      "wg-quick@fcams": "active"
+    },
+    "resources": {
+      "NRestarts": "0",
+      "MemoryCurrent": "24137728",
+      "MemoryPeak": "24383488",
+      "CPUUsageNSec": "548557000",
+      "TasksCurrent": "6",
+      "CPUQuotaPerSecUSec": "250ms",
+      "MemoryMax": "201326592"
+    }
+  },
+  "short_message": {
+    "before": {
+      "messages": [
+        {
+          "id": "e536607f21d538f243b92e9b4f0377b601efcc7df632e6974b1b558898edc860",
+          "text_bytes": 4,
+          "lxmf_bytes": 115,
+          "ciphertext_bytes": 0
+        }
+      ],
+      "tx_bytes": 200,
+      "rx_bytes": 0
+    },
+    "after": {
+      "messages": [
+        {
+          "id": "e536607f21d538f243b92e9b4f0377b601efcc7df632e6974b1b558898edc860",
+          "text_bytes": 4,
+          "lxmf_bytes": 115,
+          "ciphertext_bytes": 208
+        }
+      ],
+      "tx_bytes": 1055,
+      "rx_bytes": 416
+    },
+    "rns_tx_delta": 855,
+    "rns_rx_delta": 416
+  },
+  "stored": {
+    "count": 1,
+    "bytes": 208,
+    "services": {
+      "family-connect-mailbox": "active",
+      "family-connect-awg31": "active",
+      "family-connect-reticulum": "active",
+      "wg-quick@fcams": "active"
+    },
+    "resources": {
+      "NRestarts": "0",
+      "MemoryCurrent": "24633344",
+      "MemoryPeak": "24662016",
+      "CPUUsageNSec": "556313000",
+      "TasksCurrent": "8",
+      "CPUQuotaPerSecUSec": "250ms",
+      "MemoryMax": "201326592"
+    }
+  },
+  "mount_cycle": {
+    "mount_stop_stopped_service": true,
+    "unmounted_refused": true,
+    "restarted": true
+  },
+  "after_restart": {
+    "count": 1,
+    "bytes": 208,
+    "services": {
+      "family-connect-mailbox": "active",
+      "family-connect-awg31": "active",
+      "family-connect-reticulum": "active",
+      "wg-quick@fcams": "active"
+    },
+    "resources": {
+      "NRestarts": "0",
+      "MemoryCurrent": "14782464",
+      "MemoryPeak": "23363584",
+      "CPUUsageNSec": "300072000",
+      "TasksCurrent": "1",
+      "CPUQuotaPerSecUSec": "250ms",
+      "MemoryMax": "201326592"
+    }
+  },
+  "delivery": {
+    "stored": 1,
+    "duplicates": 0,
+    "rejected": 0,
+    "purged": 1
+  },
+  "reply": true,
+  "after": {
+    "count": 0,
+    "bytes": 0,
+    "services": {
+      "family-connect-mailbox": "active",
+      "family-connect-awg31": "active",
+      "family-connect-reticulum": "active",
+      "wg-quick@fcams": "active"
+    },
+    "resources": {
+      "NRestarts": "0",
+      "MemoryCurrent": "24764416",
+      "MemoryPeak": "24797184",
+      "CPUUsageNSec": "379078000",
+      "TasksCurrent": "10",
+      "CPUQuotaPerSecUSec": "250ms",
+      "MemoryMax": "201326592"
+    }
+  },
+  "bootstrap": {
+    "server": "186.246.45.246",
+    "port": 4243,
+    "public_key": "e3ebce3bfbe8ef26ea4b71b4a215fb66eb5649becd2885e43321be35d27dd55d7131b6a6951d2955c4a57bb56f856511cfebe9d472041838f41a865b803fd55d",
+    "destination": "7193db3dd0cad1679bec1ffa4332542c"
+  },
+  "accepted": true
+}

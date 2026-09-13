@@ -1,5 +1,18 @@
 # Working plan / Рабочий план
 
+## Amsterdam mailbox live; compact messages remain a requirement — 2026-09-13
+
+Dedicated closed RNS1.5.1/LXMF1.1.1 service on TCP4243 deployed for two diagnostic
+identities. Offline delivery, volume/service restart persistence, commit-before-purge,
+empty repeat fetch and reply passed live. Separate64MiB volume,192MiB memory ceiling;
+actual post-test memory23.3MiB. Existing VPN/control services active; no APK packaged.
+34 messenger tests passed (59.59s). Four-byte text:115-byte signed LXMF,208-byte
+ciphertext; cold publish RNS interface counters855 TX/416 RX, excluding TCP/IP overhead.
+Next: measure message-series/empty-fetch/idle budgets and reduce control exchanges
+without weakening signatures/durable delivery; then Android carrier/Keystore/UI and
+versioned AWG3.1 signed schema. Compact binary payloads are an explicit user requirement.
+[Live evidence, bootstrap, rollout/rollback and limits](releases/2026-09-13-amsterdam-mailbox.ru.md).
+
 ## Closed messenger ingress and bounded spool — 2026-09-13
 
 Authenticated Family Connect RNS put endpoint, closed sender/recipient allowlist,
