@@ -1,0 +1,86 @@
+{
+  "date": "2026-09-13",
+  "source_base": "1e2d2b5",
+  "scope": "Real GTK preview, programmatic button signals; import through app backend, native chooser automation not accepted",
+  "runs": {
+    "chooser": {
+      "bundle": "66152538ee2a4f3ec4ac76cb2a0e09936bcc0785fc5afa308b692c3cd472acf5",
+      "events": [],
+      "passed": false,
+      "error": "GUI condition timeout",
+      "restored": {
+        "rules4": true,
+        "rules6": true,
+        "default4": true,
+        "default6": true,
+        "active": true,
+        "resolver": true
+      },
+      "pending_clear": true
+    },
+    "selection": {
+      "bundle": "66152538ee2a4f3ec4ac76cb2a0e09936bcc0785fc5afa308b692c3cd472acf5",
+      "events": [
+        {
+          "name": "import",
+          "ident": "42d216e6-128e-4597-9818-f7b82561e294",
+          "autoconnect": "no"
+        }
+      ],
+      "passed": false,
+      "error": "GUI condition timeout",
+      "restored": {
+        "rules4": true,
+        "rules6": true,
+        "default4": true,
+        "default6": true,
+        "active": true,
+        "resolver": true
+      },
+      "pending_clear": true
+    },
+    "accepted": {
+      "bundle": "66152538ee2a4f3ec4ac76cb2a0e09936bcc0785fc5afa308b692c3cd472acf5",
+      "events": [
+        {
+          "name": "import",
+          "ident": "42d216e6-128e-4597-9818-f7b82561e294",
+          "autoconnect": "no"
+        },
+        {
+          "name": "connected",
+          "cycle": 1,
+          "status": "Tunnel is on",
+          "ui_ip": "IP: 186.246.45.246 \u00b7 NL",
+          "interface_https_ip": "186.246.45.246"
+        },
+        {
+          "name": "disconnected",
+          "cycle": 1
+        },
+        {
+          "name": "connected",
+          "cycle": 2,
+          "status": "Tunnel is on",
+          "ui_ip": "IP: 186.246.45.246 \u00b7 NL",
+          "interface_https_ip": "186.246.45.246"
+        },
+        {
+          "name": "disconnected",
+          "cycle": 2
+        }
+      ],
+      "passed": true,
+      "restored": {
+        "rules4": true,
+        "rules6": true,
+        "default4": true,
+        "default6": true,
+        "active": true,
+        "resolver": true
+      },
+      "pending_clear": true
+    }
+  },
+  "harness_sha256": "fc7318775d9d43f76fc32e63188a020839c634f20acdcd03b2349cbe9f650ec9"
+}

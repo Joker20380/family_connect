@@ -1,5 +1,19 @@
 # Working plan / Рабочий план
 
+## Amsterdam paired Linux GUI pilot passed — 2026-09-13
+
+Accepted preview66152538ee2a4f3e completed two real GTK Connect → Check IP →
+Disconnect cycles: UI and interface-bound HTTPS both confirmed186.246.45.246/NL.
+Profile fc-app-Amsterdam-pilot retained inactive, autoconnect=no. Host rules/default
+routes/resolver/active connections restored; pending marker clear; GUI closed.
+Import used app backend: native file chooser automation timed out. A harness profile
+naming mistake was corrected; both preliminary failures retained in the receipt.
+Installed0.2.8 unchanged; no server/release/catalog updates in this step.
+Next: external trusted Reticulum relay and signed Amsterdam configuration delivery,
+with peer/device identity binding and existing anti-replay state preserved.
+[GUI evidence, limitations and rollback](releases/2026-09-13-amsterdam-gui.ru.md).
+
+
 ## Amsterdam real-network pilot passed — 2026-09-13
 
 User authorized new empty VPS186.246.45.246: Ubuntu26.04,1 vCPU,955MiB RAM.
