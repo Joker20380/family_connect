@@ -50,12 +50,32 @@ Generator/fixtures находятся под tests/, не scripts/: Docker runti
 Git attributes сохраняют точные bytes/whitespace без CRLF conversion на Windows.
 Control workflow добавляет manifest SHA256 annotation. Runtime/client bytes не менялись.
 
-Новый remote CI на момент source commit ещё не запускался; точные source/run IDs
-и digest будут добавлены отдельным documentation checkpoint после результатов.
+## Remote CI acceptance
+
+Source **598454bad71fdf290a673c0f10a7f4afa61e2b18**, ветка stage5-linux-control-preview.
+[Linux control34748501643](https://github.com/Joker20380/family_connect/actions/runs/34748501643)
+и [phase034748501640](https://github.com/Joker20380/family_connect/actions/runs/34748501640)
+завершились success. Это включает protocol/arbiter/package suite, GTK и extracted
+artifact checks; phase0 включает Python/Rust и isolated Docker failover acceptance.
+
+Check annotation Control vectors manifest SHA256 совпал с committed manifest:
+`c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd`. Отдельный artifact control-conformance-v1-TEST-ONLY загружен CI.
+Archive ZIP не скачивался; digest проверен через официальный check annotations API.
+Paired client archive по annotation сохранил SHA256
+9c827f86f03d27705c46830758e114b3f7ef9796320d9e46f09672363de076f3 — ровно прежний
+принятый live bundle66152538ee2a4f3e. Тестовые vectors в него не включены.
+
+Отдельная проверка git checkout-index с core.autocrlf=true подтвердила побайтовое
+совпадение всех48 файлов corpus, включая manifest и whitespace boundary inputs.
+Это проверка checkout bytes, не Windows native verifier/runtime acceptance.
+Итоговые результаты сохранены отдельным documentation checkpoint с [skip ci],
+не меняющим принятый source/corpus. Initial sandbox failure и correction runner
+описаны выше, ожидаемые ошибки протокола не ослаблялись.
 
 ## Состояние и следующий шаг
 
-Следующий шаг — native Windows verifier, читающий этот manifest и те же bytes;
+Первый блок interop corpus завершён. Следующий шаг — native Windows verifier,
+читающий этот manifest и те же bytes;
 затем Android verifier, protected storage/journal/outbox и shared ownership.
 См. [native plan](../stage5-native-binding.ru.md). Корпус и Python runner сами по
 себе ещё не означают поддержку Stage5 Windows/Android.

@@ -1,17 +1,17 @@
 # Current state / Текущее состояние
 
-## Stage5 conformance corpus — 2026-09-13
+## Stage5 conformance corpus accepted — 2026-09-13
 
-Added immutable PUBLIC TEST ONLY control-v1 corpus:30 configuration inputs,
-15 ACK inputs,3 journal transcripts (16 steps);50 conformance checks passed.
-Full local Python462 passed. Generator uses fixed public test labels, no key-file
-inputs, refuses an existing output directory; committed ciphertext is immutable.
-Manifest SHA256 `c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd`. Linux CI will publish a separate TEST-ONLY corpus
-artifact/digest; paired client package and runtime application code unchanged.
-New remote CI not yet run at this source checkpoint. Next: accept CI, then native
-Windows verifier against the same inputs; Android follows. No native Stage5 claim.
-[Corpus implementation](releases/2026-09-13-control-vectors.ru.md) ·
-[Portable format](../tests/vectors/README.md).
+Source598454bad71fdf290a673c0f10a7f4afa61e2b18: immutable PUBLIC TEST ONLY
+30 configuration inputs,15 ACK inputs,3 transcripts/16 steps.50 vector checks,
+full local462 Python passed. Linux control34748501643 and phase034748501640 passed.
+CI vector manifest digest matches committed corpus; paired archive digest unchanged
+from the accepted live Linux bundle.48 corpus files preserve bytes under autocrlf=true.
+Generator refuses overwrite and has no key-file inputs. No runtime/client/server changes.
+Next: Windows native verifier against these exact bytes, then Android verifier and
+protected identity/journal/ownership. Native Stage5 not implemented by this corpus.
+[Conformance acceptance](releases/2026-09-13-control-vectors.ru.md) ·
+[Portable fixture format](../tests/vectors/README.md).
 
 ## Linux health CI and Android diagnostic rerun — 2026-09-13
 
