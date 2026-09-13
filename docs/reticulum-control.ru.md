@@ -1,5 +1,15 @@
 # Reference Stage 5: операции
 
+## Managed route preview — 13.09.2026
+
+Для внешнего TCP relay при full VPN используйте новый paired preview и установленный
+root-pinned broker: добавьте `--managed-route` к `once`. Установщик/helper, версия,
+проверки и rollback описаны в [актуальном отчёте](releases/2026-09-13-managed-control-route.ru.md).
+Маршрут создаётся только на время exchange и удаляется автоматически; manual ip rule
+для этого сценария больше не нужен. Политика ограничена одним root-approved IPv4/TCP
+endpoint/UID; этот флаг не создаёт доверие к случайному relay и не обновляет stable GUI.
+
+
 См. [архитектуру и границы](stage5-architecture.ru.md). Все команды выполняются
 из checkout проекта с зависимостями control/device_identity lockfiles. Существующие
 stable binaries, production gateway и каталог не обновляются этими инструкциями.

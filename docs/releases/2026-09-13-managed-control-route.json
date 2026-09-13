@@ -1,0 +1,1345 @@
+{
+  "source": "7ad40c03eb66d34f4698dad1a5a7255cda08992e",
+  "bundle": {
+    "bundle": "4d4afa762beddbaf69c414c00431fdca5301019a7976e19903babc397b62ec1e",
+    "archive_sha256": "fe799995022e6edfe0e6797c3cb2cb058958537d9bd3814b6c62d5bdd6801267",
+    "helper_sha256": "bf9337321f5024653c6cdcc0608fe19874b9ab855b444ccef4703aae95a55039"
+  },
+  "configuration7": {
+    "device": "71a05310177fa445bbe95b2405e650ba",
+    "revision": 7,
+    "previous": "b7b51e260b83de6fefea6d84805321ab3329e04a964415aa3ef34dce937eb3eb",
+    "envelope_hash": "a565a578bf00dea914d6241235ab0627e44d4fa3cef6d17c1f105717f768c4a7",
+    "issued_at": 1789303495,
+    "expires_at": 1789325095
+  },
+  "configuration6": {
+    "device": "71a05310177fa445bbe95b2405e650ba",
+    "revision": 6,
+    "previous": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+    "envelope_hash": "b7b51e260b83de6fefea6d84805321ab3329e04a964415aa3ef34dce937eb3eb",
+    "issued_at": 1789303088,
+    "expires_at": 1789324688
+  },
+  "initial_failures": [
+    {
+      "before": {
+        "phase": "IDLE",
+        "floor": 5,
+        "committed": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+        "outbox": 0
+      },
+      "checks": [
+        {
+          "run": 1,
+          "exit": 1,
+          "journal": {
+            "phase": "IDLE",
+            "floor": 5,
+            "committed": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+            "outbox": 0
+          }
+        }
+      ],
+      "restored": {
+        "rules4": true,
+        "rules6": true,
+        "route4": true,
+        "route6": true,
+        "resolver": true,
+        "active": true
+      },
+      "after": {
+        "phase": "IDLE",
+        "floor": 5,
+        "committed": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+        "outbox": 0
+      },
+      "pending_clear": true
+    },
+    {
+      "before": {
+        "phase": "IDLE",
+        "floor": 5,
+        "committed": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+        "outbox": 0
+      },
+      "checks": [
+        {
+          "run": 1,
+          "exit": 1,
+          "journal": {
+            "phase": "IDLE",
+            "floor": 5,
+            "committed": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+            "outbox": 0
+          }
+        }
+      ],
+      "restored": {
+        "rules4": true,
+        "rules6": true,
+        "route4": true,
+        "route6": true,
+        "resolver": true,
+        "active": true
+      },
+      "after": {
+        "phase": "IDLE",
+        "floor": 5,
+        "committed": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+        "outbox": 0
+      },
+      "pending_clear": true
+    }
+  ],
+  "diagnostic_runtime6": {
+    "before": {
+      "phase": "IDLE",
+      "floor": 5,
+      "committed": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+      "outbox": 0
+    },
+    "checks": [
+      {
+        "run": 1,
+        "exit": 0,
+        "journal": {
+          "phase": "IDLE",
+          "floor": 6,
+          "committed": "b7b51e260b83de6fefea6d84805321ab3329e04a964415aa3ef34dce937eb3eb",
+          "outbox": 0
+        },
+        "gui": {
+          "ready": true,
+          "busy": false,
+          "selected": "d9db3e0b-e05f-4461-8b01-4b0f57f11c81",
+          "active": true,
+          "closed": false,
+          "generation": 35,
+          "status": "Tunnel is on",
+          "detail": "IP: 186.246.45.246 \u00b7 NL"
+        },
+        "https": true,
+        "profiles": [
+          "1b26e4a6-c755-4708-a11d-e8bc0bbf0dc1",
+          "3810fa84-002b-41bb-b1cc-5c2f5d455e97",
+          "3c1f137a-830a-471d-bfac-8164ab7159fe",
+          "42d216e6-128e-4597-9818-f7b82561e294",
+          "4d47d83f-428e-46c5-9cb1-75b31e2cbd5f",
+          "b56605bc-290d-4d6b-976a-788f8f010017",
+          "ca453659-ff38-4993-bb04-0d62878d39c4",
+          "d9db3e0b-e05f-4461-8b01-4b0f57f11c81",
+          "fcawg6c19c559",
+          "fctcp75850269"
+        ],
+        "route_removed_after_once": true
+      },
+      {
+        "run": 2,
+        "exit": 0,
+        "journal": {
+          "phase": "IDLE",
+          "floor": 6,
+          "committed": "b7b51e260b83de6fefea6d84805321ab3329e04a964415aa3ef34dce937eb3eb",
+          "outbox": 0
+        },
+        "gui": {
+          "ready": true,
+          "busy": false,
+          "selected": "d9db3e0b-e05f-4461-8b01-4b0f57f11c81",
+          "active": true,
+          "closed": false,
+          "generation": 35,
+          "status": "Tunnel is on",
+          "detail": "IP: 186.246.45.246 \u00b7 NL"
+        },
+        "https": true,
+        "profiles": [
+          "1b26e4a6-c755-4708-a11d-e8bc0bbf0dc1",
+          "3810fa84-002b-41bb-b1cc-5c2f5d455e97",
+          "3c1f137a-830a-471d-bfac-8164ab7159fe",
+          "42d216e6-128e-4597-9818-f7b82561e294",
+          "4d47d83f-428e-46c5-9cb1-75b31e2cbd5f",
+          "b56605bc-290d-4d6b-976a-788f8f010017",
+          "ca453659-ff38-4993-bb04-0d62878d39c4",
+          "d9db3e0b-e05f-4461-8b01-4b0f57f11c81",
+          "fcawg6c19c559",
+          "fctcp75850269"
+        ],
+        "route_removed_after_once": true
+      }
+    ],
+    "passed": true,
+    "restored": {
+      "rules4": true,
+      "rules6": true,
+      "route4": true,
+      "route6": true,
+      "resolver": true,
+      "active": true
+    },
+    "after": {
+      "phase": "IDLE",
+      "floor": 6,
+      "committed": "b7b51e260b83de6fefea6d84805321ab3329e04a964415aa3ef34dce937eb3eb",
+      "outbox": 0
+    },
+    "pending_clear": true
+  },
+  "accepted_launcher7": {
+    "before": {
+      "phase": "IDLE",
+      "floor": 6,
+      "committed": "b7b51e260b83de6fefea6d84805321ab3329e04a964415aa3ef34dce937eb3eb",
+      "outbox": 0
+    },
+    "checks": [
+      {
+        "run": 1,
+        "exit": 0,
+        "journal": {
+          "phase": "IDLE",
+          "floor": 7,
+          "committed": "a565a578bf00dea914d6241235ab0627e44d4fa3cef6d17c1f105717f768c4a7",
+          "outbox": 0
+        },
+        "gui": {
+          "ready": true,
+          "busy": false,
+          "selected": "d9e659bb-b7b9-415c-bc63-b39b01c202e3",
+          "active": true,
+          "closed": false,
+          "generation": 38,
+          "status": "Tunnel is on",
+          "detail": "IP: 186.246.45.246 \u00b7 NL"
+        },
+        "https": true,
+        "profiles": [
+          "1b26e4a6-c755-4708-a11d-e8bc0bbf0dc1",
+          "3810fa84-002b-41bb-b1cc-5c2f5d455e97",
+          "3c1f137a-830a-471d-bfac-8164ab7159fe",
+          "42d216e6-128e-4597-9818-f7b82561e294",
+          "4d47d83f-428e-46c5-9cb1-75b31e2cbd5f",
+          "b56605bc-290d-4d6b-976a-788f8f010017",
+          "ca453659-ff38-4993-bb04-0d62878d39c4",
+          "d9db3e0b-e05f-4461-8b01-4b0f57f11c81",
+          "d9e659bb-b7b9-415c-bc63-b39b01c202e3",
+          "fcawg6c19c559",
+          "fctcp75850269"
+        ],
+        "route_removed_after_once": true
+      },
+      {
+        "run": 2,
+        "exit": 0,
+        "journal": {
+          "phase": "IDLE",
+          "floor": 7,
+          "committed": "a565a578bf00dea914d6241235ab0627e44d4fa3cef6d17c1f105717f768c4a7",
+          "outbox": 0
+        },
+        "gui": {
+          "ready": true,
+          "busy": false,
+          "selected": "d9e659bb-b7b9-415c-bc63-b39b01c202e3",
+          "active": true,
+          "closed": false,
+          "generation": 38,
+          "status": "Tunnel is on",
+          "detail": "IP: 186.246.45.246 \u00b7 NL"
+        },
+        "https": true,
+        "profiles": [
+          "1b26e4a6-c755-4708-a11d-e8bc0bbf0dc1",
+          "3810fa84-002b-41bb-b1cc-5c2f5d455e97",
+          "3c1f137a-830a-471d-bfac-8164ab7159fe",
+          "42d216e6-128e-4597-9818-f7b82561e294",
+          "4d47d83f-428e-46c5-9cb1-75b31e2cbd5f",
+          "b56605bc-290d-4d6b-976a-788f8f010017",
+          "ca453659-ff38-4993-bb04-0d62878d39c4",
+          "d9db3e0b-e05f-4461-8b01-4b0f57f11c81",
+          "d9e659bb-b7b9-415c-bc63-b39b01c202e3",
+          "fcawg6c19c559",
+          "fctcp75850269"
+        ],
+        "route_removed_after_once": true
+      }
+    ],
+    "passed": true,
+    "restored": {
+      "rules4": true,
+      "rules6": true,
+      "route4": true,
+      "route6": true,
+      "resolver": true,
+      "active": true
+    },
+    "after": {
+      "phase": "IDLE",
+      "floor": 7,
+      "committed": "a565a578bf00dea914d6241235ab0627e44d4fa3cef6d17c1f105717f768c4a7",
+      "outbox": 0
+    },
+    "pending_clear": true
+  },
+  "host_client_crash": {
+    "client_sigkill_cleanup": true,
+    "original_rules_restored": true
+  },
+  "relay": {
+    "provider_public": "vKri/FwEyJe/AoepLwYxN/T64cqzwVft+HxMCMDcmV8DcTOoLqnoHVjpThpwhvU2eSO+OoMTEg90lUs3VCOV8A==",
+    "provider_reference": "e504e0ef76a2b3bcc3f0c5add0760ff3",
+    "configs": [
+      [
+        "71a05310177fa445bbe95b2405e650ba",
+        4,
+        "78f6cbf5ee4c66f6cc73e4f4b3e5279ee193d98578b6e10fd4499f75b1e7ada5"
+      ],
+      [
+        "71a05310177fa445bbe95b2405e650ba",
+        5,
+        "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d"
+      ],
+      [
+        "71a05310177fa445bbe95b2405e650ba",
+        6,
+        "b7b51e260b83de6fefea6d84805321ab3329e04a964415aa3ef34dce937eb3eb"
+      ],
+      [
+        "71a05310177fa445bbe95b2405e650ba",
+        7,
+        "a565a578bf00dea914d6241235ab0627e44d4fa3cef6d17c1f105717f768c4a7"
+      ]
+    ],
+    "acks": [
+      {
+        "ack_id": "19f7625abe3c1152c9c0beb300afdf081c482ae0a631ab966ca71460d09ef326",
+        "config_id": "linux-amsterdam-external-4",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "78f6cbf5ee4c66f6cc73e4f4b3e5279ee193d98578b6e10fd4499f75b1e7ada5",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 4,
+        "status": "RECEIVED",
+        "timestamp": 1789301442
+      },
+      {
+        "ack_id": "6a3d1310155ab1638807fcdf560132cf6c16dca2712ab92d3b1370428fb288e9",
+        "config_id": "linux-amsterdam-external-4",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "78f6cbf5ee4c66f6cc73e4f4b3e5279ee193d98578b6e10fd4499f75b1e7ada5",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 4,
+        "status": "APPLIED",
+        "timestamp": 1789301443
+      },
+      {
+        "ack_id": "1c9cf5549da1a701786047ef7ff7f0d62f1e5f1fd51270c50c6273daba443baa",
+        "config_id": "linux-amsterdam-external-4",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "78f6cbf5ee4c66f6cc73e4f4b3e5279ee193d98578b6e10fd4499f75b1e7ada5",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 4,
+        "status": "COMMITTED",
+        "timestamp": 1789301443
+      },
+      {
+        "ack_id": "e17d594780f195ae634bfa6c494546c75169f8e5c6f0801eac513626dc0b5446",
+        "config_id": "linux-amsterdam-external-5",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 5,
+        "status": "RECEIVED",
+        "timestamp": 1789301937
+      },
+      {
+        "ack_id": "345314157783fc3af477589f6e2287e7f460c65580cdde1de573208c13c336fe",
+        "config_id": "linux-amsterdam-external-5",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 5,
+        "status": "APPLIED",
+        "timestamp": 1789301937
+      },
+      {
+        "ack_id": "4d0c6ea206edbbb99374ed742e5eae54de651fdb59e201f0d5dc10ea04b91a64",
+        "config_id": "linux-amsterdam-external-5",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 5,
+        "status": "COMMITTED",
+        "timestamp": 1789301938
+      },
+      {
+        "ack_id": "faba7ee0f06d1eea318cf279626d4c61a3bf27a2dfd40e62a5ec4b307b43ede1",
+        "config_id": "linux-amsterdam-managed-6",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "b7b51e260b83de6fefea6d84805321ab3329e04a964415aa3ef34dce937eb3eb",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 6,
+        "status": "RECEIVED",
+        "timestamp": 1789303317
+      },
+      {
+        "ack_id": "44298e8313471e05d066622f2e147a35d22c15d9cb2516b53ce0329f3da76685",
+        "config_id": "linux-amsterdam-managed-6",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "b7b51e260b83de6fefea6d84805321ab3329e04a964415aa3ef34dce937eb3eb",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 6,
+        "status": "APPLIED",
+        "timestamp": 1789303318
+      },
+      {
+        "ack_id": "54daf66fc8a72b6f9069f383d22cd082833033ea89df33e9f7d2b7fed3c928f1",
+        "config_id": "linux-amsterdam-managed-6",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "b7b51e260b83de6fefea6d84805321ab3329e04a964415aa3ef34dce937eb3eb",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 6,
+        "status": "COMMITTED",
+        "timestamp": 1789303318
+      },
+      {
+        "ack_id": "9617603dcdb198e317ae34d72f236236ebbb52841f4da56a1c523bb8f0875ae6",
+        "config_id": "linux-amsterdam-managed-7",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "a565a578bf00dea914d6241235ab0627e44d4fa3cef6d17c1f105717f768c4a7",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 7,
+        "status": "RECEIVED",
+        "timestamp": 1789303548
+      },
+      {
+        "ack_id": "1e6d2ab8ea233b8275ebcdf2a7fb33accabd274729cf3291376a2c05ef2edae9",
+        "config_id": "linux-amsterdam-managed-7",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "a565a578bf00dea914d6241235ab0627e44d4fa3cef6d17c1f105717f768c4a7",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 7,
+        "status": "APPLIED",
+        "timestamp": 1789303549
+      },
+      {
+        "ack_id": "fd8e71d906401a6c98676174657be6683d4306aa0fe687bf9b11b73d1f4f6e4f",
+        "config_id": "linux-amsterdam-managed-7",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "a565a578bf00dea914d6241235ab0627e44d4fa3cef6d17c1f105717f768c4a7",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 7,
+        "status": "COMMITTED",
+        "timestamp": 1789303549
+      }
+    ]
+  },
+  "pytest": {
+    "passed": 478,
+    "warnings": 2,
+    "seconds": 9.97
+  },
+  "isolated_kernel_checks": [
+    "pipe EOF cleanup",
+    "exclusive broker",
+    "main route replacement",
+    "no-main-route refusal",
+    "SIGKILL durable recovery",
+    "foreign priority preserved",
+    "original rules restored"
+  ],
+  "docker_test_stage_fix": "0136c54bf92fd464db362e6dd6ea32e7a1ee0888",
+  "docker_build": {
+    "image": "family-connect-control:managed-route-check",
+    "passed": 341,
+    "warnings": 2,
+    "seconds": 18.36
+  },
+  "ci": {
+    "implementation_runs": [
+      {
+        "id": 34758085225,
+        "name": "Client builds",
+        "status": "in_progress",
+        "conclusion": null,
+        "head_sha": "7ad40c03eb66d34f4698dad1a5a7255cda08992e",
+        "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34758085225"
+      },
+      {
+        "id": 34758085278,
+        "name": "Linux control preview",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "7ad40c03eb66d34f4698dad1a5a7255cda08992e",
+        "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34758085278"
+      },
+      {
+        "id": 34758085234,
+        "name": "phase0",
+        "status": "completed",
+        "conclusion": "failure",
+        "head_sha": "7ad40c03eb66d34f4698dad1a5a7255cda08992e",
+        "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34758085234"
+      },
+      {
+        "id": 34758085231,
+        "name": "AmneziaWG pilot",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "7ad40c03eb66d34f4698dad1a5a7255cda08992e",
+        "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34758085231"
+      },
+      {
+        "id": 34758085230,
+        "name": "TCP pilot",
+        "status": "completed",
+        "conclusion": "success",
+        "head_sha": "7ad40c03eb66d34f4698dad1a5a7255cda08992e",
+        "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34758085230"
+      }
+    ],
+    "linux_preview_job": [
+      {
+        "id": 103725875226,
+        "name": "linux-control",
+        "status": "completed",
+        "conclusion": "success",
+        "check_run_url": "https://api.github.com/repos/Joker20380/family_connect/check-runs/103725875226",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-09-13T12:48:14Z",
+            "completed_at": "2026-09-13T12:48:14Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-09-13T12:48:14Z",
+            "completed_at": "2026-09-13T12:48:15Z"
+          },
+          {
+            "name": "Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-09-13T12:48:15Z",
+            "completed_at": "2026-09-13T12:48:15Z"
+          },
+          {
+            "name": "Run pip install -r control/requirements.lock -r device_identity/requirements.lock",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-09-13T12:48:15Z",
+            "completed_at": "2026-09-13T12:48:22Z"
+          },
+          {
+            "name": "Protocol, crash recovery, arbiter and packaging regression",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-09-13T12:48:22Z",
+            "completed_at": "2026-09-13T12:48:37Z"
+          },
+          {
+            "name": "System GTK dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-09-13T12:48:37Z",
+            "completed_at": "2026-09-13T12:48:49Z"
+          },
+          {
+            "name": "Render and interaction regression",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-09-13T12:48:49Z",
+            "completed_at": "2026-09-13T12:49:05Z"
+          },
+          {
+            "name": "Build paired preview and legacy six-file archive",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-09-13T12:49:05Z",
+            "completed_at": "2026-09-13T12:49:10Z"
+          },
+          {
+            "name": "Run extracted artifacts outside checkout",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-09-13T12:49:10Z",
+            "completed_at": "2026-09-13T12:49:11Z"
+          },
+          {
+            "name": "Extracted GTK recovery and public bundle digest",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-09-13T12:49:11Z",
+            "completed_at": "2026-09-13T12:49:12Z"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-09-13T12:49:12Z",
+            "completed_at": "2026-09-13T12:49:13Z"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-09-13T12:49:13Z",
+            "completed_at": "2026-09-13T12:49:14Z"
+          },
+          {
+            "name": "Post Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23,
+            "started_at": "2026-09-13T12:49:14Z",
+            "completed_at": "2026-09-13T12:49:14Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 24,
+            "started_at": "2026-09-13T12:49:14Z",
+            "completed_at": "2026-09-13T12:49:14Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 25,
+            "started_at": "2026-09-13T12:49:14Z",
+            "completed_at": "2026-09-13T12:49:14Z"
+          }
+        ]
+      }
+    ],
+    "linux_preview_annotations": [
+      {
+        "path": ".github",
+        "blob_href": "https://github.com/Joker20380/family_connect/blob/7ad40c03eb66d34f4698dad1a5a7255cda08992e/.github",
+        "start_line": 2,
+        "start_column": null,
+        "end_line": 2,
+        "end_column": null,
+        "annotation_level": "warning",
+        "title": "",
+        "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+        "raw_details": ""
+      },
+      {
+        "path": ".github",
+        "blob_href": "https://github.com/Joker20380/family_connect/blob/7ad40c03eb66d34f4698dad1a5a7255cda08992e/.github",
+        "start_line": 31,
+        "start_column": null,
+        "end_line": 31,
+        "end_column": null,
+        "annotation_level": "notice",
+        "title": "Control vectors manifest SHA256",
+        "message": "c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd",
+        "raw_details": ""
+      },
+      {
+        "path": ".github",
+        "blob_href": "https://github.com/Joker20380/family_connect/blob/7ad40c03eb66d34f4698dad1a5a7255cda08992e/.github",
+        "start_line": 30,
+        "start_column": null,
+        "end_line": 30,
+        "end_column": null,
+        "annotation_level": "notice",
+        "title": "Control preview SHA256",
+        "message": "FamilyConnect-Control-Linux-preview-4d4afa762beddbaf.tar.gz fe799995022e6edfe0e6797c3cb2cb058958537d9bd3814b6c62d5bdd6801267",
+        "raw_details": ""
+      }
+    ],
+    "corrected_phase0_jobs": [
+      {
+        "id": 103726596332,
+        "name": "failover",
+        "status": "completed",
+        "conclusion": "success",
+        "check_run_url": "https://api.github.com/repos/Joker20380/family_connect/check-runs/103726596332",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-09-13T12:54:12Z",
+            "completed_at": "2026-09-13T12:54:13Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-09-13T12:54:13Z",
+            "completed_at": "2026-09-13T12:54:13Z"
+          },
+          {
+            "name": "Build isolated failover stack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-09-13T12:54:13Z",
+            "completed_at": "2026-09-13T12:55:11Z"
+          },
+          {
+            "name": "Run sudo ./scripts/provision.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-09-13T12:55:11Z",
+            "completed_at": "2026-09-13T12:55:12Z"
+          },
+          {
+            "name": "Run ./scripts/test_failover.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-09-13T12:55:12Z",
+            "completed_at": "2026-09-13T12:55:31Z"
+          },
+          {
+            "name": "Run ./scripts/test_auth.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-09-13T12:55:31Z",
+            "completed_at": "2026-09-13T12:55:32Z"
+          },
+          {
+            "name": "Run ./scripts/test_offline.sh",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-09-13T12:55:32Z",
+            "completed_at": "2026-09-13T12:55:44Z"
+          },
+          {
+            "name": "Run python3 scripts/test_revocation.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-09-13T12:55:44Z",
+            "completed_at": "2026-09-13T12:55:51Z"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-09-13T12:55:51Z",
+            "completed_at": "2026-09-13T12:55:51Z"
+          },
+          {
+            "name": "Run docker compose down",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-09-13T12:55:51Z",
+            "completed_at": "2026-09-13T12:56:02Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20,
+            "started_at": "2026-09-13T12:56:02Z",
+            "completed_at": "2026-09-13T12:56:02Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21,
+            "started_at": "2026-09-13T12:56:02Z",
+            "completed_at": "2026-09-13T12:56:02Z"
+          }
+        ]
+      },
+      {
+        "id": 103726596471,
+        "name": "tests",
+        "status": "completed",
+        "conclusion": "success",
+        "check_run_url": "https://api.github.com/repos/Joker20380/family_connect/check-runs/103726596471",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-09-13T12:54:12Z",
+            "completed_at": "2026-09-13T12:54:13Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-09-13T12:54:13Z",
+            "completed_at": "2026-09-13T12:54:14Z"
+          },
+          {
+            "name": "Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-09-13T12:54:14Z",
+            "completed_at": "2026-09-13T12:54:15Z"
+          },
+          {
+            "name": "Run pip install -r control/requirements.lock -r device_identity/requirements.lock",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-09-13T12:54:15Z",
+            "completed_at": "2026-09-13T12:54:23Z"
+          },
+          {
+            "name": "Run python -m pytest -q",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-09-13T12:54:23Z",
+            "completed_at": "2026-09-13T12:54:49Z"
+          },
+          {
+            "name": "Run cargo test --manifest-path core/Cargo.toml --locked",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-09-13T12:54:49Z",
+            "completed_at": "2026-09-13T12:55:16Z"
+          },
+          {
+            "name": "Post Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-09-13T12:55:16Z",
+            "completed_at": "2026-09-13T12:55:16Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-09-13T12:55:16Z",
+            "completed_at": "2026-09-13T12:55:17Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-09-13T12:55:17Z",
+            "completed_at": "2026-09-13T12:55:17Z"
+          }
+        ]
+      }
+    ],
+    "client_jobs": [
+      {
+        "id": 103725874969,
+        "name": "android",
+        "status": "in_progress",
+        "conclusion": null,
+        "check_run_url": "https://api.github.com/repos/Joker20380/family_connect/check-runs/103725874969",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-09-13T12:48:14Z",
+            "completed_at": "2026-09-13T12:48:18Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-09-13T12:48:18Z",
+            "completed_at": "2026-09-13T12:48:19Z"
+          },
+          {
+            "name": "Run actions/setup-java@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-09-13T12:48:19Z",
+            "completed_at": "2026-09-13T12:48:20Z"
+          },
+          {
+            "name": "Run android-actions/setup-android@v3",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-09-13T12:48:20Z",
+            "completed_at": "2026-09-13T12:48:38Z"
+          },
+          {
+            "name": "Run gradle/actions/setup-gradle@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-09-13T12:48:38Z",
+            "completed_at": "2026-09-13T12:48:44Z"
+          },
+          {
+            "name": "Run actions/setup-go@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-09-13T12:48:44Z",
+            "completed_at": "2026-09-13T12:48:59Z"
+          },
+          {
+            "name": "Run sdkmanager 'platforms;android-35' 'build-tools;35.0.0' 'ndk;28.2.13676358'",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-09-13T12:48:59Z",
+            "completed_at": "2026-09-13T12:49:00Z"
+          },
+          {
+            "name": "JVM control conformance",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-09-13T12:49:00Z",
+            "completed_at": "2026-09-13T12:49:12Z"
+          },
+          {
+            "name": "Build pinned unified Android VPN library",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-09-13T12:49:12Z",
+            "completed_at": "2026-09-13T12:51:38Z"
+          },
+          {
+            "name": "Run gradle --no-daemon :app:assembleDebug :app:testDebugUnitTest :app:lintDebug",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-09-13T12:51:38Z",
+            "completed_at": "2026-09-13T12:52:22Z"
+          },
+          {
+            "name": "Run python3 pilot/android-awg/verify-apk.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-09-13T12:52:22Z",
+            "completed_at": "2026-09-13T12:52:23Z"
+          },
+          {
+            "name": "Run python3 -m pip install cryptography==46.0.7",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-09-13T12:52:23Z",
+            "completed_at": "2026-09-13T12:52:31Z"
+          },
+          {
+            "name": "Enable emulator KVM",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-09-13T12:52:31Z",
+            "completed_at": "2026-09-13T12:52:31Z"
+          },
+          {
+            "name": "Real WG AWG TCP and Auto lifecycle on Android emulator",
+            "status": "in_progress",
+            "conclusion": null,
+            "number": 14,
+            "started_at": "2026-09-13T12:52:31Z",
+            "completed_at": null
+          },
+          {
+            "name": "Confirm control conformance on Android runtime",
+            "status": "pending",
+            "conclusion": null,
+            "number": 15,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 16,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run actions/setup-go@v5",
+            "status": "pending",
+            "conclusion": null,
+            "number": 29,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run gradle/actions/setup-gradle@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 30,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run actions/setup-java@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 31,
+            "started_at": null,
+            "completed_at": null
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 32,
+            "started_at": null,
+            "completed_at": null
+          }
+        ]
+      },
+      {
+        "id": 103725875148,
+        "name": "linux",
+        "status": "completed",
+        "conclusion": "success",
+        "check_run_url": "https://api.github.com/repos/Joker20380/family_connect/check-runs/103725875148",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-09-13T12:48:14Z",
+            "completed_at": "2026-09-13T12:48:15Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-09-13T12:48:15Z",
+            "completed_at": "2026-09-13T12:48:16Z"
+          },
+          {
+            "name": "Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-09-13T12:48:16Z",
+            "completed_at": "2026-09-13T12:48:16Z"
+          },
+          {
+            "name": "Run sudo apt-get update && sudo apt-get install -y python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 python3-cryptography xvfb dbus-x11",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-09-13T12:48:16Z",
+            "completed_at": "2026-09-13T12:48:31Z"
+          },
+          {
+            "name": "Run python -m pip install pytest==9.1.1 cryptography==46.0.7",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-09-13T12:48:31Z",
+            "completed_at": "2026-09-13T12:48:34Z"
+          },
+          {
+            "name": "Run python -m pytest clients/desktop/tests -q",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-09-13T12:48:34Z",
+            "completed_at": "2026-09-13T12:48:36Z"
+          },
+          {
+            "name": "Run GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/app.py --smoke",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-09-13T12:48:36Z",
+            "completed_at": "2026-09-13T12:48:41Z"
+          },
+          {
+            "name": "Run GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a -s \"-screen 0 2560x2160x24\" /usr/bin/python3 clients/desktop/layout_check.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-09-13T12:48:41Z",
+            "completed_at": "2026-09-13T12:48:50Z"
+          },
+          {
+            "name": "Run GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/recovery_check.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-09-13T12:48:50Z",
+            "completed_at": "2026-09-13T12:48:51Z"
+          },
+          {
+            "name": "Run GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/tcp_install_check.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-09-13T12:48:51Z",
+            "completed_at": "2026-09-13T12:48:54Z"
+          },
+          {
+            "name": "Run python3 scripts/package_desktop.py",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-09-13T12:48:54Z",
+            "completed_at": "2026-09-13T12:48:54Z"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-09-13T12:48:54Z",
+            "completed_at": "2026-09-13T12:48:55Z"
+          },
+          {
+            "name": "Post Run actions/setup-python@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23,
+            "started_at": "2026-09-13T12:48:55Z",
+            "completed_at": "2026-09-13T12:48:55Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 24,
+            "started_at": "2026-09-13T12:48:55Z",
+            "completed_at": "2026-09-13T12:48:56Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 25,
+            "started_at": "2026-09-13T12:48:56Z",
+            "completed_at": "2026-09-13T12:48:56Z"
+          }
+        ]
+      },
+      {
+        "id": 103725875164,
+        "name": "windows",
+        "status": "completed",
+        "conclusion": "success",
+        "check_run_url": "https://api.github.com/repos/Joker20380/family_connect/check-runs/103725875164",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-09-13T12:48:15Z",
+            "completed_at": "2026-09-13T12:48:16Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-09-13T12:48:16Z",
+            "completed_at": "2026-09-13T12:48:22Z"
+          },
+          {
+            "name": "Run actions/setup-go@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-09-13T12:48:22Z",
+            "completed_at": "2026-09-13T12:48:47Z"
+          },
+          {
+            "name": "Run actions/setup-dotnet@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-09-13T12:48:47Z",
+            "completed_at": "2026-09-13T12:49:28Z"
+          },
+          {
+            "name": "Run New-Item -ItemType Directory -Force clients/windows/dist | Out-Null",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-09-13T12:49:28Z",
+            "completed_at": "2026-09-13T12:52:09Z"
+          },
+          {
+            "name": "Defender scan when available",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-09-13T12:52:09Z",
+            "completed_at": "2026-09-13T12:52:25Z"
+          },
+          {
+            "name": "Install application and service",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-09-13T12:52:25Z",
+            "completed_at": "2026-09-13T12:52:35Z"
+          },
+          {
+            "name": "Load signed driver without routes",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-09-13T12:52:35Z",
+            "completed_at": "2026-09-13T12:52:41Z"
+          },
+          {
+            "name": "Check broker activation API",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-09-13T12:52:41Z",
+            "completed_at": "2026-09-13T12:52:42Z"
+          },
+          {
+            "name": "Check TCP profile broker storage and replacement",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-09-13T12:52:42Z",
+            "completed_at": "2026-09-13T12:52:47Z"
+          },
+          {
+            "name": "Check user interface",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-09-13T12:52:47Z",
+            "completed_at": "2026-09-13T12:52:48Z"
+          },
+          {
+            "name": "Check compact and scaled window layouts",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-09-13T12:52:48Z",
+            "completed_at": "2026-09-13T12:54:28Z"
+          },
+          {
+            "name": "Save Windows UI preview",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-09-13T12:54:28Z",
+            "completed_at": "2026-09-13T12:54:28Z"
+          },
+          {
+            "name": "Uninstall application and service",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-09-13T12:54:28Z",
+            "completed_at": "2026-09-13T12:54:30Z"
+          },
+          {
+            "name": "Run actions/upload-artifact@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 15,
+            "started_at": "2026-09-13T12:54:30Z",
+            "completed_at": "2026-09-13T12:54:33Z"
+          },
+          {
+            "name": "Post Run actions/setup-dotnet@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 28,
+            "started_at": "2026-09-13T12:54:33Z",
+            "completed_at": "2026-09-13T12:54:33Z"
+          },
+          {
+            "name": "Post Run actions/setup-go@v5",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 29,
+            "started_at": "2026-09-13T12:54:33Z",
+            "completed_at": "2026-09-13T12:54:33Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 30,
+            "started_at": "2026-09-13T12:54:33Z",
+            "completed_at": "2026-09-13T12:54:35Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 31,
+            "started_at": "2026-09-13T12:54:35Z",
+            "completed_at": "2026-09-13T12:54:35Z"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,5 +1,24 @@
 # Current state / Текущее состояние
 
+## Managed Linux control route accepted — 2026-09-13
+
+Source7ad40c0: once --managed-route leases a root-pinned UID/TCP relay route,
+cleans it after exchange/client death, and recovers broker crash intent on next use.
+Root helper/pin/Polkit installed locally; desktop current remains0.2.8.
+GUI/control entry contention waits at most5s without bypassing journal ownership.
+478 tests passed. Isolated kernel lifecycle/uplink tests and host client-SIGKILL
+cleanup passed. Real canonical launcher revision7 + active-VPN duplicate + GTK/HTTPS
++ signed ACKs passed without manual rule. Initial two unexplained OPERATION failures
+retained; physical handover/suspend/long-run tests remain open.
+Final VPN off, rules removed, journalIDLE/floor7/committed7/outbox0.
+Linux preview CI hash matched; AWG/TCP/Linux/Windows passed. Docker test-stage COPY
+fixed in0136c54; repeated phase0 tests+failover passed. Android CI still running.
+Next: AWG3.1 compatibility/runtime/profile migration and separate Amsterdam pilot;
+3.1 is still rejected until implemented. [Initial upstream/schema audit](awg31-migration.ru.md) started.
+No release/catalog/main update.
+[Version hashes, expiry, evidence and rollback](releases/2026-09-13-managed-control-route.ru.md).
+
+
 ## External Reticulum pilot accepted with operator route — 2026-09-13
 
 Amsterdam186.246.45.246:4242 now serves the pinned trusted RNS relay as fc-relay,

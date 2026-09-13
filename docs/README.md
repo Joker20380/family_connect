@@ -1,5 +1,9 @@
 # Documentation map
 
+- [AWG 3.1: начальная сверка и план миграции](awg31-migration.ru.md).
+
+- [Managed Linux control route acceptance, 13.09.2026](releases/2026-09-13-managed-control-route.ru.md).
+
 - [External Reticulum: deployment and live acceptance, 13.09.2026](releases/2026-09-13-external-reticulum.ru.md).
 
 - [Amsterdam: Linux GUI acceptance, 13.09.2026](releases/2026-09-13-amsterdam-gui.ru.md).
