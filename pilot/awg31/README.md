@@ -7,7 +7,7 @@ and [all measurements](../../docs/releases/2026-09-13-awg31-experiment.json).
 From the repository root:
 
 ```sh
-docker build -f pilot/awg31/Dockerfile -t family-connect-awg31:experiment1 .
+docker build -f pilot/awg31/Dockerfile -t family-connect-awg31:experiment2 .
 ```
 
 Extract `/opt/awg31/` from that image into an operator-owned scratch directory with
@@ -36,3 +36,16 @@ The Docker build gate runs the explicitly listed device/runtime packages three t
 The broader upstream `go test ./...` currently fails the external Outline integration
 fixture; the failure and exact scope are retained in the report. The local patch is
 not a general solution for atomic parameter changes while traffic is in flight.
+
+## Adverse conditions
+
+Add `--resilience` for three AWG base runs with invalid profiles, wrong header key,
+mismatched H4, tunnel MTU boundaries,1% independent random loss each direction,
+1MiB integrity-checked TCP transfer, brief100% loss, client link cycle, server engine
+restart, and accelerated rekey. The readiness observation window is30s; this is not
+an accepted product reconnect SLO. Original defaults/rekey timing and path MTU
+blackholes are separate acceptance work. Each transfer has a90s budget.
+
+Experiment2 adds a separate tools patch and a C boundary regression. Engine bytes
+are identical to experiment1. Full upstream Outline integration remains unresolved.
+See the dated resilience report in docs/releases for initial failures and measurements.

@@ -8,5 +8,7 @@
   "go": "1.26.1",
   "scope": "isolated experimental Linux pilot; stable runtime and schema unchanged",
   "local_patch": "patches/0001-refresh-s4-after-tun-read.patch",
-  "local_patch_scope": "Refresh S4 after blocked TUN read; experimental, not upstream release"
+  "local_patch_scope": "Refresh S4 after blocked TUN read; experimental, not upstream release",
+  "tools_local_patch": "patches/0002-tools-u16-range.patch",
+  "tools_local_patch_scope": "Reject u16 overflow, signed/empty/malformed endpoints instead of truncating"
 }

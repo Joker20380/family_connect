@@ -1,5 +1,19 @@
 # Working plan / Рабочий план
 
+## AWG3.1 adverse-condition experiment — 2026-09-13
+
+Experiment2 adds strict u16 tools parsing: reject65536 instead of truncation;
+12 negative C cases and valid boundary ranges passed, selected engine suite count=3.
+Three live virtual repeats passed wrong HPK/H4, invalid S1/padding, tunnel MTU,
+1% configured loss with1MiB integrity, brief blackhole, link cycle, server restart,
+and accelerated5s rekey. H4 recovery~15.1s and server restart~16.1s remain slow;
+original15s failure retained.30s observation acceptance is not a reconnect fix.
+Python478 passed; full upstream Outline remains unresolved. No deployment/app update.
+Next: managed recovery,1CPU load and path-MTU/long-run checks, then Amsterdam AWG.
+[Evidence and limitations](releases/2026-09-13-awg31-resilience.ru.md).
+[Reticulum/LXMF messenger proposal](reticulum-messenger.ru.md) documented; no messenger
+code/service deployed. Messaging identity/history/lifecycle must be separate from VPN.
+
 ## AWG3.1 isolated experiment accepted within limits — 2026-09-13
 
 Pinned engine v3.1.20260828 b5928ef + tools v3.1.20260812 ee0f0a9.

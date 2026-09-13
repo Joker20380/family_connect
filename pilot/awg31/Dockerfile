@@ -10,6 +10,7 @@ RUN git apply --check /patches/0001-refresh-s4-after-tun-read.patch && git apply
 RUN gofmt -w device/fc_regression_test.go
 RUN go test -count=3 ./conn/... ./device/... ./ipc/... ./ratelimiter/... ./replay/... ./rwcancel/... ./tai64n/... ./tun/...
 RUN CGO_ENABLED=0 go build -trimpath -buildvcs=false -o /out/amneziawg-go .
-RUN git clone https://github.com/amnezia-vpn/amneziawg-tools /tools && cd /tools && git checkout "$TOOLS_REV" && test "$(git rev-parse HEAD)" = "$TOOLS_REV" && make -C src -j2 && cp src/wg /out/awg && cp COPYING /out/LICENSE-tools && cp /engine/LICENSE /out/LICENSE-go
+COPY pilot/awg31/tools_regression.c /tools_regression.c
+RUN git clone https://github.com/amnezia-vpn/amneziawg-tools /tools && cd /tools && git checkout "$TOOLS_REV" && test "$(git rev-parse HEAD)" = "$TOOLS_REV" && git apply --check /patches/0002-tools-u16-range.patch && git apply /patches/0002-tools-u16-range.patch && cc -Isrc /tools_regression.c src/type.c -o /tmp/tools-test && /tmp/tools-test && make -C src -j2 && cp src/wg /out/awg && cp COPYING /out/LICENSE-tools && cp /engine/LICENSE /out/LICENSE-go
 FROM debian:bookworm-slim
 COPY --from=build /out/ /opt/awg31/

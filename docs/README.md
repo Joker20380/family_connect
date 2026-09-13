@@ -1,5 +1,9 @@
 # Documentation map
 
+- [AWG3.1: adverse conditions and tools range fix](releases/2026-09-13-awg31-resilience.ru.md).
+
+- [Reticulum messenger: proposed scope and integration](reticulum-messenger.ru.md).
+
 - [AWG3.1: startup fix and first virtual comparison](releases/2026-09-13-awg31-experiment.ru.md).
 
 - [AWG 3.1: начальная сверка и план миграции](awg31-migration.ru.md).
