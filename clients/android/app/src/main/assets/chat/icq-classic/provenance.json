@@ -1,0 +1,664 @@
+{
+  "source": "https://github.com/MyHoldFast/icq_client",
+  "commit": "165549533e629ed3e7890e23391a20284663981a",
+  "status": "Prototype archive; exact official ICQ version and redistribution license not established; not released",
+  "assets": [
+    {
+      "file": "aa.gif",
+      "label": "Ангел",
+      "codes": [
+        "O=)",
+        "O:-)"
+      ],
+      "bytes": 7746,
+      "sha256": "1a2e9d5dcb824070dc321fcfb963d7a2ee307d785af4a5690f89f331dba8b8d9",
+      "width": 27,
+      "height": 23,
+      "frames": 20,
+      "duration_ms": 13600
+    },
+    {
+      "file": "ab.gif",
+      "label": "Улыбка",
+      "codes": [
+        ":)",
+        "=)",
+        ":-)"
+      ],
+      "bytes": 2180,
+      "sha256": "274d0af255571ddbb4219fd7f7a296d150900502f48872800952a2c33f73b17a",
+      "width": 20,
+      "height": 24,
+      "frames": 6,
+      "duration_ms": 5650
+    },
+    {
+      "file": "ac.gif",
+      "label": "Грусть",
+      "codes": [
+        ":(",
+        ";(",
+        ":-("
+      ],
+      "bytes": 2152,
+      "sha256": "ddb4b878a067038e2c8776fbdc174a8bf3fc6cc836a00e62e83e1f170d16285a",
+      "width": 20,
+      "height": 24,
+      "frames": 6,
+      "duration_ms": 5650
+    },
+    {
+      "file": "ad.gif",
+      "label": "Подмигивание",
+      "codes": [
+        ";)",
+        ";-)"
+      ],
+      "bytes": 2113,
+      "sha256": "ec195866e0183119b2a6a6e8d16024c5b07b9286790c6a07e5566a8c48d1b147",
+      "width": 20,
+      "height": 20,
+      "frames": 6,
+      "duration_ms": 1600
+    },
+    {
+      "file": "ae.gif",
+      "label": "Язык",
+      "codes": [
+        ":P",
+        ":-P"
+      ],
+      "bytes": 495,
+      "sha256": "f3706ffb539ac569a749d66471c184f6cd7f5d157f43bec08cb1ec753adef002",
+      "width": 18,
+      "height": 18,
+      "frames": 2,
+      "duration_ms": 200
+    },
+    {
+      "file": "af.gif",
+      "label": "Очки",
+      "codes": [
+        "8-)"
+      ],
+      "bytes": 7094,
+      "sha256": "4d94a6a29127a46cda1992c9f527b283bd8ee7ba7c3be081322420be18006173",
+      "width": 21,
+      "height": 21,
+      "frames": 23,
+      "duration_ms": 3680
+    },
+    {
+      "file": "ag.gif",
+      "label": "Смех",
+      "codes": [
+        ":D",
+        ":-D"
+      ],
+      "bytes": 1339,
+      "sha256": "d057204b91006fed93c912098cd9d62d44711a89358e93172c314a27e1004ea7",
+      "width": 20,
+      "height": 20,
+      "frames": 2,
+      "duration_ms": 200
+    },
+    {
+      "file": "ah.gif",
+      "label": "Смущение",
+      "codes": [
+        ":-["
+      ],
+      "bytes": 6786,
+      "sha256": "b0ce3ddad46a04ad2330efa681a37d0b4ae11ba1578683a9331daaa09dbf365b",
+      "width": 25,
+      "height": 25,
+      "frames": 28,
+      "duration_ms": 9800
+    },
+    {
+      "file": "ai.gif",
+      "label": "Удивление",
+      "codes": [
+        "=-O"
+      ],
+      "bytes": 3478,
+      "sha256": "8083df14bbb79a2f263dbc777a2236ee9d6d7a4532cbd03c4c7f680cc5d00b51",
+      "width": 20,
+      "height": 20,
+      "frames": 12,
+      "duration_ms": 7100
+    },
+    {
+      "file": "aj.gif",
+      "label": "Поцелуй",
+      "codes": [
+        ":-*"
+      ],
+      "bytes": 7829,
+      "sha256": "e24628b606b3274e84ab58af1048787f080944401ae3651369030d82627fc64a",
+      "width": 34,
+      "height": 23,
+      "frames": 19,
+      "duration_ms": 10700
+    },
+    {
+      "file": "ak.gif",
+      "label": "Плач",
+      "codes": [
+        ":'("
+      ],
+      "bytes": 7358,
+      "sha256": "c6f9e9682fec75015515b5e816fa7a20d54df59dff75482c6c10000b524e18ed",
+      "width": 31,
+      "height": 22,
+      "frames": 44,
+      "duration_ms": 7450
+    },
+    {
+      "file": "al.gif",
+      "label": "Молчу",
+      "codes": [
+        ":-X",
+        ":-x"
+      ],
+      "bytes": 3730,
+      "sha256": "70f089f500978a88b0a5ac091fdfc2b08d8809c63276e69045255bdf3710e086",
+      "width": 22,
+      "height": 26,
+      "frames": 29,
+      "duration_ms": 8000
+    },
+    {
+      "file": "am.gif",
+      "label": "Крик",
+      "codes": [
+        ">:o"
+      ],
+      "bytes": 16001,
+      "sha256": "15ac04646ed1c2541478c4681975dc93f4ef3721e57c803c2988bea1f4e80675",
+      "width": 36,
+      "height": 27,
+      "frames": 48,
+      "duration_ms": 14600
+    },
+    {
+      "file": "an.gif",
+      "label": "Безразличие",
+      "codes": [
+        ":-|"
+      ],
+      "bytes": 10038,
+      "sha256": "4a54f68554b3a9c8fb729f22436881606b7d2446f927d1e7ea253bb3351479c9",
+      "width": 29,
+      "height": 23,
+      "frames": 36,
+      "duration_ms": 6450
+    },
+    {
+      "file": "ao.gif",
+      "label": "Недовольство",
+      "codes": [
+        ":-/",
+        ":-\\"
+      ],
+      "bytes": 2571,
+      "sha256": "e225e2847fc4d80a3f0ea8ab80eb79ed68832208de92f6e78eb68d93c608eb88",
+      "width": 28,
+      "height": 28,
+      "frames": 16,
+      "duration_ms": 7700
+    },
+    {
+      "file": "ap.gif",
+      "label": "Шутка",
+      "codes": [
+        "*JOKINGLY*"
+      ],
+      "bytes": 6135,
+      "sha256": "930ddd972f447639c0113af38689fc21747d7f4cf9e040043b244e570a9bc0a2",
+      "width": 25,
+      "height": 25,
+      "frames": 20,
+      "duration_ms": 4500
+    },
+    {
+      "file": "aq.gif",
+      "label": "Дьявол",
+      "codes": [
+        "]:->"
+      ],
+      "bytes": 24889,
+      "sha256": "5fe51a5ba28b8d6688ad4c95e9ea504faf29d0f0c9fcfc59d6e30bd5050b47e0",
+      "width": 39,
+      "height": 34,
+      "frames": 58,
+      "duration_ms": 13300
+    },
+    {
+      "file": "ar.gif",
+      "label": "Диджей",
+      "codes": [
+        "[:-}"
+      ],
+      "bytes": 7840,
+      "sha256": "9464d022e2d4b917cc3bc4f870a3f6590ffc1b2a556ad75edbd3ae86f5c26567",
+      "width": 28,
+      "height": 25,
+      "frames": 25,
+      "duration_ms": 2500
+    },
+    {
+      "file": "as.gif",
+      "label": "Зацелован",
+      "codes": [
+        "*KISSED*"
+      ],
+      "bytes": 3519,
+      "sha256": "91b8f6d560cd0ae37fee11ccf6a2692d5945fc20e1dc07d316eca422d3913194",
+      "width": 23,
+      "height": 26,
+      "frames": 11,
+      "duration_ms": 3750
+    },
+    {
+      "file": "at.gif",
+      "label": "Тошнит",
+      "codes": [
+        ":-!"
+      ],
+      "bytes": 10653,
+      "sha256": "443a83a44fb58586fa0575e11675e341ca0b7e02582922ffd45e4ebf9dfdd024",
+      "width": 21,
+      "height": 21,
+      "frames": 30,
+      "duration_ms": 11700
+    },
+    {
+      "file": "au.gif",
+      "label": "Устал",
+      "codes": [
+        "*TIRED*"
+      ],
+      "bytes": 13693,
+      "sha256": "9e7cca88f6c439eabf89c23122e2f27f66cc7224450bc3c09cdd335144282fa9",
+      "width": 26,
+      "height": 22,
+      "frames": 43,
+      "duration_ms": 16770
+    },
+    {
+      "file": "av.gif",
+      "label": "Стоп",
+      "codes": [
+        "*STOP*"
+      ],
+      "bytes": 7883,
+      "sha256": "513dc7f23a1df4624d5ca109c29497772e8321e1f3a2987daa14a912bcdc678b",
+      "width": 36,
+      "height": 23,
+      "frames": 23,
+      "duration_ms": 4800
+    },
+    {
+      "file": "aw.gif",
+      "label": "Целую",
+      "codes": [
+        "*KISSING*"
+      ],
+      "bytes": 9079,
+      "sha256": "8ed87a508440afd113e156fa8f3ddca68108f97e6dcabf0ccabcafe6a3cfc140",
+      "width": 47,
+      "height": 24,
+      "frames": 24,
+      "duration_ms": 5800
+    },
+    {
+      "file": "ax.gif",
+      "label": "Роза",
+      "codes": [
+        "@}->--"
+      ],
+      "bytes": 6835,
+      "sha256": "1aa126c82cc4dc033ba7e4a6cc20212fe37fdd8fa7e9c8beb91b59f520db35a5",
+      "width": 30,
+      "height": 26,
+      "frames": 24,
+      "duration_ms": 7860
+    },
+    {
+      "file": "ay.gif",
+      "label": "Класс",
+      "codes": [
+        "*THUMBS UP*"
+      ],
+      "bytes": 4164,
+      "sha256": "cd70e0ad6ba7090cb23c25426885e541e8277b465229e8a857aeaf692efbf79c",
+      "width": 26,
+      "height": 23,
+      "frames": 15,
+      "duration_ms": 4800
+    },
+    {
+      "file": "az.gif",
+      "label": "Выпьем",
+      "codes": [
+        "*DRINK*"
+      ],
+      "bytes": 24043,
+      "sha256": "36030d0657340f77ea25d1c6bbd9efe9f308ee68f1d03bddd2f1af8e05f4797b",
+      "width": 51,
+      "height": 28,
+      "frames": 36,
+      "duration_ms": 7800
+    },
+    {
+      "file": "ba.gif",
+      "label": "Влюблён",
+      "codes": [
+        "*IN LOVE*"
+      ],
+      "bytes": 1408,
+      "sha256": "84a633de1d9072a36c3f7e929ddd944373bd8215f690d6f6f3b2cfa3b1664de2",
+      "width": 20,
+      "height": 20,
+      "frames": 2,
+      "duration_ms": 1100
+    },
+    {
+      "file": "bb.gif",
+      "label": "Бомба",
+      "codes": [
+        "@="
+      ],
+      "bytes": 868,
+      "sha256": "de4a22e3b6904e38118cb7ad404003b00c4e085f3c2e5d87c9fe208968dfbeac",
+      "width": 28,
+      "height": 24,
+      "frames": 2,
+      "duration_ms": 200
+    },
+    {
+      "file": "bc.gif",
+      "label": "Помогите",
+      "codes": [
+        "*HELP*"
+      ],
+      "bytes": 12550,
+      "sha256": "915e44adeff38ea8a73e4a02f8f688dc6741d4dca45cc9e178763935802ec321",
+      "width": 30,
+      "height": 33,
+      "frames": 29,
+      "duration_ms": 2900
+    },
+    {
+      "file": "bd.gif",
+      "label": "Рок",
+      "codes": [
+        "\\m/"
+      ],
+      "bytes": 7949,
+      "sha256": "e34449bf03babd93978ce44c9b4be5c865dcf63cb22c18868d3993589922febe",
+      "width": 35,
+      "height": 26,
+      "frames": 26,
+      "duration_ms": 4910
+    },
+    {
+      "file": "be.gif",
+      "label": "Безумие",
+      "codes": [
+        "%)"
+      ],
+      "bytes": 981,
+      "sha256": "b3cd27f0f4571c3c3ae6209beaa448e9b249f0e82fd7b0a0a6ae65b6e20793a3",
+      "width": 20,
+      "height": 24,
+      "frames": 7,
+      "duration_ms": 700
+    },
+    {
+      "file": "bf.gif",
+      "label": "Окей",
+      "codes": [
+        "*OK*"
+      ],
+      "bytes": 4976,
+      "sha256": "5dcbca2d698ea1d88e7e72d6b3897df987c33b131d0c116bcbf023f5e4c4a2af",
+      "width": 40,
+      "height": 26,
+      "frames": 14,
+      "duration_ms": 3150
+    },
+    {
+      "file": "bg.gif",
+      "label": "Как дела",
+      "codes": [
+        "*SUP*",
+        "*WASSUP*"
+      ],
+      "bytes": 6510,
+      "sha256": "481737e9ba6c970e7c95699bc187591edf5ee6998940e4b8d8459f21bf3c53e1",
+      "width": 28,
+      "height": 25,
+      "frames": 22,
+      "duration_ms": 10150
+    },
+    {
+      "file": "bh.gif",
+      "label": "Извини",
+      "codes": [
+        "*SORRY*"
+      ],
+      "bytes": 16159,
+      "sha256": "e465ebe2d34df963e1da067081a0fd3e83cce61905b0f299b4b4152cfd5013f4",
+      "width": 24,
+      "height": 22,
+      "frames": 60,
+      "duration_ms": 17700
+    },
+    {
+      "file": "bi.gif",
+      "label": "Браво",
+      "codes": [
+        "*BRAVO*"
+      ],
+      "bytes": 5460,
+      "sha256": "a75413e7b43dae7f69ba75c9404877e5ddae0829a2e70add05de230d59e0346a",
+      "width": 40,
+      "height": 27,
+      "frames": 16,
+      "duration_ms": 2900
+    },
+    {
+      "file": "bj.gif",
+      "label": "Катаюсь от смеха",
+      "codes": [
+        "*LOL*",
+        "*ROFL*"
+      ],
+      "bytes": 28109,
+      "sha256": "28de4485457a59614017a4e7812333baa911a91bb0687824f6f5a055faff4f60",
+      "width": 29,
+      "height": 25,
+      "frames": 133,
+      "duration_ms": 21660
+    },
+    {
+      "file": "bk.gif",
+      "label": "Прошу прощения",
+      "codes": [
+        "*PARDON*"
+      ],
+      "bytes": 2824,
+      "sha256": "36fffe7fcdbed902746ca915cec4a51d2bfec917f720ab747a0990020e58e806",
+      "width": 36,
+      "height": 26,
+      "frames": 13,
+      "duration_ms": 5700
+    },
+    {
+      "file": "bl.gif",
+      "label": "Нет",
+      "codes": [
+        "*NO*"
+      ],
+      "bytes": 3591,
+      "sha256": "c3deeabf63609c500a16153138e78e7bc1c217f866018798c20f0cf336094ae1",
+      "width": 36,
+      "height": 26,
+      "frames": 16,
+      "duration_ms": 4580
+    },
+    {
+      "file": "bm.gif",
+      "label": "Сумасшедший",
+      "codes": [
+        "*CRAZY*"
+      ],
+      "bytes": 6513,
+      "sha256": "37132cb9e3a709b01be59b45ac59cd542fc27e11f3f1bcc54033f167c81648ca",
+      "width": 20,
+      "height": 27,
+      "frames": 35,
+      "duration_ms": 9900
+    },
+    {
+      "file": "bn.gif",
+      "label": "Не знаю",
+      "codes": [
+        "*UNKNOWN*",
+        "*DONT_KNOW*"
+      ],
+      "bytes": 3628,
+      "sha256": "a6b2ef65dfa4b561fc9c1b7e47c221ce97676debd21b000f3822be1b33fdaafa",
+      "width": 32,
+      "height": 20,
+      "frames": 15,
+      "duration_ms": 7100
+    },
+    {
+      "file": "bo.gif",
+      "label": "Танец",
+      "codes": [
+        "*DANCE*"
+      ],
+      "bytes": 6267,
+      "sha256": "ff754aaa0c52077e6f94e1b764cd801ea07a501eeee0d9a29e97a5c2337c02f2",
+      "width": 39,
+      "height": 26,
+      "frames": 16,
+      "duration_ms": 1600
+    },
+    {
+      "file": "bp.gif",
+      "label": "Ура",
+      "codes": [
+        "*YAHOO*",
+        "*YAHOO!*"
+      ],
+      "bytes": 7576,
+      "sha256": "55190d1f1ac68cb47f1ad1a1e738b5add725f25d733e090e6bc380f3232f44e8",
+      "width": 42,
+      "height": 27,
+      "frames": 22,
+      "duration_ms": 2950
+    },
+    {
+      "file": "bq.gif",
+      "label": "Привет",
+      "codes": [
+        "*HI*",
+        "*HELLO*",
+        "*PREVED*",
+        "*PRIVET*"
+      ],
+      "bytes": 3939,
+      "sha256": "a7513c0fbfe087e0018af1f0fec7c7b444721dd99127510f56fc24b4fe340a72",
+      "width": 43,
+      "height": 27,
+      "frames": 16,
+      "duration_ms": 4940
+    },
+    {
+      "file": "br.gif",
+      "label": "Пока",
+      "codes": [
+        "*BYE*"
+      ],
+      "bytes": 4644,
+      "sha256": "9cebfe2318347aea031eab1e1568b7d6ec4fd23a9a06d0f9509ea328a10e0640",
+      "width": 29,
+      "height": 24,
+      "frames": 14,
+      "duration_ms": 1920
+    },
+    {
+      "file": "bs.gif",
+      "label": "Да",
+      "codes": [
+        "*YES*"
+      ],
+      "bytes": 2993,
+      "sha256": "24bb1a5d9929ec07ae5f8042436e78cff4470a1687d4f8122af0469402124307",
+      "width": 20,
+      "height": 24,
+      "frames": 9,
+      "duration_ms": 2200
+    },
+    {
+      "file": "bt.gif",
+      "label": "Хитрый",
+      "codes": [
+        ";D",
+        "*ACUTE*"
+      ],
+      "bytes": 7287,
+      "sha256": "a61ba5bdc7e13ee05649e6d97b5b723f13ce95c7d818f39ea54c1aec71f76906",
+      "width": 27,
+      "height": 24,
+      "frames": 26,
+      "duration_ms": 6030
+    },
+    {
+      "file": "bu.gif",
+      "label": "Об стену",
+      "codes": [
+        "*DASH*",
+        "*WALL*"
+      ],
+      "bytes": 17671,
+      "sha256": "30e71ee1e08d99dc2e6cb0040bc2bac05c7687f19689f8841b6abff4b08c39b8",
+      "width": 51,
+      "height": 26,
+      "frames": 47,
+      "duration_ms": 8150
+    },
+    {
+      "file": "bv.gif",
+      "label": "Пишу",
+      "codes": [
+        "*MAIL*",
+        "*WRITE*"
+      ],
+      "bytes": 18507,
+      "sha256": "f275b551357a50604167add24b485fe993f526e2af73c48469f4c81e0be7006d",
+      "width": 36,
+      "height": 26,
+      "frames": 47,
+      "duration_ms": 9200
+    },
+    {
+      "file": "bw.gif",
+      "label": "Чешу затылок",
+      "codes": [
+        "*SCRATCH*"
+      ],
+      "bytes": 4198,
+      "sha256": "50effb76dcf8d2b3a41e6f91b03dfde3df3ef6fda5915cc7b4981ba3d9b602c7",
+      "width": 27,
+      "height": 24,
+      "frames": 21,
+      "duration_ms": 4800
+    }
+  ]
+}

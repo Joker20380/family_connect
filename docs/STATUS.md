@@ -1,5 +1,18 @@
 # Current state / Текущее состояние
 
+## Android archive GIF renderer prepared — 2026-09-13
+
+Full candidate archive49 GIF/374251 bytes added with SHA256 provenance;69 text
+aliases, unchanged signed text, no image bytes on RNS. ChatSmileyTextView uses
+bounded built-in GIF reads, up to8 animated occurrences, foreground/visibility
+checks and callback cleanup. SDK35/JDK17 compilation and crypto/token checks passed;
+Pillow verified every hash/frame/size. Actual Android rendering/lifecycle untested.
+Exact official ICQ pack provenance/release rights still pending; no APK packaged.
+No chat screen or RNS/Store bridge wired. Next: Android carrier/Store bridge and
+Keystore/lifecycle runtime acceptance, then AWG3.1 signed schema and chat UI.
+[Report, integration contract and rollback](releases/2026-09-13-android-icq-renderer.ru.md) ·
+[49 animated samples](design/icq-animated-gallery.html).
+
 ## Android chat key foundation; exact classic ICQ smileys requested — 2026-09-13
 
 Separate AndroidKeyStore wrapping alias and bounded61-byte AES-GCM Store-key file,
