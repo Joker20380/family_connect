@@ -74,3 +74,13 @@ Rollback: использовать прежний режим --resilience без
 По исходникам остаётся rns==1.5.1 и прямые RNS вызовы identity/envelope/carrier/runtime.
 Свой control layer уже развивается, но «Reticulum переписан в самостоятельную
 технологию» и «собственный VPN wire protocol готов» не соответствуют текущему коду.
+
+## CI checkpoint
+
+Source c2a95e1a44019a300349f667aaf982b379d60a07 сохранён в рабочей ветке;
+12 публичных файлов синхронизированы в основной каталог с проверкой preimage c29ae95.
+Linux control preview34761765042/job103735736832 success; phase034761765127
+unit/Rust tests103735736923 success. Failover103735737114 остановился на Build
+isolated failover stack, до запуска интеграционных сценариев; причина по annotation
+только exit1, Log API403. Локальная Docker control build прошла; полный compose build
+проверяется отдельно. Начальный отказ сохранён; повтор CI ещё не принят.
