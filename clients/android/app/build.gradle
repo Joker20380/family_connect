@@ -14,11 +14,17 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+    sourceSets {
+        test { java.srcDir 'src/controlTest/java'; resources.srcDir '../../../tests/vectors' }
+        androidTest { java.srcDir 'src/controlTest/java'; assets.srcDir '../../../tests/vectors' }
+    }
     sourceSets { main { java.srcDir '../awg-generated/java'; jniLibs.srcDir '../awg-generated/jniLibs'; assets.srcDir '../awg-generated/assets' } }
     packaging { jniLibs { keepDebugSymbols += ['**/libfc-awg.so'] } }
     buildTypes { release { minifyEnabled false } }
 }
 dependencies {
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.85.2'
+    implementation 'com.google.code.gson:gson:2.13.2'
     implementation 'androidx.annotation:annotation:1.7.1'
     implementation 'androidx.collection:collection:1.4.0'
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'

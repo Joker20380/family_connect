@@ -1,5 +1,7 @@
 # Documentation map
 
+[Android Stage5 verifier](releases/2026-09-13-android-control.ru.md).
+
 [Windows Stage5 verifier](releases/2026-09-13-windows-control.ru.md).
 
 [Stage5 conformance corpus](releases/2026-09-13-control-vectors.ru.md) · [Vector format](../tests/vectors/README.md).

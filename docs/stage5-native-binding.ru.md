@@ -1,5 +1,8 @@
 # Stage 5: следующий блок native binding
 
+Android verifier реализован, JVM45+32 и strict JSON прошли; Android runtime CI ожидается.
+[Android checkpoint](releases/2026-09-13-android-control.ru.md).
+
 Статус13.09.2026: Windows verifier принят:45 vectors+31 structural checks, Windows CI34749302222 passed на38b0554.
 [Windows checkpoint](releases/2026-09-13-windows-control.ru.md).
 [Первый implementation checkpoint](releases/2026-09-13-control-vectors.ru.md).

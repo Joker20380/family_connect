@@ -1,0 +1,13 @@
+plugins { id 'java' }
+repositories { mavenCentral() }
+java { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
+sourceSets {
+    main { java { srcDir '../app/src/main/java'; include '**/Control*.java' } }
+    test { java { srcDirs '../app/src/controlTest/java', '../app/src/test/java'; include '**/Control*.java' }; resources.srcDir '../../../tests/vectors' }
+}
+dependencies {
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.85.2'
+    implementation 'com.google.code.gson:gson:2.13.2'
+    testImplementation 'junit:junit:4.13.2'
+}
+test { testLogging { events 'passed', 'failed'; showStandardStreams = true } }

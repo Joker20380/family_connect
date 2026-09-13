@@ -31,6 +31,9 @@ jobs:
           go-version: '1.26.1'
           cache: false
       - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0' 'ndk;28.2.13676358'
+      - name: JVM control conformance
+        run: gradle --no-daemon test
+        working-directory: clients/android/control-tests
       - name: Build pinned unified Android VPN library
         run: ANDROID_NDK_HOME="$ANDROID_HOME/ndk/28.2.13676358" python3 -u pilot/android-awg/build.py 2>&1 | tee android-awg-build.log
       - run: gradle --no-daemon :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
@@ -50,6 +53,8 @@ jobs:
           target: google_apis
           disable-animations: true
           script: python3 -u pilot/android-awg/run.py
+      - name: Confirm control conformance on Android runtime
+        run: python3 pilot/android-awg/report_control_ci.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:

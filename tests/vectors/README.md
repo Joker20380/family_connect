@@ -50,3 +50,8 @@ binary, preserving boundary whitespace on Windows as well as Linux.
 The committed bytes are what
 Python, .NET and Java must share. Fixture keys are excluded from the paired preview
 by its public-file allowlist; fixtures/generator also stay outside runtime images.
+
+Android uses the same immutable corpus via a shared Java test runner:
+`cd clients/android/control-tests && gradle --no-daemon test` (JVM17), plus
+`ControlProtocolRuntimeTest` in Android instrumentation. Only test source sets
+include the fixtures. Main APK verification rejects corpus/test-key asset names.
