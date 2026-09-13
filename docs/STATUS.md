@@ -1,18 +1,19 @@
 # Current state / Текущее состояние
 
-## Windows Stage5 verifier — 2026-09-13
+## Windows Stage5 verifier accepted — 2026-09-13
 
-Native C# schema2 configuration/ACK verifier implemented without broker/carrier
-integration. Local .NET10 Docker:30 immutable configurations,15 ACKs,31 extra
-structure refusals and existing activation/update/TCP/AWG/Auto checks passed.
-Corpus SHA256 c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd.
-Full Python462 passed. First CI source581f83f: five workflows startup_failure
-before jobs; public Clients page reports a GitHub unexpected error. Scoped verifier
-remains queued. Manifest pin added; native runner passed again; retry pending.
-Next: native Android verifier, then protected Windows identity/journal/outbox and
-shared broker ownership. Transcript scenarios remain Python-only until native journal.
+Source38b055431758e3f2b80de1adfbf9df04cb299fcb (implementation581f83f): native
+C# schema2 configuration/ACK verifier. Windows CI34749302222/job103702791743
+passed30 configurations+15 ACK and31 extra structure refusals plus legacy checks.
+Manifest SHA256 c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd
+confirmed by Windows annotation. Local .NET and Python462 passed; phase034749302284
+passed. Clients34749302204: linux:success, android:success, windows:success, release:skipped.
+First CI had five startup_failure runs before jobs; GitHub unexpected error recorded.
+AWG/TCP/Linux-control original runs did not execute; no new acceptance claim for them.
+Next: Android verifier, then protected Windows identity/journal/outbox and broker
+ownership. Native transcripts/carrier/VPN apply remain unimplemented.
 No release/install/catalog/server/main changes; desktop0.2.9, installed Linux0.2.8.
-[Implementation and acceptance](releases/2026-09-13-windows-control.ru.md).
+[Implementation and CI receipts](releases/2026-09-13-windows-control.ru.md).
 
 ## Stage5 conformance corpus accepted — 2026-09-13
 

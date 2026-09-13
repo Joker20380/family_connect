@@ -56,3 +56,19 @@ runtime остаются открытыми. Далее Android verifier, зат
 Нет публикации, установки, server mutation или main merge. Для проверки нужен
 только test checkout/.NET10; пользовательский Windows PC на этом шаге не требуется.
 Возврат — использовать предыдущий checkout57ff244; никакие device stores не менялись.
+
+## Итоговый CI checkpoint
+
+Source `38b055431758e3f2b80de1adfbf9df04cb299fcb`: отдельный
+[Windows protocol run34749302222](https://github.com/Joker20380/family_connect/actions/runs/34749302222)
+успешен, job103702791743. Официальная notice подтверждает30 configurations+15 ACK
+и точный SHA256 corpus. Job запускает также31 structural refusals и legacy tests.
+[Phase0 run34749302284](https://github.com/Joker20380/family_connect/actions/runs/34749302284)
+успешен. [Clients run34749302204](https://github.com/Joker20380/family_connect/actions/runs/34749302204):
+linux:success, android:success, windows:success, release:skipped.
+Первоначальные AWG/TCP/Linux-control startup_failure не были повторены отдельным
+workflow: их успех на новом source не заявляется. Verifier не вызывается из transport
+session; carrier/application changes отсутствуют. Artifact ZIP не скачивался;
+доказательство Windows conformance — статус job и official notice, не хеш installer.
+CI предупреждает о Node20 actions, принудительно выполняемых на Node24; job успешен.
+Машинная квитанция — [windows-control.json](2026-09-13-windows-control.json).
