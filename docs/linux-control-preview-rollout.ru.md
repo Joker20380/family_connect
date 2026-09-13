@@ -1,5 +1,7 @@
 # Linux GUI/control preview — план ручного пилота
 
+**CI health исправления принят:** Linux source d7c3d79; последующие native Clients/Android source9092594 прошли. Исходный Android failure сохранён. [Точные результаты](releases/2026-09-13-linux-control-ci.ru.md).
+
 **Последний результат:** исправленный bundle66152538ee2a4f3e прошёл живой Linux
 пилот config2/3 с MTU1280, crash/recover, ACK и GUI Disconnect/close.
 [Точное состояние и границы](releases/2026-09-13-linux-control-pilot-pass.ru.md).

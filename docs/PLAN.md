@@ -1,5 +1,20 @@
 # Working plan / Рабочий план
 
+## Linux health CI and Android diagnostic rerun — 2026-09-13
+
+Health source d7c3d79: Linux control34747139792, phase034747139671,
+AWG34747139717 and TCP34747139660 passed. CI archive SHA256 matches the live bundle.
+Initial Clients34747139704: Windows/Linux passed, Android emulator failed; raw logs
+API403, precise cause unavailable. This failure remains recorded, not erased.
+Diagnostic-only source9092594 adds bounded JUnit annotations and scoped Android CI,
+without app/test/timeouts changes. Android34747632083, Clients34747632066
+(Windows/Linux/Android) and phase034747632071 passed. Initial transient cause unproven.
+All public pilot reports and final CI receipts documented in the acceptance branch.
+Next: native Stage5 interop vectors, protected identity/journal/outbox and shared
+ownership; Windows broker first, then Android service. No native Stage5 implementation
+claim, release/main merge/install/server changes. TD-1, AWG3.1 and Stage6 remain open.
+[CI evidence](releases/2026-09-13-linux-control-ci.ru.md) · [Native plan](stage5-native-binding.ru.md).
+
 ## Linux paired live pilot passed — 2026-09-13
 
 Corrected bundle66152538ee2a4f3e passed real RNS config2 apply/ACK, GTK selection,

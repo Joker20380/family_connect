@@ -1,5 +1,7 @@
 # Documentation map
 
+[CI results and Android retry](releases/2026-09-13-linux-control-ci.ru.md) · [Next native binding](stage5-native-binding.ru.md).
+
 [Linux live pilot passed13.09](releases/2026-09-13-linux-control-pilot-pass.ru.md). Scoped CI health correction next.
 
 [Linux paired preview acceptance13.09](releases/2026-09-13-linux-control-acceptance.ru.md) · [Pilot/return runbook](linux-control-preview-rollout.ru.md).

@@ -97,7 +97,7 @@ inventory/selection и отвергает stale recovery; собственное
 сбрасывает generation/finite retry budget. Сеть/ACK не держат connection lock.
 
 Это не блокировка сторонних NetworkManager/root команд. Старый установленный GUI
-0.2.7 и прежние binaries не участвуют: до согласованного обновления старый GUI должен
+0.2.8 (проверено13.09) и прежние binaries не участвуют: до согласованного обновления старый GUI должен
 быть закрыт. Новые GUI/core могут работать одновременно. Native Windows/Android
 и autonomous background scheduling остаются отдельно.
 
@@ -117,3 +117,7 @@ Windows DPAPI/broker и Android Keystore/VpnService не изменены. По�
 и application boundary, совместная упаковка новых GUI/core, background lifecycle, безопасная очистка временных
 профилей и production relay retention/quotas остаются до широкого выпуска.
 Stage 6: независимый control entry/alternate gateway, не проверенные здесь.
+
+
+Следующий native блок: [карта исходников, контракты и критерии](stage5-native-binding.ru.md).
+Native binding ещё не реализован; начинать с interop vectors, затем protected storage/ownership.
