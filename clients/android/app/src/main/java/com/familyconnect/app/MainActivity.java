@@ -27,6 +27,7 @@ public final class MainActivity extends Activity {
     private String pendingTransport="wg";
     private boolean busy=false;
     private final Runnable refresh=new Runnable(){public void run(){render();handler.postDelayed(this,500);}};
+    private TextView healthLabel;
     @Override public void onCreate(Bundle saved) {
         super.onCreate(saved);getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         try{selected=Transport.parse(getPreferences(MODE_PRIVATE).getString("transport","wg"));}catch(IllegalArgumentException ignored){}
@@ -37,6 +38,7 @@ public final class MainActivity extends Activity {
         ScrollView scroll=new ScrollView(this);scroll.setFillViewport(true);scroll.addView(content);setContentView(scroll);
         label(content,"FAMILY CONNECT",25,Color.rgb(102,219,192));label(content,getString(R.string.tagline),15,Color.LTGRAY);
         dot=label(content,"●",88,Color.GRAY);state=label(content,"",27,Color.WHITE);
+        healthLabel=label(content,"",14,Color.LTGRAY);
         label(content,getString(R.string.route),15,Color.LTGRAY);
         autoMode=new Switch(this);autoMode.setText("Auto · WG → AWG → TCP");autoMode.setTextColor(Color.WHITE);autoMode.setChecked(getPreferences(MODE_PRIVATE).getBoolean("auto",false));content.addView(autoMode);
         autoMode.setOnCheckedChangeListener((v,on)->{getPreferences(MODE_PRIVATE).edit().putBoolean("auto",on).apply();render();});
@@ -79,7 +81,8 @@ public final class MainActivity extends Activity {
         }
         boolean on=value.equals("on"),waiting=value.equals("connecting")||value.equals("cleanup-required");
         state.setText(on?R.string.on:waiting?R.string.connecting:R.string.off);
-        dot.setTextColor(on?Color.rgb(102,219,192):Color.GRAY);toggle.setText(on||waiting?R.string.disconnect:R.string.connect);
+        healthLabel.setText(!on?"":getString(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.health_checking));
+        dot.setTextColor(on?(ConnectionService.healthStatus.equals("unavailable")?Color.rgb(232,180,80):Color.rgb(102,219,192)):Color.GRAY);toggle.setText(on||waiting?R.string.disconnect:R.string.connect);
         boolean available=store.exists();if(autoMode.isChecked()){available=false;for(Transport t:Transport.values())available|=new ProfileStore(this,t).exists();}
         autoMode.setEnabled(!busy&&!on&&!waiting);toggle.setEnabled(!busy&&(on||waiting||available));transportPicker.setEnabled(!busy&&!on&&!waiting);importButton.setEnabled(!busy&&!on&&!waiting);
         forgetButton.setEnabled(!busy&&!on&&!waiting&&store.exists());checkButton.setEnabled(!busy&&on);
@@ -119,21 +122,25 @@ public final class MainActivity extends Activity {
     }
     private void checkIp(){
         busy=true;detail.setText(R.string.checking);render();
+        final long session=ConnectionService.sessionId;final String source=ConnectionService.vpnSource;
         worker.execute(()->{
             String result=getString(R.string.failed);
             HttpsURLConnection connection=null;
             try {
                 if(!ConnectionService.status.equals("on"))throw new IOException();
-                connection=(HttpsURLConnection)new URL("https://www.cloudflare.com/cdn-cgi/trace").openConnection();
+                VpnHealth binding=new VpnHealth(this);
+                android.net.Network network=binding.find(source);
+                if(network==null||session!=ConnectionService.sessionId)throw new IOException();
+                connection=(HttpsURLConnection)network.openConnection(new URL("https://www.cloudflare.com/cdn-cgi/trace"));
                 connection.setConnectTimeout(10000);connection.setReadTimeout(10000);connection.setInstanceFollowRedirects(false);
                 if(connection.getResponseCode()!=200)throw new IOException();
                 String ip="?",region="?";int total=0;
                 try(BufferedReader reader=new BufferedReader(new InputStreamReader(connection.getInputStream(),StandardCharsets.UTF_8))){
                     String line;while((line=reader.readLine())!=null){total+=line.length();if(total>4096)throw new IOException();if(line.startsWith("ip="))ip=line.substring(3);if(line.startsWith("loc="))region=line.substring(4);}
                 }
-                if(!ConnectionService.status.equals("on"))throw new IOException();result="IP: "+ip+" · "+region;
+                if(!ConnectionService.status.equals("on")||session!=ConnectionService.sessionId||!network.equals(binding.find(source)))throw new IOException();result="IP: "+ip+" · "+region;
             }catch(Exception ignored){}finally{if(connection!=null)connection.disconnect();}
-            String message=result;runOnUiThread(()->{busy=false;detail.setText(message);render();});
+            String message=result;runOnUiThread(()->{busy=false;detail.setText(session==ConnectionService.sessionId&&ConnectionService.status.equals("on")?message:getString(R.string.failed));render();});
         });
     }
     @Override protected void onSaveInstanceState(Bundle saved){saved.putString("pendingTransport",pendingTransport);super.onSaveInstanceState(saved);}

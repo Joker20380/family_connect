@@ -53,6 +53,9 @@ jobs:
           target: google_apis
           disable-animations: true
           script: python3 -u pilot/android-awg/run.py
+      - name: Publish bounded Android runtime summary
+        if: always()
+        run: python3 pilot/android-awg/report_ci.py
       - name: Confirm control conformance on Android runtime
         run: python3 pilot/android-awg/report_control_ci.py
       - uses: actions/upload-artifact@v4
@@ -67,6 +70,7 @@ jobs:
             clients/android/app/build/reports/lint-results-debug.txt
             android-awg-*.log
             android-awg-apk.json
+            android-ci-summary.json
             android-tcp-*.log
             android-tcp-peer-result.json
   windows:

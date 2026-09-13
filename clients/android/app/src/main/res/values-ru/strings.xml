@@ -14,4 +14,7 @@
     <string name="notification">VPN Family Connect</string>
     <string name="permission_denied">Разрешение на VPN не предоставлено.</string>
     <string name="forget">Удалить сохранённый профиль</string>
+    <string name="health_checking">Проверка связи через VPN…</string>
+    <string name="health_ok">VPN отвечает</string>
+    <string name="health_unavailable">Нет ответа через VPN</string>
 </resources>

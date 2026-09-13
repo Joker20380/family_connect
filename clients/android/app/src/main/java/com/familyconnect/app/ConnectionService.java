@@ -8,6 +8,9 @@ import java.util.concurrent.*;
 public final class ConnectionService extends Service {
     static volatile String status="off",activeTransport="wg",requestedTransport="wg";
     static volatile boolean failed=false;
+    static volatile String healthStatus="off",vpnSource=null;
+    static volatile long sessionId=0;
+    private static final java.util.concurrent.atomic.AtomicLong sessionCounter=new java.util.concurrent.atomic.AtomicLong();
     private TunnelEngine engine;
     private final ScheduledExecutorService worker=Executors.newSingleThreadScheduledExecutor();
     private final Handler main=new Handler(Looper.getMainLooper());
@@ -28,10 +31,10 @@ public final class ConnectionService extends Service {
         worker.execute(()->{if(automatic)next();else try{start(Transport.parse(requestedTransport));}catch(Exception|LinkageError e){failed=true;cancel();stopConnection();}});
         return START_NOT_STICKY;
     }
-    private void cancel(){stopping=true;status="connecting";VpnHealth h=health;if(h!=null)h.cancel();}
+    private void cancel(){stopping=true;status="connecting";healthStatus="off";VpnHealth h=health;if(h!=null)h.cancel();}
     private void schedule(Runnable action,int seconds){if(!stopping&&!closing)pending=worker.schedule(action,seconds,TimeUnit.SECONDS);}
     private boolean cleanup(){
-        ++generation;if(pending!=null)pending.cancel(false);if(health!=null){health.cancel();health=null;}
+        ++generation;sessionId=sessionCounter.incrementAndGet();vpnSource=null;healthStatus="off";if(pending!=null)pending.cancel(false);if(health!=null){health.cancel();health=null;}
         try{if(engine!=null){engine.down();engine=null;}return true;}
         catch(Exception|LinkageError e){failed=true;stopping=true;status="cleanup-required";main.post(this::notifyState);return false;}
     }
@@ -52,21 +55,23 @@ public final class ConnectionService extends Service {
         String profile=ProfileValidator.validate(new ProfileStore(this,type).load(),type);
         if(stopping||closing){stopConnection();return;}
         activeTransport=type.id;status="connecting";main.post(this::notifyState);
-        if(automatic)source=type==Transport.TCP?"10.79.0.2":org.amnezia.awg.config.Config.parse(new java.io.ByteArrayInputStream(profile.getBytes(java.nio.charset.StandardCharsets.UTF_8))).getInterface().getAddresses().stream().filter(a->a.getAddress() instanceof java.net.Inet4Address).findFirst().orElseThrow(()->new IllegalArgumentException("IPv4 required")).getAddress().getHostAddress();
-        final long token=++generation;
+        source=type==Transport.TCP?"10.79.0.2":org.amnezia.awg.config.Config.parse(new java.io.ByteArrayInputStream(profile.getBytes(java.nio.charset.StandardCharsets.UTF_8))).getInterface().getAddresses().stream().filter(a->a.getAddress() instanceof java.net.Inet4Address).findFirst().orElseThrow(()->new IllegalArgumentException("IPv4 required")).getAddress().getHostAddress();
+        final long token=++generation;sessionId=sessionCounter.incrementAndGet();vpnSource=source;healthStatus="checking";
         engine=TunnelEngine.create(this,type,up->{if(!up&&token==generation&&!stopping&&!closing){cancel();worker.execute(this::stopConnection);}});
         engine.up(profile);
         if(stopping||closing){stopConnection();return;}
-        if(automatic){health=new VpnHealth(this);schedule(()->probe(token),1);}
-        else{status="on";main.post(this::notifyState);}
+        health=new VpnHealth(this);schedule(()->probe(token),1);
+        if(!automatic){status="on";main.post(this::notifyState);}
     }
     private void probe(long token){
         if(token!=generation||stopping||closing)return;
         boolean good=health.check(source);
         if(token!=generation||stopping||closing)return;
-        if(policy.advance(good)){next();return;}
-        if(good){status="on";main.post(this::notifyState);}
-        schedule(()->probe(token),good?15:1);
+        healthStatus=good?"ok":"unavailable";
+        if(automatic&&policy.advance(good)){next();return;}
+        if(good||!automatic)status="on";
+        main.post(this::notifyState);
+        schedule(()->probe(token),good?15:automatic?1:5);
     }
     private void stopConnection(){if(cleanup())main.post(()->{if(!closing)stopSelf();});}
     private Notification notification(){
@@ -75,7 +80,7 @@ public final class ConnectionService extends Service {
         PendingIntent open=PendingIntent.getActivity(this,0,new Intent(this,MainActivity.class),PendingIntent.FLAG_IMMUTABLE|PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent stop=PendingIntent.getService(this,1,new Intent(this,ConnectionService.class).setAction("disconnect"),PendingIntent.FLAG_IMMUTABLE|PendingIntent.FLAG_UPDATE_CURRENT);
         return new Notification.Builder(this,"vpn").setSmallIcon(R.drawable.ic_shield).setContentTitle(getString(R.string.notification))
-            .setContentText((automatic?"AUTO · ":"")+activeTransport.toUpperCase(java.util.Locale.ROOT)+" · "+getString(status.equals("on")?R.string.on:R.string.connecting)).setContentIntent(open)
+            .setContentText((automatic?"AUTO · ":"")+activeTransport.toUpperCase(java.util.Locale.ROOT)+" · "+getString(status.equals("on")?(healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.on):R.string.connecting)).setContentIntent(open)
             .setOngoing(true).addAction(new Notification.Action.Builder(null,getString(R.string.disconnect),stop).build()).build();
     }
     private void notifyState(){if(!closing)getSystemService(NotificationManager.class).notify(1,notification());}

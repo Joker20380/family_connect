@@ -14,4 +14,7 @@
     <string name="notification">Family Connect VPN</string>
     <string name="permission_denied">VPN permission was not granted.</string>
     <string name="forget">Remove saved profile</string>
+    <string name="health_checking">Checking VPN response…</string>
+    <string name="health_ok">VPN responds</string>
+    <string name="health_unavailable">No response through VPN</string>
 </resources>
