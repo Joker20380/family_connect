@@ -277,6 +277,7 @@ class Driver:
     def profiles(self): return list(self.inventory.items())
     def active(self, ident): return ident in self.live
     def healthy(self, ident): return ident in self.live
+    def control_healthy(self, ident, expected): return self.healthy(ident)
     def connect(self, ident): self.live.add(ident)
     def disconnect(self, ident): self.live.discard(ident)
     def import_profile(self, path):
@@ -429,7 +430,7 @@ def test_real_backend_methods_are_application_boundary(environment, monkeypatch)
     e = environment
     simulated = Driver()
     calls = []
-    for name in ('profiles', 'active', 'healthy', 'connect', 'disconnect', 'import_profile'):
+    for name in ('profiles', 'active', 'healthy', 'control_healthy', 'connect', 'disconnect', 'import_profile'):
         method = getattr(simulated, name)
         def observed(self, *args, _name=name, _method=method):
             calls.append(_name)
@@ -438,7 +439,7 @@ def test_real_backend_methods_are_application_boundary(environment, monkeypatch)
     adapter = BackendApplication(LinuxTCP(), e.device)
     core = ProvisioningCore(journal=e.journal, application=adapter, device=e.device, clock=lambda: 1000)
     assert core.receive(e.raw) == 'COMMITTED'
-    assert {'profiles', 'active', 'import_profile', 'disconnect', 'connect', 'healthy'} <= set(calls)
+    assert {'profiles', 'active', 'import_profile', 'disconnect', 'connect', 'control_healthy'} <= set(calls)
     assert state(e)['committed']['applied_at'] == 1000
     assert state(e)['committed']['runtime']['active'] == list(simulated.live)
 
@@ -461,7 +462,7 @@ def test_gui_blocked_until_control_journal_recovery(environment,monkeypatch,phas
     e=environment
     monkeypatch.setattr(backend,'operation_directory',lambda:e.journal.path.parent/'operations')
     simulated=Driver()
-    for name in ('profiles','active','healthy','connect','disconnect','import_profile'):
+    for name in ('profiles','active','healthy','control_healthy','connect','disconnect','import_profile'):
         method=getattr(simulated,name)
         monkeypatch.setattr(backend.LinuxTCP,name,lambda self,*a,_method=method:_method(*a))
     driver=backend.LinuxTCP()
@@ -520,3 +521,50 @@ def test_recovery_cli_reports_failed_rollback(environment, monkeypatch, capsys):
     assert error.value.code == 1
     assert json.loads(capsys.readouterr().out)['result'] == 'FAILED'
     assert state(e)['phase'] == 'ROLLING_BACK' and state(e)['staged'] is not None
+
+
+@pytest.mark.parametrize('fails_on', [1, 2])
+def test_control_traffic_failure_never_commits_active_wg(environment, fails_on):
+    e = environment
+    driver = Driver()
+    probes = []
+    def traffic(ident, expected):
+        assert driver.active(ident)
+        assert expected == e.payload['gateways'][0]['endpoint']
+        probes.append(ident)
+        return len(probes) < fails_on
+    driver.control_healthy = traffic
+    application = BackendApplication(driver, e.device)
+    # Real application boundary with a controlled traffic result. The carrier
+    # core fixture has no host arbiter, so drive its journal directly here.
+    class Boundary(BackendApplication):
+        from contextlib import contextmanager
+        @contextmanager
+        def transaction(self, journal):
+            yield
+        def reserve(self): pass
+    core = ProvisioningCore(journal=e.journal, application=Boundary(driver, e.device),
+        device=e.device, clock=lambda:1000)
+    assert core.receive(e.raw) == 'ROLLED_BACK'
+    assert driver.live == {driver.baseline}
+    record = state(e)
+    assert record['committed'] is None and record['phase'] == 'IDLE' and record['floor'] == 1
+    assert len(probes) == fails_on
+
+
+def test_control_standalone_wg_requires_bound_https(monkeypatch):
+    from pathlib import Path
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1]/'clients/desktop'))
+    from backend import LinuxTCP, BackendError
+    driver = LinuxTCP()
+    monkeypatch.setattr(driver, 'healthy', lambda _: True)
+    monkeypatch.setattr(driver, '_nm_active', lambda _: True)
+    calls = []
+    def failed(ident, expected):
+        calls.append((ident, expected))
+        raise BackendError('traffic failed')
+    monkeypatch.setattr(driver, '_probe', failed)
+    assert driver.control_healthy('wg-profile', '185.251.89.19') is False
+    assert calls == [('wg-profile', '185.251.89.19')]
+    monkeypatch.setattr(driver, '_probe', lambda *_: None)
+    assert driver.control_healthy('wg-profile', '185.251.89.19') is True

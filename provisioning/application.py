@@ -20,6 +20,7 @@ class BackendApplication:
     def __init__(self, driver, device):
         self.driver, self.device = driver, device
         self.current = None
+        self.current_endpoint = None
 
     @contextmanager
     def transaction(self, journal):
@@ -77,17 +78,21 @@ class BackendApplication:
     def apply(self, verified, baseline):
         baseline = self._snapshot(baseline)
         self.current = None
+        self.current_endpoint = None
         # Import is inactive in all existing Linux drivers. Snapshot was durably
         # recorded first, so crash during an import is recoverable without its ID.
         candidates = [self._install(profile) for profile in verified.state.transport_profiles]
         for ident in baseline['active']:
             if self.driver.active(ident):
                 self.driver.disconnect(ident)
-        for ident in candidates:
+        gateways = {gateway.gateway_id: gateway.endpoint for gateway in verified.state.gateways}
+        for ident, profile in zip(candidates, verified.state.transport_profiles):
+            endpoint = gateways[profile.gateway_id]
             try:
                 self.driver.connect(ident)
-                if self.driver.healthy(ident):
+                if self.driver.control_healthy(ident, endpoint):
                     self.current = ident
+                    self.current_endpoint = endpoint
                     return
             except Exception:
                 # Authorization cancellation must stop this operation, not advance
@@ -100,7 +105,8 @@ class BackendApplication:
         raise RuntimeError('configuration health failed')
 
     def healthy(self, verified):
-        return self.current is not None and self.driver.healthy(self.current) is True
+        return (self.current is not None and self.current_endpoint is not None and
+                self.driver.control_healthy(self.current, self.current_endpoint) is True)
 
     def rollback(self, staged, previous, baseline):
         expired = baseline.get('expired_active', [])

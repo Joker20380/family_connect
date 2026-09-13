@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "real RNS commit1 and ACK, GUI selected active imported profile"
+  ],
+  "passed": false,
+  "failure_category": "BackendError",
+  "inactive_imports_retained": 1,
+  "cleanup": [
+    "all VPN inactive; original profiles retained; IPv4/IPv6 rules restored"
+  ]
+}

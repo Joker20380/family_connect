@@ -1,5 +1,15 @@
 # Linux GUI/control preview — план ручного пилота
 
+**Последний результат:** исправленный bundle66152538ee2a4f3e прошёл живой Linux
+пилот config2/3 с MTU1280, crash/recover, ACK и GUI Disconnect/close.
+[Точное состояние и границы](releases/2026-09-13-linux-control-pilot-pass.ru.md).
+Remote CI correction ещё открыта; старый bundle ниже сохраняется как историческая запись.
+
+**Обновление13.09:** живой пилот выявил active-only health для standalone WG.
+Прежний принятый bundle не использовать для нового live apply. Исправленный bundle
+66152538ee2a4f3e прошёл412 локальных тестов; network/crash acceptance ещё открыта.
+См. [живой результат и текущее состояние](releases/2026-09-13-linux-control-live.ru.md).
+
 Приёмка исходника: `247d16b` в ветке `stage5-linux-control-preview`.
 Это отдельный operator preview, не stable update. Установка по этому документу
 не переключает `~/.local/share/family-connect/current` и не публикует каталог.

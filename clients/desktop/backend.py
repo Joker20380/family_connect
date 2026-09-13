@@ -276,6 +276,19 @@ class Linux:
         probe_interface(interface,expected)
     def supports_recovery(self,ident):
         return ident in self._awg_records() or self._fallback(ident) is not None
+    def control_healthy(self,ident,expected):
+        """A control commit requires traffic health even for standalone NM WG.
+
+        The expected gateway comes from the verified configuration. Existing
+        AWG/TCP health stays in its transport implementation; NM WG additionally
+        proves interface-bound HTTPS egress instead of only reporting active.
+        """
+        if not self.healthy(ident):return False
+        if self._nm_active(ident):
+            try:self._probe(ident,expected)
+            except (BackendError,subprocess.TimeoutExpired):return False
+        return True
+
     def healthy(self,ident):
         records=self._awg_records();fallback=self._fallback(ident)
         awg=ident if ident in records else fallback

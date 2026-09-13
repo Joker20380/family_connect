@@ -1,5 +1,55 @@
 # Current state / Текущее состояние
 
+## Linux paired live pilot passed — 2026-09-13
+
+Corrected bundle66152538ee2a4f3e passed real RNS config2 apply/ACK, GTK selection,
+interface-bound HTTPS gateway egress and DNS. Config3 process death after actual
+apply preserved pending ownership; recover restored config2 and HTTPS. Duplicate3
+returned ROLLED_BACK with ACK delivery; real GUI Disconnect/close and exact IPv4/6
+policy-rule cleanup passed. Final journal IDLE/floor3/committed2/outbox0; pending=null.
+Three pilot imports now retained inactive; installed Linux0.2.8 unchanged.
+Packet metadata disproved the earlier inference of TCP setup failure: handshake and
+client payload reached gateway; large response ranges failed to reach the laptop.
+MTU1280 worked and was signed into config2/3, but restored1420 also passed once:
+location/cause of size-sensitive loss and long-term stability remain unproven (TD-1).
+Local412 tests and corrected package manifest previously passed; no new remote CI,
+release, install or server mutation. Next: scoped CI for the health correction, then
+native Windows/Android Stage5 binding. Local relay does not close independent Stage6.
+[Packet evidence and live acceptance](releases/2026-09-13-linux-control-pilot-pass.ru.md).
+
+## Live Linux pilot: traffic gate correction — 2026-09-13
+
+Real RNS config1 applied, ACK delivered and paired GTK selected the active imported
+WG profile. Independent bound HTTPS then failed; pilot stopped before crash recovery.
+Bounded diagnosis: direct IPv4 HTTPS passed; both default/IPv4 TUN HTTPS timed out
+before TCP connect, interface DNS passed. Cause is not established.
+Cleanup passed: all VPN inactive, existing profiles preserved, IPv4/IPv6 policy rules
+restored. One inactive pilot import retained. Journal IDLE/floor1/committed revision1:
+old active-only health caused this commit; do not treat it as network acceptance.
+Fixed control WG health to require interface-bound HTTPS/expected gateway egress
+before candidate selection and commit. Local412 Python passed (including extracted
+package); new bundle66152538ee2a4f3e manifest verified. No remote CI/release/install.
+Next: request-to-flow diagnosis of WG HTTPS, then corrected bundle live acceptance
+and crash/rollback/GUI return. Never reuse old accepted preview for live config apply.
+Keep permanent identity/journal and issue higher revisions; no state reset.
+[Live result, fix and limits](releases/2026-09-13-linux-control-live.ru.md).
+
+## Registered Linux control pilot — 2026-09-13
+
+User requested preparation of the permanent registration and trusted relay.
+Prepared private `state-enroll/control-linux-pilot`: permanent device/relay identities,
+real API enrollment, explicit local RNS configs, journal and offline-signed envelope1.
+Real two-process RNS delivery with the extracted accepted bundle passed; signature,
+device binding and byte equality verified. Journal remains IDLE/floor0; no VPN apply.
+One isolated gateway peer10.77.0.252/32 installed by the periodic worker; three prior
+WG peers preserved. Gateway lease expires 2026-09-13T08:43:59+00:00;
+envelope expires 2026-09-13T08:40:14+00:00. Registration is retained for reuse.
+Relay was stopped after the check. Local relay is not Stage6 independent ingress.
+Next: bounded paired GUI/control apply, independent traffic health, recovery/return.
+If expired, renew the gateway lease and issue/publish a higher signed revision using
+the same identity/journal; never reset state. Native Windows/Android binding follows.
+[Preparation and evidence](releases/2026-09-13-linux-control-resume.ru.md).
+
 ## Paired preview acceptance — 2026-09-13
 
 Local409 Python passed, including66 extracted protocol/arbiter scenarios. Scoped

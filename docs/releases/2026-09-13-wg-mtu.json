@@ -1,0 +1,35 @@
+{
+  "original_mtu": "0",
+  "probes": [
+    {
+      "configured_mtu": "0",
+      "actual_mtu": "1420",
+      "code": 28,
+      "egress_gateway": false,
+      "timings": "000 0.000000 0.000000 3.001859"
+    },
+    {
+      "configured_mtu": "1280",
+      "actual_mtu": "1280",
+      "code": 0,
+      "egress_gateway": true,
+      "timings": "200 0.136680 0.275996 0.415101"
+    },
+    {
+      "configured_mtu": "0",
+      "actual_mtu": "1420",
+      "code": 0,
+      "egress_gateway": true,
+      "timings": "200 0.135574 0.282775 0.383399"
+    },
+    {
+      "configured_mtu": "1280",
+      "actual_mtu": "1280",
+      "code": 0,
+      "egress_gateway": true,
+      "timings": "200 0.122252 0.257800 0.386312"
+    }
+  ],
+  "cleanup": true,
+  "original_mtu_restored": true
+}
