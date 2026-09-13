@@ -89,3 +89,12 @@ Desktop0.2.9/catalog8 и Android0.1.0/code1 без изменений; Linux0.2.
 Полная Python regression:462 passed,2 прежних deprecation warnings,9.68s.
 Оба operator scripts прошли py_compile; nft --check выполнен на gateway до активации.
 Новая удалённая CI не заявляется: acceptance — реальный сетевой пилот и локальная regression.
+
+## Git checkpoint
+
+Acceptance source `42350bcc4d722bc0d57c4142993c3d91600ed843`, рабочая ветка stage5-linux-control-preview.
+Проверочный harness использует session helper `/tmp/fc-amsterdam-ssh` для
+перезапуска сервера через владельца локального state; перед повторным запуском
+нужно восстановить этот scoped SSH helper и проверить key-only доступ. Это
+operator harness, не установленный клиентский сервис. Его private state и
+выходные JSON не следует подменять fixture keys из conformance corpus.

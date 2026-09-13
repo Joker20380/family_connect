@@ -235,5 +235,6 @@
   "harness_syntax_checked": true,
   "harness_sha256": "e5938b0d5fdf056f2de20e1400410d3708294be3477c82ee6d7e599913565362",
   "source_base": "5d34b080d19f5d562db44ff90f2ee6ae2bb08a79",
-  "standard_ssh_key_login_verified": true
+  "standard_ssh_key_login_verified": true,
+  "acceptance_source": "42350bcc4d722bc0d57c4142993c3d91600ed843"
 }
