@@ -3,9 +3,9 @@ on:
   push:
     branches: ['**']
     tags: ['v*']
-    paths: ['clients/**', '.github/workflows/clients.yml', 'scripts/package_desktop.py', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/android-tcp/**']
+    paths: ['clients/**', '.github/workflows/clients.yml', 'scripts/package_desktop.py', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
   pull_request:
-    paths: ['clients/**', '.github/workflows/clients.yml', 'scripts/package_desktop.py', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/android-tcp/**']
+    paths: ['clients/**', '.github/workflows/clients.yml', 'scripts/package_desktop.py', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
   workflow_dispatch:
 concurrency:
   group: family-connect-clients-${{ github.ref }}

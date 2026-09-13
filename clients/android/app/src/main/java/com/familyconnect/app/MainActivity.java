@@ -40,7 +40,7 @@ public final class MainActivity extends Activity {
         label(content,getString(R.string.route),15,Color.LTGRAY);
         autoMode=new Switch(this);autoMode.setText("Auto · WG → AWG → TCP");autoMode.setTextColor(Color.WHITE);autoMode.setChecked(getPreferences(MODE_PRIVATE).getBoolean("auto",false));content.addView(autoMode);
         autoMode.setOnCheckedChangeListener((v,on)->{getPreferences(MODE_PRIVATE).edit().putBoolean("auto",on).apply();render();});
-        transportPicker=new Spinner(this);transportPicker.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,new String[]{"WireGuard","AmneziaWG 2","TCP · REALITY"}));
+        transportPicker=new Spinner(this);transportPicker.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,new String[]{"WireGuard","AmneziaWG 3.1","TCP · REALITY"}));
         transportPicker.setSelection(selected.ordinal());content.addView(transportPicker);
         transportPicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onNothingSelected(AdapterView<?> parent){}

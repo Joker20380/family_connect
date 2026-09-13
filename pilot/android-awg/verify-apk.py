@@ -5,6 +5,10 @@ root=Path(__file__).resolve().parents[2]
 apk=root/'clients/android/app/build/outputs/apk/debug/app-debug.apk'
 with zipfile.ZipFile(apk) as z:
  manifest=json.loads(z.read('assets/awg-build.json'))
+ assert manifest['transport_version']=='3.1'
+ assert manifest['engine_revision']=='b5928efb6ca19f0153958460c3d141f04abc5c2e'
+ assert manifest['engine_patch_sha256']==hashlib.sha256((root/'pilot/awg31/patches/0001-refresh-s4-after-tun-read.patch').read_bytes()).hexdigest()
+ assert manifest['interface_patch_sha256']==hashlib.sha256((root/'pilot/android-awg/awg31-interface.patch').read_bytes()).hexdigest()
  assert set(manifest['abis'])=={'arm64-v8a','armeabi-v7a','x86','x86_64'}
  for abi,digest in manifest['abis'].items():
   assert hashlib.sha256(z.read('lib/'+abi+'/libfc-awg.so')).hexdigest()==digest

@@ -1,5 +1,18 @@
 # Working plan / Рабочий план
 
+## Android AWG3.1 integration in progress — 2026-09-13
+
+User requested AWG3.1 after Android WG handshake succeeded but WhatsApp call failed;
+web/DNS acceptance on the physical phone remains unconfirmed. This is not proof of
+a general WireGuard block. Android native pin moving to b5928ef + existing S4 patch.
+Manual profiles add HeaderProtectionKey, ContentPaddingAddition, RandomTrailers and
+DisableCookies with bounded validation and wrapper UAPI conversion. Custom timings
+and signed Reticulum schema3.1 remain unsupported. Version0.1.1-beta02/code2 prepared
+in source; no new APK delivered yet. Next gates: JVM/lint, native4ABI build, Android
+emulator encrypted traffic/lifecycle, separate Amsterdam AWG endpoint and live smoke,
+then beta signing and physical-phone acceptance. Existing WG remains available.
+See [integration evidence](releases/2026-09-13-android-awg31.ru.md).
+
 ## Android-first technical beta01 prepared — 2026-09-13
 
 User selected Android for initial testers. Accepted CI34758085225 APK downloaded;

@@ -17,7 +17,7 @@ public class AwgRuntimeTest {
     final Context context=InstrumentationRegistry.getInstrumentation().getTargetContext();
     static String profile(Transport type){
         String address=type==Transport.WG?"10.77.0.4/32, fd77:92::4/128":"10.78.0.4/32, fd78:92::4/128";
-        String awg=type==Transport.WG?"":"Jc = 3\nJmin = 40\nJmax = 80\nS1 = 17\nS2 = 29\nS3 = 3\nS4 = 9\nH1 = 1001-1010\nH2 = 2001-2010\nH3 = 3001-3010\nH4 = 4001-4010\nI1 = <b 0x11223344><r 16>\n";
+        String awg=type==Transport.WG?"":"Jc = 3\nJmin = 40\nJmax = 80\nS1 = 16\nS2 = 16\nS3 = 16\nS4 = 16\nH1 = 1\nH2 = 2\nH3 = 3\nH4 = 4\nHeaderProtectionKey = AwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwM=\nContentPaddingAddition = 0-32\nRandomTrailers = true\nDisableCookies = false\nI1 = <b 0x11223344><r 16>\n";
         return "[Interface]\nPrivateKey = AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE=\nAddress = "+address+"\nDNS = 1.1.1.1\nMTU = 1280\n"+awg+"[Peer]\nPublicKey = zo060cy2M+x7cMF4FKXHbs0CloUFDTRHRboFhw5YfVk=\nEndpoint = 10.0.2.2:"+(type==Transport.WG?51820:51821)+"\nAllowedIPs = 0.0.0.0/0, ::/0\nPersistentKeepalive = 25\n";
     }
     void shell(String command)throws Exception{try(ParcelFileDescriptor fd=InstrumentationRegistry.getInstrumentation().getUiAutomation().executeShellCommand(command);InputStream in=new ParcelFileDescriptor.AutoCloseInputStream(fd)){while(in.read()!=-1){}}}

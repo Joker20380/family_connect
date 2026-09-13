@@ -7,7 +7,7 @@ sys.path.insert(0,str(r/'pilot/android-tcp'))
 from fixture import peers
 try:
  for awg,port in [(False,51820),(True,51821)]:
-  params='jc=3\njmin=40\njmax=80\ns1=17\ns2=29\ns3=3\ns4=9\nh1=1001-1010\nh2=2001-2010\nh3=3001-3010\nh4=4001-4010\ni1=<b 0x11223344><r 16>\n' if awg else ''
+  params='jc=3\njmin=40\njmax=80\ns1=16\ns2=16\ns3=16\ns4=16\nh1=1\nh2=2\nh3=3\nh4=4\nheader_protection_key=0303030303030303030303030303030303030303030303030303030303030303\ncontent_padding_addition=0-32\nrandom_trailers=true\ndisable_cookies=false\ni1=<b 0x11223344><r 16>\n' if awg else ''
   address='10.78.0.4/32\nallowed_ip=fd78:92::4/128' if awg else '10.77.0.4/32\nallowed_ip=fd77:92::4/128'
   config='private_key='+'02'*32+'\nlisten_port='+str(port)+'\n'+params+'public_key=a4e09292b651c278b9772c569f5fa9bb13d906b46ab68c9df9dc2b4409f8a209\nallowed_ip='+address+'\n\n'
   peer=subprocess.Popen([str(r/'clients/android/awg-generated'/('peer-fixture' if awg else 'wg-peer-fixture'))],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True,env=os.environ|{"FC_PEER_DROP_FILE":str(r/("android-auto-awg.drop" if awg else "android-auto-wg.drop"))});processes.append(peer)
