@@ -144,3 +144,70 @@ def test_signed_non_text_payloads_rejected(pair,payload):
     raw=bob.address+alice.address+alice.identity.sign(hashed+hashlib.sha256(hashed).digest())+body
     with pytest.raises(ValueError):bob.receive(raw)
     assert not bob.store.messages()
+
+
+def test_relay_acceptance_is_distinct_and_stale_callbacks_cannot_change_it(pair):
+    alice,bob,_,_=pair
+    ident=alice.queue(bob.address,'offline')
+    token,raw=alice.store.begin_attempt(ident)
+    assert alice.store.finish_attempt(ident,token,delivered=False,relayed=True)
+    assert alice.store.messages()[0]['status']=='relayed'
+    assert not alice.store.finish_attempt(ident,token,delivered=True)
+    retry,repeated=alice.store.begin_attempt(ident)
+    assert repeated==raw
+    assert not alice.store.finish_attempt(ident,token,delivered=False)
+    assert alice.store.finish_attempt(ident,retry,delivered=True)
+
+
+def test_relay_requires_explicit_node_without_spending_attempt(pair):
+    alice,bob,_,_=pair
+    ident=alice.queue(bob.address,'offline')
+    class Router:
+        def get_outbound_propagation_node(self):return None
+    with pytest.raises(ValueError):alice.send(Router(),None,ident,via_relay=True)
+    assert alice.store.messages()[0]['status']=='queued'
+
+
+@pytest.mark.parametrize('case',['valid','unknown_contact','storage_error','cancel','wrong_ciphertext'])
+def test_mailbox_deletion_requires_verified_commit(pair,monkeypatch,case):
+    import threading
+    from types import SimpleNamespace
+    from messenger.mailbox import Mailbox,MailboxError
+    alice,bob,_,_=pair
+    raw=codec.pack(alice.identity,bob.public,'save before purge')
+    blob=bob.address+bob.identity.encrypt(raw[16:])
+    transient=RNS.Identity.full_hash(blob)
+    source=SimpleNamespace(hash=bob.address,direction=RNS.Destination.IN,decrypt=bob.identity.decrypt)
+    mailbox=Mailbox(bob,source,RNS.Identity().get_public_key())
+    calls=[];closed=[]
+    class Link:
+        ACTIVE=2;CLOSED=4
+        def __init__(self,destination,established_callback):
+            self.status=self.ACTIVE;established_callback(self)
+        def identify(self,identity):pass
+        def teardown(self):closed.append(True)
+    monkeypatch.setattr(RNS,'Link',Link)
+    monkeypatch.setattr(RNS.Transport,'has_path',lambda _:True)
+    def request(link,data,deadline,cancel):
+        calls.append(data)
+        if data==[None,None]:return [transient]
+        if data[0]==[transient]:
+            return [blob if case!='wrong_ciphertext' else blob[:-1]+bytes([blob[-1]^1])]
+        assert bob.store.messages()[0]['text']=='save before purge'
+        return []
+    monkeypatch.setattr(mailbox,'_request',request)
+    if case=='unknown_contact':monkeypatch.setattr(bob,'contacts',lambda:{})
+    if case=='storage_error':
+        def unavailable(*args,**kwargs):raise OSError('synthetic storage failure')
+        monkeypatch.setattr(bob.store,'add',unavailable)
+    cancel=threading.Event()
+    if case=='cancel':cancel.set()
+    if case in ('storage_error','cancel','wrong_ciphertext'):
+        with pytest.raises((OSError,MailboxError)):mailbox.sync(cancel=cancel)
+        assert len(calls)<=2
+    else:
+        result=mailbox.sync()
+        if case=='valid':assert result.stored==result.purged==1 and len(calls)==3
+        else:assert result.rejected==1 and result.purged==0 and len(calls)==2
+    assert not mailbox._busy.locked()
+    assert closed==([] if case=='cancel' else [True])

@@ -132,14 +132,16 @@ class Store:
             self._put(ident, message)
             return token, bytes.fromhex(message['packed'])
 
-    def finish_attempt(self, message_id, token, *, delivered):
+    def finish_attempt(self, message_id, token, *, delivered, relayed=False):
+        if delivered and relayed:
+            raise ValueError('Relay acceptance is not recipient delivery')
         with self._lock, self._db:
             ident = 'message:' + message_id
             message = self._get(ident)
             if (message is None or message['status'] != 'sending' or message['attempt'] != token
                     or not token.startswith(self.epoch + ':')):
                 return False
-            message.update(status='delivered' if delivered else 'queued', attempt=None)
+            message.update(status='delivered' if delivered else 'relayed' if relayed else 'queued', attempt=None)
             self._put(ident, message)
             return True
 

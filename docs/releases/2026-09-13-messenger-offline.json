@@ -1,0 +1,56 @@
+{
+  "date": "2026-09-13",
+  "base": "d77b22217abd5f017428d32c650865b0c7a10b27",
+  "pins": {
+    "lxmf": "1.1.1",
+    "rns": "1.5.1",
+    "cryptography": "46.0.7"
+  },
+  "changes": [
+    "propagated_send_relayed_status",
+    "bounded_mailbox_pull",
+    "store_before_purge"
+  ],
+  "checks": {
+    "combined": {
+      "passed": 516,
+      "warnings": 2,
+      "seconds": 53.71
+    },
+    "messenger_count": 26,
+    "offline_focused": {
+      "passed": 3,
+      "seconds": 41.4
+    },
+    "core_mailbox_focused": {
+      "passed": 22,
+      "seconds": 0.34
+    }
+  },
+  "acceptance": [
+    "recipient_offline",
+    "node_restart",
+    "recipient_restart",
+    "deny_then_allow",
+    "storage_error_preserves_spool",
+    "dedupe",
+    "purge_after_commit",
+    "quota_cleaner",
+    "synthetic_30_day_expiry"
+  ],
+  "spool_limit_bytes": 64000,
+  "pow_cost": 13,
+  "pow_workers": 1,
+  "apk_packaged": false,
+  "deployed": false,
+  "remote_ci": "skip ci to prevent client packaging",
+  "open": [
+    "upload_admission_control",
+    "hard_disk_quota",
+    "server_service_lifecycle",
+    "Android_keystore_ui",
+    "automatic_sync",
+    "application_ack",
+    "TCP_adverse_network_measurements"
+  ]
+}

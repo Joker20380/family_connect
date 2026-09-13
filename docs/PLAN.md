@@ -1,5 +1,19 @@
 # Working plan / Рабочий план
 
+## Offline messenger delivery and commit-before-purge — 2026-09-13
+
+LXMF1.1.1/RNS1.5.1: explicit propagated send with relayed status; new bounded
+Mailbox pull stores verified text before requesting node deletion. Fresh links,
+trusted node public key, cancellation, duplicate-safe retry and download limits.
+Three-process loopback acceptance passed: recipient offline, node restart, denied
+fetch, injected storage failure preserving spool, retry, recipient restart/dedupe,
+quota cleanup, aged-record expiry and explicit purge after durable commit.
+Combined local suite516 passed/2 existing warnings (53.71s), including26 messenger
+checks. No APK/version/server changes. Remaining: anonymous upload admission limits,
+hard disk quotas and service lifecycle before Amsterdam; Android Keystore/UI,
+automatic sync, application delivery ACK and TCP adverse-network measurements.
+[Evidence and limitations](releases/2026-09-13-messenger-offline.ru.md).
+
 ## Transport reliability and messenger text core — 2026-09-13
 
 User paused additional APK packaging; continue transport/messenger source work.

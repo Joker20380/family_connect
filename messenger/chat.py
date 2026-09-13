@@ -36,14 +36,18 @@ class Chat:
         return self.store.add(message, raw, outgoing=False)
 
     def attach(self, router):
-        """Router must belong to this chat, with private storage and DIRECT only."""
+        """Router must belong to this chat and use private runtime storage."""
         source = router.register_delivery_identity(self.identity)
         if source is None:
             raise ValueError('Router already has a delivery identity')
         router.register_delivery_callback(lambda message: self.receive(message.packed))
         return source
 
-    def send(self, router, source, message_id):
+    def send(self, router, source, message_id, *, via_relay=False):
+        if type(via_relay) is not bool:
+            raise ValueError('Explicit relay selection required')
+        if via_relay and router.get_outbound_propagation_node() is None:
+            raise ValueError('A trusted propagation node must be configured first')
         token, raw = self.store.begin_attempt(message_id)
         try:
             peer = raw[:16]
@@ -51,12 +55,18 @@ class Chat:
             parsed = codec.unpack(raw, recipient=public, contacts={self.address: self.public})
             destination = RNS.Destination(codec.identity(public), RNS.Destination.OUT,
                                           RNS.Destination.SINGLE, 'lxmf', 'delivery')
-            message = LXMF.LXMessage(destination, source, parsed['text'], desired_method=LXMF.LXMessage.DIRECT)
+            method = LXMF.LXMessage.PROPAGATED if via_relay else LXMF.LXMessage.DIRECT
+            message = LXMF.LXMessage(destination, source, parsed['text'], desired_method=method)
             message.timestamp = parsed['timestamp']
             message.pack()
             if message.packed != raw:
                 raise ValueError('Retry changed signed message')
-            message.register_delivery_callback(lambda _: self.store.finish_attempt(message_id, token, delivered=True))
+            def completed(result):
+                delivered = result.state == LXMF.LXMessage.DELIVERED
+                relayed = via_relay and result.state == LXMF.LXMessage.SENT
+                if delivered or relayed:
+                    self.store.finish_attempt(message_id, token, delivered=delivered, relayed=relayed)
+            message.register_delivery_callback(completed)
             message.register_failed_callback(lambda _: self.store.finish_attempt(message_id, token, delivered=False))
             router.handle_outbound(message)
         except Exception:
