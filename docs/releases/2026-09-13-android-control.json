@@ -1,0 +1,124 @@
+{
+  "source": "24159206a661bc7cea31a8f19d7c57c19f5796a1",
+  "implementation_source": "75ceaaaad54ce41569ff833f6e41c78e35dc1a5a",
+  "package_source": "62f04b8f67310cd8248914d6180f378cd72d6615",
+  "manifest_sha256": "c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd",
+  "local": {
+    "jvm_methods": 2,
+    "configurations": 30,
+    "acknowledgements": 15,
+    "structure_refusals": 32,
+    "authenticated_cipher_refusals": 4,
+    "json_utf8_refusals": 12,
+    "python_passed": 462,
+    "python_warnings": 2,
+    "python_authenticated_cipher_refusals": 4
+  },
+  "android_runtime_accepted": true,
+  "ci": [
+    {
+      "id": 34750425189,
+      "name": "phase0",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "24159206a661bc7cea31a8f19d7c57c19f5796a1",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34750425189"
+    },
+    {
+      "id": 34750425107,
+      "name": "Client builds",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "24159206a661bc7cea31a8f19d7c57c19f5796a1",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34750425107"
+    }
+  ],
+  "client_jobs": [
+    {
+      "id": 103705904974,
+      "name": "linux",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 103705905034,
+      "name": "android",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 103705905077,
+      "name": "windows",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 103706931300,
+      "name": "release",
+      "status": "completed",
+      "conclusion": "skipped"
+    }
+  ],
+  "annotations": [
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Joker20380/family_connect/blob/24159206a661bc7cea31a8f19d7c57c19f5796a1/.github",
+      "start_line": 3,
+      "start_column": null,
+      "end_line": 3,
+      "end_column": null,
+      "annotation_level": "warning",
+      "title": "",
+      "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-go@v5, actions/setup-java@v4, actions/upload-artifact@v4, android-actions/setup-android@v3, gradle/actions/setup-gradle@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Joker20380/family_connect/blob/24159206a661bc7cea31a8f19d7c57c19f5796a1/.github",
+      "start_line": 18,
+      "start_column": null,
+      "end_line": 18,
+      "end_column": null,
+      "annotation_level": "notice",
+      "title": "Android control conformance",
+      "message": "30 configurations, 15 ACKs, 32 structure refusals, 4 authenticated-cipher refusals; strict JSON passed; manifest SHA256 c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Joker20380/family_connect/blob/24159206a661bc7cea31a8f19d7c57c19f5796a1/.github",
+      "start_line": 15,
+      "start_column": null,
+      "end_line": 15,
+      "end_column": null,
+      "annotation_level": "warning",
+      "title": "",
+      "message": "setup-java v4 is deprecated and will no longer receive updates. Please migrate to actions/setup-java@v5.",
+      "raw_details": ""
+    }
+  ],
+  "dependencies": {
+    "org.bouncycastle/bcprov-jdk18on": {
+      "version": "1.85.2",
+      "sha256": "986b0fb92ec10e0c66b43e036ce0077e6150cfaecd1db9fb92b56672e157afe5"
+    },
+    "com.google.code.gson/gson": {
+      "version": "2.13.2",
+      "sha256": "dd0ce1b55a3ed2080cb70f9c655850cda86c206862310009dcb5e5c95265a5e0"
+    }
+  },
+  "artifact_downloaded": false,
+  "native_journal": false,
+  "native_carrier": false,
+  "native_vpn_apply": false,
+  "rollout": "none",
+  "versions": {
+    "android": "0.1.0",
+    "android_code": 1,
+    "desktop": "0.2.9",
+    "catalog": 8,
+    "installed_linux": "0.2.8",
+    "gateway": "0.2.1",
+    "tcp": "0.1.0"
+  }
+}

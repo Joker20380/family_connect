@@ -35,7 +35,7 @@ runtime methods, они выполняются вместе с прежними3
 Manifest: `c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd`.
 Fixture keys/resources входят только в unit/instrumentation source sets; проверка
 основного APK дополнительно запрещает control-v1/ и TEST-ONLY assets.
-Android build/lint/emulator CI пока ожидаются. Full Python:462 passed,2 прежних deprecation warnings,9.73s.
+Android build/lint/emulator CI прошли на2415920; результаты ниже. Full Python:462 passed,2 прежних deprecation warnings,9.73s.
 Локальная проверка не собирает весь APK: generated native transport library здесь
 не подготовлена; полный build и emulator выполняет существующий Clients workflow.
 
@@ -54,3 +54,20 @@ Desktop0.2.9/catalog8, наблюдаемая installed Linux0.2.8, gateway0.2.1
 Нет установки, публикации, server mutation или main merge. Возврат — checkout
 293170a для development; device stores не менялись. Пользовательский телефон
 не нужен для текущей проверки протокола, реальные device/network gates впереди.
+
+## Итоговый CI checkpoint
+
+Source `24159206a661bc7cea31a8f19d7c57c19f5796a1` (implementation75ceaaa,
+licenses62f04b8): [Clients34750425107](https://github.com/Joker20380/family_connect/actions/runs/34750425107):
+linux:success, android:success, windows:success, release:skipped. [Phase034750425189](https://github.com/Joker20380/family_connect/actions/runs/34750425189) passed.
+Android runtime acceptance: True. Job103705905034, API35 x86_64;
+при успехе dedicated gate подтверждает2 ControlProtocolRuntimeTest methods,
+30 configurations+15 ACK+32 structure+4 authenticated-cipher refusals и strict JSON,
+а также точный manifest SHA256. Общее instrumentation включает прежние3 VPN methods.
+Предыдущие Clients runs75ceaaa/62f04b8 заменены новыми коммитами при доработке
+упаковки/crypto tests; их отмена не является runtime acceptance. Artifact APK
+локально не скачивался: build/library hashes и отсутствие fixtures проверяет CI.
+Отдельная сверка с Python подтвердила STRUCTURE для всех4 новых signed-cipher
+случаев; ключи только PUBLIC TEST ONLY, без journal/carrier.
+Данные сохранены в [машинной квитанции](2026-09-13-android-control.json), включая
+хеши локально использованных dependency jars. Проверка API26/других ABI остаётся.

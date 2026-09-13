@@ -1,17 +1,18 @@
 # Working plan / Рабочий план
 
-## Android Stage5 verifier — 2026-09-13
+## Android Stage5 verifier accepted — 2026-09-13
 
-Java verifier implemented for schema2 encrypted configurations and device-signed ACK.
-Local Gradle/JVM17:30 configurations,15 ACK,32 profile refusals,4 authenticated-cipher
-refusals and12 strict JSON/UTF8
-refusals passed against the pinned immutable manifest. Python462 passed.
-Android emulator CI pending.
-Shared runner is used by JVM and Android instrumentation; fixture assets are test-only.
-Next: complete Android CI, then protected Windows identity/journal/outbox and shared
-broker ownership. Native transcripts/carrier/application binding remain unimplemented.
-No release/install/catalog/server changes. Android0.1.0/code1; desktop0.2.9 unchanged.
-[Implementation and checks](releases/2026-09-13-android-control.ru.md).
+Source24159206a661bc7cea31a8f19d7c57c19f5796a1: Java schema2 configuration/ACK
+verifier, pinned BC1.85.2/Gson2.13.2 with APK licenses. Local JVM:30 configurations,
+15 ACK,32 structure+4 authenticated-cipher+12 JSON/UTF8 refusals passed; Python462.
+Clients34750425107: linux:success, android:success, windows:success, release:skipped.
+Phase034750425189 passed. Android runtime acceptance: True.
+Manifest SHA256 c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd.
+Fixtures confined to test assets; APK gate checks their absence and dependency licenses.
+Next: protected Windows identity/journal/outbox and shared broker ownership, then
+Android protected state. Native transcripts/carrier/VPN apply remain unimplemented.
+No release/install/catalog/server/main changes; Android0.1.0/code1 unchanged.
+[Implementation and CI receipts](releases/2026-09-13-android-control.ru.md).
 
 ## Windows Stage5 verifier accepted — 2026-09-13
 
