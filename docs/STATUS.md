@@ -1,5 +1,19 @@
 # Current state / Текущее состояние
 
+## AWG3.1 managed recovery prototype — 2026-09-13
+
+Three isolated repeats recovered server restart in3.7529/3.7665/3.7531s vs previous
+~16.1s automatic recovery. One pinned-profile reset each; healthy controls zero resets.
+Policy:3 consecutive failed probes, at most2 resets/invocation,10s cooldown,20s
+observation budget checked between callbacks; stop on cancellation/ownership loss.
+Focused7, full Python485 and Docker test-stage348 passed. No client/server deployment.
+Production broker lease/revision/expiry/disconnect integration remains the next step;
+H4 recovery,1CPU/PMTU/long-run and Amsterdam AWG acceptance remain open.
+[Measurements and limitations](releases/2026-09-13-awg31-managed-recovery.ru.md).
+[Own transport roadmap](own-transport-roadmap.ru.md): current RNS1.5.1 dependency is
+confirmed; an independent Reticulum replacement/new VPN wire protocol is a goal,
+not an implemented result. Existing control/journal work remains the foundation.
+
 ## AWG3.1 adverse-condition experiment — 2026-09-13
 
 Experiment2 adds strict u16 tools parsing: reject65536 instead of truncation;

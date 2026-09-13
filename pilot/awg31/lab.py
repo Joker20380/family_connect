@@ -58,7 +58,10 @@ def main():
         parser.add_argument("--" + name, required=True, type=Path)
     parser.add_argument("--repetitions", type=int, default=3, choices=range(1, 6))
     parser.add_argument("--resilience", action="store_true")
+    parser.add_argument("--managed-recovery", action="store_true")
     args = parser.parse_args()
+    if args.managed_recovery and not args.resilience:
+        parser.error("--managed-recovery requires --resilience")
     payload_size = 1024 * 1024 if args.resilience else 8 * 1024 * 1024
     if os.geteuid() != 0 or os.readlink("/proc/self/ns/net") == os.readlink("/proc/1/ns/net"):
         raise SystemExit("Run as root inside unshare --net; refusing the host namespace")
@@ -74,7 +77,7 @@ def main():
     client, server = f"ac{os.getpid()}", f"as{os.getpid()}"
     records = []
     print(json.dumps({"event": "start", "shaping_each_direction": "35ms,20mbit,no injected loss",
-                      "mtu": 1280, "payload_bytes": payload_size, "resilience": args.resilience,
+                      "mtu": 1280, "payload_bytes": payload_size, "resilience": args.resilience, "managed_recovery": args.managed_recovery,
                       "gomaxprocs_per_engine": 1,
                       "binaries": {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
                                    for p in (args.engine, args.awg, args.wg)}}), flush=True)
@@ -178,7 +181,7 @@ def main():
                             "two_engines_rss_bytes": rss if processes else None}
                         if args.resilience:
                             from resilience import postflight
-                            postflight(run, namespace, client, server, tool, args.engine, processes, private_dir, log, stop)
+                            postflight(run, namespace, client, server, tool, args.engine, processes, private_dir, log, stop, managed=args.managed_recovery)
                         records.append(record)
                         print(json.dumps(record), flush=True)
                     finally:

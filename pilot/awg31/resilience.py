@@ -84,7 +84,20 @@ def preflight(run, tool, namespace, client, server, directory):
     emit('loss_enabled', percent_each_direction=1, seeded=False)
 
 
-def postflight(run, namespace, client, server, tool, engine, processes, directory, log, stop):
+def postflight(run, namespace, client, server, tool, engine, processes, directory, log, stop, managed=False):
+    if managed:
+        from recovery import recover
+        import hashlib
+        cfg = Path(directory)/(client+'.conf')
+        pinned = hashlib.sha256(cfg.read_bytes()).digest()
+        def authorized():
+            return processes[0].poll() is None and hashlib.sha256(cfg.read_bytes()).digest() == pinned
+        def reset():
+            run([tool, 'setconf', client, cfg])
+        healthy = recover(lambda: ping(run).returncode == 0, reset, authorized)
+        if not healthy.healthy or healthy.resets:
+            raise RuntimeError('Healthy control must not reconfigure the peer')
+        emit('managed_healthy_control', resets=healthy.resets, seconds=healthy.elapsed)
     shape(run, namespace, 100)
     try:
         if ping(run).returncode == 0:
@@ -110,7 +123,15 @@ def postflight(run, namespace, client, server, tool, engine, processes, director
     run([tool, 'setconf', server, Path(directory)/(server+'.conf')], ns=namespace)
     run(['ip', 'addr', 'add', '10.90.0.1/24', 'dev', server], ns=namespace)
     run(['ip', 'link', 'set', server, 'mtu', '1280', 'up'], ns=namespace)
-    emit('server_process_restart', recovery_seconds=ready(run, timeout=30))
+    if managed:
+        outcome = recover(lambda: ping(run).returncode == 0, reset, authorized)
+        emit('server_process_restart_managed', recovery_seconds=outcome.elapsed,
+             resets=outcome.resets, probes=outcome.probes, healthy=outcome.healthy,
+             reason=outcome.reason)
+        if not outcome.healthy:
+            raise RuntimeError('Managed recovery did not restore tunnel')
+    else:
+        emit('server_process_restart', recovery_seconds=ready(run, timeout=30))
     cfg = Path(directory)/(client+'.conf')
     original = cfg.read_text()
     accelerated = Path(directory)/'accelerated.conf'

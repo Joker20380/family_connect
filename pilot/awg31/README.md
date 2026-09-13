@@ -49,3 +49,14 @@ blackholes are separate acceptance work. Each transfer has a90s budget.
 Experiment2 adds a separate tools patch and a C boundary regression. Engine bytes
 are identical to experiment1. Full upstream Outline integration remains unresolved.
 See the dated resilience report in docs/releases for initial failures and measurements.
+
+## Managed recovery prototype
+
+Use `--resilience --managed-recovery` to compare server restart recovery with the
+previous automatic recovery measurements. The pure recovery policy requires three
+failed probes, permits at most two profile resets per invocation with10s cooldown,
+and stops on cancellation/ownership loss/deadline. Healthy control must cause no reset.
+The isolated caller exclusively owns the synthetic connection and pins config bytes.
+This is not installed client integration: production requires the broker lease,
+committed profile/expiry checks, user-disconnect cancellation and suitable health probes.
+A timeout cannot preempt a callback: probe/reset/ownership callbacks must be bounded.

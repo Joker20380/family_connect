@@ -1,0 +1,291 @@
+{
+  "date": "2026-09-13",
+  "scope": "isolated recovery prototype, not installed client integration",
+  "runs": [
+    {
+      "event": "start",
+      "shaping_each_direction": "35ms,20mbit,no injected loss",
+      "mtu": 1280,
+      "payload_bytes": 1048576,
+      "resilience": true,
+      "managed_recovery": true,
+      "gomaxprocs_per_engine": 1,
+      "binaries": {
+        "amneziawg-go": "e7f00e47d6df853ade5dcd2fe79240f01ff897d75088c768316a444c27c87e0f",
+        "awg": "906d6795af1dd4adee7b11bf1e7fa133d4795c8a8d6e2099b34a026f810a3278",
+        "wg": "91ae3f37bac6346676eb30c4237948de571c27b32f5b73280089f33407898d3a"
+      }
+    },
+    {
+      "event": "negative_profile_rejected",
+      "case": "header_padding_below_12"
+    },
+    {
+      "event": "negative_profile_rejected",
+      "case": "padding_above_tools_u16"
+    },
+    {
+      "event": "wrong_header_key",
+      "delivery": false,
+      "handshake": false,
+      "probe_seconds": 1
+    },
+    {
+      "event": "correct_key_recovery",
+      "seconds": 4.1504
+    },
+    {
+      "event": "mismatched_h4",
+      "delivery": false,
+      "recovery_seconds": 15.1106
+    },
+    {
+      "event": "mtu_boundary",
+      "mtu": 1280,
+      "maximum_payload": 1252,
+      "excess_locally_refused": true
+    },
+    {
+      "event": "mtu_boundary",
+      "mtu": 1200,
+      "maximum_payload": 1172,
+      "excess_locally_refused": true
+    },
+    {
+      "event": "loss_enabled",
+      "percent_each_direction": 1,
+      "seeded": false
+    },
+    {
+      "event": "managed_healthy_control",
+      "resets": 0,
+      "seconds": 0.0756
+    },
+    {
+      "event": "blackhole_recovery",
+      "seconds": 0.0723,
+      "outage_probe_seconds": 1
+    },
+    {
+      "event": "client_link_cycle",
+      "seconds": 0.0724
+    },
+    {
+      "event": "server_process_restart_managed",
+      "recovery_seconds": 3.7529,
+      "resets": 1,
+      "probes": 4,
+      "healthy": true,
+      "reason": "healthy"
+    },
+    {
+      "event": "accelerated_rekey",
+      "elapsed_seconds": 5.3742,
+      "rekey_after_time": 5
+    },
+    {
+      "case": "awg31_base",
+      "repetition": 1,
+      "first_ping_s": 0.0725,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.487,
+      "payload_bytes": 1048576,
+      "tcp_seconds": 3.6258,
+      "tcp_mbit_s": 2.314,
+      "underlay_link_bytes": 1236378,
+      "link_bytes_per_payload_byte": 1.1791,
+      "two_engines_cpu_s": 0.2,
+      "two_engines_rss_bytes": 12017664
+    },
+    {
+      "event": "negative_profile_rejected",
+      "case": "header_padding_below_12"
+    },
+    {
+      "event": "negative_profile_rejected",
+      "case": "padding_above_tools_u16"
+    },
+    {
+      "event": "wrong_header_key",
+      "delivery": false,
+      "handshake": false,
+      "probe_seconds": 1
+    },
+    {
+      "event": "correct_key_recovery",
+      "seconds": 4.1544
+    },
+    {
+      "event": "mismatched_h4",
+      "delivery": false,
+      "recovery_seconds": 15.1112
+    },
+    {
+      "event": "mtu_boundary",
+      "mtu": 1280,
+      "maximum_payload": 1252,
+      "excess_locally_refused": true
+    },
+    {
+      "event": "mtu_boundary",
+      "mtu": 1200,
+      "maximum_payload": 1172,
+      "excess_locally_refused": true
+    },
+    {
+      "event": "loss_enabled",
+      "percent_each_direction": 1,
+      "seeded": false
+    },
+    {
+      "event": "managed_healthy_control",
+      "resets": 0,
+      "seconds": 0.0719
+    },
+    {
+      "event": "blackhole_recovery",
+      "seconds": 0.0725,
+      "outage_probe_seconds": 1
+    },
+    {
+      "event": "client_link_cycle",
+      "seconds": 0.0743
+    },
+    {
+      "event": "server_process_restart_managed",
+      "recovery_seconds": 3.7665,
+      "resets": 1,
+      "probes": 4,
+      "healthy": true,
+      "reason": "healthy"
+    },
+    {
+      "event": "accelerated_rekey",
+      "elapsed_seconds": 5.38,
+      "rekey_after_time": 5
+    },
+    {
+      "case": "awg31_base",
+      "repetition": 2,
+      "first_ping_s": 0.0722,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.729,
+      "payload_bytes": 1048576,
+      "tcp_seconds": 0.8342,
+      "tcp_mbit_s": 10.056,
+      "underlay_link_bytes": 1207358,
+      "link_bytes_per_payload_byte": 1.1514,
+      "two_engines_cpu_s": 0.08,
+      "two_engines_rss_bytes": 12279808
+    },
+    {
+      "event": "negative_profile_rejected",
+      "case": "header_padding_below_12"
+    },
+    {
+      "event": "negative_profile_rejected",
+      "case": "padding_above_tools_u16"
+    },
+    {
+      "event": "wrong_header_key",
+      "delivery": false,
+      "handshake": false,
+      "probe_seconds": 1
+    },
+    {
+      "event": "correct_key_recovery",
+      "seconds": 4.1506
+    },
+    {
+      "event": "mismatched_h4",
+      "delivery": false,
+      "recovery_seconds": 15.1052
+    },
+    {
+      "event": "mtu_boundary",
+      "mtu": 1280,
+      "maximum_payload": 1252,
+      "excess_locally_refused": true
+    },
+    {
+      "event": "mtu_boundary",
+      "mtu": 1200,
+      "maximum_payload": 1172,
+      "excess_locally_refused": true
+    },
+    {
+      "event": "loss_enabled",
+      "percent_each_direction": 1,
+      "seeded": false
+    },
+    {
+      "event": "managed_healthy_control",
+      "resets": 0,
+      "seconds": 0.0753
+    },
+    {
+      "event": "blackhole_recovery",
+      "seconds": 0.0738,
+      "outage_probe_seconds": 1
+    },
+    {
+      "event": "client_link_cycle",
+      "seconds": 0.0754
+    },
+    {
+      "event": "server_process_restart_managed",
+      "recovery_seconds": 3.7531,
+      "resets": 1,
+      "probes": 4,
+      "healthy": true,
+      "reason": "healthy"
+    },
+    {
+      "event": "accelerated_rekey",
+      "elapsed_seconds": 5.3772,
+      "rekey_after_time": 5
+    },
+    {
+      "case": "awg31_base",
+      "repetition": 3,
+      "first_ping_s": 0.0719,
+      "ping_loss_percent": 20.0,
+      "ping_avg_ms": 70.547,
+      "payload_bytes": 1048576,
+      "tcp_seconds": 0.8149,
+      "tcp_mbit_s": 10.294,
+      "underlay_link_bytes": 1205008,
+      "link_bytes_per_payload_byte": 1.1492,
+      "two_engines_cpu_s": 0.17,
+      "two_engines_rss_bytes": 11624448
+    },
+    {
+      "event": "complete",
+      "runs": 3,
+      "server_namespace_removed": true
+    }
+  ],
+  "checks": {
+    "focused": 7,
+    "python": {
+      "passed": 485,
+      "warnings": 2,
+      "seconds": 10.22
+    },
+    "docker_tests": {
+      "passed": 348,
+      "warnings": 2,
+      "seconds": 19.46
+    }
+  },
+  "baseline_report": "2026-09-13-awg31-resilience.json",
+  "limitations": [
+    "No production broker/revision/expiry integration",
+    "Callbacks must be bounded; deadline is checked between callbacks",
+    "Reset budget is per invocation, not persistent across invocations",
+    "ICMP probes are synthetic gateway health, not production HTTPS/application acceptance",
+    "Recovery time begins after server recreation, not at fault injection",
+    "H4 recovery still uses automatic baseline path",
+    "Not a rewritten Reticulum or independently specified VPN wire protocol"
+  ]
+}

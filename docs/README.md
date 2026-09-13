@@ -1,5 +1,8 @@
 # Documentation map
 
+- [AWG3.1: managed recovery experiment](releases/2026-09-13-awg31-managed-recovery.ru.md).
+- [Own transport: milestones and actual dependencies](own-transport-roadmap.ru.md).
+
 - [AWG3.1: adverse conditions and tools range fix](releases/2026-09-13-awg31-resilience.ru.md).
 
 - [Reticulum messenger: proposed scope and integration](reticulum-messenger.ru.md).
