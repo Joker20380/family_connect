@@ -101,3 +101,36 @@ def test_automatic_recovery_preserves_generation_and_retry_budget(monkeypatch):
     with backend.connection_operation() as lease:generation=lease.record['generation']
     assert driver.recover_if_current('current',generation)
     with backend.connection_operation() as lease:assert lease.record['generation']==generation
+
+
+def test_control_waits_for_short_gui_poll(tmp_path, monkeypatch):
+    import threading
+    monkeypatch.setattr(backend, 'operation_directory', lambda: tmp_path/'operations')
+    held = threading.Event()
+    release = threading.Event()
+    def poll():
+        with backend.connection_operation():
+            held.set()
+            assert release.wait(3)
+    thread = threading.Thread(target=poll)
+    thread.start(); assert held.wait(3)
+    timer = threading.Timer(.15, release.set); timer.start()
+    try:
+        with backend.Linux().control_transaction('a'*64) as lease:
+            assert release.is_set() and lease.record['pending'] is None
+    finally:
+        release.set(); thread.join(3); timer.cancel()
+
+
+def test_control_contention_is_bounded(tmp_path, monkeypatch):
+    from contextlib import contextmanager
+    @contextmanager
+    def busy(**_):
+        raise backend.ConnectionBusy('pending owner')
+        yield
+    monkeypatch.setattr(backend, 'connection_operation', busy)
+    clock=iter([0, 6])
+    monkeypatch.setattr(backend.time, 'monotonic', lambda: next(clock))
+    with pytest.raises(backend.ConnectionBusy):
+        with backend.Linux().control_transaction('a'*64):
+            pytest.fail('must not bypass ownership')

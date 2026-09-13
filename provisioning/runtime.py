@@ -4,6 +4,7 @@ Coordinates with the updated desktop GUI through the shared operation arbiter.
 Older desktop versions do not participate and must remain closed. RNS starts with
 explicit operator config, never generated interfaces or VPN lifecycle hooks.
 """
+from contextlib import nullcontext
 import argparse
 import base64
 import json
@@ -42,6 +43,7 @@ def main():
     parser.add_argument('--sequence', type=int)
     parser.add_argument('--envelope', type=Path)
     parser.add_argument('--exclusive-connection-owner', action='store_true')
+    parser.add_argument('--managed-route', action='store_true', help='Lease the installed root-pinned TCP relay route for this once operation')
     args = parser.parse_args()
     clock = lambda: int(time.time())
     handler = logging.StreamHandler()
@@ -100,13 +102,15 @@ def main():
         if recovered == 'FAILED':
             raise SystemExit(1)
         return
-    RNS.Reticulum(configdir=str(args.rns_config), loglevel=RNS.LOG_CRITICAL)
     cancel = threading.Event()
     for number in (signal.SIGTERM, signal.SIGINT):
         signal.signal(number, lambda *_: cancel.set())
-    carrier = ReticulumAdapter(provider_public=base64.b64decode(args.provider_public, validate=True),
-        device=device, clock=clock, cancel=cancel)
-    print(json.dumps(dict(result=core.refresh(carrier))))
+    from .control_route import managed_route
+    with managed_route(args.provider_public, cancel) if args.managed_route else nullcontext():
+        RNS.Reticulum(configdir=str(args.rns_config), loglevel=RNS.LOG_CRITICAL)
+        carrier = ReticulumAdapter(provider_public=base64.b64decode(args.provider_public, validate=True),
+            device=device, clock=clock, cancel=cancel)
+        print(json.dumps(dict(result=core.refresh(carrier))))
 
 
 if __name__ == '__main__':

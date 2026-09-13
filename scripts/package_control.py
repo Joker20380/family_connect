@@ -10,9 +10,9 @@ import tarfile
 ROOT = Path(__file__).resolve().parents[1]
 DESKTOP = ('app.py', 'backend.py', 'profile_config.py', 'updates.py', 'update.pub', 'install-linux.sh')
 CORE = ('__init__.py', 'ack.py', 'application.py', 'auth.py', 'cache.py',
-        'configuration.py', 'envelope.py', 'models.py', 'relay.py', 'reticulum.py',
+        'configuration.py', 'control_route.py', 'envelope.py', 'models.py', 'relay.py', 'reticulum.py',
         'runtime.py', 'transaction.py')
-FILES = ('VERSION', 'device_identity/__init__.py', 'device_identity/device.py',
+FILES = ('scripts/install_control_route.py', 'clients/linux/control-route-helper.py', 'VERSION', 'device_identity/__init__.py', 'device_identity/device.py',
          'provisioning/requirements.lock', 'scripts/run_control_preview.py') + tuple(
     'clients/desktop/' + name for name in DESKTOP) + tuple('provisioning/' + name for name in CORE)
 

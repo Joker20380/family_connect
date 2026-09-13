@@ -215,8 +215,24 @@ class RecoveryPolicy:
 
 
 class Linux:
+    @contextmanager
     def control_transaction(self, owner):
-        return connection_operation(owner=owner)
+        # GUI status polling briefly owns the same lock. Wait only on entry;
+        # never replay an application mutation, bypass pending ownership, or
+        # make GUI operations block behind control. The bound also covers an
+        # unrelated pending owner, which still fails closed after five seconds.
+        from contextlib import ExitStack
+        deadline = time.monotonic() + 5
+        with ExitStack() as stack:
+            while True:
+                try:
+                    lease = stack.enter_context(connection_operation(owner=owner))
+                    break
+                except ConnectionBusy:
+                    if time.monotonic() >= deadline:
+                        raise
+                    time.sleep(.05)
+            yield lease
 
     def poll_state(self, ident, health=False):
         with connection_operation() as lease:
