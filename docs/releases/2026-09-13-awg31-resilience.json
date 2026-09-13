@@ -268,5 +268,94 @@
   "patches": {
     "0002-tools-u16-range.patch": "a78487fdd56e34d74b68619e48a4f83893d025510c799640886d89cf68cd4ccf",
     "0001-refresh-s4-after-tun-read.patch": "62acf2d7f3b4d92c4ee646e1e026115b1d98ef21cf0a589a4dbd1b1caa1d477f"
-  }
+  },
+  "baseline_sanity": [
+    {
+      "event": "start",
+      "shaping_each_direction": "35ms,20mbit,no injected loss",
+      "mtu": 1280,
+      "payload_bytes": 8388608,
+      "resilience": false,
+      "gomaxprocs_per_engine": 1,
+      "binaries": {
+        "amneziawg-go": "e7f00e47d6df853ade5dcd2fe79240f01ff897d75088c768316a444c27c87e0f",
+        "awg": "906d6795af1dd4adee7b11bf1e7fa133d4795c8a8d6e2099b34a026f810a3278",
+        "wg": "91ae3f37bac6346676eb30c4237948de571c27b32f5b73280089f33407898d3a"
+      }
+    },
+    {
+      "case": "wireguard",
+      "repetition": 1,
+      "first_ping_s": 0.2143,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.797,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0473,
+      "tcp_mbit_s": 16.581,
+      "underlay_link_bytes": 9765646,
+      "link_bytes_per_payload_byte": 1.1642,
+      "two_engines_cpu_s": null,
+      "two_engines_rss_bytes": null
+    },
+    {
+      "case": "awg31_base",
+      "repetition": 1,
+      "first_ping_s": 0.1484,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.846,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0915,
+      "tcp_mbit_s": 16.402,
+      "underlay_link_bytes": 9730410,
+      "link_bytes_per_payload_byte": 1.16,
+      "two_engines_cpu_s": 0.95,
+      "two_engines_rss_bytes": 15425536
+    },
+    {
+      "case": "awg31_padding",
+      "repetition": 1,
+      "first_ping_s": 0.1496,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.811,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0907,
+      "tcp_mbit_s": 16.405,
+      "underlay_link_bytes": 9743679,
+      "link_bytes_per_payload_byte": 1.1615,
+      "two_engines_cpu_s": 1.08,
+      "two_engines_rss_bytes": 14770176
+    },
+    {
+      "case": "awg31_trailers",
+      "repetition": 1,
+      "first_ping_s": 0.1439,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.959,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0913,
+      "tcp_mbit_s": 16.403,
+      "underlay_link_bytes": 10346654,
+      "link_bytes_per_payload_byte": 1.2334,
+      "two_engines_cpu_s": 1.19,
+      "two_engines_rss_bytes": 15294464
+    },
+    {
+      "event": "complete",
+      "runs": 4,
+      "server_namespace_removed": true
+    }
+  ],
+  "source_commit": "c2bbd9aa77732c1efecf53ed0476ce8bbf789b4f",
+  "ci": {
+    "run": 34761027324,
+    "tests": {
+      "job": 103733774154,
+      "conclusion": "success"
+    },
+    "failover": {
+      "job": 103733774205,
+      "conclusion": "success"
+    }
+  },
+  "cleanup": "No netns or amneziawg IPC sockets remained on inspection"
 }

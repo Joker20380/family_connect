@@ -94,3 +94,16 @@ Rollback: завершить harness штатно, сохранить production
 
 [Все события, хеши и предварительные отказы](2026-09-13-awg31-resilience.json).
 Family Connect478 passed/2 прежних warnings/10.21с; syntax и diff checks прошли.
+
+## Контрольный цикл, сохранение и CI
+
+После adverse runs обычный режим тоже прошёл: один повтор WG/base/padding/trailers,
+по8MiB, всего32MiB, zero ping loss. Эти4 записи включены в JSON отдельно от3 adverse
+прогонов. Проверка host ip netns list и /var/run/amneziawg показала отсутствие
+оставшихся namespace/сокетов.
+
+Исходный commit c2bbd9aa77732c1efecf53ed0476ce8bbf789b4f в stage5-linux-control-preview.
+[phase0 CI34761027324](https://github.com/Joker20380/family_connect/actions/runs/34761027324):
+tests103733774154 и failover103733774205 success. AWG3.1 Docker/C/network проверки
+в этой сессии локальные; общий phase0 не заменяет их.13 публичных файлов синхронизированы
+в основной Family Connect с проверкой preimage c7bacf1; остальные изменения сохранены.

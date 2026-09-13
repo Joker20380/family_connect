@@ -9,6 +9,8 @@ Three live virtual repeats passed wrong HPK/H4, invalid S1/padding, tunnel MTU,
 and accelerated5s rekey. H4 recovery~15.1s and server restart~16.1s remain slow;
 original15s failure retained.30s observation acceptance is not a reconnect fix.
 Python478 passed; full upstream Outline remains unresolved. No deployment/app update.
+Source c2bbd9a: phase0 CI34761027324 tests+failover passed; ordinary4-case sanity
+also passed, namespace/IPC cleanup verified.
 Next: managed recovery,1CPU load and path-MTU/long-run checks, then Amsterdam AWG.
 [Evidence and limitations](releases/2026-09-13-awg31-resilience.ru.md).
 [Reticulum/LXMF messenger proposal](reticulum-messenger.ru.md) documented; no messenger
