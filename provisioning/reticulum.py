@@ -111,9 +111,13 @@ class ReticulumAdapter:
             if not RNS.Transport.has_path(destination.hash):
                 RNS.Transport.request_path(destination.hash)
             self._wait(lambda: RNS.Transport.has_path(destination.hash), deadline, self.cancel)
-            link = RNS.Link(destination)
-            self._wait(lambda: link.status in (RNS.Link.ACTIVE, RNS.Link.CLOSED), deadline, self.cancel)
-            if link.status != RNS.Link.ACTIVE:
+            # RNS 1.5.1 publishes ACTIVE before sending the final LRRTT packet.
+            # Another thread must not issue a request in that interval: the
+            # responder is still in HANDSHAKE. The callback runs after LRRTT send.
+            established = threading.Event()
+            link = RNS.Link(destination, established_callback=lambda _: established.set())
+            self._wait(lambda: established.is_set() or link.status == RNS.Link.CLOSED, deadline, self.cancel)
+            if not established.is_set() or link.status != RNS.Link.ACTIVE:
                 raise ProvisioningRejected('Reticulum link failed')
             return operation(link, deadline)
         finally:

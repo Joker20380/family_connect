@@ -53,7 +53,7 @@ def test_second_independent_service_can_confirm_tunnel(monkeypatch):
     monkeypatch.setattr(backend,'run',fake)
     backend.probe_interface('awg0','185.251.89.19')
     assert len(calls)==2
-    assert all(c[c.index('--interface')+1]=='awg0' for c in calls)
+    assert all(c[c.index('--interface')+1]=='if!awg0' for c in calls)
     assert all(c[1]=='--disable' for c in calls)
 
 def test_wrong_egress_and_timeouts_fail_closed(monkeypatch):
@@ -93,3 +93,45 @@ def test_monitor_only_does_not_spend_retries_or_stop_checks():
     assert policy.attempts==0 and not policy.exhausted and policy.identity=='tcp'
     assert not policy.observe(True,allow_recovery=False)
     assert policy.failures==0
+
+
+def test_health_services_share_deadline(monkeypatch):
+    now=[0.0];budgets=[]
+    monkeypatch.setattr(backend.time,'monotonic',lambda:now[0])
+    def stalled(*args,timeout):
+        budgets.append(timeout)
+        now[0]+=timeout
+        raise backend.subprocess.TimeoutExpired('curl',timeout)
+    monkeypatch.setattr(backend,'run',stalled)
+    with pytest.raises(backend.BackendError):backend.probe_interface('fctcp12345678','192.0.2.1')
+    assert budgets==[6,2] and now[0]==8
+
+
+def test_late_health_success_is_not_accepted(monkeypatch):
+    now=[0.0];calls=[]
+    monkeypatch.setattr(backend.time,'monotonic',lambda:now[0])
+    def late(*args,**kwargs):
+        calls.append(1);now[0]=9
+        return 'ip=192.0.2.1'
+    monkeypatch.setattr(backend,'run',late)
+    with pytest.raises(backend.BackendError):backend.probe_interface('fctcp12345678','192.0.2.1')
+    assert calls==[1]
+
+
+def test_missing_interface_is_not_resolved_as_hostname(monkeypatch):
+    import http.server
+    import threading
+    if Path('/sys/class/net/localhost').exists():pytest.skip('Host has an interface named localhost')
+    requests=[]
+    class Handler(http.server.BaseHTTPRequestHandler):
+        def do_GET(self):
+            requests.append(True)
+            self.send_response(200);self.end_headers();self.wfile.write(b'192.0.2.1')
+        def log_message(self,*args):pass
+    server=http.server.HTTPServer(('127.0.0.1',0),Handler)
+    worker=threading.Thread(target=server.serve_forever,daemon=True);worker.start()
+    monkeypatch.setattr(backend,'HEALTH_TARGETS',((f'http://127.0.0.1:{server.server_port}/','plain'),))
+    try:
+        with pytest.raises(backend.BackendError):backend.probe_interface('localhost','192.0.2.1')
+        assert requests==[]
+    finally:server.shutdown();worker.join(2);server.server_close()

@@ -1,5 +1,25 @@
 # Current state / Текущее состояние
 
+## Transport reliability and messenger text core — 2026-09-13
+
+User paused additional APK packaging; continue transport/messenger source work.
+RNS1.5.1 adapter now waits for establishment callback after LRRTT send, not early
+ACTIVE status. Deterministic old-code regression fails2/current passes2; real
+control lifecycle/extracted preview pass. Previous CI timeout attribution remains
+unproven. Linux TCP/WG/AWG health probes share8s budget and force interface names
+(`if!`), avoiding hostname interpretation if the interface disappears.
+Messenger prototype: LXMF1.1.1/RNS1.5.1, independent encrypted identity/contacts/
+history/outbox, signed text, duplicate suppression, restart/manual retry and stale
+callback fencing. Actual two-process DIRECT delivery/receipts pass; no Android UI,
+Keystore, automatic retry scheduler or offline propagation service yet.
+Local combined suite506 passed/2 existing warnings; Docker control350 passed.
+No app/server deployment or APK version change. Source commit intentionally uses
+[skip ci] to prevent existing workflows packaging clients; new messenger-only
+workflow added, remote CI not claimed. Next: isolated offline propagation acceptance,
+key/lifecycle integration for Android, TCP adverse-network runtime measurements.
+[Evidence and limits](releases/2026-09-13-transports-messenger.ru.md) ·
+[Prototype](../messenger/README.ru.md).
+
 ## Android beta03 health feedback accepted in emulator — 2026-09-13
 
 Source6383130: manual VPN-bound DNS health feedback, session-bound public-IP

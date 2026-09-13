@@ -171,12 +171,18 @@ def probe_interface(interface, expected):
     import ipaddress
     if not re.fullmatch(r'[a-zA-Z0-9_.-]{1,15}',interface):raise BackendError('Invalid VPN interface')
     expected=str(ipaddress.ip_address(expected))
+    deadline=time.monotonic()+8
     for url,kind in HEALTH_TARGETS:
+        remaining=deadline-time.monotonic()
+        if remaining<=0:break
         try:
-            raw=run('/usr/bin/curl','--disable','--noproxy','*','--interface',interface,'--fail','--silent',
-                '--connect-timeout','3','--max-time','5','--max-filesize','4096',url,timeout=7)
+            # Reserve part of the shared budget for the independent second service.
+            attempt=min(5,remaining)
+            raw=run('/usr/bin/curl','--disable','--noproxy','*','--interface','if!'+interface,'--fail','--silent',
+                '--connect-timeout',str(min(3,attempt)),'--max-time',str(attempt),
+                '--max-filesize','4096',url,timeout=min(attempt+1,remaining))
             actual=dict(line.split('=',1) for line in raw.splitlines() if '=' in line).get('ip') if kind=='trace' else raw.strip()
-            if actual==expected:return
+            if actual==expected and time.monotonic()<deadline:return
         except (BackendError,subprocess.TimeoutExpired):pass
     raise BackendError('VPN internet checks failed')
 
