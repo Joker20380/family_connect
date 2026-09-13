@@ -124,7 +124,26 @@ class Mailbox:
             return SyncResult(stored,duplicates,rejected,len(haves) if delete_after_store else 0)
 
     def publish(self, message_id, *, timeout=12, cancel=None):
-        """Closed Family Connect ingress; successful response means stored on node."""
+        """Closed ingress; successful response means stored on node."""
+        self.publish_many([message_id],timeout=timeout,cancel=cancel)
+
+    def publish_many(self, message_ids, *, timeout=12, cancel=None):
+        """Send up to four queued messages on one bounded, authenticated link.
+
+        Each message is committed/acknowledged independently. On failure, earlier
+        ACKed messages remain relayed; the failed and unattempted messages can be
+        retried. No automatic retry, background link or wire format change.
+        """
+        if (type(message_ids) not in (list,tuple) or not 1<=len(message_ids)<=4
+                or any(type(x) is not str for x in message_ids)
+                or len(set(message_ids))!=len(message_ids)):
+            raise ValueError('Expected one to four distinct message IDs')
+        with self._connection(timeout,cancel) as (link,deadline,cancel):
+            for message_id in message_ids:
+                self._wait(lambda:True,deadline,cancel)
+                self._publish_connected(message_id,link,deadline,cancel)
+
+    def _publish_connected(self, message_id, link, deadline, cancel):
         from .relay import PUT_PATH
         token,raw=self.chat.store.begin_attempt(message_id)
         try:
@@ -133,11 +152,10 @@ class Mailbox:
             unpack(raw,recipient=public,contacts={self.chat.address:self.chat.public})
             blob=self.chat.store.relay_blob(message_id,
                 lambda:recipient+identity(public).encrypt(raw[16:]))
-            with self._connection(timeout,cancel) as (link,deadline,cancel):
-                response=self._request(link,blob,deadline,cancel,path=PUT_PATH)
-                if response!=['stored',RNS.Identity.full_hash(blob)]:
-                    code=response[0] if response and response[0] in ('full','rate_limited','rejected','unavailable') else 'invalid_response'
-                    raise MailboxError(code)
+            response=self._request(link,blob,deadline,cancel,path=PUT_PATH)
+            if response!=['stored',RNS.Identity.full_hash(blob)]:
+                code=response[0] if response and response[0] in ('full','rate_limited','rejected','unavailable') else 'invalid_response'
+                raise MailboxError(code)
             self.chat.store.finish_attempt(message_id,token,delivered=False,relayed=True)
         except Exception:
             self.chat.store.finish_attempt(message_id,token,delivered=False)

@@ -1,5 +1,17 @@
 # Working plan / Рабочий план
 
+## Compact mailbox batch accepted — 2026-09-13
+
+Mailbox.publish_many sends1–4 messages on one authenticated link with a shared
+bounded deadline and individual durable ACKs. Partial failure/cancellation preserves
+completed and queued messages; unchanged ciphertext retry/deduplication.42 messenger
+tests passed (65.86s). Amsterdam four-message send: 4419 → 2373 RNS interface
+bytes (46.30% reduction in this run); all8 messages delivered/purged.
+Empty fetch and65s idle measured separately; not full TCP/IP or a capacity estimate.
+No daemon/Android deployment or APK packaging. Next: event/resume-driven bounded
+sync and adverse-link traffic/recovery, then Android carrier/Keystore/AWG3.1 schema.
+[Measurements, reproduction, rollback and limits](releases/2026-09-13-messenger-compact.ru.md).
+
 ## Amsterdam mailbox live; compact messages remain a requirement — 2026-09-13
 
 Dedicated closed RNS1.5.1/LXMF1.1.1 service on TCP4243 deployed for two diagnostic

@@ -41,6 +41,7 @@ def main():
             if op=='trust':result=chat.trust_contact(bytes.fromhex(request['public'])).hex()
             elif op=='queue':result=chat.queue(bytes.fromhex(request['peer']),request['text'])
             elif op=='publish':mailbox.publish(request['id'],timeout=30);result=True
+            elif op=='batch':mailbox.publish_many(request['ids'],timeout=30);result=True
             elif op=='fetch':result=asdict(mailbox.sync(timeout=30))
             elif op=='messages':result=[{k:m[k] for k in ('id','text','status','outgoing')} for m in store.messages()]
             elif op=='metrics':
