@@ -12,6 +12,7 @@ from messenger.chat import Chat
 from messenger.store import Store
 from messenger.relay import Spool,ClosedRelay
 from messenger.mailbox import Mailbox,MailboxError
+from messenger.sync import SyncController
 
 role,directory,port,allowfile=sys.argv[1:]
 os.umask(0o077)
@@ -33,6 +34,7 @@ else:
     router=LXMF.LXMRouter(identity=chat.identity,storagepath=str(root/'router'),autopeer=False,delivery_limit=8)
     source=chat.attach(router)
 mailbox=None
+controller=None
 def emit(value):print(json.dumps(value),flush=True)
 emit(dict(public=chat.public.hex()))
 for line in sys.stdin:
@@ -53,6 +55,13 @@ for line in sys.stdin:
             if request.get('cancel_after_ack'):mailbox._request=cancel_after_ack
             try:mailbox.publish_many(request['ids'],cancel=cancel);result=True
             finally:mailbox._request=original
+        elif op=='lifecycle':
+            if controller is None:controller=SyncController(mailbox,cooldown=.1,max_backoff=.4)
+            controller.update(online=request['online'],foreground=request['foreground']);result=True
+        elif op=='sync_state':
+            result=controller.snapshot()
+            if result['result'] is not None:result['result']=asdict(result['result'])
+        elif op=='sync_close':result=controller.close()
         elif op=='metrics':result=dict(tx=sum(i.txb for i in RNS.Transport.interfaces),rx=sum(i.rxb for i in RNS.Transport.interfaces))
         elif op=='fetch':result=asdict(mailbox.sync(delete_after_store=request.get('delete',True)))
         elif op=='messages':result=[{k:m[k] for k in ('id','text','status','outgoing')} for m in store.messages()]

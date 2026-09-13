@@ -1,5 +1,17 @@
 # Working plan / Рабочий план
 
+## Event-driven foreground mailbox sync — 2026-09-13
+
+SyncController coalesces lifecycle/refresh events into one bounded worker and one
+pending pull. No periodic polling or event-free retry. Foreground+online required;
+background/network loss cancels, generation fence ignores late results.30s cooldown,
+error backoff capped300s; close/join must finish before Store closes. Receive-only:
+outbox and Android callbacks not wired. Real local RNS resume delivery/purge passed;
+20 duplicate lifecycle events produced one attempt. Full suite51 passed/71.64s; final close refinement verified by10 sync tests/3.29s.
+No server/APK changes. Next: Android carrier/Keystore/lifecycle integration and
+versioned AWG3.1 signed configuration; push/hints, outbox and Doze remain open.
+[API, tests, limits and rollback](releases/2026-09-13-messenger-event-sync.ru.md).
+
 ## Compact mailbox batch accepted — 2026-09-13
 
 Mailbox.publish_many sends1–4 messages on one authenticated link with a shared
