@@ -1,5 +1,7 @@
 # Documentation map
 
+- [External Reticulum: deployment and live acceptance, 13.09.2026](releases/2026-09-13-external-reticulum.ru.md).
+
 - [Amsterdam: Linux GUI acceptance, 13.09.2026](releases/2026-09-13-amsterdam-gui.ru.md).
 
 [Amsterdam gateway: real-network pilot and rollback](releases/2026-09-13-amsterdam-pilot.ru.md).

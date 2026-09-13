@@ -1,5 +1,21 @@
 # Working plan / Рабочий план
 
+## External Reticulum pilot accepted with operator route — 2026-09-13
+
+Amsterdam186.246.45.246:4242 now serves the pinned trusted RNS relay as fc-relay,
+active+enabled; same VPS as WG, not independent infrastructure. Existing device
+identity/journal preserved, second WG peer10.79.0.3 added; manual peer.2 preserved.
+Revision4 committed but lost ACK connectivity after full VPN; outbox3 retained.
+With temporary TCP4242→main policy rule, revision5 committed, all6 signed ACKs
+arrived, duplicate delivery made no new profile; real GTK and bound HTTPS confirmedNL.
+Relay restart preserved identity/configs/ACKs and duplicate fetch passed with VPN off.
+Final: VPN off, temporary rule removed, journalIDLE/floor5/committed5/outbox0.
+Next priority: managed trusted-relay route lifecycle in Linux runtime/helper, then
+repeat without manual operator rule. Current installed0.2.8 unchanged; not a release.
+Native protected state and independent infrastructure/alternate transport remain open.
+[Evidence, exact lease expiry, limitations and rollback](releases/2026-09-13-external-reticulum.ru.md).
+
+
 ## Amsterdam paired Linux GUI pilot passed — 2026-09-13
 
 Accepted preview66152538ee2a4f3e completed two real GTK Connect → Check IP →
