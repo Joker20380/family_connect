@@ -117,3 +117,12 @@ Rollback эксперимента: завершить harness штатно (fina
 не требуется, поскольку они не изменялись. SIGKILL/power loss recovery harness
 отдельно не проверены; перед повтором после аварии оператор проверяет остатки
 fc31lab-* namespace и соответствующих процессов, не удаляя чужие namespace.
+
+## Сохранение и CI
+
+Реализация86eb784, patch whitespace attributes b90e39a6de92f19cd4f03e9b881c11ab9bec4179,
+ветка stage5-linux-control-preview.14 публичных файлов перенесены в основной
+каталог с проверкой preimage07dd413; остальные незакоммиченные изменения сохранены.
+[phase0 CI34759917018](https://github.com/Joker20380/family_connect/actions/runs/34759917018)
+на b90e39a: tests103730824181 и failover103730824332 success. Этот общий workflow
+не запускает новый AWG3.1 стенд: его приёмка в этой сессии локальная, с рецептами выше.

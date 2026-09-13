@@ -11,6 +11,7 @@ WG/base/padding/trailers virtual comparison:12/12 runs,96MiB, zero measured ping
 loss; AWG ~16.4Mbps on shaped20Mbps/~70ms RTT. Trailers cost ~6.4% more link bytes
 than AWG base here; no DPI or VPS-capacity acceptance. Both engines RSS <14.59MiB
 at sampled transfer end, not peak/service budget. No server/app/catalog/main change.
+Source b90e39a: phase0 CI34759917018 tests+failover passed; local Python478 passed.
 Next: negative profiles and loss/MTU/reconnect/rekey checks,1CPU load, then separate
 Amsterdam AWG pilot; schema3.1 and Windows/Android migration remain open.
 [Recipe, regression, metrics and limitations](releases/2026-09-13-awg31-experiment.ru.md).

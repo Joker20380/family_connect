@@ -247,5 +247,19 @@
     "passed": 478,
     "warnings": 2,
     "seconds": 9.89
+  },
+  "source_commit": "b90e39a6de92f19cd4f03e9b881c11ab9bec4179",
+  "ci": {
+    "workflow": "phase0",
+    "run": 34759917018,
+    "source_commit": "b90e39a6de92f19cd4f03e9b881c11ab9bec4179",
+    "tests": {
+      "job": 103730824181,
+      "conclusion": "success"
+    },
+    "failover": {
+      "job": 103730824332,
+      "conclusion": "success"
+    }
   }
 }
