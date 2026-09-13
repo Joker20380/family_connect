@@ -23,7 +23,16 @@ MTU, неполные routes, endpoint binding и prefix. Старые .NET chec
 activation9, catalog6, TCP29 refusals/interoperability/config, AWG16 refusals,
 Auto7 lifecycle policy scenarios. Первый runner упал из-за имени expected.digest;
 исправлен на manifest envelope_sha256, повтор прошёл. Corpus не менялся.
-Windows runtime CI и full Python regression ожидаются на source checkpoint.
+Полная Python regression:462 passed,2 прежних deprecation warnings,9.89s.
+Source581f83fddbce0d31ee52b9152582cc058564c941 отправлен в acceptance branch.
+CI Clients34749167169, phase034749166980, Linux34749167086,
+AWG34749167185 и TCP34749167035 завершились startup_failure до создания jobs.
+Публичная страница Clients сообщает о внутренней ошибке GitHub и рекомендует повтор.
+Отдельный Windows verifier34749167304 остался queued на момент проверки.
+Ошибка не считается падением тестов, но Windows acceptance отсутствует.
+Добавлен pin SHA256 самого manifest, чтобы runner отвергал изменённый/сокращённый
+corpus; native45+31 и legacy checks повторно прошли. Следующий push повторяет CI.
+[Первый Clients run](https://github.com/Joker20380/family_connect/actions/runs/34749167169).
 
 Manifest SHA256: `c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd`.
 Scoped `.github/workflows/windows-control.yml` запускает тот же C# runner на Windows;

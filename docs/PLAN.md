@@ -6,7 +6,9 @@ Native C# schema2 configuration/ACK verifier implemented without broker/carrier
 integration. Local .NET10 Docker:30 immutable configurations,15 ACKs,31 extra
 structure refusals and existing activation/update/TCP/AWG/Auto checks passed.
 Corpus SHA256 c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd.
-Windows CI and full Python regression pending at this source checkpoint.
+Full Python462 passed. First CI source581f83f: five workflows startup_failure
+before jobs; public Clients page reports a GitHub unexpected error. Scoped verifier
+remains queued. Manifest pin added; native runner passed again; retry pending.
 Next: native Android verifier, then protected Windows identity/journal/outbox and
 shared broker ownership. Transcript scenarios remain Python-only until native journal.
 No release/install/catalog/server/main changes; desktop0.2.9, installed Linux0.2.8.

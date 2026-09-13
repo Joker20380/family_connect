@@ -8,7 +8,9 @@ internal static class ControlVectors
     internal static void Run()
     {
         var root = Path.Combine(AppContext.BaseDirectory, "control-v1");
-        using var manifest = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(root, "manifest.json")));
+        var manifestBytes = File.ReadAllBytes(Path.Combine(root, "manifest.json"));
+        if (ControlProtocol.Hash(manifestBytes) != "c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd") throw new Exception("Unexpected conformance corpus revision");
+        using var manifest = JsonDocument.Parse(manifestBytes);
         var m = manifest.RootElement;
         if (!m.GetProperty("test_only").GetBoolean()) throw new Exception("Test corpus required");
         foreach (var file in m.GetProperty("files").EnumerateObject())
