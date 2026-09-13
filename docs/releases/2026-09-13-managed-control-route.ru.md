@@ -130,3 +130,6 @@ Bundle/runtime/helper bytes от Dockerfile correction не меняются.
   на момент записи. Это не full platform release acceptance; публикация не выполнялась.
 
 Начальная [сверка AWG3.1](../awg31-migration.ru.md) сохранена отдельным документом.
+
+CI follow-up13.09: Android job103725874969 в run34758085225 завершился success.
+Таким образом Linux/Windows/Android jobs этого run прошли; release job skipped.

@@ -1,7 +1,7 @@
 # AWG 3.1: начальная сверка и план миграции — 13.09.2026
 
 Управляемый маршрут Reticulum прошёл живой Linux-пилот. Начата сверка требований
-AWG3.1; реализация и Amsterdam AWG3.1 gateway пока не развёрнуты.
+AWG3.1. Позднее в этой сессии выполнен [локальный эксперимент с patch и метриками](releases/2026-09-13-awg31-experiment.ru.md). Amsterdam AWG3.1 gateway пока не развёрнут.
 
 По [официальной документации Amnezia](https://docs.amnezia.org/documentation/amnezia-wg/),
 3.1 добавляет HeaderProtectionKey, ContentPaddingAddition, вариативные интервалы,
@@ -41,6 +41,7 @@ RandomTrailers и DisableCookies. Для Header Protection нужны S1–S4 м
 быть отделены от исторической приёмки. Установленные приложения и release catalog
 обновляются только после платформенной приёмки; один Linux build этого не заменяет.
 
-Открыто: точный целевой upstream commit, миграция всех native parsers, нагрузка
+Целевые commits и локальный startup patch закреплены в pilot/awg31/pins.json.
+Открыто: приёмка patch/отрицательные проверки, миграция всех native parsers, нагрузка
 на1CPU/1GiB, физические сети/длительная стабильность. Старый WG остаётся контрольным
 рабочим вариантом на всём протяжении пилота.

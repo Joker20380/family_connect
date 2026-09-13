@@ -1,5 +1,20 @@
 # Working plan / Рабочий план
 
+## AWG3.1 isolated experiment accepted within limits — 2026-09-13
+
+Pinned engine v3.1.20260828 b5928ef + tools v3.1.20260812 ee0f0a9.
+Unmodified device tests failed: first packets lost with S4 startup configuration.
+Local explicit patch refreshes padding after blocked TUN Read; original device
+and five new first-packet cases passed in the selected suite count=3.
+Full go test ./... still fails Outline external integration; no full-suite claim.
+WG/base/padding/trailers virtual comparison:12/12 runs,96MiB, zero measured ping
+loss; AWG ~16.4Mbps on shaped20Mbps/~70ms RTT. Trailers cost ~6.4% more link bytes
+than AWG base here; no DPI or VPS-capacity acceptance. Both engines RSS <14.59MiB
+at sampled transfer end, not peak/service budget. No server/app/catalog/main change.
+Next: negative profiles and loss/MTU/reconnect/rekey checks,1CPU load, then separate
+Amsterdam AWG pilot; schema3.1 and Windows/Android migration remain open.
+[Recipe, regression, metrics and limitations](releases/2026-09-13-awg31-experiment.ru.md).
+
 ## Managed Linux control route accepted — 2026-09-13
 
 Source7ad40c0: once --managed-route leases a root-pinned UID/TCP relay route,
@@ -12,7 +27,7 @@ cleanup passed. Real canonical launcher revision7 + active-VPN duplicate + GTK/H
 retained; physical handover/suspend/long-run tests remain open.
 Final VPN off, rules removed, journalIDLE/floor7/committed7/outbox0.
 Linux preview CI hash matched; AWG/TCP/Linux/Windows passed. Docker test-stage COPY
-fixed in0136c54; repeated phase0 tests+failover passed. Android CI still running.
+fixed in0136c54; repeated phase0 tests+failover passed. Android CI103725874969 also passed (checked13.09).
 Next: AWG3.1 compatibility/runtime/profile migration and separate Amsterdam pilot;
 3.1 is still rejected until implemented. [Initial upstream/schema audit](awg31-migration.ru.md) started.
 No release/catalog/main update.

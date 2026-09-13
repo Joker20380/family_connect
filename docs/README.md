@@ -1,5 +1,7 @@
 # Documentation map
 
+- [AWG3.1: startup fix and first virtual comparison](releases/2026-09-13-awg31-experiment.ru.md).
+
 - [AWG 3.1: начальная сверка и план миграции](awg31-migration.ru.md).
 
 - [Managed Linux control route acceptance, 13.09.2026](releases/2026-09-13-managed-control-route.ru.md).
