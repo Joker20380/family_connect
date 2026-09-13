@@ -1,5 +1,18 @@
 # Working plan / Рабочий план
 
+## Android chat key foundation; exact classic ICQ smileys requested — 2026-09-13
+
+Separate AndroidKeyStore wrapping alias and bounded61-byte AES-GCM Store-key file,
+explicit create/load and fail-closed missing/corrupt state. SDK35 compilation and
+JDK17 crypto/token checks passed; device Keystore/AtomicFile runtime untested.
+User requires original animated ICQ2000s smileys. Custom drawing removed; archived
+GIF samples available for visual comparison, exact provenance/version still pending.
+Text-only2–3-byte tokens prepared; no image renderer/picker or Android RNS bridge yet.
+No APK/server deployment. Next: original asset match and lifecycle-aware rendering,
+RNS/Store bridge, runtime Keystore acceptance, versioned AWG3.1 signed schema.
+[Report and boundaries](releases/2026-09-13-android-chat-foundation.ru.md) ·
+[Animated reference preview](design/icq-classic-preview.html).
+
 ## Event-driven foreground mailbox sync — 2026-09-13
 
 SyncController coalesces lifecycle/refresh events into one bounded worker and one
