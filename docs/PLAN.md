@@ -1,5 +1,17 @@
 # Working plan / Рабочий план
 
+## Android beta02 calls reported working; load checked — 2026-09-13
+
+User reports AWG3.1 working on MTS Vladikavkaz and home Rostelecom, WhatsApp and
+Telegram calls with clear uninterrupted audio. Current20s idle measurement: host
+CPU0.301%, AWG0.0161%, AWG RAM7.16MiB/peak15.63MiB, available RAM720MiB, restarts0.
+Historical sysstat resolution10min; reported call times19:07/19:17MSK precede AWG
+startup19:24:59, so call-to-load correlation remains unconfirmed and clarification
+is pending. No per-call CPU/quality claim. No server capacity upgrade indicated for
+the current small pilot; concurrency untested. Next: resolve time mismatch, then
+synchronized call measurement if needed, screen sleep and network handover.
+[Evidence and limits](releases/2026-09-13-android-calls-load.ru.md).
+
 ## Android AWG3.1 beta02 ready for first phone — 2026-09-13
 
 Source d0709bc: Android CI34768083248/job103752559759 passed native4ABI build,
