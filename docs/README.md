@@ -1,5 +1,7 @@
 # Documentation map
 
+[Stage5 conformance corpus](releases/2026-09-13-control-vectors.ru.md) · [Vector format](../tests/vectors/README.md).
+
 [CI results and Android retry](releases/2026-09-13-linux-control-ci.ru.md) · [Next native binding](stage5-native-binding.ru.md).
 
 [Linux live pilot passed13.09](releases/2026-09-13-linux-control-pilot-pass.ru.md). Scoped CI health correction next.

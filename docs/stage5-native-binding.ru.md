@@ -1,6 +1,7 @@
 # Stage 5: следующий блок native binding
 
-Статус13.09.2026: проектирование следующего шага по фактическим исходникам.
+Статус13.09.2026: общий corpus и Python runner реализованы; native verifier следующий.
+[Первый implementation checkpoint](releases/2026-09-13-control-vectors.ru.md).
 Native Stage5 ещё не реализован; успешные native WG/AWG/TCP/Auto тесты относятся
 к data plane. Linux протокол и живой paired pilot приняты отдельно.
 

@@ -1,0 +1,1160 @@
+{
+  "acknowledgements": [
+    {
+      "expected": {
+        "body": {
+          "ack_id": "6b231937ad6e2ea6fbacdd8c567437b81c41f60decb6fd52b3b48263c9a85490",
+          "config_id": "fixture-1",
+          "device": "25cc23cad3d7a8a30fe05f344f92978f",
+          "envelope_hash": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+          "error": "NONE",
+          "public_identity": "AeeW9SIyktM6lvnUbcLvEf76zb/zO5f4iNcQuYz8XEIuxgWnn8n2+6M4cKN4V1wxFeiZKAKagzssrx22K64Dpg==",
+          "schema_version": 1,
+          "sequence": 1,
+          "status": "APPLIED",
+          "timestamp": 1000
+        },
+        "category": "ACCEPT"
+      },
+      "id": "ack-applied",
+      "input": "ack-applied.ack"
+    },
+    {
+      "expected": {
+        "body": {
+          "ack_id": "140a45c7e4917dce39040254d789e95a732aa889506f1ac89c2a88fe3fd84aee",
+          "config_id": "fixture-1",
+          "device": "25cc23cad3d7a8a30fe05f344f92978f",
+          "envelope_hash": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+          "error": "NONE",
+          "public_identity": "AeeW9SIyktM6lvnUbcLvEf76zb/zO5f4iNcQuYz8XEIuxgWnn8n2+6M4cKN4V1wxFeiZKAKagzssrx22K64Dpg==",
+          "schema_version": 1,
+          "sequence": 1,
+          "status": "COMMITTED",
+          "timestamp": 1000
+        },
+        "category": "ACCEPT"
+      },
+      "id": "ack-committed",
+      "input": "ack-committed.ack"
+    },
+    {
+      "expected": {
+        "body": {
+          "ack_id": "5954b17b19b4a781e8c74bf39ecd8874018996ac6f097805ebc8609a275cf351",
+          "config_id": "fixture-1",
+          "device": "25cc23cad3d7a8a30fe05f344f92978f",
+          "envelope_hash": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+          "error": "NONE",
+          "public_identity": "AeeW9SIyktM6lvnUbcLvEf76zb/zO5f4iNcQuYz8XEIuxgWnn8n2+6M4cKN4V1wxFeiZKAKagzssrx22K64Dpg==",
+          "schema_version": 1,
+          "sequence": 1,
+          "status": "FAILED",
+          "timestamp": 1000
+        },
+        "category": "ACCEPT"
+      },
+      "id": "ack-failed",
+      "input": "ack-failed.ack"
+    },
+    {
+      "expected": {
+        "body": {
+          "ack_id": "e1cb7d7198fc7aea90cd9900fd5b7a9dbbb8db4a6ef60a78815517b6fa36fa2e",
+          "config_id": "fixture-1",
+          "device": "25cc23cad3d7a8a30fe05f344f92978f",
+          "envelope_hash": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+          "error": "NONE",
+          "public_identity": "AeeW9SIyktM6lvnUbcLvEf76zb/zO5f4iNcQuYz8XEIuxgWnn8n2+6M4cKN4V1wxFeiZKAKagzssrx22K64Dpg==",
+          "schema_version": 1,
+          "sequence": 1,
+          "status": "RECEIVED",
+          "timestamp": 1000
+        },
+        "category": "ACCEPT"
+      },
+      "id": "ack-received",
+      "input": "ack-received.ack"
+    },
+    {
+      "expected": {
+        "body": {
+          "ack_id": "581712f0f74cd30f6f9e69aa78cce28a323795a2c414253025ad1c779fcff588",
+          "config_id": null,
+          "device": "25cc23cad3d7a8a30fe05f344f92978f",
+          "envelope_hash": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+          "error": "SIGNATURE",
+          "public_identity": "AeeW9SIyktM6lvnUbcLvEf76zb/zO5f4iNcQuYz8XEIuxgWnn8n2+6M4cKN4V1wxFeiZKAKagzssrx22K64Dpg==",
+          "schema_version": 1,
+          "sequence": 0,
+          "status": "REJECTED",
+          "timestamp": 1000
+        },
+        "category": "ACCEPT"
+      },
+      "id": "ack-rejected",
+      "input": "ack-rejected.ack"
+    },
+    {
+      "expected": {
+        "body": {
+          "ack_id": "28308283dcc14d332693c59d799034f6bb5f1a8575b84af750251e2b1846dce3",
+          "config_id": "fixture-1",
+          "device": "25cc23cad3d7a8a30fe05f344f92978f",
+          "envelope_hash": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+          "error": "NONE",
+          "public_identity": "AeeW9SIyktM6lvnUbcLvEf76zb/zO5f4iNcQuYz8XEIuxgWnn8n2+6M4cKN4V1wxFeiZKAKagzssrx22K64Dpg==",
+          "schema_version": 1,
+          "sequence": 1,
+          "status": "ROLLED_BACK",
+          "timestamp": 1000
+        },
+        "category": "ACCEPT"
+      },
+      "id": "ack-rolled_back",
+      "input": "ack-rolled_back.ack"
+    },
+    {
+      "expected": {
+        "body": {
+          "ack_id": "140a45c7e4917dce39040254d789e95a732aa889506f1ac89c2a88fe3fd84aee",
+          "config_id": "fixture-1",
+          "device": "25cc23cad3d7a8a30fe05f344f92978f",
+          "envelope_hash": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+          "error": "NONE",
+          "public_identity": "AeeW9SIyktM6lvnUbcLvEf76zb/zO5f4iNcQuYz8XEIuxgWnn8n2+6M4cKN4V1wxFeiZKAKagzssrx22K64Dpg==",
+          "schema_version": 1,
+          "sequence": 1,
+          "status": "COMMITTED",
+          "timestamp": 1000
+        },
+        "category": "ACCEPT"
+      },
+      "id": "ack-limit-4096",
+      "input": "ack-limit-4096.ack"
+    },
+    {
+      "expected": {
+        "category": "REJECT"
+      },
+      "id": "ack-oversize-4097",
+      "input": "ack-oversize-4097.ack"
+    },
+    {
+      "expected": {
+        "category": "REJECT"
+      },
+      "id": "ack-duplicate",
+      "input": "ack-duplicate.ack"
+    },
+    {
+      "expected": {
+        "category": "REJECT"
+      },
+      "id": "ack-tampered",
+      "input": "ack-tampered.ack"
+    },
+    {
+      "expected": {
+        "category": "REJECT"
+      },
+      "id": "ack-wrong-id",
+      "input": "ack-wrong-id.ack"
+    },
+    {
+      "expected": {
+        "category": "REJECT"
+      },
+      "id": "ack-bool-sequence",
+      "input": "ack-bool-sequence.ack"
+    },
+    {
+      "expected": {
+        "category": "REJECT"
+      },
+      "id": "ack-unknown-field",
+      "input": "ack-unknown-field.ack"
+    },
+    {
+      "expected": {
+        "category": "REJECT"
+      },
+      "id": "ack-noncanonical-public",
+      "input": "ack-noncanonical-public.ack"
+    },
+    {
+      "expected": {
+        "category": "REJECT"
+      },
+      "id": "ack-wrong-purpose",
+      "input": "ack-wrong-purpose.ack"
+    }
+  ],
+  "configurations": [
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "ACCEPT",
+        "envelope_sha256": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+        "payload": {
+          "audience": "family-connect/control-config/v1",
+          "config_id": "fixture-1",
+          "expires_at": 4600,
+          "gateways": [
+            {
+              "endpoint": "198.51.100.1",
+              "gateway_id": "gw1",
+              "port": 51820
+            }
+          ],
+          "issued_at": 1000,
+          "min_client_version": "0.2.9",
+          "previous_config_hash": null,
+          "recipient": "25cc23cad3d7a8a30fe05f344f92978f",
+          "revision": 1,
+          "schema_version": 2,
+          "signer_key_id": "86df1e9cfb6267405d96f2299d12aa8dea8c5f021331e88a853b50d2d9de5b1c",
+          "transport_profiles": [
+            {
+              "config": "[Interface]\nPrivateKey = LOCAL_DEVICE_KEY\nAddress = 10.77.0.4/32\nDNS = 1.1.1.1\nMTU = 1280\n[Peer]\nPublicKey = LTtVpsRvuZkKOOadqE5YdgW6ms3EsKYzASfQveJNFjw=\nEndpoint = 198.51.100.1:51820\nAllowedIPs = 0.0.0.0/0, ::/0\n",
+              "gateway_id": "gw1",
+              "profile_id": "wg1",
+              "transport": "wireguard",
+              "transport_version": "1"
+            }
+          ],
+          "wireguard_public_key": "/XH1pXzqIv3EFAx37Raqc4XXU4XMI47Ik6oDqdcn4Tc="
+        }
+      },
+      "id": "valid-wg",
+      "input": "valid-wg.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "ACCEPT",
+        "envelope_sha256": "dd67338a64a1b61b3577d621ce2cb6cb79e8a1e5069a7675e8724a881e0fe594",
+        "payload": {
+          "audience": "family-connect/control-config/v1",
+          "config_id": "fixture-1",
+          "expires_at": 4600,
+          "gateways": [
+            {
+              "endpoint": "198.51.100.1",
+              "gateway_id": "gw1",
+              "port": 51820
+            }
+          ],
+          "issued_at": 1000,
+          "min_client_version": "0.2.9",
+          "previous_config_hash": null,
+          "recipient": "25cc23cad3d7a8a30fe05f344f92978f",
+          "revision": 1,
+          "schema_version": 2,
+          "signer_key_id": "86df1e9cfb6267405d96f2299d12aa8dea8c5f021331e88a853b50d2d9de5b1c",
+          "transport_profiles": [
+            {
+              "config": "[Interface]\nPrivateKey = LOCAL_DEVICE_KEY\nAddress = 10.77.0.4/32\nDNS = 1.1.1.1\nMTU = 1280\nJc = 4\nJmin = 40\nJmax = 70\nS1 = 16\nS2 = 32\nS3 = 16\nS4 = 16\nH1 = 100\nH2 = 200\nH3 = 300\nH4 = 400\n[Peer]\nPublicKey = LTtVpsRvuZkKOOadqE5YdgW6ms3EsKYzASfQveJNFjw=\nEndpoint = 198.51.100.1:51820\nAllowedIPs = 0.0.0.0/0, ::/0\n",
+              "gateway_id": "gw1",
+              "profile_id": "wg1",
+              "transport": "amneziawg",
+              "transport_version": "2.0"
+            }
+          ],
+          "wireguard_public_key": "/XH1pXzqIv3EFAx37Raqc4XXU4XMI47Ik6oDqdcn4Tc="
+        }
+      },
+      "id": "valid-awg2",
+      "input": "valid-awg2.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "ACCEPT",
+        "envelope_sha256": "6c8d075cdcbe5bf10edea667dfafb21804221ab0021daf45c957ef41f4b84de5",
+        "payload": {
+          "audience": "family-connect/control-config/v1",
+          "config_id": "fixture-1",
+          "expires_at": 4600,
+          "gateways": [
+            {
+              "endpoint": "198.51.100.1",
+              "gateway_id": "gw1",
+              "port": 51820
+            }
+          ],
+          "issued_at": 1000,
+          "min_client_version": "0.2.9",
+          "previous_config_hash": null,
+          "recipient": "25cc23cad3d7a8a30fe05f344f92978f",
+          "revision": 1,
+          "schema_version": 2,
+          "signer_key_id": "86df1e9cfb6267405d96f2299d12aa8dea8c5f021331e88a853b50d2d9de5b1c",
+          "transport_profiles": [
+            {
+              "config": "{\"type\": \"vless-reality-v1\", \"server\": \"198.51.100.1\", \"port\": 51820, \"id\": \"11111111-2222-4333-8444-555555555555\", \"public_key\": \"LTtVpsRvuZkKOOadqE5YdgW6ms3EsKYzASfQveJNFjw\", \"server_name\": \"example.com\", \"short_id\": \"abcd\"}",
+              "gateway_id": "gw1",
+              "profile_id": "wg1",
+              "transport": "vless-reality",
+              "transport_version": "1"
+            }
+          ],
+          "wireguard_public_key": "/XH1pXzqIv3EFAx37Raqc4XXU4XMI47Ik6oDqdcn4Tc="
+        }
+      },
+      "id": "valid-tcp",
+      "input": "valid-tcp.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "ACCEPT",
+        "envelope_sha256": "ec241a40af57e33b63d6fa129021e3b4b8c53c32834f398c3d3968092abf2d37",
+        "payload": {
+          "audience": "family-connect/control-config/v1",
+          "config_id": "fixture-2",
+          "expires_at": 4600,
+          "gateways": [
+            {
+              "endpoint": "198.51.100.1",
+              "gateway_id": "gw1",
+              "port": 51820
+            }
+          ],
+          "issued_at": 1000,
+          "min_client_version": "0.2.9",
+          "previous_config_hash": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+          "recipient": "25cc23cad3d7a8a30fe05f344f92978f",
+          "revision": 2,
+          "schema_version": 2,
+          "signer_key_id": "86df1e9cfb6267405d96f2299d12aa8dea8c5f021331e88a853b50d2d9de5b1c",
+          "transport_profiles": [
+            {
+              "config": "[Interface]\nPrivateKey = LOCAL_DEVICE_KEY\nAddress = 10.77.0.4/32\nDNS = 1.1.1.1\nMTU = 1280\n[Peer]\nPublicKey = LTtVpsRvuZkKOOadqE5YdgW6ms3EsKYzASfQveJNFjw=\nEndpoint = 198.51.100.1:51820\nAllowedIPs = 0.0.0.0/0, ::/0\n",
+              "gateway_id": "gw1",
+              "profile_id": "wg1",
+              "transport": "wireguard",
+              "transport_version": "1"
+            }
+          ],
+          "wireguard_public_key": "/XH1pXzqIv3EFAx37Raqc4XXU4XMI47Ik6oDqdcn4Tc="
+        }
+      },
+      "id": "valid-next",
+      "input": "valid-next.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "ACCEPT",
+        "envelope_sha256": "7a30660a88421e2aed5508deffed22522cb3b5b5d6f3d7a75e0439a1c80b1b91",
+        "payload": {
+          "audience": "family-connect/control-config/v1",
+          "config_id": "fixture-1",
+          "expires_at": 4600,
+          "gateways": [
+            {
+              "endpoint": "198.51.100.1",
+              "gateway_id": "gw1",
+              "port": 51820
+            }
+          ],
+          "issued_at": 1000,
+          "min_client_version": "0.2.9",
+          "previous_config_hash": null,
+          "recipient": "25cc23cad3d7a8a30fe05f344f92978f",
+          "revision": 1,
+          "schema_version": 2,
+          "signer_key_id": "86df1e9cfb6267405d96f2299d12aa8dea8c5f021331e88a853b50d2d9de5b1c",
+          "transport_profiles": [
+            {
+              "config": "[Interface]\nPrivateKey = LOCAL_DEVICE_KEY\nAddress = 10.77.0.4/32\nDNS = 1.1.1.1\nMTU = 1280\n[Peer]\nPublicKey = LTtVpsRvuZkKOOadqE5YdgW6ms3EsKYzASfQveJNFjw=\nEndpoint = 198.51.100.1:51820\nAllowedIPs = 0.0.0.0/0, ::/0\n",
+              "gateway_id": "gw1",
+              "profile_id": "wg1",
+              "transport": "wireguard",
+              "transport_version": "1"
+            }
+          ],
+          "wireguard_public_key": "/XH1pXzqIv3EFAx37Raqc4XXU4XMI47Ik6oDqdcn4Tc="
+        }
+      },
+      "id": "same-revision-other-bytes",
+      "input": "same-revision-other-bytes.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "ACCEPT",
+        "envelope_sha256": "af841445e6130dfa80fd5580bf06d9dac86a3363edb1f70aeebb1b34fa9aaedd",
+        "payload": {
+          "audience": "family-connect/control-config/v1",
+          "config_id": "fixture-2",
+          "expires_at": 4600,
+          "gateways": [
+            {
+              "endpoint": "198.51.100.1",
+              "gateway_id": "gw1",
+              "port": 51820
+            }
+          ],
+          "issued_at": 1000,
+          "min_client_version": "0.2.9",
+          "previous_config_hash": null,
+          "recipient": "25cc23cad3d7a8a30fe05f344f92978f",
+          "revision": 2,
+          "schema_version": 2,
+          "signer_key_id": "86df1e9cfb6267405d96f2299d12aa8dea8c5f021331e88a853b50d2d9de5b1c",
+          "transport_profiles": [
+            {
+              "config": "[Interface]\nPrivateKey = LOCAL_DEVICE_KEY\nAddress = 10.77.0.4/32\nDNS = 1.1.1.1\nMTU = 1280\n[Peer]\nPublicKey = LTtVpsRvuZkKOOadqE5YdgW6ms3EsKYzASfQveJNFjw=\nEndpoint = 198.51.100.1:51820\nAllowedIPs = 0.0.0.0/0, ::/0\n",
+              "gateway_id": "gw1",
+              "profile_id": "wg1",
+              "transport": "wireguard",
+              "transport_version": "1"
+            }
+          ],
+          "wireguard_public_key": "/XH1pXzqIv3EFAx37Raqc4XXU4XMI47Ik6oDqdcn4Tc="
+        }
+      },
+      "id": "wrong-previous",
+      "input": "wrong-previous.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "TARGET"
+      },
+      "id": "wrong-target",
+      "input": "wrong-target.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "TARGET"
+      },
+      "id": "wrong-audience",
+      "input": "wrong-audience.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "TARGET"
+      },
+      "id": "wrong-wg",
+      "input": "wrong-wg.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "SIGNER"
+      },
+      "id": "wrong-signer-id",
+      "input": "wrong-signer-id.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "SCHEMA"
+      },
+      "id": "schema-unknown",
+      "input": "schema-unknown.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "SCHEMA"
+      },
+      "id": "schema-bool",
+      "input": "schema-bool.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "STRUCTURE"
+      },
+      "id": "invalid-timestamps",
+      "input": "invalid-timestamps.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "LEASE"
+      },
+      "id": "future",
+      "input": "future.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "STRUCTURE"
+      },
+      "id": "unknown-field",
+      "input": "unknown-field.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "STRUCTURE"
+      },
+      "id": "bad-profile",
+      "input": "bad-profile.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "UNSUPPORTED_TRANSPORT_VERSION"
+      },
+      "id": "awg31",
+      "input": "awg31.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "ACCEPT",
+        "envelope_sha256": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+        "payload": {
+          "audience": "family-connect/control-config/v1",
+          "config_id": "fixture-1",
+          "expires_at": 4600,
+          "gateways": [
+            {
+              "endpoint": "198.51.100.1",
+              "gateway_id": "gw1",
+              "port": 51820
+            }
+          ],
+          "issued_at": 1000,
+          "min_client_version": "0.2.9",
+          "previous_config_hash": null,
+          "recipient": "25cc23cad3d7a8a30fe05f344f92978f",
+          "revision": 1,
+          "schema_version": 2,
+          "signer_key_id": "86df1e9cfb6267405d96f2299d12aa8dea8c5f021331e88a853b50d2d9de5b1c",
+          "transport_profiles": [
+            {
+              "config": "[Interface]\nPrivateKey = LOCAL_DEVICE_KEY\nAddress = 10.77.0.4/32\nDNS = 1.1.1.1\nMTU = 1280\n[Peer]\nPublicKey = LTtVpsRvuZkKOOadqE5YdgW6ms3EsKYzASfQveJNFjw=\nEndpoint = 198.51.100.1:51820\nAllowedIPs = 0.0.0.0/0, ::/0\n",
+              "gateway_id": "gw1",
+              "profile_id": "wg1",
+              "transport": "wireguard",
+              "transport_version": "1"
+            }
+          ],
+          "wireguard_public_key": "/XH1pXzqIv3EFAx37Raqc4XXU4XMI47Ik6oDqdcn4Tc="
+        }
+      },
+      "id": "lease-last-second",
+      "input": "lease-last-second.envelope",
+      "now": 4599
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "LEASE"
+      },
+      "id": "lease-expired",
+      "input": "lease-expired.envelope",
+      "now": 4600
+    },
+    {
+      "client_version": "0.2.8",
+      "expected": {
+        "category": "CLIENT_VERSION"
+      },
+      "id": "older-client",
+      "input": "older-client.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "CLOCK"
+      },
+      "id": "negative-clock",
+      "input": "negative-clock.envelope",
+      "now": -1
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "SIGNATURE"
+      },
+      "id": "wrong-purpose",
+      "input": "wrong-purpose.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "SIGNATURE"
+      },
+      "id": "untrusted-issuer",
+      "input": "untrusted-issuer.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "SIGNATURE"
+      },
+      "id": "bad-high-sequence",
+      "input": "bad-high-sequence.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "SIGNATURE"
+      },
+      "id": "tampered-ciphertext",
+      "input": "tampered-ciphertext.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "MALFORMED"
+      },
+      "id": "duplicate-outer",
+      "input": "duplicate-outer.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "STRUCTURE"
+      },
+      "id": "duplicate-plaintext",
+      "input": "duplicate-plaintext.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "MALFORMED"
+      },
+      "id": "malformed-json",
+      "input": "malformed-json.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "ACCEPT",
+        "envelope_sha256": "41fefb1c05df2c71a73752127f11108731d270bf4d2b377b6e776fb663971aa5",
+        "payload": {
+          "audience": "family-connect/control-config/v1",
+          "config_id": "fixture-1",
+          "expires_at": 4600,
+          "gateways": [
+            {
+              "endpoint": "198.51.100.1",
+              "gateway_id": "gw1",
+              "port": 51820
+            }
+          ],
+          "issued_at": 1000,
+          "min_client_version": "0.2.9",
+          "previous_config_hash": null,
+          "recipient": "25cc23cad3d7a8a30fe05f344f92978f",
+          "revision": 1,
+          "schema_version": 2,
+          "signer_key_id": "86df1e9cfb6267405d96f2299d12aa8dea8c5f021331e88a853b50d2d9de5b1c",
+          "transport_profiles": [
+            {
+              "config": "[Interface]\nPrivateKey = LOCAL_DEVICE_KEY\nAddress = 10.77.0.4/32\nDNS = 1.1.1.1\nMTU = 1280\n[Peer]\nPublicKey = LTtVpsRvuZkKOOadqE5YdgW6ms3EsKYzASfQveJNFjw=\nEndpoint = 198.51.100.1:51820\nAllowedIPs = 0.0.0.0/0, ::/0\n",
+              "gateway_id": "gw1",
+              "profile_id": "wg1",
+              "transport": "wireguard",
+              "transport_version": "1"
+            }
+          ],
+          "wireguard_public_key": "/XH1pXzqIv3EFAx37Raqc4XXU4XMI47Ik6oDqdcn4Tc="
+        }
+      },
+      "id": "limit-65536",
+      "input": "limit-65536.envelope",
+      "now": 1000
+    },
+    {
+      "client_version": "0.2.9",
+      "expected": {
+        "category": "SIZE"
+      },
+      "id": "oversize-65537",
+      "input": "oversize-65537.envelope",
+      "now": 1000
+    }
+  ],
+  "domains_b64": {
+    "acknowledgement": "ZmFtaWx5LWNvbm5lY3QvY29udHJvbC1hY2svdjEA",
+    "configuration": "ZmFtaWx5LWNvbm5lY3QvY29udHJvbC1jb25maWcvdjEA"
+  },
+  "files": {
+    "README.txt": {
+      "sha256": "749f009abff721ac5e698f9fcaa88d93f43a754ef1429fbd6e80050fc85c6677",
+      "size": 244
+    },
+    "TEST-ONLY-identity.json": {
+      "sha256": "5e0ca53fe80e4d4d556e11494c405049cffbe85581cb0a4588751e496bbbc1ec",
+      "size": 599
+    },
+    "ack-applied.ack": {
+      "sha256": "a5e29c3ce4e359f8d9ca34cf47631866d679e3ce2fb5bda7c79244262c7b4455",
+      "size": 532
+    },
+    "ack-bool-sequence.ack": {
+      "sha256": "a29c2cd1a59f3af27851c3ab8b80947b5095efadb689bc4284ec198884ea62d6",
+      "size": 537
+    },
+    "ack-committed.ack": {
+      "sha256": "46598956ce29b1012f8305355ac61aaacfe135eee4d5a3a9d5c45c1eeccbe6d9",
+      "size": 534
+    },
+    "ack-duplicate.ack": {
+      "sha256": "f7e30b6876c5b6d185e33826fd1f0061739a8b8b2c69b165ac93b1cd048d5d1f",
+      "size": 544
+    },
+    "ack-failed.ack": {
+      "sha256": "ad81613953bd3fa8b24b2fae06fc5c6d172d82859d7544f900a61a6077a180b7",
+      "size": 531
+    },
+    "ack-limit-4096.ack": {
+      "sha256": "70639a5b6835fb2539ce6958ffab310e1787585786bf5fef4fe64d18d239e455",
+      "size": 4096
+    },
+    "ack-noncanonical-public.ack": {
+      "sha256": "6c5706f9e8759b1bc926623103086e7ceacc07dfb32b8ba8a9456462e789a154",
+      "size": 535
+    },
+    "ack-oversize-4097.ack": {
+      "sha256": "1538c93383f04fe43d7f4e2f86c2efabbaefad56ae18f1a5967f478b713bf66c",
+      "size": 4097
+    },
+    "ack-received.ack": {
+      "sha256": "632f9ad4c245e112be12e302f9e091a2faa164e70005b5c10310834e625461cb",
+      "size": 533
+    },
+    "ack-rejected.ack": {
+      "sha256": "87658be0bc7b52e4e0664ee3db6804399da4099315764e2471a0ffcbe54bd13c",
+      "size": 531
+    },
+    "ack-rolled_back.ack": {
+      "sha256": "3b813e6d22480313c3a92707c534e9522eb27d1af05127fc985d7f084e3b5612",
+      "size": 536
+    },
+    "ack-tampered.ack": {
+      "sha256": "e04d8f120fa9b40524b3bc9c4b6b55166c5bc2a1290b0516c95dfab5a6b34888",
+      "size": 531
+    },
+    "ack-unknown-field.ack": {
+      "sha256": "d768d33148e95b21669d3c1905d1d35617873815b8a495bb762bb2ff30de4097",
+      "size": 551
+    },
+    "ack-wrong-id.ack": {
+      "sha256": "319e1b40bda60c90fd0b611f30f871d290a9ded3adc9bc74c2529aa1f9e00a43",
+      "size": 534
+    },
+    "ack-wrong-purpose.ack": {
+      "sha256": "d86320b3e6096bb1c4b13f8ec8738b4320b68ff103ddd5859c7398818962f13c",
+      "size": 534
+    },
+    "awg31.envelope": {
+      "sha256": "a20682908d8bff67a3bfb2f1c49b0019d325a41142a242efc769167dd3b3c57c",
+      "size": 1316
+    },
+    "bad-high-sequence.envelope": {
+      "sha256": "978f1f5d5d491e7616639e174599349caf458e2bd69930ee695928f0892421ef",
+      "size": 1316
+    },
+    "bad-profile.envelope": {
+      "sha256": "b5a70ec7c910a3117e6c679bab665dea1dc8c170780cb2f9bc340471462203b9",
+      "size": 1060
+    },
+    "duplicate-outer.envelope": {
+      "sha256": "be98946b54255718633f084e1a4416fcc1aaff24c28b688bccf190a0aaf13621",
+      "size": 1341
+    },
+    "duplicate-plaintext.envelope": {
+      "sha256": "3a00b32d03e8b1c6e1b2e43bce71f53599fadf3c6decdc4218400a42520fd78a",
+      "size": 1336
+    },
+    "future.envelope": {
+      "sha256": "2f52dee25c1afeccca3741719fb4754ae1d769b154a2035f0a18a1d7d5a07145",
+      "size": 1316
+    },
+    "invalid-timestamps.envelope": {
+      "sha256": "9e1134f86e238f320a8de938f33a0b7c66979e7f6ee38d22c1a9839965a65412",
+      "size": 1316
+    },
+    "lease-expired.envelope": {
+      "sha256": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+      "size": 1316
+    },
+    "lease-last-second.envelope": {
+      "sha256": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+      "size": 1316
+    },
+    "limit-65536.envelope": {
+      "sha256": "41fefb1c05df2c71a73752127f11108731d270bf4d2b377b6e776fb663971aa5",
+      "size": 65536
+    },
+    "malformed-json.envelope": {
+      "sha256": "021fb596db81e6d02bf3d2586ee3981fe519f275c0ac9ca76bbcf2ebb4097d96",
+      "size": 1
+    },
+    "negative-clock.envelope": {
+      "sha256": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+      "size": 1316
+    },
+    "older-client.envelope": {
+      "sha256": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+      "size": 1316
+    },
+    "oversize-65537.envelope": {
+      "sha256": "7ce81b7f603c752081bfbe81e0d744012542522164ae8cb16b3ee4b0948ba860",
+      "size": 65537
+    },
+    "same-revision-other-bytes.envelope": {
+      "sha256": "7a30660a88421e2aed5508deffed22522cb3b5b5d6f3d7a75e0439a1c80b1b91",
+      "size": 1316
+    },
+    "schema-bool.envelope": {
+      "sha256": "f0ec010640ee4b4799cdf1b3b02298045560d4715447caf6e14d2ba2f7035bcd",
+      "size": 1336
+    },
+    "schema-unknown.envelope": {
+      "sha256": "fef47614ff06b1264b37a4871c5c335b83709d8e09d1e632bf276461878349bf",
+      "size": 1316
+    },
+    "tampered-ciphertext.envelope": {
+      "sha256": "bb2b847a501948cb888da4dd25fd0181ca361d29f21ee9c252a3a061cee1ebbf",
+      "size": 1316
+    },
+    "unknown-field.envelope": {
+      "sha256": "e558b7dbb2159e3f1ed311eb77d866608a13b533c30f89b0e782791e8389d2cc",
+      "size": 1336
+    },
+    "untrusted-issuer.envelope": {
+      "sha256": "fcbeb42d240fe3bcaced57afb8c469af798375113ebba60f2c235644759c8e05",
+      "size": 1316
+    },
+    "valid-awg2.envelope": {
+      "sha256": "dd67338a64a1b61b3577d621ce2cb6cb79e8a1e5069a7675e8724a881e0fe594",
+      "size": 1464
+    },
+    "valid-next.envelope": {
+      "sha256": "ec241a40af57e33b63d6fa129021e3b4b8c53c32834f398c3d3968092abf2d37",
+      "size": 1400
+    },
+    "valid-tcp.envelope": {
+      "sha256": "6c8d075cdcbe5bf10edea667dfafb21804221ab0021daf45c957ef41f4b84de5",
+      "size": 1360
+    },
+    "valid-wg.envelope": {
+      "sha256": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+      "size": 1316
+    },
+    "wrong-audience.envelope": {
+      "sha256": "87a997e633b93a17d75156b2c0631c4a3032b3bb9a011236e8ee43a9f32aef0e",
+      "size": 1296
+    },
+    "wrong-previous.envelope": {
+      "sha256": "af841445e6130dfa80fd5580bf06d9dac86a3363edb1f70aeebb1b34fa9aaedd",
+      "size": 1316
+    },
+    "wrong-purpose.envelope": {
+      "sha256": "45d824aa5bb6ce778b4fb6c63dc562032ae5dcad99a005e3c039ce391d27eac3",
+      "size": 1316
+    },
+    "wrong-signer-id.envelope": {
+      "sha256": "6d7b6e7ab75f45b3d8a8cd888d7618e959db03856b060b90225366a6fdf81e68",
+      "size": 1316
+    },
+    "wrong-target.envelope": {
+      "sha256": "7ddfe34ecd549a18b3cc099b9cd6424810bdb0afd433e20afa7892674b113839",
+      "size": 1316
+    },
+    "wrong-wg.envelope": {
+      "sha256": "a241c9225a3bdaca6dfbdadebb0b33b234076dc30e0839126a1ef598d299c612",
+      "size": 1316
+    }
+  },
+  "fixture_identity": "TEST-ONLY-identity.json",
+  "reference_version": "0.2.9",
+  "schema_version": 1,
+  "suite": "family-connect-control-v1",
+  "test_only": true,
+  "transcripts": [
+    {
+      "id": "replay-and-chain",
+      "initial": {
+        "active": "baseline",
+        "client_version": "0.2.9",
+        "committed_sha256": null,
+        "floor": 0,
+        "now": 1000
+      },
+      "steps": [
+        {
+          "expected": {
+            "active": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "applies": 1,
+            "committed_sha256": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "floor": 1,
+            "phase": "IDLE",
+            "result": "COMMITTED",
+            "rollbacks": 0
+          },
+          "input": "valid-wg",
+          "operation": "receive"
+        },
+        {
+          "expected": {
+            "active": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "applies": 1,
+            "committed_sha256": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "floor": 1,
+            "phase": "IDLE",
+            "result": "COMMITTED",
+            "rollbacks": 0
+          },
+          "input": "valid-wg",
+          "operation": "receive"
+        },
+        {
+          "error": "REPLAY",
+          "expected": {
+            "active": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "applies": 1,
+            "committed_sha256": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "floor": 1,
+            "phase": "IDLE",
+            "result": "REJECTED",
+            "rollbacks": 0
+          },
+          "input": "same-revision-other-bytes",
+          "operation": "receive"
+        },
+        {
+          "error": "SIGNATURE",
+          "expected": {
+            "active": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "applies": 1,
+            "committed_sha256": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "floor": 1,
+            "phase": "IDLE",
+            "result": "REJECTED",
+            "rollbacks": 0
+          },
+          "input": "bad-high-sequence",
+          "operation": "receive"
+        },
+        {
+          "error": "PREVIOUS_HASH",
+          "expected": {
+            "active": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "applies": 1,
+            "committed_sha256": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "floor": 1,
+            "phase": "IDLE",
+            "result": "REJECTED",
+            "rollbacks": 0
+          },
+          "input": "wrong-previous",
+          "operation": "receive"
+        },
+        {
+          "expected": {
+            "active": "ec241a40af57e33b63d6fa129021e3b4b8c53c32834f398c3d3968092abf2d37",
+            "applies": 2,
+            "committed_sha256": "ec241a40af57e33b63d6fa129021e3b4b8c53c32834f398c3d3968092abf2d37",
+            "floor": 2,
+            "phase": "IDLE",
+            "result": "COMMITTED",
+            "rollbacks": 0
+          },
+          "input": "valid-next",
+          "operation": "receive"
+        },
+        {
+          "error": "REPLAY",
+          "expected": {
+            "active": "ec241a40af57e33b63d6fa129021e3b4b8c53c32834f398c3d3968092abf2d37",
+            "applies": 2,
+            "committed_sha256": "ec241a40af57e33b63d6fa129021e3b4b8c53c32834f398c3d3968092abf2d37",
+            "floor": 2,
+            "phase": "IDLE",
+            "result": "REJECTED",
+            "rollbacks": 0
+          },
+          "input": "valid-wg",
+          "operation": "receive"
+        }
+      ]
+    },
+    {
+      "id": "failed-health-and-replay",
+      "initial": {
+        "active": "baseline",
+        "client_version": "0.2.9",
+        "committed_sha256": null,
+        "floor": 0,
+        "now": 1000
+      },
+      "steps": [
+        {
+          "expected": {
+            "active": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "applies": 1,
+            "committed_sha256": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "floor": 1,
+            "phase": "IDLE",
+            "result": "COMMITTED",
+            "rollbacks": 0
+          },
+          "input": "valid-wg",
+          "operation": "receive"
+        },
+        {
+          "error": "HEALTH",
+          "expected": {
+            "active": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "applies": 2,
+            "committed_sha256": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "floor": 2,
+            "phase": "IDLE",
+            "result": "ROLLED_BACK",
+            "rollbacks": 1
+          },
+          "health": false,
+          "input": "valid-next",
+          "operation": "receive"
+        },
+        {
+          "error": "HEALTH",
+          "expected": {
+            "active": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "applies": 2,
+            "committed_sha256": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "floor": 2,
+            "phase": "IDLE",
+            "result": "ROLLED_BACK",
+            "rollbacks": 1
+          },
+          "health": true,
+          "input": "valid-next",
+          "operation": "receive"
+        }
+      ]
+    },
+    {
+      "id": "crash-recover-outbox",
+      "initial": {
+        "active": "baseline",
+        "client_version": "0.2.9",
+        "committed_sha256": null,
+        "floor": 0,
+        "now": 1000
+      },
+      "steps": [
+        {
+          "at_phase": "APPLIED_PENDING",
+          "expected": {
+            "active": "fb852295dc64949b8b07292b20798df9833b5ed4c3a07474d2f1d5a7d3c3233a",
+            "applies": 1,
+            "committed_sha256": null,
+            "floor": 1,
+            "phase": "APPLIED_PENDING",
+            "result": "CRASH",
+            "rollbacks": 0
+          },
+          "input": "valid-wg",
+          "operation": "crash"
+        },
+        {
+          "expected": {
+            "active": "baseline",
+            "applies": 1,
+            "committed_sha256": null,
+            "floor": 1,
+            "phase": "IDLE",
+            "result": "ROLLED_BACK",
+            "rollbacks": 1
+          },
+          "operation": "restart-recover"
+        },
+        {
+          "expected": {
+            "active": "baseline",
+            "applies": 1,
+            "committed_sha256": null,
+            "floor": 1,
+            "phase": "IDLE",
+            "result": "IDLE",
+            "rollbacks": 1
+          },
+          "operation": "restart-recover"
+        },
+        {
+          "error": "RECOVERY",
+          "expected": {
+            "active": "baseline",
+            "applies": 1,
+            "committed_sha256": null,
+            "floor": 1,
+            "phase": "IDLE",
+            "result": "ROLLED_BACK",
+            "rollbacks": 1
+          },
+          "input": "valid-wg",
+          "operation": "receive"
+        },
+        {
+          "available": false,
+          "expected": {
+            "active": "baseline",
+            "applies": 1,
+            "committed_sha256": null,
+            "floor": 1,
+            "phase": "IDLE",
+            "result": false,
+            "rollbacks": 1
+          },
+          "operation": "flush",
+          "outbox_empty": false
+        },
+        {
+          "available": true,
+          "expected": {
+            "active": "baseline",
+            "applies": 1,
+            "committed_sha256": null,
+            "floor": 1,
+            "phase": "IDLE",
+            "result": true,
+            "rollbacks": 1
+          },
+          "operation": "flush",
+          "outbox_empty": true
+        }
+      ]
+    }
+  ]
+}

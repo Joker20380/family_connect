@@ -64,6 +64,8 @@ jobs:
           artifact, = Path('artifacts/control').glob('*.tar.gz')
           digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
           print(f'::notice title=Control preview SHA256::{artifact.name} {digest}')
+          vectors = Path('tests/vectors/control-v1/manifest.json')
+          print(f'::notice title=Control vectors manifest SHA256::{hashlib.sha256(vectors.read_bytes()).hexdigest()}')
           PY
       - uses: actions/upload-artifact@v4
         with:
@@ -71,4 +73,9 @@ jobs:
           path: |
             artifacts/control/*.tar.gz
             artifacts/clients/FamilyConnect-Linux-*.tar.gz
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: control-conformance-v1-TEST-ONLY
+          path: tests/vectors/control-v1/
           if-no-files-found: error
