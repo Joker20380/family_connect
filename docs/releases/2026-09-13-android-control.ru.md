@@ -16,6 +16,7 @@ Numeric gateway parsing не делает DNS lookup для имён.
 
 Закреплены BouncyCastle bcprov-jdk18on1.85.2 (lightweight API, без регистрации
 системного provider) и Gson2.13.2; версии одинаковы в app и JVM test project.
+Обе лицензии добавлены в assets/control-licenses; APK gate требует их наличия.
 [BC Java](https://www.bouncycastle.org/download/bouncy-castle-java/) и
 [Gson2.13.2 release](https://github.com/google/gson/releases/tag/gson-parent-2.13.2).
 
