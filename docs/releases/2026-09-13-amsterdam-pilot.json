@@ -1,0 +1,239 @@
+{
+  "host": "186.246.45.246",
+  "authorized_by_user": "2026-09-13",
+  "role": "Amsterdam single-client native WireGuard pilot",
+  "os": "Ubuntu 26.04 LTS",
+  "kernel": "7.0.0-30-generic",
+  "vcpus": 1,
+  "memory_mib": 955,
+  "final_memory_used_mib": 179,
+  "final_memory_available_mib": 776,
+  "disk_free_gib_approx": 17,
+  "service": "wg-quick@fcams.service",
+  "service_active": true,
+  "service_enabled": true,
+  "firewall_service_active": true,
+  "ipv4_forward": 1,
+  "ipv6_forward": 0,
+  "port": 51820,
+  "mtu": 1280,
+  "ssh_key_login_verified": true,
+  "ssh_host_fingerprint": "SHA256:TA7zrfD44kXhvR1k2aW8JHNtWIuLFfP8m6yxzV6+drk",
+  "server": {
+    "host": "186.246.45.246",
+    "interface": "fcams",
+    "port": 51820,
+    "server_public_key": "M5HLfjTQHHY3k7K1/4ITv9MUVz0Xtwt+pYn2Oz2wrAw=",
+    "wireguard": "wireguard-tools v1.0.20250521 - https://git.zx2c4.com/wireguard-tools/",
+    "service": "active",
+    "ipv6_egress": false,
+    "installer_sha256": "212885d636b7597700e5deaadcfb65d4d25e21d2e01237cbe587587499c6004d"
+  },
+  "runs": [
+    {
+      "host": "186.246.45.246",
+      "namespace": "fc-ams-check",
+      "started_at": 1789295696,
+      "tests": [
+        {
+          "test": "gateway_ping",
+          "summary": [
+            "3 packets transmitted, 3 received, 0% packet loss, time 2003ms",
+            "rtt min/avg/max/mdev = 41.976/87.679/115.163/32.537 ms"
+          ],
+          "passed": true
+        },
+        {
+          "test": "dns",
+          "passed": true
+        },
+        {
+          "test": "https",
+          "egress": "186.246.45.246",
+          "country": "NL",
+          "passed": true
+        },
+        {
+          "test": "second_https",
+          "egress": "186.246.45.246",
+          "passed": true
+        },
+        {
+          "test": "bounded_download",
+          "bytes": 1048576,
+          "bytes_per_second": 558943.0,
+          "seconds": 1.875997,
+          "passed": true
+        },
+        {
+          "test": "private_network_block",
+          "passed": true
+        },
+        {
+          "test": "ipv6_block",
+          "passed": true
+        }
+      ],
+      "passed": false,
+      "error": {
+        "stage": "server_restart",
+        "type": "CalledProcessError"
+      },
+      "host_routes_rules_unchanged": true,
+      "host_resolver_unchanged": true,
+      "namespace_removed": true,
+      "interface_removed": true,
+      "finished_at": 1789295721
+    },
+    {
+      "host": "186.246.45.246",
+      "namespace": "fc-ams-check",
+      "started_at": 1789295957,
+      "tests": [
+        {
+          "test": "gateway_ping",
+          "summary": [
+            "3 packets transmitted, 2 received, 33.3333% packet loss, time 2064ms",
+            "rtt min/avg/max/mdev = 55.879/102.173/148.468/46.294 ms"
+          ],
+          "passed": true
+        },
+        {
+          "test": "dns",
+          "passed": true
+        },
+        {
+          "test": "https",
+          "egress": "186.246.45.246",
+          "country": "NL",
+          "passed": true
+        },
+        {
+          "test": "second_https",
+          "egress": "186.246.45.246",
+          "passed": true
+        },
+        {
+          "test": "bounded_download",
+          "bytes": 1048576,
+          "bytes_per_second": 828828.0,
+          "seconds": 1.26513,
+          "passed": true
+        },
+        {
+          "test": "private_network_block",
+          "passed": true
+        },
+        {
+          "test": "ipv6_block",
+          "passed": true
+        },
+        {
+          "test": "https_after_server_restart",
+          "egress": "186.246.45.246",
+          "country": "NL",
+          "passed": true
+        }
+      ],
+      "passed": false,
+      "server_restart_command_succeeded": true,
+      "post_restart_readiness_seconds": 16.627,
+      "error": {
+        "stage": "client_link_restart",
+        "type": "CalledProcessError",
+        "exit_code": 6,
+        "detail": "curl: (6) Could not resolve host: www.cloudflare.com\n"
+      },
+      "host_routes_rules_unchanged": true,
+      "host_resolver_unchanged": true,
+      "namespace_removed": true,
+      "interface_removed": true,
+      "finished_at": 1789295981
+    },
+    {
+      "host": "186.246.45.246",
+      "namespace": "fc-ams-check",
+      "started_at": 1789296115,
+      "tests": [
+        {
+          "test": "gateway_ping",
+          "summary": [
+            "3 packets transmitted, 3 received, 0% packet loss, time 2002ms",
+            "rtt min/avg/max/mdev = 55.763/71.127/97.007/18.406 ms"
+          ],
+          "passed": true
+        },
+        {
+          "test": "dns",
+          "passed": true
+        },
+        {
+          "test": "https",
+          "egress": "186.246.45.246",
+          "country": "NL",
+          "passed": true
+        },
+        {
+          "test": "second_https",
+          "egress": "186.246.45.246",
+          "passed": true
+        },
+        {
+          "test": "bounded_download",
+          "bytes": 1048576,
+          "bytes_per_second": 907841.0,
+          "seconds": 1.155021,
+          "passed": true
+        },
+        {
+          "test": "private_network_block",
+          "passed": true
+        },
+        {
+          "test": "ipv6_block",
+          "passed": true
+        },
+        {
+          "test": "https_after_server_restart",
+          "egress": "186.246.45.246",
+          "country": "NL",
+          "passed": true
+        },
+        {
+          "test": "https_after_client_reconnect",
+          "egress": "186.246.45.246",
+          "country": "NL",
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "server_restart_command_succeeded": true,
+      "post_restart_readiness_seconds": 16.615,
+      "client_reconnect_readiness_seconds": 0.078,
+      "recent_handshake": 1789296139,
+      "host_routes_rules_unchanged": true,
+      "host_resolver_unchanged": true,
+      "namespace_removed": true,
+      "interface_removed": true,
+      "finished_at": 1789296139
+    }
+  ],
+  "local_wg_sha256": "91ae3f37bac6346676eb30c4237948de571c27b32f5b73280089f33407898d3a",
+  "gateway_reboot_tested": false,
+  "app_gui_tested": false,
+  "reticulum_relay_deployed": false,
+  "awg_deployed": false,
+  "tcp_reality_deployed": false,
+  "catalog_changed": false,
+  "other_gateway_modified": false,
+  "python": {
+    "passed": 462,
+    "existing_warnings": 2,
+    "seconds": 9.68
+  },
+  "installer_syntax_checked": true,
+  "harness_syntax_checked": true,
+  "harness_sha256": "e5938b0d5fdf056f2de20e1400410d3708294be3477c82ee6d7e599913565362",
+  "source_base": "5d34b080d19f5d562db44ff90f2ee6ae2bb08a79",
+  "standard_ssh_key_login_verified": true
+}

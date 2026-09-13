@@ -1,5 +1,7 @@
 # Documentation map
 
+[Amsterdam gateway: real-network pilot and rollback](releases/2026-09-13-amsterdam-pilot.ru.md).
+
 [Android Stage5 verifier](releases/2026-09-13-android-control.ru.md).
 
 [Windows Stage5 verifier](releases/2026-09-13-windows-control.ru.md).

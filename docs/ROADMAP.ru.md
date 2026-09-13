@@ -1,5 +1,9 @@
 # План развития Family Connect
 
+Amsterdam186.246.45.246: native WG real-network pilot accepted13.09; Stage6 partly
+started, independent control ingress/alternate transports still pending.
+[Evidence](releases/2026-09-13-amsterdam-pilot.ru.md).
+
 Состояние на 12.09.2026. Главная цель: приложение сохраняет или восстанавливает VPN,
 а при полной недоступности старого сервера получает проверенные новые настройки
 по независимому служебному каналу и подключается к другому серверу.

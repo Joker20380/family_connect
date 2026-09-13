@@ -1,5 +1,24 @@
 # Current state / Текущее состояние
 
+## Amsterdam real-network pilot passed — 2026-09-13
+
+User authorized new empty VPS186.246.45.246: Ubuntu26.04,1 vCPU,955MiB RAM.
+Native WireGuard UDP51820/MTU1280 installed, one locally generated client peer;
+server key generated on-server. Service active+enabled, scoped nftables NAT/filter.
+Final isolated Linux netns run passed DNS, two HTTPS egress checks (IP186.246.45.246,
+countryNL),1MiB download, private-network/IPv6 refusal, server service restart and
+full client reconnect. Server rekey readiness16.615s; host routes/rules/DNS unchanged.
+Two preliminary failures retained: HTTPS immediately after server restart, then DNS
+failure after bare client link down/up. Bare link toggle remains unaccepted; final
+scenario recreates the complete connection. Not a fix/closure of TD-1 stability debt.
+SSH key access verified; mandatory initial password change handled outside Git.
+Private profile retained in ignored state-enroll/amsterdam-pilot, not imported in GUI.
+Next: Amsterdam profile in paired Linux application, then external trusted Reticulum
+relay and alternate transport checks. Native Windows/Android protected state remains.
+Python462 and operator-script syntax checks passed.
+No existing gateway/client install/catalog/main changes; Stage6 only partially begun.
+[Deployment, evidence and rollback](releases/2026-09-13-amsterdam-pilot.ru.md).
+
 ## Android Stage5 verifier accepted — 2026-09-13
 
 Source24159206a661bc7cea31a8f19d7c57c19f5796a1: Java schema2 configuration/ACK
