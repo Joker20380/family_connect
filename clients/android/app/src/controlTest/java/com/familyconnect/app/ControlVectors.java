@@ -42,7 +42,28 @@ final class ControlVectors {
         }
         JsonObject valid=manifest.getAsJsonArray("configurations").get(0).getAsJsonObject().getAsJsonObject("expected").getAsJsonObject("payload");
         int refusals=structures(valid);
-        return configurations+" configurations, "+acks+" ACKs, "+refusals+" structure refusals; manifest SHA256 "+MANIFEST;
+        cryptoRefusals(loader,fixture,anchor,privateKey,publicKey);
+        return configurations+" configurations, "+acks+" ACKs, "+refusals+" structure refusals, 4 authenticated-cipher refusals; manifest SHA256 "+MANIFEST;
+    }
+    static void cryptoRefusals(Loader loader,JsonObject fixture,byte[] anchor,byte[] privateKey,byte[] publicKey)throws Exception {
+        JsonObject original=parse(load(loader,"valid-wg.envelope")).getAsJsonObject();
+        byte[] validCipher=ControlProtocol.base64(text(original.get("ciphertext")),true);
+        for(int mode=0;mode<4;mode++) {
+            byte[] cipher=validCipher.clone(),deviceKey=privateKey.clone();
+            if(mode==0)cipher[cipher.length-1]^=1;
+            if(mode==1)cipher=Arrays.copyOf(cipher,64);
+            if(mode==2)Arrays.fill(cipher,0,32,(byte)0);
+            if(mode==3)deviceKey[4]^=1;
+            // PUBLIC TEST ONLY issuer deliberately authenticates invalid ciphertext.
+            org.bouncycastle.crypto.signers.Ed25519Signer signer=new org.bouncycastle.crypto.signers.Ed25519Signer();
+            signer.init(true,new org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters(ControlProtocol.base64(text(fixture.get("issuer_private_b64")),true),0));
+            byte[] domain=("family-connect/control-config/v1"+"\0").getBytes(StandardCharsets.UTF_8);
+            signer.update(domain,0,domain.length);signer.update(cipher,0,cipher.length);
+            JsonObject outer=new JsonObject();outer.addProperty("ciphertext",Base64.getEncoder().encodeToString(cipher));outer.addProperty("signature",Base64.getEncoder().encodeToString(signer.generateSignature()));
+            try{ControlProtocol.verifyConfiguration(outer.toString().getBytes(StandardCharsets.UTF_8),anchor,deviceKey,publicKey,text(fixture.get("wireguard_public_key")),"0.2.9",1000);}
+            catch(ControlProtocol.Rejected e){check(e.category.equals("STRUCTURE"),"Authenticated cipher category");continue;}
+            throw new AssertionError("Authenticated invalid ciphertext accepted");
+        }
     }
     static void reject(JsonObject valid,Consumer<JsonObject> mutate)throws Exception {
         JsonObject value=valid.deepCopy();mutate.accept(value);

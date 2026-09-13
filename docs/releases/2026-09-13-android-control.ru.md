@@ -23,7 +23,10 @@ Numeric gateway parsing не делает DNS lookup для имён.
 ## Проверки и границы
 
 Локальный Gradle8.11.1/JVM17 Docker:30 configurations+15 ACK,32 отказа структуры
-и12 отказов JSON/UTF8,2 JUnit methods passed. Проверяются manifest SHA256,
+и12 отказов JSON/UTF8,2 JUnit methods passed. Дополнительно4 signed-cipher
+отказа: неверный HMAC, truncated token, zero ephemeral X25519 и другой device key.
+Ciphertext здесь заново подписана PUBLIC TEST ONLY issuer, ожидается STRUCTURE
+после успешной проверки подписи. Эти проверки добавлены после review crypto gate. Проверяются manifest SHA256,
 47 resource hashes/sizes, полные payload/ACK body и исходный envelope SHA256.
 Общий runner включён в JVM и Android instrumentation. В Android добавлены2
 runtime methods, они выполняются вместе с прежними3 VPN lifecycle methods.

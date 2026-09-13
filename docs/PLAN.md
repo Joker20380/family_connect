@@ -3,7 +3,8 @@
 ## Android Stage5 verifier — 2026-09-13
 
 Java verifier implemented for schema2 encrypted configurations and device-signed ACK.
-Local Gradle/JVM17:30 configurations,15 ACK,32 profile refusals and12 strict JSON/UTF8
+Local Gradle/JVM17:30 configurations,15 ACK,32 profile refusals,4 authenticated-cipher
+refusals and12 strict JSON/UTF8
 refusals passed against the pinned immutable manifest. Python462 passed.
 Android emulator CI pending.
 Shared runner is used by JVM and Android instrumentation; fixture assets are test-only.

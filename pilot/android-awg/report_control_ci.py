@@ -15,4 +15,4 @@ for path in (root/'clients/android/app/build/outputs/androidTest-results').rglob
 assert found == expected, 'Android control runtime test results missing'
 digest = hashlib.sha256((root/'tests/vectors/control-v1/manifest.json').read_bytes()).hexdigest()
 assert digest == 'c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd'
-print(f'::notice title=Android control conformance::30 configurations, 15 ACKs, 32 structure refusals; strict JSON passed; manifest SHA256 {digest}')
+print(f'::notice title=Android control conformance::30 configurations, 15 ACKs, 32 structure refusals, 4 authenticated-cipher refusals; strict JSON passed; manifest SHA256 {digest}')
