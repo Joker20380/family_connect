@@ -276,6 +276,12 @@
       "passed": 348,
       "warnings": 2,
       "seconds": 19.46
+    },
+    "full_compose_build": {
+      "result": "success",
+      "control_image": "family-connect-control:recovery-compose-check",
+      "core_image": "family-connect-core:recovery-compose-check",
+      "services_started": false
     }
   },
   "baseline_report": "2026-09-13-awg31-resilience.json",
@@ -287,5 +293,30 @@
     "Recovery time begins after server recreation, not at fault injection",
     "H4 recovery still uses automatic baseline path",
     "Not a rewritten Reticulum or independently specified VPN wire protocol"
-  ]
+  ],
+  "source_commit": "c2a95e1a44019a300349f667aaf982b379d60a07",
+  "ci": {
+    "linux_control": {
+      "run": 34761765042,
+      "job": 103735736832,
+      "conclusion": "success"
+    },
+    "initial_phase0": {
+      "run": 34761765127,
+      "tests_job": 103735736923,
+      "tests": "success",
+      "failover_job": 103735737114,
+      "failover": "failure at image build, exact cause unavailable; log API403"
+    },
+    "repeated_phase0": {
+      "run": 34761940493,
+      "head": "1cece64bcbe096fb1d62934505564caee790d90f",
+      "tests_job": 103736204560,
+      "tests": "success",
+      "failover_job": 103736204445,
+      "failover": "success",
+      "code_changes_since_initial": false
+    }
+  },
+  "cleanup": "netns list and amneziawg IPC directory empty after tests"
 }

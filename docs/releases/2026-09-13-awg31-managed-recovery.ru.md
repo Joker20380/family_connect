@@ -84,3 +84,14 @@ unit/Rust tests103735736923 success. Failover103735737114 остановился
 isolated failover stack, до запуска интеграционных сценариев; причина по annotation
 только exit1, Log API403. Локальная Docker control build прошла; полный compose build
 проверяется отдельно. Начальный отказ сохранён; повтор CI ещё не принят.
+
+CI follow-up: повтор [phase034761940493](https://github.com/Joker20380/family_connect/actions/runs/34761940493)
+на1cece64bcbe096fb1d62934505564caee790d90f прошёл: tests103736204560 и
+failover103736204445 success. Между попытками изменена только документация;
+точная причина первого отказа не установлена, он не объявляется исправленной ошибкой.
+Namespace/IPC cleanup подтверждён отдельным осмотром. Full Compose local control
+stage также повторно прошёл348 tests/2 warnings/18.86с.
+
+Полная локальная Compose-сборка завершилась success для control и gateway, с
+отдельными тегами recovery-compose-check. Сервисы не запускались; рабочие образы
+auth2 и запущенные контейнеры не заменялись.

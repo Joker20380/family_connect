@@ -7,6 +7,8 @@ Three isolated repeats recovered server restart in3.7529/3.7665/3.7531s vs previ
 Policy:3 consecutive failed probes, at most2 resets/invocation,10s cooldown,20s
 observation budget checked between callbacks; stop on cancellation/ownership loss.
 Focused7, full Python485 and Docker test-stage348 passed. No client/server deployment.
+Linux control CI passed; initial phase0 failover image-build failure retained (logs403).
+One retry34761940493 on unchanged code passed tests+failover; cleanup verified.
 Production broker lease/revision/expiry/disconnect integration remains the next step;
 H4 recovery,1CPU/PMTU/long-run and Amsterdam AWG acceptance remain open.
 [Measurements and limitations](releases/2026-09-13-awg31-managed-recovery.ru.md).
