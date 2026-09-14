@@ -10,6 +10,22 @@
 
 [Единый список условий выпуска](PLAN.md#release-gates-three-platforms).
 
+## Android: CI a342d4b принят; проверка process restart — 2026-09-14
+
+Для a342d4b Client builds34833797626: Linux/Windows/Android success;
+Android diagnostic34833797792 success; phase034833797631: tests/failover success.
+Release job skipped. Последний desktop release по API — v0.2.9; новый APK не
+публиковался. Android source остаётся0.1.2-beta03/code3.
+Добавлена обязательная проверка Android Keystore/AtomicFile/journal/outbox:
+отдельные prepare → force-stop → recover процессы, отказ clock regression,
+corrupt storage и повторной генерации identity. Java compilation и локальные
+положительные/отрицательные проверки CI gate прошли; новый emulator CI ещё ожидается.
+Телефон разрешён для установки/приёмки; USB видит Xiaomi MTP, ADB пока пуст.
+Полная регистрация→RNS→native apply→Internet→ACK и crash rollback ещё не приняты.
+Далее: новый runtime CI, подключение ADB и подписанная тестовая сборка, затем
+полная Android-приёмка и остальные [условия трёх платформ](PLAN.md#release-gates-three-platforms).
+[Отчёт и границы проверки](releases/2026-09-14-android-storage-runtime.ru.md).
+
 ## Git checkpoint и Android runtime acceptance — 2026-09-14
 
 Накопленные исходники357 файлов сохранены коммитом af46e87 и отправлены в origin/main.

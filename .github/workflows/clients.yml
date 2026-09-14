@@ -74,6 +74,8 @@ jobs:
             android-awg-*.log
             android-awg-apk.json
             android-ci-summary.json
+            android-control-storage-*.log
+            android-control-storage-result.json
             android-tcp-*.log
             android-tcp-peer-result.json
   windows:

@@ -1,5 +1,7 @@
 # Documentation map
 
+[Android CI и защищённое состояние после остановки процесса](releases/2026-09-14-android-storage-runtime.ru.md).
+
 [Git checkpoint и Android runtime acceptance](releases/2026-09-14-git-android-acceptance.ru.md).
 
 [Android: автоматический RNS carrier и ACK](releases/2026-09-14-android-control-rns.ru.md).

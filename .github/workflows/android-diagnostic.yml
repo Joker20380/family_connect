@@ -69,3 +69,5 @@ jobs:
             android-tcp-*.log
             android-tcp-peer-result.json
             android-ci-summary.json
+            android-control-storage-*.log
+            android-control-storage-result.json
