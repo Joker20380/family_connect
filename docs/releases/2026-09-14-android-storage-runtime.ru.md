@@ -275,3 +275,88 @@ failure-after-three; Python syntax passed. Новый source CI ещё пред�
 Принятая revision7 истекла12:30:03UTC; после этого UI показал VPN off, dumpsys activity
 services для pilot — nothing. Автоматическое expiry отключение принято на beta04.
 Запрошен повторный RNS connect для проверки expired refusal; результат ещё ожидается.
+
+Explicit shell:bash и добавление pipefail подтверждены
+[официальным workflow syntax reference](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#jobsjob_idstepsshell).
+Повтор expired revision7 дал подписанный REJECTED/LEASE1789389095 и1789389155;
+новый TUN не поднялся. UI остался в ожидании relay («Подключение…») с текстом отказа;
+оператор нажал «Отключить». Отдельный статус ожидания конфигурации остаётся UI улучшением.
+
+## Частичная уборка во время beta05 CI
+
+Временный WG peer10.79.0.5/fd79:92::5 в Amsterdam удалён exact-stanza cleanup;
+временный AWG peer10.78.0.3/fd78:92::3 на185.251.89.19 удалён таким же scoped cleanup.
+Оба соответствующих expiry timers остановлены до ручной уборки. Исходные peers
+не удалялись, private backups/receipts сохранены. Для beta05 остаётся отдельный
+TCP8444 container с таймером и Wi-Fi ADB; их уборка ещё впереди.
+
+## Исправленный CI8b6d51b принят
+
+[Clients34843986160](https://github.com/Joker20380/family_connect/actions/runs/34843986160):
+Android103975351009, Windows103975350690, Linux103975351163 success; release skipped.
+[Android diagnostic34843986164](https://github.com/Joker20380/family_connect/actions/runs/34843986164):
+103975350698 success. [phase034843986155](https://github.com/Joker20380/family_connect/actions/runs/34843986155):
+failover103975350079/tests103975350461 success. CI acceptance wrapper проверил exact
+full SHA8b6d51b87769248fb0f1519c2916925b8f5507bd и conclusions всех трёх workflows.
+Artifact10347930896,121754674 bytes, expected SHA256
+89b1c9c99f466e8b0a182c221c2284d971bda30a2f47b1c419f368e4b3762578;
+скачивание/локальная проверка/подпись/установка beta05 ещё выполняются.
+
+## Проверенный ARM64 beta05
+
+Artifact digest подтверждён;132 app unit cases и8 instrumentation cases без
+failures/errors/skips. Storage restart prepare5836→recover5870 passed. Native hashes,
+Python/RNS/bootstrap/anchor/licenses/fixture gates passed. ARM64 selection сохранил
+retained payload; zipalign16KB и offline подпись постоянным beta key verified.
+APK0.1.4-beta05/code5,77686846 bytes, SHA256
+e83c0841dfa3719e50bef3509fdb436ce7f2fb17c8479c556fa13d80d974d951.
+Public receipt и APK: state-client-build/android-pilots/beta05/. Source8b6d51b,
+certificate SHA25667a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a.
+Команда adb install -r выполняется; фактическая версия/runtime ещё проверяются.
+
+## Beta05 установлена; revision8 принята
+
+adb install -r завершился Success; dumpsys package подтвердил pilot0.1.4-beta05/code5
+и неизменённое исходное com.familyconnect.app0.1.0/code1. Регистрация не повторялась.
+Новая revision8 требует min_client_version0.1.4, previous hashconfig7, expiry epoch
+1789390735. SHA256fdc106fed72d7ce6a3199fe3c2cfd96436abff1544122829142c74ab21348bd9.
+RECEIVED1789390467, APPLIED1789390468, COMMITTED1789390469/errorNONE подписаны прежней
+identity. Bound HTTPS external IP185.251.89.19/RU подтверждён. Повторные reconnect и
+force-stop recovery beta05 пока выполняются. Исходный native APK retained payload
+проверен; установка по failed5356ab4 не выполнялась.
+
+## Итог beta05 и выполненная уборка
+
+Три последовательных цикла beta05 прошли без debugger: disconnect/reconnect45.34s,
+disconnect/reconnect40.90s, force-stop/new-process/reconnect43.54s. В каждом bound HTTPS
+IP185.251.89.19. Эти timings включают ADB/UI/RNS и не являются временем health probe.
+Relay сохранил одну revision8 apply transaction с прежними тремя ACK/timestamps.
+Standard uiautomator dump создал валидный XML с23 pilot nodes; MIUI вывела warning
+о missing theme_compatibility.xml, но XML получен. Прежнего endless idle timeout нет.
+После expiry revision8 **12:58:55UTC** UI VPN off, обе pilot services отсутствуют.
+Установленные версии: pilot0.1.4-beta05/code5 и исходный0.1.0/code1.
+
+Удалены временные Android peers. С pre-test receipts сверены все исходные WG3/AWG1
+peers: значения сохранены. Отдельный family-connect-android-tcp-pilot остановлен и
+удалён; его timer и WG/AWG timers остановлены. Private backup/config/receipt directories
+сохранены. Существующие service StartedAt не изменились:
+
+- AWG gateway2026-09-10T21:02:48.155055691Z;
+- TCP443 gateway2026-09-11T13:18:55.24780161Z;
+- product API2026-09-10T11:10:53.139051801Z;
+- новый постоянный HTTPS ingress2026-09-14T11:14:20.720039078Z.
+
+UI helper /data/local/tmp/fc-ui-dump.jar, /data/local/tmp/fc-ui-beta05.xml и JDWP
+forward tcp8700 удалены; adb usb подтвердил restarting in USB mode. Проверка5555
+вернула connection refused111. Телефон можно погасить. Private native keys/journal,
+исходное приложение и HTTPS ingress сохранены. Последний committed hashconfig8:
+fdc106fed72d7ce6a3199fe3c2cfd96436abff1544122829142c74ab21348bd9; следующий sequence>8.
+Не сбрасывать journal и не переиспользовать уже опубликованные revisions.
+
+Осталось: российские AWG/TCP сети и blocked-WG managed Auto; AWG3.1 signed schema;
+отказ relay/полного gateway и независимый путь доставки; Doze, Wi-Fi/mobile handover,
+полный routing/IPv6/DNS cleanup, длительные/многопользовательские проверки; Windows
+native Stage5 и общий выпуск трёх платформ. Short beta05 retry series не доказывает
+устранение всех transient сетевых отказов. Scheduled TLS renewal ещё не наблюдался.
+Django/платежи после VPN, messenger/iPhone отложены. Это техническая device acceptance,
+не публичный платный релиз и не заявление о доступности из России.

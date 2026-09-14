@@ -6,11 +6,12 @@
     "test_location": "Europe"
   },
   "installed": {
-    "source": "972c81c",
-    "version": "0.1.3-beta04",
-    "version_code": 4,
+    "source": "8b6d51b87769248fb0f1519c2916925b8f5507bd",
+    "version": "0.1.4-beta05",
+    "version_code": 5,
     "package": "com.familyconnect.app.pilot",
-    "apk_sha256": "b6df64f0f4d0d16602900221bd605e7b3e07779a36633b9e7eb6c4930eae9365"
+    "apk_sha256": "e83c0841dfa3719e50bef3509fdb436ce7f2fb17c8479c556fa13d80d974d951",
+    "bytes": 77686846
   },
   "acks": [
     {
@@ -188,6 +189,46 @@
       "error": "NONE",
       "timestamp": 1789388468,
       "envelope_hash": "ed3b4290ee78f0b8fbb80dafbcd0c56065b1d4380276e7bc2d557354a50a591c"
+    },
+    {
+      "config_id": null,
+      "sequence": 0,
+      "status": "REJECTED",
+      "error": "LEASE",
+      "timestamp": 1789389095,
+      "envelope_hash": "ed3b4290ee78f0b8fbb80dafbcd0c56065b1d4380276e7bc2d557354a50a591c"
+    },
+    {
+      "config_id": null,
+      "sequence": 0,
+      "status": "REJECTED",
+      "error": "LEASE",
+      "timestamp": 1789389155,
+      "envelope_hash": "ed3b4290ee78f0b8fbb80dafbcd0c56065b1d4380276e7bc2d557354a50a591c"
+    },
+    {
+      "config_id": "android-live-8",
+      "sequence": 8,
+      "status": "RECEIVED",
+      "error": "NONE",
+      "timestamp": 1789390467,
+      "envelope_hash": "fdc106fed72d7ce6a3199fe3c2cfd96436abff1544122829142c74ab21348bd9"
+    },
+    {
+      "config_id": "android-live-8",
+      "sequence": 8,
+      "status": "APPLIED",
+      "error": "NONE",
+      "timestamp": 1789390468,
+      "envelope_hash": "fdc106fed72d7ce6a3199fe3c2cfd96436abff1544122829142c74ab21348bd9"
+    },
+    {
+      "config_id": "android-live-8",
+      "sequence": 8,
+      "status": "COMMITTED",
+      "error": "NONE",
+      "timestamp": 1789390469,
+      "envelope_hash": "fdc106fed72d7ce6a3199fe3c2cfd96436abff1544122829142c74ab21348bd9"
     }
   ],
   "verified_device_signatures": true,
@@ -203,17 +244,61 @@
     "WG and TCP committed restart",
     "unavailable endpoint rollback",
     "APPLIED_PENDING process death recovery and durable ACK delivery",
-    "expired envelope refusal"
+    "expired envelope refusal",
+    "beta05 TCP upgrade preserves identity and commits revision8",
+    "beta05 3 reconnect/recovery HTTPS cycles",
+    "beta05 accepted lease automatic stop",
+    "beta05 standard UI XML"
   ],
   "open": [
-    "Russia carrier networks",
-    "transient health refusal: beta05 fix awaits runtime",
-    "committed lease automatic stop",
-    "managed Auto and blocked-WG failover",
-    "relay outage",
+    "Russia AWG/TCP carrier networks and managed blocked-WG failover",
+    "managed Auto",
+    "relay and entire gateway outage",
     "Doze and Wi-Fi/mobile handover",
+    "full routing IPv6 DNS cleanup",
     "AWG3.1 signed schema",
-    "long-running stability",
-    "temporary resource cleanup"
-  ]
+    "long-running multi-user stability",
+    "Windows native Stage5 and coordinated three-platform release",
+    "scheduled TLS renewal observation"
+  ],
+  "beta05_cycles": [
+    {
+      "action": "disconnect",
+      "passed": true,
+      "external_ip": "185.251.89.19",
+      "elapsed_seconds": 45.34
+    },
+    {
+      "action": "disconnect",
+      "passed": true,
+      "external_ip": "185.251.89.19",
+      "elapsed_seconds": 40.9
+    },
+    {
+      "action": "force-stop",
+      "passed": true,
+      "external_ip": "185.251.89.19",
+      "elapsed_seconds": 43.54
+    }
+  ],
+  "baseline_installed": {
+    "source": "972c81c",
+    "version": "0.1.3-beta04",
+    "version_code": 4,
+    "package": "com.familyconnect.app.pilot",
+    "apk_sha256": "b6df64f0f4d0d16602900221bd605e7b3e07779a36633b9e7eb6c4930eae9365"
+  },
+  "cleanup": {
+    "temporary_wg_awg_peers_removed": true,
+    "original_wg_peers_preserved": 3,
+    "original_awg_peers_preserved": 1,
+    "temporary_tcp_container_removed": true,
+    "temporary_timers_stopped": true,
+    "ui_helper_xml_removed": true,
+    "jdwp_forward_removed": true,
+    "adb_usb_restored": true,
+    "wifi_adb_5555_connect_errno": 111,
+    "pilot_vpn_off": true,
+    "identity_journal_preserved": true
+  }
 }

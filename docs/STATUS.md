@@ -10,32 +10,39 @@
 
 [Единый список условий выпуска](PLAN.md#release-gates-three-platforms).
 
-## Реальный Android pilot — 2026-09-14
+## Android live acceptance и beta05 — 2026-09-14
 
-На Redmi Note9 Pro/Android12 установлен0.1.3-beta04/code4 (source972c81c), отдельный
-com.familyconnect.app.pilot. Исходный com.familyconnect.app0.1.0 сохранён. Platform
-CI34838248178 и phase034838248234 passed,8 instrumentation + restart5620→5655 passed.
-HTTPS IP enrollment → encrypted signed Reticulum configuration → native apply →
-bound DNS/HTTPS → device-signed ACK проверены для WG, AWG2 и TCP. External IP:
-WG186.246.45.246/NL, AWG2/TCP185.251.89.19/RU. WG/TCP committed process restart,
-health failure rollback и crash APPLIED_PENDING→RECOVERY rollback с durable outbox
-passed. Несколько ранних WG reconnect отказали по health; причина пока не объяснена.
+На Redmi Note9 Pro/Android12 установлен **0.1.4-beta05/code5**, source8b6d51b,
+com.familyconnect.app.pilot; исходный com.familyconnect.app0.1.0/code1 сохранён.
+APK SHA256 e83c0841dfa3719e50bef3509fdb436ce7f2fb17c8479c556fa13d80d974d951,
+постоянная offline beta signature,132 app unit/8 instrumentation и отдельный
+storage restart5836→5870 passed. Clients34843986160, Android diagnostic34843986164,
+phase034843986155 success. Публичного release/tag/catalog update не было.
 
-Телефон в Европе. Пользователь сообщает блокировку WG в России: европейский WG
-baseline не закрывает приёмку РФ; нужны AWG/TCP на российской сети. Managed Auto,
-AWG3.1 signed schema, relay outage, handover/Doze и длительная устойчивость открыты.
-Revision6 откатилась по HEALTH, затем просроченный envelope отклонён по LEASE;
-Принятая revision7 истекла12:30:03UTC: VPN и pilot services остановились.
-Последняя committed TCP revision7; expired reconnect ещё проверяется.
-Подготовлен beta05/code5: bounded health retry и устранение лишних UI text updates;
-104 local tests/Android compilation passed. CI5356ab4 отказал: sum.golang.org
-HTTP2 ошибка, скрытая pipe через tee; APK gate обнаружил отсутствующие native libraries.
-Добавлены pipefail и3 bounded Go module retries; повторный CI/установка впереди;
-временные WG/AWG peers, TCP8444 pilot и Wi-Fi ADB5555 ещё требуют уборки.
-Checkpoint a857e4f в main; его Linux/Windows/Android/phase0 CI passed.
-Далее Android оставшиеся gates, Windows native Stage5 и остальные условия трёх
-платформ; Django/платежи после VPN. Messenger/iPhone отложены.
-[Версии, доказательства, rollout/rollback и оставшиеся проверки](releases/2026-09-14-android-storage-runtime.ru.md).
+На beta04 принята цепочка HTTPS IP enrollment → signed encrypted Reticulum → native
+WG/AWG2/TCP → bound DNS/HTTPS → device-signed ACK, health rollback, crash после
+APPLIED_PENDING с durable outbox/recovery и expiry stop/refusal. В beta05 добавлен
+bound health retry в прежнем15s budget, устранены лишние UI text updates. После
+обновления прежняя identity приняла revision8/COMMITTED;3/3 повторных TCP подключений
+(два disconnect, один force-stop) подтвердили HTTPS IP185.251.89.19. Standard UI XML
+получен, бесконечного idle wait нет. Revision8 истекла12:58:55UTC, VPN/services off.
+Краткие прогоны не доказывают длительную устойчивость или все причины ранних отказов.
+
+Телефон находится в Европе. Пользователь сообщает полную блокировку WG в России;
+приёмка РФ требует AWG/TCP в российских сетях. Европейский WG остаётся baseline.
+Открыты managed Auto/blocked-WG failover, AWG3.1 signed schema, relay/whole-gateway
+outage, Doze/handover, полный routing/IPv6/DNS и длительная эксплуатация.
+
+Временные Android WG/AWG peers удалены (исходные3/1 peers сверены), TCP8444 container
+удалён, три expiry timers остановлены. Исходные API/AWG/TCP не перезапускались.
+UI helper/XML и JDWP forwarding убраны; adb usb выполнен, Wi-Fi5555 connection refused.
+Native identity/journal и private receipts сохранены. Для продолжения: новая revision>8,
+previous hash fdc106fed72d7ce6a3199fe3c2cfd96436abff1544122829142c74ab21348bd9;
+истёкшие тестовые конфигурации/удалённые endpoints не использовать как рабочий сервис.
+Далее оставшиеся Android gates, Windows native Stage5 и остальные условия трёх
+платформ. Django/платежи после VPN; messenger/iPhone отложены.
+[Отчёт](releases/2026-09-14-android-storage-runtime.ru.md) ·
+[Runbook](testing/android-stage5-live.ru.md) · [Sanitized receipt](android-stage5-live-result.json).
 
 ## HTTPS для Android регистрации — 2026-09-14
 
@@ -45,7 +52,7 @@ Staging/production issuance, external TLS/routes/body/rate limits и renewal dry
 passed; отдельный twice-daily timer active, ручной renew/reload success. Новые UFW
 IPv4 TCP80/8443; прежний API и VPN не перезапускались. Созданы отдельные single-use
 invitation/entitlement с предварительной private DB backup; Android enrollment выполнен
-в beta04. Следующее: live reconnect/recovery, AWG/TCP;
+в beta04; дальнейшие live WG/AWG2/TCP/recovery описаны выше. Осталось
 наблюдать scheduled certificate renewal. [Rollout/rollback и тесты](releases/2026-09-14-product-https.ru.md).
 
 ## Исторический checkpoint a342d4b и подготовка restart test — 2026-09-14
