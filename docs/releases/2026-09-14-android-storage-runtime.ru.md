@@ -75,3 +75,16 @@ ADB увидел Redmi Note9 Pro/joyeuse, Android12/arm64-v8a, установл�
 по-прежнему обрывается; APK для сравнения сертификата пока не получен.
 Временно включён tcpip5555, проверяется192.168.129.42:5555; после приёмки вернуть USB.
 Профили/app data не читались и не удалялись, APK не установлен.
+
+## Сохранение прежнего приложения
+
+Wi-Fi ADB192.168.129.42:5555 позволил сохранить исходный публичный APK. Его debug
+certificate SHA256668409f4b19253908f66a6bcdaf0da77a625e589fece38ccebb59e0c89722e08
+не совпадает с локальным debug c2c3da545f0c1171562339934fae275f1cf89a224e0493a924dd73a990e8bca6
+или beta67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a.
+Для обновления старого CI APK нужный private signing key отсутствует. Uninstall
+не выполнялся. Новая debug beta04 получает applicationId com.familyconnect.app.pilot
+и label Family Connect Pilot; release ID остаётся com.familyconnect.app. CI выполняет
+всю приёмку на фактическом pilot ID. Это отдельная регистрация/identity; migration
+старого профиля не заявляется. Следующие pilot APK подписывать одним постоянным
+beta key, code увеличивать; не подменять опубликованные версии.

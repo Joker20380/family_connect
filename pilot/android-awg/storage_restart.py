@@ -9,7 +9,7 @@ import subprocess
 def check(root):
     assert os.environ.get('GITHUB_ACTIONS') == 'true', 'CI emulator required'
     assert subprocess.check_output(['adb', 'shell', 'getprop', 'ro.kernel.qemu'], text=True).strip() == '1'
-    package = 'com.familyconnect.app'
+    package = 'com.familyconnect.app.pilot'
     # connectedDebugAndroidTest uninstalls its instrumentation APK on completion.
     # Install the already-built pair once, before either persistence phase.
     for directory in ('debug', 'androidTest/debug'):
@@ -20,7 +20,7 @@ def check(root):
     for phase in ('prepare', 'recover'):
         subprocess.run(['adb', 'shell', 'am', 'force-stop', package], check=True, timeout=20)
         result = subprocess.run(['adb', 'shell', 'am', 'instrument', '-w', '-r',
-            '-e', 'class', package+'.ControlStorageRuntimeTest',
+            '-e', 'class', 'com.familyconnect.app.ControlStorageRuntimeTest',
             '-e', 'fc_disposable', 'true', '-e', 'fc_storage_phase', phase,
             package+'.test/androidx.test.runner.AndroidJUnitRunner'],
             capture_output=True, text=True, timeout=120)
