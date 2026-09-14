@@ -1,0 +1,14 @@
+{
+  "engine_repository": "https://github.com/amnezia-vpn/amneziawg-go",
+  "engine_tag": "v3.1.20260828",
+  "engine_commit": "b5928efb6ca19f0153958460c3d141f04abc5c2e",
+  "tools_repository": "https://github.com/amnezia-vpn/amneziawg-tools",
+  "tools_tag": "v3.1.20260812",
+  "tools_commit": "ee0f0a9aa34ff0a0da4b3433b9512781cfe02843",
+  "go": "1.26.1",
+  "scope": "isolated experimental Linux pilot; stable runtime and schema unchanged",
+  "local_patch": "patches/0001-refresh-s4-after-tun-read.patch",
+  "local_patch_scope": "Refresh S4 after blocked TUN read; experimental, not upstream release",
+  "tools_local_patch": "patches/0002-tools-u16-range.patch",
+  "tools_local_patch_scope": "Reject u16 overflow, signed/empty/malformed endpoints instead of truncating"
+}

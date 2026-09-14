@@ -1,0 +1,29 @@
+--- a/device/send.go
++++ b/device/send.go
+@@ -333,14 +333,24 @@
+ 
+ 		// read packets
+ 		count, readErr = device.tun.device.Read(bufs, sizes, offset)
++		// Configuration can change S4 while Read is blocked, including at startup.
++		// Move the plaintext to the new offset before constructing queue elements.
++		currentPadding := device.paddings.transport.Load()
++		currentOffset := MessageTransportHeaderSize + int(currentPadding)
+ 		for i := 0; i < count; i++ {
+ 			if sizes[i] < 1 {
+ 				continue
+ 			}
+ 
++			if currentOffset > len(bufs[i])-sizes[i] {
++				continue
++			}
++			if currentOffset != offset {
++				copy(bufs[i][currentOffset:currentOffset+sizes[i]], bufs[i][offset:offset+sizes[i]])
++			}
+ 			elem := elems[i]
+-			elem.packet = bufs[i][offset : offset+sizes[i]]
+-			elem.padding = padding
++			elem.packet = bufs[i][currentOffset : currentOffset+sizes[i]]
++			elem.padding = currentPadding
+ 
+ 			// lookup peer
+ 			var peer *Peer

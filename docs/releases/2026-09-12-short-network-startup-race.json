@@ -1,0 +1,79 @@
+{
+  "scope": "existing installed TCP; no upgrade/server/fault/load changes",
+  "started_at": 1789247875,
+  "samples": [
+    {
+      "round": 1,
+      "https": [
+        {
+          "target": "trace",
+          "exit": 45,
+          "expected_egress": false
+        },
+        {
+          "target": "ip",
+          "exit": 45,
+          "expected_egress": false
+        }
+      ],
+      "dns": false
+    },
+    {
+      "round": 2,
+      "https": [
+        {
+          "target": "trace",
+          "exit": 45,
+          "expected_egress": false
+        },
+        {
+          "target": "ip",
+          "exit": 45,
+          "expected_egress": false
+        }
+      ],
+      "dns": false
+    },
+    {
+      "round": 3,
+      "https": [
+        {
+          "target": "trace",
+          "exit": 45,
+          "expected_egress": false
+        },
+        {
+          "target": "ip",
+          "exit": 45,
+          "expected_egress": false
+        }
+      ],
+      "dns": false
+    }
+  ],
+  "direct_https": [
+    {
+      "target": "trace",
+      "exit": 0,
+      "expected_egress": null
+    },
+    {
+      "target": "ip",
+      "exit": 0,
+      "expected_egress": null
+    }
+  ],
+  "direct_dns": true,
+  "server_bypass": true,
+  "public_via_tun": false,
+  "dns_configuration": false,
+  "cleanup": {
+    "stop_success": true,
+    "tun_absent": true,
+    "marker_absent": true,
+    "rules_restored": true,
+    "gateway_route_restored": true,
+    "table_empty": true
+  },
+  "finished_at": 1789247876
+}

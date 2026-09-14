@@ -1,0 +1,301 @@
+{
+  "date": "2026-09-13",
+  "source_base": "6d0de83",
+  "bundle_id": "66152538ee2a4f3ec4ac76cb2a0e09936bcc0785fc5afa308b692c3cd472acf5",
+  "revision4": {
+    "device": "71a05310177fa445bbe95b2405e650ba",
+    "revision": 4,
+    "previous": "31eeed4a5b8fa32e732f4c7fb95896008c62f35fcd3e70c09045d9646e1fe99a",
+    "envelope_hash": "78f6cbf5ee4c66f6cc73e4f4b3e5279ee193d98578b6e10fd4499f75b1e7ada5",
+    "issued_at": 1789301285,
+    "expires_at": 1789322885,
+    "operator_proof_verified": true
+  },
+  "revision5": {
+    "device": "71a05310177fa445bbe95b2405e650ba",
+    "revision": 5,
+    "previous": "78f6cbf5ee4c66f6cc73e4f4b3e5279ee193d98578b6e10fd4499f75b1e7ada5",
+    "envelope_hash": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+    "issued_at": 1789301880,
+    "expires_at": 1789323480,
+    "operator_route_exception": "TCP 186.246.45.246:4242 lookup main, priority 10990; temporary pilot prerequisite"
+  },
+  "initial_live": {
+    "before": {
+      "phase": "IDLE",
+      "floor": 3,
+      "committed": "31eeed4a5b8fa32e732f4c7fb95896008c62f35fcd3e70c09045d9646e1fe99a",
+      "outbox": 0
+    },
+    "checks": [
+      {
+        "run": 1,
+        "exit": 0,
+        "journal": {
+          "phase": "IDLE",
+          "floor": 4,
+          "committed": "78f6cbf5ee4c66f6cc73e4f4b3e5279ee193d98578b6e10fd4499f75b1e7ada5",
+          "outbox": 3
+        },
+        "gui": {
+          "ready": true,
+          "busy": false,
+          "selected": "3810fa84-002b-41bb-b1cc-5c2f5d455e97",
+          "active": true,
+          "closed": false,
+          "generation": 29,
+          "status": "Tunnel is on",
+          "detail": "IP: 186.246.45.246 \u00b7 NL"
+        },
+        "https": true
+      },
+      {
+        "run": 2,
+        "exit": 1,
+        "journal": {
+          "phase": "IDLE",
+          "floor": 4,
+          "committed": "78f6cbf5ee4c66f6cc73e4f4b3e5279ee193d98578b6e10fd4499f75b1e7ada5",
+          "outbox": 3
+        }
+      }
+    ],
+    "restored": {
+      "rules4": true,
+      "rules6": true,
+      "route4": true,
+      "route6": true,
+      "resolver": true,
+      "active": true
+    },
+    "after": {
+      "phase": "IDLE",
+      "floor": 4,
+      "committed": "78f6cbf5ee4c66f6cc73e4f4b3e5279ee193d98578b6e10fd4499f75b1e7ada5",
+      "outbox": 3
+    },
+    "pending_clear": true
+  },
+  "accepted_live": {
+    "before": {
+      "phase": "IDLE",
+      "floor": 4,
+      "committed": "78f6cbf5ee4c66f6cc73e4f4b3e5279ee193d98578b6e10fd4499f75b1e7ada5",
+      "outbox": 3
+    },
+    "checks": [
+      {
+        "run": 1,
+        "exit": 0,
+        "journal": {
+          "phase": "IDLE",
+          "floor": 5,
+          "committed": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+          "outbox": 0
+        },
+        "gui": {
+          "ready": true,
+          "busy": false,
+          "selected": "4d47d83f-428e-46c5-9cb1-75b31e2cbd5f",
+          "active": true,
+          "closed": false,
+          "generation": 32,
+          "status": "Tunnel is on",
+          "detail": "IP: 186.246.45.246 \u00b7 NL"
+        },
+        "https": true,
+        "profiles": [
+          "1b26e4a6-c755-4708-a11d-e8bc0bbf0dc1",
+          "3810fa84-002b-41bb-b1cc-5c2f5d455e97",
+          "3c1f137a-830a-471d-bfac-8164ab7159fe",
+          "42d216e6-128e-4597-9818-f7b82561e294",
+          "4d47d83f-428e-46c5-9cb1-75b31e2cbd5f",
+          "b56605bc-290d-4d6b-976a-788f8f010017",
+          "ca453659-ff38-4993-bb04-0d62878d39c4",
+          "fcawg6c19c559",
+          "fctcp75850269"
+        ],
+        "relay_route": [
+          {
+            "dst": "186.246.45.246",
+            "gateway": "192.168.128.1",
+            "dev": "wlp0s20f3",
+            "prefsrc": "192.168.129.37",
+            "flags": [],
+            "uid": 1000,
+            "cache": []
+          }
+        ]
+      },
+      {
+        "run": 2,
+        "exit": 0,
+        "journal": {
+          "phase": "IDLE",
+          "floor": 5,
+          "committed": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+          "outbox": 0
+        },
+        "gui": {
+          "ready": true,
+          "busy": false,
+          "selected": "4d47d83f-428e-46c5-9cb1-75b31e2cbd5f",
+          "active": true,
+          "closed": false,
+          "generation": 32,
+          "status": "Tunnel is on",
+          "detail": "IP: 186.246.45.246 \u00b7 NL"
+        },
+        "https": true,
+        "profiles": [
+          "1b26e4a6-c755-4708-a11d-e8bc0bbf0dc1",
+          "3810fa84-002b-41bb-b1cc-5c2f5d455e97",
+          "3c1f137a-830a-471d-bfac-8164ab7159fe",
+          "42d216e6-128e-4597-9818-f7b82561e294",
+          "4d47d83f-428e-46c5-9cb1-75b31e2cbd5f",
+          "b56605bc-290d-4d6b-976a-788f8f010017",
+          "ca453659-ff38-4993-bb04-0d62878d39c4",
+          "fcawg6c19c559",
+          "fctcp75850269"
+        ],
+        "relay_route": [
+          {
+            "dst": "186.246.45.246",
+            "gateway": "192.168.128.1",
+            "dev": "wlp0s20f3",
+            "prefsrc": "192.168.129.37",
+            "flags": [],
+            "uid": 1000,
+            "cache": []
+          }
+        ]
+      }
+    ],
+    "passed": true,
+    "restored": {
+      "rules4": true,
+      "rules6": true,
+      "route4": true,
+      "route6": true,
+      "resolver": true,
+      "active": true
+    },
+    "after": {
+      "phase": "IDLE",
+      "floor": 5,
+      "committed": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+      "outbox": 0
+    },
+    "pending_clear": true
+  },
+  "relay": {
+    "provider_public": "vKri/FwEyJe/AoepLwYxN/T64cqzwVft+HxMCMDcmV8DcTOoLqnoHVjpThpwhvU2eSO+OoMTEg90lUs3VCOV8A==",
+    "provider_reference": "e504e0ef76a2b3bcc3f0c5add0760ff3",
+    "configs": [
+      [
+        "71a05310177fa445bbe95b2405e650ba",
+        4,
+        "78f6cbf5ee4c66f6cc73e4f4b3e5279ee193d98578b6e10fd4499f75b1e7ada5"
+      ],
+      [
+        "71a05310177fa445bbe95b2405e650ba",
+        5,
+        "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d"
+      ]
+    ],
+    "acks": [
+      {
+        "ack_id": "19f7625abe3c1152c9c0beb300afdf081c482ae0a631ab966ca71460d09ef326",
+        "config_id": "linux-amsterdam-external-4",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "78f6cbf5ee4c66f6cc73e4f4b3e5279ee193d98578b6e10fd4499f75b1e7ada5",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 4,
+        "status": "RECEIVED",
+        "timestamp": 1789301442
+      },
+      {
+        "ack_id": "6a3d1310155ab1638807fcdf560132cf6c16dca2712ab92d3b1370428fb288e9",
+        "config_id": "linux-amsterdam-external-4",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "78f6cbf5ee4c66f6cc73e4f4b3e5279ee193d98578b6e10fd4499f75b1e7ada5",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 4,
+        "status": "APPLIED",
+        "timestamp": 1789301443
+      },
+      {
+        "ack_id": "1c9cf5549da1a701786047ef7ff7f0d62f1e5f1fd51270c50c6273daba443baa",
+        "config_id": "linux-amsterdam-external-4",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "78f6cbf5ee4c66f6cc73e4f4b3e5279ee193d98578b6e10fd4499f75b1e7ada5",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 4,
+        "status": "COMMITTED",
+        "timestamp": 1789301443
+      },
+      {
+        "ack_id": "e17d594780f195ae634bfa6c494546c75169f8e5c6f0801eac513626dc0b5446",
+        "config_id": "linux-amsterdam-external-5",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 5,
+        "status": "RECEIVED",
+        "timestamp": 1789301937
+      },
+      {
+        "ack_id": "345314157783fc3af477589f6e2287e7f460c65580cdde1de573208c13c336fe",
+        "config_id": "linux-amsterdam-external-5",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 5,
+        "status": "APPLIED",
+        "timestamp": 1789301937
+      },
+      {
+        "ack_id": "4d0c6ea206edbbb99374ed742e5eae54de651fdb59e201f0d5dc10ea04b91a64",
+        "config_id": "linux-amsterdam-external-5",
+        "device": "71a05310177fa445bbe95b2405e650ba",
+        "envelope_hash": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+        "error": "NONE",
+        "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+        "schema_version": 1,
+        "sequence": 5,
+        "status": "COMMITTED",
+        "timestamp": 1789301938
+      }
+    ]
+  },
+  "service": "ActiveState=active\nSubState=running\nNRestarts=0\nMemoryCurrent=33501184\nenabled\n               total        used        free      shared  buff/cache   available\nMem:             955         238          73           1         665         717\nSwap:              0           0           0\nState  Recv-Q Send-Q Local Address:Port Peer Address:Port\nLISTEN 0      5            0.0.0.0:4242      0.0.0.0:*   \nT9Ral2y7eoj+qiPTBu/WBzdMIfOqVwqD+IQcWVYvPzM=\t10.79.0.2/32 fd79:92::2/128\niK8HzMpp6J+QtRDk+z9Z90Vgafo7O4ZoSVbBR//nMRE=\t10.79.0.3/32 fd79:92::3/128\n",
+  "post_restart_log": "{\"control_event\": \"control.channel.started\", \"config_id\": null, \"sequence\": null, \"state\": null, \"error_category\": \"NONE\"}\n{\"control_event\": \"control.message.received\", \"config_id\": null, \"sequence\": null, \"state\": \"IDLE\", \"error_category\": \"NONE\"}\n{\"control_event\": \"control.ack.sent\", \"config_id\": \"linux-amsterdam-external-5\", \"sequence\": 5, \"state\": \"IDLE\", \"error_category\": \"NONE\"}\n{\"result\": \"COMMITTED\"}\n",
+  "temporary_route_removed": true,
+  "final_journal": {
+    "device": "71a05310177fa445bbe95b2405e650ba",
+    "public_identity": "WObH1Ze24sQtzbQ+3TWuh0fxUE3+7bf/23M0ZtPLsnnQwCnnf6sDxO3Nv+iJopFc0pqupx+9n3bq9RUpmsxQYw==",
+    "wg": "iK8HzMpp6J+QtRDk+z9Z90Vgafo7O4ZoSVbBR//nMRE=",
+    "phase": "IDLE",
+    "floor": 5,
+    "previous": "4048c1d5062a684b1c1ef29c4bc1291432bb08d1322e4cea9effe54e5800416d",
+    "outbox": 0
+  },
+  "operator_hashes": {
+    "deploy_remote.py": "3bf77336a527e2344d3d1adb645f0809ebc09f086917fcb1299b8938b7c596b9",
+    "resume_remote.py": "74692d6736dd18faf00c7b0bbc48a7c91cba7401cad334f9e6d5d17242757f7c",
+    "route.py": "d234a840c5df5920ff9b09f3b1e8a52e6a50c1366d7548fe662581cdcbaec431",
+    "live.py": "685c454afb1f5e456f7761495ac0e09d8e8154e4c26cdaf867cfdf584a360084",
+    "remote_status.py": "ec929d540cdd922b222e8f2091009176f4e3fcc65e6be47029a4421585683815",
+    "restart.py": "3e045e425d3e426a03d1ba5144a3d7f7804564ff2010ca3fa5b263a2327de542"
+  }
+}

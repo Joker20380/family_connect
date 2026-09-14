@@ -1,0 +1,2 @@
+# Unified diff context contains a marker space before tabs/blank lines by design.
+*.patch -whitespace

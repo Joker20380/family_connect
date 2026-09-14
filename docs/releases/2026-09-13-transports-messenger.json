@@ -1,0 +1,46 @@
+{
+  "date": "2026-09-13",
+  "base": "e0953b2744377281707e7f165bf8647ddaedba4b",
+  "scope": [
+    "rns_client_readiness",
+    "linux_vpn_health_budget_and_interface",
+    "messenger_text_core"
+  ],
+  "pins": {
+    "rns": "1.5.1",
+    "lxmf": "1.1.1",
+    "cryptography": "46.0.7"
+  },
+  "checks": {
+    "combined": {
+      "passed": 506,
+      "warnings": 2,
+      "seconds": 18.59
+    },
+    "docker_control": {
+      "passed": 350,
+      "warnings": 2,
+      "seconds": 19.84,
+      "image": "f52f9dea14d4"
+    },
+    "final_long_message_and_readiness": {
+      "passed": 3,
+      "seconds": 2.38
+    },
+    "old_adapter_baseline": {
+      "expected_failures": 2,
+      "reason": "request issued before establishment callback"
+    }
+  },
+  "apk_packaged": false,
+  "deployed": false,
+  "remote_ci": "not run; skip ci prevents client packaging",
+  "open": [
+    "offline propagation",
+    "Android keystore and UI",
+    "automatic retry scheduler and lifecycle",
+    "Sideband application interoperability",
+    "TCP adverse-network measurements",
+    "attribution of previous CI timeout"
+  ]
+}

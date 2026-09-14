@@ -133,3 +133,5 @@ async Task SequenceCase(string mode){
 }
 foreach(var mode in new[]{"failure","skip","established","cancel-before","cancel-start","cancel-established","cleanup-failure"})await SequenceCase(mode);
 Console.WriteLine("7 automatic transport policy order, cancellation, cleanup and exhaustion scenarios passed.");
+
+ControlVectors.Run();

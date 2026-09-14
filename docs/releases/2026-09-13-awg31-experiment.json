@@ -1,0 +1,265 @@
+{
+  "date": "2026-09-13",
+  "scope": "local isolated synthetic Linux experiment, not release acceptance",
+  "pins": {
+    "engine_repository": "https://github.com/amnezia-vpn/amneziawg-go",
+    "engine_tag": "v3.1.20260828",
+    "engine_commit": "b5928efb6ca19f0153958460c3d141f04abc5c2e",
+    "tools_repository": "https://github.com/amnezia-vpn/amneziawg-tools",
+    "tools_tag": "v3.1.20260812",
+    "tools_commit": "ee0f0a9aa34ff0a0da4b3433b9512781cfe02843",
+    "go": "1.26.1",
+    "scope": "isolated experimental Linux pilot; stable runtime and schema unchanged",
+    "local_patch": "patches/0001-refresh-s4-after-tun-read.patch",
+    "local_patch_scope": "Refresh S4 after blocked TUN read; experimental, not upstream release"
+  },
+  "kernel": "7.0.0-30-generic",
+  "patch_sha256": "62acf2d7f3b4d92c4ee646e1e026115b1d98ef21cf0a589a4dbd1b1caa1d477f",
+  "image_tag": "family-connect-awg31:experiment1",
+  "upstream_unmodified": {
+    "device_suite": "FAIL TestAWGDevicePing ping/pong did not transit",
+    "deterministic_s4_regression": "FAIL both first packets"
+  },
+  "patched": {
+    "selected_engine_packages": "PASS count=3; includes 5 new subcases each run",
+    "full_go_test": "FAIL only outline/Test_outlineIntegration: could not find a working fallback: all tests failed"
+  },
+  "first_lab_attempt": "WG passed, then harness waited for wrong IPC directory /var/run/wireguard; corrected to /var/run/amneziawg",
+  "metrics": [
+    {
+      "event": "start",
+      "shaping_each_direction": "35ms,20mbit,no injected loss",
+      "mtu": 1280,
+      "payload_bytes": 8388608,
+      "gomaxprocs_per_engine": 1,
+      "binaries": {
+        "amneziawg-go": "e7f00e47d6df853ade5dcd2fe79240f01ff897d75088c768316a444c27c87e0f",
+        "awg": "5eb2eca206cd7e2afbe21b02b6def2347b003f3a7d4cf5e622cd56b21b6d379a",
+        "wg": "91ae3f37bac6346676eb30c4237948de571c27b32f5b73280089f33407898d3a"
+      }
+    },
+    {
+      "case": "wireguard",
+      "repetition": 1,
+      "first_ping_s": 0.2134,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 71.078,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0488,
+      "tcp_mbit_s": 16.575,
+      "underlay_link_bytes": 9771166,
+      "link_bytes_per_payload_byte": 1.1648,
+      "two_engines_cpu_s": null,
+      "two_engines_rss_bytes": null
+    },
+    {
+      "case": "awg31_base",
+      "repetition": 1,
+      "first_ping_s": 0.1449,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.885,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0911,
+      "tcp_mbit_s": 16.404,
+      "underlay_link_bytes": 9729556,
+      "link_bytes_per_payload_byte": 1.1599,
+      "two_engines_cpu_s": 0.95,
+      "two_engines_rss_bytes": 15294464
+    },
+    {
+      "case": "awg31_padding",
+      "repetition": 1,
+      "first_ping_s": 0.1489,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.833,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0914,
+      "tcp_mbit_s": 16.402,
+      "underlay_link_bytes": 9742406,
+      "link_bytes_per_payload_byte": 1.1614,
+      "two_engines_cpu_s": 1.39,
+      "two_engines_rss_bytes": 14508032
+    },
+    {
+      "case": "awg31_trailers",
+      "repetition": 1,
+      "first_ping_s": 0.1436,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.797,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0904,
+      "tcp_mbit_s": 16.406,
+      "underlay_link_bytes": 10356226,
+      "link_bytes_per_payload_byte": 1.2346,
+      "two_engines_cpu_s": 1.54,
+      "two_engines_rss_bytes": 15032320
+    },
+    {
+      "case": "awg31_base",
+      "repetition": 2,
+      "first_ping_s": 0.1442,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.54,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0891,
+      "tcp_mbit_s": 16.411,
+      "underlay_link_bytes": 9731138,
+      "link_bytes_per_payload_byte": 1.16,
+      "two_engines_cpu_s": 1.3,
+      "two_engines_rss_bytes": 14770176
+    },
+    {
+      "case": "awg31_padding",
+      "repetition": 2,
+      "first_ping_s": 0.1456,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.585,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0887,
+      "tcp_mbit_s": 16.413,
+      "underlay_link_bytes": 9743441,
+      "link_bytes_per_payload_byte": 1.1615,
+      "two_engines_cpu_s": 1.49,
+      "two_engines_rss_bytes": 15032320
+    },
+    {
+      "case": "awg31_trailers",
+      "repetition": 2,
+      "first_ping_s": 0.1495,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.819,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0897,
+      "tcp_mbit_s": 16.409,
+      "underlay_link_bytes": 10346044,
+      "link_bytes_per_payload_byte": 1.2333,
+      "two_engines_cpu_s": 1.38,
+      "two_engines_rss_bytes": 15294464
+    },
+    {
+      "case": "wireguard",
+      "repetition": 2,
+      "first_ping_s": 0.1454,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.678,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0468,
+      "tcp_mbit_s": 16.583,
+      "underlay_link_bytes": 9767768,
+      "link_bytes_per_payload_byte": 1.1644,
+      "two_engines_cpu_s": null,
+      "two_engines_rss_bytes": null
+    },
+    {
+      "case": "awg31_padding",
+      "repetition": 3,
+      "first_ping_s": 0.1477,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.815,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.091,
+      "tcp_mbit_s": 16.404,
+      "underlay_link_bytes": 9744256,
+      "link_bytes_per_payload_byte": 1.1616,
+      "two_engines_cpu_s": 1.26,
+      "two_engines_rss_bytes": 15163392
+    },
+    {
+      "case": "awg31_trailers",
+      "repetition": 3,
+      "first_ping_s": 0.1468,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.955,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0909,
+      "tcp_mbit_s": 16.404,
+      "underlay_link_bytes": 10358927,
+      "link_bytes_per_payload_byte": 1.2349,
+      "two_engines_cpu_s": 0.97,
+      "two_engines_rss_bytes": 14901248
+    },
+    {
+      "case": "wireguard",
+      "repetition": 3,
+      "first_ping_s": 0.1455,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 71.274,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0462,
+      "tcp_mbit_s": 16.586,
+      "underlay_link_bytes": 9740858,
+      "link_bytes_per_payload_byte": 1.1612,
+      "two_engines_cpu_s": null,
+      "two_engines_rss_bytes": null
+    },
+    {
+      "case": "awg31_base",
+      "repetition": 3,
+      "first_ping_s": 0.1461,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.707,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0885,
+      "tcp_mbit_s": 16.414,
+      "underlay_link_bytes": 9714968,
+      "link_bytes_per_payload_byte": 1.1581,
+      "two_engines_cpu_s": 0.69,
+      "two_engines_rss_bytes": 14770176
+    },
+    {
+      "event": "complete",
+      "runs": 12,
+      "server_namespace_removed": true
+    }
+  ],
+  "medians": {
+    "wireguard": {
+      "tcp_mbit_s": 16.583,
+      "link_bytes_per_payload_byte": 1.1644,
+      "ping_avg_ms": 71.078
+    },
+    "awg31_base": {
+      "tcp_mbit_s": 16.411,
+      "link_bytes_per_payload_byte": 1.1599,
+      "ping_avg_ms": 70.707
+    },
+    "awg31_padding": {
+      "tcp_mbit_s": 16.404,
+      "link_bytes_per_payload_byte": 1.1615,
+      "ping_avg_ms": 70.815
+    },
+    "awg31_trailers": {
+      "tcp_mbit_s": 16.406,
+      "link_bytes_per_payload_byte": 1.2346,
+      "ping_avg_ms": 70.819
+    }
+  },
+  "limitations": [
+    "No DPI classifier or censorship network measurement",
+    "20mbit shaping, not server capacity",
+    "GOMAXPROCS=1 per engine, not a shared 1CPU quota",
+    "Short synthetic TCP download, no mobility/rekey/long-run acceptance",
+    "Local patch does not make live parameter changes atomic",
+    "Outline external integration unresolved",
+    "No Amsterdam deployment, app/parser/native release migration yet"
+  ],
+  "family_connect_pytest": {
+    "passed": 478,
+    "warnings": 2,
+    "seconds": 9.89
+  },
+  "source_commit": "b90e39a6de92f19cd4f03e9b881c11ab9bec4179",
+  "ci": {
+    "workflow": "phase0",
+    "run": 34759917018,
+    "source_commit": "b90e39a6de92f19cd4f03e9b881c11ab9bec4179",
+    "tests": {
+      "job": 103730824181,
+      "conclusion": "success"
+    },
+    "failover": {
+      "job": 103730824332,
+      "conclusion": "success"
+    }
+  }
+}

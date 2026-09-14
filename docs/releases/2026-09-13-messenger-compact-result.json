@@ -1,0 +1,92 @@
+{
+  "local": {
+    "idle_2_seconds": {
+      "tx": 0,
+      "rx": 0,
+      "seconds": 2.1
+    },
+    "one_announce": {
+      "tx": 0,
+      "rx": 167,
+      "seconds": 0.101
+    },
+    "empty_fetch": {
+      "tx": 594,
+      "rx": 217,
+      "seconds": 0.145
+    },
+    "separate": {
+      "tx": 3205,
+      "rx": 996,
+      "seconds": 0.272
+    },
+    "batch": {
+      "tx": 1733,
+      "rx": 642,
+      "seconds": 0.214
+    },
+    "saved_fraction": 0.4347
+  },
+  "amsterdam": {
+    "before": {
+      "count": 0,
+      "bytes": 0,
+      "services": {
+        "family-connect-mailbox": "active",
+        "family-connect-awg31": "active",
+        "family-connect-reticulum": "active",
+        "wg-quick@fcams": "active"
+      },
+      "resources": {
+        "NRestarts": "0",
+        "MemoryCurrent": "24432640",
+        "MemoryPeak": "24850432",
+        "CPUUsageNSec": "1012395000",
+        "TasksCurrent": "6",
+        "CPUQuotaPerSecUSec": "250ms",
+        "MemoryMax": "201326592"
+      }
+    },
+    "empty_fetch": {
+      "tx": 643,
+      "rx": 384,
+      "seconds": 0.285
+    },
+    "separate": {
+      "tx": 3256,
+      "rx": 1163,
+      "seconds": 0.476
+    },
+    "batch": {
+      "tx": 1731,
+      "rx": 642,
+      "seconds": 0.411
+    },
+    "idle_65_seconds": {
+      "tx": 0,
+      "rx": 167,
+      "seconds": 65.202
+    },
+    "saved_fraction": 0.463,
+    "after": {
+      "count": 0,
+      "bytes": 0,
+      "services": {
+        "family-connect-mailbox": "active",
+        "family-connect-awg31": "active",
+        "family-connect-reticulum": "active",
+        "wg-quick@fcams": "active"
+      },
+      "resources": {
+        "NRestarts": "0",
+        "MemoryCurrent": "24920064",
+        "MemoryPeak": "25133056",
+        "CPUUsageNSec": "1114431000",
+        "TasksCurrent": "8",
+        "CPUQuotaPerSecUSec": "250ms",
+        "MemoryMax": "201326592"
+      }
+    },
+    "accepted": true
+  }
+}

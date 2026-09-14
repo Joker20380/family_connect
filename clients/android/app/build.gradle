@@ -1,28 +1,47 @@
-plugins { id 'com.android.application' }
+plugins { id 'com.android.application'; id 'com.chaquo.python' }
 android {
     namespace 'com.familyconnect.app'
     compileSdk 35
     defaultConfig {
         applicationId 'com.familyconnect.app'
+        ndk { abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64' }
         minSdk 26
         targetSdk 35
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        versionCode 1
-        versionName '0.1.0'
+        versionCode 3
+        versionName '0.1.2-beta03'
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+    }
+    sourceSets {
+        test { java.srcDir 'src/controlTest/java'; resources.srcDir '../../../tests/vectors' }
+        androidTest { java.srcDir 'src/controlTest/java'; assets.srcDir '../../../tests/vectors' }
     }
     sourceSets { main { java.srcDir '../awg-generated/java'; jniLibs.srcDir '../awg-generated/jniLibs'; assets.srcDir '../awg-generated/assets' } }
     packaging { jniLibs { keepDebugSymbols += ['**/libfc-awg.so'] } }
     buildTypes { release { minifyEnabled false } }
 }
 dependencies {
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.85.2'
+    implementation 'com.google.code.gson:gson:2.13.2'
     implementation 'androidx.annotation:annotation:1.7.1'
     implementation 'androidx.collection:collection:1.4.0'
     compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.6.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+}
+
+// Keep four-ABI support. No device private material crosses the Python bridge.
+chaquopy {
+    defaultConfig {
+        version '3.10'
+        pip {
+            options '--no-deps'
+            install 'rns==1.5.1'
+            install 'pyserial==3.5'
+        }
+    }
 }

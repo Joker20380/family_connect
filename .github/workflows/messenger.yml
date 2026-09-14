@@ -1,0 +1,22 @@
+name: Messenger prototype
+on:
+  workflow_dispatch:
+  push:
+    paths: ['messenger/**', 'provisioning/requirements.lock', '.github/workflows/messenger.yml']
+  pull_request:
+    paths: ['messenger/**', 'provisioning/requirements.lock', '.github/workflows/messenger.yml']
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r control/requirements.lock -r provisioning/requirements.lock
+      - run: python -m pip install --no-deps --require-hashes -r messenger/requirements.lock
+      - run: python -m pytest -q messenger/tests
+# Synthetic loopback identities only. No APK, release artifact or server deployment.

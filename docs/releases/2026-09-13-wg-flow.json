@@ -1,0 +1,28 @@
+{
+  "requests": [
+    {
+      "name": "direct",
+      "t": 1789286571.5883641,
+      "code": 0,
+      "egress_gateway": false,
+      "socket_timing": "200 10.245.184.169 45258 1.1.1.1 443 0.059457 0.136280 0.175631"
+    },
+    {
+      "name": "tunnel-bound",
+      "t": 1789286581.473986,
+      "code": 28,
+      "egress_gateway": false,
+      "socket_timing": "000  -1  -1 0.000000 0.000000 3.002426"
+    },
+    {
+      "name": "tunnel-default",
+      "t": 1789286584.4957032,
+      "code": 28,
+      "egress_gateway": false,
+      "socket_timing": "000  -1  -1 0.000000 0.000000 3.002635"
+    }
+  ],
+  "local_headers": 9,
+  "gateway_headers": 28,
+  "cleanup": true
+}

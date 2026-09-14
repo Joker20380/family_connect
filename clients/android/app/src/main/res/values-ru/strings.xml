@@ -14,4 +14,25 @@
     <string name="notification">VPN Family Connect</string>
     <string name="permission_denied">Разрешение на VPN не предоставлено.</string>
     <string name="forget">Удалить сохранённый профиль</string>
+    <string name="health_checking">Проверка связи через VPN…</string>
+    <string name="health_ok">VPN отвечает</string>
+    <string name="health_unavailable">Нет ответа через VPN</string>
+    <string name="enroll_device">Зарегистрировать устройство</string>
+    <string name="enroll_server">Сервер регистрации: https://…</string>
+    <string name="enroll_invitation">Код приглашения</string>
+    <string name="enroll_continue">Зарегистрировать / проверить результат</string>
+    <string name="enroll_explanation">Создаст постоянную identity устройства и включит управляемый VPN. Ручной импорт и удаление профилей будут заблокированы; сохранённые профили останутся. Укажите HTTPS-сервер своего оператора. Регистрация не подключает VPN: нужна подписанная конфигурация. Для проверки прерванной регистрации повторите с тем же сервером.</string>
+    <string name="enroll_working">Регистрация устройства…</string>
+    <string name="enroll_done">Устройство зарегистрировано: %1$s. Ожидается подписанная конфигурация VPN.</string>
+    <string name="enroll_failed">Регистрацию не удалось подтвердить. Повторите с тем же сервером. Если ошибка остаётся, обратитесь к оператору; сохраните данные приложения и identity устройства.</string>
+    <string name="control_file">Применить подписанную конфигурацию VPN</string>
+    <string name="control_file_hint">Выберите зашифрованный файл конфигурации, выданный для этого зарегистрированного устройства. Подпись будет проверена до изменения профилей. После применения приложение подключит VPN. Сначала отключите активный VPN.</string>
+    <string name="control_applying">Проверка и применение конфигурации…</string>
+    <string name="control_committed">Конфигурация VPN применена, соединение проверено.</string>
+    <string name="control_rejected">Конфигурация отклонена: проверьте подпись, устройство, версию и срок действия.</string>
+    <string name="control_rolled_back">Конфигурация не принята; прежние профили восстановлены.</string>
+    <string name="control_failed">Не удалось применить конфигурацию. Сохраните identity и данные приложения для восстановления.</string>
+    <string name="rns_connect">Подключить через Reticulum</string>
+    <string name="rns_hint">Получать подписанную конфигурацию этого зарегистрированного устройства с закреплённого relay Family Connect. VPN подключится после проверки. Повтор получения и доставки подтверждений — каждую минуту до отключения.</string>
+    <string name="rns_unavailable">Relay Reticulum недоступен. Повторим попытку; действующий VPN сохраняется.</string>
 </resources>

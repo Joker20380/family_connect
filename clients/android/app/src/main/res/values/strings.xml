@@ -14,4 +14,25 @@
     <string name="notification">Family Connect VPN</string>
     <string name="permission_denied">VPN permission was not granted.</string>
     <string name="forget">Remove saved profile</string>
+    <string name="health_checking">Checking VPN response…</string>
+    <string name="health_ok">VPN responds</string>
+    <string name="health_unavailable">No response through VPN</string>
+    <string name="enroll_device">Register device</string>
+    <string name="enroll_server">Registration server: https://…</string>
+    <string name="enroll_invitation">Invitation code</string>
+    <string name="enroll_continue">Register / check result</string>
+    <string name="enroll_explanation">Creates a permanent device identity and switches to managed VPN. Manual profile import and removal will be locked; saved profiles stay. Use your operator’s HTTPS server. Registration does not connect VPN; a signed configuration is still required. Retry with the same server to check an interrupted registration.</string>
+    <string name="enroll_working">Registering device…</string>
+    <string name="enroll_done">Device registered: %1$s. Waiting for a signed VPN configuration.</string>
+    <string name="enroll_failed">Registration could not be confirmed. Retry with the same server. If it still fails, contact your operator; keep the app data and device identity.</string>
+    <string name="control_file">Apply signed VPN configuration</string>
+    <string name="control_file_hint">Choose the encrypted configuration file issued for this registered device. Its signature will be verified before changing VPN profiles. The app will connect VPN after applying it. Disconnect any active VPN first.</string>
+    <string name="control_applying">Checking and applying configuration…</string>
+    <string name="control_committed">VPN configuration applied and connection verified.</string>
+    <string name="control_rejected">Configuration rejected: check its signature, device, version and expiry.</string>
+    <string name="control_rolled_back">Configuration was not accepted; previous profiles restored.</string>
+    <string name="control_failed">Could not apply configuration. Keep the device identity and app data for recovery.</string>
+    <string name="rns_connect">Connect via Reticulum</string>
+    <string name="rns_hint">Fetch signed configuration for this registered device from the pinned Family Connect relay. VPN will connect after verification. Configuration and confirmation delivery retry every minute until Disconnect.</string>
+    <string name="rns_unavailable">Reticulum relay unavailable. Retrying; the current VPN is preserved.</string>
 </resources>

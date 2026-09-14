@@ -1,0 +1,58 @@
+{
+  "date": "2026-09-13",
+  "base": "1e24fb97f1af4141aaddf9e3f47200e6cd646340",
+  "pins": {
+    "rns": "1.5.1",
+    "lxmf": "1.1.1",
+    "cryptography": "46.0.7"
+  },
+  "tests": {
+    "combined": {
+      "passed": 521,
+      "warnings": 2,
+      "seconds": 58.46
+    },
+    "messenger_count": 31,
+    "focused_unit_core": {
+      "passed": 26,
+      "seconds": 0.36
+    },
+    "closed_wire_initial": {
+      "passed": 1,
+      "seconds": 5.08
+    }
+  },
+  "volume_acceptance": {
+    "bytes": 16777216,
+    "enospc": true,
+    "false_ack": false,
+    "previous_message_preserved": true,
+    "recovery_and_reopen": true,
+    "network": "none",
+    "mount_cleanup": true
+  },
+  "default_limits": {
+    "ciphertext_bytes": 262144,
+    "messages": 128,
+    "sender_bytes": 65536,
+    "sender_messages": 32,
+    "sqlite_file_bytes": 786432,
+    "retention_seconds": 86400,
+    "burst": 4,
+    "requests_per_second": 1
+  },
+  "configuration_delivery": {
+    "linux_live_accepted": true,
+    "android_native_rns_integrated": false,
+    "signed_awg31_schema_supported": false
+  },
+  "apk_packaged": false,
+  "deployed": false,
+  "remote_ci": "not run; skip ci prevents client packaging",
+  "next": [
+    "dedicated persistent runtime volume",
+    "service memory and task limits",
+    "permanent node identity/bootstrap",
+    "Android carrier and versioned AWG3.1 signed schema"
+  ]
+}

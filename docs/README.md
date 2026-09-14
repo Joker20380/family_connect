@@ -1,5 +1,69 @@
 # Documentation map
 
+[Android: автоматический RNS carrier и ACK](releases/2026-09-14-android-control-rns.ru.md).
+
+[Android: приём подписанной конфигурации](releases/2026-09-14-android-control-intake.ru.md).
+
+[Android: регистрация Reticulum identity](releases/2026-09-14-android-control-enrollment.ru.md).
+
+[Android committed resume](releases/2026-09-14-android-control-resume.ru.md) · [Django и Reticulum identity](design/django-product-plane.ru.md).
+
+[Android Stage5: startup recovery, 14.09.2026](releases/2026-09-14-android-control-startup.ru.md).
+
+- [Android Stage 5: native application adapter, pinned root и rollback14.09](releases/2026-09-14-android-control-application.ru.md).
+
+- [Android Stage 5: общий service/profile owner и защитный gate14.09](releases/2026-09-14-android-control-owner.ru.md).
+
+- [Утверждённые условия выпуска трёх платформ; messenger/iPhone после них](PLAN.md#release-gates-three-platforms).
+- [Android Stage 5: journal, ACK, recovery и границы проверки14.09](releases/2026-09-14-android-control-journal.ru.md).
+
+- [Android beta01: tester instructions](testing/android-beta01.ru.md) · [Preparation evidence](releases/2026-09-13-android-beta01.ru.md).
+
+- [AWG3.1: managed recovery experiment](releases/2026-09-13-awg31-managed-recovery.ru.md).
+- [Own transport: milestones and actual dependencies](own-transport-roadmap.ru.md).
+
+- [AWG3.1: adverse conditions and tools range fix](releases/2026-09-13-awg31-resilience.ru.md).
+
+- [Reticulum messenger: proposed scope and integration](reticulum-messenger.ru.md).
+
+- [AWG3.1: startup fix and first virtual comparison](releases/2026-09-13-awg31-experiment.ru.md).
+
+- [AWG 3.1: начальная сверка и план миграции](awg31-migration.ru.md).
+
+- [Managed Linux control route acceptance, 13.09.2026](releases/2026-09-13-managed-control-route.ru.md).
+
+- [External Reticulum: deployment and live acceptance, 13.09.2026](releases/2026-09-13-external-reticulum.ru.md).
+
+- [Amsterdam: Linux GUI acceptance, 13.09.2026](releases/2026-09-13-amsterdam-gui.ru.md).
+
+[Amsterdam gateway: real-network pilot and rollback](releases/2026-09-13-amsterdam-pilot.ru.md).
+
+[Android Stage5 verifier](releases/2026-09-13-android-control.ru.md).
+
+[Windows Stage5 verifier](releases/2026-09-13-windows-control.ru.md).
+
+[Stage5 conformance corpus](releases/2026-09-13-control-vectors.ru.md) · [Vector format](../tests/vectors/README.md).
+
+[CI results and Android retry](releases/2026-09-13-linux-control-ci.ru.md) · [Next native binding](stage5-native-binding.ru.md).
+
+[Linux live pilot passed13.09](releases/2026-09-13-linux-control-pilot-pass.ru.md). Scoped CI health correction next.
+
+[Linux paired preview acceptance13.09](releases/2026-09-13-linux-control-acceptance.ru.md) · [Pilot/return runbook](linux-control-preview-rollout.ru.md).
+
+## Paired Linux control preview — 2026-09-12
+
+Operator GUI/core bundle added with an explicit public-file allowlist, integrity
+manifest, runtime-only pinned dependencies and extracted launcher. Legacy six-file
+desktop archive unchanged. Local405 Python passed; extracted real RNS lifecycle
+and GTK smoke passed. Scoped Linux control CI34720569558 passed on source d8aef8a.
+AWG/TCP pilot and phase0 Python/Rust passed. General phase0 failover failed at
+isolated Docker build; exact cause unavailable (logs API403). Client builds Linux
+passed; Windows/Android still running at checkpoint.
+No release/install/catalog/server changes. Next: resolve general failover build evidence and prepare paired preview
+rollout; native Windows/Android binding, AWG3.1 and TD-1 remain open.
+[Preview checkpoint](releases/2026-09-12-control-preview.ru.md).
+
+
 Latest work/rollbacks: [complete session checkpoint](releases/2026-09-11-session-checkpoint.ru.md).
 Ubuntu appearance/terminal: [settings and rollback](ubuntu-laptop-settings.ru.md).
 
@@ -113,3 +177,13 @@ Android WG/AWG: [implementation and acceptance](releases/2026-09-12-android-awg.
 Android TCP: [implementation and acceptance](releases/2026-09-12-android-tcp.ru.md).
 
 Android Auto: [implementation and acceptance](releases/2026-09-12-android-auto.ru.md).
+
+Stage 5 control channel: [architecture](stage5-architecture.ru.md), [runbook](reticulum-control.ru.md), [Stage 5 checkpoint](releases/2026-09-12-reticulum-control.ru.md).
+
+[GUI coordination and short network checkpoint](releases/2026-09-12-control-gui-network.ru.md).
+
+[Matched HTTPS result](releases/2026-09-12-matched-https.ru.md).
+
+- [Android AWG3.1 beta02: установка](testing/android-beta02-awg31.ru.md) · [приёмка](releases/2026-09-13-android-awg31.ru.md)
+
+- [Android beta03: проверка связи и установка](testing/android-beta03.ru.md) · [приёмка и ограничения CI](releases/2026-09-13-android-stability.ru.md)

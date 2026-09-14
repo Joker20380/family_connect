@@ -1,0 +1,4 @@
+# Preserve golden wire bytes (including deliberate whitespace) on every OS.
+control-v1/** -text
+control-v1/*.envelope binary
+control-v1/*.ack binary

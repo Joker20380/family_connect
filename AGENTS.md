@@ -14,7 +14,9 @@ uncommitted work. Do not assume a build is installed or a commit is deployed. Be
 ending, update STATUS (including any unfinished work), PLAN and the dated release
 report with exact versions, tests, rollout/rollback paths and remaining checks.
 
-Only `185.251.89.19:/opt/apps/family_connect` is the Family Connect gateway host.
+Authorized Family Connect gateway hosts: `185.251.89.19:/opt/apps/family_connect`
+and `186.246.45.246:/opt/apps/family_connect` (Amsterdam, explicitly authorized by
+the user on 2026-09-13; native WG pilot under `amsterdam/`).
 `186.246.51.201` is excluded. Never operate neighbouring MicroTrader services. Client
 private keys/profiles, product DB, backups and release signing secrets stay out of Git,
 CI and command output. Public anchors and signed catalogs may be committed.

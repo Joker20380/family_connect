@@ -1,0 +1,153 @@
+{
+  "source": "38b055431758e3f2b80de1adfbf9df04cb299fcb",
+  "implementation_source": "581f83fddbce0d31ee52b9152582cc058564c941",
+  "manifest_sha256": "c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd",
+  "local": {
+    "configurations": 30,
+    "acknowledgements": 15,
+    "additional_structure_refusals": 31,
+    "legacy_dotnet": "passed",
+    "python_passed": 462,
+    "python_existing_warnings": 2
+  },
+  "ci": [
+    {
+      "id": 34749302222,
+      "name": "Windows control conformance",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "38b055431758e3f2b80de1adfbf9df04cb299fcb",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34749302222"
+    },
+    {
+      "id": 34749302284,
+      "name": "phase0",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "38b055431758e3f2b80de1adfbf9df04cb299fcb",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34749302284"
+    },
+    {
+      "id": 34749302204,
+      "name": "Client builds",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "38b055431758e3f2b80de1adfbf9df04cb299fcb",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34749302204"
+    }
+  ],
+  "client_jobs": [
+    {
+      "id": 103702791636,
+      "name": "linux",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 103702791637,
+      "name": "android",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 103702791710,
+      "name": "windows",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 103703504361,
+      "name": "release",
+      "status": "completed",
+      "conclusion": "skipped"
+    }
+  ],
+  "protocol_job": 103702791743,
+  "protocol_annotations": [
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Joker20380/family_connect/blob/38b055431758e3f2b80de1adfbf9df04cb299fcb/.github",
+      "start_line": 4,
+      "start_column": null,
+      "end_line": 4,
+      "end_column": null,
+      "annotation_level": "warning",
+      "title": "",
+      "message": "Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-dotnet@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/",
+      "raw_details": ""
+    },
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Joker20380/family_connect/blob/38b055431758e3f2b80de1adfbf9df04cb299fcb/.github",
+      "start_line": 14,
+      "start_column": null,
+      "end_line": 14,
+      "end_column": null,
+      "annotation_level": "notice",
+      "title": "Native control conformance",
+      "message": "30 configurations, 15 ACKs passed; manifest SHA256 c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd",
+      "raw_details": ""
+    }
+  ],
+  "first_ci": [
+    {
+      "id": 34749167304,
+      "name": "Windows control conformance",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "581f83fddbce0d31ee52b9152582cc058564c941",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34749167304"
+    },
+    {
+      "id": 34749167185,
+      "name": "Windows AWG native pilot",
+      "status": "completed",
+      "conclusion": "startup_failure",
+      "head_sha": "581f83fddbce0d31ee52b9152582cc058564c941",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34749167185"
+    },
+    {
+      "id": 34749167086,
+      "name": "Linux control preview",
+      "status": "completed",
+      "conclusion": "startup_failure",
+      "head_sha": "581f83fddbce0d31ee52b9152582cc058564c941",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34749167086"
+    },
+    {
+      "id": 34749167035,
+      "name": "Windows TCP native pilot",
+      "status": "completed",
+      "conclusion": "startup_failure",
+      "head_sha": "581f83fddbce0d31ee52b9152582cc058564c941",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34749167035"
+    },
+    {
+      "id": 34749167169,
+      "name": "Client builds",
+      "status": "completed",
+      "conclusion": "startup_failure",
+      "head_sha": "581f83fddbce0d31ee52b9152582cc058564c941",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34749167169"
+    },
+    {
+      "id": 34749166980,
+      "name": "phase0",
+      "status": "completed",
+      "conclusion": "startup_failure",
+      "head_sha": "581f83fddbce0d31ee52b9152582cc058564c941",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34749166980"
+    }
+  ],
+  "first_ci_page_explanation": "GitHub reports an unexpected error and recommends retry; no jobs were created for startup_failure runs.",
+  "artifact_downloaded": false,
+  "native_journal": false,
+  "native_carrier": false,
+  "native_vpn_apply": false,
+  "rollout": "none",
+  "installed_linux": "0.2.8",
+  "desktop": "0.2.9",
+  "catalog_sequence": 8,
+  "gateway": "0.2.1",
+  "tcp": "0.1.0"
+}

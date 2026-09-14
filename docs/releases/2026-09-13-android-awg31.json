@@ -1,0 +1,194 @@
+{
+  "source_commit": "d0709bc724a42267c4fbbe614e1692ebf9119a7e",
+  "android_ci_run": 34768083248,
+  "android_ci_job": 103752559759,
+  "ci": {
+    "artifact": {
+      "id": 10320104767,
+      "node_id": "MDg6QXJ0aWZhY3QxMDMyMDEwNDc2Nw==",
+      "name": "FamilyConnect-Android-debug",
+      "size_in_bytes": 93970394,
+      "url": "https://api.github.com/repos/Joker20380/family_connect/actions/artifacts/10320104767",
+      "archive_download_url": "https://api.github.com/repos/Joker20380/family_connect/actions/artifacts/10320104767/zip",
+      "expired": false,
+      "digest": "sha256:89a42575d9fd6435c183e8e2a21304d51ec6b3b6f2ce37f555932def5fa2ee99",
+      "created_at": "2026-09-13T16:28:04Z",
+      "updated_at": "2026-09-13T16:28:04Z",
+      "expires_at": "2026-12-12T16:16:30Z",
+      "workflow_run": {
+        "id": 34768083248,
+        "repository_id": 1361237966,
+        "head_repository_id": 1361237966,
+        "head_branch": "stage5-linux-control-preview",
+        "head_sha": "d0709bc724a42267c4fbbe614e1692ebf9119a7e"
+      }
+    },
+    "apk_sha256": "75677b1ea68fd316ba24f4d4d3528511a3befc31949e0e8ed7bf54de3488d868",
+    "apk_bytes": 190076721,
+    "build": {
+      "android_revision": "5420011143f9dd42831cc95fcdb0d6ac9bde868f",
+      "engine_revision": "b5928efb6ca19f0153958460c3d141f04abc5c2e",
+      "transport_version": "3.1",
+      "engine_patch_sha256": "62acf2d7f3b4d92c4ee646e1e026115b1d98ef21cf0a589a4dbd1b1caa1d477f",
+      "interface_patch_sha256": "ae27306d7d0031f9ae89776a3dab173eef95f1e5a805557a93b0eab2618c3982",
+      "go": "1.26.1",
+      "ndk": "28.2.13676358",
+      "abis": {
+        "arm64-v8a": "ddbd76c087831a0b43b7f830f98f0c238dd11ecb98477ac05b6c2e57c7df1d4d",
+        "armeabi-v7a": "81702e6d56623186db2a9938431b163b91f7736694710b4830cfd94edfb62337",
+        "x86": "af9f98308d013d500ad22ba09f8b4817819b1fc7b96f9ff034580e0188c74c63",
+        "x86_64": "8afa6868414dca337a0f6c5227a05723fa399b2091f3ac2c85de874a223fe5fd"
+      },
+      "jni_source_sha256": "a38d3b23b2f385e7af4d5ea3a91ebbde3ab29e240a565a47a2ed10cbefa41481",
+      "public_uapi": false,
+      "root_backend": false,
+      "single_runtime": true,
+      "xray_revision": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+      "tcp_source_sha256": "f5ec5e4908e56ebd595f1b96bf5d83fafad996105a75a73f9bbd4ee469eec1a6",
+      "tcp_jni_sha256": "6ef06b63b6d19a1160819a7fd5ac9bf19dc07db8ba32e9cc0903e1fcb4a1470b",
+      "go_sum_sha256": "9979cda04f77d776b1567e32e6e8d6b1373c4b67eac3418690c944b6d0b22a18",
+      "wg_peer_revision": "ecfc5a8d54462e18e13c72173e2623d16d8e25a0"
+    }
+  },
+  "signed_apk": {
+    "apk": "FamilyConnect-Android-0.1.1-beta02-arm64.apk",
+    "bytes": 51154127,
+    "sha256": "2de9d0a1e1c509a99e1dea14341c32ee4a391edbc38ea0779d6464434b9399b8",
+    "certificate_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+    "version_code": 2,
+    "version_name": "0.1.1-beta02",
+    "abi": "arm64-v8a",
+    "retained_payload_matches_ci": true,
+    "debuggable": true,
+    "physical_device_tested": false
+  },
+  "platform_tests": [
+    {
+      "file": "clients/android/app/build/outputs/androidTest-results/connected/debug/TEST-emulator-5554 - 15-_app-.xml",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "file": "clients/android/app/build/test-results/testDebugUnitTest/TEST-com.familyconnect.app.AutoPolicyTest.xml",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "file": "clients/android/app/build/test-results/testDebugUnitTest/TEST-com.familyconnect.app.Awg31ProfileTest.xml",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "file": "clients/android/app/build/test-results/testDebugUnitTest/TEST-com.familyconnect.app.AwgProfileTest.xml",
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "file": "clients/android/app/build/test-results/testDebugUnitTest/TEST-com.familyconnect.app.ControlProtocolTest.xml",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "file": "clients/android/app/build/test-results/testDebugUnitTest/TEST-com.familyconnect.app.ProfileValidatorTest.xml",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "file": "clients/android/app/build/test-results/testDebugUnitTest/TEST-com.familyconnect.app.TcpProfileTest.xml",
+      "tests": "6",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "server": {
+    "server_public_key": "+68W5XjYDXOQFKOrVb7upyoZvZwct+iie0TS57/CVG0=",
+    "client_public_key": "C8uon7rlCJ4XNKcWvgoRis4TYH19mi8BeenGURxTLlE=",
+    "port": 443,
+    "ipv4": "10.80.0.2/32",
+    "interface": "fcawg31",
+    "active": true
+  },
+  "live_network": {
+    "host": "186.246.45.246",
+    "namespace": "fc-awg31-check",
+    "started_at": 1789317046,
+    "tests": [
+      {
+        "test": "gateway_ping",
+        "summary": [
+          "3 packets transmitted, 3 received, 0% packet loss, time 2003ms",
+          "rtt min/avg/max/mdev = 7.644/33.364/68.637/25.800 ms"
+        ],
+        "passed": true
+      },
+      {
+        "test": "dns",
+        "passed": true
+      },
+      {
+        "test": "https",
+        "egress": "186.246.45.246",
+        "country": "NL",
+        "passed": true
+      },
+      {
+        "test": "second_https",
+        "egress": "186.246.45.246",
+        "passed": true
+      },
+      {
+        "test": "bounded_download",
+        "bytes": 1048576,
+        "bytes_per_second": 1296378.0,
+        "seconds": 0.80885,
+        "passed": true
+      },
+      {
+        "test": "private_network_block",
+        "passed": true
+      },
+      {
+        "test": "ipv6_block",
+        "passed": true
+      },
+      {
+        "test": "https_after_client_reconnect",
+        "egress": "186.246.45.246",
+        "country": "NL",
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "server_restart_tested": false,
+    "client_reconnect_readiness_seconds": 0.017,
+    "recent_handshake": 1789317051,
+    "host_routes_rules_unchanged": true,
+    "host_resolver_unchanged": true,
+    "namespace_removed": true,
+    "interface_removed": true,
+    "ipc_removed": true,
+    "finished_at": 1789317052
+  },
+  "python_suite": {
+    "passed": 485,
+    "warnings": 2,
+    "seconds": 9.48
+  },
+  "physical_android_tested": false,
+  "whatsapp_call_tested": false,
+  "server_memory_sample_bytes": 4395008,
+  "server_tasks_sample": 9
+}

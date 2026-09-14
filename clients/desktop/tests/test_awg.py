@@ -104,5 +104,5 @@ def test_probe_cannot_use_default_route(linux,monkeypatch):
         return 'wg-test' if args[0]=='nmcli' else 'ip=185.251.89.19\n'
     monkeypatch.setattr(backend,'run',fake)
     driver._probe('wg-id','185.251.89.19')
-    assert calls[1][calls[1].index('--interface')+1]=='wg-test'
+    assert calls[1][calls[1].index('--interface')+1]=='if!wg-test'
     with pytest.raises(backend.BackendError):driver._probe('wg-id','192.0.2.1')

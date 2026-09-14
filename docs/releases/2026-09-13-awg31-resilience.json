@@ -1,0 +1,361 @@
+{
+  "date": "2026-09-13",
+  "pins": {
+    "engine_repository": "https://github.com/amnezia-vpn/amneziawg-go",
+    "engine_tag": "v3.1.20260828",
+    "engine_commit": "b5928efb6ca19f0153958460c3d141f04abc5c2e",
+    "tools_repository": "https://github.com/amnezia-vpn/amneziawg-tools",
+    "tools_tag": "v3.1.20260812",
+    "tools_commit": "ee0f0a9aa34ff0a0da4b3433b9512781cfe02843",
+    "go": "1.26.1",
+    "scope": "isolated experimental Linux pilot; stable runtime and schema unchanged",
+    "local_patch": "patches/0001-refresh-s4-after-tun-read.patch",
+    "local_patch_scope": "Refresh S4 after blocked TUN read; experimental, not upstream release",
+    "tools_local_patch": "patches/0002-tools-u16-range.patch",
+    "tools_local_patch_scope": "Reject u16 overflow, signed/empty/malformed endpoints instead of truncating"
+  },
+  "image": "family-connect-awg31:experiment2",
+  "runs": [
+    {
+      "event": "start",
+      "shaping_each_direction": "35ms,20mbit,no injected loss",
+      "mtu": 1280,
+      "payload_bytes": 1048576,
+      "resilience": true,
+      "gomaxprocs_per_engine": 1,
+      "binaries": {
+        "amneziawg-go": "e7f00e47d6df853ade5dcd2fe79240f01ff897d75088c768316a444c27c87e0f",
+        "awg": "906d6795af1dd4adee7b11bf1e7fa133d4795c8a8d6e2099b34a026f810a3278",
+        "wg": "91ae3f37bac6346676eb30c4237948de571c27b32f5b73280089f33407898d3a"
+      }
+    },
+    {
+      "event": "negative_profile_rejected",
+      "case": "header_padding_below_12"
+    },
+    {
+      "event": "negative_profile_rejected",
+      "case": "padding_above_tools_u16"
+    },
+    {
+      "event": "wrong_header_key",
+      "delivery": false,
+      "handshake": false,
+      "probe_seconds": 1
+    },
+    {
+      "event": "correct_key_recovery",
+      "seconds": 4.1596
+    },
+    {
+      "event": "mismatched_h4",
+      "delivery": false,
+      "recovery_seconds": 15.1093
+    },
+    {
+      "event": "mtu_boundary",
+      "mtu": 1280,
+      "maximum_payload": 1252,
+      "excess_locally_refused": true
+    },
+    {
+      "event": "mtu_boundary",
+      "mtu": 1200,
+      "maximum_payload": 1172,
+      "excess_locally_refused": true
+    },
+    {
+      "event": "loss_enabled",
+      "percent_each_direction": 1,
+      "seeded": false
+    },
+    {
+      "event": "blackhole_recovery",
+      "seconds": 0.0731,
+      "outage_probe_seconds": 1
+    },
+    {
+      "event": "client_link_cycle",
+      "seconds": 0.0751
+    },
+    {
+      "event": "server_process_restart",
+      "recovery_seconds": 16.1205
+    },
+    {
+      "event": "accelerated_rekey",
+      "elapsed_seconds": 5.3765,
+      "rekey_after_time": 5
+    },
+    {
+      "case": "awg31_base",
+      "repetition": 1,
+      "first_ping_s": 0.0719,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.529,
+      "payload_bytes": 1048576,
+      "tcp_seconds": 0.8312,
+      "tcp_mbit_s": 10.092,
+      "underlay_link_bytes": 1210718,
+      "link_bytes_per_payload_byte": 1.1546,
+      "two_engines_cpu_s": 0.11,
+      "two_engines_rss_bytes": 12148736
+    },
+    {
+      "event": "negative_profile_rejected",
+      "case": "header_padding_below_12"
+    },
+    {
+      "event": "negative_profile_rejected",
+      "case": "padding_above_tools_u16"
+    },
+    {
+      "event": "wrong_header_key",
+      "delivery": false,
+      "handshake": false,
+      "probe_seconds": 1
+    },
+    {
+      "event": "correct_key_recovery",
+      "seconds": 4.1586
+    },
+    {
+      "event": "mismatched_h4",
+      "delivery": false,
+      "recovery_seconds": 15.1153
+    },
+    {
+      "event": "mtu_boundary",
+      "mtu": 1280,
+      "maximum_payload": 1252,
+      "excess_locally_refused": true
+    },
+    {
+      "event": "mtu_boundary",
+      "mtu": 1200,
+      "maximum_payload": 1172,
+      "excess_locally_refused": true
+    },
+    {
+      "event": "loss_enabled",
+      "percent_each_direction": 1,
+      "seeded": false
+    },
+    {
+      "event": "blackhole_recovery",
+      "seconds": 0.0747,
+      "outage_probe_seconds": 1
+    },
+    {
+      "event": "client_link_cycle",
+      "seconds": 0.0732
+    },
+    {
+      "event": "server_process_restart",
+      "recovery_seconds": 16.1159
+    },
+    {
+      "event": "accelerated_rekey",
+      "elapsed_seconds": 5.3788,
+      "rekey_after_time": 5
+    },
+    {
+      "case": "awg31_base",
+      "repetition": 2,
+      "first_ping_s": 0.0719,
+      "ping_loss_percent": 10.0,
+      "ping_avg_ms": 70.558,
+      "payload_bytes": 1048576,
+      "tcp_seconds": 1.8285,
+      "tcp_mbit_s": 4.588,
+      "underlay_link_bytes": 1223512,
+      "link_bytes_per_payload_byte": 1.1668,
+      "two_engines_cpu_s": 0.25,
+      "two_engines_rss_bytes": 12410880
+    },
+    {
+      "event": "negative_profile_rejected",
+      "case": "header_padding_below_12"
+    },
+    {
+      "event": "negative_profile_rejected",
+      "case": "padding_above_tools_u16"
+    },
+    {
+      "event": "wrong_header_key",
+      "delivery": false,
+      "handshake": false,
+      "probe_seconds": 1
+    },
+    {
+      "event": "correct_key_recovery",
+      "seconds": 4.1611
+    },
+    {
+      "event": "mismatched_h4",
+      "delivery": false,
+      "recovery_seconds": 15.1203
+    },
+    {
+      "event": "mtu_boundary",
+      "mtu": 1280,
+      "maximum_payload": 1252,
+      "excess_locally_refused": true
+    },
+    {
+      "event": "mtu_boundary",
+      "mtu": 1200,
+      "maximum_payload": 1172,
+      "excess_locally_refused": true
+    },
+    {
+      "event": "loss_enabled",
+      "percent_each_direction": 1,
+      "seeded": false
+    },
+    {
+      "event": "blackhole_recovery",
+      "seconds": 0.0742,
+      "outage_probe_seconds": 1
+    },
+    {
+      "event": "client_link_cycle",
+      "seconds": 0.0749
+    },
+    {
+      "event": "server_process_restart",
+      "recovery_seconds": 16.1203
+    },
+    {
+      "event": "accelerated_rekey",
+      "elapsed_seconds": 5.3799,
+      "rekey_after_time": 5
+    },
+    {
+      "case": "awg31_base",
+      "repetition": 3,
+      "first_ping_s": 0.0752,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.946,
+      "payload_bytes": 1048576,
+      "tcp_seconds": 0.8654,
+      "tcp_mbit_s": 9.693,
+      "underlay_link_bytes": 1210746,
+      "link_bytes_per_payload_byte": 1.1547,
+      "two_engines_cpu_s": 0.2,
+      "two_engines_rss_bytes": 11886592
+    },
+    {
+      "event": "complete",
+      "runs": 3,
+      "server_namespace_removed": true
+    }
+  ],
+  "prior_failures": [
+    "Unpatched tools accepted 65536; C assertion and live refusal gate failed",
+    "H4 recovery exceeded original 15s window; 30s observation window used afterward, not a speed fix",
+    "Harness assumed ping exit 2 for MTU refusal; fixed to nonzero + explicit message too long"
+  ],
+  "checks": {
+    "engine_selected_suite": "pass count=3",
+    "tools_regression": "unpatched fails; patched passes 12 negative cases and 3 valid ranges",
+    "python": {
+      "passed": 478,
+      "warnings": 2,
+      "seconds": 10.21
+    }
+  },
+  "patches": {
+    "0002-tools-u16-range.patch": "a78487fdd56e34d74b68619e48a4f83893d025510c799640886d89cf68cd4ccf",
+    "0001-refresh-s4-after-tun-read.patch": "62acf2d7f3b4d92c4ee646e1e026115b1d98ef21cf0a589a4dbd1b1caa1d477f"
+  },
+  "baseline_sanity": [
+    {
+      "event": "start",
+      "shaping_each_direction": "35ms,20mbit,no injected loss",
+      "mtu": 1280,
+      "payload_bytes": 8388608,
+      "resilience": false,
+      "gomaxprocs_per_engine": 1,
+      "binaries": {
+        "amneziawg-go": "e7f00e47d6df853ade5dcd2fe79240f01ff897d75088c768316a444c27c87e0f",
+        "awg": "906d6795af1dd4adee7b11bf1e7fa133d4795c8a8d6e2099b34a026f810a3278",
+        "wg": "91ae3f37bac6346676eb30c4237948de571c27b32f5b73280089f33407898d3a"
+      }
+    },
+    {
+      "case": "wireguard",
+      "repetition": 1,
+      "first_ping_s": 0.2143,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.797,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0473,
+      "tcp_mbit_s": 16.581,
+      "underlay_link_bytes": 9765646,
+      "link_bytes_per_payload_byte": 1.1642,
+      "two_engines_cpu_s": null,
+      "two_engines_rss_bytes": null
+    },
+    {
+      "case": "awg31_base",
+      "repetition": 1,
+      "first_ping_s": 0.1484,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.846,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0915,
+      "tcp_mbit_s": 16.402,
+      "underlay_link_bytes": 9730410,
+      "link_bytes_per_payload_byte": 1.16,
+      "two_engines_cpu_s": 0.95,
+      "two_engines_rss_bytes": 15425536
+    },
+    {
+      "case": "awg31_padding",
+      "repetition": 1,
+      "first_ping_s": 0.1496,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.811,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0907,
+      "tcp_mbit_s": 16.405,
+      "underlay_link_bytes": 9743679,
+      "link_bytes_per_payload_byte": 1.1615,
+      "two_engines_cpu_s": 1.08,
+      "two_engines_rss_bytes": 14770176
+    },
+    {
+      "case": "awg31_trailers",
+      "repetition": 1,
+      "first_ping_s": 0.1439,
+      "ping_loss_percent": 0.0,
+      "ping_avg_ms": 70.959,
+      "payload_bytes": 8388608,
+      "tcp_seconds": 4.0913,
+      "tcp_mbit_s": 16.403,
+      "underlay_link_bytes": 10346654,
+      "link_bytes_per_payload_byte": 1.2334,
+      "two_engines_cpu_s": 1.19,
+      "two_engines_rss_bytes": 15294464
+    },
+    {
+      "event": "complete",
+      "runs": 4,
+      "server_namespace_removed": true
+    }
+  ],
+  "source_commit": "c2bbd9aa77732c1efecf53ed0476ce8bbf789b4f",
+  "ci": {
+    "run": 34761027324,
+    "tests": {
+      "job": 103733774154,
+      "conclusion": "success"
+    },
+    "failover": {
+      "job": 103733774205,
+      "conclusion": "success"
+    }
+  },
+  "cleanup": "No netns or amneziawg IPC sockets remained on inspection"
+}

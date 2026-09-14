@@ -1,0 +1,116 @@
+{
+  "initial_runs": [
+    {
+      "id": 34747139717,
+      "name": "AmneziaWG pilot",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "d7c3d7943d9ab1bde214b4a37b7b421bcc38d5c5",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34747139717"
+    },
+    {
+      "id": 34747139792,
+      "name": "Linux control preview",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "d7c3d7943d9ab1bde214b4a37b7b421bcc38d5c5",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34747139792"
+    },
+    {
+      "id": 34747139660,
+      "name": "TCP pilot",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "d7c3d7943d9ab1bde214b4a37b7b421bcc38d5c5",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34747139660"
+    },
+    {
+      "id": 34747139671,
+      "name": "phase0",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "d7c3d7943d9ab1bde214b4a37b7b421bcc38d5c5",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34747139671"
+    },
+    {
+      "id": 34747139704,
+      "name": "Client builds",
+      "status": "completed",
+      "conclusion": "failure",
+      "head_sha": "d7c3d7943d9ab1bde214b4a37b7b421bcc38d5c5",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34747139704"
+    }
+  ],
+  "retry_runs": [
+    {
+      "id": 34747632071,
+      "name": "phase0",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "909259406bb4721c21ad67c7cefceb66f2a6396d",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34747632071"
+    },
+    {
+      "id": 34747632066,
+      "name": "Client builds",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "909259406bb4721c21ad67c7cefceb66f2a6396d",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34747632066"
+    },
+    {
+      "id": 34747632083,
+      "name": "Android diagnostic acceptance",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "909259406bb4721c21ad67c7cefceb66f2a6396d",
+      "html_url": "https://github.com/Joker20380/family_connect/actions/runs/34747632083"
+    }
+  ],
+  "client_jobs": [
+    {
+      "id": 103698372393,
+      "name": "linux",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 103698372489,
+      "name": "android",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 103698372500,
+      "name": "windows",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 103699421468,
+      "name": "release",
+      "status": "completed",
+      "conclusion": "skipped"
+    }
+  ],
+  "bundle_sha256": "9c827f86f03d27705c46830758e114b3f7ef9796320d9e46f09672363de076f3",
+  "digest_annotation": [
+    {
+      "path": ".github",
+      "blob_href": "https://github.com/Joker20380/family_connect/blob/d7c3d7943d9ab1bde214b4a37b7b421bcc38d5c5/.github",
+      "start_line": 28,
+      "start_column": null,
+      "end_line": 28,
+      "end_column": null,
+      "annotation_level": "notice",
+      "title": "Control preview SHA256",
+      "message": "FamilyConnect-Control-Linux-preview-66152538ee2a4f3e.tar.gz 9c827f86f03d27705c46830758e114b3f7ef9796320d9e46f09672363de076f3",
+      "raw_details": ""
+    }
+  ],
+  "android_summary": {
+    "instrumentation_cases": 3,
+    "failures": [],
+    "hints": []
+  }
+}
