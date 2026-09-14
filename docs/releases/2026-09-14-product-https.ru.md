@@ -72,3 +72,10 @@ state-enroll/android-stage5-pilot/invitation.json (0600). Token/DB contents не
 certificate state. localhost API, DB и все прежние peers/routes оставлять. Не
 останавливать Docker daemon или другие контейнеры. Возврат: docker start только
 нового контейнера, scoped rules, timer, затем TLS и API checks.
+
+## Последующее подтверждение Android
+
+HTTPS enrollment реально выполнен в accepted beta04 на Redmi Note9 Pro/Android12.
+Далее подписанные конфигурации получены через Reticulum, применены к WG/AWG2/TCP,
+bound Internet и device ACK подтверждены. [Отдельный live отчёт](2026-09-14-android-storage-runtime.ru.md).
+Состояние «ещё не зарегистрировано» выше относится только к моменту ingress rollout.

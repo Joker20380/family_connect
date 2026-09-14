@@ -25,9 +25,12 @@ passed. Несколько ранних WG reconnect отказали по healt
 baseline не закрывает приёмку РФ; нужны AWG/TCP на российской сети. Managed Auto,
 AWG3.1 signed schema, relay outage, handover/Doze и длительная устойчивость открыты.
 Revision6 откатилась по HEALTH, затем просроченный envelope отклонён по LEASE;
-автоматический expiry stop ещё не принят. Последняя committed TCP revision7.
+Принятая revision7 истекла12:30:03UTC: VPN и pilot services остановились.
+Последняя committed TCP revision7; expired reconnect ещё проверяется.
 Подготовлен beta05/code5: bounded health retry и устранение лишних UI text updates;
-104 local tests/Android compilation passed, новый native CI/установка впереди;
+104 local tests/Android compilation passed. CI5356ab4 отказал: sum.golang.org
+HTTP2 ошибка, скрытая pipe через tee; APK gate обнаружил отсутствующие native libraries.
+Добавлены pipefail и3 bounded Go module retries; повторный CI/установка впереди;
 временные WG/AWG peers, TCP8444 pilot и Wi-Fi ADB5555 ещё требуют уборки.
 Checkpoint a857e4f в main; его Linux/Windows/Android/phase0 CI passed.
 Далее Android оставшиеся gates, Windows native Stage5 и остальные условия трёх

@@ -250,3 +250,28 @@ annotation warning; native emulator/real phone beta05 ещё не провере
 CI a857e4f завершён: Clients34841760104 Linux/Windows/Android success, release skipped;
 phase034841760207 tests/failover success. APK этого checkpoint не устанавливался.
 Новый beta05 CI/ARM64 packaging/offline signature/install и lease test впереди.
+
+[Sanitized live receipt](../android-stage5-live-result.json): подписи ACK проверены
+перед выгрузкой; профили, tokens, private keys и TCP credentials отсутствуют.
+
+## Beta05 первый CI: checksum service outage и скрытый pipeline failure
+
+Source5356ab4, Clients34843155641 Android103972622858 остановлен APK gate.
+Native build log: go mod tidy не смог проверить github.com/xtls/reality через
+sum.golang.org/tile/8/0/x201/224 (HTTP2 INTERNAL_ERROR). Pipe `build.py | tee` без
+explicit bash pipefail ошибочно вернул0; Gradle продолжил сборку. APK имеет
+размер55661222 bytes; в нём нет ни assets/awg-build.json, ни четырёх libfc-awg.so.
+Последующий verify-apk правильно отказал. Artifact10347131108,32560862 bytes,
+SHA2560321d63b1b2cc422e39128ae8313c6e7416ae6fd17552d8f3478b3437712eb0a
+скачан только для диагностики в /tmp/fc-android-beta05/failed-5356ab4; подпись/
+установка не выполнялись. Это не успешный native CI и не проблема Android health кода.
+
+Оба workflows теперь задают explicit shell:bash для native pipeline (pipefail).
+Go mod tidy имеет не более3 попыток, паузы2/4s, исходные checksum verification и
+GOTOOLCHAIN сохранены. Последний отказ по-прежнему завершает сборку ошибкой.
+Локально проверены propagation `false | tee`, success-after-two-failures и terminal
+failure-after-three; Python syntax passed. Новый source CI ещё предстоит.
+
+Принятая revision7 истекла12:30:03UTC; после этого UI показал VPN off, dumpsys activity
+services для pilot — nothing. Автоматическое expiry отключение принято на beta04.
+Запрошен повторный RNS connect для проверки expired refusal; результат ещё ожидается.

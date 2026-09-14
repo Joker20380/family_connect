@@ -38,6 +38,7 @@ jobs:
         run: gradle --no-daemon test
         working-directory: clients/android/control-tests
       - name: Build pinned unified Android VPN library
+        shell: bash # Explicit bash enables pipefail: tee must not hide a failed native build.
         run: ANDROID_NDK_HOME="$ANDROID_HOME/ndk/28.2.13676358" python3 -u pilot/android-awg/build.py 2>&1 | tee android-awg-build.log
       - run: gradle --no-daemon :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
         working-directory: clients/android

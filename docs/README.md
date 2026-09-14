@@ -1,5 +1,7 @@
 # Documentation map
 
+[Приёмка Android Stage5 на реальном устройстве](testing/android-stage5-live.ru.md).
+
 [Публичный HTTPS для Android регистрации](releases/2026-09-14-product-https.ru.md).
 
 [Android CI и защищённое состояние после остановки процесса](releases/2026-09-14-android-storage-runtime.ru.md).

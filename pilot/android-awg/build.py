@@ -1,9 +1,16 @@
 """Build one pinned WG-compatible/AWG JNI runtime. No root tools or public UAPI."""
-import hashlib,json,os,shutil,subprocess,tempfile
+import hashlib,json,os,shutil,subprocess,tempfile,time
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2];OUT=ROOT/'clients/android/awg-generated'
 ANDROID='5420011143f9dd42831cc95fcdb0d6ac9bde868f';ENGINE='b5928efb6ca19f0153958460c3d141f04abc5c2e'
 def run(*args,**kw):subprocess.run(args,check=True,**kw)
+def tidy(cwd,env):
+ # A checksum service/HTTP2 outage may be transient; every retry still verifies sums.
+ for attempt in range(3):
+  try:run('go','mod','tidy',cwd=cwd,env=env);return
+  except subprocess.CalledProcessError:
+   if attempt==2:raise
+   print('Retrying verified Go module resolution',flush=True);time.sleep(2*(attempt+1))
 def checkout(url,rev,path):
  run('git','clone','--quiet',url,str(path));run('git','-C',str(path),'checkout','--quiet','--detach',rev)
  assert subprocess.check_output(['git','-C',str(path),'rev-parse','HEAD'],text=True).strip()==rev
@@ -64,7 +71,7 @@ with tempfile.TemporaryDirectory(prefix='fc-android-awg-') as temporary:
  run('go','mod','edit','-require','github.com/xtls/xray-core@v0.0.0',cwd=native)
  run('go','mod','edit','-droprequire','github.com/amnezia-vpn/amneziawg-go',cwd=native)
  run('go','mod','edit','-require','github.com/amnezia-vpn/amneziawg-go/v3@v3.0.0','-replace','github.com/amnezia-vpn/amneziawg-go/v3='+str(engine),cwd=native)
- env=os.environ.copy();env['GOTOOLCHAIN']='local';run('go','mod','tidy',cwd=native,env=env)
+ env=os.environ.copy();env['GOTOOLCHAIN']='local';tidy(native,env)
  run('go','build','-trimpath','-buildvcs=false','-o',str(OUT/'xray-peer'),'./main',cwd=xray,env=env)
  # Same in-memory encrypted UDP echo peer used for isolated Windows acceptance, portable source.
  peer=engine/'cmd/fc-android-peer';peer.mkdir(parents=True);(peer/'main.go').write_text((ROOT/'pilot/android-awg/peer.go').read_text().replace('github.com/amnezia-vpn/amneziawg-go/', 'github.com/amnezia-vpn/amneziawg-go/v3/'))
