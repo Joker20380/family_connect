@@ -24,6 +24,7 @@ COPY clients/desktop/app.py clients/desktop/backend.py clients/desktop/profile_c
 COPY clients/linux/control-route-helper.py /app/clients/linux/control-route-helper.py
 # Extracted-package acceptance also exercises the shared operation arbiter.
 COPY clients/desktop/tests/conftest.py clients/desktop/tests/test_operations.py /app/clients/desktop/tests/
+COPY deploy/friends/awg-gateway.py /app/deploy/friends/awg-gateway.py
 RUN python -m pytest -q && touch /tmp/tests-passed
 
 FROM base AS runtime
