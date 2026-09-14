@@ -10,26 +10,29 @@
 
 [Единый список условий выпуска](PLAN.md#release-gates-three-platforms).
 
-## Реальный Android pilot и сеть РФ — 2026-09-14
+## Реальный Android pilot — 2026-09-14
 
-Пользователь сообщил полную блокировку обычного WG в проверенных им российских
-сетях. WG оставлен контрольной проверкой цепочки; российская приёмка требует
-AWG/TCP и восстановления при недоступном WG. Успех WG вне этих сетей её не закрывает.
+На Redmi Note9 Pro/Android12 установлен0.1.3-beta04/code4 (source972c81c), отдельный
+com.familyconnect.app.pilot. Исходный com.familyconnect.app0.1.0 сохранён. Platform
+CI34838248178 и phase034838248234 passed,8 instrumentation + restart5620→5655 passed.
+HTTPS IP enrollment → encrypted signed Reticulum configuration → native apply →
+bound DNS/HTTPS → device-signed ACK проверены для WG, AWG2 и TCP. External IP:
+WG186.246.45.246/NL, AWG2/TCP185.251.89.19/RU. WG/TCP committed process restart,
+health failure rollback и crash APPLIED_PENDING→RECOVERY rollback с durable outbox
+passed. Несколько ранних WG reconnect отказали по health; причина пока не объяснена.
 
-Source972c81c: Clients34838248178 (Linux/Windows/Android) и phase034838248234
-passed. Android8 instrumentation и отдельные storage prepare PID5620 → force-stop
-→ recover PID5655 passed. Подписанный постоянным beta key ARM64 APK0.1.3-beta04/code4
-установлен как com.familyconnect.app.pilot; старый com.familyconnect.app0.1.0 сохранён.
-Регистрация через публичный HTTPS IP выполнена на Redmi Note9 Pro/Android12.
-Signed configuration android-live-1/revision1 получена через Amsterdam Reticulum;
-relay подтвердил подписи RECEIVED/APPLIED/COMMITTED, gateway — handshake/трафик.
-Первое применение прошло bound DNS+HTTPS; несколько повторных connect завершились
-Resume health failed, затем один повтор восстановился. Устойчивость ещё не принята.
-Следующее: внешний IP, воспроизводимый reconnect/process recovery, AWG/TCP и блокировка WG;
-после VPN продолжить Linux/Windows gates, затем Django/платежи. Messenger/iPhone отложены.
-Временный Wi-Fi ADB5555 и Amsterdam peer имеют незавершённую уборку;
-peer удаляется отдельным130-minute timer. Не сбрасывать identity/journal.
-[Версии, доказательства и rollback](releases/2026-09-14-android-storage-runtime.ru.md).
+Телефон в Европе. Пользователь сообщает блокировку WG в России: европейский WG
+baseline не закрывает приёмку РФ; нужны AWG/TCP на российской сети. Managed Auto,
+AWG3.1 signed schema, relay outage, handover/Doze и длительная устойчивость открыты.
+Revision6 откатилась по HEALTH, затем просроченный envelope отклонён по LEASE;
+автоматический expiry stop ещё не принят. Последняя committed TCP revision7.
+Подготовлен beta05/code5: bounded health retry и устранение лишних UI text updates;
+104 local tests/Android compilation passed, новый native CI/установка впереди;
+временные WG/AWG peers, TCP8444 pilot и Wi-Fi ADB5555 ещё требуют уборки.
+Checkpoint a857e4f в main; его Linux/Windows/Android/phase0 CI passed.
+Далее Android оставшиеся gates, Windows native Stage5 и остальные условия трёх
+платформ; Django/платежи после VPN. Messenger/iPhone отложены.
+[Версии, доказательства, rollout/rollback и оставшиеся проверки](releases/2026-09-14-android-storage-runtime.ru.md).
 
 ## HTTPS для Android регистрации — 2026-09-14
 
@@ -42,7 +45,7 @@ invitation/entitlement с предварительной private DB backup; Andr
 в beta04. Следующее: live reconnect/recovery, AWG/TCP;
 наблюдать scheduled certificate renewal. [Rollout/rollback и тесты](releases/2026-09-14-product-https.ru.md).
 
-## Android: CI a342d4b принят; проверка process restart — 2026-09-14
+## Исторический checkpoint a342d4b и подготовка restart test — 2026-09-14
 
 Для a342d4b Client builds34833797626: Linux/Windows/Android success;
 Android diagnostic34833797792 success; phase034833797631: tests/failover success.
@@ -212,8 +215,8 @@ native apply/health/rollback и RNS carrier. APK/серверы/версии н�
   общий owner Activity/service/import/clear/Auto; recovery перед mutation;
   native apply/traffic health/rollback; enrollment/binding и RNS carrier.
   Identity/journal/transaction source и legacy service/profile owner готовы;
-  native application adapter source готов; startup/enrollment wiring
-  и Android runtime приёмка ещё открыты.
+  native startup/enrollment/RNS wiring и live WG/AWG2/TCP apply/ACK, process recovery
+  проверены на beta04; managed Auto, relay outage, Doze/handover и стабильность открыты.
 - [ ] **Windows Stage 5.** Защищённые identity/journal/outbox по SID, общий broker
   owner, SCM restart recovery, native apply/health/rollback, enrollment и carrier.
   Verifier принят ранее; это не полная native интеграция.

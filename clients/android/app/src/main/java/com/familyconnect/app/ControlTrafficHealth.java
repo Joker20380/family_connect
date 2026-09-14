@@ -19,7 +19,12 @@ final class ControlTrafficHealth {
     boolean check(String source){
         android.os.Handler timer=new android.os.Handler(android.os.Looper.getMainLooper());
         Runnable timeout=this::cancel;timer.postDelayed(timeout,15000);
-        try{return checkBound(source);}finally{timer.removeCallbacks(timeout);}
+        try {
+            return ControlHealthRetry.check(()->checkBound(source),()->cancelled,
+                android.os.SystemClock::elapsedRealtime,Thread::sleep,15000);
+        } catch(InterruptedException interrupted) {
+            Thread.currentThread().interrupt();return false;
+        } finally{timer.removeCallbacks(timeout);}
     }
     private boolean checkBound(String source){
         if(cancelled||!dns.check(source))return false;

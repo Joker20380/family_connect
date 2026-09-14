@@ -167,3 +167,86 @@ exact-stanza cleanup python3 /opt/apps/family_connect/android-stage5-awg-peer.py
 185.251.89.19:51999), previous hash config2; серверный firewall не меняется.
 Envelope SHA256 bee4bee1523557981066d7834de6d1248315a90b82c1e8771e25549ff62f5e18.
 Результат rollback пока ожидается; не перепубликовывать revision3 и не сбрасывать floor.
+
+## Health rollback и crash pending rollback приняты в live pilot
+
+Revision3: RECEIVED1789387649, APPLIED1789387650, ROLLED_BACK/HEALTH1789387655;
+после отката bound HTTPS показал185.251.89.19/RU через сохранённый AWG2.
+Для revision4 тот же недоступный endpoint, previous hash остаётся config2:
+SHA256643f32bdbfff2806c20bd0d76e6c6cc63647e0a2432ddcd8a7a770a6592f5a95.
+В debug APK JDWP breakpoint в ControlApplication.healthy остановил процесс после
+persist APPLIED_PENDING (до health/COMMITTED). Подтверждён CRASH_POINT_REACHED;
+am force-stop только com.familyconnect.app.pilot, затем новый запуск и явный RNS.
+Сохранённые RECEIVED/APPLIED1789387778 доставлены из outbox после restart;
+ROLLED_BACK/RECOVERY1789387817 подписан тем же устройством. Повторный bound HTTPS
+185.251.89.19/RU подтвердил реальный трафик через восстановленный AWG2.
+Ни одна fault revision не получила COMMITTED, replay floor не сбрасывался.
+
+Телефон находится в Европе (уточнено пользователем). Эти результаты подтверждают
+pipeline/runtime, но не доступность WG/AWG/TCP из России. WG блокируется в российских
+сетях пользователя; для целевой сети нужны независимые AWG/TCP acceptance.
+
+## Изолированный TCP pilot — подготовлен
+
+На185.251.89.19 создан только family-connect-android-tcp-pilot, TCP8444→container8443;
+прежний family-connect-tcp-gateway-1/TCP443 не перезапускался. Закреплённый image
+sha256:865c9e3311707e87476611c4fd65dc840ef5b4addf7bac5822e08245e59a5453,
+Xray26.3.27/d2758a0. Новый отдельный UUID, private config в
+/opt/apps/family_connect/android-stage5-tcp-pilot; server REALITY key остаётся на
+том же gateway, не загружался локально/вGit. Серверная конфигурация uid65532:65532,
+0600, каталог0700; readonly container, cap-dropALL,128MiB/64pids, tmpfs/tmp.
+Первая config validation отказала из-за root-owned0600 нового файла; после назначения
+ожидаемого uid65532 explicit xray run -test passed. Существующие config/users не менялись.
+Таймер family-connect-android-tcp-expiry останавливает только pilot через70min.
+Rollback: docker stop family-connect-android-tcp-pilot, затем убрать только этот
+временный container; private files сохранить до сверки результата. Firewall не менялся.
+
+Подписан/опубликован android-live-5/revision5, previous hashconfig2; TCP credential
+доставляется только в encrypted envelope. SHA256
+828e5e1c493b76fbfe36860b7e9ef38787276773bcf1edd5ef9cb1e02a838399.
+TCP apply/traffic/ACK пока ожидаются. Это отдельный порт8444, не приёмка TCP443 из России.
+
+## TCP Internet/restart и короткая lease
+
+Revision5 RECEIVED/APPLIED1789388063, COMMITTED1789388064/errorNONE.
+Bound HTTPS external IP185.251.89.19/RU подтверждён на TCP; после force-stop и явного
+RNS connect TCP восстановился, повторный external IP тот же. Новая регистрация не нужна.
+После этого подписана TCP revision6, previous hashconfig5, срок120s:
+expiry2026-09-14 12:19:37UTC, envelope SHA256
+3ab6c2fa31dc54ac4606cb21d934833b5be4faae76328f212de848dd6a4e3986.
+Проверка expiry stop/refusal и уборка временных ресурсов ещё выполняются.
+
+Checkpoint a857e4f отправлен в main. Clients34841760104: Windows103968142314 и
+Linux103968142639 success; Android103968142610 пока выполняет emulator lifecycle.
+Phase034841760207 tests103968142203/failover103968141872 success.
+Новый APK этого checkpoint не подписывался/не устанавливался; телефон остаётся
+на accepted972c81c beta04 с исходным SHA. В исправлении подписи AWG native engine не менялся.
+
+## Обнаруженный transient health refusal и beta05 source
+
+Revision6 НЕ COMMITTED: RECEIVED1789388265, APPLIED1789388266,
+ROLLED_BACK/HEALTH1789388267. Поэтому автоматическая остановка по её expiry не
+проверена. Позднее relay получил REJECTED/LEASE1789388390 для её hash: отказ
+просроченного envelope подтверждён. Следующая revision7, previous hashconfig5,
+SHA256ed3b4290ee78f0b8fbb80dafbcd0c56065b1d4380276e7bc2d557354a50a591c,
+RECEIVED1789388455, APPLIED1789388462, COMMITTED1789388468. Это последний committed
+hash; следующий выпуск конфигурации должен иметь revision>7 и ссылаться именно на него.
+Non-suspending JDWP trace на этом успешном повторе показал Network present/DNS true;
+точная причина предыдущего краткого отказа не доказана, влияние самого debugger
+на тайминг не исключено. Диагностический debugger отключён.
+
+В исходниках0.1.4-beta05/code5 добавлен ControlHealthRetry: повтор только bound
+DNS/HTTPS до прежнего общего15s deadline, проверка отмены и late-success refusal.
+Произвольного default-network fallback нет. Цель — убрать преждевременный отказ при
+асинхронной готовности Android Network или кратком сбое пробы; fixed deadline сохранён.
+MainActivity обновляет state/health/toggle/error TextView только при изменённом тексте,
+чтобы idle UI не порождал бесконечные accessibility text-change events.
+Local JDK17/aapt2/Android35 app compilation passed;104 control tests passed,
+включая6 readiness/deadline/cancellation/interruption cases. Один cached AndroidX
+annotation warning; native emulator/real phone beta05 ещё не проверены.
+Самостоятельный aapt2 harness требовал package namespace, добавленный только в /tmp
+копию manifest; production manifest/Gradle namespace не менялись.
+
+CI a857e4f завершён: Clients34841760104 Linux/Windows/Android success, release skipped;
+phase034841760207 tests/failover success. APK этого checkpoint не устанавливался.
+Новый beta05 CI/ARM64 packaging/offline signature/install и lease test впереди.

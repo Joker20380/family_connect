@@ -97,6 +97,9 @@ public final class MainActivity extends Activity {
         Button view=new Button(this);view.setText(resource);view.setAllCaps(false);view.setOnClickListener(v->action.run());
         LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(-1,dp(55));params.topMargin=dp(8);parent.addView(view,params);return view;
     }
+    private static void textIfChanged(TextView view,CharSequence text){
+        if(!android.text.TextUtils.equals(view.getText(),text))view.setText(text);
+    }
     private void render(){
         if(toggle==null||detail==null)return;
         String value=ConnectionService.status;
@@ -105,15 +108,15 @@ public final class MainActivity extends Activity {
             if(selected!=active){selected=active;store=new ProfileStore(this,active);transportPicker.setSelection(active.ordinal());getPreferences(MODE_PRIVATE).edit().putString("transport",active.id).apply();}
         }
         boolean on=value.equals("on"),waiting=value.equals("connecting")||value.equals("cleanup-required");
-        state.setText(on?R.string.on:waiting?R.string.connecting:R.string.off);
-        healthLabel.setText(!on?"":getString(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.health_checking));
-        dot.setTextColor(on?(ConnectionService.healthStatus.equals("unavailable")?Color.rgb(232,180,80):Color.rgb(102,219,192)):Color.GRAY);toggle.setText(on||waiting?R.string.disconnect:R.string.connect);
+        textIfChanged(state,getString(on?R.string.on:waiting?R.string.connecting:R.string.off));
+        textIfChanged(healthLabel,!on?"":getString(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.health_checking));
+        dot.setTextColor(on?(ConnectionService.healthStatus.equals("unavailable")?Color.rgb(232,180,80):Color.rgb(102,219,192)):Color.GRAY);textIfChanged(toggle,getString(on||waiting?R.string.disconnect:R.string.connect));
         boolean available=store.exists();if(autoMode.isChecked()){available=false;for(Transport t:Transport.values())available|=new ProfileStore(this,t).exists();}
         autoMode.setEnabled(!busy&&!on&&!waiting);toggle.setEnabled(!busy&&(on||waiting||available));transportPicker.setEnabled(!busy&&!on&&!waiting);importButton.setEnabled(!busy&&!on&&!waiting);
         enrollButton.setEnabled(!busy&&!on&&!waiting);controlButton.setEnabled(!busy&&!on&&!waiting);rnsButton.setEnabled(!busy&&!on&&!waiting);
         forgetButton.setEnabled(!busy&&!on&&!waiting&&store.exists());checkButton.setEnabled(!busy&&on);
-        if(ConnectionService.failed)detail.setText(R.string.failed);
-        else if(!value.equals("off")&&"auto".equals(ConnectionService.requestedTransport))detail.setText("Auto · "+ConnectionService.activeTransport.toUpperCase(java.util.Locale.ROOT));
+        if(ConnectionService.failed)textIfChanged(detail,getString(R.string.failed));
+        else if(!value.equals("off")&&"auto".equals(ConnectionService.requestedTransport))textIfChanged(detail,"Auto · "+ConnectionService.activeTransport.toUpperCase(java.util.Locale.ROOT));
         showControlResult();
     }
     private void showControlResult(){
