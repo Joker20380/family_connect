@@ -8,6 +8,8 @@ COPY device_identity/requirements.lock /tmp/identity-requirements.lock
 RUN pip install --no-cache-dir -r /tmp/identity-requirements.lock
 COPY control /app/control
 COPY tests /app/tests
+# Real RNS transport regression imports the public Android Python carrier.
+COPY clients/android/app/src/main/python /app/clients/android/app/src/main/python
 COPY scripts /app/scripts
 COPY device_identity /app/device_identity
 COPY provisioning /app/provisioning

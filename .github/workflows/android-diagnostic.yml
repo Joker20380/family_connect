@@ -52,6 +52,8 @@ jobs:
       - name: Publish bounded runtime test summary
         if: always()
         run: python3 pilot/android-awg/report_ci.py
+      - name: Confirm control and RNS runtime conformance
+        run: python3 pilot/android-awg/report_control_ci.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:

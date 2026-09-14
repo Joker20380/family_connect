@@ -10,6 +10,20 @@
 
 [Единый список условий выпуска](PLAN.md#release-gates-three-platforms).
 
+## Git checkpoint и Android runtime acceptance — 2026-09-14
+
+Накопленные исходники357 файлов сохранены коммитом af46e87 и отправлены в origin/main.
+Client builds34828757268: Windows/Linux success, Android APK/unit/lint прошли;
+эмулятор выявил устаревший Auto-тест, пытавшийся менять профиль при активном VPN.
+Тест исправлен: проверяет запрет изменения и восстанавливает профиль после disconnect;
+cleanup ждёт освобождения service owner. Добавлены APK gates для Python/RNS/bootstrap/
+лицензий и обязательный результат ControlRnsRuntimeTest в обоих Android workflows.
+Docker test stage теперь копирует Python carrier: локальная сборка passed,353 tests/27s.
+Проверка runtime report принимает успешный RNS test, отвергает missing/skipped.
+Повторный CI для исправлений ещё предстоит; полное live Android enrollment→relay→VPN→ACK
+не проверено. Версия0.1.2-beta03/code3 сохранена, релиз и установка не выполнялись.
+[Отчёт](releases/2026-09-14-git-android-acceptance.ru.md).
+
 ## Android Stage 5: автоматический RNS carrier и ACK — 2026-09-14
 
 Добавлен явный запуск «Подключить через Reticulum»: встроенный RNS получает

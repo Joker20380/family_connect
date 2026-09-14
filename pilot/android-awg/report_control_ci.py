@@ -4,15 +4,18 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 root = Path(__file__).resolve().parents[2]
-expected = {'immutableCorpus', 'strictJson'}
+expected = {('com.familyconnect.app.ControlProtocolRuntimeTest', 'immutableCorpus'),
+            ('com.familyconnect.app.ControlProtocolRuntimeTest', 'strictJson'),
+            ('com.familyconnect.app.ControlRnsRuntimeTest', 'packagedPythonImportsRnsAndInitializesWithoutDeviceKeys')}
 found = set()
 for path in (root/'clients/android/app/build/outputs/androidTest-results').rglob('*.xml'):
     for case in ET.parse(path).iter('testcase'):
-        if case.get('classname') != 'com.familyconnect.app.ControlProtocolRuntimeTest':
+        key = (case.get('classname'), case.get('name'))
+        if key not in expected:
             continue
         assert not any(case.find(name) is not None for name in ('failure', 'error', 'skipped')), 'Android control test did not pass'
-        found.add(case.get('name'))
+        found.add(key)
 assert found == expected, 'Android control runtime test results missing'
 digest = hashlib.sha256((root/'tests/vectors/control-v1/manifest.json').read_bytes()).hexdigest()
 assert digest == 'c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd'
-print(f'::notice title=Android control conformance::30 configurations, 15 ACKs, 32 structure refusals, 4 authenticated-cipher refusals; strict JSON passed; manifest SHA256 {digest}')
+print(f'::notice title=Android control conformance::30 configurations, 15 ACKs, 32 structure refusals, 4 authenticated-cipher refusals; strict JSON and packaged RNS runtime passed; manifest SHA256 {digest}')

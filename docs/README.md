@@ -1,5 +1,7 @@
 # Documentation map
 
+[Git checkpoint и Android runtime acceptance](releases/2026-09-14-git-android-acceptance.ru.md).
+
 [Android: автоматический RNS carrier и ACK](releases/2026-09-14-android-control-rns.ru.md).
 
 [Android: приём подписанной конфигурации](releases/2026-09-14-android-control-intake.ru.md).
