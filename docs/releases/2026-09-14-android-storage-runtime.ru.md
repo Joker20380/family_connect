@@ -12,7 +12,9 @@ GitHub API подтвердил результаты:
 Ошибки предыдущего checkpoint исправлены. API releases/latest вернул404,
 список releases подтвердил desktop v0.2.9 (2026-09-11T15:46:52Z), TCP0.1.0 и
 TCP Setup0.1.0. CI success не означает установку или deployment.
-Android версия исходников0.1.2-beta03/code3; опубликованные APK не заменялись.
+Проверенный a342d4b имел0.1.2-beta03/code3. После разрешения установки подготовлена
+новая версия0.1.3-beta04/code4; опубликованные APK beta03 не заменяются.
+Storage checkpoint2ce9a1b отправлен в main; следом version bump для нового CI APK.
 
 ## Новая проверка
 
@@ -49,7 +51,7 @@ Django/платежи после VPN acceptance, messenger/iPhone отложен
 
 ## Rollout и rollback
 
-Изменения затрагивают androidTest и CI, не production app. Deployment/установка/
+Изменения затрагивают androidTest/CI и увеличение Android versionCode/versionName. Deployment/установка/
 каталог/подписи/server state не изменены. Rollback — revert нового тестового
 checkpoint; сохранять production device data, identity, journal и outbox. Disposable
 CI удаляет только созданные им managed aliases/files после проверки. Нельзя запускать

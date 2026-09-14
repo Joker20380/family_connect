@@ -15,7 +15,7 @@
 Для a342d4b Client builds34833797626: Linux/Windows/Android success;
 Android diagnostic34833797792 success; phase034833797631: tests/failover success.
 Release job skipped. Последний desktop release по API — v0.2.9; новый APK не
-публиковался. Android source остаётся0.1.2-beta03/code3.
+публиковался. Для новой установки подготовлена версия0.1.3-beta04/code4; beta03 не заменяется.
 Добавлена обязательная проверка Android Keystore/AtomicFile/journal/outbox:
 отдельные prepare → force-stop → recover процессы, отказ clock regression,
 corrupt storage и повторной генерации identity. Java compilation и локальные
