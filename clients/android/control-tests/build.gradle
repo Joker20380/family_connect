@@ -2,7 +2,7 @@ plugins { id 'java' }
 repositories { mavenCentral() }
 java { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
 sourceSets {
-    main { java { srcDir '../app/src/main/java'; include '**/Control*.java', '**/TcpProfile.java'; exclude '**/ControlIdentityVault.java', '**/ControlJournalVault.java', '**/ControlMutationGate.java', '**/ControlTrafficHealth.java', '**/ControlTrust.java', '**/ControlEnrollmentVault.java', '**/ControlEnrollmentAndroid.java', '**/ControlRnsAndroid.java' } }
+    main { java { srcDir '../app/src/main/java'; include '**/Control*.java', '**/TcpProfile.java', '**/ProfileValidator.java', '**/Transport.java', '**/AwgParameters.java'; exclude '**/ControlIdentityVault.java', '**/ControlJournalVault.java', '**/ControlMutationGate.java', '**/ControlTrafficHealth.java', '**/ControlTrust.java', '**/ControlEnrollmentVault.java', '**/ControlEnrollmentAndroid.java', '**/ControlRnsAndroid.java' } }
     test { java { srcDirs '../app/src/controlTest/java', '../app/src/test/java'; include '**/Control*.java' }; resources.srcDir '../../../tests/vectors' }
 }
 dependencies {

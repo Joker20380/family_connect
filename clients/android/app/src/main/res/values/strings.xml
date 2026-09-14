@@ -40,7 +40,11 @@
     <string name="gateway_netherlands">Netherlands</string>
     <string name="gateway_default">Default</string>
     <string name="gateway_unavailable">Receive a valid signed configuration through Reticulum first.</string>
-    <string name="friends_access">Free open test · no expiry</string>
-    <string name="friends_hint">Choose a country and connect. No account or payment required.</string>
+    <string name="friends_access">Test by invitation · no expiry</string>
+    <string name="friends_hint">Activate your invitation, then choose a country and transport.</string>
     <string name="friends_unavailable">Could not load the server list. Check your internet connection and try again.</string>
+    <string name="friends_activate">Activate with invitation</string>
+    <string name="friends_invite_hint">One code activates one device. Access has no payment or expiry.</string>
+    <string name="friends_activated">Access activated. Choose a country and transport.</string>
+    <string name="friends_invite_rejected">The code is invalid or already used on another device.</string>
 </resources>

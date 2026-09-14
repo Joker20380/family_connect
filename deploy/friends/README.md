@@ -1,42 +1,58 @@
-# Open test distribution
+# Invited tester distribution
 
-Explicit user authorization, 2026-09-14: anyone receiving the APK may use both
-countries without an account, payment or expiry. This is separate from per-device
-managed Reticulum acceptance; its gates remain open in STATUS/PLAN.
+Final user requirements,2026-09-14: one APK, one-use invite for one device, no account
+or payment, no expiry after activation. Independent country (RU/NL) and transport
+(AWG3.1/TCP REALITY) selection. This supersedes the earlier anonymous/common-access
+prototype. It is separate from managed Reticulum acceptance and billing/product DB.
 
 Android `friends` build type: `com.familyconnect.app.friends`, non-debuggable,
-`FriendsActivity`, shared existing TCP engine. Only a bounded HTTPS-fetched catalog
-signed with the offline root under `family-connect/open-test/v1\0` is accepted.
-The catalog has a monotonic sequence, two strict TCP profiles, and deliberately no
-lease. An already verified cached catalog works when refresh is unavailable.
-No user identity, payment check, invitation or managed journal is created. Test
-access credentials are intentionally public; server REALITY private keys remain
-private. Never substitute personal device profiles. Keep generated files outside
-Git, CI and command output, under `state-enroll/friends-pilot/`.
+`FriendsActivity`. Each installation creates and preserves independent signing and
+WG keys inside encrypted Android Keystore-backed private storage. Invite redemption
+and every configuration refresh require a nonce-bound device signature. APK copying
+alone does not activate a device. Updates retain identity; uninstall removes it.
 
-Dedicated services on the two authorized hosts:
+The offline root signs credential-free gateway templates under the separate
+`family-connect/invited-test/v1\0` domain (`scripts/sign_friends_catalog.py`). Templates
+contain DEVICE_CREDENTIAL, LOCAL_DEVICE_KEY and ASSIGNED_ADDRESS placeholders.
+Individual TCP UUID and AWG peer address are issued over authenticated HTTPS only.
+The signed templates and returned credentials are cached in protected device storage.
+Cached access has no lease, and never falls back after an explicit API denial.
 
-- RU label:185.251.89.19:8446, NL label:186.246.45.246:443.
-- `/opt/apps/family_connect/friends-tcp/`, `family-connect-friends-tcp.service`.
-- Xray26.3.27/d2758a0, binary SHA256
+Dedicated authorized-host services:
+
+- `family-connect-friends-tcp`: RU185.251.89.19:8446, NL186.246.45.246:443;
+  `/opt/apps/family_connect/friends-tcp/`, individual users, loopback Xray API18085.
+- `family-connect-friends-awg`: UDP51823 on both hosts, interfacefcopen31;
+  RU10.84.0.1/16, NL10.83.0.1/16, `/opt/apps/family_connect/friends-awg/`.
+- `family-connect-friends-access`: RU loopback18084, private SQLite DB under
+  `/opt/apps/family_connect/friends-access/`. HTTPS paths under `/friends/` on8443.
+- Xray26.3.27/d2758a0 SHA256
   `4f7a4436f86798bbb5c875014e352021a1673710a45e170ccc507c5f59341940`.
-- Separate REALITY keys and shared test credentials for each gateway; no log of traffic.
-- Existing API, WG, AWG, TCP443 and Android TCP8444 retained. Outbound private/local
-  address ranges blocked for the open service.
+- AWG3.1 experiment2 engine/tools SHA256
+  `e7f00e47d6df853ade5dcd2fe79240f01ff897d75088c768316a444c27c87e0f` /
+  `906d6795af1dd4adee7b11bf1e7fa133d4795c8a8d6e2099b34a026f810a3278`.
 
-`install-tcp.py` reads private configuration on stdin and refuses overwriting an
-existing install; upload the verified binary first. `publish-catalog.py` only
-publishes the first already-signed catalog at the existing HTTPS ingress and
-retains a before-friends nginx config. Sign offline with
-`scripts/sign_open_test_catalog.py`; never send the signing key to a server.
+Nginx supplies TLS, method/body/rate limits; the root helper accepts only canonical
+keys/UUID/device identifiers. The separate inter-server SSH key is restricted to
+this registration command and pins the existing known host. Operator keys are never
+copied. Existing product DB, API and VPN services are retained. The formerly shared
+TCP credentials were revoked and the public credential catalog was withdrawn.
 
-Before distribution, require platform CI, APK signature/version/ABI checks, and
-real Android RU→NL→RU traffic tests. Sign the accepted APK with the persistent
-local beta key. Never overwrite an already distributed version with new binaries.
+`control/friends/access.py` atomically binds a one-use invitation to one device and
+WG key, rejects concurrent second claims/replays, and has no entitlement expiry.
+`access-api.py` proves authorization before provisioning the selected country's
+AWG peer/TCP user. `awg-gateway.py` maintains only its own interface, private peer DB,
+iptables chain/rules and test TCP users. It never prints private configs or keys.
+Generated profiles, invite codes and receipts stay under private state directories,
+not Git/CI/command output. Only intended APK/manual files become public downloads.
 
-Rollback: stop only `family-connect-friends-tcp.service` on the affected host;
-this deliberately disables that country's open test, so it is not routine test
-cleanup. Preserve configs and profiles for recovery. Restore nginx's
-`.before-friends` backup only after reviewing any later changes; test config and
-reload. Keep registration/TLS renewal working. Do not remove existing Pilot state.
-For clients, publish a higher version/code, without uninstalling user data.
+Distribution gates: platform CI, final signed APK version/ABI/payload checks, real
+Android activation and four country/transport combinations, repeat connection and
+process restart, second-device invite refusal. Sign accepted assets using the
+persistent local beta key, preserve immutable version/code and offline update root.
+
+Rollback: stop only the affected friends service; preserve DB/keys/configs. This
+intentionally disables those testers and must not be routine test cleanup. Review
+later edits before restoring nginx `.before-invites` config; do not restore the old
+public credential endpoint. Keep existing registration/TLS renewal and Pilot working.
+Update clients with a higher version/code, without uninstalling their data.

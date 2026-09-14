@@ -1,5 +1,24 @@
 # Android CI и защищённое состояние — 2026-09-14
 
+## Invite pilot checkpoint — 2026-09-14
+
+Android 0.1.7-beta08/code8 prepared (not yet installed). Latest pushed source
+a673e45: Clients34851270867 all three platforms success; phase034851271032 success.
+New code: local Java/resources108 tests and invite backend3 tests passed.
+HTTPS proof activation passed; second device with same invitation rejected403.
+Both countries now issue individual TCP credentials and AWG3.1 peers; offline-signed
+credential-free catalog sequence3 verified. Fixed Xray adu missing inbound port;
+confirmation checks returned user UUID/email, because CLI exit0 alone is insufficient.
+Public shared catalog withdrawn and common TCP credentials revoked on both hosts.
+Separate friends-access API18084 behind8443 enabled; original product DB untouched.
+Short tester manual: docs/testing/friends-quickstart.ru.md, download link pending.
+Next: final CI, sign exact accepted friends APK, physical Android four combinations,
+restart/recovery, private invitation batch and public APK/manual. Desktop invited
+onboarding not ready. Rollback: stop only family-connect-friends-access/tcp/awg
+services and remove friends HTTPS routes; keep original Pilot and product services.
+Do not restore withdrawn common credentials. Earlier open-access notes are historical.
+
+
 ## Проверенный исходный checkpoint
 
 Рабочее дерево при входе чистое, HEAD a342d4b; origin/main указан пользователем.
@@ -439,3 +458,37 @@ phase034849209570 success; APK ещё не подписан/установлен
 ссылки на готовые артефакты и ограничения desktop readiness. Desktop0.2.9 пока не имеет
 этого автоматического открытого onboarding; не выдавать его за такую же готовую сборку.
 [Rollout/rollback](../../deploy/friends/README.md).
+
+## Актуальная раздаваемая сборка: одноразовые инвайты — 2026-09-14
+
+Последнее решение пользователя: общий APK, одноразовый код на одно устройство;
+после активации доступ бессрочный, без оплаты и аккаунта. Независимые селекторы:
+Россия/Нидерланды и AWG3.1/TCP REALITY. Это заменяет предыдущее решение об открытом
+доступе любому получившему APK и привязке транспорта к стране. Финальная сборка
+ещё не выдана; beta07/08 в разработке нельзя объявлять готовой для раздачи.
+
+Оба отдельных AWG3.1 сервиса установлены на authorized hosts: fcopen31,
+UDP51823,10.84.0.1/16(RU),10.83.0.1/16(NL). Engine/tools из принятого experiment2:
+e7f00e47d6df853ade5dcd2fe79240f01ff897d75088c768316a444c27c87e0f /
+906d6795af1dd4adee7b11bf1e7fa133d4795c8a8d6e2099b34a026f810a3278.
+AWG peer registration идемпотентна по отдельному публичному ключу телефона;
+server-side SSH key допускает только registration forced command в Нидерландах.
+Публичный registration HTTP пока не включён; нужен invite/proof gate.
+
+Добавляется отдельное хранилище одноразовых инвайтов control/friends, без Django и
+миграции существующей product DB. Нужно завершить proofs/atomic activation,
+индивидуальные TCP credentials, автоматическую peer выдачу только активированным
+устройствам, Android secure identity/cache и UI ввода кода. Удалить/заменить прежний
+публичный catalog1 с общими TCP credentials и отозвать эти общие credentials до
+закрытого пилота. Новый подписанный шаблон AWG/TCP пока не опубликован:
+Python legacy parser отказал AWG3.1; native Java compile и108 tests passed.
+
+RU TCP с SNI www.cloudflare.com пропустил HTTPS; внешний IP оказался IPv6
+2a0a:2b41:0:3854::, locRU. Прежний assert ожидал IPv4, поэтому этот отказ проверки
+не означает отказ туннеля. С SNI www.microsoft.com был реальный TLS reset.
+NL TCP и все четыре комбинации на реальном Android ещё не приняты. На телефоне
+по-прежнему beta05/revision9; friends APK не установлен. Следующие действия:
+принять invite backend/security tests, закончить сборку и CI, подписать после gates,
+установить и пройти 4 комбинации/повторный запуск/отказ повторного инвайта; затем
+выдать APK и коды. Linux/Windows выдавать только при подтверждённой готовности.
+Rollback только новых friends services; действующие Pilot/WG/AWG/TCP/API сохранять.

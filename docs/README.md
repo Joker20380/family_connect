@@ -1,5 +1,7 @@
 # Documentation map
 
+[Короткая инструкция Family Connect Test](testing/friends-quickstart.ru.md).
+
 [Приёмка Android Stage5 на реальном устройстве](testing/android-stage5-live.ru.md).
 
 [Публичный HTTPS для Android регистрации](releases/2026-09-14-product-https.ru.md).
