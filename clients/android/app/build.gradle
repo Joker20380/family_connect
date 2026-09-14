@@ -8,9 +8,9 @@ android {
         minSdk 26
         targetSdk 35
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        versionCode 6
-        versionName '0.1.5-beta06'
-        manifestPlaceholders = [appLabel: 'Family Connect']
+        versionCode 7
+        versionName '0.1.6-beta07'
+        manifestPlaceholders = [appLabel: 'Family Connect', launcherActivity: 'com.familyconnect.app.MainActivity']
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -26,9 +26,16 @@ android {
         debug {
             // Technical pilots coexist with old CI-signed installs; never uninstall their data.
             applicationIdSuffix '.pilot'
-            manifestPlaceholders = [appLabel: 'Family Connect Pilot']
+            manifestPlaceholders = [appLabel: 'Family Connect Pilot', launcherActivity: 'com.familyconnect.app.MainActivity']
         }
         release { minifyEnabled false }
+        friends {
+            initWith release
+            applicationIdSuffix '.friends'
+            debuggable false
+            matchingFallbacks = ['release']
+            manifestPlaceholders = [appLabel: 'Family Connect Test', launcherActivity: 'com.familyconnect.app.FriendsActivity']
+        }
     }
 }
 dependencies {

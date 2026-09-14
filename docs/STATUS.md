@@ -10,6 +10,32 @@
 
 [Единый список условий выпуска](PLAN.md#release-gates-three-platforms).
 
+## Открытая сборка для знакомых — 2026-09-14
+
+Пользователь явно выбрал открытый тест: любой получивший APK подключается, без
+аккаунта/оплаты/срока окончания, с общим тестовым доступом к двум TCP-серверам.
+Другие системы — если готовы. Эта отдельная friends-сборка не заменяет требования
+managed Reticulum pipeline и не изменяет текущий Pilot/identity/journal.
+Подготовлена Android0.1.6-beta07/code7, com.familyconnect.app.friends, non-debuggable:
+выбор RU/NL, connect/disconnect, bound IP check; HTTPS signed open-test catalog,
+strict profiles, monotonic cache, отсутствие lease/payment gate. Local Java/resources
+compilation и108 tests passed. CI/подписание/установка/реальный телефон ещё впереди.
+
+Два отдельных TCP services Xray26.3.27/d2758a0 enabled/active:
+185.251.89.19:8446 и186.246.45.246:443; server private keys разные, credentials
+предназначены для общего открытого теста. Original API/VPN не изменены. HTTPS
+/friends/catalog.json опубликован; bytes match offline signed catalog sequence1,
+SHA256572aac4bfe61080ec6ea931e8a18c6dcd1bfd695f0d1484535f633945fd8a13c.
+Root signing key остаётся только локально. Native/HTTP traffic gates pending.
+
+Предшествующая beta06/source01fe2bf: Clients34849209625 Android/Linux/Windows success,
+phase034849209570 success; APK ещё не подписан/установлен. Приоритет переключён на
+запрошенную раздаваемую friends-сборку; на Redmi пока прежний рабочий beta05/revision9.
+Далее CI beta07, обе страны на реальном Android и повторная установка/перезапуск;
+ссылки на готовые артефакты и ограничения desktop readiness. Desktop0.2.9 пока не имеет
+этого автоматического открытого onboarding; не выдавать его за такую же готовую сборку.
+[Rollout/rollback](../deploy/friends/README.md).
+
 ## Android: выбор России / Нидерландов — 2026-09-14
 
 По запросу пользователя добавлен выбор шлюза из действующей подписанной конфигурации.

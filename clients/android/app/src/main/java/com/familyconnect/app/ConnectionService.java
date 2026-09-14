@@ -238,7 +238,7 @@ public final class ConnectionService extends Service {
     private Notification notification(){
         NotificationManager manager=getSystemService(NotificationManager.class);
         manager.createNotificationChannel(new NotificationChannel("vpn",getString(R.string.notification),NotificationManager.IMPORTANCE_LOW));
-        PendingIntent open=PendingIntent.getActivity(this,0,new Intent(this,MainActivity.class),PendingIntent.FLAG_IMMUTABLE|PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent open=PendingIntent.getActivity(this,0,getPackageManager().getLaunchIntentForPackage(getPackageName()),PendingIntent.FLAG_IMMUTABLE|PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent stop=PendingIntent.getService(this,1,new Intent(this,ConnectionService.class).setAction("disconnect"),PendingIntent.FLAG_IMMUTABLE|PendingIntent.FLAG_UPDATE_CURRENT);
         return new Notification.Builder(this,"vpn").setSmallIcon(R.drawable.ic_shield).setContentTitle(getString(R.string.notification))
             .setContentText((automatic?"AUTO · ":"")+activeTransport.toUpperCase(java.util.Locale.ROOT)+" · "+getString(status.equals("on")?(healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.on):R.string.connecting)).setContentIntent(open)

@@ -7,7 +7,7 @@
     <application android:label="${appLabel}" android:icon="@drawable/ic_shield"
         android:theme="@android:style/Theme.Material.NoActionBar" android:allowBackup="false"
         android:fullBackupContent="false" android:dataExtractionRules="@xml/extraction_rules" android:usesCleartextTraffic="false">
-        <activity android:name=".MainActivity" android:exported="true">
+        <activity android:name="${launcherActivity}" android:exported="true">
             <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
         </activity>
         <service android:name="org.amnezia.awg.backend.GoBackend$VpnService" android:permission="android.permission.BIND_VPN_SERVICE" android:exported="false">

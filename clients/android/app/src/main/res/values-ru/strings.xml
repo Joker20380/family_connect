@@ -40,4 +40,7 @@
     <string name="gateway_netherlands">Нидерланды</string>
     <string name="gateway_default">По умолчанию</string>
     <string name="gateway_unavailable">Сначала получите действующую подписанную конфигурацию через Reticulum.</string>
+    <string name="friends_access">Бесплатный открытый тест · без срока окончания</string>
+    <string name="friends_hint">Выберите страну и подключитесь. Аккаунт и оплата не нужны.</string>
+    <string name="friends_unavailable">Не удалось получить список серверов. Проверьте интернет и повторите подключение.</string>
 </resources>

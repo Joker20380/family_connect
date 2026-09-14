@@ -40,7 +40,7 @@ jobs:
       - name: Build pinned unified Android VPN library
         shell: bash # Explicit bash enables pipefail: tee must not hide a failed native build.
         run: ANDROID_NDK_HOME="$ANDROID_HOME/ndk/28.2.13676358" python3 -u pilot/android-awg/build.py 2>&1 | tee android-awg-build.log
-      - run: gradle --no-daemon :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
+      - run: gradle --no-daemon :app:assembleDebug :app:testDebugUnitTest :app:lintDebug :app:assembleFriends :app:testFriendsUnitTest :app:lintFriends
         working-directory: clients/android
       - run: python3 pilot/android-awg/verify-apk.py
       - run: python3 -m pip install cryptography==46.0.7
@@ -68,6 +68,7 @@ jobs:
           name: FamilyConnect-Android-debug
           path: |
             clients/android/app/build/outputs/apk/debug/*.apk
+            clients/android/app/build/outputs/apk/friends/*.apk
             clients/android/awg-generated/assets/awg-build.json
             clients/android/app/build/test-results/testDebugUnitTest/*.xml
             clients/android/app/build/outputs/androidTest-results/connected/**/*.xml
