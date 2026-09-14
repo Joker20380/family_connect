@@ -1,5 +1,7 @@
 # Documentation map
 
+[Публичный HTTPS для Android регистрации](releases/2026-09-14-product-https.ru.md).
+
 [Android CI и защищённое состояние после остановки процесса](releases/2026-09-14-android-storage-runtime.ru.md).
 
 [Git checkpoint и Android runtime acceptance](releases/2026-09-14-git-android-acceptance.ru.md).

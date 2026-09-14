@@ -88,3 +88,82 @@ certificate SHA256668409f4b19253908f66a6bcdaf0da77a625e589fece38ccebb59e0c89722e
 всю приёмку на фактическом pilot ID. Это отдельная регистрация/identity; migration
 старого профиля не заявляется. Следующие pilot APK подписывать одним постоянным
 beta key, code увеличивать; не подменять опубликованные версии.
+
+## Принятый CI и установка beta04
+
+Source972c81c, [Clients34838248178](https://github.com/Joker20380/family_connect/actions/runs/34838248178):
+Linux103957035071, Android103957035298, Windows103957035500 success; release skipped.
+[phase034838248234](https://github.com/Joker20380/family_connect/actions/runs/34838248234):
+tests103956952462/failover103956952866 success.8 instrumentation cases и отдельные
+prepare PID5620/recover PID5655 passed; packaged RNS internal crypto/corpus passed.
+Artifact10345416969,120478185 bytes, SHA256
+2e04f9ec8e4fd3cddbd06d9b465d93cd30a6281b4080cea386f3ec422cec96c1.
+Проверены все4 native ABI, Python/RNS, packaged bootstrap/anchor/licenses и отсутствие
+fixtures. ARM64 packaging сохранил байты retained payload; zipalign16KB/signature passed.
+Установлен state-client-build/android-pilots/beta04/FamilyConnect-Android-0.1.3-beta04-arm64.apk,
+77686846 bytes, SHA256 b6df64f0f4d0d16602900221bd605e7b3e07779a36633b9e7eb6c4930eae9365.
+Сертификат постоянного offline beta key67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a.
+Это debug technical pilot, не публичный release. Исходный0.1.0 остаётся установлен.
+
+## Live enrollment, configuration1 и незавершённая приёмка
+
+На реальном Redmi Note9 Pro/Android12 пользовательский UI зарегистрировал новую
+native identity через https://185.251.89.19:8443; proof/key binding подтверждён.
+Device reference dc899995df4dafd51177ca28ab1d4382. Private invitation/binding хранятся
+только state-enroll/android-stage5-pilot (0700, files0600). До создания приглашения
+в private product DB directory сохранена android-stage5-before-20260914.db;
+не восстанавливать весь DB поверх последующих регистраций.
+
+В Amsterdam fcams добавлен только отдельный peer10.79.0.5/32,fd79:92::5/128;
+прежние3 peers сохранены, interface не перезапускался. Offline signed schema2
+android-live-1/revision1, expiry2026-09-14 13:53:02UTC; envelope SHA256
+055cf9423aebc5c120cd489f533a98a2403de48899818fc870810f14386fd2e0.
+Опубликован в существующем ControlRelay без restart. На relay проверены device signatures
+RECEIVED/APPLIED timestamp1789386931 и COMMITTED1789386932, sequence1/errorNONE.
+Gateway зарегистрировал handshake и рост двусторонних счётчиков; commit требует
+DNS и HTTPS через конкретный VPN Network. Отдельный внешний IP ещё проверяется.
+
+Несколько reconnect завершились IOException в ControlTransaction:96 (Resume health
+failed); один последующий reconnect успешен. Диагностика debug JDWP выводит только
+type/stack locations и boolean/null готовности Network, без exception values/keys/profiles.
+Причина нестабильности ещё не доказана; тайминг публикации VPN Network проверяется.
+Полная приёмка восстановления, crash pending rollback, AWG/TCP и blocked-WG открыта.
+Наблюдение пользователя о блокировке WG в российских сетях делает AWG/TCP обязательными;
+WG baseline не является приёмкой России.
+
+UI обновляет TextView каждые500ms: uiautomator idle dump не завершается. MIUI
+input tap запрещён; разрешённые AccessibilityNodeInfo actions работают через временный
+shell UiAutomation helper. Helper может вернуть137 после успешного action; не считать
+такой exit доказательством отсутствия нажатия. Это открытая проблема автоматизации/UI.
+
+Возврат: остановить только pilot, сохранить его identity/journal и исходное приложение.
+Для нового peer есть exact-stanza cleanup: на186.246.45.246 выполнить
+python3 /opt/apps/family_connect/android-stage5-peer.py cleanup; откажет при изменённой
+stanza. Private backup/receipt в /opt/apps/family_connect/android-stage5-pilot.
+Timer family-connect-android-pilot-expiry удаляет только этот peer через130min;
+проверить его результат. Не переиздавать revision1 с иными bytes/reset journal.
+После испытаний убрать временный /data/local/tmp/fc-ui-dump.jar и JDWP port8700,
+вернуть adb usb, закрыв временный Wi-Fi listener5555. Это пока незавершённые действия.
+
+## Live WG recovery и AWG2
+
+WG external IP через bound HTTPS:186.246.45.246/NL. Force-stop только pilot → новый
+process → явный Reticulum connect восстановил VPN/DNS без новой revision/ACK transaction.
+Это один принятый restart, не объяснение предыдущих health refusals.
+AWG2 config android-live-2/revision2 получена автоматически в работающей сессии;
+previous hash указывает на config1. Envelope SHA256
+3855cdce4297d05c357b5031a0870b42adc9254899f0b5687bdde9197dc414f4,
+expiry epoch1789391100. RECEIVED/APPLIED1789387526, COMMITTED1789387527/errorNONE.
+Внешний IP185.251.89.19 (trace locRU) подтверждён через AWG VPN Network.
+UI ошибочно подписывал весь AWG slot как3.1; исходник исправлен на AmneziaWG,
+установленный beta04 пока содержит старую подпись. Managed schema2 здесь именно2.0.
+
+Добавлен только AWG peer10.78.0.3/32,fd78:92::3/128 на185.251.89.19;
+исходный peer сохранён. Backup /opt/apps/family_connect/android-stage5-awg-pilot/awg-before.conf,
+exact-stanza cleanup python3 /opt/apps/family_connect/android-stage5-awg-peer.py cleanup;
+таймер family-connect-android-awg-expiry удаляет только этот peer через70min.
+
+Для health-failure rollback опубликован android-live-3/revision3 (AWG endpoint
+185.251.89.19:51999), previous hash config2; серверный firewall не меняется.
+Envelope SHA256 bee4bee1523557981066d7834de6d1248315a90b82c1e8771e25549ff62f5e18.
+Результат rollback пока ожидается; не перепубликовывать revision3 и не сбрасывать floor.

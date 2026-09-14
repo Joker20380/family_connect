@@ -1,0 +1,13 @@
+[Unit]
+Description=Renew Family Connect product IP TLS certificate
+After=docker.service network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/apps/family_connect/product-https-pilot/pilot.py renew
+TimeoutStartSec=300
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true

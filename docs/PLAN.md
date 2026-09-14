@@ -10,6 +10,38 @@
 
 [Единый список условий выпуска](PLAN.md#release-gates-three-platforms).
 
+## Реальный Android pilot и сеть РФ — 2026-09-14
+
+Пользователь сообщил полную блокировку обычного WG в проверенных им российских
+сетях. WG оставлен контрольной проверкой цепочки; российская приёмка требует
+AWG/TCP и восстановления при недоступном WG. Успех WG вне этих сетей её не закрывает.
+
+Source972c81c: Clients34838248178 (Linux/Windows/Android) и phase034838248234
+passed. Android8 instrumentation и отдельные storage prepare PID5620 → force-stop
+→ recover PID5655 passed. Подписанный постоянным beta key ARM64 APK0.1.3-beta04/code4
+установлен как com.familyconnect.app.pilot; старый com.familyconnect.app0.1.0 сохранён.
+Регистрация через публичный HTTPS IP выполнена на Redmi Note9 Pro/Android12.
+Signed configuration android-live-1/revision1 получена через Amsterdam Reticulum;
+relay подтвердил подписи RECEIVED/APPLIED/COMMITTED, gateway — handshake/трафик.
+Первое применение прошло bound DNS+HTTPS; несколько повторных connect завершились
+Resume health failed, затем один повтор восстановился. Устойчивость ещё не принята.
+Следующее: внешний IP, воспроизводимый reconnect/process recovery, AWG/TCP и блокировка WG;
+после VPN продолжить Linux/Windows gates, затем Django/платежи. Messenger/iPhone отложены.
+Временный Wi-Fi ADB5555 и Amsterdam peer имеют незавершённую уборку;
+peer удаляется отдельным130-minute timer. Не сбрасывать identity/journal.
+[Версии, доказательства и rollback](releases/2026-09-14-android-storage-runtime.ru.md).
+
+## HTTPS для Android регистрации — 2026-09-14
+
+https://185.251.89.19:8443 развёрнут перед прежним localhost product API.
+nginx1.30.4/Certbot5.4.0 pinned digests; публичный IP TLS expiry21.09.2026 02:18:22GMT.
+Staging/production issuance, external TLS/routes/body/rate limits и renewal dry-run
+passed; отдельный twice-daily timer active, ручной renew/reload success. Новые UFW
+IPv4 TCP80/8443; прежний API и VPN не перезапускались. Созданы отдельные single-use
+invitation/entitlement с предварительной private DB backup; Android enrollment выполнен
+в beta04. Следующее: live reconnect/recovery, AWG/TCP;
+наблюдать scheduled certificate renewal. [Rollout/rollback и тесты](releases/2026-09-14-product-https.ru.md).
+
 ## Android: CI a342d4b принят; проверка process restart — 2026-09-14
 
 Для a342d4b Client builds34833797626: Linux/Windows/Android success;
