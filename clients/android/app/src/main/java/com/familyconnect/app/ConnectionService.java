@@ -194,7 +194,7 @@ public final class ConnectionService extends Service {
                 try{return !cancelled()&&check.check(source)&&!cancelled();}finally{check.cancel();controlHealth=null;}
             }
             public boolean cancelled(){return stopping||closing||VpnService.prepare(ConnectionService.this)!=null;}
-        },identity);
+        },identity,()->getSharedPreferences("gateway-selection",MODE_PRIVATE).getString("gateway",""));
     }
     /** Internal dispatch only. Trust comes from the packaged offline anchor, never an Intent.
      * Service startup supports explicit local signed-file intake. Network carrier remains separate.

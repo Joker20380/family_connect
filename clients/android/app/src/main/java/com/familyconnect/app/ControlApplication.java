@@ -19,8 +19,23 @@ final class ControlApplication implements ControlTransaction.Resumable {
     }
     private final Host host;
     private final ControlIdentity identity;
+    private final java.util.function.Supplier<String> gateway;
     private static final List<String> SLOTS = Arrays.asList("wg", "awg", "tcp");
-    ControlApplication(Host host, ControlIdentity identity) { this.host=host; this.identity=identity; }
+    ControlApplication(Host host, ControlIdentity identity) { this(host,identity,()->""); }
+    ControlApplication(Host host, ControlIdentity identity, java.util.function.Supplier<String> gateway) {
+        this.host=host; this.identity=identity; this.gateway=gateway;
+    }
+    private String selectedSlot(ControlProtocol.Verified config) throws IOException {
+        String wanted=gateway.get();
+        for(JsonElement item:config.state().getAsJsonArray("transport_profiles")) {
+            JsonObject profile=item.getAsJsonObject();
+            if(wanted.isEmpty()||wanted.equals(text(profile.get("gateway_id")))) {
+                String transport=text(profile.get("transport"));
+                return transport.equals("wireguard")?"wg":transport.equals("amneziawg")?"awg":"tcp";
+            }
+        }
+        throw new IOException("Selected gateway is not in signed configuration");
+    }
     private JsonObject checked(JsonObject value) throws Exception {
         fields(value, "schema profiles active lease"); require(integer(value.get("schema"),1)==1);
         integer(value.get("lease"),0); JsonObject profiles=value.getAsJsonObject("profiles"); fields(profiles,"wg awg tcp");
@@ -50,7 +65,7 @@ final class ControlApplication implements ControlTransaction.Resumable {
         if(profiles.isEmpty())throw new IOException("No native profile");return profiles;
     }
     public void apply(ControlProtocol.Verified config, JsonObject baseline) throws Exception {
-        checked(baseline);LinkedHashMap<String,String> profiles=materialize(config);
+        checked(baseline);LinkedHashMap<String,String> profiles=materialize(config);String selected=selectedSlot(config);
         if(host.cancelled())throw new IOException("Control operation cancelled");
         host.stop();
         for(var entry:profiles.entrySet()) {
@@ -58,19 +73,19 @@ final class ControlApplication implements ControlTransaction.Resumable {
             host.save(entry.getKey(),entry.getValue());
         }
         if(host.cancelled())throw new IOException("Control operation cancelled");
-        host.start(profiles.keySet().iterator().next(),integer(config.state().get("expires_at"),1));
+        host.start(selected,integer(config.state().get("expires_at"),1));
     }
     public void resume(ControlProtocol.Verified config) throws Exception {
         JsonObject saved=checked(host.capture());
         if(!saved.get("active").isJsonNull())throw new IOException("Resume requires stopped VPN");
-        LinkedHashMap<String,String> profiles=materialize(config);
+        LinkedHashMap<String,String> profiles=materialize(config);String selected=selectedSlot(config);
         for(var entry:profiles.entrySet()) {
             JsonElement stored=saved.getAsJsonObject("profiles").get(entry.getKey());
             if(stored.isJsonNull()||!entry.getValue().equals(text(stored)))
                 throw new IOException("Committed profile differs from local slot");
         }
         if(host.cancelled())throw new IOException("Control operation cancelled");
-        host.start(profiles.keySet().iterator().next(),integer(config.state().get("expires_at"),1));
+        host.start(selected,integer(config.state().get("expires_at"),1));
         if(host.cancelled())throw new IOException("Control operation cancelled");
     }
     public void stopResume() throws Exception {host.stop();}

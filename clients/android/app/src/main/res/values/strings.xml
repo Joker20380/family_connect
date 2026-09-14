@@ -35,4 +35,9 @@
     <string name="rns_connect">Connect via Reticulum</string>
     <string name="rns_hint">Fetch signed configuration for this registered device from the pinned Family Connect relay. VPN will connect after verification. Configuration and confirmation delivery retry every minute until Disconnect.</string>
     <string name="rns_unavailable">Reticulum relay unavailable. Retrying; the current VPN is preserved.</string>
+    <string name="choose_gateway">Server</string>
+    <string name="gateway_russia">Russia</string>
+    <string name="gateway_netherlands">Netherlands</string>
+    <string name="gateway_default">Default</string>
+    <string name="gateway_unavailable">Receive a valid signed configuration through Reticulum first.</string>
 </resources>

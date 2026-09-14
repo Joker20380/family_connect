@@ -35,4 +35,9 @@
     <string name="rns_connect">Подключить через Reticulum</string>
     <string name="rns_hint">Получать подписанную конфигурацию этого зарегистрированного устройства с закреплённого relay Family Connect. VPN подключится после проверки. Повтор получения и доставки подтверждений — каждую минуту до отключения.</string>
     <string name="rns_unavailable">Relay Reticulum недоступен. Повторим попытку; действующий VPN сохраняется.</string>
+    <string name="choose_gateway">Сервер</string>
+    <string name="gateway_russia">Россия</string>
+    <string name="gateway_netherlands">Нидерланды</string>
+    <string name="gateway_default">По умолчанию</string>
+    <string name="gateway_unavailable">Сначала получите действующую подписанную конфигурацию через Reticulum.</string>
 </resources>

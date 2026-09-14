@@ -87,6 +87,36 @@ public class ControlApplicationTest {
             assertThrows(IOException.class,()->app.apply(two,host.capture()));assertEquals(0,host.stops);assertEquals(0,host.saves);
         }
     }
+    @Test public void selectedSignedGatewayResumesWithoutProfileWrites()throws Exception{
+        try(var h=new ControlTransactionTest.Harness()){
+            Host host=new Host();String[] selected={""};
+            ControlApplication app=new ControlApplication(host,h.identity,()->selected[0]);
+            var verified=h.journal.verify(ControlTransactionTest.resource("valid-wg.envelope"),1000);
+            JsonObject state=verified.state();
+            var awg=h.journal.verify(ControlTransactionTest.resource("valid-awg2.envelope"),1000);
+            JsonObject second=awg.state().getAsJsonArray("transport_profiles").get(0).getAsJsonObject().deepCopy();
+            JsonObject gateway=awg.state().getAsJsonArray("gateways").get(0).getAsJsonObject().deepCopy();
+            gateway.addProperty("gateway_id","second");state.getAsJsonArray("gateways").add(gateway);
+            second.addProperty("gateway_id","second");second.addProperty("profile_id","second");
+            state.getAsJsonArray("transport_profiles").add(second);ControlProfiles.validate(state);
+            var two=new ControlProtocol.Verified(state,verified.digest);
+            app.apply(two,host.capture());assertEquals("wg",host.active);
+            host.stop();int writes=host.saves;selected[0]="second";
+            app.resume(two);assertEquals("awg",host.active);assertEquals(writes,host.saves);
+            host.stop();selected[0]="absent";int starts=host.starts;
+            assertThrows(IOException.class,()->app.resume(two));assertEquals(starts,host.starts);assertEquals(writes,host.saves);
+            host.profiles.addProperty("awg","tampered");selected[0]="second";
+            assertThrows(IOException.class,()->app.resume(two));assertEquals(starts,host.starts);
+        }
+    }
+    @Test public void unavailableGatewayRefusedBeforeStoppingActiveConnection()throws Exception{
+        try(var h=new ControlTransactionTest.Harness()){
+            Host host=new Host();ControlApplication app=new ControlApplication(host,h.identity,()->"absent");
+            var config=h.journal.verify(ControlTransactionTest.resource("valid-wg.envelope"),1000);
+            assertThrows(IOException.class,()->app.apply(config,host.capture()));
+            assertEquals(0,host.stops);assertEquals(0,host.saves);
+        }
+    }
     @Test public void matchingServiceOwnerCanApplyButForeignAndStaleOwnersCannot()throws Exception{
         try(var h=new ControlTransactionTest.Harness()){
             Host host=new Host();Object owner=new Object();ControlOperations.APP.claim(owner);

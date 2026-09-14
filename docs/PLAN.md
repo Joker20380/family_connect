@@ -10,6 +10,59 @@
 
 [Единый список условий выпуска](PLAN.md#release-gates-three-platforms).
 
+## Android: выбор России / Нидерландов — 2026-09-14
+
+По запросу пользователя добавлен выбор шлюза из действующей подписанной конфигурации.
+Имена pilot gateways: tcp-android-pilot — «Россия» (185.251.89.19, пользовательское
+обозначение), amsterdam — «Нидерланды» (186.246.45.246). Выбор отключает текущий VPN
+и запускает проверенное committed resume; новые ACK/revision при переключении не
+создаются. Native slots перед resume сверяются с подписанными профилями; неизвестный
+шлюз и истёкшая конфигурация отклоняются. Resume не меняет профили/journal authority.
+Ограничение первой версии: по одному подписанному профилю на transport slot; Россия
+TCP REALITY, Нидерланды WG. NL AWG/TCP нужен для сетей с блокировкой WG.
+
+Подготовлена новая неизменяемая версия0.1.5-beta06/code6; пока не установлена.
+Локально Java/resources compilation +106 tests passed; CI и установка ожидаются.
+Amsterdam phone peer .5 восстановлен в runtime и fcams.conf без expiry timer;
+исходные3 peers сохранены, исходные сервисы не перезапускались. TCP8444 остаётся
+running/unless-stopped. На телефоне пока beta05 и revision9. Далее CI beta06,
+подписание проверенного APK, установка поверх Pilot без удаления данных, новая
+revision>9 с обоими gateways, RU→NL→RU с проверкой трафика, сохранения выбора и lease.
+Rollback сборки: новую версию не понижать с очисткой данных; при дефекте выпускать
+следующий code/version. Рабочие endpoints после проверки не удалять.
+
+## Восстановление пользовательского Pilot после cleanup — 2026-09-14
+
+Причина обращения «не подключается VPN»: оператор завершил приёмку удалением
+временного TCP8444 container, а установленная beta05 осталась с истёкшей revision8.
+Это ошибка завершения пилота; рабочий доступ пользователю не был оставлен.
+Восстановлен отдельный family-connect-android-tcp-pilot из сохранённой private
+конфигурации, прежний pinned Xray image865c9e331170…, restart unless-stopped.
+Config test passed, container running, внешний TCP185.251.89.19:8444 reachable,
+expiry timer inactive. Исходные TCP443/API/AWG не изменялись.
+
+Offline подписана и опубликована в существующий Reticulum relay revision9,
+previous hash fdc106fed72d7ce6a3199fe3c2cfd96436abff1544122829142c74ab21348bd9,
+envelope SHA256 b811d17b92e6d2750ce6a6adeb96f2c51e1e5bcec6d356e74b7a617b96f3c9d0.
+Lease ограничен текущим entitlement: **15.09.2026 11:34:16UTC / 13:34:16 Brussels**.
+Новая сборка не устанавливалась: Pilot0.1.4-beta05/code5/source8b6d51b.
+CI текущего checkpoint1bad661: phase034846985307 tests/failover success.
+
+После разрешённого пользователем Wi-Fi ADB TLS pairing подключён Redmi/joyeuse.
+Через UI Pilot выполнено «Подключить через Reticulum»: проверены device-signed ACK9
+RECEIVED/APPLIED1789391829, COMMITTED1789391831 (error NONE). UI подтверждает
+«Туннель включён», «VPN отвечает», TCP REALITY и успешную проверку соединения.
+Это подтверждает встроенный bound DNS/HTTPS health; отдельное числовое значение
+внешнего IP в полученном UI dump не отображалось. После включения VPN mDNS ADB
+пропал, прямое TLS ADB подключение восстановилось. VPN оставлен включённым.
+Открыты наблюдение длительной работы и штатное продление entitlement/config до
+истечения; не выдавать
+lease более24h и не переносить offline signing key на сервер. Не удалять этот вход
+по завершении диагностики. Следующий revision должен быть >9, previous hash — hash9.
+Rollback: остановить только family-connect-android-tcp-pilot, сохранив private файлы
+и journal; это отключит данный телефон и требует явного основания, повторно
+не выполнять как обычную уборку теста. Для изменения конфигурации — новая revision.
+
 ## Android live acceptance и beta05 — 2026-09-14
 
 На Redmi Note9 Pro/Android12 установлен **0.1.4-beta05/code5**, source8b6d51b,

@@ -26,6 +26,8 @@ public final class MainActivity extends Activity {
     private volatile ControlEnrollmentHttp enrollmentHttp;
     private ProfileStore store;
     private Spinner transportPicker;
+    private Button gatewayButton;
+    private boolean reconnectGateway;
     private Switch autoMode;
     private Transport selected=Transport.WG;
     private String pendingTransport="wg";
@@ -43,6 +45,7 @@ public final class MainActivity extends Activity {
         label(content,"FAMILY CONNECT",25,Color.rgb(102,219,192));label(content,getString(R.string.tagline),15,Color.LTGRAY);
         dot=label(content,"●",88,Color.GRAY);state=label(content,"",27,Color.WHITE);
         healthLabel=label(content,"",14,Color.LTGRAY);
+        gatewayButton=button(content,R.string.choose_gateway,this::chooseGateway);
         label(content,getString(R.string.route),15,Color.LTGRAY);
         autoMode=new Switch(this);autoMode.setText("Auto · WG → AWG → TCP");autoMode.setTextColor(Color.WHITE);autoMode.setChecked(getPreferences(MODE_PRIVATE).getBoolean("auto",false));content.addView(autoMode);
         autoMode.setOnCheckedChangeListener((v,on)->{getPreferences(MODE_PRIVATE).edit().putBoolean("auto",on).apply();render();});
@@ -103,6 +106,9 @@ public final class MainActivity extends Activity {
     private void render(){
         if(toggle==null||detail==null)return;
         String value=ConnectionService.status;
+        gatewayButton.setEnabled(!busy&&!value.equals("connecting")&&!value.equals("cleanup-required"));
+        textIfChanged(gatewayButton,getString(R.string.choose_gateway)+": "+gatewayName(getSharedPreferences("gateway-selection",MODE_PRIVATE).getString("gateway","")));
+        if(reconnectGateway&&value.equals("off")){reconnectGateway=false;toggle();return;}
         if(!value.equals("off")&&!"auto".equals(ConnectionService.requestedTransport)){
             Transport active=Transport.parse(ConnectionService.activeTransport);
             if(selected!=active){selected=active;store=new ProfileStore(this,active);transportPicker.setSelection(active.ordinal());getPreferences(MODE_PRIVATE).edit().putString("transport",active.id).apply();}
@@ -125,6 +131,43 @@ public final class MainActivity extends Activity {
         int message="COMMITTED".equals(outcome)?R.string.control_committed:"REJECTED".equals(outcome)?R.string.control_rejected:
             "ROLLED_BACK".equals(outcome)?R.string.control_rolled_back:"BUSY".equals(outcome)?R.string.disconnect_first:"UNAVAILABLE".equals(outcome)?R.string.rns_unavailable:R.string.control_failed;
         detail.setText(message);
+    }
+    private String gatewayName(String id){
+        if(id.equals("tcp-android-pilot"))return getString(R.string.gateway_russia);
+        if(id.equals("amsterdam"))return getString(R.string.gateway_netherlands);
+        return id.isEmpty()?getString(R.string.gateway_default):id;
+    }
+    private void chooseGateway(){
+        if(busy)return;busy=true;render();
+        worker.execute(()->{
+            java.util.ArrayList<String> ids=new java.util.ArrayList<>();
+            try{
+                synchronized(ControlJournal.OWNER){
+                    try(ControlIdentity identity=new ControlIdentityVault(this).load()){
+                        String version=getPackageManager().getPackageInfo(getPackageName(),0).versionName.split("-",2)[0];
+                        ControlJournal journal=new ControlJournal(new ControlJournalVault(this),identity,ControlTrust.anchor(this),version);
+                        com.google.gson.JsonObject record=journal.read();long now=System.currentTimeMillis()/1000;
+                        if(now<ControlJson.integer(record.get("last_now"),0)||!record.get("staged").isJsonNull())throw new IOException();
+                        ControlProtocol.Verified config=journal.unpack(record.getAsJsonObject("committed"),now);
+                        for(com.google.gson.JsonElement item:config.state().getAsJsonArray("transport_profiles")){
+                            String id=ControlJson.text(item.getAsJsonObject().get("gateway_id"));if(!ids.contains(id))ids.add(id);
+                        }
+                    }
+                }
+            }catch(Exception failure){ids.clear();}
+            runOnUiThread(()->{
+                if(isDestroyed())return;busy=false;render();
+                if(ids.isEmpty()){detail.setText(R.string.gateway_unavailable);return;}
+                String[] names=new String[ids.size()];for(int i=0;i<names.length;i++)names[i]=gatewayName(ids.get(i));
+                new android.app.AlertDialog.Builder(this).setTitle(R.string.choose_gateway).setItems(names,(d,index)->{
+                    if(!getSharedPreferences("gateway-selection",MODE_PRIVATE).edit().putString("gateway",ids.get(index)).commit()){
+                        detail.setText(R.string.failed);return;
+                    }
+                    if(ConnectionService.status.equals("off"))toggle();
+                    else{reconnectGateway=true;startService(new Intent(this,ConnectionService.class).setAction("disconnect"));}
+                }).setNegativeButton(android.R.string.cancel,null).show();
+            });
+        });
     }
     private void continueRns(){
         if(!pendingRns)return;
