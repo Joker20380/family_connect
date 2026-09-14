@@ -28,6 +28,18 @@ with tempfile.TemporaryDirectory(prefix='fc-android-awg-') as temporary:
  xray=temp/'xray'
  checkout('https://github.com/XTLS/Xray-core','d2758a023cd7f4174a5a5fa4ff66e487d4342ba0',xray)
  tun=xray/'proxy/tun/tun_android.go';code=tun.read_text().replace('\terr = unix.SetNonblock(fd, true)','\tif err != nil || fd < 3 { return nil, errors.New("invalid Android TUN descriptor") }\n\terr = unix.SetNonblock(fd, true)').replace('\t\t_ = unix.Close(fd)\n','');tun.write_text(code)
+ # A TUN inbound has no socket workers. Xray's pinned revision never closes its
+ # proxy, leaving gVisor's blocked read alive after the Android descriptor closes.
+ # Stop the stack before native fd release so repeated sessions cannot retain VPNs.
+ handler=xray/'proxy/tun/handler.go';code=handler.read_text()
+ assert 'func (t *Handler) Close()' not in code
+ code+='\nfunc (t *Handler) Close() error {\n\tif t.stack == nil { return nil }; err := t.stack.Close(); t.stack = nil; return err\n}\n'
+ handler.write_text(code)
+ always=xray/'app/proxyman/inbound/always.go';code=always.read_text()
+ needle='\terrs = append(errs, h.mux.Close())'
+ assert code.count(needle)==1
+ code=code.replace(needle,'\tif len(h.workers) == 0 { errs = append(errs, common.Close(h.proxy)) }\n'+needle)
+ always.write_text(code)
  source=android/'tunnel/src/main/java';dest=OUT/'java'
  for file in source.rglob('*.java'):
   if file.name in ('AwgQuickBackend.java','RootShell.java','ToolsInstaller.java'):continue

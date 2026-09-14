@@ -36,6 +36,7 @@ def tcp_user(device,ident):
   assert not any(c['id']==ident for c in clients)
   clients.append(client);temporary=path.with_suffix('.pending');info=path.stat()
   fd=os.open(temporary,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o640)
+  os.fchmod(fd,0o640)
   with os.fdopen(fd,'w') as f:json.dump(value,f);f.flush();os.fsync(f.fileno())
   os.chown(temporary,info.st_uid,info.st_gid);os.replace(temporary,path)
  payload={'inbounds':[{'tag':'friends','listen':'127.0.0.1','port':inbound['port'],'protocol':'vless','settings':{'clients':[client],'decryption':'none'}}]}
