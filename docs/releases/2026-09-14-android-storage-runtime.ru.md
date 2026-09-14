@@ -56,3 +56,22 @@ Django/платежи после VPN acceptance, messenger/iPhone отложен
 checkpoint; сохранять production device data, identity, journal и outbox. Disposable
 CI удаляет только созданные им managed aliases/files после проверки. Нельзя запускать
 storage runner на пользовательском телефоне или убирать его emulator/pre-existing-state guards.
+
+## Первый CI нового теста
+
+Source babe651, [Clients34836392940](https://github.com/Joker20380/family_connect/actions/runs/34836392940):
+Windows/Linux success, Android APK/unit/lint и8 instrumentation methods passed.
+Дополнительный storage runner failed: connectedDebugAndroidTest удалил test APK,
+am instrument вернул Unable to find instrumentation info. Исправлено установкой
+уже собранных target/test APK перед prepare; между prepare и recover переустановки
+нет, только force-stop. Это runner fix, не ослабление storage acceptance.
+Artifact10344867835,121729505 bytes, SHA256
+b08ef967a70d46c5f5b93b5013d1279981ca34312fff689aca4b59284be419d1 проверен.
+APK сохранён для диагностики; выпуск/установка по failed CI не выполнялись.
+Phase034836392974 tests/failover success. Повторный CI ожидается.
+
+ADB увидел Redmi Note9 Pro/joyeuse, Android12/arm64-v8a, установленный Family Connect
+0.1.0/code1/debuggable от10.09.2026. Помог ADB_LIBUSB=1, но bulk USB передача
+по-прежнему обрывается; APK для сравнения сертификата пока не получен.
+Временно включён tcpip5555, проверяется192.168.129.42:5555; после приёмки вернуть USB.
+Профили/app data не читались и не удалялись, APK не установлен.

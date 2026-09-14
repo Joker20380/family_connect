@@ -19,8 +19,11 @@ Release job skipped. Последний desktop release по API — v0.2.9; н�
 Добавлена обязательная проверка Android Keystore/AtomicFile/journal/outbox:
 отдельные prepare → force-stop → recover процессы, отказ clock regression,
 corrupt storage и повторной генерации identity. Java compilation и локальные
-положительные/отрицательные проверки CI gate прошли; новый emulator CI ещё ожидается.
-Телефон разрешён для установки/приёмки; USB видит Xiaomi MTP, ADB пока пуст.
+положительные/отрицательные проверки CI gate прошли. CI34836392940: все8 instrumentation
+cases passed; дополнительный restart runner не нашёл удалённый Gradle test APK.
+Добавлена установка уже собранной пары перед обеими фазами; повторный CI ожидается.
+Телефон Redmi Note9 Pro/Android12 доступен, установлен0.1.0/code1. USB нестабилен;
+подготовлен переход на локальный Wi-Fi ADB. Новая сборка пока не установлена.
 Полная регистрация→RNS→native apply→Internet→ACK и crash rollback ещё не приняты.
 Далее: новый runtime CI, подключение ADB и подписанная тестовая сборка, затем
 полная Android-приёмка и остальные [условия трёх платформ](PLAN.md#release-gates-three-platforms).
