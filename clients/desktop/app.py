@@ -13,28 +13,84 @@ import urllib.request
 import gi
 gi.require_version('Gtk','4.0')
 gi.require_version('Adw','1')
-from gi.repository import Gtk, Adw, Gdk, Gio, GLib, Pango
+from gi.repository import Gtk, Adw, Gdk, Gio, GLib, Pango, Graphene, GdkPixbuf
 from backend import backend, BackendError, AuthorizationError, RecoveryPolicy, ConnectionBusy, StaleConnection, ConnectionSnapshot
 
 CSS='''
-window.fc-window { background: #0e1423; color: #e9edf7; }
-.fc-window headerbar { background: #0e1423; box-shadow: none; }
+ .fc-shell { background: #03110e; }
+window.fc-window { background: #03110e; color: #dafff2; font-family: monospace; }
+.fc-window headerbar { background: #03110e; box-shadow: none; }
 .fc-brand { font-size: 17px; font-weight: 700; }
-.fc-caption { color: #98a6c0; font-size: 12px; }
-.fc-card { background: #182136; border: 1px solid #29344b; border-radius: 16px; padding: 18px; }
+.fc-caption, .fc-note { color: #99c4b5; font-size: 12px; }
+.fc-card { background: transparent; border: none; padding: 0; }
 .fc-status { font-size: 20px; font-weight: 700; }
-.fc-dot { color: #8796b0; }
-.fc-dot.connected { color: #6ee7b7; }
-.fc-window button.fc-action { min-height: 24px; padding: 11px 16px; border-radius: 12px; }
-.fc-window button.fc-primary { background: #a5b4fc; color: #11172b; font-weight: 700; }
-.fc-window button.fc-primary:hover { background: #bec9ff; }
-.fc-window button.fc-primary:disabled { background: #2b3650; color: #93a1bc; }
-.fc-window button.fc-secondary { background: #202b42; }
-.fc-window button.fc-quiet { background: transparent; color: #aab7ce; }
-.fc-window dropdown > button { background: #202b42; padding: 10px 14px; border-radius: 12px; }
-.fc-note { color: #98a6c0; font-size: 12px; }
-.fc-detail { color: #edc99b; }
+.fc-dot { color: #ffad46; }
+.fc-dot.connected { color: #98f7d8; }
+.fc-window button.fc-action { background: transparent; background-image: none; border: none; box-shadow: none; min-height: 50px; padding: 0; color: #dafff2; }
+.fc-window button.fc-action:disabled { color: #75988a; }
+.fc-window dropdown > button { background: #072018; color: #dafff2; border: 1px solid #438e79; padding: 10px 14px; border-radius: 0; }
+.fc-detail { color: #ffad46; }
+.fc-window button.fc-nav { padding: 0; font-size: 10px; }
 '''
+
+
+def terminal_texture(svg):
+    loader=GdkPixbuf.PixbufLoader.new_with_type('svg');loader.write(svg.encode());loader.close()
+    return Gdk.Texture.new_for_pixbuf(loader.get_pixbuf())
+
+
+def terminal_frame(snapshot,widget,fill='#072018',stroke='#438e79',extra=''):
+    w,h=widget.get_width(),widget.get_height()
+    if min(w,h)<4:return
+    c=min(12,w/5,h/4)
+    key=(w,h,fill,stroke,extra)
+    if getattr(widget,'terminal_key',None)!=key:
+        svg=f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}"><path d="M{c},1 H{w-c} L{w-1},{c} V{h-c} L{w-c},{h-1} H{c} L1,{h-c} V{c} Z" fill="{fill}" stroke="{stroke}"/>{extra}</svg>'
+        widget.terminal_cache=terminal_texture(svg);widget.terminal_key=key
+    snapshot.append_texture(widget.terminal_cache,Graphene.Rect().init(0,0,w,h))
+
+
+class TerminalButton(Gtk.Button):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.connect("notify::label",self.prepare_label)
+    def prepare_label(self,*_):
+        child=self.get_child()
+        if isinstance(child,Gtk.Label):
+            child.set_margin_start(8 if self.has_css_class("fc-nav") else 16)
+            child.set_margin_end(8 if self.has_css_class("fc-nav") else 16)
+            if self.has_css_class("fc-primary"):
+                child.set_xalign(0);child.set_margin_end(90)
+    def do_snapshot(self,snapshot):
+        selected=self.has_css_class('selected') or self.has_css_class('connected')
+        stroke='#ffad46' if self.has_css_class('selected') else '#438e79'
+        fill='#103d2e' if self.get_state_flags() & Gtk.StateFlags.PRELIGHT else '#072018'
+        extra=''
+        if self.has_css_class('fc-primary'):
+            w,h=self.get_width(),self.get_height();x=w-78;y=h/2
+            color='#98f7d8' if selected else '#ffad46'
+            if not self.get_sensitive():color='#75988a'
+            extra=f'<rect x="{x}" y="{y-13}" width="62" height="26" rx="13" fill="#17392d" stroke="{color}"/><circle cx="{x+(48 if selected else 14)}" cy="{y}" r="10" fill="{color}"/>'
+        terminal_frame(snapshot,self,fill,stroke,extra)
+        Gtk.Button.do_snapshot(self,snapshot)
+
+
+class TerminalCard(Gtk.Box):
+    def do_snapshot(self,snapshot):
+        terminal_frame(snapshot,self)
+        Gtk.Box.do_snapshot(self,snapshot)
+
+
+class TerminalHeader(Gtk.Box):
+    def __init__(self):
+        super().__init__();self.set_size_request(-1,78)
+    def do_snapshot(self,snapshot):
+        w=self.get_width();size=19 if w>=350 else 16
+        logo='<g transform="translate(17 15) scale(.48)"><path fill-rule="evenodd" fill="#98f7d8" d="M50 3 L90 25 L90 77 L50 99 L10 77 L10 25 Z M50 12 L18 30 L18 73 L50 91 L82 73 L82 30 Z"/><path fill="#8debcd" d="M23 36 L50 20 L50 99 L23 81 Z"/><path fill="#c1ffe9" d="M55 50 H60 V65 H55 Z"/><path fill="#255e4e" d="M50 12 L82 30 V36 L50 19 Z"/></g>'
+        text=f'<text x="77" y="33" fill="#dafff2" font-family="monospace" font-weight="bold" font-size="{size}">FAMILY CONNECT</text><text x="78" y="54" fill="#98f7d8" font-family="monospace" font-size="9">SECURE NETWORK TERMINAL</text><path d="M78 40 H205 M78 60 H205" stroke="#438e79" opacity=".25"/><path d="M8 28 v5 M8 37 v5 M8 46 v5" stroke="#ffad46" stroke-width="3"/>'
+        terminal_frame(snapshot,self,'#03110e','#438e79',logo+text)
+
+
 
 
 def translated(key,ru):return WORDS[key][0 if ru else 1]
@@ -58,20 +114,21 @@ class App:
         provider=Gtk.CssProvider();provider.load_from_data(CSS.encode())
         Gtk.StyleContext.add_provider_for_display(self.window.get_display(),provider,Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.provider=provider
-        shell=Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        shell=Gtk.Box(orientation=Gtk.Orientation.VERTICAL);shell.add_css_class("fc-shell")
         header=Adw.HeaderBar();brand=Gtk.Box(spacing=9)
         texture=Gdk.Texture.new_from_bytes(GLib.Bytes.new(base64.b64decode(ICON_PNG)))
         icon=Gtk.Image.new_from_paintable(texture);icon.set_pixel_size(28);brand.append(icon)
         name=Gtk.Label(label='Family Connect');name.add_css_class('fc-brand');brand.append(name)
-        header.set_title_widget(brand);shell.append(header)
+        header.set_title_widget(Gtk.Label(label=''));shell.append(header)
+        brand_header=TerminalHeader();brand_header.set_margin_start(20);brand_header.set_margin_end(20);shell.append(brand_header)
         self.body=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=10)
         for side in ('top','bottom','start','end'):getattr(self.body,'set_margin_'+side)(20)
         self.body.set_margin_top(8)
         self.subtitle=self.label('fc-caption');self.body.append(self.subtitle)
-        self.card=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=8);self.card.add_css_class('fc-card');self.card.set_margin_top(6);self.card.set_margin_bottom(6)
-        status_row=Gtk.Box(spacing=10);self.dot=Gtk.Label(label='●');self.dot.add_css_class('fc-dot');status_row.append(self.dot)
+        self.card=TerminalCard(orientation=Gtk.Orientation.VERTICAL,spacing=8);self.card.add_css_class('fc-card');self.card.set_margin_top(6);self.card.set_margin_bottom(6)
+        status_row=Gtk.Box(spacing=10);status_row.set_margin_top(18);status_row.set_margin_start(18);status_row.set_margin_end(18);self.dot=Gtk.Label(label='●');self.dot.add_css_class('fc-dot');status_row.append(self.dot)
         self.status=self.label('fc-status');status_row.append(self.status);self.card.append(status_row)
-        self.hint=self.label('fc-caption');self.card.append(self.hint);self.body.append(self.card)
+        self.hint=self.label('fc-caption');self.hint.set_margin_start(18);self.hint.set_margin_end(18);self.hint.set_margin_bottom(18);self.card.append(self.hint);self.body.append(self.card)
         self.model=Gtk.StringList.new([]);self.choose=Gtk.DropDown(model=self.model);self.choose.set_hexpand(True)
         self.choose.set_tooltip_text('WireGuard / AmneziaWG');self.choose.connect('notify::selected',self.selection_changed);self.body.append(self.choose)
         self.friends_owner_class=None
@@ -93,9 +150,18 @@ class App:
         monitors=self.window.get_display().get_monitors()
         self.height_limit=max(360,monitors.get_item(0).get_geometry().height-160) if monitors.get_n_items() else 720
         self.scroll.set_max_content_height(self.height_limit);self.scroll.set_child(self.body);shell.append(self.scroll)
-        footer=Gtk.Box(spacing=8);footer.set_margin_start(20);footer.set_margin_end(20);footer.set_margin_bottom(14)
-        version=Gtk.Label(label='v'+APP_VERSION+(' · AWG pilot' if '--awg-pilot' in sys.argv else ''),xalign=0);version.add_css_class('fc-caption');version.set_hexpand(True);footer.append(version)
-        self.language_button=Gtk.Button(label='RU / EN');self.language_button.add_css_class('flat');self.language_button.connect('clicked',lambda _:self.language());footer.append(self.language_button)
+        self.page='status'
+        self.language_button=TerminalButton(label='RU / EN');self.language_button.add_css_class('fc-action');self.language_button.connect('clicked',lambda _:self.language());self.body.append(self.language_button)
+        self.version_label=Gtk.Label(label='v'+APP_VERSION,xalign=0);self.version_label.add_css_class('fc-caption');self.body.append(self.version_label)
+        self.route_title=Gtk.Label(label='',xalign=0,wrap=True);self.body.prepend(self.route_title)
+        self.messenger_note=Gtk.Label(label='',xalign=0,wrap=True);self.body.append(self.messenger_note)
+        self.pages={'status':[self.card,self.toggle,self.note], 'route':[self.route_title,self.choose,self.check],
+            'settings':[self.add,self.update_button,self.tcp_button,self.language_button,self.version_label]+([self.friends_button] if self.friends_button else []), 'messenger':[self.messenger_note]}
+        footer=Gtk.Box(spacing=4);footer.set_margin_start(12);footer.set_margin_end(12);footer.set_margin_bottom(12)
+        self.nav={}
+        for page in ('status','messenger','route','settings'):
+            button=TerminalButton();button.add_css_class('fc-action');button.add_css_class('fc-nav');button.set_hexpand(True)
+            button.connect('clicked',lambda _,p=page:self.select_page(p));footer.append(button);self.nav[page]=button
         shell.append(footer);self.window.set_content(shell)
         self.last_profiles=None
         if not smoke:self.register_icon();self.submit(self.initialize,'initialized')
@@ -105,7 +171,7 @@ class App:
         label=Gtk.Label(xalign=0);label.set_wrap(True);label.set_wrap_mode(Pango.WrapMode.WORD_CHAR)
         label.set_max_width_chars(36);label.set_hexpand(True);label.add_css_class(css);return label
     def button(self,css,action):
-        button=Gtk.Button();button.set_hexpand(True);button.add_css_class('fc-action');button.add_css_class(css)
+        button=TerminalButton();button.set_hexpand(True);button.add_css_class('fc-action');button.add_css_class(css)
         button.connect('clicked',lambda _:action());self.body.append(button);return button
     def t(self,key):return translated(key,self.ru)
     def present(self):self.window.present()
@@ -123,6 +189,8 @@ class App:
             text=('Проверяем подключение' if self.ru else 'Checking connection') if self.initializing else self.t('unknown' if self.active is None else ('on' if self.active else 'off'))
             self.set_value(self.status,'label',text);self.set_value(self.hint,'label',self.t('hint'))
             connected=self.active is True
+            if self.toggle.has_css_class('connected')!=connected:
+                (self.toggle.add_css_class if connected else self.toggle.remove_css_class)('connected');self.toggle.queue_draw()
             if self.dot.has_css_class('connected')!=connected:
                 (self.dot.add_css_class if connected else self.dot.remove_css_class)('connected');self.widget_changes+=1
             names=tuple(name for _,name in self.items) or ((('Загружаем профили…' if self.ru else 'Loading profiles…') if self.initializing else self.t('empty')),)
@@ -146,6 +214,7 @@ class App:
                 self.set_value(widget,'label',text);self.set_value(widget,'sensitive',enabled)
             self.set_value(self.note,'label',self.t('quality'));self.set_value(self.detail,'label',self.detail_text)
             self.set_value(self.detail,'visible',bool(self.detail_text));self.set_value(self.retry,'visible',self.driver is None and not self.initializing)
+            self.apply_page()
         finally:self.rendering=False
         if before!=self.widget_changes and not self.fit_source:self.fit_source=GLib.idle_add(self.fit_height)
         return GLib.SOURCE_REMOVE
@@ -157,6 +226,21 @@ class App:
         if natural!=self.fitted_height:
             self.fitted_height=natural;self.window.set_default_size(width,natural)
         return GLib.SOURCE_REMOVE
+    def select_page(self,page):
+        self.page=page;self.paint()
+    def apply_page(self):
+        for page,widgets in self.pages.items():
+            for widget in widgets:
+                visible=page==self.page and (widget is not self.tcp_button or '--awg-pilot' in sys.argv)
+                self.set_value(widget,'visible',visible)
+        names={'status':('СТАТУС','STATUS'),'messenger':('МЕССЕНДЖЕР','MESSENGER'),'route':('МАРШРУТ','ROUTE'),'settings':('НАСТРОЙКИ','SETTINGS')}
+        for page,button in self.nav.items():
+            self.set_value(button,'label',names[page][0 if self.ru else 1])
+            if button.has_css_class('selected')!=(page==self.page):
+                (button.add_css_class if page==self.page else button.remove_css_class)('selected');button.queue_draw()
+        self.set_value(self.route_title,'label','Выберите профиль подключения и проверьте внешний IP.' if self.ru else 'Choose a connection profile and check your public IP.')
+        self.set_value(self.messenger_note,'label','Мессенджер пока доступен в Android. Версия для компьютера в разработке.' if self.ru else 'Messaging is currently available on Android. Desktop messaging is in development.')
+
     def open_friends(self):
         if self.busy or not self.friends_owner_class:return
         from friends_ui import FriendsWindow

@@ -79,17 +79,24 @@ def layouts(scale):
             for width in (360,420,680):
                 app.window.set_default_size(width,-1)
                 app.set_detail(app.t('error')+'\n'+app.t('system'));pump(.1)
-                previous=-1
-                for widget in (app.toggle,app.add,app.check,app.update_button):
-                    ok,rect=widget.compute_bounds(app.body);assert ok
-                    assert rect.get_y()>=previous,'Buttons must stay in one column'
-                    previous=rect.get_y()+rect.get_height()
-                    assert rect.get_x()>=0 and rect.get_x()+rect.get_width()<=app.body.get_width()+1,'Horizontal clipping'
-                    minimum,natural,_,_=widget.measure(Gtk.Orientation.HORIZONTAL,-1)
-                    assert widget.get_width()>=minimum,'Clipped button label'
-                for label in (app.status,app.hint,app.note,app.detail):
-                    _,height=label.get_layout().get_pixel_size()
-                    assert label.get_height()>=height,'Clipped label'
+                for page in ('status','messenger','route','settings'):
+                    app.select_page(page);pump(.1)
+                    assert all(button.get_mapped() for button in app.nav.values()),'Navigation disappeared'
+                    for name,widgets in app.pages.items():
+                        if name!=page:assert all(not w.get_visible() for w in widgets),'Inactive section is visible'
+                    previous=-1
+                    for widget in (app.toggle,app.add,app.check,app.update_button):
+                        if not widget.get_visible():continue
+                        ok,rect=widget.compute_bounds(app.body);assert ok
+                        assert rect.get_y()>=previous,'Buttons must stay in one column'
+                        previous=rect.get_y()+rect.get_height()
+                        assert rect.get_x()>=0 and rect.get_x()+rect.get_width()<=app.body.get_width()+1,'Horizontal clipping'
+                        minimum,natural,_,_=widget.measure(Gtk.Orientation.HORIZONTAL,-1)
+                        assert widget.get_width()>=minimum,'Clipped button label'
+                    for label in (app.status,app.hint,app.note,app.detail):
+                        if not label.get_mapped():continue
+                        _,height=label.get_layout().get_pixel_size()
+                        assert label.get_height()>=height,'Clipped label'
                 app.update_button.grab_focus();pump()
                 assert app.update_button.has_focus(),'Keyboard focus lost'
                 results.append(dict(scale=scale,ru=ru,width=width))

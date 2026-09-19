@@ -16,8 +16,8 @@ internal sealed class FriendsForm : Form
         ru = russian; call = caller ?? Wire.Call;
         AutoScaleMode=AutoScaleMode.Dpi;AutoScaleDimensions=new SizeF(96,96);
         Text=T("Доступ по приглашению", "Invitation access");StartPosition=FormStartPosition.CenterParent;
-        ClientSize=new(440,570);MinimumSize=new(340,360);Font=new Font("Segoe UI",10);
-        BackColor=Color.FromArgb(4,24,21);ForeColor=Color.FromArgb(205,242,229);
+        ClientSize=new(440,570);MinimumSize=new(340,360);Font=new Font("Consolas",10);
+        BackColor=Color.FromArgb(3,17,14);ForeColor=Color.FromArgb(218,255,242);
         var panel=new TableLayoutPanel { Dock=DockStyle.Fill,ColumnCount=1,AutoScroll=true,Padding=new Padding(20) };
         panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));Controls.Add(panel);
         void Add(Control control)
@@ -38,7 +38,7 @@ internal sealed class FriendsForm : Form
         foreach(var button in new[]{activate,connect,share,copy})
         {
             button.AutoSize=true;button.MinimumSize=new(0,42);button.FlatStyle=FlatStyle.Flat;
-            button.BackColor=Color.FromArgb(12,48,40);button.ForeColor=ForeColor;
+            button.BackColor=Color.FromArgb(7,32,24);button.ForeColor=ForeColor;
         }
         activate.Click+=async(_,_)=>await Run(new("friends-activate",invitation.Text.Trim()),T("Доступ активирован. Можно подключаться.","Access activated. You can connect."));
         connect.Click+=async(_,_)=>await Run(new(region.SelectedIndex==1?"friends-connect-tcp-ru":"friends-connect-tcp-nl"),T("Подключение запущено. Состояние видно в главном окне.","Connection started. Check its status in the main window."));

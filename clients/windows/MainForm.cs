@@ -19,16 +19,20 @@ internal sealed class MainForm:Form
     readonly Panel viewport=new();
     readonly TableLayoutPanel card=new();
     bool fitting;
-    readonly Color mint=Color.FromArgb(165,180,252);
+    string page="status";
+    readonly Label routeTitle=new(){AutoSize=true,Dock=DockStyle.Fill},messengerNote=new(){AutoSize=true,Dock=DockStyle.Fill};
+    readonly Dictionary<string,Control[]> pages=new();
+    readonly Dictionary<string,ModernButton> nav=new();
+    readonly Color mint=Color.FromArgb(152,247,216);
     string T(string russian,string english)=>ru?russian:english;
     public MainForm(bool smoke,bool layoutTest=false)
     {
         AutoScaleMode=AutoScaleMode.Dpi;AutoScaleDimensions=new SizeF(96,96);
         Text=$"Family Connect · {Application.ProductVersion.Split('+')[0]}";ClientSize=new(390,548);MinimumSize=new(360,360);
         DoubleBuffered=true;
-        BackColor=Color.FromArgb(14,20,35);ForeColor=Color.White;
+        BackColor=Color.FromArgb(3,17,14);ForeColor=Color.FromArgb(218,255,242);
         Icon=Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-        Font=new Font("Segoe UI",10);StartPosition=FormStartPosition.CenterScreen;
+        Font=new Font("Consolas",10);StartPosition=FormStartPosition.CenterScreen;
         var shell=new TableLayoutPanel{Dock=DockStyle.Fill,ColumnCount=1,RowCount=2,Margin=Padding.Empty};
         shell.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
         shell.RowStyles.Add(new RowStyle(SizeType.Percent,100));shell.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -36,11 +40,11 @@ internal sealed class MainForm:Form
         viewport.Dock=DockStyle.Fill;viewport.AutoScroll=true;viewport.Margin=Padding.Empty;
         shell.Controls.Add(viewport,0,0);
         content.AutoSize=true;content.AutoSizeMode=AutoSizeMode.GrowAndShrink;
-        content.ColumnCount=1;content.RowCount=11;content.Padding=new Padding(24,12,24,8);
+        content.ColumnCount=1;content.RowCount=15;content.Padding=new Padding(24,12,24,8);
         content.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
-        for(int i=0;i<11;i++)content.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        for(int i=0;i<15;i++)content.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         viewport.Controls.Add(content);
-        title.Text="Family Connect";title.ForeColor=Color.FromArgb(238,242,255);title.Font=new Font(Font.FontFamily,14,FontStyle.Bold);
+        title.Text="Family Connect";title.ForeColor=Color.FromArgb(218,255,242);title.Font=new Font(Font.FontFamily,14,FontStyle.Bold);
         using var brandStream=typeof(MainForm).Assembly.GetManifestResourceStream("FamilyConnect.Brand.png")!;
         using var brandSource=Image.FromStream(brandStream);
         var emblem=new PictureBox{Image=new Bitmap(brandSource),SizeMode=PictureBoxSizeMode.Zoom,Height=28,Dock=DockStyle.Fill,Margin=new Padding(0,0,10,0)};
@@ -52,35 +56,45 @@ internal sealed class MainForm:Form
         }
         foreach(var button in new[]{connect,request,activate,language,update,friends}){
             button.AutoSize=true;button.MinimumSize=new Size(0,46);button.Dock=DockStyle.Fill;
-            button.BackColor=Color.FromArgb(32,43,65);button.FlatAppearance.BorderColor=Color.FromArgb(51,65,100);
-            button.FlatAppearance.MouseOverBackColor=Color.FromArgb(41,55,92);button.FlatAppearance.MouseDownBackColor=Color.FromArgb(51,65,100);
+            button.BackColor=Color.FromArgb(7,32,24);button.FlatAppearance.BorderColor=Color.FromArgb(67,142,121);
+            button.FlatAppearance.MouseOverBackColor=Color.FromArgb(16,61,46);button.FlatAppearance.MouseDownBackColor=Color.FromArgb(67,142,121);
             button.Cursor=Cursors.Hand;button.FlatStyle=FlatStyle.Flat;button.Margin=new Padding(0,4,0,4);
         }
-        connect.FlatAppearance.MouseOverBackColor=Color.FromArgb(199,210,254);connect.FlatAppearance.MouseDownBackColor=Color.FromArgb(129,140,248);
-        connect.BackColor=mint;connect.ForeColor=BackColor;connect.Font=new Font(Font.FontFamily,10,FontStyle.Bold);
-        detail.ForeColor=Color.FromArgb(232,205,164);notice.ForeColor=Color.FromArgb(153,166,198);
-        var header=new TableLayoutPanel{AutoSize=true,Dock=DockStyle.Fill,ColumnCount=2,RowCount=1,Margin=new Padding(0,0,0,8)};
-        header.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute,38));header.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
-        header.Controls.Add(emblem,0,0);header.Controls.Add(title,1,0);
-        var tagline=new Label{Text=T("Связь для вашей семьи","Connection for your family"),Name="tagline",AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.FromArgb(153,166,198),Margin=new Padding(0,0,0,16)};
+        connect.FlatAppearance.MouseOverBackColor=Color.FromArgb(16,61,46);connect.FlatAppearance.MouseDownBackColor=Color.FromArgb(67,142,121);
+        connect.BackColor=Color.FromArgb(7,32,24);connect.ForeColor=ForeColor;((ModernButton)connect).TerminalSwitch=true;connect.Font=new Font(Font.FontFamily,10,FontStyle.Bold);
+        detail.ForeColor=Color.FromArgb(255,173,70);notice.ForeColor=Color.FromArgb(153,196,181);
+        var header=new TerminalHeader{Dock=DockStyle.Fill,Margin=new Padding(0,0,0,8)};
+        var tagline=new Label{Text=T("Связь для вашей семьи","Connection for your family"),Name="tagline",AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.FromArgb(153,196,181),Margin=new Padding(0,0,0,16)};
         card.AutoSize=true;card.Dock=DockStyle.Fill;card.ColumnCount=1;card.RowCount=2;
         card.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
         card.Padding=new Padding(16,12,16,12);card.Margin=new Padding(0,0,0,12);
-        card.BackColor=Color.FromArgb(25,35,53);
+        card.BackColor=Color.FromArgb(7,32,24);
         card.Controls.Add(status,0,0);card.Controls.Add(description,0,1);
-        card.SizeChanged+=(_,_)=>{using var path=ModernButton.Rounded(new RectangleF(0,0,card.Width,card.Height),16*DeviceDpi/96f);var old=card.Region;card.Region=new Region(path);old?.Dispose();};
-        description.ForeColor=Color.FromArgb(153,166,198);
+        card.SizeChanged+=(_,_)=>{using var path=ModernButton.Cut(new RectangleF(0,0,card.Width,card.Height),12*DeviceDpi/96f);var old=card.Region;card.Region=new Region(path);old?.Dispose();};
+        description.ForeColor=Color.FromArgb(153,196,181);
         foreach(var button in new[]{request,activate,language,update,friends})button.Font=new Font(Font.FontFamily,10,FontStyle.Bold);
         update.BackColor=BackColor;language.BackColor=BackColor;
         mode.Items.AddRange(new object[]{"WireGuard","TCP · preview","AWG · preview","Auto · WG → AWG → TCP"});mode.SelectedIndex=0;
-        mode.Margin=new Padding(0,4,0,8);mode.BackColor=Color.FromArgb(32,43,65);mode.ForeColor=ForeColor;
+        mode.Margin=new Padding(0,4,0,8);mode.BackColor=Color.FromArgb(7,32,24);mode.ForeColor=ForeColor;
         mode.SelectedIndexChanged+=(_,_)=>PaintState();
         int row=0;
         foreach(Control child in new Control[]{header,tagline,card,mode,connect,friends,request,activate,detail,notice,update})
             content.Controls.Add(child,0,row++);
-        var footer=new Panel{Dock=DockStyle.Fill,Height=48,Padding=new Padding(24,4,24,8),Margin=Padding.Empty};
-        footer.Controls.Add(new Label{Text="v"+Application.ProductVersion.Split('+')[0],AutoSize=true,ForeColor=Color.FromArgb(153,166,198),Location=new Point(24,16)});
-        language.MinimumSize=new Size(0,32);language.Dock=DockStyle.Right;language.Width=100;footer.Controls.Add(language);shell.Controls.Add(footer,0,1);
+        var version=new Label{Text="v"+Application.ProductVersion.Split('+')[0],AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.FromArgb(153,196,181)};
+        language.MinimumSize=new Size(0,36);language.Dock=DockStyle.Fill;
+        foreach(var child in new Control[]{language,version,routeTitle,messengerNote})content.Controls.Add(child,0,row++);
+        pages["status"]=new Control[]{card,connect,notice};
+        pages["route"]=new Control[]{routeTitle,mode};
+        pages["settings"]=new Control[]{friends,request,activate,update,language,version};
+        pages["messenger"]=new Control[]{messengerNote};
+        var footer=new TableLayoutPanel{Dock=DockStyle.Fill,Height=64,Padding=new Padding(12,2,12,8),Margin=Padding.Empty,ColumnCount=4,RowCount=1};
+        int column=0;
+        foreach(string name in new[]{"status","messenger","route","settings"}){
+            footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,25));
+            var button=new ModernButton{Dock=DockStyle.Fill,BackColor=BackColor,ForeColor=ForeColor,Font=new Font("Segoe UI",8,FontStyle.Bold),Margin=new Padding(2)};
+            button.Click+=(_,_)=>{page=name;PaintState();FitContent();};nav[name]=button;footer.Controls.Add(button,column++,0);
+        }
+        shell.Controls.Add(footer,0,1);
         viewport.SizeChanged+=(_,_)=>FitContent();
         DpiChanged+=(_,_)=>BeginInvoke((Action)FitContent);
         update.Click+=async(_,_)=>{
@@ -105,7 +119,7 @@ internal sealed class MainForm:Form
             var layout=new TableLayoutPanel{Dock=DockStyle.Fill,Padding=new Padding(16),ColumnCount=1,RowCount=3};
             layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
             layout.RowStyles.Add(new RowStyle(SizeType.Percent,45));layout.RowStyles.Add(new RowStyle(SizeType.Percent,55));layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            var text=new TextBox{BackColor=Color.FromArgb(25,35,53),ForeColor=ForeColor,BorderStyle=BorderStyle.None,Text=code,ReadOnly=true,Multiline=true,WordWrap=true,ScrollBars=ScrollBars.Vertical,Dock=DockStyle.Fill};
+            var text=new TextBox{BackColor=Color.FromArgb(7,32,24),ForeColor=ForeColor,BorderStyle=BorderStyle.None,Text=code,ReadOnly=true,Multiline=true,WordWrap=true,ScrollBars=ScrollBars.Vertical,Dock=DockStyle.Fill};
             var copy=new ModernButton{BackColor=mint,ForeColor=BackColor,Text=T("Скопировать код","Copy code"),Dock=DockStyle.Fill,AutoSize=true,MinimumSize=new(0,44)};
             copy.Click+=(_,_)=>{Clipboard.SetText(code);dialog.Close();};
             var help=new Label{Text=T("Передайте этот код оператору для активации. Закрытый ключ остаётся на устройстве.","Send this code to the operator for activation. Your private key stays on this device."),Dock=DockStyle.Fill};
@@ -151,14 +165,17 @@ internal sealed class MainForm:Form
         foreach(float scale in new[]{1f,1.5f,2f,2.5f})
         foreach(bool russian in new[]{true,false})
         foreach(int protocol in new[]{0,1,2,3})
+        foreach(string selectedPage in new[]{"status","messenger","route","settings"})
         foreach(string connection in new[]{"inactive","off","pending","recovering","on","other-user","unknown"})
         foreach(Size size in new[]{new Size(360,420),new Size(480,620),new Size(800,700)}){
+            if(selectedPage!="status"&&(protocol!=0||connection!="off"))continue;
             using var form=new MainForm(true,true);
-            form.ru=russian;form.state=connection=="recovering"?"pending":connection;form.lastError=connection=="recovering"?"tcp-reconnecting":null;form.tcpReady=protocol==1;form.awgReady=protocol==2;form.transport=protocol==2?"awg":protocol==1?"tcp":"wg";form.mode.SelectedIndex=protocol;form.automatic=protocol==3;
+            form.page=selectedPage;form.ru=russian;form.state=connection=="recovering"?"pending":connection;form.lastError=connection=="recovering"?"tcp-reconnecting":null;form.tcpReady=protocol==1;form.awgReady=protocol==2;form.transport=protocol==2?"awg":protocol==1?"tcp":"wg";form.mode.SelectedIndex=protocol;form.automatic=protocol==3;
             form.Scale(new SizeF(scale,scale));
             form.ClientSize=new Size((int)(size.Width*scale),(int)(size.Height*scale));
             form.detail.Text=russian?"Служба Family Connect недоступна. Повторно запустите установщик приложения.":"Family Connect service is unavailable. Run the application installer again.";
             form.Show();Application.DoEvents();form.PaintState();form.PerformLayout();form.content.PerformLayout();
+            if(form.nav.Values.Any(b=>!b.Visible))throw new Exception("Navigation disappeared");
             int bottom=0;
             foreach(Control control in form.content.Controls){
                 if(!control.Visible)continue;
@@ -171,6 +188,7 @@ internal sealed class MainForm:Form
                     throw new InvalidOperationException("Clipped button");
             }
             foreach(var label in new[]{form.status,form.description}){
+                if(!label.Visible)continue;
                 if(label.Right>form.card.ClientSize.Width-form.card.Padding.Right || label.Height<label.GetPreferredSize(new Size(label.Width,0)).Height)
                     throw new InvalidOperationException("Clipped status card");
             }
@@ -280,14 +298,15 @@ internal sealed class MainForm:Form
         panel.RowStyles.Add(new RowStyle(SizeType.Absolute,46));panel.RowStyles.Add(new RowStyle(SizeType.Absolute,46));
         panel.Controls.Add(new Label{Text=message,Dock=DockStyle.Fill,AutoSize=true},0,0);
         var accept=new ModernButton{Text=T("Продолжить","Continue"),Dock=DockStyle.Fill,BackColor=mint,ForeColor=BackColor,DialogResult=DialogResult.OK};
-        var cancel=new ModernButton{Text=T("Отмена","Cancel"),Dock=DockStyle.Fill,BackColor=Color.FromArgb(32,43,65),ForeColor=ForeColor,DialogResult=DialogResult.Cancel};
+        var cancel=new ModernButton{Text=T("Отмена","Cancel"),Dock=DockStyle.Fill,BackColor=Color.FromArgb(7,32,24),ForeColor=ForeColor,DialogResult=DialogResult.Cancel};
         panel.Controls.Add(accept,0,1);panel.Controls.Add(cancel,0,2);dialog.Controls.Add(panel);
         dialog.AcceptButton=cancel;dialog.CancelButton=cancel;
         return dialog.ShowDialog(this)==DialogResult.OK;
     }
     void PaintState()
     {
-        status.ForeColor=state=="on"?Color.FromArgb(110,231,183):Color.FromArgb(238,242,255);
+        ((ModernButton)connect).SwitchOn=state=="on";connect.Invalidate();
+        status.ForeColor=state=="on"?Color.FromArgb(152,247,216):Color.FromArgb(218,255,242);
         status.Text=state switch{
             "on"=>T("Туннель включён","Tunnel is on"),"off"=>T("Готов к подключению","Ready to connect"),
             "inactive"=>T("Активируйте устройство","Activate your device"),"other-user"=>T("VPN занят другим пользователем","VPN used by another user"),
@@ -305,6 +324,16 @@ internal sealed class MainForm:Form
         content.Controls.Find("tagline",false)[0].Text=T("Связь для вашей семьи","Connection for your family");
         detail.Visible=detail.Text.Length>0;FitContent();
         if(Visible)FitWindow();
+        ApplyPage();
+    }
+    void ApplyPage(){
+        routeTitle.Text=T("Выберите профиль подключения.","Choose a connection profile.");
+        messengerNote.Text=T("Мессенджер пока доступен в Android. Версия для компьютера в разработке.","Messaging is currently available on Android. Desktop messaging is in development.");
+        foreach(var group in pages)foreach(var control in group.Value)control.Visible=group.Key==page;
+        foreach(var item in nav){
+            item.Value.Text=item.Key switch{"status"=>T("СТАТУС","STATUS"),"messenger"=>T("МЕССЕНДЖЕР","MESSENGER"),"route"=>T("МАРШРУТ","ROUTE"),_=>T("НАСТРОЙКИ","SETTINGS")};
+            item.Value.ForeColor=item.Key==page?Color.FromArgb(255,173,70):Color.FromArgb(153,196,181);
+        }
     }
     string ConnectionAction()=>state=="on"||(state=="pending"&&(automatic||transport is "tcp" or "awg"))?"disconnect":AutoSelected?"connect-auto":AwgSelected?"connect-awg":TcpSelected?"connect-tcp":"connect";
     string ErrorText(string? error)=>error switch{

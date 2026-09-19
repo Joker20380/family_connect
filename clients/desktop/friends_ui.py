@@ -20,13 +20,13 @@ class FriendsWindow:
         self.window.add_css_class('fc-friends')
         self.provider=Gtk.CssProvider()
         self.provider.load_from_data(b'''
-.fc-friends { background-color: #061d18; color: #c9f0df; }
-.fc-friends label { color: #c9f0df; }
+.fc-friends { background-color: #03110e; color: #dafff2; }
+.fc-friends label { color: #dafff2; }
 .fc-friends button, .fc-friends entry, .fc-friends dropdown {
- background-image: none; background-color: #103a30; color: #dcfff0;
+ background-image: none; background-color: #072018; color: #dafff2;
  border: 1px solid #468b75; border-radius: 4px; min-height: 32px;
 }
-.fc-friends entry text { background-color: transparent; color: #dcfff0; }
+.fc-friends entry text { background-color: transparent; color: #dafff2; }
 .fc-friends button:hover { background-color: #185442; }
 .fc-friends button:disabled { background-color: #142b25; color: #6a8d7d; }
 ''')
