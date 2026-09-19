@@ -1,0 +1,17 @@
+{
+  "test_only": true,
+  "material": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f",
+  "reference": "aca31af0441d81dbec71e82da0b4b5f5",
+  "public_identity": "j0DFrbaPJWJK5bIU6nZ6bslNgp09e14a0bpvPiE4KF8prLrhQbzK8LIuGpTTTQvHNh5SbQv+EsiXlLyTIpZt1w==",
+  "wireguard_public_key": "eaYx7t4b+cmPEgMs3q3Q56B5OY/HhriMyEbsia+FpRo=",
+  "challenge": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=",
+  "proof": {
+    "schema_version": 1,
+    "public_identity": "j0DFrbaPJWJK5bIU6nZ6bslNgp09e14a0bpvPiE4KF8prLrhQbzK8LIuGpTTTQvHNh5SbQv+EsiXlLyTIpZt1w==",
+    "wireguard_public_key": "eaYx7t4b+cmPEgMs3q3Q56B5OY/HhriMyEbsia+FpRo=",
+    "challenge": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=",
+    "audience": "family-connect/enrollment/v1",
+    "transport": "wireguard",
+    "signature": "MPQyaRKEMWodB8ASshN50SnkQmxdATzHc/liIeT2qQGV6dg0/pmAqb4mHFku5gUq2mJw8mZx4mCWUa895uaXAg=="
+  }
+}
