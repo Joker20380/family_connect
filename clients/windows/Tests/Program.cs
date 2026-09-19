@@ -141,3 +141,5 @@ FriendsIdentityChecks.Run();
 await FriendsAccessChecks.Run();
 
 FriendsVaultChecks.Run();
+FriendsCatalogChecks.Run();
+FriendsConfigurationVaultChecks.Run();

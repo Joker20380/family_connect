@@ -52,6 +52,36 @@ internal static class FriendsAccessChecks
         await Reject(_ => new(HttpStatusCode.OK) { Content = new StringContent("{\"x\":1,\"x\":2}") }, "invalid_response");
         await Reject(_ => new(HttpStatusCode.OK) { Content = new StringContent(new string('x', 65537)) }, "invalid_response");
         if (identity.Reference.Length != 32) throw new Exception("Client disposed owner identity");
+        using var catalogFixture = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory,"fixtures","desktop-friends-catalog-v2.json")));
+        var fixture = catalogFixture.RootElement;
+        var anchor = Convert.FromBase64String(fixture.GetProperty("anchor").GetString()!);
+        foreach(var failure in new[] { "", "device", "signature", "country", "denied" })
+        {
+            int requests = 0;
+            var reply = System.Text.Json.Nodes.JsonNode.Parse(fixture.GetProperty("vectors")[0].GetProperty("reply").GetRawText())!;
+            reply["device"] = failure == "device" ? new string('0',32) : identity.Reference;
+            if(failure == "country")reply["country"] = "ru";
+            if(failure == "signature")reply["catalog"]!["signature"] = Convert.ToBase64String(new byte[64]);
+            using var client = new FriendsAccessClient(identity, new Handler(request => {
+                requests++;
+                using var body = JsonDocument.Parse(request.Content!.ReadAsStringAsync().GetAwaiter().GetResult());
+                if(request.RequestUri!.AbsolutePath == "/friends/challenge")
+                {
+                    if(body.RootElement.GetProperty("purpose").GetString() != "nl")throw new Exception("Wrong purpose");
+                    return Json(new { challenge=nonce, expires_at=1120, audience="family-connect/enrollment/v1" });
+                }
+                if(request.RequestUri.AbsolutePath != "/friends/configuration/nl")throw new Exception("Wrong path");
+                if(failure == "denied")return new(HttpStatusCode.Forbidden);
+                return Json(reply);
+            }), () => 1000);
+            bool accepted=false;
+            try { var result=await client.Configuration("nl", anchor); accepted=true; if(result.Profile.Address!="10.83.0.2/32")throw new Exception("Wrong assignment"); }
+            catch(FriendsAccessError e) when(e.Message == (failure == "denied" ? "access_rejected" : "invalid_response")) { }
+            if(accepted != (failure == "") || requests != 2)throw new Exception("Configuration HTTP verification mismatch");
+            try { await client.Configuration("../ru",anchor); throw new Exception("Invalid country accepted"); }
+            catch(FriendsAccessError e) when(e.Message=="invalid_input") { }
+            if(requests!=2)throw new Exception("Invalid input sent to network");
+        }
         Console.WriteLine($"Windows friends HTTP: activation/referral and {rejected} rejection checks passed.");
     }
 }

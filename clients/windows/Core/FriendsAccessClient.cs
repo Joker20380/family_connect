@@ -106,5 +106,16 @@ internal sealed class FriendsAccessClient : IDisposable
         catch (Exception e) when (ControlProtocol.Invalid(e)) { throw new FriendsAccessError("invalid_response"); }
     }
 
+    internal async Task<(JsonElement Response, FriendsConfiguration Profile)> Configuration(
+        string country, byte[] anchor, long floor = 0, string? previousHash = null, CancellationToken token = default)
+    {
+        if (country is not ("ru" or "nl")) throw new FriendsAccessError("invalid_input");
+        var response = await Post("/friends/configuration/" + country, await Proof(country, "", token), token);
+        var privateKey = identity.WireguardPrivateKey();
+        try { return (response, FriendsCatalog.Verify(response, anchor, identity.Reference, country, privateKey, floor, previousHash)); }
+        catch (FormatException) { throw new FriendsAccessError("invalid_response"); }
+        finally { System.Security.Cryptography.CryptographicOperations.ZeroMemory(privateKey); }
+    }
+
     public void Dispose() => http.Dispose(); // The caller retains ownership of the identity.
 }

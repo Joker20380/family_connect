@@ -41,6 +41,9 @@ internal sealed class ControlIdentity : IDisposable
     // Used only by the protected storage owner; caller must erase the returned copy.
     internal byte[] ExportForProtection() => Open().ToArray();
 
+    // Caller owns this temporary copy and must erase it after materialization.
+    internal byte[] WireguardPrivateKey() => Open().AsSpan(64, 32).ToArray();
+
     internal byte[] PublicIdentity()
     {
         var bytes = Open();
