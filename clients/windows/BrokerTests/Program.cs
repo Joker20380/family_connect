@@ -2,6 +2,7 @@ using System.Buffers.Binary;
 using System.IO.Pipes;
 using System.Security.Cryptography;
 using System.Security.Principal;
+using System.ServiceProcess;
 using System.Text;
 using System.Text.Json;
 using FamilyConnect;
@@ -17,6 +18,9 @@ var store=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Commo
 var profile=Path.Combine(store,Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(sid)))+".tcp.dpapi");
 if(File.Exists(profile))throw new Exception("Refuse existing TCP profile");
 var output=Path.GetFullPath(args[0]);
+string friendsPath=Path.Combine(store,Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(sid)))+".friends-identity.dpapi");
+string friendsMarker=friendsPath+".initialized";
+if(File.Exists(friendsPath)||File.Exists(friendsMarker))throw new Exception("Refuse existing friends identity");
 int checks=0;
 JsonElement Call(string action,string? activation=null){
  using var timeout=new CancellationTokenSource(TimeSpan.FromSeconds(35));
@@ -56,7 +60,43 @@ try {
  Check(Call("activate-tcp",Sign(grant with{Sequence=11})).GetProperty("ok").GetBoolean(),"newer revision import");
  Check(!Call("activate-tcp",Sign(grant)).GetProperty("ok").GetBoolean(),"persisted sequence floor");
  Check(!Call("activate-tcp","{}").GetProperty("ok").GetBoolean(),"malformed import");
- File.WriteAllText(output,$"PASS: {checks} broker TCP import, DPAPI and replacement checks. No tunnel started.\n");
+ Check(!Call("friends-identity").GetProperty("ok").GetBoolean(),"resume refuses missing friends identity");
+ Check(!File.Exists(friendsPath)&&!File.Exists(friendsMarker),"resume does not create friends state");
+ var identityReply=Call("friends-create");Check(identityReply.GetProperty("ok").GetBoolean(),"broker identity create");
+ var publicIdentity=identityReply.GetProperty("code").GetString()!;
+ using(var identity=JsonDocument.Parse(publicIdentity)) {
+   Check(identity.RootElement.EnumerateObject().Count()==4,"only public identity fields leave broker");
+   Check(identity.RootElement.GetProperty("wireguard_public_key").GetString()==device,"friends migration preserves existing WG key");
+ }
+ var identityCipher=File.ReadAllBytes(friendsPath);
+ bool identityDenied=false;
+ try{ProtectedData.Unprotect(identityCipher,SHA256.HashData(Encoding.UTF8.GetBytes("family-connect/friends-identity/v1\0"+sid)),DataProtectionScope.CurrentUser);}
+ catch(CryptographicException){identityDenied=true;}
+ Check(identityDenied,"friends identity bound to LocalSystem DPAPI, not UI user");
+ using(var broker=new ServiceController("FamilyConnectBroker")) {
+   broker.Stop();broker.WaitForStatus(ServiceControllerStatus.Stopped,TimeSpan.FromSeconds(130));
+   broker.Start();broker.WaitForStatus(ServiceControllerStatus.Running,TimeSpan.FromSeconds(130));
+ }
+ Check(Call("friends-identity").GetProperty("code").GetString()==publicIdentity,"broker restart preserves friends identity");
+ Check(File.ReadAllBytes(friendsPath).SequenceEqual(identityCipher),"restart leaves encrypted identity unchanged");
+ File.WriteAllBytes(friendsPath,new byte[]{1,2,3});
+ Check(!Call("friends-create").GetProperty("ok").GetBoolean(),"corrupt identity refuses recreate");
+ Check(File.ReadAllBytes(friendsPath).SequenceEqual(new byte[]{1,2,3}),"corrupt identity preserved for recovery");
+ File.WriteAllBytes(friendsPath,identityCipher);File.Delete(friendsPath);
+ Check(!Call("friends-create").GetProperty("ok").GetBoolean(),"missing marked identity refuses recreate");
+ Check(!File.Exists(friendsPath),"missing identity not silently regenerated");
+ File.WriteAllBytes(friendsPath,identityCipher);
+ Check(Call("friends-identity").GetProperty("code").GetString()==publicIdentity,"restored identity resumes");
+ string wgPath=Path.Combine(store,Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(sid)))+".key.dpapi");
+ var savedWg=File.ReadAllBytes(wgPath);
+ try {
+   File.Delete(wgPath);
+   Check(!Call("request").GetProperty("ok").GetBoolean(),"legacy request cannot regenerate enrolled WG key");
+   Check(!Call("friends-create").GetProperty("ok").GetBoolean(),"friends owner refuses missing WG key");
+   Check(!File.Exists(wgPath),"missing WG key remains absent for recovery");
+ } finally {File.WriteAllBytes(wgPath,savedWg);}
+
+ File.WriteAllText(output,$"PASS: {checks} broker TCP and Friends identity/DPAPI/restart/recovery checks. No tunnel started.\n");
  Console.WriteLine(File.ReadAllText(output));
 }catch(Exception e){File.WriteAllText(output,"FAIL after "+checks+" checks: "+e.GetType().Name+": "+e.Message+"\n"+e.StackTrace+"\n");throw;}
-finally{File.WriteAllBytes(anchor,originalAnchor);File.Delete(profile);}
+finally{File.WriteAllBytes(anchor,originalAnchor);File.Delete(profile);File.Delete(friendsPath);File.Delete(friendsMarker);}

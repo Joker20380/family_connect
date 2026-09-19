@@ -139,3 +139,5 @@ ControlVectors.Run();
 FriendsIdentityChecks.Run();
 
 await FriendsAccessChecks.Run();
+
+FriendsVaultChecks.Run();

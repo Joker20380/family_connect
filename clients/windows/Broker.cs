@@ -56,6 +56,16 @@ internal sealed class Broker:ServiceBase
         if(state!="off"&&owner!=sid)return new(false,"other-user",Error:"other-user");
         if(request.Action.StartsWith("connect",StringComparison.Ordinal)&&state=="off")automatic.ClearError();
         switch(request.Action){
+            case "friends-create":
+            case "friends-identity":
+                if(request.Activation is not null)return new(false,state,Error:"unsupported-action");
+                using(var identity=Store.FriendsIdentity(sid,request.Action=="friends-create"))
+                    return new(true,state!="off"?state:ready?"off":"inactive",Code:System.Text.Json.JsonSerializer.Serialize(new {
+                        schema_version=1,device=identity.Reference,
+                        public_identity=Convert.ToBase64String(identity.PublicIdentity()),
+                        wireguard_public_key=identity.WireguardPublicKey
+                    }));
+
             case "connect-auto":
                 if(state!="off")return new(false,state,Error:"busy");
                 var autoAwg=Store.Awg(sid);var autoTcp=Store.Tcp(sid);
