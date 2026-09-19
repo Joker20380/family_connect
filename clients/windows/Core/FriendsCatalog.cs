@@ -127,4 +127,16 @@ internal static class FriendsCatalog
         }
         catch (Exception e) when (e is not OutOfMemoryException) { throw new FormatException("Invalid Friends configuration"); }
     }
+    internal static TcpGrant NativeTcp(FriendsConfiguration profile, string devicePublicKey)
+    {
+        var p = ControlProtocol.Parse(System.Text.Encoding.UTF8.GetBytes(profile.Tcp));
+        ControlProtocol.Fields(p,"type server port id public_key server_name short_id");
+        if (p.GetProperty("type").GetString() != "vless-reality-v1") throw new FormatException("Invalid TCP transport");
+        string S(string name) => ControlProtocol.Text(p.GetProperty(name));
+        // This grant is in-memory native input after signed-catalog/HTTPS verification,
+        // not an exported legacy activation file. No synthetic operator signature.
+        var grant = new TcpGrant(1,devicePublicKey,profile.Sequence,1,S("server"),
+            checked((int)ControlProtocol.Integer(p.GetProperty("port"),1)),S("id"),S("public_key"),S("server_name"),S("short_id"));
+        TcpProfile.Validate(grant); return grant;
+    }
 }

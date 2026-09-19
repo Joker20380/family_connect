@@ -12,7 +12,7 @@ internal sealed class MainForm:Form
     bool polling,pollError;long revision;
     Func<Request,Task<Reply>> call=Wire.Call;
     readonly Label title=new(),status=new(),description=new(),detail=new(),notice=new();
-    readonly Button connect=new ModernButton(),request=new ModernButton(),activate=new ModernButton(),language=new ModernButton(),update=new ModernButton();
+    readonly Button connect=new ModernButton(),request=new ModernButton(),activate=new ModernButton(),language=new ModernButton(),update=new ModernButton(),friends=new ModernButton();
     AppUpdate? availableUpdate;
     readonly System.Windows.Forms.Timer poll=new(){Interval=3000};
     readonly TableLayoutPanel content=new();
@@ -36,9 +36,9 @@ internal sealed class MainForm:Form
         viewport.Dock=DockStyle.Fill;viewport.AutoScroll=true;viewport.Margin=Padding.Empty;
         shell.Controls.Add(viewport,0,0);
         content.AutoSize=true;content.AutoSizeMode=AutoSizeMode.GrowAndShrink;
-        content.ColumnCount=1;content.RowCount=10;content.Padding=new Padding(24,12,24,8);
+        content.ColumnCount=1;content.RowCount=11;content.Padding=new Padding(24,12,24,8);
         content.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
-        for(int i=0;i<10;i++)content.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        for(int i=0;i<11;i++)content.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         viewport.Controls.Add(content);
         title.Text="Family Connect";title.ForeColor=Color.FromArgb(238,242,255);title.Font=new Font(Font.FontFamily,14,FontStyle.Bold);
         using var brandStream=typeof(MainForm).Assembly.GetManifestResourceStream("FamilyConnect.Brand.png")!;
@@ -50,7 +50,7 @@ internal sealed class MainForm:Form
             label.AutoSize=true;label.Dock=DockStyle.Fill;label.TextAlign=ContentAlignment.MiddleLeft;
             label.Margin=new Padding(0,6,0,6);
         }
-        foreach(var button in new[]{connect,request,activate,language,update}){
+        foreach(var button in new[]{connect,request,activate,language,update,friends}){
             button.AutoSize=true;button.MinimumSize=new Size(0,46);button.Dock=DockStyle.Fill;
             button.BackColor=Color.FromArgb(32,43,65);button.FlatAppearance.BorderColor=Color.FromArgb(51,65,100);
             button.FlatAppearance.MouseOverBackColor=Color.FromArgb(41,55,92);button.FlatAppearance.MouseDownBackColor=Color.FromArgb(51,65,100);
@@ -70,13 +70,13 @@ internal sealed class MainForm:Form
         card.Controls.Add(status,0,0);card.Controls.Add(description,0,1);
         card.SizeChanged+=(_,_)=>{using var path=ModernButton.Rounded(new RectangleF(0,0,card.Width,card.Height),16*DeviceDpi/96f);var old=card.Region;card.Region=new Region(path);old?.Dispose();};
         description.ForeColor=Color.FromArgb(153,166,198);
-        foreach(var button in new[]{request,activate,language,update})button.Font=new Font(Font.FontFamily,10,FontStyle.Bold);
+        foreach(var button in new[]{request,activate,language,update,friends})button.Font=new Font(Font.FontFamily,10,FontStyle.Bold);
         update.BackColor=BackColor;language.BackColor=BackColor;
         mode.Items.AddRange(new object[]{"WireGuard","TCP · preview","AWG · preview","Auto · WG → AWG → TCP"});mode.SelectedIndex=0;
         mode.Margin=new Padding(0,4,0,8);mode.BackColor=Color.FromArgb(32,43,65);mode.ForeColor=ForeColor;
         mode.SelectedIndexChanged+=(_,_)=>PaintState();
         int row=0;
-        foreach(Control child in new Control[]{header,tagline,card,mode,connect,request,activate,detail,notice,update})
+        foreach(Control child in new Control[]{header,tagline,card,mode,connect,friends,request,activate,detail,notice,update})
             content.Controls.Add(child,0,row++);
         var footer=new Panel{Dock=DockStyle.Fill,Height=48,Padding=new Padding(24,4,24,8),Margin=Padding.Empty};
         footer.Controls.Add(new Label{Text="v"+Application.ProductVersion.Split('+')[0],AutoSize=true,ForeColor=Color.FromArgb(153,166,198),Location=new Point(24,16)});
@@ -111,6 +111,11 @@ internal sealed class MainForm:Form
             var help=new Label{Text=T("Передайте этот код оператору для активации. Закрытый ключ остаётся на устройстве.","Send this code to the operator for activation. Your private key stays on this device."),Dock=DockStyle.Fill};
             layout.Controls.Add(text,0,0);layout.Controls.Add(help,0,1);layout.Controls.Add(copy,0,2);
             dialog.Controls.Add(layout);dialog.ShowDialog(this);
+        };
+        friends.Click+=async(_,_)=>{
+            if(busy)return;revision++;busy=true;PaintState();
+            try{using var dialog=new FriendsForm(ru,call);dialog.ShowDialog(this);}
+            finally{busy=false;PaintState();await PollStatus();}
         };
         activate.Click+=async(_,_)=>{
             using var dialog=new OpenFileDialog{Filter=AwgSelected?"Family Connect AWG activation|*.fcawgactivation":TcpSelected?"Family Connect TCP activation|*.fctcpactivation":"Family Connect activation|*.fcactivation",CheckFileExists=true};
@@ -177,6 +182,7 @@ internal sealed class MainForm:Form
     }
     static void CheckPolling()
     {
+        FriendsForm.CheckUi();
         using var form=new MainForm(true,true);form.state="off";form.Show();form.PaintState();
         using(var cancel=new System.Windows.Forms.Timer{Interval=50}){
             cancel.Tick+=(_,_)=>{foreach(Form dialog in Application.OpenForms)if(dialog!=form){dialog.DialogResult=DialogResult.Cancel;break;}};
@@ -290,6 +296,7 @@ internal sealed class MainForm:Form
         connect.Text=state=="on"?T("Отключить","Disconnect"):state=="pending"&&(automatic||transport is "tcp" or "awg")?T("Отменить подключение","Cancel connection"):T("Подключить","Connect");
         connect.Enabled=!busy&&(state=="on"||(state=="pending"&&(automatic||transport is "tcp" or "awg"))||((state is "off" or "inactive")&&(AutoSelected?(awgReady||tcpReady||state=="off"):AwgSelected?awgReady:TcpSelected?tcpReady:state=="off")));
         mode.Enabled=!busy&&(state is "off" or "inactive");
+        friends.Text=T("Доступ по приглашению", "Invitation access");friends.Enabled=!busy;
         request.Text=T("Получить код устройства","Get device code");request.Enabled=!busy;
         activate.Text=AwgSelected?T("Открыть AWG-активацию","Open AWG activation"):TcpSelected?T("Открыть TCP-активацию","Open TCP activation"):T("Открыть файл активации","Open activation file");activate.Enabled=!busy&&!AutoSelected&&(state=="off"||state=="inactive");
         notice.Text=AutoSelected?T("Для активации выберите нужный транспорт. Авто использует уже принятые профили.","Select a transport to activate it. Auto uses existing profiles."):T("Туннель не подтверждает доступность интернета. Активация пилота выполняется оператором.","Tunnel status does not verify Internet access. Pilot activation is handled by the operator.");

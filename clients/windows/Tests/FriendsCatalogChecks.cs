@@ -14,6 +14,11 @@ internal static class FriendsCatalogChecks
             catch(FormatException e) when(e.Message=="Invalid Friends configuration") { if(valid)throw new Exception("Rejected valid vector: "+c.GetProperty("name").GetString()); }
             if(valid!=(result is not null))throw new Exception("Catalog vector mismatch: "+c.GetProperty("name").GetString());
             if(result is not null && (result.Sequence!=2 || result.Tcp.Contains("DEVICE_CREDENTIAL") || result.Awg.Contains("LOCAL_DEVICE_KEY") || result.ToString().Contains(f.GetProperty("wireguard_key").GetString()!)))throw new Exception("Materialization/redaction mismatch");
+            if(result is not null)
+            {
+                var grant=FriendsCatalog.NativeTcp(result,f.GetProperty("wireguard_key").GetString()!);
+                if(grant.Sequence!=result.Sequence||grant.Id!=reply.GetProperty("tcp_id").GetString())throw new Exception("Native TCP mapping mismatch");
+            }
             count++;
         }
         Console.WriteLine($"Friends catalog: {count} shared verification/materialization vectors passed.");

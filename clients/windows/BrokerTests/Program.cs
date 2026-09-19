@@ -96,6 +96,9 @@ try {
    Check(!File.Exists(wgPath),"missing WG key remains absent for recovery");
  } finally {File.WriteAllBytes(wgPath,savedWg);}
 
+ Check(!Call("friends-referral","unexpected").GetProperty("ok").GetBoolean(),"referral rejects unsupported input without HTTP");
+ Check(!Call("friends-connect-tcp-ru","unexpected").GetProperty("ok").GetBoolean(),"Friends connect rejects unsupported input without HTTP");
+ Check(!Call("friends-activate","invalid").GetProperty("ok").GetBoolean(),"invalid invitation fails before HTTP");
  File.WriteAllText(output,$"PASS: {checks} broker TCP and Friends identity/DPAPI/restart/recovery checks. No tunnel started.\n");
  Console.WriteLine(File.ReadAllText(output));
 }catch(Exception e){File.WriteAllText(output,"FAIL after "+checks+" checks: "+e.GetType().Name+": "+e.Message+"\n"+e.StackTrace+"\n");throw;}

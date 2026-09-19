@@ -35,6 +35,7 @@ internal sealed class Broker:ServiceBase
                 if(sid is null)throw new UnauthorizedAccessException();
                 Reply answer;
                 try{answer=Handle(sid,request);}
+                catch(FriendsAccessError error){answer=new(false,"unknown",Error:error.Message);}
                 catch(FormatException){answer=new(false,"unknown",Error:"activation-invalid");}
                 catch(System.Text.Json.JsonException){answer=new(false,"unknown",Error:"activation-invalid");}
                 catch(Exception){answer=new(false,"unknown",Error:"system-failed");}
@@ -65,6 +66,22 @@ internal sealed class Broker:ServiceBase
                         public_identity=Convert.ToBase64String(identity.PublicIdentity()),
                         wireguard_public_key=identity.WireguardPublicKey
                     }));
+
+            case "friends-activate":
+                if(state!="off")return new(false,state,Error:"disconnect-first");
+                FriendsOwner.Activate(sid,request.Activation??"",stop.Token);
+                return new(true,ready?"off":"inactive");
+            case "friends-referral":
+                if(request.Activation is not null)return new(false,state,Error:"unsupported-action");
+                return new(true,state,Code:FriendsOwner.Referral(sid,stop.Token));
+            case "friends-connect-tcp-ru":
+            case "friends-connect-tcp-nl":
+                if(state!="off")return new(false,state,Error:"busy");
+                if(request.Activation is not null)return new(false,state,Error:"unsupported-action");
+                if(!Directory.Exists(Path.Combine(AppContext.BaseDirectory,"tcp")))return new(false,"off",Error:"tcp-engine-missing");
+                var friendsGrant=FriendsOwner.Tcp(sid,request.Action.EndsWith("-ru",StringComparison.Ordinal)?"ru":"nl",stop.Token);
+                tcp.Start(sid,friendsGrant);
+                return new(true,"pending",Transport:"tcp");
 
             case "connect-auto":
                 if(state!="off")return new(false,state,Error:"busy");
