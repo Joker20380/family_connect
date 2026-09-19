@@ -194,8 +194,13 @@ internal sealed class MainForm:Form
             }
             if(form.content.Width>form.viewport.ClientSize.Width)
                 throw new InvalidOperationException("Horizontal overflow");
-            if(form.language.Bottom>form.language.Parent!.ClientSize.Height)
-                throw new InvalidOperationException("Clipped footer");
+            if(form.language.Visible && form.language.Bottom>form.language.Parent!.ClientSize.Height)
+                throw new InvalidOperationException("Clipped settings language control");
+            foreach(var button in form.nav.Values){
+                var parent=button.Parent!;
+                if(button.Left<0 || button.Top<0 || button.Right>parent.ClientSize.Width || button.Bottom>parent.ClientSize.Height)
+                    throw new InvalidOperationException("Clipped navigation");
+            }
         }
     }
     static void CheckPolling()
