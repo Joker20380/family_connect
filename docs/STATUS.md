@@ -7,7 +7,14 @@ Android, срезанные рамки, цветной переключател�
 Linux24 layout cases +state/poll regressions, GTK Friends/TCP interaction passed;
 Windows cross-build0errors/0warnings. Linux CI35473867188 success. Windows layout
 в этом run выявил устаревшую проверку скрытого language control; исправлено6ed47bc.
-Повторный CI35474122321 выполняется. Windows render/runtime gate пока не закрыт.
+CI35474122321 завершён: Linux success; Windows сборка/install/broker/UI passed,
+но layout failed: `Clipped or overlapping content`, MainForm.cs:183. Release skipped.
+Это незакрытый дефект геометрии; конкретные вкладка/масштаб/элемент ещё не определены.
+По просьбе пользователя сессия остановлена после документации и ожидания сборки.
+Первый шаг следующей сессии: добавить контекст в layout failure, локализовать и исправить
+геометрию Windows, затем повторить platform CI и визуальную проверку. Не ослаблять тест.
+Native TCP35474122315 / AWG35474122305 ещё выполнялись при последней проверке;
+перед продолжением прочитать их окончательные результаты.
 [Отчёт и снимки](releases/2026-09-20-desktop-terminal.ru.md).
 
 Предыдущий Friends checkpoint e796dbf:605 Python passed; Windows DPAPI и Windows/Linux

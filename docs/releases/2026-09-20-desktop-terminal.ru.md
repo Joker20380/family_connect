@@ -27,8 +27,13 @@ Android остаётся **0.1.18-beta19/code19**, публичный desktop �
   на устаревшей проверке скрытого language control (`Clipped footer`). Исправлено
   в6ed47bc: проверяется только видимый элемент настроек, добавлены границы всех
   кнопок нижней навигации. Android setup-android failed, release skipped.
-- Client builds35474122321 на6ed47bc выполняется. Native Windows TCP35474122315
-  и AWG35474122305 также выполняются. Их успех пока не подтверждён.
+- [Client builds35474122321](https://github.com/Joker20380/family_connect/actions/runs/35474122321)
+  на6ed47bc завершён: Linux success; Windows build, install, broker и UI passed,
+  финальный layout failed с `Clipped or overlapping content` (MainForm.cs:183).
+  Android setup-android failed, release skipped. Успешной поставкой этот run не является.
+- Native Windows TCP35474122315 и AWG35474122305 ещё выполнялись при последней
+  проверке: соответственно LocalSystem routes/DNS/cancellation/crash recovery и
+  signed AWG activation/data cleanup. Их успех пока не подтверждён.
 - Полный Windows PNG ещё не просмотрен: public check annotation обрезает base64
   до4096 символов. Не считать повреждённую копию визуальной проверкой.
 
@@ -59,3 +64,17 @@ APK, desktop installers, gateways и signed catalogs не менялись. Ко
 новая версия, после platform CI, проверки скачанных assets и offline signing.
 Откат исходников — revert aaa6c40/4aba2d9/6ed47bc в desktop-ветке; пользовательского отката
 сейчас не требуется. Сохранённые identity/профили и marker не удалять.
+
+
+## Остановка на ночь
+
+По просьбе пользователя работа остановлена после ожидания Client builds и записи
+результата. Изменения runtime в этой сессии не вносились. Следующая сессия начинается
+с определения элемента/вкладки/масштаба, на котором Windows layout сообщает
+`Clipped or overlapping content`; сейчас диагностическое сообщение этих данных
+не содержит. Добавить контекст ошибки, исправить геометрию и повторить Windows CI,
+сохранив проверки границ и наложений. Затем просмотреть полный Windows screenshot
+и получить подтверждение на реальном компьютере. Проверить оставшиеся native runs.
+
+Проверка ссылок отчёта и `git diff --check` пройдены. Rollout/rollback и публичные
+версии остаются указанными выше; установленный Android beta19 не менялся.
