@@ -74,6 +74,12 @@ class App:
         self.hint=self.label('fc-caption');self.card.append(self.hint);self.body.append(self.card)
         self.model=Gtk.StringList.new([]);self.choose=Gtk.DropDown(model=self.model);self.choose.set_hexpand(True)
         self.choose.set_tooltip_text('WireGuard / AmneziaWG');self.choose.connect('notify::selected',self.selection_changed);self.body.append(self.choose)
+        self.friends_owner_class=None
+        try:
+            from provisioning.friends_owner import FriendsOwner
+            self.friends_owner_class=FriendsOwner
+        except ImportError:pass  # Standalone six-file archive has no paired core.
+        self.friends_button=self.button('fc-secondary',self.open_friends) if self.friends_owner_class else None
         self.toggle=self.button('fc-primary',self.toggle_vpn)
         self.add=self.button('fc-secondary',self.import_profile)
         self.check=self.button('fc-quiet',self.check_ip)
@@ -108,6 +114,7 @@ class App:
     def paint(self):
         if not self.closed and not self.render_source:self.render_source=GLib.idle_add(self.render)
     def render(self):
+        if self.friends_button:self.friends_button.set_label("Доступ по приглашению" if self.ru else "Invitation access");self.friends_button.set_sensitive(not self.busy)
         self.render_source=0
         if self.closed:return GLib.SOURCE_REMOVE
         self.render_count+=1;self.rendering=True;before=self.widget_changes
@@ -150,6 +157,14 @@ class App:
         if natural!=self.fitted_height:
             self.fitted_height=natural;self.window.set_default_size(width,natural)
         return GLib.SOURCE_REMOVE
+    def open_friends(self):
+        if self.busy or not self.friends_owner_class:return
+        from friends_ui import FriendsWindow
+        path=Path.home()/'.local/share/family-connect/friends-identity'
+        owner=self.friends_owner_class(path,Path(__file__).with_name('update.pub'))
+        self.friends_window=FriendsWindow(self.window,owner,self.ru)
+        self.friends_window.present()
+
     def language(self):self.ru=not self.ru;self.paint()
     def set_detail(self,text):self.detail_text=text;self.paint()
     def selected(self):

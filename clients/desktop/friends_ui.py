@@ -1,0 +1,87 @@
+"""Invitation screen for the paired Linux frontend, using GTK 4/libadwaita.
+
+The ordinary six-file archive remains standalone. This screen is packaged with its
+Python core, rather than downloading executable components at runtime.
+"""
+import concurrent.futures
+import gi
+
+gi.require_version('Gtk','4.0')
+gi.require_version('Adw','1')
+from gi.repository import Gtk, Adw, GLib, Gdk
+
+
+class FriendsWindow:
+    def __init__(self,parent,owner,ru=True):
+        self.owner=owner;self.ru=ru;self.busy=False;self.closed=False
+        self.pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
+        self.window=Adw.Window(title=self.t('Доступ по приглашению','Invitation access'),transient_for=parent,modal=True)
+        self.window.set_default_size(440,520)
+        self.window.add_css_class('fc-friends')
+        self.provider=Gtk.CssProvider()
+        self.provider.load_from_data(b'''
+.fc-friends { background-color: #061d18; color: #c9f0df; }
+.fc-friends label { color: #c9f0df; }
+.fc-friends button, .fc-friends entry, .fc-friends dropdown {
+ background-image: none; background-color: #103a30; color: #dcfff0;
+ border: 1px solid #468b75; border-radius: 4px; min-height: 32px;
+}
+.fc-friends entry text { background-color: transparent; color: #dcfff0; }
+.fc-friends button:hover { background-color: #185442; }
+.fc-friends button:disabled { background-color: #142b25; color: #6a8d7d; }
+''')
+        Gtk.StyleContext.add_provider_for_display(self.window.get_display(),self.provider,Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
+        box=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=12)
+        for name in ('top','bottom','start','end'):getattr(box,'set_margin_'+name)(20)
+        scroll=Gtk.ScrolledWindow();scroll.set_child(box);self.window.set_content(scroll)
+        def label(text):
+            widget=Gtk.Label(label=text,xalign=0,wrap=True);box.append(widget);return widget
+        label(self.t('Вставьте код приглашения. При обновлении повторная активация не нужна.','Paste your invitation code. App updates do not require activation again.'))
+        self.code=Gtk.Entry(placeholder_text='FC-…',max_length=128);box.append(self.code)
+        self.activate=Gtk.Button(label=self.t('Активировать','Activate'));box.append(self.activate)
+        self.region=Gtk.DropDown.new_from_strings([self.t('Нидерланды','Netherlands'),self.t('Россия','Russia')]);box.append(self.region)
+        self.prepare=Gtk.Button(label=self.t('Получить настройки','Get configuration'));box.append(self.prepare)
+        label(self.t('Предварительная проверка доступа и настроек. Подключение из этого окна ещё не подключено.','Access and configuration preview. Connecting from this window is not integrated yet.'))
+        self.share=Gtk.Button(label=self.t('Получить ссылку для друга','Get invitation link'));box.append(self.share)
+        self.link=Gtk.Entry(editable=False);box.append(self.link)
+        self.copy=Gtk.Button(label=self.t('Скопировать ссылку','Copy link'));self.copy.set_sensitive(False);box.append(self.copy)
+        self.status=label('')
+        self.activate.connect('clicked',lambda *_:self.submit(lambda:self.owner.activate(self.code.get_text().strip()),'activate'))
+        self.prepare.connect('clicked',lambda *_:self.prepare_configuration())
+        self.share.connect('clicked',lambda *_:self.submit(self.owner.referral,'referral'))
+        self.copy.connect('clicked',lambda *_:Gdk.Display.get_default().get_clipboard().set(self.link.get_text()))
+        self.window.connect('close-request',self.close)
+    def t(self,r,e):return r if self.ru else e
+    def prepare_configuration(self):
+        country='ru' if self.region.get_selected()==1 else 'nl'
+        # Credentials stay in the worker/owner, not in GTK callback results.
+        def action():
+            config=self.owner.configuration(country)
+            return config.country,config.sequence
+        self.submit(action,'configuration')
+    def submit(self,action,kind):
+        if self.busy or self.closed:return
+        # Snapshot GTK input on the UI thread before creating the worker.
+        if kind=='activate':
+            code=self.code.get_text().strip();action=lambda:self.owner.activate(code)
+        self.busy=True;self.sensitivity();self.status.set_text(self.t('Подождите…','Please wait…'))
+        future=self.pool.submit(action)
+        future.add_done_callback(lambda f:GLib.idle_add(self.complete,f,kind))
+    def complete(self,future,kind):
+        if self.closed:return GLib.SOURCE_REMOVE
+        try:
+            result=future.result()
+            if kind=='activate':self.code.set_text('');text=self.t('Доступ активирован.','Access activated.')
+            elif kind=='referral':
+                self.link.set_text(result['url']);text=self.t('Осталось приглашений: ','Invitations remaining: ')+str(result['remaining'])
+            else:text=self.t('Настройки проверены и сохранены.','Configuration verified and saved.')
+            self.status.set_text(text)
+        except Exception:self.status.set_text(self.t('Действие не выполнено. Проверьте код и сеть. Повреждённые данные требуют восстановления.','Could not complete the action. Check the code and network. Damaged data requires recovery.'))
+        self.busy=False;self.sensitivity();return GLib.SOURCE_REMOVE
+    def sensitivity(self):
+        for widget in (self.code,self.activate,self.region,self.prepare,self.share):widget.set_sensitive(not self.busy)
+        self.copy.set_sensitive(not self.busy and bool(self.link.get_text()))
+    def close(self,*_):
+        if self.busy:return True
+        self.closed=True;self.pool.shutdown(wait=False,cancel_futures=True);Gtk.StyleContext.remove_provider_for_display(self.window.get_display(),self.provider);return False
+    def present(self):self.window.present()
