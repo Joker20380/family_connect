@@ -1,5 +1,28 @@
 # Current state / Текущее состояние
 
+## Desktop: единый терминальный интерфейс — 2026-09-20
+
+В desktop/friends-access-20260919 опубликованы aaa6c40,4aba2d9 и6ed47bc: палитра/шапка
+Android, срезанные рамки, цветной переключатель, постоянные четыре вкладки.
+Linux24 layout cases +state/poll regressions, GTK Friends/TCP interaction passed;
+Windows cross-build0errors/0warnings. Linux CI35473867188 success. Windows layout
+в этом run выявил устаревшую проверку скрытого language control; исправлено6ed47bc.
+Повторный CI35474122321 выполняется. Windows render/runtime gate пока не закрыт.
+[Отчёт и снимки](releases/2026-09-20-desktop-terminal.ru.md).
+
+Предыдущий Friends checkpoint e796dbf:605 Python passed; Windows DPAPI и Windows/Linux
+CI success, native TCP35472664774 success. Windows Friends подключён к TCP broker,
+Linux получает/сохраняет configuration. [Подробности](releases/2026-09-20-desktop-friends-configuration.ru.md).
+Android setup-android и phase0 failover build требуют отдельного разбора;
+полный CI не объявлен зелёным.
+
+Далее: завершить Windows runtime/render gate и выравнивание экранов, подключить
+Linux Friends VPN apply/recovery, AWG3.1 и /16, desktop messenger/QR/карту,
+проверить на живых Linux/Windows и выпустить новую immutable версию.
+Android beta19 и public desktop v0.2.9 не менялись. Установщиков этого этапа нет.
+Public main d87f30d; корневая рабочая папка с накопленными изменениями сохранена.
+
+
 ## Проверка готовности по запросу пользователя — 2026-09-14 14:37 UTC
 
 Исходники beta08/code8: c98d789, отправлены в main. Clients34855992025:
