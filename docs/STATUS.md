@@ -45,7 +45,8 @@ No new desktop installer is offered as a user release.
 ## GitHub presentation
 
 Product README EN/RU, installation guides, security/privacy, documentation map and
-contribution templates are prepared as a documentation-only main update. Markdown
+contribution templates were published to main in commit `9c4114b`. The public README
+was downloaded and matched the reviewed file byte for byte. Markdown
 links, 17 external URLs and four Mermaid diagrams passed validation. See the
 [presentation report](releases/2026-09-19-github-presentation.ru.md).
 

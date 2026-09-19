@@ -2,9 +2,9 @@
 
 Updated 2026-09-19. Use [STATUS](STATUS.md) for verified versions.
 
-1. Publish the reviewed product documentation independently of runtime changes.
-   Validate both languages, Markdown links, image paths and Mermaid rendering.
-   Update About/topics when owner API authentication is available; do not choose a license implicitly.
+1. Product documentation published to main (`9c4114b`); both languages, links, images
+   and Mermaid verified. Remaining metadata task: update About/topics when owner API
+   authentication is available. Do not choose a license implicitly.
 2. Reconcile and publish the Android beta19/messenger source checkpoint separately.
    Preserve local work, verify dependencies and release receipts; documentation publication
    does not rebuild or replace the working Android APK.
