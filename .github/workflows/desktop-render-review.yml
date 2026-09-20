@@ -1,0 +1,43 @@
+name: Desktop render review
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Completed Client builds run containing Windows preview images
+        required: true
+        default: '35500441063'
+  push:
+    paths: ['.github/workflows/desktop-render-review.yml']
+permissions:
+  actions: read
+  contents: read
+jobs:
+  images:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # Inspect only PNG data; never execute files from the downloaded installer.
+      - uses: actions/download-artifact@v4
+        with:
+          name: FamilyConnect-Windows-Installer-pilot-unsigned
+          run-id: ${{ inputs.run_id || '35500441063' }}
+          github-token: ${{ github.token }}
+          path: preview
+      - name: Main screen
+        shell: python
+        run: |
+          import pathlib,base64,hashlib
+          files=list(pathlib.Path('preview').rglob('Windows-preview.png'));assert len(files)==1
+          raw=files[0].read_bytes();assert raw.startswith(b'\x89PNG\r\n\x1a\n')
+          data=base64.b64encode(raw).decode();assert len(data)<=180000
+          print('SHA256',hashlib.sha256(raw).hexdigest())
+          for offset in range(0,len(data),20000):print(f'::notice title=Windows preview part {offset}::{data[offset:offset+20000]}')
+      - name: Route screen
+        shell: python
+        run: |
+          import pathlib,base64,hashlib
+          files=list(pathlib.Path('preview').rglob('Windows-route.png'));assert len(files)==1
+          raw=files[0].read_bytes();assert raw.startswith(b'\x89PNG\r\n\x1a\n')
+          data=base64.b64encode(raw).decode();assert len(data)<=180000
+          print('SHA256',hashlib.sha256(raw).hexdigest())
+          for offset in range(0,len(data),20000):print(f'::notice title=Windows route part {offset}::{data[offset:offset+20000]}')

@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
-if ! python3 -c 'import gi, cryptography; gi.require_version("Gtk", "4.0"); gi.require_version("Adw", "1")'; then
-    echo 'Install Python GI, GTK 4 and libadwaita first. Ubuntu/Debian: sudo apt install python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 python3-cryptography' >&2
+if ! python3 -c 'import gi, cairo, cryptography; gi.require_foreign("cairo"); gi.require_version("Gtk", "4.0"); gi.require_version("Adw", "1")'; then
+    echo 'Install Python GI, GTK 4 and libadwaita first. Ubuntu/Debian: sudo apt install python3-gi python3-gi-cairo gir1.2-gtk-4.0 gir1.2-adw-1 python3-cryptography' >&2
     exit 1
 fi
 command -v nmcli >/dev/null

@@ -23,7 +23,7 @@ jobs:
       - name: Protocol, crash recovery, arbiter and packaging regression
         run: python -m pytest -q
       - name: System GTK dependencies
-        run: sudo apt-get update && sudo apt-get install -y python3-gi python3-venv gir1.2-gtk-4.0 gir1.2-adw-1 libqrencode4 libzbar0 python3-cryptography xvfb dbus-x11
+        run: sudo apt-get update && sudo apt-get install -y python3-gi python3-gi-cairo python3-venv gir1.2-gtk-4.0 gir1.2-adw-1 libqrencode4 libzbar0 python3-cryptography xvfb dbus-x11
       - name: Render and interaction regression
         env:
           GSK_RENDERER: cairo

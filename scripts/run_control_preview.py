@@ -47,12 +47,13 @@ def main():
     sys.argv = [args.mode] + rest
     if args.mode == 'gui':
         try:
-            import gi
+            import gi, cairo
+            gi.require_foreign("cairo")
             gi.require_version('Gtk', '4.0')
             gi.require_version('Adw', '1')
             from provisioning.friends_owner import FriendsOwner
         except (ImportError, ValueError):
-            raise SystemExit('Paired GUI requires system GTK 4/libadwaita and pinned Friends dependencies. '
+            raise SystemExit('Paired GUI requires system GTK 4/libadwaita, python3-gi-cairo and pinned Friends dependencies. '
                              'Create a venv using /usr/bin/python3 -m venv --system-site-packages, '
                              'install provisioning/requirements.lock there, and launch with its bin/python.') from None
         runpy.run_path(str(ROOT / 'clients/desktop/app.py'), run_name='__main__')
