@@ -15,7 +15,8 @@ layout cases, Friends parent/lifecycle и recovery/installer checks; .NET cross-
 наf8c10c0; Windows build/install/broker/UI/layout35490043368 тоже success,
 полный PNG просмотрен. Наb9a2b4a исправлено окружение paired GUI: обязательны GTK
 и pinned Friends dependencies. Финальный extracted Linux CI35490344947 success;
-local package/owner/lifecycle19 passed. Android SDK setup и phase0 остаются failure.
+local package/owner/lifecycle19 passed. Native Windows TCP35490043369 и AWG35490043292
+completed/success. Android SDK setup и phase0 остаются failure.
 [Отчёт, версии, рендеры, rollout/rollback](releases/2026-09-20-desktop-friends-apply.ru.md).
 
 Установок/релиза/серверных изменений нет: Android0.1.18-beta19/code19,

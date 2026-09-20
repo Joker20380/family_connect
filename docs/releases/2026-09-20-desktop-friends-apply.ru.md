@@ -105,7 +105,7 @@ Standalone по-прежнему самодостаточен. [Запуск и 
   Расширенный owner-test проводит реальный подписанный fixture через mocked HTTP,
   durable cache и apply; после HTTP403 повторный import не выполняется.
 - AWG native35490043292 и TCP pilot35490043423 наf8c10c0 success.
-  Windows native TCP35490043369 ещё выполнялся при проверке; его финал не подтверждён.
+  Windows native TCP35490043369 также completed/success (проверено перед завершением).
   Phase035490344945: tests success, failover failed на Build isolated failover stack;
   причина Docker build в этой задаче не разбиралась. Общий набор workflows не зелёный.
 - Android в общем Client builds снова failed на setup-android до компиляции;
