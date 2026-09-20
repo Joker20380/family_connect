@@ -44,7 +44,7 @@ w.transport.set_selected(1);w.connect_button.emit('clicked');pump(lambda:not w.b
 assert owner.connected[-1]==('ru',driver,'awg')
 # Busy close is rejected and duplicate network actions remain disabled.
 w.busy=True;w.sensitivity();assert w.close() is True and not w.connect_button.get_sensitive()
-w.busy=False;w.sensitivity()
+w.busy=False;w.close_pending=False;w.back.set_label('Назад');w.sensitivity()
 assert w.window.get_width()>=340
 end=time.monotonic()+.5
 while time.monotonic()<end:
@@ -58,7 +58,20 @@ if node is not None:
  renderer=Gsk.Renderer.new_for_surface(w.window.get_surface())
  try:renderer.render_texture(node,None).save_to_png(sys.argv[1]) if len(sys.argv)>1 else None
  finally:renderer.unrealize()
-w.window.close();assert closed==[True]
+# Visible navigation remains reachable even when the content scrolls.
+assert w.back.get_mapped() and w.back.get_sensitive()
+w.back.emit('clicked');assert closed==[True] and w.closed
+w.close();assert closed==[True]
+# Escape returns to the parent; a close during work waits for completion.
+from gi.repository import Gdk
+import concurrent.futures
+for ru in (True,False):
+ done=[];dialog=FriendsWindow(None,owner,ru,on_close=lambda:done.append(True))
+ dialog.present();dialog.busy=True;dialog.sensitivity()
+ assert dialog.key_pressed(None,Gdk.KEY_Escape,0,0)
+ assert dialog.close_pending and not dialog.closed
+ future=concurrent.futures.Future();future.set_result(owner.referral())
+ dialog.complete(future,'referral');assert dialog.closed and done==[True]
 print('GTK invitation activation/referral/configuration/TCP and busy-close checks passed; no HTTP or VPN mutations.')
 
 # Parent integration: startup recovery precedes profile discovery and modal close

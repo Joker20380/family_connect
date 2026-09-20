@@ -14,7 +14,7 @@ from gi.repository import Gtk, Adw, GLib, Gdk
 class FriendsWindow:
     def __init__(self,parent,owner,ru=True,driver=None,on_close=None):
         self.owner=owner;self.ru=ru;self.busy=False;self.closed=False
-        self.driver=driver;self.on_closed=on_close;self.qr_window=None
+        self.driver=driver;self.on_closed=on_close;self.qr_window=None;self.close_pending=False
         self.pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
         self.window=Adw.Window(title=self.t('Доступ по приглашению','Invitation access'),transient_for=parent,modal=True)
         self.window.set_default_size(440,520)
@@ -34,7 +34,16 @@ class FriendsWindow:
         Gtk.StyleContext.add_provider_for_display(self.window.get_display(),self.provider,Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         box=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=12)
         for name in ('top','bottom','start','end'):getattr(box,'set_margin_'+name)(20)
-        scroll=Gtk.ScrolledWindow();scroll.set_child(box);self.window.set_content(scroll)
+        # Navigation stays outside scrolling content at every window size.
+        shell=Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        header=Adw.HeaderBar();header.set_show_end_title_buttons(True)
+        self.back=Gtk.Button(label=self.t('Назад','Back'))
+        self.back.connect('clicked',lambda *_:self.window.close())
+        header.pack_start(self.back);shell.append(header)
+        scroll=Gtk.ScrolledWindow();scroll.set_vexpand(True);scroll.set_child(box)
+        shell.append(scroll);self.window.set_content(shell)
+        keys=Gtk.EventControllerKey()
+        keys.connect('key-pressed',self.key_pressed);self.window.add_controller(keys)
         def label(text):
             widget=Gtk.Label(label=text,xalign=0,wrap=True);box.append(widget);return widget
         label(self.t('Вставьте код приглашения. При обновлении повторная активация не нужна.','Paste your invitation code. App updates do not require activation again.'))
@@ -59,6 +68,10 @@ class FriendsWindow:
         self.copy.connect('clicked',lambda *_:Gdk.Display.get_default().get_clipboard().set(self.link.get_text()))
         self.window.connect('close-request',self.close)
     def t(self,r,e):return r if self.ru else e
+    def key_pressed(self,controller,keyval,keycode,state):
+        if keyval==Gdk.KEY_Escape:
+            self.window.close();return True
+        return False
     def show_qr(self):
         if self.busy or self.closed:return
         if self.qr_window is not None:
@@ -121,14 +134,21 @@ class FriendsWindow:
             else:text=self.t('Настройки проверены и сохранены.','Configuration verified and saved.')
             self.status.set_text(text)
         except Exception:self.status.set_text(self.t('Действие не выполнено. Проверьте код и сеть. Повреждённые данные требуют восстановления.','Could not complete the action. Check the code and network. Damaged data requires recovery.'))
-        self.busy=False;self.sensitivity();return GLib.SOURCE_REMOVE
+        self.busy=False;self.sensitivity()
+        if self.close_pending:self.window.close()
+        return GLib.SOURCE_REMOVE
     def sensitivity(self):
         for widget in (self.code,self.activate,self.region,self.transport,self.prepare,self.share):widget.set_sensitive(not self.busy)
         self.connect_button.set_sensitive(not self.busy and self.driver is not None)
         self.copy.set_sensitive(not self.busy and bool(self.link.get_text()))
         self.qr.set_sensitive(not self.busy and bool(self.link.get_text()))
     def close(self,*_):
-        if self.busy:return True
+        if self.closed:return False
+        if self.busy:
+            self.close_pending=True
+            self.back.set_label(self.t('Ожидание…','Waiting…'))
+            self.status.set_text(self.t('Дождитесь завершения текущей операции. Окно закроется автоматически.','Waiting for the current operation. This window will close automatically.'))
+            return True
         if self.qr_window is not None:self.qr_window.close()
         self.link.set_text('')
         self.closed=True;self.pool.shutdown(wait=False,cancel_futures=True);Gtk.StyleContext.remove_provider_for_display(self.window.get_display(),self.provider)
