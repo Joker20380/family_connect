@@ -1,5 +1,11 @@
 # Current state / Текущее состояние
 
+Финальный source `7a8036a` опубликован. CI: AWG `35495112337`, TCP `35495112351`,
+Client builds `35495112338`, phase0 `35495112340` — in_progress на момент записи.
+На предыдущем `761406f` Linux/Windows jobs `35494706323` success; aggregate failure
+из-за Android SDK setup. Новый Linux auth-сеанс на хост пока не установлен.
+
+
 ## Один сеанс Linux-авторизации — 2026-09-20
 
 Исправлен источник повторных запросов: Linux import/up/down одной операции используют

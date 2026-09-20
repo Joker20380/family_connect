@@ -1,5 +1,11 @@
 # Linux: один запрос авторизации на операцию — 2026-09-20
 
+Финальный source `7a8036a` опубликован. CI: AWG `35495112337`, TCP `35495112351`,
+Client builds `35495112338`, phase0 `35495112340` — in_progress на момент записи.
+На предыдущем `761406f` Linux/Windows jobs `35494706323` success; aggregate failure
+из-за Android SDK setup. Новый Linux auth-сеанс на хост пока не установлен.
+
+
 База desktop-ветки:653effa (source3e5943c). После четырёх успешных живых Friends
 подключений пользователь сообщил о примерно20 password prompts. Новый код группирует
 privileged import/up/down через один pkexec-процесс внутри connection operation.
