@@ -3,11 +3,11 @@
 #endif
 [Setup]
 AppId={{68D949A5-515C-4328-901F-C870A270FD01}
-AppName=Family Connect
+AppName=family_connect
 AppVersion=0.2.9
-AppPublisher=Family Connect
+AppPublisher=family_connect
 DefaultDirName={autopf}\Family Connect
-DefaultGroupName=Family Connect
+DefaultGroupName=family_connect
 ArchitecturesAllowed=x64os
 ArchitecturesInstallIn64BitMode=x64os
 PrivilegesRequired=admin
@@ -28,9 +28,12 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 [Files]
 Source: "build\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+[InstallDelete]
+Type: files; Name: "{autoprograms}\Family Connect.lnk"
+Type: files; Name: "{autodesktop}\Family Connect.lnk"
 [Icons]
-Name: "{autoprograms}\Family Connect"; Filename: "{app}\FamilyConnect.exe"
-Name: "{autodesktop}\Family Connect"; Filename: "{app}\FamilyConnect.exe"; Tasks: desktopicon
+Name: "{autoprograms}\family_connect"; Filename: "{app}\FamilyConnect.exe"
+Name: "{autodesktop}\family_connect"; Filename: "{app}\FamilyConnect.exe"; Tasks: desktopicon
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; Flags: unchecked
 [UninstallRun]

@@ -34,7 +34,7 @@ internal sealed class MainForm:Form
     public MainForm(bool smoke,bool layoutTest=false)
     {
         AutoScaleMode=AutoScaleMode.Dpi;AutoScaleDimensions=new SizeF(96,96);
-        Text=$"Family Connect · {Application.ProductVersion.Split('+')[0]}";ClientSize=new(390,548);MinimumSize=new(360,360);
+        Text=$"family_connect · {Application.ProductVersion.Split('+')[0]}";ClientSize=new(390,548);MinimumSize=new(360,360);
         DoubleBuffered=true;
         BackColor=Color.FromArgb(3,17,14);ForeColor=Color.FromArgb(218,255,242);
         Icon=Icon.ExtractAssociatedIcon(Application.ExecutablePath);
@@ -50,7 +50,7 @@ internal sealed class MainForm:Form
         content.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
         for(int i=0;i<15;i++)content.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         viewport.Controls.Add(content);
-        title.Text="Family Connect";title.ForeColor=Color.FromArgb(218,255,242);title.Font=new Font(Font.FontFamily,14,FontStyle.Bold);
+        title.Text="family_connect";title.ForeColor=Color.FromArgb(218,255,242);title.Font=new Font(Font.FontFamily,14,FontStyle.Bold);
         using var brandStream=typeof(MainForm).Assembly.GetManifestResourceStream("FamilyConnect.Brand.png")!;
         using var brandSource=Image.FromStream(brandStream);
         var emblem=new PictureBox{Image=new Bitmap(brandSource),SizeMode=PictureBoxSizeMode.Zoom,Height=28,Dock=DockStyle.Fill,Margin=new Padding(0,0,10,0)};
@@ -319,7 +319,7 @@ internal sealed class MainForm:Form
     }
     bool Confirm(string message)
     {
-        using var dialog=new Form{Text="Family Connect",BackColor=BackColor,ForeColor=ForeColor,Font=Font,Icon=Icon,
+        using var dialog=new Form{Text="family_connect",BackColor=BackColor,ForeColor=ForeColor,Font=Font,Icon=Icon,
             AutoScaleMode=AutoScaleMode.Dpi,ClientSize=new Size(370,280),StartPosition=FormStartPosition.CenterParent,
             FormBorderStyle=FormBorderStyle.FixedDialog,MaximizeBox=false,MinimizeBox=false};
         dialog.HandleCreated+=(_,_)=>DarkFrame(dialog);

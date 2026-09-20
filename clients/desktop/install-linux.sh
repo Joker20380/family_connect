@@ -34,7 +34,7 @@ theme=Path.home()/'.local/share/icons/hicolor/256x256/apps';theme.mkdir(parents=
 (theme/'com.familyconnect.Client.png').write_bytes(raw)
 folder=Path.home()/'.local/share/applications';folder.mkdir(parents=True,exist_ok=True)
 command=str(root/'current/app.py').replace('\\','\\\\').replace('"','\\"').replace('`','\\`').replace('$','\\$')
-(folder/'family-connect.desktop').write_text('[Desktop Entry]\nType=Application\nName=Family Connect\nExec=python3 "'+command+'"\nIcon='+str(icon_path)+'\nStartupWMClass=com.familyconnect.Client\nTerminal=false\nCategories=Network;\nComment=Family VPN client\n')
+(folder/'family-connect.desktop').write_text('[Desktop Entry]\nType=Application\nName=family_connect\nExec=python3 "'+command+'"\nIcon='+str(icon_path)+'\nStartupWMClass=com.familyconnect.Client\nTerminal=false\nCategories=Network;\nComment=Family VPN client\n')
 entry=folder/'family-connect.desktop'
 (folder/'com.familyconnect.Client.desktop').write_text(entry.read_text()+'NoDisplay=true\n')
 print('Installed Family Connect',version)

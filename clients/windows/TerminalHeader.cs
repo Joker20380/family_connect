@@ -21,10 +21,10 @@ internal sealed class TerminalHeader : Control
         Polygon(Color.FromArgb(141,235,205),new PointF[]{new(23,36),new(50,20),new(50,99),new(23,81)});
         Polygon(Color.FromArgb(193,255,233),new PointF[]{new(55,50),new(60,50),new(60,65),new(55,65)});
         Polygon(Color.FromArgb(37,94,78),new PointF[]{new(50,12),new(82,30),new(82,36),new(50,19)});g.Restore(saved);
-        using var font=new Font("Consolas",(Width/scale>=350?19:16)*scale,FontStyle.Bold,GraphicsUnit.Pixel);
+        using var font=new Font("Consolas",(Width/scale>=350?19:16)*scale,FontStyle.Regular,GraphicsUnit.Pixel);
         using var small=new Font("Consolas",9*scale,FontStyle.Regular,GraphicsUnit.Pixel);
         using var text=new SolidBrush(Color.FromArgb(218,255,242));using var mint=new SolidBrush(Color.FromArgb(152,247,216));
-        g.DrawString("FAMILY CONNECT",font,text,77*scale,17*scale);
+        g.DrawString("family_connect",font,text,77*scale,17*scale);
         g.DrawString("SECURE NETWORK TERMINAL",small,mint,78*scale,44*scale);
         using var faint=new Pen(Color.FromArgb(55,67,142,121),scale);
         g.DrawLine(faint,78*scale,40*scale,205*scale,40*scale);g.DrawLine(faint,78*scale,60*scale,205*scale,60*scale);

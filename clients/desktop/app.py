@@ -166,7 +166,7 @@ class TerminalHeader(Gtk.Box):
     def do_snapshot(self,snapshot):
         w=self.get_width();size=min(27,max(15,(w-90)/8.8))
         logo='<g transform="translate(17 12) scale(.46)"><path fill-rule="evenodd" fill="#98f7d8" d="M50 3 L90 25 L90 77 L50 99 L10 77 L10 25 Z M50 12 L18 30 L18 73 L50 91 L82 73 L82 30 Z"/><path fill="#8debcd" d="M23 36 L50 20 L50 99 L23 81 Z"/><path fill="#c1ffe9" d="M55 50 H60 V65 H55 Z"/><path fill="#255e4e" d="M50 12 L82 30 V36 L50 19 Z"/></g>'
-        text=f'<text x="77" y="33" fill="#dafff2" font-family="sans-serif" font-weight="900" font-size="{size}">FAMILY CONNECT</text><text x="78" y="54" fill="#98f7d8" font-family="monospace" font-size="9">SECURE NETWORK TERMINAL</text><path d="M78 40 H205 M78 60 H205" stroke="#438e79" opacity=".25"/><path d="M8 28 v5 M8 37 v5 M8 46 v5" stroke="#ffad46" stroke-width="2"/>'
+        text=f'<text x="77" y="33" fill="#dafff2" font-family="monospace" font-weight="400" font-size="{size}">family_connect</text><text x="78" y="54" fill="#98f7d8" font-family="monospace" font-size="9">SECURE NETWORK TERMINAL</text><path d="M78 40 H205 M78 60 H205" stroke="#438e79" opacity=".25"/><path d="M8 28 v5 M8 37 v5 M8 46 v5" stroke="#ffad46" stroke-width="2"/>'
         terminal_frame(snapshot,self,'#03110e','#98f7d8',logo+text)
 
 
@@ -249,7 +249,7 @@ class App:
         self.load_pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
         self.pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
         self.poll_pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
-        self.window=Adw.ApplicationWindow(application=application,title='Family Connect')
+        self.window=Adw.ApplicationWindow(application=application,title='family_connect')
         self.window.add_css_class('fc-window');self.window.set_default_size(390,-1)
         self.window.set_icon_name('com.familyconnect.Client')
         self.window.connect('close-request',self.on_close)
@@ -261,7 +261,7 @@ class App:
         header=Adw.HeaderBar();brand=Gtk.Box(spacing=9)
         texture=Gdk.Texture.new_from_bytes(GLib.Bytes.new(base64.b64decode(ICON_PNG)))
         icon=Gtk.Image.new_from_paintable(texture);icon.set_pixel_size(28);brand.append(icon)
-        name=Gtk.Label(label='Family Connect');name.add_css_class('fc-brand');brand.append(name)
+        name=Gtk.Label(label='family_connect');name.add_css_class('fc-brand');brand.append(name)
         header.set_title_widget(Gtk.Label(label=''));shell.append(header)
         brand_header=TerminalHeader();brand_header.set_margin_start(12);brand_header.set_margin_end(12);shell.append(brand_header)
         self.body=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=10)
@@ -632,7 +632,7 @@ class App:
             return 'IP: '+values.get('ip','?')+' · '+values.get('loc','?')
         self.submit(action,'ip')
     def confirm(self,text,action,accepted):
-        dialog=Adw.MessageDialog(transient_for=self.window,heading='Family Connect',body=text,modal=True)
+        dialog=Adw.MessageDialog(transient_for=self.window,heading='family_connect',body=text,modal=True)
         dialog.add_response('cancel','Отмена' if self.ru else 'Cancel');dialog.add_response('accept',action)
         dialog.set_response_appearance('accept',Adw.ResponseAppearance.SUGGESTED)
         dialog.set_default_response('cancel');dialog.set_close_response('cancel')
