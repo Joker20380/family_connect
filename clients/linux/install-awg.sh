@@ -11,6 +11,9 @@ command -v curl >/dev/null
 test -c /dev/net/tun
 # Verify the complete pinned bundle before changing the installed helper.
 python3 "$source_dir/clients/linux/check-awg-bundle.py" "$binary_dir"
+for interface in /sys/class/net/fcawg*; do
+ if [ -e "$interface" ]; then echo 'Disconnect AWG before updating its helper.' >&2; exit 1; fi
+done
 destination=/usr/local/lib/family-connect-awg
 install -d -m 755 "$destination" /etc/family-connect/awg
 for name in awg amneziawg-go awg-quick; do

@@ -36,7 +36,7 @@ internal sealed class TcpEngine : IDisposable
     static TcpEngine StartCore(string trustedDirectory,string config,bool awg)
     {
         string executable=awg?"fc-awg.exe":"xray.exe";
-        string hash=awg?"0ff643eee68ce94183b6f5dde75fc9c03eeff96d6731349c9431fc2771be1a70":XraySha;
+        string hash=awg?"e3d11b9552eb8ed84776cf16a8c240e90b4b9ff0d361519c840909ca5f97fdb6":XraySha;
         if(!OperatingSystem.IsWindows())throw new PlatformNotSupportedException();
         if(Encoding.UTF8.GetByteCount(config)>16384)throw new FormatException("TCP config size");
         string folder=Path.GetFullPath(trustedDirectory);

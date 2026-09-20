@@ -22,7 +22,7 @@ try {
             foreach($name in $expected.Keys){if((Get-FileHash "$tcp/$name" -Algorithm SHA256).Hash.ToLower() -ne $expected[$name]){throw "Installed TCP hash mismatch: $name"}}
             foreach($name in @('licenses/Xray.txt','licenses/Wintun.txt','build.json')){if(-not(Test-Path "$tcp/$name")){throw "TCP notice missing: $name"}}
             $awg="$env:ProgramFiles/Family Connect/awg"
-            if((Get-FileHash "$awg/fc-awg.exe" -Algorithm SHA256).Hash.ToLower() -ne '0ff643eee68ce94183b6f5dde75fc9c03eeff96d6731349c9431fc2771be1a70'){throw 'Installed AWG worker mismatch'}
+            if((Get-FileHash "$awg/fc-awg.exe" -Algorithm SHA256).Hash.ToLower() -ne 'e3d11b9552eb8ed84776cf16a8c240e90b4b9ff0d361519c840909ca5f97fdb6'){throw 'Installed AWG worker mismatch'}
             if((Get-FileHash "$awg/wintun.dll" -Algorithm SHA256).Hash.ToLower() -ne 'e5da8447dc2c320edc0fc52fa01885c103de8c118481f683643cacc3220dafce'){throw 'Installed AWG driver mismatch'}
             if(Test-Path "$awg/peer-fixture.exe"){throw 'CI peer included in installer'}
             foreach($name in @('licenses/AmneziaWG.txt','licenses/Wintun.txt','build.json')){if(-not(Test-Path "$awg/$name")){throw 'AWG notice missing'}}

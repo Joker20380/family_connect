@@ -41,3 +41,5 @@ Copy-Item "$source/LICENSE" "$Output/licenses/AmneziaWG.txt"
 $record=@{revision=$revision;protocol='3.1';startup_patch_sha256=(Get-FileHash $patch -Algorithm SHA256).Hash.ToLower();go=(go version);worker_source_sha256=(Get-FileHash "$PSScriptRoot/worker/main.go" -Algorithm SHA256).Hash.ToLower();files=@{}}
 foreach($name in @('fc-awg.exe','wintun.dll','peer-fixture.exe')){$record.files[$name]=(Get-FileHash "$Output/$name" -Algorithm SHA256).Hash.ToLower()}
 $record | ConvertTo-Json -Depth 4 | Set-Content "$Output/build.json"
+
+Write-Output "::notice title=AWG worker SHA256::$($record.files['fc-awg.exe'])"
