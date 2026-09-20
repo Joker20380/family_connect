@@ -57,12 +57,13 @@ jobs:
         run: |
           set -euo pipefail
           repo=Joker20380/family_connect
+          # The immutable source tag is created through the authorized Git transport.
           tag=desktop-preview-20260920-a1be617
           if gh release view "$tag" --repo "$repo" >/dev/null 2>&1; then
             echo 'Preview already exists; refusing to overwrite immutable assets.' >&2
             exit 1
           fi
-          if ! gh release create "$tag" publish/* --repo "$repo" --target a1be617f4fae2eac82ef5945bd7e36c325f891a5 --prerelease --title 'Desktop preview 2026-09-20 · server load' --notes-file notes.md >publish-result.log 2>&1; then
+          if ! gh release create "$tag" publish/* --repo "$repo" --verify-tag --prerelease --title 'Desktop preview 2026-09-20 · server load' --notes-file notes.md >publish-result.log 2>&1; then
             sed 's/^/::error::/' publish-result.log
             exit 1
           fi
