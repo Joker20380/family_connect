@@ -136,7 +136,7 @@ jobs:
       - name: Save Windows UI preview
         if: always()
         shell: pwsh
-        run: Copy-Item "$env:TEMP/Windows-preview.png" clients/windows/dist/
+        run: Copy-Item "$env:TEMP/Windows-preview.png","$env:TEMP/Windows-route.png" clients/windows/dist/
       - name: Uninstall application and service
         if: always()
         shell: pwsh
@@ -158,6 +158,7 @@ jobs:
       - run: python -m pytest clients/desktop/tests -q
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/app.py --smoke
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a -s "-screen 0 2560x2160x24" /usr/bin/python3 clients/desktop/layout_check.py
+      - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/map_check.py
       - name: Check Friends invitation window
         run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/friends_ui_check.py
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/recovery_check.py

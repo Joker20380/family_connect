@@ -21,6 +21,7 @@ internal sealed class MainForm:Form
     readonly TableLayoutPanel card=new();
     bool fitting;
     string page="status";
+    readonly RouteMap routeMap=new();
     readonly Label routeTitle=new(){AutoSize=true,Dock=DockStyle.Fill},messengerNote=new(){AutoSize=true,Dock=DockStyle.Fill};
     readonly Dictionary<string,Control[]> pages=new();
     readonly Dictionary<string,ModernButton> nav=new();
@@ -83,9 +84,9 @@ internal sealed class MainForm:Form
             content.Controls.Add(child,0,row++);
         var version=new Label{Text="v"+Application.ProductVersion.Split('+')[0],AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.FromArgb(153,196,181)};
         language.MinimumSize=new Size(0,36);language.Dock=DockStyle.Fill;
-        foreach(var child in new Control[]{language,version,routeTitle,messengerNote})content.Controls.Add(child,0,row++);
+        foreach(var child in new Control[]{language,version,routeTitle,routeMap,messengerNote})content.Controls.Add(child,0,row++);
         pages["status"]=new Control[]{card,connect,notice};
-        pages["route"]=new Control[]{routeTitle,mode};
+        pages["route"]=new Control[]{routeTitle,routeMap,mode};
         pages["settings"]=new Control[]{friends,request,activate,update,language,version};
         pages["messenger"]=new Control[]{messengerNote};
         footer.Dock=DockStyle.Fill;footer.Height=64;footer.Padding=new Padding(12,2,12,8);footer.Margin=Padding.Empty;footer.ColumnCount=4;footer.RowCount=1;
@@ -161,6 +162,9 @@ internal sealed class MainForm:Form
             using var bitmap=new Bitmap(preview.Width,preview.Height);preview.DrawToBitmap(bitmap,new Rectangle(Point.Empty,preview.Size));
             string path=Path.Combine(Path.GetTempPath(),"Windows-preview.png");
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);bitmap.Save(path);
+            preview.page="route";preview.PaintState();preview.FitWindow();Application.DoEvents();
+            using var routeImage=new Bitmap(preview.Width,preview.Height);preview.DrawToBitmap(routeImage,new Rectangle(Point.Empty,preview.Size));
+            routeImage.Save(Path.Combine(Path.GetTempPath(),"Windows-route.png"));
         }
         // No broker requests: test visible runtime layout.
         foreach(float scale in new[]{1f,1.5f,2f,2.5f})
