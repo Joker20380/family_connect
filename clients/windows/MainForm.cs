@@ -175,10 +175,12 @@ internal sealed class MainForm:Form
             form.Scale(new SizeF(scale,scale));
             form.ClientSize=new Size((int)(size.Width*scale),(int)(size.Height*scale));
             form.detail.Text=russian?"Служба Family Connect недоступна. Повторно запустите установщик приложения.":"Family Connect service is unavailable. Run the application installer again.";
-            form.Show();Application.DoEvents();form.PaintState();form.PerformLayout();form.content.PerformLayout();
+            form.Show();Application.DoEvents();form.PaintState();
+            form.ClientSize=new Size((int)(size.Width*scale),(int)(size.Height*scale));
+            form.FitContent();form.PerformLayout();form.content.PerformLayout();
             if(form.nav.Values.Any(b=>!b.Visible))throw new Exception("Navigation disappeared");
             int bottom=0;
-            foreach(Control control in form.content.Controls){
+            foreach(Control control in form.content.Controls.Cast<Control>().OrderBy(form.content.GetRow)){
                 if(!control.Visible)continue;
                 if(control.Left<0||control.Right>form.content.ClientSize.Width||control.Top<bottom)
                     throw new InvalidOperationException($"Clipped or overlapping content: page={selectedPage}, scale={scale}, ru={russian}, protocol={protocol}, state={connection}, requested={size}, client={form.ClientSize}, content={form.content.ClientSize}, row={form.content.GetRow(control)}, type={control.GetType().Name}, bounds={control.Bounds}, previousBottom={bottom}, text={control.Text}");

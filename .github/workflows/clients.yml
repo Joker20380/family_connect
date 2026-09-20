@@ -125,9 +125,16 @@ jobs:
           $process = Start-Process $app.FullName -ArgumentList '/layout-test' -PassThru
           if (-not $process.WaitForExit(200000)) { $process.Kill(); throw 'Layout checks timed out' }
           if (Test-Path "$env:TEMP/fc-layout-check.txt") { $failure = (Get-Content "$env:TEMP/fc-layout-check.txt" -Raw).Replace('%','%25').Replace("`r",'%0D').Replace("`n",'%0A'); Write-Output "::error title=Layout detail::$failure" }
-          if (Test-Path "$env:TEMP/Windows-preview.png") { $preview = [Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:TEMP/Windows-preview.png")); Write-Output "::notice title=Windows preview::$preview" }
+          if (Test-Path "$env:TEMP/Windows-preview.png") {
+            $preview = [Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:TEMP/Windows-preview.png"))
+            for ($offset=0; $offset -lt $preview.Length; $offset+=3000) {
+              $part = $preview.Substring($offset, [Math]::Min(3000, $preview.Length-$offset))
+              Write-Output "::notice title=Windows preview part $offset::$part"
+            }
+          }
           if ($process.ExitCode -ne 0) { Get-Content "$env:TEMP/fc-layout-check.txt" -ErrorAction SilentlyContinue; throw "Layout checks failed: $($process.ExitCode)" }
       - name: Save Windows UI preview
+        if: always()
         shell: pwsh
         run: Copy-Item "$env:TEMP/Windows-preview.png" clients/windows/dist/
       - name: Uninstall application and service
