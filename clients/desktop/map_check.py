@@ -45,6 +45,22 @@ def check():
     dial.update(True,True,True,False);assert not dial.get_sensitive()
     print('Dial: native button callback, enabled state and ON/OFF renders passed')
     print('Map: shared geography, 3 scales, equal dot coverage, ocean/land and shimmer passed')
+    # Load display never mistakes missing/stale/other-server data for idle load.
+    from app import App
+    import time
+    app=App(smoke=True);app.ru=True;app.selected_id='fixture';app.load_ident='fixture'
+    try:
+        app.load_sample={'country':'nl','observed_at':time.time(),'cpu':30,'rx':80,'tx':70,'percent':80}
+        app.render_server_load();assert app.load_bar.get_fraction()==.8 and '80%' in app.load_label.get_text()
+        assert not app.toggle.get_visible() and app.toggle.get_parent() is None
+        app.load_sample['percent']=None;app.render_server_load()
+        assert app.load_bar.get_fraction()==0 and 'Нет данных' in app.load_label.get_text()
+        app.load_sample['percent']=80;app.load_sample['observed_at']-=46;app.render_server_load()
+        assert 'Нет данных' in app.load_label.get_text()
+        app.load_sample['observed_at']=time.time();app.selected_id='other';app.render_server_load()
+        assert 'Нет данных' in app.load_label.get_text()
+    finally:app.close(True)
+    print('Load: percentage, missing capacity, stale data, server switch and removed duplicate control passed')
 
 if __name__=='__main__':
     try:check()

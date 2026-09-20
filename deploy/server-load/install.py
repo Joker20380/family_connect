@@ -23,7 +23,7 @@ def main():
     interface=json.loads((ROOT.parent/'friends-awg/settings.json').read_text())['external']
     assert interface.replace('-','').replace('_','').isalnum()
     config=dict(country=args.country,interface=interface,capacity_mbps=None,snapshot=str(public/'snapshot.json'))
-    paths=[str(public)]
+    paths=[str(public)];bind=''
     if args.country=='ru':
         key=state/'read-nl'
         if not key.exists():run('ssh-keygen','-q','-t','ed25519','-N','','-C','fc-server-load-readonly','-f',str(key))
@@ -31,7 +31,11 @@ def main():
         key.chmod(0o600)
         known=state/'known_hosts';shutil.copyfile(ROOT.parent/'friends-awg/known_hosts',known);known.chmod(0o600);os.chown(known,user.pw_uid,user.pw_gid)
         output=ROOT.parent/'state-product-https/config/server-load';output.mkdir(mode=0o755,exist_ok=True);os.chown(output,user.pw_uid,user.pw_gid)
-        config.update(key=str(key),known_hosts=str(known),public=str(output/'snapshot.json'));paths.append(str(output))
+        # Bind only the public metrics directory into an accessible path; the
+        # private HTTPS parent remains mode0700 with its original permissions.
+        visible=ROOT/'public';visible.mkdir(mode=0o755,exist_ok=True)
+        config.update(key=str(key),known_hosts=str(known),public=str(visible/'snapshot.json'))
+        paths.append(str(visible));bind='BindPaths='+str(output)+':'+str(visible)+'\n'
     path=ROOT/'config.json'
     # Capacity is operator-provided. Never guess or overwrite a configured value.
     if path.exists():config['capacity_mbps']=json.loads(path.read_text()).get('capacity_mbps')
@@ -59,10 +63,9 @@ CapabilityBoundingSet=
 RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
 MemoryMax=96M
 CPUQuota=5%
-ReadWritePaths='''+' '.join(paths)+'''
-[Install]
+ReadWritePaths='''+' '.join(paths)+'\n'+bind+'''[Install]
 WantedBy=multi-user.target
 ''')
-    run('systemctl','daemon-reload');run('systemctl','enable','--now','family-connect-server-load.service')
+    run('systemctl','daemon-reload');run('systemctl','enable','family-connect-server-load.service');run('systemctl','restart','family-connect-server-load.service')
     print(args.country+': read-only monitor installed; capacity remains unconfigured')
 if __name__=='__main__':main()

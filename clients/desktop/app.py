@@ -293,7 +293,7 @@ class App:
         self.load_bar=Gtk.ProgressBar();self.load_bar.add_css_class('fc-server-load')
         self.load_bar.set_fraction(0);self.load_bar.set_hexpand(True)
         self.server_load.append(self.load_label);self.server_load.append(self.load_bar);self.card.append(self.server_load)
-        self.server_load_value=None;self.load_sample=None;self.load_ident=None;self.load_pending=False;self.load_next=0
+        self.load_sample=None;self.load_ident=None;self.load_pending=False;self.load_next=0
         for edge in ('start','end','bottom'):getattr(self.toggle,'set_margin_'+edge)(10)
         self.add=self.button('fc-secondary',self.import_profile)
         self.check=self.button('fc-quiet',self.check_ip)
