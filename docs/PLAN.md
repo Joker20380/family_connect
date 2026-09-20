@@ -7,8 +7,8 @@
 paired bundle cce586a74c391108, исходник c75f563, APP_VERSION0.2.9 preview.
 Карта в «Маршрут» использует ту же сушу и точки; новый круг на главной управляет
 существующей кнопкой подключения, поддерживает состояния, фокус и клавиатуру.
-Windows исходники готовы; локальная сборка0errors/0warnings. Полный Windows CI c75f563 passed; финальный UI21b740a passed
-(run35501348376), включая исправление растеризации точек.
+Windows исходники готовы; локальная сборка0errors/0warnings. Финальный Windows21b740a: UI CI35501348376 и полный installer CI35501348219
+passed, включая исправление растеризации точек. Installer artifact10602861137.
 Linux:24 layout cases, state/poll/confirmation checks, Cairo map на3 масштабах,
 рендеры и callback круга passed;8 packaging/QR tests passed.
 Android beta25 прежняя, public downloads прежние. Windows live ждёт доступного ПК.

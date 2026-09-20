@@ -2,8 +2,7 @@
 
 Итог: Linux0.2.9 preview cce586a74c391108 установлен, включая новый интерактивный
 круг и карту. Windows финальная отрисовка21b740a прошла native UI CI35501348376,
-изображения обеих платформ просмотрены. Полный installer CI35501348219 завершает
-layout; Windows-компьютер пользователя недоступен, ручная установка отложена.
+изображения обеих платформ просмотрены. Полный installer CI35501348219 **success**; Windows-компьютер пользователя недоступен, ручная установка отложена.
 Androidbeta25 и публичные релизы не менялись.
 
 Основа — принятый пользователем Android0.1.18-beta25/code25. На desktop до этого
@@ -101,7 +100,7 @@ Windows0f12923 native coverage check в run35501211259/job106053180401 выяв�
 SetPixel вместо GDI+ FillEllipse, NearestNeighbor при переносе cache1:1.
 Проверка3scale сохраняется; opacity/spacing/география не менялись.
 Final native Windows UI run35501348376/job106053540123 **success**; полный
-installer run35501348219 также запущен. Ранее успешный installer c75f563 содержит
+installer run35501348219 также **success**. Ранее успешный installer c75f563 содержит
 предыдущую отрисовку точек и не должен выдаваться за финальный21b740a.
 
 Итоговые native Windows рендеры21b740a просмотрены: точки чёткие и одинаковые,
@@ -112,5 +111,13 @@ installer run35501348219 также запущен. Ранее успешный 
 проверка pixel coverage1/2/3, layout1/1.5/2/2.5, circle callback/busy disable,
 Friends UI и state/polling passed. PNG восстановлены полностью (37403/20758bytes).
 На компьютере пользователя Windows не установлен: он недоступен; следующая ручная
-приёмка и получение финального installer21b740a остаются открыты. Linux уже установлен
+приёмка и доставка финального installer21b740a на пользовательский ПК остаются открыты. Linux уже установлен
 cce586a74c391108, оба ярлыка обновлены, прежний комплект сохранён для отката.
+
+Финальный полный CI21b740a: run35501348219, Windows job106053563281 **success**,
+Linux job106053563448 **success**; Android setup failure прежний, release skipped.
+Windows unsigned installer0.2.9 artifact10602861137,49494232bytes, GitHub ZIP digest
+`53f6beaf2ef5772b93a54fa4934ec641c2f902e18d7b7dcf545a196b0eb67dc8`,
+expires2026-12-19T09:05:31Z. Это доступный финальный комплект для отложенной
+Windows-приёмки, заменяющий старый7835b4f/c75f563 кандидат; на ПК не установлен.
+[Windows installer CI](https://github.com/Joker20380/family_connect/actions/runs/35501348219).
