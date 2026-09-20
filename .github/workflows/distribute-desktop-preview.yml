@@ -20,17 +20,20 @@ jobs:
           base='https://api.github.com/repos/Joker20380/family_connect'
           def get(path):
             return json.load(urllib.request.urlopen(urllib.request.Request(base+path,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN']}),timeout=30))
-          run=get('/actions/runs/35501348219')
-          assert run['head_sha']=='21b740a8dd2d08e50ee69af3637d106728be16ee'
-          jobs=get('/actions/runs/35501348219/jobs')['jobs']
+          run=get('/actions/runs/35506170039')
+          assert run['head_sha']=='a1be617f4fae2eac82ef5945bd7e36c325f891a5'
+          jobs=get('/actions/runs/35506170039/jobs')['jobs']
           for name in ['windows','linux']:assert any(j['name']==name and j['conclusion']=='success' for j in jobs)
-          artifact=get('/actions/artifacts/10602861137')
+          for accepted in [35506170233,35506170083]:
+            checked=get('/actions/runs/'+str(accepted))
+            assert checked['head_sha']==run['head_sha'] and checked['conclusion']=='success'
+          artifact=get('/actions/artifacts/10603579913')
           assert artifact['workflow_run']['head_sha']==run['head_sha'] and not artifact['expired']
-          assert artifact['digest']=='sha256:53f6beaf2ef5772b93a54fa4934ec641c2f902e18d7b7dcf545a196b0eb67dc8'
+          assert artifact['digest']=='sha256:c3fa041702c32096b4393fae53c04496358493e1d6c6ccc9c03f20f9af176d82'
       - uses: actions/download-artifact@v4
         with:
           name: FamilyConnect-Windows-Installer-pilot-unsigned
-          run-id: '35501348219'
+          run-id: '35506170039'
           github-token: ${{ github.token }}
           path: accepted
       - name: Verify installer and prepare immutable release
@@ -43,10 +46,10 @@ jobs:
           manifest=exe.with_name('SHA256SUMS').read_text(encoding='utf-8-sig')
           assert any(line.split()==[digest,name] for line in manifest.splitlines())
           out=pathlib.Path('publish');out.mkdir()
-          target=out/'FamilyConnect-Setup-0.2.9-preview-21b740a.exe';shutil.copyfile(exe,target)
+          target=out/'FamilyConnect-Setup-0.2.9-preview-a1be617.exe';shutil.copyfile(exe,target)
           (out/'SHA256SUMS').write_text(digest+'  '+target.name+'\n')
-          (out/'receipt.json').write_text(json.dumps({'source':'21b740a8dd2d08e50ee69af3637d106728be16ee','ci_run':35501348219,'artifact':10602861137,'sha256':digest,'bytes':target.stat().st_size,'channel':'manual-preview'},indent=2)+'\n')
-          pathlib.Path('notes.md').write_text('Test build with the Android-style map and interactive dial. Windows and Linux platform CI passed; native Windows UI/render checks passed.\n\nWindows x64 manual preview; publisher code signing is not available. In-place installation preserves activation. Physical Windows acceptance remains pending.\n\nThis is a new immutable preview tag. Existing v0.2.9 assets and signed update catalogs are unchanged.\n')
+          (out/'receipt.json').write_text(json.dumps({'source':'a1be617f4fae2eac82ef5945bd7e36c325f891a5','ci_run':35506170039,'artifact':10603579913,'sha256':digest,'bytes':target.stat().st_size,'channel':'manual-preview'},indent=2)+'\n')
+          pathlib.Path('notes.md').write_text('Test build with a gateway load bar and interactive connection dial. Windows and Linux platform CI passed; native Windows UI/render checks passed.\n\nWindows x64 manual preview; publisher code signing is not available. In-place installation preserves activation. Physical Windows acceptance remains pending.\n\nThis is a new immutable preview tag. Existing v0.2.9 assets and signed update catalogs are unchanged.\n')
       - name: Publish new preview tag without replacing old releases
         env:
           GH_TOKEN: ${{ github.token }}
@@ -54,9 +57,9 @@ jobs:
         run: |
           set -euo pipefail
           repo=Joker20380/family_connect
-          tag=desktop-preview-20260920-21b740a
+          tag=desktop-preview-20260920-a1be617
           if gh release view "$tag" --repo "$repo" >/dev/null 2>&1; then
             echo 'Preview already exists; refusing to overwrite immutable assets.' >&2
             exit 1
           fi
-          gh release create "$tag" publish/* --repo "$repo" --target 21b740a8dd2d08e50ee69af3637d106728be16ee --prerelease --title 'Desktop preview 2026-09-20 · map and dial' --notes-file notes.md
+          gh release create "$tag" publish/* --repo "$repo" --target a1be617f4fae2eac82ef5945bd7e36c325f891a5 --prerelease --title 'Desktop preview 2026-09-20 · server load' --notes-file notes.md
