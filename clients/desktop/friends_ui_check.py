@@ -93,7 +93,21 @@ try:
  parent.driver=driver;parent.present();settle()
  parent.initialize=lambda:(driver,items,active)
  parent.open_friends();settle();assert parent.busy
- parent.friends_window.window.close();settle();assert not parent.busy and parent.selected_id=='active'
+ assert parent.friends_window.content.is_ancestor(parent.scroll)
+ assert all(button.get_mapped() for button in parent.nav.values())
+ settle(.5)
+ if len(sys.argv)>1:
+  paintable=Gtk.WidgetPaintable.new(parent.window.get_content());snapshot=Gtk.Snapshot()
+  paintable.snapshot(snapshot,parent.window.get_width(),parent.window.get_height())
+  renderer=Gsk.Renderer.new_for_surface(parent.window.get_surface())
+  try:renderer.render_texture(snapshot.to_node(),None).save_to_png(sys.argv[1]+'.parent.png')
+  finally:renderer.unrealize()
+ parent.select_page('route');settle();assert parent.page=='route' and parent.friends_window is None
+ assert parent.body.is_ancestor(parent.scroll)
+ assert not parent.busy and parent.selected_id=='active'
+ # Closing the app from the embedded screen refreshes state, then exits normally.
+ parent.initialize=lambda:(driver,items,False)
+ parent.open_friends();settle();parent.on_close();settle(.5);assert parent.closed
 finally:
  frontend.backend=original;parent.busy=False;parent.close(True)
 print('GTK parent startup recovery, active selection and modal ownership passed.')

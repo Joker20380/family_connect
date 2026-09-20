@@ -291,7 +291,7 @@ class App:
         monitors=self.window.get_display().get_monitors()
         self.height_limit=max(360,monitors.get_item(0).get_geometry().height-160) if monitors.get_n_items() else 720
         self.scroll.set_max_content_height(self.height_limit);self.scroll.set_vexpand(True);self.scroll.set_child(self.body);shell.append(self.scroll)
-        self.page='status'
+        self.page='status';self.friends_window=None;self.friends_next_page='settings';self.exit_after_friends=False
         self.language_button=TerminalButton(label='RU / EN');self.language_button.add_css_class('fc-action');self.language_button.connect('clicked',lambda _:self.language());self.body.append(self.language_button)
         self.version_label=Gtk.Label(label='v'+APP_VERSION,xalign=0);self.version_label.add_css_class('fc-caption');self.body.append(self.version_label)
         self.route_title=Gtk.Label(label='',xalign=0,wrap=True);self.body.prepend(self.route_title)
@@ -370,6 +370,8 @@ class App:
             self.fitted_height=natural;self.window.set_default_size(width,natural)
         return GLib.SOURCE_REMOVE
     def select_page(self,page):
+        if self.friends_window is not None:
+            self.friends_next_page=page;self.friends_window.request_close();return
         self.page=page;self.paint()
     def apply_page(self):
         for page,widgets in self.pages.items():
@@ -389,11 +391,16 @@ class App:
         from friends_ui import FriendsWindow
         path=Path.home()/'.local/share/family-connect/friends-identity'
         owner=self.friends_owner_class(path,Path(__file__).with_name('update.pub'))
+        self.friends_next_page='settings'
         def finished():
-            self.busy=False
+            self.friends_window=None;self.scroll.set_child(self.body)
+            self.page=self.friends_next_page;self.busy=False
             if not self.closed:self.submit(self.initialize,'initialized')
-        self.friends_window=FriendsWindow(self.window,owner,self.ru,driver=self.driver,on_close=finished)
+        self.friends_window=FriendsWindow(self.window,owner,self.ru,driver=self.driver,on_close=finished,
+            embedded=True,button_class=TerminalButton)
         self.busy=True;self.revision+=1;self.recovery.stop();self.paint()
+        self.scroll.set_child(self.friends_window.content)
+        self.scroll.get_vadjustment().set_value(0)
         self.friends_window.present()
 
     def language(self):self.ru=not self.ru;self.paint()
@@ -519,7 +526,10 @@ class App:
                 self.active=None;self.initializing=False
                 self.detail_text=self.t('error')
                 if isinstance(exc,BackendError):self.detail_text+='\n'+str(exc)
-        self.paint();return GLib.SOURCE_REMOVE
+        self.paint()
+        if kind=='initialized' and self.exit_after_friends:
+            self.exit_after_friends=False;GLib.idle_add(self.on_close)
+        return GLib.SOURCE_REMOVE
     def refresh(self):
         if self.closed:return GLib.SOURCE_REMOVE
         ident=self.selected()
@@ -593,6 +603,8 @@ class App:
         self.confirm(text,'Установить обновление' if self.ru else 'Install update',install)
     def on_close(self,*_):
         if self.closed:return False
+        if self.friends_window is not None:
+            self.exit_after_friends=True;self.friends_window.request_close();return True
         if self.busy:return True
         if self.active:
             message=self.t('closing')

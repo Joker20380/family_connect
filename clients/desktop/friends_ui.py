@@ -12,13 +12,14 @@ from gi.repository import Gtk, Adw, GLib, Gdk
 
 
 class FriendsWindow:
-    def __init__(self,parent,owner,ru=True,driver=None,on_close=None):
-        self.owner=owner;self.ru=ru;self.busy=False;self.closed=False
+    def __init__(self,parent,owner,ru=True,driver=None,on_close=None,embedded=False,button_class=Gtk.Button):
+        self.owner=owner;self.ru=ru;self.busy=False;self.closed=False;self.embedded=embedded
         self.driver=driver;self.on_closed=on_close;self.qr_window=None;self.close_pending=False
         self.pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
-        self.window=Adw.Window(title=self.t('Доступ по приглашению','Invitation access'),transient_for=parent,modal=True)
-        self.window.set_default_size(440,520)
-        self.window.add_css_class('fc-friends')
+        self.window=parent if embedded else Adw.Window(title=self.t('Доступ по приглашению','Invitation access'),transient_for=parent,modal=True)
+        if not embedded:
+            self.window.set_default_size(440,520)
+            self.window.add_css_class('fc-friends')
         self.provider=Gtk.CssProvider()
         self.provider.load_from_data(b'''
 .fc-friends { background-color: #03110e; color: #dafff2; }
@@ -34,31 +35,36 @@ class FriendsWindow:
         Gtk.StyleContext.add_provider_for_display(self.window.get_display(),self.provider,Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         box=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=12)
         for name in ('top','bottom','start','end'):getattr(box,'set_margin_'+name)(20)
-        # Navigation stays outside scrolling content at every window size.
-        shell=Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        header=Adw.HeaderBar();header.set_show_end_title_buttons(True)
-        self.back=Gtk.Button(label=self.t('Назад','Back'))
-        self.back.connect('clicked',lambda *_:self.window.close())
-        header.pack_start(self.back);shell.append(header)
-        scroll=Gtk.ScrolledWindow();scroll.set_vexpand(True);scroll.set_child(box)
-        shell.append(scroll);self.window.set_content(shell)
+        self.content=box
+        self.back=button_class(label=self.t('Назад в настройки','Back to settings'))
+        self.back.connect('clicked',lambda *_:self.request_close())
+        if embedded:
+            for side in ('top','bottom','start','end'):getattr(box,'set_margin_'+side)(12)
+            self.back.add_css_class('fc-action');box.append(self.back)
+        else:
+            shell=Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+            header=Adw.HeaderBar();header.set_show_end_title_buttons(True)
+            header.pack_start(self.back);shell.append(header)
+            scroll=Gtk.ScrolledWindow();scroll.set_vexpand(True);scroll.set_child(box)
+            shell.append(scroll);self.window.set_content(shell)
         keys=Gtk.EventControllerKey()
-        keys.connect('key-pressed',self.key_pressed);self.window.add_controller(keys)
+        keys.connect('key-pressed',self.key_pressed)
+        (box if embedded else self.window).add_controller(keys)
         def label(text):
             widget=Gtk.Label(label=text,xalign=0,wrap=True);box.append(widget);return widget
         label(self.t('Вставьте код приглашения. При обновлении повторная активация не нужна.','Paste your invitation code. App updates do not require activation again.'))
         self.code=Gtk.Entry(placeholder_text='FC-…',max_length=128);box.append(self.code)
-        self.activate=Gtk.Button(label=self.t('Активировать','Activate'));box.append(self.activate)
+        self.activate=button_class(label=self.t('Активировать','Activate'));box.append(self.activate)
         self.region=Gtk.DropDown.new_from_strings([self.t('Нидерланды','Netherlands'),self.t('Россия','Russia')]);box.append(self.region)
-        self.prepare=Gtk.Button(label=self.t('Получить настройки','Get configuration'));box.append(self.prepare)
+        self.prepare=button_class(label=self.t('Получить настройки','Get configuration'));box.append(self.prepare)
         self.transport=Gtk.DropDown.new_from_strings(['TCP REALITY','AWG 3.1']);box.append(self.transport)
-        self.connect_button=Gtk.Button(label=self.t('Подключиться','Connect'));box.append(self.connect_button)
+        self.connect_button=button_class(label=self.t('Подключиться','Connect'));box.append(self.connect_button)
         self.connect_button.set_sensitive(driver is not None)
         label(self.t('Выберите транспорт. При неудаче вернём прежнее подключение.','Choose a transport. A failed connection restores the previous one.'))
-        self.share=Gtk.Button(label=self.t('Получить ссылку для друга','Get invitation link'));box.append(self.share)
+        self.share=button_class(label=self.t('Получить ссылку для друга','Get invitation link'));box.append(self.share)
         self.link=Gtk.Entry(editable=False);box.append(self.link)
-        self.copy=Gtk.Button(label=self.t('Скопировать ссылку','Copy link'));self.copy.set_sensitive(False);box.append(self.copy)
-        self.qr=Gtk.Button(label=self.t('Показать QR-код','Show QR code'));self.qr.set_sensitive(False);box.append(self.qr)
+        self.copy=button_class(label=self.t('Скопировать ссылку','Copy link'));self.copy.set_sensitive(False);box.append(self.copy)
+        self.qr=button_class(label=self.t('Показать QR-код','Show QR code'));self.qr.set_sensitive(False);box.append(self.qr)
         self.qr.connect('clicked',lambda *_:self.show_qr())
         self.status=label('')
         self.activate.connect('clicked',lambda *_:self.submit(lambda:self.owner.activate(self.code.get_text().strip()),'activate'))
@@ -66,11 +72,14 @@ class FriendsWindow:
         self.connect_button.connect('clicked',lambda *_:self.connect_vpn())
         self.share.connect('clicked',lambda *_:self.submit(self.owner.referral,'referral'))
         self.copy.connect('clicked',lambda *_:Gdk.Display.get_default().get_clipboard().set(self.link.get_text()))
-        self.window.connect('close-request',self.close)
+        if embedded:
+            for button in (self.activate,self.prepare,self.connect_button,self.share,self.copy,self.qr):
+                button.add_css_class('fc-action');button.add_css_class('fc-secondary')
+        else:self.window.connect('close-request',self.close)
     def t(self,r,e):return r if self.ru else e
     def key_pressed(self,controller,keyval,keycode,state):
         if keyval==Gdk.KEY_Escape:
-            self.window.close();return True
+            self.request_close();return True
         return False
     def show_qr(self):
         if self.busy or self.closed:return
@@ -135,7 +144,7 @@ class FriendsWindow:
             self.status.set_text(text)
         except Exception:self.status.set_text(self.t('Действие не выполнено. Проверьте код и сеть. Повреждённые данные требуют восстановления.','Could not complete the action. Check the code and network. Damaged data requires recovery.'))
         self.busy=False;self.sensitivity()
-        if self.close_pending:self.window.close()
+        if self.close_pending:self.request_close()
         return GLib.SOURCE_REMOVE
     def sensitivity(self):
         for widget in (self.code,self.activate,self.region,self.transport,self.prepare,self.share):widget.set_sensitive(not self.busy)
@@ -154,4 +163,9 @@ class FriendsWindow:
         self.closed=True;self.pool.shutdown(wait=False,cancel_futures=True);Gtk.StyleContext.remove_provider_for_display(self.window.get_display(),self.provider)
         if self.on_closed:self.on_closed()
         return False
-    def present(self):self.window.present()
+    def request_close(self):
+        if self.embedded:return self.close()
+        self.window.close()
+    def present(self):
+        self.window.present()
+        if self.embedded:self.back.grab_focus()
