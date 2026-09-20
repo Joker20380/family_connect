@@ -7,7 +7,7 @@ from provisioning.friends import FriendsError
 from control.friends.access import Access,Rejected
 
 
-def test_persisted_owner_activation_configuration_and_restart(tmp_path):
+def test_persisted_owner_activation_configuration_and_restart(tmp_path,monkeypatch):
     fixture=json.loads((Path(__file__).parent/'fixtures/desktop-friends-catalog-v2.json').read_text())
     api=Access(tmp_path/'access.db');api.initialize();invitation=api.invite()
     anchor=tmp_path/'update.pub';anchor.write_text(fixture['anchor'])
@@ -33,9 +33,32 @@ def test_persisted_owner_activation_configuration_and_restart(tmp_path):
     resumed=FriendsOwner(path,anchor,http_factory=factory)
     assert resumed.configuration('nl').catalog_hash==first.catalog_hash
     assert (path/'wireguard.key').read_bytes()==original
+    # Exercise the complete signed HTTP -> persisted cache -> desktop apply path.
+    import sys
+    sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'clients/desktop'))
+    import backend
+    monkeypatch.setattr(backend,'operation_directory',lambda:tmp_path/'operations')
+    class Driver(backend.LinuxTCP):
+        known=[];live=False;imports=0
+        def profiles(self):return [(ident,ident) for ident in self.known]
+        def active(self,ident):return self.live
+        def import_profile(self,profile):
+            # This is a device-specific TCP configuration, never test output.
+            assert backend.parse_tcp(Path(profile).read_text())['type']=='vless-reality-v1'
+            assert (path/'friends.configuration.json').is_file()
+            self.imports+=1;self.known=['fctcp12345678'];return self.known[0]
+        def connect(self,ident):self.live=True
+        def disconnect(self,ident):self.live=False
+        def healthy(self,ident):return self.live
+    driver=Driver()
+    applied=resumed.connect('nl',driver)
+    assert applied==dict(profile='fctcp12345678',country='nl',transport='tcp',sequence=2)
+    assert driver.live and driver.imports==1
     cache=(path/'friends.configuration.json').read_bytes();denied=True
     with pytest.raises(FriendsError,match='access_rejected'):resumed.configuration('nl')
     assert (path/'friends.configuration.json').read_bytes()==cache
+    with pytest.raises(FriendsError,match='access_rejected'):resumed.connect('nl',driver)
+    assert driver.live and driver.imports==1
     count=len(requests);(path/'friends.configuration.json').write_bytes(b'broken')
     with pytest.raises(ValueError):resumed.configuration('nl')
     assert len(requests)==count
