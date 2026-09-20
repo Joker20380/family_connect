@@ -1,5 +1,20 @@
 # Current state / Текущее состояние
 
+## Android beta20 установлена: точечная карта — 2026-09-20
+
+После штатного отключения VPN пользователем beta20/code20 установлена поверхbeta19
+на Redmi Note9 Pro (Android12), без удаления данных/активации. SHA256 установленного
+APK совпал: f64235af0e8b1b3147656b9b864d9690cb4bffa6372a24423d6f01f4ddefdd3b.
+Карта/маршрут/подписи ограничены общим clip; pinch сохраняет focus; land — точки4dp,
+мягкое мерцание5.2s, grid16dp/0.5dp. Главная анимация не менялась.
+140 unit tests passed, lint0errors/16warnings;2 native Canvas tests на телефоне passed,
+включая27 width/zoom/pan комбинаций и reduced-motion. Рендер просмотрен; экран
+«Маршрут» открыт для пользовательской оценки. Public download остаётсяbeta19.
+Windows live отложен до доступности ПК. Linux установленный5a9ca444046993a7 прежний;
+QR исходники сохранены в5002579, новый QR preview ещё не установлен.
+[Результаты карты и rollback](releases/2026-09-20-android-map.ru.md).
+
+
 ## Приоритет: карта Android; Windows отложен — 2026-09-20
 
 Пользователь сообщил: Windows-компьютер сейчас недоступен. Живую Windows-приёмку

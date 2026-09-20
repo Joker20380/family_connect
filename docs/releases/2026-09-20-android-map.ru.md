@@ -38,3 +38,20 @@ Public invite/download по-прежнему beta19, beta20 не опублик�
 Rollback клиента: не удалять приложение; при необходимости собрать code>20 с прежним
 кодом карты и прежним beta signing key. Не заменять APK/URL опубликованной beta19.
 Windows live отложен пользователем до доступности Windows-компьютера.
+
+## Установка и native приёмка завершены
+
+Пользователь подтвердил штатное отключение VPN. Install-r beta20 и подписанного
+instrumentation APK — success, без uninstall/clear. RouteMapRuntimeTest: OK (2 tests),
+3.062s;27 сочетаний размеров/zoom/pan, shimmer без геолокации и reduced-motion.
+SHA256/code20/versionName0.1.18-beta20 установленного пакета сверены по телефону.
+Карта открыта через FriendsActivity tab2. Синтетический native screenshot просмотрен:
+[точечная карта](../assets/android-map-beta20.png). Фото/координаты пользователя
+не сохранялись. Пользовательская оценка zoom/pan и эстетики ещё открыта.
+
+Публичная ссылка по-прежнему beta19; новый APK не загружен на gateway и не публиковался.
+Отчёт о beta20 и APK hashes сохранены; Android sources остаются в рабочей папке
+с прежними накопленными изменениями, а копии RouteMapView/RouteMapRuntimeTest —
+в ignored state-client-build/android-pilots/beta20. Desktop QR commit5002579 не
+представляет собой Android source release. Rollback: code>20 с прежним ключом,
+без удаления приложения/данных; оригинальный beta19 APK/URL остаётся immutable.
