@@ -1,5 +1,34 @@
 # Working plan / Рабочий план
 
+## Windows: подготовлена живая приёмка — 2026-09-20
+
+Source7835b4f: Windows и Linux jobs35495850992 success; release skipped из-за
+Android setup failure. Linux paired35495850974 и TCP35495851005 success.
+Windows artifact10600990083 `FamilyConnect-Windows-Installer-pilot-unsigned`,
+49,427,825 bytes, expires2026-12-19. SHA256 ZIP из GitHub metadata:
+86129b9ad5f8c026d23727d3d283214474d7ac9df59c921d179a128efeaf4904.
+Архив локально не скачан: metadata/CI проверены, локальная сверка байтов не заявляется.
+Тестовый installer имеет внутреннюю версию0.2.9; это отдельный CI artifact,
+не замена public v0.2.9. Инструкция: [Windows live](testing/windows-friends-live.ru.md).
+Удалённого доступа к Windows нет; следующий шаг выполняет пользователь на своём ПК.
+Linux успешно проверен ранее, новых VPN подключений в этой сессии не было.
+
+
+## Живая приёмка одного Linux auth-сеанса — 2026-09-20
+
+Installed paired preview5a9ca444046993a7 / helper source7a8036a:
+NL TCP connect→bound Internet health→disconnect прошёл за12.18s, catalog sequence3.
+Инструментировано ровно1 pkexec process; процесс завершился exit0. Маршруты IPv4/IPv6,
+rules и DNS совпали с baseline, Friends journal IDLE, fcawg/fctcp отсутствуют.
+Операции объединены в один тестовый control_transaction; отдельное последующее
+пользовательское действие штатно открывает новый сеанс. Число видимых диалогов
+пользователем отдельно не подтверждено; измерено число запусков pkexec.
+Повторных запусков после вопроса пользователя о зависании не было.
+Следующий этап — Windows live на доступном ПК; российской сети пока нет.
+Нового релиза, смены bundle/engines или server rollout не было.
+[Приёмка и границы](releases/2026-09-20-linux-auth-live.ru.md).
+
+
 ## Установлены auth helpers и Linux Friends preview — 2026-09-20
 
 На хосте установлены оба AWG/TCP auth-session helpers из7a8036a за один pkexec install.
