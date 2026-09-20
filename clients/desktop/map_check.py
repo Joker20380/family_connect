@@ -2,7 +2,7 @@
 import base64,json,math,zlib
 from pathlib import Path
 import cairo
-from app import RouteMap,LAND_ZLIB_BASE64,Adw
+from app import RouteMap,LAND_ZLIB_BASE64,Adw,TerminalGauge
 
 
 def check():
@@ -34,6 +34,16 @@ def check():
     first=render(0);assert bytes(first.get_data())!=bytes(render(.25).get_data())
     assert bytes(first.get_data())==bytes(render(0).get_data())
     first.write_to_png('/tmp/fc-desktop-map.png')
+    dial=TerminalGauge();dial.update(False,False,True,True)
+    clicks=[];dial.connect('clicked',lambda *_:clicks.append(True));dial.emit('clicked');assert len(clicks)==1
+    images=[]
+    for on in (False,True):
+        dial.update(on,False,True,True)
+        image=cairo.ImageSurface(cairo.FORMAT_ARGB32,360,360);cr=cairo.Context(image);cr.set_source_rgb(3/255,17/255,14/255);cr.paint()
+        dial.draw(dial.area,cr,360,360);image.write_to_png('/tmp/fc-desktop-dial-'+('on' if on else 'off')+'.png');images.append(bytes(image.get_data()))
+    assert images[0]!=images[1]
+    dial.update(True,True,True,False);assert not dial.get_sensitive()
+    print('Dial: native button callback, enabled state and ON/OFF renders passed')
     print('Map: shared geography, 3 scales, equal dot coverage, ocean/land and shimmer passed')
 
 if __name__=='__main__':

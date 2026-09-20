@@ -132,6 +132,13 @@ jobs:
               Write-Output "::notice title=Windows preview part $offset::$part"
             }
           }
+          if (Test-Path "$env:TEMP/Windows-route.png") {
+            $routePreview = [Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:TEMP/Windows-route.png"))
+            for ($offset=0; $offset -lt $routePreview.Length; $offset+=3000) {
+              $part = $routePreview.Substring($offset, [Math]::Min(3000, $routePreview.Length-$offset))
+              Write-Output "::notice title=Windows route part $offset::$part"
+            }
+          }
           if ($process.ExitCode -ne 0) { Get-Content "$env:TEMP/fc-layout-check.txt" -ErrorAction SilentlyContinue; throw "Layout checks failed: $($process.ExitCode)" }
       - name: Save Windows UI preview
         if: always()

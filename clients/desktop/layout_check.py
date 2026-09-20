@@ -81,7 +81,7 @@ def layouts(scale):
                 app.window.set_default_size(width,-1)
                 app.set_detail(app.t('error')+'\n'+app.t('system'));pump(.1)
                 for page in ('status','messenger','route','settings'):
-                    app.select_page(page);pump(.1)
+                    app.select_page(page);pump(.2)
                     assert all(button.get_mapped() for button in app.nav.values()),'Navigation disappeared'
                     for name,widgets in app.pages.items():
                         if name!=page:assert all(not w.get_visible() for w in widgets),'Inactive section is visible'
@@ -93,7 +93,7 @@ def layouts(scale):
                         previous=rect.get_y()+rect.get_height()
                         assert rect.get_x()>=0 and rect.get_x()+rect.get_width()<=app.body.get_width()+1,'Horizontal clipping'
                         minimum,natural,_,_=widget.measure(Gtk.Orientation.HORIZONTAL,-1)
-                        assert widget.get_width()>=minimum,'Clipped button label'
+                        assert widget.get_width()>=minimum,f'Clipped button label: page={page} ru={ru} requested={width} label={widget.get_label()} actual={widget.get_width()} minimum={minimum}'
                     for label in (app.status,app.hint,app.note,app.detail):
                         if not label.get_mapped():continue
                         _,height=label.get_layout().get_pixel_size()

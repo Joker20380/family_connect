@@ -76,6 +76,7 @@ class RouteMap(Gtk.DrawingArea):
         cr.rectangle(.5,.5,max(0,width-1),max(0,height-1));cr.stroke();cr.restore()
 
 CSS='''
+ .fc-gauge, .fc-gauge:hover, .fc-gauge:active { background: transparent; border: none; box-shadow: none; padding: 0; }
  .fc-shell { background: #03110e; }
 window.fc-window { background: #03110e; color: #dafff2; font-family: monospace; }
 .fc-window headerbar { background: #03110e; box-shadow: none; }
@@ -164,27 +165,69 @@ class TerminalHeader(Gtk.Box):
         terminal_frame(snapshot,self,'#03110e','#98f7d8',logo+text)
 
 
-class TerminalGauge(Gtk.Box):
-    """Static Android composition; motion design is a separate follow-up."""
+class TerminalGauge(Gtk.Button):
+    """Interactive segmented dial using the accepted Android geometry."""
     def __init__(self):
-        super().__init__();self.set_size_request(-1,230);self.connected=False
-    def do_snapshot(self,snapshot):
-        w,h=self.get_width(),self.get_height();scale=self.get_scale_factor()
-        if min(w,h)<4:return
-        key=(w,h,scale,self.connected)
-        if getattr(self,'gauge_key',None)!=key:
-            import math
-            x,y=w/2,h/2;r=min(w/2-24,h/2-16)
-            color='#98f7d8' if self.connected else '#ffad46'
-            marks=''.join(f'<path d="M{x+math.cos(a)*r*.87:.2f} {y+math.sin(a)*r*.87:.2f} L{x+math.cos(a)*r*.92:.2f} {y+math.sin(a)*r*.92:.2f}" opacity="{.8 if i%6==0 else .23}"/>' for i in range(48) for a in [i*math.pi/24])
-            svg=f'''<svg xmlns="http://www.w3.org/2000/svg" width="{w*scale}" height="{h*scale}" viewBox="0 0 {w} {h}">
-            <g fill="none" stroke="#438e79" stroke-width=".7"><circle cx="{x}" cy="{y}" r="{r}"/><circle cx="{x}" cy="{y}" r="{r*.67}"/></g>
-            <g stroke="{color}" stroke-width="2">{marks}</g>
-            <text x="{x}" y="{y+9}" text-anchor="middle" fill="{color}" font-family="sans-serif" font-weight="500" font-size="28">VPN</text></svg>'''
-            self.gauge_cache=terminal_texture(svg);self.gauge_key=key
-        snapshot.append_texture(self.gauge_cache,Graphene.Rect().init(0,0,w,h))
-
-
+        super().__init__();self.set_size_request(-1,230);self.add_css_class('fc-gauge')
+        self.connected=False;self.pending=False;self.ru=True;self.phase=0;self.timer=0
+        self.area=Gtk.DrawingArea();self.area.set_content_height(230);self.area.set_draw_func(self.draw)
+        self.set_child(self.area);self.connect('map',lambda *_:self.motion());self.connect('unmap',lambda *_:self.stop())
+    def do_contains(self,x,y):
+        return (x-self.get_width()/2)**2+(y-self.get_height()/2)**2<=(min(self.get_width(),self.get_height())*.48)**2
+    def stop(self):
+        if self.timer:GLib.source_remove(self.timer);self.timer=0
+    def motion(self):
+        run=self.get_mapped() and (self.connected or self.pending) and self.get_settings().get_property('gtk-enable-animations')
+        if run and not self.timer:self.timer=GLib.timeout_add(50,self.animate)
+        elif not run:self.stop()
+    def animate(self):
+        if not self.get_mapped() or not self.get_settings().get_property('gtk-enable-animations'):
+            self.timer=0;return False
+        self.phase=time.monotonic()%9/9*360;self.area.queue_draw();return True
+    def update(self,connected,pending,ru,enabled):
+        changed=(self.connected,self.pending,self.ru,self.get_sensitive())!=(connected,pending,ru,enabled)
+        self.connected=connected;self.pending=pending;self.ru=ru;self.set_sensitive(enabled)
+        self.set_tooltip_text(('Отключить' if connected else 'Подключить') if ru else ('Disconnect' if connected else 'Connect'))
+        self.update_property([Gtk.AccessibleProperty.LABEL],[self.get_tooltip_text()])
+        self.motion()
+        if changed:self.area.queue_draw()
+    def draw(self,widget,c,w,h):
+        import math,cairo
+        x,y=w/2,h/2;r=min(w,h)*.385;mint=(152/255,247/255,216/255);amber=(1,173/255,70/255)
+        accent=mint if self.connected else amber;phase=self.phase if self.connected or self.pending else 0
+        def ink(color,alpha=1):c.set_source_rgba(*color,alpha*(1 if self.get_sensitive() else .5))
+        def arc(radius,start,sweep,width,color=mint,alpha=1):
+            ink(color,alpha);c.set_line_width(width);c.new_path();c.arc(x,y,radius,math.radians(start),math.radians(start+sweep));c.stroke()
+        gradient=cairo.RadialGradient(x,y,0,x,y,r*1.23);gradient.add_color_stop_rgba(0,.2,1,.77,.07);gradient.add_color_stop_rgba(1,.2,1,.77,0)
+        c.set_source(gradient);c.arc(x,y,r*1.23,0,math.tau);c.fill()
+        for ratio,width,alpha in [(1.18,.6,85/255),(1.08,.5,110/255),(.72,.65,170/255),(.67,.4,55/255)]:arc(r*ratio,0,360,width,alpha=alpha)
+        for i in range(120):
+            a=i*math.tau/120;ink(mint,175/255 if i%5==0 else 85/255);c.set_line_width(.6)
+            c.move_to(x+math.sin(a)*r*.78,y-math.cos(a)*r*.78);outer=.86 if i%5==0 else .825
+            c.line_to(x+math.sin(a)*r*outer,y-math.cos(a)*r*outer);c.stroke()
+        for i in range(4):
+            c.save();c.translate(x,y);c.rotate(i*math.pi/2);ink(mint,160/255);c.set_line_width(.6)
+            c.move_to(-r*1.25,0);c.line_to(-r*1.02,0);c.move_to(-r*.76,0);c.line_to(-r*.64,0);c.stroke();c.restore()
+        for i in range(64):
+            lit=self.connected or self.pending and (i-int(phase/5.625)+64)%64<19
+            color=amber if 43<=i<=46 else mint
+            if lit:arc(r,-90+i*5.625,4.3,r*.15,color,20/255)
+            arc(r,-90+i*5.625,4.3,r*.105,color,(230 if lit else 40 if self.pending else 65)/255)
+        for i in range(3):arc(r*1.18,phase+i*119+14,1.8,2,mint if i==1 else amber,(240 if self.connected or self.pending else 100)/255)
+        arc(r*.72,-90-phase*.4,94,.85,alpha=160/255)
+        if self.has_focus() or self.get_state_flags()&Gtk.StateFlags.ACTIVE:arc(r*1.11,0,360,1.4)
+        ly=y-r*.30;lw=r*.19;ink(accent);c.set_line_width(max(1,r*.026))
+        c.save();c.translate(x,ly-lw*.475);c.scale(lw*.63,lw*.675);c.arc(0,0,1,math.pi,math.tau);c.restore();c.stroke()
+        c.move_to(x+lw*.63,ly-lw*.475);c.line_to(x+lw*.63,ly+lw*.08)
+        c.move_to(x-lw*.63,ly-lw*.475);c.line_to(x-lw*.63,ly+lw*.08 if self.connected else ly-lw*.25);c.stroke()
+        c.rectangle(x-lw,ly,lw*2,lw*1.15);c.fill();c.set_source_rgb(3/255,17/255,14/255)
+        c.arc(x,ly+lw*.43,r*.033,0,math.tau);c.fill();c.rectangle(x-r*.016,ly+lw*.43,r*.032,lw*.41);c.fill()
+        def text(value,size,baseline,color,bold=False):
+            ink(color);c.select_font_face('monospace',cairo.FONT_SLANT_NORMAL,cairo.FONT_WEIGHT_BOLD if bold else cairo.FONT_WEIGHT_NORMAL);c.set_font_size(size)
+            e=c.text_extents(value);c.move_to(x-e.width/2-e.x_bearing,baseline);c.show_text(value)
+        text('ON' if self.connected else '…' if self.pending else 'OFF',min(30,r*.29),y+r*.20,accent,True)
+        label=('ОТКЛЮЧИТЬ' if self.connected else 'ПОДКЛЮЧИТЬ') if self.ru else ('DISCONNECT' if self.connected else 'CONNECT')
+        text(label,min(11,r*.115),y+r*.39,mint)
 
 
 def translated(key,ru):return WORDS[key][0 if ru else 1]
@@ -233,6 +276,7 @@ class App:
         except ImportError:pass  # Standalone six-file archive has no paired core.
         self.friends_button=self.button('fc-secondary',self.open_friends) if self.friends_owner_class else None
         self.toggle=self.button('fc-primary',self.toggle_vpn)
+        self.gauge.connect('clicked',lambda *_:self.toggle.emit('clicked') if self.toggle.get_sensitive() else None)
         self.body.remove(self.toggle);self.card.append(self.toggle)
         for edge in ('start','end','bottom'):getattr(self.toggle,'set_margin_'+edge)(10)
         self.add=self.button('fc-secondary',self.import_profile)
@@ -287,7 +331,7 @@ class App:
             text=('Проверяем подключение' if self.ru else 'Checking connection') if self.initializing else self.t('unknown' if self.active is None else ('on' if self.active else 'off'))
             self.set_value(self.status,'label',text);self.set_value(self.hint,'label',self.t('hint'))
             connected=self.active is True
-            if self.gauge.connected!=connected:self.gauge.connected=connected;self.gauge.queue_draw()
+            self.gauge.update(connected,self.busy or self.initializing,self.ru,not self.busy and bool(self.items) and self.active is not None)
             if self.toggle.has_css_class('connected')!=connected:
                 (self.toggle.add_css_class if connected else self.toggle.remove_css_class)('connected');self.toggle.queue_draw()
             if self.dot.has_css_class('connected')!=connected:

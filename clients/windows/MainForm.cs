@@ -22,6 +22,7 @@ internal sealed class MainForm:Form
     bool fitting;
     string page="status";
     readonly RouteMap routeMap=new();
+    readonly TerminalDial dial=new();
     readonly Label routeTitle=new(){AutoSize=true,Dock=DockStyle.Fill},messengerNote=new(){AutoSize=true,Dock=DockStyle.Fill};
     readonly Dictionary<string,Control[]> pages=new();
     readonly Dictionary<string,ModernButton> nav=new();
@@ -67,11 +68,12 @@ internal sealed class MainForm:Form
         detail.ForeColor=Color.FromArgb(255,173,70);notice.ForeColor=Color.FromArgb(153,196,181);
         var header=new TerminalHeader{Dock=DockStyle.Fill,Margin=new Padding(0,0,0,8)};
         var tagline=new Label{Text=T("Связь для вашей семьи","Connection for your family"),Name="tagline",AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.FromArgb(153,196,181),Margin=new Padding(0,0,0,16)};
-        card.AutoSize=true;card.Dock=DockStyle.Fill;card.ColumnCount=1;card.RowCount=2;
+        card.AutoSize=true;card.Dock=DockStyle.Fill;card.ColumnCount=1;card.RowCount=3;
         card.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
         card.Padding=new Padding(16,12,16,12);card.Margin=new Padding(0,0,0,12);
         card.BackColor=Color.FromArgb(7,32,24);
-        card.Controls.Add(status,0,0);card.Controls.Add(description,0,1);
+        card.Controls.Add(dial,0,0);card.Controls.Add(status,0,1);card.Controls.Add(description,0,2);
+        dial.Click+=(_,_)=>connect.PerformClick();
         card.SizeChanged+=(_,_)=>{using var path=ModernButton.Cut(new RectangleF(0,0,card.Width,card.Height),12*DeviceDpi/96f);var old=card.Region;card.Region=new Region(path);old?.Dispose();};
         description.ForeColor=Color.FromArgb(153,196,181);
         foreach(var button in new[]{request,activate,language,update,friends})button.Font=new Font(Font.FontFamily,10,FontStyle.Bold);
@@ -265,6 +267,14 @@ internal sealed class MainForm:Form
         if(!form.connect.Enabled||form.ConnectionAction()!="connect-awg")throw new Exception("AWG-only profile unavailable");
         form.call=_=>Task.FromResult(new Reply(true,"pending",Transport:"awg",AwgReady:true));Pump(form.PollStatus());
         if(!form.connect.Enabled||form.mode.Enabled||form.ConnectionAction()!="disconnect"||form.mode.SelectedIndex!=2)throw new Exception("AWG cancellation unavailable");
+        string? dialAction=null;
+        form.call=r=>{dialAction=r.Action;return Task.FromResult(new Reply(true,"off"));};
+        if(!form.dial.Enabled)throw new Exception("Dial differs from connection control");
+        form.dial.PerformClick();Application.DoEvents();
+        if(dialAction!="disconnect")throw new Exception("Dial did not dispatch existing connection action");
+        form.busy=true;form.PaintState();dialAction=null;form.dial.PerformClick();
+        if(dialAction is not null||form.dial.Enabled)throw new Exception("Busy dial accepted action");
+        form.busy=false;
         static void Pump(Task task){
             var deadline=DateTime.UtcNow.AddSeconds(5);
             while(!task.IsCompleted&&DateTime.UtcNow<deadline)Application.DoEvents();
@@ -329,6 +339,7 @@ internal sealed class MainForm:Form
         description.Text=AutoSelected?T("Авто · ","Auto · ")+(state is "on" or "pending"?transport?.ToUpperInvariant():"WG → AWG → TCP"):(state is "on" or "pending"?transport=="awg":AwgSelected)?T("AWG · предварительная версия","AWG · preview"):(state is "on" or "pending"?transport=="tcp":TcpSelected)?T("TCP · предварительная версия","TCP · preview"):T("Защищённое подключение · Россия","Private connection · Russia");
         connect.Text=state=="on"?T("Отключить","Disconnect"):state=="pending"&&(automatic||transport is "tcp" or "awg")?T("Отменить подключение","Cancel connection"):T("Подключить","Connect");
         connect.Enabled=!busy&&(state=="on"||(state=="pending"&&(automatic||transport is "tcp" or "awg"))||((state is "off" or "inactive")&&(AutoSelected?(awgReady||tcpReady||state=="off"):AwgSelected?awgReady:TcpSelected?tcpReady:state=="off")));
+        dial.UpdateState(state=="on",busy||state=="pending",ru,connect.Enabled);
         mode.Enabled=!busy&&(state is "off" or "inactive");
         friends.Text=T("Доступ по приглашению", "Invitation access");friends.Enabled=!busy;
         request.Text=T("Получить код устройства","Get device code");request.Enabled=!busy;
