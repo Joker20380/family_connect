@@ -88,6 +88,9 @@ sys.argv=['helper','up',sys.argv[1]]
 m.main()
 """
                 run('docker','exec',client,'python3','-c',code,ident)
+                try:run('docker','exec',client,'sh','/source/clients/linux/install-awg.sh','/source','/opt/awg31')
+                except RuntimeError:pass
+                else:raise AssertionError('Installer changed an active AWG tunnel')
                 assigned=json.loads(run('docker','exec',client,'ip','-j','address','show','dev',ident))
                 assert any(a['local']==client_address for a in assigned[0]['addr_info'])
                 run('docker','exec',client,helper,'down',ident)

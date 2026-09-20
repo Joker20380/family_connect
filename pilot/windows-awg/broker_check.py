@@ -225,3 +225,7 @@ finally:
   if tcp_server and tcp_server.poll() is None:tcp_server.kill();tcp_server.wait(timeout=10)
   if http_fixture:http_fixture.shutdown();http_fixture.server_close()
   out.write_text(json.dumps(result,indent=2));print(json.dumps(result),flush=True)
+
+ # Public CI diagnostic summary contains no keys, credentials or raw profiles.
+ summary=json.dumps({k:result[k] for k in ('passed','error_type','error') if k in result})
+ print('::notice title=AWG broker result::'+summary.replace('%','%25').replace('\r','%0D').replace('\n','%0A'))

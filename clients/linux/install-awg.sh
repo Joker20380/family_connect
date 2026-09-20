@@ -5,6 +5,10 @@ set -eu
 [ "$#" = 2 ]
 source_dir=$1
 binary_dir=$2
+# Serialize against privileged import/up/down, including the active-interface check.
+umask 077
+exec 9>/run/family-connect-awg.lock
+flock -n 9
 command -v resolvconf >/dev/null
 command -v nft >/dev/null
 command -v curl >/dev/null

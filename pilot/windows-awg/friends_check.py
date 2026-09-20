@@ -34,7 +34,7 @@ def clean():
  assert not ps("Get-NetRoute | Where-Object {$_.DestinationPrefix -in @('198.18.0.1/32','fd79:fc::1/128')} | Select-Object -ExpandProperty DestinationPrefix")
  assert network()==before
 try:
- assert not journal.exists();before=network()
+ assert not root.exists(),'Existing store';before=network()
  client=X25519PrivateKey.generate();server=X25519PrivateKey.generate();signer=Ed25519PrivateKey.generate()
  hpk=secrets.token_bytes(32);address='10.83.42.254'
  with socket.socket(socket.AF_INET,socket.SOCK_DGRAM) as s:s.bind(('127.0.0.1',0));port=s.getsockname()[1]
@@ -62,6 +62,9 @@ try:
    p=subprocess.run([str(exe),'/recover-friends-session'],capture_output=True,text=True,timeout=60)
    assert p.returncode==0 and p.stdout.strip()=='clean','Journal recovery failed'
   session=None;clean();result['rounds'].append(dict(mode=mode,address=address,journal=2,clean=True))
+ # This test created only the journal directory. Restore the clean-install
+ # precondition for the following LocalSystem test; refuse to remove contents.
+ root.rmdir()
  result['passed']=True
 finally:
  if session and session.poll() is None:session.kill();session.wait(timeout=10)
