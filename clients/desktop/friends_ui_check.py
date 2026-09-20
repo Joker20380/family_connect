@@ -6,7 +6,7 @@ from gi.repository import Gtk,Adw,GLib
 Adw.init()
 class Owner:
  connected=[]
- def connect(self,country,driver):self.connected.append((country,driver));return {'profile':'fctcp12345678','country':country,'transport':'tcp','sequence':2}
+ def connect(self,country,driver,*,transport="tcp"):self.connected.append((country,driver,transport));return {'profile':'fctcp12345678','country':country,'transport':'tcp','sequence':2}
  def activate(self,code):assert code=='test-invitation'
  def referral(self):return {'url':'https://185.251.89.19:8443/invite/#'+'a'*64,'remaining':499}
  def configuration(self,country):
@@ -24,7 +24,9 @@ w.code.set_text('test-invitation');w.activate.emit('clicked');pump(lambda:not w.
 w.share.emit('clicked');pump(lambda:not w.busy);assert w.copy.get_sensitive() and '499' in w.status.get_text()
 w.prepare.emit('clicked');pump(lambda:not w.busy);assert 'сохранены' in w.status.get_text()
 w.region.set_selected(1);w.connect_button.emit('clicked');pump(lambda:not w.busy)
-assert owner.connected==[('ru',driver)] and 'проверен' in w.status.get_text()
+assert owner.connected==[('ru',driver,'tcp')] and 'проверен' in w.status.get_text()
+w.transport.set_selected(1);w.connect_button.emit('clicked');pump(lambda:not w.busy)
+assert owner.connected[-1]==('ru',driver,'awg')
 # Busy close is rejected and duplicate network actions remain disabled.
 w.busy=True;w.sensitivity();assert w.close() is True and not w.connect_button.get_sensitive()
 w.busy=False;w.sensitivity()

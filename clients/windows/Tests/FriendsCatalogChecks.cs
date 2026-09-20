@@ -16,6 +16,11 @@ internal static class FriendsCatalogChecks
             if(result is not null && (result.Sequence!=2 || result.Tcp.Contains("DEVICE_CREDENTIAL") || result.Awg.Contains("LOCAL_DEVICE_KEY") || result.ToString().Contains(f.GetProperty("wireguard_key").GetString()!)))throw new Exception("Materialization/redaction mismatch");
             if(result is not null)
             {
+                var awg=FriendsCatalog.NativeAwg(result);
+                if(awg.Address!=result.Address[..^3]||awg.ToString().Contains(f.GetProperty("wireguard_key").GetString()!))throw new Exception("Native AWG address/redaction");
+                using var runtime=JsonDocument.Parse(awg.Config("fcawg12345678","test-uplink"));
+                var text=runtime.RootElement.GetProperty("config").GetString()!;
+                if(!text.Contains("header_protection_key=")||!text.Contains("content_padding_addition=")||text.Contains("headerprotectionkey="))throw new Exception("AWG UAPI mapping");
                 var grant=FriendsCatalog.NativeTcp(result,f.GetProperty("wireguard_key").GetString()!);
                 if(grant.Sequence!=result.Sequence||grant.Id!=reply.GetProperty("tcp_id").GetString())throw new Exception("Native TCP mapping mismatch");
             }

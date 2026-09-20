@@ -1,4 +1,4 @@
-"""Friends TCP apply/recovery using the desktop's shared operation owner.
+"""Friends VPN apply/recovery using the desktop's shared operation owner.
 
 Only public profile identifiers and the pre-apply inventory enter this journal.
 Credentials remain in the verified configuration cache and the privileged helper.
@@ -76,9 +76,10 @@ class FriendsApplication:
             with self.store._locked() as directory:
                 self._recover(directory, lease)
 
-    def connect(self, fetch):
+    def connect(self, fetch, *, transport="tcp"):
         """fetch verifies and durably saves configuration before any VPN mutation."""
         from types import SimpleNamespace
+        if transport not in ("tcp", "awg"):raise ValueError("Unsupported Friends transport")
         with self.driver.control_transaction(self.owner) as lease:
             with self.store._locked() as directory:
                 self._recover(directory, lease)
@@ -92,7 +93,8 @@ class FriendsApplication:
                 record.update(phase='APPLYING', baseline=baseline)
                 self._write(directory, record)
                 try:
-                    profile = SimpleNamespace(transport='vless-reality', config=configuration.tcp)
+                    profile = SimpleNamespace(transport='vless-reality' if transport=='tcp' else 'amneziawg',
+                                              config=configuration.tcp if transport=='tcp' else configuration.awg)
                     ident = self.adapter._install(profile)
                     for previous in baseline['active']:
                         self.driver.disconnect(previous)
@@ -107,4 +109,4 @@ class FriendsApplication:
                     raise
                 lease.finish()
                 return dict(profile=ident, country=configuration.country,
-                            transport='tcp', sequence=configuration.sequence)
+                            transport=transport, sequence=configuration.sequence)

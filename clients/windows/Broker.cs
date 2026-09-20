@@ -83,6 +83,14 @@ internal sealed class Broker:ServiceBase
                 tcp.Start(sid,friendsGrant);
                 return new(true,"pending",Transport:"tcp");
 
+            case "friends-connect-awg-ru":
+            case "friends-connect-awg-nl":
+                if(state!="off")return new(false,state,Error:"busy");
+                if(request.Activation is not null)return new(false,state,Error:"unsupported-action");
+                if(!File.Exists(Path.Combine(AppContext.BaseDirectory,"awg","fc-awg.exe")))return new(false,"off",Error:"awg-engine-missing");
+                tcp.StartFriendsAwg(sid,FriendsOwner.Awg(sid,request.Action.EndsWith("-ru",StringComparison.Ordinal)?"ru":"nl",stop.Token));
+                return new(true,"pending",Transport:"awg");
+
             case "connect-auto":
                 if(state!="off")return new(false,state,Error:"busy");
                 var autoAwg=Store.Awg(sid);var autoTcp=Store.Tcp(sid);

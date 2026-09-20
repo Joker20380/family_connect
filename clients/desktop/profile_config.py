@@ -90,7 +90,7 @@ def parse(text, *, allow_awg=False, allow_awg31=False):
     for field,low,high in [('MTU',1280,1500),('ListenPort',0,65535)]:
         if field in interface and not low<=int(interface[field])<=high: raise ValueError('Invalid interface option')
     if 'PersistentKeepalive' in peer and not 0<=int(peer['PersistentKeepalive'])<=65535: raise ValueError('Invalid keepalive')
-    if set(interface) & AWG_FIELDS:
+    if set(interface) & (AWG_FIELDS | AWG31_FIELDS):
         validate_awg(interface)
     return sections
 

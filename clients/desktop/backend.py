@@ -11,9 +11,9 @@ import time
 import uuid
 from profile_config import validate, parse, parse_tcp, AWG_FIELDS, MAX_PROFILE
 
-def read_profile(path, *, allow_awg=False):
+def read_profile(path, *, allow_awg=False, allow_awg31=False):
     with Path(path).open("rb") as source:
-        return validate(source.read(MAX_PROFILE+1).decode("utf-8-sig"),allow_awg=allow_awg)
+        return validate(source.read(MAX_PROFILE+1).decode("utf-8-sig"),allow_awg=allow_awg,allow_awg31=allow_awg31)
 
 
 PREFIX='fc-app-'
@@ -391,8 +391,8 @@ class Linux:
         if self._nm_active(ident):run('nmcli','connection','down','uuid',ident)
     @serialized_connection
     def import_profile(self,path):
-        data=read_profile(path,allow_awg=True)
-        if set(parse(data,allow_awg=True)['Interface'])&AWG_FIELDS:
+        data=read_profile(path,allow_awg=True,allow_awg31=True)
+        if set(parse(data,allow_awg=True,allow_awg31=True)['Interface'])&AWG_FIELDS:
             return self._awg('import',data=data)
         name=PREFIX+uuid.uuid4().hex[:8]
         with tempfile.TemporaryDirectory(prefix='family-connect-') as folder:

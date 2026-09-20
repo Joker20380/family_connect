@@ -1,9 +1,9 @@
 name: AmneziaWG pilot
 on:
   pull_request:
-    paths: ['pilot/awg/**', 'clients/linux/**', 'clients/desktop/backend.py', 'clients/desktop/profile_config.py', 'clients/desktop/tests/**', 'scripts/test_awg_gateway.py', 'compose.awg.yaml', '.github/workflows/awg.yml']
+    paths: ['pilot/awg/**', 'pilot/awg31/**', 'clients/linux/**', 'clients/desktop/backend.py', 'clients/desktop/profile_config.py', 'clients/desktop/tests/**', 'scripts/test_awg_gateway.py', 'compose.awg.yaml', '.github/workflows/awg.yml']
   push:
-    paths: ['pilot/awg/**', 'clients/linux/**', 'clients/desktop/backend.py', 'clients/desktop/profile_config.py', 'clients/desktop/tests/**', 'scripts/test_awg_gateway.py', 'compose.awg.yaml', '.github/workflows/awg.yml']
+    paths: ['pilot/awg/**', 'pilot/awg31/**', 'clients/linux/**', 'clients/desktop/backend.py', 'clients/desktop/profile_config.py', 'clients/desktop/tests/**', 'scripts/test_awg_gateway.py', 'compose.awg.yaml', '.github/workflows/awg.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -20,3 +20,8 @@ jobs:
       - run: python -m pytest -q clients/desktop/tests
       - run: docker build -f pilot/awg/Dockerfile -t family-connect-amneziawg:2-pilot1 .
       - run: python -m scripts.test_awg_gateway
+      - run: docker build -f pilot/awg31/Dockerfile -t family-connect-amneziawg:3.1-desktop .
+      - run: python -m scripts.test_awg_gateway
+        env:
+          FC_AWG_TEST_IMAGE: family-connect-amneziawg:3.1-desktop
+          FC_AWG_TEST_PROTOCOL: '3.1'

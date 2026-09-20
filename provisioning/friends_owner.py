@@ -38,9 +38,9 @@ class FriendsOwner:
         anchor=base64.b64decode(raw.strip(),validate=True)
         return FriendsConfigurationStore(self.path,device,anchor)
 
-    def connect(self,country,driver):
+    def connect(self,country,driver,*,transport="tcp"):
         from .friends_application import FriendsApplication
-        return FriendsApplication(self._store(),driver).connect(lambda:self.configuration(country))
+        return FriendsApplication(self._store(),driver).connect(lambda:self.configuration(country),transport=transport)
 
     def recover(self,driver):
         from .friends_application import FriendsApplication

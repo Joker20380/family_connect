@@ -7,6 +7,7 @@ internal sealed class FriendsForm : Form
     readonly Func<Request, Task<Reply>> call;
     readonly TextBox invitation = new(), link = new();
     readonly ComboBox region = new() { DropDownStyle = ComboBoxStyle.DropDownList };
+    readonly ComboBox transport = new() { DropDownStyle = ComboBoxStyle.DropDownList };
     readonly Label status = new();
     readonly Button activate = new ModernButton(), connect = new ModernButton(), share = new ModernButton(), copy = new ModernButton();
     bool busy;
@@ -29,7 +30,7 @@ internal sealed class FriendsForm : Form
         invitation.PlaceholderText="FC-…";invitation.MaxLength=128;Add(invitation);
         activate.Text=T("Активировать", "Activate");Add(activate);
         region.Items.AddRange(new object[]{T("Нидерланды", "Netherlands"),T("Россия", "Russia")});region.SelectedIndex=0;Add(region);
-        Add(new Label { Text=T("Подключение через TCP. AWG 3.1 для этого экрана ещё не готов.","TCP connection. AWG 3.1 is not available on this screen yet."),AutoSize=true });
+        transport.Items.AddRange(new object[]{"TCP REALITY","AWG 3.1"});transport.SelectedIndex=0;Add(transport);
         connect.Text=T("Подключиться", "Connect");Add(connect);
         share.Text=T("Получить ссылку для друга", "Get invitation link");Add(share);
         link.ReadOnly=true;link.Multiline=true;link.Height=76;link.ScrollBars=ScrollBars.Vertical;Add(link);
@@ -41,7 +42,7 @@ internal sealed class FriendsForm : Form
             button.BackColor=Color.FromArgb(7,32,24);button.ForeColor=ForeColor;
         }
         activate.Click+=async(_,_)=>await Run(new("friends-activate",invitation.Text.Trim()),T("Доступ активирован. Можно подключаться.","Access activated. You can connect."));
-        connect.Click+=async(_,_)=>await Run(new(region.SelectedIndex==1?"friends-connect-tcp-ru":"friends-connect-tcp-nl"),T("Подключение запущено. Состояние видно в главном окне.","Connection started. Check its status in the main window."));
+        connect.Click+=async(_,_)=>await Run(new("friends-connect-"+(transport.SelectedIndex==1?"awg":"tcp")+(region.SelectedIndex==1?"-ru":"-nl")),T("Подключение запущено. Состояние видно в главном окне.","Connection started. Check its status in the main window."));
         share.Click+=async(_,_)=>await Run(new("friends-referral"),T("Ссылка готова. Отправьте её другу.","Link ready. Send it to your friend."));
         copy.Click+=(_,_)=>{if(link.Text.Length>0){Clipboard.SetText(link.Text);status.Text=T("Ссылка скопирована.","Link copied.");}};
         FormClosing+=(_,e)=>{if(busy)e.Cancel=true;};
@@ -50,7 +51,7 @@ internal sealed class FriendsForm : Form
     {
         if(busy)return;busy=true;
         foreach(var b in new[]{activate,connect,share,copy})b.Enabled=false;
-        invitation.Enabled=region.Enabled=false;status.Text=T("Подождите…", "Please wait…");
+        invitation.Enabled=region.Enabled=transport.Enabled=false;status.Text=T("Подождите…", "Please wait…");
         try
         {
             var reply=await call(request);
@@ -60,6 +61,7 @@ internal sealed class FriendsForm : Form
                     "disconnect-first" or "busy"=>T("Сначала отключите VPN в главном окне.","Disconnect VPN in the main window first."),
                     "invalid_invitation"=>T("Проверьте формат кода приглашения.","Check the invitation code format."),
                     "access_rejected"=>T("Сервер отклонил доступ. Проверьте приглашение.","The server rejected access. Check the invitation."),
+                    "awg-engine-missing"=>T("Компонент AWG отсутствует. Нужен полный установщик.","The AWG component is missing. Use the complete installer."),
                     "tcp-engine-missing"=>T("Компонент TCP отсутствует. Нужен полный установщик.","The TCP component is missing. Use the complete installer."),
                     _=>T("Действие не выполнено. Проверьте сеть; если данные повреждены, требуется восстановление.","Could not complete the action. Check the network; damaged data requires recovery.") };
                 return;
@@ -76,7 +78,7 @@ internal sealed class FriendsForm : Form
         finally
         {
             busy=false;activate.Enabled=connect.Enabled=share.Enabled=true;
-            copy.Enabled=link.Text.Length>0;invitation.Enabled=region.Enabled=true;
+            copy.Enabled=link.Text.Length>0;invitation.Enabled=region.Enabled=transport.Enabled=true;
         }
     }
     internal static void CheckUi()
@@ -94,6 +96,8 @@ internal sealed class FriendsForm : Form
             if(!form.copy.Enabled||!form.link.ReadOnly||!form.link.Text.EndsWith(new string('a',64)))throw new Exception("Invitation sharing UI failed");
             Pump(form.Run(new("friends-connect-tcp-ru"),"ok"));
             if(requests.Count!=3||requests[2].Action!="friends-connect-tcp-ru")throw new Exception("Wrong Friends action");
+            form.transport.SelectedIndex=1;form.region.SelectedIndex=0;form.connect.PerformClick();Application.DoEvents();
+            if(requests.Count!=4||requests[3].Action!="friends-connect-awg-nl")throw new Exception("Wrong AWG Friends action");
             form.Close();
         }
         using var denied=new FriendsForm(true,_=>Task.FromResult(new Reply(false,"off",Error:"access_rejected")));

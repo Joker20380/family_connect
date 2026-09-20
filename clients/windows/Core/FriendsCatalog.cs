@@ -41,7 +41,7 @@ internal static class FriendsCatalog
         TcpProfile.Validate(new TcpGrant(1, Sample, 1, 1, S(p, "server"), checked((int)Integer(p.GetProperty("port"), 1)),
             "11111111-1111-4111-8111-111111111111", S(p, "public_key"), S(p, "server_name"), S(p, "short_id")));
     }
-    static void Awg(string template)
+    static (Dictionary<string,string> Face, Dictionary<string,string> Peer) Awg(string template)
     {
         Require(Encoding.UTF8.GetByteCount(template) <= 8192 && !template.Contains('\0'));
         Require(template.Split("LOCAL_DEVICE_KEY").Length == 2 && template.Split("ASSIGNED_ADDRESS").Length == 2);
@@ -89,6 +89,7 @@ internal static class FriendsCatalog
         int port = Number(endpoint[1], 1, 65535);
         if (peer.TryGetValue("PersistentKeepalive", out var keep)) Number(keep, 0, 65535);
         AwgProfile.Validate(new AwgGrant(1, Sample, 1, 1, peer["PublicKey"], endpoint[0], port, 4, old));
+        return (face,peer);
     }
     internal static FriendsConfiguration Verify(JsonElement reply, byte[] anchor, string device, string country, byte[] wireguardKey,
         long floor = 0, string? previousHash = null)
@@ -127,6 +128,32 @@ internal static class FriendsCatalog
         }
         catch (Exception e) when (e is not OutOfMemoryException) { throw new FormatException("Invalid Friends configuration"); }
     }
+    internal static FriendsAwg NativeAwg(FriendsConfiguration profile)
+    {
+        var lines=profile.Awg.Split('\n');
+        string? key=null;
+        for(int i=0;i<lines.Length;i++){
+            if(lines[i].StartsWith("PrivateKey = ",StringComparison.Ordinal)){key=lines[i][13..];lines[i]="PrivateKey = LOCAL_DEVICE_KEY";}
+            if(lines[i].StartsWith("Address = ",StringComparison.Ordinal)){
+                Require(lines[i][10..]==profile.Address);lines[i]="Address = ASSIGNED_ADDRESS";
+            }
+        }
+        Require(key is not null);Key(key!);FriendsAwg.ValidateAddress(profile.Address[..^3]);
+        var (face,peer)=Awg(string.Join('\n',lines));
+        // Current broker network policy is fixed. Reject unsupported signed options
+        // instead of silently ignoring DNS or MTU from a future catalog.
+        Require(face["DNS"]=="1.1.1.1" && face.GetValueOrDefault("MTU","1280")=="1280");
+        var config=new StringBuilder("private_key="+Convert.ToHexString(Convert.FromBase64String(key!)).ToLowerInvariant()+"\n");
+        var names=new Dictionary<string,string>{{"HeaderProtectionKey","header_protection_key"},{"ContentPaddingAddition","content_padding_addition"},{"RandomTrailers","random_trailers"},{"DisableCookies","disable_cookies"},{"ListenPort","listen_port"}};
+        foreach(var (name,value) in face){
+            if(name is "PrivateKey" or "Address" or "DNS" or "MTU")continue;
+            config.Append(names.GetValueOrDefault(name,name.ToLowerInvariant())).Append('=').Append(name=="HeaderProtectionKey"?Convert.ToHexString(Convert.FromBase64String(value)).ToLowerInvariant():value).Append('\n');
+        }
+        config.Append("public_key=").Append(Convert.ToHexString(Convert.FromBase64String(peer["PublicKey"])).ToLowerInvariant()).Append('\n');
+        if(peer.TryGetValue("PresharedKey",out var psk))config.Append("preshared_key=").Append(Convert.ToHexString(Convert.FromBase64String(psk)).ToLowerInvariant()).Append('\n');
+        config.Append("endpoint=").Append(peer["Endpoint"]).Append("\nallowed_ip=0.0.0.0/0\nallowed_ip=::/0\npersistent_keepalive_interval=").Append(peer.GetValueOrDefault("PersistentKeepalive","0")).Append("\n\n");
+        return new FriendsAwg(profile.Address[..^3],config.ToString());
+    }
     internal static TcpGrant NativeTcp(FriendsConfiguration profile, string devicePublicKey)
     {
         var p = ControlProtocol.Parse(System.Text.Encoding.UTF8.GetBytes(profile.Tcp));
@@ -139,4 +166,22 @@ internal static class FriendsCatalog
             checked((int)ControlProtocol.Integer(p.GetProperty("port"),1)),S("id"),S("public_key"),S("server_name"),S("short_id"));
         TcpProfile.Validate(grant); return grant;
     }
+}
+
+internal sealed class FriendsAwg(string address,string config)
+{
+    internal string Address {get;}=address;
+    internal static void ValidateAddress(string address)
+    {
+        if(!IPAddress.TryParse(address,out var ip)||ip.AddressFamily!=System.Net.Sockets.AddressFamily.InterNetwork||ip.ToString()!=address)throw new FormatException("Friends address");
+        var b=ip.GetAddressBytes();
+        if(b[0]!=10||b[1] is not (83 or 84)||(b[2]==0&&b[3]<=1)||(b[2]==255&&b[3]==255))throw new FormatException("Friends address");
+    }
+    internal string Config(string adapter,string uplink)
+    {
+        ValidateAddress(Address);
+        if(!System.Text.RegularExpressions.Regex.IsMatch(adapter,@"\Afcawg[0-9a-f]{8}\z"))throw new FormatException("adapter");
+        return JsonSerializer.Serialize(new{adapter,uplink,config});
+    }
+    public override string ToString()=>"FriendsAwg";
 }

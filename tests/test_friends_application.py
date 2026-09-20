@@ -49,7 +49,7 @@ def setup(tmp_path, monkeypatch):
     store = FriendsConfigurationStore(tmp_path/'identity', device, bytes(32))
     driver = Driver()
     app = FriendsApplication(store, driver)
-    config = SimpleNamespace(tcp='test-credential', country='nl', sequence=2)
+    config = SimpleNamespace(tcp='test-credential', awg='test-credential', country='nl', sequence=2)
     return app, driver, lambda:config, tmp_path
 
 
@@ -140,3 +140,22 @@ def test_second_owner_cannot_mutate_during_apply(setup):
         return fetch()
     app.connect(checked_fetch)
     assert_idle(app,root)
+
+@pytest.mark.parametrize('point', [None,'import','connect','health'])
+def test_awg_apply_and_rollback(setup, point, monkeypatch):
+    app,driver,fetch,root=setup
+    monkeypatch.setitem(globals(),'NEW','fcawg12345678')
+    driver.failure=point
+    if point:
+        with pytest.raises(RuntimeError):app.connect(fetch,transport='awg')
+        assert driver.live=={OLD}
+    else:
+        result=app.connect(fetch,transport='awg')
+        assert result['transport']=='awg' and driver.live=={NEW}
+    assert_idle(app,root)
+
+
+def test_unknown_transport_cannot_fetch_or_mutate(setup):
+    app,driver,fetch,root=setup
+    with pytest.raises(ValueError):app.connect(lambda:pytest.fail('unexpected fetch'),transport='unknown')
+    assert driver.live=={OLD} and driver.imports==0

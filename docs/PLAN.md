@@ -1,5 +1,18 @@
 # Working plan / Рабочий план
 
+## Desktop AWG 3.1 — работа начата 2026-09-20
+
+В desktop-ветке готовится переход на engine b5928ef / tools ee0f0a9 с существующими
+проверенными startup/u16 patches. Добавлены Friends AWG apply/recovery, полный IPv4
+адрес из /16 в Windows journal/network/health, преобразование bool для Linux tools.
+Локально:43 targeted Python passed, Windows36 catalog vectors passed, Go Windows
+worker/fixture cross-build passed, изолированный Linux AWG3.1 handshake+HTTP passed
+с адресом10.78.42.254/32. Windows runtime и новые GUI проверки ещё не завершены.
+Ничего не установлено/не опубликовано: desktopv0.2.9, Android0.1.18-beta19/code19.
+Следующее: проверить awg-quick/helper в контейнере, Windows CI, GTK и полный regression;
+после этого живой Friends и immutable release. Анимация отложена.
+[Отчёт](releases/2026-09-20-desktop-awg31.ru.md).
+
 ## Desktop: Friends TCP recovery и новый Linux UI — 2026-09-20
 
 Пользователь отклонил прежний Linux UI: требуется сходство с Android, тонкие линии.

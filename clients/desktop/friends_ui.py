@@ -42,9 +42,10 @@ class FriendsWindow:
         self.activate=Gtk.Button(label=self.t('Активировать','Activate'));box.append(self.activate)
         self.region=Gtk.DropDown.new_from_strings([self.t('Нидерланды','Netherlands'),self.t('Россия','Russia')]);box.append(self.region)
         self.prepare=Gtk.Button(label=self.t('Получить настройки','Get configuration'));box.append(self.prepare)
-        self.connect_button=Gtk.Button(label=self.t('Подключить TCP','Connect TCP'));box.append(self.connect_button)
+        self.transport=Gtk.DropDown.new_from_strings(['TCP REALITY','AWG 3.1']);box.append(self.transport)
+        self.connect_button=Gtk.Button(label=self.t('Подключиться','Connect'));box.append(self.connect_button)
         self.connect_button.set_sensitive(driver is not None)
-        label(self.t('TCP REALITY. AWG 3.1 появится после проверки совместимости. При неудаче вернём прежнее подключение.','TCP REALITY. AWG 3.1 will follow compatibility checks. A failed connection restores the previous one.'))
+        label(self.t('Выберите транспорт. При неудаче вернём прежнее подключение.','Choose a transport. A failed connection restores the previous one.'))
         self.share=Gtk.Button(label=self.t('Получить ссылку для друга','Get invitation link'));box.append(self.share)
         self.link=Gtk.Entry(editable=False);box.append(self.link)
         self.copy=Gtk.Button(label=self.t('Скопировать ссылку','Copy link'));self.copy.set_sensitive(False);box.append(self.copy)
@@ -66,7 +67,8 @@ class FriendsWindow:
     def connect_vpn(self):
         if self.driver is None:return
         country='ru' if self.region.get_selected()==1 else 'nl'
-        self.submit(lambda:self.owner.connect(country,self.driver),'connected')
+        transport='awg' if self.transport.get_selected()==1 else 'tcp'
+        self.submit(lambda:self.owner.connect(country,self.driver,transport=transport),'connected')
     def submit(self,action,kind):
         if self.busy or self.closed:return
         # Snapshot GTK input on the UI thread before creating the worker.
@@ -82,13 +84,13 @@ class FriendsWindow:
             if kind=='activate':self.code.set_text('');text=self.t('Доступ активирован.','Access activated.')
             elif kind=='referral':
                 self.link.set_text(result['url']);text=self.t('Осталось приглашений: ','Invitations remaining: ')+str(result['remaining'])
-            elif kind=='connected':text=self.t('TCP подключён. Доступ в интернет проверен.','TCP connected. Internet access verified.')
+            elif kind=='connected':text=self.t('VPN подключён. Доступ в интернет проверен.','VPN connected. Internet access verified.')
             else:text=self.t('Настройки проверены и сохранены.','Configuration verified and saved.')
             self.status.set_text(text)
         except Exception:self.status.set_text(self.t('Действие не выполнено. Проверьте код и сеть. Повреждённые данные требуют восстановления.','Could not complete the action. Check the code and network. Damaged data requires recovery.'))
         self.busy=False;self.sensitivity();return GLib.SOURCE_REMOVE
     def sensitivity(self):
-        for widget in (self.code,self.activate,self.region,self.prepare,self.share):widget.set_sensitive(not self.busy)
+        for widget in (self.code,self.activate,self.region,self.transport,self.prepare,self.share):widget.set_sensitive(not self.busy)
         self.connect_button.set_sensitive(not self.busy and self.driver is not None)
         self.copy.set_sensitive(not self.busy and bool(self.link.get_text()))
     def close(self,*_):
