@@ -73,6 +73,32 @@ def main():
                 run('docker','exec',client,'sh','/source/clients/linux/install-awg.sh','/source','/opt/awg31')
                 profile='[Interface]\nPrivateKey = '+client_key+'\nAddress = '+client_address+'/32\nDNS = 1.1.1.1\nMTU = 1280\n'+params.replace('RandomTrailers = on','RandomTrailers = true').replace('DisableCookies = off','DisableCookies = false')+'[Peer]\nPublicKey = '+server_pub+'\nEndpoint = '+address+':51821\nAllowedIPs = 0.0.0.0/0, ::/0\nPersistentKeepalive = 25\n'
                 helper='/usr/local/lib/family-connect-awg/helper'
+                session_code = """import json,os,subprocess,sys
+profile=sys.stdin.read()
+helper='/usr/local/lib/family-connect-awg/helper'
+def start(uid):
+ env=dict(os.environ,PKEXEC_UID=str(uid))
+ p=subprocess.Popen([helper,'session'],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True,env=env)
+ assert json.loads(p.stdout.readline())=={'ready':1}
+ return p
+def request(p,action,ident=None,data=None):
+ p.stdin.write(json.dumps(dict(kind='awg',action=action,ident=ident,data=data))+'\\n');p.stdin.flush()
+ return json.loads(p.stdout.readline())
+p=start(1000)
+r=request(p,'import',data=profile);assert r['ok'];ident=r['value']
+assert json.load(open('/etc/family-connect/awg/'+ident+'.json'))['owner']==1000
+assert request(p,'down',ident)['ok']
+other=start(1001)
+assert request(other,'down',ident)['ok'] is False
+other.stdin.close();assert other.wait(timeout=5)==0
+assert request(p,'down',ident)['ok']
+p.stdin.close();assert p.wait(timeout=5)==0
+bad=start(1000)
+bad.stdin.write(json.dumps(dict(kind='awg',action='serve',ident=ident,data=None))+'\\n');bad.stdin.flush()
+assert bad.wait(timeout=5)!=0
+print('PASS: installed authorization session, owner preservation, cross-user denial, forbidden action and EOF exit.')
+"""
+                print(run('docker','exec','-i',client,'python3','-c',session_code,input=profile))
                 ident=run('docker','exec','-i',client,helper,'import',input=profile)
                 # Replace only the external HTTPS health service with the isolated
                 # bound HTTP peer. Import, awg-quick, routing and cleanup stay real.

@@ -22,3 +22,6 @@ install -o root -g root -m 755 "$source_dir/clients/linux/tcp-helper.py" /usr/lo
 install -o root -g root -m 644 "$source_dir/clients/desktop/profile_config.py" "$source_dir/clients/desktop/backend.py" /usr/local/lib/family-connect-tcp/
 install -o root -g root -m 644 "$source_dir/clients/linux/family-connect-tcp@.service" /etc/systemd/system/
 systemctl daemon-reload
+
+# Publish capability only after the helper and its module are installed.
+install -o root -g root -m 644 /dev/null /usr/local/lib/family-connect-tcp/authorization-session-v1

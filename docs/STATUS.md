@@ -1,5 +1,50 @@
 # Current state / Текущее состояние
 
+## Один сеанс Linux-авторизации — 2026-09-20
+
+Исправлен источник повторных запросов: Linux import/up/down одной операции используют
+один лениво открываемый pkexec-сеанс; Friends apply/rollback и вложенные операции
+делят его. Отказ не повторяет запрос автоматически. Root-сеанс принимает только
+фиксированные AWG/TCP helper verbs, сохраняет PKEXEC_UID и проверки владельца;
+закрывается через EOF, ограничен 300 секундами и32 запросами. Socket/passwordless
+policy не добавлены. Старый helper требует обновления, без повторяющегося fallback.
+Шестифайловый клиент сохранён; marker устанавливается последним обоими installers.
+Исправление fchmod для metadata644/private600 включено в тот же набор изменений.
+
+Проверено:648 Python tests passed; реальный AWG3.1 helper в Docker — import/up,
+/16, bound HTTP, неверный ключ/cleanup, session owner, чужой UID denied, запрещённые
+verbs и EOF exit. Host routes не менялись, новых live-подключений не было.
+Установка auth fix и новый CI ещё не выполнены. GUI0.2.8, public desktopv0.2.9,
+Androidbeta19 прежние; установленный AWG3.1 engine не менялся.
+Далее: CI → обновить оба Linux helpers и paired preview → один ручной auth-тест;
+затем Windows live на доступном ПК. Проверка из РФ ждёт доступной российской сети.
+Этап глобального плана:4, приёмка платформ и подготовка выпуска.
+[Изменения, ограничения, rollout/rollback](releases/2026-09-20-linux-authorization.ru.md).
+
+
+## Живой Linux Friends и проблема повторной авторизации — 2026-09-20
+
+Короткая реальная проверка завершилась: NL/RU × AWG3.1/TCP — 4/4 подключений
+с подтверждённым Internet health; после каждого маршруты/rules/DNS совпали с baseline.
+После обращения пользователя проверено: тестовый процесс завершён, интерфейсов
+fcawg/fctcp нет. Пользователь сообщил примерно20 запросов пароля: сценарий многократно
+вызывал pkexec для отдельных import/up/down и повторной проверки. Это дефект удобства
+авторизации; новые подключения остановлены. Следующий приоритет — сократить запросы
+в рамках одной пользовательской операции, сохранив privileged boundary.
+
+На Linux установлен AWG3.1 helper, engine SHA256
+`e7f00e47d6df853ade5dcd2fe79240f01ff897d75088c768316a444c27c87e0f`.
+Backup: `/var/backups/family-connect/desktop-awg31-20260920`.
+Первый live import выявил зависимость metadata mode от umask077: исправлены AWG/TCP
+write через fchmod, metadata только прерванного импорта восстановлена, journal
+восстановлен штатно. Private profiles остаются0600. Регрессии76 passed/2 skipped,
+включая6 новых проверок mode. Этот fix ещё не закоммичен и не прошёл новый CI.
+GUI current по-прежнему0.2.8; public desktopv0.2.9 и Androidbeta19 не менялись.
+Windows у пользователя есть, российской сети нет. Windows live и проверка из РФ
+ещё не выполнены. Новый выпуск не опубликован.
+[Подробности](releases/2026-09-20-desktop-live.ru.md).
+
+
 ## Desktop Friends AWG 3.1 — 2026-09-20
 
 Реализован native AWG 3.1 для Friends на Linux/Windows (source `3e5943c`, desktop-ветка).

@@ -42,6 +42,9 @@ def write(path, text, mode):
     temporary=path.with_name('.'+secrets.token_hex(16))
     fd=os.open(temporary,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,mode)
     try:
+        # pkexec can inherit a restrictive caller umask. Public metadata must
+        # remain readable by its owner; private profiles stay exactly 0600.
+        os.fchmod(fd,mode)
         with os.fdopen(fd,'w') as out:
             out.write(text);out.flush();os.fsync(out.fileno())
         os.replace(temporary,path)
@@ -70,6 +73,9 @@ def healthy(ident, expected):
         raise RuntimeError('AWG handshake unavailable')
 
 def main():
+    if sys.argv[1:] == ['session']:
+        from backend import privileged_session
+        return privileged_session()
     if os.geteuid()!=0: raise ValueError('Administrator required')
     uid=int(os.environ.get('PKEXEC_UID',os.environ.get('SUDO_UID','0')))
     if len(sys.argv)<2: raise ValueError('Missing operation')

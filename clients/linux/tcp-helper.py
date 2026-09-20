@@ -86,6 +86,9 @@ def write(path,data,mode):
     temporary=path.with_name('.'+secrets.token_hex(16))
     fd=os.open(temporary,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,mode)
     try:
+        # pkexec can inherit a restrictive caller umask. Public metadata must
+        # remain readable by its owner; private profiles stay exactly 0600.
+        os.fchmod(fd,mode)
         with os.fdopen(fd,'w') as out:
             out.write(data);out.flush();os.fsync(out.fileno())
         os.replace(temporary,path)
@@ -146,6 +149,9 @@ def serve(ident,profile):
                 except subprocess.TimeoutExpired:process.kill();process.wait()
 
 def main():
+    if sys.argv[1:] == ['session']:
+        from backend import privileged_session
+        return privileged_session()
     if os.geteuid()!=0:raise ValueError('Administrator required')
     s=ROOT.lstat()
     if not stat.S_ISDIR(s.st_mode) or s.st_uid!=0 or stat.S_IMODE(s.st_mode)!=0o755:
