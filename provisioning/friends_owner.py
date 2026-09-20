@@ -26,11 +26,23 @@ class FriendsOwner:
         with self.http_factory() as http:return FriendsClient(http,device).referral()
 
     def configuration(self,country):
+        store=self._store()
+        with self.http_factory() as http:
+            client=FriendsClient(http,store.device)
+            return store.accept(country,lambda floor,digest:client.configuration(country,store.anchor,floor=floor,previous_hash=digest)[0])
+
+    def _store(self):
         device=self._device()
         raw=self.anchor_path.read_bytes()
         if len(raw)>128:raise ValueError('Invalid packaged anchor')
         anchor=base64.b64decode(raw.strip(),validate=True)
-        store=FriendsConfigurationStore(self.path,device,anchor)
-        with self.http_factory() as http:
-            client=FriendsClient(http,device)
-            return store.accept(country,lambda floor,digest:client.configuration(country,anchor,floor=floor,previous_hash=digest)[0])
+        return FriendsConfigurationStore(self.path,device,anchor)
+
+    def connect(self,country,driver):
+        from .friends_application import FriendsApplication
+        return FriendsApplication(self._store(),driver).connect(lambda:self.configuration(country))
+
+    def recover(self,driver):
+        from .friends_application import FriendsApplication
+        if not self.path.exists():return
+        FriendsApplication(self._store(),driver).recover()

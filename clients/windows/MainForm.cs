@@ -92,7 +92,7 @@ internal sealed class MainForm:Form
         int column=0;
         foreach(string name in new[]{"status","messenger","route","settings"}){
             footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,25));
-            var button=new ModernButton{Dock=DockStyle.Fill,BackColor=BackColor,ForeColor=ForeColor,Font=new Font("Segoe UI",8,FontStyle.Bold),Margin=new Padding(2)};
+            var button=new ModernButton{NavigationButton=true,Dock=DockStyle.Fill,BackColor=BackColor,ForeColor=ForeColor,Font=new Font("Segoe UI",8,FontStyle.Regular),Margin=new Padding(2)};
             button.Click+=(_,_)=>{page=name;PaintState();FitContent();};nav[name]=button;footer.Controls.Add(button,column++,0);
         }
         shell.Controls.Add(footer,0,1);
@@ -203,6 +203,9 @@ internal sealed class MainForm:Form
                 var parent=button.Parent!;
                 if(button.Left<0 || button.Top<0 || button.Right>parent.ClientSize.Width || button.Bottom>parent.ClientSize.Height)
                     throw new InvalidOperationException("Clipped navigation");
+                var text=TextRenderer.MeasureText(button.Text,button.Font,Size.Empty,TextFormatFlags.NoPadding|TextFormatFlags.SingleLine);
+                if(text.Width>button.Width-4 || text.Height>button.Height-8)
+                    throw new InvalidOperationException($"Clipped navigation text: {button.Text}, scale={scale}, client={form.ClientSize}, measured={text}, button={button.Size}");
             }
         }
     }

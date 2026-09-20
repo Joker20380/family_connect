@@ -12,8 +12,9 @@ from gi.repository import Gtk, Adw, GLib, Gdk
 
 
 class FriendsWindow:
-    def __init__(self,parent,owner,ru=True):
+    def __init__(self,parent,owner,ru=True,driver=None,on_close=None):
         self.owner=owner;self.ru=ru;self.busy=False;self.closed=False
+        self.driver=driver;self.on_closed=on_close
         self.pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
         self.window=Adw.Window(title=self.t('Доступ по приглашению','Invitation access'),transient_for=parent,modal=True)
         self.window.set_default_size(440,520)
@@ -41,13 +42,16 @@ class FriendsWindow:
         self.activate=Gtk.Button(label=self.t('Активировать','Activate'));box.append(self.activate)
         self.region=Gtk.DropDown.new_from_strings([self.t('Нидерланды','Netherlands'),self.t('Россия','Russia')]);box.append(self.region)
         self.prepare=Gtk.Button(label=self.t('Получить настройки','Get configuration'));box.append(self.prepare)
-        label(self.t('Предварительная проверка доступа и настроек. Подключение из этого окна ещё не подключено.','Access and configuration preview. Connecting from this window is not integrated yet.'))
+        self.connect_button=Gtk.Button(label=self.t('Подключить TCP','Connect TCP'));box.append(self.connect_button)
+        self.connect_button.set_sensitive(driver is not None)
+        label(self.t('TCP REALITY. AWG 3.1 появится после проверки совместимости. При неудаче вернём прежнее подключение.','TCP REALITY. AWG 3.1 will follow compatibility checks. A failed connection restores the previous one.'))
         self.share=Gtk.Button(label=self.t('Получить ссылку для друга','Get invitation link'));box.append(self.share)
         self.link=Gtk.Entry(editable=False);box.append(self.link)
         self.copy=Gtk.Button(label=self.t('Скопировать ссылку','Copy link'));self.copy.set_sensitive(False);box.append(self.copy)
         self.status=label('')
         self.activate.connect('clicked',lambda *_:self.submit(lambda:self.owner.activate(self.code.get_text().strip()),'activate'))
         self.prepare.connect('clicked',lambda *_:self.prepare_configuration())
+        self.connect_button.connect('clicked',lambda *_:self.connect_vpn())
         self.share.connect('clicked',lambda *_:self.submit(self.owner.referral,'referral'))
         self.copy.connect('clicked',lambda *_:Gdk.Display.get_default().get_clipboard().set(self.link.get_text()))
         self.window.connect('close-request',self.close)
@@ -59,6 +63,10 @@ class FriendsWindow:
             config=self.owner.configuration(country)
             return config.country,config.sequence
         self.submit(action,'configuration')
+    def connect_vpn(self):
+        if self.driver is None:return
+        country='ru' if self.region.get_selected()==1 else 'nl'
+        self.submit(lambda:self.owner.connect(country,self.driver),'connected')
     def submit(self,action,kind):
         if self.busy or self.closed:return
         # Snapshot GTK input on the UI thread before creating the worker.
@@ -74,14 +82,18 @@ class FriendsWindow:
             if kind=='activate':self.code.set_text('');text=self.t('Доступ активирован.','Access activated.')
             elif kind=='referral':
                 self.link.set_text(result['url']);text=self.t('Осталось приглашений: ','Invitations remaining: ')+str(result['remaining'])
+            elif kind=='connected':text=self.t('TCP подключён. Доступ в интернет проверен.','TCP connected. Internet access verified.')
             else:text=self.t('Настройки проверены и сохранены.','Configuration verified and saved.')
             self.status.set_text(text)
         except Exception:self.status.set_text(self.t('Действие не выполнено. Проверьте код и сеть. Повреждённые данные требуют восстановления.','Could not complete the action. Check the code and network. Damaged data requires recovery.'))
         self.busy=False;self.sensitivity();return GLib.SOURCE_REMOVE
     def sensitivity(self):
         for widget in (self.code,self.activate,self.region,self.prepare,self.share):widget.set_sensitive(not self.busy)
+        self.connect_button.set_sensitive(not self.busy and self.driver is not None)
         self.copy.set_sensitive(not self.busy and bool(self.link.get_text()))
     def close(self,*_):
         if self.busy:return True
-        self.closed=True;self.pool.shutdown(wait=False,cancel_futures=True);Gtk.StyleContext.remove_provider_for_display(self.window.get_display(),self.provider);return False
+        self.closed=True;self.pool.shutdown(wait=False,cancel_futures=True);Gtk.StyleContext.remove_provider_for_display(self.window.get_display(),self.provider)
+        if self.on_closed:self.on_closed()
+        return False
     def present(self):self.window.present()

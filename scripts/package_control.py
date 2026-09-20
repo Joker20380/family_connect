@@ -9,7 +9,7 @@ import tarfile
 
 ROOT = Path(__file__).resolve().parents[1]
 DESKTOP = ('app.py', 'backend.py', 'profile_config.py', 'updates.py', 'update.pub', 'install-linux.sh')
-CORE = ('friends.py', 'friends_catalog.py', 'friends_store.py', 'friends_owner.py', '__init__.py', 'ack.py', 'application.py', 'auth.py', 'cache.py',
+CORE = ('friends.py', 'friends_catalog.py', 'friends_store.py', 'friends_owner.py', 'friends_application.py', '__init__.py', 'ack.py', 'application.py', 'auth.py', 'cache.py',
         'configuration.py', 'control_route.py', 'envelope.py', 'models.py', 'relay.py', 'reticulum.py',
         'runtime.py', 'transaction.py')
 FILES = ('clients/desktop/friends_ui.py', 'device_identity/friends.py', 'scripts/install_control_route.py', 'clients/linux/control-route-helper.py', 'VERSION', 'device_identity/__init__.py', 'device_identity/device.py',

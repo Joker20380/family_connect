@@ -23,14 +23,16 @@ window.fc-window { background: #03110e; color: #dafff2; font-family: monospace; 
 .fc-brand { font-size: 17px; font-weight: 700; }
 .fc-caption, .fc-note { color: #99c4b5; font-size: 12px; }
 .fc-card { background: transparent; border: none; padding: 0; }
-.fc-status { font-size: 20px; font-weight: 700; }
+.fc-status { font-size: 16px; font-weight: 400; }
+.fc-window button.fc-action label { font-weight: 400; }
+.fc-window button.fc-action:focus-visible { outline: 1px solid #98f7d8; outline-offset: -4px; }
 .fc-dot { color: #ffad46; }
 .fc-dot.connected { color: #98f7d8; }
-.fc-window button.fc-action { background: transparent; background-image: none; border: none; box-shadow: none; min-height: 50px; padding: 0; color: #dafff2; }
+.fc-window button.fc-action { background: transparent; background-image: none; border: none; box-shadow: none; min-height: 46px; padding: 0; color: #dafff2; }
 .fc-window button.fc-action:disabled { color: #75988a; }
 .fc-window dropdown > button { background: #072018; color: #dafff2; border: 1px solid #438e79; padding: 10px 14px; border-radius: 0; }
 .fc-detail { color: #ffad46; }
-.fc-window button.fc-nav { padding: 0; font-size: 10px; }
+.fc-window button.fc-nav { padding: 0; min-height: 58px; font-size: 9px; }
 '''
 
 
@@ -42,10 +44,11 @@ def terminal_texture(svg):
 def terminal_frame(snapshot,widget,fill='#072018',stroke='#438e79',extra=''):
     w,h=widget.get_width(),widget.get_height()
     if min(w,h)<4:return
-    c=min(12,w/5,h/4)
-    key=(w,h,fill,stroke,extra)
+    c=min(6,w/5,h/4)
+    scale=widget.get_scale_factor()
+    key=(w,h,scale,fill,stroke,extra)
     if getattr(widget,'terminal_key',None)!=key:
-        svg=f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}"><path d="M{c},1 H{w-c} L{w-1},{c} V{h-c} L{w-c},{h-1} H{c} L1,{h-c} V{c} Z" fill="{fill}" stroke="{stroke}"/>{extra}</svg>'
+        svg=f'<svg xmlns="http://www.w3.org/2000/svg" width="{w*scale}" height="{h*scale}" viewBox="0 0 {w} {h}"><path d="M{c},1 H{w-c} L{w-1},{c} V{h-c} L{w-c},{h-1} H{c} L1,{h-c} V{c} Z" fill="{fill}" stroke="{stroke}" stroke-width=".8"/>{extra}</svg>'
         widget.terminal_cache=terminal_texture(svg);widget.terminal_key=key
     snapshot.append_texture(widget.terminal_cache,Graphene.Rect().init(0,0,w,h))
 
@@ -57,8 +60,10 @@ class TerminalButton(Gtk.Button):
     def prepare_label(self,*_):
         child=self.get_child()
         if isinstance(child,Gtk.Label):
-            child.set_margin_start(8 if self.has_css_class("fc-nav") else 16)
-            child.set_margin_end(8 if self.has_css_class("fc-nav") else 16)
+            child.set_margin_start(2 if self.has_css_class("fc-nav") else 12)
+            child.set_margin_end(2 if self.has_css_class("fc-nav") else 12)
+            if self.has_css_class("fc-nav"):
+                child.set_margin_top(29);child.set_margin_bottom(6)
             if self.has_css_class("fc-primary"):
                 child.set_xalign(0);child.set_margin_end(90)
     def do_snapshot(self,snapshot):
@@ -71,6 +76,15 @@ class TerminalButton(Gtk.Button):
             color='#98f7d8' if selected else '#ffad46'
             if not self.get_sensitive():color='#75988a'
             extra=f'<rect x="{x}" y="{y-13}" width="62" height="26" rx="13" fill="#17392d" stroke="{color}"/><circle cx="{x+(48 if selected else 14)}" cy="{y}" r="10" fill="{color}"/>'
+        if self.has_css_class('fc-nav'):
+            color='#ffad46' if self.has_css_class('selected') else '#98f7d8'
+            fill='#072018' if self.has_css_class('selected') else '#03110e'
+            icons={
+                'status':'<path d="M1 13 H6 L9 4 L13 21 L16 10 L19 13 H23"/>',
+                'messenger':'<path d="M4 3 H20 Q22 3 22 5 V16 Q22 18 20 18 H12 L6 23 V18 H4 Q2 18 2 16 V5 Q2 3 4 3Z"/>',
+                'route':'<circle cx="12" cy="4" r="3"/><circle cx="4" cy="20" r="3"/><circle cx="20" cy="20" r="3"/><path d="M12 7 L4 17 M12 7 L20 17"/>',
+                'settings':'<circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M12 2 V6 M12 18 V22 M2 12 H6 M18 12 H22 M5 5 L8 8 M16 16 L19 19 M5 19 L8 16 M16 8 L19 5"/>'}
+            extra=f'<g transform="translate({self.get_width()/2-10.5} 9) scale(.875)" fill="none" stroke="{color}" stroke-width="1.2">{icons.get(getattr(self,"nav_page",""),"")}</g>'
         terminal_frame(snapshot,self,fill,stroke,extra)
         Gtk.Button.do_snapshot(self,snapshot)
 
@@ -83,12 +97,33 @@ class TerminalCard(Gtk.Box):
 
 class TerminalHeader(Gtk.Box):
     def __init__(self):
-        super().__init__();self.set_size_request(-1,78)
+        super().__init__();self.set_size_request(-1,72)
     def do_snapshot(self,snapshot):
-        w=self.get_width();size=19 if w>=350 else 16
-        logo='<g transform="translate(17 15) scale(.48)"><path fill-rule="evenodd" fill="#98f7d8" d="M50 3 L90 25 L90 77 L50 99 L10 77 L10 25 Z M50 12 L18 30 L18 73 L50 91 L82 73 L82 30 Z"/><path fill="#8debcd" d="M23 36 L50 20 L50 99 L23 81 Z"/><path fill="#c1ffe9" d="M55 50 H60 V65 H55 Z"/><path fill="#255e4e" d="M50 12 L82 30 V36 L50 19 Z"/></g>'
-        text=f'<text x="77" y="33" fill="#dafff2" font-family="monospace" font-weight="bold" font-size="{size}">FAMILY CONNECT</text><text x="78" y="54" fill="#98f7d8" font-family="monospace" font-size="9">SECURE NETWORK TERMINAL</text><path d="M78 40 H205 M78 60 H205" stroke="#438e79" opacity=".25"/><path d="M8 28 v5 M8 37 v5 M8 46 v5" stroke="#ffad46" stroke-width="3"/>'
-        terminal_frame(snapshot,self,'#03110e','#438e79',logo+text)
+        w=self.get_width();size=min(27,max(15,(w-90)/8.8))
+        logo='<g transform="translate(17 12) scale(.46)"><path fill-rule="evenodd" fill="#98f7d8" d="M50 3 L90 25 L90 77 L50 99 L10 77 L10 25 Z M50 12 L18 30 L18 73 L50 91 L82 73 L82 30 Z"/><path fill="#8debcd" d="M23 36 L50 20 L50 99 L23 81 Z"/><path fill="#c1ffe9" d="M55 50 H60 V65 H55 Z"/><path fill="#255e4e" d="M50 12 L82 30 V36 L50 19 Z"/></g>'
+        text=f'<text x="77" y="33" fill="#dafff2" font-family="sans-serif" font-weight="900" font-size="{size}">FAMILY CONNECT</text><text x="78" y="54" fill="#98f7d8" font-family="monospace" font-size="9">SECURE NETWORK TERMINAL</text><path d="M78 40 H205 M78 60 H205" stroke="#438e79" opacity=".25"/><path d="M8 28 v5 M8 37 v5 M8 46 v5" stroke="#ffad46" stroke-width="2"/>'
+        terminal_frame(snapshot,self,'#03110e','#98f7d8',logo+text)
+
+
+class TerminalGauge(Gtk.Box):
+    """Static Android composition; motion design is a separate follow-up."""
+    def __init__(self):
+        super().__init__();self.set_size_request(-1,230);self.connected=False
+    def do_snapshot(self,snapshot):
+        w,h=self.get_width(),self.get_height();scale=self.get_scale_factor()
+        if min(w,h)<4:return
+        key=(w,h,scale,self.connected)
+        if getattr(self,'gauge_key',None)!=key:
+            import math
+            x,y=w/2,h/2;r=min(w/2-24,h/2-16)
+            color='#98f7d8' if self.connected else '#ffad46'
+            marks=''.join(f'<path d="M{x+math.cos(a)*r*.87:.2f} {y+math.sin(a)*r*.87:.2f} L{x+math.cos(a)*r*.92:.2f} {y+math.sin(a)*r*.92:.2f}" opacity="{.8 if i%6==0 else .23}"/>' for i in range(48) for a in [i*math.pi/24])
+            svg=f'''<svg xmlns="http://www.w3.org/2000/svg" width="{w*scale}" height="{h*scale}" viewBox="0 0 {w} {h}">
+            <g fill="none" stroke="#438e79" stroke-width=".7"><circle cx="{x}" cy="{y}" r="{r}"/><circle cx="{x}" cy="{y}" r="{r*.67}"/></g>
+            <g stroke="{color}" stroke-width="2">{marks}</g>
+            <text x="{x}" y="{y+9}" text-anchor="middle" fill="{color}" font-family="sans-serif" font-weight="500" font-size="28">VPN</text></svg>'''
+            self.gauge_cache=terminal_texture(svg);self.gauge_key=key
+        snapshot.append_texture(self.gauge_cache,Graphene.Rect().init(0,0,w,h))
 
 
 
@@ -120,15 +155,16 @@ class App:
         icon=Gtk.Image.new_from_paintable(texture);icon.set_pixel_size(28);brand.append(icon)
         name=Gtk.Label(label='Family Connect');name.add_css_class('fc-brand');brand.append(name)
         header.set_title_widget(Gtk.Label(label=''));shell.append(header)
-        brand_header=TerminalHeader();brand_header.set_margin_start(20);brand_header.set_margin_end(20);shell.append(brand_header)
+        brand_header=TerminalHeader();brand_header.set_margin_start(12);brand_header.set_margin_end(12);shell.append(brand_header)
         self.body=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=10)
-        for side in ('top','bottom','start','end'):getattr(self.body,'set_margin_'+side)(20)
-        self.body.set_margin_top(8)
-        self.subtitle=self.label('fc-caption');self.body.append(self.subtitle)
-        self.card=TerminalCard(orientation=Gtk.Orientation.VERTICAL,spacing=8);self.card.add_css_class('fc-card');self.card.set_margin_top(6);self.card.set_margin_bottom(6)
-        status_row=Gtk.Box(spacing=10);status_row.set_margin_top(18);status_row.set_margin_start(18);status_row.set_margin_end(18);self.dot=Gtk.Label(label='●');self.dot.add_css_class('fc-dot');status_row.append(self.dot)
-        self.status=self.label('fc-status');status_row.append(self.status);self.card.append(status_row)
-        self.hint=self.label('fc-caption');self.hint.set_margin_start(18);self.hint.set_margin_end(18);self.hint.set_margin_bottom(18);self.card.append(self.hint);self.body.append(self.card)
+        for side in ('top','bottom','start','end'):getattr(self.body,'set_margin_'+side)(12)
+        self.body.set_margin_top(0)
+        self.subtitle=self.label('fc-caption')
+        self.card=TerminalCard(orientation=Gtk.Orientation.VERTICAL,spacing=8);self.card.add_css_class('fc-card');self.card.set_margin_top(2);self.card.set_margin_bottom(0)
+        self.gauge=TerminalGauge();self.card.append(self.gauge)
+        status_row=Gtk.Box(spacing=10);status_row.set_margin_top(0);status_row.set_margin_start(18);status_row.set_margin_end(18);self.dot=Gtk.Label(label='●');self.dot.add_css_class('fc-dot');self.dot.set_visible(False);status_row.append(self.dot)
+        self.status=self.label('fc-status');self.status.set_xalign(.5);self.status.set_justify(Gtk.Justification.CENTER);status_row.append(self.status);self.card.append(status_row)
+        self.hint=self.label('fc-caption');self.hint.set_margin_start(18);self.hint.set_margin_end(18);self.hint.set_margin_bottom(4);self.hint.set_xalign(.5);self.card.append(self.hint);self.body.append(self.card)
         self.model=Gtk.StringList.new([]);self.choose=Gtk.DropDown(model=self.model);self.choose.set_hexpand(True)
         self.choose.set_tooltip_text('WireGuard / AmneziaWG');self.choose.connect('notify::selected',self.selection_changed);self.body.append(self.choose)
         self.friends_owner_class=None
@@ -138,6 +174,8 @@ class App:
         except ImportError:pass  # Standalone six-file archive has no paired core.
         self.friends_button=self.button('fc-secondary',self.open_friends) if self.friends_owner_class else None
         self.toggle=self.button('fc-primary',self.toggle_vpn)
+        self.body.remove(self.toggle);self.card.append(self.toggle)
+        for edge in ('start','end','bottom'):getattr(self.toggle,'set_margin_'+edge)(10)
         self.add=self.button('fc-secondary',self.import_profile)
         self.check=self.button('fc-quiet',self.check_ip)
         self.note=self.label('fc-note');self.note.set_margin_top(4);self.body.append(self.note)
@@ -149,7 +187,7 @@ class App:
         self.scroll.set_propagate_natural_height(True)
         monitors=self.window.get_display().get_monitors()
         self.height_limit=max(360,monitors.get_item(0).get_geometry().height-160) if monitors.get_n_items() else 720
-        self.scroll.set_max_content_height(self.height_limit);self.scroll.set_child(self.body);shell.append(self.scroll)
+        self.scroll.set_max_content_height(self.height_limit);self.scroll.set_vexpand(True);self.scroll.set_child(self.body);shell.append(self.scroll)
         self.page='status'
         self.language_button=TerminalButton(label='RU / EN');self.language_button.add_css_class('fc-action');self.language_button.connect('clicked',lambda _:self.language());self.body.append(self.language_button)
         self.version_label=Gtk.Label(label='v'+APP_VERSION,xalign=0);self.version_label.add_css_class('fc-caption');self.body.append(self.version_label)
@@ -157,10 +195,10 @@ class App:
         self.messenger_note=Gtk.Label(label='',xalign=0,wrap=True);self.body.append(self.messenger_note)
         self.pages={'status':[self.card,self.toggle,self.note], 'route':[self.route_title,self.choose,self.check],
             'settings':[self.add,self.update_button,self.tcp_button,self.language_button,self.version_label]+([self.friends_button] if self.friends_button else []), 'messenger':[self.messenger_note]}
-        footer=Gtk.Box(spacing=4);footer.set_margin_start(12);footer.set_margin_end(12);footer.set_margin_bottom(12)
+        footer=Gtk.Box(spacing=2);footer.set_homogeneous(True);footer.set_margin_start(12);footer.set_margin_end(12);footer.set_margin_bottom(12)
         self.nav={}
         for page in ('status','messenger','route','settings'):
-            button=TerminalButton();button.add_css_class('fc-action');button.add_css_class('fc-nav');button.set_hexpand(True)
+            button=TerminalButton();button.nav_page=page;button.add_css_class('fc-action');button.add_css_class('fc-nav');button.set_hexpand(True)
             button.connect('clicked',lambda _,p=page:self.select_page(p));footer.append(button);self.nav[page]=button
         shell.append(footer);self.window.set_content(shell)
         self.last_profiles=None
@@ -189,6 +227,7 @@ class App:
             text=('Проверяем подключение' if self.ru else 'Checking connection') if self.initializing else self.t('unknown' if self.active is None else ('on' if self.active else 'off'))
             self.set_value(self.status,'label',text);self.set_value(self.hint,'label',self.t('hint'))
             connected=self.active is True
+            if self.gauge.connected!=connected:self.gauge.connected=connected;self.gauge.queue_draw()
             if self.toggle.has_css_class('connected')!=connected:
                 (self.toggle.add_css_class if connected else self.toggle.remove_css_class)('connected');self.toggle.queue_draw()
             if self.dot.has_css_class('connected')!=connected:
@@ -231,7 +270,7 @@ class App:
     def apply_page(self):
         for page,widgets in self.pages.items():
             for widget in widgets:
-                visible=page==self.page and (widget is not self.tcp_button or '--awg-pilot' in sys.argv)
+                visible=page==self.page and (widget is not self.tcp_button or self.friends_owner_class is not None or '--awg-pilot' in sys.argv)
                 self.set_value(widget,'visible',visible)
         names={'status':('СТАТУС','STATUS'),'messenger':('МЕССЕНДЖЕР','MESSENGER'),'route':('МАРШРУТ','ROUTE'),'settings':('НАСТРОЙКИ','SETTINGS')}
         for page,button in self.nav.items():
@@ -246,7 +285,11 @@ class App:
         from friends_ui import FriendsWindow
         path=Path.home()/'.local/share/family-connect/friends-identity'
         owner=self.friends_owner_class(path,Path(__file__).with_name('update.pub'))
-        self.friends_window=FriendsWindow(self.window,owner,self.ru)
+        def finished():
+            self.busy=False
+            if not self.closed:self.submit(self.initialize,'initialized')
+        self.friends_window=FriendsWindow(self.window,owner,self.ru,driver=self.driver,on_close=finished)
+        self.busy=True;self.revision+=1;self.recovery.stop();self.paint()
         self.friends_window.present()
 
     def language(self):self.ru=not self.ru;self.paint()
@@ -259,7 +302,15 @@ class App:
             index=self.choose.get_selected();self.selected_id=self.items[index][0] if 0<=index<len(self.items) else None
             self.refresh()
     def initialize(self):
-        driver=backend();items=driver.profiles();active=driver.active(items[-1][0]) if items else False
+        driver=backend()
+        if self.friends_owner_class:
+            owner=self.friends_owner_class(Path.home()/'.local/share/family-connect/friends-identity',Path(__file__).with_name('update.pub'))
+            owner.recover(driver)
+        items=driver.profiles()
+        active_ids=[ident for ident,_ in items if driver.active(ident)]
+        # Keep the selected connection last for the existing UI result contract.
+        if active_ids:items=sorted(items,key=lambda item:item[0]==active_ids[0])
+        active=bool(active_ids)
         return driver,items,active
     def submit(self,fn,kind='profiles'):
         if self.busy or self.closed:return

@@ -39,6 +39,7 @@ def regressions():
     try:
         import app as module
         original=module.backend;module.backend=Driver
+        app.friends_owner_class=None  # Layout fixture never reads installed identity.
         try:driver,items,active=app.initialize()
         finally:module.backend=original
         assert app.driver is None and not app.items,'Worker mutated UI state'

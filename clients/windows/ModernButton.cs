@@ -8,6 +8,8 @@ internal sealed class ModernButton : Button
     internal bool TerminalSwitch { get; set; }
     [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
     internal bool SwitchOn { get; set; }
+    [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
+    internal bool NavigationButton { get; set; }
     public ModernButton(){DoubleBuffered=true;FlatStyle=FlatStyle.Flat;FlatAppearance.BorderSize=0;
         FlatAppearance.MouseOverBackColor=Color.FromArgb(16,61,46);FlatAppearance.MouseDownBackColor=Color.FromArgb(37,94,78);Cursor=Cursors.Hand;}
     internal static GraphicsPath Rounded(RectangleF rect,float radius){
@@ -39,7 +41,7 @@ internal sealed class ModernButton : Button
         using var brush=new SolidBrush(fill);e.Graphics.FillPath(brush,path);
         using(var frame=new Pen(ForeColor==Color.FromArgb(255,173,70)?ForeColor:Color.FromArgb(67,142,121),1)){e.Graphics.DrawPath(frame,path);}
         if(Focused&&ShowFocusCues){using var pen=new Pen(Color.FromArgb(152,247,216),2);e.Graphics.DrawPath(pen,path);}
-        var label=Rectangle.Inflate(ClientRectangle,-14,-4);
+        var label=Rectangle.Inflate(ClientRectangle,NavigationButton?-2:-14,-4);
         if(TerminalSwitch){
             float scale=DeviceDpi/96f;var pill=new RectangleF(Width-78*scale,Height/2f-13*scale,62*scale,26*scale);
             Color tint=!Enabled?Color.FromArgb(117,152,138):SwitchOn?Color.FromArgb(152,247,216):Color.FromArgb(255,173,70);
@@ -47,7 +49,7 @@ internal sealed class ModernButton : Button
             e.Graphics.DrawPath(pen,outline);e.Graphics.FillEllipse(knob,pill.Left+(SwitchOn?38:4)*scale,pill.Top+3*scale,20*scale,20*scale);
             label.Width=Math.Max(1,label.Width-(int)(82*scale));
         }
-        TextRenderer.DrawText(e.Graphics,Text,Font,label,Enabled?ForeColor:Color.FromArgb(117,152,138),(TerminalSwitch?TextFormatFlags.Left:TextFormatFlags.HorizontalCenter)|TextFormatFlags.VerticalCenter|TextFormatFlags.WordBreak);
+        TextRenderer.DrawText(e.Graphics,Text,Font,label,Enabled?ForeColor:Color.FromArgb(117,152,138),(TerminalSwitch?TextFormatFlags.Left:TextFormatFlags.HorizontalCenter)|TextFormatFlags.VerticalCenter|TextFormatFlags.WordBreak|TextFormatFlags.NoPadding);
 
     }
 }
