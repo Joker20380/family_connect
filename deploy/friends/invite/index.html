@@ -1,0 +1,31 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer"><title>Приглашение — Family Connect</title>
+<style>body{margin:0;background:#041310;color:#dafff2;font:16px/1.6 monospace}main{max-width:520px;margin:32px auto;padding:24px;border:1px solid #347766}h1{color:#70f4c6;font-size:26px}button{font:inherit;width:100%;padding:16px;margin:12px 0;color:#70f4c6;background:#102e24;border:1px solid #70f4c6}button:disabled{opacity:.5}#code{overflow-wrap:anywhere;font-size:21px}a{color:#70f4c6}p{overflow-wrap:anywhere}</style>
+<main><h1>FAMILY CONNECT</h1><p>Вас пригласили присоединиться.</p><p>Получите личный одноразовый код. После активации устройства вы тоже сможете приглашать друзей.</p>
+<button id="claim">Получить приглашение</button><p id="status" role="status" aria-live="polite"></p><p id="code"></p><button id="copy" hidden>Скопировать код</button>
+<p>В приложении выберите «Активировать» и вставьте код. Не передавайте свой код другим: для друзей используйте ваш QR после активации.</p>
+<h2>Скачать приложение</h2>
+<p><a href="/downloads/FamilyConnect-Test-0.1.18-beta25.apk" download>Android — 36 МБ</a><br>Beta25 · Android 8.0+ · ARM64. Установите APK поверх прежней версии, чтобы сохранить данные.</p>
+<p><a href="/downloads/FamilyConnect-Control-Linux-preview-11c53d18c3bc10a9.tar.gz" download>Linux — архив, 115 КБ</a><br>Тестовая версия 0.2.9 с новой картой и кругом. Требует ручной установки зависимостей и VPN-компонентов. <a href="/downloads/FamilyConnect-Linux-preview-20260920.txt">Инструкция для Linux</a>.</p>
+<p><a href="/downloads/FamilyConnect-Setup-0.2.9-preview-21b740a.exe" download>Windows — 50 МБ</a><br>Тестовая версия 0.2.9 · x64. Установщик без подписи издателя; проверка на пользовательском ПК ещё впереди.</p>
+<p><a href="https://github.com/Joker20380/family_connect" rel="noreferrer">Исходный код и состояние проекта</a></p></main>
+<script>
+'use strict';
+const token=location.hash.slice(1),claim=document.getElementById('claim'),status=document.getElementById('status'),code=document.getElementById('code'),copy=document.getElementById('copy');
+let invitation='';
+if(!/^[a-f0-9]{64}$/.test(token)){claim.disabled=true;status.textContent='Нужна полная ссылка из QR участника.';}
+claim.onclick=async()=>{
+ claim.disabled=true;status.textContent='Получаем приглашение…';
+ try{
+  let id=localStorage.getItem('fc-referral-request-v1');
+  if(!/^[a-f0-9]{32}$/.test(id||'')){id=Array.from(crypto.getRandomValues(new Uint8Array(16)),v=>v.toString(16).padStart(2,'0')).join('');localStorage.setItem('fc-referral-request-v1',id);}
+  const response=await fetch('/friends/referral/claim',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token,request_id:id}),cache:'no-store',credentials:'omit',signal:AbortSignal.timeout(15000)});
+  if(!response.ok){status.textContent=response.status===410?'Все 500 реферальных приглашений уже выданы.':response.status===429?'Лимит выдачи по этому QR на сегодня достигнут. Попробуйте позже.':response.status===403?'Приглашение недоступно. Обратитесь к участнику, показавшему QR.':'Сервис временно недоступен. Можно повторить без расходования второго кода.';return;}
+  const value=await response.json();if(!/^FC-(?:[A-F0-9]{4}-){7}[A-F0-9]{4}$/.test(value.invitation))throw Error();
+  invitation=value.invitation;code.textContent=invitation;copy.hidden=false;
+  status.textContent=value.status==='activated'?'Этот код уже активирован. Для другого человека откройте ссылку в его браузере.':'Ваш код готов. Повторное открытие в этом браузере вернёт тот же код.';
+ }catch(error){status.textContent='Не удалось получить код. Проверьте соединение и разрешите локальное хранилище браузера, затем повторите.';}
+ finally{claim.disabled=false;}
+};
+copy.onclick=async()=>{try{await navigator.clipboard.writeText(invitation);status.textContent='Код скопирован.';}catch(error){status.textContent='Выделите код и скопируйте вручную.';}};
+</script></html>

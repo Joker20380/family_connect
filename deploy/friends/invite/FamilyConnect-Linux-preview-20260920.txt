@@ -1,0 +1,38 @@
+Family Connect для Linux — тестовая версия от 20.09.2026
+
+Архив: FamilyConnect-Control-Linux-preview-11c53d18c3bc10a9.tar.gz
+SHA256: f0f877cb7a6933a950d3c53c100da41f231963912c9cfbc5ebee2ee326cbd037
+Версия интерфейса: 0.2.9 preview. Карта и интерактивный круг обновлены.
+
+Это архив приложения и ядра с ручной установкой, а не автономный установщик.
+Для рабочего VPN нужны отдельно установленные привилегированные компоненты
+Family Connect AWG 3.1/TCP. Архив их не содержит. На чистом компьютере одной
+распаковки недостаточно; подготовка VPN-компонентов требует администратора.
+
+Требования: системный Python 3.10+, venv, GTK 4.8+, libadwaita 1.2+,
+PyGObject, Cairo и GI Cairo. Для Debian/Ubuntu соответствующие пакеты:
+python3-venv python3-gi python3-cairo python3-gi-cairo
+ gir1.2-gtk-4.0 gir1.2-adw-1
+
+Закройте прежнее приложение, штатно отключив VPN. Распакуйте архив в новый
+каталог, не поверх старой версии. Из каталога FamilyConnect-Control-preview:
+
+/usr/bin/python3 -m venv --system-site-packages .venv
+.venv/bin/pip install -r provisioning/requirements.lock
+.venv/bin/python scripts/run_control_preview.py verify
+.venv/bin/python scripts/run_control_preview.py gui
+
+Проверка verify должна вернуть bundle_id:
+11c53d18c3bc10a9bd129a55c466b93f5cb7e91b0d5ff8d90b850db7c004b932
+Не запускайте install-linux.sh из архива: это старый установщик только GUI.
+Не запускайте одновременно старое и новое приложение. Не удаляйте данные
+активации, ключи и журнал незавершённой операции. Если требуется восстановление,
+сначала повторно запустите ту же версию приложения.
+
+Уже настроенный Linux: сохраняйте существующие VPN-компоненты и данные.
+Откат: штатно отключите VPN, закройте preview, вернитесь к прежнему запуску;
+при незавершённом восстановлении сначала устраните ошибку в этой же версии.
+
+Подготовка компонентов и точные ограничения описаны в документации проекта:
+https://github.com/Joker20380/family_connect/blob/desktop/friends-access-20260919/docs/releases/2026-09-20-desktop-awg31.ru.md
+https://github.com/Joker20380/family_connect/blob/desktop/friends-access-20260919/docs/linux-control-preview-rollout.ru.md

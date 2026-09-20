@@ -1,5 +1,7 @@
 # Documentation map
 
+- [Three-platform downloads and rollback](releases/2026-09-20-three-platform-downloads.ru.md).
+
 - [Native Friends AWG 3.1 на Linux/Windows: проверки и rollout](releases/2026-09-20-desktop-awg31.ru.md).
 
 [Desktop Friends TCP recovery и новый Linux UI](releases/2026-09-20-desktop-friends-apply.ru.md).
