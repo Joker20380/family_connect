@@ -36,4 +36,11 @@ def check():
     first.write_to_png('/tmp/fc-desktop-map.png')
     print('Map: shared geography, 3 scales, equal dot coverage, ocean/land and shimmer passed')
 
-if __name__=='__main__':check()
+if __name__=='__main__':
+    try:check()
+    except Exception:
+        import os,traceback
+        if os.environ.get('GITHUB_ACTIONS'):
+            detail=traceback.format_exc().replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+            print('::error title=Native map check::'+detail,flush=True)
+        raise
