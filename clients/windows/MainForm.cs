@@ -3,6 +3,7 @@ namespace FamilyConnect;
 internal sealed class MainForm:Form
 {
     bool ru=CultureInfo.CurrentUICulture.TwoLetterISOLanguageName=="ru",busy;
+    readonly bool saveLanguage;
     string state="unknown";
     bool tcpReady,awgReady,automatic;string? transport,lastError;
     readonly ComboBox mode=new(){DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill};
@@ -33,6 +34,8 @@ internal sealed class MainForm:Form
     string T(string russian,string english)=>ru?russian:english;
     public MainForm(bool smoke,bool layoutTest=false)
     {
+        saveLanguage=!smoke&&!layoutTest;
+        if(saveLanguage)try{using var preferences=Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\family_connect");var saved=preferences?.GetValue("Language") as string;if(saved is "ru" or "en")ru=saved=="ru";}catch(System.Security.SecurityException){}catch(UnauthorizedAccessException){}catch(IOException){}
         AutoScaleMode=AutoScaleMode.Dpi;AutoScaleDimensions=new SizeF(96,96);
         Text=$"family_connect · {Application.ProductVersion.Split('+')[0]}";ClientSize=new(390,548);MinimumSize=new(360,360);
         DoubleBuffered=true;
@@ -148,7 +151,7 @@ internal sealed class MainForm:Form
                 using var reader=new StreamReader(stream);await Execute(new(AwgSelected?"activate-awg":TcpSelected?"activate-tcp":"activate",await reader.ReadToEndAsync()));
             }catch(Exception){detail.Text=T("Не удалось прочитать файл активации.","Could not read the activation file.");}
         };
-        language.Click+=(_,_)=>{ru=!ru;PaintState();FitWindow();};
+        language.Click+=(_,_)=>{ru=!ru;if(saveLanguage)try{using var preferences=Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\family_connect");preferences.SetValue("Language",ru?"ru":"en");}catch(Exception){detail.Text=T("Не удалось сохранить язык.","Could not save language.");}PaintState();FitWindow();};
         poll.Tick+=async(_,_)=>await PollStatus();
         FormClosing+=(_,e)=>{if(busy){e.Cancel=true;return;}if(!smoke&&(state is "on" or "pending")&&!Confirm(T("Закрыть окно? VPN продолжит работать.","Close this window? The VPN will keep running.")))e.Cancel=true;};
         FormClosed+=(_,_)=>{poll.Dispose();loadTimer.Dispose();loadTip.Dispose();connect.Dispose();};
@@ -352,7 +355,7 @@ internal sealed class MainForm:Form
         activate.Text=AwgSelected?T("Открыть AWG-активацию","Open AWG activation"):TcpSelected?T("Открыть TCP-активацию","Open TCP activation"):T("Открыть файл активации","Open activation file");activate.Enabled=!busy&&!AutoSelected&&(state=="off"||state=="inactive");
         notice.Text=AutoSelected?T("Для активации выберите нужный транспорт. Авто использует уже принятые профили.","Select a transport to activate it. Auto uses existing profiles."):T("Туннель не подтверждает доступность интернета. Активация пилота выполняется оператором.","Tunnel status does not verify Internet access. Pilot activation is handled by the operator.");
         update.Text=availableUpdate is null?T("Проверить обновления","Check for updates"):T("Установить обновление","Install update");update.Enabled=!busy;
-        language.Text="RU / EN";
+        language.Text=T("Язык: Русский → English","Language: English → Русский");
         content.Controls.Find("tagline",false)[0].Text=T("Связь для вашей семьи","Connection for your family");
         detail.Visible=detail.Text.Length>0;PaintLoad();ApplyPage();FitContent();
         if(Visible)FitWindow();

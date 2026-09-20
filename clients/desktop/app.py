@@ -5,6 +5,7 @@ WORDS={'title': ('Связь для вашей семьи', 'Connectivity for yo
 import base64
 import concurrent.futures
 import locale
+import os
 import math
 from pathlib import Path
 import subprocess
@@ -241,6 +242,12 @@ def translated(key,ru):return WORDS[key][0 if ru else 1]
 class App:
     def __init__(self,application=None,smoke=False):
         self.ru=bool(locale.getlocale()[0] and locale.getlocale()[0].lower().startswith('ru'))
+        self.language_path=None if smoke else Path(os.environ.get('XDG_CONFIG_HOME',str(Path.home()/'.config')))/'family-connect'/'ui-language'
+        if self.language_path:
+            try:
+                saved=self.language_path.read_text(encoding='ascii').strip()
+                if saved in ('ru','en'):self.ru=saved=='ru'
+            except (OSError,UnicodeError):pass
         self.driver=None;self.items=[];self.selected_id=None;self.active=None;self.busy=False;self.initializing=False
         self.closed=False;self.revision=0;self.polling=False;self.poll_error=False
         self.recovery=RecoveryPolicy();self.operation_generation=None
@@ -337,6 +344,7 @@ class App:
     def set_value(self,widget,prop,value):
         if widget.get_property(prop)!=value:widget.set_property(prop,value);self.widget_changes+=1
     def paint(self):
+        self.language_button.set_label('Язык: Русский → English' if self.ru else 'Language: English → Русский')
         if not self.closed and not self.render_source:self.render_source=GLib.idle_add(self.render)
     def render(self):
         if self.friends_button:self.friends_button.set_label("Доступ по приглашению" if self.ru else "Invitation access");self.friends_button.set_sensitive(not self.busy)
@@ -461,7 +469,14 @@ class App:
         self.scroll.get_vadjustment().set_value(0)
         self.friends_window.present()
 
-    def language(self):self.ru=not self.ru;self.paint()
+    def language(self):
+        self.ru=not self.ru
+        if self.language_path:
+            try:
+                self.language_path.parent.mkdir(parents=True,exist_ok=True,mode=0o700)
+                pending=self.language_path.with_suffix('.pending');pending.write_text('ru' if self.ru else 'en',encoding='ascii');pending.replace(self.language_path)
+            except OSError:self.set_detail('Не удалось сохранить язык.' if self.ru else 'Could not save language.')
+        self.paint()
     def set_detail(self,text):self.detail_text=text;self.paint()
     def selected(self):
         return self.selected_id
