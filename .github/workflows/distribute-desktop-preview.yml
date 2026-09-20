@@ -62,4 +62,7 @@ jobs:
             echo 'Preview already exists; refusing to overwrite immutable assets.' >&2
             exit 1
           fi
-          gh release create "$tag" publish/* --repo "$repo" --target a1be617f4fae2eac82ef5945bd7e36c325f891a5 --prerelease --title 'Desktop preview 2026-09-20 · server load' --notes-file notes.md
+          if ! gh release create "$tag" publish/* --repo "$repo" --target a1be617f4fae2eac82ef5945bd7e36c325f891a5 --prerelease --title 'Desktop preview 2026-09-20 · server load' --notes-file notes.md >publish-result.log 2>&1; then
+            sed 's/^/::error::/' publish-result.log
+            exit 1
+          fi
