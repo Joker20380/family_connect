@@ -1,0 +1,13 @@
+{
+  "page_sha256": "27ddb14889eababff11469326eb66c497c43bcd8a8a81a5fe91c1049e703b102",
+  "csp": true,
+  "old_universal_preserved": true,
+  "assets": [
+    {
+      "name": "FamilyConnect-Test-0.1.18-beta35.apk",
+      "bytes": 36407372,
+      "sha256": "fd7cc8ca00ca95acd4cc2cf5cc265d6afd46d39a4a21d22374e14f1f915a3a4e",
+      "verified": true
+    }
+  ]
+}
