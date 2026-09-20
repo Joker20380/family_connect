@@ -1,20 +1,32 @@
 # Current state / Текущее состояние
 
-## Desktop AWG 3.1 — работа начата 2026-09-20
+## Desktop Friends AWG 3.1 — 2026-09-20
 
-Пользователь уточнил: AWG2 уже не работает в России. Для РФ целевые транспорты —
-AWG3.1 и TCP REALITY; legacy compatibility не является проверкой доступности из РФ.
+Реализован native AWG 3.1 для Friends на Linux/Windows (source `3e5943c`, desktop-ветка).
+Пользователь сообщил, что AWG 2 уже не работает в России: для РФ целевые транспорты —
+AWG 3.1 и TCP REALITY. Совместимость старых профилей не означает доступность из РФ.
 
-В desktop-ветке готовится переход на engine b5928ef / tools ee0f0a9 с существующими
-проверенными startup/u16 patches. Добавлены Friends AWG apply/recovery, полный IPv4
-адрес из /16 в Windows journal/network/health, преобразование bool для Linux tools.
-Локально:43 targeted Python passed, Windows36 catalog vectors passed, Go Windows
-worker/fixture cross-build passed, изолированный Linux AWG3.1 handshake+HTTP passed
-с адресом10.78.42.254/32. Windows runtime и новые GUI проверки ещё не завершены.
-Ничего не установлено/не опубликовано: desktopv0.2.9, Android0.1.18-beta19/code19.
-Следующее: проверить awg-quick/helper в контейнере, Windows CI, GTK и полный regression;
-после этого живой Friends и immutable release. Анимация отложена.
-[Отчёт](releases/2026-09-20-desktop-awg31.ru.md).
+Linux: pinned engine/tools, проверка комплекта до установки, принудительный userspace,
+общая блокировка installer/helper, преобразование bool для awg-tools, apply/rollback.
+Windows: отдельный Friends runtime, полный адрес /16 в network/health/journal v2,
+выбор транспорта в UI. Старый journal v1 читается. Новая анимация отложена.
+
+Подтверждены:629 Python tests; GTK Friends transport/parent и просмотр рендера;
+реальный Linux helper import/up/HTTP/down, неверный ключ и cleanup; Windows native
+AWG 3.1 IPv4/IPv6, подписанный Friends →10.83.42.254/32→journal v2→crash recovery.
+Windows/Linux build/install/UI/layout `35492148281` platform jobs success;
+Windows control `35492148256` success; Linux paired `35491752871` success;
+Windows native service `35491998544` success. Финальный совместный Windows
+AWG/Friends/service `35492618745` и Linux AWG `35492618670` — **success**;
+Windows TCP `35492148288` — success. Финальные Windows/Linux client platform jobs
+`35492618663` — success (Android failure, release skipped). Проблема изоляции Friends
+fixture исправлена без ослабления требования чистой установки.
+
+Публикации/установки приложения/server rollout нет: public desktop `v0.2.9`,
+Android `0.1.18-beta19/code19`. Android SDK setup и phase0 остаются отдельными failures.
+Далее: живой Friends Linux/Windows и проверка из российской сети;
+desktop messenger/QR/карта и новый immutable выпуск остаются следующими этапами.
+[Версии, проверки, rollout/rollback](releases/2026-09-20-desktop-awg31.ru.md).
 
 ## Desktop: Friends TCP recovery и новый Linux UI — 2026-09-20
 

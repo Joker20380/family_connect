@@ -1,5 +1,7 @@
 # Documentation map
 
+- [Native Friends AWG 3.1 на Linux/Windows: проверки и rollout](releases/2026-09-20-desktop-awg31.ru.md).
+
 [Desktop Friends TCP recovery и новый Linux UI](releases/2026-09-20-desktop-friends-apply.ru.md).
 
 [Короткая инструкция Family Connect Test](testing/friends-quickstart.ru.md).

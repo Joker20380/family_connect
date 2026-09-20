@@ -1,20 +1,23 @@
 # Working plan / Рабочий план
 
-## Desktop AWG 3.1 — работа начата 2026-09-20
+## Следующий этап после native Friends AWG 3.1 — 2026-09-20
 
-Пользователь уточнил: AWG2 уже не работает в России. Для РФ целевые транспорты —
-AWG3.1 и TCP REALITY; legacy compatibility не является проверкой доступности из РФ.
+Source `3e5943c`: native AWG 3.1 и /16 реализованы на Linux/Windows. Для РФ опираемся
+на AWG 3.1/TCP REALITY; по сообщению пользователя AWG 2 там уже не работает.
 
-В desktop-ветке готовится переход на engine b5928ef / tools ee0f0a9 с существующими
-проверенными startup/u16 patches. Добавлены Friends AWG apply/recovery, полный IPv4
-адрес из /16 в Windows journal/network/health, преобразование bool для Linux tools.
-Локально:43 targeted Python passed, Windows36 catalog vectors passed, Go Windows
-worker/fixture cross-build passed, изолированный Linux AWG3.1 handshake+HTTP passed
-с адресом10.78.42.254/32. Windows runtime и новые GUI проверки ещё не завершены.
-Ничего не установлено/не опубликовано: desktopv0.2.9, Android0.1.18-beta19/code19.
-Следующее: проверить awg-quick/helper в контейнере, Windows CI, GTK и полный regression;
-после этого живой Friends и immutable release. Анимация отложена.
-[Отчёт](releases/2026-09-20-desktop-awg31.ru.md).
+Закрыто: Windows AWG/Friends/service `35492618745`, Linux AWG `35492618670`,
+Windows TCP `35492148288` и Windows/Linux client platform jobs `35492618663` — success.
+Android setup продолжает давать aggregate failure; release skipped.
+
+1. Проверить живой Friends на Linux и Windows и доступность из российской сети.
+   Контейнер/CI подтверждают протокол и lifecycle, но не обход блокировок провайдера.
+2. Выпустить новую immutable desktop-версию после platform CI, рендера и проверки
+   скачанных assets; подписывать offline с увеличением sequence. `v0.2.9` не заменять.
+3. Продолжить desktop messenger/QR/карту. Анимацию в духе «Бункера» пользователь отложил.
+
+Выпуск и установка ещё не выполнены. Android `0.1.18-beta19/code19` остаётся прежним.
+Известные Android setup/phase0 failures не объявлять зелёными.
+[Отчёт и rollback](releases/2026-09-20-desktop-awg31.ru.md).
 
 ## Desktop: Friends TCP recovery и новый Linux UI — 2026-09-20
 
