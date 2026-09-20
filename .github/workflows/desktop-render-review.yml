@@ -23,21 +23,39 @@ jobs:
           run-id: ${{ inputs.run_id || '35500441063' }}
           github-token: ${{ github.token }}
           path: preview
-      - name: Main screen
+      - name: preview PNG parts from 0
         shell: python
         run: |
           import pathlib,base64,hashlib
           files=list(pathlib.Path('preview').rglob('Windows-preview.png'));assert len(files)==1
           raw=files[0].read_bytes();assert raw.startswith(b'\x89PNG\r\n\x1a\n')
-          data=base64.b64encode(raw).decode();assert len(data)<=180000
+          data=base64.b64encode(raw).decode();assert len(data)<=60000
           print('SHA256',hashlib.sha256(raw).hexdigest())
-          for offset in range(0,len(data),20000):print(f'::notice title=Windows preview part {offset}::{data[offset:offset+20000]}')
-      - name: Route screen
+          for offset in range(0,min(len(data),30000),3000):print(f'::notice title=Windows preview part {offset}::{data[offset:offset+3000]}')
+      - name: preview PNG parts from 30000
+        shell: python
+        run: |
+          import pathlib,base64,hashlib
+          files=list(pathlib.Path('preview').rglob('Windows-preview.png'));assert len(files)==1
+          raw=files[0].read_bytes();assert raw.startswith(b'\x89PNG\r\n\x1a\n')
+          data=base64.b64encode(raw).decode();assert len(data)<=60000
+          print('SHA256',hashlib.sha256(raw).hexdigest())
+          for offset in range(30000,min(len(data),60000),3000):print(f'::notice title=Windows preview part {offset}::{data[offset:offset+3000]}')
+      - name: route PNG parts from 0
         shell: python
         run: |
           import pathlib,base64,hashlib
           files=list(pathlib.Path('preview').rglob('Windows-route.png'));assert len(files)==1
           raw=files[0].read_bytes();assert raw.startswith(b'\x89PNG\r\n\x1a\n')
-          data=base64.b64encode(raw).decode();assert len(data)<=180000
+          data=base64.b64encode(raw).decode();assert len(data)<=60000
           print('SHA256',hashlib.sha256(raw).hexdigest())
-          for offset in range(0,len(data),20000):print(f'::notice title=Windows route part {offset}::{data[offset:offset+20000]}')
+          for offset in range(0,min(len(data),30000),3000):print(f'::notice title=Windows route part {offset}::{data[offset:offset+3000]}')
+      - name: route PNG parts from 30000
+        shell: python
+        run: |
+          import pathlib,base64,hashlib
+          files=list(pathlib.Path('preview').rglob('Windows-route.png'));assert len(files)==1
+          raw=files[0].read_bytes();assert raw.startswith(b'\x89PNG\r\n\x1a\n')
+          data=base64.b64encode(raw).decode();assert len(data)<=60000
+          print('SHA256',hashlib.sha256(raw).hexdigest())
+          for offset in range(30000,min(len(data),60000),3000):print(f'::notice title=Windows route part {offset}::{data[offset:offset+3000]}')
