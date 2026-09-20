@@ -3,7 +3,8 @@ namespace FamilyConnect;
 internal sealed class TcpSession
 {
     readonly object gate=new();
-    string state="off",transport="tcp";string? owner,error;
+    string state="off",transport="tcp";string? owner,error,loadCountry;
+    public string? LoadCountry(string sid){lock(gate)return owner==sid?loadCountry:null;}
     Task? worker;CancellationTokenSource? cancel;
     static string Marker=>Path.Combine(Store.Root,"tcp-session.json");
     sealed record Journal(int Version,string Adapter,int? Awg=null,string? Address=null);
@@ -19,11 +20,12 @@ internal sealed class TcpSession
     }
     public void Start(string sid,TcpGrant grant,bool recover=true)=>StartCore(sid,grant,null,null,recover);
     public void StartAwg(string sid,AwgGrant grant,string key,bool recover=true)=>StartCore(sid,null,grant,key,recover);
-    public void StartFriendsAwg(string sid,FriendsAwg profile)=>StartCore(sid,null,null,null,true,profile);
-    void StartCore(string sid,TcpGrant? grant,AwgGrant? awg,string? key,bool recover,FriendsAwg? friends=null)
+    public void StartFriendsAwg(string sid,FriendsAwg profile,string? country=null)=>StartCore(sid,null,null,null,true,profile,country);
+    void StartCore(string sid,TcpGrant? grant,AwgGrant? awg,string? key,bool recover,FriendsAwg? friends=null,string? country=null)
     {
         lock(gate){
             if(state!="off"||File.Exists(Marker))throw new InvalidOperationException("TCP session busy or needs cleanup");
+            loadCountry=country is "ru" or "nl"?country:(grant?.Server??awg?.Server) switch{"185.251.89.19"=>"ru","186.246.45.246"=>"nl",_=>null};
             owner=sid;error=null;transport=awg is null&&friends is null?"tcp":"awg";state="pending";cancel=new CancellationTokenSource();
             worker=Run(grant,awg,key,cancel.Token,recover,friends);
         }

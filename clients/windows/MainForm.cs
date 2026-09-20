@@ -23,6 +23,9 @@ internal sealed class MainForm:Form
     string page="status";
     readonly RouteMap routeMap=new();
     readonly TerminalDial dial=new();
+    readonly Label loadLabel=new(){AutoSize=true,Dock=DockStyle.Fill};readonly LoadBar loadBar=new();readonly ToolTip loadTip=new();
+    readonly System.Windows.Forms.Timer loadTimer=new(){Interval=3000};
+    LoadSample? loadSample;bool loadPending;DateTime loadNext=DateTime.MinValue;long loadRevision=-1;int loadMode=-1;
     readonly Label routeTitle=new(){AutoSize=true,Dock=DockStyle.Fill},messengerNote=new(){AutoSize=true,Dock=DockStyle.Fill};
     readonly Dictionary<string,Control[]> pages=new();
     readonly Dictionary<string,ModernButton> nav=new();
@@ -68,12 +71,13 @@ internal sealed class MainForm:Form
         detail.ForeColor=Color.FromArgb(255,173,70);notice.ForeColor=Color.FromArgb(153,196,181);
         var header=new TerminalHeader{Dock=DockStyle.Fill,Margin=new Padding(0,0,0,8)};
         var tagline=new Label{Text=T("Связь для вашей семьи","Connection for your family"),Name="tagline",AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.FromArgb(153,196,181),Margin=new Padding(0,0,0,16)};
-        card.AutoSize=true;card.Dock=DockStyle.Fill;card.ColumnCount=1;card.RowCount=3;
+        card.AutoSize=true;card.Dock=DockStyle.Fill;card.ColumnCount=1;card.RowCount=5;
         card.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
         card.Padding=new Padding(16,12,16,12);card.Margin=new Padding(0,0,0,12);
         card.BackColor=Color.FromArgb(7,32,24);
         card.Controls.Add(dial,0,0);card.Controls.Add(status,0,1);card.Controls.Add(description,0,2);
-        dial.Click+=(_,_)=>connect.PerformClick();
+        card.Controls.Add(loadLabel,0,3);card.Controls.Add(loadBar,0,4);loadLabel.ForeColor=Color.FromArgb(153,196,181);
+        dial.Click+=async(_,_)=>{if(connect.Enabled)await Execute(new(ConnectionAction()));};
         card.SizeChanged+=(_,_)=>{using var path=ModernButton.Cut(new RectangleF(0,0,card.Width,card.Height),12*DeviceDpi/96f);var old=card.Region;card.Region=new Region(path);old?.Dispose();};
         description.ForeColor=Color.FromArgb(153,196,181);
         foreach(var button in new[]{request,activate,language,update,friends})button.Font=new Font(Font.FontFamily,10,FontStyle.Bold);
@@ -82,12 +86,12 @@ internal sealed class MainForm:Form
         mode.Margin=new Padding(0,4,0,8);mode.BackColor=Color.FromArgb(7,32,24);mode.ForeColor=ForeColor;
         mode.SelectedIndexChanged+=(_,_)=>PaintState();
         int row=0;
-        foreach(Control child in new Control[]{header,tagline,card,mode,connect,friends,request,activate,detail,notice,update})
+        foreach(Control child in new Control[]{header,tagline,card,mode,friends,request,activate,detail,notice,update})
             content.Controls.Add(child,0,row++);
         var version=new Label{Text="v"+Application.ProductVersion.Split('+')[0],AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.FromArgb(153,196,181)};
         language.MinimumSize=new Size(0,36);language.Dock=DockStyle.Fill;
         foreach(var child in new Control[]{language,version,routeTitle,routeMap,messengerNote})content.Controls.Add(child,0,row++);
-        pages["status"]=new Control[]{card,connect,notice};
+        pages["status"]=new Control[]{card,notice};
         pages["route"]=new Control[]{routeTitle,routeMap,mode};
         pages["settings"]=new Control[]{friends,request,activate,update,language,version};
         pages["messenger"]=new Control[]{messengerNote};
@@ -147,18 +151,19 @@ internal sealed class MainForm:Form
         language.Click+=(_,_)=>{ru=!ru;PaintState();FitWindow();};
         poll.Tick+=async(_,_)=>await PollStatus();
         FormClosing+=(_,e)=>{if(busy){e.Cancel=true;return;}if(!smoke&&(state is "on" or "pending")&&!Confirm(T("Закрыть окно? VPN продолжит работать.","Close this window? The VPN will keep running.")))e.Cancel=true;};
-        FormClosed+=(_,_)=>poll.Dispose();
+        FormClosed+=(_,_)=>{poll.Dispose();loadTimer.Dispose();loadTip.Dispose();connect.Dispose();};
+        loadTimer.Tick+=async(_,_)=>await RefreshLoad();
         PaintState();
         Shown+=async(_,_)=>{
             FitWindow();
             if(layoutTest)return;
             if(smoke){Close();return;}
-            await Execute(new("status"));poll.Start();
+            await Execute(new("status"));poll.Start();loadTimer.Start();await RefreshLoad();
         };
     }
     internal static void CheckLayouts()
     {
-        RouteMap.CheckPixels();
+        ServerLoad.Check();RouteMap.CheckPixels();
         CheckPolling();
         using(var preview=new MainForm(true,true)){
             preview.ru=true;preview.state="off";preview.Show();preview.PaintState();preview.FitWindow();Application.DoEvents();
@@ -349,8 +354,28 @@ internal sealed class MainForm:Form
         update.Text=availableUpdate is null?T("Проверить обновления","Check for updates"):T("Установить обновление","Install update");update.Enabled=!busy;
         language.Text="RU / EN";
         content.Controls.Find("tagline",false)[0].Text=T("Связь для вашей семьи","Connection for your family");
-        detail.Visible=detail.Text.Length>0;ApplyPage();FitContent();
+        detail.Visible=detail.Text.Length>0;PaintLoad();ApplyPage();FitContent();
         if(Visible)FitWindow();
+    }
+    void PaintLoad(){
+        var sample=loadSample;
+        if(sample is not null&&(!sample.Fresh||loadRevision!=revision||loadMode!=mode.SelectedIndex))sample=null;
+        loadBar.Percent=sample?.Percent;
+        loadLabel.Text=T("Нагрузка сервера","Server load")+" · "+(sample?.Percent is double p?(sample.Estimated?"≈ ":"")+Math.Round(p)+"%":T("Нет данных","No data"));
+        loadBar.AccessibleName=loadLabel.Text;loadBar.Invalidate();
+        loadTip.SetToolTip(loadLabel,sample is null?loadLabel.Text:$"CPU {sample.Cpu:F0}% · ↓ {sample.Rx:F1} / ↑ {sample.Tx:F1} Mbps"+(sample.Estimated?T(" · оценка по 200 Мбит/с исходящего канала"," · estimated using 200 Mbps egress"):""));
+    }
+    async Task RefreshLoad(){
+        if(IsDisposed||Disposing)return;PaintLoad();
+        if(loadPending||busy||page!="status")return;
+        if(DateTime.UtcNow<loadNext&&loadRevision==revision&&loadMode==mode.SelectedIndex)return;
+        loadPending=true;long started=revision;int selected=mode.SelectedIndex;
+        try{
+            var target=await call(new("load-country",AutoSelected?"auto":AwgSelected?"awg":TcpSelected?"tcp":"wg"));
+            var sample=target.Ok&&target.Code is "ru" or "nl"?await ServerLoad.Fetch(target.Code):null;
+            if(!IsDisposed&&!Disposing&&started==revision&&selected==mode.SelectedIndex){loadSample=sample;loadRevision=started;loadMode=selected;}
+        }catch(Exception){if(started==revision)loadSample=null;}
+        finally{loadPending=false;loadNext=DateTime.UtcNow.AddSeconds(15);if(!IsDisposed&&!Disposing)PaintLoad();}
     }
     void ApplyPage(){
         routeTitle.Text=T("Выберите профиль подключения.","Choose a connection profile.");

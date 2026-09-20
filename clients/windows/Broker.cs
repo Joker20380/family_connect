@@ -57,6 +57,17 @@ internal sealed class Broker:ServiceBase
         if(state!="off"&&owner!=sid)return new(false,"other-user",Error:"other-user");
         if(request.Action.StartsWith("connect",StringComparison.Ordinal)&&state=="off")automatic.ClearError();
         switch(request.Action){
+            case "load-country":
+                if(request.Activation is not ("tcp" or "awg" or "wg" or "auto"))return new(false,state,Error:"unsupported-action");
+                string? loadTarget=null;
+                if(session.State!="off")loadTarget=tcp.LoadCountry(sid);
+                else if(request.Activation==session.Transport)loadTarget=tcp.LoadCountry(sid);
+                if(loadTarget is null&&state=="off"){
+                    string? endpoint=request.Activation=="tcp"?Store.Tcp(sid)?.Server:request.Activation=="awg"?Store.Awg(sid)?.Server:null;
+                    loadTarget=endpoint switch{"185.251.89.19"=>"ru","186.246.45.246"=>"nl",_=>null};
+                }
+                return new(true,state,Code:loadTarget);
+
             case "friends-create":
             case "friends-identity":
                 if(request.Activation is not null)return new(false,state,Error:"unsupported-action");
@@ -88,7 +99,7 @@ internal sealed class Broker:ServiceBase
                 if(state!="off")return new(false,state,Error:"busy");
                 if(request.Activation is not null)return new(false,state,Error:"unsupported-action");
                 if(!File.Exists(Path.Combine(AppContext.BaseDirectory,"awg","fc-awg.exe")))return new(false,"off",Error:"awg-engine-missing");
-                tcp.StartFriendsAwg(sid,FriendsOwner.Awg(sid,request.Action.EndsWith("-ru",StringComparison.Ordinal)?"ru":"nl",stop.Token));
+                tcp.StartFriendsAwg(sid,FriendsOwner.Awg(sid,request.Action.EndsWith("-ru",StringComparison.Ordinal)?"ru":"nl",stop.Token),request.Action.EndsWith("-ru",StringComparison.Ordinal)?"ru":"nl");
                 return new(true,"pending",Transport:"awg");
 
             case "connect-auto":
