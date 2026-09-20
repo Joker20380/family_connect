@@ -2,6 +2,9 @@
 
 ## Desktop AWG 3.1 — работа начата 2026-09-20
 
+Пользователь уточнил: AWG2 уже не работает в России. Для РФ целевые транспорты —
+AWG3.1 и TCP REALITY; legacy compatibility не является проверкой доступности из РФ.
+
 В desktop-ветке готовится переход на engine b5928ef / tools ee0f0a9 с существующими
 проверенными startup/u16 patches. Добавлены Friends AWG apply/recovery, полный IPv4
 адрес из /16 в Windows journal/network/health, преобразование bool для Linux tools.

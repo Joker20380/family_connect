@@ -56,6 +56,12 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           New-Item -ItemType Directory "$env:RUNNER_TEMP/fc-awg-broker/awg" | Out-Null
           Copy-Item "$env:RUNNER_TEMP/fc-windows-awg/fc-awg.exe","$env:RUNNER_TEMP/fc-windows-awg/wintun.dll" "$env:RUNNER_TEMP/fc-awg-broker/awg/"
+      - name: Signed Friends AWG 3.1 full address and journal recovery
+        shell: pwsh
+        timeout-minutes: 5
+        run: |
+          python pilot/windows-awg/friends_check.py "$env:RUNNER_TEMP/fc-awg-broker" "$env:RUNNER_TEMP/fc-windows-awg" "$env:RUNNER_TEMP/awg-friends-result.json"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Build pinned TCP peer for automatic transport acceptance
         shell: pwsh
         run: |
@@ -85,4 +91,5 @@ jobs:
             ${{ runner.temp }}/awg-acceptance.*
             ${{ runner.temp }}/awg31-acceptance.*
             ${{ runner.temp }}/awg-broker*
+            ${{ runner.temp }}/awg-friends*
             ${{ runner.temp }}/fc-awg-broker/*error.txt

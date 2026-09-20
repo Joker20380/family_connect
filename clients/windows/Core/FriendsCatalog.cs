@@ -181,7 +181,12 @@ internal sealed class FriendsAwg(string address,string config)
     {
         ValidateAddress(Address);
         if(!System.Text.RegularExpressions.Regex.IsMatch(adapter,@"\Afcawg[0-9a-f]{8}\z"))throw new FormatException("adapter");
-        return JsonSerializer.Serialize(new{adapter,uplink,config});
+        #if TCP_SESSION_TEST
+        var runtime=System.Text.RegularExpressions.Regex.Replace(config,@"(?m)^endpoint=[^:]+:","endpoint=127.0.0.1:");
+#else
+        var runtime=config;
+#endif
+        return JsonSerializer.Serialize(new{adapter,uplink,config=runtime});
     }
     public override string ToString()=>"FriendsAwg";
 }

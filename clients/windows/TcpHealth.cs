@@ -31,7 +31,7 @@ internal static class TcpHealth
             if(wireguard){if(adapter!="fc-native")throw new FormatException("WG adapter");}else TcpNetwork.ValidateAdapter(adapter);
 #if TCP_SESSION_TEST
             var uri=new Uri("http://198.18.0.1/health/"+(second?"b":"a"));
-            var source=IPAddress.Parse("198.18.0.2");
+            var source=IPAddress.Parse(address??"198.18.0.2");
 #else
             var uri=new Uri(second?"https://www.gstatic.com/generate_204":"https://1.1.1.1/cdn-cgi/trace");
             var source=IPAddress.Parse(address??(awg is int n?"10.78.0."+n:"10.79.0.2"));
