@@ -17,6 +17,7 @@ internal sealed class MainForm:Form
     readonly System.Windows.Forms.Timer poll=new(){Interval=3000};
     readonly TableLayoutPanel content=new();
     readonly Panel viewport=new();
+    readonly TableLayoutPanel footer=new();
     readonly TableLayoutPanel card=new();
     bool fitting;
     string page="status";
@@ -87,7 +88,7 @@ internal sealed class MainForm:Form
         pages["route"]=new Control[]{routeTitle,mode};
         pages["settings"]=new Control[]{friends,request,activate,update,language,version};
         pages["messenger"]=new Control[]{messengerNote};
-        var footer=new TableLayoutPanel{Dock=DockStyle.Fill,Height=64,Padding=new Padding(12,2,12,8),Margin=Padding.Empty,ColumnCount=4,RowCount=1};
+        footer.Dock=DockStyle.Fill;footer.Height=64;footer.Padding=new Padding(12,2,12,8);footer.Margin=Padding.Empty;footer.ColumnCount=4;footer.RowCount=1;
         int column=0;
         foreach(string name in new[]{"status","messenger","route","settings"}){
             footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,25));
@@ -180,7 +181,7 @@ internal sealed class MainForm:Form
             foreach(Control control in form.content.Controls){
                 if(!control.Visible)continue;
                 if(control.Left<0||control.Right>form.content.ClientSize.Width||control.Top<bottom)
-                    throw new InvalidOperationException("Clipped or overlapping content");
+                    throw new InvalidOperationException($"Clipped or overlapping content: page={selectedPage}, scale={scale}, ru={russian}, protocol={protocol}, state={connection}, requested={size}, client={form.ClientSize}, content={form.content.ClientSize}, row={form.content.GetRow(control)}, type={control.GetType().Name}, bounds={control.Bounds}, previousBottom={bottom}, text={control.Text}");
                 bottom=control.Bottom;
                 if(control is Label label && label.Height<label.GetPreferredSize(new Size(label.Width,0)).Height)
                     throw new InvalidOperationException("Clipped label");
@@ -269,7 +270,7 @@ internal sealed class MainForm:Form
         content.SuspendLayout();
         content.MinimumSize=new Size(width,0);content.MaximumSize=new Size(width,0);content.Width=width;
         int textWidth=Math.Max(1,width-content.Padding.Horizontal);
-        foreach(var label in new[]{title,detail,notice})label.MaximumSize=new Size(textWidth,0);
+        foreach(var label in new[]{title,detail,notice,routeTitle,messengerNote})label.MaximumSize=new Size(textWidth,0);
         foreach(var label in new[]{status,description})label.MaximumSize=new Size(Math.Max(1,textWidth-card.Padding.Horizontal),0);
         content.ResumeLayout(true);
     }
@@ -287,7 +288,7 @@ internal sealed class MainForm:Form
         try{
             FitContent();content.PerformLayout();
             int max=Screen.FromControl(this).WorkingArea.Height-(Height-ClientSize.Height)-40;
-            ClientSize=new Size(ClientSize.Width,Math.Min(max,content.PreferredSize.Height+language.Parent!.Height));
+            ClientSize=new Size(ClientSize.Width,Math.Min(max,content.PreferredSize.Height+footer.Height));
             FitContent();
         }finally{fitting=false;}
     }
@@ -327,9 +328,8 @@ internal sealed class MainForm:Form
         update.Text=availableUpdate is null?T("Проверить обновления","Check for updates"):T("Установить обновление","Install update");update.Enabled=!busy;
         language.Text="RU / EN";
         content.Controls.Find("tagline",false)[0].Text=T("Связь для вашей семьи","Connection for your family");
-        detail.Visible=detail.Text.Length>0;FitContent();
+        detail.Visible=detail.Text.Length>0;ApplyPage();FitContent();
         if(Visible)FitWindow();
-        ApplyPage();
     }
     void ApplyPage(){
         routeTitle.Text=T("Выберите профиль подключения.","Choose a connection profile.");
