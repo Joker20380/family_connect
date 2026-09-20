@@ -1,5 +1,27 @@
 # Current state / Текущее состояние
 
+## Установлены auth helpers и Linux Friends preview — 2026-09-20
+
+На хосте установлены оба AWG/TCP auth-session helpers из7a8036a за один pkexec install.
+Backup: `/var/backups/family-connect/linux-auth-20260920`. Движки/профили сохранены.
+CI7a8036a: AWG35495112337 и TCP35495112351 success; Linux/Windows platform jobs
+35495112338 success; aggregate failure — Android SDK setup, phase0 failure.
+
+Меню Family Connect теперь запускает постоянный paired preview `5a9ca444046993a7`
+с отдельным venv и lockfile dependencies; значок — дверь из Android, не прежний
+многогранник. Обновлены PNG с hash в имени, hicolor icon и desktop aliases/cache.
+Старый AWG pilot ярлык скрыт, его исходник сохранён. Legacy `current` по-прежнему
+указывает на0.2.8 только как прежний комплект; обычный ярлык больше его не запускает.
+Backup ярлыков: `~/.local/share/family-connect/backups/linux-launcher-20260920`.
+
+Приняты GTK Friends interaction/parent checks и28 targeted tests, логотип просмотрен.
+GUI запущен через пользовательский systemd unit `family-connect-preview-20260920`:
+active/running, ExecMainStatus0. VPN не включался, fcawg/fctcp интерфейсов нет.
+Новый ручной auth connect/disconnect остаётся открытым; далее Windows live.
+Новый публичный выпуск не создан, Androidbeta19/public desktopv0.2.9 прежние.
+[Bundle, изменения, проверка и откат](releases/2026-09-20-linux-installed-preview.ru.md).
+
+
 Финальный source `7a8036a` опубликован. CI: AWG `35495112337`, TCP `35495112351`,
 Client builds `35495112338`, phase0 `35495112340` — in_progress на момент записи.
 На предыдущем `761406f` Linux/Windows jobs `35494706323` success; aggregate failure
