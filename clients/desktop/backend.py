@@ -1,5 +1,7 @@
 import ctypes
 import json
+import math
+import urllib.request
 import stat
 import os
 from pathlib import Path
@@ -14,6 +16,27 @@ from profile_config import validate, parse, parse_tcp, AWG_FIELDS, MAX_PROFILE
 def read_profile(path, *, allow_awg=False, allow_awg31=False):
     with Path(path).open("rb") as source:
         return validate(source.read(MAX_PROFILE+1).decode("utf-8-sig"),allow_awg=allow_awg,allow_awg31=allow_awg31)
+
+
+def verified_server_load(payload,country,now):
+    """Telemetry is informational; stale/unknown capacity is never zero load."""
+    if country not in ('ru','nl') or len(payload)>8192:raise ValueError('Invalid load sample')
+    value=json.loads(payload)
+    if value.get('schema')!=1:raise ValueError('Invalid load schema')
+    sample=value['gateways'][country]
+    if sample['country']!=country:raise ValueError('Wrong gateway')
+    def number(key,minimum=0,maximum=1e12):
+        n=sample[key]
+        if type(n) not in (int,float) or not math.isfinite(n) or not minimum<=n<=maximum:
+            raise ValueError('Invalid load value')
+        return n
+    observed=number('observed_at')
+    if not -15<=now-observed<=45:raise ValueError('Stale load sample')
+    cpu=number('cpu_percent',0,100);rx=number('rx_mbps');tx=number('tx_mbps')
+    capacity=sample.get('capacity_mbps')
+    if capacity is not None:capacity=number('capacity_mbps',.001,1e9)
+    percent=min(100,max(cpu,100*max(rx,tx)/capacity)) if capacity else None
+    return dict(country=country,observed_at=observed,cpu=cpu,rx=rx,tx=tx,percent=percent)
 
 
 PREFIX='fc-app-'
@@ -361,6 +384,16 @@ class RecoveryPolicy:
 
 
 class Linux:
+    def server_load(self,ident):
+        records=self._awg_records()
+        if hasattr(self,'_tcp_records'):records.update(self._tcp_records())
+        endpoint=records.get(ident,{}).get('endpoint')
+        country={'185.251.89.19':'ru','186.246.45.246':'nl'}.get(endpoint)
+        if country is None:return None
+        request=urllib.request.Request('https://185.251.89.19:8443/status/server-load.json',
+            headers={'Accept':'application/json','Cache-Control':'no-cache'})
+        with urllib.request.urlopen(request,timeout=5) as response:payload=response.read(8193)
+        return verified_server_load(payload,country,time.time())
     @contextmanager
     def control_transaction(self, owner):
         # GUI status polling briefly owns the same lock. Wait only on entry;

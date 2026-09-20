@@ -5,6 +5,7 @@ WORDS={'title': ('Связь для вашей семьи', 'Connectivity for yo
 import base64
 import concurrent.futures
 import locale
+import math
 from pathlib import Path
 import subprocess
 import sys
@@ -78,6 +79,10 @@ class RouteMap(Gtk.DrawingArea):
 CSS='''
  .fc-gauge, .fc-gauge:hover, .fc-gauge:active { background: transparent; border: none; box-shadow: none; padding: 0; }
  .fc-shell { background: #03110e; }
+.fc-window progressbar.fc-server-load trough { min-height: 5px; background: #102e24; border: 1px solid #347766; border-radius: 0; }
+.fc-window progressbar.fc-server-load progress { min-height: 5px; background: #98f7d8; border: none; border-radius: 0; }
+.fc-window progressbar.fc-server-load.warning progress { background: #ffad46; }
+.fc-window progressbar.fc-server-load.critical progress { background: #ef8474; }
 window.fc-window { background: #03110e; color: #dafff2; font-family: monospace; }
 .fc-window headerbar { background: #03110e; box-shadow: none; }
 .fc-brand { font-size: 17px; font-weight: 700; }
@@ -241,6 +246,7 @@ class App:
         self.recovery=RecoveryPolicy();self.operation_generation=None
         self.detail_text='';self.update_plan=None;self.updater=None;self.render_source=0;self.fit_source=0;self.fitted_height=None
         self.render_count=0;self.widget_changes=0;self.rendering=False
+        self.load_pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
         self.pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
         self.poll_pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
         self.window=Adw.ApplicationWindow(application=application,title='Family Connect')
@@ -277,7 +283,17 @@ class App:
         self.friends_button=self.button('fc-secondary',self.open_friends) if self.friends_owner_class else None
         self.toggle=self.button('fc-primary',self.toggle_vpn)
         self.gauge.connect('clicked',lambda *_:self.toggle.emit('clicked') if self.toggle.get_sensitive() else None)
-        self.body.remove(self.toggle);self.card.append(self.toggle)
+        # The native dial is the single connection control; keep the existing
+        # action object for shared command state, without a duplicate visual switch.
+        self.body.remove(self.toggle);self.toggle.set_visible(False)
+        self.server_load=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=8)
+        for edge in ('start','end','bottom'):getattr(self.server_load,'set_margin_'+edge)(18)
+        self.server_load.set_margin_top(6)
+        self.load_label=Gtk.Label(xalign=0,wrap=True);self.load_label.add_css_class('fc-caption')
+        self.load_bar=Gtk.ProgressBar();self.load_bar.add_css_class('fc-server-load')
+        self.load_bar.set_fraction(0);self.load_bar.set_hexpand(True)
+        self.server_load.append(self.load_label);self.server_load.append(self.load_bar);self.card.append(self.server_load)
+        self.server_load_value=None;self.load_sample=None;self.load_ident=None;self.load_pending=False;self.load_next=0
         for edge in ('start','end','bottom'):getattr(self.toggle,'set_margin_'+edge)(10)
         self.add=self.button('fc-secondary',self.import_profile)
         self.check=self.button('fc-quiet',self.check_ip)
@@ -297,7 +313,7 @@ class App:
         self.route_title=Gtk.Label(label='',xalign=0,wrap=True);self.body.prepend(self.route_title)
         self.messenger_note=Gtk.Label(label='',xalign=0,wrap=True);self.body.append(self.messenger_note)
         self.route_map=RouteMap();self.body.insert_child_after(self.route_map,self.route_title)
-        self.pages={'status':[self.card,self.toggle,self.note], 'route':[self.route_title,self.route_map,self.choose,self.check],
+        self.pages={'status':[self.card,self.note], 'route':[self.route_title,self.route_map,self.choose,self.check],
             'settings':[self.add,self.update_button,self.tcp_button,self.language_button,self.version_label]+([self.friends_button] if self.friends_button else []), 'messenger':[self.messenger_note]}
         footer=Gtk.Box(spacing=2);footer.set_homogeneous(True);footer.set_margin_start(12);footer.set_margin_end(12);footer.set_margin_bottom(12)
         self.nav={}
@@ -309,6 +325,7 @@ class App:
         if not smoke:self.register_icon();self.submit(self.initialize,'initialized')
         if self.render_source:GLib.source_remove(self.render_source);self.render_source=0
         self.render();self.poll_source=GLib.timeout_add_seconds(3,self.refresh)
+        self.load_source=0 if smoke else GLib.timeout_add_seconds(3,self.refresh_load)
     def label(self,css):
         label=Gtk.Label(xalign=0);label.set_wrap(True);label.set_wrap_mode(Pango.WrapMode.WORD_CHAR)
         label.set_max_width_chars(36);label.set_hexpand(True);label.add_css_class(css);return label
@@ -357,10 +374,49 @@ class App:
                 self.set_value(widget,'label',text);self.set_value(widget,'sensitive',enabled)
             self.set_value(self.note,'label',self.t('quality'));self.set_value(self.detail,'label',self.detail_text)
             self.set_value(self.detail,'visible',bool(self.detail_text));self.set_value(self.retry,'visible',self.driver is None and not self.initializing)
+            self.render_server_load()
             self.apply_page()
         finally:self.rendering=False
         if before!=self.widget_changes and not self.fit_source:self.fit_source=GLib.idle_add(self.fit_height)
         return GLib.SOURCE_REMOVE
+    def render_server_load(self):
+        sample=self.load_sample
+        if sample and (self.load_ident!=self.selected_id or not -15<=time.time()-sample['observed_at']<=45):
+            sample=None
+        value=sample['percent'] if sample else None
+        available=type(value) in (int,float) and math.isfinite(value) and 0<=value<=100
+        title=('Нагрузка сервера' if self.ru else 'Server load')+(' · '+sample['country'].upper() if sample else '')
+        text=(f'{value:.0f}%' if available else ('Нет данных' if self.ru else 'No data'))
+        self.set_value(self.load_label,'label',title+' · '+text)
+        self.load_bar.set_fraction(value/100 if available else 0)
+        self.load_bar.set_sensitive(available)
+        detail=title+' · '+text
+        if sample:
+            detail+=f"\nCPU {sample['cpu']:.0f}% · ↓ {sample['rx']:.1f} / ↑ {sample['tx']:.1f} Mbps"
+            if value is None:detail+='\n'+('Ёмкость канала ещё не задана.' if self.ru else 'Channel capacity is not configured yet.')
+        self.load_bar.set_tooltip_text(detail);self.load_label.set_tooltip_text(detail)
+        for css,enabled in [('warning',available and 70<=value<90),('critical',available and value>=90)]:
+            if enabled:self.load_bar.add_css_class(css)
+            else:self.load_bar.remove_css_class(css)
+    def refresh_load(self):
+        if self.closed:return GLib.SOURCE_REMOVE
+        self.render_server_load()
+        ident=self.selected_id
+        if self.load_ident!=ident:self.load_sample=None;self.load_next=0;self.load_ident=ident
+        if self.load_pending or self.busy or self.page!='status' or not ident or time.monotonic()<self.load_next:
+            return GLib.SOURCE_CONTINUE
+        if not hasattr(self.driver,'server_load'):return GLib.SOURCE_CONTINUE
+        self.load_pending=True;driver=self.driver
+        future=self.load_pool.submit(driver.server_load,ident)
+        future.add_done_callback(lambda f:GLib.idle_add(self.complete_load,f,ident))
+        return GLib.SOURCE_CONTINUE
+    def complete_load(self,future,ident):
+        if self.closed:return GLib.SOURCE_REMOVE
+        self.load_pending=False;self.load_next=time.monotonic()+15
+        if ident!=self.selected_id:return GLib.SOURCE_REMOVE
+        try:self.load_sample=future.result()
+        except Exception:self.load_sample=None
+        self.load_ident=ident;self.render_server_load();return GLib.SOURCE_REMOVE
     def fit_height(self):
         self.fit_source=0
         if self.closed:return GLib.SOURCE_REMOVE
@@ -616,6 +672,8 @@ class App:
         if self.active and not confirmed:return self.on_close()
         self.recovery.stop()
         self.closed=True
+        if self.load_source:GLib.source_remove(self.load_source);self.load_source=0
+        self.load_pool.shutdown(wait=False,cancel_futures=True)
         if self.render_source:GLib.source_remove(self.render_source);self.render_source=0
         if self.fit_source:GLib.source_remove(self.fit_source);self.fit_source=0
         GLib.source_remove(self.poll_source)
