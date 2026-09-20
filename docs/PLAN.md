@@ -14,7 +14,9 @@ policy не добавлены. Старый helper требует обновл�
 Проверено:648 Python tests passed; реальный AWG3.1 helper в Docker — import/up,
 /16, bound HTTP, неверный ключ/cleanup, session owner, чужой UID denied, запрещённые
 verbs и EOF exit. Host routes не менялись, новых live-подключений не было.
-Установка auth fix и новый CI ещё не выполнены. GUI0.2.8, public desktopv0.2.9,
+Source761406f опубликован: AWG35494706326, TCP35494706324 и paired Linux35494706337 success.
+Client builds35494706323 и phase0 failure; установка auth fix ещё не выполнена.
+GUI0.2.8, public desktopv0.2.9,
 Androidbeta19 прежние; установленный AWG3.1 engine не менялся.
 Далее: CI → обновить оба Linux helpers и paired preview → один ручной auth-тест;
 затем Windows live на доступном ПК. Проверка из РФ ждёт доступной российской сети.

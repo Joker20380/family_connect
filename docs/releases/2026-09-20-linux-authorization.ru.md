@@ -34,7 +34,8 @@ Root-owned TCP networking под новым сеансом требует отд
 
 CI на базе:Linux AWG35492618670 и Windows AWG35492618745 success;
 Client builds35492618663 aggregate failure (Android setup), desktop platform jobs success.
-Новый source CI пока не запущен. Нового релиза/подписи/установки в этой сессии нет.
+Source761406f: AWG35494706326, TCP35494706324, paired Linux35494706337 success;
+Client builds35494706323 и phase0 failure. Нового релиза/подписи/установки в этой сессии нет.
 Installed GUI0.2.8; public desktopv0.2.9; Android0.1.18-beta19/code19.
 Installed AWG engine e7f00e47d6df853ade5dcd2fe79240f01ff897d75088c768316a444c27c87e0f.
 
@@ -52,3 +53,12 @@ backup, включая состояние capability marker, и прежний p
 установке AWG3.1 до этой доработки; перед новой установкой нужен отдельный backup.
 Не удалять Friends identity/journal и private profiles. Серверы не изменялись.
 Открыто: CI новой версии, установка и ручная auth-приёмка Linux, Windows live, RF сеть.
+
+Дополнение: TCP bundle installer также создаёт capability последним как generated file,
+включает его в backup/restore.json и откатывает при ошибке daemon-reload. Состав архива
+и подпись manifest не расширены. Изолированный check_tcp_bundle.py прошёл: fresh install,
+реальный Xray version, mode/root checks, active/tamper refusal, failed reload rollback,
+upgrade, private profile preserved, service not started.17 targeted tests passed.
+Локальный тестовый архив /tmp/fc-auth-tcp-bundle.tar.gz SHA256
+8b55b1350cd5b0dad1b9e3805ed521be261b9c75cbf77efd7dc3719ec5312d0e,
+не подписан, не опубликован и не установлен на хост. Follow-up CI требуется.
