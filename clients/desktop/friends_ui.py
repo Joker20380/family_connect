@@ -14,7 +14,7 @@ from gi.repository import Gtk, Adw, GLib, Gdk
 class FriendsWindow:
     def __init__(self,parent,owner,ru=True,driver=None,on_close=None):
         self.owner=owner;self.ru=ru;self.busy=False;self.closed=False
-        self.driver=driver;self.on_closed=on_close
+        self.driver=driver;self.on_closed=on_close;self.qr_window=None
         self.pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
         self.window=Adw.Window(title=self.t('Доступ по приглашению','Invitation access'),transient_for=parent,modal=True)
         self.window.set_default_size(440,520)
@@ -49,6 +49,8 @@ class FriendsWindow:
         self.share=Gtk.Button(label=self.t('Получить ссылку для друга','Get invitation link'));box.append(self.share)
         self.link=Gtk.Entry(editable=False);box.append(self.link)
         self.copy=Gtk.Button(label=self.t('Скопировать ссылку','Copy link'));self.copy.set_sensitive(False);box.append(self.copy)
+        self.qr=Gtk.Button(label=self.t('Показать QR-код','Show QR code'));self.qr.set_sensitive(False);box.append(self.qr)
+        self.qr.connect('clicked',lambda *_:self.show_qr())
         self.status=label('')
         self.activate.connect('clicked',lambda *_:self.submit(lambda:self.owner.activate(self.code.get_text().strip()),'activate'))
         self.prepare.connect('clicked',lambda *_:self.prepare_configuration())
@@ -57,6 +59,37 @@ class FriendsWindow:
         self.copy.connect('clicked',lambda *_:Gdk.Display.get_default().get_clipboard().set(self.link.get_text()))
         self.window.connect('close-request',self.close)
     def t(self,r,e):return r if self.ru else e
+    def show_qr(self):
+        if self.busy or self.closed:return
+        if self.qr_window is not None:
+            self.qr_window.present();return
+        try:
+            from friends_qr import invitation_matrix
+            matrix=invitation_matrix(self.link.get_text())
+        except (ValueError,RuntimeError,OSError):
+            self.status.set_text(self.t('QR-код недоступен. Можно скопировать ссылку.','QR code unavailable. You can copy the link.'));return
+        dialog=Adw.Window(title=self.t('Пригласить друга','Invite a friend'),transient_for=self.window,modal=True)
+        dialog.add_css_class('fc-friends')
+        dialog.set_default_size(320,370)
+        box=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=12)
+        for side in ('top','bottom','start','end'):getattr(box,'set_margin_'+side)(16)
+        area=Gtk.DrawingArea();area.set_content_width(280);area.set_content_height(280)
+        area.set_hexpand(True);area.set_vexpand(True)
+        def draw(_,cr,width,height):
+            # Integral modules and four white modules around every edge.
+            size=len(matrix);scale=max(1,min(width,height)//(size+8))
+            left=(width-(size+8)*scale)//2;top=(height-(size+8)*scale)//2
+            cr.set_source_rgb(1,1,1);cr.paint();cr.set_source_rgb(0,0,0)
+            for y,row in enumerate(matrix):
+                for x,dark in enumerate(row):
+                    if dark:cr.rectangle(left+(x+4)*scale,top+(y+4)*scale,scale,scale)
+            cr.fill()
+        area.set_draw_func(draw);box.append(area)
+        box.append(Gtk.Label(label=self.t('Откройте камеру телефона и наведите её на код.','Point your phone camera at the code.'),wrap=True))
+        close=Gtk.Button(label=self.t('Готово','Done'));close.connect('clicked',lambda *_:dialog.close());box.append(close)
+        dialog.set_content(box);self.qr_window=dialog
+        def closed(*_):self.qr_window=None;area.set_draw_func(None);return False
+        dialog.connect('close-request',closed);dialog.present()
     def prepare_configuration(self):
         country='ru' if self.region.get_selected()==1 else 'nl'
         # Credentials stay in the worker/owner, not in GTK callback results.
@@ -93,8 +126,11 @@ class FriendsWindow:
         for widget in (self.code,self.activate,self.region,self.transport,self.prepare,self.share):widget.set_sensitive(not self.busy)
         self.connect_button.set_sensitive(not self.busy and self.driver is not None)
         self.copy.set_sensitive(not self.busy and bool(self.link.get_text()))
+        self.qr.set_sensitive(not self.busy and bool(self.link.get_text()))
     def close(self,*_):
         if self.busy:return True
+        if self.qr_window is not None:self.qr_window.close()
+        self.link.set_text('')
         self.closed=True;self.pool.shutdown(wait=False,cancel_futures=True);Gtk.StyleContext.remove_provider_for_display(self.window.get_display(),self.provider)
         if self.on_closed:self.on_closed()
         return False

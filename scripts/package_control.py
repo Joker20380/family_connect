@@ -12,7 +12,7 @@ DESKTOP = ('app.py', 'backend.py', 'profile_config.py', 'updates.py', 'update.pu
 CORE = ('friends.py', 'friends_catalog.py', 'friends_store.py', 'friends_owner.py', 'friends_application.py', '__init__.py', 'ack.py', 'application.py', 'auth.py', 'cache.py',
         'configuration.py', 'control_route.py', 'envelope.py', 'models.py', 'relay.py', 'reticulum.py',
         'runtime.py', 'transaction.py')
-FILES = ('clients/desktop/friends_ui.py', 'device_identity/friends.py', 'scripts/install_control_route.py', 'clients/linux/control-route-helper.py', 'VERSION', 'device_identity/__init__.py', 'device_identity/device.py',
+FILES = ('clients/desktop/friends_qr.py', 'clients/desktop/friends_ui.py', 'device_identity/friends.py', 'scripts/install_control_route.py', 'clients/linux/control-route-helper.py', 'VERSION', 'device_identity/__init__.py', 'device_identity/device.py',
          'provisioning/requirements.lock', 'scripts/run_control_preview.py') + tuple(
     'clients/desktop/' + name for name in DESKTOP) + tuple('provisioning/' + name for name in CORE)
 

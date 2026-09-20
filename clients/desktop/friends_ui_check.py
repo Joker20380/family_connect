@@ -22,6 +22,21 @@ def pump(until):
  assert until()
 w.code.set_text('test-invitation');w.activate.emit('clicked');pump(lambda:not w.busy);assert w.code.get_text()==''
 w.share.emit('clicked');pump(lambda:not w.busy);assert w.copy.get_sensitive() and '499' in w.status.get_text()
+assert w.qr.get_sensitive()
+w.qr.emit('clicked');pump(lambda:w.qr_window is not None)
+qr=w.qr_window
+end=time.monotonic()+.3
+while time.monotonic()<end:
+ while GLib.MainContext.default().iteration(False):pass
+ time.sleep(.01)
+from gi.repository import Gsk
+paintable=Gtk.WidgetPaintable.new(qr.get_content());snapshot=Gtk.Snapshot()
+paintable.snapshot(snapshot,qr.get_width(),qr.get_height());node=snapshot.to_node()
+if node is not None and len(sys.argv)>1:
+ renderer=Gsk.Renderer.new_for_surface(qr.get_surface())
+ try:renderer.render_texture(node,None).save_to_png(sys.argv[1]+'.qr.png')
+ finally:renderer.unrealize()
+qr.close();assert w.qr_window is None
 w.prepare.emit('clicked');pump(lambda:not w.busy);assert 'сохранены' in w.status.get_text()
 w.region.set_selected(1);w.connect_button.emit('clicked');pump(lambda:not w.busy)
 assert owner.connected==[('ru',driver,'tcp')] and 'проверен' in w.status.get_text()

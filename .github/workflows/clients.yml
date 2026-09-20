@@ -153,7 +153,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: sudo apt-get update && sudo apt-get install -y python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 python3-cryptography xvfb dbus-x11
+      - run: sudo apt-get update && sudo apt-get install -y python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 libqrencode4 libzbar0 python3-cryptography xvfb dbus-x11
       - run: python -m pip install pytest==9.1.1 cryptography==46.0.7
       - run: python -m pytest clients/desktop/tests -q
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/app.py --smoke
