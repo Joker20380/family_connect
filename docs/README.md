@@ -1,5 +1,7 @@
 # Documentation map
 
+[Desktop Friends TCP recovery и новый Linux UI](releases/2026-09-20-desktop-friends-apply.ru.md).
+
 [Короткая инструкция Family Connect Test](testing/friends-quickstart.ru.md).
 
 [Приёмка Android Stage5 на реальном устройстве](testing/android-stage5-live.ru.md).

@@ -1,5 +1,28 @@
 # Current state / Текущее состояние
 
+## Desktop: Friends TCP recovery и новый Linux UI — 2026-09-20
+
+Пользователь отклонил прежний Linux UI: требуется сходство с Android, тонкие линии.
+Переработку анимации в духе «Бункера» отложил. Наf8c10c0 desktop-ветки обновлена
+композиция GTK, добавлены статичный VPN-индикатор и иконки навигации; есть реальные
+Xvfb-снимки, оценка пользователем ещё нужна. Windows6206b60/337b2a0 исправляют
+расчёт высоты и порядок проверки строк; f8c10c0 также проверяет полный текст вкладок.
+
+Linux paired Friends теперь выполняет TCP apply/health/commit/rollback, startup
+recovery и общее владение операциями с GUI. Подтверждены620 Python tests,24 GTK
+layout cases, Friends parent/lifecycle и recovery/installer checks; .NET cross-build
+0errors/0warnings. Linux client35490043368 и control preview35490043361 success
+наf8c10c0; Windows build/install/broker/UI/layout35490043368 тоже success,
+полный PNG просмотрен. Наb9a2b4a исправлено окружение paired GUI: обязательны GTK
+и pinned Friends dependencies. Финальный extracted Linux CI35490344947 success;
+local package/owner/lifecycle19 passed. Android SDK setup и phase0 остаются failure.
+[Отчёт, версии, рендеры, rollout/rollback](releases/2026-09-20-desktop-friends-apply.ru.md).
+
+Установок/релиза/серверных изменений нет: Android0.1.18-beta19/code19,
+public desktopv0.2.9 прежние. Шестифайловый updater не расширен; Friends нужен paired core.
+Далее: native AWG3.1 /16, живые Friends Linux/Windows,
+desktop messenger/QR/карта и новый immutable выпуск. Новая анимация отдельным этапом.
+
 ## Desktop: единый терминальный интерфейс — 2026-09-20
 
 В desktop/friends-access-20260919 опубликованы aaa6c40,4aba2d9 и6ed47bc: палитра/шапка
