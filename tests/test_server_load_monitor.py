@@ -22,3 +22,10 @@ def test_counter_reset_and_long_gap():
     with pytest.raises(ValueError):monitor.utilization(before,after,'ru',100,1000)
     before,after=counters();after['clock']=100
     with pytest.raises(ValueError):monitor.utilization(before,after,'ru',100,1000)
+
+
+def test_egress_only_capacity():
+    before,after=counters();after['tx']=10_000_000
+    value=monitor.utilization(before,after,'nl',100,1000,'egress','provider-default-estimate')
+    assert value['channel_percent']==8 and value['load_percent']==30
+    assert value['capacity_basis']=='provider-default-estimate'

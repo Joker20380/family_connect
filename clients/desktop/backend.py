@@ -35,8 +35,11 @@ def verified_server_load(payload,country,now):
     cpu=number('cpu_percent',0,100);rx=number('rx_mbps');tx=number('tx_mbps')
     capacity=sample.get('capacity_mbps')
     if capacity is not None:capacity=number('capacity_mbps',.001,1e9)
-    percent=min(100,max(cpu,100*max(rx,tx)/capacity)) if capacity else None
-    return dict(country=country,observed_at=observed,cpu=cpu,rx=rx,tx=tx,percent=percent)
+    direction=sample.get('capacity_direction','duplex')
+    if direction not in ('duplex','egress'):raise ValueError('Invalid capacity direction')
+    used=tx if direction=='egress' else max(rx,tx)
+    percent=min(100,max(cpu,100*used/capacity)) if capacity else None
+    return dict(country=country,observed_at=observed,cpu=cpu,rx=rx,tx=tx,percent=percent,estimated=sample.get('capacity_basis')=='provider-default-estimate',capacity=capacity,direction=direction)
 
 
 PREFIX='fc-app-'

@@ -15,7 +15,7 @@ def sample(interface):
                 rx=int((net/'rx_bytes').read_text()), tx=int((net/'tx_bytes').read_text()))
 
 
-def utilization(before, after, country, capacity_mbps, now):
+def utilization(before, after, country, capacity_mbps, now, direction="duplex", basis="configured"):
     elapsed=after['clock']-before['clock'];total=after['total']-before['total']
     idle=after['idle']-before['idle'];rx=after['rx']-before['rx'];tx=after['tx']-before['tx']
     if not (0<elapsed<=60 and total>0 and 0<=idle<=total and min(rx,tx)>=0):
@@ -23,10 +23,12 @@ def utilization(before, after, country, capacity_mbps, now):
     cpu=100*(1-idle/total);rx_mbps=rx*8/elapsed/1_000_000;tx_mbps=tx*8/elapsed/1_000_000
     known=type(capacity_mbps) in (int,float) and math.isfinite(capacity_mbps) and capacity_mbps>0
     # Full-duplex link: compare the busiest direction, not RX+TX (VPN counts twice).
-    channel=min(100,100*max(rx_mbps,tx_mbps)/capacity_mbps) if known else None
+    if direction not in ('duplex','egress'):raise ValueError('Invalid capacity direction')
+    used=tx_mbps if direction=='egress' else max(rx_mbps,tx_mbps)
+    channel=min(100,100*used/capacity_mbps) if known else None
     return dict(country=country,observed_at=int(now),cpu_percent=round(cpu,1),
                 rx_mbps=round(rx_mbps,3),tx_mbps=round(tx_mbps,3),
-                capacity_mbps=capacity_mbps if known else None,
+                capacity_mbps=capacity_mbps if known else None,capacity_direction=direction,capacity_basis=basis,
                 channel_percent=round(channel,1) if known else None,
                 load_percent=round(max(cpu,channel),1) if known else None,
                 reason=None if known else 'capacity-unknown')
@@ -56,7 +58,7 @@ def main():
     while True:
         time.sleep(15)
         config=json.loads(path.read_text());after=sample(config['interface'])
-        try:value=utilization(before,after,config['country'],config['capacity_mbps'],time.time())
+        try:value=utilization(before,after,config['country'],config['capacity_mbps'],time.time(),config.get('capacity_direction','duplex'),config.get('capacity_basis','configured'))
         except ValueError:
             before=after;continue
         before=after;atomic(config['snapshot'],value)

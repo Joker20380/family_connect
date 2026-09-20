@@ -386,13 +386,15 @@ class App:
         value=sample['percent'] if sample else None
         available=type(value) in (int,float) and math.isfinite(value) and 0<=value<=100
         title=('Нагрузка сервера' if self.ru else 'Server load')+(' · '+sample['country'].upper() if sample else '')
-        text=(f'{value:.0f}%' if available else ('Нет данных' if self.ru else 'No data'))
+        text=((('≈ ' if sample.get('estimated') else '')+f'{value:.0f}%') if available else ('Нет данных' if self.ru else 'No data'))
         self.set_value(self.load_label,'label',title+' · '+text)
         self.load_bar.set_fraction(value/100 if available else 0)
         self.load_bar.set_sensitive(available)
         detail=title+' · '+text
         if sample:
             detail+=f"\nCPU {sample['cpu']:.0f}% · ↓ {sample['rx']:.1f} / ↑ {sample['tx']:.1f} Mbps"
+            if sample.get('estimated'):
+                detail+='\n'+(('Оценка: исходящий канал '+str(sample['capacity'])+' Мбит/с по общим условиям провайдера.') if self.ru else ('Estimate: '+str(sample['capacity'])+' Mbps egress, provider default.'))
             if value is None:detail+='\n'+('Ёмкость канала ещё не задана.' if self.ru else 'Channel capacity is not configured yet.')
         self.load_bar.set_tooltip_text(detail);self.load_label.set_tooltip_text(detail)
         for css,enabled in [('warning',available and 70<=value<90),('critical',available and value>=90)]:

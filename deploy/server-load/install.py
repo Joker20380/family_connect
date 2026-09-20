@@ -38,7 +38,10 @@ def main():
         paths.append(str(visible));bind='BindPaths='+str(output)+':'+str(visible)+'\n'
     path=ROOT/'config.json'
     # Capacity is operator-provided. Never guess or overwrite a configured value.
-    if path.exists():config['capacity_mbps']=json.loads(path.read_text()).get('capacity_mbps')
+    if path.exists():
+        previous=json.loads(path.read_text())
+        for field in ('capacity_mbps','capacity_direction','capacity_basis','capacity_source'):
+            if field in previous:config[field]=previous[field]
     path.write_text(json.dumps(config,indent=2)+'\n');path.chmod(0o644)
     unit=Path('/etc/systemd/system/family-connect-server-load.service')
     unit.write_text('''[Unit]

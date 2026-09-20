@@ -17,3 +17,9 @@ def test_bad_or_stale_metrics_rejected(changes):
 
 def test_unknown_gateway_not_mapped_to_another_server():
     with pytest.raises((ValueError,KeyError)):verified_server_load(payload(),'ru',1010)
+
+
+def test_provider_egress_estimate():
+    value=verified_server_load(payload(rx_mbps=900,tx_mbps=20,capacity_mbps=200,
+        capacity_direction='egress',capacity_basis='provider-default-estimate'),'nl',1010)
+    assert value['percent']==30 and value['estimated'] and value['capacity']==200
