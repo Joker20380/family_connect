@@ -42,15 +42,30 @@ internal sealed class RouteMap : Control
         foreach(var ring in land)
             if(ring.Length>=3)path.AddPolygon(ring.Select(p=>new PointF((p[0]+180)/360*w,(85-p[1])/145*h)).ToArray());
         var layer=new Bitmap(w,h,PixelFormat.Format32bppArgb);
-        using var g=Graphics.FromImage(layer);g.SmoothingMode=SmoothingMode.AntiAlias;g.PixelOffsetMode=PixelOffsetMode.Half;
-        using var ink=new SolidBrush(Color.FromArgb(152,247,216));
         float diameter=Math.Max(1,(int)MathF.Floor(.65f*scale+.5f));
+        // Fixed supersampled circle coverage avoids GDI+ subpixel ellipse blur.
+        int size=(int)diameter;var stamp=new Color[size,size];
+        for(int py=0;py<size;py++)for(int px=0;px<size;px++)
+        {
+            int inside=0;
+            for(int sy=0;sy<8;sy++)for(int sx=0;sx<8;sx++)
+            {
+                float dx=px+(sx+.5f)/8-diameter/2,dy=py+(sy+.5f)/8-diameter/2;
+                if(dx*dx+dy*dy<=diameter*diameter/4)inside++;
+            }
+            stamp[px,py]=Color.FromArgb((inside*255+32)/64,152,247,216);
+        }
         float offset=(int)diameter%2==1?.5f:0,spacing=2.3f*scale,rowSpacing=spacing*.8660254f;
         for(int row=0;row*rowSpacing<h;row++)for(int col=0;col*spacing<w;col++)
         {
             float x=MathF.Floor((col+.5f*(row&1))*spacing-offset+.5f)+offset;
             float y=MathF.Floor(row*rowSpacing-offset+.5f)+offset;
-            if(x>=0&&y>=0&&x<w&&y<h&&path.IsVisible(x,y))g.FillEllipse(ink,x-diameter/2,y-diameter/2,diameter,diameter);
+            if(x>=0&&y>=0&&x<w&&y<h&&path.IsVisible(x,y))
+            {
+                int left=(int)MathF.Round(x-diameter/2),top=(int)MathF.Round(y-diameter/2);
+                for(int py=0;py<size;py++)for(int px=0;px<size;px++)
+                    if(left+px>=0&&left+px<w&&top+py>=0&&top+py<h)layer.SetPixel(left+px,top+py,stamp[px,py]);
+            }
         }
         return layer;
     }
@@ -62,7 +77,7 @@ internal sealed class RouteMap : Control
             using var dots=view.CreateDots(360*scale,200*scale,scale);
             int peak=0;
             for(int y=0;y<dots.Height;y++)for(int x=0;x<dots.Width;x++)peak=Math.Max(peak,dots.GetPixel(x,y).A);
-            if(peak<180)throw new Exception("Map dots blurred across physical pixels");
+            if(peak<180)throw new Exception($"Map dots blurred across physical pixels: scale={scale} peak={peak}");
         }
     }
     protected override void OnPaint(PaintEventArgs e)
@@ -77,6 +92,7 @@ internal sealed class RouteMap : Control
         for(float y=0;y<Height;y+=16*scale)g.DrawLine(grid,0,y,Width,y);
         using var attributes=new ImageAttributes();
         var matrix=new ColorMatrix{Matrix33=(120+6*MathF.Sin(2*MathF.PI*phase))/255};attributes.SetColorMatrix(matrix);
+        g.InterpolationMode=InterpolationMode.NearestNeighbor;g.PixelOffsetMode=PixelOffsetMode.Half;
         g.DrawImage(dots,ClientRectangle,0,0,Width,Height,GraphicsUnit.Pixel,attributes);
         using var border=new Pen(Color.FromArgb(70,139,117),scale);
         g.DrawRectangle(border,scale/2,scale/2,Math.Max(0,Width-scale),Math.Max(0,Height-scale));g.Restore(state);
