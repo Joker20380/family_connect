@@ -1,0 +1,62 @@
+name: Desktop visual checks
+on:
+  push:
+    paths: ['clients/windows/**', 'clients/assets/**', '.github/workflows/desktop-visual.yml']
+  pull_request:
+    paths: ['clients/windows/**', 'clients/assets/**', '.github/workflows/desktop-visual.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows-ui:
+    runs-on: windows-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet build clients/windows/FamilyConnect.csproj -c Release
+      - name: Native rendering, input and layouts without VPN drivers
+        shell: pwsh
+        run: |
+          $app = Resolve-Path clients/windows/bin/Release/net10.0-windows/FamilyConnect.exe
+          $process = Start-Process $app -ArgumentList '/layout-test' -PassThru
+          if (-not $process.WaitForExit(240000)) { $process.Kill(); throw 'UI checks timed out' }
+          if ($process.ExitCode -ne 0) {
+            $detail = (Get-Content "$env:TEMP/fc-layout-check.txt" -Raw).Replace('%','%25').Replace("`r",'%0D').Replace("`n",'%0A')
+            Write-Output "::error title=Layout detail::$detail"
+            throw 'Native UI checks failed'
+          }
+      - name: preview PNG parts from 0
+        shell: python
+        run: |
+          import pathlib,base64,hashlib,os
+          raw=(pathlib.Path(os.environ['TEMP'])/'Windows-preview.png').read_bytes();assert raw.startswith(b'\x89PNG\r\n\x1a\n')
+          data=base64.b64encode(raw).decode();assert len(data)<=60000
+          print('SHA256',hashlib.sha256(raw).hexdigest())
+          for offset in range(0,min(len(data),30000),3000):print(f'::notice title=Windows preview part {offset}::{data[offset:offset+3000]}')
+      - name: preview PNG parts from 30000
+        shell: python
+        run: |
+          import pathlib,base64,hashlib,os
+          raw=(pathlib.Path(os.environ['TEMP'])/'Windows-preview.png').read_bytes();assert raw.startswith(b'\x89PNG\r\n\x1a\n')
+          data=base64.b64encode(raw).decode();assert len(data)<=60000
+          print('SHA256',hashlib.sha256(raw).hexdigest())
+          for offset in range(30000,min(len(data),60000),3000):print(f'::notice title=Windows preview part {offset}::{data[offset:offset+3000]}')
+      - name: route PNG parts from 0
+        shell: python
+        run: |
+          import pathlib,base64,hashlib,os
+          raw=(pathlib.Path(os.environ['TEMP'])/'Windows-route.png').read_bytes();assert raw.startswith(b'\x89PNG\r\n\x1a\n')
+          data=base64.b64encode(raw).decode();assert len(data)<=60000
+          print('SHA256',hashlib.sha256(raw).hexdigest())
+          for offset in range(0,min(len(data),30000),3000):print(f'::notice title=Windows route part {offset}::{data[offset:offset+3000]}')
+      - name: route PNG parts from 30000
+        shell: python
+        run: |
+          import pathlib,base64,hashlib,os
+          raw=(pathlib.Path(os.environ['TEMP'])/'Windows-route.png').read_bytes();assert raw.startswith(b'\x89PNG\r\n\x1a\n')
+          data=base64.b64encode(raw).decode();assert len(data)<=60000
+          print('SHA256',hashlib.sha256(raw).hexdigest())
+          for offset in range(30000,min(len(data),60000),3000):print(f'::notice title=Windows route part {offset}::{data[offset:offset+3000]}')

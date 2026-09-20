@@ -158,6 +158,7 @@ internal sealed class MainForm:Form
     }
     internal static void CheckLayouts()
     {
+        RouteMap.CheckPixels();
         CheckPolling();
         using(var preview=new MainForm(true,true)){
             preview.ru=true;preview.state="off";preview.Show();preview.PaintState();preview.FitWindow();Application.DoEvents();

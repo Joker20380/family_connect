@@ -42,7 +42,7 @@ internal sealed class RouteMap : Control
         foreach(var ring in land)
             if(ring.Length>=3)path.AddPolygon(ring.Select(p=>new PointF((p[0]+180)/360*w,(85-p[1])/145*h)).ToArray());
         var layer=new Bitmap(w,h,PixelFormat.Format32bppArgb);
-        using var g=Graphics.FromImage(layer);g.SmoothingMode=SmoothingMode.AntiAlias;
+        using var g=Graphics.FromImage(layer);g.SmoothingMode=SmoothingMode.AntiAlias;g.PixelOffsetMode=PixelOffsetMode.Half;
         using var ink=new SolidBrush(Color.FromArgb(152,247,216));
         float diameter=Math.Max(1,(int)MathF.Floor(.65f*scale+.5f));
         float offset=(int)diameter%2==1?.5f:0,spacing=2.3f*scale,rowSpacing=spacing*.8660254f;
@@ -53,6 +53,17 @@ internal sealed class RouteMap : Control
             if(x>=0&&y>=0&&x<w&&y<h&&path.IsVisible(x,y))g.FillEllipse(ink,x-diameter/2,y-diameter/2,diameter,diameter);
         }
         return layer;
+    }
+    internal static void CheckPixels()
+    {
+        using var view=new RouteMap();
+        foreach(int scale in new[]{1,2,3})
+        {
+            using var dots=view.CreateDots(360*scale,200*scale,scale);
+            int peak=0;
+            for(int y=0;y<dots.Height;y++)for(int x=0;x<dots.Width;x++)peak=Math.Max(peak,dots.GetPixel(x,y).A);
+            if(peak<180)throw new Exception("Map dots blurred across physical pixels");
+        }
     }
     protected override void OnPaint(PaintEventArgs e)
     {
