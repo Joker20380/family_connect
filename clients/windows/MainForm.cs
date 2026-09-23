@@ -29,7 +29,7 @@ internal sealed class MainForm:Form
     readonly TableLayoutPanel card=new();
     bool fitting;
     string page="status";
-    readonly RouteMap routeMap=new(),dashboardMap=new(){Height=130};
+    readonly RouteMap routeMap=new();
     readonly TerminalDial dial=new();
     readonly Label loadLabel=new(){AutoSize=true,Dock=DockStyle.Fill};readonly LoadBar loadBar=new();readonly ToolTip loadTip=new();
     readonly System.Windows.Forms.Timer loadTimer=new(){Interval=3000};
@@ -116,14 +116,14 @@ internal sealed class MainForm:Form
         accessPage=new FriendsForm(ru,r=>call(r));accessPage.RegistrationChanged+=()=>{friendsReady=true;PaintState();};
         var selectors=new LiveNetworkPanel(country,mode,!smoke&&!layoutTest);telemetry=selectors;
         int row=0;
-        foreach(Control child in new Control[]{card,selectors,dashboardMap,friends,request,activate,detail,notice,update,accessPage})
+        foreach(Control child in new Control[]{card,selectors,friends,request,activate,detail,notice,update,accessPage})
             content.Controls.Add(child,0,row++);
         var version=new Label{Text="v"+Application.ProductVersion.Split('+')[0],AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.FromArgb(153,196,181)};
         language.MinimumSize=new Size(0,36);language.Dock=DockStyle.Fill;
         foreach(var child in new Control[]{language,version,routeTitle,routeMap,messengerNote})content.Controls.Add(child,0,row++);
-        pages["status"]=new Control[]{card,selectors,dashboardMap,notice};
+        pages["status"]=new Control[]{card,selectors};
         pages["route"]=new Control[]{routeTitle,routeMap};
-        pages["settings"]=new Control[]{friends,update,language,version};
+        pages["settings"]=new Control[]{friends,update,language,version,notice};
         pages["access"]=new Control[]{accessPage};request.Visible=activate.Visible=false;
         pages["messenger"]=new Control[]{messengerNote};
         footer.Dock=DockStyle.Fill;footer.Height=64;footer.Padding=new Padding(12,2,12,8);footer.Margin=Padding.Empty;footer.ColumnCount=4;footer.RowCount=1;footer.RowStyles.Add(new RowStyle(SizeType.Percent,100));
@@ -188,6 +188,7 @@ internal sealed class MainForm:Form
             foreach(var button in nav.Values){
                 if(button.Height<D(48)||button.Bottom>footer.ClientSize.Height)throw new InvalidOperationException("Startup navigation clipped");
             }
+            viewport.AutoScrollPosition=Point.Empty;Application.DoEvents();
             if(size.Width>=560){
                 using var image=new Bitmap(Width,Height);DrawToBitmap(image,new Rectangle(Point.Empty,Size));
                 image.Save(Path.Combine(Path.GetTempPath(),size.Width==1200?"Windows-startup-wide.png":"Windows-startup.png"));
@@ -211,6 +212,7 @@ internal sealed class MainForm:Form
                 if(preview.nav.Values.Any(button=>button.Height<48*preview.DeviceDpi/96f))
                     throw new InvalidOperationException("Resize collapsed navigation");
             }
+            preview.viewport.AutoScrollPosition=Point.Empty;Application.DoEvents();
             using(var wide=new Bitmap(preview.Width,preview.Height)){preview.DrawToBitmap(wide,new Rectangle(Point.Empty,preview.Size));wide.Save(Path.Combine(Path.GetTempPath(),"Windows-wide.png"));}
             preview.page="route";preview.PaintState();preview.FitWindow();Application.DoEvents();
             using var routeImage=new Bitmap(preview.Width,preview.Height);preview.DrawToBitmap(routeImage,new Rectangle(Point.Empty,preview.Size));
@@ -236,7 +238,7 @@ internal sealed class MainForm:Form
             if(form.nav.Values.Any(b=>!b.Visible))throw new Exception("Navigation disappeared");
             if(form.country.Visible && (form.mode.Bottom>form.telemetry!.ClientSize.Height || form.country.Bounds.IntersectsWith(form.mode.Bounds)))
                 throw new InvalidOperationException("Connection selectors clipped or overlapping");
-            if(form.header.Height<78*form.DeviceDpi/96f || form.dial.Height<250*form.DeviceDpi/96f)
+            if(form.header.Height<78*form.DeviceDpi/96f || form.dial.Height<150*form.DeviceDpi/96f)
                 throw new InvalidOperationException("Custom painted control lost its logical height");
             int bottom=0;
             foreach(Control control in form.content.Controls.Cast<Control>().OrderBy(form.content.GetRow)){
@@ -340,16 +342,20 @@ internal sealed class MainForm:Form
         shell.SuspendLayout();
         shell.RowStyles[0].Height=D(86);shell.RowStyles[2].Height=D(76);
         header.MinimumSize=new Size(D(240),D(78));header.Margin=new Padding(0,0,0,D(8));
-        dial.MinimumSize=new Size(0,D(260));dial.Height=D(260);
+        dial.MinimumSize=new Size(0,D(150));dial.Height=D(260);
         telemetry!.MinimumSize=new Size(0,D(174));telemetry.Height=D(174);
-        dashboardMap.Height=D(130);
+        card.Padding=new Padding(D(16),D(8),D(16),D(8));
+        foreach(var label in new[]{status,description,loadLabel})label.Margin=new Padding(0,D(4),0,D(4));
         footer.Height=D(76);footer.Padding=new Padding(D(12),D(2),D(12),D(8));
         foreach(var picker in new[]{country,mode})picker.ItemHeight=D(30);
         shell.ResumeLayout(true);telemetry.PerformLayout();FitShell();
     }
+    bool fittingContent;
     void FitContent()
     {
-        if(viewport.ClientSize.Width<=0)return;
+        if(fittingContent||viewport.ClientSize.Width<=0)return;
+        fittingContent=true;
+        try{
         int width=Math.Max(1,viewport.ClientSize.Width);
         content.SuspendLayout();
         content.MinimumSize=new Size(width,0);content.MaximumSize=new Size(width,0);content.Width=width;
@@ -357,6 +363,12 @@ internal sealed class MainForm:Form
         foreach(var label in new[]{title,detail,notice,routeTitle,messengerNote})label.MaximumSize=new Size(textWidth,0);
         foreach(var label in new[]{status,description})label.MaximumSize=new Size(Math.Max(1,textWidth-card.Padding.Horizontal),0);
         content.ResumeLayout(true);
+        if(page=="status" && telemetry is not null && card.Height>dial.Height){
+            int other=card.Height-dial.Height+telemetry.Height+content.Padding.Vertical+card.Margin.Vertical+telemetry.Margin.Vertical;
+            int height=Math.Clamp(viewport.ClientSize.Height-other,D(150),D(260));
+            if(dial.Height!=height){dial.Height=height;content.PerformLayout();}
+        }
+        }finally{fittingContent=false;}
     }
     [System.Runtime.InteropServices.DllImport("dwmapi.dll")]
     static extern int DwmSetWindowAttribute(IntPtr window,int attribute,ref int value,int size);
