@@ -152,7 +152,7 @@ jobs:
       - name: Save Windows UI preview
         if: always()
         shell: pwsh
-        run: Copy-Item "$env:TEMP/Windows-preview.png","$env:TEMP/Windows-route.png" clients/windows/dist/
+        run: Copy-Item "$env:TEMP/Windows-preview.png","$env:TEMP/Windows-route.png","$env:TEMP/Windows-wide.png" clients/windows/dist/
       - name: Uninstall application and service
         if: always()
         shell: pwsh

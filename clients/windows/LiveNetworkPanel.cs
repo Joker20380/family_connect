@@ -17,8 +17,11 @@ internal sealed class LiveNetworkPanel : UserControl
         timer.Tick+=(_,_)=>Sample();timer.Enabled=sample;
         SizeChanged+=(_,_)=>Place();Place();
     }
+    protected override void OnLayout(LayoutEventArgs e){base.OnLayout(e);Place();}
+    protected override void OnDpiChangedAfterParent(EventArgs e){base.OnDpiChangedAfterParent(e);Place();}
     int D(int n)=>(int)Math.Round(n*DeviceDpi/96f);
     void Place(){
+        if(country is null||protocol is null)return;
         int x=Width/2+D(10),w=Math.Max(1,Width-x-D(12));
         country.SetBounds(x,D(78),w,country.Height);protocol.SetBounds(x,D(114),w,protocol.Height);
     }

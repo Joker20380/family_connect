@@ -22,6 +22,9 @@ internal sealed class MainForm:Form
     readonly System.Windows.Forms.Timer poll=new(){Interval=3000};
     readonly TableLayoutPanel content=new();
     readonly Panel viewport=new();
+    readonly Panel shellHost=new(){Dock=DockStyle.Fill};
+    readonly TableLayoutPanel shell=new();
+    readonly TerminalHeader header=new();
     readonly TableLayoutPanel footer=new();
     readonly TableLayoutPanel card=new();
     bool fitting;
@@ -39,18 +42,19 @@ internal sealed class MainForm:Form
     string pendingInvitation="";
     public MainForm(bool smoke,bool layoutTest=false)
     {
+        SuspendLayout();
         saveLanguage=!smoke&&!layoutTest;
         if(saveLanguage)try{using var preferences=Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\family_connect");var saved=preferences?.GetValue("Language") as string;if(saved is "ru" or "en")ru=saved=="ru";}catch(System.Security.SecurityException){}catch(UnauthorizedAccessException){}catch(IOException){}
         AutoScaleMode=AutoScaleMode.Dpi;AutoScaleDimensions=new SizeF(96,96);
-        Text=$"family_connect · {Application.ProductVersion.Split('+')[0]}";ClientSize=new(390,720);MinimumSize=new(360,360);
+        Text=$"family_connect · {Application.ProductVersion.Split('+')[0]}";ClientSize=new(560,800);MinimumSize=new(360,420);
         DoubleBuffered=true;
         BackColor=Color.FromArgb(3,17,14);ForeColor=Color.FromArgb(218,255,242);
         Icon=Icon.ExtractAssociatedIcon(Application.ExecutablePath);
         Font=new Font("Consolas",10);StartPosition=FormStartPosition.CenterScreen;
-        var shell=new TableLayoutPanel{Dock=DockStyle.Fill,ColumnCount=1,RowCount=3,Margin=Padding.Empty};
+        shell.ColumnCount=1;shell.RowCount=3;shell.Margin=Padding.Empty;
         shell.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
-        shell.RowStyles.Add(new RowStyle(SizeType.AutoSize));shell.RowStyles.Add(new RowStyle(SizeType.Percent,100));shell.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        Controls.Add(shell);
+        shell.RowStyles.Add(new RowStyle(SizeType.Absolute,86));shell.RowStyles.Add(new RowStyle(SizeType.Percent,100));shell.RowStyles.Add(new RowStyle(SizeType.Absolute,76));
+        Controls.Add(shellHost);shellHost.Controls.Add(shell);shellHost.SizeChanged+=(_,_)=>FitShell();
         viewport.Dock=DockStyle.Fill;viewport.AutoScroll=true;viewport.Margin=Padding.Empty;
         shell.Controls.Add(viewport,0,1);
         content.AutoSize=true;content.AutoSizeMode=AutoSizeMode.GrowAndShrink;
@@ -77,11 +81,12 @@ internal sealed class MainForm:Form
         connect.FlatAppearance.MouseOverBackColor=Color.FromArgb(16,61,46);connect.FlatAppearance.MouseDownBackColor=Color.FromArgb(67,142,121);
         connect.BackColor=Color.FromArgb(7,32,24);connect.ForeColor=ForeColor;((ModernButton)connect).TerminalSwitch=true;connect.Font=new Font(Font.FontFamily,10,FontStyle.Bold);
         detail.ForeColor=Color.FromArgb(255,173,70);notice.ForeColor=Color.FromArgb(153,196,181);
-        var header=new TerminalHeader{Dock=DockStyle.Fill,Margin=new Padding(0,0,0,8)};
+        header.Dock=DockStyle.Fill;header.Margin=new Padding(0,0,0,8);
         shell.Controls.Add(header,0,0);
         var tagline=new Label{Text=T("Связь для вашей семьи","Connection for your family"),Name="tagline",AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.FromArgb(153,196,181),Margin=new Padding(0,0,0,16)};
         card.AutoSize=true;card.Dock=DockStyle.Fill;card.ColumnCount=1;card.RowCount=5;
         card.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
+        for(int i=0;i<5;i++)card.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         card.Padding=new Padding(16,12,16,12);card.Margin=new Padding(0,0,0,12);
         card.BackColor=Color.FromArgb(7,32,24);
         card.Controls.Add(dial,0,0);card.Controls.Add(status,0,1);card.Controls.Add(description,0,2);
@@ -107,7 +112,7 @@ internal sealed class MainForm:Form
         if(saveLanguage)try{using var p=Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\family_connect");country.SelectedIndex=(p?.GetValue("Country") as string)=="ru"?1:0;mode.SelectedIndex=(p?.GetValue("Transport") as string)=="tcp"?0:1;}catch{}
         void SaveSelection(){revision++;loadNext=DateTime.MinValue;if(saveLanguage)try{using var p=Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\family_connect");p.SetValue("Country",Country);p.SetValue("Transport",TcpSelected?"tcp":"awg");}catch{}PaintState();}
         country.SelectedIndexChanged+=(_,_)=>SaveSelection();mode.SelectedIndexChanged+=(_,_)=>SaveSelection();
-        dial.Height=190;
+        dial.Height=260;
         accessPage=new FriendsForm(ru,r=>call(r));accessPage.RegistrationChanged+=()=>{friendsReady=true;PaintState();};
         var selectors=new LiveNetworkPanel(country,mode,!smoke&&!layoutTest);telemetry=selectors;
         int row=0;
@@ -130,7 +135,7 @@ internal sealed class MainForm:Form
         }
         shell.Controls.Add(footer,0,2);
         viewport.SizeChanged+=(_,_)=>FitContent();
-        DpiChanged+=(_,_)=>BeginInvoke((Action)FitContent);
+        DpiChanged+=(_,_)=>BeginInvoke((Action)(()=>{ApplyDpiMetrics();FitWindow();}));
         update.Click+=async(_,_)=>{
             if(busy)return;revision++;busy=true;PaintState();
             try{
@@ -153,11 +158,13 @@ internal sealed class MainForm:Form
         loadTimer.Tick+=async(_,_)=>await RefreshLoad();
         PaintState();
         Shown+=async(_,_)=>{
-            FitWindow();
+            ApplyDpiMetrics();FitWindow();
             if(layoutTest)return;
             if(smoke){Close();return;}
             await Execute(new("status"));if(pendingInvitation.Length>0)await AcceptInvitation();else if(state is "off" or "inactive")await Execute(new("friends-register"));poll.Start();loadTimer.Start();await RefreshLoad();
         };
+        AutoScaleDimensions=new SizeF(96,96);
+        ResumeLayout(true);
     }
     internal void Invite(string uri){
         if(!System.Text.RegularExpressions.Regex.IsMatch(uri,@"\Afamilyconnect://invite/[0-9a-f]{64}\z"))return;
@@ -181,6 +188,14 @@ internal sealed class MainForm:Form
             using var bitmap=new Bitmap(preview.Width,preview.Height);preview.DrawToBitmap(bitmap,new Rectangle(Point.Empty,preview.Size));
             string path=Path.Combine(Path.GetTempPath(),"Windows-preview.png");
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);bitmap.Save(path);
+            foreach(var size in new[]{new Size(360,420),new Size(1200,800),new Size(800,700)}){
+                preview.ClientSize=size;Application.DoEvents();preview.FitContent();
+                if(preview.mode.Bottom>preview.telemetry!.ClientSize.Height || preview.country.Bounds.IntersectsWith(preview.mode.Bounds))
+                    throw new InvalidOperationException("Resize clipped connection selectors");
+                if(preview.nav.Values.Any(button=>button.Height<48*preview.DeviceDpi/96f))
+                    throw new InvalidOperationException("Resize collapsed navigation");
+            }
+            using(var wide=new Bitmap(preview.Width,preview.Height)){preview.DrawToBitmap(wide,new Rectangle(Point.Empty,preview.Size));wide.Save(Path.Combine(Path.GetTempPath(),"Windows-wide.png"));}
             preview.page="route";preview.PaintState();preview.FitWindow();Application.DoEvents();
             using var routeImage=new Bitmap(preview.Width,preview.Height);preview.DrawToBitmap(routeImage,new Rectangle(Point.Empty,preview.Size));
             routeImage.Save(Path.Combine(Path.GetTempPath(),"Windows-route.png"));
@@ -203,6 +218,10 @@ internal sealed class MainForm:Form
             form.ClientSize=new Size((int)(size.Width*scale),(int)(size.Height*scale));
             form.FitContent();form.PerformLayout();form.content.PerformLayout();
             if(form.nav.Values.Any(b=>!b.Visible))throw new Exception("Navigation disappeared");
+            if(form.country.Visible && (form.mode.Bottom>form.telemetry!.ClientSize.Height || form.country.Bounds.IntersectsWith(form.mode.Bounds)))
+                throw new InvalidOperationException("Connection selectors clipped or overlapping");
+            if(form.header.Height<78*form.DeviceDpi/96f || form.dial.Height<250*form.DeviceDpi/96f)
+                throw new InvalidOperationException("Custom painted control lost its logical height");
             int bottom=0;
             foreach(Control control in form.content.Controls.Cast<Control>().OrderBy(form.content.GetRow)){
                 if(!control.Visible)continue;
@@ -228,7 +247,7 @@ internal sealed class MainForm:Form
                 if(button.Left<0 || button.Top<0 || button.Right>parent.ClientSize.Width || button.Bottom>parent.ClientSize.Height)
                     throw new InvalidOperationException("Clipped navigation");
                 var text=TextRenderer.MeasureText(button.Text,button.Font,Size.Empty,TextFormatFlags.NoPadding|TextFormatFlags.SingleLine);
-                if(text.Width>button.Width-4 || text.Height>button.Height-8)
+                if(text.Width>button.Width-4 || text.Height>button.Height/2-4 || button.Height<48*form.DeviceDpi/96f)
                     throw new InvalidOperationException($"Clipped navigation text: {button.Text}, scale={scale}, client={form.ClientSize}, measured={text}, button={button.Size}");
             }
         }
@@ -291,10 +310,31 @@ internal sealed class MainForm:Form
             task.GetAwaiter().GetResult();
         }
     }
+    int D(int value)=>(int)Math.Round(value*DeviceDpi/96f);
+    void FitShell()
+    {
+        int width=Math.Min(shellHost.ClientSize.Width,D(720));
+        shell.SetBounds(Math.Max(0,(shellHost.ClientSize.Width-width)/2),0,width,shellHost.ClientSize.Height);
+        FitContent();
+    }
+    void ApplyDpiMetrics()
+    {
+        // Custom painting uses DeviceDpi. Its containing rows must use the same units,
+        // including controls created after WinForms' first automatic scaling pass.
+        shell.SuspendLayout();
+        shell.RowStyles[0].Height=D(86);shell.RowStyles[2].Height=D(76);
+        header.MinimumSize=new Size(D(240),D(78));header.Margin=new Padding(0,0,0,D(8));
+        dial.MinimumSize=new Size(0,D(260));dial.Height=D(260);
+        telemetry!.MinimumSize=new Size(0,D(174));telemetry.Height=D(174);
+        dashboardMap.Height=D(130);
+        footer.Height=D(76);footer.Padding=new Padding(D(12),D(2),D(12),D(8));
+        foreach(var picker in new[]{country,mode})picker.ItemHeight=D(30);
+        shell.ResumeLayout(true);telemetry.PerformLayout();FitShell();
+    }
     void FitContent()
     {
         if(viewport.ClientSize.Width<=0)return;
-        int width=Math.Max(1,viewport.ClientSize.Width-(viewport.VerticalScroll.Visible?SystemInformation.VerticalScrollBarWidth:0));
+        int width=Math.Max(1,viewport.ClientSize.Width);
         content.SuspendLayout();
         content.MinimumSize=new Size(width,0);content.MaximumSize=new Size(width,0);content.Width=width;
         int textWidth=Math.Max(1,width-content.Padding.Horizontal);

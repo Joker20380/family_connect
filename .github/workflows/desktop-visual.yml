@@ -28,35 +28,10 @@ jobs:
             Write-Output "::error title=Layout detail::$detail"
             throw 'Native UI checks failed'
           }
-      - name: preview PNG parts from 0
-        shell: python
-        run: |
-          import pathlib,base64,hashlib,os
-          raw=(pathlib.Path(os.environ['TEMP'])/'Windows-preview.png').read_bytes();assert raw.startswith(b'\x89PNG\r\n\x1a\n')
-          data=base64.b64encode(raw).decode();assert len(data)<=60000
-          print('SHA256',hashlib.sha256(raw).hexdigest())
-          for offset in range(0,min(len(data),30000),3000):print(f'::notice title=Windows preview part {offset}::{data[offset:offset+3000]}')
-      - name: preview PNG parts from 30000
-        shell: python
-        run: |
-          import pathlib,base64,hashlib,os
-          raw=(pathlib.Path(os.environ['TEMP'])/'Windows-preview.png').read_bytes();assert raw.startswith(b'\x89PNG\r\n\x1a\n')
-          data=base64.b64encode(raw).decode();assert len(data)<=60000
-          print('SHA256',hashlib.sha256(raw).hexdigest())
-          for offset in range(30000,min(len(data),60000),3000):print(f'::notice title=Windows preview part {offset}::{data[offset:offset+3000]}')
-      - name: route PNG parts from 0
-        shell: python
-        run: |
-          import pathlib,base64,hashlib,os
-          raw=(pathlib.Path(os.environ['TEMP'])/'Windows-route.png').read_bytes();assert raw.startswith(b'\x89PNG\r\n\x1a\n')
-          data=base64.b64encode(raw).decode();assert len(data)<=60000
-          print('SHA256',hashlib.sha256(raw).hexdigest())
-          for offset in range(0,min(len(data),30000),3000):print(f'::notice title=Windows route part {offset}::{data[offset:offset+3000]}')
-      - name: route PNG parts from 30000
-        shell: python
-        run: |
-          import pathlib,base64,hashlib,os
-          raw=(pathlib.Path(os.environ['TEMP'])/'Windows-route.png').read_bytes();assert raw.startswith(b'\x89PNG\r\n\x1a\n')
-          data=base64.b64encode(raw).decode();assert len(data)<=60000
-          print('SHA256',hashlib.sha256(raw).hexdigest())
-          for offset in range(30000,min(len(data),60000),3000):print(f'::notice title=Windows route part {offset}::{data[offset:offset+3000]}')
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-ui-renders
+          path: |
+            ${{ runner.temp }}/Windows-*.png
+            ${{ runner.temp }}/fc-layout-*.txt
