@@ -1,0 +1,92 @@
+name: Distribute accepted desktop 0.2.10 preview
+on:
+  push:
+    branches: ['release/desktop0210-invitations']
+    paths: ['.github/workflows/distribute-desktop0210.yml']
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify pinned platform and artifact acceptance
+        shell: python
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          import json,urllib.request,os
+          base='https://api.github.com/repos/Joker20380/family_connect'
+          def get(path):
+              request=urllib.request.Request(base+path,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN']})
+              return json.load(urllib.request.urlopen(request,timeout=30))
+          source='840181d011f6f13fd40543f0280e66c65c2b1e06'
+          tag=get('/git/ref/tags/desktop-preview-20260923-840181d')
+          assert tag['object']['type']=='commit' and tag['object']['sha']==source
+          for run_id in [35906041234,35906041181,35906041363,35906041231,35906041335]:
+              run=get('/actions/runs/'+str(run_id))
+              assert run['head_sha']==source and run['conclusion']=='success',(run_id,run['conclusion'])
+          linux=get('/actions/runs/35906041187')
+          assert linux['head_sha'].startswith('840181d') and linux['conclusion']=='success'
+          for ident,run_id,digest in [
+              (10770879739,35906041234,'bd5171df135f0b261b81294f3cbe68477463341217d75bbaabc42ed1d3fd6108'),
+              (10771033041,35906041187,'31d0cd8861d020713eb5129c8fdef1468467981a9d07cb8bd49c47ac4a4aed52')]:
+              artifact=get('/actions/artifacts/'+str(ident))
+              assert artifact['workflow_run']['id']==run_id and not artifact['expired']
+              assert artifact['digest']=='sha256:'+digest
+      - uses: actions/download-artifact@v4
+        with:
+          name: FamilyConnect-Windows-Installer-pilot-unsigned
+          run-id: '35906041234'
+          github-token: ${{ github.token }}
+          path: accepted-windows
+      - uses: actions/download-artifact@v4
+        with:
+          name: linux-control-preview
+          run-id: '35906041187'
+          github-token: ${{ github.token }}
+          path: accepted-linux
+      - name: Verify exact files and paired source manifest
+        shell: python
+        run: |
+          import pathlib,hashlib,json,shutil,tarfile
+          out=pathlib.Path('publish');out.mkdir()
+          records=[]
+          def copy(source,name,expected):
+              raw=source.read_bytes();digest=hashlib.sha256(raw).hexdigest();assert digest==expected,name
+              (out/name).write_bytes(raw);records.append(dict(file=name,size=len(raw),sha256=digest))
+          source=pathlib.Path('accepted-windows/FamilyConnect-Setup-0.2.10-pilot-unsigned.exe')
+          copy(source,'FamilyConnect-Setup-0.2.10-preview-840181d.exe','accd67ba613a58445bc9303bfd4a18946a2a59dc387a5730fb83234e37c7a5fe')
+          archives=list(pathlib.Path('accepted-linux').rglob('FamilyConnect-Control-Linux-preview-8e9fabe3cbef2989.tar.gz'));assert len(archives)==1
+          archive=archives[0]
+          copy(archive,archive.name,'67b569cb2423692f088baa7ef0d83761394bec4fadb38249ac0788a046605795')
+          with tarfile.open(archive) as tar:
+              prefix='FamilyConnect-Control-preview/'
+              manifest=json.load(tar.extractfile(prefix+'manifest.json'))
+              assert set(tar.getnames())=={prefix+'manifest.json'}|{prefix+n for n in manifest['files']}
+              assert hashlib.sha256(json.dumps(manifest['files'],sort_keys=True).encode()).hexdigest()==manifest['bundle_id']
+              for name,digest in manifest['files'].items():
+                  assert not pathlib.PurePosixPath(name).is_absolute() and '..' not in pathlib.PurePosixPath(name).parts
+                  assert hashlib.sha256(tar.extractfile(prefix+name).read()).hexdigest()==digest
+                  assert hashlib.sha256(pathlib.Path(name).read_bytes()).hexdigest()==digest
+          copy(pathlib.Path('deploy/friends/invite/FamilyConnect-Linux-0.2.10-invitation.txt'),'FamilyConnect-Linux-0.2.10-invitation.txt','2d1e0578767c3e0258f9214c080363cbc54c04944cea91e6b5f704393ba8c5bd')
+          for name in ['Windows-preview.png','Windows-route.png']:shutil.copyfile(pathlib.Path('accepted-windows')/name,out/name)
+          (out/'SHA256SUMS').write_text(''.join(r['sha256']+'  '+r['file']+'\n' for r in records))
+          (out/'receipt.json').write_text(json.dumps(dict(version='0.2.10',channel='manual-preview',windows_source='840181d011f6f13fd40543f0280e66c65c2b1e06',windows_ci=35906041234,linux_ci=35906041187,linux_bundle=manifest['bundle_id'],artifacts=records),indent=2)+'\n')
+          pathlib.Path('notes.md').write_text('Desktop 0.2.10 manual preview: invitation-link activation and single-window navigation. Windows installed URI launch/reuse, ordinary-user broker and native AWG/TCP passed. Linux paired archive matches accepted CI and its source manifest; GTK and URI checks passed. The coordinated HTTPS rollout provides Android beta50. OFF switches are orange, ON turquoise across clients and the interactive invitation page.\n\nWindows x64 installer has no publisher signature; physical-PC and Russian-network acceptance remain open. Linux needs system GTK/libadwaita, a persistent Python environment and operator-installed VPN helpers. See the included Linux guide.\n\nExisting releases and automatic update catalogs are unchanged. Preserve identity and application data when updating.\n')
+      - name: Publish immutable manual preview
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          repo=Joker20380/family_connect
+          tag=desktop-preview-20260923-840181d
+          if gh release view "$tag" --repo "$repo" >/dev/null 2>&1; then
+            echo 'Refusing to replace an existing immutable release.' >&2
+            exit 1
+          fi
+          gh release create "$tag" publish/* --repo "$repo" --verify-tag --prerelease --title 'Desktop 0.2.10 preview — invitations by link' --notes-file notes.md
