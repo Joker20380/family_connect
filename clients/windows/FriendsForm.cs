@@ -104,6 +104,7 @@ internal sealed class FriendsForm : Form
             if(form.invitation.Text.Length!=0)throw new Exception("Invitation retained after success");
             if(form.status.Top<form.activate.Bottom||form.status.Bottom>form.region.Top||form.status.Width>form.ClientSize.Width)
                 throw new Exception("Activation result not visible beside action");
+            if(ru){using var bitmap=new Bitmap(form.Width,form.Height);form.DrawToBitmap(bitmap,new Rectangle(0,0,form.Width,form.Height));bitmap.Save(Path.Combine(Path.GetTempPath(),"Windows-invitation.png"));}
             Pump(form.Run(new("friends-referral"),"ok"));
             if(!form.copy.Enabled||!form.link.ReadOnly||!form.link.Text.EndsWith(new string('a',64)))throw new Exception("Invitation sharing UI failed");
             Pump(form.Run(new("friends-connect-tcp-ru"),"ok"));

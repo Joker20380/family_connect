@@ -39,6 +39,14 @@ jobs:
             Write-Host "::error title=Layout::$($detail.Replace([char]13,' ').Replace([char]10,' '))"
             throw 'Layout failed'
           }
+      - name: Invitation rendering
+        shell: pwsh
+        run: |
+          $data=[Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:TEMP/Windows-invitation.png"))
+          for($i=0;$i -lt $data.Length;$i+=3000){
+            $part=$data.Substring($i,[Math]::Min(3000,$data.Length-$i))
+            Write-Host "::notice title=Invitation image $i::$part"
+          }
       - name: Compare administrator and ordinary user
         shell: pwsh
         run: |
