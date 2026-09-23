@@ -42,3 +42,7 @@ SHA256 `9c5a14a4a1142fe974fb48ee772ecb58d971b0968e66508c2b3442d8ecaaaa64`,
 Приведённые выше baece0d/4ed7007e файлы не публикуются: нужны новые артефакты с цветами.
 Windows URI acceptance35902574209 прошёл; Android этого run остановился на VPN revoke
 до Friends URI-теста, поэтому общий run failure. Публичный rollout не выполнялся.
+
+## Итог
+
+Кандидаты baece0d/4ed7007 не публиковались. Выпущены840181d/8e9fabe3 и Android50; страница интерактивная, OFF/ON едины. [Хеши, проверки и откат](2026-09-23-switch-colors-beta50.ru.md).

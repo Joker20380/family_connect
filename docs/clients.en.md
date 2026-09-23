@@ -6,7 +6,7 @@ Status checked 2026-09-23. Client features and release versions differ by platfo
 
 ## Android
 
-Use the [friends beta guide](getting-started.en.md): Android 8+, ARM64 beta49,
+Use the [friends beta guide](getting-started.en.md): Android 8+, ARM64 beta50,
 invitation-based access, VPN, text and voice messages. The APK is distributed through
 an invitation page and HTTPS download; it is not yet a GitHub or app-store release.
 The [client workflow](../.github/workflows/clients.yml) documents source-build requirements.
@@ -14,9 +14,17 @@ CI debug APKs are not update packages for an installed friends beta.
 
 ## Current invitation-page downloads
 
-[Linux 0.2.9 / 146d221d0ad23c07](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-146d221d0ad23c07.tar.gz) · [Windows 0.2.9 / a6c68fe](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.9-preview-a6c68fe.exe)
+[Linux 0.2.10 / 8e9fabe3cbef2989](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-8e9fabe3cbef2989.tar.gz) · [Windows 0.2.10 / 840181d](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.10-preview-840181d.exe)
 
-These immutable previews are newer than the original GitHub v0.2.9 assets described below. Linux requires operator-assisted setup; [current Linux instructions](https://185.251.89.19:8443/downloads/FamilyConnect-Linux-brand-20260920.txt). Desktop 0.2.10 with invitation-link activation is still under test.
+Install the client, return to the original invitation link, mark **Application installed** and choose **Open application**.
+Windows installs the URI handler with its service and preserves existing activation.
+Linux needs operator-assisted setup: [current archive instructions](https://185.251.89.19:8443/downloads/FamilyConnect-Linux-0.2.10-invitation.txt).
+They cover a persistent Python environment and desktop URI handler; VPN helpers are installed separately.
+
+[GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/desktop-preview-20260923-840181d) · [Hashes and checks](releases/2026-09-23-desktop0210-rollout.ru.md).
+Preserve identity and application data when updating. This is a manual preview; the older
+six-file release's automatic catalogs are unchanged. Desktop messenger parity is not claimed.
+The separate historical GitHub v0.2.9 flow below is retained; use0.2.10 for new invitations.
 
 ## Original GitHub v0.2.9: Linux
 

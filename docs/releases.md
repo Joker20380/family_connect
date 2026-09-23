@@ -1,32 +1,36 @@
 # Release distribution / Выпуски
 
-Verified 2026-09-23 against public HTTPS discovery and the invitation page.
+Verified 2026-09-23 by downloading every new public artifact and checking its SHA256.
 
 | Channel | Distributed version | Notes |
 | --- | --- | --- |
-| Android updater / direct APK | 0.1.18-beta49, code49, ARM64 | Existing activation preserved; user confirms installation |
-| Android first-activation page | beta35 | Code activation, then update in place to49 |
-| Linux invitation download | 0.2.9 preview146d221d0ad23c07 | Paired GTK archive, operator-assisted setup |
-| Windows invitation download | 0.2.9 previewa6c68fe | x64 preview, publisher signing/physical acceptance open |
-| Original desktop GitHub release | v0.2.9 | Separate older assets; not Android feature parity |
+| Android updater / invitation | 0.1.18-beta50, code50, ARM64 | Persistent beta certificate; in-place update |
+| Linux invitation | 0.2.10 preview8e9fabe3cbef2989 | Paired manual preview; operator-assisted setup |
+| Windows invitation | 0.2.10 preview840181d | Native tested installer; no publisher signature |
 
-[Android guide EN](getting-started.en.md) / [RU](getting-started.ru.md) ·
-[Desktop EN](clients.en.md) / [RU](clients.ru.md).
+Invitation activation now opens the app from the original link. OFF switches are orange,
+ON switches turquoise on the page and all clients. Historical artifacts remain immutable.
 
-[APK49](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta49.apk),
-36448332 bytes. SHA256 `3a37613a63c130af97c853d1c39836c026822dca717a748fa005a3211f8f549d`.
-[Discovery](https://185.251.89.19:8443/updates/android-friends.json) ·
-[Checks, certificate and rollback](releases/2026-09-23-voice-scroll-beta49.ru.md).
-Beta48 was tested locally and never published. Historical reports retain their original
-versions; use this page and STATUS for current downloads.
+[FamilyConnect-Control-Linux-preview-8e9fabe3cbef2989.tar.gz](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-8e9fabe3cbef2989.tar.gz), 120093 bytes.
+SHA256 `67b569cb2423692f088baa7ef0d83761394bec4fadb38249ac0788a046605795`.
+
+[FamilyConnect-Linux-0.2.10-invitation.txt](https://185.251.89.19:8443/downloads/FamilyConnect-Linux-0.2.10-invitation.txt), 3371 bytes.
+SHA256 `2d1e0578767c3e0258f9214c080363cbc54c04944cea91e6b5f704393ba8c5bd`.
+
+[FamilyConnect-Setup-0.2.10-preview-840181d.exe](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.10-preview-840181d.exe), 49931275 bytes.
+SHA256 `accd67ba613a58445bc9303bfd4a18946a2a59dc387a5730fb83234e37c7a5fe`.
+
+[FamilyConnect-Test-0.1.18-beta50.apk](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta50.apk), 36448332 bytes.
+SHA256 `8a1d44eac8cdd45bb9225e930c71377ea5b38428238300803fecc42a60761369`.
+
+[Discovery](https://185.251.89.19:8443/updates/android-friends.json) · [Checks and rollback](releases/2026-09-23-switch-colors-beta50.ru.md).
 
 ## Release procedure
 
 The [client workflow](../.github/workflows/clients.yml) defines platform builds and
 release conditions. CI artifacts do not by themselves establish a release. Validate native
 UI/runtime and downloaded artifacts before signing/publishing. Windows cross-build alone
-is insufficient. The current source checkpoint includes Android beta49 and
-the desktop0.2.10 candidate; see the [source report](releases/2026-09-23-source-checkpoint.ru.md). Desktop0.2.10 and the new invitation page are not distributed.
+is insufficient. The current release includes Android beta50 and desktop0.2.10 manual previews; see the [release report](releases/2026-09-23-switch-colors-beta50.ru.md).
 
 Desktop catalogs use offline signing with increasing sequence numbers. Keep keys out of
 CI and servers; never replace an existing version/tag with different binaries.

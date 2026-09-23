@@ -1,0 +1,43 @@
+{
+  "public": {
+    "passed": true,
+    "version": "0.2.10",
+    "android": "0.1.18-beta50",
+    "page_sha256": "6c8a6f7f8023b56aa5af680814497218c215e589c3604d64308766caf47d71b0",
+    "checked_at": "2026-09-23T19:20:55.627906+00:00",
+    "assets": [
+      {
+        "file": "FamilyConnect-Control-Linux-preview-8e9fabe3cbef2989.tar.gz",
+        "size": 120093,
+        "sha256": "67b569cb2423692f088baa7ef0d83761394bec4fadb38249ac0788a046605795"
+      },
+      {
+        "file": "FamilyConnect-Linux-0.2.10-invitation.txt",
+        "size": 3371,
+        "sha256": "2d1e0578767c3e0258f9214c080363cbc54c04944cea91e6b5f704393ba8c5bd"
+      },
+      {
+        "file": "FamilyConnect-Setup-0.2.10-preview-840181d.exe",
+        "size": 49931275,
+        "sha256": "accd67ba613a58445bc9303bfd4a18946a2a59dc387a5730fb83234e37c7a5fe"
+      },
+      {
+        "file": "FamilyConnect-Test-0.1.18-beta50.apk",
+        "size": 36448332,
+        "sha256": "8a1d44eac8cdd45bb9225e930c71377ea5b38428238300803fecc42a60761369"
+      }
+    ]
+  },
+  "github": {
+    "passed": true,
+    "tag": "desktop-preview-20260923-840181d",
+    "url": "https://github.com/Joker20380/family_connect/releases/tag/desktop-preview-20260923-840181d"
+  },
+  "android": {
+    "version": "0.1.18-beta50",
+    "code": 50,
+    "sha256": "8a1d44eac8cdd45bb9225e930c71377ea5b38428238300803fecc42a60761369",
+    "in_place": true
+  },
+  "signing_certificate": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+}

@@ -81,3 +81,7 @@ fallback. Build compact explicitly with `-PfcTargetAbi=arm64-v8a`; default build
 keep four ABIs. Verify with `pilot/android-awg/verify-apk.py --abis arm64-v8a`.
 Compact packaging compresses the unchanged native libraries; Android extracts them
 on install. [Artifact, checks and rollback](../../docs/releases/2026-09-19-android-beta14.ru.md).
+
+## Current distribution — 2026-09-23
+
+The historical code-claim browser flow above is superseded by app-side invitation activation. The page preserves its fragment, provides Android beta50 / desktop0.2.10 downloads and opens the installed URI handler. No browser claim or token storage. OFF is orange, ON turquoise. [Current versions and rollback](../../docs/releases/2026-09-23-switch-colors-beta50.ru.md).

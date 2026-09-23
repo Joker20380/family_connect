@@ -1,6 +1,6 @@
 # Documentation
 
-Текущая доработка: [голосовые beta49: жесты, прокрутка и фон](releases/2026-09-23-voice-scroll-beta49.ru.md) · [мессенджер и уведомления](testing/messenger-notices.ru.md).
+Текущая доработка: [голосовые beta50: жесты, прокрутка и фон](releases/2026-09-23-switch-colors-beta50.ru.md) · [мессенджер и уведомления](testing/messenger-notices.ru.md).
 
 - [family_connect: обновления Android, язык, бренд и карта](releases/2026-09-20-updater-language-brand.ru.md).
 
@@ -8,7 +8,7 @@
 
 [Product introduction](../README.md) · [Русская версия](../README.ru.md)
 
-Updated23 September2026. Android updater: beta49; initial invitation page: beta35.
+Updated23 September2026. Android updater and invitation page: beta50; desktop invitation downloads:0.2.10 preview.
 [Current distribution](releases.md) · [Documentation required with every version](releases.md#documentation-with-every-version).
 
 Start with the guide for your role. [STATUS](STATUS.md) is the source of truth for

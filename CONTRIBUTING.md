@@ -16,10 +16,10 @@ change. Tests should establish behavior, not merely repeat implementation detail
 
 ## Development setup and checks
 
-This source checkpoint includes Android beta49 and the Linux/Windows0.2.10 candidate.
-See the [acceptance report](docs/releases/2026-09-23-source-checkpoint.ru.md) for validation.
+This source checkpoint includes Android beta50 and Linux/Windows0.2.10 previews.
+See the [acceptance report](docs/releases/2026-09-23-switch-colors-beta50.ru.md) for validation.
 CI artifacts use test signing; byte-for-byte reproduction of the distributed APK is not
-claimed. Public desktop previews remain0.2.9 until a coordinated release.
+claimed. Desktop0.2.10 is distributed as a manual preview; automatic catalogs remain separate.
 
 - **Python/control/identity:** use an isolated virtual environment, install
   `control/requirements.lock` and `device_identity/requirements.lock`, then run

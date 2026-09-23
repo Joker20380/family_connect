@@ -1,6 +1,6 @@
 # Product images
 
-`android-beta38-home.png` is the unchanged native View.draw render from beta38/code38, captured on the connected Android phone on 2026-09-23. It is a historical beta38 capture; the current Android update is beta49. Country and protocol are selectable in the connection panel beneath the battery. VPN is off in the capture; the device was reconnected after tests. The image contains no invitation, contact, device identity or private key. It remains on the landing page with an explicit version/date caption, not as a beta49 screenshot.
+`android-beta38-home.png` is the unchanged native View.draw render from beta38/code38, captured on the connected Android phone on 2026-09-23. It is a historical beta38 capture; the current Android update is beta50. Country and protocol are selectable in the connection panel beneath the battery. VPN is off in the capture; the device was reconnected after tests. The image contains no invitation, contact, device identity or private key. It remains on the landing page with an explicit version/date caption, not as a beta50 screenshot.
 
 [Build and verification record](../releases/2026-09-23-public-client-status.ru.md).
 
@@ -16,3 +16,5 @@ in docs/images are historical. The rejected vector-smiley study is not a product
 
 For future additions: capture the current app, record version/device/date, inspect for
 private data, and show at most four relevant images. Do not add empty image placeholders.
+
+`invitation-beta50-off.png`: Firefox headless render of the final invitation page on23 September2026,390×1100px. Synthetic invitation; no private token or identity is displayed. The segmented circle shares native dial geometry and uses orange OFF. Captured by scripts/check_invitation_page.py after the requested circle correction.

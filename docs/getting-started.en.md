@@ -4,26 +4,25 @@
 
 ## First activation
 
-Android8+, ARM64; invitation-only access. Downloading an APK does not grant access.
-The invitation page still provides beta35, while the updater provides beta49.
+Android8+, ARM64; access is invitation-only. Installing the APK does not grant access.
+The invitation page and in-app updater both provide beta50.
 
-1. Ask a participant for a link/QR from **Settings → Invite a friend**. Obtain your own
-   code on that page and download its beta35 APK. Keep invitation links private.
-2. Install **Family Connect Test**, allowing installation from your browser if Android asks.
-3. In beta35, use **Settings → Activate with code** and enter your code.
-4. Once activated, install beta49 below over the existing app, keeping its data.
-   No new invitation is required. Beta49 no longer has manual code entry; the new
-   invitation page with an app-opening button has not been published yet.
-5. In beta49, choose country/transport in the home connection panel near the battery,
-   enable VPN and allow Android’s VPN request. Check the public IP in Route, then try a website.
+1. Ask a participant for their link/QR from **Settings → Invite a friend**. Keep it private.
+2. Download the APK and install **Family Connect Test**, allowing installation from your
+   browser when Android asks. Update an existing installation in place.
+3. Return to the original full invitation link, mark **Application installed** and choose **Open application**.
+   Allow Family Connect to open. Activation happens inside the app; no manual code is needed.
+   If Telegram's embedded browser does not open the app, use an external browser.
+4. Select a country and transport beside the battery panel, enable VPN and accept Android's
+   VPN prompt. Check the external IP on the Route screen, then open a normal website.
 
 ## Update an existing app
 
-[Download beta49 — 36.4 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta49.apk).
-Version `0.1.18-beta49`, code49, ARM64,36448332 bytes; SHA256:
+[Download beta50 — 36.4 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta50.apk).
+Version `0.1.18-beta50`, code50, ARM64,36448332 bytes; SHA256:
 
 ```text
-3a37613a63c130af97c853d1c39836c026822dca717a748fa005a3211f8f549d
+8a1d44eac8cdd45bb9225e930c71377ea5b38428238300803fecc42a60761369
 ```
 
 The app also checks for updates. Open the APK and select **Update** in Android’s system
@@ -33,7 +32,7 @@ do not copy another device’s profiles or keys.
 
 The [older universal beta13](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.12-beta13.apk)
 remains available for other architectures,240.5 MB. It lacks current features and is not
-an equivalent alternative to49.
+an equivalent alternative to50.
 
 ## Text and voice
 
@@ -43,7 +42,7 @@ release to send. Swipe up to lock recording, then use the arrow to send or cross
 cancel. Swipe left while holding to cancel. Recording requires Android10+ and is limited
 to60s/128KiB. After granting microphone access, hold again to start. At the limit,
 recording stops and waits for sending. Leaving the app cancels an unsent recording.
-Update both phones to49 for the same interface.
+Update both phones to50 for the same interface.
 
 The background service receives messages and posts notifications without an active VPN
 when the message server is reachable. Check the service and notification settings in the
@@ -60,10 +59,11 @@ not established. [Notification and announcement guide (RU)](testing/messenger-no
 - Update failure: record the error and versions; do not erase data to bypass a signature mismatch.
 
 Report model, Android/app version and network type. Exclude invitations, keys, profiles
-and messages. [Beta49 validation (RU)](releases/2026-09-23-voice-scroll-beta49.ru.md).
+and messages. [Beta50 validation (RU)](releases/2026-09-23-switch-colors-beta50.ru.md).
 
-## Desktop
+## Desktop clients
 
-[Linux/Windows](clients.en.md) have separate versions and operator-assisted activation.
-Direct invitations and referrals use separate pools; configured limits50/500 are not
-live remaining counts. Coordinated invitation-link rollout remains in [PLAN](PLAN.md).
+[Linux/Windows0.2.10 previews](clients.en.md) also accept invitation links. Linux needs
+operator-assisted dependency and VPN-helper setup. Desktop messenger parity with Android
+is not claimed. Direct invitations and referral claims use separate pools; limits are not
+current availability counts.

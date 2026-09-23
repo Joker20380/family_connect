@@ -6,7 +6,7 @@
 
 ## Android
 
-[Инструкция Friends beta](getting-started.ru.md): Android 8+, ARM64 beta49,
+[Инструкция Friends beta](getting-started.ru.md): Android 8+, ARM64 beta50,
 доступ по приглашению, VPN, текст и голосовые. APK распространяется
 через страницу приглашения и HTTPS; в GitHub Releases и магазинах её пока нет.
 Для сборки используйте требования [client workflow](../.github/workflows/clients.yml).
@@ -14,9 +14,17 @@ Debug APK из CI не предназначена для обновления у
 
 ## Текущие загрузки со страницы приглашения
 
-[Linux 0.2.9 / 146d221d0ad23c07](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-146d221d0ad23c07.tar.gz) · [Windows 0.2.9 / a6c68fe](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.9-preview-a6c68fe.exe)
+[Linux 0.2.10 / 8e9fabe3cbef2989](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-8e9fabe3cbef2989.tar.gz) · [Windows 0.2.10 / 840181d](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.10-preview-840181d.exe)
 
-Эти неизменяемые preview новее исходных файлов GitHub v0.2.9, описанных ниже. Для Linux нужна настройка с оператором: [инструкция к текущему архиву](https://185.251.89.19:8443/downloads/FamilyConnect-Linux-brand-20260920.txt). Версия 0.2.10 с активацией по ссылке ещё тестируется.
+Установите клиент, вернитесь к исходной ссылке приглашения, отметьте **Приложение установлено** и нажмите **Открыть приложение**.
+Windows устанавливает обработчик ссылки вместе со службой; существующая активация сохраняется.
+Linux требует настройки с оператором: [инструкция к текущему архиву](https://185.251.89.19:8443/downloads/FamilyConnect-Linux-0.2.10-invitation.txt).
+Она включает постоянное Python-окружение и установку desktop URI handler. Системные VPN helpers устанавливаются отдельно.
+
+[GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/desktop-preview-20260923-840181d) · [Хеши и проверки](releases/2026-09-23-desktop0210-rollout.ru.md).
+Обновляйте без удаления идентичности и данных. Это manual preview; автоматические каталоги
+прежнего шестифайлового desktop release не переключались. Desktop-мессенджер не принят наравне с Android.
+Ниже сохранён отдельный старый сценарий GitHub v0.2.9; для новых приглашений используйте0.2.10.
 
 ## Исходный GitHub v0.2.9: Linux
 
