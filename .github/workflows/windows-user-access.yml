@@ -24,6 +24,11 @@ jobs:
       - name: Build and install corrected client over the preview
         shell: pwsh
         run: |
+          trap {
+            $detail=$_.ToString().Replace([char]13,' ').Replace([char]10,' ')
+            Write-Host "::error title=Windows upgrade check::$detail"
+            exit 1
+          }
           dotnet run --project clients/windows/Tests/Tests.csproj -c Release
           if($LASTEXITCODE -ne 0){throw 'Core tests failed'}
           dotnet publish clients/windows/FamilyConnect.csproj -c Release -r win-x64 --self-contained true -o patched
