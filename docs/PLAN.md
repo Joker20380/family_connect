@@ -13,12 +13,10 @@
 1. Выполнено: RU/EN инструкции, загрузки и статус сверены, история сохранена;
    274 Markdown-файла/1586 ссылок проверены. Документация опубликована в GitHub
    коммитом b8d51bf;9 основных файлов скачаны и совпали побайтно.
-2. Завершить этап4: подготовить проверенный актуальный source checkpoint Android49,
-   Linux/Windows, согласовать VERSION/версии установщиков и выполнить его собственный CI.
-   Предыдущий blocker SDK закрыт: main e900cfa/6299cea и кандидат ce6fb11 прошли
-   Client builds и Android diagnostic. Docker tests stage кандидата исправлен в aa0b0a7:
-   448 локальных тестов и удалённый phase0/tests+failover success. Эти CI проверяют
-   прежний source с Android8/Windows0.2.10/VERSION0.2.9, а не полный код APK49.
+2. Выполнено: актуальный source checkpoint Android49 / Linux/Windows0.2.10 опубликован
+   в main, версии согласованы. Код8627d55: Client builds35899784973, Linux control,
+   phase0 и TCP — success; native Windows AWG/TCP и ordinary-user acceptance также passed.
+   Это публикация исходников, общий выпуск этапа4 ещё не завершён.
 3. Проверить передачу ссылки приложению на каждой платформе; затем согласованно обновить
    страницу приглашения/ссылки/CSP и необходимые каталоги. Сейчас страница выдаёт beta35,
    Android updater —49. Старые desktop установщики не имеют нового обработчика ссылки.
@@ -58,6 +56,6 @@
 лицензирование, private security reporting, Windows publisher signing и коммерческий
 запуск не закрываются успешной сборкой. Новые VPS не заказаны.
 
-Готовится [актуальный source checkpoint](releases/2026-09-23-source-checkpoint.ru.md):
-Android49 и согласованный desktop VERSION0.2.10. Локально811 Python, Docker498,
-Android153 unit/lint/build passed; remote CI ещё не завершён. Публичные версии прежние.
+[Отчёт source checkpoint](releases/2026-09-23-source-checkpoint.ru.md) содержит точные
+коммиты, CI и ограничения. Перед выпуском desktop нужно получить полный Windows render:
+публичные аннотации содержат обрезанное изображение и не заменяют просмотр артефакта.

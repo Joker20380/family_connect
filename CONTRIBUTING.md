@@ -16,9 +16,10 @@ change. Tests should establish behavior, not merely repeat implementation detail
 
 ## Development setup and checks
 
-The public main branch is an earlier source snapshot than the distributed Android beta49.
-The matching source checkpoint remains to be published; the commands below describe
-the intended build/check process, not a reproducible beta49 build from current main.
+This source checkpoint includes Android beta49 and the Linux/Windows0.2.10 candidate.
+See the [acceptance report](docs/releases/2026-09-23-source-checkpoint.ru.md) for validation.
+CI artifacts use test signing; byte-for-byte reproduction of the distributed APK is not
+claimed. Public desktop previews remain0.2.9 until a coordinated release.
 
 - **Python/control/identity:** use an isolated virtual environment, install
   `control/requirements.lock` and `device_identity/requirements.lock`, then run

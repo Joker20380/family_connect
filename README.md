@@ -112,7 +112,7 @@ This is the implemented provisioning path at a high level; integration maturity 
 
 ## Development
 
-**Source snapshot:** the public main branch currently predates the distributed Android beta49. The beta features above describe the tested APK; building main does not reproduce that version. Publishing the corresponding source checkpoint is tracked in [PLAN](docs/PLAN.md).
+**Source snapshot:** this checkpoint includes Android beta49 and the Linux/Windows0.2.10 candidate. See [source acceptance](docs/releases/2026-09-23-source-checkpoint.ru.md) for checks and limits. CI uses test signing; byte-for-byte reproduction of the published APK is not claimed. Public desktop downloads remain0.2.9 until the coordinated release.
 
 Start with [CONTRIBUTING.md](CONTRIBUTING.md) for setup and scoped checks.
 
