@@ -135,7 +135,7 @@ internal sealed class MainForm:Form
             try{
                 if(availableUpdate is null){
                     availableUpdate=await Updates.Check(Application.ProductVersion.Split('+')[0]);
-                    detail.Text=availableUpdate is null?T("Установлена последняя версия.","You are up to date."):T("Доступна версия ","Version available: ")+availableUpdate.Version;
+                    detail.Text=availableUpdate is null?T("Установлена последняя версия Windows: ","Windows is up to date: ")+Application.ProductVersion.Split('+')[0]:T("Доступна версия ","Version available: ")+availableUpdate.Version;
                 }else{
                     string installer=await Updates.Download(availableUpdate);Updates.LaunchInstaller(installer,availableUpdate);
                     busy=false;state="off";Close();
