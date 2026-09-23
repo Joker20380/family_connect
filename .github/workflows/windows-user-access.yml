@@ -29,13 +29,19 @@ jobs:
           Copy-Item clients/windows/diagnose-broker.ps1 "$dir/probe.ps1"
           $admin=& "$dir/probe.ps1"
           $admin | Set-Content "$dir/admin.json"
-          Write-Host "::notice title=Administrator probe::$($admin -join ' ')"
+          Write-Host "::notice title=Administrator probe::$(($admin | ForEach-Object { $_.ToString().Replace([char]13,' ').Replace([char]10,' ') }) -join ' ')"
           $password=ConvertTo-SecureString ([Guid]::NewGuid().ToString('N')+'aA1!') -AsPlainText -Force
           New-LocalUser -Name fcordinary -Password $password | Out-Null
           $users=Get-LocalGroup -SID 'S-1-5-32-545'
           Add-LocalGroupMember -Group $users -Member fcordinary
+          New-Item -ItemType Directory "$dir/user-temp" | Out-Null
+          Set-Content "$dir/user-probe.ps1" @'
+          $env:TEMP=Join-Path $env:PUBLIC 'fc-broker-diagnostic/user-temp'
+          $env:TMP=$env:TEMP
+          & (Join-Path $env:PUBLIC 'fc-broker-diagnostic/probe.ps1')
+          '@
           $credential=[PSCredential]::new('.\fcordinary',$password)
-          $p=Start-Process "$env:SystemRoot/System32/WindowsPowerShell/v1.0/powershell.exe" -Credential $credential -LoadUserProfile -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File $dir/probe.ps1" -RedirectStandardOutput "$dir/user.json" -RedirectStandardError "$dir/user-error.txt" -PassThru
+          $p=Start-Process "$env:SystemRoot/System32/WindowsPowerShell/v1.0/powershell.exe" -Credential $credential -LoadUserProfile -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File $dir/user-probe.ps1" -RedirectStandardOutput "$dir/user.json" -RedirectStandardError "$dir/user-error.txt" -PassThru
           if(-not $p.WaitForExit(60000)){$p.Kill();throw 'User diagnostic timeout'}
           Write-Host "::notice title=Ordinary user probe::$((Get-Content "$dir/user.json") -join ' ')"
           Write-Host "::notice title=Probe stderr::$((Get-Content "$dir/user-error.txt") -join ' ')"

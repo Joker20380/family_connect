@@ -16,7 +16,7 @@ try {
         [IO.Pipes.PipeAccessRights]::ReadWrite, [IO.Pipes.PipeOptions]::Asynchronous,
         [Security.Principal.TokenImpersonationLevel]::Impersonation, [IO.HandleInheritability]::None)
     $pipe.Connect(5000)
-    $result.stage = 'server-identity'
+    $result.stage = 'load-diagnostic-helper'
     Add-Type -TypeDefinition @'
 using System;
 using System.Runtime.InteropServices;
@@ -39,6 +39,7 @@ public static class FcBrokerDiagnostic {
  }
 }
 '@
+    $result.stage = 'server-identity'
     $serverPath = [FcBrokerDiagnostic]::ServerPath($pipe.SafePipeHandle)
     $installed = Join-Path $env:ProgramFiles 'Family Connect\FamilyConnect.exe'
     $result.serverMatchesDefaultInstall = [string]::Equals($serverPath,$installed,[StringComparison]::OrdinalIgnoreCase)
