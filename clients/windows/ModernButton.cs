@@ -42,6 +42,22 @@ internal sealed class ModernButton : Button
         using(var frame=new Pen(ForeColor==Color.FromArgb(255,173,70)?ForeColor:Color.FromArgb(67,142,121),1)){e.Graphics.DrawPath(frame,path);}
         if(Focused&&ShowFocusCues){using var pen=new Pen(Color.FromArgb(152,247,216),2);e.Graphics.DrawPath(pen,path);}
         var label=Rectangle.Inflate(ClientRectangle,NavigationButton?-2:-14,-4);
+        if(NavigationButton){
+            float scale=DeviceDpi/96f;var saved=e.Graphics.Save();
+            e.Graphics.TranslateTransform(Width/2f-10*scale,8*scale);e.Graphics.ScaleTransform(scale,scale);
+            using var icon=new Pen(ForeColor,1.1f);
+            switch(Tag as string){
+                case "status":e.Graphics.DrawLines(icon,new PointF[]{new(0,10),new(5,10),new(8,2),new(12,19),new(15,7),new(17,10),new(21,10)});break;
+                case "messenger":e.Graphics.DrawLines(icon,new PointF[]{new(2,2),new(19,2),new(19,15),new(11,15),new(5,20),new(5,15),new(2,15),new(2,2)});break;
+                case "route":
+                    e.Graphics.DrawLine(icon,10,5,3,16);e.Graphics.DrawLine(icon,10,5,18,16);
+                    foreach(var point in new[]{new Point(10,3),new Point(3,18),new Point(18,18)})e.Graphics.DrawEllipse(icon,point.X-2,point.Y-2,4,4);break;
+                default:
+                    e.Graphics.DrawEllipse(icon,5,5,11,11);e.Graphics.DrawEllipse(icon,8,8,5,5);
+                    for(int i=0;i<8;i++){double a=i*Math.PI/4;e.Graphics.DrawLine(icon,10.5f+(float)Math.Cos(a)*7,10.5f+(float)Math.Sin(a)*7,10.5f+(float)Math.Cos(a)*10,10.5f+(float)Math.Sin(a)*10);}break;
+            }
+            e.Graphics.Restore(saved);label=new Rectangle(2,Height/2,Width-4,Height/2-4);
+        }
         if(TerminalSwitch){
             float scale=DeviceDpi/96f;var pill=new RectangleF(Width-78*scale,Height/2f-13*scale,62*scale,26*scale);
             Color tint=!Enabled?Color.FromArgb(117,152,138):SwitchOn?Color.FromArgb(152,247,216):Color.FromArgb(255,173,70);

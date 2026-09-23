@@ -53,7 +53,7 @@ internal sealed class MainForm:Form
         viewport.Dock=DockStyle.Fill;viewport.AutoScroll=true;viewport.Margin=Padding.Empty;
         shell.Controls.Add(viewport,0,1);
         content.AutoSize=true;content.AutoSizeMode=AutoSizeMode.GrowAndShrink;
-        content.ColumnCount=1;content.RowCount=15;content.Padding=new Padding(24,12,24,8);
+        content.ColumnCount=1;content.RowCount=15;content.Padding=new Padding(12,8,12,8);
         content.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
         for(int i=0;i<15;i++)content.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         viewport.Controls.Add(content);
@@ -94,15 +94,25 @@ internal sealed class MainForm:Form
         mode.Margin=new Padding(0,4,0,8);mode.BackColor=Color.FromArgb(7,32,24);mode.ForeColor=ForeColor;
         country.Items.AddRange(new object[]{T("Нидерланды","Netherlands"),T("Россия","Russia")});country.SelectedIndex=0;
         country.BackColor=mode.BackColor;country.ForeColor=ForeColor;
+        foreach(var picker in new[]{country,mode}){
+            picker.FlatStyle=FlatStyle.Flat;picker.DrawMode=DrawMode.OwnerDrawFixed;picker.ItemHeight=30;picker.Font=Font;
+            picker.DrawItem+=(_,e)=>{
+                if(e.Index<0)return;
+                using var background=new SolidBrush(picker.BackColor);e.Graphics.FillRectangle(background,e.Bounds);
+                TextRenderer.DrawText(e.Graphics,picker.Items[e.Index]?.ToString(),picker.Font,e.Bounds,picker.ForeColor,TextFormatFlags.Left|TextFormatFlags.VerticalCenter|TextFormatFlags.EndEllipsis);
+                e.DrawFocusRectangle();
+            };
+        }
         if(saveLanguage)try{using var p=Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\family_connect");country.SelectedIndex=(p?.GetValue("Country") as string)=="ru"?1:0;mode.SelectedIndex=(p?.GetValue("Transport") as string)=="tcp"?0:1;}catch{}
         void SaveSelection(){revision++;loadNext=DateTime.MinValue;if(saveLanguage)try{using var p=Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\family_connect");p.SetValue("Country",Country);p.SetValue("Transport",TcpSelected?"tcp":"awg");}catch{}PaintState();}
         country.SelectedIndexChanged+=(_,_)=>SaveSelection();mode.SelectedIndexChanged+=(_,_)=>SaveSelection();
+        dial.Height=190;
         accessPage=new FriendsForm(ru,r=>call(r));accessPage.RegistrationChanged+=()=>{friendsReady=true;PaintState();};
         var selectors=new TableLayoutPanel{Dock=DockStyle.Top,AutoSize=true,ColumnCount=2,RowCount=1,Margin=new Padding(0,4,0,8)};
         selectors.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));selectors.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));
         selectors.Controls.Add(country,0,0);selectors.Controls.Add(mode,1,0);
         int row=0;
-        foreach(Control child in new Control[]{tagline,selectors,card,dashboardMap,friends,request,activate,detail,notice,update,accessPage})
+        foreach(Control child in new Control[]{selectors,card,dashboardMap,friends,request,activate,detail,notice,update,accessPage})
             content.Controls.Add(child,0,row++);
         var version=new Label{Text="v"+Application.ProductVersion.Split('+')[0],AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.FromArgb(153,196,181)};
         language.MinimumSize=new Size(0,36);language.Dock=DockStyle.Fill;
@@ -116,7 +126,7 @@ internal sealed class MainForm:Form
         int column=0;
         foreach(string name in new[]{"status","messenger","route","settings"}){
             footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,25));
-            var button=new ModernButton{NavigationButton=true,Dock=DockStyle.Fill,BackColor=BackColor,ForeColor=ForeColor,Font=new Font("Segoe UI",8,FontStyle.Regular),Margin=new Padding(2)};
+            var button=new ModernButton{NavigationButton=true,Tag=name,Dock=DockStyle.Fill,BackColor=BackColor,ForeColor=ForeColor,Font=new Font("Segoe UI",8,FontStyle.Regular),Margin=new Padding(2)};
             button.Click+=(_,_)=>{page=name;PaintState();FitContent();};nav[name]=button;footer.Controls.Add(button,column++,0);
         }
         shell.Controls.Add(footer,0,2);
@@ -137,7 +147,7 @@ internal sealed class MainForm:Form
         };
         connect.Click+=async(_,_)=>await Execute(new(ConnectionAction()));
         friends.Click+=(_,_)=>{page="access";PaintState();};
-        language.Click+=(_,_)=>{ru=!ru;if(saveLanguage)try{using var preferences=Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\family_connect");preferences.SetValue("Language",ru?"ru":"en");}catch(Exception){detail.Text=T("Не удалось сохранить язык.","Could not save language.");}PaintState();FitWindow();};
+        language.Click+=(_,_)=>{ru=!ru;country.Items[0]=T("Нидерланды","Netherlands");country.Items[1]=T("Россия","Russia");if(saveLanguage)try{using var preferences=Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\family_connect");preferences.SetValue("Language",ru?"ru":"en");}catch(Exception){detail.Text=T("Не удалось сохранить язык.","Could not save language.");}PaintState();FitWindow();};
         poll.Tick+=async(_,_)=>{if(pendingInvitation.Length>0&&!busy)await AcceptInvitation();else await PollStatus();};
         FormClosing+=(_,e)=>{if(busy){e.Cancel=true;return;}};
         FormClosed+=(_,_)=>{poll.Dispose();loadTimer.Dispose();loadTip.Dispose();connect.Dispose();};
@@ -313,6 +323,10 @@ internal sealed class MainForm:Form
     }
     void PaintState()
     {
+        if(country.Items.Count==2){
+            if((country.Items[0] as string)!=T("Нидерланды","Netherlands"))country.Items[0]=T("Нидерланды","Netherlands");
+            if((country.Items[1] as string)!=T("Россия","Russia"))country.Items[1]=T("Россия","Russia");
+        }
         ((ModernButton)connect).SwitchOn=state=="on";connect.Invalidate();
         status.ForeColor=state=="on"?Color.FromArgb(152,247,216):Color.FromArgb(218,255,242);
         status.Text=state switch{
@@ -331,7 +345,7 @@ internal sealed class MainForm:Form
         update.Text=availableUpdate is null?T("Проверить обновления","Check for updates"):T("Установить обновление","Install update");update.Enabled=!busy;
         accessPage.SetLanguage(ru);
         language.Text=T("Язык: Русский → English","Language: English → Русский");
-        content.Controls.Find("tagline",false)[0].Text=T("Связь для вашей семьи","Connection for your family");
+
         detail.Visible=detail.Text.Length>0;PaintLoad();ApplyPage();FitContent();
         if(Visible)FitWindow();
     }
