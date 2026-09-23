@@ -27,8 +27,9 @@ internal static class Program
                 return status.Ok&&request.Ok&&request.Code?.Length==68&&!invalid.Ok?0:10;
             }
             bool invite=args.Length==1&&System.Text.RegularExpressions.Regex.IsMatch(args[0],@"\Afamilyconnect://invite/[0-9a-f]{64}\z");
-            if(args.Length>0&&args[0]!="/smoke"&&args[0]!="/layout-test"&&!invite)return 2;
+            if(args.Length>0&&args[0]!="/smoke"&&args[0]!="/layout-test"&&args[0]!="/startup-layout-test"&&!invite)return 2;
             ApplicationConfiguration.Initialize();
+            if(args.Contains("/startup-layout-test")){var app=new SingleWindowApplication(true);app.Run(Array.Empty<string>());return app.LayoutExitCode;}
             if(args.Contains("/layout-test")){MainForm.CheckLayouts();return 0;}
             if(args.Contains("/smoke")){using var form=new MainForm(true);Application.Run(form);}
             else new SingleWindowApplication().Run(args);

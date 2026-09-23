@@ -178,6 +178,22 @@ internal sealed class MainForm:Form
         var reply=await Execute(new("friends-register",token));
         if(reply?.Ok!=true){accessPage.PendingInvitation=token;page="access";PaintState();}
     }
+    internal void CheckStartupLayout()
+    {
+        if(Application.HighDpiMode!=HighDpiMode.PerMonitorV2)throw new InvalidOperationException("Production startup changed DPI mode");
+        state="off";awgReady=true;friendsReady=true;ru=true;PaintState();
+        foreach(var size in new[]{new Size(560,800),new Size(1200,800),new Size(360,420),new Size(560,800)}){
+            ClientSize=new Size(D(size.Width),D(size.Height));Application.DoEvents();FitContent();
+            if(mode.Bottom>telemetry!.ClientSize.Height || country.Bounds.IntersectsWith(mode.Bounds))throw new InvalidOperationException("Startup selectors clipped");
+            foreach(var button in nav.Values){
+                if(button.Height<D(48)||button.Bottom>footer.ClientSize.Height)throw new InvalidOperationException("Startup navigation clipped");
+            }
+            if(size.Width>=560){
+                using var image=new Bitmap(Width,Height);DrawToBitmap(image,new Rectangle(Point.Empty,Size));
+                image.Save(Path.Combine(Path.GetTempPath(),size.Width==1200?"Windows-startup-wide.png":"Windows-startup.png"));
+            }
+        }
+    }
     internal static void CheckLayouts()
     {
         TraceLayout("start");ServerLoad.Check();RouteMap.CheckPixels();
