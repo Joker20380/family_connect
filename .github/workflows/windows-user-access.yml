@@ -62,7 +62,7 @@ jobs:
           $app=Join-Path $env:ProgramFiles 'Family Connect/FamilyConnect.exe'
           $p=Start-Process $app -ArgumentList '/broker-test' -PassThru
           if(-not $p.WaitForExit(60000)){$p.Kill();$code=-1}else{$code=$p.ExitCode}
-          $detail=Get-Content (Join-Path $env:TEMP 'fc-broker-check.txt') -ErrorAction SilentlyContinue
+          $detail=[string](Get-Content (Join-Path $env:TEMP 'fc-broker-check.txt') -Raw -ErrorAction SilentlyContinue)
           @{exitCode=$code;detail=$detail} | ConvertTo-Json -Compress | Set-Content (Join-Path $env:PUBLIC 'fc-broker-diagnostic/user-app.json')
           '@
           $credential=[PSCredential]::new('.\fcordinary',$password)

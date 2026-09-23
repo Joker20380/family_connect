@@ -4,7 +4,7 @@
 [Setup]
 AppId={{68D949A5-515C-4328-901F-C870A270FD01}
 AppName=family_connect
-AppVersion=0.2.9
+AppVersion=0.2.10
 AppPublisher=family_connect
 DefaultDirName={autopf}\Family Connect
 DefaultGroupName=family_connect
@@ -12,7 +12,7 @@ ArchitecturesAllowed=x64os
 ArchitecturesInstallIn64BitMode=x64os
 PrivilegesRequired=admin
 OutputDir=dist
-OutputBaseFilename=FamilyConnect-Setup-0.2.9-{#BuildLabel}
+OutputBaseFilename=FamilyConnect-Setup-0.2.10-{#BuildLabel}
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
