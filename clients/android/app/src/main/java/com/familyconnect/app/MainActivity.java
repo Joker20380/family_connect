@@ -29,7 +29,7 @@ public final class MainActivity extends LocalizedActivity {
     private Spinner transportPicker;
     private Button gatewayButton;
     private boolean reconnectGateway;
-    private Switch autoMode;
+    private TerminalToggle autoMode;
     private Transport selected=Transport.WG;
     private String pendingTransport="wg";
     private boolean busy=false;
@@ -49,9 +49,7 @@ public final class MainActivity extends LocalizedActivity {
         LinearLayout route=TerminalUi.section(content,getString(R.string.terminal_route));
         gatewayButton=button(route,R.string.choose_gateway,this::chooseGateway);
         label(route,getString(R.string.route),13,TerminalUi.MUTED);
-        autoMode=new Switch(this);autoMode.setText("Auto · WG → AWG → TCP");TerminalUi.textStyle(autoMode,14,TerminalUi.TEXT);autoMode.setMinHeight(dp(48));autoMode.setChecked(getPreferences(MODE_PRIVATE).getBoolean("auto",false));route.addView(autoMode);
-        autoMode.setThumbTintList(new android.content.res.ColorStateList(new int[][]{new int[]{android.R.attr.state_checked},new int[]{}},new int[]{TerminalUi.MINT,TerminalUi.MUTED}));
-        autoMode.setTrackTintList(android.content.res.ColorStateList.valueOf(TerminalUi.FRAME));
+        autoMode=new TerminalToggle(this);autoMode.setText("Auto · WG → AWG → TCP");TerminalUi.textStyle(autoMode,14,TerminalUi.TEXT);autoMode.setMinHeight(dp(48));autoMode.setChecked(getPreferences(MODE_PRIVATE).getBoolean("auto",false));route.addView(autoMode);
         autoMode.setOnCheckedChangeListener((v,on)->{getPreferences(MODE_PRIVATE).edit().putBoolean("auto",on).apply();render();});
         transportPicker=new Spinner(this);TerminalUi.picker(transportPicker,new String[]{"WireGuard","AmneziaWG","TCP · REALITY"});transportPicker.setContentDescription(getString(R.string.terminal_transport));
         transportPicker.setSelection(selected.ordinal());route.addView(transportPicker,new LinearLayout.LayoutParams(-1,-2));

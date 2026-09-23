@@ -38,7 +38,7 @@ final class TerminalToggle extends CompoundButton {
     @Override protected void onDraw(Canvas canvas){
         float d=getResources().getDisplayMetrics().density,w=getWidth(),h=getHeight(),cy=h/2;
         float left=w-63*d,right=w-12*d,radius=15.5f*d;
-        int color=pending?TerminalUi.AMBER:blend(TerminalUi.AMBER,TerminalUi.MINT,position);
+        int color=pending?TerminalUi.SWITCH_OFF:blend(TerminalUi.SWITCH_OFF,TerminalUi.SWITCH_ON,position);
         paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(d);paint.setColor(color);paint.setAlpha(isEnabled()?210:95);
         paint.setStyle(Paint.Style.FILL);paint.setColor(TerminalUi.TEXT);paint.setAlpha(isEnabled()?255:120);
         paint.setTypeface(getTypeface());paint.setTextSize(getTextSize());paint.setTextAlign(Paint.Align.LEFT);

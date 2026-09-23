@@ -200,27 +200,27 @@ class TerminalGauge(Gtk.Button):
         if changed:self.area.queue_draw()
     def draw(self,widget,c,w,h):
         import math,cairo
-        x,y=w/2,h/2;r=min(w,h)*.385;mint=(152/255,247/255,216/255);amber=(1,173/255,70/255)
+        x,y=w/2,h/2;r=min(w,h)*.385;mint=(112/255,244/255,198/255);amber=(1,173/255,70/255)
         accent=mint if self.connected else amber;phase=self.phase if self.connected or self.pending else 0
         def ink(color,alpha=1):c.set_source_rgba(*color,alpha*(1 if self.get_sensitive() else .5))
-        def arc(radius,start,sweep,width,color=mint,alpha=1):
+        def arc(radius,start,sweep,width,color=accent,alpha=1):
             ink(color,alpha);c.set_line_width(width);c.new_path();c.arc(x,y,radius,math.radians(start),math.radians(start+sweep));c.stroke()
-        gradient=cairo.RadialGradient(x,y,0,x,y,r*1.23);gradient.add_color_stop_rgba(0,.2,1,.77,.07);gradient.add_color_stop_rgba(1,.2,1,.77,0)
+        gradient=cairo.RadialGradient(x,y,0,x,y,r*1.23);gradient.add_color_stop_rgba(0,*accent,.07);gradient.add_color_stop_rgba(1,*accent,0)
         c.set_source(gradient);c.arc(x,y,r*1.23,0,math.tau);c.fill()
         for ratio,width,alpha in [(1.18,.6,85/255),(1.08,.5,110/255),(.72,.65,170/255),(.67,.4,55/255)]:arc(r*ratio,0,360,width,alpha=alpha)
         for i in range(120):
-            a=i*math.tau/120;ink(mint,175/255 if i%5==0 else 85/255);c.set_line_width(.6)
+            a=i*math.tau/120;ink(accent,175/255 if i%5==0 else 85/255);c.set_line_width(.6)
             c.move_to(x+math.sin(a)*r*.78,y-math.cos(a)*r*.78);outer=.86 if i%5==0 else .825
             c.line_to(x+math.sin(a)*r*outer,y-math.cos(a)*r*outer);c.stroke()
         for i in range(4):
-            c.save();c.translate(x,y);c.rotate(i*math.pi/2);ink(mint,160/255);c.set_line_width(.6)
+            c.save();c.translate(x,y);c.rotate(i*math.pi/2);ink(accent,160/255);c.set_line_width(.6)
             c.move_to(-r*1.25,0);c.line_to(-r*1.02,0);c.move_to(-r*.76,0);c.line_to(-r*.64,0);c.stroke();c.restore()
         for i in range(64):
             lit=self.connected or self.pending and (i-int(phase/5.625)+64)%64<19
-            color=amber if 43<=i<=46 else mint
+            color=accent
             if lit:arc(r,-90+i*5.625,4.3,r*.15,color,20/255)
             arc(r,-90+i*5.625,4.3,r*.105,color,(230 if lit else 40 if self.pending else 65)/255)
-        for i in range(3):arc(r*1.18,phase+i*119+14,1.8,2,mint if i==1 else amber,(240 if self.connected or self.pending else 100)/255)
+        for i in range(3):arc(r*1.18,phase+i*119+14,1.8,2,accent,(240 if self.connected or self.pending else 100)/255)
         arc(r*.72,-90-phase*.4,94,.85,alpha=160/255)
         if self.has_focus() or self.get_state_flags()&Gtk.StateFlags.ACTIVE:arc(r*1.11,0,360,1.4)
         ly=y-r*.30;lw=r*.19;ink(accent);c.set_line_width(max(1,r*.026))
@@ -234,7 +234,7 @@ class TerminalGauge(Gtk.Button):
             e=c.text_extents(value);c.move_to(x-e.width/2-e.x_bearing,baseline);c.show_text(value)
         text('ON' if self.connected else '…' if self.pending else 'OFF',min(30,r*.29),y+r*.20,accent,True)
         label=('ОТКЛЮЧИТЬ' if self.connected else 'ПОДКЛЮЧИТЬ') if self.ru else ('DISCONNECT' if self.connected else 'CONNECT')
-        text(label,min(11,r*.115),y+r*.39,mint)
+        text(label,min(11,r*.115),y+r*.39,accent)
 
 
 def translated(key,ru):return WORDS[key][0 if ru else 1]

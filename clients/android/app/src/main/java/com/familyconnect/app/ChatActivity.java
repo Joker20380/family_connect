@@ -204,7 +204,7 @@ public final class ChatActivity extends LocalizedActivity {
     }
     private void notificationSettings(){
         screen="notifications";ChatRuntime.visiblePeer=null;shell(getString(R.string.chat_notifications),this::contacts,null);
-        Switch enabled=new Switch(this);enabled.setText(R.string.chat_background_hint);enabled.setChecked(ChatDeliveryService.enabled(this));
+        TerminalToggle enabled=new TerminalToggle(this);enabled.setText(R.string.chat_background_hint);enabled.setChecked(ChatDeliveryService.enabled(this));
         content.addView(enabled);enabled.setOnCheckedChangeListener((button,value)->{getSharedPreferences("chat-notifications",MODE_PRIVATE).edit().putBoolean("background",value).apply();if(value)ChatDeliveryService.start(this);else stopService(new android.content.Intent(this,ChatDeliveryService.class));});
         TerminalUi.button(content,R.string.chat_enable_notifications,()->startActivity(new android.content.Intent(android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(android.provider.Settings.EXTRA_APP_PACKAGE,getPackageName())));
     }
@@ -304,6 +304,7 @@ public final class ChatActivity extends LocalizedActivity {
         showCard(panel, card);
         TerminalUi.label(panel, getString(R.string.chat_verify_hint), 14, TerminalUi.AMBER);
         CheckBox checked = new CheckBox(this);
+        checked.setButtonTintList(new android.content.res.ColorStateList(new int[][]{new int[]{android.R.attr.state_checked},new int[]{}},new int[]{TerminalUi.SWITCH_ON,TerminalUi.SWITCH_OFF}));
         checked.setText(R.string.chat_verified); TerminalUi.textStyle(checked, 14, TerminalUi.TEXT);
         checked.setMinHeight(TerminalUi.dp(this, 48)); panel.addView(checked);
         Button save = TerminalUi.button(panel, R.string.chat_save_contact, () -> {

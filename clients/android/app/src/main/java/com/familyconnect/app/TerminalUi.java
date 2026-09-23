@@ -11,6 +11,7 @@ import android.widget.*;
 /** Terminal presentation; animation follows view visibility and real connection state. */
 final class TerminalUi {
     static final int BACKGROUND = 0xff03110e, SURFACE = 0xff072018, FRAME = 0xff438e79;
+    static final int SWITCH_ON = 0xff70f4c6, SWITCH_OFF = 0xffffad46;
     static final int TEXT = 0xffdafff2, MUTED = 0xff99c4b5, MINT = 0xff98f7d8, AMBER = 0xffffad46;
 
     static int dp(Context context, int value) { return Math.round(value * context.getResources().getDisplayMetrics().density); }
@@ -335,26 +336,26 @@ final class TerminalUi {
             float x=getWidth()/2f,y=getHeight()/2f,r=Math.min(getWidth(),getHeight())*.385f,d=getResources().getDisplayMetrics().density;
             if(r<4)return;
             boolean off=state.equals("off"),ready=state.equals("on")&&health.equals("ok");
-            int accent=ready?MINT:AMBER;
-            paint.setStyle(Paint.Style.FILL);paint.setShader(new RadialGradient(x,y,r*1.23f,new int[]{isPressed()?0x3047ffc4:0x1235ffc4,0x0020dba6},null,Shader.TileMode.CLAMP));canvas.drawCircle(x,y,r*1.23f,paint);paint.setShader(null);
-            ring(canvas,x,y,r*1.18f,.6f*d,MINT,85);
-            ring(canvas,x,y,r*1.08f,.5f*d,MINT,110);
-            ring(canvas,x,y,r*.72f,.65f*d,MINT,170);
-            ring(canvas,x,y,r*.67f,.4f*d,MINT,55);
+            int accent=ready?SWITCH_ON:SWITCH_OFF;
+            paint.setStyle(Paint.Style.FILL);paint.setShader(new RadialGradient(x,y,r*1.23f,new int[]{(accent&0x00ffffff)|(isPressed()?0x30000000:0x12000000),accent&0x00ffffff},null,Shader.TileMode.CLAMP));canvas.drawCircle(x,y,r*1.23f,paint);paint.setShader(null);
+            ring(canvas,x,y,r*1.18f,.6f*d,accent,85);
+            ring(canvas,x,y,r*1.08f,.5f*d,accent,110);
+            ring(canvas,x,y,r*.72f,.65f*d,accent,170);
+            ring(canvas,x,y,r*.67f,.4f*d,accent,55);
             paint.setStrokeCap(Paint.Cap.BUTT);
             // Fine inner ticks and crosshairs echo the reference, not a progress scale.
             for(int i=0;i<120;i++){
-                canvas.save();canvas.rotate(i*3,x,y);paint.setColor(MINT);paint.setAlpha(i%5==0?175:85);paint.setStrokeWidth(.6f*d);
+                canvas.save();canvas.rotate(i*3,x,y);paint.setColor(accent);paint.setAlpha(i%5==0?175:85);paint.setStrokeWidth(.6f*d);
                 canvas.drawLine(x,y-r*.78f,x,y-r*(i%5==0?.86f:.825f),paint);canvas.restore();
             }
             for(int i=0;i<4;i++){
-                canvas.save();canvas.rotate(i*90,x,y);paint.setColor(MINT);paint.setAlpha(160);paint.setStrokeWidth(.6f*d);
+                canvas.save();canvas.rotate(i*90,x,y);paint.setColor(accent);paint.setAlpha(160);paint.setStrokeWidth(.6f*d);
                 canvas.drawLine(x-r*1.25f,y,x-r*1.02f,y,paint);canvas.drawLine(x-r*.76f,y,x-r*.64f,y,paint);canvas.restore();
             }
             for(int i=0;i<64;i++){
                 float start=-90+i*5.625f;
                 boolean lit=ready||(!off&&((i-(int)(phase/5.625f)+64)%64)<19);
-                int color=i>=43&&i<=46?AMBER:MINT;
+                int color=accent;
                 int alpha=lit?230:off?65:40;
                 if(lit)arc(canvas,x,y,r,start,4.3f,r*.15f,color,20);
                 arc(canvas,x,y,r,start,4.3f,r*.105f,color,alpha);
@@ -362,10 +363,10 @@ final class TerminalUi {
             // Sparse markers move slowly while connected/negotiating; no invented %.
             for(int i=0;i<3;i++){
                 float angle=phase+i*119+14;
-                arc(canvas,x,y,r*1.18f,angle,1.8f,2*d,i==1?MINT:AMBER,off?100:240);
+                arc(canvas,x,y,r*1.18f,angle,1.8f,2*d,accent,off?100:240);
             }
-            arc(canvas,x,y,r*.72f,-90-phase*.4f,94,.85f*d,MINT,160);
-            if(isPressed()||isFocused())ring(canvas,x,y,r*1.11f,1.4f*d,MINT,240);
+            arc(canvas,x,y,r*.72f,-90-phase*.4f,94,.85f*d,accent,160);
+            if(isPressed()||isFocused())ring(canvas,x,y,r*1.11f,1.4f*d,accent,240);
             // Lock icon: the closed state is only shown for verified Internet health.
             float lockY=y-r*.30f,lockW=r*.19f;
             paint.setColor(accent);paint.setAlpha(isEnabled()?255:100);paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(Math.max(d,r*.026f));
@@ -380,7 +381,7 @@ final class TerminalUi {
             paint.setTextSize(Math.min(30*d,r*.29f));canvas.drawText(off?"OFF":ready?"ON":"…",x,y+r*.20f,paint);
             String label=getContext().getString(off?R.string.connect:R.string.disconnect).toUpperCase(java.util.Locale.ROOT);
             paint.setTypeface(Typeface.MONOSPACE);paint.setTextSize(Math.min(11*d,r*.115f));
-            paint.setTextSize(Math.min(paint.getTextSize(),paint.getTextSize()*r*1.13f/Math.max(1,paint.measureText(label))));paint.setColor(MINT);
+            paint.setTextSize(Math.min(paint.getTextSize(),paint.getTextSize()*r*1.13f/Math.max(1,paint.measureText(label))));paint.setColor(accent);
             canvas.drawText(label,x,y+r*.39f,paint);paint.setAlpha(255);
         }
     }

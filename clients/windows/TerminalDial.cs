@@ -6,7 +6,7 @@ internal sealed class TerminalDial : Button
 {
     readonly System.Windows.Forms.Timer motion=new(){Interval=50};
     bool connected,pending,russian;float phase;
-    static readonly Color Mint=Color.FromArgb(152,247,216),Amber=Color.FromArgb(255,173,70);
+    static readonly Color Mint=Color.FromArgb(112,244,198),Amber=Color.FromArgb(255,173,70);
     [DllImport("user32.dll")]static extern bool SystemParametersInfo(uint action,uint parameter,out int value,uint flags);
     static bool AnimationsEnabled()=>SystemParametersInfo(0x1042,0,out int value,0)&&value!=0;
     internal TerminalDial()
@@ -39,27 +39,27 @@ internal sealed class TerminalDial : Button
         Color Ink(Color color,int alpha=255)=>Color.FromArgb(Enabled?alpha:alpha/2,color);
         void Arc(float radius,float start,float sweep,float width,Color color,int alpha=255)
         {using var pen=new Pen(Ink(color,alpha),width);g.DrawArc(pen,x-radius,y-radius,radius*2,radius*2,start,sweep);}
-        foreach(var (ratio,width,alpha) in new[]{(1.18f,.6f,85),(1.08f,.5f,110),(.72f,.65f,170),(.67f,.4f,55)})Arc(r*ratio,0,360,width*d,Mint,alpha);
+        foreach(var (ratio,width,alpha) in new[]{(1.18f,.6f,85),(1.08f,.5f,110),(.72f,.65f,170),(.67f,.4f,55)})Arc(r*ratio,0,360,width*d,accent,alpha);
         for(int i=0;i<120;i++)
         {
             float a=i*MathF.Tau/120,outer=i%5==0?.86f:.825f;
-            using var pen=new Pen(Ink(Mint,i%5==0?175:85),.6f*d);
+            using var pen=new Pen(Ink(accent,i%5==0?175:85),.6f*d);
             g.DrawLine(pen,x+MathF.Sin(a)*r*.78f,y-MathF.Cos(a)*r*.78f,x+MathF.Sin(a)*r*outer,y-MathF.Cos(a)*r*outer);
         }
         for(int i=0;i<4;i++)
         {
             var saved=g.Save();g.TranslateTransform(x,y);g.RotateTransform(i*90);
-            using var pen=new Pen(Ink(Mint,160),.6f*d);g.DrawLine(pen,-r*1.25f,0,-r*1.02f,0);g.DrawLine(pen,-r*.76f,0,-r*.64f,0);g.Restore(saved);
+            using var pen=new Pen(Ink(accent,160),.6f*d);g.DrawLine(pen,-r*1.25f,0,-r*1.02f,0);g.DrawLine(pen,-r*.76f,0,-r*.64f,0);g.Restore(saved);
         }
         for(int i=0;i<64;i++)
         {
-            bool lit=connected||(pending&&(i-(int)(p/5.625f)+64)%64<19);var color=i>=43&&i<=46?Amber:Mint;
+            bool lit=connected||(pending&&(i-(int)(p/5.625f)+64)%64<19);var color=accent;
             if(lit)Arc(r,-90+i*5.625f,4.3f,r*.15f,color,20);
             Arc(r,-90+i*5.625f,4.3f,r*.105f,color,lit?230:pending?40:65);
         }
-        for(int i=0;i<3;i++)Arc(r*1.18f,p+i*119+14,1.8f,2*d,i==1?Mint:Amber,connected||pending?240:100);
-        Arc(r*.72f,-90-p*.4f,94,.85f*d,Mint,160);
-        if(Focused||Capture)Arc(r*1.11f,0,360,1.4f*d,Mint);
+        for(int i=0;i<3;i++)Arc(r*1.18f,p+i*119+14,1.8f,2*d,accent,connected||pending?240:100);
+        Arc(r*.72f,-90-p*.4f,94,.85f*d,accent,160);
+        if(Focused||Capture)Arc(r*1.11f,0,360,1.4f*d,accent);
         float ly=y-r*.30f,lw=r*.19f;
         using(var pen=new Pen(Ink(accent),Math.Max(d,r*.026f)))
         {
@@ -76,6 +76,6 @@ internal sealed class TerminalDial : Button
             g.DrawString(text,font,brush,new PointF(x,baseline-size),format);
         }
         TextAt(connected?"ON":pending?"…":"OFF",Math.Min(30*d,r*.29f),y+r*.20f,accent,true);
-        TextAt(russian?(connected?"ОТКЛЮЧИТЬ":"ПОДКЛЮЧИТЬ"):(connected?"DISCONNECT":"CONNECT"),Math.Min(11*d,r*.115f),y+r*.39f,Mint);
+        TextAt(russian?(connected?"ОТКЛЮЧИТЬ":"ПОДКЛЮЧИТЬ"):(connected?"DISCONNECT":"CONNECT"),Math.Min(11*d,r*.115f),y+r*.39f,accent);
     }
 }
