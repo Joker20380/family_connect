@@ -10,7 +10,7 @@ internal sealed class ModernButton : Button
     internal bool SwitchOn { get; set; }
     [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
     internal bool NavigationButton { get; set; }
-    public ModernButton(){DoubleBuffered=true;FlatStyle=FlatStyle.Flat;FlatAppearance.BorderSize=0;
+    public ModernButton(){UseVisualStyleBackColor=false;DoubleBuffered=true;FlatStyle=FlatStyle.Flat;FlatAppearance.BorderSize=0;
         FlatAppearance.MouseOverBackColor=Color.FromArgb(16,61,46);FlatAppearance.MouseDownBackColor=Color.FromArgb(37,94,78);Cursor=Cursors.Hand;}
     internal static GraphicsPath Rounded(RectangleF rect,float radius){
         float diameter=Math.Min(radius*2,Math.Min(rect.Width,rect.Height));
@@ -29,6 +29,9 @@ internal sealed class ModernButton : Button
     protected override void OnMouseLeave(EventArgs e){hovered=false;pressed=false;Invalidate();base.OnMouseLeave(e);}
     protected override void OnMouseDown(MouseEventArgs e){pressed=true;Invalidate();base.OnMouseDown(e);}
     protected override void OnMouseUp(MouseEventArgs e){pressed=false;Invalidate();base.OnMouseUp(e);}
+    protected override void OnKeyDown(KeyEventArgs e){if(e.KeyCode==Keys.Space){pressed=true;Invalidate();}base.OnKeyDown(e);}
+    protected override void OnKeyUp(KeyEventArgs e){if(e.KeyCode==Keys.Space){pressed=false;Invalidate();}base.OnKeyUp(e);}
+    protected override void OnLostFocus(EventArgs e){pressed=false;Invalidate();base.OnLostFocus(e);}
     protected override void OnPaint(PaintEventArgs e)
     {
         e.Graphics.Clear(Parent?.BackColor??BackColor);

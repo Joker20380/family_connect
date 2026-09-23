@@ -6,11 +6,11 @@ internal sealed class MainForm:Form
     readonly bool saveLanguage;
     string state="unknown";
     bool tcpReady,awgReady,automatic,friendsReady;
-    readonly ComboBox country=new(){DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill};
+    readonly ComboBox country=new ModernComboBox(){DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill};
     FriendsForm accessPage=null!;
     LiveNetworkPanel? telemetry;
     string Country=>country.SelectedIndex==1?"ru":"nl";string? transport,lastError;
-    readonly ComboBox mode=new(){DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill};
+    readonly ComboBox mode=new ModernComboBox(){DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill};
     bool TcpSelected=>mode.SelectedIndex==0;
     bool AwgSelected=>mode.SelectedIndex==1;
     bool AutoSelected=>false;
@@ -102,15 +102,7 @@ internal sealed class MainForm:Form
         mode.Margin=new Padding(0,4,0,8);mode.BackColor=Color.FromArgb(7,32,24);mode.ForeColor=ForeColor;
         country.Items.AddRange(new object[]{T("Нидерланды","Netherlands"),T("Россия","Russia")});country.SelectedIndex=0;
         country.BackColor=mode.BackColor;country.ForeColor=ForeColor;
-        foreach(var picker in new[]{country,mode}){
-            picker.FlatStyle=FlatStyle.Flat;picker.DrawMode=DrawMode.OwnerDrawFixed;picker.ItemHeight=30;picker.Font=Font;
-            picker.DrawItem+=(_,e)=>{
-                if(e.Index<0)return;
-                using var background=new SolidBrush(picker.BackColor);e.Graphics.FillRectangle(background,e.Bounds);
-                TextRenderer.DrawText(e.Graphics,picker.Items[e.Index]?.ToString(),picker.Font,e.Bounds,picker.ForeColor,TextFormatFlags.Left|TextFormatFlags.VerticalCenter|TextFormatFlags.EndEllipsis);
-                e.DrawFocusRectangle();
-            };
-        }
+        foreach(var picker in new[]{country,mode}){picker.ItemHeight=30;picker.Font=Font;}
         if(saveLanguage)try{using var p=Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\family_connect");country.SelectedIndex=(p?.GetValue("Country") as string)=="ru"?1:0;mode.SelectedIndex=(p?.GetValue("Transport") as string)=="tcp"?0:1;}catch{}
         void SaveSelection(){revision++;loadNext=DateTime.MinValue;if(saveLanguage)try{using var p=Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\family_connect");p.SetValue("Country",Country);p.SetValue("Transport",TcpSelected?"tcp":"awg");}catch{}PaintState();}
         country.SelectedIndexChanged+=(_,_)=>SaveSelection();mode.SelectedIndexChanged+=(_,_)=>SaveSelection();
@@ -219,6 +211,16 @@ internal sealed class MainForm:Form
             using var bitmap=new Bitmap(preview.Width,preview.Height);preview.DrawToBitmap(bitmap,new Rectangle(Point.Empty,preview.Size));
             string path=Path.Combine(Path.GetTempPath(),"Windows-preview.png");
             Directory.CreateDirectory(Path.GetDirectoryName(path)!);bitmap.Save(path);
+            preview.country.Focus();preview.country.DroppedDown=true;Application.DoEvents();
+            if(!preview.country.DroppedDown)throw new InvalidOperationException("Country list did not open");
+            preview.country.SelectedIndex=1;preview.country.DroppedDown=false;
+            if(preview.Country!="ru")throw new InvalidOperationException("Country selection lost");
+            preview.country.SelectedIndex=0;
+            preview.mode.Focus();preview.mode.DroppedDown=true;Application.DoEvents();
+            if(!preview.mode.DroppedDown)throw new InvalidOperationException("Transport list did not open");
+            preview.mode.SelectedIndex=0;preview.mode.DroppedDown=false;
+            if(!preview.TcpSelected)throw new InvalidOperationException("Transport selection lost");
+            preview.mode.SelectedIndex=1;Application.DoEvents();
             foreach(var size in new[]{new Size(360,420),new Size(1200,800),new Size(800,700)}){
                 preview.ClientSize=size;Application.DoEvents();preview.FitContent();
                 if(preview.mode.Bottom>preview.telemetry!.ClientSize.Height || preview.country.Bounds.IntersectsWith(preview.mode.Bounds))

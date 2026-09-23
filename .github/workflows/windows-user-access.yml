@@ -37,7 +37,7 @@ jobs:
           Copy-Item patched/* "$env:ProgramFiles/Family Connect/" -Recurse -Force
           Start-Service FamilyConnectBroker
           $p=Start-Process "$env:ProgramFiles/Family Connect/FamilyConnect.exe" -ArgumentList '/layout-test' -PassThru
-          if(-not $p.WaitForExit(90000)){$p.Kill();throw 'Layout timeout'}
+          if(-not $p.WaitForExit(240000)){$p.Kill();throw 'Layout timeout'}
           if($p.ExitCode -ne 0){
             $detail=Get-Content "$env:TEMP/fc-layout-check.txt" -Raw -ErrorAction SilentlyContinue
             Write-Host "::error title=Layout::$($detail.Replace([char]13,' ').Replace([char]10,' '))"

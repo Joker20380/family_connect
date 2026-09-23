@@ -25,9 +25,10 @@ internal sealed class FriendsForm : UserControl
         panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));Controls.Add(panel);
         void Add(Control c){c.Dock=DockStyle.Top;c.Margin=new Padding(0,5,0,5);int row=panel.RowCount++;panel.RowStyles.Add(new RowStyle(SizeType.AutoSize));panel.Controls.Add(c,0,row);}
         SetLanguage(ru);Add(hint);Add(device);Add(invitation);
-        register.Text=T("Получить доступ","Get access");Add(register);Add(status);
+        Add(register);Add(status);
         share.Text=T("Пригласить друга","Invite a friend");Add(share);Add(link);
         copy.Text=T("Скопировать ссылку","Copy link");copy.Enabled=false;Add(copy);
+        foreach(var field in new[]{invitation,link}){field.BackColor=Color.FromArgb(7,32,24);field.ForeColor=ForeColor;field.BorderStyle=BorderStyle.FixedSingle;}
         foreach(var b in new[]{register,share,copy}){b.AutoSize=true;b.MinimumSize=new(0,44);b.BackColor=Color.FromArgb(7,32,24);b.ForeColor=ForeColor;}
         SizeChanged+=(_,_)=>{int width=Math.Max(1,Width-12);hint.MaximumSize=new(width,0);status.MaximumSize=new(width,0);device.MaximumSize=new(width,0);};
         register.Click+=async(_,_)=>{
