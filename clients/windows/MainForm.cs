@@ -306,7 +306,7 @@ internal sealed class MainForm:Form
         if(form.busy||!form.connect.Enabled||changes!=0)throw new Exception("Poll changed visible state");
         form.PollStatus().GetAwaiter().GetResult();
         if(calls!=1)throw new Exception("Overlapping polls");
-        response.SetResult(new(true,"off"));
+        response.SetResult(new(true,"off",AwgReady:true));
         Pump(pending);if(changes!=0)throw new Exception("Unchanged poll repainted state");
         form.call=_=>Task.FromResult(new Reply(true,"on"));Pump(form.PollStatus());
         if(form.state!="on")throw new Exception("State change ignored");
@@ -420,11 +420,10 @@ internal sealed class MainForm:Form
         }
         ((ModernButton)connect).SwitchOn=state=="on";connect.Invalidate();
         status.ForeColor=state=="on"?Color.FromArgb(152,247,216):Color.FromArgb(218,255,242);
-        status.Text=state switch{
+        status.Text=NeedsInvitation?T("Нужно приглашение","Invitation required"):state switch{
             "on"=>T("Туннель включён","Tunnel is on"),"off"=>T("Готов к подключению","Ready to connect"),
             "inactive"=>friendsReady?T("Готов к подключению","Ready to connect"):T("Получить доступ","Get access"),"other-user"=>T("VPN занят другим пользователем","VPN used by another user"),
             "pending"=>lastError=="tcp-reconnecting"?T("Восстанавливаем подключение…","Reconnecting…"):T("Подключение меняется…","Connection changing…"),_=>T("Статус недоступен","Status unavailable")};
-        if(NeedsInvitation)status.Text=T("Нужно приглашение","Invitation required");
         enroll.Text=T("Активировать по приглашению","Activate with invitation");
         description.Text=(Country=="nl"?T("Нидерланды","Netherlands"):T("Россия","Russia"))+" · "+(TcpSelected?"TCP REALITY":"AWG 3.1");
         connect.Text=state=="on"?T("Отключить","Disconnect"):state=="pending"&&(automatic||transport is "tcp" or "awg")?T("Отменить подключение","Cancel connection"):T("Подключить","Connect");
