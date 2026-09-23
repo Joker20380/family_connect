@@ -53,5 +53,14 @@
     "schema": 2,
     "sequence": 9,
     "version": "0.2.13"
+  },
+  "public_updater_check": {
+    "passed": true,
+    "implementation": "Windows Updates.Check via C# harness",
+    "offered_to": "0.2.12",
+    "current": "0.2.13",
+    "sequence": 9,
+    "catalog_sha256": "042207c92e01cf6a22be3beee10af9745c97b1c3735874cb7ce6690a4f9117f1",
+    "legacy_catalog_sha256": "5fac40f2dbeb3561e78786a78588fbfb0041e8731584a7522e50c066eff16291"
   }
 }
