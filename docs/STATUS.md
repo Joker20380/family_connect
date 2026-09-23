@@ -69,3 +69,7 @@ claims на приглашающее устройство за24ч и500 общ�
 Main patch e900cfa, опубликованный checkpoint6299cea: Client builds35891111532 и
 Android diagnostic35891111340 — success. Следующий шаг — актуальный source checkpoint
 и согласование версий перед выпуском; публичные загрузки остаются прежними.
+
+Готовится [актуальный source checkpoint](releases/2026-09-23-source-checkpoint.ru.md):
+Android49 и согласованный desktop VERSION0.2.10. Локально811 Python, Docker498,
+Android153 unit/lint/build passed; remote CI ещё не завершён. Публичные версии прежние.

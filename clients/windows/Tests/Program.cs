@@ -135,3 +135,11 @@ foreach(var mode in new[]{"failure","skip","established","cancel-before","cancel
 Console.WriteLine("7 automatic transport policy order, cancellation, cleanup and exhaustion scenarios passed.");
 
 ControlVectors.Run();
+
+FriendsIdentityChecks.Run();
+
+await FriendsAccessChecks.Run();
+
+FriendsVaultChecks.Run();
+FriendsCatalogChecks.Run();
+FriendsConfigurationVaultChecks.Run();

@@ -5,7 +5,6 @@ import android.net.*;
 import android.os.ParcelFileDescriptor;
 import com.chaquo.python.Python;
 import com.chaquo.python.PyObject;
-import com.chaquo.python.android.AndroidPlatform;
 import com.google.gson.JsonObject;
 import java.io.*;
 import java.util.Base64;
@@ -13,7 +12,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /** One bounded RNS exchange session; Java retains device secrets and owns VPN mutations. */
 final class ControlRnsAndroid implements ControlCarrier.Wire,AutoCloseable {
-    private static final Object PYTHON_START=new Object();
     private final Context context;private final AtomicBoolean cancelled=new AtomicBoolean();private PyObject channel;
     ControlRnsAndroid(Context context){this.context=context.getApplicationContext();}
     public static final class Callbacks {
@@ -40,7 +38,7 @@ final class ControlRnsAndroid implements ControlCarrier.Wire,AutoCloseable {
             bootstrap=ControlJson.parse(bytes.toByteArray()).getAsJsonObject();
         }
         ControlJson.fields(bootstrap,"host port provider_public");
-        synchronized(PYTHON_START){if(!Python.isStarted())Python.start(new AndroidPlatform(context));}
+        PythonRuntimeAndroid.get(context);
         if(cancelled())throw new IOException("RNS cancelled");
         channel=Python.getInstance().getModule("fc_rns_transport").callAttr("Channel",
             new File(context.getNoBackupFilesDir(),"rns-control").getAbsolutePath(),ControlJson.text(bootstrap.get("host")),

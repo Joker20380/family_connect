@@ -57,3 +57,7 @@
 Долгий Doze/OEM/boot/Android13+, desktop messenger, iOS/macOS, балансировка gateway,
 лицензирование, private security reporting, Windows publisher signing и коммерческий
 запуск не закрываются успешной сборкой. Новые VPS не заказаны.
+
+Готовится [актуальный source checkpoint](releases/2026-09-23-source-checkpoint.ru.md):
+Android49 и согласованный desktop VERSION0.2.10. Локально811 Python, Docker498,
+Android153 unit/lint/build passed; remote CI ещё не завершён. Публичные версии прежние.

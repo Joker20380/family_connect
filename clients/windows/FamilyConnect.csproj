@@ -5,10 +5,11 @@
     <UseWindowsForms>true</UseWindowsForms><ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode><EnableWindowsTargeting>true</EnableWindowsTargeting>
     <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
     <ApplicationManifest>app.manifest</ApplicationManifest><AssemblyName>FamilyConnect</AssemblyName>
-    <Version>0.2.9</Version><ApplicationIcon>app.ico</ApplicationIcon><Company>Family Connect</Company><Product>Family Connect</Product>
+    <Version>0.2.10</Version><ApplicationIcon>app.ico</ApplicationIcon><Company>family_connect</Company><Product>family_connect</Product><Title>family_connect</Title>
     <PublishSingleFile>false</PublishSingleFile><PublishTrimmed>false</PublishTrimmed>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="../assets/land.json" LogicalName="FamilyConnect.Land.json" />
     <EmbeddedResource Include="TcpNetwork.ps1" LogicalName="FamilyConnect.TcpNetwork.ps1" />
     <EmbeddedResource Include="../assets/dodecahedron.png" LogicalName="FamilyConnect.Brand.png" />
     <Compile Remove="Tests/**/*.cs;BrokerTests/**/*.cs" />

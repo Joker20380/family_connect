@@ -15,7 +15,7 @@ permissions:
 jobs:
   android:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -59,7 +59,9 @@ jobs:
           arch: x86_64
           target: google_apis
           disable-animations: true
-          script: python3 -u pilot/android-awg/run.py
+          script: |
+            python3 -u pilot/android-awg/run.py
+            python3 -u pilot/android-awg/friends_ci.py
       - name: Publish bounded Android runtime summary
         if: always()
         run: python3 pilot/android-awg/report_ci.py
@@ -74,6 +76,7 @@ jobs:
             clients/android/app/build/outputs/apk/friends/*.apk
             clients/android/awg-generated/assets/awg-build.json
             clients/android/app/build/test-results/testDebugUnitTest/*.xml
+            clients/android/app/build/test-results/testFriendsUnitTest/*.xml
             clients/android/app/build/outputs/androidTest-results/connected/**/*.xml
             clients/android/app/build/reports/lint-results-debug.txt
             android-awg-*.log
@@ -128,11 +131,25 @@ jobs:
           $process = Start-Process $app.FullName -ArgumentList '/layout-test' -PassThru
           if (-not $process.WaitForExit(200000)) { $process.Kill(); throw 'Layout checks timed out' }
           if (Test-Path "$env:TEMP/fc-layout-check.txt") { $failure = (Get-Content "$env:TEMP/fc-layout-check.txt" -Raw).Replace('%','%25').Replace("`r",'%0D').Replace("`n",'%0A'); Write-Output "::error title=Layout detail::$failure" }
-          if (Test-Path "$env:TEMP/Windows-preview.png") { $preview = [Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:TEMP/Windows-preview.png")); Write-Output "::notice title=Windows preview::$preview" }
+          if (Test-Path "$env:TEMP/Windows-preview.png") {
+            $preview = [Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:TEMP/Windows-preview.png"))
+            for ($offset=0; $offset -lt $preview.Length; $offset+=3000) {
+              $part = $preview.Substring($offset, [Math]::Min(3000, $preview.Length-$offset))
+              Write-Output "::notice title=Windows preview part $offset::$part"
+            }
+          }
+          if (Test-Path "$env:TEMP/Windows-route.png") {
+            $routePreview = [Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:TEMP/Windows-route.png"))
+            for ($offset=0; $offset -lt $routePreview.Length; $offset+=3000) {
+              $part = $routePreview.Substring($offset, [Math]::Min(3000, $routePreview.Length-$offset))
+              Write-Output "::notice title=Windows route part $offset::$part"
+            }
+          }
           if ($process.ExitCode -ne 0) { Get-Content "$env:TEMP/fc-layout-check.txt" -ErrorAction SilentlyContinue; throw "Layout checks failed: $($process.ExitCode)" }
       - name: Save Windows UI preview
+        if: always()
         shell: pwsh
-        run: Copy-Item "$env:TEMP/Windows-preview.png" clients/windows/dist/
+        run: Copy-Item "$env:TEMP/Windows-preview.png","$env:TEMP/Windows-route.png" clients/windows/dist/
       - name: Uninstall application and service
         if: always()
         shell: pwsh
@@ -149,11 +166,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: sudo apt-get update && sudo apt-get install -y python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 python3-cryptography xvfb dbus-x11
+      - run: sudo apt-get update && sudo apt-get install -y python3-gi python3-gi-cairo gir1.2-gtk-4.0 gir1.2-adw-1 libqrencode4 libzbar0 python3-cryptography xvfb dbus-x11
       - run: python -m pip install pytest==9.1.1 cryptography==46.0.7
       - run: python -m pytest clients/desktop/tests -q
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/app.py --smoke
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a -s "-screen 0 2560x2160x24" /usr/bin/python3 clients/desktop/layout_check.py
+      - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/map_check.py
+      - name: Check Friends invitation window
+        run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/friends_ui_check.py
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/recovery_check.py
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/tcp_install_check.py
       - run: python3 scripts/package_desktop.py

@@ -1,0 +1,31 @@
+{
+  "page_sha256": "01d91776bbf0f104ea4b47e0b7b516a02d85ef2c867f1a1db3b933ee2deb25dc",
+  "csp": true,
+  "old_universal_preserved": true,
+  "assets": [
+    {
+      "name": "FamilyConnect-Test-0.1.18-beta25.apk",
+      "bytes": 36395084,
+      "sha256": "8d350572bfca0d955f37858d2c957e379f04d93762a3a3355b21d673d8f1cb3b",
+      "verified": true
+    },
+    {
+      "name": "FamilyConnect-Control-Linux-preview-11c53d18c3bc10a9.tar.gz",
+      "bytes": 114644,
+      "sha256": "f0f877cb7a6933a950d3c53c100da41f231963912c9cfbc5ebee2ee326cbd037",
+      "verified": true
+    },
+    {
+      "name": "FamilyConnect-Setup-0.2.9-preview-21b740a.exe",
+      "bytes": 49928867,
+      "sha256": "5ce1d67781a4bede2d0f5c50cd7cfdf5ff407524e8406b8cc1e0abd38bfaea0f",
+      "verified": true
+    },
+    {
+      "name": "FamilyConnect-Linux-preview-20260920.txt",
+      "bytes": 3039,
+      "sha256": "1a1ac65b6b6c9a336373226cab69013f8e893d73734b983d6c32b60239780a1e",
+      "verified": true
+    }
+  ]
+}

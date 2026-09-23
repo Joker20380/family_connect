@@ -10,6 +10,7 @@ FIELDS={'Interface':{'PrivateKey','Address','DNS','MTU','ListenPort'},
         'Peer':{'PublicKey','PresharedKey','Endpoint','AllowedIPs','PersistentKeepalive'}}
 
 
+AWG31_FIELDS=set("HeaderProtectionKey ContentPaddingAddition RandomTrailers DisableCookies".split())
 AWG_FIELDS=set("Jc Jmin Jmax S1 S2 S3 S4 H1 H2 H3 H4 I1 I2 I3 I4 I5".split())
 
 
@@ -53,9 +54,12 @@ def tcp_config(profile, interface):
                 'sockopt':{'mark':64630}}}]}
 
 
-def parse(text, *, allow_awg=False):
+def parse(text, *, allow_awg=False, allow_awg31=False):
     allowed={k:set(v) for k,v in FIELDS.items()}
     if allow_awg: allowed["Interface"].update(AWG_FIELDS)
+    if allow_awg31:
+        if not allow_awg: raise ValueError("AWG 3.1 requires explicit AWG support")
+        allowed["Interface"].update(AWG31_FIELDS)
     if len(text.encode('utf-8'))>MAX_PROFILE or '\x00' in text:
         raise ValueError('Invalid profile size')
     sections={}; current=None
@@ -86,13 +90,13 @@ def parse(text, *, allow_awg=False):
     for field,low,high in [('MTU',1280,1500),('ListenPort',0,65535)]:
         if field in interface and not low<=int(interface[field])<=high: raise ValueError('Invalid interface option')
     if 'PersistentKeepalive' in peer and not 0<=int(peer['PersistentKeepalive'])<=65535: raise ValueError('Invalid keepalive')
-    if set(interface) & AWG_FIELDS:
+    if set(interface) & (AWG_FIELDS | AWG31_FIELDS):
         validate_awg(interface)
     return sections
 
 
-def validate(text, *, allow_awg=False):
-    sections=parse(text, allow_awg=allow_awg)
+def validate(text, *, allow_awg=False, allow_awg31=False):
+    sections=parse(text, allow_awg=allow_awg, allow_awg31=allow_awg31)
     return '\n\n'.join('['+name+']\n'+'\n'.join(k+' = '+v for k,v in fields.items()) for name,fields in sections.items())+'\n'
 
 
@@ -103,12 +107,28 @@ def validate_awg(fields):
         if not re.fullmatch(r'[0-9]{1,5}',fields[name]) or not low<=int(fields[name])<=high:
             raise ValueError('Invalid AWG padding')
     if int(fields['Jmin'])>int(fields['Jmax']): raise ValueError('Invalid AWG junk range')
+    protected='HeaderProtectionKey' in fields
+    if protected:
+        raw=base64.b64decode(fields['HeaderProtectionKey'],validate=True)
+        if len(raw)!=32 or not any(raw) or base64.b64encode(raw).decode()!=fields['HeaderProtectionKey']:
+            raise ValueError('Invalid header protection key')
+        if any(int(fields[f'S{i}'])<12 or fields[f'H{i}']!=str(i) for i in range(1,5)):
+            raise ValueError('Invalid protected headers')
+    for name in ('RandomTrailers','DisableCookies'):
+        if name in fields and fields[name] not in ('true','false'):raise ValueError('Invalid AWG flag')
+    if 'ContentPaddingAddition' in fields:
+        v=fields['ContentPaddingAddition']
+        if not re.fullmatch(r'[0-9]{1,5}(?:-[0-9]{1,5})?',v):raise ValueError('Invalid content padding')
+        parts=list(map(int,v.split('-')))
+        if not 0<=parts[0]<=parts[-1]<=256:raise ValueError('Invalid content padding')
+    if fields.get('RandomTrailers')=='true' and len({fields[f'S{i}'] for i in range(1,5)})!=1:
+        raise ValueError('Unequal random trailers')
     ranges=[]
     for name in ('H1','H2','H3','H4'):
         if not re.fullmatch(r'[0-9]{1,10}(?:-[0-9]{1,10})?',fields[name]): raise ValueError('Invalid AWG header')
         limits=list(map(int,fields[name].split('-')))
         lo,hi=limits[0],limits[-1]
-        if not 5<=lo<=hi<=4294967295 or any(lo<=b and a<=hi for a,b in ranges):
+        if not (1 if protected else 5)<=lo<=hi<=4294967295 or any(lo<=b and a<=hi for a,b in ranges):
             raise ValueError('Overlapping or invalid AWG headers')
         ranges.append((lo,hi))
     # Strict grammar: no hooks, arbitrary shell text or oversized signature packets.

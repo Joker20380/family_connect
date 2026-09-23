@@ -1,3 +1,4 @@
+from pathlib import Path
 import json
 import shutil
 import subprocess
@@ -60,3 +61,18 @@ def test_preview_dependency_pins_reuse_existing_locks():
         (ROOT / 'device_identity/requirements.lock').read_text().splitlines())
     pins = (ROOT / 'provisioning/requirements.lock').read_text().splitlines()
     assert all(line in accepted for line in pins if line and not line.startswith('#'))
+
+
+def test_invitation_handler_installs_verified_bundle_idempotently(tmp_path):
+    from scripts.install_control_desktop import install
+    archive=package(ROOT,tmp_path/'out')
+    with tarfile.open(archive) as tar:tar.extractall(tmp_path/'unpacked',filter='data')
+    source=tmp_path/'unpacked/FamilyConnect-Control-preview'
+    args=(source,Path(sys.executable),tmp_path/'data',tmp_path/'applications')
+    target=install(*args)
+    assert install(*args)==target
+    entry=(tmp_path/'applications/family-connect.desktop').read_text()
+    assert 'gui %u' in entry and 'MimeType=x-scheme-handler/familyconnect;' in entry
+    assert str(target/'scripts/run_control_preview.py') in entry
+    (source/'clients/desktop/app.py').write_text('tampered')
+    with pytest.raises(ValueError,match='Invalid source'):install(*args)

@@ -1,8 +1,15 @@
 """Verify the packaged native libraries against the build manifest."""
-import hashlib,io,json,zipfile
+import argparse,hashlib,io,json,zipfile
 from pathlib import Path
 root=Path(__file__).resolve().parents[2]
-apk=root/'clients/android/app/build/outputs/apk/debug/app-debug.apk'
+parser=argparse.ArgumentParser()
+parser.add_argument('--apk',type=Path,default=root/'clients/android/app/build/outputs/apk/debug/app-debug.apk')
+parser.add_argument('--report',type=Path,default=root/'android-awg-apk.json')
+parser.add_argument('--abis',default='arm64-v8a,armeabi-v7a,x86,x86_64',help='Exact expected packaged ABI set; default remains four-ABI CI')
+args=parser.parse_args()
+expected=set(args.abis.split(','))
+assert expected and expected <= {'arm64-v8a','armeabi-v7a','x86','x86_64'}
+apk=args.apk
 with zipfile.ZipFile(apk) as z:
  manifest=json.loads(z.read('assets/awg-build.json'))
  assert manifest['transport_version']=='3.1'
@@ -10,22 +17,27 @@ with zipfile.ZipFile(apk) as z:
  assert manifest['engine_patch_sha256']==hashlib.sha256((root/'pilot/awg31/patches/0001-refresh-s4-after-tun-read.patch').read_bytes()).hexdigest()
  assert manifest['interface_patch_sha256']==hashlib.sha256((root/'pilot/android-awg/awg31-interface.patch').read_bytes()).hexdigest()
  assert set(manifest['abis'])=={'arm64-v8a','armeabi-v7a','x86','x86_64'}
- for abi,digest in manifest['abis'].items():
+ actual={n.split('/')[1] for n in z.namelist() if n.startswith('lib/') and n.endswith('.so')}
+ assert actual==expected, (actual,expected)
+ for abi in expected:
+  digest=manifest['abis'][abi]
   assert hashlib.sha256(z.read('lib/'+abi+'/libfc-awg.so')).hexdigest()==digest
   assert 'lib/'+abi+'/libwg-go.so' not in z.namelist()
  for name in ('Android.txt','Engine.txt','Xray.txt','gVisor.txt'):assert z.read('assets/awg-licenses/'+name)
  assert not any('peer-fixture' in n or 'xray-peer' in n for n in z.namelist())
- for name in ('BouncyCastle.txt','Gson.txt','Reticulum.txt','PySerial.txt','Chaquopy.txt'):assert z.read('assets/control-licenses/'+name)
+ for name in ('BouncyCastle.txt','Gson.txt','Reticulum.txt','PySerial.txt','Chaquopy.txt','LXMF.txt','ZXing.txt'):assert z.read('assets/control-licenses/'+name)
  # Embedded carrier and pinned bootstrap must be present in the real APK.
  assert z.read('assets/rns-relay.json')==(root/'clients/android/app/src/main/assets/rns-relay.json').read_bytes()
  with zipfile.ZipFile(io.BytesIO(z.read('assets/chaquopy/app.imy'))) as source:
   assert 'fc_rns_transport.pyc' in source.namelist()
+  for name in ('fc_chat_store.pyc','fc_chat_transport.pyc','messenger/local.pyc','messenger/delivery.pyc','messenger/admission.pyc'):
+   assert name in source.namelist()
  with zipfile.ZipFile(io.BytesIO(z.read('assets/chaquopy/requirements-common.imy'))) as requirements:
-  for module in ('RNS/__init__.pyc','serial/__init__.pyc'):assert module in requirements.namelist()
- for abi in manifest['abis']:
+  for module in ('RNS/__init__.pyc','LXMF/__init__.pyc','serial/__init__.pyc'):assert module in requirements.namelist()
+ for abi in expected:
   assert z.read('lib/'+abi+'/libpython3.10.so')
  assert not any('control-v1/' in n or 'TEST-ONLY' in n for n in z.namelist())
  assert manifest['xray_revision']=='d2758a023cd7f4174a5a5fa4ff66e487d4342ba0'
-result={'apk_sha256':hashlib.sha256(apk.read_bytes()).hexdigest(),'bytes':apk.stat().st_size,'build':manifest}
-(root/'android-awg-apk.json').write_text(json.dumps(result,indent=2)+'\n')
+result={'apk_sha256':hashlib.sha256(apk.read_bytes()).hexdigest(),'bytes':apk.stat().st_size,'build':manifest,'packaged_abis':sorted(expected)}
+args.report.write_text(json.dumps(result,indent=2)+'\n')
 print(json.dumps(result))

@@ -12,7 +12,7 @@ import time
 from LXMF.LXMPeer import LXMPeer
 import RNS
 
-from .codec import identity, unpack, MAX_PACKED
+from .codec import identity, unpack, MAX_PACKED, PUT_PATH
 
 
 class MailboxError(Exception):
@@ -25,6 +25,18 @@ class SyncResult:
     duplicates: int
     rejected: int
     purged: int
+
+
+@dataclass(frozen=True)
+class ExchangeResult:
+    received: SyncResult
+    relayed: int
+    outbox_pending: int
+    more_incoming: bool
+
+    @property
+    def more(self):
+        return self.outbox_pending > 0 or self.more_incoming
 
 
 class Mailbox:
@@ -50,7 +62,7 @@ class Mailbox:
         def received(receipt):response.append(receipt.response);done.set()
         receipt=link.request(path,data=data,
             response_callback=received,failed_callback=lambda _:done.set(),
-            timeout=max(.001,deadline-time.monotonic()),max_response_size=70000)
+            timeout=max(.001,deadline-time.monotonic()),max_response_size=200000)
         if receipt is None or receipt is False:raise MailboxError('request_failed')
         self._wait(lambda:done.is_set() or link.status==RNS.Link.CLOSED,deadline,cancel)
         if not response:raise MailboxError('request_failed')
@@ -87,41 +99,65 @@ class Mailbox:
     def sync(self, *, delete_after_store=True, timeout=12, cancel=None):
         if type(delete_after_store) is not bool:raise ValueError('Explicit deletion policy required')
         with self._connection(timeout,cancel) as (link,deadline,cancel):
-            available=self._request(link,[None,None],deadline,cancel)
-            if len(available)>1000 or any(type(x) is not bytes or len(x)!=32 for x in available):
-                raise MailboxError('invalid_list')
-            wanted=list(dict.fromkeys(available))[:10]
-            if not wanted:return SyncResult(0,0,0,0)
-            # Ask for a small batch. Remaining messages stay on the node for the
-            # next explicit sync; never download an unbounded remote mailbox.
-            messages=self._request(link,[wanted,[],48],deadline,cancel)
-            if len(messages)>len(wanted):raise MailboxError('invalid_batch')
-            stored=duplicates=rejected=0;haves=[]
-            for blob in messages:
+            result,_=self._sync_connected(link,deadline,cancel,delete_after_store=delete_after_store)
+            return result
+
+    def _sync_connected(self, link, deadline, cancel, *, delete_after_store):
+        available=self._request(link,[None,None],deadline,cancel)
+        if len(available)>1000 or any(type(x) is not bytes or len(x)!=32 for x in available):
+            raise MailboxError('invalid_list')
+        wanted=list(dict.fromkeys(available))[:10]
+        if not wanted:return SyncResult(0,0,0,0),False
+        # Ask for a small batch. Remaining messages stay on the node for the
+        # next explicit sync; never download an unbounded remote mailbox.
+        messages=self._request(link,[wanted,[],192],deadline,cancel)
+        if len(messages)>len(wanted):raise MailboxError('invalid_batch')
+        stored=duplicates=rejected=0;haves=[]
+        for blob in messages:
+            self._wait(lambda:True,deadline,cancel)
+            if type(blob) is not bytes or not 16<len(blob)<=MAX_PACKED+256:
+                raise MailboxError('invalid_ciphertext')
+            transient=RNS.Identity.full_hash(blob)
+            if transient not in wanted or transient in haves:raise MailboxError('unexpected_message')
+            if blob[:16]!=self.chat.address:
+                rejected+=1;continue
+            plaintext=self.source.decrypt(blob[16:])
+            if plaintext is None:
+                rejected+=1;continue
+            try:
+                added=self.chat.receive(blob[:16]+plaintext)
+            except ValueError:
+                # Unknown contact, bad signature, unsupported text or full
+                # history: preserve on node. No plaintext/error detail logs.
+                rejected+=1;continue
+            # Other storage errors propagate before ANY purge request.
+            if added:stored+=1
+            else:duplicates+=1
+            haves.append(transient)
+        if delete_after_store and haves:
+            if self._request(link,[None,haves],deadline,cancel):
+                raise MailboxError('invalid_purge_response')
+        purged=len(haves) if delete_after_store else 0
+        # Only a successful purge justifies another automatic fetch. Unknown
+        # contacts/full local history must not produce an endless download loop.
+        more=purged>0 and len(available)>purged
+        return SyncResult(stored,duplicates,rejected,purged),more
+
+    def exchange(self, *, timeout=12, cancel=None):
+        """One link/deadline: receive up to ten messages and relay up to four.
+
+        Partial progress is committed to Store even if a later operation fails.
+        The caller must reload history after failure rather than assume rollback.
+        """
+        with self._connection(timeout,cancel) as (link,deadline,cancel):
+            received,more=self._sync_connected(link,deadline,cancel,delete_after_store=True)
+            ids=self.chat.store.pending_outbox()[:4]
+            relayed=0
+            for ident in ids:
                 self._wait(lambda:True,deadline,cancel)
-                if type(blob) is not bytes or not 16<len(blob)<=MAX_PACKED+256:
-                    raise MailboxError('invalid_ciphertext')
-                transient=RNS.Identity.full_hash(blob)
-                if transient not in wanted or transient in haves:raise MailboxError('unexpected_message')
-                if blob[:16]!=self.chat.address:
-                    rejected+=1;continue
-                plaintext=self.source.decrypt(blob[16:])
-                if plaintext is None:
-                    rejected+=1;continue
-                try:
-                    added=self.chat.receive(blob[:16]+plaintext)
-                except ValueError:
-                    # Unknown contact, bad signature, unsupported text or full
-                    # history: preserve on node. No plaintext/error detail logs.
-                    rejected+=1;continue
-                # Other storage errors propagate before ANY purge request.
-                if added:stored+=1
-                else:duplicates+=1
-                haves.append(transient)
-            if delete_after_store and haves:
-                if self._request(link,[None,haves],deadline,cancel):
-                    raise MailboxError('invalid_purge_response')
-            return SyncResult(stored,duplicates,rejected,len(haves) if delete_after_store else 0)
+                self._publish_connected(ident,link,deadline,cancel)
+                relayed+=1
+            return ExchangeResult(received,relayed,len(self.chat.store.pending_outbox()),more)
 
     def publish(self, message_id, *, timeout=12, cancel=None):
         """Closed ingress; successful response means stored on node."""
@@ -144,7 +180,6 @@ class Mailbox:
                 self._publish_connected(message_id,link,deadline,cancel)
 
     def _publish_connected(self, message_id, link, deadline, cancel):
-        from .relay import PUT_PATH
         token,raw=self.chat.store.begin_attempt(message_id)
         try:
             recipient=raw[:16]

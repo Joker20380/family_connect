@@ -14,27 +14,36 @@ import stat
 import threading
 import uuid
 
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-
-
 class Store:
-    def __init__(self, directory, key):
-        if type(key) is not bytes or len(key) != 32:
-            raise ValueError('A 32-byte external storage key is required')
+    def __init__(self, directory, key=None, *, create=None, cipher=None):
+        # Native enrollment must distinguish a new account from damaged/missing
+        # existing state. None retains the prototype's open-or-create API.
+        if create is not None and type(create) is not bool:
+            raise ValueError('Explicit store creation mode required')
+        if cipher is None:
+            if type(key) is not bytes or len(key) != 32:
+                raise ValueError('A 32-byte external storage key is required')
+            from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+            cipher = AESGCM(key)
+        elif key is not None or not all(callable(getattr(cipher, name, None)) for name in ('encrypt', 'decrypt')):
+            raise ValueError('Exactly one storage cipher is required')
         root = Path(directory)
-        root.mkdir(mode=0o700, parents=False, exist_ok=True)
+        if create is not False:
+            root.mkdir(mode=0o700, parents=False, exist_ok=create is None)
         info = root.lstat()
         if not stat.S_ISDIR(info.st_mode) or info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o700:
             raise ValueError('Unsafe chat directory')
         self._lock = threading.RLock()
-        self._cipher = AESGCM(key)
+        # Android supplies the same AES-GCM format through a Java callback;
+        # its storage key never needs to enter Python or a serialized request.
+        self._cipher = cipher
         self._owner = None
         self._db = None
         try:
-            self._owner = self._open(root / '.lock')
+            self._owner = self._open(root / '.lock', create=create is not False)
             fcntl.flock(self._owner, fcntl.LOCK_EX | fcntl.LOCK_NB)
             fresh = not (root / 'history.sqlite').exists()
-            fd = self._open(root / 'history.sqlite')
+            fd = self._open(root / 'history.sqlite', create=create is not False)
             os.close(fd)
             self._db = sqlite3.connect(root / 'history.sqlite', check_same_thread=False)
             self._db.execute('PRAGMA journal_mode=DELETE')
@@ -54,8 +63,9 @@ class Store:
             raise
 
     @staticmethod
-    def _open(path):
-        fd = os.open(path, os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW | os.O_NONBLOCK, 0o600)
+    def _open(path, *, create=True):
+        flags = os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK
+        fd = os.open(path, flags | (os.O_CREAT if create else 0), 0o600)
         info = os.fstat(fd)
         if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o600 or info.st_nlink != 1:
             os.close(fd)
@@ -66,7 +76,9 @@ class Store:
         nonce = os.urandom(12)
         raw = json.dumps(value, separators=(',', ':'), ensure_ascii=False).encode()
         sealed = nonce + self._cipher.encrypt(nonce, raw, b'fc-chat-v1:' + ident.encode())
-        self._db.execute('INSERT OR REPLACE INTO records VALUES (?,?)', (ident, sealed))
+        # Preserve insertion order when status changes; REPLACE moves the row.
+        self._db.execute('INSERT INTO records VALUES (?,?) ON CONFLICT(id) '
+                         'DO UPDATE SET sealed=excluded.sealed', (ident, sealed))
 
     def _get(self, ident):
         row = self._db.execute('SELECT sealed FROM records WHERE id=?', (ident,)).fetchone()
@@ -75,11 +87,13 @@ class Store:
         sealed = row[0]
         return json.loads(self._cipher.decrypt(sealed[:12], sealed[12:], b'fc-chat-v1:' + ident.encode()))
 
-    def chat_identity(self):
+    def chat_identity(self, *, create=True):
         import RNS
         with self._lock, self._db:
             saved = self._get('identity')
             if saved is None:
+                if not create:
+                    raise ValueError('Chat identity unavailable')
                 result = RNS.Identity()
                 self._put('identity', result.get_private_key().hex())
                 return result
@@ -90,7 +104,7 @@ class Store:
 
     def add(self, message, raw, *, outgoing):
         # Only callers that verified/created the signed message may insert it.
-        if type(raw) is not bytes or not 96 < len(raw) <= 4608:
+        if type(raw) is not bytes or not 96 < len(raw) <= 131584:
             raise ValueError('Invalid packed message')
         ident = 'message:' + message['id']
         with self._lock, self._db:
@@ -98,6 +112,10 @@ class Store:
                 return False
             if self._db.execute("SELECT count(*) FROM records WHERE id LIKE 'message:%'").fetchone()[0] >= 1000:
                 raise ValueError('Pilot history quota reached')
+            if not outgoing and message.get('kind')=='edit':
+                original=next((m for m in self.visible_messages() if m['id']==message['target']),None)
+                if original is not None and not original['outgoing'] and original['peer']==message['peer'] and message['revision']>original.get('revision',0):
+                    state=self._get('inbox') or {};state[message['target']]={'read':False,'notified':False};self._put('inbox',state)
             self._put(ident, dict(message, packed=raw.hex(), outgoing=outgoing,
                                  status='queued' if outgoing else 'received', attempt=None))
             return True
@@ -114,10 +132,107 @@ class Store:
             contacts[address] = public
             self._put('contacts', contacts)
 
+    def contact_names(self):
+        with self._lock:
+            return self._get('contact-names') or {}
+
+    def rename_contact(self, address, name):
+        with self._lock, self._db:
+            if address not in self.contacts(): raise ValueError('Unknown contact')
+            names = self.contact_names()
+            if name: names[address] = name
+            else: names.pop(address, None)
+            self._put('contact-names', names)
+
     def messages(self):
         with self._lock:
             return [self._get(row[0]) for row in self._db.execute(
                 "SELECT id FROM records WHERE id LIKE 'message:%' ORDER BY rowid").fetchall()]
+
+    def visible_messages(self):
+        messages=self.messages();visible=[dict(m) for m in messages if m.get('kind')!='edit'];known={m['id']:m for m in visible}
+        for edit in messages:
+            if edit.get('kind')!='edit':continue
+            original=known.get(edit['target'])
+            if original is None or original.get('kind')=='audio' or original['peer']!=edit['peer'] or original['outgoing']!=edit['outgoing']:continue
+            if edit['revision']<=original.get('revision',0):continue
+            original.update(text=edit['text'],revision=edit['revision'],edited=True)
+            if original['outgoing']:original.update(status=edit['status'],attempt=edit['attempt'])
+        return visible
+
+    def inbox(self):
+        """Encrypted read/delivery flags; migrate old history silently once."""
+        with self._lock, self._db:
+            messages = self.visible_messages()
+            state = self._get('inbox')
+            if state is None:
+                state = {m['id']: {'read': True, 'notified': True} for m in messages if not m['outgoing']}
+                self._put('inbox', state)
+            return [dict(m, **state.get(m['id'], {'read': False, 'notified': False}))
+                    for m in messages if not m['outgoing']]
+
+    def inbox_mark(self, ids, flag):
+        if flag not in ('read', 'notified') or type(ids) is not list or len(ids) > 1000 or any(type(i) is not str for i in ids):
+            raise ValueError('Invalid inbox update')
+        with self._lock, self._db:
+            messages = self.inbox()
+            state = self._get('inbox')
+            wanted = set(ids)
+            for message in messages:
+                if message['id'] in wanted:
+                    value = state.setdefault(message['id'], {'read': False, 'notified': False})
+                    value[flag] = True
+                    if flag == 'read': value['notified'] = True
+            self._put('inbox', state)
+
+    def service_events(self, incoming=None):
+        with self._lock, self._db:
+            events = self._get('service-events') or []
+            if incoming is not None:
+                known = {event['id']: event for event in events}
+                for event in incoming:
+                    if event['id'] in known:
+                        original = {k: v for k, v in known[event['id']].items() if k not in ('read', 'notified')}
+                        revision=event.get('revision',1);previous=original.get('revision',1)
+                        if revision<previous: continue
+                        if revision>previous:
+                            if any(event[k]!=original[k] for k in ('created','expires','author','kind','platforms')): raise ValueError('Changed service identity')
+                            known[event['id']].clear();known[event['id']].update(event,read=False,notified=False)
+                        else:
+                            left={k:v for k,v in original.items() if k not in ('revision','updated','editor')}
+                            right={k:v for k,v in event.items() if k not in ('revision','updated','editor')}
+                            if left!=right: raise ValueError('Changed service event')
+                            if 'revision' in original and 'revision' in event and original!=event: raise ValueError('Changed service revision')
+                            if 'revision' in event: known[event['id']].update(event)
+                    else:
+                        value = dict(event, read=False, notified=False)
+                        events.append(value);known[event['id']] = value
+                if len(events) > 1000: raise ValueError('Service history quota reached')
+                self._put('service-events', events)
+            return events
+
+    def service_mark(self, ids, flag):
+        if flag not in ('read', 'notified') or type(ids) is not list or len(ids) > 1000 or any(type(i) is not str for i in ids):
+            raise ValueError('Invalid service update')
+        with self._lock, self._db:
+            events = self.service_events()
+            for event in events:
+                if event['id'] in ids:
+                    event[flag] = True
+                    if flag == 'read': event['notified'] = True
+            self._put('service-events', events)
+
+    def pending_outbox(self):
+        """Stable IDs only; never automatically resend a relay-accepted message.
+
+        A sending record from a previous owner epoch can retry its original bytes.
+        A current-epoch attempt belongs to the existing in-flight worker.
+        """
+        with self._lock:
+            return [message['id'] for message in self.messages()
+                    if message['outgoing'] and (message['status'] == 'queued'
+                    or (message['status'] == 'sending'
+                        and not (message['attempt'] or '').startswith(self.epoch + ':')))]
 
     def begin_attempt(self, message_id):
         with self._lock, self._db:
@@ -141,7 +256,7 @@ class Store:
                 raise ValueError('Outgoing message required')
             if 'relay_blob' not in message:
                 blob=create()
-                if type(blob) is not bytes or not 112<=len(blob)<=4864:
+                if type(blob) is not bytes or not 112<=len(blob)<=131840:
                     raise ValueError('Invalid relay ciphertext')
                 message['relay_blob']=blob.hex()
                 self._put(ident,message)

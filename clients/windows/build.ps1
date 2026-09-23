@@ -37,7 +37,7 @@ Copy-Item "$tcpOutput/*" build/publish/tcp/ -Recurse -Force
 $awgOutput=Join-Path $env:RUNNER_TEMP ('fc-client-awg-'+[guid]::NewGuid().ToString('N'))
 & "$PSScriptRoot/../../pilot/windows-awg/build.ps1" -Output $awgOutput
 Check-Exit
-if((Get-FileHash "$awgOutput/fc-awg.exe" -Algorithm SHA256).Hash.ToLower() -ne '0ff643eee68ce94183b6f5dde75fc9c03eeff96d6731349c9431fc2771be1a70'){throw 'Unaccepted AWG worker'}
+if((Get-FileHash "$awgOutput/fc-awg.exe" -Algorithm SHA256).Hash.ToLower() -ne 'e3d11b9552eb8ed84776cf16a8c240e90b4b9ff0d361519c840909ca5f97fdb6'){throw 'Unaccepted AWG worker'}
 New-Item -ItemType Directory -Force build/publish/awg | Out-Null
 Copy-Item "$awgOutput/fc-awg.exe","$awgOutput/wintun.dll","$awgOutput/build.json" build/publish/awg/
 Copy-Item "$awgOutput/licenses" build/publish/awg/ -Recurse -Force
@@ -78,7 +78,7 @@ if($SignedRelease){
 & $iscc @argsList
 Check-Exit
 if($SignedRelease){
-    $sig=Get-AuthenticodeSignature 'dist/FamilyConnect-Setup-0.2.9-signed.exe'
+    $sig=Get-AuthenticodeSignature 'dist/FamilyConnect-Setup-0.2.10-signed.exe'
     if($sig.Status -ne 'Valid' -or $sig.SignerCertificate.Thumbprint -ne $SigningThumbprint){throw 'Installer signature verification failed'}
 }
 Get-ChildItem dist/*.exe|ForEach-Object { $h=Get-FileHash $_ -Algorithm SHA256; "$($h.Hash.ToLower())  $($_.Name)" }|Set-Content dist/SHA256SUMS

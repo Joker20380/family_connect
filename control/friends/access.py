@@ -41,7 +41,7 @@ CREATE TABLE challenges(nonce TEXT PRIMARY KEY, device TEXT NOT NULL, public TEX
   key=_decode(public,64);_decode(wg,32)
   return hashlib.sha256(key).hexdigest()[:32]
  def challenge(self,public_identity,wireguard_public_key,purpose,invitation=''):
-  if purpose not in ('activate','ru','nl'):raise Rejected()
+  if purpose not in ('activate','ru','nl','refer','notices-role','notices-publish','notices-list','notices-edit'):raise Rejected()
   device=self.binding(public_identity,wireguard_public_key);now=int(self.clock());invite=None
   with self.db() as db:
    row=db.execute('SELECT * FROM devices WHERE device=?',(device,)).fetchone()

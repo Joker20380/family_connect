@@ -39,12 +39,29 @@ internal static class Store
     {
         string path=UserPath(sid,".key.dpapi");
         if(!File.Exists(path)){
+            if(FriendsIdentityVault.HasState(Root,sid))throw new IOException("Enrolled WG key recovery required");
             var key=new X25519PrivateKeyParameters(new SecureRandom()).GetEncoded();
             try{Atomic(path,ProtectedData.Protect(key,null,DataProtectionScope.CurrentUser));}
             finally{CryptographicOperations.ZeroMemory(key);}
         }
+        var info=new FileInfo(path);
+        if((info.Attributes&FileAttributes.ReparsePoint)!=0||info.Length<1||info.Length>4096)
+            throw new IOException("Unsafe WG key file");
         return ProtectedData.Unprotect(File.ReadAllBytes(path),null,DataProtectionScope.CurrentUser);
     }
+    internal static ControlIdentity FriendsIdentity(string sid, bool create) =>
+        FriendsIdentityVault.Load(Root, sid, create, mayCreate =>
+        {
+            if (mayCreate) return Key(sid);
+            // Do not use Key(): its legacy create-on-missing behavior is forbidden
+            // when resuming an already registered friends identity.
+            var path = UserPath(sid, ".key.dpapi");
+            var info = new FileInfo(path);
+            if (!info.Exists || (info.Attributes & FileAttributes.ReparsePoint) != 0
+                || info.Length < 1 || info.Length > 4096) throw new IOException("WG key recovery required");
+            return ProtectedData.Unprotect(File.ReadAllBytes(path), null, DataProtectionScope.CurrentUser);
+        });
+
     public static string Public(string sid)
     {
         var key=Key(sid);try{return Convert.ToBase64String(new X25519PrivateKeyParameters(key,0).GeneratePublicKey().GetEncoded());}

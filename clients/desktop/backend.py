@@ -1,5 +1,7 @@
 import ctypes
 import json
+import math
+import urllib.request
 import stat
 import os
 from pathlib import Path
@@ -11,9 +13,33 @@ import time
 import uuid
 from profile_config import validate, parse, parse_tcp, AWG_FIELDS, MAX_PROFILE
 
-def read_profile(path, *, allow_awg=False):
+def read_profile(path, *, allow_awg=False, allow_awg31=False):
     with Path(path).open("rb") as source:
-        return validate(source.read(MAX_PROFILE+1).decode("utf-8-sig"),allow_awg=allow_awg)
+        return validate(source.read(MAX_PROFILE+1).decode("utf-8-sig"),allow_awg=allow_awg,allow_awg31=allow_awg31)
+
+
+def verified_server_load(payload,country,now):
+    """Telemetry is informational; stale/unknown capacity is never zero load."""
+    if country not in ('ru','nl') or len(payload)>8192:raise ValueError('Invalid load sample')
+    value=json.loads(payload)
+    if value.get('schema')!=1:raise ValueError('Invalid load schema')
+    sample=value['gateways'][country]
+    if sample['country']!=country:raise ValueError('Wrong gateway')
+    def number(key,minimum=0,maximum=1e12):
+        n=sample[key]
+        if type(n) not in (int,float) or not math.isfinite(n) or not minimum<=n<=maximum:
+            raise ValueError('Invalid load value')
+        return n
+    observed=number('observed_at')
+    if not -15<=now-observed<=45:raise ValueError('Stale load sample')
+    cpu=number('cpu_percent',0,100);rx=number('rx_mbps');tx=number('tx_mbps')
+    capacity=sample.get('capacity_mbps')
+    if capacity is not None:capacity=number('capacity_mbps',.001,1e9)
+    direction=sample.get('capacity_direction','duplex')
+    if direction not in ('duplex','egress'):raise ValueError('Invalid capacity direction')
+    used=tx if direction=='egress' else max(rx,tx)
+    percent=min(100,max(cpu,100*used/capacity)) if capacity else None
+    return dict(country=country,observed_at=observed,cpu=cpu,rx=rx,tx=tx,percent=percent,estimated=sample.get('capacity_basis')=='provider-default-estimate',capacity=capacity,direction=direction)
 
 
 PREFIX='fc-app-'
@@ -140,10 +166,150 @@ def connection_operation(*, owner=None, mutate=False, expected=None):
         _operation_mutex.release()
 
 
+# A short-lived, pipe-only session; it accepts only existing VPN helper verbs.
+# No socket, policy relaxation, caller-selected executable, or secret on argv.
+_SESSION_HELPERS = {kind: '/usr/local/lib/family-connect-'+kind+'/helper'
+                    for kind in ('awg', 'tcp')}
+
+
+def _session_line(stream, deadline):
+    import select
+    result = bytearray()
+    while len(result) <= MAX_PROFILE * 2 + 4096:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0 or not select.select([stream], [], [], remaining)[0]:
+            raise BackendError('VPN authorization session timed out')
+        chunk = os.read(stream.fileno(), 1)
+        if not chunk:
+            raise EOFError('VPN authorization session closed')
+        if chunk == b'\n':
+            return json.loads(result)
+        result.extend(chunk)
+    raise BackendError('VPN authorization message too large')
+
+
+def _session_request(request):
+    if not isinstance(request, dict) or set(request) != {'kind', 'action', 'ident', 'data'}:
+        raise ValueError('Invalid session request')
+    kind, action, ident, data = (request[k] for k in ('kind', 'action', 'ident', 'data'))
+    if kind not in _SESSION_HELPERS or action not in ('import', 'up', 'down'):
+        raise ValueError('Invalid session operation')
+    if action == 'import':
+        if ident is not None or not isinstance(data, str) or len(data.encode()) > MAX_PROFILE:
+            raise ValueError('Invalid import')
+    elif data is not None or not isinstance(ident, str) or not re.fullmatch('fc'+kind+r'[0-9a-f]{8}', ident):
+        raise ValueError('Invalid profile identity')
+    return [_SESSION_HELPERS[kind], action] + ([ident] if ident else []), data
+
+
+def privileged_session():
+    # Invoked only by the root-installed helper, after pkexec authentication.
+    uid = os.environ.get('PKEXEC_UID', '')
+    if os.geteuid() != 0 or not uid.isdecimal() or int(uid) == 0:
+        raise ValueError('Authenticated desktop user required')
+    deadline = time.monotonic() + 300
+    env = {'PATH': '/usr/sbin:/usr/bin:/sbin:/bin', 'LANG': 'C',
+           'HOME': '/root', 'PKEXEC_UID': uid}
+    print('{"ready":1}', flush=True)
+    for _ in range(32):
+        try:
+            request = _session_line(sys.stdin.buffer, deadline)
+        except EOFError:
+            return
+        args, data = _session_request(request)
+        try:
+            result = subprocess.run(args, input=data, capture_output=True, text=True,
+                                    env=env, timeout=min(120, max(.1, deadline-time.monotonic())))
+            reply = {'ok': result.returncode == 0,
+                     'value': result.stdout.strip() if result.returncode == 0 else ''}
+        except subprocess.TimeoutExpired:
+            reply = {'ok': False, 'value': ''}
+        print(json.dumps(reply), flush=True)
+
+
+def _authorization_available(helper):
+    try:
+        marker = Path(helper).with_name('authorization-session-v1')
+        for parent in marker.parents:
+            info = parent.lstat()
+            if not stat.S_ISDIR(info.st_mode) or info.st_uid != 0 or info.st_mode & 0o022:
+                return False
+        info = marker.lstat()
+        return stat.S_ISREG(info.st_mode) and info.st_uid == 0 and not info.st_mode & 0o022
+    except OSError:
+        return False
+
+
+class _AuthorizationSession:
+    def __init__(self):
+        self.process = None
+        self.failed = False
+
+    def call(self, kind, action, ident, data):
+        request = dict(kind=kind, action=action, ident=ident, data=data)
+        _session_request(request)
+        if self.failed:
+            raise AuthorizationError('VPN authorization session unavailable; retry explicitly')
+        if self.process is None:
+            helper = _SESSION_HELPERS[kind]
+            if not _authorization_available(helper):
+                raise BackendError('Update the Linux VPN helper to support single authorization')
+            self.failed = True  # Never re-prompt after denial or a broken pipe.
+            self.process = subprocess.Popen(['pkexec', helper, 'session'], stdin=subprocess.PIPE,
+                                            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, bufsize=0)
+            try:
+                if _session_line(self.process.stdout, time.monotonic()+120) != {'ready': 1}:
+                    raise ValueError('Invalid authorization response')
+            except (EOFError, ValueError, BackendError):
+                raise AuthorizationError('VPN authorization cancelled or unavailable') from None
+            self.failed = False
+        try:
+            payload = memoryview((json.dumps(request)+'\n').encode())
+            while payload:
+                count = self.process.stdin.write(payload)
+                if not count:
+                    raise OSError('Closed authorization pipe')
+                payload = payload[count:]
+            reply = _session_line(self.process.stdout, time.monotonic()+125)
+            if not isinstance(reply, dict) or set(reply) != {'ok', 'value'}:
+                raise ValueError('Invalid operation response')
+        except (OSError, EOFError, ValueError, BackendError):
+            self.failed = True
+            raise BackendError('VPN authorization session interrupted; recovery required') from None
+        if reply['ok'] is not True:
+            raise BackendError('VPN operation failed')
+        return reply['value']
+
+    def close(self):
+        if self.process is not None:
+            self.process.stdin.close()  # EOF revokes the session, including on exceptions.
+            self.process.stdout.close()
+            try:
+                self.process.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                # An in-flight helper owns cleanup; it is bounded by the server timeout.
+                threading.Thread(target=self.process.wait, daemon=True).start()
+
+
+@contextmanager
+def authorization_operation():
+    if getattr(_operation_local, 'authorization', None) is not None:
+        yield
+        return
+    session = _AuthorizationSession()
+    _operation_local.authorization = session
+    try:
+        yield
+    finally:
+        _operation_local.authorization = None
+        session.close()
+
+
 def serialized_connection(method):
     @functools.wraps(method)
     def call(*args,**kwargs):
-        with connection_operation(mutate=True):return method(*args,**kwargs)
+        with connection_operation(mutate=True), authorization_operation():
+            return method(*args,**kwargs)
     return call
 
 
@@ -221,6 +387,18 @@ class RecoveryPolicy:
 
 
 class Linux:
+    def server_load(self,ident):
+        if ident in ('country:ru','country:nl'):country=ident.split(':')[1]
+        else:
+            records=self._awg_records()
+            if hasattr(self,'_tcp_records'):records.update(self._tcp_records())
+            endpoint=records.get(ident,{}).get('endpoint')
+            country={'185.251.89.19':'ru','186.246.45.246':'nl'}.get(endpoint)
+        if country is None:return None
+        request=urllib.request.Request('https://185.251.89.19:8443/status/server-load.json',
+            headers={'Accept':'application/json','Cache-Control':'no-cache'})
+        with urllib.request.urlopen(request,timeout=5) as response:payload=response.read(8193)
+        return verified_server_load(payload,country,time.time())
     @contextmanager
     def control_transaction(self, owner):
         # GUI status polling briefly owns the same lock. Wait only on entry;
@@ -238,7 +416,8 @@ class Linux:
                     if time.monotonic() >= deadline:
                         raise
                     time.sleep(.05)
-            yield lease
+            with authorization_operation():
+                yield lease
 
     def poll_state(self, ident, health=False):
         with connection_operation() as lease:
@@ -278,6 +457,9 @@ class Linux:
             records[record['id']]=record
         return records
     def _awg(self,action,ident=None,data=None):
+        session = getattr(_operation_local, 'authorization', None)
+        if session is not None:
+            return session.call('awg', action, ident, data)
         args=['pkexec',self.awg_helper,action]+([ident] if ident else [])
         try:
             p=subprocess.run(args,input=data,capture_output=True,text=True,timeout=120)
@@ -391,8 +573,8 @@ class Linux:
         if self._nm_active(ident):run('nmcli','connection','down','uuid',ident)
     @serialized_connection
     def import_profile(self,path):
-        data=read_profile(path,allow_awg=True)
-        if set(parse(data,allow_awg=True)['Interface'])&AWG_FIELDS:
+        data=read_profile(path,allow_awg=True,allow_awg31=True)
+        if set(parse(data,allow_awg=True,allow_awg31=True)['Interface'])&AWG_FIELDS:
             return self._awg('import',data=data)
         name=PREFIX+uuid.uuid4().hex[:8]
         with tempfile.TemporaryDirectory(prefix='family-connect-') as folder:
@@ -417,6 +599,9 @@ class LinuxTCP(Linux):
     tcp_helper='/usr/local/lib/family-connect-tcp/helper'
     def _tcp_records(self):return self._records(self.tcp_root,'fctcp')
     def _tcp(self,action,ident=None,data=None):
+        session = getattr(_operation_local, 'authorization', None)
+        if session is not None:
+            return session.call('tcp', action, ident, data)
         try:
             p=subprocess.run(['pkexec',self.tcp_helper,action]+([ident] if ident else []),
                 input=data,capture_output=True,text=True,timeout=120)

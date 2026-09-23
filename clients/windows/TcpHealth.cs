@@ -6,24 +6,24 @@ namespace FamilyConnect;
 internal static class TcpHealth
 {
     // No IPC/profile supplied URLs. Probes must never silently use the physical uplink.
-    public static async Task Watch(string adapter,CancellationToken token,int? awg=null,bool wireguard=false)
+    public static async Task Watch(string adapter,CancellationToken token,int? awg=null,bool wireguard=false,string? address=null)
     {
         int failures=0;
         while(true){
             await Task.Delay(TimeSpan.FromSeconds(15),token);
-            var results=await Task.WhenAll(Probe(adapter,false,token,awg,wireguard),Probe(adapter,true,token,awg,wireguard));
+            var results=await Task.WhenAll(Probe(adapter,false,token,awg,wireguard,address),Probe(adapter,true,token,awg,wireguard,address));
             failures=results.Any(x=>x)?0:failures+1;
             if(failures==2)return;
         }
     }
-    public static async Task<bool> Ready(string adapter,CancellationToken token,int? awg=null,bool wireguard=false){
+    public static async Task<bool> Ready(string adapter,CancellationToken token,int? awg=null,bool wireguard=false,string? address=null){
         for(int i=0;i<2;i++){
             token.ThrowIfCancellationRequested();
-            if((await Task.WhenAll(Probe(adapter,false,token,awg,wireguard),Probe(adapter,true,token,awg,wireguard))).Any(x=>x))return true;
+            if((await Task.WhenAll(Probe(adapter,false,token,awg,wireguard,address),Probe(adapter,true,token,awg,wireguard,address))).Any(x=>x))return true;
             if(i==0)await Task.Delay(TimeSpan.FromSeconds(5),token);
         }return false;
     }
-    static async Task<bool> Probe(string adapter,bool second,CancellationToken token,int? awg,bool wireguard)
+    static async Task<bool> Probe(string adapter,bool second,CancellationToken token,int? awg,bool wireguard,string? address)
     {
         using var deadline=CancellationTokenSource.CreateLinkedTokenSource(token);
         deadline.CancelAfter(TimeSpan.FromSeconds(8));
@@ -31,10 +31,10 @@ internal static class TcpHealth
             if(wireguard){if(adapter!="fc-native")throw new FormatException("WG adapter");}else TcpNetwork.ValidateAdapter(adapter);
 #if TCP_SESSION_TEST
             var uri=new Uri("http://198.18.0.1/health/"+(second?"b":"a"));
-            var source=IPAddress.Parse("198.18.0.2");
+            var source=IPAddress.Parse(address??"198.18.0.2");
 #else
             var uri=new Uri(second?"https://www.gstatic.com/generate_204":"https://1.1.1.1/cdn-cgi/trace");
-            var source=IPAddress.Parse(awg is int n?"10.78.0."+n:"10.79.0.2");
+            var source=IPAddress.Parse(address??(awg is int n?"10.78.0."+n:"10.79.0.2"));
 #endif
             var nic=NetworkInterface.GetAllNetworkInterfaces().Single(n=>n.Name==adapter);
             var properties=nic.GetIPProperties();

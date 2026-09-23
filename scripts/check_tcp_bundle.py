@@ -30,6 +30,9 @@ for src,name in [('bin/xray','xray'),('lib/helper','helper'),('lib/backend.py','
  assert p.stat().st_uid==0 and p.stat().st_mode&0o777==(0o755 if name in ('xray','helper') else 0o644)
 assert subprocess.run([str(installed/'xray'),'version'],capture_output=True).returncode==0
 profile=Path('/etc/family-connect/tcp/test.conf');profile.write_text('synthetic fixture, not a credential');profile.chmod(0o600)
+marker=installed/'authorization-session-v1'
+assert marker.read_bytes()==b'' and marker.stat().st_mode&0o777==0o644
+marker.write_bytes(b'previous-capability')
 original=(installed/'helper').read_bytes();before=len(list(Path('/var/backups/family-connect').iterdir()))
 Path('/tmp/active').touch();install(False);Path('/tmp/active').unlink()
 assert len(list(Path('/var/backups/family-connect').iterdir()))==before
@@ -38,7 +41,9 @@ install(False);assert (installed/'helper').read_bytes()==original
 manifest['sha256']['lib/helper']=hashlib.sha256((bundle/'lib/helper').read_bytes()).hexdigest();(bundle/'manifest.json').write_text(json.dumps(manifest))
 Path('/tmp/fail-reload').touch();install(False)
 assert (installed/'helper').read_bytes()==original
+assert marker.read_bytes()==b'previous-capability'
 install(True);assert (installed/'helper').read_bytes()==(bundle/'lib/helper').read_bytes()
+assert marker.read_bytes()==b''
 assert profile.read_text()=='synthetic fixture, not a credential' and profile.stat().st_mode&0o777==0o600
 for b in Path('/var/backups/family-connect').iterdir():
  assert b.stat().st_mode&0o777==0o700

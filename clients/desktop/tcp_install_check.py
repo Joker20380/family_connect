@@ -6,7 +6,7 @@ from app import App,Adw
 from layout_check import pump
 
 def main():
- Adw.init();sys.argv.append('--awg-pilot');app=App(smoke=True);app.ru=True
+ Adw.init();sys.argv.append('--awg-pilot');app=App(smoke=True);app.ru=True;app.select_page('settings')
  app.active=False;app.items=[('wg','VPN')];app.selected_id='wg';app.present();app.paint();pump()
  original=(backend.tcp_updater_available,backend.install_tcp_component)
  calls=[];dialogs=[];confirm=app.confirm
@@ -35,6 +35,7 @@ def main():
     app.window.set_default_size(width,-1);app.paint();pump(.15)
     previous=0
     for widget in (app.toggle,app.add,app.check,app.update_button,app.tcp_button):
+     if not widget.get_visible():continue
      ok,rect=widget.compute_bounds(app.body);assert ok and rect.get_y()>=previous
      previous=rect.get_y()+rect.get_height()
      assert rect.get_x()>=0 and rect.get_x()+rect.get_width()<=app.body.get_width()+1

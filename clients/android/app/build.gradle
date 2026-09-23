@@ -1,16 +1,22 @@
 plugins { id 'com.android.application'; id 'com.chaquo.python' }
+// Optional compact pilot; ordinary platform CI keeps all four ABIs.
+def targetAbi = providers.gradleProperty('fcTargetAbi').getOrElse('all')
+def friendsCi = providers.gradleProperty('fcFriendsCi').getOrElse('false') == 'true'
+if (!(targetAbi in ['all', 'arm64-v8a']) && !(friendsCi && targetAbi == 'x86_64')) throw new GradleException('Unsupported fcTargetAbi')
 android {
     namespace 'com.familyconnect.app'
     compileSdk 35
+    // Manual signed Friends UI acceptance; ordinary CI continues to test debug.
+    testBuildType providers.gradleProperty('fcTestBuildType').getOrElse('debug')
     defaultConfig {
         applicationId 'com.familyconnect.app'
-        ndk { abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64' }
+        ndk { abiFilters.addAll(targetAbi == 'all' ? ['armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'] : [targetAbi]) }
         minSdk 26
         targetSdk 35
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        versionCode 8
-        versionName '0.1.7-beta08'
-        manifestPlaceholders = [appLabel: 'Family Connect', launcherActivity: 'com.familyconnect.app.MainActivity']
+        versionCode 49
+        versionName '0.1.18-beta49'
+        manifestPlaceholders = [appLabel: 'family_connect', launcherActivity: 'com.familyconnect.app.MainActivity']
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -21,24 +27,33 @@ android {
         androidTest { java.srcDir 'src/controlTest/java'; assets.srcDir '../../../tests/vectors' }
     }
     sourceSets { main { java.srcDir '../awg-generated/java'; jniLibs.srcDir '../awg-generated/jniLibs'; assets.srcDir '../awg-generated/assets' } }
-    packaging { jniLibs { keepDebugSymbols += ['**/libfc-awg.so'] } }
+    packaging { jniLibs {
+        keepDebugSymbols += ['**/libfc-awg.so']
+        // Extract compressed libraries on install; preserve their verified bytes.
+        if (targetAbi != 'all') useLegacyPackaging = true
+    } }
     buildTypes {
         debug {
             // Technical pilots coexist with old CI-signed installs; never uninstall their data.
             applicationIdSuffix '.pilot'
-            manifestPlaceholders = [appLabel: 'Family Connect Pilot', launcherActivity: 'com.familyconnect.app.MainActivity']
+            manifestPlaceholders = [appLabel: 'family_connect_pilot', launcherActivity: 'com.familyconnect.app.MainActivity']
         }
         release { minifyEnabled false }
         friends {
             initWith release
+            // Disposable emulator only: never use this APK to update a beta-signed phone.
+            if (friendsCi) {
+                signingConfig signingConfigs.debug
+            }
             applicationIdSuffix '.friends'
             debuggable false
             matchingFallbacks = ['release']
-            manifestPlaceholders = [appLabel: 'Family Connect Test', launcherActivity: 'com.familyconnect.app.FriendsActivity']
+            manifestPlaceholders = [appLabel: 'family_connect', launcherActivity: 'com.familyconnect.app.FriendsActivity']
         }
     }
 }
 dependencies {
+    implementation 'com.google.zxing:core:3.5.3'
     implementation 'org.bouncycastle:bcprov-jdk18on:1.85.2'
     implementation 'com.google.code.gson:gson:2.13.2'
     implementation 'androidx.annotation:annotation:1.7.1'
@@ -49,7 +64,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
 }
 
-// Keep four-ABI support. No device private material crosses the Python bridge.
+// Keep four-ABI support. VPN identity and chat storage keys stay in Java.
 chaquopy {
     defaultConfig {
         version '3.10'
@@ -60,3 +75,6 @@ chaquopy {
         }
     }
 }
+
+ext.chatCoreDirectory = file('../../../messenger')
+apply from: '../chat-python.gradle'

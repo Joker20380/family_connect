@@ -10,10 +10,8 @@ from messenger.store import Store
 
 
 @pytest.fixture(scope='module', autouse=True)
-def reticulum(tmp_path_factory):
-    config = tmp_path_factory.mktemp('chat-rns')
-    (config/'config').write_text('[reticulum]\nshare_instance = No\nenable_transport = No\n[logging]\nloglevel = 0\n[interfaces]\n')
-    RNS.Reticulum(configdir=str(config), loglevel=0)
+def reticulum(chat_runtime):
+    return chat_runtime
 
 
 @pytest.fixture
