@@ -1,0 +1,26 @@
+name: Inspect Windows acceptance failure
+on:
+  push:
+    paths: ['.github/workflows/windows-acceptance-log.yml']
+permissions:
+  actions: read
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read isolated acceptance log
+        shell: python
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          import os,urllib.request
+          url='https://api.github.com/repos/Joker20380/family_connect/actions/jobs/107149000394/logs'
+          request=urllib.request.Request(url,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN']})
+          raw=urllib.request.urlopen(request,timeout=30).read().decode(errors='replace')
+          lines=raw.splitlines()
+          relevant=[(i,l) for i,l in enumerate(lines) if any(x in l.lower() for x in ['exception','failed','error','timeout','timed out'])]
+          for i,line in relevant:
+            for text in lines[max(0,i-2):min(len(lines),i+4)]:
+              text=text.replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+              print('::notice title=Acceptance log::'+text)
