@@ -27,7 +27,9 @@ jobs:
           New-Item -ItemType Directory $dir | Out-Null
           icacls $dir /grant '*S-1-5-32-545:(OI)(CI)M' | Out-Null
           Copy-Item clients/windows/diagnose-broker.ps1 "$dir/probe.ps1"
-          & "$dir/probe.ps1" | Tee-Object "$dir/admin.json"
+          $admin=& "$dir/probe.ps1"
+          $admin | Set-Content "$dir/admin.json"
+          Write-Host "::notice title=Administrator probe::$($admin -join ' ')"
           $password=ConvertTo-SecureString ([Guid]::NewGuid().ToString('N')+'aA1!') -AsPlainText -Force
           New-LocalUser -Name fcordinary -Password $password | Out-Null
           $users=Get-LocalGroup -SID 'S-1-5-32-545'
@@ -35,8 +37,8 @@ jobs:
           $credential=[PSCredential]::new('.\fcordinary',$password)
           $p=Start-Process "$env:SystemRoot/System32/WindowsPowerShell/v1.0/powershell.exe" -Credential $credential -LoadUserProfile -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File $dir/probe.ps1" -RedirectStandardOutput "$dir/user.json" -RedirectStandardError "$dir/user-error.txt" -PassThru
           if(-not $p.WaitForExit(60000)){$p.Kill();throw 'User diagnostic timeout'}
-          Get-Content "$dir/user.json"
-          Get-Content "$dir/user-error.txt"
+          Write-Host "::notice title=Ordinary user probe::$((Get-Content "$dir/user.json") -join ' ')"
+          Write-Host "::notice title=Probe stderr::$((Get-Content "$dir/user-error.txt") -join ' ')"
           $result=Get-Content "$dir/user.json" -Raw | ConvertFrom-Json
           if($result.elevated){throw 'Test user unexpectedly elevated'}
           if(-not $result.ok){throw 'Ordinary user cannot reach broker'}
