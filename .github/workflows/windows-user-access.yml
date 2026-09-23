@@ -80,7 +80,7 @@ jobs:
           trap { Write-Host "::error title=Acceptance failure::$($_.Exception.Message)"; exit 1 }
           Write-Host '::notice title=Acceptance stage::Layout'
           $p=Start-Process "$env:ProgramFiles/Family Connect/FamilyConnect.exe" -ArgumentList '/layout-test' -PassThru
-          if(-not $p.WaitForExit(200000)){$p.Kill();throw 'Layout timeout'}
+          if(-not $p.WaitForExit(200000)){$p.Kill();$last=Get-Content "$env:TEMP/fc-layout-progress.txt" -Raw -ErrorAction SilentlyContinue;throw "Layout timeout: $last"}
           if($p.ExitCode -ne 0){
             $detail=Get-Content "$env:TEMP/fc-layout-check.txt" -Raw -ErrorAction SilentlyContinue
             Write-Host "::error title=Layout::$($detail.Replace([char]13,' ').Replace([char]10,' '))"

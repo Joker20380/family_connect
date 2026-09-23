@@ -18,23 +18,29 @@ internal static class FriendsAccessChecks
     {
         using var identity = ControlIdentity.Restore(Enumerable.Range(0, 96).Select(i => (byte)i).ToArray());
         string nonce = Convert.ToBase64String(Enumerable.Range(0, 32).Select(i => (byte)i).ToArray());
-        int proofs = 0;
+        int proofs = 0, claims = 0;
         var handler = new Handler(request => {
             string path = request.RequestUri!.AbsolutePath;
+            if(path=="/friends/referral/claim"){
+                using var claim=JsonDocument.Parse(request.Content!.ReadAsStringAsync().GetAwaiter().GetResult());
+                if(claim.RootElement.GetProperty("request_id").GetString()!=identity.Reference||claim.RootElement.GetProperty("token").GetString()!=new string('a',64))throw new Exception("Incorrect invitation claim");
+                claims++;return Json(new{invitation="FC-"+string.Join("-",Enumerable.Repeat("ABCD",8)),status="issued"});
+            }
             if (path == "/friends/challenge") return Json(new { challenge = nonce, expires_at = 1120,
                 audience = "family-connect/enrollment/v1" });
             using var body = JsonDocument.Parse(request.Content!.ReadAsStringAsync().GetAwaiter().GetResult());
             using var expected = JsonDocument.Parse(identity.EnrollmentProof(nonce));
             if (!JsonElement.DeepEquals(body.RootElement, expected.RootElement)) throw new Exception("Proof not sent");
             proofs++;
-            return path is "/friends/activate" or "/friends/register" ? Json(new { device = identity.Reference, status = "active" })
+            return path == "/friends/activate" ? Json(new { device = identity.Reference, status = "active" })
                 : Json(new { url = "https://185.251.89.19:8443/invite/#" + new string('a', 64), pool_limit = 500, remaining = 499 });
         });
         using (var client = new FriendsAccessClient(identity, handler, () => 1000))
         {
             await client.Activate("FC-" + new string('A', 32));
+            await client.Register(invitationToken:new string('a',64));
             await client.Register();
-            if (!(await client.Referral()).EndsWith(new string('a', 64)) || proofs != 3)
+            if (!(await client.Referral()).EndsWith(new string('a', 64)) || proofs != 4 || claims != 1)
                 throw new Exception("Activation/referral mismatch");
         }
         int rejected = 0;

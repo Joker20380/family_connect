@@ -41,7 +41,7 @@ internal sealed class MainForm:Form
         saveLanguage=!smoke&&!layoutTest;
         if(saveLanguage)try{using var preferences=Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\family_connect");var saved=preferences?.GetValue("Language") as string;if(saved is "ru" or "en")ru=saved=="ru";}catch(System.Security.SecurityException){}catch(UnauthorizedAccessException){}catch(IOException){}
         AutoScaleMode=AutoScaleMode.Dpi;AutoScaleDimensions=new SizeF(96,96);
-        Text=$"family_connect · {Application.ProductVersion.Split('+')[0]}";ClientSize=new(390,548);MinimumSize=new(360,360);
+        Text=$"family_connect · {Application.ProductVersion.Split('+')[0]}";ClientSize=new(390,720);MinimumSize=new(360,360);
         DoubleBuffered=true;
         BackColor=Color.FromArgb(3,17,14);ForeColor=Color.FromArgb(218,255,242);
         Icon=Icon.ExtractAssociatedIcon(Application.ExecutablePath);
@@ -98,13 +98,16 @@ internal sealed class MainForm:Form
         void SaveSelection(){revision++;loadNext=DateTime.MinValue;if(saveLanguage)try{using var p=Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\family_connect");p.SetValue("Country",Country);p.SetValue("Transport",TcpSelected?"tcp":"awg");}catch{}PaintState();}
         country.SelectedIndexChanged+=(_,_)=>SaveSelection();mode.SelectedIndexChanged+=(_,_)=>SaveSelection();
         accessPage=new FriendsForm(ru,r=>call(r));accessPage.RegistrationChanged+=()=>{friendsReady=true;PaintState();};
+        var selectors=new TableLayoutPanel{Dock=DockStyle.Top,AutoSize=true,ColumnCount=2,RowCount=1,Margin=new Padding(0,4,0,8)};
+        selectors.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));selectors.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));
+        selectors.Controls.Add(country,0,0);selectors.Controls.Add(mode,1,0);
         int row=0;
-        foreach(Control child in new Control[]{tagline,card,country,mode,dashboardMap,friends,request,activate,detail,notice,update,accessPage})
+        foreach(Control child in new Control[]{tagline,selectors,card,dashboardMap,friends,request,activate,detail,notice,update,accessPage})
             content.Controls.Add(child,0,row++);
         var version=new Label{Text="v"+Application.ProductVersion.Split('+')[0],AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.FromArgb(153,196,181)};
         language.MinimumSize=new Size(0,36);language.Dock=DockStyle.Fill;
         foreach(var child in new Control[]{language,version,routeTitle,routeMap,messengerNote})content.Controls.Add(child,0,row++);
-        pages["status"]=new Control[]{card,country,mode,dashboardMap,notice};
+        pages["status"]=new Control[]{selectors,card,dashboardMap,notice};
         pages["route"]=new Control[]{routeTitle,routeMap};
         pages["settings"]=new Control[]{friends,update,language,version};
         pages["access"]=new Control[]{accessPage};request.Visible=activate.Visible=false;
@@ -133,31 +136,7 @@ internal sealed class MainForm:Form
             finally{busy=false;if(!IsDisposed)PaintState();}
         };
         connect.Click+=async(_,_)=>await Execute(new(ConnectionAction()));
-        request.Click+=async(_,_)=>{
-            var reply=await Execute(new("request"));
-            if(reply?.Code is not string code)return;
-            using var dialog=new Form{Text=T("Код устройства","Device code"),BackColor=BackColor,ForeColor=ForeColor,Font=Font,Icon=Icon,ClientSize=new(500,230),MinimumSize=new(340,240),StartPosition=FormStartPosition.CenterParent,AutoScaleMode=AutoScaleMode.Dpi};
-            dialog.HandleCreated+=(_,_)=>DarkFrame(dialog);
-            var layout=new TableLayoutPanel{Dock=DockStyle.Fill,Padding=new Padding(16),ColumnCount=1,RowCount=3};
-            layout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
-            layout.RowStyles.Add(new RowStyle(SizeType.Percent,45));layout.RowStyles.Add(new RowStyle(SizeType.Percent,55));layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-            var text=new TextBox{BackColor=Color.FromArgb(7,32,24),ForeColor=ForeColor,BorderStyle=BorderStyle.None,Text=code,ReadOnly=true,Multiline=true,WordWrap=true,ScrollBars=ScrollBars.Vertical,Dock=DockStyle.Fill};
-            var copy=new ModernButton{BackColor=mint,ForeColor=BackColor,Text=T("Скопировать код","Copy code"),Dock=DockStyle.Fill,AutoSize=true,MinimumSize=new(0,44)};
-            copy.Click+=(_,_)=>{Clipboard.SetText(code);dialog.Close();};
-            var help=new Label{Text=T("Передайте этот код оператору для активации. Закрытый ключ остаётся на устройстве.","Send this code to the operator for activation. Your private key stays on this device."),Dock=DockStyle.Fill};
-            layout.Controls.Add(text,0,0);layout.Controls.Add(help,0,1);layout.Controls.Add(copy,0,2);
-            dialog.Controls.Add(layout);dialog.ShowDialog(this);
-        };
         friends.Click+=(_,_)=>{page="access";PaintState();};
-        activate.Click+=async(_,_)=>{
-            using var dialog=new OpenFileDialog{Filter=AwgSelected?"Family Connect AWG activation|*.fcawgactivation":TcpSelected?"Family Connect TCP activation|*.fctcpactivation":"Family Connect activation|*.fcactivation",CheckFileExists=true};
-            if(dialog.ShowDialog(this)!=DialogResult.OK)return;
-            try{
-                using var stream=File.OpenRead(dialog.FileName);
-                if(stream.Length>8192)throw new IOException();
-                using var reader=new StreamReader(stream);await Execute(new(AwgSelected?"activate-awg":TcpSelected?"activate-tcp":"activate",await reader.ReadToEndAsync()));
-            }catch(Exception){detail.Text=T("Не удалось прочитать файл активации.","Could not read the activation file.");}
-        };
         language.Click+=(_,_)=>{ru=!ru;if(saveLanguage)try{using var preferences=Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\family_connect");preferences.SetValue("Language",ru?"ru":"en");}catch(Exception){detail.Text=T("Не удалось сохранить язык.","Could not save language.");}PaintState();FitWindow();};
         poll.Tick+=async(_,_)=>{if(pendingInvitation.Length>0&&!busy)await AcceptInvitation();else await PollStatus();};
         FormClosing+=(_,e)=>{if(busy){e.Cancel=true;return;}};
@@ -185,8 +164,9 @@ internal sealed class MainForm:Form
     }
     internal static void CheckLayouts()
     {
-        ServerLoad.Check();RouteMap.CheckPixels();
-        CheckPolling();
+        TraceLayout("start");ServerLoad.Check();RouteMap.CheckPixels();
+        TraceLayout("polling");
+        CheckPolling();TraceLayout("preview");
         using(var preview=new MainForm(true,true)){
             preview.ru=true;preview.state="off";preview.Show();preview.PaintState();preview.FitWindow();Application.DoEvents();
             using var bitmap=new Bitmap(preview.Width,preview.Height);preview.DrawToBitmap(bitmap,new Rectangle(Point.Empty,preview.Size));
@@ -200,10 +180,11 @@ internal sealed class MainForm:Form
         foreach(float scale in new[]{1f,1.5f,2f,2.5f})
         foreach(bool russian in new[]{true,false})
         foreach(int protocol in new[]{0,1})
-        foreach(string selectedPage in new[]{"status","messenger","route","settings"})
+        foreach(string selectedPage in new[]{"status","messenger","route","settings","access"})
         foreach(string connection in new[]{"inactive","off","pending","recovering","on","other-user","unknown"})
         foreach(Size size in new[]{new Size(360,420),new Size(480,620),new Size(800,700)}){
             if(selectedPage!="status"&&(protocol!=0||connection!="off"))continue;
+            TraceLayout($"case {scale} {russian} {protocol} {selectedPage} {connection} {size}");
             using var form=new MainForm(true,true);
             form.page=selectedPage;form.ru=russian;form.state=connection=="recovering"?"pending":connection;form.lastError=connection=="recovering"?"tcp-reconnecting":null;form.tcpReady=protocol==0;form.awgReady=protocol==1;form.transport=protocol==1?"awg":"tcp";form.mode.SelectedIndex=protocol;form.automatic=false;
             form.Scale(new SizeF(scale,scale));
@@ -243,9 +224,10 @@ internal sealed class MainForm:Form
             }
         }
     }
+    static void TraceLayout(string value)=>File.WriteAllText(Path.Combine(Path.GetTempPath(),"fc-layout-progress.txt"),value);
     static void CheckPolling()
     {
-        FriendsForm.CheckUi();
+        TraceLayout("access page");FriendsForm.CheckUi();TraceLayout("polling state");
         using var form=new MainForm(true,true);form.state="off";form.awgReady=true;form.Show();form.PaintState();
         int changes=0;form.status.TextChanged+=(_,_)=>changes++;
         var response=new TaskCompletionSource<Reply>();int calls=0;
@@ -325,7 +307,7 @@ internal sealed class MainForm:Form
         try{
             FitContent();content.PerformLayout();
             int max=Screen.FromControl(this).WorkingArea.Height-(Height-ClientSize.Height)-40;
-            ClientSize=new Size(ClientSize.Width,Math.Min(max,content.PreferredSize.Height+footer.Height+(int)(86*DeviceDpi/96f)));
+            ClientSize=new Size(ClientSize.Width,Math.Min(max,ClientSize.Height));
             FitContent();
         }finally{fitting=false;}
     }
