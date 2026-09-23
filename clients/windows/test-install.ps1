@@ -17,6 +17,8 @@ try {
             $installer=(Resolve-Path "$PSScriptRoot/dist/*pilot-unsigned.exe").Path
             Invoke-Checked $installer '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP- /LOG=install.log' 180
             if((Get-Service FamilyConnectBroker).Status -ne 'Running'){throw 'Broker service did not start'}
+            $handler=Get-Item 'Registry::HKEY_LOCAL_MACHINE\Software\Classes\familyconnect\shell\open\command'
+            if($handler.GetValue('') -ne ('"'+$app.Replace('/','\')+'" "%1"')){throw 'Invitation handler command mismatch'}
             $tcp="$env:ProgramFiles/Family Connect/tcp"
             $expected=@{'xray.exe'='74475d8c4f68dd07bef754e56778eb2a9061e4dfcc954fa008b912a989bd848a';'wintun.dll'='e5da8447dc2c320edc0fc52fa01885c103de8c118481f683643cacc3220dafce'}
             foreach($name in $expected.Keys){if((Get-FileHash "$tcp/$name" -Algorithm SHA256).Hash.ToLower() -ne $expected[$name]){throw "Installed TCP hash mismatch: $name"}}

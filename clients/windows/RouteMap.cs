@@ -41,6 +41,13 @@ internal sealed class RouteMap : Control
         using var path=new GraphicsPath(FillMode.Alternate);
         foreach(var ring in land)
             if(ring.Length>=3)path.AddPolygon(ring.Select(p=>new PointF((p[0]+180)/360*w,(85-p[1])/145*h)).ToArray());
+        // Rasterize the coastline once. Testing every dot against the full polygon
+        // made opening and resizing the dashboard spend seconds in GDI+.
+        using var mask=new Bitmap(w,h,PixelFormat.Format32bppArgb);
+        using(var fill=Graphics.FromImage(mask)){fill.SmoothingMode=SmoothingMode.None;fill.Clear(Color.Transparent);fill.FillPath(Brushes.White,path);}
+        var locked=mask.LockBits(new Rectangle(0,0,w,h),ImageLockMode.ReadOnly,PixelFormat.Format32bppArgb);
+        var pixels=new byte[locked.Stride*h];int stride=locked.Stride;
+        try{Marshal.Copy(locked.Scan0,pixels,0,pixels.Length);}finally{mask.UnlockBits(locked);}
         var layer=new Bitmap(w,h,PixelFormat.Format32bppArgb);
         float diameter=Math.Max(1,(int)MathF.Floor(.65f*scale+.5f));
         // Fixed supersampled circle coverage avoids GDI+ subpixel ellipse blur.
@@ -60,7 +67,7 @@ internal sealed class RouteMap : Control
         {
             float x=MathF.Floor((col+.5f*(row&1))*spacing-offset+.5f)+offset;
             float y=MathF.Floor(row*rowSpacing-offset+.5f)+offset;
-            if(x>=0&&y>=0&&x<w&&y<h&&path.IsVisible(x,y))
+            if(x>=0&&y>=0&&x<w&&y<h&&pixels[(int)y*stride+(int)x*4+3]>127)
             {
                 int left=(int)MathF.Round(x-diameter/2),top=(int)MathF.Round(y-diameter/2);
                 for(int py=0;py<size;py++)for(int px=0;px<size;px++)
