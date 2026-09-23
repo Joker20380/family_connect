@@ -14,17 +14,19 @@ CI debug APKs are not update packages for an installed friends beta.
 
 ## Current invitation-page downloads
 
-[Linux 0.2.10 / 8e9fabe3cbef2989](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-8e9fabe3cbef2989.tar.gz) · [Windows 0.2.10 / 840181d](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.10-preview-840181d.exe)
+[Linux 0.2.10 / 8e9fabe3cbef2989](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-8e9fabe3cbef2989.tar.gz) · [Windows 0.2.11 / 8906d62](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.11-preview-8906d62.exe)
 
 Install the client, return to the original invitation link, mark **Application installed** and choose **Open application**.
 Windows installs the URI handler with its service and preserves existing activation.
 Linux needs operator-assisted setup: [current archive instructions](https://185.251.89.19:8443/downloads/FamilyConnect-Linux-0.2.10-invitation.txt).
 They cover a persistent Python environment and desktop URI handler; VPN helpers are installed separately.
 
-[GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/desktop-preview-20260923-840181d) · [Hashes and checks](releases/2026-09-23-desktop0210-rollout.ru.md).
+[Windows GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/windows-preview-20260923-8906d62) · [Linux GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/desktop-preview-20260923-840181d) · [Hashes and checks](releases/2026-09-23-windows0211-dpi.ru.md).
 Preserve identity and application data when updating. This is a manual preview; the older
 six-file release's automatic catalogs are unchanged. Desktop messenger parity is not claimed.
-The separate historical GitHub v0.2.9 flow below is retained; use0.2.10 for new invitations.
+The separate historical GitHub v0.2.9 flow below is retained; use the current downloads above for new invitations.
+
+Windows0.2.11 automatically creates the local device key on first launch. Access still needs an invitation: on the phone choose **Settings → Invite a friend**, send the full link to the PC and open it. Alternatively choose **Activate with invitation** on the PC, paste the full link and select **Activate access**. Launching only the desktop shortcut cannot supply the invitation. Existing access survives an update.
 
 ## Original GitHub v0.2.9: Linux
 

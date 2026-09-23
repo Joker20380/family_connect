@@ -63,7 +63,7 @@ and messages. [Beta50 validation (RU)](releases/2026-09-23-switch-colors-beta50.
 
 ## Desktop clients
 
-[Linux/Windows0.2.10 previews](clients.en.md) also accept invitation links. Linux needs
+[Linux0.2.10 / Windows0.2.11 previews](clients.en.md) also accept invitation links. Linux needs
 operator-assisted dependency and VPN-helper setup. Desktop messenger parity with Android
 is not claimed. Direct invitations and referral claims use separate pools; limits are not
 current availability counts.

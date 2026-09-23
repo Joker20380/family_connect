@@ -6,7 +6,7 @@ Verified 2026-09-23 by downloading every new public artifact and checking its SH
 | --- | --- | --- |
 | Android updater / invitation | 0.1.18-beta50, code50, ARM64 | Persistent beta certificate; in-place update |
 | Linux invitation | 0.2.10 preview8e9fabe3cbef2989 | Paired manual preview; operator-assisted setup |
-| Windows invitation | 0.2.10 preview840181d | Native tested installer; no publisher signature |
+| Windows invitation | 0.2.11 preview8906d62 | Native tested installer; no publisher signature |
 
 Invitation activation now opens the app from the original link. OFF switches are orange,
 ON switches turquoise on the page and all clients. Historical artifacts remain immutable.
@@ -17,20 +17,20 @@ SHA256 `67b569cb2423692f088baa7ef0d83761394bec4fadb38249ac0788a046605795`.
 [FamilyConnect-Linux-0.2.10-invitation.txt](https://185.251.89.19:8443/downloads/FamilyConnect-Linux-0.2.10-invitation.txt), 3371 bytes.
 SHA256 `2d1e0578767c3e0258f9214c080363cbc54c04944cea91e6b5f704393ba8c5bd`.
 
-[FamilyConnect-Setup-0.2.10-preview-840181d.exe](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.10-preview-840181d.exe), 49931275 bytes.
-SHA256 `accd67ba613a58445bc9303bfd4a18946a2a59dc387a5730fb83234e37c7a5fe`.
+[FamilyConnect-Setup-0.2.11-preview-8906d62.exe](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.11-preview-8906d62.exe), 49934207 bytes.
+SHA256 `9cc04ba7446ff31d87e2a3d96dfb7faf24e61cf81a7eac8eccea0adb29c3ed3c`.
 
 [FamilyConnect-Test-0.1.18-beta50.apk](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta50.apk), 36448332 bytes.
 SHA256 `8a1d44eac8cdd45bb9225e930c71377ea5b38428238300803fecc42a60761369`.
 
-[Discovery](https://185.251.89.19:8443/updates/android-friends.json) · [Checks and rollback](releases/2026-09-23-switch-colors-beta50.ru.md).
+[Discovery](https://185.251.89.19:8443/updates/android-friends.json) · [Windows checks and rollback](releases/2026-09-23-windows0211-dpi.ru.md) · [Android/Linux checks](releases/2026-09-23-switch-colors-beta50.ru.md).
 
 ## Release procedure
 
 The [client workflow](../.github/workflows/clients.yml) defines platform builds and
 release conditions. CI artifacts do not by themselves establish a release. Validate native
 UI/runtime and downloaded artifacts before signing/publishing. Windows cross-build alone
-is insufficient. The current release includes Android beta50 and desktop0.2.10 manual previews; see the [release report](releases/2026-09-23-switch-colors-beta50.ru.md).
+is insufficient. The current release includes Android beta50 and Linux0.2.10 and Windows0.2.11 manual previews; see the [Windows report](releases/2026-09-23-windows0211-dpi.ru.md) and [Android/Linux report](releases/2026-09-23-switch-colors-beta50.ru.md).
 
 Desktop catalogs use offline signing with increasing sequence numbers. Keep keys out of
 CI and servers; never replace an existing version/tag with different binaries.

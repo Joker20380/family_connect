@@ -1,5 +1,7 @@
 # Windows 0.2: standalone client
 
+Current Windows0.2.11 uses invitation-link activation, creates its local key automatically and accepts a full invitation pasted into the access page. Use the [current installation guide](clients.en.md) and [Windows release report](releases/2026-09-23-windows0211-dpi.ru.md). The engineering description below documents the original0.2 standalone pilot; its operator-file onboarding is historical.
+
 ## Status
 
 The new client replaces the Python/Tk Windows wrapper. A single installer includes the application, .NET runtime, Family Connect service, embedded WireGuard tunnel library and official signed WireGuardNT driver. Users need no separate installations. This build targets Windows x64; a separate ARM64 build has not been validated.
