@@ -15,7 +15,8 @@
    коммитом b8d51bf;9 основных файлов скачаны и совпали побайтно.
 2. Завершить этап4: Linux/Windows0.2.10, обработка приглашений, нативные проверки,
    неизменяемые артефакты. Client builds54506d8: Linux/Windows success, Android setup-android@v3 failed,
-   release skipped; Windows AWG/TCP/UI/broker success. Исправить Android CI setup;
+   release skipped; Windows AWG/TCP/UI/broker success. Android CI setup исправлен
+   (ce6fb11: оба setup success); дождаться полного нового build/runtime результата;
    новый checkpoint исходников публиковать
    отдельно от документации после проверки накопленных изменений.
 3. Проверить передачу ссылки приложению на каждой платформе; затем согласованно обновить

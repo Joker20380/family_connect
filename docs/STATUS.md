@@ -61,3 +61,7 @@ claims на приглашающее устройство за24ч и500 общ�
 
 Пересмотр документации опубликован в GitHub main: `b8d51bf`;9 основных файлов
 проверены скачиванием. Версии приложений и серверы этим коммитом не изменялись.
+
+Текущая работа: [исправление Android SDK в CI](releases/2026-09-23-android-sdk-ci.ru.md),
+кандидат ce6fb11: setup-android success в Client builds и Android diagnostic.
+Основные build/runtime jobs продолжаются. Patch main: e900cfa; версии загрузок не меняются.
