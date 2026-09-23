@@ -34,7 +34,8 @@ internal sealed class ModernComboBox : ComboBox
         bool printing=m.Msg is 0x0317 or 0x0318; // WM_PRINT / WM_PRINTCLIENT for native render evidence.
         if((m.Msg!=0x000F&&!printing)||!IsHandleCreated||Width<4||Height<4)return;
         using var g=printing?Graphics.FromHdc(m.WParam):Graphics.FromHwnd(Handle);g.SmoothingMode=SmoothingMode.AntiAlias;
-        g.Clear(Parent?.BackColor??BackColor);
+        // WM_PRINT may share a parent bitmap HDC: never clear outside this control.
+        using(var background=new SolidBrush(Parent?.BackColor??BackColor))g.FillRectangle(background,ClientRectangle);
         float scale=DeviceDpi/96f;
         var tint=!Enabled?Color.FromArgb(117,152,138):Focused||hovered||DroppedDown?Color.FromArgb(152,247,216):Color.FromArgb(67,142,121);
         using var path=ModernButton.Cut(new RectangleF(1,1,Width-3,Height-3),6*scale);
