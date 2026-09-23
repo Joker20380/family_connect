@@ -8,6 +8,7 @@ internal sealed class MainForm:Form
     bool tcpReady,awgReady,automatic,friendsReady;
     readonly ComboBox country=new(){DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill};
     FriendsForm accessPage=null!;
+    LiveNetworkPanel? telemetry;
     string Country=>country.SelectedIndex==1?"ru":"nl";string? transport,lastError;
     readonly ComboBox mode=new(){DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill};
     bool TcpSelected=>mode.SelectedIndex==0;
@@ -108,16 +109,14 @@ internal sealed class MainForm:Form
         country.SelectedIndexChanged+=(_,_)=>SaveSelection();mode.SelectedIndexChanged+=(_,_)=>SaveSelection();
         dial.Height=190;
         accessPage=new FriendsForm(ru,r=>call(r));accessPage.RegistrationChanged+=()=>{friendsReady=true;PaintState();};
-        var selectors=new TableLayoutPanel{Dock=DockStyle.Top,AutoSize=true,ColumnCount=2,RowCount=1,Margin=new Padding(0,4,0,8)};
-        selectors.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));selectors.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,50));
-        selectors.Controls.Add(country,0,0);selectors.Controls.Add(mode,1,0);
+        var selectors=new LiveNetworkPanel(country,mode,!smoke&&!layoutTest);telemetry=selectors;
         int row=0;
-        foreach(Control child in new Control[]{selectors,card,dashboardMap,friends,request,activate,detail,notice,update,accessPage})
+        foreach(Control child in new Control[]{card,selectors,dashboardMap,friends,request,activate,detail,notice,update,accessPage})
             content.Controls.Add(child,0,row++);
         var version=new Label{Text="v"+Application.ProductVersion.Split('+')[0],AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.FromArgb(153,196,181)};
         language.MinimumSize=new Size(0,36);language.Dock=DockStyle.Fill;
         foreach(var child in new Control[]{language,version,routeTitle,routeMap,messengerNote})content.Controls.Add(child,0,row++);
-        pages["status"]=new Control[]{selectors,card,dashboardMap,notice};
+        pages["status"]=new Control[]{card,selectors,dashboardMap,notice};
         pages["route"]=new Control[]{routeTitle,routeMap};
         pages["settings"]=new Control[]{friends,update,language,version};
         pages["access"]=new Control[]{accessPage};request.Visible=activate.Visible=false;
@@ -336,7 +335,7 @@ internal sealed class MainForm:Form
         description.Text=(Country=="nl"?T("Нидерланды","Netherlands"):T("Россия","Russia"))+" · "+(TcpSelected?"TCP REALITY":"AWG 3.1");
         connect.Text=state=="on"?T("Отключить","Disconnect"):state=="pending"&&(automatic||transport is "tcp" or "awg")?T("Отменить подключение","Cancel connection"):T("Подключить","Connect");
         connect.Enabled=!busy&&(state=="on"||(state=="pending"&&(automatic||transport is "tcp" or "awg"))||((state is "off" or "inactive")&&(friendsReady||(AutoSelected?(awgReady||tcpReady||state=="off"):AwgSelected?awgReady:TcpSelected?tcpReady:state=="off"))));
-        dial.UpdateState(state=="on",busy||state=="pending",ru,connect.Enabled);
+        dial.UpdateState(state=="on",busy||state=="pending",ru,connect.Enabled);telemetry?.Connection(ru,status.Text);
         mode.Enabled=country.Enabled=!busy&&(state is "off" or "inactive");
         friends.Text=T("Устройство и доступ", "Device and access");friends.Enabled=!busy;
         request.Text=T("Получить код устройства","Get device code");request.Enabled=!busy;
