@@ -13,12 +13,12 @@
 1. Выполнено: RU/EN инструкции, загрузки и статус сверены, история сохранена;
    274 Markdown-файла/1586 ссылок проверены. Документация опубликована в GitHub
    коммитом b8d51bf;9 основных файлов скачаны и совпали побайтно.
-2. Завершить этап4: Linux/Windows0.2.10, обработка приглашений, нативные проверки,
-   неизменяемые артефакты. Client builds54506d8: Linux/Windows success, Android setup-android@v3 failed,
-   release skipped; Windows AWG/TCP/UI/broker success. Android CI setup исправлен
-   (ce6fb11: оба setup success); дождаться полного нового build/runtime результата;
-   новый checkpoint исходников публиковать
-   отдельно от документации после проверки накопленных изменений.
+2. Завершить этап4: подготовить проверенный актуальный source checkpoint Android49,
+   Linux/Windows, согласовать VERSION/версии установщиков и выполнить его собственный CI.
+   Предыдущий blocker SDK закрыт: main e900cfa/6299cea и кандидат ce6fb11 прошли
+   Client builds и Android diagnostic. Docker tests stage кандидата исправлен в aa0b0a7:
+   448 локальных тестов и удалённый phase0/tests+failover success. Эти CI проверяют
+   прежний source с Android8/Windows0.2.10/VERSION0.2.9, а не полный код APK49.
 3. Проверить передачу ссылки приложению на каждой платформе; затем согласованно обновить
    страницу приглашения/ссылки/CSP и необходимые каталоги. Сейчас страница выдаёт beta35,
    Android updater —49. Старые desktop установщики не имеют нового обработчика ссылки.

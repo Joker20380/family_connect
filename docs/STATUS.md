@@ -38,8 +38,11 @@ Beta49:153 Android unit, lint/build и native gesture/scroll passed; синте�
 
 Linux/Windows0.2.10 остаются кандидатами. Linux24 layout checks и короткая матрица
 RU/NL × AWG3.1/TCP прошли в предыдущих сессиях. Windows native UI и ordinary-user
-broker, AWG/TCP CI прошли для54506d8. Client builds: Linux/Windows success, Android
-failed на setup-android@v3, release skipped. Полный выпуск и физический ПК не приняты.
+broker, AWG/TCP CI прошли для54506d8. Прежний отказ setup-android исправлен:
+Client builds и Android diagnostic success на кандидате ce6fb11 и main6299cea.
+Docker-кандидат aa0b0a7:448 локальных тестов и phase0/tests+failover success.
+CI использует старый Android source/version8; это не приёмка APK49. Полный согласованный
+выпуск и физический ПК не приняты.
 [Кандидаты и необходимые проверки](releases/2026-09-23-invitation-link-ui.ru.md).
 
 ## Ограничения
@@ -62,6 +65,7 @@ claims на приглашающее устройство за24ч и500 общ�
 Пересмотр документации опубликован в GitHub main: `b8d51bf`;9 основных файлов
 проверены скачиванием. Версии приложений и серверы этим коммитом не изменялись.
 
-Текущая работа: [исправление Android SDK в CI](releases/2026-09-23-android-sdk-ci.ru.md),
-кандидат ce6fb11: setup-android success в Client builds и Android diagnostic.
-Основные build/runtime jobs продолжаются. Patch main: e900cfa; версии загрузок не меняются.
+Завершено [исправление Android SDK в CI](releases/2026-09-23-android-sdk-ci.ru.md).
+Main patch e900cfa, опубликованный checkpoint6299cea: Client builds35891111532 и
+Android diagnostic35891111340 — success. Следующий шаг — актуальный source checkpoint
+и согласование версий перед выпуском; публичные загрузки остаются прежними.
