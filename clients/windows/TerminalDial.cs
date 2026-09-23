@@ -11,7 +11,7 @@ internal sealed class TerminalDial : Button
     static bool AnimationsEnabled()=>SystemParametersInfo(0x1042,0,out int value,0)&&value!=0;
     internal TerminalDial()
     {
-        SetStyle(ControlStyles.UserPaint|ControlStyles.AllPaintingInWmPaint|ControlStyles.OptimizedDoubleBuffer,true);
+        SetStyle(ControlStyles.ResizeRedraw|ControlStyles.UserPaint|ControlStyles.AllPaintingInWmPaint|ControlStyles.OptimizedDoubleBuffer,true);
         Height=230;Dock=DockStyle.Top;FlatStyle=FlatStyle.Flat;FlatAppearance.BorderSize=0;Cursor=Cursors.Hand;
         BackColor=Color.FromArgb(7,32,24);
         motion.Tick+=(_,_)=>{if(!AnimationsEnabled()){motion.Stop();return;}phase=(float)(Environment.TickCount64%9000)/9000*360;Invalidate();};

@@ -11,7 +11,7 @@ internal sealed class LiveNetworkPanel : UserControl
     long previousTime,rx,tx;string? adapter;
     string network="—",battery="—",rate="—",state="—";bool ru;
     internal LiveNetworkPanel(ComboBox country,ComboBox protocol,bool sample){
-        this.country=country;this.protocol=protocol;DoubleBuffered=true;Height=174;Dock=DockStyle.Top;
+        this.country=country;this.protocol=protocol;DoubleBuffered=true;ResizeRedraw=true;Height=174;Dock=DockStyle.Top;
         BackColor=Color.FromArgb(7,32,24);ForeColor=Color.FromArgb(152,247,216);
         Controls.Add(country);Controls.Add(protocol);country.Dock=protocol.Dock=DockStyle.None;
         timer.Tick+=(_,_)=>Sample();timer.Enabled=sample;

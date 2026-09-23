@@ -3,7 +3,18 @@ namespace FamilyConnect;
 
 internal sealed class TerminalHeader : Control
 {
-    internal TerminalHeader() { DoubleBuffered=true;Height=78;MinimumSize=new(240,78);BackColor=Color.FromArgb(3,17,14); }
+    internal TerminalHeader() { DoubleBuffered=true;ResizeRedraw=true;Height=78;MinimumSize=new(240,78);BackColor=Color.FromArgb(3,17,14); }
+    internal static void CheckResizeInvalidation(){
+        using var host=new Form{ClientSize=new(500,100)};
+        using var header=new TerminalHeader{Dock=DockStyle.Fill};host.Controls.Add(header);
+        host.Show();Application.DoEvents();bool full=false;
+        header.Invalidated+=(_,e)=>{if(e.InvalidRect.Contains(header.ClientRectangle))full=true;};
+        foreach(int width in new[]{360,720,500,720,360}){
+            full=false;host.ClientSize=new(width,100);Application.DoEvents();
+            if(!full)throw new InvalidOperationException("Header resize left stale painted regions");
+        }
+        host.Close();
+    }
     protected override void OnPaint(PaintEventArgs e)
     {
         var g=e.Graphics;g.Clear(BackColor);g.SmoothingMode=SmoothingMode.AntiAlias;

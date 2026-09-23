@@ -39,6 +39,6 @@ internal static class ServerLoad
 internal sealed class LoadBar:Control
 {
     internal double? Percent;
-    public LoadBar(){DoubleBuffered=true;Height=8;Dock=DockStyle.Fill;Margin=new Padding(0,4,0,8);AccessibleRole=AccessibleRole.ProgressBar;}
+    public LoadBar(){DoubleBuffered=true;ResizeRedraw=true;Height=8;Dock=DockStyle.Fill;Margin=new Padding(0,4,0,8);AccessibleRole=AccessibleRole.ProgressBar;}
     protected override void OnPaint(PaintEventArgs e){base.OnPaint(e);using var border=new Pen(Color.FromArgb(67,142,121));e.Graphics.DrawRectangle(border,0,0,Math.Max(0,Width-1),Math.Max(0,Height-1));if(Percent is double p){using var fill=new SolidBrush(p>=90?Color.FromArgb(239,132,116):p>=70?Color.FromArgb(255,173,70):Color.FromArgb(152,247,216));e.Graphics.FillRectangle(fill,1,1,(int)((Width-2)*Math.Clamp(p,0,100)/100),Math.Max(0,Height-2));}}
 }

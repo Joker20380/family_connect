@@ -203,7 +203,7 @@ internal sealed class MainForm:Form
     }
     internal static void CheckLayouts()
     {
-        TraceLayout("start");ServerLoad.Check();RouteMap.CheckPixels();
+        TraceLayout("start");ServerLoad.Check();RouteMap.CheckPixels();TerminalHeader.CheckResizeInvalidation();
         TraceLayout("polling");
         CheckPolling();TraceLayout("preview");
         using(var preview=new MainForm(true,true)){

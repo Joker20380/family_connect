@@ -14,7 +14,7 @@ internal sealed class RouteMap : Control
     float phase;
     internal RouteMap()
     {
-        DoubleBuffered=true;Height=200;Dock=DockStyle.Top;
+        DoubleBuffered=true;ResizeRedraw=true;Height=200;Dock=DockStyle.Top;
         AccessibleName="World map";BackColor=Color.FromArgb(3,17,14);
         animation.Tick+=(_,_)=>{phase=(float)(Environment.TickCount64%5200)/5200;Invalidate();};
     }

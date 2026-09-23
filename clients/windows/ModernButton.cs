@@ -10,7 +10,7 @@ internal sealed class ModernButton : Button
     internal bool SwitchOn { get; set; }
     [System.ComponentModel.DesignerSerializationVisibility(System.ComponentModel.DesignerSerializationVisibility.Hidden)]
     internal bool NavigationButton { get; set; }
-    public ModernButton(){UseVisualStyleBackColor=false;DoubleBuffered=true;FlatStyle=FlatStyle.Flat;FlatAppearance.BorderSize=0;
+    public ModernButton(){UseVisualStyleBackColor=false;DoubleBuffered=true;ResizeRedraw=true;FlatStyle=FlatStyle.Flat;FlatAppearance.BorderSize=0;
         FlatAppearance.MouseOverBackColor=Color.FromArgb(16,61,46);FlatAppearance.MouseDownBackColor=Color.FromArgb(37,94,78);Cursor=Cursors.Hand;}
     internal static GraphicsPath Rounded(RectangleF rect,float radius){
         float diameter=Math.Min(radius*2,Math.Min(rect.Width,rect.Height));
