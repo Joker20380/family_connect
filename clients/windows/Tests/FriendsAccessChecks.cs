@@ -27,13 +27,14 @@ internal static class FriendsAccessChecks
             using var expected = JsonDocument.Parse(identity.EnrollmentProof(nonce));
             if (!JsonElement.DeepEquals(body.RootElement, expected.RootElement)) throw new Exception("Proof not sent");
             proofs++;
-            return path == "/friends/activate" ? Json(new { device = identity.Reference, status = "active" })
+            return path is "/friends/activate" or "/friends/register" ? Json(new { device = identity.Reference, status = "active" })
                 : Json(new { url = "https://185.251.89.19:8443/invite/#" + new string('a', 64), pool_limit = 500, remaining = 499 });
         });
         using (var client = new FriendsAccessClient(identity, handler, () => 1000))
         {
             await client.Activate("FC-" + new string('A', 32));
-            if (!(await client.Referral()).EndsWith(new string('a', 64)) || proofs != 2)
+            await client.Register();
+            if (!(await client.Referral()).EndsWith(new string('a', 64)) || proofs != 3)
                 throw new Exception("Activation/referral mismatch");
         }
         int rejected = 0;

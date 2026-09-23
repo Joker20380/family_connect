@@ -96,6 +96,25 @@ internal sealed class FriendsAccessClient : IDisposable
         catch (Exception e) when (ControlProtocol.Invalid(e)) { throw new FriendsAccessError("invalid_response"); }
     }
 
+    internal async Task Register(CancellationToken token = default, string invitationToken = "")
+    {
+        string invitation="";
+        if(invitationToken.Length>0){
+            if(!System.Text.RegularExpressions.Regex.IsMatch(invitationToken,@"\A[0-9a-f]{64}\z"))throw new FriendsAccessError("access_rejected");
+            var claim=await Post("/friends/referral/claim",new{token=invitationToken,request_id=identity.Reference},token);
+            try{
+                ControlProtocol.Fields(claim,"invitation status");
+                invitation=claim.GetProperty("invitation").GetString()??"";
+                if(!System.Text.RegularExpressions.Regex.IsMatch(invitation,@"\AFC-(?:[A-F0-9]{4}-){7}[A-F0-9]{4}\z") || claim.GetProperty("status").GetString() is not ("issued" or "activated"))throw new FormatException();
+            }catch(Exception e) when(ControlProtocol.Invalid(e)){throw new FriendsAccessError("invalid_response");}
+        }
+        var result=await Post("/friends/activate",await Proof("activate",invitation,token),token);
+        try {
+            ControlProtocol.Fields(result,"device status");
+            if(result.GetProperty("device").GetString()!=identity.Reference || result.GetProperty("status").GetString()!="active")throw new FormatException();
+        } catch(Exception e) when(ControlProtocol.Invalid(e)){throw new FriendsAccessError("invalid_response");}
+    }
+
     internal async Task<string> Referral(CancellationToken token = default)
     {
         var result = await Post("/friends/referral/issue", await Proof("refer", "", token), token);

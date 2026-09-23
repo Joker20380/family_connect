@@ -5,11 +5,14 @@ internal sealed class MainForm:Form
     bool ru=CultureInfo.CurrentUICulture.TwoLetterISOLanguageName=="ru",busy;
     readonly bool saveLanguage;
     string state="unknown";
-    bool tcpReady,awgReady,automatic;string? transport,lastError;
+    bool tcpReady,awgReady,automatic,friendsReady;
+    readonly ComboBox country=new(){DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill};
+    FriendsForm accessPage=null!;
+    string Country=>country.SelectedIndex==1?"ru":"nl";string? transport,lastError;
     readonly ComboBox mode=new(){DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill};
-    bool TcpSelected=>mode.SelectedIndex==1;
-    bool AwgSelected=>mode.SelectedIndex==2;
-    bool AutoSelected=>mode.SelectedIndex==3;
+    bool TcpSelected=>mode.SelectedIndex==0;
+    bool AwgSelected=>mode.SelectedIndex==1;
+    bool AutoSelected=>false;
     bool polling,pollError;long revision;
     Func<Request,Task<Reply>> call=Wire.Call;
     readonly Label title=new(),status=new(),description=new(),detail=new(),notice=new();
@@ -22,7 +25,7 @@ internal sealed class MainForm:Form
     readonly TableLayoutPanel card=new();
     bool fitting;
     string page="status";
-    readonly RouteMap routeMap=new();
+    readonly RouteMap routeMap=new(),dashboardMap=new(){Height=130};
     readonly TerminalDial dial=new();
     readonly Label loadLabel=new(){AutoSize=true,Dock=DockStyle.Fill};readonly LoadBar loadBar=new();readonly ToolTip loadTip=new();
     readonly System.Windows.Forms.Timer loadTimer=new(){Interval=3000};
@@ -32,6 +35,7 @@ internal sealed class MainForm:Form
     readonly Dictionary<string,ModernButton> nav=new();
     readonly Color mint=Color.FromArgb(152,247,216);
     string T(string russian,string english)=>ru?russian:english;
+    string pendingInvitation="";
     public MainForm(bool smoke,bool layoutTest=false)
     {
         saveLanguage=!smoke&&!layoutTest;
@@ -42,12 +46,12 @@ internal sealed class MainForm:Form
         BackColor=Color.FromArgb(3,17,14);ForeColor=Color.FromArgb(218,255,242);
         Icon=Icon.ExtractAssociatedIcon(Application.ExecutablePath);
         Font=new Font("Consolas",10);StartPosition=FormStartPosition.CenterScreen;
-        var shell=new TableLayoutPanel{Dock=DockStyle.Fill,ColumnCount=1,RowCount=2,Margin=Padding.Empty};
+        var shell=new TableLayoutPanel{Dock=DockStyle.Fill,ColumnCount=1,RowCount=3,Margin=Padding.Empty};
         shell.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
-        shell.RowStyles.Add(new RowStyle(SizeType.Percent,100));shell.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        shell.RowStyles.Add(new RowStyle(SizeType.AutoSize));shell.RowStyles.Add(new RowStyle(SizeType.Percent,100));shell.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         Controls.Add(shell);
         viewport.Dock=DockStyle.Fill;viewport.AutoScroll=true;viewport.Margin=Padding.Empty;
-        shell.Controls.Add(viewport,0,0);
+        shell.Controls.Add(viewport,0,1);
         content.AutoSize=true;content.AutoSizeMode=AutoSizeMode.GrowAndShrink;
         content.ColumnCount=1;content.RowCount=15;content.Padding=new Padding(24,12,24,8);
         content.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
@@ -73,6 +77,7 @@ internal sealed class MainForm:Form
         connect.BackColor=Color.FromArgb(7,32,24);connect.ForeColor=ForeColor;((ModernButton)connect).TerminalSwitch=true;connect.Font=new Font(Font.FontFamily,10,FontStyle.Bold);
         detail.ForeColor=Color.FromArgb(255,173,70);notice.ForeColor=Color.FromArgb(153,196,181);
         var header=new TerminalHeader{Dock=DockStyle.Fill,Margin=new Padding(0,0,0,8)};
+        shell.Controls.Add(header,0,0);
         var tagline=new Label{Text=T("Связь для вашей семьи","Connection for your family"),Name="tagline",AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.FromArgb(153,196,181),Margin=new Padding(0,0,0,16)};
         card.AutoSize=true;card.Dock=DockStyle.Fill;card.ColumnCount=1;card.RowCount=5;
         card.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
@@ -85,18 +90,24 @@ internal sealed class MainForm:Form
         description.ForeColor=Color.FromArgb(153,196,181);
         foreach(var button in new[]{request,activate,language,update,friends})button.Font=new Font(Font.FontFamily,10,FontStyle.Bold);
         update.BackColor=BackColor;language.BackColor=BackColor;
-        mode.Items.AddRange(new object[]{"WireGuard","TCP · preview","AWG · preview","Auto · WG → AWG → TCP"});mode.SelectedIndex=0;
+        mode.Items.AddRange(new object[]{"TCP REALITY","AWG 3.1"});mode.SelectedIndex=1;
         mode.Margin=new Padding(0,4,0,8);mode.BackColor=Color.FromArgb(7,32,24);mode.ForeColor=ForeColor;
-        mode.SelectedIndexChanged+=(_,_)=>PaintState();
+        country.Items.AddRange(new object[]{T("Нидерланды","Netherlands"),T("Россия","Russia")});country.SelectedIndex=0;
+        country.BackColor=mode.BackColor;country.ForeColor=ForeColor;
+        if(saveLanguage)try{using var p=Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\family_connect");country.SelectedIndex=(p?.GetValue("Country") as string)=="ru"?1:0;mode.SelectedIndex=(p?.GetValue("Transport") as string)=="tcp"?0:1;}catch{}
+        void SaveSelection(){revision++;loadNext=DateTime.MinValue;if(saveLanguage)try{using var p=Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\family_connect");p.SetValue("Country",Country);p.SetValue("Transport",TcpSelected?"tcp":"awg");}catch{}PaintState();}
+        country.SelectedIndexChanged+=(_,_)=>SaveSelection();mode.SelectedIndexChanged+=(_,_)=>SaveSelection();
+        accessPage=new FriendsForm(ru,r=>call(r));accessPage.RegistrationChanged+=()=>{friendsReady=true;PaintState();};
         int row=0;
-        foreach(Control child in new Control[]{header,tagline,card,mode,friends,request,activate,detail,notice,update})
+        foreach(Control child in new Control[]{tagline,card,country,mode,dashboardMap,friends,request,activate,detail,notice,update,accessPage})
             content.Controls.Add(child,0,row++);
         var version=new Label{Text="v"+Application.ProductVersion.Split('+')[0],AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.FromArgb(153,196,181)};
         language.MinimumSize=new Size(0,36);language.Dock=DockStyle.Fill;
         foreach(var child in new Control[]{language,version,routeTitle,routeMap,messengerNote})content.Controls.Add(child,0,row++);
-        pages["status"]=new Control[]{card,notice};
-        pages["route"]=new Control[]{routeTitle,routeMap,mode};
-        pages["settings"]=new Control[]{friends,request,activate,update,language,version};
+        pages["status"]=new Control[]{card,country,mode,dashboardMap,notice};
+        pages["route"]=new Control[]{routeTitle,routeMap};
+        pages["settings"]=new Control[]{friends,update,language,version};
+        pages["access"]=new Control[]{accessPage};request.Visible=activate.Visible=false;
         pages["messenger"]=new Control[]{messengerNote};
         footer.Dock=DockStyle.Fill;footer.Height=64;footer.Padding=new Padding(12,2,12,8);footer.Margin=Padding.Empty;footer.ColumnCount=4;footer.RowCount=1;
         int column=0;
@@ -105,7 +116,7 @@ internal sealed class MainForm:Form
             var button=new ModernButton{NavigationButton=true,Dock=DockStyle.Fill,BackColor=BackColor,ForeColor=ForeColor,Font=new Font("Segoe UI",8,FontStyle.Regular),Margin=new Padding(2)};
             button.Click+=(_,_)=>{page=name;PaintState();FitContent();};nav[name]=button;footer.Controls.Add(button,column++,0);
         }
-        shell.Controls.Add(footer,0,1);
+        shell.Controls.Add(footer,0,2);
         viewport.SizeChanged+=(_,_)=>FitContent();
         DpiChanged+=(_,_)=>BeginInvoke((Action)FitContent);
         update.Click+=async(_,_)=>{
@@ -114,7 +125,7 @@ internal sealed class MainForm:Form
                 if(availableUpdate is null){
                     availableUpdate=await Updates.Check(Application.ProductVersion.Split('+')[0]);
                     detail.Text=availableUpdate is null?T("Установлена последняя версия.","You are up to date."):T("Доступна версия ","Version available: ")+availableUpdate.Version;
-                }else if(Confirm(T("Скачать и установить обновление? VPN может кратко прерваться. Ключи и профили сохранятся.","Download and install the update? VPN may briefly disconnect. Keys and profiles will be preserved.")) ){
+                }else{
                     string installer=await Updates.Download(availableUpdate);Updates.LaunchInstaller(installer,availableUpdate);
                     busy=false;state="off";Close();
                 }
@@ -137,11 +148,7 @@ internal sealed class MainForm:Form
             layout.Controls.Add(text,0,0);layout.Controls.Add(help,0,1);layout.Controls.Add(copy,0,2);
             dialog.Controls.Add(layout);dialog.ShowDialog(this);
         };
-        friends.Click+=async(_,_)=>{
-            if(busy)return;revision++;busy=true;PaintState();
-            try{using var dialog=new FriendsForm(ru,call);dialog.ShowDialog(this);}
-            finally{busy=false;PaintState();await PollStatus();}
-        };
+        friends.Click+=(_,_)=>{page="access";PaintState();};
         activate.Click+=async(_,_)=>{
             using var dialog=new OpenFileDialog{Filter=AwgSelected?"Family Connect AWG activation|*.fcawgactivation":TcpSelected?"Family Connect TCP activation|*.fctcpactivation":"Family Connect activation|*.fcactivation",CheckFileExists=true};
             if(dialog.ShowDialog(this)!=DialogResult.OK)return;
@@ -152,8 +159,8 @@ internal sealed class MainForm:Form
             }catch(Exception){detail.Text=T("Не удалось прочитать файл активации.","Could not read the activation file.");}
         };
         language.Click+=(_,_)=>{ru=!ru;if(saveLanguage)try{using var preferences=Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\family_connect");preferences.SetValue("Language",ru?"ru":"en");}catch(Exception){detail.Text=T("Не удалось сохранить язык.","Could not save language.");}PaintState();FitWindow();};
-        poll.Tick+=async(_,_)=>await PollStatus();
-        FormClosing+=(_,e)=>{if(busy){e.Cancel=true;return;}if(!smoke&&(state is "on" or "pending")&&!Confirm(T("Закрыть окно? VPN продолжит работать.","Close this window? The VPN will keep running.")))e.Cancel=true;};
+        poll.Tick+=async(_,_)=>{if(pendingInvitation.Length>0&&!busy)await AcceptInvitation();else await PollStatus();};
+        FormClosing+=(_,e)=>{if(busy){e.Cancel=true;return;}};
         FormClosed+=(_,_)=>{poll.Dispose();loadTimer.Dispose();loadTip.Dispose();connect.Dispose();};
         loadTimer.Tick+=async(_,_)=>await RefreshLoad();
         PaintState();
@@ -161,8 +168,20 @@ internal sealed class MainForm:Form
             FitWindow();
             if(layoutTest)return;
             if(smoke){Close();return;}
-            await Execute(new("status"));poll.Start();loadTimer.Start();await RefreshLoad();
+            await Execute(new("status"));if(pendingInvitation.Length>0)await AcceptInvitation();else if(state is "off" or "inactive")await Execute(new("friends-register"));poll.Start();loadTimer.Start();await RefreshLoad();
         };
+    }
+    internal void Invite(string uri){
+        if(!System.Text.RegularExpressions.Regex.IsMatch(uri,@"\Afamilyconnect://invite/[0-9a-f]{64}\z"))return;
+        pendingInvitation=uri["familyconnect://invite/".Length..];page="status";
+        if(WindowState==FormWindowState.Minimized)WindowState=FormWindowState.Normal;
+        Activate();
+    }
+    async Task AcceptInvitation(){
+        if(busy)return;
+        string token=pendingInvitation;pendingInvitation="";
+        var reply=await Execute(new("friends-register",token));
+        if(reply?.Ok!=true){accessPage.PendingInvitation=token;page="access";PaintState();}
     }
     internal static void CheckLayouts()
     {
@@ -180,13 +199,13 @@ internal sealed class MainForm:Form
         // No broker requests: test visible runtime layout.
         foreach(float scale in new[]{1f,1.5f,2f,2.5f})
         foreach(bool russian in new[]{true,false})
-        foreach(int protocol in new[]{0,1,2,3})
+        foreach(int protocol in new[]{0,1})
         foreach(string selectedPage in new[]{"status","messenger","route","settings"})
         foreach(string connection in new[]{"inactive","off","pending","recovering","on","other-user","unknown"})
         foreach(Size size in new[]{new Size(360,420),new Size(480,620),new Size(800,700)}){
             if(selectedPage!="status"&&(protocol!=0||connection!="off"))continue;
             using var form=new MainForm(true,true);
-            form.page=selectedPage;form.ru=russian;form.state=connection=="recovering"?"pending":connection;form.lastError=connection=="recovering"?"tcp-reconnecting":null;form.tcpReady=protocol==1;form.awgReady=protocol==2;form.transport=protocol==2?"awg":protocol==1?"tcp":"wg";form.mode.SelectedIndex=protocol;form.automatic=protocol==3;
+            form.page=selectedPage;form.ru=russian;form.state=connection=="recovering"?"pending":connection;form.lastError=connection=="recovering"?"tcp-reconnecting":null;form.tcpReady=protocol==0;form.awgReady=protocol==1;form.transport=protocol==1?"awg":"tcp";form.mode.SelectedIndex=protocol;form.automatic=false;
             form.Scale(new SizeF(scale,scale));
             form.ClientSize=new Size((int)(size.Width*scale),(int)(size.Height*scale));
             form.detail.Text=russian?"Служба Family Connect недоступна. Повторно запустите установщик приложения.":"Family Connect service is unavailable. Run the application installer again.";
@@ -227,11 +246,7 @@ internal sealed class MainForm:Form
     static void CheckPolling()
     {
         FriendsForm.CheckUi();
-        using var form=new MainForm(true,true);form.state="off";form.Show();form.PaintState();
-        using(var cancel=new System.Windows.Forms.Timer{Interval=50}){
-            cancel.Tick+=(_,_)=>{foreach(Form dialog in Application.OpenForms)if(dialog!=form){dialog.DialogResult=DialogResult.Cancel;break;}};
-            cancel.Start();if(form.Confirm("Confirmation cancellation check"))throw new Exception("Cancelled confirmation accepted");cancel.Stop();
-        }
+        using var form=new MainForm(true,true);form.state="off";form.awgReady=true;form.Show();form.PaintState();
         int changes=0;form.status.TextChanged+=(_,_)=>changes++;
         var response=new TaskCompletionSource<Reply>();int calls=0;
         form.call=_=>{calls++;return response.Task;};
@@ -251,7 +266,7 @@ internal sealed class MainForm:Form
         if(form.state!="unknown")throw new Exception("Poll error hidden");
         form.call=_=>Task.FromResult(new Reply(true,"off"));Pump(form.PollStatus());
         if(form.state!="off"||form.detail.Text!="")throw new Exception("Poll recovery failed");
-        form.state="inactive";form.tcpReady=true;form.mode.SelectedIndex=1;form.PaintState();
+        form.state="inactive";form.tcpReady=true;form.mode.SelectedIndex=0;form.PaintState();
         if(!form.connect.Enabled||form.ConnectionAction()!="connect-tcp")throw new Exception("TCP-only activation unavailable");
         form.state="pending";form.transport="tcp";form.PaintState();
         if(!form.connect.Enabled||form.mode.Enabled||form.ConnectionAction()!="disconnect")throw new Exception("TCP cancellation unavailable");
@@ -266,16 +281,10 @@ internal sealed class MainForm:Form
         if(form.detail.Text!=""||form.state!="on")throw new Exception("Recovery success UI stale");
         form.call=_=>Task.FromResult(new Reply(true,"inactive",Error:"tcp-recovery-exhausted",TcpReady:true,Transport:"wg"));Pump(form.PollStatus());
         if(!form.connect.Enabled||form.ConnectionAction()!="connect-tcp"||form.detail.Text!=form.ErrorText("tcp-recovery-exhausted"))throw new Exception("Manual retry unavailable");
-        form.state="inactive";form.awgReady=true;form.mode.SelectedIndex=3;form.PaintState();
-        if(!form.connect.Enabled||form.ConnectionAction()!="connect-auto"||form.activate.Enabled)throw new Exception("Auto readiness UI broken");
-        form.call=_=>Task.FromResult(new Reply(true,"pending",Transport:"wg",Automatic:true));Pump(form.PollStatus());
-        if(form.mode.SelectedIndex!=3||!form.connect.Enabled||form.ConnectionAction()!="disconnect")throw new Exception("Auto WG cancellation unavailable");
-        form.call=_=>Task.FromResult(new Reply(true,"on",Transport:"tcp",Automatic:true));Pump(form.PollStatus());
-        if(form.mode.SelectedIndex!=3||!form.description.Text.Contains("TCP"))throw new Exception("Auto transport display broken");
-        form.automatic=false;form.state="inactive";form.awgReady=true;form.mode.SelectedIndex=2;form.PaintState();
+        form.automatic=false;form.state="inactive";form.awgReady=true;form.mode.SelectedIndex=1;form.PaintState();
         if(!form.connect.Enabled||form.ConnectionAction()!="connect-awg")throw new Exception("AWG-only profile unavailable");
         form.call=_=>Task.FromResult(new Reply(true,"pending",Transport:"awg",AwgReady:true));Pump(form.PollStatus());
-        if(!form.connect.Enabled||form.mode.Enabled||form.ConnectionAction()!="disconnect"||form.mode.SelectedIndex!=2)throw new Exception("AWG cancellation unavailable");
+        if(!form.connect.Enabled||form.mode.Enabled||form.ConnectionAction()!="disconnect"||form.mode.SelectedIndex!=1)throw new Exception("AWG cancellation unavailable");
         string? dialAction=null;
         form.call=r=>{dialAction=r.Action;return Task.FromResult(new Reply(true,"off"));};
         if(!form.dial.Enabled)throw new Exception("Dial differs from connection control");
@@ -316,26 +325,9 @@ internal sealed class MainForm:Form
         try{
             FitContent();content.PerformLayout();
             int max=Screen.FromControl(this).WorkingArea.Height-(Height-ClientSize.Height)-40;
-            ClientSize=new Size(ClientSize.Width,Math.Min(max,content.PreferredSize.Height+footer.Height));
+            ClientSize=new Size(ClientSize.Width,Math.Min(max,content.PreferredSize.Height+footer.Height+(int)(86*DeviceDpi/96f)));
             FitContent();
         }finally{fitting=false;}
-    }
-    bool Confirm(string message)
-    {
-        using var dialog=new Form{Text="family_connect",BackColor=BackColor,ForeColor=ForeColor,Font=Font,Icon=Icon,
-            AutoScaleMode=AutoScaleMode.Dpi,ClientSize=new Size(370,280),StartPosition=FormStartPosition.CenterParent,
-            FormBorderStyle=FormBorderStyle.FixedDialog,MaximizeBox=false,MinimizeBox=false};
-        dialog.HandleCreated+=(_,_)=>DarkFrame(dialog);
-        var panel=new TableLayoutPanel{Dock=DockStyle.Fill,Padding=new Padding(24),ColumnCount=1,RowCount=3};
-        panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));
-        panel.RowStyles.Add(new RowStyle(SizeType.Percent,100));
-        panel.RowStyles.Add(new RowStyle(SizeType.Absolute,46));panel.RowStyles.Add(new RowStyle(SizeType.Absolute,46));
-        panel.Controls.Add(new Label{Text=message,Dock=DockStyle.Fill,AutoSize=true},0,0);
-        var accept=new ModernButton{Text=T("Продолжить","Continue"),Dock=DockStyle.Fill,BackColor=mint,ForeColor=BackColor,DialogResult=DialogResult.OK};
-        var cancel=new ModernButton{Text=T("Отмена","Cancel"),Dock=DockStyle.Fill,BackColor=Color.FromArgb(7,32,24),ForeColor=ForeColor,DialogResult=DialogResult.Cancel};
-        panel.Controls.Add(accept,0,1);panel.Controls.Add(cancel,0,2);dialog.Controls.Add(panel);
-        dialog.AcceptButton=cancel;dialog.CancelButton=cancel;
-        return dialog.ShowDialog(this)==DialogResult.OK;
     }
     void PaintState()
     {
@@ -343,18 +335,19 @@ internal sealed class MainForm:Form
         status.ForeColor=state=="on"?Color.FromArgb(152,247,216):Color.FromArgb(218,255,242);
         status.Text=state switch{
             "on"=>T("Туннель включён","Tunnel is on"),"off"=>T("Готов к подключению","Ready to connect"),
-            "inactive"=>T("Активируйте устройство","Activate your device"),"other-user"=>T("VPN занят другим пользователем","VPN used by another user"),
+            "inactive"=>friendsReady?T("Готов к подключению","Ready to connect"):T("Получить доступ","Get access"),"other-user"=>T("VPN занят другим пользователем","VPN used by another user"),
             "pending"=>lastError=="tcp-reconnecting"?T("Восстанавливаем подключение…","Reconnecting…"):T("Подключение меняется…","Connection changing…"),_=>T("Статус недоступен","Status unavailable")};
-        description.Text=AutoSelected?T("Авто · ","Auto · ")+(state is "on" or "pending"?transport?.ToUpperInvariant():"WG → AWG → TCP"):(state is "on" or "pending"?transport=="awg":AwgSelected)?T("AWG · предварительная версия","AWG · preview"):(state is "on" or "pending"?transport=="tcp":TcpSelected)?T("TCP · предварительная версия","TCP · preview"):T("Защищённое подключение · Россия","Private connection · Russia");
+        description.Text=(Country=="nl"?T("Нидерланды","Netherlands"):T("Россия","Russia"))+" · "+(TcpSelected?"TCP REALITY":"AWG 3.1");
         connect.Text=state=="on"?T("Отключить","Disconnect"):state=="pending"&&(automatic||transport is "tcp" or "awg")?T("Отменить подключение","Cancel connection"):T("Подключить","Connect");
-        connect.Enabled=!busy&&(state=="on"||(state=="pending"&&(automatic||transport is "tcp" or "awg"))||((state is "off" or "inactive")&&(AutoSelected?(awgReady||tcpReady||state=="off"):AwgSelected?awgReady:TcpSelected?tcpReady:state=="off")));
+        connect.Enabled=!busy&&(state=="on"||(state=="pending"&&(automatic||transport is "tcp" or "awg"))||((state is "off" or "inactive")&&(friendsReady||(AutoSelected?(awgReady||tcpReady||state=="off"):AwgSelected?awgReady:TcpSelected?tcpReady:state=="off"))));
         dial.UpdateState(state=="on",busy||state=="pending",ru,connect.Enabled);
-        mode.Enabled=!busy&&(state is "off" or "inactive");
-        friends.Text=T("Доступ по приглашению", "Invitation access");friends.Enabled=!busy;
+        mode.Enabled=country.Enabled=!busy&&(state is "off" or "inactive");
+        friends.Text=T("Устройство и доступ", "Device and access");friends.Enabled=!busy;
         request.Text=T("Получить код устройства","Get device code");request.Enabled=!busy;
         activate.Text=AwgSelected?T("Открыть AWG-активацию","Open AWG activation"):TcpSelected?T("Открыть TCP-активацию","Open TCP activation"):T("Открыть файл активации","Open activation file");activate.Enabled=!busy&&!AutoSelected&&(state=="off"||state=="inactive");
-        notice.Text=AutoSelected?T("Для активации выберите нужный транспорт. Авто использует уже принятые профили.","Select a transport to activate it. Auto uses existing profiles."):T("Туннель не подтверждает доступность интернета. Активация пилота выполняется оператором.","Tunnel status does not verify Internet access. Pilot activation is handled by the operator.");
+        notice.Text=friendsReady?T("Личный ключ сохранён на устройстве.","Your personal key is stored on this device."):T("Доступ оформляется автоматически. Если не удалось — откройте «Устройство и доступ» в настройках.","Access is registered automatically. If it fails, open Device and access in Settings.");
         update.Text=availableUpdate is null?T("Проверить обновления","Check for updates"):T("Установить обновление","Install update");update.Enabled=!busy;
+        accessPage.SetLanguage(ru);
         language.Text=T("Язык: Русский → English","Language: English → Русский");
         content.Controls.Find("tagline",false)[0].Text=T("Связь для вашей семьи","Connection for your family");
         detail.Visible=detail.Text.Length>0;PaintLoad();ApplyPage();FitContent();
@@ -374,22 +367,22 @@ internal sealed class MainForm:Form
         if(DateTime.UtcNow<loadNext&&loadRevision==revision&&loadMode==mode.SelectedIndex)return;
         loadPending=true;long started=revision;int selected=mode.SelectedIndex;
         try{
-            var target=await call(new("load-country",AutoSelected?"auto":AwgSelected?"awg":TcpSelected?"tcp":"wg"));
+            var target=friendsReady?new Reply(true,"off",Code:Country):await call(new("load-country",AutoSelected?"auto":AwgSelected?"awg":TcpSelected?"tcp":"wg"));
             var sample=target.Ok&&target.Code is "ru" or "nl"?await ServerLoad.Fetch(target.Code):null;
             if(!IsDisposed&&!Disposing&&started==revision&&selected==mode.SelectedIndex){loadSample=sample;loadRevision=started;loadMode=selected;}
         }catch(Exception){if(started==revision)loadSample=null;}
         finally{loadPending=false;loadNext=DateTime.UtcNow.AddSeconds(15);if(!IsDisposed&&!Disposing)PaintLoad();}
     }
     void ApplyPage(){
-        routeTitle.Text=T("Выберите профиль подключения.","Choose a connection profile.");
+        routeTitle.Text=T("Маршрут подключения","Connection route");
         messengerNote.Text=T("Мессенджер пока доступен в Android. Версия для компьютера в разработке.","Messaging is currently available on Android. Desktop messaging is in development.");
         foreach(var group in pages)foreach(var control in group.Value)control.Visible=group.Key==page;
         foreach(var item in nav){
             item.Value.Text=item.Key switch{"status"=>T("СТАТУС","STATUS"),"messenger"=>T("МЕССЕНДЖЕР","MESSENGER"),"route"=>T("МАРШРУТ","ROUTE"),_=>T("НАСТРОЙКИ","SETTINGS")};
-            item.Value.ForeColor=item.Key==page?Color.FromArgb(255,173,70):Color.FromArgb(153,196,181);
+            item.Value.ForeColor=(item.Key==page||(page=="access"&&item.Key=="settings"))?Color.FromArgb(255,173,70):Color.FromArgb(153,196,181);
         }
     }
-    string ConnectionAction()=>state=="on"||(state=="pending"&&(automatic||transport is "tcp" or "awg"))?"disconnect":AutoSelected?"connect-auto":AwgSelected?"connect-awg":TcpSelected?"connect-tcp":"connect";
+    string ConnectionAction()=>state=="on"||(state=="pending"&&(automatic||transport is "tcp" or "awg"))?"disconnect":friendsReady?"friends-connect-"+(TcpSelected?"tcp":"awg")+"-"+Country:AutoSelected?"connect-auto":AwgSelected?"connect-awg":TcpSelected?"connect-tcp":"connect";
     string ErrorText(string? error)=>error switch{
         "activation-invalid"=>T("Активация недействительна, истекла или выдана другому устройству.","Activation is invalid, expired or belongs to another device."),
         "activation-required"=>T("Откройте файл активации выбранного подключения.","Open the activation file for the selected connection."),
@@ -419,9 +412,9 @@ internal sealed class MainForm:Form
             if(IsDisposed||Disposing||busy||started!=revision)return;
             bool error=!reply.Ok;
             string next=error?"unknown":reply.State;
-            if(next==state&&error==pollError&&tcpReady==reply.TcpReady&&awgReady==reply.AwgReady&&transport==reply.Transport&&lastError==reply.Error&&automatic==reply.Automatic)return;
-            state=next;tcpReady=reply.TcpReady;awgReady=reply.AwgReady;transport=reply.Transport;lastError=reply.Error;automatic=reply.Automatic;
-            if(state is "on" or "pending")mode.SelectedIndex=automatic?3:transport=="awg"?2:transport=="tcp"?1:0;
+            if(next==state&&error==pollError&&tcpReady==reply.TcpReady&&awgReady==reply.AwgReady&&transport==reply.Transport&&lastError==reply.Error&&automatic==reply.Automatic&&friendsReady==reply.FriendsReady)return;
+            state=next;tcpReady=reply.TcpReady;awgReady=reply.AwgReady;transport=reply.Transport;lastError=reply.Error;automatic=reply.Automatic;friendsReady=reply.FriendsReady;accessPage.SetDevice(reply.Device);
+            if(state is "on" or "pending")mode.SelectedIndex=transport=="awg"?1:0;
             if(error)detail.Text=T("Служба Family Connect недоступна. Повторно запустите установщик приложения.","Family Connect service is unavailable. Run the application installer again.");
             else detail.Text=reply.Error is null?"":ErrorText(reply.Error);
             pollError=error;PaintState();
@@ -433,11 +426,11 @@ internal sealed class MainForm:Form
         try{
             var reply=await call(action);
             if(action.Action!="request"){
-                state=reply.State;transport=reply.Transport;lastError=reply.Error;automatic=reply.Automatic;
+                state=reply.State;transport=reply.Transport;lastError=reply.Error;automatic=reply.Automatic;friendsReady=reply.FriendsReady;accessPage.SetDevice(reply.Device);
                 if(action.Action is "status" or "activate-tcp" or "connect-tcp")tcpReady=reply.TcpReady;
                 if(action.Action is "status" or "activate-awg" or "connect-awg")awgReady=reply.AwgReady;
             }
-            if(!reply.Ok||reply.Error is not null)detail.Text=ErrorText(reply.Error);
+            if(!reply.Ok||reply.Error is not null)detail.Text=action.Action.StartsWith("friends-")?FriendsForm.Error(reply.Error,ru):ErrorText(reply.Error);
             else if(!quiet)detail.Text=(action.Action is "activate" or "activate-tcp" or "activate-awg")?T("Устройство активировано. Нажмите «Подключить».","Device activated. Click Connect."):"";
             return reply;
         }catch(Exception){state="unknown";detail.Text=T("Служба Family Connect недоступна. Повторно запустите установщик приложения.","Family Connect service is unavailable. Run the application installer again.");return null;}

@@ -11,6 +11,20 @@ internal static class FriendsOwner
         using var client = new FriendsAccessClient(identity);
         client.Activate(invitation, token).GetAwaiter().GetResult();
     }
+    internal static string? Reference(string sid) {
+        var path=Store.UserPath(sid,".friends-registered");
+        if(!File.Exists(path)||new FileInfo(path).Length!=32)return null;
+        var value=File.ReadAllText(path);return System.Text.RegularExpressions.Regex.IsMatch(value,"\\A[0-9a-f]{32}\\z")?value:null;
+    }
+    internal static bool Registered(string sid) => Reference(sid) is not null;
+    internal static void Register(string sid,CancellationToken token,string invitationToken="")
+    {
+        using var identity=Store.FriendsIdentity(sid,true);
+        using var client=new FriendsAccessClient(identity);
+        try { client.Register(token,invitationToken).GetAwaiter().GetResult(); }
+        catch(FriendsAccessError e) when(e.Message=="access_rejected") { File.Delete(Store.UserPath(sid,".friends-registered"));throw; }
+        Store.Atomic(Store.UserPath(sid,".friends-registered"),System.Text.Encoding.ASCII.GetBytes(identity.Reference));
+    }
     internal static string Referral(string sid, CancellationToken token)
     {
         using var identity = Store.FriendsIdentity(sid, false);

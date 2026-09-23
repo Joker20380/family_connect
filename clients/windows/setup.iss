@@ -31,6 +31,10 @@ Source: "build\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 [InstallDelete]
 Type: files; Name: "{autoprograms}\Family Connect.lnk"
 Type: files; Name: "{autodesktop}\Family Connect.lnk"
+[Registry]
+Root: HKLM; Subkey: "Software\Classes\familyconnect"; ValueType: string; ValueData: "URL:family_connect invitation"; Flags: uninsdeletekey
+Root: HKLM; Subkey: "Software\Classes\familyconnect"; ValueType: string; ValueName: "URL Protocol"; ValueData: ""
+Root: HKLM; Subkey: "Software\Classes\familyconnect\shell\open\command"; ValueType: string; ValueData: """{app}\FamilyConnect.exe"" ""%1"""
 [Icons]
 Name: "{autoprograms}\family_connect"; Filename: "{app}\FamilyConnect.exe"
 Name: "{autodesktop}\family_connect"; Filename: "{app}\FamilyConnect.exe"; Tasks: desktopicon

@@ -52,7 +52,7 @@ internal sealed class Broker:ServiceBase
         var state=session.State!="off"?session.State:Native.TunnelState();
         var owner=session.State!="off"?session.Owner:File.Exists(Store.OwnerPath)?File.ReadAllText(Store.OwnerPath):null;
         var ready=File.Exists(Store.UserPath(sid,".conf.dpapi"));
-        if(request.Action=="status")return new(true,state!="off"&&owner!=sid?"other-user":state!="off"?state:ready?"off":"inactive",Error:auto.Owner==sid&&auto.Error is not null?auto.Error:session.Owner==sid?session.Error:null,TcpReady:File.Exists(Store.UserPath(sid,".tcp.dpapi")),Transport:session.State!="off"?session.Transport:"wg",AwgReady:File.Exists(Store.UserPath(sid,".awg.dpapi")),Automatic:autoActive);
+        if(request.Action=="status")return new(true,state!="off"&&owner!=sid?"other-user":state!="off"?state:ready?"off":"inactive",Error:auto.Owner==sid&&auto.Error is not null?auto.Error:session.Owner==sid?session.Error:null,TcpReady:File.Exists(Store.UserPath(sid,".tcp.dpapi")),Transport:session.State!="off"?session.Transport:"wg",AwgReady:File.Exists(Store.UserPath(sid,".awg.dpapi")),Automatic:autoActive,FriendsReady:FriendsOwner.Registered(sid),Device:FriendsOwner.Reference(sid));
         if(request.Action=="request")return new(true,"inactive",Code:"FC1-"+Convert.ToHexString(Convert.FromBase64String(Store.Public(sid))));
         if(state!="off"&&owner!=sid)return new(false,"other-user",Error:"other-user");
         if(request.Action.StartsWith("connect",StringComparison.Ordinal)&&state=="off")automatic.ClearError();
@@ -78,6 +78,10 @@ internal sealed class Broker:ServiceBase
                         wireguard_public_key=identity.WireguardPublicKey
                     }));
 
+            case "friends-register":
+                if(state!="off")return new(false,state,Error:"disconnect-first");
+                FriendsOwner.Register(sid,stop.Token,request.Activation??"");
+                return new(true,ready?"off":"inactive",FriendsReady:true,Device:FriendsOwner.Reference(sid));
             case "friends-activate":
                 if(state!="off")return new(false,state,Error:"disconnect-first");
                 FriendsOwner.Activate(sid,request.Activation??"",stop.Token);
