@@ -1,0 +1,74 @@
+name: Distribute accepted Windows 0.2.12 preview
+on:
+  push:
+    branches: ['fix/windows-repaint-0212']
+    paths: ['.github/workflows/distribute-windows0212.yml']
+permissions:
+  actions: read
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify pinned native acceptance
+        shell: python
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          import json,urllib.request,os
+          base='https://api.github.com/repos/Joker20380/family_connect'
+          def get(path):
+              request=urllib.request.Request(base+path,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN']})
+              return json.load(urllib.request.urlopen(request,timeout=30))
+          source='a584e540240035b12f996cf0244cdef1205576b6'
+          for run_id in [35918702321, 35918702299, 35918702368, 35918702376, 35918702311]:
+              run=get('/actions/runs/'+str(run_id))
+              assert run['head_sha']==source and run['conclusion']=='success',(run_id,run['conclusion'])
+          run=get('/actions/runs/35918702328')
+          assert run['head_sha']==source
+          jobs=get('/actions/runs/35918702328/jobs')['jobs']
+          assert next(j for j in jobs if j['name']=='windows')['conclusion']=='success'
+          for ident,run_id,digest in [(10775549833, 35918702328, 'sha256:9b81ba83ef22c33dfc58ce9e12864fe3f29a6c0f7f24a737ec5fa9f4d055a269'), (10776132462, 35918702311, 'sha256:ef1368f28116964127bbcdf7eeab6ba1d6c4e146162c2b57bb99414c44f012c0')]:
+              artifact=get('/actions/artifacts/'+str(ident))
+              assert artifact['workflow_run']['id']==run_id and not artifact['expired']
+              assert artifact['digest']==digest
+      - uses: actions/download-artifact@v4
+        with:
+          name: FamilyConnect-Windows-Installer-pilot-unsigned
+          run-id: '35918702328'
+          github-token: ${{ github.token }}
+          path: accepted-windows
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-ui-renders
+          run-id: '35918702311'
+          github-token: ${{ github.token }}
+          path: accepted-ui
+      - name: Verify exact installer and assemble preview
+        shell: python
+        run: |
+          import pathlib,hashlib,json,shutil
+          out=pathlib.Path('publish');out.mkdir()
+          artifact={'file': 'FamilyConnect-Setup-0.2.12-preview-a584e54.exe', 'size': 49930479, 'sha256': '31776bfc38d5d3ba1718dd6d664b507fb31d2f82eabeb894e2353a703d20c3df'}
+          raw=pathlib.Path('accepted-windows/FamilyConnect-Setup-0.2.12-pilot-unsigned.exe').read_bytes()
+          assert len(raw)==artifact['size'] and hashlib.sha256(raw).hexdigest()==artifact['sha256']
+          (out/artifact['file']).write_bytes(raw)
+          for image in pathlib.Path('accepted-ui').glob('Windows-*.png'):shutil.copyfile(image,out/image.name)
+          (out/'SHA256SUMS').write_text(artifact['sha256']+'  '+artifact['file']+'\n')
+          (out/'receipt.json').write_text(json.dumps(dict(version='0.2.12',channel='manual-preview',source='a584e540240035b12f996cf0244cdef1205576b6',windows_ci=35918702328,visual_ci=35918702311,acceptance=[35918702321, 35918702299, 35918702368, 35918702376, 35918702311],artifact=artifact),indent=2)+'\n')
+          pathlib.Path('notes.md').write_text('Windows 0.2.12 manual preview: buffers selector painting and dark layout surfaces; batches settings changes and removes transient activation visibility. Native regression checks that country/transport changes do not invalidate the header or toggle hidden controls. Invitation activation and the current door logo are retained.\n\nNative Windows rendering, installed URI activation, installer/broker, ordinary-user and AWG/TCP checks passed. Repeat testing on the reported physical PC remains pending. Install over the existing version to preserve identity and data. Android beta50, Linux0.2.10 and automatic update catalogs are unchanged. The Windows installer has no publisher signature.\n')
+      - name: Publish immutable Windows preview
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          repo=Joker20380/family_connect
+          tag=windows-preview-20260923-a584e54
+          if gh release view "$tag" --repo "$repo" >/dev/null 2>&1; then
+            echo 'Refusing to replace an existing immutable release.' >&2
+            exit 1
+          fi
+          gh release create "$tag" publish/* --repo "$repo" --verify-tag --prerelease --title 'Windows 0.2.12 preview — settings repaint' --notes-file notes.md
