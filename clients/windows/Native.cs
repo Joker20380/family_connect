@@ -13,20 +13,7 @@ internal static class Native
     public const string TunnelName="WireGuardTunnel$fc-native";
     public static string Exe => Path.Combine(AppContext.BaseDirectory,"FamilyConnect.exe");
     public static bool Admin => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
-    [DllImport("kernel32.dll",SetLastError=true)]static extern bool GetNamedPipeServerProcessId(SafePipeHandle pipe,out uint pid);
-    [DllImport("kernel32.dll",SetLastError=true)]static extern IntPtr OpenProcess(uint access,bool inherit,uint pid);
-    [DllImport("kernel32.dll",CharSet=CharSet.Unicode,SetLastError=true)]static extern bool QueryFullProcessImageName(IntPtr process,uint flags,StringBuilder path,ref int size);
-    [DllImport("kernel32.dll")]static extern bool CloseHandle(IntPtr handle);
-    public static void VerifyPipeServer(SafePipeHandle pipe)
-    {
-        if(!GetNamedPipeServerProcessId(pipe,out uint pid))throw new IOException("broker identity");
-        var handle=OpenProcess(0x1000,false,pid);if(handle==IntPtr.Zero)throw new IOException("broker process");
-        try {
-            int size=32768;var path=new StringBuilder(size);
-            if(!QueryFullProcessImageName(handle,0,path,ref size) || !string.Equals(path.ToString(),Exe,StringComparison.OrdinalIgnoreCase))
-                throw new IOException("untrusted broker");
-        }finally{CloseHandle(handle);}
-    }
+    public static void VerifyPipeServer(SafePipeHandle pipe) => BrokerIdentity.Verify(pipe, BrokerName, Exe);
     public static void Sc(params string[] args)
     {
         var info=new ProcessStartInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System),"sc.exe"))

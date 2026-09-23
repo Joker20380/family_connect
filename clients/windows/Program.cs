@@ -13,6 +13,17 @@ internal static class Program
                 var status=Wire.Call(new("status")).GetAwaiter().GetResult();
                 var request=Wire.Call(new("request")).GetAwaiter().GetResult();
                 var invalid=Wire.Call(new("activate","{}")).GetAwaiter().GetResult();
+                // A pipe hosted by this same installed EXE is still not the broker.
+                // Reject it by service PID even when the executable path matches.
+                var name="FamilyConnect.IdentityTest."+Guid.NewGuid().ToString("N");
+                using var fakeServer=new System.IO.Pipes.NamedPipeServerStream(name,System.IO.Pipes.PipeDirection.InOut,1,
+                    System.IO.Pipes.PipeTransmissionMode.Byte,System.IO.Pipes.PipeOptions.Asynchronous);
+                var waiting=fakeServer.WaitForConnectionAsync();
+                using var fakeClient=new System.IO.Pipes.NamedPipeClientStream(".",name,System.IO.Pipes.PipeDirection.InOut);
+                fakeClient.Connect(5000);waiting.GetAwaiter().GetResult();
+                bool rejected=false;
+                try{Native.VerifyPipeServer(fakeClient.SafePipeHandle);}catch(IOException){rejected=true;}
+                if(!rejected)return 11;
                 return status.Ok&&request.Ok&&request.Code?.Length==68&&!invalid.Ok?0:10;
             }
             if(args.Length>0&&args[0]!="/smoke"&&args[0]!="/layout-test")return 2;

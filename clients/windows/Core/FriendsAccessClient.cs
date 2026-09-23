@@ -39,6 +39,8 @@ internal sealed class FriendsAccessClient : IDisposable
             using var response = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, requestToken);
             if (response.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden or HttpStatusCode.Conflict)
                 throw new FriendsAccessError("access_rejected");
+            if (response.StatusCode == HttpStatusCode.TooManyRequests)
+                throw new FriendsAccessError("rate_limited");
             if (response.StatusCode != HttpStatusCode.OK) throw new FriendsAccessError("service_unavailable");
             await using var stream = await response.Content.ReadAsStreamAsync(requestToken);
             using var buffer = new MemoryStream();
@@ -53,6 +55,10 @@ internal sealed class FriendsAccessClient : IDisposable
         }
         catch (FriendsAccessError) { throw; }
         catch (OperationCanceledException) when (token.IsCancellationRequested) { throw; }
+        catch (OperationCanceledException) { throw new FriendsAccessError("request_timeout"); }
+        catch (HttpRequestException e) when (e.HttpRequestError == HttpRequestError.SecureConnectionError)
+        { throw new FriendsAccessError("tls_failed"); }
+        catch (HttpRequestException) { throw new FriendsAccessError("network_unavailable"); }
         catch (Exception e) when (ControlProtocol.Invalid(e)) { throw new FriendsAccessError("invalid_response"); }
         catch (Exception) { throw new FriendsAccessError("service_unavailable"); }
     }

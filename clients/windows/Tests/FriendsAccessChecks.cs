@@ -46,6 +46,11 @@ internal static class FriendsAccessChecks
         }
         await Reject(_ => new(HttpStatusCode.TemporaryRedirect) { Headers = { Location = new Uri("https://example.com/") } }, "service_unavailable");
         await Reject(_ => new(HttpStatusCode.Forbidden), "access_rejected");
+        await Reject(_ => new(HttpStatusCode.TooManyRequests), "rate_limited");
+        await Reject(_ => throw new TaskCanceledException(), "request_timeout");
+        await Reject(_ => throw new HttpRequestException(HttpRequestError.SecureConnectionError), "tls_failed");
+        await Reject(_ => throw new HttpRequestException(HttpRequestError.ConnectionError), "network_unavailable");
+        await Reject(_ => new(HttpStatusCode.ServiceUnavailable), "service_unavailable");
         await Reject(_ => Json(new { challenge = nonce, expires_at = 1000, audience = "family-connect/enrollment/v1" }), "invalid_response");
         await Reject(_ => Json(new { challenge = nonce, expires_at = 1121, audience = "family-connect/enrollment/v1" }), "invalid_response");
         await Reject(_ => Json(new { challenge = nonce, expires_at = 1120, audience = "other" }), "invalid_response");

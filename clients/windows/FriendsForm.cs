@@ -29,19 +29,20 @@ internal sealed class FriendsForm : Form
         Add(new Label { Text=T("Вставьте полученный код. При обычном обновлении повторная активация не нужна.","Paste your invitation code. An ordinary app update does not require activation again."),AutoSize=true });
         invitation.PlaceholderText="FC-…";invitation.MaxLength=128;Add(invitation);
         activate.Text=T("Активировать", "Activate");Add(activate);
+        status.AutoSize=true;status.MinimumSize=new(0,44);Add(status);
+        panel.SizeChanged+=(_,_)=>status.MaximumSize=new(Math.Max(1,panel.ClientSize.Width-panel.Padding.Horizontal-SystemInformation.VerticalScrollBarWidth),0);
         region.Items.AddRange(new object[]{T("Нидерланды", "Netherlands"),T("Россия", "Russia")});region.SelectedIndex=0;Add(region);
         transport.Items.AddRange(new object[]{"TCP REALITY","AWG 3.1"});transport.SelectedIndex=0;Add(transport);
         connect.Text=T("Подключиться", "Connect");Add(connect);
         share.Text=T("Получить ссылку для друга", "Get invitation link");Add(share);
         link.ReadOnly=true;link.Multiline=true;link.Height=76;link.ScrollBars=ScrollBars.Vertical;Add(link);
         copy.Text=T("Скопировать ссылку", "Copy link");copy.Enabled=false;Add(copy);
-        status.AutoSize=true;Add(status);
         foreach(var button in new[]{activate,connect,share,copy})
         {
             button.AutoSize=true;button.MinimumSize=new(0,42);button.FlatStyle=FlatStyle.Flat;
             button.BackColor=Color.FromArgb(7,32,24);button.ForeColor=ForeColor;
         }
-        activate.Click+=async(_,_)=>await Run(new("friends-activate",invitation.Text.Trim()),T("Доступ активирован. Можно подключаться.","Access activated. You can connect."));
+        activate.Click+=async(_,_)=>await Run(new("friends-activate",invitation.Text.Trim()),T("Доступ активирован. Выберите страну и нажмите «Подключиться» ниже.","Access activated. Select a country and click Connect below."));
         connect.Click+=async(_,_)=>await Run(new("friends-connect-"+(transport.SelectedIndex==1?"awg":"tcp")+(region.SelectedIndex==1?"-ru":"-nl")),T("Подключение запущено. Состояние видно в главном окне.","Connection started. Check its status in the main window."));
         share.Click+=async(_,_)=>await Run(new("friends-referral"),T("Ссылка готова. Отправьте её другу.","Link ready. Send it to your friend."));
         copy.Click+=(_,_)=>{if(link.Text.Length>0){Clipboard.SetText(link.Text);status.Text=T("Ссылка скопирована.","Link copied.");}};
@@ -61,6 +62,13 @@ internal sealed class FriendsForm : Form
                     "disconnect-first" or "busy"=>T("Сначала отключите VPN в главном окне.","Disconnect VPN in the main window first."),
                     "invalid_invitation"=>T("Проверьте формат кода приглашения.","Check the invitation code format."),
                     "access_rejected"=>T("Сервер отклонил доступ. Проверьте приглашение.","The server rejected access. Check the invitation."),
+                    "network_unavailable"=>T("Нет связи с сервером активации. Проверьте интернет и попробуйте снова.","Cannot reach the activation server. Check your connection and retry."),
+                    "request_timeout"=>T("Сервер не ответил вовремя. Повторите попытку с тем же кодом.","The server did not respond in time. Retry with the same code."),
+                    "tls_failed"=>T("Не удалось проверить защищённое соединение. Проверьте дату и время Windows и обновления сертификатов.","Could not verify the secure connection. Check the Windows date, time and certificate updates."),
+                    "rate_limited"=>T("Слишком много запросов. Подождите минуту и повторите попытку.","Too many requests. Wait a minute and retry."),
+                    "service_unavailable"=>T("Сервер активации временно недоступен. Повторите попытку позже.","The activation server is temporarily unavailable. Retry later."),
+                    "invalid_response"=>T("Ответ сервера не прошёл проверку. Проверьте дату и время Windows и версию приложения.","The server response could not be verified. Check the Windows date, time and app version."),
+                    "system-failed"=>T("Локальная служба не смогла выполнить действие. Требуется диагностика службы и сохранённых данных.","The local service could not complete the action. Service and stored data diagnostics are required."),
                     "awg-engine-missing"=>T("Компонент AWG отсутствует. Нужен полный установщик.","The AWG component is missing. Use the complete installer."),
                     "tcp-engine-missing"=>T("Компонент TCP отсутствует. Нужен полный установщик.","The TCP component is missing. Use the complete installer."),
                     _=>T("Действие не выполнено. Проверьте сеть; если данные повреждены, требуется восстановление.","Could not complete the action. Check the network; damaged data requires recovery.") };
@@ -74,7 +82,8 @@ internal sealed class FriendsForm : Form
             if(request.Action=="friends-activate")invitation.Clear();
             status.Text=success;
         }
-        catch(Exception){status.Text=T("Служба недоступна или ответ некорректен. Повторите попытку.","The service is unavailable or its response is invalid. Retry.");}
+        catch(OperationCanceledException){status.Text=T("Служба Windows не ответила за 35 секунд. Повторите попытку; если ошибка повторяется, перезапустите приложение.","The Windows service did not respond within 35 seconds. Retry; if this persists, restart the app.");}
+        catch(Exception){status.Text=T("Нет связи со службой FamilyConnectBroker. Повторно запустите установщик приложения.","Cannot communicate with FamilyConnectBroker. Run the app installer again.");}
         finally
         {
             busy=false;activate.Enabled=connect.Enabled=share.Enabled=true;
@@ -90,8 +99,11 @@ internal sealed class FriendsForm : Form
             form.Show();Application.DoEvents();
             void Pump(Task task) { var until=DateTime.UtcNow.AddSeconds(5);while(!task.IsCompleted&&DateTime.UtcNow<until){Application.DoEvents();Thread.Sleep(5);}task.GetAwaiter().GetResult(); }
             form.invitation.Text="FC-disposable-ui-test";
-            Pump(form.Run(new("friends-activate",form.invitation.Text),"ok"));
+            form.activate.PerformClick();Application.DoEvents();
+            if(requests.Count!=1||requests[0].Action!="friends-activate")throw new Exception("Activation click not dispatched");
             if(form.invitation.Text.Length!=0)throw new Exception("Invitation retained after success");
+            if(form.status.Top<form.activate.Bottom||form.status.Bottom>form.region.Top||form.status.Width>form.ClientSize.Width)
+                throw new Exception("Activation result not visible beside action");
             Pump(form.Run(new("friends-referral"),"ok"));
             if(!form.copy.Enabled||!form.link.ReadOnly||!form.link.Text.EndsWith(new string('a',64)))throw new Exception("Invitation sharing UI failed");
             Pump(form.Run(new("friends-connect-tcp-ru"),"ok"));
@@ -106,6 +118,12 @@ internal sealed class FriendsForm : Form
         while(!failure.IsCompleted){Application.DoEvents();Thread.Sleep(5);}failure.GetAwaiter().GetResult();
         if(denied.invitation.Text.Length==0||denied.status.Text=="wrong-success"||!denied.activate.Enabled)throw new Exception("Failed activation UI state");
         denied.Close();
+        using var unavailable=new FriendsForm(true,_=>Task.FromException<Reply>(new IOException()));
+        unavailable.Show();Application.DoEvents();unavailable.invitation.Text="keep-for-retry";
+        unavailable.activate.PerformClick();Application.DoEvents();
+        if(!unavailable.status.Text.Contains("FamilyConnectBroker")||unavailable.invitation.Text!="keep-for-retry"||!unavailable.activate.Enabled)
+            throw new Exception("Local broker failure not explained");
+        unavailable.Close();
     }
 
 }

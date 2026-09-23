@@ -2,7 +2,7 @@ name: Windows ordinary user access
 on:
   push:
     branches: ['fix/windows-user-activation-20260923']
-    paths: ['.github/workflows/windows-user-access.yml', 'clients/windows/diagnose-broker.ps1']
+    paths: ['.github/workflows/windows-user-access.yml', 'clients/windows/**']
 permissions:
   contents: read
 jobs:
@@ -19,6 +19,26 @@ jobs:
           if((Get-FileHash "$env:TEMP/fc-existing.exe").Hash.ToLower() -ne '37879242f1a742c35f3702d0373220b91d4138b48c2ccc643e7bbcfd639888ce'){throw 'Installer mismatch'}
           $p=Start-Process "$env:TEMP/fc-existing.exe" -ArgumentList '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-' -PassThru -Wait
           if($p.ExitCode -ne 0){throw 'Install failed'}
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build and install corrected client over the preview
+        shell: pwsh
+        run: |
+          dotnet run --project clients/windows/Tests/Tests.csproj -c Release
+          if($LASTEXITCODE -ne 0){throw 'Core tests failed'}
+          dotnet publish clients/windows/FamilyConnect.csproj -c Release -r win-x64 --self-contained true -o patched
+          if($LASTEXITCODE -ne 0){throw 'Publish failed'}
+          Stop-Service FamilyConnectBroker
+          Copy-Item patched/* "$env:ProgramFiles/Family Connect/" -Recurse -Force
+          Start-Service FamilyConnectBroker
+          $p=Start-Process "$env:ProgramFiles/Family Connect/FamilyConnect.exe" -ArgumentList '/layout-test' -PassThru
+          if(-not $p.WaitForExit(90000)){$p.Kill();throw 'Layout timeout'}
+          if($p.ExitCode -ne 0){
+            $detail=Get-Content "$env:TEMP/fc-layout-check.txt" -Raw -ErrorAction SilentlyContinue
+            Write-Host "::error title=Layout::$($detail.Replace([char]13,' ').Replace([char]10,' '))"
+            throw 'Layout failed'
+          }
       - name: Compare administrator and ordinary user
         shell: pwsh
         run: |
@@ -55,7 +75,8 @@ jobs:
           if($appResult.exitCode -ne 0){throw 'Installed app broker test failed'}
           $result=Get-Content "$dir/user.json" -Raw | ConvertFrom-Json
           if($result.elevated){throw 'Test user unexpectedly elevated'}
-          if(-not $result.ok){throw 'Ordinary user cannot reach broker'}
+          # The legacy process-open probe must reproduce access denial; the installed EXE above must succeed.
+          if($result.ok -or $result.stage -ne 'server-identity' -or $result.win32Error -ne 5){throw 'Legacy failure not reproduced'}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
