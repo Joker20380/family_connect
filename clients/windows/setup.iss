@@ -17,7 +17,7 @@ Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
 SetupIconFile=app.ico
-UninstallDisplayIcon={app}\FamilyConnect.exe
+UninstallDisplayIcon={app}\family-connect-door.ico
 CloseApplications=yes
 ChangesAssociations=yes
 #ifdef SignedRelease
@@ -28,6 +28,7 @@ SignedUninstaller=yes
 Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 [Files]
+Source: "app.ico"; DestDir: "{app}"; DestName: "family-connect-door.ico"; Flags: ignoreversion
 Source: "build\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 [InstallDelete]
 Type: files; Name: "{autoprograms}\Family Connect.lnk"
@@ -37,8 +38,8 @@ Root: HKLM; Subkey: "Software\Classes\familyconnect"; ValueType: string; ValueDa
 Root: HKLM; Subkey: "Software\Classes\familyconnect"; ValueType: string; ValueName: "URL Protocol"; ValueData: ""
 Root: HKLM; Subkey: "Software\Classes\familyconnect\shell\open\command"; ValueType: string; ValueData: """{app}\FamilyConnect.exe"" ""%1"""
 [Icons]
-Name: "{autoprograms}\family_connect"; Filename: "{app}\FamilyConnect.exe"
-Name: "{autodesktop}\family_connect"; Filename: "{app}\FamilyConnect.exe"; Tasks: desktopicon
+Name: "{autoprograms}\family_connect"; Filename: "{app}\FamilyConnect.exe"; IconFilename: "{app}\family-connect-door.ico"
+Name: "{autodesktop}\family_connect"; Filename: "{app}\FamilyConnect.exe"; IconFilename: "{app}\family-connect-door.ico"; Tasks: desktopicon
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; Flags: unchecked
 [UninstallRun]

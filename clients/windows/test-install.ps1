@@ -17,6 +17,8 @@ try {
             $installer=(Resolve-Path "$PSScriptRoot/dist/*pilot-unsigned.exe").Path
             Invoke-Checked $installer '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP- /LOG=install.log' 180
             if((Get-Service FamilyConnectBroker).Status -ne 'Running'){throw 'Broker service did not start'}
+            $icon=Join-Path (Split-Path $app) 'family-connect-door.ico'
+            if((Get-FileHash $icon -Algorithm SHA256).Hash -ne (Get-FileHash "$PSScriptRoot/app.ico" -Algorithm SHA256).Hash){throw 'Installed launcher icon differs from accepted artwork'}
             $handler=Get-Item 'Registry::HKEY_LOCAL_MACHINE\Software\Classes\familyconnect\shell\open\command'
             if($handler.GetValue('') -ne ('"'+$app.Replace('/','\')+'" "%1"')){throw 'Invitation handler command mismatch'}
             $tcp="$env:ProgramFiles/Family Connect/tcp"
