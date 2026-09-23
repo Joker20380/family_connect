@@ -17,8 +17,20 @@ Runtime state, профили, базы, ключи подписи и локал
 
 Локально:811 Python tests passed (основные, desktop, messenger); Docker tests image:
 498 passed. Android ARM64 Friends153 unit/lint/build и compile instrumentation passed.
-GTK24 layout cases, Friends UI и доставка URI существующему процессу passed.
-Полный remote CI нового snapshot ещё не завершён.
+GTK24 layout cases, Friends UI, доставка URI существующему процессу и recovery passed.
+Синтетический render встроенного Friends-экрана просмотрен. TCP installer UI passed
+после адаптации проверки к встроенной панели подтверждения вместо прежнего диалога.
+Исходный snapshot `ccb5257` опубликован в source-ветке; основной Windows client build,
+phase0, messenger, desktop visual, control conformance, Linux AWG/TCP passed.
+Client builds35898024283: Android и Windows jobs passed; Android runtime summary:
+49 instrumentation cases,0 failures; control conformance и storage restart passed.
+Windows AWG35898024318 и TCP35898024406 passed. Общий Client builds остаётся failure
+из-за Linux-теста. Первая Linux-проверка выявила устаревший вызов
+`response` на встроенной Gtk.Box: тест исправлен и локально повторён.
+Windows ordinary-user upgrade: первый run35898024390 завершился без подробного
+сообщения об ошибке; после добавления диагностики (`ef5af30`) run35898759903 passed
+без изменения кода клиента. Причина первого отказа не установлена; исправление
+runtime-дефекта этим повторным запуском не заявляется.
 
 ## Исправления подготовки
 
