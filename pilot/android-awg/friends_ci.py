@@ -19,8 +19,9 @@ def main():
     subprocess.run(["adb", "-s", serial, "shell", "pm", "grant", "com.familyconnect.app.friends", "android.permission.POST_NOTIFICATIONS"], check=True)
     classes = ["AppLanguageRuntimeTest", "AppUpdateRuntimeTest", "DashboardLayoutRuntimeTest",
                "DialRuntimeTest", "RouteMapRuntimeTest", "ChatNotificationRuntimeTest",
-               "ChatScrollRuntimeTest", "VoiceBubbleRuntimeTest", "VoiceHoldRuntimeTest", "VoiceRuntimeTest"]
+               "ChatScrollRuntimeTest", "VoiceBubbleRuntimeTest", "VoiceHoldRuntimeTest", "VoiceRuntimeTest", "InvitationRuntimeTest"]
     subprocess.run(gradle + [":app:connectedFriendsAndroidTest",
+        "-Pandroid.testInstrumentationRunnerArguments.fcInvitationCi=true",
         "-Pandroid.testInstrumentationRunnerArguments.class=" + ",".join("com.familyconnect.app." + c for c in classes)], cwd=build, check=True)
 
 if __name__ == "__main__":

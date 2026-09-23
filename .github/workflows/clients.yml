@@ -123,6 +123,9 @@ jobs:
       - name: Check user interface
         shell: pwsh
         run: ./clients/windows/test-install.ps1 -Stage UI
+      - name: Check installed invitation URI and existing window
+        shell: pwsh
+        run: ./clients/windows/check-invitation.ps1
       - name: Check compact and scaled window layouts
         shell: pwsh
         run: |
@@ -172,6 +175,8 @@ jobs:
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/app.py --smoke
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a -s "-screen 0 2560x2160x24" /usr/bin/python3 clients/desktop/layout_check.py
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/map_check.py
+      - name: Check invitation delivery to existing Linux instance
+        run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/link_ui_check.py
       - name: Check Friends invitation window
         run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/friends_ui_check.py
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/recovery_check.py

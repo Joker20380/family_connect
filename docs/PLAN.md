@@ -59,3 +59,6 @@
 [Отчёт source checkpoint](releases/2026-09-23-source-checkpoint.ru.md) содержит точные
 коммиты, CI и ограничения. Перед выпуском desktop нужно получить полный Windows render:
 публичные аннотации содержат обрезанное изображение и не заменяют просмотр артефакта.
+
+Начата [приёмка desktop0.2.10 и приглашений](releases/2026-09-23-desktop0210-rollout.ru.md):
+полный Windows render проверен; новые native URI checks ожидают CI, rollout ещё не выполнен.

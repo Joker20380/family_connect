@@ -25,8 +25,8 @@ versions; use this page and STATUS for current downloads.
 The [client workflow](../.github/workflows/clients.yml) defines platform builds and
 release conditions. CI artifacts do not by themselves establish a release. Validate native
 UI/runtime and downloaded artifacts before signing/publishing. Windows cross-build alone
-is insufficient. The public source snapshot still predates APK49; matching source
-publication remains in PLAN. Desktop0.2.10 and the new invitation page are not distributed.
+is insufficient. The current source checkpoint includes Android beta49 and
+the desktop0.2.10 candidate; see the [source report](releases/2026-09-23-source-checkpoint.ru.md). Desktop0.2.10 and the new invitation page are not distributed.
 
 Desktop catalogs use offline signing with increasing sequence numbers. Keep keys out of
 CI and servers; never replace an existing version/tag with different binaries.
