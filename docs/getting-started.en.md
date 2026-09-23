@@ -2,62 +2,68 @@
 
 [Русский](getting-started.ru.md) · [Home](../README.md)
 
-## Android friends beta
+## First activation
 
-Android 8 or newer; the compact build requires ARM64. This is an invitation-based
-pilot, not a public subscription launch. Downloading the app does not grant server access.
+Android8+, ARM64; invitation-only access. Downloading an APK does not grant access.
+The invitation page still provides beta35, while the updater provides beta49.
 
-1. Ask a participant for an invitation link or QR code. In their app it is under
-   **Settings → Invite a friend**. Open that page, obtain your own invitation code
-   and download the APK. Do not post invitation links publicly.
-2. Install **Family Connect Test**. Android may request permission to install from
-   that browser or file manager.
-3. Open **Settings → Activate with code**, and paste your code. Each activation is
-   bound to a device; do not copy another device's profile or keys.
-4. In **Route**, select a gateway region and transport; tap **Connect** and allow
-   Android's VPN request. Check the public IP in Route, then try a website.
-5. Open **Messenger** to add a contact, verify their full key/fingerprint through
-   a trusted channel, and exchange text. Incoming refresh currently requires the
-   messenger to be open; background push is not implemented.
+1. Ask a participant for a link/QR from **Settings → Invite a friend**. Obtain your own
+   code on that page and download its beta35 APK. Keep invitation links private.
+2. Install **Family Connect Test**, allowing installation from your browser if Android asks.
+3. In beta35, use **Settings → Activate with code** and enter your code.
+4. Once activated, install beta49 below over the existing app, keeping its data.
+   No new invitation is required. Beta49 no longer has manual code entry; the new
+   invitation page with an app-opening button has not been published yet.
+5. In beta49, choose country/transport in the home connection panel near the battery,
+   enable VPN and allow Android’s VPN request. Check the public IP in Route, then try a website.
 
-**Already have an invitation or an activated app?**
-[Download beta35 — 36.4 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta35.apk).
-Version `0.1.18-beta35`, code `35`; SHA256:
+## Update an existing app
+
+[Download beta49 — 36.4 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta49.apk).
+Version `0.1.18-beta49`, code49, ARM64,36448332 bytes; SHA256:
 
 ```text
-fd7cc8ca00ca95acd4cc2cf5cc265d6afd46d39a4a21d22374e14f1f915a3a4e
+3a37613a63c130af97c853d1c39836c026822dca717a748fa005a3211f8f549d
 ```
 
-For other CPU architectures, the older build remains available separately:
-[universal beta13 — 240.5 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.12-beta13.apk).
-It does not include later messenger improvements. This is not an equivalent current build.
+The app also checks for updates. Open the APK and select **Update** in Android’s system
+prompt. Do not uninstall or clear data: activation, keys and history must be kept.
+A CI debug APK may use a different signature. Each other device needs its own activation;
+do not copy another device’s profiles or keys.
 
-## Update an existing installation
+The [older universal beta13](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.12-beta13.apk)
+remains available for other architectures,240.5 MB. It lacks current features and is not
+an equivalent alternative to49.
 
-Download the new APK, open it, and choose **Update**. Do not uninstall or clear data.
-An ordinary update uses the same signing certificate and keeps activation and history.
-The app can check for updates and request Android installation; system confirmation is still required. A CI debug build may have a different
-signature and cannot serve as an update to the friends beta.
+## Text and voice
+
+Add a contact and verify the full key/fingerprint through a trusted channel. The arrow
+sends text; long-press your own text message to edit. Hold the microphone to record,
+release to send. Swipe up to lock recording, then use the arrow to send or cross to
+cancel. Swipe left while holding to cancel. Recording requires Android10+ and is limited
+to60s/128KiB. After granting microphone access, hold again to start. At the limit,
+recording stops and waits for sending. Leaving the app cancels an unsent recording.
+Update both phones to49 for the same interface.
+
+The background service receives messages and posts notifications without an active VPN
+when the message server is reachable. Check the service and notification settings in the
+messenger menu. Screen-off delivery was tested; immediate delivery during deep Doze is
+not established. [Notification and announcement guide (RU)](testing/messenger-notices.ru.md).
 
 ## Troubleshooting
 
-- **No invitation:** the APK alone cannot activate service. Ask the participant or operator.
-- **VPN connects but Internet does not work:** use Check public IP, then try the other
-  available region or transport. Report the app version, Android version and network type.
-- **No incoming message:** keep the messenger open and allow roughly 10–15 seconds;
-  confirm both devices have registered messaging and checked contact keys.
-- **Location unavailable:** Android approximate location is optional. Route placement
-  depends on permission and device location availability; VPN does not require it.
-- **An update fails:** keep the installed app. Record the Android error and APK version;
-  do not delete your data to work around a signature mismatch.
+- No invitation: ask a participant/operator; the APK alone is insufficient.
+- VPN without Internet: check the public IP and try another region/transport.
+- Missing messages: check connectivity, both registrations, contact keys, background
+  service and notification permission. Open the app again after a system force-stop.
+- Missing map location: allow approximate location; VPN does not require it.
+- Update failure: record the error and versions; do not erase data to bypass a signature mismatch.
 
-Keep invitation codes, profiles, private keys and personal chat history out of reports.
-[Detailed Russian walkthrough](testing/friends-quickstart.ru.md) ·
-[Beta35 verification](releases/2026-09-23-public-client-status.ru.md).
+Report model, Android/app version and network type. Exclude invitations, keys, profiles
+and messages. [Beta49 validation (RU)](releases/2026-09-23-voice-scroll-beta49.ru.md).
 
 ## Desktop
 
-[Linux and Windows pilot installation](clients.en.md). These releases have different
-onboarding and features from the Android friends beta.
-
-Direct pilot codes and participant referrals use separate budgets: 50 direct codes and 500 shared referral slots. Using a direct code does not reduce the referral pool. The fixed pool limit is not the remaining count.
+[Linux/Windows](clients.en.md) have separate versions and operator-assisted activation.
+Direct invitations and referrals use separate pools; configured limits50/500 are not
+live remaining counts. Coordinated invitation-link rollout remains in [PLAN](PLAN.md).

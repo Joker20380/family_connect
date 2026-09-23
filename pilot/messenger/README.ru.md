@@ -47,3 +47,9 @@ recovery_and_reopen=true. Production volume/service этим тестом не �
 [отчёт](../../docs/releases/2026-09-13-amsterdam-mailbox.ru.md).
 RNS может принять часть request resource до callback: прикладные квоты не заменяют
 ограничения памяти/тома и не доказывают устойчивость к произвольной нагрузке.
+
+## Пользовательские разрешения — 19.09
+
+[Развёрнутый expiring membership и live acceptance](../../docs/releases/2026-09-19-chat-live.ru.md):
+root-owned members.json, lease100с и публикация каждые20с по отдельному forced SSH
+command. Прежние две diagnostic identity сохранены; client/phone acceptance отдельно.

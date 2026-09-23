@@ -1,35 +1,60 @@
-# Current state / Текущее состояние
+# Текущее состояние / Current state
 
-Updated 2026-09-23. Distributed clients and test candidates are listed separately.
+Сверено 23 сентября 2026 года. Здесь только действующее состояние; старые проверки
+сохранены в [журнале](STATUS.before-beta49-2026-09-23.md).
 
-| Platform | Public download | Candidate under test |
+## Выпущенные клиенты
+
+| Платформа | Публичная версия | Границы |
 | --- | --- | --- |
-| Android 8+, ARM64 | 0.1.18-beta35/code35; 36,407,372 bytes | beta38/code38 installed on a test phone; 147 unit, 5 UI and 1 reconnect test passed |
-| Linux | 0.2.9 paired bundle146d221d0ad23c07 | 0.2.10; 24 layout checks passed |
-| Windows x64 | 0.2.9 previewa6c68fe | 0.2.10 source54506d8; build, native UI and ordinary-user broker CI passed |
-| macOS / iOS | No app release | Longer-term roadmap |
+| Android 8+, ARM64 | 0.1.18-beta49 / code49 | APK и встроенная проверка обновлений; запись голосовых на Android10+ |
+| Linux | 0.2.9 preview146d221d0ad23c07 | Парный GTK4/libadwaita архив, установка с оператором |
+| Windows x64 | 0.2.9 previewa6c68fe | Установщик без доверенной подписи издателя; физическая приёмка открыта |
+| macOS / iOS | Нет выпуска | Будущая работа |
 
-[Downloads, checksums and test evidence](releases/2026-09-23-public-client-status.ru.md) · [Installation](getting-started.en.md).
+[Загрузки и контрольная сумма](releases.md) · [Android RU](getting-started.ru.md) / [EN](getting-started.en.md).
 
-The README image shows the beta38 test candidate. Public beta35 still uses manual
-invitation-code activation. The next update preserves invite-only access and device
-keys while removing manual key entry, and places country/protocol selection beside
-the battery. New installers, invitation page and catalogs have not been published.
-Android CI setup failed; remaining release gates must pass before distribution.
+**Различие каналов:** Android discovery уже выдаёт beta49. Страница приглашения
+ещё выдаёт beta35 с активацией кодом; она не содержит кнопки открытия приложения.
+Новая beta49 обрабатывает ссылку, но общий rollout страницы и новых desktop-клиентов
+не выполнен. Для нового пользователя действующий путь: beta35 со страницы → активация
+кодом → обновление до49 с сохранением данных. Уже активированным можно сразу ставить49.
 
-The current pilot supports VPN and Android text messaging. Incoming chat refresh
-requires the messenger to remain open; background push and broader offline/restart
-acceptance remain incomplete. Desktop messenger parity is not claimed.
+## Что проверено
 
-Invitations: up to 20 new referral claims per sponsor per rolling 24 hours, within a
-shared pool of 500. Retrying the same request does not consume an additional slot.
-These are configured limits, not a live remaining count. Direct invitations use a
-separate budget. Device keys remain individual and revocable. Billing is not implemented.
+Android: VPN в пилоте, обмен текстом и голосовыми между двумя телефонами, правка
+своего текста, объявления владельца/назначенных администраторов, локальные имена,
+фоновая служба и уведомления. Пользователь подтвердил запись удержанием и с фиксацией,
+доставку/воспроизведение и уведомление с выключенным экраном. В beta49 кнопка отправки
+видна постоянно; новые сообщения открываются на последней странице с прокруткой после
+layout, обновления статусов сохраняют позицию чтения.
 
-Public main does not yet reproduce the distributed Android APK. Matching source
-publication remains open. This documentation update does not publish that source,
-change servers, revoke keys or change signed update catalogs.
+Beta49:153 Android unit, lint/build и native gesture/scroll passed; синтетические
+рендеры просмотрены. Установленный и публичный APK совпали по SHA256. Подпись прежняя,
+данные не очищались. Doze IDLE около122с и возврат ACTIVE подтверждены; служба сохранилась.
+Пользователь слышал уведомление, но время относительно выхода из Doze не заметил:
+доставка именно в IDLE и её задержка не подтверждены. Тестовые настройки восстановлены.
+[Подробная приёмка и откат](releases/2026-09-23-voice-scroll-beta49.ru.md).
 
-Repository-wide licensing, private security reporting, Windows publisher signing,
-broader platform acceptance and the commercial access model remain open.
-[Next actions](PLAN.md) · [Documentation](README.md).
+Linux/Windows0.2.10 остаются кандидатами. Linux24 layout checks и короткая матрица
+RU/NL × AWG3.1/TCP прошли в предыдущих сессиях. Windows native UI и ordinary-user
+broker, AWG/TCP CI прошли для54506d8. Client builds: Linux/Windows success, Android
+failed на setup-android@v3, release skipped. Полный выпуск и физический ПК не приняты.
+[Кандидаты и необходимые проверки](releases/2026-09-23-invitation-link-ui.ru.md).
+
+## Ограничения
+
+- Длительный фон, Doze-доставка, перезапуск/OEM и Android13+ уведомления требуют приёмки.
+- Российская сеть, длительная устойчивость и полностью недоступный gateway не закрыты.
+- Desktop не имеет подтверждённого равенства возможностей с Android-мессенджером.
+- Общий выпуск клиентов, новая страница приглашения и соответствующий исходный checkpoint впереди.
+- Подписки/оплата, независимый аудит безопасности и общая лицензия не заявляются готовыми.
+
+Доступ только по приглашению, ключи индивидуальные и отзывные. Лимиты20 новых referral
+claims на приглашающее устройство за24ч и500 общих мест — параметры, не текущий остаток.
+Прямые приглашения используют отдельный запас. Публичный main пока не воспроизводит
+распространяемый APK49: публикация документации не равна публикации его исходников.
+
+[Следующие действия](PLAN.md) · [Карта документации](README.md).
+
+Документация пересмотрена для beta49: [отчёт аудита](releases/2026-09-23-documentation-beta49.ru.md).

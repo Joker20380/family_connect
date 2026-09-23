@@ -27,13 +27,14 @@ from shared architecture. Device provisioning/configuration is distinct from the
 ## Messenger
 
 [Design](reticulum-messenger.ru.md) · [Core](../messenger/README.ru.md) ·
-[Android UI checkpoint](releases/2026-09-19-android-chat-ui.ru.md) ·
+[Android voice/UI checkpoint](releases/2026-09-23-voice-scroll-beta49.ru.md) ·
 [Foreground delivery/animation evidence](releases/2026-09-19-android-beta16.ru.md).
 
 The core uses separate chat identities, encrypted storage and existing RNS/LXMF
 components. Android integrates native screens and a carrier. Early core notes saying
-there is no Android UI are historical, not the current pilot state. Background push
-and broader restart/offline acceptance remain open.
+there is no Android UI are historical, not the current pilot state. Android now has a foreground delivery service, notifications, text edits and voice.
+Screen-off notification delivery was confirmed; deep Doze latency and broader
+restart/offline acceptance remain open. There is no FCM integration.
 
 ## Experimental relay network
 

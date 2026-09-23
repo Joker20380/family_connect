@@ -24,8 +24,8 @@ Do not put exploit details, credentials, invitation tokens or personal data in a
 - [Privacy notes](docs/privacy.md): data and metadata exposure, including limitations.
 - [Desktop release verification](docs/updates.en.md): offline catalog signing, increasing
   sequence numbers and artifact hashes. Catalog signing is not Windows Authenticode.
-- [Android beta19 checks](docs/releases/2026-09-19-beta19-download.ru.md): immutable APK
-  and checksum. Android friends updates are manual and use a consistent beta signing key.
+- [Android beta49 checks](docs/releases/2026-09-23-voice-scroll-beta49.ru.md): immutable APK
+  and checksum. Android friends checks for updates; user-confirmed installs use a consistent beta signing key.
 
 The operator, signing authority, gateway and device OS remain trust boundaries. Compromised
 administrator access, traffic correlation and a compromised gateway are not solved by a VPN.

@@ -1,6 +1,15 @@
 # Documentation
 
+Текущая доработка: [голосовые beta49: жесты, прокрутка и фон](releases/2026-09-23-voice-scroll-beta49.ru.md) · [мессенджер и уведомления](testing/messenger-notices.ru.md).
+
+- [family_connect: обновления Android, язык, бренд и карта](releases/2026-09-20-updater-language-brand.ru.md).
+
+- [Native Friends AWG 3.1 на Linux/Windows: проверки и rollout](releases/2026-09-20-desktop-awg31.ru.md).
+
 [Product introduction](../README.md) · [Русская версия](../README.ru.md)
+
+Updated23 September2026. Android updater: beta49; initial invitation page: beta35.
+[Current distribution](releases.md) · [Documentation required with every version](releases.md#documentation-with-every-version).
 
 Start with the guide for your role. [STATUS](STATUS.md) is the source of truth for
 installed/deployed versions; dated reports preserve what was checked at that time.
@@ -36,11 +45,12 @@ installed/deployed versions; dated reports preserve what was checked at that tim
 ## Project
 
 - [Current state](STATUS.md) and [working plan](PLAN.md).
+- [Desktop Friends TCP recovery and refined Linux UI](releases/2026-09-20-desktop-friends-apply.ru.md).
 - [Desktop identity storage and recovery checks](releases/2026-09-19-desktop-identity-storage.ru.md).
 - [Desktop modernization](desktop-modernization.ru.md) and [first integration checks](releases/2026-09-19-desktop-friends-foundation.ru.md).
-- [Roadmap](ROADMAP.ru.md); the first dated section takes precedence over older plans.
+- [Roadmap](ROADMAP.ru.md); historical plans are linked separately.
 - [Release model](releases.md) and [GitHub Releases](https://github.com/Joker20380/family_connect/releases).
-- [Current Android download verification](releases/2026-09-23-public-client-status.ru.md).
+- [Three-platform download verification](releases/2026-09-20-three-platform-downloads.ru.md).
 - [Licensing gaps](licensing.md).
 - [Public presentation audit](releases/2026-09-19-github-presentation.ru.md).
 

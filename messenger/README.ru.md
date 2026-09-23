@@ -1,3 +1,5 @@
+> Текущее приложение: [Android beta49](../docs/releases/2026-09-23-voice-scroll-beta49.ru.md), текст/правки/голосовые и фоновая служба. Ниже — описание модулей и исторических этапов ядра; старые ограничения UI не описывают актуальную APK. Публичный source checkpoint может отставать от приложения, см. [STATUS](../docs/STATUS.md).
+
 # Текстовое ядро мессенджера — прототип
 
 Это отдельная библиотека, ещё не экран чата в Android. Она использует LXMF 1.1.1
@@ -133,3 +135,74 @@ GET совместим с нашим Mailbox. Установленное Android
 в фон отменяется. `close()` должен вернуть True до закрытия Store. Это получение
 почты; отправка outbox и Android lifecycle ещё не подключены.
 [Контракт, проверки и ограничения](../docs/releases/2026-09-13-messenger-event-sync.ru.md).
+
+## Локальный API для Android owner — 19.09.2026
+
+`LocalChat(directory, key, create=True)` — только первая регистрация в новом
+каталоге; `create=False` — только открытие существующей истории/identity.
+Ошибка открытия не разрешает автоматически создавать новый ключ или identity.
+Ключ32 bytes поступает от платформы; API не реализует Keystore/Chaquopy packaging.
+RNS должен быть инициализирован владельцем один раз до операций с ядром.
+
+`profile()` возвращает публичный ключ, LXMF address и SHA256 fingerprint полного
+ключа. `contact_card(public_hex)` только показывает карточку; `trust_contact(public,
+fingerprint)` вызывается после независимой проверки отпечатка пользователем.
+Совпадение переданных строк само по себе не доказывает личность собеседника.
+Hex в API — канонический lowercase. `queue(address, text)` сохраняет сообщение
+до возврата ID; успешный возврат ещё не означает отправку или доставку.
+`history(address, offset=0, limit=50)` выдаёт до100 сообщений в порядке добавления,
+`total` и `next_offset`; ciphertext/envelope/packed bytes/attempt tokens не выдаются.
+Старый `sending` после перезапуска отображается как `queued`, подписанные байты
+сохраняются для существующего механизма повторов. Статусы `relayed` и `delivered`
+не объединяются. Без attach_delivery отправка не запускается.
+
+LocalError содержит фиксированный код, а не текст ошибки хранилища. Один owner
+сериализует операции и close. При attach_delivery close сначала отменяет и дожидается worker;
+при close_pending Store и ключ остаются у владельца до повторного close.
+Формат Store1 не меняется, старый prototype API совместим. Защита от удаления
+отдельных записей/отката всей базы не добавлена.
+[Проверки, ограничения и следующий этап](../docs/releases/2026-09-19-messenger-local.ru.md).
+
+## Двусторонний обмен по событиям — 19.09.2026
+
+`DeliveryController` заменяет pull-only `SyncController` для одного Mailbox;
+запускать оба одновременно нельзя. `Mailbox.exchange()` на одном link/deadline
+получает до10 сообщений/48KB, затем отправляет до4 из durable outbox. Частичный
+успех сохраняется; после ошибки UI должен перечитать историю. `relayed` — только
+подтверждение узла, не доставка собеседнику.
+
+Работа разрешена только при `online=True, foreground=True`. Commit очереди,
+возврат сети/экрана, ручное обновление или incoming hint будят один worker.
+Известный остаток обрабатывается с cooldown4с; пустой успех не запускает опрос.
+Временная ошибка допускает до3 автоматических повторов с backoff до300с;
+постоянная ошибка ждёт нового события. Переход в фон отменяет текущий обмен.
+Отвергнутые сообщения остаются на узле; отсутствие purge останавливает автодозагрузку.
+
+`LocalChat.attach_delivery(source, node_public)` принимает доверенный узел и IN
+LXMF destination этой identity от владельца carrier, затем `delivery_update`.
+Эта привязка не доступна через произвольный JSON. `delivery_state/request_sync`
+подготовлены в Python bridge; native carrier/lifecycle пока не подключены.
+Непрерывный приём, Doze, Android enrollment и runtime остаются следующими этапами.
+[Проверки и rollout/rollback](../docs/releases/2026-09-19-messenger-delivery.ru.md).
+
+## Android carrier — 19.09.2026
+
+`fc_chat_store.Session.configure_delivery(host, port, public_hex, callbacks)` и
+`ChatLocalAndroid.configureDelivery` привязывают проверенный bootstrap к owner.
+`deliveryUpdate(online, foreground)` вызывается платформой вне UI thread.
+`configure_delivery/delivery_update` не входят в публичный JSON invoke allowlist.
+Ни configure, ни open не открывают сокет до разрешающего lifecycle события.
+
+CarrierMailbox использует одну короткую TCP/RNS сессию на exchange. Shared control
+session lock не допускает одновременных control/chat carriers; busy повторяется
+ограниченно. Каждый socket до connect должен пройти Java bindSocket на underlying
+non-VPN network. Нет DNS fallback и встроенного RNS reconnect. Connect ограничен5с
+и общим deadline; отмена во время connect наблюдается после его возврата/таймаута.
+Source поддерживает только mailbox decrypt, без direct inbound/announce и фонового
+LXMF router. Используется существующее шифрование закрытого mailbox, новый протокол
+или отдельное обещание forward secrecy не вводится.
+
+После exchange закрываются link/socket/interface, при Session.close сначала worker,
+затем Store/destination. Сохраняется identity из зашифрованного Store. Это исходники
+bridge/carrier; Activity lifecycle, enrollment и реальная Android network acceptance
+ещё не выполнены. [Отчёт](../docs/releases/2026-09-19-android-chat-carrier.ru.md).

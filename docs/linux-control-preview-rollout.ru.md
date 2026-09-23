@@ -1,5 +1,22 @@
 # Linux GUI/control preview — план ручного пилота
 
+## Актуальный paired Friends запуск — 2026-09-20
+
+Для нового Friends preview используйте **одно окружение** для GUI и ядра:
+создайте venv системным `/usr/bin/python3 -m venv --system-site-packages`, затем
+установите туда зависимости из `provisioning/requirements.lock` проверенного bundle.
+Запускайте `scripts/run_control_preview.py gui` через `venv/bin/python`.
+Системные GI/Gtk4/libadwaita остаются обязательными. Launcher проверяет наличие
+Friends dependencies; больше не допускается тихое исчезновение Friends в paired GUI.
+
+Точный source/bundle и приёмка: [отчёт20.09](releases/2026-09-20-desktop-friends-apply.ru.md).
+Это source preview, не установленное обновление. Не используйте старые hashes ниже
+для этого этапа. Не запускайте legacy GUI параллельно с Friends apply/recovery.
+Для Friends recovery достаточно повторно запустить **тот же paired GUI**: startup
+сначала завершает rollback. Прежняя команда `control recover` ниже относится к
+managed Stage5 journal, а не к `friends.application.json`; она не снимает Friends owner.
+Не удаляйте operation state или identity/cache/journal при ошибке восстановления.
+
 **CI health исправления принят:** Linux source d7c3d79; последующие native Clients/Android source9092594 прошли. Исходный Android failure сохранён. [Точные результаты](releases/2026-09-13-linux-control-ci.ru.md).
 
 **Последний результат:** исправленный bundle66152538ee2a4f3e прошёл живой Linux
@@ -49,10 +66,10 @@ install -d -m 700 "$preview_parent"
 # Только для нового пустого preview_parent; не распаковывать поверх прежнего комплекта.
 tar -xzf /tmp/fc-accepted-preview/FamilyConnect-Control-Linux-preview-bc908a5f084a8bb6.tar.gz -C "$preview_parent"
 preview="$preview_parent/FamilyConnect-Control-preview"
-python3 -m venv "$preview_parent/venv"
+/usr/bin/python3 -m venv --system-site-packages "$preview_parent/venv"
 "$preview_parent/venv/bin/pip" install -r "$preview/provisioning/requirements.lock"
 /usr/bin/python3 "$preview/scripts/run_control_preview.py" verify
-/usr/bin/python3 "$preview/scripts/run_control_preview.py" gui
+"$preview_parent/venv/bin/python" "$preview/scripts/run_control_preview.py" gui
 ```
 
 GTK берётся из системного Python. Cairo/GTK_A11Y environment overrides для CI не

@@ -1,0 +1,41 @@
+{
+  "rollout": {
+    "backup": "20260919-144035",
+    "direct_invites": 50,
+    "referral_limit": 500
+  },
+  "live": {
+    "direct_unused": 50,
+    "referral_remaining": 500,
+    "https_chain": true,
+    "idempotent": true,
+    "revocation": true,
+    "csp": true,
+    "synthetic_cleanup": true
+  },
+  "source_sha256": {
+    "185.251.89.19": {
+      "control/friends/access.py": "0021fdf90c0147b78b290ee6d8661024d8f69493fd1a60c0d5dae5a12e846a5a",
+      "control/friends/chat.py": "2c59173fb10dd818aa54e16888ddc00d6a66ac142f7f89ca466384ee2dcc9bf4",
+      "control/friends/referrals.py": "01996103fc6e510c5093d6cca04632d4943432812ae3a4bf57f310eb84f529e2",
+      "deploy/friends/access-api.py": "407064b0584da19d84a5fe8a9472c6d180423ecac2e40db2d60f8bf586b0f18d"
+    },
+    "186.246.45.246": {
+      "messenger/membership.py": "a0c7513ceed6e58e83026066db5b3d01a595c408424185e9ebc8e21bd89cc4b4",
+      "pilot/messenger/accept_membership.py": "a09a190fe94d8268301521e5af072c364b272195d5f42d89ee9dad59889f063a"
+    }
+  },
+  "tests": {
+    "general": 512,
+    "messenger": 114,
+    "focused": 13,
+    "java_compile": true,
+    "qr_decode_sizes": [
+      512,
+      360,
+      280
+    ],
+    "browser_checks": 6
+  },
+  "apk_built": false
+}

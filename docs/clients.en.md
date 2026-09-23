@@ -6,8 +6,8 @@ Status checked 2026-09-23. Client features and release versions differ by platfo
 
 ## Android
 
-Use the [friends beta guide](getting-started.en.md): Android 8+, ARM64 beta35,
-invitation activation, VPN and pilot text messenger. The APK is distributed through
+Use the [friends beta guide](getting-started.en.md): Android 8+, ARM64 beta49,
+invitation-based access, VPN, text and voice messages. The APK is distributed through
 an invitation page and HTTPS download; it is not yet a GitHub or app-store release.
 The [client workflow](../.github/workflows/clients.yml) documents source-build requirements.
 CI debug APKs are not update packages for an installed friends beta.
@@ -56,7 +56,7 @@ Published desktop onboarding is not the newer Android friends activation flow.
 ## Updates and limits
 
 Desktop update checks verify an offline-signed catalog and artifact hashes; see
-[updates](updates.en.md). Android friends updates are manual, using the same beta key.
+[updates](updates.en.md). Android friends checks for updates in the app; Android asks the user to install the APK signed with the same beta key.
 A successful build or installer check does not establish live VPN reliability on every
 network. [Current platform evidence](STATUS.md) and dated release reports separate
 installation, UI, networking and recovery tests.

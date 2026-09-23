@@ -1,5 +1,29 @@
 # Android CI и защищённое состояние — 2026-09-14
 
+## Исправления перед раздачей — 2026-09-14
+
+Clients34855992025/sourcec98d789 не принят: Android TcpRuntimeTest остановился с
+VPN remains после третьего переключения (TCP→WG→TCP),18 HTTP/52 DNS peer counts.
+Linux/Windows success. Диагностический artifact240997646 bytes проверен по API digest.
+Проверка не ослаблена: f4f320f добавляет закрытие Xray TUN stack при завершении
+workerless inbound, до освобождения Android fd. Новый CI требуется до подписания.
+
+Серверная проверка перезапуска нашла umask077→server.json0600 вместо0640:
+fc-friends не мог прочитать конфигурацию после restart. Исправлен fchmod0640 при
+atomic save;4 Python tests passed, включая regression с umask077/idempotency.
+Оба friends TCP сервиса восстановлены; повторные реальные TCP и AWG3.1 HTTPS/DNS
+проверки обеих стран после restart passed с прежними персональными профилями.
+Изменены только новые friends services, existing Pilot/product не затронуты.
+
+10 свежих инвайтов подготовлены в приватном ignored state-enroll/friends-pilot/
+FamilyConnect-invitations.txt, отдельно от phone acceptance invitation. Значения
+не напечатаны, не опубликованы, не переданы в Git/CI. Публичная download page
+подготовлена с gate на digest APK и receipt физической приёмки; пока не опубликована.
+Осталось: новый успешный CI, подписанный универсальный beta08/code8, установка
+Friends на Redmi,4 сочетания/force-stop/reconnect, APK+manual publication.
+Rollback только friends services/routes; не восстанавливать общие credentials.
+
+
 ## Проверка готовности по запросу пользователя — 2026-09-14 14:37 UTC
 
 Исходники beta08/code8: c98d789, отправлены в main. Clients34855992025:

@@ -1,0 +1,33 @@
+{
+  "source": "3f6f662 + local changes",
+  "backup": "20260919-141024",
+  "deployed_sha256": {
+    "186.246.45.246": {
+      "app/messenger/codec.py": "d2bd0a33af4f8283649d912523f5420287fc2685549f98aa9f7a4ca9da01b862",
+      "app/messenger/relay.py": "25d6f38def5ae0799ce7885b526321ad66ab056d2b84f635b613e32554b2a0f7",
+      "app/messenger/server.py": "01c4d94b9bce9b7137c4f9cc25eba3046bd57ac41f81ff683ad317a6b323077c",
+      "app/messenger/membership.py": "1e029f6a9208b4bf81e218b9f351385354c46ef9d7486d407c69552d51954828",
+      "accept_membership.py": "b3f89e7adf2b415e4dbc7021b075d73d69246e7669318a2dd01cefa19388cf3d"
+    },
+    "185.251.89.19": {
+      "app/control/friends/chat.py": "a11232b6202fcb6d7ab5ee8ee64098090bceb263dcdc13427214f3ebbd7eb20e",
+      "app/control/friends/chat_sync.py": "08635a9713259f21f39a2577f3777529198ec22d09a85e741be827ac06f43ac8",
+      "app/messenger/__init__.py": "5276c4dec78953223d5bc4296242b30411baf74ae2e5de55471a7485effbf415",
+      "app/messenger/admission.py": "73fbab8d4437bf0dc304f2608b290c9814f3af5c86a08c950995919f7f0fe913",
+      "access-api.py": "a7df21d46c0f9fbccf3393d3664f09c0a31e5500f148e5c1b9fc8a22f55609b8",
+      "chat-sync.py": "251c171eb578b65a99f4048502bb986f6e54c5bfe7a0bd2aee23cbaa15fcd9b4"
+    }
+  },
+  "live_checks": {
+    "registration": true,
+    "message_reply": true,
+    "revocation": true,
+    "synthetic_invites_revoked": 2
+  },
+  "tests": {
+    "project": 507,
+    "messenger": 114,
+    "java_source_compile": true,
+    "apk_built": false
+  }
+}

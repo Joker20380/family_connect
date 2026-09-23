@@ -2,15 +2,18 @@
 
 Validates local Markdown links, heading anchors and HTML image paths.
 Lists external URLs for a separate HTTP check; does not claim network validation.
-Historical reports are outside this public-entry-point check.
+Use --all to include every versioned/non-ignored Markdown document and historical report.
 """
 from pathlib import Path
-import re, urllib.parse, json, sys
+import re, urllib.parse, json, sys, subprocess
 ROOT=Path(__file__).resolve().parents[1]
 files=[ROOT/p for p in ['README.md','README.en.md','README.ru.md','SECURITY.md','CONTRIBUTING.md']]
 files += [ROOT/'docs'/p for p in ['README.md','architecture.md','getting-started.en.md','getting-started.ru.md','clients.en.md','clients.ru.md','privacy.md','licensing.md','releases.md','assets/README.md']]
 files += [ROOT/'.github/pull_request_template.md',ROOT/'.github/ISSUE_TEMPLATE/bug_report.md']
-if len(sys.argv) > 1:
+if sys.argv[1:] == ["--all"]:
+ names = subprocess.check_output(["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z"], cwd=ROOT).decode().split("\0")
+ files = [ROOT / name for name in sorted(set(names)) if name.endswith(".md") and (ROOT / name).is_file()]
+elif len(sys.argv) > 1:
  files = [ROOT / arg for arg in sys.argv[1:]]
 def anchors(p):
  text=p.read_text();result=set();counts={}

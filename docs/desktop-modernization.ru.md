@@ -1,3 +1,5 @@
+> Historical design/plan. Current delivery status: [STATUS](STATUS.md); active work: [PLAN](PLAN.md). Goals below are not guarantees of the current pilot.
+
 # Актуализация Linux и Windows — 2026-09-19
 
 Пользователь попросил обновить обе платформы до текущего состояния Android.
@@ -24,7 +26,7 @@ Windows-компьютер для пользовательской провер�
    referral и chat registration; Windows proof совместим с Python/Android и может
    использовать прежний WG-ключ. Этот протокольный блок реализован и тестируется.
 2. **Защищённое состояние и конфигурация.** Identity storage/строгий resume реализованы
-   ([проверки](releases/2026-09-19-desktop-identity-storage.ru.md)); journal/apply/configuration ещё впереди. Linux — интеграция с существующим
+   ([проверки](releases/2026-09-19-desktop-identity-storage.ru.md)); signed configuration/cache реализованы; Linux Friends TCP apply/recovery добавлены20.09. Native AWG3.1 ещё впереди. Linux — интеграция с существующим
    владельцем identity/provisioning. Windows — DPAPI по SID в broker, сохранение
    identity до сетевого запроса, resume без молчаливой генерации новых ключей,
    bounded pipe contract, подписанный каталог/sequence floor и materialization.

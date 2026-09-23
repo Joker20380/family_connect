@@ -1,5 +1,7 @@
 # Historical engineering index
 
+Full session logs preserved on23 September2026: [STATUS archive](STATUS.before-beta49-2026-09-23.md), [PLAN archive](PLAN.before-beta49-2026-09-23.md), [roadmap archive](ROADMAP.ru.before-beta49-2026-09-23.md). They record past states; current instructions are in [STATUS](STATUS.md) and [PLAN](PLAN.md).
+
 Preserved from public main before the product documentation update on 2026-09-19.
 For current versions and entry points use [the documentation map](README.md).
 

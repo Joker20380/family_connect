@@ -16,4 +16,4 @@ Dependency source / исходники зависимостей:
 
 TCP preview includes pinned Xray-core (MPL-2.0) and official Wintun 0.14.1. Original license texts and build hashes are installed under `tcp/licenses` and `tcp/build.json`. Xray source revision: d2758a023cd7f4174a5a5fa4ff66e487d4342ba0, https://github.com/XTLS/Xray-core . Wintun: https://www.wintun.net/ .
 
-AWG preview includes amneziawg-go revision 1cc94272ca8e9e223a5fe76382f5880f09d3c12d (MIT), https://github.com/amnezia-vpn/amneziawg-go ; original license and Wintun notice are installed under `awg/licenses`. The CI peer fixture is excluded from the installer.
+AWG preview includes amneziawg-go 3.1 revision b5928efb6ca19f0153958460c3d141f04abc5c2e with the local TUN startup patch (MIT), https://github.com/amnezia-vpn/amneziawg-go ; original license and Wintun notice are installed under `awg/licenses`. The CI peer fixture is excluded from the installer.

@@ -1,6 +1,6 @@
 # Product images
 
-`android-beta38-home.png` is the unchanged native View.draw render from beta38/code38, captured on the connected Android phone on 2026-09-23. It shows the device-tested candidate, not the publicly downloadable beta35. Country and protocol are selectable in the connection panel beneath the battery. VPN is off in the capture; the device was reconnected after tests. The image contains no invitation, contact, device identity or private key. This is the current landing-page image, not a generated mockup.
+`android-beta38-home.png` is the unchanged native View.draw render from beta38/code38, captured on the connected Android phone on 2026-09-23. It is a historical beta38 capture; the current Android update is beta49. Country and protocol are selectable in the connection panel beneath the battery. VPN is off in the capture; the device was reconnected after tests. The image contains no invitation, contact, device identity or private key. It remains on the landing page with an explicit version/date caption, not as a beta49 screenshot.
 
 [Build and verification record](../releases/2026-09-23-public-client-status.ru.md).
 

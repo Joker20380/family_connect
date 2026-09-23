@@ -56,3 +56,28 @@ intentionally disables those testers and must not be routine test cleanup. Revie
 later edits before restoring nginx `.before-invites` config; do not restore the old
 public credential endpoint. Keep existing registration/TLS renewal and Pilot working.
 Update clients with a higher version/code, without uninstalling their data.
+
+## Participant referrals (2026-09-19)
+
+The direct batch is now 50; a separate server-side campaign permits 500 referral
+claims. Activated devices sign the `refer` challenge to obtain a stable URL.
+The Android source displays it as QR; the public landing page explicitly claims
+one invitation, with a browser-persisted idempotency ID. A sponsor may issue 20
+new grants per rolling 24 hours. Revocation blocks new claims; prior child grants
+remain independent. This is not unique-person verification.
+
+Keep `referral.key`, `access.db` and `direct-50.json` backed up privately together;
+never rotate the key or reset the counters during an upgrade. Fresh installation
+requires `app/control/friends/referrals.py` and `invite/index.html` in the service
+root before `install-access.py`. That installer is first-install-only.
+
+See the [rollout, rollback, tests and remaining Android checks](../../docs/releases/2026-09-19-referrals.ru.md).
+The source QR screen has not been packaged/installed: the user's APK pause remains.
+
+## Compact Android download (2026-09-19)
+
+The invite page offers beta14 ARM64 (36.4 MB) and the immutable universal beta13
+fallback. Build compact explicitly with `-PfcTargetAbi=arm64-v8a`; default builds
+keep four ABIs. Verify with `pilot/android-awg/verify-apk.py --abis arm64-v8a`.
+Compact packaging compresses the unchanged native libraries; Android extracts them
+on install. [Artifact, checks and rollback](../../docs/releases/2026-09-19-android-beta14.ru.md).

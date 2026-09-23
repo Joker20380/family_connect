@@ -10,6 +10,10 @@ Android protects saved VPN profiles with Android Keystore-backed storage. The me
 has a separate identity and encrypted local storage; its Android key handling is in
 [ChatKeyVault.java](../clients/android/app/src/main/java/com/familyconnect/app/ChatKeyVault.java).
 Loss of the required keys can make local history unrecoverable. Do not uninstall to update.
+Voice recordings use private temporary files; leaving before sending cancels the draft.
+Sent voice and text edits travel through the encrypted messaging path. Service announcements
+are public information, not private E2E messages. Screen-lock notifications hide personal
+message text; notification permission and background delivery are separate from VPN.
 
 Windows uses a privileged broker with DPAPI and restricted storage; Linux uses platform
 profile storage and privileged helpers. Protection and recovery are not identical across

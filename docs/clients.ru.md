@@ -6,8 +6,8 @@
 
 ## Android
 
-[Инструкция Friends beta](getting-started.ru.md): Android 8+, ARM64 beta35,
-активация по приглашению, VPN и пилотный текстовый мессенджер. APK распространяется
+[Инструкция Friends beta](getting-started.ru.md): Android 8+, ARM64 beta49,
+доступ по приглашению, VPN, текст и голосовые. APK распространяется
 через страницу приглашения и HTTPS; в GitHub Releases и магазинах её пока нет.
 Для сборки используйте требования [client workflow](../.github/workflows/clients.yml).
 Debug APK из CI не предназначена для обновления установленной Friends beta.
@@ -56,7 +56,7 @@ sudo apt install python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 python3-cryptography net
 ## Обновления и ограничения
 
 Настольные обновления проверяют каталог с offline-подписью и хеши файлов:
-[описание](updates.ru.md). Android Friends обновляется вручную APK с прежним beta-ключом.
+[описание](updates.ru.md). Android Friends проверяет обновления в приложении; установку APK с прежним beta-ключом подтверждает пользователь.
 Успешная сборка или проверка установщика не подтверждает надёжность VPN в любой сети.
 [STATUS](STATUS.md) и датированные отчёты разделяют проверки установки, интерфейса,
 сети и восстановления.

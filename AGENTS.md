@@ -9,6 +9,11 @@ with this directory as the project root so these instructions are loaded.
 User instructions take precedence. Continue authorized work; do not ask again merely
 because a runbook describes a deployment step. Respect actual sandbox permissions.
 
+After every version change, update documentation in the same task: STATUS, PLAN,
+the dated release report, and applicable RU/EN guides/download links/checksums.
+Distinguish built, installed, publicly distributed and invitation-page versions;
+verify public artifacts before documenting rollout as complete.
+
 At the start, check git status and the latest deployment/release result. Preserve
 uncommitted work. Do not assume a build is installed or a commit is deployed. Before
 ending, update STATUS (including any unfinished work), PLAN and the dated release

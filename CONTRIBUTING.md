@@ -16,9 +16,9 @@ change. Tests should establish behavior, not merely repeat implementation detail
 
 ## Development setup and checks
 
-The public main branch is an earlier source snapshot than the distributed Android beta19.
+The public main branch is an earlier source snapshot than the distributed Android beta49.
 The matching source checkpoint remains to be published; the commands below describe
-the intended build/check process, not a reproducible beta19 build from current main.
+the intended build/check process, not a reproducible beta49 build from current main.
 
 - **Python/control/identity:** use an isolated virtual environment, install
   `control/requirements.lock` and `device_identity/requirements.lock`, then run
@@ -45,12 +45,18 @@ not a third copy. The PR checklist makes the translation check explicit.
 
 Use [STATUS](docs/STATUS.md) for current facts. Date historical reports and mark superseded
 instructions. Check relative links and anchors, render Mermaid in a compatible renderer,
-and visually inspect images. Run `python3 scripts/check_public_docs.py` for local links, anchors and image paths,
+and visually inspect images. Run `python3 scripts/check_public_docs.py --all` for local links, anchors and image paths,
 then check its external URL list and render changed Mermaid diagrams. Run
 `git diff --check`; there was no dedicated Markdown CI
 workflow at the time of this audit. Do not add guessed downloads or synthetic app screenshots.
 
 ## Releases
+
+After every version change, update STATUS, PLAN and the dated release report in the
+same task. Update the public RU/EN guides, download links and checksums when distribution
+changes. Record candidate, installed, public and invitation-page versions separately;
+include validation, rollback and outstanding checks. See the
+[version documentation checklist](docs/releases.md#documentation-with-every-version).
 
 Read [release distribution](docs/releases.md) and [update signing](docs/updates.en.md).
 Release assets are immutable. Offline signing follows successful platform checks and

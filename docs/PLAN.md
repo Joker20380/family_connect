@@ -1,35 +1,57 @@
-# Working plan / Рабочий план
+# Рабочий план / Working plan
 
-Updated 2026-09-23. Use [STATUS](STATUS.md) for verified versions.
+Обновлён 23.09.2026. Факты и версии: [STATUS](STATUS.md).
+История сохранена в [прежнем журнале](PLAN.before-beta49-2026-09-23.md).
 
-1. Refresh public versions and native screenshots for beta35 distribution / beta38 testing; see [publication record](releases/2026-09-23-public-client-status.ru.md). Earlier product documentation published to main (`9c4114b`); both languages, links, images
-   and Mermaid verified. Remaining metadata task: update About/topics when owner API
-   authentication is available. Do not choose a license implicitly.
-2. Reconcile and publish the current Android/messenger source checkpoint separately.
-   Preserve local work, verify dependencies and release receipts; documentation publication
-   does not rebuild or replace the working Android APK.
-3. Continue [Linux/Windows modernization](desktop-modernization.ru.md): signed Friends
-   profiles, sequence floors, AWG 3.1 compatibility, broker apply/recovery, then UI,
-   invitations and messenger. Identity storage checks passed; no new desktop release yet.
-4. Verify real Linux/Windows installation and networking and cross-platform messaging.
-   A physical Windows computer is not currently available for acceptance. Preserve the six-file Linux updater
-   contract; immutable releases and offline signing only after platform gates.
-5. Finish messenger offline/restart/background behavior and broader device acceptance.
-6. Decide license and commercial access model; resolve artwork rights, private reporting,
-   publisher signing and public privacy/retention policy before a paid public launch.
-   Existing pilot access is not changed by these planning notes.
+## Текущий приоритет
 
-Documentation rollback is a separate revert of this publication, without changing APKs,
-server state, device keys or signed catalogs. Future release rollback must preserve
-identity and monotonic update/configuration floors.
+По просьбе пользователя: продолжить общий план и пересмотреть всю документацию GitHub.
+**После каждого изменения версии обновлять документацию в той же работе.** Отдельно
+указывать локальную сборку, установленную, публичную и версию на странице приглашения.
+[Процедура](releases.md#documentation-with-every-version).
 
-[Presentation audit and owner commands](releases/2026-09-19-github-presentation.ru.md) ·
-[Previous public plan, historical](PLAN.before-2026-09-19.md).
+1. Сверить пользовательские RU/EN инструкции, загрузки и статус с реально выданными
+   артефактами; сохранить историю, проверить ссылки и опубликовать документацию в GitHub.
+2. Завершить этап4: Linux/Windows0.2.10, обработка приглашений, нативные проверки,
+   неизменяемые артефакты. Client builds54506d8: Linux/Windows success, Android setup-android@v3 failed,
+   release skipped; Windows AWG/TCP/UI/broker success. Исправить Android CI setup;
+   новый checkpoint исходников публиковать
+   отдельно от документации после проверки накопленных изменений.
+3. Проверить передачу ссылки приложению на каждой платформе; затем согласованно обновить
+   страницу приглашения/ссылки/CSP и необходимые каталоги. Сейчас страница выдаёт beta35,
+   Android updater —49. Старые desktop установщики не имеют нового обработчика ссылки.
+4. Закрывать оставшуюся сетевую приёмку по доступности устройств: Windows-ПК,
+   российская сеть, длительный сон/смена сети. Для Doze нужен повторный тест с точным
+   временем отправки и получения; предыдущий подтвердил только IDLE/recovery и уведомление.
+
+## Глобальные этапы
+
+| Этап | Состояние / следующий результат |
+| --- | --- |
+| 1. Продукт, WG, идентичности | Работает в пилоте; сохранить выдачу/отзыв и ключи |
+| 2. AWG и восстановление | AWG3.1 реализован; длительная и российская приёмка открыты |
+| 3. TCP REALITY | Реализован; общая сетевая приёмка открыта |
+| 4. Три клиента и выпуск | Текущий незавершённый этап, см. порядок выше |
+| 5. Независимый служебный канал | Частично реализован; HTTPS Friends не заменяет независимый ingress |
+| 6. Недоступный gateway | Нужна сквозная смена endpoint через независимый канал |
+| 7. Сервис и коммерческая версия | Объявления реализованы; оплата/подписки не реализованы |
 
 <a id="release-gates-three-platforms"></a>
+## Условия выпуска трёх платформ
 
-## Release gates
+- Android: совпадение версии/ABI/сертификата/хеша, unit/lint/build, native UI и VPN,
+  обновление без потери идентичности, приглашение по ссылке и фон на доступных устройствах.
+- Linux: извлечённый пакет, зависимости/helpers, обычный пользователь, GTK rendering
+  и взаимодействия, установка/обновление, приглашение и реальные транспорты.
+- Windows: native CI UI/broker/installer/AWG/TCP, обычный пользователь, URI handler;
+  физическую проверку отмечать отдельно, не заменять Linux cross-build.
+- Публиковать неизменяемые файлы; каталог подписывать offline только после проверки
+  скачанных platform CI artifacts. Не заменять прежний APK другой сборкой.
+- Согласовать загрузки/страницу/документацию; проверить внешнее скачивание и предусмотреть
+  откат метаданных. Не удалять данные устройств при обновлении или откате.
 
-Platform validation and immutable release signing remain required. The detailed
-[earlier three-platform gates](PLAN.before-2026-09-19.md#release-gates-three-platforms)
-are preserved; follow current STATUS and the release runbook for actual versions.
+## Отложенные задачи
+
+Долгий Doze/OEM/boot/Android13+, desktop messenger, iOS/macOS, балансировка gateway,
+лицензирование, private security reporting, Windows publisher signing и коммерческий
+запуск не закрываются успешной сборкой. Новые VPS не заказаны.
