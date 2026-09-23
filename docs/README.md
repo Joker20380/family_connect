@@ -1,6 +1,9 @@
 # Documentation
 
-Текущая доработка: [голосовые beta50: жесты, прокрутка и фон](releases/2026-09-23-switch-colors-beta50.ru.md) · [мессенджер и уведомления](testing/messenger-notices.ru.md).
+Этап4 принят пользователем как пилотный выпуск; следующий этап — независимый служебный канал.
+[Текущий план](PLAN.md) · [Основание приёмки](STATUS.md).
+
+Последние доработки: [голосовые beta50: жесты, прокрутка и фон](releases/2026-09-23-switch-colors-beta50.ru.md) · [мессенджер и уведомления](testing/messenger-notices.ru.md).
 
 - [family_connect: обновления Android, язык, бренд и карта](releases/2026-09-20-updater-language-brand.ru.md).
 
