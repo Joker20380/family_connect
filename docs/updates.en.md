@@ -1,5 +1,9 @@
 # Client updates
 
+Windows0.2.13+ uses a separate signed [Windows catalog](../updates/windows.json): schema2, platform=windows, sequence9 for0.2.13. Windows0.2.12 and earlier still read the legacy shared catalog0.2.9/sequence8 and can incorrectly report the newest manual preview as current. Install0.2.13 manually once, preserving identity and data. Later Windows versions are offered by Check for updates. Linux continues to use the legacy shared channel described below.
+
+Every Windows release must publish the accepted installer at `windows-v{version}/FamilyConnect-Setup-{version}-pilot-unsigned.exe`, then sign `updates/windows.json` offline using `scripts/sign_update.py --platform windows`, an increasing sequence and the accepted artifact directory. Never send the signing key to CI. Validate the public catalog with the client verifier and verify the full public installer hash. Keep the90-day lease renewed with a higher sequence.
+
 0.2.1 introduces opt-in Check for updates in Linux and Windows. The client downloads
 `updates/pilot.json` over HTTPS, verifies its Ed25519 signature against embedded
 `update.pub`, lease and monotonic sequence, then offers only a newer version. After

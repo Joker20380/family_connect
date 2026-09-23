@@ -43,3 +43,10 @@ and Gtk 4.8+/Adw 1.2+. Run GUI checks with dbus-run-session and Xvfb; headless C
 GSK_RENDERER=cairo, GTK_A11Y=none only in CI. Never set those for the installed app.
 Keep the six-file Linux archive compatible with existing updaters. Never publish before
 rendering and interaction checks; preserve immutable releases and offline signing.
+
+Windows0.2.13+ releases use the independent signed `updates/windows.json` catalog.
+After accepted native CI and artifact verification, publish the immutable Windows
+installer and sign this catalog offline with `scripts/sign_update.py --platform windows`
+and an increasing sequence. Update the Windows catalog with every Windows version;
+do not leave a newer public installer invisible to Check for updates. Preserve the
+legacy Linux/shared `updates/pilot.json`; Windows0.2.12 and earlier need one manual transition.

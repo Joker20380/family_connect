@@ -1,0 +1,57 @@
+{
+  "source": "c2984363222c1547917337bb5b66ea12bb992522",
+  "before_page_sha256": "7a6c77dfe979075c586e62e38b842be5dd3a2a44306090983bd5c560801138f3",
+  "checks": [
+    35921509421,
+    35921509348,
+    35921509214,
+    35921509244,
+    35921509381,
+    35921509334
+  ],
+  "client_ci": 35921509278,
+  "visual_ci": 35921509381,
+  "channel": "windows",
+  "catalog_sequence": 9,
+  "artifact": {
+    "file": "FamilyConnect-Setup-0.2.13-pilot-unsigned.exe",
+    "size": 49934846,
+    "sha256": "88f4274cd2aff07a73a5366f09b2f37301ccd442a67574a30eeaf7c587d4ae5b"
+  },
+  "installer_artifact": {
+    "id": 10777069157,
+    "name": "FamilyConnect-Windows-Installer-pilot-unsigned",
+    "digest": "sha256:f033d07532ccf631b7159c55472adeb9558130917ed870b83a5a21bc9b81b062"
+  },
+  "visual_artifact": {
+    "id": 10777068272,
+    "name": "windows-ui-renders",
+    "digest": "sha256:0eb15808bd0fbab4e519a3a95f5069691da84d02c4d5b3e29a6eb6a92b408724"
+  },
+  "public": {
+    "passed": true,
+    "source": "c2984363222c1547917337bb5b66ea12bb992522",
+    "artifact": {
+      "file": "FamilyConnect-Setup-0.2.13-pilot-unsigned.exe",
+      "size": 49934846,
+      "sha256": "88f4274cd2aff07a73a5366f09b2f37301ccd442a67574a30eeaf7c587d4ae5b"
+    },
+    "page_sha256": "37cdb194b2ae6c9e3753f262ab4bba24afbdbf6ee6458dd82d75355c1ff76368",
+    "github": "https://github.com/Joker20380/family_connect/releases/tag/windows-v0.2.13",
+    "android_discovery_unchanged": true,
+    "checked_at": "2026-09-23T21:37:38.020021+00:00"
+  },
+  "catalog": {
+    "artifact": {
+      "sha256": "88f4274cd2aff07a73a5366f09b2f37301ccd442a67574a30eeaf7c587d4ae5b",
+      "size": 49934846,
+      "url": "https://github.com/Joker20380/family_connect/releases/download/windows-v0.2.13/FamilyConnect-Setup-0.2.13-pilot-unsigned.exe"
+    },
+    "expires_at": 1797975329,
+    "issued_at": 1790199329,
+    "platform": "windows",
+    "schema": 2,
+    "sequence": 9,
+    "version": "0.2.13"
+  }
+}

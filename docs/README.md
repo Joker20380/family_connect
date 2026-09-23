@@ -8,13 +8,13 @@
 
 [Product introduction](../README.md) · [Русская версия](../README.ru.md)
 
-Updated23 September2026. Android updater and invitation page: beta50; invitation downloads: Linux0.2.10 / Windows0.2.12 preview.
+Updated23 September2026. Android updater and invitation page: beta50; invitation downloads: Linux0.2.10 / Windows0.2.13 preview.
 [Current distribution](releases.md) · [Documentation required with every version](releases.md#documentation-with-every-version).
 
 Start with the guide for your role. [STATUS](STATUS.md) is the source of truth for
 installed/deployed versions; dated reports preserve what was checked at that time.
 
-[Windows0.2.12: интерфейс, ключ и приглашение](releases/2026-09-23-windows0212-repaint.ru.md) · [English](releases/0.2.12.en.md).
+[Windows0.2.13: интерфейс, ключ и приглашение](releases/2026-09-23-windows0213-updater.ru.md) · [English](releases/0.2.13.en.md).
 
 ## Users
 
