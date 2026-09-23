@@ -36,22 +36,6 @@ jobs:
           Stop-Service FamilyConnectBroker
           Copy-Item patched/* "$env:ProgramFiles/Family Connect/" -Recurse -Force
           Start-Service FamilyConnectBroker
-          Write-Host '::notice title=Acceptance stage::Layout'
-          $p=Start-Process "$env:ProgramFiles/Family Connect/FamilyConnect.exe" -ArgumentList '/layout-test' -PassThru
-          if(-not $p.WaitForExit(200000)){$p.Kill();throw 'Layout timeout'}
-          if($p.ExitCode -ne 0){
-            $detail=Get-Content "$env:TEMP/fc-layout-check.txt" -Raw -ErrorAction SilentlyContinue
-            Write-Host "::error title=Layout::$($detail.Replace([char]13,' ').Replace([char]10,' '))"
-            throw 'Layout failed'
-          }
-      - name: Invitation rendering
-        shell: pwsh
-        run: |
-          $data=[Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:TEMP/Windows-invitation.png"))
-          for($i=0;$i -lt $data.Length;$i+=3000){
-            $part=$data.Substring($i,[Math]::Min(3000,$data.Length-$i))
-            Write-Host "::notice title=Invitation image $i::$part"
-          }
       - name: Compare administrator and ordinary user
         shell: pwsh
         run: |
@@ -90,6 +74,26 @@ jobs:
           if($result.elevated){throw 'Test user unexpectedly elevated'}
           # The legacy process-open probe must reproduce access denial; the installed EXE above must succeed.
           if($result.ok -or $result.stage -ne 'server-identity' -or $result.win32Error -ne 5){throw 'Legacy failure not reproduced'}
+      - name: Check layouts after broker acceptance
+        shell: pwsh
+        run: |
+          trap { Write-Host "::error title=Acceptance failure::$($_.Exception.Message)"; exit 1 }
+          Write-Host '::notice title=Acceptance stage::Layout'
+          $p=Start-Process "$env:ProgramFiles/Family Connect/FamilyConnect.exe" -ArgumentList '/layout-test' -PassThru
+          if(-not $p.WaitForExit(200000)){$p.Kill();throw 'Layout timeout'}
+          if($p.ExitCode -ne 0){
+            $detail=Get-Content "$env:TEMP/fc-layout-check.txt" -Raw -ErrorAction SilentlyContinue
+            Write-Host "::error title=Layout::$($detail.Replace([char]13,' ').Replace([char]10,' '))"
+            throw 'Layout failed'
+          }
+      - name: Invitation rendering
+        shell: pwsh
+        run: |
+          $data=[Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:TEMP/Windows-invitation.png"))
+          for($i=0;$i -lt $data.Length;$i+=3000){
+            $part=$data.Substring($i,[Math]::Min(3000,$data.Length-$i))
+            Write-Host "::notice title=Invitation image $i::$part"
+          }
       - uses: actions/upload-artifact@v4
         if: always()
         with:
