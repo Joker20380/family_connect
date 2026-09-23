@@ -17,6 +17,8 @@ internal sealed class MainForm:Form
     bool polling,pollError;long revision;
     Func<Request,Task<Reply>> call=Wire.Call;
     readonly Label title=new(),status=new(),description=new(),detail=new(),notice=new();
+    readonly Button enroll=new ModernButton();
+    bool NeedsInvitation=>(state is "off" or "inactive")&&!friendsReady&&!(AwgSelected?awgReady:TcpSelected?tcpReady:false);
     readonly Button connect=new ModernButton(),request=new ModernButton(),activate=new ModernButton(),language=new ModernButton(),update=new ModernButton(),friends=new ModernButton();
     AppUpdate? availableUpdate;
     readonly System.Windows.Forms.Timer poll=new(){Interval=3000};
@@ -72,7 +74,7 @@ internal sealed class MainForm:Form
             label.AutoSize=true;label.Dock=DockStyle.Fill;label.TextAlign=ContentAlignment.MiddleLeft;
             label.Margin=new Padding(0,6,0,6);
         }
-        foreach(var button in new[]{connect,request,activate,language,update,friends}){
+        foreach(var button in new[]{connect,request,activate,language,update,friends,enroll}){
             button.AutoSize=true;button.MinimumSize=new Size(0,46);button.Dock=DockStyle.Fill;
             button.BackColor=Color.FromArgb(7,32,24);button.FlatAppearance.BorderColor=Color.FromArgb(67,142,121);
             button.FlatAppearance.MouseOverBackColor=Color.FromArgb(16,61,46);button.FlatAppearance.MouseDownBackColor=Color.FromArgb(67,142,121);
@@ -116,14 +118,14 @@ internal sealed class MainForm:Form
         accessPage=new FriendsForm(ru,r=>call(r));accessPage.RegistrationChanged+=()=>{friendsReady=true;PaintState();};
         var selectors=new LiveNetworkPanel(country,mode,!smoke&&!layoutTest);telemetry=selectors;
         int row=0;
-        foreach(Control child in new Control[]{card,selectors,friends,request,activate,detail,notice,update,accessPage})
+        foreach(Control child in new Control[]{card,enroll,selectors,friends,request,activate,detail,notice,update,accessPage})
             content.Controls.Add(child,0,row++);
         var version=new Label{Text="v"+Application.ProductVersion.Split('+')[0],AutoSize=true,Dock=DockStyle.Fill,ForeColor=Color.FromArgb(153,196,181)};
         language.MinimumSize=new Size(0,36);language.Dock=DockStyle.Fill;
         foreach(var child in new Control[]{language,version,routeTitle,routeMap,messengerNote})content.Controls.Add(child,0,row++);
-        pages["status"]=new Control[]{card,selectors};
+        pages["status"]=new Control[]{card,enroll,selectors};
         pages["route"]=new Control[]{routeTitle,routeMap};
-        pages["settings"]=new Control[]{friends,update,language,version,notice};
+        pages["settings"]=new Control[]{friends,update,language,version};
         pages["access"]=new Control[]{accessPage};request.Visible=activate.Visible=false;
         pages["messenger"]=new Control[]{messengerNote};
         footer.Dock=DockStyle.Fill;footer.Height=64;footer.Padding=new Padding(12,2,12,8);footer.Margin=Padding.Empty;footer.ColumnCount=4;footer.RowCount=1;footer.RowStyles.Add(new RowStyle(SizeType.Percent,100));
@@ -151,6 +153,7 @@ internal sealed class MainForm:Form
         };
         connect.Click+=async(_,_)=>await Execute(new(ConnectionAction()));
         friends.Click+=(_,_)=>{page="access";PaintState();};
+        enroll.Click+=(_,_)=>{page="access";PaintState();};
         language.Click+=(_,_)=>{ru=!ru;country.Items[0]=T("Нидерланды","Netherlands");country.Items[1]=T("Россия","Russia");if(saveLanguage)try{using var preferences=Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\family_connect");preferences.SetValue("Language",ru?"ru":"en");}catch(Exception){detail.Text=T("Не удалось сохранить язык.","Could not save language.");}PaintState();FitWindow();};
         poll.Tick+=async(_,_)=>{if(pendingInvitation.Length>0&&!busy)await AcceptInvitation();else await PollStatus();};
         FormClosing+=(_,e)=>{if(busy){e.Cancel=true;return;}};
@@ -161,7 +164,7 @@ internal sealed class MainForm:Form
             ApplyDpiMetrics();FitWindow();
             if(layoutTest)return;
             if(smoke){Close();return;}
-            await Execute(new("status"));if(pendingInvitation.Length>0)await AcceptInvitation();else if(state is "off" or "inactive")await Execute(new("friends-register"));poll.Start();loadTimer.Start();await RefreshLoad();
+            await Execute(new("status"));if(state is "off" or "inactive")await EnsureIdentity();if(pendingInvitation.Length>0)await AcceptInvitation();else if(friendsReady&&(state is "off" or "inactive"))await Execute(new("friends-register"));poll.Start();loadTimer.Start();await RefreshLoad();
         };
         AutoScaleDimensions=new SizeF(96,96);
         ResumeLayout(true);
@@ -171,6 +174,17 @@ internal sealed class MainForm:Form
         pendingInvitation=uri["familyconnect://invite/".Length..];page="status";
         if(WindowState==FormWindowState.Minimized)WindowState=FormWindowState.Normal;
         Activate();
+    }
+    async Task EnsureIdentity(){
+        try{
+            var reply=await call(new("friends-create"));
+            if(!reply.Ok||reply.Code is null){detail.Text=FriendsForm.Error(reply.Error,ru);return;}
+            using var identity=System.Text.Json.JsonDocument.Parse(reply.Code);
+            var reference=identity.RootElement.GetProperty("device").GetString();
+            if(reference is null||!System.Text.RegularExpressions.Regex.IsMatch(reference,@"\A[0-9a-f]{32}\z"))throw new IOException();
+            accessPage.SetDevice(reference);
+        }catch(Exception){detail.Text=T("Не удалось создать или открыть ключ устройства. Проверьте службу Family Connect в настройках доступа.","Could not create or open the device key. Check Family Connect service in access settings.");}
+        finally{PaintState();}
     }
     async Task AcceptInvitation(){
         if(busy)return;
@@ -274,6 +288,16 @@ internal sealed class MainForm:Form
     static void CheckPolling()
     {
         TraceLayout("access page");FriendsForm.CheckUi();TraceLayout("polling state");
+        using(var fresh=new MainForm(true,true)){
+            fresh.state="inactive";fresh.Show();fresh.PaintState();
+            var actions=new List<string>();
+            fresh.call=r=>{actions.Add(r.Action);return Task.FromResult(new Reply(true,"inactive",Code:"{\"device\":\""+new string('a',32)+"\"}"));};
+            Pump(fresh.EnsureIdentity());
+            if(!fresh.enroll.Visible||fresh.dial.Enabled||actions.Count!=1||actions[0]!="friends-create")throw new Exception("Fresh device onboarding skipped invitation or local key creation");
+            fresh.enroll.PerformClick();Application.DoEvents();
+            if(fresh.page!="access"||!fresh.accessPage.Visible)throw new Exception("Activation entry is unreachable");
+            fresh.Close();
+        }
         using var form=new MainForm(true,true);form.state="off";form.awgReady=true;form.Show();form.PaintState();
         int changes=0;form.status.TextChanged+=(_,_)=>changes++;
         var response=new TaskCompletionSource<Reply>();int calls=0;
@@ -400,6 +424,8 @@ internal sealed class MainForm:Form
             "on"=>T("Туннель включён","Tunnel is on"),"off"=>T("Готов к подключению","Ready to connect"),
             "inactive"=>friendsReady?T("Готов к подключению","Ready to connect"):T("Получить доступ","Get access"),"other-user"=>T("VPN занят другим пользователем","VPN used by another user"),
             "pending"=>lastError=="tcp-reconnecting"?T("Восстанавливаем подключение…","Reconnecting…"):T("Подключение меняется…","Connection changing…"),_=>T("Статус недоступен","Status unavailable")};
+        if(NeedsInvitation)status.Text=T("Нужно приглашение","Invitation required");
+        enroll.Text=T("Активировать по приглашению","Activate with invitation");
         description.Text=(Country=="nl"?T("Нидерланды","Netherlands"):T("Россия","Russia"))+" · "+(TcpSelected?"TCP REALITY":"AWG 3.1");
         connect.Text=state=="on"?T("Отключить","Disconnect"):state=="pending"&&(automatic||transport is "tcp" or "awg")?T("Отменить подключение","Cancel connection"):T("Подключить","Connect");
         connect.Enabled=!busy&&(state=="on"||(state=="pending"&&(automatic||transport is "tcp" or "awg"))||((state is "off" or "inactive")&&(friendsReady||(AutoSelected?(awgReady||tcpReady||state=="off"):AwgSelected?awgReady:TcpSelected?tcpReady:state=="off"))));
@@ -408,7 +434,7 @@ internal sealed class MainForm:Form
         friends.Text=T("Устройство и доступ", "Device and access");friends.Enabled=!busy;
         request.Text=T("Получить код устройства","Get device code");request.Enabled=!busy;
         activate.Text=AwgSelected?T("Открыть AWG-активацию","Open AWG activation"):TcpSelected?T("Открыть TCP-активацию","Open TCP activation"):T("Открыть файл активации","Open activation file");activate.Enabled=!busy&&!AutoSelected&&(state=="off"||state=="inactive");
-        notice.Text=friendsReady?T("Личный ключ сохранён на устройстве.","Your personal key is stored on this device."):T("Доступ оформляется автоматически. Если не удалось — откройте «Устройство и доступ» в настройках.","Access is registered automatically. If it fails, open Device and access in Settings.");
+        notice.Text=T("На телефоне: Настройки → Пригласить друга. Откройте эту ссылку на компьютере или вставьте её в разделе активации. Ключ создаётся автоматически; доступ выдаётся по приглашению.","On your phone: Settings → Invite a friend. Open that link on this PC or paste it in activation. The key is created automatically; access requires an invitation.");
         update.Text=availableUpdate is null?T("Проверить обновления","Check for updates"):T("Установить обновление","Install update");update.Enabled=!busy;
         accessPage.SetLanguage(ru);
         language.Text=T("Язык: Русский → English","Language: English → Русский");
@@ -440,6 +466,7 @@ internal sealed class MainForm:Form
         routeTitle.Text=T("Маршрут подключения","Connection route");
         messengerNote.Text=T("Мессенджер пока доступен в Android. Версия для компьютера в разработке.","Messaging is currently available on Android. Desktop messaging is in development.");
         foreach(var group in pages)foreach(var control in group.Value)control.Visible=group.Key==page;
+        enroll.Visible=page=="status"&&NeedsInvitation;notice.Visible=page=="status"&&NeedsInvitation;
         foreach(var item in nav){
             item.Value.Text=item.Key switch{"status"=>T("СТАТУС","STATUS"),"messenger"=>T("МЕССЕНДЖЕР","MESSENGER"),"route"=>T("МАРШРУТ","ROUTE"),_=>T("НАСТРОЙКИ","SETTINGS")};
             item.Value.ForeColor=(item.Key==page||(page=="access"&&item.Key=="settings"))?Color.FromArgb(255,173,70):Color.FromArgb(153,196,181);
