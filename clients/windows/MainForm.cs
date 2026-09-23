@@ -126,7 +126,7 @@ internal sealed class MainForm:Form
         pages["settings"]=new Control[]{friends,update,language,version};
         pages["access"]=new Control[]{accessPage};request.Visible=activate.Visible=false;
         pages["messenger"]=new Control[]{messengerNote};
-        footer.Dock=DockStyle.Fill;footer.Height=64;footer.Padding=new Padding(12,2,12,8);footer.Margin=Padding.Empty;footer.ColumnCount=4;footer.RowCount=1;
+        footer.Dock=DockStyle.Fill;footer.Height=64;footer.Padding=new Padding(12,2,12,8);footer.Margin=Padding.Empty;footer.ColumnCount=4;footer.RowCount=1;footer.RowStyles.Add(new RowStyle(SizeType.Percent,100));
         int column=0;
         foreach(string name in new[]{"status","messenger","route","settings"}){
             footer.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,25));
@@ -245,7 +245,7 @@ internal sealed class MainForm:Form
             foreach(var button in form.nav.Values){
                 var parent=button.Parent!;
                 if(button.Left<0 || button.Top<0 || button.Right>parent.ClientSize.Width || button.Bottom>parent.ClientSize.Height)
-                    throw new InvalidOperationException("Clipped navigation");
+                    throw new InvalidOperationException($"Clipped navigation: scale={scale}, page={selectedPage}, requested={size}, client={form.ClientSize}, footer={parent.ClientSize}, padding={parent.Padding}, button={button.Bounds}, text={button.Text}");
                 var text=TextRenderer.MeasureText(button.Text,button.Font,Size.Empty,TextFormatFlags.NoPadding|TextFormatFlags.SingleLine);
                 if(text.Width>button.Width-4 || text.Height>button.Height/2-4 || button.Height<48*form.DeviceDpi/96f)
                     throw new InvalidOperationException($"Clipped navigation text: {button.Text}, scale={scale}, client={form.ClientSize}, measured={text}, button={button.Size}");

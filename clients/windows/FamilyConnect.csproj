@@ -11,7 +11,7 @@
   <ItemGroup>
     <EmbeddedResource Include="../assets/land.json" LogicalName="FamilyConnect.Land.json" />
     <EmbeddedResource Include="TcpNetwork.ps1" LogicalName="FamilyConnect.TcpNetwork.ps1" />
-    <EmbeddedResource Include="../assets/dodecahedron.png" LogicalName="FamilyConnect.Brand.png" />
+    <EmbeddedResource Include="../assets/windows-door.png" LogicalName="FamilyConnect.Brand.png" />
     <Compile Remove="Tests/**/*.cs;BrokerTests/**/*.cs" />
     <PackageReference Include="BouncyCastle.Cryptography" Version="2.7.0" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="10.0.12" />

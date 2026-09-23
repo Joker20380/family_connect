@@ -28,10 +28,14 @@ jobs:
             Write-Output "::error title=Layout detail::$detail"
             throw 'Native UI checks failed'
           }
+      - name: Collect native UI evidence
+        if: always()
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force artifacts/windows-ui | Out-Null
+          Get-ChildItem "$env:TEMP/Windows-*.png","$env:TEMP/fc-layout-*.txt" -ErrorAction SilentlyContinue | Copy-Item -Destination artifacts/windows-ui/
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: windows-ui-renders
-          path: |
-            ${{ runner.temp }}/Windows-*.png
-            ${{ runner.temp }}/fc-layout-*.txt
+          path: artifacts/windows-ui/

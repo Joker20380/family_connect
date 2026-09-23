@@ -19,6 +19,7 @@ WizardStyle=modern
 SetupIconFile=app.ico
 UninstallDisplayIcon={app}\FamilyConnect.exe
 CloseApplications=yes
+ChangesAssociations=yes
 #ifdef SignedRelease
 SignTool=familyconnect
 SignedUninstaller=yes
