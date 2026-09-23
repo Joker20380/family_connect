@@ -22,13 +22,13 @@ internal sealed class MainForm:Form
     readonly Button connect=new ModernButton(),request=new ModernButton(),activate=new ModernButton(),language=new ModernButton(),update=new ModernButton(),friends=new ModernButton();
     AppUpdate? availableUpdate;
     readonly System.Windows.Forms.Timer poll=new(){Interval=3000};
-    readonly TableLayoutPanel content=new();
-    readonly Panel viewport=new();
-    readonly Panel shellHost=new(){Dock=DockStyle.Fill};
-    readonly TableLayoutPanel shell=new();
+    readonly BufferedLayoutPanel content=new();
+    readonly BufferedPanel viewport=new();
+    readonly BufferedPanel shellHost=new(){Dock=DockStyle.Fill};
+    readonly BufferedLayoutPanel shell=new();
     readonly TerminalHeader header=new();
-    readonly TableLayoutPanel footer=new();
-    readonly TableLayoutPanel card=new();
+    readonly BufferedLayoutPanel footer=new();
+    readonly BufferedLayoutPanel card=new();
     bool fitting;
     string page="status";
     readonly RouteMap routeMap=new();
@@ -204,6 +204,7 @@ internal sealed class MainForm:Form
     internal static void CheckLayouts()
     {
         TraceLayout("start");ServerLoad.Check();RouteMap.CheckPixels();TerminalHeader.CheckResizeInvalidation();
+        TraceLayout("settings repaint");CheckSettingsRepaint();
         TraceLayout("polling");
         CheckPolling();TraceLayout("preview");
         using(var preview=new MainForm(true,true)){
@@ -287,6 +288,24 @@ internal sealed class MainForm:Form
         }
     }
     static void TraceLayout(string value)=>File.WriteAllText(Path.Combine(Path.GetTempPath(),"fc-layout-progress.txt"),value);
+    static void CheckSettingsRepaint(){
+        using var form=new MainForm(true,true);form.state="off";form.awgReady=form.tcpReady=form.friendsReady=true;
+        form.Show();form.PaintState();Application.DoEvents();
+        int visibility=0,headerPaints=0;
+        form.enroll.VisibleChanged+=(_,_)=>visibility++;
+        form.header.Invalidated+=(_,_)=>headerPaints++;
+        for(int i=0;i<8;i++){
+            form.country.SelectedIndex=i%2;form.mode.SelectedIndex=i%2;Application.DoEvents();
+        }
+        if(visibility!=0||headerPaints!=0)throw new InvalidOperationException($"Settings repainted unrelated controls: activation={visibility}, header={headerPaints}");
+        form.page="settings";form.PaintState();Application.DoEvents();
+        foreach(Control child in form.content.Controls)child.VisibleChanged+=(_,_)=>visibility++;
+        visibility=0;form.PaintState();Application.DoEvents();
+        if(visibility!=0)throw new InvalidOperationException("Unchanged settings page toggled controls");
+        form.language.PerformClick();Application.DoEvents();
+        if(!form.language.Visible||!form.friends.Visible)throw new InvalidOperationException("Language change lost settings controls");
+        form.Close();
+    }
     static void CheckPolling()
     {
         TraceLayout("access page");FriendsForm.CheckUi();TraceLayout("polling state");
@@ -416,6 +435,8 @@ internal sealed class MainForm:Form
     }
     void PaintState()
     {
+        content.SuspendLayout();
+        try{
         if(country.Items.Count==2){
             if((country.Items[0] as string)!=T("Нидерланды","Netherlands"))country.Items[0]=T("Нидерланды","Netherlands");
             if((country.Items[1] as string)!=T("Россия","Russia"))country.Items[1]=T("Россия","Russia");
@@ -440,15 +461,16 @@ internal sealed class MainForm:Form
         accessPage.SetLanguage(ru);
         language.Text=T("Язык: Русский → English","Language: English → Русский");
 
-        detail.Visible=detail.Text.Length>0;PaintLoad();ApplyPage();FitContent();
-        if(Visible)FitWindow();
+        detail.Visible=detail.Text.Length>0;PaintLoad();ApplyPage();
+        }finally{content.ResumeLayout(true);}
+        FitContent();
     }
     void PaintLoad(){
         var sample=loadSample;
         if(sample is not null&&(!sample.Fresh||loadRevision!=revision||loadMode!=mode.SelectedIndex))sample=null;
-        loadBar.Percent=sample?.Percent;
+        if(loadBar.Percent!=sample?.Percent){loadBar.Percent=sample?.Percent;loadBar.Invalidate();}
         loadLabel.Text=T("Нагрузка сервера","Server load")+" · "+(sample?.Percent is double p?(sample.Estimated?"≈ ":"")+Math.Round(p)+"%":T("Нет данных","No data"));
-        loadBar.AccessibleName=loadLabel.Text;loadBar.Invalidate();
+        loadBar.AccessibleName=loadLabel.Text;
         loadTip.SetToolTip(loadLabel,sample is null?loadLabel.Text:$"CPU {sample.Cpu:F0}% · ↓ {sample.Rx:F1} / ↑ {sample.Tx:F1} Mbps"+(sample.Estimated?T(" · оценка по 200 Мбит/с исходящего канала"," · estimated using 200 Mbps egress"):""));
     }
     async Task RefreshLoad(){
@@ -466,8 +488,9 @@ internal sealed class MainForm:Form
     void ApplyPage(){
         routeTitle.Text=T("Маршрут подключения","Connection route");
         messengerNote.Text=T("Мессенджер пока доступен в Android. Версия для компьютера в разработке.","Messaging is currently available on Android. Desktop messaging is in development.");
-        foreach(var group in pages)foreach(var control in group.Value)control.Visible=group.Key==page;
-        enroll.Visible=page=="status"&&NeedsInvitation;notice.Visible=page=="status"&&NeedsInvitation;
+        foreach(var group in pages)foreach(var control in group.Value)
+            control.Visible=group.Key==page&&(control!=enroll||NeedsInvitation);
+        notice.Visible=page=="status"&&NeedsInvitation;
         foreach(var item in nav){
             item.Value.Text=item.Key switch{"status"=>T("СТАТУС","STATUS"),"messenger"=>T("МЕССЕНДЖЕР","MESSENGER"),"route"=>T("МАРШРУТ","ROUTE"),_=>T("НАСТРОЙКИ","SETTINGS")};
             item.Value.ForeColor=(item.Key==page||(page=="access"&&item.Key=="settings"))?Color.FromArgb(255,173,70):Color.FromArgb(153,196,181);

@@ -1,4 +1,5 @@
 using System.Drawing.Drawing2D;
+using System.Runtime.InteropServices;
 namespace FamilyConnect;
 
 // Keep native list navigation, keyboard selection and accessibility, paint the
@@ -29,11 +30,32 @@ internal sealed class ModernComboBox : ComboBox
         if(selected){using var marker=new SolidBrush(tint);e.Graphics.FillRectangle(marker,e.Bounds.Left,e.Bounds.Top,Math.Max(2,pad/3),e.Bounds.Height);}
         base.OnDrawItem(e);
     }
+    [StructLayout(LayoutKind.Sequential)]
+    struct PaintStruct {
+        internal IntPtr Hdc;internal int Erase,Left,Top,Right,Bottom,Restore,IncUpdate;
+        [MarshalAs(UnmanagedType.ByValArray,SizeConst=32)]internal byte[] Reserved;
+    }
+    [DllImport("user32.dll")]static extern IntPtr BeginPaint(IntPtr hwnd,out PaintStruct paint);
+    [DllImport("user32.dll")]static extern bool EndPaint(IntPtr hwnd,ref PaintStruct paint);
     protected override void WndProc(ref Message m){
+        if(m.Msg==0x0014){m.Result=(IntPtr)1;return;} // Background is part of the buffered frame.
+        if(m.Msg==0x000F && IsHandleCreated){
+            IntPtr dc=BeginPaint(Handle,out var paint);
+            try{if(dc!=IntPtr.Zero && Width>0 && Height>0){
+                using var target=Graphics.FromHdc(dc);
+                using var buffer=BufferedGraphicsManager.Current.Allocate(target,ClientRectangle);
+                PaintSelector(buffer.Graphics);buffer.Render(target);
+            }}finally{EndPaint(Handle,ref paint);}
+            m.Result=IntPtr.Zero;return;
+        }
+        if(m.Msg is 0x0317 or 0x0318 && m.WParam!=IntPtr.Zero){
+            using var target=Graphics.FromHdc(m.WParam);PaintSelector(target);m.Result=IntPtr.Zero;return;
+        }
         base.WndProc(ref m);
-        bool printing=m.Msg is 0x0317 or 0x0318; // WM_PRINT / WM_PRINTCLIENT for native render evidence.
-        if((m.Msg!=0x000F&&!printing)||!IsHandleCreated||Width<4||Height<4)return;
-        using var g=printing?Graphics.FromHdc(m.WParam):Graphics.FromHwnd(Handle);g.SmoothingMode=SmoothingMode.AntiAlias;
+    }
+    void PaintSelector(Graphics g){
+        if(Width<4||Height<4)return;
+        g.SmoothingMode=SmoothingMode.AntiAlias;
         // WM_PRINT may share a parent bitmap HDC: never clear outside this control.
         using(var background=new SolidBrush(Parent?.BackColor??BackColor))g.FillRectangle(background,ClientRectangle);
         float scale=DeviceDpi/96f;

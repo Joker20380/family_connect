@@ -25,7 +25,7 @@ internal sealed class LiveNetworkPanel : UserControl
         int x=Width/2+D(10),w=Math.Max(1,Width-x-D(12));
         country.SetBounds(x,D(78),w,country.Height);protocol.SetBounds(x,D(114),w,protocol.Height);
     }
-    internal void Connection(bool russian,string status){ru=russian;state=status;Invalidate();}
+    internal void Connection(bool russian,string status){if(ru==russian&&state==status)return;ru=russian;state=status;Invalidate();}
     void Sample(){
         try{
             var power=SystemInformation.PowerStatus;

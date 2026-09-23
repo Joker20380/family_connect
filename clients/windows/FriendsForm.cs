@@ -21,7 +21,7 @@ internal sealed class FriendsForm : UserControl
         ru=russian;call=caller??Wire.Call;AutoScaleMode=AutoScaleMode.Dpi;
         AutoSize=true;AutoSizeMode=AutoSizeMode.GrowAndShrink;Dock=DockStyle.Top;
         BackColor=Color.FromArgb(3,17,14);ForeColor=Color.FromArgb(218,255,242);Font=new Font("Consolas",10);
-        var panel=new TableLayoutPanel{AutoSize=true,Dock=DockStyle.Top,ColumnCount=1,Padding=new Padding(0,8,0,8)};
+        var panel=new BufferedLayoutPanel{AutoSize=true,Dock=DockStyle.Top,ColumnCount=1,Padding=new Padding(0,8,0,8)};
         panel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent,100));Controls.Add(panel);
         void Add(Control c){c.Dock=DockStyle.Top;c.Margin=new Padding(0,5,0,5);int row=panel.RowCount++;panel.RowStyles.Add(new RowStyle(SizeType.AutoSize));panel.Controls.Add(c,0,row);}
         SetLanguage(ru);Add(hint);Add(device);Add(invitation);

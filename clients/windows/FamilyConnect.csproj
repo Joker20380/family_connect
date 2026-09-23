@@ -5,7 +5,7 @@
     <UseWindowsForms>true</UseWindowsForms><ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode><EnableWindowsTargeting>true</EnableWindowsTargeting>
     <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
     <ApplicationManifest>app.manifest</ApplicationManifest><AssemblyName>FamilyConnect</AssemblyName>
-    <Version>0.2.11</Version><ApplicationIcon>app.ico</ApplicationIcon><Company>family_connect</Company><Product>family_connect</Product><Title>family_connect</Title>
+    <Version>0.2.12</Version><ApplicationIcon>app.ico</ApplicationIcon><Company>family_connect</Company><Product>family_connect</Product><Title>family_connect</Title>
     <PublishSingleFile>false</PublishSingleFile><PublishTrimmed>false</PublishTrimmed>
   </PropertyGroup>
   <ItemGroup>
