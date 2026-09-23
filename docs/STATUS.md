@@ -1,62 +1,35 @@
 # Current state / Текущее состояние
 
-Updated 2026-09-19. This page distinguishes distributed applications, public source,
-and work in progress. Historical reports are evidence for their dated stage.
+Updated 2026-09-23. Distributed clients and test candidates are listed separately.
 
-## Available applications
-
-| Platform | Distribution | Verified scope / limits |
+| Platform | Public download | Candidate under test |
 | --- | --- | --- |
-| Android 8+, ARM64 | 0.1.18-beta19, versionCode 19; 36,390,988 bytes | Pilot VPN and two-phone messaging confirmed. Foreground incoming refresh; background push and broader offline/restart acceptance incomplete. |
-| Linux | v0.2.9 desktop prerelease, GTK 4/libadwaita | Operator-assisted setup; current Android friends invitations and messenger are not included. |
-| Windows x64 | v0.2.9 desktop prerelease | Native installer/broker; operator activation; no trusted publisher signature. |
-| macOS / iOS | No application release | Longer-term roadmap only. |
+| Android 8+, ARM64 | 0.1.18-beta35/code35; 36,407,372 bytes | beta38/code38 installed on a test phone; 147 unit, 5 UI and 1 reconnect test passed |
+| Linux | 0.2.9 paired bundle146d221d0ad23c07 | 0.2.10; 24 layout checks passed |
+| Windows x64 | 0.2.9 previewa6c68fe | 0.2.10 source54506d8; build, native UI and ordinary-user broker CI passed |
+| macOS / iOS | No app release | Longer-term roadmap |
 
-[Android download and verification](releases/2026-09-19-beta19-download.ru.md) ·
-[Installation](getting-started.en.md) · [Desktop guide](clients.en.md).
+[Downloads, checksums and test evidence](releases/2026-09-23-public-client-status.ru.md) · [Installation](getting-started.en.md).
 
-Android SHA256: `5ebe38168f084d3e19bb740722ec7c3a7ceb5e9ed63508efc3e3ff3f5e0bf3a4`.
-The user chose to keep the current animated smileys despite rough edges.
-Android APK, installed application, servers and release catalogs are unchanged by this documentation publication.
+The README image shows the beta38 test candidate. Public beta35 still uses manual
+invitation-code activation. The next update preserves invite-only access and device
+keys while removing manual key entry, and places country/protocol selection beside
+the battery. New installers, invitation page and catalogs have not been published.
+Android CI setup failed; remaining release gates must pass before distribution.
 
-## Invitations
+The current pilot supports VPN and Android text messaging. Incoming chat refresh
+requires the messenger to remain open; background push and broader offline/restart
+acceptance remain incomplete. Desktop messenger parity is not claimed.
 
-The pilot has separate budgets: 50 direct invitations and a shared pool of 500
-referral invitations. A referral slot is consumed when a new code is issued, not
-when it is activated. A direct code does not reduce the referral pool.
-The latest read-only check returned 0 referral codes issued, 0 activated, 500 remaining.
-The user confirmed using a direct code. The Android pool-limit label is fixed;
-the remaining count is loaded once when opening the invitation screen.
+Invitations: up to 20 new referral claims per sponsor per rolling 24 hours, within a
+shared pool of 500. Retrying the same request does not consume an additional slot.
+These are configured limits, not a live remaining count. Direct invitations use a
+separate budget. Device keys remain individual and revocable. Billing is not implemented.
 
-## Source and desktop work
+Public main does not yet reproduce the distributed Android APK. Matching source
+publication remains open. This documentation update does not publish that source,
+change servers, revoke keys or change signed update catalogs.
 
-Public main currently predates Android beta19; do not claim it reproduces the published APK.
-The corresponding local Android/messenger changes still need a reviewed source checkpoint.
-Desktop integration is developed separately on `desktop/friends-access-20260919`,
-commit `429eb77`; it has not been merged into main or released.
-
-[Identity storage report](releases/2026-09-19-desktop-identity-storage.ru.md):
-53 scoped / 549 full Python checks passed locally (2 upstream warnings).
-Windows control CI 35469710256 passed. Client builds 35469710250 Windows and Linux
-jobs passed, including Windows broker restart, UI and layout checks.
-Android failed during SDK setup; overall CI was not successful and release was skipped.
-No new desktop installer is offered as a user release.
-
-## GitHub presentation
-
-Product README EN/RU, installation guides, security/privacy, documentation map and
-contribution templates were published to main in commit `9c4114b`. The public README
-was downloaded and matched the reviewed file byte for byte. Markdown
-links, 17 external URLs and four Mermaid diagrams passed validation. See the
-[presentation report](releases/2026-09-19-github-presentation.ru.md).
-
-## Public launch gaps
-
-Repository-wide license and commercial model are not chosen. Billing is not implemented.
-Third-party artwork rights, private vulnerability reporting/contact, Windows publisher
-signing, matching Android source publication and broader messenger acceptance remain open.
-GitHub About requires owner authentication; the exact command is in the
-[presentation report](releases/2026-09-19-github-presentation.ru.md).
-
-[Next actions](PLAN.md) · [Documentation](README.md) ·
-[Previous public status, historical](STATUS.before-2026-09-19.md).
+Repository-wide licensing, private security reporting, Windows publisher signing,
+broader platform acceptance and the commercial access model remain open.
+[Next actions](PLAN.md) · [Documentation](README.md).

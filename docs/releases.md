@@ -1,15 +1,19 @@
 # Release distribution
 
-Audited 2026-09-19 against the GitHub Releases API and the deployed Android invitation page.
+Updated 2026-09-23; published APK and invitation-page links checked. Beta38 is a device-tested candidate, not a public download.
 
 | Channel | Latest relevant distribution | Limits |
 | --- | --- | --- |
-| Android friends | 0.1.18-beta19/code19, HTTPS APK through invitation page | ARM64; manual update; same beta signing certificate; not a Play/GitHub release |
-| Desktop | GitHub prerelease v0.2.9 | Linux GTK archive and Windows x64 pilot installer; not Android feature parity |
+| Android friends | 0.1.18-beta35/code35, HTTPS APK through invitation page | ARM64; manual update; same beta signing certificate; not a Play/GitHub release |
+| Linux preview | 0.2.9 / 146d221d0ad23c07 | Paired bundle; operator-assisted installation |
+| Windows preview | 0.2.9 / a6c68fe | x64 installer; physical Windows acceptance pending |
+| Test candidates | Android beta38; desktop0.2.10 | Not yet public downloads |
 | TCP helpers | tcp-v0.1.0 / tcp-setup-v0.1.0 | Separate operator/setup components, not the consumer app |
 
 [Android installation](getting-started.en.md) · [Desktop installation](clients.en.md) ·
 [Published desktop releases](https://github.com/Joker20380/family_connect/releases).
+
+Current preview downloads: [Linux 0.2.9 / 146d221d0ad23c07](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-146d221d0ad23c07.tar.gz) · [Windows 0.2.9 / a6c68fe](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.9-preview-a6c68fe.exe)
 
 ## Existing pipeline
 
@@ -25,12 +29,12 @@ immutable. [Full signing and rollback procedure](updates.en.md).
 
 The Android friends APK is separately signed with a persistent beta key and manually
 published to an exact HTTPS path. The signature permits in-place updates; it is not a
-claim of app-store approval. [Beta19 verification](releases/2026-09-19-beta19-download.ru.md).
+claim of app-store approval. [Beta35 verification](releases/2026-09-23-public-client-status.ru.md).
 
 ## Recommendations, not pipeline changes
 
 1. Keep separate desktop and Android version channels; do not label desktop v0.2.9 as
-   newer than Android beta19 by comparing their numbers.
+   newer than Android beta35 by comparing their numbers.
 2. For a future Android GitHub prerelease, attach the exact locally signed, verified APK,
    checksum and source/build receipt after platform checks. Never upload signing keys
    or silently replace the existing beta file with a CI debug build.

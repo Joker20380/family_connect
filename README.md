@@ -8,22 +8,28 @@ Family Connect is a private networking project for families and personal devices
 
 **[Try the Android beta](docs/getting-started.en.md)** · [Getting started](docs/getting-started.en.md) · [How it works](#how-it-works) · [Security](SECURITY.md) · [Architecture](docs/architecture.md)
 
+## Next client update
+
+Android beta38 and desktop 0.2.10 are being tested on Android, Windows and Linux. Access remains invitation-only: install from the invitation page, then tap **Open app** on that page. The app exchanges the invitation for its own device credentials, without typing or copying an activation key. Device keys remain available for access management and revocation.
+
+Country and protocol selection move into the connection information panel beside the battery display. Navigation stays within the main window, using the Android interface as the shared design reference. These changes are not yet available in the public downloads; see the [verification and release status](docs/releases/2026-09-23-public-client-status.ru.md).
+
 ## Platforms
 
 | Platform | Current availability |
 | --- | --- |
-| Android 8+ | Invite-based beta19; ARM64 APK, 36.4 MB. VPN and text messaging tested on phones. |
-| Linux | GTK 4 / libadwaita desktop pilot; v0.2.9 archive. Operator-assisted setup. |
-| Windows x64 | Native desktop pilot; v0.2.9 installer. Operator activation; no trusted publisher signature yet. |
+| Android 8+ | Invite-based beta35; ARM64 APK, 36.4 MB. VPN and text messaging tested on phones. |
+| Linux | GTK 4 / libadwaita desktop pilot; 0.2.9 preview146d221d0ad23c07. Operator-assisted setup. |
+| Windows x64 | Native desktop pilot; 0.2.9 previewa6c68fe installer. Operator activation; no trusted publisher signature yet. |
 | macOS / iOS | No application release. Apple-platform work remains on the longer-term roadmap. |
 
 Features and onboarding differ between platforms. The current friends invitation flow and messenger are available in the Android beta, not the desktop releases.
 
 ## A look inside
 
-<img src="docs/assets/android-beta19-home.png" width="300" alt="Family Connect Android beta19 home screen, with connection switch, network status and persistent navigation">
+<img src="docs/assets/android-beta38-home.png" width="300" alt="Family Connect Android beta38 test build home screen, with connection switch, network status and persistent navigation">
 
-Android beta19, Russian interface. Actual native UI rendered during device testing; VPN is off in this capture. [Image provenance](docs/assets/README.md).
+Android beta38 test build, Russian interface, captured on 23 September 2026. Actual native UI rendered during device testing; VPN is off in this capture. Public downloads still provide beta35. [Image provenance](docs/assets/README.md).
 
 ```mermaid
 flowchart LR
@@ -70,7 +76,7 @@ Desktop releases and Android beta releases have separate versions and capabiliti
 
 **Android:** follow the [installation and invitation guide](docs/getting-started.en.md). Existing users install the new APK over the old version; keep the app and its data. No new invitation is needed for an ordinary update.
 
-**Linux and Windows:** use the [desktop pilot instructions](docs/clients.en.md) and [v0.2.9 release](https://github.com/Joker20380/family_connect/releases/tag/v0.2.9). Desktop onboarding currently requires operator assistance.
+**Linux and Windows:** use the [desktop pilot instructions](docs/clients.en.md) and [current preview downloads](docs/releases.md). Desktop onboarding currently requires operator assistance.
 
 **Building from source:** see [development](#development). CI artifacts are test builds, not interchangeable with the signed Android friends APK.
 
@@ -81,7 +87,7 @@ Public source helps inspection; it does not establish security on its own. Devic
 - [Security boundaries and reporting status](SECURITY.md)
 - [Privacy: local data, gateways and metadata](docs/privacy.md)
 - [Desktop update verification and signing](docs/updates.en.md)
-- [Android beta artifact and checksum](docs/releases/2026-09-19-beta19-download.ru.md)
+- [Android beta artifact and checksum](docs/releases/2026-09-23-public-client-status.ru.md)
 
 A VPN gateway is a trusted part of the connection and can observe destination metadata. Family Connect makes no anonymity or zero-logging guarantee.
 
@@ -102,7 +108,7 @@ This is the implemented provisioning path at a high level; integration maturity 
 
 ## Development
 
-**Source snapshot:** the public main branch currently predates the distributed Android beta19. The beta features above describe the tested APK; building main does not reproduce that version. Publishing the corresponding source checkpoint is tracked in [PLAN](docs/PLAN.md).
+**Source snapshot:** the public main branch currently predates the distributed Android beta35. The beta features above describe the tested APK; building main does not reproduce that version. Publishing the corresponding source checkpoint is tracked in [PLAN](docs/PLAN.md).
 
 Start with [CONTRIBUTING.md](CONTRIBUTING.md) for setup and scoped checks.
 

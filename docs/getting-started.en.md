@@ -21,14 +21,14 @@ pilot, not a public subscription launch. Downloading the app does not grant serv
    messenger to be open; background push is not implemented.
 
 **Already have an invitation or an activated app?**
-[Download beta19 — 36.4 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta19.apk).
-Version `0.1.18-beta19`, code `19`; SHA256:
+[Download beta35 — 36.4 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta35.apk).
+Version `0.1.18-beta35`, code `35`; SHA256:
 
 ```text
-5ebe38168f084d3e19bb740722ec7c3a7ceb5e9ed63508efc3e3ff3f5e0bf3a4
+fd7cc8ca00ca95acd4cc2cf5cc265d6afd46d39a4a21d22374e14f1f915a3a4e
 ```
 
-For other CPU architectures, the invitation page offers the older
+For other CPU architectures, the older build remains available separately:
 [universal beta13 — 240.5 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.12-beta13.apk).
 It does not include later messenger improvements. This is not an equivalent current build.
 
@@ -36,7 +36,7 @@ It does not include later messenger improvements. This is not an equivalent curr
 
 Download the new APK, open it, and choose **Update**. Do not uninstall or clear data.
 An ordinary update uses the same signing certificate and keeps activation and history.
-There is no automatic Android updater yet. A CI debug build may have a different
+The app can check for updates and request Android installation; system confirmation is still required. A CI debug build may have a different
 signature and cannot serve as an update to the friends beta.
 
 ## Troubleshooting
@@ -53,7 +53,7 @@ signature and cannot serve as an update to the friends beta.
 
 Keep invitation codes, profiles, private keys and personal chat history out of reports.
 [Detailed Russian walkthrough](testing/friends-quickstart.ru.md) ·
-[Beta19 verification](releases/2026-09-19-beta19-download.ru.md).
+[Beta35 verification](releases/2026-09-23-public-client-status.ru.md).
 
 ## Desktop
 

@@ -2,17 +2,23 @@
 
 [English](clients.en.md) · [Главная](../README.ru.md)
 
-Сверено 19.09.2026. У платформ разные версии и возможности.
+Сверено 23.09.2026. У платформ разные версии и возможности.
 
 ## Android
 
-[Инструкция Friends beta](getting-started.ru.md): Android 8+, ARM64 beta19,
+[Инструкция Friends beta](getting-started.ru.md): Android 8+, ARM64 beta35,
 активация по приглашению, VPN и пилотный текстовый мессенджер. APK распространяется
 через страницу приглашения и HTTPS; в GitHub Releases и магазинах её пока нет.
 Для сборки используйте требования [client workflow](../.github/workflows/clients.yml).
 Debug APK из CI не предназначена для обновления установленной Friends beta.
 
-## Linux
+## Текущие загрузки со страницы приглашения
+
+[Linux 0.2.9 / 146d221d0ad23c07](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-146d221d0ad23c07.tar.gz) · [Windows 0.2.9 / a6c68fe](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.9-preview-a6c68fe.exe)
+
+Эти неизменяемые preview новее исходных файлов GitHub v0.2.9, описанных ниже. Для Linux нужна настройка с оператором: [инструкция к текущему архиву](https://185.251.89.19:8443/downloads/FamilyConnect-Linux-brand-20260920.txt). Версия 0.2.10 с активацией по ссылке ещё тестируется.
+
+## Исходный GitHub v0.2.9: Linux
 
 Опубликован [пилот v0.2.9](https://github.com/Joker20380/family_connect/releases/tag/v0.2.9).
 Интерфейс — **GTK 4/libadwaita**, не Tk. Нужны системный Python с GI,
@@ -33,7 +39,7 @@ sudo apt install python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 python3-cryptography net
 Экспериментальная парная control-сборка отличается от шестифайлового release-архива:
 [инструкция оператора](linux-control-preview-rollout.ru.md).
 
-## Windows x64
+## Исходный GitHub v0.2.9: Windows x64
 
 Скачайте `FamilyConnect-Setup-0.2.9-pilot-unsigned.exe` из
 [релиза v0.2.9](https://github.com/Joker20380/family_connect/releases/tag/v0.2.9).

@@ -40,7 +40,7 @@ installed/deployed versions; dated reports preserve what was checked at that tim
 - [Desktop modernization](desktop-modernization.ru.md) and [first integration checks](releases/2026-09-19-desktop-friends-foundation.ru.md).
 - [Roadmap](ROADMAP.ru.md); the first dated section takes precedence over older plans.
 - [Release model](releases.md) and [GitHub Releases](https://github.com/Joker20380/family_connect/releases).
-- [Current Android download verification](releases/2026-09-19-beta19-download.ru.md).
+- [Current Android download verification](releases/2026-09-23-public-client-status.ru.md).
 - [Licensing gaps](licensing.md).
 - [Public presentation audit](releases/2026-09-19-github-presentation.ru.md).
 
