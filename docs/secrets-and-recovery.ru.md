@@ -140,3 +140,7 @@ Known secret modes корректны; TCP runtime umask ожидает план
 
 24.09: [TCP runtime UMask0077 применён на обоих узлах](releases/2026-09-24-tcp-private-umask-restart.ru.md)
 после разрешённого последовательного restart. Серверный backup/recovery остаётся открытым.
+
+24.09: [выбранное серверное состояние сохранено в KeePassXC](releases/2026-09-24-server-secret-backup.ru.md):
+47 файлов/6 SQLite, hashes и in-memory restore проверены. Это не полный образ серверов;
+[исключения и порядок восстановления](server-secret-backup.ru.md) остаются обязательными.

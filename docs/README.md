@@ -107,3 +107,5 @@ runbooks and STATUS before operating anything.
 - [Критические секреты и аварийное восстановление](secrets-and-recovery.ru.md).
 
 - [Локальная подпись с ключом из KeePassXC](vault-signing.ru.md).
+
+- [Закрытые серверные копии и проверка восстановления](server-secret-backup.ru.md).

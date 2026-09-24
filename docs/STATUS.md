@@ -8,6 +8,12 @@
 
 ## Положение в общем плане
 
+24.09: [47 серверных файлов/6 SQLite сохранены в KeePassXC](releases/2026-09-24-server-secret-backup.ru.md).
+Извлечение/hashes/in-memory SQLite restore прошли, VPN службы active.7 targeted tests passed.
+Следом — TLS/system SSH/messenger-node, clean-machine restore и внешний носитель.
+Это не единый образ всех серверов; работающие plaintext originals пока сохранены.
+
+
 24.09: [TCP-службы NL и RU перезапущены по разрешению пользователя](releases/2026-09-24-tcp-private-umask-restart.ru.md).
 Runtime Umask0077 подтверждён на обоих узлах; службы active/NRestarts0, TCP-порты
 доступны локально и с ноутбука. AWG PID сохранены. Отложенный TCP restart закрыт;

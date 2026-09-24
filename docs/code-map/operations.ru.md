@@ -99,3 +99,9 @@ Standalone setup verifier не зависит от vault. `deploy/friends/70-pri
 
 [Приёмка runtime UMask0077 после TCP restart RU/NL](../releases/2026-09-24-tcp-private-umask-restart.ru.md):
 настройка уже действует, source changes/версий в этом шаге нет.
+
+`scripts/server_secret_snapshot.py` — allowlisted FC state→private binary stream,
+gateway registration lock/SQLite online backup; `verify` проверяет inventory/hash
+и SQLite в памяти. `tests/test_server_secret_snapshot.py` — WAL/lock/path/tamper.
+[Runbook](../server-secret-backup.ru.md). Orchestration SSH→KeePassXC пока операторский,
+автоматического расписания backup/full-service restore нет.
