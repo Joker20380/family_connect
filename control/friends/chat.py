@@ -7,7 +7,7 @@ import sqlite3
 import RNS
 from device_identity.device import verify_transport_key_proof
 from messenger.admission import message
-from .access import Rejected
+from .access import Rejected, CHALLENGE_TTL
 
 
 class ChatAccess:
@@ -46,8 +46,8 @@ class ChatAccess:
             if db.execute('SELECT COUNT(*) FROM chat_challenges WHERE device=? AND used=0', (device,)).fetchone()[0] >= 8:
                 raise Rejected()
             db.execute('INSERT INTO chat_challenges VALUES (?,?,?,?,0)',
-                       (hashlib.sha256(nonce.encode()).hexdigest(), device, chat_public, now+120))
-        return dict(challenge=nonce, expires_at=now+120, audience='family-connect/enrollment/v1',
+                       (hashlib.sha256(nonce.encode()).hexdigest(), device, chat_public, now+CHALLENGE_TTL))
+        return dict(challenge=nonce, expires_at=now+CHALLENGE_TTL, audience='family-connect/enrollment/v1',
                     device=device, chat_public=chat_public)
 
     def register(self, proof, chat_public, chat_signature):

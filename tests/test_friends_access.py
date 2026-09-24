@@ -44,3 +44,9 @@ def test_installation_without_invitation_cannot_enroll(access):
  for purpose in ('activate','register','nl'):
   with pytest.raises(Rejected):proof(access,device,purpose=purpose)
  with access.db() as db:assert db.execute('SELECT COUNT(*) FROM devices').fetchone()[0]==0
+
+
+def test_shorter_challenge_expires_at_server_deadline(access):
+ device=DeviceIdentity.generate();p=proof(access,device,access.invite())
+ access.clock=lambda:1100
+ with pytest.raises(Rejected):access.complete(p,'activate')

@@ -72,3 +72,7 @@ Fleet пока локальный backend этапа5: native engine acceptance 
 не означает production deployment, рабочую платежную авторизацию или независимый failover.
 Открыты ACK/offline→online, migration действующих выдач, автономный TTL и остальные
 пункты STATUS. Не создавать вторую независимо изменяемую копию leases в будущей Django DB.
+
+Friends Access/ChatAccess используют общий `CHALLENGE_TTL=100` в
+`control/friends/access.py`: запас20с до клиентской границы120с, DB expiry100с.
+[Инцидент и проверка](../releases/2026-09-24-friends-challenge-clock.ru.md).

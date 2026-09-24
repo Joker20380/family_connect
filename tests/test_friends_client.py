@@ -221,3 +221,16 @@ def test_link_activation_requires_invitation_and_reuses_device(service):
         db.execute('UPDATE devices SET revoked=1 WHERE device=?',(child.device.reference,))
     with pytest.raises(FriendsError, match='access_rejected'):child.register(token)
     assert '/friends/register' not in seen
+
+
+@pytest.mark.parametrize('lag', [1, 20])
+def test_challenge_allows_small_client_clock_lag(service, lag):
+    access, client, _ = service
+    client.clock = lambda: 1000 - lag
+    assert client.activate(access.invite())['status'] == 'active'
+
+
+def test_challenge_still_rejects_excessive_clock_lag(service):
+    access, client, _ = service
+    client.clock = lambda: 979
+    with pytest.raises(FriendsError):client.activate(access.invite())

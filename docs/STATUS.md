@@ -8,6 +8,12 @@
 
 ## Положение в общем плане
 
+24.09: [исправлен нулевой запас challenge на расхождение часов](releases/2026-09-24-friends-challenge-clock.ru.md).
+RU API выдаёт challenge100с вместо120с; клиентская граница120с сохранена.
+45 tests passed, HTTPS200/TTL100, службы active. APK friends beta50 проверен по
+хешу/package; успешное подключение проблемного нового клиента ещё не подтверждено.
+Ближайший шаг — повторная пользовательская проверка, затем возврат к аудиту секретов.
+
 24.09: [изолированное восстановление из KeePassXC прошло](releases/2026-09-24-vault-restore-rehearsal.ru.md).
 89 файлов/7 SQLite, Access/referral identity и реальный mailbox startup/shutdown
 проверены в контейнере без сети;12 tests passed. Live state и vault не изменялись.

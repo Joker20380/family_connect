@@ -8,6 +8,10 @@ from contextlib import contextmanager
 from pathlib import Path
 from device_identity.device import _decode,verify_transport_key_proof
 
+# Clients reject expiry more than 120 seconds ahead of their wall clock.
+# Leave 20 seconds of clock-skew headroom without extending server validity.
+CHALLENGE_TTL = 100
+
 class Rejected(ValueError):pass
 
 class Access:
@@ -54,8 +58,8 @@ CREATE TABLE challenges(nonce TEXT PRIMARY KEY, device TEXT NOT NULL, public TEX
    db.execute('DELETE FROM challenges WHERE expires<=?',(now,))
    if db.execute('SELECT COUNT(*) FROM challenges WHERE device=? AND used=0',(device,)).fetchone()[0]>=8:raise Rejected()
    nonce=base64.b64encode(secrets.token_bytes(32)).decode()
-   db.execute('INSERT INTO challenges VALUES (?,?,?,?,?,?,?,0)',(hashlib.sha256(nonce.encode()).hexdigest(),device,public_identity,wireguard_public_key,purpose,invite,now+120))
-  return {'challenge':nonce,'expires_at':now+120,'audience':'family-connect/enrollment/v1'}
+   db.execute('INSERT INTO challenges VALUES (?,?,?,?,?,?,?,0)',(hashlib.sha256(nonce.encode()).hexdigest(),device,public_identity,wireguard_public_key,purpose,invite,now+CHALLENGE_TTL))
+  return {'challenge':nonce,'expires_at':now+CHALLENGE_TTL,'audience':'family-connect/enrollment/v1'}
  def complete(self,proof,purpose):
   device=verify_transport_key_proof(proof,expected_challenge=proof['challenge']);now=int(self.clock());nonce=hashlib.sha256(proof['challenge'].encode()).hexdigest()
   with self.db() as db:
