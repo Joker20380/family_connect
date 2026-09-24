@@ -80,3 +80,6 @@ multi-ingress recovery и новый третий transport — не готов�
 `tests/test_public_sources.py` — проверка секретов в staged bytes и отсутствия
 значений в выводе. `.github/workflows/test.yml` повторяет guard в CI (после push).
 Это не хранилище секретов и не полный secret scanner.
+
+Source guard также блокирует `.kdbx`/`.keyx`; личное KeePassXC-хранилище не является
+частью проекта. Порядок доступа и backup описан в политике секретов.

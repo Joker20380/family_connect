@@ -24,7 +24,7 @@ def violations(path: str, raw: bytes) -> list[str]:
         reasons.append("runtime-state-path")
     if p.name == ".env" or (p.name.startswith(".env.") and p.name not in {".env.example", ".env.template"}):
         reasons.append("environment-file")
-    if p.suffix.lower() in {".key", ".p12", ".pfx", ".jks", ".keystore", ".db", ".sqlite", ".sqlite3", ".apk"}:
+    if p.suffix.lower() in {".key", ".p12", ".pfx", ".jks", ".keystore", ".db", ".sqlite", ".sqlite3", ".apk", ".kdbx", ".keyx"}:
         reasons.append("private-or-runtime-file")
     for name, pattern in PATTERNS.items():
         matches = list(pattern.finditer(raw))

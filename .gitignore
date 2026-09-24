@@ -38,3 +38,7 @@ clients/android/control-tests/.gradle/
 clients/android/chat-runtime/.gradle/
 
 state-product-https/
+
+# Encrypted password databases and key files are private, even when encrypted.
+*.kdbx
+*.keyx

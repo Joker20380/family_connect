@@ -9,7 +9,7 @@ from scripts.check_public_sources import violations
 
 
 def test_forbidden_paths_and_known_credentials():
-    for path in ("state-client-build/root", "backup/user.sqlite", ".env.prod", "keys/root.key"):
+    for path in ("state-client-build/root", "backup/user.sqlite", ".env.prod", "keys/root.key", "backup/vault.kdbx", "keys/vault.keyx"):
         assert violations(path, b"ordinary data")
     samples = [b"-----BEGIN " + b"PRIVATE KEY-----", b"ghp_" + b"a" * 36,
                b"AKIA" + b"A" * 16, b"PrivateKey = " + b"a" * 43 + b"="]
