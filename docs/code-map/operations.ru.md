@@ -91,3 +91,8 @@ Source guard также блокирует `.kdbx`/`.keyx`; личное KeePass
 issuers. KeePassXC→memfd→private inventory→pinned public anchor; plaintext key-файл
 не экспортируется. `tests/test_signing_key.py` содержит synthetic KDBX integration.
 [Команды и ограничения](../vault-signing.ru.md).
+
+Дополнительные потребители `signing_key.py`: `sign_tcp.py`, `tcp_setup_signature.py sign`.
+Standalone setup verifier не зависит от vault. `deploy/friends/70-private-files.conf`
+задаёт UMask0077 для будущих запусков AWG/TCP; установщики содержат то же правило.
+[Проверка configured/runtime и приёмка](../releases/2026-09-24-secret-consumers.ru.md).

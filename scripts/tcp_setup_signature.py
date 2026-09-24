@@ -1,7 +1,7 @@
 """Offline TCP Setup release signatures; verification never executes the archive."""
-import argparse,base64,hashlib,json,os,re,stat
+import argparse,base64,hashlib,json,os,re
 from pathlib import Path
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey,Ed25519PublicKey
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 
 DOMAIN=b'family-connect/tcp-setup-release/v1\x00'
 MAX_SIZE=1024*1024
@@ -21,11 +21,21 @@ def archive_bytes(path):
 def metadata(archive,release_version):
     raw=archive_bytes(archive)
     return dict(schema=1,component='tcp-setup',architecture='amd64',version=version(release_version),size=len(raw),sha256=hashlib.sha256(raw).hexdigest())
-def sign(archive,release_version,key_path,output):
-    info=key_path.lstat()
-    if not stat.S_ISREG(info.st_mode) or info.st_nlink!=1 or stat.S_IMODE(info.st_mode)!=0o600:raise ValueError('Unsafe signing key')
+def key_loader():
+    # Verification is also shipped standalone; import operator dependencies only for signing.
+    if __package__:
+        from . import signing_key
+    else:
+        import signing_key
+    return signing_key
+
+def sign(archive,release_version,key_path,output,*,private_key=None):
+    key=private_key
+    if key is None:
+        a=argparse.Namespace(key=key_path,vault=None,vault_entry=None,vault_member=None,
+                             vault_public_key=None,vault_password_dialog=False)
+        key=key_loader().load(a)
     payload=json.dumps(metadata(archive,release_version),sort_keys=True,separators=(',',':')).encode()
-    key=Ed25519PrivateKey.from_private_bytes(key_path.read_bytes())
     envelope=json.dumps(dict(payload=base64.b64encode(payload).decode(),signature=base64.b64encode(key.sign(DOMAIN+payload)).decode()),sort_keys=True,separators=(',',':'))+'\n'
     with output.open('x') as f:f.write(envelope)
 def verify(archive,signature,anchor,expected_version):
@@ -45,9 +55,14 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__);sub=parser.add_subparsers(dest='operation',required=True)
     for operation in ('sign','verify'):
         p=sub.add_parser(operation);p.add_argument('--archive',type=Path,required=True);p.add_argument('--version',required=True)
-        if operation=='sign':p.add_argument('--key',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
+        if operation=='sign':
+            source=p.add_mutually_exclusive_group(required=True)
+            source.add_argument('--key',type=Path);source.add_argument('--vault',type=Path)
+            p.add_argument('--vault-entry');p.add_argument('--vault-member')
+            p.add_argument('--vault-public-key',type=Path);p.add_argument('--vault-password-dialog',action='store_true')
+            p.add_argument('--output',type=Path,required=True)
         else:p.add_argument('--signature',type=Path,required=True);p.add_argument('--anchor',type=Path,required=True,help='Previously trusted base64 Ed25519 public key; never trust the key inside the downloaded setup')
     a=parser.parse_args()
-    if a.operation=='sign':sign(a.archive,a.version,a.key,a.output);print('Setup signature written; private key remains local.')
+    if a.operation=='sign':sign(a.archive,a.version,None,a.output,private_key=key_loader().load(a));print('Setup signature written; private key remains local.')
     else:print(json.dumps(verify(a.archive,a.signature,a.anchor,a.version),sort_keys=True))
 if __name__=='__main__':main()

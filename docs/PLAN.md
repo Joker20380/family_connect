@@ -5,6 +5,12 @@
 
 ## Текущий приоритет
 
+24.09: [аудит серверных прав и5 vault issuers](releases/2026-09-24-secret-consumers.ru.md).
+40 targeted tests passed; основные секреты RU/NL имеют ожидаемые600/640 и закрытые
+каталоги. Drop-in UMask0077 установлен без restart; AWG runtime0077, TCP runtime0022
+до планового restart. Далее — server backup/реестр потребителей; plaintext оригиналы пока сохранены.
+
+
 24.09: [подпись из KeePassXC](releases/2026-09-24-vault-signing.ru.md) подключена к3 issuers.
 896 Python tests passed; рабочий ключ прочитан из vault и проверен по public anchor
 без подписи/экспорта. Далее — проверка остальных потребителей/серверных credentials,

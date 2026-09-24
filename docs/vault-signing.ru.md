@@ -1,7 +1,8 @@
 # Подпись с ключом из KeePassXC
 
 Локальный Linux operator workflow. Код: `scripts/signing_key.py`; потребители:
-`sign_update.py`, `sign_control_config.py`, `sign_friends_catalog.py`.
+`sign_update.py`, `sign_control_config.py`, `sign_friends_catalog.py`,
+`sign_tcp.py`, `tcp_setup_signature.py sign`.
 Не серверный secrets manager и не физически офлайн signing station.
 
 ## Проверка без подписи
@@ -32,7 +33,8 @@ python -m scripts.signing_key --vault /private/operator.kdbx --vault-entry 'GROU
 python -m scripts.sign_update --vault /private/operator.kdbx --vault-entry 'GROUP/ENTRY' --vault-member 'path/inside/archive.key' --vault-public-key clients/desktop/update.pub --vault-password-dialog --platform windows --version X.Y.Z --sequence N --artifacts /private/verified-artifacts --output /private/new-catalog.json
 ```
 
-Аналогичные options доступны для control config и Friends catalog. Нельзя обходить
+Аналогичные options доступны для control config, Friends catalog, TCP catalog и
+`tcp_setup_signature.py sign`. Standalone `verify` не требует vault loader/KeePassXC. Нельзя обходить
 приёмку артефактов, monotonic sequence и неизменяемость опубликованных релизов.
 `--initialize` допускается только с файловым `--key`; vault workflow не создаёт/не
 меняет корневые ключи. Режим `--key` сохранён для совместимости, проверки regular file,
@@ -66,3 +68,8 @@ checks passed после добавления безопасного обозн�
 успешная проверка не означает выполненный выпуск на рабочем ключе. Control/Friends
 signer получили общий loader, их реальная подпись из рабочего vault не выполнялась.
 Рабочие оригиналы и live services не изменялись. Внешнего backup пока нет.
+
+Продолжение24.09:40 targeted tests passed для loader/update/TCP delivery/TCP setup.
+Реальные синтетические KDBX tests проверяют подписи update/TCP/setup и отказ при
+неверном пароле. Standalone setup verifier проверен в отдельной директории без
+operator loader. Рабочим ключом TCP/setup подпись не выполнялась.

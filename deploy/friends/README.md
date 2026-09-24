@@ -85,3 +85,20 @@ on install. [Artifact, checks and rollback](../../docs/releases/2026-09-19-andro
 ## Current distribution — 2026-09-23
 
 The historical code-claim browser flow above is superseded by app-side invitation activation. The page preserves its fragment, provides Android beta50 / desktop0.2.10 downloads and opens the installed URI handler. No browser claim or token storage. OFF is orange, ON turquoise. [Current versions and rollback](../../docs/releases/2026-09-23-switch-colors-beta50.ru.md).
+
+## Private-file creation policy
+
+New AWG/TCP units include `UMask=0077`. Existing deployments use the repository's
+`70-private-files.conf` as `/etc/systemd/system/<unit>.d/70-private-files.conf` for
+`family-connect-friends-awg.service` and `family-connect-friends-tcp.service`.
+After `systemctl daemon-reload`, confirm `systemctl show <unit> -p UMask`.
+This changes the next process start, not the umask of an already running process.
+Compare `/proc/<MainPID>/status` and do not claim effective rollout from unit settings
+alone. A restart can interrupt connections and should be a separate maintenance step.
+
+Keep AWG private config/settings/peer DB root0600 inside root0700; TCP server.json
+root:fc-friends0640 inside root:fc-friends0750. The TCP group read bit is intentional.
+Do not chmod it0600 without first changing the service's credential access path.
+Do not print config contents, environment values or database rows while checking.
+Rollback of this drop-in restores prior creation policy after reload/next start;
+it does not change existing file modes or revert unrelated hardening.

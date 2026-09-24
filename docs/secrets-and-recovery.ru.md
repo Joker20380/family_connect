@@ -134,3 +134,6 @@ Backup inventory. Названия разделов — схема; это не 
 
 24.09: реализован [локальный путь подписи из KeePassXC](vault-signing.ru.md).
 Чтение рабочего ключа/anchor проверено без подписи; переход не удаляет открытые оригиналы.
+
+24.09: [аудит основных server credentials и ещё2 issuers](releases/2026-09-24-secret-consumers.ru.md).
+Known secret modes корректны; TCP runtime umask ожидает планового restart, серверный backup ещё открыт.
