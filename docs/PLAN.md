@@ -1,5 +1,13 @@
 # Рабочий план / Working plan
 
+24.09: [Windows0.2.14 опубликован](releases/2026-09-24-windows0214-installer.ru.md), source6eed30c.
+GitHub/HTTPS installer и страница обновлены; отдельный подписанный Windows-каталог
+schema2/sequence10. CET отключён только для процессов приложения для совместимости
+со старыми патчами Win10; системные настройки защиты не меняются. Повторная установка
+не запускает старый EXE, данные сохраняются. Native CI: Server2025/2022, recovery/upgrade,
+UI/user/AWG/TCP passed. Физический проблемный Win10 ПК ещё требует приёмки.
+Windows10 1809+ /11 x64 — целевые версии, не гарантия всех сборок Windows.
+
 24.09: [XHTTP/TLS реализован в исходниках и проверен локально](releases/2026-09-24-xhttp-local.ru.md).
 Этап5.3в теперь в работе по прямому запросу пользователя: Python/Linux, Android
 Java/Go и Windows activation v2; двусторонний loopback, TLS/credential refusals.

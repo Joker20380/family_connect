@@ -1,5 +1,9 @@
 # Client installation
 
+Windows0.2.14 targets Windows10 1809+ /11 x64 and bundles .NET.
+After a failed0.2.13 installation, run the new installer over the remaining files.
+No manual service setup is needed. Affected Windows10 device acceptance is pending.
+
 [Русский](clients.ru.md) · [Home](../README.md)
 
 Status checked 2026-09-23. Client features and release versions differ by platform.
@@ -14,18 +18,18 @@ CI debug APKs are not update packages for an installed friends beta.
 
 ## Current invitation-page downloads
 
-[Linux 0.2.10 / 8e9fabe3cbef2989](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-8e9fabe3cbef2989.tar.gz) · [Windows 0.2.13 / c298436](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.13-pilot-unsigned.exe)
+[Linux 0.2.10 / 8e9fabe3cbef2989](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-8e9fabe3cbef2989.tar.gz) · [Windows 0.2.14 / 6eed30c](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.14-pilot-unsigned.exe)
 
 Install the client, return to the original invitation link, mark **Application installed** and choose **Open application**.
 Windows installs the URI handler with its service and preserves existing activation.
 Linux needs operator-assisted setup: [current archive instructions](https://185.251.89.19:8443/downloads/FamilyConnect-Linux-0.2.10-invitation.txt).
 They cover a persistent Python environment and desktop URI handler; VPN helpers are installed separately.
 
-[Windows GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/windows-v0.2.13) · [Linux GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/desktop-preview-20260923-840181d) · [Hashes and checks](releases/2026-09-23-windows0213-updater.ru.md).
-Preserve identity and application data when updating. Windows0.2.13 uses its own signed update catalog; install it manually once from0.2.12 or earlier. Linux and the older shared catalog are unchanged. Desktop messenger parity is not claimed.
+[Windows GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/windows-v0.2.14) · [Linux GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/desktop-preview-20260923-840181d) · [Hashes and checks](releases/2026-09-24-windows0214-installer.ru.md).
+Preserve identity and application data when updating. Windows0.2.14 uses its own signed update catalog; install it manually once from0.2.12 or earlier. Linux and the older shared catalog are unchanged. Desktop messenger parity is not claimed.
 The separate historical GitHub v0.2.9 flow below is retained; use the current downloads above for new invitations.
 
-Windows0.2.13 automatically creates the local device key on first launch. Access still needs an invitation: on the phone choose **Settings → Invite a friend**, send the full link to the PC and open it. Alternatively choose **Activate with invitation** on the PC, paste the full link and select **Activate access**. Launching only the desktop shortcut cannot supply the invitation. Existing access survives an update.
+Windows0.2.14 automatically creates the local device key on first launch. Access still needs an invitation: on the phone choose **Settings → Invite a friend**, send the full link to the PC and open it. Alternatively choose **Activate with invitation** on the PC, paste the full link and select **Activate access**. Launching only the desktop shortcut cannot supply the invitation. Existing access survives an update.
 
 ## Original GitHub v0.2.9: Linux
 

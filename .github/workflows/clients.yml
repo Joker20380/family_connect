@@ -120,6 +120,9 @@ jobs:
       - name: Check TCP profile broker storage and replacement
         shell: pwsh
         run: dotnet run --project clients/windows/BrokerTests/BrokerTests.csproj -c Release -- clients/windows/dist/tcp-broker-check.txt
+      - name: Upgrade running service and preserve existing data
+        shell: pwsh
+        run: ./clients/windows/test-install.ps1 -Stage Upgrade
       - name: Check user interface
         shell: pwsh
         run: ./clients/windows/test-install.ps1 -Stage UI
@@ -189,6 +192,37 @@ jobs:
             clients/desktop/*.py
             clients/desktop/*.sh
             artifacts/clients/FamilyConnect-Linux-*.tar.gz
+
+  windows-compatibility:
+    needs: windows
+    runs-on: windows-2022
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: FamilyConnect-Windows-Installer-pilot-unsigned
+          path: clients/windows/dist
+      - name: Install identical release artifact over unusable leftover host
+        shell: pwsh
+        run: ./clients/windows/test-install.ps1 -Stage Install
+      - name: Broker works without a separately installed NET 10 runtime
+        shell: pwsh
+        run: ./clients/windows/test-install.ps1 -Stage Broker
+      - name: Upgrade running service and preserve data
+        shell: pwsh
+        run: ./clients/windows/test-install.ps1 -Stage Upgrade
+      - name: Remove service and application
+        if: always()
+        shell: pwsh
+        run: ./clients/windows/test-install.ps1 -Stage Uninstall
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-compatibility-logs
+          path: |
+            install.log
+            upgrade.log
 
   release:
     if: startsWith(github.ref, 'refs/tags/v') || (github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'Release '))

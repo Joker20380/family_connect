@@ -1,6 +1,6 @@
 # Windows 0.2: standalone client
 
-Current Windows0.2.13 uses invitation-link activation, creates its local key automatically and accepts a full invitation pasted into the access page. Use the [current installation guide](clients.en.md) and [Windows release report](releases/2026-09-23-windows0213-updater.ru.md). The engineering description below documents the original0.2 standalone pilot; its operator-file onboarding is historical.
+Current Windows0.2.14 uses invitation-link activation, creates its local key automatically and accepts a full invitation pasted into the access page. Use the [current installation guide](clients.en.md) and [Windows release report](releases/2026-09-24-windows0214-installer.ru.md). The engineering description below documents the original0.2 standalone pilot; its operator-file onboarding is historical.
 
 ## Status
 

@@ -1,5 +1,13 @@
 # Текущее состояние / Current state
 
+24.09: [Windows0.2.14 опубликован](releases/2026-09-24-windows0214-installer.ru.md), source6eed30c.
+GitHub/HTTPS installer и страница обновлены; отдельный подписанный Windows-каталог
+schema2/sequence10. CET отключён только для процессов приложения для совместимости
+со старыми патчами Win10; системные настройки защиты не меняются. Повторная установка
+не запускает старый EXE, данные сохраняются. Native CI: Server2025/2022, recovery/upgrade,
+UI/user/AWG/TCP passed. Физический проблемный Win10 ПК ещё требует приёмки.
+Windows10 1809+ /11 x64 — целевые версии, не гарантия всех сборок Windows.
+
 24.09: [XHTTP/TLS реализован в исходниках и проверен локально](releases/2026-09-24-xhttp-local.ru.md).
 Этап5.3в теперь в работе по прямому запросу пользователя: Python/Linux, Android
 Java/Go и Windows activation v2; двусторонний loopback, TLS/credential refusals.
@@ -181,14 +189,14 @@ Windows0.2.13 (интерфейс, приглашение, подключени�
 | --- | --- | --- |
 | Android ARM64 | 0.1.18-beta50 / code50 | Redmi Note 9 Pro обновлён поверх49; HTTPS APK, updater и страница —50 |
 | Linux | 0.2.10 / preview8e9fabe3cbef2989 | GitHub/HTTPS paired archive; базовый сценарий принят пользователем |
-| Windows x64 | 0.2.13 / sourcec298436 | GitHub/HTTPS installer; native CI passed; пилотная приёмка принята пользователем |
+| Windows x64 | 0.2.14 / source6eed30c | GitHub/HTTPS installer; Server2025/2022 native CI passed; affected Win10 device acceptance pending |
 
 [Интерактивная страница](https://185.251.89.19:8443/invite/) принимает исходную ссылку
 приглашения: установка → возврат к ссылке → открытие приложения. Вкладки, выбор платформы
 и переключатели работают в браузере; VPN подключается самим приложением. Во всех клиентах
 и на странице OFF оранжевый, ON бирюзовый. Старые файлы и автоматические desktop-каталоги
-сохранены; Linux0.2.10 остаётся manual preview. Windows0.2.13 опубликован и включён
-в отдельный подписанный updates/windows.json (schema2, sequence9). С0.2.12 и старше нужна
+сохранены; Linux0.2.10 остаётся manual preview. Windows0.2.14 опубликован и включён
+в отдельный подписанный updates/windows.json (schema2, sequence10). С0.2.12 и старше нужна
 одна ручная установка переходной версии; затем работает встроенная проверка Windows.
 
 [Версии и хеши](releases.md) · [Windows: приёмка и откат](releases/2026-09-23-windows0213-updater.ru.md) · [Android/Linux](releases/2026-09-23-switch-colors-beta50.ru.md).
