@@ -42,7 +42,44 @@ def database(raw):
         # Do not return table names, row counts, SQL or record contents to public logs.
 
 
-def snapshot(root, role):
+def infrastructure_sources(root, role):
+    """Explicit recovery dependencies only; TLS links stored as private metadata."""
+    selected = []
+    links = []
+    ssh = root / 'etc/ssh'
+    for algorithm in ('rsa', 'ecdsa', 'ed25519'):
+        for suffix in ('', '.pub'):
+            path = ssh / ('ssh_host_' + algorithm + '_key' + suffix)
+            if path.exists(): selected.append(path)
+    if not any(p.name.endswith('_key') for p in selected):
+        raise ValueError('missing host keys')
+    selected.append(root / 'root/.ssh/authorized_keys')
+    base = root / 'opt/apps/family_connect'
+    if role == 'nl':
+        node = base / 'mailbox-pilot'
+        selected += [node / name for name in (
+            'node.identity', 'settings.json', 'members.json', 'state/.volume-id',
+            'state/rns/config', 'state/rns/storage/transport_identity',
+            'state/spool/spool.sqlite')]
+    else:
+        tls = base / 'state-product-https/certificates'
+        if tls.is_symlink() or not tls.is_dir():
+            raise ValueError('missing TLS root')
+        for path in sorted(tls.rglob('*')):
+            if path.is_symlink():
+                target = path.resolve(strict=True)
+                if not target.is_relative_to(tls) or not target.is_file():
+                    raise ValueError('unsafe TLS link')
+                links.append(dict(path=str(path.relative_to(root)),
+                                  target=str(target.relative_to(root))))
+            elif path.is_file(): selected.append(path)
+        names = {str(p.relative_to(root)) for p in selected}
+        if not links or any(link['target'] not in names for link in links):
+            raise ValueError('missing TLS link target')
+    return selected, links
+
+
+def snapshot(root, role, *, infrastructure=False):
     if role not in {'ru', 'nl'}:
         raise ValueError('unknown role')
     root = Path(root)
@@ -50,43 +87,47 @@ def snapshot(root, role):
     files = {}
     manifest = []
     with contextlib.ExitStack() as stack:
-        lock = root / 'friends-awg/registration.lock'
-        fd, _ = regular(root, lock)
-        stack.callback(os.close, fd)
-        # Never block live provisioning indefinitely; retry explicitly if busy.
-        fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        required = ['friends-awg/server.conf', 'friends-awg/settings.json',
-                    'friends-awg/peers.db', 'friends-tcp/server.json']
-        areas = ['friends-awg', 'friends-tcp']
-        if role == 'ru':
-            required += ['friends-access/access.db', 'friends-access/referral.key',
-                         'friends-access/notices.sqlite', 'friends-access/catalog.json']
-            areas += ['friends-access']
-        excluded = {'awg', 'amneziawg-go', 'xray'}
-        selected = []
-        for area in areas:
-            folder = root / area
-            if folder.is_symlink() or not folder.is_dir():
-                raise ValueError('missing or unsafe required area')
-            for path in sorted(folder.iterdir()):
-                if path.is_symlink():
-                    raise ValueError('source symlink refused')
-                if path.is_dir() or path.name in excluded or path.name.endswith(('.lock', '-wal', '-shm')):
-                    continue
-                if path.suffix == '.pending' or path.name == 'user-request.json':
-                    raise ValueError('unfinished registration')
-                selected.append(path)
-        if role == 'ru':
-            product = root / 'state-product'
-            if not product.is_dir() or product.is_symlink():
-                raise ValueError('missing Product state')
-            for path in sorted(product.rglob('*')):
-                if path.is_symlink():
-                    raise ValueError('source symlink refused')
-                if path.is_file() and not path.name.endswith(('.lock', '-wal', '-shm')):
+        links = []
+        if infrastructure:
+            selected, links = infrastructure_sources(root, role)
+        else:
+            lock = root / 'friends-awg/registration.lock'
+            fd, _ = regular(root, lock)
+            stack.callback(os.close, fd)
+            # Never block live provisioning indefinitely; retry explicitly if busy.
+            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            required = ['friends-awg/server.conf', 'friends-awg/settings.json',
+                        'friends-awg/peers.db', 'friends-tcp/server.json']
+            areas = ['friends-awg', 'friends-tcp']
+            if role == 'ru':
+                required += ['friends-access/access.db', 'friends-access/referral.key',
+                             'friends-access/notices.sqlite', 'friends-access/catalog.json']
+                areas += ['friends-access']
+            excluded = {'awg', 'amneziawg-go', 'xray'}
+            selected = []
+            for area in areas:
+                folder = root / area
+                if folder.is_symlink() or not folder.is_dir():
+                    raise ValueError('missing or unsafe required area')
+                for path in sorted(folder.iterdir()):
+                    if path.is_symlink():
+                        raise ValueError('source symlink refused')
+                    if path.is_dir() or path.name in excluded or path.name.endswith(('.lock', '-wal', '-shm')):
+                        continue
+                    if path.suffix == '.pending' or path.name == 'user-request.json':
+                        raise ValueError('unfinished registration')
                     selected.append(path)
-        if not set(required) <= {str(p.relative_to(root)) for p in selected}:
-            raise ValueError('missing required files')
+            if role == 'ru':
+                product = root / 'state-product'
+                if not product.is_dir() or product.is_symlink():
+                    raise ValueError('missing Product state')
+                for path in sorted(product.rglob('*')):
+                    if path.is_symlink():
+                        raise ValueError('source symlink refused')
+                    if path.is_file() and not path.name.endswith(('.lock', '-wal', '-shm')):
+                        selected.append(path)
+            if not set(required) <= {str(p.relative_to(root)) for p in selected}:
+                raise ValueError('missing required files')
         total = 0
         for path in selected:
             fd, before = regular(root, path)
@@ -128,8 +169,11 @@ def snapshot(root, role):
             finally:
                 os.close(fd)
     inventory = dict(schema=1, role=role, started_at=started, finished_at=int(time.time()),
-        consistency='gateway registration lock; individual SQLite online snapshots; not a global transaction',
-        excluded=['old backup directories', 'binaries', 'TLS', 'system SSH', 'messenger node', 'legacy state-v2'], files=manifest)
+        scope='infrastructure' if infrastructure else 'application', symlinks=links,
+        consistency=('individual SQLite online snapshots; no global transaction' if infrastructure else
+                     'gateway registration lock; individual SQLite online snapshots; not a global transaction'),
+        excluded=(['runtime originals', 'system configuration', 'RNS caches', 'volume image', 'legacy state-v2'] if infrastructure else
+                  ['old backup directories', 'binaries', 'TLS', 'system SSH', 'messenger node', 'legacy state-v2']), files=manifest)
     files['PRIVATE-INVENTORY.json'] = json.dumps(inventory, sort_keys=True).encode()
     out = io.BytesIO()
     with tarfile.open(fileobj=out, mode='w:gz') as archive:
@@ -156,6 +200,11 @@ def verify(raw):
     expected = inventory['files']
     if len(expected) != len(files) or {r['path'] for r in expected} != set(files):
         raise ValueError('inventory mismatch')
+    for link in inventory.get('symlinks', []):
+        path = PurePosixPath(link['path'])
+        if (path.is_absolute() or '..' in path.parts or str(path) != link['path'] or
+                link['path'] in files or link['target'] not in files):
+            raise ValueError('unsafe link inventory')
     databases = 0
     for record in expected:
         data = files[record['path']]
@@ -170,12 +219,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--role', choices=['ru', 'nl'], required=True)
     parser.add_argument('--private-stream', action='store_true', required=True)
+    parser.add_argument('--infrastructure', action='store_true')
     args = parser.parse_args()
     resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
     if sys.stdout.isatty():
         raise SystemExit('Refusing private stream to terminal')
     try:
-        raw = snapshot(Path('/opt/apps/family_connect'), args.role)
+        raw = snapshot(Path('/') if args.infrastructure else Path('/opt/apps/family_connect'),
+                       args.role, infrastructure=args.infrastructure)
         verify(raw)
         sys.stdout.buffer.write(raw)
     except Exception:

@@ -105,3 +105,8 @@ gateway registration lock/SQLite online backup; `verify` проверяет inve
 и SQLite в памяти. `tests/test_server_secret_snapshot.py` — WAL/lock/path/tamper.
 [Runbook](../server-secret-backup.ru.md). Orchestration SSH→KeePassXC пока операторский,
 автоматического расписания backup/full-service restore нет.
+
+Infrastructure scope того же snapshot модуля: SSH host identity/authorized_keys,
+RU Certbot regular files + private link mapping, NL mailbox identity/bootstrap/spool.
+Тесты проверяют границы ссылок и обязательную identity; SQLite остаётся online backup.
+[Checkpoint и обнаруженный chat-sync сбой](../releases/2026-09-24-infrastructure-secret-backup.ru.md).

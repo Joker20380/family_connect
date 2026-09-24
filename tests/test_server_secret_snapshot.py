@@ -75,3 +75,47 @@ def test_modified_attachment_refused(source):
         for name,data in files.items():
             item=tarfile.TarInfo(name);item.size=len(data);archive.addfile(item,io.BytesIO(data))
     with pytest.raises(ValueError,match='digest'):verify(out.getvalue())
+
+
+@pytest.fixture
+def infrastructure(tmp_path):
+    for name in ('etc/ssh/ssh_host_ed25519_key', 'root/.ssh/authorized_keys'):
+        path=tmp_path/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(b'synthetic')
+    base=tmp_path/'opt/apps/family_connect'
+    tls=base/'state-product-https/certificates'
+    (tls/'archive/example').mkdir(parents=True)
+    (tls/'archive/example/key1.pem').write_bytes(b'synthetic TLS')
+    (tls/'live/example').mkdir(parents=True)
+    (tls/'live/example/privkey.pem').symlink_to('../../archive/example/key1.pem')
+    node=base/'mailbox-pilot'
+    for name in ('node.identity','settings.json','members.json','state/.volume-id',
+                 'state/rns/config','state/rns/storage/transport_identity'):
+        path=node/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(b'synthetic')
+    (node/'state/spool').mkdir()
+    with sqlite3.connect(node/'state/spool/spool.sqlite') as db:
+        db.execute('CREATE TABLE messages (ciphertext BLOB)')
+        db.execute('INSERT INTO messages VALUES (?)',(b'synthetic encrypted message',))
+    return tmp_path
+
+
+def test_infrastructure_preserves_tls_link_metadata_and_mailbox(infrastructure):
+    raw=snapshot(infrastructure,'ru',infrastructure=True)
+    assert verify(raw)['files']==3
+    files=unpack(raw);manifest=json.loads(files['PRIVATE-INVENTORY.json'])
+    assert len(manifest['symlinks'])==1
+    assert files[manifest['symlinks'][0]['target']]==b'synthetic TLS'
+    raw=snapshot(infrastructure,'nl',infrastructure=True)
+    assert verify(raw)==dict(files=9,databases_verified=1,role='nl')
+    assert not any('cache' in p for p in unpack(raw))
+
+
+def test_infrastructure_rejects_escaping_tls_link(infrastructure):
+    tls=infrastructure/'opt/apps/family_connect/state-product-https/certificates'
+    (tls/'escape').symlink_to(infrastructure/'etc/ssh/ssh_host_ed25519_key')
+    with pytest.raises(ValueError,match='unsafe TLS link'):
+        snapshot(infrastructure,'ru',infrastructure=True)
+
+
+def test_infrastructure_requires_identity(infrastructure):
+    (infrastructure/'opt/apps/family_connect/mailbox-pilot/node.identity').unlink()
+    with pytest.raises(FileNotFoundError):snapshot(infrastructure,'nl',infrastructure=True)

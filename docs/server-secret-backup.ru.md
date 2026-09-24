@@ -63,3 +63,29 @@ atomic replace только после двух успешных snapshots и п
 
 24.09 выполнены только encrypted save, byte/inventory checks и SQLite restore-in-memory.
 Полный запуск сервиса на чистой машине и client acceptance из backup ещё не выполнены.
+
+## Дополнительный scope infrastructure
+
+`--infrastructure` использует корень файловой системы и отдельный allowlist:
+SSH host keys RSA/ECDSA/Ed25519 (присутствующие пары) и root authorized_keys на обоих
+FC hosts; на RU дерево certificates Certbot, на NL node.identity/settings/members,
+volume marker, RNS config/transport identity и SQLite spool. Старый application scope
+не изменён. Это два отдельных attachments, их нужно восстанавливать совместно с
+предыдущими application snapshots и конфигурацией развёртывания.
+
+TLS symlinks не разыменовываются в tar: архив содержит regular targets, а закрытый
+manifest — отображение link path → target path. Цель обязана быть обычным файлом
+внутри TLS дерева и присутствовать в архиве. При восстановлении сначала проверять
+manifest, затем создать файлы и относительные ссылки внутри нового staging root;
+не создавать ссылки в работающем `/etc/letsencrypt` вслепую. UID/GID сверять по
+служебным пользователям на новом хосте, не переносить числовые ID автоматически.
+Host private keys восстанавливать только для замены прежнего узла, не клонировать
+одну SSH identity на одновременно работающие разные машины.
+
+Mailbox state.ext4 и RNS caches исключены. Для восстановления нужен новый bounded
+смонтированный volume с сохранённым marker, правильными владельцами/правами и
+preflight `messenger.server --check`. SQLite spool включает ciphertext сообщений;
+он остаётся чувствительными данными. Online backup не гарантирует общий момент
+снимка с membership/settings; lease участников после восстановления обновляется
+с authoritative RU, а не продлевается вручную. Старые сообщения ограничены retention.
+Проверка tar/SQLite в памяти ещё не означает успешный запуск восстановленного узла.

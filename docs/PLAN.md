@@ -5,6 +5,12 @@
 
 ## Текущий приоритет
 
+24.09: [TLS/SSH/mailbox: ещё42 файла в KeePassXC](releases/2026-09-24-infrastructure-secret-backup.ru.md).
+Binary export/SHA256 и1 SQLite restore прошли;10 targeted tests passed.
+Обнаружены failed RU chat-sync и просроченный NL membership lease: диагностика и
+исправление — следующий шаг. Затем clean-machine restore/внешний носитель;
+рабочие plaintext originals пока сохранены. Версии клиентов не менялись.
+
 24.09: [47 серверных файлов/6 SQLite сохранены в KeePassXC](releases/2026-09-24-server-secret-backup.ru.md).
 Извлечение/hashes/in-memory SQLite restore прошли, VPN службы active.7 targeted tests passed.
 Следом — TLS/system SSH/messenger-node, clean-machine restore и внешний носитель.
