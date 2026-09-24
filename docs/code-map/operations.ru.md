@@ -75,3 +75,8 @@ multi-ingress recovery и новый третий transport — не готов�
 Текущие границы сверять с STATUS. Обновление docs/code-map не заменяет их реализацию.
 
 Правила [хранения критических секретов и восстановления](../secrets-and-recovery.ru.md).
+
+`scripts/check_public_sources.py` — stdlib guard Git index перед публикацией;
+`tests/test_public_sources.py` — проверка секретов в staged bytes и отсутствия
+значений в выводе. `.github/workflows/test.yml` повторяет guard в CI (после push).
+Это не хранилище секретов и не полный secret scanner.

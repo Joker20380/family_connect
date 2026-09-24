@@ -66,3 +66,10 @@ include validation, rollback and outstanding checks. See the
 Read [release distribution](docs/releases.md) and [update signing](docs/updates.en.md).
 Release assets are immutable. Offline signing follows successful platform checks and
 verification of downloaded assets; private signing keys do not enter CI or the server.
+
+## Public source guard
+
+After staging and before committing/pushing, run `python3 scripts/check_public_sources.py`.
+It inspects index blobs and reports paths/categories without secret values. CI repeats
+this check, but CI runs after upload and cannot prevent the first disclosure. See the
+[secret storage and recovery policy](docs/secrets-and-recovery.ru.md) for scope and limits.
