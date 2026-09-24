@@ -1,5 +1,9 @@
 # Stage 5: следующий блок native binding
 
+Текущая сверка24.09.2026: [аудит](releases/2026-09-24-stage5-audit.ru.md) и
+[контракт служебного канала/fleet](stage5-fleet-contract.ru.md). Ниже сохранены
+исторические checkpoint; они не заменяют актуальную матрицу реализации.
+
 14.09.2026: Android native profile/application adapter и service-worker dispatcher
 подготовлены;43 Java tests, включая cancellation/partial-write/crash rollback.
 Root закреплён APK resource; public wire protocol/schema2 не менялся. Dispatcher

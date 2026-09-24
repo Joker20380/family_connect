@@ -28,7 +28,7 @@ public final class MainActivity extends LocalizedActivity {
     private ProfileStore store;
     private Spinner transportPicker;
     private Button gatewayButton;
-    private boolean reconnectGateway;
+    private String pendingGateway;
     private TerminalToggle autoMode;
     private Transport selected=Transport.WG;
     private String pendingTransport="wg";
@@ -107,7 +107,6 @@ public final class MainActivity extends LocalizedActivity {
         String value=ConnectionService.status;
         gatewayButton.setEnabled(!busy&&!value.equals("connecting")&&!value.equals("cleanup-required"));
         textIfChanged(gatewayButton,getString(R.string.choose_gateway)+": "+gatewayName(getSharedPreferences("gateway-selection",MODE_PRIVATE).getString("gateway","")));
-        if(reconnectGateway&&value.equals("off")){reconnectGateway=false;toggle();return;}
         if(!value.equals("off")&&!"auto".equals(ConnectionService.requestedTransport)){
             Transport active=Transport.parse(ConnectionService.activeTransport);
             if(selected!=active){selected=active;store=new ProfileStore(this,active);transportPicker.setSelection(active.ordinal());getPreferences(MODE_PRIVATE).edit().putString("transport",active.id).apply();}
@@ -127,7 +126,7 @@ public final class MainActivity extends LocalizedActivity {
     private void showControlResult(){
         long id=ConnectionService.controlResultId;if(id==seenControlResult)return;seenControlResult=id;
         String outcome=ConnectionService.controlOutcome;if(outcome==null)return;
-        int message="COMMITTED".equals(outcome)?R.string.control_committed:"REJECTED".equals(outcome)?R.string.control_rejected:
+        int message="SELECTED".equals(outcome)?R.string.gateway_selected:"COMMITTED".equals(outcome)?R.string.control_committed:"REJECTED".equals(outcome)?R.string.control_rejected:
             "ROLLED_BACK".equals(outcome)?R.string.control_rolled_back:"BUSY".equals(outcome)?R.string.disconnect_first:"UNAVAILABLE".equals(outcome)?R.string.rns_unavailable:R.string.control_failed;
         detail.setText(message);
     }
@@ -146,6 +145,8 @@ public final class MainActivity extends LocalizedActivity {
                         String version=getPackageManager().getPackageInfo(getPackageName(),0).versionName.split("-",2)[0];
                         ControlJournal journal=new ControlJournal(new ControlJournalVault(this),identity,ControlTrust.anchor(this),version);
                         com.google.gson.JsonObject record=journal.read();long now=System.currentTimeMillis()/1000;
+                        if(record.has("selected_gateway"))getSharedPreferences("gateway-selection",MODE_PRIVATE).edit()
+                            .putString("gateway",record.get("selected_gateway").isJsonNull()?"":ControlJson.text(record.get("selected_gateway"))).apply();
                         if(now<ControlJson.integer(record.get("last_now"),0)||!record.get("staged").isJsonNull())throw new IOException();
                         ControlProtocol.Verified config=journal.unpack(record.getAsJsonObject("committed"),now);
                         for(com.google.gson.JsonElement item:config.state().getAsJsonArray("transport_profiles")){
@@ -159,11 +160,9 @@ public final class MainActivity extends LocalizedActivity {
                 if(ids.isEmpty()){detail.setText(R.string.gateway_unavailable);return;}
                 String[] names=new String[ids.size()];for(int i=0;i<names.length;i++)names[i]=gatewayName(ids.get(i));
                 new android.app.AlertDialog.Builder(this).setTitle(R.string.choose_gateway).setItems(names,(d,index)->{
-                    if(!getSharedPreferences("gateway-selection",MODE_PRIVATE).edit().putString("gateway",ids.get(index)).commit()){
-                        detail.setText(R.string.failed);return;
-                    }
-                    if(ConnectionService.status.equals("off"))toggle();
-                    else{reconnectGateway=true;startService(new Intent(this,ConnectionService.class).setAction("disconnect"));}
+                    pendingGateway=ids.get(index);busy=true;render();
+                    Intent permission=VpnService.prepare(this);
+                    if(permission!=null)startActivityForResult(permission,20);else continueGateway();
                 }).setNegativeButton(android.R.string.cancel,null).show();
             });
         });
@@ -173,6 +172,20 @@ public final class MainActivity extends LocalizedActivity {
         if(Build.VERSION.SDK_INT>=33&&checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
             requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},19);
         else startRns();
+    }
+    private void continueGateway(){
+        if(pendingGateway==null)return;
+        if(Build.VERSION.SDK_INT>=33&&checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
+            requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},21);
+        else startGateway();
+    }
+    private void startGateway(){
+        String id=pendingGateway;pendingGateway=null;busy=false;
+        if(id!=null&&!isDestroyed())try{
+            startForegroundService(new Intent(this,ConnectionService.class).setAction("select-gateway").putExtra("gateway",id));
+            detail.setText(R.string.control_applying);
+        }catch(Exception failure){detail.setText(R.string.control_failed);}
+        render();
     }
     private void startRns(){
         if(!pendingRns)return;pendingRns=false;
@@ -241,11 +254,12 @@ public final class MainActivity extends LocalizedActivity {
         else startVpn();
     }
     @Override public void onRequestPermissionsResult(int request,String[] permissions,int[] results){
-        super.onRequestPermissionsResult(request,permissions,results);if(request==12)startVpn();else if(request==16)startControl();else if(request==19)startRns();
+        super.onRequestPermissionsResult(request,permissions,results);if(request==12)startVpn();else if(request==16)startControl();else if(request==19)startRns();else if(request==21)startGateway();
     }
     private void startVpn(){ConnectionService.requestedTransport=pendingTransport;if(!pendingTransport.equals("auto"))ConnectionService.activeTransport=pendingTransport;ConnectionService.status="connecting";startForegroundService(new Intent(this,ConnectionService.class).setAction("connect").putExtra("transport",pendingTransport));render();}
     @Override protected void onActivityResult(int request,int result,Intent data){
         super.onActivityResult(request,result,data);
+        if(request==20){if(result==RESULT_OK)continueGateway();else{pendingGateway=null;busy=false;detail.setText(R.string.permission_denied);render();}return;}
         if(request==11){if(result==RESULT_OK)continueStart();else detail.setText(R.string.permission_denied);return;}
         if(request==18){if(result==RESULT_OK)continueRns();else{pendingRns=false;detail.setText(R.string.permission_denied);}return;}
         if(request==15){if(result==RESULT_OK)readControl(data);return;}
@@ -288,7 +302,21 @@ public final class MainActivity extends LocalizedActivity {
         });
     }
     @Override protected void onSaveInstanceState(Bundle saved){saved.putString("pendingTransport",pendingTransport);super.onSaveInstanceState(saved);}
-    @Override protected void onResume(){super.onResume();handler.post(refresh);}
+    private void refreshGatewayChoice(){
+        worker.execute(()->{
+            synchronized(ControlJournal.OWNER){
+                try(ControlIdentity identity=new ControlIdentityVault(this).load()){
+                    String version=getPackageManager().getPackageInfo(getPackageName(),0).versionName.split("-",2)[0];
+                    var journal=new ControlJournal(new ControlJournalVault(this),identity,ControlTrust.anchor(this),version);
+                    var record=journal.read();
+                    if(record.has("selected_gateway"))getSharedPreferences("gateway-selection",MODE_PRIVATE).edit()
+                        .putString("gateway",record.get("selected_gateway").isJsonNull()?"":ControlJson.text(record.get("selected_gateway"))).apply();
+                }catch(Exception unavailable){/* No creation/reset of managed state on a UI read. */}
+            }
+            runOnUiThread(()->{if(!isDestroyed())render();});
+        });
+    }
+    @Override protected void onResume(){super.onResume();handler.post(refresh);refreshGatewayChoice();}
     @Override protected void onPause(){handler.removeCallbacks(refresh);super.onPause();}
     @Override protected void onDestroy(){pendingRns=false;pendingControl=null;handler.removeCallbacks(refresh);ControlEnrollmentHttp e=enrollmentHttp;if(e!=null)e.close();worker.shutdownNow();super.onDestroy();}
 }

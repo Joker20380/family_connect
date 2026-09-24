@@ -7,6 +7,7 @@ internal static class ControlVectors
 {
     internal static void Run()
     {
+        ControlAwg31Vectors.Run();
         var root = Path.Combine(AppContext.BaseDirectory, "control-v1");
         var manifestBytes = File.ReadAllBytes(Path.Combine(root, "manifest.json"));
         if (ControlProtocol.Hash(manifestBytes) != "c97e00ccff7440b09a636a792557c0602aba5eb63815cdc8fefe7755711ac3cd") throw new Exception("Unexpected conformance corpus revision");

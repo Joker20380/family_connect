@@ -1,7 +1,28 @@
 # Documentation
 
-Этап4 принят пользователем как пилотный выпуск; следующий этап — независимый служебный канал.
+[Android: подключение выбора gateway к службе/UI](releases/2026-09-24-android-selection-service.ru.md).
+
+**Новому разработчику: [общая карта кода по модулям](code-map/README.ru.md)** —
+сервер, клиенты, мессенджер, эксплуатация, зависимости и границы готовности.
+
+[Android: транзакционная смена gateway и восстановление](releases/2026-09-24-android-gateway-transaction.ru.md).
+
+Разработчику: [карта managed-кода, проверки и восстановление](managed-control-code-map.ru.md).
+
+[Android AWG3.1 journal и фактический статус публикации документации](releases/2026-09-24-awg31-android-journal.ru.md).
+
+[AWG3.1: согласование Java/C#/Python и границы проверки](releases/2026-09-24-managed-awg31-native-verifiers.ru.md).
+
+[Защита от блокировок: требования и приёмка](blocking-resilience.ru.md) ·
+[Managed AWG3.1: локальный checkpoint5.3а](releases/2026-09-24-managed-awg31.ru.md).
+
+[Как другие проекты восстанавливают доступ и доставляют адреса](releases/2026-09-24-competitor-recovery.ru.md).
+
+Этап4 принят пользователем как пилотный выпуск. Этап5 начат: независимый служебный
+канал и расширяемый парк серверов. [Контракт](stage5-fleet-contract.ru.md) ·
+[Аудит5.1 и первые компоненты](releases/2026-09-24-stage5-audit.ru.md).
 [Текущий план](PLAN.md) · [Основание приёмки](STATUS.md).
+[Приоритет AWG3.1 и исследование третьего транспорта](releases/2026-09-24-transport-priorities.ru.md).
 
 Последние доработки: [голосовые beta50: жесты, прокрутка и фон](releases/2026-09-23-switch-colors-beta50.ru.md) · [мессенджер и уведомления](testing/messenger-notices.ru.md).
 
@@ -11,7 +32,7 @@
 
 [Product introduction](../README.md) · [Русская версия](../README.ru.md)
 
-Updated23 September2026. Android updater and invitation page: beta50; invitation downloads: Linux0.2.10 / Windows0.2.13 preview.
+Updated24 September2026. Android updater and invitation page: beta50; invitation downloads: Linux0.2.10 / Windows0.2.13 preview.
 [Current distribution](releases.md) · [Documentation required with every version](releases.md#documentation-with-every-version).
 
 Start with the guide for your role. [STATUS](STATUS.md) is the source of truth for
@@ -30,6 +51,18 @@ installed/deployed versions; dated reports preserve what was checked at that tim
 ## Operators
 
 - [Friends deployment](../deploy/friends/README.md).
+- [Fleet leases/IPAM: хранение, API и recovery](fleet-leases.ru.md).
+- [Fleet proof авторизация и scheduler](fleet-access-scheduler.ru.md).
+- [Fleet offline publication: подпись, доступ и схема3](fleet-publication.ru.md).
+- [Checkpoint5.2:269 тестов signed publication](releases/2026-09-24-fleet-publication.ru.md).
+- [Checkpoint5.2:201 тест и миграция](releases/2026-09-24-fleet-services.ru.md).
+- [Fleet gateway fencing и worker](fleet-gateway-fencing.ru.md).
+- [Fleet WG/AWG и SSH: контракт, установка и границы](fleet-wg-ssh.ru.md).
+- [Native fleet-приёмка:12 сценариев WG/AWG+SSH](releases/2026-09-24-fleet-native.ru.md).
+- [Повторяемый изолированный стенд](../pilot/fleet-native/README.ru.md).
+- [Этап5.2: WG/SSH checkpoint,163 теста](releases/2026-09-24-fleet-wg-ssh.ru.md).
+- [7.1: единая Django-админка серверов, доступа и платежей](PLAN.md#django-admin).
+- [Этап5.2: проверки постоянных выдач](releases/2026-09-24-fleet-leases.ru.md).
 - Registration: [English](registration.en.md) / [Русский](registration.ru.md).
 - Gateway reconciliation: [English](gateway-reconciliation.en.md) / [Русский](gateway-reconciliation.ru.md).
 - [Paired Linux control rollout](linux-control-preview-rollout.ru.md).
@@ -66,3 +99,9 @@ All detailed reports remain available in [releases](releases/) and the
 [English](implementation-log.en.md) / [Русский](implementation-log.ru.md).
 Older instructions may name retired hosts or superseded interfaces; follow current
 runbooks and STATUS before operating anything.
+
+- [Коммерческая гипотеза: восстановление после блокировок и конкуренты](releases/2026-09-24-vpn-market-assessment.ru.md).
+
+- [Reticulum: перенос службы, discovery и границы восстановления](reticulum-recovery-design.ru.md).
+
+- [Критические секреты и аварийное восстановление](secrets-and-recovery.ru.md).

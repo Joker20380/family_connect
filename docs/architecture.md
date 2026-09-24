@@ -4,6 +4,9 @@ Family Connect contains a product client path and separate networking experiment
 Use [STATUS](STATUS.md) for platform integration and deployment facts; older design
 records describe their named stage, not the entire current application.
 
+For source entry points, module responsibilities, data stores and tests, use the
+[module code map](code-map/README.ru.md).
+
 ## Product and device path
 
 Invitation/entitlement → device identity → provisioning → client verification and
@@ -19,8 +22,8 @@ protected state → platform VPN adapter → transport/gateway.
 - [Android source](../clients/android/), [Linux source](../clients/desktop/),
   [Windows source](../clients/windows/).
 
-Android friends currently exposes AWG 3.1 and TCP REALITY options. Published desktop
-v0.2.9 has its own capabilities and activation. Do not infer identical feature support
+Android friends currently exposes AWG 3.1 and TCP REALITY options. Desktop releases
+have their own capabilities and activation; see STATUS for current versions. Do not infer identical feature support
 from shared architecture. Device provisioning/configuration is distinct from the
 [offline-signed application update catalog](updates.en.md).
 

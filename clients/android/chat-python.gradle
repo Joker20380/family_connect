@@ -10,6 +10,10 @@ def stageChatPython = tasks.register('stageChatPython', Sync) {
 chaquopy {
     sourceSets { getByName('main') { srcDir generatedChat.get().asFile } }
     defaultConfig {
+        // Reproducible local APK builds: point at a host Python matching target 3.10.
+        // Leave Chaquopy's normal discovery unchanged when the property is absent.
+        def hostPython = providers.gradleProperty('fcBuildPython').orNull
+        if (hostPython != null) buildPython hostPython
         pip { install 'lxmf==1.1.1' }
     }
 }

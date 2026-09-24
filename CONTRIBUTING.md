@@ -4,6 +4,10 @@ Start with [STATUS](docs/STATUS.md), [PLAN](docs/PLAN.md) and the
 [documentation map](docs/README.md). They distinguish current behavior from dated experiments.
 The repository-wide [license decision](docs/licensing.md) remains pending.
 
+For module ownership, entry points, data stores and tests, start with the
+[module code map (Russian)](docs/code-map/README.ru.md). Update the relevant module
+page when adding a module, changing its responsibilities or moving a trust boundary.
+
 ## Changes and reports
 
 Keep changes focused. Describe the problem, expected behavior, exact platform/version,

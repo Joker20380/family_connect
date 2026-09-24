@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 import static com.familyconnect.app.ControlJson.*;
 
 /** Native profile transaction policy. Host uses the existing service worker and engine. */
-final class ControlApplication implements ControlTransaction.Resumable {
+final class ControlApplication implements ControlTransaction.Selectable {
     interface Host {
         JsonObject capture() throws Exception;
         void validate(String transport, String profile) throws Exception;
@@ -25,8 +25,10 @@ final class ControlApplication implements ControlTransaction.Resumable {
     ControlApplication(Host host, ControlIdentity identity, java.util.function.Supplier<String> gateway) {
         this.host=host; this.identity=identity; this.gateway=gateway;
     }
-    private String selectedSlot(ControlProtocol.Verified config) throws IOException {
-        String wanted=gateway.get();
+    public ControlTransaction.Resumable forGateway(String id) {
+        return new ControlApplication(host,identity,()->id);
+    }
+    private String selectedSlot(ControlProtocol.Verified config,String wanted) throws IOException {
         for(JsonElement item:config.state().getAsJsonArray("transport_profiles")) {
             JsonObject profile=item.getAsJsonObject();
             if(wanted.isEmpty()||wanted.equals(text(profile.get("gateway_id")))) {
@@ -49,12 +51,15 @@ final class ControlApplication implements ControlTransaction.Resumable {
         return value.deepCopy();
     }
     public JsonObject snapshot(JsonObject previousRuntime) throws Exception { return checked(host.capture()); }
-    private LinkedHashMap<String,String> materialize(ControlProtocol.Verified verified) throws Exception {
+    private LinkedHashMap<String,String> materialize(ControlProtocol.Verified verified,String wanted) throws Exception {
         LinkedHashMap<String,String> profiles=new LinkedHashMap<>();
         byte[] key=identity.wireguardPrivateKey();
         try {
             for(JsonElement item:verified.state().getAsJsonArray("transport_profiles")) {
                 JsonObject p=item.getAsJsonObject();String transport=text(p.get("transport"));
+                // Fixed native slots must only contain profiles of the explicit target.
+                // Empty selection retains legacy all-slots behavior and rejects ambiguity.
+                if(!wanted.isEmpty()&&!wanted.equals(text(p.get("gateway_id"))))continue;
                 String slot=transport.equals("wireguard")?"wg":transport.equals("amneziawg")?"awg":"tcp";
                 if(profiles.containsKey(slot))throw new IOException("Multiple signed profiles for one native slot");
                 String raw=text(p.get("config"));
@@ -65,7 +70,10 @@ final class ControlApplication implements ControlTransaction.Resumable {
         if(profiles.isEmpty())throw new IOException("No native profile");return profiles;
     }
     public void apply(ControlProtocol.Verified config, JsonObject baseline) throws Exception {
-        checked(baseline);LinkedHashMap<String,String> profiles=materialize(config);String selected=selectedSlot(config);
+        checked(baseline);
+        // Read selection once so validation, writes and start use the same target.
+        String wanted=gateway.get(),selected=selectedSlot(config,wanted);
+        LinkedHashMap<String,String> profiles=materialize(config,wanted);
         if(host.cancelled())throw new IOException("Control operation cancelled");
         host.stop();
         for(var entry:profiles.entrySet()) {
@@ -78,7 +86,8 @@ final class ControlApplication implements ControlTransaction.Resumable {
     public void resume(ControlProtocol.Verified config) throws Exception {
         JsonObject saved=checked(host.capture());
         if(!saved.get("active").isJsonNull())throw new IOException("Resume requires stopped VPN");
-        LinkedHashMap<String,String> profiles=materialize(config);String selected=selectedSlot(config);
+        String wanted=gateway.get(),selected=selectedSlot(config,wanted);
+        LinkedHashMap<String,String> profiles=materialize(config,wanted);
         for(var entry:profiles.entrySet()) {
             JsonElement stored=saved.getAsJsonObject("profiles").get(entry.getKey());
             if(stored.isJsonNull()||!entry.getValue().equals(text(stored)))

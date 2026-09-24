@@ -21,11 +21,17 @@ final class ControlJournal {
     final ControlIdentity identity;
     private final byte[] anchor;
     private final String clientVersion;
+    private final boolean supportsAwg31;
     ControlJournal(Storage storage, ControlIdentity identity, byte[] anchor, String clientVersion) {
+        this(storage,identity,anchor,clientVersion,false);
+    }
+    // Capability belongs to the application, never to mutable journal/network input.
+    ControlJournal(Storage storage, ControlIdentity identity, byte[] anchor, String clientVersion, boolean supportsAwg31) {
         this.storage = storage; this.identity = identity; this.anchor = anchor.clone(); this.clientVersion = clientVersion;
+        this.supportsAwg31 = supportsAwg31;
     }
     ControlProtocol.Verified verify(byte[] raw, long now) throws ControlProtocol.Rejected {
-        return identity.verify(raw, anchor, clientVersion, now);
+        return identity.verify(raw, anchor, clientVersion, now,supportsAwg31);
     }
     static byte[] encode(JsonObject record) { return record.toString().getBytes(StandardCharsets.UTF_8); }
     void initialize() throws Exception {
@@ -48,11 +54,25 @@ final class ControlJournal {
         finally { Arrays.fill(raw, (byte) 0); }
     }
     private void validate(JsonObject r) throws Exception {
-        fields(r, "schema device committed staged phase baseline floor last_now outbox result");
-        require(integer(r.get("schema"), 1) == 1 && text(r.get("device")).equals(identity.reference()));
+        long schema=integer(r.get("schema"),1);require(schema==1||schema==2);
+        fields(r, "schema device committed staged phase baseline floor last_now outbox result"+(schema==2?" selected_gateway pending_gateway":""));
+        require(text(r.get("device")).equals(identity.reference()));
         long floor = integer(r.get("floor"), 0), now = integer(r.get("last_now"), 0);
         String phase = text(r.get("phase"));
-        require(Arrays.asList("IDLE STAGED APPLYING APPLIED_PENDING ROLLING_BACK".split(" ")).contains(phase));
+        boolean switching=phase.equals("SWITCHING");
+        require(Arrays.asList("IDLE STAGED APPLYING APPLIED_PENDING ROLLING_BACK SWITCHING".split(" ")).contains(phase));
+        if(switching)require(schema==2&&!r.get("committed").isJsonNull());
+        if(schema==2) {
+            require(switching!=r.get("pending_gateway").isJsonNull());
+            for(String name:new String[]{"selected_gateway","pending_gateway"})if(!r.get(name).isJsonNull()) {
+                String id=text(r.get(name));require(id.matches("[a-zA-Z0-9_-]{1,64}"));
+                require(!r.get("committed").isJsonNull());
+                boolean found=false;
+                for(JsonElement p:unpack(r.getAsJsonObject("committed"),null).state().getAsJsonArray("transport_profiles"))
+                    found|=id.equals(text(p.getAsJsonObject().get("gateway_id")));
+                require(found);
+            }
+        }
         boolean idle = phase.equals("IDLE");
         require(idle == r.get("staged").isJsonNull() && idle == r.get("baseline").isJsonNull());
         if (!idle) require(r.get("baseline").isJsonObject());
@@ -61,10 +81,11 @@ final class ControlJournal {
             JsonObject entry = r.getAsJsonObject(name); ControlProtocol.Verified v = unpack(entry, null);
             long revision = integer(v.state().get("revision"), 1);
             require(revision <= floor && integer(entry.get("at"), 0) <= now);
-            if (name.equals("staged")) require(revision == floor && entry.get("applied_at").isJsonNull() && entry.get("runtime").isJsonNull());
+            if (name.equals("staged")) require((switching||revision == floor) && entry.get("applied_at").isJsonNull() && entry.get("runtime").isJsonNull());
             else require(integer(entry.get("applied_at"), integer(entry.get("at"), 0)) <= now && entry.get("runtime").isJsonObject());
         }
-        if (!idle && !r.get("committed").isJsonNull())
+        if(switching)require(r.getAsJsonObject("staged").get("envelope").equals(r.getAsJsonObject("committed").get("envelope")));
+        if (!idle && !switching && !r.get("committed").isJsonNull())
             require(integer(unpack(r.getAsJsonObject("committed"), null).state().get("revision"), 1) < floor);
         require(r.get("outbox").isJsonArray() && r.getAsJsonArray("outbox").size() <= 64);
         Set<String> ids = new HashSet<>();

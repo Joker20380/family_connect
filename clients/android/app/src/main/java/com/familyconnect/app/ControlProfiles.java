@@ -10,6 +10,7 @@ import static com.familyconnect.app.ControlJson.*;
 /** Schema2 profiles, distinct from Android's legacy import parser. Never resolves names. */
 final class ControlProfiles {
     private static final List<String> AWG=Arrays.asList("Jc Jmin Jmax S1 S2 S3 S4 H1 H2 H3 H4 I1 I2 I3 I4 I5".split(" "));
+    private static final List<String> AWG31=Arrays.asList("HeaderProtectionKey ContentPaddingAddition RandomTrailers DisableCookies".split(" "));
     private static String s(JsonObject v,String key){return text(v.get(key));}
     private static void id(String v){require(v.matches("[a-zA-Z0-9_-]{1,64}"));}
     private static InetAddress ip(String value)throws Exception {
@@ -65,8 +66,9 @@ final class ControlProfiles {
             id(s(p,"profile_id"));id(s(p,"gateway_id"));require(ids.add(s(p,"profile_id")));
             String config=s(p,"config");require(!config.isEmpty()&&config.getBytes(StandardCharsets.UTF_8).length<=16384);
             String transport=s(p,"transport");require(Arrays.asList("wireguard","amneziawg","vless-reality").contains(transport));
-            require(s(p,"transport_version").equals(transport.equals("amneziawg")?"2.0":"1"));
-            Endpoint endpoint=transport.equals("vless-reality")?tcp(config):wg(config,transport.equals("amneziawg"));
+            String version=s(p,"transport_version");
+            require(transport.equals("amneziawg")?Arrays.asList("2.0","3.1").contains(version):version.equals("1"));
+            Endpoint endpoint=transport.equals("vless-reality")?tcp(config):wg(config,transport.equals("amneziawg"),version.equals("3.1"));
             require(endpoint.same(endpoints.get(s(p,"gateway_id"))));
         }
     }
@@ -79,7 +81,7 @@ final class ControlProfiles {
         String name=s(p,"server_name");require(name.length()<=253&&name.matches("(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]{2,63}"));
         require(s(p,"short_id").matches("(?:[0-9a-f]{2}){1,8}"));return new Endpoint(host,port);
     }
-    private static Endpoint wg(String text,boolean awg)throws Exception {
+    private static Endpoint wg(String text,boolean awg,boolean awg31)throws Exception {
         require(!text.contains("\0"));Map<String,Map<String,String>> sections=new HashMap<>();Map<String,String> current=null;String section="";
         for(String raw:text.split("\\r\\n|[\\n\\r\\u000b\\f\\u001c-\\u001e\\u0085\\u2028\\u2029]")) {
             String line=raw.split("#",2)[0].trim();if(line.isEmpty())continue;
@@ -88,7 +90,7 @@ final class ControlProfiles {
             }
             String[] parts=line.split("=",2);require(current!=null&&parts.length==2);String key=parts[0].trim(),v=parts[1].trim();
             String allowed=section.equals("Interface")?"PrivateKey Address DNS MTU ListenPort":"PublicKey PresharedKey Endpoint AllowedIPs PersistentKeepalive";
-            require(Arrays.asList(allowed.split(" ")).contains(key)||(section.equals("Interface")&&awg&&AWG.contains(key)));
+            require(Arrays.asList(allowed.split(" ")).contains(key)||(section.equals("Interface")&&awg&&(AWG.contains(key)||(awg31&&AWG31.contains(key)))));
             require(!v.isEmpty()&&current.put(key,v)==null);
         }
         require(sections.size()==2);Map<String,String> i=sections.get("Interface"),p=sections.get("Peer");
@@ -101,13 +103,23 @@ final class ControlProfiles {
         Set<String> routes=new HashSet<>();for(String r:p.get("AllowedIPs").split(",",-1))routes.add(r.trim());require(routes.equals(new HashSet<>(Arrays.asList("0.0.0.0/0","::/0"))));
         String endpoint=p.get("Endpoint");int at=endpoint.lastIndexOf(':');require(at>0);String host=endpoint.substring(0,at).replaceAll("^[\\[\\]]+|[\\[\\]]+$","");ip(host);long port=number(endpoint.substring(at+1),1,65535);
         if(i.containsKey("MTU"))number(i.get("MTU"),1280,1500);if(i.containsKey("ListenPort"))number(i.get("ListenPort"),0,65535);if(p.containsKey("PersistentKeepalive"))number(p.get("PersistentKeepalive"),0,65535);
+        if(awg31)require(i.keySet().containsAll(AWG31));
         if(awg)awg(i);return new Endpoint(host,port);
     }
     private static void awg(Map<String,String> fields) {
         for(String name:AWG.subList(0,7)){String value=fields.get(name);require(value.matches("[0-9]{1,5}"));number(value,0,name.equals("Jc")?12:name.startsWith("J")?1280:256);}
         require(Long.parseLong(fields.get("Jmin"))<=Long.parseLong(fields.get("Jmax")));List<long[]> ranges=new ArrayList<>();
+        boolean protectedHeaders=fields.containsKey("HeaderProtectionKey");
+        if(protectedHeaders) {
+            key(fields.get("HeaderProtectionKey"),true,true);
+            for(int n=1;n<=4;n++)require(Long.parseLong(fields.get("S"+n))>=12&&fields.get("H"+n).equals(Integer.toString(n)));
+            for(String name:Arrays.asList("RandomTrailers","DisableCookies"))require(Arrays.asList("true","false").contains(fields.get(name)));
+            String padding=fields.get("ContentPaddingAddition");require(padding.matches("[0-9]{1,5}(?:-[0-9]{1,5})?"));
+            String[] parts=padding.split("-");long low=number(parts[0],0,256);number(parts[parts.length-1],low,256);
+            if(fields.get("RandomTrailers").equals("true"))for(int n=2;n<=4;n++)require(fields.get("S1").equals(fields.get("S"+n)));
+        }
         for(String name:AWG.subList(7,11)) {
-            String value=fields.get(name);require(value.matches("[0-9]{1,10}(?:-[0-9]{1,10})?"));String[] parts=value.split("-");long low=number(parts[0],5,4294967295L),high=number(parts[parts.length-1],low,4294967295L);
+            String value=fields.get(name);require(value.matches("[0-9]{1,10}(?:-[0-9]{1,10})?"));String[] parts=value.split("-");long low=number(parts[0],protectedHeaders?1:5,4294967295L),high=number(parts[parts.length-1],low,4294967295L);
             for(long[] range:ranges)require(low>range[1]||range[0]>high);ranges.add(new long[]{low,high});
         }
         Pattern packet=Pattern.compile("<(?:b 0x([0-9a-fA-F]+)|(r|rd|rc) ([0-9]{1,4})|(t))>");

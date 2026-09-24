@@ -97,8 +97,12 @@ final class ControlIdentity implements AutoCloseable {
     }
     synchronized ControlProtocol.Verified verify(byte[] envelope, byte[] anchor, String version, long now)
             throws ControlProtocol.Rejected {
+        return verify(envelope,anchor,version,now,false);
+    }
+    synchronized ControlProtocol.Verified verify(byte[] envelope, byte[] anchor, String version, long now, boolean supportsAwg31)
+            throws ControlProtocol.Rejected {
         requireOpen(); byte[] rns = Arrays.copyOf(secret, 64);
-        try { return ControlProtocol.verifyConfiguration(envelope, anchor, rns, publicIdentity(), wireguardPublicKey(), version, now); }
+        try { return ControlProtocol.verifyConfiguration(envelope, anchor, rns, publicIdentity(), wireguardPublicKey(), version, now,supportsAwg31); }
         finally { Arrays.fill(rns, (byte) 0); }
     }
     @Override public synchronized void close() {

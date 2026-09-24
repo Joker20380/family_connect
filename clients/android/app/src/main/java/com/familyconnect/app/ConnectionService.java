@@ -31,6 +31,7 @@ public final class ConnectionService extends Service {
     private volatile boolean stopping=false,closing=false,claimed=false;
     private volatile long generation=0;
     private boolean started=false,automatic=false;
+    private final java.util.concurrent.atomic.AtomicBoolean selectingGateway=new java.util.concurrent.atomic.AtomicBoolean();
     private final AutoPolicy policy=new AutoPolicy();
     private volatile VpnHealth health;
     private ScheduledFuture<?> pending;
@@ -40,7 +41,19 @@ public final class ConnectionService extends Service {
         if(intent!=null&&"disconnect".equals(intent.getAction())){if(!started){stopSelf();return START_NOT_STICKY;}cancel();worker.execute(()->owned(this::stopConnection));return START_NOT_STICKY;}
         final boolean sync=intent!=null&&"sync-control".equals(intent.getAction());
         final boolean intake=intent!=null&&"apply-control".equals(intent.getAction());
-        if(started||stopping||closing){if(intake||sync)reportControl("BUSY");return START_NOT_STICKY;}
+        final boolean selection=intent!=null&&"select-gateway".equals(intent.getAction());
+        final String gateway=selection?intent.getStringExtra("gateway"):null;
+        if(selection&&(gateway==null||!gateway.matches("[a-zA-Z0-9_-]{1,64}"))){reportControl("FAILED");if(!started)stopSelf();return START_NOT_STICKY;}
+        if(selection&&started&&!stopping&&!closing){
+            if(!selectingGateway.compareAndSet(false,true)){reportControl("BUSY");return START_NOT_STICKY;}
+            worker.execute(()->{try{owned(()->{
+                try{reportControl(controlNow(null,false,false,gateway));}
+                catch(Exception|LinkageError failure){reportControl("FAILED");failed=true;cancel();stopConnection();}
+                if(engine==null&&!rnsEnabled&&!stopping&&!closing)stopConnection();
+            });}finally{selectingGateway.set(false);}});
+            return START_NOT_STICKY;
+        }
+        if(started||stopping||closing){if(intake||sync||selection)reportControl("BUSY");return START_NOT_STICKY;}
         final String priorStatus=status;
         byte[] received=null;
         if(intake){try{received=ControlIntake.copy(intent.getByteArrayExtra("envelope"));}
@@ -52,10 +65,11 @@ public final class ConnectionService extends Service {
         final boolean connectRequested=intent!=null&&"connect".equals(intent.getAction());
         worker.execute(()->{
             try{ControlOperations.APP.claim(operationOwner);claimed=true;}
-            catch(Exception busy){if(intake)reportControl("BUSY");main.post(()->{status=priorStatus;stopSelf();});return;}
+            catch(Exception busy){if(intake||selection)reportControl("BUSY");main.post(()->{status=priorStatus;stopSelf();});return;}
             owned(()->{
                 try{
-                    if(sync){
+                    if(selection){reportControl(controlNow(null,false,false,gateway));}
+                    else if(sync){
                         try(ControlIdentity identity=new ControlIdentityVault(this).load()){
                             com.google.gson.JsonObject enrolled=new ControlEnrollmentAndroid(this).read();
                             if(!"ENROLLED".equals(ControlJson.text(enrolled.get("phase")))||!identity.reference().equals(ControlJson.text(enrolled.get("device"))))
@@ -71,7 +85,7 @@ public final class ConnectionService extends Service {
                         ()->{if(automatic)next();else start(Transport.parse(requestedTransport));});
                     if(engine==null&&!rnsEnabled&&!stopping&&!closing)stopConnection();
                 }
-                catch(Exception|LinkageError e){if(intake||sync)reportControl("FAILED");failed=true;cancel();stopConnection();}
+                catch(Exception|LinkageError e){if(intake||sync||selection)reportControl("FAILED");failed=true;cancel();stopConnection();}
             });
         });
         return START_NOT_STICKY;
@@ -217,16 +231,25 @@ public final class ConnectionService extends Service {
         return controlNow(raw,recoveryOnly,false);
     }
     private String controlNow(byte[] raw,boolean recoveryOnly,boolean resume)throws Exception{
+        return controlNow(raw,recoveryOnly,resume,null);
+    }
+    private String controlNow(byte[] raw,boolean recoveryOnly,boolean resume,String gateway)throws Exception{
         controlWorker();
+        if(gateway!=null&&(stopping||closing))throw new java.io.IOException("Gateway selection cancelled");
         controlApplying=true;if(pending!=null)pending.cancel(false);
         try(ControlIdentity identity=new ControlIdentityVault(this).load()){
             ControlJournal journal=controlJournal(identity);
             ControlTransaction core=new ControlTransaction(journal,application(identity),()->System.currentTimeMillis()/1000,operationOwner);
             String outcome;
-            if(resume)outcome=core.resume();
+            if(gateway!=null)outcome=ControlSelection.select(core,identity,new ControlEnrollmentAndroid(this).read(),gateway,()->engine!=null);
+            else if(resume)outcome=core.resume();
             else if(recoveryOnly)outcome=core.recover();
             else outcome=ControlIntake.apply(core,identity,new ControlEnrollmentAndroid(this).read(),raw,()->engine!=null);
             if(outcome.equals("FAILED")){failed=true;cancel();stopConnection();}
+            // Presentation cache only. Journal remains authoritative after process death.
+            com.google.gson.JsonObject record=journal.read();
+            if(record.has("selected_gateway"))getSharedPreferences("gateway-selection",MODE_PRIVATE).edit()
+                .putString("gateway",record.get("selected_gateway").isJsonNull()?"":ControlJson.text(record.get("selected_gateway"))).apply();
             return outcome;
         }
         finally{

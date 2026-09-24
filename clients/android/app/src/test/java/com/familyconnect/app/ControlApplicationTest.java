@@ -117,6 +117,32 @@ public class ControlApplicationTest {
             assertEquals(0,host.stops);assertEquals(0,host.saves);
         }
     }
+    @Test public void explicitGatewaySelectsOneOfTwoSameTransportProfiles()throws Exception{
+        try(var h=new ControlTransactionTest.Harness()){
+            Host host=new Host();var verified=h.journal.verify(ControlTransactionTest.resource("valid-wg.envelope"),1000);
+            JsonObject state=verified.state();
+            var second=state.getAsJsonArray("transport_profiles").get(0).getAsJsonObject().deepCopy();
+            second.addProperty("profile_id","second");second.addProperty("gateway_id","new-node-42");
+            second.addProperty("config",second.get("config").getAsString().replace("198.51.100.1:51820","198.51.100.2:51820"));
+            state.getAsJsonArray("transport_profiles").add(second);
+            var g=state.getAsJsonArray("gateways").get(0).getAsJsonObject().deepCopy();
+            g.addProperty("gateway_id","new-node-42");g.addProperty("endpoint","198.51.100.2");state.getAsJsonArray("gateways").add(g);
+            ControlProfiles.validate(state);var two=new ControlProtocol.Verified(state,verified.digest);
+            int[] reads={0};var app=new ControlApplication(host,h.identity,()->{reads[0]++;return reads[0]==1?"new-node-42":"absent";});
+            app.apply(two,host.capture());assertEquals(1,reads[0]);assertEquals(1,host.saves);
+            assertTrue(host.profiles.get("wg").getAsString().contains("198.51.100.2:51820"));
+            assertEquals("manual-awg",host.profiles.get("awg").getAsString());
+            host.stop();int writes=host.saves;
+            new ControlApplication(host,h.identity,()->"new-node-42").resume(two);
+            assertEquals(writes,host.saves);assertEquals("wg",host.active);
+            host.stop();int starts=host.starts;
+            // The first gateway has not been installed: resume cannot silently rewrite it.
+            assertThrows(IOException.class,()->new ControlApplication(host,h.identity,()->"gw1").resume(two));
+            assertEquals(starts,host.starts);assertEquals(writes,host.saves);
+            assertThrows(IOException.class,()->new ControlApplication(host,h.identity).apply(two,host.capture()));
+            assertEquals(writes,host.saves);
+        }
+    }
     @Test public void matchingServiceOwnerCanApplyButForeignAndStaleOwnersCannot()throws Exception{
         try(var h=new ControlTransactionTest.Harness()){
             Host host=new Host();Object owner=new Object();ControlOperations.APP.claim(owner);

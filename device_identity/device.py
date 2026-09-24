@@ -40,7 +40,7 @@ def _binding(public_identity, wireguard_public_key, challenge, audience):
     _decode(wireguard_public_key, 32)
     _decode(challenge, 32)
     # Audience is a server-configured protocol identifier, never a request URL.
-    if type(audience) is not str or audience not in {'family-connect/enrollment/v1'}:
+    if type(audience) is not str or audience not in {'family-connect/enrollment/v1', 'family-connect/fleet-reservation/v1'}:
         raise ValueError('invalid enrollment audience')
     return dict(schema_version=1, public_identity=public_identity,
                 wireguard_public_key=wireguard_public_key, challenge=challenge,

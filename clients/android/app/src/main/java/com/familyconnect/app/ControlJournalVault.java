@@ -11,7 +11,9 @@ import java.util.Arrays;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
-/** One app process, no backups or implicit recreation. Not yet connected to service mutations. */
+/** Atomic encrypted journal used by ConnectionService; no backups or implicit recreation.
+ * See docs/managed-control-code-map.ru.md for identity, ownership and recovery boundaries.
+ */
 final class ControlJournalVault implements ControlJournal.Storage {
     private static final String ALIAS = "family-connect-control-journal-v1";
     private final AtomicFile file;

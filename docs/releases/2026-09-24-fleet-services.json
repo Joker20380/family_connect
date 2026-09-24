@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-24",
+  "stage": "5.2",
+  "schema_version": 2,
+  "command": "/tmp/fc-desktop-current-venv/bin/python -m pytest -q tests/test_fleet_services.py tests/test_fleet_adapters.py tests/test_fleet_gateway.py tests/test_fleet_store.py tests/test_fleet.py tests/test_friends_identity_store.py tests/test_friends_store.py tests/test_friends_owner.py tests/test_device_identity.py tests/test_friends_access.py",
+  "passed": 201,
+  "seconds": 5.17,
+  "production_rollout": false,
+  "sha256": {
+    "control/fleet_access.py": "2b6fb94250b19b0dd847c6ebb2561f0139313ef47e64d67066960349242de65f",
+    "control/fleet_scheduler.py": "e7fe498b3b3a967b832fee95a20d8c1e473de955918cf7b96ced2dbdd2cb757f",
+    "control/fleet_store.py": "9e15dc7de9db9a20d35c9f92a192d65bfadbba7a1c41ed15154d43ed9160bcab",
+    "control/fleet_worker.py": "7809f4e473491c65f57250763c38f612163bb4f0a0e08bd61f02c44af9ae89a8",
+    "device_identity/device.py": "38e29e640c913c1331164aa36fde0ca95b1d13ee057ae92c3d31ec7b993151d3",
+    "tests/test_fleet_services.py": "6bd9d91bd690858f1f06e257e2a7e25f3e7002d575949d90cf3f0ded9e6e2785"
+  }
+}

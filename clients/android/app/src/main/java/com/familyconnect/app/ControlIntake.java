@@ -24,14 +24,17 @@ final class ControlIntake {
     static String apply(ControlTransaction core,ControlIdentity identity,JsonObject enrollment,
                         byte[] envelope,BooleanSupplier connected)throws Exception {
         byte[] raw=copy(envelope);
-        fields(enrollment,"schema origin phase device proof");require(integer(enrollment.get("schema"),1)==1);
-        require("ENROLLED".equals(text(enrollment.get("phase")))&&enrollment.get("proof").isJsonNull());
-        require(identity.reference().equals(text(enrollment.get("device"))));
-        require(ControlEnrollment.origin(text(enrollment.get("origin"))).equals(text(enrollment.get("origin"))));
+        authorize(identity,enrollment);
         String outcome=core.receive(raw);
         // A duplicate committed envelope after process restart must verify/health-check resume,
         // without new profile writes or a second application transaction.
         if("COMMITTED".equals(outcome)&&!connected.getAsBoolean())core.resume();
         return outcome;
+    }
+    static void authorize(ControlIdentity identity,JsonObject enrollment)throws Exception {
+        fields(enrollment,"schema origin phase device proof");require(integer(enrollment.get("schema"),1)==1);
+        require("ENROLLED".equals(text(enrollment.get("phase")))&&enrollment.get("proof").isJsonNull());
+        require(identity.reference().equals(text(enrollment.get("device"))));
+        require(ControlEnrollment.origin(text(enrollment.get("origin"))).equals(text(enrollment.get("origin"))));
     }
 }

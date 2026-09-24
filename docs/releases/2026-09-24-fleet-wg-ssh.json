@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-24",
+  "stage": "5.2",
+  "passed": 163,
+  "duration_seconds": 4.45,
+  "production_rollout": false,
+  "native_vpn_test": false,
+  "live_ssh_test": false,
+  "sha256": {
+    "control/fleet_wg.py": "3ae39929ddb1f6fbb499978f708e38495c853962dc132779577a60af33d624ec",
+    "control/fleet_gateway.py": "febf1ad4e3d08c0f0f45c349a965620bff506213c361e388925282c76e9837a8",
+    "control/fleet_process.py": "624e0eb65e6094f428e6a51463343954476165cdf65c408f34006a9ccb989d80",
+    "control/fleet_ssh.py": "b0b1dc589f5a5e0adeabe4f06d5cc2d27e4e84b5356233d6c68a417eba2335ff",
+    "scripts/fleet_agent.py": "b40163533c0ed47647b83747eb15e78e692c05dd37dce0c6478e62433100b94b",
+    "tests/test_fleet_adapters.py": "9db0f518f3e0fef1a453ede388a063995d9226db48ad4503f4a9a876d87c63ad"
+  }
+}

@@ -229,4 +229,5 @@
     <string name="chat_voice_locked_status">● %1$s   Locked\nTap send when finished</string>
     <string name="chat_voice_ready_status">%1$s   Ready to send</string>
     <string name="chat_voice_sending">%1$s   Saving…</string>
+    <string name="gateway_selected">Gateway selected</string>
 </resources>

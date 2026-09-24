@@ -229,4 +229,5 @@
     <string name="chat_voice_locked_status">● %1$s   Запись закреплена\nНажмите ➤ для отправки</string>
     <string name="chat_voice_ready_status">%1$s   Можно отправить</string>
     <string name="chat_voice_sending">%1$s   Сохранение…</string>
+    <string name="gateway_selected">Сервер выбран</string>
 </resources>
