@@ -96,3 +96,6 @@ issuers. KeePassXC→memfd→private inventory→pinned public anchor; plaintext
 Standalone setup verifier не зависит от vault. `deploy/friends/70-private-files.conf`
 задаёт UMask0077 для будущих запусков AWG/TCP; установщики содержат то же правило.
 [Проверка configured/runtime и приёмка](../releases/2026-09-24-secret-consumers.ru.md).
+
+[Приёмка runtime UMask0077 после TCP restart RU/NL](../releases/2026-09-24-tcp-private-umask-restart.ru.md):
+настройка уже действует, source changes/версий в этом шаге нет.

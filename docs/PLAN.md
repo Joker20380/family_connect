@@ -5,6 +5,12 @@
 
 ## Текущий приоритет
 
+24.09: [TCP-службы NL и RU перезапущены по разрешению пользователя](releases/2026-09-24-tcp-private-umask-restart.ru.md).
+Runtime Umask0077 подтверждён на обоих узлах; службы active/NRestarts0, TCP-порты
+доступны локально и с ноутбука. AWG PID сохранены. Отложенный TCP restart закрыт;
+полный клиентский VPN-трафик этим запуском не проверен. Следом — server backup/recovery.
+
+
 24.09: [аудит серверных прав и5 vault issuers](releases/2026-09-24-secret-consumers.ru.md).
 40 targeted tests passed; основные секреты RU/NL имеют ожидаемые600/640 и закрытые
 каталоги. Drop-in UMask0077 установлен без restart; AWG runtime0077, TCP runtime0022
