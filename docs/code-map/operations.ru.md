@@ -83,3 +83,6 @@ multi-ingress recovery и новый третий transport — не готов�
 
 Source guard также блокирует `.kdbx`/`.keyx`; личное KeePassXC-хранилище не является
 частью проекта. Порядок доступа и backup описан в политике секретов.
+
+Локальный vault содержит проверенные encrypted recovery copies; signing/службы пока
+читают прежние рабочие источники. [Границы импорта](../releases/2026-09-24-vault-import.ru.md).
