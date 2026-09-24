@@ -117,3 +117,5 @@ runbooks and STATUS before operating anything.
 - [Потребители секретов и состояние миграции](secret-consumer-register.ru.md).
 
 - [Подпись Android APK из KeePassXC](android-vault-signing.ru.md).
+
+- [Актуальность локальных SQLite и границы классификации](local-sqlite-backup-review.ru.md).

@@ -5,6 +5,12 @@
 
 ## Текущий приоритет
 
+24.09: [актуальность3 локальных SQLite подтверждена](releases/2026-09-24-local-sqlite-review.ru.md).
+Все3 совпали логически с backup; свежие encrypted snapshots сохранены и извлечены.
+14 targeted tests passed. Классификация: локальное pilot state, сохранять;
+наблюдение потребителей неполное. Следующая разработка5.3а — Android device acceptance.
+Внешняя копия, full DR и production signing acceptance остаются открытыми.
+
 24.09: [Android signing consumer из KeePassXC реализован](releases/2026-09-24-android-vault-signing.ru.md).
 65 targeted tests passed, включая реальный synthetic KDBX→apksigner→verify.
 Настоящий keystore проверен по сертификату beta50 без подписи; новых релизов нет.
@@ -194,10 +200,11 @@ health/rollback/restart на устройствах; Windows C# тесты на 
 реестр потребителей начат. Android vault entry point готов; не закрыты production signing acceptance, внешний носитель
 и восстановление на чистом хосте. Безопасность — не отдельный завершённый этап.
 
-**Очередь:** ближайший технический шаг — проверка свежести локальных SQLite и active/legacy state; затем остальные
-потребители/проверки копий и возврат к5.3а: Android service/UI acceptance с реальным
+**Очередь:** выбранные3 SQLite сверены, fresh snapshots проверены. Ближайшая
+разработка возвращается к5.3а: Android service/UI acceptance с реальным
 enrollment, разрешением VPN, restart/rollback и трафиком. Далее remaining5.2/5.4–5.6,
-сквозной этап6 и только затем Django7.1. Исследование третьего транспорта5.3б остаётся
+сквозной этап6 и только затем Django7.1. Проверка всех потребителей перед удалением
+originals, внешний носитель и full DR остаются отдельными обязательными пунктами. Исследование третьего транспорта5.3б остаётся
 согласованным, но отдельный production transport ещё не выбран. Новый сервер для
 текущей локальной работы не нужен; независимый ingress нужен для сетевой приёмки6.
 

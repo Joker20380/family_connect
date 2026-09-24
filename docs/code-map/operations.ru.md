@@ -132,3 +132,8 @@ certificate pin, APK input hash, memfd signing/verify и новый output.
 Общий reader `scripts/signing_key.py` обслуживает Ed25519 и Android; проверки
 формата ключа/anchor остаются у соответствующего потребителя.
 [Runbook](../android-vault-signing.ru.md). Production signing ещё не выполнялась.
+
+`scripts/sqlite_backup_compare.py` — bounded online snapshot, проверка integrity,
+логическое сравнение schema/typed rows/rowid; private data/digests не печатаются.
+`tests/test_sqlite_backup_compare.py` — WAL, row/schema changes и unsafe inputs.
+[Методика и фактическая local DB проверка](../local-sqlite-backup-review.ru.md).

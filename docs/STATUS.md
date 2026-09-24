@@ -8,6 +8,12 @@
 
 ## Положение в общем плане
 
+24.09: [актуальность3 локальных SQLite подтверждена](releases/2026-09-24-local-sqlite-review.ru.md).
+Все3 совпали логически с backup; свежие encrypted snapshots сохранены и извлечены.
+14 targeted tests passed. Классификация: локальное pilot state, сохранять;
+наблюдение потребителей неполное. Следующая разработка5.3а — Android device acceptance.
+Внешняя копия, full DR и production signing acceptance остаются открытыми.
+
 24.09: [Android signing consumer из KeePassXC реализован](releases/2026-09-24-android-vault-signing.ru.md).
 65 targeted tests passed, включая реальный synthetic KDBX→apksigner→verify.
 Настоящий keystore проверен по сертификату beta50 без подписи; новых релизов нет.

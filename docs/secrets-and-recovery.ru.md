@@ -150,3 +150,6 @@ Known secret modes корректны; TCP runtime umask ожидает план
 
 24.09: [Android APK signing из vault](android-vault-signing.ru.md) готов и проверен
 на одноразовом ключе; настоящий keystore проверен без подписи. Originals сохранены.
+
+24.09: [три локальные SQLite сверены и fresh snapshots сохранены](local-sqlite-backup-review.ru.md).
+Пилотное состояние оставлено; полнота списка потребителей ещё не подтверждена.
