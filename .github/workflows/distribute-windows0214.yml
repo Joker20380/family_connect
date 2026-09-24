@@ -1,0 +1,74 @@
+name: Distribute accepted Windows 0.2.14 preview
+on:
+  push:
+    branches: ['fix/windows10-installer-0214']
+    paths: ['.github/workflows/distribute-windows0214.yml']
+permissions:
+  actions: read
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify pinned native acceptance
+        shell: python
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          import json,urllib.request,os
+          base='https://api.github.com/repos/Joker20380/family_connect'
+          def get(path):
+              request=urllib.request.Request(base+path,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN']})
+              return json.load(urllib.request.urlopen(request,timeout=30))
+          source='6eed30ceb8333275bade123ecb50375478f331c7'
+          for run_id in [36058000805, 36058000952, 36058000759, 36058000729, 36058000753]:
+              run=get('/actions/runs/'+str(run_id))
+              assert run['head_sha']==source and run['conclusion']=='success',(run_id,run['conclusion'])
+          run=get('/actions/runs/36058000764')
+          assert run['head_sha']==source
+          jobs=get('/actions/runs/36058000764/jobs')['jobs']
+          assert all(next(j for j in jobs if j['name']==name)['conclusion']=='success' for name in ['windows','windows-compatibility'])
+          for ident,run_id,digest in [(10833297798, 36058000764, 'sha256:db53e09594c93dad19ec6e56037cc42f1e1c3dcaff599477859de66119c66812'), (10832874142, 36058000729, 'sha256:988074fc07099ba32309ba9972e34c7e3b200d0d9ed06d3ab8e390bdf37f443f')]:
+              artifact=get('/actions/artifacts/'+str(ident))
+              assert artifact['workflow_run']['id']==run_id and not artifact['expired']
+              assert artifact['digest']==digest
+      - uses: actions/download-artifact@v4
+        with:
+          name: FamilyConnect-Windows-Installer-pilot-unsigned
+          run-id: '36058000764'
+          github-token: ${{ github.token }}
+          path: accepted-windows
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-ui-renders
+          run-id: '36058000729'
+          github-token: ${{ github.token }}
+          path: accepted-ui
+      - name: Verify exact installer and assemble preview
+        shell: python
+        run: |
+          import pathlib,hashlib,json,shutil
+          out=pathlib.Path('publish');out.mkdir()
+          artifact={'file': 'FamilyConnect-Setup-0.2.14-pilot-unsigned.exe', 'size': 49942347, 'sha256': '7b1af167a55a977c357c47b94407916fe27d1b343d33ecb69c42b2d11b85e886'}
+          raw=pathlib.Path('accepted-windows/FamilyConnect-Setup-0.2.14-pilot-unsigned.exe').read_bytes()
+          assert len(raw)==artifact['size'] and hashlib.sha256(raw).hexdigest()==artifact['sha256']
+          (out/artifact['file']).write_bytes(raw)
+          for image in pathlib.Path('accepted-ui').glob('Windows-*.png'):shutil.copyfile(image,out/image.name)
+          (out/'SHA256SUMS').write_text(artifact['sha256']+'  '+artifact['file']+'\n')
+          (out/'receipt.json').write_text(json.dumps(dict(version='0.2.14',channel='windows',source='6eed30ceb8333275bade123ecb50375478f331c7',windows_ci=36058000764,visual_ci=36058000729,acceptance=[36058000805, 36058000952, 36058000759, 36058000729, 36058000753],artifact=artifact),indent=2)+'\n')
+          pathlib.Path('notes.md').write_text('Windows 0.2.14: installation compatibility and recovery.\n\nThe app-local CET opt-in is disabled for compatibility with old Windows 10 servicing levels. This removes hardware shadow-stack protection for Family Connect processes; it does not alter OS-wide security settings. Setup now prepares services through Windows PowerShell instead of launching a potentially broken previous client, preserves encrypted data, and records exit codes and installation stages. Bundled .NET; Windows 10 1809+ / Windows 11 x64 target.\n\nNative installer, broken-leftover recovery, running-service upgrade/data preservation, broker and uninstall passed on Windows Server 2025 and 2022 runners. UI, ordinary-user and AWG/TCP checks passed. Actual affected Windows 10 device acceptance remains pending; CI does not establish compatibility with every Windows build. No Windows publisher signature.\n\nThe independent signed Windows catalog is published offline after artifact verification. Existing 0.2.13 clients use Check for updates; 0.2.12 or earlier require one manual upgrade. Android, Linux and the shared legacy catalog are unchanged.\n')
+      - name: Publish immutable Windows preview
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          repo=Joker20380/family_connect
+          tag=windows-v0.2.14
+          if gh release view "$tag" --repo "$repo" >/dev/null 2>&1; then
+            echo 'Refusing to replace an existing immutable release.' >&2
+            exit 1
+          fi
+          gh release create "$tag" publish/* --repo "$repo" --verify-tag --prerelease --title 'Windows 0.2.14 preview — Windows 10 installer compatibility' --notes-file notes.md
