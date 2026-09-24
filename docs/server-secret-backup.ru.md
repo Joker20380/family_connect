@@ -89,3 +89,6 @@ preflight `messenger.server --check`. SQLite spool включает ciphertext �
 снимка с membership/settings; lease участников после восстановления обновляется
 с authoritative RU, а не продлевается вручную. Старые сообщения ограничены retention.
 Проверка tar/SQLite в памяти ещё не означает успешный запуск восстановленного узла.
+
+24.09 дополнительно выполнен [контейнерный restore rehearsal](vault-restore-rehearsal.ru.md):
+89 файлов/7 SQLite и mailbox startup/shutdown. Полный clean-machine DR остаётся открыт.

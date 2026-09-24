@@ -115,3 +115,9 @@ RU Certbot regular files + private link mapping, NL mailbox identity/bootstrap/s
 `deploy/time/family-connect.sources` содержит дополнительный NTS-источник;
 [приёмка новых серверов и диагностика](../server-time-and-chat-sync.ru.md).
 Приёмник сохраняет fail-closed TTL, runtime код не изменён.
+
+`scripts/vault_restore_probe.py` — in-container восстановление четырёх закрытых
+snapshots в tmpfs, проверка Access/referral и mailbox identity/start/stop.
+`tests/test_vault_restore_probe.py` — private modes, TLS links, overwrite/symlink refusal.
+`pilot/recovery/Dockerfile` — добавление pinned LXMF к локальному control test image.
+[Границы и запуск](../vault-restore-rehearsal.ru.md); production secrets не идут в CI.

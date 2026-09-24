@@ -111,3 +111,5 @@ runbooks and STATUS before operating anything.
 - [Закрытые серверные копии и проверка восстановления](server-secret-backup.ru.md).
 
 - [Время серверов и диагностика chat-sync](server-time-and-chat-sync.ru.md).
+
+- [Изолированная проверка восстановления KeePassXC](vault-restore-rehearsal.ru.md).

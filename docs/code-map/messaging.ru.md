@@ -54,3 +54,7 @@ OEM/restart и точные задержки требуют отдельных �
 `deploy/time/family-connect.sources` содержит дополнительный NTS-источник;
 [приёмка новых серверов и диагностика](../server-time-and-chat-sync.ru.md).
 Приёмник сохраняет fail-closed TTL, runtime код не изменён.
+
+Восстановление mailbox identity/spool проверяет `scripts/vault_restore_probe.py`:
+реальные preflight/start/stop в network-none контейнере, без публичного announce.
+[Runbook](../vault-restore-rehearsal.ru.md); client-to-client recovery ещё не принят.

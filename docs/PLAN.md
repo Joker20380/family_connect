@@ -5,6 +5,12 @@
 
 ## Текущий приоритет
 
+24.09: [изолированное восстановление из KeePassXC прошло](releases/2026-09-24-vault-restore-rehearsal.ru.md).
+89 файлов/7 SQLite, Access/referral identity и реальный mailbox startup/shutdown
+проверены в контейнере без сети;12 tests passed. Live state и vault не изменялись.
+Следом аудит plaintext/потребителей; полный clean-machine DR, VPN/HTTPS acceptance
+и внешний носитель остаются открытыми.
+
 24.09: [синхронизация участников чата восстановлена](releases/2026-09-24-chat-clock-recovery.ru.md).
 Причина — часы NL отставали примерно24с; добавлен рабочий NTS-источник chrony.
 RU/NL synchronized, timer успешен, membership актуален и совпадает с RU;21 tests passed.
