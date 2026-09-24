@@ -68,9 +68,10 @@ def archive_key(raw, member):
         return key
 
 
-def vault_bytes(args):
-    if not args.vault_entry or not args.vault_member or not args.vault_public_key:
-        raise ValueError('vault entry, member and public anchor are required')
+def vault_archive(args):
+    """Read a bounded encrypted attachment into memory; callers validate its members."""
+    if not args.vault_entry:
+        raise ValueError('vault entry is required')
     if not hasattr(os, 'memfd_create'):
         raise ValueError('vault signing requires Linux memfd')
     import resource
@@ -108,13 +109,23 @@ def vault_bytes(args):
         stage = 'archive verification'
         os.lseek(memory, 0, os.SEEK_SET)
         with os.fdopen(os.dup(memory), 'rb') as source:
-            return archive_key(source.read(LIMIT + 1), args.vault_member)
+            return source.read(LIMIT + 1)
     except Exception:
         raise ValueError(f'vault signing key unavailable at {stage}; private diagnostics suppressed') from None
     finally:
         password = None
         os.close(database)
         os.close(memory)
+
+
+def vault_bytes(args):
+    if not args.vault_entry or not args.vault_member or not args.vault_public_key:
+        raise ValueError('vault entry, member and public anchor are required')
+    raw = vault_archive(args)
+    try:
+        return archive_key(raw, args.vault_member)
+    except Exception:
+        raise ValueError('vault signing key unavailable at archive verification; private diagnostics suppressed') from None
 
 
 def load(args):

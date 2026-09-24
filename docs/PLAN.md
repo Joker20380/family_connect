@@ -5,6 +5,12 @@
 
 ## Текущий приоритет
 
+24.09: [Android signing consumer из KeePassXC реализован](releases/2026-09-24-android-vault-signing.ru.md).
+65 targeted tests passed, включая реальный synthetic KDBX→apksigner→verify.
+Настоящий keystore проверен по сертификату beta50 без подписи; новых релизов нет.
+Следом свежесть3 локальных SQLite/active-legacy state; внешний носитель и production
+signing acceptance остаются открытыми. Рабочие оригиналы сохранены.
+
 24.09: [закрытый реестр локальных потребителей сохранён в KeePassXC](releases/2026-09-24-local-secret-consumer-audit.ru.md).
 204 файла:200 совпадают с прежними backups,3 SQLite требуют проверки актуальности,
 ещё1 административный credential добавлен и проверен.7 modes сужены до0600.
@@ -185,10 +191,10 @@ health/rollback/restart на устройствах; Windows C# тесты на 
 
 **Текущая точка:** этап5, обеспечивающая задача секретов/recovery для5/6.
 Хранилище, пять vault issuers, server backups и контейнерное восстановление готовы;
-реестр потребителей начат. Не закрыты Android signing migration, внешний носитель
+реестр потребителей начат. Android vault entry point готов; не закрыты production signing acceptance, внешний носитель
 и восстановление на чистом хосте. Безопасность — не отдельный завершённый этап.
 
-**Очередь:** ближайший технический шаг — Android signing из vault; затем остальные
+**Очередь:** ближайший технический шаг — проверка свежести локальных SQLite и active/legacy state; затем остальные
 потребители/проверки копий и возврат к5.3а: Android service/UI acceptance с реальным
 enrollment, разрешением VPN, restart/rollback и трафиком. Далее remaining5.2/5.4–5.6,
 сквозной этап6 и только затем Django7.1. Исследование третьего транспорта5.3б остаётся

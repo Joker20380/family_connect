@@ -8,6 +8,12 @@
 
 ## Положение в общем плане
 
+24.09: [Android signing consumer из KeePassXC реализован](releases/2026-09-24-android-vault-signing.ru.md).
+65 targeted tests passed, включая реальный synthetic KDBX→apksigner→verify.
+Настоящий keystore проверен по сертификату beta50 без подписи; новых релизов нет.
+Следом свежесть3 локальных SQLite/active-legacy state; внешний носитель и production
+signing acceptance остаются открытыми. Рабочие оригиналы сохранены.
+
 24.09: [закрытый реестр локальных потребителей сохранён в KeePassXC](releases/2026-09-24-local-secret-consumer-audit.ru.md).
 204 файла:200 совпадают с прежними backups,3 SQLite требуют проверки актуальности,
 ещё1 административный credential добавлен и проверен.7 modes сужены до0600.

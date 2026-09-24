@@ -115,3 +115,5 @@ runbooks and STATUS before operating anything.
 - [Изолированная проверка восстановления KeePassXC](vault-restore-rehearsal.ru.md).
 
 - [Потребители секретов и состояние миграции](secret-consumer-register.ru.md).
+
+- [Подпись Android APK из KeePassXC](android-vault-signing.ru.md).

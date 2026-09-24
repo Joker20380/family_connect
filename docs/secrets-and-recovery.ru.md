@@ -147,3 +147,6 @@ Known secret modes корректны; TCP runtime umask ожидает план
 
 24.09: [реестр локальных потребителей и состояния миграции](secret-consumer-register.ru.md)
 сохранён в закрытом vault; Android signing остаётся следующим файловым потребителем.
+
+24.09: [Android APK signing из vault](android-vault-signing.ru.md) готов и проверен
+на одноразовом ключе; настоящий keystore проверен без подписи. Originals сохранены.

@@ -125,3 +125,10 @@ snapshots в tmpfs, проверка Access/referral и mailbox identity/start/s
 [Реестр категорий секретов и потребителей](../secret-consumer-register.ru.md):
 закрытый фактический инвентарь хранится в KeePassXC; operator audit helper локальный,
 не production runtime и не CI job. Android signing migration ещё не реализована.
+
+`scripts/sign_android_vault.py` — PKCS12/password members из общего vault_archive,
+certificate pin, APK input hash, memfd signing/verify и новый output.
+`tests/test_android_vault_signing.py` — отказы и opt-in реальный KDBX/apksigner.
+Общий reader `scripts/signing_key.py` обслуживает Ed25519 и Android; проверки
+формата ключа/anchor остаются у соответствующего потребителя.
+[Runbook](../android-vault-signing.ru.md). Production signing ещё не выполнялась.

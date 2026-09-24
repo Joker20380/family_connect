@@ -26,7 +26,11 @@ def key_loader():
     if __package__:
         from . import signing_key
     else:
-        import signing_key
+        # Also support importlib loading by operator/test harnesses, which do not
+        # automatically add this script's directory to sys.path.
+        import importlib.util
+        spec=importlib.util.spec_from_file_location('_fc_signing_key',Path(__file__).with_name('signing_key.py'))
+        signing_key=importlib.util.module_from_spec(spec);spec.loader.exec_module(signing_key)
     return signing_key
 
 def sign(archive,release_version,key_path,output,*,private_key=None):
