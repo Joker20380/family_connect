@@ -5,14 +5,15 @@
 
 ## Текущий приоритет
 
-24.09: подготовлен [source checkpoint и правила секретов](releases/2026-09-24-source-checkpoint.ru.md)
-для отправки поверх актуального main.890 Python/124 Java tests и C# runner passed.
+24.09: [source checkpoint и правила секретов](releases/2026-09-24-source-checkpoint.ru.md)
+опубликованы в GitHub main: `86eb24e`.890 Python/124 Java tests и C# runner passed.
+GitHub Actions для этого коммита поставлен в очередь; результат ещё не подтверждён.
 Публикация Git не означает rollout. Исторические пометки «локально» ниже описывают
 состояние на момент соответствующей проверки.
 
 
-24.09: принята [схема хранения секретов](secrets-and-recovery.ru.md). Выбор закрытого
-хранилища/носителя и проверка аварийного восстановления ещё открыты; секреты не перемещались.
+24.09: принята [схема хранения секретов](secrets-and-recovery.ru.md). Выбраны компьютер
+и отдельный офлайн-носитель. Настройка шифрования и проверка восстановления ещё открыты; секреты не перемещались.
 
 На подключённом Redmi Note 9 Pro выполнены [4 instrumented tests](releases/2026-09-24-android-selection-device.ru.md)
 в отдельном debug pilot: encrypted journal selection/reopen/rollback, protocol/JSON и

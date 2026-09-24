@@ -8,8 +8,9 @@
 
 ## Положение в общем плане
 
-24.09: подготовлен [source checkpoint и правила секретов](releases/2026-09-24-source-checkpoint.ru.md)
-для отправки поверх актуального main.890 Python/124 Java tests и C# runner passed.
+24.09: [source checkpoint и правила секретов](releases/2026-09-24-source-checkpoint.ru.md)
+опубликованы в GitHub main: `86eb24e`.890 Python/124 Java tests и C# runner passed.
+GitHub Actions для этого коммита поставлен в очередь; результат ещё не подтверждён.
 Публикация Git не означает rollout. Исторические пометки «локально» ниже описывают
 состояние на момент соответствующей проверки.
 
