@@ -1,5 +1,7 @@
 # Documentation
 
+[Режим сетей с белыми списками: требования и план5.3в](allowlist-connectivity.ru.md).
+
 [Android: подключение выбора gateway к службе/UI](releases/2026-09-24-android-selection-service.ru.md).
 
 **Новому разработчику: [общая карта кода по модулям](code-map/README.ru.md)** —
