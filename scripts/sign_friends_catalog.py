@@ -3,16 +3,20 @@
 Templates contain placeholders for device credentials and addresses. Never include
 personal profiles or server private keys. Does not sign application updates.
 """
-import argparse,base64,json,os,stat
+import argparse,base64,json,os
 from pathlib import Path
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from clients.desktop.profile_config import parse_tcp, parse
 
 DOMAIN=b'family-connect/invited-test/v1\0'
 
+if __package__:
+    from . import signing_key
+else:
+    import signing_key
+
 def main():
  p=argparse.ArgumentParser(description=__doc__)
- p.add_argument('--key',type=Path,required=True);p.add_argument('--input',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
+ signing_key.arguments(p);p.add_argument('--input',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
  args=p.parse_args();raw=args.input.read_bytes();assert len(raw)<=8192
  value=json.loads(raw);assert set(value)=={'schema','sequence','access','gateways'}
  assert value['schema']==2 and type(value['sequence']) is int and value['sequence']>0 and value['access']=='invite-test'
@@ -33,11 +37,7 @@ def main():
   legacy=re.sub(r'^(HeaderProtectionKey|ContentPaddingAddition) = .+\n','',template,flags=re.M)
   for index in range(1,5):legacy=legacy.replace('H'+str(index)+' = '+str(index)+'\n','H'+str(index)+' = '+str(100+index)+'\n')
   parse(legacy.replace('LOCAL_DEVICE_KEY',base64.b64encode(bytes([1])*32).decode()).replace('ASSIGNED_ADDRESS','10.83.0.2/32'),allow_awg=True)
- fd=os.open(args.key,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
- try:
-  info=os.fstat(fd);assert stat.S_ISREG(info.st_mode) and info.st_uid==os.getuid() and info.st_nlink==1 and stat.S_IMODE(info.st_mode)==0o600
-  key=Ed25519PrivateKey.from_private_bytes(os.read(fd,33))
- finally:os.close(fd)
+ key=signing_key.load(args)
  envelope=json.dumps({'payload':base64.b64encode(raw).decode(),'signature':base64.b64encode(key.sign(DOMAIN+raw)).decode()},separators=(',',':')).encode()
  fd=os.open(args.output,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600)
  with os.fdopen(fd,'wb') as output:output.write(envelope);output.flush();os.fsync(output.fileno())

@@ -86,3 +86,8 @@ Source guard также блокирует `.kdbx`/`.keyx`; личное KeePass
 
 Локальный vault содержит проверенные encrypted recovery copies; signing/службы пока
 читают прежние рабочие источники. [Границы импорта](../releases/2026-09-24-vault-import.ru.md).
+
+`scripts/signing_key.py` — общий loader `--key`/`--vault` для update/control/Friends
+issuers. KeePassXC→memfd→private inventory→pinned public anchor; plaintext key-файл
+не экспортируется. `tests/test_signing_key.py` содержит synthetic KDBX integration.
+[Команды и ограничения](../vault-signing.ru.md).

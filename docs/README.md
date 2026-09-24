@@ -105,3 +105,5 @@ runbooks and STATUS before operating anything.
 - [Reticulum: перенос службы, discovery и границы восстановления](reticulum-recovery-design.ru.md).
 
 - [Критические секреты и аварийное восстановление](secrets-and-recovery.ru.md).
+
+- [Локальная подпись с ключом из KeePassXC](vault-signing.ru.md).

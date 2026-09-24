@@ -10,6 +10,8 @@ jobs:
           python-version: '3.13'
       - name: Check public source inventory (no secret values in output)
         run: python scripts/check_public_sources.py
+      - name: Install local vault test dependency (synthetic keys only)
+        run: sudo apt-get update && sudo apt-get install -y keepassxc
       - run: pip install -r control/requirements.lock -r device_identity/requirements.lock
       - run: python -m pytest -q
       - run: cargo test --manifest-path core/Cargo.toml --locked
