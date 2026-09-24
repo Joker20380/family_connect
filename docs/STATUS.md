@@ -8,6 +8,12 @@
 
 ## Положение в общем плане
 
+24.09: [закрытый реестр локальных потребителей сохранён в KeePassXC](releases/2026-09-24-local-secret-consumer-audit.ru.md).
+204 файла:200 совпадают с прежними backups,3 SQLite требуют проверки актуальности,
+ещё1 административный credential добавлен и проверен.7 modes сужены до0600.
+Следом Android signing consumer из vault; внешний носитель и full clean-machine DR
+остаются открытыми. Рабочие оригиналы сохранены, production не менялся.
+
 24.09: [исправлен нулевой запас challenge на расхождение часов](releases/2026-09-24-friends-challenge-clock.ru.md).
 RU API выдаёт challenge100с вместо120с; клиентская граница120с сохранена.
 45 tests passed, HTTPS200/TTL100, службы active. APK friends beta50 проверен по

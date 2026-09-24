@@ -121,3 +121,7 @@ snapshots в tmpfs, проверка Access/referral и mailbox identity/start/s
 `tests/test_vault_restore_probe.py` — private modes, TLS links, overwrite/symlink refusal.
 `pilot/recovery/Dockerfile` — добавление pinned LXMF к локальному control test image.
 [Границы и запуск](../vault-restore-rehearsal.ru.md); production secrets не идут в CI.
+
+[Реестр категорий секретов и потребителей](../secret-consumer-register.ru.md):
+закрытый фактический инвентарь хранится в KeePassXC; operator audit helper локальный,
+не production runtime и не CI job. Android signing migration ещё не реализована.

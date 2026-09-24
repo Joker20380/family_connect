@@ -113,3 +113,5 @@ runbooks and STATUS before operating anything.
 - [Время серверов и диагностика chat-sync](server-time-and-chat-sync.ru.md).
 
 - [Изолированная проверка восстановления KeePassXC](vault-restore-rehearsal.ru.md).
+
+- [Потребители секретов и состояние миграции](secret-consumer-register.ru.md).

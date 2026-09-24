@@ -144,3 +144,6 @@ Known secret modes корректны; TCP runtime umask ожидает план
 24.09: [выбранное серверное состояние сохранено в KeePassXC](releases/2026-09-24-server-secret-backup.ru.md):
 47 файлов/6 SQLite, hashes и in-memory restore проверены. Это не полный образ серверов;
 [исключения и порядок восстановления](server-secret-backup.ru.md) остаются обязательными.
+
+24.09: [реестр локальных потребителей и состояния миграции](secret-consumer-register.ru.md)
+сохранён в закрытом vault; Android signing остаётся следующим файловым потребителем.
