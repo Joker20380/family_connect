@@ -124,3 +124,10 @@ Keystore/ControlJournalVault: selection, повторное открытие о�
 Перед изменением поведения обновлять эту карту, тест соответствующего инварианта,
 STATUS/PLAN и датированный отчёт с границами проверки. Публикация на GitHub отдельно
 подтверждается коммитом/проверкой remote; локальная запись не считается опубликованной.
+
+`ControlServiceAdmissionRuntimeTest` — три подготовленных проверки реальной Android-службы:
+invalid gateway, отсутствие enrollment/повтор, отмена permission callback в MainActivity.
+Только пустой debug `.pilot` с `fc_disposable=true`; проверяет отсутствие новых
+managed secrets/profiles и освобождение owner/завершение службы. Сборка прошла,
+выполнение на устройстве пока не подтверждено; системный VPN dialog и туннель не проверяются.
+[Состояние и запуск](releases/2026-09-24-android-service-admission.ru.md).

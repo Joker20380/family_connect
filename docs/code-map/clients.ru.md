@@ -84,3 +84,10 @@ Checks: `Tests` для контрактов, `BrokerTests` для broker и nati
 добавить capability/version gate и native application tests. Не считать одинаковые
 имена полей доказательством одинаковой поддержки. Старые версии должны отказывать
 без частичного применения и без молчаливого удаления параметров защиты.
+
+`ControlServiceAdmissionRuntimeTest` — три подготовленных проверки реальной Android-службы:
+invalid gateway, отсутствие enrollment/повтор, отмена permission callback в MainActivity.
+Только пустой debug `.pilot` с `fc_disposable=true`; проверяет отсутствие новых
+managed secrets/profiles и освобождение owner/завершение службы. Сборка прошла,
+выполнение на устройстве пока не подтверждено; системный VPN dialog и туннель не проверяются.
+[Состояние и запуск](../releases/2026-09-24-android-service-admission.ru.md).

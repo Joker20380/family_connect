@@ -1,5 +1,12 @@
 # Текущее состояние / Current state
 
+24.09: [подготовлены проверки admission Android-службы](releases/2026-09-24-android-service-admission.ru.md).
+Три instrumented сценария для пустого debug pilot: неверный gateway, выбор без
+managed enrollment с повтором, отмена callback разрешения VPN. Сборка прошла;
+первый запуск на телефоне завершился тайм-аутом, runtime acceptance не засчитана.
+По просьбе пользователя дальнейшая работа пока без телефона. Следующий шаг5.3а:
+повторить эти проверки, затем реальный enrollment/permission/restart/rollback/трафик.
+
 Обновлено 24.09.2026. Это актуальный статус; датированные отчёты сохраняют историю.
 
 24.09: [сравнение восстановления у Proton, Mullvad, Amnezia, Psiphon и Tor](releases/2026-09-24-competitor-recovery.ru.md).
