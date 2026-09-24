@@ -1,5 +1,10 @@
 # Текущее состояние / Current state
 
+24.09: Windows0.2.14 готовится к выпуску: app-local CET compatibility, native
+service preparation after broken0.2.13, automatic setup logs and error codes.
+Local compile passed; native CI, publication and affected Windows10 acceptance pending.
+See [release notes](releases/0.2.14.en.md). Public channel remains0.2.13.
+
 Обновлено 23.09.2026. Это актуальный статус; датированные отчёты сохраняют историю.
 
 ## Версии и распространение

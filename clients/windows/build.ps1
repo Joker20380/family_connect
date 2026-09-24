@@ -26,6 +26,8 @@ dotnet run --project Tests/Tests.csproj -c Release
 Check-Exit
 dotnet publish FamilyConnect.csproj -c Release -r win-x64 --self-contained true -o build/publish
 Check-Exit
+python check_installer_host.py build/publish/FamilyConnect.exe
+Check-Exit
 Copy-Item "$vendor/embeddable-dll-service/amd64/tunnel.dll" build/publish/
 $tcpOutput=Join-Path $env:RUNNER_TEMP ('fc-client-tcp-'+[guid]::NewGuid().ToString('N'))
 & "$PSScriptRoot/../../pilot/windows-tcp/build.ps1" -Output $tcpOutput
@@ -78,7 +80,7 @@ if($SignedRelease){
 & $iscc @argsList
 Check-Exit
 if($SignedRelease){
-    $sig=Get-AuthenticodeSignature 'dist/FamilyConnect-Setup-0.2.13-signed.exe'
+    $sig=Get-AuthenticodeSignature 'dist/FamilyConnect-Setup-0.2.14-signed.exe'
     if($sig.Status -ne 'Valid' -or $sig.SignerCertificate.Thumbprint -ne $SigningThumbprint){throw 'Installer signature verification failed'}
 }
 Get-ChildItem dist/*.exe|ForEach-Object { $h=Get-FileHash $_ -Algorithm SHA256; "$($h.Hash.ToLower())  $($_.Name)" }|Set-Content dist/SHA256SUMS

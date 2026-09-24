@@ -49,14 +49,22 @@ internal static class Native
         Sc("sidtype",TunnelName,"unrestricted");service.Refresh();service.Start();
         service.WaitForStatus(ServiceControllerStatus.Running,TimeSpan.FromSeconds(20));
     }
+    internal static string InstallStage {get;private set;}="not-started";
     public static void Install()
     {
+        InstallStage="administrator";
         if(!Admin)throw new UnauthorizedAccessException();
+        InstallStage="secure-storage";
         Store.SecureRoot();
+        InstallStage="create-service";
         Sc("create",BrokerName,"binPath=",$"\"{Exe}\" /broker","start=","auto","DisplayName=","Family Connect Connection Service");
+        InstallStage="service-description";
         Sc("description",BrokerName,"Manages local Family Connect activation and encrypted VPN sessions.");
+        InstallStage="service-recovery";
         Sc("failure",BrokerName,"reset=","86400","actions=","restart/1000/restart/5000/restart/10000");
+        InstallStage="start-service";
         Sc("start",BrokerName);
+        InstallStage="complete";
     }
     public static void Remove()
     {

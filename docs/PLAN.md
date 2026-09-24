@@ -1,5 +1,10 @@
 # Рабочий план / Working plan
 
+24.09: Windows0.2.14 готовится к выпуску: app-local CET compatibility, native
+service preparation after broken0.2.13, automatic setup logs and error codes.
+Local compile passed; native CI, publication and affected Windows10 acceptance pending.
+See [release notes](releases/0.2.14.en.md). Public channel remains0.2.13.
+
 Обновлён 23.09.2026. Факты и версии: [STATUS](STATUS.md).
 История сохранена в [прежнем журнале](PLAN.before-beta49-2026-09-23.md).
 

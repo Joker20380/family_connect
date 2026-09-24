@@ -5,7 +5,9 @@
     <UseWindowsForms>true</UseWindowsForms><ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode><EnableWindowsTargeting>true</EnableWindowsTargeting>
     <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
     <ApplicationManifest>app.manifest</ApplicationManifest><AssemblyName>FamilyConnect</AssemblyName>
-    <Version>0.2.13</Version><ApplicationIcon>app.ico</ApplicationIcon><Company>family_connect</Company><Product>family_connect</Product><Title>family_connect</Title>
+    <Version>0.2.14</Version><ApplicationIcon>app.ico</ApplicationIcon><Company>family_connect</Company><Product>family_connect</Product><Title>family_connect</Title>
+    <!-- Older Windows 10 CET implementations can fail before Main. This opt-out is app-local. -->
+    <CETCompat>false</CETCompat>
     <PublishSingleFile>false</PublishSingleFile><PublishTrimmed>false</PublishTrimmed>
   </PropertyGroup>
   <ItemGroup>

@@ -7,7 +7,17 @@ internal static class Program
         try{
             if(args.SequenceEqual(new[]{"/broker"})){ServiceBase.Run(new Broker());return 0;}
             if(args.Length==2&&args[0]=="/tunnel-service")return Native.RunTunnel(args[1]);
-            if(args.SequenceEqual(new[]{"/install-service"})){Native.Install();return 0;}
+            if(args.SequenceEqual(new[]{"/runtime-check"}))return 0;
+            if(args.Length is 1 or 2 && args[0]=="/install-service"){
+                try { Native.Install(); }
+                catch(Exception error) {
+                    if(args.Length==2)File.WriteAllText(args[1],"stage="+Native.InstallStage+"; type="+error.GetType().Name+
+                        "; hresult=0x"+error.HResult.ToString("X8")+
+                        (error is System.ComponentModel.Win32Exception win32 ? "; win32="+win32.NativeErrorCode : ""));
+                    throw;
+                }
+                return 0;
+            }
             if(args.SequenceEqual(new[]{"/remove-service"})){Native.Remove();return 0;}
             if(args.SequenceEqual(new[]{"/broker-test"})){
                 var status=Wire.Call(new("status")).GetAwaiter().GetResult();
