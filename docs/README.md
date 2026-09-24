@@ -109,3 +109,5 @@ runbooks and STATUS before operating anything.
 - [Локальная подпись с ключом из KeePassXC](vault-signing.ru.md).
 
 - [Закрытые серверные копии и проверка восстановления](server-secret-backup.ru.md).
+
+- [Время серверов и диагностика chat-sync](server-time-and-chat-sync.ru.md).

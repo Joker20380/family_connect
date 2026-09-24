@@ -110,3 +110,8 @@ Infrastructure scope того же snapshot модуля: SSH host identity/auth
 RU Certbot regular files + private link mapping, NL mailbox identity/bootstrap/spool.
 Тесты проверяют границы ссылок и обязательную identity; SQLite остаётся online backup.
 [Checkpoint и обнаруженный chat-sync сбой](../releases/2026-09-24-infrastructure-secret-backup.ru.md).
+
+Внешняя зависимость membership — синхронное время RU/NL.
+`deploy/time/family-connect.sources` содержит дополнительный NTS-источник;
+[приёмка новых серверов и диагностика](../server-time-and-chat-sync.ru.md).
+Приёмник сохраняет fail-closed TTL, runtime код не изменён.

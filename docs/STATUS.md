@@ -8,6 +8,11 @@
 
 ## Положение в общем плане
 
+24.09: [синхронизация участников чата восстановлена](releases/2026-09-24-chat-clock-recovery.ru.md).
+Причина — часы NL отставали примерно24с; добавлен рабочий NTS-источник chrony.
+RU/NL synchronized, timer успешен, membership актуален и совпадает с RU;21 tests passed.
+Далее clean-machine restore/внешний носитель/аудит plaintext; alerts времени ещё открыты.
+
 24.09: [TLS/SSH/mailbox: ещё42 файла в KeePassXC](releases/2026-09-24-infrastructure-secret-backup.ru.md).
 Binary export/SHA256 и1 SQLite restore прошли;10 targeted tests passed.
 Обнаружены failed RU chat-sync и просроченный NL membership lease: диагностика и
