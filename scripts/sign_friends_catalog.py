@@ -22,7 +22,7 @@ def main():
  assert value['schema']==2 and type(value['sequence']) is int and value['sequence']>0 and value['access']=='invite-test'
  assert len(value['gateways'])==2 and {g['country'] for g in value['gateways']}=={'ru','nl'}
  for gateway in value['gateways']:
-  assert set(gateway)=={'country','tcp','awg'};tcp=dict(gateway['tcp']);assert tcp['id']=='DEVICE_CREDENTIAL';tcp['id']='11111111-1111-4111-8111-111111111111';parse_tcp(json.dumps(tcp))
+  assert set(gateway)=={'country','tcp','awg'};tcp=dict(gateway['tcp']);assert tcp.get('type')=='vless-reality-v1';assert tcp['id']=='DEVICE_CREDENTIAL';tcp['id']='11111111-1111-4111-8111-111111111111';parse_tcp(json.dumps(tcp))
   template=gateway['awg'];assert template.count('LOCAL_DEVICE_KEY')==1 and template.count('ASSIGNED_ADDRESS')==1
   assert '\nPrivateKey = LOCAL_DEVICE_KEY\n' in template and '\nAddress = ASSIGNED_ADDRESS\n' in template
   assert 'HeaderProtectionKey = ' in template and 'ContentPaddingAddition = ' in template

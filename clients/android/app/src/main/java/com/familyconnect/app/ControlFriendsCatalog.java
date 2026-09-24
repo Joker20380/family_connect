@@ -28,7 +28,7 @@ final class ControlFriendsCatalog {
         for(JsonElement item:gateways){
             JsonObject gateway=item.getAsJsonObject();fields(gateway,"country tcp awg");String country=text(gateway.get("country"));
             require(country.equals("ru")||country.equals("nl"));require(!profiles.containsKey(country));
-            JsonObject tcp=gateway.getAsJsonObject("tcp").deepCopy();require(text(tcp.get("id")).equals("DEVICE_CREDENTIAL"));
+            JsonObject tcp=gateway.getAsJsonObject("tcp").deepCopy();require(text(tcp.get("type")).equals("vless-reality-v1"));require(text(tcp.get("id")).equals("DEVICE_CREDENTIAL"));
             tcp.addProperty("id","11111111-1111-4111-8111-111111111111");TcpProfile.validate(tcp.toString());
             profiles.put(country,gateway.getAsJsonObject("tcp").toString());
             String template=text(gateway.get("awg"));

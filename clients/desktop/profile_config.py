@@ -24,34 +24,48 @@ def parse_tcp(text):
             result[key]=value
         return result
     p=json.loads(text,object_pairs_hook=unique)
-    fields={'type','server','port','id','public_key','server_name','short_id'}
-    if not isinstance(p,dict) or set(p)!=fields or p['type']!='vless-reality-v1':
+    common={'type','server','port','id','server_name'}
+    kind=p.get('type') if isinstance(p,dict) else None
+    fields=common|({'path','mode'} if kind=='vless-xhttp-tls-v1' else {'public_key','short_id'})
+    if not isinstance(p,dict) or set(p)!=fields or kind not in ('vless-reality-v1','vless-xhttp-tls-v1'):
         raise ValueError('Unsupported TCP profile')
     if not all(isinstance(p[k],str) for k in fields-{'port'}):raise ValueError('Invalid TCP field')
     if type(p['port']) is not int or not 1<=p['port']<=65535:raise ValueError('Invalid TCP port')
-    if str(ipaddress.IPv4Address(p['server']))!=p['server']:raise ValueError('IPv4 gateway required')
-    if str(uuid.UUID(p['id']))!=p['id']:raise ValueError('Invalid TCP identity')
-    key=p['public_key']
-    if not re.fullmatch(r'[A-Za-z0-9_-]{43}',key) or base64.urlsafe_b64encode(base64.urlsafe_b64decode(key+'=')).decode().rstrip('=')!=key:
-        raise ValueError('Invalid REALITY public key')
+    ip=ipaddress.IPv4Address(p['server'])
+    if str(ip)!=p['server'] or ip.is_loopback or ip.packed[0] == 0 or ip.packed[0] >= 224:
+        raise ValueError('IPv4 gateway required')
+    if str(uuid.UUID(p['id']))!=p['id'] or uuid.UUID(p['id']).int==0:raise ValueError('Invalid TCP identity')
     if not re.fullmatch(r'(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}',p['server_name']) or len(p['server_name'])>253:
-        raise ValueError('Invalid REALITY server name')
-    if not re.fullmatch(r'(?:[0-9a-f]{2}){1,8}',p['short_id']):raise ValueError('Invalid REALITY short id')
+        raise ValueError('Invalid TLS server name')
+    if kind=='vless-xhttp-tls-v1':
+        if p['mode']!='packet-up' or not re.fullmatch(r'/[A-Za-z0-9_-]{16,128}/',p['path']):
+            raise ValueError('Invalid XHTTP route')
+    else:
+        key=p['public_key']
+        if not re.fullmatch(r'[A-Za-z0-9_-]{43}',key) or base64.urlsafe_b64encode(base64.urlsafe_b64decode(key+'=')).decode().rstrip('=')!=key or not any(base64.urlsafe_b64decode(key+'=')):
+            raise ValueError('Invalid REALITY public key')
+        if not re.fullmatch(r'(?:[0-9a-f]{2}){1,8}',p['short_id']):raise ValueError('Invalid REALITY short id')
     return p
 
 
 def tcp_config(profile, interface):
     p=parse_tcp(json.dumps(profile))
     if not re.fullmatch(r'fctcp[0-9a-f]{8}',interface):raise ValueError('Invalid TCP interface')
+    user={'id':p['id'],'encryption':'none'}
+    if p['type']=='vless-xhttp-tls-v1':
+        stream={'network':'xhttp','security':'tls',
+            'tlsSettings':{'serverName':p['server_name'],'fingerprint':'chrome','alpn':['h2']},
+            'xhttpSettings':{'host':p['server_name'],'path':p['path'],'mode':p['mode']}}
+    else:
+        user['flow']='xtls-rprx-vision'
+        stream={'network':'raw','security':'reality',
+            'realitySettings':{'fingerprint':'chrome','serverName':p['server_name'],
+                'password':p['public_key'],'shortId':p['short_id']}}
+    stream['sockopt']={'mark':64630}
     return {'log':{'loglevel':'none'},
         'inbounds':[{'tag':'tun','protocol':'tun','settings':{'name':interface,'MTU':1280}}],
         'outbounds':[{'tag':'vpn','protocol':'vless','settings':{'vnext':[{
-            'address':p['server'],'port':p['port'],'users':[{'id':p['id'],
-            'encryption':'none','flow':'xtls-rprx-vision'}]}]},
-            'streamSettings':{'network':'raw','security':'reality',
-                'realitySettings':{'fingerprint':'chrome','serverName':p['server_name'],
-                    'password':p['public_key'],'shortId':p['short_id']},
-                'sockopt':{'mark':64630}}}]}
+            'address':p['server'],'port':p['port'],'users':[user]}]},'streamSettings':stream}]}
 
 
 def parse(text, *, allow_awg=False, allow_awg31=False):

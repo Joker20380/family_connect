@@ -57,6 +57,8 @@ class TransportProfile(FrozenModel):
     def parsed(self):
         if self.transport == 'vless-reality':
             value = parse_tcp(self.config)
+            if value["type"] != "vless-reality-v1":
+                raise ValueError("transport/profile mismatch")
             if value['id'] == '00000000-0000-0000-0000-000000000000' or not any(base64.urlsafe_b64decode(value['public_key']+'=')):
                 raise ValueError('invalid TCP credential')
             return value

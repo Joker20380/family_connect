@@ -1,5 +1,7 @@
 # Documentation
 
+[XHTTP/TLS: исследование, реализация и границы5.3в](xhttp-implementation.ru.md).
+
 [Режим сетей с белыми списками: требования и план5.3в](allowlist-connectivity.ru.md).
 
 [Android: подключение выбора gateway к службе/UI](releases/2026-09-24-android-selection-service.ru.md).

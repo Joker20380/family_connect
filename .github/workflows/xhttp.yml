@@ -1,0 +1,30 @@
+name: XHTTP local transport acceptance
+on:
+  push:
+    paths: ['pilot/android-tcp/**', 'pilot/android-awg/build.py', 'clients/desktop/profile_config.py', 'scripts/check_xhttp.py', 'scripts/xhttp_gateway_config.py', '.github/workflows/xhttp.yml']
+  pull_request:
+    paths: ['pilot/android-tcp/**', 'pilot/android-awg/build.py', 'clients/desktop/profile_config.py', 'scripts/check_xhttp.py', 'scripts/xhttp_gateway_config.py', '.github/workflows/xhttp.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  loopback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.1'
+          cache: false
+      - name: Pinned Xray and actual Android bridge Go source
+        run: |
+          git clone --filter=blob:none --no-checkout https://github.com/XTLS/Xray-core "$RUNNER_TEMP/xray-core"
+          git -C "$RUNNER_TEMP/xray-core" checkout --detach d2758a023cd7f4174a5a5fa4ff66e487d4342ba0
+          python3 pilot/android-tcp/host-check/build.py --core "$RUNNER_TEMP/xray-core" --output "$RUNNER_TEMP/xhttp-driver"
+          cd "$RUNNER_TEMP/xray-core"
+          go build -trimpath -o "$RUNNER_TEMP/xray" ./main
+      - name: TLS transfer and refusal checks
+        run: |
+          python3 -m scripts.check_xhttp --xray "$RUNNER_TEMP/xray"
+          python3 -m scripts.check_xhttp --xray "$RUNNER_TEMP/xray" --client-binary "$RUNNER_TEMP/xhttp-driver/android-host-driver"

@@ -184,3 +184,25 @@ await FriendsAccessChecks.Run();
 FriendsVaultChecks.Run();
 FriendsCatalogChecks.Run();
 FriendsConfigurationVaultChecks.Run();
+
+// XHTTP has a distinct activation version; legacy fields/signatures remain readable.
+var xhttp=tcp with {Version=2,PublicKey="",ShortId="",XhttpPath="/fc_test_only_path_1234/"};
+if(TcpProfile.Verify(SignTcp(xhttp),root,device,now)!=xhttp)throw new Exception("XHTTP signed round trip");
+using(var xdoc=JsonDocument.Parse(TcpProfile.Config(xhttp,"fctcp12345678"))){
+ var outbound=xdoc.RootElement.GetProperty("outbounds")[0];var stream=outbound.GetProperty("streamSettings");
+ if(stream.GetProperty("network").GetString()!="xhttp"||stream.GetProperty("security").GetString()!="tls")throw new Exception("XHTTP transport");
+ if(stream.GetProperty("tlsSettings").TryGetProperty("allowInsecure",out _))throw new Exception("XHTTP TLS bypass");
+ if(outbound.GetProperty("settings").GetProperty("vnext")[0].GetProperty("users")[0].TryGetProperty("flow",out _))throw new Exception("XHTTP Vision flow");
+}
+RejectTcp(()=>TcpProfile.Validate(xhttp with {XhttpPath="/../bad/"}));
+RejectTcp(()=>TcpProfile.Validate(xhttp with {PublicKey=tcp.PublicKey}));
+RejectTcp(()=>TcpProfile.Validate(xhttp with {Version=1}));
+RejectTcp(()=>TcpProfile.Validate(tcp with {Version=2}));
+if(JsonSerializer.Serialize(tcp,Activation.Json).Contains("xhttpPath"))throw new Exception("Legacy serialization changed");
+Console.WriteLine("XHTTP activation/config checks passed");
+
+var xhttpFixture=TcpProfile.Verify(File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"fixtures/windows-xhttp-v2.json")),
+ Convert.FromBase64String(File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"fixtures/windows-tcp-v1.pub")).Trim()),
+ Convert.ToBase64String(Enumerable.Range(1,32).Select(x=>(byte)x).ToArray()),1000);
+if(xhttpFixture.Version!=2||xhttpFixture.Sequence!=8||xhttpFixture.XhttpPath!="/fc_test_only_path_1234/")throw new Exception("Python XHTTP fixture");
+Console.WriteLine("Python→C# XHTTP activation fixture passed");

@@ -131,3 +131,15 @@ invalid gateway, отсутствие enrollment/повтор, отмена perm
 managed secrets/profiles и освобождение owner/завершение службы. Сборка прошла,
 выполнение на устройстве пока не подтверждено; системный VPN dialog и туннель не проверяются.
 [Состояние и запуск](releases/2026-09-24-android-service-admission.ru.md).
+
+## XHTTP/TLS: checkpoint5.3в
+
+[Полная карта и ограничения](xhttp-implementation.ru.md).
+Python `profile_config.py` и Android `TcpProfile`/`pilot/android-tcp/tcp-android.go`
+понимают строгий XHTTP/TLS профиль; Windows `TcpProfile` — activation version2,
+issuer `scripts/activate_windows_tcp.py`. Shared fixture `windows-xhttp-v2.json`.
+Origin/Nginx renderer: `scripts/xhttp_gateway_config.py`; сетевые проверки:
+`scripts/check_xhttp.py`, `pilot/android-tcp/host-check/`, workflow `xhttp.yml`.
+Friends catalog и managed vless-reality schema явно не допускают подмену новым типом;
+выдача, UI, fleet и реальные белые списки ещё не интегрированы. Локальные тесты
+не означают rollout; версии публичных приложений прежние.
