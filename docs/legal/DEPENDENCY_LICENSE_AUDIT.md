@@ -96,3 +96,36 @@ Reviewed before the legal documentation commit:
   notice does not purport to be a complete consumer EULA or commercial service contract.
 - RU/EN README statements and retained notices agree; ICQ rights gap and incomplete
   historical artifact audit remain explicit. This review is not legal counsel approval.
+
+## WebRTC carrier reference audit — preparation only, 2026-09-25
+
+The owner limited this iteration to documentation/preparation. No code copied,
+modified, linked or redistributed from either inspected repository; no Go/Pion
+module or fork added. Existing proprietary Family Connect LICENSE is unchanged.
+
+| Repository / immutable revision | License verified in checkout | Files/logic inspected | copied / modified / linked / redistributed | Use |
+| --- | --- | --- | --- | --- |
+| [kulikov0/whitelist-bypass](https://github.com/kulikov0/whitelist-bypass/tree/7c19a7ec40900940fe0c43ea1db7768ee632393d) | MIT; copyright line is exactly `Copyright (c) 2026`, no named holder on that line | `relay/wbstream/{api,session}.go`, `relay/livekit/*.go`, `relay/telemost/api.go`, headless creator entrypoints, Android joiner structure, `relay/tunnel/rtc/vp8tunnel.go`; guest/signaling/ICE/DC/VP8/lifecycle | no / no / no / no | Reference-only |
+| [openlibrecommunity/olcrtc](https://github.com/openlibrecommunity/olcrtc/tree/92b2332769c3dd5000584366201572efc448065f) | WTFPL v2; Copyright (C) 2026 zarazaex | `internal/auth/wbstream`, `internal/auth/telemost`, engine/transport boundaries, reconnect contracts and example configs | no / no / no / no | Reference-only |
+
+Upstream license files at inspected revisions:
+[whitelist MIT](https://github.com/kulikov0/whitelist-bypass/blob/7c19a7ec40900940fe0c43ea1db7768ee632393d/LICENSE),
+[olcrtc WTFPL](https://github.com/openlibrecommunity/olcrtc/blob/92b2332769c3dd5000584366201572efc448065f/LICENSE).
+Do not label olcrtc MIT or attribute all transitive files to its root license.
+If any source is adopted, record exact source/destination files and modifications,
+retain the complete applicable notice and inspect all included transitive licenses.
+No full VPN/SOCKS/tun2socks architecture is selected for reuse.
+
+| Candidate dependency | Inspected version | License status for inclusion | Purpose | Redistributed / modified now | Notice requirement / risk |
+| --- | --- | --- | --- | --- | --- |
+| `github.com/kulikov0/headless-client` | v0.1.0 in whitelist go.mod | Not audited; STOP inclusion until its own license and forks are checked | Pion-derived headless RTC/HTTP runtime reference | no / no | No adoption from parent project's MIT alone |
+| `github.com/pion/webrtc/v4` | v4.2.15 in olcrtc go.mod; not a Family Connect pin | Exact version/graph license review pending | Candidate carrier engine | no / no | Select minimal dependency set and retain upstream notices before coding/bundling |
+| LiveKit/forked RTC engines | olcrtc manifest, not selected | Not audited for inclusion | WB signaling/media reference | no / no | Avoid importing whole graph; unknown licenses block that dependency |
+| Go toolchain | Installation deferred; no project version selected | Packaging/license review with chosen toolchain | Candidate isolated process build | no / no | Current shell has no Go executable; no build performed |
+
+Root-source license permission and service API access are different questions.
+WB guest joining is visible in code but live room creation/media permissions and
+provider usage terms/quotas must be checked before deployment. No provider login,
+room creation or traffic exchange was performed by this audit. These sources do
+not prove current availability on restricted mobile networks. No GPL/AGPL or other
+new dependency has been silently introduced.

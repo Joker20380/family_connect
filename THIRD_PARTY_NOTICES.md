@@ -48,3 +48,17 @@ this index together with complete version-specific notices, accessible offline,
 and verify presence in APK/installer acceptance. This change documents that path;
 it does not add the UI or assert it is already available. Do not replace full
 license texts with links alone in redistributed packages.
+
+## WebRTC carrier references — 2026-09-25
+
+No WebRTC source or dependency is included in this preparation-only checkpoint.
+
+| Reference | License / revision | Integration / portions used |
+| --- | --- | --- |
+| [kulikov0/whitelist-bypass](https://github.com/kulikov0/whitelist-bypass/tree/7c19a7ec40900940fe0c43ea1db7768ee632393d) | MIT; `Copyright (c) 2026`; revision `7c19a7ec40900940fe0c43ea1db7768ee632393d` | Research only: WB/Telemost auth, LiveKit signaling, headless Pion, DC/VP8. No copied, modified, linked or bundled files. |
+| [openlibrecommunity/olcrtc](https://github.com/openlibrecommunity/olcrtc/tree/92b2332769c3dd5000584366201572efc448065f) | WTFPL v2; Copyright (C) 2026 zarazaex; revision `92b2332769c3dd5000584366201572efc448065f` | Research only: provider/auth/transport split and reconnect. No copied, modified, linked or bundled files. |
+
+Exact inspected paths, license sources and candidate-dependency blockers are in
+[the audit](docs/legal/DEPENDENCY_LICENSE_AUDIT.md#webrtc-carrier-reference-audit--preparation-only-2026-09-25).
+Any later MIT source reuse must retain the full original notice and identify
+source/destination files. No implied license for forks/transitive dependencies.
