@@ -1,5 +1,13 @@
 # Licensing audit — 2026-09-19
 
+## Update 2026-09-25 — license selected
+
+The owner selected Proprietary / Source-Available / All Rights Reserved.
+[LICENSE](../LICENSE), [Third-Party Notices](../THIRD_PARTY_NOTICES.md) and
+[history/dependency audit](legal/DEPENDENCY_LICENSE_AUDIT.md) supersede the
+license-choice-pending statements in the dated audit below. Third-party rights,
+prior valid permissions and the unresolved smiley provenance gap remain preserved.
+
 No repository-wide LICENSE was present in the repository or detected by GitHub during
 this audit. The owner has not selected one. Do not infer a license from public visibility
 or apply a new root license to third-party code and artwork.

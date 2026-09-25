@@ -1,5 +1,11 @@
 # Рабочий план / Working plan
 
+25.09: по решению владельца добавлена proprietary/source-available
+[LICENSE](../LICENSE), RU/EN README и [Third-Party Notices](../THIRD_PARTY_NOTICES.md).
+[Публикационный checkpoint](releases/2026-09-25-license-publication.ru.md).
+Права сторонних компонентов и прежние разрешения сохранены; полный transitive
+аудит/права смайликов остаются открытыми. Код, версии приложений и rollout не менялись.
+
 24.09: [Windows0.2.14 опубликован](releases/2026-09-24-windows0214-installer.ru.md), source6eed30c.
 GitHub/HTTPS installer и страница обновлены; отдельный подписанный Windows-каталог
 schema2/sequence10. CET отключён только для процессов приложения для совместимости

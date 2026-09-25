@@ -49,7 +49,7 @@ The idea: make connections manageable for people and their devices. This illustr
 ## Why Family Connect?
 
 - **Simple for family members.** An invitation leads to the download and an Open application button. Activate once, choose a connection and connect. Removing setup friction is the goal; the pilot still needs an invitation and Android permissions.
-- **Inspectable development.** Client and server code, test evidence and architecture can be inspected publicly. The project is intended to become an open-source private network; the repository-wide license decision is still pending.
+- **Inspectable development.** Client and server code, test evidence and architecture can be inspected publicly. Family Connect is source-available proprietary software; public inspection does not grant reuse rights.
 - **Personal device identities.** Device credentials and activation belong to a device. Family members do not need to share a single configuration file.
 - **More than one connection option.** The Android friends beta offers AWG and TCP transports and a choice of gateway region. Automatic selection and recovery have separate experimental implementations and are not a cross-platform reliability guarantee.
 
@@ -137,4 +137,19 @@ Bug reports, clearer documentation and scoped patches are welcome. Include the p
 
 ## License
 
-A repository-wide license has not yet been selected. Public source availability alone does not grant reuse rights. Third-party components retain their own terms; the classic smiley asset provenance records unresolved redistribution terms. See the [licensing audit](docs/licensing.md) before reuse or redistribution.
+Family Connect is source-available proprietary software. The source repository
+being public does not make Family Connect open source. All rights are reserved
+except where explicitly stated for third-party components. See [LICENSE](LICENSE),
+[Third-Party Notices](THIRD_PARTY_NOTICES.md) and the [license audit](docs/legal/DEPENDENCY_LICENSE_AUDIT.md).
+Public visibility grants no general reuse, derivative distribution, resale,
+substantial republication or branding permission. Existing third-party rights and
+prior valid grants are preserved. Classic smiley redistribution rights remain unresolved.
+
+Family Connect — проприетарное ПО с публично доступными исходниками (source-available).
+Публичный репозиторий не делает Family Connect open source. Все права сохранены,
+кроме явно установленных условий сторонних компонентов. См. [LICENSE](LICENSE),
+[Third-Party Notices](THIRD_PARTY_NOTICES.md) и [аудит](docs/legal/DEPENDENCY_LICENSE_AUDIT.md).
+Публичность не разрешает использование кода в другом продукте, распространение
+производных, продажу копий, перепубликацию существенных частей или использование
+бренда. Права третьих лиц и ранее выданные разрешения сохраняются. Права на
+распространение классических смайликов остаются неустановленными.
