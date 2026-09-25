@@ -7,7 +7,242 @@ Current execution order lives in [PLAN](../PLAN.md), measured results in
 [STATUS](../STATUS.md). The project has working pilot clients and VPN transports;
 it is no longer only an isolated research laboratory, nor production-ready.
 
-## Strategy revision — owner decision, 2026-09-25
+## Whitelisted WebRTC Carrier — extension, 2026-09-25
+
+**Current scope: documentation and implementation preparation only**, as clarified
+by the owner after requesting the carrier extension. No carrier implementation,
+platform build or live-provider acceptance is claimed by this checkpoint.
+
+Delta: previous Home Gateway with Reticulum control and selectable data transport
+**+** interchangeable WebRTC underlays **=** Reticulum overlay over a separately
+managed network path. Reticulum remains independent of provider/IP transport.
+The earlier freedom to use another IP data transport remains; the new WebRTC
+workstream specifically proves RNS frames, announces and Links over the carrier,
+with IP-over-RNS-over-WebRTC as a later explicit test branch. The historical
+strategy below is retained, not a second competing architecture.
+
+```text
+Android / Family Device Identity
+                 │
+        Reticulum Overlay
+                 │
+        UnderlayPathManager
+                 │
+     ┌───────────┼───────────────┐
+ DirectIPv6  DirectIPv4     WebRTC Carrier
+             /future NAT        │
+                         ┌──────┼──────┐
+                      Telemost  VK     WB
+                         └──── SFU/RTC ┘
+                                │
+                       Windows Reticulum Overlay
+                                │
+                       Windows Home Gateway
+                                │
+                     existing Family Connect VPN
+                                │
+                             Internet
+```
+
+**Reticulum = overlay / identity / encryption / routing. WebRTC = carrier /
+underlay.** Family entitlement remains authoritative for admission. Provider
+accounts, room membership and ICE/DTLS success do not authenticate Family devices.
+RNS Link payloads remain end-to-end encrypted across untrusted SFUs. RNS announces
+and some routing metadata are public/signed, not secret: do not claim every byte
+of RNS signaling is encrypted or place credentials in announce application data.
+
+### Existing code and intended integration
+
+Inspected checkpoint `3bddff0` and existing dirty working tree. Home Gateway work
+to date consists of design/legal documents; no `UnderlayPathManager` or WebRTC
+provider implementation was found. `provisioning/reticulum.py` already contains
+`ReticulumAdapter` / `ReticulumControlProvider` for finite control exchanges;
+Android `fc_rns_transport.py` owns an RNS runtime and TCP interface. Preserve these
+callers and their verification/lifecycle behavior. Attach a packet-oriented custom
+RNS Interface below the existing runtime; do not reproduce destination, announce,
+Link, encryption or packet parsing in a provider. Validate the Interface hooks
+against pinned `rns==1.5.1` when implementing.
+
+Proposed `UnderlayPathManager` owns enabled path factories, cancellation, generation
+tokens, bounded setup deadlines, health and reconnect. Initial preference: direct
+IPv6/IPv4 → existing cheap reachable path → WebRTC. Use bounded sequential attempts
+first; future racing must cancel losing paths. `NatTraversalPath`, `OwnRelayPath`
+and `MeshtasticBootstrap` are future extension points, not implemented paths.
+Meshtastic is a possible bootstrap/control channel, not an assumed broadband path.
+Replacing an interface must not replace Device Identity. Seamless live migration
+is out of scope; reconnect/reauthentication may be needed when the path changes.
+
+`WhitelistedWebRtcPathProvider` exposes connect/disconnect/send/receive/health/
+reconnect/capabilities. Opaque binary frames are the only payload contract. It
+contains no TUN, SOCKS, HTTP proxy, VPN routes, Family accounts or Internet
+forwarding. Provider adapters encapsulate create_session/join_session, signaling,
+credentials, SFU negotiation, ICE and cleanup. Reticulum code must not branch on
+Telemost/VK/WB. Avoid importing either reference project's complete VPN stack.
+
+### Reference inspection and first provider decision
+
+Sources inspected as code (not a live-service test):
+
+- `kulikov0/whitelist-bypass` at `7c19a7ec40900940fe0c43ea1db7768ee632393d`:
+  MIT; `relay/wbstream/{api,session}.go`, `relay/livekit/*.go`,
+  `relay/telemost/api.go`, headless creator entrypoints, Android headless joiners
+  and `relay/tunnel/rtc/vp8tunnel.go`. It uses a Pion-derived headless-client
+  dependency, publisher/subscriber peer connections, signaling, server-provided
+  ICE parameters, DC and paced VP8 media paths. Reconnect/session loops need
+  adaptation to our bounded lifecycle, not copying wholesale.
+- `openlibrecommunity/olcrtc` at `92b2332769c3dd5000584366201572efc448065f`:
+  WTFPL v2, Copyright (C) 2026 zarazaex; `internal/auth/{wbstream,telemost}`,
+  engine/transport separation, reconnect contracts and provider example configs.
+  Its module graph includes forked RTC engines and other dependencies whose
+  licenses must be checked individually before use. Root license is not a
+  license for every transitive component.
+
+**First provider selected for implementation preparation: WB Stream, VP8 mode.**
+Its guest-register → join existing room → room-token/server-URL flow is visible
+in both references, and the LiveKit-style signaling boundary is separable from
+the VPN bridge. This is lower integration risk than copying Telemost's custom
+signaling/slot management for this first PoC; it is not a claim that WB is reachable
+or stable on the target SIM. Telemost remains the next candidate; VK comes later.
+
+Guest joining is not guest room creation. The inspected whitelist WB creator
+requires a bearer from cookies; its API helper also has a guest/create code path,
+whose current service acceptance has not been tested. olcrtc WB auth joins an
+existing room. The inspected Telemost creator requires Yandex `Session_id`, and
+olcrtc Telemost auth does not implement room creation. Start with an explicitly
+provided disposable room through the session API; manual exchange is permitted
+only in this PoC. Do not promise fully anonymous creation/no-login final UX until
+tested. No credentials have been requested, exported or committed.
+
+### Carrier process and protocol proposal
+
+Use an isolated `family-webrtc-carrier` process, with Go/Pion as the preferred
+implementation candidate pending version/license review. Parent-owned stdio pipes
+are preferred over localhost listeners. One process owns one carrier session;
+only inherited handles connect it to its parent. No unauthenticated TCP listener.
+Windows broker controls executable verification/process lifetime; Android requires
+an ABI-matched packaged executable and lifecycle tests. Do not assume gomobile
+reference builds prove our separate-process packaging works on Android.
+
+Proposed IPC v1, to freeze with conformance vectors before coding:
+`u32be body_length | u8 version | u8 opcode | u32be request_id | payload`.
+Body bound 64 KiB, control JSON bound 16 KiB; reject unsupported versions/types,
+truncation, invalid lengths/JSON and unsolicited state transitions before allocation.
+Payload opcodes preserve exact bytes, including zero bytes; max RNS frame size is
+negotiated with the pinned adapter, not inferred from this IPC envelope bound.
+Commands: OPEN, SEND, PING, STATUS, CLOSE. Responses/events: OPENED, RECV, PONG,
+STATUS, ERROR, CLOSED. Frame counters and sanitized errors only in diagnostics;
+stdout is exclusively framed IPC. Bounded queues, backpressure, serialization of
+writes, deadlines and cancellation are required. EOF tears down the child; parent
+terminates/reaps a stuck process after a bounded grace interval.
+
+OPEN supplies provider, mode preference, ephemeral session descriptor and expiry
+through the private pipe; no token/cookie in argv, environment or log. STATUS
+must not echo the descriptor. Host owns secure storage, policy and provider-enable
+config. Provider/API exceptions become sanitized unavailable states. CLOSE must
+be idempotent and clean up room participation, sockets and timers where supported.
+
+Capabilities explicitly name `supports_datachannel`, `supports_vp8_carrier`,
+`supports_tcp_fallback`, `supports_turn`, limits and observed mode. Model unknown
+separately from false. References show DC and VP8 paths, but actual provider/session
+support must be probed: do not hardcode Telemost DC=false or WB DC=true as proven
+facts. Start WB in VP8, retain DataChannel as a separate mode contract. TCP signaling
+does not prove TCP media fallback; TURN availability/credentials are session-specific.
+Never disable TLS/certificate checks. Bound and validate signaling responses and
+server URLs; prevent unsafe schemes, credential forwarding and arbitrary local
+network access from untrusted signaling. Media loss/fragmentation/reordering and
+queue saturation need explicit tests before trusting binary integrity.
+
+### Rendezvous, security, enable flags and recovery
+
+Session descriptor is short-lived provider room/role/join material, never device
+identity. The host binds it to existing Family identities/authorization. Rendezvous
+eventually uses existing provisioning or another reachable control path; avoid the
+circular assumption that RNS-over-this-carrier can bootstrap itself before both
+ends have its session descriptor. PoC manual exchange stays behind session API;
+cached expiring provisioning, another RNS path or Meshtastic remain future options.
+
+Provider and overlay connection states stay separate. A provider may be connected
+while RNS peer authentication fails: no gateway admission in that case. Provider
+failure cannot disable other transports or silently downgrade authentication.
+Use exponential backoff/jitter, finite attempts/deadlines and explicit retry state;
+replace expired session material, reject stale callbacks, release failed sessions.
+
+Proposed signed provisioned config: `webRtcProviders.wb.enabled=false`, with
+independent Telemost/VK flags also false by default; experimental opt-in required.
+A supported provider can be disabled by verified configuration without a new build.
+Config expiry must be defined: an offline client cannot receive an immediate kill
+switch; cached authorization must not remain valid forever. No arbitrary executable
+or code download through these flags. Future API breakage may still need a build.
+
+Android must protect/bind **all** carrier network sockets, including HTTP signaling,
+DNS, ICE/STUN/TURN, RTP/DTLS, DataChannel and reconnect sockets. Parent-side protection
+needs an explicit cross-process FD mechanism or equivalent platform-approved
+binding; stdio alone does not solve it. Prove the socket factory before full VPN
+integration. Pure binary WEBRTC-2 may run without VpnService first, but cannot
+therefore claim tunnel-loop/leak protection. Existing secret storage and firewall
+constraints remain; no cookies/tokens, RNS/user payloads or production DNS queries
+in logs. An SFU can observe timing/size/public announce metadata or drop/replay
+frames; RNS and Family authorization remain the security boundary.
+
+### Added stages and acceptance (existing 5A–5G preserved)
+
+| Stage | Work / gate | Current status |
+| --- | --- | --- |
+| 5H | UnderlayPathManager and RNS Interface / private IPC contracts | Designed, not implemented |
+| 5I | Single-provider isolated carrier: WEBRTC-1, then WEBRTC-2 | WB/VP8 selected for first investigation; not run |
+| 5J | Reticulum-over-WebRTC: WEBRTC-3 | Not run |
+| 5K | Home Gateway over WebRTC: WEBRTC-4/5, linked to existing5C–5E | Later; not run |
+| 5L | Multi-provider WebRTC; independent flags and recovery | Later; not implemented |
+| 5M | Restricted-mobile acceptance, extension of existing5F | Краснодар; not run |
+
+Execution priority is 5A reachability →5H→5I→5J; adding later letters does not mean
+existing5B–5G are complete. Continue into5K only after reviewing these gate results.
+
+WEBRTC-1: two desktop processes through real WB infrastructure, random binary
+round trips with exact equality at 1, 64, 512, 1500, 4096 bytes and negotiated
+maximum; reject maximum+1. Exercise partial IPC reads, concurrent send/receive,
+duplicates, disconnect/rejoin, token expiry, provider unavailable and clean shutdown.
+WEBRTC-2: Android↔Windows repeats those tests over the provider, recording exact
+OS/ABI/builds. Desktop loopback/cross-compilation does not satisfy this gate.
+WEBRTC-3: actual reference RNS interfaces carry announces both directions and
+establish an authenticated RNS Link without manual packet reconstruction; demonstrate
+identity/signature rejection and no provider logic in the Reticulum layer.
+WEBRTC-4: Android TUN→RNS→WebRTC→Windows deterministic IP/reply, ping-equivalent,
+TCP and UDP. WEBRTC-5: browser/DNS, FC exit public IP, no mobile/DNS/IPv6 leak,
+upstream failure and reconnect on the restricted mobile network.
+
+Measure DataChannel and VP8 separately: setup/reconnect time, RTT, throughput,
+CPU/memory, loss and 30–60 minute stability. >5 Mbit/s stable is a useful PoC
+target, 20+ Mbit/s a strong result, neither a current measurement nor guaranteed.
+Slower first results prompt analysis, not automatic rejection of the architecture.
+Path telemetry: provider, carrier_mode, RTT or unavailable, connected_since,
+rx_bytes/tx_bytes, reconnects, sanitized failure_reason and path generation.
+
+Краснодар matrix: ordinary FC transport = user-reported cellular failure (reproduce
+and record timestamp/active restrictions); direct Home Gateway = unknown; WB =
+unknown; Telemost = unknown; RNS-over-WebRTC = unknown; full Home Gateway = unknown.
+Success requires ordinary direct VPN failing while the complete new path works
+in the same restricted-network conditions. No whitelist reachability is inferred
+from a service name, reference README, office Internet or loopback result.
+
+### Implementation preparation and open blockers
+
+Next authorized implementation step, when resumed: license-pin the minimal Go/Pion
+graph, specify executable packaging/protected sockets, implement and test bounded
+IPC plus path manager, then WB session/media adapter and opt-in live WEBRTC-1.
+Reuse only justified small modules; preserve notices and exact provenance before
+copying. No SOCKS/tun2socks/mux or full VPN import. Check dependencies of forks
+individually; no unreviewed GPL/AGPL inclusion.
+
+Open: live guest/create/media capabilities, reachable carrier on the target SIM,
+provider/API stability, final Go/Pion or fork versions/licenses, Android process
+packaging/socket protection, actual Windows+Android test endpoints. No Go/adb/dotnet
+commands were found in the current shell PATH during inspection; toolchain setup
+is deferred with implementation. Source clones stay outside the repository in /tmp;
+no implementation, dependency pins, app release or provider session was created.
+The user has deferred device testing and requested preparation only at this time.
+
+## Previous strategy revision — owner decision, 2026-09-25
 
 The primary objective is establishing a secure phone↔home-PC connection while
 mobile allowlist restrictions are active. Reticulum is the control/discovery,
