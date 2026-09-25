@@ -97,12 +97,21 @@ Sources inspected as code (not a live-service test):
   licenses must be checked individually before use. Root license is not a
   license for every transitive component.
 
-**First provider selected for implementation preparation: WB Stream, VP8 mode.**
-Its guest-register → join existing room → room-token/server-URL flow is visible
-in both references, and the LiveKit-style signaling boundary is separable from
-the VPN bridge. This is lower integration risk than copying Telemost's custom
-signaling/slot management for this first PoC; it is not a claim that WB is reachable
-or stable on the target SIM. Telemost remains the next candidate; VK comes later.
+**Updated first provider priority: Yandex Telemost**, following user-reported
+field evidence on 2026-09-25: Android on restricted cellular in Krasnodar completed
+a Telemost video call with Belgium while direct Family Connect VPN was unavailable.
+This establishes one observed working application-level media path to Belgium,
+not arbitrary binary transport, headless API compatibility or RNS acceptance.
+Operator, exact time, client/version, call duration, bitrate and ICE/TURN/SFU path
+were not supplied; the Belgian endpoint OS is unknown. Do not infer Windows,
+DataChannel, VP8 or a particular media route from the successful call.
+
+The initial WB/VP8 choice was based on simpler guest/LiveKit reference code and is
+now the reserve candidate. Target-network evidence gives Telemost higher PoC
+priority despite its more complex signaling/slot management. Start by validating
+headless Telemost join and binary media carriage on this network; VP8 is a candidate,
+not the observed call's established codec. WB and VK remain interchangeable options.
+[Field record](../releases/2026-09-25-telemost-cellular-evidence.ru.md).
 
 Guest joining is not guest room creation. The inspected whitelist WB creator
 requires a bearer from cookies; its API helper also has a guest/create code path,
@@ -145,7 +154,7 @@ Capabilities explicitly name `supports_datachannel`, `supports_vp8_carrier`,
 `supports_tcp_fallback`, `supports_turn`, limits and observed mode. Model unknown
 separately from false. References show DC and VP8 paths, but actual provider/session
 support must be probed: do not hardcode Telemost DC=false or WB DC=true as proven
-facts. Start WB in VP8, retain DataChannel as a separate mode contract. TCP signaling
+facts. Investigate Telemost VP8 first, retain DataChannel as a separate mode contract. TCP signaling
 does not prove TCP media fallback; TURN availability/credentials are session-specific.
 Never disable TLS/certificate checks. Bound and validate signaling responses and
 server URLs; prevent unsafe schemes, credential forwarding and arbitrary local
@@ -189,7 +198,7 @@ frames; RNS and Family authorization remain the security boundary.
 | Stage | Work / gate | Current status |
 | --- | --- | --- |
 | 5H | UnderlayPathManager and RNS Interface / private IPC contracts | Designed, not implemented |
-| 5I | Single-provider isolated carrier: WEBRTC-1, then WEBRTC-2 | WB/VP8 selected for first investigation; not run |
+| 5I | Single-provider isolated carrier: WEBRTC-1, then WEBRTC-2 | Telemost prioritized by reported video-call reachability; carrier not run |
 | 5J | Reticulum-over-WebRTC: WEBRTC-3 | Not run |
 | 5K | Home Gateway over WebRTC: WEBRTC-4/5, linked to existing5C–5E | Later; not run |
 | 5L | Multi-provider WebRTC; independent flags and recovery | Later; not implemented |
@@ -198,7 +207,7 @@ frames; RNS and Family authorization remain the security boundary.
 Execution priority is 5A reachability →5H→5I→5J; adding later letters does not mean
 existing5B–5G are complete. Continue into5K only after reviewing these gate results.
 
-WEBRTC-1: two desktop processes through real WB infrastructure, random binary
+WEBRTC-1: two desktop processes through real selected-provider infrastructure (Telemost first), random binary
 round trips with exact equality at 1, 64, 512, 1500, 4096 bytes and negotiated
 maximum; reject maximum+1. Exercise partial IPC reads, concurrent send/receive,
 duplicates, disconnect/rejoin, token expiry, provider unavailable and clean shutdown.
@@ -218,9 +227,11 @@ Slower first results prompt analysis, not automatic rejection of the architectur
 Path telemetry: provider, carrier_mode, RTT or unavailable, connected_since,
 rx_bytes/tx_bytes, reconnects, sanitized failure_reason and path generation.
 
-Краснодар matrix: ordinary FC transport = user-reported cellular failure (reproduce
-and record timestamp/active restrictions); direct Home Gateway = unknown; WB =
-unknown; Telemost = unknown; RNS-over-WebRTC = unknown; full Home Gateway = unknown.
+Краснодар matrix: ordinary FC transport = user-reported cellular failure;
+Telemost video call to Belgium = user-reported PASS on 2026-09-25; direct Home
+Gateway = unknown; WB = unknown; Telemost binary/headless carrier = unknown;
+RNS-over-WebRTC = unknown; full Home Gateway = unknown. Reproduce with timestamps
+and record restrictions; this report is not an instrumented comparative test.
 Success requires ordinary direct VPN failing while the complete new path works
 in the same restricted-network conditions. No whitelist reachability is inferred
 from a service name, reference README, office Internet or loopback result.
@@ -229,7 +240,7 @@ from a service name, reference README, office Internet or loopback result.
 
 Next authorized implementation step, when resumed: license-pin the minimal Go/Pion
 graph, specify executable packaging/protected sockets, implement and test bounded
-IPC plus path manager, then WB session/media adapter and opt-in live WEBRTC-1.
+IPC plus path manager, then Telemost session/media adapter and opt-in live WEBRTC-1.
 Reuse only justified small modules; preserve notices and exact provenance before
 copying. No SOCKS/tun2socks/mux or full VPN import. Check dependencies of forks
 individually; no unreviewed GPL/AGPL inclusion.
