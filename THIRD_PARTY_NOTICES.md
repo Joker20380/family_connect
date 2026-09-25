@@ -62,3 +62,8 @@ Exact inspected paths, license sources and candidate-dependency blockers are in
 [the audit](docs/legal/DEPENDENCY_LICENSE_AUDIT.md#webrtc-carrier-reference-audit--preparation-only-2026-09-25).
 Any later MIT source reuse must retain the full original notice and identify
 source/destination files. No implied license for forks/transitive dependencies.
+
+The subsequent direct Android→Telemost→Linux EU priority correction adds no code
+or dependencies. Both community references remain reference-only. Any future
+crypto/mux/reliability/TUN-conversion reuse requires a separate exact-version audit;
+existing Xray notices and obligations remain applicable.

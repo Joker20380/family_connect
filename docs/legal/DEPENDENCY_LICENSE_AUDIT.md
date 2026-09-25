@@ -129,3 +129,12 @@ provider usage terms/quotas must be checked before deployment. No provider login
 room creation or traffic exchange was performed by this audit. These sources do
 not prove current availability on restricted mobile networks. No GPL/AGPL or other
 new dependency has been silently introduced.
+
+## Direct EU priority correction — 2026-09-25
+
+The new5N plan uses the same inspected whitelist-bypass and olcrtc references,
+reference-only: no copied/modified/linked portions or new dependencies. No additional
+crypto/mux/tun2socks library is selected or licensed by this decision. Inspect the
+existing Xray TUN conversion boundary first; its MPL-2.0 obligations still apply
+if modified. Audit exact versions and transitive licenses before implementing the
+new Family encrypted session/reliability/mux. Root proprietary LICENSE is unchanged.

@@ -7,7 +7,204 @@ Current execution order lives in [PLAN](../PLAN.md), measured results in
 [STATUS](../STATUS.md). The project has working pilot clients and VPN transports;
 it is no longer only an isolated research laboratory, nor production-ready.
 
+## DECISION: restricted WebRTC to EU Gateway first — 2026-09-25
+
+**For restricted mobile networks, direct WebRTC carrier to EU Gateway has priority
+over routing through Windows Home Gateway.** This is a critical-path correction,
+not a restart or removal of Reticulum/Home Gateway. Current authorized work remains
+documentation and implementation preparation; no new runtime is claimed here.
+Earlier sections below describe retained secondary designs and prior decisions;
+their old immediate-next-step ordering is superseded by this section and PLAN.
+
+Basis: the user reported a successful Android cellular Telemost video call from
+Krasnodar to Belgium on 2026-09-25 while normal Family VPN was unavailable.
+Community source implements binary DC/video carriers and supports investigating
+this path; we have not independently reproduced those carriers. A normal call
+proves one application-level reachable path, not headless API, VP8 binary throughput
+or our authenticated transport. [Field evidence](../releases/2026-09-25-telemost-cellular-evidence.ru.md).
+
+Removing Windows from the restricted-network critical path removes the need for
+residential dynamic-IP handling, home NAT traversal, Windows forwarding/NAT and an
+always-on home PC, and removes the home-PC detour before the EU exit. It does not
+remove provider signaling/ICE requirements or the need for a reachable EU endpoint.
+
+```text
+CONTROL PLANE (retained)
+Device Identity / FAMILY ↔ Reticulum control/recovery/provisioning/discovery
+                                  │
+                    messenger / emergency communications
+                    future Meshtastic bootstrap / Personal Gateway
+
+DATA PLANE (new priority)
+Android apps → VpnService/TUN → existing stream conversion
+                                   │
+                 existing transport selection/lifecycle
+                    ├── AWG
+                    ├── TCP / XHTTP
+                    └── WebRtcRestrictedTransport
+                           Family stream mux
+                                   │
+                       authenticated E2E Family session
+                                   │
+                      opaque WebRTC carrier / VP8
+                      Telemost first → WB later
+                                   │
+                               SFU / RTC
+                                   │
+                     headless Linux EU Family Gateway
+                                   │
+                           DNS / Internet egress
+```
+
+### Architecture and reuse boundaries
+
+Reticulum keeps Device Identity binding, control/recovery, emergency provisioning,
+messaging, peer/Personal Gateway discovery and future Meshtastic compatibility.
+It is not a mandatory encapsulation layer for high-volume Internet traffic. Keep
+the RNS custom-interface/UnderlayPathManager proposal as a reusable secondary
+integration; completing RNS-over-WebRTC or IP-over-RNS is not a gate for the EU
+data transport. Evaluate raw IP or RNS encapsulation only after benchmarks justify it.
+
+Integrate `WebRtcRestrictedTransport` into existing Android `Transport`,
+`ConnectionService`/selection/health and provisioning capabilities. These names
+describe intended integration, not newly implemented classes. Do not add a second
+TransportManager or change current default selection during experimental work.
+Future policy: normal network→AWG/existing fastest suitable transport; blocked
+AWG→reachable TCP/XHTTP; strict restrictions→Telemost VP8; Telemost unavailable→
+enabled, validated fallback provider. Retain CONNECT as the normal UI operation.
+
+Reuse the carrier's opaque byte/packet contract and isolated private IPC. It must
+not know Family entitlements, destination hosts, DNS queries or egress routes.
+TelemostProvider owns signaling/creator/joiner/room/ICE/SFU/media/reconnect; WB is
+first fallback only after Telemost passes real-network validation, VK/future later.
+Explicit capabilities: supportsDataChannel, supportsVp8Carrier, supportsTurn,
+supportsUdp, supportsTcpFallback (unknown is distinct from false; aliases of
+earlier snake_case capability design). Prefer VP8 for the first serious Telemost
+PoC on community implementation evidence, but measure it. Do not infer the codec
+of the reported video call or declare DataChannel categorically unsupported.
+
+Existing `pilot/android-tcp/tcp-android.go` uses Xray's TUN inbound with an owned
+TUN fd, and creates VLESS RAW/REALITY or XHTTP outbounds. This is the first reuse
+candidate for TUN-to-stream conversion; it is not yet a generic Family mux adapter.
+Inspect the pinned engine's extension boundary before deciding on tun2socks.
+No second TUN converter, whole community VPN stack or new native dependency is
+approved by this design alone. Keep existing fd ownership/protection/revoke paths.
+
+`family-restricted-gateway` is a proposed **headless Linux** endpoint integrated
+with existing Family infrastructure: provider termination via isolated carrier,
+Family authentication/authorization, sessions/mux, DNS, Internet egress, health and
+metrics. The carrier process and authenticated egress engine remain separate trust
+boundaries. Unknown/provider-only peers cannot open sockets or use DNS forwarding.
+Use existing entitlement/revocation/provisioning authority; no standalone users or
+family password store. No Windows component, home IP or per-user DDNS prerequisite.
+
+### Authenticated session, stream mux and DNS
+
+SFUs are untrusted and may terminate WebRTC transport encryption. Put authenticated
+Family E2E encryption above the provider, including stream OPEN metadata and DNS.
+Reuse existing Device Identity and signed entitlement/gateway bindings. Select a
+reviewed secure-session protocol/library and audit it before implementation; do
+not invent a cipher/handshake or treat existing Xray integration as proof that
+its authentication already enforces Family entitlement. Bind both peer identities,
+gateway role, protocol version, fresh challenges, session keys and authorization
+expiry/revision. Reject unknown, wrong-family, revoked, expired or replayed proofs;
+pin the EU gateway's authorized identity. Room/token identity is not Family identity.
+
+One provider conference/carrier session carries many logical streams. Reuse an
+appropriate existing mux if found, otherwise design a small bounded mux with
+OPEN_STREAM/OPEN_TCP, DATA/TCP_DATA, CLOSE_STREAM/half-close and RESET_STREAM.
+Versioned framing reserves UDP_DATAGRAM and DNS_QUERY/DNS_RESPONSE or equivalent
+existing operations; strict length/type/stream-id limits, concurrent-stream quota,
+per-stream/global flow control, fairness, timeout and cancellation are mandatory.
+The video carrier is lossy: establish ordering/reliability requirements of the
+chosen encryption/mux and bounded retransmission/reassembly below it. A reliable
+IPC pipe does not make RTP reliable. Never replay application writes automatically
+across recreated sessions; fail/reset old streams and let applications reconnect.
+
+Phase1 is **TCP + DNS**; full general UDP is phase2. Capture application UDP DNS
+and tunnel it as bounded encrypted DNS requests (or reuse verified resolver
+conversion), correlated to replies and resolved on the EU side. No production
+query logging or direct DNS fallback. Unsupported UDP must be dropped/rejected
+without leaking to cellular, with limitations documented; do not promise QUIC,
+voice calls or every app works during TCP-only PoC. For egress enforce destination
+policy, quotas and deny unsafe loopback/link-local/metadata/admin-network access
+unless explicitly authorized. This is an authenticated Family service, not a public
+SOCKS/HTTP/open proxy. TLS certificate verification remains enabled everywhere.
+
+Android must protect all signaling, DNS, ICE/STUN/TURN/media/reconnect sockets and
+retain capture routes/fail-closed state on transport failure. Phase1 captures or
+blocks IPv6 and unsupported UDP as well as IPv4; verify screen/process lifecycle,
+always-on/lockdown limitations and no DNS/traffic leak. Provider must never receive
+Family credentials/plaintext. It still sees unavoidable media timing/size/transport
+metadata; no claim of indistinguishability from every normal video call is made.
+
+Use existing verified provisioning flags, proposed
+`restrictedTransports.telemost.enabled=false`, `.wb.enabled=false` initially.
+Experimenters opt in; remote disable must isolate provider failure without changing
+AWG/TCP/XHTTP. Offline expiry/revision floors and reachable update delivery are
+required; remote disable is not instantaneous when all control paths are offline.
+Room descriptors stay ephemeral and private; retain manual exchange only for early
+PoC, with existing secret storage and a future reachable rendezvous path. Meshtastic
+may later carry bootstrap/messages, never today's broadband data path.
+
+### Preserved stage numbering and immediate gates
+
+Keep committed5A–5M meanings. Add **5N — Restricted WebRTC Android→EU track**,
+whose sub-stages are WEBRTC-EU-1–6 below. Prioritize 5N over Windows/Home Gateway
+5B–5E/5J–5K; reuse generic5H/5I carrier contracts and share5M mobile evidence.
+Existing5L supplies WB fallback after validation; existing Home Gateway and
+RNS-over-WebRTC gates stay open, not cancelled or silently counted as complete.
+
+| New gate | Required result | Status |
+| --- | --- | --- |
+| WEBRTC-EU-1 / 5N.1 | Desktop/Linux↔Linux random binary round trip over real Telemost at several sizes; exact byte equality | Not run |
+| WEBRTC-EU-2 / 5N.2 | Android↔Linux EU Telemost binary round trip, no TUN yet | Not run |
+| WEBRTC-EU-3 / 5N.3 | Authenticated E2E Family session; valid identity succeeds, unknown/wrong-family/revoked/replayed proof fails | Not run |
+| WEBRTC-EU-4 / 5N.4 | One TCP stream through EU returns a real HTTPS response, e.g. example.com:443 | Not run |
+| WEBRTC-EU-5 / 5N.5 | Parallel TCP/browser/API/DNS streams share one carrier session; bounded fairness/flow control | Not run |
+| WEBRTC-EU-6 / 5N.6 | Android full-device TCP+DNS: browser/HTTPS and ordinary apps where protocol permits, EU exit, no direct leaks | Not run |
+
+**Immediate engineering target after implementation resumes:** Android on Krasnodar
+cellular → Telemost VP8 → Linux EU → arbitrary authenticated Family data (gates1–3).
+Then prove one HTTPS stream, mux and full-device Internet. Do not wait for Windows
+NAT, home discovery or RNS packet tunneling; do not spend time on polished UI.
+
+Required automated tests: malformed/oversized carrier/mux frames; ordering/loss,
+stream id/replay/half-close/reset and saturation; auth/expiry/revoke/wrong-family;
+DNS correlation/limits; unsupported UDP/IPv6 blocking; protected socket creation;
+provider disable/API failure; carrier recreation; gateway restart; cancellation,
+bounded backoff, clean shutdown and no orphan processes. Existing transport/security
+tests stay intact. Mocks/local EU tests do not satisfy the mobile acceptance gates.
+
+### Decisive Krasnodar acceptance and performance
+
+Test Android **cellular only, Wi-Fi disabled**, record timestamp/operator/network
+conditions and builds without subscriber identifiers. Baseline is user-reported
+direct FC FAIL / Telemost video PASS; reproduce it in the same test window as
+Family Telemost transport. Current Family transport result is **NOT RUN**.
+
+Measure setup time,5/30/60 minute stability, RTT, sustained throughput, CPU, memory,
+battery and reconnect count/time. Exercise screen off/on, mobile data off/on,
+airplane mode on/off, cellular reconnect, carrier session recreation and EU gateway
+restart. Workloads: small browsing, large file, video stream and many parallel HTTP
+requests. Capture leak evidence on failure/recovery; record unsupported UDP apps.
+Report actual endpoint placement/exit IP. A user-reported video call is not these tests.
+
+Stable >5 Mbit/s is PoC target; >10–20 Mbit/s good first product result; >30 Mbit/s
+strong result. Stability precedes optimisation; these are targets, not measurements.
+Strong completion requires normal traffic for30–60 minutes on the restricted SIM,
+no leaks and automatic recovery after interruption. Do not equate local EU success,
+one binary echo or a video call with production readiness.
+
+Home Gateway remains useful for LAN/NAS/RDP/family devices, residential egress and
+emergency alternate gateway. Reticulum and Meshtastic-compatible control designs
+are preserved. No code has been removed or dependency added by this correction;
+community projects remain reference-only under their audited pinned licenses.
+
 ## Whitelisted WebRTC Carrier — extension, 2026-09-25
+
+Retained secondary Home Gateway design; immediate priorities are superseded by
+the direct-EU decision above. Its Android↔Windows gates remain open.
 
 **Current scope: documentation and implementation preparation only**, as clarified
 by the owner after requesting the carrier extension. No carrier implementation,
