@@ -1,4 +1,4 @@
-# Personal/Home Gateway over Reticulum
+# Personal/Home Gateway — Reticulum control, selectable data transport
 
 Engineering decision and implementation requirements, 2026-09-25.
 **Stage 5 / Reticulum — active development; design recorded, RNS-1–RNS-5 open.**
@@ -7,34 +7,53 @@ Current execution order lives in [PLAN](../PLAN.md), measured results in
 [STATUS](../STATUS.md). The project has working pilot clients and VPN transports;
 it is no longer only an isolated research laboratory, nor production-ready.
 
+## Strategy revision — owner decision, 2026-09-25
+
+The primary objective is establishing a secure phone↔home-PC connection while
+mobile allowlist restrictions are active. Reticulum is the control/discovery,
+authentication and negotiation/recovery channel; carrying all IP traffic over RNS
+is no longer required. This supersedes the original mandatory IP-over-Reticulum
+strategy. Milestone names RNS-1–RNS-5 are retained for continuity, with updated
+acceptance below. No milestone has passed. Current position: global stage5,
+start of5A (design and reachability validation); no Home Gateway runtime yet.
+
+First validate reachable authorized infrastructure on the target mobile network:
+control/bootstrap AND data ingress. A successful RNS exchange is not evidence of
+a reachable data endpoint; a known destination is not a firewall bypass. If the
+RNS carrier is blocked, it also needs a reachable bootstrap/carrier. Shared
+operator infrastructure is allowed; per-user home DDNS/static IP is not required.
+
+Relay-first PoC: both endpoints establish outbound connections to a reachable
+relay; user traffic remains encrypted end-to-end to the home PC. The relay is not
+an Internet exit. Direct IPv6/IPv4 and NAT traversal come later as optimisation.
+AWG/WG with reachable UDP and existing TCP/XHTTP/TLS are candidates, not validated
+solutions for this mobile network. Existing runtimes do not automatically provide
+a reverse/relay tunnel. Choose the data adapter after measurement and license audit;
+no new implementation or dependency is selected by this strategy change.
+
 ## Goal and scope
 
-Android on a mobile network sends IP traffic through an encrypted Reticulum path
-to its owner's Windows Home PC. Windows provides either diagnostic direct Internet
-egress (A), or the existing Family Connect VPN / EU exit (B). No per-user static IPv4,
-domain/DDNS, manually entered home endpoint, key transfer or reconfiguration after
-home-IP changes. Device Identity → RNS Destination → currently reachable path.
-IP addresses belong to the mutable underlay, never permanent identity.
+Android on a mobile network establishes an authenticated connection to its owner's
+Windows Home PC using Reticulum control and a selected encrypted data channel.
+Windows provides diagnostic direct Internet (A) or existing Family Connect VPN / EU
+exit (B). No per-user static IPv4, domain/DDNS, manually entered home endpoint,
+key transfer or reconfiguration after home-IP changes. Device Identity → RNS
+Destination → signed negotiation → currently reachable data path. IP addresses
+belong to the mutable underlay, never permanent identity.
 
 ```text
-                     Family Control
-                          │
-                 Device Identity
-                          │
-              Reticulum Destination
-                          │
-         ┌────────────────┴───────────────┐
-         │                                │
-   Android Phone                   Windows Home PC
-         │                                │
- Android VpnService                  Home Gateway
-         │                                │
-         └──── encrypted RNS path ────────┘
-                                          │
-                                  Family Connect VPN
-                                          │
-                                          ▼
-                                       Internet
+Family Control / Device Identity / FAMILY authorization
+                         │
+        Reticulum: discovery + signed negotiation
+                         │
+           Android Phone ↔ Windows Home PC
+                         │
+Data: Android TUN ══ encrypted selected transport ══ Windows Gateway
+                        direct OR relay                    │
+                                               diagnostic Internet
+                                                OR existing FC VPN
+                                                           │
+                                                        Internet
 ```
 
 Direct Internet is an explicit diagnostic mode, never a fallback from mode B.
@@ -66,12 +85,14 @@ No public localhost SOCKS/HTTP interface, command-line secrets, or extra VPN sta
 The IPC must authenticate its owner and reject unrelated local processes; named-pipe
 ACLs/parent-owned handles, bounded messages and child cleanup are acceptance gates.
 
-`ReticulumHomeGatewayTransport` is a proposed transport-layer component with these
-boundaries: identity/authorization, discovery, session, packet framing, Android TUN
-adapter, Windows gateway adapter, health/reconnect, diagnostics. A library-independent
-adapter supplies destination derivation, announce/discovery, encrypted session,
-peer identity proof, bounded packet send/receive and close. Business policy depends
-on these interfaces, not RNS objects. Both peers use the reference stack first.
+`HomeGatewaySession` is the proposed orchestration boundary: existing identity/FAMILY
+policy, a `ReticulumControlAdapter`, replaceable `DataTransportAdapter`, Android TUN
+and Windows gateway adapters, health/reconnect and diagnostics. These are design
+names, not implemented classes. The former `ReticulumHomeGatewayTransport` name
+must not require RNS packet carriage. Control handles destination/discovery and
+signed negotiation; data handles peer handshake, bounded packet I/O and close.
+Business logic depends on these contracts, not RNS objects. Both peers use the
+reference RNS stack for control; IP-over-RNS remains an optional future data adapter.
 
 [rns-vpn-rs](https://github.com/BeechatNetworkSystemsLtd/rns-vpn-rs) is a reference
 for TUN packets over links, destination-based peer lookup and nonce/signature peer
@@ -100,7 +121,10 @@ reference from the public key, signature and destination derivation. Even when
 the keys coincide, include these fields in the signed authorization transcript to
 prevent cross-protocol or role confusion. Control countersigns a bounded grant
 binding both device identities, FAMILY/entitlement and revision, roles, virtual
-addresses, allowed mode, gateway consent, issue/expiry and audience. A device
+addresses, allowed mode, gateway consent, issue/expiry and audience. Signed negotiation
+also binds data transport keys, both identities, roles, selected protocol/version,
+path parameters, session nonce and expiry. The data handshake must independently
+prove possession of the bound keys; reject relay substitution, replay and downgrade. A device
 signature proves possession, **not entitlement**. Both peers validate the existing
 Control trust anchor and revision floor; no TOFU and no shared family password.
 
@@ -123,13 +147,12 @@ Reticulum alone does not guarantee reachability through CGNAT or allowlist filte
 
 ## Data plane and routing safety
 
-Android: applications → VpnService → TUN → IP framing → encrypted RNS link.
-Start with IPv4; reserve an address-family/version field for future IPv6. Define
-strict version/type/session/sequence/length framing, bounded MTU and fragment
-reassembly (size, count, deadline and memory quotas); validate IP length/header,
-source assignment and maximum payload before injection. RNS link packet limits
-must drive fragmentation: never assume a full 1500-byte IP packet fits one RNS packet.
-Avoid unbounded resources/queues and document backpressure/drop counters.
+Android: applications → VpnService → TUN → selected encrypted data transport → Windows.
+Start with IPv4; preserve future IPv6 support. Reuse existing packet/framing/MTU
+handling when suitable, with strict bounds, source validation and backpressure.
+Specify extra framing only where the selected adapter requires it. Do not build
+RNS IP fragmentation as a prerequisite; if that optional adapter is later selected,
+validate its packet limits and bounded fragment reassembly separately.
 
 Before any underlay connect or reconnect, Android must `VpnService.protect(fd)`
 and bind the socket to a validated non-VPN `Network` as needed. Fail closed if
@@ -153,12 +176,13 @@ blocks forwarding if upstream VPN fails. No second VPN stack or mandatory manual
 Internet Connection Sharing. Select and validate application-managed forwarding/NAT
 and narrow firewall rules before RNS-3; do not claim existing Wintun alone supplies NAT.
 Use idempotent route/rule ownership and crash journal; remove only application-owned
-state. Prevent routing the RNS carrier recursively through this tunnel. No automatic
+state. Prevent routing control or data underlay recursively through this tunnel. No automatic
 WAN port exposure, global firewall disable, or public SOCKS/HTTP listeners.
 
 ## Discovery and lifecycle
 
-First PoC may use an explicit shared bootstrap RNS transport node. Both devices
+First PoC may use an explicit shared bootstrap RNS node for control and a
+reachable data relay (possibly colocated, but separate roles). Both devices
 make outbound connections; home address changes never edit device identity or user
 configuration. Announce/path rediscovery follows underlay reconnection. Adapter
 configuration supports a list of bootstrap paths and future direct IPv6, direct IPv4,
@@ -172,6 +196,9 @@ DISABLED → DISCOVERING → CONNECTING → AUTHENTICATING → CONNECTED
 
 Use bounded connection/auth deadlines, health probes and exponential backoff with
 jitter and a maximum delay; reset retries only after stable success. No busy loops.
+Track control and data health separately. Loss of control need not interrupt a
+healthy data session while its bounded authorization remains valid. Reconnect uses
+reachable control or preauthorized unexpired paths; grant expiry fails closed.
 On Android/Windows network change close stale sockets, cancel old generation work,
 rediscover and reauthenticate; preserve capture policy. Persist only approved
 configuration/identity, not ephemeral endpoints as identity. PC restart restores
@@ -188,7 +215,8 @@ egress. One config switch disables the feature. These are planned names, not
 currently accepted client options. Existing transport defaults stay unchanged until
 real-world acceptance. Avoid UI polish until the data path is proven.
 
-Record `transport=reticulum_home_gateway`, local Device Identity,
+Record `mode=home_gateway`, `control_transport=reticulum`, actual `data_transport`,
+`path_kind=direct|relay`, separate control/data states and ingress reachability, local Device Identity,
 `gateway_device_id`, `rns_destination`, `path_state`, `connection_state`,
 `session_age`, `rx_bytes`, `tx_bytes`, `rx_packets`, `tx_packets`,
 `reconnect_count`, sanitized `last_error`, RTT/loss only when actually measured
@@ -199,14 +227,15 @@ user packets or production DNS queries. Diagnostic exports need the same filteri
 
 | Gate | Required evidence | Current status |
 | --- | --- | --- |
-| RNS-1 / 5A–5B | Authenticated Android ↔ Windows session; both Device Identities in diagnostics; reconnect | Not run |
-| RNS-2 / 5C | Real IP packets from Android TUN over RNS to Windows; virtual-IP ping or deterministic packet test, with return path | Not run; minimum implementation success gate |
+| RNS-1 / 5A–5B | Reachable control and data ingress under active target mobile restrictions; RNS negotiation and authenticated selected data session Android ↔ Windows; both identities; reconnect | Not run |
+| RNS-2 / 5C | Real IP packets from Android TUN over the selected encrypted transport to Windows; virtual-IP ping or deterministic packet test, with return path | Not run; minimum implementation success gate |
 | RNS-3 / 5D | Explicit direct-Internet gateway: HTTP/HTTPS, DNS, UDP and TCP | Not run |
 | RNS-4 / 5E | Existing Windows VPN upstream; phone public IP equals VPN exit, not home ISP/mobile carrier | Not run |
-| RNS-5 / 5F | Краснодар mobile→home Windows→Family Connect; measurements below | Not run |
-| 5G | Zero-config discovery/path optimisation, informed by measurements | Planned |
+| RNS-5 / 5F | Краснодар with active allowlist restrictions: mobile→home Windows→Family Connect; measurements below | Not run |
+| 5G | Direct paths/NAT traversal and zero-config optimisation, informed by measurements | Planned |
 
-Required unit/integration coverage: framing and malformed/oversized packets;
+Required unit/integration coverage: control reachable/data blocked and control blocked;
+relay end-to-end identity/key binding, negotiation replay/downgrade; framing and malformed/oversized packets;
 authentication/wrong-family/revoked/expired-grant rejection; replay/duplicates;
 state-machine backoff and cancellation; route install/remove/rollback; tunnel/DNS
 leaks including unsupported IPv6; loop prevention and unprotected reconnect sockets;
@@ -214,6 +243,8 @@ shutdown, gateway disappearance, endpoint change and upstream failure in mode B.
 Existing tests must continue passing without weakening security assertions.
 Mock tests, Linux loopback and cross-compilation are not Android/Windows acceptance.
 
+Start reachability measurements at5A; repeat full acceptance at RNS-5. Record
+evidence that allowlist restrictions are active, and test control and data separately.
 For RNS-5 record device/OS/build/commit, operator and network type (no subscriber
 number), bootstrap path, connection establishment time, throughput, latency, packet
 loss, 30–60 minute stability, mobile-data off/on, Wi-Fi↔LTE and home-IP change where
