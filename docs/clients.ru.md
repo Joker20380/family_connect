@@ -18,17 +18,22 @@ Debug APK из CI не предназначена для обновления у
 
 ## Текущие загрузки со страницы приглашения
 
-[Linux 0.2.11 / 5b02e8cb9fde119f](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz) · [Windows 0.2.15 / 2ffba77](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.15-pilot-unsigned.exe)
+[Linux 0.2.11 AppImage](https://185.251.89.19:8443/downloads/FamilyConnect-0.2.11-x86_64.AppImage) · [Linux 0.2.11 .deb](https://185.251.89.19:8443/downloads/FamilyConnect_0.2.11_amd64.deb) · [Windows 0.2.15 / 2ffba77](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.15-pilot-unsigned.exe)
 
-Установите клиент, вернитесь к исходной ссылке приглашения, отметьте **Приложение установлено** и нажмите **Открыть приложение**.
-Windows устанавливает обработчик ссылки вместе со службой; существующая активация сохраняется.
-Linux требует настройки с оператором: [инструкция к текущему архиву](https://185.251.89.19:8443/downloads/FamilyConnect-Linux-0.2.11-invitation.txt).
-Она включает постоянное Python-окружение и установку desktop URI handler. Системные VPN helpers устанавливаются отдельно.
+Установите клиент, затем откройте его по ссылке приглашения или кнопкой «Открыть Family Connect»
+на странице приглашения. Windows устанавливает обработчик ссылки вместе со службой;
+существующая активация сохраняется.
 
-В разработке: пользовательские Linux-артефакты `FamilyConnect-<ver>-x86_64.AppImage`
-и `FamilyConnect_<ver>_amd64.deb` вместо operator preview tar.gz; tar.gz останется
-только как advanced/manual. Пока не опубликовано — текущая ссылка выше всё ещё ведёт
-на preview-архив. [Design](linux-appimage-deb.ru.md).
+Linux теперь распространяется как обычные пользовательские артефакты:
+
+- `FamilyConnect-0.2.11-x86_64.AppImage` — основной вариант; `chmod +x` и запуск;
+  без pip/venv/source checkout. Хост-зависимости GTK/GI — в [отчёте](linux-appimage-deb.ru.md).
+- `FamilyConnect_0.2.11_amd64.deb` — Ubuntu / Debian / Mint: `sudo apt install ./FamilyConnect_0.2.11_amd64.deb`,
+  приложение появляется в меню и регистрирует `x-scheme-handler/familyconnect`.
+- `FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz` — только для опытных / manual.
+
+Системные VPN helpers устанавливаются отдельно. SHA256 и проверки — в [releases.md](releases.md)
+и [Linux-отчёте](linux-appimage-deb.ru.md).
 
 [Windows GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/windows-v0.2.15) · [Linux GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/desktop-preview-20260926-5b02e8cb) · [Хеши и проверки](releases/2026-09-26-server-list-crossplatform.ru.md).
 Обновляйте без удаления идентичности и данных. Windows0.2.15 использует отдельный подписанный каталог; с0.2.12 и старше нужна одна ручная установка. Linux и прежний общий каталог сохранены. Desktop-мессенджер не принят наравне с Android.

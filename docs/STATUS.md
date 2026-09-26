@@ -25,16 +25,18 @@ backend semantics и версии не менялись.
 [design](design/activation-simplification-design.ru.md),
 [android note](design/android-sideload-deferred-bootstrap.ru.md).
 
-26.09 Linux packaging (WIP): начата замена operator preview tar.gz на
-пользовательские артефакты `FamilyConnect-<ver>-x86_64.AppImage` и
-`FamilyConnect_<ver>_amd64.deb` (legacy `FamilyConnect-Linux-<ver>.tar.gz`
-сохраняется как advanced/manual и для подписанного updater). Реализованы
-`scripts/package_linux.py`, `packaging/linux/*` (launcher, desktop entry, icon,
-postinst/prerm, AppRun + `--integrate`), CI linux/release jobs и package-content
-audit (нет identity/token/WG private/.env/DB). Артефакты ещё НЕ собраны в CI и
-НЕ опубликованы; invitation landing всё ещё отдаёт preview tar.gz; чистая-Ubuntu
-acceptance не выполнена. production/версии не менялись.
-[design](linux-appimage-deb.ru.md).
+26.09 Linux packaging (опубликовано): operator preview tar.gz заменён на
+пользовательские артефакты `FamilyConnect-0.2.11-x86_64.AppImage` и
+`FamilyConnect_0.2.11_amd64.deb` (legacy preview tar.gz сохранён как advanced/manual
+и для подписанного updater). Реализованы `scripts/package_linux.py`,
+`packaging/linux/*` (launcher, desktop entry, icon, postinst/prerm, AppRun +
+`--integrate`), CI linux/release jobs и package-content audit (нет
+identity/token/WG private/.env/DB). CI green (`36261639780`), чистая Ubuntu 24.04
+acceptance пройдена (AppImage smoke/restart/`--integrate`/URI; DEB install/smoke/URI/
+upgrade/reinstall/remove), артефакты опубликованы на HTTPS, invitation landing
+переключена на AppImage (`.deb`/`.tar.gz` secondary). AppImage не self-contained по
+GTK-стеку — host prerequisites задокументированы. Friends/VPN/версии не менялись.
+[report](linux-appimage-deb.ru.md).
 
 26.09: [аудит использования и сбоев VPN](releases/2026-09-26-vpn-health.ru.md).
 22 устройства/18 действующих (+4 с24.09); NL12 с handshake<24ч,4 свежих,
@@ -340,7 +342,7 @@ Windows0.2.13 (интерфейс, приглашение, подключени�
 | Платформа | Собрано | Установлено / опубликовано |
 | --- | --- | --- |
 | Android ARM64 | 0.1.18-beta51 / code51 | Redmi Note 9 Pro обновлён поверх50; HTTPS APK, updater и страница —51 |
-| Linux | 0.2.11 / preview5b02e8cb9fde119f | GitHub/HTTPS paired archive; CI GTK/map/link/friends/recovery/install passed |
+| Linux | 0.2.11 AppImage + .deb (+ preview5b02e8cb9fde119f) | HTTPS AppImage/DEB published; clean Ubuntu 24.04 install/URI/upgrade/reinstall passed; CI GTK/map/link/friends/recovery/install passed |
 | Windows x64 | 0.2.15 / source2ffba77 | GitHub/HTTPS installer + catalog sequence11; native/compat CI passed; affected Win10 device acceptance pending |
 
 [Интерактивная страница](https://185.251.89.19:8443/invite/) принимает исходную ссылку

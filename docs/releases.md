@@ -5,15 +5,20 @@ Android0.1.18-beta51, Windows0.2.15 and Linux0.2.11 verified 2026-09-26 by CI, r
 | Channel | Distributed version | Notes |
 | --- | --- | --- |
 | Android updater / invitation | 0.1.18-beta51, code51, ARM64 | Persistent beta certificate; in-place update |
-| Linux invitation | 0.2.11 preview5b02e8cb9fde119f | Paired manual preview; operator-assisted setup |
+| Linux invitation | 0.2.11 AppImage + .deb (+ preview5b02e8cb9fde119f) | User installables; tar.gz stays advanced/manual |
 | Windows invitation / updater | 0.2.15 source2ffba77 | Independent signed catalog schema2/sequence11; no publisher signature |
 
 Invitation activation now opens the app from the original link. OFF switches are orange,
 ON switches turquoise on the page and all clients. Historical artifacts remain immutable.
-Linux user packaging (AppImage + .deb) is implemented at source level in
-`scripts/package_linux.py` / `packaging/linux/` with CI build/verify steps; artifacts
-are not yet built in CI or published, so the invitation page still serves the preview
-tar.gz. [Design](linux-appimage-deb.ru.md).
+Linux user packaging (AppImage + .deb) is built by CI and accepted on clean Ubuntu 24.04;
+the invitation page now serves the AppImage as primary Linux download, with `.deb` and the
+legacy preview tar.gz as secondary. [Acceptance and publication](linux-appimage-deb.ru.md).
+
+[FamilyConnect-0.2.11-x86_64.AppImage](https://185.251.89.19:8443/downloads/FamilyConnect-0.2.11-x86_64.AppImage), 8559096 bytes.
+SHA256 `7dfaca6022a275e62eeac5b8c402477d493d5833181d238f2080aa62014ba83b`.
+
+[FamilyConnect_0.2.11_amd64.deb](https://185.251.89.19:8443/downloads/FamilyConnect_0.2.11_amd64.deb), 6685688 bytes.
+SHA256 `a336624808b96de4455963307c609be1d3bddbbadf29976a9a0176207f415697`.
 
 [FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz), 121503 bytes.
 SHA256 `6d4c6186fa69d36f4835b380582ba046e1a3a70abf359ee1a0332dd741f97a56`.

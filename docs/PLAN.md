@@ -14,11 +14,12 @@
   page, QR=canonical URL. Fresh-install sideload **не** заявляется fully automatic:
   Flow A (приложение установлено, 1 действие), Flow B (sideload: возврат на landing +
   «Открыть», 3–4 действия). Real-device Android E2E ещё не пройден.
-- Параллельно (WIP, не блокирует 5N): Linux-дистрибуция — AppImage + .deb как
-  основной публичный артефакт вместо operator preview tar.gz. Source-level packaging
-  реализован (`scripts/package_linux.py`, `packaging/linux/*`, CI linux/release jobs);
-  сборка в CI, публикация и чистая-Ubuntu acceptance ещё не выполнены; landing пока
-  отдаёт preview tar.gz. [design](linux-appimage-deb.ru.md).
+- Параллельно (завершено, не блокирует 5N): Linux-дистрибуция — AppImage + .deb как
+  основной публичный артефакт вместо operator preview tar.gz. Packaging реализован
+  (`scripts/package_linux.py`, `packaging/linux/*`, CI linux/release jobs), собран в CI,
+  принят на чистой Ubuntu 24.04, опубликован на HTTPS; invitation landing отдаёт
+  AppImage (`.deb`/`.tar.gz` secondary). AppImage не self-contained по GTK-стеку.
+  [report](linux-appimage-deb.ru.md).
 - Backlog (не реализуется сейчас, требует Friends DB/API/schema): product split
   «Personal Invitation» (один получатель → одно Device Identity → consumed) vs
   «Referral Link» (sponsor capability → N получателей, quota/TTL/revoke). Текущий UI

@@ -1,7 +1,8 @@
 # Linux: AppImage и DEB вместо tar.gz preview
 
-Статус: реализовано, собрано и проверено (CI + чистая Ubuntu 24.04); публикация на
-HTTPS release infrastructure и переключение invitation landing ещё не выполнены.
+Статус: реализовано, собрано, проверено (CI + чистая Ubuntu 24.04) и опубликовано
+на HTTPS release infrastructure; invitation landing переключена на AppImage как
+основной Linux download (`.deb` и `.tar.gz` — secondary).
 
 ## Результаты приёмки (26.09)
 
@@ -164,15 +165,37 @@ icon `/usr/share/icons/hicolor/256x256/apps/com.familyconnect.Client.png`,
 
 ## 9. Acceptance (план, ещё не выполнен)
 
-Чистая Ubuntu:
+## 9. Acceptance (выполнено)
+
+Чистая Ubuntu 24.04 (Docker `fc-accept-full` / `fc-accept-minimal`):
 
 - AppImage: скачать → `chmod +x`/разрешить выполнение → запуск GUI; без `pip`, без venv,
-  без source checkout; корректный icon; state writable; restart; invitation URI где поддержано.
+  без source checkout; корректный icon; state writable; restart; `--integrate` создаёт
+  `~/.local/share/applications/com.familyconnect.Client.desktop` (`Exec="...AppImage" %u`),
+  icon и `x-scheme-handler/familyconnect`. На clean Ubuntu без GTK/GI падает
+  `No module named 'gi'`; host prerequisites зафиксированы (см. ниже), self-contained
+  по GTK-стеку **не** заявляется.
 - DEB: `dpkg -i`/`apt install` → пункт меню → запуск; update/reinstall/uninstall; state
-  сохранён; URI handler `x-scheme-handler/familyconnect`.
+  сохранён; URI handler `x-scheme-handler/familyconnect`; `familyconnect://invite/<64hex>`
+  доставляется приложению аргументом.
 
 CI: artifact exists + executable + arch + AppImage `--appimage-extract` + `dpkg-deb --info`
 + package-content audit (нет identity/token/WG private/.env/DB) + xvfb/dbus smoke.
+
+### Публикация (26.09)
+
+- `FamilyConnect-0.2.11-x86_64.AppImage` — 8 559 096 B, SHA256
+  `7dfaca6022a275e62eeac5b8c402477d493d5833181d238f2080aa62014ba83b`,
+  `https://185.251.89.19:8443/downloads/FamilyConnect-0.2.11-x86_64.AppImage`.
+- `FamilyConnect_0.2.11_amd64.deb` — 6 685 688 B, SHA256
+  `a336624808b96de4455963307c609be1d3bddbbadf29976a9a0176207f415697`,
+  `https://185.251.89.19:8443/downloads/FamilyConnect_0.2.11_amd64.deb`.
+- Legacy `.tar.gz` остаётся `FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz`.
+
+Производственная invitation landing проверена по `/i/#<token>` и `/invite/#<token>` с
+Linux UA: AppImage — primary, `Ubuntu / Debian / Mint — .deb` и «Для опытных
+пользователей — .tar.gz» — secondary; checkbox «Приложение установлено» отсутствует.
+Скачанные с production артефакты совпадают с записанными SHA256 byte-level.
 
 ## 10. Known limitations
 

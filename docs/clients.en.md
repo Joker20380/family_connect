@@ -18,17 +18,22 @@ CI debug APKs are not update packages for an installed friends beta.
 
 ## Current invitation-page downloads
 
-[Linux 0.2.11 / 5b02e8cb9fde119f](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz) · [Windows 0.2.15 / 2ffba77](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.15-pilot-unsigned.exe)
+[Linux 0.2.11 AppImage](https://185.251.89.19:8443/downloads/FamilyConnect-0.2.11-x86_64.AppImage) · [Linux 0.2.11 .deb](https://185.251.89.19:8443/downloads/FamilyConnect_0.2.11_amd64.deb) · [Windows 0.2.15 / 2ffba77](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.15-pilot-unsigned.exe)
 
-Install the client, return to the original invitation link, mark **Application installed** and choose **Open application**.
-Windows installs the URI handler with its service and preserves existing activation.
-Linux needs operator-assisted setup: [current archive instructions](https://185.251.89.19:8443/downloads/FamilyConnect-Linux-0.2.11-invitation.txt).
-They cover a persistent Python environment and desktop URI handler; VPN helpers are installed separately.
+Install the client, then open it from the invitation link or the **Open Family Connect**
+button on the invitation page. Windows installs the URI handler with its service and
+preserves existing activation.
 
-In development: user-facing Linux artifacts `FamilyConnect-<ver>-x86_64.AppImage` and
-`FamilyConnect_<ver>_amd64.deb` replace the operator preview tar.gz; the tar.gz stays
-only as an advanced/manual option. Not published yet — the link above still serves the
-preview archive. [Design](linux-appimage-deb.ru.md).
+Linux is now distributed as regular user-facing artifacts:
+
+- `FamilyConnect-0.2.11-x86_64.AppImage` — primary option; `chmod +x` and run; no pip,
+  venv or source checkout. Host GTK/GI prerequisites are documented in the [report](linux-appimage-deb.ru.md).
+- `FamilyConnect_0.2.11_amd64.deb` — Ubuntu / Debian / Mint: `sudo apt install ./FamilyConnect_0.2.11_amd64.deb`,
+  appears in the menu and registers `x-scheme-handler/familyconnect`.
+- `FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz` — advanced/manual only.
+
+VPN helpers are installed separately. SHA256 and checks are in [releases.md](releases.md)
+and the [Linux report](linux-appimage-deb.ru.md).
 
 [Windows GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/windows-v0.2.15) · [Linux GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/desktop-preview-20260926-5b02e8cb) · [Hashes and checks](releases/2026-09-26-server-list-crossplatform.ru.md).
 Preserve identity and application data when updating. Windows0.2.15 uses its own signed update catalog; install it manually once from0.2.12 or earlier. Linux and the older shared catalog are unchanged. Desktop messenger parity is not claimed.
