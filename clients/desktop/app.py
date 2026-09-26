@@ -1,5 +1,6 @@
 """Native Linux GTK 4 client. Keys and network operations stay in the backend."""
-APP_VERSION='0.2.10'
+APP_VERSION='0.2.11'
+TRANSPORTS=(('awg','AWG 3.1'),('tcp','TCP REALITY'))
 ICON_PNG='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'
 WORDS={'title': ('Связь для вашей семьи', 'Connectivity for your family'), 'unknown': ('Статус недоступен', 'Status unavailable'), 'off': ('Готов к подключению', 'Ready to connect'), 'on': ('Туннель включён', 'Tunnel is on'), 'connect': ('Подключить', 'Connect'), 'disconnect': ('Отключить', 'Disconnect'), 'import': ('Добавить профиль', 'Add profile'), 'check': ('Проверить внешний IP', 'Check public IP'), 'empty': ('Добавьте профиль вашего устройства', 'Add this device’s profile'), 'hint': ('Прямое подключение', 'Direct connection'), 'pending': ('Выполняется…', 'Working…'), 'error': ('Не удалось выполнить действие. Проверьте профиль, системный VPN и разрешения.', 'Operation failed. Check the profile, system VPN and permissions.'), 'retry': ('Повторить проверку', 'Retry setup'), 'install': ('Установить WireGuard', 'Install WireGuard'), 'system': ('Linux: нужен NetworkManager. Windows: официальный WireGuard и запуск от администратора.', 'Linux: NetworkManager required. Windows: official WireGuard and administrator rights required.'), 'quality': ('Включённый туннель не подтверждает доступность интернета.', 'An active tunnel does not confirm Internet connectivity.'), 'closing': ('Закрытие окна не отключает VPN. Продолжить?', 'Closing this window keeps the VPN running. Continue?'), 'checks': ('Проверка обращается к Cloudflare через текущее соединение.', 'This check contacts Cloudflare over the current connection.')}
 import base64
@@ -98,6 +99,9 @@ window.fc-window { background: #03110e; color: #dafff2; font-family: monospace; 
 .fc-window button.fc-action { background: transparent; background-image: none; border: none; box-shadow: none; min-height: 46px; padding: 0; color: #dafff2; }
 .fc-window button.fc-action:disabled { color: #75988a; }
 .fc-window dropdown > button { background: #072018; color: #dafff2; border: 1px solid #438e79; padding: 10px 14px; border-radius: 0; }
+.fc-flag { min-width: 22px; min-height: 14px; border: 1px solid #438e79; }
+.fc-flag-nl { background-image: linear-gradient(to bottom, #ae1c28 0 33.3%, #ffffff 33.3% 66.6%, #21468b 66.6% 100%); }
+.fc-flag-ru { background-image: linear-gradient(to bottom, #ffffff 0 33.3%, #0039a6 33.3% 66.6%, #d52b1e 66.6% 100%); }
 .fc-detail { color: #ffad46; }
 .fc-window button.fc-nav { padding: 0; min-height: 58px; font-size: 9px; }
 '''
@@ -320,6 +324,7 @@ class App:
         self.driver=None;self.items=[];self.selected_id=None;self.active=None;self.busy=False;self.initializing=False
         self.closed=False;self.revision=0;self.polling=False;self.poll_error=False
         self.recovery=RecoveryPolicy();self.operation_generation=None
+        self.all_loads={};self.country_name_labels={'nl':[],'ru':[]};self.country_load_labels={'nl':[],'ru':[]}
         self.detail_text='';self.update_plan=None;self.updater=None;self.render_source=0;self.fit_source=0;self.fitted_height=None
         self.render_count=0;self.widget_changes=0;self.rendering=False
         self.load_pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
@@ -356,8 +361,8 @@ class App:
             from provisioning.friends_owner import FriendsOwner
             self.friends_owner_class=FriendsOwner
         except ImportError:pass  # Standalone six-file archive has no paired core.
-        self.country=Gtk.DropDown.new_from_strings(['Нидерланды' if self.ru else 'Netherlands','Россия' if self.ru else 'Russia'])
-        self.protocol=Gtk.DropDown.new_from_strings(['AWG 3.1','TCP REALITY'])
+        self.country=self.build_country_picker()
+        self.protocol=Gtk.DropDown.new_from_strings([label for _,label in TRANSPORTS])
         self.country.set_hexpand(True);self.protocol.set_hexpand(True)
         self.selectors=TerminalTelemetry(self.country,self.protocol,not smoke);self.body.append(self.selectors)
         if self.route_path:
@@ -434,7 +439,7 @@ class App:
             self.set_value(self.subtitle,'label',self.t('title'))
             text=('Проверяем подключение' if self.ru else 'Checking connection') if self.initializing else self.t('unknown' if self.active is None else ('on' if self.active else 'off'))
             self.set_value(self.status,'label',text)
-            self.set_value(self.hint,'label',(('Нидерланды' if self.ru else 'Netherlands') if self.country.get_selected()==0 else ('Россия' if self.ru else 'Russia'))+' · '+('AWG 3.1' if self.protocol.get_selected()==0 else 'TCP REALITY'))
+            self.set_value(self.hint,'label',self.country_label('nl' if self.country.get_selected()==0 else 'ru')+' · '+self.transport_label())
             connected=self.active is True
             self.gauge.update(connected,self.busy or self.initializing,self.ru,not self.busy and (self.friends_registered or bool(self.items)) and self.active is not None)
             if self.toggle.has_css_class('connected')!=connected:
@@ -471,6 +476,49 @@ class App:
         return GLib.SOURCE_REMOVE
     def load_key(self):
         return ("country:"+("ru" if self.country.get_selected()==1 else "nl")) if self.friends_registered else self.selected_id
+    def country_label(self,code):
+        return (('Нидерланды' if self.ru else 'Netherlands') if code=='nl' else ('Россия' if self.ru else 'Russia'))
+    def transport_label(self):
+        index=self.protocol.get_selected()
+        return TRANSPORTS[index][1] if 0<=index<len(TRANSPORTS) else TRANSPORTS[0][1]
+    def transport_id(self):
+        index=self.protocol.get_selected()
+        return TRANSPORTS[index][0] if 0<=index<len(TRANSPORTS) else TRANSPORTS[0][0]
+    def load_text(self,code,sample):
+        if sample is None:return 'Нет данных' if self.ru else 'No data'
+        value=sample.get('percent')
+        if not (type(value) in (int,float) and math.isfinite(value) and 0<=value<=100):
+            return 'Нет данных' if self.ru else 'No data'
+        return (('≈ ' if sample.get('estimated') else '')+f'{value:.0f}%')
+    def build_country_picker(self):
+        model=Gtk.StringList.new(['nl','ru'])
+        dropdown=Gtk.DropDown.new(model)
+        factory=Gtk.SignalListItemFactory()
+        def setup(_factory,item):
+            row=Gtk.Box(spacing=8)
+            flag=Gtk.Box();flag.set_size_request(22,14);flag.set_valign(Gtk.Align.CENTER)
+            name=Gtk.Label(xalign=0);name.set_hexpand(True)
+            load=Gtk.Label(xalign=1);load.add_css_class('fc-caption')
+            row.append(flag);row.append(name);row.append(load);item.set_child(row)
+        def bind(_factory,item):
+            code=item.get_item().get_string();row=item.get_child()
+            flag=row.get_first_child();name=flag.get_next_sibling();load=name.get_next_sibling()
+            flag.set_css_classes(['fc-flag','fc-flag-'+code])
+            name.set_text(self.country_label(code));load.set_text(self.load_text(code,self.all_loads.get(code)))
+            if name not in self.country_name_labels[code]:self.country_name_labels[code].append(name)
+            if load not in self.country_load_labels[code]:self.country_load_labels[code].append(load)
+        def unbind(_factory,item):
+            code=item.get_item().get_string();row=item.get_child()
+            if row is None:return
+            flag=row.get_first_child();name=flag.get_next_sibling();load=name.get_next_sibling()
+            if name in self.country_name_labels[code]:self.country_name_labels[code].remove(name)
+            if load in self.country_load_labels[code]:self.country_load_labels[code].remove(load)
+        factory.connect('setup',setup);factory.connect('bind',bind);factory.connect('unbind',unbind)
+        dropdown.set_factory(factory);return dropdown
+    def refresh_country_labels(self):
+        for code in ('nl','ru'):
+            for name in list(self.country_name_labels[code]):name.set_text(self.country_label(code))
+            for load in list(self.country_load_labels[code]):load.set_text(self.load_text(code,self.all_loads.get(code)))
     def render_server_load(self):
         sample=self.load_sample
         if sample and (self.load_ident!=self.load_key() or not -15<=time.time()-sample['observed_at']<=45):
@@ -502,8 +550,12 @@ class App:
             return GLib.SOURCE_CONTINUE
         if not hasattr(self.driver,'server_load'):return GLib.SOURCE_CONTINUE
         self.load_pending=True;driver=self.driver
-        future=self.load_pool.submit(driver.server_load,ident)
-        future.add_done_callback(lambda f:GLib.idle_add(self.complete_load,f,ident))
+        if hasattr(driver,'server_loads') and ident.startswith('country:'):
+            future=self.load_pool.submit(driver.server_loads)
+            future.add_done_callback(lambda f:GLib.idle_add(self.complete_loads,f,ident))
+        else:
+            future=self.load_pool.submit(driver.server_load,ident)
+            future.add_done_callback(lambda f:GLib.idle_add(self.complete_load,f,ident))
         return GLib.SOURCE_CONTINUE
     def complete_load(self,future,ident):
         if self.closed:return GLib.SOURCE_REMOVE
@@ -512,6 +564,15 @@ class App:
         try:self.load_sample=future.result()
         except Exception:self.load_sample=None
         self.load_ident=ident;self.render_server_load();return GLib.SOURCE_REMOVE
+    def complete_loads(self,future,ident):
+        if self.closed:return GLib.SOURCE_REMOVE
+        self.load_pending=False;self.load_next=time.monotonic()+15
+        if ident!=self.load_key():self.load_next=0;return GLib.SOURCE_REMOVE
+        try:self.all_loads=future.result() or {}
+        except Exception:self.all_loads={}
+        country=ident.split(':')[1] if ident.startswith('country:') else None
+        self.load_sample=self.all_loads.get(country) if country else None
+        self.load_ident=ident;self.refresh_country_labels();self.render_server_load();return GLib.SOURCE_REMOVE
     def fit_height(self):
         self.fit_source=0
         if self.closed:return GLib.SOURCE_REMOVE
@@ -559,7 +620,7 @@ class App:
     def language(self):
         self.ru=not self.ru
         index=self.country.get_selected()
-        self.country.get_model().splice(0,2,['Нидерланды' if self.ru else 'Netherlands','Россия' if self.ru else 'Russia'])
+        self.refresh_country_labels()
         self.country.set_selected(index)
         if self.language_path:
             try:
@@ -713,7 +774,7 @@ class App:
         if self.route_path:
             try:
                 self.route_path.parent.mkdir(parents=True,exist_ok=True)
-                pending=self.route_path.with_suffix('.pending');pending.write_text(json.dumps({'country':'ru' if self.country.get_selected()==1 else 'nl','transport':'tcp' if self.protocol.get_selected()==1 else 'awg'}));pending.replace(self.route_path)
+                pending=self.route_path.with_suffix('.pending');pending.write_text(json.dumps({'country':'ru' if self.country.get_selected()==1 else 'nl','transport':self.transport_id()}));pending.replace(self.route_path)
             except OSError:pass
         self.paint()
     def toggle_vpn(self):
@@ -721,7 +782,7 @@ class App:
         if self.busy or active is None:return
         self.recovery.stop();driver=self.driver
         if not active and self.friends_registered and self.friends_owner_class:
-            country='ru' if self.country.get_selected()==1 else 'nl';transport='tcp' if self.protocol.get_selected()==1 else 'awg'
+            country='ru' if self.country.get_selected()==1 else 'nl';transport=self.transport_id()
             owner=self.friends_owner_class(Path.home()/'.local/share/family-connect/friends-identity',Path(__file__).with_name('update.pub'))
             def action():
                 owner.connect(country,driver,transport=transport)
