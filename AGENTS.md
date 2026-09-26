@@ -1,8 +1,28 @@
 # Family Connect — session entry point
 
-Before starting work, read `docs/STATUS.md`, then `docs/PLAN.md`. Use
-`docs/README.md` to locate a runbook. These are the current state and next actions;
-`docs/implementation-log.*.md` and dated release reports are historical evidence.
+Before starting work, read `docs/STATUS.md` and the **current-priority section** of
+`docs/PLAN.md`. Use `docs/README.md` to locate a runbook. These are the current state
+and next actions; `docs/implementation-log.*.md` and dated release reports are
+historical evidence and are not required reading for every task.
+
+## Documentation routing
+
+Always read:
+
+- `docs/STATUS.md`
+- current-priority section of `docs/PLAN.md` (`Current engineering priority / Текущий critical path`)
+
+Additional documents only for the area being touched:
+
+- restricted WebRTC / 5N: `docs/architecture.md`, relevant current sections of
+  `docs/reticulum/HOME_GATEWAY_DESIGN.md`; read `docs/legal/DEPENDENCY_LICENSE_AUDIT.md`
+  only for dependency/source reuse.
+- Android transport: relevant Android code-map and client docs.
+- fleet: fleet docs.
+- release: release runbook.
+
+Do not require reading historical release reports, implementation logs, or unrelated
+platform docs for every task.
 
 Work in this repository, not the neighbouring microtrader project. Open new sessions
 with this directory as the project root so these instructions are loaded.

@@ -1,5 +1,17 @@
 # Рабочий план / Working plan
 
+## Current engineering priority / Текущий critical path
+
+- current: **5N — Restricted WebRTC Android→EU** (Telemost VP8 carrier → authenticated
+  Family session → headless Linux EU gateway → TCP+DNS → Internet).
+- immediate engineering gate: **WEBRTC-EU-1 / 5N.1**.
+- затем: **5N.2 → 5N.3 → 5N.4 → 5N.5 → 5N.6**.
+- после этого: restricted-mobile acceptance **5M**.
+- **WB fallback** — только после подтверждения Telemost на реальной сети.
+- **5.3a / 5.3в** и **Home Gateway (5A–5M secondary track)** — backlog, не запускаются автоматически.
+
+Gate-таблица и порядок — ниже в секции `DECISION25.09 — Restricted WebRTC → Linux EU`.
+
 26.09: [аудит использования и сбоев VPN](releases/2026-09-26-vpn-health.ru.md).
 22 устройства/18 действующих (+4 с24.09); NL12 с handshake<24ч,4 свежих,
 3–4 передают трафик; RU0. Найдена история sysstat: AWG около26.7ГиБ с24.09
@@ -112,7 +124,11 @@ binary round trip → Android↔Windows → RNS announces/Link. Проверят
 carrier/media путь, который использует PoC; работа штатного видеоклиента не
 доказывает достижимость всех API/серверов. Не запрашивать/хранить cookies в документации.
 
-## WebRTC extension25.09 — текущий приоритет и граница работы
+## WebRTC extension25.09 — superseded immediate ordering (backlog: RNS-over-WebRTC / Windows path)
+
+> Superseded immediate ordering. Эта секция описывает прежний путь WebRTC underlay →
+> Windows Home Gateway / RNS-over-WebRTC. Текущий critical path — 5N (см. Current
+> engineering priority выше). Сохранена как backlog / secondary track.
 
 **По последнему уточнению пользователя сейчас только документация и подготовка
 к реализации.** Carrier-код, сборки, провайдерские сессии и device tests отложены.
@@ -157,7 +173,11 @@ no secrets/logging/TLS downgrade и provider-unavailable без падения �
 Производительность DC/VP8 измерять отдельно: >5Mbit/s полезная цель,20+ сильный
 результат, не текущие замеры. Достижимость видеосервиса в белых списках не доказана.
 
-## Приоритет 25.09: Home Gateway — Reticulum control, selectable data transport
+## Home Gateway (secondary track / backlog) — Reticulum control, selectable data transport
+
+> Superseded immediate ordering. Home Gateway — secondary LAN/NAS/RDP/residential-egress
+> track, не немедленный следующий шаг. Текущий critical path — 5N (см. Current
+> engineering priority выше).
 
 **Уточнение пользователя: главная задача — установить защищённое соединение
 телефон ↔ домашний компьютер в мобильной сети с белыми списками.** Reticulum
@@ -259,7 +279,10 @@ managed enrollment с повтором, отмена callback разрешени
 Обновлён 24.09.2026. Факты и версии: [STATUS](STATUS.md).
 История сохранена в [прежнем журнале](PLAN.before-beta49-2026-09-23.md).
 
-## Текущий приоритет
+## Текущий приоритет (исторический журнал 24.09, superseded ordering)
+
+> Исторический журнал24.09; immediate ordering superseded. Текущий critical path — 5N
+> (см. Current engineering priority выше). Содержимое ниже сохранено как backlog/история.
 
 24.09: [уточнение AWG на Wi-Fi](releases/2026-09-24-awg-wifi-followup.ru.md):
 пользователь пробовал AWG до исправления выдачи конфигурации; повтор ещё ожидается.
@@ -456,7 +479,7 @@ health/rollback/restart на устройствах; Windows C# тесты на 
 | 6. Недоступный gateway | Нужна сквозная смена endpoint через независимый канал |
 | 7. Сервис и коммерческая версия | Согласована7.1 — единая Django-админка; оплата/подписки не реализованы |
 
-**Текущая точка:** этап5.3в, локальная реализация XHTTP/TLS по новому прямому запросу;
+**Текущая точка (superseded immediate ordering / backlog):** этап5.3в, локальная реализация XHTTP/TLS по новому прямому запросу;
 5.3а Android service/UI acceptance остаётся открытым, телефон отложен пользователем.
 Обеспечивающие задачи секретов/recovery для5/6 продолжаются отдельно.
 Хранилище, пять vault issuers, server backups и контейнерное восстановление готовы;
@@ -594,7 +617,10 @@ leases, не дублируют оплату и не раскрывают сек
   российские домашняя и мобильная сети, UDP blocked, loss, смена сети и блок IP.
   Внедрять кандидат только при измеримом выигрыше относительно AWG3.1+REALITY.
 
-## 5.3в — режим подключения в сетях с белыми списками
+## 5.3в — режим подключения в сетях с белыми списками (backlog)
+
+> Backlog / secondary. Задача сохранена, но не является немедленным engineering step;
+> текущий critical path — 5N (см. Current engineering priority выше).
 
 Добавлен24.09 по прямому запросу пользователя; ориентир — продуктовый режим
 «Белые списки» у Shuka. Задача включает исследование, реализацию и сетевую приёмку,

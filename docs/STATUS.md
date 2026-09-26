@@ -1,5 +1,12 @@
 # Текущее состояние / Current state
 
+- production и current released versions этой задачей не менялись
+  (Android beta51/code51, Linux0.2.11, Windows0.2.15).
+- active engineering critical path — **5N: Restricted WebRTC Android→EU**
+  (Telemost VP8 → Linux EU gateway → TCP+DNS → Internet).
+- ближайший runtime milestone — **WEBRTC-EU-1 / 5N.1**.
+- все WEBRTC-EU gates пока **NOT RUN**.
+
 26.09: [аудит использования и сбоев VPN](releases/2026-09-26-vpn-health.ru.md).
 22 устройства/18 действующих (+4 с24.09); NL12 с handshake<24ч,4 свежих,
 3–4 передают трафик; RU0. Найдена история sysstat: AWG около26.7ГиБ с24.09

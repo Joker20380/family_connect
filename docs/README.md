@@ -1,22 +1,27 @@
 # Documentation
 
+**Текущий critical path — 5N:** [Restricted Android→Telemost VP8→Linux EU](PLAN.md).
+Новый разработчик restricted connectivity начинает с 5N design
+([DECISION](reticulum/HOME_GATEWAY_DESIGN.md#decision-restricted-webrtc-to-eu-gateway-first--2026-09-25))
+и gate WEBRTC-EU-1 / 5N.1. Home Gateway и RNS-over-WebRTC — secondary / backlog.
+
 **Приоритет25.09 уточнён:** [Restricted Android→Telemost VP8→Linux EU](PLAN.md)
 без обязательного Windows Home Gateway/IP-over-RNS. Reticulum control/recovery
 сохраняется. [Решение в существующем дизайне](reticulum/HOME_GATEWAY_DESIGN.md).
 Добавлены WEBRTC-EU-1–6/5N; сначала binary/auth, затем TCP+DNS/full-device.
 Текущий scope — документация/preparation; существующие AWG/TCP/XHTTP не заменяются.
 
-**WebRTC underlay — подготовка25.09:** [существующий Home Gateway design](reticulum/HOME_GATEWAY_DESIGN.md)
+**WebRTC underlay — подготовка25.09 (backlog):** [существующий Home Gateway design](reticulum/HOME_GATEWAY_DESIGN.md)
 расширен path manager/provider/IPC contracts, исследованием WB/Telemost и gates
 WEBRTC-1–5. [План5H–5M](PLAN.md) · [Лицензии](legal/DEPENDENCY_LICENSE_AUDIT.md).
 Реализация и устройства пока отложены; новый статус — подготовка5A/5H.
 
-**Стратегия25.09 уточнена:** [Home Gateway](reticulum/HOME_GATEWAY_DESIGN.md) —
+**Стратегия25.09 уточнена (backlog):** [Home Gateway](reticulum/HOME_GATEWAY_DESIGN.md) —
 Reticulum для control/discovery/negotiation, выбранный защищённый transport для IP.
 Сейчас этап5/начало5A: доказать достижимый control и data ingress при активных
 мобильных белых списках; затем телефон↔домашний ПК. [Глобальный план](ROADMAP.ru.md).
 
-**Новый приоритет25.09: [Personal/Home Gateway over Reticulum](reticulum/HOME_GATEWAY_DESIGN.md)**
+**Новый приоритет25.09: [Personal/Home Gateway over Reticulum (backlog)](reticulum/HOME_GATEWAY_DESIGN.md)**
 — требования, integration points, threat model, Stage5A–5G и gates RNS-1–RNS-5.
 [PLAN](PLAN.md) · [Статус](STATUS.md) · [Лицензионный аудит](legal/DEPENDENCY_LICENSE_AUDIT.md)
 · [Third-Party Notices](../THIRD_PARTY_NOTICES.md). Дизайн зафиксирован; рабочий
