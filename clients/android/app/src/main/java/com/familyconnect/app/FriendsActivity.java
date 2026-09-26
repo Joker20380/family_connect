@@ -22,8 +22,10 @@ public final class FriendsActivity extends LocalizedActivity {
     private boolean busy,reconnect,initializing=true;
     private TerminalUi.Dial dial;
     private final ExecutorService loadWorker=Executors.newSingleThreadExecutor();
-    private TextView loadLabel;private ProgressBar loadBar;private ServerLoad loadSample;
-    private boolean loadPending,loadResumed;private long loadNext;private String loadCountry;
+    private TextView loadLabel;private ProgressBar loadBar;
+    private final java.util.HashMap<String,ServerLoad> serverLoads=new java.util.HashMap<>();
+    private ServerAdapter serverAdapter;
+    private boolean loadPending,loadResumed;private long loadNext;
     private final Runnable loadRefresh=new Runnable(){public void run(){refreshLoad();if(loadResumed)handler.postDelayed(this,3000);}};
     private AppUpdateUi appUpdate;
     private boolean motion;
@@ -42,8 +44,12 @@ public final class FriendsActivity extends LocalizedActivity {
     @Override public void onCreate(Bundle state){
         super.onCreate(state);getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE);transport=getPreferences(MODE_PRIVATE).getString("transport","awg");country=getPreferences(MODE_PRIVATE).getString("country","nl");
         motion=getPreferences(MODE_PRIVATE).getBoolean("motion",true);activeCountry=getPreferences(MODE_PRIVATE).getString("session_country",country);
-        countries=new Spinner(this);TerminalUi.inlinePicker(countries,new String[]{getString(R.string.gateway_russia),getString(R.string.gateway_netherlands)});
-        countries.setContentDescription(getString(R.string.terminal_country));countries.setSelection(country.equals("nl")?1:0);
+        countries=new Spinner(this){@Override public boolean performClick(){refreshServerLoads();return super.performClick();}};
+        countries.setContentDescription(getString(R.string.terminal_country));
+        serverAdapter=new ServerAdapter();countries.setAdapter(serverAdapter);
+        countries.setBackgroundColor(Color.TRANSPARENT);countries.setPadding(0,0,0,0);
+        countries.setPopupBackgroundDrawable(TerminalUi.frame(this,TerminalUi.SURFACE,TerminalUi.FRAME));
+        countries.setSelection(country.equals("nl")?1:0);
         transports=new Spinner(this);TerminalUi.inlinePicker(transports,new String[]{"AWG 3.1","TCP REALITY"});
         transports.setContentDescription(getString(R.string.terminal_transport));transports.setSelection(transport.equals("awg")?0:1);
         countries.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
@@ -266,7 +272,7 @@ public final class FriendsActivity extends LocalizedActivity {
     private String loadTarget(){return ConnectionService.status.equals("off")?country:activeCountry;}
     private void renderLoad(){
         if(loadLabel==null)return;
-        ServerLoad sample=loadSample;
+        ServerLoad sample=serverLoads.get(loadTarget());
         if(sample!=null&&(!sample.country.equals(loadTarget())||!sample.fresh(System.currentTimeMillis()/1000.0)))sample=null;
         boolean ru=getResources().getConfiguration().getLocales().get(0).getLanguage().equals("ru");
         String text=(ru?"Нагрузка сервера":"Server load")+" · ";
@@ -276,13 +282,40 @@ public final class FriendsActivity extends LocalizedActivity {
         loadBar.setProgressTintList(android.content.res.ColorStateList.valueOf(percent!=null&&percent>=90?Color.rgb(239,132,116):percent!=null&&percent>=70?TerminalUi.AMBER:TerminalUi.MINT));
         loadLabel.setTooltipText(sample==null?text:String.format(java.util.Locale.ROOT,"CPU %.0f%% · ↓ %.1f / ↑ %.1f Mbps",sample.cpu,sample.rx,sample.tx)+(sample.estimated?(ru?" · расчёт по исходящему каналу 200 Мбит/с":" · estimated using 200 Mbps egress"):""));
     }
+    private void refreshServerLoads(){if(!loadResumed||isDestroyed()||loadPending)return;loadNext=0;refreshLoad();}
     private void refreshLoad(){
-        if(!loadResumed||isDestroyed())return;String target=loadTarget();
-        if(!target.equals(loadCountry)){loadCountry=target;loadSample=null;loadNext=0;}renderLoad();
+        if(!loadResumed||isDestroyed())return;renderLoad();
         if(loadPending||SystemClock.elapsedRealtime()<loadNext)return;loadPending=true;
-        loadWorker.execute(()->{ServerLoad result=null;try{result=ServerLoad.fetch(target);}catch(Exception ignored){}final ServerLoad value=result;
+        loadWorker.execute(()->{java.util.Map<String,ServerLoad> result=null;try{result=ServerLoad.fetchAll();}catch(Exception ignored){}final java.util.Map<String,ServerLoad> value=result;
             handler.post(()->{if(isDestroyed())return;loadPending=false;loadNext=SystemClock.elapsedRealtime()+15000;
-                if(target.equals(loadTarget()))loadSample=value;renderLoad();});});
+                if(value!=null){serverLoads.clear();serverLoads.putAll(value);}if(serverAdapter!=null)serverAdapter.notifyDataSetChanged();renderLoad();});});
+    }
+    private final class ServerAdapter extends BaseAdapter {
+        private final String[] codes={"ru","nl"};
+        public int getCount(){return codes.length;}
+        public Object getItem(int position){return codes[position];}
+        public long getItemId(int position){return position;}
+        public boolean hasStableIds(){return true;}
+        public android.view.View getView(int position,android.view.View recycled,android.view.ViewGroup parent){return serverRow(codes[position],recycled,parent,true);}
+        public android.view.View getDropDownView(int position,android.view.View recycled,android.view.ViewGroup parent){return serverRow(codes[position],recycled,parent,false);}
+    }
+    private android.view.View serverRow(String code,android.view.View recycled,android.view.ViewGroup parent,boolean collapsed){
+        android.content.Context c=parent.getContext();LinearLayout row=(LinearLayout)recycled;
+        if(row==null){row=new LinearLayout(c);row.setOrientation(LinearLayout.HORIZONTAL);row.setGravity(Gravity.CENTER_VERTICAL);}
+        else row.removeAllViews();
+        boolean ru=code.equals("ru");
+        ImageView flag=new ImageView(c);flag.setImageResource(ru?R.drawable.ic_flag_ru:R.drawable.ic_flag_nl);flag.setAdjustViewBounds(true);
+        LinearLayout.LayoutParams flagParams=new LinearLayout.LayoutParams(TerminalUi.dp(c,24),TerminalUi.dp(c,16));flagParams.rightMargin=TerminalUi.dp(c,10);row.addView(flag,flagParams);
+        TextView name=new TextView(c);name.setText(ru?R.string.gateway_russia:R.string.gateway_netherlands);TerminalUi.textStyle(name,collapsed?12:14,collapsed?TerminalUi.MINT:TerminalUi.TEXT);name.setGravity(Gravity.CENTER_VERTICAL);
+        row.addView(name,new LinearLayout.LayoutParams(0,LinearLayout.LayoutParams.WRAP_CONTENT,1));
+        if(collapsed){name.append("  ▾");return row;}
+        ServerLoad sample=serverLoads.get(code);if(sample!=null&&!sample.fresh(System.currentTimeMillis()/1000.0))sample=null;
+        Double percent=sample==null?null:sample.percent;boolean locRu=getResources().getConfiguration().getLocales().get(0).getLanguage().equals("ru");
+        TextView load=new TextView(c);load.setText(percent==null?(locRu?"Нет данных":"No data"):(sample.estimated?"≈ ":"")+Math.round(percent)+"%");
+        int color=percent==null?TerminalUi.MUTED:percent>=90?Color.rgb(239,132,116):percent>=70?TerminalUi.AMBER:TerminalUi.MINT;
+        TerminalUi.textStyle(load,13,color);load.setGravity(Gravity.CENTER_VERTICAL|Gravity.END);
+        row.addView(load,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+        row.setMinimumHeight(TerminalUi.dp(c,48));row.setPadding(TerminalUi.dp(c,12),TerminalUi.dp(c,6),TerminalUi.dp(c,12),TerminalUi.dp(c,6));return row;
     }
     @Override protected void onResume(){super.onResume();if(getPreferences(MODE_PRIVATE).getBoolean("activated",false)){ChatNotifications.request(this);ChatDeliveryService.start(this);}if(dashboardLocation!=null&&dashboardLocation.permitted())dashboardLocation.start();if(appUpdate!=null)appUpdate.render();loadResumed=true;handler.post(loadRefresh);handler.post(refresh);if(routeLocation!=null&&routeLocation.permitted())routeLocation.start();}
     @Override protected void onPause(){if(dashboardLocation!=null)dashboardLocation.stop();loadResumed=false;handler.removeCallbacks(loadRefresh);handler.removeCallbacks(refresh);if(telemetry!=null)telemetry.pause();if(routeLocation!=null)routeLocation.stop();super.onPause();}
