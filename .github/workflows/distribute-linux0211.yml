@@ -1,0 +1,62 @@
+name: Distribute accepted Linux 0.2.11 preview
+on:
+  push:
+    branches: ['release/linux0211']
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify pinned platform and artifact acceptance
+        shell: python
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          import json,urllib.request,os
+          base='https://api.github.com/repos/Joker20380/family_connect'
+          def get(path):
+              request=urllib.request.Request(base+path,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN']})
+              return json.load(urllib.request.urlopen(request,timeout=30))
+          source='2ffba7700023079d25832eb25d15c58fbbe55d74'
+          run=get('/actions/runs/36242070755')
+          assert run['head_sha']==source
+          jobs=get('/actions/runs/36242070755/jobs')['jobs']
+          assert next(j for j in jobs if j['name']=='linux')['conclusion']=='success'
+          artifact=get('/actions/artifacts/10906006256')
+          assert artifact['workflow_run']['id']==36242070755 and not artifact['expired']
+          assert artifact['digest']=='sha256:097662751a0d83058fd37636a6cde4f7598dcdc0f55f50660db1411ae2ff1332'
+      - name: Build verified source-only control preview
+        shell: python
+        run: |
+          import pathlib,hashlib,json,shutil,subprocess
+          out=pathlib.Path('publish');out.mkdir()
+          subprocess.run(['python3','scripts/package_control.py','--output',str(out)],check=True)
+          archives=list(out.glob('FamilyConnect-Control-Linux-preview-*.tar.gz'))
+          assert len(archives)==1, archives
+          archive=archives[0]
+          assert archive.name=='FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz', archive.name
+          digest=hashlib.sha256(archive.read_bytes()).hexdigest()
+          assert digest=='6d4c6186fa69d36f4835b380582ba046e1a3a70abf359ee1a0332dd741f97a56', digest
+          guide=pathlib.Path('deploy/friends/invite/FamilyConnect-Linux-0.2.11-invitation.txt')
+          shutil.copyfile(guide,out/guide.name)
+          (out/'SHA256SUMS').write_text(digest+'  '+archive.name+'\n')
+          (out/'receipt.json').write_text(json.dumps(dict(version='0.2.11',channel='manual-preview',source='2ffba7700023079d25832eb25d15c58fbbe55d74',linux_ci=36242070755,bundle_id='5b02e8cb9fde119f',artifact=dict(file=archive.name,size=archive.stat().st_size,sha256=digest)),indent=2)+'\n')
+          pathlib.Path('notes.md').write_text('Linux 0.2.11 manual preview: country flag and live load in the server picker, plus a transport catalog. Linux GTK/map/link/friends/recovery/install checks passed on CI. This is a source-only paired preview; it does not install system VPN helpers and has no signed updater. Follow the included guide; preserve identity and application data when updating.\n')
+      - name: Publish immutable Linux preview
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          repo=Joker20380/family_connect
+          tag=desktop-preview-20260926-5b02e8cb
+          if gh release view "$tag" --repo "$repo" >/dev/null 2>&1; then
+            echo 'Refusing to replace an existing immutable release.' >&2
+            exit 1
+          fi
+          gh release create "$tag" publish/* --repo "$repo" --target "$GITHUB_SHA" --prerelease --title 'Linux 0.2.11 preview — server flags and load' --notes-file notes.md

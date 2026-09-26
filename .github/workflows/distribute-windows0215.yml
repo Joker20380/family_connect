@@ -1,0 +1,68 @@
+name: Distribute accepted Windows 0.2.15 preview
+on:
+  push:
+    branches: ['release/windows0215']
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify pinned native acceptance
+        shell: python
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          import json,urllib.request,os
+          base='https://api.github.com/repos/Joker20380/family_connect'
+          def get(path):
+              request=urllib.request.Request(base+path,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN']})
+              return json.load(urllib.request.urlopen(request,timeout=30))
+          source='2ffba7700023079d25832eb25d15c58fbbe55d74'
+          run=get('/actions/runs/36242070755')
+          assert run['head_sha']==source
+          jobs=get('/actions/runs/36242070755/jobs')['jobs']
+          assert all(next(j for j in jobs if j['name']==name)['conclusion']=='success' for name in ['windows','windows-compatibility'])
+          artifact=get('/actions/artifacts/10905863334')
+          assert artifact['workflow_run']['id']==36242070755 and not artifact['expired']
+          assert artifact['digest']=='sha256:95f4baf9881563550e2a635dee532685c3d458344aa910a7f0e60ef2a3d8c7db'
+      - uses: actions/download-artifact@v4
+        with:
+          name: FamilyConnect-Windows-Installer-pilot-unsigned
+          run-id: '36242070755'
+          github-token: ${{ github.token }}
+          path: accepted-windows
+      - name: Verify exact installer and assemble preview
+        shell: python
+        run: |
+          import pathlib,hashlib,json,shutil
+          out=pathlib.Path('publish');out.mkdir()
+          name='FamilyConnect-Setup-0.2.15-pilot-unsigned.exe'
+          exe=pathlib.Path('accepted-windows')/name
+          raw=exe.read_bytes()
+          digest=hashlib.sha256(raw).hexdigest()
+          manifest=pathlib.Path('accepted-windows/SHA256SUMS').read_text(encoding='utf-8-sig')
+          assert any(line.split()==[digest,name] for line in manifest.splitlines()), 'installer hash not in CI SHA256SUMS'
+          (out/name).write_bytes(raw)
+          for image in pathlib.Path('accepted-windows').glob('Windows-*.png'):
+              shutil.copyfile(image,out/image.name)
+          (out/'SHA256SUMS').write_text(digest+'  '+name+'\n')
+          (out/'receipt.json').write_text(json.dumps(dict(version='0.2.15',channel='windows',source='2ffba7700023079d25832eb25d15c58fbbe55d74',windows_ci=36242070755,artifact_zip_digest='sha256:95f4baf9881563550e2a635dee532685c3d458344aa910a7f0e60ef2a3d8c7db',artifact=dict(file=name,size=len(raw),sha256=digest)),indent=2)+'\n')
+          pathlib.Path('notes.md').write_text('Windows 0.2.15: server list with country flag and live load, plus a transport catalog. Windows native CI, installer/broker/URI/UI/upgrade and compatibility jobs passed; the unrelated Android emulator step in the same run is covered by Android device acceptance. The installer still has no publisher signature.\n\nExisting 0.2.14 clients can update through Check for updates after the signed catalog is published. 0.2.12 or earlier need one manual transition. Preserve identity and application data when updating.\n')
+      - name: Publish immutable Windows preview
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          repo=Joker20380/family_connect
+          tag=windows-v0.2.15
+          if gh release view "$tag" --repo "$repo" >/dev/null 2>&1; then
+            echo 'Refusing to replace an existing immutable release.' >&2
+            exit 1
+          fi
+          gh release create "$tag" publish/* --repo "$repo" --target "$GITHUB_SHA" --prerelease --title 'Windows 0.2.15 preview — server flags and load' --notes-file notes.md
