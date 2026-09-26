@@ -7,11 +7,14 @@ namespace FamilyConnect;
 internal sealed class ModernComboBox : ComboBox
 {
     bool hovered;
+    internal Func<int,Color[]?>? FlagBands;
+    internal Func<int,string?>? Detail;
     public ModernComboBox(){
         DropDownStyle=ComboBoxStyle.DropDownList;DrawMode=DrawMode.OwnerDrawFixed;
         FlatStyle=FlatStyle.Flat;ItemHeight=30;Cursor=Cursors.Hand;
         BackColor=Color.FromArgb(7,32,24);ForeColor=Color.FromArgb(218,255,242);
     }
+    internal void RefreshContent()=>RefreshItems();
     protected override void OnMouseEnter(EventArgs e){hovered=true;Invalidate();base.OnMouseEnter(e);}
     protected override void OnMouseLeave(EventArgs e){hovered=false;Invalidate();base.OnMouseLeave(e);}
     protected override void OnGotFocus(EventArgs e){base.OnGotFocus(e);Invalidate();}
@@ -25,7 +28,23 @@ internal sealed class ModernComboBox : ComboBox
         using var fill=new SolidBrush(selected?Color.FromArgb(25,75,61):BackColor);
         e.Graphics.FillRectangle(fill,e.Bounds);
         int pad=(int)Math.Round(10*DeviceDpi/96f);
-        var label=Rectangle.Inflate(e.Bounds,-pad,0);
+        var bands=FlagBands?.Invoke(e.Index);
+        int left=pad;
+        if(bands is {Length:3}){
+            int fw=(int)Math.Round(22*DeviceDpi/96f),fh=(int)Math.Round(14*DeviceDpi/96f);
+            int fy=e.Bounds.Top+(e.Bounds.Height-fh)/2;
+            for(int b=0;b<3;b++){using var band=new SolidBrush(bands[b]);e.Graphics.FillRectangle(band,e.Bounds.Left+pad,fy+((fh*b)/3),fw,Math.Max(1,(fh+2)/3));}
+            using var border=new Pen(tint);e.Graphics.DrawRectangle(border,e.Bounds.Left+pad,fy,fw-1,fh-1);
+            left=pad+fw+pad;
+        }
+        var detail=Detail?.Invoke(e.Index);
+        var label=new Rectangle(e.Bounds.Left+left,e.Bounds.Top,Math.Max(1,e.Bounds.Width-left-pad),e.Bounds.Height);
+        if(!string.IsNullOrEmpty(detail)){
+            var detailSize=TextRenderer.MeasureText(detail,Font);
+            var detailRect=new Rectangle(Math.Max(label.Left,label.Right-detailSize.Width),label.Top,Math.Min(label.Width,detailSize.Width),label.Height);
+            TextRenderer.DrawText(e.Graphics,detail,Font,detailRect,Color.FromArgb(153,196,181),TextFormatFlags.Right|TextFormatFlags.VerticalCenter|TextFormatFlags.EndEllipsis|TextFormatFlags.NoPrefix);
+            label.Width=Math.Max(1,label.Width-detailSize.Width-pad);
+        }
         TextRenderer.DrawText(e.Graphics,GetItemText(Items[e.Index]),Font,label,Enabled?(selected?tint:ForeColor):Color.FromArgb(117,152,138),TextFormatFlags.Left|TextFormatFlags.VerticalCenter|TextFormatFlags.EndEllipsis|TextFormatFlags.NoPrefix);
         if(selected){using var marker=new SolidBrush(tint);e.Graphics.FillRectangle(marker,e.Bounds.Left,e.Bounds.Top,Math.Max(2,pad/3),e.Bounds.Height);}
         base.OnDrawItem(e);
@@ -64,7 +83,14 @@ internal sealed class ModernComboBox : ComboBox
         using var fill=new SolidBrush(DroppedDown||hovered?Color.FromArgb(16,61,46):BackColor);
         using var pen=new Pen(tint,scale);g.FillPath(fill,path);g.DrawPath(pen,path);
         int pad=(int)Math.Round(10*scale),arrow=(int)Math.Round(30*scale);
-        TextRenderer.DrawText(g,Text,Font,new Rectangle(pad,1,Math.Max(1,Width-arrow-pad),Height-2),Enabled?ForeColor:Color.FromArgb(117,152,138),TextFormatFlags.Left|TextFormatFlags.VerticalCenter|TextFormatFlags.EndEllipsis|TextFormatFlags.NoPrefix);
+        int left=pad;var bands=FlagBands?.Invoke(SelectedIndex);
+        if(bands is {Length:3}){
+            int fw=(int)Math.Round(22*scale),fh=(int)Math.Round(14*scale);int fy=1+(Height-2-fh)/2;
+            for(int b=0;b<3;b++){using var band=new SolidBrush(bands[b]);g.FillRectangle(band,pad,fy+((fh*b)/3),fw,Math.Max(1,(fh+2)/3));}
+            using var border=new Pen(tint,scale);g.DrawRectangle(border,pad,fy,fw-1,fh-1);
+            left=pad+fw+pad;
+        }
+        TextRenderer.DrawText(g,Text,Font,new Rectangle(left,1,Math.Max(1,Width-arrow-left),Height-2),Enabled?ForeColor:Color.FromArgb(117,152,138),TextFormatFlags.Left|TextFormatFlags.VerticalCenter|TextFormatFlags.EndEllipsis|TextFormatFlags.NoPrefix);
         float x=Width-16*scale,y=Height/2f;float direction=DroppedDown?-1:1;
         g.DrawLines(pen,new PointF[]{new(x-4*scale,y-direction*2*scale),new(x,y+direction*2*scale),new(x+4*scale,y-direction*2*scale)});
     }

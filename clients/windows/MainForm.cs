@@ -6,7 +6,7 @@ internal sealed class MainForm:Form
     readonly bool saveLanguage;
     string state="unknown";
     bool tcpReady,awgReady,automatic,friendsReady;
-    readonly ComboBox country=new ModernComboBox(){DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill};
+    readonly ModernComboBox country=new(){DropDownStyle=ComboBoxStyle.DropDownList,Dock=DockStyle.Fill};
     FriendsForm accessPage=null!;
     LiveNetworkPanel? telemetry;
     string Country=>country.SelectedIndex==1?"ru":"nl";string? transport,lastError;
@@ -36,6 +36,7 @@ internal sealed class MainForm:Form
     readonly Label loadLabel=new(){AutoSize=true,Dock=DockStyle.Fill};readonly LoadBar loadBar=new();readonly ToolTip loadTip=new();
     readonly System.Windows.Forms.Timer loadTimer=new(){Interval=3000};
     LoadSample? loadSample;bool loadPending;DateTime loadNext=DateTime.MinValue;long loadRevision=-1;int loadMode=-1;
+    readonly Dictionary<string,LoadSample> allLoads=new();
     readonly Label routeTitle=new(){AutoSize=true,Dock=DockStyle.Fill},messengerNote=new(){AutoSize=true,Dock=DockStyle.Fill};
     readonly Dictionary<string,Control[]> pages=new();
     readonly Dictionary<string,ModernButton> nav=new();
@@ -102,6 +103,7 @@ internal sealed class MainForm:Form
         mode.Margin=new Padding(0,4,0,8);mode.BackColor=Color.FromArgb(7,32,24);mode.ForeColor=ForeColor;
         country.Items.AddRange(new object[]{T("Нидерланды","Netherlands"),T("Россия","Russia")});country.SelectedIndex=0;
         country.BackColor=mode.BackColor;country.ForeColor=ForeColor;
+        country.FlagBands=CountryFlag;country.Detail=CountryLoad;
         foreach(var picker in new[]{country,mode}){picker.ItemHeight=30;picker.Font=Font;}
         if(saveLanguage)try{using var p=Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\family_connect");country.SelectedIndex=(p?.GetValue("Country") as string)=="ru"?1:0;mode.SelectedIndex=(p?.GetValue("Transport") as string)=="tcp"?0:1;}catch{}
         void SaveSelection(){revision++;loadNext=DateTime.MinValue;if(saveLanguage)try{using var p=Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\family_connect");p.SetValue("Country",Country);p.SetValue("Transport",TcpSelected?"tcp":"awg");}catch{}PaintState();}
@@ -473,15 +475,30 @@ internal sealed class MainForm:Form
         loadBar.AccessibleName=loadLabel.Text;
         loadTip.SetToolTip(loadLabel,sample is null?loadLabel.Text:$"CPU {sample.Cpu:F0}% · ↓ {sample.Rx:F1} / ↑ {sample.Tx:F1} Mbps"+(sample.Estimated?T(" · оценка по 200 Мбит/с исходящего канала"," · estimated using 200 Mbps egress"):""));
     }
+    Color[]? CountryFlag(int index)=>index switch{0=>new[]{Color.FromArgb(174,28,40),Color.White,Color.FromArgb(33,70,139)},1=>new[]{Color.White,Color.FromArgb(0,57,166),Color.FromArgb(213,43,30)},_=>null};
+    string? CountryLoad(int index){
+        var code=index==1?"ru":"nl";
+        if(!allLoads.TryGetValue(code,out var sample)||!sample.Fresh)return T("Нет данных","No data");
+        return sample.Percent is double p?(sample.Estimated?"≈ ":"")+Math.Round(p)+"%":T("Нет данных","No data");
+    }
     async Task RefreshLoad(){
         if(IsDisposed||Disposing)return;PaintLoad();
         if(loadPending||busy||page!="status")return;
         if(DateTime.UtcNow<loadNext&&loadRevision==revision&&loadMode==mode.SelectedIndex)return;
         loadPending=true;long started=revision;int selected=mode.SelectedIndex;
         try{
-            var target=friendsReady?new Reply(true,"off",Code:Country):await call(new("load-country",AutoSelected?"auto":AwgSelected?"awg":TcpSelected?"tcp":"wg"));
-            var sample=target.Ok&&target.Code is "ru" or "nl"?await ServerLoad.Fetch(target.Code):null;
-            if(!IsDisposed&&!Disposing&&started==revision&&selected==mode.SelectedIndex){loadSample=sample;loadRevision=started;loadMode=selected;}
+            if(friendsReady){
+                var loads=await ServerLoad.FetchAll();
+                if(!IsDisposed&&!Disposing&&started==revision&&selected==mode.SelectedIndex){
+                    allLoads.Clear();foreach(var pair in loads)allLoads[pair.Key]=pair.Value;
+                    loadSample=allLoads.TryGetValue(Country,out var current)?current:null;
+                    loadRevision=started;loadMode=selected;country.RefreshContent();
+                }
+            }else{
+                var target=await call(new("load-country",AutoSelected?"auto":AwgSelected?"awg":TcpSelected?"tcp":"wg"));
+                var sample=target.Ok&&target.Code is "ru" or "nl"?await ServerLoad.Fetch(target.Code):null;
+                if(!IsDisposed&&!Disposing&&started==revision&&selected==mode.SelectedIndex){loadSample=sample;loadRevision=started;loadMode=selected;}
+            }
         }catch(Exception){if(started==revision)loadSample=null;}
         finally{loadPending=false;loadNext=DateTime.UtcNow.AddSeconds(15);if(!IsDisposed&&!Disposing)PaintLoad();}
     }
