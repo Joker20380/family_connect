@@ -12,6 +12,9 @@ unattended-upgrade libexpat1. Во время чтения журналов вы
 по SIGTERM: TimeoutStopSec=20→90 (шаблон install-awg.py + drop-in на RU),
 чистая остановка1с вместо timeout20с/SIGKILL; rollback — удалить drop-in.
 Production/версии не менялись.
+26.09 Android: в исходники главного экрана Friends добавлен выбор сервера
+с флагом и нагрузкой на момент выбора (RU/NL, `server-load.json`, кэш15с).
+Сборка/UI-приёмка/публикация не выполнялись; APK и production прежние.
 
 25.09: лицензирование опубликовано в GitHub main, commit
 `aa3ed9f801a83a4808df3352abc300d235a7c42c`: LICENSE, notices, audit и README RU/EN.
