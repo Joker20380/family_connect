@@ -42,6 +42,19 @@ def verified_server_load(payload,country,now):
     return dict(country=country,observed_at=observed,cpu=cpu,rx=rx,tx=tx,percent=percent,estimated=sample.get('capacity_basis')=='provider-default-estimate',capacity=capacity,direction=direction)
 
 
+def verified_server_loads(payload,now):
+    """Parse both public gateways; a missing/stale gateway is omitted, never zero load."""
+    if len(payload)>8192:raise ValueError('Invalid load sample')
+    value=json.loads(payload)
+    if value.get('schema')!=1:raise ValueError('Invalid load schema')
+    result={}
+    for country in ('ru','nl'):
+        if country not in value.get('gateways',{}):continue
+        try:result[country]=verified_server_load(payload,country,now)
+        except (ValueError,KeyError):continue
+    return result
+
+
 PREFIX='fc-app-'
 class BackendError(Exception): pass
 class AuthorizationError(BackendError): pass
@@ -399,6 +412,11 @@ class Linux:
             headers={'Accept':'application/json','Cache-Control':'no-cache'})
         with urllib.request.urlopen(request,timeout=5) as response:payload=response.read(8193)
         return verified_server_load(payload,country,time.time())
+    def server_loads(self):
+        request=urllib.request.Request('https://185.251.89.19:8443/status/server-load.json',
+            headers={'Accept':'application/json','Cache-Control':'no-cache'})
+        with urllib.request.urlopen(request,timeout=5) as response:payload=response.read(8193)
+        return verified_server_loads(payload,time.time())
     @contextmanager
     def control_transaction(self, owner):
         # GUI status polling briefly owns the same lock. Wait only on entry;
