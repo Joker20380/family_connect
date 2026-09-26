@@ -1,0 +1,95 @@
+name: Distribute Linux 0.2.11 updater release
+on:
+  push:
+    branches: ['release/v0211']
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify pinned acceptance
+        shell: python
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          import json,urllib.request,os
+          base='https://api.github.com/repos/Joker20380/family_connect'
+          def get(path):
+              request=urllib.request.Request(base+path,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN']})
+              return json.load(urllib.request.urlopen(request,timeout=30))
+          source='2ffba7700023079d25832eb25d15c58fbbe55d74'
+          run=get('/actions/runs/36242070755')
+          assert run['head_sha']==source
+          jobs=get('/actions/runs/36242070755/jobs')['jobs']
+          assert next(j for j in jobs if j['name']=='linux')['conclusion']=='success'
+          artifact=get('/actions/artifacts/10906006256')
+          assert artifact['workflow_run']['id']==36242070755 and not artifact['expired']
+          assert artifact['digest']=='sha256:097662751a0d83058fd37636a6cde4f7598dcdc0f55f50660db1411ae2ff1332'
+          release=get('/releases/tags/windows-preview-20260923-8906d62')
+          asset=next(a for a in release['assets'] if a['name']=='FamilyConnect-Setup-0.2.11-preview-8906d62.exe')
+          assert asset['digest']=='sha256:9cc04ba7446ff31d87e2a3d96dfb7faf24e61cf81a7eac8eccea0adb29c3ed3c'
+          assert asset['size']==49934207
+      - name: Build and verify Linux archive
+        shell: python
+        run: |
+          import pathlib,hashlib,subprocess,tarfile
+          subprocess.run(['python3','scripts/package_desktop.py'],check=True)
+          archive=pathlib.Path('artifacts/clients/FamilyConnect-Linux-0.2.11.tar.gz')
+          digest=hashlib.sha256(archive.read_bytes()).hexdigest()
+          assert digest=='2077a6b5a7852a7c627e6c1d778e9f2e25ca21814f403d07fd43acd5997ab057', digest
+          with tarfile.open(archive,'r:gz') as bundle:
+              members=bundle.getmembers()
+          expected=['app.py','backend.py','profile_config.py','updates.py','update.pub','install-linux.sh']
+          assert [m.name for m in members]==[f'FamilyConnect-Linux-0.2.11/{n}' for n in expected], [m.name for m in members]
+          out=pathlib.Path('publish');out.mkdir()
+          (out/archive.name).write_bytes(archive.read_bytes())
+      - name: Fetch accepted Windows 0.2.11 placeholder
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release download windows-preview-20260923-8906d62 --repo Joker20380/family_connect --pattern 'FamilyConnect-Setup-0.2.11-preview-8906d62.exe' --dir publish
+          mv publish/FamilyConnect-Setup-0.2.11-preview-8906d62.exe publish/FamilyConnect-Setup-0.2.11-pilot-unsigned.exe
+      - name: Verify renamed placeholder and assemble receipts
+        shell: python
+        run: |
+          import pathlib,hashlib,json
+          out=pathlib.Path('publish')
+          exe=out/'FamilyConnect-Setup-0.2.11-pilot-unsigned.exe'
+          raw=exe.read_bytes()
+          digest=hashlib.sha256(raw).hexdigest()
+          assert digest=='9cc04ba7446ff31d87e2a3d96dfb7faf24e61cf81a7eac8eccea0adb29c3ed3c', digest
+          assert exe.stat().st_size==49934207
+          lines=[]
+          for name in ['FamilyConnect-Linux-0.2.11.tar.gz','FamilyConnect-Setup-0.2.11-pilot-unsigned.exe']:
+              p=out/name
+              lines.append(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+name+'\n')
+          (out/'SHA256SUMS').write_text(''.join(lines))
+          (out/'receipt.json').write_text(json.dumps(dict(
+              version='0.2.11',channel='linux-updater',source='2ffba7700023079d25832eb25d15c58fbbe55d74',
+              linux_ci=36242070755,
+              artifacts=[
+                  dict(file='FamilyConnect-Linux-0.2.11.tar.gz',size=83306,sha256='2077a6b5a7852a7c627e6c1d778e9f2e25ca21814f403d07fd43acd5997ab057'),
+                  dict(file='FamilyConnect-Setup-0.2.11-pilot-unsigned.exe',size=49934207,sha256='9cc04ba7446ff31d87e2a3d96dfb7faf24e61cf81a7eac8eccea0adb29c3ed3c',
+                       note='byte-for-byte rename of accepted windows-preview-20260923-8906d62 asset; legacy schema1 slot only, never downloaded by the Linux updater')
+              ]),indent=2)+'\n')
+          pathlib.Path('notes.md').write_text('Linux 0.2.11 signed-updater release: server list with country flag and live load, plus a transport catalog. The legacy schema1 catalog requires both linux and windows slots; the windows slot is a byte-for-byte rename of the accepted Windows 0.2.11 preview asset and is never downloaded by the Linux updater. Existing Linux 0.2.9 clients can update through Check for updates after the signed catalog is published. Preserve identity and application data when updating.\n')
+      - name: Publish immutable Linux updater release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          repo=Joker20380/family_connect
+          tag=v0.2.11
+          if gh release view "$tag" --repo "$repo" >/dev/null 2>&1; then
+            echo 'Refusing to replace an existing immutable release.' >&2
+            exit 1
+          fi
+          gh release create "$tag" publish/* --repo "$repo" --target "$GITHUB_SHA" --prerelease --title 'Linux 0.2.11 updater — server flags and load' --notes-file notes.md
