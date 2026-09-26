@@ -123,6 +123,14 @@ No full VPN/SOCKS/tun2socks architecture is selected for reuse.
 | LiveKit/forked RTC engines | olcrtc manifest, not selected | Not audited for inclusion | WB signaling/media reference | no / no | Avoid importing whole graph; unknown licenses block that dependency |
 | Go toolchain | Installation deferred; no project version selected | Packaging/license review with chosen toolchain | Candidate isolated process build | no / no | Current shell has no Go executable; no build performed |
 
+Minimal Telemost carrier dependency set verified from `olcrtc/internal/engine/goolom`
+and `olcrtc/internal/auth/telemost`: the Telemost join path uses only
+`github.com/pion/webrtc/v4` (MIT, plus its MIT Pion transitives),
+`github.com/gorilla/websocket` (BSD-3-Clause) and `github.com/google/uuid`
+(BSD-3-Clause, avoidable). It does not import `kulikov0/headless-client` or any
+LiveKit/forked engine module. Exact versions remain Family Connect pins TBD and
+must be re-audited in the FC `go.mod`/`go.sum` before coding/bundling.
+
 Root-source license permission and service API access are different questions.
 WB guest joining is visible in code but live room creation/media permissions and
 provider usage terms/quotas must be checked before deployment. No provider login,
