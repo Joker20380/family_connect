@@ -17,6 +17,23 @@ if VENDOR.is_dir():
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(DESKTOP))
 
+# Fail with a clear message instead of a raw GTK/GI traceback. GTK 4,
+# libadwaita and GI are host/system dependencies and are not bundled.
+try:
+    import gi
+    import cairo
+    gi.require_foreign('cairo')
+    gi.require_version('Gtk', '4.0')
+    gi.require_version('Adw', '1')
+except (ImportError, ValueError) as exc:
+    sys.stderr.write(
+        'Family Connect requires GTK 4 / libadwaita system packages.\n'
+        'Ubuntu/Debian: sudo apt install python3-gi python3-gi-cairo '
+        'gir1.2-gtk-4.0 gir1.2-adw-1\n'
+        f'({exc})\n'
+    )
+    raise SystemExit(2)
+
 app = DESKTOP / 'app.py'
 sys.argv[0] = str(app)
 runpy.run_path(str(app), run_name='__main__')
