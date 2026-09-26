@@ -199,7 +199,7 @@ jobs:
           dpkg-deb -x artifacts/clients/FamilyConnect_*_amd64.deb /tmp/fc-deb
           grep -q 'MimeType=x-scheme-handler/familyconnect' /tmp/fc-deb/usr/share/applications/com.familyconnect.Client.desktop
       - name: Smoke packaged launcher from the DEB
-        run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a python3 /tmp/fc-deb/usr/lib/family-connect/launcher.py --smoke
+        run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 /tmp/fc-deb/usr/lib/family-connect/launcher.py --smoke
       - name: AppImage extract smoke
         run: |
           ./artifacts/clients/FamilyConnect-*-x86_64.AppImage --appimage-extract >/dev/null
