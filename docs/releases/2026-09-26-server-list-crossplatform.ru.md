@@ -68,9 +68,23 @@ immutable GitHub release `windows-v0.2.15` и HTTPS. Каталог `updates/win
 
 ### Linux 0.2.11
 
-Source-only control preview собран из принятого источника (`linux` CI success),
-проверен `bundle_id`, выложен immutable GitHub release `desktop-preview-20260926-5b02e8cb`
-и HTTPS.
+Кроме manual control preview опубликован и подписанный updater-канал, чтобы
+существующие Linux-клиенты обновлялись через «Check for updates» (раньше
+`pilot.json` указывал на 0.2.9 и клиент писал «последняя версия»).
+
+- Signed updater release `v0.2.11` (immutable, GitHub):
+  - `FamilyConnect-Linux-0.2.11.tar.gz` — 82897 bytes, SHA256
+    `3aaf6e0661b5dd9e6136f12d96c66b2ad103c7fa8b0fc9c47a6db918c511b795`.
+  - `FamilyConnect-Setup-0.2.11-pilot-unsigned.exe` — 49934207 bytes, SHA256
+    `9cc04ba7446ff31d87e2a3d96dfb7faf24e61cf81a7eac8eccea0adb29c3ed3c`
+    (байт-в-байт переименованный принятый Windows 0.2.11 preview; slot нужен
+    schema1 каталогу, Linux-апдейтер его не скачивает).
+- Каталог `updates/pilot.json` подписан offline Ed25519 (schema1, sequence9,
+  version0.2.11), signature проверена локально публичным anchor `update.pub`.
+- Сборка Linux-архива сделана воспроизводимой (`scripts/package_desktop.py`:
+  фиксированные `mtime=0` и порядок, gzip `mtime=0`).
+
+Manual control preview (опциональный, без VPN helpers):
 
 - `FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz` — 121503 bytes, SHA256
   `6d4c6186fa69d36f4835b380582ba046e1a3a70abf359ee1a0332dd741f97a56`.
@@ -108,4 +122,5 @@ Android-код на устройстве не понижать; исправле
 
 - Физическая приёмка Windows10/11 на пользовательском ПК; publisher signing отсутствует.
 - Российская сеть, длительный фон, смена сети и долгая устойчивость.
-- Linux остаётся manual preview с ручными зависимостями и VPN helpers.
+- Linux updater-канал поднят до 0.2.11; системные VPN helpers по-прежнему
+  устанавливаются вручную (updater ставит только application-файлы).

@@ -17,6 +17,9 @@ Production/версии не менялись.
 Android beta51/code51, Linux0.2.11 и Windows0.2.15 собраны и опубликованы
 (APK/discovery/invite, desktop GitHub/HTTPS, Windows catalog sequence11) —
 см. [отчёт](releases/2026-09-26-server-list-crossplatform.ru.md).
+26.09 Linux: подписанный updater-канал поднят до 0.2.11 (`updates/pilot.json`
+sequence9, release `v0.2.11`); ранее клиент показывал «последняя версия», потому
+что каталог указывал на 0.2.9. Сборка Linux-архива сделана воспроизводимой.
 
 25.09: лицензирование опубликовано в GitHub main, commit
 `aa3ed9f801a83a4808df3352abc300d235a7c42c`: LICENSE, notices, audit и README RU/EN.
