@@ -25,6 +25,17 @@ backend semantics и версии не менялись.
 [design](design/activation-simplification-design.ru.md),
 [android note](design/android-sideload-deferred-bootstrap.ru.md).
 
+26.09 Linux packaging (WIP): начата замена operator preview tar.gz на
+пользовательские артефакты `FamilyConnect-<ver>-x86_64.AppImage` и
+`FamilyConnect_<ver>_amd64.deb` (legacy `FamilyConnect-Linux-<ver>.tar.gz`
+сохраняется как advanced/manual и для подписанного updater). Реализованы
+`scripts/package_linux.py`, `packaging/linux/*` (launcher, desktop entry, icon,
+postinst/prerm, AppRun + `--integrate`), CI linux/release jobs и package-content
+audit (нет identity/token/WG private/.env/DB). Артефакты ещё НЕ собраны в CI и
+НЕ опубликованы; invitation landing всё ещё отдаёт preview tar.gz; чистая-Ubuntu
+acceptance не выполнена. production/версии не менялись.
+[design](linux-appimage-deb.ru.md).
+
 26.09: [аудит использования и сбоев VPN](releases/2026-09-26-vpn-health.ru.md).
 22 устройства/18 действующих (+4 с24.09); NL12 с handshake<24ч,4 свежих,
 3–4 передают трафик; RU0. Найдена история sysstat: AWG около26.7ГиБ с24.09

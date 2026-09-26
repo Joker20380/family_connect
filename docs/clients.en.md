@@ -25,6 +25,11 @@ Windows installs the URI handler with its service and preserves existing activat
 Linux needs operator-assisted setup: [current archive instructions](https://185.251.89.19:8443/downloads/FamilyConnect-Linux-0.2.11-invitation.txt).
 They cover a persistent Python environment and desktop URI handler; VPN helpers are installed separately.
 
+In development: user-facing Linux artifacts `FamilyConnect-<ver>-x86_64.AppImage` and
+`FamilyConnect_<ver>_amd64.deb` replace the operator preview tar.gz; the tar.gz stays
+only as an advanced/manual option. Not published yet — the link above still serves the
+preview archive. [Design](linux-appimage-deb.ru.md).
+
 [Windows GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/windows-v0.2.15) · [Linux GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/desktop-preview-20260926-5b02e8cb) · [Hashes and checks](releases/2026-09-26-server-list-crossplatform.ru.md).
 Preserve identity and application data when updating. Windows0.2.15 uses its own signed update catalog; install it manually once from0.2.12 or earlier. Linux and the older shared catalog are unchanged. Desktop messenger parity is not claimed.
 The separate historical GitHub v0.2.9 flow below is retained; use the current downloads above for new invitations.

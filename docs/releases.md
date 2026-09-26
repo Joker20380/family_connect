@@ -10,6 +10,10 @@ Android0.1.18-beta51, Windows0.2.15 and Linux0.2.11 verified 2026-09-26 by CI, r
 
 Invitation activation now opens the app from the original link. OFF switches are orange,
 ON switches turquoise on the page and all clients. Historical artifacts remain immutable.
+Linux user packaging (AppImage + .deb) is implemented at source level in
+`scripts/package_linux.py` / `packaging/linux/` with CI build/verify steps; artifacts
+are not yet built in CI or published, so the invitation page still serves the preview
+tar.gz. [Design](linux-appimage-deb.ru.md).
 
 [FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz), 121503 bytes.
 SHA256 `6d4c6186fa69d36f4835b380582ba046e1a3a70abf359ee1a0332dd741f97a56`.

@@ -25,6 +25,11 @@ Windows устанавливает обработчик ссылки вмест�
 Linux требует настройки с оператором: [инструкция к текущему архиву](https://185.251.89.19:8443/downloads/FamilyConnect-Linux-0.2.11-invitation.txt).
 Она включает постоянное Python-окружение и установку desktop URI handler. Системные VPN helpers устанавливаются отдельно.
 
+В разработке: пользовательские Linux-артефакты `FamilyConnect-<ver>-x86_64.AppImage`
+и `FamilyConnect_<ver>_amd64.deb` вместо operator preview tar.gz; tar.gz останется
+только как advanced/manual. Пока не опубликовано — текущая ссылка выше всё ещё ведёт
+на preview-архив. [Design](linux-appimage-deb.ru.md).
+
 [Windows GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/windows-v0.2.15) · [Linux GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/desktop-preview-20260926-5b02e8cb) · [Хеши и проверки](releases/2026-09-26-server-list-crossplatform.ru.md).
 Обновляйте без удаления идентичности и данных. Windows0.2.15 использует отдельный подписанный каталог; с0.2.12 и старше нужна одна ручная установка. Linux и прежний общий каталог сохранены. Desktop-мессенджер не принят наравне с Android.
 Ниже сохранён отдельный старый сценарий GitHub v0.2.9; для новых приглашений используйте текущие загрузки выше.

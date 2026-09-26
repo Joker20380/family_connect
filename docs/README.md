@@ -97,6 +97,7 @@ installed/deployed versions; dated reports preserve what was checked at that tim
 - Registration: [English](registration.en.md) / [Русский](registration.ru.md).
 - Gateway reconciliation: [English](gateway-reconciliation.en.md) / [Русский](gateway-reconciliation.ru.md).
 - [Paired Linux control rollout](linux-control-preview-rollout.ru.md).
+- [Linux AppImage + .deb packaging design](linux-appimage-deb.ru.md).
 - Operations/diagnostics for the original lab: [English](operations.en.md) / [Русский](operations.ru.md).
 - [Release distribution and signing](releases.md).
 
