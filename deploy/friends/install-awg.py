@@ -17,11 +17,12 @@ Description=Family Connect open test AWG3.1 gateway
 After=network-online.target
 Wants=network-online.target
 [Service]
+UMask=0077
 ExecStart=/usr/bin/python3 /opt/apps/family_connect/friends-awg/awg-gateway.py run
 Restart=on-failure
 RestartSec=3
 KillMode=mixed
-TimeoutStopSec=20
+TimeoutStopSec=90
 NoNewPrivileges=true
 ProtectHome=true
 ProtectSystem=full
