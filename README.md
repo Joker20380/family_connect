@@ -30,11 +30,11 @@ Family Connect is a private networking project for families and personal devices
 
 ## Current release
 
-Android **0.1.18-beta50** is available for existing users: voice messages, hold-to-record,
+Android **0.1.18-beta51** is available for existing users: voice messages, hold-to-record,
 swipe-up locking, text edits and background notifications. New messages scroll into view. Switches are orange when off and turquoise when on.
 [Install or update](docs/getting-started.en.md) · [Versions and checksums](docs/releases.md).
 
-The invitation page provides Android beta50 and Linux0.2.10 / Windows0.2.14 previews. Install
+The invitation page provides Android beta51 and Linux0.2.10 / Windows0.2.14 previews. Install
 the client, return to the original invitation mark **Application installed** and choose **Open application**.
 [Desktop installation](docs/clients.en.md) · [Rollout checks](docs/releases/2026-09-24-windows0214-installer.ru.md).
 
@@ -44,7 +44,7 @@ Windows0.2.14 fixes installer recovery and adjusts app-local CET compatibility f
 
 | Platform | Current availability |
 | --- | --- |
-| Android 8+ | Beta50; ARM64 APK, 36.4 MB. VPN, text and voice tested on phones; invitation-link activation. |
+| Android 8+ | Beta51; ARM64 APK, 36.4 MB. VPN, text and voice tested on phones; invitation-link activation. |
 | Linux | GTK 4 / libadwaita desktop pilot; 0.2.10 preview8e9fabe3cbef2989. Operator-assisted setup. |
 | Windows x64 | Native desktop pilot; 0.2.14 source6eed30c installer. Invitation-link activation; no trusted publisher signature yet. |
 | macOS / iOS | No application release. Apple-platform work remains on the longer-term roadmap. |
@@ -55,7 +55,7 @@ Invitation-link activation is available on all three clients. Messenger function
 
 <img src="docs/assets/android-beta38-home.png" width="300" alt="Family Connect Android beta38 test build home screen, with connection switch, network status and persistent navigation">
 
-Android beta38 test build, Russian interface, captured on 23 September 2026. Actual native UI rendered during device testing; VPN is off in this capture. Historical screenshot; the current update is beta50. [Image provenance](docs/assets/README.md).
+Android beta38 test build, Russian interface, captured on 23 September 2026. Actual native UI rendered during device testing; VPN is off in this capture. Historical screenshot; the current update is beta51. [Image provenance](docs/assets/README.md).
 
 ```mermaid
 flowchart LR
@@ -113,7 +113,7 @@ Public source helps inspection; it does not establish security on its own. Devic
 - [Security boundaries and reporting status](SECURITY.md)
 - [Privacy: local data, gateways and metadata](docs/privacy.md)
 - [Desktop update verification and signing](docs/updates.en.md)
-- [Android beta artifact and checksum](docs/releases/2026-09-23-switch-colors-beta50.ru.md)
+- [Android beta artifact and checksum](docs/releases/2026-09-26-server-list-crossplatform.ru.md)
 
 A VPN gateway is a trusted part of the connection and can observe destination metadata. Family Connect makes no anonymity or zero-logging guarantee.
 
@@ -134,7 +134,7 @@ This is the implemented provisioning path at a high level; integration maturity 
 
 ## Development
 
-**Source snapshot:** this checkpoint includes Android beta50 and Linux0.2.10 / Windows0.2.14 previews. See [source acceptance](docs/releases/2026-09-23-switch-colors-beta50.ru.md) for checks and limits. CI uses test signing; byte-for-byte reproduction of the published APK is not claimed. Linux remains a manual preview. Windows0.2.14 uses an independent signed catalog after one manual transition.
+**Source snapshot:** this checkpoint includes Android0.1.18-beta51 and Linux0.2.11 / Windows0.2.15 candidates; the published desktop versions remain Linux0.2.10 / Windows0.2.14. See [source acceptance](docs/releases/2026-09-23-switch-colors-beta50.ru.md) for checks and limits. CI uses test signing; byte-for-byte reproduction of the published APK is not claimed. Linux remains a manual preview. Windows0.2.14 uses an independent signed catalog after one manual transition.
 
 Start with [CONTRIBUTING.md](CONTRIBUTING.md) for setup and scoped checks.
 
