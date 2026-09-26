@@ -1,12 +1,15 @@
 """Package only public application files. No state, profiles, tokens or keys."""
 import argparse
 import hashlib
+import gzip
+import io
 import json
 from pathlib import Path
 import shutil
 import tarfile
 
 ROOT=Path(__file__).resolve().parents[1]
+DESKTOP=('app.py','backend.py','profile_config.py','updates.py','update.pub','install-linux.sh')
 
 
 def main():
@@ -16,9 +19,16 @@ def main():
         raise ValueError('invalid release version')
     if not args.release_files:
         output=ROOT/'artifacts/clients';output.mkdir(parents=True,exist_ok=True)
-        with tarfile.open(output/f'FamilyConnect-Linux-{version}.tar.gz','w:gz') as archive:
-            for name in ('app.py','backend.py','profile_config.py','updates.py','update.pub','install-linux.sh'):
-                archive.add(ROOT/'clients/desktop'/name,arcname=f'FamilyConnect-Linux-{version}/{name}')
+        target=output/f'FamilyConnect-Linux-{version}.tar.gz'
+        with target.open('wb') as stream, gzip.GzipFile(fileobj=stream,mode='wb',filename='',mtime=0) as compressed, tarfile.open(fileobj=compressed,mode='w') as archive:
+            for name in DESKTOP:
+                source=ROOT/'clients/desktop'/name
+                if source.is_symlink() or not source.is_file():
+                    raise ValueError('missing or unsafe public source: '+name)
+                data=source.read_bytes()
+                entry=tarfile.TarInfo(f'FamilyConnect-Linux-{version}/{name}')
+                entry.size,entry.mode,entry.mtime=len(data),0o600,0
+                archive.addfile(entry,io.BytesIO(data))
         return
     output=ROOT/'release-files';output.mkdir(exist_ok=True)
     names=[f'FamilyConnect-Linux-{version}.tar.gz',f'FamilyConnect-Setup-{version}-pilot-unsigned.exe']
