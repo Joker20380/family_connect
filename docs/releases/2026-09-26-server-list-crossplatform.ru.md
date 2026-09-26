@@ -110,6 +110,13 @@ Update path: подписанный каталог `updates/windows.json` сей
 переход на0.2.15 не рекомендуется без проверки на проблемном устройстве; catalog в
 этой задаче не менялся.
 
+Позже landing переведена на единое описание платформ: User-Agent теперь определяет
+только PRIMARY (крупная CTA + version + «Открыть Family Connect» для Android/Windows),
+а блок «Другие платформы» всегда содержит полные варианты остальных платформ — для
+Windows оба (`0.2.15` + compatibility `0.2.14`), для Linux AppImage/`.deb`/`.tar.gz`,
+для Android актуальный APK. `scripts/check_invitation_page.py` проверяет, что при
+каждом UA (Android/Windows/Linux/unknown) в DOM есть все шесть download URL.
+
 ## Откат
 
 Серверные бэкапы сохранены в `/opt/apps/family_connect/state-product-https/config`:
