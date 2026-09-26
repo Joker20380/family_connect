@@ -343,7 +343,7 @@ Windows0.2.13 (интерфейс, приглашение, подключени�
 | --- | --- | --- |
 | Android ARM64 | 0.1.18-beta51 / code51 | Redmi Note 9 Pro обновлён поверх50; HTTPS APK, updater и страница —51 |
 | Linux | 0.2.11 AppImage + .deb (+ preview5b02e8cb9fde119f) | HTTPS AppImage/DEB published; clean Ubuntu 24.04 install/URI/upgrade/reinstall passed; CI GTK/map/link/friends/recovery/install passed |
-| Windows x64 | 0.2.15 / source2ffba77 | GitHub/HTTPS installer + catalog sequence11; native/compat CI passed; affected Win10 device acceptance pending |
+| Windows x64 | 0.2.15 / source2ffba77 (+ 0.2.14 compatibility fallback) | GitHub/HTTPS installer + catalog sequence11; native/compat CI passed; 0.2.14 kept on landing for old Windows 10; affected Win10 device acceptance pending |
 
 [Интерактивная страница](https://185.251.89.19:8443/invite/) принимает исходную ссылку
 приглашения: установка → возврат к ссылке → открытие приложения. Вкладки, выбор платформы

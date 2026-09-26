@@ -99,6 +99,17 @@ Manual control preview (опциональный, без VPN helpers):
 nginx перезагружен. `scripts/check_invitation_page.py`: 4 сценария × 13 проверок passed.
 Публичные URL `200 OK`, размеры и SHA256 совпали.
 
+Позже для Windows UA добавлен вторичный compatibility fallback `0.2.14`
+(`FamilyConnect-Setup-0.2.14-pilot-unsigned.exe`, 49942347 bytes, SHA256
+`7b1af167a55a977c357c47b94407916fe27d1b343d33ecb69c42b2d11b85e886`): primary
+остаётся `0.2.15`, кнопка «Скачать совместимую версию 0.2.14» — вторичная, для
+пользователей со старой Windows 10. CSP script/style-hash пересчитан.
+Update path: подписанный каталог `updates/windows.json` сейчас один entry —
+0.2.15 (schema2/sequence11), поэтому0.2.14 → «Проверить обновления» → 0.2.15
+поддерживается. Если0.2.14 ставилась как workaround совместимости, автоматический
+переход на0.2.15 не рекомендуется без проверки на проблемном устройстве; catalog в
+этой задаче не менялся.
+
 ## Откат
 
 Серверные бэкапы сохранены в `/opt/apps/family_connect/state-product-https/config`:

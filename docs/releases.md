@@ -6,7 +6,7 @@ Android0.1.18-beta51, Windows0.2.15 and Linux0.2.11 verified 2026-09-26 by CI, r
 | --- | --- | --- |
 | Android updater / invitation | 0.1.18-beta51, code51, ARM64 | Persistent beta certificate; in-place update |
 | Linux invitation | 0.2.11 AppImage + .deb (+ preview5b02e8cb9fde119f) | User installables; tar.gz stays advanced/manual |
-| Windows invitation / updater | 0.2.15 source2ffba77 | Independent signed catalog schema2/sequence11; no publisher signature |
+| Windows invitation / updater | 0.2.15 source2ffba77 (+ 0.2.14 compatibility fallback) | Independent signed catalog schema2/sequence11; no publisher signature; 0.2.14 kept for old Windows 10 |
 
 Invitation activation now opens the app from the original link. OFF switches are orange,
 ON switches turquoise on the page and all clients. Historical artifacts remain immutable.
@@ -28,6 +28,9 @@ SHA256 `59fb42f034b86a2fc451f6cb3914ed2e4f19c93805e9348a5bd1676f1b75c279`.
 
 [FamilyConnect-Setup-0.2.15-pilot-unsigned.exe](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.15-pilot-unsigned.exe), 49941739 bytes.
 SHA256 `3e610962da40510e0dce7a9d794f4352ba113e090e462f6d1c75d7712f965e6b`.
+
+[FamilyConnect-Setup-0.2.14-pilot-unsigned.exe](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.14-pilot-unsigned.exe), 49942347 bytes.
+SHA256 `7b1af167a55a977c357c47b94407916fe27d1b343d33ecb69c42b2d11b85e886`.
 
 [FamilyConnect-Test-0.1.18-beta51.apk](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta51.apk), 36456636 bytes.
 SHA256 `79a2d28667332ea442eae1b895b4fc632b52734cbed1e75bd95f32b7175ad366`.

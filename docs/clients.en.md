@@ -24,6 +24,11 @@ Install the client, then open it from the invitation link or the **Open Family C
 button on the invitation page. Windows installs the URI handler with its service and
 preserves existing activation.
 
+Windows 0.2.15 is the primary version. Windows 0.2.14 is available as a compatibility
+fallback for some older Windows 10 installs: the invitation page shows it as a secondary
+**Download compatible version 0.2.14** action
+([immutable EXE](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.14-pilot-unsigned.exe)).
+
 Linux is now distributed as regular user-facing artifacts:
 
 - `FamilyConnect-0.2.11-x86_64.AppImage` — primary option; `chmod +x` and run; no pip,
