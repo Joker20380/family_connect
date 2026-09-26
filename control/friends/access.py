@@ -45,16 +45,17 @@ CREATE TABLE challenges(nonce TEXT PRIMARY KEY, device TEXT NOT NULL, public TEX
   key=_decode(public,64);_decode(wg,32)
   return hashlib.sha256(key).hexdigest()[:32]
  def challenge(self,public_identity,wireguard_public_key,purpose,invitation=''):
-  if purpose not in ('activate','ru','nl','refer','notices-role','notices-publish','notices-list','notices-edit'):raise Rejected()
+  if purpose not in ('activate','status','ru','nl','refer','notices-role','notices-publish','notices-list','notices-edit'):raise Rejected()
   device=self.binding(public_identity,wireguard_public_key);now=int(self.clock());invite=None
   with self.db() as db:
    row=db.execute('SELECT * FROM devices WHERE device=?',(device,)).fetchone()
    if row is not None:
     if row['revoked'] or row['public']!=public_identity or row['wg']!=wireguard_public_key:raise Rejected()
    else:
-    if purpose!='activate':raise Rejected()
-    invite=self.code_hash(invitation);grant=db.execute('SELECT * FROM invites WHERE hash=?',(invite,)).fetchone()
-    if grant is None or grant['revoked'] or grant['device'] is not None:raise Rejected()
+    if purpose not in ('activate','status'):raise Rejected()
+    if purpose=='activate':
+     invite=self.code_hash(invitation);grant=db.execute('SELECT * FROM invites WHERE hash=?',(invite,)).fetchone()
+     if grant is None or grant['revoked'] or grant['device'] is not None:raise Rejected()
    db.execute('DELETE FROM challenges WHERE expires<=?',(now,))
    if db.execute('SELECT COUNT(*) FROM challenges WHERE device=? AND used=0',(device,)).fetchone()[0]>=8:raise Rejected()
    nonce=base64.b64encode(secrets.token_bytes(32)).decode()
@@ -76,3 +77,16 @@ CREATE TABLE challenges(nonce TEXT PRIMARY KEY, device TEXT NOT NULL, public TEX
    if row['revoked'] or row['public']!=proof['public_identity'] or row['wg']!=proof['wireguard_public_key']:raise Rejected()
    db.execute('UPDATE challenges SET used=1 WHERE nonce=?',(nonce,))
    return {'device':device,'public_key':row['wg'],'tcp_id':row['tcp']}
+ def status(self,proof):
+  """Authenticated read-only recovery query. Never consumes an invitation."""
+  device=verify_transport_key_proof(proof,expected_challenge=proof['challenge']);now=int(self.clock());nonce=hashlib.sha256(proof['challenge'].encode()).hexdigest()
+  with self.db() as db:
+   challenge=db.execute('SELECT * FROM challenges WHERE nonce=?',(nonce,)).fetchone()
+   if challenge is None or challenge['used'] or challenge['expires']<=now or challenge['purpose']!='status' or challenge['device']!=device or challenge['public']!=proof['public_identity'] or challenge['wg']!=proof['wireguard_public_key']:raise Rejected()
+   db.execute('UPDATE challenges SET used=1 WHERE nonce=?',(nonce,))
+   row=db.execute('SELECT * FROM devices WHERE device=?',(device,)).fetchone()
+   if row is None:return {'device':device,'registered':False,'revoked':False,'active':False}
+   grant=db.execute('SELECT revoked FROM invites WHERE device=?',(device,)).fetchone()
+   revoked=bool(row['revoked'] or (grant is not None and grant['revoked']))
+   active=(not revoked and row['public']==proof['public_identity'] and row['wg']==proof['wireguard_public_key'])
+   return {'device':device,'registered':True,'revoked':revoked,'active':active}

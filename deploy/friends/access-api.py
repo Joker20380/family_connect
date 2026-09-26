@@ -23,7 +23,7 @@ class Handler(BaseHTTPRequestHandler):
   raw=json.dumps(value,ensure_ascii=False,separators=(',',':')).encode();self.send_response(status);self.send_header('Content-Type','application/json');self.send_header('Cache-Control','no-store');self.send_header('Content-Length',str(len(raw)));self.end_headers();self.wfile.write(raw)
  def do_POST(self):
   self.connection.settimeout(5)
-  if self.path not in ('/friends/challenge','/friends/activate','/friends/configuration/ru','/friends/configuration/nl','/friends/chat/challenge','/friends/chat/register','/friends/referral/issue','/friends/referral/claim','/friends/notices/publish','/friends/notices/device/role','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit'):self.reply(404,{'error':'not-found'});return
+  if self.path not in ('/friends/challenge','/friends/activate','/friends/configuration/ru','/friends/configuration/nl','/friends/chat/challenge','/friends/chat/register','/friends/referral/issue','/friends/referral/claim','/friends/device/status','/friends/notices/publish','/friends/notices/device/role','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit'):self.reply(404,{'error':'not-found'});return
   if not slots.acquire(blocking=False):self.reply(429,{'error':'busy'});return
   try:
    size=int(self.headers.get('Content-Length','0'));assert 0<size<=(32768 if self.path in ('/friends/notices/publish','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit') else 8192) and self.headers.get('Content-Type','').split(';')[0]=='application/json'
@@ -57,6 +57,8 @@ class Handler(BaseHTTPRequestHandler):
     result=access.challenge(**value)
    elif self.path=='/friends/activate':
     record=access.complete(value,'activate');result={'device':record['device'],'status':'active'}
+   elif self.path=='/friends/device/status':
+    result=access.status(value)
    else:
     country=self.path.rsplit('/',1)[1];record=access.complete(value,country)
     if country=='ru':command=['/usr/bin/python3','/opt/apps/family_connect/friends-awg/awg-gateway.py','register']

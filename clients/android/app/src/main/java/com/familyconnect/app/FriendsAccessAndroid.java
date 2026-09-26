@@ -28,7 +28,7 @@ final class FriendsAccessAndroid {
         if(!create)throw new Denied();return vault.create();
     }
     private JsonObject post(String path,JsonObject body)throws Exception{
-        require(path.matches("/friends/(challenge|activate|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|notices/device/(role|publish|list|edit))"));
+        require(path.matches("/friends/(challenge|activate|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/status|notices/device/(role|publish|list|edit))"));
         HttpsURLConnection connection=direct?new ChatNetworkAndroid(context).openHttps("https://185.251.89.19:8443"+path):(HttpsURLConnection)new URL("https://185.251.89.19:8443"+path).openConnection();
         try{
             connection.setConnectTimeout(5000);connection.setReadTimeout(15000);connection.setInstanceFollowRedirects(false);connection.setUseCaches(false);connection.setRequestMethod("POST");connection.setDoOutput(true);connection.setRequestProperty("Content-Type","application/json");
@@ -68,11 +68,30 @@ final class FriendsAccessAndroid {
             return identity.reference();
         }
     }
+    String deviceStatus() throws Exception {
+        try(ControlIdentity identity=identity(false)) {
+            JsonObject request=new JsonObject();
+            request.addProperty("public_identity",Base64.getEncoder().encodeToString(identity.publicIdentity()));
+            request.addProperty("wireguard_public_key",identity.wireguardPublicKey());
+            request.addProperty("purpose","status");
+            request.addProperty("invitation","");
+            JsonObject challenge=post("/friends/challenge",request);fields(challenge,"challenge expires_at audience");
+            long now=System.currentTimeMillis()/1000,expiry=integer(challenge.get("expires_at"),1);
+            require(expiry>now&&expiry-now<=120&&text(challenge.get("audience")).equals("family-connect/enrollment/v1"));
+            JsonObject result=post("/friends/device/status",identity.proveTransportKey(text(challenge.get("challenge"))));
+            fields(result,"device registered revoked active");
+            require(text(result.get("device")).equals(identity.reference()));
+            require(result.get("registered").isJsonPrimitive()&&result.get("registered").getAsJsonPrimitive().isBoolean());
+            require(result.get("revoked").isJsonPrimitive()&&result.get("revoked").getAsJsonPrimitive().isBoolean());
+            require(result.get("active").isJsonPrimitive()&&result.get("active").getAsJsonPrimitive().isBoolean());
+            return result.get("active").getAsBoolean()?text(result.get("device")):"";
+        }
+    }
     JsonObject referral() throws Exception {
         try(ControlIdentity identity=identity(false)) {
             JsonObject result=post("/friends/referral/issue",proof(identity,"refer",""));
             fields(result,"url pool_limit remaining");
-            require(text(result.get("url")).matches("https://185\\.251\\.89\\.19:8443/invite/#[0-9a-f]{64}"));
+            require(text(result.get("url")).matches("https://185\\.251\\.89\\.19:8443/(?:invite|i)/#[0-9a-f]{64}"));
             require(integer(result.get("pool_limit"),1)==500&&integer(result.get("remaining"),0)<=500);
             return result;
         }

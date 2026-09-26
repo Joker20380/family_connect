@@ -50,3 +50,28 @@ def test_shorter_challenge_expires_at_server_deadline(access):
  device=DeviceIdentity.generate();p=proof(access,device,access.invite())
  access.clock=lambda:1100
  with pytest.raises(Rejected):access.complete(p,'activate')
+
+def test_device_status_unknown_registered_and_invite_revoked(access):
+    device=DeviceIdentity.generate()
+    unknown=access.status(proof(access,device,purpose='status'))
+    assert unknown==dict(device=device.reference,registered=False,revoked=False,active=False)
+    code=access.invite()
+    record=access.complete(proof(access,device,code),'activate')
+    assert record['device']==device.reference
+    registered=access.status(proof(access,device,purpose='status'))
+    assert registered==dict(device=device.reference,registered=True,revoked=False,active=True)
+    with access.db() as db:
+        db.execute('UPDATE invites SET revoked=1 WHERE hash=?',(access.code_hash(code),))
+    revoked=access.status(proof(access,device,purpose='status'))
+    assert revoked==dict(device=device.reference,registered=True,revoked=True,active=False)
+
+
+def test_device_status_does_not_consume_invite_and_rejects_replay(access):
+    device=DeviceIdentity.generate()
+    code=access.invite()
+    first=proof(access,device,purpose='status')
+    assert access.status(first)['registered'] is False
+    # The read-only query must not consume the invitation.
+    record=access.complete(proof(access,device,code),'activate')
+    assert record['device']==device.reference
+    with pytest.raises(Rejected):access.status(first)

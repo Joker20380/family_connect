@@ -8,7 +8,7 @@ class Owner:
  connected=[]
  def connect(self,country,driver,*,transport="tcp"):self.connected.append((country,driver,transport));return {'profile':'fctcp12345678','country':country,'transport':'tcp','sequence':2}
  def register(self,token=''):return {'device':'a'*32,'status':'active'}
- def referral(self):return {'url':'https://185.251.89.19:8443/invite/#'+'a'*64,'remaining':499}
+ def referral(self):return {'url':'https://185.251.89.19:8443/i/#'+'a'*64,'remaining':499}
  def configuration(self,country):
   class Configuration:sequence=2
   result=Configuration();result.country=country;return result

@@ -7,6 +7,16 @@
 - ближайший runtime milestone — **WEBRTC-EU-1 / 5N.1**.
 - все WEBRTC-EU gates пока **NOT RUN**.
 
+26.09 активация (WIP): начато упрощение invitation/activation. Сервер Friends:
+read-only authenticated recovery `POST /friends/device/status` и purpose `status`
+(не расходует приглашение), canonical URL `/i/` (redirect совместимость с
+`/invite/`), smart landing page с одним primary CTA и без checkbox/инструкций,
+QR = canonical URL; клиенты: `FriendsAccessAndroid.deviceStatus()` + recovery при
+старте, Python `FriendsClient.device_status()`; тесты server/client (65+5 passed).
+Real-device Android E2E acceptance ещё НЕ пройден; версии/production/WEBRTC gates
+не менялись. [design](design/activation-simplification-design.ru.md),
+[android note](design/android-sideload-deferred-bootstrap.ru.md).
+
 26.09: [аудит использования и сбоев VPN](releases/2026-09-26-vpn-health.ru.md).
 22 устройства/18 действующих (+4 с24.09); NL12 с handshake<24ч,4 свежих,
 3–4 передают трафик; RU0. Найдена история sysstat: AWG около26.7ГиБ с24.09

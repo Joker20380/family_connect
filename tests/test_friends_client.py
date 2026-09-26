@@ -35,6 +35,8 @@ def service(tmp_path):
                 result = dict(device=access.complete(body, request.url.path.rsplit('/',1)[1])['device'], status='active')
             elif request.url.path == '/friends/referral/claim':
                 result = referrals.claim(**body)
+            elif request.url.path == '/friends/device/status':
+                result = access.status(body)
             elif request.url.path == '/friends/referral/issue':
                 result = referrals.issue(body)
             elif request.url.path == '/friends/chat/challenge':
@@ -69,6 +71,20 @@ def test_existing_api_activation_referral_and_persisted_identity(service):
         assert db.execute('SELECT COUNT(*) FROM challenges WHERE used=0').fetchone()[0] == 0
     assert original == (identity.reference, identity.public_identity, identity.wireguard_public_key)
     assert seen.count('/friends/challenge') == 4
+
+
+def test_device_status_recovery_round_trip(service):
+    access, client, _ = service
+    # Unknown device: authenticated query returns not-registered without consuming anything.
+    status = client.device_status()
+    assert status == dict(device=client.device.reference, registered=False, revoked=False, active=False)
+    with access.db() as db:
+        assert db.execute('SELECT COUNT(*) FROM devices').fetchone()[0] == 0
+    # After activation the same local identity reports registered/active.
+    invitation = access.invite()
+    client.activate(invitation)
+    status = client.device_status()
+    assert status == dict(device=client.device.reference, registered=True, revoked=False, active=True)
 
 
 def test_not_activated_and_revoked_owner_cannot_refer(service):

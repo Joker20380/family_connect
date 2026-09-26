@@ -6,7 +6,7 @@ import re
 
 def invitation_matrix(url):
     # Only the existing referral URL is encoded; never keys or VPN profiles.
-    if not isinstance(url, str) or not re.fullmatch(r'https://185\.251\.89\.19:8443/invite/#[0-9a-f]{64}', url):
+    if not isinstance(url, str) or not re.fullmatch(r'https://185\.251\.89\.19:8443/(?:invite|i)/#[0-9a-f]{64}', url):
         raise ValueError('Invalid invitation link')
     name = ctypes.util.find_library('qrencode')
     if not name:

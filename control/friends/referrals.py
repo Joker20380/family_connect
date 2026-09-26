@@ -40,7 +40,7 @@ class Referrals:
             self.active(db,device)
             db.execute('INSERT OR IGNORE INTO referral_links VALUES (?,?)',(token_hash,device))
             remaining=self.LIMIT-db.execute('SELECT COUNT(*) FROM referral_claims').fetchone()[0]
-        return dict(url='https://185.251.89.19:8443/invite/#'+token,pool_limit=self.LIMIT,remaining=max(0,remaining))
+        return dict(url='https://185.251.89.19:8443/i/#'+token,pool_limit=self.LIMIT,remaining=max(0,remaining))
 
     def claim(self, token, request_id):
         if type(token) is not str or not re.fullmatch('[0-9a-f]{64}',token):raise Rejected()

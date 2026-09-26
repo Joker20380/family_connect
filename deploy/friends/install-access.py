@@ -41,7 +41,7 @@ StandardError=null
 WantedBy=multi-user.target
 ''')
 subprocess.run(['systemctl','daemon-reload'],check=True);subprocess.run(['systemctl','enable','--now',unit.name],check=True)
-section='''        location = /invite/ {
+section='''        location = /i/ {
             root /etc/fc;
             try_files /invite.html =404;
             default_type text/html;
@@ -50,7 +50,16 @@ section='''        location = /invite/ {
             add_header X-Content-Type-Options "nosniff" always;
             add_header Content-Security-Policy "'''+csp+'''" always;
         }
-        location ~ ^/friends/(challenge|activate|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|notices/publish)$ {
+        location = /invite/ {
+            root /etc/fc;
+            try_files /invite.html =404;
+            default_type text/html;
+            add_header Cache-Control "no-store" always;
+            add_header Referrer-Policy "no-referrer" always;
+            add_header X-Content-Type-Options "nosniff" always;
+            add_header Content-Security-Policy "'''+csp+'''" always;
+        }
+        location ~ ^/friends/(challenge|activate|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/status|notices/publish)$ {
             if ($request_method != POST) { return 405; }
             proxy_pass http://127.0.0.1:18084;
             proxy_set_header Host 127.0.0.1;

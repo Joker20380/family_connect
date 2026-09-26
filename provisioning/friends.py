@@ -144,10 +144,22 @@ class FriendsClient:
         response = self._post('/friends/referral/issue', self._proof('refer'))
         self._fields(response, 'url pool_limit remaining')
         if (type(response['url']) is not str or not re.fullmatch(
-                r'https://185\.251\.89\.19:8443/invite/#[0-9a-f]{64}', response['url'])
+                r'https://185\.251\.89\.19:8443/(?:invite|i)/#[0-9a-f]{64}', response['url'])
                 or self._integer(response['pool_limit'], 1) != 500
                 or self._integer(response['remaining']) > 500):
             raise FriendsError('invalid_response')
+        return response
+
+    def device_status(self):
+        """Authenticated read-only recovery query. Never consumes an invitation."""
+        proof = self._proof('status')
+        response = self._post('/friends/device/status', proof)
+        self._fields(response, 'device registered revoked active')
+        if response['device'] != self.device.reference:
+            raise FriendsError('invalid_response')
+        for key in ('registered', 'revoked', 'active'):
+            if type(response[key]) is not bool:
+                raise FriendsError('invalid_response')
         return response
 
     def configuration(self, country, anchor, *, floor=0, previous_hash=None):

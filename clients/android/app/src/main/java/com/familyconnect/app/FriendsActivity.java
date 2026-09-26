@@ -220,7 +220,9 @@ public final class FriendsActivity extends LocalizedActivity {
     private void activate(){navigate(0);register(false);}
     private void register(boolean connectAfter){
         if(busy)return;
-        if(pendingInvitation.isEmpty()&&!getPreferences(MODE_PRIVATE).getBoolean("activated",false)){detail.setText(R.string.friends_invite_hint);return;}
+        if(pendingInvitation.isEmpty()&&!getPreferences(MODE_PRIVATE).getBoolean("activated",false)){
+            recover();return;
+        }
         final String invitation=pendingInvitation;
         busy=true;detail.setText(R.string.checking);render();
         worker.execute(()->{
@@ -231,6 +233,20 @@ public final class FriendsActivity extends LocalizedActivity {
             runOnUiThread(()->{if(isDestroyed())return;busy=false;
                 if(!registered.isEmpty()){pendingInvitation="";getPreferences(MODE_PRIVATE).edit().putBoolean("activated",true).putString("device",registered).apply();}
                 detail.setText(result);render();if(connectAfter&&!registered.isEmpty())toggle();
+            });
+        });
+    }
+    private void recover(){
+        // Authenticated recovery: the local identity may already be enrolled server-side.
+        busy=true;detail.setText(R.string.checking);render();
+        worker.execute(()->{
+            int message=R.string.friends_unavailable;String device="";
+            try{device=new FriendsAccessAndroid(this).deviceStatus();if(!device.isEmpty())message=R.string.friends_activated;}
+            catch(FriendsAccessAndroid.Denied denied){message=R.string.friends_invite_hint;}catch(Exception failure){}
+            final String registered=device;final int result=message;
+            runOnUiThread(()->{if(isDestroyed())return;busy=false;
+                if(!registered.isEmpty())getPreferences(MODE_PRIVATE).edit().putBoolean("activated",true).putString("device",registered).apply();
+                detail.setText(result);render();
             });
         });
     }
