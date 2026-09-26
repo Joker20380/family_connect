@@ -1,5 +1,25 @@
 [Русская версия →](README.ru.md)
 
+**Stage5 priority update:** Android → Telemost VP8 → Linux EU Gateway → Internet.
+Reticulum control/recovery remains; Windows Home Gateway is a secondary feature.
+Preparation only: Family encrypted binary/TCP/DNS/full-device transport is not yet
+implemented or validated. [Current plan and WEBRTC-EU gates](docs/PLAN.md).
+Earlier Home Gateway notes below describe retained future functionality.
+
+WebRTC underlay preparation: Reticulum frames may travel through an isolated
+WB/Telemost/VK carrier as an alternative to direct paths. Telemost is now the first
+candidate after a reported cellular video call from Krasnodar to Belgium; WB is
+the reserve. Headless/binary/RNS carrier and Android↔Windows acceptance remain open. [Updated Stage5 plan](docs/PLAN.md).
+
+## Personal/Home Gateway — active development
+
+Stage 5 targets a secure Android↔Windows Home PC connection under mobile
+allowlist restrictions. Reticulum handles discovery and connection negotiation;
+IP traffic uses a selected encrypted transport, direct or through a relay, then
+diagnostic Internet or the existing Family Connect VPN. Stable Device Identity, no per-user DDNS or manual key transfer. Experimental,
+not yet implemented; real Android↔Windows RNS-2 acceptance is still required.
+[Design and milestones](docs/reticulum/HOME_GATEWAY_DESIGN.md) · [Plan](docs/PLAN.md).
+
 # Family Connect
 
 **Private connectivity for families and devices across borders.**

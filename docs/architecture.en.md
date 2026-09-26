@@ -1,5 +1,35 @@
 > Historical QUIC laboratory design. For the current product paths and platform status, see the [architecture map](architecture.md) and [STATUS](STATUS.md).
 
+## Current Stage5 critical path — Android → Telemost VP8 → Linux EU
+
+Reticulum control/identity/recovery remains; Windows Home Gateway and RNS packet
+encapsulation are secondary, not prerequisites for restricted-mobile Internet.
+Phase1 TCP+DNS over an authenticated Family session, then full UDP; reuse existing
+transport/TUN facilities. [Current diagram](architecture.md) · [Plan5N](PLAN.md).
+Prior Home/RNS diagrams below are retained for their separate feature. No runtime
+implementation/acceptance is claimed by this preparation-only correction.
+
+## WebRTC underlay extension (2026-09-25)
+
+Reticulum Overlay → UnderlayPathManager → direct IPv6/IPv4 or interchangeable
+WB/Telemost/VK WebRTC carrier → Windows Home Gateway. Provider logic stays below
+Reticulum; Family identity and RNS Link encryption remain authoritative.
+[Current architecture and diagram](architecture.md) · [Design](reticulum/HOME_GATEWAY_DESIGN.md).
+Documentation/preparation only; Telemost prioritized after a reported cellular video call to Belgium; WB reserve.
+All WEBRTC gates remain open.
+
+## Personal Gateway / Reticulum Transport — 2026-09-25
+
+The current architecture now includes the planned personal Android → selected encrypted data transport
+→ Windows Home Gateway → Internet/existing Family Connect VPN path. Reticulum
+provides control/discovery/negotiation; IP-over-RNS is optional. The first gate is
+control and data ingress reachability under active mobile allowlist restrictions.
+See the [architecture map and diagram](architecture.md#personal-gateway--reticulum-transport)
+and [Home Gateway design](reticulum/HOME_GATEWAY_DESIGN.md). This is an experimental
+active development track, not a working or production-ready tunnel. The historical
+QUIC constraints below describe that laboratory; personal FAMILY-authorized egress
+is a separate explicit mode, not permission to turn public relays into exits.
+
 # Architecture and trust boundaries
 
 [Русский](architecture.ru.md) · [Guide](../README.en.md)

@@ -1,5 +1,30 @@
 # XHTTP/TLS: исследование и реализация5.3в
 
+**Приоритет25.09 уточнён:** [Restricted Android→Telemost VP8→Linux EU](PLAN.md)
+без обязательного Windows Home Gateway/IP-over-RNS. Reticulum control/recovery
+сохраняется. [Решение в существующем дизайне](reticulum/HOME_GATEWAY_DESIGN.md).
+Добавлены WEBRTC-EU-1–6/5N; сначала binary/auth, затем TCP+DNS/full-device.
+Текущий scope — документация/preparation; существующие AWG/TCP/XHTTP не заменяются.
+
+## WebRTC underlay: дополнение25.09
+
+Добавлен отдельный кандидат достижимости: Reticulum frames через WebRTC
+видеосервиса, с изолированными WB/Telemost/VK providers. Первый PoC-кандидат —
+WB/VP8; доступность на целевой SIM не подтверждена. Это дополнение, не замена
+существующего XHTTP/direct пути. [План](PLAN.md) · [Дизайн](reticulum/HOME_GATEWAY_DESIGN.md).
+Текущая работа ограничена документацией/preparation; API/live/device tests не запускались.
+
+## Уточнение стратегии25.09 — Home Gateway
+
+Главная цель — защищённое соединение телефон↔домашний Windows при активных
+мобильных белых списках. Reticulum отвечает за control/discovery/negotiation;
+data plane выбирается отдельно. [Актуальный план](PLAN.md) ·
+[Дизайн](reticulum/HOME_GATEWAY_DESIGN.md). Сначала проверить достижимость control
+и data ingress, затем relay-assisted session; прямой путь — оптимизация.
+XHTTP/TLS — существующий кандидат, не доказанный обход ограничений и не готовый
+reverse tunnel до домашнего ПК. Этот приоритет не означает автоматическое
+возобновление всех прежних задач5.3в или закрытие их acceptance.
+
 24.09.2026. Запрос пользователя: обязательная поддержка сетей с белыми списками,
 ориентир Shuka. Первый регион испытаний — Краснодар; оператор пока неизвестен.
 Телефон/абонентские данные в репозитории не хранятся. Это обзор найденных первичных

@@ -1,5 +1,119 @@
 # Architecture map / Карта архитектуры
 
+## Current decision — Restricted WebRTC to EU Gateway first
+
+Priority correction25.09, preparation-only: remove the Windows home-PC detour from
+restricted mobile Internet access. Reticulum is retained for identity binding,
+control/recovery, provisioning, messages/discovery and future Meshtastic bootstrap.
+Home Gateway remains a secondary LAN/NAS/RDP/residential-egress feature. Existing
+Home/RNS-underlay diagrams below still apply to that feature, not the current critical path.
+
+```text
+CONTROL: Device Identity / FAMILY ↔ Reticulum control/recovery/provisioning
+
+Android apps → VpnService/TUN → existing stream conversion
+                                     │
+                         existing transport selection
+                         ├── AWG
+                         ├── TCP / XHTTP
+                         └── WebRtcRestrictedTransport
+                              Family mux + authenticated E2E encryption
+                                     │
+                              opaque Telemost VP8 carrier
+                                     │
+                                  SFU / RTC
+                                     │
+                         headless Linux EU Family Gateway
+                         Family admission / mux / DNS / egress
+                                     │
+                                  Internet
+```
+
+Telemost first, WB fallback after real-network validation; no second transport
+manager/TUN converter unless reuse is shown unsuitable. Phase1 TCP+DNS, phase2
+UDP with reserved framing; unsupported UDP/IPv6 must not escape directly. Provider
+is untrusted; encryption of payloads, destinations and DNS is above carrier and
+Family admission precedes any egress. Secure-session/reliability/mux selection is
+an open implementation prerequisite. One conference supports many connections.
+Reticulum encapsulation is optional and benchmark-driven, not mandatory for5N.
+[Existing design/decision](reticulum/HOME_GATEWAY_DESIGN.md) · [Gates](PLAN.md).
+
+## Whitelisted WebRTC Carrier — architecture extension
+
+Preparation-only checkpoint; no carrier implementation or runtime acceptance yet.
+Previous Home Gateway + interchangeable WebRTC underlay = the path below.
+Existing direct paths and the selectable IP data transport strategy remain valid;
+this workstream proves opaque RNS frame carriage before IP-over-RNS-over-WebRTC.
+
+```text
+Android / Device Identity
+          │
+Reticulum Overlay (identity / Link encryption / routing)
+          │
+UnderlayPathManager
+          ├── DirectIPv6
+          ├── DirectIPv4 / future NAT traversal
+          └── WebRTC Carrier (isolated process; framed private IPC)
+                      ├── WB (reserve candidate)
+                      ├── Telemost (first PoC candidate)
+                      └── VK (later)
+                            │
+                         SFU / RTC
+                            │
+                  Windows Reticulum Overlay
+                            │
+                    Windows Home Gateway
+                            │
+                  existing Family Connect VPN
+```
+
+Reticulum = overlay; WebRTC = underlay. SFU/signaling is untrusted and cannot
+replace Family authentication. Only RNS Link payload encryption is claimed;
+announces/public metadata are not secret. Session room IDs are ephemeral and
+rendezvous must avoid a circular bootstrap dependency. No TUN/SOCKS/HTTP proxy
+belongs in the carrier. WB guest join is a reference-code finding, not proof of
+anonymous room creation or mobile whitelist availability. The full contracts,
+reference SHAs, lifecycle/security and WEBRTC-1–5 gates extend the
+[existing design](reticulum/HOME_GATEWAY_DESIGN.md). [Plan](PLAN.md).
+
+## Personal Gateway / Reticulum Transport
+
+Strategy revised by the owner on 2026-09-25: the objective is a secure Android↔home
+Windows connection on a mobile network with active allowlist restrictions.
+Reticulum carries discovery/authentication/transport negotiation and recovery;
+user IP packets may use any approved encrypted data transport. IP-over-RNS is
+optional. [Full design and acceptance](reticulum/HOME_GATEWAY_DESIGN.md).
+
+```text
+Family Control / Device Identity / FAMILY authorization
+                         │
+        Reticulum: discovery + signed negotiation
+                         │
+           Android Phone ↔ Windows Home PC
+                         │
+Data: Android TUN ══ encrypted selected transport ══ Windows Gateway
+                        direct OR relay                    │
+                                               diagnostic Internet
+                                                OR existing FC VPN
+                                                           │
+                                                        Internet
+```
+
+Existing Device Identity/FAMILY authorizes both peers and binds negotiated data keys
+and paths. End-to-end encryption terminates at the home PC even when using a relay.
+First prove reachable control/bootstrap and data ingress on the target network;
+then relay-assisted sessions, real TUN packets and gateway egress. Direct paths/NAT
+traversal are later optimisation. No static home IP/DDNS or manual key transfer.
+RNS control success alone is not data reachability or NAT traversal.
+
+Reference `rns==1.5.1` stays behind the control adapter. Reuse existing VPN engines
+where suitable; a reverse/relay data path still needs implementation. No transport
+has been selected or validated for the restricted mobile path yet. Preserve mutual
+FAMILY authorization, fail-closed including DNS/IPv6, Android socket protection,
+Windows route ownership and no ISP fallback from VPN-upstream mode. Experimental
+flag defaults OFF. Home Gateway remains unimplemented; RNS-2 now means real IP
+packets over the selected transport, not necessarily over RNS.
+
 Family Connect contains a product client path and separate networking experiments.
 Use [STATUS](STATUS.md) for platform integration and deployment facts; older design
 records describe their named stage, not the entire current application.

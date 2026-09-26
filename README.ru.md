@@ -1,5 +1,25 @@
 [English →](README.md)
 
+**Новый приоритет этапа5:** Android → Telemost VP8 → Linux EU Gateway → Internet.
+Reticulum control/recovery сохраняется, Windows Home Gateway — вторичная функция.
+Пока подготовка: Family carrier/auth/TCP/DNS/full-device ещё не реализованы и не
+проверены. [План и WEBRTC-EU gates](docs/PLAN.md). Home Gateway ниже — сохранённая
+будущая функция, не prerequisite для решения мобильных белых списков.
+
+Подготовка WebRTC underlay: Reticulum frames могут передаваться через изолированный
+WB/Telemost/VK carrier наряду с direct paths. Первым теперь Telemost: пользователь подтвердил25.09 видеозвонок
+Краснодар→Бельгия по сотовой сети при недоступном Family VPN. Headless/binary/RNS
+carrier ещё не проверен; код и device tests отложены. [Обновлённый этап5](docs/PLAN.md).
+
+## Personal/Home Gateway — активная разработка
+
+Stage5: соединение Android↔домашний Windows в мобильной сети с белыми списками.
+Reticulum — discovery и согласование; IP-трафик — через подходящий защищённый
+транспорт напрямую или через relay, далее Internet либо существующий Family Connect VPN. Стабильная Device
+Identity, без per-user DDNS и переноса ключей. Пока зафиксированы требования:
+транспорт не реализован, реальная приёмка Android↔Windows RNS-2 впереди.
+[Дизайн и milestones](docs/reticulum/HOME_GATEWAY_DESIGN.md) · [План](docs/PLAN.md).
+
 # Family Connect
 
 **Личная сеть для семей и устройств по разные стороны границ.**
