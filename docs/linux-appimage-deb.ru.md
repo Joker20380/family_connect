@@ -197,6 +197,34 @@ Linux UA: AppImage — primary, `Ubuntu / Debian / Mint — .deb` и «Для о
 пользователей — .tar.gz» — secondary; checkbox «Приложение установлено» отсутствует.
 Скачанные с production артефакты совпадают с записанными SHA256 byte-level.
 
+### Дополнительная runtime-проверка (26.09, рабочая Ubuntu 26.04)
+
+Опубликованные артефакты дополнительно проверены на рабочей машине (Ubuntu 26.04,
+GNOME Wayland, все host GTK/GI пакеты и NetworkManager уже установлены). Это
+developer-machine smoke, не заменяет clean-Ubuntu acceptance выше.
+
+- AppImage: `--appimage-extract` успешен; launcher GI/GTK/Adw preflight проходит,
+  приложение доходит до создания `Adw.ApplicationWindow`. На этой машине нет FUSE
+  (`/dev/fuse` отсутствует), поэтому прямой запуск AppImage требует
+  `--appimage-extract-and-run` / `APPIMAGE_EXTRACT_AND_RUN=1`; реальное окно из
+  sandbox не рендерится (display недостижим, нет Xvfb/sudo) — GUI-init покрыт CI
+  xvfb smoke.
+- AppImage `--integrate`: полный flow проверен в изолированном writable `$HOME` —
+  корректные `~/.local/share/applications/com.familyconnect.Client.desktop`
+  (`Exec="...AppImage" %u`, `MimeType=x-scheme-handler/familyconnect`), иконка
+  11 896 B, `xdg-mime query default x-scheme-handler/familyconnect` →
+  `com.familyconnect.Client.desktop`.
+- DEB: `dpkg-deb --info/--contents` подтверждают `Depends` (в т.ч.
+  `python3-gi`, `gir1.2-gtk-4.0`, `gir1.2-adw-1`, `librsvg2-common`,
+  `network-manager`, `libqrencode4`, `libzbar0`) и layout `/usr/bin/family-connect`
+  → `/usr/lib/family-connect/launcher.py`; launcher preflight проходит, приложение
+  доходит до создания окна.
+
+VPN runtime prerequisites на этом хосте: kernel `wireguard` загружен, `network-manager`,
+`pkexec`/`polkit`, `ip`, `nft`, `libqrencode4`/`libzbar0` присутствуют; `wg` tool,
+`/dev/net/tun` и запущенный NetworkManager daemon в контейнере отсутствуют — реальный
+VPN tunnel в sandbox не поднимается (см. Known limitations).
+
 ## 10. Known limitations
 
 - AppImage НЕ self-contained по GTK-стеку: требует host `python3-gi`,
