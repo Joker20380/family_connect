@@ -29,7 +29,7 @@ except (ImportError, ValueError) as exc:
     sys.stderr.write(
         'Family Connect requires GTK 4 / libadwaita system packages.\n'
         'Ubuntu/Debian: sudo apt install python3-gi python3-gi-cairo '
-        'gir1.2-gtk-4.0 gir1.2-adw-1\n'
+        'gir1.2-gtk-4.0 gir1.2-adw-1 librsvg2-common\n'
         f'({exc})\n'
     )
     raise SystemExit(2)

@@ -47,7 +47,9 @@ Host/system dependencies (документируются, не bundle):
 - `python3`, `python3-gi`, `python3-gi-cairo`;
 - `gir1.2-gtk-4.0`, `gir1.2-adw-1`;
 - `network-manager` (`nmcli`);
-- `libqrencode4`, `libzbar0` (QR в Friends UI).
+- `libqrencode4`, `libzbar0` (QR в Friends UI);
+- `librsvg2-common` (SVG loader gdk-pixbuf — без него не рендерится встроенный
+  terminal-виджет; приложение запускается, но виджет пуст).
 
 ## 5. Привилегированные VPN helpers
 

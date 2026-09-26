@@ -191,6 +191,7 @@ def build_deb(bundle, version, output):
     (staging / 'usr' / 'bin' / 'family-connect').write_text(
         '#!/bin/sh\n'
         'export PYTHONNOUSERSITE=1\n'
+        'export PYTHONDONTWRITEBYTECODE=1\n'
         'exec /usr/bin/python3 /usr/lib/family-connect/launcher.py "$@"\n'
     )
     (staging / 'usr' / 'bin' / 'family-connect').chmod(0o755)
@@ -210,7 +211,7 @@ def build_deb(bundle, version, output):
         'Architecture: amd64\n'
         'Maintainer: Family Connect <maintainers@family-connect.invalid>\n'
         f'Installed-Size: {installed_size(staging / "usr")}\n'
-        'Depends: python3 (>= 3.10), python3-gi, python3-gi-cairo, gir1.2-gtk-4.0, gir1.2-adw-1, network-manager, libqrencode4, libzbar0\n'
+        'Depends: python3 (>= 3.10), python3-gi, python3-gi-cairo, gir1.2-gtk-4.0, gir1.2-adw-1, librsvg2-common, network-manager, libqrencode4, libzbar0\n'
         'Section: net\n'
         'Priority: optional\n'
         'Homepage: https://github.com/Joker20380/family_connect\n'
