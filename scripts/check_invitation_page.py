@@ -89,23 +89,29 @@ try:
     check(p.ids.get('open-link', {}).get('href') == 'familyconnect://invite/' + tok, 'android open uri')
     check('Windows' in p.text.get('others', '') and 'Linux' in p.text.get('others', '') and 'Android' not in p.text.get('others', ''), 'android others')
     check('hidden' in p.ids.get('all', {}), 'android all hidden')
+    check('hidden' in p.ids.get('compat', {}), 'android compat hidden')
     passed.append('android-valid')
 
     # Windows + valid
     p = probe('windows-valid', tok, UAS['windows'])
     check(p.text.get('primary') == 'Скачать для Windows', 'windows primary label')
-    check(p.ids.get('primary', {}).get('href', '').startswith('/downloads/FamilyConnect-Setup-'), 'windows exe href')
+    check(p.ids.get('primary', {}).get('href') == '/downloads/FamilyConnect-Setup-0.2.15-pilot-unsigned.exe', 'windows primary 0.2.15 href')
     check('hidden' not in p.ids.get('open', {}), 'windows open visible')
     check(p.ids.get('open-link', {}).get('href') == 'familyconnect://invite/' + tok, 'windows open uri')
     check('Android' in p.text.get('others', '') and 'Linux' in p.text.get('others', '') and 'Windows' not in p.text.get('others', ''), 'windows others')
+    check('hidden' not in p.ids.get('compat', {}), 'windows compat visible')
+    check(p.ids.get('compat-link', {}).get('href') == '/downloads/FamilyConnect-Setup-0.2.14-pilot-unsigned.exe', 'windows compat 0.2.14 href')
+    check('0.2.14' in p.text.get('compat', ''), 'windows compat mentions 0.2.14')
+    check('старой Windows 10' in p.text.get('compat', ''), 'windows compat explains old Win10')
     passed.append('windows-valid')
 
     # Linux + valid: no deep-link/open claim
     p = probe('linux-valid', tok, UAS['linux'])
     check(p.text.get('primary') == 'Скачать для Linux', 'linux primary label')
-    check(p.ids.get('primary', {}).get('href', '').startswith('/downloads/FamilyConnect-Control-Linux-'), 'linux package href')
+    check(p.ids.get('primary', {}).get('href') == '/downloads/FamilyConnect-0.2.11-x86_64.AppImage', 'linux AppImage href')
     check('hidden' in p.ids.get('open', {}), 'linux open hidden')
     check('Android' in p.text.get('others', '') and 'Windows' in p.text.get('others', '') and 'Linux' not in p.text.get('others', ''), 'linux others')
+    check('hidden' in p.ids.get('compat', {}), 'linux compat hidden')
     passed.append('linux-valid')
 
     # Unknown + valid: neutral three-button choice
@@ -117,6 +123,8 @@ try:
     check('Скачать Family Connect' in all_text, 'unknown subhead')
     for name in ('Android', 'Windows', 'Linux'):
         check(name in all_text, 'unknown has ' + name)
+    check('0.2.14' in all_text, 'unknown windows compat available')
+    check('Совместимость со старой Windows 10' in all_text, 'unknown compat label')
     passed.append('unknown-valid')
 
     # Linux + missing token
