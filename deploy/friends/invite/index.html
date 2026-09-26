@@ -15,6 +15,7 @@
 <p id="version" class="version" hidden></p>
 <div id="all" class="platforms" hidden></div>
 <div id="open" hidden><span class="q">Уже установили Family Connect?</span><a id="open-link" class="open-btn" href="#">Открыть Family Connect</a></div>
+<div id="secondary" class="others" hidden></div>
 <p id="others" class="others" hidden></p>
 <p id="hint" class="hint"></p>
 </section>
@@ -25,14 +26,14 @@ const token=location.hash.slice(1),valid=/^[a-f0-9]{64}$/.test(token),byId=id=>d
 const clients={
  android:{name:'Android',version:'Beta51 · Android 8.0+ · ARM64',url:'/downloads/FamilyConnect-Test-0.1.18-beta51.apk'},
  windows:{name:'Windows',version:'0.2.15 · Windows 10 1809+ / 11 · x64',url:'/downloads/FamilyConnect-Setup-0.2.15-pilot-unsigned.exe'},
- linux:{name:'Linux',version:'0.2.11 paired preview · GTK4 / libadwaita',url:'/downloads/FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz'}};
+ linux:{name:'Linux',version:'AppImage · 0.2.11 · x86_64',url:'/downloads/FamilyConnect-0.2.11-x86_64.AppImage',secondary:[{label:'Ubuntu / Debian / Mint',url:'/downloads/FamilyConnect_0.2.11_amd64.deb'},{label:'Для опытных пользователей',url:'/downloads/FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz'}]}};
 const order=['android','windows','linux'],ua=navigator.userAgent;
 const platform=/Android/i.test(ua)?'android':/Windows/i.test(ua)?'windows':/Linux/i.test(ua)?'linux':'';
 function render(){
  byId('invitation-status').dataset.valid=String(valid);
  byId('invitation-label').textContent=valid?'Приглашение готово':'Нужна ссылка приглашения';
  byId('hint').textContent=valid?'':'Откройте полную ссылку приглашения, которую вам прислали.';
- const primary=byId('primary'),version=byId('version'),open=byId('open'),others=byId('others'),all=byId('all');
+ const primary=byId('primary'),version=byId('version'),open=byId('open'),others=byId('others'),all=byId('all'),secondary=byId('secondary');
  if(platform){
   const c=clients[platform];
   primary.hidden=false;all.hidden=true;version.hidden=false;
@@ -40,6 +41,7 @@ function render(){
   const canOpen=(platform==='android'||platform==='windows')&&valid;
   open.hidden=!canOpen;if(canOpen)byId('open-link').href='familyconnect://invite/'+token;
   others.hidden=false;others.innerHTML='Другие платформы: '+order.filter(k=>k!==platform).map(k=>'<a href="'+clients[k].url+'">'+clients[k].name+'</a>').join(' · ');
+  if(c.secondary){secondary.hidden=false;secondary.innerHTML=c.secondary.map(o=>o.label+' — <a href="'+o.url+'">'+o.url.split('/').pop()+'</a>').join('<br>');}else{secondary.hidden=true;}
  }else{
   primary.hidden=true;version.hidden=true;open.hidden=true;others.hidden=true;all.hidden=false;
   all.innerHTML='<span class="subhead">Скачать Family Connect</span>'+order.map(k=>'<a class="alt" href="'+clients[k].url+'">'+clients[k].name+'</a>').join('');
