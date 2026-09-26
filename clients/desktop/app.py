@@ -355,7 +355,7 @@ class StatsPanel(TerminalCard):
         if self.last is None or now<=self.last[2] or rx<self.last[0] or tx<self.last[1]:
             self.last=(rx,tx,now);return
         last_rx,last_tx,last_now=self.last;delta=now-last_now
-        self.down=(self.down+[(rx-last_rx)/delta/1024])[-90];self.up=(self.up+[(tx-last_tx)/delta/1024])[-90]
+        self.down=(self.down+[(rx-last_rx)/delta/1024])[-90:];self.up=(self.up+[(tx-last_tx)/delta/1024])[-90:]
         self.total_down+=rx-last_rx;self.total_up+=tx-last_tx
         self.last=(rx,tx,now);self.graph.queue_draw();self._refresh_summary()
     def set_state(self,connected):
