@@ -1,57 +1,141 @@
-"""Local Firefox acceptance of the invitation page; synthetic tokens, no live claims."""
+"""Local acceptance of the invitation page across platform User-Agents; synthetic tokens."""
 from pathlib import Path
-import base64,hashlib,json,re,subprocess,tempfile,threading
-from http.server import BaseHTTPRequestHandler,HTTPServer
-ROOT=Path(__file__).resolve().parents[1]
-OUTPUT=ROOT/'artifacts/invitation';OUTPUT.mkdir(parents=True,exist_ok=True)
-source=(ROOT/'deploy/friends/invite/index.html').read_text()
-check=r'''
-addEventListener('load',async()=>{
- try{
-  document.documentElement.classList.add('no-motion');
-  const expected=/^[a-f0-9]{64}$/.test(location.hash.slice(1)),fragment=location.hash;
-  function check(v,message){if(!v)throw Error(message)}
-  const status=byId('invitation-status'),primary=byId('primary'),open=byId('open'),hint=byId('hint');
-  check(status.dataset.valid===String(expected),'status validity');
-  check(primary.getAttribute('href').startsWith('/downloads/FamilyConnect-'),'download link');
-  check(primary.textContent.includes('Скачать'),'initial primary is download');
-  check(open.hidden===!expected,'open link visibility');
-  if(expected){
-    check(open.getAttribute('href')==='familyconnect://invite/'+location.hash.slice(1),'exact URI');
-    primary.click();
-    check(primary.textContent.includes('Открыть'),'primary becomes open after install start');
-    check(primary.getAttribute('href')==='familyconnect://invite/'+location.hash.slice(1),'primary URI after open');
-    check(sessionStorage.getItem('fc_install_started')==='1','install marker persisted');
-  }else{
-    check(!hint.textContent.includes('Открыть Family Connect')||open.hidden,'invalid hidden open');
-  }
-  check(location.hash===fragment,'fragment preserved');
-  check(document.documentElement.scrollWidth<=innerWidth,'horizontal overflow');
-  await fetch('/result',{method:'POST',body:JSON.stringify({passed:true,invitation:expected,checks:8})});
- }catch(e){await fetch('/result',{method:'POST',body:JSON.stringify({passed:false,error:String(e)})});}
-});
-'''
+import base64, hashlib, json, re, subprocess, tempfile, threading
+from html.parser import HTMLParser
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
-page=source.replace('</script>',check+'</script>')
-def digest(tag):return base64.b64encode(hashlib.sha256(re.search('<'+tag+'>(.*?)</'+tag+'>',page,re.S).group(1).encode()).digest()).decode()
-csp="default-src 'none'; script-src 'sha256-"+digest('script')+"'; style-src 'sha256-"+digest('style')+"'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'"
-result={};done=threading.Event()
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT = ROOT / 'artifacts/invitation'
+OUTPUT.mkdir(parents=True, exist_ok=True)
+source = (ROOT / 'deploy/friends/invite/index.html').read_text()
+
+def digest(tag):
+    return base64.b64encode(hashlib.sha256(re.search('<'+tag+'>(.*?)</'+tag+'>', source, re.S).group(1).encode()).digest()).decode()
+
+csp = ("default-src 'none'; script-src 'sha256-" + digest('script') + "'; style-src 'sha256-" + digest('style') + "'; "
+       "connect-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'")
+
+
+class Probe(HTMLParser):
+    def __init__(self):
+        super().__init__(); self.ids = {}; self.text = {}; self.stack = []
+    def handle_starttag(self, tag, attrs):
+        d = dict(attrs); iid = d.get('id')
+        if iid is not None:
+            self.ids[iid] = d; self.text.setdefault(iid, ''); self.stack.append(iid)
+        else:
+            self.stack.append(None)
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs); self.handle_endtag(tag)
+    def handle_endtag(self, tag):
+        if self.stack: self.stack.pop()
+    def handle_data(self, data):
+        for iid in self.stack:
+            if iid is not None: self.text[iid] = self.text.get(iid, '') + data
+
+
 class H(BaseHTTPRequestHandler):
- def log_message(self,*a):pass
- def do_GET(self):
-  raw=page.encode();self.send_response(200);self.send_header('Content-Type','text/html; charset=utf-8');self.send_header('Content-Security-Policy',csp);self.end_headers();self.wfile.write(raw)
- def do_POST(self):
-  assert self.path=='/result';result.update(json.loads(self.rfile.read(int(self.headers['Content-Length']))));self.send_response(204);self.end_headers();done.set()
-s=HTTPServer(('127.0.0.1',0),H);threading.Thread(target=s.serve_forever,daemon=True).start()
+    def log_message(self, *a): pass
+    def do_GET(self):
+        raw = source.encode()
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/html; charset=utf-8')
+        self.send_header('Content-Security-Policy', csp)
+        self.end_headers(); self.wfile.write(raw)
+
+
+server = HTTPServer(('127.0.0.1', 0), H)
+threading.Thread(target=server.serve_forever, daemon=True).start()
+base = f'http://127.0.0.1:{server.server_port}/'
+
+UAS = {
+    'android': 'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Mobile Safari/537.36',
+    'windows': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0',
+    'linux':   'Mozilla/5.0 (X11; Linux x86_64; rv:126.0) Gecko/20100101 Firefox/126.0',
+    'unknown': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
+}
+
+
+def chromium(name, fragment, ua, screenshot):
+    profile = tempfile.mkdtemp(prefix='fc-invite-')
+    cmd = ['chromium', '--headless=new', '--no-sandbox', '--disable-gpu', '--window-size=390,1100',
+           '--user-agent=' + ua, '--virtual-time-budget=3000']
+    cmd += ['--screenshot=' + str(OUTPUT / f'page-{name}.png')] if screenshot else ['--dump-dom']
+    cmd += [base + '#' + fragment]
+    p = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, timeout=45)
+    return p.stdout.decode('utf-8', 'replace')
+
+
+def probe(name, fragment, ua):
+    dom = chromium(name, fragment, ua, screenshot=False)
+    chromium(name, fragment, ua, screenshot=True)
+    p = Probe(); p.feed(dom)
+    return p
+
+
+def check(cond, msg):
+    if not cond: raise AssertionError(msg)
+
+
+passed = []
 try:
- for name,fragment in [('valid','a'*64),('missing',''),('invalid','BAD')]:
-  done.clear();result.clear()
-  profile=tempfile.mkdtemp(prefix='fc-invite-page-')
-  command=['firefox','--headless','--no-remote','--profile',profile,'--window-size','390,1100','--screenshot',str(OUTPUT/f'page-{name}.png'),f'http://127.0.0.1:{s.server_port}/#'+fragment]
-  p=subprocess.Popen(command,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-  try:
-   assert done.wait(35),'Browser timeout';assert result.get('passed'),result
-   p.wait(timeout=20);print(name,result,flush=True)
-  finally:
-   if p.poll() is None:p.terminate();p.wait(timeout=10)
-finally:s.shutdown()
+    tok = 'a' * 64
+    # Android + valid
+    p = probe('android-valid', tok, UAS['android'])
+    check(p.text.get('invitation-label') == 'Приглашение готово', 'android label')
+    check(p.text.get('primary') == 'Скачать для Android', 'android primary label')
+    check(p.ids.get('primary', {}).get('href', '').startswith('/downloads/FamilyConnect-Test-'), 'android apk href')
+    check('hidden' not in p.ids.get('open', {}), 'android open visible')
+    check(p.ids.get('open-link', {}).get('href') == 'familyconnect://invite/' + tok, 'android open uri')
+    check('Windows' in p.text.get('others', '') and 'Linux' in p.text.get('others', '') and 'Android' not in p.text.get('others', ''), 'android others')
+    check('hidden' in p.ids.get('all', {}), 'android all hidden')
+    passed.append('android-valid')
+
+    # Windows + valid
+    p = probe('windows-valid', tok, UAS['windows'])
+    check(p.text.get('primary') == 'Скачать для Windows', 'windows primary label')
+    check(p.ids.get('primary', {}).get('href', '').startswith('/downloads/FamilyConnect-Setup-'), 'windows exe href')
+    check('hidden' not in p.ids.get('open', {}), 'windows open visible')
+    check(p.ids.get('open-link', {}).get('href') == 'familyconnect://invite/' + tok, 'windows open uri')
+    check('Android' in p.text.get('others', '') and 'Linux' in p.text.get('others', '') and 'Windows' not in p.text.get('others', ''), 'windows others')
+    passed.append('windows-valid')
+
+    # Linux + valid: no deep-link/open claim
+    p = probe('linux-valid', tok, UAS['linux'])
+    check(p.text.get('primary') == 'Скачать для Linux', 'linux primary label')
+    check(p.ids.get('primary', {}).get('href', '').startswith('/downloads/FamilyConnect-Control-Linux-'), 'linux package href')
+    check('hidden' in p.ids.get('open', {}), 'linux open hidden')
+    check('Android' in p.text.get('others', '') and 'Windows' in p.text.get('others', '') and 'Linux' not in p.text.get('others', ''), 'linux others')
+    passed.append('linux-valid')
+
+    # Unknown + valid: neutral three-button choice
+    p = probe('unknown-valid', tok, UAS['unknown'])
+    check('hidden' in p.ids.get('primary', {}), 'unknown primary hidden')
+    check('hidden' in p.ids.get('open', {}), 'unknown open hidden')
+    check('hidden' not in p.ids.get('all', {}), 'unknown all visible')
+    all_text = p.text.get('all', '')
+    check('Скачать Family Connect' in all_text, 'unknown subhead')
+    for name in ('Android', 'Windows', 'Linux'):
+        check(name in all_text, 'unknown has ' + name)
+    passed.append('unknown-valid')
+
+    # Linux + missing token
+    p = probe('linux-missing', '', UAS['linux'])
+    check(p.text.get('invitation-label') == 'Нужна ссылка приглашения', 'missing label')
+    check('hidden' in p.ids.get('open', {}), 'missing open hidden')
+    check('полную ссылку' in p.text.get('hint', ''), 'missing hint')
+    check(p.text.get('primary') == 'Скачать для Linux', 'missing still shows linux download')
+    passed.append('linux-missing')
+
+    # Linux + invalid token
+    p = probe('linux-invalid', 'BAD', UAS['linux'])
+    check(p.text.get('invitation-label') == 'Нужна ссылка приглашения', 'invalid label')
+    check('hidden' in p.ids.get('open', {}), 'invalid open hidden')
+    check('полную ссылку' in p.text.get('hint', ''), 'invalid hint')
+    passed.append('linux-invalid')
+
+    for name in passed:
+        print(name, 'passed', flush=True)
+    print('OK', len(passed), 'scenarios', flush=True)
+finally:
+    server.shutdown()

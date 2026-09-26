@@ -4,15 +4,18 @@
 <meta name="referrer" content="no-referrer"><meta name="theme-color" content="#041310">
 <title>Приглашение — Family Connect</title>
 <style>
-:root{color-scheme:dark;--bg:#041310;--panel:#082219;--text:#dafff2;--muted:#99c4b5;--on:#70f4c6;--off:#ffad46;--line:#285347}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace}a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}button{font:inherit;cursor:pointer}[hidden]{display:none!important}.app{max-width:520px;min-height:100dvh;margin:auto;padding:18px 20px 40px;background:linear-gradient(90deg,#70f4c604 1px,transparent 1px),linear-gradient(#70f4c604 1px,transparent 1px);background-size:32px 32px}.header{display:flex;align-items:center;gap:12px;border:1px solid var(--line);padding:14px 16px;background:var(--bg)}.logo{width:37px;height:44px;flex:none;color:var(--on)}h1{font-size:22px;letter-spacing:.01em;font-weight:500;line-height:1.2;margin:0}.eyebrow{font-size:9px;letter-spacing:.1em;color:var(--on);margin-top:4px}.status{display:flex;align-items:center;gap:8px;margin:18px 2px 0;font-size:12px;color:var(--on)}.status[data-valid=false]{color:var(--off)}.led{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 12px currentColor}.panel{background:var(--panel);border:1px solid var(--line);padding:20px;margin-top:18px}.cta{display:block;text-align:center;padding:16px 14px;border:1px solid var(--on);text-decoration:none;background:#70f4c60a;color:var(--on);font-weight:600;font-size:16px;margin-top:8px}.cta:active{transform:scale(.985)}.muted-link{display:block;text-align:center;color:var(--muted);font-size:13px;margin-top:16px;text-decoration:none}.hint{color:var(--muted);font-size:12px;margin:14px 0 0}.footer{font-size:11px;text-align:center;margin:24px 0;color:var(--muted)}
+:root{color-scheme:dark;--bg:#041310;--panel:#082219;--text:#dafff2;--muted:#99c4b5;--on:#70f4c6;--off:#ffad46;--line:#285347}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace}a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}[hidden]{display:none!important}.app{max-width:520px;min-height:100dvh;margin:auto;padding:18px 20px 40px;background:linear-gradient(90deg,#70f4c604 1px,transparent 1px),linear-gradient(#70f4c604 1px,transparent 1px);background-size:32px 32px}.header{display:flex;align-items:center;gap:12px;border:1px solid var(--line);padding:14px 16px;background:var(--bg)}.logo{width:37px;height:44px;flex:none;color:var(--on)}h1{font-size:22px;letter-spacing:.01em;font-weight:500;line-height:1.2;margin:0}.eyebrow{font-size:9px;letter-spacing:.1em;color:var(--on);margin-top:4px}.status{display:flex;align-items:center;gap:8px;margin:18px 2px 0;font-size:12px;color:var(--on)}.status[data-valid=false]{color:var(--off)}.led{width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 12px currentColor}.panel{background:var(--panel);border:1px solid var(--line);padding:20px;margin-top:18px}.cta,.alt,.open-btn{display:block;text-align:center;padding:15px 14px;border:1px solid var(--on);text-decoration:none;background:#70f4c60a;color:var(--on);font-weight:600;font-size:16px;margin-top:10px}.cta:active,.alt:active,.open-btn:active{transform:scale(.985)}.alt{border-color:var(--line);color:var(--text);font-size:15px}.open-btn{background:transparent;font-size:15px}.version{color:var(--muted);font-size:12px;margin:10px 0 0;text-align:center}.q{display:block;color:var(--muted);font-size:13px;margin:16px 0 0;text-align:center}.others{color:var(--muted);font-size:13px;margin:16px 0 0;line-height:2}.others a{color:var(--on);text-decoration:none;border-bottom:1px solid var(--line);padding:0 2px}.subhead{display:block;color:var(--text);font-size:16px;font-weight:600;text-align:center;margin-top:2px}.platforms{display:flex;flex-direction:column}.hint{color:var(--muted);font-size:12px;margin:14px 0 0}.footer{font-size:11px;text-align:center;margin:24px 0;color:var(--muted)}
 </style>
 <main class="app">
 <header class="header"><svg class="logo" viewBox="0 0 40 48" aria-hidden="true"><path d="M20 2 37 12v24L20 46 3 36V12Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="m12 34 8 5V10l-8 5Z" fill="currentColor"/><path d="M27 17v12" stroke="currentColor" stroke-width="3"/></svg><div><h1>Family Connect</h1><div class="eyebrow">SECURE NETWORK TERMINAL</div></div></header>
 <div id="invitation-status" class="status" role="status"><span class="led"></span><span id="invitation-label">Проверяем приглашение</span></div>
 <section class="panel">
 <p id="title" class="hint" style="margin-top:0">Чтобы получить доступ, установите Family Connect на это устройство.</p>
-<a id="primary" class="cta" href="#download">Скачать Family Connect</a>
-<a id="open" class="muted-link" hidden>Приложение уже установлено? Открыть</a>
+<a id="primary" class="cta" href="#">Скачать Family Connect</a>
+<p id="version" class="version" hidden></p>
+<div id="all" class="platforms" hidden></div>
+<div id="open" hidden><span class="q">Уже установили Family Connect?</span><a id="open-link" class="open-btn" href="#">Открыть Family Connect</a></div>
+<p id="others" class="others" hidden></p>
 <p id="hint" class="hint"></p>
 </section>
 <div class="footer">Отправьте эту ссылку человеку, которого хотите подключить.</div>
@@ -23,18 +26,25 @@ const clients={
  android:{name:'Android',version:'Beta51 · Android 8.0+ · ARM64',url:'/downloads/FamilyConnect-Test-0.1.18-beta51.apk'},
  windows:{name:'Windows',version:'0.2.15 · Windows 10 1809+ / 11 · x64',url:'/downloads/FamilyConnect-Setup-0.2.15-pilot-unsigned.exe'},
  linux:{name:'Linux',version:'0.2.11 paired preview · GTK4 / libadwaita',url:'/downloads/FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz'}};
-const platform=/Windows/i.test(navigator.userAgent)?'windows':/Linux/i.test(navigator.userAgent)&&!/Android/i.test(navigator.userAgent)?'linux':'android';
+const order=['android','windows','linux'],ua=navigator.userAgent;
+const platform=/Android/i.test(ua)?'android':/Windows/i.test(ua)?'windows':/Linux/i.test(ua)?'linux':'';
 function render(){
- const client=clients[platform],opened=sessionStorage.getItem('fc_install_started')==='1';
  byId('invitation-status').dataset.valid=String(valid);
  byId('invitation-label').textContent=valid?'Приглашение готово':'Нужна ссылка приглашения';
- byId('primary').href=opened&&valid?'familyconnect://invite/'+token:client.url;
- byId('primary').textContent=opened&&valid?'Открыть Family Connect':'Скачать Family Connect';
- byId('hint').textContent=!valid?'Откройте полную ссылку приглашения, которую вам прислали.':opened?'После установки нажмите «Открыть Family Connect».':'После установки вернитесь и нажмите «Открыть Family Connect».';
- byId('open').hidden=!valid;
- byId('open').href='familyconnect://invite/'+token;
+ byId('hint').textContent=valid?'':'Откройте полную ссылку приглашения, которую вам прислали.';
+ const primary=byId('primary'),version=byId('version'),open=byId('open'),others=byId('others'),all=byId('all');
+ if(platform){
+  const c=clients[platform];
+  primary.hidden=false;all.hidden=true;version.hidden=false;
+  primary.textContent='Скачать для '+c.name;primary.href=c.url;version.textContent=c.version;
+  const canOpen=(platform==='android'||platform==='windows')&&valid;
+  open.hidden=!canOpen;if(canOpen)byId('open-link').href='familyconnect://invite/'+token;
+  others.hidden=false;others.innerHTML='Другие платформы: '+order.filter(k=>k!==platform).map(k=>'<a href="'+clients[k].url+'">'+clients[k].name+'</a>').join(' · ');
+ }else{
+  primary.hidden=true;version.hidden=true;open.hidden=true;others.hidden=true;all.hidden=false;
+  all.innerHTML='<span class="subhead">Скачать Family Connect</span>'+order.map(k=>'<a class="alt" href="'+clients[k].url+'">'+clients[k].name+'</a>').join('');
+ }
 }
-byId('primary').addEventListener('click',()=>{if(valid){sessionStorage.setItem('fc_install_started','1');render();}});
 render();
 </script>
 </html>
