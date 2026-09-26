@@ -1,0 +1,68 @@
+name: Distribute verified desktop preview
+on:
+  # Historical immutable preview: source checkpoint pushes must not publish it.
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: write
+jobs:
+  publish-verified-windows:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Verify pinned platform acceptance
+        shell: python
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          import json,urllib.request,os
+          base='https://api.github.com/repos/Joker20380/family_connect'
+          def get(path):
+            return json.load(urllib.request.urlopen(urllib.request.Request(base+path,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN']}),timeout=30))
+          run=get('/actions/runs/35508127354')
+          assert run['head_sha']=='a6c68fe95fefc30358b41664fd18ffb68234013b'
+          jobs=get('/actions/runs/35508127354/jobs')['jobs']
+          for name in ['windows','linux']:assert any(j['name']==name and j['conclusion']=='success' for j in jobs)
+          for accepted in [35508127345,35508127347]:
+            checked=get('/actions/runs/'+str(accepted))
+            assert checked['head_sha']==run['head_sha'] and checked['conclusion']=='success'
+          artifact=get('/actions/artifacts/10603778715')
+          assert artifact['workflow_run']['head_sha']==run['head_sha'] and not artifact['expired']
+          assert artifact['digest']=='sha256:c784e006c371b79cd97fe79cb095b31d91440fad763877ac28a74fa665f0c547'
+      - uses: actions/download-artifact@v4
+        with:
+          name: FamilyConnect-Windows-Installer-pilot-unsigned
+          run-id: '35508127354'
+          github-token: ${{ github.token }}
+          path: accepted
+      - name: Verify installer and prepare immutable release
+        shell: python
+        run: |
+          import pathlib,hashlib,json,shutil
+          root=pathlib.Path('accepted');name='FamilyConnect-Setup-0.2.9-pilot-unsigned.exe'
+          installers=list(root.rglob(name));assert len(installers)==1
+          exe=installers[0];digest=hashlib.sha256(exe.read_bytes()).hexdigest()
+          manifest=exe.with_name('SHA256SUMS').read_text(encoding='utf-8-sig')
+          assert any(line.split()==[digest,name] for line in manifest.splitlines())
+          out=pathlib.Path('publish');out.mkdir()
+          target=out/'FamilyConnect-Setup-0.2.9-preview-a6c68fe.exe';shutil.copyfile(exe,target)
+          (out/'SHA256SUMS').write_text(digest+'  '+target.name+'\n')
+          (out/'receipt.json').write_text(json.dumps({'source':'a6c68fe95fefc30358b41664fd18ffb68234013b','ci_run':35508127354,'artifact':10603778715,'sha256':digest,'bytes':target.stat().st_size,'channel':'manual-preview'},indent=2)+'\n')
+          pathlib.Path('notes.md').write_text('Test build with a family_connect monospace header and persistent language choice. Windows and Linux platform CI passed; native Windows UI/render checks passed.\n\nWindows x64 manual preview; publisher code signing is not available. In-place installation preserves activation. Physical Windows acceptance remains pending.\n\nThis is a new immutable preview tag. Existing v0.2.9 assets and signed update catalogs are unchanged.\n')
+      - name: Publish new preview tag without replacing old releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          repo=Joker20380/family_connect
+          # The immutable source tag is created through the authorized Git transport.
+          tag=desktop-preview-20260920-a6c68fe
+          if gh release view "$tag" --repo "$repo" >/dev/null 2>&1; then
+            echo 'Preview already exists; refusing to overwrite immutable assets.' >&2
+            exit 1
+          fi
+          if ! gh release create "$tag" publish/* --repo "$repo" --verify-tag --prerelease --title 'Desktop preview 2026-09-20 · family_connect and language' --notes-file notes.md >publish-result.log 2>&1; then
+            sed 's/^/::error::/' publish-result.log
+            exit 1
+          fi

@@ -10,6 +10,7 @@ FIELDS={'Interface':{'PrivateKey','Address','DNS','MTU','ListenPort'},
         'Peer':{'PublicKey','PresharedKey','Endpoint','AllowedIPs','PersistentKeepalive'}}
 
 
+AWG31_FIELDS=set("HeaderProtectionKey ContentPaddingAddition RandomTrailers DisableCookies".split())
 AWG_FIELDS=set("Jc Jmin Jmax S1 S2 S3 S4 H1 H2 H3 H4 I1 I2 I3 I4 I5".split())
 
 
@@ -23,39 +24,56 @@ def parse_tcp(text):
             result[key]=value
         return result
     p=json.loads(text,object_pairs_hook=unique)
-    fields={'type','server','port','id','public_key','server_name','short_id'}
-    if not isinstance(p,dict) or set(p)!=fields or p['type']!='vless-reality-v1':
+    common={'type','server','port','id','server_name'}
+    kind=p.get('type') if isinstance(p,dict) else None
+    fields=common|({'path','mode'} if kind=='vless-xhttp-tls-v1' else {'public_key','short_id'})
+    if not isinstance(p,dict) or set(p)!=fields or kind not in ('vless-reality-v1','vless-xhttp-tls-v1'):
         raise ValueError('Unsupported TCP profile')
     if not all(isinstance(p[k],str) for k in fields-{'port'}):raise ValueError('Invalid TCP field')
     if type(p['port']) is not int or not 1<=p['port']<=65535:raise ValueError('Invalid TCP port')
-    if str(ipaddress.IPv4Address(p['server']))!=p['server']:raise ValueError('IPv4 gateway required')
-    if str(uuid.UUID(p['id']))!=p['id']:raise ValueError('Invalid TCP identity')
-    key=p['public_key']
-    if not re.fullmatch(r'[A-Za-z0-9_-]{43}',key) or base64.urlsafe_b64encode(base64.urlsafe_b64decode(key+'=')).decode().rstrip('=')!=key:
-        raise ValueError('Invalid REALITY public key')
+    ip=ipaddress.IPv4Address(p['server'])
+    if str(ip)!=p['server'] or ip.is_loopback or ip.packed[0] == 0 or ip.packed[0] >= 224:
+        raise ValueError('IPv4 gateway required')
+    if str(uuid.UUID(p['id']))!=p['id'] or uuid.UUID(p['id']).int==0:raise ValueError('Invalid TCP identity')
     if not re.fullmatch(r'(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}',p['server_name']) or len(p['server_name'])>253:
-        raise ValueError('Invalid REALITY server name')
-    if not re.fullmatch(r'(?:[0-9a-f]{2}){1,8}',p['short_id']):raise ValueError('Invalid REALITY short id')
+        raise ValueError('Invalid TLS server name')
+    if kind=='vless-xhttp-tls-v1':
+        if p['mode']!='packet-up' or not re.fullmatch(r'/[A-Za-z0-9_-]{16,128}/',p['path']):
+            raise ValueError('Invalid XHTTP route')
+    else:
+        key=p['public_key']
+        if not re.fullmatch(r'[A-Za-z0-9_-]{43}',key) or base64.urlsafe_b64encode(base64.urlsafe_b64decode(key+'=')).decode().rstrip('=')!=key or not any(base64.urlsafe_b64decode(key+'=')):
+            raise ValueError('Invalid REALITY public key')
+        if not re.fullmatch(r'(?:[0-9a-f]{2}){1,8}',p['short_id']):raise ValueError('Invalid REALITY short id')
     return p
 
 
 def tcp_config(profile, interface):
     p=parse_tcp(json.dumps(profile))
     if not re.fullmatch(r'fctcp[0-9a-f]{8}',interface):raise ValueError('Invalid TCP interface')
+    user={'id':p['id'],'encryption':'none'}
+    if p['type']=='vless-xhttp-tls-v1':
+        stream={'network':'xhttp','security':'tls',
+            'tlsSettings':{'serverName':p['server_name'],'fingerprint':'chrome','alpn':['h2']},
+            'xhttpSettings':{'host':p['server_name'],'path':p['path'],'mode':p['mode']}}
+    else:
+        user['flow']='xtls-rprx-vision'
+        stream={'network':'raw','security':'reality',
+            'realitySettings':{'fingerprint':'chrome','serverName':p['server_name'],
+                'password':p['public_key'],'shortId':p['short_id']}}
+    stream['sockopt']={'mark':64630}
     return {'log':{'loglevel':'none'},
         'inbounds':[{'tag':'tun','protocol':'tun','settings':{'name':interface,'MTU':1280}}],
         'outbounds':[{'tag':'vpn','protocol':'vless','settings':{'vnext':[{
-            'address':p['server'],'port':p['port'],'users':[{'id':p['id'],
-            'encryption':'none','flow':'xtls-rprx-vision'}]}]},
-            'streamSettings':{'network':'raw','security':'reality',
-                'realitySettings':{'fingerprint':'chrome','serverName':p['server_name'],
-                    'password':p['public_key'],'shortId':p['short_id']},
-                'sockopt':{'mark':64630}}}]}
+            'address':p['server'],'port':p['port'],'users':[user]}]},'streamSettings':stream}]}
 
 
-def parse(text, *, allow_awg=False):
+def parse(text, *, allow_awg=False, allow_awg31=False):
     allowed={k:set(v) for k,v in FIELDS.items()}
     if allow_awg: allowed["Interface"].update(AWG_FIELDS)
+    if allow_awg31:
+        if not allow_awg: raise ValueError("AWG 3.1 requires explicit AWG support")
+        allowed["Interface"].update(AWG31_FIELDS)
     if len(text.encode('utf-8'))>MAX_PROFILE or '\x00' in text:
         raise ValueError('Invalid profile size')
     sections={}; current=None
@@ -86,13 +104,13 @@ def parse(text, *, allow_awg=False):
     for field,low,high in [('MTU',1280,1500),('ListenPort',0,65535)]:
         if field in interface and not low<=int(interface[field])<=high: raise ValueError('Invalid interface option')
     if 'PersistentKeepalive' in peer and not 0<=int(peer['PersistentKeepalive'])<=65535: raise ValueError('Invalid keepalive')
-    if set(interface) & AWG_FIELDS:
+    if set(interface) & (AWG_FIELDS | AWG31_FIELDS):
         validate_awg(interface)
     return sections
 
 
-def validate(text, *, allow_awg=False):
-    sections=parse(text, allow_awg=allow_awg)
+def validate(text, *, allow_awg=False, allow_awg31=False):
+    sections=parse(text, allow_awg=allow_awg, allow_awg31=allow_awg31)
     return '\n\n'.join('['+name+']\n'+'\n'.join(k+' = '+v for k,v in fields.items()) for name,fields in sections.items())+'\n'
 
 
@@ -103,12 +121,28 @@ def validate_awg(fields):
         if not re.fullmatch(r'[0-9]{1,5}',fields[name]) or not low<=int(fields[name])<=high:
             raise ValueError('Invalid AWG padding')
     if int(fields['Jmin'])>int(fields['Jmax']): raise ValueError('Invalid AWG junk range')
+    protected='HeaderProtectionKey' in fields
+    if protected:
+        raw=base64.b64decode(fields['HeaderProtectionKey'],validate=True)
+        if len(raw)!=32 or not any(raw) or base64.b64encode(raw).decode()!=fields['HeaderProtectionKey']:
+            raise ValueError('Invalid header protection key')
+        if any(int(fields[f'S{i}'])<12 or fields[f'H{i}']!=str(i) for i in range(1,5)):
+            raise ValueError('Invalid protected headers')
+    for name in ('RandomTrailers','DisableCookies'):
+        if name in fields and fields[name] not in ('true','false'):raise ValueError('Invalid AWG flag')
+    if 'ContentPaddingAddition' in fields:
+        v=fields['ContentPaddingAddition']
+        if not re.fullmatch(r'[0-9]{1,5}(?:-[0-9]{1,5})?',v):raise ValueError('Invalid content padding')
+        parts=list(map(int,v.split('-')))
+        if not 0<=parts[0]<=parts[-1]<=256:raise ValueError('Invalid content padding')
+    if fields.get('RandomTrailers')=='true' and len({fields[f'S{i}'] for i in range(1,5)})!=1:
+        raise ValueError('Unequal random trailers')
     ranges=[]
     for name in ('H1','H2','H3','H4'):
         if not re.fullmatch(r'[0-9]{1,10}(?:-[0-9]{1,10})?',fields[name]): raise ValueError('Invalid AWG header')
         limits=list(map(int,fields[name].split('-')))
         lo,hi=limits[0],limits[-1]
-        if not 5<=lo<=hi<=4294967295 or any(lo<=b and a<=hi for a,b in ranges):
+        if not (1 if protected else 5)<=lo<=hi<=4294967295 or any(lo<=b and a<=hi for a,b in ranges):
             raise ValueError('Overlapping or invalid AWG headers')
         ranges.append((lo,hi))
     # Strict grammar: no hooks, arbitrary shell text or oversized signature packets.

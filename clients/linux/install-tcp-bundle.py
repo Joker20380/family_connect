@@ -9,6 +9,10 @@ FILES={'bin/xray':'/usr/local/lib/family-connect-tcp/xray',
        'lib/LICENSE':'/usr/local/lib/family-connect-tcp/LICENSE',
        'systemd/family-connect-tcp@.service':'/etc/systemd/system/family-connect-tcp@.service'}
 
+# Generated locally: preserve the existing signed archive member set.
+INSTALL_FILES={**FILES, 'generated/authorization-session-v1':
+               '/usr/local/lib/family-connect-tcp/authorization-session-v1'}
+
 def verify(root):
     manifest=json.loads((root/'manifest.json').read_text())
     if manifest.get('format')!=1 or manifest.get('architecture')!='amd64':raise ValueError('Unsupported bundle')
@@ -46,6 +50,7 @@ def main():
     if os.geteuid()!=0:raise ValueError('Run the trusted installer as root')
     if os.uname().machine!='x86_64':raise ValueError('This bundle requires x86_64')
     payload=verify(Path(__file__).resolve().parent)
+    payload['generated/authorization-session-v1']=b''
     for program in ('ip','curl','resolvectl','systemctl','pkexec','sysctl'):
         if not shutil.which(program):raise ValueError('Missing dependency: '+program)
     if not stat.S_ISCHR(Path('/dev/net/tun').stat().st_mode):raise ValueError('TUN device required')
@@ -56,7 +61,7 @@ def main():
         active=command('systemctl','list-units','family-connect-tcp@*.service','--state=active,activating,deactivating','--no-legend','--plain').stdout
         if active.strip():raise ValueError('Stop TCP services before installation')
         old={}
-        for name,target in FILES.items():
+        for name,target in INSTALL_FILES.items():
             path=Path(target);directory(path.parent)
             if path.exists() or path.is_symlink():
                 info=path.lstat()
@@ -67,18 +72,18 @@ def main():
         records={}
         for i,(name,(data,mode)) in enumerate(old.items()):
             saved=backup/str(i);saved.write_bytes(data);saved.chmod(0o600)
-            records[name]={'backup':str(i),'destination':FILES[name],'mode':mode,'sha256':hashlib.sha256(data).hexdigest()}
-        (backup/'restore.json').write_text(json.dumps({'previous':records,'new_files':[FILES[n] for n in FILES if n not in old]},indent=2));(backup/'restore.json').chmod(0o600)
+            records[name]={'backup':str(i),'destination':INSTALL_FILES[name],'mode':mode,'sha256':hashlib.sha256(data).hexdigest()}
+        (backup/'restore.json').write_text(json.dumps({'previous':records,'new_files':[INSTALL_FILES[n] for n in INSTALL_FILES if n not in old]},indent=2));(backup/'restore.json').chmod(0o600)
         print(json.dumps({'backup':str(backup),'installing':True}),flush=True)
         changed=[]
         try:
-            for name,target in FILES.items():
+            for name,target in INSTALL_FILES.items():
                 atomic(Path(target),payload[name],0o755 if name in ('bin/xray','lib/helper') else 0o644);changed.append(name)
             command('systemctl','daemon-reload')
         except Exception:
             for name in reversed(changed):
-                if name in old:atomic(Path(FILES[name]),*old[name])
-                else:Path(FILES[name]).unlink()
+                if name in old:atomic(Path(INSTALL_FILES[name]),*old[name])
+                else:Path(INSTALL_FILES[name]).unlink()
             command('systemctl','daemon-reload')
             raise
         print(json.dumps({'installed':True,'backup':str(backup),'service_started':False}))

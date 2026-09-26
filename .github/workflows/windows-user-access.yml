@@ -1,0 +1,96 @@
+name: Windows ordinary user access
+on:
+  push:
+    paths: ['.github/workflows/windows-user-access.yml', 'clients/windows/**']
+permissions:
+  contents: read
+jobs:
+  reproduce:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install the distributed preview
+        shell: pwsh
+        run: |
+          $url='https://github.com/Joker20380/family_connect/releases/download/desktop-preview-20260920-a6c68fe/FamilyConnect-Setup-0.2.9-preview-a6c68fe.exe'
+          Invoke-WebRequest $url -OutFile "$env:TEMP/fc-existing.exe"
+          if((Get-FileHash "$env:TEMP/fc-existing.exe").Hash.ToLower() -ne '37879242f1a742c35f3702d0373220b91d4138b48c2ccc643e7bbcfd639888ce'){throw 'Installer mismatch'}
+          $p=Start-Process "$env:TEMP/fc-existing.exe" -ArgumentList '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP-' -PassThru -Wait
+          if($p.ExitCode -ne 0){throw 'Install failed'}
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build and install corrected client over the preview
+        shell: pwsh
+        run: |
+          trap {
+            $detail=$_.ToString().Replace([char]13,' ').Replace([char]10,' ')
+            Write-Host "::error title=Windows upgrade check::$detail"
+            exit 1
+          }
+          dotnet run --project clients/windows/Tests/Tests.csproj -c Release
+          if($LASTEXITCODE -ne 0){throw 'Core tests failed'}
+          dotnet publish clients/windows/FamilyConnect.csproj -c Release -r win-x64 --self-contained true -o patched
+          if($LASTEXITCODE -ne 0){throw 'Publish failed'}
+          Stop-Service FamilyConnectBroker
+          Copy-Item patched/* "$env:ProgramFiles/Family Connect/" -Recurse -Force
+          Start-Service FamilyConnectBroker
+          $p=Start-Process "$env:ProgramFiles/Family Connect/FamilyConnect.exe" -ArgumentList '/layout-test' -PassThru
+          if(-not $p.WaitForExit(240000)){$p.Kill();throw 'Layout timeout'}
+          if($p.ExitCode -ne 0){
+            $detail=Get-Content "$env:TEMP/fc-layout-check.txt" -Raw -ErrorAction SilentlyContinue
+            Write-Host "::error title=Layout::$($detail.Replace([char]13,' ').Replace([char]10,' '))"
+            throw 'Layout failed'
+          }
+      - name: Invitation rendering
+        shell: pwsh
+        run: |
+          $data=[Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:TEMP/Windows-invitation.png"))
+          for($i=0;$i -lt $data.Length;$i+=3000){
+            $part=$data.Substring($i,[Math]::Min(3000,$data.Length-$i))
+            Write-Host "::notice title=Invitation image $i::$part"
+          }
+      - name: Compare administrator and ordinary user
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $dir=Join-Path $env:PUBLIC 'fc-broker-diagnostic'
+          New-Item -ItemType Directory $dir | Out-Null
+          icacls $dir /grant '*S-1-5-32-545:(OI)(CI)M' | Out-Null
+          Copy-Item clients/windows/diagnose-broker.ps1 "$dir/probe.ps1"
+          $admin=& "$dir/probe.ps1"
+          $admin | Set-Content "$dir/admin.json"
+          Write-Host "::notice title=Administrator probe::$(($admin | ForEach-Object { $_.ToString().Replace([char]13,' ').Replace([char]10,' ') }) -join ' ')"
+          $password=ConvertTo-SecureString ([Guid]::NewGuid().ToString('N')+'aA1!') -AsPlainText -Force
+          New-LocalUser -Name fcordinary -Password $password | Out-Null
+          $users=Get-LocalGroup -SID 'S-1-5-32-545'
+          Add-LocalGroupMember -Group $users -Member fcordinary
+          New-Item -ItemType Directory "$dir/user-temp" | Out-Null
+          Set-Content "$dir/user-probe.ps1" @'
+          $env:TEMP=Join-Path $env:PUBLIC 'fc-broker-diagnostic/user-temp'
+          $env:TMP=$env:TEMP
+          & (Join-Path $env:PUBLIC 'fc-broker-diagnostic/probe.ps1')
+          $app=Join-Path $env:ProgramFiles 'Family Connect/FamilyConnect.exe'
+          $p=Start-Process $app -ArgumentList '/broker-test' -PassThru
+          if(-not $p.WaitForExit(60000)){$p.Kill();$code=-1}else{$code=$p.ExitCode}
+          $detail=[string](Get-Content (Join-Path $env:TEMP 'fc-broker-check.txt') -Raw -ErrorAction SilentlyContinue)
+          @{exitCode=$code;detail=$detail} | ConvertTo-Json -Compress | Set-Content (Join-Path $env:PUBLIC 'fc-broker-diagnostic/user-app.json')
+          '@
+          $credential=[PSCredential]::new('.\fcordinary',$password)
+          $p=Start-Process "$env:SystemRoot/System32/WindowsPowerShell/v1.0/powershell.exe" -Credential $credential -LoadUserProfile -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File $dir/user-probe.ps1" -RedirectStandardOutput "$dir/user.json" -RedirectStandardError "$dir/user-error.txt" -PassThru
+          if(-not $p.WaitForExit(60000)){$p.Kill();throw 'User diagnostic timeout'}
+          Write-Host "::notice title=Ordinary user probe::$((Get-Content "$dir/user.json") -join ' ')"
+          Write-Host "::notice title=Probe stderr::$((Get-Content "$dir/user-error.txt") -join ' ')"
+          Write-Host "::notice title=Installed app ordinary user::$((Get-Content "$dir/user-app.json") -join ' ')"
+          $appResult=Get-Content "$dir/user-app.json" -Raw | ConvertFrom-Json
+          if($appResult.exitCode -ne 0){throw 'Installed app broker test failed'}
+          $result=Get-Content "$dir/user.json" -Raw | ConvertFrom-Json
+          if($result.elevated){throw 'Test user unexpectedly elevated'}
+          # The legacy process-open probe must reproduce access denial; the installed EXE above must succeed.
+          if($result.ok -or $result.stage -ne 'server-identity' -or $result.win32Error -ne 5){throw 'Legacy failure not reproduced'}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Windows-user-access-diagnostics
+          path: C:/Users/Public/fc-broker-diagnostic/*.json

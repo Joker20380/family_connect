@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "date": "2026-09-24",
+  "scope": "local fleet registry and durable leases; no production rollout",
+  "tests": {
+    "command": "python -m pytest -q tests/test_fleet_store.py tests/test_fleet.py tests/test_friends_identity_store.py tests/test_friends_store.py tests/test_friends_owner.py",
+    "passed": 112,
+    "exit_code": 0
+  },
+  "dependencies": {
+    "pytest": "9.1.1",
+    "pydantic": "2.13.5",
+    "rns": "1.5.1",
+    "cryptography": "46.0.7"
+  },
+  "sha256": {
+    "control/fleet.py": "f42fed91660fec5d8507510ca5d96d032d424e31fd35c3743c4260fe318f33e4",
+    "control/fleet_store.py": "9058c0b3e28250d5608d868a74da229949ed49c3f154ed0768f76863eb9bea1b",
+    "tests/test_fleet.py": "0fea2a62231b54a74447443de52bfaed33cbfd34bb1c6aa72788646a245c587e",
+    "tests/test_fleet_store.py": "fa08975b4f41e7a305e96ca815a5281677eabcefc2ec590a5090c7d7289e056d"
+  }
+}

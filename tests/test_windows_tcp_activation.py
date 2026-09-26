@@ -52,3 +52,16 @@ def test_issuer_rejects_duplicate_json():
 def test_issuer_rejects_empty_device():
     with pytest.raises(ValueError):
         activation.issue('FC1-'+'0'*64,json.dumps(PROFILE),1,Ed25519PrivateKey.generate(),1000)
+
+
+def test_xhttp_issuer_uses_distinct_version_and_preserves_device_binding():
+    from clients.desktop.tests.test_xhttp import PROFILE as xhttp
+    key=Ed25519PrivateKey.from_private_bytes(bytes(range(32)))
+    envelope=activation.issue(DEVICE,json.dumps(xhttp),8,key,1000)
+    raw=base64.b64decode(envelope['payload'])
+    key.public_key().verify(base64.b64decode(envelope['signature']),activation.DOMAIN+raw)
+    grant=json.loads(raw)
+    assert grant['version']==2 and grant['xhttpPath']==xhttp['path']
+    assert grant['publicKey']==grant['shortId']==''
+    assert grant['devicePublicKey']==base64.b64encode(bytes(range(1,33))).decode()
+    assert envelope==json.loads((ROOT/'tests/fixtures/windows-xhttp-v2.json').read_text())

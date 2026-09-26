@@ -1,4 +1,4 @@
-param([ValidateSet('Install','Broker','UI','Uninstall')][string]$Stage)
+param([ValidateSet('Install','Broker','UI','Upgrade','Uninstall')][string]$Stage)
 $ErrorActionPreference='Stop'
 function Invoke-Checked([string]$Exe,[string]$Arguments,[int]$Seconds=90){
     # Wait for the requested process, not an unbounded descendant process tree.
@@ -14,15 +14,23 @@ try {
     $app="$env:ProgramFiles/Family Connect/FamilyConnect.exe"
     switch($Stage){
         'Install' {
+            # Reproduce a first attempt that left an unusable client executable.
+            if(Test-Path $app){throw 'Install test requires a clean application directory'}
+            New-Item -ItemType Directory -Force (Split-Path $app) | Out-Null
+            [IO.File]::WriteAllText($app,'Broken previous apphost; must never be executed')
             $installer=(Resolve-Path "$PSScriptRoot/dist/*pilot-unsigned.exe").Path
             Invoke-Checked $installer '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP- /LOG=install.log' 180
             if((Get-Service FamilyConnectBroker).Status -ne 'Running'){throw 'Broker service did not start'}
+            $icon=Join-Path (Split-Path $app) 'family-connect-door.ico'
+            if((Get-FileHash $icon -Algorithm SHA256).Hash -ne (Get-FileHash "$PSScriptRoot/app.ico" -Algorithm SHA256).Hash){throw 'Installed launcher icon differs from accepted artwork'}
+            $handler=Get-Item 'Registry::HKEY_LOCAL_MACHINE\Software\Classes\familyconnect\shell\open\command'
+            if($handler.GetValue('') -ne ('"'+$app.Replace('/','\')+'" "%1"')){throw 'Invitation handler command mismatch'}
             $tcp="$env:ProgramFiles/Family Connect/tcp"
             $expected=@{'xray.exe'='74475d8c4f68dd07bef754e56778eb2a9061e4dfcc954fa008b912a989bd848a';'wintun.dll'='e5da8447dc2c320edc0fc52fa01885c103de8c118481f683643cacc3220dafce'}
             foreach($name in $expected.Keys){if((Get-FileHash "$tcp/$name" -Algorithm SHA256).Hash.ToLower() -ne $expected[$name]){throw "Installed TCP hash mismatch: $name"}}
             foreach($name in @('licenses/Xray.txt','licenses/Wintun.txt','build.json')){if(-not(Test-Path "$tcp/$name")){throw "TCP notice missing: $name"}}
             $awg="$env:ProgramFiles/Family Connect/awg"
-            if((Get-FileHash "$awg/fc-awg.exe" -Algorithm SHA256).Hash.ToLower() -ne '0ff643eee68ce94183b6f5dde75fc9c03eeff96d6731349c9431fc2771be1a70'){throw 'Installed AWG worker mismatch'}
+            if((Get-FileHash "$awg/fc-awg.exe" -Algorithm SHA256).Hash.ToLower() -ne 'e3d11b9552eb8ed84776cf16a8c240e90b4b9ff0d361519c840909ca5f97fdb6'){throw 'Installed AWG worker mismatch'}
             if((Get-FileHash "$awg/wintun.dll" -Algorithm SHA256).Hash.ToLower() -ne 'e5da8447dc2c320edc0fc52fa01885c103de8c118481f683643cacc3220dafce'){throw 'Installed AWG driver mismatch'}
             if(Test-Path "$awg/peer-fixture.exe"){throw 'CI peer included in installer'}
             foreach($name in @('licenses/AmneziaWG.txt','licenses/Wintun.txt','build.json')){if(-not(Test-Path "$awg/$name")){throw 'AWG notice missing'}}
@@ -31,6 +39,18 @@ try {
             foreach($rule in $acl.GetAccessRules($true,$true,[System.Security.Principal.SecurityIdentifier])) {
                 if($rule.AccessControlType -eq 'Allow' -and $rule.IdentityReference.Value -notin @('S-1-5-18','S-1-5-32-544')) {throw 'Unexpected key store access'}
             }
+        }
+        'Upgrade' {
+            $sentinel=Join-Path $env:ProgramData 'FamilyConnect/installer-upgrade-sentinel.txt'
+            [IO.File]::WriteAllText($sentinel,'preserve-existing-data')
+            try {
+                $installer=(Resolve-Path "$PSScriptRoot/dist/*pilot-unsigned.exe").Path
+                Invoke-Checked $installer '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP- /LOG=upgrade.log' 240
+                if((Get-Service FamilyConnectBroker).Status -ne 'Running'){throw 'Broker did not restart after upgrade'}
+                if([IO.File]::ReadAllText($sentinel) -ne 'preserve-existing-data'){throw 'Upgrade changed stored data'}
+                Invoke-Checked $app '/runtime-check' 30
+                Invoke-Checked $app '/broker-test' 60
+            } finally {Remove-Item -LiteralPath $sentinel -ErrorAction SilentlyContinue}
         }
         'Broker' {Invoke-Checked $app '/broker-test' 60}
         'UI' {Invoke-Checked $app '/smoke' 30}

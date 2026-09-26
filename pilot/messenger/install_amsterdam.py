@@ -38,7 +38,7 @@ def main():
     except KeyError:pass
     bundle=Path(args.bundle)
     if hashlib.sha256(bundle.read_bytes()).hexdigest()!=args.sha256:raise ValueError('Public bundle hash mismatch')
-    expected={'messenger/'+name for name in ('__init__.py','codec.py','relay.py','server.py','store.py','chat.py','mailbox.py','requirements.lock')}
+    expected={'messenger/'+name for name in ('__init__.py','codec.py','relay.py','server.py','membership.py','store.py','chat.py','mailbox.py','requirements.lock')}
     expected|={'provisioning/requirements.lock','pilot/messenger/family-connect-mailbox.service'}
     with tarfile.open(bundle) as archive:
         entries=archive.getmembers()

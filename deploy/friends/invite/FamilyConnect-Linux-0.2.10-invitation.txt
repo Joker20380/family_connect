@@ -1,0 +1,37 @@
+family_connect — Linux 0.2.10 paired preview
+
+Это тестовый архив, не автономный установщик. Нужны GTK4/libadwaita,
+системный Python с GI/Cairo, venv и отдельные VPN helpers, установленные
+оператором. Сам архив не устанавливает системные VPN-компоненты.
+
+1. Скачайте FamilyConnect-Control-Linux-preview-8e9fabe3cbef2989.tar.gz.
+   SHA256: 67b569cb2423692f088baa7ef0d83761394bec4fadb38249ac0788a046605795
+   Сверьте: sha256sum FamilyConnect-Control-Linux-preview-8e9fabe3cbef2989.tar.gz
+2. Сохраните резервные копии ~/.local/share/applications/family-connect.desktop
+   и ~/.config/mimeapps.list, если они существуют.
+   Закройте прежний Family Connect при отключённом VPN. Не удаляйте данные
+   ~/.local/share/family-connect/friends-identity или журналы восстановления.
+3. Распакуйте архив в отдельный новый каталог. Войдите в
+   FamilyConnect-Control-preview и выполните:
+
+   /usr/bin/python3 scripts/run_control_preview.py verify
+   /usr/bin/python3 -m venv --system-site-packages "$HOME/.local/share/family-connect/runtime-0.2.10"
+   "$HOME/.local/share/family-connect/runtime-0.2.10/bin/pip" install -r provisioning/requirements.lock
+   "$HOME/.local/share/family-connect/runtime-0.2.10/bin/python" scripts/install_control_desktop.py
+
+   При отсутствии python3-venv, python3-gi, python3-gi-cairo, Gtk4, libadwaita
+   обратитесь к оператору; имена системных пакетов зависят от дистрибутива.
+   Окружение runtime-0.2.10 должно быть новым и постоянным: launcher использует его.
+4. Откройте исходную ссылку приглашения в браузере отметьте «Приложение установлено» и нажмите «Открыть приложение».
+   Разрешите открытие familyconnect. Приложение сохранит личный ключ и активирует
+   доступ по приглашению. Установка сама по себе доступ не выдаёт.
+   Если страница открыта внутри Telegram, откройте её во внешнем браузере.
+5. Уже активированное приложение сохраняет прежнюю идентичность. Не удаляйте
+   данные и не переустанавливайте профиль ради обновления.
+
+Откат: вернуть прежний launcher/обработчик из резервной копии, сохранённой перед
+установкой, либо повторно установить прежний проверенный paired bundle.
+Не удалять идентичность, профили и журналы операций. Каталоги автоматического
+обновления legacy-клиента этим preview не меняются.
+
+Состояние и ограничения: https://github.com/Joker20380/family_connect/blob/main/docs/STATUS.md

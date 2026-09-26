@@ -1,0 +1,17 @@
+{
+  "date": "2026-09-24",
+  "stage": "5.2",
+  "schema_version": 3,
+  "wire_schema": 2,
+  "passed": 269,
+  "seconds": 5.04,
+  "command": "/tmp/fc-desktop-current-venv/bin/python -m pytest -q tests/test_fleet_publish.py tests/test_fleet_services.py tests/test_fleet_adapters.py tests/test_fleet_gateway.py tests/test_fleet_store.py tests/test_fleet.py tests/test_friends_identity_store.py tests/test_friends_store.py tests/test_friends_owner.py tests/test_device_identity.py tests/test_friends_access.py tests/test_control_vectors.py",
+  "production_rollout": false,
+  "sha256": {
+    "control/fleet_publish.py": "1cd8d8fc676d48cec8d9d0ed4f227850102925bc8020bd9d7653e67dc014c863",
+    "provisioning/fleet.py": "8f4e7e1a0776112a2c6cc5bcda038131296aba05a478368e6438928dadc24f4d",
+    "control/fleet_store.py": "8ba9a2dca53c2ab39e684e3ba3348fc10dc0fe8ed11929ff6783c69e384956c3",
+    "tests/test_fleet_publish.py": "ed42680bd7b5eaca9bc66382c1487ea511bb644703bc4aa66dbc50a7e4d7f79f",
+    "tests/test_fleet_services.py": "baea04005498a0880433dff2e533e90a132ed5ce900132eac953823daffbae8d"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "source": "8906d6215dc0638b838d64f37de586554fbfd6c9",
+  "before_page_sha256": "6c8a6f7f8023b56aa5af680814497218c215e589c3604d64308766caf47d71b0",
+  "checks": [
+    35915664215,
+    35915664037,
+    35915664040,
+    35915664133,
+    35915664039
+  ],
+  "client_ci": 35915664169,
+  "visual_ci": 35915664039,
+  "visual_artifact": {
+    "id": 10775485540,
+    "name": "windows-ui-renders",
+    "digest": "sha256:2bbd1e557746dd5e5f739bdd36fbbc1d8de08ab23fc6b1a1a6706c78c6507a4f"
+  },
+  "artifact": {
+    "file": "FamilyConnect-Setup-0.2.11-preview-8906d62.exe",
+    "size": 49934207,
+    "sha256": "9cc04ba7446ff31d87e2a3d96dfb7faf24e61cf81a7eac8eccea0adb29c3ed3c"
+  },
+  "installer_artifact": {
+    "id": 10774174695,
+    "name": "FamilyConnect-Windows-Installer-pilot-unsigned",
+    "digest": "sha256:362f1eb7fddd4d4eed127b0d01e952d2fb289c47f36b209f3a97c5a02fb96854"
+  },
+  "public": {
+    "passed": true,
+    "source": "8906d6215dc0638b838d64f37de586554fbfd6c9",
+    "artifact": {
+      "file": "FamilyConnect-Setup-0.2.11-preview-8906d62.exe",
+      "size": 49934207,
+      "sha256": "9cc04ba7446ff31d87e2a3d96dfb7faf24e61cf81a7eac8eccea0adb29c3ed3c"
+    },
+    "page_sha256": "671dceae9ea1164f43f72bcdae9ec805cc97edf7dbca7e654041348961dd8029",
+    "github": "https://github.com/Joker20380/family_connect/releases/tag/windows-preview-20260923-8906d62",
+    "android_discovery_unchanged": true,
+    "checked_at": "2026-09-23T20:39:10.446743+00:00"
+  }
+}

@@ -1,5 +1,9 @@
 # Stage 5 — Reticulum control channel
 
+Текущая сверка24.09.2026: [аудит](releases/2026-09-24-stage5-audit.ru.md) и
+[контракт служебного канала/fleet](stage5-fleet-contract.ru.md). Ниже сохранены
+исторические checkpoint; они не заменяют актуальную матрицу реализации.
+
 Inspection baseline: `4cb1423`, 2026-09-12. Реализация — reference Python/Linux
 protocol/application layer; native Windows/Android packaging не заявляется.
 

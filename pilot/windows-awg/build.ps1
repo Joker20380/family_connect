@@ -1,7 +1,7 @@
 param([Parameter(Mandatory)][string]$Output)
 $ErrorActionPreference='Stop'
 if((go version) -ne 'go version go1.26.1 windows/amd64'){throw 'Go 1.26.1 Windows amd64 required'}
-$revision='1cc94272ca8e9e223a5fe76382f5880f09d3c12d'
+$revision='b5928efb6ca19f0153958460c3d141f04abc5c2e'
 $source=Join-Path $env:RUNNER_TEMP ('fc-awg-source-'+[guid]::NewGuid().ToString('N'))
 if(Test-Path $Output){throw 'Use a fresh output directory'}
 New-Item -ItemType Directory $Output | Out-Null
@@ -9,6 +9,11 @@ git clone https://github.com/amnezia-vpn/amneziawg-go $source
 if($LASTEXITCODE -ne 0){throw 'AWG checkout failed'}
 git -C $source checkout --detach $revision
 if($LASTEXITCODE -ne 0 -or (git -C $source rev-parse HEAD) -ne $revision){throw 'AWG revision mismatch'}
+$patch=Join-Path $PSScriptRoot '../awg31/patches/0001-refresh-s4-after-tun-read.patch'
+git -C $source apply --check $patch
+if($LASTEXITCODE -ne 0){throw 'AWG startup patch mismatch'}
+git -C $source apply $patch
+if($LASTEXITCODE -ne 0){throw 'AWG startup patch failed'}
 New-Item -ItemType Directory "$source/cmd/fc-worker","$source/cmd/fc-fixture" | Out-Null
 Copy-Item "$PSScriptRoot/worker/main.go" "$source/cmd/fc-worker/main_windows.go"
 Copy-Item "$PSScriptRoot/fixture/main.go" "$source/cmd/fc-fixture/main_windows.go"
@@ -33,6 +38,8 @@ Copy-Item $dll "$Output/wintun.dll"
 New-Item -ItemType Directory "$Output/licenses" | Out-Null
 Copy-Item "$driver/wintun/LICENSE.txt" "$Output/licenses/Wintun.txt"
 Copy-Item "$source/LICENSE" "$Output/licenses/AmneziaWG.txt"
-$record=@{revision=$revision;go=(go version);worker_source_sha256=(Get-FileHash "$PSScriptRoot/worker/main.go" -Algorithm SHA256).Hash.ToLower();files=@{}}
+$record=@{revision=$revision;protocol='3.1';startup_patch_sha256=(Get-FileHash $patch -Algorithm SHA256).Hash.ToLower();go=(go version);worker_source_sha256=(Get-FileHash "$PSScriptRoot/worker/main.go" -Algorithm SHA256).Hash.ToLower();files=@{}}
 foreach($name in @('fc-awg.exe','wintun.dll','peer-fixture.exe')){$record.files[$name]=(Get-FileHash "$Output/$name" -Algorithm SHA256).Hash.ToLower()}
 $record | ConvertTo-Json -Depth 4 | Set-Content "$Output/build.json"
+
+Write-Output "::notice title=AWG worker SHA256::$($record.files['fc-awg.exe'])"

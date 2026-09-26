@@ -13,6 +13,7 @@ from messenger.store import Store
 from messenger.relay import Spool,ClosedRelay
 from messenger.mailbox import Mailbox,MailboxError
 from messenger.sync import SyncController
+from messenger.delivery import DeliveryController
 
 role,directory,port,allowfile=sys.argv[1:]
 os.umask(0o077)
@@ -35,6 +36,7 @@ else:
     source=chat.attach(router)
 mailbox=None
 controller=None
+delivery=None
 def emit(value):print(json.dumps(value),flush=True)
 emit(dict(public=chat.public.hex()))
 for line in sys.stdin:
@@ -44,7 +46,17 @@ for line in sys.stdin:
         elif op=='stats':result=spool.stats()
         elif op=='relay':mailbox=Mailbox(chat,source,bytes.fromhex(request['public']));result=True
         elif op=='trust':chat.trust_contact(bytes.fromhex(request['public']));result=True
-        elif op=='queue':result=chat.queue(bytes.fromhex(request['peer']),request['text'])
+        elif op=='queue':
+            result=chat.queue(bytes.fromhex(request['peer']),request['text'])
+            if delivery is not None:delivery.request_sync()
+        elif op=='delivery_lifecycle':
+            if delivery is None:delivery=DeliveryController(mailbox)
+            delivery.update(online=request['online'],foreground=request['foreground']);result=True
+        elif op=='delivery_state':
+            result=delivery.snapshot()
+            if result['result'] is not None:result['result']=asdict(result['result'])
+        elif op=='delivery_refresh':result=delivery.request_sync()
+        elif op=='delivery_close':result=delivery.close()
         elif op=='publish':mailbox.publish(request['id']);result=True
         elif op=='batch':
             cancel=threading.Event();original=mailbox._request

@@ -14,7 +14,7 @@ from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 from pydantic import Field, field_validator, model_validator
 
-from clients.desktop.profile_config import parse, parse_tcp, AWG_FIELDS
+from clients.desktop.profile_config import parse, parse_tcp, AWG_FIELDS, AWG31_FIELDS
 from clients.desktop.updates import version
 from .envelope import MAX_ENVELOPE_BYTES, ProvisioningRejected, _unique_fields, public_identity
 from .models import FrozenModel, GatewayCandidate, Identifier, Positive
@@ -57,12 +57,16 @@ class TransportProfile(FrozenModel):
     def parsed(self):
         if self.transport == 'vless-reality':
             value = parse_tcp(self.config)
+            if value["type"] != "vless-reality-v1":
+                raise ValueError("transport/profile mismatch")
             if value['id'] == '00000000-0000-0000-0000-000000000000' or not any(base64.urlsafe_b64decode(value['public_key']+'=')):
                 raise ValueError('invalid TCP credential')
             return value
         # Only the local device can supply a WG private key, never the issuer.
         sentinel = base64.b64encode(bytes(32)).decode()
-        fields = parse(self.config.replace(LOCAL_KEY, sentinel), allow_awg=self.transport == 'amneziawg')
+        fields = parse(self.config.replace(LOCAL_KEY, sentinel),
+                       allow_awg=self.transport == 'amneziawg',
+                       allow_awg31=self.transport == 'amneziawg' and self.transport_version == '3.1')
         if (fields['Interface']['PrivateKey'] != sentinel or self.config.count(LOCAL_KEY) != 1 or
                 not re.search(r'^\s*PrivateKey\s*=\s*LOCAL_DEVICE_KEY\s*(?:#.*)?$', self.config, re.MULTILINE)):
             raise ValueError('local device key binding required')
@@ -73,11 +77,9 @@ class TransportProfile(FrozenModel):
         expected = {'wireguard': {'1'}, 'amneziawg': {'2.0', '3.1'}, 'vless-reality': {'1'}}
         if self.transport_version not in expected[self.transport]:
             raise ValueError('transport version mismatch')
-        if self.transport_version == '3.1':
-            # A future runtime/parser must explicitly add support. Never interpret
-            # AWG 3.1 as 2.0 or silently drop its header/timing protection settings.
-            raise ConfigError('UNSUPPORTED_TRANSPORT_VERSION')
         fields = self.parsed()
+        if self.transport_version == '3.1' and not AWG31_FIELDS <= set(fields['Interface']):
+            raise ValueError('complete AWG 3.1 parameters required')
         if self.transport == 'amneziawg' and not AWG_FIELDS.intersection(fields['Interface']):
             raise ValueError('AWG parameters required')
         return self
@@ -163,7 +165,12 @@ def issue_config(state, *, recipient_public, signing_key):
 
 
 class ConfigVerifier:
-    def __init__(self, *, anchor, device, client_version):
+    def __init__(self, *, anchor, device, client_version, supports_awg31=False):
+        # Version numbers across platforms do not prove native runtime support.
+        # Only an application boundary tested with AWG 3.1 may opt in.
+        if type(supports_awg31) is not bool:
+            raise ValueError('invalid AWG capability')
+        self.supports_awg31 = supports_awg31
         self.signer = Ed25519PublicKey.from_public_bytes(anchor)
         self.key_id = hashlib.sha256(anchor).hexdigest()
         self.device = device
@@ -196,7 +203,7 @@ class ConfigVerifier:
             if value.get('signer_key_id') != self.key_id:
                 raise ConfigError('SIGNER')
             profiles = value.get('transport_profiles')
-            if type(profiles) is list and any(type(p) is dict and p.get('transport') == 'amneziawg'
+            if not self.supports_awg31 and type(profiles) is list and any(type(p) is dict and p.get('transport') == 'amneziawg'
                     and p.get('transport_version') == '3.1' for p in profiles):
                 raise ConfigError('UNSUPPORTED_TRANSPORT_VERSION')
             state = ControlConfiguration.model_validate_json(plain)

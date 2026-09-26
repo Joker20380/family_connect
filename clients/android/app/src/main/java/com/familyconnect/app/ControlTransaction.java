@@ -19,6 +19,9 @@ final class ControlTransaction {
         void resume(ControlProtocol.Verified config) throws Exception; // No persistent mutations.
         void stopResume() throws Exception;
     }
+    interface Selectable extends Resumable {
+        Resumable forGateway(String gateway); // Same engine/owner, fixed selection for one operation.
+    }
     interface Sender { boolean send(byte[] acknowledgement) throws Exception; }
     interface Mutation { void run() throws Exception; }
     private final ControlJournal journal;
@@ -56,6 +59,7 @@ final class ControlTransaction {
         outbox.add(encoded); if (terminal) r.add("result", encoded.deepCopy()); return status;
     }
     private String rollback(JsonObject r, String error) throws Exception {
+        if(text(r.get("phase")).equals("SWITCHING"))return rollbackSelection(r);
         long now = time(r); ControlProtocol.Verified candidate = journal.unpack(r.getAsJsonObject("staged"), null);
         r.addProperty("phase", "ROLLING_BACK"); journal.save(r);
         try {
@@ -70,6 +74,51 @@ final class ControlTransaction {
         }
         r.addProperty("phase", "IDLE"); r.add("staged", JsonNull.INSTANCE); r.add("baseline", JsonNull.INSTANCE);
         ack(r, candidate.digest, candidate, "ROLLED_BACK", error, now, true); journal.save(r); return "ROLLED_BACK";
+    }
+    private Resumable target(String gateway)throws IOException {
+        if(!(application instanceof Selectable))throw new IOException("Gateway selection unsupported");
+        return ((Selectable)application).forGateway(gateway);
+    }
+    private String rollbackSelection(JsonObject r)throws Exception {
+        long now=time(r);journal.save(r); // Keep SWITCHING until cleanup durably completes.
+        var config=journal.unpack(r.getAsJsonObject("committed"),null);
+        boolean mayRestore=true;
+        try{journal.unpack(r.getAsJsonObject("committed"),now);}catch(ControlProtocol.Rejected expired){mayRestore=false;}
+        try{target(text(r.get("pending_gateway"))).rollback(config,config,r.getAsJsonObject("baseline").deepCopy(),mayRestore);}
+        catch(Exception failure){return "FAILED";}
+        r.addProperty("phase","IDLE");r.add("staged",JsonNull.INSTANCE);r.add("baseline",JsonNull.INSTANCE);
+        r.add("pending_gateway",JsonNull.INSTANCE);journal.save(r);return "ROLLED_BACK";
+    }
+    /** Local selection within the already authenticated committed envelope. No revision/ACK changes. */
+    String selectGateway(String gateway)throws Exception {
+        synchronized(ControlJournal.OWNER) {
+            admitted();
+            if(gateway==null||!gateway.matches("[a-zA-Z0-9_-]{1,64}"))throw new IOException("Invalid gateway");
+            JsonObject r=journal.read();long now=time(r);
+            if(!r.get("staged").isJsonNull())throw new IOException("Control recovery required");
+            if(r.get("committed").isJsonNull())throw new IOException("No committed configuration");
+            var config=journal.unpack(r.getAsJsonObject("committed"),now);
+            boolean found=false;
+            for(JsonElement p:config.state().getAsJsonArray("transport_profiles"))found|=gateway.equals(text(p.getAsJsonObject().get("gateway_id")));
+            if(!found)throw new IOException("Gateway not in committed configuration");
+            Resumable chosen=target(gateway);
+            if(r.has("selected_gateway")&&!r.get("selected_gateway").isJsonNull()&&gateway.equals(text(r.get("selected_gateway"))))return "SELECTED";
+            JsonObject baseline=Objects.requireNonNull(chosen.snapshot(r.getAsJsonObject("committed").getAsJsonObject("runtime").deepCopy())).deepCopy();
+            if(integer(r.get("schema"),1)==1){r.addProperty("schema",2);r.add("selected_gateway",JsonNull.INSTANCE);}
+            r.addProperty("pending_gateway",gateway);r.addProperty("phase","SWITCHING");r.add("baseline",baseline);
+            byte[] raw=ControlProtocol.base64(text(r.getAsJsonObject("committed").get("envelope")),true);
+            r.add("staged",ControlJournal.pack(raw,config,now));journal.save(r);
+            try {
+                chosen.apply(config,baseline.deepCopy());
+                if(!chosen.healthy(config))return rollbackSelection(r);
+                var runtime=Objects.requireNonNull(chosen.snapshot(null)).deepCopy();
+                journal.unpack(r.getAsJsonObject("committed"),time(r));
+                r.getAsJsonObject("committed").add("runtime",runtime);
+            }catch(Exception failure){return rollbackSelection(r);}
+            r.addProperty("selected_gateway",gateway);r.add("pending_gateway",JsonNull.INSTANCE);
+            r.addProperty("phase","IDLE");r.add("staged",JsonNull.INSTANCE);r.add("baseline",JsonNull.INSTANCE);
+            journal.save(r);return "SELECTED";
+        }
     }
     String recover() throws Exception {
         synchronized (ControlJournal.OWNER) {
@@ -88,7 +137,8 @@ final class ControlTransaction {
             if(r.get("committed").isJsonNull()){journal.save(r);return "IDLE";}
             ControlProtocol.Verified config=journal.unpack(r.getAsJsonObject("committed"),now);
             if(!(application instanceof Resumable))throw new IOException("Resume unsupported");
-            Resumable nativeApp=(Resumable)application;
+            Resumable nativeApp=r.has("selected_gateway")&&!r.get("selected_gateway").isJsonNull()
+                ?target(text(r.get("selected_gateway"))):(Resumable)application;
             // Persist the clock floor before any activation. No profile writes or new ACKs.
             journal.save(r);
             try {
@@ -160,6 +210,7 @@ final class ControlTransaction {
             committed.addProperty("applied_at", integer(r.get("last_now"), 0));
             committed.add("runtime", runtime);
             r.add("committed", committed); r.add("staged", JsonNull.INSTANCE); r.add("baseline", JsonNull.INSTANCE); r.addProperty("phase", "IDLE");
+            if(r.has("selected_gateway"))r.add("selected_gateway",JsonNull.INSTANCE);
             ack(r, digest, verified, "COMMITTED", "NONE", integer(r.get("last_now"), 0), true);
             journal.save(r); return "COMMITTED";
         }

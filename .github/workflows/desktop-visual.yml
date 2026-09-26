@@ -1,0 +1,51 @@
+name: Desktop visual checks
+on:
+  push:
+    paths: ['clients/windows/**', 'clients/assets/**', '.github/workflows/desktop-visual.yml']
+  pull_request:
+    paths: ['clients/windows/**', 'clients/assets/**', '.github/workflows/desktop-visual.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows-ui:
+    runs-on: windows-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet build clients/windows/FamilyConnect.csproj -c Release
+      - name: Native rendering, input and layouts without VPN drivers
+        shell: pwsh
+        run: |
+          $app = Resolve-Path clients/windows/bin/Release/net10.0-windows/FamilyConnect.exe
+          $process = Start-Process $app -ArgumentList '/layout-test' -PassThru
+          if (-not $process.WaitForExit(240000)) { $process.Kill(); throw 'UI checks timed out' }
+          if ($process.ExitCode -ne 0) {
+            $detail = (Get-Content "$env:TEMP/fc-layout-check.txt" -Raw).Replace('%','%25').Replace("`r",'%0D').Replace("`n",'%0A')
+            Write-Output "::error title=Layout detail::$detail"
+            throw 'Native UI checks failed'
+          }
+      - name: Production application startup and resize
+        shell: pwsh
+        run: |
+          $app = Resolve-Path clients/windows/bin/Release/net10.0-windows/FamilyConnect.exe
+          $process = Start-Process $app -ArgumentList '/startup-layout-test' -PassThru
+          if (-not $process.WaitForExit(60000)) { $process.Kill(); throw 'Startup layout check timed out' }
+          if ($process.ExitCode -ne 0) {
+            Get-Content "$env:TEMP/fc-layout-startup.txt" -ErrorAction SilentlyContinue
+            throw 'Production startup layout check failed'
+          }
+      - name: Collect native UI evidence
+        if: always()
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force artifacts/windows-ui | Out-Null
+          Get-ChildItem "$env:TEMP/Windows-*.png","$env:TEMP/fc-layout-*.txt" -ErrorAction SilentlyContinue | Copy-Item -Destination artifacts/windows-ui/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-ui-renders
+          path: artifacts/windows-ui/

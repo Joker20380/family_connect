@@ -23,7 +23,7 @@ jobs:
       - name: Protocol, crash recovery, arbiter and packaging regression
         run: python -m pytest -q
       - name: System GTK dependencies
-        run: sudo apt-get update && sudo apt-get install -y python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 python3-cryptography xvfb dbus-x11
+        run: sudo apt-get update && sudo apt-get install -y python3-gi python3-gi-cairo python3-venv gir1.2-gtk-4.0 gir1.2-adw-1 libqrencode4 libzbar0 python3-cryptography xvfb dbus-x11
       - name: Render and interaction regression
         env:
           GSK_RENDERER: cairo
@@ -38,7 +38,7 @@ jobs:
           python scripts/package_desktop.py
           mkdir -p /tmp/fc-preview-extracted
           tar -xzf artifacts/control/*.tar.gz -C /tmp/fc-preview-extracted
-          python -m venv /tmp/fc-preview-env
+          /usr/bin/python3 -m venv --system-site-packages /tmp/fc-preview-env
           /tmp/fc-preview-env/bin/pip install -r /tmp/fc-preview-extracted/FamilyConnect-Control-preview/provisioning/requirements.lock
       - name: Run extracted artifacts outside checkout
         env:
@@ -47,16 +47,17 @@ jobs:
         run: |
           cd /tmp
           /tmp/fc-preview-env/bin/python fc-preview-extracted/FamilyConnect-Control-preview/scripts/run_control_preview.py control --help
-          dbus-run-session -- xvfb-run -a /usr/bin/python3 fc-preview-extracted/FamilyConnect-Control-preview/scripts/run_control_preview.py gui --smoke
+          dbus-run-session -- xvfb-run -a /tmp/fc-preview-env/bin/python fc-preview-extracted/FamilyConnect-Control-preview/scripts/run_control_preview.py gui --smoke
       - name: Extracted GTK recovery and public bundle digest
         env:
           GSK_RENDERER: cairo
           GTK_A11Y: none
         run: |
           mkdir -p /tmp/fc-preview-harness
-          cp clients/desktop/recovery_check.py clients/desktop/layout_check.py /tmp/fc-preview-harness/
+          cp clients/desktop/recovery_check.py clients/desktop/layout_check.py clients/desktop/friends_ui_check.py /tmp/fc-preview-harness/
           cd /tmp
           PYTHONPATH=/tmp/fc-preview-extracted/FamilyConnect-Control-preview/clients/desktop dbus-run-session -- xvfb-run -a /usr/bin/python3 fc-preview-harness/recovery_check.py
+          PYTHONPATH=/tmp/fc-preview-extracted/FamilyConnect-Control-preview:/tmp/fc-preview-extracted/FamilyConnect-Control-preview/clients/desktop dbus-run-session -- xvfb-run -a /tmp/fc-preview-env/bin/python fc-preview-harness/friends_ui_check.py
           cd "$GITHUB_WORKSPACE"
           python - <<'PY'
           import hashlib

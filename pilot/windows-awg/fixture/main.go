@@ -13,9 +13,9 @@ import (
  "strconv"
  "sync/atomic"
  "golang.org/x/sys/windows"
- "github.com/amnezia-vpn/amneziawg-go/conn"
- "github.com/amnezia-vpn/amneziawg-go/device"
- "github.com/amnezia-vpn/amneziawg-go/tun"
+ "github.com/amnezia-vpn/amneziawg-go/v3/conn"
+ "github.com/amnezia-vpn/amneziawg-go/v3/device"
+ "github.com/amnezia-vpn/amneziawg-go/v3/tun"
 )
 // RIO reports ICMP port-unreachable as a receive error after the test kills a client.
 // Keep the synthetic gateway listening; all other errors retain native handling.

@@ -9,6 +9,7 @@ import threading
 
 import RNS
 from .relay import ClosedRelay,Spool
+from .membership import Membership
 
 
 def read_owned(path, limit, *, private=False):
@@ -76,7 +77,9 @@ def main():
         return
     rns=RNS.Reticulum(configdir=str(root/'rns'),loglevel=0)
     spool=Spool(root/'spool')
-    relay=ClosedRelay(node,spool,allowed_public=allowed)
+    # Optional root-owned lease. Static diagnostic identities remain unchanged.
+    membership=Membership(Path(args.settings).parent/'members.json',read_owned)
+    relay=ClosedRelay(node,spool,allowed_public=allowed,membership=membership)
     stop=threading.Event()
     signal.signal(signal.SIGTERM,lambda *_:stop.set())
     signal.signal(signal.SIGINT,lambda *_:stop.set())

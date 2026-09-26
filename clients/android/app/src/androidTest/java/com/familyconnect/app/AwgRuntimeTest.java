@@ -48,16 +48,18 @@ public class AwgRuntimeTest {
     void revokeThroughSystemDialog()throws Exception{
         android.app.UiAutomation automation=InstrumentationRegistry.getInstrumentation().getUiAutomation();
         android.accessibilityservice.AccessibilityServiceInfo info=automation.getServiceInfo();
-        info.flags|=android.accessibilityservice.AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS;
+        info.flags|=android.accessibilityservice.AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS|android.accessibilityservice.AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS;
         automation.setServiceInfo(info);
         String testPackage=InstrumentationRegistry.getInstrumentation().getContext().getPackageName();
         // Each test must exercise a fresh system confirmation, even after another handover.
         shell("appops set "+testPackage+" ACTIVATE_VPN deny");
-        context.startActivity(new Intent().setComponent(new ComponentName(testPackage,RevokeVpnActivity.class.getName())).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        shell("am start -W -n "+testPackage+"/"+RevokeVpnActivity.class.getName());
         long until=System.currentTimeMillis()+15000;boolean clicked=false;
         while(System.currentTimeMillis()<until&&!clicked){
-            android.view.accessibility.AccessibilityNodeInfo root=InstrumentationRegistry.getInstrumentation().getUiAutomation().getRootInActiveWindow();
-            if(root!=null&&"com.android.vpndialogs".contentEquals(root.getPackageName())){
+            java.util.List<android.view.accessibility.AccessibilityNodeInfo> roots=new java.util.ArrayList<>();
+            roots.add(automation.getRootInActiveWindow());
+            for(android.view.accessibility.AccessibilityWindowInfo window:automation.getWindows())roots.add(window.getRoot());
+            for(android.view.accessibility.AccessibilityNodeInfo root:roots)if(root!=null&&"com.android.vpndialogs".contentEquals(root.getPackageName())){
                 for(android.view.accessibility.AccessibilityNodeInfo node:root.findAccessibilityNodeInfosByViewId("android:id/button1"))
                     if(node.isEnabled()&&node.performAction(android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK)){clicked=true;break;}
             }

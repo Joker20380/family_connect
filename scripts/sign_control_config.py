@@ -7,28 +7,23 @@ import argparse
 import base64
 import os
 from pathlib import Path
-import stat
 
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from provisioning.configuration import ControlConfiguration, issue_config
 
 
+if __package__:
+    from . import signing_key
+else:
+    import signing_key
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--key', type=Path, required=True)
+    signing_key.arguments(parser)
     parser.add_argument('--configuration', type=Path, required=True)
     parser.add_argument('--recipient-public', required=True)
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
-    fd = os.open(args.key, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
-    try:
-        info = os.fstat(fd)
-        if (not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or
-                info.st_nlink != 1 or stat.S_IMODE(info.st_mode) != 0o600):
-            raise ValueError('unsafe signing key')
-        key = Ed25519PrivateKey.from_private_bytes(os.read(fd, 33))
-    finally:
-        os.close(fd)
+    key = signing_key.load(args)
     with args.configuration.open('rb') as source:
         state = ControlConfiguration.model_validate_json(source.read(65537))
     raw = issue_config(state, recipient_public=base64.b64decode(args.recipient_public, validate=True), signing_key=key)

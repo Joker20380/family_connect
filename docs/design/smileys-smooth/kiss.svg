@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Поцелуй">
+<defs><radialGradient id="face" cx="36%" cy="25%" r="78%"><stop stop-color="#ffe995"/><stop offset=".55" stop-color="#ffd457"/><stop offset="1" stop-color="#efa92e"/></radialGradient></defs>
+<g><animateTransform attributeName="transform" type="translate" values="0 0;0 -1;0 0" dur="3s" repeatCount="indefinite"/><circle cx="48" cy="48" r="35" fill="url(#face)" stroke="#b77b27" stroke-width="1.5"/>
+<path d="M24 31 Q34 15 53 18" fill="none" stroke="#fff3b4" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+<ellipse cx="26" cy="53" rx="6" ry="3.5" fill="#eb9353" opacity=".28"/><ellipse cx="70" cy="53" rx="6" ry="3.5" fill="#eb9353" opacity=".28"/>
+<g fill="#50351c" stroke="#50351c" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"><path d="M30 41 Q36 46 42 40 M54 40 Q60 46 66 41" fill="none" stroke-width="3"/><path d="M46 54 Q59 55 49 60 Q59 65 46 66" fill="none" stroke-width="3"/><g fill="#ee785c" stroke="none"><path d="M76 48 C66 39 69 32 75 33 Q79 33 80 37 Q84 31 88 36 C94 42 82 48 76 48Z"><animate attributeName="opacity" values="0;0;1;1;0" keyTimes="0;.25;.4;.7;1" dur="3s" repeatCount="indefinite"/></path></g></g></g></svg>

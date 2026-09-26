@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
-if ! python3 -c 'import gi, cryptography; gi.require_version("Gtk", "4.0"); gi.require_version("Adw", "1")'; then
-    echo 'Install Python GI, GTK 4 and libadwaita first. Ubuntu/Debian: sudo apt install python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 python3-cryptography' >&2
+if ! python3 -c 'import gi, cairo, cryptography; gi.require_foreign("cairo"); gi.require_version("Gtk", "4.0"); gi.require_version("Adw", "1")'; then
+    echo 'Install Python GI, GTK 4 and libadwaita first. Ubuntu/Debian: sudo apt install python3-gi python3-gi-cairo gir1.2-gtk-4.0 gir1.2-adw-1 python3-cryptography' >&2
     exit 1
 fi
 command -v nmcli >/dev/null
@@ -9,6 +9,7 @@ source_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 python3 - "$source_dir" <<'PY'
 import ast
 import base64
+import hashlib
 import os
 from pathlib import Path
 import secrets
@@ -27,10 +28,13 @@ if (root/'current').is_symlink():
     previous=root/('.previous-'+secrets.token_hex(6));previous.symlink_to(os.readlink(root/'current'));os.replace(previous,root/'previous')
 link=root/('.current-'+secrets.token_hex(6));link.symlink_to(release.relative_to(root));os.replace(link,root/'current')
 icon_data=next(node.value.value for node in ast.parse((source/'app.py').read_text()).body if isinstance(node,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='ICON_PNG' for t in node.targets))
-(root/'app.png').write_bytes(base64.b64decode(icon_data))
+raw=base64.b64decode(icon_data)
+icon_path=root/('app-'+hashlib.sha256(raw).hexdigest()[:16]+'.png');icon_path.write_bytes(raw)
+theme=Path.home()/'.local/share/icons/hicolor/256x256/apps';theme.mkdir(parents=True,exist_ok=True)
+(theme/'com.familyconnect.Client.png').write_bytes(raw)
 folder=Path.home()/'.local/share/applications';folder.mkdir(parents=True,exist_ok=True)
 command=str(root/'current/app.py').replace('\\','\\\\').replace('"','\\"').replace('`','\\`').replace('$','\\$')
-(folder/'family-connect.desktop').write_text('[Desktop Entry]\nType=Application\nName=Family Connect\nExec=python3 "'+command+'"\nIcon='+str(root/'app.png')+'\nStartupWMClass=com.familyconnect.Client\nTerminal=false\nCategories=Network;\nComment=Family VPN client\n')
+(folder/'family-connect.desktop').write_text('[Desktop Entry]\nType=Application\nName=family_connect\nExec=python3 "'+command+'" %u\nMimeType=x-scheme-handler/familyconnect;\nIcon='+str(icon_path)+'\nStartupWMClass=com.familyconnect.Client\nTerminal=false\nCategories=Network;\nComment=Family VPN client\n')
 entry=folder/'family-connect.desktop'
 (folder/'com.familyconnect.Client.desktop').write_text(entry.read_text()+'NoDisplay=true\n')
 print('Installed Family Connect',version)

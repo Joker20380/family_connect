@@ -2,13 +2,15 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Signers;
 namespace FamilyConnect;
 
 public sealed record TcpGrant(int Version, string DevicePublicKey, long Sequence, long ExpiresAt,
-    string Server, int Port, string Id, string PublicKey, string ServerName, string ShortId);
+    string Server, int Port, string Id, string PublicKey, string ServerName, string ShortId,
+    [property: JsonIgnore(Condition=JsonIgnoreCondition.WhenWritingNull)] string? XhttpPath=null);
 
 public static class TcpProfile
 {
@@ -50,7 +52,7 @@ public static class TcpProfile
     }
     public static void Validate(TcpGrant p)
     {
-        if(p.Version!=1||p.Sequence<1||p.Sequence>9007199254740991||p.ExpiresAt<1||p.ExpiresAt>253402300799)
+        if((p.Version!=1&&p.Version!=2)||p.Sequence<1||p.Sequence>9007199254740991||p.ExpiresAt<1||p.ExpiresAt>253402300799)
             throw new FormatException("version or sequence");
         if(p.DevicePublicKey is null||p.Server is null||p.Id is null||p.PublicKey is null||p.ServerName is null||p.ShortId is null)
             throw new FormatException("missing field");
@@ -59,6 +61,13 @@ public static class TcpProfile
             ||IPAddress.IsLoopback(ip)||ip.GetAddressBytes()[0] is 0 or >=224||p.Port<1||p.Port>65535)
             throw new FormatException("endpoint");
         if(!Guid.TryParseExact(p.Id,"D",out var id)||id==Guid.Empty||id.ToString("D")!=p.Id)throw new FormatException("identity");
+        if(p.ServerName.Length>253||!Host.IsMatch(p.ServerName))throw new FormatException("TLS server name");
+        if(p.Version==2){
+            if(p.PublicKey!=""||p.ShortId!=""||p.XhttpPath is null||!Regex.IsMatch(p.XhttpPath,@"\A/[A-Za-z0-9_-]{16,128}/\z"))
+                throw new FormatException("XHTTP profile");
+            return;
+        }
+        if(p.XhttpPath is not null)throw new FormatException("Unexpected XHTTP path");
         if(!Regex.IsMatch(p.PublicKey,@"\A[A-Za-z0-9_-]{43}\z"))throw new FormatException("key");
         var key=Convert.FromBase64String(p.PublicKey.Replace('-','+').Replace('_','/')+"=");
         if(key.All(b=>b==0)||Convert.ToBase64String(key).TrimEnd('=').Replace('+','-').Replace('/','_')!=p.PublicKey)
@@ -75,6 +84,15 @@ public static class TcpProfile
     {
         Validate(p);
         if(!Regex.IsMatch(adapter,@"\Afctcp[0-9a-f]{8}\z"))throw new FormatException("adapter");
+        if(p.Version==2)return JsonSerializer.Serialize(new {
+            log=new {loglevel="none"},
+            inbounds=new[]{new {tag="tun",protocol="tun",settings=new {name=adapter,MTU=1280}}},
+            outbounds=new[]{new {tag="vpn",protocol="vless",settings=new {vnext=new[]{new {
+                address=p.Server,port=p.Port,users=new[]{new {id=p.Id,encryption="none"}}
+            }}},streamSettings=new {network="xhttp",security="tls",sockopt=new {@interface=uplink??""},
+                tlsSettings=new {serverName=p.ServerName,fingerprint="chrome",alpn=new[]{"h2"}},
+                xhttpSettings=new {host=p.ServerName,path=p.XhttpPath,mode="packet-up"}}}}
+        });
         return JsonSerializer.Serialize(new {
             log=new {loglevel="none"},
             inbounds=new[]{new {tag="tun",protocol="tun",settings=new {name=adapter,MTU=1280}}},

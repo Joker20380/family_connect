@@ -6,9 +6,9 @@ from . import codec
 
 
 class Chat:
-    def __init__(self, store):
+    def __init__(self, store, *, create_identity=True):
         self.store = store
-        self.identity = store.chat_identity()
+        self.identity = store.chat_identity(create=create_identity)
         self.public = self.identity.get_public_key()
         self.address = codec.address(self.public)
 
@@ -20,11 +20,11 @@ class Chat:
     def contacts(self):
         return {bytes.fromhex(k): bytes.fromhex(v) for k, v in self.store.contacts().items()}
 
-    def queue(self, recipient, text):
+    def queue(self, recipient, text, fields=None):
         contacts = self.contacts()
         if recipient not in contacts:
             raise ValueError('Contact verification required')
-        raw = codec.pack(self.identity, contacts[recipient], text)
+        raw = codec.pack(self.identity, contacts[recipient], text, fields=fields)
         own = {self.address: self.public}
         message = codec.unpack(raw, recipient=contacts[recipient], contacts=own)
         message['peer'] = recipient.hex()
@@ -56,7 +56,7 @@ class Chat:
             destination = RNS.Destination(codec.identity(public), RNS.Destination.OUT,
                                           RNS.Destination.SINGLE, 'lxmf', 'delivery')
             method = LXMF.LXMessage.PROPAGATED if via_relay else LXMF.LXMessage.DIRECT
-            message = LXMF.LXMessage(destination, source, parsed['text'], desired_method=method)
+            message = LXMF.LXMessage(destination, source, parsed['text'], fields=codec.fields_for(parsed), desired_method=method)
             message.timestamp = parsed['timestamp']
             message.pack()
             if message.packed != raw:

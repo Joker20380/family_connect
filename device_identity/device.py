@@ -40,7 +40,7 @@ def _binding(public_identity, wireguard_public_key, challenge, audience):
     _decode(wireguard_public_key, 32)
     _decode(challenge, 32)
     # Audience is a server-configured protocol identifier, never a request URL.
-    if type(audience) is not str or audience not in {'family-connect/enrollment/v1'}:
+    if type(audience) is not str or audience not in {'family-connect/enrollment/v1', 'family-connect/fleet-reservation/v1'}:
         raise ValueError('invalid enrollment audience')
     return dict(schema_version=1, public_identity=public_identity,
                 wireguard_public_key=wireguard_public_key, challenge=challenge,
@@ -109,14 +109,15 @@ proves possession of the WG private key.
 
 
 @contextmanager
-def _private_directory(path):
+def _private_directory(path, *, create=True):
     if os.name != 'posix':
         raise RuntimeError('native secure storage required on this platform')
     path = Path(path)
-    try:
-        path.mkdir(mode=0o700)
-    except FileExistsError:
-        pass
+    if create:
+        try:
+            path.mkdir(mode=0o700)
+        except FileExistsError:
+            pass
     fd = os.open(path, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
     try:
         info = os.fstat(fd)
@@ -159,6 +160,9 @@ def _create_key(directory, name, raw):
         os.fsync(directory)
 
 
+_FRIENDS_MARKER = b'FC-FRIENDS-IDENTITY-1\n'
+
+
 def load_or_create(path):
     """Persist independent keys atomically under a caller-owned POSIX directory.
 
@@ -177,8 +181,18 @@ Missing transport key may be regenerated; an existing corrupt key is never reset
                 raise ValueError('unsafe identity lock')
             fcntl.flock(lock, fcntl.LOCK_EX)
             try:
+                marker = _read_key(directory, 'friends.initialized', len(_FRIENDS_MARKER))
+            except FileNotFoundError:
+                friends_marked = False
+            else:
+                if marker != _FRIENDS_MARKER:
+                    raise ValueError('invalid friends identity marker')
+                friends_marked = True
+            try:
                 raw = _read_key(directory, 'reticulum.key', 64)
             except FileNotFoundError:
+                if friends_marked:
+                    raise ValueError('missing enrolled identity') from None
                 # A partial store with a transport key must never silently acquire
                 # a replacement identity after loss of the permanent identity.
                 try:
@@ -195,6 +209,8 @@ Missing transport key may be regenerated; an existing corrupt key is never reset
             try:
                 wg_raw = _read_key(directory, 'wireguard.key', 32)
             except FileNotFoundError:
+                if friends_marked:
+                    raise ValueError('missing enrolled transport key') from None
                 wg_raw = X25519PrivateKey.generate().private_bytes_raw()
                 _create_key(directory, 'wireguard.key', wg_raw)
             return DeviceIdentity(identity, X25519PrivateKey.from_private_bytes(wg_raw))

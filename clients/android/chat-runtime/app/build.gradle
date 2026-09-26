@@ -1,0 +1,43 @@
+plugins { id 'com.android.application'; id 'com.chaquo.python' }
+android {
+    namespace 'com.familyconnect.app'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'com.familyconnect.chatchecks'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName 'acceptance-only'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        ndk { abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64' }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    sourceSets {
+        main {
+            java.srcDirs = ['../../app/src/main/java']
+            java.includes = ['**/ChatLocalAndroid.java', '**/ChatKeyVault.java',
+                '**/ChatKeyEnvelope.java', '**/ChatStoreCipher.java', '**/ChatNetworkAndroid.java', '**/PythonRuntimeAndroid.java']
+        }
+    }
+}
+dependencies {
+    implementation 'com.google.code.gson:gson:2.13.2'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+}
+chaquopy {
+    defaultConfig {
+        version '3.10'
+        pip {
+            options '--no-deps'
+            install 'rns==1.5.1'
+            install 'pyserial==3.5'
+        }
+    }
+    sourceSets { getByName('main') { srcDir '../../app/src/main/python' } }
+}
+ext.chatCoreDirectory = file('../../../../messenger')
+apply from: '../../chat-python.gradle'

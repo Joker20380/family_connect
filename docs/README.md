@@ -1,199 +1,125 @@
-# Documentation map
+# Documentation
 
-[Короткая инструкция Family Connect Test](testing/friends-quickstart.ru.md).
+[XHTTP/TLS: исследование, реализация и границы5.3в](xhttp-implementation.ru.md).
 
-[Приёмка Android Stage5 на реальном устройстве](testing/android-stage5-live.ru.md).
+[Режим сетей с белыми списками: требования и план5.3в](allowlist-connectivity.ru.md).
 
-[Публичный HTTPS для Android регистрации](releases/2026-09-14-product-https.ru.md).
+[Android: подключение выбора gateway к службе/UI](releases/2026-09-24-android-selection-service.ru.md).
 
-[Android CI и защищённое состояние после остановки процесса](releases/2026-09-14-android-storage-runtime.ru.md).
+**Новому разработчику: [общая карта кода по модулям](code-map/README.ru.md)** —
+сервер, клиенты, мессенджер, эксплуатация, зависимости и границы готовности.
 
-[Git checkpoint и Android runtime acceptance](releases/2026-09-14-git-android-acceptance.ru.md).
+[Android: транзакционная смена gateway и восстановление](releases/2026-09-24-android-gateway-transaction.ru.md).
 
-[Android: автоматический RNS carrier и ACK](releases/2026-09-14-android-control-rns.ru.md).
+Разработчику: [карта managed-кода, проверки и восстановление](managed-control-code-map.ru.md).
 
-[Android: приём подписанной конфигурации](releases/2026-09-14-android-control-intake.ru.md).
+[Android AWG3.1 journal и фактический статус публикации документации](releases/2026-09-24-awg31-android-journal.ru.md).
 
-[Android: регистрация Reticulum identity](releases/2026-09-14-android-control-enrollment.ru.md).
+[AWG3.1: согласование Java/C#/Python и границы проверки](releases/2026-09-24-managed-awg31-native-verifiers.ru.md).
 
-[Android committed resume](releases/2026-09-14-android-control-resume.ru.md) · [Django и Reticulum identity](design/django-product-plane.ru.md).
+[Защита от блокировок: требования и приёмка](blocking-resilience.ru.md) ·
+[Managed AWG3.1: локальный checkpoint5.3а](releases/2026-09-24-managed-awg31.ru.md).
 
-[Android Stage5: startup recovery, 14.09.2026](releases/2026-09-14-android-control-startup.ru.md).
+[Как другие проекты восстанавливают доступ и доставляют адреса](releases/2026-09-24-competitor-recovery.ru.md).
 
-- [Android Stage 5: native application adapter, pinned root и rollback14.09](releases/2026-09-14-android-control-application.ru.md).
+Этап4 принят пользователем как пилотный выпуск. Этап5 начат: независимый служебный
+канал и расширяемый парк серверов. [Контракт](stage5-fleet-contract.ru.md) ·
+[Аудит5.1 и первые компоненты](releases/2026-09-24-stage5-audit.ru.md).
+[Текущий план](PLAN.md) · [Основание приёмки](STATUS.md).
+[Приоритет AWG3.1 и исследование третьего транспорта](releases/2026-09-24-transport-priorities.ru.md).
 
-- [Android Stage 5: общий service/profile owner и защитный gate14.09](releases/2026-09-14-android-control-owner.ru.md).
+Последние доработки: [голосовые beta50: жесты, прокрутка и фон](releases/2026-09-23-switch-colors-beta50.ru.md) · [мессенджер и уведомления](testing/messenger-notices.ru.md).
 
-- [Утверждённые условия выпуска трёх платформ; messenger/iPhone после них](PLAN.md#release-gates-three-platforms).
-- [Android Stage 5: journal, ACK, recovery и границы проверки14.09](releases/2026-09-14-android-control-journal.ru.md).
+- [family_connect: обновления Android, язык, бренд и карта](releases/2026-09-20-updater-language-brand.ru.md).
 
-- [Android beta01: tester instructions](testing/android-beta01.ru.md) · [Preparation evidence](releases/2026-09-13-android-beta01.ru.md).
+- [Native Friends AWG 3.1 на Linux/Windows: проверки и rollout](releases/2026-09-20-desktop-awg31.ru.md).
 
-- [AWG3.1: managed recovery experiment](releases/2026-09-13-awg31-managed-recovery.ru.md).
-- [Own transport: milestones and actual dependencies](own-transport-roadmap.ru.md).
+[Product introduction](../README.md) · [Русская версия](../README.ru.md)
 
-- [AWG3.1: adverse conditions and tools range fix](releases/2026-09-13-awg31-resilience.ru.md).
+Updated24 September2026. Android updater and invitation page: beta50; invitation downloads: Linux0.2.10 / Windows0.2.14 preview.
+[Current distribution](releases.md) · [Documentation required with every version](releases.md#documentation-with-every-version).
 
-- [Reticulum messenger: proposed scope and integration](reticulum-messenger.ru.md).
+Start with the guide for your role. [STATUS](STATUS.md) is the source of truth for
+installed/deployed versions; dated reports preserve what was checked at that time.
 
-- [AWG3.1: startup fix and first virtual comparison](releases/2026-09-13-awg31-experiment.ru.md).
+[Windows0.2.14: интерфейс, ключ и приглашение](releases/2026-09-24-windows0214-installer.ru.md) · [English](releases/0.2.14.en.md).
 
-- [AWG 3.1: начальная сверка и план миграции](awg31-migration.ru.md).
+## Users
 
-- [Managed Linux control route acceptance, 13.09.2026](releases/2026-09-13-managed-control-route.ru.md).
+- Getting started and troubleshooting: [English](getting-started.en.md) / [Русский](getting-started.ru.md).
+- Client installation: [English](clients.en.md) / [Русский](clients.ru.md).
+- [Detailed Android friends walkthrough](testing/friends-quickstart.ru.md).
+- Desktop updates: [English](updates.en.md) / [Русский](updates.ru.md).
+- [Security](../SECURITY.md) and [privacy](privacy.md).
 
-- [External Reticulum: deployment and live acceptance, 13.09.2026](releases/2026-09-13-external-reticulum.ru.md).
+## Operators
 
-- [Amsterdam: Linux GUI acceptance, 13.09.2026](releases/2026-09-13-amsterdam-gui.ru.md).
+- [Friends deployment](../deploy/friends/README.md).
+- [Fleet leases/IPAM: хранение, API и recovery](fleet-leases.ru.md).
+- [Fleet proof авторизация и scheduler](fleet-access-scheduler.ru.md).
+- [Fleet offline publication: подпись, доступ и схема3](fleet-publication.ru.md).
+- [Checkpoint5.2:269 тестов signed publication](releases/2026-09-24-fleet-publication.ru.md).
+- [Checkpoint5.2:201 тест и миграция](releases/2026-09-24-fleet-services.ru.md).
+- [Fleet gateway fencing и worker](fleet-gateway-fencing.ru.md).
+- [Fleet WG/AWG и SSH: контракт, установка и границы](fleet-wg-ssh.ru.md).
+- [Native fleet-приёмка:12 сценариев WG/AWG+SSH](releases/2026-09-24-fleet-native.ru.md).
+- [Повторяемый изолированный стенд](../pilot/fleet-native/README.ru.md).
+- [Этап5.2: WG/SSH checkpoint,163 теста](releases/2026-09-24-fleet-wg-ssh.ru.md).
+- [7.1: единая Django-админка серверов, доступа и платежей](PLAN.md#django-admin).
+- [Этап5.2: проверки постоянных выдач](releases/2026-09-24-fleet-leases.ru.md).
+- Registration: [English](registration.en.md) / [Русский](registration.ru.md).
+- Gateway reconciliation: [English](gateway-reconciliation.en.md) / [Русский](gateway-reconciliation.ru.md).
+- [Paired Linux control rollout](linux-control-preview-rollout.ru.md).
+- Operations/diagnostics for the original lab: [English](operations.en.md) / [Русский](operations.ru.md).
+- [Release distribution and signing](releases.md).
 
-[Amsterdam gateway: real-network pilot and rollback](releases/2026-09-13-amsterdam-pilot.ru.md).
+## Developers
 
-[Android Stage5 verifier](releases/2026-09-13-android-control.ru.md).
+- [Contribution and build checks](../CONTRIBUTING.md).
+- [Architecture map](architecture.md): current product versus experimental relay paths.
+- Device identity: [English ADR](adr/001-identity-provisioning.en.md) / [Русский ADR](adr/001-identity-provisioning.ru.md).
+- Provisioning: [English](provisioning-provider.en.md) / [Русский](provisioning-provider.ru.md).
+- [Stage 5 control protocol](stage5-architecture.ru.md), [native binding](stage5-native-binding.ru.md).
+- [Messenger design](reticulum-messenger.ru.md) and [core](../messenger/README.ru.md).
+- [Android runtime acceptance](testing/android-stage5-live.ru.md).
+- Lab testing: [English](testing.en.md) / [Русский](testing.ru.md).
 
-[Windows Stage5 verifier](releases/2026-09-13-windows-control.ru.md).
+## Project
 
-[Stage5 conformance corpus](releases/2026-09-13-control-vectors.ru.md) · [Vector format](../tests/vectors/README.md).
+- [Current state](STATUS.md) and [working plan](PLAN.md).
+- [Desktop Friends TCP recovery and refined Linux UI](releases/2026-09-20-desktop-friends-apply.ru.md).
+- [Desktop identity storage and recovery checks](releases/2026-09-19-desktop-identity-storage.ru.md).
+- [Desktop modernization](desktop-modernization.ru.md) and [first integration checks](releases/2026-09-19-desktop-friends-foundation.ru.md).
+- [Roadmap](ROADMAP.ru.md); historical plans are linked separately.
+- [Release model](releases.md) and [GitHub Releases](https://github.com/Joker20380/family_connect/releases).
+- [Three-platform download verification](releases/2026-09-20-three-platform-downloads.ru.md).
+- [Licensing gaps](licensing.md).
+- [Public presentation audit](releases/2026-09-19-github-presentation.ru.md).
 
-[CI results and Android retry](releases/2026-09-13-linux-control-ci.ru.md) · [Next native binding](stage5-native-binding.ru.md).
+## Engineering history
 
-[Linux live pilot passed13.09](releases/2026-09-13-linux-control-pilot-pass.ru.md). Scoped CI health correction next.
+All detailed reports remain available in [releases](releases/) and the
+[preserved session index](history-index.md). Implementation logs:
+[English](implementation-log.en.md) / [Русский](implementation-log.ru.md).
+Older instructions may name retired hosts or superseded interfaces; follow current
+runbooks and STATUS before operating anything.
 
-[Linux paired preview acceptance13.09](releases/2026-09-13-linux-control-acceptance.ru.md) · [Pilot/return runbook](linux-control-preview-rollout.ru.md).
+- [Коммерческая гипотеза: восстановление после блокировок и конкуренты](releases/2026-09-24-vpn-market-assessment.ru.md).
 
-## Paired Linux control preview — 2026-09-12
+- [Reticulum: перенос службы, discovery и границы восстановления](reticulum-recovery-design.ru.md).
 
-Operator GUI/core bundle added with an explicit public-file allowlist, integrity
-manifest, runtime-only pinned dependencies and extracted launcher. Legacy six-file
-desktop archive unchanged. Local405 Python passed; extracted real RNS lifecycle
-and GTK smoke passed. Scoped Linux control CI34720569558 passed on source d8aef8a.
-AWG/TCP pilot and phase0 Python/Rust passed. General phase0 failover failed at
-isolated Docker build; exact cause unavailable (logs API403). Client builds Linux
-passed; Windows/Android still running at checkpoint.
-No release/install/catalog/server changes. Next: resolve general failover build evidence and prepare paired preview
-rollout; native Windows/Android binding, AWG3.1 and TD-1 remain open.
-[Preview checkpoint](releases/2026-09-12-control-preview.ru.md).
+- [Критические секреты и аварийное восстановление](secrets-and-recovery.ru.md).
 
+- [Локальная подпись с ключом из KeePassXC](vault-signing.ru.md).
 
-Latest work/rollbacks: [complete session checkpoint](releases/2026-09-11-session-checkpoint.ru.md).
-Ubuntu appearance/terminal: [settings and rollback](ubuntu-laptop-settings.ru.md).
+- [Закрытые серверные копии и проверка восстановления](server-secret-backup.ru.md).
 
-Start with [STATUS](STATUS.md) (what is actually installed/deployed) and [PLAN](PLAN.md)
-(the next work). `AGENTS.md` in the repository root directs new sessions here.
+- [Время серверов и диагностика chat-sync](server-time-and-chat-sync.ru.md).
 
-| Topic | Русский | English |
-|---|---|---|
-| Native Linux UI 0.2.7 | [GTK report](releases/0.2.7.ru.md) | [GTK report](releases/0.2.7.en.md) |
-| Release 0.2.1 | [Release](releases/0.2.1.ru.md) | [Release](releases/0.2.1.en.md) |
-| Client updates | [Updates](updates.ru.md) | [Updates](updates.en.md) |
-| Product registration | [Registration](registration.ru.md) | [Registration](registration.en.md) |
-| Provisioning and cache | [Provider](provisioning-provider.ru.md) | [Provider](provisioning-provider.en.md) |
-| Gateway operations | [Reconciliation](gateway-reconciliation.ru.md) | [Reconciliation](gateway-reconciliation.en.md) |
-| Desktop layout | [Layout](desktop-layout.ru.md) | [Layout](desktop-layout.en.md) |
-| Implementation history | [Log](implementation-log.ru.md) | [Log](implementation-log.en.md) |
+- [Изолированная проверка восстановления KeePassXC](vault-restore-rehearsal.ru.md).
 
-Historical descriptions of an earlier stage are not the deployment state. STATUS is
-updated after verification; plans and unrun checks must never be marked complete.
+- [Потребители секретов и состояние миграции](secret-consumer-register.ru.md).
 
-Windows visual alignment: [RU](releases/0.2.8.ru.md), [EN](releases/0.2.8.en.md).
+- [Подпись Android APK из KeePassXC](android-vault-signing.ru.md).
 
-Live product enrollment/revoke validation (2026-09-10): [report](live-product-smoke.ru.md).
-
-Connection resilience / AWG pilot: [rollout](releases/2026-09-10-awg.ru.md).
-
-Linux established-session recovery: [report](releases/2026-09-10-recovery.ru.md).
-
-TCP experiment (unstable; resume here): [checkpoint](releases/2026-09-11-tcp.ru.md).
-
-TCP diagnosis and routing defect: [report](releases/2026-09-11-tcp-diagnosis.ru.md).
-
-TCP routing correction (isolated tests passed; not installed): [report](releases/2026-09-11-tcp-routing.ru.md).
-
-Matched TCP/direct/SOCKS timing and remaining errors: [report](releases/2026-09-11-tcp-matched.ru.md).
-
-Paired client/server TCP-header diagnosis: [report](releases/2026-09-11-tcp-packets.ru.md).
-
-Development stages and acceptance criteria: [roadmap](ROADMAP.ru.md).
-
-Local Wi-Fi/gateway/VPS comparison: [report](releases/2026-09-11-local-link.ru.md).
-
-Retest after Wi-Fi change (120/120 isolated probes): [report](releases/2026-09-11-network-change.ru.md).
-
-Corrected TCP helper installed; short laptop smoke passed: [report](releases/2026-09-11-tcp-host-smoke.ru.md).
-
-Established AWG → TCP backend recovery (two passes; GUI acceptance pending): [report](releases/2026-09-11-awg-tcp-recovery.ru.md).
-
-Real GTK/pkexec recovery and remaining manual acceptance: [report](releases/2026-09-11-tcp-gtk.ru.md).
-
-Manual polkit cancellation passed: [report](releases/2026-09-11-polkit-cancel.ru.md).
-
-TCP integration into main, review fixes and packaging gap: [report](releases/2026-09-11-tcp-integration.ru.md).
-
-Linux TCP component bundle: [installation](linux-tcp-install.ru.md), [validation](releases/2026-09-11-tcp-bundle.ru.md).
-
-Real Linux TCP systemd acceptance: [report](releases/2026-09-11-tcp-systemd.ru.md), [sanitized result](tcp-systemd-result.json).
-
-TCP authenticated delivery: [runbook](tcp-delivery.ru.md), [validation](releases/2026-09-11-tcp-delivery.ru.md).
-
-Published signed TCP 0.1.0: [release evidence](releases/2026-09-11-tcp-release.ru.md).
-
-Root-owned TCP updater and GTK pilot install: [acceptance](releases/2026-09-11-tcp-updater.ru.md).
-
-Manual TCP updater authorization cancellation: [report](releases/2026-09-11-tcp-updater-cancel.ru.md).
-
-Standalone TCP setup, independent VM and second Ubuntu laptop: [checkpoint](releases/2026-09-11-tcp-setup.ru.md).
-
-Second Ubuntu laptop dedicated TCP profile: [checkpoint](releases/2026-09-11-ubuntu-profile.ru.md).
-
-Ubuntu TCP network timeout diagnosis: [report](releases/2026-09-11-ubuntu-network.ru.md).
-
-First-laptop context comparison and TCP cycle: [result](releases/2026-09-11-first-laptop-resume.ru.md).
-
-First-laptop paired headers and remaining loss hypothesis: [report](releases/2026-09-11-first-laptop-paired.ru.md).
-
-First-laptop pinned-control offload comparison: [report](releases/2026-09-11-first-laptop-offload.ru.md).
-
-First-laptop isolated TUN/SOCKS/direct: [report](releases/2026-09-11-first-laptop-isolated.ru.md).
-
-Standalone setup integrated; network tests deferred by user: [checkpoint](releases/2026-09-11-setup-integration.ru.md).
-
-Platform CI180d79f and release preparation: [checkpoint](releases/2026-09-11-platform-ci.ru.md).
-
-Published desktop0.2.9 and offline signed update: [report](releases/2026-09-11-release-0.2.9.ru.md).
-
-Signed standalone TCP Setup: [trust/install runbook](tcp-setup-trust.ru.md), [release evidence](releases/2026-09-11-tcp-setup-release.ru.md).
-
-Windows TCP native engine: [CI result and next integration](releases/2026-09-11-windows-tcp-engine.ru.md).
-
-Windows TCP profile: [operator runbook](windows-tcp-profile.ru.md) · [broker acceptance](releases/2026-09-11-windows-tcp-profile.ru.md).
-
-Windows TCP process lifetime: [native stop/crash acceptance](releases/2026-09-11-windows-tcp-lifecycle.ru.md).
-
-Windows TCP broker network session: [runbook](windows-tcp-session.ru.md) · [LocalSystem acceptance](releases/2026-09-11-windows-tcp-session.ru.md).
-
-Windows TCP installer/transport UI: [report](releases/2026-09-11-windows-tcp-ui.ru.md), [runbook](windows-tcp-session.ru.md).
-
-Windows TCP engine-crash recovery: [report](releases/2026-09-11-windows-tcp-recovery.ru.md).
-
-Windows TCP tunnel health monitoring: [report](releases/2026-09-11-windows-tcp-health.ru.md).
-
-Windows AWG native worker: [report](releases/2026-09-11-windows-awg-engine.ru.md), [build/CI](../pilot/windows-awg/README.md).
-
-- [Windows AWG: активация и эксплуатация](windows-awg.ru.md).
-
-Windows Auto: [implementation and acceptance](releases/2026-09-12-windows-auto.ru.md).
-
-Android WG/AWG: [implementation and acceptance](releases/2026-09-12-android-awg.ru.md), [операции и сборка](android-transports.ru.md).
-
-Android TCP: [implementation and acceptance](releases/2026-09-12-android-tcp.ru.md).
-
-Android Auto: [implementation and acceptance](releases/2026-09-12-android-auto.ru.md).
-
-Stage 5 control channel: [architecture](stage5-architecture.ru.md), [runbook](reticulum-control.ru.md), [Stage 5 checkpoint](releases/2026-09-12-reticulum-control.ru.md).
-
-[GUI coordination and short network checkpoint](releases/2026-09-12-control-gui-network.ru.md).
-
-[Matched HTTPS result](releases/2026-09-12-matched-https.ru.md).
-
-- [Android AWG3.1 beta02: установка](testing/android-beta02-awg31.ru.md) · [приёмка](releases/2026-09-13-android-awg31.ru.md)
-
-- [Android beta03: проверка связи и установка](testing/android-beta03.ru.md) · [приёмка и ограничения CI](releases/2026-09-13-android-stability.ru.md)
+- [Актуальность локальных SQLite и границы классификации](local-sqlite-backup-review.ru.md).

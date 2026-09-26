@@ -1,0 +1,23 @@
+// Shared by the actual client and the isolated chat runtime acceptance app.
+// Explicit source allowlist: never put the repository root on the Python path.
+def chatRoot = project.ext.chatCoreDirectory
+def chatSources = ['__init__.py', 'codec.py', 'chat.py', 'store.py', 'local.py', 'mailbox.py', 'delivery.py', 'admission.py', 'service_events.py']
+def generatedChat = layout.buildDirectory.dir('generated/chatPython')
+def stageChatPython = tasks.register('stageChatPython', Sync) {
+    from(chatRoot) { include chatSources; into 'messenger' }
+    into generatedChat
+}
+chaquopy {
+    sourceSets { getByName('main') { srcDir generatedChat.get().asFile } }
+    defaultConfig {
+        // Reproducible local APK builds: point at a host Python matching target 3.10.
+        // Leave Chaquopy's normal discovery unchanged when the property is absent.
+        def hostPython = providers.gradleProperty('fcBuildPython').orNull
+        if (hostPython != null) buildPython hostPython
+        pip { install 'lxmf==1.1.1' }
+    }
+}
+// Chaquopy's merge task enumerates source directories, so make generation explicit.
+tasks.configureEach {
+    if (name.matches('merge.*PythonSources')) dependsOn stageChatPython
+}

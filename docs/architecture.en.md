@@ -1,3 +1,5 @@
+> Historical QUIC laboratory design. For the current product paths and platform status, see the [architecture map](architecture.md) and [STATUS](STATUS.md).
+
 # Architecture and trust boundaries
 
 [Русский](architecture.ru.md) · [Guide](../README.en.md)

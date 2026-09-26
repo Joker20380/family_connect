@@ -1,118 +1,78 @@
-> Linux 0.2.7+: native GTK 4/libadwaita. Prerequisites and current installation: [release](releases/0.2.7.en.md), [STATUS](STATUS.md). The 0.1 prototype below is historical.
+# Client installation
 
-> **Current Windows version:** [Windows 0.2](windows-native.en.md). The Windows section below describes the legacy 0.1 prototype.
+Windows0.2.14 targets Windows10 1809+ /11 x64 and bundles .NET.
+After a failed0.2.13 installation, run the new installer over the remaining files.
+No manual service setup is needed. Affected Windows10 device acceptance is pending.
 
-# Family Connect applications 0.1
+[Русский](clients.ru.md) · [Home](../README.md)
 
-[Русский](clients.ru.md) · [Home](../README.en.md)
-
-## Included
-
-- Android: a native app embedding the official WireGuard GoBackend; no separate WireGuard
-  app is required. Android 8.0/API 26 or newer.
-- Linux: a Python/Tk desktop UI controlling WireGuard through NetworkManager.
-- Windows: the same UI controlling an installed official WireGuard service. Administrator
-  rights are required; Windows packages are built on Windows through GitHub Actions.
-- Full IPv4/IPv6 profile import, connect/disconnect, actual OS tunnel state, manual public-IP
-  checks, and Russian/English UI.
-
-This first client uses direct WireGuard. Adaptive relays, family invitations, link enrollment,
-gateway selection and a persistent application kill switch are not integrated. The experimental
-Rust core remains separate. The retired website server is not used.
+Status checked 2026-09-23. Client features and release versions differ by platform.
 
 ## Android
 
-Local build: `artifacts/clients/FamilyConnect-Android-debug.apk`.
-GitHub Actions: **Client builds**, artifact **FamilyConnect-Android-debug**.
+Use the [friends beta guide](getting-started.en.md): Android 8+, ARM64 beta50,
+invitation-based access, VPN, text and voice messages. The APK is distributed through
+an invitation page and HTTPS download; it is not yet a GitHub or app-store release.
+The [client workflow](../.github/workflows/clients.yml) documents source-build requirements.
+CI debug APKs are not update packages for an installed friends beta.
 
-1. Transfer the APK and personal `fc-ru-android.conf` file by USB.
-2. Install the APK; Android may ask you to allow installation from that source.
-3. Open Family Connect → Add device profile → select the `.conf` file.
-4. Tap Connect and grant VPN permission; notification permission is optional.
-5. Tap Check public IP. The current Russian gateway should show `185.251.89.19`.
+## Current invitation-page downloads
 
-Disconnect the old VPN before using this app. The imported configuration remains this device's
-personal profile; do not share one key between simultaneously connected devices. The APK does
-not contain your private keys or a preconfigured VPN profile.
+[Linux 0.2.10 / 8e9fabe3cbef2989](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-8e9fabe3cbef2989.tar.gz) · [Windows 0.2.14 / 6eed30c](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.14-pilot-unsigned.exe)
 
-The profile is stored privately using AES-GCM with an Android Keystore key. The file is excluded
-from backup/device transfer and FLAG_SECURE protects the screen. The original imported file is
-not deleted by the app; you may remove it after import. Remove saved profile deletes the stored
-profile and its storage key.
+Install the client, return to the original invitation link, mark **Application installed** and choose **Open application**.
+Windows installs the URI handler with its service and preserves existing activation.
+Linux needs operator-assisted setup: [current archive instructions](https://185.251.89.19:8443/downloads/FamilyConnect-Linux-0.2.10-invitation.txt).
+They cover a persistent Python environment and desktop URI handler; VPN helpers are installed separately.
 
-A foreground service provides a disconnect notification. Closing the Activity keeps the VPN
-running. There is no boot auto-connect, and Always-on is explicitly disabled pending lifecycle
-and recovery validation. A debug APK is for private testing. Persistent updates need a release
-signing key: debug builds from different machines/CI can have different signatures. This is not
-a Google Play release. Physical-device operation, Wi-Fi/LTE and leak behavior remain to be tested.
+[Windows GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/windows-v0.2.14) · [Linux GitHub preview](https://github.com/Joker20380/family_connect/releases/tag/desktop-preview-20260923-840181d) · [Hashes and checks](releases/2026-09-24-windows0214-installer.ru.md).
+Preserve identity and application data when updating. Windows0.2.14 uses its own signed update catalog; install it manually once from0.2.12 or earlier. Linux and the older shared catalog are unchanged. Desktop messenger parity is not claimed.
+The separate historical GitHub v0.2.9 flow below is retained; use the current downloads above for new invitations.
 
-## Linux
+Windows0.2.14 automatically creates the local device key on first launch. Access still needs an invitation: on the phone choose **Settings → Invite a friend**, send the full link to the PC and open it. Alternatively choose **Activate with invitation** on the PC, paste the full link and select **Activate access**. Launching only the desktop shortcut cannot supply the invitation. Existing access survives an update.
 
-Requires Python 3, Tk and NetworkManager with WireGuard support. These components were checked
-on your laptop, and the existing `fc-ru-linux` profile is detected automatically.
+## Original GitHub v0.2.9: Linux
 
-```sh
-./clients/desktop/install-linux.sh
-```
-
-Open **Family Connect** from the applications menu, or run directly:
+The original desktop release is the [v0.2.9 pilot](https://github.com/Joker20380/family_connect/releases/tag/v0.2.9).
+The UI uses **GTK 4/libadwaita**, not Tk. Requirements: system Python with GI,
+GTK 4.8+, libadwaita 1.2+, cryptography and NetworkManager with WireGuard support.
+On Debian/Ubuntu, install the prerequisites:
 
 ```sh
-python3 clients/desktop/app.py
+sudo apt install python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 python3-cryptography network-manager
 ```
 
-Only application profiles `fc-app-*` and the existing `fc-ru-linux` are listed. Import creates a
-NetworkManager profile, disables automatic connection and prioritizes full-tunnel DNS. Temporary
-configuration files have mode 0600 and are removed; permanent key storage and authorization are
-handled by NetworkManager/Polkit. Run the UI as a normal user, not through sudo. The OS can request
-authorization. Closing the window keeps the system tunnel running and prompts when its active
-state is known.
+Download and extract `FamilyConnect-Linux-0.2.9.tar.gz` from that release. Inside the
+extracted directory, run `sh install-linux.sh`, then open Family Connect from the
+applications menu. Run the UI as your normal user; privileged operations use the
+platform's authorization flow. The operator supplies device-specific activation/profile
+setup. The release does not include the Android friends invitation flow or messenger.
 
-## Windows
+For source installation, run `sh clients/desktop/install-linux.sh` after installing
+prerequisites. Experimental paired control builds are separate from the six-file
+release archive: [operator runbook](linux-control-preview-rollout.ru.md).
 
-1. Install [official WireGuard](https://www.wireguard.com/install/).
-2. In GitHub **Actions → Client builds**, download **FamilyConnect-Windows**.
-3. Extract the **whole** folder, including `_internal`, run `FamilyConnect.exe` and allow UAC.
-4. Import a separate Windows profile and connect. Do not reuse a currently active Linux/Android
-   key; an additional device needs its own peer on the gateway.
+## Original GitHub v0.2.9: Windows x64
 
-The app checks the installed WireGuard Authenticode signature. Its official manager service
-applies ACLs and converts imported profiles into DPAPI storage. Family Connect does not maintain
-its own persistent plaintext profile store. Profile names are limited to `fc-app-*`; unrelated
-VPN services are not deleted. The app's tunnel service is configured for manual startup;
-disconnecting uninstalls only the selected tunnel service. IP checks are user-triggered.
+Download `FamilyConnect-Setup-0.2.9-pilot-unsigned.exe` from the
+[v0.2.9 release](https://github.com/Joker20380/family_connect/releases/tag/v0.2.9).
+The installer includes the native app, .NET runtime, broker and VPN components.
+Administrator approval is needed for installation; a separate WireGuard app is not required.
+A trusted Family Connect Authenticode publisher signature is still missing; do not
+turn off security software to install it. No Windows ARM64 release is validated.
 
-The Windows executable is packaged with PyInstaller on Windows and is not Authenticode-signed.
-Unknown-publisher warnings do not constitute an operator signature. Actual VPN/DPAPI behavior
-has not yet been validated on a user's Windows machine.
+Use **Get device code**, give the public code to the operator, then import the
+operator-issued `.fcactivation` file and connect. See the
+[native Windows guide](windows-native.en.md) for key custody, activation and build steps.
+Published desktop onboarding is not the newer Android friends activation flow.
 
-## Tests and builds
+## Updates and limits
 
-Parsers reject executable hooks such as PostUp/PreUp, unknown or repeated fields, multiple peers,
-invalid keys, incomplete IPv4/IPv6 routes and oversized profiles. Android also uses the official
-library parser. This MVP accepts numeric endpoint/DNS addresses. The app does not log private
-keys, configurations or traffic contents.
+Desktop update checks verify an offline-signed catalog and artifact hashes; see
+[updates](updates.en.md). Android friends checks for updates in the app; Android asks the user to install the APK signed with the same beta key.
+A successful build or installer check does not establish live VPN reliability on every
+network. [Current platform evidence](STATUS.md) and dated release reports separate
+installation, UI, networking and recovery tests.
 
-```sh
-python3 -m pytest clients/desktop/tests -q
-python3 clients/desktop/app.py --smoke
-
-# Android: JDK 17, Gradle 8.11.1, SDK 35 / Build Tools 35.0.0
-cd clients/android
-gradle --no-daemon :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
-
-# Windows PowerShell, Python 3.12+
-./clients/desktop/build-windows.ps1
-```
-
-An active interface alone is not evidence of working Internet access. The UI therefore reports
-“Tunnel is on” and provides a separate IP check through Cloudflare.
-
-Integration references: [WireGuard embedding](https://www.wireguard.com/embedding/),
-[Windows services and secure storage](https://git.zx2c4.com/wireguard-windows/about/docs/enterprise.md).
-
-The local debug signing key is retained only on the laptop under `state-client-build/android-signing/`, outside Git. Keep it to support updates over the locally installed build.
-
-### Windows troubleshooting
-
-If the profile list is empty and setup fails, install official WireGuard using Install WireGuard, then select Retry setup. Run Family Connect as administrator. WireGuard signature verification remains mandatory. After setup succeeds, import a separate Windows device profile using Add profile. The client displays specific setup failures without exposing profile contents or system command output.
+[Historical initial-client guide](clients-legacy.en.md) is retained for the early direct
+WireGuard experiment; its old Tk/Windows-wrapper instructions are not current installation advice.

@@ -56,3 +56,49 @@ intentionally disables those testers and must not be routine test cleanup. Revie
 later edits before restoring nginx `.before-invites` config; do not restore the old
 public credential endpoint. Keep existing registration/TLS renewal and Pilot working.
 Update clients with a higher version/code, without uninstalling their data.
+
+## Participant referrals (2026-09-19)
+
+The direct batch is now 50; a separate server-side campaign permits 500 referral
+claims. Activated devices sign the `refer` challenge to obtain a stable URL.
+The Android source displays it as QR; the public landing page explicitly claims
+one invitation, with a browser-persisted idempotency ID. A sponsor may issue 20
+new grants per rolling 24 hours. Revocation blocks new claims; prior child grants
+remain independent. This is not unique-person verification.
+
+Keep `referral.key`, `access.db` and `direct-50.json` backed up privately together;
+never rotate the key or reset the counters during an upgrade. Fresh installation
+requires `app/control/friends/referrals.py` and `invite/index.html` in the service
+root before `install-access.py`. That installer is first-install-only.
+
+See the [rollout, rollback, tests and remaining Android checks](../../docs/releases/2026-09-19-referrals.ru.md).
+The source QR screen has not been packaged/installed: the user's APK pause remains.
+
+## Compact Android download (2026-09-19)
+
+The invite page offers beta14 ARM64 (36.4 MB) and the immutable universal beta13
+fallback. Build compact explicitly with `-PfcTargetAbi=arm64-v8a`; default builds
+keep four ABIs. Verify with `pilot/android-awg/verify-apk.py --abis arm64-v8a`.
+Compact packaging compresses the unchanged native libraries; Android extracts them
+on install. [Artifact, checks and rollback](../../docs/releases/2026-09-19-android-beta14.ru.md).
+
+## Current distribution — 2026-09-23
+
+The historical code-claim browser flow above is superseded by app-side invitation activation. The page preserves its fragment, provides Android beta50 / desktop0.2.10 downloads and opens the installed URI handler. No browser claim or token storage. OFF is orange, ON turquoise. [Current versions and rollback](../../docs/releases/2026-09-23-switch-colors-beta50.ru.md).
+
+## Private-file creation policy
+
+New AWG/TCP units include `UMask=0077`. Existing deployments use the repository's
+`70-private-files.conf` as `/etc/systemd/system/<unit>.d/70-private-files.conf` for
+`family-connect-friends-awg.service` and `family-connect-friends-tcp.service`.
+After `systemctl daemon-reload`, confirm `systemctl show <unit> -p UMask`.
+This changes the next process start, not the umask of an already running process.
+Compare `/proc/<MainPID>/status` and do not claim effective rollout from unit settings
+alone. A restart can interrupt connections and should be a separate maintenance step.
+
+Keep AWG private config/settings/peer DB root0600 inside root0700; TCP server.json
+root:fc-friends0640 inside root:fc-friends0750. The TCP group read bit is intentional.
+Do not chmod it0600 without first changing the service's credential access path.
+Do not print config contents, environment values or database rows while checking.
+Rollback of this drop-in restores prior creation policy after reload/next start;
+it does not change existing file modes or revert unrelated hardening.

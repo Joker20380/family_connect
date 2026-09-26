@@ -128,7 +128,7 @@ public static class ControlProtocol
     }
     public sealed record VerifiedConfiguration(JsonElement State, string Digest);
     public static VerifiedConfiguration VerifyConfiguration(byte[] raw, byte[] anchor, byte[] rnsPrivate,
-        byte[] publicIdentity, string wireguardPublicKey, string clientVersion, long now)
+        byte[] publicIdentity, string wireguardPublicKey, string clientVersion, long now, bool supportsAwg31 = false)
     {
         if (now < 0) throw new ControlRejected("CLOCK");
         if (raw.Length > 65536) throw new ControlRejected("SIZE");
@@ -151,7 +151,7 @@ public static class ControlProtocol
             if (!state.TryGetProperty("audience", out var audience) || audience.ValueKind != JsonValueKind.String || Text(audience) != ConfigPurpose ||
                 !state.TryGetProperty("recipient", out var recipient) || recipient.ValueKind != JsonValueKind.String || Text(recipient) != Hash(publicIdentity)[..32]) throw new ControlRejected("TARGET");
             if (!state.TryGetProperty("signer_key_id", out var signer) || signer.ValueKind != JsonValueKind.String || Text(signer) != Hash(anchor)) throw new ControlRejected("SIGNER");
-            if (state.TryGetProperty("transport_profiles", out var profiles) && profiles.ValueKind == JsonValueKind.Array)
+            if (!supportsAwg31 && state.TryGetProperty("transport_profiles", out var profiles) && profiles.ValueKind == JsonValueKind.Array)
                 foreach (var p in profiles.EnumerateArray())
                     if (p.ValueKind == JsonValueKind.Object && p.TryGetProperty("transport", out var t) && t.ValueKind == JsonValueKind.String && Text(t) == "amneziawg" && p.TryGetProperty("transport_version", out var v) && v.ValueKind == JsonValueKind.String && Text(v) == "3.1") throw new ControlRejected("UNSUPPORTED_TRANSPORT_VERSION");
             ControlProfiles.Validate(state);

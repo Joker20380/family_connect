@@ -1,0 +1,74 @@
+name: Distribute accepted Windows 0.2.13 preview
+on:
+  push:
+    branches: ['fix/windows-update-channel-0213']
+    paths: ['.github/workflows/distribute-windows0213.yml']
+permissions:
+  actions: read
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify pinned native acceptance
+        shell: python
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          import json,urllib.request,os
+          base='https://api.github.com/repos/Joker20380/family_connect'
+          def get(path):
+              request=urllib.request.Request(base+path,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN']})
+              return json.load(urllib.request.urlopen(request,timeout=30))
+          source='c2984363222c1547917337bb5b66ea12bb992522'
+          for run_id in [35921509421, 35921509348, 35921509214, 35921509244, 35921509381, 35921509334]:
+              run=get('/actions/runs/'+str(run_id))
+              assert run['head_sha']==source and run['conclusion']=='success',(run_id,run['conclusion'])
+          run=get('/actions/runs/35921509278')
+          assert run['head_sha']==source
+          jobs=get('/actions/runs/35921509278/jobs')['jobs']
+          assert next(j for j in jobs if j['name']=='windows')['conclusion']=='success'
+          for ident,run_id,digest in [(10777069157, 35921509278, 'sha256:f033d07532ccf631b7159c55472adeb9558130917ed870b83a5a21bc9b81b062'), (10777068272, 35921509381, 'sha256:0eb15808bd0fbab4e519a3a95f5069691da84d02c4d5b3e29a6eb6a92b408724')]:
+              artifact=get('/actions/artifacts/'+str(ident))
+              assert artifact['workflow_run']['id']==run_id and not artifact['expired']
+              assert artifact['digest']==digest
+      - uses: actions/download-artifact@v4
+        with:
+          name: FamilyConnect-Windows-Installer-pilot-unsigned
+          run-id: '35921509278'
+          github-token: ${{ github.token }}
+          path: accepted-windows
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-ui-renders
+          run-id: '35921509381'
+          github-token: ${{ github.token }}
+          path: accepted-ui
+      - name: Verify exact installer and assemble preview
+        shell: python
+        run: |
+          import pathlib,hashlib,json,shutil
+          out=pathlib.Path('publish');out.mkdir()
+          artifact={'file': 'FamilyConnect-Setup-0.2.13-pilot-unsigned.exe', 'size': 49934846, 'sha256': '88f4274cd2aff07a73a5366f09b2f37301ccd442a67574a30eeaf7c587d4ae5b'}
+          raw=pathlib.Path('accepted-windows/FamilyConnect-Setup-0.2.13-pilot-unsigned.exe').read_bytes()
+          assert len(raw)==artifact['size'] and hashlib.sha256(raw).hexdigest()==artifact['sha256']
+          (out/artifact['file']).write_bytes(raw)
+          for image in pathlib.Path('accepted-ui').glob('Windows-*.png'):shutil.copyfile(image,out/image.name)
+          (out/'SHA256SUMS').write_text(artifact['sha256']+'  '+artifact['file']+'\n')
+          (out/'receipt.json').write_text(json.dumps(dict(version='0.2.13',channel='windows',source='c2984363222c1547917337bb5b66ea12bb992522',windows_ci=35921509278,visual_ci=35921509381,acceptance=[35921509421, 35921509348, 35921509214, 35921509244, 35921509381, 35921509334],artifact=artifact),indent=2)+'\n')
+          pathlib.Path('notes.md').write_text('Windows 0.2.13 manual preview: introduces an independent signed Windows update catalog (schema2, updates/windows.json). One manual installation is needed to leave the legacy shared desktop channel. Later Windows releases are discovered by Check for updates. Existing signature, expiry, rollback and artifact hash checks are retained.\n\nNative Windows rendering, installed URI activation, installer/broker, ordinary-user and AWG/TCP checks passed. Repeat testing on the reported physical PC remains pending. Install over the existing version to preserve identity and data. Android beta50, Linux0.2.10 and the legacy shared catalog are unchanged. The new Windows catalog is signed offline after acceptance and published separately. The Windows installer has no publisher signature.\n')
+      - name: Publish immutable Windows preview
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          repo=Joker20380/family_connect
+          tag=windows-v0.2.13
+          if gh release view "$tag" --repo "$repo" >/dev/null 2>&1; then
+            echo 'Refusing to replace an existing immutable release.' >&2
+            exit 1
+          fi
+          gh release create "$tag" publish/* --repo "$repo" --verify-tag --prerelease --title 'Windows 0.2.13 preview — independent Windows updates' --notes-file notes.md

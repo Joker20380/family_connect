@@ -42,6 +42,9 @@ def write(path, text, mode):
     temporary=path.with_name('.'+secrets.token_hex(16))
     fd=os.open(temporary,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,mode)
     try:
+        # pkexec can inherit a restrictive caller umask. Public metadata must
+        # remain readable by its owner; private profiles stay exactly 0600.
+        os.fchmod(fd,mode)
         with os.fdopen(fd,'w') as out:
             out.write(text);out.flush();os.fsync(out.fileno())
         os.replace(temporary,path)
@@ -49,6 +52,18 @@ def write(path, text, mode):
         try: os.fsync(directory)
         finally: os.close(directory)
     finally: temporary.unlink(missing_ok=True)
+
+def quick_flags(text, *, native):
+    # Signed catalogs use true/false; pinned awg-tools accepts on/off.
+    mapping={'true':'on','false':'off'} if native else {'on':'true','off':'false'}
+    return re.sub(r'(?m)^(RandomTrailers|DisableCookies) = (true|false|on|off)$',
+                  lambda m:m[1]+' = '+mapping.get(m[2],m[2]),text)
+
+def supports_awg31():
+    path=Path(BIN)/'awg31.json'
+    if not path.exists():return False
+    record=json.loads(read(path))
+    return record.get('engine')=='b5928efb6ca19f0153958460c3d141f04abc5c2e' and record.get('tools')=='ee0f0a9aa34ff0a0da4b3433b9512781cfe02843' and record.get('schema')==1
 
 def healthy(ident, expected):
     # Same bound, independent HTTPS checks as the unprivileged monitor.
@@ -58,6 +73,9 @@ def healthy(ident, expected):
         raise RuntimeError('AWG handshake unavailable')
 
 def main():
+    if sys.argv[1:] == ['session']:
+        from backend import privileged_session
+        return privileged_session()
     if os.geteuid()!=0: raise ValueError('Administrator required')
     uid=int(os.environ.get('PKEXEC_UID',os.environ.get('SUDO_UID','0')))
     if len(sys.argv)<2: raise ValueError('Missing operation')
@@ -70,12 +88,12 @@ def main():
         action=sys.argv[1]
         if action=='import' and len(sys.argv)==2:
             raw=sys.stdin.buffer.read(MAX_PROFILE+1).decode('utf-8-sig')
-            text=validate(raw,allow_awg=True);fields=parse(text,allow_awg=True)
+            text=validate(raw,allow_awg=True,allow_awg31=supports_awg31());fields=parse(text,allow_awg=True,allow_awg31=supports_awg31())
             if not set(fields['Interface'])&AWG_FIELDS: raise ValueError('AWG profile required')
             ident='fcawg'+secrets.token_hex(4)
             endpoint=fields['Peer']['Endpoint'].rsplit(':',1)[0].strip('[]')
             if ipaddress.ip_address(endpoint).version!=4: raise ValueError('Pilot IPv4 gateway required')
-            write(ROOT/(ident+'.conf'),text,0o600)
+            write(ROOT/(ident+'.conf'),quick_flags(text,native=True),0o600)
             write(ROOT/(ident+'.json'),json.dumps(dict(id=ident,owner=uid,endpoint=endpoint,primary=None)),0o644)
             print(ident);return
         if len(sys.argv) not in (3,4) or not re.fullmatch(r'fcawg[0-9a-f]{8}',sys.argv[2]):
@@ -90,7 +108,7 @@ def main():
                 if other!=metadata and record.get('primary')==primary: raise ValueError('Already paired')
             meta['primary']=primary;write(metadata,json.dumps(meta),0o644);return
         if len(sys.argv)!=3 or action not in ('up','down'): raise ValueError('Invalid operation')
-        validate(read(config,private=True),allow_awg=True)
+        validate(quick_flags(read(config,private=True),native=False),allow_awg=True,allow_awg31=supports_awg31())
         active=Path('/sys/class/net',ident).exists()
         if action=='down':
             if active: command(BIN+'/awg-quick','down',str(config))

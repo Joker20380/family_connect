@@ -1,3 +1,5 @@
+> Historical design/plan. Current delivery status: [STATUS](STATUS.md); active work: [PLAN](PLAN.md). Goals below are not guarantees of the current pilot.
+
 # Мессенджер Family Connect поверх Reticulum: план и прототип — 13.09.2026
 
 Реализовать можно. Предлагаемый транспорт сообщений — [LXMF](https://github.com/markqvist/LXMF)

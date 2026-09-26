@@ -73,6 +73,10 @@ final class ControlProtocol {
     }
     private static boolean equalsString(JsonElement value,String expected){return value!=null && value.isJsonPrimitive() && value.getAsJsonPrimitive().isString() && value.getAsString().equals(expected);}
     static Verified verifyConfiguration(byte[] raw,byte[] anchor,byte[] rnsPrivate,byte[] publicIdentity,String wgPublic,String clientVersion,long now)throws Rejected {
+        return verifyConfiguration(raw,anchor,rnsPrivate,publicIdentity,wgPublic,clientVersion,now,false);
+    }
+    // Trusted application capability; never derive this flag from received data.
+    static Verified verifyConfiguration(byte[] raw,byte[] anchor,byte[] rnsPrivate,byte[] publicIdentity,String wgPublic,String clientVersion,long now,boolean supportsAwg31)throws Rejected {
         if(now<0)throw new Rejected("CLOCK");if(raw==null || raw.length>65536)throw new Rejected("SIZE");byte[] cipher;
         try {
             JsonElement value=parse(raw);fields(value,"ciphertext signature");JsonObject outer=value.getAsJsonObject();cipher=base64(text(outer.get("ciphertext")),false);
@@ -87,7 +91,7 @@ final class ControlProtocol {
             if(!equalsString(state.get("audience"),CONFIG) || !equalsString(state.get("recipient"),hash(publicIdentity).substring(0,32)))throw new Rejected("TARGET");
             if(!equalsString(state.get("signer_key_id"),hash(anchor)))throw new Rejected("SIGNER");
             JsonElement profiles=state.get("transport_profiles");
-            if(profiles!=null && profiles.isJsonArray())for(JsonElement p:profiles.getAsJsonArray())
+            if(!supportsAwg31 && profiles!=null && profiles.isJsonArray())for(JsonElement p:profiles.getAsJsonArray())
                 if(p.isJsonObject() && equalsString(p.getAsJsonObject().get("transport"),"amneziawg") && equalsString(p.getAsJsonObject().get("transport_version"),"3.1"))throw new Rejected("UNSUPPORTED_TRANSPORT_VERSION");
             ControlProfiles.validate(state);
         }catch(Rejected e){throw e;}catch(Exception e){throw new Rejected("STRUCTURE");}

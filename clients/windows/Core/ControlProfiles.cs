@@ -11,6 +11,7 @@ namespace FamilyConnect;
 internal static class ControlProfiles
 {
     static readonly string[] AwgFields = "Jc Jmin Jmax S1 S2 S3 S4 H1 H2 H3 H4 I1 I2 I3 I4 I5".Split(' ');
+    static readonly string[] Awg31Fields = "HeaderProtectionKey ContentPaddingAddition RandomTrailers DisableCookies".Split(' ');
     static string S(JsonElement value, string key) => Text(value.GetProperty(key));
     static void Id(string value) => Require(Matches(value, "[a-zA-Z0-9_-]{1,64}"));
     static IPAddress Ip(string value)
@@ -52,8 +53,8 @@ internal static class ControlProfiles
             var config = S(p, "config"); Require(config.Length > 0 && Encoding.UTF8.GetByteCount(config) <= 16384);
             var transport = S(p, "transport"); var version = S(p, "transport_version");
             Require(transport is "wireguard" or "amneziawg" or "vless-reality");
-            Require(version == (transport == "amneziawg" ? "2.0" : "1"));
-            var endpoint = transport == "vless-reality" ? Tcp(config) : WireGuard(config, transport == "amneziawg");
+            Require(transport == "amneziawg" ? version is "2.0" or "3.1" : version == "1");
+            var endpoint = transport == "vless-reality" ? Tcp(config) : WireGuard(config, transport == "amneziawg", version == "3.1");
             Require(endpoints.TryGetValue(S(p, "gateway_id"), out var expected) && endpoint == expected);
         }
     }
@@ -72,7 +73,7 @@ internal static class ControlProfiles
     {
         Require(long.TryParse(text, System.Globalization.NumberStyles.AllowLeadingSign, System.Globalization.CultureInfo.InvariantCulture, out var value) && value >= low && value <= high); return value;
     }
-    static (string, long) WireGuard(string text, bool awg)
+    static (string, long) WireGuard(string text, bool awg, bool awg31)
     {
         Require(!text.Contains('\0'));
         var sections = new Dictionary<string, Dictionary<string, string>>(StringComparer.Ordinal);
@@ -88,7 +89,7 @@ internal static class ControlProfiles
             var parts = line.Split('=', 2); Require(current != null && parts.Length == 2);
             var key = parts[0].Trim(); var value = parts[1].Trim();
             var allowed = section == "Interface" ? "PrivateKey Address DNS MTU ListenPort" : "PublicKey PresharedKey Endpoint AllowedIPs PersistentKeepalive";
-            Require(allowed.Split(' ').Contains(key) || (section == "Interface" && awg && AwgFields.Contains(key)));
+            Require(allowed.Split(' ').Contains(key) || (section == "Interface" && awg && (AwgFields.Contains(key) || (awg31 && Awg31Fields.Contains(key)))));
             Require(value.Length > 0 && current!.TryAdd(key, value));
         }
         Require(sections.Count == 2); var i = sections["Interface"]; var p = sections["Peer"];
@@ -106,6 +107,7 @@ internal static class ControlProfiles
         if (i.TryGetValue("MTU", out var mtu)) Number(mtu, 1280, 1500);
         if (i.TryGetValue("ListenPort", out var listen)) Number(listen, 0, 65535);
         if (p.TryGetValue("PersistentKeepalive", out var keep)) Number(keep, 0, 65535);
+        if (awg31) Require(Awg31Fields.All(i.ContainsKey));
         if (awg) ValidateAwg(i);
         return (host, port);
     }
@@ -117,11 +119,21 @@ internal static class ControlProfiles
             Number(value, 0, name == "Jc" ? 12 : name.StartsWith('J') ? 1280 : 256);
         }
         Require(long.Parse(fields["Jmin"]) <= long.Parse(fields["Jmax"]));
+        bool protectedHeaders = fields.ContainsKey("HeaderProtectionKey");
+        if (protectedHeaders)
+        {
+            Key(fields["HeaderProtectionKey"], true, true);
+            for (int n = 1; n <= 4; n++) Require(long.Parse(fields["S"+n]) >= 12 && fields["H"+n] == n.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            foreach (var name in new[]{"RandomTrailers", "DisableCookies"}) Require(fields[name] is "true" or "false");
+            var padding = fields["ContentPaddingAddition"]; Require(Matches(padding, "[0-9]{1,5}(?:-[0-9]{1,5})?"));
+            var parts = padding.Split('-'); var low = Number(parts[0], 0, 256); Number(parts[^1], low, 256);
+            if (fields["RandomTrailers"] == "true") Require(Enumerable.Range(1, 4).Select(n => fields["S"+n]).Distinct().Count() == 1);
+        }
         var ranges = new List<(long Low, long High)>();
         foreach (var name in AwgFields.Skip(7).Take(4))
         {
             var value = fields[name]; Require(Matches(value, "[0-9]{1,10}(?:-[0-9]{1,10})?"));
-            var parts = value.Split('-'); var low = Number(parts[0], 5, uint.MaxValue); var high = Number(parts[^1], low, uint.MaxValue);
+            var parts = value.Split('-'); var low = Number(parts[0], protectedHeaders ? 1 : 5, uint.MaxValue); var high = Number(parts[^1], low, uint.MaxValue);
             Require(!ranges.Any(r => low <= r.High && r.Low <= high)); ranges.Add((low, high));
         }
         foreach (var name in AwgFields.Skip(11))

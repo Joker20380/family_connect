@@ -15,10 +15,11 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 import java.util.concurrent.*;
 
-public final class MainActivity extends Activity {
+public final class MainActivity extends LocalizedActivity {
     private final Handler handler=new Handler(Looper.getMainLooper());
     private final ExecutorService worker=Executors.newSingleThreadExecutor();
-    private TextView state,dot,detail;
+    private TextView state,detail;
+    private TerminalUi.Dial dial;
     private Button toggle,importButton,checkButton,forgetButton,enrollButton,controlButton,rnsButton;
     private boolean pendingRns;
     private byte[] pendingControl;
@@ -27,8 +28,8 @@ public final class MainActivity extends Activity {
     private ProfileStore store;
     private Spinner transportPicker;
     private Button gatewayButton;
-    private boolean reconnectGateway;
-    private Switch autoMode;
+    private String pendingGateway;
+    private TerminalToggle autoMode;
     private Transport selected=Transport.WG;
     private String pendingTransport="wg";
     private boolean busy=false;
@@ -39,18 +40,19 @@ public final class MainActivity extends Activity {
         try{selected=Transport.parse(getPreferences(MODE_PRIVATE).getString("transport","wg"));}catch(IllegalArgumentException ignored){}
         pendingTransport=saved==null?selected.id:saved.getString("pendingTransport",selected.id);
         store=new ProfileStore(this,selected);
-        LinearLayout content=new LinearLayout(this);content.setOrientation(LinearLayout.VERTICAL);content.setGravity(Gravity.CENTER);
-        content.setPadding(dp(28),dp(28),dp(28),dp(28));content.setBackgroundColor(Color.rgb(16,25,35));
-        ScrollView scroll=new ScrollView(this);scroll.setFillViewport(true);scroll.addView(content);setContentView(scroll);
-        label(content,"FAMILY CONNECT",25,Color.rgb(102,219,192));label(content,getString(R.string.tagline),15,Color.LTGRAY);
-        dot=label(content,"●",88,Color.GRAY);state=label(content,"",27,Color.WHITE);
-        healthLabel=label(content,"",14,Color.LTGRAY);
-        gatewayButton=button(content,R.string.choose_gateway,this::chooseGateway);
-        label(content,getString(R.string.route),15,Color.LTGRAY);
-        autoMode=new Switch(this);autoMode.setText("Auto · WG → AWG → TCP");autoMode.setTextColor(Color.WHITE);autoMode.setChecked(getPreferences(MODE_PRIVATE).getBoolean("auto",false));content.addView(autoMode);
+        LinearLayout content=TerminalUi.screen(this,getString(R.string.terminal_tagline));
+        TerminalUi.button(content,R.string.chat_title,()->startActivity(new Intent(this,ChatActivity.class)));
+        LinearLayout connection=TerminalUi.section(content,getString(R.string.terminal_status));
+        dial=new TerminalUi.Dial(this);connection.addView(dial,new LinearLayout.LayoutParams(-1,dp(188)));
+        state=label(connection,"",23,TerminalUi.TEXT);
+        healthLabel=label(connection,"",14,TerminalUi.MUTED);
+        LinearLayout route=TerminalUi.section(content,getString(R.string.terminal_route));
+        gatewayButton=button(route,R.string.choose_gateway,this::chooseGateway);
+        label(route,getString(R.string.route),13,TerminalUi.MUTED);
+        autoMode=new TerminalToggle(this);autoMode.setText("Auto · WG → AWG → TCP");TerminalUi.textStyle(autoMode,14,TerminalUi.TEXT);autoMode.setMinHeight(dp(48));autoMode.setChecked(getPreferences(MODE_PRIVATE).getBoolean("auto",false));route.addView(autoMode);
         autoMode.setOnCheckedChangeListener((v,on)->{getPreferences(MODE_PRIVATE).edit().putBoolean("auto",on).apply();render();});
-        transportPicker=new Spinner(this);transportPicker.setAdapter(new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,new String[]{"WireGuard","AmneziaWG","TCP · REALITY"}));
-        transportPicker.setSelection(selected.ordinal());content.addView(transportPicker);
+        transportPicker=new Spinner(this);TerminalUi.picker(transportPicker,new String[]{"WireGuard","AmneziaWG","TCP · REALITY"});transportPicker.setContentDescription(getString(R.string.terminal_transport));
+        transportPicker.setSelection(selected.ordinal());route.addView(transportPicker,new LinearLayout.LayoutParams(-1,-2));
         transportPicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onNothingSelected(AdapterView<?> parent){}
             public void onItemSelected(AdapterView<?> parent,View view,int position,long id){
@@ -58,14 +60,15 @@ public final class MainActivity extends Activity {
                 selected=Transport.values()[position];store=new ProfileStore(MainActivity.this,selected);getPreferences(MODE_PRIVATE).edit().putString("transport",selected.id).apply();render();
             }
         });
-        toggle=button(content,R.string.connect,()->toggle());
-        importButton=button(content,R.string.import_profile,()->{
+        toggle=button(connection,R.string.connect,()->toggle());
+        LinearLayout settings=TerminalUi.section(content,getString(R.string.terminal_settings));
+        importButton=button(settings,R.string.import_profile,()->{
             if(!ConnectionService.status.equals("off")){detail.setText(R.string.disconnect_first);return;}
             Intent picker=new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*").addCategory(Intent.CATEGORY_OPENABLE);
             startActivityForResult(picker,10);
         });
-        enrollButton=button(content,R.string.enroll_device,()->enrollDevice());
-        rnsButton=button(content,R.string.rns_connect,()->{
+        enrollButton=button(settings,R.string.enroll_device,()->enrollDevice());
+        rnsButton=button(settings,R.string.rns_connect,()->{
             if(busy||!ConnectionService.status.equals("off"))return;
             new android.app.AlertDialog.Builder(this).setTitle(R.string.rns_connect).setMessage(R.string.rns_hint)
                 .setNegativeButton(android.R.string.cancel,null).setPositiveButton(android.R.string.ok,(d,w)->{
@@ -73,14 +76,14 @@ public final class MainActivity extends Activity {
                     if(permission!=null)startActivityForResult(permission,18);else continueRns();
                 }).show();
         });
-        controlButton=button(content,R.string.control_file,()->{
+        controlButton=button(settings,R.string.control_file,()->{
             if(busy||!ConnectionService.status.equals("off"))return;
             new android.app.AlertDialog.Builder(this).setTitle(R.string.control_file).setMessage(R.string.control_file_hint)
                 .setNegativeButton(android.R.string.cancel,null).setPositiveButton(android.R.string.ok,(d,w)->
                     startActivityForResult(new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*").addCategory(Intent.CATEGORY_OPENABLE),15)).show();
         });
-        checkButton=button(content,R.string.check_ip,()->checkIp());
-        forgetButton=button(content,R.string.forget,()->{
+        checkButton=button(settings,R.string.check_ip,()->checkIp());
+        forgetButton=button(settings,R.string.forget,()->{
             if(!ConnectionService.status.equals("off"))return;
             busy=true;render();final ProfileStore removing=store;
             worker.execute(()->{
@@ -90,16 +93,12 @@ public final class MainActivity extends Activity {
                 runOnUiThread(()->{if(isDestroyed())return;busy=false;detail.setText(result);render();});
             });
         });
-        label(content,getString(R.string.hint),13,Color.LTGRAY);detail=label(content,"",14,Color.rgb(232,205,164));
+        label(settings,getString(R.string.hint),13,TerminalUi.MUTED);detail=label(settings,"",14,TerminalUi.AMBER);
+        TerminalUi.label(content,getString(R.string.terminal_footer),11,TerminalUi.MUTED);
     }
     private int dp(int value){return (int)(getResources().getDisplayMetrics().density*value);}
-    private TextView label(LinearLayout parent,String text,int size,int color){
-        TextView view=new TextView(this);view.setText(text);view.setTextSize(size);view.setTextColor(color);view.setGravity(Gravity.CENTER);view.setPadding(0,dp(8),0,dp(8));parent.addView(view);return view;
-    }
-    private Button button(LinearLayout parent,int resource,Runnable action){
-        Button view=new Button(this);view.setText(resource);view.setAllCaps(false);view.setOnClickListener(v->action.run());
-        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(-1,dp(55));params.topMargin=dp(8);parent.addView(view,params);return view;
-    }
+    private TextView label(LinearLayout parent,String text,int size,int color){return TerminalUi.label(parent,text,size,color);}
+    private Button button(LinearLayout parent,int resource,Runnable action){return TerminalUi.button(parent,resource,action);}
     private static void textIfChanged(TextView view,CharSequence text){
         if(!android.text.TextUtils.equals(view.getText(),text))view.setText(text);
     }
@@ -108,7 +107,6 @@ public final class MainActivity extends Activity {
         String value=ConnectionService.status;
         gatewayButton.setEnabled(!busy&&!value.equals("connecting")&&!value.equals("cleanup-required"));
         textIfChanged(gatewayButton,getString(R.string.choose_gateway)+": "+gatewayName(getSharedPreferences("gateway-selection",MODE_PRIVATE).getString("gateway","")));
-        if(reconnectGateway&&value.equals("off")){reconnectGateway=false;toggle();return;}
         if(!value.equals("off")&&!"auto".equals(ConnectionService.requestedTransport)){
             Transport active=Transport.parse(ConnectionService.activeTransport);
             if(selected!=active){selected=active;store=new ProfileStore(this,active);transportPicker.setSelection(active.ordinal());getPreferences(MODE_PRIVATE).edit().putString("transport",active.id).apply();}
@@ -116,7 +114,7 @@ public final class MainActivity extends Activity {
         boolean on=value.equals("on"),waiting=value.equals("connecting")||value.equals("cleanup-required");
         textIfChanged(state,getString(on?R.string.on:waiting?R.string.connecting:R.string.off));
         textIfChanged(healthLabel,!on?"":getString(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.health_checking));
-        dot.setTextColor(on?(ConnectionService.healthStatus.equals("unavailable")?Color.rgb(232,180,80):Color.rgb(102,219,192)):Color.GRAY);textIfChanged(toggle,getString(on||waiting?R.string.disconnect:R.string.connect));
+        dial.update(value,ConnectionService.healthStatus);textIfChanged(toggle,getString(on||waiting?R.string.disconnect:R.string.connect));
         boolean available=store.exists();if(autoMode.isChecked()){available=false;for(Transport t:Transport.values())available|=new ProfileStore(this,t).exists();}
         autoMode.setEnabled(!busy&&!on&&!waiting);toggle.setEnabled(!busy&&(on||waiting||available));transportPicker.setEnabled(!busy&&!on&&!waiting);importButton.setEnabled(!busy&&!on&&!waiting);
         enrollButton.setEnabled(!busy&&!on&&!waiting);controlButton.setEnabled(!busy&&!on&&!waiting);rnsButton.setEnabled(!busy&&!on&&!waiting);
@@ -128,7 +126,7 @@ public final class MainActivity extends Activity {
     private void showControlResult(){
         long id=ConnectionService.controlResultId;if(id==seenControlResult)return;seenControlResult=id;
         String outcome=ConnectionService.controlOutcome;if(outcome==null)return;
-        int message="COMMITTED".equals(outcome)?R.string.control_committed:"REJECTED".equals(outcome)?R.string.control_rejected:
+        int message="SELECTED".equals(outcome)?R.string.gateway_selected:"COMMITTED".equals(outcome)?R.string.control_committed:"REJECTED".equals(outcome)?R.string.control_rejected:
             "ROLLED_BACK".equals(outcome)?R.string.control_rolled_back:"BUSY".equals(outcome)?R.string.disconnect_first:"UNAVAILABLE".equals(outcome)?R.string.rns_unavailable:R.string.control_failed;
         detail.setText(message);
     }
@@ -147,6 +145,8 @@ public final class MainActivity extends Activity {
                         String version=getPackageManager().getPackageInfo(getPackageName(),0).versionName.split("-",2)[0];
                         ControlJournal journal=new ControlJournal(new ControlJournalVault(this),identity,ControlTrust.anchor(this),version);
                         com.google.gson.JsonObject record=journal.read();long now=System.currentTimeMillis()/1000;
+                        if(record.has("selected_gateway"))getSharedPreferences("gateway-selection",MODE_PRIVATE).edit()
+                            .putString("gateway",record.get("selected_gateway").isJsonNull()?"":ControlJson.text(record.get("selected_gateway"))).apply();
                         if(now<ControlJson.integer(record.get("last_now"),0)||!record.get("staged").isJsonNull())throw new IOException();
                         ControlProtocol.Verified config=journal.unpack(record.getAsJsonObject("committed"),now);
                         for(com.google.gson.JsonElement item:config.state().getAsJsonArray("transport_profiles")){
@@ -160,11 +160,9 @@ public final class MainActivity extends Activity {
                 if(ids.isEmpty()){detail.setText(R.string.gateway_unavailable);return;}
                 String[] names=new String[ids.size()];for(int i=0;i<names.length;i++)names[i]=gatewayName(ids.get(i));
                 new android.app.AlertDialog.Builder(this).setTitle(R.string.choose_gateway).setItems(names,(d,index)->{
-                    if(!getSharedPreferences("gateway-selection",MODE_PRIVATE).edit().putString("gateway",ids.get(index)).commit()){
-                        detail.setText(R.string.failed);return;
-                    }
-                    if(ConnectionService.status.equals("off"))toggle();
-                    else{reconnectGateway=true;startService(new Intent(this,ConnectionService.class).setAction("disconnect"));}
+                    pendingGateway=ids.get(index);busy=true;render();
+                    Intent permission=VpnService.prepare(this);
+                    if(permission!=null)startActivityForResult(permission,20);else continueGateway();
                 }).setNegativeButton(android.R.string.cancel,null).show();
             });
         });
@@ -174,6 +172,20 @@ public final class MainActivity extends Activity {
         if(Build.VERSION.SDK_INT>=33&&checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
             requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},19);
         else startRns();
+    }
+    private void continueGateway(){
+        if(pendingGateway==null)return;
+        if(Build.VERSION.SDK_INT>=33&&checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
+            requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},21);
+        else startGateway();
+    }
+    private void startGateway(){
+        String id=pendingGateway;pendingGateway=null;busy=false;
+        if(id!=null&&!isDestroyed())try{
+            startForegroundService(new Intent(this,ConnectionService.class).setAction("select-gateway").putExtra("gateway",id));
+            detail.setText(R.string.control_applying);
+        }catch(Exception failure){detail.setText(R.string.control_failed);}
+        render();
     }
     private void startRns(){
         if(!pendingRns)return;pendingRns=false;
@@ -242,11 +254,12 @@ public final class MainActivity extends Activity {
         else startVpn();
     }
     @Override public void onRequestPermissionsResult(int request,String[] permissions,int[] results){
-        super.onRequestPermissionsResult(request,permissions,results);if(request==12)startVpn();else if(request==16)startControl();else if(request==19)startRns();
+        super.onRequestPermissionsResult(request,permissions,results);if(request==12)startVpn();else if(request==16)startControl();else if(request==19)startRns();else if(request==21)startGateway();
     }
     private void startVpn(){ConnectionService.requestedTransport=pendingTransport;if(!pendingTransport.equals("auto"))ConnectionService.activeTransport=pendingTransport;ConnectionService.status="connecting";startForegroundService(new Intent(this,ConnectionService.class).setAction("connect").putExtra("transport",pendingTransport));render();}
     @Override protected void onActivityResult(int request,int result,Intent data){
         super.onActivityResult(request,result,data);
+        if(request==20){if(result==RESULT_OK)continueGateway();else{pendingGateway=null;busy=false;detail.setText(R.string.permission_denied);render();}return;}
         if(request==11){if(result==RESULT_OK)continueStart();else detail.setText(R.string.permission_denied);return;}
         if(request==18){if(result==RESULT_OK)continueRns();else{pendingRns=false;detail.setText(R.string.permission_denied);}return;}
         if(request==15){if(result==RESULT_OK)readControl(data);return;}
@@ -289,7 +302,21 @@ public final class MainActivity extends Activity {
         });
     }
     @Override protected void onSaveInstanceState(Bundle saved){saved.putString("pendingTransport",pendingTransport);super.onSaveInstanceState(saved);}
-    @Override protected void onResume(){super.onResume();handler.post(refresh);}
+    private void refreshGatewayChoice(){
+        worker.execute(()->{
+            synchronized(ControlJournal.OWNER){
+                try(ControlIdentity identity=new ControlIdentityVault(this).load()){
+                    String version=getPackageManager().getPackageInfo(getPackageName(),0).versionName.split("-",2)[0];
+                    var journal=new ControlJournal(new ControlJournalVault(this),identity,ControlTrust.anchor(this),version);
+                    var record=journal.read();
+                    if(record.has("selected_gateway"))getSharedPreferences("gateway-selection",MODE_PRIVATE).edit()
+                        .putString("gateway",record.get("selected_gateway").isJsonNull()?"":ControlJson.text(record.get("selected_gateway"))).apply();
+                }catch(Exception unavailable){/* No creation/reset of managed state on a UI read. */}
+            }
+            runOnUiThread(()->{if(!isDestroyed())render();});
+        });
+    }
+    @Override protected void onResume(){super.onResume();handler.post(refresh);refreshGatewayChoice();}
     @Override protected void onPause(){handler.removeCallbacks(refresh);super.onPause();}
     @Override protected void onDestroy(){pendingRns=false;pendingControl=null;handler.removeCallbacks(refresh);ControlEnrollmentHttp e=enrollmentHttp;if(e!=null)e.close();worker.shutdownNow();super.onDestroy();}
 }

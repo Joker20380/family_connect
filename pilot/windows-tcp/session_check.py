@@ -95,9 +95,18 @@ try:
     self.send_response(503 if health_fail[which] else 204);self.end_headers();return
    self.send_response(200);self.send_header('Content-Length',str(len(token)));self.end_headers();self.wfile.write(token)
   def log_message(self,*args):pass
- fixture=http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler)
+ # Windows can reserve a UDP port whose TCP counterpart is available.
+ # Reserve both sockets before starting either server; retry only bind conflicts.
+ for attempt in range(32):
+  fixture=http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler)
+  udp=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+  try:udp.bind(('127.0.0.1',fixture.server_port))
+  except OSError as error:
+   udp.close();udp=None;fixture.server_close();fixture=None
+   if getattr(error,'winerror',None) not in (10013,10048) or attempt==31:raise
+  else:break
+ udp.settimeout(.3)
  threading.Thread(target=fixture.serve_forever,daemon=True).start()
- udp=socket.socket(socket.AF_INET,socket.SOCK_DGRAM);udp.bind(('127.0.0.1',fixture.server_port));udp.settimeout(.3)
  def dns_loop():
   while not dns_stop.is_set():
    try:data,addr=udp.recvfrom(4096)

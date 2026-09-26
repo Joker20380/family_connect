@@ -1,16 +1,16 @@
 name: Windows AWG native pilot
 on:
   push:
-    paths: ['pilot/windows-awg/**', 'clients/windows/*.cs', 'clients/windows/*.ps1', 'clients/windows/Core/**', '.github/workflows/windows-awg.yml']
+    paths: ['pilot/windows-awg/**', 'pilot/awg31/**', 'clients/windows/*.cs', 'clients/windows/*.ps1', 'clients/windows/Core/**', '.github/workflows/windows-awg.yml']
   pull_request:
-    paths: ['pilot/windows-awg/**', 'clients/windows/*.cs', 'clients/windows/*.ps1', 'clients/windows/Core/**', '.github/workflows/windows-awg.yml']
+    paths: ['pilot/windows-awg/**', 'pilot/awg31/**', 'clients/windows/*.cs', 'clients/windows/*.ps1', 'clients/windows/Core/**', '.github/workflows/windows-awg.yml']
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
   native:
     runs-on: windows-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
@@ -41,6 +41,14 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python pilot/windows-awg/check.py "$env:RUNNER_TEMP/fc-windows-awg" "$env:RUNNER_TEMP/fc-awg-owner/Host.exe" "$env:RUNNER_TEMP/awg-acceptance.json" 2>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP/awg-acceptance.log"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: AWG 3.1 protected headers padding trailers and owner cleanup
+        timeout-minutes: 8
+        shell: pwsh
+        env:
+          FC_AWG_TEST_PROTOCOL: '3.1'
+        run: |
+          python pilot/windows-awg/check.py "$env:RUNNER_TEMP/fc-windows-awg" "$env:RUNNER_TEMP/fc-awg-owner/Host.exe" "$env:RUNNER_TEMP/awg31-acceptance.json"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Build actual broker for scoped AWG session
         shell: pwsh
         run: |
@@ -48,6 +56,12 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           New-Item -ItemType Directory "$env:RUNNER_TEMP/fc-awg-broker/awg" | Out-Null
           Copy-Item "$env:RUNNER_TEMP/fc-windows-awg/fc-awg.exe","$env:RUNNER_TEMP/fc-windows-awg/wintun.dll" "$env:RUNNER_TEMP/fc-awg-broker/awg/"
+      - name: Signed Friends AWG 3.1 full address and journal recovery
+        shell: pwsh
+        timeout-minutes: 5
+        run: |
+          python pilot/windows-awg/friends_check.py "$env:RUNNER_TEMP/fc-awg-broker" "$env:RUNNER_TEMP/fc-windows-awg" "$env:RUNNER_TEMP/awg-friends-result.json"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Build pinned TCP peer for automatic transport acceptance
         shell: pwsh
         run: |
@@ -75,5 +89,7 @@ jobs:
             ${{ runner.temp }}/fc-windows-awg/
             ${{ runner.temp }}/awg-build.log
             ${{ runner.temp }}/awg-acceptance.*
+            ${{ runner.temp }}/awg31-acceptance.*
             ${{ runner.temp }}/awg-broker*
+            ${{ runner.temp }}/awg-friends*
             ${{ runner.temp }}/fc-awg-broker/*error.txt

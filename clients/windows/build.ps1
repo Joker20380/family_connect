@@ -26,6 +26,8 @@ dotnet run --project Tests/Tests.csproj -c Release
 Check-Exit
 dotnet publish FamilyConnect.csproj -c Release -r win-x64 --self-contained true -o build/publish
 Check-Exit
+python check_installer_host.py build/publish/FamilyConnect.exe
+Check-Exit
 Copy-Item "$vendor/embeddable-dll-service/amd64/tunnel.dll" build/publish/
 $tcpOutput=Join-Path $env:RUNNER_TEMP ('fc-client-tcp-'+[guid]::NewGuid().ToString('N'))
 & "$PSScriptRoot/../../pilot/windows-tcp/build.ps1" -Output $tcpOutput
@@ -37,7 +39,7 @@ Copy-Item "$tcpOutput/*" build/publish/tcp/ -Recurse -Force
 $awgOutput=Join-Path $env:RUNNER_TEMP ('fc-client-awg-'+[guid]::NewGuid().ToString('N'))
 & "$PSScriptRoot/../../pilot/windows-awg/build.ps1" -Output $awgOutput
 Check-Exit
-if((Get-FileHash "$awgOutput/fc-awg.exe" -Algorithm SHA256).Hash.ToLower() -ne '0ff643eee68ce94183b6f5dde75fc9c03eeff96d6731349c9431fc2771be1a70'){throw 'Unaccepted AWG worker'}
+if((Get-FileHash "$awgOutput/fc-awg.exe" -Algorithm SHA256).Hash.ToLower() -ne 'e3d11b9552eb8ed84776cf16a8c240e90b4b9ff0d361519c840909ca5f97fdb6'){throw 'Unaccepted AWG worker'}
 New-Item -ItemType Directory -Force build/publish/awg | Out-Null
 Copy-Item "$awgOutput/fc-awg.exe","$awgOutput/wintun.dll","$awgOutput/build.json" build/publish/awg/
 Copy-Item "$awgOutput/licenses" build/publish/awg/ -Recurse -Force
@@ -78,7 +80,7 @@ if($SignedRelease){
 & $iscc @argsList
 Check-Exit
 if($SignedRelease){
-    $sig=Get-AuthenticodeSignature 'dist/FamilyConnect-Setup-0.2.9-signed.exe'
+    $sig=Get-AuthenticodeSignature 'dist/FamilyConnect-Setup-0.2.14-signed.exe'
     if($sig.Status -ne 'Valid' -or $sig.SignerCertificate.Thumbprint -ne $SigningThumbprint){throw 'Installer signature verification failed'}
 }
 Get-ChildItem dist/*.exe|ForEach-Object { $h=Get-FileHash $_ -Algorithm SHA256; "$($h.Hash.ToLower())  $($_.Name)" }|Set-Content dist/SHA256SUMS

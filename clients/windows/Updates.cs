@@ -7,8 +7,9 @@ namespace FamilyConnect;
 internal sealed record AppUpdate(string Version,long Sequence,long ExpiresAt,string Url,string Sha256,long Size);
 internal static class Updates
 {
-    const string Catalog="https://raw.githubusercontent.com/Joker20380/family_connect/main/updates/pilot.json";
+    const string Catalog="https://raw.githubusercontent.com/Joker20380/family_connect/main/updates/windows.json";
     static readonly byte[] Domain=Encoding.UTF8.GetBytes("family-connect/app-update/v1\0");
+    static readonly byte[] WindowsDomain=Encoding.UTF8.GetBytes("family-connect/app-update/v2\0");
     static readonly HttpClient Http=new(){Timeout=TimeSpan.FromSeconds(60)};
     static string Store=>Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"FamilyConnect","updates");
     static void Fields(JsonElement value,params string[] names){
@@ -22,14 +23,30 @@ internal static class Updates
         if(!System.Text.RegularExpressions.Regex.IsMatch(value,@"\A(0|[1-9][0-9]{0,5})\.(0|[1-9][0-9]{0,5})\.(0|[1-9][0-9]{0,5})\z"))throw new InvalidDataException();
         return Version.Parse(value);
     }
-    internal static (AppUpdate Update,string Digest) Verify(byte[] raw,byte[] publicKey,long now){
+    static byte[] SignedPayload(byte[] raw,byte[] publicKey,byte[] domain){
         if(raw.Length>65536||publicKey.Length!=32)throw new InvalidDataException();
         using var outer=JsonDocument.Parse(raw);Unique(outer.RootElement);Fields(outer.RootElement,"payload","signature");
         byte[] payload=Convert.FromBase64String(outer.RootElement.GetProperty("payload").GetString()!);
         byte[] signature=Convert.FromBase64String(outer.RootElement.GetProperty("signature").GetString()!);
         var verifier=new Ed25519Signer();verifier.Init(false,new Ed25519PublicKeyParameters(publicKey,0));
-        verifier.BlockUpdate(Domain,0,Domain.Length);verifier.BlockUpdate(payload,0,payload.Length);
+        verifier.BlockUpdate(domain,0,domain.Length);verifier.BlockUpdate(payload,0,payload.Length);
         if(!verifier.VerifySignature(signature))throw new InvalidDataException("Untrusted update");
+        return payload;
+    }
+    internal static (AppUpdate Update,string Digest) VerifyWindows(byte[] raw,byte[] publicKey,long now){
+        byte[] payload=SignedPayload(raw,publicKey,WindowsDomain);
+        using var document=JsonDocument.Parse(payload);var data=document.RootElement;Unique(data);
+        Fields(data,"schema","platform","sequence","version","issued_at","expires_at","artifact");
+        long sequence=data.GetProperty("sequence").GetInt64(),issued=data.GetProperty("issued_at").GetInt64(),expires=data.GetProperty("expires_at").GetInt64();
+        string version=data.GetProperty("version").GetString()!;ParseVersion(version);
+        if(data.GetProperty("schema").GetInt32()!=2||data.GetProperty("platform").GetString()!="windows"||sequence<1||issued<1||issued>now||expires<=now||expires-issued<=0||expires-issued>90*86400)throw new InvalidDataException("Invalid Windows update lease");
+        var artifact=data.GetProperty("artifact");Fields(artifact,"url","sha256","size");
+        string url=artifact.GetProperty("url").GetString()!,sha=artifact.GetProperty("sha256").GetString()!;long size=artifact.GetProperty("size").GetInt64();
+        if(url!=$"https://github.com/Joker20380/family_connect/releases/download/windows-v{version}/FamilyConnect-Setup-{version}-pilot-unsigned.exe"||!System.Text.RegularExpressions.Regex.IsMatch(sha,@"\A[0-9a-f]{64}\z")||size<1||size>512*1024*1024)throw new InvalidDataException("Invalid Windows artifact");
+        return (new(version,sequence,expires,url,sha,size),Convert.ToHexString(SHA256.HashData(payload)));
+    }
+    internal static (AppUpdate Update,string Digest) Verify(byte[] raw,byte[] publicKey,long now){
+        byte[] payload=SignedPayload(raw,publicKey,Domain);
         using var document=JsonDocument.Parse(payload);var data=document.RootElement;Unique(data);
         Fields(data,"schema","sequence","version","issued_at","expires_at","artifacts");
         long sequence=data.GetProperty("sequence").GetInt64(),issued=data.GetProperty("issued_at").GetInt64(),expires=data.GetProperty("expires_at").GetInt64();
@@ -48,26 +65,30 @@ internal static class Updates
         return (update!,Convert.ToHexString(SHA256.HashData(payload)));
     }
     static void SafePath(string path){if((File.Exists(path)||Directory.Exists(path))&&File.GetAttributes(path).HasFlag(FileAttributes.ReparsePoint))throw new InvalidDataException("Unsafe update storage");}
-    public static async Task<AppUpdate?> Check(string currentVersion){
+    public static Task<AppUpdate?> Check(string currentVersion)=>Check(currentVersion,Convert.FromBase64String(File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"update.pub")).Trim()),Store);
+    internal static async Task<AppUpdate?> Check(string currentVersion,byte[] publicKey,string store){
         using var response=await Http.GetAsync(Catalog,HttpCompletionOption.ResponseHeadersRead);response.EnsureSuccessStatusCode();
         using var input=await response.Content.ReadAsStreamAsync();using var output=new MemoryStream();
         byte[] buffer=new byte[8192];int count;
         while((count=await input.ReadAsync(buffer.AsMemory()).AsTask().WaitAsync(TimeSpan.FromSeconds(30)))>0){if(output.Length+count>65536)throw new InvalidDataException();output.Write(buffer,0,count);}
-        long now=DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        var (update,digest)=Verify(output.ToArray(),Convert.FromBase64String(File.ReadAllText(Path.Combine(AppContext.BaseDirectory,"update.pub")).Trim()),now);
-        Directory.CreateDirectory(Store);SafePath(Store);
-        string path=Path.Combine(Store,"state.json"),lockPath=Path.Combine(Store,"lock");SafePath(path);SafePath(lockPath);
+        return Accept(output.ToArray(),publicKey,currentVersion,DateTimeOffset.UtcNow.ToUnixTimeSeconds(),store);
+    }
+    internal static AppUpdate? Accept(byte[] raw,byte[] publicKey,string currentVersion,long now,string store){
+        var current=ParseVersion(currentVersion);
+        var (update,digest)=VerifyWindows(raw,publicKey,now);
+        Directory.CreateDirectory(store);SafePath(store);
+        string path=Path.Combine(store,"state.json"),lockPath=Path.Combine(store,"lock");SafePath(path);SafePath(lockPath);
         using var gate=new FileStream(lockPath,FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.None);
         if(File.Exists(path)){
             using var previous=JsonDocument.Parse(File.ReadAllBytes(path));var state=previous.RootElement;Unique(state);Fields(state,"sequence","digest","last_now");
             long floor=state.GetProperty("sequence").GetInt64();
             if(floor<1||update.Sequence<floor||now<state.GetProperty("last_now").GetInt64()||(update.Sequence==floor&&digest!=state.GetProperty("digest").GetString()))throw new InvalidDataException("Update rollback");
         }
-        string temp=Path.Combine(Store,Guid.NewGuid()+".json");
+        string temp=Path.Combine(store,Guid.NewGuid()+".json");
         byte[] stateBytes=JsonSerializer.SerializeToUtf8Bytes(new{sequence=update.Sequence,digest,last_now=now});
         using(var stream=new FileStream(temp,FileMode.CreateNew,FileAccess.Write,FileShare.None)){stream.Write(stateBytes);stream.Flush(true);}
         File.Move(temp,path,true);
-        return ParseVersion(update.Version)>ParseVersion(currentVersion)?update:null;
+        return ParseVersion(update.Version)>current?update:null;
     }
     public static async Task<string> Download(AppUpdate update){
         if(DateTimeOffset.UtcNow.ToUnixTimeSeconds()>=update.ExpiresAt)throw new InvalidDataException("Expired update");

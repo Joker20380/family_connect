@@ -6,7 +6,7 @@ from app import App,Adw
 from layout_check import pump
 
 def main():
- Adw.init();sys.argv.append('--awg-pilot');app=App(smoke=True);app.ru=True
+ Adw.init();sys.argv.append('--awg-pilot');app=App(smoke=True);app.ru=True;app.select_page('settings')
  app.active=False;app.items=[('wg','VPN')];app.selected_id='wg';app.present();app.paint();pump()
  original=(backend.tcp_updater_available,backend.install_tcp_component)
  calls=[];dialogs=[];confirm=app.confirm
@@ -18,12 +18,12 @@ def main():
   app.tcp_button.emit('clicked');pump();assert 'администратором' in app.detail_text
   backend.tcp_updater_available=lambda:True
   backend.install_tcp_component=lambda:calls.append(True) or True
-  app.tcp_button.emit('clicked');pump();dialogs[-1].emit('response','cancel');pump();assert not calls
-  app.tcp_button.emit('clicked');pump();dialogs[-1].emit('response','accept');pump(.4)
+  app.tcp_button.emit('clicked');pump();dialogs[-1].cancel_button.emit('clicked');pump();assert not calls
+  app.tcp_button.emit('clicked');pump();dialogs[-1].get_last_child().emit('clicked');pump(.4)
   assert calls==[True] and 'TCP установлен' in app.detail_text
   def cancelled():raise backend.AuthorizationError('cancelled')
   backend.install_tcp_component=cancelled
-  app.tcp_button.emit('clicked');pump();dialogs[-1].emit('response','accept');pump(.4)
+  app.tcp_button.emit('clicked');pump();dialogs[-1].get_last_child().emit('clicked');pump(.4)
   assert 'отменена' in app.detail_text and app.active is False and not app.busy
   count=len(dialogs);app.active=True;app.paint();pump();assert not app.tcp_button.get_sensitive()
   app.install_tcp();assert len(dialogs)==count
@@ -35,6 +35,7 @@ def main():
     app.window.set_default_size(width,-1);app.paint();pump(.15)
     previous=0
     for widget in (app.toggle,app.add,app.check,app.update_button,app.tcp_button):
+     if not widget.get_visible():continue
      ok,rect=widget.compute_bounds(app.body);assert ok and rect.get_y()>=previous
      previous=rect.get_y()+rect.get_height()
      assert rect.get_x()>=0 and rect.get_x()+rect.get_width()<=app.body.get_width()+1
@@ -43,6 +44,6 @@ def main():
   print('TCP GTK: missing bootstrap, confirm/cancel, success, auth cancel and busy/connected guards passed')
  finally:
   backend.tcp_updater_available,backend.install_tcp_component=original
-  for dialog in dialogs:dialog.destroy()
+  if app.confirmation is not None:app.confirmation.cancel_button.emit('clicked')
   app.busy=False;app.close(True);pump()
 if __name__=='__main__':main()

@@ -8,7 +8,13 @@ $dns=if($test){'198.18.0.1'}else{'1.1.1.1'}
 $namespace=if($test){'.fctcp-ci.invalid'}else{'.'}
 $routes=if($test){@('198.18.0.1/32','fd79:fc::1/128')}else{@('0.0.0.0/1','128.0.0.0/1','::/1','8000::/1')}
 if($null -ne $p.awg -and ($p.awg -lt 4 -or $p.awg -gt 254)){throw 'invalid AWG address'}
-$local4=if($test){'198.18.0.2'}elseif($null -ne $p.awg){'10.78.0.'+$p.awg}else{'10.79.0.2'}
+if($null -ne $p.address){
+ $parsed=$null
+ if($null -eq $p.awg -or $p.adapter -notmatch '^fcawg' -or ![Net.IPAddress]::TryParse([string]$p.address,[ref]$parsed) -or $parsed.ToString() -cne $p.address -or $p.address -notmatch '^10\.(83|84)\.') {throw 'invalid Friends address'}
+ $bytes=$parsed.GetAddressBytes()
+ if($bytes.Length -ne 4 -or ($bytes[2] -eq 0 -and $bytes[3] -le 1) -or ($bytes[2] -eq 255 -and $bytes[3] -eq 255)){throw 'reserved Friends address'}
+}
+$local4=if($null -ne $p.address){$p.address}elseif($test){'198.18.0.2'}elseif($null -ne $p.awg){'10.78.0.'+$p.awg}else{'10.79.0.2'}
 $local6=if(!$test -and $null -ne $p.awg){'fd78:92::'+('{0:x}' -f [int]$p.awg)}else{'fd79:fc::2'}
 $label='FamilyConnect TCP '+$p.adapter
 function Adapter {Get-NetAdapter -Name $p.adapter -IncludeHidden -ErrorAction SilentlyContinue}

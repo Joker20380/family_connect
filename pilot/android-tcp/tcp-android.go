@@ -35,6 +35,7 @@ import (
  _ "github.com/xtls/xray-core/proxy/tun"
  _ "github.com/xtls/xray-core/proxy/vless/outbound"
  _ "github.com/xtls/xray-core/transport/internet/tcp"
+ _ "github.com/xtls/xray-core/transport/internet/splithttp"
  _ "github.com/xtls/xray-core/transport/internet/reality"
  _ "github.com/xtls/xray-core/transport/internet/tls"
  _ "github.com/xtls/xray-core/transport/internet/udp"
@@ -85,13 +86,26 @@ func tcpConfig(raw string)([]byte,string,error){
  for dec.More(){t,e=dec.Token();if e!=nil{return nil,"",denied};key,ok:=t.(string);if !ok||p[key]!=nil{return nil,"",denied};var value json.RawMessage;if dec.Decode(&value)!=nil{return nil,"",denied};p[key]=value}
  if _,e=dec.Token();e!=nil{return nil,"",denied};if _,e=dec.Token();e!=io.EOF{return nil,"",denied}
  if len(p)!=7{return nil,"",denied};values:=map[string]string{}
- for _,key:=range []string{"type","server","id","public_key","server_name","short_id"}{var v string;if json.Unmarshal(p[key],&v)!=nil{return nil,"",denied};values[key]=v}
- var port int;if json.Unmarshal(p["port"],&port)!=nil||port<1||port>65535||values["type"]!="vless-reality-v1"{return nil,"",denied}
+ var kind string;if json.Unmarshal(p["type"],&kind)!=nil{return nil,"",denied};xhttp:=kind=="vless-xhttp-tls-v1"
+ fields:=[]string{"type","server","id","public_key","server_name","short_id"};if xhttp{fields=[]string{"type","server","id","server_name","path","mode"}}
+ for _,key:=range fields{var v string;if json.Unmarshal(p[key],&v)!=nil{return nil,"",denied};values[key]=v}
+ var port int;if json.Unmarshal(p["port"],&port)!=nil||port<1||port>65535||(!xhttp&&values["type"]!="vless-reality-v1"){return nil,"",denied}
  ip,e:=netip.ParseAddr(values["server"]);if e!=nil||!ip.Is4()||ip.String()!=values["server"]||ip.IsLoopback()||ip.As4()[0]==0||ip.As4()[0]>=224{return nil,"",denied}
  if !regexp.MustCompile(`^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$`).MatchString(values["id"])||values["id"]=="00000000-0000-0000-0000-000000000000"{return nil,"",denied}
- key,e:=base64.RawURLEncoding.DecodeString(values["public_key"]);if e!=nil||len(key)!=32||bytes.Equal(key,make([]byte,32))||base64.RawURLEncoding.EncodeToString(key)!=values["public_key"]{return nil,"",denied}
- if len(values["server_name"])>253||!regexp.MustCompile(`^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$`).MatchString(values["server_name"])||!regexp.MustCompile(`^(?:[0-9a-f]{2}){1,8}$`).MatchString(values["short_id"]){return nil,"",denied}
+ if len(values["server_name"])>253||!regexp.MustCompile(`^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$`).MatchString(values["server_name"]){return nil,"",denied}
+ if xhttp {
+  if values["mode"]!="packet-up"||!regexp.MustCompile(`^/[A-Za-z0-9_-]{16,128}/$`).MatchString(values["path"]){return nil,"",denied}
+ } else {
+  key,e:=base64.RawURLEncoding.DecodeString(values["public_key"]);if e!=nil||len(key)!=32||bytes.Equal(key,make([]byte,32))||base64.RawURLEncoding.EncodeToString(key)!=values["public_key"]{return nil,"",denied}
+  if !regexp.MustCompile(`^(?:[0-9a-f]{2}){1,8}$`).MatchString(values["short_id"]){return nil,"",denied}
+ }
  config:=map[string]any{"log":map[string]any{"loglevel":"none"},"inbounds":[]any{map[string]any{"tag":"tun","protocol":"tun","settings":map[string]any{"name":"fctcp","MTU":1280}}},"outbounds":[]any{map[string]any{"tag":"vpn","protocol":"vless","settings":map[string]any{"vnext":[]any{map[string]any{"address":values["server"],"port":port,"users":[]any{map[string]any{"id":values["id"],"encryption":"none","flow":"xtls-rprx-vision"}}}}},"streamSettings":map[string]any{"network":"raw","security":"reality","realitySettings":map[string]any{"fingerprint":"chrome","serverName":values["server_name"],"password":values["public_key"],"shortId":values["short_id"]}}}}}
+ if xhttp {
+  outbound:=config["outbounds"].([]any)[0].(map[string]any)
+  user:=outbound["settings"].(map[string]any)["vnext"].([]any)[0].(map[string]any)["users"].([]any)[0].(map[string]any)
+  delete(user,"flow")
+  outbound["streamSettings"]=map[string]any{"network":"xhttp","security":"tls","tlsSettings":map[string]any{"serverName":values["server_name"],"fingerprint":"chrome","alpn":[]string{"h2"}},"xhttpSettings":map[string]any{"host":values["server_name"],"path":values["path"],"mode":"packet-up"}}
+ }
  b,e:=json.Marshal(config);return b,net.JoinHostPort(values["server"],strconv.Itoa(port)),e
 }
 func(s *tcpSession)close()error{

@@ -35,11 +35,13 @@ def issue(request, profile, sequence, signing_key, now):
     address = ipaddress.IPv4Address(p['server'])
     if address.is_loopback or address.packed[0] == 0 or address.packed[0] >= 224:
         raise ValueError('Invalid gateway address')
-    if p['id'] == '00000000-0000-0000-0000-000000000000' or not any(base64.urlsafe_b64decode(p['public_key']+'=')):
+    if p['id'] == '00000000-0000-0000-0000-000000000000' or (p['type']=='vless-reality-v1' and not any(base64.urlsafe_b64decode(p['public_key']+'='))):
         raise ValueError('Invalid credential')
     grant = dict(version=1, devicePublicKey=base64.b64encode(device).decode(),
                  sequence=sequence, expiresAt=now+86400, server=p['server'], port=p['port'],
-                 id=p['id'], publicKey=p['public_key'], serverName=p['server_name'], shortId=p['short_id'])
+                 id=p['id'], publicKey=p.get('public_key',''), serverName=p['server_name'], shortId=p.get('short_id',''))
+    if p['type']=='vless-xhttp-tls-v1':
+        grant.update(version=2, xhttpPath=p['path'])
     raw = json.dumps(grant, sort_keys=True, separators=(',', ':')).encode()
     return dict(payload=base64.b64encode(raw).decode(),
                 signature=base64.b64encode(signing_key.sign(DOMAIN+raw)).decode())

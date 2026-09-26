@@ -25,6 +25,7 @@ Description=Family Connect open test TCP gateway
 After=network-online.target
 Wants=network-online.target
 [Service]
+UMask=0077
 User=fc-friends
 Group=fc-friends
 ExecStart=/opt/apps/family_connect/friends-tcp/xray run -config /opt/apps/family_connect/friends-tcp/server.json

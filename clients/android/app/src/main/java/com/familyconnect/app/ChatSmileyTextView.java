@@ -6,7 +6,6 @@ import android.graphics.ColorFilter;
 import android.graphics.Movie;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.text.SpannableString;
@@ -19,10 +18,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Display-only prototype. Pass original plain text to Store/transport, not this View.
+/** Local animated display. Pass original plain text to Store/transport, not this View.
  * Built-in verified assets only; no GIF attachments, remote URLs or writable packs.
  */
-@SuppressWarnings("deprecation") // Movie supports minSdk26; native runtime validation pending.
+@SuppressWarnings("deprecation") // Movie supports minSdk26; render animated spans on a software layer.
 public final class ChatSmileyTextView extends TextView {
     private final List<Gif> images=new ArrayList<>();
     private final Rect visible=new Rect();
@@ -42,7 +41,7 @@ public final class ChatSmileyTextView extends TextView {
         List<ChatSmileys.Match> matches=ChatSmileys.find(original);
         stopFrames();images.clear();time=0;
         SpannableString text=new SpannableString(original);
-        int height=Math.max(16,Math.min(96,Math.round(getTextSize()*1.4f)));
+        int height=Math.max(16,Math.min(96,Math.round(getTextSize()*1.15f)));
         for(ChatSmileys.Match match:matches) {
             if(images.size()==8)break; // Remaining tokens remain readable plain text.
             try {
@@ -52,11 +51,14 @@ public final class ChatSmileyTextView extends TextView {
                 Gif gif=new Gif(movie);
                 gif.setBounds(0,0,Math.max(1,height*movie.width()/movie.height()),height);
                 images.add(gif);
-                text.setSpan(new ImageSpan(gif,ImageSpan.ALIGN_BASELINE),match.start,match.end,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                text.setSpan(new GifSpan(gif),match.start,match.end,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             } catch(java.io.IOException|IllegalArgumentException failure) {
                 // Keep signed text visible; no asset path or message content logging.
             }
         }
+        // Selectable TextView may cache hardware text display lists, freezing GIF spans.
+        // Re-render this small message view only; the rest of the screen stays accelerated.
+        setLayerType(images.isEmpty()?LAYER_TYPE_NONE:LAYER_TYPE_SOFTWARE,null);
         setText(text,BufferType.SPANNABLE);
         // Screen readers retain the literal message, including fallback tokens.
         setContentDescription(original);
@@ -80,7 +82,7 @@ public final class ChatSmileyTextView extends TextView {
         invalidate();
     }
     /** Explicit release for a recycled/offscreen message. */
-    public void clearMessage(){stopFrames();images.clear();time=0;setText("");setContentDescription(null);}
+    public void clearMessage(){stopFrames();images.clear();time=0;setLayerType(LAYER_TYPE_NONE,null);setText("");setContentDescription(null);}
     private boolean eligible() {
         return foreground&&!images.isEmpty()&&isAttachedToWindow()&&hasWindowFocus()
             &&getWindowVisibility()==VISIBLE&&isShown()&&getGlobalVisibleRect(visible);
@@ -104,15 +106,35 @@ public final class ChatSmileyTextView extends TextView {
     @Override protected void onDetachedFromWindow(){stopFrames();super.onDetachedFromWindow();}
     @Override public void onWindowFocusChanged(boolean focus){super.onWindowFocusChanged(focus);if(!focus)stopFrames();else invalidate();}
     @Override protected void onWindowVisibilityChanged(int visibility){super.onWindowVisibilityChanged(visibility);if(visibility!=VISIBLE&&frame!=null)stopFrames();}
+    /** Reserve the whole GIF above the baseline; do not subtract font descent twice. */
+    private final class GifSpan extends ImageSpan {
+        GifSpan(Drawable drawable){super(drawable,ImageSpan.ALIGN_BASELINE);}
+        @Override public int getSize(android.graphics.Paint paint,CharSequence text,int start,int end,android.graphics.Paint.FontMetricsInt metrics){
+            Rect bounds=getDrawable().getBounds();
+            if(metrics!=null){paint.getFontMetricsInt(metrics);int gap=TerminalUi.dp(getContext(),2);metrics.ascent=Math.min(metrics.ascent,-bounds.height()-gap);metrics.top=Math.min(metrics.top,metrics.ascent);metrics.descent=Math.max(metrics.descent,gap);metrics.bottom=Math.max(metrics.bottom,metrics.descent);}
+            return bounds.width();
+        }
+        @Override public void draw(Canvas canvas,CharSequence text,int start,int end,float x,int top,int baseline,int bottom,android.graphics.Paint paint){
+            int save=canvas.save();canvas.translate(x,baseline-getDrawable().getBounds().height());getDrawable().draw(canvas);canvas.restoreToCount(save);
+        }
+    }
     private final class Gif extends Drawable {
         final Movie movie;int opacity=255;
-        Gif(Movie movie){this.movie=movie;}
+        final android.graphics.Bitmap bitmap;
+        final Canvas frameCanvas;
+        final android.graphics.Paint bitmapPaint=new android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG|android.graphics.Paint.FILTER_BITMAP_FLAG);
+        final int[] pixels;final boolean[] edge;
+        boolean decoded;
+        Gif(Movie movie){this.movie=movie;bitmap=android.graphics.Bitmap.createBitmap(movie.width(),movie.height(),android.graphics.Bitmap.Config.ARGB_8888);frameCanvas=new Canvas(bitmap);pixels=new int[movie.width()*movie.height()];edge=new boolean[pixels.length];}
         @Override public void draw(Canvas canvas) {
-            Rect bounds=getBounds();int save=canvas.saveLayerAlpha(new RectF(bounds),opacity);
-            canvas.translate(bounds.left,bounds.top);
-            canvas.scale(bounds.width()/(float)movie.width(),bounds.height()/(float)movie.height());
-            movie.setTime((int)(time%Math.max(1,movie.duration())));movie.draw(canvas,0,0);
-            canvas.restoreToCount(save);
+            boolean changed=movie.setTime((int)(time%Math.max(1,movie.duration())));
+            if(changed||!decoded){
+                bitmap.eraseColor(android.graphics.Color.TRANSPARENT);movie.draw(frameCanvas,0,0);
+                bitmap.getPixels(pixels,0,movie.width(),0,0,movie.width(),movie.height());
+                ChatGifContour.clean(pixels,movie.width(),movie.height(),edge);
+                bitmap.setPixels(pixels,0,movie.width(),0,0,movie.width(),movie.height());decoded=true;
+            }
+            bitmapPaint.setAlpha(opacity);canvas.drawBitmap(bitmap,null,getBounds(),bitmapPaint);
         }
         @Override public void setAlpha(int alpha){opacity=Math.max(0,Math.min(255,alpha));invalidateSelf();}
         @Override public void setColorFilter(ColorFilter filter){} // Original GIF palette.

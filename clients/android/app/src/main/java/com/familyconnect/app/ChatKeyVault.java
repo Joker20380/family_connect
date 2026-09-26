@@ -21,6 +21,14 @@ final class ChatKeyVault {
     ChatKeyVault(Context context) {
         file=new AtomicFile(new File(context.getNoBackupFilesDir(),"chat-store-key.enc"));
     }
+    boolean hasState() throws Exception {
+        synchronized (LOCK) {
+            KeyStore keys = KeyStore.getInstance("AndroidKeyStore"); keys.load(null);
+            return keys.containsAlias(ALIAS) || file.getBaseFile().exists()
+                || new File(file.getBaseFile()+".bak").exists()
+                || new File(file.getBaseFile()+".new").exists();
+        }
+    }
     byte[] load() throws Exception {
         synchronized(LOCK) {
             KeyStore keys=KeyStore.getInstance("AndroidKeyStore");keys.load(null);

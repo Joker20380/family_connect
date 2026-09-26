@@ -1,8 +1,12 @@
 """Offline TCP catalog signing, only after artifact CI and acceptance. Never use in CI."""
-import argparse,base64,hashlib,json,os,stat,time
+import argparse,base64,hashlib,json,os,time
 from pathlib import Path
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
-from tcp_delivery import DOMAIN,artifact_url,verify
+if __package__:
+    from . import signing_key
+    from .tcp_delivery import DOMAIN,artifact_url,verify
+else:
+    import signing_key
+    from tcp_delivery import DOMAIN,artifact_url,verify
 
 def sign(key,archive,version,sequence,now):
     raw=archive.read_bytes()
@@ -16,13 +20,10 @@ def sign(key,archive,version,sequence,now):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    for name in ('key','archive','output'):p.add_argument('--'+name,type=Path,required=True)
+    signing_key.arguments(p)
+    for name in ('archive','output'):p.add_argument('--'+name,type=Path,required=True)
     p.add_argument('--version',required=True);p.add_argument('--sequence',type=int,required=True);a=p.parse_args()
-    fd=os.open(a.key,os.O_RDONLY|os.O_NOFOLLOW)
-    with os.fdopen(fd,'rb') as stream:
-        info=os.fstat(stream.fileno())
-        if not stat.S_ISREG(info.st_mode) or info.st_nlink!=1 or info.st_uid!=os.getuid() or stat.S_IMODE(info.st_mode)!=0o600:raise ValueError('unsafe signing key')
-        key=Ed25519PrivateKey.from_private_bytes(stream.read(33))
+    key=signing_key.load(a)
     envelope=sign(key,a.archive,a.version,a.sequence,int(time.time()))
     with a.output.open('xb') as stream:stream.write(envelope);stream.flush();os.fsync(stream.fileno())
 

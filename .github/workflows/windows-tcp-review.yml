@@ -1,0 +1,29 @@
+name: Review Windows TCP acceptance
+on:
+  push:
+    paths: ['.github/workflows/windows-tcp-review.yml']
+permissions:
+  actions: read
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: FamilyConnect-Windows-TCP-engine-preview
+          run-id: '35506170019'
+          github-token: ${{ github.token }}
+          path: acceptance
+      - name: Report test outcome
+        shell: python
+        run: |
+          import pathlib,json
+          files=list(pathlib.Path('acceptance').rglob('session-acceptance.json'))
+          assert len(files)==1
+          data=json.loads(files[0].read_text())
+          for key in ['passed','rounds','error_type','error','traceback']:
+            value=json.dumps(data.get(key),ensure_ascii=True)
+            value=value.replace('%','%25').replace('\r','%0D').replace('\n','%0A')
+            print(f'::notice title=TCP {key}::{value[:12000]}')

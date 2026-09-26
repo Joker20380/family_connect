@@ -14,9 +14,8 @@ import time
 
 import RNS
 from LXMF.LXMPeer import LXMPeer
-from .codec import address, identity, MAX_PACKED
+from .codec import address, identity, MAX_PACKED, PUT_PATH
 
-PUT_PATH='/family_connect/chat/v1/put'
 MAX_BLOB=MAX_PACKED+256
 
 
@@ -25,8 +24,8 @@ class SpoolFull(Exception):
 
 
 class Spool:
-    def __init__(self, path, *, max_bytes=262144, max_messages=128,
-                 sender_bytes=65536, sender_messages=32, retention=86400, clock=time.time):
+    def __init__(self, path, *, max_bytes=1048576, max_messages=128,
+                 sender_bytes=262144, sender_messages=32, retention=86400, clock=time.time):
         for value in (max_bytes,max_messages,sender_bytes,sender_messages,retention):
             if type(value) is not int or value<=0:raise ValueError('Positive integer limits required')
         if max_bytes>1048576 or max_messages>1000 or retention>30*86400:
@@ -102,6 +101,9 @@ class Spool:
     def get(self,recipient,data):
         if type(data) is not list or len(data) not in (2,3):raise ValueError('Invalid mailbox request')
         wants,haves=data[:2]
+        budget=data[2] if len(data)==3 else 48
+        if type(budget) not in (int,float) or not 0<budget<=192:raise ValueError("Invalid transfer budget")
+        budget=min(int(budget*1000),192000)
         for values in (wants,haves):
             if values is not None and (type(values) is not list or len(values)>10 or any(type(x) is not bytes or len(x)!=32 for x in values)):
                 raise ValueError('Invalid message IDs')
@@ -114,7 +116,7 @@ class Spool:
             result=[];size=0
             for ident in dict.fromkeys(wants or []):
                 row=self.db.execute('SELECT body FROM messages WHERE id=? AND recipient=?',(ident,recipient)).fetchone()
-                if row and size+len(row[0])<=48000:result.append(row[0]);size+=len(row[0])
+                if row and size+len(row[0])<=budget:result.append(row[0]);size+=len(row[0])
             return result
 
     def close(self):
@@ -124,10 +126,11 @@ class Spool:
 
 
 class ClosedRelay:
-    def __init__(self,relay_identity,spool,*,allowed_public):
+    def __init__(self,relay_identity,spool,*,allowed_public,membership=None):
         if not 1<=len(allowed_public)<=100:raise ValueError('Closed pilot requires 1..100 identities')
         self.spool=spool
         self.allowed={identity(public).hash:address(public) for public in allowed_public}
+        self.membership=membership
         self.rate={};self.rate_lock=threading.Lock()
         self.destination=RNS.Destination(relay_identity,RNS.Destination.IN,RNS.Destination.SINGLE,'lxmf','propagation')
         for path in (PUT_PATH,LXMPeer.MESSAGE_GET_PATH):
@@ -135,12 +138,16 @@ class ClosedRelay:
         # No native upload callbacks or peer offer handlers: requests only.
 
     def respond(self,path,data,request_id,remote_identity,requested_at):
-        if remote_identity is None or remote_identity.hash not in self.allowed:
+        allowed=self.allowed
+        if self.membership is not None:
+            allowed={**allowed,**{identity(public).hash:address(public) for public in self.membership.keys()}}
+        if remote_identity is None or remote_identity.hash not in allowed:
             return LXMPeer.ERROR_NO_ACCESS
         if path==PUT_PATH:
-            if type(data) is not bytes or not 112<=len(data)<=MAX_BLOB or data[:16] not in self.allowed.values():
+            if type(data) is not bytes or not 112<=len(data)<=MAX_BLOB or data[:16] not in allowed.values():
                 return ['rejected']
             with self.rate_lock:
+                self.rate={key:value for key,value in self.rate.items() if key in allowed}
                 now=time.monotonic();last,tokens=self.rate.get(remote_identity.hash,(now,4.0))
                 tokens=min(4.0,tokens+max(0,now-last))
                 if tokens<1:
@@ -152,6 +159,6 @@ class ClosedRelay:
             except ValueError:return ['rejected']
             except (OSError,sqlite3.Error):return ['unavailable']
         if path==LXMPeer.MESSAGE_GET_PATH:
-            try:return self.spool.get(self.allowed[remote_identity.hash],data)
+            try:return self.spool.get(allowed[remote_identity.hash],data)
             except (ValueError,OSError,sqlite3.Error):return LXMPeer.ERROR_NO_ACCESS
         return LXMPeer.ERROR_NO_ACCESS

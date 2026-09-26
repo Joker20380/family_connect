@@ -1,3 +1,5 @@
+> Historical design/plan. Current delivery status: [STATUS](STATUS.md); active work: [PLAN](PLAN.md). Goals below are not guarantees of the current pilot.
+
 # План развития
 
 [English](roadmap.en.md) · [Руководство](../README.ru.md)

@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "date": "2026-09-24",
+  "scope": "local gateway fencing prototype and Django admin plan 7.1; no live deployment",
+  "passed": 139,
+  "exit_code": 0,
+  "command": "python -m pytest -q tests/test_fleet_gateway.py tests/test_fleet_store.py tests/test_fleet.py tests/test_friends_identity_store.py tests/test_friends_store.py tests/test_friends_owner.py",
+  "sha256": {
+    "control/fleet_gateway.py": "08dd9d78928c31935345ed1f213716e3dc7e55ebce8b772110e2fbee8e4a1d3d",
+    "control/fleet_worker.py": "b79c58c00f51a81abc1056f6f617fa43555018b09f4c440316d79250e02274b9",
+    "tests/test_fleet_gateway.py": "0b23ff3eb0c76b8e0f7d3cac2be71b2593035251b782bc99c78ac1ee36e96837"
+  }
+}

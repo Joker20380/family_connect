@@ -1,6 +1,7 @@
 """Run the paired preview from its extracted directory, without installing it.
 
-Use system Python for `gui`, and the pinned control virtualenv for `control`.
+Use a system-Python virtualenv with --system-site-packages and the pinned
+provisioning requirements for both `gui` and `control` (GTK comes from the OS).
 Never run an older installed GUI concurrently. State paths remain explicit.
 The manifest detects corruption/mixed copies; it is not a signing trust boundary.
 """
@@ -45,6 +46,16 @@ def main():
     sys.path.insert(0, str(ROOT / 'clients/desktop'))
     sys.argv = [args.mode] + rest
     if args.mode == 'gui':
+        try:
+            import gi, cairo
+            gi.require_foreign("cairo")
+            gi.require_version('Gtk', '4.0')
+            gi.require_version('Adw', '1')
+            from provisioning.friends_owner import FriendsOwner
+        except (ImportError, ValueError):
+            raise SystemExit('Paired GUI requires system GTK 4/libadwaita, python3-gi-cairo and pinned Friends dependencies. '
+                             'Create a venv using /usr/bin/python3 -m venv --system-site-packages, '
+                             'install provisioning/requirements.lock there, and launch with its bin/python.') from None
         runpy.run_path(str(ROOT / 'clients/desktop/app.py'), run_name='__main__')
     else:
         runpy.run_module('provisioning.runtime', run_name='__main__')
