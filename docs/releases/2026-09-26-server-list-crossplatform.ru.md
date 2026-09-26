@@ -34,12 +34,38 @@
 
 ## Осталось для выката (вне этой среды)
 
-1. Пуш ветки → CI собирает/тестирует Windows/Linux/Android.
+1. Пуш ветки выполнен в `main` (`6ad8856..2ffba77`), CI запущен.
 2. Скачать и проверить артефакты CI (Windows installer, Linux tar, APK).
-3. Офлайн-подпись каталогов `updates/windows.json` (sequence+1) и Linux/Android metadata.
+3. Офлайн-подпись каталогов `updates/windows.json` (sequence10→11) и Linux/Android metadata.
 4. Публикация неизменяемых артефактов по HTTPS и проверка live URL/хешей.
 5. Отдельные release notes/теги GitHub: для Linux `v0.2.11` имя `0.2.11.en.md`
    пересекается с исторической Windows-заметкой — при фактическом выкате нужен отдельный путь/имя.
+
+### Результат CI (`2ffba77`)
+
+- Linux ✅, Windows ✅ (+windows-compatibility ✅).
+- Android: сборка/unit/lint ✅ (`assembleFriends`, `testFriendsUnitTest`, `lintFriends`,
+  `verify-apk`), ❌ только `Real WG AWG TCP and Auto lifecycle on Android emulator` —
+  тот же флаки-шаг, что падал на базовом `7db987b`, не связан с флагами/нагрузкой/каталогом.
+  До Android-релиза этот шаг закрывается реальной приёмкой на устройстве.
+
+### Android beta51: подготовка публикации
+
+Подготовлен генератор discovery-манифеста `deploy/friends/prepare-android-manifest.py`
+и кандидат-патч пригласительной страницы (`Beta50→Beta51`, без публикации).
+Порядок после скачивания/проверки APK:
+
+1. Приёмка APK: `pilot/android-awg/verify-apk.py --abis arm64-v8a` + реальная
+   активация и 4 сочетания страна×транспорт, повтор/рестарт, отказ по второй ссылке.
+2. Манифест: `python3 deploy/friends/prepare-android-manifest.py
+   /path/to/FamilyConnect-Test-0.1.18-beta51.apk --version 0.1.18-beta51
+   --version-code 51 --output /tmp/android-friends-update.json`.
+3. Выложить APK на HTTPS-хост в `/downloads/FamilyConnect-Test-0.1.18-beta51.apk`.
+4. Публикация discovery на сервере: `python3 deploy/friends/install-android-update.py
+   /tmp/android-friends-update.json` (проверяет размер/хеш APK и атомарно публикует
+   `updates/android-friends.json`).
+5. После публикации развернуть пригласительную страницу и обновить
+   `docs/getting-started.*`, README, `docs/releases.md` и отчёт хешами/размером.
 
 ## Откат
 

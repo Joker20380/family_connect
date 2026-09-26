@@ -19,7 +19,7 @@ addEventListener('load',async()=>{
    document.querySelector('[data-platform="'+platform+'"]').click();
    check(byId('download').getAttribute('href').startsWith('/downloads/FamilyConnect-'),'download link');
   }
-  check(byId('download').getAttribute('href').includes('beta50.apk'),'APK version');
+  check(byId('download').getAttribute('href').includes('beta51.apk'),'APK version');
   byId('connect-tab').click();installed.checked=true;installed.dispatchEvent(new Event('change'));
 
   check(getComputedStyle(installed).borderTopColor==='rgb(112, 244, 198)','on turquoise');
