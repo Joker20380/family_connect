@@ -41,7 +41,7 @@ jobs:
           subprocess.run(['python3','scripts/package_desktop.py'],check=True)
           archive=pathlib.Path('artifacts/clients/FamilyConnect-Linux-0.2.11.tar.gz')
           digest=hashlib.sha256(archive.read_bytes()).hexdigest()
-          assert digest=='2077a6b5a7852a7c627e6c1d778e9f2e25ca21814f403d07fd43acd5997ab057', digest
+          assert digest=='3aaf6e0661b5dd9e6136f12d96c66b2ad103c7fa8b0fc9c47a6db918c511b795', digest
           with tarfile.open(archive,'r:gz') as bundle:
               members=bundle.getmembers()
           expected=['app.py','backend.py','profile_config.py','updates.py','update.pub','install-linux.sh']
@@ -75,7 +75,7 @@ jobs:
               version='0.2.11',channel='linux-updater',source='2ffba7700023079d25832eb25d15c58fbbe55d74',
               linux_ci=36242070755,
               artifacts=[
-                  dict(file='FamilyConnect-Linux-0.2.11.tar.gz',size=83306,sha256='2077a6b5a7852a7c627e6c1d778e9f2e25ca21814f403d07fd43acd5997ab057'),
+                  dict(file='FamilyConnect-Linux-0.2.11.tar.gz',size=82897,sha256='3aaf6e0661b5dd9e6136f12d96c66b2ad103c7fa8b0fc9c47a6db918c511b795'),
                   dict(file='FamilyConnect-Setup-0.2.11-pilot-unsigned.exe',size=49934207,sha256='9cc04ba7446ff31d87e2a3d96dfb7faf24e61cf81a7eac8eccea0adb29c3ed3c',
                        note='byte-for-byte rename of accepted windows-preview-20260923-8906d62 asset; legacy schema1 slot only, never downloaded by the Linux updater')
               ]),indent=2)+'\n')
