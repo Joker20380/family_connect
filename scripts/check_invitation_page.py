@@ -9,6 +9,15 @@ OUTPUT = ROOT / 'artifacts/invitation'
 OUTPUT.mkdir(parents=True, exist_ok=True)
 source = (ROOT / 'deploy/friends/invite/index.html').read_text()
 
+URLS = {
+    'apk': '/downloads/FamilyConnect-Test-0.1.18-beta51.apk',
+    'win15': '/downloads/FamilyConnect-Setup-0.2.15-pilot-unsigned.exe',
+    'win14': '/downloads/FamilyConnect-Setup-0.2.14-pilot-unsigned.exe',
+    'appimage': '/downloads/FamilyConnect-0.2.11-x86_64.AppImage',
+    'deb': '/downloads/FamilyConnect_0.2.11_amd64.deb',
+    'targz': '/downloads/FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz',
+}
+
 def digest(tag):
     return base64.b64encode(hashlib.sha256(re.search('<'+tag+'>(.*?)</'+tag+'>', source, re.S).group(1).encode()).digest()).decode()
 
@@ -70,76 +79,70 @@ def probe(name, fragment, ua):
     dom = chromium(name, fragment, ua, screenshot=False)
     chromium(name, fragment, ua, screenshot=True)
     p = Probe(); p.feed(dom)
-    return p
+    return p, dom
 
 
 def check(cond, msg):
     if not cond: raise AssertionError(msg)
 
 
+def assert_all_urls(dom, ctx):
+    for label, url in URLS.items():
+        check(url in dom, f'{ctx} has {label}')
+
+
 passed = []
 try:
     tok = 'a' * 64
     # Android + valid
-    p = probe('android-valid', tok, UAS['android'])
+    p, dom = probe('android-valid', tok, UAS['android'])
     check(p.text.get('invitation-label') == 'Приглашение готово', 'android label')
     check(p.text.get('primary') == 'Скачать для Android', 'android primary label')
-    check(p.ids.get('primary', {}).get('href', '').startswith('/downloads/FamilyConnect-Test-'), 'android apk href')
+    check(p.ids.get('primary', {}).get('href') == URLS['apk'], 'android primary apk href')
     check('hidden' not in p.ids.get('open', {}), 'android open visible')
     check(p.ids.get('open-link', {}).get('href') == 'familyconnect://invite/' + tok, 'android open uri')
-    check('Windows' in p.text.get('others', '') and 'Linux' in p.text.get('others', '') and 'Android' not in p.text.get('others', ''), 'android others')
-    check('hidden' in p.ids.get('all', {}), 'android all hidden')
-    check('hidden' in p.ids.get('compat', {}), 'android compat hidden')
+    assert_all_urls(dom, 'android')
     passed.append('android-valid')
 
     # Windows + valid
-    p = probe('windows-valid', tok, UAS['windows'])
+    p, dom = probe('windows-valid', tok, UAS['windows'])
     check(p.text.get('primary') == 'Скачать для Windows', 'windows primary label')
-    check(p.ids.get('primary', {}).get('href') == '/downloads/FamilyConnect-Setup-0.2.15-pilot-unsigned.exe', 'windows primary 0.2.15 href')
+    check(p.ids.get('primary', {}).get('href') == URLS['win15'], 'windows primary 0.2.15 href')
     check('hidden' not in p.ids.get('open', {}), 'windows open visible')
     check(p.ids.get('open-link', {}).get('href') == 'familyconnect://invite/' + tok, 'windows open uri')
-    check('Android' in p.text.get('others', '') and 'Linux' in p.text.get('others', '') and 'Windows' not in p.text.get('others', ''), 'windows others')
-    check('hidden' not in p.ids.get('compat', {}), 'windows compat visible')
-    check(p.ids.get('compat-link', {}).get('href') == '/downloads/FamilyConnect-Setup-0.2.14-pilot-unsigned.exe', 'windows compat 0.2.14 href')
-    check('0.2.14' in p.text.get('compat', ''), 'windows compat mentions 0.2.14')
-    check('старой Windows 10' in p.text.get('compat', ''), 'windows compat explains old Win10')
+    assert_all_urls(dom, 'windows')
     passed.append('windows-valid')
 
     # Linux + valid: no deep-link/open claim
-    p = probe('linux-valid', tok, UAS['linux'])
-    check(p.text.get('primary') == 'Скачать для Linux', 'linux primary label')
-    check(p.ids.get('primary', {}).get('href') == '/downloads/FamilyConnect-0.2.11-x86_64.AppImage', 'linux AppImage href')
+    p, dom = probe('linux-valid', tok, UAS['linux'])
+    check(p.text.get('primary') == 'Скачать AppImage', 'linux primary label')
+    check(p.ids.get('primary', {}).get('href') == URLS['appimage'], 'linux AppImage href')
     check('hidden' in p.ids.get('open', {}), 'linux open hidden')
-    check('Android' in p.text.get('others', '') and 'Windows' in p.text.get('others', '') and 'Linux' not in p.text.get('others', ''), 'linux others')
-    check('hidden' in p.ids.get('compat', {}), 'linux compat hidden')
+    assert_all_urls(dom, 'linux')
     passed.append('linux-valid')
 
-    # Unknown + valid: neutral three-button choice
-    p = probe('unknown-valid', tok, UAS['unknown'])
+    # Unknown + valid: full list of all builds
+    p, dom = probe('unknown-valid', tok, UAS['unknown'])
     check('hidden' in p.ids.get('primary', {}), 'unknown primary hidden')
     check('hidden' in p.ids.get('open', {}), 'unknown open hidden')
-    check('hidden' not in p.ids.get('all', {}), 'unknown all visible')
-    all_text = p.text.get('all', '')
-    check('Скачать Family Connect' in all_text, 'unknown subhead')
-    for name in ('Android', 'Windows', 'Linux'):
-        check(name in all_text, 'unknown has ' + name)
-    check('0.2.14' in all_text, 'unknown windows compat available')
-    check('Совместимость со старой Windows 10' in all_text, 'unknown compat label')
+    assert_all_urls(dom, 'unknown')
     passed.append('unknown-valid')
 
     # Linux + missing token
-    p = probe('linux-missing', '', UAS['linux'])
+    p, dom = probe('linux-missing', '', UAS['linux'])
     check(p.text.get('invitation-label') == 'Нужна ссылка приглашения', 'missing label')
     check('hidden' in p.ids.get('open', {}), 'missing open hidden')
     check('полную ссылку' in p.text.get('hint', ''), 'missing hint')
-    check(p.text.get('primary') == 'Скачать для Linux', 'missing still shows linux download')
+    check(p.text.get('primary') == 'Скачать AppImage', 'missing still shows linux AppImage')
+    assert_all_urls(dom, 'linux-missing')
     passed.append('linux-missing')
 
     # Linux + invalid token
-    p = probe('linux-invalid', 'BAD', UAS['linux'])
+    p, dom = probe('linux-invalid', 'BAD', UAS['linux'])
     check(p.text.get('invitation-label') == 'Нужна ссылка приглашения', 'invalid label')
     check('hidden' in p.ids.get('open', {}), 'invalid open hidden')
     check('полную ссылку' in p.text.get('hint', ''), 'invalid hint')
+    assert_all_urls(dom, 'linux-invalid')
     passed.append('linux-invalid')
 
     for name in passed:
