@@ -16,6 +16,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 /** Separate open-test launcher: one-use invitation, no accounts or billing; separate from managed journal. */
 public final class FriendsActivity extends LocalizedActivity {
+    private static final String[][] TRANSPORTS={{"awg","AWG 3.1"},{"tcp","TCP REALITY"}};
     private final Handler handler=new Handler(Looper.getMainLooper());
     private final ExecutorService worker=Executors.newSingleThreadExecutor();
     private TextView status,detail,routeCaption,routeStatus,routeDetail;private Button check,activate;private TerminalToggle connect;private Spinner countries,transports;
@@ -50,7 +51,8 @@ public final class FriendsActivity extends LocalizedActivity {
         countries.setBackgroundColor(Color.TRANSPARENT);countries.setPadding(0,0,0,0);
         countries.setPopupBackgroundDrawable(TerminalUi.frame(this,TerminalUi.SURFACE,TerminalUi.FRAME));
         countries.setSelection(country.equals("nl")?1:0);
-        transports=new Spinner(this);TerminalUi.inlinePicker(transports,new String[]{"AWG 3.1","TCP REALITY"});
+        String[] transportLabels=new String[TRANSPORTS.length];for(int i=0;i<TRANSPORTS.length;i++)transportLabels[i]=TRANSPORTS[i][1];
+        transports=new Spinner(this);TerminalUi.inlinePicker(transports,transportLabels);
         transports.setContentDescription(getString(R.string.terminal_transport));transports.setSelection(transport.equals("awg")?0:1);
         countries.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onNothingSelected(AdapterView<?> parent){}
@@ -65,7 +67,7 @@ public final class FriendsActivity extends LocalizedActivity {
             public void onNothingSelected(AdapterView<?> parent){}
             public void onItemSelected(AdapterView<?> parent,android.view.View view,int position,long id){
                 if(!parent.isShown())return;
-                String next=position==0?"awg":"tcp";if(next.equals(transport))return;
+                String next=position>=0&&position<TRANSPORTS.length?TRANSPORTS[position][0]:"awg";if(next.equals(transport))return;
                 transport=next;getPreferences(MODE_PRIVATE).edit().putString("transport",transport).apply();
                 if(!initializing&&!ConnectionService.status.equals("off")){reconnect=true;disconnect();}render();
             }

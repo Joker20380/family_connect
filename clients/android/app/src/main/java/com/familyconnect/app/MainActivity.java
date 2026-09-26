@@ -51,7 +51,8 @@ public final class MainActivity extends LocalizedActivity {
         label(route,getString(R.string.route),13,TerminalUi.MUTED);
         autoMode=new TerminalToggle(this);autoMode.setText("Auto · WG → AWG → TCP");TerminalUi.textStyle(autoMode,14,TerminalUi.TEXT);autoMode.setMinHeight(dp(48));autoMode.setChecked(getPreferences(MODE_PRIVATE).getBoolean("auto",false));route.addView(autoMode);
         autoMode.setOnCheckedChangeListener((v,on)->{getPreferences(MODE_PRIVATE).edit().putBoolean("auto",on).apply();render();});
-        transportPicker=new Spinner(this);TerminalUi.picker(transportPicker,new String[]{"WireGuard","AmneziaWG","TCP · REALITY"});transportPicker.setContentDescription(getString(R.string.terminal_transport));
+        String[] transportLabels=new String[Transport.values().length];for(int i=0;i<transportLabels.length;i++)transportLabels[i]=Transport.values()[i].label;
+        transportPicker=new Spinner(this);TerminalUi.picker(transportPicker,transportLabels);transportPicker.setContentDescription(getString(R.string.terminal_transport));
         transportPicker.setSelection(selected.ordinal());route.addView(transportPicker,new LinearLayout.LayoutParams(-1,-2));
         transportPicker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onNothingSelected(AdapterView<?> parent){}
