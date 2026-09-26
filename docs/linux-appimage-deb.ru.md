@@ -1,7 +1,66 @@
 # Linux: AppImage и DEB вместо tar.gz preview
 
-Статус: design + implementation plan. Runtime-артефакты ещё не собраны и не опубликованы;
-этот документ не объявляет rollout завершённым.
+Статус: реализовано, собрано и проверено (CI + чистая Ubuntu 24.04); публикация на
+HTTPS release infrastructure и переключение invitation landing ещё не выполнены.
+
+## Результаты приёмки (26.09)
+
+Source commit: `70f594a0` (packaging `398a2e5`, `4c7549c`, `b1e96f0`, `0a56210`,
+`2ff3821`, `4cae8a2`, `70f594a0`). CI run `36261639780` — linux job green, все шаги
+(сборка AppImage/DEB/tar.gz, `dpkg-deb --info/--contents`, desktop MimeType, smoke
+packaged launcher, `--appimage-extract`, sha256) success. Python/runtime baseline:
+ubuntu-latest = Ubuntu 24.04, system `/usr/bin/python3` 3.12; compiled vendor wheels
+собраны под cp312.
+
+Артефакты (собраны в чистом `ubuntu:24.04`, те же что прошли acceptance):
+
+| Artifact | Size | SHA256 |
+| --- | --- | --- |
+| `FamilyConnect-0.2.11-x86_64.AppImage` | 8 559 096 B | `7dfaca6022a275e62eeac5b8c402477d493d5833181d238f2080aa62014ba83b` |
+| `FamilyConnect_0.2.11_amd64.deb` | 6 685 688 B | `a336624808b96de4455963307c609be1d3bddbbadf29976a9a0176207f415697` |
+| `FamilyConnect-Linux-0.2.11.tar.gz` (legacy) | 83 911 B | `e5906431fb458dd463c46c58dd249b9882b101bc2d768ec375c5002b6445ea5d` |
+
+### AppImage
+
+- Portability (clean Ubuntu 24.04 **без** GTK/GI): запуск падает `ModuleNotFoundError:
+  No module named 'gi'`. AppImage **не** self-contained по GTK-стеку. Launcher выдаёт
+  понятное сообщение и exit 2 вместо traceback.
+- Минимальные host prerequisites (те же, что DEB Depends): `python3-gi`,
+  `python3-gi-cairo`, `gir1.2-gtk-4.0`, `gir1.2-adw-1`, `librsvg2-common`
+  (+ `libqrencode4`, `libzbar0` для QR; `network-manager` для VPN).
+- С этими пакетами: smoke exit 0, restart exit 0, `--integrate` создаёт
+  `~/.local/share/applications/com.familyconnect.Client.desktop` (`Exec="...AppImage" %u`),
+  icon, `x-scheme-handler/familyconnect` → `com.familyconnect.Client.desktop`.
+- Без git/pip/venv/source checkout/ручного PYTHONPATH.
+
+### DEB
+
+- `apt install ./FamilyConnect_0.2.11_amd64.deb` разрешает Depends (в т.ч.
+  `librsvg2-common`) и ставит 0.2.11; `/usr/bin/family-connect`, desktop entry,
+  icon, MimeType `x-scheme-handler/familyconnect` — ok.
+- `/usr/bin/family-connect --smoke` exit 0, без SVG/GDK ошибок.
+- `familyconnect://invite/<64hex>` аргументом доставляется приложению (GUI остаётся
+  запущенным; только безобидные Gtk theme-parser warnings от CSS gradient).
+- Upgrade (reinstall) сохраняет `~/.local/share/family-connect/*` (simulated
+  friends-identity); `apt remove` удаляет `/usr/bin/family-connect` и
+  `/usr/lib/family-connect`; пользовательские данные сохраняются; reinstall —
+  state снова доступен. Launchers ставят `PYTHONDONTWRITEBYTECODE=1`, чтобы root-run
+  не оставлял `.pyc` в `/usr/lib`.
+
+### Package-content audit
+
+DEB и AppImage (`squashfs-root`): в собственных файлах нет private keys, test
+identities, invitation tokens, Friends state, real provisioning, `.env`, DB,
+developer home paths, build credentials, signing keys. Vendor проверяется по
+filenames (нет `.env`/state/pycache).
+
+### VPN prerequisites (отдельно от GUI)
+
+GUI/application installation — **PASS** (чистая Ubuntu 24.04). Friends activation и
+VPN runtime (NetworkManager/WireGuard/polkit/helpers/TUN/routing) в контейнере не
+проверялись: NetworkManager не запускается без systemd. Root AWG/TCP helpers и их
+бинарники по-прежнему ставятся отдельно (`install-awg.sh`/`install-tcp.sh`) и не
+входят в пользовательский пакет.
 
 ## 1. Как работает текущий Linux-поток
 
@@ -117,6 +176,9 @@ CI: artifact exists + executable + arch + AppImage `--appimage-extract` + `dpkg-
 
 ## 10. Known limitations
 
+- AppImage НЕ self-contained по GTK-стеку: требует host `python3-gi`,
+  `python3-gi-cairo`, `gir1.2-gtk-4.0`, `gir1.2-adw-1`, `librsvg2-common`.
+  Термин «self-contained» для AppImage не используется без оговорки про host deps.
 - AppImage bundling `gi`/GTK4/libadwaita надёжно не решается; они остаются системными.
 - Root AWG/TCP helper и их бинарники не входят в пользовательский пакет.
 - Полный AppImage/DEB self-update не реализован в этой задаче.
