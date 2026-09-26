@@ -1,0 +1,10 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Family Connect
+Upstream-Contact: Family Connect <maintainers@family-connect.invalid>
+Source: https://github.com/Joker20380/family_connect
+
+Files: *
+Copyright: Family Connect
+License: Proprietary
+ Family Connect is source-available proprietary software. Public inspection of
+ the source does not grant reuse rights. All rights reserved.

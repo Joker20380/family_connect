@@ -1,0 +1,36 @@
+#!/bin/sh
+# AppImage entry point. The squashfs is mounted; APPIMAGE points at the file.
+set -eu
+HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+APPIMAGE=${APPIMAGE:-$(readlink -f "$0" 2>/dev/null || echo "$0")}
+
+integrate() {
+    icon_dir="$HOME/.local/share/icons/hicolor/256x256/apps"
+    app_dir="$HOME/.local/share/applications"
+    mkdir -p "$icon_dir" "$app_dir"
+    cp "$HERE/com.familyconnect.Client.png" "$icon_dir/com.familyconnect.Client.png"
+    cat > "$app_dir/com.familyconnect.Client.desktop" <<DESKTOP
+[Desktop Entry]
+Type=Application
+Name=Family Connect
+Comment=Private family VPN client
+Exec="$APPIMAGE" %u
+Icon=com.familyconnect.Client
+Terminal=false
+Categories=Network;
+StartupWMClass=com.familyconnect.Client
+MimeType=x-scheme-handler/familyconnect;
+DESKTOP
+    command -v update-desktop-database >/dev/null 2>&1 && update-desktop-database "$app_dir" >/dev/null 2>&1 || true
+    command -v xdg-mime >/dev/null 2>&1 && xdg-mime default com.familyconnect.Client.desktop x-scheme-handler/familyconnect >/dev/null 2>&1 || true
+    echo "Family Connect added to the application menu." >&2
+    exit 0
+}
+
+case "${1:-}" in
+    --integrate|--install) integrate ;;
+esac
+
+export PYTHONNOUSERSITE=1
+export PYTHONPATH="$HERE/usr/lib/family-connect/vendor${PYTHONPATH:+:$PYTHONPATH}"
+exec /usr/bin/python3 "$HERE/usr/lib/family-connect/launcher.py" "$@"

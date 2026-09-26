@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Family Connect
+Comment=Private family VPN client
+Exec=family-connect %u
+Icon=com.familyconnect.Client
+Terminal=false
+Categories=Network;
+StartupWMClass=com.familyconnect.Client
+MimeType=x-scheme-handler/familyconnect;

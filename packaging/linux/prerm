@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+# Never touch $HOME state. Only drop the URI registration owned by this package.
+if command -v xdg-mime >/dev/null 2>&1; then
+    if [ "$(xdg-mime query default x-scheme-handler/familyconnect 2>/dev/null || true)" = "com.familyconnect.Client.desktop" ]; then
+        xdg-mime default '' x-scheme-handler/familyconnect >/dev/null 2>&1 || true
+    fi
+fi
+exit 0
