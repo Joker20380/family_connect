@@ -1,36 +1,36 @@
 # Release distribution / Выпуски
 
-Android0.1.18-beta51 verified 2026-09-26 by real-device acceptance and full HTTPS SHA256. Windows0.2.14 verified 2026-09-24 by full GitHub/HTTPS downloads and SHA256. Linux retains its 2026-09-23 acceptance.
+Android0.1.18-beta51, Windows0.2.15 and Linux0.2.11 verified 2026-09-26 by CI, real-device Android acceptance and full GitHub/HTTPS SHA256 downloads.
 
 | Channel | Distributed version | Notes |
 | --- | --- | --- |
 | Android updater / invitation | 0.1.18-beta51, code51, ARM64 | Persistent beta certificate; in-place update |
-| Linux invitation | 0.2.10 preview8e9fabe3cbef2989 | Paired manual preview; operator-assisted setup |
-| Windows invitation / updater | 0.2.14 source6eed30c | Independent signed catalog schema2/sequence10; no publisher signature |
+| Linux invitation | 0.2.11 preview5b02e8cb9fde119f | Paired manual preview; operator-assisted setup |
+| Windows invitation / updater | 0.2.15 source2ffba77 | Independent signed catalog schema2/sequence11; no publisher signature |
 
 Invitation activation now opens the app from the original link. OFF switches are orange,
 ON switches turquoise on the page and all clients. Historical artifacts remain immutable.
 
-[FamilyConnect-Control-Linux-preview-8e9fabe3cbef2989.tar.gz](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-8e9fabe3cbef2989.tar.gz), 120093 bytes.
-SHA256 `67b569cb2423692f088baa7ef0d83761394bec4fadb38249ac0788a046605795`.
+[FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz](https://185.251.89.19:8443/downloads/FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz), 121503 bytes.
+SHA256 `6d4c6186fa69d36f4835b380582ba046e1a3a70abf359ee1a0332dd741f97a56`.
 
-[FamilyConnect-Linux-0.2.10-invitation.txt](https://185.251.89.19:8443/downloads/FamilyConnect-Linux-0.2.10-invitation.txt), 3371 bytes.
-SHA256 `2d1e0578767c3e0258f9214c080363cbc54c04944cea91e6b5f704393ba8c5bd`.
+[FamilyConnect-Linux-0.2.11-invitation.txt](https://185.251.89.19:8443/downloads/FamilyConnect-Linux-0.2.11-invitation.txt), 3371 bytes.
+SHA256 `59fb42f034b86a2fc451f6cb3914ed2e4f19c93805e9348a5bd1676f1b75c279`.
 
-[FamilyConnect-Setup-0.2.14-pilot-unsigned.exe](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.14-pilot-unsigned.exe), 49942347 bytes.
-SHA256 `7b1af167a55a977c357c47b94407916fe27d1b343d33ecb69c42b2d11b85e886`.
+[FamilyConnect-Setup-0.2.15-pilot-unsigned.exe](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.15-pilot-unsigned.exe), 49941739 bytes.
+SHA256 `3e610962da40510e0dce7a9d794f4352ba113e090e462f6d1c75d7712f965e6b`.
 
 [FamilyConnect-Test-0.1.18-beta51.apk](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta51.apk), 36456636 bytes.
 SHA256 `79a2d28667332ea442eae1b895b4fc632b52734cbed1e75bd95f32b7175ad366`.
 
-[Discovery](https://185.251.89.19:8443/updates/android-friends.json) · [Windows checks and rollback](releases/2026-09-24-windows0214-installer.ru.md) · [Android beta51 checks](releases/2026-09-26-server-list-crossplatform.ru.md) · [Linux checks](releases/2026-09-23-switch-colors-beta50.ru.md).
+[Discovery](https://185.251.89.19:8443/updates/android-friends.json) · [Android/Windows/Linux checks](releases/2026-09-26-server-list-crossplatform.ru.md) · [Windows0.2.14 checks](releases/2026-09-24-windows0214-installer.ru.md).
 
 ## Release procedure
 
 The [client workflow](../.github/workflows/clients.yml) defines platform builds and
 release conditions. CI artifacts do not by themselves establish a release. Validate native
 UI/runtime and downloaded artifacts before signing/publishing. Windows cross-build alone
-is insufficient. The current release includes Android0.1.18-beta51, Linux0.2.10 and Windows0.2.14 Windows-channel release; see the [Android beta51 report](releases/2026-09-26-server-list-crossplatform.ru.md), [Windows report](releases/2026-09-24-windows0214-installer.ru.md) and [Linux report](releases/2026-09-23-switch-colors-beta50.ru.md).
+is insufficient. The current release includes Android0.1.18-beta51, Linux0.2.11 and Windows0.2.15 Windows-channel release; see the [cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and the prior [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md).
 
 Desktop catalogs use offline signing with increasing sequence numbers. Keep keys out of
 CI and servers; never replace an existing version/tag with different binaries.

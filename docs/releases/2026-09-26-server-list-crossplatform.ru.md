@@ -2,9 +2,8 @@
 
 Расширяем список серверов как у конкурентов: флаг страны и нагрузка на момент
 выбора, плюс каталог транспортов для быстрого добавления следующего транспорта.
-Изменения внесены в исходники всех трёх клиентов. Android beta51 собран, принят
-на устройстве и опубликован; Linux0.2.11 и Windows0.2.15 остаются кандидатами
-в исходниках — сборка, подпись и публикация desktop не выполнялись.
+Изменения внесены в исходники и опубликованы на всех трёх платформах:
+Android beta51/code51, Linux0.2.11, Windows0.2.15.
 
 ## Изменения
 
@@ -21,17 +20,16 @@
 | Клиент | Было | Стало | Состояние |
 | --- | --- | --- | --- |
 | Android | 0.1.18-beta50 / code50 | 0.1.18-beta51 / code51 | опубликован 26.09 |
-| Linux | 0.2.10 | 0.2.11 | кандидат в исходниках |
-| Windows | 0.2.14 | 0.2.15 | кандидат в исходниках |
+| Linux | 0.2.10 | 0.2.11 | опубликован 26.09 |
+| Windows | 0.2.14 | 0.2.15 | опубликован 26.09 |
 
 ## Проверка
 
 - Linux: `python -m pytest clients/desktop/tests -q` — 221 passed, 1 сбой только из-за
   sandbox-ограничения сокета (`test_recovery`, не связано с изменениями).
   `test_server_load` расширен `verified_server_loads`.
-- Linux GUI (`map_check`, `layout_check`) локально не запускались — нет X-дисплея/xvfb.
 - Android: `ServerLoad.java` и `Transport.java` собраны отдельно через `javac` — успешно.
-- Windows и полная Android-сборка — откладываются на CI.
+- Полные сборки/UI/нативные проверки — в CI, см. ниже.
 
 ### Результат CI (`2ffba77`)
 
@@ -41,7 +39,7 @@
   тот же флаки-шаг, что падал на базовом `7db987b`, не связан с флагами/нагрузкой/каталогом.
   Этот шаг закрыт реальной приёмкой beta51 на устройстве.
 
-### Android beta51: сборка и публикация
+### Android beta51
 
 Подписанный APK собран локально для ABI `arm64-v8a`, проверен `pilot/android-awg/verify-apk.py
 --abis arm64-v8a` и установлен поверх beta50 без очистки данных на Redmi Note 9 Pro:
@@ -56,39 +54,58 @@
 - Certificate SHA256 `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`
   (тот же подписант, что у beta50).
 
-Публикация:
+### Windows 0.2.15
 
-1. APK выложен на HTTPS-хост и добавлен точный nginx `location` `/downloads/...beta51.apk`.
-2. Discovery-манифест подготовлен `prepare-android-manifest.py` и атомарно опубликован
-   `install-android-update.py`: `updates/android-friends.json` теперь code51.
-3. Пригласительная страница обновлена `Beta50→Beta51`, CSP script-hash пересчитан
-   (`script-src 'sha256-WyVIGrrQ2wnvZXFUcQR+D3WzFzmQ6TCi73vs+9IjzuY='`), nginx
-   перезагружен. `scripts/check_invitation_page.py`: 4 сценария × 13 проверок passed.
-4. Публичные URL проверены: APK `200 OK`, манифест code51, страница содержит только beta51.
+Принят артефакт CI `2ffba77` (`windows` и `windows-compatibility` success), выложен
+immutable GitHub release `windows-v0.2.15` и HTTPS. Каталог `updates/windows.json`
+подписан offline Ed25519 (schema2, sequence11, version0.2.15).
 
-## Осталось для выката desktop
+- `FamilyConnect-Setup-0.2.15-pilot-unsigned.exe` — 49941739 bytes, SHA256
+  `3e610962da40510e0dce7a9d794f4352ba113e090e462f6d1c75d7712f965e6b`.
+- GitHub: `https://github.com/Joker20380/family_connect/releases/download/windows-v0.2.15/FamilyConnect-Setup-0.2.15-pilot-unsigned.exe`.
+- Каталог: `https://raw.githubusercontent.com/Joker20380/family_connect/main/updates/windows.json`.
+  Signature проверена локально публичным anchor `update.pub`.
 
-1. Собрать и проверить артефакты CI для Windows0.2.15 и Linux0.2.11.
-2. Офлайн-подписать каталог `updates/windows.json` (sequence10→11) и Linux metadata.
-3. Опубликовать неизменяемые desktop-артефакты по HTTPS и проверить live URL/хеши.
-4. Отдельные release notes/теги GitHub: для Linux `v0.2.11` имя `0.2.11.en.md`
-   пересекается с исторической Windows-заметкой — нужен отдельный путь/имя.
+### Linux 0.2.11
+
+Source-only control preview собран из принятого источника (`linux` CI success),
+проверен `bundle_id`, выложен immutable GitHub release `desktop-preview-20260926-5b02e8cb`
+и HTTPS.
+
+- `FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz` — 121503 bytes, SHA256
+  `6d4c6186fa69d36f4835b380582ba046e1a3a70abf359ee1a0332dd741f97a56`.
+- `FamilyConnect-Linux-0.2.11-invitation.txt` — 3371 bytes, SHA256
+  `59fb42f034b86a2fc451f6cb3914ed2e4f19c93805e9348a5bd1676f1b75c279`.
+- GitHub: `https://github.com/Joker20380/family_connect/releases/tag/desktop-preview-20260926-5b02e8cb`.
+
+### Пригласительная страница
+
+Страница обновлена до Android beta51 / Windows0.2.15 / Linux0.2.11, CSP script-hash
+пересчитан (`script-src 'sha256-msSL16npkKnn6mE2zGpGcwEA2unk7hXpvgeJN/6Uqh4='`),
+nginx перезагружен. `scripts/check_invitation_page.py`: 4 сценария × 13 проверок passed.
+Публичные URL `200 OK`, размеры и SHA256 совпали.
 
 ## Откат
 
 Серверные бэкапы сохранены в `/opt/apps/family_connect/state-product-https/config`:
 
-- `invite.html.before-server-list-beta51-20260926`;
-- `nginx.conf`/`nginx-final.conf` `.before-server-list-beta51-20260926` (до CSP/страницы);
-- `nginx.conf`/`nginx-final.conf` `.before-beta51-download-20260926` (до добавления location);
-- `android-friends-update.json.before-android-update-51` (discovery beta50).
+- `invite.html`/`nginx.conf`/`nginx-final.conf` `.before-desktop0211-20260926`;
+- предыдущие бэкапы beta51: `.before-server-list-beta51-20260926`,
+  `.before-beta51-download-20260926`, `android-friends-update.json.before-android-update-51`.
 
-Откат страницы/config: восстановить файлы `invite.html`, `nginx.conf`,
-`nginx-final.conf` из `.before-server-list-beta51-20260926`, затем `nginx -t` и HUP
-только `family-connect-product-https`. Откат discovery: восстановить
-`android-friends-update.json.before-android-update-51`. Опубликованный APK beta51
-оставить неизменяемым; Android-код на устройстве не понижать, исправления выпускать
-с большим versionCode и той же подписью.
+Откат страницы/config: восстановить `invite.html`, `nginx.conf`, `nginx-final.conf`
+из `.before-desktop0211-20260926`, затем `nginx -t` и HUP только
+`family-connect-product-https`. Windows-каталог не откатывать на меньший sequence:
+при ошибке публиковать корректирующий каталог с большим sequence; установленные
+клиенты и данные сохранять. Опубликованные immutable APK/EXE/архивы не заменять.
+Android-код на устройстве не понижать; исправления выпускать с большим versionCode
+и той же подписью.
 
 `git revert` коммитов этой задачи: вернуть прежние версии в `VERSION`, `APP_VERSION`,
 `FamilyConnect.csproj`/`setup.iss`/`build.ps1` и `build.gradle`.
+
+## Остаётся открытым
+
+- Физическая приёмка Windows10/11 на пользовательском ПК; publisher signing отсутствует.
+- Российская сеть, длительный фон, смена сети и долгая устойчивость.
+- Linux остаётся manual preview с ручными зависимостями и VPN helpers.

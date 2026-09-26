@@ -34,19 +34,19 @@ Android **0.1.18-beta51** is available for existing users: voice messages, hold-
 swipe-up locking, text edits and background notifications. New messages scroll into view. Switches are orange when off and turquoise when on.
 [Install or update](docs/getting-started.en.md) · [Versions and checksums](docs/releases.md).
 
-The invitation page provides Android beta51 and Linux0.2.10 / Windows0.2.14 previews. Install
+The invitation page provides Android beta51 and Linux0.2.11 / Windows0.2.15 previews. Install
 the client, return to the original invitation mark **Application installed** and choose **Open application**.
-[Desktop installation](docs/clients.en.md) · [Rollout checks](docs/releases/2026-09-24-windows0214-installer.ru.md).
+[Desktop installation](docs/clients.en.md) · [Rollout checks](docs/releases/2026-09-26-server-list-crossplatform.ru.md).
 
-Windows0.2.14 fixes installer recovery and adjusts app-local CET compatibility for older Windows 10 updates. Windows 10 1809+ / 11 x64 are the target platforms; affected-device acceptance remains pending. Version0.2.13 can update through Check for updates;0.2.12 or earlier needs one manual installation.
+Windows0.2.15 adds the server picker with country flags and live load, plus a transport catalog. Windows 10 1809+ / 11 x64 are the target platforms; the installer has no publisher signature. Version0.2.14 can update through Check for updates;0.2.12 or earlier needs one manual installation.
 
 ## Platforms
 
 | Platform | Current availability |
 | --- | --- |
 | Android 8+ | Beta51; ARM64 APK, 36.4 MB. VPN, text and voice tested on phones; invitation-link activation. |
-| Linux | GTK 4 / libadwaita desktop pilot; 0.2.10 preview8e9fabe3cbef2989. Operator-assisted setup. |
-| Windows x64 | Native desktop pilot; 0.2.14 source6eed30c installer. Invitation-link activation; no trusted publisher signature yet. |
+| Linux | GTK 4 / libadwaita desktop pilot; 0.2.11 preview5b02e8cb9fde119f. Operator-assisted setup. |
+| Windows x64 | Native desktop pilot; 0.2.15 source2ffba77 installer. Invitation-link activation; no trusted publisher signature yet. |
 | macOS / iOS | No application release. Apple-platform work remains on the longer-term roadmap. |
 
 Invitation-link activation is available on all three clients. Messenger functionality is verified on Android; desktop feature parity is not claimed.
@@ -134,7 +134,7 @@ This is the implemented provisioning path at a high level; integration maturity 
 
 ## Development
 
-**Source snapshot:** this checkpoint includes Android0.1.18-beta51 and Linux0.2.11 / Windows0.2.15 candidates; the published desktop versions remain Linux0.2.10 / Windows0.2.14. See [source acceptance](docs/releases/2026-09-23-switch-colors-beta50.ru.md) for checks and limits. CI uses test signing; byte-for-byte reproduction of the published APK is not claimed. Linux remains a manual preview. Windows0.2.14 uses an independent signed catalog after one manual transition.
+**Source snapshot:** this checkpoint includes Android0.1.18-beta51, Linux0.2.11 and Windows0.2.15. See the [cross-platform release report](docs/releases/2026-09-26-server-list-crossplatform.ru.md) for checks and limits. CI uses test signing; byte-for-byte reproduction of the published APK is not claimed. Linux remains a manual preview. Windows0.2.15 uses an independent signed catalog after one manual transition.
 
 Start with [CONTRIBUTING.md](CONTRIBUTING.md) for setup and scoped checks.
 

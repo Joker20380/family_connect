@@ -14,9 +14,8 @@ unattended-upgrade libexpat1. Во время чтения журналов вы
 Production/версии не менялись.
 26.09 Android: в исходники главного экрана Friends добавлен выбор сервера
 с флагом и нагрузкой на момент выбора (RU/NL, `server-load.json`, кэш15с).
-Android beta51/code51 собран, принят на Redmi Note 9 Pro и опубликован
-(APK, discovery, invite-страница); Linux0.2.11 и Windows0.2.15 остаются
-кандидатами в исходниках — сборка/подпись/публикация desktop отложены —
+Android beta51/code51, Linux0.2.11 и Windows0.2.15 собраны и опубликованы
+(APK/discovery/invite, desktop GitHub/HTTPS, Windows catalog sequence11) —
 см. [отчёт](releases/2026-09-26-server-list-crossplatform.ru.md).
 
 25.09: лицензирование опубликовано в GitHub main, commit

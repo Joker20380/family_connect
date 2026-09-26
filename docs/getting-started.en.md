@@ -1,6 +1,6 @@
 # Try Family Connect
 
-Windows0.2.14 targets Windows10 1809+ /11 x64 and bundles .NET.
+Windows0.2.15 targets Windows10 1809+ /11 x64 and bundles .NET.
 After a failed0.2.13 installation, run the new installer over the remaining files.
 No manual service setup is needed. Affected Windows10 device acceptance is pending.
 
@@ -67,7 +67,7 @@ and messages. [Beta51 validation (RU)](releases/2026-09-26-server-list-crossplat
 
 ## Desktop clients
 
-[Linux0.2.10 / Windows0.2.14 previews](clients.en.md) also accept invitation links. Linux needs
+[Linux0.2.11 / Windows0.2.15 previews](clients.en.md) also accept invitation links. Linux needs
 operator-assisted dependency and VPN-helper setup. Desktop messenger parity with Android
 is not claimed. Direct invitations and referral claims use separate pools; limits are not
 current availability counts.

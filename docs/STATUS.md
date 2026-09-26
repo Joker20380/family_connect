@@ -14,9 +14,8 @@ unattended-upgrade libexpat1. Во время чтения журналов вы
 Production/версии не менялись.
 26.09 Android: в исходники главного экрана Friends добавлен выбор сервера
 с флагом и нагрузкой на момент выбора (RU/NL, `server-load.json`, кэш15с).
-Android beta51/code51 собран, принят на Redmi Note 9 Pro и опубликован
-(APK, discovery, invite-страница); Linux0.2.11 и Windows0.2.15 остаются
-кандидатами в исходниках — сборка/подпись/публикация desktop отложены —
+Android beta51/code51, Linux0.2.11 и Windows0.2.15 собраны и опубликованы
+(APK/discovery/invite, desktop GitHub/HTTPS, Windows catalog sequence11) —
 см. [отчёт](releases/2026-09-26-server-list-crossplatform.ru.md).
 
 25.09: лицензирование опубликовано в GitHub main, commit
@@ -298,8 +297,8 @@ Windows0.2.13 (интерфейс, приглашение, подключени�
 | Платформа | Собрано | Установлено / опубликовано |
 | --- | --- | --- |
 | Android ARM64 | 0.1.18-beta51 / code51 | Redmi Note 9 Pro обновлён поверх50; HTTPS APK, updater и страница —51 |
-| Linux | 0.2.10 / preview8e9fabe3cbef2989 | GitHub/HTTPS paired archive; базовый сценарий принят пользователем |
-| Windows x64 | 0.2.14 / source6eed30c | GitHub/HTTPS installer; Server2025/2022 native CI passed; affected Win10 device acceptance pending |
+| Linux | 0.2.11 / preview5b02e8cb9fde119f | GitHub/HTTPS paired archive; CI GTK/map/link/friends/recovery/install passed |
+| Windows x64 | 0.2.15 / source2ffba77 | GitHub/HTTPS installer + catalog sequence11; native/compat CI passed; affected Win10 device acceptance pending |
 
 [Интерактивная страница](https://185.251.89.19:8443/invite/) принимает исходную ссылку
 приглашения: установка → возврат к ссылке → открытие приложения. Вкладки, выбор платформы
