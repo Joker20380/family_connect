@@ -3,9 +3,9 @@ on:
   push:
     branches: ['**']
     tags: ['v*']
-    paths: ['clients/**', '.github/workflows/clients.yml', 'scripts/package_desktop.py', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
+    paths: ['clients/**', '.github/workflows/clients.yml', 'scripts/package_desktop.py', 'scripts/package_linux.py', 'packaging/**', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
   pull_request:
-    paths: ['clients/**', '.github/workflows/clients.yml', 'scripts/package_desktop.py', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
+    paths: ['clients/**', '.github/workflows/clients.yml', 'scripts/package_desktop.py', 'scripts/package_linux.py', 'packaging/**', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
   workflow_dispatch:
 concurrency:
   group: family-connect-clients-${{ github.ref }}
@@ -184,7 +184,30 @@ jobs:
         run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/friends_ui_check.py
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/recovery_check.py
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/tcp_install_check.py
-      - run: python3 scripts/package_desktop.py
+      - name: Install appimagetool
+        run: |
+          curl -fsSL https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage -o /tmp/appimagetool
+          chmod +x /tmp/appimagetool
+      - name: Build Linux AppImage, DEB and legacy archive
+        run: APPIMAGE_EXTRACT_AND_RUN=1 python3 scripts/package_linux.py --appimagetool /tmp/appimagetool
+      - name: Verify DEB metadata, desktop integration and content audit
+        run: |
+          dpkg-deb --info artifacts/clients/FamilyConnect_*_amd64.deb
+          dpkg-deb --contents artifacts/clients/FamilyConnect_*_amd64.deb | grep -q 'usr/bin/family-connect'
+          dpkg-deb --contents artifacts/clients/FamilyConnect_*_amd64.deb | grep -q 'usr/share/applications/com.familyconnect.Client.desktop'
+          rm -rf /tmp/fc-deb && mkdir -p /tmp/fc-deb
+          dpkg-deb -x artifacts/clients/FamilyConnect_*_amd64.deb /tmp/fc-deb
+          grep -q 'MimeType=x-scheme-handler/familyconnect' /tmp/fc-deb/usr/share/applications/com.familyconnect.Client.desktop
+      - name: Smoke packaged launcher from the DEB
+        run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a python3 /tmp/fc-deb/usr/lib/family-connect/launcher.py --smoke
+      - name: AppImage extract smoke
+        run: |
+          ./artifacts/clients/FamilyConnect-*-x86_64.AppImage --appimage-extract >/dev/null
+          test -x squashfs-root/AppRun
+          test -f squashfs-root/usr/lib/family-connect/launcher.py
+          test -f squashfs-root/usr/lib/family-connect/clients/desktop/app.py
+      - name: Publish Linux artifact hashes
+        run: sha256sum artifacts/clients/FamilyConnect-*-x86_64.AppImage artifacts/clients/FamilyConnect_*_amd64.deb artifacts/clients/FamilyConnect-Linux-*.tar.gz
       - uses: actions/upload-artifact@v4
         with:
           name: FamilyConnect-Linux
@@ -192,6 +215,8 @@ jobs:
             clients/desktop/*.py
             clients/desktop/*.sh
             artifacts/clients/FamilyConnect-Linux-*.tar.gz
+            artifacts/clients/FamilyConnect-*-x86_64.AppImage
+            artifacts/clients/FamilyConnect_*_amd64.deb
 
   windows-compatibility:
     needs: windows
@@ -242,7 +267,7 @@ jobs:
           path: release-linux
       - name: Prepare versioned release files
         run: |
-          python3 scripts/package_desktop.py --release-files
+          python3 scripts/package_linux.py --release-files
           cp release-windows/Windows-preview.png release-files/
       - name: Publish tested pilot release
         env:
