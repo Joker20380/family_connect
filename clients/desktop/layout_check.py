@@ -81,7 +81,7 @@ def layouts(scale):
             for width in (360,420,680):
                 app.window.set_default_size(width,-1)
                 app.set_detail(app.t('error')+'\n'+app.t('system'));pump(.1)
-                for page in ('status','messenger','route','settings'):
+                for page in ('status','messenger','stats','settings'):
                     app.select_page(page);pump(.2)
                     assert all(button.get_mapped() for button in app.nav.values()),'Navigation disappeared'
                     for name,widgets in app.pages.items():

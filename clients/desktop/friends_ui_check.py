@@ -104,7 +104,7 @@ try:
   renderer=Gsk.Renderer.new_for_surface(parent.window.get_surface())
   try:renderer.render_texture(snapshot.to_node(),None).save_to_png(sys.argv[1]+'.parent.png')
   finally:renderer.unrealize()
- parent.select_page('route');settle();assert parent.page=='route' and parent.friends_window is None
+ parent.select_page('stats');settle();assert parent.page=='stats' and parent.friends_window is None
  assert parent.body.is_ancestor(parent.scroll)
  assert not parent.busy and parent.selected_id=='active'
  # Closing the app from the embedded screen refreshes state, then exits normally.
