@@ -124,10 +124,9 @@ install (см. п.7).
 | Invitation использован другим device | referral link — bounded capability спонсора: другое device получает собственный single-use `FC-…` code и может enroll, пока спонсор active и лимиты кампании позволяют. Сам `invites` code строго одноразовый и device-bound. |
 | Enrollment committed, но response потерян | Локальная identity уже создана; повторный запуск идёт через `POST /friends/device/status` (post-enrollment recovery), без нового claim и без второго устройства. |
 
-Примечание: подпись landing «Приглашение предназначено для одного устройства.»
-описывает single-use `invites` code, а не сам referral link; если продуктовая
-политика должна быть строго одноразовой на ссылку, это отдельная доработка
-entitlement, а не часть sideload flow.
+Примечание: подпись landing приведена к фактической семантике — «Отправьте эту
+ссылку человеку, которого хотите подключить» (см. п.9). Сам `invites` code
+остаётся строго одноразовым и device-bound; referral link — bounded capability.
 
 ## 8. Приёмка на реальном Android (manual checklist)
 
@@ -151,7 +150,53 @@ entitlement, а не часть sideload flow.
 1. Перезапустить приложение.
 2. `device/status` возвращает active; повторная регистрация не выполняется.
 
-## 9. Файлы, которые будут изменены
+## 9. Future product split: Personal Invitation vs Referral Link
+
+Текущий backend `referrals` — **bounded sponsor capability**: одна referral URL может
+выдать несколько конечных single-use activation codes. Поэтому текущий UI описывает
+ссылку нейтрально («Отправьте эту ссылку человеку, которого хотите подключить»), а не
+как строго одноразовое приглашение. Сплит на две сущности зафиксирован как backlog и
+**не реализуется сейчас**: он потребует изменения Friends DB/API/schema.
+
+### Personal Invitation
+
+Назначение: `Настройки → Пригласить друга`.
+
+Семантика:
+
+- issue personal invite → один получатель → одно новое Device Identity →
+  successful activation → invitation consumed.
+
+Требования:
+
+- single-device;
+- короткий/контролируемый TTL;
+- revoke;
+- consumed атомарно с успешным enrollment;
+- repeat/recovery с той же Device Identity не считается вторым использованием;
+- другая Device Identity после consumption получает отказ.
+
+### Referral Link
+
+Назначение: массовое/реферальное распространение Family Connect.
+
+Семантика:
+
+- sponsor referral capability → N получателей → каждый получает собственную
+  single-use device activation.
+
+Требования:
+
+- quota;
+- TTL;
+- sponsor attribution;
+- revoke;
+- abuse/rate limits;
+- каждый конечный device enrollment остаётся отдельным и одноразовым.
+
+Обе сущности остаются вне runtime scope до прохождения real-device Android acceptance.
+
+## 10. Файлы, которые будут изменены
 
 - `control/friends/access.py` — `status` purpose + read-only `status()` (recovery).
 - `deploy/friends/access-api.py` — route `POST /friends/device/status`.

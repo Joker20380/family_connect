@@ -17,6 +17,11 @@ Fresh-install sideload активация **не** заявляется fully au
 (приложение установлено, 1 действие) и Flow B (sideload: возврат на landing +
 «Открыть», 3–4 действия). Real-device Android E2E acceptance ещё НЕ пройден;
 версии/production/WEBRTC gates не менялись.
+UI-текст «Приглашение предназначено для одного устройства» заменён на нейтральный
+«Отправьте эту ссылку человеку, которого хотите подключить» (referral link —
+bounded capability, не строго одноразовая ссылка). Future product split
+Personal Invitation vs Referral Link зафиксирован в design/PLAN как backlog;
+backend semantics и версии не менялись.
 [design](design/activation-simplification-design.ru.md),
 [android note](design/android-sideload-deferred-bootstrap.ru.md).
 

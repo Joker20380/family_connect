@@ -110,7 +110,7 @@
     <string name="referral_load">Показать мой QR</string>
     <string name="referral_loading">Получаем ссылку-приглашение…</string>
     <string name="referral_remaining">В общем пуле осталось приглашений: %1$d</string>
-    <string name="referral_qr">Отсканируйте, чтобы получить личный инвайт</string>
+    <string name="referral_qr">QR-код со ссылкой приглашения Family Connect</string>
     <string name="referral_copy">Скопировать ссылку-приглашение</string>
     <string name="referral_copied">Ссылка-приглашение скопирована</string>
     <string name="referral_unavailable">Сначала активируйте устройство по приглашению. Если оно уже активировано, проверьте сеть и повторите.</string>

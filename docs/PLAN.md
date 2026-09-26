@@ -14,6 +14,11 @@
   page, QR=canonical URL. Fresh-install sideload **не** заявляется fully automatic:
   Flow A (приложение установлено, 1 действие), Flow B (sideload: возврат на landing +
   «Открыть», 3–4 действия). Real-device Android E2E ещё не пройден.
+- Backlog (не реализуется сейчас, требует Friends DB/API/schema): product split
+  «Personal Invitation» (один получатель → одно Device Identity → consumed) vs
+  «Referral Link» (sponsor capability → N получателей, quota/TTL/revoke). Текущий UI
+  описывает ссылку нейтрально — «Отправьте эту ссылку человеку, которого хотите
+  подключить», без утверждения «строго одно устройство».
 
 Gate-таблица и порядок — ниже в секции `DECISION25.09 — Restricted WebRTC → Linux EU`.
 

@@ -110,7 +110,7 @@
     <string name="referral_load">Show my QR</string>
     <string name="referral_loading">Loading invitation link…</string>
     <string name="referral_remaining">Invitations remaining in the shared pool: %1$d</string>
-    <string name="referral_qr">Scan to get a personal invitation</string>
+    <string name="referral_qr">QR code with the Family Connect invitation link</string>
     <string name="referral_copy">Copy invitation link</string>
     <string name="referral_copied">Invitation link copied</string>
     <string name="referral_unavailable">Activate this device with an invitation first. If it is already active, check your connection and retry.</string>
