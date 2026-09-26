@@ -13,8 +13,11 @@ read-only authenticated recovery `POST /friends/device/status` и purpose `statu
 `/invite/`), smart landing page с одним primary CTA и без checkbox/инструкций,
 QR = canonical URL; клиенты: `FriendsAccessAndroid.deviceStatus()` + recovery при
 старте, Python `FriendsClient.device_status()`; тесты server/client (65+5 passed).
-Real-device Android E2E acceptance ещё НЕ пройден; версии/production/WEBRTC gates
-не менялись. [design](design/activation-simplification-design.ru.md),
+Fresh-install sideload активация **не** заявляется fully automatic: Flow A
+(приложение установлено, 1 действие) и Flow B (sideload: возврат на landing +
+«Открыть», 3–4 действия). Real-device Android E2E acceptance ещё НЕ пройден;
+версии/production/WEBRTC gates не менялись.
+[design](design/activation-simplification-design.ru.md),
 [android note](design/android-sideload-deferred-bootstrap.ru.md).
 
 26.09: [аудит использования и сбоев VPN](releases/2026-09-26-vpn-health.ru.md).

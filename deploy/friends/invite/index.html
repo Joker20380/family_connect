@@ -30,7 +30,7 @@ function render(){
  byId('invitation-label').textContent=valid?'Приглашение готово':'Нужна ссылка приглашения';
  byId('primary').href=opened&&valid?'familyconnect://invite/'+token:client.url;
  byId('primary').textContent=opened&&valid?'Открыть Family Connect':'Скачать Family Connect';
- byId('hint').textContent=!valid?'Откройте полную ссылку приглашения, которую вам прислали.':opened?'Нажмите, чтобы открыть приложение.':'После установки вернитесь и нажмите «Открыть Family Connect».';
+ byId('hint').textContent=!valid?'Откройте полную ссылку приглашения, которую вам прислали.':opened?'После установки нажмите «Открыть Family Connect».':'После установки вернитесь и нажмите «Открыть Family Connect».';
  byId('open').hidden=!valid;
  byId('open').href='familyconnect://invite/'+token;
 }

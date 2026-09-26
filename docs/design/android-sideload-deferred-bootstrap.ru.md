@@ -2,6 +2,9 @@
 
 Design note, 2026-09-26. Фиксирует реальные ограничения Android для sideload APK
 (текущий способ распространения Family Connect — прямой APK, не Play Store).
+Корректировка 2026-09-26 (на базе commit `308ec08`): явно зафиксировано, что
+fresh-install sideload активация **не** fully automatic; acceptance разделён на
+Flow A (приложение установлено) и Flow B (sideload APK).
 
 ## Вывод
 
@@ -10,8 +13,16 @@ Design note, 2026-09-26. Фиксирует реальные ограничен�
 Android не передаёт referrer/контекст установки для APK, установленного не из Play Store.
 
 Поэтому полный вариант A (zero-touch deferred activation) для sideload недостижим;
-реализуется вариант B — практически надёжный one-click flow со smart landing page
-и одним primary CTA.
+реализуется вариант B — практически надёжный flow со smart landing page и одним
+primary CTA, но с одним явным шагом пользователя после установки («Открыть»).
+
+## Два acceptance flow
+
+- **Flow A — приложение уже установлено** (target near zero-friction, 1 действие):
+  QR/ссылка → `familyconnect://invite/<token>` → приложение → enrollment → ready.
+- **Flow B — приложение не установлено (sideload APK)** (минимум 3–4 действия):
+  landing → «Скачать» → installer → возврат на landing → «Открыть» → enrollment → ready.
+  Fresh install **не** активируется автоматически из установщика.
 
 ## Что проверено
 
@@ -44,9 +55,10 @@ Android не передаёт referrer/контекст установки дл�
 3. **Custom scheme `familyconnect://` как fallback** для браузеров/случаев, когда
    App Link verification не прошла.
 4. Landing page `/i/` (отдаётся nginx, fragment не передаётся) с **одним primary CTA**:
-   приложение не установлено → «Установить Family Connect» (скачивание APK);
-   после установки тот же экран → «Открыть Family Connect» (App Link, fallback
-   custom scheme). Без checkbox «Приложение установлено» и без инструкций.
+   приложение не установлено → «Скачать Family Connect» (скачивание APK);
+   после начала скачивания тот же экран очевидно переходит к единственной кнопке
+   «Открыть Family Connect» (App Link, fallback custom scheme). Без checkbox
+   «Приложение установлено» и без инструкций.
 5. **Bootstrap claim** на стороне сервера — short-lived single-use claim, которым
    обменивается opaque invitation reference при начале активации; сегодня его роль
    выполняет существующий single-use challenge (`CHALLENGE_TTL=100`), привязанный к
@@ -54,7 +66,8 @@ Android не передаёт referrer/контекст установки дл�
    credential в URL/APK не появляется.
 6. **Authenticated recovery**: приложение, уже создавшее локальную Device Identity,
    спрашивает сервер «я уже зарегистрирован?» через `POST /friends/device/status`,
-   доказывая владение той же identity; это закрывает сценарий
+   доказывая владение той же identity; это **post-enrollment recovery** и не является
+   механизмом передачи invitation при fresh install. Закрывает сценарий
    `enroll → commit → сеть упала до ответа` без расходования нового приглашения.
 
 ## Практическое ограничение текущего хоста
@@ -66,8 +79,17 @@ App Link `autoVerify` требует HTTPS-домен с валидным пуб
 scheme `familyconnect://invite/<token>`; App Links откладываются до появления
 собственного домена и модели подписи.
 
+## Future targets (не сейчас)
+
+- Домен + валидный публичный TLS + `/.well-known/assetlinks.json` на порту 443 →
+  Android App Links как primary deep link без custom-scheme confirmation.
+- Google Play deferred install (Install Referrer / deferred deep linking) — только
+  если приложение позднее будет распространяться через Play; для прямого APK
+  неприменимо и сейчас не является acceptance path.
+
 ## Не делать
 
 - Не утверждать, что sideload решает deferred activation полностью.
+- Не заявлять fully automatic fresh-install activation для sideload APK.
 - Не зашивать постоянный VPN/WG/RNS/bearer credential в APK.
 - Не строить второй registration subsystem.

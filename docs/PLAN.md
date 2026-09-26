@@ -11,7 +11,9 @@
 - **5.3a / 5.3в** и **Home Gateway (5A–5M secondary track)** — backlog, не запускаются автоматически.
 - Параллельно (WIP, не блокирует 5N): упрощение invitation/activation — server-side
   authenticated recovery `POST /friends/device/status`, canonical URL `/i/`, smart landing
-  page, QR=canonical URL; real-device Android E2E ещё не пройден.
+  page, QR=canonical URL. Fresh-install sideload **не** заявляется fully automatic:
+  Flow A (приложение установлено, 1 действие), Flow B (sideload: возврат на landing +
+  «Открыть», 3–4 действия). Real-device Android E2E ещё не пройден.
 
 Gate-таблица и порядок — ниже в секции `DECISION25.09 — Restricted WebRTC → Linux EU`.
 
