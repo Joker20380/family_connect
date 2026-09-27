@@ -3,6 +3,7 @@ package telemost
 import (
 	"github.com/pion/rtp"
 	"github.com/pion/rtp/codecs"
+	"time"
 )
 
 // reorderWindow bounds how many out-of-order RTP packets are held before a gap
@@ -22,10 +23,11 @@ func seqLess(a, b uint16) bool {
 
 // reorderBuffer restores RTP sequence order before VP8 frame assembly.
 type reorderBuffer struct {
-	pkts    map[uint16]*rtp.Packet
-	free    []*rtp.Packet
-	nextSeq uint16
-	started bool
+	pkts     map[uint16]*rtp.Packet
+	free     []*rtp.Packet
+	nextSeq  uint16
+	started  bool
+	gapSince time.Time
 }
 
 func newReorderBuffer() *reorderBuffer {
@@ -33,6 +35,9 @@ func newReorderBuffer() *reorderBuffer {
 }
 
 func (b *reorderBuffer) push(pkt *rtp.Packet, deliver func(*rtp.Packet)) {
+	if len(pkt.Payload) > 2048 {
+		return
+	}
 	if !b.started {
 		b.started = true
 		b.nextSeq = pkt.SequenceNumber
@@ -40,14 +45,26 @@ func (b *reorderBuffer) push(pkt *rtp.Packet, deliver func(*rtp.Packet)) {
 	if seqLess(pkt.SequenceNumber, b.nextSeq) {
 		return
 	}
+	if uint16(pkt.SequenceNumber-b.nextSeq) >= reorderWindow {
+		for sequence, queued := range b.pkts {
+			b.recycle(queued)
+			delete(b.pkts, sequence)
+		}
+		b.nextSeq = pkt.SequenceNumber
+	}
 	if old := b.pkts[pkt.SequenceNumber]; old != nil {
 		b.recycle(old)
 	}
 	b.pkts[pkt.SequenceNumber] = b.clone(pkt)
-	if len(b.pkts) > reorderWindow {
+	if len(b.pkts) >= reorderWindow || (!b.gapSince.IsZero() && time.Since(b.gapSince) > 100*time.Millisecond) {
 		b.skipToOldest()
 	}
 	b.drain(deliver)
+	if len(b.pkts) == 0 {
+		b.gapSince = time.Time{}
+	} else if b.gapSince.IsZero() {
+		b.gapSince = time.Now()
+	}
 }
 
 func (b *reorderBuffer) drain(deliver func(*rtp.Packet)) {
@@ -111,6 +128,7 @@ type vp8FrameState struct {
 	lastSeq     uint16
 	haveLastSeq bool
 	frameValid  bool
+	timestamp   uint32
 }
 
 func (st *vp8FrameState) process(pkt *rtp.Packet) []byte {
@@ -127,7 +145,12 @@ func (st *vp8FrameState) process(pkt *rtp.Packet) []byte {
 		st.frameBuf = st.frameBuf[:0]
 		return nil
 	}
-	if st.vp8Pkt.S == 1 {
+	if st.timestamp != pkt.Timestamp {
+		st.frameValid = false
+		st.frameBuf = st.frameBuf[:0]
+	}
+	st.timestamp = pkt.Timestamp
+	if st.vp8Pkt.S == 1 && st.vp8Pkt.PID == 0 {
 		st.frameBuf = st.frameBuf[:0]
 		st.frameValid = true
 	}

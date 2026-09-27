@@ -1,13 +1,10 @@
 package telemost
 
 import (
+	"bytes"
 	"github.com/pion/webrtc/v4"
 )
 
-// VP8 bitstream headers re-derived from the audited references. The SFU
-// validates VP8 conformance and drops frames that do not look like a real
-// VP8 keyframe/interframe, so data frames are prepended with a valid
-// interframe header and keepalives use a valid keyframe header.
 var (
 	// vp8Keepalive is a minimal decodable VP8 keyframe (20 bytes).
 	vp8Keepalive = []byte{
@@ -23,8 +20,6 @@ var (
 	}
 )
 
-// encodeVP8DataFrame wraps a fragment in the interframe header so the SFU
-// forwards it as an ordinary video frame.
 func encodeVP8DataFrame(fragment []byte) []byte {
 	out := make([]byte, 0, len(vp8Interframe)+len(fragment))
 	out = append(out, vp8Interframe...)
@@ -40,7 +35,7 @@ func decodeVP8Frame(frame []byte) ([]byte, bool) {
 	}
 	switch frame[0] {
 	case vp8Interframe[0]:
-		if len(frame) < len(vp8Interframe) {
+		if len(frame) < len(vp8Interframe)+fragmentHeaderLen || len(frame) > len(vp8Interframe)+fragmentHeaderLen+maxFragmentPayload || !bytes.HasPrefix(frame, vp8Interframe) {
 			return nil, false
 		}
 		return frame[len(vp8Interframe):], true
