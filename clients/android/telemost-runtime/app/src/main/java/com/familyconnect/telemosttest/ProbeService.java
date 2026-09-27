@@ -28,7 +28,7 @@ import java.util.HashSet;
 import java.util.Arrays;
 
 public final class ProbeService extends Service {
-    private static final Set<String> EVENTS = new HashSet<>(Arrays.asList("start", "connected", "probe_result", "probe_failed", "suite_complete", "summary", "resources"));
+    private static final Set<String> EVENTS = new HashSet<>(Arrays.asList("start", "connected", "family_auth", "probe_result", "probe_failed", "suite_complete", "summary", "resources"));
     final class LocalBinder extends Binder { ProbeService service() { return ProbeService.this; } }
     private final LocalBinder binder = new LocalBinder();
     private final NativeRun run = new NativeRun();
@@ -111,14 +111,19 @@ public final class ProbeService extends Service {
         notifications.createNotificationChannel(new NotificationChannel("probe", "Synthetic carrier test", NotificationManager.IMPORTANCE_LOW));
         PendingIntent stop = PendingIntent.getService(this, 1, new Intent(this, ProbeService.class).setAction("disconnect"), PendingIntent.FLAG_IMMUTABLE);
         startForeground(1, new Notification.Builder(this, "probe")
-            .setContentTitle("Telemost 5N.2 synthetic VP8 test")
-            .setContentText("No VPN / no Family E2E. Tap to disconnect.")
+            .setContentTitle("Telemost isolated VP8 test")
+            .setContentText("No VPN. Family auth only with test credentials. Tap to disconnect.")
             .setSmallIcon(android.R.drawable.stat_notify_sync).setContentIntent(stop).setOngoing(true).build());
         record(event("android_start", "model", android.os.Build.MODEL, "android", android.os.Build.VERSION.RELEASE,
             "abi", android.os.Build.SUPPORTED_ABIS[0], "network", networkType(), "protected_sockets", false));
         run.start(() -> {
             ProcessBuilder builder = new ProcessBuilder(executable.getAbsolutePath(), "--role", "probe", "--mode", "vp8",
                 "--duration", "25m", "--sustained", "30s", "--extended", "--metrics-interval", "10s");
+            File family = new File(getFilesDir(), "family.input");
+            if (family.exists()) {
+                builder.command().add("--family-config");
+                builder.command().add(family.getAbsolutePath());
+            }
             builder.environment().put("FC_TELEMOST_ROOM", room);
             builder.environment().put("SSL_CERT_DIR", "/system/etc/security/cacerts:/apex/com.android.conscrypt/cacerts");
             builder.redirectError(new File("/dev/null"));

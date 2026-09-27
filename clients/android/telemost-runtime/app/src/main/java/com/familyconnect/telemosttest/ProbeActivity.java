@@ -61,7 +61,7 @@ public final class ProbeActivity extends Activity {
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(24, 24, 24, 24);
         TextView title = new TextView(this);
-        title.setText("Telemost 5N.2 — synthetic binary only\nNo TUN / no Family E2E / no protected sockets\nDisable any VPN before starting. Back stops; Home keeps testing.");
+        title.setText("Telemost 5N.2/5N.3 — synthetic binary only\nNo TUN / no protected sockets\nFamily E2E requires operator test credentials.\nDisable any VPN before starting. Back stops; Home keeps testing.");
         layout.addView(title);
         room = new EditText(this);
         room.setHint("Disposable HTTPS room (not saved)");

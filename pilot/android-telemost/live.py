@@ -20,6 +20,8 @@ def main():
     parser.add_argument("--binary", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--case", choices=["acceptance", "cancel", "process-death", "remote-exit", "activity-close"], default="acceptance")
+    parser.add_argument("--family-dir", type=Path)
+    parser.add_argument("--client-profile", choices=["valid", "wrong-family", "revoked", "unknown"], default="valid")
     args = parser.parse_args()
     room = os.environ["FC_TELEMOST_ROOM"]
     if not room or len(room) > 2048 or "\n" in room or "\r" in room:
@@ -42,10 +44,13 @@ def main():
         with tarfile.open(archive, "w") as bundle:
             bundle.add(args.binary, arcname="telemost-live")
             bundle.add(root / "carrier/licenses", arcname="licenses")
+            if args.family_dir:
+                bundle.add(args.family_dir / "gateway.json", arcname="family.input")
         with archive.open("rb") as source:
             subprocess.run(SSH + [f"tar -xf - -C {directory} && chown -R nobody:nogroup {directory}"], stdin=source, check=True, timeout=45)
         archive.unlink()
-        code = f'import os,sys; os.chdir({directory!r}); os.environ["FC_TELEMOST_ROOM"]=sys.stdin.readline().rstrip("\\n"); open("pid","w").write(str(os.getpid())); os.execvpe("./telemost-live",["./telemost-live","--role","echo","--mode","vp8","--duration","25m","--metrics-interval","10s"],os.environ)'
+        extra = ["--family-config", "family.input"] if args.family_dir else []
+        code = f'import os,sys; os.chdir({directory!r}); os.environ["FC_TELEMOST_ROOM"]=sys.stdin.readline().rstrip("\\n"); open("pid","w").write(str(os.getpid())); os.execvpe("./telemost-live",["./telemost-live","--role","echo","--mode","vp8","--duration","25m","--metrics-interval","10s"]+{extra!r},os.environ)'
         with (args.out / "B.jsonl").open("w") as output, (args.out / "B.stderr").open("w") as errors:
             remote = subprocess.Popen(SSH + ["runuser -u nobody -- python3 -c " + shlex.quote(code)], stdin=subprocess.PIPE, stdout=output, stderr=errors, text=True)
         remote.stdin.write(room + "\n")
@@ -57,6 +62,10 @@ def main():
             time.sleep(0.5)
         print("B_CONNECTED", flush=True)
         adb("shell", "am", "force-stop", PACKAGE)
+        adb("exec-out", "run-as", PACKAGE, "rm", "-f", "files/family.input")
+        if args.family_dir:
+            script = "umask 077; mkdir -p files; cat > files/family.input"
+            adb("shell", "-T", "run-as", PACKAGE, "sh", "-c", shlex.quote(script), input=(args.family_dir / (args.client_profile + ".json")).read_bytes())
         script = "umask 077; mkdir -p files; rm -f files/evidence.jsonl; cat > files/room.input"
         adb("shell", "-T", "run-as", PACKAGE, "sh", "-c", shlex.quote(script), input=room.encode())
         del room
@@ -101,12 +110,19 @@ def main():
             time.sleep(2)
         else:
             raise RuntimeError("ANDROID_SUITE_DEADLINE")
-        if args.case == "acceptance" and not (exits and exits[-1]["code"] == 0 and any(event.get("event") == "suite_complete" and event.get("gate_eligible_mode") for event in rows)):
-            raise RuntimeError("ANDROID_ACCEPTANCE_INCOMPLETE: inspect sanitized evidence")
+        if args.client_profile != "valid":
+            rejected = any(event.get("event") == "family_auth" and event.get("accepted") is False for event in events(args.out / "B.jsonl"))
+            if checks or not rejected or not exits or exits[-1]["code"] == 0:
+                raise RuntimeError("FAMILY_NEGATIVE_CASE_FAILED")
+            print("FAMILY_REJECTED", args.client_profile, flush=True)
+        elif args.case == "acceptance":
+            if not (exits and exits[-1]["code"] == 0 and any(event.get("event") == "suite_complete" and event.get("gate_eligible_mode") and (not args.family_dir or event.get("family_authenticated")) for event in rows)):
+                raise RuntimeError("ANDROID_ACCEPTANCE_INCOMPLETE: inspect sanitized evidence")
     finally:
         try:
             adb("shell", "am", "force-stop", PACKAGE)
             adb("exec-out", "run-as", PACKAGE, "rm", "-f", "files/room.input")
+            adb("exec-out", "run-as", PACKAGE, "rm", "-f", "files/family.input")
         except subprocess.SubprocessError:
             print("ANDROID_CLEANUP_UNCONFIRMED", flush=True)
         cleanup = f'import os,pathlib,signal,shutil,time; directory=pathlib.Path({directory!r}); pidfile=directory/"pid"; pid=int(pidfile.read_text()) if pidfile.exists() else 0; executable=pathlib.Path(f"/proc/{{pid}}/exe"); matched=pid>0 and executable.exists() and str(executable.resolve())==str(directory/"telemost-live"); os.kill(pid,signal.SIGTERM) if matched else None; time.sleep(3); alive=matched and executable.exists() and str(executable.resolve())==str(directory/"telemost-live"); os.kill(pid,signal.SIGKILL) if alive else None; shutil.rmtree(directory); print("REMOTE_TEMP_REMOVED; FORCED_KILL="+str(alive))'

@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
-    <application android:label="Telemost 5N.2 TEST" android:allowBackup="false"
+    <application android:label="Telemost isolated TEST" android:allowBackup="false"
         android:usesCleartextTraffic="false" android:extractNativeLibs="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
         <activity android:name=".ProbeActivity" android:exported="true">
