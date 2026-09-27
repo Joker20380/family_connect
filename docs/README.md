@@ -106,6 +106,10 @@ installed/deployed versions; dated reports preserve what was checked at that tim
 
 ## Developers
 
+- [5N-PERF-1: physical VP8 capacity measurements](releases/2026-09-27-webrtc-5n-perf1-carrier-capacity.ru.md):
+  window/offered-load/payload sweeps, timing and raw media evidence; long-run
+  integrity failures prevent accepting a sustainable carrier ceiling. No5N.4/rollout.
+
 - [Telemost5N.1 carrier: build и live runbook](../carrier/README.md),
   [recovery/results27.09](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md):
   real Linux↔Telemost VP8↔Amsterdam PASS27.09 (291 checks +30s/5min);

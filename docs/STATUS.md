@@ -10,6 +10,32 @@
 - **WEBRTC-EU-3 / 5N.3 = PASS**: physical Android Family E2E over VP8,
   374 exact echoes,302.001s sustained; 5N.4–5N.6 NOT RUN.
 
+## 27.09.2026 — 5N-PERF-1 = FAIL: sustainable ceiling NOT ACCEPTED
+
+Baseline воспроизведён на неизменном runtime:301.991478843s,151×16KiB,
+one-way0.065537849Mbit/s, avgRTT1999.843ms. Все окна1/2/4/8/16/32/64,
+offered0.1/0.25/0.5/1/2/4Mbit/s и payload1/4/16/32/64KiB проверены;
+failed/warm-up точки не считаются успешными60s measurements.
+Highest error-free60s: paced2Mbit/s →1.992294Mbit/s delivered, avgRTT317.584ms.
+Highest completed300s:16KiB/window2 →0.130635Mbit/s, avg/p95/p99
+1999.765/2046.538/2128.154ms. Long window8, paced2 и64KiB/window2 FAIL;
+TLS bad-record-MAC после return RTP gap. Всего5 failed performance points,
+35 sent-but-unconfirmed echoes,4 classified TLS rejects; no accepted unequal bytes.
+Старые0.131Mbit/s aggregate подтверждены как stop-and-wait limitation, не ceiling;
+2s RTT не константа carrier. Window-sweep latency/queue growth не равны универсальной
+capacity: paced2Mbit/s быстрее closed-loop plateau. Sustainable ceiling неизвестен.
+Core/auth/wire/pacing/production не менялись; final test binary/harness `f1a211a`.
+Go race×3/vet/modules/fuzz,95 Python, Android build/6 JVM/lint PASS;
+physical native tests PASS. Final canonical/lifecycle regression PASS:370 exact
+checks,300.000378s,0.064662Mbit/s one-way, avgRTT2026.944ms; running hashes matched.
+Diagnostic APK удалён;28 Android/29 Amsterdam known native PIDs gone, remote dirs0,
+radios1/1 unchanged. Own local APK/native/private fixtures/DBs/logs/helpers удалены;
+sanitized29-run evidence сохранён и проверен. Production/каталоги/push не менялись.
+Remaining: причинная диагностика RTP gaps/TLS rejection и устойчивый ceiling,
+не автоматическое продолжение разработки.
+[Отчёт / точные results / limitations / rollback](releases/2026-09-27-webrtc-5n-perf1-carrier-capacity.ru.md).
+**5N.4 не начинать; после отчёта остановиться.**
+
 ## 27.09.2026 — Family E2E gate PASS
 
 Scope5N.3 сохранён: existing Device Identity/FAMILY admission, не повтор plaintext
@@ -30,7 +56,7 @@ dependency, **без изменения runtime/retries/deadlines**; точны�
 Race×3/vet/modules/fuzz PASS;91 Python tests,6 JVM tests/build/lint PASS.
 Own test PIDs/remote dirs0; APK/private inputs и local disposable artifacts удалены.
 No production rollout/push. [Отчёт/evidence/rollback](releases/2026-09-27-webrtc-eu3-family-session.ru.md).
-**NEXT: решение о5N.4 (один TCP→HTTPS через EU), не начат.** TUN/full VPN/Device Core,
+**Следующий выполненный запрос —5N-PERF-1 выше;5N.4 не начат.** TUN/full VPN/Device Core,
 protected sockets, performance ceiling и production readiness не доказаны.
 
 ## 27.09.2026 — physical Android binary gate PASS (checkpoint до5N.3)

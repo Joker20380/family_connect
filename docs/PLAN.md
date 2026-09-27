@@ -2,6 +2,18 @@
 
 ## Current engineering priority / Текущий critical path
 
+- **5N-PERF-1 = FAIL — измерения завершены, sustainable ceiling NOT ACCEPTED**.
+  Canonical baseline reproduced; все7 windows,6 offered rates и5 payload sizes
+  проверены. Error-free60s peak1.992294Mbit/s (paced2), completed300s
+  0.130635Mbit/s (16KiB/window2); high-load long checks FAIL with TLS/RTP gaps.
+  No retries-to-green, failed points retained. Final canonical370 checks/300s и
+  lifecycle regression PASS; APK/remote/local private artifact cleanup завершены,
+  sanitized29-run evidence проверен. [Capacity report](releases/2026-09-27-webrtc-5n-perf1-carrier-capacity.ru.md).
+  После отчёта **STOP**, не запускать5N.4 или transport redesign автоматически.
+  Remaining engineering questions: causal RTP-gap/stream rejection diagnosis,
+  reproducible high-load300s stability, synchronized finer stage timings/true ceiling.
+  Это не authorization на исправление carrier или новый production rollout.
+
 - current: **5N — Restricted WebRTC Android→EU** (Telemost VP8 carrier → authenticated
   Family session → headless Linux EU gateway → TCP+DNS → Internet).
 - **WEBRTC-EU-1 / 5N.1 = PASS**,27.09, runtime `a13068e` (clean): настоящий
@@ -25,7 +37,7 @@
   FAIL сохранены; accepted run использует independent observer, unchanged runtime.
   Diagnostic APK удалён, credentials/test processes0; no rollout/push.
   [Отчёт/evidence/rollback](releases/2026-09-27-webrtc-eu3-family-session.ru.md).
-  TUN/TCP/WB не начинались; остановиться на5N.3.
+  TUN/TCP/WB не начинались; последующий5N-PERF-1 приведён выше, затем STOP.
   [Отчёт/оставшиеся проверки](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md).
   [Android5N.2 checkpoint](releases/2026-09-27-webrtc-eu2-android-binary.ru.md).
 - затем, отдельным разрешением: **5N.4 → 5N.5 → 5N.6**; автоматически не начинать.

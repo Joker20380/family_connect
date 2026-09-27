@@ -58,6 +58,51 @@ to4096/phase; nearest-rank p50/p95/p99 appear only when the sample set is comple
 Ordering is additionally checked by monotonic sequence inside encrypted test
 messages. Loss/reorder that TLS cannot authenticate closes/times out, never retries.
 
+## Opt-in 5N-PERF-1 measurement harness
+
+The default canonical suite is unchanged. `--performance-config` in the physical
+runner installs a private, non-secret `performance.input` containing bounded JSON:
+`window` (1–128), `payload` (1024–65536 bytes), `seconds` (1–300),
+`warmup_seconds` (1–30), `rate_mbit_s` (zero for sliding window, or0.01–4).
+Only authenticated VP8 is accepted. Independent send/receive workers preserve
+exact byte validation and monotonic sequence association; no carrier/framing/auth
+change, automatic retry, recovery, TUN or production integration is introduced.
+
+After a fresh successful canonical physical baseline (at least60s at16KiB), use:
+
+```sh
+python3 pilot/android-telemost/capacity.py \
+  --baseline /tmp/fc-family-acceptance/A.jsonl --adb /path/to/adb \
+  --binary /tmp/fc-telemost-binary --family-dir /tmp/fc-family-fixture \
+  --out /tmp/fc-capacity --windows 1 2 4 8 16 32 64
+```
+
+`FC_TELEMOST_ROOM` is still environment/stdin-only. For independent offered load,
+replace `--windows ...` with `--rates 0.1 0.25 0.5 1 2`; review before testing4.
+The128-outstanding limit is a stop condition, not ACK-paced rate limiting.
+Use `--seconds 300` for long validation; `<60s` is discovery only. Each point has
+5s warm-up, drains it, then starts a new measurement clock and finally drains
+measurement traffic. A failure aborts the point and series; do not retry until green.
+Never mix a failed long run into a zero-error short-run result.
+
+The producer has bounded outstanding payloads, a10s creation-to-echo deadline and
+a16384-sample cap. `perf_result` retains interval TX/RX rates separately from the
+measurement-plus-drain rate; `perf_blocks` retains monotonic timing rows.
+`perf_sample` retains queue gauges and numeric/boolean Pion statistics for nominated
+ICE pairs only. Raw addresses, SDP, credentials and arbitrary error text are excluded.
+`terminal_error_class` distinguishes authenticated-record rejection from generic
+closure; `corruption=0` only means no unequal plaintext was accepted, not absence
+of a TLS-integrity failure. `missing` means sent without a confirmed exact echo,
+not necessarily forward-path loss. B's `perf_echo` rows retain application receive/
+echo-send timings for successfully submitted echoes, not independently synchronized
+one-way network latency. Polling samples are not exact queue high-water marks.
+
+The physical runner removes `performance.input` with the other private inputs.
+Diagnostic APK remains code2/5N.3-test-only and is not a published release.
+[27.09 results and limitations](../../../docs/releases/2026-09-27-webrtc-5n-perf1-carrier-capacity.ru.md):
+the old stop-and-wait rate is not the carrier ceiling, but high-load long runs
+encountered TLS rejection after RTP gaps; no sustainable capacity ceiling is accepted.
+
 ## Shared core and packaging
 
 `carrier/telemost` and the **same** `carrier/cmd/telemost-binary` used by Linux
