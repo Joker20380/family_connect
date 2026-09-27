@@ -2,7 +2,6 @@
 import json
 import shlex
 import subprocess
-import time
 
 
 class IndependentEcho:
@@ -37,7 +36,8 @@ with open("B.jsonl", "wb") as output, open("B.stderr", "wb") as errors:
 pathlib.Path("pid").write_text(str(child.pid))
 os.write(writer, b"1")
 os.close(writer)
-pathlib.Path("exit.code").write_text(str(child.wait()))
+pathlib.Path("exit.pending").write_text(str(child.wait()))
+os.replace("exit.pending", "exit.code")
 os._exit(0)
 '''
         subprocess.run(self.ssh + ['runuser -u nobody -- python3 -c ' + shlex.quote(code)], input=room + '\n', text=True, capture_output=True, check=True, timeout=30)
@@ -96,6 +96,6 @@ print("REMOTE_CHILD_STOPPED; FORCED_KILL="+str(forced))
 '''
         subprocess.run(self.ssh + ['python3 -c ' + shlex.quote(code)], check=True, timeout=30)
         self.collect()
+        print('B_EXIT', self.returncode, flush=True)
         code = f'import shutil; shutil.rmtree({self.directory!r}); print("REMOTE_TEMP_REMOVED")'
         subprocess.run(self.ssh + ['python3 -c ' + shlex.quote(code)], check=True, timeout=25)
-
