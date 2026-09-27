@@ -1,0 +1,153 @@
+package telemost
+
+import (
+	"github.com/pion/rtp"
+	"github.com/pion/rtp/codecs"
+)
+
+// reorderWindow bounds how many out-of-order RTP packets are held before a gap
+// is treated as lost and skipped.
+const reorderWindow = 256
+
+// maxAssembledFrameSize bounds one reassembled VP8 frame. It sits above the
+// largest legitimate carrier frame so a peer cannot grow the buffer without
+// bound by streaming fragments that never set the marker bit.
+const maxAssembledFrameSize = 4 * maxFragmentPayload
+
+// seqLess reports whether RTP sequence a precedes b with wrap-around aware
+// serial arithmetic (RFC 1982).
+func seqLess(a, b uint16) bool {
+	return (a-b)&0x8000 != 0
+}
+
+// reorderBuffer restores RTP sequence order before VP8 frame assembly.
+type reorderBuffer struct {
+	pkts    map[uint16]*rtp.Packet
+	free    []*rtp.Packet
+	nextSeq uint16
+	started bool
+}
+
+func newReorderBuffer() *reorderBuffer {
+	return &reorderBuffer{pkts: make(map[uint16]*rtp.Packet, reorderWindow)}
+}
+
+func (b *reorderBuffer) push(pkt *rtp.Packet, deliver func(*rtp.Packet)) {
+	if !b.started {
+		b.started = true
+		b.nextSeq = pkt.SequenceNumber
+	}
+	if seqLess(pkt.SequenceNumber, b.nextSeq) {
+		return
+	}
+	if old := b.pkts[pkt.SequenceNumber]; old != nil {
+		b.recycle(old)
+	}
+	b.pkts[pkt.SequenceNumber] = b.clone(pkt)
+	if len(b.pkts) > reorderWindow {
+		b.skipToOldest()
+	}
+	b.drain(deliver)
+}
+
+func (b *reorderBuffer) drain(deliver func(*rtp.Packet)) {
+	for {
+		pkt, ok := b.pkts[b.nextSeq]
+		if !ok {
+			return
+		}
+		delete(b.pkts, b.nextSeq)
+		b.nextSeq++
+		deliver(pkt)
+		b.recycle(pkt)
+	}
+}
+
+func (b *reorderBuffer) clone(pkt *rtp.Packet) *rtp.Packet {
+	var clone *rtp.Packet
+	if last := len(b.free) - 1; last >= 0 {
+		clone = b.free[last]
+		b.free = b.free[:last]
+	} else {
+		clone = &rtp.Packet{}
+	}
+	clone.Header = pkt.Header
+	if cap(clone.Payload) < len(pkt.Payload) {
+		clone.Payload = make([]byte, len(pkt.Payload))
+	} else {
+		clone.Payload = clone.Payload[:len(pkt.Payload)]
+	}
+	copy(clone.Payload, pkt.Payload)
+	return clone
+}
+
+func (b *reorderBuffer) recycle(pkt *rtp.Packet) {
+	pkt.Header = rtp.Header{}
+	if cap(pkt.Payload) > 2*1024 {
+		pkt.Payload = nil
+	} else {
+		pkt.Payload = pkt.Payload[:0]
+	}
+	b.free = append(b.free, pkt)
+}
+
+func (b *reorderBuffer) skipToOldest() {
+	first := true
+	var oldest uint16
+	for seq := range b.pkts {
+		if first || seqLess(seq, oldest) {
+			oldest = seq
+			first = false
+		}
+	}
+	b.nextSeq = oldest
+}
+
+// vp8FrameState reassembles a VP8 frame from its RTP packets. It returns the
+// assembled frame payload when complete, or nil otherwise.
+type vp8FrameState struct {
+	vp8Pkt      codecs.VP8Packet
+	frameBuf    []byte
+	lastSeq     uint16
+	haveLastSeq bool
+	frameValid  bool
+}
+
+func (st *vp8FrameState) process(pkt *rtp.Packet) []byte {
+	if st.haveLastSeq && pkt.SequenceNumber != st.lastSeq+1 {
+		st.frameValid = false
+		st.frameBuf = st.frameBuf[:0]
+	}
+	st.lastSeq = pkt.SequenceNumber
+	st.haveLastSeq = true
+
+	payload, err := st.vp8Pkt.Unmarshal(pkt.Payload)
+	if err != nil {
+		st.frameValid = false
+		st.frameBuf = st.frameBuf[:0]
+		return nil
+	}
+	if st.vp8Pkt.S == 1 {
+		st.frameBuf = st.frameBuf[:0]
+		st.frameValid = true
+	}
+	if !st.frameValid {
+		return nil
+	}
+	if len(st.frameBuf)+len(payload) > maxAssembledFrameSize {
+		st.frameValid = false
+		st.frameBuf = st.frameBuf[:0]
+		return nil
+	}
+	st.frameBuf = append(st.frameBuf, payload...)
+	if !pkt.Marker {
+		return nil
+	}
+	frame := st.frameBuf
+	st.frameBuf = st.frameBuf[:0]
+	st.frameValid = false
+	if len(frame) >= len(vp8Interframe) {
+		return frame
+	}
+	return nil
+}
