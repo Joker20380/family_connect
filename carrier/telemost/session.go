@@ -77,18 +77,22 @@ type Config struct {
 
 // Stats is a point-in-time snapshot of carrier metrics.
 type Stats struct {
-	Mode            string
-	SetupMs         int64
-	BytesSent       uint64
-	BytesReceived   uint64
-	MessagesSent    uint64
-	MessagesRecv    uint64
-	ReconnectCount  uint32
-	Disconnects     uint32
-	SubscriberState string
-	PublisherState  string
-	Evidence        []Evidence
-	EvidenceDropped uint64
+	Mode             string
+	SetupMs          int64
+	BytesSent        uint64
+	BytesReceived    uint64
+	MessagesSent     uint64
+	MessagesRecv     uint64
+	ReconnectCount   uint32
+	Disconnects      uint32
+	SubscriberState  string
+	PublisherState   string
+	Evidence         []Evidence
+	EvidenceDropped  uint64
+	Media            MediaStats
+	ApplicationPongs uint64
+	ApplicationPings uint64
+	SignalingACKs    uint64
 }
 
 // Session owns one Telemost conference join and one carrier direction.
@@ -143,15 +147,19 @@ type Session struct {
 
 	reconnects atomic.Uint32
 
-	statsMu         sync.Mutex
-	bytesSent       uint64
-	bytesRecv       uint64
-	msgsSent        uint64
-	msgsRecv        uint64
-	setupStarted    time.Time
-	setupDone       time.Time
-	evidence        []Evidence
-	evidenceDropped uint64
+	statsMu          sync.Mutex
+	bytesSent        uint64
+	bytesRecv        uint64
+	msgsSent         uint64
+	msgsRecv         uint64
+	setupStarted     time.Time
+	setupDone        time.Time
+	evidence         []Evidence
+	evidenceDropped  uint64
+	mediaStats       MediaStats
+	applicationPongs uint64
+	applicationPings uint64
+	signalingACKs    uint64
 
 	wg sync.WaitGroup
 }
@@ -355,12 +363,17 @@ func (s *Session) Stats() Stats {
 	setupDone := s.setupDone
 	evidence := append([]Evidence(nil), s.evidence...)
 	for index := range evidence {
+		evidence[index].ReasonKeywords = append([]string(nil), evidence[index].ReasonKeywords...)
 		if evidence[index].TURNUsed != nil {
 			relay := *evidence[index].TURNUsed
 			evidence[index].TURNUsed = &relay
 		}
 	}
 	evidenceDropped := s.evidenceDropped
+	mediaStats := s.mediaStats
+	applicationPongs := s.applicationPongs
+	applicationPings := s.applicationPings
+	signalingACKs := s.signalingACKs
 	s.statsMu.Unlock()
 
 	var setupMs int64
@@ -376,18 +389,22 @@ func (s *Session) Stats() Stats {
 		pub = pubPC.ConnectionState().String()
 	}
 	return Stats{
-		Mode:            s.mode.String(),
-		SetupMs:         setupMs,
-		BytesSent:       bs,
-		BytesReceived:   br,
-		MessagesSent:    ms,
-		MessagesRecv:    mr,
-		ReconnectCount:  s.reconnects.Load(),
-		Disconnects:     s.disconnects.Load(),
-		SubscriberState: sub,
-		PublisherState:  pub,
-		Evidence:        evidence,
-		EvidenceDropped: evidenceDropped,
+		Mode:             s.mode.String(),
+		SetupMs:          setupMs,
+		BytesSent:        bs,
+		BytesReceived:    br,
+		MessagesSent:     ms,
+		MessagesRecv:     mr,
+		ReconnectCount:   s.reconnects.Load(),
+		Disconnects:      s.disconnects.Load(),
+		SubscriberState:  sub,
+		PublisherState:   pub,
+		Evidence:         evidence,
+		EvidenceDropped:  evidenceDropped,
+		Media:            mediaStats,
+		ApplicationPongs: applicationPongs,
+		ApplicationPings: applicationPings,
+		SignalingACKs:    signalingACKs,
 	}
 }
 

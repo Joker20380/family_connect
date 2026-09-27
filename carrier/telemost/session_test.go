@@ -284,3 +284,51 @@ func TestSignalingHelloAndSDPSequence(t *testing.T) {
 		t.Fatal("signaling schema regression")
 	}
 }
+
+func TestApplicationHeartbeatAndPongAcknowledgment(t *testing.T) {
+	acknowledged := make(chan bool, 1)
+	upgrader := websocket.Upgrader{}
+	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		connection, err := upgrader.Upgrade(writer, request, nil)
+		if err != nil {
+			return
+		}
+		defer connection.Close()
+		_ = connection.SetReadDeadline(time.Now().Add(8 * time.Second))
+		var ping map[string]any
+		if connection.ReadJSON(&ping) != nil || !hasKey(ping, "ping") || ping["uid"] == "" {
+			return
+		}
+		if connection.WriteJSON(map[string]any{"uid": "fixture-pong", "pong": map[string]any{}}) != nil {
+			return
+		}
+		var ack map[string]any
+		if connection.ReadJSON(&ack) != nil {
+			return
+		}
+		acknowledged <- ack["uid"] == "fixture-pong" && hasKey(ack, "ack")
+		var ignored any
+		_ = connection.ReadJSON(&ignored)
+	}))
+	defer server.Close()
+	session := testSession(t)
+	defer session.Close()
+	connection, _, err := websocket.DefaultDialer.Dial("ws"+strings.TrimPrefix(server.URL, "http"), nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	session.ws = connection
+	session.startWorker(session.signalingLoop)
+	session.startWorker(session.heartbeatLoop)
+	select {
+	case ok := <-acknowledged:
+		if !ok || session.Stats().ApplicationPongs != 1 {
+			t.Fatal("application heartbeat protocol mismatch")
+		}
+	case <-time.After(7 * time.Second):
+		t.Fatal("application heartbeat missing")
+	}
+	if err := session.Close(); err != nil {
+		t.Fatal(err)
+	}
+}

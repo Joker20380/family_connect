@@ -202,5 +202,9 @@ func localEndpoint(role string) error {
 			return fmt.Errorf("size %d: mismatch", size)
 		}
 	}
+	stats := session.Stats()
+	if stats.MessagesRecv != 207 || stats.Media.BinaryFrames < 315 || stats.Media.RTPReceived < stats.Media.BinaryFrames {
+		return fmt.Errorf("incomplete local media evidence")
+	}
 	return frame.WriteFrame(os.Stdout, frame.Frame{Version: frame.Version, Opcode: frame.OpStatusResp, Payload: []byte("207 byte-for-byte checks")})
 }

@@ -137,7 +137,13 @@ func probe(ctx context.Context, session *telemost.Session, emit func(map[string]
 		}
 		cancel()
 		if err != nil {
-			_ = emit(map[string]any{"event": "probe_failed", "phase": phase, "payload_bytes": size, "completed": completed, "reason": "send/receive timeout or closed", "carrier_mode": session.Stats().Mode, "stats": session.Stats()})
+			reason := "SESSION_CLOSED"
+			if errors.Is(err, context.DeadlineExceeded) {
+				reason = "ECHO_TIMEOUT"
+			} else if errors.Is(err, context.Canceled) {
+				reason = "CANCELED"
+			}
+			_ = emit(map[string]any{"event": "probe_failed", "phase": phase, "payload_bytes": size, "completed": completed, "reason": reason, "carrier_mode": session.Stats().Mode, "stats": session.Stats()})
 			return errors.New("binary probe failed; gate remains open")
 		}
 		if !bytes.Equal(payload, echoed) {

@@ -109,6 +109,7 @@ func (s *Session) signalingLoop() {
 		var msg map[string]any
 		if err := conn.ReadJSON(&msg); err != nil {
 			if !s.closed.Load() {
+				s.recordSignalingReadFailure(err)
 				s.signalClosed(errors.New("telemost: signaling closed or invalid JSON"))
 			}
 			return
@@ -118,7 +119,9 @@ func (s *Session) signalingLoop() {
 		uid, _ := msg["uid"].(string)
 
 		if _, ok := msg["ack"]; ok {
-			// no-op: acks are consumed implicitly.
+			s.statsMu.Lock()
+			s.signalingACKs++
+			s.statsMu.Unlock()
 		}
 		if serverHello, ok := msg["serverHello"].(map[string]any); ok {
 			s.recordEvidence(Evidence{Stage: "SERVER_HELLO"})
@@ -466,10 +469,19 @@ func (s *Session) flushICE(target string) {
 func (s *Session) heartbeatLoop() {
 	ticker := time.NewTicker(20 * time.Second)
 	defer ticker.Stop()
+	applicationTicker := time.NewTicker(5 * time.Second)
+	defer applicationTicker.Stop()
 	for {
 		select {
 		case <-s.closeCh:
 			return
+		case <-applicationTicker.C:
+			if err := s.writeJSON(map[string]any{"uid": newUUID(), "ping": map[string]any{}}); err != nil {
+				return
+			}
+			s.statsMu.Lock()
+			s.applicationPings++
+			s.statsMu.Unlock()
 		case <-ticker.C:
 			connection := s.wsConn()
 			if connection == nil {
@@ -497,6 +509,11 @@ func (s *Session) sendAck(uid string) {
 
 func (s *Session) handleHousekeeping(msg map[string]any, uid string) {
 	switch {
+	case hasKey(msg, "pong"):
+		s.statsMu.Lock()
+		s.applicationPongs++
+		s.statsMu.Unlock()
+		s.sendAck(uid)
 	case hasKey(msg, "ping"):
 		_ = s.writeJSON(map[string]any{"uid": uid, "pong": map[string]any{}})
 	case hasKey(msg, "updateDescription"),
@@ -586,7 +603,11 @@ func (s *Session) writeVP8Sample(data []byte) {
 	}
 	if err := s.track.WriteSample(media.Sample{Data: data, Duration: vp8FrameDuration}); err != nil {
 		s.signalClosed(errors.New("telemost: VP8 write failed"))
+		return
 	}
+	s.statsMu.Lock()
+	s.mediaStats.SamplesWritten++
+	s.statsMu.Unlock()
 }
 
 func (s *Session) writeDCMessage(data []byte) bool {
@@ -672,12 +693,29 @@ func (s *Session) readVP8Track(track *webrtc.TrackRemote) {
 		if pkt.Unmarshal(buf[:n]) != nil {
 			continue
 		}
+		s.statsMu.Lock()
+		s.mediaStats.RTPReceived++
+		if len(pkt.Payload) == 0 {
+			s.mediaStats.EmptyRTP++
+		}
+		s.statsMu.Unlock()
 		reorder.push(pkt, func(ordered *rtp.Packet) {
+			s.statsMu.Lock()
+			if state.haveLastSeq && ordered.SequenceNumber != state.lastSeq+1 {
+				s.mediaStats.SequenceGaps++
+			}
+			s.statsMu.Unlock()
 			frame := state.process(ordered)
 			if frame == nil {
 				return
 			}
+			s.statsMu.Lock()
+			s.mediaStats.FramesReceived++
+			s.statsMu.Unlock()
 			if frag, ok := decodeVP8Frame(frame); ok {
+				s.statsMu.Lock()
+				s.mediaStats.BinaryFrames++
+				s.statsMu.Unlock()
 				s.reassembler.ingest(frag)
 			}
 		})
