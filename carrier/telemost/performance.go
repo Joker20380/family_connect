@@ -22,6 +22,9 @@ func (session *Session) PerformanceSnapshot() map[string]any {
 			if json.Unmarshal(raw, &fields) != nil {
 				continue
 			}
+			if fields["type"] == "candidate-pair" && fields["nominated"] != true {
+				continue
+			}
 			switch fields["type"] {
 			case "inbound-rtp", "outbound-rtp", "remote-inbound-rtp", "remote-outbound-rtp", "candidate-pair", "transport", "peer-connection":
 			default:
