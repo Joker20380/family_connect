@@ -1,6 +1,8 @@
 package telemost
 
 import (
+	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"runtime"
@@ -13,19 +15,19 @@ import (
 	"github.com/pion/webrtc/v4/pkg/media"
 )
 
-func (s *Session) dialWebSocket() error {
+func (s *Session) dialWebSocket(ctx context.Context) error {
 	dialer := websocket.Dialer{
 		HandshakeTimeout: wsHandshakeTimeout,
 		Proxy:            http.ProxyFromEnvironment,
 	}
 	header := http.Header{}
 	header.Set("Origin", DefaultOrigin)
-	conn, resp, err := dialer.Dial(s.wsURL, header)
-	if err != nil {
-		return fmt.Errorf("telemost: dial signaling: %w", err)
-	}
+	conn, resp, err := dialer.DialContext(ctx, s.wsURL, header)
 	if resp != nil && resp.Body != nil {
 		_ = resp.Body.Close()
+	}
+	if err != nil {
+		return errors.New("telemost: signaling connection failed")
 	}
 	conn.SetReadLimit(wsReadLimit)
 	conn.SetPongHandler(func(string) error {
@@ -47,7 +49,8 @@ func (s *Session) writeJSON(v any) error {
 	}
 	_ = s.ws.SetWriteDeadline(time.Now().Add(wsWriteTimeout))
 	if err := s.ws.WriteJSON(v); err != nil {
-		return fmt.Errorf("telemost: ws write: %w", err)
+		s.signalClosed(errors.New("telemost: signaling write failed"))
+		return errors.New("telemost: signaling write failed")
 	}
 	return nil
 }
@@ -97,7 +100,6 @@ func (s *Session) sendHello() error {
 }
 
 func (s *Session) signalingLoop() {
-	defer s.wg.Done()
 	conn := s.wsConn()
 	if conn == nil {
 		return
@@ -107,7 +109,7 @@ func (s *Session) signalingLoop() {
 		var msg map[string]any
 		if err := conn.ReadJSON(&msg); err != nil {
 			if !s.closed.Load() {
-				s.signalClosed(fmt.Errorf("telemost: signaling read: %w", err))
+				s.signalClosed(errors.New("telemost: signaling closed or invalid JSON"))
 			}
 			return
 		}
@@ -127,9 +129,11 @@ func (s *Session) signalingLoop() {
 			return
 		}
 		if offer, ok := msg["subscriberSdpOffer"].(map[string]any); ok {
-			if err := s.handleSubscriberOffer(offer, uid, !pubOfferSent); err == nil {
-				pubOfferSent = true
+			if err := s.handleSubscriberOffer(offer, uid, !pubOfferSent); err != nil {
+				s.signalClosed(errors.New("telemost: subscriber negotiation failed"))
+				return
 			}
+			pubOfferSent = true
 		}
 		if answer, ok := msg["publisherSdpAnswer"].(map[string]any); ok {
 			s.handlePublisherAnswer(answer)
@@ -149,18 +153,14 @@ func (s *Session) wsConn() *websocket.Conn {
 }
 
 func (s *Session) signalClosed(err error) {
-	s.connectErr = err
-	s.closed.Store(true)
-	select {
-	case <-s.connected:
-	default:
-		close(s.connected)
-	}
-	select {
-	case <-s.closeCh:
-	default:
+	s.closeOnce.Do(func() {
+		s.errMu.Lock()
+		s.connectErr = err
+		s.errMu.Unlock()
+		s.closed.Store(true)
 		close(s.closeCh)
-	}
+		s.cancel()
+	})
 }
 
 func (s *Session) applyServerHello(serverHello map[string]any) {
@@ -209,25 +209,36 @@ func (s *Session) applyServerHello(serverHello map[string]any) {
 		SDPSemantics: webrtc.SDPSemanticsUnifiedPlan,
 	}
 	if sub := s.pcSub.Load(); sub != nil {
-		_ = sub.SetConfiguration(cfg)
+		if err := sub.SetConfiguration(cfg); err != nil {
+			s.signalClosed(errors.New("telemost: invalid subscriber ICE configuration"))
+		}
 	}
 	if pub := s.pcPub.Load(); pub != nil {
-		_ = pub.SetConfiguration(cfg)
+		if err := pub.SetConfiguration(cfg); err != nil {
+			s.signalClosed(errors.New("telemost: invalid publisher ICE configuration"))
+		}
 	}
 }
 
 func (s *Session) handleSubscriberOffer(offer map[string]any, uid string, sendPub bool) error {
+	if sequence, ok := offer["pcSeq"].(float64); ok {
+		if sequence < 0 || sequence > float64(^uint32(0)) || sequence != float64(uint32(sequence)) {
+			return errors.New("telemost: invalid subscriber sequence")
+		}
+		s.subSequence.Store(uint32(sequence))
+	}
 	sub := s.pcSub.Load()
 	if sub == nil {
 		return errorsTelemost("subscriber pc missing")
 	}
 	sdp, _ := offer["sdp"].(string)
-	if sdp == "" {
+	if sdp == "" || len(sdp) > 256*1024 || strings.Count(sdp, "\nm=") > 32 {
 		return errorsTelemost("empty subscriber offer")
 	}
 	if err := sub.SetRemoteDescription(webrtc.SessionDescription{Type: webrtc.SDPTypeOffer, SDP: sdp}); err != nil {
 		return fmt.Errorf("telemost: set subscriber remote: %w", err)
 	}
+	s.flushICE("SUBSCRIBER")
 	answer, err := sub.CreateAnswer(nil)
 	if err != nil {
 		return fmt.Errorf("telemost: create subscriber answer: %w", err)
@@ -238,7 +249,7 @@ func (s *Session) handleSubscriberOffer(offer map[string]any, uid string, sendPu
 	if err := s.writeJSON(map[string]any{
 		"uid": newUUID(),
 		"subscriberSdpAnswer": map[string]any{
-			"pcSeq": 1,
+			"pcSeq": s.subSequence.Load(),
 			"sdp":   answer.SDP,
 		},
 	}); err != nil {
@@ -257,7 +268,11 @@ func (s *Session) handleSubscriberOffer(offer map[string]any, uid string, sendPu
 	// Give the SFU time to apply the subscriber answer before the publisher
 	// offer lands on the same channel; SEPARATE offer/answer mode drops an
 	// early publisher offer.
-	time.Sleep(300 * time.Millisecond)
+	select {
+	case <-s.closeCh:
+		return ErrClosed
+	case <-time.After(300 * time.Millisecond):
+	}
 	return s.sendPublisherOffer()
 }
 
@@ -289,10 +304,15 @@ func (s *Session) handlePublisherAnswer(answer map[string]any) {
 		return
 	}
 	sdp, _ := answer["sdp"].(string)
-	if sdp == "" {
+	if sdp == "" || len(sdp) > 256*1024 || strings.Count(sdp, "\nm=") > 32 {
+		s.signalClosed(errors.New("telemost: empty publisher answer"))
 		return
 	}
-	_ = pub.SetRemoteDescription(webrtc.SessionDescription{Type: webrtc.SDPTypeAnswer, SDP: sdp})
+	if err := pub.SetRemoteDescription(webrtc.SessionDescription{Type: webrtc.SDPTypeAnswer, SDP: sdp}); err != nil {
+		s.signalClosed(errors.New("telemost: publisher negotiation failed"))
+		return
+	}
+	s.flushICE("PUBLISHER")
 }
 
 func (s *Session) publisherTrackDescriptions() []map[string]any {
@@ -358,6 +378,10 @@ func (s *Session) iceHandler(target string) func(*webrtc.ICECandidate) {
 			return
 		}
 		init := c.ToJSON()
+		sequence := uint32(1)
+		if target == "SUBSCRIBER" {
+			sequence = s.subSequence.Load()
+		}
 		_ = s.writeJSON(map[string]any{
 			"uid": newUUID(),
 			"webrtcIceCandidate": map[string]any{
@@ -365,7 +389,7 @@ func (s *Session) iceHandler(target string) func(*webrtc.ICECandidate) {
 				"sdpMid":        init.SDPMid,
 				"sdpMlineIndex": init.SDPMLineIndex,
 				"target":        target,
-				"pcSeq":         1,
+				"pcSeq":         sequence,
 			},
 		})
 	}
@@ -376,7 +400,7 @@ func (s *Session) handleRemoteICE(cand map[string]any) {
 	target, _ := cand["target"].(string)
 	sdpMid, _ := cand["sdpMid"].(string)
 	idx, _ := cand["sdpMlineIndex"].(float64)
-	if candidate == "" || len(strings.Fields(candidate)) < 8 {
+	if candidate == "" || len(candidate) > 4096 || len(strings.Fields(candidate)) < 8 || idx < 0 || idx > 65535 || idx != float64(uint16(idx)) || len(sdpMid) > 64 {
 		return
 	}
 	mlIndex := uint16(idx)
@@ -385,14 +409,63 @@ func (s *Session) handleRemoteICE(cand map[string]any) {
 		SDPMid:        &sdpMid,
 		SDPMLineIndex: &mlIndex,
 	}
+	peer := s.icePeer(target)
+	if peer == nil {
+		return
+	}
+	if peer.RemoteDescription() == nil {
+		if len(s.pendingICE[target]) >= 128 {
+			s.signalClosed(errors.New("telemost: too many pending ICE candidates"))
+			return
+		}
+		s.pendingICE[target] = append(s.pendingICE[target], init)
+		return
+	}
+	if err := peer.AddICECandidate(init); err != nil {
+		s.signalClosed(errors.New("telemost: invalid remote ICE"))
+	}
+}
+
+func (s *Session) icePeer(target string) *webrtc.PeerConnection {
 	switch target {
 	case "SUBSCRIBER":
-		if sub := s.pcSub.Load(); sub != nil {
-			_ = sub.AddICECandidate(init)
-		}
+		return s.pcSub.Load()
 	case "PUBLISHER":
-		if pub := s.pcPub.Load(); pub != nil {
-			_ = pub.AddICECandidate(init)
+		return s.pcPub.Load()
+	}
+	return nil
+}
+
+func (s *Session) flushICE(target string) {
+	peer := s.icePeer(target)
+	if peer == nil {
+		return
+	}
+	for _, candidate := range s.pendingICE[target] {
+		if err := peer.AddICECandidate(candidate); err != nil {
+			s.signalClosed(errors.New("telemost: invalid queued ICE"))
+			break
+		}
+	}
+	delete(s.pendingICE, target)
+}
+
+func (s *Session) heartbeatLoop() {
+	ticker := time.NewTicker(20 * time.Second)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-s.closeCh:
+			return
+		case <-ticker.C:
+			connection := s.wsConn()
+			if connection == nil {
+				return
+			}
+			if err := connection.WriteControl(websocket.PingMessage, nil, time.Now().Add(time.Second)); err != nil {
+				s.signalClosed(errors.New("telemost: signaling heartbeat failed"))
+				return
+			}
 		}
 	}
 }
@@ -459,7 +532,6 @@ func isEndedState(st string) bool {
 // writerLoop drains the send queue into the active transport. For VP8 it also
 // injects a decodable keepalive keyframe so the SFU keeps forwarding the track.
 func (s *Session) writerLoop() {
-	defer s.wg.Done()
 	if s.mode == ModeVP8 {
 		keepalive := time.NewTicker(vp8KeepaliveInterval)
 		defer keepalive.Stop()
@@ -488,6 +560,7 @@ func (s *Session) writerLoop() {
 				return
 			}
 			if !s.writeDCMessage(frame) {
+				s.signalClosed(errors.New("telemost: data channel write failed"))
 				return
 			}
 		}
@@ -498,7 +571,9 @@ func (s *Session) writeVP8Sample(data []byte) {
 	if s.track == nil {
 		return
 	}
-	_ = s.track.WriteSample(media.Sample{Data: data, Duration: vp8FrameDuration})
+	if err := s.track.WriteSample(media.Sample{Data: data, Duration: vp8FrameDuration}); err != nil {
+		s.signalClosed(errors.New("telemost: VP8 write failed"))
+	}
 }
 
 func (s *Session) writeDCMessage(data []byte) bool {
@@ -506,8 +581,12 @@ func (s *Session) writeDCMessage(data []byte) bool {
 	if dc == nil || dc.ReadyState() != webrtc.DataChannelStateOpen {
 		return false
 	}
+	deadline := time.NewTimer(10 * time.Second)
+	defer deadline.Stop()
 	for dc.BufferedAmount() > dcBufferedHighWaterMark {
 		select {
+		case <-deadline.C:
+			return false
 		case <-s.closeCh:
 			return false
 		case <-time.After(5 * time.Millisecond):
@@ -544,18 +623,18 @@ func capabilitiesOffer() map[string]any {
 			"SDK_PUBLISHER_OPTIMIZE_BITRATE_FULL",
 			"SDK_PUBLISHER_OPTIMIZE_BITRATE_ONLY_SELF",
 		},
-		"sdkNetworkLostDetection":   []string{"SDK_NETWORK_LOST_DETECTION_DISABLED"},
-		"sdkNetworkPathMonitor":     []string{"SDK_NETWORK_PATH_MONITOR_DISABLED"},
-		"publisherVp9":              []string{"PUBLISH_VP9_DISABLED", "PUBLISH_VP9_ENABLED"},
-		"svcMode":                   []string{"SVC_MODE_DISABLED", "SVC_MODE_L3T3", "SVC_MODE_L3T3_KEY"},
-		"subscriberOfferAsyncAck":   []string{"SUBSCRIBER_OFFER_ASYNC_ACK_DISABLED", "SUBSCRIBER_OFFER_ASYNC_ACK_ENABLED"},
-		"androidBluetoothRoutingFix": []string{"ANDROID_BLUETOOTH_ROUTING_FIX_DISABLED"},
-		"fixedIceCandidatesPoolSize": []string{"FIXED_ICE_CANDIDATES_POOL_SIZE_DISABLED"},
+		"sdkNetworkLostDetection":      []string{"SDK_NETWORK_LOST_DETECTION_DISABLED"},
+		"sdkNetworkPathMonitor":        []string{"SDK_NETWORK_PATH_MONITOR_DISABLED"},
+		"publisherVp9":                 []string{"PUBLISH_VP9_DISABLED", "PUBLISH_VP9_ENABLED"},
+		"svcMode":                      []string{"SVC_MODE_DISABLED", "SVC_MODE_L3T3", "SVC_MODE_L3T3_KEY"},
+		"subscriberOfferAsyncAck":      []string{"SUBSCRIBER_OFFER_ASYNC_ACK_DISABLED", "SUBSCRIBER_OFFER_ASYNC_ACK_ENABLED"},
+		"androidBluetoothRoutingFix":   []string{"ANDROID_BLUETOOTH_ROUTING_FIX_DISABLED"},
+		"fixedIceCandidatesPoolSize":   []string{"FIXED_ICE_CANDIDATES_POOL_SIZE_DISABLED"},
 		"sdkAndroidTelecomIntegration": []string{"SDK_ANDROID_TELECOM_INTEGRATION_DISABLED"},
-		"setActiveCodecsMode": []string{"SET_ACTIVE_CODECS_MODE_DISABLED", "SET_ACTIVE_CODECS_MODE_VIDEO_ONLY"},
-		"subscriberDtlsPassiveMode": []string{"SUBSCRIBER_DTLS_PASSIVE_MODE_DISABLED"},
-		"publisherOpusDred":         []string{"PUBLISHER_OPUS_DRED_DISABLED"},
-		"publisherOpusLowBitrate":   []string{"PUBLISHER_OPUS_LOW_BITRATE_DISABLED"},
+		"setActiveCodecsMode":          []string{"SET_ACTIVE_CODECS_MODE_DISABLED", "SET_ACTIVE_CODECS_MODE_VIDEO_ONLY"},
+		"subscriberDtlsPassiveMode":    []string{"SUBSCRIBER_DTLS_PASSIVE_MODE_DISABLED"},
+		"publisherOpusDred":            []string{"PUBLISHER_OPUS_DRED_DISABLED"},
+		"publisherOpusLowBitrate":      []string{"PUBLISHER_OPUS_LOW_BITRATE_DISABLED"},
 		"sdkAndroidDestroySessionOnTaskRemoved": []string{
 			"SDK_ANDROID_DESTROY_SESSION_ON_TASK_REMOVED_DISABLED",
 		},

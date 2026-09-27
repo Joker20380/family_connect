@@ -1,10 +1,5 @@
 // Package telemost implements a minimal Telemost (Yandex) conference adapter
 // for an opaque binary carrier over a real SFU media path.
-//
-// The protocol facts here were re-derived from the public reference
-// implementations audited in docs/legal/DEPENDENCY_LICENSE_AUDIT.md
-// (kulikov0/whitelist-bypass @ 7c19a7ec and openlibrecommunity/olcrtc
-// @ 92b23327) and are re-implemented, not copied.
 package telemost
 
 import (
@@ -18,6 +13,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 )
 
 const (
@@ -34,9 +30,9 @@ var ErrAPI = errors.New("telemost api error")
 
 // ConnectionInfo is the connection metadata returned by the Telemost API.
 type ConnectionInfo struct {
-	RoomID      string `json:"room_id"`
-	PeerID      string `json:"peer_id"`
-	Credentials string `json:"credentials"`
+	RoomID       string `json:"room_id"`
+	PeerID       string `json:"peer_id"`
+	Credentials  string `json:"credentials"`
 	ClientConfig struct {
 		MediaServerURL string `json:"media_server_url"`
 	} `json:"client_configuration"`
@@ -70,12 +66,43 @@ func NormalizeRoomURL(room string) string {
 	return roomURLPrefix + room
 }
 
+func validRoom(room string) bool {
+	parsed, err := url.Parse(NormalizeRoomURL(room))
+	if err != nil || parsed.Scheme != "https" || parsed.Host != "telemost.yandex.ru" || parsed.User != nil || parsed.RawQuery != "" || parsed.Fragment != "" {
+		return false
+	}
+	identifier := strings.TrimPrefix(parsed.Path, "/j/")
+	if identifier == parsed.Path || len(identifier) == 0 || len(identifier) > 128 {
+		return false
+	}
+	for _, character := range identifier {
+		if !(character >= '0' && character <= '9' || character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character == '-' || character == '_') {
+			return false
+		}
+	}
+	return true
+}
+
+func validSignalingURL(raw string) bool {
+	parsed, err := url.Parse(raw)
+	if err != nil || parsed.Scheme != "wss" || parsed.User != nil || parsed.Fragment != "" || (parsed.Port() != "" && parsed.Port() != "443") {
+		return false
+	}
+	host := parsed.Hostname()
+	for _, suffix := range []string{".yandex.ru", ".yandex.net", ".yandex.com"} {
+		if strings.HasSuffix(host, suffix) {
+			return true
+		}
+	}
+	return false
+}
+
 // FetchConnection retrieves connection metadata for the given room.
 func (a *Auth) FetchConnection(ctx context.Context, roomURL, displayName string) (ConnectionInfo, error) {
 	var info ConnectionInfo
 	full := NormalizeRoomURL(roomURL)
-	if full == "" {
-		return info, errors.New("telemost: room URL required")
+	if !validRoom(roomURL) {
+		return info, errors.New("telemost: invalid room URL")
 	}
 	apiURL := a.APIURL
 	if apiURL == "" {
@@ -83,8 +110,11 @@ func (a *Auth) FetchConnection(ctx context.Context, roomURL, displayName string)
 	}
 	client := a.Client
 	if client == nil {
-		client = http.DefaultClient
+		client = &http.Client{Timeout: 15 * time.Second}
 	}
+	boundedClient := *client
+	boundedClient.Timeout = 15 * time.Second
+	boundedClient.CheckRedirect = func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }
 
 	u := fmt.Sprintf("%s/conferences/%s/connection", apiURL, url.QueryEscape(full))
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u, http.NoBody)
@@ -110,21 +140,20 @@ func (a *Auth) FetchConnection(ctx context.Context, roomURL, displayName string)
 	req.Header.Set("Origin", DefaultOrigin)
 	req.Header.Set("Referer", DefaultOrigin+"/")
 
-	resp, err := client.Do(req)
+	resp, err := boundedClient.Do(req)
 	if err != nil {
-		return info, fmt.Errorf("telemost: do request: %w", err)
+		return info, errors.New("telemost: HTTP connection failed")
 	}
 	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(io.LimitReader(resp.Body, 4096))
-		return info, fmt.Errorf("%w: status %d: %s", ErrAPI, resp.StatusCode, redactBody(body))
+		return info, fmt.Errorf("%w: HTTP status %d", ErrAPI, resp.StatusCode)
 	}
 	dec := json.NewDecoder(io.LimitReader(resp.Body, 8<<20))
 	if err := dec.Decode(&info); err != nil {
-		return info, fmt.Errorf("telemost: decode response: %w", err)
+		return info, errors.New("telemost: invalid connection response")
 	}
-	if info.RoomID == "" || info.PeerID == "" || info.ClientConfig.MediaServerURL == "" {
+	if info.RoomID == "" || info.PeerID == "" || info.Credentials == "" || !validSignalingURL(info.ClientConfig.MediaServerURL) {
 		return info, errors.New("telemost: connection response missing required fields")
 	}
 	return info, nil
@@ -151,32 +180,4 @@ func newUUID() string {
 	dst[23] = '-'
 	hex.Encode(dst[24:36], b[10:16])
 	return string(dst[:])
-}
-
-// redactBody strips known credential-bearing keys from an error body before it
-// is surfaced in a diagnostic.
-func redactBody(body []byte) string {
-	var m map[string]any
-	if err := json.Unmarshal(body, &m); err != nil {
-		return "<non-json>"
-	}
-	redactMap(m)
-	out, err := json.Marshal(m)
-	if err != nil {
-		return "<unmarshalable>"
-	}
-	return string(out)
-}
-
-func redactMap(m map[string]any) {
-	for k, v := range m {
-		switch strings.ToLower(k) {
-		case "credentials", "token", "cookie", "set-cookie", "secret", "authorization":
-			m[k] = "[redacted]"
-		default:
-			if child, ok := v.(map[string]any); ok {
-				redactMap(child)
-			}
-		}
-	}
 }

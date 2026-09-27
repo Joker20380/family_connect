@@ -6,6 +6,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"io"
 	"net"
 	"net/http"
 	"sync"
@@ -14,8 +15,8 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/pion/interceptor"
+	"github.com/pion/logging"
 	"github.com/pion/webrtc/v4"
-	"github.com/pion/webrtc/v4/pkg/media"
 )
 
 const (
@@ -83,6 +84,7 @@ type Stats struct {
 	MessagesSent    uint64
 	MessagesRecv    uint64
 	ReconnectCount  uint32
+	Disconnects     uint32
 	SubscriberState string
 	PublisherState  string
 }
@@ -103,17 +105,28 @@ type Session struct {
 	wsURL       string
 
 	// atomic generation handles for the two peer connections and data channel.
-	pcSub atomic.Pointer[webrtc.PeerConnection]
-	pcPub atomic.Pointer[webrtc.PeerConnection]
-	dc    atomic.Pointer[webrtc.DataChannel]
-	track *webrtc.TrackLocalStaticSample
+	pcSub         atomic.Pointer[webrtc.PeerConnection]
+	pcPub         atomic.Pointer[webrtc.PeerConnection]
+	dc            atomic.Pointer[webrtc.DataChannel]
+	track         *webrtc.TrackLocalStaticSample
+	ctx           context.Context
+	cancel        context.CancelFunc
+	initMu        sync.Mutex
+	workersMu     sync.Mutex
+	started       atomic.Bool
+	cleanupOnce   sync.Once
+	cleanupDone   chan struct{}
+	connectedOnce sync.Once
+	errMu         sync.Mutex
+	recvQueue     chan []byte
+	disconnects   atomic.Uint32
+	pendingICE    map[string][]webrtc.ICECandidateInit
 
 	wsMu sync.Mutex
 	ws   *websocket.Conn
 
 	msgID       atomic.Uint32
-	onDataMu    sync.RWMutex
-	onData      func([]byte)
+	subSequence atomic.Uint32
 	reassembler *reassembler
 
 	sendQueue chan []byte
@@ -123,7 +136,6 @@ type Session struct {
 
 	subReady   atomic.Bool
 	pubReady   atomic.Bool
-	dcReady    chan struct{}
 	connected  chan struct{}
 	connectErr error
 
@@ -142,32 +154,34 @@ type Session struct {
 
 // New creates an unconnected Session.
 func New(ctx context.Context, cfg Config) (*Session, error) {
-	if cfg.RoomURL == "" {
-		return nil, errors.New("telemost: room URL required")
+	if !validRoom(cfg.RoomURL) {
+		return nil, errors.New("telemost: invalid room URL")
+	}
+	if cfg.Mode != ModeVP8 && cfg.Mode != ModeDataChannel {
+		return nil, errors.New("telemost: unsupported mode")
 	}
 	if cfg.ConnectTimeout <= 0 {
 		cfg.ConnectTimeout = 60 * time.Second
 	}
 	s := &Session{
-		cfg:        cfg,
-		mode:       cfg.Mode,
-		senderID:   randomUint32(),
-		auth:       NewAuth(cfg.HTTPClient),
-		sendQueue:  make(chan []byte, sendQueueSize),
-		closeCh:    make(chan struct{}),
-		connected:  make(chan struct{}),
+		cfg:          cfg,
+		mode:         cfg.Mode,
+		senderID:     randomUint32(),
+		auth:         NewAuth(cfg.HTTPClient),
+		sendQueue:    make(chan []byte, sendQueueSize),
+		closeCh:      make(chan struct{}),
+		connected:    make(chan struct{}),
 		setupStarted: time.Now(),
 	}
 	s.msgID.Store(randomUint32())
+	s.subSequence.Store(1)
+	s.ctx, s.cancel = context.WithCancel(ctx)
+	s.cleanupDone = make(chan struct{})
+	s.recvQueue = make(chan []byte, 16)
+	s.pendingICE = make(map[string][]webrtc.ICECandidateInit)
 	s.reassembler = newReassembler(s.senderID, s.deliver)
+	go func() { <-s.ctx.Done(); _ = s.Close() }()
 	return s, nil
-}
-
-// OnMessage registers the callback invoked with each reassembled message.
-func (s *Session) OnMessage(cb func([]byte)) {
-	s.onDataMu.Lock()
-	s.onData = cb
-	s.onDataMu.Unlock()
 }
 
 func (s *Session) deliver(payload []byte) {
@@ -175,19 +189,50 @@ func (s *Session) deliver(payload []byte) {
 	s.bytesRecv += uint64(len(payload))
 	s.msgsRecv++
 	s.statsMu.Unlock()
-	s.onDataMu.RLock()
-	cb := s.onData
-	s.onDataMu.RUnlock()
-	if cb != nil {
-		cb(payload)
+	select {
+	case s.recvQueue <- payload:
+	case <-s.closeCh:
+	default:
+		s.signalClosed(errors.New("telemost: receive queue full"))
+	}
+}
+
+func (s *Session) Recv(ctx context.Context) ([]byte, error) {
+	select {
+	case <-s.closeCh:
+		return nil, s.failure()
+	default:
+	}
+	select {
+	case payload := <-s.recvQueue:
+		return payload, nil
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	case <-s.closeCh:
+		return nil, s.failure()
 	}
 }
 
 // Connect performs the join and blocks until the carrier is ready, ctx is
 // cancelled, or the connect deadline expires.
-func (s *Session) Connect(ctx context.Context) error {
+func (s *Session) Connect(ctx context.Context) (connectError error) {
+	if !s.started.CompareAndSwap(false, true) {
+		return errors.New("telemost: connect already attempted")
+	}
+	s.initMu.Lock()
+	defer func() {
+		s.initMu.Unlock()
+		if connectError != nil {
+			_ = s.Close()
+		}
+	}()
+	if s.closed.Load() {
+		return ErrClosed
+	}
 	connCtx, cancel := context.WithTimeout(ctx, s.cfg.ConnectTimeout)
 	defer cancel()
+	stopCancel := context.AfterFunc(s.ctx, cancel)
+	defer stopCancel()
 
 	info, err := s.auth.FetchConnection(connCtx, s.cfg.RoomURL, s.cfg.DisplayName)
 	if err != nil {
@@ -208,15 +253,26 @@ func (s *Session) Connect(ctx context.Context) error {
 	if err := s.setupTransport(); err != nil {
 		return err
 	}
-	if err := s.dialWebSocket(); err != nil {
+	if err := s.dialWebSocket(connCtx); err != nil {
 		return err
 	}
 	s.setupICEHandlers()
 
-	s.wg.Add(1)
-	go s.signalingLoop()
-	s.wg.Add(1)
-	go s.writerLoop()
+	s.startWorker(s.signalingLoop)
+	s.startWorker(s.writerLoop)
+	s.startWorker(s.heartbeatLoop)
+	s.startWorker(func() {
+		ticker := time.NewTicker(time.Second)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-s.closeCh:
+				return
+			case <-ticker.C:
+				s.reassembler.prune()
+			}
+		}
+	})
 
 	if err := s.sendHello(); err != nil {
 		return err
@@ -224,7 +280,12 @@ func (s *Session) Connect(ctx context.Context) error {
 
 	select {
 	case <-s.connected:
+		if s.closed.Load() {
+			return s.failure()
+		}
+		s.statsMu.Lock()
 		s.setupDone = time.Now()
+		s.statsMu.Unlock()
 		return nil
 	case <-connCtx.Done():
 		if connCtx.Err() == context.DeadlineExceeded {
@@ -232,22 +293,28 @@ func (s *Session) Connect(ctx context.Context) error {
 		}
 		return connCtx.Err()
 	case <-s.closeCh:
-		if s.connectErr != nil {
-			return s.connectErr
-		}
-		return ErrClosed
+		return s.failure()
 	}
 }
 
 // Send delivers one application message to the remote peer.
 func (s *Session) Send(payload []byte) error {
+	ctx, cancel := context.WithTimeout(s.ctx, 10*time.Second)
+	defer cancel()
+	return s.SendContext(ctx, payload)
+}
+
+func (s *Session) SendContext(ctx context.Context, payload []byte) error {
 	if s.closed.Load() {
 		return ErrClosed
+	}
+	if err := ctx.Err(); err != nil {
+		return err
 	}
 	if len(payload) > MaxMessageSize {
 		return ErrMessageTooLarge
 	}
-	if !s.subReady.Load() && !s.pubReady.Load() && s.dcOpen() != nil {
+	if !s.subReady.Load() || !s.pubReady.Load() || (s.mode == ModeDataChannel && s.dcOpen() == nil) {
 		return errors.New("telemost: carrier not ready")
 	}
 	msgID := s.msgID.Add(1)
@@ -262,6 +329,8 @@ func (s *Session) Send(payload []byte) error {
 		}
 		select {
 		case s.sendQueue <- out:
+		case <-ctx.Done():
+			return ctx.Err()
 		case <-s.closeCh:
 			return ErrClosed
 		}
@@ -277,11 +346,12 @@ func (s *Session) Send(payload []byte) error {
 func (s *Session) Stats() Stats {
 	s.statsMu.Lock()
 	bs, br, ms, mr := s.bytesSent, s.bytesRecv, s.msgsSent, s.msgsRecv
+	setupDone := s.setupDone
 	s.statsMu.Unlock()
 
 	var setupMs int64
-	if !s.setupDone.IsZero() {
-		setupMs = s.setupDone.Sub(s.setupStarted).Milliseconds()
+	if !setupDone.IsZero() {
+		setupMs = setupDone.Sub(s.setupStarted).Milliseconds()
 	}
 	sub := "closed"
 	if subPC := s.pcSub.Load(); subPC != nil {
@@ -299,6 +369,7 @@ func (s *Session) Stats() Stats {
 		MessagesSent:    ms,
 		MessagesRecv:    mr,
 		ReconnectCount:  s.reconnects.Load(),
+		Disconnects:     s.disconnects.Load(),
 		SubscriberState: sub,
 		PublisherState:  pub,
 	}
@@ -306,39 +377,54 @@ func (s *Session) Stats() Stats {
 
 // Close tears down the session. It is idempotent.
 func (s *Session) Close() error {
-	s.closeOnce.Do(func() {
-		s.closed.Store(true)
-		close(s.closeCh)
-	})
-
-	s.wsMu.Lock()
-	ws := s.ws
-	s.ws = nil
-	s.wsMu.Unlock()
-	if ws != nil {
-		_ = ws.WriteControl(websocket.CloseMessage,
-			websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""),
-			time.Now().Add(time.Second))
-		_ = ws.Close()
-	}
-	if dc := s.dc.Load(); dc != nil {
-		_ = dc.Close()
-	}
-	for _, pc := range []*webrtc.PeerConnection{s.pcPub.Load(), s.pcSub.Load()} {
-		if pc != nil {
-			_ = pc.Close()
+	s.signalClosed(ErrClosed)
+	s.cleanupOnce.Do(func() {
+		s.initMu.Lock()
+		defer s.initMu.Unlock()
+		s.workersMu.Lock()
+		s.workersMu.Unlock()
+		s.wsMu.Lock()
+		ws := s.ws
+		s.ws = nil
+		s.wsMu.Unlock()
+		if ws != nil {
+			_ = ws.WriteControl(websocket.CloseMessage,
+				websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""),
+				time.Now().Add(time.Second))
+			_ = ws.Close()
 		}
-	}
-	done := make(chan struct{})
-	go func() {
+		if dc := s.dc.Load(); dc != nil {
+			_ = dc.Close()
+		}
+		for _, pc := range []*webrtc.PeerConnection{s.pcPub.Load(), s.pcSub.Load()} {
+			if pc != nil {
+				_ = pc.Close()
+			}
+		}
 		s.wg.Wait()
-		close(done)
-	}()
-	select {
-	case <-done:
-	case <-time.After(3 * time.Second):
-	}
+		close(s.cleanupDone)
+	})
+	<-s.cleanupDone
 	return nil
+}
+
+func (s *Session) startWorker(work func()) {
+	s.workersMu.Lock()
+	defer s.workersMu.Unlock()
+	if s.closed.Load() {
+		return
+	}
+	s.wg.Add(1)
+	go func() { defer s.wg.Done(); work() }()
+}
+
+func (s *Session) failure() error {
+	s.errMu.Lock()
+	defer s.errMu.Unlock()
+	if s.connectErr != nil {
+		return s.connectErr
+	}
+	return ErrClosed
 }
 
 func (s *Session) dcOpen() *webrtc.DataChannel {
@@ -378,6 +464,9 @@ func (s *Session) setupPeerConnections(config webrtc.Configuration) error {
 
 func newWebRTCAPI() (*webrtc.API, error) {
 	settings := webrtc.SettingEngine{}
+	logger := logging.NewDefaultLoggerFactory()
+	logger.Writer = io.Discard
+	settings.LoggerFactory = logger
 	settings.SetNetworkTypes([]webrtc.NetworkType{webrtc.NetworkTypeUDP4})
 	settings.SetIPFilter(func(ip net.IP) bool { return ip.To4() != nil })
 
@@ -404,10 +493,19 @@ func (s *Session) setupTransport() error {
 		if err != nil {
 			return fmt.Errorf("telemost: new vp8 track: %w", err)
 		}
-		if _, err := pub.AddTrack(track); err != nil {
+		sender, err := pub.AddTrack(track)
+		if err != nil {
 			return fmt.Errorf("telemost: add vp8 track: %w", err)
 		}
 		s.track = track
+		s.startWorker(func() {
+			buffer := make([]byte, 1500)
+			for {
+				if _, _, err := sender.Read(buffer); err != nil {
+					return
+				}
+			}
+		})
 		return nil
 	}
 
@@ -417,9 +515,6 @@ func (s *Session) setupTransport() error {
 	}
 	dc.OnOpen(func() {
 		s.pubReady.Store(true)
-		if s.dcReady != nil {
-			close(s.dcReady)
-		}
 		s.maybeConnected()
 	})
 	dc.OnClose(func() {
@@ -427,19 +522,22 @@ func (s *Session) setupTransport() error {
 	})
 	dc.OnMessage(s.onDataChannelMessage)
 	s.dc.Store(dc)
-	s.dcReady = make(chan struct{})
 	return nil
 }
 
 func (s *Session) onSubscriberTrack(track *webrtc.TrackRemote, receiver *webrtc.RTPReceiver) {
-	if track.Kind() != webrtc.RTPCodecTypeVideo || track.Codec().MimeType != webrtc.MimeTypeVP8 {
-		go drainTrack(track)
+	if s.mode != ModeVP8 || track.Kind() != webrtc.RTPCodecTypeVideo || track.Codec().MimeType != webrtc.MimeTypeVP8 {
+		s.startWorker(func() { drainTrack(track) })
 		return
 	}
-	go s.readVP8Track(track)
+	s.startWorker(func() { s.readVP8Track(track) })
 }
 
 func (s *Session) onSubscriberDataChannel(dc *webrtc.DataChannel) {
+	if s.mode != ModeDataChannel {
+		_ = dc.Close()
+		return
+	}
 	dc.OnMessage(s.onDataChannelMessage)
 	dc.OnOpen(func() {
 		s.subReady.Store(true)
@@ -448,7 +546,7 @@ func (s *Session) onSubscriberDataChannel(dc *webrtc.DataChannel) {
 }
 
 func (s *Session) onDataChannelMessage(msg webrtc.DataChannelMessage) {
-	if len(msg.Data) == 0 {
+	if s.mode != ModeDataChannel || msg.IsString || len(msg.Data) == 0 {
 		return
 	}
 	s.reassembler.ingest(msg.Data)
@@ -467,19 +565,11 @@ func (s *Session) maybeConnected() {
 	switch s.mode {
 	case ModeVP8:
 		if s.subReady.Load() && s.pubReady.Load() {
-			select {
-			case <-s.connected:
-			default:
-				close(s.connected)
-			}
+			s.connectedOnce.Do(func() { close(s.connected) })
 		}
 	case ModeDataChannel:
 		if s.dcOpen() != nil && s.subReady.Load() {
-			select {
-			case <-s.connected:
-			default:
-				close(s.connected)
-			}
+			s.connectedOnce.Do(func() { close(s.connected) })
 		}
 	}
 }
@@ -493,6 +583,10 @@ func (s *Session) onSubscriberState(state webrtc.PeerConnectionState) {
 		webrtc.PeerConnectionStateFailed,
 		webrtc.PeerConnectionStateClosed:
 		s.subReady.Store(false)
+		if !s.closed.Load() {
+			s.disconnects.Add(1)
+			s.signalClosed(errors.New("telemost: subscriber disconnected"))
+		}
 	}
 }
 
@@ -505,6 +599,10 @@ func (s *Session) onPublisherState(state webrtc.PeerConnectionState) {
 		webrtc.PeerConnectionStateFailed,
 		webrtc.PeerConnectionStateClosed:
 		s.pubReady.Store(false)
+		if !s.closed.Load() {
+			s.disconnects.Add(1)
+			s.signalClosed(errors.New("telemost: publisher disconnected"))
+		}
 	}
 }
 
