@@ -99,7 +99,7 @@ def main():
         if args.case == 'reliable-gap':
             pattern = '^TestLiveReliableGap$'
         if args.case == 'unit':
-            pattern = '^Test(CanonicalMatrixAndCancellation|AdmissionFailures|ExpiredLeaseAndBounds|TLSRecordReplayRejected|HandshakeProofReplayRejected|ReliableTLSFaultMatrix)$'
+            pattern = '^Test(CanonicalMatrixAndCancellation|AdmissionFailures|ExpiredLeaseAndBounds|TLSRecordReplayRejected|HandshakeProofReplayRejected|ReliableTLSFaultMatrix|ReliableTLSExhaustion)$'
         command = (f'read -r FC_TELEMOST_ROOM; export FC_TELEMOST_ROOM; '
                    f'export FC_FAMILY_TEST_PROFILE={android}/family.input; '
                    f'export FC_FAMILY_REPLAY_READY={android}/fresh.ready; '

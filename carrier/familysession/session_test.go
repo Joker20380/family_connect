@@ -435,9 +435,10 @@ func openTestTLS(ctx context.Context, endpoint PacketEndpoint, raw []byte, serve
 
 type lossEndpoint struct {
 	*endpoint
-	armed atomic.Bool
-	seen  map[uint64]int
-	held  []byte
+	armed   atomic.Bool
+	dropAll atomic.Bool
+	seen    map[uint64]int
+	held    []byte
 }
 
 func (point *lossEndpoint) SendContext(ctx context.Context, data []byte) error {
@@ -445,6 +446,9 @@ func (point *lossEndpoint) SendContext(ctx context.Context, data []byte) error {
 		return point.endpoint.SendContext(ctx, data)
 	}
 	seq := binary.BigEndian.Uint64(data[40:])
+	if point.dropAll.Load() {
+		return nil
+	}
 	point.seen[seq]++
 	if point.seen[seq] == 1 && (seq%7 == 0 || seq >= 7 && seq <= 9) {
 		return nil
@@ -533,5 +537,41 @@ func TestReliableTLSFaultMatrix(test *testing.T) {
 	case <-complete:
 	case <-time.After(time.Second):
 		test.Fatal("echo worker leaked")
+	}
+}
+
+func TestReliableTLSExhaustion(test *testing.T) {
+	clientProfile, serverProfile := profiles(test)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	left, right := pair()
+	clientEndpoint := &lossEndpoint{endpoint: left, seen: make(map[uint64]int)}
+	config := reliablestream.DefaultConfig()
+	config.RTO = 30 * time.Millisecond
+	config.MaxRetries = 2
+	ready := make(chan *Session, 1)
+	go func() { session, _ := OpenReliable(ctx, right, encoded(serverProfile), true, config); ready <- session }()
+	client, err := OpenReliable(ctx, clientEndpoint, encoded(clientProfile), false, config)
+	if err != nil {
+		test.Fatal(err)
+	}
+	defer client.Close()
+	server := <-ready
+	if server == nil {
+		test.Fatal("handshake")
+	}
+	defer server.Close()
+	clientEndpoint.dropAll.Store(true)
+	clientEndpoint.armed.Store(true)
+	if err := client.SendContext(ctx, bytes.Repeat([]byte{91}, 16384)); err != nil {
+		test.Fatal(err)
+	}
+	payload, err := server.Recv(ctx)
+	if err == nil || len(payload) != 0 || strings.Contains(err.Error(), "bad record MAC") || ctx.Err() != nil {
+		test.Fatal("unrecoverable stream did not abort cleanly", err)
+	}
+	client.Close()
+	if client.ReliabilityStats().Terminal != "recovery_exhausted" {
+		test.Fatal("exhaustion not observable")
 	}
 }
