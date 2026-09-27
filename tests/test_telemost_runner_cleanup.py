@@ -34,7 +34,7 @@ def test_completed_remote_preserves_exit():
 
 def test_android_incremental_read_cannot_capture_missing_file_error():
     command = runner_module().android_evidence_command('test-adb', 42)
-    script = shlex.split(command[-1])[0]
+    script = command[-1]
     assert script == 'test -f files/evidence.jsonl && tail -c +43 files/evidence.jsonl 2>/dev/null'
 
 

@@ -18,7 +18,7 @@ SSH = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=12", "root@186.246.45
 
 def android_evidence_command(adb, offset):
     script = f"test -f files/evidence.jsonl && tail -c +{offset + 1} files/evidence.jsonl 2>/dev/null"
-    return [adb, "exec-out", "run-as", PACKAGE, "sh", "-c", shlex.quote(script)]
+    return [adb, "exec-out", "run-as", PACKAGE, "sh", "-c", script]
 
 
 def reap_remote(remote):
