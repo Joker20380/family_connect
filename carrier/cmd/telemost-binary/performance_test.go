@@ -133,3 +133,9 @@ func TestPerformanceConfigRejectsUnboundedAndUnknown(test *testing.T) {
 		test.Fatal(err)
 	}
 }
+
+func TestPerformanceErrorClassNeverLeaksRawError(test *testing.T) {
+	if performanceErrorClass(errors.New("sensitive arbitrary server response")) != "other_redacted" || performanceErrorClass(errors.New("tls: bad record MAC")) != "tls_bad_record_mac" {
+		test.Fatal("unsafe error classification")
+	}
+}

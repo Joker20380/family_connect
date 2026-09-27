@@ -12,6 +12,7 @@ import (
 	"math"
 	"os"
 	"sort"
+	"strings"
 	"sync"
 	"time"
 
@@ -130,6 +131,7 @@ func performanceProbe(parent context.Context, endpoint familysession.PacketEndpo
 	stages := make([][]float64, 0, 512)
 	counters := map[string]int{"corruption": 0, "missing": 0, "duplicate": 0, "reordered": 0, "unexpected_frames": 0, "timeout": 0, "disconnect": 0, "recovery": 0}
 	reason := ""
+	errorClass := ""
 	status := "PASS"
 	accumulate := func(now time.Time) {
 		bound := now
@@ -211,6 +213,7 @@ func performanceProbe(parent context.Context, endpoint familysession.PacketEndpo
 		case <-tick.C:
 		case event := <-events:
 			if event.err != nil {
+				errorClass = performanceErrorClass(event.err)
 				reason = "disconnect"
 				if errors.Is(event.err, context.DeadlineExceeded) || os.IsTimeout(event.err) {
 					reason = "timeout"
@@ -286,6 +289,7 @@ func performanceProbe(parent context.Context, endpoint familysession.PacketEndpo
 		}
 	}
 	result := map[string]any{"event": "perf_result", "status": status, "reason": reason, "warmup": warmup, "config": config, "measurement_s": measured, "elapsed_with_drain_s": elapsed, "blocks_sent": sent, "blocks_received": received, "useful_tx_bytes": sent * config.Payload, "useful_rx_bytes": received * config.Payload, "tx_interval_bytes": sentInInterval * config.Payload, "rx_interval_bytes": deliveredInInterval * config.Payload, "tx_mbit_s": float64(sentInInterval*config.Payload*8) / measured / 1e6, "delivered_mbit_s": float64(deliveredInInterval*config.Payload*8) / measured / 1e6, "aggregate_mbit_s": float64((sentInInterval+deliveredInInterval)*config.Payload*8) / measured / 1e6, "drain_normalized_mbit_s": float64(received*config.Payload*8) / elapsed / 1e6, "max_outstanding": maximumOutstanding, "average_outstanding": integral / measured, "errors": counters, "snapshot": snapshot()}
+	result["terminal_error_class"] = errorClass
 	if len(samples) > 0 {
 		sort.Float64s(samples)
 		total := float64(0)
@@ -306,6 +310,25 @@ func performanceProbe(parent context.Context, endpoint familysession.PacketEndpo
 		return errors.New("bounded performance point failed; no retry")
 	}
 	return nil
+}
+
+func performanceErrorClass(err error) string {
+	switch {
+	case errors.Is(err, context.DeadlineExceeded), os.IsTimeout(err):
+		return "deadline"
+	case errors.Is(err, familysession.ErrRejected):
+		return "family_rejected"
+	case errors.Is(err, io.ErrClosedPipe):
+		return "closed_pipe"
+	case errors.Is(err, io.EOF):
+		return "eof"
+	case strings.Contains(err.Error(), "bad record MAC"):
+		return "tls_bad_record_mac"
+	case strings.Contains(err.Error(), "unexpected message"):
+		return "tls_unexpected_message"
+	default:
+		return "other_redacted"
+	}
 }
 
 func performanceEcho(ctx context.Context, endpoint familysession.PacketEndpoint, snapshot func() map[string]any, emit func(map[string]any) error) error {
