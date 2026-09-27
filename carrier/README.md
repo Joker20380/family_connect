@@ -1,4 +1,4 @@
-# Telemost binary carrier — experimental 5N.1 / 5N.2
+# Telemost binary carrier — experimental 5N.1 / 5N.2 / 5N.3
 
 Recovered from the interrupted DeepSeek worktree, not a second carrier.
 `WEBRTC-EU-1 / 5N.1` **PASS on 2026-09-27**: independent developer Linux and
@@ -11,8 +11,30 @@ reuses this exact CLI/core; its physical-device acceptance is recorded separatel
 **5N.2 PASS27.09**, clean3f65346: physical Redmi/Android12→Telemost VP8→Amsterdam,
 372 exact echoes including30s/5min; see the Android report for lifecycle/performance limits.
 Local Pion and DataChannel results alone do not close the gate.
-No Family auth, VPN, proxy, routing, DNS or product integration is here.
-Use synthetic random data only: the SFU is untrusted and DTLS is not Family E2E.
+No VPN, proxy, routing, DNS or product integration is here. The opt-in5N.3
+`--family-config` adds an isolated TLS1.3 Family session above the opaque carrier;
+the default5N.1/5N.2 mode remains plaintext. Use synthetic random data only:
+the SFU is untrusted and DTLS is not Family E2E.
+
+**5N.3 PASS27.09**, runtime5dd8b49: physical Android374 exact echoes/302.001s,
+Family admission/replay rejection and lifecycle/recovery. Two early failed runs
+remain in evidence; independent SSH observer isolates the accepted test endpoint.
+[Result and limits](../docs/releases/2026-09-27-webrtc-eu3-family-session.ru.md).
+[Profile/reuse boundary](../docs/testing/webrtc-eu3-session-profile.md) and
+[disposable authority/operator runbook](../clients/android/telemost-runtime/README.md).
+No crypto/SFU/pacing replacement, automatic reconnect or production credential
+issuer is included. TLS over the lossy carrier fails closed; no reliability is added.
+
+`pilot/android-telemost/family_checks.py` runs physical native unit, live WS/PC
+closure, and old-transcript replay cases. It takes `--case unit|ws-close|peer-close|replay`,
+`--adb`, `--binary` (Linux CLI), `--native-test` (Android PIE Go test executable),
+`--family-dir` and a new private `--out`. Unit mode uses `familysession`'s test
+executable; other modes use `telemost`'s. Build with the same Android toolchain as
+the APK, `go test -c -buildmode=pie -ldflags=-checklinkname=0`.
+The replay test captures only in memory, proves an initial exact authenticated
+echo, closes it, waits for an explicitly restarted B, and sends the old transcript
+through a fresh real VP8 carrier. PASS additionally requires B's new
+`family_auth accepted=false`, not just the client test exit code.
 
 ## Build and preliminary checks
 

@@ -1,9 +1,62 @@
-# Physical Android synthetic Telemost gate — 5N.2
+# Physical Android synthetic Telemost gates — 5N.2 / 5N.3
 
 This is a **separate debug-only APK**, `com.familyconnect.telemosttest`, not the
-Family Connect beta. No VpnService, TUN, production traffic, FAMILY authentication,
-Chaquopy, AWG/Xray, transport selection or automatic fallback is included.
-DTLS is not Family E2E. Only generated random payloads enter the untrusted SFU.
+Family Connect beta. No VpnService, TUN, production traffic, Chaquopy, AWG/Xray,
+transport selection or automatic fallback is included. Code2 / `5N.3-test-only`
+adds an opt-in authenticated Family TLS1.3 session above the unchanged VP8 carrier.
+Without private operator credentials it remains the plaintext5N.2 diagnostic.
+DTLS is not Family E2E. Only generated random payloads are used.
+
+**5N.3 PASS27.09**: runtime5dd8b49, physical Redmi374 exact echoes/302.001s,
+live Family negatives/replay and lifecycle/recovery. Diagnostic APK was subsequently
+uninstalled, never distributed. [Report/hashes/limits](../../../docs/releases/2026-09-27-webrtc-eu3-family-session.ru.md).
+
+## Isolated Family acceptance
+
+Read [the session profile](../../../docs/testing/webrtc-eu3-session-profile.md)
+before using this mode. The disposable issuer uses existing DeviceIdentity and
+ProductStore enrollment/authorization/revocation against a **new temporary DB**.
+It accepts no existing DB or production signing key. PKCS8 keys are copies of
+these disposable identities' Ed25519 signing seeds, never WireGuard keys. The
+short-lived test certificate binds the full RNS public identity (URI SAN), role,
+family, revision (named OU attributes), expiry and issuer. The gateway identity
+is pinned. Current signed CRL and local trusted revision floors are mandatory.
+TLS1.3 only, mutual certificates, versioned ALPN, no tickets/0-RTT/retry/fallback.
+This does not implement production provisioning or mobile secure-store integration.
+
+```sh
+python -m pilot.telemost_family_fixture --out /tmp/fc-family-fixture
+python3 pilot/android-telemost/live.py --binary /tmp/fc-telemost-binary \
+  --family-dir /tmp/fc-family-fixture --independent-observer \
+  --out /tmp/fc-family-acceptance
+```
+
+Use the existing control + identity Python lockfiles. `--client-profile revoked`,
+`wrong-family`, `unknown` run negative admission cases: B must reject and A must
+complete no echo. Credentials stay in mode0600 `family.input` in the app-private
+directory and B's temporary directory, never intent extras/argv/APK/Git/logs.
+The runner removes both inputs and remote artifacts in `finally`; remove the
+local fixture directory (including its disposable DB) after all cases. Stop and
+uninstall only `com.familyconnect.telemosttest` at final cleanup. No diagnostic APK
+is publicly distributed. Never keep credentials after their test window.
+
+Use `--independent-observer` for sustained runs: the exact same temporary nobody
+binary writes bounded private files under an owned supervisor, not a persistent
+SSH stdout pipe. Short SSH snapshots preserve remote exit and evidence; `finally`
+terminates/reaps only owned processes and removes the directory. Two earlier5N.3
+attempts lost their runuser parent at320s and timed out; they remain FAIL in the
+report. The exact terminating signal is unknown. No transport retry, deadline
+relaxation, production SSH config change or service installation is involved.
+Staging uses a compressed archive (45s bound), deleted locally even on failure.
+Fixtures expire after1h; generate fresh disposable identities for a later test
+window, never extend/reissue a failed active session to turn it green.
+
+The same seven payload sizes/100×1KiB/100×16KiB/30s/5min and10s echo deadlines
+apply. Useful metrics count application bytes, excluding TLS/test headers/RTP;
+one-way=TX×8/elapsed/1e6; aggregate=(TX+RX)×8/elapsed/1e6. RTT samples are bounded
+to4096/phase; nearest-rank p50/p95/p99 appear only when the sample set is complete.
+Ordering is additionally checked by monotonic sequence inside encrypted test
+messages. Loss/reorder that TLS cannot authenticate closes/times out, never retries.
 
 ## Shared core and packaging
 
@@ -48,7 +101,7 @@ Use clean source for final acceptance and record the APK hash separately.
 Disable active VPNs before testing. The harness refuses a visible VPN at start
 and checks again every10s; this is **not** a fail-closed firewall or leak guarantee.
 Start the Amsterdam **unprivileged temporary echo** first using `carrier/README.md`.
-Open “Telemost 5N.2 TEST”, enter the disposable room into the masked field, and tap
+Open “Telemost isolated TEST”, enter the disposable room into the masked field, and tap
 “Connect + run VP8 binary suite”. The input is cleared immediately and not saved
 across recreation. Screenshots/autofill/backups are disabled for this test app.
 
@@ -124,4 +177,4 @@ a second independent Go shared library beside AWG/Xray.
   libc/netd resolution is not proven protected by wrapping the HTTP socket alone.
 
 No protection bridge is implemented or asserted here. Full-device VPN and leak
-validation remain5N.6; FAMILY auth remains5N.3, neither starts with this test.
+validation remain5N.6; the isolated5N.3 mode does not start that work.

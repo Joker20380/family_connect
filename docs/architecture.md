@@ -15,9 +15,17 @@ shared Go core → unchanged Linux CLI or Android PIE CLI child → bounded fore
 test Service/Activity. No second source copy, Java WebRTC, JNI or product Go runtime.
 Physical **5N.2 PASS**, clean `3f65346`: Redmi Note9 Pro/Android12 ordinary cellular
 ↔Telemost VP8↔Amsterdam,372 exact echoes including30s/5min and lifecycle/fault checks.
-Final RTT≈2s/aggregate0.131069Mbit/s; earlier full run≈4s/0.065536Mbit/s, not production
-performance. Wi-Fi handoff/deep Doze/restricted-mobile not claimed. Next5N.3 not started.
-No Family auth, gateway, TUN or production transport integration. All sockets remain
+Final RTT≈2s/aggregate0.131069Mbit/s; earlier full run≈4s/0.065536Mbit/s are baseline
+measurements, not a throughput ceiling or production acceptance.
+Wi-Fi handoff/deep Doze/restricted-mobile not claimed.
+Isolated5N.3 now adds `familysession`: standard TLS1.3 above unchanged VP8,
+existing DeviceIdentity/ProductStore-derived disposable authorization, gateway pin,
+signed revocation snapshot and bounded lease. No production authority/identity
+store integration. **5N.3 PASS**: physical Android374 exact echoes/302.001s sustained,
+live admission/replay rejection and lifecycle/recovery. Two earlier SSH-lifetime
+failures are retained; accepted run isolates its observer without carrier changes.
+[Report/limits](releases/2026-09-27-webrtc-eu3-family-session.ru.md).
+No egress gateway, TUN or production transport integration. All sockets remain
 unprotected; future HTTP/WS/Pion transport.Net/DNS protection requires an explicit
 cross-process SCM_RIGHTS+protect ACK bridge or in-process JNI, not child fd integers.
 [5N.2 report](releases/2026-09-27-webrtc-eu2-android-binary.ru.md).

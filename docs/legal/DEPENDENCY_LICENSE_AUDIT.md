@@ -10,6 +10,15 @@ records the subsequently authorized, recovered5N.1 prototype.
 
 ## Recovered Telemost carrier — 2026-09-27
 
+5N.3 addendum: isolated `familysession` uses the already included Go1.27.1
+`crypto/tls`/`crypto/x509`/Ed25519 implementation, not a new crypto library,
+handshake, RTC stack or module pin. Existing Go BSD-3-Clause notice is retained.
+The disposable acceptance issuer uses existing pinned RNS1.5.1 and cryptography
+46.0.7 through DeviceIdentity/ProductStore; no code copied from another project.
+[Selection/API/trust-boundary review](../testing/webrtc-eu3-session-profile.md)
+is not an independent cryptographic audit or production security approval.
+The carrier and 23-module dependency graph/notices remain unchanged.
+
 5N.2 Android addendum: Go1.27.1 Android/arm64 CGO `go list -deps` matches the
 same23 external modules/versions below. No module fork, new RTC stack or copied
 implementation. Android build uses NDK28.2.13676358 and unmodified pinned anet's

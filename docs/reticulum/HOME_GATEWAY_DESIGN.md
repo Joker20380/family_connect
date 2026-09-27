@@ -8,9 +8,12 @@ Current execution order lives in [PLAN](../PLAN.md), measured results in
 it is no longer only an isolated research laboratory, nor production-ready.
 
 27.09 implementation addendum: the recovered [Go/Pion carrier](../../carrier/README.md)
-implements only5N.1. Local VP8/race tests pass, but no valid real Telemost room
-was provided: WEBRTC-EU-1 stays OPEN/BLOCKED. Admission/waiting-room behavior and
-real SFU media still need acceptance. No later stage is promoted by local tests.
+has real5N.1/5N.2 PASS evidence (see the gate table). The earlier no-room blocker
+is superseded. Isolated5N.3 Family TLS1.3 admission at5dd8b49 is **PASS**:
+physical Android374 exact echoes/302.001s, live negatives/replay/lifecycle/recovery.
+Earlier SSH-lifetime failures remain in evidence; no production authority rollout.
+[Current report](../releases/2026-09-27-webrtc-eu3-family-session.ru.md).
+No later stage is promoted by local tests or a short authenticated echo.
 
 ## DECISION: restricted WebRTC to EU Gateway first — 2026-09-25
 
@@ -164,7 +167,7 @@ RNS-over-WebRTC gates stay open, not cancelled or silently counted as complete.
 | --- | --- | --- |
 | WEBRTC-EU-1 / 5N.1 | Desktop/Linux↔Linux random binary round trip over real Telemost at several sizes; exact byte equality | PASS27.09: Linux dev↔Amsterdam,291 VP8 echoes,30s/5min; [report](../releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md) |
 | WEBRTC-EU-2 / 5N.2 | Android↔Linux EU Telemost binary round trip, no TUN yet | PASS27.09: physical Redmi/Telemost VP8/Amsterdam,372 exact echoes,30s/5min; [report](../releases/2026-09-27-webrtc-eu2-android-binary.ru.md) |
-| WEBRTC-EU-3 / 5N.3 | Authenticated E2E Family session; valid identity succeeds, unknown/wrong-family/revoked/replayed proof fails | Not run |
+| WEBRTC-EU-3 / 5N.3 | Authenticated E2E Family session; valid identity succeeds, unknown/wrong-family/revoked/replayed proof fails | PASS27.09: physical Android,374 exact echoes/302.001s; [report/limits](../releases/2026-09-27-webrtc-eu3-family-session.ru.md) |
 | WEBRTC-EU-4 / 5N.4 | One TCP stream through EU returns a real HTTPS response, e.g. example.com:443 | Not run |
 | WEBRTC-EU-5 / 5N.5 | Parallel TCP/browser/API/DNS streams share one carrier session; bounded fairness/flow control | Not run |
 | WEBRTC-EU-6 / 5N.6 | Android full-device TCP+DNS: browser/HTTPS and ordinary apps where protocol permits, EU exit, no direct leaks | Not run |

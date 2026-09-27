@@ -7,9 +7,33 @@
 - **WEBRTC-EU-1 / 5N.1 = PASS**: настоящий local Linux ↔ Telemost VP8 ↔ Amsterdam.
 - **WEBRTC-EU-2 / 5N.2 = PASS**: physical Android↔Telemost VP8↔Amsterdam,
   372 exact echoes,7 sizes/100×1/16KiB/30s/5min, без TUN/DataChannel substitution.
-- **NEXT = WEBRTC-EU-3 / 5N.3**; 5N.3–5N.6 NOT RUN, не начинать автоматически.
+- **WEBRTC-EU-3 / 5N.3 = PASS**: physical Android Family E2E over VP8,
+  374 exact echoes,302.001s sustained; 5N.4–5N.6 NOT RUN.
 
-## 27.09.2026 — physical Android binary gate PASS
+## 27.09.2026 — Family E2E gate PASS
+
+Scope5N.3 сохранён: existing Device Identity/FAMILY admission, не повтор plaintext
+echo. Clean runtime `5dd8b49`: isolated TLS1.3/mutual identity certificates поверх
+неизменного VP8, disposable authority на existing ProductStore, без production DB/
+provisioning изменений. Diagnostic APK `5N.3-test-only`/code2 собран, временно
+установлен на Redmi, затем удалён; не опубликован. Sustained151×16KiB/302.000773s:
+avg1999.913819ms, p50/p95/p99=2000.067656/2013.326301/2044.018489ms;
+useful aggregate(TX+RX)0.131071665Mbit/s, one-way0.065535832. Ceiling не установлен.
+Accepted full run374 exact echoes/TX=RX4,564,257B, corruption/timeout/disconnect0.
+Unknown/wrong/revoked и old TLS handshake rejected на real carrier; native replay,
+ctx/SIGTERM/activity/force-stop/remote-exit/WS-close/PC-close/network-loss/explicit
+fresh recovery PASS. Wi-Fi handoff NOT TESTED: сеть не connected.
+Два предыдущих full runs FAIL после150/153 checks: старые SSH parent sessions
+закрылись на320s до echo timeout. Test-only independent observer устранил lifetime
+dependency, **без изменения runtime/retries/deadlines**; точный OS signal неизвестен.
+Оба FAIL сохранены, не включены в zero-error accepted window. Harness `e4b67f8`.
+Race×3/vet/modules/fuzz PASS;91 Python tests,6 JVM tests/build/lint PASS.
+Own test PIDs/remote dirs0; APK/private inputs и local disposable artifacts удалены.
+No production rollout/push. [Отчёт/evidence/rollback](releases/2026-09-27-webrtc-eu3-family-session.ru.md).
+**NEXT: решение о5N.4 (один TCP→HTTPS через EU), не начат.** TUN/full VPN/Device Core,
+protected sockets, performance ceiling и production readiness не доказаны.
+
+## 27.09.2026 — physical Android binary gate PASS (checkpoint до5N.3)
 
 Отдельный `com.familyconnect.telemosttest`, debug version1/5N.2-test-only,
 переиспользует тот же `carrier/cmd/telemost-binary` как Android PIE child process.

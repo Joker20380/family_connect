@@ -3,13 +3,16 @@
 **Текущий critical path — 5N:** [Restricted Android→Telemost VP8→Linux EU](PLAN.md).
 Новый разработчик restricted connectivity начинает с 5N design
 ([DECISION](reticulum/HOME_GATEWAY_DESIGN.md#decision-restricted-webrtc-to-eu-gateway-first--2026-09-25))
-и gate WEBRTC-EU-1 / 5N.1. Home Gateway и RNS-over-WebRTC — secondary / backlog.
+и актуального gate в STATUS:5N.1/5N.2/5N.3 PASS; дальнейшая5N.4 требует отдельного
+решения. [Отчёт5N.3/evidence](releases/2026-09-27-webrtc-eu3-family-session.ru.md).
+Home Gateway и RNS-over-WebRTC — secondary / backlog.
 
 **Приоритет25.09 уточнён:** [Restricted Android→Telemost VP8→Linux EU](PLAN.md)
 без обязательного Windows Home Gateway/IP-over-RNS. Reticulum control/recovery
 сохраняется. [Решение в существующем дизайне](reticulum/HOME_GATEWAY_DESIGN.md).
 Добавлены WEBRTC-EU-1–6/5N; сначала binary/auth, затем TCP+DNS/full-device.
-Текущий scope — документация/preparation; существующие AWG/TCP/XHTTP не заменяются.
+Preparation-only относилось к25.09; текущие runtime/gates — в STATUS/PLAN.
+Существующие AWG/TCP/XHTTP не заменяются.
 
 **WebRTC underlay — подготовка25.09 (backlog):** [существующий Home Gateway design](reticulum/HOME_GATEWAY_DESIGN.md)
 расширен path manager/provider/IPC contracts, исследованием WB/Telemost и gates
