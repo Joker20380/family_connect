@@ -39,8 +39,9 @@ def main():
         with connection:
             connection.settimeout(650)
             if args.mode == 'remote_reset':
+                payload = connection.recv(777)
                 connection.setsockopt(socket.SOL_SOCKET, socket.SO_LINGER, struct.pack('ii', 1, 0))
-                print(json.dumps({'event': 'fixture_reset'}), flush=True)
+                print(json.dumps({'event': 'fixture_reset', 'received_before_reset': len(payload)}), flush=True)
                 return
             if args.mode == 'remote_close':
                 print(json.dumps({'event': 'fixture_clean_close'}), flush=True)

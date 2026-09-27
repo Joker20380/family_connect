@@ -130,6 +130,11 @@ func tcpMetrics(ctx context.Context, stats func() tcpforward.Stats, snapshot fun
 }
 
 func tcpFault(stream *tcpforward.Stream, config tcpConfig, result map[string]any) error {
+	if config.Mode == "remote_reset" {
+		if _, err := stream.Write(make([]byte, 1024)); err != nil {
+			return err
+		}
+	}
 	payload, err := io.ReadAll(io.LimitReader(stream, 65537))
 	if config.Mode == "remote_reset" {
 		if !errors.Is(err, tcpforward.ErrReset) {

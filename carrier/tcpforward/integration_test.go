@@ -220,3 +220,22 @@ func TestAuthenticationRequired(test *testing.T) {
 		test.Fatal("unauthenticated gateway")
 	}
 }
+
+func TestAuthenticatedImmediateResetPreservesOpen(test *testing.T) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	client, server := authenticatedPair(test, ctx)
+	port := startFixture(test, func(connection *net.TCPConn) { connection.SetLinger(0) })
+	done := make(chan error, 1)
+	go func() { done <- Serve(ctx, server, Policy{TestOnlyLoopbackPort: port}, nil) }()
+	stream, err := OpenTCP(ctx, client, OpenRequest{Host: "127.0.0.1", Port: port})
+	if err != nil {
+		test.Fatalf("OPEN_OK lost during reset: %v", err)
+	}
+	_, err = io.ReadAll(stream)
+	if err != ErrReset {
+		test.Fatalf("RST became EOF: %v", err)
+	}
+	stream.Close()
+	completed(test, done, false)
+}

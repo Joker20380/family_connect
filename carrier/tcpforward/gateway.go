@@ -86,7 +86,14 @@ func serve(ctx context.Context, endpoint familysession.PacketEndpoint, policy Po
 		if err != nil {
 			metrics.update(func(stats *Stats) { stats.Resets++ })
 			_ = boundedControl(endpoint, resetFrame)
-			cancel()
+			connection.Close()
+			timer := time.NewTimer(10 * time.Second)
+			select {
+			case <-ctx.Done():
+			case <-timer.C:
+				cancel()
+			}
+			timer.Stop()
 		}
 		reverse <- err
 	}()
