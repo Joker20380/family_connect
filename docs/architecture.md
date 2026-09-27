@@ -25,6 +25,12 @@ store integration. **5N.3 PASS**: physical Android374 exact echoes/302.001s sust
 live admission/replay rejection and lifecycle/recovery. Two earlier SSH-lifetime
 failures are retained; accepted run isolates its observer without carrier changes.
 [Report/limits](releases/2026-09-27-webrtc-eu3-family-session.ru.md).
+5N-REL-1 now inserts `ReliableStream` **below TLS and above VP8/RTP** in Family
+mode. Cumulative ACK + bounded selective-repeat/SACK restores ordered bytes before
+TLS; sender8/receiver16,16KiB defaults, no crypto/auth changes or unreliable fallback.
+Fresh bidirectional epochs scope each attempt, not an additional authentication
+layer. Plaintext carrier mode is unchanged. [Protocol/threat boundary](../carrier/reliablestream/README.md)
+and [physical/local acceptance record](releases/2026-09-27-webrtc-5n-rel1-reliable-stream.ru.md).
 No egress gateway, TUN or production transport integration. All sockets remain
 unprotected; future HTTP/WS/Pion transport.Net/DNS protection requires an explicit
 cross-process SCM_RIGHTS+protect ACK bridge or in-process JNI, not child fd integers.
@@ -61,8 +67,9 @@ Telemost first, WB fallback after real-network validation; no second transport
 manager/TUN converter unless reuse is shown unsuitable. Phase1 TCP+DNS, phase2
 UDP with reserved framing; unsupported UDP/IPv6 must not escape directly. Provider
 is untrusted; encryption of payloads, destinations and DNS is above carrier and
-Family admission precedes any egress. Secure-session/reliability/mux selection is
-an open implementation prerequisite. One conference supports many connections.
+Family admission precedes any egress. Production integration of secure sessions,
+reliability and mux remains open; isolated TLS/reliability is covered by5N.3/REL-1,
+not a deployed production multiplexer. One conference supports many connections.
 Reticulum encapsulation is optional and benchmark-driven, not mandatory for5N.
 [Existing design/decision](reticulum/HOME_GATEWAY_DESIGN.md) · [Gates](PLAN.md).
 

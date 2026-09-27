@@ -10,6 +10,28 @@
 - **WEBRTC-EU-3 / 5N.3 = PASS**: physical Android Family E2E over VP8,
   374 exact echoes,302.001s sustained; 5N.4–5N.6 NOT RUN.
 
+## 27.09.2026 — 5N-REL-1 = PASS: reliable bytes before TLS
+
+Architecture: Family TLS1.3 → bounded ReliableStream → unchanged Telemost VP8/RTP.
+Core `ecc884c`, actual clean CLI/APK build `d14a92f`; test/observer `bbcea5e`.
+Selective repeat: cumulative ACK +32-bit SACK, sender8/receiver16, DATA16KiB,
+RTO1s/retries8/MaxAge20s, bounded memory and producer backpressure.
+Deterministic faults, TLS recovery/exhaustion, Go race×3/vet/modules/fuzz PASS.
+Physical Redmi→real SFU→Amsterdam300s PASS: offered cap2Mbit/s, delivered1.883505,
+4315/4315 exact echoes, bad-MAC/corruption/duplicate/reorder/unexpected close0.
+Accepted60s runs recovered29/29 natural block gaps (25 RTP gap events), max1578.496ms;
+controlled seq2 also recovered874.979ms with surviving TLS. No TUN/DC substitution.
+Final canonical500 exact echoes/300.439s sustained PASS. Native auth/WS/PC/replay,
+live admission negatives, cancel/activity/force-stop/remote-exit/network-loss and
+explicit fresh recovery PASS. Go race×3/vet/modules/fuzz,153 Python, Android build/
+6 JVM/lint and ARM11 reliability/7 carrier/9 CLI/7 Family groups PASS.
+Three incomplete/failed harness/observer attempts retained separately, no core
+tuning/retries-to-green. APK uninstalled;15 Android/22 Amsterdam known PIDs gone,
+temporary remote/native dirs0; local private fixtures/builds/logs/helpers removed.
+Radios1/1 restored; sanitized20-run evidence verified. No unfinished REL-1 checks.
+No public versions/catalogs/production/push. [Report/protocol/limits](releases/2026-09-27-webrtc-5n-rel1-reliable-stream.ru.md).
+**STOP**; no automatic5N-PERF-2/5N.4. Capacity ceiling/production readiness not claimed.
+
 ## 27.09.2026 — 5N-PERF-1 = FAIL: sustainable ceiling NOT ACCEPTED
 
 Baseline воспроизведён на неизменном runtime:301.991478843s,151×16KiB,

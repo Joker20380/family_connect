@@ -7,6 +7,17 @@ adds an opt-in authenticated Family TLS1.3 session above the unchanged VP8 carri
 Without private operator credentials it remains the plaintext5N.2 diagnostic.
 DTLS is not Family E2E. Only generated random payloads are used.
 
+5N-REL-1 diagnostic builds preserve APK code2/name`5N.3-test-only`; exact source
+and hashes, not this reused local debug label, identify an installed test build.
+Family mode now uses `TLS → ReliableStream → VP8/RTP`, sender8/receiver16,
+payload16KiB. See [protocol](../../../carrier/reliablestream/README.md) and the
+[acceptance report](../../../docs/releases/2026-09-27-webrtc-5n-rel1-reliable-stream.ru.md).
+No public artifact, signed catalog or invitation-page version changes.
+**REL-1 PASS27.09**, clean CLI/APK d14a92f:300s/4315 exact echoes,
+1.883505Mbit/s useful RX at pacing cap2, natural and controlled gap recovery
+without TLS failure; canonical500 echoes and lifecycle/admission regression PASS.
+Test APK and disposable credentials were removed after validation.
+
 **5N.3 PASS27.09**: runtime5dd8b49, physical Redmi374 exact echoes/302.001s,
 live Family negatives/replay and lifecycle/recovery. Diagnostic APK was subsequently
 uninstalled, never distributed. [Report/hashes/limits](../../../docs/releases/2026-09-27-webrtc-eu3-family-session.ru.md).
@@ -56,7 +67,8 @@ apply. Useful metrics count application bytes, excluding TLS/test headers/RTP;
 one-way=TX×8/elapsed/1e6; aggregate=(TX+RX)×8/elapsed/1e6. RTT samples are bounded
 to4096/phase; nearest-rank p50/p95/p99 appear only when the sample set is complete.
 Ordering is additionally checked by monotonic sequence inside encrypted test
-messages. Loss/reorder that TLS cannot authenticate closes/times out, never retries.
+messages. ReliableStream retries carrier blocks below TLS; application operations,
+authentication and session reconnection are never automatically retried.
 
 ## Opt-in 5N-PERF-1 measurement harness
 
@@ -64,6 +76,12 @@ The default canonical suite is unchanged. `--performance-config` in the physical
 runner installs a private, non-secret `performance.input` containing bounded JSON:
 `window` (1–128), `payload` (1024–65536 bytes), `seconds` (1–300),
 `warmup_seconds` (1–30), `rate_mbit_s` (zero for sliding window, or0.01–4).
+For REL-1 only, optional `backpressure:true` treats the configured rate as a pacing
+upper bound: a full application window waits, without accumulating pacing debt or
+catch-up bursts. Report actual TX/RX rates and `backpressure_events`; PASS does not
+assert the requested rate was attained. Default false retains PERF-1's strict
+offered-load failure behavior. Both application and reliable windows remain8 for
+the initial REL-1 checks. `reliability_final` is an allowlisted numeric event.
 Only authenticated VP8 is accepted. Independent send/receive workers preserve
 exact byte validation and monotonic sequence association; no carrier/framing/auth
 change, automatic retry, recovery, TUN or production integration is introduced.

@@ -2,7 +2,23 @@
 
 ## Current engineering priority / Текущий critical path
 
+- **5N-REL-1 = PASS**, explicitly authorized
+  successor to PERF-1 investigation. TLS → bounded selective-repeat ReliableStream
+  → unchanged VP8/RTP; sender8/receiver16,16KiB. Physical300s accepted data run:
+  4315 exact echoes, delivered1.883505Mbit/s at offered cap2; no bad MAC/corruption.
+  Natural29/29 gaps and controlled seq2 recovered with TLS survival. Deterministic
+  faults/security/native/physical checks PASS; canonical500 exact echoes, live
+  admission negatives/lifecycle/network-loss/fresh recovery PASS. Go race×3/vet/
+  modules/fuzz,153 Python, Android build/6 JVM/lint/ARM suites PASS. APK/private
+  artifacts removed; own PIDs/remote dirs0, radios1/1 restored. Three failed/incomplete
+  harness attempts preserved; sanitized20-run evidence verified. Runtime `ecc884c`,
+  clean build `d14a92f`, final tests/observer `bbcea5e`. No rollout/push.
+  [Report](releases/2026-09-27-webrtc-5n-rel1-reliable-stream.ru.md).
+  **STOP**, no automatic5N-PERF-2 or5N.4; no unfinished REL-1 checks.
+
 - **5N-PERF-1 = FAIL — измерения завершены, sustainable ceiling NOT ACCEPTED**.
+  Historical raw-TLS/VP8 boundary; loss recovery is addressed by REL-1 above,
+  without retroactively promoting this old capacity gate or claiming a ceiling.
   Canonical baseline reproduced; все7 windows,6 offered rates и5 payload sizes
   проверены. Error-free60s peak1.992294Mbit/s (paced2), completed300s
   0.130635Mbit/s (16KiB/window2); high-load long checks FAIL with TLS/RTP gaps.

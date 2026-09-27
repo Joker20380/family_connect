@@ -23,10 +23,18 @@ remain in evidence; independent SSH observer isolates the accepted test endpoint
 [Profile/reuse boundary](../docs/testing/webrtc-eu3-session-profile.md) and
 [disposable authority/operator runbook](../clients/android/telemost-runtime/README.md).
 No crypto/SFU/pacing replacement, automatic reconnect or production credential
-issuer is included. TLS over the lossy carrier fails closed; no reliability is added.
+issuer is included. 5N-REL-1 now inserts a bounded selective-repeat adapter before
+TLS receives bytes: [protocol/bounds/threat boundary](reliablestream/README.md).
+`familysession.Open` always uses it; plaintext carrier mode is unchanged.
+This is experimental, not a production rollout or TCP/VPN readiness claim.
+**5N-REL-1 PASS27.09**: physical300s/4315 exact echoes,1.883505Mbit/s useful RX
+at pacing cap2;29 natural block gaps recovered in accepted60s sessions and one
+separately injected gap recovered below TLS. Auth/lifecycle/regression/cleanup PASS.
+[Exact scope, failed harness attempts and report](../docs/releases/2026-09-27-webrtc-5n-rel1-reliable-stream.ru.md).
 
 `pilot/android-telemost/family_checks.py` runs physical native unit, live WS/PC
-closure, and old-transcript replay cases. It takes `--case unit|ws-close|peer-close|replay`,
+closure, old-transcript replay and controlled reliability-gap cases. It takes
+`--case unit|ws-close|peer-close|replay|reliable-gap`,
 `--adb`, `--binary` (Linux CLI), `--native-test` (Android PIE Go test executable),
 `--family-dir` and a new private `--out`. Unit mode uses `familysession`'s test
 executable; other modes use `telemost`'s. Build with the same Android toolchain as
@@ -35,6 +43,11 @@ The replay test captures only in memory, proves an initial exact authenticated
 echo, closes it, waits for an explicitly restarted B, and sends the old transcript
 through a fresh real VP8 carrier. PASS additionally requires B's new
 `family_auth accepted=false`, not just the client test exit code.
+The replay observer waits up to35s for that refusal before cleanup; stale epochs
+are discarded below TLS rather than immediately causing a TLS parse failure.
+`reliable-gap` drops one DATA only in the native test binary, after admission,
+and checks eight exact encrypted echoes plus matching receiver gap/recovery and
+sender retransmission evidence. The CLI/APK cannot enable that injector.
 
 ## Build and preliminary checks
 

@@ -14,13 +14,18 @@ physical Android374 exact echoes/302.001s, live negatives/replay/lifecycle/recov
 Earlier SSH-lifetime failures remain in evidence; no production authority rollout.
 [Current report](../releases/2026-09-27-webrtc-eu3-family-session.ru.md).
 No later stage is promoted by local tests or a short authenticated echo.
+5N-REL-1 adds the missing reliability boundary: Family TLS → bounded ReliableStream
+→ unchanged VP8/RTP. This does not advance TCP/mux/TUN stages or production rollout.
+[Protocol/bounds](../../carrier/reliablestream/README.md) ·
+[REL-1 PASS, limits and cleanup](../releases/2026-09-27-webrtc-5n-rel1-reliable-stream.ru.md).
 
 ## DECISION: restricted WebRTC to EU Gateway first — 2026-09-25
 
 **For restricted mobile networks, direct WebRTC carrier to EU Gateway has priority
 over routing through Windows Home Gateway.** This is a critical-path correction,
-not a restart or removal of Reticulum/Home Gateway. Current authorized work remains
-documentation and implementation preparation; no new runtime is claimed here.
+not a restart or removal of Reticulum/Home Gateway. The original25.09 decision was
+preparation-only; current authorized runtime work and proof are in PLAN and the
+implementation addenda above, not implied by the future design below.
 Earlier sections below describe retained secondary designs and prior decisions;
 their old immediate-next-step ordering is superseded by this section and PLAN.
 

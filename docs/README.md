@@ -106,6 +106,11 @@ installed/deployed versions; dated reports preserve what was checked at that tim
 
 ## Developers
 
+- [5N-REL-1: reliable ordered bytes before Family TLS](releases/2026-09-27-webrtc-5n-rel1-reliable-stream.ru.md):
+  bounded selective repeat/SACK, deterministic fault matrix, natural/injected live
+  gap recovery and300s physical Android validation, **PASS**; cleanup complete.
+  [Wire format, limits and threat boundary](../carrier/reliablestream/README.md).
+
 - [5N-PERF-1: physical VP8 capacity measurements](releases/2026-09-27-webrtc-5n-perf1-carrier-capacity.ru.md):
   window/offered-load/payload sweeps, timing and raw media evidence; long-run
   integrity failures prevent accepting a sustainable carrier ceiling. No5N.4/rollout.
