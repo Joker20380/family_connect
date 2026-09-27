@@ -5,8 +5,26 @@
 - active engineering critical path — **5N: Restricted WebRTC Android→EU**
   (Telemost VP8 → Linux EU gateway → TCP+DNS → Internet).
 - **WEBRTC-EU-1 / 5N.1 = PASS**: настоящий local Linux ↔ Telemost VP8 ↔ Amsterdam.
-- **NEXT = WEBRTC-EU-2 / 5N.2**, но5N.2 в этой сессии НЕ начат;
-  5N.2–5N.6 остаются NOT RUN.
+- **CURRENT = WEBRTC-EU-2 / 5N.2**: isolated Android diagnostic APK;
+  physical Redmi Note9 Pro/Android12/arm64 preliminary7-size VP8 echo PASS.
+  Full clean-runtime acceptance/lifecycle ещё выполняются; gate пока OPEN.
+  5N.3–5N.6 NOT RUN, не начинать автоматически.
+
+## 27.09.2026 — Android binary gate in progress
+
+Отдельный `com.familyconnect.telemosttest`, debug version1/5N.2-test-only,
+переиспользует тот же `carrier/cmd/telemost-binary` как Android PIE child process.
+Не копирует Go core, не использует JNI/Chaquopy/production AWG runtime и не
+меняет beta51/Transport selection. No TUN/FAMILY auth, sockets НЕ protected.
+Native build/race/vet/module verification, Android build/unit/lint PASS;
+физический телефон по USB: Redmi Note9 Pro, Android12/API31, arm64-v8a.
+Предварительный real cellular↔Telemost↔Amsterdam VP8:7 размеров1B–64KiB exact;
+это не полная acceptance. Android parent/child исчезли после force-stop.
+Следующий шаг — clean commit/runtime, полная матрица и lifecycle evidence.
+[Текущий отчёт](releases/2026-09-27-webrtc-eu2-android-binary.ru.md)
+· [Build/operator runbook](../clients/android/telemost-runtime/README.md).
+Ни APK, ни изменения не опубликованы; production rollout отсутствует.
+Rollback: остановить/удалить только diagnostic APK и временный nobody echo.
 
 ## 27.09.2026 — real Telemost VP8 acceptance PASS
 

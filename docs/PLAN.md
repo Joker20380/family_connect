@@ -11,9 +11,12 @@
   Waiting room не потребовался; application heartbeat устранил live WS4008.
   Race×3/fuzz/vet/modules и live WS-close/SIGTERM/remote exit PASS; temporary
   EU process/artifacts удалены, production/версии/каталоги не менялись.
-  **NEXT = WEBRTC-EU-2 / 5N.2**, но НЕ запускать автоматически: текущая сессия
-  остановлена после5N.1. Android/TUN/Family auth/TCP/WB не начинались.
+  **CURRENT = WEBRTC-EU-2 / 5N.2**: Android разрешён отдельным запросом;
+  standalone test APK/shared Go carrier, physical preliminary7-size VP8 PASS.
+  Full clean-runtime suite/lifecycle ещё выполняются; gate OPEN.
+  TUN/Family auth/TCP/WB не начинались,5N.3 не запускать автоматически.
   [Отчёт/оставшиеся проверки](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md).
+  [Android5N.2 checkpoint](releases/2026-09-27-webrtc-eu2-android-binary.ru.md).
 - затем: **5N.2 → 5N.3 → 5N.4 → 5N.5 → 5N.6**.
 - после этого: restricted-mobile acceptance **5M**.
 - **WB fallback** — только после подтверждения Telemost на реальной сети.
@@ -77,7 +80,7 @@ home IP/NAT, Windows routing, включённого ПК и лишнего до
 разрешил восстановить и продолжить только5N.1 transport PoC; carrier реализован
 локально; последующая live-проверка27.09 закрыла5N.1 (см. current priority).
 Прежний preparation-only scope
-относился к25.09, не запрещает текущую работу и не разрешает переход к Android.
+относился к25.09; после5N.1 PASS пользователь отдельно разрешил5N.2 Android.
 Старые немедленные планы через Windows/RNS ниже — история прежнего приоритета,
 а не условия начала нового track. Существующие номера5A–5M не переиспользовать.
 
@@ -86,7 +89,7 @@ home IP/NAT, Windows routing, включённого ПК и лишнего до
 | Gate / подэтап | Результат | Статус |
 | --- | --- | --- |
 | WEBRTC-EU-1 / 5N.1 | Два независимых Linux через настоящий Telemost VP8: byte-for-byte binary echo нескольких размеров | PASS27.09:291 checks,30s/5min и live failure cleanup; source a13068e |
-| WEBRTC-EU-2 / 5N.2 | Android↔EU Linux binary round trip без TUN | Не запускался |
+| WEBRTC-EU-2 / 5N.2 | Android↔EU Linux binary round trip без TUN | In progress: standalone APK, physical preliminary7-size VP8 PASS; full/lifecycle pending |
 | WEBRTC-EU-3 / 5N.3 | E2E Family session с existing Device Identity/FAMILY; wrong/revoked/replay rejected | Не запускался |
 | WEBRTC-EU-4 / 5N.4 | Один TCP stream: реальный HTTPS response через EU | Не запускался |
 | WEBRTC-EU-5 / 5N.5 | Много TCP/API/browser/DNS streams в одной carrier session | Не запускался |

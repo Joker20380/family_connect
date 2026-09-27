@@ -8,9 +8,16 @@ framing, Telemost join/signaling, VP8 and a separate diagnostic DC mode exist;
 local two-process Pion tests pass. Real Linux↔Telemost VP8↔Amsterdam **5N.1 PASS**
 on27.09, clean runtime `a13068e`: 291 exact echoes including30s/5min and live
 failure teardown. Observed RTT≈4s and useful roundtrip≈0.0655Mbit/s are limitations,
-not production performance acceptance. 5N.2 is next but not started.
-No Family auth, gateway, Android or VPN
-integration is implemented by this checkpoint. [Evidence](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md).
+not production performance acceptance. [5N.1 evidence](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md).
+
+5N.2 now has a separate [Android diagnostic APK](../clients/android/telemost-runtime/README.md):
+shared Go core → unchanged Linux CLI or Android PIE CLI child → bounded foreground
+test Service/Activity. No second source copy, Java WebRTC, JNI or product Go runtime.
+Physical preliminary7-size echo PASS; full acceptance/lifecycle remains in progress.
+No Family auth, gateway, TUN or production transport integration. All sockets remain
+unprotected; future HTTP/WS/Pion transport.Net/DNS protection requires an explicit
+cross-process SCM_RIGHTS+protect ACK bridge or in-process JNI, not child fd integers.
+[5N.2 report](releases/2026-09-27-webrtc-eu2-android-binary.ru.md).
 
 Priority correction25.09, preparation-only: remove the Windows home-PC detour from
 restricted mobile Internet access. Reticulum is retained for identity binding,

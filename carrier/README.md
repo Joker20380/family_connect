@@ -5,9 +5,11 @@ Recovered from the interrupted DeepSeek worktree, not a second carrier.
 Amsterdam Linux exchanged 291 exact synthetic echoes through **real Telemost VP8**,
 including the 30-second and five-minute phases. See the linked result record for
 the exact clean revision, artifact hash, low throughput/high RTT and fault checks.
-This is not Android, restricted-mobile or production acceptance; 5N.2 is not started.
+This result is not Android, restricted-mobile or production acceptance. The separate
+[5N.2 Android diagnostic APK](../clients/android/telemost-runtime/README.md) now
+reuses this exact CLI/core; its physical-device acceptance is recorded separately.
 Local Pion and DataChannel results alone do not close the gate.
-No Android, Family auth, VPN, proxy, routing, DNS or product integration is here.
+No Family auth, VPN, proxy, routing, DNS or product integration is here.
 Use synthetic random data only: the SFU is untrusted and DTLS is not Family E2E.
 
 ## Build and preliminary checks

@@ -12,6 +12,7 @@ import (
 	"os/signal"
 	"runtime"
 	"runtime/debug"
+	"sync"
 	"syscall"
 	"time"
 
@@ -32,7 +33,11 @@ func run() error {
 	sustained := flag.Duration("sustained", 30*time.Second, "sustained probe duration after size/batch checks")
 	extended := flag.Bool("extended", false, "run another five minutes after successful sustained check")
 	settle := flag.Duration("settle", 3*time.Second, "wait for remote media slots before probing")
+	metricsInterval := flag.Duration("metrics-interval", 0, "optional memory/CPU sample interval (1s to 1m; zero disables)")
 	flag.Parse()
+	if *metricsInterval != 0 && (*metricsInterval < time.Second || *metricsInterval > time.Minute) {
+		return errors.New("invalid metrics interval")
+	}
 	if (*role != "probe" && *role != "echo") || (*modeName != "vp8" && *modeName != "datachannel") || *duration <= 0 || *duration > time.Hour || *sustained < 0 || *sustained > 5*time.Minute || *settle < 0 || *settle > time.Minute {
 		return errors.New("invalid harness options")
 	}
@@ -50,12 +55,18 @@ func run() error {
 	}
 	defer session.Close()
 	encoder := json.NewEncoder(os.Stdout)
+	var outputMu sync.Mutex
 	emit := func(event map[string]any) error {
+		outputMu.Lock()
+		defer outputMu.Unlock()
 		event["utc"] = time.Now().UTC().Format(time.RFC3339Nano)
 		return encoder.Encode(event)
 	}
+	stopMetrics := startMetrics(ctx, *metricsInterval, emit)
+	defer stopMetrics()
 	defer func() {
 		_ = session.Close()
+		stopMetrics()
 		var usage syscall.Rusage
 		_ = syscall.Getrusage(syscall.RUSAGE_SELF, &usage)
 		var memory runtime.MemStats
@@ -115,7 +126,7 @@ func run() error {
 			return err
 		}
 	}
-	return emit(map[string]any{"event": "suite_complete", "byte_for_byte": true, "gate_eligible_mode": mode == telemost.ModeVP8, "note": "requires independent Linux endpoints and recorded real Telemost room/media evidence; no automatic gate promotion"})
+	return emit(map[string]any{"event": "suite_complete", "byte_for_byte": true, "gate_eligible_mode": mode == telemost.ModeVP8, "note": "requires independent endpoints and recorded real Telemost room/media evidence; Android gate also requires a physical device; no automatic gate promotion"})
 }
 
 func probe(ctx context.Context, session *telemost.Session, emit func(map[string]any) error, phase string, size, count int, duration time.Duration) error {
@@ -162,7 +173,7 @@ func probe(ctx context.Context, session *telemost.Session, emit func(map[string]
 }
 
 func buildMetadata() map[string]any {
-	metadata := map[string]any{"os": runtime.GOOS, "arch": runtime.GOARCH, "go": runtime.Version()}
+	metadata := map[string]any{"os": runtime.GOOS, "arch": runtime.GOARCH, "go": runtime.Version(), "pid": os.Getpid(), "parent_pid": os.Getppid()}
 	if info, ok := debug.ReadBuildInfo(); ok {
 		for _, dependency := range info.Deps {
 			if dependency.Path == "github.com/pion/webrtc/v4" {

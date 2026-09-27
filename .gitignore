@@ -36,6 +36,9 @@ clients/android/awg-generated
 
 clients/android/control-tests/.gradle/
 clients/android/chat-runtime/.gradle/
+clients/android/telemost-runtime/.gradle/
+clients/android/telemost-runtime/native-generated/
+clients/android/telemost-runtime/local.properties
 
 state-product-https/
 

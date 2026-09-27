@@ -1,6 +1,9 @@
 # Linked carrier dependencies — 2026-09-27
 
 Inventory of `go list -deps ./cmd/telemost-binary`, Go 1.27.1, Linux/amd64.
+Android/arm64 CGO inventory for5N.2 on27.09 matches the same23 external modules.
+The standalone test APK retains these notices plus original NDK/LLVM notices
+conservatively (not evidence that every component listed there is linked).
 Pinned by go.mod/go.sum; no vendored or modified dependency implementation.
 Google UUID is required transitively by Pion, not by our UUID helper.
 All module-root LICENSE files and additional LICENSES/ notices are retained

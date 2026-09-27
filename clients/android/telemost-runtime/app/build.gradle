@@ -1,0 +1,36 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'com.familyconnect.telemosttest'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'com.familyconnect.telemosttest'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '5N.2-test-only'
+        ndk { abiFilters 'arm64-v8a' }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    sourceSets.main {
+        jniLibs.srcDirs = ['../native-generated/jniLibs']
+        assets.srcDirs = ['../native-generated/assets']
+    }
+    packagingOptions.jniLibs {
+        useLegacyPackaging = true
+        keepDebugSymbols += ['**/libfc_telemost.so']
+    }
+}
+tasks.configureEach { task ->
+    if (task.name.toLowerCase().contains('release')) task.enabled = false
+}
+tasks.named('preBuild') {
+    doFirst {
+        if (!file('../native-generated/jniLibs/arm64-v8a/libfc_telemost.so').isFile()) {
+            throw new GradleException('Build the shared carrier using pilot/android-telemost/build.py first')
+        }
+    }
+}
+dependencies { testImplementation 'junit:junit:4.13.2' }

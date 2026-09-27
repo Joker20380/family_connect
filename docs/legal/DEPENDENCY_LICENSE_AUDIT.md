@@ -10,6 +10,15 @@ records the subsequently authorized, recovered5N.1 prototype.
 
 ## Recovered Telemost carrier — 2026-09-27
 
+5N.2 Android addendum: Go1.27.1 Android/arm64 CGO `go list -deps` matches the
+same23 external modules/versions below. No module fork, new RTC stack or copied
+implementation. Android build uses NDK28.2.13676358 and unmodified pinned anet's
+documented linker workaround; runtime keeps original notices in APK assets,
+including original NDK and LLVM notices conservatively. Those aggregate notices
+do not establish that every listed compiler/tool component is linked. Java wrapper
+uses Android platform APIs only; JUnit4.13.2 is test-only, not an APK dependency.
+APK is isolated/debug/device-test-only, not a published production release.
+
 `carrier/go.mod` was damaged by shutdown (985 NUL bytes); original version pins
 cannot be inferred. Original bytes are preserved in recovery commit `ee3a830`.
 Reconstructed pins: `pion/webrtc/v4 v4.2.15` (research version, now actually used),
