@@ -74,14 +74,16 @@ export FC_TELEMOST_ROOM
 
 ```sh
 # Linux B — EU endpoint
-/tmp/fc-telemost-binary --role echo --mode vp8 --duration 10m > /tmp/fc-eu1-B.jsonl
+/tmp/fc-telemost-binary --role echo --mode vp8 --duration 25m > /tmp/fc-eu1-B.jsonl
 # Linux A — independent Linux developer machine
 /tmp/fc-telemost-binary --role probe --mode vp8 --sustained 30s --extended \
-  --duration 10m > /tmp/fc-eu1-A.jsonl
+  --duration 25m > /tmp/fc-eu1-A.jsonl
 ```
 
 The suite checks 1 B, 32 B, 256 B, 1/4/16/64 KiB, then 100 × 1 KiB,
 100 × 16 KiB, 30 seconds and (only after success) another 5 minutes.
+The explicit 25-minute overall budget accommodates the observed 2–4-second
+live RTT; each individual echo still has a 10-second deadline, not a retry.
 B checks bounded reassembly and CRC before echo; A byte-compares random payloads.
 An idle peer departure may leave the SFU connection alive: A fails at its 10 s
 receive deadline, B at its operator-set overall deadline. SIGTERM closes cleanly.
@@ -99,6 +101,31 @@ directions (`2 × size × count / elapsed`), not RTP/network wire bitrate. Sessi
 TX counts admitted application bytes; RX counts fully reassembled validated
 messages, not packet capture. No payloads, hashes, URLs, tokens or ICE credentials
 are logged. Write metrics to a local regular file; stdout is not a network service.
+
+Stats also retain at most 128 sanitized signaling/ICE/media events (with an
+overflow counter), selected candidate **types** and protocol, connection-state
+changes and media counters. No candidate address, SDP or credential is retained.
+`VP8_MEDIA_ACTIVE` means a VP8 RTP track arrived, not successful binary decoding;
+only exact echo comparisons prove the latter. Selected host/host and
+`turn_used=false` describe Pion's pair, not every underlying network hop.
+WebSocket failures preserve only the numeric close code, timeout/JSON category,
+and fixed reason keywords, never the server's arbitrary close reason.
+
+The signaling heartbeat uses both WebSocket control pings and a bounded-lifetime
+5-second application `ping` loop; incoming application `pong` is acknowledged.
+Counters distinguish sent application pings, received pongs and generic ACKs.
+Do not infer a successful application pong exchange just from an open socket.
+
+With a separate live echo endpoint still running, an explicitly opted-in test
+checks an exact 1 KiB VP8 echo, closes **only its own** signaling socket, and
+requires terminal receive/send behavior and bounded teardown:
+
+```sh
+FC_TEST_LIVE_SIGNALING_CLOSE=1 go test -v -count=1 -timeout 90s \
+  -run '^TestLiveSignalingClosure$' ./telemost
+```
+
+Normal tests skip this test; the room is read only from `FC_TELEMOST_ROOM`.
 
 Record endpoint distro/kernel separately (`uname -srm`, `/etc/os-release`), room
 creation method (not URL), placement, UTC window and matching source revision.
