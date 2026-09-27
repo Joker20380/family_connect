@@ -5,7 +5,33 @@
 - active engineering critical path — **5N: Restricted WebRTC Android→EU**
   (Telemost VP8 → Linux EU gateway → TCP+DNS → Internet).
 - ближайший runtime milestone — **WEBRTC-EU-1 / 5N.1**.
-- все WEBRTC-EU gates пока **NOT RUN**.
+- **5N.1 OPEN / BLOCKED**: preliminary local VP8 PASS, real Telemost VP8 NOT RUN;
+  5N.2–5N.6 остаются NOT RUN.
+
+## 27.09.2026 — восстановление Telemost carrier после выключения
+
+Сохранён оригинальный DeepSeek checkpoint `ee3a830` поверх `8e36858`, без reset,
+stash или удаления незакоммиченной работы. Найдены 10 untracked файлов `carrier/`;
+`go.mod` содержал 985 NUL-байтов, `go.sum` был пуст. Восстановлены module pins,
+bounded framing/reassembly, Telemost session/signaling, VP8 lifecycle и synthetic
+harness. Source checkpoint `7aed1a8df9aa7af49e7e82d78fd07fa83367fd7e`.
+Go1.27.1 / Pion4.2.15; build, race suite ×3, vet, module verification и fuzz PASS.
+Два локальных Pion процесса: 7 размеров до64KiB +100×1KiB +100×16KiB,
+207 byte-for-byte checks; **это не Telemost acceptance**. VP8 mode отвергает DC.
+Настоящий negative HTTP join вернул404; валидная room/session/ICE/SFU не проверены.
+
+**WEBRTC-EU-1 = BLOCKED**: disposable room URL не предоставлен и
+`FC_TELEMOST_ROOM` не задан. Amsterdam `186.246.45.246` read-only SSH доступен,
+но carrier туда не установлен. Следующий шаг: ручная ephemeral room → A(dev)
+↔ Telemost ↔ B(EU), все размеры/30s/5min и live failure checks. Waiting-room poll
+пока не реализован; текущая схема admission/signaling требует live-проверки.
+Android/5N.2 не начинать до настоящего VP8 PASS. Production, routing и версии
+Android beta51/code51, Linux0.2.11, Windows0.2.15 не менялись; PoC только локально,
+не опубликован/не подписан. Rollback — остановить временный процесс; production
+откатывать нечего. [Отчёт](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md),
+[build/live runbook](../carrier/README.md), [dependency inventory](../carrier/DEPENDENCIES.md).
+
+## Предыдущие checkpoints
 
 26.09 активация (WIP): начато упрощение invitation/activation. Сервер Friends:
 read-only authenticated recovery `POST /friends/device/status` и purpose `status`

@@ -7,6 +7,11 @@ Current execution order lives in [PLAN](../PLAN.md), measured results in
 [STATUS](../STATUS.md). The project has working pilot clients and VPN transports;
 it is no longer only an isolated research laboratory, nor production-ready.
 
+27.09 implementation addendum: the recovered [Go/Pion carrier](../../carrier/README.md)
+implements only5N.1. Local VP8/race tests pass, but no valid real Telemost room
+was provided: WEBRTC-EU-1 stays OPEN/BLOCKED. Admission/waiting-room behavior and
+real SFU media still need acceptance. No later stage is promoted by local tests.
+
 ## DECISION: restricted WebRTC to EU Gateway first — 2026-09-25
 
 **For restricted mobile networks, direct WebRTC carrier to EU Gateway has priority
@@ -329,12 +334,16 @@ Windows broker controls executable verification/process lifetime; Android requir
 an ABI-matched packaged executable and lifecycle tests. Do not assume gomobile
 reference builds prove our separate-process packaging works on Android.
 
-Proposed IPC v1, to freeze with conformance vectors before coding:
+Original proposed IPC v1, before the unshipped27.09 implementation:
 `u32be body_length | u8 version | u8 opcode | u32be request_id | payload`.
 Body bound 64 KiB, control JSON bound 16 KiB; reject unsupported versions/types,
 truncation, invalid lengths/JSON and unsolicited state transitions before allocation.
 Payload opcodes preserve exact bytes, including zero bytes; max RNS frame size is
 negotiated with the pinned adapter, not inferred from this IPC envelope bound.
+The27.09 codec corrects the body bound to65,542 bytes so a full65,536-byte payload
+fits with its six-byte header. There were no deployed consumers of the earlier
+proposal. Only the codec and a synthetic Session-API harness exist, not a full
+OPEN/SEND/STATUS process protocol server. No RNS integration is claimed.
 Commands: OPEN, SEND, PING, STATUS, CLOSE. Responses/events: OPENED, RECV, PONG,
 STATUS, ERROR, CLOSED. Frame counters and sanitized errors only in diagnostics;
 stdout is exclusively framed IPC. Bounded queues, backpressure, serialization of

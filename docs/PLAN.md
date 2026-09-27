@@ -5,6 +5,12 @@
 - current: **5N — Restricted WebRTC Android→EU** (Telemost VP8 carrier → authenticated
   Family session → headless Linux EU gateway → TCP+DNS → Internet).
 - immediate engineering gate: **WEBRTC-EU-1 / 5N.1**.
+- 27.09: **5N.1 OPEN / BLOCKED**, восстановлен DeepSeek carrier (`ee3a830`),
+  исправленный source `7aed1a8`; local двухпроцессный VP8/race/fuzz PASS,
+  но нет предоставленной disposable Telemost room и real A↔SFU↔B evidence.
+  Далее только5N.1: room → independent dev/EU echo →30s→5min→live failures;
+  проверить admission (waiting-room poll ещё отсутствует), SDP/ICE/SFU.
+  [Отчёт/оставшиеся проверки](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md).
 - затем: **5N.2 → 5N.3 → 5N.4 → 5N.5 → 5N.6**.
 - после этого: restricted-mobile acceptance **5M**.
 - **WB fallback** — только после подтверждения Telemost на реальной сети.
@@ -64,8 +70,10 @@ home IP/NAT, Windows routing, включённого ПК и лишнего до
 
 [Решение в существующем дизайне](reticulum/HOME_GATEWAY_DESIGN.md#decision-restricted-webrtc-to-eu-gateway-first--2026-09-25)
 · [Checkpoint](releases/2026-09-25-webrtc-eu-priority.ru.md).
-**Мы на глобальном этапе5: подготовка restricted Android→EU track.** Ранее
-согласованный scope документации/preparation сохранён; runtime пока не реализуется.
+**Мы на глобальном этапе5: restricted Android→EU track.** 27.09 пользователь
+разрешил восстановить и продолжить только5N.1 transport PoC; carrier реализован
+локально, но real Telemost gate остаётся OPEN. Прежний preparation-only scope
+относился к25.09, не запрещает текущую работу и не разрешает переход к Android.
 Старые немедленные планы через Windows/RNS ниже — история прежнего приоритета,
 а не условия начала нового track. Существующие номера5A–5M не переиспользовать.
 
@@ -73,7 +81,7 @@ home IP/NAT, Windows routing, включённого ПК и лишнего до
 
 | Gate / подэтап | Результат | Статус |
 | --- | --- | --- |
-| WEBRTC-EU-1 / 5N.1 | Linux/desktop↔Linux через настоящий Telemost: binary round trip нескольких размеров | Не запускался |
+| WEBRTC-EU-1 / 5N.1 | Два независимых Linux через настоящий Telemost VP8: byte-for-byte binary echo нескольких размеров | OPEN / BLOCKED: нет ephemeral room; local preliminary PASS не закрывает gate |
 | WEBRTC-EU-2 / 5N.2 | Android↔EU Linux binary round trip без TUN | Не запускался |
 | WEBRTC-EU-3 / 5N.3 | E2E Family session с existing Device Identity/FAMILY; wrong/revoked/replay rejected | Не запускался |
 | WEBRTC-EU-4 / 5N.4 | Один TCP stream: реальный HTTPS response через EU | Не запускался |

@@ -103,6 +103,10 @@ installed/deployed versions; dated reports preserve what was checked at that tim
 
 ## Developers
 
+- [Telemost5N.1 carrier: build и live runbook](../carrier/README.md),
+  [recovery/results27.09](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md):
+  local preliminary PASS, real Telemost VP8 OPEN/BLOCKED (нужна disposable room).
+
 - [Contribution and build checks](../CONTRIBUTING.md).
 - [Architecture map](architecture.md): current product versus experimental relay paths.
 - Device identity: [English ADR](adr/001-identity-provisioning.en.md) / [Русский ADR](adr/001-identity-provisioning.ru.md).

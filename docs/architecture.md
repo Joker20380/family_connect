@@ -2,6 +2,13 @@
 
 ## Current decision — Restricted WebRTC to EU Gateway first
 
+2026-09-27 implementation checkpoint: [carrier/](../carrier/README.md) recovers
+the interrupted isolated Go/Pion prototype for **5N.1 only**. Bounded binary
+framing, Telemost join/signaling, VP8 and a separate diagnostic DC mode exist;
+local two-process Pion tests pass. Real Telemost VP8 remains OPEN/BLOCKED pending
+an operator-provided disposable room. No Family auth, gateway, Android or VPN
+integration is implemented by this checkpoint. [Evidence](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md).
+
 Priority correction25.09, preparation-only: remove the Windows home-PC detour from
 restricted mobile Internet access. Reticulum is retained for identity binding,
 control/recovery, provisioning, messages/discovery and future Meshtastic bootstrap.

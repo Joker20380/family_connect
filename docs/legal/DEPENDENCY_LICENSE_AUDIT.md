@@ -5,6 +5,45 @@ notice. No executable code or new dependencies introduced in this change.
 This is a technical provenance/terms review, not an opinion that all historical
 distributions are legally cleared. [Inventory](../../THIRD_PARTY_NOTICES.md).
 
+The scope above is the historical25.09 change. The following27.09 addendum
+records the subsequently authorized, recovered5N.1 prototype.
+
+## Recovered Telemost carrier — 2026-09-27
+
+`carrier/go.mod` was damaged by shutdown (985 NUL bytes); original version pins
+cannot be inferred. Original bytes are preserved in recovery commit `ee3a830`.
+Reconstructed pins: `pion/webrtc/v4 v4.2.15` (research version, now actually used),
+`gorilla/websocket v1.5.3`, `pion/interceptor v0.1.45`, `pion/rtp v1.10.2`,
+`pion/logging v0.2.4`. `go.sum` restored through Go proxy/checksum verification;
+`go mod verify` PASS. No `replace`, forked RTC or whole reference module.
+
+The [23-module linked inventory](../../carrier/DEPENDENCIES.md) records exact
+versions/root LICENSE SHA256 values from `go list -deps ./cmd/telemost-binary`
+on Linux/amd64. Pion roots MIT; UUID/Gorilla/anet/Go x/* BSD-3-Clause. Additional
+Pion BSD-3-Clause and CC0 texts are retained, not overwritten with MIT. Google
+UUID is an actual Pion transitive despite the local auth helper avoiding it.
+[Complete original notices](../../carrier/licenses/dependencies.txt) include
+module LICENSE/NOTICE/LICENSES texts and Go1.27.1's license. No modifications to
+dependency implementations. No GPL/AGPL module is linked by this executable.
+Upstream test/tool-only nodes of the full module graph are explicitly separated;
+their presence in go.sum does not mean they ship in this harness. Re-audit before
+adding them or changing platform/build tags. This is not historical app clearance.
+
+Recovery provenance cannot justify the old Go comment “not copied”: protocol
+maps, layout and byte constants overlap the references. Treat those narrow
+portions as reference-derived and retain both complete notices conservatively:
+
+| Pinned source | Recovered destination / adaptations | Terms / disposition |
+| --- | --- | --- |
+| olcrtc `92b2332769c3dd5000584366201572efc448065f`: `internal/auth/telemost/{api,telemost}.go`, `internal/engine/goolom/{signaling,media,capabilities}.go` | `carrier/telemost/{auth,signaling,session}.go`: HTTP fields, hello/capability maps, pub/sub SDP/ICE; bounded lifecycle, sanitized failures and queues adapted locally | WTFPL v2, Copyright (C)2026 zarazaex; [full notice](../../carrier/licenses/olcrtc.txt) |
+| olcrtc same SHA `internal/transport/vp8channel/wire.go`; whitelist-bypass `7c19a7ec40900940fe0c43ea1db7768ee632393d`: `relay/telemost/api.go`, previously inspected `relay/tunnel/rtc/vp8tunnel.go` | `carrier/telemost/{vp8,signaling}.go`: recovered VP8 prefixes/protocol constants; bounded FC framing is separate, no KCP/session epoch protocol imported | WTFPL v2 + conservative whitelist MIT attribution; [full MIT notice](../../carrier/licenses/whitelist-bypass.txt), original copyright line retained exactly |
+
+No cookies, bearer tokens or room secrets are included. Only a local temporary
+test executable was built; nothing publicly distributed or integrated into
+Android/Linux product/Windows releases. Copy `carrier/licenses/` with any later
+private PoC binary transfer. Proprietary root LICENSE unchanged; reference-code
+terms do not grant Telemost service access or prove provider usage permissions.
+
 ## Repository history and ownership
 
 Audited the available non-shallow local history (`HEAD` at inspection: `3f6f662`),

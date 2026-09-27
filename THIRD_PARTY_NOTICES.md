@@ -51,6 +51,17 @@ license texts with links alone in redistributed packages.
 
 ## WebRTC carrier references — 2026-09-25
 
+**2026-09-27 delta:** the historical reference-only statement below applied to
+25.09. The recovered `carrier/` now links pinned Pion4.2.15, Gorilla1.5.3 and
+their actually used module graph. See the [exact inventory](carrier/DEPENDENCIES.md)
+and [complete offline notices](carrier/licenses/dependencies.txt). No dependency
+source was modified; no product binary includes this prototype yet.
+Recovered Telemost protocol maps/VP8 constants overlap the inspected references;
+conservatively retain [whitelist-bypass MIT](carrier/licenses/whitelist-bypass.txt)
+and [olcrtc WTFPL v2](carrier/licenses/olcrtc.txt), rather than assert independent
+authorship. No full reference project, headless fork, KCP, LiveKit, TUN or proxy is
+imported. The [audit](docs/legal/DEPENDENCY_LICENSE_AUDIT.md) maps source/destination.
+
 No WebRTC source or dependency is included in this preparation-only checkpoint.
 
 | Reference | License / revision | Integration / portions used |
