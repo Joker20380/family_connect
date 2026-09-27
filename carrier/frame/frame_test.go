@@ -91,3 +91,38 @@ func TestOpcodeClassification(t *testing.T) {
 		t.Fatal("command classified as event")
 	}
 }
+
+type shortWriter struct{}
+
+func (shortWriter) Write(data []byte) (int, error) { return len(data) - 1, nil }
+
+func TestFrameBoundaryAndShortWrite(t *testing.T) {
+	payload := make([]byte, 65536)
+	encoded, err := Encode(Version, OpSend, 1, payload)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := Decode(encoded); err != nil {
+		t.Fatal(err)
+	}
+	if err := WriteFrame(shortWriter{}, Frame{Version, OpSend, 1, payload}); err != io.ErrShortWrite {
+		t.Fatal(err)
+	}
+	if _, err := Encode(Version, OpStatus, 1, payload); err != ErrTooLarge {
+		t.Fatal(err)
+	}
+	if _, err := Encode(Version, 0x20, 1, nil); err == nil {
+		t.Fatal("unknown opcode")
+	}
+	for index := 0; index < len(encoded); index += 1024 {
+		if _, err := Decode(encoded[:index]); err == nil {
+			t.Fatal("truncation")
+		}
+	}
+}
+
+func FuzzDecode(f *testing.F) {
+	encoded, _ := Encode(Version, OpSend, 1, []byte{0, 255})
+	f.Add(encoded)
+	f.Fuzz(func(t *testing.T, data []byte) { _, _ = Decode(data) })
+}

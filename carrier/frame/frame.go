@@ -25,7 +25,7 @@ const (
 	HeaderLen = 1 + 1 + 4 // version + opcode + request_id
 
 	// MaxBodyLen bounds the total body (HeaderLen + payload).
-	MaxBodyLen = 64 * 1024
+	MaxBodyLen = HeaderLen + 64*1024
 
 	// MaxPayloadLen is the largest payload a frame may carry.
 	MaxPayloadLen = MaxBodyLen - HeaderLen
@@ -42,12 +42,12 @@ const (
 	OpStatus byte = 0x04
 	OpClose  byte = 0x05
 
-	OpOpened byte = 0x81
-	OpRecv   byte = 0x82
-	OpPong   byte = 0x83
+	OpOpened     byte = 0x81
+	OpRecv       byte = 0x82
+	OpPong       byte = 0x83
 	OpStatusResp byte = 0x84
-	OpError  byte = 0x85
-	OpClosed byte = 0x86
+	OpError      byte = 0x85
+	OpClosed     byte = 0x86
 )
 
 // Frame is a decoded IPC frame.
@@ -69,6 +69,15 @@ var (
 
 // Encode serialises a frame into a single contiguous byte slice.
 func Encode(version, opcode byte, requestID uint32, payload []byte) ([]byte, error) {
+	if version != Version {
+		return nil, ErrBadVersion
+	}
+	if !validOpcode(opcode) {
+		return nil, errors.New("frame: unsupported opcode")
+	}
+	if opcode != OpSend && opcode != OpRecv && len(payload) > MaxControlJSONLen {
+		return nil, ErrTooLarge
+	}
 	if len(payload) > MaxPayloadLen {
 		return nil, ErrTooLarge
 	}
@@ -109,6 +118,12 @@ func Decode(data []byte) (Frame, error) {
 	if f.Version != Version {
 		return Frame{}, ErrBadVersion
 	}
+	if !validOpcode(f.Opcode) {
+		return Frame{}, errors.New("frame: unsupported opcode")
+	}
+	if f.Opcode != OpSend && f.Opcode != OpRecv && bodyLen-HeaderLen > MaxControlJSONLen {
+		return Frame{}, ErrTooLarge
+	}
 	if bodyLen > HeaderLen {
 		f.Payload = append([]byte(nil), data[10:total]...)
 	}
@@ -145,8 +160,15 @@ func WriteFrame(w io.Writer, f Frame) error {
 	if err != nil {
 		return err
 	}
-	_, err = w.Write(b)
+	written, err := w.Write(b)
+	if err == nil && written != len(b) {
+		return io.ErrShortWrite
+	}
 	return err
+}
+
+func validOpcode(opcode byte) bool {
+	return opcode >= OpOpen && opcode <= OpClose || opcode >= OpOpened && opcode <= OpClosed
 }
 
 // IsCommand reports whether opcode is a parent->carrier command.
