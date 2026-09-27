@@ -25,6 +25,7 @@ type performanceConfig struct {
 	Seconds       int     `json:"seconds"`
 	WarmupSeconds int     `json:"warmup_seconds"`
 	Rate          float64 `json:"rate_mbit_s"`
+	Backpressure  bool    `json:"backpressure"`
 }
 
 func readPerformanceConfig(path string) (performanceConfig, error) {
@@ -125,6 +126,8 @@ func performanceProbe(parent context.Context, endpoint familysession.PacketEndpo
 	sequence, expected := uint64(1), uint64(1)
 	sent, received, deliveredInInterval, sentInInterval := 0, 0, 0, 0
 	maximumOutstanding := 0
+	backpressureEvents := 0
+	blockedOffer := false
 	integral := float64(0)
 	lastIntegral := started
 	samples := make([]float64, 0, 512)
@@ -166,6 +169,8 @@ func performanceProbe(parent context.Context, endpoint familysession.PacketEndpo
 			sentInInterval = 0
 			deliveredInInterval = 0
 			maximumOutstanding = 0
+			backpressureEvents = 0
+			blockedOffer = false
 			integral = 0
 			lastIntegral = started
 			samples = samples[:0]
@@ -200,11 +205,21 @@ func performanceProbe(parent context.Context, endpoint familysession.PacketEndpo
 				jobs <- block
 				maximumOutstanding = max(maximumOutstanding, len(pending))
 				if config.Rate > 0 {
+					if config.Backpressure && nextOffer.Before(now) {
+						nextOffer = now
+					}
 					nextOffer = nextOffer.Add(offerInterval)
 				}
+				blockedOffer = false
 			} else if config.Rate > 0 {
-				reason = "offered_load_outstanding_bound"
-				break
+				if !config.Backpressure {
+					reason = "offered_load_outstanding_bound"
+					break
+				}
+				if !blockedOffer {
+					backpressureEvents++
+					blockedOffer = true
+				}
 			}
 		}
 		select {
@@ -290,6 +305,7 @@ func performanceProbe(parent context.Context, endpoint familysession.PacketEndpo
 	}
 	result := map[string]any{"event": "perf_result", "status": status, "reason": reason, "warmup": warmup, "config": config, "measurement_s": measured, "elapsed_with_drain_s": elapsed, "blocks_sent": sent, "blocks_received": received, "useful_tx_bytes": sent * config.Payload, "useful_rx_bytes": received * config.Payload, "tx_interval_bytes": sentInInterval * config.Payload, "rx_interval_bytes": deliveredInInterval * config.Payload, "tx_mbit_s": float64(sentInInterval*config.Payload*8) / measured / 1e6, "delivered_mbit_s": float64(deliveredInInterval*config.Payload*8) / measured / 1e6, "aggregate_mbit_s": float64((sentInInterval+deliveredInInterval)*config.Payload*8) / measured / 1e6, "drain_normalized_mbit_s": float64(received*config.Payload*8) / elapsed / 1e6, "max_outstanding": maximumOutstanding, "average_outstanding": integral / measured, "errors": counters, "snapshot": snapshot()}
 	result["terminal_error_class"] = errorClass
+	result["backpressure_events"] = backpressureEvents
 	if len(samples) > 0 {
 		sort.Float64s(samples)
 		total := float64(0)

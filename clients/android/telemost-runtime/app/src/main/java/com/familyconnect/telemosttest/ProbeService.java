@@ -28,7 +28,7 @@ import java.util.HashSet;
 import java.util.Arrays;
 
 public final class ProbeService extends Service {
-    private static final Set<String> EVENTS = new HashSet<>(Arrays.asList("start", "connected", "family_auth", "probe_result", "probe_failed", "suite_complete", "summary", "resources", "perf_warmup", "perf_sample", "perf_blocks", "perf_result"));
+    private static final Set<String> EVENTS = new HashSet<>(Arrays.asList("start", "connected", "family_auth", "probe_result", "probe_failed", "suite_complete", "summary", "resources", "perf_warmup", "perf_sample", "perf_blocks", "perf_result", "reliability_final"));
     final class LocalBinder extends Binder { ProbeService service() { return ProbeService.this; } }
     private final LocalBinder binder = new LocalBinder();
     private final NativeRun run = new NativeRun();

@@ -116,6 +116,20 @@ func TestPerformanceOfferedLoadStopsInsteadOfBlocking(test *testing.T) {
 	}
 }
 
+func TestReliablePerformanceBackpressure(test *testing.T) {
+	echo := &pipelineEcho{queue: make(chan []byte, 128)}
+	var result map[string]any
+	err := performanceProbe(context.Background(), echo, performanceConfig{Window: 2, Payload: 1024, Seconds: 1, WarmupSeconds: 1, Rate: 4, Backpressure: true}, func() map[string]any { return nil }, func(event map[string]any) error {
+		if event["event"] == "perf_result" {
+			result = event
+		}
+		return nil
+	})
+	if err != nil || result["status"] != "PASS" || result["backpressure_events"].(int) == 0 || result["max_outstanding"].(int) > 2 || result["blocks_received"] != result["blocks_sent"] || result["tx_mbit_s"].(float64) >= 4 {
+		test.Fatal(result, err)
+	}
+}
+
 func TestPerformanceConfigRejectsUnboundedAndUnknown(test *testing.T) {
 	path := filepath.Join(test.TempDir(), "performance.json")
 	for _, input := range []string{`{}`, `{"window":129,"payload":1024,"seconds":60,"warmup_seconds":5}`, `{"window":1,"payload":65537,"seconds":60,"warmup_seconds":5}`, `{"window":1,"payload":1024,"seconds":301,"warmup_seconds":5}`, `{"window":1,"payload":1024,"seconds":60,"warmup_seconds":5,"unknown":1}`} {
