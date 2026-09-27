@@ -402,6 +402,7 @@ func (s *Session) Close() error {
 			}
 		}
 		s.wg.Wait()
+		s.auth.closeIdleConnections()
 		close(s.cleanupDone)
 	})
 	<-s.cleanupDone

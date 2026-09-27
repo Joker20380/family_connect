@@ -40,17 +40,32 @@ type ConnectionInfo struct {
 
 // Auth is a self-contained helper that fetches Telemost connection metadata.
 type Auth struct {
-	APIURL    string
-	UserAgent string
-	Client    *http.Client
+	APIURL     string
+	UserAgent  string
+	Client     *http.Client
+	ownsClient bool
 }
 
 // NewAuth returns an Auth with production defaults and the supplied client.
 func NewAuth(client *http.Client) *Auth {
+	ownsClient := false
+	if client == nil {
+		if transport, ok := http.DefaultTransport.(*http.Transport); ok {
+			client = &http.Client{Timeout: 15 * time.Second, Transport: transport.Clone()}
+			ownsClient = true
+		}
+	}
 	return &Auth{
-		APIURL:    DefaultAPIURL,
-		UserAgent: "Mozilla/5.0 (X11; Linux x86_64; rv:149.0) Gecko/20100101 Firefox/149.0",
-		Client:    client,
+		APIURL:     DefaultAPIURL,
+		UserAgent:  "Mozilla/5.0 (X11; Linux x86_64; rv:149.0) Gecko/20100101 Firefox/149.0",
+		Client:     client,
+		ownsClient: ownsClient,
+	}
+}
+
+func (a *Auth) closeIdleConnections() {
+	if a.ownsClient && a.Client != nil {
+		a.Client.CloseIdleConnections()
 	}
 }
 

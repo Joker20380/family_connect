@@ -81,6 +81,37 @@ func TestReassemblyRejectsMalformedAndDuplicates(t *testing.T) {
 	}
 }
 
+func TestCRCAndRecentMessageBound(t *testing.T) {
+	delivered := 0
+	assembler := newReassembler(2, func([]byte) { delivered++ })
+	fragments, _ := encodeFragments(1, 0, []byte{1})
+	fragments[0][fragmentHeaderLen] ^= 1
+	assembler.ingest(fragments[0])
+	if delivered != 0 {
+		t.Fatal("corruption passed CRC")
+	}
+	for message := 1; message <= maxRecentMessages+100; message++ {
+		fragments, _ := encodeFragments(1, uint32(message), []byte{1})
+		assembler.ingest(fragments[0])
+	}
+	if len(assembler.recent) != maxRecentMessages || len(assembler.builds) != 0 {
+		t.Fatal("recent ID bound")
+	}
+}
+
+func TestRTPRejectsMixedTimestamps(t *testing.T) {
+	fragments, _ := encodeFragments(1, 1, make([]byte, 4096))
+	payloader := &codecs.VP8Payloader{}
+	packets := payloader.Payload(1100, encodeVP8DataFrame(fragments[0]))
+	state := vp8FrameState{}
+	for index, payload := range packets {
+		packet := &rtp.Packet{Header: rtp.Header{SequenceNumber: uint16(index), Timestamp: uint32(index), Marker: index == len(packets)-1}, Payload: payload}
+		if state.process(packet) != nil {
+			t.Fatal("mixed RTP timestamps accepted")
+		}
+	}
+}
+
 func TestVP8RTPRoundTripAndLoss(t *testing.T) {
 	payload := bytes.Repeat([]byte{0, 255, 1}, 2700)
 	fragments, _ := encodeFragments(1, 1, payload)
