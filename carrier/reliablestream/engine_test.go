@@ -13,6 +13,25 @@ type flight struct {
 	due    int
 }
 
+func TestBoundedRecentTelemetry(test *testing.T) {
+	state := connectedEngines()[0]
+	for sequence := uint64(1); sequence <= 1000; sequence++ {
+		state.event("recovered", sequence, state.started.Add(time.Duration(sequence)*time.Millisecond), time.Second)
+	}
+	if len(state.stats.Events) != 128 || len(state.stats.RecentEvents) != 128 || state.stats.EventsDropped != 872 {
+		test.Fatal("unbounded telemetry")
+	}
+	if state.stats.Events[0].Index != 1 || state.stats.RecentEvents[0].Index != 873 || state.stats.RecentEvents[127].Index != 1000 {
+		test.Fatal("telemetry coverage cannot be audited")
+	}
+	stream := &Stream{state: state}
+	stats := stream.Stats()
+	stats.RecentEvents[0].Kind = "mutated"
+	if stream.Stats().RecentEvents[0].Kind != "recovered" {
+		test.Fatal("telemetry aliases live state")
+	}
+}
+
 type faults struct {
 	drop      map[uint64]int
 	every     uint64

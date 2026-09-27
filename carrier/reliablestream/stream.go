@@ -56,6 +56,7 @@ func (stream *Stream) Stats() Stats {
 	defer stream.mu.Unlock()
 	stats := stream.state.stats
 	stats.Events = append([]Event(nil), stats.Events...)
+	stats.RecentEvents = append([]Event(nil), stats.RecentEvents...)
 	return stats
 }
 

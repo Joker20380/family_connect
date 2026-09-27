@@ -6,6 +6,7 @@ import (
 )
 
 type Event struct {
+	Index    uint64  `json:"index"`
 	Kind     string  `json:"kind"`
 	Sequence uint64  `json:"sequence"`
 	AtMS     float64 `json:"at_ms"`
@@ -39,6 +40,7 @@ type Stats struct {
 	SendDepth          int
 	ReorderDepth       int
 	Events             []Event
+	RecentEvents       []Event
 	EventsDropped      uint64
 	Terminal           string
 }
@@ -82,11 +84,17 @@ func (state *engine) opening(target epoch) frame {
 }
 
 func (state *engine) event(kind string, seq uint64, now time.Time, delay time.Duration) {
+	event := Event{uint64(len(state.stats.Events)) + state.stats.EventsDropped + 1, kind, seq, float64(now.Sub(state.started)) / float64(time.Millisecond), float64(delay) / float64(time.Millisecond), len(state.buffer)}
 	if len(state.stats.Events) == 128 {
 		state.stats.EventsDropped++
+		if len(state.stats.RecentEvents) == 128 {
+			copy(state.stats.RecentEvents, state.stats.RecentEvents[1:])
+			state.stats.RecentEvents = state.stats.RecentEvents[:127]
+		}
+		state.stats.RecentEvents = append(state.stats.RecentEvents, event)
 		return
 	}
-	state.stats.Events = append(state.stats.Events, Event{kind, seq, float64(now.Sub(state.started)) / float64(time.Millisecond), float64(delay) / float64(time.Millisecond), len(state.buffer)})
+	state.stats.Events = append(state.stats.Events, event)
 }
 
 func (state *engine) depths() {
