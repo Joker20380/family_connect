@@ -11,11 +11,13 @@ final class NativeRun {
     private boolean cancelled;
     private Process process;
     private Thread worker;
+    private Runnable stopSignal;
 
     synchronized boolean start(Factory factory, Observer observer) {
         if (active) return false;
         active = true;
         cancelled = false;
+        stopSignal = null;
         worker = new Thread(() -> execute(factory, observer), "telemost-native-owner");
         worker.start();
         return true;
@@ -74,6 +76,10 @@ final class NativeRun {
 
     synchronized boolean isActive() { return active; }
 
+    synchronized void setStopSignal(Runnable signal) {
+        if (active && !cancelled) stopSignal = signal;
+    }
+
     synchronized void cancel() {
         if (cancelled) return;
         cancelled = true;
@@ -82,8 +88,9 @@ final class NativeRun {
         terminate(child);
     }
 
-    private static void terminate(Process child) {
-        child.destroy();
+    private void terminate(Process child) {
+        if (stopSignal != null && child.isAlive()) stopSignal.run();
+        else child.destroy();
         new Thread(() -> {
             try {
                 if (!child.waitFor(5, java.util.concurrent.TimeUnit.SECONDS)) child.destroyForcibly();

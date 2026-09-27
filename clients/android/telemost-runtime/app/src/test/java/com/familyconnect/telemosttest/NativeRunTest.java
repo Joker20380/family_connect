@@ -8,6 +8,29 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.Assert.*;
 
 public class NativeRunTest {
+    @Test public void usesOwnedSignalHookOnce() throws Exception {
+        NativeRun run = new NativeRun();
+        CountDownLatch ready = new CountDownLatch(1);
+        AtomicInteger signals = new AtomicInteger();
+        java.util.concurrent.atomic.AtomicReference<Process> child = new java.util.concurrent.atomic.AtomicReference<>();
+        run.start(() -> {
+            child.set(new ProcessBuilder("sh", "-c", "echo ready; exec sleep 30").start());
+            return child.get();
+        }, new NativeRun.Observer() {
+            public void line(String line) {
+                run.setStopSignal(() -> { signals.incrementAndGet(); child.get().destroy(); });
+                ready.countDown();
+            }
+            public void finished(int code, boolean cancelled) {}
+        });
+        assertTrue(ready.await(3, TimeUnit.SECONDS));
+        run.cancel();
+        run.cancel();
+        run.awaitForTest(7000);
+        assertFalse(run.isActive());
+        assertEquals(1, signals.get());
+    }
+
     @Test public void closedPipeDuringCancellationStillAllowsGracefulExit() throws Exception {
         NativeRun run = new NativeRun();
         CountDownLatch reading = new CountDownLatch(1);

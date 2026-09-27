@@ -128,6 +128,13 @@ public final class ProbeService extends Service {
             @Override public void line(String line) {
                 try {
                     JSONObject data = new JSONObject(line);
+                    if ("start".equals(data.optString("event"))) {
+                        int nativePid = data.getInt("pid");
+                        if (nativePid <= 1 || data.getInt("parent_pid") != android.os.Process.myPid()) {
+                            throw new IllegalStateException("native process ownership mismatch");
+                        }
+                        run.setStopSignal(() -> android.os.Process.sendSignal(nativePid, 15));
+                    }
                     if (!EVENTS.contains(data.optString("event")) || line.contains("://")) {
                         record(event("android_failure", "reason", "OUTPUT_REJECTED"));
                         run.cancel();
