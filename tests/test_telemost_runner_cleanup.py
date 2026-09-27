@@ -1,6 +1,7 @@
 import importlib.util
 from pathlib import Path
 import subprocess
+import sys
 from unittest.mock import Mock
 
 import pytest
@@ -10,7 +11,11 @@ def reaper():
     path = Path(__file__).resolve().parents[1] / 'pilot/android-telemost/live.py'
     spec = importlib.util.spec_from_file_location('telemost_live_runner', path)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    sys.path.insert(0, str(path.parent))
+    try:
+        spec.loader.exec_module(module)
+    finally:
+        sys.path.pop(0)
     return module.reap_remote
 
 
