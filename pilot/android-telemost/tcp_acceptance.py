@@ -77,21 +77,24 @@ def main():
     parser.add_argument('--binary', type=Path, required=True)
     parser.add_argument('--family-dir', type=Path, required=True)
     parser.add_argument('--out', type=Path, required=True)
-    parser.add_argument('--case', choices=['local', 'https', 'multi', 'sustained', 'remote_close', 'remote_half_close', 'remote_reset', 'timeout', 'refused', 'cancel', 'remote-exit'], required=True)
+    parser.add_argument('--case', choices=['local', 'https', 'download', 'multi', 'sustained', 'remote_close', 'remote_half_close', 'remote_reset', 'timeout', 'refused', 'cancel', 'remote-exit', 'network-loss'], required=True)
+    parser.add_argument('--public-fixture', action='store_true')
     args = parser.parse_args()
     if not os.environ.get('FC_TELEMOST_ROOM'):
         raise RuntimeError('room environment required (redacted)')
     args.out.mkdir(mode=0o700, parents=True, exist_ok=False)
     fixture = None
     config = {'host': 'example.com', 'port': 443, 'mode': 'https', 'path': '/', 'timeout_ms': 10000}
-    public = args.case != 'local'
+    public = args.public_fixture or args.case in ('https', 'download')
     try:
-        if args.case != 'https':
+        if args.case == 'download':
+            config.update(host='speed.cloudflare.com', path='/__down?bytes=10485760')
+        if args.case not in ('https', 'download'):
             fixture = Fixture('185.251.89.19' if public else '186.246.45.246', args.out / 'fixture.jsonl')
             mode = args.case if args.case in ('remote_close', 'remote_half_close', 'remote_reset', 'timeout') else 'echo'
             port = fixture.start(mode, public)
             config = {'host': '185.251.89.19' if public else '127.0.0.1', 'port': port, 'mode': mode, 'bytes': 10 * 1024 * 1024 if args.case == 'multi' else 65536, 'timeout_ms': 3000}
-            if args.case in ('sustained', 'cancel', 'remote-exit'):
+            if args.case in ('sustained', 'cancel', 'remote-exit', 'network-loss'):
                 config.update(seconds=300, mbit=0.6)
             if args.case in ('timeout', 'refused'):
                 config.update(mode='open_error', expected_error='timeout' if args.case == 'timeout' else 'connection_refused')
@@ -103,7 +106,7 @@ def main():
         command = [sys.executable, str(Path(__file__).with_name('live.py')), '--adb', args.adb, '--binary', str(args.binary), '--family-dir', str(args.family_dir), '--independent-observer', '--tcp-config', str(path), '--out', str(args.out / 'flow')]
         if not public:
             command += ['--tcp-test-loopback-port', str(config['port'])]
-        if args.case in ('cancel', 'remote-exit'):
+        if args.case in ('cancel', 'remote-exit', 'network-loss'):
             command += ['--case', args.case]
         with (args.out / 'runner.log').open('wb') as output:
             run = subprocess.run(command, stdout=output, stderr=output, timeout=1600)
@@ -113,8 +116,10 @@ def main():
             raise RuntimeError('TCP case failed: ' + args.case)
         android = [json.loads(line) for line in (args.out / 'flow/A.jsonl').read_text().splitlines() if line.endswith('}')]
         proofs = [row for row in android if row.get('event') == 'tcp_result']
-        if args.case not in ('cancel', 'remote-exit') and (len(proofs) != 1 or proofs[0]['status'] != 'PASS'):
+        if args.case not in ('cancel', 'remote-exit', 'network-loss') and (len(proofs) != 1 or proofs[0]['status'] != 'PASS'):
             raise RuntimeError('TCP proof missing')
+        if args.case == 'download' and proofs[0]['download_bytes'] != 10485760:
+            raise RuntimeError('download exact length failed')
         if fixture and args.case in ('local', 'multi', 'sustained'):
             target = [row for row in fixture.collect() if row.get('event') == 'fixture_result']
             if len(target) != 1 or target[0]['bytes'] != proofs[0]['upload_bytes'] or target[0]['sha256'] != proofs[0]['upload_sha256']:

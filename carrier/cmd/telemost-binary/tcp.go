@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/Joker20380/family_connect/carrier/familysession"
@@ -78,6 +79,8 @@ func tcpProbe(ctx context.Context, session *familysession.Session, path string, 
 		return errors.New("TCP OPEN failed")
 	}
 	defer stream.Close()
+	stopTCP := tcpMetrics(ctx, stream.Stats, snapshot, emit)
+	defer stopTCP()
 	_ = emit(map[string]any{"event": "tcp_open", "connect_ms": float64(time.Since(started)) / float64(time.Millisecond)})
 	result := map[string]any{"event": "tcp_result", "scenario": config.Mode, "status": "FAIL"}
 	if config.Mode == "https" {
@@ -102,6 +105,28 @@ func tcpProbe(ctx context.Context, session *familysession.Session, path string, 
 		return emitErr
 	}
 	return err
+}
+
+func tcpMetrics(ctx context.Context, stats func() tcpforward.Stats, snapshot func() map[string]any, emit func(map[string]any) error) func() {
+	ctx, cancel := context.WithCancel(ctx)
+	done := make(chan struct{})
+	var once sync.Once
+	go func() {
+		defer close(done)
+		ticker := time.NewTicker(5 * time.Second)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-ticker.C:
+				if emit(map[string]any{"event": "tcp_sample", "stats": stats(), "transport": snapshot()}) != nil {
+					return
+				}
+			}
+		}
+	}()
+	return func() { once.Do(func() { cancel(); <-done }) }
 }
 
 func tcpFault(stream *tcpforward.Stream, config tcpConfig, result map[string]any) error {

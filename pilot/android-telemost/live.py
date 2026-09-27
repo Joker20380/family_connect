@@ -39,7 +39,7 @@ def main():
     parser.add_argument("--adb", default="adb")
     parser.add_argument("--binary", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
-    parser.add_argument("--case", choices=["acceptance", "cancel", "process-death", "remote-exit", "activity-close"], default="acceptance")
+    parser.add_argument("--case", choices=["acceptance", "cancel", "process-death", "remote-exit", "activity-close", "network-loss"], default="acceptance")
     parser.add_argument("--family-dir", type=Path)
     parser.add_argument("--client-profile", choices=["valid", "wrong-family", "revoked", "unknown"], default="valid")
     parser.add_argument("--independent-observer", action="store_true")
@@ -64,6 +64,7 @@ def main():
         raise SystemExit("Unexpected remote temporary directory")
     remote = None
     independent = None
+    data_disabled = False
     def adb(*command, **kwargs):
         return subprocess.run([args.adb, *command], capture_output=True, check=True, timeout=25, **kwargs)
     def events(path):
@@ -158,6 +159,9 @@ def main():
             if checks and args.case != "acceptance" and fault_started is None:
                 fault_started = time.monotonic()
                 if args.case == "remote-exit": stop_remote()
+                elif args.case == "network-loss":
+                    adb("shell", "svc", "data", "disable")
+                    data_disabled = True
                 elif args.case == "process-death": adb("shell", "am", "force-stop", PACKAGE)
                 elif args.case == "activity-close": adb("shell", "am", "start", "-n", PACKAGE + "/.ProbeActivity", "--activity-clear-top", "--activity-single-top", "--ez", "close", "true")
                 else: adb("shell", "am", "start", "-n", PACKAGE + "/.ProbeActivity", "--activity-clear-top", "--activity-single-top", "--ez", "disconnect", "true")
@@ -191,6 +195,8 @@ def main():
             if not (exits and exits[-1]["code"] == 0 and completed):
                 raise RuntimeError("ANDROID_ACCEPTANCE_INCOMPLETE: inspect sanitized evidence")
     finally:
+        if data_disabled:
+            adb("shell", "svc", "data", "enable")
         archive.unlink(missing_ok=True)
         try:
             adb("shell", "am", "force-stop", PACKAGE)

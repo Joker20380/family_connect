@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"github.com/Joker20380/family_connect/carrier/tcpforward"
 	"os"
 	"path/filepath"
 	"testing"
@@ -28,6 +30,14 @@ func TestTCPConfigBounds(test *testing.T) {
 			test.Fatal(scenario.body, err)
 		}
 	}
+}
+
+func TestTCPMetricsCancellationJoins(test *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	stop := tcpMetrics(ctx, func() tcpforward.Stats { return tcpforward.Stats{} }, func() map[string]any { return nil }, func(map[string]any) error { return nil })
+	cancel()
+	stop()
+	stop()
 }
 
 func TestTCPPayloadIndependentOfSegmentation(test *testing.T) {

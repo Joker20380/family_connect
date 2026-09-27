@@ -152,6 +152,8 @@ func run() error {
 		}
 		if *tcpGateway {
 			metrics := &tcpforward.Metrics{}
+			stopTCP := tcpMetrics(ctx, metrics.Snapshot, snapshot, emit)
+			defer stopTCP()
 			defer func() {
 				_ = emit(map[string]any{"event": "tcp_gateway", "stats": metrics.Snapshot(), "transport": snapshot()})
 			}()
