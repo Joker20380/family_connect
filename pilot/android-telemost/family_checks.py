@@ -131,6 +131,11 @@ def main():
         if native.returncode or '--- PASS:' not in output or room in output:
             raise RuntimeError('native test failed; inspect private sanitized test output')
         if args.case == 'replay':
+            rejection_deadline = time.monotonic() + 35
+            while remote.poll() is None and time.monotonic() < rejection_deadline:
+                if any(row.get('event') == 'family_auth' for row in events()):
+                    break
+                time.sleep(0.25)
             rejected = any(row.get('event') == 'family_auth' and row.get('accepted') is False for row in events())
             admitted = any(row.get('event') == 'family_auth' and row.get('accepted') is True for row in events())
             if not restarted or not rejected or admitted:
