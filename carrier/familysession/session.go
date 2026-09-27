@@ -233,6 +233,19 @@ type Session struct {
 	sendMu       sync.Mutex
 	recvMu       sync.Mutex
 	reliable     *reliablestream.Stream
+	claimMu      sync.Mutex
+	tcpClaimed   bool
+	server       bool
+}
+
+func (session *Session) ClaimTCP(server bool) error {
+	session.claimMu.Lock()
+	defer session.claimMu.Unlock()
+	if session.connection == nil || session.server != server || session.tcpClaimed {
+		return ErrRejected
+	}
+	session.tcpClaimed = true
+	return nil
 }
 
 func Open(ctx context.Context, endpoint PacketEndpoint, raw []byte, server bool) (*Session, error) {
@@ -263,7 +276,7 @@ func OpenReliable(ctx context.Context, endpoint PacketEndpoint, raw []byte, serv
 		return nil, ErrRejected
 	}
 	expiry = minTime(expiry, connection.ConnectionState().PeerCertificates[0].NotAfter)
-	return &Session{connection: connection, stream: transport, expiry: expiry, reliable: reliable}, nil
+	return &Session{connection: connection, stream: transport, expiry: expiry, reliable: reliable, server: server}, nil
 }
 
 func (session *Session) ReliabilityStats() reliablestream.Stats { return session.reliable.Stats() }
