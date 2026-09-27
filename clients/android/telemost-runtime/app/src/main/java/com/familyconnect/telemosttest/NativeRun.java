@@ -51,8 +51,17 @@ final class NativeRun {
             code = -1;
         } finally {
             if (child != null) {
-                if (child.isAlive()) child.destroyForcibly();
-                try { child.waitFor(); } catch (InterruptedException ignored) { Thread.currentThread().interrupt(); }
+                try {
+                    if (child.isAlive()) {
+                        child.destroy();
+                        if (!child.waitFor(5, java.util.concurrent.TimeUnit.SECONDS)) child.destroyForcibly();
+                    }
+                    child.waitFor();
+                    synchronized (this) { if (cancelled) code = child.exitValue(); }
+                } catch (InterruptedException ignored) {
+                    child.destroyForcibly();
+                    Thread.currentThread().interrupt();
+                }
             }
             synchronized (this) {
                 process = null;
