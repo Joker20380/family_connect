@@ -106,7 +106,9 @@ installed/deployed versions; dated reports preserve what was checked at that tim
 - [Telemost5N.1 carrier: build и live runbook](../carrier/README.md),
   [recovery/results27.09](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md):
   real Linux↔Telemost VP8↔Amsterdam PASS27.09 (291 checks +30s/5min);
-  следующий5N.2 не начат, production/версии не менялись.
+  production/версии не менялись.
+- [Android5N.2: standalone APK и operator runbook](../clients/android/telemost-runtime/README.md),
+  [physical-device results27.09](releases/2026-09-27-webrtc-eu2-android-binary.ru.md).
 
 - [Contribution and build checks](../CONTRIBUTING.md).
 - [Architecture map](architecture.md): current product versus experimental relay paths.

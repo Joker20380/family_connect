@@ -5,6 +5,16 @@
 
 ## Android
 
+Изолированный **5N.2 test endpoint** находится отдельно:
+`clients/android/telemost-runtime` (`ProbeActivity` → `ProbeService` → `NativeRun`),
+`pilot/android-telemost/{build,live}.py` — только build/operator wrappers.
+Он запускает **тот же** `carrier/cmd/telemost-binary` как Android PIE из nativeLibraryDir,
+а не новый Java WebRTC/JNI stack. Не импортирует `FriendsActivity`/`ConnectionService`,
+не меняет production Transport selection, `pilot/android-{tcp,awg}` или Chaquopy.
+Текущий product TCP protect hook остаётся в `NativeTcp`/`TcpVpnService` и Go TCP runtime;
+test carrier sockets **не protected**, будущий bridge описан в
+[отдельном runbook](../../clients/android/telemost-runtime/README.md).
+
 Корень: [clients/android](../../clients/android/). Основные Java-файлы в
 `app/src/main/java/com/familyconnect/app/`; ресурсы в `app/src/main/res/`, Python bridge
 в `app/src/main/python/`. Gradle `app/build.gradle` определяет variant/ABI/version.

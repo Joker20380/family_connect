@@ -163,7 +163,7 @@ RNS-over-WebRTC gates stay open, not cancelled or silently counted as complete.
 | New gate | Required result | Status |
 | --- | --- | --- |
 | WEBRTC-EU-1 / 5N.1 | Desktop/Linux↔Linux random binary round trip over real Telemost at several sizes; exact byte equality | PASS27.09: Linux dev↔Amsterdam,291 VP8 echoes,30s/5min; [report](../releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md) |
-| WEBRTC-EU-2 / 5N.2 | Android↔Linux EU Telemost binary round trip, no TUN yet | In progress: isolated APK/shared Go core, physical preliminary7-size VP8 PASS; [report](../releases/2026-09-27-webrtc-eu2-android-binary.ru.md) |
+| WEBRTC-EU-2 / 5N.2 | Android↔Linux EU Telemost binary round trip, no TUN yet | PASS27.09: physical Redmi/Telemost VP8/Amsterdam,372 exact echoes,30s/5min; [report](../releases/2026-09-27-webrtc-eu2-android-binary.ru.md) |
 | WEBRTC-EU-3 / 5N.3 | Authenticated E2E Family session; valid identity succeeds, unknown/wrong-family/revoked/replayed proof fails | Not run |
 | WEBRTC-EU-4 / 5N.4 | One TCP stream through EU returns a real HTTPS response, e.g. example.com:443 | Not run |
 | WEBRTC-EU-5 / 5N.5 | Parallel TCP/browser/API/DNS streams share one carrier session; bounded fairness/flow control | Not run |

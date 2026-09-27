@@ -3,7 +3,7 @@
 ## Current decision — Restricted WebRTC to EU Gateway first
 
 2026-09-27 implementation checkpoint: [carrier/](../carrier/README.md) recovers
-the interrupted isolated Go/Pion prototype for **5N.1 only**. Bounded binary
+the interrupted isolated Go/Pion prototype initially for **5N.1**. Bounded binary
 framing, Telemost join/signaling, VP8 and a separate diagnostic DC mode exist;
 local two-process Pion tests pass. Real Linux↔Telemost VP8↔Amsterdam **5N.1 PASS**
 on27.09, clean runtime `a13068e`: 291 exact echoes including30s/5min and live
@@ -13,7 +13,10 @@ not production performance acceptance. [5N.1 evidence](releases/2026-09-27-webrt
 5N.2 now has a separate [Android diagnostic APK](../clients/android/telemost-runtime/README.md):
 shared Go core → unchanged Linux CLI or Android PIE CLI child → bounded foreground
 test Service/Activity. No second source copy, Java WebRTC, JNI or product Go runtime.
-Physical preliminary7-size echo PASS; full acceptance/lifecycle remains in progress.
+Physical **5N.2 PASS**, clean `3f65346`: Redmi Note9 Pro/Android12 ordinary cellular
+↔Telemost VP8↔Amsterdam,372 exact echoes including30s/5min and lifecycle/fault checks.
+Final RTT≈2s/aggregate0.131069Mbit/s; earlier full run≈4s/0.065536Mbit/s, not production
+performance. Wi-Fi handoff/deep Doze/restricted-mobile not claimed. Next5N.3 not started.
 No Family auth, gateway, TUN or production transport integration. All sockets remain
 unprotected; future HTTP/WS/Pion transport.Net/DNS protection requires an explicit
 cross-process SCM_RIGHTS+protect ACK bridge or in-process JNI, not child fd integers.

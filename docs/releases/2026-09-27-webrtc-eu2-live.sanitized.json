@@ -1,0 +1,5401 @@
+{
+  "gate": "WEBRTC-EU-2 / 5N.2",
+  "result": "PASS",
+  "runtime": {
+    "commit": "3f65346a02d621c0843975cbe84173d23ebba91f",
+    "dirty": false,
+    "binary_sha256": "d83bbc8c4d1596e88afa5decfb39bb33e257a5e2c14e5bda4e578bd30152aa47",
+    "go": "go version go1.27.1 linux/amd64",
+    "ndk": "Pkg.Desc = Android NDK\nPkg.Revision = 28.2.13676358\nPkg.BaseRevision = 28.2.13676358\nPkg.ReleaseName = r28c",
+    "abi": "arm64-v8a",
+    "min_api": 26,
+    "scope": "synthetic-only, no TUN, sockets unprotected",
+    "apk_sha256": "2642cba98b29f3c7dbf2f6984e10e61cacc95c39c18e85618a346d4ddb22022b",
+    "linux_sha256": "fbf6f4bce509f71dfa3ec9ecd17318aa0feb19e620f405ea4568d90d2bb7c13e"
+  },
+  "running_executable_verification": {
+    "android_sha256": "d83bbc8c4d1596e88afa5decfb39bb33e257a5e2c14e5bda4e578bd30152aa47",
+    "linux_sha256": "fbf6f4bce509f71dfa3ec9ecd17318aa0feb19e620f405ea4568d90d2bb7c13e",
+    "linux_uid": 65534,
+    "android_matches": true,
+    "linux_matches": true
+  },
+  "A": {
+    "events": [
+      {
+        "event": "android_start",
+        "utc_ms": 1790511261728,
+        "model": "Redmi Note 9 Pro",
+        "android": "12",
+        "abi": "arm64-v8a",
+        "network": "cellular",
+        "protected_sockets": false
+      },
+      {
+        "arch": "arm64",
+        "event": "start",
+        "go": "go1.27.1",
+        "mode": "vp8",
+        "os": "android",
+        "parent_pid": 21026,
+        "pid": 21053,
+        "pion": "v4.2.15",
+        "role": "probe",
+        "room_method": "operator-provided disposable room",
+        "utc": "2026-09-27T12:14:21.748864489Z",
+        "vcs.modified": "false",
+        "vcs.revision": "3f65346a02d621c0843975cbe84173d23ebba91f"
+      },
+      {
+        "event": "connected",
+        "utc": "2026-09-27T12:14:24.116909279Z"
+      },
+      {
+        "byte_equal": true,
+        "byte_for_byte": true,
+        "carrier_mode": "vp8",
+        "count": 1,
+        "elapsed_s": 2.229721197,
+        "event": "probe_result",
+        "max_rtt_ms": 2229.665,
+        "mean_rtt_ms": 2229.665,
+        "payload_bytes": 1,
+        "phase": "size",
+        "received": 1,
+        "sent": 1,
+        "useful_roundtrip_mbit_s": 7.175785036051752e-06,
+        "utc": "2026-09-27T12:14:29.35094709Z"
+      },
+      {
+        "byte_equal": true,
+        "byte_for_byte": true,
+        "carrier_mode": "vp8",
+        "count": 1,
+        "elapsed_s": 1.998716093,
+        "event": "probe_result",
+        "max_rtt_ms": 1998.647,
+        "mean_rtt_ms": 1998.647,
+        "payload_bytes": 32,
+        "phase": "size",
+        "received": 1,
+        "sent": 1,
+        "useful_roundtrip_mbit_s": 0.00025616444566246854,
+        "utc": "2026-09-27T12:14:31.351454172Z"
+      },
+      {
+        "byte_equal": true,
+        "byte_for_byte": true,
+        "carrier_mode": "vp8",
+        "count": 1,
+        "elapsed_s": 1.9981532290000001,
+        "event": "probe_result",
+        "max_rtt_ms": 1998.08,
+        "mean_rtt_ms": 1998.08,
+        "payload_bytes": 256,
+        "phase": "size",
+        "received": 1,
+        "sent": 1,
+        "useful_roundtrip_mbit_s": 0.002049892841326234,
+        "utc": "2026-09-27T12:14:33.350969224Z"
+      },
+      {
+        "byte_equal": true,
+        "byte_for_byte": true,
+        "carrier_mode": "vp8",
+        "count": 1,
+        "elapsed_s": 2.001274739,
+        "event": "probe_result",
+        "max_rtt_ms": 2001.199,
+        "mean_rtt_ms": 2001.199,
+        "payload_bytes": 1024,
+        "phase": "size",
+        "received": 1,
+        "sent": 1,
+        "useful_roundtrip_mbit_s": 0.008186781994853332,
+        "utc": "2026-09-27T12:14:35.35310589Z"
+      },
+      {
+        "byte_equal": true,
+        "byte_for_byte": true,
+        "carrier_mode": "vp8",
+        "count": 1,
+        "elapsed_s": 2.053035468,
+        "event": "probe_result",
+        "max_rtt_ms": 2052.908,
+        "mean_rtt_ms": 2052.908,
+        "payload_bytes": 4096,
+        "phase": "size",
+        "received": 1,
+        "sent": 1,
+        "useful_roundtrip_mbit_s": 0.03192151378847976,
+        "utc": "2026-09-27T12:14:37.410652035Z"
+      },
+      {
+        "byte_equal": true,
+        "byte_for_byte": true,
+        "carrier_mode": "vp8",
+        "count": 1,
+        "elapsed_s": 2.119285988,
+        "event": "probe_result",
+        "max_rtt_ms": 2119.067,
+        "mean_rtt_ms": 2119.067,
+        "payload_bytes": 16384,
+        "phase": "size",
+        "received": 1,
+        "sent": 1,
+        "useful_roundtrip_mbit_s": 0.12369449025961285,
+        "utc": "2026-09-27T12:14:39.531010315Z"
+      },
+      {
+        "byte_equal": true,
+        "byte_for_byte": true,
+        "carrier_mode": "vp8",
+        "count": 1,
+        "elapsed_s": 2.302900155,
+        "event": "probe_result",
+        "max_rtt_ms": 2302.078,
+        "mean_rtt_ms": 2302.078,
+        "payload_bytes": 65536,
+        "phase": "size",
+        "received": 1,
+        "sent": 1,
+        "useful_roundtrip_mbit_s": 0.4553284682027389,
+        "utc": "2026-09-27T12:14:41.834874689Z"
+      },
+      {
+        "event": "android_lifecycle",
+        "utc_ms": 1790511335078,
+        "state": "background"
+      },
+      {
+        "event": "android_lifecycle",
+        "utc_ms": 1790511335080,
+        "state": "foreground"
+      },
+      {
+        "event": "android_lifecycle",
+        "utc_ms": 1790511335082,
+        "state": "background"
+      },
+      {
+        "event": "android_lifecycle",
+        "utc_ms": 1790511335128,
+        "state": "activity_bound"
+      },
+      {
+        "event": "android_lifecycle",
+        "utc_ms": 1790511339259,
+        "state": "background"
+      },
+      {
+        "event": "android_lifecycle",
+        "utc_ms": 1790511359420,
+        "state": "foreground"
+      },
+      {
+        "byte_equal": true,
+        "byte_for_byte": true,
+        "carrier_mode": "vp8",
+        "count": 100,
+        "elapsed_s": 199.515063153,
+        "event": "probe_result",
+        "max_rtt_ms": 2015.556,
+        "mean_rtt_ms": 1995.09094,
+        "payload_bytes": 1024,
+        "phase": "batch",
+        "received": 100,
+        "sent": 100,
+        "useful_roundtrip_mbit_s": 0.008211911291848565,
+        "utc": "2026-09-27T12:18:01.350503988Z"
+      },
+      {
+        "byte_equal": true,
+        "byte_for_byte": true,
+        "carrier_mode": "vp8",
+        "count": 100,
+        "elapsed_s": 200.197876173,
+        "event": "probe_result",
+        "max_rtt_ms": 2169.524,
+        "mean_rtt_ms": 2001.7730600000002,
+        "payload_bytes": 16384,
+        "phase": "batch",
+        "received": 100,
+        "sent": 100,
+        "useful_roundtrip_mbit_s": 0.13094244804748556,
+        "utc": "2026-09-27T12:21:21.550467349Z"
+      },
+      {
+        "byte_equal": true,
+        "byte_for_byte": true,
+        "carrier_mode": "vp8",
+        "count": 15,
+        "elapsed_s": 30.002490613,
+        "event": "probe_result",
+        "max_rtt_ms": 2019.654,
+        "mean_rtt_ms": 1999.9788666666668,
+        "payload_bytes": 16384,
+        "phase": "sustained",
+        "received": 15,
+        "sent": 15,
+        "useful_roundtrip_mbit_s": 0.1310611192490868,
+        "utc": "2026-09-27T12:21:51.553677286Z"
+      },
+      {
+        "byte_equal": true,
+        "byte_for_byte": true,
+        "carrier_mode": "vp8",
+        "count": 150,
+        "elapsed_s": 300.006638271,
+        "event": "probe_result",
+        "max_rtt_ms": 2057.696,
+        "mean_rtt_ms": 1999.84424,
+        "payload_bytes": 16384,
+        "phase": "extended",
+        "received": 150,
+        "sent": 150,
+        "useful_roundtrip_mbit_s": 0.13106909975932024,
+        "utc": "2026-09-27T12:26:51.561551546Z"
+      },
+      {
+        "byte_for_byte": true,
+        "event": "suite_complete",
+        "gate_eligible_mode": true,
+        "note": "requires independent endpoints and recorded real Telemost room/media evidence; Android gate also requires a physical device; no automatic gate promotion",
+        "utc": "2026-09-27T12:26:51.565937275Z"
+      },
+      {
+        "cpu_system_s": 21.200868,
+        "cpu_user_s": 22.279504,
+        "event": "summary",
+        "goroutines": 3,
+        "heap_bytes": 8741464,
+        "max_rss_kib": 114228,
+        "utc": "2026-09-27T12:26:51.586321182Z"
+      },
+      {
+        "event": "android_exit",
+        "utc_ms": 1790512011606,
+        "code": 0,
+        "cancelled": false,
+        "elapsed_ms": 749892
+      }
+    ],
+    "final_stats": {
+      "Mode": "vp8",
+      "SetupMs": 2368,
+      "BytesSent": 4531489,
+      "BytesReceived": 4531489,
+      "MessagesSent": 372,
+      "MessagesRecv": 372,
+      "ReconnectCount": 0,
+      "Disconnects": 0,
+      "SubscriberState": "closed",
+      "PublisherState": "closed",
+      "Evidence": [
+        {
+          "utc": "2026-09-27T12:14:22.460503915Z",
+          "stage": "ROOM_RESOLVED"
+        },
+        {
+          "utc": "2026-09-27T12:14:22.84326428Z",
+          "stage": "SIGNALING_CONNECTED"
+        },
+        {
+          "utc": "2026-09-27T12:14:23.04435079Z",
+          "stage": "SERVER_HELLO"
+        },
+        {
+          "utc": "2026-09-27T12:14:23.044507144Z",
+          "stage": "ICE_CONFIGURED"
+        },
+        {
+          "utc": "2026-09-27T12:14:23.18266704Z",
+          "stage": "CONNECTION_STATE",
+          "target": "SUBSCRIBER",
+          "state": "connecting"
+        },
+        {
+          "utc": "2026-09-27T12:14:23.615707509Z",
+          "stage": "CONNECTION_STATE",
+          "target": "PUBLISHER",
+          "state": "connecting"
+        },
+        {
+          "utc": "2026-09-27T12:14:23.760914384Z",
+          "stage": "ICE_SELECTED_PAIR",
+          "target": "SUBSCRIBER",
+          "local_type": "host",
+          "remote_type": "host",
+          "protocol": "udp",
+          "turn_used": false
+        },
+        {
+          "utc": "2026-09-27T12:14:23.940608446Z",
+          "stage": "ICE_SELECTED_PAIR",
+          "target": "PUBLISHER",
+          "local_type": "host",
+          "remote_type": "host",
+          "protocol": "udp",
+          "turn_used": false
+        },
+        {
+          "utc": "2026-09-27T12:14:23.943408134Z",
+          "stage": "CONNECTION_STATE",
+          "target": "SUBSCRIBER",
+          "state": "connected"
+        },
+        {
+          "utc": "2026-09-27T12:14:23.943439956Z",
+          "stage": "SUBSCRIBER_CONNECTED"
+        },
+        {
+          "utc": "2026-09-27T12:14:24.023841675Z",
+          "stage": "VP8_MEDIA_ACTIVE",
+          "target": "SUBSCRIBER"
+        },
+        {
+          "utc": "2026-09-27T12:14:24.116744904Z",
+          "stage": "CONNECTION_STATE",
+          "target": "PUBLISHER",
+          "state": "connected"
+        },
+        {
+          "utc": "2026-09-27T12:14:24.116800061Z",
+          "stage": "PUBLISHER_CONNECTED"
+        },
+        {
+          "utc": "2026-09-27T12:26:51.575627744Z",
+          "stage": "CONNECTION_STATE",
+          "target": "PUBLISHER",
+          "state": "closed"
+        },
+        {
+          "utc": "2026-09-27T12:26:51.585748682Z",
+          "stage": "CONNECTION_STATE",
+          "target": "SUBSCRIBER",
+          "state": "closed"
+        }
+      ],
+      "EvidenceDropped": 0,
+      "Media": {
+        "SamplesWritten": 1019,
+        "RTPReceived": 4263,
+        "EmptyRTP": 0,
+        "SequenceGaps": 0,
+        "FramesReceived": 1019,
+        "BinaryFrames": 645
+      },
+      "ApplicationPongs": 0,
+      "ApplicationPings": 149,
+      "SignalingACKs": 200,
+      "CandidateCounts": [
+        {
+          "target": "PUBLISHER",
+          "local_type": "host",
+          "protocol": "udp",
+          "count": 3
+        },
+        {
+          "target": "PUBLISHER",
+          "local_type": "relay",
+          "protocol": "udp",
+          "count": 8
+        },
+        {
+          "target": "PUBLISHER",
+          "local_type": "srflx",
+          "protocol": "udp",
+          "count": 12
+        },
+        {
+          "target": "SUBSCRIBER",
+          "local_type": "host",
+          "protocol": "udp",
+          "count": 3
+        },
+        {
+          "target": "SUBSCRIBER",
+          "local_type": "relay",
+          "protocol": "udp",
+          "count": 9
+        },
+        {
+          "target": "SUBSCRIBER",
+          "local_type": "srflx",
+          "protocol": "udp",
+          "count": 12
+        }
+      ]
+    },
+    "samples": [
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511261770,
+        "elapsed_ms": 54,
+        "java_used_bytes": 3534888,
+        "app_pss_kib": 48913,
+        "app_cpu_ms": 800,
+        "battery_percent": 79,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 0.39354,
+        "cpu_user_s": 0.509686,
+        "event": "resources",
+        "goroutines": 167,
+        "heap_bytes": 3348408,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:14:31.753828495Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511271801,
+        "elapsed_ms": 10085,
+        "java_used_bytes": 4640808,
+        "app_pss_kib": 71315,
+        "app_cpu_ms": 2184,
+        "battery_percent": 79,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 0.739718,
+        "cpu_user_s": 0.895612,
+        "event": "resources",
+        "goroutines": 167,
+        "heap_bytes": 4728368,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:14:41.753838752Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511281830,
+        "elapsed_ms": 20115,
+        "java_used_bytes": 3083592,
+        "app_pss_kib": 84405,
+        "app_cpu_ms": 3171,
+        "battery_percent": 79,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 1.116115,
+        "cpu_user_s": 1.282348,
+        "event": "resources",
+        "goroutines": 167,
+        "heap_bytes": 5001128,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:14:51.753832029Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511291860,
+        "elapsed_ms": 30144,
+        "java_used_bytes": 4681032,
+        "app_pss_kib": 89509,
+        "app_cpu_ms": 3918,
+        "battery_percent": 79,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 1.520029,
+        "cpu_user_s": 1.669473,
+        "event": "resources",
+        "goroutines": 167,
+        "heap_bytes": 5247968,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:15:01.753916036Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511301890,
+        "elapsed_ms": 40175,
+        "java_used_bytes": 3949032,
+        "app_pss_kib": 90965,
+        "app_cpu_ms": 4749,
+        "battery_percent": 79,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 1.892889,
+        "cpu_user_s": 2.089798,
+        "event": "resources",
+        "goroutines": 167,
+        "heap_bytes": 5620976,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:15:11.75378874Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511311921,
+        "elapsed_ms": 50206,
+        "java_used_bytes": 3029384,
+        "app_pss_kib": 91442,
+        "app_cpu_ms": 5503,
+        "battery_percent": 79,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 2.182432,
+        "cpu_user_s": 2.597374,
+        "event": "resources",
+        "goroutines": 167,
+        "heap_bytes": 5833344,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:15:21.753479101Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511321952,
+        "elapsed_ms": 60236,
+        "java_used_bytes": 4733320,
+        "app_pss_kib": 95570,
+        "app_cpu_ms": 6299,
+        "battery_percent": 79,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 2.684001,
+        "cpu_user_s": 2.900339,
+        "event": "resources",
+        "goroutines": 167,
+        "heap_bytes": 5989520,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:15:31.753385243Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511331982,
+        "elapsed_ms": 70267,
+        "java_used_bytes": 3931536,
+        "app_pss_kib": 96574,
+        "app_cpu_ms": 7028,
+        "battery_percent": 80,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 3.170442,
+        "cpu_user_s": 3.229794,
+        "event": "resources",
+        "goroutines": 167,
+        "heap_bytes": 6208424,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:15:41.753786593Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511342031,
+        "elapsed_ms": 80316,
+        "java_used_bytes": 2693896,
+        "app_pss_kib": 68171,
+        "app_cpu_ms": 8041,
+        "battery_percent": 80,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 3.609176,
+        "cpu_user_s": 3.577726,
+        "event": "resources",
+        "goroutines": 167,
+        "heap_bytes": 6023136,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:15:51.753739194Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511352065,
+        "elapsed_ms": 90349,
+        "java_used_bytes": 2693896,
+        "app_pss_kib": 68156,
+        "app_cpu_ms": 8073,
+        "battery_percent": 80,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 3.98761,
+        "cpu_user_s": 4.012904,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 5845960,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:16:01.753984034Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511362096,
+        "elapsed_ms": 100380,
+        "java_used_bytes": 3390472,
+        "app_pss_kib": 99594,
+        "app_cpu_ms": 8535,
+        "battery_percent": 80,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 4.164241,
+        "cpu_user_s": 4.616882,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 5686304,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:16:11.754077311Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511372127,
+        "elapsed_ms": 110411,
+        "java_used_bytes": 5020680,
+        "app_pss_kib": 103162,
+        "app_cpu_ms": 9213,
+        "battery_percent": 80,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 4.476595,
+        "cpu_user_s": 5.121885,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 5600104,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:16:21.753860953Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511382158,
+        "elapsed_ms": 120443,
+        "java_used_bytes": 4559104,
+        "app_pss_kib": 103894,
+        "app_cpu_ms": 9965,
+        "battery_percent": 80,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 4.856906,
+        "cpu_user_s": 5.590476,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 5566952,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:16:31.753485949Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511392190,
+        "elapsed_ms": 130475,
+        "java_used_bytes": 4272344,
+        "app_pss_kib": 112557,
+        "app_cpu_ms": 11275,
+        "battery_percent": 80,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 5.276045,
+        "cpu_user_s": 5.999661,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 5458232,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:16:41.753646362Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511402222,
+        "elapsed_ms": 140507,
+        "java_used_bytes": 3643776,
+        "app_pss_kib": 111737,
+        "app_cpu_ms": 12164,
+        "battery_percent": 80,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 5.676332,
+        "cpu_user_s": 6.393825,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 5244504,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:16:51.754130525Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511412254,
+        "elapsed_ms": 150539,
+        "java_used_bytes": 2960616,
+        "app_pss_kib": 112281,
+        "app_cpu_ms": 12853,
+        "battery_percent": 80,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 6.013914,
+        "cpu_user_s": 6.848225,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 5003536,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:17:01.753405625Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511422287,
+        "elapsed_ms": 160571,
+        "java_used_bytes": 4877544,
+        "app_pss_kib": 114501,
+        "app_cpu_ms": 13687,
+        "battery_percent": 80,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 6.454706,
+        "cpu_user_s": 7.221051,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 4731024,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:17:11.753814736Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511432363,
+        "elapsed_ms": 170647,
+        "java_used_bytes": 4445024,
+        "app_pss_kib": 113369,
+        "app_cpu_ms": 14415,
+        "battery_percent": 80,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 6.774121,
+        "cpu_user_s": 7.699408,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 4430296,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:17:21.754035618Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511442395,
+        "elapsed_ms": 180680,
+        "java_used_bytes": 3760480,
+        "app_pss_kib": 112737,
+        "app_cpu_ms": 15116,
+        "battery_percent": 80,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 7.128061,
+        "cpu_user_s": 8.16905,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 4136872,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:17:31.754078374Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511452425,
+        "elapsed_ms": 190709,
+        "java_used_bytes": 3331792,
+        "app_pss_kib": 111757,
+        "app_cpu_ms": 15838,
+        "battery_percent": 80,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 7.366757,
+        "cpu_user_s": 8.728449,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 3873120,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:17:41.753628214Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511462456,
+        "elapsed_ms": 200741,
+        "java_used_bytes": 5093072,
+        "app_pss_kib": 115241,
+        "app_cpu_ms": 16473,
+        "battery_percent": 81,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 7.746579,
+        "cpu_user_s": 9.145654,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 6850664,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:17:51.75372019Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511472489,
+        "elapsed_ms": 210774,
+        "java_used_bytes": 4792352,
+        "app_pss_kib": 114163,
+        "app_cpu_ms": 17190,
+        "battery_percent": 81,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 8.138132,
+        "cpu_user_s": 9.548136,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 6547184,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:18:01.753173363Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511482522,
+        "elapsed_ms": 220806,
+        "java_used_bytes": 4646624,
+        "app_pss_kib": 116443,
+        "app_cpu_ms": 17873,
+        "battery_percent": 81,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 8.432701,
+        "cpu_user_s": 9.793824,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 4889512,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:18:11.753588203Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511492553,
+        "elapsed_ms": 230838,
+        "java_used_bytes": 4173056,
+        "app_pss_kib": 118287,
+        "app_cpu_ms": 18611,
+        "battery_percent": 81,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 8.720331,
+        "cpu_user_s": 9.987789,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 6147584,
+        "heap_sys_bytes": 15433728,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:18:21.75333122Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511502584,
+        "elapsed_ms": 240869,
+        "java_used_bytes": 3658840,
+        "app_pss_kib": 120318,
+        "app_cpu_ms": 19268,
+        "battery_percent": 81,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 8.981339,
+        "cpu_user_s": 10.226179,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 4503096,
+        "heap_sys_bytes": 19628032,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:18:31.754001789Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511512617,
+        "elapsed_ms": 250901,
+        "java_used_bytes": 3189400,
+        "app_pss_kib": 122809,
+        "app_cpu_ms": 19996,
+        "battery_percent": 81,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 9.175104,
+        "cpu_user_s": 10.504062,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 5789232,
+        "heap_sys_bytes": 19628032,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:18:41.753904441Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511522650,
+        "elapsed_ms": 260934,
+        "java_used_bytes": 5065368,
+        "app_pss_kib": 127441,
+        "app_cpu_ms": 20624,
+        "battery_percent": 81,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 9.424591,
+        "cpu_user_s": 10.729722,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 7046320,
+        "heap_sys_bytes": 19628032,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:18:51.754100115Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511532682,
+        "elapsed_ms": 270966,
+        "java_used_bytes": 4770328,
+        "app_pss_kib": 129897,
+        "app_cpu_ms": 21342,
+        "battery_percent": 81,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 9.619144,
+        "cpu_user_s": 11.04128,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 5360896,
+        "heap_sys_bytes": 19628032,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:19:01.753058757Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511542715,
+        "elapsed_ms": 281000,
+        "java_used_bytes": 4048504,
+        "app_pss_kib": 130561,
+        "app_cpu_ms": 21970,
+        "battery_percent": 81,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 9.912125,
+        "cpu_user_s": 11.228348,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 6636920,
+        "heap_sys_bytes": 19628032,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:19:11.75389292Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511552748,
+        "elapsed_ms": 291033,
+        "java_used_bytes": 3937720,
+        "app_pss_kib": 132833,
+        "app_cpu_ms": 22662,
+        "battery_percent": 81,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 10.071698,
+        "cpu_user_s": 11.553961,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 7889320,
+        "heap_sys_bytes": 19628032,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:19:21.754549791Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511562781,
+        "elapsed_ms": 301065,
+        "java_used_bytes": 4064512,
+        "app_pss_kib": 134501,
+        "app_cpu_ms": 23356,
+        "battery_percent": 81,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 10.284764,
+        "cpu_user_s": 11.852528,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 5709288,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:19:31.753790308Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511572813,
+        "elapsed_ms": 311097,
+        "java_used_bytes": 3443400,
+        "app_pss_kib": 135285,
+        "app_cpu_ms": 23993,
+        "battery_percent": 82,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 10.539953,
+        "cpu_user_s": 12.07128,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 6927384,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:19:41.753635981Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511582844,
+        "elapsed_ms": 321129,
+        "java_used_bytes": 3339336,
+        "app_pss_kib": 136151,
+        "app_cpu_ms": 24669,
+        "battery_percent": 82,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 10.796759,
+        "cpu_user_s": 12.288286,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 8070144,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:19:51.754119415Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511592877,
+        "elapsed_ms": 331161,
+        "java_used_bytes": 5297224,
+        "app_pss_kib": 139808,
+        "app_cpu_ms": 25261,
+        "battery_percent": 82,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 11.067924,
+        "cpu_user_s": 12.506226999999999,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 9229776,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:20:01.753477223Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511602910,
+        "elapsed_ms": 341195,
+        "java_used_bytes": 2794384,
+        "app_pss_kib": 138658,
+        "app_cpu_ms": 25968,
+        "battery_percent": 82,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 11.345651,
+        "cpu_user_s": 12.720906,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 5885936,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:20:11.753753053Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511612943,
+        "elapsed_ms": 351228,
+        "java_used_bytes": 4801424,
+        "app_pss_kib": 141658,
+        "app_cpu_ms": 26555,
+        "battery_percent": 82,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 11.57643,
+        "cpu_user_s": 12.967363,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 7041152,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:20:21.754238882Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511622975,
+        "elapsed_ms": 361260,
+        "java_used_bytes": 4723728,
+        "app_pss_kib": 140184,
+        "app_cpu_ms": 27207,
+        "battery_percent": 82,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 11.79675,
+        "cpu_user_s": 13.23355,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 8187888,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:20:31.753428722Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511633007,
+        "elapsed_ms": 371292,
+        "java_used_bytes": 5063264,
+        "app_pss_kib": 140292,
+        "app_cpu_ms": 27859,
+        "battery_percent": 82,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 12.080725,
+        "cpu_user_s": 13.429839,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 9315800,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:20:41.754078146Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511643040,
+        "elapsed_ms": 381324,
+        "java_used_bytes": 2792472,
+        "app_pss_kib": 136876,
+        "app_cpu_ms": 28459,
+        "battery_percent": 82,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 12.36507,
+        "cpu_user_s": 13.632664,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 5655272,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:20:51.753658402Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511653072,
+        "elapsed_ms": 391357,
+        "java_used_bytes": 5102616,
+        "app_pss_kib": 138400,
+        "app_cpu_ms": 29091,
+        "battery_percent": 82,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 12.602385,
+        "cpu_user_s": 13.869596,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 6804792,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:21:01.754228451Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511663104,
+        "elapsed_ms": 401389,
+        "java_used_bytes": 4795672,
+        "app_pss_kib": 136816,
+        "app_cpu_ms": 29679,
+        "battery_percent": 82,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 12.799565,
+        "cpu_user_s": 14.145026,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 7947344,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:21:11.754077561Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511673137,
+        "elapsed_ms": 411421,
+        "java_used_bytes": 5167792,
+        "app_pss_kib": 136528,
+        "app_cpu_ms": 30319,
+        "battery_percent": 82,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 13.043339,
+        "cpu_user_s": 14.384721,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 9135256,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:21:21.753942453Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511683170,
+        "elapsed_ms": 421454,
+        "java_used_bytes": 4771232,
+        "app_pss_kib": 135892,
+        "app_cpu_ms": 31030,
+        "battery_percent": 83,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 13.257926,
+        "cpu_user_s": 14.666288,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 5535528,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:21:31.754051824Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511693202,
+        "elapsed_ms": 431486,
+        "java_used_bytes": 4171816,
+        "app_pss_kib": 135104,
+        "app_cpu_ms": 31713,
+        "battery_percent": 83,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 13.491921,
+        "cpu_user_s": 14.90811,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 6680184,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:21:41.753767133Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511703235,
+        "elapsed_ms": 441519,
+        "java_used_bytes": 3384816,
+        "app_pss_kib": 134552,
+        "app_cpu_ms": 32474,
+        "battery_percent": 83,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 13.787988,
+        "cpu_user_s": 15.098306000000001,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 7873680,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:21:51.753951348Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511713269,
+        "elapsed_ms": 451554,
+        "java_used_bytes": 3006336,
+        "app_pss_kib": 135372,
+        "app_cpu_ms": 33140,
+        "battery_percent": 83,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 14.00726,
+        "cpu_user_s": 15.368621,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 9017520,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:22:01.753854105Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511723300,
+        "elapsed_ms": 461585,
+        "java_used_bytes": 5005184,
+        "app_pss_kib": 137716,
+        "app_cpu_ms": 33866,
+        "battery_percent": 83,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 14.272425,
+        "cpu_user_s": 15.605376,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 5443656,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:22:11.753925143Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511733332,
+        "elapsed_ms": 471616,
+        "java_used_bytes": 4697568,
+        "app_pss_kib": 136592,
+        "app_cpu_ms": 34533,
+        "battery_percent": 83,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 14.43942,
+        "cpu_user_s": 15.913871,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 6585480,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:22:21.753922639Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511743365,
+        "elapsed_ms": 481649,
+        "java_used_bytes": 3939640,
+        "app_pss_kib": 135116,
+        "app_cpu_ms": 35287,
+        "battery_percent": 83,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 14.727294,
+        "cpu_user_s": 16.10471,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 7794520,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:22:31.754121333Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511753398,
+        "elapsed_ms": 491682,
+        "java_used_bytes": 3420272,
+        "app_pss_kib": 134264,
+        "app_cpu_ms": 35952,
+        "battery_percent": 83,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 15.00955,
+        "cpu_user_s": 16.307194,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 8936832,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:22:41.753932579Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511763430,
+        "elapsed_ms": 501714,
+        "java_used_bytes": 3278856,
+        "app_pss_kib": 134796,
+        "app_cpu_ms": 36689,
+        "battery_percent": 83,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 15.287499,
+        "cpu_user_s": 16.501912,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 10067552,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:22:51.753731377Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511773462,
+        "elapsed_ms": 511747,
+        "java_used_bytes": 5072904,
+        "app_pss_kib": 135760,
+        "app_cpu_ms": 37348,
+        "battery_percent": 83,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 15.491755,
+        "cpu_user_s": 16.79006,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 6281176,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:23:01.753920123Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511783495,
+        "elapsed_ms": 521779,
+        "java_used_bytes": 4328008,
+        "app_pss_kib": 135212,
+        "app_cpu_ms": 38102,
+        "battery_percent": 83,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 15.784978,
+        "cpu_user_s": 16.9787,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 7444528,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:23:11.754001474Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511793528,
+        "elapsed_ms": 531812,
+        "java_used_bytes": 3817736,
+        "app_pss_kib": 133681,
+        "app_cpu_ms": 38773,
+        "battery_percent": 84,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 16.058022,
+        "cpu_user_s": 17.206634,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 8592336,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:23:21.753863033Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511803561,
+        "elapsed_ms": 541846,
+        "java_used_bytes": 3704224,
+        "app_pss_kib": 133713,
+        "app_cpu_ms": 39504,
+        "battery_percent": 84,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 16.323301999999998,
+        "cpu_user_s": 17.419958,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 10161288,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:23:31.753984175Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511813594,
+        "elapsed_ms": 551879,
+        "java_used_bytes": 2744616,
+        "app_pss_kib": 132749,
+        "app_cpu_ms": 40175,
+        "battery_percent": 84,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 16.513685,
+        "cpu_user_s": 17.717339,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 6531312,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:23:41.753740629Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511823628,
+        "elapsed_ms": 561912,
+        "java_used_bytes": 4727080,
+        "app_pss_kib": 134909,
+        "app_cpu_ms": 40902,
+        "battery_percent": 84,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 16.767626,
+        "cpu_user_s": 17.941102,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 7674952,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:23:51.753492084Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511833686,
+        "elapsed_ms": 571971,
+        "java_used_bytes": 4403448,
+        "app_pss_kib": 133613,
+        "app_cpu_ms": 41622,
+        "battery_percent": 84,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 17.004282,
+        "cpu_user_s": 18.185998,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 8818040,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:24:01.753868955Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511843720,
+        "elapsed_ms": 582005,
+        "java_used_bytes": 3553048,
+        "app_pss_kib": 132433,
+        "app_cpu_ms": 42325,
+        "battery_percent": 84,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 17.200913,
+        "cpu_user_s": 18.465665,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 9960456,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:24:11.753685357Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511853753,
+        "elapsed_ms": 592037,
+        "java_used_bytes": 3029416,
+        "app_pss_kib": 132917,
+        "app_cpu_ms": 43065,
+        "battery_percent": 84,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 17.442087,
+        "cpu_user_s": 18.710596,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 6168472,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:24:21.753517437Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511863786,
+        "elapsed_ms": 602071,
+        "java_used_bytes": 4823464,
+        "app_pss_kib": 134141,
+        "app_cpu_ms": 43720,
+        "battery_percent": 84,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 17.695319,
+        "cpu_user_s": 18.982956,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 7412488,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:24:31.75386186Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511873819,
+        "elapsed_ms": 612103,
+        "java_used_bytes": 4144824,
+        "app_pss_kib": 130549,
+        "app_cpu_ms": 44481,
+        "battery_percent": 84,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 17.925596,
+        "cpu_user_s": 19.240009,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 8552360,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:24:41.753364825Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511883852,
+        "elapsed_ms": 622137,
+        "java_used_bytes": 3611768,
+        "app_pss_kib": 130002,
+        "app_cpu_ms": 45144,
+        "battery_percent": 84,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 18.127973,
+        "cpu_user_s": 19.525233,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 9693784,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:24:51.753240707Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511893884,
+        "elapsed_ms": 632168,
+        "java_used_bytes": 3490296,
+        "app_pss_kib": 133258,
+        "app_cpu_ms": 45893,
+        "battery_percent": 84,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 18.34082,
+        "cpu_user_s": 19.806678,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 5938200,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:25:01.753408411Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511903916,
+        "elapsed_ms": 642201,
+        "java_used_bytes": 2584488,
+        "app_pss_kib": 134408,
+        "app_cpu_ms": 46560,
+        "battery_percent": 84,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 18.605612999999998,
+        "cpu_user_s": 20.022794,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 7082616,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:25:11.754187105Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511913949,
+        "elapsed_ms": 652233,
+        "java_used_bytes": 4648872,
+        "app_pss_kib": 135440,
+        "app_cpu_ms": 47277,
+        "battery_percent": 84,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 18.900741,
+        "cpu_user_s": 20.200975,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 8212024,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:25:21.754165643Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511923982,
+        "elapsed_ms": 662267,
+        "java_used_bytes": 4165800,
+        "app_pss_kib": 134768,
+        "app_cpu_ms": 47932,
+        "battery_percent": 84,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 19.100317,
+        "cpu_user_s": 20.486315,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 9350664,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:25:31.754019962Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511934015,
+        "elapsed_ms": 672299,
+        "java_used_bytes": 4017416,
+        "app_pss_kib": 133804,
+        "app_cpu_ms": 48643,
+        "battery_percent": 85,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 19.378895,
+        "cpu_user_s": 20.711648,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 5567584,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:25:41.754257094Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511944049,
+        "elapsed_ms": 682333,
+        "java_used_bytes": 3492888,
+        "app_pss_kib": 132874,
+        "app_cpu_ms": 49279,
+        "battery_percent": 85,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 19.654091,
+        "cpu_user_s": 20.911448,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 6718296,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:25:51.75419709Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511954081,
+        "elapsed_ms": 692365,
+        "java_used_bytes": 3552528,
+        "app_pss_kib": 133083,
+        "app_cpu_ms": 49969,
+        "battery_percent": 85,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 19.929502,
+        "cpu_user_s": 21.11498,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 7859912,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:26:01.753570524Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511964137,
+        "elapsed_ms": 702421,
+        "java_used_bytes": 3847968,
+        "app_pss_kib": 132977,
+        "app_cpu_ms": 50648,
+        "battery_percent": 85,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 20.188652,
+        "cpu_user_s": 21.338567,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 8989880,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:26:11.754229478Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511974170,
+        "elapsed_ms": 712454,
+        "java_used_bytes": 3212288,
+        "app_pss_kib": 131769,
+        "app_cpu_ms": 51302,
+        "battery_percent": 85,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 20.41722,
+        "cpu_user_s": 21.576958,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 10130896,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:26:21.754091297Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511984203,
+        "elapsed_ms": 722487,
+        "java_used_bytes": 3073424,
+        "app_pss_kib": 133137,
+        "app_cpu_ms": 51971,
+        "battery_percent": 85,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 20.64568,
+        "cpu_user_s": 21.856036,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 6337592,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:26:31.753431502Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790511994237,
+        "elapsed_ms": 732521,
+        "java_used_bytes": 5031312,
+        "app_pss_kib": 134101,
+        "app_cpu_ms": 52567,
+        "battery_percent": 85,
+        "network": "cellular"
+      },
+      {
+        "cpu_system_s": 20.866481,
+        "cpu_user_s": 22.104002,
+        "event": "resources",
+        "goroutines": 165,
+        "heap_bytes": 7492248,
+        "heap_sys_bytes": 19562496,
+        "max_rss_kib": 114228,
+        "rss_bytes": 13193216,
+        "utc": "2026-09-27T12:26:41.753993581Z"
+      },
+      {
+        "event": "android_resources",
+        "utc_ms": 1790512004268,
+        "elapsed_ms": 742553,
+        "java_used_bytes": 5145552,
+        "app_pss_kib": 133933,
+        "app_cpu_ms": 53249,
+        "battery_percent": 85,
+        "network": "cellular"
+      }
+    ]
+  },
+  "B": {
+    "events": [
+      {
+        "arch": "amd64",
+        "event": "start",
+        "go": "go1.27.1",
+        "mode": "vp8",
+        "os": "linux",
+        "parent_pid": 3971365,
+        "pid": 3971366,
+        "pion": "v4.2.15",
+        "role": "echo",
+        "room_method": "operator-provided disposable room",
+        "utc": "2026-09-27T12:14:18.732767454Z",
+        "vcs.modified": "false",
+        "vcs.revision": "3f65346a02d621c0843975cbe84173d23ebba91f"
+      },
+      {
+        "event": "connected",
+        "utc": "2026-09-27T12:14:20.570752194Z"
+      },
+      {
+        "cpu_system_s": 6.595817,
+        "cpu_user_s": 10.348700000000001,
+        "event": "summary",
+        "goroutines": 5,
+        "heap_bytes": 6535248,
+        "max_rss_kib": 28728,
+        "utc": "2026-09-27T12:26:55.274985331Z"
+      }
+    ],
+    "final_stats": {
+      "Mode": "vp8",
+      "SetupMs": 1838,
+      "BytesSent": 4531489,
+      "BytesReceived": 4531489,
+      "MessagesSent": 372,
+      "MessagesRecv": 372,
+      "ReconnectCount": 0,
+      "Disconnects": 0,
+      "SubscriberState": "closed",
+      "PublisherState": "closed",
+      "Evidence": [
+        {
+          "utc": "2026-09-27T12:14:19.111067609Z",
+          "stage": "ROOM_RESOLVED"
+        },
+        {
+          "utc": "2026-09-27T12:14:19.287344385Z",
+          "stage": "SIGNALING_CONNECTED"
+        },
+        {
+          "utc": "2026-09-27T12:14:19.500617693Z",
+          "stage": "SERVER_HELLO"
+        },
+        {
+          "utc": "2026-09-27T12:14:19.500660518Z",
+          "stage": "ICE_CONFIGURED"
+        },
+        {
+          "utc": "2026-09-27T12:14:19.565676356Z",
+          "stage": "CONNECTION_STATE",
+          "target": "SUBSCRIBER",
+          "state": "connecting"
+        },
+        {
+          "utc": "2026-09-27T12:14:19.926393625Z",
+          "stage": "CONNECTION_STATE",
+          "target": "PUBLISHER",
+          "state": "connecting"
+        },
+        {
+          "utc": "2026-09-27T12:14:20.04444584Z",
+          "stage": "ICE_SELECTED_PAIR",
+          "target": "PUBLISHER",
+          "local_type": "host",
+          "remote_type": "host",
+          "protocol": "udp",
+          "turn_used": false
+        },
+        {
+          "utc": "2026-09-27T12:14:20.146786449Z",
+          "stage": "CONNECTION_STATE",
+          "target": "PUBLISHER",
+          "state": "connected"
+        },
+        {
+          "utc": "2026-09-27T12:14:20.146805698Z",
+          "stage": "PUBLISHER_CONNECTED"
+        },
+        {
+          "utc": "2026-09-27T12:14:20.484328493Z",
+          "stage": "ICE_SELECTED_PAIR",
+          "target": "SUBSCRIBER",
+          "local_type": "host",
+          "remote_type": "host",
+          "protocol": "udp",
+          "turn_used": false
+        },
+        {
+          "utc": "2026-09-27T12:14:20.570672433Z",
+          "stage": "CONNECTION_STATE",
+          "target": "SUBSCRIBER",
+          "state": "connected"
+        },
+        {
+          "utc": "2026-09-27T12:14:20.570709509Z",
+          "stage": "SUBSCRIBER_CONNECTED"
+        },
+        {
+          "utc": "2026-09-27T12:14:26.913873529Z",
+          "stage": "VP8_MEDIA_ACTIVE",
+          "target": "SUBSCRIBER"
+        },
+        {
+          "utc": "2026-09-27T12:26:55.273069863Z",
+          "stage": "CONNECTION_STATE",
+          "target": "PUBLISHER",
+          "state": "closed"
+        }
+      ],
+      "EvidenceDropped": 0,
+      "Media": {
+        "SamplesWritten": 1022,
+        "RTPReceived": 4261,
+        "EmptyRTP": 0,
+        "SequenceGaps": 0,
+        "FramesReceived": 1018,
+        "BinaryFrames": 645
+      },
+      "ApplicationPongs": 0,
+      "ApplicationPings": 151,
+      "SignalingACKs": 218,
+      "CandidateCounts": [
+        {
+          "target": "PUBLISHER",
+          "local_type": "host",
+          "protocol": "udp",
+          "count": 4
+        },
+        {
+          "target": "PUBLISHER",
+          "local_type": "relay",
+          "protocol": "udp",
+          "count": 12
+        },
+        {
+          "target": "PUBLISHER",
+          "local_type": "srflx",
+          "protocol": "udp",
+          "count": 15
+        },
+        {
+          "target": "SUBSCRIBER",
+          "local_type": "host",
+          "protocol": "udp",
+          "count": 4
+        },
+        {
+          "target": "SUBSCRIBER",
+          "local_type": "relay",
+          "protocol": "udp",
+          "count": 12
+        },
+        {
+          "target": "SUBSCRIBER",
+          "local_type": "srflx",
+          "protocol": "udp",
+          "count": 16
+        }
+      ]
+    }
+  },
+  "lifecycle": [
+    {
+      "event": "before",
+      "utc": "2026-09-27T12:15:35.019746+00:00",
+      "app_pid": 21026,
+      "native_pid": 21053,
+      "wifi_on": "1"
+    },
+    {
+      "event": "activity_recreated",
+      "utc": "2026-09-27T12:15:39.171929+00:00",
+      "exit": 0,
+      "app_same": true,
+      "child_alive": true
+    },
+    {
+      "event": "home",
+      "utc": "2026-09-27T12:15:39.269430+00:00",
+      "exit": 0
+    },
+    {
+      "event": "background_survived",
+      "utc": "2026-09-27T12:15:59.331286+00:00",
+      "app_same": true,
+      "child_alive": true
+    },
+    {
+      "event": "foreground_return",
+      "utc": "2026-09-27T12:15:59.398254+00:00",
+      "exit": 0
+    }
+  ],
+  "prior_full_run": {
+    "runtime": {
+      "commit": "c3a874d58dbc7feb5fbfa81c4083dafbff7b4690",
+      "apk_sha256": "ef3b7e750fe9b2e630c4d2622bc8cbb3e43b36da42dbee0361e731764fc6e9d4",
+      "linux_sha256": "eb492860fa813e2d8ea7d7abde1105cfc89ab962bc78a0514ef068477180b5ea",
+      "android": {
+        "commit": "c3a874d58dbc7feb5fbfa81c4083dafbff7b4690",
+        "dirty": false,
+        "binary_sha256": "08c315b44abe92ed1981fe1c99eb238965890d621ab445a3efc5f1e385bbf019",
+        "go": "go version go1.27.1 linux/amd64",
+        "ndk": "Pkg.Desc = Android NDK\nPkg.Revision = 28.2.13676358\nPkg.BaseRevision = 28.2.13676358\nPkg.ReleaseName = r28c",
+        "abi": "arm64-v8a",
+        "min_api": 26,
+        "scope": "synthetic-only, no TUN, sockets unprotected"
+      }
+    },
+    "A": {
+      "events": [
+        {
+          "event": "android_start",
+          "utc_ms": 1790508857227,
+          "model": "Redmi Note 9 Pro",
+          "android": "12",
+          "abi": "arm64-v8a",
+          "network": "cellular",
+          "protected_sockets": false
+        },
+        {
+          "arch": "arm64",
+          "event": "start",
+          "go": "go1.27.1",
+          "mode": "vp8",
+          "os": "android",
+          "parent_pid": 11496,
+          "pid": 11600,
+          "pion": "v4.2.15",
+          "role": "probe",
+          "room_method": "operator-provided disposable room",
+          "utc": "2026-09-27T11:34:17.298324312Z",
+          "vcs.modified": "false",
+          "vcs.revision": "c3a874d58dbc7feb5fbfa81c4083dafbff7b4690"
+        },
+        {
+          "event": "connected",
+          "utc": "2026-09-27T11:34:19.747603009Z"
+        },
+        {
+          "byte_equal": true,
+          "byte_for_byte": true,
+          "carrier_mode": "vp8",
+          "count": 1,
+          "elapsed_s": 3.583795572,
+          "event": "probe_result",
+          "max_rtt_ms": 3583.76,
+          "mean_rtt_ms": 3583.76,
+          "payload_bytes": 1,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "useful_roundtrip_mbit_s": 4.464540367482769e-06,
+          "utc": "2026-09-27T11:34:26.336470246Z"
+        },
+        {
+          "byte_equal": true,
+          "byte_for_byte": true,
+          "carrier_mode": "vp8",
+          "count": 1,
+          "elapsed_s": 1.9845766660000002,
+          "event": "probe_result",
+          "max_rtt_ms": 1984.555,
+          "mean_rtt_ms": 1984.555,
+          "payload_bytes": 32,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "useful_roundtrip_mbit_s": 0.0002579895293397549,
+          "utc": "2026-09-27T11:34:28.321430558Z"
+        },
+        {
+          "byte_equal": true,
+          "byte_for_byte": true,
+          "carrier_mode": "vp8",
+          "count": 1,
+          "elapsed_s": 1.993085208,
+          "event": "probe_result",
+          "max_rtt_ms": 1993.06,
+          "mean_rtt_ms": 1993.06,
+          "payload_bytes": 256,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "useful_roundtrip_mbit_s": 0.0020551053128883587,
+          "utc": "2026-09-27T11:34:30.314755245Z"
+        },
+        {
+          "event": "android_lifecycle",
+          "utc_ms": 1790508870372,
+          "state": "background"
+        },
+        {
+          "event": "android_lifecycle",
+          "utc_ms": 1790508871568,
+          "state": "screen_off"
+        },
+        {
+          "byte_equal": true,
+          "byte_for_byte": true,
+          "carrier_mode": "vp8",
+          "count": 1,
+          "elapsed_s": 2.000093333,
+          "event": "probe_result",
+          "max_rtt_ms": 2000.031,
+          "mean_rtt_ms": 2000.031,
+          "payload_bytes": 1024,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "useful_roundtrip_mbit_s": 0.008191617725871396,
+          "utc": "2026-09-27T11:34:32.315674879Z"
+        },
+        {
+          "byte_equal": true,
+          "byte_for_byte": true,
+          "carrier_mode": "vp8",
+          "count": 1,
+          "elapsed_s": 2.062573124,
+          "event": "probe_result",
+          "max_rtt_ms": 2062.39,
+          "mean_rtt_ms": 2062.39,
+          "payload_bytes": 4096,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "useful_roundtrip_mbit_s": 0.03177390378911967,
+          "utc": "2026-09-27T11:34:34.379961805Z"
+        },
+        {
+          "byte_equal": true,
+          "byte_for_byte": true,
+          "carrier_mode": "vp8",
+          "count": 1,
+          "elapsed_s": 2.116088645,
+          "event": "probe_result",
+          "max_rtt_ms": 2115.615,
+          "mean_rtt_ms": 2115.615,
+          "payload_bytes": 16384,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "useful_roundtrip_mbit_s": 0.12388138872131228,
+          "utc": "2026-09-27T11:34:36.497468367Z"
+        },
+        {
+          "byte_equal": true,
+          "byte_for_byte": true,
+          "carrier_mode": "vp8",
+          "count": 1,
+          "elapsed_s": 4.000181249,
+          "event": "probe_result",
+          "max_rtt_ms": 3999.331,
+          "mean_rtt_ms": 3999.331,
+          "payload_bytes": 65536,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "useful_roundtrip_mbit_s": 0.2621321222037457,
+          "utc": "2026-09-27T11:34:40.498590814Z"
+        },
+        {
+          "event": "android_lifecycle",
+          "utc_ms": 1790508883542,
+          "state": "activity_bound"
+        },
+        {
+          "event": "android_lifecycle",
+          "utc_ms": 1790508886632,
+          "state": "screen_on"
+        },
+        {
+          "event": "android_lifecycle",
+          "utc_ms": 1790508907802,
+          "state": "foreground"
+        },
+        {
+          "byte_equal": true,
+          "byte_for_byte": true,
+          "carrier_mode": "vp8",
+          "count": 100,
+          "elapsed_s": 201.816806173,
+          "event": "probe_result",
+          "max_rtt_ms": 3830.793,
+          "mean_rtt_ms": 2018.10545,
+          "payload_bytes": 1024,
+          "phase": "batch",
+          "received": 100,
+          "sent": 100,
+          "useful_roundtrip_mbit_s": 0.008118253534324302,
+          "utc": "2026-09-27T11:38:02.316724539Z"
+        },
+        {
+          "byte_equal": true,
+          "byte_for_byte": true,
+          "carrier_mode": "vp8",
+          "count": 100,
+          "elapsed_s": 398.174463598,
+          "event": "probe_result",
+          "max_rtt_ms": 4038.441,
+          "mean_rtt_ms": 3981.5485,
+          "payload_bytes": 16384,
+          "phase": "batch",
+          "received": 100,
+          "sent": 100,
+          "useful_roundtrip_mbit_s": 0.06583646716848789,
+          "utc": "2026-09-27T11:44:40.495033866Z"
+        },
+        {
+          "byte_equal": true,
+          "byte_for_byte": true,
+          "carrier_mode": "vp8",
+          "count": 8,
+          "elapsed_s": 31.992369624,
+          "event": "probe_result",
+          "max_rtt_ms": 4022.996,
+          "mean_rtt_ms": 3998.859,
+          "payload_bytes": 16384,
+          "phase": "sustained",
+          "received": 8,
+          "sent": 8,
+          "useful_roundtrip_mbit_s": 0.06555163073718556,
+          "utc": "2026-09-27T11:45:12.493061302Z"
+        },
+        {
+          "byte_equal": true,
+          "byte_for_byte": true,
+          "carrier_mode": "vp8",
+          "count": 75,
+          "elapsed_s": 300.000350823,
+          "event": "probe_result",
+          "max_rtt_ms": 4099.606,
+          "mean_rtt_ms": 3999.8065600000004,
+          "payload_bytes": 16384,
+          "phase": "extended",
+          "received": 75,
+          "sent": 75,
+          "useful_roundtrip_mbit_s": 0.06553592336163586,
+          "utc": "2026-09-27T11:50:12.4941765Z"
+        },
+        {
+          "byte_for_byte": true,
+          "event": "suite_complete",
+          "gate_eligible_mode": true,
+          "note": "requires independent endpoints and recorded real Telemost room/media evidence; Android gate also requires a physical device; no automatic gate promotion",
+          "utc": "2026-09-27T11:50:12.499321187Z"
+        },
+        {
+          "cpu_system_s": 28.046556,
+          "cpu_user_s": 26.828008,
+          "event": "summary",
+          "goroutines": 6,
+          "heap_bytes": 9548704,
+          "max_rss_kib": 125448,
+          "utc": "2026-09-27T11:50:12.517130718Z"
+        },
+        {
+          "event": "android_exit",
+          "utc_ms": 1790509812527,
+          "code": 0,
+          "cancelled": false,
+          "elapsed_ms": 955345
+        }
+      ],
+      "final_stats": {
+        "Mode": "vp8",
+        "SetupMs": 2449,
+        "BytesSent": 3188001,
+        "BytesReceived": 3188001,
+        "MessagesSent": 290,
+        "MessagesRecv": 290,
+        "ReconnectCount": 0,
+        "Disconnects": 0,
+        "SubscriberState": "closed",
+        "PublisherState": "closed",
+        "Evidence": [
+          {
+            "utc": "2026-09-27T11:34:18.062052905Z",
+            "stage": "ROOM_RESOLVED"
+          },
+          {
+            "utc": "2026-09-27T11:34:18.415229572Z",
+            "stage": "SIGNALING_CONNECTED"
+          },
+          {
+            "utc": "2026-09-27T11:34:18.661800145Z",
+            "stage": "SERVER_HELLO"
+          },
+          {
+            "utc": "2026-09-27T11:34:18.661852593Z",
+            "stage": "ICE_CONFIGURED"
+          },
+          {
+            "utc": "2026-09-27T11:34:18.787366291Z",
+            "stage": "CONNECTION_STATE",
+            "target": "SUBSCRIBER",
+            "state": "connecting"
+          },
+          {
+            "utc": "2026-09-27T11:34:19.215251863Z",
+            "stage": "CONNECTION_STATE",
+            "target": "PUBLISHER",
+            "state": "connecting"
+          },
+          {
+            "utc": "2026-09-27T11:34:19.28354103Z",
+            "stage": "ICE_SELECTED_PAIR",
+            "target": "SUBSCRIBER",
+            "local_type": "host",
+            "remote_type": "host",
+            "protocol": "udp",
+            "turn_used": false
+          },
+          {
+            "utc": "2026-09-27T11:34:19.469518217Z",
+            "stage": "CONNECTION_STATE",
+            "target": "SUBSCRIBER",
+            "state": "connected"
+          },
+          {
+            "utc": "2026-09-27T11:34:19.469538947Z",
+            "stage": "SUBSCRIBER_CONNECTED"
+          },
+          {
+            "utc": "2026-09-27T11:34:19.565148999Z",
+            "stage": "ICE_SELECTED_PAIR",
+            "target": "PUBLISHER",
+            "local_type": "host",
+            "remote_type": "host",
+            "protocol": "udp",
+            "turn_used": false
+          },
+          {
+            "utc": "2026-09-27T11:34:19.747526238Z",
+            "stage": "CONNECTION_STATE",
+            "target": "PUBLISHER",
+            "state": "connected"
+          },
+          {
+            "utc": "2026-09-27T11:34:19.747551707Z",
+            "stage": "PUBLISHER_CONNECTED"
+          },
+          {
+            "utc": "2026-09-27T11:34:20.36242478Z",
+            "stage": "VP8_MEDIA_ACTIVE",
+            "target": "SUBSCRIBER"
+          },
+          {
+            "utc": "2026-09-27T11:50:12.509490354Z",
+            "stage": "CONNECTION_STATE",
+            "target": "PUBLISHER",
+            "state": "closed"
+          }
+        ],
+        "EvidenceDropped": 0,
+        "Media": {
+          "SamplesWritten": 958,
+          "RTPReceived": 3217,
+          "EmptyRTP": 0,
+          "SequenceGaps": 0,
+          "FramesReceived": 958,
+          "BinaryFrames": 481
+        },
+        "ApplicationPongs": 0,
+        "ApplicationPings": 190,
+        "SignalingACKs": 240,
+        "CandidateCounts": [
+          {
+            "target": "PUBLISHER",
+            "local_type": "host",
+            "protocol": "udp",
+            "count": 3
+          },
+          {
+            "target": "PUBLISHER",
+            "local_type": "relay",
+            "protocol": "udp",
+            "count": 8
+          },
+          {
+            "target": "PUBLISHER",
+            "local_type": "srflx",
+            "protocol": "udp",
+            "count": 11
+          },
+          {
+            "target": "SUBSCRIBER",
+            "local_type": "host",
+            "protocol": "udp",
+            "count": 3
+          },
+          {
+            "target": "SUBSCRIBER",
+            "local_type": "relay",
+            "protocol": "udp",
+            "count": 9
+          },
+          {
+            "target": "SUBSCRIBER",
+            "local_type": "srflx",
+            "protocol": "udp",
+            "count": 12
+          }
+        ]
+      }
+    },
+    "B": {
+      "events": [
+        {
+          "arch": "amd64",
+          "event": "start",
+          "go": "go1.27.1",
+          "mode": "vp8",
+          "os": "linux",
+          "parent_pid": 3954743,
+          "pid": 3954744,
+          "pion": "v4.2.15",
+          "role": "echo",
+          "room_method": "operator-provided disposable room",
+          "utc": "2026-09-27T11:34:13.466999023Z",
+          "vcs.modified": "false",
+          "vcs.revision": "c3a874d58dbc7feb5fbfa81c4083dafbff7b4690"
+        },
+        {
+          "event": "connected",
+          "utc": "2026-09-27T11:34:15.568071944Z"
+        },
+        {
+          "cpu_system_s": 8.784305,
+          "cpu_user_s": 11.846886,
+          "event": "summary",
+          "goroutines": 5,
+          "heap_bytes": 7463168,
+          "max_rss_kib": 28664,
+          "utc": "2026-09-27T11:50:13.238707614Z"
+        }
+      ],
+      "final_stats": {
+        "Mode": "vp8",
+        "SetupMs": 2101,
+        "BytesSent": 3188001,
+        "BytesReceived": 3188001,
+        "MessagesSent": 290,
+        "MessagesRecv": 290,
+        "ReconnectCount": 0,
+        "Disconnects": 0,
+        "SubscriberState": "closed",
+        "PublisherState": "closed",
+        "Evidence": [
+          {
+            "utc": "2026-09-27T11:34:13.971546768Z",
+            "stage": "ROOM_RESOLVED"
+          },
+          {
+            "utc": "2026-09-27T11:34:14.247739622Z",
+            "stage": "SIGNALING_CONNECTED"
+          },
+          {
+            "utc": "2026-09-27T11:34:14.502900877Z",
+            "stage": "SERVER_HELLO"
+          },
+          {
+            "utc": "2026-09-27T11:34:14.502946106Z",
+            "stage": "ICE_CONFIGURED"
+          },
+          {
+            "utc": "2026-09-27T11:34:14.596459081Z",
+            "stage": "CONNECTION_STATE",
+            "target": "SUBSCRIBER",
+            "state": "connecting"
+          },
+          {
+            "utc": "2026-09-27T11:34:14.968602862Z",
+            "stage": "CONNECTION_STATE",
+            "target": "PUBLISHER",
+            "state": "connecting"
+          },
+          {
+            "utc": "2026-09-27T11:34:15.089637643Z",
+            "stage": "ICE_SELECTED_PAIR",
+            "target": "PUBLISHER",
+            "local_type": "host",
+            "remote_type": "host",
+            "protocol": "udp",
+            "turn_used": false
+          },
+          {
+            "utc": "2026-09-27T11:34:15.185974149Z",
+            "stage": "CONNECTION_STATE",
+            "target": "PUBLISHER",
+            "state": "connected"
+          },
+          {
+            "utc": "2026-09-27T11:34:15.18599454Z",
+            "stage": "PUBLISHER_CONNECTED"
+          },
+          {
+            "utc": "2026-09-27T11:34:15.480721007Z",
+            "stage": "ICE_SELECTED_PAIR",
+            "target": "SUBSCRIBER",
+            "local_type": "host",
+            "remote_type": "host",
+            "protocol": "udp",
+            "turn_used": false
+          },
+          {
+            "utc": "2026-09-27T11:34:15.568022388Z",
+            "stage": "CONNECTION_STATE",
+            "target": "SUBSCRIBER",
+            "state": "connected"
+          },
+          {
+            "utc": "2026-09-27T11:34:15.568044582Z",
+            "stage": "SUBSCRIBER_CONNECTED"
+          },
+          {
+            "utc": "2026-09-27T11:34:22.473892428Z",
+            "stage": "VP8_MEDIA_ACTIVE",
+            "target": "SUBSCRIBER"
+          },
+          {
+            "utc": "2026-09-27T11:50:13.236206964Z",
+            "stage": "CONNECTION_STATE",
+            "target": "PUBLISHER",
+            "state": "closed"
+          }
+        ],
+        "EvidenceDropped": 0,
+        "Media": {
+          "SamplesWritten": 960,
+          "RTPReceived": 3216,
+          "EmptyRTP": 0,
+          "SequenceGaps": 0,
+          "FramesReceived": 957,
+          "BinaryFrames": 481
+        },
+        "ApplicationPongs": 0,
+        "ApplicationPings": 191,
+        "SignalingACKs": 255,
+        "CandidateCounts": [
+          {
+            "target": "PUBLISHER",
+            "local_type": "host",
+            "protocol": "udp",
+            "count": 4
+          },
+          {
+            "target": "PUBLISHER",
+            "local_type": "relay",
+            "protocol": "udp",
+            "count": 12
+          },
+          {
+            "target": "PUBLISHER",
+            "local_type": "srflx",
+            "protocol": "udp",
+            "count": 14
+          },
+          {
+            "target": "SUBSCRIBER",
+            "local_type": "host",
+            "protocol": "udp",
+            "count": 4
+          },
+          {
+            "target": "SUBSCRIBER",
+            "local_type": "relay",
+            "protocol": "udp",
+            "count": 12
+          },
+          {
+            "target": "SUBSCRIBER",
+            "local_type": "srflx",
+            "protocol": "udp",
+            "count": 14
+          }
+        ]
+      }
+    },
+    "lifecycle": [
+      {
+        "event": "before",
+        "utc": "2026-09-27T11:34:43.304172+00:00",
+        "app_pid": 11496,
+        "native_pid": 11600,
+        "wifi_on": "1"
+      },
+      {
+        "event": "activity_recreated",
+        "utc": "2026-09-27T11:34:47.555054+00:00",
+        "exit": 0,
+        "app_same": true,
+        "child_alive": true
+      },
+      {
+        "event": "home",
+        "utc": "2026-09-27T11:34:47.636610+00:00",
+        "exit": 0
+      },
+      {
+        "event": "background_survived",
+        "utc": "2026-09-27T11:35:07.704500+00:00",
+        "app_same": true,
+        "child_alive": true
+      },
+      {
+        "event": "foreground_return",
+        "utc": "2026-09-27T11:35:07.774684+00:00",
+        "exit": 0
+      },
+      {
+        "event": "owner_ps_observed",
+        "utc": "2026-09-27T11:37:54.041231+00:00",
+        "direct_children": 1,
+        "expected_native_only": true,
+        "note": "numeric PID/PPID only; task children procfs observation unavailable"
+      },
+      {
+        "event": "wifi_availability_parsed",
+        "utc": "2026-09-27T11:51:25.579511+00:00",
+        "enabled": true,
+        "supplicant_state": null,
+        "wifi_disconnected_explicit": true,
+        "command_exit": 0
+      }
+    ]
+  },
+  "faults": {
+    "final-cancel": {
+      "A": {
+        "events": [
+          {
+            "event": "android_start",
+            "utc_ms": 1790511029938,
+            "model": "Redmi Note 9 Pro",
+            "android": "12",
+            "abi": "arm64-v8a",
+            "network": "cellular",
+            "protected_sockets": false
+          },
+          {
+            "arch": "arm64",
+            "event": "start",
+            "go": "go1.27.1",
+            "mode": "vp8",
+            "os": "android",
+            "parent_pid": 20511,
+            "pid": 20540,
+            "pion": "v4.2.15",
+            "role": "probe",
+            "room_method": "operator-provided disposable room",
+            "utc": "2026-09-27T12:10:29.983178744Z",
+            "vcs.modified": "false",
+            "vcs.revision": "3f65346a02d621c0843975cbe84173d23ebba91f"
+          },
+          {
+            "event": "connected",
+            "utc": "2026-09-27T12:10:32.389865201Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 1,
+            "elapsed_s": 2.275258124,
+            "event": "probe_result",
+            "max_rtt_ms": 2275.182,
+            "mean_rtt_ms": 2275.182,
+            "payload_bytes": 1,
+            "phase": "size",
+            "received": 1,
+            "sent": 1,
+            "useful_roundtrip_mbit_s": 7.032169155327012e-06,
+            "utc": "2026-09-27T12:10:37.667746553Z"
+          },
+          {
+            "event": "android_lifecycle",
+            "utc_ms": 1790511037982,
+            "state": "background"
+          },
+          {
+            "event": "android_lifecycle",
+            "utc_ms": 1790511037984,
+            "state": "foreground"
+          },
+          {
+            "carrier_mode": "vp8",
+            "completed": 0,
+            "event": "probe_failed",
+            "payload_bytes": 32,
+            "phase": "size",
+            "reason": "CANCELED",
+            "utc": "2026-09-27T12:10:37.986415824Z"
+          },
+          {
+            "cpu_system_s": 0.470058,
+            "cpu_user_s": 0.300965,
+            "event": "summary",
+            "goroutines": 7,
+            "heap_bytes": 3385032,
+            "max_rss_kib": 117956,
+            "utc": "2026-09-27T12:10:37.995644938Z"
+          },
+          {
+            "event": "android_exit",
+            "utc_ms": 1790511038009,
+            "code": 1,
+            "cancelled": true,
+            "elapsed_ms": 8094
+          }
+        ],
+        "final_stats": {
+          "Mode": "vp8",
+          "SetupMs": 2406,
+          "BytesSent": 33,
+          "BytesReceived": 1,
+          "MessagesSent": 2,
+          "MessagesRecv": 1,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "Evidence": [
+            {
+              "utc": "2026-09-27T12:10:30.694748639Z",
+              "stage": "ROOM_RESOLVED"
+            },
+            {
+              "utc": "2026-09-27T12:10:31.051991347Z",
+              "stage": "SIGNALING_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:10:31.314752076Z",
+              "stage": "SERVER_HELLO"
+            },
+            {
+              "utc": "2026-09-27T12:10:31.314805931Z",
+              "stage": "ICE_CONFIGURED"
+            },
+            {
+              "utc": "2026-09-27T12:10:31.441657128Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:10:31.863186816Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:10:31.95926218Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:10:32.141707076Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:10:32.141728691Z",
+              "stage": "SUBSCRIBER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:10:32.204687545Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:10:32.222422024Z",
+              "stage": "VP8_MEDIA_ACTIVE",
+              "target": "SUBSCRIBER"
+            },
+            {
+              "utc": "2026-09-27T12:10:32.389611711Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:10:32.389735461Z",
+              "stage": "PUBLISHER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:10:37.993850407Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "closed"
+            }
+          ],
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 5,
+            "RTPReceived": 5,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 4,
+            "BinaryFrames": 1
+          },
+          "ApplicationPongs": 0,
+          "ApplicationPings": 1,
+          "SignalingACKs": 52,
+          "CandidateCounts": [
+            {
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 3
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 8
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 12
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 3
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 9
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 12
+            }
+          ]
+        }
+      },
+      "B": {
+        "events": [
+          {
+            "arch": "amd64",
+            "event": "start",
+            "go": "go1.27.1",
+            "mode": "vp8",
+            "os": "linux",
+            "parent_pid": 3969587,
+            "pid": 3969588,
+            "pion": "v4.2.15",
+            "role": "echo",
+            "room_method": "operator-provided disposable room",
+            "utc": "2026-09-27T12:10:26.977382371Z",
+            "vcs.modified": "false",
+            "vcs.revision": "3f65346a02d621c0843975cbe84173d23ebba91f"
+          },
+          {
+            "event": "connected",
+            "utc": "2026-09-27T12:10:28.852948886Z"
+          },
+          {
+            "cpu_system_s": 0.166511,
+            "cpu_user_s": 0.228217,
+            "event": "summary",
+            "goroutines": 7,
+            "heap_bytes": 4111096,
+            "max_rss_kib": 22560,
+            "utc": "2026-09-27T12:10:40.64567586Z"
+          }
+        ],
+        "final_stats": {
+          "Mode": "vp8",
+          "SetupMs": 1875,
+          "BytesSent": 1,
+          "BytesReceived": 1,
+          "MessagesSent": 1,
+          "MessagesRecv": 1,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "Evidence": [
+            {
+              "utc": "2026-09-27T12:10:27.381877813Z",
+              "stage": "ROOM_RESOLVED"
+            },
+            {
+              "utc": "2026-09-27T12:10:27.603405917Z",
+              "stage": "SIGNALING_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:10:27.764442717Z",
+              "stage": "SERVER_HELLO"
+            },
+            {
+              "utc": "2026-09-27T12:10:27.764487505Z",
+              "stage": "ICE_CONFIGURED"
+            },
+            {
+              "utc": "2026-09-27T12:10:27.842743513Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:10:28.222596976Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:10:28.321684058Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:10:28.408032926Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:10:28.40804947Z",
+              "stage": "PUBLISHER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:10:28.762403806Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:10:28.852893021Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:10:28.852913932Z",
+              "stage": "SUBSCRIBER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:10:35.121607191Z",
+              "stage": "VP8_MEDIA_ACTIVE",
+              "target": "SUBSCRIBER"
+            },
+            {
+              "utc": "2026-09-27T12:10:40.644316088Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "closed"
+            }
+          ],
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 7,
+            "RTPReceived": 4,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 4,
+            "BinaryFrames": 1
+          },
+          "ApplicationPongs": 0,
+          "ApplicationPings": 2,
+          "SignalingACKs": 70,
+          "CandidateCounts": [
+            {
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 4
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 12
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 16
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 4
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 12
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 16
+            }
+          ]
+        }
+      }
+    },
+    "final-activity-close": {
+      "A": {
+        "events": [
+          {
+            "event": "android_start",
+            "utc_ms": 1790512143552,
+            "model": "Redmi Note 9 Pro",
+            "android": "12",
+            "abi": "arm64-v8a",
+            "network": "cellular",
+            "protected_sockets": false
+          },
+          {
+            "arch": "arm64",
+            "event": "start",
+            "go": "go1.27.1",
+            "mode": "vp8",
+            "os": "android",
+            "parent_pid": 24235,
+            "pid": 24262,
+            "pion": "v4.2.15",
+            "role": "probe",
+            "room_method": "operator-provided disposable room",
+            "utc": "2026-09-27T12:29:03.581858475Z",
+            "vcs.modified": "false",
+            "vcs.revision": "3f65346a02d621c0843975cbe84173d23ebba91f"
+          },
+          {
+            "event": "connected",
+            "utc": "2026-09-27T12:29:05.820296391Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 1,
+            "elapsed_s": 2.480480728,
+            "event": "probe_result",
+            "max_rtt_ms": 2480.418,
+            "mean_rtt_ms": 2480.418,
+            "payload_bytes": 1,
+            "phase": "size",
+            "received": 1,
+            "sent": 1,
+            "useful_roundtrip_mbit_s": 6.450362552464065e-06,
+            "utc": "2026-09-27T12:29:11.303113264Z"
+          },
+          {
+            "event": "android_lifecycle",
+            "utc_ms": 1790512151613,
+            "state": "background"
+          },
+          {
+            "carrier_mode": "vp8",
+            "completed": 0,
+            "event": "probe_failed",
+            "payload_bytes": 32,
+            "phase": "size",
+            "reason": "CANCELED",
+            "utc": "2026-09-27T12:29:12.282518836Z"
+          },
+          {
+            "cpu_system_s": 0.414839,
+            "cpu_user_s": 0.348772,
+            "event": "summary",
+            "goroutines": 5,
+            "heap_bytes": 3958920,
+            "max_rss_kib": 113864,
+            "utc": "2026-09-27T12:29:12.295709305Z"
+          },
+          {
+            "event": "android_exit",
+            "utc_ms": 1790512152319,
+            "code": 1,
+            "cancelled": true,
+            "elapsed_ms": 8782
+          }
+        ],
+        "final_stats": {
+          "Mode": "vp8",
+          "SetupMs": 2238,
+          "BytesSent": 33,
+          "BytesReceived": 1,
+          "MessagesSent": 2,
+          "MessagesRecv": 1,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "Evidence": [
+            {
+              "utc": "2026-09-27T12:29:04.157389777Z",
+              "stage": "ROOM_RESOLVED"
+            },
+            {
+              "utc": "2026-09-27T12:29:04.590580402Z",
+              "stage": "SIGNALING_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:29:04.788343839Z",
+              "stage": "SERVER_HELLO"
+            },
+            {
+              "utc": "2026-09-27T12:29:04.788489777Z",
+              "stage": "ICE_CONFIGURED"
+            },
+            {
+              "utc": "2026-09-27T12:29:04.919129047Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:29:05.348119412Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:29:05.437720141Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:29:05.629547745Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:29:05.632962849Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:29:05.632992016Z",
+              "stage": "SUBSCRIBER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:29:05.82008238Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:29:05.820172901Z",
+              "stage": "PUBLISHER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:29:07.189215245Z",
+              "stage": "VP8_MEDIA_ACTIVE",
+              "target": "SUBSCRIBER"
+            },
+            {
+              "utc": "2026-09-27T12:29:12.293100607Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "closed"
+            },
+            {
+              "utc": "2026-09-27T12:29:12.295398368Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "closed"
+            }
+          ],
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 5,
+            "RTPReceived": 4,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 4,
+            "BinaryFrames": 1
+          },
+          "ApplicationPongs": 0,
+          "ApplicationPings": 1,
+          "SignalingACKs": 53,
+          "CandidateCounts": [
+            {
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 3
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 9
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 12
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 3
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 9
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 12
+            }
+          ]
+        }
+      },
+      "B": {
+        "events": [
+          {
+            "arch": "amd64",
+            "event": "start",
+            "go": "go1.27.1",
+            "mode": "vp8",
+            "os": "linux",
+            "parent_pid": 3977125,
+            "pid": 3977126,
+            "pion": "v4.2.15",
+            "role": "echo",
+            "room_method": "operator-provided disposable room",
+            "utc": "2026-09-27T12:29:00.477079562Z",
+            "vcs.modified": "false",
+            "vcs.revision": "3f65346a02d621c0843975cbe84173d23ebba91f"
+          },
+          {
+            "event": "connected",
+            "utc": "2026-09-27T12:29:02.481953727Z"
+          },
+          {
+            "cpu_system_s": 0.183129,
+            "cpu_user_s": 0.233637,
+            "event": "summary",
+            "goroutines": 7,
+            "heap_bytes": 6303400,
+            "max_rss_kib": 22528,
+            "utc": "2026-09-27T12:29:14.212333158Z"
+          }
+        ],
+        "final_stats": {
+          "Mode": "vp8",
+          "SetupMs": 2004,
+          "BytesSent": 1,
+          "BytesReceived": 1,
+          "MessagesSent": 1,
+          "MessagesRecv": 1,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "Evidence": [
+            {
+              "utc": "2026-09-27T12:29:00.867547063Z",
+              "stage": "ROOM_RESOLVED"
+            },
+            {
+              "utc": "2026-09-27T12:29:01.130717737Z",
+              "stage": "SIGNALING_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:29:01.305716317Z",
+              "stage": "SERVER_HELLO"
+            },
+            {
+              "utc": "2026-09-27T12:29:01.305796047Z",
+              "stage": "ICE_CONFIGURED"
+            },
+            {
+              "utc": "2026-09-27T12:29:01.400404628Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:29:01.779716935Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:29:01.866762403Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:29:01.953155357Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:29:01.953166134Z",
+              "stage": "PUBLISHER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:29:02.390787951Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:29:02.48187662Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:29:02.481914567Z",
+              "stage": "SUBSCRIBER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:29:08.656425723Z",
+              "stage": "VP8_MEDIA_ACTIVE",
+              "target": "SUBSCRIBER"
+            },
+            {
+              "utc": "2026-09-27T12:29:14.210849638Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "closed"
+            }
+          ],
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 7,
+            "RTPReceived": 4,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 4,
+            "BinaryFrames": 1
+          },
+          "ApplicationPongs": 0,
+          "ApplicationPings": 2,
+          "SignalingACKs": 66,
+          "CandidateCounts": [
+            {
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 4
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 12
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 14
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 4
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 12
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 14
+            }
+          ]
+        }
+      },
+      "operator_result": {
+        "case": "activity-close",
+        "runner_exit": 0,
+        "duration_s": 70.99407196099855,
+        "native_remaining": false,
+        "utc": "2026-09-27T12:29:17.302427+00:00"
+      }
+    },
+    "final-process-death": {
+      "A": {
+        "events": [
+          {
+            "event": "android_start",
+            "utc_ms": 1790512193556,
+            "model": "Redmi Note 9 Pro",
+            "android": "12",
+            "abi": "arm64-v8a",
+            "network": "cellular",
+            "protected_sockets": false
+          },
+          {
+            "arch": "arm64",
+            "event": "start",
+            "go": "go1.27.1",
+            "mode": "vp8",
+            "os": "android",
+            "parent_pid": 24435,
+            "pid": 24464,
+            "pion": "v4.2.15",
+            "role": "probe",
+            "room_method": "operator-provided disposable room",
+            "utc": "2026-09-27T12:29:53.591425123Z",
+            "vcs.modified": "false",
+            "vcs.revision": "3f65346a02d621c0843975cbe84173d23ebba91f"
+          },
+          {
+            "event": "connected",
+            "utc": "2026-09-27T12:29:56.184973924Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 1,
+            "elapsed_s": 2.018120155,
+            "event": "probe_result",
+            "max_rtt_ms": 2017.929,
+            "mean_rtt_ms": 2017.929,
+            "payload_bytes": 1,
+            "phase": "size",
+            "received": 1,
+            "sent": 1,
+            "useful_roundtrip_mbit_s": 7.928170163882042e-06,
+            "utc": "2026-09-27T12:30:01.204947307Z"
+          }
+        ],
+        "final_stats": {
+          "Mode": "vp8",
+          "SetupMs": 2593,
+          "BytesSent": 1,
+          "BytesReceived": 1,
+          "MessagesSent": 1,
+          "MessagesRecv": 1,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "connected",
+          "PublisherState": "connected",
+          "Evidence": [
+            {
+              "utc": "2026-09-27T12:29:54.101540122Z",
+              "stage": "ROOM_RESOLVED"
+            },
+            {
+              "utc": "2026-09-27T12:29:54.461482831Z",
+              "stage": "SIGNALING_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:29:54.694819289Z",
+              "stage": "SERVER_HELLO"
+            },
+            {
+              "utc": "2026-09-27T12:29:54.694966164Z",
+              "stage": "ICE_CONFIGURED"
+            },
+            {
+              "utc": "2026-09-27T12:29:54.852837362Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:29:55.28183882Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:29:55.547593351Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:29:55.728718507Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:29:55.728777101Z",
+              "stage": "PUBLISHER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:29:56.00084184Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:29:56.184818351Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:29:56.18487507Z",
+              "stage": "SUBSCRIBER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:29:56.260372934Z",
+              "stage": "VP8_MEDIA_ACTIVE",
+              "target": "SUBSCRIBER"
+            }
+          ],
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 4,
+            "RTPReceived": 5,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 4,
+            "BinaryFrames": 1
+          },
+          "ApplicationPongs": 0,
+          "ApplicationPings": 1,
+          "SignalingACKs": 51,
+          "CandidateCounts": [
+            {
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 3
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 9
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 10
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 3
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 9
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 12
+            }
+          ]
+        }
+      },
+      "B": {
+        "events": [
+          {
+            "arch": "amd64",
+            "event": "start",
+            "go": "go1.27.1",
+            "mode": "vp8",
+            "os": "linux",
+            "parent_pid": 3977603,
+            "pid": 3977604,
+            "pion": "v4.2.15",
+            "role": "echo",
+            "room_method": "operator-provided disposable room",
+            "utc": "2026-09-27T12:29:50.635088849Z",
+            "vcs.modified": "false",
+            "vcs.revision": "3f65346a02d621c0843975cbe84173d23ebba91f"
+          },
+          {
+            "event": "connected",
+            "utc": "2026-09-27T12:29:52.393461575Z"
+          },
+          {
+            "cpu_system_s": 0.158947,
+            "cpu_user_s": 0.207016,
+            "event": "summary",
+            "goroutines": 7,
+            "heap_bytes": 5728528,
+            "max_rss_kib": 22116,
+            "utc": "2026-09-27T12:30:02.276266949Z"
+          }
+        ],
+        "final_stats": {
+          "Mode": "vp8",
+          "SetupMs": 1758,
+          "BytesSent": 1,
+          "BytesReceived": 1,
+          "MessagesSent": 1,
+          "MessagesRecv": 1,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "Evidence": [
+            {
+              "utc": "2026-09-27T12:29:50.862569811Z",
+              "stage": "ROOM_RESOLVED"
+            },
+            {
+              "utc": "2026-09-27T12:29:51.142585566Z",
+              "stage": "SIGNALING_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:29:51.284942918Z",
+              "stage": "SERVER_HELLO"
+            },
+            {
+              "utc": "2026-09-27T12:29:51.284981768Z",
+              "stage": "ICE_CONFIGURED"
+            },
+            {
+              "utc": "2026-09-27T12:29:51.382290772Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:29:51.767821494Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:29:51.88363025Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:29:51.993671992Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:29:51.993707867Z",
+              "stage": "PUBLISHER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:29:52.305842703Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:29:52.393310586Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:29:52.393391488Z",
+              "stage": "SUBSCRIBER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:29:58.518835304Z",
+              "stage": "VP8_MEDIA_ACTIVE",
+              "target": "SUBSCRIBER"
+            },
+            {
+              "utc": "2026-09-27T12:30:02.274779482Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "closed"
+            }
+          ],
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 6,
+            "RTPReceived": 4,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 4,
+            "BinaryFrames": 1
+          },
+          "ApplicationPongs": 0,
+          "ApplicationPings": 2,
+          "SignalingACKs": 69,
+          "CandidateCounts": [
+            {
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 4
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 12
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 16
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 4
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 12
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 15
+            }
+          ]
+        }
+      },
+      "operator_result": {
+        "case": "process-death",
+        "runner_exit": 0,
+        "duration_s": 48.08364127200002,
+        "native_remaining": false,
+        "utc": "2026-09-27T12:30:05.386258+00:00"
+      }
+    },
+    "final-remote-exit": {
+      "A": {
+        "events": [
+          {
+            "event": "android_start",
+            "utc_ms": 1790512220012,
+            "model": "Redmi Note 9 Pro",
+            "android": "12",
+            "abi": "arm64-v8a",
+            "network": "cellular",
+            "protected_sockets": false
+          },
+          {
+            "arch": "arm64",
+            "event": "start",
+            "go": "go1.27.1",
+            "mode": "vp8",
+            "os": "android",
+            "parent_pid": 24594,
+            "pid": 24620,
+            "pion": "v4.2.15",
+            "role": "probe",
+            "room_method": "operator-provided disposable room",
+            "utc": "2026-09-27T12:30:20.043526102Z",
+            "vcs.modified": "false",
+            "vcs.revision": "3f65346a02d621c0843975cbe84173d23ebba91f"
+          },
+          {
+            "event": "connected",
+            "utc": "2026-09-27T12:30:22.625445007Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 1,
+            "elapsed_s": 2.309202603,
+            "event": "probe_result",
+            "max_rtt_ms": 2309.132,
+            "mean_rtt_ms": 2309.132,
+            "payload_bytes": 1,
+            "phase": "size",
+            "received": 1,
+            "sent": 1,
+            "useful_roundtrip_mbit_s": 6.928798702726909e-06,
+            "utc": "2026-09-27T12:30:27.936576828Z"
+          },
+          {
+            "carrier_mode": "vp8",
+            "completed": 0,
+            "event": "probe_failed",
+            "payload_bytes": 32,
+            "phase": "size",
+            "reason": "ECHO_TIMEOUT",
+            "utc": "2026-09-27T12:30:37.938407241Z"
+          },
+          {
+            "cpu_system_s": 0.871493,
+            "cpu_user_s": 0.691114,
+            "event": "summary",
+            "goroutines": 6,
+            "heap_bytes": 5075288,
+            "max_rss_kib": 113720,
+            "utc": "2026-09-27T12:30:37.95815922Z"
+          },
+          {
+            "event": "android_exit",
+            "utc_ms": 1790512237976,
+            "code": 1,
+            "cancelled": false,
+            "elapsed_ms": 17981
+          }
+        ],
+        "final_stats": {
+          "Mode": "vp8",
+          "SetupMs": 2582,
+          "BytesSent": 33,
+          "BytesReceived": 1,
+          "MessagesSent": 2,
+          "MessagesRecv": 1,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "Evidence": [
+            {
+              "utc": "2026-09-27T12:30:20.592729487Z",
+              "stage": "ROOM_RESOLVED"
+            },
+            {
+              "utc": "2026-09-27T12:30:21.019342196Z",
+              "stage": "SIGNALING_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:30:21.285615945Z",
+              "stage": "SERVER_HELLO"
+            },
+            {
+              "utc": "2026-09-27T12:30:21.285908445Z",
+              "stage": "ICE_CONFIGURED"
+            },
+            {
+              "utc": "2026-09-27T12:30:21.446893237Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:30:21.876123966Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:30:22.163555528Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:30:22.39066058Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:30:22.39071282Z",
+              "stage": "PUBLISHER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:30:22.454604226Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:30:22.625316674Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:30:22.625369903Z",
+              "stage": "SUBSCRIBER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:30:22.700462716Z",
+              "stage": "VP8_MEDIA_ACTIVE",
+              "target": "SUBSCRIBER"
+            },
+            {
+              "utc": "2026-09-27T12:30:37.952368699Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "closed"
+            }
+          ],
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 10,
+            "RTPReceived": 5,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 5,
+            "BinaryFrames": 1
+          },
+          "ApplicationPongs": 0,
+          "ApplicationPings": 3,
+          "SignalingACKs": 54,
+          "CandidateCounts": [
+            {
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 3
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 9
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 12
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 3
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 9
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 11
+            }
+          ]
+        }
+      },
+      "B": {
+        "events": [
+          {
+            "arch": "amd64",
+            "event": "start",
+            "go": "go1.27.1",
+            "mode": "vp8",
+            "os": "linux",
+            "parent_pid": 3978002,
+            "pid": 3978003,
+            "pion": "v4.2.15",
+            "role": "echo",
+            "room_method": "operator-provided disposable room",
+            "utc": "2026-09-27T12:30:17.416120737Z",
+            "vcs.modified": "false",
+            "vcs.revision": "3f65346a02d621c0843975cbe84173d23ebba91f"
+          },
+          {
+            "event": "connected",
+            "utc": "2026-09-27T12:30:19.157547581Z"
+          },
+          {
+            "cpu_system_s": 0.163302,
+            "cpu_user_s": 0.166961,
+            "event": "summary",
+            "goroutines": 7,
+            "heap_bytes": 5823672,
+            "max_rss_kib": 22148,
+            "utc": "2026-09-27T12:30:28.495059044Z"
+          }
+        ],
+        "final_stats": {
+          "Mode": "vp8",
+          "SetupMs": 1741,
+          "BytesSent": 1,
+          "BytesReceived": 1,
+          "MessagesSent": 1,
+          "MessagesRecv": 1,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "Evidence": [
+            {
+              "utc": "2026-09-27T12:30:17.694253455Z",
+              "stage": "ROOM_RESOLVED"
+            },
+            {
+              "utc": "2026-09-27T12:30:17.873215952Z",
+              "stage": "SIGNALING_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:30:18.073464318Z",
+              "stage": "SERVER_HELLO"
+            },
+            {
+              "utc": "2026-09-27T12:30:18.073515467Z",
+              "stage": "ICE_CONFIGURED"
+            },
+            {
+              "utc": "2026-09-27T12:30:18.136878616Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:30:18.49151409Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:30:18.569562552Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:30:18.648529664Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:30:18.648553871Z",
+              "stage": "PUBLISHER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:30:19.0660704Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:30:19.157498536Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:30:19.157513559Z",
+              "stage": "SUBSCRIBER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:30:25.079919543Z",
+              "stage": "VP8_MEDIA_ACTIVE",
+              "target": "SUBSCRIBER"
+            },
+            {
+              "utc": "2026-09-27T12:30:28.484847287Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "closed"
+            }
+          ],
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 6,
+            "RTPReceived": 4,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 4,
+            "BinaryFrames": 1
+          },
+          "ApplicationPongs": 0,
+          "ApplicationPings": 2,
+          "SignalingACKs": 70,
+          "CandidateCounts": [
+            {
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 4
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 12
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 16
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 4
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 12
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 16
+            }
+          ]
+        }
+      },
+      "operator_result": {
+        "case": "remote-exit",
+        "runner_exit": 0,
+        "duration_s": 37.36914069299928,
+        "native_remaining": false,
+        "utc": "2026-09-27T12:30:42.755555+00:00"
+      }
+    },
+    "network-loss": {
+      "A": {
+        "events": [
+          {
+            "event": "android_start",
+            "utc_ms": 1790510493684,
+            "model": "Redmi Note 9 Pro",
+            "android": "12",
+            "abi": "arm64-v8a",
+            "network": "cellular",
+            "protected_sockets": false
+          },
+          {
+            "arch": "arm64",
+            "event": "start",
+            "go": "go1.27.1",
+            "mode": "vp8",
+            "os": "android",
+            "parent_pid": 18792,
+            "pid": 18850,
+            "pion": "v4.2.15",
+            "role": "probe",
+            "room_method": "operator-provided disposable room",
+            "utc": "2026-09-27T12:01:33.791403844Z",
+            "vcs.modified": "false",
+            "vcs.revision": "d8e450c09174e2769d90e663098f0dd413735dc2"
+          },
+          {
+            "event": "connected",
+            "utc": "2026-09-27T12:01:37.284463061Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 1,
+            "elapsed_s": 2.823827395,
+            "event": "probe_result",
+            "max_rtt_ms": 2823.767,
+            "mean_rtt_ms": 2823.767,
+            "payload_bytes": 1,
+            "phase": "size",
+            "received": 1,
+            "sent": 1,
+            "useful_roundtrip_mbit_s": 5.666068693975539e-06,
+            "utc": "2026-09-27T12:01:43.117110038Z"
+          },
+          {
+            "carrier_mode": "vp8",
+            "completed": 0,
+            "event": "probe_failed",
+            "payload_bytes": 32,
+            "phase": "size",
+            "reason": "SESSION_CLOSED",
+            "utc": "2026-09-27T12:01:44.12320733Z"
+          },
+          {
+            "cpu_system_s": 0.514898,
+            "cpu_user_s": 0.407525,
+            "event": "summary",
+            "goroutines": 3,
+            "heap_bytes": 4318256,
+            "max_rss_kib": 118492,
+            "utc": "2026-09-27T12:01:44.134244257Z"
+          },
+          {
+            "event": "android_exit",
+            "utc_ms": 1790510504181,
+            "code": 1,
+            "cancelled": false,
+            "elapsed_ms": 10517
+          }
+        ],
+        "final_stats": {
+          "Mode": "vp8",
+          "SetupMs": 3493,
+          "BytesSent": 33,
+          "BytesReceived": 1,
+          "MessagesSent": 2,
+          "MessagesRecv": 1,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "Evidence": [
+            {
+              "utc": "2026-09-27T12:01:35.069566135Z",
+              "stage": "ROOM_RESOLVED"
+            },
+            {
+              "utc": "2026-09-27T12:01:35.48300577Z",
+              "stage": "SIGNALING_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:01:35.683301187Z",
+              "stage": "SERVER_HELLO"
+            },
+            {
+              "utc": "2026-09-27T12:01:35.683462802Z",
+              "stage": "ICE_CONFIGURED"
+            },
+            {
+              "utc": "2026-09-27T12:01:35.803170093Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:01:36.221602593Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:01:36.457969155Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:01:36.63623827Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:01:36.636282749Z",
+              "stage": "PUBLISHER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:01:37.10098702Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:01:37.28430827Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:01:37.284369572Z",
+              "stage": "SUBSCRIBER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:01:37.357553791Z",
+              "stage": "VP8_MEDIA_ACTIVE",
+              "target": "SUBSCRIBER"
+            },
+            {
+              "utc": "2026-09-27T12:01:44.12290983Z",
+              "stage": "WS_FAIL",
+              "state": "read_error"
+            },
+            {
+              "utc": "2026-09-27T12:01:44.129059778Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "closed"
+            },
+            {
+              "utc": "2026-09-27T12:01:44.133217486Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "closed"
+            }
+          ],
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 6,
+            "RTPReceived": 6,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 6,
+            "BinaryFrames": 1
+          },
+          "ApplicationPongs": 0,
+          "ApplicationPings": 1,
+          "SignalingACKs": 53,
+          "CandidateCounts": [
+            {
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 3
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 9
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 12
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 3
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 9
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 12
+            }
+          ]
+        }
+      },
+      "B": {
+        "events": [
+          {
+            "arch": "amd64",
+            "event": "start",
+            "go": "go1.27.1",
+            "mode": "vp8",
+            "os": "linux",
+            "parent_pid": 3965984,
+            "pid": 3965985,
+            "pion": "v4.2.15",
+            "role": "echo",
+            "room_method": "operator-provided disposable room",
+            "utc": "2026-09-27T12:01:30.572109194Z",
+            "vcs.modified": "false",
+            "vcs.revision": "c3a874d58dbc7feb5fbfa81c4083dafbff7b4690"
+          },
+          {
+            "event": "connected",
+            "utc": "2026-09-27T12:01:32.396443035Z"
+          },
+          {
+            "cpu_system_s": 0.218151,
+            "cpu_user_s": 0.256611,
+            "event": "summary",
+            "goroutines": 7,
+            "heap_bytes": 4390472,
+            "max_rss_kib": 22840,
+            "utc": "2026-09-27T12:01:46.334163495Z"
+          }
+        ],
+        "final_stats": {
+          "Mode": "vp8",
+          "SetupMs": 1824,
+          "BytesSent": 33,
+          "BytesReceived": 33,
+          "MessagesSent": 2,
+          "MessagesRecv": 2,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "Evidence": [
+            {
+              "utc": "2026-09-27T12:01:30.81073538Z",
+              "stage": "ROOM_RESOLVED"
+            },
+            {
+              "utc": "2026-09-27T12:01:31.04776323Z",
+              "stage": "SIGNALING_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:01:31.248826524Z",
+              "stage": "SERVER_HELLO"
+            },
+            {
+              "utc": "2026-09-27T12:01:31.248866254Z",
+              "stage": "ICE_CONFIGURED"
+            },
+            {
+              "utc": "2026-09-27T12:01:31.328512704Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:01:31.698628517Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:01:31.836578196Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:01:31.955001397Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:01:31.955041819Z",
+              "stage": "PUBLISHER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:01:32.311677356Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:01:32.396371266Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:01:32.39638719Z",
+              "stage": "SUBSCRIBER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:01:39.534426567Z",
+              "stage": "VP8_MEDIA_ACTIVE",
+              "target": "SUBSCRIBER"
+            },
+            {
+              "utc": "2026-09-27T12:01:46.33267714Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "closed"
+            }
+          ],
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 9,
+            "RTPReceived": 5,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 5,
+            "BinaryFrames": 2
+          },
+          "ApplicationPongs": 0,
+          "ApplicationPings": 3,
+          "SignalingACKs": 66,
+          "CandidateCounts": [
+            {
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 4
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 12
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 16
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 4
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 12
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 11
+            }
+          ]
+        }
+      }
+    },
+    "recovery-and-cancel": {
+      "A": {
+        "events": [
+          {
+            "event": "android_start",
+            "utc_ms": 1790510538416,
+            "model": "Redmi Note 9 Pro",
+            "android": "12",
+            "abi": "arm64-v8a",
+            "network": "cellular",
+            "protected_sockets": false
+          },
+          {
+            "arch": "arm64",
+            "event": "start",
+            "go": "go1.27.1",
+            "mode": "vp8",
+            "os": "android",
+            "parent_pid": 19371,
+            "pid": 19398,
+            "pion": "v4.2.15",
+            "role": "probe",
+            "room_method": "operator-provided disposable room",
+            "utc": "2026-09-27T12:02:18.446827473Z",
+            "vcs.modified": "false",
+            "vcs.revision": "d8e450c09174e2769d90e663098f0dd413735dc2"
+          },
+          {
+            "event": "connected",
+            "utc": "2026-09-27T12:02:20.880691534Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 1,
+            "elapsed_s": 2.327112915,
+            "event": "probe_result",
+            "max_rtt_ms": 2327.041,
+            "mean_rtt_ms": 2327.041,
+            "payload_bytes": 1,
+            "phase": "size",
+            "received": 1,
+            "sent": 1,
+            "useful_roundtrip_mbit_s": 6.875472134105707e-06,
+            "utc": "2026-09-27T12:02:26.211244397Z"
+          },
+          {
+            "event": "android_lifecycle",
+            "utc_ms": 1790510546485,
+            "state": "background"
+          },
+          {
+            "event": "android_lifecycle",
+            "utc_ms": 1790510546489,
+            "state": "foreground"
+          },
+          {
+            "event": "android_exit",
+            "utc_ms": 1790510546587,
+            "code": 141,
+            "cancelled": true,
+            "elapsed_ms": 8184
+          }
+        ],
+        "final_stats": {
+          "Mode": "vp8",
+          "SetupMs": 2433,
+          "BytesSent": 1,
+          "BytesReceived": 1,
+          "MessagesSent": 1,
+          "MessagesRecv": 1,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "connected",
+          "PublisherState": "connected",
+          "Evidence": [
+            {
+              "utc": "2026-09-27T12:02:18.915769087Z",
+              "stage": "ROOM_RESOLVED"
+            },
+            {
+              "utc": "2026-09-27T12:02:19.348591743Z",
+              "stage": "SIGNALING_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:02:19.602114087Z",
+              "stage": "SERVER_HELLO"
+            },
+            {
+              "utc": "2026-09-27T12:02:19.602364191Z",
+              "stage": "ICE_CONFIGURED"
+            },
+            {
+              "utc": "2026-09-27T12:02:19.725888983Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:02:20.155786899Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:02:20.230039764Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:02:20.421822212Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:02:20.42188992Z",
+              "stage": "SUBSCRIBER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:02:20.512069503Z",
+              "stage": "VP8_MEDIA_ACTIVE",
+              "target": "SUBSCRIBER"
+            },
+            {
+              "utc": "2026-09-27T12:02:20.697964399Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:02:20.880562264Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:02:20.880614503Z",
+              "stage": "PUBLISHER_CONNECTED"
+            }
+          ],
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 4,
+            "RTPReceived": 5,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 4,
+            "BinaryFrames": 1
+          },
+          "ApplicationPongs": 0,
+          "ApplicationPings": 1,
+          "SignalingACKs": 51,
+          "CandidateCounts": [
+            {
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 3
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 9
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 11
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 3
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 9
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 11
+            }
+          ]
+        }
+      },
+      "B": {
+        "events": [
+          {
+            "arch": "amd64",
+            "event": "start",
+            "go": "go1.27.1",
+            "mode": "vp8",
+            "os": "linux",
+            "parent_pid": 3966437,
+            "pid": 3966438,
+            "pion": "v4.2.15",
+            "role": "echo",
+            "room_method": "operator-provided disposable room",
+            "utc": "2026-09-27T12:02:15.508046702Z",
+            "vcs.modified": "false",
+            "vcs.revision": "c3a874d58dbc7feb5fbfa81c4083dafbff7b4690"
+          },
+          {
+            "event": "connected",
+            "utc": "2026-09-27T12:02:17.506584851Z"
+          },
+          {
+            "cpu_system_s": 0.218052,
+            "cpu_user_s": 0.206885,
+            "event": "summary",
+            "goroutines": 7,
+            "heap_bytes": 6404352,
+            "max_rss_kib": 22820,
+            "utc": "2026-09-27T12:02:29.36001444Z"
+          }
+        ],
+        "final_stats": {
+          "Mode": "vp8",
+          "SetupMs": 1998,
+          "BytesSent": 1,
+          "BytesReceived": 1,
+          "MessagesSent": 1,
+          "MessagesRecv": 1,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "Evidence": [
+            {
+              "utc": "2026-09-27T12:02:15.890930616Z",
+              "stage": "ROOM_RESOLVED"
+            },
+            {
+              "utc": "2026-09-27T12:02:16.15015546Z",
+              "stage": "SIGNALING_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:02:16.376458273Z",
+              "stage": "SERVER_HELLO"
+            },
+            {
+              "utc": "2026-09-27T12:02:16.376498534Z",
+              "stage": "ICE_CONFIGURED"
+            },
+            {
+              "utc": "2026-09-27T12:02:16.468734964Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:02:16.842760292Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connecting"
+            },
+            {
+              "utc": "2026-09-27T12:02:16.947370623Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:02:17.034547364Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:02:17.034565553Z",
+              "stage": "PUBLISHER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:02:17.418945604Z",
+              "stage": "ICE_SELECTED_PAIR",
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "remote_type": "host",
+              "protocol": "udp",
+              "turn_used": false
+            },
+            {
+              "utc": "2026-09-27T12:02:17.506450827Z",
+              "stage": "CONNECTION_STATE",
+              "target": "SUBSCRIBER",
+              "state": "connected"
+            },
+            {
+              "utc": "2026-09-27T12:02:17.506527082Z",
+              "stage": "SUBSCRIBER_CONNECTED"
+            },
+            {
+              "utc": "2026-09-27T12:02:23.41054314Z",
+              "stage": "VP8_MEDIA_ACTIVE",
+              "target": "SUBSCRIBER"
+            },
+            {
+              "utc": "2026-09-27T12:02:29.358724285Z",
+              "stage": "CONNECTION_STATE",
+              "target": "PUBLISHER",
+              "state": "closed"
+            }
+          ],
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 7,
+            "RTPReceived": 4,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 4,
+            "BinaryFrames": 1
+          },
+          "ApplicationPongs": 0,
+          "ApplicationPings": 2,
+          "SignalingACKs": 64,
+          "CandidateCounts": [
+            {
+              "target": "PUBLISHER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 4
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 12
+            },
+            {
+              "target": "PUBLISHER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 16
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "host",
+              "protocol": "udp",
+              "count": 4
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "relay",
+              "protocol": "udp",
+              "count": 12
+            },
+            {
+              "target": "SUBSCRIBER",
+              "local_type": "srflx",
+              "protocol": "udp",
+              "count": 10
+            }
+          ]
+        }
+      }
+    }
+  },
+  "cleanup": {
+    "android_native_test_directories": 0,
+    "mobile_data_enabled_after_restore": true,
+    "wifi_enabled_after_tests": true,
+    "remote_directories": 0,
+    "remote_processes": 0,
+    "android_app_running": false,
+    "android_native_pids_remaining": [],
+    "android_room_input_remaining": false
+  },
+  "waiting_room_required": false,
+  "restrictions": [
+    "synthetic only",
+    "no TUN",
+    "no Family E2E/auth",
+    "no protected sockets",
+    "no restricted-mobile claim",
+    "Wi-Fi not associated; handoff not tested"
+  ],
+  "network_actions": [
+    {
+      "action": "mobile_data_disabled",
+      "utc": "2026-09-27T12:01:43.883332+00:00",
+      "exit": 0
+    },
+    {
+      "action": "bounded_terminal_exit",
+      "utc": "2026-09-27T12:01:45.887764+00:00",
+      "observed_elapsed_s": 2.0044652279993898
+    },
+    {
+      "action": "mobile_data_restored",
+      "utc": "2026-09-27T12:01:46.066954+00:00",
+      "exit": 0,
+      "restored": true
+    },
+    {
+      "action": "runner_exit",
+      "utc": "2026-09-27T12:01:49.487743+00:00",
+      "code": 1
+    }
+  ],
+  "android_native_signaling_close": {
+    "echo_byte_equal": true,
+    "event": "live_signaling_close",
+    "shutdown_ms": 16,
+    "stats": {
+      "Mode": "vp8",
+      "SetupMs": 2380,
+      "BytesSent": 1024,
+      "BytesReceived": 1024,
+      "MessagesSent": 1,
+      "MessagesRecv": 1,
+      "ReconnectCount": 0,
+      "Disconnects": 0,
+      "SubscriberState": "closed",
+      "PublisherState": "closed",
+      "Evidence": [
+        {
+          "utc": "2026-09-27T11:54:53.607573736Z",
+          "stage": "ROOM_RESOLVED"
+        },
+        {
+          "utc": "2026-09-27T11:54:53.977201392Z",
+          "stage": "SIGNALING_CONNECTED"
+        },
+        {
+          "utc": "2026-09-27T11:54:54.242468632Z",
+          "stage": "SERVER_HELLO"
+        },
+        {
+          "utc": "2026-09-27T11:54:54.242635507Z",
+          "stage": "ICE_CONFIGURED"
+        },
+        {
+          "utc": "2026-09-27T11:54:54.392387694Z",
+          "stage": "CONNECTION_STATE",
+          "target": "SUBSCRIBER",
+          "state": "connecting"
+        },
+        {
+          "utc": "2026-09-27T11:54:54.826896913Z",
+          "stage": "CONNECTION_STATE",
+          "target": "PUBLISHER",
+          "state": "connecting"
+        },
+        {
+          "utc": "2026-09-27T11:54:54.903483579Z",
+          "stage": "ICE_SELECTED_PAIR",
+          "target": "SUBSCRIBER",
+          "local_type": "host",
+          "remote_type": "host",
+          "protocol": "udp",
+          "turn_used": false
+        },
+        {
+          "utc": "2026-09-27T11:54:55.064418423Z",
+          "stage": "ICE_SELECTED_PAIR",
+          "target": "PUBLISHER",
+          "local_type": "host",
+          "remote_type": "host",
+          "protocol": "udp",
+          "turn_used": false
+        },
+        {
+          "utc": "2026-09-27T11:54:55.068576652Z",
+          "stage": "CONNECTION_STATE",
+          "target": "SUBSCRIBER",
+          "state": "connected"
+        },
+        {
+          "utc": "2026-09-27T11:54:55.068613111Z",
+          "stage": "SUBSCRIBER_CONNECTED"
+        },
+        {
+          "utc": "2026-09-27T11:54:55.159385611Z",
+          "stage": "VP8_MEDIA_ACTIVE",
+          "target": "SUBSCRIBER"
+        },
+        {
+          "utc": "2026-09-27T11:54:55.27557009Z",
+          "stage": "CONNECTION_STATE",
+          "target": "PUBLISHER",
+          "state": "connected"
+        },
+        {
+          "utc": "2026-09-27T11:54:55.275613631Z",
+          "stage": "PUBLISHER_CONNECTED"
+        },
+        {
+          "utc": "2026-09-27T11:55:01.057842431Z",
+          "stage": "WS_FAIL",
+          "state": "read_error"
+        },
+        {
+          "utc": "2026-09-27T11:55:01.066479567Z",
+          "stage": "CONNECTION_STATE",
+          "target": "PUBLISHER",
+          "state": "closed"
+        },
+        {
+          "utc": "2026-09-27T11:55:01.07288941Z",
+          "stage": "CONNECTION_STATE",
+          "target": "SUBSCRIBER",
+          "state": "closed"
+        }
+      ],
+      "EvidenceDropped": 0,
+      "Media": {
+        "SamplesWritten": 4,
+        "RTPReceived": 5,
+        "EmptyRTP": 0,
+        "SequenceGaps": 0,
+        "FramesReceived": 5,
+        "BinaryFrames": 1
+      },
+      "ApplicationPongs": 0,
+      "ApplicationPings": 1,
+      "SignalingACKs": 53,
+      "CandidateCounts": [
+        {
+          "target": "PUBLISHER",
+          "local_type": "host",
+          "protocol": "udp",
+          "count": 3
+        },
+        {
+          "target": "PUBLISHER",
+          "local_type": "relay",
+          "protocol": "udp",
+          "count": 9
+        },
+        {
+          "target": "PUBLISHER",
+          "local_type": "srflx",
+          "protocol": "udp",
+          "count": 12
+        },
+        {
+          "target": "SUBSCRIBER",
+          "local_type": "host",
+          "protocol": "udp",
+          "count": 3
+        },
+        {
+          "target": "SUBSCRIBER",
+          "local_type": "relay",
+          "protocol": "udp",
+          "count": 9
+        },
+        {
+          "target": "SUBSCRIBER",
+          "local_type": "srflx",
+          "protocol": "udp",
+          "count": 12
+        }
+      ]
+    }
+  },
+  "android_native_tests": [
+    "--- PASS: TestFragmentRoundTrips (0.00s)",
+    "--- PASS: TestReassemblyBoundsAndTimeout (0.04s)",
+    "--- PASS: TestReassemblyRejectsMalformedAndDuplicates (0.00s)",
+    "--- PASS: TestCRCAndRecentMessageBound (0.23s)",
+    "--- PASS: TestRTPRejectsMixedTimestamps (0.00s)",
+    "--- PASS: TestVP8RTPRoundTripAndLoss (0.00s)",
+    "--- PASS: TestRTPReorderAndBounds (0.00s)",
+    "--- PASS: TestLiveSignalingClosure (8.18s)"
+  ],
+  "jvm_tests": [
+    {
+      "name": "com.familyconnect.telemosttest.NativeRunTest",
+      "tests": "6",
+      "skipped": "0",
+      "failures": "0",
+      "errors": "0",
+      "timestamp": "2026-09-27T12:05:24",
+      "time": "0.183"
+    }
+  ],
+  "projection": "Repeated ICE_CANDIDATE events aggregated into CandidateCounts; selected pair and state timestamps retained. No room/subscriber/credential fields collected. Unreliable initial Wi-Fi spelling/procfs-children probes omitted; corrected Wi-Fi and numeric PID/PPID observations retained."
+}

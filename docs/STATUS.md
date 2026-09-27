@@ -5,26 +5,37 @@
 - active engineering critical path — **5N: Restricted WebRTC Android→EU**
   (Telemost VP8 → Linux EU gateway → TCP+DNS → Internet).
 - **WEBRTC-EU-1 / 5N.1 = PASS**: настоящий local Linux ↔ Telemost VP8 ↔ Amsterdam.
-- **CURRENT = WEBRTC-EU-2 / 5N.2**: isolated Android diagnostic APK;
-  physical Redmi Note9 Pro/Android12/arm64 preliminary7-size VP8 echo PASS.
-  Full clean-runtime acceptance/lifecycle ещё выполняются; gate пока OPEN.
-  5N.3–5N.6 NOT RUN, не начинать автоматически.
+- **WEBRTC-EU-2 / 5N.2 = PASS**: physical Android↔Telemost VP8↔Amsterdam,
+  372 exact echoes,7 sizes/100×1/16KiB/30s/5min, без TUN/DataChannel substitution.
+- **NEXT = WEBRTC-EU-3 / 5N.3**; 5N.3–5N.6 NOT RUN, не начинать автоматически.
 
-## 27.09.2026 — Android binary gate in progress
+## 27.09.2026 — physical Android binary gate PASS
 
 Отдельный `com.familyconnect.telemosttest`, debug version1/5N.2-test-only,
 переиспользует тот же `carrier/cmd/telemost-binary` как Android PIE child process.
 Не копирует Go core, не использует JNI/Chaquopy/production AWG runtime и не
 меняет beta51/Transport selection. No TUN/FAMILY auth, sockets НЕ protected.
-Native build/race/vet/module verification, Android build/unit/lint PASS;
-физический телефон по USB: Redmi Note9 Pro, Android12/API31, arm64-v8a.
-Предварительный real cellular↔Telemost↔Amsterdam VP8:7 размеров1B–64KiB exact;
-это не полная acceptance. Android parent/child исчезли после force-stop.
-Следующий шаг — clean commit/runtime, полная матрица и lifecycle evidence.
-[Текущий отчёт](releases/2026-09-27-webrtc-eu2-android-binary.ru.md)
+Clean runtime `3f65346a02d621c0843975cbe84173d23ebba91f`, physical Redmi Note9 Pro,
+Android12/API31/arm64, ordinary cellular. A/B каждый TX=RX4,531,489B,372 exact echoes;
+5min150 echoes/300.006638s, mean RTT1999.844ms, useful aggregate0.131069Mbit/s.
+Corruption/timeout/unexpected disconnect/reconnect0. Первый full run c3a874d тоже PASS
+(290 checks,RTT≈4s/0.065536Mbit/s); не приписываем вариативность shutdown fix.
+Waiting room не нужен; оба selected PC pair host/host UDP, TURN не выбран по Pion.
+Foreground/background/recreation/screen, disconnect/finish/force-stop, network-loss
+и explicit recovery, remote exit, physical native WS-close16ms проверены.
+Android Process.destroy pipe race устранён bounded wait + owned-PID SIGTERM;
+final summary сохраняется. Native RSS samples12.582MiB, heap3.19–9.69MiB;
+Java heap2.46–5.05MiB, app PSS≤138.34MiB; no unbounded growth observed in window.
+Linux race/local207-check/vet/fuzz/modules PASS; Android build/6 JVM tests/lint PASS,
+physical native7 framing/bounds tests + live signaling-close PASS.
+[Отчёт/точные hashes/evidence](releases/2026-09-27-webrtc-eu2-android-binary.ru.md)
 · [Build/operator runbook](../clients/android/telemost-runtime/README.md).
-Ни APK, ни изменения не опубликованы; production rollout отсутствует.
-Rollback: остановить/удалить только diagnostic APK и временный nobody echo.
+Test APK установлен, stopped, не опубликован; production rollout/push отсутствуют.
+Amsterdam temporary processes/directories0, Android native PID/room.input0.
+Wi-Fi не был connected: handoff не проверен; no deep Doze/restricted-mobile/protection
+claim. Fine-grained queue/allocation gauges не снимались; bounds проверены тестами.
+Rollback: удалить только diagnostic APK; B temporary artifacts уже удалены.
+Остановились после5N.2; FAMILY auth/TUN/5N.3 не начаты.
 
 ## 27.09.2026 — real Telemost VP8 acceptance PASS
 

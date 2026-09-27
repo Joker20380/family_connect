@@ -1,4 +1,4 @@
-# Telemost binary carrier — experimental 5N.1
+# Telemost binary carrier — experimental 5N.1 / 5N.2
 
 Recovered from the interrupted DeepSeek worktree, not a second carrier.
 `WEBRTC-EU-1 / 5N.1` **PASS on 2026-09-27**: independent developer Linux and
@@ -8,6 +8,8 @@ the exact clean revision, artifact hash, low throughput/high RTT and fault check
 This result is not Android, restricted-mobile or production acceptance. The separate
 [5N.2 Android diagnostic APK](../clients/android/telemost-runtime/README.md) now
 reuses this exact CLI/core; its physical-device acceptance is recorded separately.
+**5N.2 PASS27.09**, clean3f65346: physical Redmi/Android12→Telemost VP8→Amsterdam,
+372 exact echoes including30s/5min; see the Android report for lifecycle/performance limits.
 Local Pion and DataChannel results alone do not close the gate.
 No Family auth, VPN, proxy, routing, DNS or product integration is here.
 Use synthetic random data only: the SFU is untrusted and DTLS is not Family E2E.

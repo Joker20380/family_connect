@@ -86,11 +86,17 @@ A bound foreground test Service owns exactly one child. Activity recreation only
 rebinds. Home/background retains the test; Back/explicit Disconnect/task removal
 cancel it. The Service is non-exported, START_NOT_STICKY, with no boot receiver.
 An explicit launcher `disconnect=true` diagnostic action allows bounded ADB tests.
-Cancellation sends SIGTERM; after5s a reaper force-kills that exact child. Android-only
-native constructor installs `PR_SET_PDEATHSIG(SIGKILL)` before Go initialization and
+Cancellation sends SIGTERM; after5s a reaper force-kills that exact child.
+Normal Android stop uses `android.os.Process.sendSignal` after checking the CLI's PID/parent
+metadata against the owning app. `Process.destroy()` closes output pipes on Android:
+it is only a pre-metadata fallback, not normal stop. The reader still waits for exit
+if a pipe closes early; this avoids premature SIGKILL and preserves final PC metrics.
+The Android-only native constructor installs `PR_SET_PDEATHSIG(SIGKILL)` before Go initialization and
 rejects an already lost parent. Abrupt process death releases OS sockets, but is not
 graceful signaling leave. The owning Java thread stays alive until the child exits.
 Verify this on a physical device; JVM tests alone cannot establish Android behavior.
+An app force-stop test establishes overall process cleanup, not independent causal
+attribution to the kernel parent-death guard. Do not claim the latter from force-stop alone.
 
 Runner fault cases: `--case cancel`, `activity-close`, `process-death`, `remote-exit`.
 Each waits for a real exact echo before triggering its fault. Save evidence before
@@ -106,6 +112,9 @@ fd tables differ between processes. For5N.6 choose an in-process JNI callback or
 app-private authenticated Unix socket with SCM_RIGHTS duplicate-fd transfer and an
 ACK: Java applies `VpnService.protect(duplicateFd)`/underlying-Network binding before
 the child can use the socket. Protection refusal/timeout must fail closed. Cover:
+
+An in-process design must join the existing product Go build/runtime; do not load
+a second independent Go shared library beside AWG/Xray.
 
 - HTTP: `telemost.Config.HTTPClient` → `http.Transport.DialContext` / `net.Dialer.Control`.
 - WebSocket: `telemost.dialWebSocket`'s `websocket.Dialer.NetDialContext` (currently unset).

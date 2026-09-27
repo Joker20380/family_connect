@@ -11,13 +11,17 @@
   Waiting room не потребовался; application heartbeat устранил live WS4008.
   Race×3/fuzz/vet/modules и live WS-close/SIGTERM/remote exit PASS; temporary
   EU process/artifacts удалены, production/версии/каталоги не менялись.
-  **CURRENT = WEBRTC-EU-2 / 5N.2**: Android разрешён отдельным запросом;
-  standalone test APK/shared Go carrier, physical preliminary7-size VP8 PASS.
-  Full clean-runtime suite/lifecycle ещё выполняются; gate OPEN.
-  TUN/Family auth/TCP/WB не начинались,5N.3 не запускать автоматически.
+  **WEBRTC-EU-2 / 5N.2 = PASS**: clean `3f65346`, physical Redmi Note9 Pro/
+  Android12/arm64 ordinary cellular↔Telemost VP8↔Amsterdam.372 exact echoes,
+  30s/5min, no corruption/timeout/unexpected disconnect; RTT≈2s, aggregate0.131069Mbit/s.
+  Первый full run RTT≈4s/0.065536Mbit/s тоже PASS; performance не production-ready.
+  Isolated APK/shared Go core, lifecycle/cancellation/network-loss/WS-close tested,
+  Linux regression и Android checks PASS, temporary processes/artifacts cleaned.
+  Wi-Fi handoff/deep Doze/protected sockets/restricted5M не заявляются.
+  **NEXT = WEBRTC-EU-3 / 5N.3**, НЕ запускать автоматически. TUN/Family auth/TCP/WB не начинались.
   [Отчёт/оставшиеся проверки](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md).
   [Android5N.2 checkpoint](releases/2026-09-27-webrtc-eu2-android-binary.ru.md).
-- затем: **5N.2 → 5N.3 → 5N.4 → 5N.5 → 5N.6**.
+- затем, отдельным разрешением: **5N.3 → 5N.4 → 5N.5 → 5N.6**.
 - после этого: restricted-mobile acceptance **5M**.
 - **WB fallback** — только после подтверждения Telemost на реальной сети.
 - **5.3a / 5.3в** и **Home Gateway (5A–5M secondary track)** — backlog, не запускаются автоматически.
@@ -89,7 +93,7 @@ home IP/NAT, Windows routing, включённого ПК и лишнего до
 | Gate / подэтап | Результат | Статус |
 | --- | --- | --- |
 | WEBRTC-EU-1 / 5N.1 | Два независимых Linux через настоящий Telemost VP8: byte-for-byte binary echo нескольких размеров | PASS27.09:291 checks,30s/5min и live failure cleanup; source a13068e |
-| WEBRTC-EU-2 / 5N.2 | Android↔EU Linux binary round trip без TUN | In progress: standalone APK, physical preliminary7-size VP8 PASS; full/lifecycle pending |
+| WEBRTC-EU-2 / 5N.2 | Android↔EU Linux binary round trip без TUN | PASS27.09: physical Redmi/Telemost VP8/Amsterdam,372 exact echoes,30s/5min; runtime3f65346 |
 | WEBRTC-EU-3 / 5N.3 | E2E Family session с existing Device Identity/FAMILY; wrong/revoked/replay rejected | Не запускался |
 | WEBRTC-EU-4 / 5N.4 | Один TCP stream: реальный HTTPS response через EU | Не запускался |
 | WEBRTC-EU-5 / 5N.5 | Много TCP/API/browser/DNS streams в одной carrier session | Не запускался |
