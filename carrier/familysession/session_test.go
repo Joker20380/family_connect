@@ -9,6 +9,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"crypto/x509/pkix"
+	"encoding/binary"
 	"encoding/hex"
 	"encoding/json"
 	"encoding/pem"
@@ -19,8 +20,11 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
+
+	"github.com/Joker20380/family_connect/carrier/reliablestream"
 )
 
 type endpoint struct {
@@ -287,8 +291,11 @@ func TestTLSRecordReplayRejected(test *testing.T) {
 		return payload
 	}
 	ready := make(chan *Session, 1)
-	go func() { connection, _ := Open(ctx, serverEndpoint, encoded(serverProfile), true); ready <- connection }()
-	client, err := Open(ctx, clientEndpoint, encoded(clientProfile), false)
+	go func() {
+		connection, _ := openTestTLS(ctx, serverEndpoint, encoded(serverProfile), true)
+		ready <- connection
+	}()
+	client, err := openTestTLS(ctx, clientEndpoint, encoded(clientProfile), false)
 	if err != nil {
 		test.Fatal(err)
 	}
@@ -364,8 +371,11 @@ func TestHandshakeProofReplayRejected(test *testing.T) {
 		return payload
 	}
 	ready := make(chan *Session, 1)
-	go func() { connection, _ := Open(ctx, serverEndpoint, encoded(serverProfile), true); ready <- connection }()
-	client, err := Open(ctx, clientEndpoint, encoded(clientProfile), false)
+	go func() {
+		connection, _ := openTestTLS(ctx, serverEndpoint, encoded(serverProfile), true)
+		ready <- connection
+	}()
+	client, err := openTestTLS(ctx, clientEndpoint, encoded(clientProfile), false)
 	if err != nil {
 		test.Fatal(err)
 	}
@@ -385,7 +395,7 @@ func TestHandshakeProofReplayRejected(test *testing.T) {
 	defer attacker.Close()
 	result := make(chan error, 1)
 	go func() {
-		session, err := Open(ctx, freshEndpoint, encoded(serverProfile), true)
+		session, err := openTestTLS(ctx, freshEndpoint, encoded(serverProfile), true)
 		if session != nil {
 			session.Close()
 		}
@@ -403,5 +413,125 @@ func TestHandshakeProofReplayRejected(test *testing.T) {
 		}
 	case <-ctx.Done():
 		test.Fatal("replay was not rejected before the deadline")
+	}
+}
+
+func openTestTLS(ctx context.Context, endpoint PacketEndpoint, raw []byte, server bool) (*Session, error) {
+	config, expiry, err := Configuration(raw, server)
+	if err != nil {
+		return nil, err
+	}
+	transport := bridge(ctx, endpoint)
+	connection := tls.Client(transport, config)
+	if server {
+		connection = tls.Server(transport, config)
+	}
+	if err := connection.HandshakeContext(ctx); err != nil {
+		transport.Close()
+		return nil, err
+	}
+	return &Session{connection: connection, stream: transport, expiry: expiry}, nil
+}
+
+type lossEndpoint struct {
+	*endpoint
+	armed atomic.Bool
+	seen  map[uint64]int
+	held  []byte
+}
+
+func (point *lossEndpoint) SendContext(ctx context.Context, data []byte) error {
+	if len(data) < reliablestream.HeaderSize || data[4] != 2 || !point.armed.Load() {
+		return point.endpoint.SendContext(ctx, data)
+	}
+	seq := binary.BigEndian.Uint64(data[40:])
+	point.seen[seq]++
+	if point.seen[seq] == 1 && (seq%7 == 0 || seq >= 7 && seq <= 9) {
+		return nil
+	}
+	if point.seen[seq] == 1 && seq%5 == 0 && point.held == nil {
+		point.held = bytes.Clone(data)
+		return nil
+	}
+	if err := point.endpoint.SendContext(ctx, data); err != nil {
+		return err
+	}
+	if seq%3 == 0 {
+		if err := point.endpoint.SendContext(ctx, data); err != nil {
+			return err
+		}
+	}
+	if point.held != nil {
+		data = point.held
+		point.held = nil
+		return point.endpoint.SendContext(ctx, data)
+	}
+	return nil
+}
+
+func TestReliableTLSFaultMatrix(test *testing.T) {
+	clientProfile, serverProfile := profiles(test)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	left, right := pair()
+	clientEndpoint := &lossEndpoint{endpoint: left, seen: make(map[uint64]int)}
+	serverEndpoint := &lossEndpoint{endpoint: right, seen: make(map[uint64]int)}
+	config := reliablestream.DefaultConfig()
+	config.RTO = 30 * time.Millisecond
+	ready := make(chan *Session, 1)
+	go func() {
+		session, _ := OpenReliable(ctx, serverEndpoint, encoded(serverProfile), true, config)
+		ready <- session
+	}()
+	client, err := OpenReliable(ctx, clientEndpoint, encoded(clientProfile), false, config)
+	if err != nil {
+		test.Fatal(err)
+	}
+	defer client.Close()
+	server := <-ready
+	if server == nil {
+		test.Fatal("handshake")
+	}
+	defer server.Close()
+	clientEndpoint.armed.Store(true)
+	serverEndpoint.armed.Store(true)
+	complete := make(chan error, 1)
+	go func() {
+		for {
+			data, err := server.Recv(ctx)
+			if err == nil {
+				err = server.SendContext(ctx, data)
+			}
+			if err != nil {
+				complete <- err
+				return
+			}
+		}
+	}()
+	sizes := []int{1, 32, 256, 1024, 4096, 16384, 65536}
+	for index := 0; index < 100; index++ {
+		sizes = append(sizes, 1024, 16384)
+	}
+	for _, size := range sizes {
+		data := make([]byte, size)
+		rand.Read(data)
+		if err := client.SendContext(ctx, data); err != nil {
+			test.Fatal(err)
+		}
+		actual, err := client.Recv(ctx)
+		if err != nil || !bytes.Equal(data, actual) {
+			test.Fatal("TLS stream after recovery", err)
+		}
+	}
+	for _, stats := range []reliablestream.Stats{client.ReliabilityStats(), server.ReliabilityStats()} {
+		if stats.Retransmissions == 0 || stats.RecoveredGaps == 0 || stats.Duplicates == 0 || stats.BufferedBytes > 24*16384 {
+			test.Fatal("fault evidence", stats)
+		}
+	}
+	cancel()
+	select {
+	case <-complete:
+	case <-time.After(time.Second):
+		test.Fatal("echo worker leaked")
 	}
 }

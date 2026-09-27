@@ -17,6 +17,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/Joker20380/family_connect/carrier/reliablestream"
 )
 
 const Protocol = "family-connect-5n3-test-v1"
@@ -230,14 +232,23 @@ type Session struct {
 	recvSequence uint64
 	sendMu       sync.Mutex
 	recvMu       sync.Mutex
+	reliable     *reliablestream.Stream
 }
 
 func Open(ctx context.Context, endpoint PacketEndpoint, raw []byte, server bool) (*Session, error) {
+	return OpenReliable(ctx, endpoint, raw, server, reliablestream.DefaultConfig())
+}
+
+func OpenReliable(ctx context.Context, endpoint PacketEndpoint, raw []byte, server bool, reliability reliablestream.Config) (*Session, error) {
 	config, expiry, err := Configuration(raw, server)
 	if err != nil {
 		return nil, err
 	}
-	transport := bridge(ctx, endpoint)
+	reliable, err := reliablestream.New(ctx, endpoint, reliability)
+	if err != nil {
+		return nil, err
+	}
+	transport := bridge(ctx, reliable)
 	var connection *tls.Conn
 	if server {
 		connection = tls.Server(transport, config)
@@ -252,8 +263,10 @@ func Open(ctx context.Context, endpoint PacketEndpoint, raw []byte, server bool)
 		return nil, ErrRejected
 	}
 	expiry = minTime(expiry, connection.ConnectionState().PeerCertificates[0].NotAfter)
-	return &Session{connection: connection, stream: transport, expiry: expiry}, nil
+	return &Session{connection: connection, stream: transport, expiry: expiry, reliable: reliable}, nil
 }
+
+func (session *Session) ReliabilityStats() reliablestream.Stats { return session.reliable.Stats() }
 
 func (session *Session) SendContext(ctx context.Context, payload []byte) error {
 	session.sendMu.Lock()

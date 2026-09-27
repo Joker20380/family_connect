@@ -104,6 +104,7 @@ func run() error {
 		return err
 	}
 	var data familysession.PacketEndpoint = session
+	snapshot := session.PerformanceSnapshot
 	if *familyConfig != "" {
 		if mode != telemost.ModeVP8 {
 			return errors.New("Family gate requires VP8")
@@ -129,7 +130,15 @@ func run() error {
 			_ = emit(map[string]any{"event": "family_auth", "accepted": false})
 			return familysession.ErrRejected
 		}
-		defer secured.Close()
+		defer func() {
+			secured.Close()
+			_ = emit(map[string]any{"event": "reliability_final", "stats": secured.ReliabilityStats()})
+		}()
+		snapshot = func() map[string]any {
+			result := session.PerformanceSnapshot()
+			result["reliability"] = secured.ReliabilityStats()
+			return result
+		}
 		data = secured
 		if err := emit(map[string]any{"event": "family_auth", "accepted": true, "protocol": familysession.Protocol}); err != nil {
 			return err
@@ -137,7 +146,7 @@ func run() error {
 	}
 	if *role == "echo" {
 		if *performanceObserver {
-			return performanceEcho(ctx, data, session.PerformanceSnapshot, emit)
+			return performanceEcho(ctx, data, snapshot, emit)
 		}
 		for {
 			payload, err := data.Recv(ctx)
@@ -158,7 +167,7 @@ func run() error {
 		return ctx.Err()
 	}
 	if *performanceFile != "" {
-		return performanceProbe(ctx, data, performance, session.PerformanceSnapshot, emit)
+		return performanceProbe(ctx, data, performance, snapshot, emit)
 	}
 	for _, size := range []int{1, 32, 256, 1024, 4096, 16384, 65536} {
 		if err := probe(ctx, data, session, emit, "size", size, 1, 0); err != nil {

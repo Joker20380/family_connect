@@ -1,0 +1,277 @@
+package reliablestream
+
+import (
+	"bytes"
+	"time"
+)
+
+type Event struct {
+	Kind     string  `json:"kind"`
+	Sequence uint64  `json:"sequence"`
+	AtMS     float64 `json:"at_ms"`
+	DelayMS  float64 `json:"delay_ms"`
+	Depth    int     `json:"depth"`
+}
+
+type Stats struct {
+	DataSent           uint64
+	DataReceived       uint64
+	ACKSent            uint64
+	ACKReceived        uint64
+	SACKSent           uint64
+	SACKReceived       uint64
+	Retransmissions    uint64
+	RetransmittedBytes uint64
+	Duplicates         uint64
+	Reordered          uint64
+	Stale              uint64
+	Timeouts           uint64
+	Resets             uint64
+	DeliveredBytes     uint64
+	WithheldBytes      uint64
+	Gaps               uint64
+	RecoveredGaps      uint64
+	MaxRecoveryMS      float64
+	SendHighWater      int
+	ReorderHighWater   int
+	BufferedBytes      int
+	MaxBufferedBytes   int
+	SendDepth          int
+	ReorderDepth       int
+	Events             []Event
+	EventsDropped      uint64
+	Terminal           string
+}
+
+type pending struct {
+	data    []byte
+	first   time.Time
+	last    time.Time
+	retries int
+	sacked  bool
+}
+
+type engine struct {
+	config       Config
+	local        epoch
+	remote       epoch
+	remoteWindow int
+	remoteSize   int
+	started      time.Time
+	lastOpen     time.Time
+	lastRefresh  time.Time
+	next         uint64
+	base         uint64
+	receive      uint64
+	sent         map[uint64]*pending
+	buffer       map[uint64][]byte
+	gaps         map[uint64]time.Time
+	stats        Stats
+}
+
+func newEngine(config Config, local epoch, now time.Time) *engine {
+	return &engine{config: config, local: local, started: now, sent: make(map[uint64]*pending), buffer: make(map[uint64][]byte), gaps: make(map[uint64]time.Time)}
+}
+
+func (state *engine) packet(kind byte) frame {
+	return frame{kind: kind, source: state.local, target: state.remote}
+}
+
+func (state *engine) opening(target epoch) frame {
+	return frame{kind: openFrame, source: state.local, target: target, window: state.config.ReceiveWindow, payload: state.config.Payload}
+}
+
+func (state *engine) event(kind string, seq uint64, now time.Time, delay time.Duration) {
+	if len(state.stats.Events) == 128 {
+		state.stats.EventsDropped++
+		return
+	}
+	state.stats.Events = append(state.stats.Events, Event{kind, seq, float64(now.Sub(state.started)) / float64(time.Millisecond), float64(delay) / float64(time.Millisecond), len(state.buffer)})
+}
+
+func (state *engine) depths() {
+	state.stats.SendDepth = len(state.sent)
+	state.stats.ReorderDepth = len(state.buffer)
+	state.stats.SendHighWater = max(state.stats.SendHighWater, len(state.sent))
+	state.stats.ReorderHighWater = max(state.stats.ReorderHighWater, len(state.buffer))
+	state.stats.MaxBufferedBytes = max(state.stats.MaxBufferedBytes, state.stats.BufferedBytes)
+}
+
+func (state *engine) ack() frame {
+	packet := state.packet(ackFrame)
+	packet.ack = state.receive
+	for seq := range state.buffer {
+		packet.bits |= 1 << (seq - state.receive)
+	}
+	state.stats.ACKSent++
+	if packet.bits != 0 {
+		state.stats.SACKSent++
+	}
+	return packet
+}
+
+func (state *engine) input(packet frame, now time.Time) ([]frame, error) {
+	if packet.target != state.local && !(packet.kind == openFrame && packet.target == (epoch{})) || (state.remote != (epoch{}) && packet.source != state.remote) {
+		state.stats.Stale++
+		return nil, nil
+	}
+	if packet.kind == openFrame {
+		if packet.target == (epoch{}) {
+			return []frame{state.opening(packet.source)}, nil
+		}
+		if state.remote == (epoch{}) {
+			state.remote, state.remoteWindow, state.remoteSize = packet.source, packet.window, packet.payload
+			return []frame{state.opening(packet.source), state.ack()}, nil
+		}
+		if packet.window != state.remoteWindow || packet.payload != state.remoteSize {
+			return nil, ErrProtocol
+		}
+		return []frame{state.ack()}, nil
+	}
+	if state.remote == (epoch{}) {
+		state.stats.Stale++
+		return nil, nil
+	}
+	switch packet.kind {
+	case resetFrame:
+		return nil, ErrReset
+	case ackFrame:
+		state.stats.ACKReceived++
+		if packet.ack < state.base {
+			return nil, nil
+		}
+		if packet.ack > state.next {
+			return nil, ErrProtocol
+		}
+		for bit := uint64(0); bit < MaxWindow; bit++ {
+			if packet.bits&(1<<bit) != 0 && bit >= state.next-packet.ack {
+				return nil, ErrProtocol
+			}
+		}
+		if packet.bits != 0 {
+			state.stats.SACKReceived++
+		}
+		for seq, block := range state.sent {
+			if seq < packet.ack {
+				state.stats.BufferedBytes -= len(block.data)
+				delete(state.sent, seq)
+			} else if packet.bits&(1<<(seq-packet.ack)) != 0 {
+				block.sacked = true
+			}
+		}
+		state.base = packet.ack
+		state.depths()
+	case dataFrame:
+		state.stats.DataReceived++
+		if len(packet.data) > state.config.Payload || packet.seq == ^uint64(0) {
+			return nil, ErrProtocol
+		}
+		if packet.seq < state.receive {
+			state.stats.Duplicates++
+			return []frame{state.ack()}, nil
+		}
+		if packet.seq-state.receive >= uint64(state.config.ReceiveWindow) {
+			return nil, ErrProtocol
+		}
+		if previous, exists := state.buffer[packet.seq]; exists {
+			if !bytes.Equal(previous, packet.data) {
+				return nil, ErrProtocol
+			}
+			state.stats.Duplicates++
+			return []frame{state.ack()}, nil
+		}
+		state.buffer[packet.seq] = bytes.Clone(packet.data)
+		state.stats.BufferedBytes += len(packet.data)
+		state.depths()
+		if packet.seq > state.receive {
+			state.stats.Reordered++
+			state.stats.WithheldBytes += uint64(len(packet.data))
+		}
+		for missing := state.receive; missing < packet.seq; missing++ {
+			if _, exists := state.buffer[missing]; exists {
+				continue
+			}
+			if _, exists := state.gaps[missing]; !exists {
+				state.gaps[missing] = now
+				state.stats.Gaps++
+				state.event("gap_sack", missing, now, 0)
+			}
+		}
+		if detected, exists := state.gaps[packet.seq]; exists {
+			delay := now.Sub(detected)
+			state.stats.RecoveredGaps++
+			state.stats.MaxRecoveryMS = max(state.stats.MaxRecoveryMS, float64(delay)/float64(time.Millisecond))
+			state.event("recovered", packet.seq, now, delay)
+			delete(state.gaps, packet.seq)
+		}
+		return []frame{state.ack()}, nil
+	}
+	return nil, nil
+}
+
+func (state *engine) writable() bool {
+	return state.remote != (epoch{}) && state.next-state.base < uint64(min(state.config.SendWindow, state.remoteWindow))
+}
+
+func (state *engine) send(data []byte, now time.Time) (frame, error) {
+	if !state.writable() || len(data) == 0 || len(data) > min(state.config.Payload, state.remoteSize) || state.next == ^uint64(0) {
+		return frame{}, ErrProtocol
+	}
+	packet := state.packet(dataFrame)
+	packet.seq, packet.data = state.next, bytes.Clone(data)
+	state.sent[state.next] = &pending{data: packet.data, first: now, last: now}
+	state.next++
+	state.stats.DataSent++
+	state.stats.BufferedBytes += len(data)
+	state.depths()
+	return packet, nil
+}
+
+func (state *engine) consume() ([]byte, frame) {
+	data := state.buffer[state.receive]
+	delete(state.buffer, state.receive)
+	state.receive++
+	state.stats.DeliveredBytes += uint64(len(data))
+	state.stats.BufferedBytes -= len(data)
+	state.depths()
+	return data, state.ack()
+}
+
+func (state *engine) tick(now time.Time) ([]frame, error) {
+	if state.remote == (epoch{}) {
+		if now.Sub(state.started) >= state.config.MaxAge {
+			return nil, ErrExhausted
+		}
+		if state.lastOpen.IsZero() || now.Sub(state.lastOpen) >= state.config.RTO {
+			state.lastOpen = now
+			return []frame{state.opening(epoch{})}, nil
+		}
+		return nil, nil
+	}
+	var output []frame
+	if now.Sub(state.lastRefresh) >= state.config.RTO {
+		state.lastRefresh = now
+		output = append(output, state.ack())
+	}
+	for seq := state.base; seq < state.next; seq++ {
+		block := state.sent[seq]
+		if now.Sub(block.first) >= state.config.MaxAge {
+			return nil, ErrExhausted
+		}
+		if block.sacked || now.Sub(block.last) < state.config.RTO {
+			continue
+		}
+		state.stats.Timeouts++
+		if block.retries >= state.config.MaxRetries {
+			return nil, ErrExhausted
+		}
+		block.last, block.retries = now, block.retries+1
+		packet := state.packet(dataFrame)
+		packet.seq, packet.data = seq, block.data
+		output = append(output, packet)
+		state.stats.Retransmissions++
+		state.stats.RetransmittedBytes += uint64(len(block.data))
+		state.event("retransmit", seq, now, now.Sub(block.first))
+	}
+	return output, nil
+}
