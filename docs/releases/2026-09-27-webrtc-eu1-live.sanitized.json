@@ -1,0 +1,1414 @@
+{
+  "scope": "WEBRTC-EU-1 / 5N.1 only; synthetic VP8 payloads",
+  "room_source": "FC_TELEMOST_ROOM; value intentionally excluded",
+  "waiting_room_required": false,
+  "artifact_commit": "a13068e74f8a1ceef4e5d9d659622eb70710aac0",
+  "artifact_sha256": "758bffe3c9f62192dd9887a2858af048a0a3386fa2b36e74ff388308a5d25061",
+  "attempts": {
+    "accepted": {
+      "A": {
+        "events": [
+          {
+            "arch": "amd64",
+            "event": "start",
+            "go": "go1.27.1",
+            "mode": "vp8",
+            "os": "linux",
+            "pion": "v4.2.15",
+            "role": "probe",
+            "room_method": "operator-provided disposable room",
+            "utc": "2026-09-27T09:56:49.749256298Z",
+            "vcs.modified": "false",
+            "vcs.revision": "a13068e74f8a1ceef4e5d9d659622eb70710aac0"
+          },
+          {
+            "event": "connected",
+            "utc": "2026-09-27T09:56:51.500369948Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 1,
+            "elapsed_s": 3.776294446,
+            "event": "probe_result",
+            "max_rtt_ms": 3776.282,
+            "mean_rtt_ms": 3776.282,
+            "payload_bytes": 1,
+            "phase": "size",
+            "received": 1,
+            "sent": 1,
+            "useful_roundtrip_mbit_s": 4.236957744899323e-06,
+            "utc": "2026-09-27T09:56:58.277441303Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 1,
+            "elapsed_s": 4.012551382,
+            "event": "probe_result",
+            "max_rtt_ms": 4012.535,
+            "mean_rtt_ms": 4012.535,
+            "payload_bytes": 32,
+            "phase": "size",
+            "received": 1,
+            "sent": 1,
+            "useful_roundtrip_mbit_s": 0.00012759961213127215,
+            "utc": "2026-09-27T09:57:02.29012607Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 1,
+            "elapsed_s": 3.98605933,
+            "event": "probe_result",
+            "max_rtt_ms": 3986.051,
+            "mean_rtt_ms": 3986.051,
+            "payload_bytes": 256,
+            "phase": "size",
+            "received": 1,
+            "sent": 1,
+            "useful_roundtrip_mbit_s": 0.0010275812929257126,
+            "utc": "2026-09-27T09:57:06.27634815Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 1,
+            "elapsed_s": 3.999270569,
+            "event": "probe_result",
+            "max_rtt_ms": 3999.261,
+            "mean_rtt_ms": 3999.261,
+            "payload_bytes": 1024,
+            "phase": "size",
+            "received": 1,
+            "sent": 1,
+            "useful_roundtrip_mbit_s": 0.004096747073578657,
+            "utc": "2026-09-27T09:57:10.275698629Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 1,
+            "elapsed_s": 4.058640413,
+            "event": "probe_result",
+            "max_rtt_ms": 4058.627,
+            "mean_rtt_ms": 4058.627,
+            "payload_bytes": 4096,
+            "phase": "size",
+            "received": 1,
+            "sent": 1,
+            "useful_roundtrip_mbit_s": 0.01614727921943648,
+            "utc": "2026-09-27T09:57:14.334591619Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 1,
+            "elapsed_s": 4.124871171,
+            "event": "probe_result",
+            "max_rtt_ms": 4124.831,
+            "mean_rtt_ms": 4124.831,
+            "payload_bytes": 16384,
+            "phase": "size",
+            "received": 1,
+            "sent": 1,
+            "useful_roundtrip_mbit_s": 0.06355204541732341,
+            "utc": "2026-09-27T09:57:18.459654269Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 1,
+            "elapsed_s": 3.993382029,
+            "event": "probe_result",
+            "max_rtt_ms": 3993.25,
+            "mean_rtt_ms": 3993.25,
+            "payload_bytes": 65536,
+            "phase": "size",
+            "received": 1,
+            "sent": 1,
+            "useful_roundtrip_mbit_s": 0.26257843411555054,
+            "utc": "2026-09-27T09:57:22.45314573Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 100,
+            "elapsed_s": 401.139399329,
+            "event": "probe_result",
+            "max_rtt_ms": 5316.705,
+            "mean_rtt_ms": 4011.3860600000003,
+            "payload_bytes": 1024,
+            "phase": "batch",
+            "received": 100,
+            "sent": 100,
+            "useful_roundtrip_mbit_s": 0.004084365691180196,
+            "utc": "2026-09-27T10:04:03.592634005Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 100,
+            "elapsed_s": 398.852821231,
+            "event": "probe_result",
+            "max_rtt_ms": 4432.499,
+            "mean_rtt_ms": 3988.4627600000003,
+            "payload_bytes": 16384,
+            "phase": "batch",
+            "received": 100,
+            "sent": 100,
+            "useful_roundtrip_mbit_s": 0.06572449436133646,
+            "utc": "2026-09-27T10:10:42.445610865Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 8,
+            "elapsed_s": 32.010260353,
+            "event": "probe_result",
+            "max_rtt_ms": 4016.141,
+            "mean_rtt_ms": 4001.21225,
+            "payload_bytes": 16384,
+            "phase": "sustained",
+            "received": 8,
+            "sent": 8,
+            "useful_roundtrip_mbit_s": 0.06551499353248638,
+            "utc": "2026-09-27T10:11:14.456776175Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 76,
+            "elapsed_s": 303.989867439,
+            "event": "probe_result",
+            "max_rtt_ms": 4094.47,
+            "mean_rtt_ms": 3999.8067763157896,
+            "payload_bytes": 16384,
+            "phase": "extended",
+            "received": 76,
+            "sent": 76,
+            "useful_roundtrip_mbit_s": 0.06553818443964363,
+            "utc": "2026-09-27T10:16:18.446735636Z"
+          },
+          {
+            "byte_for_byte": true,
+            "event": "suite_complete",
+            "gate_eligible_mode": true,
+            "note": "requires independent Linux endpoints and recorded real Telemost room/media evidence; no automatic gate promotion",
+            "utc": "2026-09-27T10:16:18.446822641Z"
+          },
+          {
+            "cpu_system_s": 8.122725,
+            "cpu_user_s": 14.167106,
+            "event": "summary",
+            "goroutines": 3,
+            "heap_bytes": 9914152,
+            "max_rss_kib": 29808,
+            "utc": "2026-09-27T10:16:18.448198882Z"
+          }
+        ],
+        "final_stats": {
+          "Mode": "vp8",
+          "SetupMs": 1751,
+          "BytesSent": 3204385,
+          "BytesReceived": 3204385,
+          "MessagesSent": 291,
+          "MessagesRecv": 291,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 1067,
+            "RTPReceived": 3338,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 1067,
+            "BinaryFrames": 483
+          },
+          "ApplicationPongs": 0,
+          "ApplicationPings": 233,
+          "SignalingACKs": 283
+        },
+        "evidence": [
+          {
+            "utc": "2026-09-27T09:56:49.978712146Z",
+            "stage": "ROOM_RESOLVED"
+          },
+          {
+            "utc": "2026-09-27T09:56:50.211537639Z",
+            "stage": "SIGNALING_CONNECTED"
+          },
+          {
+            "utc": "2026-09-27T09:56:50.451495987Z",
+            "stage": "SERVER_HELLO"
+          },
+          {
+            "utc": "2026-09-27T09:56:50.45152328Z",
+            "stage": "ICE_CONFIGURED"
+          },
+          {
+            "utc": "2026-09-27T09:56:50.537245904Z",
+            "stage": "CONNECTION_STATE",
+            "target": "SUBSCRIBER",
+            "state": "connecting"
+          },
+          {
+            "utc": "2026-09-27T09:56:50.915172594Z",
+            "stage": "CONNECTION_STATE",
+            "target": "PUBLISHER",
+            "state": "connecting"
+          },
+          {
+            "utc": "2026-09-27T09:56:51.084554006Z",
+            "stage": "ICE_SELECTED_PAIR",
+            "target": "PUBLISHER",
+            "local_type": "host",
+            "remote_type": "host",
+            "protocol": "udp",
+            "turn_used": false
+          },
+          {
+            "utc": "2026-09-27T09:56:51.184697992Z",
+            "stage": "CONNECTION_STATE",
+            "target": "PUBLISHER",
+            "state": "connected"
+          },
+          {
+            "utc": "2026-09-27T09:56:51.184710223Z",
+            "stage": "PUBLISHER_CONNECTED"
+          },
+          {
+            "utc": "2026-09-27T09:56:51.40681545Z",
+            "stage": "ICE_SELECTED_PAIR",
+            "target": "SUBSCRIBER",
+            "local_type": "host",
+            "remote_type": "host",
+            "protocol": "udp",
+            "turn_used": false
+          },
+          {
+            "utc": "2026-09-27T09:56:51.500345197Z",
+            "stage": "CONNECTION_STATE",
+            "target": "SUBSCRIBER",
+            "state": "connected"
+          },
+          {
+            "utc": "2026-09-27T09:56:51.500358437Z",
+            "stage": "SUBSCRIBER_CONNECTED"
+          },
+          {
+            "utc": "2026-09-27T09:56:52.27672169Z",
+            "stage": "VP8_MEDIA_ACTIVE",
+            "target": "SUBSCRIBER"
+          },
+          {
+            "utc": "2026-09-27T10:16:18.44758799Z",
+            "stage": "CONNECTION_STATE",
+            "target": "PUBLISHER",
+            "state": "closed"
+          },
+          {
+            "utc": "2026-09-27T10:16:18.448066312Z",
+            "stage": "CONNECTION_STATE",
+            "target": "SUBSCRIBER",
+            "state": "closed"
+          }
+        ],
+        "candidate_types": [
+          {
+            "local_type": "host",
+            "protocol": "udp",
+            "target": "PUBLISHER"
+          },
+          {
+            "local_type": "host",
+            "protocol": "udp",
+            "target": "SUBSCRIBER"
+          },
+          {
+            "local_type": "relay",
+            "protocol": "udp",
+            "target": "PUBLISHER"
+          },
+          {
+            "local_type": "relay",
+            "protocol": "udp",
+            "target": "SUBSCRIBER"
+          },
+          {
+            "local_type": "srflx",
+            "protocol": "udp",
+            "target": "PUBLISHER"
+          },
+          {
+            "local_type": "srflx",
+            "protocol": "udp",
+            "target": "SUBSCRIBER"
+          }
+        ],
+        "stderr": ""
+      },
+      "B": {
+        "events": [
+          {
+            "arch": "amd64",
+            "event": "start",
+            "go": "go1.27.1",
+            "mode": "vp8",
+            "os": "linux",
+            "pion": "v4.2.15",
+            "role": "echo",
+            "room_method": "operator-provided disposable room",
+            "utc": "2026-09-27T09:56:47.754762876Z",
+            "vcs.modified": "false",
+            "vcs.revision": "a13068e74f8a1ceef4e5d9d659622eb70710aac0"
+          },
+          {
+            "event": "connected",
+            "utc": "2026-09-27T09:56:49.581412067Z"
+          },
+          {
+            "cpu_system_s": 10.107996,
+            "cpu_user_s": 16.359885,
+            "event": "summary",
+            "goroutines": 4,
+            "heap_bytes": 7586048,
+            "max_rss_kib": 28800,
+            "utc": "2026-09-27T10:16:42.888943078Z"
+          }
+        ],
+        "final_stats": {
+          "Mode": "vp8",
+          "SetupMs": 1826,
+          "BytesSent": 3205411,
+          "BytesReceived": 3205411,
+          "MessagesSent": 294,
+          "MessagesRecv": 294,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 1083,
+            "RTPReceived": 3348,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 1077,
+            "BinaryFrames": 486
+          },
+          "ApplicationPongs": 0,
+          "ApplicationPings": 238,
+          "SignalingACKs": 301
+        },
+        "evidence": [
+          {
+            "utc": "2026-09-27T09:56:48.023210659Z",
+            "stage": "ROOM_RESOLVED"
+          },
+          {
+            "utc": "2026-09-27T09:56:48.230796529Z",
+            "stage": "SIGNALING_CONNECTED"
+          },
+          {
+            "utc": "2026-09-27T09:56:48.473000403Z",
+            "stage": "SERVER_HELLO"
+          },
+          {
+            "utc": "2026-09-27T09:56:48.473027875Z",
+            "stage": "ICE_CONFIGURED"
+          },
+          {
+            "utc": "2026-09-27T09:56:48.54980229Z",
+            "stage": "CONNECTION_STATE",
+            "target": "SUBSCRIBER",
+            "state": "connecting"
+          },
+          {
+            "utc": "2026-09-27T09:56:48.911345712Z",
+            "stage": "CONNECTION_STATE",
+            "target": "PUBLISHER",
+            "state": "connecting"
+          },
+          {
+            "utc": "2026-09-27T09:56:49.034623418Z",
+            "stage": "ICE_SELECTED_PAIR",
+            "target": "PUBLISHER",
+            "local_type": "host",
+            "remote_type": "host",
+            "protocol": "udp",
+            "turn_used": false
+          },
+          {
+            "utc": "2026-09-27T09:56:49.123152501Z",
+            "stage": "CONNECTION_STATE",
+            "target": "PUBLISHER",
+            "state": "connected"
+          },
+          {
+            "utc": "2026-09-27T09:56:49.123172312Z",
+            "stage": "PUBLISHER_CONNECTED"
+          },
+          {
+            "utc": "2026-09-27T09:56:49.440791141Z",
+            "stage": "ICE_SELECTED_PAIR",
+            "target": "SUBSCRIBER",
+            "local_type": "host",
+            "remote_type": "host",
+            "protocol": "udp",
+            "turn_used": false
+          },
+          {
+            "utc": "2026-09-27T09:56:49.581322451Z",
+            "stage": "CONNECTION_STATE",
+            "target": "SUBSCRIBER",
+            "state": "connected"
+          },
+          {
+            "utc": "2026-09-27T09:56:49.581365737Z",
+            "stage": "SUBSCRIBER_CONNECTED"
+          },
+          {
+            "utc": "2026-09-27T09:56:54.283657969Z",
+            "stage": "VP8_MEDIA_ACTIVE",
+            "target": "SUBSCRIBER"
+          },
+          {
+            "utc": "2026-09-27T10:16:42.886526526Z",
+            "stage": "CONNECTION_STATE",
+            "target": "PUBLISHER",
+            "state": "closed"
+          }
+        ],
+        "candidate_types": [
+          {
+            "local_type": "host",
+            "protocol": "udp",
+            "target": "PUBLISHER"
+          },
+          {
+            "local_type": "host",
+            "protocol": "udp",
+            "target": "SUBSCRIBER"
+          },
+          {
+            "local_type": "relay",
+            "protocol": "udp",
+            "target": "PUBLISHER"
+          },
+          {
+            "local_type": "relay",
+            "protocol": "udp",
+            "target": "SUBSCRIBER"
+          },
+          {
+            "local_type": "srflx",
+            "protocol": "udp",
+            "target": "PUBLISHER"
+          },
+          {
+            "local_type": "srflx",
+            "protocol": "udp",
+            "target": "SUBSCRIBER"
+          }
+        ],
+        "stderr": ""
+      }
+    },
+    "accepted-sigterm": {
+      "A": {
+        "events": [
+          {
+            "arch": "amd64",
+            "event": "start",
+            "go": "go1.27.1",
+            "mode": "vp8",
+            "os": "linux",
+            "pion": "v4.2.15",
+            "role": "probe",
+            "room_method": "operator-provided disposable room",
+            "utc": "2026-09-27T10:16:26.298715991Z",
+            "vcs.modified": "false",
+            "vcs.revision": "a13068e74f8a1ceef4e5d9d659622eb70710aac0"
+          },
+          {
+            "event": "connected",
+            "utc": "2026-09-27T10:16:28.055286439Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 1,
+            "elapsed_s": 3.223998874,
+            "event": "probe_result",
+            "max_rtt_ms": 3223.992,
+            "mean_rtt_ms": 3223.992,
+            "payload_bytes": 1,
+            "phase": "size",
+            "received": 1,
+            "sent": 1,
+            "useful_roundtrip_mbit_s": 4.962780889606477e-06,
+            "utc": "2026-09-27T10:16:34.280183378Z"
+          },
+          {
+            "carrier_mode": "vp8",
+            "completed": 0,
+            "event": "probe_failed",
+            "payload_bytes": 32,
+            "phase": "size",
+            "reason": "CANCELED",
+            "utc": "2026-09-27T10:16:34.517143611Z"
+          },
+          {
+            "cpu_system_s": 0.09118,
+            "cpu_user_s": 0.144952,
+            "event": "summary",
+            "goroutines": 2,
+            "heap_bytes": 4602040,
+            "max_rss_kib": 22488,
+            "utc": "2026-09-27T10:16:34.518698578Z"
+          }
+        ],
+        "final_stats": {
+          "Mode": "vp8",
+          "SetupMs": 1756,
+          "BytesSent": 33,
+          "BytesReceived": 1,
+          "MessagesSent": 2,
+          "MessagesRecv": 1,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 5,
+            "RTPReceived": 5,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 5,
+            "BinaryFrames": 1
+          },
+          "ApplicationPongs": 0,
+          "ApplicationPings": 1,
+          "SignalingACKs": 53
+        },
+        "evidence": [],
+        "stderr": "binary probe failed; gate remains open"
+      }
+    },
+    "accepted-remote-exit": {
+      "A": {
+        "events": [
+          {
+            "arch": "amd64",
+            "event": "start",
+            "go": "go1.27.1",
+            "mode": "vp8",
+            "os": "linux",
+            "pion": "v4.2.15",
+            "role": "probe",
+            "room_method": "operator-provided disposable room",
+            "utc": "2026-09-27T10:16:34.523106025Z",
+            "vcs.modified": "false",
+            "vcs.revision": "a13068e74f8a1ceef4e5d9d659622eb70710aac0"
+          },
+          {
+            "event": "connected",
+            "utc": "2026-09-27T10:16:36.347539463Z"
+          },
+          {
+            "byte_equal": true,
+            "byte_for_byte": true,
+            "carrier_mode": "vp8",
+            "count": 1,
+            "elapsed_s": 2.931568011,
+            "event": "probe_result",
+            "max_rtt_ms": 2931.56,
+            "mean_rtt_ms": 2931.56,
+            "payload_bytes": 1,
+            "phase": "size",
+            "received": 1,
+            "sent": 1,
+            "useful_roundtrip_mbit_s": 5.457830055439229e-06,
+            "utc": "2026-09-27T10:16:42.280403384Z"
+          },
+          {
+            "carrier_mode": "vp8",
+            "completed": 0,
+            "event": "probe_failed",
+            "payload_bytes": 32,
+            "phase": "size",
+            "reason": "ECHO_TIMEOUT",
+            "utc": "2026-09-27T10:16:52.281551645Z"
+          },
+          {
+            "cpu_system_s": 0.147255,
+            "cpu_user_s": 0.354886,
+            "event": "summary",
+            "goroutines": 3,
+            "heap_bytes": 3465536,
+            "max_rss_kib": 23724,
+            "utc": "2026-09-27T10:16:52.283428533Z"
+          }
+        ],
+        "final_stats": {
+          "Mode": "vp8",
+          "SetupMs": 1824,
+          "BytesSent": 33,
+          "BytesReceived": 1,
+          "MessagesSent": 2,
+          "MessagesRecv": 1,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 10,
+            "RTPReceived": 5,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 5,
+            "BinaryFrames": 1
+          },
+          "ApplicationPongs": 0,
+          "ApplicationPings": 3,
+          "SignalingACKs": 52
+        },
+        "evidence": [],
+        "stderr": "binary probe failed; gate remains open"
+      }
+    }
+  },
+  "fault_injections": [
+    {
+      "fault": "sigterm",
+      "exit": 1,
+      "elapsed_s": 0.003213906000382849,
+      "utc": "2026-09-27T10:16:34Z"
+    },
+    {
+      "fault": "remote-exit",
+      "exit": 1,
+      "elapsed_s": 9.784968574999766,
+      "utc": "2026-09-27T10:16:52Z"
+    }
+  ],
+  "signaling_close_test": {
+    "passed": true,
+    "result": {
+      "echo_byte_equal": true,
+      "event": "live_signaling_close",
+      "shutdown_ms": 1,
+      "stats": {
+        "Mode": "vp8",
+        "SetupMs": 1874,
+        "BytesSent": 1024,
+        "BytesReceived": 1024,
+        "MessagesSent": 1,
+        "MessagesRecv": 1,
+        "ReconnectCount": 0,
+        "Disconnects": 0,
+        "SubscriberState": "closed",
+        "PublisherState": "closed",
+        "Evidence": [
+          {
+            "utc": "2026-09-27T10:16:19.714586633Z",
+            "stage": "ROOM_RESOLVED"
+          },
+          {
+            "utc": "2026-09-27T10:16:19.946196862Z",
+            "stage": "SIGNALING_CONNECTED"
+          },
+          {
+            "utc": "2026-09-27T10:16:20.130014438Z",
+            "stage": "SERVER_HELLO"
+          },
+          {
+            "utc": "2026-09-27T10:16:20.130037104Z",
+            "stage": "ICE_CONFIGURED"
+          },
+          {
+            "utc": "2026-09-27T10:16:20.196960883Z",
+            "stage": "CONNECTION_STATE",
+            "target": "SUBSCRIBER",
+            "state": "connecting"
+          },
+          {
+            "utc": "2026-09-27T10:16:20.559599978Z",
+            "stage": "CONNECTION_STATE",
+            "target": "PUBLISHER",
+            "state": "connecting"
+          },
+          {
+            "utc": "2026-09-27T10:16:20.697667898Z",
+            "stage": "ICE_SELECTED_PAIR",
+            "target": "PUBLISHER",
+            "local_type": "host",
+            "remote_type": "host",
+            "protocol": "udp",
+            "turn_used": false
+          },
+          {
+            "utc": "2026-09-27T10:16:20.799930407Z",
+            "stage": "CONNECTION_STATE",
+            "target": "PUBLISHER",
+            "state": "connected"
+          },
+          {
+            "utc": "2026-09-27T10:16:20.799950592Z",
+            "stage": "PUBLISHER_CONNECTED"
+          },
+          {
+            "utc": "2026-09-27T10:16:21.106887057Z",
+            "stage": "ICE_SELECTED_PAIR",
+            "target": "SUBSCRIBER",
+            "local_type": "host",
+            "remote_type": "host",
+            "protocol": "udp",
+            "turn_used": false
+          },
+          {
+            "utc": "2026-09-27T10:16:21.21567696Z",
+            "stage": "CONNECTION_STATE",
+            "target": "SUBSCRIBER",
+            "state": "connected"
+          },
+          {
+            "utc": "2026-09-27T10:16:21.215688541Z",
+            "stage": "SUBSCRIBER_CONNECTED"
+          },
+          {
+            "utc": "2026-09-27T10:16:21.26875615Z",
+            "stage": "VP8_MEDIA_ACTIVE",
+            "target": "SUBSCRIBER"
+          },
+          {
+            "utc": "2026-09-27T10:16:26.278656495Z",
+            "stage": "WS_FAIL",
+            "state": "read_error"
+          },
+          {
+            "utc": "2026-09-27T10:16:26.279308496Z",
+            "stage": "CONNECTION_STATE",
+            "target": "PUBLISHER",
+            "state": "closed"
+          },
+          {
+            "utc": "2026-09-27T10:16:26.279916609Z",
+            "stage": "CONNECTION_STATE",
+            "target": "SUBSCRIBER",
+            "state": "closed"
+          }
+        ],
+        "EvidenceDropped": 0,
+        "Media": {
+          "SamplesWritten": 4,
+          "RTPReceived": 5,
+          "EmptyRTP": 0,
+          "SequenceGaps": 0,
+          "FramesReceived": 4,
+          "BinaryFrames": 1
+        },
+        "ApplicationPongs": 0,
+        "ApplicationPings": 1,
+        "SignalingACKs": 51
+      }
+    }
+  },
+  "prior_attempts": {
+    "baseline": {
+      "A": {
+        "build": {
+          "arch": "amd64",
+          "event": "start",
+          "go": "go1.27.1",
+          "mode": "vp8",
+          "os": "linux",
+          "pion": "v4.2.15",
+          "role": "probe",
+          "room_method": "operator-provided disposable room",
+          "utc": "2026-09-27T09:37:02.981331592Z",
+          "vcs.modified": "false",
+          "vcs.revision": "4c1407613d084b7614db3cf500d3e14119e22531"
+        },
+        "successful_phases": [
+          {
+            "phase": "size",
+            "payload_bytes": 1,
+            "count": 1,
+            "mean_rtt_ms": 3849.285,
+            "max_rtt_ms": 3849.285,
+            "utc": "2026-09-27T09:37:11.644347984Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 32,
+            "count": 1,
+            "mean_rtt_ms": 3997.634,
+            "max_rtt_ms": 3997.634,
+            "utc": "2026-09-27T09:37:15.642127148Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 256,
+            "count": 1,
+            "mean_rtt_ms": 4000.937,
+            "max_rtt_ms": 4000.937,
+            "utc": "2026-09-27T09:37:19.643177878Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 1024,
+            "count": 1,
+            "mean_rtt_ms": 4019.101,
+            "max_rtt_ms": 4019.101,
+            "utc": "2026-09-27T09:37:23.662377794Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 4096,
+            "count": 1,
+            "mean_rtt_ms": 4043.248,
+            "max_rtt_ms": 4043.248,
+            "utc": "2026-09-27T09:37:27.705761283Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 16384,
+            "count": 1,
+            "mean_rtt_ms": 4099.963,
+            "max_rtt_ms": 4099.963,
+            "utc": "2026-09-27T09:37:31.8058547Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 65536,
+            "count": 1,
+            "mean_rtt_ms": 3995.134,
+            "max_rtt_ms": 3995.134,
+            "utc": "2026-09-27T09:37:35.801200024Z"
+          }
+        ],
+        "failure": [
+          {
+            "carrier_mode": "vp8",
+            "completed": 7,
+            "event": "probe_failed",
+            "payload_bytes": 1024,
+            "phase": "batch",
+            "reason": "send/receive timeout or closed",
+            "utc": "2026-09-27T09:38:04.432023392Z"
+          }
+        ],
+        "failure_evidence": [],
+        "end_utc": "2026-09-27T09:38:04.433113126Z",
+        "counters": {
+          "Mode": "vp8",
+          "SetupMs": 1812,
+          "BytesSent": 95521,
+          "BytesReceived": 94497,
+          "MessagesSent": 15,
+          "MessagesRecv": 14,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "EvidenceDropped": 0
+        },
+        "stderr": "binary probe failed; gate remains open"
+      },
+      "B": {
+        "build": {
+          "arch": "amd64",
+          "event": "start",
+          "go": "go1.27.1",
+          "mode": "vp8",
+          "os": "linux",
+          "pion": "v4.2.15",
+          "role": "echo",
+          "room_method": "operator-provided disposable room",
+          "utc": "2026-09-27T09:37:00.073855691Z",
+          "vcs.modified": "false",
+          "vcs.revision": "4c1407613d084b7614db3cf500d3e14119e22531"
+        },
+        "successful_phases": [],
+        "failure": [],
+        "failure_evidence": [],
+        "end_utc": "2026-09-27T09:38:04.790038429Z",
+        "counters": {
+          "Mode": "vp8",
+          "SetupMs": 2785,
+          "BytesSent": 94497,
+          "BytesReceived": 94497,
+          "MessagesSent": 14,
+          "MessagesRecv": 14,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "EvidenceDropped": 0
+        },
+        "stderr": ""
+      }
+    },
+    "repeat": {
+      "A": {
+        "build": {
+          "arch": "amd64",
+          "event": "start",
+          "go": "go1.27.1",
+          "mode": "vp8",
+          "os": "linux",
+          "pion": "v4.2.15",
+          "role": "probe",
+          "room_method": "operator-provided disposable room",
+          "utc": "2026-09-27T09:40:30.121494381Z",
+          "vcs.modified": "false",
+          "vcs.revision": "4c1407613d084b7614db3cf500d3e14119e22531"
+        },
+        "successful_phases": [
+          {
+            "phase": "size",
+            "payload_bytes": 1,
+            "count": 1,
+            "mean_rtt_ms": 3624.448,
+            "max_rtt_ms": 3624.448,
+            "utc": "2026-09-27T09:40:38.626134558Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 32,
+            "count": 1,
+            "mean_rtt_ms": 1995.353,
+            "max_rtt_ms": 1995.353,
+            "utc": "2026-09-27T09:40:40.621595244Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 256,
+            "count": 1,
+            "mean_rtt_ms": 2003.162,
+            "max_rtt_ms": 2003.162,
+            "utc": "2026-09-27T09:40:42.624852193Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 1024,
+            "count": 1,
+            "mean_rtt_ms": 2001.807,
+            "max_rtt_ms": 2001.807,
+            "utc": "2026-09-27T09:40:44.626763314Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 4096,
+            "count": 1,
+            "mean_rtt_ms": 2059.458,
+            "max_rtt_ms": 2059.458,
+            "utc": "2026-09-27T09:40:46.686590109Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 16384,
+            "count": 1,
+            "mean_rtt_ms": 2101.387,
+            "max_rtt_ms": 2101.387,
+            "utc": "2026-09-27T09:40:48.78812245Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 65536,
+            "count": 1,
+            "mean_rtt_ms": 4007.756,
+            "max_rtt_ms": 4007.756,
+            "utc": "2026-09-27T09:40:52.796117589Z"
+          }
+        ],
+        "failure": [
+          {
+            "carrier_mode": "vp8",
+            "completed": 39,
+            "event": "probe_failed",
+            "payload_bytes": 1024,
+            "phase": "batch",
+            "reason": "send/receive timeout or closed",
+            "utc": "2026-09-27T09:42:13.702830246Z"
+          }
+        ],
+        "failure_evidence": [],
+        "end_utc": "2026-09-27T09:42:13.704428614Z",
+        "counters": {
+          "Mode": "vp8",
+          "SetupMs": 1879,
+          "BytesSent": 128289,
+          "BytesReceived": 127265,
+          "MessagesSent": 47,
+          "MessagesRecv": 46,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "EvidenceDropped": 0
+        },
+        "stderr": "binary probe failed; gate remains open"
+      },
+      "B": {
+        "build": {
+          "arch": "amd64",
+          "event": "start",
+          "go": "go1.27.1",
+          "mode": "vp8",
+          "os": "linux",
+          "pion": "v4.2.15",
+          "role": "echo",
+          "room_method": "operator-provided disposable room",
+          "utc": "2026-09-27T09:40:28.160575249Z",
+          "vcs.modified": "false",
+          "vcs.revision": "4c1407613d084b7614db3cf500d3e14119e22531"
+        },
+        "successful_phases": [],
+        "failure": [],
+        "failure_evidence": [],
+        "end_utc": "2026-09-27T09:42:13.702817216Z",
+        "counters": {
+          "Mode": "vp8",
+          "SetupMs": 1713,
+          "BytesSent": 128289,
+          "BytesReceived": 128289,
+          "MessagesSent": 47,
+          "MessagesRecv": 47,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "EvidenceDropped": 0
+        },
+        "stderr": "telemost: signaling closed or invalid JSON"
+      }
+    },
+    "keyframe-trial": {
+      "A": {
+        "build": {
+          "arch": "amd64",
+          "event": "start",
+          "go": "go1.27.1",
+          "mode": "vp8",
+          "os": "linux",
+          "pion": "v4.2.15",
+          "role": "probe",
+          "room_method": "operator-provided disposable room",
+          "utc": "2026-09-27T09:45:41.745374161Z",
+          "vcs.modified": "true",
+          "vcs.revision": "4c1407613d084b7614db3cf500d3e14119e22531"
+        },
+        "successful_phases": [
+          {
+            "phase": "size",
+            "payload_bytes": 1,
+            "count": 1,
+            "mean_rtt_ms": 3708.026,
+            "max_rtt_ms": 3708.026,
+            "utc": "2026-09-27T09:45:50.281806398Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 32,
+            "count": 1,
+            "mean_rtt_ms": 2003.422,
+            "max_rtt_ms": 2003.422,
+            "utc": "2026-09-27T09:45:52.285314121Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 256,
+            "count": 1,
+            "mean_rtt_ms": 1995.795,
+            "max_rtt_ms": 1995.795,
+            "utc": "2026-09-27T09:45:54.281242282Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 1024,
+            "count": 1,
+            "mean_rtt_ms": 1999.299,
+            "max_rtt_ms": 1999.299,
+            "utc": "2026-09-27T09:45:56.28065484Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 4096,
+            "count": 1,
+            "mean_rtt_ms": 2065.067,
+            "max_rtt_ms": 2065.067,
+            "utc": "2026-09-27T09:45:58.345819096Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 16384,
+            "count": 1,
+            "mean_rtt_ms": 2093.858,
+            "max_rtt_ms": 2093.858,
+            "utc": "2026-09-27T09:46:00.439852215Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 65536,
+            "count": 1,
+            "mean_rtt_ms": 4022.869,
+            "max_rtt_ms": 4022.869,
+            "utc": "2026-09-27T09:46:04.463422542Z"
+          }
+        ],
+        "failure": [
+          {
+            "carrier_mode": "vp8",
+            "completed": 33,
+            "event": "probe_failed",
+            "payload_bytes": 1024,
+            "phase": "batch",
+            "reason": "SESSION_CLOSED",
+            "utc": "2026-09-27T09:47:13.720594834Z"
+          }
+        ],
+        "failure_evidence": [
+          {
+            "utc": "2026-09-27T09:47:13.720562196Z",
+            "stage": "WS_FAIL",
+            "state": "close_code_4008"
+          }
+        ],
+        "end_utc": "2026-09-27T09:47:13.721615584Z",
+        "counters": {
+          "Mode": "vp8",
+          "SetupMs": 1827,
+          "BytesSent": 122145,
+          "BytesReceived": 121121,
+          "MessagesSent": 41,
+          "MessagesRecv": 40,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "EvidenceDropped": 0
+        },
+        "stderr": "binary probe failed; gate remains open"
+      },
+      "B": {
+        "build": {
+          "arch": "amd64",
+          "event": "start",
+          "go": "go1.27.1",
+          "mode": "vp8",
+          "os": "linux",
+          "pion": "v4.2.15",
+          "role": "echo",
+          "room_method": "operator-provided disposable room",
+          "utc": "2026-09-27T09:45:39.280727053Z",
+          "vcs.modified": "true",
+          "vcs.revision": "4c1407613d084b7614db3cf500d3e14119e22531"
+        },
+        "successful_phases": [],
+        "failure": [],
+        "failure_evidence": [
+          {
+            "utc": "2026-09-27T09:47:13.696934401Z",
+            "stage": "WS_FAIL",
+            "state": "close_code_4008"
+          }
+        ],
+        "end_utc": "2026-09-27T09:47:13.704484793Z",
+        "counters": {
+          "Mode": "vp8",
+          "SetupMs": 2251,
+          "BytesSent": 122145,
+          "BytesReceived": 122145,
+          "MessagesSent": 41,
+          "MessagesRecv": 41,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "EvidenceDropped": 0
+        },
+        "stderr": "telemost: signaling closed or invalid JSON"
+      }
+    },
+    "heartbeat": {
+      "A": {
+        "build": {
+          "arch": "amd64",
+          "event": "start",
+          "go": "go1.27.1",
+          "mode": "vp8",
+          "os": "linux",
+          "pion": "v4.2.15",
+          "role": "probe",
+          "room_method": "operator-provided disposable room",
+          "utc": "2026-09-27T09:49:41.750367693Z",
+          "vcs.modified": "true",
+          "vcs.revision": "4c1407613d084b7614db3cf500d3e14119e22531"
+        },
+        "successful_phases": [
+          {
+            "phase": "size",
+            "payload_bytes": 1,
+            "count": 1,
+            "mean_rtt_ms": 2631.512,
+            "max_rtt_ms": 2631.512,
+            "utc": "2026-09-27T09:49:50.363274763Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 32,
+            "count": 1,
+            "mean_rtt_ms": 1988.318,
+            "max_rtt_ms": 1988.318,
+            "utc": "2026-09-27T09:49:52.351707229Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 256,
+            "count": 1,
+            "mean_rtt_ms": 2007.76,
+            "max_rtt_ms": 2007.76,
+            "utc": "2026-09-27T09:49:54.359596781Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 1024,
+            "count": 1,
+            "mean_rtt_ms": 2001.772,
+            "max_rtt_ms": 2001.772,
+            "utc": "2026-09-27T09:49:56.361482121Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 4096,
+            "count": 1,
+            "mean_rtt_ms": 2056.805,
+            "max_rtt_ms": 2056.805,
+            "utc": "2026-09-27T09:49:58.418727812Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 16384,
+            "count": 1,
+            "mean_rtt_ms": 2112.481,
+            "max_rtt_ms": 2112.481,
+            "utc": "2026-09-27T09:50:00.531356964Z"
+          },
+          {
+            "phase": "size",
+            "payload_bytes": 65536,
+            "count": 1,
+            "mean_rtt_ms": 3984.502,
+            "max_rtt_ms": 3984.502,
+            "utc": "2026-09-27T09:50:04.516154215Z"
+          },
+          {
+            "phase": "batch",
+            "payload_bytes": 1024,
+            "count": 100,
+            "mean_rtt_ms": 2018.37402,
+            "max_rtt_ms": 3838.647,
+            "utc": "2026-09-27T09:53:26.354432427Z"
+          }
+        ],
+        "failure": [
+          {
+            "carrier_mode": "vp8",
+            "completed": 40,
+            "event": "probe_failed",
+            "payload_bytes": 16384,
+            "phase": "batch",
+            "reason": "CANCELED",
+            "utc": "2026-09-27T09:56:08.108999329Z"
+          }
+        ],
+        "failure_evidence": [],
+        "end_utc": "2026-09-27T09:56:08.110210083Z",
+        "counters": {
+          "Mode": "vp8",
+          "SetupMs": 2981,
+          "BytesSent": 861473,
+          "BytesReceived": 845089,
+          "MessagesSent": 148,
+          "MessagesRecv": 147,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 389,
+            "RTPReceived": 938,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 388,
+            "BinaryFrames": 196
+          },
+          "ApplicationPongs": 0
+        },
+        "stderr": "binary probe failed; gate remains open"
+      },
+      "B": {
+        "build": {
+          "arch": "amd64",
+          "event": "start",
+          "go": "go1.27.1",
+          "mode": "vp8",
+          "os": "linux",
+          "pion": "v4.2.15",
+          "role": "echo",
+          "room_method": "operator-provided disposable room",
+          "utc": "2026-09-27T09:49:39.323984484Z",
+          "vcs.modified": "true",
+          "vcs.revision": "4c1407613d084b7614db3cf500d3e14119e22531"
+        },
+        "successful_phases": [],
+        "failure": [],
+        "failure_evidence": [],
+        "end_utc": "2026-09-27T09:56:08.729353499Z",
+        "counters": {
+          "Mode": "vp8",
+          "SetupMs": 2237,
+          "BytesSent": 861473,
+          "BytesReceived": 861473,
+          "MessagesSent": 148,
+          "MessagesRecv": 148,
+          "ReconnectCount": 0,
+          "Disconnects": 0,
+          "SubscriberState": "closed",
+          "PublisherState": "closed",
+          "EvidenceDropped": 0,
+          "Media": {
+            "SamplesWritten": 391,
+            "RTPReceived": 942,
+            "EmptyRTP": 0,
+            "SequenceGaps": 0,
+            "FramesReceived": 387,
+            "BinaryFrames": 197
+          },
+          "ApplicationPongs": 0
+        },
+        "stderr": ""
+      }
+    }
+  }
+}

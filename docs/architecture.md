@@ -5,8 +5,11 @@
 2026-09-27 implementation checkpoint: [carrier/](../carrier/README.md) recovers
 the interrupted isolated Go/Pion prototype for **5N.1 only**. Bounded binary
 framing, Telemost join/signaling, VP8 and a separate diagnostic DC mode exist;
-local two-process Pion tests pass. Real Telemost VP8 remains OPEN/BLOCKED pending
-an operator-provided disposable room. No Family auth, gateway, Android or VPN
+local two-process Pion tests pass. Real Linux↔Telemost VP8↔Amsterdam **5N.1 PASS**
+on27.09, clean runtime `a13068e`: 291 exact echoes including30s/5min and live
+failure teardown. Observed RTT≈4s and useful roundtrip≈0.0655Mbit/s are limitations,
+not production performance acceptance. 5N.2 is next but not started.
+No Family auth, gateway, Android or VPN
 integration is implemented by this checkpoint. [Evidence](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md).
 
 Priority correction25.09, preparation-only: remove the Windows home-PC detour from

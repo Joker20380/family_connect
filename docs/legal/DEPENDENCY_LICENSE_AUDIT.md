@@ -41,7 +41,12 @@ portions as reference-derived and retain both complete notices conservatively:
 No cookies, bearer tokens or room secrets are included. Only a local temporary
 test executable was built; nothing publicly distributed or integrated into
 Android/Linux product/Windows releases. Copy `carrier/licenses/` with any later
-private PoC binary transfer. Proprietary root LICENSE unchanged; reference-code
+private PoC binary transfer. Live continuation27.09 used the same pins/notices:
+binary + complete `carrier/licenses/` were privately transferred to Amsterdam,
+run as an unprivileged temporary process and removed after acceptance. The small
+application ping/pong heartbeat follows the already-attributed goolom signaling
+contract; no additional dependency or reference implementation was imported.
+Proprietary root LICENSE unchanged; reference-code
 terms do not grant Telemost service access or prove provider usage permissions.
 
 ## Repository history and ownership

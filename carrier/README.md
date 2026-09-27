@@ -1,8 +1,12 @@
 # Telemost binary carrier — experimental 5N.1
 
 Recovered from the interrupted DeepSeek worktree, not a second carrier.
-`WEBRTC-EU-1` is **OPEN** until independent Linux endpoints exchange exact bytes
-through **real Telemost VP8**. Local Pion and DataChannel results do not close it.
+`WEBRTC-EU-1 / 5N.1` **PASS on 2026-09-27**: independent developer Linux and
+Amsterdam Linux exchanged 291 exact synthetic echoes through **real Telemost VP8**,
+including the 30-second and five-minute phases. See the linked result record for
+the exact clean revision, artifact hash, low throughput/high RTT and fault checks.
+This is not Android, restricted-mobile or production acceptance; 5N.2 is not started.
+Local Pion and DataChannel results alone do not close the gate.
 No Android, Family auth, VPN, proxy, routing, DNS or product integration is here.
 Use synthetic random data only: the SFU is untrusted and DTLS is not Family E2E.
 
@@ -47,7 +51,8 @@ VP8 interframe prefix + fragment is packetized as VP8/RTP; periodic keyframes
 keep the track active. The prefix is not encryption, steganography or a proof of
 arbitrary-video decoder conformance. RTP reorder window 256, gap expiry 100 ms
 on next arrival; frame assembly is bounded and rejects packet gaps/timestamp
-mixing. SFU forwarding of these bytes remains a live acceptance question.
+mixing. SFU forwarding passed in the recorded disposable room; this does not
+promise arbitrary decoder conformance or compatibility with every future SFU.
 
 `frame/` preserves DeepSeek's private IPC codec. It now permits 64 KiB **payload**
 (body maximum 65,542 bytes), rather than incorrectly limiting body to 64 KiB.
@@ -91,8 +96,9 @@ No room-membership event is misrepresented as reliable remote liveness.
 
 For diagnostic comparison only, set `--mode datachannel`; native SFU DC sharing
 or TO_RTP mapping is not proven by merely advertising capabilities. A DC success
-never substitutes for VP8. HTTP waiting-room and current provider schema still
-need real-room verification; errors never print API bodies, credentials or SDP.
+never substitutes for VP8. The recorded room admitted both guests immediately;
+waiting-room polling remains unimplemented and unverified for rooms requiring it.
+Errors never print API bodies, credentials or SDP.
 
 JSONL contains build revision/dirty flag, OS/arch, Go/Pion versions, setup time,
 per-size/batch RTT mean/max and exact-byte result, aggregate CPU seconds, heap and

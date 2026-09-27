@@ -4,11 +4,40 @@
   (Android beta51/code51, Linux0.2.11, Windows0.2.15).
 - active engineering critical path — **5N: Restricted WebRTC Android→EU**
   (Telemost VP8 → Linux EU gateway → TCP+DNS → Internet).
-- ближайший runtime milestone — **WEBRTC-EU-1 / 5N.1**.
-- **5N.1 OPEN / BLOCKED**: preliminary local VP8 PASS, real Telemost VP8 NOT RUN;
+- **WEBRTC-EU-1 / 5N.1 = PASS**: настоящий local Linux ↔ Telemost VP8 ↔ Amsterdam.
+- **NEXT = WEBRTC-EU-2 / 5N.2**, но5N.2 в этой сессии НЕ начат;
   5N.2–5N.6 остаются NOT RUN.
 
-## 27.09.2026 — восстановление Telemost carrier после выключения
+## 27.09.2026 — real Telemost VP8 acceptance PASS
+
+Clean runtime `a13068e74f8a1ceef4e5d9d659622eb70710aac0`, Go1.27.1/Pion4.2.15,
+одинаковый binary на A(dev Ubuntu26.04) и B(Amsterdam186.246.45.246, nobody).
+Все7 размеров1B–64KiB,100×1KiB,100×16KiB,30s(actual32.010s) и5min(actual303.990s)
+прошли: **291 byte-for-byte echo**, A TX=RX3,204,385B. Main window
+09:56:49–10:16:18 UTC; disconnect/reconnect/corruption/timeout0.
+5min useful roundtrip0.065538Mbit/s (≈0.032769 в одну сторону), mean RTT3999.807ms;
+скорость низкая, это transport PoC, не production/VPN performance acceptance.
+
+Room использована только из `FC_TELEMOST_ROOM`, URL/секреты не документируются.
+`waiting_room_required=no`; poll не добавлялся. HTTP/WS/serverHello/ICE/pub/sub/VP8
+активны. Pion selected pairs обоих PC на обоих endpoint: host/host UDP,
+TURN не выбран; конкретные промежуточные network hops не утверждаются.
+Наблюдавшийся WS close4008 устранён добавлением application heartbeat (`55f2561`);
+keyframe-prefix experiment не помог и отменён, исходный VP8 envelope сохранён.
+
+Race suite×3/local207 checks×3, vet, module verification, build/fuzz PASS.
+Live WS-close после echo, active SIGTERM и remote exit PASS (terminal timeout≤10s).
+Temporary processes/artifacts на Amsterdam удалены, проверено0/0; production
+services/routing, installed/public/invitation versions и каталоги не менялись.
+PoC не опубликован/не подписан; push отсутствует. Rollback — temporary cleanup,
+уже выполнен; production откатывать нечего.
+
+Остаются: waiting-room на других rooms, высокий RTT/throughput, auto-reconnect и
+mobile validation. **Не начинались Android/TUN/Family auth/TCP/WB**; следующий
+gate5N.2 только записан. [Полный отчёт](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md)
+· [sanitized evidence](releases/2026-09-27-webrtc-eu1-live.sanitized.json).
+
+## 27.09.2026 — recovery checkpoint до live acceptance (superseded)
 
 Сохранён оригинальный DeepSeek checkpoint `ee3a830` поверх `8e36858`, без reset,
 stash или удаления незакоммиченной работы. Найдены 10 untracked файлов `carrier/`;
