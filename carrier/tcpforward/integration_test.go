@@ -6,6 +6,7 @@ import (
 	"crypto/ed25519"
 	"crypto/rand"
 	"crypto/sha256"
+	"crypto/tls"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/binary"
@@ -238,4 +239,53 @@ func TestAuthenticatedImmediateResetPreservesOpen(test *testing.T) {
 	}
 	stream.Close()
 	completed(test, done, false)
+}
+
+type tlsTestStream struct{ *Stream }
+
+func (connection tlsTestStream) LocalAddr() net.Addr              { return &net.TCPAddr{} }
+func (connection tlsTestStream) RemoteAddr() net.Addr             { return &net.TCPAddr{} }
+func (connection tlsTestStream) SetDeadline(time.Time) error      { return nil }
+func (connection tlsTestStream) SetReadDeadline(time.Time) error  { return nil }
+func (connection tlsTestStream) SetWriteDeadline(time.Time) error { return nil }
+
+func TestEndSiteTLSRemoteClosureBeforeTCPFIN(test *testing.T) {
+	_, raw := testCredentials(test)
+	var profile familysession.Credentials
+	if err := json.Unmarshal(raw, &profile); err != nil {
+		test.Fatal(err)
+	}
+	certificate, err := tls.X509KeyPair([]byte(profile.Certificate), []byte(profile.PrivateKey))
+	if err != nil {
+		test.Fatal(err)
+	}
+	roots := x509.NewCertPool()
+	roots.AppendCertsFromPEM([]byte(profile.Authority))
+	port := startFixture(test, func(connection *net.TCPConn) {
+		secure := tls.Server(connection, &tls.Config{Certificates: []tls.Certificate{certificate}, MinVersion: tls.VersionTLS13})
+		defer secure.Close()
+		request := make([]byte, 1)
+		if _, err := io.ReadFull(secure, request); err == nil {
+			secure.Write([]byte("complete response"))
+		}
+	})
+	stream, _, done, _ := startGateway(test, port)
+	secure := tls.Client(tlsTestStream{stream}, &tls.Config{ServerName: "gateway.family-connect.test", RootCAs: roots, MinVersion: tls.VersionTLS13})
+	if _, err := secure.Write([]byte{1}); err != nil {
+		test.Fatal(err)
+	}
+	response, err := io.ReadAll(secure)
+	if err != nil || string(response) != "complete response" {
+		test.Fatal(string(response), err)
+	}
+	if err := stream.CloseWrite(); err != nil {
+		test.Fatal(err)
+	}
+	if _, err := io.Copy(io.Discard, stream); err != nil {
+		test.Fatal(err)
+	}
+	if err := stream.Close(); err != nil {
+		test.Fatal(err)
+	}
+	completed(test, done, true)
 }

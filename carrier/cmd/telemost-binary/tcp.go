@@ -205,14 +205,11 @@ func tcpHTTPS(ctx context.Context, stream *tcpforward.Stream, config tcpConfig, 
 	if response.StatusCode < 200 || response.StatusCode >= 400 {
 		return errors.New("HTTPS status not accepted")
 	}
-	if err := secure.CloseWrite(); err != nil {
+	_, err = io.Copy(io.Discard, io.LimitReader(secure, 65537))
+	if err != nil {
 		return err
 	}
 	if err := stream.CloseWrite(); err != nil {
-		return err
-	}
-	_, err = io.Copy(io.Discard, io.LimitReader(secure, 65537))
-	if err != nil {
 		return err
 	}
 	_, err = io.Copy(io.Discard, io.LimitReader(stream, 65537))
