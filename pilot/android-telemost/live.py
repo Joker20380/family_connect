@@ -44,10 +44,16 @@ def main():
     parser.add_argument("--client-profile", choices=["valid", "wrong-family", "revoked", "unknown"], default="valid")
     parser.add_argument("--independent-observer", action="store_true")
     parser.add_argument("--performance-config", type=Path)
+    parser.add_argument("--tcp-config", type=Path)
+    parser.add_argument("--tcp-test-loopback-port", type=int, default=0)
     args = parser.parse_args()
     duration = "35m" if args.performance_config else "25m"
     if args.performance_config and (not args.family_dir or not args.independent_observer or args.case != "acceptance"):
         parser.error("performance requires Family credentials, independent observer and acceptance case")
+    if args.tcp_config and (not args.family_dir or not args.independent_observer or args.performance_config or args.client_profile != "valid"):
+        parser.error("TCP requires valid Family credentials, independent observer and exclusive acceptance mode")
+    if args.tcp_test_loopback_port and (not args.tcp_config or not 1 <= args.tcp_test_loopback_port <= 65535):
+        parser.error("loopback override requires TCP and an exact port")
     room = os.environ["FC_TELEMOST_ROOM"]
     if not room or len(room) > 2048 or "\n" in room or "\r" in room:
         raise SystemExit("Invalid room input (redacted)")
@@ -78,6 +84,10 @@ def main():
         extra = ["--family-config", "family.input"] if args.family_dir else []
         if args.performance_config:
             extra += ["--performance-observer"]
+        if args.tcp_config:
+            extra += ["--tcp-gateway"]
+            if args.tcp_test_loopback_port:
+                extra += ["--tcp-test-loopback-port", str(args.tcp_test_loopback_port)]
         code = f'import os,sys; os.chdir({directory!r}); os.environ["FC_TELEMOST_ROOM"]=sys.stdin.readline().rstrip("\\n"); open("pid","w").write(str(os.getpid())); os.execvpe("./telemost-live",["./telemost-live","--role","echo","--mode","vp8","--duration","25m","--metrics-interval","10s"]+{extra!r},os.environ)'
         if args.independent_observer:
             independent = IndependentEcho(SSH, directory, args.out)
@@ -98,6 +108,10 @@ def main():
         adb("shell", "am", "force-stop", PACKAGE)
         adb("exec-out", "run-as", PACKAGE, "rm", "-f", "files/family.input")
         adb("exec-out", "run-as", PACKAGE, "rm", "-f", "files/performance.input")
+        adb("exec-out", "run-as", PACKAGE, "rm", "-f", "files/tcp.input")
+        if args.tcp_config:
+            script = "umask 077; mkdir -p files; cat > files/tcp.input"
+            adb("shell", "-T", "run-as", PACKAGE, "sh", "-c", shlex.quote(script), input=args.tcp_config.read_bytes())
         if args.performance_config:
             script = "umask 077; mkdir -p files; cat > files/performance.input"
             adb("shell", "-T", "run-as", PACKAGE, "sh", "-c", shlex.quote(script), input=args.performance_config.read_bytes())
@@ -127,10 +141,15 @@ def main():
             (args.out / "A.jsonl").write_bytes(android_output)
             rows = events(args.out / "A.jsonl")
             checks = [event for event in rows if event.get("event") == "probe_result"]
+            if args.tcp_config:
+                checks = [event for event in rows if event.get("event") == "tcp_open"]
             if len(checks) > milestone:
                 milestone = len(checks)
                 latest = checks[-1]
-                print("A_RESULT", latest["phase"], latest["payload_bytes"], latest["count"], latest["byte_equal"], round(latest["mean_rtt_ms"], 3), flush=True)
+                if not args.tcp_config:
+                    print("A_RESULT", latest["phase"], latest["payload_bytes"], latest["count"], latest["byte_equal"], round(latest["mean_rtt_ms"], 3), flush=True)
+                else:
+                    print("A_TCP_OPEN", round(latest["connect_ms"], 3), flush=True)
             failures = [event for event in rows if event.get("event") == "android_failure"]
             exits = [event for event in rows if event.get("event") == "android_exit"]
             if failures:
@@ -167,6 +186,8 @@ def main():
             completed = any(event.get("event") == "suite_complete" and event.get("gate_eligible_mode") and (not args.family_dir or event.get("family_authenticated")) for event in rows)
             if args.performance_config:
                 completed = any(event.get("event") == "perf_result" and event.get("status") == "PASS" and not event.get("warmup") for event in rows)
+            if args.tcp_config:
+                completed = any(event.get("event") == "tcp_result" and event.get("status") == "PASS" for event in rows)
             if not (exits and exits[-1]["code"] == 0 and completed):
                 raise RuntimeError("ANDROID_ACCEPTANCE_INCOMPLETE: inspect sanitized evidence")
     finally:
@@ -176,6 +197,7 @@ def main():
             adb("exec-out", "run-as", PACKAGE, "rm", "-f", "files/room.input")
             adb("exec-out", "run-as", PACKAGE, "rm", "-f", "files/performance.input")
             adb("exec-out", "run-as", PACKAGE, "rm", "-f", "files/family.input")
+            adb("exec-out", "run-as", PACKAGE, "rm", "-f", "files/tcp.input")
         except subprocess.SubprocessError:
             print("ANDROID_CLEANUP_UNCONFIRMED", flush=True)
         cleanup = f'import os,pathlib,signal,shutil,time; directory=pathlib.Path({directory!r}); pidfile=directory/"pid"; pid=int(pidfile.read_text()) if pidfile.exists() else 0; executable=pathlib.Path(f"/proc/{{pid}}/exe"); matched=pid>0 and executable.exists() and str(executable.resolve())==str(directory/"telemost-live"); os.kill(pid,signal.SIGTERM) if matched else None; time.sleep(3); alive=matched and executable.exists() and str(executable.resolve())==str(directory/"telemost-live"); os.kill(pid,signal.SIGKILL) if alive else None; shutil.rmtree(directory); print("REMOTE_TEMP_REMOVED; FORCED_KILL="+str(alive))'

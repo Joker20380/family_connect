@@ -18,6 +18,7 @@ import (
 	"time"
 
 	"github.com/Joker20380/family_connect/carrier/familysession"
+	"github.com/Joker20380/family_connect/carrier/tcpforward"
 	"github.com/Joker20380/family_connect/carrier/telemost"
 )
 
@@ -39,7 +40,13 @@ func run() error {
 	familyConfig := flag.String("family-config", "", "private isolated 5N.3 credentials file; no production identity")
 	performanceFile := flag.String("performance-config", "", "bounded test-only performance point JSON")
 	performanceObserver := flag.Bool("performance-observer", false, "test-only echo timing and numeric WebRTC statistics")
+	tcpFile := flag.String("tcp-config", "", "single TCP test request JSON; authenticated VP8 only")
+	tcpGateway := flag.Bool("tcp-gateway", false, "serve one authenticated outbound TCP stream")
+	tcpLoopback := flag.Int("tcp-test-loopback-port", 0, "test-only exact 127.0.0.1 port override; default public destinations only")
 	flag.Parse()
+	if (*tcpFile != "" || *tcpGateway || *tcpLoopback != 0) && (*modeName != "vp8" || *familyConfig == "" || *performanceFile != "" || *performanceObserver || *tcpGateway != (*role == "echo") || *tcpFile != "" && *role != "probe" || *tcpLoopback < 0 || *tcpLoopback > 65535 || *tcpLoopback != 0 && !*tcpGateway) {
+		return errors.New("TCP requires exclusive authenticated VP8 test mode")
+	}
 	var performance performanceConfig
 	if *performanceFile != "" {
 		var err error
@@ -142,6 +149,16 @@ func run() error {
 		data = secured
 		if err := emit(map[string]any{"event": "family_auth", "accepted": true, "protocol": familysession.Protocol}); err != nil {
 			return err
+		}
+		if *tcpGateway {
+			metrics := &tcpforward.Metrics{}
+			defer func() {
+				_ = emit(map[string]any{"event": "tcp_gateway", "stats": metrics.Snapshot(), "transport": snapshot()})
+			}()
+			return tcpforward.Serve(ctx, secured, tcpforward.Policy{TestOnlyLoopbackPort: *tcpLoopback}, metrics)
+		}
+		if *tcpFile != "" {
+			return tcpProbe(ctx, secured, *tcpFile, snapshot, emit)
 		}
 	}
 	if *role == "echo" {

@@ -28,7 +28,7 @@ import java.util.HashSet;
 import java.util.Arrays;
 
 public final class ProbeService extends Service {
-    private static final Set<String> EVENTS = new HashSet<>(Arrays.asList("start", "connected", "family_auth", "probe_result", "probe_failed", "suite_complete", "summary", "resources", "perf_warmup", "perf_sample", "perf_blocks", "perf_result", "reliability_final"));
+    private static final Set<String> EVENTS = new HashSet<>(Arrays.asList("start", "connected", "family_auth", "probe_result", "probe_failed", "suite_complete", "summary", "resources", "perf_warmup", "perf_sample", "perf_blocks", "perf_result", "reliability_final", "tcp_open", "tcp_open_error", "tcp_result"));
     final class LocalBinder extends Binder { ProbeService service() { return ProbeService.this; } }
     private final LocalBinder binder = new LocalBinder();
     private final NativeRun run = new NativeRun();
@@ -122,6 +122,10 @@ public final class ProbeService extends Service {
                 "--duration", performance.isFile() ? "35m" : "25m", "--sustained", "30s", "--extended", "--metrics-interval", "10s");
             if (performance.isFile()) {
                 builder.command().addAll(Arrays.asList("--performance-config", performance.getAbsolutePath()));
+            }
+            File tcp = new File(getFilesDir(), "tcp.input");
+            if (tcp.isFile()) {
+                builder.command().addAll(Arrays.asList("--tcp-config", tcp.getAbsolutePath()));
             }
             File family = new File(getFilesDir(), "family.input");
             if (family.exists()) {

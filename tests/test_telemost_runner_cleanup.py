@@ -83,3 +83,17 @@ def test_independent_observer_collects_incrementally(tmp_path, monkeypatch):
     assert remote.collect() == 0
     assert (tmp_path / 'B.jsonl').read_text() == 'first\nsecond\n'
     assert "'B.jsonl': 6" in shlex.split(execute.call_args.args[0][-1])[-1]
+
+
+@pytest.mark.parametrize('extra', [[], ['--family-dir', '/unused'],
+                                    ['--tcp-test-loopback-port', '65536']])
+def test_tcp_requires_authenticated_exclusive_mode(extra, monkeypatch):
+    module = runner_module()
+    monkeypatch.setattr(sys, 'argv', ['live.py', '--binary', '/unused', '--out', '/unused',
+                                     '--tcp-config', '/unused', *extra])
+    remote = Mock()
+    monkeypatch.setattr(module.subprocess, 'check_output', remote)
+    with pytest.raises(SystemExit) as caught:
+        module.main()
+    assert caught.value.code == 2
+    remote.assert_not_called()
