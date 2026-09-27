@@ -13,6 +13,20 @@ import time
 SSH = ['ssh', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=12', 'root@186.246.45.246']
 
 
+def validate_gap_evidence(output, remote_events):
+    marker = 'RELIABLE_GAP_EVIDENCE '
+    proofs = [json.loads(line.split(marker, 1)[1]) for line in output.splitlines() if marker in line]
+    finals = [row['stats'] for row in remote_events if row.get('event') == 'reliability_final']
+    if len(proofs) != 1 or not finals:
+        raise RuntimeError('missing controlled gap evidence')
+    proof, stats = proofs[0], finals[-1]
+    sequence = proof['injected_sequence']
+    kinds = {event['kind'] for event in stats['Events'] if event['sequence'] == sequence}
+    if not proof['tls_survived'] or proof['exact_echoes'] != 8 or proof['reliability']['Retransmissions'] < 1 or not {'gap_sack', 'recovered'} <= kinds:
+        raise RuntimeError('reliable gap recovery not proven')
+    return {'injected_sequence': sequence, 'client': proof['reliability'], 'server': stats, 'tls_survived': True, 'exact_echoes': 8}
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--adb', required=True)
@@ -20,7 +34,7 @@ def main():
     parser.add_argument('--native-test', type=Path, required=True)
     parser.add_argument('--family-dir', type=Path, required=True)
     parser.add_argument('--out', type=Path, required=True)
-    parser.add_argument('--case', choices=['unit', 'ws-close', 'peer-close', 'replay'], required=True)
+    parser.add_argument('--case', choices=['unit', 'ws-close', 'peer-close', 'replay', 'reliable-gap'], required=True)
     args = parser.parse_args()
     args.out.mkdir(mode=0o700, parents=True, exist_ok=False)
     room = os.environ['FC_TELEMOST_ROOM']
@@ -82,12 +96,15 @@ def main():
         if args.case != 'unit':
             start_remote()
         pattern = '^TestLiveFamilyHandshakeReplay$' if args.case == 'replay' else '^TestLiveSignalingClosure$'
+        if args.case == 'reliable-gap':
+            pattern = '^TestLiveReliableGap$'
         if args.case == 'unit':
-            pattern = '^Test(CanonicalMatrixAndCancellation|AdmissionFailures|ExpiredLeaseAndBounds|TLSRecordReplayRejected|HandshakeProofReplayRejected)$'
+            pattern = '^Test(CanonicalMatrixAndCancellation|AdmissionFailures|ExpiredLeaseAndBounds|TLSRecordReplayRejected|HandshakeProofReplayRejected|ReliableTLSFaultMatrix)$'
         command = (f'read -r FC_TELEMOST_ROOM; export FC_TELEMOST_ROOM; '
                    f'export FC_FAMILY_TEST_PROFILE={android}/family.input; '
                    f'export FC_FAMILY_REPLAY_READY={android}/fresh.ready; '
                    f'export FC_TEST_LIVE_SIGNALING_CLOSE=1 FC_TEST_LIVE_FAMILY_REPLAY=1 FC_TEST_LIVE_PEER_CLOSE={int(args.case == "peer-close")}; '
+                   f'export FC_TEST_LIVE_RELIABLE_GAP={int(args.case == "reliable-gap")}; '
                    'export SSL_CERT_DIR=/system/etc/security/cacerts:/apex/com.android.conscrypt/cacerts; '
                    f'echo $$ > {android}/pid; exec {android}/native.test -test.run {shlex.quote(pattern)} -test.v -test.timeout=120s')
         with (args.out / 'A.log').open('w') as output:
@@ -118,6 +135,10 @@ def main():
             admitted = any(row.get('event') == 'family_auth' and row.get('accepted') is True for row in events())
             if not restarted or not rejected or admitted:
                 raise RuntimeError('fresh server replay rejection not proven')
+        if args.case == 'reliable-gap':
+            stop_remote()
+            proof = validate_gap_evidence(output, events())
+            (args.out / 'gap-proof.json').write_text(json.dumps(proof, indent=2) + '\n')
         print('PHYSICAL_NATIVE_CHECK_PASS', args.case, flush=True)
         for line in output.splitlines():
             if line.startswith(('=== RUN', '--- PASS', 'PASS')):

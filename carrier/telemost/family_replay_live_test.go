@@ -20,7 +20,7 @@ type handshakeCapture struct {
 
 func (capture *handshakeCapture) SendContext(ctx context.Context, payload []byte) error {
 	capture.mu.Lock()
-	if len(capture.packets) >= 16 || capture.bytes+len(payload) > 1<<20 {
+	if len(capture.packets) >= 64 || capture.bytes+len(payload) > 1<<20 {
 		capture.mu.Unlock()
 		return familysession.ErrRejected
 	}
