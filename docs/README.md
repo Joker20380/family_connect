@@ -106,6 +106,11 @@ installed/deployed versions; dated reports preserve what was checked at that tim
 
 ## Developers
 
+- [5N-PERF-2: reliable long-duration operating envelope](releases/2026-09-27-webrtc-5n-perf2-reliable-envelope.ru.md):
+  **PASS**, physical Android/Telemost/Amsterdam, fixed reliable defaults;
+  1.742311Mbit/s/30min, conservative1.480531Mbit/s/15min; ceiling not established,
+  cleanup/regressions complete, no5N.4.
+
 - [5N-REL-1: reliable ordered bytes before Family TLS](releases/2026-09-27-webrtc-5n-rel1-reliable-stream.ru.md):
   bounded selective repeat/SACK, deterministic fault matrix, natural/injected live
   gap recovery and300s physical Android validation, **PASS**; cleanup complete.

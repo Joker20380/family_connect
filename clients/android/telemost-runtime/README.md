@@ -70,13 +70,13 @@ Ordering is additionally checked by monotonic sequence inside encrypted test
 messages. ReliableStream retries carrier blocks below TLS; application operations,
 authentication and session reconnection are never automatically retried.
 
-## Opt-in 5N-PERF-1 measurement harness
+## Opt-in performance measurement harness
 
 The default canonical suite is unchanged. `--performance-config` in the physical
 runner installs a private, non-secret `performance.input` containing bounded JSON:
-`window` (1–128), `payload` (1024–65536 bytes), `seconds` (1–300),
+`window` (1–128), `payload` (1024–65536 bytes), `seconds` (1–1800),
 `warmup_seconds` (1–30), `rate_mbit_s` (zero for sliding window, or0.01–4).
-For REL-1 only, optional `backpressure:true` treats the configured rate as a pacing
+For REL-1/PERF-2, optional `backpressure:true` treats the configured rate as a pacing
 upper bound: a full application window waits, without accumulating pacing debt or
 catch-up bursts. Report actual TX/RX rates and `backpressure_events`; PASS does not
 assert the requested rate was attained. Default false retains PERF-1's strict
@@ -86,7 +86,8 @@ Only authenticated VP8 is accepted. Independent send/receive workers preserve
 exact byte validation and monotonic sequence association; no carrier/framing/auth
 change, automatic retry, recovery, TUN or production integration is introduced.
 
-After a fresh successful canonical physical baseline (at least60s at16KiB), use:
+Historical **PERF-1** invocation (not the PERF-2 acceptance procedure): after a
+fresh successful canonical physical baseline (at least60s at16KiB), use:
 
 ```sh
 python3 pilot/android-telemost/capacity.py \
@@ -98,13 +99,14 @@ python3 pilot/android-telemost/capacity.py \
 `FC_TELEMOST_ROOM` is still environment/stdin-only. For independent offered load,
 replace `--windows ...` with `--rates 0.1 0.25 0.5 1 2`; review before testing4.
 The128-outstanding limit is a stop condition, not ACK-paced rate limiting.
-Use `--seconds 300` for long validation; `<60s` is discovery only. Each point has
+PERF-1 used `--seconds 300`; that is not long-duration PERF-2 proof. Each point has
 5s warm-up, drains it, then starts a new measurement clock and finally drains
 measurement traffic. A failure aborts the point and series; do not retry until green.
 Never mix a failed long run into a zero-error short-run result.
 
 The producer has bounded outstanding payloads, a10s creation-to-echo deadline and
-a16384-sample cap. `perf_result` retains interval TX/RX rates separately from the
+a65536-sample cap. Exact timing rows stream in batches of128; all RTT samples fit
+in a fixed-capacity512KiB array. `perf_result` retains interval TX/RX rates separately from the
 measurement-plus-drain rate; `perf_blocks` retains monotonic timing rows.
 `perf_sample` retains queue gauges and numeric/boolean Pion statistics for nominated
 ICE pairs only. Raw addresses, SDP, credentials and arbitrary error text are excluded.
@@ -120,6 +122,20 @@ Diagnostic APK remains code2/5N.3-test-only and is not a published release.
 [27.09 results and limitations](../../../docs/releases/2026-09-27-webrtc-5n-perf1-carrier-capacity.ru.md):
 the old stop-and-wait rate is not the carrier ceiling, but high-load long runs
 encountered TLS rejection after RTP gaps; no sustainable capacity ceiling is accepted.
+
+For **PERF-2**, do not use the historical `capacity.py` raw-TLS baseline gate.
+Run `live.py --performance-config` with16KiB/window8/backpressure=true and the
+existing Family fixtures. Durations above300s require that configuration and a
+0.5–4Mbit/s cap. The native deadline and Java watchdog become35min only in
+performance mode; canonical mode remains25min. A300s cap2 baseline precedes the
+120s0.5/1/1.5/2/2.5/3 sweep. Selected900–1800s runs, not discovery, prove duration.
+Each run needs a fresh disposable fixture (one-hour lease), no injected faults.
+`envelope.py RUN_DIRECTORY --out SUMMARY.json` audits exact timing-row coverage,
+quantiles, complete indexed recovery telemetry, per-minute queue/RTT/resource data.
+Its `correctness_complete` is not an automatic stability/envelope verdict.
+Review queue/RTT evolution and distinguish final teardown from active work.
+ADB/SSH collection is incremental; missing-file stderr must never become JSON.
+[PERF-2 report](../../../docs/releases/2026-09-27-webrtc-5n-perf2-reliable-envelope.ru.md).
 
 ## Shared core and packaging
 
@@ -189,7 +205,7 @@ read it. This is a disposable debug harness, not a secret-vault/security claim.
 The same seven sizes, 100×1KiB, 100×16KiB,30s and5min execute in sequence. Mode is
 hardcoded **VP8** in this wrapper, never DC. Each echo has the original10s deadline;
 overall session and Java watchdog are25min. No automatic reconnect or replay.
-`evidence.jsonl` is private, bounded to2MiB/1024 events; UI tail24K characters,
+`evidence.jsonl` is private, bounded to32MiB/4096 events; UI tail24K characters,
 child line128KiB. Raw stderr is discarded rather than displayed; sanitized core
 evidence classifies network/protocol failures. Metrics every10s include Go heap,
 current RSS when observable, RSS high-water, CPU and goroutines; Java heap/PSS,

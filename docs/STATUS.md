@@ -10,6 +10,28 @@
 - **WEBRTC-EU-3 / 5N.3 = PASS**: physical Android Family E2E over VP8,
   374 exact echoes,302.001s sustained; 5N.4–5N.6 NOT RUN.
 
+## 27.09.2026 — 5N-PERF-2 = PASS: reliable operating envelope
+
+Fixed16KiB/sender8/receiver16/RTO1s; no protocol/default changes, TCP/TUN or5N.4.
+Starting clean `ca4f9e7`; runtime telemetry `df6149e`, tested CLI/APK `04f39f2`,
+final harness `4475560`. Baseline cap2/300s reproduced:3935 exact,1.716169Mbit/s.
+Sweep0.5/1/1.5/2/2.5/3,120s each. Highest long reliable goodput **1.742311Mbit/s**
+at cap3,1800s,23935 exact echoes; conservative demonstrated **1.480531Mbit/s**
+at cap1.5,900s,10169 exact. Highest short1.795686Mbit/s. No sustained overload
+threshold/hard carrier ceiling established; cap2.5 severe transient is not a
+rate-specific threshold. Across9 sessions45452 exact,29/29 block gaps recovered;
+accepted TLS bad-MAC/corruption/duplicate/reorder/missing/unexpected closure0.
+Highest long RTT avg/p50/p95/p99=599.271/570.229/756.025/1010.886ms,carrierQmax9,
+send/reorder8/8; queues/resources bounded. Full canonical516 exact, live/native
+auth/lifecycle/fault regression PASS; Go race×3/vet/modules/fuzz,Python982+1optional
+skip,Android build/6JVM/lint PASS. Observer failures/post-exit teardown preserved.
+APK/private artifacts removed;20 Android/25 Amsterdam known IDs checked, owned
+processes0 (one Android ID reused by unrelated thread); radios1/1 restored.
+Sanitized metrics/timing audit PASS. No unfinished PERF-2 checks; concurrent
+foreign VPN edits preserved, not included. Public versions/production unchanged;
+no push. [Report/evidence/limits](releases/2026-09-27-webrtc-5n-perf2-reliable-envelope.ru.md).
+**STOP**: planning region1.4–1.5 useful Mbit/s, no automatic default or5N.4.
+
 ## 27.09.2026 — 5N-REL-1 = PASS: reliable bytes before TLS
 
 Architecture: Family TLS1.3 → bounded ReliableStream → unchanged Telemost VP8/RTP.

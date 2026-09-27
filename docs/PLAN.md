@@ -2,6 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
+- **5N-PERF-2 = PASS**, explicitly authorized on27.09 after REL-1.
+  Baseline cap2/300s reproduced; six120s discovery points0.5/1/1.5/2/2.5/3.
+  Highest accepted reliable goodput1.742311Mbit/s at cap3/1800s; conservative
+  demonstrated1.480531Mbit/s at cap1.5/900s. Defaults16KiB/sender8/receiver16/RTO1s
+  unchanged. No sustained overload threshold/hard carrier ceiling established;
+  cap2.5 transient warning does not prove a rate-specific ceiling. Queues/resources
+  bounded; exact/auth/lifecycle/fault/local+Android regressions and cleanup PASS.
+  No unfinished PERF-2 checks; foreign concurrent VPN work preserved separately.
+  [Report](releases/2026-09-27-webrtc-5n-perf2-reliable-envelope.ru.md).
+  **STOP** after PERF-2; no automatic5N.4, production default, rollout or push.
+
 - **5N-REL-1 = PASS**, explicitly authorized
   successor to PERF-1 investigation. TLS → bounded selective-repeat ReliableStream
   → unchanged VP8/RTP; sender8/receiver16,16KiB. Physical300s accepted data run:

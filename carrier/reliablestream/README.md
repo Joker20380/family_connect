@@ -81,7 +81,12 @@ congestion control; this adapter adds reliability/flow control only.
 
 - Payload hard maximum32KiB, each window1–32, maximum framed size32KiB+64B.
 - Default retained DATA bytes ≤(8+16)×16KiB =393,216; hard config bound2MiB.
-- At most128 numeric gap/retry events, then an explicit dropped-event counter.
+- The first128 numeric gap/retry events and a separate rolling tail of the latest128
+  later events. `EventsDropped` still counts events omitted from the first list;
+  monotonic `index` lets an observer merge snapshots and detect missed telemetry.
+  This changes diagnostics only, not delivery/retry/ACK behavior. Each stats copy
+  owns both bounded lists; a complete long-run recovery percentile requires full
+  index coverage, not just the final tail.
 - Header decoding allocates no payload; validation precedes cloning/buffering.
 - Huge sequence jumps, receive-window overflow and conflicting buffered duplicates
   reset the session. No sequence wrap or resizing to a peer-provided distance.
