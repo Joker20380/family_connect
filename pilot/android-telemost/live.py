@@ -38,7 +38,10 @@ def main():
     parser.add_argument("--family-dir", type=Path)
     parser.add_argument("--client-profile", choices=["valid", "wrong-family", "revoked", "unknown"], default="valid")
     parser.add_argument("--independent-observer", action="store_true")
+    parser.add_argument("--performance-config", type=Path)
     args = parser.parse_args()
+    if args.performance_config and (not args.family_dir or not args.independent_observer or args.case != "acceptance"):
+        parser.error("performance requires Family credentials, independent observer and acceptance case")
     room = os.environ["FC_TELEMOST_ROOM"]
     if not room or len(room) > 2048 or "\n" in room or "\r" in room:
         raise SystemExit("Invalid room input (redacted)")
@@ -67,6 +70,8 @@ def main():
             subprocess.run(SSH + [f"tar -xzf - -C {directory} && chown -R nobody:nogroup {directory}"], stdin=source, check=True, timeout=45)
         archive.unlink()
         extra = ["--family-config", "family.input"] if args.family_dir else []
+        if args.performance_config:
+            extra += ["--performance-observer"]
         code = f'import os,sys; os.chdir({directory!r}); os.environ["FC_TELEMOST_ROOM"]=sys.stdin.readline().rstrip("\\n"); open("pid","w").write(str(os.getpid())); os.execvpe("./telemost-live",["./telemost-live","--role","echo","--mode","vp8","--duration","25m","--metrics-interval","10s"]+{extra!r},os.environ)'
         if args.independent_observer:
             independent = IndependentEcho(SSH, directory, args.out)
@@ -86,6 +91,10 @@ def main():
         print("B_CONNECTED", flush=True)
         adb("shell", "am", "force-stop", PACKAGE)
         adb("exec-out", "run-as", PACKAGE, "rm", "-f", "files/family.input")
+        adb("exec-out", "run-as", PACKAGE, "rm", "-f", "files/performance.input")
+        if args.performance_config:
+            script = "umask 077; mkdir -p files; cat > files/performance.input"
+            adb("shell", "-T", "run-as", PACKAGE, "sh", "-c", shlex.quote(script), input=args.performance_config.read_bytes())
         if args.family_dir:
             script = "umask 077; mkdir -p files; cat > files/family.input"
             adb("shell", "-T", "run-as", PACKAGE, "sh", "-c", shlex.quote(script), input=(args.family_dir / (args.client_profile + ".json")).read_bytes())
@@ -143,13 +152,17 @@ def main():
                 raise RuntimeError("FAMILY_NEGATIVE_CASE_FAILED")
             print("FAMILY_REJECTED", args.client_profile, flush=True)
         elif args.case == "acceptance":
-            if not (exits and exits[-1]["code"] == 0 and any(event.get("event") == "suite_complete" and event.get("gate_eligible_mode") and (not args.family_dir or event.get("family_authenticated")) for event in rows)):
+            completed = any(event.get("event") == "suite_complete" and event.get("gate_eligible_mode") and (not args.family_dir or event.get("family_authenticated")) for event in rows)
+            if args.performance_config:
+                completed = any(event.get("event") == "perf_result" and event.get("status") == "PASS" and not event.get("warmup") for event in rows)
+            if not (exits and exits[-1]["code"] == 0 and completed):
                 raise RuntimeError("ANDROID_ACCEPTANCE_INCOMPLETE: inspect sanitized evidence")
     finally:
         archive.unlink(missing_ok=True)
         try:
             adb("shell", "am", "force-stop", PACKAGE)
             adb("exec-out", "run-as", PACKAGE, "rm", "-f", "files/room.input")
+            adb("exec-out", "run-as", PACKAGE, "rm", "-f", "files/performance.input")
             adb("exec-out", "run-as", PACKAGE, "rm", "-f", "files/family.input")
         except subprocess.SubprocessError:
             print("ANDROID_CLEANUP_UNCONFIRMED", flush=True)

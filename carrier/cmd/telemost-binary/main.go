@@ -37,7 +37,20 @@ func run() error {
 	settle := flag.Duration("settle", 3*time.Second, "wait for remote media slots before probing")
 	metricsInterval := flag.Duration("metrics-interval", 0, "optional memory/CPU sample interval (1s to 1m; zero disables)")
 	familyConfig := flag.String("family-config", "", "private isolated 5N.3 credentials file; no production identity")
+	performanceFile := flag.String("performance-config", "", "bounded test-only performance point JSON")
+	performanceObserver := flag.Bool("performance-observer", false, "test-only echo timing and numeric WebRTC statistics")
 	flag.Parse()
+	var performance performanceConfig
+	if *performanceFile != "" {
+		var err error
+		performance, err = readPerformanceConfig(*performanceFile)
+		if err != nil {
+			return err
+		}
+	}
+	if (*performanceFile != "" || *performanceObserver) && (*modeName != "vp8" || *familyConfig == "") {
+		return errors.New("performance requires authenticated VP8")
+	}
 	if *metricsInterval != 0 && (*metricsInterval < time.Second || *metricsInterval > time.Minute) {
 		return errors.New("invalid metrics interval")
 	}
@@ -123,6 +136,9 @@ func run() error {
 		}
 	}
 	if *role == "echo" {
+		if *performanceObserver {
+			return performanceEcho(ctx, data, session.PerformanceSnapshot, emit)
+		}
 		for {
 			payload, err := data.Recv(ctx)
 			if err != nil {
@@ -140,6 +156,9 @@ func run() error {
 	case <-time.After(*settle):
 	case <-ctx.Done():
 		return ctx.Err()
+	}
+	if *performanceFile != "" {
+		return performanceProbe(ctx, data, performance, session.PerformanceSnapshot, emit)
 	}
 	for _, size := range []int{1, 32, 256, 1024, 4096, 16384, 65536} {
 		if err := probe(ctx, data, session, emit, "size", size, 1, 0); err != nil {
