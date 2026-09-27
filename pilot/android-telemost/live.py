@@ -40,6 +40,7 @@ def main():
     parser.add_argument("--independent-observer", action="store_true")
     parser.add_argument("--performance-config", type=Path)
     args = parser.parse_args()
+    duration = "35m" if args.performance_config else "25m"
     if args.performance_config and (not args.family_dir or not args.independent_observer or args.case != "acceptance"):
         parser.error("performance requires Family credentials, independent observer and acceptance case")
     room = os.environ["FC_TELEMOST_ROOM"]
@@ -75,7 +76,7 @@ def main():
         code = f'import os,sys; os.chdir({directory!r}); os.environ["FC_TELEMOST_ROOM"]=sys.stdin.readline().rstrip("\\n"); open("pid","w").write(str(os.getpid())); os.execvpe("./telemost-live",["./telemost-live","--role","echo","--mode","vp8","--duration","25m","--metrics-interval","10s"]+{extra!r},os.environ)'
         if args.independent_observer:
             independent = IndependentEcho(SSH, directory, args.out)
-            independent.start(room, ["./telemost-live", "--role", "echo", "--mode", "vp8", "--duration", "25m", "--metrics-interval", "10s"] + extra)
+            independent.start(room, ["./telemost-live", "--role", "echo", "--mode", "vp8", "--duration", duration, "--metrics-interval", "10s"] + extra)
             independent.collect()
         else:
             with (args.out / "B.jsonl").open("w") as output, (args.out / "B.stderr").open("w") as errors:
@@ -102,7 +103,8 @@ def main():
         adb("shell", "-T", "run-as", PACKAGE, "sh", "-c", shlex.quote(script), input=room.encode())
         del room
         adb("shell", "am", "start", "-n", PACKAGE + "/.ProbeActivity", "--ez", "run", "true")
-        deadline = time.monotonic() + 1520
+        deadline = time.monotonic() + (2120 if args.performance_config else 1520)
+        android_output = b""
         milestone = 0
         fault_started = None
         last_remote_collection = time.monotonic()
@@ -110,11 +112,14 @@ def main():
             if independent and time.monotonic() - last_remote_collection >= 10:
                 independent.collect()
                 last_remote_collection = time.monotonic()
-            result = subprocess.run([args.adb, "exec-out", "run-as", PACKAGE, "cat", "files/evidence.jsonl"], capture_output=True, timeout=25)
+            result = subprocess.run([args.adb, "exec-out", "run-as", PACKAGE, "tail", "-c", f"+{len(android_output) + 1}", "files/evidence.jsonl"], capture_output=True, timeout=25)
             if result.returncode:
                 time.sleep(1)
                 continue
-            (args.out / "A.jsonl").write_bytes(result.stdout)
+            android_output += result.stdout
+            if len(android_output) > 32 * 1024 * 1024:
+                raise RuntimeError("ANDROID_EVIDENCE_BOUND")
+            (args.out / "A.jsonl").write_bytes(android_output)
             rows = events(args.out / "A.jsonl")
             checks = [event for event in rows if event.get("event") == "probe_result"]
             if len(checks) > milestone:

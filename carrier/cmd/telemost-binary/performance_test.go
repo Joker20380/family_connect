@@ -62,9 +62,17 @@ func TestPerformancePipelineAndBounds(test *testing.T) {
 	for _, rate := range []float64{0, 0.25} {
 		echo := &pipelineEcho{queue: make(chan []byte, 128)}
 		var result map[string]any
+		blocks := 0
 		emit := func(event map[string]any) error {
 			if event["event"] == "perf_result" {
 				result = event
+			}
+			if event["event"] == "perf_blocks" && event["warmup"] == false {
+				rows := event["rows"].([][]float64)
+				if len(rows) > 128 {
+					test.Fatal("unbounded timing batch")
+				}
+				blocks += len(rows)
 			}
 			return nil
 		}
@@ -78,8 +86,35 @@ func TestPerformancePipelineAndBounds(test *testing.T) {
 		if result["blocks_sent"] != result["blocks_received"] || result["max_outstanding"].(int) > 8 || result["measurement_s"] != float64(1) {
 			test.Fatal(result)
 		}
-		if result["errors"].(map[string]int)["missing"] != 0 {
+		if result["errors"].(map[string]int)["missing"] != 0 || blocks != result["blocks_received"] {
 			test.Fatal("lost blocks")
+		}
+	}
+}
+
+func TestLongPerformanceConfigKeepsDefaults(test *testing.T) {
+	path := filepath.Join(test.TempDir(), "performance.json")
+	for _, input := range []string{
+		`{"window":8,"payload":16384,"seconds":1800,"warmup_seconds":5,"rate_mbit_s":4,"backpressure":true}`,
+		`{"window":8,"payload":16384,"seconds":900,"warmup_seconds":5,"rate_mbit_s":0.5,"backpressure":true}`,
+	} {
+		if err := os.WriteFile(path, []byte(input), 0600); err != nil {
+			test.Fatal(err)
+		}
+		if _, err := readPerformanceConfig(path); err != nil {
+			test.Fatal(err)
+		}
+	}
+	for _, input := range []string{
+		`{"window":16,"payload":16384,"seconds":900,"warmup_seconds":5,"rate_mbit_s":2,"backpressure":true}`,
+		`{"window":8,"payload":16384,"seconds":1801,"warmup_seconds":5,"rate_mbit_s":2,"backpressure":true}`,
+		`{"window":8,"payload":16384,"seconds":900,"warmup_seconds":5,"rate_mbit_s":2}`,
+	} {
+		if err := os.WriteFile(path, []byte(input), 0600); err != nil {
+			test.Fatal(err)
+		}
+		if _, err := readPerformanceConfig(path); err == nil {
+			test.Fatal("accepted changed long configuration")
 		}
 	}
 }

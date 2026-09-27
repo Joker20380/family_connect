@@ -43,22 +43,31 @@ os._exit(0)
         subprocess.run(self.ssh + ['runuser -u nobody -- python3 -c ' + shlex.quote(code)], input=room + '\n', text=True, capture_output=True, check=True, timeout=30)
 
     def collect(self):
+        offsets = {name: (self.output / name).stat().st_size if (self.output / name).exists() else 0
+                   for name in ('B.jsonl', 'B.stderr')}
         code = f'''
 import json,pathlib
 folder=pathlib.Path({self.directory!r})
 result={{}}
+offsets={offsets!r}
 for name in ("B.jsonl", "B.stderr", "exit.code"):
     path=folder/name
     if path.exists():
-        if path.stat().st_size > 2*1024*1024:
+        if path.stat().st_size > 32*1024*1024:
             raise RuntimeError("bounded test output exceeded")
-        result[name]=path.read_text()
+        offset=offsets.get(name,0)
+        if path.stat().st_size < offset:
+            raise RuntimeError("test output truncated")
+        with path.open("rb") as source:
+            source.seek(offset)
+            result[name]=source.read().decode()
 print(json.dumps(result))
 '''
         result = json.loads(subprocess.check_output(self.ssh + ['python3 -c ' + shlex.quote(code)], text=True, timeout=25))
         for name in ('B.jsonl', 'B.stderr'):
             if name in result:
-                (self.output / name).write_text(result[name])
+                with (self.output / name).open('a') as output:
+                    output.write(result[name])
         if 'exit.code' in result:
             self.returncode = int(result['exit.code'])
         return self.returncode

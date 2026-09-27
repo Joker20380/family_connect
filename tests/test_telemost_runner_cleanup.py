@@ -1,6 +1,7 @@
 import importlib.util
 from pathlib import Path
 import subprocess
+import shlex
 import sys
 from unittest.mock import Mock
 
@@ -64,3 +65,15 @@ def test_independent_observer_room_only_in_stdin(tmp_path, monkeypatch):
     assert options['input'] == room + '\n'
     assert options['timeout'] == 30 and options['check'] is True
     assert 'exit.pending' in arguments[0][-1]
+
+
+def test_independent_observer_collects_incrementally(tmp_path, monkeypatch):
+    module = runner_module()
+    responses = iter(['{"B.jsonl":"first\\n"}', '{"B.jsonl":"second\\n","exit.code":"0"}'])
+    execute = Mock(side_effect=lambda *args, **kwargs: next(responses))
+    monkeypatch.setattr(module.subprocess, 'check_output', execute)
+    remote = module.IndependentEcho(['test-only-ssh'], '/tmp/test-only-echo', tmp_path)
+    assert remote.collect() is None
+    assert remote.collect() == 0
+    assert (tmp_path / 'B.jsonl').read_text() == 'first\nsecond\n'
+    assert "'B.jsonl': 6" in shlex.split(execute.call_args.args[0][-1])[-1]

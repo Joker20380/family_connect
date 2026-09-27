@@ -117,9 +117,9 @@ public final class ProbeService extends Service {
         record(event("android_start", "model", android.os.Build.MODEL, "android", android.os.Build.VERSION.RELEASE,
             "abi", android.os.Build.SUPPORTED_ABIS[0], "network", networkType(), "protected_sockets", false));
         run.start(() -> {
-            ProcessBuilder builder = new ProcessBuilder(executable.getAbsolutePath(), "--role", "probe", "--mode", "vp8",
-                "--duration", "25m", "--sustained", "30s", "--extended", "--metrics-interval", "10s");
             File performance = new File(getFilesDir(), "performance.input");
+            ProcessBuilder builder = new ProcessBuilder(executable.getAbsolutePath(), "--role", "probe", "--mode", "vp8",
+                "--duration", performance.isFile() ? "35m" : "25m", "--sustained", "30s", "--extended", "--metrics-interval", "10s");
             if (performance.isFile()) {
                 builder.command().addAll(Arrays.asList("--performance-config", performance.getAbsolutePath()));
             }
@@ -168,7 +168,7 @@ public final class ProbeService extends Service {
             }
         });
         handler.post(sample);
-        handler.postDelayed(deadline, 25 * 60 * 1000L);
+        handler.postDelayed(deadline, (new File(getFilesDir(), "performance.input").isFile() ? 35 : 25) * 60 * 1000L);
     }
 
     void disconnect() {
@@ -220,7 +220,7 @@ public final class ProbeService extends Service {
 
     private synchronized void record(JSONObject data) {
         String line = data.toString() + "\n";
-        if (++records > 1024 || new File(getFilesDir(), "evidence.jsonl").length() + line.length() > 2 * 1024 * 1024) {
+        if (++records > 4096 || new File(getFilesDir(), "evidence.jsonl").length() + line.length() > 32 * 1024 * 1024) {
             handler.post(this::disconnect);
             return;
         }

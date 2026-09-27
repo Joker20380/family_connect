@@ -30,6 +30,8 @@ func startMetrics(ctx context.Context, interval time.Duration, emit func(map[str
 				var memory runtime.MemStats
 				runtime.ReadMemStats(&memory)
 				fields := map[string]any{"event": "resources", "heap_bytes": memory.HeapAlloc, "heap_sys_bytes": memory.HeapSys, "max_rss_kib": usage.Maxrss, "goroutines": runtime.NumGoroutine(), "cpu_user_s": float64(usage.Utime.Sec) + float64(usage.Utime.Usec)/1e6, "cpu_system_s": float64(usage.Stime.Sec) + float64(usage.Stime.Usec)/1e6}
+				fields["gc_cycles"] = memory.NumGC
+				fields["gc_pause_total_ns"] = memory.PauseTotalNs
 				if statm, err := os.ReadFile("/proc/self/statm"); err == nil {
 					values := strings.Fields(string(statm))
 					if len(values) > 1 {

@@ -41,8 +41,11 @@ func readPerformanceConfig(path string) (performanceConfig, error) {
 	}
 	decoder := json.NewDecoder(io.LimitReader(file, 4097))
 	decoder.DisallowUnknownFields()
-	if decoder.Decode(&config) != nil || decoder.Decode(new(any)) != io.EOF || config.Window < 1 || config.Window > 128 || config.Payload < 1024 || config.Payload > familysession.MaxPayload || config.Seconds < 1 || config.Seconds > 300 || config.WarmupSeconds < 1 || config.WarmupSeconds > 30 || math.IsNaN(config.Rate) || math.IsInf(config.Rate, 0) || config.Rate < 0 || config.Rate > 4 || (config.Rate > 0 && config.Rate < 0.01) {
+	if decoder.Decode(&config) != nil || decoder.Decode(new(any)) != io.EOF || config.Window < 1 || config.Window > 128 || config.Payload < 1024 || config.Payload > familysession.MaxPayload || config.Seconds < 1 || config.Seconds > 1800 || config.WarmupSeconds < 1 || config.WarmupSeconds > 30 || math.IsNaN(config.Rate) || math.IsInf(config.Rate, 0) || config.Rate < 0 || config.Rate > 4 || (config.Rate > 0 && config.Rate < 0.01) {
 		return config, errors.New("invalid bounded performance input")
+	}
+	if config.Seconds > 300 && (!config.Backpressure || config.Window != 8 || config.Payload != 16384 || config.Rate < 0.5) {
+		return config, errors.New("long performance requires paced default-window reliable configuration")
 	}
 	return config, nil
 }
@@ -130,8 +133,16 @@ func performanceProbe(parent context.Context, endpoint familysession.PacketEndpo
 	blockedOffer := false
 	integral := float64(0)
 	lastIntegral := started
-	samples := make([]float64, 0, 512)
-	stages := make([][]float64, 0, 512)
+	samples := make([]float64, 0, 65536)
+	stages := make([][]float64, 0, 128)
+	flushStages := func() error {
+		if len(stages) == 0 {
+			return nil
+		}
+		err := emit(map[string]any{"event": "perf_blocks", "warmup": warmup, "columns": []string{"sequence", "created_ms", "send_begin_ms", "send_return_ms", "echo_received_ms"}, "rows": stages})
+		stages = make([][]float64, 0, 128)
+		return err
+	}
 	counters := map[string]int{"corruption": 0, "missing": 0, "duplicate": 0, "reordered": 0, "unexpected_frames": 0, "timeout": 0, "disconnect": 0, "recovery": 0}
 	reason := ""
 	errorClass := ""
@@ -156,7 +167,10 @@ func performanceProbe(parent context.Context, endpoint familysession.PacketEndpo
 			if !warmup {
 				break
 			}
-			if err := emit(map[string]any{"event": "perf_warmup", "sent": sent, "received": received, "elapsed_s": now.Sub(started).Seconds()}); err != nil {
+			if err := flushStages(); err != nil {
+				return err
+			}
+			if err := emit(map[string]any{"event": "perf_warmup", "sent": sent, "received": received, "elapsed_s": now.Sub(started).Seconds(), "snapshot": snapshot()}); err != nil {
 				return err
 			}
 			warmup = false
@@ -276,8 +290,13 @@ func performanceProbe(parent context.Context, endpoint familysession.PacketEndpo
 				milliseconds := func(when time.Time) float64 { return float64(when.Sub(started)) / float64(time.Millisecond) }
 				samples = append(samples, float64(block.received.Sub(block.created))/float64(time.Millisecond))
 				stages = append(stages, []float64{float64(block.sequence), milliseconds(block.created), milliseconds(block.begin), milliseconds(block.end), milliseconds(block.received)})
+				if len(stages) == 128 {
+					if err := flushStages(); err != nil {
+						return err
+					}
+				}
 				delete(pending, block.sequence)
-				if len(samples) >= 16384 {
+				if len(samples) >= 65536 {
 					reason = "sample_bound"
 				}
 			}
@@ -298,10 +317,8 @@ func performanceProbe(parent context.Context, endpoint familysession.PacketEndpo
 	}
 	elapsed := time.Since(started).Seconds()
 	measured := math.Min(elapsed, interval.Seconds())
-	for offset := 0; offset < len(stages); offset += 128 {
-		if err := emit(map[string]any{"event": "perf_blocks", "warmup": warmup, "columns": []string{"sequence", "created_ms", "send_begin_ms", "send_return_ms", "echo_received_ms"}, "rows": stages[offset:min(offset+128, len(stages))]}); err != nil {
-			return err
-		}
+	if err := flushStages(); err != nil {
+		return err
 	}
 	result := map[string]any{"event": "perf_result", "status": status, "reason": reason, "warmup": warmup, "config": config, "measurement_s": measured, "elapsed_with_drain_s": elapsed, "blocks_sent": sent, "blocks_received": received, "useful_tx_bytes": sent * config.Payload, "useful_rx_bytes": received * config.Payload, "tx_interval_bytes": sentInInterval * config.Payload, "rx_interval_bytes": deliveredInInterval * config.Payload, "tx_mbit_s": float64(sentInInterval*config.Payload*8) / measured / 1e6, "delivered_mbit_s": float64(deliveredInInterval*config.Payload*8) / measured / 1e6, "aggregate_mbit_s": float64((sentInInterval+deliveredInInterval)*config.Payload*8) / measured / 1e6, "drain_normalized_mbit_s": float64(received*config.Payload*8) / elapsed / 1e6, "max_outstanding": maximumOutstanding, "average_outstanding": integral / measured, "errors": counters, "snapshot": snapshot()}
 	result["terminal_error_class"] = errorClass
