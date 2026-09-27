@@ -32,6 +32,12 @@ def test_completed_remote_preserves_exit():
     remote.kill.assert_not_called()
 
 
+def test_android_incremental_read_cannot_capture_missing_file_error():
+    command = runner_module().android_evidence_command('test-adb', 42)
+    script = shlex.split(command[-1])[0]
+    assert script == 'test -f files/evidence.jsonl && tail -c +43 files/evidence.jsonl 2>/dev/null'
+
+
 @pytest.mark.parametrize('force', [False, True])
 def test_observer_timeout_reaps_but_never_masks_failure(force):
     remote = Mock()

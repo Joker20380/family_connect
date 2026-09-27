@@ -16,6 +16,11 @@ PACKAGE = "com.familyconnect.telemosttest"
 SSH = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=12", "root@186.246.45.246"]
 
 
+def android_evidence_command(adb, offset):
+    script = f"test -f files/evidence.jsonl && tail -c +{offset + 1} files/evidence.jsonl 2>/dev/null"
+    return [adb, "exec-out", "run-as", PACKAGE, "sh", "-c", shlex.quote(script)]
+
+
 def reap_remote(remote):
     try:
         return remote.wait(timeout=15)
@@ -112,7 +117,7 @@ def main():
             if independent and time.monotonic() - last_remote_collection >= 10:
                 independent.collect()
                 last_remote_collection = time.monotonic()
-            result = subprocess.run([args.adb, "exec-out", "run-as", PACKAGE, "tail", "-c", f"+{len(android_output) + 1}", "files/evidence.jsonl"], capture_output=True, timeout=25)
+            result = subprocess.run(android_evidence_command(args.adb, len(android_output)), capture_output=True, timeout=25)
             if result.returncode:
                 time.sleep(1)
                 continue
