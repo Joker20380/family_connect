@@ -14,6 +14,19 @@ PACKAGE = "com.familyconnect.telemosttest"
 SSH = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=12", "root@186.246.45.246"]
 
 
+def reap_remote(remote):
+    try:
+        return remote.wait(timeout=15)
+    except subprocess.TimeoutExpired:
+        remote.terminate()
+        try:
+            remote.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            remote.kill()
+            remote.wait(timeout=5)
+        raise RuntimeError("REMOTE_OBSERVER_TIMEOUT_AFTER_CLEANUP") from None
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--adb", default="adb")
@@ -128,7 +141,7 @@ def main():
         cleanup = f'import os,pathlib,signal,shutil,time; directory=pathlib.Path({directory!r}); pidfile=directory/"pid"; pid=int(pidfile.read_text()) if pidfile.exists() else 0; executable=pathlib.Path(f"/proc/{{pid}}/exe"); matched=pid>0 and executable.exists() and str(executable.resolve())==str(directory/"telemost-live"); os.kill(pid,signal.SIGTERM) if matched else None; time.sleep(3); alive=matched and executable.exists() and str(executable.resolve())==str(directory/"telemost-live"); os.kill(pid,signal.SIGKILL) if alive else None; shutil.rmtree(directory); print("REMOTE_TEMP_REMOVED; FORCED_KILL="+str(alive))'
         subprocess.run(SSH + ["python3 -c " + shlex.quote(cleanup)], check=True, timeout=30)
         if remote is not None:
-            print("B_EXIT", remote.wait(timeout=15), flush=True)
+            print("B_EXIT", reap_remote(remote), flush=True)
 
 
 if __name__ == "__main__":
