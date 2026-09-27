@@ -56,15 +56,15 @@ def main():
     def stop_remote():
         code = f'import os,pathlib,signal; directory=pathlib.Path({directory!r}); pid=int((directory/"pid").read_text()); executable=pathlib.Path(f"/proc/{{pid}}/exe"); os.kill(pid,signal.SIGTERM) if executable.exists() and str(executable.resolve())==str(directory/"telemost-live") else None'
         subprocess.run(SSH + ["python3 -c " + shlex.quote(code)], check=True, timeout=25)
+    archive = args.out / "artifact.tar.gz"
     try:
-        archive = args.out / "artifact.tar"
-        with tarfile.open(archive, "w") as bundle:
+        with tarfile.open(archive, "w:gz") as bundle:
             bundle.add(args.binary, arcname="telemost-live")
             bundle.add(root / "carrier/licenses", arcname="licenses")
             if args.family_dir:
                 bundle.add(args.family_dir / "gateway.json", arcname="family.input")
         with archive.open("rb") as source:
-            subprocess.run(SSH + [f"tar -xf - -C {directory} && chown -R nobody:nogroup {directory}"], stdin=source, check=True, timeout=45)
+            subprocess.run(SSH + [f"tar -xzf - -C {directory} && chown -R nobody:nogroup {directory}"], stdin=source, check=True, timeout=45)
         archive.unlink()
         extra = ["--family-config", "family.input"] if args.family_dir else []
         code = f'import os,sys; os.chdir({directory!r}); os.environ["FC_TELEMOST_ROOM"]=sys.stdin.readline().rstrip("\\n"); open("pid","w").write(str(os.getpid())); os.execvpe("./telemost-live",["./telemost-live","--role","echo","--mode","vp8","--duration","25m","--metrics-interval","10s"]+{extra!r},os.environ)'
@@ -146,6 +146,7 @@ def main():
             if not (exits and exits[-1]["code"] == 0 and any(event.get("event") == "suite_complete" and event.get("gate_eligible_mode") and (not args.family_dir or event.get("family_authenticated")) for event in rows)):
                 raise RuntimeError("ANDROID_ACCEPTANCE_INCOMPLETE: inspect sanitized evidence")
     finally:
+        archive.unlink(missing_ok=True)
         try:
             adb("shell", "am", "force-stop", PACKAGE)
             adb("exec-out", "run-as", PACKAGE, "rm", "-f", "files/room.input")

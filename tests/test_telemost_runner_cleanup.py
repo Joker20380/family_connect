@@ -7,7 +7,7 @@ from unittest.mock import Mock
 import pytest
 
 
-def reaper():
+def runner_module():
     path = Path(__file__).resolve().parents[1] / 'pilot/android-telemost/live.py'
     spec = importlib.util.spec_from_file_location('telemost_live_runner', path)
     module = importlib.util.module_from_spec(spec)
@@ -16,7 +16,11 @@ def reaper():
         spec.loader.exec_module(module)
     finally:
         sys.path.pop(0)
-    return module.reap_remote
+    return module
+
+
+def reaper():
+    return runner_module().reap_remote
 
 
 def test_completed_remote_preserves_exit():
@@ -36,3 +40,27 @@ def test_observer_timeout_reaps_but_never_masks_failure(force):
         reaper()(remote)
     remote.terminate.assert_called_once()
     assert remote.kill.call_count == int(force)
+
+
+def test_independent_observer_preserves_remote_failure(tmp_path, monkeypatch):
+    module = runner_module()
+    monkeypatch.setattr(module.subprocess, 'check_output', lambda *args, **kwargs:
+                        '{"B.jsonl":"{\\"event\\":\\"summary\\"}\\n","B.stderr":"test failure","exit.code":"1"}')
+    remote = module.IndependentEcho(['test-only-ssh'], '/tmp/test-only-echo', tmp_path)
+    assert remote.collect() == 1
+    assert remote.returncode == 1
+    assert (tmp_path / 'B.stderr').read_text() == 'test failure'
+
+
+def test_independent_observer_room_only_in_stdin(tmp_path, monkeypatch):
+    module = runner_module()
+    execute = Mock()
+    monkeypatch.setattr(module.subprocess, 'run', execute)
+    remote = module.IndependentEcho(['test-only-ssh'], '/tmp/test-only-echo', tmp_path)
+    room = 'NOT-A-REAL-ROOM-TEST-ONLY'
+    remote.start(room, ['./telemost-live', '--mode', 'vp8'])
+    arguments, options = execute.call_args
+    assert room not in ' '.join(arguments[0])
+    assert options['input'] == room + '\n'
+    assert options['timeout'] == 30 and options['check'] is True
+    assert 'exit.pending' in arguments[0][-1]
