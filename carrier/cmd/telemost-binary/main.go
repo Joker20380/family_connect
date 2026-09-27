@@ -137,7 +137,7 @@ func probe(ctx context.Context, session *telemost.Session, emit func(map[string]
 		}
 		cancel()
 		if err != nil {
-			_ = emit(map[string]any{"event": "probe_failed", "phase": phase, "payload_bytes": size, "completed": completed, "reason": "send/receive timeout or closed"})
+			_ = emit(map[string]any{"event": "probe_failed", "phase": phase, "payload_bytes": size, "completed": completed, "reason": "send/receive timeout or closed", "carrier_mode": session.Stats().Mode, "stats": session.Stats()})
 			return errors.New("binary probe failed; gate remains open")
 		}
 		if !bytes.Equal(payload, echoed) {
@@ -152,7 +152,7 @@ func probe(ctx context.Context, session *telemost.Session, emit func(map[string]
 	if completed == 0 {
 		return errors.New("probe interval completed without samples")
 	}
-	return emit(map[string]any{"event": "probe_result", "phase": phase, "payload_bytes": size, "count": completed, "byte_for_byte": true, "elapsed_s": seconds, "mean_rtt_ms": float64(totalRTT.Microseconds()) / 1000 / float64(completed), "max_rtt_ms": float64(maximumRTT.Microseconds()) / 1000, "useful_roundtrip_mbit_s": float64(completed*size*2*8) / seconds / 1e6, "stats": session.Stats()})
+	return emit(map[string]any{"event": "probe_result", "phase": phase, "payload_bytes": size, "count": completed, "sent": completed, "received": completed, "byte_equal": true, "carrier_mode": session.Stats().Mode, "byte_for_byte": true, "elapsed_s": seconds, "mean_rtt_ms": float64(totalRTT.Microseconds()) / 1000 / float64(completed), "max_rtt_ms": float64(maximumRTT.Microseconds()) / 1000, "useful_roundtrip_mbit_s": float64(completed*size*2*8) / seconds / 1e6, "stats": session.Stats()})
 }
 
 func buildMetadata() map[string]any {

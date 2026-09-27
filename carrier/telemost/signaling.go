@@ -121,6 +121,7 @@ func (s *Session) signalingLoop() {
 			// no-op: acks are consumed implicitly.
 		}
 		if serverHello, ok := msg["serverHello"].(map[string]any); ok {
+			s.recordEvidence(Evidence{Stage: "SERVER_HELLO"})
 			s.applyServerHello(serverHello)
 			s.sendAck(uid)
 		}
@@ -217,6 +218,9 @@ func (s *Session) applyServerHello(serverHello map[string]any) {
 		if err := pub.SetConfiguration(cfg); err != nil {
 			s.signalClosed(errors.New("telemost: invalid publisher ICE configuration"))
 		}
+	}
+	if !s.closed.Load() {
+		s.recordEvidence(Evidence{Stage: "ICE_CONFIGURED"})
 	}
 }
 
@@ -370,6 +374,14 @@ func (s *Session) setupICEHandlers() {
 	if pub := s.pcPub.Load(); pub != nil {
 		pub.OnICECandidate(s.iceHandler("PUBLISHER"))
 	}
+	for _, target := range []string{"SUBSCRIBER", "PUBLISHER"} {
+		peer := s.icePeer(target)
+		if peer != nil && peer.SCTP() != nil {
+			peer.SCTP().Transport().ICETransport().OnSelectedCandidatePairChange(func(pair *webrtc.ICECandidatePair) {
+				s.observePair(target, pair)
+			})
+		}
+	}
 }
 
 func (s *Session) iceHandler(target string) func(*webrtc.ICECandidate) {
@@ -377,6 +389,7 @@ func (s *Session) iceHandler(target string) func(*webrtc.ICECandidate) {
 		if c == nil {
 			return
 		}
+		s.recordEvidence(Evidence{Stage: "ICE_CANDIDATE", Target: target, LocalType: c.Typ.String(), Protocol: c.Protocol.String()})
 		init := c.ToJSON()
 		sequence := uint32(1)
 		if target == "SUBSCRIBER" {

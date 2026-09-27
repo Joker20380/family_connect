@@ -87,6 +87,8 @@ type Stats struct {
 	Disconnects     uint32
 	SubscriberState string
 	PublisherState  string
+	Evidence        []Evidence
+	EvidenceDropped uint64
 }
 
 // Session owns one Telemost conference join and one carrier direction.
@@ -141,13 +143,15 @@ type Session struct {
 
 	reconnects atomic.Uint32
 
-	statsMu      sync.Mutex
-	bytesSent    uint64
-	bytesRecv    uint64
-	msgsSent     uint64
-	msgsRecv     uint64
-	setupStarted time.Time
-	setupDone    time.Time
+	statsMu         sync.Mutex
+	bytesSent       uint64
+	bytesRecv       uint64
+	msgsSent        uint64
+	msgsRecv        uint64
+	setupStarted    time.Time
+	setupDone       time.Time
+	evidence        []Evidence
+	evidenceDropped uint64
 
 	wg sync.WaitGroup
 }
@@ -238,6 +242,7 @@ func (s *Session) Connect(ctx context.Context) (connectError error) {
 	if err != nil {
 		return err
 	}
+	s.recordEvidence(Evidence{Stage: "ROOM_RESOLVED"})
 	s.peerID = info.PeerID
 	s.roomID = info.RoomID
 	s.credentials = info.Credentials
@@ -256,6 +261,7 @@ func (s *Session) Connect(ctx context.Context) (connectError error) {
 	if err := s.dialWebSocket(connCtx); err != nil {
 		return err
 	}
+	s.recordEvidence(Evidence{Stage: "SIGNALING_CONNECTED"})
 	s.setupICEHandlers()
 
 	s.startWorker(s.signalingLoop)
@@ -347,6 +353,14 @@ func (s *Session) Stats() Stats {
 	s.statsMu.Lock()
 	bs, br, ms, mr := s.bytesSent, s.bytesRecv, s.msgsSent, s.msgsRecv
 	setupDone := s.setupDone
+	evidence := append([]Evidence(nil), s.evidence...)
+	for index := range evidence {
+		if evidence[index].TURNUsed != nil {
+			relay := *evidence[index].TURNUsed
+			evidence[index].TURNUsed = &relay
+		}
+	}
+	evidenceDropped := s.evidenceDropped
 	s.statsMu.Unlock()
 
 	var setupMs int64
@@ -372,6 +386,8 @@ func (s *Session) Stats() Stats {
 		Disconnects:     s.disconnects.Load(),
 		SubscriberState: sub,
 		PublisherState:  pub,
+		Evidence:        evidence,
+		EvidenceDropped: evidenceDropped,
 	}
 }
 
@@ -531,6 +547,7 @@ func (s *Session) onSubscriberTrack(track *webrtc.TrackRemote, receiver *webrtc.
 		s.startWorker(func() { drainTrack(track) })
 		return
 	}
+	s.recordEvidence(Evidence{Stage: "VP8_MEDIA_ACTIVE", Target: "SUBSCRIBER"})
 	s.startWorker(func() { s.readVP8Track(track) })
 }
 
@@ -576,8 +593,10 @@ func (s *Session) maybeConnected() {
 }
 
 func (s *Session) onSubscriberState(state webrtc.PeerConnectionState) {
+	s.recordEvidence(Evidence{Stage: "CONNECTION_STATE", Target: "SUBSCRIBER", State: state.String()})
 	switch state {
 	case webrtc.PeerConnectionStateConnected:
+		s.recordEvidence(Evidence{Stage: "SUBSCRIBER_CONNECTED"})
 		s.subReady.Store(true)
 		s.maybeConnected()
 	case webrtc.PeerConnectionStateDisconnected,
@@ -592,8 +611,10 @@ func (s *Session) onSubscriberState(state webrtc.PeerConnectionState) {
 }
 
 func (s *Session) onPublisherState(state webrtc.PeerConnectionState) {
+	s.recordEvidence(Evidence{Stage: "CONNECTION_STATE", Target: "PUBLISHER", State: state.String()})
 	switch state {
 	case webrtc.PeerConnectionStateConnected:
+		s.recordEvidence(Evidence{Stage: "PUBLISHER_CONNECTED"})
 		s.pubReady.Store(true)
 		s.maybeConnected()
 	case webrtc.PeerConnectionStateDisconnected,
