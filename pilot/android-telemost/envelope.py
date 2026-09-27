@@ -41,7 +41,7 @@ def reliability_events(snapshots, final):
     return [indexed[index] for index in sorted(indexed)], complete
 
 
-def endpoint_summary(rows, origin):
+def endpoint_summary(rows, origin, finished):
     samples = [row for row in rows if 'snapshot' in row]
     snapshots = [row['snapshot'] for row in samples]
     final = next((row['stats'] for row in reversed(rows) if row.get('event') == 'reliability_final'), {})
@@ -74,7 +74,15 @@ def endpoint_summary(rows, origin):
         for field in ('carrier_queue', 'retained_bytes', 'send_depth', 'reorder_depth', 'application_queue'):
             entry[field] = distribution(entry[field])
     stats = {key: value for key, value in final.items() if key not in ('Events', 'RecentEvents')}
+    active = [row for row in samples if timestamp(row) <= finished]
+    active_stats = active[-1]['snapshot'].get('reliability', {}) if active else {}
+    active_stats = {key: value for key, value in active_stats.items() if key not in ('Events', 'RecentEvents')}
+    ice = [pair['currentRoundTripTime'] for snapshot in snapshots for role in ('publisher', 'subscriber')
+           for pair in snapshot.get(role, []) if pair.get('type') == 'candidate-pair' and 'currentRoundTripTime' in pair]
     return {'reliability': stats, 'carrier': {key: value for key, value in carrier.items() if key not in ('Evidence',)},
+            'last_active_reliability': active_stats,
+            'last_active_snapshot_utc': active[-1]['utc'] if active else None,
+            'ice_rtt_seconds': distribution(ice),
             'events': events, 'event_coverage_complete': complete,
             'recovery_ms': distribution([event['delay_ms'] for event in events if event['kind'] == 'recovered']),
             'carrier_queue': distribution([snapshot['send_queue_frames'] for snapshot in snapshots]),
@@ -95,14 +103,15 @@ def summarize(directory):
     origin = timestamp(warmup or result)
     stages = [stage for row in android if row.get('event') == 'perf_blocks' and not row['warmup'] for stage in row['rows']]
     sequences = [int(stage[0]) for stage in stages]
-    exact_rows = (len(stages) == result['blocks_received'] and bool(sequences)
+    exact_rows = (len(stages) == result['blocks_received'] and bool(sequences) and warmup is not None
+                  and sequences[0] == warmup['sent'] + 1
                   and sequences == list(range(sequences[0], sequences[0] + len(sequences))))
     auth = all(any(row.get('event') == 'family_auth' and row.get('accepted') is True for row in rows) for rows in (android, gateway))
     clean_exit = any(row.get('event') == 'android_exit' and row['code'] == 0 and not row.get('cancelled') for row in android)
     correct = (auth and clean_exit and exact_rows and not result['warmup'] and result['status'] == 'PASS'
                and not any(result['errors'].values()) and result['blocks_sent'] == result['blocks_received']
                and result['measurement_s'] >= result['config']['seconds'])
-    endpoints = {name: endpoint_summary(rows, origin) for name, rows in (('android', android), ('amsterdam', gateway))}
+    endpoints = {name: endpoint_summary(rows, origin, timestamp(result)) for name, rows in (('android', android), ('amsterdam', gateway))}
     minutes = {}
     for stage in stages:
         entry = minutes.setdefault(int(stage[1] // 60000), {'rtt': [], 'count': 0})
@@ -120,6 +129,7 @@ def summarize(directory):
             'session_retry_payload_bytes': retry_bytes,
             'session_retry_over_measured_bidirectional_useful_percent': retry_bytes * 100 / useful_bytes if useful_bytes else None,
             'session_ack_header_bytes': 64 * sum(entry.get('ACKSent', 0) for entry in stats),
+            'session_data_header_bytes': 64 * sum(entry.get('DataSent', 0) + entry.get('Retransmissions', 0) for entry in stats),
             'sha256': {name: hashlib.sha256((directory / name).read_bytes()).hexdigest() for name in ('A.jsonl', 'B.jsonl')}}
 
 
