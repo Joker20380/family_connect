@@ -71,6 +71,20 @@ print('FIXTURE_REMOVED')
         subprocess.run(self.ssh + ['python3 -c ' + shlex.quote(code)], check=True, timeout=30)
 
 
+def validate_tcp_evidence(case, android, gateway):
+    closes = [row for row in gateway if row.get('event') == 'tcp_gateway']
+    if len(closes) != 1 or closes[0]['stats']['active_sockets'] != 0 or closes[0]['stats']['retained_bytes'] != 0:
+        raise RuntimeError('gateway socket/buffer cleanup unproven')
+    if closes[0]['stats']['open_requests'] != 1:
+        raise RuntimeError('unexpected OPEN count')
+    if case in ('cancel', 'remote-exit', 'network-loss'):
+        exits = [row for row in android if row.get('event') == 'android_exit']
+        if len(exits) != 1 or exits[0]['code'] == 0 or exits[0]['cancelled'] != (case == 'cancel'):
+            raise RuntimeError('expected interruption not proven')
+        if not any(row.get('event') == 'tcp_open' for row in android):
+            raise RuntimeError('no stream before fault')
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--adb', required=True)
@@ -115,6 +129,8 @@ def main():
         if run.returncode:
             raise RuntimeError('TCP case failed: ' + args.case)
         android = [json.loads(line) for line in (args.out / 'flow/A.jsonl').read_text().splitlines() if line.endswith('}')]
+        gateway = [json.loads(line) for line in (args.out / 'flow/B.jsonl').read_text().splitlines() if line.endswith('}')]
+        validate_tcp_evidence(args.case, android, gateway)
         proofs = [row for row in android if row.get('event') == 'tcp_result']
         if args.case not in ('cancel', 'remote-exit', 'network-loss') and (len(proofs) != 1 or proofs[0]['status'] != 'PASS'):
             raise RuntimeError('TCP proof missing')

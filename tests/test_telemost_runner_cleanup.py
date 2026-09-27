@@ -97,3 +97,20 @@ def test_tcp_requires_authenticated_exclusive_mode(extra, monkeypatch):
         module.main()
     assert caught.value.code == 2
     remote.assert_not_called()
+
+
+def test_tcp_gate_requires_cleanup_and_actual_fault():
+    path = Path(__file__).resolve().parents[1] / 'pilot/android-telemost/tcp_acceptance.py'
+    spec = importlib.util.spec_from_file_location('tcp_acceptance_runner', path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    gateway = [{'event': 'tcp_gateway', 'stats': {'active_sockets': 0, 'retained_bytes': 0, 'open_requests': 1}}]
+    android = [{'event': 'tcp_open'}, {'event': 'android_exit', 'code': 1, 'cancelled': False}]
+    module.validate_tcp_evidence('remote-exit', android, gateway)
+    with pytest.raises(RuntimeError, match='cleanup'):
+        module.validate_tcp_evidence('https', android, [])
+    with pytest.raises(RuntimeError, match='interruption'):
+        module.validate_tcp_evidence('cancel', android, gateway)
+    gateway[0]['stats']['active_sockets'] = 1
+    with pytest.raises(RuntimeError, match='cleanup'):
+        module.validate_tcp_evidence('https', android, gateway)

@@ -160,8 +160,8 @@ def main():
                 fault_started = time.monotonic()
                 if args.case == "remote-exit": stop_remote()
                 elif args.case == "network-loss":
-                    adb("shell", "svc", "data", "disable")
                     data_disabled = True
+                    adb("shell", "svc", "data", "disable")
                 elif args.case == "process-death": adb("shell", "am", "force-stop", PACKAGE)
                 elif args.case == "activity-close": adb("shell", "am", "start", "-n", PACKAGE + "/.ProbeActivity", "--activity-clear-top", "--activity-single-top", "--ez", "close", "true")
                 else: adb("shell", "am", "start", "-n", PACKAGE + "/.ProbeActivity", "--activity-clear-top", "--activity-single-top", "--ez", "disconnect", "true")
