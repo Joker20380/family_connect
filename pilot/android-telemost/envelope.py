@@ -79,10 +79,24 @@ def endpoint_summary(rows, origin, finished):
     active_stats = {key: value for key, value in active_stats.items() if key not in ('Events', 'RecentEvents')}
     ice = [pair['currentRoundTripTime'] for snapshot in snapshots for role in ('publisher', 'subscriber')
            for pair in snapshot.get(role, []) if pair.get('type') == 'candidate-pair' and 'currentRoundTripTime' in pair]
+    measured_resources = [row for row in resource_rows if origin <= timestamp(row) <= finished]
+    cpu = None
+    if len(measured_resources) > 1:
+        first, last = measured_resources[0], measured_resources[-1]
+        seconds = timestamp(last) - timestamp(first)
+        if seconds > 0:
+            cpu = 100 * sum(last[key] - first[key] for key in ('cpu_user_s', 'cpu_system_s')) / seconds
+    measured_android = [row for row in android_rows if origin <= row['utc_ms'] / 1000 <= finished]
+    java_cpu = None
+    if len(measured_android) > 1:
+        first, last = measured_android[0], measured_android[-1]
+        java_cpu = 100 * (last['app_cpu_ms'] - first['app_cpu_ms']) / (last['elapsed_ms'] - first['elapsed_ms'])
     return {'reliability': stats, 'carrier': {key: value for key, value in carrier.items() if key not in ('Evidence',)},
             'last_active_reliability': active_stats,
             'last_active_snapshot_utc': active[-1]['utc'] if active else None,
             'ice_rtt_seconds': distribution(ice),
+            'sampled_native_cpu_percent_one_core': cpu,
+            'sampled_java_cpu_percent_one_core': java_cpu,
             'events': events, 'event_coverage_complete': complete,
             'recovery_ms': distribution([event['delay_ms'] for event in events if event['kind'] == 'recovered']),
             'carrier_queue': distribution([snapshot['send_queue_frames'] for snapshot in snapshots]),

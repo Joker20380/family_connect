@@ -157,6 +157,8 @@ def main():
         else:
             raise RuntimeError("ANDROID_SUITE_DEADLINE")
         if args.client_profile != "valid":
+            if independent:
+                independent.collect()
             rejected = any(event.get("event") == "family_auth" and event.get("accepted") is False for event in events(args.out / "B.jsonl"))
             if checks or not rejected or not exits or exits[-1]["code"] == 0:
                 raise RuntimeError("FAMILY_NEGATIVE_CASE_FAILED")
