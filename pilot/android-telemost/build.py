@@ -37,7 +37,7 @@ def main():
         "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(),
         "go": subprocess.check_output([args.go, "version"], env=env, text=True).strip(),
         "ndk": (args.ndk / "source.properties").read_text().strip(),
-        "abi": "arm64-v8a", "min_api": 26, "scope": "isolated VP8/Family/single-TCP tests, no TUN, sockets unprotected",
+        "abi": "arm64-v8a", "min_api": 26, "scope": "isolated VP8/Family/TCP-mux/DNS tests, no TUN, sockets unprotected",
     }
     (assets / "build.json").write_text(json.dumps(metadata, indent=2) + "\n")
     print(json.dumps(metadata, indent=2))

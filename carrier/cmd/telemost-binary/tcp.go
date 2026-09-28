@@ -156,7 +156,11 @@ func tcpFault(stream *tcpforward.Stream, config tcpConfig, result map[string]any
 	return stream.CloseWrite()
 }
 
-type tlsStream struct{ *tcpforward.Stream }
+type tcpByteStream interface {
+	io.ReadWriteCloser
+	CloseWrite() error
+}
+type tlsStream struct{ tcpByteStream }
 type testAddress string
 
 func (address testAddress) Network() string       { return "family-tcp" }
@@ -173,7 +177,7 @@ func (connection tlsStream) SetWriteDeadline(time.Time) error {
 	return errors.New("test adapter uses session context deadline")
 }
 
-func tcpHTTPS(ctx context.Context, stream *tcpforward.Stream, config tcpConfig, result map[string]any) error {
+func tcpHTTPS(ctx context.Context, stream tcpByteStream, config tcpConfig, result map[string]any) error {
 	secure := tls.Client(tlsStream{stream}, &tls.Config{ServerName: config.Host, MinVersion: tls.VersionTLS12})
 	if err := secure.HandshakeContext(ctx); err != nil {
 		return errors.New("end-site TLS handshake failed")

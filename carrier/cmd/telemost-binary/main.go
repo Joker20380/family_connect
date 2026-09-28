@@ -43,7 +43,23 @@ func run() error {
 	tcpFile := flag.String("tcp-config", "", "single TCP test request JSON; authenticated VP8 only")
 	tcpGateway := flag.Bool("tcp-gateway", false, "serve one authenticated outbound TCP stream")
 	tcpLoopback := flag.Int("tcp-test-loopback-port", 0, "test-only exact 127.0.0.1 port override; default public destinations only")
+	muxFile := flag.String("mux-config", "", "bounded TCP+DNS mux probe configuration")
+	muxGateway := flag.Bool("mux-gateway", false, "serve authenticated TCP+DNS mux")
+	muxLoopback := flag.Int("mux-test-loopback-port", 0, "test-only exact loopback destination for mux")
+	muxDNS := flag.String("mux-dns-upstream", "", "gateway DNS resolver literal IP:53; default system configuration")
+	denyDNS := flag.Bool("deny-client-dns-after-admission", false, "test-only native resolver denial after carrier and Family admission")
 	flag.Parse()
+	if *denyDNS {
+		if *muxFile == "" || *role != "probe" {
+			return errors.New("DNS denial only supported in mux probe")
+		}
+		if err := prepareDNSGuard(); err != nil {
+			return err
+		}
+	}
+	if (*muxFile != "" || *muxGateway || *muxLoopback != 0 || *muxDNS != "") && (*modeName != "vp8" || *familyConfig == "" || *tcpFile != "" || *tcpGateway || *performanceFile != "" || *performanceObserver || *muxGateway != (*role == "echo") || *muxFile != "" && *role != "probe" || *muxLoopback < 0 || *muxLoopback > 65535 || (*muxLoopback != 0 || *muxDNS != "") && !*muxGateway) {
+		return errors.New("mux requires exclusive authenticated VP8 test mode")
+	}
 	if (*tcpFile != "" || *tcpGateway || *tcpLoopback != 0) && (*modeName != "vp8" || *familyConfig == "" || *performanceFile != "" || *performanceObserver || *tcpGateway != (*role == "echo") || *tcpFile != "" && *role != "probe" || *tcpLoopback < 0 || *tcpLoopback > 65535 || *tcpLoopback != 0 && !*tcpGateway) {
 		return errors.New("TCP requires exclusive authenticated VP8 test mode")
 	}
@@ -158,6 +174,33 @@ func run() error {
 				_ = emit(map[string]any{"event": "tcp_gateway", "stats": metrics.Snapshot(), "transport": snapshot()})
 			}()
 			return tcpforward.Serve(ctx, secured, tcpforward.Policy{TestOnlyLoopbackPort: *tcpLoopback}, metrics)
+		}
+		if *muxGateway {
+			mux, err := tcpforward.NewMux(ctx, secured, true, tcpforward.MuxConfig{Policy: tcpforward.Policy{TestOnlyLoopbackPort: *muxLoopback}, DNSUpstream: *muxDNS})
+			if err != nil {
+				return err
+			}
+			defer mux.Close()
+			stopMux := muxSamples(ctx, mux, snapshot, emit)
+			defer stopMux()
+			defer func() {
+				_ = emit(map[string]any{"event": "mux_gateway", "stats": mux.Stats(), "transport": snapshot()})
+			}()
+			return mux.Wait()
+		}
+		if *muxFile != "" {
+			if *denyDNS {
+				if err := activateDNSGuard(ctx); err != nil {
+					return err
+				}
+				_ = emit(map[string]any{"event": "mux_dns_guard", "phase": "enabled", "negative_probe_blocked": true, "post_probe_calls": dnsGuardCount()})
+			}
+			defer func() {
+				if *denyDNS {
+					_ = emit(map[string]any{"event": "mux_dns_guard", "phase": "final", "post_probe_calls": dnsGuardCount()})
+				}
+			}()
+			return muxProbe(ctx, secured, *muxFile, snapshot, emit)
 		}
 		if *tcpFile != "" {
 			return tcpProbe(ctx, secured, *tcpFile, snapshot, emit)

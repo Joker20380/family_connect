@@ -11,17 +11,18 @@ import time
 
 
 class Fixture:
-    def __init__(self, host, output):
+    def __init__(self, host, output, source=None):
         self.ssh = ['ssh', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=12', 'root@' + host]
         self.output = output
         self.directory = None
+        self.source = source or Path(__file__).with_name('tcp_fixture.py')
 
     def start(self, mode, public):
         self.directory = subprocess.check_output(self.ssh + ['mktemp -d /tmp/fc-eu4-fixture.XXXXXXXX'], text=True).strip()
         if not re.fullmatch(r'/tmp/fc-eu4-fixture\.[a-zA-Z0-9]{8}', self.directory):
             self.directory = None
             raise RuntimeError('invalid fixture directory')
-        source = Path(__file__).with_name('tcp_fixture.py').read_bytes()
+        source = self.source.read_bytes()
         command = f'cat > {self.directory}/fixture.py; chown -R nobody:nogroup {self.directory}'
         subprocess.run(self.ssh + [command], input=source, check=True, timeout=30)
         code = f'''

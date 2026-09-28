@@ -31,6 +31,21 @@ func startMetrics(ctx context.Context, interval time.Duration, emit func(map[str
 				runtime.ReadMemStats(&memory)
 				fields := map[string]any{"event": "resources", "heap_bytes": memory.HeapAlloc, "heap_sys_bytes": memory.HeapSys, "max_rss_kib": usage.Maxrss, "goroutines": runtime.NumGoroutine(), "cpu_user_s": float64(usage.Utime.Sec) + float64(usage.Utime.Usec)/1e6, "cpu_system_s": float64(usage.Stime.Sec) + float64(usage.Stime.Usec)/1e6}
 				fields["gc_cycles"] = memory.NumGC
+				fields["pid"] = os.Getpid()
+				fields["logical_cpus"] = runtime.NumCPU()
+				fields["cpu_source"] = "getrusage(RUSAGE_SELF), all process threads"
+				if tasks, err := os.ReadDir("/proc/self/task"); err == nil {
+					fields["os_threads"] = len(tasks)
+				}
+				if entries, err := os.ReadDir("/proc/self/fd"); err == nil {
+					sockets := 0
+					for _, entry := range entries {
+						if target, err := os.Readlink("/proc/self/fd/" + entry.Name()); err == nil && strings.HasPrefix(target, "socket:[") {
+							sockets++
+						}
+					}
+					fields["socket_fds"] = sockets
+				}
 				fields["gc_pause_total_ns"] = memory.PauseTotalNs
 				if statm, err := os.ReadFile("/proc/self/statm"); err == nil {
 					values := strings.Fields(string(statm))
