@@ -1,0 +1,4853 @@
+{
+  "schema": "family-connect-5n5-sanitized-evidence-v1",
+  "native_revision": "c26c2b741a2ab71ac4df8ac3c831bb66b83134c6",
+  "observer_revision": "c26c2b7",
+  "final_validator_revision": "083763d",
+  "scope": "one physical Redmi Note 9 Pro, Android12 arm64, cellular, real VP8 Telemost, Amsterdam; not OS/browser/TUN integration",
+  "limits": {
+    "streams_default": 16,
+    "streams_hard_max": 32,
+    "stream_receive_credit_bytes": 65536,
+    "data_max_bytes": 16384,
+    "dns_max_bytes": 4096,
+    "dns_outstanding": 16,
+    "dns_timeout_seconds": 5,
+    "control_queue_frames": 96,
+    "reliable_retained_bound_bytes": 393216
+  },
+  "accepted_public": {
+    "attempt": "public-4",
+    "A": {
+      "provenance": {
+        "utc": "2026-09-28T11:25:49.264599318Z",
+        "pid": 5545,
+        "parent_pid": 5437,
+        "vcs.revision": "c26c2b741a2ab71ac4df8ac3c831bb66b83134c6",
+        "vcs.modified": "false",
+        "executable_sha256": "a86dc6cd5cd8731baa357de166c5c3fd5b47b1e9edcd10c3ae96965f52fcde0a"
+      },
+      "events": {
+        "android_start": 1,
+        "android_resources": 2,
+        "start": 1,
+        "connected": 1,
+        "family_auth": 1,
+        "mux_dns_guard": 2,
+        "resources": 1,
+        "mux_sample": 1,
+        "mux_open": 1,
+        "mux_https": 4,
+        "mux_dns": 3,
+        "mux_result": 1,
+        "reliability_final": 1,
+        "summary": 1,
+        "android_exit": 1
+      },
+      "final_mux": {
+        "Destination": {
+          "hostname_open_requests": 0,
+          "dns_lookup_success": 0,
+          "dns_lookup_failure": 0,
+          "dns_lookup_timeout": 0,
+          "ipv4_selected": 0,
+          "ipv6_selected": 0,
+          "destination_denied": 0,
+          "connect_failure": 0
+        },
+        "ActiveSockets": 0,
+        "ActiveStreams": 0,
+        "MaxActiveStreams": 4,
+        "Opened": 4,
+        "OpenOK": 4,
+        "OpenErrors": 0,
+        "Resets": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 6842,
+        "ReceivedBytes": 26761,
+        "FlowStalls": 12,
+        "RetainedBytes": 0,
+        "RetainedHighWater": 266707,
+        "SendHighWater": 1524,
+        "ReceiveHighWater": 5587,
+        "QueueHighWater": 3,
+        "SchedulerFrames": 40,
+        "SchedulerWaitMaxMS": 559.943437,
+        "DNSRequests": 3,
+        "DNSResponses": 3,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "peak_mux": {
+        "ActiveSockets": 0,
+        "ActiveStreams": 4,
+        "MaxActiveStreams": 4,
+        "Opened": 4,
+        "OpenOK": 4,
+        "OpenErrors": 0,
+        "Resets": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 6842,
+        "ReceivedBytes": 26761,
+        "FlowStalls": 12,
+        "RetainedBytes": 262144,
+        "RetainedHighWater": 266707,
+        "SendHighWater": 1524,
+        "ReceiveHighWater": 5587,
+        "QueueHighWater": 3,
+        "SchedulerFrames": 40,
+        "SchedulerWaitMaxMS": 559.943437,
+        "DNSRequests": 3,
+        "DNSResponses": 3,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "resources": {
+        "samples": 1,
+        "source": "getrusage(RUSAGE_SELF), all process threads",
+        "logical_cpus": 8,
+        "peaks": {
+          "rss_bytes": 12349440,
+          "heap_bytes": 4165936,
+          "heap_sys_bytes": 11108352,
+          "goroutines": 179,
+          "os_threads": 16,
+          "socket_fds": 50
+        }
+      },
+      "app_resources": {
+        "pss_peak_kib": 71907,
+        "java_used_peak_bytes": 4836240,
+        "networks": [
+          "cellular"
+        ],
+        "cpu": {
+          "first_utc_ms": 1790594749198,
+          "last_utc_ms": 1790594759229,
+          "wall_ms": 10036,
+          "app_cpu_ms": 1507,
+          "percent_one_core": 15.015942606616182
+        }
+      },
+      "dns_latency": {
+        "count": 3,
+        "avg_ms": 482.792708,
+        "p50_ms": 341.842239,
+        "p95_ms": 341.842239,
+        "p99_ms": 341.842239,
+        "max_ms": 926.608385
+      },
+      "proofs": [
+        {
+          "event": "mux_dns_guard",
+          "negative_probe_blocked": true,
+          "phase": "enabled",
+          "post_probe_calls": 0,
+          "utc": "2026-09-28T11:25:56.917775773Z"
+        },
+        {
+          "event": "mux_open",
+          "simultaneous": 4,
+          "stats": {
+            "Destination": {
+              "hostname_open_requests": 0,
+              "dns_lookup_success": 0,
+              "dns_lookup_failure": 0,
+              "dns_lookup_timeout": 0,
+              "ipv4_selected": 0,
+              "ipv6_selected": 0,
+              "destination_denied": 0,
+              "connect_failure": 0
+            },
+            "ActiveSockets": 0,
+            "ActiveStreams": 4,
+            "MaxActiveStreams": 4,
+            "Opened": 4,
+            "OpenOK": 4,
+            "OpenErrors": 0,
+            "Resets": 0,
+            "ProtocolErrors": 0,
+            "SentBytes": 0,
+            "ReceivedBytes": 0,
+            "FlowStalls": 0,
+            "RetainedBytes": 262144,
+            "RetainedHighWater": 262186,
+            "SendHighWater": 0,
+            "ReceiveHighWater": 0,
+            "QueueHighWater": 1,
+            "SchedulerFrames": 4,
+            "SchedulerWaitMaxMS": 0,
+            "DNSRequests": 0,
+            "DNSResponses": 0,
+            "DNSErrors": 0,
+            "DNSTimeouts": 0
+          },
+          "utc": "2026-09-28T11:26:01.964910407Z"
+        },
+        {
+          "download_bytes": 559,
+          "download_sha256": "ff67a9d764d6a2367a187734e697f6a53217db9a21c101d410a113ca871a299d",
+          "end_site_tls_verified": true,
+          "end_site_tls_version": 772,
+          "event": "mux_https",
+          "host": "example.com",
+          "http_status": 200,
+          "passed": true,
+          "stream": {
+            "ID": 5,
+            "State": "closed",
+            "Sent": 1693,
+            "Received": 6525,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 1515,
+            "ReceiveHighWater": 4344
+          },
+          "stream_id": 5,
+          "utc": "2026-09-28T11:26:03.127774573Z"
+        },
+        {
+          "download_bytes": 2048,
+          "download_sha256": "e2943f8d0b0e7d5835f9533722a6e25f669acb8980daee378b4edb44da212f51",
+          "end_site_tls_verified": true,
+          "end_site_tls_version": 772,
+          "event": "mux_https",
+          "host": "speed.cloudflare.com",
+          "http_status": 200,
+          "passed": true,
+          "stream": {
+            "ID": 7,
+            "State": "closed",
+            "Sent": 1728,
+            "Received": 7381,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 1524,
+            "ReceiveHighWater": 3910
+          },
+          "stream_id": 7,
+          "utc": "2026-09-28T11:26:03.259584573Z"
+        },
+        {
+          "download_bytes": 1024,
+          "download_sha256": "35ae5091b37e8f0f306833ef57a635f9dc06738d7f4e563a610eec2adb26fe28",
+          "end_site_tls_verified": true,
+          "end_site_tls_version": 772,
+          "event": "mux_https",
+          "host": "speed.cloudflare.com",
+          "http_status": 200,
+          "passed": true,
+          "stream": {
+            "ID": 3,
+            "State": "closed",
+            "Sent": 1728,
+            "Received": 6331,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 1524,
+            "ReceiveHighWater": 2896
+          },
+          "stream_id": 3,
+          "utc": "2026-09-28T11:26:03.296109885Z"
+        },
+        {
+          "download_bytes": 559,
+          "download_sha256": "ff67a9d764d6a2367a187734e697f6a53217db9a21c101d410a113ca871a299d",
+          "end_site_tls_verified": true,
+          "end_site_tls_version": 772,
+          "event": "mux_https",
+          "host": "example.com",
+          "http_status": 200,
+          "passed": true,
+          "stream": {
+            "ID": 1,
+            "State": "closed",
+            "Sent": 1693,
+            "Received": 6524,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 1515,
+            "ReceiveHighWater": 5587
+          },
+          "stream_id": 1,
+          "utc": "2026-09-28T11:26:04.162889625Z"
+        },
+        {
+          "event": "mux_dns_guard",
+          "phase": "final",
+          "post_probe_calls": 0,
+          "utc": "2026-09-28T11:26:05.126190145Z"
+        }
+      ],
+      "dns_results": {
+        "type=1;nxdomain=True;rcode=3;passed=True": 1,
+        "type=1;nxdomain=False;rcode=0;passed=True": 1,
+        "type=28;nxdomain=False;rcode=0;passed=True": 1
+      },
+      "results": [
+        {
+          "event": "mux_result",
+          "mode": "public",
+          "seconds": 8.17205307,
+          "status": "PASS",
+          "utc": "2026-09-28T11:26:05.108764208Z"
+        }
+      ],
+      "reliability_final": {
+        "DataSent": 42,
+        "DataReceived": 40,
+        "ACKSent": 91,
+        "ACKReceived": 99,
+        "SACKSent": 40,
+        "SACKReceived": 44,
+        "Retransmissions": 1,
+        "RetransmittedBytes": 77,
+        "Duplicates": 0,
+        "Reordered": 0,
+        "Stale": 0,
+        "Timeouts": 1,
+        "Resets": 1,
+        "DeliveredBytes": 31025,
+        "WithheldBytes": 0,
+        "Gaps": 0,
+        "RecoveredGaps": 0,
+        "MaxRecoveryMS": 0,
+        "SendHighWater": 8,
+        "ReorderHighWater": 1,
+        "BufferedBytes": 0,
+        "MaxBufferedBytes": 9083,
+        "SendDepth": 0,
+        "ReorderDepth": 0,
+        "EventsDropped": 0,
+        "Terminal": "cancelled"
+      },
+      "transport_sample_peaks": {
+        "receive_queue_messages": 0,
+        "send_queue_capacity": 256,
+        "send_queue_frames": 1
+      },
+      "rtp_gaps_max": 0,
+      "mux_samples": [
+        {
+          "ActiveStreams": 4,
+          "ActiveSockets": 0,
+          "RetainedBytes": 262144,
+          "RetainedHighWater": 262186,
+          "QueueHighWater": 1,
+          "SentBytes": 0,
+          "ReceivedBytes": 0,
+          "DNSRequests": 0,
+          "DNSResponses": 0,
+          "utc": "2026-09-28T11:26:01.939566657Z"
+        }
+      ]
+    },
+    "B": {
+      "provenance": {
+        "utc": "2026-09-28T11:25:44.554049142Z",
+        "pid": 414534,
+        "parent_pid": 414533,
+        "vcs.revision": "c26c2b741a2ab71ac4df8ac3c831bb66b83134c6",
+        "vcs.modified": "false",
+        "executable_sha256": "b2d19c1f614e5394d377f4a83274543352c3bcd8a16fd6b767453123d334b88d"
+      },
+      "events": {
+        "start": 1,
+        "connected": 1,
+        "resources": 2,
+        "family_auth": 1,
+        "mux_sample": 2,
+        "mux_gateway": 1,
+        "reliability_final": 1,
+        "summary": 1
+      },
+      "final_mux": {
+        "Destination": {
+          "hostname_open_requests": 4,
+          "dns_lookup_success": 4,
+          "dns_lookup_failure": 0,
+          "dns_lookup_timeout": 0,
+          "ipv4_selected": 4,
+          "ipv6_selected": 0,
+          "destination_denied": 0,
+          "connect_failure": 0
+        },
+        "ActiveSockets": 0,
+        "ActiveStreams": 0,
+        "MaxActiveStreams": 4,
+        "Opened": 4,
+        "OpenOK": 4,
+        "OpenErrors": 0,
+        "Resets": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 26761,
+        "ReceivedBytes": 6842,
+        "FlowStalls": 1,
+        "RetainedBytes": 0,
+        "RetainedHighWater": 267731,
+        "SendHighWater": 5587,
+        "ReceiveHighWater": 1524,
+        "QueueHighWater": 4,
+        "SchedulerFrames": 39,
+        "SchedulerWaitMaxMS": 478.056584,
+        "DNSRequests": 3,
+        "DNSResponses": 3,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "peak_mux": {
+        "ActiveSockets": 4,
+        "ActiveStreams": 4,
+        "MaxActiveStreams": 4,
+        "Opened": 4,
+        "OpenOK": 4,
+        "OpenErrors": 0,
+        "Resets": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 26761,
+        "ReceivedBytes": 6842,
+        "FlowStalls": 1,
+        "RetainedBytes": 262144,
+        "RetainedHighWater": 267731,
+        "SendHighWater": 5587,
+        "ReceiveHighWater": 1524,
+        "QueueHighWater": 4,
+        "SchedulerFrames": 39,
+        "SchedulerWaitMaxMS": 478.056584,
+        "DNSRequests": 3,
+        "DNSResponses": 3,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "resources": {
+        "samples": 2,
+        "source": "getrusage(RUSAGE_SELF), all process threads",
+        "logical_cpus": 1,
+        "peaks": {
+          "rss_bytes": 24948736,
+          "heap_bytes": 5538272,
+          "heap_sys_bytes": 11370496,
+          "goroutines": 227,
+          "os_threads": 7,
+          "socket_fds": 72
+        },
+        "cpu": {
+          "first_utc": "2026-09-28T11:25:54.532874554Z",
+          "last_utc": "2026-09-28T11:26:04.532588715Z",
+          "wall_seconds": 9.999713897705078,
+          "process_cpu_seconds": 0.3185500000000001,
+          "percent_one_core": 3.185591140493599
+        }
+      },
+      "proofs": [],
+      "dns_results": {},
+      "results": [
+        {
+          "event": "mux_gateway",
+          "utc": "2026-09-28T11:26:07.269466418Z"
+        }
+      ],
+      "reliability_final": {
+        "DataSent": 40,
+        "DataReceived": 43,
+        "ACKSent": 101,
+        "ACKReceived": 91,
+        "SACKSent": 44,
+        "SACKReceived": 40,
+        "Retransmissions": 0,
+        "RetransmittedBytes": 0,
+        "Duplicates": 1,
+        "Reordered": 2,
+        "Stale": 0,
+        "Timeouts": 0,
+        "Resets": 1,
+        "DeliveredBytes": 11317,
+        "WithheldBytes": 232,
+        "Gaps": 0,
+        "RecoveredGaps": 0,
+        "MaxRecoveryMS": 0,
+        "SendHighWater": 8,
+        "ReorderHighWater": 2,
+        "BufferedBytes": 0,
+        "MaxBufferedBytes": 18345,
+        "SendDepth": 0,
+        "ReorderDepth": 0,
+        "EventsDropped": 0,
+        "Terminal": "cancelled"
+      },
+      "transport_sample_peaks": {
+        "receive_queue_messages": 0,
+        "send_queue_capacity": 256,
+        "send_queue_frames": 0
+      },
+      "rtp_gaps_max": 0,
+      "mux_samples": [
+        {
+          "ActiveStreams": 4,
+          "ActiveSockets": 4,
+          "RetainedBytes": 262144,
+          "RetainedHighWater": 266488,
+          "QueueHighWater": 1,
+          "SentBytes": 5588,
+          "ReceivedBytes": 1515,
+          "DNSRequests": 0,
+          "DNSResponses": 0,
+          "utc": "2026-09-28T11:26:02.243696821Z"
+        },
+        {
+          "ActiveStreams": 0,
+          "ActiveSockets": 0,
+          "RetainedBytes": 0,
+          "RetainedHighWater": 267731,
+          "QueueHighWater": 4,
+          "SentBytes": 26761,
+          "ReceivedBytes": 6842,
+          "DNSRequests": 3,
+          "DNSResponses": 3,
+          "utc": "2026-09-28T11:26:07.247376077Z"
+        }
+      ]
+    }
+  },
+  "accepted_mixed": {
+    "attempt": "mixed-2",
+    "A": {
+      "provenance": {
+        "utc": "2026-09-28T11:26:43.921646224Z",
+        "pid": 6264,
+        "parent_pid": 6238,
+        "vcs.revision": "c26c2b741a2ab71ac4df8ac3c831bb66b83134c6",
+        "vcs.modified": "false",
+        "executable_sha256": "a86dc6cd5cd8731baa357de166c5c3fd5b47b1e9edcd10c3ae96965f52fcde0a"
+      },
+      "events": {
+        "android_start": 1,
+        "start": 1,
+        "android_resources": 32,
+        "connected": 1,
+        "family_auth": 1,
+        "mux_dns_guard": 2,
+        "resources": 31,
+        "mux_open": 1,
+        "mux_sample": 61,
+        "mux_dns": 171,
+        "mux_isolation": 3,
+        "mux_bulk": 1,
+        "mux_stream": 4,
+        "mux_interactive": 1,
+        "mux_result": 1,
+        "reliability_final": 1,
+        "summary": 1,
+        "android_exit": 1
+      },
+      "final_mux": {
+        "Destination": {
+          "hostname_open_requests": 0,
+          "dns_lookup_success": 0,
+          "dns_lookup_failure": 0,
+          "dns_lookup_timeout": 0,
+          "ipv4_selected": 0,
+          "ipv6_selected": 0,
+          "destination_denied": 0,
+          "connect_failure": 0
+        },
+        "ActiveSockets": 0,
+        "ActiveStreams": 0,
+        "MaxActiveStreams": 7,
+        "Opened": 8,
+        "OpenOK": 7,
+        "OpenErrors": 1,
+        "Resets": 2,
+        "ProtocolErrors": 0,
+        "SentBytes": 18868864,
+        "ReceivedBytes": 18868864,
+        "FlowStalls": 755,
+        "RetainedBytes": 0,
+        "RetainedHighWater": 401664,
+        "SendHighWater": 8192,
+        "ReceiveHighWater": 16384,
+        "QueueHighWater": 5,
+        "SchedulerFrames": 6556,
+        "SchedulerWaitMaxMS": 1891.283749,
+        "DNSRequests": 171,
+        "DNSResponses": 171,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "peak_mux": {
+        "ActiveSockets": 0,
+        "ActiveStreams": 6,
+        "MaxActiveStreams": 7,
+        "Opened": 8,
+        "OpenOK": 7,
+        "OpenErrors": 1,
+        "Resets": 2,
+        "ProtocolErrors": 0,
+        "SentBytes": 18868864,
+        "ReceivedBytes": 18868864,
+        "FlowStalls": 755,
+        "RetainedBytes": 401408,
+        "RetainedHighWater": 401664,
+        "SendHighWater": 8192,
+        "ReceiveHighWater": 16384,
+        "QueueHighWater": 5,
+        "SchedulerFrames": 6556,
+        "SchedulerWaitMaxMS": 1891.283749,
+        "DNSRequests": 171,
+        "DNSResponses": 171,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "resources": {
+        "samples": 31,
+        "source": "getrusage(RUSAGE_SELF), all process threads",
+        "logical_cpus": 8,
+        "peaks": {
+          "rss_bytes": 16564224,
+          "heap_bytes": 10510912,
+          "heap_sys_bytes": 19496960,
+          "goroutines": 188,
+          "os_threads": 14,
+          "socket_fds": 49
+        },
+        "cpu": {
+          "first_utc": "2026-09-28T11:26:53.896473147Z",
+          "last_utc": "2026-09-28T11:31:53.896179074Z",
+          "wall_seconds": 299.99970602989197,
+          "process_cpu_seconds": 48.32942800000001,
+          "percent_one_core": 16.10982511935677
+        }
+      },
+      "app_resources": {
+        "pss_peak_kib": 182943,
+        "java_used_peak_bytes": 5364416,
+        "networks": [
+          "cellular"
+        ],
+        "cpu": {
+          "first_utc_ms": 1790594803925,
+          "last_utc_ms": 1790595115080,
+          "wall_ms": 311162,
+          "app_cpu_ms": 33617,
+          "percent_one_core": 10.803697109544224
+        }
+      },
+      "dns_latency": {
+        "count": 171,
+        "avg_ms": 294.90158274853803,
+        "p50_ms": 236.611354,
+        "p95_ms": 581.710677,
+        "p99_ms": 1247.083541,
+        "max_ms": 1310.580312
+      },
+      "proofs": [
+        {
+          "event": "mux_dns_guard",
+          "negative_probe_blocked": true,
+          "phase": "enabled",
+          "post_probe_calls": 0,
+          "utc": "2026-09-28T11:26:51.235178357Z"
+        },
+        {
+          "event": "mux_open",
+          "simultaneous": 5,
+          "stats": {
+            "Destination": {
+              "hostname_open_requests": 0,
+              "dns_lookup_success": 0,
+              "dns_lookup_failure": 0,
+              "dns_lookup_timeout": 0,
+              "ipv4_selected": 0,
+              "ipv6_selected": 0,
+              "destination_denied": 0,
+              "connect_failure": 0
+            },
+            "ActiveSockets": 0,
+            "ActiveStreams": 5,
+            "MaxActiveStreams": 5,
+            "Opened": 5,
+            "OpenOK": 5,
+            "OpenErrors": 0,
+            "Resets": 0,
+            "ProtocolErrors": 0,
+            "SentBytes": 0,
+            "ReceivedBytes": 0,
+            "FlowStalls": 0,
+            "RetainedBytes": 327680,
+            "RetainedHighWater": 327713,
+            "SendHighWater": 0,
+            "ReceiveHighWater": 0,
+            "QueueHighWater": 1,
+            "SchedulerFrames": 5,
+            "SchedulerWaitMaxMS": 0,
+            "DNSRequests": 0,
+            "DNSResponses": 0,
+            "DNSErrors": 0,
+            "DNSTimeouts": 0
+          },
+          "utc": "2026-09-28T11:26:56.104880803Z"
+        },
+        {
+          "event": "mux_isolation",
+          "mode": "reset",
+          "passed": true,
+          "stream": {
+            "ID": 11,
+            "State": "reset",
+            "Sent": 128,
+            "Received": 128,
+            "LocalFIN": 0,
+            "RemoteFIN": 0,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 128,
+            "ReceiveHighWater": 128
+          },
+          "utc": "2026-09-28T11:27:09.024235016Z"
+        },
+        {
+          "event": "mux_isolation",
+          "mode": "cancel",
+          "passed": true,
+          "stream": {
+            "ID": 13,
+            "State": "reset",
+            "Sent": 128,
+            "Received": 128,
+            "LocalFIN": 0,
+            "RemoteFIN": 0,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 128,
+            "ReceiveHighWater": 128
+          },
+          "utc": "2026-09-28T11:27:10.894018141Z"
+        },
+        {
+          "event": "mux_isolation",
+          "mode": "policy_error",
+          "passed": true,
+          "utc": "2026-09-28T11:27:11.767086422Z"
+        },
+        {
+          "aggregate_mbit": 0.9972215515996192,
+          "bytes_each_direction": 18751488,
+          "event": "mux_bulk",
+          "passed": true,
+          "seconds": 300.859731239,
+          "sha256": "13c095ef5dd8824cce89d9c8e8682d1d8447ee206b9e4ce1c36098fa026afa33",
+          "stream": {
+            "ID": 1,
+            "State": "closed",
+            "Sent": 18751488,
+            "Received": 18751488,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 8192,
+            "ReceiveHighWater": 16384
+          },
+          "utc": "2026-09-28T11:31:56.965247407Z"
+        },
+        {
+          "event": "mux_stream",
+          "passed": true,
+          "stream": {
+            "ID": 9,
+            "State": "closed",
+            "Sent": 29056,
+            "Received": 29056,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 128,
+            "ReceiveHighWater": 128
+          },
+          "utc": "2026-09-28T11:31:57.181295479Z"
+        },
+        {
+          "event": "mux_stream",
+          "passed": true,
+          "stream": {
+            "ID": 3,
+            "State": "closed",
+            "Sent": 29440,
+            "Received": 29440,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 128,
+            "ReceiveHighWater": 128
+          },
+          "utc": "2026-09-28T11:31:57.331171261Z"
+        },
+        {
+          "event": "mux_stream",
+          "passed": true,
+          "stream": {
+            "ID": 7,
+            "State": "closed",
+            "Sent": 29312,
+            "Received": 29312,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 128,
+            "ReceiveHighWater": 128
+          },
+          "utc": "2026-09-28T11:31:57.477155375Z"
+        },
+        {
+          "event": "mux_stream",
+          "passed": true,
+          "stream": {
+            "ID": 5,
+            "State": "closed",
+            "Sent": 29312,
+            "Received": 29312,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 128,
+            "ReceiveHighWater": 128
+          },
+          "utc": "2026-09-28T11:31:57.549681Z"
+        },
+        {
+          "event": "mux_interactive",
+          "latency": {
+            "avg_ms": 313.90418811584715,
+            "count": 915,
+            "max_ms": 1880.617604,
+            "p50_ms": 245.219792,
+            "p95_ms": 789.054531,
+            "p99_ms": 1508.58401
+          },
+          "passed": true,
+          "seconds": 304.137659259,
+          "utc": "2026-09-28T11:32:00.243060218Z"
+        },
+        {
+          "event": "mux_dns_guard",
+          "phase": "final",
+          "post_probe_calls": 0,
+          "utc": "2026-09-28T11:32:00.27741876Z"
+        }
+      ],
+      "dns_results": {
+        "type=1;nxdomain=False;rcode=0;passed=True": 57,
+        "type=28;nxdomain=False;rcode=0;passed=True": 57,
+        "type=1;nxdomain=True;rcode=3;passed=True": 57
+      },
+      "results": [
+        {
+          "event": "mux_result",
+          "mode": "mixed",
+          "seconds": 309.00768582,
+          "status": "PASS",
+          "utc": "2026-09-28T11:32:00.260619228Z"
+        }
+      ],
+      "reliability_final": {
+        "DataSent": 6558,
+        "DataReceived": 6629,
+        "ACKSent": 13553,
+        "ACKReceived": 13417,
+        "SACKSent": 6830,
+        "SACKReceived": 6709,
+        "Retransmissions": 2,
+        "RetransmittedBytes": 8284,
+        "Duplicates": 1,
+        "Reordered": 202,
+        "Stale": 0,
+        "Timeouts": 2,
+        "Resets": 1,
+        "DeliveredBytes": 19179242,
+        "WithheldBytes": 28941,
+        "Gaps": 0,
+        "RecoveredGaps": 0,
+        "MaxRecoveryMS": 0,
+        "SendHighWater": 8,
+        "ReorderHighWater": 3,
+        "BufferedBytes": 0,
+        "MaxBufferedBytes": 66020,
+        "SendDepth": 0,
+        "ReorderDepth": 0,
+        "EventsDropped": 0,
+        "Terminal": "cancelled"
+      },
+      "transport_sample_peaks": {
+        "receive_queue_messages": 0,
+        "send_queue_capacity": 256,
+        "send_queue_frames": 2
+      },
+      "rtp_gaps_max": 0,
+      "mux_samples": [
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327790,
+          "RetainedHighWater": 336238,
+          "QueueHighWater": 5,
+          "SentBytes": 8704,
+          "ReceivedBytes": 0,
+          "DNSRequests": 3,
+          "DNSResponses": 0,
+          "utc": "2026-09-28T11:26:56.256203511Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 336256,
+          "QueueHighWater": 5,
+          "SentBytes": 280064,
+          "ReceivedBytes": 148608,
+          "DNSRequests": 3,
+          "DNSResponses": 3,
+          "utc": "2026-09-28T11:27:01.254928457Z"
+        },
+        {
+          "ActiveStreams": 6,
+          "ActiveSockets": 0,
+          "RetainedBytes": 393216,
+          "RetainedHighWater": 393249,
+          "QueueHighWater": 5,
+          "SentBytes": 543232,
+          "ReceivedBytes": 264320,
+          "DNSRequests": 6,
+          "DNSResponses": 6,
+          "utc": "2026-09-28T11:27:06.26098059Z"
+        },
+        {
+          "ActiveStreams": 6,
+          "ActiveSockets": 0,
+          "RetainedBytes": 401408,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 814976,
+          "ReceivedBytes": 393472,
+          "DNSRequests": 9,
+          "DNSResponses": 9,
+          "utc": "2026-09-28T11:27:11.243084547Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 1160192,
+          "ReceivedBytes": 550656,
+          "DNSRequests": 12,
+          "DNSResponses": 12,
+          "utc": "2026-09-28T11:27:16.253616316Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 335872,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 1481088,
+          "ReceivedBytes": 781824,
+          "DNSRequests": 15,
+          "DNSResponses": 15,
+          "utc": "2026-09-28T11:27:21.259159387Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 1891968,
+          "ReceivedBytes": 1054464,
+          "DNSRequests": 18,
+          "DNSResponses": 18,
+          "utc": "2026-09-28T11:27:26.258442562Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 2212992,
+          "ReceivedBytes": 1425408,
+          "DNSRequests": 21,
+          "DNSResponses": 21,
+          "utc": "2026-09-28T11:27:31.253657664Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327790,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 2526080,
+          "ReceivedBytes": 1911168,
+          "DNSRequests": 24,
+          "DNSResponses": 21,
+          "utc": "2026-09-28T11:27:36.253245423Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 335872,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 2839168,
+          "ReceivedBytes": 2463104,
+          "DNSRequests": 24,
+          "DNSResponses": 24,
+          "utc": "2026-09-28T11:27:41.254305421Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 3152256,
+          "ReceivedBytes": 3127424,
+          "DNSRequests": 27,
+          "DNSResponses": 27,
+          "utc": "2026-09-28T11:27:46.254485263Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 3465472,
+          "ReceivedBytes": 3449088,
+          "DNSRequests": 30,
+          "DNSResponses": 30,
+          "utc": "2026-09-28T11:27:51.253935521Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 3778944,
+          "ReceivedBytes": 3754112,
+          "DNSRequests": 33,
+          "DNSResponses": 33,
+          "utc": "2026-09-28T11:27:56.252658592Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 4092288,
+          "ReceivedBytes": 4075648,
+          "DNSRequests": 36,
+          "DNSResponses": 36,
+          "utc": "2026-09-28T11:28:01.253059997Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 4413824,
+          "ReceivedBytes": 4388992,
+          "DNSRequests": 39,
+          "DNSResponses": 39,
+          "utc": "2026-09-28T11:28:06.258130255Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 4727040,
+          "ReceivedBytes": 4702464,
+          "DNSRequests": 42,
+          "DNSResponses": 42,
+          "utc": "2026-09-28T11:28:11.25359067Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 5040512,
+          "ReceivedBytes": 5024000,
+          "DNSRequests": 45,
+          "DNSResponses": 45,
+          "utc": "2026-09-28T11:28:16.257384626Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 5353856,
+          "ReceivedBytes": 5337472,
+          "DNSRequests": 48,
+          "DNSResponses": 48,
+          "utc": "2026-09-28T11:28:21.253038687Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 5667200,
+          "ReceivedBytes": 5650816,
+          "DNSRequests": 51,
+          "DNSResponses": 51,
+          "utc": "2026-09-28T11:28:26.256552487Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 5980544,
+          "ReceivedBytes": 5964160,
+          "DNSRequests": 54,
+          "DNSResponses": 54,
+          "utc": "2026-09-28T11:28:31.254687329Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 6293888,
+          "ReceivedBytes": 6277504,
+          "DNSRequests": 57,
+          "DNSResponses": 57,
+          "utc": "2026-09-28T11:28:36.257713004Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 6615424,
+          "ReceivedBytes": 6599040,
+          "DNSRequests": 60,
+          "DNSResponses": 60,
+          "utc": "2026-09-28T11:28:41.253062429Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 6928768,
+          "ReceivedBytes": 6912384,
+          "DNSRequests": 63,
+          "DNSResponses": 63,
+          "utc": "2026-09-28T11:28:46.257447323Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 7242240,
+          "ReceivedBytes": 7225728,
+          "DNSRequests": 66,
+          "DNSResponses": 66,
+          "utc": "2026-09-28T11:28:51.25426305Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 7555712,
+          "ReceivedBytes": 7539200,
+          "DNSRequests": 69,
+          "DNSResponses": 69,
+          "utc": "2026-09-28T11:28:56.256887736Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 7869056,
+          "ReceivedBytes": 7852544,
+          "DNSRequests": 72,
+          "DNSResponses": 72,
+          "utc": "2026-09-28T11:29:01.250548724Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 8182400,
+          "ReceivedBytes": 8165888,
+          "DNSRequests": 75,
+          "DNSResponses": 75,
+          "utc": "2026-09-28T11:29:06.258805701Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327790,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 8495744,
+          "ReceivedBytes": 8487552,
+          "DNSRequests": 78,
+          "DNSResponses": 75,
+          "utc": "2026-09-28T11:29:11.254119709Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 8817280,
+          "ReceivedBytes": 8800896,
+          "DNSRequests": 78,
+          "DNSResponses": 78,
+          "utc": "2026-09-28T11:29:16.257667937Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 9130624,
+          "ReceivedBytes": 9106048,
+          "DNSRequests": 81,
+          "DNSResponses": 81,
+          "utc": "2026-09-28T11:29:21.253680904Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 9443968,
+          "ReceivedBytes": 9427584,
+          "DNSRequests": 84,
+          "DNSResponses": 84,
+          "utc": "2026-09-28T11:29:26.255534443Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 9757312,
+          "ReceivedBytes": 9740928,
+          "DNSRequests": 87,
+          "DNSResponses": 87,
+          "utc": "2026-09-28T11:29:31.254435952Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 10070656,
+          "ReceivedBytes": 10054272,
+          "DNSRequests": 90,
+          "DNSResponses": 90,
+          "utc": "2026-09-28T11:29:36.254310221Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 10384000,
+          "ReceivedBytes": 10367616,
+          "DNSRequests": 93,
+          "DNSResponses": 93,
+          "utc": "2026-09-28T11:29:41.253746521Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 10697600,
+          "ReceivedBytes": 10680960,
+          "DNSRequests": 96,
+          "DNSResponses": 96,
+          "utc": "2026-09-28T11:29:46.255284175Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 11019136,
+          "ReceivedBytes": 10994304,
+          "DNSRequests": 99,
+          "DNSResponses": 99,
+          "utc": "2026-09-28T11:29:51.25437808Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 11332480,
+          "ReceivedBytes": 11315968,
+          "DNSRequests": 102,
+          "DNSResponses": 102,
+          "utc": "2026-09-28T11:29:56.254337244Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 11645952,
+          "ReceivedBytes": 11629184,
+          "DNSRequests": 105,
+          "DNSResponses": 105,
+          "utc": "2026-09-28T11:30:01.248365628Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 11959296,
+          "ReceivedBytes": 11942656,
+          "DNSRequests": 108,
+          "DNSResponses": 108,
+          "utc": "2026-09-28T11:30:06.25298573Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 12272640,
+          "ReceivedBytes": 12256128,
+          "DNSRequests": 111,
+          "DNSResponses": 111,
+          "utc": "2026-09-28T11:30:11.259241822Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 12585856,
+          "ReceivedBytes": 12569216,
+          "DNSRequests": 114,
+          "DNSResponses": 114,
+          "utc": "2026-09-28T11:30:16.258170622Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 12907520,
+          "ReceivedBytes": 12882560,
+          "DNSRequests": 117,
+          "DNSResponses": 117,
+          "utc": "2026-09-28T11:30:21.253733016Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 13220608,
+          "ReceivedBytes": 13204096,
+          "DNSRequests": 120,
+          "DNSResponses": 120,
+          "utc": "2026-09-28T11:30:26.248628379Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 13533952,
+          "ReceivedBytes": 13509248,
+          "DNSRequests": 123,
+          "DNSResponses": 123,
+          "utc": "2026-09-28T11:30:31.253269002Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 13847296,
+          "ReceivedBytes": 13830784,
+          "DNSRequests": 126,
+          "DNSResponses": 126,
+          "utc": "2026-09-28T11:30:36.254006656Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 14160768,
+          "ReceivedBytes": 14135936,
+          "DNSRequests": 129,
+          "DNSResponses": 129,
+          "utc": "2026-09-28T11:30:41.258623373Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327790,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 14474112,
+          "ReceivedBytes": 14457472,
+          "DNSRequests": 132,
+          "DNSResponses": 129,
+          "utc": "2026-09-28T11:30:46.254075402Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 14787328,
+          "ReceivedBytes": 14770816,
+          "DNSRequests": 132,
+          "DNSResponses": 132,
+          "utc": "2026-09-28T11:30:51.246863057Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 15108864,
+          "ReceivedBytes": 15084032,
+          "DNSRequests": 135,
+          "DNSResponses": 135,
+          "utc": "2026-09-28T11:30:56.254125971Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 15422336,
+          "ReceivedBytes": 15405568,
+          "DNSRequests": 138,
+          "DNSResponses": 138,
+          "utc": "2026-09-28T11:31:01.255572636Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 15735680,
+          "ReceivedBytes": 15718912,
+          "DNSRequests": 141,
+          "DNSResponses": 141,
+          "utc": "2026-09-28T11:31:06.254139041Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 16048896,
+          "ReceivedBytes": 16032384,
+          "DNSRequests": 144,
+          "DNSResponses": 144,
+          "utc": "2026-09-28T11:31:11.253762997Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 16362240,
+          "ReceivedBytes": 16345600,
+          "DNSRequests": 147,
+          "DNSResponses": 147,
+          "utc": "2026-09-28T11:31:16.253828933Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 16675584,
+          "ReceivedBytes": 16659200,
+          "DNSRequests": 150,
+          "DNSResponses": 150,
+          "utc": "2026-09-28T11:31:21.254252524Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 16988928,
+          "ReceivedBytes": 16980608,
+          "DNSRequests": 153,
+          "DNSResponses": 153,
+          "utc": "2026-09-28T11:31:26.255971116Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 17310464,
+          "ReceivedBytes": 17285888,
+          "DNSRequests": 156,
+          "DNSResponses": 156,
+          "utc": "2026-09-28T11:31:31.254141635Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 17623808,
+          "ReceivedBytes": 17607296,
+          "DNSRequests": 159,
+          "DNSResponses": 159,
+          "utc": "2026-09-28T11:31:36.253723248Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 17937024,
+          "ReceivedBytes": 17920640,
+          "DNSRequests": 162,
+          "DNSResponses": 162,
+          "utc": "2026-09-28T11:31:41.255999079Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 18250368,
+          "ReceivedBytes": 18233984,
+          "DNSRequests": 165,
+          "DNSResponses": 165,
+          "utc": "2026-09-28T11:31:46.254498504Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 18563712,
+          "ReceivedBytes": 18539136,
+          "DNSRequests": 168,
+          "DNSResponses": 168,
+          "utc": "2026-09-28T11:31:51.25044944Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 0,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 401664,
+          "QueueHighWater": 5,
+          "SentBytes": 18868864,
+          "ReceivedBytes": 18860672,
+          "DNSRequests": 171,
+          "DNSResponses": 171,
+          "utc": "2026-09-28T11:31:56.253825688Z"
+        }
+      ]
+    },
+    "B": {
+      "provenance": {
+        "utc": "2026-09-28T11:26:39.62113622Z",
+        "pid": 415501,
+        "parent_pid": 415500,
+        "vcs.revision": "c26c2b741a2ab71ac4df8ac3c831bb66b83134c6",
+        "vcs.modified": "false",
+        "executable_sha256": "b2d19c1f614e5394d377f4a83274543352c3bcd8a16fd6b767453123d334b88d"
+      },
+      "events": {
+        "start": 1,
+        "connected": 1,
+        "resources": 32,
+        "family_auth": 1,
+        "mux_sample": 62,
+        "mux_gateway": 1,
+        "reliability_final": 1,
+        "summary": 1
+      },
+      "final_mux": {
+        "Destination": {
+          "hostname_open_requests": 0,
+          "dns_lookup_success": 0,
+          "dns_lookup_failure": 0,
+          "dns_lookup_timeout": 0,
+          "ipv4_selected": 7,
+          "ipv6_selected": 0,
+          "destination_denied": 1,
+          "connect_failure": 0
+        },
+        "ActiveSockets": 0,
+        "ActiveStreams": 0,
+        "MaxActiveStreams": 7,
+        "Opened": 8,
+        "OpenOK": 7,
+        "OpenErrors": 1,
+        "Resets": 2,
+        "ProtocolErrors": 0,
+        "SentBytes": 18868864,
+        "ReceivedBytes": 18868864,
+        "FlowStalls": 1749,
+        "RetainedBytes": 0,
+        "RetainedHighWater": 475136,
+        "SendHighWater": 16384,
+        "ReceiveHighWater": 8192,
+        "QueueHighWater": 5,
+        "SchedulerFrames": 6387,
+        "SchedulerWaitMaxMS": 1840.458697,
+        "DNSRequests": 171,
+        "DNSResponses": 171,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "peak_mux": {
+        "ActiveSockets": 5,
+        "ActiveStreams": 5,
+        "MaxActiveStreams": 7,
+        "Opened": 8,
+        "OpenOK": 7,
+        "OpenErrors": 1,
+        "Resets": 2,
+        "ProtocolErrors": 0,
+        "SentBytes": 18868864,
+        "ReceivedBytes": 18868864,
+        "FlowStalls": 1749,
+        "RetainedBytes": 344320,
+        "RetainedHighWater": 475136,
+        "SendHighWater": 16384,
+        "ReceiveHighWater": 8192,
+        "QueueHighWater": 5,
+        "SchedulerFrames": 6387,
+        "SchedulerWaitMaxMS": 1840.458697,
+        "DNSRequests": 171,
+        "DNSResponses": 171,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "resources": {
+        "samples": 32,
+        "source": "getrusage(RUSAGE_SELF), all process threads",
+        "logical_cpus": 1,
+        "peaks": {
+          "rss_bytes": 31928320,
+          "heap_bytes": 11590448,
+          "heap_sys_bytes": 19693568,
+          "goroutines": 239,
+          "os_threads": 7,
+          "socket_fds": 78
+        },
+        "cpu": {
+          "first_utc": "2026-09-28T11:26:49.603700211Z",
+          "last_utc": "2026-09-28T11:31:59.603625823Z",
+          "wall_seconds": 309.99992513656616,
+          "process_cpu_seconds": 13.164463000000001,
+          "percent_one_core": 4.246601993274862
+        }
+      },
+      "proofs": [],
+      "dns_results": {},
+      "results": [
+        {
+          "event": "mux_gateway",
+          "utc": "2026-09-28T11:32:03.301057902Z"
+        }
+      ],
+      "reliability_final": {
+        "DataSent": 6628,
+        "DataReceived": 6560,
+        "ACKSent": 13420,
+        "ACKReceived": 13553,
+        "SACKSent": 6709,
+        "SACKReceived": 6830,
+        "Retransmissions": 1,
+        "RetransmittedBytes": 2290,
+        "Duplicates": 2,
+        "Reordered": 150,
+        "Stale": 0,
+        "Timeouts": 1,
+        "Resets": 1,
+        "DeliveredBytes": 19179576,
+        "WithheldBytes": 16109,
+        "Gaps": 0,
+        "RecoveredGaps": 0,
+        "MaxRecoveryMS": 0,
+        "SendHighWater": 8,
+        "ReorderHighWater": 3,
+        "BufferedBytes": 0,
+        "MaxBufferedBytes": 66276,
+        "SendDepth": 0,
+        "ReorderDepth": 0,
+        "EventsDropped": 0,
+        "Terminal": "cancelled"
+      },
+      "transport_sample_peaks": {
+        "receive_queue_messages": 0,
+        "send_queue_capacity": 256,
+        "send_queue_frames": 4
+      },
+      "rtp_gaps_max": 0,
+      "mux_samples": [
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 336000,
+          "RetainedHighWater": 336000,
+          "QueueHighWater": 4,
+          "SentBytes": 8704,
+          "ReceivedBytes": 8704,
+          "DNSRequests": 3,
+          "DNSResponses": 3,
+          "utc": "2026-09-28T11:26:56.745377448Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 344320,
+          "RetainedHighWater": 344448,
+          "QueueHighWater": 4,
+          "SentBytes": 181760,
+          "ReceivedBytes": 247296,
+          "DNSRequests": 3,
+          "DNSResponses": 3,
+          "utc": "2026-09-28T11:27:01.745616593Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 344064,
+          "RetainedHighWater": 344448,
+          "QueueHighWater": 4,
+          "SentBytes": 297472,
+          "ReceivedBytes": 526848,
+          "DNSRequests": 6,
+          "DNSResponses": 6,
+          "utc": "2026-09-28T11:27:06.743891187Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 336128,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 435072,
+          "ReceivedBytes": 814976,
+          "DNSRequests": 9,
+          "DNSResponses": 9,
+          "utc": "2026-09-28T11:27:11.74856386Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 344064,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 608384,
+          "ReceivedBytes": 1151872,
+          "DNSRequests": 12,
+          "DNSResponses": 12,
+          "utc": "2026-09-28T11:27:16.746163996Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 344064,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 839808,
+          "ReceivedBytes": 1497472,
+          "DNSRequests": 15,
+          "DNSResponses": 15,
+          "utc": "2026-09-28T11:27:21.74842715Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 344320,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 1136768,
+          "ReceivedBytes": 1908608,
+          "DNSRequests": 18,
+          "DNSResponses": 18,
+          "utc": "2026-09-28T11:27:26.744536716Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 344064,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 1507456,
+          "ReceivedBytes": 2221184,
+          "DNSRequests": 21,
+          "DNSResponses": 21,
+          "utc": "2026-09-28T11:27:31.744554899Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 343808,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 1968768,
+          "ReceivedBytes": 2526080,
+          "DNSRequests": 24,
+          "DNSResponses": 24,
+          "utc": "2026-09-28T11:27:36.744300878Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 344064,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 2553728,
+          "ReceivedBytes": 2847360,
+          "DNSRequests": 24,
+          "DNSResponses": 24,
+          "utc": "2026-09-28T11:27:41.745435628Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 3160448,
+          "ReceivedBytes": 3160448,
+          "DNSRequests": 27,
+          "DNSResponses": 27,
+          "utc": "2026-09-28T11:27:46.745962531Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 3481984,
+          "ReceivedBytes": 3481984,
+          "DNSRequests": 30,
+          "DNSResponses": 30,
+          "utc": "2026-09-28T11:27:51.74720115Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 3795328,
+          "ReceivedBytes": 3795328,
+          "DNSRequests": 33,
+          "DNSResponses": 33,
+          "utc": "2026-09-28T11:27:56.745192363Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 4108672,
+          "ReceivedBytes": 4108672,
+          "DNSRequests": 36,
+          "DNSResponses": 36,
+          "utc": "2026-09-28T11:28:01.743874227Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 4422016,
+          "ReceivedBytes": 4422016,
+          "DNSRequests": 39,
+          "DNSResponses": 39,
+          "utc": "2026-09-28T11:28:06.744679329Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 4743552,
+          "ReceivedBytes": 4743552,
+          "DNSRequests": 42,
+          "DNSResponses": 42,
+          "utc": "2026-09-28T11:28:11.745635321Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 5057024,
+          "ReceivedBytes": 5057024,
+          "DNSRequests": 45,
+          "DNSResponses": 45,
+          "utc": "2026-09-28T11:28:16.745140833Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 5370240,
+          "ReceivedBytes": 5370240,
+          "DNSRequests": 48,
+          "DNSResponses": 48,
+          "utc": "2026-09-28T11:28:21.744979982Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 5683712,
+          "ReceivedBytes": 5683712,
+          "DNSRequests": 51,
+          "DNSResponses": 51,
+          "utc": "2026-09-28T11:28:26.744366439Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 5997056,
+          "ReceivedBytes": 5997056,
+          "DNSRequests": 54,
+          "DNSResponses": 54,
+          "utc": "2026-09-28T11:28:31.744310414Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 6310528,
+          "ReceivedBytes": 6310528,
+          "DNSRequests": 57,
+          "DNSResponses": 57,
+          "utc": "2026-09-28T11:28:36.745126671Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 6623872,
+          "ReceivedBytes": 6623872,
+          "DNSRequests": 60,
+          "DNSResponses": 60,
+          "utc": "2026-09-28T11:28:41.744881362Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 6945408,
+          "ReceivedBytes": 6945408,
+          "DNSRequests": 63,
+          "DNSResponses": 63,
+          "utc": "2026-09-28T11:28:46.744181179Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 7258752,
+          "ReceivedBytes": 7258752,
+          "DNSRequests": 66,
+          "DNSResponses": 66,
+          "utc": "2026-09-28T11:28:51.743917632Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 7572096,
+          "ReceivedBytes": 7572096,
+          "DNSRequests": 69,
+          "DNSResponses": 69,
+          "utc": "2026-09-28T11:28:56.744432073Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 7885440,
+          "ReceivedBytes": 7885440,
+          "DNSRequests": 72,
+          "DNSResponses": 72,
+          "utc": "2026-09-28T11:29:01.743478116Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 8198784,
+          "ReceivedBytes": 8198784,
+          "DNSRequests": 75,
+          "DNSResponses": 75,
+          "utc": "2026-09-28T11:29:06.746740859Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 8512128,
+          "ReceivedBytes": 8512128,
+          "DNSRequests": 78,
+          "DNSResponses": 78,
+          "utc": "2026-09-28T11:29:11.74374372Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 8825600,
+          "ReceivedBytes": 8825600,
+          "DNSRequests": 81,
+          "DNSResponses": 81,
+          "utc": "2026-09-28T11:29:16.744681643Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 9138944,
+          "ReceivedBytes": 9138944,
+          "DNSRequests": 81,
+          "DNSResponses": 81,
+          "utc": "2026-09-28T11:29:21.748498203Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 9460480,
+          "ReceivedBytes": 9460480,
+          "DNSRequests": 84,
+          "DNSResponses": 84,
+          "utc": "2026-09-28T11:29:26.744936109Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 9773952,
+          "ReceivedBytes": 9773952,
+          "DNSRequests": 87,
+          "DNSResponses": 87,
+          "utc": "2026-09-28T11:29:31.743667571Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 10087424,
+          "ReceivedBytes": 10087424,
+          "DNSRequests": 90,
+          "DNSResponses": 90,
+          "utc": "2026-09-28T11:29:36.744457018Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 10400768,
+          "ReceivedBytes": 10400768,
+          "DNSRequests": 93,
+          "DNSResponses": 93,
+          "utc": "2026-09-28T11:29:41.743620118Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 10714112,
+          "ReceivedBytes": 10714112,
+          "DNSRequests": 96,
+          "DNSResponses": 96,
+          "utc": "2026-09-28T11:29:46.74367283Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 11027456,
+          "ReceivedBytes": 11027456,
+          "DNSRequests": 99,
+          "DNSResponses": 99,
+          "utc": "2026-09-28T11:29:51.744176598Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 11348992,
+          "ReceivedBytes": 11348992,
+          "DNSRequests": 102,
+          "DNSResponses": 102,
+          "utc": "2026-09-28T11:29:56.742871451Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 11662336,
+          "ReceivedBytes": 11662336,
+          "DNSRequests": 105,
+          "DNSResponses": 105,
+          "utc": "2026-09-28T11:30:01.744626129Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 11975808,
+          "ReceivedBytes": 11975808,
+          "DNSRequests": 108,
+          "DNSResponses": 108,
+          "utc": "2026-09-28T11:30:06.743208393Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 12289024,
+          "ReceivedBytes": 12289024,
+          "DNSRequests": 111,
+          "DNSResponses": 111,
+          "utc": "2026-09-28T11:30:11.746169921Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 12602368,
+          "ReceivedBytes": 12602368,
+          "DNSRequests": 114,
+          "DNSResponses": 114,
+          "utc": "2026-09-28T11:30:16.744990798Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 12915712,
+          "ReceivedBytes": 12915712,
+          "DNSRequests": 117,
+          "DNSResponses": 117,
+          "utc": "2026-09-28T11:30:21.743589718Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 13229056,
+          "ReceivedBytes": 13229056,
+          "DNSRequests": 120,
+          "DNSResponses": 120,
+          "utc": "2026-09-28T11:30:26.74394282Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 13542272,
+          "ReceivedBytes": 13542272,
+          "DNSRequests": 123,
+          "DNSResponses": 123,
+          "utc": "2026-09-28T11:30:31.744004734Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 13863808,
+          "ReceivedBytes": 13863808,
+          "DNSRequests": 126,
+          "DNSResponses": 126,
+          "utc": "2026-09-28T11:30:36.743450022Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 14177152,
+          "ReceivedBytes": 14177152,
+          "DNSRequests": 129,
+          "DNSResponses": 129,
+          "utc": "2026-09-28T11:30:41.74433353Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 14490496,
+          "ReceivedBytes": 14490496,
+          "DNSRequests": 132,
+          "DNSResponses": 132,
+          "utc": "2026-09-28T11:30:46.745486441Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 14803840,
+          "ReceivedBytes": 14803840,
+          "DNSRequests": 135,
+          "DNSResponses": 135,
+          "utc": "2026-09-28T11:30:51.745018673Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 15117184,
+          "ReceivedBytes": 15117184,
+          "DNSRequests": 135,
+          "DNSResponses": 135,
+          "utc": "2026-09-28T11:30:56.743303402Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 15430528,
+          "ReceivedBytes": 15430528,
+          "DNSRequests": 138,
+          "DNSResponses": 138,
+          "utc": "2026-09-28T11:31:01.745873444Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 15752064,
+          "ReceivedBytes": 15752064,
+          "DNSRequests": 141,
+          "DNSResponses": 141,
+          "utc": "2026-09-28T11:31:06.74872716Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 16065280,
+          "ReceivedBytes": 16065280,
+          "DNSRequests": 144,
+          "DNSResponses": 144,
+          "utc": "2026-09-28T11:31:11.744076566Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 16378624,
+          "ReceivedBytes": 16378624,
+          "DNSRequests": 147,
+          "DNSResponses": 147,
+          "utc": "2026-09-28T11:31:16.745424682Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 16692096,
+          "ReceivedBytes": 16692096,
+          "DNSRequests": 150,
+          "DNSResponses": 150,
+          "utc": "2026-09-28T11:31:21.74502843Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 17005312,
+          "ReceivedBytes": 17005312,
+          "DNSRequests": 153,
+          "DNSResponses": 153,
+          "utc": "2026-09-28T11:31:26.74543389Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 17318656,
+          "ReceivedBytes": 17318656,
+          "DNSRequests": 156,
+          "DNSResponses": 156,
+          "utc": "2026-09-28T11:31:31.746290189Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 17632000,
+          "ReceivedBytes": 17632000,
+          "DNSRequests": 159,
+          "DNSResponses": 159,
+          "utc": "2026-09-28T11:31:36.745162465Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 17945344,
+          "ReceivedBytes": 17945344,
+          "DNSRequests": 162,
+          "DNSResponses": 162,
+          "utc": "2026-09-28T11:31:41.744968705Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 18266880,
+          "ReceivedBytes": 18266880,
+          "DNSRequests": 165,
+          "DNSResponses": 165,
+          "utc": "2026-09-28T11:31:46.744147991Z"
+        },
+        {
+          "ActiveStreams": 5,
+          "ActiveSockets": 5,
+          "RetainedBytes": 327680,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 18580224,
+          "ReceivedBytes": 18580224,
+          "DNSRequests": 168,
+          "DNSResponses": 168,
+          "utc": "2026-09-28T11:31:51.744415742Z"
+        },
+        {
+          "ActiveStreams": 4,
+          "ActiveSockets": 4,
+          "RetainedBytes": 262144,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 18868864,
+          "ReceivedBytes": 18868864,
+          "DNSRequests": 171,
+          "DNSResponses": 171,
+          "utc": "2026-09-28T11:31:56.747642199Z"
+        },
+        {
+          "ActiveStreams": 0,
+          "ActiveSockets": 0,
+          "RetainedBytes": 0,
+          "RetainedHighWater": 475136,
+          "QueueHighWater": 5,
+          "SentBytes": 18868864,
+          "ReceivedBytes": 18868864,
+          "DNSRequests": 171,
+          "DNSResponses": 171,
+          "utc": "2026-09-28T11:32:01.74796484Z"
+        }
+      ]
+    }
+  },
+  "pre_shutdown_correction_public": {
+    "attempt": "public-3",
+    "A": {
+      "provenance": {
+        "utc": "2026-09-28T10:45:47.779382786Z",
+        "pid": 20176,
+        "parent_pid": 20123,
+        "vcs.revision": "4687c3d0370e9e123f123109a72cbe54a0d3e409",
+        "vcs.modified": "false",
+        "executable_sha256": "dbb9374cba5f8b90f00cafb599eeacb07e2690c72602bb8ccd01405943ef3ab4"
+      },
+      "events": {
+        "android_start": 1,
+        "android_resources": 2,
+        "start": 1,
+        "connected": 1,
+        "family_auth": 1,
+        "mux_dns_guard": 2,
+        "resources": 1,
+        "mux_sample": 1,
+        "mux_open": 1,
+        "mux_https": 4,
+        "mux_dns": 3,
+        "mux_result": 1,
+        "reliability_final": 1,
+        "summary": 1,
+        "android_exit": 1
+      },
+      "final_mux": {
+        "Destination": {
+          "hostname_open_requests": 0,
+          "dns_lookup_success": 0,
+          "dns_lookup_failure": 0,
+          "dns_lookup_timeout": 0,
+          "ipv4_selected": 0,
+          "ipv6_selected": 0,
+          "destination_denied": 0,
+          "connect_failure": 0
+        },
+        "ActiveSockets": 0,
+        "ActiveStreams": 0,
+        "MaxActiveStreams": 4,
+        "Opened": 4,
+        "OpenOK": 4,
+        "OpenErrors": 0,
+        "Resets": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 6842,
+        "ReceivedBytes": 26737,
+        "FlowStalls": 12,
+        "RetainedBytes": 0,
+        "RetainedHighWater": 263668,
+        "SendHighWater": 1524,
+        "ReceiveHighWater": 5587,
+        "QueueHighWater": 2,
+        "SchedulerFrames": 40,
+        "SchedulerWaitMaxMS": 662.861302,
+        "DNSRequests": 3,
+        "DNSResponses": 3,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "peak_mux": {
+        "ActiveSockets": 0,
+        "ActiveStreams": 4,
+        "MaxActiveStreams": 4,
+        "Opened": 4,
+        "OpenOK": 4,
+        "OpenErrors": 0,
+        "Resets": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 6842,
+        "ReceivedBytes": 26737,
+        "FlowStalls": 12,
+        "RetainedBytes": 262144,
+        "RetainedHighWater": 263668,
+        "SendHighWater": 1524,
+        "ReceiveHighWater": 5587,
+        "QueueHighWater": 2,
+        "SchedulerFrames": 40,
+        "SchedulerWaitMaxMS": 662.861302,
+        "DNSRequests": 3,
+        "DNSResponses": 3,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "resources": {
+        "samples": 1,
+        "source": "getrusage(RUSAGE_SELF), all process threads",
+        "logical_cpus": 8,
+        "peaks": {
+          "rss_bytes": 12423168,
+          "heap_bytes": 4268824,
+          "heap_sys_bytes": 15204352,
+          "goroutines": 179,
+          "os_threads": 16,
+          "socket_fds": 50
+        }
+      },
+      "app_resources": {
+        "pss_peak_kib": 73124,
+        "java_used_peak_bytes": 4724400,
+        "networks": [
+          "cellular"
+        ],
+        "cpu": {
+          "first_utc_ms": 1790592347632,
+          "last_utc_ms": 1790592357665,
+          "wall_ms": 10034,
+          "app_cpu_ms": 1510,
+          "percent_one_core": 15.04883396452063
+        }
+      },
+      "dns_latency": {
+        "count": 3,
+        "avg_ms": 609.4280556666666,
+        "p50_ms": 281.019219,
+        "p95_ms": 281.019219,
+        "p99_ms": 281.019219,
+        "max_ms": 1381.180365
+      },
+      "proofs": [
+        {
+          "event": "mux_dns_guard",
+          "negative_probe_blocked": true,
+          "phase": "enabled",
+          "post_probe_calls": 0,
+          "utc": "2026-09-28T10:45:55.696868043Z"
+        },
+        {
+          "event": "mux_open",
+          "simultaneous": 4,
+          "stats": {
+            "Destination": {
+              "hostname_open_requests": 0,
+              "dns_lookup_success": 0,
+              "dns_lookup_failure": 0,
+              "dns_lookup_timeout": 0,
+              "ipv4_selected": 0,
+              "ipv6_selected": 0,
+              "destination_denied": 0,
+              "connect_failure": 0
+            },
+            "ActiveSockets": 0,
+            "ActiveStreams": 4,
+            "MaxActiveStreams": 4,
+            "Opened": 4,
+            "OpenOK": 4,
+            "OpenErrors": 0,
+            "Resets": 0,
+            "ProtocolErrors": 0,
+            "SentBytes": 0,
+            "ReceivedBytes": 0,
+            "FlowStalls": 0,
+            "RetainedBytes": 262144,
+            "RetainedHighWater": 262186,
+            "SendHighWater": 0,
+            "ReceiveHighWater": 0,
+            "QueueHighWater": 1,
+            "SchedulerFrames": 4,
+            "SchedulerWaitMaxMS": 0,
+            "DNSRequests": 0,
+            "DNSResponses": 0,
+            "DNSErrors": 0,
+            "DNSTimeouts": 0
+          },
+          "utc": "2026-09-28T10:46:01.71543627Z"
+        },
+        {
+          "download_bytes": 2048,
+          "download_sha256": "e2943f8d0b0e7d5835f9533722a6e25f669acb8980daee378b4edb44da212f51",
+          "end_site_tls_verified": true,
+          "end_site_tls_version": 772,
+          "event": "mux_https",
+          "host": "speed.cloudflare.com",
+          "http_status": 200,
+          "passed": true,
+          "stream": {
+            "ID": 7,
+            "State": "closed",
+            "Sent": 1728,
+            "Received": 7369,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 1524,
+            "ReceiveHighWater": 3912
+          },
+          "stream_id": 7,
+          "utc": "2026-09-28T10:46:02.923879447Z"
+        },
+        {
+          "download_bytes": 559,
+          "download_sha256": "ff67a9d764d6a2367a187734e697f6a53217db9a21c101d410a113ca871a299d",
+          "end_site_tls_verified": true,
+          "end_site_tls_version": 772,
+          "event": "mux_https",
+          "host": "example.com",
+          "http_status": 200,
+          "passed": true,
+          "stream": {
+            "ID": 1,
+            "State": "closed",
+            "Sent": 1693,
+            "Received": 6523,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 1515,
+            "ReceiveHighWater": 5587
+          },
+          "stream_id": 1,
+          "utc": "2026-09-28T10:46:02.942233249Z"
+        },
+        {
+          "download_bytes": 559,
+          "download_sha256": "ff67a9d764d6a2367a187734e697f6a53217db9a21c101d410a113ca871a299d",
+          "end_site_tls_verified": true,
+          "end_site_tls_version": 772,
+          "event": "mux_https",
+          "host": "example.com",
+          "http_status": 200,
+          "passed": true,
+          "stream": {
+            "ID": 5,
+            "State": "closed",
+            "Sent": 1693,
+            "Received": 6523,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 1515,
+            "ReceiveHighWater": 5587
+          },
+          "stream_id": 5,
+          "utc": "2026-09-28T10:46:03.021456478Z"
+        },
+        {
+          "download_bytes": 1024,
+          "download_sha256": "35ae5091b37e8f0f306833ef57a635f9dc06738d7f4e563a610eec2adb26fe28",
+          "end_site_tls_verified": true,
+          "end_site_tls_version": 772,
+          "event": "mux_https",
+          "host": "speed.cloudflare.com",
+          "http_status": 200,
+          "passed": true,
+          "stream": {
+            "ID": 3,
+            "State": "closed",
+            "Sent": 1728,
+            "Received": 6322,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 1524,
+            "ReceiveHighWater": 3911
+          },
+          "stream_id": 3,
+          "utc": "2026-09-28T10:46:03.711931634Z"
+        },
+        {
+          "event": "mux_dns_guard",
+          "phase": "final",
+          "post_probe_calls": 0,
+          "utc": "2026-09-28T10:46:05.128485644Z"
+        }
+      ],
+      "dns_results": {
+        "type=1;nxdomain=True;rcode=3;passed=True": 1,
+        "type=1;nxdomain=False;rcode=0;passed=True": 1,
+        "type=28;nxdomain=False;rcode=0;passed=True": 1
+      },
+      "results": [
+        {
+          "event": "mux_result",
+          "mode": "public",
+          "seconds": 9.397476298,
+          "status": "PASS",
+          "utc": "2026-09-28T10:46:05.115061529Z"
+        }
+      ],
+      "reliability_final": {
+        "DataSent": 42,
+        "DataReceived": 38,
+        "ACKSent": 89,
+        "ACKReceived": 102,
+        "SACKSent": 38,
+        "SACKReceived": 44,
+        "Retransmissions": 2,
+        "RetransmittedBytes": 163,
+        "Duplicates": 0,
+        "Reordered": 0,
+        "Stale": 0,
+        "Timeouts": 2,
+        "Resets": 1,
+        "DeliveredBytes": 30913,
+        "WithheldBytes": 0,
+        "Gaps": 0,
+        "RecoveredGaps": 0,
+        "MaxRecoveryMS": 0,
+        "SendHighWater": 8,
+        "ReorderHighWater": 1,
+        "BufferedBytes": 0,
+        "MaxBufferedBytes": 9146,
+        "SendDepth": 0,
+        "ReorderDepth": 0,
+        "EventsDropped": 0,
+        "Terminal": "cancelled"
+      },
+      "transport_sample_peaks": {
+        "receive_queue_messages": 0,
+        "send_queue_capacity": 256,
+        "send_queue_frames": 1
+      },
+      "rtp_gaps_max": 0
+    },
+    "B": {
+      "provenance": {
+        "utc": "2026-09-28T10:45:43.076440255Z",
+        "pid": 383962,
+        "parent_pid": 383961,
+        "vcs.revision": "4687c3d0370e9e123f123109a72cbe54a0d3e409",
+        "vcs.modified": "false",
+        "executable_sha256": "79113ec0c0968f4f8a65476a1c772e7b02684e30b84d2767d94c759ee5beba06"
+      },
+      "events": {
+        "start": 1,
+        "connected": 1,
+        "resources": 2,
+        "family_auth": 1,
+        "mux_sample": 2,
+        "mux_gateway": 1,
+        "reliability_final": 1,
+        "summary": 1
+      },
+      "final_mux": {
+        "Destination": {
+          "hostname_open_requests": 4,
+          "dns_lookup_success": 4,
+          "dns_lookup_failure": 0,
+          "dns_lookup_timeout": 0,
+          "ipv4_selected": 4,
+          "ipv6_selected": 0,
+          "destination_denied": 0,
+          "connect_failure": 0
+        },
+        "ActiveSockets": 0,
+        "ActiveStreams": 0,
+        "MaxActiveStreams": 4,
+        "Opened": 4,
+        "OpenOK": 4,
+        "OpenErrors": 0,
+        "Resets": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 26737,
+        "ReceivedBytes": 6842,
+        "FlowStalls": 1,
+        "RetainedBytes": 0,
+        "RetainedHighWater": 267731,
+        "SendHighWater": 5587,
+        "ReceiveHighWater": 1524,
+        "QueueHighWater": 4,
+        "SchedulerFrames": 37,
+        "SchedulerWaitMaxMS": 525.523836,
+        "DNSRequests": 3,
+        "DNSResponses": 3,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "peak_mux": {
+        "ActiveSockets": 4,
+        "ActiveStreams": 4,
+        "MaxActiveStreams": 4,
+        "Opened": 4,
+        "OpenOK": 4,
+        "OpenErrors": 0,
+        "Resets": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 26737,
+        "ReceivedBytes": 6842,
+        "FlowStalls": 1,
+        "RetainedBytes": 262144,
+        "RetainedHighWater": 267731,
+        "SendHighWater": 5587,
+        "ReceiveHighWater": 1524,
+        "QueueHighWater": 4,
+        "SchedulerFrames": 37,
+        "SchedulerWaitMaxMS": 525.523836,
+        "DNSRequests": 3,
+        "DNSResponses": 3,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "resources": {
+        "samples": 2,
+        "source": "getrusage(RUSAGE_SELF), all process threads",
+        "logical_cpus": 1,
+        "peaks": {
+          "rss_bytes": 24670208,
+          "heap_bytes": 4773368,
+          "heap_sys_bytes": 11370496,
+          "goroutines": 229,
+          "os_threads": 7,
+          "socket_fds": 73
+        },
+        "cpu": {
+          "first_utc": "2026-09-28T10:45:53.053539487Z",
+          "last_utc": "2026-09-28T10:46:03.052079749Z",
+          "wall_seconds": 9.998539924621582,
+          "process_cpu_seconds": 0.33534900000000006,
+          "percent_one_core": 3.3539797063188916
+        }
+      },
+      "proofs": [],
+      "dns_results": {},
+      "results": [
+        {
+          "event": "mux_gateway",
+          "utc": "2026-09-28T10:46:08.238412611Z"
+        }
+      ],
+      "reliability_final": {
+        "DataSent": 38,
+        "DataReceived": 44,
+        "ACKSent": 104,
+        "ACKReceived": 89,
+        "SACKSent": 44,
+        "SACKReceived": 38,
+        "Retransmissions": 1,
+        "RetransmittedBytes": 133,
+        "Duplicates": 2,
+        "Reordered": 2,
+        "Stale": 0,
+        "Timeouts": 1,
+        "Resets": 1,
+        "DeliveredBytes": 11317,
+        "WithheldBytes": 96,
+        "Gaps": 0,
+        "RecoveredGaps": 0,
+        "MaxRecoveryMS": 0,
+        "SendHighWater": 8,
+        "ReorderHighWater": 2,
+        "BufferedBytes": 0,
+        "MaxBufferedBytes": 19365,
+        "SendDepth": 0,
+        "ReorderDepth": 0,
+        "EventsDropped": 0,
+        "Terminal": "cancelled"
+      },
+      "transport_sample_peaks": {
+        "receive_queue_messages": 0,
+        "send_queue_capacity": 256,
+        "send_queue_frames": 0
+      },
+      "rtp_gaps_max": 0
+    }
+  },
+  "pre_shutdown_correction_mixed": {
+    "attempt": "mixed-1",
+    "A": {
+      "provenance": {
+        "utc": "2026-09-28T10:46:30.742270895Z",
+        "pid": 21078,
+        "parent_pid": 21047,
+        "vcs.revision": "4687c3d0370e9e123f123109a72cbe54a0d3e409",
+        "vcs.modified": "false",
+        "executable_sha256": "dbb9374cba5f8b90f00cafb599eeacb07e2690c72602bb8ccd01405943ef3ab4"
+      },
+      "events": {
+        "android_start": 1,
+        "android_resources": 32,
+        "start": 1,
+        "connected": 1,
+        "family_auth": 1,
+        "mux_dns_guard": 2,
+        "resources": 31,
+        "mux_open": 1,
+        "mux_dns": 171,
+        "mux_sample": 61,
+        "mux_isolation": 3,
+        "mux_bulk": 1,
+        "mux_stream": 4,
+        "mux_interactive": 1,
+        "mux_result": 1,
+        "reliability_final": 1,
+        "summary": 1,
+        "android_exit": 1
+      },
+      "final_mux": {
+        "Destination": {
+          "hostname_open_requests": 0,
+          "dns_lookup_success": 0,
+          "dns_lookup_failure": 0,
+          "dns_lookup_timeout": 0,
+          "ipv4_selected": 0,
+          "ipv6_selected": 0,
+          "destination_denied": 0,
+          "connect_failure": 0
+        },
+        "ActiveSockets": 0,
+        "ActiveStreams": 0,
+        "MaxActiveStreams": 7,
+        "Opened": 8,
+        "OpenOK": 7,
+        "OpenErrors": 1,
+        "Resets": 2,
+        "ProtocolErrors": 0,
+        "SentBytes": 18867712,
+        "ReceivedBytes": 18867712,
+        "FlowStalls": 1093,
+        "RetainedBytes": 0,
+        "RetainedHighWater": 401826,
+        "SendHighWater": 8192,
+        "ReceiveHighWater": 16384,
+        "QueueHighWater": 6,
+        "SchedulerFrames": 6523,
+        "SchedulerWaitMaxMS": 1573.265156,
+        "DNSRequests": 171,
+        "DNSResponses": 171,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "peak_mux": {
+        "ActiveSockets": 0,
+        "ActiveStreams": 6,
+        "MaxActiveStreams": 7,
+        "Opened": 8,
+        "OpenOK": 7,
+        "OpenErrors": 1,
+        "Resets": 2,
+        "ProtocolErrors": 0,
+        "SentBytes": 18867712,
+        "ReceivedBytes": 18867712,
+        "FlowStalls": 1093,
+        "RetainedBytes": 401536,
+        "RetainedHighWater": 401826,
+        "SendHighWater": 8192,
+        "ReceiveHighWater": 16384,
+        "QueueHighWater": 6,
+        "SchedulerFrames": 6523,
+        "SchedulerWaitMaxMS": 1573.265156,
+        "DNSRequests": 171,
+        "DNSResponses": 171,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "resources": {
+        "samples": 31,
+        "source": "getrusage(RUSAGE_SELF), all process threads",
+        "logical_cpus": 8,
+        "peaks": {
+          "rss_bytes": 14880768,
+          "heap_bytes": 11235688,
+          "heap_sys_bytes": 19431424,
+          "goroutines": 186,
+          "os_threads": 15,
+          "socket_fds": 49
+        },
+        "cpu": {
+          "first_utc": "2026-09-28T10:46:40.709014693Z",
+          "last_utc": "2026-09-28T10:51:40.708534266Z",
+          "wall_seconds": 299.99952006340027,
+          "process_cpu_seconds": 54.276221,
+          "percent_one_core": 18.092102610207363
+        }
+      },
+      "app_resources": {
+        "pss_peak_kib": 184442,
+        "java_used_peak_bytes": 5186240,
+        "networks": [
+          "cellular"
+        ],
+        "cpu": {
+          "first_utc_ms": 1790592390719,
+          "last_utc_ms": 1790592701920,
+          "wall_ms": 311200,
+          "app_cpu_ms": 34199,
+          "percent_one_core": 10.98939588688946
+        }
+      },
+      "dns_latency": {
+        "count": 171,
+        "avg_ms": 322.73474525146196,
+        "p50_ms": 229.391354,
+        "p95_ms": 962.929792,
+        "p99_ms": 1421.303749,
+        "max_ms": 1438.499218
+      },
+      "proofs": [
+        {
+          "event": "mux_dns_guard",
+          "negative_probe_blocked": true,
+          "phase": "enabled",
+          "post_probe_calls": 0,
+          "utc": "2026-09-28T10:46:38.297023287Z"
+        },
+        {
+          "event": "mux_open",
+          "simultaneous": 5,
+          "stats": {
+            "Destination": {
+              "hostname_open_requests": 0,
+              "dns_lookup_success": 0,
+              "dns_lookup_failure": 0,
+              "dns_lookup_timeout": 0,
+              "ipv4_selected": 0,
+              "ipv6_selected": 0,
+              "destination_denied": 0,
+              "connect_failure": 0
+            },
+            "ActiveSockets": 0,
+            "ActiveStreams": 5,
+            "MaxActiveStreams": 5,
+            "Opened": 5,
+            "OpenOK": 5,
+            "OpenErrors": 0,
+            "Resets": 0,
+            "ProtocolErrors": 0,
+            "SentBytes": 0,
+            "ReceivedBytes": 0,
+            "FlowStalls": 0,
+            "RetainedBytes": 327680,
+            "RetainedHighWater": 327713,
+            "SendHighWater": 0,
+            "ReceiveHighWater": 0,
+            "QueueHighWater": 1,
+            "SchedulerFrames": 5,
+            "SchedulerWaitMaxMS": 0,
+            "DNSRequests": 0,
+            "DNSResponses": 0,
+            "DNSErrors": 0,
+            "DNSTimeouts": 0
+          },
+          "utc": "2026-09-28T10:46:43.0042624Z"
+        },
+        {
+          "event": "mux_isolation",
+          "mode": "reset",
+          "passed": true,
+          "stream": {
+            "ID": 11,
+            "State": "reset",
+            "Sent": 128,
+            "Received": 128,
+            "LocalFIN": 0,
+            "RemoteFIN": 0,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 128,
+            "ReceiveHighWater": 128
+          },
+          "utc": "2026-09-28T10:46:55.520584843Z"
+        },
+        {
+          "event": "mux_isolation",
+          "mode": "cancel",
+          "passed": true,
+          "stream": {
+            "ID": 13,
+            "State": "reset",
+            "Sent": 128,
+            "Received": 128,
+            "LocalFIN": 0,
+            "RemoteFIN": 0,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 128,
+            "ReceiveHighWater": 128
+          },
+          "utc": "2026-09-28T10:46:57.324389582Z"
+        },
+        {
+          "event": "mux_isolation",
+          "mode": "policy_error",
+          "passed": true,
+          "utc": "2026-09-28T10:46:58.187127499Z"
+        },
+        {
+          "aggregate_mbit": 0.9973503198776593,
+          "bytes_each_direction": 18751488,
+          "event": "mux_bulk",
+          "passed": true,
+          "seconds": 300.820887125,
+          "sha256": "13c095ef5dd8824cce89d9c8e8682d1d8447ee206b9e4ce1c36098fa026afa33",
+          "stream": {
+            "ID": 1,
+            "State": "closed",
+            "Sent": 18751488,
+            "Received": 18751488,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 8192,
+            "ReceiveHighWater": 16384
+          },
+          "utc": "2026-09-28T10:51:43.8274464Z"
+        },
+        {
+          "event": "mux_stream",
+          "passed": true,
+          "stream": {
+            "ID": 7,
+            "State": "closed",
+            "Sent": 28928,
+            "Received": 28928,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 128,
+            "ReceiveHighWater": 128
+          },
+          "utc": "2026-09-28T10:51:44.213860619Z"
+        },
+        {
+          "event": "mux_stream",
+          "passed": true,
+          "stream": {
+            "ID": 3,
+            "State": "closed",
+            "Sent": 29184,
+            "Received": 29184,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 128,
+            "ReceiveHighWater": 128
+          },
+          "utc": "2026-09-28T10:51:44.244142494Z"
+        },
+        {
+          "event": "mux_stream",
+          "passed": true,
+          "stream": {
+            "ID": 5,
+            "State": "closed",
+            "Sent": 28928,
+            "Received": 28928,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 128,
+            "ReceiveHighWater": 128
+          },
+          "utc": "2026-09-28T10:51:44.790914264Z"
+        },
+        {
+          "event": "mux_stream",
+          "passed": true,
+          "stream": {
+            "ID": 9,
+            "State": "closed",
+            "Sent": 28928,
+            "Received": 28928,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 128,
+            "ReceiveHighWater": 128
+          },
+          "utc": "2026-09-28T10:51:45.002008014Z"
+        },
+        {
+          "event": "mux_interactive",
+          "latency": {
+            "avg_ms": 327.4865859304635,
+            "count": 906,
+            "max_ms": 2227.349322,
+            "p50_ms": 236.167604,
+            "p95_ms": 1096.936875,
+            "p99_ms": 1421.682448
+          },
+          "passed": true,
+          "seconds": 305.183818582,
+          "utc": "2026-09-28T10:51:48.189754471Z"
+        },
+        {
+          "event": "mux_dns_guard",
+          "phase": "final",
+          "post_probe_calls": 0,
+          "utc": "2026-09-28T10:51:48.22116994Z"
+        }
+      ],
+      "dns_results": {
+        "type=1;nxdomain=True;rcode=3;passed=True": 57,
+        "type=1;nxdomain=False;rcode=0;passed=True": 57,
+        "type=28;nxdomain=False;rcode=0;passed=True": 57
+      },
+      "results": [
+        {
+          "event": "mux_result",
+          "mode": "mixed",
+          "seconds": 309.89215983,
+          "status": "PASS",
+          "utc": "2026-09-28T10:51:48.206609523Z"
+        }
+      ],
+      "reliability_final": {
+        "DataSent": 6525,
+        "DataReceived": 6615,
+        "ACKSent": 13528,
+        "ACKReceived": 13349,
+        "SACKSent": 6892,
+        "SACKReceived": 6707,
+        "Retransmissions": 1,
+        "RetransmittedBytes": 48,
+        "Duplicates": 0,
+        "Reordered": 274,
+        "Stale": 0,
+        "Timeouts": 1,
+        "Resets": 1,
+        "DeliveredBytes": 19176456,
+        "WithheldBytes": 61039,
+        "Gaps": 1,
+        "RecoveredGaps": 1,
+        "MaxRecoveryMS": 1278.085624,
+        "SendHighWater": 8,
+        "ReorderHighWater": 8,
+        "BufferedBytes": 0,
+        "MaxBufferedBytes": 65848,
+        "SendDepth": 0,
+        "ReorderDepth": 0,
+        "EventsDropped": 0,
+        "Terminal": "cancelled"
+      },
+      "transport_sample_peaks": {
+        "receive_queue_messages": 0,
+        "send_queue_capacity": 256,
+        "send_queue_frames": 5
+      },
+      "rtp_gaps_max": 1
+    },
+    "B": {
+      "provenance": {
+        "utc": "2026-09-28T10:46:26.483566644Z",
+        "pid": 384842,
+        "parent_pid": 384841,
+        "vcs.revision": "4687c3d0370e9e123f123109a72cbe54a0d3e409",
+        "vcs.modified": "false",
+        "executable_sha256": "79113ec0c0968f4f8a65476a1c772e7b02684e30b84d2767d94c759ee5beba06"
+      },
+      "events": {
+        "start": 1,
+        "connected": 1,
+        "resources": 32,
+        "family_auth": 1,
+        "mux_sample": 62,
+        "mux_gateway": 1,
+        "reliability_final": 1,
+        "summary": 1
+      },
+      "final_mux": {
+        "Destination": {
+          "hostname_open_requests": 0,
+          "dns_lookup_success": 0,
+          "dns_lookup_failure": 0,
+          "dns_lookup_timeout": 0,
+          "ipv4_selected": 7,
+          "ipv6_selected": 0,
+          "destination_denied": 1,
+          "connect_failure": 0
+        },
+        "ActiveSockets": 0,
+        "ActiveStreams": 0,
+        "MaxActiveStreams": 7,
+        "Opened": 8,
+        "OpenOK": 7,
+        "OpenErrors": 1,
+        "Resets": 2,
+        "ProtocolErrors": 0,
+        "SentBytes": 18867712,
+        "ReceivedBytes": 18867712,
+        "FlowStalls": 1911,
+        "RetainedBytes": 0,
+        "RetainedHighWater": 475136,
+        "SendHighWater": 16384,
+        "ReceiveHighWater": 8192,
+        "QueueHighWater": 5,
+        "SchedulerFrames": 6344,
+        "SchedulerWaitMaxMS": 1752.753339,
+        "DNSRequests": 171,
+        "DNSResponses": 171,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "peak_mux": {
+        "ActiveSockets": 6,
+        "ActiveStreams": 6,
+        "MaxActiveStreams": 7,
+        "Opened": 8,
+        "OpenOK": 7,
+        "OpenErrors": 1,
+        "Resets": 2,
+        "ProtocolErrors": 0,
+        "SentBytes": 18867712,
+        "ReceivedBytes": 18867712,
+        "FlowStalls": 1911,
+        "RetainedBytes": 401408,
+        "RetainedHighWater": 475136,
+        "SendHighWater": 16384,
+        "ReceiveHighWater": 8192,
+        "QueueHighWater": 5,
+        "SchedulerFrames": 6344,
+        "SchedulerWaitMaxMS": 1752.753339,
+        "DNSRequests": 171,
+        "DNSResponses": 171,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "resources": {
+        "samples": 32,
+        "source": "getrusage(RUSAGE_SELF), all process threads",
+        "logical_cpus": 1,
+        "peaks": {
+          "rss_bytes": 32063488,
+          "heap_bytes": 12241672,
+          "heap_sys_bytes": 19726336,
+          "goroutines": 239,
+          "os_threads": 7,
+          "socket_fds": 78
+        },
+        "cpu": {
+          "first_utc": "2026-09-28T10:46:36.465014912Z",
+          "last_utc": "2026-09-28T10:51:46.463466023Z",
+          "wall_seconds": 309.9984519481659,
+          "process_cpu_seconds": 13.524053,
+          "percent_one_core": 4.3626195276166495
+        }
+      },
+      "proofs": [],
+      "dns_results": {},
+      "results": [
+        {
+          "event": "mux_gateway",
+          "utc": "2026-09-28T10:51:50.096232957Z"
+        }
+      ],
+      "reliability_final": {
+        "DataSent": 6615,
+        "DataReceived": 6526,
+        "ACKSent": 13352,
+        "ACKReceived": 13528,
+        "SACKSent": 6707,
+        "SACKReceived": 6892,
+        "Retransmissions": 1,
+        "RetransmittedBytes": 8236,
+        "Duplicates": 1,
+        "Reordered": 182,
+        "Stale": 0,
+        "Timeouts": 1,
+        "Resets": 1,
+        "DeliveredBytes": 19176876,
+        "WithheldBytes": 20495,
+        "Gaps": 0,
+        "RecoveredGaps": 0,
+        "MaxRecoveryMS": 0,
+        "SendHighWater": 8,
+        "ReorderHighWater": 4,
+        "BufferedBytes": 0,
+        "MaxBufferedBytes": 57762,
+        "SendDepth": 0,
+        "ReorderDepth": 0,
+        "EventsDropped": 0,
+        "Terminal": "cancelled"
+      },
+      "transport_sample_peaks": {
+        "receive_queue_messages": 0,
+        "send_queue_capacity": 256,
+        "send_queue_frames": 4
+      },
+      "rtp_gaps_max": 0
+    }
+  },
+  "failed_public_nxdomain_fixture": {
+    "attempt": "public-1",
+    "A": {
+      "provenance": {
+        "utc": "2026-09-28T10:32:35.379490797Z",
+        "pid": 16168,
+        "parent_pid": 16089,
+        "vcs.revision": "03582fb84ad802c56b38cd19693e79b301c406fa",
+        "vcs.modified": "false"
+      },
+      "events": {
+        "android_start": 1,
+        "android_resources": 2,
+        "start": 1,
+        "connected": 1,
+        "family_auth": 1,
+        "mux_dns_guard": 2,
+        "resources": 1,
+        "mux_sample": 1,
+        "mux_open": 1,
+        "mux_https": 4,
+        "mux_dns": 3,
+        "mux_result": 1,
+        "reliability_final": 1,
+        "summary": 1,
+        "android_exit": 1
+      },
+      "final_mux": {
+        "Destination": {
+          "hostname_open_requests": 0,
+          "dns_lookup_success": 0,
+          "dns_lookup_failure": 0,
+          "dns_lookup_timeout": 0,
+          "ipv4_selected": 0,
+          "ipv6_selected": 0,
+          "destination_denied": 0,
+          "connect_failure": 0
+        },
+        "ActiveSockets": 0,
+        "ActiveStreams": 0,
+        "MaxActiveStreams": 4,
+        "Opened": 4,
+        "OpenOK": 4,
+        "OpenErrors": 0,
+        "Resets": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 6842,
+        "ReceivedBytes": 26746,
+        "FlowStalls": 15,
+        "RetainedBytes": 0,
+        "RetainedHighWater": 265192,
+        "SendHighWater": 1524,
+        "ReceiveHighWater": 5587,
+        "QueueHighWater": 3,
+        "SchedulerFrames": 39,
+        "SchedulerWaitMaxMS": 543.689791,
+        "DNSRequests": 3,
+        "DNSResponses": 3,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "peak_mux": {
+        "ActiveSockets": 0,
+        "ActiveStreams": 4,
+        "MaxActiveStreams": 4,
+        "Opened": 4,
+        "OpenOK": 4,
+        "OpenErrors": 0,
+        "Resets": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 6842,
+        "ReceivedBytes": 26746,
+        "FlowStalls": 15,
+        "RetainedBytes": 262144,
+        "RetainedHighWater": 265192,
+        "SendHighWater": 1524,
+        "ReceiveHighWater": 5587,
+        "QueueHighWater": 3,
+        "SchedulerFrames": 39,
+        "SchedulerWaitMaxMS": 543.689791,
+        "DNSRequests": 3,
+        "DNSResponses": 3,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "resources": {
+        "samples": 1,
+        "source": "getrusage(RUSAGE_SELF), all process threads",
+        "logical_cpus": 8,
+        "peaks": {
+          "rss_bytes": 12120064,
+          "heap_bytes": 4618352,
+          "heap_sys_bytes": 11075584,
+          "goroutines": 176,
+          "os_threads": 15,
+          "socket_fds": 47
+        }
+      },
+      "app_resources": {
+        "pss_peak_kib": 79250,
+        "java_used_peak_bytes": 4735128,
+        "networks": [
+          "cellular"
+        ],
+        "cpu": {
+          "first_utc_ms": 1790591555301,
+          "last_utc_ms": 1790591565333,
+          "wall_ms": 10031,
+          "app_cpu_ms": 1285,
+          "percent_one_core": 12.810288106868708
+        }
+      },
+      "dns_latency": {
+        "count": 3,
+        "avg_ms": 328.42404500000004,
+        "p50_ms": 282.908594,
+        "p95_ms": 282.908594,
+        "p99_ms": 282.908594,
+        "max_ms": 546.080677
+      },
+      "proofs": [
+        {
+          "event": "mux_dns_guard",
+          "negative_probe_blocked": true,
+          "phase": "enabled",
+          "post_probe_calls": 0,
+          "utc": "2026-09-28T10:32:42.940132929Z"
+        },
+        {
+          "event": "mux_open",
+          "simultaneous": 4,
+          "stats": {
+            "Destination": {
+              "hostname_open_requests": 0,
+              "dns_lookup_success": 0,
+              "dns_lookup_failure": 0,
+              "dns_lookup_timeout": 0,
+              "ipv4_selected": 0,
+              "ipv6_selected": 0,
+              "destination_denied": 0,
+              "connect_failure": 0
+            },
+            "ActiveSockets": 0,
+            "ActiveStreams": 4,
+            "MaxActiveStreams": 4,
+            "Opened": 4,
+            "OpenOK": 4,
+            "OpenErrors": 0,
+            "Resets": 0,
+            "ProtocolErrors": 0,
+            "SentBytes": 0,
+            "ReceivedBytes": 0,
+            "FlowStalls": 0,
+            "RetainedBytes": 262144,
+            "RetainedHighWater": 262186,
+            "SendHighWater": 0,
+            "ReceiveHighWater": 0,
+            "QueueHighWater": 1,
+            "SchedulerFrames": 4,
+            "SchedulerWaitMaxMS": 0,
+            "DNSRequests": 0,
+            "DNSResponses": 0,
+            "DNSErrors": 0,
+            "DNSTimeouts": 0
+          },
+          "utc": "2026-09-28T10:32:48.311616104Z"
+        },
+        {
+          "download_bytes": 559,
+          "download_sha256": "ff67a9d764d6a2367a187734e697f6a53217db9a21c101d410a113ca871a299d",
+          "end_site_tls_verified": true,
+          "end_site_tls_version": 772,
+          "event": "mux_https",
+          "host": "example.com",
+          "http_status": 200,
+          "passed": true,
+          "stream": {
+            "ID": 5,
+            "State": "closed",
+            "Sent": 1693,
+            "Received": 6523,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 1515,
+            "ReceiveHighWater": 5587
+          },
+          "stream_id": 5,
+          "utc": "2026-09-28T10:32:49.463344177Z"
+        },
+        {
+          "download_bytes": 2048,
+          "download_sha256": "e2943f8d0b0e7d5835f9533722a6e25f669acb8980daee378b4edb44da212f51",
+          "end_site_tls_verified": true,
+          "end_site_tls_version": 772,
+          "event": "mux_https",
+          "host": "speed.cloudflare.com",
+          "http_status": 200,
+          "passed": true,
+          "stream": {
+            "ID": 7,
+            "State": "closed",
+            "Sent": 1728,
+            "Received": 7372,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 1524,
+            "ReceiveHighWater": 3912
+          },
+          "stream_id": 7,
+          "utc": "2026-09-28T10:32:49.585657041Z"
+        },
+        {
+          "download_bytes": 1024,
+          "download_sha256": "35ae5091b37e8f0f306833ef57a635f9dc06738d7f4e563a610eec2adb26fe28",
+          "end_site_tls_verified": true,
+          "end_site_tls_version": 772,
+          "event": "mux_https",
+          "host": "speed.cloudflare.com",
+          "http_status": 200,
+          "passed": true,
+          "stream": {
+            "ID": 3,
+            "State": "closed",
+            "Sent": 1728,
+            "Received": 6328,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 1524,
+            "ReceiveHighWater": 3911
+          },
+          "stream_id": 3,
+          "utc": "2026-09-28T10:32:49.627950479Z"
+        },
+        {
+          "download_bytes": 559,
+          "download_sha256": "ff67a9d764d6a2367a187734e697f6a53217db9a21c101d410a113ca871a299d",
+          "end_site_tls_verified": true,
+          "end_site_tls_version": 772,
+          "event": "mux_https",
+          "host": "example.com",
+          "http_status": 200,
+          "passed": true,
+          "stream": {
+            "ID": 1,
+            "State": "closed",
+            "Sent": 1693,
+            "Received": 6523,
+            "LocalFIN": 1,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 1515,
+            "ReceiveHighWater": 5587
+          },
+          "stream_id": 1,
+          "utc": "2026-09-28T10:32:50.410820635Z"
+        },
+        {
+          "event": "mux_dns_guard",
+          "phase": "final",
+          "post_probe_calls": 0,
+          "utc": "2026-09-28T10:32:50.992080322Z"
+        }
+      ],
+      "dns_results": {
+        "type=28;nxdomain=False;rcode=0;passed=True": 1,
+        "type=1;nxdomain=True;rcode=0;passed=False": 1,
+        "type=1;nxdomain=False;rcode=0;passed=True": 1
+      },
+      "results": [
+        {
+          "event": "mux_result",
+          "mode": "public",
+          "seconds": 8.017274997,
+          "status": "FAIL",
+          "utc": "2026-09-28T10:32:50.975490686Z"
+        }
+      ],
+      "reliability_final": {
+        "DataSent": 41,
+        "DataReceived": 39,
+        "ACKSent": 88,
+        "ACKReceived": 97,
+        "SACKSent": 38,
+        "SACKReceived": 44,
+        "Retransmissions": 1,
+        "RetransmittedBytes": 77,
+        "Duplicates": 1,
+        "Reordered": 0,
+        "Stale": 0,
+        "Timeouts": 1,
+        "Resets": 1,
+        "DeliveredBytes": 30988,
+        "WithheldBytes": 0,
+        "Gaps": 0,
+        "RecoveredGaps": 0,
+        "MaxRecoveryMS": 0,
+        "SendHighWater": 8,
+        "ReorderHighWater": 1,
+        "BufferedBytes": 0,
+        "MaxBufferedBytes": 10326,
+        "SendDepth": 0,
+        "ReorderDepth": 0,
+        "EventsDropped": 0,
+        "Terminal": "cancelled"
+      },
+      "transport_sample_peaks": {
+        "receive_queue_messages": 0,
+        "send_queue_capacity": 256,
+        "send_queue_frames": 1
+      },
+      "rtp_gaps_max": 0,
+      "mux_samples": [
+        {
+          "ActiveStreams": 4,
+          "ActiveSockets": 0,
+          "RetainedBytes": 262144,
+          "RetainedHighWater": 262186,
+          "QueueHighWater": 1,
+          "SentBytes": 0,
+          "ReceivedBytes": 0,
+          "DNSRequests": 0,
+          "DNSResponses": 0,
+          "utc": "2026-09-28T10:32:47.964953188Z"
+        }
+      ]
+    },
+    "B": {
+      "provenance": {
+        "utc": "2026-09-28T10:32:30.033716506Z",
+        "pid": 378312,
+        "parent_pid": 378311,
+        "vcs.revision": "03582fb84ad802c56b38cd19693e79b301c406fa",
+        "vcs.modified": "false"
+      },
+      "events": {
+        "start": 1,
+        "connected": 1,
+        "resources": 2,
+        "family_auth": 1,
+        "mux_sample": 1,
+        "mux_gateway": 1,
+        "reliability_final": 1,
+        "summary": 1
+      },
+      "final_mux": {
+        "Destination": {
+          "hostname_open_requests": 4,
+          "dns_lookup_success": 4,
+          "dns_lookup_failure": 0,
+          "dns_lookup_timeout": 0,
+          "ipv4_selected": 4,
+          "ipv6_selected": 0,
+          "destination_denied": 0,
+          "connect_failure": 0
+        },
+        "ActiveSockets": 0,
+        "ActiveStreams": 0,
+        "MaxActiveStreams": 4,
+        "Opened": 4,
+        "OpenOK": 4,
+        "OpenErrors": 0,
+        "Resets": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 26746,
+        "ReceivedBytes": 6842,
+        "FlowStalls": 1,
+        "RetainedBytes": 0,
+        "RetainedHighWater": 267731,
+        "SendHighWater": 5587,
+        "ReceiveHighWater": 1524,
+        "QueueHighWater": 1,
+        "SchedulerFrames": 37,
+        "SchedulerWaitMaxMS": 628.37589,
+        "DNSRequests": 3,
+        "DNSResponses": 3,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "peak_mux": {
+        "ActiveSockets": 4,
+        "ActiveStreams": 4,
+        "MaxActiveStreams": 4,
+        "Opened": 4,
+        "OpenOK": 4,
+        "OpenErrors": 0,
+        "Resets": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 26746,
+        "ReceivedBytes": 6842,
+        "FlowStalls": 1,
+        "RetainedBytes": 262144,
+        "RetainedHighWater": 267731,
+        "SendHighWater": 5587,
+        "ReceiveHighWater": 1524,
+        "QueueHighWater": 1,
+        "SchedulerFrames": 37,
+        "SchedulerWaitMaxMS": 628.37589,
+        "DNSRequests": 3,
+        "DNSResponses": 3,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0
+      },
+      "resources": {
+        "samples": 2,
+        "source": "getrusage(RUSAGE_SELF), all process threads",
+        "logical_cpus": 1,
+        "peaks": {
+          "rss_bytes": 24473600,
+          "heap_bytes": 4730584,
+          "heap_sys_bytes": 11468800,
+          "goroutines": 223,
+          "os_threads": 7,
+          "socket_fds": 68
+        },
+        "cpu": {
+          "first_utc": "2026-09-28T10:32:40.039499656Z",
+          "last_utc": "2026-09-28T10:32:50.035751974Z",
+          "wall_seconds": 9.996252059936523,
+          "process_cpu_seconds": 0.299491,
+          "percent_one_core": 2.996032895171931
+        }
+      },
+      "proofs": [],
+      "dns_results": {},
+      "results": [
+        {
+          "event": "mux_gateway",
+          "utc": "2026-09-28T10:32:53.283884083Z"
+        }
+      ],
+      "reliability_final": {
+        "DataSent": 38,
+        "DataReceived": 42,
+        "ACKSent": 99,
+        "ACKReceived": 88,
+        "SACKSent": 44,
+        "SACKReceived": 38,
+        "Retransmissions": 1,
+        "RetransmittedBytes": 44,
+        "Duplicates": 1,
+        "Reordered": 3,
+        "Stale": 0,
+        "Timeouts": 1,
+        "Resets": 1,
+        "DeliveredBytes": 11273,
+        "WithheldBytes": 200,
+        "Gaps": 0,
+        "RecoveredGaps": 0,
+        "MaxRecoveryMS": 0,
+        "SendHighWater": 8,
+        "ReorderHighWater": 2,
+        "BufferedBytes": 0,
+        "MaxBufferedBytes": 19365,
+        "SendDepth": 0,
+        "ReorderDepth": 0,
+        "EventsDropped": 0,
+        "Terminal": "cancelled"
+      },
+      "transport_sample_peaks": {
+        "receive_queue_messages": 0,
+        "send_queue_capacity": 256,
+        "send_queue_frames": 0
+      },
+      "rtp_gaps_max": 0,
+      "mux_samples": [
+        {
+          "ActiveStreams": 4,
+          "ActiveSockets": 4,
+          "RetainedBytes": 262144,
+          "RetainedHighWater": 262144,
+          "QueueHighWater": 0,
+          "SentBytes": 0,
+          "ReceivedBytes": 0,
+          "DNSRequests": 0,
+          "DNSResponses": 0,
+          "utc": "2026-09-28T10:32:48.380836098Z"
+        }
+      ]
+    }
+  },
+  "failed_preflight": {
+    "attempt": "public-2",
+    "stage": "artifact upload",
+    "timeout_seconds": 45,
+    "session_started": false,
+    "owned_temp_removed": true
+  },
+  "local_validation": {
+    "go_race_repetitions": 3,
+    "go_race_packages": 6,
+    "vet": "PASS",
+    "modules": "PASS",
+    "fuzz_targets": 8,
+    "fuzz_seconds_each": 5,
+    "python_passed": 1004,
+    "python_skipped": 3,
+    "python_skip_reasons": [
+      "optional public Android signing fixture absent",
+      "two no-TUN installer preflight cases"
+    ],
+    "jvm_tests": 6,
+    "lint_errors": 0,
+    "lint_existing_warnings": 6,
+    "linux_cli_build": "PASS",
+    "android_arm64_build": "PASS",
+    "windows_shared_tcpforward_cross_compile": "PASS; not native UI/runtime"
+  },
+  "native_android": {
+    "familysession": {
+      "top_level_passed": 7,
+      "skips": [
+        "--- SKIP: TestProductStoreFixtures (0.00s)"
+      ]
+    },
+    "reliablestream": {
+      "top_level_passed": 12,
+      "skips": []
+    },
+    "frame": {
+      "top_level_passed": 10,
+      "skips": []
+    },
+    "tcpforward": {
+      "top_level_passed": 44,
+      "skips": []
+    },
+    "telemost": {
+      "top_level_passed": 23,
+      "skips": [
+        "--- SKIP: TestLiveFamilyHandshakeReplay (0.00s)",
+        "--- SKIP: TestLiveSignalingClosure (0.00s)",
+        "--- SKIP: TestLocalEndpointHelper (0.00s)",
+        "--- SKIP: TestLiveReliableGap (0.00s)"
+      ]
+    },
+    "telemost-binary": {
+      "top_level_passed": 15,
+      "skips": []
+    }
+  },
+  "regression": {
+    "activity-close": {
+      "A": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:16:28.761119792Z"
+        },
+        {
+          "byte_equal": true,
+          "count": 1,
+          "elapsed_s": 1.023459843,
+          "event": "probe_result",
+          "payload_bytes": 1,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "utc": "2026-09-28T11:16:32.785657395Z"
+        },
+        {
+          "byte_equal": true,
+          "count": 1,
+          "elapsed_s": 0.674286927,
+          "event": "probe_result",
+          "payload_bytes": 32,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "utc": "2026-09-28T11:16:33.460829478Z"
+        },
+        {
+          "byte_equal": true,
+          "count": 1,
+          "elapsed_s": 1.416845156,
+          "event": "probe_result",
+          "payload_bytes": 256,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "utc": "2026-09-28T11:16:34.879310935Z"
+        },
+        {
+          "event": "android_exit",
+          "code": 1,
+          "elapsed_ms": 13969
+        }
+      ],
+      "B": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:16:29.235643418Z"
+        }
+      ],
+      "runner_markers": [
+        "FAULT_TRIGGERED activity-close",
+        "REMOTE_CHILD_STOPPED; FORCED_KILL=False",
+        "REMOTE_TEMP_REMOVED"
+      ]
+    },
+    "canonical": {
+      "A": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T10:59:55.14686689Z"
+        },
+        {
+          "byte_equal": true,
+          "count": 1,
+          "elapsed_s": 0.97071875,
+          "event": "probe_result",
+          "payload_bytes": 1,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "utc": "2026-09-28T10:59:59.118898034Z"
+        },
+        {
+          "byte_equal": true,
+          "count": 1,
+          "elapsed_s": 0.486460781,
+          "event": "probe_result",
+          "payload_bytes": 32,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "utc": "2026-09-28T10:59:59.606052565Z"
+        },
+        {
+          "byte_equal": true,
+          "count": 1,
+          "elapsed_s": 1.101492969,
+          "event": "probe_result",
+          "payload_bytes": 256,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "utc": "2026-09-28T11:00:00.70825194Z"
+        },
+        {
+          "byte_equal": true,
+          "count": 1,
+          "elapsed_s": 1.095897708,
+          "event": "probe_result",
+          "payload_bytes": 1024,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "utc": "2026-09-28T11:00:01.804976887Z"
+        },
+        {
+          "byte_equal": true,
+          "count": 1,
+          "elapsed_s": 1.373573958,
+          "event": "probe_result",
+          "payload_bytes": 4096,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "utc": "2026-09-28T11:00:03.180081001Z"
+        },
+        {
+          "byte_equal": true,
+          "count": 1,
+          "elapsed_s": 1.143525937,
+          "event": "probe_result",
+          "payload_bytes": 16384,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "utc": "2026-09-28T11:00:04.324279699Z"
+        },
+        {
+          "byte_equal": true,
+          "count": 1,
+          "elapsed_s": 1.870611926,
+          "event": "probe_result",
+          "payload_bytes": 65536,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "utc": "2026-09-28T11:00:06.195864958Z"
+        },
+        {
+          "byte_equal": true,
+          "count": 100,
+          "elapsed_s": 100.013946003,
+          "event": "probe_result",
+          "payload_bytes": 1024,
+          "phase": "batch",
+          "received": 100,
+          "sent": 100,
+          "utc": "2026-09-28T11:01:46.211066952Z"
+        },
+        {
+          "byte_equal": true,
+          "count": 100,
+          "elapsed_s": 119.538776153,
+          "event": "probe_result",
+          "payload_bytes": 16384,
+          "phase": "batch",
+          "received": 100,
+          "sent": 100,
+          "utc": "2026-09-28T11:03:45.751437635Z"
+        },
+        {
+          "byte_equal": true,
+          "count": 29,
+          "elapsed_s": 30.553240197,
+          "event": "probe_result",
+          "payload_bytes": 16384,
+          "phase": "sustained",
+          "received": 29,
+          "sent": 29,
+          "utc": "2026-09-28T11:04:16.306003457Z"
+        },
+        {
+          "byte_equal": true,
+          "count": 271,
+          "elapsed_s": 301.020382021,
+          "event": "probe_result",
+          "payload_bytes": 16384,
+          "phase": "extended",
+          "received": 271,
+          "sent": 271,
+          "utc": "2026-09-28T11:09:17.331549644Z"
+        },
+        {
+          "event": "suite_complete",
+          "family_authenticated": true,
+          "gate_eligible_mode": true,
+          "utc": "2026-09-28T11:09:17.3429073Z"
+        },
+        {
+          "event": "android_exit",
+          "code": 0,
+          "elapsed_ms": 569313
+        }
+      ],
+      "B": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T10:59:55.587446256Z"
+        }
+      ],
+      "runner_markers": [
+        "REMOTE_CHILD_STOPPED; FORCED_KILL=False",
+        "REMOTE_TEMP_REMOVED"
+      ]
+    },
+    "peer-close": {
+      "gateway_generations": [
+        {
+          "generation": "B1",
+          "admission": [
+            {
+              "accepted": true,
+              "utc": "2026-09-28T10:56:57.656510132Z"
+            }
+          ]
+        }
+      ],
+      "runner_markers": [
+        "PHYSICAL_NATIVE_CHECK_PASS peer-close",
+        "--- PASS: TestLiveSignalingClosure (9.30s)",
+        "REMOTE_TEMP_REMOVED; FORCED_KILL=False"
+      ]
+    },
+    "process-death": {
+      "A": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:17:08.88197035Z"
+        },
+        {
+          "byte_equal": true,
+          "count": 1,
+          "elapsed_s": 1.057575676,
+          "event": "probe_result",
+          "payload_bytes": 1,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "utc": "2026-09-28T11:17:12.940388213Z"
+        },
+        {
+          "byte_equal": true,
+          "count": 1,
+          "elapsed_s": 1.002621926,
+          "event": "probe_result",
+          "payload_bytes": 32,
+          "phase": "size",
+          "received": 1,
+          "sent": 1,
+          "utc": "2026-09-28T11:17:13.943815243Z"
+        }
+      ],
+      "B": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:17:09.26376525Z"
+        }
+      ],
+      "runner_markers": [
+        "FAULT_TRIGGERED process-death",
+        "REMOTE_CHILD_STOPPED; FORCED_KILL=False",
+        "REMOTE_TEMP_REMOVED"
+      ]
+    },
+    "reliable-gap": {
+      "gateway_generations": [
+        {
+          "generation": "B1",
+          "admission": [
+            {
+              "accepted": true,
+              "utc": "2026-09-28T10:54:40.226428612Z"
+            }
+          ]
+        }
+      ],
+      "runner_markers": [
+        "PHYSICAL_NATIVE_CHECK_PASS reliable-gap",
+        "--- PASS: TestLiveReliableGap (11.91s)",
+        "REMOTE_TEMP_REMOVED; FORCED_KILL=False"
+      ],
+      "gap_proof": {
+        "injected_sequence": 2,
+        "tls_survived": true,
+        "exact_echoes": 8,
+        "client": {
+          "DataSent": 25,
+          "DataReceived": 24,
+          "ACKSent": 55,
+          "ACKReceived": 61,
+          "SACKSent": 25,
+          "SACKReceived": 35,
+          "Retransmissions": 2,
+          "RetransmittedBytes": 2208,
+          "Duplicates": 0,
+          "Reordered": 1,
+          "Stale": 0,
+          "Timeouts": 2,
+          "Resets": 0,
+          "DeliveredBytes": 133898,
+          "WithheldBytes": 22,
+          "Gaps": 0,
+          "RecoveredGaps": 0,
+          "MaxRecoveryMS": 0,
+          "SendHighWater": 8,
+          "ReorderHighWater": 2,
+          "BufferedBytes": 0,
+          "MaxBufferedBytes": 74050,
+          "SendDepth": 0,
+          "ReorderDepth": 0,
+          "EventsDropped": 0,
+          "Terminal": ""
+        },
+        "server": {
+          "DataSent": 24,
+          "DataReceived": 26,
+          "ACKSent": 62,
+          "ACKReceived": 54,
+          "SACKSent": 35,
+          "SACKReceived": 25,
+          "Retransmissions": 0,
+          "RetransmittedBytes": 0,
+          "Duplicates": 1,
+          "Reordered": 9,
+          "Stale": 0,
+          "Timeouts": 0,
+          "Resets": 1,
+          "DeliveredBytes": 133999,
+          "WithheldBytes": 48200,
+          "Gaps": 1,
+          "RecoveredGaps": 1,
+          "MaxRecoveryMS": 1291.799311,
+          "SendHighWater": 8,
+          "ReorderHighWater": 8,
+          "BufferedBytes": 0,
+          "MaxBufferedBytes": 82110,
+          "SendDepth": 0,
+          "ReorderDepth": 0,
+          "EventsDropped": 0,
+          "Terminal": "cancelled"
+        }
+      }
+    },
+    "replay": {
+      "gateway_generations": [
+        {
+          "generation": "B1",
+          "admission": [
+            {
+              "accepted": true,
+              "utc": "2026-09-28T10:55:20.233010865Z"
+            }
+          ]
+        },
+        {
+          "generation": "B2",
+          "admission": [
+            {
+              "accepted": false,
+              "utc": "2026-09-28T10:55:45.091482861Z"
+            }
+          ]
+        }
+      ],
+      "runner_markers": [
+        "PHYSICAL_NATIVE_CHECK_PASS replay",
+        "--- PASS: TestLiveFamilyHandshakeReplay (26.88s)",
+        "REMOTE_TEMP_REMOVED; FORCED_KILL=False"
+      ]
+    },
+    "revoked": {
+      "A": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T10:59:04.597638055Z"
+        },
+        {
+          "event": "android_exit",
+          "code": 1,
+          "elapsed_ms": 16851
+        }
+      ],
+      "B": [
+        {
+          "accepted": false,
+          "event": "family_auth",
+          "utc": "2026-09-28T10:59:05.113412656Z"
+        }
+      ],
+      "runner_markers": [
+        "FAMILY_REJECTED revoked",
+        "REMOTE_CHILD_STOPPED; FORCED_KILL=False",
+        "REMOTE_TEMP_REMOVED"
+      ]
+    },
+    "tcp-cancel": {
+      "A": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:13:43.85184798Z"
+        },
+        {
+          "byte_equal": false,
+          "download_bytes": 131072,
+          "download_sha256": "5153f76bee80491e84dabd2d8d2f491f8cd93f76e8a31713480da8d0635c2b45",
+          "event": "tcp_result",
+          "status": "FAIL",
+          "upload_bytes": 180224,
+          "upload_sha256": "fc9e9857fdb539785496e786d9d2e5f5a9cbcc24a8dfe3156abec4ab091e2312",
+          "utc": "2026-09-28T11:13:48.135164384Z"
+        },
+        {
+          "event": "android_exit",
+          "code": 1,
+          "elapsed_ms": 11050
+        }
+      ],
+      "B": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:13:44.308692024Z"
+        }
+      ],
+      "runner_markers": []
+    },
+    "tcp-fresh": {
+      "A": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:15:51.197550692Z"
+        },
+        {
+          "byte_equal": true,
+          "download_bytes": 65536,
+          "download_sha256": "3dcea1e1a0f4b3488ecb5b90375d9d9534cc24997424331bb0059aef8ba78844",
+          "event": "tcp_result",
+          "status": "PASS",
+          "upload_bytes": 65536,
+          "upload_sha256": "3dcea1e1a0f4b3488ecb5b90375d9d9534cc24997424331bb0059aef8ba78844",
+          "utc": "2026-09-28T11:15:55.439884388Z"
+        },
+        {
+          "event": "android_exit",
+          "code": 0,
+          "elapsed_ms": 12219
+        }
+      ],
+      "B": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:15:51.650381239Z"
+        }
+      ],
+      "runner_markers": []
+    },
+    "tcp-https": {
+      "A": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:10:11.632898634Z"
+        },
+        {
+          "download_bytes": 559,
+          "download_sha256": "ff67a9d764d6a2367a187734e697f6a53217db9a21c101d410a113ca871a299d",
+          "event": "tcp_result",
+          "status": "PASS",
+          "utc": "2026-09-28T11:10:16.567669569Z"
+        },
+        {
+          "event": "android_exit",
+          "code": 0,
+          "elapsed_ms": 12210
+        }
+      ],
+      "B": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:10:12.134929737Z"
+        }
+      ],
+      "runner_markers": []
+    },
+    "tcp-local": {
+      "A": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:10:46.101719089Z"
+        },
+        {
+          "byte_equal": true,
+          "download_bytes": 65536,
+          "download_sha256": "3dcea1e1a0f4b3488ecb5b90375d9d9534cc24997424331bb0059aef8ba78844",
+          "event": "tcp_result",
+          "status": "PASS",
+          "upload_bytes": 65536,
+          "upload_sha256": "3dcea1e1a0f4b3488ecb5b90375d9d9534cc24997424331bb0059aef8ba78844",
+          "utc": "2026-09-28T11:10:51.050293619Z"
+        },
+        {
+          "event": "android_exit",
+          "code": 0,
+          "elapsed_ms": 12529
+        }
+      ],
+      "B": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:10:46.569820488Z"
+        }
+      ],
+      "runner_markers": []
+    },
+    "tcp-network-loss": {
+      "A": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:15:10.196351593Z"
+        },
+        {
+          "byte_equal": false,
+          "download_bytes": 147456,
+          "download_sha256": "42f9680f1839af4b84e245e61210f229bbcb775e968af33112b6fb694dcec829",
+          "event": "tcp_result",
+          "status": "FAIL",
+          "upload_bytes": 229376,
+          "upload_sha256": "6776e812e52cfde0e5039edf5a382396b1557bc6acaec1548c59e98df1cf1bf6",
+          "utc": "2026-09-28T11:15:15.030139716Z"
+        },
+        {
+          "event": "android_exit",
+          "code": 1,
+          "elapsed_ms": 12136
+        }
+      ],
+      "B": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:15:10.518600334Z"
+        }
+      ],
+      "runner_markers": []
+    },
+    "tcp-refused": {
+      "A": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:12:35.761843266Z"
+        },
+        {
+          "event": "tcp_result",
+          "status": "PASS",
+          "utc": "2026-09-28T11:12:37.667291547Z"
+        },
+        {
+          "event": "android_exit",
+          "code": 0,
+          "elapsed_ms": 9157
+        }
+      ],
+      "B": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:12:36.238162646Z"
+        }
+      ],
+      "runner_markers": []
+    },
+    "tcp-remote-exit": {
+      "A": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:14:23.0031801Z"
+        },
+        {
+          "byte_equal": false,
+          "download_bytes": 182555,
+          "download_sha256": "10341024b4fe4adc24334cb67221f1a95452ed8aa3c7c8b0cebcf00c819c6c5e",
+          "event": "tcp_result",
+          "status": "FAIL",
+          "upload_bytes": 245760,
+          "upload_sha256": "78b908be30b2f645dbc1dc60da75a50f3c1f62b91f414b6e249764ec7aec25d9",
+          "utc": "2026-09-28T11:14:36.329874991Z"
+        },
+        {
+          "event": "android_exit",
+          "code": 1,
+          "elapsed_ms": 20937
+        }
+      ],
+      "B": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:14:23.490839311Z"
+        }
+      ],
+      "runner_markers": []
+    },
+    "tcp-remote_half_close": {
+      "A": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:11:24.557475116Z"
+        },
+        {
+          "event": "tcp_result",
+          "status": "PASS",
+          "utc": "2026-09-28T11:11:27.214697563Z"
+        },
+        {
+          "event": "android_exit",
+          "code": 0,
+          "elapsed_ms": 10227
+        }
+      ],
+      "B": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:11:24.964076587Z"
+        }
+      ],
+      "runner_markers": []
+    },
+    "tcp-remote_reset": {
+      "A": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:11:57.803341562Z"
+        },
+        {
+          "event": "tcp_result",
+          "status": "PASS",
+          "utc": "2026-09-28T11:11:59.433690103Z"
+        },
+        {
+          "event": "android_exit",
+          "code": 0,
+          "elapsed_ms": 9024
+        }
+      ],
+      "B": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:11:58.27896725Z"
+        }
+      ],
+      "runner_markers": []
+    },
+    "tcp-timeout": {
+      "A": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:13:09.217108983Z"
+        },
+        {
+          "event": "tcp_result",
+          "status": "PASS",
+          "utc": "2026-09-28T11:13:14.001455804Z"
+        },
+        {
+          "event": "android_exit",
+          "code": 0,
+          "elapsed_ms": 12591
+        }
+      ],
+      "B": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T11:13:09.563202083Z"
+        }
+      ],
+      "runner_markers": []
+    },
+    "unknown": {
+      "A": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T10:57:40.237130379Z"
+        },
+        {
+          "event": "android_exit",
+          "code": 1,
+          "elapsed_ms": 16748
+        }
+      ],
+      "B": [
+        {
+          "accepted": false,
+          "event": "family_auth",
+          "utc": "2026-09-28T10:57:41.531976409Z"
+        }
+      ],
+      "runner_markers": [
+        "FAMILY_REJECTED unknown",
+        "REMOTE_CHILD_STOPPED; FORCED_KILL=False",
+        "REMOTE_TEMP_REMOVED"
+      ]
+    },
+    "wrong-family": {
+      "A": [
+        {
+          "accepted": true,
+          "event": "family_auth",
+          "utc": "2026-09-28T10:58:21.661380675Z"
+        },
+        {
+          "event": "android_exit",
+          "code": 1,
+          "elapsed_ms": 17140
+        }
+      ],
+      "B": [
+        {
+          "accepted": false,
+          "event": "family_auth",
+          "utc": "2026-09-28T10:58:23.005233361Z"
+        }
+      ],
+      "runner_markers": [
+        "FAMILY_REJECTED wrong-family",
+        "REMOTE_CHILD_STOPPED; FORCED_KILL=False",
+        "REMOTE_TEMP_REMOVED"
+      ]
+    },
+    "ws-close": {
+      "gateway_generations": [
+        {
+          "generation": "B1",
+          "admission": [
+            {
+              "accepted": true,
+              "utc": "2026-09-28T10:56:24.584933899Z"
+            }
+          ]
+        }
+      ],
+      "runner_markers": [
+        "PHYSICAL_NATIVE_CHECK_PASS ws-close",
+        "--- PASS: TestLiveSignalingClosure (8.88s)",
+        "REMOTE_TEMP_REMOVED; FORCED_KILL=False"
+      ]
+    }
+  },
+  "shutdown_correction": {
+    "commit": "c26c2b7",
+    "pre_fix_test_failures": 3,
+    "post_fix_race_repetitions": 20,
+    "cause": "late DNS_CANCEL could enqueue after closed mux cleanup",
+    "fix": "reject control enqueue once mux context cancelled"
+  },
+  "artifact_sha256": {
+    "linux_cli": "b2d19c1f614e5394d377f4a83274543352c3bcd8a16fd6b767453123d334b88d",
+    "android_native": "a86dc6cd5cd8731baa357de166c5c3fd5b47b1e9edcd10c3ae96965f52fcde0a",
+    "diagnostic_apk": "73380c120c9699326b40fb8f052eaa9ba1a2ed2eacef70e25ef61f36b624be7a"
+  },
+  "cleanup": {
+    "android": {
+      "wifi": "1",
+      "mobile_data": "1",
+      "recorded_pids": 42,
+      "recorded_pids_still_present": [],
+      "owned_processes": [],
+      "interface_source": "/sys/class/net (ip netlink denied to non-root shell)",
+      "tun_interfaces": [],
+      "test_package": "",
+      "native_directory_removed": true
+    },
+    "gateway": {
+      "recorded_pids": 52,
+      "present": [],
+      "owned_processes": [],
+      "test_directories": []
+    },
+    "local_private_artifacts_removed": true,
+    "push_performed": false
+  }
+}

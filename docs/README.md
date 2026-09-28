@@ -3,8 +3,8 @@
 **Текущий critical path — 5N:** [Restricted Android→Telemost VP8→Linux EU](PLAN.md).
 Новый разработчик restricted connectivity начинает с 5N design
 ([DECISION](reticulum/HOME_GATEWAY_DESIGN.md#decision-restricted-webrtc-to-eu-gateway-first--2026-09-25))
-и актуального gate в STATUS:5N.1–5N.4 PASS; далее STOP,5N.5 требует отдельного
-решения. [Отчёт5N.4/evidence](releases/2026-09-28-webrtc-eu4-single-tcp.ru.md).
+и актуального gate в STATUS:5N.1–5N.5 PASS; далее STOP, Room Broker/5N.6 требуют
+отдельного решения. [Отчёт5N.5/evidence](releases/2026-09-28-webrtc-eu5-mux-dns.ru.md).
 Home Gateway и RNS-over-WebRTC — secondary / backlog.
 
 **Приоритет25.09 уточнён:** [Restricted Android→Telemost VP8→Linux EU](PLAN.md)
@@ -105,6 +105,12 @@ installed/deployed versions; dated reports preserve what was checked at that tim
 - [Release distribution and signing](releases.md).
 
 ## Developers
+
+- [5N.5: bounded TCP mux + Family DNS](releases/2026-09-28-webrtc-eu5-mux-dns.ru.md):
+  **PASS**, physical4 simultaneous public HTTPS,304.138s mixed5 TCP+171 DNS,
+  exact/fair/bounded, native local destination DNS denied, independent lifecycle.
+  [DNS dependency audit/manual procedure](testing/webrtc-dns-containment.ru.md).
+  No TUN/full-device DNS/Room Broker/production rollout; STOP after5N.5.
 
 - [5N.4: single admitted TCP stream](releases/2026-09-28-webrtc-eu4-single-tcp.ru.md):
   **PASS**, physical public HTTPS10MiB, controlled exact duplex300.821s,

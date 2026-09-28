@@ -1,11 +1,19 @@
-# Telemost binary carrier — experimental 5N.1–5N.4
+# Telemost binary carrier — experimental 5N.1–5N.5
+
+**5N.5 PASS28.09**, clean tested native/APK `c26c2b7`:
+[bounded TCP mux + wire DNS](tcpforward/MUX.md),4 public HTTPS streams and304.138s
+mixed physical TCP/DNS with native destination DNS denied. No full-device claim.
+CLI `--mux-gateway`/`--mux-config` requires admitted VP8; one existing Family
+TLS/reliable session, not one carrier per stream. [Current acceptance report](../docs/releases/2026-09-28-webrtc-eu5-mux-dns.ru.md).
+Legacy single-stream mode remains unchanged; no production rollout or TUN.
 
 5N.4 adds [one authenticated TCP stream](tcpforward/README.md) above existing
 Family TLS/ReliableStream, without changing the carrier. CLI `--tcp-gateway` and
 `--tcp-config` are explicit test-only modes requiring authenticated VP8. Default
 echo behavior is unchanged. [Android/operator surface](../clients/android/telemost-runtime/README.md)
 and [live evidence/status](../docs/releases/2026-09-28-webrtc-eu4-single-tcp.ru.md).
-No mux, TUN, production proxy, dedicated DNS or seamless TCP session migration.
+The legacy single-stream mode has no mux/DNS; neither mode is a production proxy,
+TUN implementation or seamless TCP migration.
 
 Recovered from the interrupted DeepSeek worktree, not a second carrier.
 `WEBRTC-EU-1 / 5N.1` **PASS on 2026-09-27**: independent developer Linux and
@@ -18,7 +26,7 @@ reuses this exact CLI/core; its physical-device acceptance is recorded separatel
 **5N.2 PASS27.09**, clean3f65346: physical Redmi/Android12→Telemost VP8→Amsterdam,
 372 exact echoes including30s/5min; see the Android report for lifecycle/performance limits.
 Local Pion and DataChannel results alone do not close the gate.
-No VPN, proxy, routing, DNS or product integration is here. The opt-in5N.3
+The original plaintext carrier has no VPN/proxy/routing/DNS product integration. The opt-in5N.3
 `--family-config` adds an isolated TLS1.3 Family session above the opaque carrier;
 the default5N.1/5N.2 mode remains plaintext. Use synthetic random data only:
 the SFU is untrusted and DTLS is not Family E2E.

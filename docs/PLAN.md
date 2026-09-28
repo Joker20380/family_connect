@@ -2,6 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
+- **WEBRTC-EU-5 / 5N.5 = PASS**, explicitly authorized28.09:
+  bounded mux + wire DNS over one admitted TLS/reliable/VP8 session; default16/max32,
+  fixed64KiB credit/16KiB DATA, fair RR. Final clean native/APK `c26c2b7`.
+  Physical4 public HTTPS/TLS200,304.138s mixed5 persistent TCP +171 Family DNS;
+  exact18.75MB duplex,915 interactive replies; client destination DNS guard0 calls.
+  Host/native/race×3/fuzz/build/Python1004, security/legacy TCP/lifecycle/fresh-session
+  regressions and cleanup PASS; early attempts and shutdown correction retained.
+  [Report/evidence](releases/2026-09-28-webrtc-eu5-mux-dns.ru.md).
+  No unfinished acceptance checks. **STOP after5N.5**, no automatic Room Broker,
+  5N.6/TUN/UDP/Orchestrator/production rollout/push. Full-device DNS not claimed.
+
 - **WEBRTC-EU-4 / 5N.4 = PASS**, explicitly authorized: single admitted TCP stream,
   core `2b977da`/RST fix `fa3c027`, final clean tested CLI/APK `63f6bde`.
   Physical Redmi→Family TLS→ReliableStream→Telemost→Amsterdam→public HTTPS200,
@@ -81,7 +92,7 @@
   TUN/TCP/WB не начинались; последующий5N-PERF-1 приведён выше, затем STOP.
   [Отчёт/оставшиеся проверки](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md).
   [Android5N.2 checkpoint](releases/2026-09-27-webrtc-eu2-android-binary.ru.md).
-- после accepted5N.4, отдельным разрешением: **5N.5 → 5N.6**; автоматически не начинать.
+- после accepted5N.5: отдельное решение о Room Broker и затем5N.6; автоматически не начинать.
 - после этого: restricted-mobile acceptance **5M**.
 - **WB fallback** — только после подтверждения Telemost на реальной сети.
 - **5.3a / 5.3в** и **Home Gateway (5A–5M secondary track)** — backlog, не запускаются автоматически.
@@ -156,7 +167,7 @@ home IP/NAT, Windows routing, включённого ПК и лишнего до
 | WEBRTC-EU-2 / 5N.2 | Android↔EU Linux binary round trip без TUN | PASS27.09: physical Redmi/Telemost VP8/Amsterdam,372 exact echoes,30s/5min; runtime3f65346 |
 | WEBRTC-EU-3 / 5N.3 | E2E Family session с existing Device Identity/FAMILY; wrong/revoked/replay rejected | PASS27.09: physical Android,374 exact echoes/302.001s; isolated runtime5dd8b49; no production authority rollout |
 | WEBRTC-EU-4 / 5N.4 | Один TCP stream: реальный HTTPS response через EU | **PASS28.09**: physical HTTPS200/public10MiB, exact duplex300.821s, half-close/faults/security/cleanup; [evidence/limits](releases/2026-09-28-webrtc-eu4-single-tcp.ru.md) |
-| WEBRTC-EU-5 / 5N.5 | Много TCP/API/browser/DNS streams в одной carrier session | Не запускался |
+| WEBRTC-EU-5 / 5N.5 | Core-level multiplexed TCP + DNS, bounded fairness/flow control | **PASS28.09**: physical4 public HTTPS,304.138s mixed5 TCP+171 DNS, exact/fair/bounded; [evidence/limits](releases/2026-09-28-webrtc-eu5-mux-dns.ru.md); no OS/browser interception |
 | WEBRTC-EU-6 / 5N.6 | Full-device Android TCP+DNS, EU exit, no direct/DNS/IPv6 leak | Не запускался |
 
 Порядок: reuse generic5H/5I contracts →5N.1–3 на целевой мобильной сети →5N.4–6 →

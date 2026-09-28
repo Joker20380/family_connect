@@ -174,13 +174,12 @@ RNS-over-WebRTC gates stay open, not cancelled or silently counted as complete.
 | WEBRTC-EU-2 / 5N.2 | Android↔Linux EU Telemost binary round trip, no TUN yet | PASS27.09: physical Redmi/Telemost VP8/Amsterdam,372 exact echoes,30s/5min; [report](../releases/2026-09-27-webrtc-eu2-android-binary.ru.md) |
 | WEBRTC-EU-3 / 5N.3 | Authenticated E2E Family session; valid identity succeeds, unknown/wrong-family/revoked/replayed proof fails | PASS27.09: physical Android,374 exact echoes/302.001s; [report/limits](../releases/2026-09-27-webrtc-eu3-family-session.ru.md) |
 | WEBRTC-EU-4 / 5N.4 | One TCP stream through EU returns a real HTTPS response, e.g. example.com:443 | **PASS28.09**: physical public HTTPS10MiB, exact duplex300.821s, half-close/fault/security/cleanup; [evidence/limits](../releases/2026-09-28-webrtc-eu4-single-tcp.ru.md) |
-| WEBRTC-EU-5 / 5N.5 | Parallel TCP/browser/API/DNS streams share one carrier session; bounded fairness/flow control | Not run |
+| WEBRTC-EU-5 / 5N.5 | Core TCP/DNS streams share one carrier session; bounded fairness/flow control | **PASS28.09**:4 physical public HTTPS,304.138s mixed5 TCP+171 DNS, exact/fair/bounded; [report/limits](../releases/2026-09-28-webrtc-eu5-mux-dns.ru.md); no OS/browser interception |
 | WEBRTC-EU-6 / 5N.6 | Android full-device TCP+DNS: browser/HTTPS and ordinary apps where protocol permits, EU exit, no direct leaks | Not run |
 
-**Immediate engineering target after implementation resumes:** Android on Krasnodar
-cellular → Telemost VP8 → Linux EU → arbitrary authenticated Family data (gates1–3).
-Then prove one HTTPS stream, mux and full-device Internet. Do not wait for Windows
-NAT, home discovery or RNS packet tunneling; do not spend time on polished UI.
+**Current boundary28.09:** gates1–5 PASS on physical Android/cellular through real
+Telemost to Amsterdam. STOP; Room Broker and then full-device5N.6 require separate
+authorization. No implicit TUN, UDP, production rollout or Home Gateway detour.
 
 Required automated tests: malformed/oversized carrier/mux frames; ordering/loss,
 stream id/replay/half-close/reset and saturation; auth/expiry/revoke/wrong-family;

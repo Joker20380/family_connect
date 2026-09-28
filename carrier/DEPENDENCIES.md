@@ -1,5 +1,9 @@
 # Linked carrier dependencies — 2026-09-27
 
+28.09 /5N.5: DNS wire parsing now directly imports the already pinned
+`golang.org/x/net/dns/dnsmessage` at v0.50.0. No module version, source fork or
+notice changes; BSD-3-Clause license is already retained below/in the APK.
+
 Inventory of `go list -deps ./cmd/telemost-binary`, Go 1.27.1, Linux/amd64.
 Android/arm64 CGO inventory for5N.2 on27.09 matches the same23 external modules.
 The standalone test APK retains these notices plus original NDK/LLVM notices

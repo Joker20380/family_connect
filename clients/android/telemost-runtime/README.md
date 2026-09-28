@@ -1,8 +1,20 @@
-# Physical Android isolated Telemost gates — 5N.2 / 5N.3 / 5N.4
+# Physical Android isolated Telemost gates — 5N.2 / 5N.3 / 5N.4 / 5N.5
+
+28.09 diagnostic5N.5 source/build: code4/name`5N.5-test-only`, with opt-in
+`files/mux.input`. The same native core handles16(default)/32(max) TCP streams
+and16 bounded wire-DNS queries through one Family Session. It automatically
+enables the diagnostic native DNS-denial guard **after** carrier admission;
+public hostname HTTPS must then succeed without any client resolver calls.
+[Operator/audit/negative-DNS procedure](../../../docs/testing/webrtc-dns-containment.ru.md)
+and [exact physical status/artifact provenance](../../../docs/releases/2026-09-28-webrtc-eu5-mux-dns.ru.md).
+No TUN, OS DNS interception, direct-DNS fallback, Room Broker or production update.
+**PASS28.09**, final clean build `c26c2b7`; installed for physical acceptance and
+then removed, radios restored. Artifact hashes and exact regression revision scope
+are in the report; this diagnostic APK was never publicly distributed.
 
 This is a **separate debug-only APK**, `com.familyconnect.telemosttest`, not the
 Family Connect beta. No VpnService, TUN, production traffic, Chaquopy, AWG/Xray,
-transport selection or automatic fallback is included. Code3 / `5N.4-test-only`
+transport selection or automatic fallback is included. Historical code3 / `5N.4-test-only`
 adds one TCP stream above the existing authenticated Family TLS1.3 session.
 Without private operator credentials it remains the plaintext5N.2 diagnostic.
 DTLS is not Family E2E. Tests use synthetic payloads and public HTTPS responses;

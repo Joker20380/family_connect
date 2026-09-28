@@ -1,8 +1,16 @@
 # Architecture map / Карта архитектуры
 
+28.09 **5N.5 PASS**: opt-in bounded/fair TCP mux + wire DNS above the existing single
+Family TLS/ReliableStream/Telemost path; default16/max32,64KiB credit,16KiB DATA.
+Physical4 public HTTPS and304.138s mixed TCP+DNS, native destination resolver denied;
+[exact evidence/limits](releases/2026-09-28-webrtc-eu5-mux-dns.ru.md). No TUN/rollout.
+Hostname OPEN already resolved at the gateway in5N.4, not at the Android client.
+[DNS dependency audit, containment proof and manual verification](testing/webrtc-dns-containment.ru.md)
+separates carrier bootstrap from user destinations; no whole-device DNS claim.
+
 ## Current decision — Restricted WebRTC to EU Gateway first
 
-28.09: isolated [5N.4 single TCP forwarding](../carrier/tcpforward/README.md)
+Earlier28.09: isolated [5N.4 single TCP forwarding](../carrier/tcpforward/README.md)
 adds `Application TCP → Family TCP framing → Family TLS → ReliableStream → VP8`
 above the unchanged proven carrier. One admitted session/stream, explicit FIN and
 structured connect errors; gateway DNS with public-destination validation, no mux
@@ -39,7 +47,8 @@ TLS; sender8/receiver16,16KiB defaults, no crypto/auth changes or unreliable fal
 Fresh bidirectional epochs scope each attempt, not an additional authentication
 layer. Plaintext carrier mode is unchanged. [Protocol/threat boundary](../carrier/reliablestream/README.md)
 and [physical/local acceptance record](releases/2026-09-27-webrtc-5n-rel1-reliable-stream.ru.md).
-No egress gateway, TUN or production transport integration. All sockets remain
+At that earlier REL-1 boundary there was no egress gateway; current5N.4/5N.5 TCP
+egress is described above. Still no TUN or production transport integration. All sockets remain
 unprotected; future HTTP/WS/Pion transport.Net/DNS protection requires an explicit
 cross-process SCM_RIGHTS+protect ACK bridge or in-process JNI, not child fd integers.
 [5N.2 report](releases/2026-09-27-webrtc-eu2-android-binary.ru.md).

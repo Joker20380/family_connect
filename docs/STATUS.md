@@ -1,5 +1,28 @@
 # Текущее состояние / Current state
 
+## 28.09.2026 — WEBRTC-EU-5 / 5N.5 = PASS: mux TCP + Family DNS
+
+Authorized mux TCP+DNS task starts at `812f4cb5913cad412d29f2f4f605c55327ce7d25`.
+Foreign VPN audit hunks/reports preserved. Core `a22742a`, DNS hardening `0014fd2`,
+final clean tested CLI/APK `c26c2b7` (late DNS-cancel retention corrected),
+harness `03582fb`/`4687c3d`/`bb867a0`/`083763d`. Default16/max32 logical streams;
+one admitted TLS/reliable/Telemost path. Physical4 concurrent public verified
+HTTPS200; mixed304.137659s,5 persistent streams,18,751,488B each way exact bulk,
+0.997222Mbit/s bulk aggregate,915 interactive replies and171 Family DNS responses.
+Native DNS guard proves zero destination lookups after admission (bootstrap separate).
+Final A/AAAA/NXDOMAIN PASS, bad-MAC/corruption/duplicate/missing/cross-stream0.
+Fair scheduling/isolation/credit bounds PASS; global ReliableStream HOL remains.
+Final mux HWM401664/475136B, sockets/retained0. Natural gap1 recovered in earlier
+accepted mixed session; final mixed gaps0, retransmissions2/1. No capacity claim.
+Go race×3/vet/modules/8 fuzz,Python1004+3 documented skips,Android build/6JVM/lint/
+6 native suites PASS;507 canonical exact, live auth/replay/legacy TCP/lifecycle/
+network-loss and fresh-session regression PASS (exact revision scope in report).
+Diagnostic code4 installed then removed;42 Android/52 gateway recorded IDs absent,
+private artifacts/worktree/test images removed, radios1/1 restored. No production,
+public/invitation version change or push. No unfinished5N.5 acceptance checks.
+[Report/evidence/limits](releases/2026-09-28-webrtc-eu5-mux-dns.ru.md).
+**STOP after5N.5**; Room Broker/5N.6/TUN/UDP/Orchestrator require separate work.
+
 - production и current released versions этой задачей не менялись
   (Android beta51/code51, Linux0.2.11, Windows0.2.15).
 - active engineering critical path — **5N: Restricted WebRTC Android→EU**
@@ -10,7 +33,7 @@
 - **WEBRTC-EU-3 / 5N.3 = PASS**: physical Android Family E2E over VP8,
   374 exact echoes,302.001s sustained.
 - **WEBRTC-EU-4 / 5N.4 = PASS**: single TCP, physical HTTPS/public10MiB,
-  controlled full-duplex300.821s; 5N.5–5N.6 NOT RUN. STOP, no automatic next stage.
+  controlled full-duplex300.821s;5N.5 PASS above,5N.6 NOT RUN.
 
 ## 28.09.2026 — WEBRTC-EU-4 / 5N.4 = PASS: one admitted TCP stream
 
