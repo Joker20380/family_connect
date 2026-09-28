@@ -85,7 +85,19 @@ public final class ProbeService extends Service {
 
     void startProbe(String room) {
         if (destroying || run.isActive()) return;
-        if (room == null || room.length() > 2048 || !room.startsWith("https://")) {
+        File brokerInput = new File(getFilesDir(), "broker.input");
+        String brokerEndpoint = "";
+        try {
+            if (brokerInput.isFile() && brokerInput.length() <= 2048) {
+                brokerEndpoint = new String(java.nio.file.Files.readAllBytes(brokerInput.toPath()), java.nio.charset.StandardCharsets.UTF_8).trim();
+            }
+        } catch (Exception ignored) {
+            record(event("android_failure", "reason", "BROKER_INPUT_INVALID"));
+            return;
+        }
+        final String broker = brokerEndpoint;
+        if ((!broker.isEmpty() && (!broker.startsWith("https://") || (room != null && !room.isEmpty()))) ||
+            (broker.isEmpty() && (room == null || room.length() > 2048 || !room.startsWith("https://")))) {
             record(event("android_failure", "reason", "ROOM_INPUT_INVALID"));
             return;
         }
@@ -137,7 +149,12 @@ public final class ProbeService extends Service {
                 builder.command().add("--family-config");
                 builder.command().add(family.getAbsolutePath());
             }
-            builder.environment().put("FC_TELEMOST_ROOM", room);
+            if (broker.isEmpty()) {
+                builder.environment().put("FC_TELEMOST_ROOM", room);
+            } else {
+                builder.command().addAll(Arrays.asList("--broker-url", broker));
+                builder.environment().remove("FC_TELEMOST_ROOM");
+            }
             builder.environment().put("SSL_CERT_DIR", "/system/etc/security/cacerts:/apex/com.android.conscrypt/cacerts");
             builder.redirectError(new File("/dev/null"));
             try { return builder.start(); }

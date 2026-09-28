@@ -21,6 +21,7 @@ import (
 	"time"
 
 	"github.com/Joker20380/family_connect/carrier/familysession"
+	"github.com/Joker20380/family_connect/carrier/roombroker"
 	"github.com/Joker20380/family_connect/carrier/tcpforward"
 	"github.com/Joker20380/family_connect/carrier/telemost"
 )
@@ -41,6 +42,7 @@ func run() error {
 	settle := flag.Duration("settle", 3*time.Second, "wait for remote media slots before probing")
 	metricsInterval := flag.Duration("metrics-interval", 0, "optional memory/CPU sample interval (1s to 1m; zero disables)")
 	familyConfig := flag.String("family-config", "", "private isolated 5N.3 credentials file; no production identity")
+	brokerURL := flag.String("broker-url", "", "automatic authenticated room control endpoint; no manual room")
 	performanceFile := flag.String("performance-config", "", "bounded test-only performance point JSON")
 	performanceObserver := flag.Bool("performance-observer", false, "test-only echo timing and numeric WebRTC statistics")
 	tcpFile := flag.String("tcp-config", "", "single TCP test request JSON; authenticated VP8 only")
@@ -91,7 +93,29 @@ func run() error {
 	defer stop()
 	ctx, cancel := context.WithTimeout(signalContext, *duration)
 	defer cancel()
-	session, err := telemost.New(ctx, telemost.Config{RoomURL: os.Getenv("FC_TELEMOST_ROOM"), DisplayName: "FC synthetic " + *role, Mode: mode})
+	roomURL := os.Getenv("FC_TELEMOST_ROOM")
+	var descriptor roombroker.Descriptor
+	if *brokerURL != "" {
+		if *familyConfig == "" || *role != "probe" || *muxFile == "" || mode != telemost.ModeVP8 || roomURL != "" {
+			return errors.New("broker requires authenticated mux probe without manual room")
+		}
+		raw, err := roombroker.LoadCredentials(*familyConfig)
+		if err != nil {
+			return err
+		}
+		client, err := roombroker.NewClient(*brokerURL, raw)
+		clear(raw)
+		if err != nil {
+			return err
+		}
+		descriptor, err = client.Create(ctx)
+		if err != nil {
+			return err
+		}
+		defer client.Cancel(descriptor.SetupID)
+		roomURL = descriptor.JoinURL
+	}
+	session, err := telemost.New(ctx, telemost.Config{RoomURL: roomURL, DisplayName: "FC synthetic " + *role, Mode: mode})
 	if err != nil {
 		return err
 	}
@@ -120,6 +144,9 @@ func run() error {
 	metadata["role"] = *role
 	metadata["mode"] = *modeName
 	metadata["room_method"] = "operator-provided disposable room"
+	if *brokerURL != "" {
+		metadata["room_method"] = "authenticated automatic broker"
+	}
 	if err := emit(metadata); err != nil {
 		return errors.New("metrics output failed")
 	}
@@ -151,6 +178,12 @@ func run() error {
 			}
 		}
 		secured, err := familysession.Open(ctx, session, credentials, *role == "echo")
+		if err == nil && *brokerURL != "" {
+			err = roombroker.BindClient(ctx, secured, descriptor, credentials)
+			if err != nil {
+				secured.Close()
+			}
+		}
 		clear(credentials)
 		if err != nil {
 			_ = emit(map[string]any{"event": "family_auth", "accepted": false})

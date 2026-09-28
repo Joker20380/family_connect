@@ -21,6 +21,7 @@ def main():
     toolchain = args.ndk.resolve() / "toolchains/llvm/prebuilt/linux-x86_64/bin"
     env = os.environ.copy()
     env.pop("FC_TELEMOST_ROOM", None)
+    env.pop("YANDEX_TELEMOST_OAUTH_TOKEN", None)
     env.update(GOOS="android", GOARCH="arm64", CGO_ENABLED="1",
                CC=str(toolchain / "aarch64-linux-android26-clang"),
                CGO_LDFLAGS="-Wl,-z,max-page-size=16384")
