@@ -13,6 +13,8 @@ import (
 
 type Policy struct {
 	TestOnlyLoopbackPort int
+	Metrics              *DestinationMetrics
+	localAddresses       []netip.Addr
 }
 
 var forbidden = []netip.Prefix{
@@ -29,6 +31,10 @@ var forbidden = []netip.Prefix{
 }
 
 func validate(request OpenRequest) error {
+	if len(request.Host) > 254 {
+		return &OpenError{Code: "malformed_request"}
+	}
+	request.Host = canonicalHost(request.Host)
 	if request.Port < 1 || request.Port > 65535 || request.TimeoutMS < 0 || request.TimeoutMS > 30000 || len(request.Host) == 0 || len(request.Host) > 253 {
 		return &OpenError{Code: "malformed_request"}
 	}
@@ -55,6 +61,11 @@ func (policy Policy) permits(address netip.Addr, port int) bool {
 	address = address.Unmap()
 	if address == netip.MustParseAddr("127.0.0.1") && policy.TestOnlyLoopbackPort == port {
 		return true
+	}
+	for _, local := range policy.localAddresses {
+		if local == address {
+			return false
+		}
 	}
 	if !address.IsGlobalUnicast() || address.IsPrivate() || address.IsLoopback() || address.IsLinkLocalUnicast() {
 		return false
@@ -83,6 +94,7 @@ func connect(ctx context.Context, request OpenRequest, policy Policy, lookup res
 	if err := validate(request); err != nil {
 		return nil, err
 	}
+	request.Host = canonicalHost(request.Host)
 	timeout := 10 * time.Second
 	if request.TimeoutMS != 0 {
 		timeout = time.Duration(request.TimeoutMS) * time.Millisecond
@@ -94,13 +106,24 @@ func connect(ctx context.Context, request OpenRequest, policy Policy, lookup res
 		addresses = []netip.Addr{literal}
 	} else {
 		var err error
-		addresses, err = lookup.LookupNetIP(ctx, "ip", request.Host)
+		policy.Metrics.update(func(stats *DestinationStats) { stats.HostnameOpenRequests++ })
+		lookupContext, cancelLookup := context.WithTimeout(ctx, 3*time.Second)
+		addresses, err = lookup.LookupNetIP(lookupContext, "ip", request.Host)
+		lookupErr := lookupContext.Err()
+		cancelLookup()
 		if err != nil {
-			if ctx.Err() != nil {
+			policy.Metrics.update(func(stats *DestinationStats) { stats.DNSLookupFailure++ })
+			if ctx.Err() == context.Canceled {
+				return nil, &OpenError{Code: "cancelled"}
+			}
+			var dnsError *net.DNSError
+			if lookupErr == context.DeadlineExceeded || errors.Is(err, context.DeadlineExceeded) || errors.As(err, &dnsError) && dnsError.IsTimeout {
+				policy.Metrics.update(func(stats *DestinationStats) { stats.DNSLookupTimeout++ })
 				return nil, &OpenError{Code: "timeout"}
 			}
 			return nil, &OpenError{Code: "dns_failure"}
 		}
+		policy.Metrics.update(func(stats *DestinationStats) { stats.DNSLookupSuccess++ })
 	}
 	if len(addresses) == 0 {
 		return nil, &OpenError{Code: "dns_failure"}
@@ -110,16 +133,27 @@ func connect(ctx context.Context, request OpenRequest, policy Policy, lookup res
 	}
 	for _, address := range addresses {
 		if !policy.permits(address, request.Port) {
+			policy.Metrics.update(func(stats *DestinationStats) { stats.DestinationDenied++ })
 			return nil, &OpenError{Code: "policy_rejected"}
 		}
 	}
 	var last error
 	for _, address := range addresses {
-		connection, err := dial(ctx, "tcp", net.JoinHostPort(address.Unmap().String(), strconv.Itoa(request.Port)))
+		attempt, cancelAttempt := context.WithTimeout(ctx, 3*time.Second)
+		connection, err := dial(attempt, "tcp", net.JoinHostPort(address.Unmap().String(), strconv.Itoa(request.Port)))
+		cancelAttempt()
 		if err == nil {
+			policy.Metrics.update(func(stats *DestinationStats) {
+				if address.Unmap().Is4() {
+					stats.IPv4Selected++
+				} else {
+					stats.IPv6Selected++
+				}
+			})
 			return connection, nil
 		}
 		last = err
+		policy.Metrics.update(func(stats *DestinationStats) { stats.ConnectFailure++ })
 		if ctx.Err() != nil {
 			break
 		}

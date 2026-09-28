@@ -20,6 +20,7 @@ type MuxConfig struct {
 }
 
 type MuxStats struct {
+	Destination        DestinationStats
 	ActiveSockets      int
 	ActiveStreams      int
 	MaxActiveStreams   int
@@ -79,6 +80,13 @@ func NewMux(ctx context.Context, session *familysession.Session, server bool, co
 	}
 	if err := validateMuxConfig(config); err != nil {
 		return nil, err
+	}
+	if server {
+		var err error
+		config.Policy, err = gatewayPolicy(config.Policy)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if err := session.ClaimTCP(server); err != nil {
 		return nil, err
@@ -190,6 +198,7 @@ func (mux *Mux) Stats() MuxStats {
 }
 
 func (mux *Mux) measureLocked() {
+	mux.stats.Destination = mux.config.Policy.Metrics.Snapshot()
 	retained, queue := 0, len(mux.control)
 	for _, frame := range mux.control {
 		retained += len(frame.payload)

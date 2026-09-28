@@ -44,26 +44,27 @@ type OpenError struct {
 func (failure *OpenError) Error() string { return "TCP OPEN: " + failure.Code }
 
 type Stats struct {
-	OpenRequests      uint64  `json:"open_requests"`
-	OpenOK            uint64  `json:"open_ok"`
-	OpenErrors        uint64  `json:"open_errors"`
-	ConnectMS         float64 `json:"connect_ms"`
-	ToTarget          uint64  `json:"to_target_bytes"`
-	FromTarget        uint64  `json:"from_target_bytes"`
-	DataSent          uint64  `json:"data_sent"`
-	DataReceived      uint64  `json:"data_received"`
-	TCPReads          uint64  `json:"tcp_reads"`
-	TCPWrites         uint64  `json:"tcp_writes"`
-	PartialWrites     uint64  `json:"partial_writes"`
-	LocalFIN          uint64  `json:"local_fin"`
-	RemoteFIN         uint64  `json:"remote_fin"`
-	EOFs              uint64  `json:"eofs"`
-	Resets            uint64  `json:"resets"`
-	RetainedHighWater int     `json:"retained_high_water"`
-	RetainedBytes     int     `json:"retained_bytes"`
-	BufferBoundBytes  int     `json:"buffer_bound_bytes"`
-	ActiveSockets     int     `json:"active_sockets"`
-	CloseReason       string  `json:"close_reason"`
+	Destination       DestinationStats `json:"destination"`
+	OpenRequests      uint64           `json:"open_requests"`
+	OpenOK            uint64           `json:"open_ok"`
+	OpenErrors        uint64           `json:"open_errors"`
+	ConnectMS         float64          `json:"connect_ms"`
+	ToTarget          uint64           `json:"to_target_bytes"`
+	FromTarget        uint64           `json:"from_target_bytes"`
+	DataSent          uint64           `json:"data_sent"`
+	DataReceived      uint64           `json:"data_received"`
+	TCPReads          uint64           `json:"tcp_reads"`
+	TCPWrites         uint64           `json:"tcp_writes"`
+	PartialWrites     uint64           `json:"partial_writes"`
+	LocalFIN          uint64           `json:"local_fin"`
+	RemoteFIN         uint64           `json:"remote_fin"`
+	EOFs              uint64           `json:"eofs"`
+	Resets            uint64           `json:"resets"`
+	RetainedHighWater int              `json:"retained_high_water"`
+	RetainedBytes     int              `json:"retained_bytes"`
+	BufferBoundBytes  int              `json:"buffer_bound_bytes"`
+	ActiveSockets     int              `json:"active_sockets"`
+	CloseReason       string           `json:"close_reason"`
 }
 
 type Metrics struct {

@@ -15,12 +15,18 @@ func Serve(ctx context.Context, session *familysession.Session, policy Policy, m
 	if session == nil {
 		return familysession.ErrRejected
 	}
+	var err error
+	policy, err = gatewayPolicy(policy)
+	if err != nil {
+		return err
+	}
 	if err := session.ClaimTCP(true); err != nil {
 		return err
 	}
 	if metrics == nil {
 		metrics = &Metrics{}
 	}
+	defer func() { metrics.update(func(stats *Stats) { stats.Destination = policy.Metrics.Snapshot() }) }()
 	return serve(ctx, session, policy, metrics, net.DefaultResolver, func(ctx context.Context, network, address string) (socket, error) {
 		connection, err := (&net.Dialer{KeepAlive: 30 * time.Second}).DialContext(ctx, network, address)
 		if err != nil {
