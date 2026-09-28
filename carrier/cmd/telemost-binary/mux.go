@@ -44,7 +44,7 @@ func muxSamples(ctx context.Context, mux *tcpforward.Mux, snapshot func() map[st
 	return func() { cancel(); <-done }
 }
 
-func muxProbe(ctx context.Context, session *familysession.Session, path string, snapshot func() map[string]any, emit func(map[string]any) error) error {
+func muxProbe(ctx context.Context, session *familysession.Session, path string, guard bool, snapshot func() map[string]any, emit func(map[string]any) error) error {
 	info, err := os.Stat(path)
 	if err != nil || !info.Mode().IsRegular() || info.Size() > 1024 {
 		return errors.New("invalid mux configuration")
@@ -73,6 +73,9 @@ func muxProbe(ctx context.Context, session *familysession.Session, path string, 
 		err = muxMixed(ctx, mux, config, emit)
 	}
 	status := "PASS"
+	if guard && dnsGuardCount() != 0 {
+		err = errors.New("native DNS attempted after admission")
+	}
 	if err != nil {
 		status = "FAIL"
 	}
@@ -129,10 +132,7 @@ func muxQuery(name string, kind dnsmessage.Type) ([]byte, error) {
 func muxDNSProof(ctx context.Context, mux *tcpforward.Mux, emit func(map[string]any) error) error {
 	results := make(chan error, 3)
 	for index, kind := range []dnsmessage.Type{dnsmessage.TypeA, dnsmessage.TypeAAAA, dnsmessage.TypeA} {
-		name := "example.com."
-		if index == 2 {
-			name = fmt.Sprintf("fc-mux-%d.example.com.", time.Now().UnixNano())
-		}
+		name := muxDNSName(index)
 		go func() {
 			query, err := muxQuery(name, kind)
 			if err != nil {
@@ -159,6 +159,13 @@ func muxDNSProof(ctx context.Context, mux *tcpforward.Mux, emit func(map[string]
 		}
 	}
 	return failure
+}
+
+func muxDNSName(index int) string {
+	if index == 2 {
+		return fmt.Sprintf("fc-mux-%d.invalid.", time.Now().UnixNano())
+	}
+	return "example.com."
 }
 
 func muxFill(payload []byte, id uint32, offset int64) {

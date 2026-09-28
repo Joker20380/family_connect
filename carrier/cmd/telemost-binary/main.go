@@ -4,10 +4,13 @@ import (
 	"bytes"
 	"context"
 	"crypto/rand"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"os/signal"
 	"runtime"
@@ -200,7 +203,7 @@ func run() error {
 					_ = emit(map[string]any{"event": "mux_dns_guard", "phase": "final", "post_probe_calls": dnsGuardCount()})
 				}
 			}()
-			return muxProbe(ctx, secured, *muxFile, snapshot, emit)
+			return muxProbe(ctx, secured, *muxFile, *denyDNS, snapshot, emit)
 		}
 		if *tcpFile != "" {
 			return tcpProbe(ctx, secured, *tcpFile, snapshot, emit)
@@ -315,6 +318,15 @@ func probe(ctx context.Context, data familysession.PacketEndpoint, session *tele
 
 func buildMetadata() map[string]any {
 	metadata := map[string]any{"os": runtime.GOOS, "arch": runtime.GOARCH, "go": runtime.Version(), "pid": os.Getpid(), "parent_pid": os.Getppid()}
+	if executable, err := os.Executable(); err == nil {
+		if file, err := os.Open(executable); err == nil {
+			digest := sha256.New()
+			if _, err := io.Copy(digest, file); err == nil {
+				metadata["executable_sha256"] = hex.EncodeToString(digest.Sum(nil))
+			}
+			file.Close()
+		}
+	}
 	if info, ok := debug.ReadBuildInfo(); ok {
 		for _, dependency := range info.Deps {
 			if dependency.Path == "github.com/pion/webrtc/v4" {
