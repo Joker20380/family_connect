@@ -47,7 +47,10 @@ def main():
     parser.add_argument("--tcp-config", type=Path)
     parser.add_argument("--mux-config", type=Path)
     parser.add_argument("--tcp-test-loopback-port", type=int, default=0)
+    parser.add_argument("--upload-timeout", type=int, default=45)
     args = parser.parse_args()
+    if not 15 <= args.upload_timeout <= 180:
+        parser.error("artifact upload timeout must be 15..180 seconds")
     if args.mux_config and (not args.family_dir or not args.independent_observer or args.performance_config or args.tcp_config or args.client_profile != "valid"):
         parser.error("mux requires valid Family credentials and an exclusive independent observer")
     duration = "35m" if args.performance_config else "25m"
@@ -83,7 +86,9 @@ def main():
             if args.family_dir:
                 bundle.add(args.family_dir / "gateway.json", arcname="family.input")
         with archive.open("rb") as source:
-            subprocess.run(SSH + [f"tar -xzf - -C {directory} && chown -R nobody:nogroup {directory}"], stdin=source, check=True, timeout=45)
+            upload_started = time.monotonic()
+            subprocess.run(SSH + [f"tar -xzf - -C {directory} && chown -R nobody:nogroup {directory}"], stdin=source, check=True, timeout=args.upload_timeout)
+            print("B_ARTIFACT_UPLOADED", archive.stat().st_size, round(time.monotonic() - upload_started, 3), flush=True)
         archive.unlink()
         extra = ["--family-config", "family.input"] if args.family_dir else []
         if args.performance_config:

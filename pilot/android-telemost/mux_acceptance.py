@@ -68,7 +68,7 @@ def main():
         path.write_text(json.dumps(config))
         command = [sys.executable, str(Path(__file__).with_name('live.py')), '--adb', args.adb,
                    '--binary', str(args.binary), '--family-dir', str(args.family_dir),
-                   '--independent-observer', '--mux-config', str(path), '--out', str(args.out / 'flow')]
+                   '--independent-observer', '--mux-config', str(path), '--upload-timeout', '180', '--out', str(args.out / 'flow')]
         if fixture:
             command += ['--tcp-test-loopback-port', str(config['port'])]
         with (args.out / 'runner.log').open('wb') as output:
