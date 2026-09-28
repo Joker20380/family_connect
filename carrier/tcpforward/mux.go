@@ -222,6 +222,9 @@ func (mux *Mux) measureLocked() {
 }
 
 func (mux *Mux) controlLocked(frame muxFrame) {
+	if mux.ctx.Err() != nil {
+		return
+	}
 	if len(mux.control) >= 2*MuxMaxStreams+2*MuxMaxDNS {
 		mux.err = ErrProtocol
 		mux.cancel()
