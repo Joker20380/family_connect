@@ -2,6 +2,14 @@
 
 ## Current decision — Restricted WebRTC to EU Gateway first
 
+28.09: isolated [5N.4 single TCP forwarding](../carrier/tcpforward/README.md)
+adds `Application TCP → Family TCP framing → Family TLS → ReliableStream → VP8`
+above the unchanged proven carrier. One admitted session/stream, explicit FIN and
+structured connect errors; gateway DNS with public-destination validation, no mux
+or TUN. **5N.4 PASS**: physical public HTTPS200/10MiB and controlled exact duplex
+300.821s; security/lifecycle/regressions/cleanup accepted. No production rollout
+or5N.5; [proof and limits](releases/2026-09-28-webrtc-eu4-single-tcp.ru.md).
+
 2026-09-27 implementation checkpoint: [carrier/](../carrier/README.md) recovers
 the interrupted isolated Go/Pion prototype initially for **5N.1**. Bounded binary
 framing, Telemost join/signaling, VP8 and a separate diagnostic DC mode exist;

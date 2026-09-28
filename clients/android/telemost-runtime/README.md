@@ -1,11 +1,48 @@
-# Physical Android synthetic Telemost gates — 5N.2 / 5N.3
+# Physical Android isolated Telemost gates — 5N.2 / 5N.3 / 5N.4
 
 This is a **separate debug-only APK**, `com.familyconnect.telemosttest`, not the
 Family Connect beta. No VpnService, TUN, production traffic, Chaquopy, AWG/Xray,
-transport selection or automatic fallback is included. Code2 / `5N.3-test-only`
-adds an opt-in authenticated Family TLS1.3 session above the unchanged VP8 carrier.
+transport selection or automatic fallback is included. Code3 / `5N.4-test-only`
+adds one TCP stream above the existing authenticated Family TLS1.3 session.
 Without private operator credentials it remains the plaintext5N.2 diagnostic.
-DTLS is not Family E2E. Only generated random payloads are used.
+DTLS is not Family E2E. Tests use synthetic payloads and public HTTPS responses;
+never forward private application traffic using these disposable credentials.
+
+## Single TCP operator surface (5N.4)
+
+`tcpforward.OpenTCP` lives in the shared Go core, not the Android UI. Private
+`files/tcp.input` selects `--tcp-config`; the Service still enforces VP8 and an
+authenticated Family profile. There is no local proxy listener or VPN permission.
+Example request: `{"host":"example.com","port":443,"mode":"https","path":"/"}`.
+The gateway uses `--tcp-gateway --family-config family.input --role echo --mode vp8`.
+One TCP stream per freshly admitted session, no automatic migration/reconnect.
+
+With the existing room environment and fresh disposable identity directory:
+
+```sh
+python3 pilot/android-telemost/tcp_acceptance.py --adb /path/to/adb \
+  --binary /tmp/fc-telemost-binary --family-dir /tmp/fc-family-fixture \
+  --case https --out /tmp/fc-tcp-https
+```
+
+Cases `local`, `multi` (10MiB echo), `sustained` (300s paced), `remote_close`,
+`remote_half_close`, `remote_reset`, `refused`, `timeout`, `cancel`, `remote-exit`,
+`network-loss` use an explicit exact-port Amsterdam loopback fixture by default.
+They are real TCP semantics over physical SFU, **not public Internet targets**.
+`https` uses example.com; `download` checks exactly10MiB from speed.cloudflare.com.
+Optional `--public-fixture` uses a temporary source-IP-restricted endpoint on the
+other authorized host185.251.89.19; first28.09 trial timed out, no firewall change.
+Any source-IP allowlist/fixture is test-only, not a gateway admission substitute.
+
+Each invocation saves independent evidence; never overwrite a failed run. The
+runner deletes app-private inputs and owned remote processes/directories. Network
+loss requires an initially enabled cellular radio and disabled Wi-Fi; it restores
+cellular in `finally`. Save/restore initial radio settings externally. After final
+testing uninstall only the diagnostic APK and remove local profiles/private builds.
+`tcp_sample` every5s captures staging, queue and reliable counters; resources10s.
+End-site TLS uses standard verification and never terminates at the gateway.
+[Protocol/policy](../../../carrier/tcpforward/README.md) ·
+[5N.4 accepted evidence and limitations](../../../docs/releases/2026-09-28-webrtc-eu4-single-tcp.ru.md).
 
 5N-REL-1 diagnostic builds preserve APK code2/name`5N.3-test-only`; exact source
 and hashes, not this reused local debug label, identify an installed test build.

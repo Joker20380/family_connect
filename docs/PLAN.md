@@ -2,6 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
+- **WEBRTC-EU-4 / 5N.4 = PASS**, explicitly authorized: single admitted TCP stream,
+  core `2b977da`/RST fix `fa3c027`, final clean tested CLI/APK `63f6bde`.
+  Physical Redmi→Family TLS→ReliableStream→Telemost→Amsterdam→public HTTPS200,
+  verified end-site TLS,10MiB public download; controlled10MiB duplex exact and
+  22,511,616B each direction/300.820842906s/1.197343416Mbit/s aggregate.
+  FIN/half-close/structured errors/RST/cancellation/fresh-session recovery PASS.
+  Bounded buffers,0 bad-MAC/corruption/duplicate/missing on completed transfers;
+  regressions (including518 canonical exact and controlled gap1/1) and cleanup PASS.
+  Initial public-fixture timeout/RST/HTTPS-close failures retained; no firewall or
+  production changes. [Report/evidence](releases/2026-09-28-webrtc-eu4-single-tcp.ru.md).
+  **STOP after5N.4**; no unfinished acceptance checks. No automatic5N.5/mux/TUN,
+  production rollout or push. Further work requires separate authorization.
+  Earlier STOPs below are historical gate boundaries, not current pending work.
+
 - **5N-PERF-2 = PASS**, explicitly authorized on27.09 after REL-1.
   Baseline cap2/300s reproduced; six120s discovery points0.5/1/1.5/2/2.5/3.
   Highest accepted reliable goodput1.742311Mbit/s at cap3/1800s; conservative
@@ -67,7 +81,7 @@
   TUN/TCP/WB не начинались; последующий5N-PERF-1 приведён выше, затем STOP.
   [Отчёт/оставшиеся проверки](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md).
   [Android5N.2 checkpoint](releases/2026-09-27-webrtc-eu2-android-binary.ru.md).
-- затем, отдельным разрешением: **5N.4 → 5N.5 → 5N.6**; автоматически не начинать.
+- после accepted5N.4, отдельным разрешением: **5N.5 → 5N.6**; автоматически не начинать.
 - после этого: restricted-mobile acceptance **5M**.
 - **WB fallback** — только после подтверждения Telemost на реальной сети.
 - **5.3a / 5.3в** и **Home Gateway (5A–5M secondary track)** — backlog, не запускаются автоматически.
@@ -141,7 +155,7 @@ home IP/NAT, Windows routing, включённого ПК и лишнего до
 | WEBRTC-EU-1 / 5N.1 | Два независимых Linux через настоящий Telemost VP8: byte-for-byte binary echo нескольких размеров | PASS27.09:291 checks,30s/5min и live failure cleanup; source a13068e |
 | WEBRTC-EU-2 / 5N.2 | Android↔EU Linux binary round trip без TUN | PASS27.09: physical Redmi/Telemost VP8/Amsterdam,372 exact echoes,30s/5min; runtime3f65346 |
 | WEBRTC-EU-3 / 5N.3 | E2E Family session с existing Device Identity/FAMILY; wrong/revoked/replay rejected | PASS27.09: physical Android,374 exact echoes/302.001s; isolated runtime5dd8b49; no production authority rollout |
-| WEBRTC-EU-4 / 5N.4 | Один TCP stream: реальный HTTPS response через EU | Не запускался |
+| WEBRTC-EU-4 / 5N.4 | Один TCP stream: реальный HTTPS response через EU | **PASS28.09**: physical HTTPS200/public10MiB, exact duplex300.821s, half-close/faults/security/cleanup; [evidence/limits](releases/2026-09-28-webrtc-eu4-single-tcp.ru.md) |
 | WEBRTC-EU-5 / 5N.5 | Много TCP/API/browser/DNS streams в одной carrier session | Не запускался |
 | WEBRTC-EU-6 / 5N.6 | Full-device Android TCP+DNS, EU exit, no direct/DNS/IPv6 leak | Не запускался |
 

@@ -8,7 +8,33 @@
 - **WEBRTC-EU-2 / 5N.2 = PASS**: physical Android↔Telemost VP8↔Amsterdam,
   372 exact echoes,7 sizes/100×1/16KiB/30s/5min, без TUN/DataChannel substitution.
 - **WEBRTC-EU-3 / 5N.3 = PASS**: physical Android Family E2E over VP8,
-  374 exact echoes,302.001s sustained; 5N.4–5N.6 NOT RUN.
+  374 exact echoes,302.001s sustained.
+- **WEBRTC-EU-4 / 5N.4 = PASS**: single TCP, physical HTTPS/public10MiB,
+  controlled full-duplex300.821s; 5N.5–5N.6 NOT RUN. STOP, no automatic next stage.
+
+## 28.09.2026 — WEBRTC-EU-4 / 5N.4 = PASS: one admitted TCP stream
+
+Explicitly authorized single-stream forwarding above existing Family TLS/reliable
+VP8. Core2b977da/RST fixfa3c027; initial harness2e81984, telemetry554acbb,
+observer2c5c63e, final tested clean CLI/APK63f6bde. Physical Redmi Note9 Pro/Android12
+cellular→Family TLS→ReliableStream→Telemost real SFU→Amsterdam→public TCP:
+example.com443/Cloudflare443 verified end-site TLS,HTTP200; public10,485,760B download.
+Controlled Amsterdam TCP fixture10MiB each direction exact; sustained22,511,616B
+each direction/300.820842906s/1.197343416Mbit/s aggregate. Public download and
+controlled-loopback upload/duplex are distinct proofs, not a public-fixture claim.
+FIN/half-close/refused/timeout/RST/session loss/fresh recovery PASS;13 final cases.
+Sustained RTP gaps0/recovered0; data retries0,teardown3; exact accepted transfers
+bad-MAC/corruption/duplicates/missing0. CarrierQ sampled4/7, staging32011/42956B
+<49172B bound, reliable retained76656/80718B, final sockets/buffers0.
+Go race×3/vet/modules/five fuzz,Python984+3 documented skips,Android build/6JVM/
+lint/native PASS; physical canonical518 exact, auth negatives/replay/lifecycle PASS,
+controlled reliable gap1/1 recovered with8 exact echoes. Earlier failed attempts
+retained, no production/firewall changes. [Report/evidence](releases/2026-09-28-webrtc-eu4-single-tcp.ru.md).
+Only isolated APK5N.4-test-only/code3 was installed, then removed.28 Android/33
+gateway recorded PIDs absent, temp fixtures/worktrees/private credentials/logs/builds
+removed; radios1/1 restored. Production/public/invitation versions unchanged.
+No unfinished5N.4 acceptance checks; no TUN/mux/5N.5/rollout/push or production-ready
+claim. Foreign VPN audit changes retained separately. **STOP after5N.4.**
 
 ## 27.09.2026 — 5N-PERF-2 = PASS: reliable operating envelope
 

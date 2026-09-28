@@ -32,6 +32,9 @@ the owned Family transport, unblocking active IO. After both FINs, CLOSE/ack is
 bounded by 10s. The gateway keeps its Family endpoint alive for up to 10s after
 the response to avoid dropping an enqueued reliable response during teardown;
 the TCP socket is already closed. No migration after Family session loss.
+An immediate target RST closes its socket but retains the Family endpoint for
+peer observation (up to10s); otherwise a queued OPEN_OK/RESET could be lost during
+carrier teardown. The client cancels its endpoint after observing terminal RESET.
 Callers must supply a bounded lifetime context and close the returned stream.
 
 ## Policy

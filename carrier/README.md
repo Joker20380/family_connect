@@ -1,4 +1,11 @@
-# Telemost binary carrier — experimental 5N.1 / 5N.2 / 5N.3
+# Telemost binary carrier — experimental 5N.1–5N.4
+
+5N.4 adds [one authenticated TCP stream](tcpforward/README.md) above existing
+Family TLS/ReliableStream, without changing the carrier. CLI `--tcp-gateway` and
+`--tcp-config` are explicit test-only modes requiring authenticated VP8. Default
+echo behavior is unchanged. [Android/operator surface](../clients/android/telemost-runtime/README.md)
+and [live evidence/status](../docs/releases/2026-09-28-webrtc-eu4-single-tcp.ru.md).
+No mux, TUN, production proxy, dedicated DNS or seamless TCP session migration.
 
 Recovered from the interrupted DeepSeek worktree, not a second carrier.
 `WEBRTC-EU-1 / 5N.1` **PASS on 2026-09-27**: independent developer Linux and

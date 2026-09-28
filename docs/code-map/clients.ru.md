@@ -15,6 +15,13 @@
 test carrier sockets **не protected**, будущий bridge описан в
 [отдельном runbook](../../clients/android/telemost-runtime/README.md).
 
+5N.4 single TCP: `carrier/tcpforward` содержит wire/policy/client/gateway; concrete
+`familysession.Session.ClaimTCP` допускает одну сессию правильной роли после auth.
+`carrier/cmd/telemost-binary/tcp.go` — echo/HTTPS/fault test client и5s telemetry;
+`pilot/android-telemost/tcp_acceptance.py`/`tcp_fixture.py` — disposable fixtures,
+exact validation и cleanup. APK code3/5N.4-test-only, app-private tcp.input; product
+UI/VPN runtime не меняются. [Evidence](../releases/2026-09-28-webrtc-eu4-single-tcp.ru.md).
+
 Корень: [clients/android](../../clients/android/). Основные Java-файлы в
 `app/src/main/java/com/familyconnect/app/`; ресурсы в `app/src/main/res/`, Python bridge
 в `app/src/main/python/`. Gradle `app/build.gradle` определяет variant/ABI/version.

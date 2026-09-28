@@ -3,8 +3,8 @@
 **Текущий critical path — 5N:** [Restricted Android→Telemost VP8→Linux EU](PLAN.md).
 Новый разработчик restricted connectivity начинает с 5N design
 ([DECISION](reticulum/HOME_GATEWAY_DESIGN.md#decision-restricted-webrtc-to-eu-gateway-first--2026-09-25))
-и актуального gate в STATUS:5N.1/5N.2/5N.3 PASS; дальнейшая5N.4 требует отдельного
-решения. [Отчёт5N.3/evidence](releases/2026-09-27-webrtc-eu3-family-session.ru.md).
+и актуального gate в STATUS:5N.1–5N.4 PASS; далее STOP,5N.5 требует отдельного
+решения. [Отчёт5N.4/evidence](releases/2026-09-28-webrtc-eu4-single-tcp.ru.md).
 Home Gateway и RNS-over-WebRTC — secondary / backlog.
 
 **Приоритет25.09 уточнён:** [Restricted Android→Telemost VP8→Linux EU](PLAN.md)
@@ -105,6 +105,11 @@ installed/deployed versions; dated reports preserve what was checked at that tim
 - [Release distribution and signing](releases.md).
 
 ## Developers
+
+- [5N.4: single admitted TCP stream](releases/2026-09-28-webrtc-eu4-single-tcp.ru.md):
+  **PASS**, physical public HTTPS10MiB, controlled exact duplex300.821s,
+  half-close/errors/security/regressions/cleanup; failed attempts preserved.
+  No mux/TUN/production rollout; STOP before5N.5.
 
 - [5N-PERF-2: reliable long-duration operating envelope](releases/2026-09-27-webrtc-5n-perf2-reliable-envelope.ru.md):
   **PASS**, physical Android/Telemost/Amsterdam, fixed reliable defaults;
