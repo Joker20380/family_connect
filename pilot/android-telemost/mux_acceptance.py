@@ -22,6 +22,9 @@ def validate_mux_evidence(case, android, gateway):
         raise RuntimeError('negative local DNS condition or zero local lookup proof missing')
     if not any(row.get('event') == 'android_start' and row.get('network') == 'cellular' for row in android):
         raise RuntimeError('cellular environment not proven')
+    opened = [row for row in android if row.get('event') == 'mux_open']
+    if len(opened) != 1 or opened[0].get('simultaneous') != (4 if case == 'public' else 5):
+        raise RuntimeError('simultaneous stream count not proven')
     dns = [row for row in android if row.get('event') == 'mux_dns']
     if len(dns) < 3 or not all(row['passed'] for row in dns):
         raise RuntimeError('Family DNS proof failed')
@@ -36,13 +39,16 @@ def validate_mux_evidence(case, android, gateway):
         if len(bulk) != 1 or not bulk[0]['passed'] or bulk[0]['seconds'] < 300 or bulk[0]['bytes_each_direction'] < 10 * 1024 * 1024:
             raise RuntimeError('mixed bulk acceptance incomplete')
         small = [row for row in android if row.get('event') == 'mux_stream']
-        if len(small) != 4 or not all(row['passed'] and row['stream']['Sent'] > 0 for row in small):
+        if len(small) != 4 or len({row['stream']['ID'] for row in small}) != 4 or not all(row['passed'] and row['stream']['Sent'] == row['stream']['Received'] and row['stream']['Sent'] >= 12800 for row in small):
             raise RuntimeError('interactive streams missing')
+        interactive = [row for row in android if row.get('event') == 'mux_interactive']
+        if len(interactive) != 1 or not interactive[0]['passed'] or interactive[0]['seconds'] < 300:
+            raise RuntimeError('mixed interactive duration not proven')
         isolation = [row for row in android if row.get('event') == 'mux_isolation']
         if len(isolation) != 3 or not all(row['passed'] for row in isolation):
             raise RuntimeError('live stream isolation missing')
     final = [row for row in gateway if row.get('event') == 'mux_gateway']
-    if len(final) != 1 or final[0]['stats']['ActiveSockets'] != 0 or final[0]['stats']['RetainedBytes'] != 0:
+    if len(final) != 1 or final[0]['stats']['ActiveSockets'] != 0 or final[0]['stats']['ActiveStreams'] != 0 or final[0]['stats']['RetainedBytes'] != 0:
         raise RuntimeError('gateway socket/buffer cleanup unproven')
     return result[0]
 
