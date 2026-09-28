@@ -2,6 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
+- **5N-RB-1 = PASS**, authorized28.09, core ff25246/integration398df64:
+  one fresh official PUBLIC room per admitted bounded setup; gateway READY before
+  Android descriptor; expiry/replay/device binding and cleanup. Physical Redmi→
+  Telemost→Amsterdam Family TLS +4 HTTPS200/DNS PASS without manual room URL.
+  Focused tests/race/vet/Android PASS; control ingress isolated SSH+adb reverse,
+  no production bootstrap/rollout/capacity claim. Foreign VPN changes preserved.
+  [Report](releases/2026-09-28-webrtc-5n-room-broker.ru.md). Gate checks complete.
+  **STOP**; no5N.6/TUN/UDP/Orchestrator/performance/load/production work or push.
+  Previous Room Broker STOP entries below are historical and superseded only
+  by this explicitly authorized isolated gate.
+
 - **WEBRTC-EU-5 / 5N.5 = PASS**, explicitly authorized28.09:
   bounded mux + wire DNS over one admitted TLS/reliable/VP8 session; default16/max32,
   fixed64KiB credit/16KiB DATA, fair RR. Final clean native/APK `c26c2b7`.

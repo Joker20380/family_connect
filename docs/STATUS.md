@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+## 28.09.2026 — 5N-RB-1 = PASS: automatic Telemost room broker
+
+Authorized isolated gate starts8d899ab; core ff25246, adapters/tests398df64.
+Official PUBLIC create HTTP201, env-only server credential, bounded lifecycle:
+15s creation/45s READY/60s unused TTL,1 outstanding/device/32 global.
+Existing Family admission gates control API; gateway-first descriptor plus one-time
+device/setup binding over unchanged Family TLS. One physical Redmi/cellular→
+Amsterdam smoke: automatic fresh room, READY before issue, Family TLS,4 verified
+HTTPS200 + A/AAAA/NXDOMAIN, DNS guard0; native21.922s, mux7.499s, exit0.
+Focused race/vet, ProductStore-backed mTLS/binding, Python57, Android build/6JVM/lint
+PASS. No manual room URL. Control ingress uses disposable SSH+adb reverse, not a
+claim of production restricted-network bootstrap. Diagnostic code4 test install
+removed; public/installed production/invitation versions unchanged, no rollout/push.
+Foreign VPN work preserved separately. [Report/limits](releases/2026-09-28-webrtc-5n-room-broker.ru.md).
+**STOP after5N-RB-1**; no5N.6/TUN/UDP/Orchestrator/performance or production work.
+
 ## 28.09.2026 — WEBRTC-EU-5 / 5N.5 = PASS: mux TCP + Family DNS
 
 Authorized mux TCP+DNS task starts at `812f4cb5913cad412d29f2f4f605c55327ce7d25`.

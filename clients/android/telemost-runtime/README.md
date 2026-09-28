@@ -1,5 +1,17 @@
 # Physical Android isolated Telemost gates — 5N.2 / 5N.3 / 5N.4 / 5N.5
 
+28.09 **5N-RB-1 automatic room gate PASS**, opt-in `files/broker.input` (control
+endpoint) plus existing Family/mux inputs. No `room.input` or manual Telemost URL
+in automatic mode. Native Android requests its own mTLS-authenticated descriptor
+only after the Amsterdam gateway joins. Existing data plane is unchanged.
+Local diagnostic version label remains code4/name`5N.5-test-only`; accepted
+runtime398df64 and exact artifact hashes, installation/removal and limitations are
+in the [Room Broker report](../../../docs/releases/2026-09-28-webrtc-5n-room-broker.ru.md).
+This APK was never publicly distributed. The previous manual diagnostic path
+remains available; it cannot be combined with automatic broker mode.
+See the [control/API guide](../../../carrier/roombroker/README.md). The earlier
+"no Room Broker" statement below describes the original5N.5 checkpoint only.
+
 28.09 diagnostic5N.5 source/build: code4/name`5N.5-test-only`, with opt-in
 `files/mux.input`. The same native core handles16(default)/32(max) TCP streams
 and16 bounded wire-DNS queries through one Family Session. It automatically
