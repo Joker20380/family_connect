@@ -13,8 +13,16 @@
    engine → cached BOOT-1/dedicated Family Mux/DNS; Chrome2 sites,14 concurrent TCP,
    98 DNS,543.7s smoke, protected underlay, UDP/IPv6 fail-closed, controlled session
    failure с сохранением TUN, cleanup. [Отчёт/scope](releases/2026-09-30-webrtc-eu6-android-full-device.ru.md).
-3. **Minimum viable Connectivity / Transport Orchestrator — NEXT / NOT STARTED.**
-   Одна кнопка; выбор доступного пути и автоматическое восстановление.
+3. **Minimum viable Connectivity / Transport Orchestrator — IMPLEMENTED / ACCEPTANCE FAIL.**
+   Одна кнопка, bounded deterministic state machine, same-owner guard/handover,
+   normal preference/LKG → alternate normal → BOOT-1/fresh dedicated whole-device,
+   sticky healthy path, один restoration pass. Redmi normal/alternate/restoration/
+   bounded exhaustion проверены. Fresh BOOT-1 activation отсутствует; нужны Auto
+   restricted browser/Family DNS/concurrency/leak/cancellation/smoke evidence.
+   Chrome normal получил ERR_CONNECTION_CLOSED при working Java HTTPS: NEXT —
+   локализовать/исправить browser failure, затем закрыть restricted acceptance.
+   Gate **FAIL**, не FIELD-1;
+   [отчёт, blockers и оставшиеся physical checks](releases/2026-09-30-mvp-connectivity-orchestrator.ru.md).
 4. **Krasnodar FIELD-1 (NOT RUN).** Реальная ограниченная мобильная сеть,
    обычное устройство и приложения, без engineering harness.
 5. **Product beta — 50–100 реальных пользователей (PLANNED).** Проверить
@@ -27,9 +35,10 @@ PERF-2 и **automatic Room Broker = PASS** в изолированной physica
 full-device restricted VPN не выпущен.** OAuth был только в runner/server memory;
 Redmi cellular/Wi-Fi OFF/no VPN. Первая live попытка выявила только premature
 cleanup validation в runner; focused fix, Python20 и повторный live run PASS.
-Cleanup BOOT-1 завершён, production не менялся. Отдельная текущая задача разрешает
-только5N.6/TUN integration и physical acceptance; Orchestrator, второй carrier,
-performance tuning и production rollout не разрешены. STOP после EU-6.
+Cleanup BOOT-1 завершён, production не менялся. EU-6 завершён; текущая отдельная
+авторизация — только MVP Orchestrator/integration/tests/physical acceptance.
+FIELD-1, второй carrier, performance tuning и production rollout не разрешены.
+STOP после текущего gate; отсутствие live evidence не считать PASS.
 [Архитектура и продуктовые принципы](architecture.md) ·
 [Фактический статус](STATUS.md) · [Отчёт rebaseline](releases/2026-09-30-product-engineering-rebaseline.ru.md).
 
@@ -42,7 +51,7 @@ performance tuning и production rollout не разрешены. STOP посл�
 | C — Restricted data plane + setup proof | TECHNICALLY PROVEN, isolated physical acceptance | 5N.1–5N.5, ReliableStream, DNS containment и Room Broker. Broker — control-plane proof, не production bootstrap. |
 | D — Restricted bootstrap | PASS / 5N-BOOT-1, isolated physical | Cached authenticated directory/restart → bounded seed → Family TLS → broker READY → separate dedicated session; no control forwarding. Diagnostic endpoint-denial, не FIELD-1/production. |
 | E — Android full-device | PASS / isolated physical5N.6 | Existing OS lifecycle/packet path ↔ existing 5N core; ordinary Chrome/TCP/Family DNS, protected underlay, fail-closed failure и UDP/IPv6, bounded cleanup. Diagnostic opt-in, не public release/iOS. |
-| F — Minimum viable Orchestrator | NEXT / NOT STARTED | Normal fast → alternate normal → restricted bootstrap/carrier; безопасные probes, failover/recovery, без обязательного ML/scoring. |
+| F — Minimum viable Orchestrator | IMPLEMENTED / ACCEPTANCE FAIL | Normal lifecycle partial PASS; normal Chrome ERR_CONNECTION_CLOSED, fresh restricted Auto acceptance BLOCKED. Не переходить к FIELD-1. |
 | G — FIELD-1 | AFTER F / NOT RUN | Реальный restricted/allowlist mobile field, сначала Краснодар; не лабораторный echo. |
 | H — Product beta | AFTER G / PLANNED | 50–100 пользователей: reliability, battery/heat, support и invitation UX. |
 | I — Scale / iOS / carriers | LATER, после beta evidence | iOS, multi-user load, дополнительные gateways/carriers, масштабирование инфраструктуры, monetization/referrals. |

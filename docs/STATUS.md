@@ -1,11 +1,35 @@
 # Текущее состояние / Current state
 
-## CURRENT PRODUCT STATE — 30.09.2026 / WEBRTC-EU-6
+## CURRENT PRODUCT STATE — 30.09.2026 / MVP Connectivity Orchestrator
+
+**MVP Connectivity Orchestrator = FAIL acceptance; implementation complete, restricted live BLOCKED.**
+Starting/main/origin HEAD8886fd03398ffecd82ab4f66ff6d9884846e628c, clean.
+Pure deterministic core + existing ConnectionService worker, single TcpVpnService
+guard для automatic AWG JNI/TCP/restricted adapters. Normal configured preference/LKG
+→ alternate normals → cached BOOT-1/fresh dedicated whole-device; no manual room.
+Healthy path sticky, per-candidate retry0, один restoration pass;20s/200s candidates,
+300s CONNECT, bounded backoff, local128-event diagnostics, cancellation/auth terminal.
+Main/Friends default Auto, explicit manual/managed behavior сохранён.
+Restricted library/activation пока opt-in diagnostic, не public rollout.
+Final Redmi/cellular: automatic TCP723ms, forced AWG→TCP2457ms; controlled loss →
+RESTORING → TCP1427ms, второй loss → FAILED с VPN/full routes и blocked ordinary TCP.
+Java ordinary HTTPS2×200/TLS verified, но Chrome на двух контрольных public sites
+даёт ERR_CONNECTION_CLOSED при активном VPN: **normal browser FAIL**, причина ещё
+не локализована между existing cached JNI/REALITY fixture/Chrome; не списывать на parser.
+Exhaustion автоматически вызывает restricted candidate; без activation → bounded
+BOOTSTRAP_UNAVAILABLE/FAILED6245ms. Fresh BOOT-1/Room Broker live заблокирован:
+нет `YANDEX_TELEMOST_OAUTH_TOKEN`/новой isolated activation. Не переносить старый
+5N.6 PASS на Auto. JVM185/Python76/race/vet/build/lint PASS; native instrumentation
+не запускался, полный current-source normal four-ABI rebuild не заявлен.
+Текущий gate и failed attempts/remaining physical checks:
+[отчёт Orchestrator](releases/2026-09-30-mvp-connectivity-orchestrator.ru.md).
+FIELD-1 **NOT STARTED**, только после полного PASS; production/версии не менялись.
 
 **Family Connect = resilient connectivity for families**, не protocol picker.
 Приоритет — непрерывность связи и автоматическое восстановление, с быстрыми
 обычными транспортами в нормальной сети и restricted carrier как резервом.
-Целевой UX одной кнопки ещё не завершён; детали — [architecture](architecture.md).
+Исходный UX одной кнопки реализован; полная physical acceptance не завершена;
+детали — [architecture](architecture.md).
 
 **WEBRTC-EU-6 / 5N.6 = PASS**, isolated physical30.09,18:53–19:04 UTC. Existing
 ConnectionService/TcpVpnService/Xray packet engine подключены к shared Family
@@ -21,7 +45,7 @@ Focused JNI string lifetime и gateway16/client32 fixes приняты повт�
 native/build/lint0 errors/36 warnings, docs/source guards PASS. PSS peak82195KiB.
 Отдельный diagnostic `.eu6` built/installed/removed, public beta51/code51/production
 не меняются. Normal AWG/TCP owner сохранён; повторный physical normal-path test
-не проводился. Orchestrator **NOT STARTED**.
+не проводился в EU-6. Тогда Orchestrator **NOT STARTED**; текущая отдельная задача выше.
 [Отчёт EU-6, hashes/metrics/leak scope/rollback](releases/2026-09-30-webrtc-eu6-android-full-device.ru.md).
 
 **5N-BOOT-1 = PASS**, isolated physical acceptance30.09, 15:37–15:38 UTC.
@@ -50,7 +74,7 @@ docs/source guard — PASS; lint содержит только existing manifest
 | PROVEN IN ISOLATED ACCEPTANCE | 5N.1–5N.5, Family TLS1.3, selective-repeat ReliableStream/real RTP gap recovery, long-duration goodput, Internet TCP/end-site HTTPS TLS, mux/Family DNS/containment, automatic Room Broker **PASS**. Physical Redmi → real Telemost VP8/RTP → Amsterdam. |
 | PROVEN IN ISOLATED ACCEPTANCE | **5N-BOOT-1 PASS**: cached mTLS directory/restart, control-only real seed, Family auth, broker READY-before-descriptor through bootstrap, separate dedicated session/DNS/HTTPS and cleanup. Diagnostic unreachable-endpoint fault, not a carrier-wide block/field claim. |
 | PROVEN IN ISOLATED ACCEPTANCE | **5N.6 PASS**: existing Android VPN/packet engine → dedicated Family Mux TCP/DNS, ordinary Chrome, protected underlay, captured/rejected UDP/IPv6, session-loss fail-closed, bounded cleanup. |
-| NEXT / NOT STARTED | Minimum viable Connectivity Orchestrator → Krasnodar FIELD-1 → 50–100-user beta. STOP после EU-6; следующие gates не реализуются. |
+| IMPLEMENTED / ACCEPTANCE FAIL | Minimum viable Connectivity Orchestrator: normal lifecycle partial PASS, Chrome normal FAIL, fresh restricted Auto acceptance BLOCKED. Затем только после полного PASS — Krasnodar FIELD-1 (NOT STARTED), затем50–100-user beta. |
 
 5N.5 доказал simultaneous public HTTPS, mixed TCP + DNS, exact delivery и
 fairness/bounded buffers. Room Broker доказал official Telemost API, server-only

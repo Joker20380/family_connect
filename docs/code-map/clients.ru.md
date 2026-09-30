@@ -5,6 +5,15 @@
 
 ## Android
 
+MVP Auto: `ConnectivityOrchestrator` — pure deterministic policy/tests;
+`AutomaticConnection` — adapter/lifecycle host на existing ConnectionService worker;
+`AutomaticVpnOwner` — full-route guard и TUN handover в existing TcpVpnService;
+`AutomaticNormalEngine` — existing AWG JNI/NativeTcp без второго service owner.
+`RestrictedTunnelEngine` поддерживает shared-owner mode; native → `wholedevice.OpenCached`
+получает свежий BOOT-1 descriptor без fake control probe. Main/Friends default Auto,
+manual diagnostics и managed recovery сохранены. Private bounded events не содержат
+URL/destination. [Точный scope/physical ledger](../releases/2026-09-30-mvp-connectivity-orchestrator.ru.md).
+
 5N.6 diagnostic binding: `ConnectionService` → `RestrictedTunnelEngine` → existing
 `TcpVpnService` → `NativeRestricted` → `pilot/android-restricted/packet` (existing
 Xray/gVisor TUN engine) → shared `carrier/wholedevice` → existing Mux/Family DNS.

@@ -17,7 +17,8 @@ identity/invitation foundations exist, but no shared family dashboard is claimed
 Target UX: install → accept family invitation → CONNECT → automatic path selection
 or recovery → CONNECTED. Normal states: **CONNECTING / CONNECTED / RESTORING
 CONNECTION**. AWG, TCP, VP8, ReliableStream and gateway details belong in advanced
-diagnostics. This cross-transport experience is **PLANNED**, not today's complete UX.
+diagnostics. The MVP cross-transport implementation is now in source; full physical
+acceptance and production distribution are not yet established by that implementation.
 Continuity comes before benchmark speed, country count or protocol count; normal
 networks should still use fast, inexpensive transports, with a restricted carrier
 as fallback/recovery rather than mandatory default.
@@ -59,7 +60,7 @@ Telemost call is evidence of a service path, not proof of our bootstrap or VPN.
   [PROVEN EXPERIMENTAL] <-------+                     |
           |                                          |
           +------ Connectivity / Transport Orchestrator ------+
-                  [PLANNED selection/recovery policy]          |
+                  [MVP implemented; acceptance not passed]     |
                         |              |                      |
                   AWG adapter     TCP adapter        service carrier adapter
                   [IMPLEMENTED]   [IMPLEMENTED]      Telemost VP8/RTP
@@ -147,7 +148,7 @@ is not a carrier-wide/production API firewall block or FIELD-1 proof; see the
 Fresh installations already inside a restricted network are out of scope;
 the device must have obtained its directory during earlier normal connectivity.
 
-### Full-device boundary (diagnostic) and orchestrator (PLANNED)
+### Full-device boundary and MVP orchestrator
 
 5N.6 / WEBRTC-EU-6 connects the **existing Android VPN lifecycle and packet path**
 to the existing 5N mux/DNS/TCP core. ConnectionService remains the authoritative
@@ -161,16 +162,33 @@ and Mux readiness. IPv4 TCP and Family DNS are supported; IPv6 and generic UDP
 are captured/rejected. Session loss retains the VPN routes, closes app flows and
 reports unavailable; explicit stop releases native state before TUN/service.
 This shared boundary permits a future iOS PacketTunnel adapter; neither iOS nor
-always-on process-death lockdown is implemented. Normal AWG/TCP is unchanged,
-restricted selection is debug-only and opt-in, not a new automatic selector.
+always-on process-death lockdown is implemented. The accepted5N.6 explicit diagnostic
+selection remains available. Manual normal AWG/TCP factories remain unchanged.
 
-The conceptual networking center becomes a **Connectivity / Transport Orchestrator**:
-observe network state, probe allowed transports safely, select an appropriate path,
-fail over and recover without requiring protocol knowledge. Reuse existing selection
-and lifecycle boundaries rather than introducing a parallel VPN owner. MVP policy
-can be normal fast transport → alternate normal transport → restricted bootstrap/
-carrier; ML or adaptive scoring is not required. Privacy-safe connection telemetry
-comes later, without traffic content or browsing history; [metrics and phases](PLAN.md).
+`ConnectivityOrchestrator` now implements a bounded deterministic policy: configured
+normal last-known-good/preferred → other configured normal → BOOT-1 cached recovery.
+CONNECT/RESTORING have300s deadlines, normal20s and restricted200s candidate budgets,
+no per-candidate retry, one automatic restoration pass per user CONNECT. Explicit
+auth/config/internal failures terminate. A healthy selected path is sticky; no faster
+path probes or seamless flow migration. Preferences contain normal transport IDs only.
+
+`AutomaticConnection` runs under the existing ConnectionService operation owner and
+worker. `AutomaticVpnOwner` holds full IPv4/IPv6 routes in the existing TcpVpnService
+before configuration/startup and across backend cleanup/failure. `AutomaticNormalEngine`
+uses existing AWG JNI/NativeTcp on that same service; it never starts a second
+GoBackend VpnService. New guard establishment precedes old fd closure/backend stop.
+RestrictedTunnelEngine uses this owner and shared `wholedevice.OpenCached`; no fake
+loopback control probe is required in Auto. Failed sessions retain a guard until
+DISCONNECT; explicit OS revocation/process death still require platform lockdown
+for a stronger guarantee. Opaque restricted session loss is conservatively terminal
+because the existing native API cannot distinguish revocation from network loss.
+
+Main/Friends default to Auto; explicit manual diagnostics and managed journal policy
+remain available. Local atomic diagnostics contain at most128 state/candidate/category/
+elapsed-time events, no traffic/URL/destination data. Restricted activation/native
+packaging is still an opt-in diagnostic integration, not a public beta rollout.
+[Orchestrator implementation/acceptance ledger](releases/2026-09-30-mvp-connectivity-orchestrator.ru.md)
+and [metrics/phases](PLAN.md) distinguish code, physical proof and distribution.
 
 ### Replaceable adapters and security
 

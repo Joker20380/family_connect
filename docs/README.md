@@ -4,6 +4,9 @@
 [5N-BOOT-1 → 5N.6 → MVP Orchestrator → Krasnodar FIELD-1 → 50–100-user beta](PLAN.md).
 Начните с [CURRENT PRODUCT STATE](STATUS.md), затем [продуктовой архитектуры](architecture.md):
 implemented beta / proven experimental / planned разделены явно.
+[MVP Orchestrator implementation / текущая acceptance](releases/2026-09-30-mvp-connectivity-orchestrator.ru.md):
+одно CONNECT, bounded normal fallback/BOOT-1, existing VPN owner и fail-closed guard;
+не public rollout и пока не full physical PASS.
 5N.1–5N.5, ReliableStream/DNS containment и automatic Room Broker приняты;
 production restricted bootstrap и whole-device integration ещё отсутствуют.
 [5N-BOOT-1 PASS / isolated physical cached-state acceptance](releases/2026-09-30-webrtc-5n-boot1-bootstrap.ru.md):
