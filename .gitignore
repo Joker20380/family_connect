@@ -33,6 +33,7 @@ state-product/
 state-awg/
 
 clients/android/awg-generated
+clients/android/restricted-generated/
 
 clients/android/control-tests/.gradle/
 clients/android/chat-runtime/.gradle/

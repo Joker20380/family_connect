@@ -13,6 +13,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/Joker20380/family_connect/carrier/underlay"
 	"github.com/gorilla/websocket"
 	"github.com/pion/interceptor"
 	"github.com/pion/logging"
@@ -71,6 +72,7 @@ type Config struct {
 	DisplayName string
 	Mode        Mode
 	HTTPClient  *http.Client
+	Underlay    *underlay.Network
 	// Timeouts, zero means default.
 	ConnectTimeout time.Duration
 	MaxVideoTracks int
@@ -78,22 +80,24 @@ type Config struct {
 
 // Stats is a point-in-time snapshot of carrier metrics.
 type Stats struct {
-	Mode             string
-	SetupMs          int64
-	BytesSent        uint64
-	BytesReceived    uint64
-	MessagesSent     uint64
-	MessagesRecv     uint64
-	ReconnectCount   uint32
-	Disconnects      uint32
-	SubscriberState  string
-	PublisherState   string
-	Evidence         []Evidence
-	EvidenceDropped  uint64
-	Media            MediaStats
-	ApplicationPongs uint64
-	ApplicationPings uint64
-	SignalingACKs    uint64
+	SendQueueDepth    int
+	ReceiveQueueDepth int
+	Mode              string
+	SetupMs           int64
+	BytesSent         uint64
+	BytesReceived     uint64
+	MessagesSent      uint64
+	MessagesRecv      uint64
+	ReconnectCount    uint32
+	Disconnects       uint32
+	SubscriberState   string
+	PublisherState    string
+	Evidence          []Evidence
+	EvidenceDropped   uint64
+	Media             MediaStats
+	ApplicationPongs  uint64
+	ApplicationPings  uint64
+	SignalingACKs     uint64
 }
 
 // Session owns one Telemost conference join and one carrier direction.
@@ -168,6 +172,9 @@ type Session struct {
 
 // New creates an unconnected Session.
 func New(ctx context.Context, cfg Config) (*Session, error) {
+	if cfg.Underlay != nil {
+		cfg.HTTPClient = cfg.Underlay.HTTPClient()
+	}
 	if cfg.MaxVideoTracks < 0 || cfg.MaxVideoTracks > 4 {
 		return nil, errors.New("telemost: invalid track limit")
 	}
@@ -394,22 +401,24 @@ func (s *Session) Stats() Stats {
 		pub = pubPC.ConnectionState().String()
 	}
 	return Stats{
-		Mode:             s.mode.String(),
-		SetupMs:          setupMs,
-		BytesSent:        bs,
-		BytesReceived:    br,
-		MessagesSent:     ms,
-		MessagesRecv:     mr,
-		ReconnectCount:   s.reconnects.Load(),
-		Disconnects:      s.disconnects.Load(),
-		SubscriberState:  sub,
-		PublisherState:   pub,
-		Evidence:         evidence,
-		EvidenceDropped:  evidenceDropped,
-		Media:            mediaStats,
-		ApplicationPongs: applicationPongs,
-		ApplicationPings: applicationPings,
-		SignalingACKs:    signalingACKs,
+		SendQueueDepth:    len(s.sendQueue),
+		ReceiveQueueDepth: len(s.recvQueue),
+		Mode:              s.mode.String(),
+		SetupMs:           setupMs,
+		BytesSent:         bs,
+		BytesReceived:     br,
+		MessagesSent:      ms,
+		MessagesRecv:      mr,
+		ReconnectCount:    s.reconnects.Load(),
+		Disconnects:       s.disconnects.Load(),
+		SubscriberState:   sub,
+		PublisherState:    pub,
+		Evidence:          evidence,
+		EvidenceDropped:   evidenceDropped,
+		Media:             mediaStats,
+		ApplicationPongs:  applicationPongs,
+		ApplicationPings:  applicationPings,
+		SignalingACKs:     signalingACKs,
 	}
 }
 
@@ -478,7 +487,7 @@ func (s *Session) dcOpen() *webrtc.DataChannel {
 }
 
 func (s *Session) setupPeerConnections(config webrtc.Configuration) error {
-	api, err := newWebRTCAPI()
+	api, err := newWebRTCAPI(s.cfg.Underlay)
 	if err != nil {
 		return err
 	}
@@ -501,8 +510,11 @@ func (s *Session) setupPeerConnections(config webrtc.Configuration) error {
 	return nil
 }
 
-func newWebRTCAPI() (*webrtc.API, error) {
+func newWebRTCAPI(networks ...*underlay.Network) (*webrtc.API, error) {
 	settings := webrtc.SettingEngine{}
+	if len(networks) > 0 && networks[0] != nil {
+		settings.SetNet(networks[0])
+	}
 	logger := logging.NewDefaultLoggerFactory()
 	logger.Writer = io.Discard
 	settings.LoggerFactory = logger

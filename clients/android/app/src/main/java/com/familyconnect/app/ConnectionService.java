@@ -80,12 +80,19 @@ public final class ConnectionService extends Service {
                     } else if(intake){
                         if(stopping||closing)throw new java.io.IOException("Control intake cancelled");
                         reportControl(controlNow(ControlIntake.copy(incoming),false));
+                    } else if(connectRequested && ("restricted".equals(requestedTransport)||"restricted-refresh".equals(requestedTransport))) {
+                        if((getApplicationInfo().flags & android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE)==0 || ControlMutationGate.managed(this))
+                            throw new IllegalStateException("Unmanaged diagnostic only");
+                        startRestricted(intent.getStringExtra("control"));
                     } else ControlStartup.run(connectRequested,()->ControlMutationGate.managed(this),
                         ()->controlNow(null,true),()->controlNow(null,true,true),
                         ()->{if(automatic)next();else start(Transport.parse(requestedTransport));});
                     if(engine==null&&!rnsEnabled&&!stopping&&!closing)stopConnection();
                 }
-                catch(Exception|LinkageError e){if(intake||sync||selection)reportControl("FAILED");failed=true;cancel();stopConnection();}
+                catch(Exception|LinkageError e){
+                    if("restricted".equals(requestedTransport)||"restricted-refresh".equals(requestedTransport))RestrictedTunnelEngine.failure(this,e);
+                    if(intake||sync||selection)reportControl("FAILED");failed=true;cancel();stopConnection();
+                }
             });
         });
         return START_NOT_STICKY;
@@ -154,6 +161,25 @@ public final class ConnectionService extends Service {
         if(stopping||closing){stopConnection();return;}
         health=new VpnHealth(this);if(!controlApplying)schedule(()->probe(token),1);
         if(!automatic&&!controlApplying){status="on";main.post(this::notifyState);}
+    }
+    private void startRestricted(String control)throws Exception{
+        final long token=++generation;sessionId=sessionCounter.incrementAndGet();activeTransport="restricted";
+        RestrictedTunnelEngine restricted=new RestrictedTunnelEngine(this,()->stopping||closing,up->{
+            if(!up&&token==generation&&!stopping&&!closing){cancel();worker.execute(()->owned(this::stopConnection));}
+        });
+        engine=restricted;
+        boolean refresh="restricted-refresh".equals(requestedTransport);
+        if(refresh&&(control==null||!control.startsWith("https://")))throw new IllegalArgumentException("Preparation endpoint required");
+        restricted.up(refresh?control:"");
+        if(refresh||stopping||closing){stopConnection();return;}
+        status="on";healthStatus="ok";main.post(this::notifyState);
+        schedule(()->restrictedHealth(token,restricted),5);
+    }
+    private void restrictedHealth(long token,RestrictedTunnelEngine restricted){
+        if(token!=generation||stopping||closing||engine!=restricted)return;
+        if(!restricted.healthy()){failed=true;status="on";healthStatus="unavailable";main.post(this::notifyState);}
+        try{restricted.evidence();}catch(Exception ignored){}
+        schedule(()->restrictedHealth(token,restricted),15);
     }
     private void probe(long token){
         if(token!=generation||stopping||closing)return;

@@ -2,6 +2,7 @@ plugins { id 'com.android.application'; id 'com.chaquo.python' }
 // Optional compact pilot; ordinary platform CI keeps all four ABIs.
 def targetAbi = providers.gradleProperty('fcTargetAbi').getOrElse('all')
 def friendsCi = providers.gradleProperty('fcFriendsCi').getOrElse('false') == 'true'
+def restrictedDiagnostic = providers.gradleProperty('fcRestrictedDiagnostic').getOrElse('false') == 'true'
 if (!(targetAbi in ['all', 'arm64-v8a']) && !(friendsCi && targetAbi == 'x86_64')) throw new GradleException('Unsupported fcTargetAbi')
 android {
     namespace 'com.familyconnect.app'
@@ -27,6 +28,7 @@ android {
         androidTest { java.srcDir 'src/controlTest/java'; assets.srcDir '../../../tests/vectors' }
     }
     sourceSets { main { java.srcDir '../awg-generated/java'; jniLibs.srcDir '../awg-generated/jniLibs'; assets.srcDir '../awg-generated/assets' } }
+    sourceSets { debug { jniLibs.srcDir '../restricted-generated/jniLibs'; assets.srcDir '../restricted-generated/assets' } }
     packaging { jniLibs {
         keepDebugSymbols += ['**/libfc-awg.so']
         // Extract compressed libraries on install; preserve their verified bytes.
@@ -35,7 +37,7 @@ android {
     buildTypes {
         debug {
             // Technical pilots coexist with old CI-signed installs; never uninstall their data.
-            applicationIdSuffix '.pilot'
+            applicationIdSuffix restrictedDiagnostic ? '.eu6' : '.pilot'
             manifestPlaceholders = [appLabel: 'family_connect_pilot', launcherActivity: 'com.familyconnect.app.MainActivity']
         }
         release { minifyEnabled false }

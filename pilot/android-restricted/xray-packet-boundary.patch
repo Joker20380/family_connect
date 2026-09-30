@@ -1,0 +1,122 @@
+diff --git a/proxy/tun/stack_gvisor.go b/proxy/tun/stack_gvisor.go
+index ab767c61..24023185 100644
+--- a/proxy/tun/stack_gvisor.go
++++ b/proxy/tun/stack_gvisor.go
+@@ -23,12 +23,12 @@ const (
+ 	defaultNIC tcpip.NICID = 1
+ 
+ 	tcpRXBufMinSize = tcp.MinBufferSize
+-	tcpRXBufDefSize = tcp.DefaultSendBufferSize
+-	tcpRXBufMaxSize = 8 << 20 // 8MiB
++	tcpRXBufDefSize = 64 << 10
++	tcpRXBufMaxSize = 128 << 10
+ 
+ 	tcpTXBufMinSize = tcp.MinBufferSize
+-	tcpTXBufDefSize = tcp.DefaultReceiveBufferSize
+-	tcpTXBufMaxSize = 6 << 20 // 6MiB
++	tcpTXBufDefSize = 64 << 10
++	tcpTXBufMaxSize = 128 << 10
+ )
+ 
+ // stackGVisor is ip stack implemented by gVisor package
+@@ -36,7 +36,7 @@ type stackGVisor struct {
+ 	ctx         context.Context
+ 	tun         GVisorTun
+ 	idleTimeout time.Duration
+-	handler     *Handler
++	handler     ConnectionHandler
+ 	stack       *stack.Stack
+ 	endpoint    stack.LinkEndpoint
+ }
+@@ -47,7 +47,7 @@ type GVisorTun interface {
+ }
+ 
+ // NewStack builds new ip stack (using gVisor)
+-func NewStack(ctx context.Context, options StackOptions, handler *Handler) (Stack, error) {
++func NewStack(ctx context.Context, options StackOptions, handler ConnectionHandler) (Stack, error) {
+ 	gStack := &stackGVisor{
+ 		ctx:         ctx,
+ 		tun:         options.Tun.(GVisorTun),
+@@ -70,7 +70,12 @@ func (t *stackGVisor) Start() error {
+ 		return err
+ 	}
+ 
+-	tcpForwarder := tcp.NewForwarder(ipStack, 0, 65535, func(r *tcp.ForwarderRequest) {
++	tcpForwarder := tcp.NewForwarder(ipStack, 0, 64, func(r *tcp.ForwarderRequest) {
++		id := r.ID()
++		if filter, ok := t.handler.(interface { AllowDestination(net.Destination) bool }); ok && !filter.AllowDestination(net.TCPDestination(net.IPAddress(id.LocalAddress.AsSlice()), net.Port(id.LocalPort))) {
++			r.Complete(true)
++			return
++		}
+ 		go func(r *tcp.ForwarderRequest) {
+ 			var wq waiter.Queue
+ 			var id = r.ID()
+@@ -114,6 +119,7 @@ func (t *stackGVisor) Start() error {
+ 		// this function handle packets passing from the tun to the gVisor, therefore the src/dst assignement
+ 		src := net.UDPDestination(net.IPAddress(id.RemoteAddress.AsSlice()), net.Port(id.RemotePort))
+ 		dst := net.UDPDestination(net.IPAddress(id.LocalAddress.AsSlice()), net.Port(id.LocalPort))
++		if filter, ok := t.handler.(interface { AllowDestination(net.Destination) bool }); ok && !filter.AllowDestination(dst) { return true }
+ 
+ 		return udpForwarder.HandlePacket(src, dst, data)
+ 	})
+diff --git a/proxy/tun/udp_fullcone.go b/proxy/tun/udp_fullcone.go
+index df58ce4e..a311a711 100644
+--- a/proxy/tun/udp_fullcone.go
++++ b/proxy/tun/udp_fullcone.go
+@@ -32,15 +32,17 @@ func newUdpConnectionHandler(handleConnection func(conn net.Conn, dest net.Desti
+ // this custom handler support FullCone NAT of returning packets, binding connection only by the source addr:port
+ func (u *udpConnectionHandler) HandlePacket(src net.Destination, dst net.Destination, data []byte) bool {
+ 	u.Lock()
++	defer u.Unlock()
+ 	conn, found := u.udpConns[src]
++	if found && conn.dst != dst { return true }
+ 	if !found {
++		if len(u.udpConns) >= 16 { return true }
+ 		egress := make(chan []byte, 16)
+ 		conn = &udpConn{handler: u, egress: egress, src: src, dst: dst}
+ 		u.udpConns[src] = conn
+ 
+ 		go u.handleConnection(conn, dst)
+ 	}
+-	u.Unlock()
+ 
+ 	// send packet data to the egress channel, if it has buffer, or discard
+ 	select {
+@@ -63,6 +65,7 @@ func (u *udpConnectionHandler) connectionFinished(src net.Destination) {
+ 
+ // udp connection abstraction
+ type udpConn struct {
++	once sync.Once
+ 	net.Conn
+ 	buf.Writer
+ 
+@@ -96,7 +99,7 @@ func (c *udpConn) Write(p []byte) (int, error) {
+ }
+ 
+ func (c *udpConn) Close() error {
+-	c.handler.connectionFinished(c.src)
++	c.once.Do(func() { c.handler.connectionFinished(c.src) })
+ 
+ 	return nil
+ }
+diff --git a/proxy/tun/family_endpoint.go b/proxy/tun/family_endpoint.go
+new file mode 100644
+index 00000000..062625d3
+--- /dev/null
++++ b/proxy/tun/family_endpoint.go
+@@ -0,0 +1,15 @@
++package tun
++
++import (
++	"context"
++	"gvisor.dev/gvisor/pkg/tcpip/stack"
++)
++
++type familyEndpoint struct { endpoint stack.LinkEndpoint }
++func (link familyEndpoint) newEndpoint() (stack.LinkEndpoint, error) { return link.endpoint, nil }
++func (link familyEndpoint) Start() error { return nil }
++func (link familyEndpoint) Close() error { return nil }
++
++func NewEndpointStack(ctx context.Context, endpoint stack.LinkEndpoint, handler ConnectionHandler) (Stack, error) {
++	return NewStack(ctx, StackOptions{Tun: familyEndpoint{endpoint}}, handler)
++}

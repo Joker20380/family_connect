@@ -108,7 +108,7 @@ public final class MainActivity extends LocalizedActivity {
         String value=ConnectionService.status;
         gatewayButton.setEnabled(!busy&&!value.equals("connecting")&&!value.equals("cleanup-required"));
         textIfChanged(gatewayButton,getString(R.string.choose_gateway)+": "+gatewayName(getSharedPreferences("gateway-selection",MODE_PRIVATE).getString("gateway","")));
-        if(!value.equals("off")&&!"auto".equals(ConnectionService.requestedTransport)){
+        if(!value.equals("off")&&!"auto".equals(ConnectionService.requestedTransport)&&!"restricted".equals(ConnectionService.activeTransport)){
             Transport active=Transport.parse(ConnectionService.activeTransport);
             if(selected!=active){selected=active;store=new ProfileStore(this,active);transportPicker.setSelection(active.ordinal());getPreferences(MODE_PRIVATE).edit().putString("transport",active.id).apply();}
         }

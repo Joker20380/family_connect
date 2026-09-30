@@ -7,6 +7,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
+	"github.com/Joker20380/family_connect/carrier/underlay"
 	"io"
 	"net/http"
 	"os"
@@ -199,7 +200,7 @@ func (client *Client) BootstrapDirectory(ctx context.Context) ([]byte, error) {
 	return raw, nil
 }
 
-func NewClient(base string, raw []byte) (*Client, error) {
+func NewClient(base string, raw []byte, networks ...*underlay.Network) (*Client, error) {
 	if !strings.HasPrefix(base, "https://") || strings.ContainsAny(base, "?#@\r\n") {
 		return nil, Code("invalid_endpoint")
 	}
@@ -209,6 +210,9 @@ func NewClient(base string, raw []byte) (*Client, error) {
 	}
 	controlALPN(config)
 	transport := &http.Transport{TLSClientConfig: config, TLSHandshakeTimeout: 10 * time.Second, DisableKeepAlives: true}
+	if len(networks) > 0 && networks[0] != nil {
+		transport.DialContext = networks[0].DialContext
+	}
 	return &Client{strings.TrimRight(base, "/"), &http.Client{Transport: transport, Timeout: 65 * time.Second,
 		CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}}, nil
 }

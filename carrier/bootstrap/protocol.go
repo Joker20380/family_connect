@@ -8,6 +8,7 @@ import (
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
 	"github.com/Joker20380/family_connect/carrier/telemost"
+	"github.com/Joker20380/family_connect/carrier/underlay"
 )
 
 type message struct {
@@ -148,7 +149,7 @@ func OpenServer(ctx context.Context, endpoint familysession.PacketEndpoint, path
 	}
 }
 
-func Recover(ctx context.Context, directory Directory, raw []byte, event func(string)) (roombroker.Descriptor, error) {
+func Recover(ctx context.Context, directory Directory, raw []byte, event func(string), networks ...*underlay.Network) (roombroker.Descriptor, error) {
 	var credentials familysession.Credentials
 	if json.Unmarshal(raw, &credentials) != nil {
 		return roombroker.Descriptor{}, roombroker.Code("credentials_rejected")
@@ -159,7 +160,11 @@ func Recover(ctx context.Context, directory Directory, raw []byte, event func(st
 	}
 	ctx, cancel := context.WithTimeout(ctx, ExchangeTimeout)
 	defer cancel()
-	carrier, err := telemost.New(ctx, telemost.Config{RoomURL: directory.Seeds[0].JoinURL, DisplayName: "Family bootstrap device", Mode: telemost.ModeVP8, MaxVideoTracks: 4})
+	config := telemost.Config{RoomURL: directory.Seeds[0].JoinURL, DisplayName: "Family bootstrap device", Mode: telemost.ModeVP8, MaxVideoTracks: 4}
+	if len(networks) > 0 {
+		config.Underlay = networks[0]
+	}
+	carrier, err := telemost.New(ctx, config)
 	if err != nil {
 		return roombroker.Descriptor{}, roombroker.Code("bootstrap_carrier")
 	}

@@ -1,0 +1,12 @@
+package com.familyconnect.app;
+
+import android.net.VpnService;
+
+final class NativeRestricted {
+    static void load() { System.loadLibrary("fc_restricted"); }
+    static native long begin(String directory, String control, String resolver, VpnService protector);
+    static native boolean attach(long handle, int tunFd);
+    static native int state(long handle);
+    static native String stats(long handle);
+    static native boolean stop(long handle);
+}

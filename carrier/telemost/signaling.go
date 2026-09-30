@@ -20,6 +20,10 @@ func (s *Session) dialWebSocket(ctx context.Context) error {
 		HandshakeTimeout: wsHandshakeTimeout,
 		Proxy:            http.ProxyFromEnvironment,
 	}
+	if s.cfg.Underlay != nil {
+		dialer.NetDialContext = s.cfg.Underlay.DialContext
+		dialer.Proxy = nil
+	}
 	header := http.Header{}
 	header.Set("Origin", DefaultOrigin)
 	conn, resp, err := dialer.DialContext(ctx, s.wsURL, header)

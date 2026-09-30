@@ -17,6 +17,8 @@ type TelemostGateway struct {
 	Event           func(string)
 }
 
+const DedicatedMaxStreams = tcpforward.MuxMaxStreams
+
 type telemostGateway struct {
 	session     *telemost.Session
 	credentials []byte
@@ -90,7 +92,7 @@ func (gateway *telemostGateway) Run(ctx context.Context, active func() error) er
 	if err := bindGateway(ctx, secured, gateway.setupID, gateway.identity, active); err != nil {
 		return err
 	}
-	mux, err := tcpforward.NewMux(ctx, secured, true, tcpforward.MuxConfig{})
+	mux, err := tcpforward.NewMux(ctx, secured, true, tcpforward.MuxConfig{MaxStreams: DedicatedMaxStreams})
 	if err != nil {
 		return Code("mux_start_failed")
 	}
