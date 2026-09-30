@@ -73,6 +73,7 @@ type Config struct {
 	HTTPClient  *http.Client
 	// Timeouts, zero means default.
 	ConnectTimeout time.Duration
+	MaxVideoTracks int
 }
 
 // Stats is a point-in-time snapshot of carrier metrics.
@@ -145,7 +146,8 @@ type Session struct {
 	connected  chan struct{}
 	connectErr error
 
-	reconnects atomic.Uint32
+	reconnects  atomic.Uint32
+	videoTracks atomic.Int32
 
 	statsMu          sync.Mutex
 	bytesSent        uint64
@@ -166,6 +168,9 @@ type Session struct {
 
 // New creates an unconnected Session.
 func New(ctx context.Context, cfg Config) (*Session, error) {
+	if cfg.MaxVideoTracks < 0 || cfg.MaxVideoTracks > 4 {
+		return nil, errors.New("telemost: invalid track limit")
+	}
 	if !validRoom(cfg.RoomURL) {
 		return nil, errors.New("telemost: invalid room URL")
 	}
@@ -560,6 +565,17 @@ func (s *Session) setupTransport() error {
 }
 
 func (s *Session) onSubscriberTrack(track *webrtc.TrackRemote, receiver *webrtc.RTPReceiver) {
+	if s.cfg.MaxVideoTracks > 0 {
+		if track.Kind() != webrtc.RTPCodecTypeVideo || track.Codec().MimeType != webrtc.MimeTypeVP8 || s.videoTracks.Add(1) > int32(s.cfg.MaxVideoTracks) {
+			if track.Kind() == webrtc.RTPCodecTypeVideo && track.Codec().MimeType == webrtc.MimeTypeVP8 {
+				s.videoTracks.Add(-1)
+			}
+			_ = receiver.Stop()
+			return
+		}
+		s.startWorker(func() { defer s.videoTracks.Add(-1); s.readVP8Track(track) })
+		return
+	}
 	if s.mode != ModeVP8 || track.Kind() != webrtc.RTPCodecTypeVideo || track.Codec().MimeType != webrtc.MimeTypeVP8 {
 		s.startWorker(func() { drainTrack(track) })
 		return

@@ -67,6 +67,14 @@ func controlALPN(config *tls.Config) {
 }
 
 func RequestAuthorizer(path string, state *tls.ConnectionState) Authorize {
+	return connectionAuthorizer(path, state, true)
+}
+
+func SessionAuthorizer(path string, state tls.ConnectionState) Authorize {
+	return connectionAuthorizer(path, &state, false)
+}
+
+func connectionAuthorizer(path string, state *tls.ConnectionState, httpControl bool) Authorize {
 	return func(ctx context.Context) (Identity, error) {
 		if state == nil || len(state.PeerCertificates) != 1 || ctx.Err() != nil {
 			return Identity{}, Code("unauthorized")
@@ -80,7 +88,9 @@ func RequestAuthorizer(path string, state *tls.ConnectionState) Authorize {
 		if err != nil {
 			return Identity{}, Code("unauthorized")
 		}
-		controlALPN(config)
+		if httpControl {
+			controlALPN(config)
+		}
 		peer := state.PeerCertificates[0]
 		if _, err := peer.Verify(x509.VerifyOptions{Roots: config.ClientCAs, KeyUsages: []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth}}); err != nil {
 			return Identity{}, Code("unauthorized")
@@ -167,6 +177,26 @@ func (broker *Broker) Handler(path string) http.Handler {
 type Client struct {
 	base   string
 	client *http.Client
+}
+
+func (client *Client) BootstrapDirectory(ctx context.Context) ([]byte, error) {
+	request, err := http.NewRequestWithContext(ctx, http.MethodGet, client.base+"/v1/bootstrap/directory", nil)
+	if err != nil {
+		return nil, Code("control_request")
+	}
+	response, err := client.client.Do(request)
+	if err != nil {
+		return nil, Code("control_unavailable")
+	}
+	defer response.Body.Close()
+	if response.StatusCode != http.StatusOK {
+		return nil, Code("control_rejected")
+	}
+	raw, err := io.ReadAll(io.LimitReader(response.Body, 8193))
+	if err != nil || len(raw) > 8192 {
+		return nil, Code("control_response")
+	}
+	return raw, nil
 }
 
 func NewClient(base string, raw []byte) (*Client, error) {

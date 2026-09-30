@@ -94,7 +94,13 @@ func (gateway *telemostGateway) Run(ctx context.Context, active func() error) er
 	if err != nil {
 		return Code("mux_start_failed")
 	}
-	defer mux.Close()
+	defer func() {
+		mux.Close()
+		stats := mux.Stats()
+		if stats.ActiveSockets == 0 && stats.ActiveStreams == 0 && stats.RetainedBytes == 0 {
+			gateway.event("dedicated_resources_closed")
+		}
+	}()
 	return mux.Wait()
 }
 

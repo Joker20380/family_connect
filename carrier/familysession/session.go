@@ -281,6 +281,10 @@ func OpenReliable(ctx context.Context, endpoint PacketEndpoint, raw []byte, serv
 
 func (session *Session) ReliabilityStats() reliablestream.Stats { return session.reliable.Stats() }
 
+func (session *Session) ConnectionState() tls.ConnectionState {
+	return session.connection.ConnectionState()
+}
+
 func (session *Session) SendContext(ctx context.Context, payload []byte) error {
 	session.sendMu.Lock()
 	defer session.sendMu.Unlock()
