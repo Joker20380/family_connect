@@ -52,7 +52,7 @@ Telemost call is evidence of a service path, not proof of our bootstrap or VPN.
   CONTROL / PRODUCT    BOOTSTRAP / RECOVERY      DATA PLANE
   identity/invites/     obtain trusted setup      normal AWG/TCP
   entitlement/         when API unreachable     [IMPLEMENTED]
-  provisioning/        [PLANNED: 5N-BOOT-1]       restricted Mux/DNS/TCP
+  provisioning/        [IMPLEMENTED, LIVE BLOCKED] restricted Mux/DNS/TCP
   signed config                |                over Family TLS
   [IMPLEMENTED]                |                [PROVEN EXPERIMENTAL]
   Room Broker                  |                     |
@@ -109,10 +109,10 @@ Krasnodar FIELD-1 exists yet. There is no generic UDP/QUIC/ICMP in the restricte
 path; global ReliableStream HOL and lack of seamless session migration remain.
 No production multi-user capacity claim follows from these single-device proofs.
 
-### Restricted bootstrap target — 5N-BOOT-1 (PLANNED)
+### Restricted bootstrap — 5N-BOOT-1 (IMPLEMENTED / LIVE BLOCKED)
 
 ```text
-cached/signed bootstrap directory -> reachable bootstrap rendezvous carrier
+cached authenticated bootstrap directory -> bootstrap rendezvous carrier
   -> Family authentication -> REQUEST_TRANSPORT -> existing Room Broker
   -> fresh dedicated room (gateway READY) -> dedicated Family Session
 ```
@@ -120,11 +120,18 @@ cached/signed bootstrap directory -> reachable bootstrap rendezvous carrier
 Goal: obtain an authenticated dedicated descriptor when the ordinary control API
 is unreachable but a permitted service carrier is reachable, without manual URL,
 operator forwarding or an engineering harness. The bootstrap channel is
-**control-only / rendezvous-oriented**, never the permanent bulk VPN. This is a
-design target, not an implemented protocol/API. Trusted directory provisioning,
-expiry/refresh/revocation, reachability and bounded abuse handling need explicit
-design/acceptance; room secrecy or provider reachability cannot replace Family
-trust. No circular requirement to fetch initial trust through an unavailable API.
+**control-only / rendezvous-oriented**, never the permanent bulk VPN.
+[BOOT-1 core/runbook](../carrier/bootstrap/README.md) implements directory delivery
+through existing Family mTLS, a protected atomic Android diagnostic cache, a
+separate READY-only seed and one bounded authenticated exchange. The existing
+Room Broker owns dedicated creation, setup binding, revocation/revision checks
+and cleanup. No new signing root and no application-update key are involved.
+The seed packet lease is routing only; Family TLS remains the security boundary.
+Bootstrap never constructs a TCP/DNS Mux. The dedicated session uses the existing
+data path after bootstrap closes. Physical acceptance with ordinary control
+deliberately unavailable is still **NOT RUN**, not inferred from deterministic
+checks. Fresh installations already inside a restricted network are out of scope;
+the device must have obtained its directory during earlier normal connectivity.
 
 ### Full-device boundary and orchestrator (PLANNED)
 

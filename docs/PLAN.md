@@ -4,9 +4,10 @@
 
 ### CURRENT PRODUCT CRITICAL PATH — 30.09.2026
 
-1. **5N-BOOT-1 — restricted bootstrap (NEXT).** При недоступном обычном Family
+1. **5N-BOOT-1 — restricted bootstrap (IMPLEMENTED / LIVE BLOCKED).** При недоступном обычном Family
    control/API и доступном service carrier получить authenticated dedicated
-   descriptor без manual URL, SSH/adb forwarding или оператора.
+   descriptor без manual URL, SSH/adb forwarding или оператора. Следующий checkpoint —
+   physical cached-state acceptance, не5N.6; [отчёт](releases/2026-09-30-webrtc-5n-boot1-bootstrap.ru.md).
 2. **WEBRTC-EU-6 / 5N.6 — Android full-device integration (после bootstrap).**
    Подключить существующий VPN lifecycle/packet path к существующему 5N mux/DNS/TCP.
 3. **Minimum viable Connectivity / Transport Orchestrator (после full-device).**
@@ -19,8 +20,10 @@
 Это авторитетный порядок; нижние хронологические записи и STOP относятся к своим
 датам/gates, не являются актуальным заданием на выполнение. 5N.1–5N.5, REL-1,
 PERF-2 и **automatic Room Broker = PASS** в изолированной physical acceptance.
-**Bootstrap ещё отсутствует; full-device restricted VPN не выпущен.**
-Эта rebaseline-задача только документационная: не начинать даже 5N-BOOT-1.
+**Bootstrap реализован в isolated core/diagnostic path, live PASS не заявлен;
+full-device restricted VPN не выпущен.** OAuth live prerequisite отсутствует в
+окружении задачи. После deterministic checks остановиться на BOOT-1: никаких
+5N.6/TUN, Orchestrator, второго carrier, performance tuning или production rollout.
 [Архитектура и продуктовые принципы](architecture.md) ·
 [Фактический статус](STATUS.md) · [Отчёт rebaseline](releases/2026-09-30-product-engineering-rebaseline.ru.md).
 
@@ -31,20 +34,26 @@ PERF-2 и **automatic Room Broker = PASS** в изолированной physica
 | A — Foundation | DONE / existing | Device Identity, FAMILY admission, invitations/provisioning, Android/Linux/Windows base. Не обещание завершённого family dashboard. |
 | B — Normal connectivity | WORKING beta | AWG/TCP уже используются; существующий Android VpnService/VPN lifecycle. |
 | C — Restricted data plane + setup proof | TECHNICALLY PROVEN, isolated physical acceptance | 5N.1–5N.5, ReliableStream, DNS containment и Room Broker. Broker — control-plane proof, не production bootstrap. |
-| D — Restricted bootstrap | NEXT / 5N-BOOT-1 | Trusted setup при недоступном обычном API, без operator ingress; затем dedicated Family Session. |
+| D — Restricted bootstrap | IMPLEMENTED / LIVE BLOCKED / 5N-BOOT-1 | Cached authenticated directory → bounded seed → Family TLS → broker READY → separate dedicated session; physical proof без control forwarding ещё открыт. |
 | E — Android full-device | AFTER D / 5N.6 | Existing OS lifecycle/packet path ↔ existing 5N core; тонкий OS adapter, reusable Family logic для будущего iOS PacketTunnel. |
 | F — Minimum viable Orchestrator | AFTER E | Normal fast → alternate normal → restricted bootstrap/carrier; безопасные probes, failover/recovery, без обязательного ML/scoring. |
 | G — FIELD-1 | AFTER F / NOT RUN | Реальный restricted/allowlist mobile field, сначала Краснодар; не лабораторный echo. |
 | H — Product beta | AFTER G / PLANNED | 50–100 пользователей: reliability, battery/heat, support и invitation UX. |
 | I — Scale / iOS / carriers | LATER, после beta evidence | iOS, multi-user load, дополнительные gateways/carriers, масштабирование инфраструктуры, monetization/referrals. |
 
-**D target:** cached/signed bootstrap directory → bootstrap rendezvous carrier →
+**D implementation:** cached authenticated bootstrap directory → bootstrap rendezvous carrier →
 Family authentication → `REQUEST_TRANSPORT` → existing Room Broker → fresh dedicated
 room → dedicated Family Session. Bootstrap — control-only/rendezvous, не постоянный
-bulk VPN. Дизайн trusted directory, expiry/revocation и deployment acceptance ещё
-впереди; здесь нет реализации. Room Broker уже создаёт комнату официальным API,
-ждёт gateway READY и автоматически выдаёт Android descriptor, но live acceptance
-использовала SSH forwarding + adb reverse для временного control ingress.
+bulk VPN. [Код/лимиты/runbook](../carrier/bootstrap/README.md): существующий mTLS,
+protected atomic cache, одна активная exchange, server challenge/setup binding,
+без нового signing root. Старый Room Broker PASS использовал forwarding; BOOT-1
+runner использует direct mTLS только для prior cache, затем запрещённый normal
+endpoint и исключительно Telemost rendezvous. Этот новый live run ещё NOT RUN.
+Deterministic checkpoint: focused Go/race x10/vet, Python118, Android native/APK/
+JVM9/lint, docs/source guard PASS. Следующий шаг — credential + physical phases A–E,
+не начало5N.6; подробные результаты и artifact hashes в датированном отчёте.
+Fresh install уже внутри completely restricted сети вне scope. Rollback — остановить
+только task-owned процесс/удалить diagnostic APK/cache; production не изменяется.
 
 **E acceptance:** сохранить OS ownership/lifecycle и socket protection; проверить
 whole-device TCP/DNS, fail-closed поведение неподдерживаемого трафика/DNS/IPv6 и

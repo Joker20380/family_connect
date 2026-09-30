@@ -1,24 +1,29 @@
 # Текущее состояние / Current state
 
-## CURRENT PRODUCT STATE — 30.09.2026 rebaseline
+## CURRENT PRODUCT STATE — 30.09.2026 / 5N-BOOT-1
 
 **Family Connect = resilient connectivity for families**, не protocol picker.
 Приоритет — непрерывность связи и автоматическое восстановление, с быстрыми
 обычными транспортами в нормальной сети и restricted carrier как резервом.
 Целевой UX одной кнопки ещё не завершён; детали — [architecture](architecture.md).
 
-**Repository sync complete:** после свежего `git fetch origin main` starting
-HEAD = origin/main = `5cc9d2a04149cd17a0ef3434a77fefc137b1a06a`; branch main,
-рабочая копия чистая. Синхронизация не означает deployment или green full CI.
-Этот rebaseline — только docs, без bump/build/install/release/push/production changes.
-Docs validation: public/all local links+anchors PASS, `git diff --check` PASS;
-historical STATUS/PLAN ledger сохранён byte-for-byte, [подробности](releases/2026-09-30-product-engineering-rebaseline.ru.md).
+**5N-BOOT-1 = IMPLEMENTED / LIVE BLOCKED**, не physical PASS. Starting clean main
+HEAD = freshly fetched origin/main = `51d0ad788b651f47ba22e33b4a9991a1283661ce`.
+Добавлены authenticated BootstrapDirectory/cache, отдельный bounded seed manager,
+control-only Family TLS rendezvous → существующий Room Broker и diagnostic Android
+handoff. OAuth отсутствует в окружении этой сессии; physical acceptance не запускалась.
+Focused Go/race (bootstrap x10)/vet, Python118, Android native/APK/JVM9/lint,
+docs/source guard — PASS; lint содержит только existing manifest/UI warnings.
+Нет production deployment, version bump, public release/catalog changes или push.
+[Отчёт BOOT-1](releases/2026-09-30-webrtc-5n-boot1-bootstrap.ru.md) ·
+[Контракт/runbook](../carrier/bootstrap/README.md). Исторический ledger ниже сохранён.
 
 | Уровень | Фактическое состояние |
 | --- | --- |
 | IMPLEMENTED IN CURRENT BETA | Device Identity, FAMILY admission, invitations/provisioning; Android/Linux/Windows; normal AWG/TCP используются beta-пользователями. Android VpnService/VPN lifecycle уже существует. |
 | PROVEN IN ISOLATED ACCEPTANCE | 5N.1–5N.5, Family TLS1.3, selective-repeat ReliableStream/real RTP gap recovery, long-duration goodput, Internet TCP/end-site HTTPS TLS, mux/Family DNS/containment, automatic Room Broker **PASS**. Physical Redmi → real Telemost VP8/RTP → Amsterdam. |
-| PLANNED / NEXT | **5N-BOOT-1** restricted bootstrap → **5N.6** existing Android VPN ↔ 5N full-device path → minimum viable Connectivity Orchestrator → Krasnodar FIELD-1 → 50–100-user beta. |
+| IMPLEMENTED / LIVE BLOCKED | **5N-BOOT-1**: cached mTLS directory, one control-only seed/exchange, broker READY-before-descriptor, diagnostic dedicated handoff. Physical restricted-control acceptance ещё обязательна. |
+| PLANNED / NEXT | Завершить **5N-BOOT-1 acceptance**, затем **5N.6** existing Android VPN ↔ 5N full-device path → minimum viable Connectivity Orchestrator → Krasnodar FIELD-1 → 50–100-user beta. |
 
 5N.5 доказал simultaneous public HTTPS, mixed TCP + DNS, exact delivery и
 fairness/bounded buffers. Room Broker доказал official Telemost API, server-only
@@ -26,7 +31,8 @@ OAuth, gateway-first READY и automatic Android descriptor/join без manual UR
 Family TLS + multiple HTTPS200. **Это принятые факты, не preparation-only.**
 Но broker acceptance использовала temporary control ingress (SSH forwarding +
 adb reverse). **Production restricted bootstrap нет:** при недоступном ordinary
-Family API устройство ещё не получает initial dedicated room самостоятельно.
+Family API получение initial dedicated room теперь реализовано в diagnostic core,
+но физически ещё не доказано без forwarding; production путь не выпущен.
 5N mux/DNS не подключён ко всему Android traffic, 5N.6 и Krasnodar FIELD-1 NOT RUN;
 restricted rollout beta-пользователям и product-complete orchestration отсутствуют.
 Нет generic UDP в restricted path; global ReliableStream HOL остаётся; production
@@ -61,7 +67,7 @@ WG/AWG/TCP/Auto lifecycle FAIL, release SKIPPED. Причины здесь не 
 outbox и client end-to-end остаются открыты. TLS renewal тогда PASS, мониторинг
 продолжается; новых live checks/deployments здесь нет.
 
-**NEXT = 5N-BOOT-1, не запускать в этой задаче.** Второй carrier/Home Gateway —
+**NEXT = завершить physical 5N-BOOT-1 после снятия live blocker; 5N.6 NOT STARTED.** Второй carrier/Home Gateway —
 backlog; performance/FEC/HOL — later evidence-driven work.
 [Authoritative plan](PLAN.md) · [Rebaseline: docs checks, boundaries, rollback](releases/2026-09-30-product-engineering-rebaseline.ru.md).
 

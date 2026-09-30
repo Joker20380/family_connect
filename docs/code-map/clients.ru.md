@@ -5,6 +5,15 @@
 
 ## Android
 
+5N-BOOT-1: `carrier/bootstrap` — directory/cache, one-lease carrier envelope,
+Family-authenticated control-only protocol и separate seed manager.
+`carrier/cmd/bootstrap-broker` — disposable mTLS preparation + seed process;
+`carrier/cmd/telemost-binary/bootstrap.go` — explicit refresh/recover diagnostic
+path, затем existing dedicated Family binding/Mux. `BootstrapMode`/`ProbeService`
+дают только mode, guarded control endpoint и no-backup cache path; второй Java
+network stack не создаётся. [Runbook](../../carrier/bootstrap/README.md) ·
+[Report/live blocker](../releases/2026-09-30-webrtc-5n-boot1-bootstrap.ru.md).
+
 Изолированный **5N.2 test endpoint** находится отдельно:
 `clients/android/telemost-runtime` (`ProbeActivity` → `ProbeService` → `NativeRun`),
 `pilot/android-telemost/{build,live}.py` — только build/operator wrappers.

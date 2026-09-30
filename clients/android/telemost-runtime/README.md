@@ -318,3 +318,15 @@ a second independent Go shared library beside AWG/Xray.
 
 No protection bridge is implemented or asserted here. Full-device VPN and leak
 validation remain5N.6; the isolated5N.3 mode does not start that work.
+## BOOT-1 diagnostic entry points
+
+The existing native executable also accepts `--bootstrap-cache` and
+`--bootstrap-refresh`; no beta/version change, TUN or second network stack.
+App-private `bootstrap.input` contains only `refresh` or `recover`; `broker.input`
+is the direct mTLS control endpoint during refresh and exactly
+`https://127.0.0.1:1` during guarded recovery. The native cache lives in
+`getNoBackupFilesDir()`, persists process restart and never contains OAuth or
+private keys. No operator room URL is accepted in bootstrap mode.
+See the [BOOT-1 runbook](../../../carrier/bootstrap/README.md) and
+[implementation/live status](../../../docs/releases/2026-09-30-webrtc-5n-boot1-bootstrap.ru.md).
+The historical forwarding runners below must not be used for BOOT-1 acceptance.
