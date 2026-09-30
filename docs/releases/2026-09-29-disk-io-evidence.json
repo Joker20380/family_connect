@@ -1,0 +1,197 @@
+{
+  "description": "Sanitized diskstats/proc evidence. Early elapsed times were not captured; compare approximate sample windows, not guaranteed rates.",
+  "windows": {
+    "baseline": {
+      "RU": {
+        "end_utc": "2026-09-29T08:39:04.456440+00:00",
+        "samples": 60,
+        "elapsed_seconds": null,
+        "read_ops": 5,
+        "read_bytes": 20480,
+        "write_ops": 2284,
+        "write_bytes": 18694144,
+        "read_time_ms": 3,
+        "write_time_ms": 102679,
+        "io_busy_ms": 6149,
+        "weighted_io_ms": 105120,
+        "discard_ops": 185,
+        "discard_time_ms": 14,
+        "flush_ops": 550,
+        "flush_time_ms": 2423,
+        "io_pressure_delta_us": {
+          "some": 4234794,
+          "full": 3203386
+        },
+        "cpu_busy_percent": null,
+        "iowait_percent": null
+      },
+      "NL": {
+        "end_utc": "2026-09-29T08:39:01.269083+00:00",
+        "samples": 60,
+        "elapsed_seconds": null,
+        "read_ops": 0,
+        "read_bytes": 0,
+        "write_ops": 615,
+        "write_bytes": 3567616,
+        "read_time_ms": 0,
+        "write_time_ms": 99173,
+        "io_busy_ms": 2664,
+        "weighted_io_ms": 99176,
+        "discard_ops": 8,
+        "discard_time_ms": 1,
+        "flush_ops": 12,
+        "flush_time_ms": 2,
+        "io_pressure_delta_us": {
+          "some": 2283351,
+          "full": 2224231
+        },
+        "cpu_busy_percent": null,
+        "iowait_percent": null
+      }
+    },
+    "after_initial": {
+      "RU": {
+        "end_utc": "2026-09-29T08:48:46.318526+00:00",
+        "samples": 60,
+        "elapsed_seconds": null,
+        "read_ops": 5,
+        "read_bytes": 20480,
+        "write_ops": 868,
+        "write_bytes": 9826304,
+        "read_time_ms": 1,
+        "write_time_ms": 19582,
+        "io_busy_ms": 2756,
+        "weighted_io_ms": 21268,
+        "discard_ops": 101,
+        "discard_time_ms": 9,
+        "flush_ops": 342,
+        "flush_time_ms": 1676,
+        "io_pressure_delta_us": {
+          "some": 1462451,
+          "full": 871758
+        },
+        "cpu_busy_percent": null,
+        "iowait_percent": null
+      },
+      "NL": {
+        "end_utc": "2026-09-29T08:48:43.787780+00:00",
+        "samples": 60,
+        "elapsed_seconds": null,
+        "read_ops": 0,
+        "read_bytes": 0,
+        "write_ops": 459,
+        "write_bytes": 2719744,
+        "read_time_ms": 0,
+        "write_time_ms": 60009,
+        "io_busy_ms": 1871,
+        "weighted_io_ms": 60011,
+        "discard_ops": 8,
+        "discard_time_ms": 1,
+        "flush_ops": 12,
+        "flush_time_ms": 2,
+        "io_pressure_delta_us": {
+          "some": 1324681,
+          "full": 1281022
+        },
+        "cpu_busy_percent": null,
+        "iowait_percent": null
+      }
+    },
+    "after_final": {
+      "RU": {
+        "end_utc": "2026-09-29T08:53:32.495975+00:00",
+        "samples": 60,
+        "elapsed_seconds": 62.58405457995832,
+        "read_ops": 0,
+        "read_bytes": 0,
+        "write_ops": 933,
+        "write_bytes": 10268672,
+        "read_time_ms": 0,
+        "write_time_ms": 36214,
+        "io_busy_ms": 3070,
+        "weighted_io_ms": 38061,
+        "discard_ops": 106,
+        "discard_time_ms": 8,
+        "flush_ops": 368,
+        "flush_time_ms": 1840,
+        "io_pressure_delta_us": {
+          "some": 1815262,
+          "full": 1478185
+        },
+        "cpu_busy_percent": 23.83181341296102,
+        "iowait_percent": 1.9046081833588895
+      },
+      "NL": {
+        "end_utc": "2026-09-29T08:53:30.103544+00:00",
+        "samples": 60,
+        "elapsed_seconds": 60.84053756808862,
+        "read_ops": 140,
+        "read_bytes": 6238208,
+        "write_ops": 322,
+        "write_bytes": 1957888,
+        "read_time_ms": 25462,
+        "write_time_ms": 56627,
+        "io_busy_ms": 1964,
+        "weighted_io_ms": 82090,
+        "discard_ops": 6,
+        "discard_time_ms": 1,
+        "flush_ops": 8,
+        "flush_time_ms": 1,
+        "io_pressure_delta_us": {
+          "some": 1470543,
+          "full": 1293792
+        },
+        "cpu_busy_percent": 4.45143140824094,
+        "iowait_percent": 2.1347013072977
+      }
+    },
+    "sustained": {
+      "RU": {
+        "end_utc": "2026-09-29T09:01:06.142462+00:00",
+        "samples": 180,
+        "elapsed_seconds": 188.06063455017284,
+        "read_ops": 19,
+        "read_bytes": 118784,
+        "write_ops": 2345,
+        "write_bytes": 27836416,
+        "read_time_ms": 16,
+        "write_time_ms": 34646,
+        "io_busy_ms": 9030,
+        "weighted_io_ms": 40951,
+        "discard_ops": 302,
+        "discard_time_ms": 31,
+        "flush_ops": 1049,
+        "flush_time_ms": 6257,
+        "io_pressure_delta_us": {
+          "some": 5358643,
+          "full": 3998440
+        },
+        "cpu_busy_percent": 23.36077663654161,
+        "iowait_percent": 1.794094773257529
+      },
+      "NL": {
+        "end_utc": "2026-09-29T09:00:58.926999+00:00",
+        "samples": 180,
+        "elapsed_seconds": 182.53837997210212,
+        "read_ops": 0,
+        "read_bytes": 0,
+        "write_ops": 1182,
+        "write_bytes": 7389184,
+        "read_time_ms": 0,
+        "write_time_ms": 138656,
+        "io_busy_ms": 4569,
+        "weighted_io_ms": 138664,
+        "discard_ops": 26,
+        "discard_time_ms": 1,
+        "flush_ops": 42,
+        "flush_time_ms": 8,
+        "io_pressure_delta_us": {
+          "some": 3086101,
+          "full": 2921851
+        },
+        "cpu_busy_percent": 4.7695191883546535,
+        "iowait_percent": 1.5935156594618438
+      }
+    }
+  }
+}

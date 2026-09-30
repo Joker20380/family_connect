@@ -74,6 +74,14 @@ Docker гарантии мгновенного удаления нет. Оста
 
 ## Периодический worker
 
+С29.09.2026 на RU установлен **`family-connect-peer-worker.service`**: один
+постоянный контейнер, новый процесс прежней команды на каждый проход. Пауза15с
+после завершения и timeout60с сохранены; старый timer отключён. Это уменьшает
+Docker/filesystem/journal churn без изменения авторизации и логики drift/revoke.
+[Установка, проверки, откат](../deploy/product-peer-worker/README.md) ·
+[Измерения и границы](releases/2026-09-29-disk-io-recovery.ru.md).
+Следующий абзац описывает **прежний вариант**, сохранённый для отката.
+
 Шаблоны находятся в `deploy/systemd/family-connect-peers.service` и `.timer`: проход
 через 15 секунд после старта и после завершения предыдущего, timeout 60 секунд.
 Рабочий путь `/opt/apps/family_connect`. Worker запускается в Docker image `family-connect-product:0.2.1`; см. установленный шаблон unit. EnvironmentFile

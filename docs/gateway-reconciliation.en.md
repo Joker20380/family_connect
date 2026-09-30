@@ -60,12 +60,19 @@ Stopping a worker does not revoke existing peers. After recovery, reconcile and 
 the queue before opening the product API. Old database/peer backups can resurrect
 revoked grants; restore only while stopped and reconcile authorization first.
 
+Since 2026-09-29, RU runs `family-connect-peer-worker.service`: one persistent
+container with fresh reconciliation children, the same 15-second post-cycle delay
+and 60-second timeout. The old timer is disabled. Authorization and drift/revoke
+logic are unchanged. See the [supervisor runbook](../deploy/product-peer-worker/README.md)
+for installation, bounded shutdown, validation and supervisor-only rollback.
+The following describes the legacy timer option retained for rollback.
+
 Systemd templates in `deploy/systemd/` run after boot and every 15 seconds after the
 previous pass, with a 60-second service timeout. Adapt `/opt/family-connect` and `.venv`.
 `/etc/family-connect/product.env` defines absolute `FC_PRODUCT_DB` and `FC_GATEWAYS` paths.
 The default service UID is root; whichever UID is selected must own private 0700
 storage/0600 files and have Docker access. Do not expose Docker to the public HTTP
-process. Templates have not been installed or started.
+process. The legacy timer was deployed previously; it is now disabled on RU.
 
 Rollback means stopping the timer and product API while preserving v3 data and deciding
 how to handle existing peers. Do not downgrade the schema. Migrated v2 envelopes without
