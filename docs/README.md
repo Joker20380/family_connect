@@ -1,11 +1,17 @@
 # Documentation
 
-**Текущий critical path — 5N:** [Restricted Android→Telemost VP8→Linux EU](PLAN.md).
-Новый разработчик restricted connectivity начинает с 5N design
-([DECISION](reticulum/HOME_GATEWAY_DESIGN.md#decision-restricted-webrtc-to-eu-gateway-first--2026-09-25))
-и актуального gate в STATUS:5N.1–5N.5 PASS; далее STOP, Room Broker/5N.6 требуют
-отдельного решения. [Отчёт5N.5/evidence](releases/2026-09-28-webrtc-eu5-mux-dns.ru.md).
-Home Gateway и RNS-over-WebRTC — secondary / backlog.
+**Current product critical path — 30.09.2026:**
+[5N-BOOT-1 → 5N.6 → MVP Orchestrator → Krasnodar FIELD-1 → 50–100-user beta](PLAN.md).
+Начните с [CURRENT PRODUCT STATE](STATUS.md), затем [продуктовой архитектуры](architecture.md):
+implemented beta / proven experimental / planned разделены явно.
+5N.1–5N.5, ReliableStream/DNS containment и automatic Room Broker приняты;
+production restricted bootstrap и whole-device integration ещё отсутствуют.
+[5N.5 evidence](releases/2026-09-28-webrtc-eu5-mux-dns.ru.md) ·
+[Room Broker PASS и temporary ingress](releases/2026-09-28-webrtc-5n-room-broker.ru.md) ·
+[Rebaseline report](releases/2026-09-30-product-engineering-rebaseline.ru.md).
+Второй restricted carrier, Home Gateway и RNS-over-WebRTC — backlog.
+
+Следующие датированные priority notes — историческая навигация, не текущий порядок.
 
 **Приоритет25.09 уточнён:** [Restricted Android→Telemost VP8→Linux EU](PLAN.md)
 без обязательного Windows Home Gateway/IP-over-RNS. Reticulum control/recovery
@@ -66,7 +72,9 @@ Home Gateway и приёмка RNS-2 пока отсутствуют.
 
 [Product introduction](../README.md) · [Русская версия](../README.ru.md)
 
-Updated24 September2026. Android updater and invitation page: beta50; invitation downloads: Linux0.2.10 / Windows0.2.14 preview.
+Updated30 September2026. Last documented distribution: Android beta51/code51,
+Linux0.2.11 / Windows0.2.15; Windows0.2.14 compatibility fallback retained.
+This documentation task does not revalidate installed/public/invitation artifacts.
 [Current distribution](releases.md) · [Documentation required with every version](releases.md#documentation-with-every-version).
 
 Start with the guide for your role. [STATUS](STATUS.md) is the source of truth for

@@ -1,159 +1,149 @@
 [Русская версия →](README.ru.md)
 
-**Stage5 priority update:** Android → Telemost VP8 → Linux EU Gateway → Internet.
-Reticulum control/recovery remains; Windows Home Gateway is a secondary feature.
-Preparation only: Family encrypted binary/TCP/DNS/full-device transport is not yet
-implemented or validated. [Current plan and WEBRTC-EU gates](docs/PLAN.md).
-Earlier Home Gateway notes below describe retained future functionality.
-
-WebRTC underlay preparation: Reticulum frames may travel through an isolated
-WB/Telemost/VK carrier as an alternative to direct paths. Telemost is now the first
-candidate after a reported cellular video call from Krasnodar to Belgium; WB is
-the reserve. Headless/binary/RNS carrier and Android↔Windows acceptance remain open. [Updated Stage5 plan](docs/PLAN.md).
-
-## Personal/Home Gateway — active development
-
-Stage 5 targets a secure Android↔Windows Home PC connection under mobile
-allowlist restrictions. Reticulum handles discovery and connection negotiation;
-IP traffic uses a selected encrypted transport, direct or through a relay, then
-diagnostic Internet or the existing Family Connect VPN. Stable Device Identity, no per-user DDNS or manual key transfer. Experimental,
-not yet implemented; real Android↔Windows RNS-2 acceptance is still required.
-[Design and milestones](docs/reticulum/HOME_GATEWAY_DESIGN.md) · [Plan](docs/PLAN.md).
-
 # Family Connect
 
-**Private connectivity for families and devices across borders.**
+**Resilient connectivity for families and personal devices.**
 
-Family Connect is a private networking project for families and personal devices, with an Android app for an encrypted connection and messaging. It started with a simple need: its developer lives in Europe, while people close to him live in Russia. The goal is to make staying connected easier, without asking family members to learn VPN configurations, servers or protocols.
+Family Connect helps people stay connected without having to understand which
+transport or server works today. It is not a protocol picker or just another VPN:
+connection continuity and automatic recovery are the product direction. Fast,
+inexpensive VPN transports remain the normal path; a restricted service carrier
+is a fallback, not the default.
 
-**[Try the Android beta](docs/getting-started.en.md)** · [Getting started](docs/getting-started.en.md) · [How it works](#how-it-works) · [Security](SECURITY.md) · [Architecture](docs/architecture.md)
+The initial target is a technically capable family member helping relatives and
+devices stay connected without repeatedly explaining configurations. Families
+split across countries, including people with relatives in Russia, are a common
+starting context—not a limit to the product's geography.
 
-## Current release
+**[Try the Android beta](docs/getting-started.en.md)** · [Desktop installation](docs/clients.en.md) · [How it works](#how-it-works) · [Security](SECURITY.md)
 
-Android **0.1.18-beta51** is available for existing users: voice messages, hold-to-record,
-swipe-up locking, text edits and background notifications. New messages scroll into view. Switches are orange when off and turquoise when on.
-[Install or update](docs/getting-started.en.md) · [Versions and checksums](docs/releases.md).
+## Current usable beta — implemented
 
-The invitation page provides Android beta51 and Linux0.2.11 / Windows0.2.15 previews. Install
-the client, return to the original invitation mark **Application installed** and choose **Open application**.
-[Desktop installation](docs/clients.en.md) · [Rollout checks](docs/releases/2026-09-26-server-list-crossplatform.ru.md).
+Device Identity, Family admission, invitations and provisioning exist. Beta users
+already use normal AWG/TCP connectivity; Android already has a VpnService/VPN
+lifecycle. Automatic orchestration across normal and restricted transports is
+**not product-complete**. Current clients still expose region/transport choices.
 
-Windows0.2.15 adds the server picker with country flags and live load, plus a transport catalog. Windows 10 1809+ / 11 x64 are the target platforms; the installer has no publisher signature. Version0.2.14 can update through Check for updates;0.2.12 or earlier needs one manual installation.
-
-## Platforms
-
-| Platform | Current availability |
+| Platform | Latest documented distribution and limits |
 | --- | --- |
-| Android 8+ | Beta51; ARM64 APK, 36.4 MB. VPN, text and voice tested on phones; invitation-link activation. |
-| Linux | GTK 4 / libadwaita desktop pilot; 0.2.11 preview5b02e8cb9fde119f. Operator-assisted setup. |
-| Windows x64 | Native desktop pilot; 0.2.15 source2ffba77 installer. Invitation-link activation; no trusted publisher signature yet. |
-| macOS / iOS | No application release. Apple-platform work remains on the longer-term roadmap. |
+| Android 8+ / ARM64 | **0.1.18-beta51 / code51**; invitation activation, normal VPN, text/voice messaging and background notifications tested on phones. |
+| Linux | **0.2.11**, GTK 4/libadwaita; AppImage and DEB, legacy archive retained for advanced/manual use and updater compatibility. System dependencies and VPN helpers still require setup. |
+| Windows 10 1809+ / 11 x64 | **0.2.15**; invitation activation, independent signed update catalog; installer has no trusted publisher signature. 0.2.14 remains a compatibility fallback; affected Windows 10 device acceptance is pending. |
+| macOS / iOS | No client release; iOS is later work, after real beta evidence. |
 
-Invitation-link activation is available on all three clients. Messenger functionality is verified on Android; desktop feature parity is not claimed.
+These are the last documented public/invitation versions, not a new artifact or
+installed-device audit. See [versions and checksums](docs/releases.md),
+[cross-platform release evidence](docs/releases/2026-09-26-server-list-crossplatform.ru.md)
+and [Linux packaging](docs/linux-appimage-deb.ru.md). Windows 0.2.12 and earlier
+need one manual transition before using the independent update catalog.
 
-## A look inside
+Desktop feature parity with Android messaging is not claimed. Android screen-off
+notifications were confirmed; deep Doze latency and broader offline/restart
+acceptance remain open. This remains a pilot, not a production-ready service.
 
-<img src="docs/assets/android-beta38-home.png" width="300" alt="Family Connect Android beta38 test build home screen, with connection switch, network status and persistent navigation">
+## Restricted-network R&D — proven experimental
 
-Android beta38 test build, Russian interface, captured on 23 September 2026. Actual native UI rendered during device testing; VPN is off in this capture. Historical screenshot; the current update is beta51. [Image provenance](docs/assets/README.md).
+Isolated engineering acceptance passed on a **physical Redmi Android → real
+Telemost VP8/RTP carrier → Amsterdam EU gateway → TCP/DNS Internet** path:
 
-```mermaid
-flowchart LR
-    F["Your family"] --- A["Your phone"]
-    F --- B["Your laptop"]
-    F --- C["A relative's phone"]
-```
+- Family TLS 1.3 authentication over a selective-repeat ReliableStream, real RTP
+  gap recovery and long-duration reliable goodput.
+- Multiple simultaneous public HTTPS streams with verified end-site TLS, mixed
+  TCP + Family DNS workload, exact byte delivery, fair scheduling and bounded buffers.
+- Destination DNS containment/hardening in the tested core path.
+- Automatic Room Broker using the official Telemost API with server-side OAuth
+  only: Amsterdam joins first and reports READY; Android receives the dedicated
+  descriptor and joins without an operator-supplied room URL.
 
-The idea: make connections manageable for people and their devices. This illustration is not a claim of a shared family dashboard or a direct mesh between devices.
+[5N.5 acceptance](docs/releases/2026-09-28-webrtc-eu5-mux-dns.ru.md) ·
+[Room Broker PASS](docs/releases/2026-09-28-webrtc-5n-room-broker.ru.md) ·
+[Reliability and sustained goodput](docs/releases/2026-09-27-webrtc-5n-perf2-reliable-envelope.ru.md)
 
-## Why Family Connect?
+**This is not yet the released whole-device restricted Android VPN.** The accepted
+Room Broker run used temporary control ingress (SSH forwarding + adb reverse),
+not production restricted-network bootstrap. If the ordinary Family API is
+unreachable, the device cannot yet independently obtain its first dedicated room.
+5N.6 full-device integration and Krasnodar FIELD-1 have not run; restricted mode
+has not been rolled out to existing beta users. There is no generic UDP support
+in this path; global ReliableStream head-of-line blocking remains, and no
+production capacity or universal allowlist availability is claimed.
 
-- **Simple for family members.** An invitation leads to the download and an Open application button. Activate once, choose a connection and connect. Removing setup friction is the goal; the pilot still needs an invitation and Android permissions.
-- **Inspectable development.** Client and server code, test evidence and architecture can be inspected publicly. Family Connect is source-available proprietary software; public inspection does not grant reuse rights.
-- **Personal device identities.** Device credentials and activation belong to a device. Family members do not need to share a single configuration file.
-- **More than one connection option.** The Android friends beta offers AWG and TCP transports and a choice of gateway region. Automatic selection and recovery have separate experimental implementations and are not a cross-platform reliability guarantee.
-
-## Why I built it
-
-I live in Europe, while people close to me live in Russia.
-
-I built Family Connect because I wanted a connection my family could use without learning VPN clients, configuration files, servers or networking. I wanted to configure it once and know that the next connection would be straightforward.
-
-That personal need grew into a project for families and personal devices spread across different countries. Making secure networking approachable remains the reason for building it.
+In one user-reported Krasnodar cellular restricted/allowlist condition, Family
+AWG 3.1 and TCP were unavailable while Telemost communication remained available.
+This is one field observation—not a claim about every network, operator, region
+or time, and not a Family restricted-VPN field acceptance.
 
 ## How it works
 
-1. **Get an invitation** from a participant or the pilot operator.
-2. **Install and activate** the app by returning to your original invitation link.
-3. **Choose a region and connect.** The app connects your device to the selected gateway, which provides Internet access.
-4. **Use the messenger** with contacts whose keys you have checked. Messaging is a separate feature; a VPN connection is not itself a chat session.
+**Target experience (planned across transports):**
 
-Participants can share a QR code or invitation link from Settings. The recipient downloads the app, returns to that same link and opens the app to activate access.
+```text
+INSTALL → accept family invitation → CONNECT
+        → Family Connect selects/recovers an available path → CONNECTED
+```
 
-## Project status
+The normal user-facing states should be **CONNECTING**, **CONNECTED** and
+**RESTORING CONNECTION**; protocol details belong in advanced diagnostics.
+The mental model is **Family → people/devices → connectivity**, not account →
+server → configuration file. A shared family dashboard is not implemented by
+this diagram or claimed here.
 
-Family Connect is under active development. Some platforms and features are experimental. **This is a pilot, not a production-ready service.**
+**Today:** obtain an invitation, install the client, return to the original link
+and open the application to activate it. Accept Android VPN permissions and use
+the current region/connection controls. Fresh sideload installation still needs
+the return to the invitation; end-to-end automatic activation is not claimed.
+Messaging is a separate feature, not a consequence of connecting the VPN.
 
-Android VPN, two-phone text/voice exchange and screen-off notifications have been confirmed in the pilot. Background delivery uses the app’s own service, not FCM. Delivery latency during deep Doze, broader device coverage and offline/restart acceptance remain open. Animated smileys are present; their rough edges are a known visual issue.
-
-Desktop releases and Android beta releases have separate versions and capabilities. No app-store release or independent security audit is claimed. [Current state](docs/STATUS.md) takes precedence over dated engineering reports. [Next work](docs/PLAN.md).
-
-## Getting started
-
-**Android:** follow the [installation and invitation guide](docs/getting-started.en.md). Existing users install the new APK over the old version; keep the app and its data. No new invitation is needed for an ordinary update.
-
-**Linux and Windows:** use the [desktop pilot instructions](docs/clients.en.md) and [current preview downloads](docs/releases.md). Linux dependency and VPN-helper setup requires operator assistance.
-
-**Building from source:** see [development](#development). CI artifacts are test builds, not interchangeable with the signed Android friends APK.
+**Next:** restricted bootstrap (`5N-BOOT-1`) → Android full-device integration
+(`5N.6`) → minimum viable Connectivity Orchestrator → Krasnodar FIELD-1 →
+50–100-user product beta. [Authoritative roadmap](docs/PLAN.md).
 
 ## Security & privacy
 
-Public source helps inspection; it does not establish security on its own. Device key storage, signed configuration verification and release checks are documented with their limits.
+Third-party carriers are untrusted. The restricted path's security boundary is
+**Device Identity / Family admission / Family TLS**, not Telemost room secrecy.
+Telemost is the first proven restricted carrier, not the product or a permanent
+architectural dependency; carriers remain replaceable adapters.
 
-- [Security boundaries and reporting status](SECURITY.md)
-- [Privacy: local data, gateways and metadata](docs/privacy.md)
-- [Desktop update verification and signing](docs/updates.en.md)
-- [Android beta artifact and checksum](docs/releases/2026-09-26-server-list-crossplatform.ru.md)
+The gateway is trusted and can observe destination metadata. No anonymity,
+zero-logging, guaranteed bypass or guaranteed availability is promised. Future
+connection-success metrics must not collect traffic content or browsing history;
+they are planned, not presented as an existing telemetry system.
 
-A VPN gateway is a trusted part of the connection and can observe destination metadata. Family Connect makes no anonymity or zero-logging guarantee.
+[Security boundaries](SECURITY.md) · [Privacy](docs/privacy.md) ·
+[Update verification](docs/updates.en.md)
 
 ## Architecture
 
-```mermaid
-flowchart TD
-    A["Invitation and entitlement"] --> B["Device registration and identity"]
-    B --> C["Provisioning and signed configuration"]
-    C --> D["Client verification and protected state"]
-    D --> E["Platform VPN adapter"]
-    E --> F["Transport and gateway"]
-```
+The architecture distinguishes the **control/product plane**, the missing
+**restricted bootstrap/recovery plane**, and the proven experimental **data
+plane**. A planned Connectivity Orchestrator selects among available capabilities;
+normal AWG/TCP paths do not run through the experimental 5N mux.
 
-This is the implemented provisioning path at a high level; integration maturity differs by platform. The networking code includes WireGuard, AmneziaWG and VLESS REALITY adapters. Reticulum carries control messages in the newer control path. The Rust QUIC relay lab is a separate experiment, not the Android VPN data path.
-
-[Architecture map](docs/architecture.md) · [Device identity](docs/adr/001-identity-provisioning.en.md) · [Provisioning](docs/provisioning-provider.en.md) · [Messenger core](messenger/README.ru.md)
+[Architecture and product decisions](docs/architecture.md) ·
+[Device Identity](docs/adr/001-identity-provisioning.en.md) ·
+[Provisioning](docs/provisioning-provider.en.md) · [Current state](docs/STATUS.md)
 
 ## Development
 
-**Source snapshot:** this checkpoint includes Android0.1.18-beta51, Linux0.2.11 and Windows0.2.15. See the [cross-platform release report](docs/releases/2026-09-26-server-list-crossplatform.ru.md) for checks and limits. CI uses test signing; byte-for-byte reproduction of the published APK is not claimed. Linux remains a manual preview. Windows0.2.15 uses an independent signed catalog after one manual transition.
-
-Start with [CONTRIBUTING.md](CONTRIBUTING.md) for setup and scoped checks.
+Start with [CONTRIBUTING.md](CONTRIBUTING.md) and the [documentation map](docs/README.md).
+Source, CI builds, installed clients and public artifacts are separate states;
+CI test signing does not reproduce the distributed friends APK. The current main
+CI has open failures documented in STATUS; repository synchronization is not a
+release or a deployment.
 
 | Area | Source |
 | --- | --- |
-| Android client | [clients/android](clients/android/) |
-| Linux client | [clients/desktop](clients/desktop/) |
-| Windows client | [clients/windows](clients/windows/) |
-| Registration and provisioning | [control](control/), [device_identity](device_identity/), [provisioning](provisioning/) |
-| Messaging | [messenger](messenger/) |
-| Experimental relay core | [core](core/) |
-
-## Documentation
-
-The [documentation map](docs/README.md) separates user guides, operator runbooks, development references and project history. Detailed engineering reports remain available.
+| Android / Linux / Windows | [Android](clients/android/) / [Linux](clients/desktop/) / [Windows](clients/windows/) |
+| Identity and provisioning | [control](control/) / [device_identity](device_identity/) / [provisioning](provisioning/) |
+| Experimental restricted core / Room Broker | [carrier](carrier/) / [roombroker](carrier/roombroker/) |
+| Messaging / separate QUIC relay lab | [messenger](messenger/) / [core](core/) |
 
 ## Contributing
 
-Bug reports, clearer documentation and scoped patches are welcome. Include the platform and exact version, and remove private data from reports. See [contribution guidance](CONTRIBUTING.md); security-sensitive reports follow [SECURITY.md](SECURITY.md).
+Bug reports, documentation and scoped patches are welcome. Include platform and
+exact version, and remove private data. Follow [contribution guidance](CONTRIBUTING.md)
+and [security reporting](SECURITY.md).
 
 ## License
 

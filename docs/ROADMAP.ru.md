@@ -1,5 +1,24 @@
 # План развития Family Connect
 
+## CURRENT PRODUCT ROADMAP — 30.09.2026
+
+Family Connect — resilient connectivity для семей, не набор протоколов.
+Foundation существует, normal AWG/TCP работают в beta; restricted data plane
+5N.1–5N.5 + ReliableStream/DNS containment и automatic Room Broker доказаны
+изолированно на physical Android, но ещё не стали released whole-device VPN.
+
+**5N-BOOT-1 → 5N.6 Android full-device → minimum viable Connectivity Orchestrator
+→ Krasnodar FIELD-1 → 50–100-user beta.** Это текущий порядок; authoritative
+phase A–I statuses, acceptance и будущие privacy-safe metrics ведутся в [PLAN](PLAN.md).
+[Архитектура/три planes](architecture.md) · [Фактический статус](STATUS.md).
+
+Второй carrier (VK/WB/прочие), Home Gateway и RNS-over-WebRTC — backlog;
+FEC/HOL/performance — позже по evidence. iOS, load/scale, новые gateways/carriers,
+monetization/referrals — после реальной beta evidence, не текущие blockers.
+Ни bootstrap, ни FIELD-1 не считаются выполненными этой документацией.
+Исторические стадии ниже сохранены без перенумерации; их preparation-only,
+«next» и обязательный WB fallback не являются текущим решением.
+
 ## Current priority25.09 — Restricted Android→EU (5N)
 
 **Stage5 now prioritizes Android → Telemost VP8 → headless Linux EU Gateway →

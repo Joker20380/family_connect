@@ -1,5 +1,14 @@
 # Personal/Home Gateway — Reticulum control, selectable data transport
 
+**30.09.2026 rebaseline:** этот документ сохраняет Home/RNS design и исторические
+5N requirements; Home Gateway — secondary/backlog, не текущий critical path.
+[Architecture](../architecture.md) и [PLAN](../PLAN.md) определяют актуальный порядок:
+5N-BOOT-1 → 5N.6 → minimum viable Orchestrator → FIELD-1 → product beta.
+5N.1–5N.5, REL-1/PERF-2 и automatic Room Broker уже **PASS** изолированно;
+production bootstrap/full-device restricted rollout ещё нет. Нижние preparation-only
+и «WB next/fallback» относятся к25.09: второй carrier теперь только backlog по
+field/telemetry coverage evidence. Исходные gate IDs и design сохранены.
+
 Engineering decision and implementation requirements, 2026-09-25.
 **Stage 5 / Reticulum — active development; design recorded, RNS-1–RNS-5 open.**
 This document specifies work to implement; it is not evidence of a working tunnel.

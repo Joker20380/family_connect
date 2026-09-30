@@ -1,177 +1,176 @@
 # Architecture map / Карта архитектуры
 
-28.09 **5N.5 PASS**: opt-in bounded/fair TCP mux + wire DNS above the existing single
-Family TLS/ReliableStream/Telemost path; default16/max32,64KiB credit,16KiB DATA.
-Physical4 public HTTPS and304.138s mixed TCP+DNS, native destination resolver denied;
-[exact evidence/limits](releases/2026-09-28-webrtc-eu5-mux-dns.ru.md). No TUN/rollout.
-Hostname OPEN already resolved at the gateway in5N.4, not at the Android client.
-[DNS dependency audit, containment proof and manual verification](testing/webrtc-dns-containment.ru.md)
-separates carrier bootstrap from user destinations; no whole-device DNS claim.
+## Current product decision — resilient family connectivity
 
-## Current decision — Restricted WebRTC to EU Gateway first
+Authoritative rebaseline, **30 September 2026**. [STATUS](STATUS.md) records
+implementation/deployment facts; [PLAN](PLAN.md) owns execution order. Dated 5N
+reports retain their exact acceptance scope, failures and STOP boundaries. This
+decision changes documentation and priorities, not runtime or rollout.
 
-Earlier28.09: isolated [5N.4 single TCP forwarding](../carrier/tcpforward/README.md)
-adds `Application TCP → Family TCP framing → Family TLS → ReliableStream → VP8`
-above the unchanged proven carrier. One admitted session/stream, explicit FIN and
-structured connect errors; gateway DNS with public-destination validation, no mux
-or TUN. **5N.4 PASS**: physical public HTTPS200/10MiB and controlled exact duplex
-300.821s; security/lifecycle/regressions/cleanup accepted. No production rollout
-or5N.5; [proof and limits](releases/2026-09-28-webrtc-eu4-single-tcp.ru.md).
+Family Connect is a **resilient connectivity service**, not a protocol picker.
+The initial user is a technically capable family member helping relatives/devices
+stay connected without repeated VPN configuration support. Families across
+countries, including relatives in Russia, are an initial context—not a permanent
+geographic restriction. The mental model is **Family → people/devices → connectivity**;
+identity/invitation foundations exist, but no shared family dashboard is claimed.
 
-2026-09-27 implementation checkpoint: [carrier/](../carrier/README.md) recovers
-the interrupted isolated Go/Pion prototype initially for **5N.1**. Bounded binary
-framing, Telemost join/signaling, VP8 and a separate diagnostic DC mode exist;
-local two-process Pion tests pass. Real Linux↔Telemost VP8↔Amsterdam **5N.1 PASS**
-on27.09, clean runtime `a13068e`: 291 exact echoes including30s/5min and live
-failure teardown. Observed RTT≈4s and useful roundtrip≈0.0655Mbit/s are limitations,
-not production performance acceptance. [5N.1 evidence](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md).
+Target UX: install → accept family invitation → CONNECT → automatic path selection
+or recovery → CONNECTED. Normal states: **CONNECTING / CONNECTED / RESTORING
+CONNECTION**. AWG, TCP, VP8, ReliableStream and gateway details belong in advanced
+diagnostics. This cross-transport experience is **PLANNED**, not today's complete UX.
+Continuity comes before benchmark speed, country count or protocol count; normal
+networks should still use fast, inexpensive transports, with a restricted carrier
+as fallback/recovery rather than mandatory default.
 
-5N.2 now has a separate [Android diagnostic APK](../clients/android/telemost-runtime/README.md):
-shared Go core → unchanged Linux CLI or Android PIE CLI child → bounded foreground
-test Service/Activity. No second source copy, Java WebRTC, JNI or product Go runtime.
-Physical **5N.2 PASS**, clean `3f65346`: Redmi Note9 Pro/Android12 ordinary cellular
-↔Telemost VP8↔Amsterdam,372 exact echoes including30s/5min and lifecycle/fault checks.
-Final RTT≈2s/aggregate0.131069Mbit/s; earlier full run≈4s/0.065536Mbit/s are baseline
-measurements, not a throughput ceiling or production acceptance.
-Wi-Fi handoff/deep Doze/restricted-mobile not claimed.
-Isolated5N.3 now adds `familysession`: standard TLS1.3 above unchanged VP8,
-existing DeviceIdentity/ProductStore-derived disposable authorization, gateway pin,
-signed revocation snapshot and bounded lease. No production authority/identity
-store integration. **5N.3 PASS**: physical Android374 exact echoes/302.001s sustained,
-live admission/replay rejection and lifecycle/recovery. Two earlier SSH-lifetime
-failures are retained; accepted run isolates its observer without carrier changes.
-[Report/limits](releases/2026-09-27-webrtc-eu3-family-session.ru.md).
-5N-REL-1 now inserts `ReliableStream` **below TLS and above VP8/RTP** in Family
-mode. Cumulative ACK + bounded selective-repeat/SACK restores ordered bytes before
-TLS; sender8/receiver16,16KiB defaults, no crypto/auth changes or unreliable fallback.
-Fresh bidirectional epochs scope each attempt, not an additional authentication
-layer. Plaintext carrier mode is unchanged. [Protocol/threat boundary](../carrier/reliablestream/README.md)
-and [physical/local acceptance record](releases/2026-09-27-webrtc-5n-rel1-reliable-stream.ru.md).
-At that earlier REL-1 boundary there was no egress gateway; current5N.4/5N.5 TCP
-egress is described above. Still no TUN or production transport integration. All sockets remain
-unprotected; future HTTP/WS/Pion transport.Net/DNS protection requires an explicit
-cross-process SCM_RIGHTS+protect ACK bridge or in-process JNI, not child fd integers.
-[5N.2 report](releases/2026-09-27-webrtc-eu2-android-binary.ru.md).
+### Network capabilities, not a VPN-only model
 
-Priority correction25.09, preparation-only: remove the Windows home-PC detour from
-restricted mobile Internet access. Reticulum is retained for identity binding,
-control/recovery, provisioning, messages/discovery and future Meshtastic bootstrap.
-Home Gateway remains a secondary LAN/NAS/RDP/residential-egress feature. Existing
-Home/RNS-underlay diagrams below still apply to that feature, not the current critical path.
+In one user-reported Krasnodar cellular restricted/allowlist condition, Family
+AWG 3.1 and TCP did not work while Yandex Telemost communication remained available.
+The initial [25 September field observation](releases/2026-09-25-telemost-cellular-evidence.ru.md)
+is clarified by the user in this rebaseline. It is not a universal statement about
+Russia, operators, regions or time, nor a Family VPN FIELD-1 result.
+
+Do not assume that the Internet is reachable and only VPN packets are filtered.
+Model the device as having a changing **subset of network capabilities**: direct
+Internet, AWG, TCP/Reality, Family control API, Telemost/service carrier, future
+carriers. Reachability of one does not establish reachability of another. A normal
+Telemost call is evidence of a service path, not proof of our bootstrap or VPN.
+
+### Three planes and implementation maturity
+
+- **IMPLEMENTED**: current beta/product foundations and normal transport lifecycle.
+- **PROVEN EXPERIMENTAL**: isolated physical acceptance, not production integration.
+- **PLANNED**: future boundaries/policy; not new runtime components.
 
 ```text
-CONTROL: Device Identity / FAMILY ↔ Reticulum control/recovery/provisioning
+                       FAMILY CORE
+           Device Identity / Family admission / policy
+                         [IMPLEMENTED]
+                               |
+          +--------------------+---------------------+
+          |                    |                     |
+  CONTROL / PRODUCT    BOOTSTRAP / RECOVERY      DATA PLANE
+  identity/invites/     obtain trusted setup      normal AWG/TCP
+  entitlement/         when API unreachable     [IMPLEMENTED]
+  provisioning/        [PLANNED: 5N-BOOT-1]       restricted Mux/DNS/TCP
+  signed config                |                over Family TLS
+  [IMPLEMENTED]                |                [PROVEN EXPERIMENTAL]
+  Room Broker                  |                     |
+  [PROVEN EXPERIMENTAL] <-------+                     |
+          |                                          |
+          +------ Connectivity / Transport Orchestrator ------+
+                  [PLANNED selection/recovery policy]          |
+                        |              |                      |
+                  AWG adapter     TCP adapter        service carrier adapter
+                  [IMPLEMENTED]   [IMPLEMENTED]      Telemost VP8/RTP
+                                                     + ReliableStream
+                                                     [PROVEN EXPERIMENTAL]
+                                                     future carriers [PLANNED]
 
-Android apps → VpnService/TUN → existing stream conversion
-                                     │
-                         existing transport selection
-                         ├── AWG
-                         ├── TCP / XHTTP
-                         └── WebRtcRestrictedTransport
-                              Family mux + authenticated E2E encryption
-                                     │
-                              opaque Telemost VP8 carrier
-                                     │
-                                  SFU / RTC
-                                     │
-                         headless Linux EU Family Gateway
-                         Family admission / mux / DNS / egress
-                                     │
-                                  Internet
+  OS boundary (not a wire layer below every transport):
+  Android apps <-> existing VPN lifecycle / packet adapter [IMPLEMENTED]
+                 -> normal transport engines [IMPLEMENTED]
+                 -> 5N Mux/DNS/TCP core binding [PLANNED: 5N.6]
+  Future iOS PacketTunnel adapter [PLANNED; no iOS client]
 ```
 
-Telemost first, WB fallback after real-network validation; no second transport
-manager/TUN converter unless reuse is shown unsuitable. Phase1 TCP+DNS, phase2
-UDP with reserved framing; unsupported UDP/IPv6 must not escape directly. Provider
-is untrusted; encryption of payloads, destinations and DNS is above carrier and
-Family admission precedes any egress. Production integration of secure sessions,
-reliability and mux remains open; isolated TLS/reliability is covered by5N.3/REL-1,
-not a deployed production multiplexer. One conference supports many connections.
-Reticulum encapsulation is optional and benchmark-driven, not mandatory for5N.
-[Existing design/decision](reticulum/HOME_GATEWAY_DESIGN.md) · [Gates](PLAN.md).
+This is a responsibility map, not a claim that all transports share one wire
+stack or already run under a new orchestrator. Room Broker belongs to the
+control/product plane; bootstrap must make its authenticated setup reachable
+without assuming ordinary API access. **Restricted bootstrap/recovery is the
+largest missing architectural gate**, not a missing TCP/DNS data-plane proof.
 
-## Whitelisted WebRTC Carrier — architecture extension
-
-Preparation-only checkpoint; no carrier implementation or runtime acceptance yet.
-Previous Home Gateway + interchangeable WebRTC underlay = the path below.
-Existing direct paths and the selectable IP data transport strategy remain valid;
-this workstream proves opaque RNS frame carriage before IP-over-RNS-over-WebRTC.
+### Accepted restricted path
 
 ```text
-Android / Device Identity
-          │
-Reticulum Overlay (identity / Link encryption / routing)
-          │
-UnderlayPathManager
-          ├── DirectIPv6
-          ├── DirectIPv4 / future NAT traversal
-          └── WebRTC Carrier (isolated process; framed private IPC)
-                      ├── WB (reserve candidate)
-                      ├── Telemost (first PoC candidate)
-                      └── VK (later)
-                            │
-                         SFU / RTC
-                            │
-                  Windows Reticulum Overlay
-                            │
-                    Windows Home Gateway
-                            │
-                  existing Family Connect VPN
+Core TCP streams + DNS wire queries -> Mux -> Family TLS 1.3
+  -> ReliableStream (selective repeat/SACK) -> Telemost VP8/RTP
+  -> real service SFU -> Amsterdam -> Family TLS/Mux -> TCP Internet / Family DNS
 ```
 
-Reticulum = overlay; WebRTC = underlay. SFU/signaling is untrusted and cannot
-replace Family authentication. Only RNS Link payload encryption is claimed;
-announces/public metadata are not secret. Session room IDs are ephemeral and
-rendezvous must avoid a circular bootstrap dependency. No TUN/SOCKS/HTTP proxy
-belongs in the carrier. WB guest join is a reference-code finding, not proof of
-anonymous room creation or mobile whitelist availability. The full contracts,
-reference SHAs, lifecycle/security and WEBRTC-1–5 gates extend the
-[existing design](reticulum/HOME_GATEWAY_DESIGN.md). [Plan](PLAN.md).
+| Gate | Accepted evidence (PROVEN EXPERIMENTAL) |
+| --- | --- |
+| [5N.1](releases/2026-09-27-webrtc-eu1-telemost-binary.ru.md) / [5N.2](releases/2026-09-27-webrtc-eu2-android-binary.ru.md) | Real VP8/RTP carrier; physical Redmi Note 9 Pro Android 12 joins Amsterdam; shared Go core, separate diagnostic APK. |
+| [5N.3](releases/2026-09-27-webrtc-eu3-family-session.ru.md) | Family TLS 1.3 authentication with DeviceIdentity/ProductStore-derived disposable authorization; negative admission/replay/lifecycle checks. |
+| [REL-1](releases/2026-09-27-webrtc-5n-rel1-reliable-stream.ru.md) / [PERF-2](releases/2026-09-27-webrtc-5n-perf2-reliable-envelope.ru.md) | Selective-repeat ordered bytes below TLS; real RTP gap recovery; demonstrated reliable goodput 1.742311 Mbit/s over 30 minutes, not a capacity ceiling. |
+| [5N.4](releases/2026-09-28-webrtc-eu4-single-tcp.ru.md) | Real outbound TCP to Internet; verified end-site HTTPS TLS, no gateway MITM. |
+| [5N.5](releases/2026-09-28-webrtc-eu5-mux-dns.ru.md) | Four simultaneous public HTTPS streams; 304.138s mixed TCP + Family DNS, exact bytes, fair scheduling and bounded buffers; destination DNS containment/hardening. |
+| [5N-RB-1](releases/2026-09-28-webrtc-5n-room-broker.ru.md) | Official Telemost API, server-side OAuth only; gateway joins first/READY, physical Android obtains automatic descriptor and joins; Family TLS + four verified HTTPS200; no manually supplied room URL. |
+
+**Room Broker itself is PASS.** Its accepted temporary control ingress used SSH
+forwarding + adb reverse. The real media/data path used Telemost, not that
+forwarding. It did not prove initial setup on a whitelist network with the Family
+API unavailable. [DNS containment](testing/webrtc-dns-containment.ru.md) proves
+tested core destination handling, not whole-device browser/OS DNS interception.
+
+No production restricted bootstrap, whole-device 5N binding, 5N.6 acceptance,
+product-complete cross-transport orchestration, beta-user restricted rollout or
+Krasnodar FIELD-1 exists yet. There is no generic UDP/QUIC/ICMP in the restricted
+path; global ReliableStream HOL and lack of seamless session migration remain.
+No production multi-user capacity claim follows from these single-device proofs.
+
+### Restricted bootstrap target — 5N-BOOT-1 (PLANNED)
+
+```text
+cached/signed bootstrap directory -> reachable bootstrap rendezvous carrier
+  -> Family authentication -> REQUEST_TRANSPORT -> existing Room Broker
+  -> fresh dedicated room (gateway READY) -> dedicated Family Session
+```
+
+Goal: obtain an authenticated dedicated descriptor when the ordinary control API
+is unreachable but a permitted service carrier is reachable, without manual URL,
+operator forwarding or an engineering harness. The bootstrap channel is
+**control-only / rendezvous-oriented**, never the permanent bulk VPN. This is a
+design target, not an implemented protocol/API. Trusted directory provisioning,
+expiry/refresh/revocation, reachability and bounded abuse handling need explicit
+design/acceptance; room secrecy or provider reachability cannot replace Family
+trust. No circular requirement to fetch initial trust through an unavailable API.
+
+### Full-device boundary and orchestrator (PLANNED)
+
+5N.6 / WEBRTC-EU-6 connects the **existing Android VPN lifecycle and packet path**
+to the existing 5N mux/DNS/TCP core. It is not a new VpnService from scratch.
+Preserve platform ownership, foreground lifecycle, cancellation, socket protection
+and fail-closed DNS/IPv6/unsupported-traffic behaviour. The isolated diagnostic
+child-process path does not supply product socket protection; child fd integers
+cannot be passed as if owned by the VpnService process. Binding/protection design
+must precede whole-device acceptance. Keep the OS packet adapter thin and Family
+packet/session logic reusable for future iOS PacketTunnel—not a claim that such
+portability or iOS integration is already delivered.
+
+The conceptual networking center becomes a **Connectivity / Transport Orchestrator**:
+observe network state, probe allowed transports safely, select an appropriate path,
+fail over and recover without requiring protocol knowledge. Reuse existing selection
+and lifecycle boundaries rather than introducing a parallel VPN owner. MVP policy
+can be normal fast transport → alternate normal transport → restricted bootstrap/
+carrier; ML or adaptive scoring is not required. Privacy-safe connection telemetry
+comes later, without traffic content or browsing history; [metrics and phases](PLAN.md).
+
+### Replaceable adapters and security
+
+Telemost is the **first proven restricted service carrier**, not the product or a
+permanent dependency. Provider logic remains in adapters, including
+[RoomProvider](../carrier/roombroker/README.md). Provider/SFU/signaling are untrusted;
+**Device Identity / Family admission / Family TLS** protect Family sessions and
+authorize egress. Room secrecy is not a security boundary; provider OAuth stays
+server-side. End-site HTTPS validation remains separate from Family TLS.
+
+No second exotic carrier is on the current critical path. VK/WB/other services
+stay backlog until field evidence or privacy-safe telemetry demonstrates a
+meaningful coverage gap or reliability need. Home Gateway, RNS-over-WebRTC,
+FEC/HOL optimisation and further performance tuning are secondary/evidence-driven,
+not prerequisites for the next gate. Reticulum control/recovery/messaging and the
+[Home Gateway design](reticulum/HOME_GATEWAY_DESIGN.md) remain separate retained
+workstreams, not proof of a deployed restricted bootstrap. Earlier 25 September
+Home/WB-first ordering is historical; [PLAN](PLAN.md) supersedes it.
 
 ## Personal Gateway / Reticulum Transport
 
-Strategy revised by the owner on 2026-09-25: the objective is a secure Android↔home
-Windows connection on a mobile network with active allowlist restrictions.
-Reticulum carries discovery/authentication/transport negotiation and recovery;
-user IP packets may use any approved encrypted data transport. IP-over-RNS is
-optional. [Full design and acceptance](reticulum/HOME_GATEWAY_DESIGN.md).
-
-```text
-Family Control / Device Identity / FAMILY authorization
-                         │
-        Reticulum: discovery + signed negotiation
-                         │
-           Android Phone ↔ Windows Home PC
-                         │
-Data: Android TUN ══ encrypted selected transport ══ Windows Gateway
-                        direct OR relay                    │
-                                               diagnostic Internet
-                                                OR existing FC VPN
-                                                           │
-                                                        Internet
-```
-
-Existing Device Identity/FAMILY authorizes both peers and binds negotiated data keys
-and paths. End-to-end encryption terminates at the home PC even when using a relay.
-First prove reachable control/bootstrap and data ingress on the target network;
-then relay-assisted sessions, real TUN packets and gateway egress. Direct paths/NAT
-traversal are later optimisation. No static home IP/DDNS or manual key transfer.
-RNS control success alone is not data reachability or NAT traversal.
-
-Reference `rns==1.5.1` stays behind the control adapter. Reuse existing VPN engines
-where suitable; a reverse/relay data path still needs implementation. No transport
-has been selected or validated for the restricted mobile path yet. Preserve mutual
-FAMILY authorization, fail-closed including DNS/IPv6, Android socket protection,
-Windows route ownership and no ISP fallback from VPN-upstream mode. Experimental
-flag defaults OFF. Home Gateway remains unimplemented; RNS-2 now means real IP
-packets over the selected transport, not necessarily over RNS.
-
-Family Connect contains a product client path and separate networking experiments.
-Use [STATUS](STATUS.md) for platform integration and deployment facts; older design
-records describe their named stage, not the entire current application.
-
-For source entry points, module responsibilities, data stores and tests, use the
-[module code map](code-map/README.ru.md).
+Retained secondary/backlog design: Android ↔ Windows Home PC for LAN/NAS/RDP or
+residential egress, with Reticulum control/discovery and a selected encrypted data
+transport. Home Gateway is not implemented or required for the accepted Android→EU
+path. [Historical design and gates](reticulum/HOME_GATEWAY_DESIGN.md) remain available;
+the current product sequence is bootstrap → full-device → Orchestrator → FIELD-1.
 
 ## Product and device path
 

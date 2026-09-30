@@ -1,5 +1,76 @@
 # Текущее состояние / Current state
 
+## CURRENT PRODUCT STATE — 30.09.2026 rebaseline
+
+**Family Connect = resilient connectivity for families**, не protocol picker.
+Приоритет — непрерывность связи и автоматическое восстановление, с быстрыми
+обычными транспортами в нормальной сети и restricted carrier как резервом.
+Целевой UX одной кнопки ещё не завершён; детали — [architecture](architecture.md).
+
+**Repository sync complete:** после свежего `git fetch origin main` starting
+HEAD = origin/main = `5cc9d2a04149cd17a0ef3434a77fefc137b1a06a`; branch main,
+рабочая копия чистая. Синхронизация не означает deployment или green full CI.
+Этот rebaseline — только docs, без bump/build/install/release/push/production changes.
+Docs validation: public/all local links+anchors PASS, `git diff --check` PASS;
+historical STATUS/PLAN ledger сохранён byte-for-byte, [подробности](releases/2026-09-30-product-engineering-rebaseline.ru.md).
+
+| Уровень | Фактическое состояние |
+| --- | --- |
+| IMPLEMENTED IN CURRENT BETA | Device Identity, FAMILY admission, invitations/provisioning; Android/Linux/Windows; normal AWG/TCP используются beta-пользователями. Android VpnService/VPN lifecycle уже существует. |
+| PROVEN IN ISOLATED ACCEPTANCE | 5N.1–5N.5, Family TLS1.3, selective-repeat ReliableStream/real RTP gap recovery, long-duration goodput, Internet TCP/end-site HTTPS TLS, mux/Family DNS/containment, automatic Room Broker **PASS**. Physical Redmi → real Telemost VP8/RTP → Amsterdam. |
+| PLANNED / NEXT | **5N-BOOT-1** restricted bootstrap → **5N.6** existing Android VPN ↔ 5N full-device path → minimum viable Connectivity Orchestrator → Krasnodar FIELD-1 → 50–100-user beta. |
+
+5N.5 доказал simultaneous public HTTPS, mixed TCP + DNS, exact delivery и
+fairness/bounded buffers. Room Broker доказал official Telemost API, server-only
+OAuth, gateway-first READY и automatic Android descriptor/join без manual URL,
+Family TLS + multiple HTTPS200. **Это принятые факты, не preparation-only.**
+Но broker acceptance использовала temporary control ingress (SSH forwarding +
+adb reverse). **Production restricted bootstrap нет:** при недоступном ordinary
+Family API устройство ещё не получает initial dedicated room самостоятельно.
+5N mux/DNS не подключён ко всему Android traffic, 5N.6 и Krasnodar FIELD-1 NOT RUN;
+restricted rollout beta-пользователям и product-complete orchestration отсутствуют.
+Нет generic UDP в restricted path; global ReliableStream HOL остаётся; production
+capacity и iOS client не заявляются. Telemost — заменяемый недоверенный carrier;
+security boundary — Device Identity / Family admission / Family TLS.
+
+### Версии — последний документированный выпуск, не новый rollout audit
+
+| Платформа | Собрано / принято ранее | Public / invitation | Установка / ограничения |
+| --- | --- | --- | --- |
+| Android | 0.1.18-beta51 / code51 | APK/updater/invitation beta51 | Redmi обновлён поверх beta50 по release report; заново не проверялось. |
+| Linux | 0.2.11, legacy preview5b02e8cb9fde119f; AppImage/DEB | HTTPS AppImage/DEB, invitation AppImage; legacy updater sequence9 | Clean Ubuntu24.04 install/URI/upgrade/reinstall принят ранее; текущие установки не опрашивались. |
+| Windows | 0.2.15, source2ffba77; native/compat CI | GitHub/HTTPS, invitation; windows catalog sequence11; 0.2.14 compatibility fallback | Проблемный Windows10 device acceptance остаётся открытым; publisher signature нет. |
+
+[Cross-platform release](releases/2026-09-26-server-list-crossplatform.ru.md) ·
+[Linux packaging](linux-appimage-deb.ru.md) · [Downloads/checksums](releases.md).
+Diagnostic APK code4/name5N.5-test-only для mux/broker был built/test-installed,
+затем удалён; никогда не public beta. Public artifacts/install/invitation page
+в этой docs-задаче повторно не проверялись. Каталоги и checksums не менялись.
+
+### Operational state — отдельно от product critical path
+
+После sync на исходном HEAD: [Linux control preview](https://github.com/Joker20380/family_connect/actions/runs/36718292459)
+PASS; [phase0](https://github.com/Joker20380/family_connect/actions/runs/36718292492)
+tests PASS, failover FAIL на Build isolated failover stack;
+[Client builds](https://github.com/Joker20380/family_connect/actions/runs/36718292488)
+Linux/Windows/Windows compatibility PASS, Android build/unit/lint PASS, emulator
+WG/AWG/TCP/Auto lifecycle FAIL, release SKIPPED. Причины здесь не диагностировались;
+это отдельные открытые CI issues, не отмена isolated 5N/Room Broker acceptance.
+Последний документированный production deployment — disk mitigation29.09;
+30.09 read-only audit: NL disk latency, RU API restart cause, worker unhealthy/
+outbox и client end-to-end остаются открыты. TLS renewal тогда PASS, мониторинг
+продолжается; новых live checks/deployments здесь нет.
+
+**NEXT = 5N-BOOT-1, не запускать в этой задаче.** Второй carrier/Home Gateway —
+backlog; performance/FEC/HOL — later evidence-driven work.
+[Authoritative plan](PLAN.md) · [Rebaseline: docs checks, boundaries, rollback](releases/2026-09-30-product-engineering-rebaseline.ru.md).
+
+## Historical checkpoints — preserved evidence
+
+Все записи ниже сохраняют контекст своих дат. Их STOP/current/next и старые
+версии не переопределяют CURRENT PRODUCT STATE; завершённый sync не разрешает
+push в этой задаче. Runtime/production rollout не выполнялся и откатывать нечего.
+
 ## 30.09.2026 — repository synchronization checkpoint
 
 User-authorized main→origin/main sync only; no development or deployment.

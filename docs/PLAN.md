@@ -2,6 +2,95 @@
 
 ## Current engineering priority / Текущий critical path
 
+### CURRENT PRODUCT CRITICAL PATH — 30.09.2026
+
+1. **5N-BOOT-1 — restricted bootstrap (NEXT).** При недоступном обычном Family
+   control/API и доступном service carrier получить authenticated dedicated
+   descriptor без manual URL, SSH/adb forwarding или оператора.
+2. **WEBRTC-EU-6 / 5N.6 — Android full-device integration (после bootstrap).**
+   Подключить существующий VPN lifecycle/packet path к существующему 5N mux/DNS/TCP.
+3. **Minimum viable Connectivity / Transport Orchestrator (после full-device).**
+   Одна кнопка; выбор доступного пути и автоматическое восстановление.
+4. **Krasnodar FIELD-1 (NOT RUN).** Реальная ограниченная мобильная сеть,
+   обычное устройство и приложения, без engineering harness.
+5. **Product beta — 50–100 реальных пользователей (PLANNED).** Проверить
+   успешность подключения, восстановление, стабильность и семейный invitation UX.
+
+Это авторитетный порядок; нижние хронологические записи и STOP относятся к своим
+датам/gates, не являются актуальным заданием на выполнение. 5N.1–5N.5, REL-1,
+PERF-2 и **automatic Room Broker = PASS** в изолированной physical acceptance.
+**Bootstrap ещё отсутствует; full-device restricted VPN не выпущен.**
+Эта rebaseline-задача только документационная: не начинать даже 5N-BOOT-1.
+[Архитектура и продуктовые принципы](architecture.md) ·
+[Фактический статус](STATUS.md) · [Отчёт rebaseline](releases/2026-09-30-product-engineering-rebaseline.ru.md).
+
+### Product phases — без перенумерации исторических gates
+
+| Phase | Состояние | Цель / граница |
+| --- | --- | --- |
+| A — Foundation | DONE / existing | Device Identity, FAMILY admission, invitations/provisioning, Android/Linux/Windows base. Не обещание завершённого family dashboard. |
+| B — Normal connectivity | WORKING beta | AWG/TCP уже используются; существующий Android VpnService/VPN lifecycle. |
+| C — Restricted data plane + setup proof | TECHNICALLY PROVEN, isolated physical acceptance | 5N.1–5N.5, ReliableStream, DNS containment и Room Broker. Broker — control-plane proof, не production bootstrap. |
+| D — Restricted bootstrap | NEXT / 5N-BOOT-1 | Trusted setup при недоступном обычном API, без operator ingress; затем dedicated Family Session. |
+| E — Android full-device | AFTER D / 5N.6 | Existing OS lifecycle/packet path ↔ existing 5N core; тонкий OS adapter, reusable Family logic для будущего iOS PacketTunnel. |
+| F — Minimum viable Orchestrator | AFTER E | Normal fast → alternate normal → restricted bootstrap/carrier; безопасные probes, failover/recovery, без обязательного ML/scoring. |
+| G — FIELD-1 | AFTER F / NOT RUN | Реальный restricted/allowlist mobile field, сначала Краснодар; не лабораторный echo. |
+| H — Product beta | AFTER G / PLANNED | 50–100 пользователей: reliability, battery/heat, support и invitation UX. |
+| I — Scale / iOS / carriers | LATER, после beta evidence | iOS, multi-user load, дополнительные gateways/carriers, масштабирование инфраструктуры, monetization/referrals. |
+
+**D target:** cached/signed bootstrap directory → bootstrap rendezvous carrier →
+Family authentication → `REQUEST_TRANSPORT` → existing Room Broker → fresh dedicated
+room → dedicated Family Session. Bootstrap — control-only/rendezvous, не постоянный
+bulk VPN. Дизайн trusted directory, expiry/revocation и deployment acceptance ещё
+впереди; здесь нет реализации. Room Broker уже создаёт комнату официальным API,
+ждёт gateway READY и автоматически выдаёт Android descriptor, но live acceptance
+использовала SSH forwarding + adb reverse для временного control ingress.
+
+**E acceptance:** сохранить OS ownership/lifecycle и socket protection; проверить
+whole-device TCP/DNS, fail-closed поведение неподдерживаемого трафика/DNS/IPv6 и
+cleanup/recovery. Не писать Android VPN с нуля и не выдавать core DNS guard за
+проверку всего телефона. Generic UDP сейчас не поддержан; global ReliableStream
+HOL остаётся, seamless session migration и capacity не доказаны.
+
+**G acceptance:** то же обычное устройство без engineering harness; в наблюдаемом
+ограниченном состоянии normal transports недоступны, Family автоматически
+проходит restricted bootstrap и подключается. Browser/DNS/обычные приложения
+работают; разумная длительность сессии и восстановление проверяются по заранее
+заданным условиям. Пока **NOT RUN**, критерии длительности/восстановления ещё надо
+зафиксировать до field run. Один пользовательский случай AWG3.1/TCP unavailable,
+Telemost available в Краснодаре не обобщается на всех операторов/регионы/времена.
+
+### Product metrics — будущие, не уже собираемые
+
+North star: **Successful connection without user intervention** — успешное
+подключение без действий пользователя сверх CONNECT. До beta определить denominator,
+окно наблюдения и допустимое время соединения; измеренных product SLO пока нет.
+Supporting metrics: connection success rate; time-to-connected; automatic recovery
+rate / reconnect success; disconnect rate; crash-free sessions; battery/thermal
+behaviour; transport success by coarse network context; support requests / 100 users;
+invitation conversion; retention. Это план измерений, не утверждение о deployed telemetry.
+**Не собирать содержимое трафика или историю просмотров** ради этих метрик;
+network context только укрупнённый, с минимизацией данных.
+
+### Operational / later / backlog — вне product critical path
+
+- CI после sync: phase0 failover-stack build и Android emulator lifecycle FAIL;
+  исправление отдельно, без переоценки принятых isolated gates. [Статус](STATUS.md).
+- Ops: NL disk latency, RU API restart, worker healthcheck/outbox, TLS monitoring
+  и client E2E follow-ups. Поддержка работающей beta не подменяет gates D–H.
+- **Второй restricted carrier — backlog.** Telemost уже доказал архитектуру;
+  VK/WB/другие нужны только при meaningful coverage/reliability gap по field/telemetry,
+  не автоматически «следом за Telemost».
+- Home Gateway / RNS-over-WebRTC — secondary/backlog. FEC/HOL optimisation и
+  performance tuning — позже по evidence, не текущий blocker. Не обещать production
+  capacity до отдельной load acceptance. iOS и scale — phase I.
+
+## Historical gate ledger / Сохранённая история до rebaseline
+
+Записи ниже сохранены без перенумерации. Их слова «current», «next», «STOP»,
+старый sync push и preparation-only относятся к указанным checkpoint, а не к
+нынешней задаче. Source of truth для нового порядка — секция наверху.
+
 - 30.09 repository sync only: preserve completed worker, disk/TLS/VPN audits and
   existing58-commit history; focused32 tests/unit verification/publication scan PASS.
   Push main to origin/main without force, then fetch and verify exact HEAD equality.
