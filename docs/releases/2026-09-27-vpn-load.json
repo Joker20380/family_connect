@@ -1,0 +1,818 @@
+{
+  "checked_on": "2026-09-27",
+  "timezone": "Europe/Brussels",
+  "source": "Read-only SSH: sadf JSON, aggregate Friends access SQLite mode=ro, AWG latest-handshakes/transfer, systemctl and /proc. No identifiers or private profiles.",
+  "method": "Rates integrated over clipped non-overlapping sysstat intervals. CPU busy = 100-idle-iowait (includes steal); network kB converted with 1024. Days use Brussels boundaries; sa filenames use server MSK dates, records use UTC.",
+  "limitations": [
+    "AWG interface traffic is not complete VPN TCP traffic.",
+    "Latest handshakes are not session history or unique-person DAU.",
+    "Host resources include all workloads, including separate Telemost tests on NL.",
+    "Unit and kernel journal reads timed out; no historical error-free claim.",
+    "Diagnostic journal reads coincided with additional disk pressure outside the historical window."
+  ],
+  "ru": {
+    "final_recovery_check": {
+      "checked_at_utc": "2026-09-27T21:17:22.630683+00:00",
+      "cpu_busy_percent": 19.87,
+      "iowait_percent": 6.38,
+      "loadavg": [
+        "1.92",
+        "2.58",
+        "1.96"
+      ],
+      "io_pressure": [
+        "some avg10=5.16 avg60=11.50 avg300=28.13 total=103853702792",
+        "full avg10=4.13 avg60=9.61 avg300=23.55 total=87863601499"
+      ],
+      "services": {
+        "family-connect-friends-awg": {
+          "ActiveState": "active",
+          "ActiveEnterTimestamp": "Sat 2026-09-26 14:38:02 MSK",
+          "Result": "success",
+          "ExecMainExitTimestamp": "",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-tcp": {
+          "ActiveState": "active",
+          "ActiveEnterTimestamp": "Thu 2026-09-24 17:11:09 MSK",
+          "Result": "success",
+          "ExecMainExitTimestamp": "",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-chat-sync": {
+          "ActiveState": "inactive",
+          "ActiveEnterTimestamp": "",
+          "Result": "success",
+          "ExecMainExitTimestamp": "Mon 2026-09-28 00:17:05 MSK",
+          "ExecMainStatus": "0"
+        }
+      },
+      "remaining_diagnostic_commands": []
+    },
+    "country": "ru",
+    "checked_at_utc": "2026-09-27T21:11:33.433798+00:00",
+    "timezone": "Europe/Brussels",
+    "errors": [
+      "unit journal: TimeoutExpired",
+      "kernel journal: TimeoutExpired"
+    ],
+    "cpu_count": 2,
+    "days": {
+      "2026-09-26": {
+        "start_utc": "2026-09-25T22:00:00+00:00",
+        "end_utc": "2026-09-26T22:00:00+00:00",
+        "first_sample_start_utc": "2026-09-25T22:00:00+00:00",
+        "last_sample_end_utc": "2026-09-26T22:00:00+00:00",
+        "samples": 145,
+        "coverage_hours": 23.9944,
+        "metrics": {
+          "cpu_busy_percent": {
+            "mean": 20.314,
+            "min": 17.32,
+            "max": 22.13,
+            "max_end_utc": "2026-09-25T22:30:01+00:00"
+          },
+          "iowait_percent": {
+            "mean": 5.537,
+            "min": 3.94,
+            "max": 62.93,
+            "max_end_utc": "2026-09-26T08:50:02+00:00"
+          },
+          "steal_percent": {
+            "mean": 0.041,
+            "min": 0.02,
+            "max": 0.17,
+            "max_end_utc": "2026-09-26T21:00:10+00:00"
+          },
+          "available_mib": {
+            "mean": 1149.711,
+            "min": 1063.879,
+            "max": 1207.668,
+            "max_end_utc": "2026-09-26T09:00:08+00:00"
+          },
+          "load_1m": {
+            "mean": 0.875,
+            "min": 0.35,
+            "max": 2.77,
+            "max_end_utc": "2026-09-26T08:50:02+00:00"
+          },
+          "disk_await_ms": {
+            "mean": 36.97,
+            "min": 14.47,
+            "max": 235.04,
+            "max_end_utc": "2026-09-26T08:50:02+00:00"
+          },
+          "disk_util_percent": {
+            "mean": 10.574,
+            "min": 8.44,
+            "max": 74.62,
+            "max_end_utc": "2026-09-26T08:50:02+00:00"
+          },
+          "ens3_rx_mbps": {
+            "mean": 0.032,
+            "min": 0.018,
+            "max": 0.7,
+            "max_end_utc": "2026-09-26T14:00:12+00:00"
+          },
+          "ens3_tx_mbps": {
+            "mean": 0.046,
+            "min": 0.009,
+            "max": 1.442,
+            "max_end_utc": "2026-09-26T19:30:08+00:00"
+          },
+          "fcopen31_rx_mbps": {
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.006,
+            "max_end_utc": "2026-09-26T14:10:02+00:00"
+          },
+          "fcopen31_tx_mbps": {
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.011,
+            "max_end_utc": "2026-09-26T14:10:02+00:00"
+          }
+        },
+        "estimated_gib": {
+          "ens3_rx": 0.319729,
+          "ens3_tx": 0.461014,
+          "fcopen31_rx": 0.0004,
+          "fcopen31_tx": 0.000772
+        },
+        "hourly_awg_gib": {
+          "2026-09-26T00:00+0200": 0.0,
+          "2026-09-26T01:00+0200": 0.0,
+          "2026-09-26T02:00+0200": 0.0,
+          "2026-09-26T03:00+0200": 0.0,
+          "2026-09-26T04:00+0200": 0.0,
+          "2026-09-26T05:00+0200": 0.0,
+          "2026-09-26T06:00+0200": 0.0,
+          "2026-09-26T07:00+0200": 0.0,
+          "2026-09-26T08:00+0200": 0.0,
+          "2026-09-26T09:00+0200": 0.0,
+          "2026-09-26T10:00+0200": 0.0,
+          "2026-09-26T11:00+0200": 0.0001,
+          "2026-09-26T12:00+0200": 0.0,
+          "2026-09-26T13:00+0200": 0.0,
+          "2026-09-26T14:00+0200": 0.0,
+          "2026-09-26T15:00+0200": 0.0,
+          "2026-09-26T16:00+0200": 0.0011,
+          "2026-09-26T17:00+0200": 0.0,
+          "2026-09-26T18:00+0200": 0.0,
+          "2026-09-26T19:00+0200": 0.0,
+          "2026-09-26T20:00+0200": 0.0,
+          "2026-09-26T21:00+0200": 0.0,
+          "2026-09-26T22:00+0200": 0.0,
+          "2026-09-26T23:00+0200": 0.0
+        },
+        "iowait_ge20_minutes": 9.9,
+        "disk_util_ge80_minutes": 0.0
+      },
+      "2026-09-27": {
+        "start_utc": "2026-09-26T22:00:00+00:00",
+        "end_utc": "2026-09-27T21:11:33.433798+00:00",
+        "first_sample_start_utc": "2026-09-26T22:00:00+00:00",
+        "last_sample_end_utc": "2026-09-27T21:10:03+00:00",
+        "samples": 140,
+        "coverage_hours": 23.1617,
+        "metrics": {
+          "cpu_busy_percent": {
+            "mean": 20.186,
+            "min": 19.29,
+            "max": 21.61,
+            "max_end_utc": "2026-09-27T13:40:06+00:00"
+          },
+          "iowait_percent": {
+            "mean": 5.151,
+            "min": 4.3,
+            "max": 7.95,
+            "max_end_utc": "2026-09-27T00:40:14+00:00"
+          },
+          "steal_percent": {
+            "mean": 0.046,
+            "min": 0.03,
+            "max": 0.12,
+            "max_end_utc": "2026-09-26T22:30:01+00:00"
+          },
+          "available_mib": {
+            "mean": 1156.073,
+            "min": 1092.41,
+            "max": 1181.867,
+            "max_end_utc": "2026-09-27T13:40:06+00:00"
+          },
+          "load_1m": {
+            "mean": 0.892,
+            "min": 0.34,
+            "max": 1.9,
+            "max_end_utc": "2026-09-27T02:30:07+00:00"
+          },
+          "disk_await_ms": {
+            "mean": 35.332,
+            "min": 17.83,
+            "max": 62.48,
+            "max_end_utc": "2026-09-27T06:10:00+00:00"
+          },
+          "disk_util_percent": {
+            "mean": 10.224,
+            "min": 9.08,
+            "max": 14.28,
+            "max_end_utc": "2026-09-27T00:40:14+00:00"
+          },
+          "ens3_rx_mbps": {
+            "mean": 0.02,
+            "min": 0.018,
+            "max": 0.043,
+            "max_end_utc": "2026-09-27T13:40:06+00:00"
+          },
+          "ens3_tx_mbps": {
+            "mean": 0.012,
+            "min": 0.009,
+            "max": 0.021,
+            "max_end_utc": "2026-09-27T08:40:05+00:00"
+          },
+          "fcopen31_rx_mbps": {
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "max_end_utc": "2026-09-26T22:00:03+00:00"
+          },
+          "fcopen31_tx_mbps": {
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "max_end_utc": "2026-09-26T22:00:03+00:00"
+          }
+        },
+        "estimated_gib": {
+          "ens3_rx": 0.196979,
+          "ens3_tx": 0.113113,
+          "fcopen31_rx": 0.0,
+          "fcopen31_tx": 0.0
+        },
+        "hourly_awg_gib": {
+          "2026-09-27T00:00+0200": 0.0,
+          "2026-09-27T01:00+0200": 0.0,
+          "2026-09-27T02:00+0200": 0.0,
+          "2026-09-27T03:00+0200": 0.0,
+          "2026-09-27T04:00+0200": 0.0,
+          "2026-09-27T05:00+0200": 0.0,
+          "2026-09-27T06:00+0200": 0.0,
+          "2026-09-27T07:00+0200": 0.0,
+          "2026-09-27T08:00+0200": 0.0,
+          "2026-09-27T09:00+0200": 0.0,
+          "2026-09-27T10:00+0200": 0.0,
+          "2026-09-27T11:00+0200": 0.0,
+          "2026-09-27T12:00+0200": 0.0,
+          "2026-09-27T13:00+0200": 0.0,
+          "2026-09-27T14:00+0200": 0.0,
+          "2026-09-27T15:00+0200": 0.0,
+          "2026-09-27T16:00+0200": 0.0,
+          "2026-09-27T17:00+0200": 0.0,
+          "2026-09-27T18:00+0200": 0.0,
+          "2026-09-27T19:00+0200": 0.0,
+          "2026-09-27T20:00+0200": 0.0,
+          "2026-09-27T21:00+0200": 0.0,
+          "2026-09-27T22:00+0200": 0.0,
+          "2026-09-27T23:00+0200": 0.0
+        },
+        "iowait_ge20_minutes": 0.0,
+        "disk_util_ge80_minutes": 0.0
+      }
+    },
+    "services": {
+      "family-connect-friends-awg": {
+        "ActiveState": "active",
+        "SubState": "running",
+        "ActiveEnterTimestamp": "Sat 2026-09-26 14:38:02 MSK",
+        "Result": "success",
+        "NRestarts": "0",
+        "ExecMainStatus": "0"
+      },
+      "family-connect-friends-tcp": {
+        "ActiveState": "active",
+        "SubState": "running",
+        "ActiveEnterTimestamp": "Thu 2026-09-24 17:11:09 MSK",
+        "Result": "success",
+        "NRestarts": "0",
+        "ExecMainStatus": "0"
+      },
+      "family-connect-server-load": {
+        "ActiveState": "active",
+        "SubState": "running",
+        "ActiveEnterTimestamp": "Fri 2026-09-25 06:56:02 MSK",
+        "Result": "success",
+        "NRestarts": "0",
+        "ExecMainStatus": "0"
+      },
+      "family-connect-friends-access": {
+        "ActiveState": "active",
+        "SubState": "running",
+        "ActiveEnterTimestamp": "Fri 2026-09-25 06:56:22 MSK",
+        "Result": "success",
+        "NRestarts": "0",
+        "ExecMainStatus": "0"
+      },
+      "family-connect-chat-sync": {
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "ActiveEnterTimestamp": "",
+        "Result": "success",
+        "NRestarts": "0",
+        "ExecMainStatus": "0"
+      }
+    },
+    "events": [],
+    "access_counts": {
+      "devices": 23,
+      "not_revoked": 19,
+      "revoked": 4,
+      "invites": 77,
+      "used_invites": 23
+    },
+    "device_schema_columns": [
+      "device",
+      "public",
+      "wg",
+      "tcp",
+      "revoked"
+    ],
+    "awg": {
+      "sample_end_utc": "2026-09-27T21:13:01.945493+00:00",
+      "configured_peers": 10,
+      "latest_handshake_within_5min": 0,
+      "latest_handshake_within_24h": 0,
+      "latest_handshake_since_today_start_lower_bound": 0,
+      "never_handshook": 9,
+      "peer_counters_rx_gib": 0.0004,
+      "peer_counters_tx_gib": 0.0008,
+      "sampling_seconds": 20.912,
+      "peers_transferring_any_bytes": 0,
+      "peers_transferring_over_1kib": 0,
+      "sample_transfer_mbps": 0.0
+    },
+    "current": {
+      "cpu_busy_percent": 17.81,
+      "iowait_percent": 75.65,
+      "network_mbps": {
+        "ens3": {
+          "rx": 0.0215,
+          "tx": 0.0167
+        },
+        "fcopen31": {
+          "rx": 0.0,
+          "tx": 0.0
+        }
+      },
+      "uptime_days": 26.37,
+      "loadavg": [
+        "8.57",
+        "3.58",
+        "1.96"
+      ],
+      "memory_mib": {
+        "MemTotal": 1962.5,
+        "MemAvailable": 1205.9,
+        "SwapTotal": 2048.0,
+        "SwapFree": 1424.0
+      },
+      "disk_available_gib": 8.75,
+      "disk_used_percent": 68.7,
+      "friends_tcp_established_connections": 0
+    },
+    "recovery_check": {
+      "checked_at_utc": "2026-09-27T21:14:32.426815+00:00",
+      "cpu_busy_percent": 11.56,
+      "iowait_percent": 43.68,
+      "loadavg": [
+        "4.17",
+        "3.49",
+        "2.08"
+      ],
+      "io_pressure": [
+        "some avg10=49.80 avg60=77.69 avg300=43.96 total=103838577544",
+        "full avg10=43.84 avg60=65.86 avg300=36.89 total=87851143616"
+      ],
+      "services": {
+        "family-connect-friends-awg": {
+          "ActiveState": "active",
+          "ActiveEnterTimestamp": "Sat 2026-09-26 14:38:02 MSK",
+          "Result": "success",
+          "ExecMainExitTimestamp": "",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-tcp": {
+          "ActiveState": "active",
+          "ActiveEnterTimestamp": "Thu 2026-09-24 17:11:09 MSK",
+          "Result": "success",
+          "ExecMainExitTimestamp": "",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-chat-sync": {
+          "ActiveState": "inactive",
+          "ActiveEnterTimestamp": "",
+          "Result": "success",
+          "ExecMainExitTimestamp": "Mon 2026-09-28 00:14:21 MSK",
+          "ExecMainStatus": "0"
+        }
+      },
+      "remaining_diagnostic_commands": []
+    }
+  },
+  "nl": {
+    "country": "nl",
+    "checked_at_utc": "2026-09-27T21:11:33.790875+00:00",
+    "timezone": "Europe/Brussels",
+    "errors": [
+      "unit journal: TimeoutExpired",
+      "kernel journal: TimeoutExpired"
+    ],
+    "cpu_count": 1,
+    "days": {
+      "2026-09-26": {
+        "start_utc": "2026-09-25T22:00:00+00:00",
+        "end_utc": "2026-09-26T22:00:00+00:00",
+        "first_sample_start_utc": "2026-09-25T22:00:00+00:00",
+        "last_sample_end_utc": "2026-09-26T22:00:00+00:00",
+        "samples": 145,
+        "coverage_hours": 23.9947,
+        "metrics": {
+          "cpu_busy_percent": {
+            "mean": 5.676,
+            "min": 2.85,
+            "max": 15.33,
+            "max_end_utc": "2026-09-26T17:50:00+00:00"
+          },
+          "iowait_percent": {
+            "mean": 3.225,
+            "min": 1.12,
+            "max": 29.78,
+            "max_end_utc": "2026-09-26T08:50:01+00:00"
+          },
+          "steal_percent": {
+            "mean": 0.091,
+            "min": 0.02,
+            "max": 0.33,
+            "max_end_utc": "2026-09-26T17:40:00+00:00"
+          },
+          "available_mib": {
+            "mean": 600.063,
+            "min": 555.297,
+            "max": 625.086,
+            "max_end_utc": "2026-09-26T00:00:05+00:00"
+          },
+          "load_1m": {
+            "mean": 0.259,
+            "min": 0.04,
+            "max": 0.91,
+            "max_end_utc": "2026-09-26T20:20:00+00:00"
+          },
+          "disk_await_ms": {
+            "mean": 153.211,
+            "min": 78.07,
+            "max": 190.6,
+            "max_end_utc": "2026-09-26T08:50:01+00:00"
+          },
+          "disk_util_percent": {
+            "mean": 4.21,
+            "min": 1.92,
+            "max": 31.62,
+            "max_end_utc": "2026-09-26T08:50:01+00:00"
+          },
+          "ens3_rx_mbps": {
+            "mean": 2.005,
+            "min": 0.031,
+            "max": 10.442,
+            "max_end_utc": "2026-09-26T17:50:00+00:00"
+          },
+          "ens3_tx_mbps": {
+            "mean": 2.056,
+            "min": 0.024,
+            "max": 10.486,
+            "max_end_utc": "2026-09-26T17:50:00+00:00"
+          },
+          "fcams_rx_mbps": {
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "max_end_utc": "2026-09-25T22:00:05+00:00"
+          },
+          "fcams_tx_mbps": {
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "max_end_utc": "2026-09-25T22:00:05+00:00"
+          },
+          "fcawg31_rx_mbps": {
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "max_end_utc": "2026-09-25T22:00:05+00:00"
+          },
+          "fcawg31_tx_mbps": {
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "max_end_utc": "2026-09-25T22:00:05+00:00"
+          },
+          "fcopen31_rx_mbps": {
+            "mean": 0.277,
+            "min": 0.002,
+            "max": 3.549,
+            "max_end_utc": "2026-09-26T17:50:00+00:00"
+          },
+          "fcopen31_tx_mbps": {
+            "mean": 1.627,
+            "min": 0.007,
+            "max": 8.472,
+            "max_end_utc": "2026-09-26T14:30:00+00:00"
+          }
+        },
+        "estimated_gib": {
+          "ens3_rx": 20.166874,
+          "ens3_tx": 20.671889,
+          "fcams_rx": 0.0,
+          "fcams_tx": 0.0,
+          "fcawg31_rx": 0.0,
+          "fcawg31_tx": 0.0,
+          "fcopen31_rx": 2.781029,
+          "fcopen31_tx": 16.361603
+        },
+        "hourly_awg_gib": {
+          "2026-09-26T00:00+0200": 0.4532,
+          "2026-09-26T01:00+0200": 0.2077,
+          "2026-09-26T02:00+0200": 0.2977,
+          "2026-09-26T03:00+0200": 0.024,
+          "2026-09-26T04:00+0200": 0.2706,
+          "2026-09-26T05:00+0200": 0.5538,
+          "2026-09-26T06:00+0200": 1.0154,
+          "2026-09-26T07:00+0200": 0.5538,
+          "2026-09-26T08:00+0200": 0.0343,
+          "2026-09-26T09:00+0200": 0.2502,
+          "2026-09-26T10:00+0200": 0.2058,
+          "2026-09-26T11:00+0200": 0.2831,
+          "2026-09-26T12:00+0200": 0.9984,
+          "2026-09-26T13:00+0200": 0.0569,
+          "2026-09-26T14:00+0200": 0.0841,
+          "2026-09-26T15:00+0200": 0.1417,
+          "2026-09-26T16:00+0200": 1.9026,
+          "2026-09-26T17:00+0200": 2.7602,
+          "2026-09-26T18:00+0200": 1.2454,
+          "2026-09-26T19:00+0200": 1.9171,
+          "2026-09-26T20:00+0200": 2.5503,
+          "2026-09-26T21:00+0200": 2.3618,
+          "2026-09-26T22:00+0200": 0.9194,
+          "2026-09-26T23:00+0200": 0.0553
+        },
+        "iowait_ge20_minutes": 10.0,
+        "disk_util_ge80_minutes": 0.0
+      },
+      "2026-09-27": {
+        "start_utc": "2026-09-26T22:00:00+00:00",
+        "end_utc": "2026-09-27T21:11:33.790875+00:00",
+        "first_sample_start_utc": "2026-09-26T22:00:00+00:00",
+        "last_sample_end_utc": "2026-09-27T21:10:05+00:00",
+        "samples": 140,
+        "coverage_hours": 23.1636,
+        "metrics": {
+          "cpu_busy_percent": {
+            "mean": 6.015,
+            "min": 2.85,
+            "max": 15.37,
+            "max_end_utc": "2026-09-27T19:50:08+00:00"
+          },
+          "iowait_percent": {
+            "mean": 3.11,
+            "min": 1.19,
+            "max": 6.74,
+            "max_end_utc": "2026-09-27T14:10:06+00:00"
+          },
+          "steal_percent": {
+            "mean": 0.11,
+            "min": 0.02,
+            "max": 0.99,
+            "max_end_utc": "2026-09-27T11:50:00+00:00"
+          },
+          "available_mib": {
+            "mean": 568.625,
+            "min": 512.766,
+            "max": 593.082,
+            "max_end_utc": "2026-09-26T22:10:11+00:00"
+          },
+          "load_1m": {
+            "mean": 0.265,
+            "min": 0.05,
+            "max": 0.87,
+            "max_end_utc": "2026-09-27T19:40:03+00:00"
+          },
+          "disk_await_ms": {
+            "mean": 154.518,
+            "min": 88.7,
+            "max": 206.1,
+            "max_end_utc": "2026-09-27T16:00:02+00:00"
+          },
+          "disk_util_percent": {
+            "mean": 4.128,
+            "min": 2.01,
+            "max": 8.31,
+            "max_end_utc": "2026-09-27T14:10:06+00:00"
+          },
+          "ens3_rx_mbps": {
+            "mean": 1.891,
+            "min": 0.016,
+            "max": 6.735,
+            "max_end_utc": "2026-09-27T12:00:13+00:00"
+          },
+          "ens3_tx_mbps": {
+            "mean": 1.658,
+            "min": 0.009,
+            "max": 5.743,
+            "max_end_utc": "2026-09-27T12:00:13+00:00"
+          },
+          "fcams_rx_mbps": {
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "max_end_utc": "2026-09-26T22:00:02+00:00"
+          },
+          "fcams_tx_mbps": {
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "max_end_utc": "2026-09-26T22:00:02+00:00"
+          },
+          "fcawg31_rx_mbps": {
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "max_end_utc": "2026-09-26T22:00:02+00:00"
+          },
+          "fcawg31_tx_mbps": {
+            "mean": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "max_end_utc": "2026-09-26T22:00:02+00:00"
+          },
+          "fcopen31_rx_mbps": {
+            "mean": 0.041,
+            "min": 0.0,
+            "max": 0.247,
+            "max_end_utc": "2026-09-27T12:50:03+00:00"
+          },
+          "fcopen31_tx_mbps": {
+            "mean": 1.376,
+            "min": 0.0,
+            "max": 5.223,
+            "max_end_utc": "2026-09-27T12:00:13+00:00"
+          }
+        },
+        "estimated_gib": {
+          "ens3_rx": 18.352864,
+          "ens3_tx": 16.092884,
+          "fcams_rx": 0.0,
+          "fcams_tx": 0.0,
+          "fcawg31_rx": 0.0,
+          "fcawg31_tx": 0.0,
+          "fcopen31_rx": 0.402326,
+          "fcopen31_tx": 13.361374
+        },
+        "hourly_awg_gib": {
+          "2026-09-27T00:00+0200": 0.2077,
+          "2026-09-27T01:00+0200": 0.0276,
+          "2026-09-27T02:00+0200": 0.0661,
+          "2026-09-27T03:00+0200": 0.0143,
+          "2026-09-27T04:00+0200": 0.0443,
+          "2026-09-27T05:00+0200": 0.8983,
+          "2026-09-27T06:00+0200": 1.137,
+          "2026-09-27T07:00+0200": 0.0705,
+          "2026-09-27T08:00+0200": 0.0166,
+          "2026-09-27T09:00+0200": 0.766,
+          "2026-09-27T10:00+0200": 1.0674,
+          "2026-09-27T11:00+0200": 0.8993,
+          "2026-09-27T12:00+0200": 1.171,
+          "2026-09-27T13:00+0200": 1.3294,
+          "2026-09-27T14:00+0200": 0.7084,
+          "2026-09-27T15:00+0200": 1.2683,
+          "2026-09-27T16:00+0200": 0.6475,
+          "2026-09-27T17:00+0200": 0.2522,
+          "2026-09-27T18:00+0200": 0.3986,
+          "2026-09-27T19:00+0200": 0.7117,
+          "2026-09-27T20:00+0200": 0.5536,
+          "2026-09-27T21:00+0200": 0.4012,
+          "2026-09-27T22:00+0200": 1.0422,
+          "2026-09-27T23:00+0200": 0.0646
+        },
+        "iowait_ge20_minutes": 0.0,
+        "disk_util_ge80_minutes": 0.0
+      }
+    },
+    "services": {
+      "family-connect-friends-awg": {
+        "ActiveState": "active",
+        "SubState": "running",
+        "ActiveEnterTimestamp": "Fri 2026-09-25 06:48:20 MSK",
+        "Result": "success",
+        "NRestarts": "0",
+        "ExecMainStatus": "0"
+      },
+      "family-connect-friends-tcp": {
+        "ActiveState": "active",
+        "SubState": "running",
+        "ActiveEnterTimestamp": "Thu 2026-09-24 17:10:22 MSK",
+        "Result": "success",
+        "NRestarts": "0",
+        "ExecMainStatus": "0"
+      },
+      "family-connect-server-load": {
+        "ActiveState": "active",
+        "SubState": "running",
+        "ActiveEnterTimestamp": "Fri 2026-09-25 06:48:13 MSK",
+        "Result": "success",
+        "NRestarts": "0",
+        "ExecMainStatus": "0"
+      }
+    },
+    "events": [],
+    "awg": {
+      "sample_end_utc": "2026-09-27T21:12:30.224318+00:00",
+      "configured_peers": 18,
+      "latest_handshake_within_5min": 3,
+      "latest_handshake_within_24h": 9,
+      "latest_handshake_since_today_start_lower_bound": 9,
+      "never_handshook": 3,
+      "peer_counters_rx_gib": 4.414,
+      "peer_counters_tx_gib": 41.7796,
+      "sampling_seconds": 21.082,
+      "peers_transferring_any_bytes": 3,
+      "peers_transferring_over_1kib": 2,
+      "sample_transfer_mbps": 0.2885
+    },
+    "current": {
+      "cpu_busy_percent": 3.39,
+      "iowait_percent": 9.94,
+      "network_mbps": {
+        "ens3": {
+          "rx": 0.312,
+          "tx": 0.2966
+        },
+        "fcopen31": {
+          "rx": 0.0645,
+          "tx": 0.1869
+        },
+        "fcams": {
+          "rx": 0.0,
+          "tx": 0.0
+        },
+        "fcawg31": {
+          "rx": 0.0,
+          "tx": 0.0
+        }
+      },
+      "uptime_days": 14.48,
+      "loadavg": [
+        "1.14",
+        "0.51",
+        "0.35"
+      ],
+      "memory_mib": {
+        "MemTotal": 955.3,
+        "MemAvailable": 559.9,
+        "SwapTotal": 0.0,
+        "SwapFree": 0.0
+      },
+      "disk_available_gib": 14.3,
+      "disk_used_percent": 21.6,
+      "friends_tcp_established_connections": 0
+    },
+    "recovery_check": {
+      "checked_at_utc": "2026-09-27T21:14:32.757037+00:00",
+      "cpu_busy_percent": 4.68,
+      "iowait_percent": 1.96,
+      "loadavg": [
+        "0.51",
+        "0.45",
+        "0.35"
+      ],
+      "io_pressure": [
+        "some avg10=3.57 avg60=11.32 avg300=13.35 total=27023676627",
+        "full avg10=3.35 avg60=10.76 avg300=12.64 total=25191619551"
+      ],
+      "services": {
+        "family-connect-friends-awg": {
+          "ActiveState": "active",
+          "ActiveEnterTimestamp": "Fri 2026-09-25 06:48:20 MSK",
+          "Result": "success",
+          "ExecMainExitTimestamp": "",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-tcp": {
+          "ActiveState": "active",
+          "ActiveEnterTimestamp": "Thu 2026-09-24 17:10:22 MSK",
+          "Result": "success",
+          "ExecMainExitTimestamp": "",
+          "ExecMainStatus": "0"
+        }
+      },
+      "remaining_diagnostic_commands": []
+    }
+  }
+}
