@@ -1,0 +1,18 @@
+[Unit]
+Description=Family Connect persistent peer reconciliation worker
+After=docker.service network-online.target
+Requires=docker.service
+Conflicts=family-connect-peers.service family-connect-peers.timer
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/family-connect/product.env
+ExecStart=/usr/bin/docker run --rm --name family-connect-peer-worker --log-driver local --log-opt max-size=1m --log-opt max-file=2 --network none --read-only --cap-drop ALL --security-opt no-new-privileges --env PYTHONDONTWRITEBYTECODE=1 --volume /var/run/docker.sock:/var/run/docker.sock --volume /usr/bin/docker:/usr/local/bin/docker:ro --volume ${FC_PROJECT_ROOT}:${FC_PROJECT_ROOT}:ro --volume ${FC_PRODUCT_DB_DIRECTORY}:${FC_PRODUCT_DB_DIRECTORY} --volume ${FC_GATEWAY_KEYS}:${FC_GATEWAY_KEYS} --workdir ${FC_PROJECT_ROOT} family-connect-product:0.2.1 python deploy/product-peer-worker/worker.py --database ${FC_PRODUCT_DB} --gateways ${FC_GATEWAYS}
+ExecStop=/usr/bin/docker stop --time 70 family-connect-peer-worker
+Restart=always
+RestartSec=5
+TimeoutStopSec=90
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
