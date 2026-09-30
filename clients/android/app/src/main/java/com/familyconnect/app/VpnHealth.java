@@ -34,13 +34,16 @@ final class VpnHealth {
         }return null;
     }
     boolean check(String source){
+        return check(source,android.os.SystemClock.elapsedRealtime()+5000);
+    }
+    boolean check(String source,long deadline){
         Network network=find(source);if(network==null||cancelled)return false;
         for(String target:new String[]{"1.1.1.1","9.9.9.9"}){
-            if(cancelled)return false;
+            if(cancelled||android.os.SystemClock.elapsedRealtime()>=deadline)return false;
             try(DatagramSocket socket=new DatagramSocket(null)){
                 if(!own(socket))return false;
                 network.bindSocket(socket);socket.bind(new InetSocketAddress(InetAddress.getByName(source),0));
-                socket.connect(InetAddress.getByName(target),53);socket.setSoTimeout(2500);
+                socket.connect(InetAddress.getByName(target),53);socket.setSoTimeout((int)Math.max(1,Math.min(2500,deadline-android.os.SystemClock.elapsedRealtime())));
                 byte[] q=query(new SecureRandom().nextInt(65536),"fc-"+java.util.UUID.randomUUID().toString().replace("-",""));
                 socket.send(new DatagramPacket(q,q.length));byte[] bytes=new byte[1232];DatagramPacket reply=new DatagramPacket(bytes,bytes.length);socket.receive(reply);
                 if(valid(q,bytes,reply.getLength())&&!cancelled&&network.equals(find(source)))return true;

@@ -15,6 +15,7 @@ public final class ConnectionService extends Service {
     private static final java.util.concurrent.atomic.AtomicLong sessionCounter=new java.util.concurrent.atomic.AtomicLong();
     private final Object operationOwner=new Object();
     private TunnelEngine engine;
+    private volatile AutomaticConnection automaticConnection;
     private final ScheduledExecutorService rnsWorker=Executors.newSingleThreadScheduledExecutor();
     private volatile ControlRnsAndroid rnsCarrier;
     private volatile boolean rnsEnabled;
@@ -32,7 +33,6 @@ public final class ConnectionService extends Service {
     private volatile long generation=0;
     private boolean started=false,automatic=false;
     private final java.util.concurrent.atomic.AtomicBoolean selectingGateway=new java.util.concurrent.atomic.AtomicBoolean();
-    private final AutoPolicy policy=new AutoPolicy();
     private volatile VpnHealth health;
     private ScheduledFuture<?> pending;
     private String source;
@@ -60,7 +60,7 @@ public final class ConnectionService extends Service {
             catch(Exception invalid){reportControl("FAILED");stopSelf();return START_NOT_STICKY;}}
         final byte[] incoming=received;
         started=true;status="connecting";failed=false;
-        String id=intent==null?"wg":intent.getStringExtra("transport");requestedTransport=id==null?"wg":id;
+        String id=intent==null?"auto":intent.getStringExtra("transport");requestedTransport=id==null?"auto":id;
         automatic="auto".equals(requestedTransport);
         final boolean connectRequested=intent!=null&&"connect".equals(intent.getAction());
         worker.execute(()->{
@@ -86,7 +86,7 @@ public final class ConnectionService extends Service {
                         startRestricted(intent.getStringExtra("control"));
                     } else ControlStartup.run(connectRequested,()->ControlMutationGate.managed(this),
                         ()->controlNow(null,true),()->controlNow(null,true,true),
-                        ()->{if(automatic)next();else start(Transport.parse(requestedTransport));});
+                        ()->{if(automatic)startAutomatic(intent.getStringExtra("country"));else start(Transport.parse(requestedTransport));});
                     if(engine==null&&!rnsEnabled&&!stopping&&!closing)stopConnection();
                 }
                 catch(Exception|LinkageError e){
@@ -129,26 +129,38 @@ public final class ConnectionService extends Service {
         try{ControlOperations.APP.session(operationOwner,action);}
         catch(ControlOperations.Stale ignored){/* Late callback belongs to a released service. */}
     }
-    private void cancel(){rnsEnabled=false;ControlRnsAndroid transport=rnsCarrier;if(transport!=null)transport.cancel();stopping=true;status="connecting";healthStatus="off";VpnHealth h=health;if(h!=null)h.cancel();ControlTrafficHealth c=controlHealth;if(c!=null)c.cancel();}
+    private void cancel(){AutomaticConnection connection=automaticConnection;if(connection!=null)connection.interrupt(ConnectivityOrchestrator.Failure.CANCELLED);rnsEnabled=false;ControlRnsAndroid transport=rnsCarrier;if(transport!=null)transport.cancel();stopping=true;status="disconnecting";healthStatus="off";VpnHealth h=health;if(h!=null)h.cancel();ControlTrafficHealth c=controlHealth;if(c!=null)c.cancel();}
     private void schedule(Runnable action,int seconds){if(!stopping&&!closing)pending=worker.schedule(()->owned(action),seconds,TimeUnit.SECONDS);}
     private boolean cleanup(){
         managedExpiry=0;Runnable lease=leaseTask;if(lease!=null){main.removeCallbacks(lease);leaseTask=null;}ControlTrafficHealth c=controlHealth;if(c!=null)c.cancel();
         ++generation;sessionId=sessionCounter.incrementAndGet();vpnSource=null;healthStatus="off";if(pending!=null)pending.cancel(false);if(health!=null){health.cancel();health=null;}
-        try{if(engine!=null){engine.down();engine=null;}return true;}
+        try{if(engine!=null){engine.down();engine=null;}automaticConnection=null;return true;}
         catch(Exception|LinkageError e){failed=true;stopping=true;status="cleanup-required";main.post(this::notifyState);return false;}
     }
-    private void next(){
-        status="connecting";
-        if(!cleanup())return;
+    private void startAutomatic(String country){
+        final long token=++generation;sessionId=sessionCounter.incrementAndGet();
+        AutomaticConnection connection=new AutomaticConnection(this,country,event->{
+            if("restoration_attempted".equals(event.name)){sessionId=sessionCounter.incrementAndGet();vpnSource=null;}
+            switch(event.state){
+                case CONNECTED:status="on";healthStatus="ok";break;
+                case RESTORING:status="restoring";healthStatus="checking";break;
+                case FAILED:status="failed";healthStatus="unavailable";failed=true;break;
+                case DISCONNECTED:status="disconnecting";healthStatus="off";break;
+                case DISCONNECTING:status="disconnecting";break;
+                default:status="connecting";healthStatus="checking";
+            }
+            main.post(this::notifyState);
+        });
+        automaticConnection=connection;engine=connection;
+        if(stopping||closing)connection.interrupt(ConnectivityOrchestrator.Failure.CANCELLED);
+        connection.up(getSharedPreferences("connectivity",MODE_PRIVATE).getString("preferred",null));
         if(stopping||closing){stopConnection();return;}
-        // Revocation is terminal: never open a permission dialog or another tunnel automatically.
-        if(VpnService.prepare(this)!=null){cancel();stopConnection();return;}
-        Transport candidate;
-        while((candidate=policy.next())!=null){
-            if(!new ProfileStore(this,candidate).exists())continue;
-            try{start(candidate);return;}catch(Exception|LinkageError e){if(!cleanup())return;if(stopping||closing){stopConnection();return;}}
-        }
-        failed=true;cancel();stopConnection();
+        if(connection.connected())schedule(()->automaticHealth(token,connection),5);
+    }
+    private void automaticHealth(long token,AutomaticConnection connection){
+        if(token!=generation||stopping||closing||engine!=connection)return;
+        connection.poll();
+        if(connection.connected())schedule(()->automaticHealth(token,connection),5);
     }
     private void start(Transport type)throws Exception{
         String profile=ProfileValidator.validate(new ProfileStore(this,type).load(),type);
@@ -187,10 +199,9 @@ public final class ConnectionService extends Service {
         boolean good=health.check(source);
         if(token!=generation||stopping||closing)return;
         healthStatus=good?"ok":"unavailable";
-        if(automatic&&policy.advance(good)){next();return;}
-        if(good||!automatic)status="on";
+        status="on";
         main.post(this::notifyState);
-        schedule(()->probe(token),good?15:automatic?1:5);
+        schedule(()->probe(token),good?15:5);
     }
     private void armLease(long expiry){
         Runnable previous=leaseTask;if(previous!=null)main.removeCallbacks(previous);
@@ -290,7 +301,7 @@ public final class ConnectionService extends Service {
         PendingIntent open=PendingIntent.getActivity(this,0,getPackageManager().getLaunchIntentForPackage(getPackageName()),PendingIntent.FLAG_IMMUTABLE|PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent stop=PendingIntent.getService(this,1,new Intent(this,ConnectionService.class).setAction("disconnect"),PendingIntent.FLAG_IMMUTABLE|PendingIntent.FLAG_UPDATE_CURRENT);
         return new Notification.Builder(this,"vpn").setSmallIcon(R.drawable.ic_shield).setContentTitle(getString(R.string.notification))
-            .setContentText((automatic?"AUTO · ":"")+activeTransport.toUpperCase(java.util.Locale.ROOT)+" · "+getString(status.equals("on")?(healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.on):R.string.connecting)).setContentIntent(open)
+            .setContentText(automatic?getString(status.equals("on")?R.string.on:status.equals("restoring")?R.string.restoring:status.equals("failed")?R.string.unable_connect:R.string.connecting):activeTransport.toUpperCase(java.util.Locale.ROOT)+" · "+getString(status.equals("on")?(healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.on):R.string.connecting)).setContentIntent(open)
             .setOngoing(true).addAction(new Notification.Action.Builder(null,getString(R.string.disconnect),stop).build()).build();
     }
     private void notifyState(){if(!closing)getSystemService(NotificationManager.class).notify(1,notification());}

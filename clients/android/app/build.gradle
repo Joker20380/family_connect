@@ -3,6 +3,7 @@ plugins { id 'com.android.application'; id 'com.chaquo.python' }
 def targetAbi = providers.gradleProperty('fcTargetAbi').getOrElse('all')
 def friendsCi = providers.gradleProperty('fcFriendsCi').getOrElse('false') == 'true'
 def restrictedDiagnostic = providers.gradleProperty('fcRestrictedDiagnostic').getOrElse('false') == 'true'
+def orchestratorDiagnostic = providers.gradleProperty('fcOrchestratorDiagnostic').getOrElse('false') == 'true'
 if (!(targetAbi in ['all', 'arm64-v8a']) && !(friendsCi && targetAbi == 'x86_64')) throw new GradleException('Unsupported fcTargetAbi')
 android {
     namespace 'com.familyconnect.app'
@@ -37,7 +38,7 @@ android {
     buildTypes {
         debug {
             // Technical pilots coexist with old CI-signed installs; never uninstall their data.
-            applicationIdSuffix restrictedDiagnostic ? '.eu6' : '.pilot'
+            applicationIdSuffix orchestratorDiagnostic ? '.orchestrator' : restrictedDiagnostic ? '.eu6' : '.pilot'
             manifestPlaceholders = [appLabel: 'family_connect_pilot', launcherActivity: 'com.familyconnect.app.MainActivity']
         }
         release { minifyEnabled false }

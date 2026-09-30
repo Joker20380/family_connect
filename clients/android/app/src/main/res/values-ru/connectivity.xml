@@ -1,0 +1,5 @@
+<resources>
+    <string name="automatic_connection">Автоматическое подключение</string>
+    <string name="restoring">Восстанавливаем соединение…</string>
+    <string name="unable_connect">Не удалось подключиться</string>
+</resources>

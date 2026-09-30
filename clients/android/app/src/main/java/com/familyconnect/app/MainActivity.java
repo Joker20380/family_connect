@@ -49,7 +49,7 @@ public final class MainActivity extends LocalizedActivity {
         LinearLayout route=TerminalUi.section(content,getString(R.string.terminal_route));
         gatewayButton=button(route,R.string.choose_gateway,this::chooseGateway);
         label(route,getString(R.string.route),13,TerminalUi.MUTED);
-        autoMode=new TerminalToggle(this);autoMode.setText("Auto · WG → AWG → TCP");TerminalUi.textStyle(autoMode,14,TerminalUi.TEXT);autoMode.setMinHeight(dp(48));autoMode.setChecked(getPreferences(MODE_PRIVATE).getBoolean("auto",false));route.addView(autoMode);
+        autoMode=new TerminalToggle(this);autoMode.setText(R.string.automatic_connection);TerminalUi.textStyle(autoMode,14,TerminalUi.TEXT);autoMode.setMinHeight(dp(48));autoMode.setChecked(getPreferences(MODE_PRIVATE).getBoolean("auto",true));route.addView(autoMode);
         autoMode.setOnCheckedChangeListener((v,on)->{getPreferences(MODE_PRIVATE).edit().putBoolean("auto",on).apply();render();});
         String[] transportLabels=new String[Transport.values().length];for(int i=0;i<transportLabels.length;i++)transportLabels[i]=Transport.values()[i].label;
         transportPicker=new Spinner(this);TerminalUi.picker(transportPicker,transportLabels);transportPicker.setContentDescription(getString(R.string.terminal_transport));
@@ -112,11 +112,11 @@ public final class MainActivity extends LocalizedActivity {
             Transport active=Transport.parse(ConnectionService.activeTransport);
             if(selected!=active){selected=active;store=new ProfileStore(this,active);transportPicker.setSelection(active.ordinal());getPreferences(MODE_PRIVATE).edit().putString("transport",active.id).apply();}
         }
-        boolean on=value.equals("on"),waiting=value.equals("connecting")||value.equals("cleanup-required");
-        textIfChanged(state,getString(on?R.string.on:waiting?R.string.connecting:R.string.off));
+        boolean on=value.equals("on"),waiting=!value.equals("off")&&!on;
+        textIfChanged(state,getString(value.equals("failed")?R.string.unable_connect:value.equals("restoring")?R.string.restoring:on?R.string.on:waiting?R.string.connecting:R.string.off));
         textIfChanged(healthLabel,!on?"":getString(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.health_checking));
         dial.update(value,ConnectionService.healthStatus);textIfChanged(toggle,getString(on||waiting?R.string.disconnect:R.string.connect));
-        boolean available=store.exists();if(autoMode.isChecked()){available=false;for(Transport t:Transport.values())available|=new ProfileStore(this,t).exists();}
+        boolean available=store.exists();if(autoMode.isChecked())available=true;
         autoMode.setEnabled(!busy&&!on&&!waiting);toggle.setEnabled(!busy&&(on||waiting||available));transportPicker.setEnabled(!busy&&!on&&!waiting);importButton.setEnabled(!busy&&!on&&!waiting);
         enrollButton.setEnabled(!busy&&!on&&!waiting);controlButton.setEnabled(!busy&&!on&&!waiting);rnsButton.setEnabled(!busy&&!on&&!waiting);
         forgetButton.setEnabled(!busy&&!on&&!waiting&&store.exists());checkButton.setEnabled(!busy&&on);

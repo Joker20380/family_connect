@@ -1,0 +1,5 @@
+<resources>
+    <string name="automatic_connection">Automatic connection</string>
+    <string name="restoring">Restoring connection…</string>
+    <string name="unable_connect">Unable to connect</string>
+</resources>

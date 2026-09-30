@@ -10,12 +10,14 @@ import "C"
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"path/filepath"
 	"runtime"
 	"strings"
 	"sync"
 	"time"
 
+	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
 	"github.com/Joker20380/family_connect/carrier/underlay"
 	"github.com/Joker20380/family_connect/carrier/wholedevice"
@@ -91,7 +93,7 @@ func fcRestrictedBegin(directory, control, resolver string, owner C.uintptr_t) i
 		defer close(owned.done)
 		var err error
 		path, cache := filepath.Join(directory, "family.json"), filepath.Join(directory, "bootstrap.json")
-		if control != "" {
+		if control != "" && control != "auto" {
 			bounded, finish := context.WithTimeout(ctx, 30*time.Second)
 			defer finish()
 			err = wholedevice.Refresh(bounded, path, cache, control, network)
@@ -108,12 +110,20 @@ func fcRestrictedBegin(directory, control, resolver string, owner C.uintptr_t) i
 			}
 			return
 		}
-		session, err := wholedevice.Open(ctx, path, cache, network, owned.event)
+		var session *wholedevice.Session
+		if control == "auto" {
+			session, err = wholedevice.OpenCached(ctx, path, cache, network, owned.event)
+		} else {
+			session, err = wholedevice.Open(ctx, path, cache, network, owned.event)
+		}
 		owned.failure(err)
 		owned.mu.Lock()
 		defer owned.mu.Unlock()
 		if err != nil {
 			owned.state = 3
+			if errors.Is(err, familysession.ErrRejected) || errors.Is(err, roombroker.Code("credentials_rejected")) || errors.Is(err, roombroker.Code("bootstrap_auth_failed")) {
+				owned.state = 5
+			}
 			return
 		}
 		owned.session = session

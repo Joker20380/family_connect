@@ -32,6 +32,10 @@ public class AutoRuntimeTest {
   assertEquals("off",ConnectionService.status);helper.clean();assertEquals(0,NativeTcp.connections(0));Thread.sleep(500);
  }
  void stop()throws Exception{context.startService(new Intent(context,ConnectionService.class).setAction("disconnect"));off();}
+ void failed()throws Exception{
+  long until=System.currentTimeMillis()+150000;while(!ConnectionService.status.equals("failed")&&System.currentTimeMillis()<until)Thread.sleep(100);
+  assertEquals("failed",ConnectionService.status);assertTrue(ConnectionService.failed);
+ }
  @Test public void automaticFallbackHealthLossExhaustionCancelAndRevoke()throws Exception{
   assertTrue(android.os.Build.FINGERPRINT.contains("generic")||android.os.Build.MODEL.contains("sdk"));helper.clean();
   helper.shell("appops set "+context.getPackageName()+" ACTIVATE_VPN allow");helper.shell("pm grant "+context.getPackageName()+" android.permission.POST_NOTIFICATIONS");
@@ -41,10 +45,12 @@ public class AutoRuntimeTest {
    wg.save(ProfileValidator.validate(AwgRuntimeTest.profile(Transport.WG)));awg.save(ProfileValidator.validate(AwgRuntimeTest.profile(Transport.AWG),Transport.AWG));tcp.save(TcpProfile.validate(TcpRuntimeTest.profile()));
    control("wg-down");start();on("awg");helper.traffic(Transport.AWG);
    control("udp-down");on("tcp");new TcpRuntimeTest().traffic();stop();
-   control("up");start();on("wg");helper.traffic(Transport.WG);stop();
-   control("all-down");start();Thread.sleep(500);off();assertTrue(ConnectionService.failed);
+   control("up");start();on("tcp");new TcpRuntimeTest().traffic();stop();
+   context.getSharedPreferences("connectivity",Context.MODE_PRIVATE).edit().remove("normal_hint").commit();
+   start();on("wg");helper.traffic(Transport.WG);stop();
+   control("all-down");start();failed();assertNotNull(new VpnHealth(context).find("10.79.0.2"));stop();
    start();Thread.sleep(1500);long cancelledAt=System.currentTimeMillis();stop();assertTrue("Cancel exceeded socket timeout budget",System.currentTimeMillis()-cancelledAt<5000);Thread.sleep(3000);assertEquals("off",ConnectionService.status);helper.clean();
-   control("up");wg.clear();start();on("awg");try{wg.save(ProfileValidator.validate(AwgRuntimeTest.profile(Transport.WG)));fail("Active VPN must reject profile edits");}catch(java.io.IOException expected){}helper.shell("appops set "+context.getPackageName()+" ACTIVATE_VPN deny");helper.revokeThroughSystemDialog();off();assertNotNull(VpnService.prepare(context));wg.save(ProfileValidator.validate(AwgRuntimeTest.profile(Transport.WG)));
+   control("up");wg.clear();start();on("awg");try{wg.save(ProfileValidator.validate(AwgRuntimeTest.profile(Transport.WG)));fail("Active VPN must reject profile edits");}catch(java.io.IOException expected){}helper.shell("appops set "+context.getPackageName()+" ACTIVATE_VPN deny");helper.revokeThroughSystemDialog();failed();stop();assertNotNull(VpnService.prepare(context));wg.save(ProfileValidator.validate(AwgRuntimeTest.profile(Transport.WG)));
    assertTrue(wg.exists());assertTrue(awg.exists());assertTrue(tcp.exists());
    android.util.Log.i("FamilyConnect","AUTO PASS: blocked WG to AWG, live AWG loss to TCP, WG priority, missing WG, exhaustion, in-flight cancel, system revoke; 12 UDP, 6 REALITY HTTP, 1 OS DNS; 5 cleanup scenarios");
   }finally{try{control("up");stop();wg.clear();awg.clear();tcp.clear();}finally{InstrumentationRegistry.getInstrumentation().runOnMainSync(activity::finish);}}

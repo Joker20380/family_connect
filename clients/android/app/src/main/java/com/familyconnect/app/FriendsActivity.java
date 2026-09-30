@@ -16,7 +16,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 /** Separate open-test launcher: one-use invitation, no accounts or billing; separate from managed journal. */
 public final class FriendsActivity extends LocalizedActivity {
-    private static final String[][] TRANSPORTS={{"awg","AWG 3.1"},{"tcp","TCP REALITY"}};
+    private static final String[][] TRANSPORTS={{"auto","Auto"},{"awg","AWG 3.1"},{"tcp","TCP REALITY"}};
     private final Handler handler=new Handler(Looper.getMainLooper());
     private final ExecutorService worker=Executors.newSingleThreadExecutor();
     private TextView status,detail,routeCaption,routeStatus,routeDetail;private Button check,activate;private TerminalToggle connect;private Spinner countries,transports;
@@ -43,7 +43,7 @@ public final class FriendsActivity extends LocalizedActivity {
     private String transport;
     private final Runnable refresh=new Runnable(){public void run(){render();handler.postDelayed(this,500);}};
     @Override public void onCreate(Bundle state){
-        super.onCreate(state);getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE);transport=getPreferences(MODE_PRIVATE).getString("transport","awg");country=getPreferences(MODE_PRIVATE).getString("country","nl");
+        super.onCreate(state);getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE);transport=getPreferences(MODE_PRIVATE).getString("transport","auto");country=getPreferences(MODE_PRIVATE).getString("country","nl");
         motion=getPreferences(MODE_PRIVATE).getBoolean("motion",true);activeCountry=getPreferences(MODE_PRIVATE).getString("session_country",country);
         countries=new Spinner(this){@Override public boolean performClick(){refreshServerLoads();return super.performClick();}};
         countries.setContentDescription(getString(R.string.terminal_country));
@@ -53,7 +53,7 @@ public final class FriendsActivity extends LocalizedActivity {
         countries.setSelection(country.equals("nl")?1:0);
         String[] transportLabels=new String[TRANSPORTS.length];for(int i=0;i<TRANSPORTS.length;i++)transportLabels[i]=TRANSPORTS[i][1];
         transports=new Spinner(this);TerminalUi.inlinePicker(transports,transportLabels);
-        transports.setContentDescription(getString(R.string.terminal_transport));transports.setSelection(transport.equals("awg")?0:1);
+        transports.setContentDescription(getString(R.string.terminal_transport));transports.setSelection(transport.equals("auto")?0:transport.equals("awg")?1:2);
         countries.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             public void onNothingSelected(AdapterView<?> parent){}
             public void onItemSelected(AdapterView<?> parent,android.view.View view,int position,long id){
@@ -130,7 +130,7 @@ public final class FriendsActivity extends LocalizedActivity {
     }
     private void showRoute(){
 
-        countries.setSelection(country.equals("nl")?1:0);transports.setSelection(transport.equals("awg")?0:1);
+        countries.setSelection(country.equals("nl")?1:0);transports.setSelection(transport.equals("auto")?0:transport.equals("awg")?1:2);
 
         LinearLayout page=dialogContent();page.setPadding(TerminalUi.dp(this,12),TerminalUi.dp(this,8),TerminalUi.dp(this,12),TerminalUi.dp(this,8));
         TerminalUi.dashboardHeader(page);
@@ -197,12 +197,13 @@ public final class FriendsActivity extends LocalizedActivity {
     private void render(){
         if(connect==null)return;String value=ConnectionService.status;boolean on=value.equals("on"),off=value.equals("off");
         dial.update(value,ConnectionService.healthStatus);dial.setEnabled(!busy);
-        text(status,getString(off?R.string.off:on?(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.health_checking):R.string.connecting));
+        text(status,getString(value.equals("restoring")?R.string.restoring:value.equals("failed")?R.string.unable_connect:off?R.string.off:on?R.string.on:R.string.connecting));
         text(connect,getString(off?R.string.connect:R.string.disconnect));connect.setChecked(on);connect.setPending(!off&&!on);boolean enabled=getPreferences(MODE_PRIVATE).getBoolean("activated",false);connect.setEnabled(!busy);text(activate,getString(enabled?R.string.referral_title:R.string.friends_activate));activate.setEnabled(!busy);
         String shownCountry=off?country:activeCountry;
         String shownTransport=off?transport:ConnectionService.activeTransport;
-        String summary=getString(shownCountry.equals("nl")?R.string.gateway_netherlands:R.string.gateway_russia)+"  /  "+(shownTransport.equals("awg")?"AWG 3.1":"TCP REALITY");
-        text(routeCaption,summary);telemetry.connection(getString(shownCountry.equals("nl")?R.string.gateway_netherlands:R.string.gateway_russia),shownTransport.equals("awg")?"AWG 3.1":"TCP REALITY",getString(off?R.string.off:on?(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.health_checking):R.string.connecting));telemetry.sample();renderLoad();
+        String transportLabel=shownTransport.equals("auto")?"Auto":shownTransport.equals("awg")?"AWG 3.1":shownTransport.equals("restricted")?"Restricted":"TCP REALITY";
+        String summary=getString(shownCountry.equals("nl")?R.string.gateway_netherlands:R.string.gateway_russia)+"  /  "+transportLabel;
+        text(routeCaption,summary);telemetry.connection(getString(shownCountry.equals("nl")?R.string.gateway_netherlands:R.string.gateway_russia),transportLabel,getString(off?R.string.off:on?(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.health_checking):R.string.connecting));telemetry.sample();renderLoad();
         if(routeDial!=null){routeDial.setMotion(motion);routeDial.update(value,ConnectionService.healthStatus);routeDial.setEnabled(!busy);}
         if(dashboardMap!=null)dashboardMap.update(shownCountry,value,ConnectionService.healthStatus,false);
         if(routeMap!=null){routeMap.update(shownCountry,value,ConnectionService.healthStatus,motion);text(routeStatus,getString(off?R.string.route_selected:R.string.route_active)+" · "+summary+"\n"+getString(R.string.route_core)+": "+getString(off?R.string.route_waiting:on?R.string.on:R.string.connecting)+"\n"+getString(R.string.route_check)+": "+getString(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:off?R.string.route_waiting:R.string.health_checking));text(routeDetail,detail.getText().toString());}
@@ -260,6 +261,11 @@ public final class FriendsActivity extends LocalizedActivity {
         connectNow();
     }
     private void connectNow(){
+        if("auto".equals(transport)){
+            activeCountry=country;getPreferences(MODE_PRIVATE).edit().putString("session_country",country).apply();
+            ConnectionService.status="connecting";ConnectionService.failed=false;
+            startForegroundService(new Intent(this,ConnectionService.class).setAction("connect").putExtra("transport","auto").putExtra("country",country));render();return;
+        }
         busy=true;ConnectionService.failed=false;detail.setText(R.string.checking);render();final String chosen=country,chosenTransport=transport;
         worker.execute(()->{
             boolean ready=false;

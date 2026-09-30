@@ -28,39 +28,52 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     private ParcelFileDescriptor tun;
     private long handle;
     private volatile boolean revoked;
+    private final AutomaticVpnOwner automaticOwner;
+    private final long connectDeadline;
 
     RestrictedTunnelEngine(Context context, BooleanSupplier cancelled, Consumer<Boolean> state) {
+        this(context,cancelled,state,null,Long.MAX_VALUE);
+    }
+
+    RestrictedTunnelEngine(Context context, BooleanSupplier cancelled, Consumer<Boolean> state,AutomaticVpnOwner owner,long deadline) {
         this.context=context; this.cancelled=cancelled; this.state=state;
+        automaticOwner=owner;connectDeadline=deadline;
     }
 
     public void up(String control) throws Exception {
-        if ((context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE)==0)
+        if (automaticOwner==null && (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE)==0)
             throw new IllegalStateException("Diagnostic only");
         if (VpnService.prepare(context)!=null) throw new IllegalStateException("VPN permission required");
         ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
         NetworkCapabilities capabilities=manager.getNetworkCapabilities(manager.getActiveNetwork());
         LinkProperties link=manager.getLinkProperties(manager.getActiveNetwork());
-        if (capabilities==null || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN) || link==null)
+        if (automaticOwner==null && (capabilities==null || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN) || link==null))
             throw new IllegalStateException("Direct underlay required");
         String resolver=null;
-        for (InetAddress address:link.getDnsServers()) if (address instanceof Inet4Address) { resolver=address.getHostAddress()+":53"; break; }
+        if(automaticOwner!=null)resolver=automaticOwner.resolver();
+        else for (InetAddress address:link.getDnsServers()) if (address instanceof Inet4Address) { resolver=address.getHostAddress()+":53"; break; }
         if (resolver==null) throw new IllegalStateException("IPv4 underlay resolver required");
-        NativeRestricted.load();
-        context.startService(new Intent(context,TcpVpnService.class));
-        service=TcpVpnService.ready.get(3,TimeUnit.SECONDS);
-        service.revoked=()->{revoked=true; state.accept(false);};
+        try { NativeRestricted.load(); }
+        catch(UnsatisfiedLinkError absent) { throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE); }
+        if(automaticOwner!=null)service=automaticOwner.service();
+        else {
+            context.startService(new Intent(context,TcpVpnService.class));
+            service=TcpVpnService.ready.get(3,TimeUnit.SECONDS);
+            service.revoked=()->{revoked=true; state.accept(false);};
+        }
         File directory=new File(context.getNoBackupFilesDir(),"restricted");
-        if (!directory.isDirectory()) throw new IllegalStateException("Cached activation required");
-        handle=NativeRestricted.begin(directory.getAbsolutePath(),control,resolver,service);
+        if (!directory.isDirectory()) throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
+        handle=NativeRestricted.begin(directory.getAbsolutePath(),automaticOwner==null?control:"auto",resolver,service);
         if (handle<=0) throw new IllegalStateException("Restricted startup rejected");
-        long deadline=SystemClock.elapsedRealtime()+200000;
+        long deadline=Math.min(connectDeadline,SystemClock.elapsedRealtime()+200000);
         int phase;
         while ((phase=NativeRestricted.state(handle))==0 && SystemClock.elapsedRealtime()<deadline && !cancelled.getAsBoolean() && !revoked) Thread.sleep(100);
         evidence();
-        if (cancelled.getAsBoolean() || revoked) throw new IllegalStateException("Cancelled");
+        if (cancelled.getAsBoolean() || revoked) throw new ConnectivityOrchestrator.Rejected(revoked?ConnectivityOrchestrator.Failure.AUTH:ConnectivityOrchestrator.Failure.CANCELLED);
         if (!control.isEmpty() && phase==4) return;
-        if (phase!=1) throw new IllegalStateException("Dedicated session not ready");
-        tun=service.new Builder().setSession("Family restricted diagnostic").setMtu(1280)
+        if (phase!=1) throw new ConnectivityOrchestrator.Rejected(phase==5?ConnectivityOrchestrator.Failure.AUTH:ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
+        if(automaticOwner!=null)tun=automaticOwner.replace(automaticOwner.builder());
+        else tun=service.new Builder().setSession("Family restricted diagnostic").setMtu(1280)
             .addAddress("10.79.0.2",32).addAddress("fd79:fc::2",128)
             .addRoute("0.0.0.0",0).addRoute("::",0).addDnsServer("10.79.0.1")
             .setBlocking(false).establish();
@@ -100,12 +113,12 @@ final class RestrictedTunnelEngine implements TunnelEngine {
 
     public void down() throws Exception {
         if (handle>0) {
-            evidence();
+            try { evidence(); }catch(Exception ignored){}
             if (!NativeRestricted.stop(handle)) throw new IllegalStateException("Restricted cleanup failed");
             handle=0;
         }
-        if (tun!=null) { tun.close(); tun=null; }
-        if (service!=null) { service.revoked=null; service.stopSelf(); service=null; }
+        if (tun!=null) { if(automaticOwner==null)tun.close(); tun=null; }
+        if (service!=null) { if(automaticOwner==null) { service.revoked=null; service.stopSelf(); } service=null; }
         state.accept(false);
     }
 }

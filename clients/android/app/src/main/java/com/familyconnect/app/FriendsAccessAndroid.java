@@ -14,10 +14,20 @@ import static com.familyconnect.app.ControlJson.*;
 final class FriendsAccessAndroid {
     private final Context context;
     private final boolean direct;
+    private long deadline=Long.MAX_VALUE;
+    private volatile HttpsURLConnection pending;
+    private volatile boolean cancelled;
     static final class Denied extends Exception {}
     static final class Conflict extends Exception {}
     FriendsAccessAndroid(Context context){this(context,false);}
     FriendsAccessAndroid(Context context,boolean direct){this.context=context;this.direct=direct;}
+    FriendsAccessAndroid(Context context,long deadline){this(context,true);this.deadline=deadline;}
+    void cancel(){cancelled=true;HttpsURLConnection connection=pending;if(connection!=null)connection.disconnect();}
+    private int remaining(int maximum)throws IOException{
+        long remaining=deadline-android.os.SystemClock.elapsedRealtime();
+        if(cancelled||remaining<=0)throw new IOException("Cancelled or expired");
+        return (int)Math.min(maximum,remaining);
+    }
     private boolean present(String name,String alias)throws Exception{
         File file=new File(context.getNoBackupFilesDir(),name);KeyStore keys=KeyStore.getInstance("AndroidKeyStore");keys.load(null);
         return keys.containsAlias(alias)||file.exists()||new File(file+".bak").exists()||new File(file+".new").exists();
@@ -28,17 +38,19 @@ final class FriendsAccessAndroid {
         if(!create)throw new Denied();return vault.create();
     }
     private JsonObject post(String path,JsonObject body)throws Exception{
+        remaining(5000);
         require(path.matches("/friends/(challenge|activate|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/status|notices/device/(role|publish|list|edit))"));
         HttpsURLConnection connection=direct?new ChatNetworkAndroid(context).openHttps("https://185.251.89.19:8443"+path):(HttpsURLConnection)new URL("https://185.251.89.19:8443"+path).openConnection();
+        pending=connection;
         try{
-            connection.setConnectTimeout(5000);connection.setReadTimeout(15000);connection.setInstanceFollowRedirects(false);connection.setUseCaches(false);connection.setRequestMethod("POST");connection.setDoOutput(true);connection.setRequestProperty("Content-Type","application/json");
+            connection.setConnectTimeout(remaining(5000));connection.setReadTimeout(remaining(15000));connection.setInstanceFollowRedirects(false);connection.setUseCaches(false);connection.setRequestMethod("POST");connection.setDoOutput(true);connection.setRequestProperty("Content-Type","application/json");
             byte[] raw=body.toString().getBytes(StandardCharsets.UTF_8);require(raw.length<=((path.equals("/friends/notices/device/publish")||path.equals("/friends/notices/device/edit"))?32768:8192));connection.setFixedLengthStreamingMode(raw.length);
             try(OutputStream out=connection.getOutputStream()){out.write(raw);}finally{Arrays.fill(raw,(byte)0);}
-            int status=connection.getResponseCode();if(status==409)throw new Conflict();if(status==400||status==403)throw new Denied();if(status!=200)throw new IOException("Test access unavailable");
+            connection.setReadTimeout(remaining(15000));int status=connection.getResponseCode();if(status==409)throw new Conflict();if(status==400||status==401||status==403)throw new Denied();if(status!=200)throw new IOException("Test access unavailable");
             ByteArrayOutputStream bytes=new ByteArrayOutputStream();long deadline=System.nanoTime()+20_000_000_000L;
-            try(InputStream input=connection.getInputStream()){byte[] buffer=new byte[1024];int n;while((n=input.read(buffer))!=-1){if(bytes.size()+n>(path.equals("/friends/notices/device/list")?1048576:16384)||System.nanoTime()>deadline||Thread.currentThread().isInterrupted())throw new IOException();bytes.write(buffer,0,n);}}
+            try(InputStream input=connection.getInputStream()){byte[] buffer=new byte[1024];while(true){connection.setReadTimeout(remaining(15000));int count=input.read(buffer);if(count==-1)break;if(bytes.size()+count>(path.equals("/friends/notices/device/list")?1048576:16384)||System.nanoTime()>deadline||Thread.currentThread().isInterrupted())throw new IOException();bytes.write(buffer,0,count);}}
             return parse(bytes.toByteArray()).getAsJsonObject();
-        }finally{connection.disconnect();}
+        }finally{connection.disconnect();pending=null;}
     }
     private JsonObject proof(ControlIdentity identity,String purpose,String invitation)throws Exception{
         JsonObject request=new JsonObject();request.addProperty("public_identity",Base64.getEncoder().encodeToString(identity.publicIdentity()));request.addProperty("wireguard_public_key",identity.wireguardPublicKey());request.addProperty("purpose",purpose);request.addProperty("invitation",invitation);
@@ -181,6 +193,17 @@ final class FriendsAccessAndroid {
             String profile=materialize(reply,identity,country,transport,floor);cache.add(country,reply);
             byte[] raw=cache.toString().getBytes(StandardCharsets.UTF_8);try{if(exists)vault.write(raw);else vault.create(raw);}finally{Arrays.fill(raw,(byte)0);}
             return profile;
+        }
+    }
+    Map<Transport,String> normalProfiles(String country)throws Exception{
+        profile(country,"awg");remaining(1);
+        try(ControlIdentity identity=identity(false)){
+            JsonObject reply=parse(new FriendsConfigurationVault(context).read()).getAsJsonObject().getAsJsonObject(country);
+            ControlFriendsCatalog catalog=ControlFriendsCatalog.verify(reply.getAsJsonObject("catalog").toString().getBytes(StandardCharsets.UTF_8),ControlTrust.anchor(context),0);
+            Map<Transport,String> profiles=new LinkedHashMap<>();
+            if(catalog.awgProfiles.containsKey(country))profiles.put(Transport.AWG,materialize(reply,identity,country,"awg",catalog.sequence));
+            if(catalog.profiles.containsKey(country))profiles.put(Transport.TCP,materialize(reply,identity,country,"tcp",catalog.sequence));
+            return profiles;
         }
     }
 }

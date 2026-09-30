@@ -269,7 +269,7 @@ func Open(ctx context.Context, path, cachePath string, network *underlay.Network
 	if network == nil || event == nil {
 		return nil, ErrClosed
 	}
-	raw, cache, err := profile(path, cachePath)
+	raw, _, err := profile(path, cachePath)
 	if err != nil {
 		return nil, err
 	}
@@ -285,6 +285,18 @@ func Open(ctx context.Context, path, cachePath string, network *underlay.Network
 		return nil, ErrClosed
 	}
 	event("bootstrap_normal_control_unavailable")
+	return OpenCached(ctx, path, cachePath, network, event)
+}
+
+func OpenCached(ctx context.Context, path, cachePath string, network *underlay.Network, event func(string)) (*Session, error) {
+	if network == nil || event == nil {
+		return nil, ErrClosed
+	}
+	raw, cache, err := profile(path, cachePath)
+	if err != nil {
+		return nil, err
+	}
+	defer clear(raw)
 	directory, err := cache.Load(time.Now())
 	if err != nil {
 		return nil, err
