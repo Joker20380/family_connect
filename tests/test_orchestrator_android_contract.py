@@ -39,6 +39,14 @@ def test_failed_guard_precedes_engine_cleanup_and_does_not_skip_it():
     assert 'State.FAILED' in finish and 'host.closeCandidate()' in finish
 
 
+def test_automatic_tcp_does_not_advertise_unverified_ipv6_exit():
+    tcp = source('AutomaticNormalEngine').split('if(transport==Transport.TCP)', 1)[1].split('Config config=', 1)[0]
+    assert '.addAddress(source,32)' in tcp
+    assert '.addRoute("0.0.0.0",0).addRoute("::",0)' in tcp
+    assert 'fd79:' not in tcp
+    assert '.allowBypass(' not in tcp and '.addDisallowedApplication(' not in tcp
+
+
 def test_diagnostic_io_cannot_skip_native_stop_and_provisioning_reads_are_bounded():
     cleanup = source('RestrictedTunnelEngine').split('public void down()', 1)[1]
     assert 'try { evidence(); }catch(Exception ignored){}' in cleanup
