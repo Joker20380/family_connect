@@ -8,7 +8,9 @@
 активном VPN и owner health unavailable; ожидание браузером DNS само по себе
 не считается доказательством fail-closed.
 
-Изолированный opt-in, не public release и не Connectivity Orchestrator.
+Исходный EU-6 runner ниже — изолированный opt-in, не public release. Новый
+MVP Orchestrator использует тот же backend, отдельный debug suffix `.orchestrator`
+и existing TcpVpnService guard; [отчёт/scope](../../docs/releases/2026-09-30-mvp-connectivity-orchestrator.ru.md).
 Текущий результат: [отчёт](../../docs/releases/2026-09-30-webrtc-eu6-android-full-device.ru.md).
 
 ## Границы
@@ -16,7 +18,8 @@
 `ConnectionService` остаётся единственным connection owner (worker, generation,
 ControlOperations, cancellation, notification, stop). `RestrictedTunnelEngine`
 использует **существующий** `TcpVpnService`/permission flow; нового VpnService нет.
-Normal AWG/TCP factories и AutoPolicy не заменяются. Debug activity существует
+Manual normal AWG/TCP factories не заменяются. Старый AutoPolicy заменён bounded
+ConnectivityOrchestrator; automatic adapters используют один TcpVpnService. Debug activity существует
 только в debug manifest; managed identity этим одноразовым диагностическим
 профилем заменить нельзя. Beta package не удалять и не переустанавливать.
 
@@ -101,6 +104,32 @@ SIGTERM isolated dedicated gateway → VPN-retained failure → graceful stop/un
 в памяти, browsing content не сохраняется. DNS/TCP bypass claims требуют именно
 живых route/counter/failure evidence, не одного PASS unit-тестов.
 
-Ограничения: no automatic Orchestrator, no generic UDP, IPv6 fail-closed, no flow
+Ограничения исходной5N.6 acceptance: no automatic Orchestrator, no generic UDP, IPv6 fail-closed, no flow
 migration, no production rollout/capacity claim, no fresh restricted install
 guarantee, no second carrier, no iOS. После gate — STOP.
+
+## MVP normal-path runner (не full gate PASS)
+
+`orchestrator_normal.py` использует отдельный `.orchestrator` APK, временный REALITY
+process в `/tmp` Amsterdam: без production credentials/config/services, без forwarded
+traffic. Current build флаг `-PfcOrchestratorDiagnostic=true`, arm64 native build тот же.
+Runner требует unlocked Redmi/Android12/arm64, Wi-Fi OFF/cellular ON/no other VPN.
+При запрете MIUI ADB input используйте `--manual-ui`: пользователь сам нажимает
+CONNECT/Android permission. Не обходить INJECT_EVENTS и не менять appops ради теста.
+Debug Activity запускается NEW_TASK|MULTIPLE_TASK: иначе Android может направить
+повторный Intent в singleTask MainActivity вместо injection Activity. Receipt OK
+без target/actual events недостаточен. `--lifecycle-only` пропускает browser/probe и
+никогда не является browser PASS. Parser читает text/content-desc; только ожидаемый
+body marker и host без ERR_* подтверждают контрольную страницу.
+
+Сценарии: only-configured TCP auto → browser; controlled active-backend failure →
+one restoration; second failure → retained guard/ordinary negative TCP; forced
+AWG-unavailable → alternate TCP; all normal unavailable → automatic restricted
+attempt/BOOTSTRAP_UNAVAILABLE без activation. Последний **не restricted success**.
+Fresh BOOT-1 full acceptance дополнительно требует server-only OAuth и disposable
+Family activation/directory из existing bootstrap runbook. Эти prerequisites не
+восстанавливать из expired fixtures и не заменять manual room URL.
+
+В evidence только allowlisted state events/counters/results; no profiles/tokens.
+Нативные/OS fail-closed утверждения требуют live routes/probes, не source-only tests.
+Runner finally удаляет owned APK/server;600s supervisor ограничивает abandoned server.
