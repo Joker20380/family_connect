@@ -13,6 +13,7 @@ public final class RestrictedDiagnosticActivity extends Activity {
             finish();return;
         }
         if("probe".equals(getIntent().getStringExtra("mode"))){probe();return;}
+        if("failure-probe".equals(getIntent().getStringExtra("mode"))){failureProbe();return;}
         Intent permission=VpnService.prepare(this);
         if(permission!=null) startActivityForResult(permission,6); else begin();
     }
@@ -67,5 +68,27 @@ public final class RestrictedDiagnosticActivity extends Activity {
             }catch(Exception ignored){}
             runOnUiThread(this::finish);
         },"fc-restricted-probe").start();
+    }
+    private void failureProbe() {
+        new Thread(()->{
+            org.json.JSONObject result=new org.json.JSONObject();
+            try {
+                android.net.ConnectivityManager manager=getSystemService(android.net.ConnectivityManager.class);
+                android.net.NetworkCapabilities before=manager.getNetworkCapabilities(manager.getActiveNetwork());
+                result.put("vpn_before",before!=null&&before.hasTransport(android.net.NetworkCapabilities.TRANSPORT_VPN));
+                if(!result.getBoolean("vpn_before"))throw new IllegalStateException("VPN required");
+                try(java.net.Socket socket=new java.net.Socket()) {
+                    socket.connect(new java.net.InetSocketAddress("1.1.1.1",443),5000);
+                    result.put("ordinary_tcp_failed",false);
+                }catch(java.io.IOException expected){result.put("ordinary_tcp_failed",true);}
+                android.net.NetworkCapabilities after=manager.getNetworkCapabilities(manager.getActiveNetwork());
+                result.put("vpn_after",after!=null&&after.hasTransport(android.net.NetworkCapabilities.TRANSPORT_VPN));
+                result.put("owner_health",ConnectionService.healthStatus);
+            }catch(Exception failure){try{result.put("probe_failed",true);}catch(Exception ignored){}}
+            try(java.io.FileOutputStream output=openFileOutput("restricted-failure-probe.json",MODE_PRIVATE)) {
+                output.write(result.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            }catch(Exception ignored){}
+            runOnUiThread(this::finish);
+        },"fc-restricted-failure-probe").start();
     }
 }
