@@ -52,7 +52,7 @@ Telemost call is evidence of a service path, not proof of our bootstrap or VPN.
   CONTROL / PRODUCT    BOOTSTRAP / RECOVERY      DATA PLANE
   identity/invites/     obtain trusted setup      normal AWG/TCP
   entitlement/         when API unreachable     [IMPLEMENTED]
-  provisioning/        [IMPLEMENTED, LIVE BLOCKED] restricted Mux/DNS/TCP
+  provisioning/        [PROVEN EXPERIMENTAL]     restricted Mux/DNS/TCP
   signed config                |                over Family TLS
   [IMPLEMENTED]                |                [PROVEN EXPERIMENTAL]
   Room Broker                  |                     |
@@ -77,8 +77,8 @@ Telemost call is evidence of a service path, not proof of our bootstrap or VPN.
 This is a responsibility map, not a claim that all transports share one wire
 stack or already run under a new orchestrator. Room Broker belongs to the
 control/product plane; bootstrap must make its authenticated setup reachable
-without assuming ordinary API access. **Restricted bootstrap/recovery is the
-largest missing architectural gate**, not a missing TCP/DNS data-plane proof.
+without assuming ordinary API access. **Cached-state restricted bootstrap passed
+isolated physical acceptance**; full-device integration remains the next gate.
 
 ### Accepted restricted path
 
@@ -109,7 +109,7 @@ Krasnodar FIELD-1 exists yet. There is no generic UDP/QUIC/ICMP in the restricte
 path; global ReliableStream HOL and lack of seamless session migration remain.
 No production multi-user capacity claim follows from these single-device proofs.
 
-### Restricted bootstrap — 5N-BOOT-1 (IMPLEMENTED / LIVE BLOCKED)
+### Restricted bootstrap — 5N-BOOT-1 (PASS, isolated physical)
 
 ```text
 cached authenticated bootstrap directory -> bootstrap rendezvous carrier
@@ -128,9 +128,13 @@ Room Broker owns dedicated creation, setup binding, revocation/revision checks
 and cleanup. No new signing root and no application-update key are involved.
 The seed packet lease is routing only; Family TLS remains the security boundary.
 Bootstrap never constructs a TCP/DNS Mux. The dedicated session uses the existing
-data path after bootstrap closes. Physical acceptance with ordinary control
-deliberately unavailable is still **NOT RUN**, not inferred from deterministic
-checks. Fresh installations already inside a restricted network are out of scope;
+data path after bootstrap closes. Physical acceptance30 September **PASS**:
+Redmi cellular, cached directory/restart, deliberately unreachable diagnostic
+control endpoint, real Telemost bootstrap, dedicated binding/DNS/four HTTPS200,
+cleanup; no control forwarding or manual room URL. The endpoint-denial injection
+is not a carrier-wide/production API firewall block or FIELD-1 proof; see the
+[exact evidence and limitations](releases/2026-09-30-webrtc-5n-boot1-bootstrap.ru.md).
+Fresh installations already inside a restricted network are out of scope;
 the device must have obtained its directory during earlier normal connectivity.
 
 ### Full-device boundary and orchestrator (PLANNED)

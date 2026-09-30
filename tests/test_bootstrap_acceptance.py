@@ -1,5 +1,7 @@
 import copy
 import importlib.util
+import io
+import json
 from pathlib import Path
 
 import pytest
@@ -63,3 +65,73 @@ def test_order_ordinary_control_manual_room_and_failed_dns_rejected():
         if fault == 'https': next(row for row in recovered if row['event'] == 'mux_https')['passed'] = False
         if fault == 'wifi': recovered[0]['network'] = 'wifi'
         with pytest.raises(RuntimeError): runner.validate(prepared, recovered, gateway, restarted=True)
+
+
+@pytest.mark.parametrize('outcome', ['closed_on_shutdown', 'missing_close', 'cleanup_failed'])
+def test_main_validates_final_gateway_evidence_after_cleanup(tmp_path, monkeypatch, outcome):
+    prepared, recovered, gateway = evidence()
+    output = tmp_path / 'evidence'
+    profiles = tmp_path / 'profiles'
+    profiles.mkdir()
+    for name in ['gateway.json', 'valid.json']:
+        (profiles / name).write_text('{}')
+    binary = tmp_path / 'broker'
+    apk = tmp_path / 'diagnostic.apk'
+    binary.write_bytes(b'test binary')
+    apk.write_bytes(b'test apk')
+    monkeypatch.setenv('YANDEX_TELEMOST_OAUTH_TOKEN', 'disposable-test-token')
+    monkeypatch.delenv('FC_TELEMOST_ROOM', raising=False)
+    monkeypatch.setattr('sys.argv', ['bootstrap_acceptance', '--adb', 'test-adb',
+                                   '--binary', str(binary), '--apk', str(apk),
+                                   '--family-dir', str(profiles), '--out', str(output)])
+    state = {'mode': None, 'cleaned': False}
+
+    def encode(rows):
+        return ''.join(json.dumps(row) + '\n' for row in rows).encode()
+
+    class Remote:
+        def __init__(self, command, **options):
+            self.stdin = io.BytesIO()
+            self.log = options['stdout']
+            self.log.write(encode(gateway[:-1]))
+            self.log.flush()
+            state['remote'] = self
+
+        def poll(self):
+            return None
+
+        def wait(self, **options):
+            assert state['cleaned']
+            return 0
+
+    def run(command, **options):
+        if command[0] == 'test-adb':
+            if command[-1] == 'wifi_on':
+                return b'0\n'
+            if command[-1] == 'mobile_data':
+                return b'1\n'
+            if 'cat > files/bootstrap.input' in command[-1]:
+                state['mode'] = options['input'].decode()
+            if 'head -c 4194305 files/evidence.jsonl' in command[-1]:
+                return encode(prepared if state['mode'] == 'refresh' else recovered)
+        elif 'shutil.rmtree(root)' in command[-1]:
+            state['cleaned'] = True
+            if outcome == 'cleanup_failed':
+                raise RuntimeError('test cleanup failed')
+            if outcome == 'closed_on_shutdown':
+                state['remote'].log.write(encode(gateway[-1:]))
+                state['remote'].log.flush()
+        return b''
+
+    monkeypatch.setattr(runner, 'run', run)
+    monkeypatch.setattr(runner.subprocess, 'Popen', Remote)
+    if outcome == 'closed_on_shutdown':
+        runner.main()
+        assert json.loads((output / 'evidence.json').read_text())['bootstrap'] == 'PASS'
+    else:
+        with pytest.raises(RuntimeError):
+            runner.main()
+        assert not (output / 'evidence.json').exists()
+    assert state['cleaned']
+    cleanup = json.loads((output / 'cleanup.json').read_text())
+    assert cleanup['errors'] == (['gateway'] if outcome == 'cleanup_failed' else [])

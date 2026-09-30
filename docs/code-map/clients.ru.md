@@ -12,7 +12,7 @@ Family-authenticated control-only protocol и separate seed manager.
 path, затем existing dedicated Family binding/Mux. `BootstrapMode`/`ProbeService`
 дают только mode, guarded control endpoint и no-backup cache path; второй Java
 network stack не создаётся. [Runbook](../../carrier/bootstrap/README.md) ·
-[Report/live blocker](../releases/2026-09-30-webrtc-5n-boot1-bootstrap.ru.md).
+[Report/physical PASS](../releases/2026-09-30-webrtc-5n-boot1-bootstrap.ru.md).
 
 Изолированный **5N.2 test endpoint** находится отдельно:
 `clients/android/telemost-runtime` (`ProbeActivity` → `ProbeService` → `NativeRun`),

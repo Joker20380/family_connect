@@ -7,12 +7,20 @@
 обычными транспортами в нормальной сети и restricted carrier как резервом.
 Целевой UX одной кнопки ещё не завершён; детали — [architecture](architecture.md).
 
-**5N-BOOT-1 = IMPLEMENTED / LIVE BLOCKED**, не physical PASS. Starting clean main
-HEAD = freshly fetched origin/main = `51d0ad788b651f47ba22e33b4a9991a1283661ce`.
-Добавлены authenticated BootstrapDirectory/cache, отдельный bounded seed manager,
-control-only Family TLS rendezvous → существующий Room Broker и diagnostic Android
-handoff. OAuth отсутствует в окружении этой сессии; physical acceptance не запускалась.
-Focused Go/race (bootstrap x10)/vet, Python118, Android native/APK/JVM9/lint,
+**5N-BOOT-1 = PASS**, isolated physical acceptance30.09, 15:37–15:38 UTC.
+HEAD `f487a429141da64297038e8a96237205fd1ac060` + focused runner cleanup-order fix;
+исходная implementation base `51d0ad788b651f47ba22e33b4a9991a1283661ce`.
+Real automatic Telemost seed READY → direct cellular mTLS directory/cache → restart →
+deliberately unavailable diagnostic control endpoint → cached bootstrap/Family TLS →
+existing Room Broker/fresh dedicated READY → descriptor через bootstrap → отдельная
+dedicated Family TLS/setup binding → A/AAAA/NXDOMAIN + four verified HTTPS200.
+Redmi Note9 Pro / Android12 / arm64, Wi-Fi OFF/no VPN; no adb reverse, SSH forwarding
+или manual room URL. No bootstrap data-plane/Mux. Первый live run прошёл data proof,
+но runner преждевременно проверял cleanup event; исправлен только порядок проверки,
+20 focused Python tests PASS, повторный physical run и cleanup PASS.
+Diagnostic APK code4/name5N.5-test-only установлен и удалён; runtime binaries не менялись.
+Private fixtures/test processes удалены; port18444 свободен. 5N.6 NOT STARTED; STOP.
+Предыдущие focused Go/race (bootstrap x10)/vet, Python118, Android native/APK/JVM9/lint,
 docs/source guard — PASS; lint содержит только existing manifest/UI warnings.
 Нет production deployment, version bump, public release/catalog changes или push.
 [Отчёт BOOT-1](releases/2026-09-30-webrtc-5n-boot1-bootstrap.ru.md) ·
@@ -22,8 +30,8 @@ docs/source guard — PASS; lint содержит только existing manifest
 | --- | --- |
 | IMPLEMENTED IN CURRENT BETA | Device Identity, FAMILY admission, invitations/provisioning; Android/Linux/Windows; normal AWG/TCP используются beta-пользователями. Android VpnService/VPN lifecycle уже существует. |
 | PROVEN IN ISOLATED ACCEPTANCE | 5N.1–5N.5, Family TLS1.3, selective-repeat ReliableStream/real RTP gap recovery, long-duration goodput, Internet TCP/end-site HTTPS TLS, mux/Family DNS/containment, automatic Room Broker **PASS**. Physical Redmi → real Telemost VP8/RTP → Amsterdam. |
-| IMPLEMENTED / LIVE BLOCKED | **5N-BOOT-1**: cached mTLS directory, one control-only seed/exchange, broker READY-before-descriptor, diagnostic dedicated handoff. Physical restricted-control acceptance ещё обязательна. |
-| PLANNED / NEXT | Завершить **5N-BOOT-1 acceptance**, затем **5N.6** existing Android VPN ↔ 5N full-device path → minimum viable Connectivity Orchestrator → Krasnodar FIELD-1 → 50–100-user beta. |
+| PROVEN IN ISOLATED ACCEPTANCE | **5N-BOOT-1 PASS**: cached mTLS directory/restart, control-only real seed, Family auth, broker READY-before-descriptor through bootstrap, separate dedicated session/DNS/HTTPS and cleanup. Diagnostic unreachable-endpoint fault, not a carrier-wide block/field claim. |
+| PLANNED / NEXT | **5N.6** existing Android VPN ↔ 5N full-device path → minimum viable Connectivity Orchestrator → Krasnodar FIELD-1 → 50–100-user beta. Все эти этапы вне текущей задачи; STOP после BOOT-1. |
 
 5N.5 доказал simultaneous public HTTPS, mixed TCP + DNS, exact delivery и
 fairness/bounded buffers. Room Broker доказал official Telemost API, server-only
@@ -31,8 +39,9 @@ OAuth, gateway-first READY и automatic Android descriptor/join без manual UR
 Family TLS + multiple HTTPS200. **Это принятые факты, не preparation-only.**
 Но broker acceptance использовала temporary control ingress (SSH forwarding +
 adb reverse). **Production restricted bootstrap нет:** при недоступном ordinary
-Family API получение initial dedicated room теперь реализовано в diagnostic core,
-но физически ещё не доказано без forwarding; production путь не выпущен.
+Family API получение initial dedicated room физически доказано без forwarding
+в diagnostic cached-state path; production путь не выпущен. В тесте normal endpoint
+заменён на недоступный `https://127.0.0.1:1`, а не заблокирована вся сеть оператора.
 5N mux/DNS не подключён ко всему Android traffic, 5N.6 и Krasnodar FIELD-1 NOT RUN;
 restricted rollout beta-пользователям и product-complete orchestration отсутствуют.
 Нет generic UDP в restricted path; global ReliableStream HOL остаётся; production

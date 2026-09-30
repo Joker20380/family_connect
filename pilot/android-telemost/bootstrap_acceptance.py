@@ -100,7 +100,6 @@ def main():
     directory = '/tmp/fc-boot1-' + secrets.token_hex(8)
     remote = log = None
     created = installed = False
-    evidence = None
     try:
         run([*SSH, HOST, 'umask 077; mkdir ' + directory]); created = True
         for name, raw in [('bootstrap-broker', args.binary.read_bytes()), ('family.json', (args.family_dir / 'gateway.json').read_bytes())]:
@@ -146,13 +145,6 @@ def main():
         write_input('mux.input', b'{"mode":"public"}')
         write_input('evidence.jsonl', b'')
         recovered = phase('recover', 'https://127.0.0.1:1')
-        deadline = time.monotonic() + 10
-        while time.monotonic() < deadline:
-            gateway = events((args.out / 'gateway.jsonl').read_bytes())
-            if any(row.get('event') == 'dedicated_resources_closed' for row in gateway): break
-            time.sleep(.25)
-        evidence = validate(prepared, recovered, gateway, restarted=True)
-        evidence.update(binary_sha256=hashlib.sha256(args.binary.read_bytes()).hexdigest(), apk_sha256=hashlib.sha256(args.apk.read_bytes()).hexdigest())
     finally:
         cleanup = []
         if installed:
@@ -180,6 +172,9 @@ def main():
         if log is not None: log.close()
         (args.out / 'cleanup.json').write_text(json.dumps({'errors': cleanup, 'production_changed': False}) + '\n')
         if cleanup: raise RuntimeError('cleanup incomplete')
+    gateway = events((args.out / 'gateway.jsonl').read_bytes())
+    evidence = validate(prepared, recovered, gateway, restarted=True)
+    evidence.update(binary_sha256=hashlib.sha256(args.binary.read_bytes()).hexdigest(), apk_sha256=hashlib.sha256(args.apk.read_bytes()).hexdigest())
     (args.out / 'evidence.json').write_text(json.dumps(evidence, indent=2) + '\n')
     print(json.dumps(evidence))
 

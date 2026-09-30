@@ -1,6 +1,8 @@
 # 5N-BOOT-1: cached restricted rendezvous
 
 Implementation and deterministic checks do not establish physical acceptance.
+**30 September: isolated physical BOOT-1 PASS**, cached-state Redmi cellular →
+real Telemost bootstrap → separate dedicated DNS/HTTPS; no forwarding/manual URL.
 See the [dated report](../../docs/releases/2026-09-30-webrtc-5n-boot1-bootstrap.ru.md).
 No production deployment, client version change or full-device integration.
 
@@ -102,7 +104,7 @@ instantaneous ProductStore-to-gateway revocation distribution is introduced.
 One rejected or timed-out exchange does not spawn a competing exchange while its
 worker is still exiting. Seed shutdown joins owned exchange workers.
 
-## Isolated physical acceptance (not yet accepted)
+## Isolated physical acceptance (PASS, 30 September)
 
 Prerequisites: physical Redmi Note9 Pro/Android12/arm64, cellular ON/Wi-Fi OFF,
 no active VPN, no existing diagnostic installation, disposable ProductStore
@@ -140,7 +142,9 @@ Phase D: bootstrap closes, dedicated carrier/admission/setup binding follows.
 Phase E: short existing public Mux A/AAAA/NXDOMAIN + four verified HTTPS200.
 
 Runner evidence requires ordered events and process restart, never promotes
-unit tests to live PASS, and only writes PASS after cleanup succeeds. ADB is for
+unit tests to live PASS, and only writes PASS after cleanup succeeds. Final gateway
+evidence is read after shutdown and SSH/log closure: dedicated resource closure
+may occur during that bounded shutdown, not immediately after Android exits. ADB is for
 diagnostic installation/config/start/restart and bounded evidence; it is not a
 transport. Set radios beforehand; the runner does not modify radio settings.
 Cleanup stops the exact task-owned remote executable, removes its directory,

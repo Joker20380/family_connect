@@ -4,10 +4,11 @@
 
 ### CURRENT PRODUCT CRITICAL PATH — 30.09.2026
 
-1. **5N-BOOT-1 — restricted bootstrap (IMPLEMENTED / LIVE BLOCKED).** При недоступном обычном Family
-   control/API и доступном service carrier получить authenticated dedicated
-   descriptor без manual URL, SSH/adb forwarding или оператора. Следующий checkpoint —
-   physical cached-state acceptance, не5N.6; [отчёт](releases/2026-09-30-webrtc-5n-boot1-bootstrap.ru.md).
+1. **5N-BOOT-1 — restricted bootstrap (PASS, isolated physical30.09).** Cached directory
+   survives restart; diagnostic normal endpoint deliberately unavailable; real
+   Telemost/Family auth → broker READY → dedicated descriptor through bootstrap →
+   separate dedicated DNS/HTTPS proof без manual URL или forwarding. Gate завершён,
+   STOP; [отчёт](releases/2026-09-30-webrtc-5n-boot1-bootstrap.ru.md).
 2. **WEBRTC-EU-6 / 5N.6 — Android full-device integration (после bootstrap).**
    Подключить существующий VPN lifecycle/packet path к существующему 5N mux/DNS/TCP.
 3. **Minimum viable Connectivity / Transport Orchestrator (после full-device).**
@@ -20,9 +21,11 @@
 Это авторитетный порядок; нижние хронологические записи и STOP относятся к своим
 датам/gates, не являются актуальным заданием на выполнение. 5N.1–5N.5, REL-1,
 PERF-2 и **automatic Room Broker = PASS** в изолированной physical acceptance.
-**Bootstrap реализован в isolated core/diagnostic path, live PASS не заявлен;
-full-device restricted VPN не выпущен.** OAuth live prerequisite отсутствует в
-окружении задачи. После deterministic checks остановиться на BOOT-1: никаких
+**Bootstrap PASS в isolated cached-state core/diagnostic path;
+full-device restricted VPN не выпущен.** OAuth был только в runner/server memory;
+Redmi cellular/Wi-Fi OFF/no VPN. Первая live попытка выявила только premature
+cleanup validation в runner; focused fix, Python20 и повторный live run PASS.
+Cleanup завершён, production не менялся. После BOOT-1 STOP: никаких
 5N.6/TUN, Orchestrator, второго carrier, performance tuning или production rollout.
 [Архитектура и продуктовые принципы](architecture.md) ·
 [Фактический статус](STATUS.md) · [Отчёт rebaseline](releases/2026-09-30-product-engineering-rebaseline.ru.md).
@@ -34,7 +37,7 @@ full-device restricted VPN не выпущен.** OAuth live prerequisite отс
 | A — Foundation | DONE / existing | Device Identity, FAMILY admission, invitations/provisioning, Android/Linux/Windows base. Не обещание завершённого family dashboard. |
 | B — Normal connectivity | WORKING beta | AWG/TCP уже используются; существующий Android VpnService/VPN lifecycle. |
 | C — Restricted data plane + setup proof | TECHNICALLY PROVEN, isolated physical acceptance | 5N.1–5N.5, ReliableStream, DNS containment и Room Broker. Broker — control-plane proof, не production bootstrap. |
-| D — Restricted bootstrap | IMPLEMENTED / LIVE BLOCKED / 5N-BOOT-1 | Cached authenticated directory → bounded seed → Family TLS → broker READY → separate dedicated session; physical proof без control forwarding ещё открыт. |
+| D — Restricted bootstrap | PASS / 5N-BOOT-1, isolated physical | Cached authenticated directory/restart → bounded seed → Family TLS → broker READY → separate dedicated session; no control forwarding. Diagnostic endpoint-denial, не FIELD-1/production. |
 | E — Android full-device | AFTER D / 5N.6 | Existing OS lifecycle/packet path ↔ existing 5N core; тонкий OS adapter, reusable Family logic для будущего iOS PacketTunnel. |
 | F — Minimum viable Orchestrator | AFTER E | Normal fast → alternate normal → restricted bootstrap/carrier; безопасные probes, failover/recovery, без обязательного ML/scoring. |
 | G — FIELD-1 | AFTER F / NOT RUN | Реальный restricted/allowlist mobile field, сначала Краснодар; не лабораторный echo. |
@@ -48,10 +51,11 @@ bulk VPN. [Код/лимиты/runbook](../carrier/bootstrap/README.md): сущ�
 protected atomic cache, одна активная exchange, server challenge/setup binding,
 без нового signing root. Старый Room Broker PASS использовал forwarding; BOOT-1
 runner использует direct mTLS только для prior cache, затем запрещённый normal
-endpoint и исключительно Telemost rendezvous. Этот новый live run ещё NOT RUN.
+endpoint и исключительно Telemost rendezvous. Physical phases A–E и cleanup PASS30.09.
 Deterministic checkpoint: focused Go/race x10/vet, Python118, Android native/APK/
-JVM9/lint, docs/source guard PASS. Следующий шаг — credential + physical phases A–E,
-не начало5N.6; подробные результаты и artifact hashes в датированном отчёте.
+JVM9/lint, docs/source guard PASS. Live runner fix: focused Python20 PASS.
+Следующих действий внутри BOOT-1 нет;5N.6 не начинался и требует отдельной задачи.
+Подробные timestamps, первая failed acceptance и artifact hashes в датированном отчёте.
 Fresh install уже внутри completely restricted сети вне scope. Rollback — остановить
 только task-owned процесс/удалить diagnostic APK/cache; production не изменяется.
 
