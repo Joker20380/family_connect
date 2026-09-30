@@ -133,3 +133,32 @@ Family activation/directory из existing bootstrap runbook. Эти prerequisite
 В evidence только allowlisted state events/counters/results; no profiles/tokens.
 Нативные/OS fail-closed утверждения требуют live routes/probes, не source-only tests.
 Runner finally удаляет owned APK/server;600s supervisor ограничивает abandoned server.
+
+### Fresh native / automatic restricted follow-up
+
+Для physical Orchestrator runner теперь обязателен current-source normal JNI:
+`pilot/android-awg/build.py --abi arm64-v8a --out /tmp/fresh-normal` (Go1.26.1,
+`ANDROID_NDK_HOME`). Без этих flags default остаётся four-ABI build.
+Gradle должен использовать именно fresh `jniLibs` и `assets`; embedded
+`awg-build.json`/binary сверяются с текущими Go/JNI/builder hashes до установки.
+Не выдавать cached REALITY/XHTTP artifact за current-source validation.
+
+Normal runner `--normal-only --trace` ограничивает diagnostic run двумя controlled
+sites и allowlisted fixture error labels:180s/512 records, без raw log/payload.
+`--host` принимает только два authorized gateway IP; default Amsterdam. Host должен
+иметь свободный diagnostic port; не менять production firewall/services для теста.
+Automatic TCP не объявляет неподтверждённый IPv6 source address, но захватывает
+`::/0`: это устраняет Chrome IPv6 optimism при IPv4-only egress. Native packet
+handshake сам по себе не означает remote IPv6 connectivity.
+
+После normal Chrome PASS используйте existing `acceptance.py` с
+`--orchestrator --manual-ui --seconds 600` и fresh disposable `--family-dir`,
+current bootstrap broker, `.orchestrator` APK. OAuth только в runner environment;
+helper subprocess environment очищается, server получает credential через stdin
+в память. Refresh/cache/restart — setup, затем user action только CONNECT.
+`deny_normal` диагностически отключает все три configured normal candidates
+(AWG/WG/TCP); native recovery не подменяется manual room/recover intent.
+Acceptance проверяет exact candidate ordering, fresh BOOT-1/dedicated/Chrome,
+Family DNS/concurrency/underlay counters, smoke без restoration/flapping, затем
+controlled gateway failure с RESTORING→FAILED и retained VPN. Эта fault simulation
+не является утверждением об ISP и не разрешает FIELD-1 или production rollout.

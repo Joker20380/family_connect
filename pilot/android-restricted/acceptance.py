@@ -17,8 +17,10 @@ PACKAGE = 'com.familyconnect.app.eu6'
 
 
 def run(command, **options):
+    environment = dict(options.pop('env', os.environ))
+    environment.pop('YANDEX_TELEMOST_OAUTH_TOKEN', None)
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                            timeout=options.pop('timeout', 30), **options)
+                            timeout=options.pop('timeout', 30), env=environment, **options)
     if result.returncode:
         labels = {'install', 'uninstall', 'am', 'start', 'uiautomator', 'dump', 'cat', 'run-as', 'force-stop', 'getprop'}
         operation = ' '.join(part for part in command if part in labels) or Path(command[0]).name
@@ -36,11 +38,13 @@ def stages(samples):
     return [name for sample in samples for name in (sample.get('events') or [])]
 
 
-def vpn_routes(raw):
+def vpn_routes(raw, session='Family restricted diagnostic'):
+    if sum('NetworkAgentInfo{' in line and 'ni{VPN CONNECTED' in line for line in raw.splitlines()) != 1:
+        return {'active': False}
     for line in raw.splitlines():
         if 'NetworkAgentInfo{' not in line or 'ni{VPN CONNECTED' not in line:
             continue
-        if 'sessionId=Family restricted diagnostic' not in line:
+        if 'sessionId='+session not in line:
             continue
         return {'active': True, 'ipv4_default': '0.0.0.0/0' in line, 'ipv6_default': '::/0' in line,
                 'family_dns': 'DnsAddresses: [ /10.79.0.1 ]' in line,
@@ -60,12 +64,16 @@ def screen_ready(policy, power):
     return 'mIsShowing=false' in policy and 'mWakefulness=Awake' in power
 
 
-def validate(prepared, recovered, gateway, browser, probes, failed, duration):
+def validate(prepared, recovered, gateway, browser, probes, failed, duration, orchestrator=None):
     if 'bootstrap_cache_stored' not in stages(prepared):
         raise RuntimeError('cache preparation absent')
     required = ['bootstrap_normal_control_unavailable', 'bootstrap_cache_loaded', 'bootstrap_carrier_connected',
                 'bootstrap_family_auth', 'bootstrap_descriptor_received',
                 'bootstrap_closed_before_dedicated', 'dedicated_data_ready', 'vpn_packet_ready']
+    if orchestrator is not None:
+        from auto_acceptance import validate_connected
+        validate_connected(orchestrator)
+        required.remove('bootstrap_normal_control_unavailable')
     sequence = stages(recovered)
     if any(sequence.count(name) != 1 for name in required):
         raise RuntimeError('missing/duplicate restricted lifecycle stage')
@@ -85,6 +93,14 @@ def validate(prepared, recovered, gateway, browser, probes, failed, duration):
     if len(browser) < 2 or not all(item['controlled_content'] and item['vpn_active'] for item in browser):
         raise RuntimeError('ordinary browser proof absent')
     packet = [sample['packet'] for sample in recovered if 'packet' in sample]
+    if orchestrator is not None:
+        active = [sample for sample in recovered if sample.get('state') == 2 and 'packet' in sample]
+        if not active or any(sample.get('protect_denied', 1) != 0 for sample in active):
+            raise RuntimeError('restricted underlay protection incomplete')
+        if min(sample.get('protect_ok', 0) for sample in active) < 1:
+            raise RuntimeError('protected underlay sockets absent')
+        if len({sample.get('underlay_dns') for sample in active}) != 1:
+            raise RuntimeError('underlay DNS grew during ordinary app traffic')
     if not packet or max(item['dns'] for item in packet) < 1 or max(item['tcp_peak'] for item in packet) < 3:
         raise RuntimeError('Family DNS/concurrent flow proof absent')
     for item in packet:
@@ -110,6 +126,7 @@ def validate(prepared, recovered, gateway, browser, probes, failed, duration):
 
 
 def main():
+    global PACKAGE
     parser = argparse.ArgumentParser()
     parser.add_argument('--adb', required=True)
     parser.add_argument('--binary', type=Path, required=True)
@@ -117,11 +134,17 @@ def main():
     parser.add_argument('--family-dir', type=Path, required=True)
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--seconds', type=int, default=540)
+    parser.add_argument('--orchestrator', action='store_true')
+    parser.add_argument('--manual-ui', action='store_true')
     args = parser.parse_args()
+    if args.orchestrator:
+        PACKAGE = 'com.familyconnect.app.orchestrator'
+        from provenance import verify_normal
+        verify_normal(args.apk)
     token = os.environ.get('YANDEX_TELEMOST_OAUTH_TOKEN', '')
     if not token or len(token) > 4096 or any(character in token for character in '\r\n\0'):
         raise RuntimeError('provider credential unavailable; redacted')
-    if os.environ.get('FC_TELEMOST_ROOM') or not 30 <= args.seconds <= 540:
+    if os.environ.get('FC_TELEMOST_ROOM') or not 30 <= args.seconds <= 600:
         raise RuntimeError('manual room or unbounded duration rejected')
 
     def adb(*command, **options):
@@ -134,7 +157,7 @@ def main():
         return adb('shell', '-T', 'run-as', PACKAGE, 'sh', '-c', shlex.quote(command), **options)
 
     def start(mode, *extras):
-        result = adb('shell', 'am', 'start', '-W', '-n', PACKAGE + '/com.familyconnect.app.RestrictedDiagnosticActivity', '--es', 'mode', mode, *extras)
+        result = adb('shell', 'am', 'start', '-W', '-f', '0x18000000', '-n', PACKAGE + '/com.familyconnect.app.RestrictedDiagnosticActivity', '--es', 'mode', mode, *extras)
         if b'Error:' in result or b'Error type' in result:
             raise RuntimeError('diagnostic Activity did not start')
 
@@ -152,6 +175,9 @@ def main():
         return list(ET.fromstring(raw[begin:end + len('</hierarchy>')]).iter('node'))
 
     def consent():
+        if args.manual_ui:
+            print('USER_ACTION: approve Android VPN permission if shown', flush=True)
+            return
         for node in ui():
             if node.get('resource-id') == 'android:id/button1' and node.get('text', '').lower() in ('ok', 'ок'):
                 bounds = [int(value) for value in re.findall(r'\d+', node.get('bounds', ''))]
@@ -161,7 +187,13 @@ def main():
 
     def vpn():
         raw = adb('shell', 'dumpsys', 'connectivity').decode(errors='replace')
-        return vpn_routes(raw)['active']
+        return routes(raw)['active']
+
+    def routes(raw):
+        return vpn_routes(raw, 'Family Connect' if args.orchestrator else 'Family restricted diagnostic')
+
+    def auto_events():
+        return json.loads(private('cat files/connectivity-events.json'))
 
     def battery():
         raw = adb('shell', 'dumpsys', 'battery').decode(errors='replace')
@@ -222,6 +254,7 @@ def main():
         raise RuntimeError('unaccepted physical device')
     outcome['cellular_on_wifi_off'] = True
     prepared, recovered, browser, probes, failed = [], [], [], {}, {}
+    connected_events = None
     duration = 0
 
     def stop_remote():
@@ -241,7 +274,9 @@ def main():
                 'open("pid","w").write(str(os.getpid())); '
                 'os.execv("./bootstrap-broker",["./bootstrap-broker","--family-config","family.json","--duration","15m","--listen","186.246.45.246:18444"])')
         log = (args.out / 'gateway.jsonl').open('wb')
-        remote = subprocess.Popen([*SSH, HOST, 'python3 -c ' + shlex.quote(code)], stdin=subprocess.PIPE, stdout=log, stderr=subprocess.DEVNULL)
+        environment = dict(os.environ)
+        environment.pop('YANDEX_TELEMOST_OAUTH_TOKEN', None)
+        remote = subprocess.Popen([*SSH, HOST, 'python3 -c ' + shlex.quote(code)], stdin=subprocess.PIPE, stdout=log, stderr=subprocess.DEVNULL, env=environment)
         remote.stdin.write((token + '\n').encode()); remote.stdin.close()
         deadline = time.monotonic() + 90
         while time.monotonic() < deadline:
@@ -265,17 +300,36 @@ def main():
         private('test -s no_backup/restricted/bootstrap.json; : > files/restricted-evidence.jsonl')
         outcome['cache_survived_restart'] = True
         print('CACHE_RESTART_PASS', flush=True)
-        start('recover')
+        if args.orchestrator:
+            from auto_acceptance import normal_profiles, validate_connected, validate_failed
+            for transport, profile in normal_profiles().items():
+                private('umask 077; cat > no_backup/auto-'+transport+'.profile', input=profile.encode())
+            adb('shell', 'am', 'start', '-W', '-f', '0x18000000', '-n',
+                PACKAGE+'/com.familyconnect.app.OrchestratorDiagnosticActivity', '--es', 'mode', 'prepare',
+                '--ez', 'deny_normal', 'true', '--ez', 'reset_hint', 'true')
+            time.sleep(2)
+            if not json.loads(private('cat files/orchestrator-prepared.json')).get('ready'):
+                raise RuntimeError('automatic diagnostic preparation failed')
+            print('USER_ACTION: press CONNECT only; all configured normal candidates diagnostically unavailable', flush=True)
+        else:
+            start('recover')
         recovered = wait_state(2, 'recover')
+        if args.orchestrator:
+            time.sleep(1)
+            connected_events = auto_events()
+            validate_connected(connected_events)
+            (args.out/'connected-events.json').write_text(json.dumps(connected_events))
         started = time.monotonic()
         outcome['vpn_active'] = vpn()
-        outcome['routes'] = vpn_routes(adb('shell', 'dumpsys', 'connectivity').decode())
+        outcome['routes'] = routes(adb('shell', 'dumpsys', 'connectivity').decode())
         outcome['battery_start'] = battery()
         if not all(outcome['routes'].values()):
             raise RuntimeError('VPN route/bypass/DNS evidence incomplete')
         print('VPN_PACKET_READY vpn=' + str(outcome['vpn_active']), flush=True)
         for host in ('example.com', 'example.org'):
             browser.append(browser_visit(host))
+        if not all(item['controlled_content'] and item['vpn_active'] for item in browser):
+            raise RuntimeError('ordinary browser failed before smoke')
         start('probe')
         deadline = time.monotonic() + 90
         while time.monotonic() < deadline:
@@ -290,6 +344,8 @@ def main():
         next_visit = started + 120
         while time.monotonic() - started < args.seconds:
             recovered = evidence('recover')
+            if args.orchestrator:
+                validate_connected(auto_events())
             if any(sample.get('state') == 3 for sample in recovered):
                 raise RuntimeError('dedicated session failed before injection')
             if time.monotonic() >= next_visit:
@@ -321,9 +377,13 @@ def main():
             time.sleep(1)
         failure_visit = browser_visit('1.1.1.1')
         failed.update(vpn_active=vpn(), browser_blocked=failure_visit['browser_error'] and not failure_visit['controlled_content'])
-        failed['routes'] = vpn_routes(adb('shell', 'dumpsys', 'connectivity').decode())
+        failed['routes'] = routes(adb('shell', 'dumpsys', 'connectivity').decode())
+        if args.orchestrator:
+            failed_events = auto_events()
+            validate_failed(failed_events)
+            (args.out/'failed-events.json').write_text(json.dumps(failed_events))
         (args.out / 'failure.json').write_text(json.dumps(failed, indent=2) + '\n')
-        validate(prepared, recovered, rows((args.out / 'gateway.jsonl').read_bytes()), browser, probes, failed, duration)
+        validate(prepared, recovered, rows((args.out / 'gateway.jsonl').read_bytes()), browser, probes, failed, duration, connected_events)
         outcome['result'] = 'PASS'
     except KeyboardInterrupt:
         outcome['failure'] = 'operator stopped failed attempt for focused fix'

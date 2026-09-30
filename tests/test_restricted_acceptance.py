@@ -30,6 +30,32 @@ def test_complete_evidence_passes():
     ACCEPTANCE.validate(**evidence())
 
 
+def test_auto_requires_real_normal_exhaustion_and_protected_underlay(monkeypatch):
+    monkeypatch.syspath_prepend(str(Path(SPEC.origin).parent))
+    sample = evidence()
+    sample['recovered'][0]['events'].remove('bootstrap_normal_control_unavailable')
+    sample['recovered'][0].update(state=2, protect_ok=10, protect_denied=0, underlay_dns=4)
+    events = []
+    for candidate in ('awg', 'wg', 'tcp', 'restricted'):
+        events.append(dict(event='candidate_attempted', candidate=candidate, state='CONNECTING'))
+        events.append(dict(event='candidate_succeeded' if candidate == 'restricted' else 'candidate_failed',
+                           candidate=candidate, category='TRANSPORT_UNAVAILABLE',
+                           state='CONNECTED' if candidate == 'restricted' else 'CONNECTING'))
+    ACCEPTANCE.validate(**sample, orchestrator=events)
+    with pytest.raises(RuntimeError):
+        ACCEPTANCE.validate(**sample, orchestrator=events[2:])
+    sample['recovered'].append(copy.deepcopy(sample['recovered'][0]))
+    sample['recovered'][-1]['events'] = []
+    sample['recovered'][-1]['underlay_dns'] += 1
+    with pytest.raises(RuntimeError, match='underlay DNS grew'):
+        ACCEPTANCE.validate(**sample, orchestrator=events)
+
+
+def test_route_parser_rejects_duplicate_owners():
+    line = 'NetworkAgentInfo{ ni{VPN CONNECTED sessionId=Family Connect'
+    assert not ACCEPTANCE.vpn_routes(line+'\n'+line, 'Family Connect')['active']
+
+
 def test_debug_suffix_does_not_change_java_component_namespace():
     source = Path(SPEC.origin).read_text()
     assert "PACKAGE + '/com.familyconnect.app.RestrictedDiagnosticActivity'" in source

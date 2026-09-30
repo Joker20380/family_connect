@@ -20,6 +20,7 @@ from cryptography import x509
 from cryptography.x509.oid import NameOID
 from cryptography.hazmat.primitives.serialization import Encoding, PrivateFormat, PublicFormat, NoEncryption
 from acceptance import run, screen_ready, controlled_page
+from provenance import verify_normal
 
 PACKAGE = 'com.familyconnect.app.orchestrator'
 HOST = 'root@186.246.45.246'
@@ -48,10 +49,16 @@ def main():
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--manual-ui', action='store_true')
     parser.add_argument('--lifecycle-only', action='store_true')
+    parser.add_argument('--normal-only', action='store_true')
+    parser.add_argument('--trace', action='store_true')
+    parser.add_argument('--host', choices=('186.246.45.246', '185.251.89.19'), default='186.246.45.246')
     parser.add_argument('--port', type=int, choices=(18444,18445), default=18445)
     args = parser.parse_args()
+    ssh = [*SSH[:-1], 'root@'+args.host]
+    provenance = verify_normal(args.apk)
     args.out.mkdir(mode=0o700, parents=True, exist_ok=False)
     summary = {'result': 'FAIL', 'restricted': 'NOT RUN', 'production_changed': False}
+    summary['native_provenance'] = provenance
     installed = created = False
     remote = None
     directory = '/tmp/fc-orchestrator-normal-' + secrets.token_hex(8)
@@ -183,14 +190,16 @@ def main():
                      .serial_number(x509.random_serial_number()).not_valid_before(now-datetime.timedelta(days=1))
                      .not_valid_after(now+datetime.timedelta(days=1))
                      .add_extension(x509.SubjectAlternativeName([x509.DNSName('android.test')]),False).sign(tls_key,hashes.SHA256()))
-        config = {'log': {'loglevel': 'none'}, 'inbounds': [{'listen': '186.246.45.246', 'port': args.port,
+        config = {'log': {'loglevel': 'none'}, 'inbounds': [{'listen': args.host, 'port': args.port,
                   'protocol': 'vless', 'settings': {'clients': [{'id': device_id, 'flow': 'xtls-rprx-vision'}], 'decryption': 'none'},
                   'streamSettings': {'network': 'raw', 'security': 'reality', 'realitySettings': {'show': False,
                   'target': '127.0.0.1:1', 'xver': 0, 'serverNames': ['android.test'],
                   'privateKey': encode(key.private_bytes(Encoding.Raw, PrivateFormat.Raw, NoEncryption())), 'shortIds': [short_id]}}}],
                   'outbounds': [{'protocol': 'freedom'}]}
-        run([*SSH, 'test -z "$(ss -H -lnt sport = :'+str(args.port)+')" && umask 077 && mkdir '+directory]); created = True
-        run([*SSH, 'gzip -d > '+directory+'/xray && chmod 700 '+directory+'/xray'], input=gzip.compress(args.xray.read_bytes(), compresslevel=1), timeout=180)
+        if args.trace:
+            config['log']['loglevel'] = 'debug'
+        run([*ssh, 'test -z "$(ss -H -lnt sport = :'+str(args.port)+')" && umask 077 && mkdir '+directory]); created = True
+        run([*ssh, 'gzip -d > '+directory+'/xray && chmod 700 '+directory+'/xray'], input=gzip.compress(args.xray.read_bytes(), compresslevel=1), timeout=180)
         supervisor = ('import subprocess,sys,threading,json,time,ssl,socket,os,base64;from pathlib import Path;root=Path('+repr(directory)+');os.umask(0o077);'
                       'raw=sys.stdin.buffer.read(16385);assert len(raw)<=16384;bundle=json.loads(raw);'
                       '(root/"tls.pem").write_bytes(base64.b64decode(bundle["tls"]));'
@@ -209,7 +218,7 @@ def main():
                       'threading.Thread(target=accept,daemon=True).start()\n'
                       'config=bundle["xray"];config["inbounds"][0]["streamSettings"]["realitySettings"]["target"]="127.0.0.1:"+str(listener.getsockname()[1]);'
                       'raw=json.dumps(config).encode();'
-                      'child=subprocess.Popen([str(root/"xray"),"run","-config","stdin:"],stdin=subprocess.PIPE);'
+                      'child=subprocess.Popen([str(root/"xray"),"run","-config","stdin:"],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.STDOUT);'
                       '(root/"pid").write_text(str(child.pid));child.stdin.write(raw);child.stdin.close();\n'
                       'def sample():\n'
                       ' peak=0\n'
@@ -217,17 +226,24 @@ def main():
                       '  result=subprocess.run(["ss","-H","-nt","state","established","sport = :'+str(args.port)+'"],capture_output=True,timeout=3)\n'
                       '  peak=max(peak,len(result.stdout.splitlines()));(root/"counts.json").write_text(json.dumps({"established_peak":peak}));time.sleep(1)\n'
                       'threading.Thread(target=sample,daemon=True).start()\n'
+                      'exec('+repr((Path(__file__).parent/'normal_trace.py').read_text())+')\n'
+                      'addresses={entry[4][0] for host in ("example.com","example.org") for entry in socket.getaddrinfo(host,443)}\n'
+                      'trace=Trace(addresses)\n'
+                      'def collect():\n'
+                      ' for line in iter(child.stdout.readline,b""):\n'
+                      '  trace.accept(line[:8192].decode(errors="replace"));(root/"trace.json").write_text(json.dumps(trace.snapshot()))\n'
+                      'threading.Thread(target=collect,daemon=True).start()\n'
                       'try: child.wait(timeout=600)\n'
                       'except subprocess.TimeoutExpired: child.terminate();child.wait(timeout=10)\n')
         command = 'python3 -c '+shlex.quote(supervisor)
-        remote = subprocess.Popen([*SSH, command], stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        remote = subprocess.Popen([*ssh, command], stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         tls_pem=certificate.public_bytes(Encoding.PEM)+tls_key.private_bytes(Encoding.PEM,PrivateFormat.PKCS8,NoEncryption())
         remote.stdin.write(json.dumps({'xray':config,'tls':base64.b64encode(tls_pem).decode()}).encode());remote.stdin.close()
         time.sleep(3)
         if remote.poll() is not None:
             raise RuntimeError('isolated normal fixture exited')
         adb('install', '-t', str(args.apk), timeout=120); installed = True
-        profile = {'type': 'vless-reality-v1', 'server': '186.246.45.246', 'port': args.port, 'id': device_id,
+        profile = {'type': 'vless-reality-v1', 'server': args.host, 'port': args.port, 'id': device_id,
                    'public_key': public, 'server_name': 'android.test', 'short_id': short_id}
         private('mkdir -p no_backup; umask 077; cat > no_backup/auto-tcp.profile', input=json.dumps(profile).encode())
         prepare();connect(permission=True)
@@ -243,6 +259,12 @@ def main():
                     time.sleep(1)
         summary['browser'] = [] if args.lifecycle_only else browser()
         summary['browser_pass'] = bool(summary['browser']) and all(item['controlled_content'] and item['vpn']['owners'] == 1 for item in summary['browser'])
+        print(json.dumps({'ordinary_probe': summary.get('ordinary_probe'), 'browser': summary['browser']}), flush=True)
+        if args.normal_only:
+            if not summary['browser_pass']:
+                raise RuntimeError('fresh normal Chrome failed; diagnostics retained')
+            summary['result'] = 'NORMAL BROWSER PASS / RESTRICTED NOT RUN'
+            return
         activity('OrchestratorDiagnosticActivity', 'failure')
         deadline = time.monotonic()+60
         while time.monotonic()<deadline:
@@ -306,8 +328,13 @@ def main():
             except Exception:
                 cleanup['device'] = False
         if created:
+            if args.trace:
+                try:
+                    summary['trace'] = json.loads(run([*ssh, 'cat '+directory+'/trace.json']))
+                except Exception:
+                    summary['trace'] = {'unavailable': True}
             try:
-                summary['fixture_tcp'] = json.loads(run([*SSH, 'cat '+directory+'/counts.json']))
+                summary['fixture_tcp'] = json.loads(run([*ssh, 'cat '+directory+'/counts.json']))
             except Exception:
                 summary['fixture_tcp'] = {'sampling_unavailable': True}
             try:
@@ -315,7 +342,7 @@ def main():
                         'pid=int((root/"pid").read_text()) if (root/"pid").exists() else 0;'
                         'owned=pid>0 and Path("/proc/%s/exe"%pid).exists() and os.readlink("/proc/%s/exe"%pid)==str(root/"xray");'
                         'os.kill(pid,signal.SIGTERM) if owned else None;shutil.rmtree(root)')
-                run([*SSH, 'python3 -c '+shlex.quote(code)])
+                run([*ssh, 'python3 -c '+shlex.quote(code)])
                 if remote is not None:remote.wait(timeout=15)
                 cleanup['server'] = True
             except Exception:
