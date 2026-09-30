@@ -30,6 +30,7 @@ import java.util.Arrays;
 public final class ProbeService extends Service {
     private static final Set<String> EVENTS = new HashSet<>(Arrays.asList("start", "connected", "family_auth", "probe_result", "probe_failed", "suite_complete", "summary", "resources", "perf_warmup", "perf_sample", "perf_blocks", "perf_result", "reliability_final", "tcp_open", "tcp_open_error", "tcp_result", "tcp_sample", "mux_open", "mux_https", "mux_dns", "mux_bulk", "mux_stream", "mux_interactive", "mux_sample", "mux_result", "mux_isolation"));
     static { EVENTS.add("mux_dns_guard"); }
+    static { EVENTS.addAll(Arrays.asList("bootstrap_cache_stored", "bootstrap_normal_control_unavailable", "bootstrap_cache_loaded", "bootstrap_carrier_connected", "bootstrap_family_auth", "bootstrap_descriptor_received", "bootstrap_closed_before_dedicated")); }
     final class LocalBinder extends Binder { ProbeService service() { return ProbeService.this; } }
     private final LocalBinder binder = new LocalBinder();
     private final NativeRun run = new NativeRun();
@@ -96,6 +97,15 @@ public final class ProbeService extends Service {
             return;
         }
         final String broker = brokerEndpoint;
+        final String bootstrapMode;
+        try {
+            File input = new File(getFilesDir(), "bootstrap.input");
+            if (input.exists() && (!input.isFile() || input.length() > 16)) throw new IllegalArgumentException();
+            bootstrapMode = BootstrapMode.parse(input.isFile() ? java.nio.file.Files.readAllBytes(input.toPath()) : null, broker);
+        } catch (Exception ignored) {
+            record(event("android_failure", "reason", "BOOTSTRAP_INPUT_INVALID"));
+            return;
+        }
         if ((!broker.isEmpty() && (!broker.startsWith("https://") || (room != null && !room.isEmpty()))) ||
             (broker.isEmpty() && (room == null || room.length() > 2048 || !room.startsWith("https://")))) {
             record(event("android_failure", "reason", "ROOM_INPUT_INVALID"));
@@ -156,6 +166,10 @@ public final class ProbeService extends Service {
                 builder.environment().remove("FC_TELEMOST_ROOM");
             }
             builder.environment().put("SSL_CERT_DIR", "/system/etc/security/cacerts:/apex/com.android.conscrypt/cacerts");
+            if (!bootstrapMode.isEmpty()) {
+                builder.command().addAll(Arrays.asList("--bootstrap-cache", new File(getNoBackupFilesDir(), "bootstrap.json").getAbsolutePath()));
+                if (bootstrapMode.equals("refresh")) builder.command().add("--bootstrap-refresh");
+            }
             builder.redirectError(new File("/dev/null"));
             try { return builder.start(); }
             finally { builder.environment().remove("FC_TELEMOST_ROOM"); }

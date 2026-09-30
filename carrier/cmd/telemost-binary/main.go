@@ -43,6 +43,8 @@ func run() error {
 	metricsInterval := flag.Duration("metrics-interval", 0, "optional memory/CPU sample interval (1s to 1m; zero disables)")
 	familyConfig := flag.String("family-config", "", "private isolated 5N.3 credentials file; no production identity")
 	brokerURL := flag.String("broker-url", "", "automatic authenticated room control endpoint; no manual room")
+	bootstrapCache := flag.String("bootstrap-cache", "", "app-private bootstrap cache path")
+	bootstrapRefresh := flag.Bool("bootstrap-refresh", false, "cache directory over normal authenticated control then exit")
 	performanceFile := flag.String("performance-config", "", "bounded test-only performance point JSON")
 	performanceObserver := flag.Bool("performance-observer", false, "test-only echo timing and numeric WebRTC statistics")
 	tcpFile := flag.String("tcp-config", "", "single TCP test request JSON; authenticated VP8 only")
@@ -95,7 +97,20 @@ func run() error {
 	defer cancel()
 	roomURL := os.Getenv("FC_TELEMOST_ROOM")
 	var descriptor roombroker.Descriptor
-	if *brokerURL != "" {
+	if *bootstrapRefresh && *bootstrapCache == "" {
+		return errors.New("bootstrap cache required")
+	}
+	if *bootstrapCache != "" {
+		if *familyConfig == "" || *brokerURL == "" || *role != "probe" || mode != telemost.ModeVP8 || roomURL != "" || (!*bootstrapRefresh && *muxFile == "") {
+			return errors.New("invalid bootstrap options")
+		}
+		var err error
+		descriptor, err = bootstrapRoom(ctx, *familyConfig, *bootstrapCache, *brokerURL, *bootstrapRefresh)
+		if err != nil || *bootstrapRefresh {
+			return err
+		}
+		roomURL = descriptor.JoinURL
+	} else if *brokerURL != "" {
 		if *familyConfig == "" || *role != "probe" || *muxFile == "" || mode != telemost.ModeVP8 || roomURL != "" {
 			return errors.New("broker requires authenticated mux probe without manual room")
 		}
@@ -146,6 +161,9 @@ func run() error {
 	metadata["room_method"] = "operator-provided disposable room"
 	if *brokerURL != "" {
 		metadata["room_method"] = "authenticated automatic broker"
+	}
+	if *bootstrapCache != "" {
+		metadata["room_method"] = "cached bootstrap Telemost rendezvous"
 	}
 	if err := emit(metadata); err != nil {
 		return errors.New("metrics output failed")
