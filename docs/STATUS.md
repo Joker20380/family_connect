@@ -1,5 +1,103 @@
 # Текущее состояние / Current state
 
+## 30.09.2026 — repository synchronization checkpoint
+
+User-authorized main→origin/main sync only; no development or deployment.
+Starting HEAD `a8961e8`, fetched origin `8e36858`:58 existing outgoing commits,
+all26 supplied milestone IDs are ancestors. Completed operational worker and
+sanitized VPN/disk/TLS reports preserved in separate commits; original work retained.
+Focused reconciliation suite32 PASS, unit verify PASS, publication/history scan PASS.
+Latest pre-sync remote phase0 run36268143806 had tests PASS but failover build FAIL;
+this sync does not claim green full CI or repair that existing failure.
+Versions remain Android0.1.18-beta51/code51,Linux0.2.11,Windows0.2.15;
+no public artifact/install/invitation revalidation. No production changes.
+[Audit, commit inventory and verification procedure](releases/2026-09-30-repository-sync.ru.md).
+Push authorization supersedes older no-push notes only; all development STOP gates
+and operational follow-ups below remain unchanged. Post-push SHA equality is checked
+after this checkpoint commit and reported in the task result.
+
+## 30.09.2026 — read-only VPN audit, 10:44–10:46 UTC
+
+Devices25/valid21/revoked4 unchanged. NL5 handshakes<5min/9<24h/4 transferring
+in10s; RU0. NL AWG TX1.70Mbit/s10s,1.81Mbit/s60s; CPU4.14%/5.55%.
+RU CPU13.11%,AWG idle. AWG/TCP starts unchanged; access API active but its
+start changed to30.09 03:28:04UTC; cause not yet established.
+HTTPS:8443 TLS PASS/cert until05.10 12:25:56UTC; renewal09:02:48UTC success.
+NL disk await96.92ms60s/138.56ms today remains high; worker Docker unhealthy.
+First SSH attempt failed No route to host on both, retries successful.
+No deployment/version change. [Evidence/remaining checks](releases/2026-09-30-vpn-health.ru.md).
+
+## 29.09.2026 — load increase confirmed, 19:39–19:41 UTC
+
+Read-only recheck: NL AWG TX17.19Mbit/s over10s (previous0.0065),
+subsequent60s average9.03Mbit/s; CPU busy18.39%/11.68% respectively.
+NL4 recent handshakes/3 transferring, devices25/valid21 unchanged; RU AWG idle.
+NL available RAM487MiB, minute disk await95.78ms: latency remains open.
+Services active/starts unchanged; HTTPS:8443 PASS; worker still unhealthy.
+No rollout/version change; see [repeat audit](releases/2026-09-29-vpn-health.ru.md#повторный-замер-19391941utc).
+
+## 29.09.2026 — read-only VPN snapshot, 17:51–17:52 UTC
+
+Devices25/non-revoked21/revoked4; invites79/used25. NL20 peers,
+4 latest-handshake<5min/11<24h/3 transferring in10s; RU10/0/0/0.
+CPU10s NL4.01%/RU12.93%; available RAM512/1087MiB; disk24%/69%.
+AWG/TCP/API active, starts unchanged; verified public HTTPS:8443 PASS.
+NL daily-to20:50MSK disk await144.30ms remains elevated (mixed pre/post mitigation).
+Peer worker active but Docker unhealthy; outbox/worker cycles not rechecked.
+No versions, deployment or services changed; previous uncommitted work preserved.
+Details/checks/remaining work: [evening audit](releases/2026-09-29-vpn-health.ru.md#вечерняя-проверка-17511752utc).
+
+## 29.09.2026 — повторный read-only VPN audit, 12:32–12:35 UTC
+
+25 activated devices/21 non-revoked/4 revoked, unchanged; NL20 peers,
+11 latest-handshake<24h/3<5min/3 transferring in10s; RU10/0/0.
+AWG/TCP/API active, starts unchanged. HTTPS **:8443** verified, cert until
+05.10 12:25:56UTC; automatic renewal service09:04:21UTC success.
+Peer worker running,17 recent cycles exit0, but Docker unhealthy: inherited
+HTTP API healthcheck does not match worker role. No repair in this read-only task.
+Disk await today-to15:30MSK NL144.63ms/RU33.34ms, not a post-mitigation-only sample.
+Versions unchanged; no rollout/restart. Details and remaining checks:
+[audit follow-up](releases/2026-09-29-vpn-health.ru.md#повторная-проверка-12321235utc).
+
+## 29.09.2026 — disk I/O mitigation deployed, residual NL latency open
+
+[Diagnosis/results/rollback](releases/2026-09-29-disk-io-recovery.ru.md).
+RU persistent peer supervisor deployed (existing image0.2.1), old timer disabled;
+same15s post-cycle/60s timeout, fresh child processes, sanitized bounded logs.
+NL Fail2ban1.1.0-9 SSH-only22, control/operator exclusions;9 banned in final sample.
+Final comparable ~minute writes RU17.83→9.79MiB,NL3.40→1.87MiB;
+io.full stall RU3.20→1.48s,NL2.22→1.29s. Subsequent3min writes8.47/2.32MiB/min,
+write-await14.77/117.31ms RU/NL. **Residual NL latency remains**;
+short varying-load samples do not prove full repair or a provider fault.
+32 tests PASS;36 observed live cycles0failures/outbox3matched0errors/oldest10s;
+chat-sync/HTTPS PASS, VPN/API/mailbox start times unchanged. No client version change.
+Monitor sustained behaviour/remaining NL latency and automatic TLS renewal.
+
+## 29.09.2026 — TLS renewal/reload recovery PASS, 08:32 UTC
+
+User-authorized start of `family-connect-product-cert-renew` completed08:32:25UTC,
+Result=success/ExecMainStatus0. Certbot reported not yet due; existing renewed
+certificate was applied by nginx validation/reload. Public verified HTTPS now serves
+IP185.251.89.19 certificate valid through05.10 12:25:56UTC (previously01.10).
+Certificate symlink mtime28.09 21:24:29UTC coincides with prior timeout;
+issuance was already on disk, but public ingress still served the old certificate.
+AWG/TCP/API starts unchanged, timer active/next29.09 09:18:29UTC.
+No client/version/config change. Monitor next scheduled cycle; timeout cause not
+established. [Recovery details](releases/2026-09-29-vpn-health.ru.md#tls-recovery-29-сентября-0832utc).
+
+## 29.09.2026 — read-only VPN health, 08:15–08:18 UTC
+
+[Аудит](releases/2026-09-29-vpn-health.ru.md):25 activated devices/21 non-revoked/4 revoked;
+NL20 AWG peers/12 last-handshake<24h/3 transferring in10s, RU10/0/0.
+28.09 server-local MSK: NL AWG≈13.784GiB, CPU user+system5.41%, RU19.95%;
+disk await NL159.09ms/RU37.70ms remains a risk, not diagnosed cause.
+AWG/TCP/API active; public HTTPS TLS verified. **RU cert renewal failed(timeout)**
+28.09 21:24:29UTC; live certificate expires01.10 12:19:14UTC; next timer
+29.09 09:26:17UTC. Renewal success must be checked; no repair/restart performed.
+Versions unchanged: Android0.1.18-beta51/code51, Linux0.2.11, Windows0.2.15
+(last documented release, not a fresh artifact/install audit). No rollout/rollback.
+Full outage history and end-to-end client acceptance remain unverified.
+
 ## 28.09.2026 — 5N-RB-1 = PASS: automatic Telemost room broker
 
 Authorized isolated gate starts8d899ab; core ff25246, adapters/tests398df64.
@@ -74,6 +172,21 @@ gateway recorded PIDs absent, temp fixtures/worktrees/private credentials/logs/b
 removed; radios1/1 restored. Production/public/invitation versions unchanged.
 No unfinished5N.4 acceptance checks; no TUN/mux/5N.5/rollout/push or production-ready
 claim. Foreign VPN audit changes retained separately. **STOP after5N.4.**
+
+## 27.09.2026 — использование VPN за26–27.09
+
+[Read-only аудит](releases/2026-09-27-vpn-health.ru.md), сутки Europe/Brussels,
+27.09 до23:10: Friends23 устройства/19 действующих (+1 к утру26.09).
+NL минимум9 устройств сегодня,3 свежих handshake/рост счётчиков в коротком замере;
+RU0 за24ч. Полного DAU/истории TCP нет. AWG NL19.143ГиБ вчера/13.764ГиБ сегодня,
+RU≈1.2МиБ вчера/ниже точности сегодня. CPU среднее NL5.68%/6.02%, RU20.31%/20.19%.
+AWG/TCP active, сегодня без restart по current start; RU вчерашний restart связан
+с SIGTERM fix. Journal reads timed out и совпали с дисковым давлением;
+NL iowait1.96% к21:14UTC, RU6.38% к21:17UTC, RU sync success; всплеск закончился.
+Историческое отсутствие ошибок
+не доказано; остаются мягкая диагностика диска, история устройств/TCP и E2E.
+Версии beta51/code51, Linux0.2.11, Windows0.2.15 и production не менялись;
+rollout/rollback нет, проверки агрегатов PASS, platform tests не требовались.
 
 ## 27.09.2026 — 5N-PERF-2 = PASS: reliable operating envelope
 

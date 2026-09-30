@@ -2,6 +2,52 @@
 
 ## Current engineering priority / Текущий critical path
 
+- 30.09 repository sync only: preserve completed worker, disk/TLS/VPN audits and
+  existing58-commit history; focused32 tests/unit verification/publication scan PASS.
+  Push main to origin/main without force, then fetch and verify exact HEAD equality.
+  [Sync checkpoint/inventory](releases/2026-09-30-repository-sync.ru.md).
+  Older no-push notes are historical for this authorized synchronization only.
+  No BOOT-1/TUN/Orchestrator/new development or production work; stop after sync.
+  Existing pre-sync CI failover-build failure and operational follow-ups remain open.
+
+- 30.09 10:44–10:46UTC VPN audit: traffic lower than last evening, devices25/21
+  unchanged, VPN services active. Follow up RU access API restart03:28:04UTC,
+  NL disk await96.92ms60s, worker healthcheck/outbox and client end-to-end.
+  HTTPS/cert-renew PASS; no deployment/version/5N gate changes.
+  [Report](releases/2026-09-30-vpn-health.ru.md).
+
+- 29.09 19:39–19:41UTC repeat load check confirms increased NL VPN traffic:
+  AWG TX17.19Mbit/s10s,9.03Mbit/s60s; no CPU/RAM saturation in samples.
+  Devices25/valid21 unchanged. Keep NL disk latency (minute await95.78ms),
+  worker healthcheck/outbox and client acceptance open. No rollout/version/5N change.
+
+- 29.09 17:51–17:52UTC read-only VPN snapshot:25 devices/21 valid unchanged;
+  NL4 recent handshakes/3 transferring, RU0; CPU4.01%/12.93% NL/RU.
+  HTTPS:8443 PASS, service starts unchanged. Keep worker healthcheck/outbox,
+  sustained NL disk latency and physical-client checks open; no deployment,
+  version change or change to5N STOP. See evening section in VPN health report29.09.
+
+- 29.09 12:32–12:35UTC read-only follow-up: VPN traffic and :8443 TLS PASS;
+  automatic certificate service09:04:21UTC success. Devices25/valid21 unchanged.
+  Follow up worker Docker unhealthy (inherited API healthcheck,17 recent cycles0),
+  sustained NL disk latency and physical-client acceptance; no changes authorized
+  or performed by this audit. Versions/rollout/5N gates unchanged.
+
+- 29.09 authorized [disk mitigation](releases/2026-09-29-disk-io-recovery.ru.md)
+  deployed: RU persistent reconciler (same15s/60s semantics), NL SSH Fail2ban.
+  ~45% fewer disk writes in short samples, live checks/32 tests PASS; no VPN restarts.
+  Subsequent3min sampling confirms lower writes, but NL write-await117ms remains;
+  next operational check is daily sampling
+  after SSH protection warms up, then VPS IOPS/latency investigation if reproduced.
+  No claim of full disk repair, no change to client versions or5N gates.
+
+- 29.09 [VPN audit and authorized TLS recovery](releases/2026-09-29-vpn-health.ru.md):
+  manual service run08:32:25UTC success; nginx now serves existing renewed IP cert
+  through05.10 12:25:56UTC, VPN/API starts unchanged. Timer active, next observed
+ 29.09 09:18:29UTC; monitor that cycle and diagnose earlier timeout if repeated.
+  Retain disk-latency diagnosis, privacy-safe usage history/alerts
+  and client end-to-end checks as follow-ups. No version/rollout/5N gate changes.
+
 - **5N-RB-1 = PASS**, authorized28.09, core ff25246/integration398df64:
   one fresh official PUBLIC room per admitted bounded setup; gateway READY before
   Android descriptor; expiry/replay/device binding and cleanup. Physical Redmi→
@@ -125,6 +171,15 @@
   подключить», без утверждения «строго одно устройство».
 
 Gate-таблица и порядок — ниже в секции `DECISION25.09 — Restricted WebRTC → Linux EU`.
+
+27.09: [read-only аудит VPN за26–27.09](releases/2026-09-27-vpn-health.ru.md).
+23 устройства/19 действующих; NL минимум9 сегодня, полный DAU неизвестен.
+AWG NL19.143/13.764ГиБ (Brussels, сегодня до23:10); RU почти без трафика.
+CPU среднее NL5.68/6.02%, RU20.31/20.19%; AWG/TCP active, версий/rollout нет.
+Journal reads timed out, дисковое давление после чтения прошло: NL iowait1.96%
+к21:14UTC, RU6.38% к21:17UTC, RU sync success. Отдельный ops backlog: мягкая диагностика
+диска без тяжёлых journal scans, обезличенная история DAU/одновременности/TCP,
+alerts и E2E. Не меняет порядок5N-PERF-2 и не разрешает production changes.
 
 26.09: [аудит использования и сбоев VPN](releases/2026-09-26-vpn-health.ru.md).
 22 устройства/18 действующих (+4 с24.09); NL12 с handshake<24ч,4 свежих,
