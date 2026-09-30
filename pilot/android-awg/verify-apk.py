@@ -16,7 +16,9 @@ with zipfile.ZipFile(apk) as z:
  assert manifest['engine_revision']=='b5928efb6ca19f0153958460c3d141f04abc5c2e'
  assert manifest['engine_patch_sha256']==hashlib.sha256((root/'pilot/awg31/patches/0001-refresh-s4-after-tun-read.patch').read_bytes()).hexdigest()
  assert manifest['interface_patch_sha256']==hashlib.sha256((root/'pilot/android-awg/awg31-interface.patch').read_bytes()).hexdigest()
- assert set(manifest['abis'])=={'arm64-v8a','armeabi-v7a','x86','x86_64'}
+ assert expected <= set(manifest['abis']) <= {'arm64-v8a','armeabi-v7a','x86','x86_64'}
+ for field,path in [('tcp_source_sha256','pilot/android-tcp/tcp-android.go'),('tcp_jni_sha256','pilot/android-tcp/tcp-jni.c')]:
+  assert manifest[field]==hashlib.sha256((root/path).read_bytes()).hexdigest(), field
  actual={n.split('/')[1] for n in z.namelist() if n.startswith('lib/') and n.endswith('.so')}
  assert actual==expected, (actual,expected)
  for abi in expected:
