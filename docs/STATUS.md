@@ -1,6 +1,29 @@
 # Текущее состояние / Current state
 
-## CURRENT PRODUCT STATE — 30.09.2026 / MVP Connectivity Orchestrator
+## CURRENT PRODUCT STATE — 01.10.2026 / MVP Connectivity Orchestrator
+
+**MVP CONNECTIVITY ORCHESTRATOR = PASS — isolated physical follow-up.**
+Исходный FAIL ниже сохранён. Fresh current-source arm64 normal JNI воспроизвёл отказ:
+Chrome выбирал объявленный IPv6 address, а isolated Amsterdam не имеет IPv6 egress;
+backend `network is unreachable` закрывал поток после локального TUN handshake.
+Fix `afb6c1b` убирает только неподтверждённый IPv6 source address automatic TCP,
+сохраняя обе capture routes и policy. Тот же JNI: Chrome2/TLS200×2 PASS,
+normal572ms, alternate3525ms, restoration1414ms/retained FAILED PASS. Fresh BOOT-1
+AWG→WG→TCP diagnostic exhaustion → restricted32621ms, Chrome6/6 и HTTPS/TLS2×200,
+Family DNS125 requests/115 responses,18 concurrent TCP PASS. Smoke602.6s без
+crash/flapping/retry storm; injected loss → RESTORING→FAILED138ms с retained VPN
+и blocked ordinary TCP. DNS/TCP bypass0 в принятом primary-user route/backend/app
+scope, не modem-wide pcap; UDP/IPv6 fail-closed, protect116/denied0, underlay DNS16
+без роста. PSS peak120019KiB, RSS194792KiB; battery31.3→32.3°C USB. Не скрыты
+mux ProtocolErrors7/DNSTimeouts8/OpenErrors1, без browser failure; не zero-error SLA.
+JVM185/Python98/race/vet/native/APK/lint PASS; live AWG/full four-ABI/emulator matrix
+не повторялись. Current reviewed source `12d4f40`, fix `afb6c1b`, provenance `87272e1`.
+Diagnostic APK/cache/remote fixtures/private activation удалены; VPN owners0.
+OAuth только в process memory для final live run; never persisted. Public versions,
+catalogs/invitation pages/production неизменны; no push. **FIELD-1 NOT STARTED; STOP.**
+Подробности и native/APK hashes — [follow-up ledger](releases/2026-09-30-mvp-connectivity-orchestrator.ru.md#follow-up-01102026--два-acceptance-blockers).
+
+### Исходная acceptance 30.09 (исторический FAIL)
 
 **MVP Connectivity Orchestrator = FAIL acceptance; implementation complete, restricted live BLOCKED.**
 Starting/main/origin HEAD8886fd03398ffecd82ab4f66ff6d9884846e628c, clean.

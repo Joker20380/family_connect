@@ -13,15 +13,18 @@
    engine → cached BOOT-1/dedicated Family Mux/DNS; Chrome2 sites,14 concurrent TCP,
    98 DNS,543.7s smoke, protected underlay, UDP/IPv6 fail-closed, controlled session
    failure с сохранением TUN, cleanup. [Отчёт/scope](releases/2026-09-30-webrtc-eu6-android-full-device.ru.md).
-3. **Minimum viable Connectivity / Transport Orchestrator — IMPLEMENTED / ACCEPTANCE FAIL.**
+3. **Minimum viable Connectivity / Transport Orchestrator — PASS, isolated physical01.10.**
    Одна кнопка, bounded deterministic state machine, same-owner guard/handover,
    normal preference/LKG → alternate normal → BOOT-1/fresh dedicated whole-device,
    sticky healthy path, один restoration pass. Redmi normal/alternate/restoration/
-   bounded exhaustion проверены. Fresh BOOT-1 activation отсутствует; нужны Auto
-   restricted browser/Family DNS/concurrency/leak/cancellation/smoke evidence.
-   Chrome normal получил ERR_CONNECTION_CLOSED при working Java HTTPS: NEXT —
-   локализовать/исправить browser failure, затем закрыть restricted acceptance.
-   Gate **FAIL**, не FIELD-1;
+   bounded exhaustion проверены. Follow-up01.10: fresh current-source JNI исключил
+   stale binary как причину Chrome failure. Исправлено неподтверждённое IPv6 source
+   advertisement automatic TCP при IPv4-only gateway; Chrome2/HTTPS/alternate/
+   restoration PASS. Fresh activation/OAuth: automatic restricted32621ms, Chrome6/6,
+   HTTPS/TLS2×200, Family DNS/concurrency/underlay/UDP/IPv6 fail-closed PASS.
+   Smoke602.6s без crash/flapping/retry storm; controlled loss RESTORING→FAILED138ms,
+   retained VPN и blocked ordinary TCP. Final cleanup PASS, OAuth не persisted.
+   Исходный FAIL сохранён; no public rollout/push/production changes. STOP, не FIELD-1;
    [отчёт, blockers и оставшиеся physical checks](releases/2026-09-30-mvp-connectivity-orchestrator.ru.md).
 4. **Krasnodar FIELD-1 (NOT RUN).** Реальная ограниченная мобильная сеть,
    обычное устройство и приложения, без engineering harness.
@@ -51,7 +54,7 @@ STOP после текущего gate; отсутствие live evidence не �
 | C — Restricted data plane + setup proof | TECHNICALLY PROVEN, isolated physical acceptance | 5N.1–5N.5, ReliableStream, DNS containment и Room Broker. Broker — control-plane proof, не production bootstrap. |
 | D — Restricted bootstrap | PASS / 5N-BOOT-1, isolated physical | Cached authenticated directory/restart → bounded seed → Family TLS → broker READY → separate dedicated session; no control forwarding. Diagnostic endpoint-denial, не FIELD-1/production. |
 | E — Android full-device | PASS / isolated physical5N.6 | Existing OS lifecycle/packet path ↔ existing 5N core; ordinary Chrome/TCP/Family DNS, protected underlay, fail-closed failure и UDP/IPv6, bounded cleanup. Diagnostic opt-in, не public release/iOS. |
-| F — Minimum viable Orchestrator | IMPLEMENTED / ACCEPTANCE FAIL | Normal lifecycle partial PASS; normal Chrome ERR_CONNECTION_CLOSED, fresh restricted Auto acceptance BLOCKED. Не переходить к FIELD-1. |
+| F — Minimum viable Orchestrator | PASS / isolated physical01.10 | Fresh native; normal Chrome IPv6-advertisement fix; automatic normal exhaustion→BOOT-1/restricted, browser/DNS/concurrency/containment,602.6s smoke/restoration/cleanup. Original FAIL retained; no public rollout. FIELD-1 не запускать. |
 | G — FIELD-1 | AFTER F / NOT RUN | Реальный restricted/allowlist mobile field, сначала Краснодар; не лабораторный echo. |
 | H — Product beta | AFTER G / PLANNED | 50–100 пользователей: reliability, battery/heat, support и invitation UX. |
 | I — Scale / iOS / carriers | LATER, после beta evidence | iOS, multi-user load, дополнительные gateways/carriers, масштабирование инфраструктуры, monetization/referrals. |

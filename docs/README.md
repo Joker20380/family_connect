@@ -6,7 +6,7 @@
 implemented beta / proven experimental / planned разделены явно.
 [MVP Orchestrator implementation / текущая acceptance](releases/2026-09-30-mvp-connectivity-orchestrator.ru.md):
 одно CONNECT, bounded normal fallback/BOOT-1, existing VPN owner и fail-closed guard;
-не public rollout и пока не full physical PASS.
+isolated physical PASS01.10 с сохранённым initial FAIL; не public rollout/не FIELD-1.
 5N.1–5N.5, ReliableStream/DNS containment и automatic Room Broker приняты;
 production restricted bootstrap и whole-device integration ещё отсутствуют.
 [5N-BOOT-1 PASS / isolated physical cached-state acceptance](releases/2026-09-30-webrtc-5n-boot1-bootstrap.ru.md):
