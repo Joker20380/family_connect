@@ -208,3 +208,20 @@ crypto/mux/tun2socks library is selected or licensed by this decision. Inspect t
 existing Xray TUN conversion boundary first; its MPL-2.0 obligations still apply
 if modified. Audit exact versions and transitive licenses before implementing the
 new Family encrypted session/reliability/mux. Root proprietary LICENSE is unchanged.
+
+## EU-6 diagnostic packet reuse — 2026-09-30
+
+The isolated Android adapter reuses the existing product packet dependencies:
+Xray `v1.260327.0`, commit `d2758a023cd7f4174a5a5fa4ff66e487d4342ba0` (MPL-2.0),
+gVisor `v0.0.0-20260122175437-89a5d21be8f0` (Apache-2.0), and the existing Family
+carrier dependency graph. It is not a new TCP/IP stack or copied bypass project.
+Exact module closure is recorded in `pilot/android-restricted/go.mod` and `go.sum`.
+The existing Xray ConnectionHandler boundary is opened by
+`pilot/android-restricted/xray-packet-boundary.patch`; modifications to MPL files
+remain subject to MPL, not relicensed by the proprietary repository root.
+`build.py` requires the exact upstream pin, archives it, applies the patch and
+packages the patch, Xray/gVisor license texts and existing carrier notices in
+diagnostic APK assets, with patch/binary hashes. No public distribution is made;
+any future distribution must supply corresponding modified MPL source and retain
+all applicable transitive notices, rather than treating this note as a waiver.
+Provider API permission/quotas and license permission remain separate matters.

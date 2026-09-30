@@ -70,7 +70,7 @@ Telemost call is evidence of a service path, not proof of our bootstrap or VPN.
   OS boundary (not a wire layer below every transport):
   Android apps <-> existing VPN lifecycle / packet adapter [IMPLEMENTED]
                  -> normal transport engines [IMPLEMENTED]
-                 -> 5N Mux/DNS/TCP core binding [PLANNED: 5N.6]
+                 -> 5N Mux/DNS/TCP core binding [PROVEN EXPERIMENTAL; EU-6 physical PASS]
   Future iOS PacketTunnel adapter [PLANNED; no iOS client]
 ```
 
@@ -78,7 +78,15 @@ This is a responsibility map, not a claim that all transports share one wire
 stack or already run under a new orchestrator. Room Broker belongs to the
 control/product plane; bootstrap must make its authenticated setup reachable
 without assuming ordinary API access. **Cached-state restricted bootstrap passed
-isolated physical acceptance**; full-device integration remains the next gate.
+isolated physical acceptance**; full-device integration also passed EU-6 in the
+isolated primary-user route/backend/app scope, not production or modem-wide pcap.
+Its opt-in implementation reuses ConnectionService/TcpVpnService and the existing
+Xray/gVisor packet engine, with shared `carrier/wholedevice` and per-session
+protected `carrier/underlay`. TUN routes activate only after dedicated Family
+TLS/binding/Mux readiness. IPv6 and unsupported UDP are captured/rejected; session
+failure retains TUN rather than enabling direct fallback. This is not a new
+Orchestrator, always-on lockdown, or a public release. Exact physical maturity:
+[EU-6 report](releases/2026-09-30-webrtc-eu6-android-full-device.ru.md).
 
 ### Accepted restricted path
 
@@ -96,6 +104,7 @@ Core TCP streams + DNS wire queries -> Mux -> Family TLS 1.3
 | [5N.4](releases/2026-09-28-webrtc-eu4-single-tcp.ru.md) | Real outbound TCP to Internet; verified end-site HTTPS TLS, no gateway MITM. |
 | [5N.5](releases/2026-09-28-webrtc-eu5-mux-dns.ru.md) | Four simultaneous public HTTPS streams; 304.138s mixed TCP + Family DNS, exact bytes, fair scheduling and bounded buffers; destination DNS containment/hardening. |
 | [5N-RB-1](releases/2026-09-28-webrtc-5n-room-broker.ru.md) | Official Telemost API, server-side OAuth only; gateway joins first/READY, physical Android obtains automatic descriptor and joins; Family TLS + four verified HTTPS200; no manually supplied room URL. |
+| [5N.6](releases/2026-09-30-webrtc-eu6-android-full-device.ru.md) | Cached BOOT-1 → dedicated → existing Android VPN/TUN; ordinary Chrome2 sites,14 concurrent TCP/98 Family DNS,543.7s light smoke, protected underlay, UDP/IPv6 rejection and VPN-retained session failure. No traffic forwarding/manual room URL. |
 
 **Room Broker itself is PASS.** Its accepted temporary control ingress used SSH
 forwarding + adb reverse. The real media/data path used Telemost, not that
@@ -103,9 +112,10 @@ forwarding. It did not prove initial setup on a whitelist network with the Famil
 API unavailable. [DNS containment](testing/webrtc-dns-containment.ru.md) proves
 tested core destination handling, not whole-device browser/OS DNS interception.
 
-No production restricted bootstrap, whole-device 5N binding, 5N.6 acceptance,
-product-complete cross-transport orchestration, beta-user restricted rollout or
-Krasnodar FIELD-1 exists yet. There is no generic UDP/QUIC/ICMP in the restricted
+No production restricted bootstrap, product-complete cross-transport orchestration,
+beta-user restricted rollout or Krasnodar FIELD-1 exists yet. Whole-device 5N
+binding is isolated/opt-in; its acceptance is recorded separately below.
+There is no generic UDP/QUIC/ICMP in the restricted
 path; global ReliableStream HOL and lack of seamless session migration remain.
 No production multi-user capacity claim follows from these single-device proofs.
 
@@ -137,17 +147,22 @@ is not a carrier-wide/production API firewall block or FIELD-1 proof; see the
 Fresh installations already inside a restricted network are out of scope;
 the device must have obtained its directory during earlier normal connectivity.
 
-### Full-device boundary and orchestrator (PLANNED)
+### Full-device boundary (diagnostic) and orchestrator (PLANNED)
 
 5N.6 / WEBRTC-EU-6 connects the **existing Android VPN lifecycle and packet path**
-to the existing 5N mux/DNS/TCP core. It is not a new VpnService from scratch.
-Preserve platform ownership, foreground lifecycle, cancellation, socket protection
-and fail-closed DNS/IPv6/unsupported-traffic behaviour. The isolated diagnostic
-child-process path does not supply product socket protection; child fd integers
-cannot be passed as if owned by the VpnService process. Binding/protection design
-must precede whole-device acceptance. Keep the OS packet adapter thin and Family
-packet/session logic reusable for future iOS PacketTunnel—not a claim that such
-portability or iOS integration is already delivered.
+to the existing 5N mux/DNS/TCP core. ConnectionService remains the authoritative
+owner; RestrictedTunnelEngine reuses TcpVpnService and the pinned Xray/gVisor
+ConnectionHandler/LinkEndpoint packet boundary. The new in-process JNI adapter
+uses same-process descriptors with VpnService.protect, unlike the earlier
+child-process core harness. Shared carrier/wholedevice owns flow/DNS/session
+behaviour, and carrier/underlay protects every network factory before connect/bind.
+TUN activates after cached BOOT-1, separate dedicated Family TLS/setup binding
+and Mux readiness. IPv4 TCP and Family DNS are supported; IPv6 and generic UDP
+are captured/rejected. Session loss retains the VPN routes, closes app flows and
+reports unavailable; explicit stop releases native state before TUN/service.
+This shared boundary permits a future iOS PacketTunnel adapter; neither iOS nor
+always-on process-death lockdown is implemented. Normal AWG/TCP is unchanged,
+restricted selection is debug-only and opt-in, not a new automatic selector.
 
 The conceptual networking center becomes a **Connectivity / Transport Orchestrator**:
 observe network state, probe allowed transports safely, select an appropriate path,

@@ -5,6 +5,16 @@
 
 ## Android
 
+5N.6 diagnostic binding: `ConnectionService` → `RestrictedTunnelEngine` → existing
+`TcpVpnService` → `NativeRestricted` → `pilot/android-restricted/packet` (existing
+Xray/gVisor TUN engine) → shared `carrier/wholedevice` → existing Mux/Family DNS.
+`carrier/underlay` защищает HTTPS/WebSocket/ICE/media/provider DNS до TUN через
+тот же VpnService.protect. Dedicated readiness предшествует TUN capture; failure
+держит TUN и не включает direct fallback. Debug-only activity использует реальный
+permission flow, отдельного VPN owner нет. Normal AWG/TCP factory не заменена.
+Физический результат/ограничения — [EU-6 report](../releases/2026-09-30-webrtc-eu6-android-full-device.ru.md),
+сборка/entry points — [runbook](../../pilot/android-restricted/README.md).
+
 5N-BOOT-1: `carrier/bootstrap` — directory/cache, one-lease carrier envelope,
 Family-authenticated control-only protocol и separate seed manager.
 `carrier/cmd/bootstrap-broker` — disposable mTLS preparation + seed process;

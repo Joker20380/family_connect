@@ -9,9 +9,11 @@
    Telemost/Family auth → broker READY → dedicated descriptor through bootstrap →
    separate dedicated DNS/HTTPS proof без manual URL или forwarding. Gate завершён,
    STOP; [отчёт](releases/2026-09-30-webrtc-5n-boot1-bootstrap.ru.md).
-2. **WEBRTC-EU-6 / 5N.6 — Android full-device integration (после bootstrap).**
-   Подключить существующий VPN lifecycle/packet path к существующему 5N mux/DNS/TCP.
-3. **Minimum viable Connectivity / Transport Orchestrator (после full-device).**
+2. **WEBRTC-EU-6 / 5N.6 — PASS, isolated physical30.09.** Existing VPN owner/packet
+   engine → cached BOOT-1/dedicated Family Mux/DNS; Chrome2 sites,14 concurrent TCP,
+   98 DNS,543.7s smoke, protected underlay, UDP/IPv6 fail-closed, controlled session
+   failure с сохранением TUN, cleanup. [Отчёт/scope](releases/2026-09-30-webrtc-eu6-android-full-device.ru.md).
+3. **Minimum viable Connectivity / Transport Orchestrator — NEXT / NOT STARTED.**
    Одна кнопка; выбор доступного пути и автоматическое восстановление.
 4. **Krasnodar FIELD-1 (NOT RUN).** Реальная ограниченная мобильная сеть,
    обычное устройство и приложения, без engineering harness.
@@ -25,8 +27,9 @@ PERF-2 и **automatic Room Broker = PASS** в изолированной physica
 full-device restricted VPN не выпущен.** OAuth был только в runner/server memory;
 Redmi cellular/Wi-Fi OFF/no VPN. Первая live попытка выявила только premature
 cleanup validation в runner; focused fix, Python20 и повторный live run PASS.
-Cleanup завершён, production не менялся. После BOOT-1 STOP: никаких
-5N.6/TUN, Orchestrator, второго carrier, performance tuning или production rollout.
+Cleanup BOOT-1 завершён, production не менялся. Отдельная текущая задача разрешает
+только5N.6/TUN integration и physical acceptance; Orchestrator, второй carrier,
+performance tuning и production rollout не разрешены. STOP после EU-6.
 [Архитектура и продуктовые принципы](architecture.md) ·
 [Фактический статус](STATUS.md) · [Отчёт rebaseline](releases/2026-09-30-product-engineering-rebaseline.ru.md).
 
@@ -38,8 +41,8 @@ Cleanup завершён, production не менялся. После BOOT-1 STOP
 | B — Normal connectivity | WORKING beta | AWG/TCP уже используются; существующий Android VpnService/VPN lifecycle. |
 | C — Restricted data plane + setup proof | TECHNICALLY PROVEN, isolated physical acceptance | 5N.1–5N.5, ReliableStream, DNS containment и Room Broker. Broker — control-plane proof, не production bootstrap. |
 | D — Restricted bootstrap | PASS / 5N-BOOT-1, isolated physical | Cached authenticated directory/restart → bounded seed → Family TLS → broker READY → separate dedicated session; no control forwarding. Diagnostic endpoint-denial, не FIELD-1/production. |
-| E — Android full-device | AFTER D / 5N.6 | Existing OS lifecycle/packet path ↔ existing 5N core; тонкий OS adapter, reusable Family logic для будущего iOS PacketTunnel. |
-| F — Minimum viable Orchestrator | AFTER E | Normal fast → alternate normal → restricted bootstrap/carrier; безопасные probes, failover/recovery, без обязательного ML/scoring. |
+| E — Android full-device | PASS / isolated physical5N.6 | Existing OS lifecycle/packet path ↔ existing 5N core; ordinary Chrome/TCP/Family DNS, protected underlay, fail-closed failure и UDP/IPv6, bounded cleanup. Diagnostic opt-in, не public release/iOS. |
+| F — Minimum viable Orchestrator | NEXT / NOT STARTED | Normal fast → alternate normal → restricted bootstrap/carrier; безопасные probes, failover/recovery, без обязательного ML/scoring. |
 | G — FIELD-1 | AFTER F / NOT RUN | Реальный restricted/allowlist mobile field, сначала Краснодар; не лабораторный echo. |
 | H — Product beta | AFTER G / PLANNED | 50–100 пользователей: reliability, battery/heat, support и invitation UX. |
 | I — Scale / iOS / carriers | LATER, после beta evidence | iOS, multi-user load, дополнительные gateways/carriers, масштабирование инфраструктуры, monetization/referrals. |
@@ -54,16 +57,20 @@ runner использует direct mTLS только для prior cache, зат�
 endpoint и исключительно Telemost rendezvous. Physical phases A–E и cleanup PASS30.09.
 Deterministic checkpoint: focused Go/race x10/vet, Python118, Android native/APK/
 JVM9/lint, docs/source guard PASS. Live runner fix: focused Python20 PASS.
-Следующих действий внутри BOOT-1 нет;5N.6 не начинался и требует отдельной задачи.
+Следующих действий внутри BOOT-1 нет;5N.6 завершён по отдельной авторизации.
 Подробные timestamps, первая failed acceptance и artifact hashes в датированном отчёте.
 Fresh install уже внутри completely restricted сети вне scope. Rollback — остановить
 только task-owned процесс/удалить diagnostic APK/cache; production не изменяется.
 
-**E acceptance:** сохранить OS ownership/lifecycle и socket protection; проверить
-whole-device TCP/DNS, fail-closed поведение неподдерживаемого трафика/DNS/IPv6 и
-cleanup/recovery. Не писать Android VPN с нуля и не выдавать core DNS guard за
-проверку всего телефона. Generic UDP сейчас не поддержан; global ReliableStream
-HOL остаётся, seamless session migration и capacity не доказаны.
+**E acceptance PASS:** existing ConnectionService/TcpVpnService/Xray сохранены,
+shared packet/session boundary и protect bridge подключены. Physical primary-user
+VPN routes + ordinary app/browser + counters доказали TCP/DNS и отсутствие direct
+bypass в принятом scope (не root modem pcap/другие user profiles). Session failure
+держит TUN; stop/cleanup PASS. Go/packet race/vet, Python50, Android JVM172/build/
+lint PASS. Normal factories/owner regression сохранена, normal physical path не
+перетестирован; старый CI emulator failure остаётся отдельным. Generic UDP и IPv6
+Internet не поддержаны; global ReliableStream HOL остаётся, seamless migration,
+always-on process-death lockdown, iOS/capacity/production rollout не доказаны.
 
 **G acceptance:** то же обычное устройство без engineering harness; в наблюдаемом
 ограниченном состоянии normal transports недоступны, Family автоматически
@@ -336,7 +343,7 @@ home IP/NAT, Windows routing, включённого ПК и лишнего до
 | WEBRTC-EU-3 / 5N.3 | E2E Family session с existing Device Identity/FAMILY; wrong/revoked/replay rejected | PASS27.09: physical Android,374 exact echoes/302.001s; isolated runtime5dd8b49; no production authority rollout |
 | WEBRTC-EU-4 / 5N.4 | Один TCP stream: реальный HTTPS response через EU | **PASS28.09**: physical HTTPS200/public10MiB, exact duplex300.821s, half-close/faults/security/cleanup; [evidence/limits](releases/2026-09-28-webrtc-eu4-single-tcp.ru.md) |
 | WEBRTC-EU-5 / 5N.5 | Core-level multiplexed TCP + DNS, bounded fairness/flow control | **PASS28.09**: physical4 public HTTPS,304.138s mixed5 TCP+171 DNS, exact/fair/bounded; [evidence/limits](releases/2026-09-28-webrtc-eu5-mux-dns.ru.md); no OS/browser interception |
-| WEBRTC-EU-6 / 5N.6 | Full-device Android TCP+DNS, EU exit, no direct/DNS/IPv6 leak | Не запускался |
+| WEBRTC-EU-6 / 5N.6 | Full-device Android TCP+DNS, EU exit, fail-closed unsupported traffic | **PASS30.09**, isolated physical primary-user VPN/Chrome;543.7s,14 TCP/98 Family DNS, controlled failure/cleanup; [scope/limits](releases/2026-09-30-webrtc-eu6-android-full-device.ru.md) |
 
 Порядок: reuse generic5H/5I contracts →5N.1–3 на целевой мобильной сети →5N.4–6 →
 5M реальная30–60min приёмка (связана с5F) →5L WB fallback. Telemost первый,

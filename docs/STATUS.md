@@ -1,11 +1,28 @@
 # Текущее состояние / Current state
 
-## CURRENT PRODUCT STATE — 30.09.2026 / 5N-BOOT-1
+## CURRENT PRODUCT STATE — 30.09.2026 / WEBRTC-EU-6
 
 **Family Connect = resilient connectivity for families**, не protocol picker.
 Приоритет — непрерывность связи и автоматическое восстановление, с быстрыми
 обычными транспортами в нормальной сети и restricted carrier как резервом.
 Целевой UX одной кнопки ещё не завершён; детали — [architecture](architecture.md).
+
+**WEBRTC-EU-6 / 5N.6 = PASS**, isolated physical30.09,18:53–19:04 UTC. Existing
+ConnectionService/TcpVpnService/Xray packet engine подключены к shared Family
+Mux/DNS через opt-in restricted backend. Redmi cellular/Wi-Fi OFF: cached BOOT-1
+→ fresh dedicated READY/Family TLS → real TUN → Chrome2 sites/6 successful visits,
+14 concurrent TCP,98 Family DNS, Android verified end-site TLS/HTTP200×2.
+Smoke543.7s; controlled gateway failure оставляет VPN/routes и блокирует обычный
+TCP/browser, owner health unavailable. Destination DNS/TCP bypass=0 в принятом
+primary-user route/backend/app scope, не modem-wide pcap; UDP/IPv6 fail-closed.
+Underlay85 protected sockets, provider DNS16 без роста после TUN; cleanup PASS.
+Focused JNI string lifetime и gateway16/client32 fixes приняты повторным run;
+все неуспешные попытки сохранены. Go/packet race/vet, Python50, Android JVM172,
+native/build/lint0 errors/36 warnings, docs/source guards PASS. PSS peak82195KiB.
+Отдельный diagnostic `.eu6` built/installed/removed, public beta51/code51/production
+не меняются. Normal AWG/TCP owner сохранён; повторный physical normal-path test
+не проводился. Orchestrator **NOT STARTED**.
+[Отчёт EU-6, hashes/metrics/leak scope/rollback](releases/2026-09-30-webrtc-eu6-android-full-device.ru.md).
 
 **5N-BOOT-1 = PASS**, isolated physical acceptance30.09, 15:37–15:38 UTC.
 HEAD `f487a429141da64297038e8a96237205fd1ac060` + focused runner cleanup-order fix;
@@ -19,7 +36,8 @@ Redmi Note9 Pro / Android12 / arm64, Wi-Fi OFF/no VPN; no adb reverse, SSH forwa
 но runner преждевременно проверял cleanup event; исправлен только порядок проверки,
 20 focused Python tests PASS, повторный physical run и cleanup PASS.
 Diagnostic APK code4/name5N.5-test-only установлен и удалён; runtime binaries не менялись.
-Private fixtures/test processes удалены; port18444 свободен. 5N.6 NOT STARTED; STOP.
+Private fixtures/test processes BOOT-1 удалены; port18444 освобождён тогда.
+Исторический STOP BOOT-1 superseded отдельной авторизацией задачи EU-6 ниже.
 Предыдущие focused Go/race (bootstrap x10)/vet, Python118, Android native/APK/JVM9/lint,
 docs/source guard — PASS; lint содержит только existing manifest/UI warnings.
 Нет production deployment, version bump, public release/catalog changes или push.
@@ -31,7 +49,8 @@ docs/source guard — PASS; lint содержит только existing manifest
 | IMPLEMENTED IN CURRENT BETA | Device Identity, FAMILY admission, invitations/provisioning; Android/Linux/Windows; normal AWG/TCP используются beta-пользователями. Android VpnService/VPN lifecycle уже существует. |
 | PROVEN IN ISOLATED ACCEPTANCE | 5N.1–5N.5, Family TLS1.3, selective-repeat ReliableStream/real RTP gap recovery, long-duration goodput, Internet TCP/end-site HTTPS TLS, mux/Family DNS/containment, automatic Room Broker **PASS**. Physical Redmi → real Telemost VP8/RTP → Amsterdam. |
 | PROVEN IN ISOLATED ACCEPTANCE | **5N-BOOT-1 PASS**: cached mTLS directory/restart, control-only real seed, Family auth, broker READY-before-descriptor through bootstrap, separate dedicated session/DNS/HTTPS and cleanup. Diagnostic unreachable-endpoint fault, not a carrier-wide block/field claim. |
-| PLANNED / NEXT | **5N.6** existing Android VPN ↔ 5N full-device path → minimum viable Connectivity Orchestrator → Krasnodar FIELD-1 → 50–100-user beta. Все эти этапы вне текущей задачи; STOP после BOOT-1. |
+| PROVEN IN ISOLATED ACCEPTANCE | **5N.6 PASS**: existing Android VPN/packet engine → dedicated Family Mux TCP/DNS, ordinary Chrome, protected underlay, captured/rejected UDP/IPv6, session-loss fail-closed, bounded cleanup. |
+| NEXT / NOT STARTED | Minimum viable Connectivity Orchestrator → Krasnodar FIELD-1 → 50–100-user beta. STOP после EU-6; следующие gates не реализуются. |
 
 5N.5 доказал simultaneous public HTTPS, mixed TCP + DNS, exact delivery и
 fairness/bounded buffers. Room Broker доказал official Telemost API, server-only
@@ -42,7 +61,8 @@ adb reverse). **Production restricted bootstrap нет:** при недосту�
 Family API получение initial dedicated room физически доказано без forwarding
 в diagnostic cached-state path; production путь не выпущен. В тесте normal endpoint
 заменён на недоступный `https://127.0.0.1:1`, а не заблокирована вся сеть оператора.
-5N mux/DNS не подключён ко всему Android traffic, 5N.6 и Krasnodar FIELD-1 NOT RUN;
+5N mux/DNS подключён к diagnostic TUN; EU-6 isolated physical acceptance PASS,
+Krasnodar FIELD-1 NOT RUN;
 restricted rollout beta-пользователям и product-complete orchestration отсутствуют.
 Нет generic UDP в restricted path; global ReliableStream HOL остаётся; production
 capacity и iOS client не заявляются. Telemost — заменяемый недоверенный carrier;
@@ -60,7 +80,7 @@ security boundary — Device Identity / Family admission / Family TLS.
 [Linux packaging](linux-appimage-deb.ru.md) · [Downloads/checksums](releases.md).
 Diagnostic APK code4/name5N.5-test-only для mux/broker был built/test-installed,
 затем удалён; никогда не public beta. Public artifacts/install/invitation page
-в этой docs-задаче повторно не проверялись. Каталоги и checksums не менялись.
+в этой задаче повторно не проверялись. Каталоги и checksums не менялись.
 
 ### Operational state — отдельно от product critical path
 
@@ -74,9 +94,11 @@ WG/AWG/TCP/Auto lifecycle FAIL, release SKIPPED. Причины здесь не 
 Последний документированный production deployment — disk mitigation29.09;
 30.09 read-only audit: NL disk latency, RU API restart cause, worker unhealthy/
 outbox и client end-to-end остаются открыты. TLS renewal тогда PASS, мониторинг
-продолжается; новых live checks/deployments здесь нет.
+продолжается; новых production checks/deployments здесь нет. Изолированная EU-6
+приёмка описана выше и не закрывает эти operational issues.
 
-**NEXT = завершить physical 5N-BOOT-1 после снятия live blocker; 5N.6 NOT STARTED.** Второй carrier/Home Gateway —
+**NEXT = MVP Connectivity Orchestrator (NOT STARTED).** BOOT-1 и5N.6 PASS в
+изолированном scope; текущая задача здесь останавливается. Второй carrier/Home Gateway —
 backlog; performance/FEC/HOL — later evidence-driven work.
 [Authoritative plan](PLAN.md) · [Rebaseline: docs checks, boundaries, rollback](releases/2026-09-30-product-engineering-rebaseline.ru.md).
 
