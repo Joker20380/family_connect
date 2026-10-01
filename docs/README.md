@@ -12,10 +12,13 @@ Whole-device path принят isolated; production rollout ещё не выпо
 [5N-PROV-1 authorized deployment FAILED / ROLLED BACK](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md):
 existing Friends identity → restricted provisioning/BOOT-1 → secure Android cache;
 [owner-only deployment, migration, secrets и rollback](../deploy/friends/restricted/README.md).
-NL seed reached READY, but offset expiry failed Python validation; NL rolled back,
-RU untouched. Timestamp compatibility now fixed/tested locally (5N-TIME-COMPAT),
-not deployed; authority needs fresh JIT renewal before authorized reuse. Это текущий integration
-gate перед actual-Friends readiness/rehearsal и final FIELD APK.
+В попытке №1 NL offset expiry был отклонён Python; в попытке №2 исправление
+timestamps уже прошло живую NL READY/UTC `Z` проверку. RU sync затем не импортировал
+`clients`, rollout снова откачен до API activation. Локальный packaging fix:
+явный source manifest, isolated zipapp и fixture-only pre-network CLI smoke;
+production не изменён. Authority требует свежего JIT renewal только перед новым
+отдельно разрешённым rollout. Это integration gate перед actual-Friends
+readiness/rehearsal и final FIELD APK.
 [Historical material-only preflight READY](releases/2026-10-01-5n-prod-deploy-preflight.ru.md):
 same authority, CRL refreshed to3, owner-installed provider config schema PASS;
 no token value/hash/size exposed. Recheck expiry before separately authorized use.

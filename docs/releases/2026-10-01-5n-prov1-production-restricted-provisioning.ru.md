@@ -1,5 +1,119 @@
 # 5N-PROV-1 — production restricted provisioning + bootstrap delivery
 
+## 5N-RUNTIME-PACKAGING — PASS локально, production не изменён
+
+Starting HEAD: `7350d32c36ae30b4625ab8518caa87bbba887b26`.
+Implementation commit: `460bbe9e8028700e0245600a7c1d734668a91285`.
+Только локальное исправление RU runtime packaging после попытки №2. Нет SSH,
+production deployment/start/reload, authority/CRL refresh, provider access, Redmi
+или physical tests. Успешная живая timestamp-проверка, ошибка импорта и откат
+попытки №2 ниже сохранены без переписывания. Общий 5N-PROV-1 не объявляется PASS.
+
+### Воспроизведение и root cause
+
+Прежний runtime воспроизведён **до правок** с тем же layout:
+`friends-access/app/{control/friends,device_identity,provisioning}` и командой
+`venv/bin/python -m control.friends.restricted_sync --help`, cwd=`friends-access/app`.
+PYTHONPATH/PYTHONHOME отсутствуют. `sys.path` содержит cwd как пустую строку,
+stdlib Python3.14 и locked venv site-packages; root checkout отсутствует.
+Результат: exit1, `ModuleNotFoundError: No module named 'clients'` до parser/main.
+Даже `--help` не проходит, точно как импорт production sync до publisher/SSH.
+
+Причина — **неполный ручной source-copy manifest**, не неверный cwd/install root,
+не relative import и не отсутствующий PyPI-пакет. Цепочка:
+`restricted_sync` → `provisioning.friends_catalog` →
+`clients.desktop.profile_config`. `clients` — namespace исходников проекта;
+установка одноимённого стороннего pip-пакета не является исправлением.
+Прежние pytest/build запускались с полным checkout на module path, а authority
+staging содержал больше файлов, чем минимальный RU runtime. Тестирования точного
+deployment artifact вне checkout не было; эта разница скрыла зависимость.
+
+### Решение по границе зависимостей
+
+Выбран разрешённый вариант **B — явная lightweight dependency**. `profile_config.py`
+содержит161 строку чистой проверки/построения профилей; imports только
+`base64/ipaddress/re/json/uuid`, без GUI, backend, сети или persistence. Проверка
+Friends catalog действительно использует его `parse_tcp`, `parse`, `validate`
+для подписанных AWG/TCP templates. Это намеренное переиспользование parser, не
+необходимость серверу запускать desktop app.
+
+Перемещение parser сейчас затронуло бы несколько desktop/TCP packagers и
+шестифайловый legacy archive. В этом gate безопаснее явно поставить **только этот
+файл** в его существующем namespace; не копировать весь clients/desktop/репозиторий,
+не дублировать parser и не менять его source. Регрессия фиксирует stdlib-only
+границу. Общий parser/provisioning/Android source неизменён — Android rebuild
+не требуется и не выполнялся. Trust roots, Family, admission, TTL, revisions,
+подписи, BOOT-1/descriptor/session semantics не изменены.
+
+### Закрытый artifact и entrypoints
+
+- `deploy/friends/restricted/runtime-files.json`:10 явных Python-файлов —
+  Friends access/restricted/admin/sync и package marker, device identity/marker,
+  Friends catalog/marker и один profile parser.
+- `scripts/package_restricted_runtime.py`: проверяет source list/отсутствие
+  symlinks/пропусков, не перезаписывает output, создаёт `app/` overlay и стандартный
+  stdlib zipapp `restricted-sync.pyz` из **тех же bytes**. Также поставляет два
+  существующих lockfile, unit/timer/helper и SHA256 inventory; без state/fixtures.
+- RU unit и NL forced-command теперь запускают
+  `venv/bin/python -I /opt/apps/family_connect/friends-access/restricted-sync.pyz`
+  с прежними `sync`/`gateway` параметрами. Корень модулей — archive, не cwd;
+  sys.path/PYTHONPATH hacks **не используются**. Venv зависимости по обоим locks
+  проверены: все установлены с точными версиями, включая RNS1.5.1/cryptography46.0.7.
+- `app/` — overlay для existing API, **не полная замена** старого API app; normal
+  API modules сохраняются. Новый runbook запрещает ручной выбор трёх папок.
+  NL helper сохранит exact forced-command/argument restrictions; любые другие
+  команды отвергаются с126. В production новые templates не устанавливались.
+- Новый **локальный** `sync --check`: загружает issuer/anchor/admission/CRL,
+  проверяет существующие signatures/expiry и read-only SQLite sequence/integrity,
+  bounded sync-key/known-host files; затем останавливается перед publisher/SSH.
+  Нет writes/room creation. Это не SSH authentication check и не автопродление CRL.
+  Ошибки выводятся только как `Restricted synchronization unavailable`.
+
+Финальный local artifact:
+`state-client-build/runtime-packaging/final-bundle/restricted-sync.pyz`.
+SHA256: `e7e0c8a2ebefdd8ae6f6829f86fcac214b4c4dadb50f0664f0a4e92ea3498788`.
+Содержимое: ровно10 source modules + stdlib-generated `__main__.py`, без credentials.
+Это source runtime; сторонние библиотеки предоставляются declared locked venv,
+а не неявно из checkout. Safe receipts: ignored `state-client-build/runtime-packaging/`.
+
+### Изолированные доказательства и регрессии
+
+| Проверка | Результат |
+| --- | --- |
+| Старый трёхпапочный runtime, прежний `-m` entrypoint | Точный missing `clients` воспроизведён |
+| Готовый zipapp: `--help`, `sync --help`, `gateway --help`, `python -I` | PASS вне checkout |
+| Module origin probe | Все project imports из archive, не checkout/site-packages |
+| Exact unit command с fixture `--check` | PASS из штатного app cwd и постороннего cwd |
+| Отдельный запуск **финального artifact** из `/tmp`, без PYTHONPATH | PASS, `Restricted runtime pre-network check passed` |
+| CLI authority/config fixture | Полностью синтетическая test authority; production material не читалось |
+| DB/CRL/fixture files после `--check` | Bytes/mtime неизменны, publisher/SSH/socket запрещены отдельным spy-тестом |
+| Malformed authority, expired CRL, sequence mismatch, private-key mode | Fail closed без repair/writes/secret output |
+| Удаление каждого manifest source | Builder отказывает до создания artifact |
+| Удаление каждого транзитивного runtime module из zipapp | Import fails, даже с checkout в cwd/PYTHONPATH |
+| Forced-command wrapper и точные unit paths/flags | PASS; другие команды/аргументы отвергнуты |
+| Focused Python suite | **311 passed,2 skipped**,9.01s; внутри32 новых packaging tests |
+
+Suite включает Friends catalog/access/client/store/owner/application, provisioning
+security, restricted backend/native delivery, provider input/Android source
+contracts и desktop AWG/TCP/profile parsers. Все4 Go-backed delivery fixture tests
+запущены с locked toolchain, не skipped. Два skip — существующие TCP installer
+preflight cases: у local host нет TUN device. Это не physical/PERF testing.
+Промежуточные ошибки test harness (повторяющиеся Environment в systemd и удаление
+уже отсутствующего PYTHONPATH) исправлены до итогового полного прогона.
+
+CI path filters теперь включают server modules, runtime manifest/helper/builder;
+новый regression входит в существующий pytest job. CI удалённо не запускался.
+Docs guard:412 файлов/2514 ссылок,0errors; staged source guard1563 entries,
+0blocked; `git diff --check` PASS. Runtime/test artifacts остаются ignored.
+Runbook/architecture/docs index/report обновлены. Три параллельных VPN-health
+файла (`STATUS`, `PLAN`, VPN-health report) **побайтно сохранены**, не staged и не
+включены в commits этой задачи; их новые правки/перестановка не выполнялись.
+
+**STOP:** deployment не повторять автоматически. Никакого push, production change,
+authority refresh, restricted service start, Redmi или FIELD-1 в этой задаче.
+Следующий rollout требует отдельного разрешения и свежего preflight/JIT материала
+с сохранением действующих monotonic floors, а не использования истёкшего CRL5.
+
 ## Попытка №2 — DEPLOYMENT FAILED / ROLLED BACK, 01.10.2026
 
 Исходный clean HEAD: `e808f503c2fcf05f5f3c016988fbe25ca88a89dc`.

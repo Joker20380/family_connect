@@ -1,5 +1,19 @@
 # Architecture map / Карта архитектуры
 
+## Закрытый sync runtime — локальное исправление после попытки №2
+
+Server sync теперь имеет явный десятифайловый source manifest и stdlib zipapp,
+исполняемый RU unit/NL forced helper через `python -I`; каталог checkout/cwd и
+PYTHONPATH не разрешают пропущенные imports. Чистый stdlib profile validator
+намеренно переиспользуется из `clients.desktop.profile_config`, только этот файл,
+без GUI/backend/второй реализации. Сохраняются desktop/шестифайловые архивы.
+Новый `sync --check` проверяет локальную authority и SQLite/CRL sequence read-only,
+не вызывает publisher/SSH и не меняет protocol/TTL/admission. Fixture/manifest
+regression проверяет точные unit/helper и удаление зависимостей из bundle.
+[Контракт поставки](../deploy/friends/restricted/README.md) и
+[локальные доказательства](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+Production по-прежнему откачен; локальное исправление не означает deployment.
+
 ## Попытка №2 — живой UTC-контракт подтверждён, runtime откачен
 
 01.10.2026, source `e808f50`: NL seed READY экспортировал UTC `Z`; исправленный
