@@ -1,5 +1,28 @@
 # Текущее состояние / Current state
 
+## 5N-PROV-1 — попытка №2: DEPLOYMENT FAILED / ROLLED BACK, 01.10.2026
+
+Разрешённая попытка из `e808f50` остановлена на RU sync, до активации API.
+NL READY и живой UTC `Z` каталог → Python PASS. Новый блокер: минимальный RU
+runtime не содержит `clients.desktop.profile_config`, импортируемый
+`provisioning.friends_catalog`; ошибка воспроизведена изолированно локально.
+Live-исправления/повторного запуска нет. NL stopped/disabled, sync-доступ отключён;
+RU API/ingress восстановлены без restart, timer disabled, sync failed/PID0.
+Normal PIDs/start times и devices/invites/grants неизменны; HTTPS200, обычный
+challenge400, restricted404. Admission: owner1,26 остальных rejected, других0.
+JIT CRL4→5, expiry13:46:55UTC; gateway14:31:55UTC, прежние authority/TTL.
+
+Место освобождено штатной очисткой только task-owned Go cache. Полная canary53
+`0.1.18-canary53-prov1` сборка PASS:194 JVM tests, lint0errors/36warnings,
+fresh arm64 JNI, подпись совместима с установленным Redmi field52.
+APK не установлен/не опубликован и не является финальным FIELD APK.
+Prewarm/restart/rehearsal/browser/leak proof не запускались. Следующий шаг:
+локальный dependency-closure/import smoke точного runtime bundle, затем новое
+разрешение на retry и JIT refresh после sequence5. Без push/FIELD-1.
+[Хронология, хэши, downtime и откат](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
+### Исторические checkpoint до попытки №2
+
 ## 5N-TIME-COMPAT — PASS locally, production unchanged, 01.10.2026
 
 Local repair from `e77aea8`: Go seed/Directory serializers emit UTC `Z`; strict

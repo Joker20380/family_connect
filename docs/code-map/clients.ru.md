@@ -5,6 +5,13 @@
 
 ## Android
 
+Попытка №2,01.10: приватный `0.1.18-canary53-prov1`/53 из `e808f50` полностью
+собран: fresh arm64 JNI,194 JVM tests PASS, lint0errors/36warnings. `.friends`,
+non-debuggable, прежняя beta-подпись; совместимость с установленным field52
+проверена. Установки/публикации нет, это не финальный FIELD artifact. Physical
+prewarm не начат из-за RU runtime import failure; restricted stack откачен.
+[Хэши и provenance](../releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
 5N-PROV-1 local-only: `FriendsAccessAndroid.restrictedReadiness` authenticates with
 existing `ControlIdentity` proof, no pre-existing Family TLS. `FriendsRestricted`
 provides single-flight bounded prewarm; `RestrictedCache` validates/rejects replay

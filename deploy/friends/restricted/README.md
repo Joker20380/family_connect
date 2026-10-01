@@ -1,5 +1,20 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+**Попытка №2,01.10 13:39UTC: DEPLOYMENT FAILED / ROLLED BACK.**
+Source `e808f50`: NL READY и живой UTC `Z` → Python PASS. RU sync остановлен:
+`provisioning.friends_catalog` импортирует `clients.desktop.profile_config`,
+которого нет в описанном минимальном RU bundle. Полный authority staging скрывал
+зависимость. **Не повторять rollout до локального исправления runtime manifest
+и isolated import/CLI smoke точного deployment bundle.** Не добавлять зависимости
+ad hoc на production. API/routes не включались; RU API/ingress восстановлены без
+restart, NL bootstrap/sync authorization выключены. CRL sequence5 сохранён;
+перед новым разрешённым retry нужен JIT refresh, не reset.
+В sticky NL directory обновление service-owned gateway.json требует atomic
+create/fsync/chown/rename, не copyfile поверх старого файла: сохраняем
+`fs.protected_regular=2`, owner/mode. [Доказательства/откат](../../../docs/releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
+### Исторические checkpoint до попытки №2
+
 **Local repair checkpoint: 5N-TIME-COMPAT PASS, not deployed.** Go seed export
 and Directory serialization now emit UTC `Z`; Python/native consumers validate
 offset-aware RFC3339 instants with unchanged lifetime/replay/trust bounds.

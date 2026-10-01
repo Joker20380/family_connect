@@ -1,5 +1,19 @@
 # Architecture map / Карта архитектуры
 
+## Попытка №2 — живой UTC-контракт подтверждён, runtime откачен
+
+01.10.2026, source `e808f50`: NL seed READY экспортировал UTC `Z`; исправленный
+Python принял живой BOOT-1 snapshot без ручной правки. RU sync не дошёл до
+publisher/SSH: `provisioning.friends_catalog` импортирует отсутствующий в
+минимальном RU bundle `clients.desktop.profile_config`. Изолированный локальный
+import воспроизводит ошибку; нужен dependency-closure smoke точного runtime,
+не полного checkout. Trust/TTL/identity неизменны; JIT publisher CRL4→5.
+NL service/auth выключены, RU API/ingress восстановлены без restart, routes
+не включались. Исправленные NL артефакты остаются неактивными.
+[Хронология и границы доказательств](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
+### Исторические checkpoint до попытки №2
+
 ## Timestamp compatibility repair — local only
 
 5N-TIME-COMPAT accepts absolute RFC3339 directory instants with `Z` or numeric

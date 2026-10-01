@@ -1,5 +1,144 @@
 # 5N-PROV-1 — production restricted provisioning + bootstrap delivery
 
+## Попытка №2 — DEPLOYMENT FAILED / ROLLED BACK, 01.10.2026
+
+Исходный clean HEAD: `e808f503c2fcf05f5f3c016988fbe25ca88a89dc`.
+Пользователь отдельно разрешил controlled canary retry, но не push, public Android
+release, расширение admission или Krasnodar FIELD-1. Предыдущая неудача и локальное
+исправление timestamps сохранены ниже. Итог этой попытки **не PASS**.
+
+### Место и полный Android build
+
+- Очищен только `/tmp/fc-boot1-tools/cache` штатным `go clean -cache` с явным
+  GOCACHE после проверки task ownership. `/tmp` free: **3 284 455 424 →
+  6 246 584 320 bytes**. SDK/NDK/JDK, APK, evidence, ключи и чужие файлы сохранены.
+- TMPDIR/build output — ignored `state-client-build/prov1-attempt2-e808f50/`;
+  Go cache — `state-client-build/time-compat/go-cache`. Disk free после очистки
+  17 547 005 952 bytes; после сборок/артефактов около15.45GB.
+- Оба JNI построены заново из текущего source, старые `.so` не использованы.
+  Gradle8.11.1, JDK17, Python3.10, Go1.26.1, NDK27.2.12479018, arm64-v8a.
+  `assembleFriends`, `testFriendsUnitTest`, `lintFriends`: **BUILD SUCCESSFUL**,
+  58s,68 выполненных задач; **194 tests,0 failures/errors**;
+  lint0errors/36warnings. Gradle deprecation warnings не исправлялись.
+- Private packaging override: `.friends`, versionCode53,
+  `versionName=0.1.18-canary53-prov1`, non-debuggable; public beta51 defaults и
+  каталоги неизменны. Diagnostic activities отсутствуют; debug-only forced-failure
+  hooks не активны. APK/вложенные Python-assets:1074 entries,0 findings после
+  одного ранее проверенного stdlib false-positive. Это bounded secret scan.
+- Подписан существующим защищённым beta PKCS12 через memfd без вывода секретов.
+  ZIP alignment/APK v2 signature PASS. ADB read-only: Redmi Note9Pro, Android12,
+  arm64, установлен field52; публичная подпись совпадает, update53 совместим.
+  **Установки нет**, Device Identity/private app data не читались.
+
+| Артефакт / provenance | Значение |
+| --- | --- |
+| Canary APK, не FIELD release | `state-client-build/prov1-attempt2-e808f50/artifacts/FamilyConnect-canary53-prov1-e808f50-arm64.apk` |
+| APK SHA256 | `de6426be9bfd197433101857f4e41afc3880bd514aa380a80563455473bf9dbf` |
+| Signing certificate SHA256 | `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a` |
+| Packaged fresh `libfc-awg.so` | `1263b9395d28713c96807f0eb888fa9b586a2e28180b2764a8c875c8874406b4` |
+| Packaged fresh `libfc_restricted.so` | `3be3838edb9bf68c2ef4cdf49fa544cb72e19b07306d48dca4064f644ab6641b` |
+| Xray revision, оба builder | `d2758a023cd7f4174a5a5fa4ff66e487d4342ba0` |
+| Amnezia Android / engine revision | `5420011143f9dd42831cc95fcdb0d6ac9bde868f` / `b5928efb6ca19f0153958460c3d141f04abc5c2e` |
+| restricted gVisor | `v0.0.0-20260122175437-89a5d21be8f0` |
+| Fresh host bootstrap-broker SHA256 | `e17e1fe77aa0121847c276fa15db9064d29b714977a57b568183e9950149b1b8` |
+
+Packaged native bytes совпадают со свежими outputs/manifest. Финальный shareable
+FIELD APK не создан. Go race/vet и Python91 timestamp checks — предыдущий local
+fix checkpoint, повторно здесь не запускались. Physical/PERF tests не запускались.
+
+### Preflight, backup, JIT authority
+
+Read-only RU/NL: strict SSH/host identity, normal service PIDs/start times,
+API/ingress bytes, DB integrity/четыре additive restricted tables и normal rows
+совпали с attempt1 rollback. Локальный audit сначала ошибочно требовал active для
+штатно отключённых на данном хосте служб; полное baseline-сравнение подтвердило
+**нет drift**, проверка исправлена локально. RU free8827MiB/MemAvailable1110MiB;
+NL free14086MiB/MemAvailable540MiB. HTTPS trusted/200, certificate до
+05.10 12:25:56UTC; certificate infrastructure не менялась. provider.env на NL:
+root:root0600, server-local schema/non-empty PASS; token не выводился, не
+передавался, его хэш/длина не публиковались, KeePass не открывался.
+
+До runtime изменений оба хоста получили root-only backups:
+`/opt/apps/family_connect/restricted-materials-stage-20261001/canary-rollout-e808f50/`.
+RU SQLite online backup, API app/handler, ingress, unit baseline; NL прежние
+helper/app/binary/gateway/unit. Ключи/profile/DB остаются на соответствующих хостах.
+Rollback подготовлен до первого старта; прежние backups не заменялись.
+
+JIT publisher **01.10 13:31:55UTC**: CRL **4→5**, expiry **13:46:55UTC**;
+gateway leaf expiry **14:31:55UTC**. Прежние Family/owner/issuer/gateway,
+других admissions0. Grant revision1/delegation sequence1, оба до
+**02.10 10:44:11UTC**. TTL неизменны, namespace не сброшен. Native gateway/canary
+certificate validation и negative Family/revision/CRL cases PASS. Новых миграций
+нет: schema уже применена ранее. При начале NL CRL оставалось >10min, перед RU >8min.
+
+### Последовательность и точный новый блокер
+
+1. Staging обновлён текущими Go/Python артефактами. При установке NL `copyfile`
+   поверх service-owned gateway.json отклонён `fs.protected_regular=2` в sticky1770
+   каталоге. Служба ещё не запущена. Readback: binary обновлён, старый профиль цел,
+   sync authorization отсутствует. Завершена atomic create/fsync/chown/rename
+   замена профиля; защитные sysctl/права не ослаблялись, CRL повторно не выпускался.
+2. NL bootstrap старт **13:35:34UTC**, READY подтверждён **13:36:07UTC**.
+   Один seed,0 restarts; provider initialization/gateway join PASS. Snapshot:
+   `issued_at=2026-10-01T13:35:36.694506508Z`,
+   `expires_at=2026-10-01T14:30:34.419780801Z`.
+   Go exporter → исправленный Python directory parser **PASS**, canonical UTC
+   проверен без ручной правки snapshot. Bootstrap join_url присутствует, не
+   выводился. Journal: один `bootstrap_seed_ready`, без secret/URL markers;
+   dedicated-session request/descriptor не создавался.
+3. После NL PASS на RU скопированы принятые modules/materials и sync unit/timer.
+   **13:37:55UTC**: первый start sync завершился `exit1/ModuleNotFoundError:
+   No module named 'clients'`,0 restarts. Цепочка: `restricted_sync.py:15` →
+   `provisioning/friends_catalog.py:14` → `clients.desktop.profile_config`.
+   Минимальный RU deployment не содержит `clients`. Publisher/SSH внутри sync
+   не достигнуты: БД/CRL сохранили sequence5. Timer не включён, API drop-in/
+   ingress reload/API restart не достигнуты.
+4. **STOP**, без ad-hoc live добавления зависимости и повторного запуска.
+   Локальное воспроизведение: ровно `control/friends`, `device_identity`,
+   `provisioning`, `python -I -B`, cwd вне checkout → тот же missing `clients`.
+   Полный authority staging/checkout скрывал транзитивную зависимость;
+   isolated runtime closure не был проверен. Нужен отдельный локальный packaging
+   fix/import smoke, не изменение trust/TTL или ручное редактирование credentials.
+
+### Откат, downtime и окончательные проверки
+
+- **13:39:05UTC RU**: sync service/timer выключены; API app/handler/ingress
+  восстановлены byte-identical. Friends API PID/start всё время прежние:
+  перезапусков0, ingress reload0. DB назад не восстанавливалась, sequence5,
+  ledger/отзывы сохранены. Root-only материалы и новые не включённые units
+  остаются инертными; sync status failed/PID0 сохраняет evidence.
+- **13:39:07UTC NL**: bootstrap stopped/disabled/MainPID0; sync authorized key
+  в protected backup, directory quarantined, listener18444 отсутствует.
+  Исправленные binary/helper, account/unit/gateway/provider остаются инертными;
+  token сохранён root:root0600. Rollback не затронул AWG/TCP.
+- **13:44:44–45UTC** final readback: все исходные normal PIDs/start times
+  неизменны,0 restarts. RU API/AWG/TCP active; NL AWG/TCP/control-provider/mailbox
+  active. Timer inactive/disabled, bootstrap inactive/disabled/0restarts.
+  HTTPS status200, обычный malformed challenge400, restricted challenge404.
+  devices/invites/restricted_grants неизменны. Actual `_grant`: owner1 admitted,
+  **26 non-canary rejected**,0 others. Это authority check, **не** acceptance
+  ещё не включённого restricted HTTP endpoint.
+- API interruption: restart/reload не выполнялись, наблюдаемого перерыва нет.
+  Непрерывный HTTP downtime probe планировался вокруг API restart, до которого
+  rollout не дошёл. Это **не непрерывное измерение нулевого downtime**.
+  Normal activation/provisioning rows не переписывались; user-session normal
+  data-plane smoke не проводился, service/control regression checks PASS.
+- Redmi остаётся field52. Installation/product-prewarm/readiness expiry/restart
+  persistence/restricted rehearsal не выполнены. Chrome, Family DNS, concurrent
+  TCP, DNS leak count, protected TCP bypass, UDP/IPv6 fail-closed, underlay и
+  10min light smoke **не измерены** — не заявляются нули/PASS.
+
+Safe receipts/build logs: ignored `state-client-build/prov1-attempt2-e808f50/`;
+приватный runtime не коммитится. Параллельные изменения VPN-health документации
+сохранены отдельно от этой работы. Docs check:412 файлов/2509 ссылок,0errors;
+staged source guard1559 entries/0blocked; `git diff --check` PASS. Это bounded
+проверки, не полный аудит secrets/history. Перед новым отдельно разрешённым retry:
+исправленный isolated deployment manifest, JIT refresh **после sequence5**,
+health/rollback checks. Не возобновлять rollout автоматически. Push/public Android
+release/FIELD-1: **нет**. Предыдущие failure/fix evidence сохранены далее.
+
+### Исторические результаты перед попыткой №2
+
 ## 5N-TIME-COMPAT — PASS locally, production remains rolled back
 
 Entry HEAD `e77aea8eb78c74197197d0ebbbe1d87053c36f0c`, clean worktree.

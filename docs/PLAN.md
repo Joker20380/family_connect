@@ -2,6 +2,21 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Попытка №2: DEPLOYMENT FAILED / ROLLED BACK (01.10 13:39UTC).**
+Полная Android canary53 сборка/194 tests/lint PASS; подпись field52 совместима,
+установки нет. NL живой UTC-каталог/READY/Python interoperability PASS.
+RU sync завершился до publisher/SSH: `ModuleNotFoundError: clients` через
+`provisioning.friends_catalog` → `clients.desktop.profile_config`.
+Полный source checkout/authority staging скрывали runtime packaging dependency.
+[Доказательства](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+**STOP после отката.** Далее только локальное уточнение минимального runtime
+manifest и isolated import/CLI smoke точного RU/NL deployment bundle без checkout
+на sys.path; затем исправление runbook. Не добавлять случайные файлы на live-хост.
+Новый rollout — только после отдельного разрешения и JIT refresh после sequence5,
+с прежними TTL/Family/issuer/owner-only admission. Без auto-retry/push/FIELD-1.
+
+### Исторический checkpoint перед попыткой №2
+
 **5N-TIME-COMPAT: local PASS (01.10).** Producer canonical UTC output + strict
 offset-aware Python/native input implemented; shared Z/positive/negative/actual
 failure fixtures, nanosecond bounds and replay checks pass. Python91, JVM6,
