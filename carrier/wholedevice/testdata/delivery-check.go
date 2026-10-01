@@ -24,6 +24,7 @@ func check() error {
 	var input struct {
 		Response json.RawMessage `json:"response"`
 		Identity []byte          `json:"identity"`
+		Public   []byte          `json:"public"`
 		Anchor   []byte          `json:"anchor"`
 		Now      int64           `json:"now"`
 	}
@@ -31,6 +32,14 @@ func check() error {
 		return wholedevice.ErrClosed
 	}
 	defer clear(input.Identity)
+	if len(input.Public) != 0 {
+		delivery, credentials, err := wholedevice.ValidateDelivery(input.Response, input.Public, input.Anchor, time.Unix(input.Now, 0))
+		if err != nil {
+			return err
+		}
+		_, err = bootstrap.ParseDirectory(delivery.Directory, credentials.Family, credentials.Gateway, time.Unix(input.Now, 0))
+		return err
+	}
 	profile, rawDirectory, err := wholedevice.DeliveryMaterial(input.Response, input.Identity, input.Anchor, time.Unix(input.Now, 0))
 	if err != nil {
 		return err

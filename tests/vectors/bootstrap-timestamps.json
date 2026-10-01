@@ -1,0 +1,23 @@
+{
+  "valid": [
+    {"name":"utc","value":"2026-10-01T11:54:06Z","canonical":"2026-10-01T11:54:06Z","seconds":1790855646,"nanos":0},
+    {"name":"positive","value":"2026-10-01T14:54:06+03:00","canonical":"2026-10-01T11:54:06Z","seconds":1790855646,"nanos":0},
+    {"name":"negative","value":"2026-10-01T06:24:06-05:30","canonical":"2026-10-01T11:54:06Z","seconds":1790855646,"nanos":0},
+    {"name":"production-expiry","value":"2026-10-01T15:39:55.760348939+03:00","canonical":"2026-10-01T12:39:55.760348939Z","seconds":1790858395,"nanos":760348939}
+  ],
+  "invalid": [
+    "2026-10-01T11:54:06", "2026-10-01T11:54:06+0300", "2026-10-01T11:54:06+3:00",
+    "2026-10-01T11:54:06+24:00", "2026-10-01T11:54:06+00:60", "2026-10-01T11:54:06+03:00:00",
+    "2026-02-30T11:54:06Z", "2026-10-01T24:00:00Z", "2026-10-01T11:60:00Z",
+    "2026-10-01T11:54:60Z", "2026-10-01T1:54:06Z", "2026-10-01 11:54:06Z",
+    "2026-10-01T11:54:06Zjunk", "2026-10-01T11:54:06,123Z", "2026-10-01T11:54:06.1234567890Z", ""
+  ],
+  "directory": {
+    "version":1,
+    "family":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "issued_at":"2026-10-01T11:44:58.966797108Z",
+    "expires_at":"2026-10-01T15:39:55.760348939+03:00",
+    "seeds":[{"transport":"telemost-webrtc","join_url":"https://telemost.yandex.ru/j/test-only","gateway":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}]
+  },
+  "now":1790855100
+}

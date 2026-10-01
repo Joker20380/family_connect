@@ -2,7 +2,9 @@ package bootstrap
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"strings"
 	"testing"
 	"time"
 
@@ -13,7 +15,7 @@ import (
 func TestSeedPublishedOnlyAfterReadyAndWithdrawn(test *testing.T) {
 	exported := make(chan Directory, 1)
 	manager := &SeedManager{Publish: func(directory Directory) error { exported <- directory; return nil }}
-	ctx, cancel := context.WithCancel(bounded(test))
+	ctx, cancel := context.WithDeadline(context.Background(), time.Now().In(time.FixedZone("non-UTC", 3*3600)).Add(20*time.Second))
 	defer cancel()
 	started, ready := make(chan struct{}), make(chan struct{})
 	client, server := pair()
@@ -63,6 +65,13 @@ func TestSeedPublishedOnlyAfterReadyAndWithdrawn(test *testing.T) {
 	case directory := <-exported:
 		if len(directory.Seeds) != 1 || directory.Seeds[0].Gateway != testGateway {
 			test.Fatal("invalid export")
+		}
+		if directory.IssuedAt.Location() != time.UTC || directory.ExpiresAt.Location() != time.UTC {
+			test.Fatal("producer retained local timezone")
+		}
+		var value map[string]any
+		if json.Unmarshal(encode(directory), &value) != nil || !strings.HasSuffix(value["issued_at"].(string), "Z") || !strings.HasSuffix(value["expires_at"].(string), "Z") {
+			test.Fatal("noncanonical producer output")
 		}
 	case <-ctx.Done():
 		test.Fatal("seed was not exported")

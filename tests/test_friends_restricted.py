@@ -1,5 +1,6 @@
 import base64
 import json
+from pathlib import Path
 
 import pytest
 from cryptography import x509
@@ -8,8 +9,54 @@ from cryptography.hazmat.primitives.serialization import Encoding
 from cryptography.x509.oid import NameOID
 
 from control.friends.access import Access, Rejected
-from control.friends.restricted import RestrictedReadiness, DOMAIN, delegation, directory, iso, migrate, utc
+from control.friends.restricted import RestrictedReadiness, DOMAIN, delegation, directory, iso, migrate, timestamp, timestamp_ns, utc
 from device_identity.device import DeviceIdentity
+
+
+TIME_CONTRACT = json.loads((Path(__file__).parent / 'vectors/bootstrap-timestamps.json').read_text())
+
+
+@pytest.mark.parametrize('case', TIME_CONTRACT['valid'], ids=lambda case: case['name'])
+def test_directory_absolute_timestamp_contract(case):
+    assert timestamp(case['value']) == case['seconds']
+    assert timestamp_ns(case['value']) == case['seconds'] * 1_000_000_000 + case['nanos']
+    assert timestamp_ns(case['value']) == timestamp_ns(case['canonical'])
+    assert iso(timestamp(case['value'])).endswith('Z')
+    value = dict(TIME_CONTRACT['directory'], expires_at=case['value'])
+    raw = json.dumps(value).encode()
+    for now, accepted in [(case['seconds'] - 1, True), (case['seconds'], bool(case['nanos'])), (case['seconds'] + 1, False)]:
+        if accepted:
+            assert directory(raw, 'a' * 32, 'b' * 32, now) == dict(value, expires_at=case['canonical'])
+        else:
+            with pytest.raises(ValueError):
+                directory(raw, 'a' * 32, 'b' * 32, now)
+
+
+@pytest.mark.parametrize('value', TIME_CONTRACT['invalid'])
+def test_directory_invalid_timestamp_contract(value):
+    with pytest.raises(ValueError):
+        timestamp(value)
+    for field in ('issued_at', 'expires_at'):
+        raw = json.dumps(dict(TIME_CONTRACT['directory'], **{field: value})).encode()
+        with pytest.raises(ValueError):
+            directory(raw, 'a' * 32, 'b' * 32, TIME_CONTRACT['now'])
+
+
+def test_original_offset_failure_and_precise_bounds():
+    from datetime import datetime
+    value = TIME_CONTRACT['directory']
+    def old_timestamp(text):
+        if not isinstance(text, str) or not text.endswith('Z'):
+            raise ValueError('old Z-only contract')
+        return int(datetime.fromisoformat(text.replace('Z', '+00:00')).timestamp())
+    with pytest.raises(ValueError):
+        old_timestamp(value['expires_at'])
+    assert directory(json.dumps(value).encode(), 'a' * 32, 'b' * 32, TIME_CONTRACT['now']) == dict(value, expires_at=TIME_CONTRACT['valid'][3]['canonical'])
+    for issued, expires in [('2026-10-01T11:45:00.000000001Z', '2026-10-01T12:00:00Z'),
+                            ('2026-10-01T11:00:00Z', '2026-10-01T15:00:00.000000001+03:00')]:
+        raw = json.dumps(dict(value, issued_at=issued, expires_at=expires)).encode()
+        with pytest.raises(ValueError):
+            directory(raw, 'a' * 32, 'b' * 32, TIME_CONTRACT['now'])
 
 
 @pytest.fixture
@@ -49,7 +96,8 @@ def configured(tmp_path, now):
     return service, device, now
 
 
-def test_backend_delivery_consumed_by_native_material(tmp_path):
+@pytest.mark.parametrize('source', ['current', 'production-offset', 'production-utc', 'negative-offset'])
+def test_backend_delivery_consumed_by_native_material(tmp_path, source):
     import os
     import subprocess
     import time
@@ -57,12 +105,33 @@ def test_backend_delivery_consumed_by_native_material(tmp_path):
     tool = os.environ.get('FC_TEST_GO')
     if not tool:
         pytest.skip('set FC_TEST_GO to the locked Go toolchain for cross-language compatibility')
-    service, device, now = configured(tmp_path, int(time.time()))
+    service, device, now = configured(tmp_path, int(time.time()) if source == 'current' else TIME_CONTRACT['now'])
+    if source != 'current':
+        value = dict(TIME_CONTRACT['directory'])
+        if source == 'production-utc':
+            value['expires_at'] = TIME_CONTRACT['valid'][3]['canonical']
+        elif source == 'negative-offset':
+            value['expires_at'] = TIME_CONTRACT['valid'][2]['value']
+        service.seed_source = lambda: json.dumps(value).encode()
+        from control.friends.restricted_sync import gateway
+        trust, _ = delegation(service.manifest, service.anchor, now)
+        profile = tmp_path / 'gateway.json'
+        profile.write_text(json.dumps(dict(authority=trust['authority'], revocations=service.crl_source().decode(),
+                                          minimum_crl=1, family=trust['family'], gateway=trust['gateway'])))
+        profile.chmod(0o600)
+        seed = tmp_path / 'directory.json'
+        seed.write_bytes(service.seed_source()); seed.chmod(0o600)
+        exported = gateway(profile, seed, json.dumps(dict(revocations=service.crl_source().decode())).encode(), now)
+        assert exported == seed.read_bytes()
+        service.seed_source = lambda: exported
     with service.access.db() as database:
         database.execute('UPDATE restricted_grants SET revision=2')
     response = service.fetch(proof(service, device))
+    assert response['directory']['issued_at'].endswith('Z') and response['directory']['expires_at'].endswith('Z')
     value = dict(response=response, identity=base64.b64encode(device._identity.get_private_key()).decode(),
                  anchor=base64.b64encode(service.anchor).decode(), now=now)
+    if source != 'current':
+        value['public'] = device.public_identity
     result = subprocess.run([tool, 'run', './wholedevice/testdata/delivery-check.go'],
                             input=json.dumps(value).encode(), stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                             cwd=Path(__file__).resolve().parents[1] / 'carrier', timeout=90)

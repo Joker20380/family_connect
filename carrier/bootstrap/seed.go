@@ -69,7 +69,7 @@ func (manager *SeedManager) Run(ctx context.Context, provider roombroker.RoomPro
 	now := time.Now().UTC()
 	expires, _ := lifetime.Deadline()
 	manager.mu.Lock()
-	manager.directory = &Directory{1, family, now, expires, []Seed{{"telemost-webrtc", room.JoinURL, gateway}}}
+	manager.directory = &Directory{1, family, now, expires.UTC(), []Seed{{"telemost-webrtc", room.JoinURL, gateway}}}
 	directory := *manager.directory
 	manager.mu.Unlock()
 	if manager.Publish != nil {

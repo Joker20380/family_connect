@@ -7,6 +7,28 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class RestrictedCacheTest {
+    @Test public void sharedTimestampInstantsAndReplay()throws Exception{
+        JsonObject contract;
+        try(var input=getClass().getClassLoader().getResourceAsStream("bootstrap-timestamps.json")){
+            assertNotNull(input);contract=ControlJson.parse(input.readAllBytes()).getAsJsonObject();
+        }
+        for(JsonElement entry:contract.getAsJsonArray("valid")){
+            JsonObject value=entry.getAsJsonObject();java.time.Instant instant=java.time.Instant.parse(value.get("value").getAsString());
+            assertEquals(value.get("seconds").getAsLong(),instant.getEpochSecond());assertEquals(value.get("nanos").getAsInt(),instant.getNano());
+            assertEquals(value.get("canonical").getAsString(),instant.toString());
+            assertTrue(instant.minusNanos(1).isBefore(instant));assertFalse(instant.isBefore(instant));
+        }
+        Memory storage=new Memory();RestrictedCache cache=cache(storage,1000);
+        JsonObject first=ControlJson.parse(response(1000,2000,1,1,1,"seed")).getAsJsonObject();
+        first.getAsJsonObject("directory").addProperty("issued_at","2026-10-01T14:54:06+03:00");
+        cache.accept(first.toString().getBytes(StandardCharsets.UTF_8));
+        JsonObject newer=first.deepCopy();newer.getAsJsonObject("directory").addProperty("issued_at","2026-10-01T06:24:07-05:30");
+        byte[] accepted=newer.toString().getBytes(StandardCharsets.UTF_8);cache.accept(accepted);
+        rejected(cache,first.toString().getBytes(StandardCharsets.UTF_8));
+        JsonObject conflict=newer.deepCopy();conflict.getAsJsonObject("directory").addProperty("issued_at","2026-10-01T11:54:07Z");
+        rejected(cache,conflict.toString().getBytes(StandardCharsets.UTF_8));
+        assertArrayEquals(accepted,cache(storage,1000).usable());
+    }
     static class Memory implements RestrictedCache.Storage {
         byte[] raw;boolean fail;
         public byte[] read(){return raw==null?null:raw.clone();}

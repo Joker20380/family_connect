@@ -65,8 +65,17 @@ def request(access, action, value):
 
 
 def timestamp(value):
-    require(type(value) is str and value.endswith('Z'))
-    return int(datetime.fromisoformat(value.replace('Z', '+00:00')).timestamp())
+    return timestamp_ns(value) // 1_000_000_000
+
+
+def timestamp_ns(value):
+    require(type(value) is str)
+    match = re.fullmatch(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]'
+                         r'(?:\.([0-9]{1,9}))?(?:Z|[+-](?:[01][0-9]|2[0-3]):[0-5][0-9])', value)
+    require(match is not None)
+    instant = datetime.fromisoformat(value.replace('Z', '+00:00')).astimezone(timezone.utc)
+    seconds = int(instant.replace(microsecond=0).timestamp())
+    return seconds * 1_000_000_000 + int((match.group(1) or '').ljust(9, '0'))
 
 
 def utc(value):
@@ -107,10 +116,8 @@ def directory(raw, family, gateway, now):
     value = parse(raw)
     fields(value, 'version family issued_at expires_at seeds')
     require(type(value['version']) is int and value['version'] == 1 and value['family'] == family)
-    issued, expires = timestamp(value['issued_at']), timestamp(value['expires_at'])
-    require(issued <= now < expires and 0 < expires - issued <= 3600)
-    lifetime = datetime.fromisoformat(value['expires_at'].replace('Z', '+00:00')) - datetime.fromisoformat(value['issued_at'].replace('Z', '+00:00'))
-    require(0 < lifetime.total_seconds() <= 3600)
+    issued, expires = timestamp_ns(value['issued_at']), timestamp_ns(value['expires_at'])
+    require(issued <= now * 1_000_000_000 < expires and 0 < expires - issued <= 3600 * 1_000_000_000)
     require(type(value['seeds']) is list and 1 <= len(value['seeds']) <= 4)
     seen = set()
     for seed in value['seeds']:
@@ -119,6 +126,10 @@ def directory(raw, family, gateway, now):
         require(type(seed['join_url']) is str and re.fullmatch(r'https://telemost\.yandex\.ru/j/[A-Za-z0-9_-]{1,128}', seed['join_url']))
         require(seed['join_url'] not in seen)
         seen.add(seed['join_url'])
+    for field, instant in (('issued_at', issued), ('expires_at', expires)):
+        seconds, nanos = divmod(instant, 1_000_000_000)
+        fraction = f'.{nanos:09d}'.rstrip('0') if nanos else ''
+        value[field] = iso(seconds)[:-1] + fraction + 'Z'
     return value
 
 

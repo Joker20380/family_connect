@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sync"
 	"time"
 
@@ -31,6 +32,36 @@ type Directory struct {
 	IssuedAt  time.Time `json:"issued_at"`
 	ExpiresAt time.Time `json:"expires_at"`
 	Seeds     []Seed    `json:"seeds"`
+}
+
+var directoryTimestamp = regexp.MustCompile(`^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{1,9})?(Z|[+-]([01][0-9]|2[0-3]):[0-5][0-9])$`)
+
+func (directory Directory) MarshalJSON() ([]byte, error) {
+	type plain Directory
+	directory.IssuedAt = directory.IssuedAt.UTC()
+	directory.ExpiresAt = directory.ExpiresAt.UTC()
+	return json.Marshal(plain(directory))
+}
+
+func (directory *Directory) UnmarshalJSON(raw []byte) error {
+	type plain Directory
+	var decoded plain
+	value := struct {
+		*plain
+		IssuedAt  string `json:"issued_at"`
+		ExpiresAt string `json:"expires_at"`
+	}{plain: &decoded}
+	if strictJSON(raw, &value, MaxDirectory) != nil || !directoryTimestamp.MatchString(value.IssuedAt) || !directoryTimestamp.MatchString(value.ExpiresAt) {
+		return roombroker.Code("directory_rejected")
+	}
+	issued, issuedErr := time.Parse(time.RFC3339Nano, value.IssuedAt)
+	expires, expiresErr := time.Parse(time.RFC3339Nano, value.ExpiresAt)
+	if issuedErr != nil || expiresErr != nil {
+		return roombroker.Code("directory_rejected")
+	}
+	decoded.IssuedAt, decoded.ExpiresAt = issued.UTC(), expires.UTC()
+	*directory = Directory(decoded)
+	return nil
 }
 
 func (Seed) String() string        { return "[bootstrap seed redacted]" }

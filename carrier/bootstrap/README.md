@@ -15,6 +15,26 @@ Telemost HTTPS `/j/` URLs; no query, fragment, userinfo, alternative port or hos
 private keys, provider OAuth and dedicated descriptors are not directory fields.
 Duplicates, unknown fields, stale/equal conflicting replacements are rejected.
 
+Timestamp contract (5N-TIME-COMPAT): absolute RFC3339 instants, accepting uppercase
+`T`/`Z` or numeric `±HH:MM` offsets. Canonical Family Connect directory JSON uses
+UTC with trailing `Z`; offsets are converted arithmetically, never relabeled.
+The shared Go/Python wire profile supports optional1–9 fractional digits
+(nanoseconds), clock hours00–23, minutes/seconds00–59, and valid calendar dates;
+naive timestamps, malformed offsets, leap seconds, extra precision and junk fail
+closed. Expiry is exclusive, future issuance forbidden, lifetime≤1h unchanged.
+Python compares exact UTC nanoseconds rather than truncating fractions to seconds
+or microseconds; integer readiness envelope expiry remains conservative seconds.
+Go seed publication explicitly converts the inherited context deadline to UTC,
+and every `Directory` JSON serializer canonicalizes both timestamps. Python
+delivery emits normalized UTC timestamps; sync/cache may preserve authenticated
+input bytes rather than silently rewriting a snapshot. No standalone directory
+signature/MAC binds a timestamp spelling. Issuer signatures/X509/CRLs are separate
+and unchanged. Replay ordering uses instants; equal-issued changed content still
+fails. Android additionally preserves its stricter equal-issued JSON equality
+check; normalization occurs before new delivery, not inside the encrypted vault.
+Shared fixture: `tests/vectors/bootstrap-timestamps.json` (repository root), with
+the real failure's timestamps and synthetic Family/gateway/seed values only.
+
 Delivery is `GET /v1/bootstrap/directory` on the existing Room Broker TLS1.3/mTLS
 control trust model, using `RequestAuthorizer`, not the application update key or
 a new signing root. The Android diagnostic native core obtains it directly while
