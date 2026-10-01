@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+## 5N-TIME-COMPAT — PASS locally, production unchanged, 01.10.2026
+
+Local repair from `e77aea8`: Go seed/Directory serializers emit UTC `Z`; strict
+Python/native parsing accepts valid RFC3339 offsets as the same absolute instant.
+Nanosecond expiry/lifetime comparisons, unchanged1h bound, shared actual-failure
+timestamp fixture and cross-language sync/delivery/native proof. Python91 PASS;
+Go race/vet4 packages PASS; local broker/helper build PASS; Friends cache JVM6 PASS.
+No full Android APK/physical/PERF run. Original deployment failure and rollback
+remain below: production still runs no restricted service/routes. No SSH, material
+refresh, token access, deployment, service start, public release, push or FIELD-1.
+Next authorized rollout must rebuild/re-stage fixed artifacts and refresh expired
+authority; never restart the inert old NL binary as if this local fix were deployed.
+[Contract audit, tests and preserved failure](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
 ## 5N-PROV-1 — DEPLOYMENT FAILED / ROLLED BACK, 01.10.2026
 
 Authorized canary attempt from `33255fe`,11:39–11:48UTC: JIT CRL3→4

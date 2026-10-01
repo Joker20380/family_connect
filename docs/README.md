@@ -13,7 +13,8 @@ Whole-device path принят isolated; production rollout ещё не выпо
 existing Friends identity → restricted provisioning/BOOT-1 → secure Android cache;
 [owner-only deployment, migration, secrets и rollback](../deploy/friends/restricted/README.md).
 NL seed reached READY, but offset expiry failed Python validation; NL rolled back,
-RU untouched. Required material prepared; timezone compatibility fix pending. Это текущий integration
+RU untouched. Timestamp compatibility now fixed/tested locally (5N-TIME-COMPAT),
+not deployed; authority needs fresh JIT renewal before authorized reuse. Это текущий integration
 gate перед actual-Friends readiness/rehearsal и final FIELD APK.
 [Historical material-only preflight READY](releases/2026-10-01-5n-prod-deploy-preflight.ru.md):
 same authority, CRL refreshed to3, owner-installed provider config schema PASS;

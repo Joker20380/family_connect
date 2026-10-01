@@ -1,5 +1,98 @@
 # 5N-PROV-1 — production restricted provisioning + bootstrap delivery
 
+## 5N-TIME-COMPAT — PASS locally, production remains rolled back
+
+Entry HEAD `e77aea8eb78c74197197d0ebbbe1d87053c36f0c`, clean worktree.
+The owner authorized **local repair/tests only**. The failed production attempt
+below is preserved unchanged. No SSH, provider/OAuth access, authority refresh,
+service operation, deployment, physical Android/PERF run, public release or push
+was performed in this repair task. **5N-PROV-1 is not promoted to PASS.**
+
+### Contract audit and minimal repair
+
+- Root cause: Go seed expiry inherited a context deadline's local timezone while
+  issuance used UTC; Python accepted only `Z`, although Go/native uses RFC3339
+  instants. `2026-10-01T15:39:55.760348939+03:00` is the same instant as
+  `2026-10-01T12:39:55.760348939Z`, not an extra3h validity window.
+- Producer: `SeedManager` explicitly converts deadline to UTC; `Directory.MarshalJSON`
+  canonicalizes both fields for every Family-owned Go serialization. No host
+  timezone change, manual snapshot rewrite or string suffix substitution.
+- Consumer: Python accepts strict offset-aware RFC3339 and converts via UTC
+  arithmetic. It compares exact integer nanoseconds, retaining the production
+  fixture's9-digit fraction. It canonicalizes timestamps in the returned delivery
+  object. Integer envelope expiry still floors conservatively to seconds.
+- Native parser: strict shared lexical checks reject malformed offsets/clock
+  forms that standard-library parsers can normalize permissively. Parsed Go
+  timestamps are UTC instants. Shared wire precision is0–9 fractional digits;
+  naive/malformed/invalid dates, leap seconds, excess precision and trailing junk
+  are rejected. Python3.14's newly permissive `24:00:00` is explicitly rejected.
+- RU sync imports the same authenticated bounded snapshot and validates through
+  the fixed parser; no new signature/root. Raw sync/cache input bytes need not be
+  rewritten. New Go producer and Python API serialization emit UTC trailing `Z`.
+- No **cryptographic** dependency on raw directory timestamp spelling found:
+  standalone directory signature is absent; Family-authenticated delivery is the
+  trust boundary. Signed issuer payload, X509/CRL signatures, challenge proof,
+  admission, revisions, gateway identity and AES-GCM vault remain unchanged.
+- Go cache replay compares `time.Time` instants and canonical payloads; equivalent
+  offset spellings are idempotent, changed same-issued content rejected. Android
+  `RestrictedCache` already orders with `Instant.parse`; production Java code is
+  unchanged, including stricter equal-issued JSON equality. Tests explicitly keep
+  that conservative conflict rejection and restart/preservation behavior.
+
+### Regression proof and exact scope
+
+One shared `tests/vectors/bootstrap-timestamps.json` contains canonicalZ, +03:00,
+-05:30, actual failed expiry/issuance with nanoseconds, and invalid variants.
+Family/gateway references and join URL are synthetic; no production identifier,
+credential, room URL or token is in the fixture.
+
+- OLD Z-only parser reproducer rejects the actual +03:00 expiry; NEW parser accepts
+  the same semantic directory and emits equivalent UTC. Z and negative-offset
+  fixtures resolve to the same epoch instant and pass native directory validation.
+- Fake READY seed connector with a non-UTC **parent context deadline** proves fresh
+  `SeedManager` publication uses UTC in memory and in JSON, without global timezone
+  mutation or any Telemost call.
+- Shared fixtures exercise Python sync gateway → Python authenticated delivery →
+  native `ValidateDelivery` / `ParseDirectory`, including signatures and bindings.
+  Historical fixed-date vectors use explicit validation time; the existing fresh
+  wall-clock fixture still exercises `DeliveryMaterial` and Family TLS configuration.
+- Both directory fields reject malformed inputs. Expiry before/at/after boundary,
+  positive/negative offset equivalence, subsecond expiry, future issuance and
+  lifetime one nanosecond over1h are checked without TTL extension. Go and Android
+  tests reject stale instants even when lexical string order is reversed.
+- Family/gateway/seed URL, CRL/sequence/revision, revoked grants, replay, size bounds,
+  old-cache preservation, on-demand dedicated session and trust tests retained.
+
+Validation:
+
+| Local check | Result |
+| --- | --- |
+| Python restricted readiness, sync/native fixtures, Android contracts, provider-input and restricted/Orchestrator acceptance contracts | **91 passed**,0 skipped |
+| Go `test -race` bootstrap/wholedevice/roombroker/familysession | **PASS**,4 packages |
+| Go `vet` same4 packages | **PASS** |
+| Local bootstrap-broker and delivery-check builds | **PASS**, not deployed |
+| Friends RestrictedCache JVM tests using shared fixture | **6 passed**, direct javac/JUnit |
+| Physical Android / PERF / APK build/install | Not run |
+
+Initial test execution hit `/tmp` quota (SQLite I/O and Gradle cache initialization
+errors); Python/Go outputs moved to ignored disk-backed
+`state-client-build/time-compat/`. Gradle did not reach compilation; the actual
+Java cache/parser/test classes were compiled directly with the existing JDK,
+Gson/JUnit jars and shared resources; all6 tests passed. This is not a full Android
+Gradle/APK build claim. Initial Python `24:00:00` regression was fixed and rerun.
+The final91-test Python run also passed under `TZ=Pacific/Honolulu`; uncached Go
+race tests passed under `TZ=Europe/Moscow`. No dependence on host UTC timezone.
+Implementation commit: `f0cc04040177795a44d7b2448204ae4db512850c`.
+Documentation validation:412 files/2502 links,0errors; staged source guard1559
+entries,0blocked files; whitespace PASS. The guard is bounded pattern/path
+checking, not an exhaustive secret audit. Test/build outputs stay in ignored
+`state-client-build/time-compat/`; no private fixture or build output committed.
+
+Remaining boundary: rebuild/re-stage the modified Go/Python artifacts and JIT
+refresh expired authority material **only in a separately authorized deployment**.
+Inert NL still contains the earlier unfixed binary/helper. Do not start it or retry
+rollout automatically. No TTL, admission, trust or dedicated-session changes.
+
 ## Authorized canary rollout, 01.10.2026 — DEPLOYMENT FAILED / ROLLED BACK
 
 **5N-PROV-1 = DEPLOYMENT FAILED / ROLLED BACK.** Source HEAD

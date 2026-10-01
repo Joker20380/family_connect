@@ -1,5 +1,12 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+**Local repair checkpoint: 5N-TIME-COMPAT PASS, not deployed.** Go seed export
+and Directory serialization now emit UTC `Z`; Python/native consumers validate
+offset-aware RFC3339 instants with unchanged lifetime/replay/trust bounds.
+Before any separately authorized retry, rebuild/re-stage the modified Go/Python
+artifacts and JIT refresh expired material. Do not start the inert old NL binary.
+[Contract and regression evidence](../../../docs/releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
 **Current rollout checkpoint,01.10 11:48UTC: [DEPLOYMENT FAILED / ROLLED BACK](../../../docs/releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).**
 NL seed joined READY, but generated `expires_at` retained host offset `+03:00`,
 rejected by the Python `Z`-only timestamp parser. NL unit/auth disabled and directory

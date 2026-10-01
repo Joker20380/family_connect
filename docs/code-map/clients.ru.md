@@ -15,6 +15,9 @@ AtomicFile. `FriendsReadiness` exposes only redacted production state.
 in-memory TLS key from existing identity. `RestrictedTunnelEngine` uses that bundle
 for real `.friends`; legacy fixture-file path remains diagnostic-only.
 JVM tests: `RestrictedCacheTest`; native tests: `wholedevice/provisioning_test.go`.
+5N-TIME-COMPAT: shared `tests/vectors/bootstrap-timestamps.json` exercises native
+directory parsing and JVM `Instant` replay ordering; Go canonical UTC serializers
+are in `carrier/bootstrap/directory.go`. Java equal-issued conflict guards unchanged.
 Real Keystore/process-restart/production-control validation still requires the
 authorized deployment and in-place private APK; no new APK shipped in this gate.
 

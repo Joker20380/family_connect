@@ -13,6 +13,9 @@ NL→RU READY directory forced-command sync, no key/OAuth transfer.
 `scripts/sign_restricted_issuer.py` — offline existing-root delegation, not directory
 signature. `deploy/friends/access-api.py` serves two new POSTs; disabled without
 `FC_FRIENDS_RESTRICTED_DIR`. Tests: `tests/test_friends_restricted.py`.
+5N-TIME-COMPAT: `restricted.timestamp_ns` validates offset-aware RFC3339, exact
+nanosecond bounds; `directory` emits canonical UTC. Shared timestamp vectors:
+`tests/vectors/bootstrap-timestamps.json`, Python sync/delivery → Go native tests.
 `carrier/bootstrap/seed.go` publishes snapshot only after READY;
 `carrier/cmd/bootstrap-broker/main.go --directory-export` stores it atomically.
 No live deployment or broad admission enabled.

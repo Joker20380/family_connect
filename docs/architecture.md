@@ -1,5 +1,16 @@
 # Architecture map / Карта архитектуры
 
+## Timestamp compatibility repair — local only
+
+5N-TIME-COMPAT accepts absolute RFC3339 directory instants with `Z` or numeric
+offsets; canonical Go/Python output is UTC `Z`. Nanosecond comparisons retain
+exclusive expiry and≤1h lifetime. Native and Python reject malformed/naive input;
+issuer signatures and Family-authenticated directory trust are unchanged, with no
+standalone directory signature. Android `Instant` ordering and equal-issued
+content-conflict protection remain intact. [Protocol](../carrier/bootstrap/README.md)
+and [shared-fixture evidence](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+This local fix is **not deployed**; production remains in the rollback state below.
+
 ## Latest production attempt — 1 October 2026, rolled back
 
 Controlled owner-only NL deployment reached bootstrap READY but exposed a timestamp

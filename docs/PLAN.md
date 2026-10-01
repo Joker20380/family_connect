@@ -2,6 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-TIME-COMPAT: local PASS (01.10).** Producer canonical UTC output + strict
+offset-aware Python/native input implemented; shared Z/positive/negative/actual
+failure fixtures, nanosecond bounds and replay checks pass. Python91, JVM6,
+Go race/vet4 packages and local builds PASS. [Evidence](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+**STOP before deployment.** Production remains rolled back. A separately
+authorized retry must rebuild/re-stage fixed Go/Python, refresh short-lived material
+without resetting floors/extending TTLs, then revalidate seed/sync/API before phone
+prewarm. No auto-retry, physical testing, final FIELD APK, push or FIELD-1 here.
+
+### Historical deployment failure and repair prerequisite
+
 **5N-PROV-1: DEPLOYMENT FAILED / ROLLED BACK (01.10 11:48UTC).** Authorized
 NL seed reached READY, but offset `ExpiresAt` from context deadline is rejected by
 the Python `Z`-only directory parser. New NL service/auth disabled, snapshot
