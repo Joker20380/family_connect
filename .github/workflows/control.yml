@@ -1,9 +1,9 @@
 name: Linux control preview
 on:
   push:
-    paths: ['provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
+    paths: ['control/friends/**', 'deploy/friends/restricted/**', 'scripts/package_restricted_runtime.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
   pull_request:
-    paths: ['provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
+    paths: ['control/friends/**', 'deploy/friends/restricted/**', 'scripts/package_restricted_runtime.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
   workflow_dispatch:
 permissions:
   contents: read

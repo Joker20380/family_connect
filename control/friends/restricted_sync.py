@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import resource
 import secrets
+import sqlite3
 import subprocess
 import sys
 import tempfile
@@ -85,6 +86,20 @@ def sync(access, host, ssh_key, known_hosts):
     atomic(root / 'directory.json', raw)
 
 
+def check(access, host, ssh_key, known_hosts):
+    require(host == '186.246.45.246' and access.path.is_file())
+    service = from_env(access)
+    _, _, _, _, number = service._trust(int(access.clock()))
+    bounded_file(ssh_key, 4096, True)
+    bounded_file(known_hosts, 16384)
+    database = sqlite3.connect(access.path.resolve().as_uri() + '?mode=ro', uri=True)
+    try:
+        require(database.execute('SELECT sequence FROM restricted_crl_sequence WHERE singleton=1').fetchone() == (number,))
+        require(database.execute('PRAGMA quick_check').fetchone() == ('ok',))
+    finally:
+        database.close()
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='mode', required=True)
@@ -96,6 +111,7 @@ def main():
     worker.add_argument('--host', required=True)
     worker.add_argument('--ssh-key', type=Path, required=True)
     worker.add_argument('--known-hosts', type=Path, required=True)
+    worker.add_argument('--check', action='store_true', help='Validate local inputs only; no publisher, SSH or writes')
     args = parser.parse_args()
     try:
         if args.mode == 'gateway':
@@ -106,6 +122,9 @@ def main():
                 sys.stdout.buffer.write(gateway(args.profile, args.directory, sys.stdin.buffer.read(20001), int(time.time())))
             finally:
                 os.close(descriptor)
+        elif args.check:
+            check(Access(args.db), args.host, args.ssh_key, args.known_hosts)
+            print('Restricted runtime pre-network check passed')
         else:
             sync(Access(args.db), args.host, args.ssh_key, args.known_hosts)
     except Exception:

@@ -1,5 +1,65 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+## 5N-RUNTIME-PACKAGING — локальное исправление, не deployment
+
+После попытки №2 исходники sync поставляются только по
+[`runtime-files.json`](runtime-files.json), builder —
+[`scripts/package_restricted_runtime.py`](../../../scripts/package_restricted_runtime.py).
+Manifest содержит10 Python-файлов, включая единственный чистый stdlib-модуль
+`clients/desktop/profile_config.py`; GUI/backend/client state не поставляются.
+Он намеренно используется для строгой проверки AWG/TCP templates. Перенос этого
+парсера сейчас затронул бы несколько desktop/TCP packagers и шестифайловый legacy
+archive; поэтому выбран явный lightweight dependency, без копии реализации.
+
+Локальная сборка из checkout с venv, установленным по обоим существующим lockfiles:
+
+```sh
+python scripts/package_restricted_runtime.py \
+  --output state-client-build/restricted-runtime \
+  --python /path/to/locked-venv/bin/python
+```
+
+Builder отказывается перезаписывать output, проверяет каждый source и запускает
+`--help`, `sync --help`, `gateway --help` из готового `restricted-sync.pyz` с
+`python -I`. Это стандартный stdlib zipapp, не sys.path/PYTHONPATH workaround.
+Python внутри архива — тот же source, что в `app/`; внешние RNS/cryptography и их
+зависимости остаются в venv по поставляемым `control.lock`/`identity.lock`.
+`sha256.json` фиксирует bytes всех outputs. Сборка не включает runtime state,
+fixtures, ключи, provider.env, authority или комнаты.
+
+**Только при следующем отдельно разрешённом rollout:**
+
+- Overlay `app/` из bundle в `friends-access/app/`, сохранив существующие обычные
+  API модули; **не заменять весь app** минимальным sync-набором. Отдельно поставить
+  reviewed API handler как прежде. Не делать ручной выбор Python-папок.
+- Один и тот же `restricted-sync.pyz` разместить на RU/NL по
+  `/opt/apps/family_connect/friends-access/restricted-sync.pyz`, root-owned0644;
+  родительские каталоги должны быть traversable сервисному пользователю NL.
+  В read-only backup включить старые app/архив (если есть), unit и helper.
+- RU использует unit из **того же bundle**: `venv/bin/python -I .../restricted-sync.pyz sync ...`.
+  NL root-owned0755 helper — [`restricted-sync-command`](restricted-sync-command)
+  из bundle, тот же archive с `gateway`; прежние SSH `restrict`/source restriction/
+  forced-command сохраняются. Никакого `PYTHONPATH` или зависимости от cwd checkout.
+- До старта sync выполнить его точный `ExecStart` с добавленным `--check` и
+  `FC_FRIENDS_RESTRICTED_DIR`. Проверка только локально читает/валидирует
+  delegation/key/admission/CRL, CRL sequence/SQLite integrity и bounded key/host
+  files. БД открывается `mode=ro`; publisher, SSH и writes не вызываются.
+  Успех выводит только `Restricted runtime pre-network check passed`.
+  Это **не** проверка SSH-аутентификации/удалённого consumer и не обновление
+  истёкшего CRL; JIT freshness и последующие live checks всё ещё обязательны.
+
+Regression: `tests/test_restricted_runtime.py` строит точный bundle и читает его
+unit/helper, проверяет imports/CLI вне checkout, без/с посторонним PYTHONPATH,
+отрицательное удаление каждой runtime dependency, fixture-only `--check`,
+неизменность файлов/БД и запрет publisher/socket/subprocess. CI path filters
+включают manifest, helper, builder и server modules. Android/shared parser source
+не изменены, новый APK для этого исправления не требуется.
+
+**Production остаётся в состоянии rollback попытки №2.** В этой локальной задаче
+нет SSH/deploy/start/authority refresh/phone testing/push/FIELD-1.
+
+### Исторический блокер и откат попытки №2
+
 **Попытка №2,01.10 13:39UTC: DEPLOYMENT FAILED / ROLLED BACK.**
 Source `e808f50`: NL READY и живой UTC `Z` → Python PASS. RU sync остановлен:
 `provisioning.friends_catalog` импортирует `clients.desktop.profile_config`,
@@ -144,10 +204,11 @@ existing Friends deployment.
 
 ### RU — 185.251.89.19:/opt/apps/family_connect
 
-- Deploy reviewed `control/friends/restricted*.py`, unchanged required packages
-  (`control`, `device_identity`, `provisioning`) and `deploy/friends/access-api.py`
-  into the existing `friends-access/app`/handler layout. Use existing control and
-  identity lockfiles in `friends-access/venv`; verify cryptography compatibility.
+- Deploy the checked bundle described above: explicit `app/` overlay, the same
+  `restricted-sync.pyz` and unit/helper templates on RU/NL; preserve existing API
+  modules. Deploy reviewed `deploy/friends/access-api.py` to the existing handler
+  path. Use the bundle's existing control/identity lockfiles in `friends-access/venv`;
+  verify cryptography compatibility. Never copy only three guessed source folders.
 - Create protected `friends-restricted/` (0700): `anchor.pub`, `issuer.json`,
   `issuer.key` (0600), `admission.json` with **only owner device**, initial
   `revocations.pem`, subsequent `directory.json`, dedicated `sync.key` and pinned
@@ -183,11 +244,10 @@ existing Friends deployment.
   authority, initial signed CRL, Family/gateway and revision/CRL floors. No fixture
   issuer/profile or owner-device private key. Renewal of the gateway certificate
   is operational PKI maintenance before expiry, not Android enrollment.
-- The dedicated RU sync public key must have an sshd forced command invoking
-  `python -m control.friends.restricted_sync gateway --profile
-  /opt/apps/family_connect/friends-restricted/gateway.json --directory
-  /opt/apps/family_connect/friends-restricted/directory.json` with the verified
-  NL venv and app working directory. Use a root-owned wrapper, `restrict`, source
+- The dedicated RU sync public key must have the root-owned `restricted-sync-command`
+  wrapper from the checked bundle as its sshd forced command. It invokes the verified
+  NL venv with `-I /opt/apps/family_connect/friends-access/restricted-sync.pyz gateway`
+  and the existing profile/directory paths, independently of cwd. Use `restrict`, source
   address restriction to RU, no shell/PTY/forwarding, no access to other services.
   This helper accepts a signed monotonic CRL and exports only a validated directory;
   it does not receive private keys. Do not repurpose existing peer-registration keys.

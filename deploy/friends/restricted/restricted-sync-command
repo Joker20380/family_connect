@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+[ "${SSH_ORIGINAL_COMMAND-}" = restricted-sync ] || exit 126
+[ "$#" -eq 0 ] || exit 126
+exec /opt/apps/family_connect/friends-access/venv/bin/python -I \
+    /opt/apps/family_connect/friends-access/restricted-sync.pyz gateway \
+    --profile /opt/apps/family_connect/friends-restricted/gateway.json \
+    --directory /opt/apps/family_connect/friends-restricted/directory.json

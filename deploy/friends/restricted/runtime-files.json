@@ -1,0 +1,12 @@
+[
+  "control/friends/__init__.py",
+  "control/friends/access.py",
+  "control/friends/restricted.py",
+  "control/friends/restricted_admin.py",
+  "control/friends/restricted_sync.py",
+  "device_identity/__init__.py",
+  "device_identity/device.py",
+  "provisioning/__init__.py",
+  "provisioning/friends_catalog.py",
+  "clients/desktop/profile_config.py"
+]
