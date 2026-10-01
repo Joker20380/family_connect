@@ -1,5 +1,43 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+## Committed HTTP packaging checkpoint — local only, 01.10.2026
+
+The production HTTP builder, explicit source manifest, isolated entrypoint, durable
+receipt harness, nginx matrix and CI integration are now committed in
+`f7b3b6c29526fb600990f60d57449571a8538f22`. Later evidence-only commits do not
+change these runtime inputs. Build from an exact clean Git export/worktree, never
+overlay retained uncommitted files. The candidate inventory and final clean-HEAD
+receipt are described in the [packaging Git report](../../../docs/releases/2026-10-01-5n-http-packaging-git.ru.md).
+
+```sh
+/path/to/locked-venv/bin/python -I /clean/source/scripts/package_friends_http.py \
+  --output /new/empty/http-bundle --python /path/to/locked-venv/bin/python
+```
+
+The builder normalizes ZIP order/timestamps/modes so identical inputs do not change
+archive bytes with checkout/copy timestamps. All24 explicit source/config/lock/
+harness inputs plus the archive are hashed. The packaged handler's `main()` supports
+`--root`/`--port`; production uses the existing loopback/default state layout.
+External packages remain in the venv pinned by both supplied lockfiles. The zipapp
+does not prepend the external app directory or rely on cwd/PYTHONPATH. The guarded
+external app path is retained only for legacy direct-script execution, not zipapp
+imports. Never deploy that legacy script as the new isolated artifact.
+
+Candidate HTTP SHA256:
+`460e75205eb9baff313dc7dd963cdb7bceddf2d1e13405a71686f9ec6c976d71`.
+Old `eb9eb06f…` is retired as a deployment input, retained only as historical
+evidence. Accepted sync remains `cb6f050e…`, unchanged; shared precise-directory
+compatibility is tested without rebuilding or deploying it.
+
+Use `FC_TEST_HTTP_ARTIFACT` for the exact built bundle, `FC_TEST_NGINX` for isolated
+local nginx, and `FC_TEST_SYNC_ARTIFACT` for the accepted sync archive when running
+the HTTP runtime/evidence tests. Mandatory local A–G includes synthetic signed
+readiness fetch200; the production receipt CLI itself covers A–F, since it does
+not possess the physical owner's private proof key. Real owner readiness remains
+a separate mandatory production gate, never substituted by synthetic tests.
+No live attempt, JIT refresh, service activation, phone or beta is authorized by
+this checkpoint. The production order/rollback contract remains unchanged.
+
 ## RU acceptance after attempt #5 — local operator, not deployed
 
 Use `scripts/restricted_sync_acceptance.py` instead of the archived inline RU_SYNC
@@ -98,6 +136,90 @@ Tests cover receipt ordering, nonzero shell/EXIT trap/rollback marker, hard proc
 exit, exact issuance/expiry ±1ns, URL/security bounds and real SeedManager serialized
 publication through the isolated Python archive back to native validation.
 [Detailed proof and limits](../../../docs/releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
+## Latest attempt #4 — rolled back before RU sync/API, 01.10.2026
+
+Explicit authorization followed the local revalidation below. Accepted HTTP bytes
+and25-entry inventory/source pin matched, but the HTTP archive was only staged,
+not activated. JIT CRL11→12/native authority checks PASS; gateway certificate
+expiry18:13:46UTC, CRL expiry17:28:46UTC. NL emitted one canonical UTC-Z seed and
+logged native READY once, but Python live-directory acceptance raised `ValueError`.
+Exact rejected predicate is not established. No RU `--check`/live sync/API gate;
+no Redmi. **STOP, no retry/live repair under the consumed authorization.**
+
+Rollback17:13:57–58UTC/readback17:15UTC: ordinary200/400/400, restricted404;
+API/ingress unchanged without restart, AWG/TCP unchanged. Restricted seed/sync/
+timer/auth off. Protected snapshot/evidence on both hosts:
+`restricted-materials-stage-20261001/canary-rollout-attempt4-d27156d/` under the
+authorized Family Connect root. NL `failed-directory.json` remains private there;
+do not print/copy its seed URL into Git. Local redacted receipts/operator are in
+ignored `state-client-build/prov1-attempt4/`.
+
+Authoritative DB/staged CRL12 and NL profile floor12 are preserved; inactive RU
+runtime still has expired CRL11 because installation/sync was never reached.
+Future publisher refresh must reconcile authoritative floors, not assume that
+inactive runtime is current. Never roll back the DB or use old staging6/CRL11.
+Attempt #3 historical cause remains UNKNOWN. [Full attempt #4 record](../../../docs/releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
+## Historical local HTTP gate — before attempt #4 authorization
+
+01.10.2026 local HTTP revalidation is READY FOR DEPLOYMENT AUTHORIZATION, not
+production acceptance. Historical attempt #3 root cause remains UNKNOWN because
+decisive HTTP evidence was lost. No retry is implied. [Exact artifact and receipts](../../../docs/releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
+HTTP deployment now uses the independent closed `friends-http.pyz`, built by
+[`package_friends_http.py`](../../../scripts/package_friends_http.py) from
+[`http-runtime-files.json`](http-runtime-files.json); sync still uses the separately
+accepted `restricted-sync.pyz`. Do not use the minimal sync overlay as an ordinary
+Friends API deployment. Candidate retained at
+`state-client-build/http-activation/validated-bundle/`, HTTP archive SHA256
+`eb9eb06fd38a0ec498445877fcfb5908a8566b96c7a25f44e2a4619170743a2f`.
+Its25-entry `sha256.json` also pins ingress, both HTTP drop-ins, lockfiles and the
+receipt harness. Recheck bytes against current source and after transfer; never
+rebuild silently and deploy an untested replacement. Venv must match both lockfiles.
+
+Only after separate explicit attempt #4 authorization, fresh live backups/JIT
+authority and NL READY/UTC-Z/RU isolated sync check/live sync/negative checks PASS:
+
+1. Install this exact archive to `friends-access/friends-http.pyz` and packaged
+   [`http-runtime.conf`](http-runtime.conf) as an additional systemd drop-in for
+   `family-connect-friends-access.service`. Preserve existing ordinary app/handler
+   for rollback. Keep packaged `access.conf` pointing to accepted restricted state.
+   `python -I` starts the archive on the existing loopback18084, no checkout imports.
+2. Add only packaged `nginx-location.conf` locations to the existing HTTPS vhost;
+   preserve status and ordinary Friends locations. Validate actual nginx config
+   before reload. Never run a first-install script on existing production.
+3. Use packaged `friends-http-acceptance.py` (SHA256
+   `830b5dec96af01fd5650e9afd15d27661dba1a3191f5943aecbdf41fc8d0fc42`)
+   with an owner-only evidence directory OUTSIDE any replaced/restored runtime
+   tree. Set a unique nonsecret `--generation` mapped to the saved artifact/config
+   inventory. Start `observe` before transition; observation is not an acceptance
+   verdict. `ready` checks loopback ordinary challenge with bounded readiness retries;
+   `gate` checks actual verified HTTPS without retries masking a regression.
+4. `gate --origin <verified-HTTPS-origin> --evidence <protected-receipts>
+   --generation <generation> --identities <protected-input>` requires existing
+   canary public identity/WG binding and all26 existing non-canaries by default.
+   Input file must be owner-only; do not print IDs or response bodies. Do not use
+   `--expected-non-canary 1` in production (it is synthetic fixture coverage only).
+   Exact gate: status200; ordinary malformed challenge400; safe ordinary chat
+   challenge400; restricted malformed400; all non-canaries403; canary200 with
+   validated bounded challenge shape. Physical readiness is a subsequent gate.
+5. Each probe fsyncs its redacted timestamp/status/classification/generation before
+   evaluating; only then may a nonzero gate trigger rollback. Do not wrap it in
+   an operator that keeps observations only in memory. Local tests cover shell
+   EXIT-trap/nonzero exit/SIGTERM/service failure/recovery and retained receipts.
+   Preserve receipts on rollback, including failed statuses and TLS/transport errors.
+   If persistence fails, acceptance cannot pass. No receipt guarantee is possible
+   for an uncatchable kill before an observation has been persisted.
+
+Rollback restores saved ordinary handler/app/ingress, removes **both** new HTTP
+drop-ins, reloads systemd and restarts only Friends API; stop/disable restricted
+timer/sync/NL seed and its forced-command authorization. Preserve authority, DB and
+monotonic floors (last documented11, not staging6). Never roll back a whole DB over
+new revocations. Validate ordinary200/400 and restricted404 with durable receipts.
+No AWG/TCP restart, phone interaction or FIELD-1 until the respective gates pass.
+The older overlay-based HTTP instructions below are historical/superseded by this
+section; accepted sync, trust, TTL and admission contracts are unchanged.
 
 ## Попытка №3 — rolled back, 01.10.2026 14:40UTC
 

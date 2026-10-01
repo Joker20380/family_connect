@@ -2,6 +2,43 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-HTTP-PACKAGING-GIT: local source checkpoint created (01.10.2026).**
+Code/tests/HTTP CI commit `f7b3b6c29526fb600990f60d57449571a8538f22` closes the
+missing tracked-builder/entrypoint/manifest/harness gap; clean source builds the
+precise-directory HTTP candidate `460e7520…`, not retired `eb9eb06f…`.274 targeted
+working-source checks PASS. Exact clean-HEAD inventory/startup/A–G/precision/
+receipts/sync fixture must remain verified in the [handoff evidence](releases/2026-10-01-5n-http-packaging-git.ru.md).
+Only separately authorized attempt #7 may consume this candidate, after all
+production pinning/JIT/baseline/NL/RU/negative/HTTP/physical gates in order.
+No refresh or rollout is implied; source acceptance is not owner readiness.
+Keep unrelated VPN-health/attempt-#5 evidence outside the HTTP commits. STOP.
+
+**5N-HTTP-ARTIFACT-REFRESH = FAIL, local-only clean-source audit (01.10.2026).**
+Exact HEAD8663128 contains the accepted precision fix but not the HTTP packaging
+prerequisites: builder, manifest/drop-in, durable harness, matrix tests and handler
+`main()` changes remain uncommitted. No dirty overlay, new archive or source edits
+were made.59 committed precision tests PASS; old embedded HTTP consumer rejection
+reproduced; sync pin unchanged. Old HTTP `eb9eb06f…` is retired as a rollout input,
+not deleted or replaced. [Full evidence](releases/2026-10-01-5n-http-artifact-refresh.ru.md).
+Next requires separately reviewed/accepted packaging prerequisites in a new source
+commit and an updated explicit source pin; do not claim those changes belong to
+8663128 or include retained work without review/authorization. Then rebuild from
+that clean source and run all ten artifact gates. No automatic implementation,
+deployment attempt #7, refresh, services, Redmi, push or FIELD-1.
+
+**Attempt #6 STOP — deployment input source mismatch, 01.10.2026 18:31UTC.**
+Both requested pins and internal inventories pass, but immutable HTTP archive
+`eb9eb06f…` predates the accepted nanosecond validation/delivery fix in HEAD
+`8663128…`; its shared restricted module differs from both HEAD and retained
+worktree. Sync archive `cb6f050e…` matches committed source. No production access,
+refresh, deployment, rollback, Redmi, APK, retry, commit or push in attempt #6.
+Before any separately authorized new attempt, reconcile/accept a current-source
+HTTP artifact and its route/readiness tests and new immutable pin offline; do not
+silently rebuild/replace this attempt's pinned artifact or consume unrelated work.
+Then reverify all gates/JIT floors from live authority, not old staging or expired
+receipts. This note authorizes neither preparation changes nor another deployment.
+[Attempt #6 evidence and remaining gates](releases/2026-10-01-5n-prov1-attempt6.ru.md).
+
 **5N-SYNC-ACCEPTANCE = PASS locally after attempt #5.** Воспроизведён timeout
 чтения journal10s до negative checks; synchronous runtime не переделан в async.
 Новый bounded operator проверяет authoritative unit/result/CRL/directory и обе
@@ -32,6 +69,48 @@ server/physical gates. Local PASS is not production acceptance.
 [Exact artifact and root-cause evidence](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
 
 ### Historical checkpoints — before offline reproduction
+
+**Attempt #4: 5N-PROV-1 = DEPLOYMENT FAILED / ROLLED BACK (01.10,17:13–17:15UTC).**
+Explicit authorization used only for this attempt. Source HEAD and accepted HTTP
+archive/all25 entries unchanged. JIT CRL11→12/native authority PASS, same single
+owner/Family/issuer/gateway/TTLs. NL native READY/one canonical UTC-Z seed, but
+Python live-directory validation raised `ValueError`; full NL acceptance failed.
+Rolled back before RU `--check`/sync/API activation; ordinary HTTP200/400/400,
+restricted404, normal API/AWG/TCP unchanged. No Redmi or client-level acceptance.
+Exact rejected predicate is not established; do not infer it or retrospectively
+diagnose attempt #3, whose historical cause remains **UNKNOWN**.
+
+**STOP after rollback.** Preserve quarantined NL directory and safe receipts for
+separately scoped local reproduction. No live fix/automatic retry. Any future
+authorized deployment must refresh from authoritative DB/staged CRL12/NL floor12,
+not expired inactive RU CRL11; gateway leaf expires18:13:46UTC, CRL17:28:46UTC.
+No DB/serial/revocation-floor rollback, identity changes or TTL extension. Physical
+readiness/restart/local rehearsal/browser/DNS/fail-closed gates remain unperformed.
+No commits/push/public release/FIELD-1. [Attempt #4 evidence](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
+### Historical local revalidation — before explicit attempt #4 authorization
+
+**5N-HTTP-LIVE-REVALIDATION = READY FOR DEPLOYMENT AUTHORIZATION (01.10,16:59UTC).**
+Exact retained HTTP archive and source inventory match; restricted-enabled local
+nginx/HTTPS matrix PASS,188 tests PASS/4 optional Go checks skipped. Packaged
+operator receipts are durable before verdict/rollback, including shell EXIT trap
+and upstream-failure/recovery simulation. Attempt #3 historical cause **UNKNOWN**;
+local success does not retrospectively diagnose its lost HTTP evidence.
+
+**STOP at authorization boundary.** No explicit separate authorization for attempt
+#4 in this conversation; do not infer it from the gate title or earlier attempts.
+Next authorized scope: recheck/pin the tested HTTP archive/config/harness; back up
+only relevant RU/NL state; JIT refresh CRL/gateway certificate from authoritative
+monotonic floors (last recorded11, not staging6), preserving Family/issuer/gateway/
+owner-only admission and TTLs. NL bootstrap READY/UTC-Z; exact closed RU sync
+`python -I --check`, live sync, stale-CRL/shell rejection must pass before API
+activation. Then six durable live HTTP receipts; any ordinary regression requires
+rollback before Redmi. Only after HTTP PASS: real owner in-place prewarm, restart,
+local cellular Auto rehearsal, Chrome≥2 sites/Family DNS/concurrent TCP/leak and
+fail-closed/underlay proof. No final FIELD APK, push or FIELD-1 in this gate.
+[Exact evidence and remaining work](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
+### Historical attempt #2 checkpoint — superseded by #3 and local revalidation
 
 **Попытка №2: DEPLOYMENT FAILED / ROLLED BACK (01.10 13:39UTC).**
 Полная Android canary53 сборка/194 tests/lint PASS; подпись field52 совместима,

@@ -1,5 +1,60 @@
 # Текущее состояние / Current state
 
+## 5N-HTTP-PACKAGING-GIT — committed local HTTP checkpoint, 01.10.2026
+
+Reviewed missing HTTP packaging/runtime/receipt implementation is committed in
+`f7b3b6c29526fb600990f60d57449571a8538f22`. Explicit25-entry bundle; packaged
+`main()` without external-source fallback, deterministic ZIP metadata, precise
+directory delivery, durable redacted receipts and A–G local tests. Working-source
+candidate SHA256 `460e75205eb9baff313dc7dd963cdb7bceddf2d1e13405a71686f9ec6c976d71`;
+clean source rebuild has identical bytes.274 targeted tests PASS, including native
+contracts;45 clean-commit HTTP matrix/receipt checks PASS (22.20s).
+[Final clean-HEAD evidence and preservation ledger](releases/2026-10-01-5n-http-packaging-git.ru.md).
+Old HTTP `eb9eb06f…` stays retired; sync `cb6f050e…` unchanged. This is local build
+acceptance, not deployment. Attempts #1–#6/history unchanged; #3 cause UNKNOWN.
+No production/credential/service/Redmi/APK change, no push, beta or FIELD-1.
+Unrelated VPN-health and historical attempt-#5 additions remain unstaged. STOP;
+no automatic attempt #7.
+
+## 5N-HTTP-ARTIFACT-REFRESH — FAIL: clean-HEAD packaging gap, 01.10.2026
+
+Local-only exact `8663128a4ee433c29adb90340b8d4573ac2ba161` export verified:
+all1569 tracked blobs/modes match, no extra files or dirty-worktree overlay.
+The accepted nanosecond consumer/delivery fix is present;59 targeted source
+precision/offset/security tests PASS. Existing sync archive remains `cb6f050e…`,
+matches HEAD's shared module and accepts the synthetic subsecond fixture.
+Old HTTP `eb9eb06f…` reproduces rejection from its embedded consumer and is
+**retired as a deployment candidate**, retained unchanged for historical evidence.
+
+No replacement was built: this HEAD lacks the HTTP builder/manifest/drop-in,
+receipt harness and HTTP matrix tests; its handler lacks packaged `main()` and
+unconditionally prepends the external app directory. Those prerequisites exist
+only as retained uncommitted work, which was not imported or committed. Exact-HEAD
+and no-overlay requirements therefore prevent using the accepted packaging flow.
+No new archive/hash, startup, A–G matrix, artifact regression, receipt-harness,
+sync→new-HTTP delivery or new-artifact secret-scan PASS is claimed.
+[Evidence and prerequisite boundary](releases/2026-10-01-5n-http-artifact-refresh.ru.md).
+Attempt #6 remains a pre-production stop; no production access/change, credentials,
+services, Redmi, APK, source edit, commit, push or attempt #7. STOP.
+
+## 5N-PROV-1 — attempt #6: pre-production input gate FAIL, 01.10.2026
+
+Explicitly authorized attempt #6 stopped at18:31UTC before any production access
+or change. HEAD `8663128a4ee433c29adb90340b8d4573ac2ba161` confirmed; committed
+sync acceptance operator unchanged. Both requested archive hashes and their full
+17/25-entry inventories pass, but pinned HTTP contains the old
+`control/friends/restricted.py`, without the accepted nanosecond directory/delivery
+fix. It matches neither current HEAD nor the retained HTTP worktree source.
+The corrected sync archive does match HEAD; its worktree difference is the preserved
+unrelated HTTP challenge hunk. This is a source-consistency failure, not corrupt
+archive bytes. Per the explicit mismatch STOP rule, no rebuild, JIT refresh,
+SSH, baseline/live gates, activation, Redmi operation or retry was performed.
+Rollback not needed/performed; production current health/state not freshly verified.
+Last documented state remains attempt #5 rollback, not a new acceptance.
+Existing8 modified/6 untracked files preserved; STATUS/PLAN receive only additive
+task notes. [Separate attempt #6 report](releases/2026-10-01-5n-prov1-attempt6.ru.md).
+Attempt #3 cause UNKNOWN; no commit/push/public release/beta/FIELD-1.
+
 ## 5N-SYNC-ACCEPTANCE — PASS локально после №5, 01.10.2026
 
 Таймаут №5 реконструирован в `journalctl` (10s), после синхронного start и до
@@ -41,6 +96,65 @@ attempt #4 rollback; no authority refresh, service start, Redmi, APK, push or
 FIELD-1. Attempt #3 HTTP cause remains **UNKNOWN**. Existing HTTP/workflow/VPN
 work preserved. **STOP: no automatic attempt #5.**
 [Reproduction, field audit, test gap, artifact and limitations](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
+## 5N-PROV-1 — попытка №4: DEPLOYMENT FAILED / ROLLED BACK, 01.10.2026
+
+Explicitly authorized attempt from `d27156d92fdb829fdc82471b05074270b54cd1a9`.
+Pinned HTTP archive `eb9eb06fd38a0ec498445877fcfb5908a8566b96c7a25f44e2a4619170743a2f`
+and all25 inventory/source entries unchanged; no rebuild. Baseline17:09UTC:
+ordinary HTTPS200/challenge400/chat400, restricted404; RU/NL AWG/TCP active,
+restricted units inactive, sole owner admitted/26 others rejected.
+
+JIT17:13:46UTC: CRL11→12, expiry17:28:46UTC; gateway certificate18:13:46UTC.
+Same Family/owner/issuer/gateway,0 other admissions; grant/delegation1 unchanged,
+expiry02.10 10:44:11UTC, TTLs unchanged. Native certificate/negative checks PASS.
+NL started17:13:49UTC, native `bootstrap_seed_ready` once/NRestarts0, one seed,
+canonical UTC-Z directory. **NL Python live-directory acceptance failed with
+`ValueError`**; exact failed predicate is not established by this receipt. STOP:
+RU `--check`/sync and HTTP activation not reached. No live workaround/retry.
+
+Rollback completed RU17:13:57/NL17:13:58UTC. Readback17:15UTC:
+ordinary200/400/400, restricted404; API handler/app/ingress unchanged, no new
+drop-ins, API/AWG/TCP PIDs/start times unchanged. NL seed/sync authorization off,
+directory quarantined; RU sync/timer inactive. DB normal rows/grants unchanged;
+**authoritative DB/staged CRL12 and NL floor12 retained; inactive RU runtime CRL11**.
+Do not treat that expired inactive CRL11 as the next publisher floor or restore DB.
+No Friends API restart/observed outage; continuous downtime not measured.
+
+Attempt #3 root cause remains **UNKNOWN** because decisive HTTP evidence was lost.
+Redmi, provisioning/readiness/restart/rehearsal/Chrome/DNS/leak/fail-closed proof
+not run. No APK install/build/version/public/invitation change; canary53 remains
+previously built only. No commits/push/FIELD-1; unrelated VPN-health work preserved.
+Next work requires a separate local investigation of the retained NL rejection;
+deployment authorization for this attempt is consumed, no automatic retry.
+[Exact receipts, rollback and remaining checks](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
+## 5N-HTTP-LIVE-REVALIDATION — READY FOR DEPLOYMENT AUTHORIZATION, 01.10.2026
+
+Local revalidation16:59UTC from HEAD `d27156d92fdb829fdc82471b05074270b54cd1a9`
+plus the retained uncommitted HTTP changes: exact closed Friends HTTP artifact
+`eb9eb06fd38a0ec498445877fcfb5908a8566b96c7a25f44e2a4619170743a2f`
+passes isolated restricted-enabled nginx/HTTP/verified HTTPS acceptance. Status200,
+ordinary malformed challenge400, safe chat challenge400, restricted malformed400,
+synthetic non-canary403, synthetic canary challenge200 and readiness fetch200;
+ordinary activation and route boundaries unchanged. **188 PASS /4 optional Go
+compatibility checks skipped**; focused HTTP/evidence suite first39 PASS, then
+included with an additional packaged-CLI shell EXIT-trap test in the larger run.
+Receipts fsync before acceptance/rollback and survive nonzero exit, process exit,
+catchable termination, upstream failure and local rollback/recovery simulation.
+
+**Attempt #3 root cause remains unknown because decisive HTTP evidence was lost.**
+Attempt #4 has no separate explicit deployment authorization in this conversation:
+no SSH, authority refresh, deployment, API activation, phone action or rollback here.
+Last documented production state is attempt #3 rolled back, ordinary200/400,
+restricted404; not a fresh live observation. Last recorded CRL11 expired14:55:41UTC,
+gateway certificate15:37:13UTC; both need JIT refresh from authoritative floors,
+not staging6. Same Family/owner/issuer/gateway,0 other admissions and TTL policy.
+Versions unchanged: canary53 remains a previously built private artifact, not an
+installation/publication claim. Redmi readiness/restart/rehearsal/browser/DNS/
+fail-closed acceptance remain unperformed. No new commits;18 unpushed retained;
+push/FIELD-1:no. Existing VPN-health work preserved.
+[Exact artifact, receipts, rollout/rollback boundary and remaining checks](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
 
 ## 5N-PROV-1 — попытка №2: DEPLOYMENT FAILED / ROLLED BACK, 01.10.2026
 
