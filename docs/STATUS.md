@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+## 5N-PROD-AUTHORITY — READY, staged only, 01.10.2026
+
+User-authorized first Friends restricted Family created under the existing signed
+issuer/grant namespace; only resolved Owner canary bound (other admissions0).
+Existing NL control-provider identity designated as gateway, original key retained;
+no ProductStore changes/new device/root. Additive restricted migration23.883ms,
+private on-host backup; existing normal rows/services/API/ingress unchanged.
+Offline ControlTrust delegation signed locally, RU issuer/private key0600, genuine
+publisher CRL sequence1, canary revision/delegation sequence1 from empty namespace.
+RU security files and NL gateway/binary/sync/account templates staged root-only;
+no new account/units/runtime installed or started. **Provider token excluded**;
+KeePass not accessed.18 contract tests + actual native/crypto validation PASS.
+Initial CRL/effective validation expiry **01.10 11:02:45UTC**, gateway leaf11:47:45,
+delegation/canary grant **02.10 10:44:11UTC**; refresh before later authorized use,
+never extend directory TTL/reset floors. No real-phone delivery/rehearsal/FIELD APK.
+No token phase, automatic deployment, push or FIELD-1.
+[Exact authority, inventory, validation and rollback](releases/2026-10-01-5n-prod-authority.ru.md).
+
 ## 5N-PROD-MATERIALS — BLOCKED at authority resolution, 01.10.2026
 
 Continuation from `9340931`, read-only audit completed10:28UTC. Existing protected

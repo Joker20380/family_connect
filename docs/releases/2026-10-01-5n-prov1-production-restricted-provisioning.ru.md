@@ -1,5 +1,15 @@
 # 5N-PROV-1 — production restricted provisioning + bootstrap delivery
 
+## Subsequent authority preparation — not deployment or phone acceptance
+
+01.10 [5N-PROD-AUTHORITY READY](2026-10-01-5n-prod-authority.ru.md): explicitly created
+the first canary Family, designated existing NL identity, applied only accepted
+additive restricted tables, signed delegated issuer locally, published real CRL and
+prepared/validated gateway material. One owner admission; no other beta devices.
+All new runtime files remain inactive staging. OAuth/KeePass not accessed; no new
+API/service activation, actual phone delivery or rehearsal. Initial CRL expires
+01.10 11:02:45UTC. **5N-PROV-1 PASS is still not claimed.**
+
 ## Subsequent authority audit — Phase A stop, no deployment
 
 01.10 10:28UTC, entry `9340931`: [materials continuation](2026-10-01-5n-prod-materials.ru.md)

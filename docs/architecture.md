@@ -2,6 +2,18 @@
 
 ## Production restricted delivery — 1 October 2026, local only
 
+**Authority preparation subsequently completed, not API deployment.** Under explicit
+owner authorization, one production Friends restricted Family is now represented
+by its ControlTrust-signed issuer delegation and one `restricted_grants` membership.
+It is not a ProductStore `/v2` entitlement; no cross-store enrollment or new root.
+The existing NL control-provider Device Identity was explicitly designated as the
+Family gateway (mailbox/diagnostic identities not reused). Its private key stays
+NL, online CA key stays RU, offline root stays local. Four accepted additive tables
+exist; issuer/CRL/gateway materials are root-only staged and validated. No API routes,
+new services, provider token, room creation or phone delivery enabled. Initial
+short-lived CRL requires renewal before later use; see the
+[authority checkpoint](releases/2026-10-01-5n-prod-authority.ru.md).
+
 Deployment authorization was subsequently granted for `ff9fb09`. The read-only
 09:32–09:33UTC preflight stopped because required RU issuer/sync and NL gateway/
 provider material were absent at the runbook paths. No production component or

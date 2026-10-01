@@ -1,5 +1,16 @@
 # 5N-PROD-MATERIALS — inert preparation, not deployment
 
+## Subsequent explicit authority creation — READY, provider phase excluded
+
+The next user authorization allowed creating the first Friends restricted Family
+and designating the existing NL gateway identity, resolving the Phase A policy gap
+below without inventing a ProductStore membership or replacing identities.
+[5N-PROD-AUTHORITY](2026-10-01-5n-prod-authority.ru.md): one canary grant, four accepted
+additive tables, signed delegation/real CRL and validated gateway profile staged.
+Provider token explicitly excluded, runtime unchanged. Initial CRL expiry01.10
+11:02:45UTC; refresh before future use. The following BLOCKED audit remains a
+historically correct record before that authority-creation authorization.
+
 ## Continuation — Phase A BLOCKED, 01.10.2026 10:28UTC
 
 **5N-PROD-MATERIALS = BLOCKED.** Entry HEAD

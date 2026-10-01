@@ -1,5 +1,16 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+**Authority checkpoint,01.10:** [5N-PROD-AUTHORITY READY](../../../docs/releases/2026-10-01-5n-prod-authority.ru.md)
+prepared the first signed Friends restricted Family, sole owner grant, existing NL
+control-provider gateway designation, issuer/CRL/profile and inactive runtime/sync
+templates. Files remain under root-only `restricted-materials-stage-20261001/`,
+not these final runtime paths. Only four accepted additive restricted tables were
+created. Initial CRL expires01.10 11:02:45UTC; refresh it via the publisher (preserving
+sequence) before later use. Do not regenerate Family/identity/floors or rerun first
+initialization. Provider token was expressly excluded; do not access KeePass or
+activate services/API merely because authority preparation is READY. Previous
+implementation-only statements below describe the original checkpoint.
+
 Local implementation only, 2026-10-01. **Do not execute this rollout without a
 separate authorization.** No production keys/configuration have been generated
 by this task. No diagnostic credentials may be reused. This is an owner-device

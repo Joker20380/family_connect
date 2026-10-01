@@ -2,6 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-PROD-AUTHORITY: READY / staged only (01.10).** Explicit first-Family/gateway
+designation authorization executed: one existing Owner grant, other admissions0,
+same NL control-provider identity, local offline-root delegation, real initial CRL.
+Additive four-table result/backup and18 tests/actual native validation PASS; no
+normal runtime changes. [Exact evidence](releases/2026-10-01-5n-prod-authority.ru.md).
+**STOP before provider-token phase**; do not access KeePass or retry deployment.
+Next separately authorized actions must renew short-lived CRL (initial expiry
+01.10 11:02:45UTC), leaves/delegation as needed; install staged account/helper/venv,
+then provider config/seed/sync/API only under appropriate deployment authorization.
+Phone READY/restart/rehearsal/final FIELD APK still not proven. No FIELD-1/push.
+
+### Historical Phase A authority blocker — superseded by explicit creation authorization
+
 **5N-PROD-MATERIALS: BLOCKED at Phase A (01.10, entry9340931).** Protected operator
 state resolves one active Owner device administrator, but no existing ProductStore
 Family/entitlement for that identity; cross-store identity overlap0. Existing NL
