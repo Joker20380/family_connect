@@ -1,5 +1,58 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+## RU acceptance after attempt #5 — local operator, not deployed
+
+Use `scripts/restricted_sync_acceptance.py` instead of the archived inline RU_SYNC
+block for a separately authorized future attempt. Pin the operator, closed runtime,
+unit and forced helper first; keep the sync timer disabled during one-shot acceptance.
+The source/runtime/authority policies are unchanged; this command is not a refresh
+or deployment authorization. It starts only the existing restricted sync unit once.
+
+```sh
+venv/bin/python -I /path/to/pinned/restricted_sync_acceptance.py --execute \
+  --runtime /path/to/pinned/restricted-sync.pyz \
+  --evidence /protected/attempt-evidence/ru-sync --generation attempt-N
+```
+
+`--snapshot` instead of `--execute` is a read-only safe metadata probe. No default
+execution mode. No raw profile, directory, URL, proof, private identity or OAuth is
+printed. Runtime archive dependencies are loaded through the isolated archive.
+
+Completion is **synchronous**: SSH is bounded15s, systemd Type=oneshot25s, blocking
+`systemctl start` retains45s. Require its successful blocking return, inactive/dead,
+Result=success/exit status0, CRL=previous+1 with valid issuer/signature/current time and
+matching DB floor, valid BOOT-1 directory with nondecreasing issuance. Directory v1
+has no revision counter: record version/issued/expires, not an invented revision.
+Then require strict known-host verification and forced-command generic shell exit126,
+stale CRL exit1 with empty stdout, and unchanged authoritative readback afterward.
+No retries, `--no-block`, async convergence shortcut or CRL-only acceptance.
+Exited-unit execution metadata may be cleared (ExecMainCode0 versus CLD_EXITED1);
+it is not a standalone freshness proof. Blocking start plus fresh signed material
+and the negative gates remain mandatory even when that metadata is unavailable.
+
+Journal retrieval is not an authoritative completion signal. Attempt #5's mandatory
+journal10s request preceded the first service receipt and aborted an otherwise
+completed unit before negatives. The new success path does not launch journalctl;
+any separate log investigation must stay redacted/bounded and cannot replace these
+checks. A timeout of any mandatory command remains FAIL even if subsequent diagnostic
+state/readback reports success. No timeout is caught and silently accepted.
+
+Per-command bounds: before/safe after/final snapshots5s each, before/after unit show2s
+each, daemon-reload5s, start45s, shell/stale probes15s each =99s. Reserve2s timeout-state
+and5s timeout-readback plus1s margin: total107s monotonic command budget. Each wait is
+clamped to remaining time; no unbounded polling. Existing sync/SSH/unit/start bounds
+are not enlarged. Filesystem fsync is required; this is not a hard-real-time guarantee
+against an unresponsive kernel/filesystem. Local timings are not a WAN latency SLA.
+
+Receipts record generation, step, fixed redacted executable/argv class, configured/
+effective timeout, monotonic start/end/elapsed, exit code or null, TimeoutExpired,
+bounded stdout/stderr classifications and safe material metadata. Primary failure
+is fsynced **before** timeout diagnostics. Supplemental records retain observed unit
+state and before/after material metadata, with unknowns explicit; later observations
+are not claimed to be an instantaneous snapshot at the timeout. No raw argv/stdin.
+Failure verdict is fsynced before returning nonzero to the external rollback handler.
+Keep evidence outside runtime/rollback replacement paths; never erase old receipts.
+
 ## Directory validation gate — corrected locally after attempt #4
 
 Attempt #4's producer emitted valid BOOT-1 v1; the old inline Python operator

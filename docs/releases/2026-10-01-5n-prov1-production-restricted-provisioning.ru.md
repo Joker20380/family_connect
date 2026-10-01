@@ -1,5 +1,127 @@
 # 5N-PROV-1 — production restricted provisioning + bootstrap delivery
 
+## 5N-SYNC-ACCEPTANCE — PASS, offline diagnosis/repair, 01.10.2026
+
+Начальный HEAD `20b91ce03dcd00e18deb5b4f0e5614f99d224a06`; production не читался
+и не изменялся в этой задаче. Не было SSH/Telemost/live services, refresh, Redmi,
+APK или push. Исходные receipts/оператор №5 и история ниже сохранены, не исправлены
+задним числом. **№5 по-прежнему RU acceptance TimeoutExpired / ROLLED BACK; поздние
+unit success и CRL14 delivery не означают полного acceptance PASS. №3: UNKNOWN.**
+
+### Реконструкция и доказанная граница
+
+В `tests/fixtures/restricted_sync_attempt5.py` сохранён точный RU_SYNC literal
+оператора №5 (без runtime secrets). При наличии исходного ignored operator тест
+сравнивает текст целиком. SHA256 flow:
+`446bc077138e9c15b152ee64208b533880489085b8119e92bb7db6b625d448ec`.
+Root path заменяется только в изолированном тесте, все subprocess перехватываются;
+реальные production/systemd команды не исполняются.
+
+| Порядок №5 | Ожидание / граница |
+| --- | --- |
+| Archive import + initial trust | Синхронный local read; до unit trigger |
+| systemctl daemon-reload | Без собственного timeout; внешний SSH operator120s |
+| systemctl start restricted sync | Блокирующий start, timeout45s; не --no-block |
+| Внутри unit | Type=oneshot, TimeoutStartSec25; publisher, SSH15s/ConnectTimeout5s, forced helper, directory validation + atomic write |
+| journalctl -u sync --since time -o cat --no-pager | **timeout10s**; первая service-observation записывается лишь после его возврата |
+| Trust/CRL/directory readback | Требуются sequence+1 и валидный directory |
+| SSH generic shell | timeout15s, expected126/empty stdout |
+| SSH stale CRL | timeout15s, expected1/empty stdout |
+| Final verdict | Только после всех этих проверок |
+
+Доказательства локальной реконструкции: RU_SYNC start receipt17:55:44UTC;
+RU rollback уже17:56:02UTC — всё окно18s (даже с погрешностью округления <45s).
+Сохранённый unit journal сообщает start17:55:45.142969 и finish17:55:48.878411UTC.
+Service-observation и оба negative receipts отсутствуют; rollback их не удалял.
+До первой observation единственные timed subprocess — start45s и journal10s.
+45s не помещается в окно; последующие15s probes ещё недостижимы. Outer SSH120s
+не мог создать внутреннюю `ru-sync.json` с caught TimeoutExpired. Поэтому exact
+timed-out step реконструирован как **journalctl / journal collection /10s**.
+Это вывод из source+ordering+временных границ, не вновь обнаруженный raw argv.
+
+Изолированный запуск исходного flow: successful start + journal timeout воспроизводит
+ровно отсутствие первой observation/negative receipts и сохранённый failure verdict.
+Вариант start timeout требует≥45s и не совпадает с историческим окном. Отдельный
+реальный локальный sleeping subprocess подтвердил срабатывание10s boundary и
+fsynced identity/timeout receipt. Сам production journal не воспроизводился:
+**почему его чтение заняло >10s (disk, journal/index/load и т.п.), UNKNOWN**.
+Доказанный дефект acceptance — обязательное ожидание неавторитетного журнала до
+фиксации результата unit и negative gates, плюс потеря имени failing subprocess.
+Из сценариев задания №5 соответствует **E**: успешный sync/CRL delivery, но
+negative checks не выполнены из-за промежуточного journal timeout. Это не сценарий
+намеренно асинхронного trigger; B с поздним completion отдельно моделируется и не
+даёт PASS для существующего synchronous контракта. A — success; C/D — fail/hang
+или отсутствующий readback; все варианты проверяются отдельно.
+
+### Минимальное изменение контракта оператора
+
+Новый `scripts/restricted_sync_acceptance.py` не меняет closed sync runtime,
+systemd unit, forced helper, BOOT-1, Family/owner/issuer/gateway, admission, CRL
+semantics/sequence/TTL или Android. Он не переводит synchronous sync в asynchronous.
+Journal не запускается на mandatory success path. Проверяются exit самого blocking
+start, oneshot inactive/dead/success/exit status0, signed fresh
+CRL=previous+1/DB floor, строгий directory/time/binding и nondecreasing issuance.
+Только затем generic shell126 и stale CRL1/empty stdout; финальный readback не должен
+регрессировать. CRL alone, background completion или пропущенные negatives не дают
+PASS. Timeout обязательной команды всегда FAIL; поздний success записывается только
+как диагностическое наблюдение. Failed/late/hung cases не переименовываются в успех.
+Сброшенные systemd execution metadata (ExecMainCode0 вместо CLD_EXITED1) не подменяют
+проверку нового signed CRL и успешного blocking start и сами не служат freshness proof.
+
+### Receipts до воспроизведения и rollback
+
+Schema введена до первого reproduction run: step ID, fixed executable/argv shape
+без фактических приватных аргументов, timeout configured/effective, monotonic
+start/end/elapsed, exit status/null, TimeoutExpired, generation, bounded output
+classification, safe CRL/DB/directory metadata. На timeout первичная запись fsync
+до bounded state/readback probes; supplemental receipts содержат observed unit
+state и before/after material, неизвестные значения остаются null. Они не выдают
+поздний state за точное состояние в момент timeout. BOOT-1 v1 не имеет revision;
+фиксируются version/issued/expires, directory_revision=null.
+Каждая запись: private file → flush/fsync → rename → directory fsync. Failure
+verdict сохраняется до возврата exception/nonzero внешнему rollback handler.
+Проверены shell EXIT trap, nonzero/hard exit, fsync failure, interrupted operator,
+timeout самой diagnostic state probe. Secrets/raw argv/stdin/stdout/stderr не пишутся.
+
+### Timing и общий предел
+
+Реальный isolated Python CLI с синтетической authority, настоящим publisher и
+локальным isolated forced-gateway процессом вместо SSH дал один измеренный sample:
+publisher0.0040s, forced-command simulation0.3374s (включая20ms injected delay),
+CLI0.4914s, readback0.3300s. Это offline startup/crypto/IO measurements, не WAN SLA.
+Deterministic virtual clock дополнительно проверяет valid24s completion и overflow.
+Существующие SSH15/unit25/start45 оставлены прежними; start имеет20s margin над
+unit deadline. Snapshot5s — >15x измеренного readback; state show2s и reload5s
+ограничены, но production timing для них этой задачей не измерялся.
+99s сумма mandatory step caps +2s timeout state +5s timeout readback +1s margin =
+**107s общий monotonic command budget**. Wait сокращается до remaining budget;
+никакого blind increase старого timeout, polling/retry или бесконечного ожидания.
+Обязательный fsync остаётся зависимым от kernel/filesystem, не hard realtime.
+
+Локальные regression cases: fast/slow-valid PASS; timeout+late success, timeout+hang,
+background/async-like start, total deadline exceeded, отсутствующий/invalid readback,
+CRL delivered без generic-shell, stale CRL принят, rollback после negatives — FAIL.
+Strict SSH host options и synchronous argv зафиксированы тестами. Generated safe
+measurements/reconstruction — `state-client-build/sync-acceptance/`.
+Итоговые test/guard receipts записаны там отдельно. Production-попытка не повторялась.
+
+Validation: **194 tests PASS**, без skips: operator harness, exact retained flow,
+closed CLI/runtime, directory/native compatibility, restricted issuance и HTTP
+receipt regressions. После финального уточнения diagnostic receipt schema отдельно
+повторён29-test operator suite. Sandbox сначала запретил loopback HTTP fixtures;
+повторное разрешённое локальное выполнение вне sandbox прошло, не production retry.
+Accepted cb6f sync archive неизменён; четыре CLI smoke commands снова PASS с `-I`
+из временного каталога вне checkout. Docs412/links2535/errors0; index source guard
+1566/blocked0 плюс отдельный guard трёх новых operator/test sources; diff check PASS.
+Git finalization выполняется отдельным task-owned commit от
+`20b91ce03dcd00e18deb5b4f0e5614f99d224a06`, без amend/push: оператор, два тестовых
+файла и только новые разделы четырёх docs. Повторная лёгкая проверка:29 operator
+tests PASS и четыре isolated CLI checks закреплённого cb6f runtime PASS.
+Посторонние файлы и прежние части смешанных docs сохранены; retained HTTP/workflow/
+VPN-health и предыдущий deployment checkpoint не включаются в этот commit.
+Без secrets/runtime artifacts в Git. STOP, push:no, production changed:no;
+автоматического deployment retry нет.
+
 ## 5N-DIRECTORY-VALIDATION — PASS, offline repair after attempt #4
 
 Starting HEAD `d27156d92fdb829fdc82471b05074270b54cd1a9`. Implementation commit

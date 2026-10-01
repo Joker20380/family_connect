@@ -2,6 +2,18 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-SYNC-ACCEPTANCE = PASS locally after attempt #5.** Воспроизведён timeout
+чтения journal10s до negative checks; synchronous runtime не переделан в async.
+Новый bounded operator проверяет authoritative unit/result/CRL/directory и обе
+negative gates; безопасные step/timeout/state/readback receipts fsync до возврата
+ошибки. Историческая №5 остаётся FAILED/ROLLED BACK; журнал/I/O latency root cause
+не установлен. Никаких production операций в этой задаче. После локальных проверок
+STOP; возможный новый rollout требует отдельного разрешения, повторного pinning и
+актуальных monotonic floors (последний live readback14), а не повторения №5.
+[Контракт и доказательства](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
+### История до исправления RU acceptance
+
 **5N-DIRECTORY-VALIDATION = PASS locally (01.10); production unchanged.**
 Attempt #4 reproduced from unchanged private evidence/exact old Python archive:
 valid fractional `issued_at` compared against a truncated integer-second clock,

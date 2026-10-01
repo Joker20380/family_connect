@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+## 5N-SYNC-ACCEPTANCE — PASS локально после №5, 01.10.2026
+
+Таймаут №5 реконструирован в `journalctl` (10s), после синхронного start и до
+service-observation/readback/negative gates. Исходный flow воспроизведён изолированно;
+причина задержки самого production journal остаётся неизвестной. Поздний success
+unit/CRL14 **не закрывает** историческую RU acceptance: №5 остаётся FAILED/ROLLED BACK.
+Новый оператор `scripts/restricted_sync_acceptance.py`: fsynced step receipts,
+командные deadlines, authoritative oneshot/result + свежий signed CRL/валидный
+directory + обязательные generic-shell/stale-CRL negatives. Journal исключён из
+обязательного success path; таймаут обязательной команды не превращается в PASS
+при позднем completion. Runtime/TTL/authority не изменены. Только offline fixtures;
+без production, служб, refresh, Redmi, APK, push. Подробности и тесты — в
+[отчёте](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+STOP; автоматического deployment retry нет. Причина №3 остаётся UNKNOWN.
+
 ## 5N-DIRECTORY-VALIDATION — PASS locally, no deployment, 01.10.2026
 
 Attempt #4's unchanged private directory and exact deployed Python source reproduce
