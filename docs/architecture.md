@@ -1,5 +1,15 @@
 # Architecture map / Карта архитектуры
 
+## Latest production attempt — 1 October 2026, rolled back
+
+Controlled owner-only NL deployment reached bootstrap READY but exposed a timestamp
+compatibility defect: Go context deadline serializes with local offset; Python
+delivery/sync accepts only trailing `Z`. New service stopped/disabled and directory
+quarantined; RU API/routes/sync remain undeployed. No live JSON/timezone workaround
+or validity change. Normal production unchanged, same sole-canary authority.
+Local non-UTC producer/consumer regression coverage is required before retry.
+[Exact failure, remaining inert installation and rollback](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
 ## Production restricted delivery — 1 October 2026, local only
 
 **Authority preparation subsequently completed, not API deployment.** Under explicit

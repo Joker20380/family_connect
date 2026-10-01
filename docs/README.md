@@ -9,12 +9,13 @@ implemented beta / proven experimental / planned разделены явно.
 isolated physical PASS01.10 с сохранённым initial FAIL; не public rollout/не FIELD-1.
 5N.1–5N.5, ReliableStream/DNS containment и automatic Room Broker приняты;
 Whole-device path принят isolated; production rollout ещё не выполнен.
-[5N-PROV-1 local implementation / authorized deployment preflight STOP](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md):
+[5N-PROV-1 authorized deployment FAILED / ROLLED BACK](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md):
 existing Friends identity → restricted provisioning/BOOT-1 → secure Android cache;
 [owner-only deployment, migration, secrets и rollback](../deploy/friends/restricted/README.md).
-Required production material подготовлен; rollout не начат. Это текущий integration
+NL seed reached READY, but offset expiry failed Python validation; NL rolled back,
+RU untouched. Required material prepared; timezone compatibility fix pending. Это текущий integration
 gate перед actual-Friends readiness/rehearsal и final FIELD APK.
-[Current deploy preflight READY / no deployment](releases/2026-10-01-5n-prod-deploy-preflight.ru.md):
+[Historical material-only preflight READY](releases/2026-10-01-5n-prod-deploy-preflight.ru.md):
 same authority, CRL refreshed to3, owner-installed provider config schema PASS;
 no token value/hash/size exposed. Recheck expiry before separately authorized use.
 [5N-PROD-AUTHORITY READY / staged only](releases/2026-10-01-5n-prod-authority.ru.md):

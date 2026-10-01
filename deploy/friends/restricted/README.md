@@ -1,5 +1,16 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+**Current rollout checkpoint,01.10 11:48UTC: [DEPLOYMENT FAILED / ROLLED BACK](../../../docs/releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).**
+NL seed joined READY, but generated `expires_at` retained host offset `+03:00`,
+rejected by the Python `Z`-only timestamp parser. NL unit/auth disabled and directory
+quarantined; RU runtime/routes/sync never deployed. Normal production unchanged.
+Do not repeat this rollout until local timestamp compatibility/regression coverage
+is fixed and a new controlled retry is authorized. No manual directory rewrite or
+TTL extension. Actual ingress validation command: `nginx -t -c /etc/fc/nginx.conf`
+inside `family-connect-product-https`, not nginx's unused default configuration.
+
+### Historical preflight
+
 **Current checkpoint,01.10 11:21UTC: [DEPLOY-PREFLIGHT READY](../../../docs/releases/2026-10-01-5n-prod-deploy-preflight.ru.md),
 not deployed.** Owner-installed final NL provider.env passes metadata/schema-only
 checks; token never returned/hash/size-reported. Same authority, CRL3 expires

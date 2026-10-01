@@ -2,6 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-PROV-1: DEPLOYMENT FAILED / ROLLED BACK (01.10 11:48UTC).** Authorized
+NL seed reached READY, but offset `ExpiresAt` from context deadline is rejected by
+the Python `Z`-only directory parser. New NL service/auth disabled, snapshot
+quarantined; RU runtime/routes/sync unchanged. Normal production healthy;
+owner-only admission preserved. [Evidence/rollback](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+**STOP.** Next engineering task: local producer/consumer RFC3339 compatibility
+fix with non-UTC regression coverage and unchanged BOOT-1 validity/trust semantics.
+Then new JIT CRL/gateway refresh and separately authorized controlled retry. Do not
+work around by live JSON/timezone edits, extend TTLs, start phone acceptance or
+produce final FIELD APK before infrastructure passes. No automatic rollout/push/FIELD-1.
+
+### Historical material-only preflight
+
 **5N-PROD-DEPLOY-PREFLIGHT: READY / no deployment (01.10 11:21UTC).** Owner input
 confirmed; provider metadata/schema PASS without value/hash/size disclosure.
 Publisher CRL3 expires11:35:38UTC; gateway leaf12:20:38; unchanged sole-canary

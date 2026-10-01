@@ -1,5 +1,122 @@
 # 5N-PROV-1 — production restricted provisioning + bootstrap delivery
 
+## Authorized canary rollout, 01.10.2026 — DEPLOYMENT FAILED / ROLLED BACK
+
+**5N-PROV-1 = DEPLOYMENT FAILED / ROLLED BACK.** Source HEAD
+`33255fe32308128fe9cf0ea272bf0dee6a52bc10`, entry worktree clean. The owner explicitly
+authorized only this canary rollout. NL reached bootstrap seed READY, but its
+exported directory was incompatible with the accepted Python delivery/sync parser.
+Rollout stopped **before RU runtime/synchronization/API/ingress activation**.
+Only the new NL service was stopped/disabled; existing production remained healthy.
+No physical acceptance, final FIELD APK, public release, push or FIELD-1.
+
+### Exact deployment order and validity
+
+1. Read current status/plan, architecture and deployment contract. Strict SSH to
+   the two authorized IPs; authority, service PIDs/start times/restart counters and
+   live API/ingress hashes matched the previous baseline. Same Family, owner
+   canary, gateway identity, issuer and ControlTrust; **0 other admissions**.
+2. Final prerequisite checks: RU SQLite integrity/four additive tables PASS;
+   RU/NL free disk8837/14186MiB and available RAM1137/527MiB. Public HTTPS
+   certificate/hostname verification and status HTTP200 PASS; certificate expires
+   05.10 12:25:56UTC. Provider validated only server-side for schema/metadata:
+   root:root0600; no value/hash/length exported, token not transferred to RU/local.
+3. Protected rollback backups completed on both hosts at11:39:02UTC under
+   `restricted-materials-stage-20261001/canary-rollout-33255fe/`: RU online SQLite
+   snapshot, API app/handler, ingress and relevant unit state; NL prior service
+   state. Rollback preserves current DB revocations/serial ledger/sequence floors.
+   Ingress test uses the actual running `nginx -t -c /etc/fc/nginx.conf`.
+   A preliminary default-config test hit read-only `/run/nginx.pid`; actual-config
+   test passed without changing/reloading ingress.
+4. Accepted issuer/publisher JIT refresh at **11:39:06UTC**, CRL **3→4**. No
+   sequence reset, grant change, issuer rotation, new key/Family or TTL extension.
+   CRL/effective profile expires **11:54:06UTC**; gateway leaf **12:39:06UTC**.
+   Delegation sequence1 and grant/global peer revision1 unchanged, expiry
+   **02.10 10:44:11UTC**. Actual native certificate/Family/revision/CRL negatives PASS.
+5. NL installed only the new `family-restricted` account, source-matched Friends
+   helper modules, separate venv with accepted control/identity locks, restricted
+   binary/profile, forced-command key and bootstrap unit. No fleet/ProductStore
+   runtime copied. Existing gateway private key retained; provider remains
+   root:root0600. Service directory root:family-restricted01770, binary directory
+   root:family-restricted0750, gateway profile service-owned0600; code/venv root-owned.
+   Traversal permissions and helper import working directory were corrected and
+   validated **before** first service start; no product-code patch or live workaround.
+6. Systemd definitions reloaded, only the new bootstrap service started. Existing
+   AWG/TCP/control-provider/mailbox not restarted. One server-created bootstrap
+   seed joined and emitted **`bootstrap_seed_ready` once** at about11:44:58UTC;
+   one private directory exported. No dedicated-session request/descriptor created.
+7. Python compatibility check rejected the actual exported directory. RU rollout
+   and synchronization were not started. New NL service stopped/disabled,
+   forced-command authorization removed to protected rollback storage; directory
+   quarantined, not rewritten or delivered. Rollback confirmed **11:47:18UTC**:
+   inactive/dead, MainPID0, NRestarts0, disabled, exit status0, no18444 listener.
+8. Final normal-regression and failure-reproduction checks at **11:48:52–54UTC**
+   passed. No migration applied this turn; prior additive schema remains intact.
+
+### Concrete compatibility failure — no live fix
+
+`carrier/bootstrap/seed.go` creates `IssuedAt` with `time.Now().UTC()`, but assigns
+`ExpiresAt` from the context deadline without UTC normalization. On this NL host
+the actual directory has:
+
+- `issued_at`: `2026-10-01T11:44:58.966797108Z`;
+- `expires_at`: `2026-10-01T15:39:55.760348939+03:00` (12:39:55UTC).
+
+These describe a valid less-than55min seed lifetime and the same accepted
+Family/gateway; required seed join URL format is valid. However
+`control/friends/restricted.py:timestamp()` requires `value.endswith('Z')` and
+rejects the offset timestamp before synchronization/delivery. The native directory
+schema accepts RFC3339 timestamps, so the earlier certificate-only native check
+could not expose this live seed-export boundary. No bootstrap join URL is included
+in this report or returned to the terminal.
+
+Actual quarantined directory rejection reproduced **PASS**; replacing only its
+expiry representation with equivalent UTC **in memory** made the same Python
+validator accept it. No file, signed material, TTL or runtime implementation was
+changed by this diagnostic check. This is not a deployed fix. Next work is a local
+producer/consumer timestamp-compatibility fix and non-UTC regression coverage,
+followed by new JIT material refresh and an explicitly authorized retry. Do not
+silently change host timezone, manually rewrite directory JSON, extend TTLs or
+automatically retry the production rollout.
+
+### Final state / acceptance boundaries
+
+| Item | Result |
+| --- | --- |
+| RU new runtime/routes/sync | Not deployed; restricted challenge returns404 |
+| Normal public status / malformed ordinary challenge | HTTPS200 / expected400 |
+| Friends API interruption | No API restart/reload or induced downtime;0 observed probe failures. No continuous availability trace was run |
+| RU/NL AWG/TCP | Active, identical PIDs/start times/restart counters; no restart |
+| Existing NL control-provider/mailbox | Active, unchanged |
+| Normal devices/invitations and restricted grants | Identical row sets to protected pre-rollout DB snapshot; integrity PASS |
+| Admission checks | Sole owner allowed by `_grant`; all26 non-canaries rejected; other admissions0 |
+| Issuer / native certificate compatibility | PASS, same delegated issuer and gateway identity |
+| RU↔NL sync | Not started; full live sync/strict remote-command negatives not claimed |
+| NL bootstrap | Provider/seed reached READY once; directory compatibility FAIL; stopped/disabled |
+| New NL sync authentication | Disabled after rollback; root-protected authorized-key fragment retained |
+| Logs | Only safe seed-ready event;0 URL/private-key/OAuth-assignment markers,0 unknown application events in bounded unit-log check; no token comparison/export |
+| Phone provisioning / BOOT-1 / expiry | Not run or changed; actual production READY still unproven |
+| Restart persistence / local rehearsal | Not run |
+| Chrome / TLS / Family DNS / concurrent TCP | Phone acceptance not run |
+| DNS leaks / TCP bypass / UDP/IPv6 fail-closed / underlay protection | Not measured in this attempt; do not report zero or reuse isolated PASS as product acceptance |
+| Final FIELD APK | Not produced; previous readiness-only APK is not final FIELD artifact |
+
+New NL account, root-owned helper/venv/binary/unit and protected gateway/provider
+files remain installed **inert** for inspection; unit disabled, no active sync key,
+no live directory or restricted listener. RU final restricted directory/drop-in/
+new API code/sync units remain absent. No old full DB restored: certificate ledger
+and CRL sequence4 preserved. Normal production API/ingress unchanged byte-for-byte.
+Public catalogs, normal users, phone identity and installed APK untouched.
+
+Safe local receipts: `/tmp/fc-canary-deploy-33255fe/` and
+`/tmp/fc-canary-jit-public-20261001/`; protected rollback receipt and quarantined
+directory stay on NL. No provider backup, token print/hash/size or secrets in Git.
+Documentation checks:412 files/2497 links,0errors; staged source guard1557 entries,
+0blocked files; whitespace PASS. The guard is bounded pattern/path checking, not
+an exhaustive secret audit. No product source changed or full synthetic suite
+rerun; the actual-material/native checks and live parser reproduction above ran.
+Historical evidence below is retained. **STOP; no automatic retry.**
+
 ## Subsequent authority preparation — not deployment or phone acceptance
 
 01.10 [5N-PROD-AUTHORITY READY](2026-10-01-5n-prod-authority.ru.md): explicitly created

@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+## 5N-PROV-1 — DEPLOYMENT FAILED / ROLLED BACK, 01.10.2026
+
+Authorized canary attempt from `33255fe`,11:39–11:48UTC: JIT CRL3→4
+(expiry11:54:06UTC), gateway leaf12:39:06UTC; authority/canary unchanged,0 other
+admissions. New NL bootstrap installed/started and joined one seed READY, but
+exported expiry uses `+03:00`; accepted Python directory parser requires `Z`.
+**STOP before RU rollout.** NL service stopped/disabled, sync key authorization
+disabled, directory quarantined; installed components remain inert. Normal API/
+ingress byte-identical; RU/NL AWG/TCP PIDs/start times unchanged, HTTP status200,
+ordinary malformed challenge400, restricted challenge404. Sole owner admitted,
+all26 non-canaries denied by actual authority check. No API restart/observed outage.
+Phone prewarm/restart/rehearsal, final FIELD APK and leak/fail-closed acceptance
+**not run**. No push/public rollout/FIELD-1. Next: local non-UTC timestamp
+compatibility fix/tests, then separately authorized fresh rollout; no live workaround.
+[Exact order, failure, rollback and acceptance scope](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
+### Historical material-only READY checkpoint
+
 ## 5N-PROD-DEPLOY-PREFLIGHT — READY, no deployment, 01.10.2026
 
 Owner confirmed token input; NL provider.env exists/root:root0600/schema PASS,

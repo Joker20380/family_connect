@@ -1,5 +1,11 @@
 # 5N-PROD-DEPLOY-PREFLIGHT — READY, no runtime deployment
 
+**Historical material-only checkpoint, superseded by authorized rollout.**
+01.10 11:39–11:48UTC: CRL refreshed to4, NL seed reached READY but its offset
+expiry failed Python directory validation. New service rolled back; RU untouched.
+See [current deployment failure/rollback evidence](2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+The earlier READY below does not claim successful live directory interoperability.
+
 ## Owner confirmation and fresh preflight, 01.10.2026 11:20–11:21UTC
 
 **5N-PROD-DEPLOY-PREFLIGHT = READY** for prepared materials at this checkpoint.
