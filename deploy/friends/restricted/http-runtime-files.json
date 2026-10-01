@@ -1,0 +1,18 @@
+[
+  "control/friends/__init__.py",
+  "control/friends/access.py",
+  "control/friends/chat.py",
+  "control/friends/chat_sync.py",
+  "control/friends/notices.py",
+  "control/friends/referrals.py",
+  "control/friends/restricted.py",
+  "device_identity/__init__.py",
+  "device_identity/device.py",
+  "provisioning/__init__.py",
+  "provisioning/friends_catalog.py",
+  "clients/desktop/profile_config.py",
+  "messenger/__init__.py",
+  "messenger/admission.py",
+  "messenger/service_events.py",
+  "scripts/service_notices.py"
+]

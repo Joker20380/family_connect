@@ -53,10 +53,13 @@ def from_env(access):
 
 
 def request(access, action, value):
+    if action == 'challenge':
+        fields(value, 'public_identity wireguard_public_key')
+        key(value['public_identity'], 64)
+        key(value['wireguard_public_key'], 32)
     try:
         service = from_env(access)
         if action == 'challenge':
-            fields(value, 'public_identity wireguard_public_key')
             return service.challenge(**value)
         require(action == 'fetch')
         return service.fetch(value)

@@ -1,9 +1,9 @@
 name: Linux control preview
 on:
   push:
-    paths: ['control/friends/**', 'deploy/friends/restricted/**', 'scripts/package_restricted_runtime.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
+    paths: ['control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
   pull_request:
-    paths: ['control/friends/**', 'deploy/friends/restricted/**', 'scripts/package_restricted_runtime.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
+    paths: ['control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
   workflow_dispatch:
 permissions:
   contents: read
@@ -20,7 +20,11 @@ jobs:
         with:
           python-version: '3.13'
       - run: pip install -r control/requirements.lock -r device_identity/requirements.lock
+      - name: Local HTTP contract proxy
+        run: sudo apt-get update && sudo apt-get install -y nginx
       - name: Protocol, crash recovery, arbiter and packaging regression
+        env:
+          FC_TEST_NGINX: /usr/sbin/nginx
         run: python -m pytest -q
       - name: System GTK dependencies
         run: sudo apt-get update && sudo apt-get install -y python3-gi python3-gi-cairo python3-venv gir1.2-gtk-4.0 gir1.2-adw-1 libqrencode4 libzbar0 python3-cryptography xvfb dbus-x11

@@ -3,7 +3,7 @@ import json,subprocess,threading,sys
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from pathlib import Path
 ROOT=Path('/opt/apps/family_connect/friends-access')
-sys.path.insert(0,str(ROOT/'app'))
+if __name__=='__main__':sys.path.insert(0,str(ROOT/'app'))
 from control.friends.access import Access,Rejected
 from control.friends.chat import ChatAccess
 from control.friends.chat_sync import synchronize
@@ -77,4 +77,14 @@ class Handler(BaseHTTPRequestHandler):
   except (ValueError,AssertionError,KeyError,TypeError):self.reply(400,{'error':'invalid-request'})
   except Exception:self.reply(503,{'error':'unavailable'})
   finally:slots.release()
-if __name__=='__main__':ThreadingHTTPServer(('127.0.0.1',18084),Handler).serve_forever()
+def main():
+ import argparse
+ global ROOT,access,chat_access
+ parser=argparse.ArgumentParser(description=__doc__)
+ parser.add_argument('--root',type=Path,default=ROOT)
+ parser.add_argument('--port',type=int,default=18084)
+ args=parser.parse_args()
+ ROOT=args.root.resolve();access=Access(ROOT/'access.db');chat_access=ChatAccess(access)
+ ThreadingHTTPServer(('127.0.0.1',args.port),Handler).serve_forever()
+
+if __name__=='__main__':main()
