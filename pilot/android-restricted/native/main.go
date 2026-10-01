@@ -239,4 +239,11 @@ func fcRestrictedStop(id int64) int32 {
 	return 1
 }
 
+//export fcRestrictedReadiness
+func fcRestrictedReadiness(directory string) *C.char {
+	result := wholedevice.InspectReadiness(filepath.Join(directory, "family.json"), filepath.Join(directory, "bootstrap.json"), time.Now())
+	raw, _ := json.Marshal(result)
+	return C.CString(string(raw))
+}
+
 func main() {}

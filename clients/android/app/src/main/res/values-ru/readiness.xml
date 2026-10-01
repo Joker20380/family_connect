@@ -1,0 +1,4 @@
+<resources>
+    <string name="readiness_title">Готовность подключения</string>
+    <string name="readiness_access">Проверить обычный доступ Family</string>
+</resources>

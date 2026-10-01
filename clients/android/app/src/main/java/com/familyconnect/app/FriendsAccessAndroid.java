@@ -195,6 +195,21 @@ final class FriendsAccessAndroid {
             return profile;
         }
     }
+    boolean cachedProvisioningUsable() throws Exception {
+        try(ControlIdentity identity=identity(false)) {
+            byte[] raw=new FriendsConfigurationVault(context).read();
+            try {
+                JsonObject cache=parse(raw).getAsJsonObject();
+                for(String country:new String[]{"ru","nl"}) {
+                    if(cache.has(country)) {
+                        materialize(cache.getAsJsonObject(country),identity,country,"tcp",0);
+                        return true;
+                    }
+                }
+                return false;
+            } finally { Arrays.fill(raw,(byte)0); }
+        }
+    }
     Map<Transport,String> normalProfiles(String country)throws Exception{
         profile(country,"awg");remaining(1);
         try(ControlIdentity identity=identity(false)){

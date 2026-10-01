@@ -1,0 +1,4 @@
+<resources>
+    <string name="readiness_title">Connection readiness</string>
+    <string name="readiness_access">Check normal Family access</string>
+</resources>

@@ -12,6 +12,8 @@ extern int32_t fcRestrictedTun(int64_t,int32_t);
 extern int32_t fcRestrictedState(int64_t);
 extern int32_t fcRestrictedStop(int64_t);
 extern char *fcRestrictedStats(int64_t);
+extern char *fcRestrictedReadiness(struct text);
+JNIEXPORT jstring JNICALL Java_com_familyconnect_app_NativeRestricted_readiness(JNIEnv *env,jclass cls,jstring directory){if(!directory)return NULL;const char *path=(*env)->GetStringUTFChars(env,directory,0);if(!path)return NULL;char *raw=fcRestrictedReadiness((struct text){path,(*env)->GetStringUTFLength(env,directory)});(*env)->ReleaseStringUTFChars(env,directory,path);if(!raw)return NULL;jstring result=(*env)->NewStringUTF(env,raw);free(raw);return result;}
 JNIEXPORT jlong JNICALL Java_com_familyconnect_app_NativeRestricted_begin(JNIEnv *env,jclass cls,jstring directory,jstring control,jstring resolver,jobject service){
  if(!directory||!control||!resolver||!service)return 0;
  const char *dir=(*env)->GetStringUTFChars(env,directory,NULL),*url=(*env)->GetStringUTFChars(env,control,NULL),*dns=(*env)->GetStringUTFChars(env,resolver,NULL);

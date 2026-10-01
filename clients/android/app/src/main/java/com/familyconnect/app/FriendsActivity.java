@@ -187,6 +187,29 @@ public final class FriendsActivity extends LocalizedActivity {
         appUpdate.attach(panel);
         TerminalUi.label(panel,getString(R.string.friends_hint),12,TerminalUi.MUTED);
         attach(panel,activate);
+        Button readiness=new Button(this);readiness.setText(R.string.readiness_title);panel.addView(readiness);
+        readiness.setOnClickListener(view->{
+            readiness.setEnabled(false);
+            boolean activated=getPreferences(MODE_PRIVATE).getBoolean("activated",false);
+            worker.execute(()->{
+                String summary=FriendsReadiness.inspect(getApplicationContext(),activated);
+                handler.post(()->{
+                    readiness.setEnabled(true);if(isFinishing()||isDestroyed())return;
+                    new android.app.AlertDialog.Builder(this).setTitle(R.string.readiness_title).setMessage(summary)
+                        .setPositiveButton(android.R.string.ok,null)
+                        .setNeutralButton(R.string.readiness_access,(dialog,which)->{
+                            readiness.setEnabled(false);
+                            worker.execute(()->{
+                                String entitlement;
+                                try { entitlement=new FriendsAccessAndroid(getApplicationContext(),android.os.SystemClock.elapsedRealtime()+20000).deviceStatus().isEmpty()?"INACTIVE":"ACTIVE"; }
+                                catch(Exception ignored){entitlement="UNKNOWN";}
+                                String result="normal_entitlement: "+entitlement;
+                                handler.post(()->{readiness.setEnabled(true);if(!isFinishing()&&!isDestroyed())new android.app.AlertDialog.Builder(this).setTitle(R.string.readiness_title).setMessage(result).setPositiveButton(android.R.string.ok,null).show();});
+                            });
+                        }).show();
+                });
+            });
+        });
         ScrollView scroll=new ScrollView(this);scroll.addView(panel);
         page.addView(scroll,new LinearLayout.LayoutParams(-1,0,1));TerminalUi.tabs(page,this,3);
         setContentView(page);

@@ -8,5 +8,6 @@ final class NativeRestricted {
     static native boolean attach(long handle, int tunFd);
     static native int state(long handle);
     static native String stats(long handle);
+    static native String readiness(String directory);
     static native boolean stop(long handle);
 }
