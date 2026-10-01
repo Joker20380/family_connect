@@ -1,6 +1,162 @@
 # 5N-PROD-MATERIALS — inert preparation, not deployment
 
-## Contract inventory before generation
+## Continuation — Phase A BLOCKED, 01.10.2026 10:28UTC
+
+**5N-PROD-MATERIALS = BLOCKED.** Entry HEAD
+`9340931524a55d574f85baeffb27566bf6ae22b5`, clean worktree; accepted implementation
+`ff9fb09af329402e538003a56eaefd0dce2b6c73` unchanged. User now authorizes the reviewed
+additive migration and local offline-root signing, **conditional on unambiguous
+existing Family/canary/gateway authority**. This supersedes the initial blanket
+no-migration restriction below, but Phase A did not satisfy its prerequisite.
+No migration, signing, private-key generation or production write was attempted.
+
+### Actual authority investigation (not missing chat input)
+
+- Read existing protected RU `friends-access/notices.sqlite` and `access.db` using
+  SQLite `mode=ro`/query-only, and actual `state-product/db/product.db` (version3).
+  Exactly **one active device administrator**, operator label `Owner`, maps to an
+  active Friends device and one non-revoked invitation. This resolves the existing
+  owner-canary **operator record** consistently with
+  [accepted owner-phone administrator workflow](../testing/messenger-notices.ru.md).
+  Phone state was not reread or changed; no fresh physical identity attestation is
+  claimed. Raw device/public identity/invitation values were not printed.
+- The older local protected `state-enroll/friends-pilot/phone-invitation` resolves
+  to a different record, so it is **not used to select the current canary**. No
+  newest-row heuristic, general-beta selection or admission mutation was used.
+- Current owner identity has **zero ProductStore membership matches**, comparing
+  both identity reference and full public identity. ProductStore has4 families and
+  4 devices; **all Friends↔ProductStore device identity overlap is0**. Picking one
+  of those unrelated Family records would invent an authorization relationship.
+- Friends' active invitation is the existing perpetual product authorization; its
+  `devices`/`invites` schema carries **no Family reference/revision**. None of the
+  restricted tables exists. `restricted._enroll()` takes Family/minimum revision
+  from an already-signed issuer delegation; migration only creates empty tables.
+  Therefore neither migration nor `_enroll()` can discover the missing Family.
+- NL current service definitions bind persistent64-byte Device Identities to
+  **Reticulum control provider** and **mailbox node**, respectively. Public SHA256
+  fingerprints derived in place (private keys never exported):
+
+  | Existing role / protected path | Public identity SHA256 | Authority conclusion |
+  | --- | --- | --- |
+  | Control provider: `reticulum/state/identity/reticulum.key` | `e504e0ef76a2b3bcc3f0c5add0760ff39e30808c6026fb597c996edc3ff6ff09` | Existing identity, but no accepted restricted-gateway/Family designation found |
+  | Mailbox node: `mailbox-pilot/node.identity` | `9de824cce8150a0378d956190204b621d6b2b2e0714746b94d98ac31ad93c60c` | Existing mailbox role, not authorization to issue a gateway certificate |
+
+  Paths are relative to NL `/opt/apps/family_connect`. Existing ownership/modes
+  retained (control UID999/0600; mailbox root/0640); no replacement/repermissioning.
+  AWG/WG/Reality transport keys are not64-byte Device Identity signing keys and
+  were not substituted. Prior5N.3 acceptance explicitly used an isolated fixture,
+  not production issuance; prior mailbox pilot is not a restricted Family gateway.
+- NL relay DB has2 devices/13 configs, maximum config sequence9, no Family/grant
+  tables. That sequence belongs to a **different control-config namespace**, not
+  a restricted-delegation sequence, global peer revision or CRL floor. No legal
+  restricted delegation/revision number can be selected from these observations
+  alone. No initial numeric value was guessed. The CRL publisher's atomic
+  sequence initialization remains the required future mechanism.
+- Existing local offline signer public key matches packaged ControlTrust **and**
+  the RU staged `anchor.pub`; raw public SHA256 remains
+  `6a09fb42468acdb4cfcb4f0888e27c13705ac437a45a6624fc21dddbe83fed83`.
+  Root private key stayed local and was used only for public-key derivation,
+  **not signing**. No new root or delegated private key was created.
+
+These are bounded findings in the documented production databases, configured
+identity paths and prior accepted reports, not a claim to have searched every
+possible offline owner archive. A different protected authoritative register may
+resolve the gap; its location/provenance must be established before continuing.
+
+### Phase gates and current file inventory
+
+The exact `restricted.migrate()` was reread: three additive `CREATE TABLE IF NOT
+EXISTS` statements (grants/challenges/certificates), no DROP/rename/data rewrite.
+It was **not applied**, because the explicit ambiguity stop precedes Phase B.
+Migration duration/interruption: N/A, not executed. No backup/rollback operation
+was necessary for this read-only continuation. Publisher did not initialize CRL
+sequence, and no invented empty CRL was signed.
+
+All READY entries below mean **inert staging**, not deployed/usable runtime.
+Stage on each host: `/opt/apps/family_connect/restricted-materials-stage-20261001`.
+The final `friends-restricted/` directory remains absent on both hosts.
+
+| Host / required material | Status at stop |
+| --- | --- |
+| RU `issuer.json` | MISSING — authoritative Family/gateway/floors unresolved |
+| RU `issuer.key` | MISSING — no unbound issuer generated |
+| RU `anchor.pub` | READY — matches existing root and packaged anchor |
+| RU `admission.json` | READY as deny-all only; **canary admission NOT READY** |
+| RU `revocations.pem` | MISSING — migration/publisher/signing not run |
+| RU `sync.key` | READY — retained existing staged key, public match verified |
+| RU `known_hosts` | READY — retained strict existing pins, not TOFU |
+| NL `gateway.json` | MISSING — existing restricted-gateway binding unresolved |
+| NL `provider.env` | MISSING; Yandex token present: **no** |
+| NL bootstrap unit/config | Unit template READY/staged; full configuration MISSING |
+| NL sync authorization/helper config | Restricted public fragment READY/staged; account/helper installation MISSING |
+
+Authoritative Family resolved: **no**. Owner canary operator record resolved:
+**yes** (fresh physical confirmation not run). Existing *restricted gateway*
+resolved: **no**; two other existing roles identified above. CRL initialized,
+delegation signed, issuer ready, gateway binding ready, canary-only admission ready,
+complete sync material ready, provider.env ready: **no**.
+
+### Validation and unchanged production state
+
+- Complete production offline validation: **FAIL / incomplete prerequisites**, not
+  an observed cryptographic rejection of an issued production certificate.
+  Available anchor, SSH effective options/key consistency, deny-all JSON and
+  stage permissions: **PASS**. Issuer/CRL/native certificate/gateway/provider
+  validation cannot run without the missing real material; no synthetic identity
+  used to turn those checks green. Prior18 backend/native tests below are retained
+  evidence, **not rerun nor production-material acceptance** in this continuation.
+- Root-owned staging directories0700 and every existing staged file root:root0600,
+  regular/non-symlink/nlink1 verified. Sync key was not regenerated. NL fragment
+  retains `restrict`, source restriction and fixed forced-command path. Effective
+  SSH config enforces pinned host, `IdentitiesOnly`, `BatchMode`, no forwarding.
+  No synchronization connection/helper execution was attempted.
+- RU API PID279974, RU AWG1515959/TCP1908885, NL AWG2729703/TCP2420425 remained
+  active with NRestarts0, identical to entry baseline. Restricted units remain
+  not-found; Friends restricted table count0. No process interruption caused by
+  this task; no claim of a continuous external availability measurement.
+- No secret files added to repository or task artifacts. Probes return schema,
+  counts/booleans and public fingerprints only; no private key, OAuth, device proof,
+  full credential bundle or room URL printed. Existing ignored private stores
+  remain untouched. No new bootstrap room/directory or dedicated session created.
+- Safe receipts: `/tmp/fc-materials-authority-discovery-safe.json`,
+  `/tmp/fc-materials-canary-safe.json`, `/tmp/fc-materials-gateway-safe.json`,
+  `/tmp/fc-materials-phase-a-close-safe.json`, and refreshed staged verification
+  `/tmp/fc-prod-materials-verify-safe.json`. No DB copy/private profile in receipts.
+- TLS housekeeping remains the separate earlier inspection below; no renewal,
+  timer/service action or new TLS acceptance claimed during Phase A.
+- Documentation validation:410 documents/2472 links/0 errors; diff whitespace
+  check PASS. Source-path guard1553 index entries/0 blocked files; rerun against
+  the staged documentation before commit. Only four Markdown evidence/status/plan
+  files changed; runtime/build artifacts and private stores are not part of patch.
+
+### Exact remaining owner action / stop
+
+1. Identify the **protected authoritative operator record/location** that assigns
+   the already-resolved active Owner Friends record to an existing Family. Do not
+   paste device identifiers/private keys into chat. If no such assignment exists,
+   explicitly resolve that authority-model gap first; this continuation is not
+   permission to create a Family or borrow an unrelated ProductStore entitlement.
+2. Identify the accepted production restricted-gateway binding to an **existing**
+   NL identity (safe role/fingerprints above allow disambiguation). An explicit,
+   reviewed role/Family designation is needed if it was never recorded; service
+   location alone is not such authority. Do not reuse a diagnostic fixture or
+   silently promote the control-provider/mailbox identity.
+3. Establish the authoritative delegation/peer revision ledger and validity policy
+   for that binding. Then resume the authorized migration/publisher/signing steps
+   using implementation monotonic rules, not a guessed relay number.
+
+**Token-input phase H was not reached.** It would be misleading to report only a
+missing token while Family/gateway authority remains unresolved. Provider schema
+is unchanged (`YANDEX_TELEMOST_OAUTH_TOKEN`, server-only root0600); provide the one
+safe interactive input procedure only when earlier gates can proceed. Do not ask
+the owner to supply a token now or start bootstrap rooms.
+
+Services started/reloaded: **no**. Restricted API enabled: **no**. Migration: **no**.
+Production changed beyond inert staging: **no** (no new staging in this turn).
+Production rollout, phone changes, FIELD-1, git push: **no**. Stop before Phase B;
+no automatic deployment retry. Historical preparation and preflight evidence follows.
+
+## Historical initial contract inventory before generation
 
 Source: implementation `ff9fb09`, evidence HEAD `f082c10`;
 [authoritative deployment contract](../../deploy/friends/restricted/README.md).

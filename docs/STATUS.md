@@ -1,6 +1,23 @@
 # Текущее состояние / Current state
 
-## 5N-PROD-MATERIALS — OWNER ACTION REQUIRED, 01.10.2026
+## 5N-PROD-MATERIALS — BLOCKED at authority resolution, 01.10.2026
+
+Continuation from `9340931`, read-only audit completed10:28UTC. Existing protected
+Friends notice registry resolves one active `Owner` device administrator and its
+active invitation/device; no raw device identifiers exported. However, it has
+**zero ProductStore Family/entitlement matches**; Friends↔ProductStore identity
+overlap is0. Friends schema has no Family assignment and restricted tables remain0.
+Existing NL identities resolve to control-provider and mailbox roles, not an
+authoritative Family-bound restricted gateway. Neither identity was repurposed.
+Migration/root signing are now explicitly authorized **only after unambiguous
+Phase A**; that condition is unmet, so no migration/signature/grant/admission edit.
+Need protected authoritative existing-Family assignment and accepted NL gateway
+binding before deriving delegation/revision floors. Do not guess from relay max9.
+Root↔packaged↔staged anchor and inert staging permissions PASS; API/AWG/TCP PIDs
+unchanged. OAuth absent; token-input phase not reached. No runtime/phone actions,
+new material, push or FIELD-1. [Exact evidence and owner action](releases/2026-10-01-5n-prod-materials.ru.md).
+
+### Historical initial preparation — OWNER ACTION REQUIRED
 
 Preparation only, source `ff9fb09`/entry `f082c10`: staged root-only0700 directory
 `/opt/apps/family_connect/restricted-materials-stage-20261001` on RU/NL; files0600.

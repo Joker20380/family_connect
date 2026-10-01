@@ -1,5 +1,15 @@
 # 5N-PROV-1 — production restricted provisioning + bootstrap delivery
 
+## Subsequent authority audit — Phase A stop, no deployment
+
+01.10 10:28UTC, entry `9340931`: [materials continuation](2026-10-01-5n-prod-materials.ru.md)
+resolved the active Owner Friends operator record, but found no ProductStore
+Family membership and no accepted restricted-gateway binding for existing NL
+control-provider/mailbox identities. Conditional migration/signing authorization
+does not waive Phase A: **BLOCKED before migration/signing**, not a token-only stop.
+Existing anchor/staging checks pass; production services/state remain unchanged.
+No deployed readiness, physical acceptance or final FIELD artifact claimed.
+
 ## Subsequent material preparation — no deployment retry
 
 01.10, entry `f082c10`: [5N-PROD-MATERIALS](2026-10-01-5n-prod-materials.ru.md)

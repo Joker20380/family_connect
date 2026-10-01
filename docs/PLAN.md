@@ -2,13 +2,18 @@
 
 ## Current engineering priority / Текущий critical path
 
-**5N-PROD-MATERIALS: OWNER ACTION REQUIRED (01.10).** Inert staging completed for
-public anchor, deny-all admission, SSH sync key/pins and NL service/auth templates.
-Existing offline signer verified; no issuer delegation yet because authoritative
-Family/gateway bindings and canary selection need owner confirmation. Provider
-token unavailable. Live CRL helper requires schema/sequence writes, forbidden
-in preparation; resolve initial-CRL versus preflight sequencing explicitly before
-future deployment. No invented identity/empty production CRL, no automatic retry.
+**5N-PROD-MATERIALS: BLOCKED at Phase A (01.10, entry9340931).** Protected operator
+state resolves one active Owner device administrator, but no existing ProductStore
+Family/entitlement for that identity; cross-store identity overlap0. Existing NL
+control-provider/mailbox identities have no accepted restricted-gateway binding.
+Owner must identify the protected authoritative assignment/binding, not paste
+private identifiers or create replacement roots/identities. Only after resolution:
+derive legal floors, apply the now-authorized additive migration, initialize CRL
+through the real publisher, sign delegation locally, prepare gateway/canary state.
+Do not reuse unrelated relay sequence9 as restricted issuer/peer revision.
+Then reach the owner-interactive provider token step; token remains absent.
+Inert staging/deny-all policy preserved; no migration/signature/service change in
+this continuation. No automatic deployment retry, broad admission or FIELD-1.
 [Exact inventory/status/owner actions](releases/2026-10-01-5n-prod-materials.ru.md).
 TLS renewal inspection found active timer/latest successful no-op and valid cert;
 no certificate infrastructure change. Phone/rehearsal/final FIELD APK remain pending.
