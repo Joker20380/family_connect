@@ -1,5 +1,19 @@
 # Architecture map / Карта архитектуры
 
+## Попытка №3 — closed runtime live PASS, API rollout откачен
+
+01.10.2026, source `2705db4`: NL READY и canonical UTC-Z → Python PASS;
+одинаковый `restricted-sync.pyz` на RU/NL, `python -I --check`, live CRL/directory
+sync, strict SSH/forced-command и отказ stale CRL прошли. Зависимости sync больше
+не зависят от checkout; ModuleNotFoundError не повторился. После activation API
+normal HTTP smoke не прошёл, выполнен rollback до physical prewarm. Точный код
+неудачного ответа/downtime не сохранился; root cause не установлен, PASS API нет.
+Обычные API/ingress восстановлены, AWG/TCP без restart, restricted runtime выключен.
+Authority/admission/TTL прежние, DB/live CRL sequence11 сохранён; staging6 нельзя
+считать текущим floor. [Evidence и обязательные локальные проверки перед новым
+разрешением](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+Ниже — исторические implementation/deployment checkpoints.
+
 ## Закрытый sync runtime — локальное исправление после попытки №2
 
 Server sync теперь имеет явный десятифайловый source manifest и stdlib zipapp,

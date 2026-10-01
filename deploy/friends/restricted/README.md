@@ -1,5 +1,21 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+## Попытка №3 — rolled back, 01.10.2026 14:40UTC
+
+Source `2705db4`: закрытый archive установлен на RU/NL, RU `python -I ... --check`
+и live sync PASS; ModuleNotFoundError не повторился. NL READY/UTC-Z/Python PASS,
+generic shell и stale CRL отклонены. После включения API провалился normal HTTP
+smoke; немедленный rollback вернул API/ingress, выключил sync timer/NL seed/auth.
+AWG/TCP не перезапускались, Redmi не трогали. Причина HTTP failure не установлена;
+probe observations потеряны при assertion, точный downtime/zero downtime не доказан.
+[Полный порядок, ограничения evidence и финальное состояние](../../../docs/releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
+DB/live CRL на RU и NL сохранены на sequence11 (expiry14:55:41UTC), root-only JIT
+stage остаётся на6. Не откатывать DB/monotonic floors и не использовать stage6 как
+текущий sequence при следующем refresh. Следующий шаг — локально проверить API/
+ingress transition и crash-safe probe receipt; **не автоматический deployment retry**.
+Ниже сохранены предыдущие checkpoints и контракт поставки.
+
 ## 5N-RUNTIME-PACKAGING — локальное исправление, не deployment
 
 После попытки №2 исходники sync поставляются только по

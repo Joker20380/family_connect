@@ -19,6 +19,11 @@ timestamps уже прошло живую NL READY/UTC `Z` проверку. RU 
 production не изменён. Authority требует свежего JIT renewal только перед новым
 отдельно разрешённым rollout. Это integration gate перед actual-Friends
 readiness/rehearsal и final FIELD APK.
+Попытка №3 из `2705db4`: closed-runtime `--check`/live sync, NL READY и UTC-Z PASS;
+после API activation normal HTTP smoke failed, выполнен rollback. API/ingress
+восстановлены, AWG/TCP без restart, Redmi не трогали. CRL/DB sequence11 сохранён;
+точный HTTP downtime не доказан. Следующий шаг локальный: crash-safe probe receipt
+и воспроизведение API/ingress transition; без автоматического retry.
 [Historical material-only preflight READY](releases/2026-10-01-5n-prod-deploy-preflight.ru.md):
 same authority, CRL refreshed to3, owner-installed provider config schema PASS;
 no token value/hash/size exposed. Recheck expiry before separately authorized use.

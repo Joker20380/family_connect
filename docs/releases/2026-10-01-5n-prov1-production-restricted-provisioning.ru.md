@@ -1,5 +1,120 @@
 # 5N-PROV-1 — production restricted provisioning + bootstrap delivery
 
+## Попытка №3 — DEPLOYMENT FAILED / ROLLED BACK, 01.10.2026
+
+Source HEAD: `2705db4a9d0d813c21b6010c478c5d36b6bcd429`. Отдельное разрешение
+владельца распространялось только на прежний single-owner canary. Попытки №1/№2,
+их rollback и локальные исправления ниже сохранены. Эта попытка **не PASS**:
+закрытый sync runtime доказан live, но после включения API не прошёл normal smoke.
+Немедленно выполнен rollback; live-исправлений и повторной активации не было.
+
+### Source, artifacts и preflight
+
+- Три параллельных VPN-health файла не изменялись и не входят в task commit:
+  `docs/STATUS.md`, `docs/PLAN.md`, `docs/releases/2026-10-01-vpn-health.ru.md`.
+  Их исходные SHA256 и patch сохранены в ignored `state-client-build/prov1-attempt3/`;
+  итоговая проверка byte identity обязательна. Текущий checkpoint поэтому здесь,
+  в code map/docs index/runbook, а не поверх чужих STATUS/PLAN edits.
+- `state-client-build/runtime-packaging/final-bundle/restricted-sync.pyz`:
+  SHA256 `e7e0c8a2ebefdd8ae6f6829f86fcac214b4c4dadb50f0664f0a4e92ea3498788`.
+  Весь inventory, archive и overlay совпали с текущими исходниками. Повторные
+  isolated runtime tests: **32 PASS**; именно final archive с `python -I ... sync
+  --check`, cwd `/tmp`, без PYTHONPATH, на новой synthetic-only fixture: PASS.
+  Fixture не передавалась на production. Предыдущие311 PASS/2 skips не объявляются
+  повторно выполненными в этой попытке.
+- Android/carrier source не менялся после `e808f50`; accepted canary53 APK hash
+  перепроверен: `de6426be9bfd197433101857f4e41afc3880bd514aa380a80563455473bf9dbf`.
+  Путь: `state-client-build/prov1-attempt2-e808f50/artifacts/FamilyConnect-canary53-prov1-e808f50-arm64.apk`.
+  Сборка/подпись/JNI provenance из попытки №2 сохранены; **новой Android сборки,
+  установки или физического взаимодействия не было**. Это не final FIELD artifact.
+- RU/NL host identities проверены через strict существующие SSH pins и server-side
+  address. Normal units/PIDs/start times совпали с rollback №2; RU HTTPS verified:
+  status200, обычный challenge400, restricted challenge404. DB integrity/schema,
+  devices/invites/grants и единственный owner grant без drift;26 остальных rejected
+  через production admission validator. Provider проверен только server-local
+  schema/metadata: root:root0600; значение/hash/размер токена не выводились.
+- До runtime changes на обоих хостах создан отдельный root-only rollback snapshot:
+  `/opt/apps/family_connect/restricted-materials-stage-20261001/canary-rollout-2705db4`.
+  Сохранены definitions, API app/handler, ingress, online SQLite backup, прежние
+  материалы/helper. Предыдущие backup/evidence не перезаписывались.
+
+### Deployment order и результаты
+
+1. **14:37:13UTC:** accepted publisher обновил CRL5→6, expiry14:52:13UTC;
+   gateway certificate expiry15:37:13UTC. Та же Family, owner, issuer и gateway;
+   других admitted devices0; grant revision1/delegation sequence1 неизменны,
+   grant/delegation expiry02.10 10:44:11UTC. Native gateway/canary certificate
+   validation и revision/CRL negatives PASS. TTL не продлевались; миграций нет.
+2. NL получил проверенный archive/overlay/helper и свежий gateway profile.
+   Forced command использует `python -I .../restricted-sync.pyz gateway`.
+   **14:37:16 старт;14:37:47 READY:** directory issued
+   `2026-10-01T14:37:19.717431985Z`, expires
+   `2026-10-01T15:32:16.537670305Z`; Python принял живой каталог, required bootstrap
+   seed join_url присутствует. Ни URL, ни credential bundle не выводились.
+3. RU установлен тот же archive, SHA совпал. **14:38:15:** production-local
+   `python -I ... sync ... --check` PASS, до publisher/SSH; API source ещё не менялся.
+   **14:38:18–28:** live sync PASS, CRL6→7, expiry14:53:18UTC; fresh directory
+   получен, UTC-Z принят. Dedicated SSH strict pin/forced command работают;
+   запрос `id` отклонён exit126/empty stdout, предыдущий signed CRL6 после7 —
+   exit1/empty stdout. **ModuleNotFoundError не повторился.**
+4. Только после sync PASS включён30s timer, точный overlay/handler, API drop-in
+   и новые ingress locations; nginx validation с `-c /etc/fc/nginx.conf` PASS.
+   API restart отмечен systemd в **14:39:06.694802UTC**. После reload не прошла
+   проверка `status/server-load.json == 200 && friends/challenge == 400`.
+   Это конкретный stop-trigger; какая из двух проверок/какой HTTP-код вызвали
+   failure, из сохранённого evidence установить нельзя. Root cause **не установлен**;
+   отсутствие import errors в journal не является доказательством API acceptance.
+5. Rollout остановлен **до** owner/non-canary HTTP acceptance и до Redmi.
+   **14:40:45UTC RU /14:40:47UTC NL:** timer/sync/seed остановлены, timer/seed
+   disabled, forced-key authorization выключена, NL directory quarantined.
+   API app/handler/ingress восстановлены, drop-in удалён; обычный API перезапущен
+   на сохранённом коде. DB **не восстанавливалась поверх monotonic state**.
+
+### Downtime: граница измерений
+
+Во время API restart работал HTTPS probe каждые≈100ms. Но его observations и
+status map хранились в памяти операторского процесса, а assertion оборвал процесс
+до записи receipt. Они потеряны; настроенные access logs выключены, journal не
+содержит request-кодов. **Точный фактический HTTP downtime не измерен/не доказан;
+0s не заявляется.** Systemd фиксирует99-секундный интервал между запуском нового
+API14:39:06.694802 и восстановленного14:40:45.510708; это окно новой конфигурации,
+не доказанная продолжительность недоступности. Следующий локальный prerequisite:
+сохранять безопасные probe receipts/statuses в `finally`, проверить API/ingress
+transition из точного staged layout, не делать ещё один слепой production retry.
+
+### Финальное состояние после rollback
+
+Readback14:41:59–14:42:09UTC: RU ordinary HTTPS status200/challenge400;
+restricted challenge404, drop-in отсутствует; app/handler/ingress byte-identical
+backup. RU API active, изменился PID из-за deployment/rollback restart.
+**AWG/TCP RU/NL и прочие baseline units без restart/PID/start-time изменений.**
+Devices/invites/grants byte-equivalent SQL rows, admission по-прежнему owner1,
+других0.26 отказов подтверждены preflight validator, **не** новым live HTTP gate.
+
+Timer успел штатно продвинуть CRL до **11**, issued14:40:41UTC,
+expiry**14:55:41UTC**; RU и NL consumer согласованы. Последняя CRL/DB sequence11,
+certificate history и authority сохранены, floors не сброшены. Root-only staging
+после JIT содержит6: перед будущим refresh нужно опираться на authoritative DB/live
+CRL11, не запускать старый stage-only script как будто6 — текущий namespace floor.
+Gateway certificate expiry15:37:13UTC. Archive и NL бинарник остаются установленными,
+**неактивными**; RU sync inactive/static, timer inactive/disabled; NL seed
+inactive/disabled/PID0, NRestarts0. Provider root0600 сохранён. NL journal содержит
+один `bootstrap_seed_ready`, без sensitive URL/token/private-key markers и без
+dedicated-session events. Yandex token остаётся только NL; KeePass не открывался.
+
+Physical provisioning/BOOT-1/readiness expiry/restart persistence/rehearsal/Chrome/
+Family DNS/concurrent TCP/leak/UDP/IPv6/underlay proof **не запускались**.
+Не выдавать старые isolated результаты за production-canary proof. Final FIELD APK
+не создан, текущий Redmi не трогали. Public release/push/FIELD-1: **нет**.
+Локальные redacted receipts: ignored `state-client-build/prov1-attempt3/`;
+protected host backup содержит rollback evidence. **STOP после документации;
+новое разрешение не подразумевается, автоматического retry нет.**
+
+Итоговые локальные checks: public docs412 files/2515 links/0 errors;
+source guard1563 index entries/0 blocked files; `git diff --check` PASS.
+Все три защищённых parallel файла byte-identical исходным SHA256. Worktree после
+task commit должен содержать только эти три исходных чужих изменения.
+
 ## 5N-RUNTIME-PACKAGING — PASS локально, production не изменён
 
 Starting HEAD: `7350d32c36ae30b4625ab8518caa87bbba887b26`.
