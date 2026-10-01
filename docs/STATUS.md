@@ -1,5 +1,72 @@
 # Текущее состояние / Current state
 
+## LOCAL device readiness — 01.10.2026, BLOCKED
+
+Private `.friends` field52/code52 (source9c82152) установлен IN PLACE на Redmi,
+beta signature, activation/UID сохранены. Internal view: Device Identity PRESENT,
+normal provisioning PRESENT_VALID; **restricted provisioning и BOOT-1 ABSENT**.
+После process restart то же состояние, launch PASS; normal live entitlement
+UNKNOWN. Это первое private-state evidence, прежний UNKNOWN не переписан.
+Production Friends API не выдаёт Family TLS/BOOT-1 provisioning; existing mTLS
+refresh требует уже provisioned profile. Поэтому prewarm/restricted rehearsal
+BLOCKED, fixture identity не подставлялась. APK — readiness-only, не FIELD-ready.
+Fresh arm64 native/APK/signature/scan, JVM188/Python50(+1skip), Go race/vet,
+lint0errors37warnings PASS. APK SHA
+`604f06722a702475a03dd5aec8bff1f99c82706c65dc5fb0e92e400f45a0756a`.
+Phone normal/idle, без VPN/forced failure, UI probe удалён. Public beta51/catalog
+не менялись; no push/production deployment/Krasnodar FIELD-1.
+[Lifecycle, artifact и точный blocker](releases/2026-10-01-field1-device-readiness.ru.md).
+
+## LOCAL FIELD-APK PREFLIGHT — 01.10.2026
+
+**BLOCKED по private-state/BOOT-1 verification; in-place install и UI smoke PASS.**
+USB Redmi Note9Pro/Android12/arm64: установленный exact public beta51 подтверждён
+по SHA/certificate, обновлён только `adb install -r` до private FIELD APK2644790.
+Installed SHA`f0a625c8e8485980cf2f9bc1d5577881b5e59393c86cedfdc92f4e3c7d994f41`,
+beta certificate прежний; package/code51, UID/firstInstallTime сохранены.
+До/после UI activated («Пригласить друга»), без reactivation prompt, launch PASS;
+Auto подтверждён в dropdown, режим не менялся, CONNECT не выполнялся.
+Non-debuggable/run-as denied, target instrumentation отсутствует: private Device
+Identity/provisioning и BOOT-1 presence/validity/usability **UNKNOWN**, не ABSENT.
+Cache не создавался/не переносился; raw private files/XML не сохранялись.
+FIELD APK оставлен на телефоне; Wi-Fi OFF/cellular ON как до проверки, VPN не
+запускался. Временный UI-only shell probe удалён, uninstall/pm clear/reset не было.
+Production/public artifacts/catalogs не менялись; **Krasnodar FIELD-1 NOT STARTED**.
+[Локальный отчёт и точная граница доказательства](releases/2026-10-01-field1-local-preflight.ru.md).
+
+## FIELD-1 APK packaging — 01.10.2026
+
+**BUILD PASS; FIELD-1 NOT RUN.** Из чистого detached worktree2644790 (origin/main,
+ahead/behind0/0) собран private arm64 Friends APK без runtime/source changes.
+Основное дерево уже имело документы ops-аудита: сохранены, в сборку не включены.
+Fresh normal/restricted JNI, Go1.26.1/NDK27.2, non-debug `.friends`, beta51/code51;
+persistent beta certificate совпадает с проверенным публичным beta51. APK SHA256
+`f0a625c8e8485980cf2f9bc1d5577881b5e59393c86cedfdc92f4e3c7d994f41`.
+Package/signature/version update compatibility PASS, без uninstall; подключённый
+телефон недоступен, actual install/private-state survival не проверялись.
+BOOT-1 Family activation/cache должны уже существовать: APK их не создаёт и
+не переносит из diagnostic package. Auto доступен, прошлый transport preference
+сохраняется. JVM185/Python19(+1skip)/lint0errors37warnings/provenance/signature/
+alignment/secret scan PASS. APK только в `/tmp/fc-field1-build-2644790/artifacts/`;
+public artifacts/catalogs/версии/production не менялись; no push, no FIELD-1.
+[Полный build receipt и ограничения](releases/2026-10-01-field1-apk.ru.md).
+
+## Operational snapshot — 01.10.2026, 05:29–05:31 UTC
+
+Read-only audit RU/NL:27 устройств,23 не отозвано,4 отозвано;
+81 приглашение/27 использовано. NL22 AWG peers:5 handshake<5мин,11<24ч,
+5 с передачей за15с; RU10 peers:0/0/0. Это устройства/peers, не уникальные
+люди или DAU; friends TCP established inbound0 на обоих в снимке.
+CPU busy RU22.93%/NL4.75%, available RAM1091/553MiB; перегрузки CPU/RAM
+в снимке нет. Диск RU69.1%/8.63GiB свободно, NL23.8%/13.90GiB;
+vda await71.73/107.95ms — задержки сохраняются, причина этим аудитом не установлена.
+AWG/TCP/API active, product/control healthy; peer-worker systemd active,
+Docker unhealthy сохраняется. HTTPS8443/TLS PASS, snapshots свежие,
+served certificate до05.10 12:25:56UTC. Настройки/службы/версии не менялись.
+Repository finalization завершена ранее: HEAD/origin/main2644790; этот
+аудит не запускает новый rollout, push или FIELD-1.
+[Методика, сравнение и ограничения](releases/2026-10-01-vpn-health.ru.md).
+
 ## CURRENT PRODUCT STATE — 01.10.2026 / MVP Connectivity Orchestrator
 
 **MVP CONNECTIVITY ORCHESTRATOR = PASS — isolated physical follow-up.**

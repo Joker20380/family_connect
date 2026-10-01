@@ -2,6 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
+LOCAL readiness01.10 **BLOCKED**: actual Friends field52/code52 in-place/restart
+PASS, Identity PRESENT/normal provisioning PRESENT_VALID, restricted Family TLS
+profile и BOOT-1 cache ABSENT. Нужен отдельно разрешённый production integration
+existing Friends identity→Family TLS provisioning→authenticated directory delivery;
+до него нет безопасного normal prewarm или actual-Friends restricted rehearsal.
+Не подменять identity/cache isolated fixtures. Field52 APK только readiness,
+не accepted FIELD-ready; public beta51/catalog неизменны. Предыдущий BLOCKED
+preflight сохранён. [Readiness gate](releases/2026-10-01-field1-device-readiness.ru.md).
+
 ### CURRENT PRODUCT CRITICAL PATH — 30.09.2026
 
 1. **5N-BOOT-1 — restricted bootstrap (PASS, isolated physical30.09).** Cached directory
@@ -106,6 +115,21 @@ network context только укрупнённый, с минимизацией
 
 ### Operational / later / backlog — вне product critical path
 
+- LOCAL FIELD-APK preflight01.10: USB Redmi получил in-place private APK2644790,
+  activation UI/UID сохранены, Auto/launch PASS; без CONNECT или forced failure.
+  **BLOCKED:** non-debuggable Friends не предоставляет проверенный read-only
+  private-state/BOOT-1 diagnostic; presence/validity/usability UNKNOWN. Не считать
+  это отсутствием cache или готовностью к field; не создавать cache неявно.
+  [Отчёт](releases/2026-10-01-field1-local-preflight.ru.md). FIELD-1 не начат.
+- FIELD-1 packaging01.10: private arm64 APK2644790 собран/подписан beta-ключом,
+  package/signature/version совместим с beta51; runtime не менялся. Установка,
+  наличие/валидность existing BOOT-1 activation/cache на field device не проверены.
+  [Build receipt](releases/2026-10-01-field1-apk.ru.md). **FIELD-1 NOT STARTED**;
+  сборка не закрывает field gate и не выполняет provisioning отсутствующего cache.
+- Read-only audit01.10,05:29–05:31UTC:27 устройств/23 не отозвано,
+  NL5 свежих AWG peers; CPU/RAM без перегрузки в снимке. Disk latency и
+  worker healthcheck/outbox остаются открытыми; capacity/DAU не измерены.
+  [Снимок и границы](releases/2026-10-01-vpn-health.ru.md). FIELD-1 не начат.
 - CI после sync: phase0 failover-stack build и Android emulator lifecycle FAIL;
   исправление отдельно, без переоценки принятых isolated gates. [Статус](STATUS.md).
 - Ops: NL disk latency, RU API restart, worker healthcheck/outbox, TLS monitoring
