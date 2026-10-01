@@ -4,6 +4,19 @@
 
 ## Идентичность и доступ
 
+5N-PROV-1 local-only: [API/deployment contract](../../deploy/friends/restricted/README.md).
+`control/friends/restricted.py` — activated Friends purpose-proof issuance,
+same-DB grants/revisions/certificate history, root-delegated issuer and BOOT-1 v1.
+`restricted_admin.py` — additive migration, grant revision, public gateway
+certificate and monotonic signed CRL. `restricted_sync.py` — bounded RU→NL CRL /
+NL→RU READY directory forced-command sync, no key/OAuth transfer.
+`scripts/sign_restricted_issuer.py` — offline existing-root delegation, not directory
+signature. `deploy/friends/access-api.py` serves two new POSTs; disabled without
+`FC_FRIENDS_RESTRICTED_DIR`. Tests: `tests/test_friends_restricted.py`.
+`carrier/bootstrap/seed.go` publishes snapshot only after READY;
+`carrier/cmd/bootstrap-broker/main.go --directory-export` stores it atomically.
+No live deployment or broad admission enabled.
+
 | Модуль | Ответственность и вход | Состояние/данные | Проверки |
 | --- | --- | --- | --- |
 | device_identity/device.py | DeviceIdentity, ключи RNS/WG и transport-key proof | Локальное приватное состояние; identity не сбрасывать при ошибке | tests/test_device_identity.py |

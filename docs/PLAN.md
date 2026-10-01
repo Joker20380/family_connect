@@ -2,15 +2,22 @@
 
 ## Current engineering priority / Текущий critical path
 
-**5N-PROV-1 (01.10): local implementation authorized, contract BLOCKED.** Source
-audit до runtime changes: BOOT-1 v1 требует live bootstrap seed `join_url` и
-existing mTLS authentication (не standalone signature). Уточнить, относится ли
-запрет room URLs только к dedicated rooms и нужна ли отдельная подпись response.
-Затем Friends issuance/grant binding, validated atomic Android import/prewarm и
-deterministic tests. Не подменять path ProductStore/disposable issuer. Deployable
-implementation пока нет; live deployment — только по отдельной авторизации,
-actual-Friends rehearsal/final FIELD APK — только после production readiness.
-[Pre-implementation gap](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+**5N-PROV-1 (01.10): IMPLEMENTED / DEPLOYMENT AUTHORIZATION REQUIRED.**
+Уточнение принято: BOOT-1 v1 содержит bootstrap seed `join_url`, не dedicated
+descriptor, без новой standalone directory signature. Initial delivery через
+existing activated Friends proof/HTTPS, без circular Family mTLS prerequisite.
+Local server issuance, same-DB grants/CRL sync, root-delegated issuer, Android
+validated atomic encrypted import/prewarm и deterministic tests реализованы.
+Python95/JVM193/Go race+vet/fresh JNI PASS; hardware validation ещё не выполнялась.
+Следующий шаг **только после отдельной deployment authorization**: owner-only
+RU API/issuer/sync + NL production seed/broker по
+[runbook](../deploy/friends/restricted/README.md). Затем same-signature private
+validation update, actual-Friends READY/restart, local restricted rehearsal
+(browser/DNS/fail-closed). Лишь после live PASS — final shareable FIELD APK.
+Directory≤1h; CRL15min может сокращать окно. Prewarm перед тестом, не обещать
+offline readiness спустя часы. Public beta51/private field52 не менялись.
+Historical BLOCKED audit `a88b104` сохранён в
+[отчёте](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
 
 LOCAL readiness01.10 **BLOCKED**: actual Friends field52/code52 in-place/restart
 PASS, Identity PRESENT/normal provisioning PRESENT_VALID, restricted Family TLS

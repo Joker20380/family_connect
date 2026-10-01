@@ -5,6 +5,19 @@
 
 ## Android
 
+5N-PROV-1 local-only: `FriendsAccessAndroid.restrictedReadiness` authenticates with
+existing `ControlIdentity` proof, no pre-existing Family TLS. `FriendsRestricted`
+provides single-flight bounded prewarm; `RestrictedCache` validates/rejects replay
+and retains old state on failure; `RestrictedVault` commits one Keystore-encrypted
+AtomicFile. `FriendsReadiness` exposes only redacted production state.
+`NativeRestricted.validateDelivery/beginReady` bridge to
+`carrier/wholedevice/provisioning.go`: root delegation/X509/CRL/BOOT-1 checks and
+in-memory TLS key from existing identity. `RestrictedTunnelEngine` uses that bundle
+for real `.friends`; legacy fixture-file path remains diagnostic-only.
+JVM tests: `RestrictedCacheTest`; native tests: `wholedevice/provisioning_test.go`.
+Real Keystore/process-restart/production-control validation still requires the
+authorized deployment and in-place private APK; no new APK shipped in this gate.
+
 MVP Auto: `ConnectivityOrchestrator` — pure deterministic policy/tests;
 `AutomaticConnection` — adapter/lifecycle host на existing ConnectionService worker;
 `AutomaticVpnOwner` — full-route guard и TUN handover в existing TcpVpnService;

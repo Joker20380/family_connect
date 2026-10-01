@@ -1,5 +1,16 @@
 # LOCAL FIELD-1 device readiness — 01.10.2026
 
+## Subsequent local implementation — deployment authorization required
+
+После user clarification 5N-PROV-1 implemented locally; existing identity proof
+может получить public Family TLS/BOOT-1 через production Friends API после rollout.
+См. [реализацию/tests/controlled deployment](2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+Python95/JVM193/Go race+vet/fresh JNI PASS; это **не** новое physical evidence.
+Телефон/API production не изменялись, APK не собирался/не устанавливался.
+Last-observed actual Friends: Identity PRESENT, normal PRESENT_VALID,
+restricted/BOOT-1 ABSENT; READY/restart/rehearsal pending authorization.
+Field52 остаётся readiness-only, не final FIELD artifact. Вся история ниже сохранена.
+
 ## Subsequent 5N-PROV-1 audit — evidence preserved
 
 Отдельный [production integration audit](2026-10-01-5n-prov1-production-restricted-provisioning.ru.md)

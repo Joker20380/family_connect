@@ -1,6 +1,27 @@
 # Текущее состояние / Current state
 
-## 5N-PROV-1 — 01.10.2026, BLOCKED до runtime changes
+## 5N-PROV-1 — 01.10.2026, IMPLEMENTED / DEPLOYMENT AUTHORIZATION REQUIRED
+
+После уточнения BOOT-1 contract реализован **локально**, не deployed:
+activated Friends proof → existing HTTPS `/friends/restricted-readiness` →
+active device/invitation/grant/revision/CRL checks → public-only Family certificate
+на existing Ed25519 identity + BOOT-1 v1. Online issuer делегирован existing offline
+control root; root не переносится на сервер, directory standalone signature нет.
+Bootstrap seed `join_url` разрешён, только server READY; dedicated rooms не prewarm.
+Android native validation + единый Keystore/AtomicFile bundle, replay floors,
+persisted300s cooldown, bounded foreground prewarm, valid-cache CONNECT без refresh
+wait. Private key остаётся existing Device Identity, TLS assembly только в памяти.
+Directory≤1h неизменён; текущий CRL15min дополнительно ограничивает readiness.
+Python95/JVM193/Go race+vet/fresh arm64 JNI PASS; lint0errors37warnings.
+APK не собран/не установлен; real phone всё ещё имеет last-observed BLOCKED state
+ниже. Historical audit `a88b104` и unpushed `9c82152`/`3d9fd7c` сохранены.
+Нужна отдельная authorization: owner-only RU Friends API/issuer/sync + новый NL
+seed/broker, затем in-place private validation и local rehearsal. No production
+deployment, push, final FIELD artifact или Krasnodar FIELD-1.
+[Реализация/evidence](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md),
+[точный controlled rollout/rollback](../deploy/friends/restricted/README.md).
+
+### Исторический docs-only audit — BLOCKED до уточнения, a88b104
 
 Source audit: Friends `/friends/*` не выдаёт Family TLS/BOOT-1; ProductStore
 `/v2/*` — другой контур, fixture issuer не production. Accepted BOOT-1 v1 требует

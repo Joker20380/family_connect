@@ -1,17 +1,44 @@
 # Architecture map / Карта архитектуры
 
-## Production restricted delivery gap — 1 October 2026
+## Production restricted delivery — 1 October 2026, local only
 
-5N-PROV-1 is **BLOCKED before runtime implementation**, not deployed. Friends
-`/friends/*` and its device/invitation DB are distinct from ProductStore `/v2/*`;
-the experimental issuer does not provision an ordinary activated Friends identity.
-BOOT-1 v1 requires a live **bootstrap seed join URL**, published after server seed
-READY, and authenticates delivery over existing Family mTLS. It has no standalone
-directory signature. Dedicated room descriptors are separate, created during
-admitted recovery. Reuse v1 plus a ban on all live room URLs is contradictory;
-clarify before replacing the protocol or adding a signing trust relationship.
-No TTL extension, new root, private-key delivery or production rollout was made.
-[Source findings and continuation requirements](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+5N-PROV-1 is **IMPLEMENTED / DEPLOYMENT AUTHORIZATION REQUIRED**. Friends
+`/friends/*` and its device/invitation DB remain distinct from ProductStore `/v2/*`.
+Two bounded POSTs (challenge + semantic restricted-readiness fetch) use existing
+activated Device Identity transport-key proof and ordinary authenticated HTTPS.
+Initial provisioning does **not** require already installed Family mTLS. The server
+rechecks device/invitation/Family grant, exact key binding, purpose-bound nonce,
+revision, admission policy, expiry and signed CRL before issuance.
+
+The existing offline control root signs a domain-separated **issuer delegation**,
+not each directory. Android accepts the online Family CA only through that
+delegation; no independent root or second client private identity is introduced.
+Accepted Family TLS certificate/URI/OU/ALPN format is reused. The leaf binds the
+existing device Ed25519 public key; Android assembles TLS private material only in
+memory from its existing secure identity. API returns no private key. Global peer
+revision floor and per-device grant revision remain distinct.
+
+BOOT-1 v1 stays unchanged: bootstrap seed `join_url` is required, exported only
+after READY. Existing Family-mTLS refresh remains for already provisioned core
+paths; production adds authenticated Friends HTTPS delivery. No standalone
+directory signature, OAuth in Android or prewarmed dedicated descriptor.
+`OpenProvisioned` consumes the validated bundle → cached seed → Family auth →
+Room Broker → fresh dedicated whole-device session using the accepted Orchestrator.
+
+`RestrictedVault` is one no-backup AES-GCM/Android Keystore AtomicFile containing
+public delivery, tombstone and monotonic floors. Existing identity/normal vaults
+are untouched. Native verifies root delegation/X509/CRL/device/Family/directory
+before commit; malformed/stale/unavailable refresh preserves valid old state.
+Authenticated rejection disables restricted usability; offline revocation remains
+bounded by signed CRL/session expiry, not instantaneous.
+
+Prewarm after activation/normal profile success and foreground resume/60s checks:
+single-flight,30s deadline, persisted300s attempt cooldown,300s near-expiry window.
+No background polling; CONNECT doesn't wait for refresh with valid material.
+Directory≤1h/8KiB/4 seeds unchanged; seed55min, CRL15min makes effective readiness
+at most15min. Single-seed rotation/death can invalidate liveness before expiry;
+no hours-long offline guarantee. [Implementation and historical BLOCKED audit](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+[API/schema, controlled deployment and rollback](../deploy/friends/restricted/README.md).
 
 ## Current product decision — resilient family connectivity
 
