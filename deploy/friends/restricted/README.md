@@ -1,5 +1,14 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+**Current checkpoint,01.10 11:21UTC: [DEPLOY-PREFLIGHT READY](../../../docs/releases/2026-10-01-5n-prod-deploy-preflight.ru.md),
+not deployed.** Owner-installed final NL provider.env passes metadata/schema-only
+checks; token never returned/hash/size-reported. Same authority, CRL3 expires
+11:35:38UTC, gateway leaf12:20:38UTC; no TTL extension. Other material remains
+inactive staging, account/units not installed. Stop before deployment; refresh
+through the publisher again if this short validity window is missed.
+
+### Historical input checkpoint
+
 **Current preflight checkpoint,01.10:** [refresh / owner hidden-input boundary](../../../docs/releases/2026-10-01-5n-prod-deploy-preflight.ru.md).
 Same authority/admission, publisher CRL sequence2 expires11:26:23UTC, gateway leaf
 12:11:23UTC. Token access is now owner-interactive only: the staged

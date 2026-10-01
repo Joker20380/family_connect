@@ -12,11 +12,11 @@ Whole-device path принят isolated; production rollout ещё не выпо
 [5N-PROV-1 local implementation / authorized deployment preflight STOP](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md):
 existing Friends identity → restricted provisioning/BOOT-1 → secure Android cache;
 [owner-only deployment, migration, secrets и rollback](../deploy/friends/restricted/README.md).
-Required production material отсутствует; rollout не начат. Это текущий integration
+Required production material подготовлен; rollout не начат. Это текущий integration
 gate перед actual-Friends readiness/rehearsal и final FIELD APK.
-[Current deploy preflight / owner hidden input pending](releases/2026-10-01-5n-prod-deploy-preflight.ru.md):
-authority unchanged, CRL refreshed to2; token not accessed/installed, no runtime
-deployment. Exact safe SSH input procedure; recheck expiry before later use.
+[Current deploy preflight READY / no deployment](releases/2026-10-01-5n-prod-deploy-preflight.ru.md):
+same authority, CRL refreshed to3, owner-installed provider config schema PASS;
+no token value/hash/size exposed. Recheck expiry before separately authorized use.
 [5N-PROD-AUTHORITY READY / staged only](releases/2026-10-01-5n-prod-authority.ru.md):
 explicitly authorized first Family, sole owner grant, existing NL identity binding,
 signed delegated issuer/real CRL and native validation. No service/API deployment;

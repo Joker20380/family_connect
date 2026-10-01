@@ -2,6 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-PROD-DEPLOY-PREFLIGHT: READY / no deployment (01.10 11:21UTC).** Owner input
+confirmed; provider metadata/schema PASS without value/hash/size disclosure.
+Publisher CRL3 expires11:35:38UTC; gateway leaf12:20:38; unchanged sole-canary
+authority/issuer/grant/delegation. Actual material/native/sync validation PASS.
+[Current inventory/evidence](releases/2026-10-01-5n-prod-deploy-preflight.ru.md).
+**STOP.** No services/API/routes/ingress/prewarm/FIELD-1 or push. Separately
+authorized rollout must recheck freshness and refresh again if needed, preserving
+floors/TTL; staged runtime/account/venv installation is not yet performed.
+
+### Historical owner-input blocker — resolved by owner input and fresh validation
+
 **5N-PROD-DEPLOY-PREFLIGHT: BLOCKED at owner hidden token input (01.10).**
 Authorized staged refresh complete: same authority/canary, CRL2 expires11:26:23UTC,
 gateway leaf12:11:23; no TTL changes, no runtime activation.32 tests/native PASS.

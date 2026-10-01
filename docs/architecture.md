@@ -9,10 +9,12 @@ It is not a ProductStore `/v2` entitlement; no cross-store enrollment or new roo
 The existing NL control-provider Device Identity was explicitly designated as the
 Family gateway (mailbox/diagnostic identities not reused). Its private key stays
 NL, online CA key stays RU, offline root stays local. Four accepted additive tables
-exist; issuer/CRL/gateway materials are root-only staged and validated. No API routes,
-new services, provider token, room creation or phone delivery enabled. Initial
-short-lived CRL requires renewal before later use; see the
-[authority checkpoint](releases/2026-10-01-5n-prod-authority.ru.md).
+exist; issuer/CRL/gateway materials are root-only staged and validated. Owner later
+installed only final NL provider.env; opaque metadata/schema validation PASS.
+No API routes, new services, room creation or phone delivery enabled. Current
+CRL3 expires01.10 11:35:38UTC; renew before later use if expired, without extending
+TTL or resetting floors. [Current preflight](releases/2026-10-01-5n-prod-deploy-preflight.ru.md)
+and [initial authority checkpoint](releases/2026-10-01-5n-prod-authority.ru.md).
 
 Deployment authorization was subsequently granted for `ff9fb09`. The read-only
 09:32–09:33UTC preflight stopped because required RU issuer/sync and NL gateway/

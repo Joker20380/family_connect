@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+## 5N-PROD-DEPLOY-PREFLIGHT — READY, no deployment, 01.10.2026
+
+Owner confirmed token input; NL provider.env exists/root:root0600/schema PASS,
+validated server-side with boolean-only output, no token value/hash/size exposed.
+Same Family/Owner canary/gateway/issuer; other admissions0. Publisher CRL **2→3**,
+expires **01.10 11:35:38UTC**; renewed gateway leaf **12:20:38UTC**. Delegation/grant
+unchanged through02.10 10:44:11UTC, sequence/revision1. Actual crypto/native/sync/
+permissions checks PASS. All material ready within expiry, runtime files remain
+staged except owner-installed provider.env; account/units not installed/activated.
+No policy extension, service/API/ingress change, provider request, room or phone
+prewarm. Revalidate/refresh if later deployment misses the short validity window.
+**STOP before deployment.** No FIELD-1/push.
+[Current complete inventory and evidence](releases/2026-10-01-5n-prod-deploy-preflight.ru.md).
+
 ## 5N-PROD-DEPLOY-PREFLIGHT — BLOCKED on owner input, 01.10.2026
 
 Same Family/Owner canary/gateway/issuer; other admissions0. Accepted publisher
