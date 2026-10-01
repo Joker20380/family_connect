@@ -1,5 +1,13 @@
 # LOCAL FIELD-1 device readiness — 01.10.2026
 
+## Authorized deployment preflight stopped — 09:32–09:33 UTC
+
+Deployment authorization получена, но required RU/NL production material отсутствует
+по runbook paths. [Preflight evidence](2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+Explicit missing-material STOP выполнен до rollout/migration/phone actions.
+Нового physical readiness/restart/rehearsal evidence нет; field52 и все предыдущие
+BLOCKED/IMPLEMENTED checkpoints ниже сохранены. Final FIELD APK не произведён.
+
 ## Subsequent local implementation — deployment authorization required
 
 После user clarification 5N-PROV-1 implemented locally; existing identity proof

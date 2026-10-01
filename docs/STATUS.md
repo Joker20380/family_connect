@@ -1,6 +1,26 @@
 # Текущее состояние / Current state
 
-## 5N-PROV-1 — 01.10.2026, IMPLEMENTED / DEPLOYMENT AUTHORIZATION REQUIRED
+## 5N-PROV-1 — authorized deployment preflight STOP, 01.10.2026 09:32–09:33 UTC
+
+**DEPLOYMENT FAILED / ROLLED BACK — prerequisite failure до deployment; rollback
+не требовался и не выполнялся.** Authorization получена для source `ff9fb09`, но
+новое условие пользователя требует STOP при отсутствии обязательных материалов.
+Read-only SSH подтвердил оба разрешённых IP/host keys. На RU и NL отсутствует
+`/opt/apps/family_connect/friends-restricted/`: RU issuer/delegation/anchor,
+admission/CRL/sync credentials не подготовлены; NL gateway profile/provider.env
+не подготовлены, OAuth не configured для required нового сервиса. Другие private
+stores/diagnostic credentials не искались и не подставлялись.
+Никакого partial rollout: no upload, key generation, migration, service/ingress
+change или device action. Existing RU Friends API + RU/NL AWG/TCP active,
+NRestarts0; TLS1.3 verified, public status HTTP200, certificate до05.10 12:25:56UTC.
+Known peer-worker Docker unhealthy сохраняется, unrelated fixes не выполнялись.
+Deployment-induced API interruption0s (no transitions), не continuous SLA test.
+Redmi READY/restart/rehearsal и final FIELD APK не выполнялись; prior field52
+BLOCKED evidence сохранён. Public remote main проверен: `2644790`, без изменений.
+[Точный audit, missing material, health и stop boundary](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+Production/code/catalogs unchanged; no push, no Krasnodar FIELD-1.
+
+## Historical implementation checkpoint — ff9fb09, deployment authorization then pending
 
 После уточнения BOOT-1 contract реализован **локально**, не deployed:
 activated Friends proof → existing HTTPS `/friends/restricted-readiness` →

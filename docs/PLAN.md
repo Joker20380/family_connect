@@ -2,6 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-PROV-1: controlled deployment authorized, preflight STOP (01.10 09:32UTC).**
+Required `friends-restricted/` отсутствует на обоих hosts: RU issuer/delegation/
+anchor/admission/CRL/sync material; NL gateway profile/provider OAuth configuration.
+По explicit user stop rule никакие материалы не генерировались, partial deploy
+не начинался. Нужно сначала подготовить/указать authoritative production material
+по [runbook](../deploy/friends/restricted/README.md), не заменяя его diagnostic
+fixtures, и повторить preflight. This attempt is stopped; deployment authorization
+не является доказательством готовности secrets. До успешного preflight: no API/DB/
+ingress changes, phone install/prewarm/rehearsal/final FIELD APK. Existing production
+service snapshot healthy кроме прежнего peer-worker healthcheck; no rollout.
+[Audit и remaining gates](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
+### Historical implementation checkpoint — ff9fb09
+
 **5N-PROV-1 (01.10): IMPLEMENTED / DEPLOYMENT AUTHORIZATION REQUIRED.**
 Уточнение принято: BOOT-1 v1 содержит bootstrap seed `join_url`, не dedicated
 descriptor, без новой standalone directory signature. Initial delivery через

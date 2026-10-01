@@ -1,6 +1,137 @@
 # 5N-PROV-1 — production restricted provisioning + bootstrap delivery
 
-## Current result after clarification — 01.10.2026
+## Authorized deployment attempt — preflight STOP, 01.10.2026
+
+**5N-PROV-1 = DEPLOYMENT FAILED / ROLLED BACK.** Уточнение статуса:
+**prerequisite failure до начала rollout; rollback не требовался/не выполнялся**.
+Это не «deployed / physical blocked». Production deployment authorization получена
+для `ff9fb09af329402e538003a56eaefd0dce2b6c73`, но explicit правило пользователя
+требует STOP, если обязательный secret/material отсутствует или inconsistent.
+Именно это условие сработало. Ни seed, ни issuer, ни API, ни migration не deployed.
+
+### Entry and exact missing prerequisites
+
+- Начальный worktree clean, HEAD exact `ff9fb09af329402e538003a56eaefd0dce2b6c73`.
+  Local origin/main и live `git ls-remote origin refs/heads/main` совпали:
+  `26447902137735ac7633f92ba6673395bae078fa`. No fetch/push/ref rewrite.
+- Прочитаны AGENTS, STATUS/current PLAN, architecture и exact accepted
+  [runbook](../../deploy/friends/restricted/README.md). Runtime source не изменён.
+- SSH: `BatchMode=yes`, `StrictHostKeyChecking=yes`, exact authorized IPs;
+  host-key verification успешна, `SSH_CONNECTION` server destination и assigned
+  interface address соответствуют каждому expected IP. RU `box-932982`,
+  NL `box-966556`; соседние MicroTrader services/excluded host не затрагивались.
+- RU,09:32:56UTC: `/opt/apps/family_connect/friends-restricted/` **ABSENT**.
+  Required `anchor.pub`, `issuer.json`, `issuer.key`, `admission.json`,
+  `revocations.pem`, `sync.key`, `known_hosts` отсутствуют по runbook paths.
+- NL,09:32:54UTC: тот же protected directory **ABSENT**; required `gateway.json`
+  и `provider.env` отсутствуют. Новый bootstrap service not-found; therefore
+  `YANDEX_TELEMOST_OAUTH_TOKEN` **не configured на требуемом новом service path**.
+  Это не утверждение, что token/gateway identity отсутствует во всех private
+  stores. Другие secret locations и остатки isolated fixtures не искались,
+  произвольная замена identity/CA/token не выполнялась.
+- Restricted bootstrap/sync units not-found, directory snapshots absent,
+  loopback18444 не занят на обоих hosts. RU deployed restricted.py absent.
+  NL inspected friends-access app files отсутствуют; venv/dependencies и
+  forced-command account ещё не подтверждены.
+
+Runbook допускает создание delegated issuer во время подготовки; более позднее
+user instruction явно требует STOP при отсутствующих prerequisites. Поэтому
+никакая partial secret provisioning/key generation/offline signing в этом attempt
+не делалась. Offline root/private device identity не читались. До retry нужны
+authoritative Family/gateway material, anchored delegation/issuer, owner admission,
+CRL, dedicated pinned sync credentials и server-only provider configuration;
+не просить прислать OAuth/private keys в chat, не использовать diagnostic identity.
+
+### Existing production baseline, not a new acceptance
+
+| Проверка | RU | NL |
+|---|---|---|
+| Friends AWG/TCP units | active/running, NRestarts0 | active/running, NRestarts0 |
+| Friends API | active/running, NRestarts0; start30.09 03:28:04UTC | not deployed here, as expected |
+| Available RAM |1087.0MiB/1962.5MiB|556.0MiB/955.3MiB|
+| Free filesystem space |8.63GiB|13.88GiB|
+| Load1/5/15min |1.23/0.94/0.85|0.40/0.25/0.24|
+| Relevant TCP listeners |443/8443/8446/18084; no18444|443; no18444|
+
+RU product API/control containers healthy; existing peer-worker container
+`family-connect-product:0.2.1` running/unhealthy, как в предыдущем health report.
+Это известное pre-existing состояние, не deployment regression; не исправлялось.
+Existing RU gateway images: AWG `family-connect-amneziawg:2-pilot1`, TCP
+`family-connect-xray:26.3.27-pilot1`. Наличие running services не доказывает новый
+end-to-end normal client smoke; activation/invitation mutation и phone traffic
+не запускались после prerequisite STOP.
+
+09:33:32UTC independent public check: system-CA/hostname verified TLS1.3 на
+`185.251.89.19:8443`, certificate notBefore28.09 20:25:57UTC,
+notAfter05.10 12:25:56UTC; `/status/server-load.json` HTTP200. Response body не
+сохранялся/не выводился. Общий TLS validity PASS; product data-plane acceptance
+не заменяется этим запросом.
+
+### Rollback baseline and migration boundary
+
+Read-only metadata/fingerprints собраны до изменений; secrets/config contents
+не копировались в local artifacts/Git. Safe local receipt:
+`/tmp/fc-prov1-predeploy-safe.json` (only whitelist metadata/presence/health).
+Production roots не предоставляют Git HEAD (`rev-parse` unavailable), поэтому
+deployed revision **UNKNOWN**, не приравнивается к `ff9fb09`/origin/main.
+RU artifact fingerprints:
+
+- `friends-access/access-api.py` SHA256
+  `16e557b1ceb4099897558ade00b53b265566e34e76ab88d4a673af444ab1795a`.
+- `friends-access/app/control/friends/access.py` SHA256
+  `f37fe6eccdc6609159d26363b457c62e18b71c7036ca449a6d692349c3a3d48e`.
+- `state-product-https/config/nginx.conf` SHA256
+  `4426bfa9b589fcca124aed99daaaa9dedcf04cbd2c385a322d9fd92ead925267`.
+
+Эти file bytes не совпадают с checkout versions; packaging/semantic differences
+не исследованы после STOP. Перед retry сопоставить live layout/artifacts, не
+заменять их вслепую wholesale install script. Unit FragmentPath/DropInPaths/hash,
+ActiveEnterTimestamp/NRestarts и container image/state записаны безопасно.
+
+RU DB read-only/query_only: devices27 (revoked4), invites81 (revoked5),
+`restricted_*` tables **нет**. Inspected `migrate()` содержит только три intended
+`CREATE TABLE IF NOT EXISTS`; CRL publisher добавляет restricted_crl_sequence.
+Нет destructive DROP/rename/перезаписи old tables; additive schema совместима
+с неизменёнными old API queries. **Migration не выполнялась**.
+
+Backup/config snapshots на production **не создавались**, так как preflight STOP
+наступил до любого planned write. Rollback path read/reviewed, но executable
+backup/restore rehearsal не подтверждён в этом attempt; его нельзя считать PASS.
+При retry private on-host backup/definitions/ingress snapshot обязателен до
+изменений, без вывоза private data в task artifacts. No rollback needed/performed.
+Deployment-induced API interruption **0s: no service transition/reload occurred**;
+continuous availability measurement не запускалось, zero-downtime SLA не заявлен.
+
+### Unperformed gates / unchanged product state
+
+- RU/NL deployment, restricted API live security tests, production certificate
+  issuance, CRL/directory sync, provider join/READY: **NOT RUN / NOT DEPLOYED**.
+  No client fixture fabricated, no production room created, no OAuth acquired.
+- Phone deliberately untouched: user permits physical work **only after healthy
+  infrastructure**. Last-observed existing Device Identity PRESENT and normal
+  PRESENT_VALID; restricted provisioning/BOOT-1 ABSENT (prior field52 evidence),
+  not a fresh inspection. Effective production readiness expiry: **N/A**.
+- READY process restart, local restricted rehearsal, Chrome2 sites, Family DNS,
+  concurrency, leak/fail-closed acceptance: **NOT RUN in this attempt**.
+- Final FIELD APK: **not produced**. Existing private field52/code52 readiness-only
+  and public beta51/code51 untouched; Linux0.2.11/Windows0.2.15 unchanged. Public
+  artifacts/catalogs не менялись и повторно не верифицировались.
+- No uploads, production filesystem/config writes, migration, generated credentials,
+  service restart, ingress reload, phone install/clear/uninstall, public release.
+  No regression attributable to deployment; only baseline health snapshot taken.
+- Runtime tests не повторялись: runtime source unchanged. Documentation guards
+  PASS для этого docs-only update:409 files/2464 links/0 errors,
+  source guard1552 index entries/0 blocked, working/staged diff checks PASS.
+  Previous95/JVM193/native PASS
+  ниже относится только к implementation checkpoint, не live deployment.
+
+Production current state: **pre-existing services, unchanged; PROV-1 not deployed**.
+Commits данного attempt — только local documentation evidence, hash в handoff.
+Push: **no**. Krasnodar FIELD-1 started: **no**. STOP per missing-material rule.
+
+---
+
+## Historical implementation result after clarification — 01.10.2026
 
 **5N-PROV-1 = IMPLEMENTED / DEPLOYMENT AUTHORIZATION REQUIRED.**
 Это local implementation gate, **не PASS** по physical production criteria.

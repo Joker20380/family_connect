@@ -9,10 +9,11 @@ implemented beta / proven experimental / planned разделены явно.
 isolated physical PASS01.10 с сохранённым initial FAIL; не public rollout/не FIELD-1.
 5N.1–5N.5, ReliableStream/DNS containment и automatic Room Broker приняты;
 Whole-device path принят isolated; production rollout ещё не выполнен.
-[5N-PROV-1 local implementation / deployment authorization required](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md):
+[5N-PROV-1 local implementation / authorized deployment preflight STOP](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md):
 existing Friends identity → restricted provisioning/BOOT-1 → secure Android cache;
 [owner-only deployment, migration, secrets и rollback](../deploy/friends/restricted/README.md).
-Это текущий integration gate перед actual-Friends readiness/rehearsal и final FIELD APK.
+Required production material отсутствует; rollout не начат. Это текущий integration
+gate перед actual-Friends readiness/rehearsal и final FIELD APK.
 [5N-BOOT-1 PASS / isolated physical cached-state acceptance](releases/2026-09-30-webrtc-5n-boot1-bootstrap.ru.md):
 [cached directory, rendezvous, bounds и isolated runbook](../carrier/bootstrap/README.md).
 [5N.5 evidence](releases/2026-09-28-webrtc-eu5-mux-dns.ru.md) ·

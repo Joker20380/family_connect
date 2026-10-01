@@ -2,6 +2,12 @@
 
 ## Production restricted delivery — 1 October 2026, local only
 
+Deployment authorization was subsequently granted for `ff9fb09`. The read-only
+09:32–09:33UTC preflight stopped because required RU issuer/sync and NL gateway/
+provider material were absent at the runbook paths. No production component or
+trust material was installed/generated. The implementation checkpoint below
+remains local-only; see the gate report for current prerequisites and evidence.
+
 5N-PROV-1 is **IMPLEMENTED / DEPLOYMENT AUTHORIZATION REQUIRED**. Friends
 `/friends/*` and its device/invitation DB remain distinct from ProductStore `/v2/*`.
 Two bounded POSTs (challenge + semantic restricted-readiness fetch) use existing
