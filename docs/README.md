@@ -14,6 +14,9 @@ existing Friends identity → restricted provisioning/BOOT-1 → secure Android 
 [owner-only deployment, migration, secrets и rollback](../deploy/friends/restricted/README.md).
 Required production material отсутствует; rollout не начат. Это текущий integration
 gate перед actual-Friends readiness/rehearsal и final FIELD APK.
+[Current deploy preflight / owner hidden input pending](releases/2026-10-01-5n-prod-deploy-preflight.ru.md):
+authority unchanged, CRL refreshed to2; token not accessed/installed, no runtime
+deployment. Exact safe SSH input procedure; recheck expiry before later use.
 [5N-PROD-AUTHORITY READY / staged only](releases/2026-10-01-5n-prod-authority.ru.md):
 explicitly authorized first Family, sole owner grant, existing NL identity binding,
 signed delegated issuer/real CRL and native validation. No service/API deployment;

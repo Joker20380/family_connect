@@ -1,5 +1,14 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+**Current preflight checkpoint,01.10:** [refresh / owner hidden-input boundary](../../../docs/releases/2026-10-01-5n-prod-deploy-preflight.ru.md).
+Same authority/admission, publisher CRL sequence2 expires11:26:23UTC, gateway leaf
+12:11:23UTC. Token access is now owner-interactive only: the staged
+[`provision-provider-env.py`](provision-provider-env.py) requires root/TTY,
+refuses echoed fallback/overwrite, writes only final root0600 provider.env and
+checks schema without outputting the value. No agent unlock/export of KeePass.
+Input pending; no runtime service/API/ingress deployment authorized by this step.
+Recheck expiry after owner input; never extend TTL or reuse expired CRL to deploy.
+
 **Authority checkpoint,01.10:** [5N-PROD-AUTHORITY READY](../../../docs/releases/2026-10-01-5n-prod-authority.ru.md)
 prepared the first signed Friends restricted Family, sole owner grant, existing NL
 control-provider gateway designation, issuer/CRL/profile and inactive runtime/sync

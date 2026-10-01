@@ -2,6 +2,18 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-PROD-DEPLOY-PREFLIGHT: BLOCKED at owner hidden token input (01.10).**
+Authorized staged refresh complete: same authority/canary, CRL2 expires11:26:23UTC,
+gateway leaf12:11:23; no TTL changes, no runtime activation.32 tests/native PASS.
+Next: owner runs the [single secure SSH procedure](releases/2026-10-01-5n-prod-deploy-preflight.ru.md),
+confirms without sending token; validate only file metadata/nonempty/schema and
+revalidate/refresh certificate/CRL freshness before any later deployment window.
+Do not unlock KeePass, create rooms, start/reload services, enable routes, prewarm
+phone or retry full deployment. No FIELD-1/push. Provider configuration is the
+remaining preflight blocker, not permission to deploy once entered.
+
+### Historical authority checkpoint — before refresh/input authorization
+
 **5N-PROD-AUTHORITY: READY / staged only (01.10).** Explicit first-Family/gateway
 designation authorization executed: one existing Owner grant, other admissions0,
 same NL control-provider identity, local offline-root delegation, real initial CRL.

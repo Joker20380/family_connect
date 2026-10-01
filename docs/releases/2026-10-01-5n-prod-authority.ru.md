@@ -1,5 +1,11 @@
 # 5N-PROD-AUTHORITY — READY, preparation only
 
+**Subsequent authorized refresh:** [deploy preflight / owner input pending](2026-10-01-5n-prod-deploy-preflight.ru.md)
+preserves this Family/issuer/grant/gateway, advances CRL1→2 and renews short-lived
+leaves without TTL changes. New CRL expiry01.10 11:26:23UTC, gateway12:11:23UTC.
+Token not accessed/installed; services unchanged. The initial timestamps below
+remain historical evidence and must not be used as current deployment material.
+
 01.10.2026, authority/material validation completed10:52UTC. Entry HEAD
 `584d252552ebd61e819032ec9453a52805c9bb5b`, clean worktree. Accepted production
 implementation remains `ff9fb09` / runtime `bb71a3f`; no runtime source changed.

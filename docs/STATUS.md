@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+## 5N-PROD-DEPLOY-PREFLIGHT — BLOCKED on owner input, 01.10.2026
+
+Same Family/Owner canary/gateway/issuer; other admissions0. Accepted publisher
+advanced CRL1→2, expires **01.10 11:26:23UTC**; renewed gateway leaf expires12:11:23.
+Delegation/grant unchanged through02.10 10:44:11UTC, sequence/revision1 retained.
+32 tests + actual native/authority/sync/permissions checks PASS; no TTL extension.
+NL hidden-input helper staged/tested; **provider.env missing, token not accessed
+or installed**. Owner runs the protected SSH prompt in their own terminal, never
+pastes token into chat. Stop here, recheck/refresh expiry after input if needed.
+No services/runtime/API routes/ingress changed; no room, phone prewarm/push/FIELD-1.
+[Exact secure procedure, inventory and evidence](releases/2026-10-01-5n-prod-deploy-preflight.ru.md).
+
 ## 5N-PROD-AUTHORITY — READY, staged only, 01.10.2026
 
 User-authorized first Friends restricted Family created under the existing signed
