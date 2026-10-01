@@ -1,5 +1,18 @@
 # Architecture map / Карта архитектуры
 
+## Production restricted delivery gap — 1 October 2026
+
+5N-PROV-1 is **BLOCKED before runtime implementation**, not deployed. Friends
+`/friends/*` and its device/invitation DB are distinct from ProductStore `/v2/*`;
+the experimental issuer does not provision an ordinary activated Friends identity.
+BOOT-1 v1 requires a live **bootstrap seed join URL**, published after server seed
+READY, and authenticates delivery over existing Family mTLS. It has no standalone
+directory signature. Dedicated room descriptors are separate, created during
+admitted recovery. Reuse v1 plus a ban on all live room URLs is contradictory;
+clarify before replacing the protocol or adding a signing trust relationship.
+No TTL extension, new root, private-key delivery or production rollout was made.
+[Source findings and continuation requirements](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
 ## Current product decision — resilient family connectivity
 
 Authoritative rebaseline, **30 September 2026**. [STATUS](STATUS.md) records

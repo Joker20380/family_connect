@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+## 5N-PROV-1 — 01.10.2026, BLOCKED до runtime changes
+
+Source audit: Friends `/friends/*` не выдаёт Family TLS/BOOT-1; ProductStore
+`/v2/*` — другой контур, fixture issuer не production. Accepted BOOT-1 v1 требует
+**live seed join_url**, заранее созданный сервером, и mTLS authentication без
+standalone signature. Запрет всех live room URLs несовместим с reuse v1: уточнить
+bootstrap seed versus dedicated URL и signing contract. Runtime/API/Android
+integration **не реализована**, deployment gate не достигнут. Physical BLOCKED
+ниже сохранён. Docs-only, без production/device changes, APK, push или FIELD-1.
+[Gap, key model, TTL и условия продолжения](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
 ## LOCAL device readiness — 01.10.2026, BLOCKED
 
 Private `.friends` field52/code52 (source9c82152) установлен IN PLACE на Redmi,

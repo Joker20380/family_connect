@@ -21,6 +21,13 @@ proof → сервер потребляет challenge и проверяет до
 
 ## Product: отдельный серверный контур
 
+**5N-PROV-1 audit01.10:** `/friends/*` не предоставляет restricted readiness;
+endpoint только в `/v2/*` недостаточен для real Friends APK. Accepted BOOT-1
+`carrier/bootstrap/seed.go` публикует live seed `join_url` по existing Family mTLS,
+не standalone-signed directory. `pilot/telemost_family_fixture.py` — disposable
+issuer, не production signer. До runtime changes уточнить URL/signing contract;
+[gap и trust/storage/rollout boundaries](../releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
 В [control/product](../../control/product/) читать `api.py` (HTTP boundary), `store.py`
 (ProductStore), `provisioning.py` (ProvisioningService), `gateways.py` и
 `gateway_adapter.py` (согласование gateway), `admin.py` (операторские операции).

@@ -1,5 +1,13 @@
 # LOCAL FIELD-1 device readiness — 01.10.2026
 
+## Subsequent 5N-PROV-1 audit — evidence preserved
+
+Отдельный [production integration audit](2026-10-01-5n-prov1-production-restricted-provisioning.ru.md)
+подтвердил gap Friends versus ProductStore и конфликт literal room-URL запрета с
+BOOT-1 v1 live seed. Результат **BLOCKED до runtime implementation**, не новый
+physical test и не deployable change. Телефон не трогали, prewarm/rehearsal не
+выполнены. Следующее историческое evidence остаётся без переоценки.
+
 Starting HEAD: `26447902137735ac7633f92ba6673395bae078fa`.
 Это LOCAL readiness, не Krasnodar FIELD-1. Предыдущий
 [BLOCKED preflight](2026-10-01-field1-local-preflight.ru.md) сохранён: update PASS,

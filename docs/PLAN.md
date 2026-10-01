@@ -2,6 +2,16 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-PROV-1 (01.10): local implementation authorized, contract BLOCKED.** Source
+audit до runtime changes: BOOT-1 v1 требует live bootstrap seed `join_url` и
+existing mTLS authentication (не standalone signature). Уточнить, относится ли
+запрет room URLs только к dedicated rooms и нужна ли отдельная подпись response.
+Затем Friends issuance/grant binding, validated atomic Android import/prewarm и
+deterministic tests. Не подменять path ProductStore/disposable issuer. Deployable
+implementation пока нет; live deployment — только по отдельной авторизации,
+actual-Friends rehearsal/final FIELD APK — только после production readiness.
+[Pre-implementation gap](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
 LOCAL readiness01.10 **BLOCKED**: actual Friends field52/code52 in-place/restart
 PASS, Identity PRESENT/normal provisioning PRESENT_VALID, restricted Family TLS
 profile и BOOT-1 cache ABSENT. Нужен отдельно разрешённый production integration
