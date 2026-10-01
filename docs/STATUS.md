@@ -1,5 +1,27 @@
 # Текущее состояние / Current state
 
+## 5N-PROD-MATERIALS — OWNER ACTION REQUIRED, 01.10.2026
+
+Preparation only, source `ff9fb09`/entry `f082c10`: staged root-only0700 directory
+`/opt/apps/family_connect/restricted-materials-stage-20261001` on RU/NL; files0600.
+RU: exact public anchor, deny-all admission, dedicated Ed25519 SSH sync key and
+pre-existing verified NL pins. NL: public sync key/restricted authorization fragment
+and exact bootstrap service template, **not installed/activated**. Existing offline
+root available/matches ControlTrust; no new root or delegation signature generated.
+Need authoritative Family/gateway identity binding, owner canary selection and
+server-only Yandex token (unavailable). Issuer/key/gateway/CRL not prepared with
+invented identities; CRL publisher requires migrated DB, prohibited in this task.
+Must resolve that sequencing before retry, no automatic deployment.
+Permissions/SSH configuration validation +18 backend/native contract tests PASS;
+actual missing production delegation/CRL/gateway validation not claimed.
+HTTPS renewal timer active, latest01.10 09:07UTC success/no-op, next21:16:13UTC;
+verified cert expires05.10 12:25:56UTC (~4d2h26 at09:59UTC). No manual renewal
+currently indicated; previous28.09 failures preserved in report.
+Existing API/AWG/TCP unchanged, restricted tables0, no service/reload/migration/
+public release/catalog/push/FIELD-1. No new secrets under repo; existing ignored
+offline key remains in its documented location, not moved/copied.
+[Full material inventory, validation and owner actions](releases/2026-10-01-5n-prod-materials.ru.md).
+
 ## 5N-PROV-1 — authorized deployment preflight STOP, 01.10.2026 09:32–09:33 UTC
 
 **DEPLOYMENT FAILED / ROLLED BACK — prerequisite failure до deployment; rollback

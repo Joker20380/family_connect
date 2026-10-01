@@ -14,6 +14,9 @@ existing Friends identity → restricted provisioning/BOOT-1 → secure Android 
 [owner-only deployment, migration, secrets и rollback](../deploy/friends/restricted/README.md).
 Required production material отсутствует; rollout не начат. Это текущий integration
 gate перед actual-Friends readiness/rehearsal и final FIELD APK.
+[5N-PROD-MATERIALS inventory / partial inert staging / owner actions](releases/2026-10-01-5n-prod-materials.ru.md):
+SSH/public preparation выполнена без activation; issuer/gateway authority inputs,
+provider token и initial-CRL sequencing остаются prerequisites.
 [5N-BOOT-1 PASS / isolated physical cached-state acceptance](releases/2026-09-30-webrtc-5n-boot1-bootstrap.ru.md):
 [cached directory, rendezvous, bounds и isolated runbook](../carrier/bootstrap/README.md).
 [5N.5 evidence](releases/2026-09-28-webrtc-eu5-mux-dns.ru.md) ·

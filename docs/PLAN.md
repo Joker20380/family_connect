@@ -2,6 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-PROD-MATERIALS: OWNER ACTION REQUIRED (01.10).** Inert staging completed for
+public anchor, deny-all admission, SSH sync key/pins and NL service/auth templates.
+Existing offline signer verified; no issuer delegation yet because authoritative
+Family/gateway bindings and canary selection need owner confirmation. Provider
+token unavailable. Live CRL helper requires schema/sequence writes, forbidden
+in preparation; resolve initial-CRL versus preflight sequencing explicitly before
+future deployment. No invented identity/empty production CRL, no automatic retry.
+[Exact inventory/status/owner actions](releases/2026-10-01-5n-prod-materials.ru.md).
+TLS renewal inspection found active timer/latest successful no-op and valid cert;
+no certificate infrastructure change. Phone/rehearsal/final FIELD APK remain pending.
+
+### Historical controlled-deployment preflight
+
 **5N-PROV-1: controlled deployment authorized, preflight STOP (01.10 09:32UTC).**
 Required `friends-restricted/` отсутствует на обоих hosts: RU issuer/delegation/
 anchor/admission/CRL/sync material; NL gateway profile/provider OAuth configuration.

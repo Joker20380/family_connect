@@ -1,5 +1,15 @@
 # 5N-PROV-1 — production restricted provisioning + bootstrap delivery
 
+## Subsequent material preparation — no deployment retry
+
+01.10, entry `f082c10`: [5N-PROD-MATERIALS](2026-10-01-5n-prod-materials.ru.md)
+completed only independent inert staging (anchor/deny-all admission/SSH sync
+key/pins/NL unit and authorization templates). Result **OWNER ACTION REQUIRED**:
+authoritative Family/gateway/canary selection, provider token and CRL sequencing
+still unresolved. Existing offline signer verified, no replacement root/signature.
+No runtime change, migration, service action, phone action or deployment retry;
+preceding BLOCKED/IMPLEMENTED/preflight evidence below remains historical truth.
+
 ## Authorized deployment attempt — preflight STOP, 01.10.2026
 
 **5N-PROV-1 = DEPLOYMENT FAILED / ROLLED BACK.** Уточнение статуса:
