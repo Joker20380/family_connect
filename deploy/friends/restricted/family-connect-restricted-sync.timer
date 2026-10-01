@@ -1,0 +1,11 @@
+[Unit]
+Description=Bounded server-side restricted state refresh
+
+[Timer]
+OnBootSec=15
+OnUnitInactiveSec=30
+AccuracySec=1
+Unit=family-connect-restricted-sync.service
+
+[Install]
+WantedBy=timers.target

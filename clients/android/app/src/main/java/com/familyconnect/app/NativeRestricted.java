@@ -9,5 +9,7 @@ final class NativeRestricted {
     static native int state(long handle);
     static native String stats(long handle);
     static native String readiness(String directory);
+    static native boolean validateDelivery(byte[] response, byte[] publicIdentity, byte[] anchor);
+    static native long beginReady(byte[] response, byte[] identity, byte[] anchor, String resolver, VpnService protector);
     static native boolean stop(long handle);
 }

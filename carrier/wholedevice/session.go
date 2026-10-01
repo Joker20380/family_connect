@@ -301,6 +301,25 @@ func OpenCached(ctx context.Context, path, cachePath string, network *underlay.N
 	if err != nil {
 		return nil, err
 	}
+	return openDirectory(ctx, raw, directory, network, event)
+}
+
+func OpenProvisioned(ctx context.Context, raw, directoryRaw []byte, network *underlay.Network, event func(string)) (*Session, error) {
+	if network == nil || event == nil {
+		return nil, ErrClosed
+	}
+	var credentials familysession.Credentials
+	if json.Unmarshal(raw, &credentials) != nil {
+		return nil, ErrClosed
+	}
+	directory, err := bootstrap.ParseDirectory(directoryRaw, credentials.Family, credentials.Gateway, time.Now())
+	if err != nil {
+		return nil, err
+	}
+	return openDirectory(ctx, raw, directory, network, event)
+}
+
+func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Directory, network *underlay.Network, event func(string)) (*Session, error) {
 	event("bootstrap_cache_loaded")
 	descriptor, err := bootstrap.Recover(ctx, directory, raw, event, network)
 	if err != nil {

@@ -32,7 +32,8 @@ def main():
         xray.mkdir()
         with tarfile.open(archive) as bundle:
             bundle.extractall(xray, filter='data')
-        subprocess.run(['git', 'apply', str(source / 'xray-packet-boundary.patch')], cwd=xray, check=True)
+        subprocess.run(['git', 'apply', str(source / 'xray-packet-boundary.patch')], cwd=xray,
+                       env=os.environ | {'GIT_CEILING_DIRECTORIES': str(workspace)}, check=True)
         module = workspace / 'native.mod'
         shutil.copy2(source / 'go.mod', module)
         shutil.copy2(source / 'go.sum', module.with_suffix('.sum'))

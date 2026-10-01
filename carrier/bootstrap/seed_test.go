@@ -11,7 +11,8 @@ import (
 )
 
 func TestSeedPublishedOnlyAfterReadyAndWithdrawn(test *testing.T) {
-	manager := &SeedManager{}
+	exported := make(chan Directory, 1)
+	manager := &SeedManager{Publish: func(directory Directory) error { exported <- directory; return nil }}
 	ctx, cancel := context.WithCancel(bounded(test))
 	defer cancel()
 	started, ready := make(chan struct{}), make(chan struct{})
@@ -39,6 +40,11 @@ func TestSeedPublishedOnlyAfterReadyAndWithdrawn(test *testing.T) {
 	if published {
 		test.Fatal("seed published before READY")
 	}
+	select {
+	case <-exported:
+		test.Fatal("seed exported before READY")
+	default:
+	}
 	close(ready)
 	for {
 		manager.mu.Lock()
@@ -52,6 +58,14 @@ func TestSeedPublishedOnlyAfterReadyAndWithdrawn(test *testing.T) {
 			test.Fatal("seed not published")
 		case <-time.After(time.Millisecond):
 		}
+	}
+	select {
+	case directory := <-exported:
+		if len(directory.Seeds) != 1 || directory.Seeds[0].Gateway != testGateway {
+			test.Fatal("invalid export")
+		}
+	case <-ctx.Done():
+		test.Fatal("seed was not exported")
 	}
 	cancel()
 	<-done

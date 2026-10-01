@@ -1,0 +1,17 @@
+[Unit]
+Description=Friends restricted CRL and READY seed synchronization
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/opt/apps/family_connect/friends-access/app
+Environment=FC_FRIENDS_RESTRICTED_DIR=/opt/apps/family_connect/friends-restricted
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/apps/family_connect/friends-access/venv/bin/python -m control.friends.restricted_sync sync --db /opt/apps/family_connect/friends-access/access.db --host 186.246.45.246 --ssh-key /opt/apps/family_connect/friends-restricted/sync.key --known-hosts /opt/apps/family_connect/friends-restricted/known_hosts
+TimeoutStartSec=25
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/opt/apps/family_connect/friends-access /opt/apps/family_connect/friends-restricted
+PrivateTmp=true

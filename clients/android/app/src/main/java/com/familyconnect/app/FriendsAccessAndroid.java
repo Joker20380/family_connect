@@ -39,16 +39,16 @@ final class FriendsAccessAndroid {
     }
     private JsonObject post(String path,JsonObject body)throws Exception{
         remaining(5000);
-        require(path.matches("/friends/(challenge|activate|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/status|notices/device/(role|publish|list|edit))"));
+        require(path.matches("/friends/(challenge|activate|restricted-readiness(/challenge)?|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/status|notices/device/(role|publish|list|edit))"));
         HttpsURLConnection connection=direct?new ChatNetworkAndroid(context).openHttps("https://185.251.89.19:8443"+path):(HttpsURLConnection)new URL("https://185.251.89.19:8443"+path).openConnection();
         pending=connection;
         try{
             connection.setConnectTimeout(remaining(5000));connection.setReadTimeout(remaining(15000));connection.setInstanceFollowRedirects(false);connection.setUseCaches(false);connection.setRequestMethod("POST");connection.setDoOutput(true);connection.setRequestProperty("Content-Type","application/json");
             byte[] raw=body.toString().getBytes(StandardCharsets.UTF_8);require(raw.length<=((path.equals("/friends/notices/device/publish")||path.equals("/friends/notices/device/edit"))?32768:8192));connection.setFixedLengthStreamingMode(raw.length);
             try(OutputStream out=connection.getOutputStream()){out.write(raw);}finally{Arrays.fill(raw,(byte)0);}
-            connection.setReadTimeout(remaining(15000));int status=connection.getResponseCode();if(status==409)throw new Conflict();if(status==400||status==401||status==403)throw new Denied();if(status!=200)throw new IOException("Test access unavailable");
+            connection.setReadTimeout(remaining(15000));int status=connection.getResponseCode();if(status==409)throw new Conflict();if((status==400&&!path.startsWith("/friends/restricted-readiness"))||status==401||status==403)throw new Denied();if(status!=200)throw new IOException("Test access unavailable");
             ByteArrayOutputStream bytes=new ByteArrayOutputStream();long deadline=System.nanoTime()+20_000_000_000L;
-            try(InputStream input=connection.getInputStream()){byte[] buffer=new byte[1024];while(true){connection.setReadTimeout(remaining(15000));int count=input.read(buffer);if(count==-1)break;if(bytes.size()+count>(path.equals("/friends/notices/device/list")?1048576:16384)||System.nanoTime()>deadline||Thread.currentThread().isInterrupted())throw new IOException();bytes.write(buffer,0,count);}}
+            try(InputStream input=connection.getInputStream()){byte[] buffer=new byte[1024];while(true){connection.setReadTimeout(remaining(15000));int count=input.read(buffer);if(count==-1)break;if(bytes.size()+count>(path.equals("/friends/notices/device/list")?1048576:path.equals("/friends/restricted-readiness")?65536:16384)||System.nanoTime()>deadline||Thread.currentThread().isInterrupted())throw new IOException();bytes.write(buffer,0,count);}}
             return parse(bytes.toByteArray()).getAsJsonObject();
         }finally{connection.disconnect();pending=null;}
     }
@@ -57,6 +57,16 @@ final class FriendsAccessAndroid {
         JsonObject challenge=post("/friends/challenge",request);fields(challenge,"challenge expires_at audience");
         long now=System.currentTimeMillis()/1000,expiry=integer(challenge.get("expires_at"),1);require(expiry>now&&expiry-now<=120&&text(challenge.get("audience")).equals("family-connect/enrollment/v1"));
         return identity.proveTransportKey(text(challenge.get("challenge")));
+    }
+    byte[] restrictedReadiness(ControlIdentity identity)throws Exception{
+        JsonObject request=new JsonObject();request.addProperty("public_identity",Base64.getEncoder().encodeToString(identity.publicIdentity()));request.addProperty("wireguard_public_key",identity.wireguardPublicKey());
+        JsonObject challenge=post("/friends/restricted-readiness/challenge",request);fields(challenge,"challenge expires_at audience");
+        long now=System.currentTimeMillis()/1000,expiry=integer(challenge.get("expires_at"),1);
+        require(expiry>now&&expiry-now<=120&&text(challenge.get("audience")).equals("family-connect/enrollment/v1"));
+        String nonce=text(challenge.get("challenge"));
+        JsonObject response=post("/friends/restricted-readiness",identity.proveTransportKey(nonce));
+        require(text(response.get("challenge")).equals(nonce)&&text(response.get("device")).equals(identity.reference()));
+        return response.toString().getBytes(StandardCharsets.UTF_8);
     }
     void activate(String invitation)throws Exception{
         try(ControlIdentity identity=identity(true)){
@@ -192,6 +202,7 @@ final class FriendsAccessAndroid {
             catch(IOException unavailable){if(prior!=null)return materialize(prior,identity,country,transport,floor);throw unavailable;}
             String profile=materialize(reply,identity,country,transport,floor);cache.add(country,reply);
             byte[] raw=cache.toString().getBytes(StandardCharsets.UTF_8);try{if(exists)vault.write(raw);else vault.create(raw);}finally{Arrays.fill(raw,(byte)0);}
+            FriendsRestricted.prewarm(context);
             return profile;
         }
     }

@@ -19,6 +19,7 @@ type SeedManager struct {
 	directory *Directory
 	running   bool
 	Event     func(string)
+	Publish   func(Directory) error
 }
 
 func TelemostSeed(lifetime, ready context.Context, room roombroker.Room) (familysession.PacketEndpoint, error) {
@@ -69,7 +70,13 @@ func (manager *SeedManager) Run(ctx context.Context, provider roombroker.RoomPro
 	expires, _ := lifetime.Deadline()
 	manager.mu.Lock()
 	manager.directory = &Directory{1, family, now, expires, []Seed{{"telemost-webrtc", room.JoinURL, gateway}}}
+	directory := *manager.directory
 	manager.mu.Unlock()
+	if manager.Publish != nil {
+		if err := manager.Publish(directory); err != nil {
+			return roombroker.Code("seed_publication_failed")
+		}
+	}
 	if manager.Event != nil {
 		manager.Event("bootstrap_seed_ready")
 	}

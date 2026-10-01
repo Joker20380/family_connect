@@ -72,16 +72,43 @@ func (owned *ownedSession) failure(err error) {
 
 //export fcRestrictedBegin
 func fcRestrictedBegin(directory, control, resolver string, owner C.uintptr_t) int64 {
+	return begin(directory, control, resolver, nil, nil, owner)
+}
+
+//export fcRestrictedValidateDelivery
+func fcRestrictedValidateDelivery(response, public, anchor string) int32 {
+	_, _, err := wholedevice.ValidateDelivery([]byte(response), []byte(public), []byte(anchor), time.Now())
+	if err != nil {
+		return 0
+	}
+	return 1
+}
+
+//export fcRestrictedBeginReady
+func fcRestrictedBeginReady(response, identity, anchor, resolver string, owner C.uintptr_t) int64 {
+	material := []byte(identity)
+	defer clear(material)
+	profile, directory, err := wholedevice.DeliveryMaterial([]byte(response), material, []byte(anchor), time.Now())
+	if err != nil {
+		C.fcRestrictedRelease(owner)
+		return 0
+	}
+	return begin("/", "provisioned", resolver, profile, directory, owner)
+}
+
+func begin(directory, control, resolver string, profile, seed []byte, owner C.uintptr_t) int64 {
 	directory, control, resolver = strings.Clone(directory), strings.Clone(control), strings.Clone(resolver)
 	ownerMu.Lock()
 	defer ownerMu.Unlock()
 	if current != nil || !filepath.IsAbs(directory) {
+		clear(profile)
 		C.fcRestrictedRelease(owner)
 		return 0
 	}
 	ctx, cancel := context.WithCancel(context.Background())
 	network, err := underlay.New(ctx, resolver, func(fd int) bool { return C.fcRestrictedProtect(owner, C.int(fd)) != 0 })
 	if err != nil {
+		clear(profile)
 		cancel()
 		C.fcRestrictedRelease(owner)
 		return 0
@@ -90,10 +117,11 @@ func fcRestrictedBegin(directory, control, resolver string, owner C.uintptr_t) i
 	owned := &ownedSession{id: sequence, owner: owner, ctx: ctx, cancel: cancel, done: make(chan struct{}), network: network, fd: -1}
 	current = owned
 	go func() {
+		defer clear(profile)
 		defer close(owned.done)
 		var err error
 		path, cache := filepath.Join(directory, "family.json"), filepath.Join(directory, "bootstrap.json")
-		if control != "" && control != "auto" {
+		if control != "" && control != "auto" && control != "provisioned" {
 			bounded, finish := context.WithTimeout(ctx, 30*time.Second)
 			defer finish()
 			err = wholedevice.Refresh(bounded, path, cache, control, network)
@@ -111,7 +139,9 @@ func fcRestrictedBegin(directory, control, resolver string, owner C.uintptr_t) i
 			return
 		}
 		var session *wholedevice.Session
-		if control == "auto" {
+		if control == "provisioned" {
+			session, err = wholedevice.OpenProvisioned(ctx, profile, seed, network, owned.event)
+		} else if control == "auto" {
 			session, err = wholedevice.OpenCached(ctx, path, cache, network, owned.event)
 		} else {
 			session, err = wholedevice.Open(ctx, path, cache, network, owned.event)

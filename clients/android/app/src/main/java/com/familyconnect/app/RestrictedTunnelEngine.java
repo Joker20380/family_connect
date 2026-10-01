@@ -62,8 +62,19 @@ final class RestrictedTunnelEngine implements TunnelEngine {
             service.revoked=()->{revoked=true; state.accept(false);};
         }
         File directory=new File(context.getNoBackupFilesDir(),"restricted");
-        if (!directory.isDirectory()) throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
-        handle=NativeRestricted.begin(directory.getAbsolutePath(),automaticOwner==null?control:"auto",resolver,service);
+        if(context.getPackageName().equals("com.familyconnect.app.friends")) {
+            try(ControlIdentity identity=new FriendsIdentityVault(context).load()) {
+                byte[] response;
+                synchronized(RestrictedVault.LOCK){response=FriendsRestricted.cache(context,identity).usable();}
+                if(response==null)throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
+                byte[] full=identity.material(),material=java.util.Arrays.copyOf(full,64);java.util.Arrays.fill(full,(byte)0);
+                try{handle=NativeRestricted.beginReady(response,material,ControlTrust.anchor(context),resolver,service);}
+                finally{java.util.Arrays.fill(material,(byte)0);java.util.Arrays.fill(response,(byte)0);}
+            }
+        } else {
+            if (!directory.isDirectory()) throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
+            handle=NativeRestricted.begin(directory.getAbsolutePath(),automaticOwner==null?control:"auto",resolver,service);
+        }
         if (handle<=0) throw new IllegalStateException("Restricted startup rejected");
         long deadline=Math.min(connectDeadline,SystemClock.elapsedRealtime()+200000);
         int phase;
@@ -82,7 +93,7 @@ final class RestrictedTunnelEngine implements TunnelEngine {
         state.accept(true);
     }
 
-    boolean healthy() { return handle>0 && NativeRestricted.state(handle)==2; }
+    boolean healthy() { return handle>0 && NativeRestricted.state(handle)==2 && (!context.getPackageName().equals("com.familyconnect.app.friends") || !FriendsRestricted.denied); }
 
     static void failure(Context context,Throwable failure) {
         try {

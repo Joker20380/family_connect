@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"sync"
 	"syscall"
 	"time"
@@ -34,6 +35,7 @@ func run() error {
 	path := flag.String("family-config", "", "private gateway profile")
 	address := flag.String("listen", "127.0.0.1:18444", "isolated mTLS cache preparation endpoint")
 	duration := flag.Duration("duration", 10*time.Minute, "isolated process/seed lifetime, at most one hour")
+	export := flag.String("directory-export", "", "optional protected READY seed snapshot for Friends control")
 	flag.Parse()
 	host, _, err := net.SplitHostPort(*address)
 	if err != nil || net.ParseIP(host) == nil || *duration <= 0 || *duration > bootstrap.MaxAge {
@@ -78,6 +80,19 @@ func run() error {
 	ctx, cancel := context.WithTimeout(ctx, *duration)
 	defer cancel()
 	manager := &bootstrap.SeedManager{Event: emit}
+	if *export != "" {
+		if !filepath.IsAbs(*export) {
+			return roombroker.Code("invalid_options")
+		}
+		cache := &bootstrap.Cache{Path: *export, Family: credentials.Family, Gateway: credentials.Gateway}
+		manager.Publish = func(directory bootstrap.Directory) error {
+			raw, err := json.Marshal(directory)
+			if err != nil {
+				return err
+			}
+			return cache.Store(raw, time.Now())
+		}
+	}
 	server := &http.Server{Handler: manager.Handler(*path), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 5 * time.Second, WriteTimeout: 5 * time.Second, IdleTimeout: time.Second, MaxHeaderBytes: 4096, ErrorLog: log.New(io.Discard, "", 0)}
 	defer server.Close()
 	seedDone, httpDone := make(chan error, 1), make(chan error, 1)

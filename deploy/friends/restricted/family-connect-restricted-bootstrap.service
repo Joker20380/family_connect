@@ -1,0 +1,23 @@
+[Unit]
+Description=Friends authenticated bootstrap seed and on-demand dedicated broker
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=600
+StartLimitBurst=5
+
+[Service]
+User=family-restricted
+WorkingDirectory=/opt/apps/family_connect/friends-restricted
+EnvironmentFile=/opt/apps/family_connect/friends-restricted/provider.env
+ExecStart=/opt/apps/family_connect/friends-restricted/bin/bootstrap-broker --family-config /opt/apps/family_connect/friends-restricted/gateway.json --directory-export /opt/apps/family_connect/friends-restricted/directory.json --listen 127.0.0.1:18444 --duration 55m
+Restart=always
+RestartSec=30
+TimeoutStopSec=20
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/opt/apps/family_connect/friends-restricted
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

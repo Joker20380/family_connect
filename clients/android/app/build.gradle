@@ -30,6 +30,7 @@ android {
     }
     sourceSets { main { java.srcDir '../awg-generated/java'; jniLibs.srcDir '../awg-generated/jniLibs'; assets.srcDir '../awg-generated/assets' } }
     sourceSets { debug { jniLibs.srcDir '../restricted-generated/jniLibs'; assets.srcDir '../restricted-generated/assets' } }
+    sourceSets { friends { jniLibs.srcDir '../restricted-generated/jniLibs'; assets.srcDir '../restricted-generated/assets' } }
     packaging { jniLibs {
         keepDebugSymbols += ['**/libfc-awg.so']
         // Extract compressed libraries on install; preserve their verified bytes.

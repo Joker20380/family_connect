@@ -28,6 +28,7 @@ public final class FriendsActivity extends LocalizedActivity {
     private ServerAdapter serverAdapter;
     private boolean loadPending,loadResumed;private long loadNext;
     private final Runnable loadRefresh=new Runnable(){public void run(){refreshLoad();if(loadResumed)handler.postDelayed(this,3000);}};
+    private final Runnable restrictedRefresh=new Runnable(){public void run(){if(!loadResumed)return;if(getPreferences(MODE_PRIVATE).getBoolean("activated",false))FriendsRestricted.prewarm(FriendsActivity.this);handler.postDelayed(this,60000);}};
     private AppUpdateUi appUpdate;
     private boolean motion;
     private String country,activeCountry;
@@ -255,7 +256,7 @@ public final class FriendsActivity extends LocalizedActivity {
             catch(FriendsAccessAndroid.Denied denied){message=R.string.friends_invite_rejected;}catch(Exception failure){}
             final String registered=device;final int result=message;
             runOnUiThread(()->{if(isDestroyed())return;busy=false;
-                if(!registered.isEmpty()){pendingInvitation="";getPreferences(MODE_PRIVATE).edit().putBoolean("activated",true).putString("device",registered).apply();}
+                if(!registered.isEmpty()){pendingInvitation="";getPreferences(MODE_PRIVATE).edit().putBoolean("activated",true).putString("device",registered).apply();FriendsRestricted.prewarm(this);}
                 detail.setText(result);render();if(connectAfter&&!registered.isEmpty())toggle();
             });
         });
@@ -364,7 +365,7 @@ public final class FriendsActivity extends LocalizedActivity {
         row.addView(load,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
         row.setMinimumHeight(TerminalUi.dp(c,48));row.setPadding(TerminalUi.dp(c,12),TerminalUi.dp(c,6),TerminalUi.dp(c,12),TerminalUi.dp(c,6));return row;
     }
-    @Override protected void onResume(){super.onResume();if(getPreferences(MODE_PRIVATE).getBoolean("activated",false)){ChatNotifications.request(this);ChatDeliveryService.start(this);}if(dashboardLocation!=null&&dashboardLocation.permitted())dashboardLocation.start();if(appUpdate!=null)appUpdate.render();loadResumed=true;handler.post(loadRefresh);handler.post(refresh);if(routeLocation!=null&&routeLocation.permitted())routeLocation.start();}
-    @Override protected void onPause(){if(dashboardLocation!=null)dashboardLocation.stop();loadResumed=false;handler.removeCallbacks(loadRefresh);handler.removeCallbacks(refresh);if(telemetry!=null)telemetry.pause();if(routeLocation!=null)routeLocation.stop();super.onPause();}
-    @Override protected void onDestroy(){handler.removeCallbacks(refresh);if(routeLocation!=null)routeLocation.stop();loadResumed=false;handler.removeCallbacks(loadRefresh);loadWorker.shutdownNow();if(appUpdate!=null)appUpdate.close();worker.shutdownNow();super.onDestroy();}
+    @Override protected void onResume(){super.onResume();if(getPreferences(MODE_PRIVATE).getBoolean("activated",false)){ChatNotifications.request(this);ChatDeliveryService.start(this);}if(dashboardLocation!=null&&dashboardLocation.permitted())dashboardLocation.start();if(appUpdate!=null)appUpdate.render();loadResumed=true;handler.post(loadRefresh);handler.post(restrictedRefresh);handler.post(refresh);if(routeLocation!=null&&routeLocation.permitted())routeLocation.start();}
+    @Override protected void onPause(){if(dashboardLocation!=null)dashboardLocation.stop();loadResumed=false;handler.removeCallbacks(loadRefresh);handler.removeCallbacks(restrictedRefresh);handler.removeCallbacks(refresh);if(telemetry!=null)telemetry.pause();if(routeLocation!=null)routeLocation.stop();super.onPause();}
+    @Override protected void onDestroy(){handler.removeCallbacks(refresh);handler.removeCallbacks(restrictedRefresh);if(routeLocation!=null)routeLocation.stop();loadResumed=false;handler.removeCallbacks(loadRefresh);loadWorker.shutdownNow();if(appUpdate!=null)appUpdate.close();worker.shutdownNow();super.onDestroy();}
 }
