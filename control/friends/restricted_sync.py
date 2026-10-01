@@ -2,6 +2,7 @@
 import argparse
 import json
 import os
+import re
 from pathlib import Path
 import resource
 import secrets
@@ -15,7 +16,7 @@ from cryptography import x509
 
 from provisioning.friends_catalog import fields, parse, require
 from .access import Access
-from .restricted import bounded_file, delegation, directory, from_env, utc
+from .restricted import DirectoryValidationError, bounded_file, clock_nanoseconds, delegation, directory, from_env, iso, utc
 from .restricted_admin import publish_crl
 
 
@@ -38,7 +39,7 @@ def atomic(path, raw):
             pending.unlink()
 
 
-def gateway(profile_path, directory_path, request, now):
+def gateway(profile_path, directory_path, request, now=None):
     require(len(request) <= 20000)
     value = parse(request)
     fields(value, 'revocations')
@@ -54,7 +55,7 @@ def gateway(profile_path, directory_path, request, now):
     number = incoming.extensions.get_extension_for_class(x509.CRLNumber).value.crl_number
     old_number = previous.extensions.get_extension_for_class(x509.CRLNumber).value.crl_number
     require(number >= max(old_number, profile['minimum_crl']))
-    require(incoming.last_update_utc <= utc(now) < incoming.next_update_utc)
+    require(incoming.last_update_utc <= utc(time.time() if now is None else now) < incoming.next_update_utc)
     require(incoming.last_update_utc >= previous.last_update_utc)
     require((incoming.next_update_utc - incoming.last_update_utc).total_seconds() <= 3600)
     if number == old_number:
@@ -82,7 +83,7 @@ def sync(access, host, ssh_key, known_hosts):
         require(result.returncode == 0)
         output.seek(0)
         raw = output.read(8193)
-    directory(raw, trust['family'], trust['gateway'], int(access.clock()))
+    directory(raw, trust['family'], trust['gateway'], now_ns=clock_nanoseconds(access.clock))
     atomic(root / 'directory.json', raw)
 
 
@@ -100,6 +101,29 @@ def check(access, host, ssh_key, known_hosts):
         database.close()
 
 
+def check_directory(profile_path, directory_path, receipt_path, generation, *, now_ns=None):
+    require(type(generation) is str and re.fullmatch(r'[A-Za-z0-9_.-]{1,64}', generation))
+    require(receipt_path.resolve() not in (profile_path.resolve(), directory_path.resolve()))
+    record = dict(timestamp=iso(time.time()), generation=generation, result='failed')
+    try:
+        try:
+            profile = parse(bounded_file(profile_path, 49152, True))
+            family, gateway = profile['family'], profile['gateway']
+            raw = bounded_file(directory_path, 8192, True)
+        except (OSError, ValueError, TypeError, KeyError, RecursionError):
+            raise DirectoryValidationError('input', 'unavailable_or_invalid_input', 'directory') from None
+        instant = time.time_ns() if now_ns is None else now_ns
+        record['observed_at_ns'] = instant
+        directory(raw, family, gateway, now_ns=instant)
+        record['result'] = 'passed'
+    except DirectoryValidationError as error:
+        record.update(stage=error.stage, predicate=error.predicate, field=error.field)
+        raise
+    finally:
+        atomic(receipt_path, json.dumps(record, separators=(',', ':')).encode())
+    return record
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='mode', required=True)
@@ -112,14 +136,22 @@ def main():
     worker.add_argument('--ssh-key', type=Path, required=True)
     worker.add_argument('--known-hosts', type=Path, required=True)
     worker.add_argument('--check', action='store_true', help='Validate local inputs only; no publisher, SSH or writes')
+    validator = commands.add_parser('directory-check', help='Read-only BOOT-1 validation; persist a redacted receipt before exit')
+    validator.add_argument('--profile', type=Path, required=True)
+    validator.add_argument('--directory', type=Path, required=True)
+    validator.add_argument('--receipt', type=Path, required=True)
+    validator.add_argument('--generation', required=True)
     args = parser.parse_args()
     try:
-        if args.mode == 'gateway':
+        if args.mode == 'directory-check':
+            check_directory(args.profile, args.directory, args.receipt, args.generation)
+            print('Restricted directory validation passed; receipt persisted')
+        elif args.mode == 'gateway':
             import fcntl
             descriptor = os.open(args.profile.with_suffix('.sync-lock'), os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
             try:
                 fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                sys.stdout.buffer.write(gateway(args.profile, args.directory, sys.stdin.buffer.read(20001), int(time.time())))
+                sys.stdout.buffer.write(gateway(args.profile, args.directory, sys.stdin.buffer.read(20001)))
             finally:
                 os.close(descriptor)
         elif args.check:
@@ -127,6 +159,9 @@ def main():
             print('Restricted runtime pre-network check passed')
         else:
             sync(Access(args.db), args.host, args.ssh_key, args.known_hosts)
+    except DirectoryValidationError as error:
+        print(str(error), file=sys.stderr)
+        raise SystemExit(1) from None
     except Exception:
         print('Restricted synchronization unavailable', file=sys.stderr)
         raise SystemExit(1) from None

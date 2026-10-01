@@ -1,9 +1,12 @@
 package bootstrap
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
+	"os"
+	"os/exec"
 	"strings"
 	"testing"
 	"time"
@@ -73,6 +76,32 @@ func TestSeedPublishedOnlyAfterReadyAndWithdrawn(test *testing.T) {
 		if json.Unmarshal(encode(directory), &value) != nil || !strings.HasSuffix(value["issued_at"].(string), "Z") || !strings.HasSuffix(value["expires_at"].(string), "Z") {
 			test.Fatal("noncanonical producer output")
 		}
+		test.Run("PythonPublicationContract", func(test *testing.T) {
+			python, artifact := os.Getenv("FC_TEST_PYTHON"), os.Getenv("FC_TEST_SYNC_ARTIFACT")
+			if python == "" || artifact == "" {
+				test.Skip("isolated Python artifact required")
+			}
+			program := `import contextlib,io,json,runpy,sys
+sys.argv=[sys.argv[1],"--help"]
+with contextlib.redirect_stdout(io.StringIO()):
+ try:runpy.run_path(sys.argv[0],run_name="__main__")
+ except SystemExit as error:assert error.code==0
+from control.friends.restricted import directory,timestamp_ns
+raw=sys.stdin.buffer.read();value=json.loads(raw)
+value=directory(raw,value["family"],value["seeds"][0]["gateway"],now_ns=timestamp_ns(value["issued_at"]))
+sys.stdout.write(json.dumps(value,separators=(",",":")))
+`
+			command := exec.CommandContext(ctx, python, "-I", "-c", program, artifact)
+			command.Dir = test.TempDir()
+			command.Stdin = bytes.NewReader(encode(directory))
+			raw, err := command.Output()
+			if err != nil {
+				test.Fatal("serialized real SeedManager publication rejected by isolated Python")
+			}
+			if _, err := ParseDirectory(raw, testFamily, testGateway, directory.IssuedAt); err != nil {
+				test.Fatal("Python publication rejected by native consumer")
+			}
+		})
 	case <-ctx.Done():
 		test.Fatal("seed was not exported")
 	}

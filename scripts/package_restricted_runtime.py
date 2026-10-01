@@ -46,7 +46,7 @@ def build(output, source=ROOT):
 
 
 def smoke(output, python):
-    for arguments in (['--help'], ['sync', '--help'], ['gateway', '--help']):
+    for arguments in (['--help'], ['sync', '--help'], ['gateway', '--help'], ['directory-check', '--help']):
         subprocess.run([str(python), '-I', str((output / ARCHIVE).resolve()), *arguments],
                        cwd=output.parent, check=True, capture_output=True, timeout=30)
 

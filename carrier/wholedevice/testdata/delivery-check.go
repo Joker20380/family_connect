@@ -27,20 +27,25 @@ func check() error {
 		Public   []byte          `json:"public"`
 		Anchor   []byte          `json:"anchor"`
 		Now      int64           `json:"now"`
+		NowNS    int64           `json:"now_ns"`
 	}
 	if err := json.NewDecoder(io.LimitReader(os.Stdin, 70000)).Decode(&input); err != nil {
 		return wholedevice.ErrClosed
 	}
 	defer clear(input.Identity)
+	now := time.Unix(input.Now, 0)
+	if input.NowNS != 0 {
+		now = time.Unix(0, input.NowNS)
+	}
 	if len(input.Public) != 0 {
-		delivery, credentials, err := wholedevice.ValidateDelivery(input.Response, input.Public, input.Anchor, time.Unix(input.Now, 0))
+		delivery, credentials, err := wholedevice.ValidateDelivery(input.Response, input.Public, input.Anchor, now)
 		if err != nil {
 			return err
 		}
-		_, err = bootstrap.ParseDirectory(delivery.Directory, credentials.Family, credentials.Gateway, time.Unix(input.Now, 0))
+		_, err = bootstrap.ParseDirectory(delivery.Directory, credentials.Family, credentials.Gateway, now)
 		return err
 	}
-	profile, rawDirectory, err := wholedevice.DeliveryMaterial(input.Response, input.Identity, input.Anchor, time.Unix(input.Now, 0))
+	profile, rawDirectory, err := wholedevice.DeliveryMaterial(input.Response, input.Identity, input.Anchor, now)
 	if err != nil {
 		return err
 	}
@@ -52,6 +57,6 @@ func check() error {
 	if _, _, err = familysession.Configuration(profile, false); err != nil {
 		return err
 	}
-	_, err = bootstrap.ParseDirectory(rawDirectory, credentials.Family, credentials.Gateway, time.Unix(input.Now, 0))
+	_, err = bootstrap.ParseDirectory(rawDirectory, credentials.Family, credentials.Gateway, now)
 	return err
 }

@@ -1,12 +1,14 @@
 """Bounded Friends issuance; existing identity, offline-root delegated Family issuer."""
 import base64
 from datetime import datetime, timezone
+from decimal import Decimal
 import hashlib
 import json
 import re
 import secrets
 import os
 import stat
+import time
 from pathlib import Path
 
 from cryptography import x509
@@ -111,20 +113,58 @@ def delegation(envelope, anchor, now):
     return value, authority
 
 
-def directory(raw, family, gateway, now):
-    require(type(raw) is bytes and 0 < len(raw) <= 8192)
-    value = parse(raw)
-    fields(value, 'version family issued_at expires_at seeds')
-    require(type(value['version']) is int and value['version'] == 1 and value['family'] == family)
-    issued, expires = timestamp_ns(value['issued_at']), timestamp_ns(value['expires_at'])
-    require(issued <= now * 1_000_000_000 < expires and 0 < expires - issued <= 3600 * 1_000_000_000)
-    require(type(value['seeds']) is list and 1 <= len(value['seeds']) <= 4)
+class DirectoryValidationError(ValueError):
+    def __init__(self, stage, predicate, field):
+        self.stage, self.predicate, self.field = stage, predicate, field
+        super().__init__(f'directory_validation_failed: stage={stage} predicate={predicate} field={field}')
+
+
+def directory_require(ok, stage, predicate, field):
+    if not ok:
+        raise DirectoryValidationError(stage, predicate, field)
+
+
+def clock_nanoseconds(clock):
+    if clock is time.time:
+        return time.time_ns()
+    return int(Decimal(str(clock())) * 1_000_000_000)
+
+
+def directory(raw, family, gateway, now=None, *, now_ns=None):
+    directory_require(type(raw) is bytes and 0 < len(raw) <= 8192, 'parse', 'invalid_size', 'directory')
+    try:
+        value = parse(raw)
+    except (ValueError, UnicodeError, RecursionError):
+        raise DirectoryValidationError('parse', 'invalid_json', 'directory') from None
+    directory_require(type(value) is dict and set(value) == {'version', 'family', 'issued_at', 'expires_at', 'seeds'},
+                      'structure', 'invalid_fields', 'directory')
+    directory_require(type(value['version']) is int and value['version'] == 1, 'structure', 'invalid_version', 'version')
+    directory_require(value['family'] == family, 'binding', 'invalid_family_binding', 'family')
+    instants = {}
+    for field in ('issued_at', 'expires_at'):
+        try:
+            instants[field] = timestamp_ns(value[field])
+        except (ValueError, TypeError, OverflowError):
+            raise DirectoryValidationError('parse', 'invalid_timestamp', field) from None
+    directory_require(now is None or (type(now) is int and now_ns is None), 'clock', 'invalid_clock', 'now')
+    if now_ns is None:
+        now_ns = time.time_ns() if now is None else now * 1_000_000_000
+    directory_require(type(now_ns) is int, 'clock', 'invalid_clock', 'now')
+    issued, expires = instants['issued_at'], instants['expires_at']
+    directory_require(issued <= now_ns, 'time', 'issued_in_future', 'issued_at')
+    directory_require(now_ns < expires, 'time', 'expired', 'expires_at')
+    directory_require(0 < expires - issued <= 3600 * 1_000_000_000, 'time', 'invalid_lifetime', 'expires_at')
+    directory_require(type(value['seeds']) is list and 1 <= len(value['seeds']) <= 4,
+                      'structure', 'invalid_seed_count', 'seeds')
     seen = set()
     for seed in value['seeds']:
-        fields(seed, 'transport join_url gateway')
-        require(seed['transport'] == 'telemost-webrtc' and seed['gateway'] == gateway)
-        require(type(seed['join_url']) is str and re.fullmatch(r'https://telemost\.yandex\.ru/j/[A-Za-z0-9_-]{1,128}', seed['join_url']))
-        require(seed['join_url'] not in seen)
+        directory_require(type(seed) is dict and set(seed) == {'transport', 'join_url', 'gateway'},
+                          'structure', 'invalid_seed_fields', 'seeds')
+        directory_require(seed['transport'] == 'telemost-webrtc', 'seed', 'invalid_transport', 'seeds.transport')
+        directory_require(seed['gateway'] == gateway, 'binding', 'invalid_gateway_binding', 'seeds.gateway')
+        directory_require(type(seed['join_url']) is str and re.fullmatch(r'https://telemost\.yandex\.ru/j/[A-Za-z0-9_-]{1,128}', seed['join_url']),
+                          'seed', 'invalid_join_url', 'seeds.join_url')
+        directory_require(seed['join_url'] not in seen, 'seed', 'duplicate_seed', 'seeds.join_url')
         seen.add(seed['join_url'])
     for field, instant in (('issued_at', issued), ('expires_at', expires)):
         seconds, nanos = divmod(instant, 1_000_000_000)
@@ -220,11 +260,11 @@ class RestrictedReadiness:
         digest = hashlib.sha256(proof['challenge'].encode()).hexdigest()
         now = int(self.access.clock())
         trust, authority, crl, crl_pem, crl_number = self._trust(now)
-        seeds = directory(self.seed_source(), trust['family'], trust['gateway'], now)
+        seeds = directory(self.seed_source(), trust['family'], trust['gateway'], now_ns=clock_nanoseconds(self.access.clock))
         with self.access.db() as database:
             now = int(self.access.clock())
             require(trust['issued_at'] <= now < trust['expires_at'] and crl.last_update_utc <= utc(now) < crl.next_update_utc)
-            directory(json.dumps(seeds).encode(), trust['family'], trust['gateway'], now)
+            directory(json.dumps(seeds).encode(), trust['family'], trust['gateway'], now_ns=clock_nanoseconds(self.access.clock))
             row = self._grant(database, device, now)
             challenge = database.execute('SELECT c.*, r.revision, r.family FROM challenges c '
                                          'JOIN restricted_challenges r ON c.nonce=r.nonce WHERE c.nonce=?', (digest,)).fetchone()
