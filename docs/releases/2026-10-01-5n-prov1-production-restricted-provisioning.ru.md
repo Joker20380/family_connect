@@ -1,5 +1,432 @@
 # 5N-PROV-1 — production restricted provisioning + bootstrap delivery
 
+## 5N-DIRECTORY-VALIDATION — PASS, offline repair after attempt #4
+
+Starting HEAD `d27156d92fdb829fdc82471b05074270b54cd1a9`. Implementation commit
+`29d15d73dae52ac8a1079c52dd349b5b21045742`; separate documentation commit records
+the evidence. No production deployment/retry, service start, authority refresh,
+Redmi action, APK build, release or push. Only read-only retrieval of the preserved
+NL evidence and safe historical journal timestamps. Earlier attempt/rollback
+records below remain unchanged, including their initially unknown diagnoses.
+**Attempt #3 HTTP root cause remains UNKNOWN; this proof concerns #4 only.**
+
+### Exact private reproduction and proven predicate
+
+Retrieved without editing the private
+`canary-rollout-attempt4-d27156d/failed-directory.json`, the expected Family/gateway
+bindings, exact deployed Python source dependencies and `restricted-sync.pyz`.
+Private values remain in ignored0700/0600 local evidence; no room URL, identity,
+credential or raw directory printed or committed. All five retrieved source files
+are byte-identical to their deployed closed-archive counterparts. The archive SHA256
+is `e7e0c8a2ebefdd8ae6f6829f86fcac214b4c4dadb50f0664f0a4e92ea3498788`.
+Replay runs this exact old archive with `python -I`, not a reconstructed validator.
+
+| Evidence | Observed/reproduced fact |
+| --- | --- |
+| Private directory | Unchanged291-byte BOOT-1 v1, one seed; issued17:13:53.532852358Z, expires18:08:49.62807736Z |
+| Native READY journal | 2026-10-01T17:13:53.539049Z |
+| systemd stopping journal | 2026-10-01T17:13:54.204369Z, after validation failed and rollback was requested |
+| Exact old call | `directory(raw, profile['family'], profile['gateway'], int(time.time()))` from retained `NL_START` |
+| Old replay clock | `1790874833` whole seconds (17:13:53Z) |
+| Exception/stack | `ValueError`, archived `control/friends/restricted.py:120` → `provisioning/friends_catalog.py:22` |
+| Failed predicate | `issued_ns <= now_seconds * 1_000_000_000` is false |
+| Safe category | `stage=time predicate=issued_in_future field=issued_at` |
+| Unchanged old bytes at next second | PASS at1790874834; no schema/URL/binding changes |
+| Precise replay observation | 1790874833539049000ns, the retained READY observation; corrected Python and native PASS |
+
+The exact subsecond Python call instant was not logged; it is not invented here.
+The returned bytes, old code and isolated predicate checks prove the incompatibility:
+discarding the fractional clock makes the just-issued valid seed appear future
+through the rest of its publication second. Within the recorded publication/stop
+window, the reconstructed integer53 reproduces the failure; integer54 accepts
+the identical bytes. All other predicates accept that same directory. The time
+ordering predicate, not parsing/normalization/schema/trust/gateway/URL/replay,
+is the proven failing condition. This is not the earlier numeric-offset bug.
+
+Native `bootstrap.ParseDirectory` accepts the preserved bytes at the precise
+historical observation. Therefore **producer output is valid**. No producer fix,
+rounding of wire timestamps or permissive parser workaround is appropriate.
+The 291-byte original remains unchanged through retrieval/replays and its digest
+is verified privately; no normalization is written back to the evidence.
+
+### Field-by-field BOOT-1 v1 contract audit
+
+| Field/boundary | Producer, Python and native contract |
+| --- | --- |
+| version | Integer1; boolean/string/unknown version rejected |
+| family | Expected32-character Family reference; no identity remapping |
+| issued_at | Absolute RFC3339 timestamp, canonical UTC-Z from Go,1–9 fractional digits; must not exceed precise current time |
+| expires_at | Same encoding; exclusive expiry, strictly later than issuance, lifetime≤3600s |
+| seeds | Array1–4; producer emits exactly one after READY; directory≤8192 bytes |
+| seed identifier | No separate ID field in v1; duplicate join URLs rejected |
+| transport | Exact `telemost-webrtc`; not a dedicated-session descriptor |
+| join_url | Present string, exact HTTPS `telemost.yandex.ru/j/` plus1–128 ASCII letters/digits/underscore/hyphen; no query/fragment/userinfo/port/encoding substitutions |
+| gateway | Each seed binds the expected gateway reference; no fingerprint/identity replacement |
+| certificate/binding metadata | Not directory fields; existing delegated authority/X509/CRL and caller's expected bindings are separate prerequisites |
+| revision/sequence/floors | Not directory fields; issuer/grant/CRL checks and cache replay floors remain in their existing components |
+| null/absent/extra fields | Required exact top-level and seed field sets; null/wrong-type/extra metadata does not substitute for required fields |
+| canonical form/replay | UTC normalization preserves absolute instants; no field stripping, URL rewriting, seed substitution or replay bypass |
+
+Preserved wire shape matches this contract, including a14-digit room segment (the
+synthetic fixture replaces it with zeros, never the real URL),32-character synthetic
+Family/gateway values,9-digit issuance fraction and8-digit expiry fraction. No
+optional ID/certificate/floor field was missing: such fields are absent by design.
+
+### Why previous checks missed it — concrete test gap
+
+- `carrier/bootstrap/directory_test.go` fixtures issue a minute before the test
+  clock; native comparisons already use full `time.Time`, never Python's cast.
+- `tests/vectors/bootstrap-timestamps.json` exercises offset/fractional **expiry**;
+  its issuance is11:44:58.966797108 while `now` is11:45:00. The earliest Python
+  check still occurs in a later second, so integer truncation cannot reject issuance.
+- `configured()` in Python creates seeds with `issued_at=iso(now-1)` and integer
+  timestamps. Existing synthetic sync/delivery/native tests therefore age the
+  directory before consuming it, rather than validate a real just-published seed.
+- Existing real `SeedManager` test checks READY ordering and UTC serialization,
+  but previously did not pass those serialized bytes through packaged Python.
+- Old deployment preflight checked authority/imports/old synthetic directories;
+  the first actual same-second publication check was the live operator's
+  `int(time.time())` call. This is a **receiver-clock precision/cross-component
+  timing coverage gap**, not an unrecognized production schema or a need for
+  wider URLs/larger bounds. Safe predicate diagnostics were also missing.
+
+### Minimal implementation and safe observability
+
+Python directory validation now defaults to `time.time_ns()` and accepts an
+explicit integer `now_ns` for deterministic testing. The old positional integer
+seconds argument still means exactly that whole-second instant; it is **not**
+silently advanced/tolerated. Gateway CLI no longer truncates its clock; RU sync
+and both readiness-fetch directory checks preserve the clock's subsecond value.
+Injected test clocks remain supported without changing grant/issuer/CRL/envelope
+integer-second semantics. Real clocks use `time.time_ns()` directly. Producer and
+native production code are unchanged; Go modifications are tests only.
+
+`DirectoryValidationError(ValueError)` carries bounded stage/predicate/field codes
+for parse, structure, binding, seed and time rejection. No field value appears in
+the error. The new packaged `directory-check` command reads existing directory/
+expected profile bindings, samples nanoseconds after reading and writes a redacted
+timestamp/generation/verdict/category receipt. Atomic write, file fsync, rename and
+directory fsync finish before returning/raising. Failure is not caught-and-ignored;
+CLI exits nonzero after reporting the safe category. A failed persistence operation
+cannot pass acceptance. Receipt lives outside any replaced/rollback directory.
+
+This command is directory validation only; it does not replace native authority,
+signature, CRL, issuer or owner-admission checks, and has no production clock-
+override CLI argument. Future operators must use it instead of archived inline
+`int(time.time())` snippets. [Updated invocation/order](../../deploy/friends/restricted/README.md).
+
+### Regression, cross-component proof and final artifact
+
+- Synthetic fixture: [`bootstrap-live-issuance.json`](../../tests/vectors/bootstrap-live-issuance.json).
+  The old deployed archive rejects its Go-shaped291-byte encoding with the same
+  predicate; corrected precise-clock path accepts it. Original private bytes also
+  reproduce old FAIL/new PASS without edits. Frozen time is offline replay only,
+  not a production expiry bypass. Exclusive directory expiry is still rejected.
+- Go's actual `Directory.MarshalJSON` → Python gateway sync/export → signed
+  readiness delivery → Android shared-native `wholedevice.ValidateDelivery` and
+  `bootstrap.ParseDirectory`: PASS. A real local `SeedManager` publication (stub
+  provider/in-memory carrier) also passes through the isolated final Python archive
+  and back to native at the exact issuance instant; no Telemost network operation.
+- **68 directory tests PASS**, including25 synthetic negative cases checked in both
+  Python and native: bad version/Family/gateway/transport, extra/null/absent/wrong-
+  type fields, empty/excess/duplicate seeds, invalid lifetime and malformed URLs;
+  plus parse/size rejection and issuance/expiry±1ns across fractional edges.
+  No future grace window; one-hour+1ns remains rejected.
+- **142 focused Python tests PASS** (directory, restricted trust, runtime packaging).
+  **306 broader regressions PASS**, no skips, including HTTP, Friends, restricted
+  acceptance/provider/Android contracts and optional Go compatibility enabled.
+  Final strengthened serialized gateway→delivery test additionally rerun in the
+  68-test directory suite. Shell nonzero/EXIT trap/rollback-marker, hard process exit
+  and fsync-failure tests verify retained redacted receipts.
+- Go `test -race` and `vet`: bootstrap, wholedevice, roombroker, familysession PASS.
+  Sandbox denied local httptest sockets; approved local-only rerun passed, not a
+  production fault. Final artifact's uncached race run also PASS.
+- Final artifact built from **committed files only** at `29d15d7`, not the retained
+  uncommitted HTTP work: `state-client-build/directory-validation/final-sync-bundle/restricted-sync.pyz`.
+  SHA256 **`cb6f050ec49ee4b65fa65c5327e32d6271d714ef6f8e695f16cb3c85b60f386f`**.
+  17-entry inventory, isolated `python -I` help for all commands, private replay and
+  native replay PASS. Final build/replay receipts in ignored
+  `state-client-build/directory-validation/`; private inputs confined to `private/`.
+- Supplemental HTTP bundle from the retained HTTP worktree passes the local
+  restricted-enabled matrix; it does not replace the immutable/pinned attempt #4
+  archive. No public artifact/catalog/invitation or installed version changed.
+
+### Security, Git and stopping boundary
+
+No change to Family/owner/issuer/gateway/admission code, no additional admitted
+device, CRL signature/monotonicity/TTL change, or bootstrap/dedicated-session merge.
+Existing negative authorization/revocation/replay tests pass. Authority remains the
+last documented attempt #4 state; no refresh/service query/start/phone operation
+is performed by the offline repair. Read-only SSH evidence retrieval is the only
+production access. No root/signing/private client secret is retrieved or committed.
+
+Implementation commit excludes the pre-existing HTTP challenge hunk, workflow and
+VPN-health changes. Existing work stays in the worktree; documentation records the
+reproduction without erasing previous failed attempts. Logical local commits only;
+**push:no; production changed:no; Redmi:no; FIELD-1:no**. No APK needed because
+native runtime/producer source did not change. **STOP; no attempt #5 authorized.**
+
+## Attempt #4 — DEPLOYMENT FAILED / ROLLED BACK, 01.10.2026
+
+Explicit user authorization in this conversation covered only attempt #4, preserving
+Family/owner/gateway/issuer,0 additional admitted devices, existing TTLs and no
+public/beta/FIELD-1/push. Entry/final source HEAD:
+`d27156d92fdb829fdc82471b05074270b54cd1a9`,18 pre-existing unpushed commits.
+No new commit, branch, artifact rebuild, APK install or version change.
+
+**Attempt #3 root cause remains unknown because decisive HTTP evidence was lost.**
+Attempt #4 stopped at a different prerequisite boundary; it does not establish or
+reinterpret the cause of #3. No claim that the current HTTP artifact worked in
+production: it was staged but never activated in #4.
+
+### Pins, baseline and operator evidence
+
+- Exact accepted `friends-http.pyz` SHA256:
+  `eb9eb06fd38a0ec498445877fcfb5908a8566b96c7a25f44e2a4619170743a2f`.
+  All25 inventory digests/current source bytes verified before changes; same
+  previously accepted local188 PASS/4 optional Go skips, not re-executed here.
+  Receipt helper remains
+  `830b5dec96af01fd5650e9afd15d27661dba1a3191f5943aecbdf41fc8d0fc42`.
+  Exact existing closed sync bundle/bootstrap binary/helper verified on both hosts;
+  no protocol/runtime repair, no rebuilding or fallback to checkout dependencies.
+- Local protected evidence/operator: `state-client-build/prov1-attempt4/`.
+  `pin.json`, `baseline-http/`, verified host baselines, prepare/refresh/NL/rollback/
+  readback receipts and `rollback-http/`. HTTP observations fsync before evaluation;
+  safe operator results persisted locally before subsequent gates. No raw response
+  body, proof, private device ID, key or OAuth token emitted in command output/docs.
+- First read-only host audit had a **local harness defect**, before production
+  changes: plain SQLite tuple rows used with a named-column validator incorrectly
+  counted27 denials; subsequent timer handling raised `KeyError: MainPID` because
+  systemd timers have no MainPID. That receipt is retained but **invalid for
+  admission**. Corrected read-only audit uses `sqlite3.Row`, catches only `Rejected`,
+  and handles timers separately: owner1/26 rejected. No production identity/grant
+  modification or admission failure is inferred from that invalid audit.
+- Verified baseline17:09:35–38UTC: ordinary status200/challenge400/chat400,
+  restricted route404; RU API and both hosts' AWG/TCP active, no restarts;
+  restricted units inactive, NL authorization off/directory absent. Delegation/
+  owner registry/sole grant match existing reservation. Provider metadata root:root
+  regular file0600, token not read by this audit. Health is service-level plus HTTPS,
+  not a new AWG/TCP client data-path E2E test.
+- Root-only rollback snapshots at both authorized hosts:
+  `/opt/apps/family_connect/restricted-materials-stage-20261001/canary-rollout-attempt4-d27156d`.
+  Saved unit definitions, applicable API/app/ingress, SQLite online backup and
+  relevant restricted state; nginx existing configuration validated. Pinned HTTP
+  candidate copied to protected staging only. No neighbouring service touched.
+
+### JIT authority and exact stop
+
+1. **17:13:46UTC:** accepted publisher advances authoritative CRL11→12,
+   expiry**17:28:46UTC**, gateway certificate expiry**18:13:46UTC**;
+   server-side validation leaf expiry17:28:46UTC (not device provisioning).
+   Family/owner/issuer/gateway unchanged, other admissions0. Delegation sequence1,
+   grant revision1, expiry**02.10 10:44:11UTC**, unchanged TTL/security policy.
+   Stale staging6 was replaced from authoritative preflight floor11 before issuing.
+   Signature/bindings checked, native gateway/canary certificates and Family/
+   revision/CRL negative compatibility checks PASS. Provider metadata verified
+   without reading its token; no signing secret moved into CI/Git/output.
+2. **17:13:48UTC:** accepted NL installed components reused, same gateway identity
+   receives fresh profile; existing tightly restricted sync authorization restored.
+   Isolated helper `python -I ... gateway --help` PASS. No AWG/TCP changes.
+3. **17:13:49UTC:** NL bootstrap started, ActiveState active/NRestarts0/PID2095124.
+   One native `bootstrap_seed_ready` event exists; quarantined directory has one
+   seed, issued **17:13:53.532852358Z**, expires **18:08:49.62807736Z**,291 bytes.
+   UTC-Z emission and native READY are observed, **not full NL acceptance**.
+   Python live-directory validation raised **`ValueError`**. The receipt does not
+   identify the exact rejected predicate; do not guess a timestamp, provider or
+   dependency root cause from the exception class. No restart storm or sensitive
+   URL/token/key markers in the inspected journal interval.
+4. **17:13:54UTC:** NL gate recorded `bootstrap_ready:false`,
+   `failure_type:ValueError`, `rolled_back:true`; failed private directory quarantined,
+   forced-command authorization disabled. Operator stopped, no retry or live fix.
+5. **17:13:57UTC RU /17:13:58UTC NL:** full restricted rollback completed.
+   RU `python -I ... sync --check`, live RU↔NL sync, forced-command shell/stale-CRL
+   negatives, HTTP activation and its acceptance matrix **NOT REACHED**. Historical
+   #3 sync success is not reused as a new #4 acceptance claim.
+
+### Exact durable HTTP receipts
+
+All times2026-10-01 UTC, transport error null. Baseline generation
+`attempt4-baseline`; post-rollback generation `attempt4-rollback`:
+
+| Probe | Baseline timestamp | Status/class | Rollback timestamp | Status/class |
+| --- | --- | --- | --- | --- |
+| Ordinary status | 17:09:35.357883Z | 200/json-object | 17:15:08.343833Z | 200/json-object |
+| Ordinary malformed challenge | 17:09:35.506849Z | 400/json-object | 17:15:08.540306Z | 400/json-object |
+| Safe ordinary chat malformed challenge | 17:09:35.673008Z | 400/json-object | 17:15:08.704352Z | 400/json-object |
+| Restricted malformed challenge, disabled route | 17:09:35.860818Z | 404/html | 17:15:08.884808Z | 404/html |
+
+The unchanged probe helper labels the restricted-enabled contract as expected400;
+the baseline/rollback wrapper explicitly requires404 while the route is disabled.
+This is not a restricted-enabled400 result. Initial17:08:34 HTTP observations also
+persist and show the same200/400/400/404; they were not discarded with the failed
+host-audit command. No active-generation A–G HTTP receipts exist because activation
+was never reached. **Real non-canary HTTP, owner challenge and owner readiness
+fetch: not run**; the read-only authority admission check is not their substitute.
+
+### Rollback readback and final state
+
+17:15:10–11UTC host readback: ordinary API handler/app/ingress byte-equivalent to
+backup; new HTTP drop-ins absent. API/AWG/TCP and other baseline units retain their
+PIDs/start timestamps; API and AWG/TCP NRestarts0. NL seed inactive/disabled/PID0,
+RU sync inactive/static and timer inactive/disabled, sync authorization off, private
+directory absent from live location and preserved in the attempt #4 backup.
+No normal device/invitation/grant row changes. No database restore.
+
+**Monotonic state retained:** RU authoritative DB12/staged signed CRL12; NL gateway
+profile minimum/CRL12. Inactive RU runtime still holds expired CRL11 because the RU
+installation/sync gate was not reached. This is not a publisher rollback: next
+authorized refresh must reconcile DB/staged/NL floors at least12, not blindly use
+inactive RU CRL11 or obsolete staging6. Keep serial and revocation history.
+
+Friends API downtime: **no restart and no observed outage**; baseline/rollback
+requests pass. No continuous availability measurement was run during NL-only
+activation; do not claim measured zero downtime. No HTTP observer/activation needed
+because the attempt stopped before that phase. Normal production remained untouched
+by runtime changes; only restricted authority/NL lifecycle changed and rolled back.
+
+Owner Redmi readiness, restricted Family TLS, BootstrapDirectory, effective device
+readiness expiry, restart persistence, local cellular Auto rehearsal, Android VPN,
+Chrome/end-site TLS, Family DNS/concurrent TCP, direct-DNS/protected-TCP leak,
+UDP/QUIC/IPv6 fail-closed and underlay protection: **NOT RUN / device expiry N/A**.
+No adb interaction, in-place installation, reactivation, data clear, manual credential
+injection, forwarding or diagnostic identity. Existing field52/canary53 build versus
+installation/publication distinctions remain as previously recorded; no new release,
+catalog/invitation change or final FIELD APK.
+
+Worktree: all pre-existing HTTP/workflow/VPN-health work retained; current tracked
+edits in this attempt are STATUS/PLAN/report/runbook only, operator/evidence ignored.
+No implementation fix/test rerun after live failure. **New commits0; git push:no;
+FIELD-1 started:no; distributed beta:no.** STOP after rollback/documentation;
+separate local investigation and fresh authorization required for another attempt.
+
+Final local verification: accepted artifact/source25-entry pin unchanged;
+`git diff --check` PASS; four changed documentation files/277 links/0 errors.
+Pre-existing STATUS/PLAN sections byte-equivalent after new checkpoints;
+VPN-health report SHA256 unchanged. Final HEAD remains `d27156d`.
+
+## 5N-HTTP-LIVE-REVALIDATION — READY FOR DEPLOYMENT AUTHORIZATION
+
+01.10.2026, local validation16:57–16:59UTC. Entry/final HEAD
+`d27156d92fdb829fdc82471b05074270b54cd1a9`, branch `main`,18 local unpushed
+commits. No new commit/push. Retained HTTP implementation, workflow changes and
+unrelated VPN-health edits were present on entry. Added only an explicit
+packaged-operator shell EXIT-trap regression and this documentation/runbook update;
+no HTTP artifact/source modification in this gate. VPN-health report unchanged;
+pre-existing STATUS/PLAN content retained below new current checkpoints.
+
+**Attempt #3 root cause remains unknown because decisive HTTP evidence was lost.**
+The previous ordinary HTTP acceptance failed, but neither failing route nor live
+status can be recovered from its surviving evidence. Current local success is not
+a historical diagnosis. **Attempt #4 was NOT deployed:** this conversation contains
+the conditional task, but no separate explicit authorization to cross its deployment
+boundary. Prior attempt authorizations do not carry forward.
+
+### Exact local artifact and tests
+
+- Tested existing `state-client-build/http-activation/validated-bundle/friends-http.pyz`,
+  SHA256 `eb9eb06fd38a0ec498445877fcfb5908a8566b96c7a25f44e2a4619170743a2f`.
+  All25 inventory entries match their digests and current source bytes, including
+  handler, ordinary/restricted dependencies, lockfiles, ingress/drop-ins and probe.
+  Archive imports resolve inside the zipapp despite hostile checkout PYTHONPATH;
+  runs use `python -I`, isolated cwd/environment and synthetic-only authority/DB.
+  This retained archive, not a newly rebuilt/lookalike handler, is the deployment
+  candidate. Recheck all hashes immediately before any authorized transfer/start.
+- Packaged `friends-http-acceptance.py` SHA256
+  `830b5dec96af01fd5650e9afd15d27661dba1a3191f5943aecbdf41fc8d0fc42`.
+  The shell-trap regression executes this exact packaged CLI, not a substitute.
+- `/tmp/fc-boot1-venv/bin/python` dependencies match control/identity lockfiles;
+  `pip check` PASS. Real isolated nginx1.28.0 via retained musl loader.
+  Sandbox initially denied loopback socket creation (`EPERM`); this was a test
+  infrastructure restriction, not an HTTP acceptance result. Approved local-only
+  outside-sandbox rerun:39 focused HTTP/evidence tests PASS. Final run after adding
+  shell-trap test: **188 PASS,4 SKIP**,21.39s across HTTP runtime/evidence, Friends
+  access/application/catalog/chat/restricted and closed sync-runtime tests.
+  Four skipped tests require optional `FC_TEST_GO` cross-language toolchain;
+  no HTTP/receipt test skipped. No new full Android/native/physical test claim.
+- Restricted disabled/enabled matrices preserve ordinary status, malformed
+  challenge/chat/activation/configuration/referral/notice routes, wrong methods,
+  unknown paths/trailing suffix rejection, valid ordinary challenge and activation.
+  Enabled synthetic canary challenge reaches handler and signed readiness fetch200;
+  admitted-vs-non-canary distinction remains200/403. This is not real owner proof.
+
+### Exact persisted receipts — LOCAL ONLY, not production HTTP
+
+Protected ignored evidence: `state-client-build/http-revalidation-20261001/`.
+`artifact-sha256.json` pins the full inventory; `tests.log` retains the final result.
+`http/`, `https/`, `shell-trap/` contain copies of the original redacted receipts,
+file0600/directory0700, fsynced. Fixture credentials/keys/proofs/bodies not copied.
+
+All following times are2026-10-01 UTC; generation `enabled`, transport error null:
+
+| Timestamp | Probe | Status | Classification |
+| --- | --- | --- | --- |
+| 16:59:20.622140Z | ordinary status | 200 | json-object |
+| 16:59:20.622557Z | ordinary malformed challenge | 400 | json-object |
+| 16:59:20.623270Z | ordinary chat malformed challenge | 400 | json-object |
+| 16:59:20.623926Z | restricted malformed challenge | 400 | json-object |
+| 16:59:20.624579Z | synthetic non-canary | 403 | json-object |
+| 16:59:20.626323Z | synthetic owner-canary fixture | 200 | restricted-challenge |
+
+HTTPS generation `attempt4-fixture`: intentional untrusted local TLS certificate
+at16:59:23.449537Z persists status null/error `tls`. After explicitly trusting only
+the synthetic test CA, statuses200/400/400/400/403/200 persist at16:59:23.483056Z,
+.491396Z,.498997Z,.505572Z,.563172Z,.571000Z respectively. TLS validation is not disabled.
+
+Ordering proven: probe → timestamp/status/response classification/config-generation
+record → file flush/fsync → atomic rename → directory fsync → evaluate → rollback
+simulation if failed. No body, proof, identity or OAuth value is recorded. Persistence
+errors abort acceptance. Nonzero CLI result, `os._exit(23)` after probe, SIGTERM
+during probe and failed upstream retain receipts. EXIT-trap simulation reads the
+already durable status200 at16:59:23.765025Z and ordinary challenge502/`html`
+at16:59:23.766592Z (generation `shell-trap`) before writing its rollback marker.
+The shell exits nonzero; starting the isolated backend restores400 without changing
+either receipt; teardown preserves them. This proves local operator ordering and
+recovery simulation, not actual systemd/production rollback. Uncatchable kill/power
+loss before persistence cannot guarantee a completed observation.
+
+### Authorization boundary, production and remaining acceptance
+
+No SSH, provider read, authority refresh, service change, deployment or phone access.
+Fresh CRL sequence/expiry: **not issued**. Last documented authoritative sequence11,
+issued14:40:41UTC/expiry14:55:41UTC; gateway certificate expiry15:37:13UTC. Expired
+at this validation; staging6 is not authoritative. Last production evidence remains
+attempt #3 rollback: NL seed/timer/auth off, RU ordinary200/400 and restricted404.
+This session did not refresh that live observation or infer present service state.
+
+After separate authorization only: back up relevant live state; verify selected
+artifact/config/harness hashes; accepted publisher refresh from current DB/live
+floors and gateway certificate, no TTL extension or identity/admission change;
+same Family/owner/issuer/gateway,0 other devices. NL accepted bootstrap/broker,
+provider/gateway identity and sync authorization → READY and accepted UTC-Z directory;
+RU accepted closed `restricted-sync.pyz`/config/authority → `python -I ... --check`,
+RU↔NL sync, no import error, stale CRL and generic shell rejected. On failure stop
+and rollback restricted runtime before API activation. Only then install tested
+Friends HTTP archive/drop-ins/additive ingress and collect six durable live receipts.
+Any ordinary regression requires saved exact error/status and immediate rollback;
+no Redmi and no speculative cause. See [runbook](../../deploy/friends/restricted/README.md).
+
+Rollback must restore saved ordinary API/ingress and remove both new API drop-ins;
+stop/disable only restricted seed/sync/timer/auth. Preserve DB, serial history and
+all newer monotonic floors; never restore an older DB over new revocations. No
+rollback performed here because production was not changed.
+
+NL bootstrap/RU sync/API activation and real canary/non-canary HTTP: **not run here**.
+Owner Redmi readiness, Device Identity/normal provisioning/restricted TLS/directory,
+restart persistence, cellular Auto restricted rehearsal, Android VPN, Chrome≥2
+HTTPS sites, Family DNS, concurrent TCP, direct-DNS/protected-TCP leak, UDP/IPv6
+fail-closed and underlay checks: **not run**. No installation/uninstall/data clear or
+manual credential injection. Existing private canary53 (`0.1.18-canary53-prov1`)
+from attempt #2 remains a prior build, not a fresh installed/public artifact claim;
+field52 installation is last documented, not rechecked. No client version change,
+public distribution/invitation/catalog change or final FIELD APK. Production final
+state: unchanged by this gate; last documented restricted rollout rolled back.
+**Commits:new0; push:no; FIELD-1 started:no. STOP pending authorization.**
+
+Final checks: `git diff --check` PASS; four changed documentation files/274 links/
+0 errors; all25 artifact/source entries still identical. Existing STATUS/PLAN
+content after the new checkpoints matches the protected entry snapshots exactly;
+unrelated VPN-health report SHA256 unchanged. HEAD remains `d27156d`.
+
 ## Попытка №3 — DEPLOYMENT FAILED / ROLLED BACK, 01.10.2026
 
 Source HEAD: `2705db4a9d0d813c21b6010c478c5d36b6bcd429`. Отдельное разрешение

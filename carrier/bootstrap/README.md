@@ -35,6 +35,18 @@ check; normalization occurs before new delivery, not inside the encrypted vault.
 Shared fixture: `tests/vectors/bootstrap-timestamps.json` (repository root), with
 the real failure's timestamps and synthetic Family/gateway/seed values only.
 
+Attempt #4 clock-precision regression: a valid live seed can have fractional
+`issued_at` within the receiver's current second. Python callers must not truncate
+their current clock before comparing with that exact timestamp. Live validation
+uses nanoseconds sampled after reading the bytes; there is no future-issuance
+grace window and expiry stays exclusive. Producer and native validation are
+unchanged. The synthetic `tests/vectors/bootstrap-live-issuance.json` preserves
+the live field/value classes and precision. Tests exercise real `SeedManager`
+publication → Go JSON serialization → isolated Python → native parsing and
+synthetic signed Python delivery → Android's native `ValidateDelivery`.
+The closed Python `directory-check` CLI persists bounded error categories before
+exit; see the [operator contract](../../deploy/friends/restricted/README.md).
+
 Delivery is `GET /v1/bootstrap/directory` on the existing Room Broker TLS1.3/mTLS
 control trust model, using `RequestAuthorizer`, not the application update key or
 a new signing root. The Android diagnostic native core obtains it directly while

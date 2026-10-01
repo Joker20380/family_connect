@@ -1,5 +1,51 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+## Directory validation gate — corrected locally after attempt #4
+
+Attempt #4's producer emitted valid BOOT-1 v1; the old inline Python operator
+rounded its current clock down with `int(time.time())`, falsely treating a
+same-second nanosecond `issued_at` as future. Production remains rolled back;
+this local fix does not authorize attempt #5. Attempt #3 HTTP cause remains UNKNOWN.
+
+Use the corrected committed-source closed runtime, not the archived operator's
+inline directory call/imports. Candidate built from `29d15d7`:
+`state-client-build/directory-validation/final-sync-bundle/restricted-sync.pyz`,
+SHA256 `cb6f050ec49ee4b65fa65c5327e32d6271d714ef6f8e695f16cb3c85b60f386f`;
+all17 inventory entries pinned. Producer binary/native consumer unchanged.
+The previously accepted HTTP archive is not rewritten: future HTTP packaging must
+include the corrected shared Python consumer and pass its own activation gate.
+
+After separate authorization, the NL validation step is:
+
+```sh
+venv/bin/python -I /path/to/pinned/restricted-sync.pyz directory-check \
+  --profile /protected/gateway.json --directory /protected/directory.json \
+  --receipt /protected/attempt-evidence/nl-directory.json --generation attempt-N
+```
+
+This command reads existing inputs and writes only a redacted receipt. It never
+starts a service, publishes a CRL, fetches provider data or enrolls a device. It
+does not replace authority/native/CRL validation. Sample the real nanosecond clock
+after reading the directory; do not pass truncated seconds or alter wire timestamps.
+There is no clock-override CLI option or skew allowance. The legacy integer-second
+library argument is only for deliberately exact whole-second test snapshots;
+use `now_ns` for injected precise test clocks and the default for live checking.
+
+`directory_validation_failed: stage=time predicate=issued_in_future field=issued_at`
+is a bounded category, not a dump of the field value. Parse/schema/binding/seed/
+expiry/lifetime failures also have bounded categories. Receipt includes safe time,
+generation and verdict/category, never URL/profile/identity/proof/body. Keep the
+owner-only receipt path outside replaced/rolled-back runtime directories. The
+file and containing directory are fsynced before a failure exits; persistence
+failure itself forbids acceptance. Only after a successful verdict may the operator
+advance; otherwise preserve receipt, perform the scoped rollback and stop. Never
+catch-and-ignore the error or retry until a clock boundary happens to pass.
+
+Tests cover receipt ordering, nonzero shell/EXIT trap/rollback marker, hard process
+exit, exact issuance/expiry ±1ns, URL/security bounds and real SeedManager serialized
+publication through the isolated Python archive back to native validation.
+[Detailed proof and limits](../../../docs/releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
 ## Попытка №3 — rolled back, 01.10.2026 14:40UTC
 
 Source `2705db4`: закрытый archive установлен на RU/NL, RU `python -I ... --check`

@@ -2,6 +2,25 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-DIRECTORY-VALIDATION = PASS locally (01.10); production unchanged.**
+Attempt #4 reproduced from unchanged private evidence/exact old Python archive:
+valid fractional `issued_at` compared against a truncated integer-second clock,
+safe predicate `time/issued_in_future/issued_at`. Source fix `29d15d7` retains
+nanosecond current time in operator validation, gateway sync, RU sync and delivery;
+no BOOT-1 schema/producer/native change, tolerance or TTL extension. Strict
+negative matrix, live-shape/real producer cross-component tests, private old FAIL/
+new PASS replay and durable classified receipt checks pass.
+
+**STOP after local commits/documentation.** No deployment/credential refresh,
+services/Redmi/APK/push/FIELD-1. Attempt #3 HTTP cause remains UNKNOWN. Any separately
+authorized attempt #5 must use the pinned corrected closed validator and
+`directory-check` receipts, not archived `int(time.time())` operator snippets;
+reconcile then-current authority floors before JIT refresh and revalidate all
+server/physical gates. Local PASS is not production acceptance.
+[Exact artifact and root-cause evidence](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
+### Historical checkpoints — before offline reproduction
+
 **Попытка №2: DEPLOYMENT FAILED / ROLLED BACK (01.10 13:39UTC).**
 Полная Android canary53 сборка/194 tests/lint PASS; подпись field52 совместима,
 установки нет. NL живой UTC-каталог/READY/Python interoperability PASS.

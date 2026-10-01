@@ -1,5 +1,32 @@
 # Текущее состояние / Current state
 
+## 5N-DIRECTORY-VALIDATION — PASS locally, no deployment, 01.10.2026
+
+Attempt #4's unchanged private directory and exact deployed Python source reproduce
+`ValueError`: `stage=time predicate=issued_in_future field=issued_at`. The valid
+Go producer issued17:13:53.532852358Z; the operator supplied
+`int(time.time()) == 17:13:53Z`. The strict nanosecond comparison therefore rejected
+a directory already published in that same second. Identical bytes pass at the
+next second and at the actual subsecond observation with native validation.
+This is a **consumer/caller clock-precision mismatch**, not invalid UTC-Z or URL.
+
+Minimal fix/source commit `29d15d73dae52ac8a1079c52dd349b5b21045742`: Python
+validation/sync/delivery preserve current nanoseconds; no rounding of directory
+timestamps, grace period, trust bypass or TTL extension. Producer and native
+consumer unchanged. Closed runtime now provides `directory-check` with bounded
+stage/predicate/field and fsynced receipts before nonzero exit/rollback handling.
+Synthetic291-byte live-shape fixture, old FAIL/new PASS private replay, strict
+negative/nanosecond edges and Go producer→Python→Android/native contract PASS.
+Python306 regressions PASS; directory68 PASS; Go race/vet four packages PASS.
+
+Final committed-source `restricted-sync.pyz`:
+`cb6f050ec49ee4b65fa65c5327e32d6271d714ef6f8e695f16cb3c85b60f386f`.
+Built/isolated-tested only, not installed. Production remains last documented
+attempt #4 rollback; no authority refresh, service start, Redmi, APK, push or
+FIELD-1. Attempt #3 HTTP cause remains **UNKNOWN**. Existing HTTP/workflow/VPN
+work preserved. **STOP: no automatic attempt #5.**
+[Reproduction, field audit, test gap, artifact and limitations](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
 ## 5N-PROV-1 — попытка №2: DEPLOYMENT FAILED / ROLLED BACK, 01.10.2026
 
 Разрешённая попытка из `e808f50` остановлена на RU sync, до активации API.
