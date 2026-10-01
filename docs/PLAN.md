@@ -2,6 +2,15 @@
 
 ## Current engineering priority / Текущий critical path
 
+**New-session recheck01.10:** actual entry `d8624dea2cffe3c41d9d136a6f93ee527b8f3812`
+already includes both requested HTTP commits. Fresh clean export rebuilt the same
+`460e7520…` HTTP artifact;274 tests PASS, no skips, plus old/new embedded timestamp
+regression including malformed timestamps. No runtime source changes needed.
+Recheck final source pin/inventory/tests are in
+`state-client-build/http-packaging-git-recheck/`; preserve all four unrelated diffs.
+Only separately authorized rollout may consume the clean candidate; production
+credentials, services, Redmi, push, attempt #7, FIELD-1 and beta remain out of scope.
+
 **5N-HTTP-PACKAGING-GIT: local source checkpoint created (01.10.2026).**
 Code/tests/HTTP CI commit `f7b3b6c29526fb600990f60d57449571a8538f22` closes the
 missing tracked-builder/entrypoint/manifest/harness gap; clean source builds the

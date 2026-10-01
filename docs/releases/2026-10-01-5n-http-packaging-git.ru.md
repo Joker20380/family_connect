@@ -1,5 +1,63 @@
 # 5N-HTTP-PACKAGING-GIT — local checkpoint, 01.10.2026
 
+## New-session recovery revalidation
+
+Actual starting HEAD: `d8624dea2cffe3c41d9d136a6f93ee527b8f3812`. Git log and
+reflog confirm that `f7b3b6c29526fb600990f60d57449571a8538f22` and the accompanying
+documentation commit already completed the requested checkpoint. The expected
+8663128 is their ancestor, not the current HEAD. Existing implementation, reports
+and evidence were reviewed; no duplicate feature commit, amend or source redesign.
+
+Entry worktree has exactly four modified files, no untracked files or staged work:
+STATUS's two VPN snapshots, PLAN's VPN audit, the VPN-health report and the long
+PROV-1 report's historical attempt-#5 addition. All are class D retained work;
+there are no remaining A/B task-owned sources or E uncertain paths. Safe original
+file SHA256 values and the exact entry diff were captured before edits under
+`state-client-build/http-packaging-git-recheck/`. Only the new revalidation notes
+in STATUS, PLAN and this report are class C and eligible for the new docs commit.
+The two unrelated reports remain byte-identical; mixed-document retained hunks
+are checked against their entry bytes after removing only these added notes.
+
+A fresh Git archive of the actual entry HEAD contains1578 tracked blobs, verified
+against Git without untracked inputs/dirty overlay. Independent rebuild matches
+the accepted25-entry inventory and HTTP SHA256
+`460e75205eb9baff313dc7dd963cdb7bceddf2d1e13405a71686f9ec6c976d71`.
+No source correction is necessary: packaged `friends_http:main` is isolated;
+external app-path insertion remains guarded for direct legacy-script execution
+only, never the production zipapp. Both dependency lockfiles remain unchanged.
+
+Fresh clean-source suite: **274 PASS, no skips,48.72s**, using the supplied rebuilt
+bundle, synthetic loopback nginx/TLS, pinned sync archive and offline Go toolchain.
+The sandbox denied socket creation; the passing run used approved local execution
+outside the sandbox, not production/system services. A–G remains200/400/400/400/
+403/200/200; additive routes, signed readiness, fsync-before-verdict, process exit,
+SIGTERM, shell EXIT trap and simulated failure/rollback receipts all PASS.
+
+Additional isolated embedded-code probes use the committed synthetic production-
+shape nanosecond fixture: retired old HTTP rejects under its truncated clock;
+new HTTP accepts without issued_in_future. Future+1ns is rejected with that exact
+predicate; four malformed timestamp variants are rejected as invalid_timestamp.
+Equivalent +02:00 input normalizes to identical UTC Z output. No timestamp tolerance
+or TTL/schema policy changed. Existing sync SHA256 remains
+`cb6f050ec49ee4b65fa65c5327e32d6271d714ef6f8e695f16cb3c85b60f386f`;
+the same-directory sync-validation→HTTP-readiness fixture passes without rebuilding it.
+
+Final post-documentation candidate path:
+`state-client-build/http-packaging-git-recheck/final-bundle/friends-http.pyz`.
+The exact new source HEAD is recorded in `final-artifact.json` in that evidence
+directory (a commit cannot embed its own hash). Final rebuild/tests/embedded probes
+are repeated from a fresh Git export of that HEAD, never the dirty main worktree;
+see `final-tests.log`, `final-nanosecond.json` and `final-verification.json`.
+Original `http-packaging-git/` evidence and bundles are retained unchanged.
+
+Attempts #1–#5 remain historical rollbacks; #3 HTTP cause stays UNKNOWN. Attempt #6
+stopped before production on stale HTTP source pin, without runtime changes.
+No access to production hosts, credential refresh, system service start/reload,
+physical Redmi, APK/release, push, attempt #7, beta or FIELD-1. No rollback needed
+here. Future authorized rollout still requires current authority/JIT, pinned
+artifacts, live negative checks and physical acceptance; scoped rollback must
+preserve monotonic DB/CRL history. **STOP after local Git/artifact acceptance.**
+
 ## Scope and source checkpoint
 
 Previous HEAD: `8663128a4ee433c29adb90340b8d4573ac2ba161`.

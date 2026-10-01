@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+## 5N-HTTP-PACKAGING-GIT — new-session revalidation, 01.10.2026
+
+Actual entry HEAD was `d8624dea2cffe3c41d9d136a6f93ee527b8f3812`, not8663128:
+the requested source and documentation commits already existed in local history.
+No duplicate implementation commit or history rewrite. Fresh1578-file Git export
+reproduces HTTP `460e75205eb9baff313dc7dd963cdb7bceddf2d1e13405a71686f9ec6c976d71`;
+274 clean-source tests PASS, no skips (48.72s). Embedded old/new fixture confirms
+old rejection, new acceptance, future+1ns and four malformed-timestamp rejections,
+offset normalization to UTC Z. No false issued_in_future. Sync pin unchanged.
+Only this revalidation documentation is new; all four retained unrelated diffs
+remain outside the index. Final post-documentation clean-source rebuild, exact
+HEAD and tests: `state-client-build/http-packaging-git-recheck/final-artifact.json`
+and `final-tests.log`; [report](releases/2026-10-01-5n-http-packaging-git.ru.md).
+No production access/change, credentials, service activation, Redmi, push or
+attempt #7. Existing rollout/rollback boundary and unperformed physical gates
+are unchanged. STOP; neither FIELD-1 nor beta starts here.
+
 ## 5N-HTTP-PACKAGING-GIT — committed local HTTP checkpoint, 01.10.2026
 
 Reviewed missing HTTP packaging/runtime/receipt implementation is committed in
