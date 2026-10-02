@@ -56,7 +56,7 @@ public class FriendsReadinessGoldenTest {
         }
     }
     public static void main(String[] args)throws Exception{
-        if(args[0].equals("emit")){Files.writeString(Path.of(args[1]),wire().toString()+"\n",StandardCharsets.UTF_8);return;}
+        if(args[0].equals("emit")){Files.write(Path.of(args[1]),(wire().toString()+"\n").getBytes(StandardCharsets.UTF_8));return;}
         URI origin=URI.create(args[1]);assertEquals("http",origin.getScheme());assertEquals("127.0.0.1",origin.getHost());
         try(ControlIdentity identity=ControlIdentity.restore(new byte[96])){
             OwnerPrewarmReceipt receipt=new OwnerPrewarmReceipt("c".repeat(32),"d".repeat(32));
