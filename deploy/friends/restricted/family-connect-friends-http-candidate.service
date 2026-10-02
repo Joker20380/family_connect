@@ -2,7 +2,7 @@
 Description=Family Connect isolated HTTP candidate (operator controlled)
 After=network-online.target
 [Service]
-ExecStart=/opt/apps/family_connect/friends-access/venv/bin/python -I /opt/apps/family_connect/friends-access/friends-http.pyz --port 18085
+ExecStart=/opt/apps/family_connect/friends-access/venv/bin/python -I /opt/apps/family_connect/friends-access/friends-http.pyz --port @CANDIDATE_PORT@
 Environment=FC_FRIENDS_RESTRICTED_DIR=/opt/apps/family_connect/friends-restricted
 Environment=PYTHONDONTWRITEBYTECODE=1
 Restart=no

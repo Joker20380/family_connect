@@ -1,9 +1,110 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+## Candidate preflight after #10 — local policy, no deployment authorization
+
+`scripts/friends_http_transition.py` contains the machine-readable `PORT_OWNERS`,
+`CANDIDATE_PORTS`, `ROUTES`, `DIRECT_PROBES` and `EXTERNAL_PROBES` contracts.
+The immutable HTTP/sync archives and production limits are unchanged.
+
+| Local TCP port | Ownership / evidence | Candidate use |
+| --- | --- | --- |
+| 18080 | Documented XHTTP origin default, `scripts/xhttp_gateway_config.py`; not a current live audit | Forbidden |
+| 18082 | Existing product API, `deploy/product-https/nginx.conf.template` | Forbidden |
+| 18084 | Ordinary Friends HTTP; #10 retained readback, PID1566654 | Forbidden |
+| 18085 | Friends TCP/Xray API; #10 read-only02.10 11:01:32UTC, PID1908885; `deploy/friends/awg-gateway.py` | Forbidden, never stop/rebind |
+| 18444 | NL restricted bootstrap loopback broker, committed unit; inactive in #10 | Forbidden |
+| 18086 | Newly defined singleton candidate allowlist; no earlier reservation found | Conditional only; production availability UNKNOWN |
+
+These are source/retained observations, **not a fresh production socket audit**.
+The18084/18085 PID evidence is specifically RU;18444 is the documented NL broker.
+Friends AWG registration invokes the Xray18085 API, not a separately reserved HTTP
+candidate port. Public VPN data listeners are outside this localhost HTTP policy.
+No other alternate HTTP port is approved.18086 is a policy choice, not evidence
+that it is free. Future operators must explicitly construct
+`Candidate(port, generation, artifact, sha256)` with port18086; no default, scanning,
+fallback to another port, wildcard or Internet-facing allocation. Pin the helper
+and immutable archive. Before any candidate/runtime modification, `preflight`
+checks Linux `ss` for **any** listener at that port, then attempts a127.0.0.1 bind.
+Unknown ownership and inspection failures fail closed. Existing candidate identity
+from a trusted prior PID/start receipt may classify `occupied_previous_candidate`,
+but still STOP; it is never adopted, overwritten or killed automatically.
+SO_REUSEADDR matches the handler's normal TIME_WAIT behavior; SO_REUSEPORT is not
+used and existing listeners still prevent startup.
+
+The service file is now an **unrendered template**, not installable as supplied.
+`Candidate.render_unit(template)` replaces its single `@CANDIDATE_PORT@` only after
+successful preflight. Do not manually bypass this with an Environment override.
+The free check cannot reserve the port through exec: if another process wins the
+race, startup fails and ingress stays untouched. The bounded start adapter returns
+the newly launched process handle (or a systemd adapter with authoritative `pid`/
+`poll()`), waits for its own socket, and never substitutes a pre-existing process.
+`capture`/`verify` recheck process liveness, Linux PID/start identity, isolated argv,
+archive SHA and exclusive127.0.0.1 listener ownership. Wildcard, IPv6, other local
+address, foreign/unknown PID and process/artifact changes all fail closed.
+
+### Direct and ingress contracts
+
+| Probe | Route owner | Direct candidate | External ingress |
+| --- | --- | --- | --- |
+| A status `/status/server-load.json` | nginx static alias | Never probed; handler GET501 is intentional, not readiness failure | 200 + correlated nginx generation |
+| B ordinary malformed challenge | Friends application | 400 | 400 through candidate |
+| C safe ordinary chat challenge | Friends application | Established400 | Established400 through candidate |
+| D restricted malformed challenge | Friends application | 400 | 400 through candidate |
+| E non-canary challenge | Friends application | 403 | 403 through candidate |
+| F canary challenge | Friends application | 200 + bounded validated shape | Same through candidate |
+| G canary readiness fetch | Friends application | 200 + cryptographically validated readiness | Same through candidate |
+
+Use `Session(..., layer='direct_candidate', candidate=..., generation=...)` and
+`matrix` for B–G; it refuses A before sending any request. Direct generation comes
+from verified process/socket metadata, not invented handler headers. Then use
+`layer='ingress_external'` with the same candidate/generation for A–G. Correlated
+ingress generation/route origin and upstream status are mandatory for this matrix.
+Both matrices require proof/validation callbacks and pace requests at≥1s intervals.
+Synthetic identities are for local fixtures only; production still requires the
+real admitted owner and real non-canaries, without extracting private identity keys.
+
+The public `transaction` requires old-generation health before preflight, then
+candidate start → direct matrix → render/validate → switch → external matrix →
+commit → confirmed old-worker drain → retirement. It refuses a ready/accept callback
+that merely returns true without completing the corresponding matrix. Render the
+ordinary/restricted location snippets with exactly two `@FRIENDS_HTTP_UPSTREAM@`
+placeholders using `Candidate.render_upstreams`; it derives both targets from the
+verified live candidate **after** direct PASS. Preserve static status and unrelated
+upstreams. The `render(upstream)` callback validates the whole configuration in a
+separate file before the atomic switch; never overwrite active config during render.
+`_transaction` is only an internal rollback-order primitive, not a deployment API.
+
+Rollback still persists failure → restores original routing → verifies external
+old-generation200/400/400 → confirms worker drain → stops only the newly owned
+candidate handle. A preflight collision never invokes start, switch or stop.
+Unknown restoration/drain/process identity retains the candidate. If old-worker
+drain cannot be confirmed **after commit**, retain old runtime and record the
+committed state; do not blindly replay deployment or kill either generation.
+
+Probe receipts add `layer`, `candidate_port`, `route_owner`, `probe_id`, observed
+`active_generation`, status, origin/upstream/limiter classifications and transport
+error. Direct limiter class is `not_applicable`; unavailable external correlation
+remains UNKNOWN, never inferred from status. Port/process decisions persist before
+verdict; no body, proof, identity, credentials or raw process command is recorded.
+
+### Attempt #11 authority handoff — not performed by this gate
+
+Freshly inspect **delegation/issuer, owner grant, CRL and gateway credential**;
+renew all expired/insufficient-lived material through the existing accepted
+offline delegation signer / restricted grant and CRL machinery before starting
+NL/RU. Do not assume only CRL/gateway need refresh: #10 observed delegation,
+issuer and owner grant expired02.10 10:44:11UTC. Gateway expired10:31:33UTC,
+CRL18 at09:48:20UTC; staged16 cannot lower the authoritative floor18.
+Preserve the same Family, issuer key, gateway, sole owner,0 other admissions,
+TTL/security policy, monotonic delegation/revision/CRL floors and rollback evidence.
+No signing, refresh, SSH, production service action, phone, APK, push or attempt #11
+is authorized by this local correction. Repeat all NL/RU/HTTP/physical gates only
+under separately explicit deployment authorization.
+
 ## HTTP transition diagnosis after #9 — local contract, not deployment
 
 [Diagnosis, evidence limits and local reproduction](../../../docs/releases/2026-10-02-5n-http-transition-diag.ru.md).
-No attempt #10 is authorized. Do not reuse the archived stop/restart/fast-observer
+The candidate policy above supersedes the old18085 assumption. Do not reuse the archived stop/restart/fast-observer
 wrapper: its probe schedule exceeds the existing per-IP policy, and restarting the
 sole18084 listener while ingress still references it creates an unavailable window.
 This locally reproduced mechanism does not retroactively identify every historical
@@ -20,17 +121,17 @@ the new paced operator. The runtime archive and its existing inventory stay unch
 1. Save original ingress/unit metadata and fsync rollback/evidence outside runtime
    replacement paths. Verify the ordinary unit remains active on loopback18084.
    All authority/NL/RU prerequisites still apply; this diagnosis changes none of them.
-2. Verify loopback18085 is unused and available memory is sufficient for a second
+2. Verify the explicitly configured allowed candidate port is unused with `Candidate.preflight`, and available memory is sufficient for a second
    bounded process. Stage the exact pinned archive, venv and candidate unit
-   `family-connect-friends-http-candidate.service`; do not restart the ordinary unit,
+   rendered `family-connect-friends-http-candidate.service`; do not restart the ordinary unit,
    overwrite a running candidate or enable a candidate at boot before acceptance.
 3. Start candidate with a bounded command. Prove local socket accept readiness,
-   direct ordinary/restricted contract and unchanged artifact/process generation.
+   direct B–G application contract and unchanged artifact/process generation; A is ingress-only.
    Readiness polling may wait for a **not-yet-routed** candidate, never retry external
    429/502 until it happens to pass. Preserve direct ECONNREFUSED/timeout categories.
 4. Prepare/validate the full ingress candidate without touching limits. Add the
    existing restricted locations and change only Friends ordinary/restricted
-   upstreams18084→18085; static status and unrelated upstreams stay unchanged.
+   upstreams18084→verified candidate port; static status and unrelated upstreams stay unchanged.
    Install `http-transition-trace.conf` in HTTP context and declare a validated
    constant `$fc_http_generation` map for this configuration. In the8443 server,
    enable `access_log /protected/probes.jsonl fc_probe if=$fc_probe_log;` and include
@@ -65,10 +166,13 @@ a potentially routed process. Do not roll back DB/CRL history. A storage failure
 forbids PASS; still restore routing where safe. Process death requires readback of
 durable intent/current ingress/service generation, not blind replay.
 
-`transaction` callbacks must use bounded commands (prepare/start≤30s, local
-readiness≤20s, config check/reload≤5s each, generation/drain≤20s); the adapter does
-not make an arbitrary Python callback preemptible. Budget external acceptance for
-the actual non-canary count at1s spacing plus3s/probe I/O; abort on first failure.
+`transaction` callbacks must use bounded commands (prepare/start≤30s, config
+check/reload≤5s each, generation/drain≤20s); the adapter does not make an arbitrary
+Python callback preemptible. Give both matrices explicit total deadlines sized for
+the actual non-canary count,1s spacing,3s/probe HTTP I/O and up to two3s socket-owner
+inspections per direct probe. The historical fixed20s readiness cap is insufficient
+for27 paced non-canaries. Check remaining authority lifetime against the complete
+planned budget before startup; abort on first failure, never retry failed probes.
 Restore commands need their own bounds and evidence; an unconfirmed rollback must
 not be reported as success. Source tests inject failures at every phase and use
 real isolated nginx for switch/rollback, not production systemd acceptance.

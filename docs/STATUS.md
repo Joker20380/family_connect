@@ -1,5 +1,29 @@
 # Текущее состояние / Current state
 
+## 5N-HTTP-CANDIDATE-PREFLIGHT — PASS locally, 02.10.2026
+
+Local harness/config correction separates direct application B–G from external
+nginx A–G.18085 is explicitly forbidden as Friends TCP/Xray's existing API.
+The new explicit singleton candidate policy allows127.0.0.1:18086 only after fresh
+unused-port preflight; it does not claim production availability. Collision is STOP,
+including a previous candidate; no process is replaced. PID/start/argv/archive and
+exclusive IPv4-loopback ownership are rechecked before direct probes and switch.
+Only complete direct readiness unlocks verified-port ingress rendering; full
+correlated external acceptance precedes commit and old-worker drain/retirement.
+[Contract, validation and Git preservation](releases/2026-10-02-5n-http-candidate-preflight.ru.md).
+
+Focused localhost suite:118 PASS,0 skips,128.55s, including exact accepted archives,
+real isolated nginx direct/external matrices, collision/TOCTOU/binding guards and
+rollback. This is not production/systemd acceptance or proof that18086 is free there.
+
+Authority remains untouched. Any separately authorized attempt #11 must check and
+renew delegation/issuer, owner grant, CRL and gateway credential as needed, preserving
+identities/TTL policy/monotonic floors. No production access or service management,
+Redmi, APK, release/version change or push. Accepted HTTP460e7520… and sync9d965b95…
+are unchanged. Historical #10 remains a pre-deployment STOP and #9 attribution
+partially UNKNOWN. STOP after focused tests/documentation and task-only local commit;
+no automatic attempt #11, DIAG-1, beta or FIELD-1.
+
 ## 5N-HTTP-TRANSITION-DIAG — historical attribution BLOCKED, 02.10.2026
 
 Read-only RU audit confirms the original shared nginx2r/s+burst8 per-IP and10r/s+

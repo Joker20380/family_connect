@@ -16,7 +16,7 @@ from cryptography import x509
 import pytest
 
 from control.friends.restricted import delegation, directory
-from scripts.friends_http_transition import Evidence, ProbeFailed, Session, response_metadata, transaction
+from scripts.friends_http_transition import Evidence, ProbeFailed, Session, response_metadata, _transaction as transaction
 from test_friends_http_runtime import ROOT, nginx_sections, port, request, running, runtime
 from test_friends_http_evidence import responder
 
@@ -468,6 +468,6 @@ def test_transition_helper_loads_isolated_outside_repository(tmp_path):
     for name in ('friends_http_transition.py','friends_http_acceptance.py'):
         shutil.copyfile(ROOT/'scripts'/name,tmp_path/name)
     result=subprocess.run([sys.executable,'-I','-c',
-        'import runpy,sys; value=runpy.run_path(sys.argv[1]); assert all(name in value for name in ("Session","Evidence","transaction"))',
+        'import runpy,sys; value=runpy.run_path(sys.argv[1]); assert all(name in value for name in ("Session","Evidence","transaction","Candidate","ROUTES"))',
         str(tmp_path/'friends_http_transition.py')],cwd=tmp_path,env={'PATH':os.defpath},capture_output=True,timeout=5)
     assert result.returncode==0

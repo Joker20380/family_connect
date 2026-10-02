@@ -2,6 +2,23 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-HTTP-CANDIDATE-PREFLIGHT = PASS locally, no deployment.**118 focused tests pass
+without skips; actual isolated nginx and unchanged pinned archives are used. Use the guarded
+public `transaction`/`Candidate` contract, not the old port18085 assumption or the
+internal rollback primitive. Candidate18086 is a singleton allowlist, not a fresh
+availability claim; source/evidence identify18085 as Friends TCP/Xray. Collision,
+unknown owner, failed bind, changed generation/artifact or non-loopback binding STOP
+before ingress change. Direct matrix is application B–G; external matrix is nginx
+static A plus proxied B–G. Never add handler GET support just to satisfy ingress A.
+[Local gate and test evidence](releases/2026-10-02-5n-http-candidate-preflight.ru.md).
+
+Next deployment requires separate authorization, fresh host port/generation readback,
+all NL/RU/HTTP gates and JIT renewal checks for **delegation/issuer, owner grant,
+CRL and gateway credential**. Preserve Family/issuer/gateway/sole owner,0 other
+admissions, TTL policy and floors; staged16 must not replace authoritative18.
+No refresh/deployment/phone/build/push in this task; no automatic attempt #11.
+Retain all #10/#9 evidence and unrelated work; local task-only commit is authorized.
+
 **5N-HTTP-TRANSITION-DIAG: BLOCKED only on exact historical attribution.** Actual
 nginx1.30.4 reproduces #9's429 schedule through unchanged shared `per_ip` policy;
 stop-before-start reproduces a socket-refused502 window. #9 lacked upstream/rule/

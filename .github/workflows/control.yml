@@ -1,9 +1,9 @@
 name: Linux control preview
 on:
   push:
-    paths: ['control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
+    paths: ['control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'scripts/friends_http_transition.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
   pull_request:
-    paths: ['control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
+    paths: ['control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'scripts/friends_http_transition.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
   workflow_dispatch:
 permissions:
   contents: read
@@ -21,7 +21,7 @@ jobs:
           python-version: '3.13'
       - run: pip install -r control/requirements.lock -r device_identity/requirements.lock
       - name: Local HTTP contract proxy
-        run: sudo apt-get update && sudo apt-get install -y nginx
+        run: sudo apt-get update && sudo apt-get install -y nginx iproute2
       - name: Protocol, crash recovery, arbiter and packaging regression
         env:
           FC_TEST_NGINX: /usr/sbin/nginx
