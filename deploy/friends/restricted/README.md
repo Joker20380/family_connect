@@ -1,5 +1,87 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+## HTTP transition diagnosis after #9 — local contract, not deployment
+
+[Diagnosis, evidence limits and local reproduction](../../../docs/releases/2026-10-02-5n-http-transition-diag.ru.md).
+No attempt #10 is authorized. Do not reuse the archived stop/restart/fast-observer
+wrapper: its probe schedule exceeds the existing per-IP policy, and restarting the
+sole18084 listener while ingress still references it creates an unavailable window.
+This locally reproduced mechanism does not retroactively identify every historical
+429's bucket or the502 kernel error: #9 did not capture those fields.
+
+Future separately authorized activation must use the following transaction contract,
+implemented as injected actions in `scripts/friends_http_transition.py`. This helper
+does not execute deployment commands, find credentials or obtain owner proofs.
+Stage it alongside the unchanged `scripts/friends_http_acceptance.py` under those
+exact names; both load with `python -I` outside checkout. Pin both source files.
+Do not substitute the old receipt CLI bundled with the immutable HTTP artifact for
+the new paced operator. The runtime archive and its existing inventory stay unchanged.
+
+1. Save original ingress/unit metadata and fsync rollback/evidence outside runtime
+   replacement paths. Verify the ordinary unit remains active on loopback18084.
+   All authority/NL/RU prerequisites still apply; this diagnosis changes none of them.
+2. Verify loopback18085 is unused and available memory is sufficient for a second
+   bounded process. Stage the exact pinned archive, venv and candidate unit
+   `family-connect-friends-http-candidate.service`; do not restart the ordinary unit,
+   overwrite a running candidate or enable a candidate at boot before acceptance.
+3. Start candidate with a bounded command. Prove local socket accept readiness,
+   direct ordinary/restricted contract and unchanged artifact/process generation.
+   Readiness polling may wait for a **not-yet-routed** candidate, never retry external
+   429/502 until it happens to pass. Preserve direct ECONNREFUSED/timeout categories.
+4. Prepare/validate the full ingress candidate without touching limits. Add the
+   existing restricted locations and change only Friends ordinary/restricted
+   upstreams18084→18085; static status and unrelated upstreams stay unchanged.
+   Install `http-transition-trace.conf` in HTTP context and declare a validated
+   constant `$fc_http_generation` map for this configuration. In the8443 server,
+   enable `access_log /protected/probes.jsonl fc_probe if=$fc_probe_log;` and include
+   `http-transition-headers.conf`. Include these headers also in status/other target
+   locations that already declare `add_header`, preserving existing cache/security
+   headers: nginx header inheritance is not additive by default. Check rendered
+   configuration with nginx before switch; record its hash, never a private body.
+5. Fsync switch intent; atomically replace only the ingress file, reload nginx with
+   a bounded command, and confirm expected generation. Keep both application
+   listeners alive while old nginx workers drain. A reload exit code alone is not
+   evidence that all workers switched or that the candidate is ready.
+6. Use **one serialized Session**, one request/second, for all external A–G probes
+   including all real non-canaries. Do not run an independent tight-loop observer
+   concurrently. Session pacing is local to that operator, not a distributed lock:
+   concurrent operators are forbidden. User traffic may still consume a shared
+   bucket; any unexpected429/502 is immediate FAIL, never automatically retried.
+7. `Session.matrix` requires a real-owner proof callback and a readiness validator;
+   it cannot omit G. Do not extract identity keys, substitute synthetic/diagnostic
+   credentials or log callback inputs/results. Validate material through the
+   accepted consumer. The local test fixtures are not real-owner production proof.
+8. Only after complete external acceptance, commit by enabling the selected candidate
+   unit for reboot and durably recording the accepted generation. Keep the old
+   listener available throughout commit/receipt writes; do not terminate it in the
+   commit callback. Any later retirement needs confirmed drain and a retained
+   recovery path, not a kill during ingress handoff.
+
+Failure order: fsync primary receipt → atomically restore/validate/reload original
+ingress → confirm old generation → confirm no old nginx worker references candidate
+→ disable/stop only candidate. If restore/drain cannot be confirmed, **retain the
+candidate**, record rollback-incomplete and stop for operator recovery. Never kill
+a potentially routed process. Do not roll back DB/CRL history. A storage failure
+forbids PASS; still restore routing where safe. Process death requires readback of
+durable intent/current ingress/service generation, not blind replay.
+
+`transaction` callbacks must use bounded commands (prepare/start≤30s, local
+readiness≤20s, config check/reload≤5s each, generation/drain≤20s); the adapter does
+not make an arbitrary Python callback preemptible. Budget external acceptance for
+the actual non-canary count at1s spacing plus3s/probe I/O; abort on first failure.
+Restore commands need their own bounds and evidence; an unconfirmed rollback must
+not be reported as success. Source tests inject failures at every phase and use
+real isolated nginx for switch/rollback, not production systemd acceptance.
+
+Receipts add random probe ID, expected/current generation, correlation-checked
+origin, upstream status/connect/header timing, direct transport error and limiter
+classification. Unknown remains unknown. Nginx exposes rejected request/connection
+policy, **not the exact rejecting zone**; rule IDs explicitly retain alternatives
+(`per_ip_or_global_rate`, `connections_or_global_connections`). No tokens, raw proofs,
+device IDs, response bodies, client IPs or arbitrary headers in probe/access logs.
+The trace snippets are **not installed in production** by this task. Global limits
+remain2r/s+burst8 per source,10r/s+burst20 globally,8/32 concurrent connections.
+
 ## NL acceptance after attempt #8 — local correction, not deployment
 
 Use the standalone `scripts/restricted_bootstrap_acceptance.py` for a future

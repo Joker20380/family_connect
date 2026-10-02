@@ -2,6 +2,22 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-HTTP-TRANSITION-DIAG: BLOCKED only on exact historical attribution.** Actual
+nginx1.30.4 reproduces #9's429 schedule through unchanged shared `per_ip` policy;
+stop-before-start reproduces a socket-refused502 window. #9 lacked upstream/rule/
+errno telemetry, ingress logs were disabled/crit, journal reads bounded-unavailable.
+Do not call replay evidence a captured production root cause; #3 remains UNKNOWN.
+[Separate diagnosis and tested local contract](releases/2026-10-02-5n-http-transition-diag.ru.md).
+
+Local future operator uses one paced stream, durable correlated receipts and
+readiness-first second listener; original listener survives switch/commit, rollback
+restores/drains before candidate stop. Limits/ordinary semantics remain intact.
+Three complete A–G matrices and three additional paced live switches pass in
+isolation, not production. Any exact historical attribution needs retained
+contemporary evidence if available; no automatic rollout can reconstruct it.
+STOP: no attempt #10, phone, Android build, authority/admission change, push, beta
+or FIELD-1. A future deployment still requires explicit authorization and all gates.
+
 **5N-NL-ACCEPTANCE = PASS,02.10 — local operator correction.** Authoritative NL acceptance
 now uses fresh READY-only export plus valid directory, same gateway profile and
 healthy stable service; fsynced authoritative verdict comes before optional journal.

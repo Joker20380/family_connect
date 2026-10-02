@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+## 5N-HTTP-TRANSITION-DIAG — historical attribution BLOCKED, 02.10.2026
+
+Read-only RU audit confirms the original shared nginx2r/s+burst8 per-IP and10r/s+
+burst20 global policies, access logging off/error level crit. No ingress log events
+retained for #9; bounded service-journal queries unavailable. Historical exact bucket
+and502 errno therefore remain unproven; no retrospective root-cause claim or PASS.
+[Diagnosis, actual timeline and limits](releases/2026-10-02-5n-http-transition-diag.ru.md).
+
+Exact production nginx1.30.4 plus unchanged accepted HTTP archive reproduce the
+recorded cadence: seven observer429 and seventh non-canary429 from `per_ip`; direct
+upstream remains expected400/403. Stop-before-start independently reproduces direct
+ECONNREFUSED/nginx502. Minimal local operator correction: serialized1s pacing,
+correlated redacted receipts, candidate18085 readiness before ingress switch while
+old18084 stays alive, restore/drain before candidate stop. A–G repeated three times
+and three additional switch-overlap checks pass locally; no production install.
+Runtime/authority/admission/CRL/BOOT-1/sync/versions unchanged, all #9 evidence and
+entry dirty work preserved. No Redmi/Android build/push/deployment #10. STOP.
+
 ## 5N-NL-ACCEPTANCE — PASS, local harness correction, 02.10.2026
 
 Standalone `scripts/restricted_bootstrap_acceptance.py` replaces the historical
