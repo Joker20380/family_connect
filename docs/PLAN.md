@@ -2,6 +2,21 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-DEVICE-READINESS-RECEIPT = PASS locally,02.10.2026.** Post-validation/post-atomic
+import product receipt v1 and authenticated ACK now replace UI-only owner acceptance.
+Restart revalidates the actual encrypted bundle; expired/denied/stale state is not
+READY. ACK failure is delivery UNKNOWN, not local readiness failure. Implementation
+`e817380`; private canary55/code55 built/signed, NOT installed/distributed; beta51 and
+installed54 are not changed. Tests/build/lint complete; [exact evidence](releases/2026-10-02-5n-device-readiness-receipt.ru.md).
+
+STOP after this local gate. No authority refresh, services, production deployment,
+FIELD-1, DIAG-1, OPS-1 or automatic attempt15. Remaining physical install/persistence,
+real owner ACK and restricted traffic acceptance require separate authorization and
+fresh production gates. Old attempt14 archives cannot serve the new ACK endpoints;
+build/review/pin compatible server/runtime bundles first in a future authorized task.
+No owner key export or UI automation prerequisite may replace the new product receipt.
+Historical deployment checkpoints below are preserved, not new execution authority.
+
 **5N-HTTP-READINESS-ADAPTER-PACKAGING = PASS locally,02.10.2026.** Exact attempt13
 transitive `provisioning` import failure reproduced before edits; the accepted HTTP
 archive was complete, but the unclosed outer adapter lost its temporary ZIP search

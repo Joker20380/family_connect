@@ -10,6 +10,14 @@ Windows: версия0.2.15, Windows10 1809+ /11 x64. .NET включён в у�
 
 ## Android
 
+Локальная сборка02.10.2026: приватный `0.1.18-canary55-receipt`/55 arm64 добавляет
+структурированный post-import readiness receipt и аутентифицированный ACK.
+Прежние package/beta signer; update-compatible с54; **собран/подписан, НЕ установлен
+и НЕ опубликован**. SHA256 `680a21f60e69cb62d2c7a70be07234b34196e178f0207ed69cb4b422b7bc6247`.
+[Локальный путь APK, проверки и контракт](releases/2026-10-02-5n-device-readiness-receipt.ru.md). Установленный54 и
+public beta51/страница приглашений ниже — последние документированные состояния;
+публичные ссылки не заменены и артефакты не перепроверены. Production/authority не менялись.
+
 [Инструкция Friends beta](getting-started.ru.md): Android 8+, ARM64 beta51,
 доступ по приглашению, VPN, текст и голосовые. APK распространяется
 через страницу приглашения и HTTPS; в GitHub Releases и магазинах её пока нет.

@@ -1,5 +1,29 @@
 # Текущее состояние / Current state
 
+## 5N-DEVICE-READINESS-RECEIPT — PASS local, 02.10.2026
+
+Starting HEAD `d5105e8c4f44aa4dac2153370800d98a229bc7d1`; implementation/build source
+`e81738083457912da5b1032c45cfbe92bad112cc`. Real product READY now follows native
+credential/directory validation, atomic encrypted import/readback and the actual
+Orchestrator credential-usability predicate. Versioned safe private durable receipt,
+authenticated control HTTPS ACK, owner-bound server readback and restart revalidation
+replace critical UI-swipe acceptance. HTTP200 or a saved old receipt alone is not READY.
+ACK failure leaves local readiness intact and server evidence ACK_PENDING/UNKNOWN.
+
+Private `0.1.18-canary55-receipt`/55 arm64 is **built and signed only, NOT installed or
+published**. Same Friends package/beta signer; update-compatible with installed54.
+APK SHA256 `680a21f60e69cb62d2c7a70be07234b34196e178f0207ed69cb4b422b7bc6247`.
+215 app JVM +160 overlapping control JVM tests PASS;187 Python integration tests,
+2 historical pinned regressions,31 adapter packaging tests PASS; native tests and
+fresh JNI build PASS; Gradle assemble/test/lint PASS (0 errors/37 existing warnings).
+No physical/Keystore instrumentation or device installation in this local gate.
+
+Production/authority/services unchanged and not accessed; attempt14 remains rolled
+back, installed54/public51 remain last documented states, not reverified here. Existing
+four attempt14 artifacts remain immutable. New ACK API needs separately reviewed/pinned
+server bundles before any future authorized deployment. No automatic PROV-1 retry,
+FIELD-1, DIAG-1, OPS-1 or push. [Contract, artifact, tests and remaining acceptance](releases/2026-10-02-5n-device-readiness-receipt.ru.md).
+
 ## 5N-HTTP-READINESS-ADAPTER-PACKAGING — PASS local, 02.10.2026
 
 Attempt13 reproduced before source edits: missing `provisioning`, transitive importer

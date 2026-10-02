@@ -1,5 +1,15 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+Local gate02.10: [DEVICE_READINESS_RECEIPT.md](DEVICE_READINESS_RECEIPT.md) now defines
+authoritative owner acceptance: real app native validation → encrypted atomic import
+→ Orchestrator usability → private durable receipt → authenticated control ACK.
+`OwnerProduct.observe` requires server challenge/fetch plus fresh owner-bound ACK;
+UI gestures are supplemental, never the source of READY. ACK failure is UNKNOWN,
+not a local readiness failure. This is source-only; old pinned attempt14 artifacts
+are unchanged. Private canary55 built/signed, not installed. New API/runtime packaging
+needs separate review/pins before any future deployment. No production authorization
+or automatic retry is granted by this local gate.
+
 ## Current owner-proof handoff contract
 
 [Owner proof handoff](OWNER_PROOF_HANDOFF.md) supersedes the operator-owner-proof

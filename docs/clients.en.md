@@ -10,6 +10,14 @@ Status checked 2026-09-23. Client features and release versions differ by platfo
 
 ## Android
 
+Local build checkpoint,2026-10-02: private `0.1.18-canary55-receipt`/55 arm64 adds
+post-import structured readiness receipt and authenticated ACK. Same package/beta
+signer, update-compatible with54; **built/signed, NOT installed or publicly distributed**.
+SHA256 `680a21f60e69cb62d2c7a70be07234b34196e178f0207ed69cb4b422b7bc6247`.
+[Local APK path, checks and contract](releases/2026-10-02-5n-device-readiness-receipt.ru.md). Installed54 and public
+beta51/invitation links below remain last documented; no download link was replaced
+or public artifact reverified. No production/authority change or rollout in this gate.
+
 Use the [friends beta guide](getting-started.en.md): Android 8+, ARM64 beta51,
 invitation-based access, VPN, text and voice messages. The APK is distributed through
 an invitation page and HTTPS download; it is not yet a GitHub or app-store release.

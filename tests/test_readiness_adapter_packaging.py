@@ -307,4 +307,5 @@ def test_clean_committed_export_build(tmp_path):
         archive.extractall(source, filter='data')
     report = build(tmp_path / 'bundle', source, head, Path(os.environ['FC_TEST_GO']))
     assert report['source_head'] == head
-    assert len(report['sources']) == 13
+    assert report['sources'] == MAPPING
+    assert report['sources']['control/friends/readiness_receipts.py'] == 'control/friends/readiness_receipts.py'

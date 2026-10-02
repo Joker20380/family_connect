@@ -5,6 +5,18 @@
 
 ## Android
 
+5N-DEVICE-READINESS-RECEIPT,02.10: `ReadinessProduct` separates import/evaluate/publish;
+`RestrictedCache.importProduct/evaluate` validates native credentials/directory, atomic
+vault readback and the same `usable()` used by `RestrictedTunnelEngine`. Safe v1
+`ReadinessImportResult` goes to private AtomicFile `ReadinessReceiptStore`, then the
+existing `FriendsAccessAndroid`/`FriendsReadinessProtocol` HTTPS proof/ACK path.
+`FriendsRestricted` revalidates encrypted state once per process before normal prewarm;
+previous receipt is never a readiness authority. BuildConfig supplies the app version.
+`control/friends/readiness_receipts.py` binds challenge/fetch/ACK, and packaged
+`--readiness-ack` read-only server inspection feeds `OwnerProduct.observe`; UI is
+supplemental. No exported component, signing API or app private-state dump.
+Private canary55 built/signed only, not installed; [evidence/schema](../releases/2026-10-02-5n-device-readiness-receipt.ru.md).
+
 5N-OWNER-PROOF-HANDOFF,02.10: normal product prewarm remains in `FriendsRestricted`.
 `FriendsReadinessProtocol` holds the unchanged challenge/sign/fetch sequence for
 JVM testing; `FriendsAccessAndroid` remains its normal HTTPS transport. The
