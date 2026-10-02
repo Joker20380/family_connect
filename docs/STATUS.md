@@ -1,5 +1,28 @@
 # Текущее состояние / Current state
 
+## 5N-HTTP-READINESS-ADAPTER-PACKAGING — PASS local, 02.10.2026
+
+Attempt13 reproduced before source edits: missing `provisioning`, transitive importer
+`control.friends.restricted:21`. The HTTP archive contains the module; the outer
+operator incorrectly relied on `runpy`'s temporary archive search path and an
+extracted test recipe. No backend/service defect or main-artifact rebuild required.
+
+Closed13-source adapter + pinned native delivery checker built twice from clean
+commit `037331f8aee029e22312b565f5d025d50f284e0b`; all four bundle files identical.
+Isolated outside-checkout startup/config, controlled B–G400/400/400/403/200/200,
+local candidate B–E/current authority --check and existing transaction callback PASS.
+74 focused tests PASS,9 unrelated integration cases explicitly deselected, no skips.
+Each manifest dependency removal fails; missing-module/importer/stack classification
+is now durably redacted before adapter failure. No PYTHONPATH/sys.path workaround.
+
+Accepted sync/HTTP17/25 inventories remain byte-compatible; original sync/HTTP/APK
+hashes unchanged. No production, authority refresh, Redmi, Telemost, Android build,
+install/distribution or push. Last production state remains the documented resumed
+attempt13 rollback, not freshly observed. Actual owner F/G and physical gates remain
+NOT RUN. [Adapter report and pins](releases/2026-10-02-5n-http-readiness-adapter-packaging.ru.md)
+and [supported runtime/runbook](../deploy/friends/restricted/READINESS_ADAPTER.md).
+STOP: no automatic attempt14, DIAG-1, regional beta or FIELD-1.
+
 ## 5N-OWNER-PROOF-HANDOFF — PASS local, 02.10.2026
 
 The attempt12 operator-proof blocker is resolved by an acceptance-phase split,

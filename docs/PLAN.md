@@ -2,6 +2,24 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-HTTP-READINESS-ADAPTER-PACKAGING = PASS locally,02.10.2026.** Exact attempt13
+transitive `provisioning` import failure reproduced before edits; the accepted HTTP
+archive was complete, but the unclosed outer adapter lost its temporary ZIP search
+root. Supported closed runtime replaces extracted test helpers; guarded bootstrap
+persists missing-module/importer/stack metadata without secrets. Clean committed
+export/repeat build and final-artifact outside-checkout B–G/current-authority/callback
+smoke PASS;74 focused tests PASS. All accepted sync/HTTP/APK pins remain unchanged.
+
+This closes the local packaging gate, **not PROV-1 deployment/owner acceptance**.
+Only a separately authorized attempt may stage the pinned adapter/native/lock bundle
+and use `Candidate.ready_with_adapter` after owned18086 verification. Reconcile live
+state and validity afresh; repeat all accepted NL/RU/server gates. Keep old18084
+through actual in-app F/G/import, then persistence/rehearsal/traffic acceptance.
+Do not reuse old authority or treat controlled fixtures as owner evidence. No
+automatic attempt14, DIAG-1, distributed beta, FIELD-1, Android release or push.
+[Exact local report](releases/2026-10-02-5n-http-readiness-adapter-packaging.ru.md).
+Earlier deployment observations below are historical, not renewed by this task.
+
 **5N-OWNER-PROOF-HANDOFF = PASS locally.** The attempt12 acceptance boundary is
 corrected: controlled isolated F/G plus live B–E/authority before switch; external
 server A–E after switch; real F/G belongs exclusively to the Friends app during
