@@ -1,5 +1,68 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+## NL acceptance after attempt #8 — local correction, not deployment
+
+Use the standalone `scripts/restricted_bootstrap_acceptance.py` for a future
+separately authorized rollout, not the archived inline NL_START wrapper. Attempt
+#8 produced a valid READY-path directory but the wrapper incorrectly turned a5s
+journal timeout into failure. It remains historically rolled back; no bootstrap/
+provider failure is established. [Reconstruction and local proof](../../../docs/releases/2026-10-02-5n-nl-acceptance.ru.md).
+
+Preconditions remain unchanged: pin accepted runtime/native binary/unit/helper,
+verify the existing expected gateway identity and native authority/JIT material,
+keep RU sync/timer and HTTP disabled, save rollback inputs, and use an owner-only
+evidence location outside replaced runtime trees. This operator does not refresh
+credentials, deploy files, admit devices or perform rollback. It starts only the
+NL bootstrap unit once, only with explicit `--execute`; this local fix grants no
+permission to run it on a server.
+
+```sh
+venv/bin/python -I /path/to/pinned/restricted_bootstrap_acceptance.py --execute \
+  --runtime /path/to/pinned/restricted-sync.pyz \
+  --evidence /protected/attempt-evidence/nl-bootstrap --generation attempt-N \
+  --journal
+```
+
+Use a **new** evidence directory for every invocation; existing directories are
+rejected, never erased/reused. `--snapshot` is a read-only internal material probe,
+not acceptance. Its transient public-binding digest is omitted from durable
+receipts; do not publish raw snapshot output. No cwd/PYTHONPATH source fallback.
+
+Authoritative success: inactive unit and absent old export before start; CRL and
+gateway leaf have >600s left; successful blocking start; active/running service,
+Result=success/ExecMainStatus0, NRestarts0, new start identity; one **fresh** seed
+published after this start, accepted by the pinned directory validator with valid
+precise timestamps and canonical UTC Z, same preflight profile identity; final
+healthy readback of the same PID/start and unchanged still-valid directory.
+`SeedManager.Run` calls `Publish` only after connector READY; `Cache.Store` validates
+and atomically fsyncs the export. There is no sd_notify/READY systemd completion
+signal here. A disk export can survive process exit: its existence alone, an old
+valid export, or a journal event is never enough. Native authority validation remains
+a separate prerequisite; this operator does not replace it with Python metadata.
+
+Bounds: state commands2s, material snapshots5s, start30s; READY wait≤120s including
+commands, at most60 observations/2s sleeps; authoritative total165s including
+prechecks and final readbacks. Waits are clamped to remaining monotonic budgets;
+any authoritative command/deadline/state/material failure is FAIL. No unbounded
+polling, background start, restart retry, clock rounding or grace interval.
+
+Each authoritative observation and the immutable authoritative verdict is file+
+directory-fsynced **before** optional diagnostics. `--journal` requests one bounded5s
+read; omission skips it. Diagnostic receipts use a separate kind/filename namespace:
+`diagnostic_available`, `diagnostic_timeout`, `diagnostic_unavailable` or
+`diagnostic_not_requested`. A journal timeout/nonzero exit/spawn failure does not
+change PASS or FAIL, and cannot overwrite authoritative evidence. Output explicitly
+separates `authoritative: PASS|FAIL` from `journal: diagnostic_*`. No raw journal,
+private IDs, room URLs, proofs, credentials or provider token enter receipts.
+Receipt-storage failure is an evidence error (nonzero exit), not a hidden PASS or
+a rewritten runtime verdict. Verdict is a point-in-time observation, not a promise
+of continued liveness during later diagnostics. Keep original receipts on rollback.
+
+RU policy is unchanged: `restricted_sync_acceptance.py` already bases acceptance
+on blocking unit/material/negative checks, not journal retrieval. The independent
+NL operator is not merged into RU or into either immutable runtime archive.
+No production deployment/refresh/Redmi/APK/push or automatic attempt #9.
+
 ## Committed HTTP packaging checkpoint — local only, 01.10.2026
 
 The production HTTP builder, explicit source manifest, isolated entrypoint, durable

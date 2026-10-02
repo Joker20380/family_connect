@@ -1,5 +1,25 @@
 # Текущее состояние / Current state
 
+## 5N-NL-ACCEPTANCE — PASS, local harness correction, 02.10.2026
+
+Standalone `scripts/restricted_bootstrap_acceptance.py` replaces the historical
+NL journal-gated wrapper for a future separately authorized attempt. Authoritative
+service/start/fresh READY-only seed/precise directory/final same-process checks and
+their fsynced verdict precede optional5s diagnostics. Journal timeout/failure is a
+warning, never runtime FAIL; real service/restart/deadline/directory failures still
+fail closed. Separate immutable authoritative/diagnostic receipts; no raw logs or
+private state. Exact attempt-#8 flow fixture reproduces old FAIL and corrected
+PASS+diagnostic_timeout. [Contract, bounds, tests and selective Git finalization](releases/2026-10-02-5n-nl-acceptance.ru.md).
+191 focused Python tests PASS, no skips; offline Go bootstrap tests PASS, broker
+command compiles. Docs419/links2558/errors0; targeted source guard/diff check PASS.
+
+Attempt #8 remains DEPLOYMENT FAILED / ROLLED BACK due to an operator error, **not**
+bootstrap/provider failure. Historical authority/CRL timestamps below were not
+refreshed or rechecked here. RU operator, runtime artifacts, architecture/admission
+and versions unchanged. Local-only tests; no production access/change, credentials,
+service start, Redmi/APK or push. Retained dirty work preserved; only task-owned
+code/tests/docs are committed. STOP: no automatic attempt #9, beta or FIELD-1.
+
 ## 5N-HTTP-PACKAGING-GIT — new-session revalidation, 01.10.2026
 
 Actual entry HEAD was `d8624dea2cffe3c41d9d136a6f93ee527b8f3812`, not8663128:

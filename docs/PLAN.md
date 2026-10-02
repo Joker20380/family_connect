@@ -2,6 +2,21 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-NL-ACCEPTANCE = PASS,02.10 — local operator correction.** Authoritative NL acceptance
+now uses fresh READY-only export plus valid directory, same gateway profile and
+healthy stable service; fsynced authoritative verdict comes before optional journal.
+Journal5s timeout/nonzero exit is diagnostic only, while real service/deadline/
+directory failures remain FAIL. Exact attempt-#8 replay: old FAIL → corrected
+PASS+diagnostic_timeout. [Local test/receipt proof and commit scope](releases/2026-10-02-5n-nl-acceptance.ru.md).
+RU acceptance policy/operator and both runtime artifacts remain unchanged.
+
+**STOP after local correction/finalization.** No deployment attempt #9 is authorized
+by this fix. Any future explicit rollout still requires fresh source/artifact pins,
+current authority/JIT, baseline, new NL operator, complete RU sync/negative gates,
+HTTP A–G and all physical gates. Attempt #8 remains a rollback caused by the old
+operator's diagnostic gate, not a bootstrap/provider defect. No credentials,
+production operations, Redmi, Android build, push, beta or FIELD-1 in this task.
+
 **New-session recheck01.10:** actual entry `d8624dea2cffe3c41d9d136a6f93ee527b8f3812`
 already includes both requested HTTP commits. Fresh clean export rebuilt the same
 `460e7520…` HTTP artifact;274 tests PASS, no skips, plus old/new embedded timestamp
