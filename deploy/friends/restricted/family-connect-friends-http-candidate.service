@@ -1,0 +1,19 @@
+[Unit]
+Description=Family Connect isolated HTTP candidate (operator controlled)
+After=network-online.target
+[Service]
+ExecStart=/opt/apps/family_connect/friends-access/venv/bin/python -I /opt/apps/family_connect/friends-access/friends-http.pyz --port 18085
+Environment=FC_FRIENDS_RESTRICTED_DIR=/opt/apps/family_connect/friends-restricted
+Environment=PYTHONDONTWRITEBYTECODE=1
+Restart=no
+NoNewPrivileges=true
+ProtectHome=true
+ProtectSystem=full
+PrivateTmp=true
+MemoryMax=256M
+TasksMax=128
+UMask=0077
+StandardOutput=null
+StandardError=null
+[Install]
+WantedBy=multi-user.target
