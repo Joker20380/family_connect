@@ -40,8 +40,10 @@ operator implementations; boolean callbacks are not cryptographic attestations.
    synthetic fixture identity**; `validate_readiness` must use the accepted
    `wholedevice.ValidateDelivery` consumer (the public-identity delivery-check
    executable is sufficient), not status-only or shape-only validation.
-   `tests/test_owner_proof_handoff.py` supplies the executable local recipe using
-   the actual isolated archive and native consumer. Stop the disposable runtime.
+   The supported [closed adapter](READINESS_ADAPTER.md) supplies the runtime recipe
+   and public-input native consumer. Do not extract/import test helpers or run an
+   outer recipe against modules temporarily loaded by `runpy`. Stop the disposable
+   runtime. Tests remain acceptance evidence, not deployable runtime dependencies.
 3. The returned `ContractFixture` is an in-process, at-most300s result bound to the
    SHA256 of the fixture artifact. It is not an owner receipt or a portable signed
    attestation. Do not fabricate it or import an old pytest PASS as current evidence.

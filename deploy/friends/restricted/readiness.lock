@@ -1,0 +1,5 @@
+cffi==2.1.1
+cryptography==46.0.7
+pycparser==3.0
+pyserial==3.5
+rns==1.5.1

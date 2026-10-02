@@ -20,9 +20,12 @@ import subprocess
 import time
 from urllib.parse import urlsplit
 
-_receipts = runpy.run_path(str(Path(__file__).with_name('friends_http_acceptance.py')))
-PATHS, ProbeFailed, classify = (_receipts[name] for name in ('PATHS', 'ProbeFailed', 'classify'))
-Evidence = _receipts['Evidence']
+if __package__:
+    from .friends_http_acceptance import PATHS, ProbeFailed, classify, Evidence
+else:
+    _receipts = runpy.run_path(str(Path(__file__).with_name('friends_http_acceptance.py')))
+    PATHS, ProbeFailed, classify = (_receipts[name] for name in ('PATHS', 'ProbeFailed', 'classify'))
+    Evidence = _receipts['Evidence']
 
 PORT_OWNERS = {18080: 'documented_xhttp_origin', 18082: 'product_api',
                18084: 'ordinary_friends_http', 18085: 'friends_tcp_xray_api',
@@ -228,6 +231,40 @@ class Candidate:
         if not self.direct_pass:
             raise ProbeFailed('Direct matrix must pass before rendering ingress')
         return 'http://127.0.0.1:' + str(self.port)
+
+    def ready_with_adapter(self, evidence, *, python, runtime, sha256, config, directory):
+        self.direct_pass = False
+        self.verify()
+        runtime, directory = Path(runtime).resolve(), Path(directory).resolve()
+        if (directory.exists() or not re.fullmatch('[a-f0-9]{64}', sha256)
+                or hashlib.sha256(runtime.read_bytes()).hexdigest() != sha256):
+            raise ProbeFailed('Fresh evidence directory and pinned adapter required')
+        passed = False
+        try:
+            result = subprocess.run([str(python), '-I', str(runtime), '--config', str(Path(config).resolve()),
+                                     '--evidence', str(directory)], cwd=runtime.parent,
+                                    capture_output=True, timeout=90)
+            receipt = json.loads((directory / 'result.json').read_bytes())
+            expected = dict(port=self.port, generation=self.generation, pid=self.process.pid,
+                            start=self.start, http_sha256=self.sha256)
+            passed = (result.returncode == 0 and not result.stderr and receipt.get('passed') is True
+                      and receipt.get('isolated') is True and receipt.get('step') == 'complete'
+                      and receipt.get('state') == 'SERVER_CANDIDATE_READY'
+                      and receipt.get('owner_product_ready') is False
+                      and receipt.get('candidate') == expected and receipt.get('artifact_sha256') == sha256
+                      and hashlib.sha256(runtime.read_bytes()).hexdigest() == sha256)
+            self.verify()
+        except Exception:
+            passed = False
+            raise
+        finally:
+            evidence.persist(dict(timestamp=timestamp(), event='closed_adapter_readiness',
+                                  receipt_class='server_probe', artifact_sha256=sha256,
+                                  active_generation=self.generation, passed=passed))
+        if not passed:
+            raise ProbeFailed('Closed adapter failed; inspect durable redacted result')
+        self.direct_pass = True
+        return True
 
     def render_upstreams(self, template):
         if template.count('@FRIENDS_HTTP_UPSTREAM@') != 2:

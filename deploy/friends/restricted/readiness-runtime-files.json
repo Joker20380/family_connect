@@ -1,0 +1,15 @@
+{
+  "__main__.py": "scripts/friends_readiness_adapter.py",
+  "control/friends/__init__.py": "control/friends/__init__.py",
+  "control/friends/access.py": "control/friends/access.py",
+  "control/friends/restricted.py": "control/friends/restricted.py",
+  "control/friends/readiness_adapter.py": "control/friends/readiness_adapter.py",
+  "control/friends/readiness_fixture.py": "control/friends/readiness_fixture.py",
+  "device_identity/__init__.py": "device_identity/__init__.py",
+  "device_identity/device.py": "device_identity/device.py",
+  "provisioning/__init__.py": "provisioning/__init__.py",
+  "provisioning/friends_catalog.py": "provisioning/friends_catalog.py",
+  "clients/desktop/profile_config.py": "clients/desktop/profile_config.py",
+  "scripts/friends_http_transition.py": "scripts/friends_http_transition.py",
+  "scripts/friends_http_acceptance.py": "scripts/friends_http_acceptance.py"
+}
