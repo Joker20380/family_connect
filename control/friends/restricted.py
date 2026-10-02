@@ -20,6 +20,7 @@ from cryptography.x509.oid import ExtendedKeyUsageOID, NameOID
 from device_identity.device import verify_transport_key_proof
 from provisioning.friends_catalog import fields, key, parse, require
 from .access import Rejected, CHALLENGE_TTL
+from . import readiness_receipts
 
 DOMAIN = b'family-connect/restricted-issuer/v1\0'
 PROTOCOL = 'family-connect-5n3-test-v1'
@@ -52,17 +53,21 @@ def from_env(access):
                               crl_source=lambda: bounded_file(root / 'revocations.pem', 16384), eligible_devices=policy['devices'])
 
 
-def request(access, action, value):
+def request(access, action, value, request_id=None):
     if action == 'challenge':
         fields(value, 'public_identity wireguard_public_key')
         key(value['public_identity'], 64)
         key(value['wireguard_public_key'], 32)
     try:
         service = from_env(access)
+        if action == 'ack-challenge':
+            return readiness_receipts.ack_challenge(service, value)
+        if action == 'ack':
+            return readiness_receipts.acknowledge(service, value)
         if action == 'challenge':
-            return service.challenge(**value)
+            return service.challenge(**value, request_id=request_id)
         require(action == 'fetch')
-        return service.fetch(value)
+        return service.fetch(value, request_id=request_id)
     except Rejected:
         raise
     except Exception:
@@ -179,6 +184,7 @@ def directory(raw, family, gateway, now=None, *, now_ns=None):
 def migrate(access):
     require(access.path.is_file())
     with access.db() as database:
+        readiness_receipts.migrate(database)
         existing = {row[0] for row in database.execute('SELECT name FROM sqlite_master WHERE type="table"')}
         require({'devices', 'invites', 'challenges'} <= existing)
         database.execute('CREATE TABLE IF NOT EXISTS restricted_grants ('
@@ -236,7 +242,7 @@ class RestrictedReadiness:
             raise Rejected()
         return row
 
-    def challenge(self, public_identity, wireguard_public_key):
+    def challenge(self, public_identity, wireguard_public_key, request_id=None):
         device = self.access.binding(public_identity, wireguard_public_key)
         now = int(self.access.clock())
         trust, _, _, _, _ = self._trust(now)
@@ -256,9 +262,11 @@ class RestrictedReadiness:
                              (digest, device, public_identity, wireguard_public_key, 'restricted', None, expiry))
             database.execute('INSERT INTO restricted_challenges VALUES (?,?,?,?)',
                              (digest, row['revision'], row['family'], expiry))
+            if request_id is not None:
+                readiness_receipts.challenge(database, request_id, digest, device, now)
         return dict(challenge=nonce, expires_at=expiry, audience='family-connect/enrollment/v1')
 
-    def fetch(self, proof):
+    def fetch(self, proof, request_id=None):
         device = verify_transport_key_proof(proof, expected_challenge=proof['challenge'])
         digest = hashlib.sha256(proof['challenge'].encode()).hexdigest()
         now = int(self.access.clock())
@@ -305,6 +313,8 @@ class RestrictedReadiness:
             encoded = json.dumps(result, separators=(',', ':')).encode()
             require(len(encoded) <= MAX_RESPONSE)
             database.execute('UPDATE challenges SET used=1 WHERE nonce=?', (digest,))
+            if request_id is not None:
+                readiness_receipts.fetched(database, digest, request_id, result, now)
             return result
 
     def _issue(self, row, authority, now, expires, role='device'):

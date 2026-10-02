@@ -5,8 +5,9 @@ import java.util.UUID;
 import static com.familyconnect.app.ControlJson.*;
 
 final class OwnerPrewarmReceipt {
-    final String challengeId=UUID.randomUUID().toString().replace("-","");
-    final String fetchId=UUID.randomUUID().toString().replace("-","");
+    final String challengeId,fetchId;
+    OwnerPrewarmReceipt(){this(UUID.randomUUID().toString().replace("-",""),UUID.randomUUID().toString().replace("-",""));}
+    OwnerPrewarmReceipt(String challenge,String fetch){require(challenge.matches("[a-f0-9]{32}")&&fetch.matches("[a-f0-9]{32}")&&!challenge.equals(fetch));challengeId=challenge;fetchId=fetch;}
     private String challenge="not_attempted",fetch="not_attempted",imported="not_attempted";
     private long revision,expires,observed;
     synchronized void challengeIssued(){challenge="issued";observed=System.currentTimeMillis()/1000;}

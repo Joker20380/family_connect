@@ -6,6 +6,7 @@ from pathlib import Path
 import subprocess
 import sys
 import time
+import re
 
 import pytest
 
@@ -16,13 +17,14 @@ from test_restricted_runtime import bundle, material_fixture, snapshot
 
 
 def product_observation(product):
-    app=dict(receipt_class='real_owner_product',challenge_id='a'*32,fetch_id='b'*32,
-             challenge_result='issued',fetch_result='authorized',import_result='accepted',
+    app=dict(version=1,type='READINESS_IMPORT_RESULT',correlation_id='a'*32,challenge_id='a'*32,fetch_id='b'*32,
+             result='READY',provisioning='PRESENT_VALID',bootstrap='PRESENT_VALID',orchestrator_usable=True,
+             minimum_crl=2,phase='import',app_version='0.1.18-canary55-receipt',version_code=55,failure_reason='NONE',
              revision=2,expires_at=int(time.time())+600,observed_at=int(time.time()))
     server=[dict(probe_id=app[key],generation=product.generation,timestamp=time.time(),
                  status=200,upstream_status='200',product_step=step)
             for key,step in [('challenge_id','challenge'),('fetch_id','readiness')]]
-    return app,server
+    return dict(version=1,correlation_id=app['correlation_id'],status='ACK_RECEIVED',receipt=app,received_at=int(time.time())),server
 
 
 @pytest.fixture
@@ -48,10 +50,11 @@ def test_product_receipts_require_both_server_requests_and_validated_app_import(
 def test_product_failures_are_redacted_and_cannot_commit(evidence,mutation):
     product=transition.OwnerProduct(evidence,'candidate')
     app,server=product_observation(product)
-    if mutation=='absent':app=None
-    elif mutation=='cannot_sign':app['fetch_result']='failed'
+    acknowledgement=app;app=acknowledgement['receipt']
+    if mutation=='absent':acknowledgement=None
+    elif mutation=='cannot_sign':acknowledgement['status']='ACK_PENDING'
     elif mutation in ('bad_proof','non_canary','revoked'):server[1]['status']=403
-    elif mutation=='import_failed':app['import_result']='failed'
+    elif mutation=='import_failed':app.update(result='ATOMIC_IMPORT_FAILED',failure_reason='ATOMIC_IMPORT_FAILED',provisioning='NOT_READY',bootstrap='NOT_READY',orchestrator_usable=False)
     elif mutation=='expired':app['expires_at']=1
     elif mutation=='fixture_class':app['receipt_class']='server_contract_fixture'
     elif mutation=='secret':app['raw_proof']='secret-sentinel'
@@ -64,9 +67,9 @@ def test_product_failures_are_redacted_and_cannot_commit(evidence,mutation):
     elif mutation=='zero_revision':app['revision']=0
     elif mutation=='deadline':product.deadline=time.monotonic()-1
     elif mutation=='future':app['observed_at']+=10
-    assert not product.observe(app,server) and not product.passed
+    assert not product.observe(acknowledgement,server) and not product.passed
     record,=evidence_records(evidence)
-    assert record['state']=='OWNER_PREWARM_FAILED'
+    assert record['state']==('OWNER_PRODUCT_UNKNOWN' if mutation=='cannot_sign' else 'OWNER_PREWARM_FAILED')
     assert 'secret-sentinel' not in json.dumps(record) and 'raw_proof' not in record
 
 
@@ -136,7 +139,7 @@ def test_android_protocol_observation_not_a_signing_api():
     protocol=(android/'java/com/familyconnect/app/FriendsReadinessProtocol.java').read_text()
     assert protocol.index('/challenge')<protocol.index('identity.proveTransportKey(nonce)')<protocol.index('receipt.fetchAuthorized()')
     prewarm=(android/'java/com/familyconnect/app/FriendsRestricted.java').read_text()
-    assert prewarm.index('cache.accept(response)')<prewarm.index('receipt.imported(response)')
+    assert prewarm.index('product.imported(response')<prewarm.index('receipt.imported(response)')
     assert 'Arrays.fill(response,(byte)0)' in prewarm
     hook=(android/'java/com/familyconnect/app/OwnerPrewarmReceipt.java').read_text()
     for forbidden in ('ControlIdentity','proveTransportKey','material()','private_key','public_identity','join_url'):
@@ -145,4 +148,4 @@ def test_android_protocol_observation_not_a_signing_api():
     assert 'OwnerPrewarm' not in manifest
     operator=(root/'scripts/friends_http_transition.py').read_text()
     for forbidden in ('adb','get_private_key','prove_transport_key','FriendsIdentityVault'):
-        assert forbidden not in operator
+        assert not re.search(r'\b'+re.escape(forbidden)+r'\b',operator)

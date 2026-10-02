@@ -75,6 +75,11 @@ func fcRestrictedBegin(directory, control, resolver string, owner C.uintptr_t) i
 	return begin(directory, control, resolver, nil, nil, owner)
 }
 
+//export fcRestrictedValidationCode
+func fcRestrictedValidationCode(response, public, anchor string) int32 {
+	return wholedevice.DeliveryValidationCode([]byte(response), []byte(public), []byte(anchor), time.Now())
+}
+
 //export fcRestrictedValidateDelivery
 func fcRestrictedValidateDelivery(response, public, anchor string) int32 {
 	_, _, err := wholedevice.ValidateDelivery([]byte(response), []byte(public), []byte(anchor), time.Now())

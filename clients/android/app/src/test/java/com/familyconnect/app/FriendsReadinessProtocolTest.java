@@ -11,6 +11,21 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class FriendsReadinessProtocolTest {
+    @Test public void ackUsesNormalProductProofAndSameBoundedPayload()throws Exception{
+        try(ControlIdentity identity=ControlIdentity.restore(new byte[96])){
+            OwnerPrewarmReceipt attempt=new OwnerPrewarmReceipt();
+            JsonObject payload=new ReadinessImportResult(attempt,ReadinessImportResult.Code.NATIVE_VALIDATION_FAILED,null,System.currentTimeMillis()/1000,"import","test",55).json();
+            ArrayList<String> paths=new ArrayList<>();String nonce=Base64.getEncoder().encodeToString(new byte[32]);
+            FriendsReadinessProtocol.acknowledge((path,body,id)->{
+                paths.add(path);assertEquals(payload,body.getAsJsonObject("receipt"));assertTrue(id.matches("[a-f0-9]{32}"));
+                JsonObject reply=new JsonObject();
+                if(path.endsWith("ack-challenge")){reply.addProperty("challenge",nonce);reply.addProperty("expires_at",System.currentTimeMillis()/1000+120);reply.addProperty("audience","family-connect/enrollment/v1");}
+                else{assertEquals(identity.proveTransportKey(nonce),body.getAsJsonObject("proof"));reply.addProperty("version",1);reply.addProperty("correlation_id",attempt.challengeId);reply.addProperty("status","ACK_RECEIVED");}
+                return reply;
+            },identity,payload);
+            assertEquals(Arrays.asList("/friends/restricted-readiness/ack-challenge","/friends/restricted-readiness/ack"),paths);
+        }
+    }
     private static class ProductServer implements FriendsReadinessProtocol.Transport {
         final ArrayList<String> paths=new ArrayList<>(),ids=new ArrayList<>();
         final ControlIdentity owner;

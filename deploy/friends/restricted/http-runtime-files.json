@@ -6,6 +6,7 @@
   "control/friends/notices.py",
   "control/friends/referrals.py",
   "control/friends/restricted.py",
+  "control/friends/readiness_receipts.py",
   "device_identity/__init__.py",
   "device_identity/device.py",
   "provisioning/__init__.py",
@@ -14,5 +15,6 @@
   "messenger/__init__.py",
   "messenger/admission.py",
   "messenger/service_events.py",
-  "scripts/service_notices.py"
+  "scripts/service_notices.py",
+  "scripts/read_readiness_ack.py"
 ]

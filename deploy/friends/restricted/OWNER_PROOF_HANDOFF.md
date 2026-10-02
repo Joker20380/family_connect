@@ -1,5 +1,11 @@
 # Owner proof handoff — local acceptance contract
 
+The [versioned product receipt/ACK](DEVICE_READINESS_RECEIPT.md) now supersedes the
+UI-only collection mechanism below. `OwnerProduct.observe` consumes owner-bound
+authenticated ACK readback plus challenge/fetch ingress receipts. ADB/UI is never
+authoritative; ACK_PENDING is UNKNOWN, not local readiness failure. Historical
+ephemeral UI diagnostics below are retained for attempt13/14 provenance only.
+
 This contract supersedes the operator-generated real-owner F/G requirement from
 the candidate-preflight gate. It does not authorize deployment, authority refresh,
 service startup or a physical-device operation. Attempt12 remains rolled back.

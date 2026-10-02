@@ -3,6 +3,7 @@
   "control/friends/__init__.py": "control/friends/__init__.py",
   "control/friends/access.py": "control/friends/access.py",
   "control/friends/restricted.py": "control/friends/restricted.py",
+  "control/friends/readiness_receipts.py": "control/friends/readiness_receipts.py",
   "control/friends/readiness_adapter.py": "control/friends/readiness_adapter.py",
   "control/friends/readiness_fixture.py": "control/friends/readiness_fixture.py",
   "device_identity/__init__.py": "device_identity/__init__.py",

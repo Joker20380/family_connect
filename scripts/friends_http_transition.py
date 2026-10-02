@@ -50,13 +50,13 @@ class ContractFixture:
 
 
 class OwnerProduct:
-    """Correlate app import diagnostics with scoped ingress receipts, not proofs."""
+    """Correlate authenticated product ACK readback with ingress; UI is supplemental."""
     def __init__(self, evidence, generation):
         self.evidence, self.generation = evidence, generation
         self.opened, self.deadline = time.time(), time.monotonic() + 300
         self.passed = self.consumed = False
 
-    def observe(self, app, server):
+    def observe(self, acknowledgement, server):
         if self.consumed:
             raise ProbeFailed('Product observation already consumed')
         self.consumed = True
@@ -64,27 +64,31 @@ class OwnerProduct:
                       active_generation=self.generation, state='OWNER_PREWARM_FAILED',
                       reason='invalid_or_missing_observation')
         try:
-            fields = {'receipt_class', 'challenge_id', 'fetch_id', 'challenge_result', 'fetch_result',
-                      'import_result', 'revision', 'expires_at', 'observed_at'}
-            if type(app) is not dict or set(app) != fields or app['receipt_class'] != 'real_owner_product':
+            from control.friends.readiness_receipts import validate
+            if type(acknowledgement) is dict and acknowledgement.get('status') in ('ACK_PENDING', 'UNKNOWN'):
+                record.update(state='OWNER_PRODUCT_UNKNOWN', reason='ACK_PENDING')
                 return False
-            if any(type(app[key]) is not str or not re.fullmatch('[a-f0-9]{32}', app[key])
-                   for key in ('challenge_id', 'fetch_id')) or app['challenge_id'] == app['fetch_id']:
+            if (type(acknowledgement) is not dict
+                    or set(acknowledgement) != {'version', 'correlation_id', 'status', 'receipt', 'received_at'}
+                    or type(acknowledgement['version']) is not int or acknowledgement['version'] != 1
+                    or acknowledgement['status'] != 'ACK_RECEIVED'):
                 return False
-            categories = {'challenge_result': {'not_attempted', 'issued', 'failed'},
-                          'fetch_result': {'not_attempted', 'authorized', 'failed'},
-                          'import_result': {'not_attempted', 'accepted', 'failed'}}
-            if any(type(app[key]) is not str or app[key] not in allowed for key, allowed in categories.items()):
+            app = acknowledgement['receipt']
+            try:
+                validate(app)
+            except (ValueError, TypeError, KeyError):
                 return False
-            if any(type(app[key]) is not int or not 0 <= app[key] <= 2**53-1
-                   for key in ('revision', 'expires_at', 'observed_at')):
+            if acknowledgement['correlation_id'] != app['correlation_id']:
                 return False
             record.update(app)
             now = time.time()
+            received = acknowledgement['received_at']
+            if type(received) is not int or not int(self.opened) <= app['observed_at'] <= received <= now:
+                return False
             if time.monotonic() > self.deadline or not int(self.opened) <= app['observed_at'] <= int(now):
                 record['reason'] = 'stale_observation'
                 return False
-            if (app['challenge_result'], app['fetch_result'], app['import_result']) != ('issued', 'authorized', 'accepted'):
+            if app['result'] != 'READY' or not app['orchestrator_usable']:
                 record['reason'] = 'product_prewarm_failed'
                 return False
             if app['revision'] < 1 or not now < app['expires_at'] <= now + 3600:

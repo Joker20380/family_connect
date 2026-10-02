@@ -10,6 +10,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"encoding/pem"
+	"errors"
 	"io"
 	"strconv"
 	"time"
@@ -19,6 +20,19 @@ import (
 )
 
 const MaxReadiness = 65536
+
+var ErrBootstrapValidation = errors.New("bootstrap validation failed")
+
+func DeliveryValidationCode(raw, public, anchor []byte, now time.Time) int32 {
+	_, _, err := ValidateDelivery(raw, public, anchor, now)
+	if err == nil {
+		return 0
+	}
+	if errors.Is(err, ErrBootstrapValidation) {
+		return 2
+	}
+	return 1
+}
 
 type issuerEnvelope struct {
 	Payload   string `json:"payload"`
@@ -177,7 +191,7 @@ func ValidateDelivery(raw, public, anchor []byte, now time.Time) (ReadinessDeliv
 	}
 	directory, err := bootstrap.ParseDirectory(delivery.Directory, trust.Family, trust.Gateway, now)
 	if err != nil {
-		return fail()
+		return ReadinessDelivery{}, familysession.Credentials{}, errors.Join(ErrClosed, ErrBootstrapValidation)
 	}
 	for _, until := range []time.Time{certificate.NotAfter, authority.NotAfter, crl.NextUpdate, directory.ExpiresAt, time.Unix(trust.ExpiresAt, 0)} {
 		if time.Unix(delivery.ExpiresAt, 0).After(until) {

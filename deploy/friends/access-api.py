@@ -23,14 +23,15 @@ class Handler(BaseHTTPRequestHandler):
   raw=json.dumps(value,ensure_ascii=False,separators=(',',':')).encode();self.send_response(status);self.send_header('Content-Type','application/json');self.send_header('Cache-Control','no-store');self.send_header('Content-Length',str(len(raw)));self.end_headers();self.wfile.write(raw)
  def do_POST(self):
   self.connection.settimeout(5)
-  if self.path not in ('/friends/challenge','/friends/activate','/friends/restricted-readiness','/friends/restricted-readiness/challenge','/friends/configuration/ru','/friends/configuration/nl','/friends/chat/challenge','/friends/chat/register','/friends/referral/issue','/friends/referral/claim','/friends/device/status','/friends/notices/publish','/friends/notices/device/role','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit'):self.reply(404,{'error':'not-found'});return
+  if self.path not in ('/friends/challenge','/friends/activate','/friends/restricted-readiness','/friends/restricted-readiness/challenge','/friends/restricted-readiness/ack-challenge','/friends/restricted-readiness/ack','/friends/configuration/ru','/friends/configuration/nl','/friends/chat/challenge','/friends/chat/register','/friends/referral/issue','/friends/referral/claim','/friends/device/status','/friends/notices/publish','/friends/notices/device/role','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit'):self.reply(404,{'error':'not-found'});return
   if not slots.acquire(blocking=False):self.reply(429,{'error':'busy'});return
   try:
    size=int(self.headers.get('Content-Length','0'));assert 0<size<=(32768 if self.path in ('/friends/notices/publish','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit') else 8192) and self.headers.get('Content-Type','').split(';')[0]=='application/json'
    value=json.loads(self.rfile.read(size),object_pairs_hook=unique)
    if self.path.startswith('/friends/restricted-readiness'):
     from control.friends.restricted import request
-    result=request(access,'challenge' if self.path.endswith('/challenge') else 'fetch',value)
+    action='fetch' if self.path=='/friends/restricted-readiness' else self.path.rsplit('/',1)[1]
+    result=request(access,action,value,request_id=self.headers.get('X-FC-Probe-ID'))
    elif self.path.startswith('/friends/notices/device/'):
     from control.friends.notices import device_request,NoticeDenied,NoticeConflict
     try:result=device_request(access,ROOT/'notices.sqlite',Path('/opt/apps/family_connect/state-product-https/config/downloads/family-connect-events-v1.json'),self.path.rsplit('/',1)[1],value)
@@ -83,8 +84,16 @@ def main():
  parser=argparse.ArgumentParser(description=__doc__)
  parser.add_argument('--root',type=Path,default=ROOT)
  parser.add_argument('--port',type=int,default=18084)
+ parser.add_argument('--readiness-ack',metavar='CORRELATION_ID')
+ parser.add_argument('--material',type=Path)
  args=parser.parse_args()
  ROOT=args.root.resolve();access=Access(ROOT/'access.db');chat_access=ChatAccess(access)
+ if args.readiness_ack is not None:
+  from scripts.read_readiness_ack import inspect
+  if args.material is None:parser.error('--material required for ACK readback')
+  try:print(json.dumps(inspect(ROOT/'access.db',args.material,args.readiness_ack)))
+  except Exception:print(json.dumps(dict(version=1,status='UNKNOWN',reason='READBACK_UNAVAILABLE')));raise SystemExit(1) from None
+  return
  ThreadingHTTPServer(('127.0.0.1',args.port),Handler).serve_forever()
 
 if __name__=='__main__':main()

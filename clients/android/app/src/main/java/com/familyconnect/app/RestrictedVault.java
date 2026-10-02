@@ -46,7 +46,8 @@ final class RestrictedVault implements RestrictedCache.Storage {
             read();Cipher cipher=Cipher.getInstance("AES/GCM/NoPadding");cipher.init(Cipher.ENCRYPT_MODE,key(true));cipher.updateAAD(AAD);
             byte[] iv=cipher.getIV(),encrypted=cipher.doFinal(raw);if(iv.length!=12)throw new IOException("Readiness nonce");FileOutputStream output=null;
             try{output=file.startWrite();output.write(1);output.write(iv);output.write(encrypted);file.finishWrite(output);output=null;
-                byte[] persisted=read();try{if(!Arrays.equals(raw,persisted))throw new IOException("Readiness persistence");}finally{Arrays.fill(persisted,(byte)0);}
+                byte[] persisted;try{persisted=read();}catch(Exception failure){throw new RestrictedCache.PersistenceFailure();}
+                try{if(!Arrays.equals(raw,persisted))throw new RestrictedCache.PersistenceFailure();}finally{if(persisted!=null)Arrays.fill(persisted,(byte)0);}
             }catch(Exception failure){if(output!=null)file.failWrite(output);throw failure;}
         }
     }

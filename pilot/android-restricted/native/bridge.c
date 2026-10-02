@@ -14,6 +14,14 @@ extern int32_t fcRestrictedStop(int64_t);
 extern char *fcRestrictedStats(int64_t);
 extern char *fcRestrictedReadiness(struct text);
 extern int32_t fcRestrictedValidateDelivery(struct text,struct text,struct text);
+extern int32_t fcRestrictedValidationCode(struct text,struct text,struct text);
+JNIEXPORT jint JNICALL Java_com_familyconnect_app_NativeRestricted_validationCode(JNIEnv *env,jclass cls,jbyteArray response,jbyteArray identity,jbyteArray anchor){
+ if(!response||!identity||!anchor)return 1;
+ jbyte *raw=(*env)->GetByteArrayElements(env,response,NULL),*public=(*env)->GetByteArrayElements(env,identity,NULL),*root=(*env)->GetByteArrayElements(env,anchor,NULL);
+ int32_t result=1;
+ if(raw&&public&&root)result=fcRestrictedValidationCode((struct text){(char*)raw,(*env)->GetArrayLength(env,response)},(struct text){(char*)public,(*env)->GetArrayLength(env,identity)},(struct text){(char*)root,(*env)->GetArrayLength(env,anchor)});
+ if(raw)(*env)->ReleaseByteArrayElements(env,response,raw,JNI_ABORT);if(public)(*env)->ReleaseByteArrayElements(env,identity,public,JNI_ABORT);if(root)(*env)->ReleaseByteArrayElements(env,anchor,root,JNI_ABORT);return result;
+}
 extern int64_t fcRestrictedBeginReady(struct text,struct text,struct text,struct text,uintptr_t);
 JNIEXPORT jboolean JNICALL Java_com_familyconnect_app_NativeRestricted_validateDelivery(JNIEnv *env,jclass cls,jbyteArray response,jbyteArray identity,jbyteArray anchor){
  if(!response||!identity||!anchor)return 0;

@@ -42,7 +42,7 @@ final class FriendsAccessAndroid {
     }
     private JsonObject post(String path,JsonObject body,String requestId)throws Exception{
         remaining(5000);
-        require(path.matches("/friends/(challenge|activate|restricted-readiness(/challenge)?|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/status|notices/device/(role|publish|list|edit))"));
+        require(path.matches("/friends/(challenge|activate|restricted-readiness(/(challenge|ack-challenge|ack))?|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/status|notices/device/(role|publish|list|edit))"));
         HttpsURLConnection connection=direct?new ChatNetworkAndroid(context).openHttps("https://185.251.89.19:8443"+path):(HttpsURLConnection)new URL("https://185.251.89.19:8443"+path).openConnection();
         pending=connection;
         try{
@@ -65,6 +65,7 @@ final class FriendsAccessAndroid {
     byte[] restrictedReadiness(ControlIdentity identity,OwnerPrewarmReceipt receipt)throws Exception{
         return FriendsReadinessProtocol.fetch(this::post,identity,receipt);
     }
+    void readinessAck(ControlIdentity identity,JsonObject receipt)throws Exception{FriendsReadinessProtocol.acknowledge(this::post,identity,receipt);}
     void activate(String invitation)throws Exception{
         try(ControlIdentity identity=identity(true)){
             JsonObject result=post("/friends/activate",proof(identity,"activate",invitation));fields(result,"device status");

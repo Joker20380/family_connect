@@ -88,6 +88,24 @@ func TestProductionDeliveryToExistingFamilyMaterial(test *testing.T) {
 	}
 }
 
+func TestDeliveryResultCodes(test *testing.T) {
+	delivery, public, _, root, now := deliveryFixture(test)
+	raw, _ := json.Marshal(delivery)
+	if DeliveryValidationCode(raw, public, root, now) != 0 {
+		test.Fatal("valid delivery")
+	}
+	delivery.Directory = json.RawMessage(`{}`)
+	raw, _ = json.Marshal(delivery)
+	if DeliveryValidationCode(raw, public, root, now) != 2 {
+		test.Fatal("bootstrap classification")
+	}
+	delivery.Certificate = "invalid"
+	raw, _ = json.Marshal(delivery)
+	if DeliveryValidationCode(raw, public, root, now) != 1 {
+		test.Fatal("native classification")
+	}
+}
+
 func TestProductionDeliveryRejectsBindingTrustExpiryBounds(test *testing.T) {
 	delivery, public, _, root, now := deliveryFixture(test)
 	for name, change := range map[string]func(*ReadinessDelivery){

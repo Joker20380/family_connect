@@ -6,6 +6,7 @@ def restrictedDiagnostic = providers.gradleProperty('fcRestrictedDiagnostic').ge
 def orchestratorDiagnostic = providers.gradleProperty('fcOrchestratorDiagnostic').getOrElse('false') == 'true'
 if (!(targetAbi in ['all', 'arm64-v8a']) && !(friendsCi && targetAbi == 'x86_64')) throw new GradleException('Unsupported fcTargetAbi')
 android {
+    buildFeatures { buildConfig = true }
     namespace 'com.familyconnect.app'
     compileSdk 35
     // Manual signed Friends UI acceptance; ordinary CI continues to test debug.
