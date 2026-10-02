@@ -28,7 +28,16 @@ REQUIRED = json.loads((ROOT / CONTRACT / 'runtime-files.json').read_text())
 @pytest.fixture
 def bundle(tmp_path):
     output = tmp_path / 'opt/apps/family_connect/friends-access'
-    build(output)
+    supplied = os.environ.get('FC_TEST_SYNC_ARTIFACT')
+    if supplied:
+        source = Path(supplied).resolve()
+        source = source.parent if source.is_file() else source
+        assert hashlib.sha256((source / ARCHIVE).read_bytes()).hexdigest() == os.environ['FC_TEST_SYNC_SHA256']
+        inventory = json.loads((source / 'sha256.json').read_bytes())
+        assert all(hashlib.sha256((source / name).read_bytes()).hexdigest() == digest for name, digest in inventory.items())
+        shutil.copytree(source, output)
+    else:
+        build(output)
     return output
 
 

@@ -1,5 +1,27 @@
 # Текущее состояние / Current state
 
+## 5N-READINESS-ACK-ARTIFACT-REFRESH — PASS local, 02.10.2026
+
+Clean exact source `a24f090d7468dce6183122616117a4e1edaadd3f`; all three old server
+artifacts classified A (bundled source changed), rebuilt with unchanged builders
+and explicit manifests. Every bundled tracked/native input equals HEAD; no waiver.
+New HTTP SHA256 `7ef821a824914b35490d3d371ae4b1722a8900d99cf7b16dbacdd3c5c0af105a`;
+readiness `45d35703edeea3cbb1cedcd472ad3b009f15888a6a94c83453e06fce1bd57c96`;
+sync `0237527cc0fbe6ea5498b0f1d2025894ae3f347c4bb26b4da9f702bfc25f4f1c`.
+HTTP/adapter repeat builds byte-identical; sync exact retained bytes pinned.
+366 focused tests +2 historical pinned regressions PASS. Exact offline sync→directory
+→HTTP→native validated simulated result→authenticated ACK→read-only inspection PASS,
+**server_contract_fixture only**, not physical owner evidence. ACK schema errors use
+existing bounded503; unauthorized/replay/stale use403. No production code change.
+
+Canary55 APK/hash/package/code55/signature unchanged and verified; no rebuild/install
+or Redmi access. No production access, authority refresh, service deployment, push,
+PROV-1 retry, FIELD-1, DIAG-1 or OPS-1 by this task. New pins are prepared, NOT deployed.
+Safe real device READY + correlated server evidence remains the next owner gate;
+ACK_PENDING preserves local READY but cannot invent owner acceptance. UI supplemental.
+[Full paths, inventories, contract and tests](releases/2026-10-02-5n-readiness-ack-artifact-refresh.ru.md) ·
+[Machine pins](releases/2026-10-02-5n-readiness-ack-artifact-pins.json).
+
 ## 5N-DEVICE-READINESS-RECEIPT — PASS local, 02.10.2026
 
 Starting HEAD `d5105e8c4f44aa4dac2153370800d98a229bc7d1`; implementation/build source

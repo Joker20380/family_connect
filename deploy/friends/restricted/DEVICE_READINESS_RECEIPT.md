@@ -84,7 +84,7 @@ No new transport stack, exported signing method or unauthenticated status endpoi
    revision/CRL/expiry. Old clients without IDs retain their existing fetch protocol.
 2. POST `/friends/restricted-readiness/ack-challenge` carries public binding and safe
    receipt. The server rechecks current grant/issuer/CRL/admission, bounds the payload
-   and binds a one-use120s nonce to its canonical SHA256 digest.
+   and binds a one-use100s nonce (existing Access CHALLENGE_TTL) to its canonical SHA256 digest.
 3. POST `/friends/restricted-readiness/ack` carries the real app's normal signed
    transport-key proof and identical payload. Purpose/device/key/digest/expiry/replay
    checks precede durable ACK storage. Changing the result after nonce issuance is

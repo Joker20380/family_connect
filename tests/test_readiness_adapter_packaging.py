@@ -18,8 +18,8 @@ from scripts import friends_http_transition as transition
 from scripts import friends_readiness_adapter as bootstrap
 from scripts.package_friends_readiness import ARCHIVE, CONTRACT, ROOT, build
 
-HTTP_SHA = '460e75205eb9baff313dc7dd963cdb7bceddf2d1e13405a71686f9ec6c976d71'
-SYNC_SHA = '9d965b955cbd5375c82adadb3f25736d1cca3fe86ab477ea73269ef1499a5a2d'
+HTTP_SHA = os.environ.get('FC_TEST_HTTP_SHA256', '460e75205eb9baff313dc7dd963cdb7bceddf2d1e13405a71686f9ec6c976d71')
+SYNC_SHA = os.environ.get('FC_TEST_SYNC_SHA256', '9d965b955cbd5375c82adadb3f25736d1cca3fe86ab477ea73269ef1499a5a2d')
 MAPPING = json.loads((ROOT / CONTRACT / 'readiness-runtime-files.json').read_bytes())
 
 
@@ -69,7 +69,8 @@ def records(evidence):
 
 
 def test_attempt13_import_boundary_reproduced_outside_checkout(packaged, tmp_path):
-    archive = configuration(packaged)['http_artifact']
+    archive = os.environ.get('FC_TEST_HISTORICAL_HTTP_ARTIFACT', configuration(packaged)['http_artifact'])
+    assert hashlib.sha256(Path(archive).read_bytes()).hexdigest() == '460e75205eb9baff313dc7dd963cdb7bceddf2d1e13405a71686f9ec6c976d71'
     code = '''import contextlib,io,json,runpy,sys
 archive=sys.argv[1]
 sys.argv=[archive,'--help']

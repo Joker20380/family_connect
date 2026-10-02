@@ -2,6 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-READINESS-ACK-ARTIFACT-REFRESH = PASS locally,02.10.2026.** HTTP, candidate adapter
+and sync all required refresh; exact clean `a24f090` artifacts/source inventories are
+now pinned, tested together and ready for a separately authorized deployment.
+[Hashes/paths/acceptance contract](releases/2026-10-02-5n-readiness-ack-artifact-refresh.ru.md). Canary55 unchanged,
+not installed; production/authority/Redmi untouched by this task. No runtime change.
+
+STOP: no automatic PROV-1 retry, authority refresh, services, FIELD-1, DIAG-1 or OPS-1.
+Future authorization must name these fresh pins, preserve existing transaction/admission
+policies and establish real app post-import READY evidence, not fixture F/G or HTTP200.
+Authenticated ACK correlates server challenge/fetch to device result; failed delivery
+keeps local READY and server UNKNOWN. UI gestures are supplemental, never authoritative.
+Prepared artifacts do not waive physical owner import/restart/rehearsal/traffic gates.
+
 **5N-DEVICE-READINESS-RECEIPT = PASS locally,02.10.2026.** Post-validation/post-atomic
 import product receipt v1 and authenticated ACK now replace UI-only owner acceptance.
 Restart revalidates the actual encrypted bundle; expired/denied/stale state is not

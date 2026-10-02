@@ -1,5 +1,14 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+Artifact refresh02.10: [new ACK-compatible pins and exact source inventories](../../../docs/releases/2026-10-02-5n-readiness-ack-artifact-pins.json)
+replace the old HTTP/readiness/sync pins for a **future separately authorized** attempt.
+All three required clean-source rebuilds at `a24f090`; no source mismatch waived.
+[Local acceptance and next production contract](../../../docs/releases/2026-10-02-5n-readiness-ack-artifact-refresh.ru.md).
+Nothing deployed; canary55 unchanged/not installed. Fixture F/G and simulated import
+remain server_contract_fixture, never owner evidence. Real owner acceptance needs
+app-originated READY after native/atomic import; ACK failure leaves local READY but
+server ACK_PENDING/UNKNOWN, and UI gestures are supplemental only. No automatic retry.
+
 Local gate02.10: [DEVICE_READINESS_RECEIPT.md](DEVICE_READINESS_RECEIPT.md) now defines
 authoritative owner acceptance: real app native validation → encrypted atomic import
 → Orchestrator usability → private durable receipt → authenticated control ACK.

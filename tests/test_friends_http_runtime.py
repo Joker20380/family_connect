@@ -259,7 +259,9 @@ def test_accepted_sync_directory_to_http_readiness(runtime):
     if not supplied:
         pytest.skip('FC_TEST_SYNC_ARTIFACT required for pinned archive interoperability')
     archive = Path(supplied).resolve()
-    assert hashlib.sha256(archive.read_bytes()).hexdigest() == '9d965b955cbd5375c82adadb3f25736d1cca3fe86ab477ea73269ef1499a5a2d'
+    archive = archive / 'restricted-sync.pyz' if archive.is_dir() else archive
+    expected = os.environ.get('FC_TEST_SYNC_SHA256', '9d965b955cbd5375c82adadb3f25736d1cca3fe86ab477ea73269ef1499a5a2d')
+    assert hashlib.sha256(archive.read_bytes()).hexdigest() == expected
     profile = runtime['temporary'] / 'synthetic-gateway.json'
     profile.write_text(json.dumps({'family': 'a' * 32, 'gateway': 'b' * 32}))
     profile.chmod(0o600)
