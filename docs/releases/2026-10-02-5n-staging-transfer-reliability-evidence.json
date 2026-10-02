@@ -1,0 +1,750 @@
+{
+  "gate": "5N-STAGING-TRANSFER-RELIABILITY",
+  "result": "FAIL",
+  "result_scope": "Historical timeout localization remains unproven; new staging regressions and RU/NL live staging pass.",
+  "starting_head": "9b3ec45e83ccb226ec4373087329cfdc218b0fac",
+  "implementation_commit": "5b59461af9003204829158ddeed155443bd6b922",
+  "historical_timeout_layer": {
+    "ru": "UNRESOLVED_WITHIN_OPAQUE_SSH_SUBPROCESS",
+    "nl": "UNRESOLVED_WITHIN_OPAQUE_SSH_SUBPROCESS"
+  },
+  "production_runtime_changed": false,
+  "authority_refreshed": false,
+  "services_started": false,
+  "redmi_touched": false,
+  "git_push": false,
+  "tests": {
+    "staging_passed": 19,
+    "broader_passed": 60,
+    "broader_failed": 2,
+    "broader_skipped": 13,
+    "broader_failures": "Pre-existing test_http_transition attempt9 hard-coded old HTTP artifact pin assertions"
+  },
+  "hosts": {
+    "ru": {
+      "reconstruction": {
+        "file_count": 9,
+        "files": {
+          "friends_http_transition.py": {
+            "bytes": 33584,
+            "sha256": "aeaecbf9ea87a18e879f83fe5798dbdc7e4906f1717cfbd6b3b3adff284d6d39"
+          },
+          "friends_http_acceptance.py": {
+            "bytes": 9988,
+            "sha256": "830b5dec96af01fd5650e9afd15d27661dba1a3191f5943aecbdf41fc8d0fc42"
+          },
+          "candidate.service": {
+            "bytes": 587,
+            "sha256": "ec82296c8c3919c777d9827998ccd1cd4305b27cf11f47060345d1f8b54f0fda"
+          },
+          "nginx-template.conf": {
+            "bytes": 27401,
+            "sha256": "8ebbc3c1d804f0ca112c573b8462c5e65e5ca71373c5b83621646a53d39dd8e0"
+          },
+          "http_operator.py": {
+            "bytes": 10868,
+            "sha256": "23b0271ef94b106a4f7d8b5fa256168b2eb2abb91088d2c6f45011fb69c537e5"
+          },
+          "candidate-readiness.pyz": {
+            "bytes": 47708,
+            "sha256": "9f914a07dd925c892ea489e0f38b3db488a462544a574d7df7a7c4e54671c64b"
+          },
+          "readiness-delivery-check": {
+            "bytes": 7652032,
+            "sha256": "9178b48e5f81085a0428ed11f2b2c33dd99fc27721680a2647e702bd633bdec6"
+          },
+          "readiness.lock": {
+            "bytes": 73,
+            "sha256": "d6870c56a9b8c435973aee3a92331fb336b0f596ba3b110c0307a1757a7c5bbe"
+          },
+          "provenance.json": {
+            "bytes": 23951,
+            "sha256": "b5f0ebcc92b7707408cb15104a5cdabf60ea5c4c66fa425a8b220735784dc2b4"
+          }
+        },
+        "program_bytes": 10410219,
+        "longest_line_bytes": 10409322,
+        "timeout": 45,
+        "executable": "/opt/apps/family_connect/friends-access/venv/bin/python",
+        "stdin_source": true,
+        "artifact_bytes": 7806192
+      },
+      "sources": {
+        "friends_http_transition.py": "/home/joker/PycharmProjects/family_connect/scripts/friends_http_transition.py",
+        "friends_http_acceptance.py": "/home/joker/PycharmProjects/family_connect/scripts/friends_http_acceptance.py",
+        "candidate.service": "/home/joker/PycharmProjects/family_connect/deploy/friends/restricted/family-connect-friends-http-candidate.service",
+        "nginx-template.conf": "/home/joker/PycharmProjects/family_connect/state-client-build/staging-transfer-reliability/nginx-template.conf",
+        "http_operator.py": "/home/joker/PycharmProjects/family_connect/state-client-build/prov1-attempt16/http_operator.py",
+        "candidate-readiness.pyz": "/home/joker/PycharmProjects/family_connect/state-client-build/real-owner-challenge-503/readiness/candidate-readiness.pyz",
+        "readiness-delivery-check": "/home/joker/PycharmProjects/family_connect/state-client-build/real-owner-challenge-503/readiness/readiness-delivery-check",
+        "readiness.lock": "/home/joker/PycharmProjects/family_connect/state-client-build/real-owner-challenge-503/readiness/readiness.lock",
+        "provenance.json": "/home/joker/PycharmProjects/family_connect/state-client-build/real-owner-challenge-503/readiness/provenance.json"
+      },
+      "before": {
+        "folder_exists": false,
+        "items": {
+          "friends_http_transition.py": {
+            "state": "ABSENT"
+          },
+          "friends_http_acceptance.py": {
+            "state": "ABSENT"
+          },
+          "candidate.service": {
+            "state": "ABSENT"
+          },
+          "nginx-template.conf": {
+            "state": "ABSENT"
+          },
+          "http_operator.py": {
+            "state": "ABSENT"
+          },
+          "candidate-readiness.pyz": {
+            "state": "ABSENT"
+          },
+          "readiness-delivery-check": {
+            "state": "ABSENT"
+          },
+          "readiness.lock": {
+            "state": "ABSENT"
+          },
+          "provenance.json": {
+            "state": "ABSENT"
+          }
+        },
+        "partial_or_related_names": []
+      },
+      "historical_authentication": "UNKNOWN",
+      "historical_remote_start": "UNKNOWN",
+      "historical_transfer_progress": "NOT_RECORDED",
+      "harmless_exact_source_probe": {
+        "bytes": 10409350,
+        "elapsed_seconds": 27.456,
+        "exit": 0,
+        "mutation": false
+      },
+      "live": {
+        "state": "READY",
+        "started_utc": "2026-10-02T21:50:37.339109+00:00",
+        "elapsed_seconds": 17.858,
+        "overall_budget_seconds": 226.417,
+        "connect_seconds": 2.537943,
+        "timeout_stage": null,
+        "exception_class": null,
+        "process_exit": 0,
+        "receiver_sha256": "2a4a319f32e6e6847e4b3316fcf088e9534212c631d9ab35af3da6bd668e11b3",
+        "receipt": {
+          "attempt": "9d11a73f3fd84665923762a25c38d672",
+          "exception_class": null,
+          "finished": 1790977855.0720456,
+          "inventory": {
+            "items": [
+              {
+                "artifact_id": "friends_http_transition.py",
+                "bytes": 33584,
+                "mode": 384,
+                "sha256": "aeaecbf9ea87a18e879f83fe5798dbdc7e4906f1717cfbd6b3b3adff284d6d39"
+              },
+              {
+                "artifact_id": "friends_http_acceptance.py",
+                "bytes": 9988,
+                "mode": 384,
+                "sha256": "830b5dec96af01fd5650e9afd15d27661dba1a3191f5943aecbdf41fc8d0fc42"
+              },
+              {
+                "artifact_id": "candidate.service",
+                "bytes": 587,
+                "mode": 384,
+                "sha256": "ec82296c8c3919c777d9827998ccd1cd4305b27cf11f47060345d1f8b54f0fda"
+              },
+              {
+                "artifact_id": "nginx-template.conf",
+                "bytes": 27401,
+                "mode": 384,
+                "sha256": "8ebbc3c1d804f0ca112c573b8462c5e65e5ca71373c5b83621646a53d39dd8e0"
+              },
+              {
+                "artifact_id": "http_operator.py",
+                "bytes": 10868,
+                "mode": 384,
+                "sha256": "23b0271ef94b106a4f7d8b5fa256168b2eb2abb91088d2c6f45011fb69c537e5"
+              },
+              {
+                "artifact_id": "candidate-readiness.pyz",
+                "bytes": 47708,
+                "mode": 384,
+                "sha256": "9f914a07dd925c892ea489e0f38b3db488a462544a574d7df7a7c4e54671c64b"
+              },
+              {
+                "artifact_id": "readiness-delivery-check",
+                "bytes": 7652032,
+                "mode": 448,
+                "sha256": "9178b48e5f81085a0428ed11f2b2c33dd99fc27721680a2647e702bd633bdec6"
+              },
+              {
+                "artifact_id": "readiness.lock",
+                "bytes": 73,
+                "mode": 384,
+                "sha256": "d6870c56a9b8c435973aee3a92331fb336b0f596ba3b110c0307a1757a7c5bbe"
+              },
+              {
+                "artifact_id": "provenance.json",
+                "bytes": 23951,
+                "mode": 384,
+                "sha256": "b5f0ebcc92b7707408cb15104a5cdabf60ea5c4c66fa425a8b220735784dc2b4"
+              }
+            ],
+            "role": "ru",
+            "version": 1
+          },
+          "items": [
+            {
+              "artifact_id": "friends_http_transition.py",
+              "atomic_promote_result": true,
+              "bytes_transferred": 33584,
+              "connect_end": 1790977839.8770516,
+              "connect_start": 1790977837.3391087,
+              "exception_class": null,
+              "expected_bytes": 33584,
+              "fsync_elapsed_seconds": 0.012377,
+              "fsync_end": 1790977840.321428,
+              "host_role": "ru",
+              "local_sha256": "aeaecbf9ea87a18e879f83fe5798dbdc7e4906f1717cfbd6b3b3adff284d6d39",
+              "remote_sha256_result": true,
+              "remote_temp_path_class": "inert_parent/unique_quarantine",
+              "state": "READY",
+              "timeout_stage": null,
+              "transfer_elapsed_seconds": 0.273818,
+              "transfer_end": 1790977840.3090513,
+              "transfer_start": 1790977840.0352333,
+              "validation_elapsed_seconds": 0.030568,
+              "validation_end": 1790977840.351996
+            },
+            {
+              "artifact_id": "friends_http_acceptance.py",
+              "atomic_promote_result": true,
+              "bytes_transferred": 9988,
+              "connect_end": 1790977839.8770516,
+              "connect_start": 1790977837.3391087,
+              "exception_class": null,
+              "expected_bytes": 9988,
+              "fsync_elapsed_seconds": 0.011314,
+              "fsync_end": 1790977840.5157638,
+              "host_role": "ru",
+              "local_sha256": "830b5dec96af01fd5650e9afd15d27661dba1a3191f5943aecbdf41fc8d0fc42",
+              "remote_sha256_result": true,
+              "remote_temp_path_class": "inert_parent/unique_quarantine",
+              "state": "READY",
+              "timeout_stage": null,
+              "transfer_elapsed_seconds": 0.118147,
+              "transfer_end": 1790977840.5044498,
+              "transfer_start": 1790977840.3863025,
+              "validation_elapsed_seconds": 0.023317,
+              "validation_end": 1790977840.5390804
+            },
+            {
+              "artifact_id": "candidate.service",
+              "atomic_promote_result": true,
+              "bytes_transferred": 587,
+              "connect_end": 1790977839.8770516,
+              "connect_start": 1790977837.3391087,
+              "exception_class": null,
+              "expected_bytes": 587,
+              "fsync_elapsed_seconds": 0.015261,
+              "fsync_end": 1790977840.6907442,
+              "host_role": "ru",
+              "local_sha256": "ec82296c8c3919c777d9827998ccd1cd4305b27cf11f47060345d1f8b54f0fda",
+              "remote_sha256_result": true,
+              "remote_temp_path_class": "inert_parent/unique_quarantine",
+              "state": "READY",
+              "timeout_stage": null,
+              "transfer_elapsed_seconds": 0.114557,
+              "transfer_end": 1790977840.675483,
+              "transfer_start": 1790977840.5609264,
+              "validation_elapsed_seconds": 0.02064,
+              "validation_end": 1790977840.7113845
+            },
+            {
+              "artifact_id": "nginx-template.conf",
+              "atomic_promote_result": true,
+              "bytes_transferred": 27401,
+              "connect_end": 1790977839.8770516,
+              "connect_start": 1790977837.3391087,
+              "exception_class": null,
+              "expected_bytes": 27401,
+              "fsync_elapsed_seconds": 0.017012,
+              "fsync_end": 1790977840.9504852,
+              "host_role": "ru",
+              "local_sha256": "8ebbc3c1d804f0ca112c573b8462c5e65e5ca71373c5b83621646a53d39dd8e0",
+              "remote_sha256_result": true,
+              "remote_temp_path_class": "inert_parent/unique_quarantine",
+              "state": "READY",
+              "timeout_stage": null,
+              "transfer_elapsed_seconds": 0.184623,
+              "transfer_end": 1790977840.933473,
+              "transfer_start": 1790977840.7488496,
+              "validation_elapsed_seconds": 0.032131,
+              "validation_end": 1790977840.9826164
+            },
+            {
+              "artifact_id": "http_operator.py",
+              "atomic_promote_result": true,
+              "bytes_transferred": 10868,
+              "connect_end": 1790977839.8770516,
+              "connect_start": 1790977837.3391087,
+              "exception_class": null,
+              "expected_bytes": 10868,
+              "fsync_elapsed_seconds": 0.015846,
+              "fsync_end": 1790977841.1744509,
+              "host_role": "ru",
+              "local_sha256": "23b0271ef94b106a4f7d8b5fa256168b2eb2abb91088d2c6f45011fb69c537e5",
+              "remote_sha256_result": true,
+              "remote_temp_path_class": "inert_parent/unique_quarantine",
+              "state": "READY",
+              "timeout_stage": null,
+              "transfer_elapsed_seconds": 0.15354,
+              "transfer_end": 1790977841.1586044,
+              "transfer_start": 1790977841.0050642,
+              "validation_elapsed_seconds": 0.020059,
+              "validation_end": 1790977841.1945095
+            },
+            {
+              "artifact_id": "candidate-readiness.pyz",
+              "atomic_promote_result": true,
+              "bytes_transferred": 47708,
+              "connect_end": 1790977839.8770516,
+              "connect_start": 1790977837.3391087,
+              "exception_class": null,
+              "expected_bytes": 47708,
+              "fsync_elapsed_seconds": 0.012308,
+              "fsync_end": 1790977841.417872,
+              "host_role": "ru",
+              "local_sha256": "9f914a07dd925c892ea489e0f38b3db488a462544a574d7df7a7c4e54671c64b",
+              "remote_sha256_result": true,
+              "remote_temp_path_class": "inert_parent/unique_quarantine",
+              "state": "READY",
+              "timeout_stage": null,
+              "transfer_elapsed_seconds": 0.191855,
+              "transfer_end": 1790977841.405564,
+              "transfer_start": 1790977841.213709,
+              "validation_elapsed_seconds": 0.024504,
+              "validation_end": 1790977841.4423761
+            },
+            {
+              "artifact_id": "readiness-delivery-check",
+              "atomic_promote_result": true,
+              "bytes_transferred": 7652032,
+              "connect_end": 1790977839.8770516,
+              "connect_start": 1790977837.3391087,
+              "exception_class": null,
+              "expected_bytes": 7652032,
+              "fsync_elapsed_seconds": 0.04995,
+              "fsync_end": 1790977854.565345,
+              "host_role": "ru",
+              "local_sha256": "9178b48e5f81085a0428ed11f2b2c33dd99fc27721680a2647e702bd633bdec6",
+              "remote_sha256_result": true,
+              "remote_temp_path_class": "inert_parent/unique_quarantine",
+              "state": "READY",
+              "timeout_stage": null,
+              "transfer_elapsed_seconds": 13.049075,
+              "transfer_end": 1790977854.5153952,
+              "transfer_start": 1790977841.4663198,
+              "validation_elapsed_seconds": 0.070945,
+              "validation_end": 1790977854.6362903
+            },
+            {
+              "artifact_id": "readiness.lock",
+              "atomic_promote_result": true,
+              "bytes_transferred": 73,
+              "connect_end": 1790977839.8770516,
+              "connect_start": 1790977837.3391087,
+              "exception_class": null,
+              "expected_bytes": 73,
+              "fsync_elapsed_seconds": 0.008743,
+              "fsync_end": 1790977854.7680192,
+              "host_role": "ru",
+              "local_sha256": "d6870c56a9b8c435973aee3a92331fb336b0f596ba3b110c0307a1757a7c5bbe",
+              "remote_sha256_result": true,
+              "remote_temp_path_class": "inert_parent/unique_quarantine",
+              "state": "READY",
+              "timeout_stage": null,
+              "transfer_elapsed_seconds": 0.099472,
+              "transfer_end": 1790977854.7592764,
+              "transfer_start": 1790977854.6598048,
+              "validation_elapsed_seconds": 0.018306,
+              "validation_end": 1790977854.7863257
+            },
+            {
+              "artifact_id": "provenance.json",
+              "atomic_promote_result": true,
+              "bytes_transferred": 23951,
+              "connect_end": 1790977839.8770516,
+              "connect_start": 1790977837.3391087,
+              "exception_class": null,
+              "expected_bytes": 23951,
+              "fsync_elapsed_seconds": 0.023113,
+              "fsync_end": 1790977854.993404,
+              "host_role": "ru",
+              "local_sha256": "b5f0ebcc92b7707408cb15104a5cdabf60ea5c4c66fa425a8b220735784dc2b4",
+              "remote_sha256_result": true,
+              "remote_temp_path_class": "inert_parent/unique_quarantine",
+              "state": "READY",
+              "timeout_stage": null,
+              "transfer_elapsed_seconds": 0.167588,
+              "transfer_end": 1790977854.9702904,
+              "transfer_start": 1790977854.8027022,
+              "validation_elapsed_seconds": 0.029083,
+              "validation_end": 1790977855.0224867
+            }
+          ],
+          "role": "ru",
+          "stage": "complete",
+          "started": 1790977839.9340866,
+          "state": "READY",
+          "timeout_stage": null,
+          "version": 1
+        }
+      },
+      "reinspection": {
+        "state": "READY",
+        "elapsed_seconds": 2.007,
+        "readonly": true
+      },
+      "after": {
+        "items": {
+          "friends_http_transition.py": {
+            "state": "COMPLETE_MATCHING",
+            "bytes": 33584,
+            "sha256": "aeaecbf9ea87a18e879f83fe5798dbdc7e4906f1717cfbd6b3b3adff284d6d39"
+          },
+          "friends_http_acceptance.py": {
+            "state": "COMPLETE_MATCHING",
+            "bytes": 9988,
+            "sha256": "830b5dec96af01fd5650e9afd15d27661dba1a3191f5943aecbdf41fc8d0fc42"
+          },
+          "candidate.service": {
+            "state": "COMPLETE_MATCHING",
+            "bytes": 587,
+            "sha256": "ec82296c8c3919c777d9827998ccd1cd4305b27cf11f47060345d1f8b54f0fda"
+          },
+          "nginx-template.conf": {
+            "state": "COMPLETE_MATCHING",
+            "bytes": 27401,
+            "sha256": "8ebbc3c1d804f0ca112c573b8462c5e65e5ca71373c5b83621646a53d39dd8e0"
+          },
+          "http_operator.py": {
+            "state": "COMPLETE_MATCHING",
+            "bytes": 10868,
+            "sha256": "23b0271ef94b106a4f7d8b5fa256168b2eb2abb91088d2c6f45011fb69c537e5"
+          },
+          "candidate-readiness.pyz": {
+            "state": "COMPLETE_MATCHING",
+            "bytes": 47708,
+            "sha256": "9f914a07dd925c892ea489e0f38b3db488a462544a574d7df7a7c4e54671c64b"
+          },
+          "readiness-delivery-check": {
+            "state": "COMPLETE_MATCHING",
+            "bytes": 7652032,
+            "sha256": "9178b48e5f81085a0428ed11f2b2c33dd99fc27721680a2647e702bd633bdec6"
+          },
+          "readiness.lock": {
+            "state": "COMPLETE_MATCHING",
+            "bytes": 73,
+            "sha256": "d6870c56a9b8c435973aee3a92331fb336b0f596ba3b110c0307a1757a7c5bbe"
+          },
+          "provenance.json": {
+            "state": "COMPLETE_MATCHING",
+            "bytes": 23951,
+            "sha256": "b5f0ebcc92b7707408cb15104a5cdabf60ea5c4c66fa425a8b220735784dc2b4"
+          }
+        },
+        "partial_or_related_names": [
+          "http-operator",
+          ".http-operator.lock",
+          ".http-operator.receipt-9d11a73f3fd84665923762a25c38d672.json"
+        ]
+      },
+      "services_unchanged": true,
+      "service_state_after": {
+        "family-connect-friends-access.service": "ActiveState=active\nSubState=running\nUnitFileState=enabled\nMainPID=1566654\nNRestarts=0\nExecMainStartTimestampMonotonic=2668799957553\n",
+        "family-connect-friends-awg.service": "ActiveState=active\nSubState=running\nUnitFileState=enabled\nMainPID=1515959\nNRestarts=0\nExecMainStartTimestampMonotonic=2157875339292\n",
+        "family-connect-friends-tcp.service": "ActiveState=active\nSubState=running\nUnitFileState=enabled\nMainPID=1908885\nNRestarts=0\nExecMainStartTimestampMonotonic=1994262857345\n",
+        "family-connect-restricted-sync.service": "ActiveState=inactive\nSubState=dead\nUnitFileState=static\nMainPID=0\nNRestarts=0\nExecMainStartTimestampMonotonic=0\n",
+        "family-connect-restricted-sync.timer": "ActiveState=inactive\nSubState=dead\nUnitFileState=disabled\n",
+        "family-connect-friends-http-candidate.service": "ActiveState=inactive\nSubState=dead\nUnitFileState=\nMainPID=0\nNRestarts=0\nExecMainStartTimestampMonotonic=0\n"
+      },
+      "ingress_sha256": "4426bfa9b589fcca124aed99daaaa9dedcf04cbd2c385a322d9fd92ead925267",
+      "budgets": {
+        "friends_http_transition.py": {
+          "bytes": 33584,
+          "transfer_seconds": 5.256,
+          "validation_seconds": 5.008
+        },
+        "friends_http_acceptance.py": {
+          "bytes": 9988,
+          "transfer_seconds": 5.076,
+          "validation_seconds": 5.002
+        },
+        "candidate.service": {
+          "bytes": 587,
+          "transfer_seconds": 5.004,
+          "validation_seconds": 5.0
+        },
+        "nginx-template.conf": {
+          "bytes": 27401,
+          "transfer_seconds": 5.209,
+          "validation_seconds": 5.007
+        },
+        "http_operator.py": {
+          "bytes": 10868,
+          "transfer_seconds": 5.083,
+          "validation_seconds": 5.003
+        },
+        "candidate-readiness.pyz": {
+          "bytes": 47708,
+          "transfer_seconds": 5.364,
+          "validation_seconds": 5.011
+        },
+        "readiness-delivery-check": {
+          "bytes": 7652032,
+          "transfer_seconds": 63.38,
+          "validation_seconds": 6.824
+        },
+        "readiness.lock": {
+          "bytes": 73,
+          "transfer_seconds": 5.001,
+          "validation_seconds": 5.0
+        },
+        "provenance.json": {
+          "bytes": 23951,
+          "transfer_seconds": 5.183,
+          "validation_seconds": 5.006
+        }
+      }
+    },
+    "nl": {
+      "reconstruction": {
+        "file_count": 3,
+        "files": {
+          "native-authority-check": {
+            "bytes": 5674189,
+            "sha256": "a1df5f88a103340a6ba9d67ae8842147afd99d430fba6b30b8ba7b212373ce90"
+          },
+          "native_authority_acceptance.py": {
+            "bytes": 5828,
+            "sha256": "a4408bf29c3c268c469c065e1b9315d04b8a69560dc8ba8caac052c11a82652d"
+          },
+          "provenance.json": {
+            "bytes": 3038,
+            "sha256": "5243972988667dc66e54625835739f5654059cdbf165485b68c5cfa4c1895b00"
+          }
+        },
+        "artifact_bytes": 5683055,
+        "checker_assignment_bytes": 7577775,
+        "timeout": 50,
+        "executable": "/opt/apps/family_connect/friends-access/venv/bin/python",
+        "stdin_source": true,
+        "authority_bundle_included": true,
+        "public_bundle_repr_bytes": 3823,
+        "program_bytes": 7586727,
+        "body_bytes": 4995
+      },
+      "sources": {
+        "native-authority-check": "/home/joker/PycharmProjects/family_connect/state-client-build/prov1-attempt13/native-bundle/native-authority-check",
+        "native_authority_acceptance.py": "/home/joker/PycharmProjects/family_connect/state-client-build/prov1-attempt13/native-bundle/native_authority_acceptance.py",
+        "provenance.json": "/home/joker/PycharmProjects/family_connect/state-client-build/prov1-attempt13/native-bundle/provenance.json"
+      },
+      "before": {
+        "folder_exists": false,
+        "items": {
+          "native-authority-check": {
+            "state": "ABSENT"
+          },
+          "native_authority_acceptance.py": {
+            "state": "ABSENT"
+          },
+          "provenance.json": {
+            "state": "ABSENT"
+          }
+        },
+        "partial_or_related_names": []
+      },
+      "historical_authentication": "UNKNOWN",
+      "historical_remote_start": "UNKNOWN",
+      "historical_transfer_progress": "NOT_RECORDED",
+      "harmless_exact_source_probe": {
+        "bytes": 7577803,
+        "elapsed_seconds": 16.689,
+        "exit": 0,
+        "mutation": false
+      },
+      "live": {
+        "state": "READY",
+        "started_utc": "2026-10-02T21:55:39.011470+00:00",
+        "elapsed_seconds": 14.332,
+        "overall_budget_seconds": 119.713,
+        "connect_seconds": 0.93264,
+        "timeout_stage": null,
+        "exception_class": null,
+        "process_exit": 0,
+        "receiver_sha256": "2a4a319f32e6e6847e4b3316fcf088e9534212c631d9ab35af3da6bd668e11b3",
+        "receipt": {
+          "attempt": "dd135164db8b4cf6af93cde198056cfa",
+          "exception_class": null,
+          "finished": 1790978153.2621849,
+          "inventory": {
+            "items": [
+              {
+                "artifact_id": "native-authority-check",
+                "bytes": 5674189,
+                "mode": 448,
+                "sha256": "a1df5f88a103340a6ba9d67ae8842147afd99d430fba6b30b8ba7b212373ce90"
+              },
+              {
+                "artifact_id": "native_authority_acceptance.py",
+                "bytes": 5828,
+                "mode": 384,
+                "sha256": "a4408bf29c3c268c469c065e1b9315d04b8a69560dc8ba8caac052c11a82652d"
+              },
+              {
+                "artifact_id": "provenance.json",
+                "bytes": 3038,
+                "mode": 384,
+                "sha256": "5243972988667dc66e54625835739f5654059cdbf165485b68c5cfa4c1895b00"
+              }
+            ],
+            "role": "nl",
+            "version": 1
+          },
+          "items": [
+            {
+              "artifact_id": "native-authority-check",
+              "atomic_promote_result": true,
+              "bytes_transferred": 5674189,
+              "connect_end": 1790978139.94411,
+              "connect_start": 1790978139.01147,
+              "exception_class": null,
+              "expected_bytes": 5674189,
+              "fsync_elapsed_seconds": 1.160296,
+              "fsync_end": 1790978152.9940808,
+              "host_role": "nl",
+              "local_sha256": "a1df5f88a103340a6ba9d67ae8842147afd99d430fba6b30b8ba7b212373ce90",
+              "remote_sha256_result": true,
+              "remote_temp_path_class": "inert_parent/unique_quarantine",
+              "state": "READY",
+              "timeout_stage": null,
+              "transfer_elapsed_seconds": 11.85314,
+              "transfer_end": 1790978151.8337848,
+              "transfer_start": 1790978139.980645,
+              "validation_elapsed_seconds": 0.050089,
+              "validation_end": 1790978153.04417
+            },
+            {
+              "artifact_id": "native_authority_acceptance.py",
+              "atomic_promote_result": true,
+              "bytes_transferred": 5828,
+              "connect_end": 1790978139.94411,
+              "connect_start": 1790978139.01147,
+              "exception_class": null,
+              "expected_bytes": 5828,
+              "fsync_elapsed_seconds": 0.001485,
+              "fsync_end": 1790978153.182499,
+              "host_role": "nl",
+              "local_sha256": "a4408bf29c3c268c469c065e1b9315d04b8a69560dc8ba8caac052c11a82652d",
+              "remote_sha256_result": true,
+              "remote_temp_path_class": "inert_parent/unique_quarantine",
+              "state": "READY",
+              "timeout_stage": null,
+              "transfer_elapsed_seconds": 0.116284,
+              "transfer_end": 1790978153.1810136,
+              "transfer_start": 1790978153.0647295,
+              "validation_elapsed_seconds": 0.001692,
+              "validation_end": 1790978153.1841905
+            },
+            {
+              "artifact_id": "provenance.json",
+              "atomic_promote_result": true,
+              "bytes_transferred": 3038,
+              "connect_end": 1790978139.94411,
+              "connect_start": 1790978139.01147,
+              "exception_class": null,
+              "expected_bytes": 3038,
+              "fsync_elapsed_seconds": 0.001469,
+              "fsync_end": 1790978153.2582128,
+              "host_role": "nl",
+              "local_sha256": "5243972988667dc66e54625835739f5654059cdbf165485b68c5cfa4c1895b00",
+              "remote_sha256_result": true,
+              "remote_temp_path_class": "inert_parent/unique_quarantine",
+              "state": "READY",
+              "timeout_stage": null,
+              "transfer_elapsed_seconds": 0.070965,
+              "transfer_end": 1790978153.2567434,
+              "transfer_start": 1790978153.1857789,
+              "validation_elapsed_seconds": 0.001887,
+              "validation_end": 1790978153.2600996
+            }
+          ],
+          "role": "nl",
+          "stage": "complete",
+          "started": 1790978139.9766154,
+          "state": "READY",
+          "timeout_stage": null,
+          "version": 1
+        }
+      },
+      "reinspection": {
+        "state": "READY",
+        "elapsed_seconds": 0.929,
+        "readonly": true
+      },
+      "after": {
+        "items": {
+          "native-authority-check": {
+            "state": "COMPLETE_MATCHING",
+            "bytes": 5674189,
+            "sha256": "a1df5f88a103340a6ba9d67ae8842147afd99d430fba6b30b8ba7b212373ce90"
+          },
+          "native_authority_acceptance.py": {
+            "state": "COMPLETE_MATCHING",
+            "bytes": 5828,
+            "sha256": "a4408bf29c3c268c469c065e1b9315d04b8a69560dc8ba8caac052c11a82652d"
+          },
+          "provenance.json": {
+            "state": "COMPLETE_MATCHING",
+            "bytes": 3038,
+            "sha256": "5243972988667dc66e54625835739f5654059cdbf165485b68c5cfa4c1895b00"
+          }
+        },
+        "partial_or_related_names": [
+          ".native-checker.receipt-dd135164db8b4cf6af93cde198056cfa.json",
+          ".native-checker.lock",
+          "native-checker"
+        ]
+      },
+      "services_unchanged": true,
+      "service_state_after": {
+        "family-connect-friends-access.service": "ActiveState=inactive\nSubState=dead\nUnitFileState=\nMainPID=0\nNRestarts=0\nExecMainStartTimestampMonotonic=0\n",
+        "family-connect-friends-awg.service": "ActiveState=active\nSubState=running\nUnitFileState=enabled\nMainPID=2729703\nNRestarts=0\nExecMainStartTimestampMonotonic=1015819537902\n",
+        "family-connect-friends-tcp.service": "ActiveState=active\nSubState=running\nUnitFileState=enabled\nMainPID=2420425\nNRestarts=0\nExecMainStartTimestampMonotonic=966764281443\n",
+        "family-connect-restricted-bootstrap.service": "ActiveState=inactive\nSubState=dead\nUnitFileState=disabled\nMainPID=0\nNRestarts=0\nExecMainStartTimestampMonotonic=0\n"
+      },
+      "ingress_sha256": null,
+      "budgets": {
+        "native-authority-check": {
+          "bytes": 5674189,
+          "transfer_seconds": 48.291,
+          "validation_seconds": 6.353
+        },
+        "native_authority_acceptance.py": {
+          "bytes": 5828,
+          "transfer_seconds": 5.044,
+          "validation_seconds": 5.001
+        },
+        "provenance.json": {
+          "bytes": 3038,
+          "transfer_seconds": 5.023,
+          "validation_seconds": 5.001
+        }
+      }
+    }
+  }
+}

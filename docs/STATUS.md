@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+## 5N-STAGING-TRANSFER-RELIABILITY — historical localization unresolved, 02.10.2026 UTC
+
+Full requested gate **FAIL** only because attempt16's exact RU/NL timeout layers remain
+unproven: old opaque SSH receipts do not distinguish authentication/reception/remote work.
+No-write exact source-assignment probes completed within45/50s; no causal claim of slow
+network, inadequate timeout or overlapping bulk transfers. New operator-only atomic
+staging commit `5b59461` has19 focused tests PASS; both authorized inert bundles READY:
+RU9 files/7,806,192B/17.858s; NL3 files/5,683,055B/14.332s. Independent remote hash,
+inventory and durable receipt reinspection PASS. Services/PIDs/restarts and RU ingress
+unchanged; restricted inactive, authority/DB/Redmi untouched. Existing artifact pins unchanged.
+Broader60pass/13skip/2preexisting pin failures; task guard/diff check PASS. No push.
+Stage5N stays OPEN. STOP; no full retry/FIELD-1/DIAG-1/OPS-1/beta. Use the new receipt-gated
+staging contract in any separately authorized future retry; do not resend artifacts as
+Python source literals. [Evidence, limitations and runbook](releases/2026-10-02-5n-staging-transfer-reliability.md).
+
 ## 5N-REAL-OWNER-CHALLENGE-503 — BLOCKED, local only, 02.10.2026
 
 Android-generated exact wire reaches the real Python HTTP handler: current synthetic
