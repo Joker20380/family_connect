@@ -2,8 +2,8 @@ plugins { id 'java' }
 repositories { mavenCentral() }
 java { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
 sourceSets {
-    main { java { srcDir '../app/src/main/java'; include '**/Control*.java', '**/TcpProfile.java', '**/ProfileValidator.java', '**/Transport.java', '**/AwgParameters.java'; exclude '**/ControlIdentityVault.java', '**/ControlJournalVault.java', '**/ControlMutationGate.java', '**/ControlTrafficHealth.java', '**/ControlTrust.java', '**/ControlEnrollmentVault.java', '**/ControlEnrollmentAndroid.java', '**/ControlRnsAndroid.java' } }
-    test { java { srcDirs '../app/src/controlTest/java', '../app/src/test/java'; include '**/Control*.java', '**/TcpProfileTest.java' }; resources.srcDir '../../../tests/vectors' }
+    main { java { srcDir '../app/src/main/java'; include '**/Control*.java', '**/TcpProfile.java', '**/ProfileValidator.java', '**/Transport.java', '**/AwgParameters.java', '**/OwnerPrewarmReceipt.java', '**/FriendsReadinessProtocol.java', '**/RestrictedCache.java'; exclude '**/ControlIdentityVault.java', '**/ControlJournalVault.java', '**/ControlMutationGate.java', '**/ControlTrafficHealth.java', '**/ControlTrust.java', '**/ControlEnrollmentVault.java', '**/ControlEnrollmentAndroid.java', '**/ControlRnsAndroid.java' } }
+    test { java { srcDirs '../app/src/controlTest/java', '../app/src/test/java'; include '**/Control*.java', '**/TcpProfileTest.java', '**/OwnerPrewarmReceiptTest.java', '**/FriendsReadinessProtocolTest.java', '**/RestrictedCacheTest.java' }; resources.srcDir '../../../tests/vectors' }
 }
 dependencies {
     implementation 'org.bouncycastle:bcprov-jdk18on:1.85.2'

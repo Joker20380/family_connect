@@ -1,5 +1,19 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+## Current owner-proof handoff contract
+
+[Owner proof handoff](OWNER_PROOF_HANDOFF.md) supersedes the operator-owner-proof
+and retirement requirements in the historical sections below. Current flow:
+isolated controlled F/G plus live candidate B–E/current authority → switch →
+external server A–E → actual Friends product prewarm F/G/import → commit/retire old.
+`SERVER_CANDIDATE_READY` is not `OWNER_PRODUCT_READY`. Keep old18084 through product
+acceptance;18085 remains forbidden and18086 remains the sole candidate policy.
+`Session.matrix` is replaced by `fixture_matrix`/`server_matrix`; `transaction`
+requires an observing `owner_prewarm` callback, never an operator proof callback.
+No owner keys, signing oracle, synthetic production admission or skipped product G.
+On owner failure, persist evidence and restore routing before stopping candidate.
+This local contract grants no deployment or phone-operation authorization.
+
 ## Candidate preflight after #10 — local policy, no deployment authorization
 
 `scripts/friends_http_transition.py` contains the machine-readable `PORT_OWNERS`,

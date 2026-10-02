@@ -73,7 +73,7 @@ def runtime(tmp_path):
     identities = {'canary': dict(public_identity=canary.public_identity, wireguard_public_key=canary.wireguard_public_key),
                   'non_canary': [dict(public_identity=non_canary.public_identity, wireguard_public_key=non_canary.wireguard_public_key)]}
     yield dict(artifact=artifact, state=state, environment=environment, backend=backend, command=command,
-               canary=canary, access=service.access, identities=identities, temporary=tmp_path)
+               canary=canary, access=service.access, restricted=service, identities=identities, temporary=tmp_path)
 
 
 @contextlib.contextmanager

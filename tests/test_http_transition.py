@@ -220,8 +220,7 @@ def test_readiness_first_switch_and_three_paced_complete_matrices(runtime):
             session.generation = 'candidate'
         def accept():
             for iteration in range(3):
-                session.matrix(runtime['identities'], lambda value: runtime['canary'].prove_transport_key(value['challenge']),
-                               lambda value: validate_delivery(runtime, value))
+                session.server_matrix(runtime['identities']['non_canary'])
             return True
         try:
             assert transaction(evidence, prepare=manager.__enter__, ready=ready, switch=switch, accept=accept,
@@ -230,13 +229,13 @@ def test_readiness_first_switch_and_three_paced_complete_matrices(runtime):
                                stop_candidate=lambda: manager.__exit__(None,None,None))
             records = evidence_records(evidence)
             probes = [record for record in records if 'probe_id' in record]
-            assert len(probes) == 25 and all(record['valid'] for record in probes)
+            assert len(probes) == 19 and all(record['valid'] for record in probes)
             assert all(record['status'] not in (429,502) for record in probes)
-            assert sum(record['label']=='restricted_readiness' for record in probes) == 3
+            assert sum(record['label']=='restricted_readiness' for record in probes) == 0
             assert 'limiting requests' not in (ingress.root/'errors.log').read_text()
             logged = [json.loads(line) for line in (ingress.root/'probes.jsonl').read_text().splitlines()]
             assert {record['probe_id'] for record in probes} <= {record['probe_id'] for record in logged}
-            assert all(set(record) == {'probe_id','timestamp','generation','status','upstream_status','upstream_connect_seconds','upstream_header_seconds','request_limit','connection_limit'} for record in logged)
+            assert all(set(record) == {'probe_id','timestamp','generation','product_step','status','upstream_status','upstream_connect_seconds','upstream_header_seconds','request_limit','connection_limit'} for record in logged)
             assert request(old['backend'], '/friends/challenge')[0] == 400
             record_measurement(runtime, 'paced-matrix', dict(pre_switch=[200,400,400,404], complete_matrices=3,
                                probe_count=len(probes), statuses=[record['status'] for record in probes],
@@ -418,7 +417,7 @@ def test_invalid_readiness_body_fails_after_durable_redacted_receipt(tmp_path):
     evidence=Evidence(tmp_path/'evidence','invalid-readiness')
     try:
         with responder(200,payload=b'{"credential":"synthetic-sensitive-value"}') as origin:
-            session=Session(origin,evidence)
+            session=Session(origin,evidence,layer='server_contract_fixture')
             with pytest.raises(ProbeFailed):
                 session.probe('restricted_readiness',{'proof':'never-record-proof'},validate=lambda value:False)
         record,=evidence_records(evidence)
@@ -428,12 +427,12 @@ def test_invalid_readiness_body_fails_after_durable_redacted_receipt(tmp_path):
         evidence.close()
 
 
-def test_matrix_cannot_skip_real_proof_or_readiness_validation(tmp_path):
+def test_fixture_cannot_skip_synthetic_proof_or_readiness_validation(tmp_path):
     evidence=Evidence(tmp_path/'evidence','mandatory-g')
     try:
-        session=Session('http://127.0.0.1:1',evidence)
+        session=Session('http://127.0.0.1:1',evidence,layer='server_contract_fixture')
         for proof,validator in [(None,lambda value:True),(lambda value:{},None)]:
-            with pytest.raises(ValueError):session.matrix({'non_canary':[{}]},proof,validator)
+            with pytest.raises(ValueError):session.fixture_matrix(__file__,{'non_canary':[{}]},proof,validator)
         assert not evidence_records(evidence)
     finally:
         evidence.close()

@@ -8,6 +8,7 @@ final class FriendsRestricted {
     private static final AtomicBoolean running=new AtomicBoolean();
     static volatile String refresh="NOT_ATTEMPTED";
     static volatile boolean denied;
+    private static volatile OwnerPrewarmReceipt observation;
     static RestrictedCache cache(Context context,ControlIdentity identity)throws Exception{
         byte[] publicIdentity=identity.publicIdentity(),anchor=ControlTrust.anchor(context);
         return new RestrictedCache(new RestrictedVault(context),raw->{NativeRestricted.load();return NativeRestricted.validateDelivery(raw,publicIdentity,anchor);});
@@ -20,18 +21,19 @@ final class FriendsRestricted {
                 RestrictedCache cache=cache(context,identity);
                 synchronized(RestrictedVault.LOCK){if(!cache.attempt(System.currentTimeMillis()/1000))return;}
                 refresh="IN_PROGRESS";
+                OwnerPrewarmReceipt receipt=new OwnerPrewarmReceipt();observation=receipt;
                 try {
-                    byte[] response=new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+30000).restrictedReadiness(identity);
-                    try{synchronized(RestrictedVault.LOCK){cache.accept(response);}denied=false;refresh="SUCCESS";}finally{Arrays.fill(response,(byte)0);}
-                }catch(FriendsAccessAndroid.Denied rejection){denied=true;synchronized(RestrictedVault.LOCK){cache.denied();}refresh="AUTHORIZATION_REJECTED";}
-                catch(Exception | LinkageError failure){refresh="UNAVAILABLE";}
+                    byte[] response=new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+30000).restrictedReadiness(identity,receipt);
+                    try{synchronized(RestrictedVault.LOCK){cache.accept(response);}receipt.imported(response);denied=false;refresh="SUCCESS";}finally{Arrays.fill(response,(byte)0);}
+                }catch(FriendsAccessAndroid.Denied rejection){receipt.failed();denied=true;synchronized(RestrictedVault.LOCK){cache.denied();}refresh="AUTHORIZATION_REJECTED";}
+                catch(Exception | LinkageError failure){receipt.failed();refresh="UNAVAILABLE";}
             }catch(Exception | LinkageError failure){refresh="UNAVAILABLE";}
             finally{running.set(false);}
         },"friends-readiness").start();
     }
     static String summary(Context context){
         try(ControlIdentity identity=new FriendsIdentityVault(context).load()){
-            synchronized(RestrictedVault.LOCK){return cache(context,identity).summary()+"\nrefresh: "+refresh;}
+            synchronized(RestrictedVault.LOCK){OwnerPrewarmReceipt receipt=observation;return cache(context,identity).summary()+"\nrefresh: "+refresh+(receipt==null?"":"\nowner_acceptance: "+receipt.summary());}
         }catch(Exception failure){return "NOT READY — identity unavailable";}
     }
 }

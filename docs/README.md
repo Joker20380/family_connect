@@ -144,6 +144,10 @@ installed/deployed versions; dated reports preserve what was checked at that tim
 
 ## Developers
 
+- [5N-OWNER-PROOF-HANDOFF](releases/2026-10-02-5n-owner-proof-handoff.ru.md): local
+  acceptance split; controlled server F/G is not real-owner proof. Real F/G stays
+  inside Friends product prewarm, with old generation retained for rollback.
+
 - [5N.5: bounded TCP mux + Family DNS](releases/2026-09-28-webrtc-eu5-mux-dns.ru.md):
   **PASS**, physical4 simultaneous public HTTPS,304.138s mixed5 TCP+171 DNS,
   exact/fair/bounded, native local destination DNS denied, independent lifecycle.

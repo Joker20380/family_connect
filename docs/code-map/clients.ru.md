@@ -5,6 +5,15 @@
 
 ## Android
 
+5N-OWNER-PROOF-HANDOFF,02.10: normal product prewarm remains in `FriendsRestricted`.
+`FriendsReadinessProtocol` holds the unchanged challenge/sign/fetch sequence for
+JVM testing; `FriendsAccessAndroid` remains its normal HTTPS transport. The
+package-private `OwnerPrewarmReceipt` adds random request correlation IDs and
+allowlisted result/revision/expiry diagnostics, never a signing/export endpoint.
+Native validation plus `RestrictedCache.accept` still precedes import success.
+[Server/product acceptance split](../../deploy/friends/restricted/OWNER_PROOF_HANDOFF.md).
+Source only: no new APK/version/install; physical proof is not supplied by local tests.
+
 Попытка №2,01.10: приватный `0.1.18-canary53-prov1`/53 из `e808f50` полностью
 собран: fresh arm64 JNI,194 JVM tests PASS, lint0errors/36warnings. `.friends`,
 non-debuggable, прежняя beta-подпись; совместимость с установленным field52

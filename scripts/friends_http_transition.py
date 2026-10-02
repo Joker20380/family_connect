@@ -1,7 +1,8 @@
 """Paced, redacted HTTP acceptance and an injected readiness-first transaction.
 
 No production command or credential discovery is performed by this module.
-The caller supplies scoped installation/switch/rollback actions and owner proof.
+The caller supplies scoped actions, isolated fixtures and safe product observations.
+Only the Friends app produces real owner proof; this operator never signs for it.
 """
 from datetime import datetime, timezone
 import base64
@@ -34,6 +35,102 @@ ROUTES['restricted_readiness'] = dict(method='POST', path='/friends/restricted-r
                                     expected=200, owner='friends_application')
 DIRECT_PROBES = tuple(label for label in ROUTES if ROUTES[label]['owner'] == 'friends_application')
 EXTERNAL_PROBES = tuple(ROUTES)
+SERVER_PROBES = ('status', 'ordinary_challenge', 'ordinary_chat', 'restricted_malformed')
+
+
+class ContractFixture:
+    """Result of an isolated synthetic F/G run, never owner admission evidence."""
+    def __init__(self, artifact, origin):
+        self.sha256 = hashlib.sha256(Path(artifact).read_bytes()).hexdigest()
+        self.origin, self.created = origin, time.monotonic()
+        self.passed = False
+
+
+class OwnerProduct:
+    """Correlate app import diagnostics with scoped ingress receipts, not proofs."""
+    def __init__(self, evidence, generation):
+        self.evidence, self.generation = evidence, generation
+        self.opened, self.deadline = time.time(), time.monotonic() + 300
+        self.passed = self.consumed = False
+
+    def observe(self, app, server):
+        if self.consumed:
+            raise ProbeFailed('Product observation already consumed')
+        self.consumed = True
+        record = dict(timestamp=timestamp(), event='owner_product', receipt_class='real_owner_product',
+                      active_generation=self.generation, state='OWNER_PREWARM_FAILED',
+                      reason='invalid_or_missing_observation')
+        try:
+            fields = {'receipt_class', 'challenge_id', 'fetch_id', 'challenge_result', 'fetch_result',
+                      'import_result', 'revision', 'expires_at', 'observed_at'}
+            if type(app) is not dict or set(app) != fields or app['receipt_class'] != 'real_owner_product':
+                return False
+            if any(type(app[key]) is not str or not re.fullmatch('[a-f0-9]{32}', app[key])
+                   for key in ('challenge_id', 'fetch_id')) or app['challenge_id'] == app['fetch_id']:
+                return False
+            categories = {'challenge_result': {'not_attempted', 'issued', 'failed'},
+                          'fetch_result': {'not_attempted', 'authorized', 'failed'},
+                          'import_result': {'not_attempted', 'accepted', 'failed'}}
+            if any(type(app[key]) is not str or app[key] not in allowed for key, allowed in categories.items()):
+                return False
+            if any(type(app[key]) is not int or not 0 <= app[key] <= 2**53-1
+                   for key in ('revision', 'expires_at', 'observed_at')):
+                return False
+            record.update(app)
+            now = time.time()
+            if time.monotonic() > self.deadline or not int(self.opened) <= app['observed_at'] <= int(now):
+                record['reason'] = 'stale_observation'
+                return False
+            if (app['challenge_result'], app['fetch_result'], app['import_result']) != ('issued', 'authorized', 'accepted'):
+                record['reason'] = 'product_prewarm_failed'
+                return False
+            if app['revision'] < 1 or not now < app['expires_at'] <= now + 3600:
+                record['reason'] = 'invalid_readiness_metadata'
+                return False
+            if type(server) is not list or len(server) != 2:
+                return False
+            request_times = []
+            for key in ('challenge_id', 'fetch_id'):
+                matches = [item for item in server if type(item) is dict and item.get('probe_id') == app[key]]
+                if len(matches) != 1:
+                    return False
+                item = matches[0]
+                if (item.get('generation') != self.generation or type(item.get('status')) is not int
+                        or item['status'] != 200 or item.get('upstream_status') != '200'
+                        or item.get('product_step') != ('challenge' if key == 'challenge_id' else 'readiness')
+                        or type(item.get('timestamp')) not in (int, float)
+                        or not self.opened <= item['timestamp'] <= app['observed_at'] + 1):
+                    return False
+                request_times.append(item['timestamp'])
+            if request_times[0] > request_times[1]:
+                return False
+            record.update(state='OWNER_PRODUCT_READY', reason='correlated_product_import')
+            return True
+        finally:
+            self.evidence.persist(record)
+            self.passed = record['state'] == 'OWNER_PRODUCT_READY'
+
+
+def current_authority_check(evidence, python, runtime, sha256, *, database, material,
+                            host, ssh_key, known_hosts):
+    """Read-only accepted sync prerequisite, with no signing or refresh path."""
+    passed = False
+    try:
+        if not re.fullmatch('[a-f0-9]{64}', sha256) or hashlib.sha256(Path(runtime).read_bytes()).hexdigest() != sha256:
+            raise ProbeFailed('Authority runtime pin mismatch')
+        import os
+        environment = dict(os.environ, FC_FRIENDS_RESTRICTED_DIR=str(material), PYTHONDONTWRITEBYTECODE='1')
+        environment.pop('PYTHONPATH', None)
+        environment.pop('PYTHONHOME', None)
+        command = [str(python), '-I', str(Path(runtime).resolve()), 'sync', '--db', str(database),
+                   '--host', host, '--ssh-key', str(ssh_key), '--known-hosts', str(known_hosts), '--check']
+        result = subprocess.run(command, env=environment, cwd='/', capture_output=True, timeout=10)
+        passed = (result.returncode == 0 and result.stdout == b'Restricted runtime pre-network check passed\n'
+                  and not result.stderr and hashlib.sha256(Path(runtime).read_bytes()).hexdigest() == sha256)
+        return passed
+    finally:
+        evidence.persist(dict(timestamp=timestamp(), event='authority_load_check', receipt_class='server_probe',
+                              passed=passed))
 
 
 def listeners(port):
@@ -204,8 +301,12 @@ class Session:
             raise ValueError('HTTPS required outside loopback')
         if interval < 1.0:
             raise ValueError('External acceptance interval must be at least one second')
-        if layer not in ('direct_candidate', 'ingress_external'):
+        if layer not in ('direct_candidate', 'ingress_external', 'server_contract_fixture'):
             raise ValueError('Invalid acceptance layer')
+        if layer == 'server_contract_fixture' and (candidate is not None or self.endpoint.scheme != 'http'
+                or self.endpoint.hostname != '127.0.0.1' or self.endpoint.port in PORT_OWNERS
+                or self.endpoint.port in CANDIDATE_PORTS):
+            raise ValueError('Fixtures require a separate disposable loopback runtime')
         if layer == 'direct_candidate' and (candidate is None or origin != 'http://127.0.0.1:' + str(candidate.port)):
             raise ValueError('Direct probes require the verified loopback candidate')
         if candidate is not None and generation != candidate.generation:
@@ -219,6 +320,8 @@ class Session:
         if label not in ROUTES:
             raise ValueError('Unknown probe')
         route = ROUTES[label]
+        if label in ('restricted_canary', 'restricted_readiness') and self.layer != 'server_contract_fixture':
+            raise ValueError('Real owner F/G belongs to the Friends app, not operator HTTP probes')
         method, path, default = (route[key] for key in ('method', 'path', 'expected'))
         if self.layer == 'direct_candidate' and label not in DIRECT_PROBES:
             raise ValueError('Ingress-owned route is not a candidate readiness probe')
@@ -227,6 +330,7 @@ class Session:
         self.last = self.clock()
         probe_id = secrets.token_hex(16)
         record = dict(timestamp=timestamp(), probe_id=probe_id, label=label,
+                      receipt_class='server_contract_fixture' if self.layer == 'server_contract_fixture' else 'server_probe',
                       layer=self.layer, route_owner=route['owner'],
                       candidate_port=self.candidate.port if self.candidate else None,
                       expected=default if expected is None else expected, status=None,
@@ -296,16 +400,13 @@ class Session:
             raise ProbeFailed('Persisted transition probe failure: ' + label)
         return value
 
-    def matrix(self, identities, prove, validate_readiness):
+    def fixture_matrix(self, artifact, identities, prove, validate_readiness):
+        if self.layer != 'server_contract_fixture':
+            raise ValueError('Synthetic F/G must not run against production state')
         if not callable(prove) or not callable(validate_readiness) or not identities['non_canary']:
-            raise ValueError('Real proof, readiness validator and non-canary required')
-        if self.layer == 'direct_candidate':
-            self.candidate.direct_pass = False
-        elif self.candidate is not None:
-            self.candidate.external_pass = False
-        for label in ('status', 'ordinary_challenge', 'ordinary_chat', 'restricted_malformed'):
-            if self.layer == 'direct_candidate' and label not in DIRECT_PROBES:
-                continue
+            raise ValueError('Synthetic proof, cryptographic validator and non-canary required')
+        result = ContractFixture(artifact, self.endpoint.geturl())
+        for label in SERVER_PROBES[1:]:
             self.probe(label)
         for identity in identities['non_canary']:
             self.probe('restricted_non_canary', identity)
@@ -320,6 +421,39 @@ class Session:
         challenge = self.probe('restricted_canary', identities['canary'], validate=valid_challenge)
         proof = prove(challenge)
         self.probe('restricted_readiness', proof, validate=validate_readiness)
+        if hashlib.sha256(Path(artifact).read_bytes()).hexdigest() != result.sha256:
+            raise ProbeFailed('Fixture artifact changed')
+        self.evidence.persist(dict(timestamp=timestamp(), event='controlled_FG',
+                                   receipt_class='server_contract_fixture', artifact_sha256=result.sha256,
+                                   classification='CONTROLLED SERVER CONTRACT FIXTURE', passed=True))
+        result.passed = True
+        return result
+
+    def server_matrix(self, non_canaries, *, fixture=None, current_authority=None):
+        if self.layer == 'server_contract_fixture' or not non_canaries:
+            raise ValueError('Server matrix requires non-canary challenge inputs')
+        if self.layer == 'direct_candidate':
+            self.candidate.direct_pass = False
+            if (type(fixture) is not ContractFixture or not fixture.passed
+                    or fixture.sha256 != self.candidate.sha256
+                    or not 0 <= time.monotonic() - fixture.created <= 300):
+                raise ProbeFailed('Fresh exact-artifact controlled F/G required')
+            loaded = callable(current_authority) and current_authority() is True
+            self.evidence.persist(dict(timestamp=timestamp(), event='current_authority',
+                                       receipt_class='server_probe', passed=loaded))
+            if not loaded:
+                raise ProbeFailed('Current authority must load before candidate acceptance')
+        elif self.candidate is not None:
+            self.candidate.external_pass = False
+        for label in SERVER_PROBES:
+            if self.layer == 'direct_candidate' and label == 'status':
+                continue
+            self.probe(label)
+        for identity in non_canaries:
+            self.probe('restricted_non_canary', identity)
+        self.evidence.persist(dict(timestamp=timestamp(), event='server_matrix', receipt_class='server_probe',
+                                   state='SERVER_CANDIDATE_READY' if self.layer == 'direct_candidate' else 'SERVER_ACCEPTANCE_PASS',
+                                   owner_product_ready=False))
         if self.layer == 'direct_candidate':
             self.candidate.verify()
             self.candidate.direct_pass = True
@@ -378,7 +512,7 @@ def _transaction(evidence, *, prepare, ready, switch, accept, commit,
 
 
 def transaction(evidence, *, candidate, old_healthy, prepare, ready, render, switch,
-                accept, commit, restore, restored, drain, stop_candidate,
+                accept, owner_prewarm, commit, restore, restored, drain, stop_candidate,
                 old_drained, retire_old):
     def receipt(event, **values):
         evidence.persist(dict(timestamp=timestamp(), event=event, candidate_port=candidate.port,
@@ -405,7 +539,26 @@ def transaction(evidence, *, candidate, old_healthy, prepare, ready, render, swi
         switch()
     def external():
         candidate.external_pass = False
-        return accept() is True and candidate.external_pass
+        if accept() is not True or not candidate.external_pass:
+            return False
+        receipt('server_acceptance_pass', state='SERVER_ACCEPTANCE_PASS', owner_product_ready=False)
+        if old_healthy() is not True:
+            raise ProbeFailed('Old generation must remain available during product prewarm')
+        product = OwnerProduct(evidence, candidate.generation)
+        receipt('owner_prewarm_intent', receipt_class='real_owner_product')
+        try:
+            completed = owner_prewarm(product) is True and product.passed and time.monotonic() <= product.deadline
+        except BaseException:
+            receipt('owner_prewarm_failed', receipt_class='real_owner_product', reason='product_observation_unavailable')
+            raise
+        if not completed:
+            receipt('owner_prewarm_failed', receipt_class='real_owner_product', reason='incomplete_product_observation')
+            raise ProbeFailed('Owner product acceptance incomplete')
+        candidate.verify()
+        if old_healthy() is not True:
+            raise ProbeFailed('Old generation lost before product acceptance commit')
+        receipt('owner_product_ready', receipt_class='real_owner_product', state='OWNER_PRODUCT_READY')
+        return True
     def stop():
         if candidate.process is not None and candidate.process.poll() is None:
             if candidate.start is None or process_start(candidate.process.pid) != candidate.start:

@@ -1,5 +1,36 @@
 # Текущее состояние / Current state
 
+## 5N-OWNER-PROOF-HANDOFF — PASS local, 02.10.2026
+
+The attempt12 operator-proof blocker is resolved by an acceptance-phase split,
+not credential access. Pre-switch: isolated exact-archive synthetic F/G crypto
+fixtures plus live candidate B–E/current authority. Post-switch: external server
+A–E, then **actual Friends product prewarm F/G/native validation/atomic import**.
+`SERVER_CANDIDATE_READY` is not `OWNER_PRODUCT_READY`; commit/old-generation
+retirement requires correlated product acceptance. Owner failure persists safe
+evidence and restores routing before stopping the candidate; old18084 is retained.
+No operator-owned real Device Identity proof, export or signing oracle exists.
+
+Android retains the normal protocol and cache policy; a package-private protocol
+extraction enables JVM tests. Minimal support-safe observation adds per-request
+random IDs, fixed outcome categories and revision/expiry metadata to existing
+readiness diagnostics. No manifest/API signing endpoint, forced refresh, reenrollment
+or cache injection. Fixture receipts and actual-product receipts have distinct
+classes; native delivery validation and backend invalid/revoked/non-canary rejection
+remain intact.197 focused Python tests,38 additional source/acceptance guards and
+149 JVM tests PASS, no skips;112 current Android Java sources compile with SDK35.
+
+Source-only local gate from `a02b82ec70269cd1e5486a26172b7a04d347cb7a`; unchanged
+accepted HTTP/sync archives tested, not redeployed. No authority refresh, service
+operation, live Telemost, Redmi access, APK version/build/install/distribution or
+push. Production remains the last documented attempt12 rollback, **not rechecked**
+here; history2/2/21 is historical state, not a current validity claim. A future
+authorized rollout needs an in-place canary containing the new observation hook;
+previously built canary53 does not contain it. No new FIELD APK.
+[Contract](../deploy/friends/restricted/OWNER_PROOF_HANDOFF.md) and
+[local evidence/limits](releases/2026-10-02-5n-owner-proof-handoff.ru.md).
+STOP: no automatic attempt13, DIAG-1, regional beta or FIELD-1.
+
 ## 5N-NATIVE-AUTHORITY-COMPAT — PASS offline, 02.10.2026
 
 Exact #11 checker/snapshot reproduces exit1 at the historical attempt time. An

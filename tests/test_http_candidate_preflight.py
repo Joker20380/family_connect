@@ -11,7 +11,7 @@ import time
 import pytest
 
 from scripts import friends_http_transition as transition
-from test_friends_http_runtime import nginx_sections, request, running, runtime
+from test_friends_http_runtime import nginx_sections, port, request, running, runtime
 from test_http_transition import Ingress, evidence_records, validate_delivery
 
 
@@ -92,7 +92,7 @@ def callbacks(calls):
             return True
         return invoke
     return {name: action(name) for name in ('old_healthy', 'prepare', 'ready', 'render', 'switch',
-            'accept', 'commit', 'restore', 'restored', 'drain', 'stop_candidate', 'old_drained', 'retire_old')}
+            'accept', 'owner_prewarm', 'commit', 'restore', 'restored', 'drain', 'stop_candidate', 'old_drained', 'retire_old')}
 
 
 def launch(candidate, runtime):
@@ -247,7 +247,7 @@ def test_source_unit_route_and_immutable_archive_guards(candidate):
     assert 'systemctl' not in source and "['ssh'" not in source and 'SO_REUSEPORT' not in source
 
 
-@pytest.mark.parametrize('failure', [None, 'accept', 'restore', 'render', 'incomplete_external', 'old_drain'])
+@pytest.mark.parametrize('failure', [None, 'accept', 'restore', 'render', 'incomplete_external', 'owner', 'incomplete_owner', 'old_drain'])
 def test_verified_blue_green_direct_and_external_contracts(candidate, runtime, evidence, failure):
     old = dict(runtime, environment={key: value for key, value in runtime['environment'].items()
                                     if key != 'FC_FRIENDS_RESTRICTED_DIR'})
@@ -256,9 +256,7 @@ def test_verified_blue_green_direct_and_external_contracts(candidate, runtime, e
     with running(old), Ingress(runtime, old['backend'], enabled=False, generation='old') as ingress:
         external = transition.Session(ingress.origin, evidence, generation='old')
         def old_healthy():
-            for label in ('status', 'ordinary_challenge', 'ordinary_chat'):
-                external.probe(label)
-            return True
+            return all(request(old['backend'],path)[0]==400 for path in ('/friends/challenge','/friends/chat/challenge'))
         def prepare():
             calls.append('prepare')
             process = launch(candidate, runtime)
@@ -266,10 +264,16 @@ def test_verified_blue_green_direct_and_external_contracts(candidate, runtime, e
             return process
         def ready():
             calls.append('ready')
+            fixture_runtime=dict(runtime,backend=port())
+            fixture_runtime['command']=runtime['command'][:-1]+[str(fixture_runtime['backend'])]
+            with running(fixture_runtime):
+                fixture=transition.Session('http://127.0.0.1:'+str(fixture_runtime['backend']),evidence,layer='server_contract_fixture')
+                contract=fixture.fixture_matrix(candidate.artifact,runtime['identities'],
+                    lambda value:runtime['canary'].prove_transport_key(value['challenge']),lambda value:validate_delivery(runtime,value))
             direct = transition.Session('http://127.0.0.1:' + str(candidate.port), evidence,
                                         layer='direct_candidate', candidate=candidate, generation=candidate.generation)
-            direct.matrix(runtime['identities'], lambda value: runtime['canary'].prove_transport_key(value['challenge']),
-                          lambda value: validate_delivery(runtime, value))
+            direct.server_matrix(runtime['identities']['non_canary'],fixture=contract,
+                                 current_authority=lambda:bool(runtime['restricted']._trust(int(time.time()))))
             return True
         def render(upstream):
             calls.append('render')
@@ -295,9 +299,16 @@ def test_verified_blue_green_direct_and_external_contracts(candidate, runtime, e
                 return True
             if failure in ('accept', 'restore'):
                 return False
-            external.matrix(runtime['identities'], lambda value: runtime['canary'].prove_transport_key(value['challenge']),
-                            lambda value: validate_delivery(runtime, value))
+            external.server_matrix(runtime['identities']['non_canary'])
             return True
+        def owner_prewarm(product):
+            calls.append('owner_prewarm')
+            assert processes[0].poll() is None and request(old['backend'],'/friends/challenge')[0]==400
+            if failure=='incomplete_owner':return True
+            from test_owner_proof_handoff import product_observation
+            app,server=product_observation(product)
+            if failure=='owner':app['import_result']='failed'
+            return product.observe(app,server)
         def restore():
             calls.append('restore')
             assert any(record.get('event') == 'failure' for record in evidence_records(evidence))
@@ -305,6 +316,8 @@ def test_verified_blue_green_direct_and_external_contracts(candidate, runtime, e
             external.generation, external.candidate = 'old', None
         def restored():
             calls.append('restored')
+            for label in ('status','ordinary_challenge','ordinary_chat'):
+                external.probe(label)
             return False if failure == 'restore' else old_healthy()
         def stop_candidate(process):
             calls.append('stop_candidate')
@@ -317,7 +330,7 @@ def test_verified_blue_green_direct_and_external_contracts(candidate, runtime, e
             return invoke
         try:
             arguments = dict(candidate=candidate, old_healthy=old_healthy, prepare=prepare, ready=ready,
-                             render=render, switch=switch, accept=accept, commit=action('commit'), restore=restore,
+                             render=render, switch=switch, accept=accept, owner_prewarm=owner_prewarm, commit=action('commit'), restore=restore,
                              restored=restored, drain=action('drain'), stop_candidate=stop_candidate,
                              old_drained=action('old_drained'), retire_old=action('retire_old'))
             if failure:
@@ -326,25 +339,29 @@ def test_verified_blue_green_direct_and_external_contracts(candidate, runtime, e
                 assert 'retire_old' not in calls
                 if failure == 'restore':
                     assert 'stop_candidate' not in calls and processes[0].poll() is None
-                elif failure in ('accept', 'incomplete_external'):
+                elif failure in ('accept', 'incomplete_external', 'owner', 'incomplete_owner'):
                     assert calls[-4:] == ['restore', 'restored', 'drain', 'stop_candidate']
+                    if failure in ('owner','incomplete_owner'):
+                        assert 'commit' not in calls
+                        assert any(record.get('event')=='owner_prewarm_failed' and record.get('receipt_class')=='real_owner_product'
+                                   for record in evidence_records(evidence))
                 elif failure == 'old_drain':
                     assert 'commit' in calls and 'restore' not in calls and processes[0].poll() is None
                 else:
                     assert 'switch' not in calls
             else:
                 assert transition.transaction(evidence, **arguments)
-                assert calls == ['prepare', 'ready', 'render', 'switch', 'accept', 'commit', 'old_drained', 'retire_old']
+                assert calls == ['prepare', 'ready', 'render', 'switch', 'accept', 'owner_prewarm', 'commit', 'old_drained', 'retire_old']
             assert request(old['backend'], '/friends/challenge')[0] == 400
             records = [record for record in evidence_records(evidence) if 'probe_id' in record]
             direct = [record for record in records if record['layer'] == 'direct_candidate']
-            assert len(direct) == 6 and all(record['route_owner'] == 'friends_application' for record in direct)
+            assert len(direct) == 4 and all(record['route_owner'] == 'friends_application' for record in direct)
             assert all(record['candidate_port'] == 18086 and record['active_generation'] == 'candidate' for record in direct)
             assert all(record['rate_limit_class'] == 'not_applicable' and record['response_origin'] == 'direct_application' for record in direct)
             assert all(record['valid'] for record in records)
             if failure in (None, 'old_drain'):
                 switched = [record for record in records if record['layer'] == 'ingress_external' and record['active_generation'] == 'candidate']
-                assert [record['status'] for record in switched] == [200, 400, 400, 400, 403, 200, 200]
+                assert [record['status'] for record in switched] == [200, 400, 400, 400, 403]
                 assert switched[0]['route_owner'] == 'nginx_static' and switched[0]['response_origin'] == 'ingress'
                 assert all(record['response_origin'] == 'upstream' for record in switched[1:])
             assert not any(secret in json.dumps(records) for secret in ('private_key', 'public_identity', 'chat_signature'))

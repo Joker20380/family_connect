@@ -2,6 +2,27 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-OWNER-PROOF-HANDOFF = PASS locally.** The attempt12 acceptance boundary is
+corrected: controlled isolated F/G plus live B–E/authority before switch; external
+server A–E after switch; real F/G belongs exclusively to the Friends app during
+product prewarm. No real-owner proof callback in operator HTTP paths. Old18084
+remains available through product acceptance; only then commit/drain/retire.
+Missing/failed product observations trigger safe rollback, not a credential export.
+197 Python+38 source/acceptance guards and149 JVM tests PASS without skips;
+112 Android Java sources compile. No production/device operation.
+
+For a **separately authorized** rollout, stage the new standalone harness/trace
+contract, prepare a verified same-signature canary with safe observation hooks,
+recheck current authority and artifact provenance, then execute every server and
+physical gate. Install/prewarm only at the post-switch product phase; keep normal
+cache/cooldown/activation policy. Never count controlled F/G as physical owner proof.
+The previously built canary53 lacks this hook and is not implicitly upgraded.
+No app version/public distribution changed. See
+[accepted contract](../deploy/friends/restricted/OWNER_PROOF_HANDOFF.md) and
+[local gate report](releases/2026-10-02-5n-owner-proof-handoff.ru.md).
+STOP after task-owned commit; no push or automatic attempt13/DIAG-1/beta/FIELD-1.
+Entries below describe earlier checkpoints, including the now-resolved proof blocker.
+
 **5N-NATIVE-AUTHORITY-COMPAT = PASS offline.** Exact #11 binary/material replay
 proves the failed predicate: negative floor1+1 equals signed owner revision2,
 so native admission succeeds and the old operator reports failure. Native runtime
