@@ -347,8 +347,10 @@ def test_gateway_sync_only_exports_directory_preserves_key_and_rejects_rollback(
 
 
 def test_public_crl_response_cannot_include_trailing_material(setup):
+    from control.friends.restricted import ChallengeUnavailable
     service, device, _ = setup
     original = service.crl_source()
     service.crl_source = lambda: original + b'non-public trailing material'
-    with pytest.raises(ValueError):
+    with pytest.raises(ChallengeUnavailable) as failure:
         proof(service, device)
+    assert (failure.value.stage, failure.value.reason) == ('authority', 'AUTHORITY_UNAVAILABLE')

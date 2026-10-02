@@ -1,0 +1,1 @@
+{"method":"POST","path":"/friends/restricted-readiness/challenge","headers":{"Content-Type":"application/json","X-FC-Probe-ID":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},"body":"{\"public_identity\":\"L+V9o0fNYkMVKNqsX7spBzD/9oSvxM/C7ZCZX1jLO3Q7aie8zrakLWKjqNAqbw1zZTIVdx3iQ6Y6wEihi1naKQ==\",\"wireguard_public_key\":\"L+V9o0fNYkMVKNqsX7spBzD/9oSvxM/C7ZCZX1jLO3Q=\"}"}

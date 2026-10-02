@@ -38,6 +38,10 @@ final class FriendsRestricted {
                         if(result.code()==ReadinessImportResult.Code.READY){receipt.imported(response);denied=false;refresh="SUCCESS";}
                         else{receipt.failed();refresh=result.code().name();}
                     }finally{Arrays.fill(response,(byte)0);}
+                }catch(FriendsReadinessProtocol.ChallengeFailure failure){receipt.failed();ReadinessImportResult.Code code=ReadinessImportResult.Code.FETCH_FAILED;
+                    if(failure.code==FriendsReadinessProtocol.ChallengeCode.CHALLENGE_UNAUTHORIZED){denied=true;code=ReadinessImportResult.Code.AUTHORIZATION_REJECTED;
+                        try{synchronized(RestrictedVault.LOCK){cache.denied();}}catch(Exception storage){code=ReadinessImportResult.Code.PERSISTENCE_FAILED;}}
+                    result=product.failed(receipt,code,System.currentTimeMillis()/1000);refresh=failure.code.name();
                 }catch(FriendsAccessAndroid.Denied rejection){receipt.failed();denied=true;ReadinessImportResult.Code code=ReadinessImportResult.Code.AUTHORIZATION_REJECTED;
                     try{synchronized(RestrictedVault.LOCK){cache.denied();}}catch(Exception failure){code=ReadinessImportResult.Code.PERSISTENCE_FAILED;}
                     result=product.failed(receipt,code,System.currentTimeMillis()/1000);refresh="AUTHORIZATION_REJECTED";

@@ -4,10 +4,12 @@ from datetime import datetime, timezone
 from decimal import Decimal
 import hashlib
 import json
+import logging
 import re
 import secrets
 import os
 import stat
+import sqlite3
 import time
 from pathlib import Path
 
@@ -25,6 +27,21 @@ from . import readiness_receipts
 DOMAIN = b'family-connect/restricted-issuer/v1\0'
 PROTOCOL = 'family-connect-5n3-test-v1'
 MAX_RESPONSE = 65536
+
+
+class ChallengeUnavailable(RuntimeError):
+    def __init__(self, stage, reason):
+        super().__init__('restricted readiness unavailable')
+        self.stage, self.reason = stage, reason
+
+
+def challenge_failure(stage, error):
+    reason = {'authority': 'AUTHORITY_UNAVAILABLE', 'device_lookup': 'DEVICE_MAPPING_UNAVAILABLE',
+              'challenge_store': 'CHALLENGE_STORE_FAILURE', 'correlation_store': 'CORRELATION_STORE_FAILURE',
+              'commit': 'CHALLENGE_STORE_FAILURE'}.get(stage, 'INTERNAL_ERROR')
+    if stage == 'correlation_store' and isinstance(error, sqlite3.OperationalError) and str(error) == 'no such table: restricted_readiness_results':
+        reason = 'CORRELATION_SCHEMA_UNAVAILABLE'
+    return ChallengeUnavailable(stage, reason)
 
 
 def bounded_file(path, limit, private=False):
@@ -59,7 +76,12 @@ def request(access, action, value, request_id=None):
         key(value['public_identity'], 64)
         key(value['wireguard_public_key'], 32)
     try:
-        service = from_env(access)
+        try:
+            service = from_env(access)
+        except Exception as error:
+            if action == 'challenge':
+                raise challenge_failure('authority', error) from None
+            raise
         if action == 'ack-challenge':
             return readiness_receipts.ack_challenge(service, value)
         if action == 'ack':
@@ -69,6 +91,9 @@ def request(access, action, value, request_id=None):
         require(action == 'fetch')
         return service.fetch(value, request_id=request_id)
     except Rejected:
+        raise
+    except ChallengeUnavailable as error:
+        logging.getLogger(__name__).warning('restricted_challenge stage=%s reason=%s', error.stage, error.reason)
         raise
     except Exception:
         raise RuntimeError('restricted readiness unavailable') from None
@@ -243,27 +268,41 @@ class RestrictedReadiness:
         return row
 
     def challenge(self, public_identity, wireguard_public_key, request_id=None):
-        device = self.access.binding(public_identity, wireguard_public_key)
-        now = int(self.access.clock())
-        trust, _, _, _, _ = self._trust(now)
-        with self.access.db() as database:
-            self._enroll(database, device, public_identity, wireguard_public_key, trust, now)
-            row = self._grant(database, device, now)
-            if row['family'] != trust['family'] or row['revision'] < trust['minimum_revision'] or row['public'] != public_identity or row['wg'] != wireguard_public_key:
-                raise Rejected()
-            database.execute('DELETE FROM restricted_challenges WHERE expires<=?', (now,))
-            database.execute('DELETE FROM challenges WHERE expires<=?', (now,))
-            if database.execute('SELECT COUNT(*) FROM challenges WHERE device=? AND used=0', (device,)).fetchone()[0] >= 8:
-                raise RuntimeError('restricted readiness busy')
-            nonce = base64.b64encode(secrets.token_bytes(32)).decode()
-            digest = hashlib.sha256(nonce.encode()).hexdigest()
-            expiry = min(now + CHALLENGE_TTL, row['expires'] if row['expires'] is not None else trust['expires_at'], trust['expires_at'])
-            database.execute('INSERT INTO challenges VALUES (?,?,?,?,?,?,?,0)',
-                             (digest, device, public_identity, wireguard_public_key, 'restricted', None, expiry))
-            database.execute('INSERT INTO restricted_challenges VALUES (?,?,?,?)',
-                             (digest, row['revision'], row['family'], expiry))
-            if request_id is not None:
-                readiness_receipts.challenge(database, request_id, digest, device, now)
+        stage = 'binding'
+        try:
+            device = self.access.binding(public_identity, wireguard_public_key)
+            stage = 'clock'
+            now = int(self.access.clock())
+            stage = 'authority'
+            trust, _, _, _, _ = self._trust(now)
+            stage = 'device_lookup'
+            with self.access.db() as database:
+                self._enroll(database, device, public_identity, wireguard_public_key, trust, now)
+                row = self._grant(database, device, now)
+                if row['family'] != trust['family'] or row['revision'] < trust['minimum_revision'] or row['public'] != public_identity or row['wg'] != wireguard_public_key:
+                    raise Rejected()
+                stage = 'challenge_store'
+                database.execute('DELETE FROM restricted_challenges WHERE expires<=?', (now,))
+                database.execute('DELETE FROM challenges WHERE expires<=?', (now,))
+                if database.execute('SELECT COUNT(*) FROM challenges WHERE device=? AND used=0', (device,)).fetchone()[0] >= 8:
+                    raise ChallengeUnavailable(stage, 'CHALLENGE_CAPACITY_EXHAUSTED')
+                stage = 'nonce'
+                nonce = base64.b64encode(secrets.token_bytes(32)).decode()
+                digest = hashlib.sha256(nonce.encode()).hexdigest()
+                expiry = min(now + CHALLENGE_TTL, row['expires'] if row['expires'] is not None else trust['expires_at'], trust['expires_at'])
+                stage = 'challenge_store'
+                database.execute('INSERT INTO challenges VALUES (?,?,?,?,?,?,?,0)',
+                                 (digest, device, public_identity, wireguard_public_key, 'restricted', None, expiry))
+                database.execute('INSERT INTO restricted_challenges VALUES (?,?,?,?)',
+                                 (digest, row['revision'], row['family'], expiry))
+                if request_id is not None:
+                    stage = 'correlation_store'
+                    readiness_receipts.challenge(database, request_id, digest, device, now)
+                stage = 'commit'
+        except (Rejected, ChallengeUnavailable):
+            raise
+        except Exception as error:
+            raise challenge_failure(stage, error) from None
         return dict(challenge=nonce, expires_at=expiry, audience='family-connect/enrollment/v1')
 
     def fetch(self, proof, request_id=None):

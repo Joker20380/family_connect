@@ -25,7 +25,8 @@ final class FriendsAccessAndroid {
     void cancel(){cancelled=true;HttpsURLConnection connection=pending;if(connection!=null)connection.disconnect();}
     private int remaining(int maximum)throws IOException{
         long remaining=deadline-android.os.SystemClock.elapsedRealtime();
-        if(cancelled||remaining<=0)throw new IOException("Cancelled or expired");
+        if(cancelled)throw new IOException("Cancelled");
+        if(remaining<=0)throw new java.net.SocketTimeoutException("Expired");
         return (int)Math.min(maximum,remaining);
     }
     private boolean present(String name,String alias)throws Exception{
@@ -47,13 +48,17 @@ final class FriendsAccessAndroid {
         pending=connection;
         try{
             connection.setConnectTimeout(remaining(5000));connection.setReadTimeout(remaining(15000));connection.setInstanceFollowRedirects(false);connection.setUseCaches(false);connection.setRequestMethod("POST");connection.setDoOutput(true);connection.setRequestProperty("Content-Type","application/json");
-            if(requestId!=null){require(requestId.matches("[a-f0-9]{32}"));connection.setRequestProperty("X-FC-Probe-ID",requestId);}
-            byte[] raw=body.toString().getBytes(StandardCharsets.UTF_8);require(raw.length<=((path.equals("/friends/notices/device/publish")||path.equals("/friends/notices/device/edit"))?32768:8192));connection.setFixedLengthStreamingMode(raw.length);
+            for(Map.Entry<String,String> header:FriendsReadinessProtocol.wireHeaders(requestId).entrySet())connection.setRequestProperty(header.getKey(),header.getValue());
+            byte[] raw=FriendsReadinessProtocol.wireBytes(body);require(raw.length<=((path.equals("/friends/notices/device/publish")||path.equals("/friends/notices/device/edit"))?32768:8192));connection.setFixedLengthStreamingMode(raw.length);
             try(OutputStream out=connection.getOutputStream()){out.write(raw);}finally{Arrays.fill(raw,(byte)0);}
-            connection.setReadTimeout(remaining(15000));int status=connection.getResponseCode();if(status==409)throw new Conflict();if((status==400&&!path.startsWith("/friends/restricted-readiness"))||status==401||status==403)throw new Denied();if(status!=200)throw new IOException("Test access unavailable");
+            connection.setReadTimeout(remaining(15000));int status=connection.getResponseCode();if(path.equals("/friends/restricted-readiness/challenge"))FriendsReadinessProtocol.challengeStatus(status);if(status==409)throw new Conflict();if((status==400&&!path.startsWith("/friends/restricted-readiness"))||status==401||status==403)throw new Denied();if(status!=200)throw new IOException("Test access unavailable");
             ByteArrayOutputStream bytes=new ByteArrayOutputStream();long deadline=System.nanoTime()+20_000_000_000L;
-            try(InputStream input=connection.getInputStream()){byte[] buffer=new byte[1024];while(true){connection.setReadTimeout(remaining(15000));int count=input.read(buffer);if(count==-1)break;if(bytes.size()+count>(path.equals("/friends/notices/device/list")?1048576:path.equals("/friends/restricted-readiness")?65536:16384)||System.nanoTime()>deadline||Thread.currentThread().isInterrupted())throw new IOException();bytes.write(buffer,0,count);}}
-            return parse(bytes.toByteArray()).getAsJsonObject();
+            try(InputStream input=connection.getInputStream()){byte[] buffer=new byte[1024];while(true){connection.setReadTimeout(remaining(15000));int count=input.read(buffer);if(count==-1)break;
+                if(bytes.size()+count>(path.equals("/friends/notices/device/list")?1048576:path.equals("/friends/restricted-readiness")?65536:16384)){
+                    if(path.equals("/friends/restricted-readiness/challenge"))throw new FriendsReadinessProtocol.ChallengeFailure(FriendsReadinessProtocol.ChallengeCode.CHALLENGE_INCOMPATIBLE_RESPONSE);throw new IOException();}
+                if(System.nanoTime()>deadline)throw new java.net.SocketTimeoutException();if(Thread.currentThread().isInterrupted())throw new IOException();bytes.write(buffer,0,count);}}
+            try{return parse(bytes.toByteArray()).getAsJsonObject();}
+            catch(Exception failure){if(path.equals("/friends/restricted-readiness/challenge"))throw new FriendsReadinessProtocol.ChallengeFailure(FriendsReadinessProtocol.ChallengeCode.CHALLENGE_INCOMPATIBLE_RESPONSE);throw failure;}
         }finally{connection.disconnect();pending=null;}
     }
     private JsonObject proof(ControlIdentity identity,String purpose,String invitation)throws Exception{

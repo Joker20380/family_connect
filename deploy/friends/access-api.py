@@ -1,5 +1,5 @@
 """Loopback invite/identity API. Public access only through the existing TLS ingress."""
-import json,subprocess,threading,sys
+import json,logging,subprocess,threading,sys
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from pathlib import Path
 ROOT=Path('/opt/apps/family_connect/friends-access')
@@ -25,11 +25,14 @@ class Handler(BaseHTTPRequestHandler):
   self.connection.settimeout(5)
   if self.path not in ('/friends/challenge','/friends/activate','/friends/restricted-readiness','/friends/restricted-readiness/challenge','/friends/restricted-readiness/ack-challenge','/friends/restricted-readiness/ack','/friends/configuration/ru','/friends/configuration/nl','/friends/chat/challenge','/friends/chat/register','/friends/referral/issue','/friends/referral/claim','/friends/device/status','/friends/notices/publish','/friends/notices/device/role','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit'):self.reply(404,{'error':'not-found'});return
   if not slots.acquire(blocking=False):self.reply(429,{'error':'busy'});return
+  phase='http_parse'
   try:
    size=int(self.headers.get('Content-Length','0'));assert 0<size<=(32768 if self.path in ('/friends/notices/publish','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit') else 8192) and self.headers.get('Content-Type','').split(';')[0]=='application/json'
    value=json.loads(self.rfile.read(size),object_pairs_hook=unique)
    if self.path.startswith('/friends/restricted-readiness'):
+    phase='handler_import'
     from control.friends.restricted import request
+    phase='dispatch'
     action='fetch' if self.path=='/friends/restricted-readiness' else self.path.rsplit('/',1)[1]
     result=request(access,action,value,request_id=self.headers.get('X-FC-Probe-ID'))
    elif self.path.startswith('/friends/notices/device/'):
@@ -76,7 +79,10 @@ class Handler(BaseHTTPRequestHandler):
   except RateLimited:self.reply(429,{'error':'referral-rate-limited'})
   except Rejected:self.reply(403,{'error':'access-rejected'})
   except (ValueError,AssertionError,KeyError,TypeError):self.reply(400,{'error':'invalid-request'})
-  except Exception:self.reply(503,{'error':'unavailable'})
+  except Exception as error:
+   if self.path=='/friends/restricted-readiness/challenge' and type(error).__name__!='ChallengeUnavailable':
+    logging.getLogger(__name__).warning('restricted_challenge stage=%s reason=%s',phase,'INTERNAL_DEPENDENCY_FAILURE' if phase=='handler_import' else 'INTERNAL_ERROR')
+   self.reply(503,{'error':'unavailable'})
   finally:slots.release()
 def main():
  import argparse

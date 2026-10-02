@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+## 5N-REAL-OWNER-CHALLENGE-503 — BLOCKED, local only, 02.10.2026
+
+Android-generated exact wire reaches the real Python HTTP handler: current synthetic
+schema200; missing receipt table503 (`correlation_store/CORRELATION_SCHEMA_UNAVAILABLE`);
+existing explicit migration restores200. This does NOT establish attempt15's cause:
+retained local evidence lacks its backend reason/schema snapshot. No wire mismatch or
+circular ACK dependency found. Safe server/client classification and permanent JVM↔Python
+golden regression added; no speculative authorization/schema behavior fix. Clean-source
+artifact/test results are tracked in the [task report](releases/2026-10-02-5n-real-owner-challenge-503.md).
+No production/device access, authority refresh, deployment, ingress change or push.
+Installed55/public51 remain last documented, not reverified. PROV-1 remains stopped;
+FIELD-1/DIAG-1/OPS-1/beta are not started. Need retained sanitized failure-time evidence,
+not another production attempt, before claiming a proven cause/fix or PASS.
+
 ## 5N-READINESS-ACK-ARTIFACT-REFRESH — PASS local, 02.10.2026
 
 Clean exact source `a24f090d7468dce6183122616117a4e1edaadd3f`; all three old server

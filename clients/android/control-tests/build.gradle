@@ -3,7 +3,7 @@ repositories { mavenCentral() }
 java { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
 sourceSets {
     main { java { srcDir '../app/src/main/java'; include '**/Control*.java', '**/TcpProfile.java', '**/ProfileValidator.java', '**/Transport.java', '**/AwgParameters.java', '**/OwnerPrewarmReceipt.java', '**/FriendsReadinessProtocol.java', '**/RestrictedCache.java', '**/ReadinessImportResult.java', '**/ReadinessProduct.java'; exclude '**/ControlIdentityVault.java', '**/ControlJournalVault.java', '**/ControlMutationGate.java', '**/ControlTrafficHealth.java', '**/ControlTrust.java', '**/ControlEnrollmentVault.java', '**/ControlEnrollmentAndroid.java', '**/ControlRnsAndroid.java' } }
-    test { java { srcDirs '../app/src/controlTest/java', '../app/src/test/java'; include '**/Control*.java', '**/TcpProfileTest.java', '**/OwnerPrewarmReceiptTest.java', '**/FriendsReadinessProtocolTest.java', '**/RestrictedCacheTest.java', '**/ReadinessProductTest.java' }; resources.srcDir '../../../tests/vectors' }
+    test { java { srcDirs '../app/src/controlTest/java', '../app/src/test/java'; include '**/Control*.java', '**/TcpProfileTest.java', '**/OwnerPrewarmReceiptTest.java', '**/FriendsReadinessProtocolTest.java', '**/FriendsReadinessGoldenTest.java', '**/RestrictedCacheTest.java', '**/ReadinessProductTest.java' }; resources.srcDir '../../../tests/vectors' }
 }
 dependencies {
     implementation 'org.bouncycastle:bcprov-jdk18on:1.85.2'
@@ -11,3 +11,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
 }
 test { testLogging { events 'passed', 'failed'; showStandardStreams = true } }
+tasks.register('goldenClasspath') {
+    dependsOn testClasses
+    doLast { file("$buildDir/golden-classpath.txt").text = sourceSets.test.runtimeClasspath.asPath }
+}
