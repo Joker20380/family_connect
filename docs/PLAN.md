@@ -8,6 +8,10 @@ schema deterministically yields503 at correlation_store/CORRELATION_SCHEMA_UNAVA
 then200 after existing explicit migration. Production attribution remains unknown;
 do not infer it from this reproduction. No wire mismatch or circular ACK dependency.
 Safe reason codes/golden regression added; [tests, builds and evidence limits](releases/2026-10-02-5n-real-owner-challenge-503.md).
+Three local server artifacts rebuilt/pinned from `ad17db7`; unsigned code56 APK built
+from `a10a9c4`, SHA256 `5ca1d29101df529cce197e5eeb82f231b50e3f4fc76c8835ba12fdad0c2122b0`.
+App218/control163 JVM, assemble/lint and171 artifact/native tests PASS; existing whole-index guard finding remains.
+These are diagnostic candidates only, not accepted production replacements.
 Next: obtain already retained sanitized attempt15 backend/schema evidence and fix only
 the proven cause. No production access/refresh/retry/service/ingress/push authorization
 is implied. Prior rollout remains rolled back, installed55/public51 unchanged/unverified.

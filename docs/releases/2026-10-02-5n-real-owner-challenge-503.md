@@ -133,10 +133,63 @@ invent revocation or new READY. Native validation/import remains required for RE
 
 ## Validation, artifacts and next boundary
 
-Build/test results and exact inventories will be recorded after clean-source builds.
-All three server bundles include `restricted.py` and therefore require rebuilding;
-HTTP also includes the classified catch. Android source changed, requiring a new local
-APK, never replacement of immutable canary55. No source-pin exception is permitted.
+Server implementation/build source: `ad17db7faf7407296dd48748045a202664860ed7`.
+Android build source: `a10a9c4e4f237d2b7a6df1a9ac4ed4fc8aee26b0` (only subsequent
+change is a test-only Files.writeString→Files.write compatibility correction).
+Every tracked file in each export matches its committed bytes; per-source and per-bundle
+inventories were verified. No source-pin exception. All three server bundles contain
+the changed restricted module, so all three were rebuilt with the existing builders.
+Android native AWG/restricted JNI were freshly built and verified against packaged bytes.
+
+| New local artifact | SHA256 |
+| --- | --- |
+| friends-http.pyz | `ad71cadba79a8fbbe4e60d8d2a1c581304e263a30fdf71fd69b002001d01dd63` |
+| candidate-readiness.pyz | `9f914a07dd925c892ea489e0f38b3db488a462544a574d7df7a7c4e54671c64b` |
+| restricted-sync.pyz | `f6aa8859ab716383bf207b2ff7b302687692832b2ccb410f1aef0ada0793a9c9` |
+| Android unsigned canary56 | `5ca1d29101df529cce197e5eeb82f231b50e3f4fc76c8835ba12fdad0c2122b0` |
+
+[Machine pins, exact paths, input/export hashes and inventories](2026-10-02-5n-real-owner-challenge-503-pins.json).
+Server artifacts: `state-client-build/real-owner-challenge-503/{http,readiness,sync}`.
+APK: `state-client-build/real-owner-challenge-503-android/source/clients/android/app/build/outputs/apk/friends/app-friends-unsigned.apk`.
+Local build-only override `0.1.18-canary56-challenge`/56, `.friends`, arm64,
+non-debuggable,49,575,960 bytes. **Unsigned, not update/install-ready, not installed,
+not distributed.** No signing secret was read. Immutable signed55 is not replaced;
+last installed55 and public/invitation51 remain unchanged, not reverified.
+
+- Python environment matches both control/identity lockfiles exactly.
+- Focused parser/security/receipt/source/secret suites:151 passed,12 skipped (optional
+  nginx/native/artifact prerequisites); exact new HTTP run65 passed,8 skipped.
+- Final exact three-artifact/native/owner/Android-source regression: **171 passed**, in
+  `state-client-build/real-owner-challenge-503/evidence/artifact-regression-final.log`.
+  Earlier historical negative used the new pin accidentally:170 passed,1 configuration
+  failure. Correct retained `460e752...` pin independently restored1/1 PASS; no historical
+  pin check or test was weakened.
+- Separate control JVM:163 passed; full app Gradle `assembleFriends`,
+  `testFriendsUnitTest`218 passed, `lintFriends`0 errors/37 warnings. Suites overlap.
+  First app test compilation caught unsupported Files.writeString in Android's test
+  API surface; committed correction and fresh clean-source rebuild passed.
+- Exact accepted HTTP `7ef821...` also reproduced missing-schema503→explicit synthetic
+  migration200. No new serializer/diagnostic code is needed to trigger that failure.
+- Compiled the accepted canary55 `FriendsReadinessProtocol` from starting HEAD separately:
+  its Gson wire body is byte-identical to the golden,180 bytes, SHA256
+  `31e9ae09989f4d3db46f9624072939c9f2814963d33641236855828fb830f794`.
+- Non-canary, revoked device/invite/grant, expired grant, wrong Family/revision/key403;
+  stale/used/wrong-purpose fetch proof403; duplicate correlation503 with rollback;
+  capacity8 preserved; malformed400; unavailable authority safe503. No security weakening.
+- APK package/manifest/alignment, fresh JNI equality and bounded nested archive scan:
+  1071 entries,0 findings; one existing hash-pinned stdlib false positive reviewed.
+  This is not an exhaustive secret scan or physical/native runtime acceptance.
+- New server archive source/secret guard:48 entries,0 findings. All four retained
+  artifact SHA256 pins match; export inventories match committed source exactly.
+- `git diff --check` passes. Whole-index `check_public_sources.py` reports **one existing
+  finding** in unchanged `tests/test_readiness_adapter_packaging.py` (`private-key-pem`),
+  reproduced at starting HEAD; task-owned staged files pass. No allowlist/guard change
+  was made. Therefore the whole-repository source guard is not reported as green.
+
+Local sockets required approved outside-sandbox test execution. No production socket,
+SSH/ADB session, CI dispatch, push or remote service operation occurred. CI workflow is
+committed but not run remotely. New private builds are diagnostic candidates, not accepted
+deployment replacements. No authoritative real owner READY/import/ACK is claimed.
 
 No production rollback is needed: production is untouched. Local code can be reverted
 by its task-owned commits without touching unrelated edits. Artifact rollback means

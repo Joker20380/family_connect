@@ -1,5 +1,14 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+Local investigation02.10: [5N-REAL-OWNER-CHALLENGE-503 remains BLOCKED](../../../docs/releases/2026-10-02-5n-real-owner-challenge-503.md).
+Golden Android bytes pass the current schema; removing only the receipt table reproduces
+503, explicit existing synthetic migration restores200. This is not production attribution.
+Fresh fixture creation masks upgrade-state omissions: future separately authorized
+preflight must check the receipts schema, not only authority/sync. Challenge never needs
+an already completed fetch/ACK. New safe logs contain only stage/reason; external503
+semantics are unchanged. Do not auto-migrate production, restart services or retry here.
+Diagnostic artifacts are local only; no new deployment is accepted by this report.
+
 Artifact refresh02.10: [new ACK-compatible pins and exact source inventories](../../../docs/releases/2026-10-02-5n-readiness-ack-artifact-pins.json)
 replace the old HTTP/readiness/sync pins for a **future separately authorized** attempt.
 All three required clean-source rebuilds at `a24f090`; no source mismatch waived.

@@ -10,6 +10,13 @@ Windows: версия0.2.15, Windows10 1809+ /11 x64. .NET включён в у�
 
 ## Android
 
+Локальная проверка совместимости,02.10.2026: `0.1.18-canary56-challenge`/56 arm64
+**собран без подписи**, не готов для установки/обновления, не установлен/не опубликован.
+SHA256 `5ca1d29101df529cce197e5eeb82f231b50e3f4fc76c8835ba12fdad0c2122b0`.
+Последние задокументированные installed55 и public/invitation51 не менялись и не
+перепроверялись. Новых download/update ссылок/каталогов нет. Причина production503
+не доказана; [локальные тесты, pins и BLOCKED gate](releases/2026-10-02-5n-real-owner-challenge-503.md).
+
 Локальная сборка02.10.2026: приватный `0.1.18-canary55-receipt`/55 arm64 добавляет
 структурированный post-import readiness receipt и аутентифицированный ACK.
 Прежние package/beta signer; update-compatible с54; **собран/подписан, НЕ установлен

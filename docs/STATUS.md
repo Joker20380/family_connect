@@ -9,6 +9,12 @@ retained local evidence lacks its backend reason/schema snapshot. No wire mismat
 circular ACK dependency found. Safe server/client classification and permanent JVM↔Python
 golden regression added; no speculative authorization/schema behavior fix. Clean-source
 artifact/test results are tracked in the [task report](releases/2026-10-02-5n-real-owner-challenge-503.md).
+Clean server builds from `ad17db7` and unsigned local Android56 from `a10a9c4` are
+[pinned with inventories](releases/2026-10-02-5n-real-owner-challenge-503-pins.json), not deployed/signed/installed.
+APK SHA256 `5ca1d29101df529cce197e5eeb82f231b50e3f4fc76c8835ba12fdad0c2122b0`.
+App218/control163 JVM PASS; assemble/lint PASS (0errors/37warnings); focused Python151
+PASS/12skip; final three-artifact/native regression171 PASS. Whole-index source guard retains one unchanged pre-existing test-fixture
+finding; task files pass. Production503 remains unproven, no speculative cause fix.
 No production/device access, authority refresh, deployment, ingress change or push.
 Installed55/public51 remain last documented, not reverified. PROV-1 remains stopped;
 FIELD-1/DIAG-1/OPS-1/beta are not started. Need retained sanitized failure-time evidence,

@@ -10,6 +10,13 @@ Status checked 2026-09-23. Client features and release versions differ by platfo
 
 ## Android
 
+Local compatibility investigation,2026-10-02: `0.1.18-canary56-challenge`/56 arm64
+**built unsigned only**, not install/update-ready, installed or distributed. SHA256
+`5ca1d29101df529cce197e5eeb82f231b50e3f4fc76c8835ba12fdad0c2122b0`.
+Installed private55 and public/invitation51 remain last documented, unchanged and
+not reverified. No new download/update link or catalog. Production503 cause remains
+unproven; [local tests, pins and BLOCKED gate](releases/2026-10-02-5n-real-owner-challenge-503.md).
+
 Local build checkpoint,2026-10-02: private `0.1.18-canary55-receipt`/55 arm64 adds
 post-import structured readiness receipt and authenticated ACK. Same package/beta
 signer, update-compatible with54; **built/signed, NOT installed or publicly distributed**.
