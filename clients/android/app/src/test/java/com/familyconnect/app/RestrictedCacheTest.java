@@ -7,6 +7,18 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class RestrictedCacheTest {
+    @Test public void renewedAuthorityFloorsAndConflictingContent()throws Exception{
+        Memory storage=new Memory();RestrictedCache cache=cache(storage,1000);
+        cache.accept(response(1000,2000,1,1,1,"initial"));
+        byte[] renewed=response(1001,2000,2,19,2,"renewed");cache.accept(renewed);
+        assertArrayEquals(renewed,cache(storage,1000).usable());
+        rejected(cache,response(1002,2000,1,19,2,"revision-rollback"));
+        rejected(cache,response(1002,2000,2,18,2,"crl-rollback"));
+        rejected(cache,response(1002,2000,2,19,1,"delegation-rollback"));
+        rejected(cache,response(1001,2000,2,19,2,"conflicting-seed"));
+        byte[] future=response(1003,2000,37,43,37,"future");cache.accept(future);
+        assertArrayEquals(future,cache(storage,1000).usable());
+    }
     @Test public void sharedTimestampInstantsAndReplay()throws Exception{
         JsonObject contract;
         try(var input=getClass().getClassLoader().getResourceAsStream("bootstrap-timestamps.json")){
