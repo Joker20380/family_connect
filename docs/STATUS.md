@@ -1,5 +1,38 @@
 # Текущее состояние / Current state
 
+## 5N-NATIVE-AUTHORITY-COMPAT — PASS offline, 02.10.2026
+
+Exact #11 checker/snapshot reproduces exit1 at the historical attempt time. An
+observability-only local copy identifies `negative_revision_unexpected_acceptance`:
+profile floor1 was incremented to2, equal to the valid signed owner revision2.
+The native authorization callback correctly accepted it; the operator's negative
+assertion was wrong. **Class D: checker negative-fixture bug, not stale binary or
+Python/native contract disagreement.** Original binary `8f59485f…` rebuilds
+byte-identically from retained main + accepted4f48202 libraries with Go1.26.0.
+
+Tracked checker now derives negative floors from validated signed revision/CRL
+claims, with genuinely different Family and safe JSON failures. Existing Family
+TLS, Python authority, delivery/cache runtime, TTLs and floors remain unchanged.
+Standalone pinned adapter fsyncs an allowlisted receipt before verdict/rollback.
+Exact #11 snapshot now PASSes locally at attempt time; actual-time expired snapshot
+still FAILs. Synthetic delegation2/grant2/CRL19,1→2 renewal, future revisions and
+stale/revoked/rollback/conflict negatives pass across producer/native/delivery/cache.
+
+Code checkpoint `8b829971f4e75a1a584cebf9867eb0ae5d256129`. Two clean Git exports,
+14 inventoried inputs, produce identical native artifact SHA256
+`a1df5f88a103340a6ba9d67ae8842147afd99d430fba6b30b8ba7b212373ce90`.
+Local artifact only: not installed, deployed, signed for release or distributed.
+Python82 PASS/no skips; shared native/CLI tests and JVM cache7 PASS. See
+[exact replay, semantics, provenance and limits](releases/2026-10-02-5n-native-authority-compat.ru.md)
+and [future operator contract](../deploy/friends/restricted/NATIVE_AUTHORITY.md).
+
+Production untouched except approved read-only material/artifact retrieval; no
+authority refresh, remote checker execution, NL/RU start, HTTP change, Redmi or
+Android build. #11 remains FAILED / ROLLED BACK; its security history remains2/2/19
+and short-lived credentials require fresh checks in a separately authorized task.
+Pre-existing dirty/untracked work is preserved; task-only local commits, no push.
+STOP: no automatic attempt #12, DIAG-1, distributed beta or Krasnodar FIELD-1.
+
 ## 5N-HTTP-CANDIDATE-PREFLIGHT — PASS locally, 02.10.2026
 
 Local harness/config correction separates direct application B–G from external

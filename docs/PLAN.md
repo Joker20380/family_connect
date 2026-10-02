@@ -2,6 +2,26 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-NATIVE-AUTHORITY-COMPAT = PASS offline.** Exact #11 binary/material replay
+proves the failed predicate: negative floor1+1 equals signed owner revision2,
+so native admission succeeds and the old operator reports failure. Native runtime
+semantics are correct; no stale binary (byte-identical rebuild), no producer/native
+contract mismatch. [Reproduction and compatibility matrix](releases/2026-10-02-5n-native-authority-compat.ru.md).
+
+Local code commit `8b829971…` adds the tracked checker, safe durable standalone
+adapter, clean-export builder and tests. Checker SHA256 `a1df5f88…`, exact full pin
+in the report, is **built/tested, not installed**. Existing sync/HTTP pins and all
+runtime validation/security policy remain unchanged. Original #11 failure remains
+historical; current production was not redeployed or refreshed by this task.
+
+STOP after task-only commits/documentation; no automatic attempt #12 or physical
+work. A separately authorized rollout must accept/pin and install the new checker
+and receipt adapter per [runbook](../deploy/friends/restricted/NATIVE_AUTHORITY.md),
+reconcile delegation2/grant2/CRL19 without resetting history, check current validity,
+then repeat every NL/RU/HTTP/device gate. Do not use historical debugger clock replay
+for acceptance of expired live authority; production tools have no clock override.
+No source/authority workaround, skipped negative, Python-only fallback, beta or FIELD-1.
+
 **5N-HTTP-CANDIDATE-PREFLIGHT = PASS locally, no deployment.**118 focused tests pass
 without skips; actual isolated nginx and unchanged pinned archives are used. Use the guarded
 public `transaction`/`Candidate` contract, not the old port18085 assumption or the
