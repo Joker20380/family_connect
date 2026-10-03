@@ -85,7 +85,7 @@ the exact assertion bytes and secret guard remain unchanged. No scanner exemptio
 Tests checkpoint416d938. Existing APK JVM/native/lint results retained.
 Protected evidence: `state-client-build/field59-delivery/`; no keys/DB/proofs in Git.
 
-FIELD-1-RELEASE **PARTIAL**; DIAG-1A **PASS** for the defined owner/local-bundle scope.
+FIELD-1-RELEASE **BLOCKED by hosted CI**; DIAG-1A **PASS** for the defined owner/local-bundle scope.
 Hosted platform CI and artifact provenance/download checks remain release gates.
 Production59 signing preparation only: min-supported1, mandatory=false, same offline
 root, increasing sequence/lease required. No production signature issued yet.
@@ -94,9 +94,45 @@ catalog and beta59 APK routes both404. Unsigned production59 payload prepared fr
 the exact installed APK (draft sequence1/min1/non-mandatory), no offline key accessed;
 refresh sequence/issued_at/expiry after CI. This is not install authorization.
 Public beta59 APK/catalog/landing publication remains explicitly prohibited in this
-continuation; do not change Windows/Linux links. Source push not yet performed.
+continuation; do not change Windows/Linux links. Source-only push1b791c2 completed
+after owner acceptance and explicit push approval. No tag/release-trigger commit,
+no release assets/catalog key sent to CI. Unrelated health work remains local.
 No FIELD widening. After release authorization, follow the existing tester instructions
 below: in-place install, no clear/uninstall, send Support ID, await operator, CONNECT.
+
+### Hosted CI stop: exact outstanding release gates
+
+CI source `1b791c2848961ed485d4f1c8300e01c1ed3fb218` has identical Android/carrier/
+Android-native source to accepted APK5abc2da. Hosted verification builds do not
+replace/re-sign the accepted6d13720 artifact. Final CI notes are a local documentation
+follow-up, not another production deployment or automatic CI retry.
+
+| Gate / command | Observed | Expected | Release blocking |
+| --- | --- | --- | --- |
+| phase0/tests: `python -m pytest -q` | exit1;7 failed,1583 passed,99 skipped,25 errors. Confirmed `KeyError: 'FC_TEST_HTTP_ARTIFACT'` in readiness packaging fixture setup; additional failures need full triage | exit0 with required source-pinned fixtures available | YES |
+| phase0/failover: `docker compose build` → `Dockerfile.control:33`, `python -m pytest -q && touch /tmp/tests-passed` | Docker build exit1; pytest exit2,14 collection errors, including missing public runtime/source paths (`test_sync_acceptance.py`, readiness/runtime tests) | complete public test build context, collection/build success | YES |
+| Linux control preview: Protocol/crash/packaging `python -m pytest -q` | exit1;7 failed,1606 passed,76 skipped,25 errors; same confirmed missing `FC_TEST_HTTP_ARTIFACT` setup | fixture-provisioned broad suite exit0 | YES |
+
+Relevant authoritative logs:
+- [phase0 tests, job111180337783](https://github.com/Joker20380/family_connect/actions/runs/37115119420/job/111180337783): summary10:05:36UTC.
+- [phase0 failover, job111180337993](https://github.com/Joker20380/family_connect/actions/runs/37115119420/job/111180337993): Dockerfile/control collection failure10:03:59UTC; bounded build-log artifact11271198754.
+- [Linux control, job111180338081](https://github.com/Joker20380/family_connect/actions/runs/37115119469/job/111180338081): summary10:07:22UTC.
+
+Whole-index guard is **PASS in hosted phase0**, not the cause of these failures.
+[Windows control37115119444](https://github.com/Joker20380/family_connect/actions/runs/37115119444)
+and [Android Friends wire contract37115119419](https://github.com/Joker20380/family_connect/actions/runs/37115119419)
+PASS. [Client builds37115119418](https://github.com/Joker20380/family_connect/actions/runs/37115119418):
+Linux job111180338239 PASS (GTK/render/interaction/packaging included); Android and
+Windows jobs still in progress at inspection, not claimed accepted. No jobs cancelled
+or automatically retried. Broader fixture/Docker issues were not hidden by modifying
+networking, removing tests, or marking skipped tests as acceptance.
+
+No production59 signature/catalog/APK/landing publication. Next work: triage and
+repair CI fixture/context wiring, finish hosted platform acceptance and verify
+downloaded artifact provenance, then offline signing **only when authorized release
+gates pass**. Publication remains subject to the user's explicit hold; owner-only
+admission/cap3 retained.27 other registrations still have unknown version/platform,
+so neither automatic adoption nor a numeric legacy manual-upgrade count is claimed.
 
 ## Owner-device continuation — 2026-10-03
 

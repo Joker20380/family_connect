@@ -15,9 +15,15 @@ Registration/invitation/alias/grant/admission/audit fingerprints unchanged;28 re
 16 live negative probes PASS; signed unknown status remains inactive200/no enrollment
 by existing contract; Support access denied403. Owner1/no wildcard/cap3 unchanged.
 518 focused Python PASS/0 skipped; whole-index guard repaired without weakening it.
-FIELD-1-RELEASE PARTIAL; DIAG-1A PASS. Hosted platform CI/artifact checks and offline
-catalog signing remain release gates. Public59/landing publication explicitly held;
-public51 unchanged. No FIELD widening. Source push not yet performed.
+FIELD-1-RELEASE BLOCKED by hosted CI; DIAG-1A PASS. Source-only checkpoint1b791c2
+pushed after owner acceptance; no tags/release trigger/unrelated health work.
+Index guard passes locally and hosted. Windows control/Android wire contract/Linux
+client job PASS; phase0 and Linux-control broad pytest FAIL (missing artifact fixture
+environment;7 failed/25 errors each), failover image14 collection errors. Remaining
+Android/Windows client jobs still running at inspection; not claimed PASS. No CI
+failure waived, no signing/publication. Public51 full-download SHA79a2d286 verified;
+beta59/signed-v2 routes404. Unsigned min1/non-mandatory payload prepared only.
+Final CI observations recorded locally; no FIELD widening.
 [Delivery, owner checks, recovery and remaining gates](releases/2026-10-03-field1-release-final.md#support-http-delivery-and-owner-completion--2026-10-03).
 
 ## FIELD-1 owner acceptance continuation — PARTIAL,03.10.2026

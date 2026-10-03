@@ -12,10 +12,14 @@
 3. DONE owner existing-ID retrieval/visible/Copy/restart/status authentication;
    unchanged installed APK/signer/UID/data/identity. DIAG snapshot/share/privacy PASS
    with non-null alias. Inventory28/24 active/4 revoked;1 known Android59,27 unknown.
-4. NEXT hosted platform CI and downloaded-artifact/provenance checks. Prepare optional
-   min1/non-mandatory production59 catalog; offline signing only after CI. Public
-   APK/catalog/landing publication remains explicitly prohibited in this continuation.
-   Do not infer all users updated; source push must exclude unrelated health work.
+4. BLOCKED hosted CI at pushed source1b791c2: phase0 and Linux-control broad pytest
+   fail with missing artifact fixtures (7 failures/25 errors); failover Docker image
+   has14 collection errors. Triage CI fixture/build-context failures before rerun;
+   never mask them with skips. Windows control/Android wire/Linux client PASS;
+   Android/Windows client completion and artifact download/provenance still pending.
+   Unsigned min1/non-mandatory production59 payload prepared; offline signing only
+   after accepted CI/downloads. Public APK/catalog/landing publication remains
+   explicitly prohibited. Public51 bytes verified; no all-users-updated claim.
 5. Retain owner; select only1–2 additional devices by Support ID. Never wildcard.
 [Final task report](releases/2026-10-03-field1-release-final.md).
 
