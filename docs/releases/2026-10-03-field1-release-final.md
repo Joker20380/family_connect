@@ -2,6 +2,69 @@
 
 ## Hosted fixture repair — 2026-10-03
 
+### Final observed result
+
+**Fixture/provisioning repair PASS; FIELD-1-RELEASE BLOCKED; DIAG-1A PASS.**
+Final pushed CI source `2b3c997e1df158c538525122554d0e15c2959fd5`. Platform runs use
+`ef554e75e54d1193ada96086480eac1087d6ca3b`; the subsequent commit changes only Docker
+test Go-cache provisioning and this report, not platform application/test sources.
+Final evidence documentation is retained locally without another CI-triggering push.
+
+| Hosted gate | Source | Run / job | Terminal result |
+| --- | --- | --- | --- |
+| phase0 full pytest + cargo |2b3c997|[37120492530](https://github.com/Joker20380/family_connect/actions/runs/37120492530),111195481064|PASS|
+| Docker build + failover/auth/offline/revocation |2b3c997|same run,111195481345|PASS|
+| Whole-index guard |2b3c997|same run,111195481064 step4|PASS; local1700 entries/0 findings|
+| Linux-control pytest/GTK/extracted bundles |ef554e7|[37120091177](https://github.com/Joker20380/family_connect/actions/runs/37120091177),111194358632|PASS|
+| Windows control |ef554e7|[37120091189](https://github.com/Joker20380/family_connect/actions/runs/37120091189),111194358497|PASS|
+| Android wire contract |ef554e7|[37120091156](https://github.com/Joker20380/family_connect/actions/runs/37120091156),111194358466|PASS|
+| Linux client |ef554e7|[37120091287](https://github.com/Joker20380/family_connect/actions/runs/37120091287),111194359023|PASS, all packaging/UI steps|
+| Windows main client |ef554e7|same run,111194359044|PASS, all installer/UI steps|
+| Windows2022 compatibility |ef554e7|same run,111195231706|FAIL, upgrade broker restart|
+| Android client |ef554e7|same run,111194358923|FAIL, emulator; runtime-conformance step not executed|
+
+The release job is skipped by the existing no-release-trigger policy, intentionally;
+this is not a skipped acceptance test. No acceptance skip/xfail/bypass was added.
+The original three failure classes are repaired, but **all hosted release gates are
+not green**, so the final publication gate is NOT READY.
+
+Remaining release-blocking commands and evidence:
+
+- `python3 -u pilot/android-awg/run.py` → `:app:connectedDebugAndroidTest`:
+  `AutoRuntimeTest.automaticFallbackHealthLossExhaustionCancelAndRevoke` fails at
+  `TcpRuntimeTest.java:23` / `AutoRuntimeTest.java:47` with
+  `java.net.BindException: bind failed: EADDRNOTAVAIL`. The test requires dual-stack
+  TCP echo; existing Auto TCP does not assign fd79:fc::2. This is separate from the
+  Python fixture defect. Neither networking nor this assertion was changed.
+- Same command: `ManualAwgStabilityTest.screenOffOutageRecoveryAndExplicitDisconnect`
+  fails at line82 during cleanup with `Disconnect VPN before changing profiles`
+  (`ControlOperations.java:43`, `ProfileStore.java:60`). Expected full manual-AWG
+  scenario and safe teardown. Cleanup may mask the original scenario failure;
+  current evidence does not establish a production AWG defect or a complete PASS.
+- `./clients/windows/test-install.ps1 -Stage Upgrade`, Windows2022: line49,
+  `Broker did not restart after upgrade`; expected broker Running followed by data,
+  runtime and broker checks. Installer log reports success but job exits1. Seen in
+  both833ab39 and ef554e7 runs. Root cause beyond this observed native failure remains
+  unresolved; not waived based on the passing main Windows job or older run.
+
+Latest Android bounded summary: artifact11273242837,40 instrumentation cases,
+2 failures; retained as `state-client-build/field59-ci/android-37120091287-summary.json`.
+Windows compatibility artifact11273202392 SHA256
+`a17daffe8d94862c9191489aad20fd4e350377af51b9a2907adf12381f660ac3` retains install/upgrade
+logs. Private/local evidence paths are ignored; no diagnostic credentials committed.
+
+Release identity reverified, not rebuilt: package `com.familyconnect.app.friends`,
+`0.1.18-beta59`/59, APK SHA256
+`6d13720bc8cff25d51d95ff7453127577890bee881685a4a66c86fae163f2148`, certificate SHA256
+`67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+No Android/carrier/pilot source diff from accepted APK source5abc2da. CI test builds
+are not replacements for that signed candidate. No beta key or offline update root used.
+Read-only production comparison preserves all registration/invitation/Support mapping,
+grants/admission/audit, deployed HTTP and nginx fingerprints.28 records/24 non-revoked/
+4 revoked/28 aliases;1 known Android59,27 unknown; admitted owner1/no wildcard/cap3.
+No deployment, catalog signature/publication, landing edit or FIELD widening. Unrelated
+VPN-health edits remain uncommitted and intact. Rollback is source-only as below.
+
 Starting HEAD `fc2b3efcaabbe75195b869d5586de65c0b0dc55c`; same milestone,
 Stage5N CLOSED, owner/DIAG-1A PASS retained. No product source or accepted APK changes.
 Publication/signing/landing/FIELD widening remain prohibited throughout this repair.

@@ -1,20 +1,26 @@
 # Текущее состояние / Current state
 
-## FIELD-1 hosted fixture repair — IN PROGRESS,03.10.2026
+## FIELD-1 fixture repair — PASS; release BLOCKED,03.10.2026
 
-Same milestone, Stage5N CLOSED; owner and DIAG-1A acceptance retained. Missing
-explicit HTTP/sync/readiness/historical fixtures and Go/nginx provisioning reproduced.
-Shared source-pinned provisioner now passes the full local suite:1691 PASS/26 existing
-environment-dependent skips (no new skips), plus3 provisioner regressions. Docker
-test context now uses committed public archives and verified credential-free Git
-metadata, with fixtures built before collection. Hosted rerun pending; publication,
-signing, landing changes and FIELD widening remain prohibited. Accepted beta59 APK
-is unchanged; no production/admission/networking edits. Prior client run completed:
-Windows+compatibility/Linux PASS, Android emulator gate FAIL (under investigation).
-First repair rerun833ab39 resolves missing fixtures/collection; further Python3.13
-operator ZIP namespace and Docker UID/system-tool prerequisites corrected locally.
-Hosted repeat pending; Android Auto IPv6 expectation mismatch and Windows2022
-broker-restart failure remain unwaived release blockers until terminal verification.
+Same milestone, Stage5N CLOSED; owner and DIAG-1A acceptance remain PASS. Source-only
+CI checkpoints pushed through2b3c997; no tags or release trigger. Explicit pinned
+HTTP/sync/readiness/historical fixtures, complete public Docker source context,
+Go1.26.0/module cache, system tools, isolated root-DAC plus unprivileged test runner
+and Python3.13 operator ZIP namespace entries repair the original failures.
+phase0 pytest+cargo, full Docker build/failover/auth/offline/revocation and index guard
+PASS at2b3c997/run37120492530. Linux-control including full pytest/GTK/extracted bundles
+PASS at ef554e7/run37120091177; Windows control37120091189 and Android wire37120091156
+PASS. Client run37120091287 is **terminal**, not partially accepted: Linux/Windows
+main jobs PASS, Android emulator FAIL, Windows2022 compatibility upgrade FAIL.
+Android: Auto test binds an unassigned IPv6 address (EADDRNOTAVAIL); manual AWG reports
+a profile-edit refusal during teardown. Windows: broker not Running after upgrade.
+No assertion waived, skip added or production networking changed to obtain green CI.
+Local full pytest1691 PASS/26 existing skips; root-DAC22 PASS; operator/provisioner21
+PASS. beta59/code59 SHA6d13720/signer67a90d1 unchanged, no signed APK rebuild.
+Read-only production verification:28/24 non-revoked/4 revoked,28 aliases,1 known59;
+all registration/invitation/mapping/grant/admission/audit/HTTP/nginx fingerprints
+unchanged; owner1/no wildcard/cap3 retained. Final publication gate **NOT READY**.
+No catalog signing, public59 publication, landing change or FIELD widening.
 [Repair evidence](releases/2026-10-03-field1-release-final.md#hosted-fixture-repair--2026-10-03).
 
 ## FIELD-1 Support delivery / owner acceptance — PASS,03.10.2026
