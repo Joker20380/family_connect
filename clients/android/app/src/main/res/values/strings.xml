@@ -230,4 +230,11 @@
     <string name="chat_voice_ready_status">%1$s   Ready to send</string>
     <string name="chat_voice_sending">%1$s   Saving…</string>
     <string name="gateway_selected">Gateway selected</string>
+    <string name="update_notice_title">Family Connect update</string>
+    <string name="update_optional_notice">A newer Family Connect version is available. Update in Settings; your activation and data are kept.</string>
+    <string name="update_required_notice">A newer Family Connect build is required for support. Update in Settings. Your connection and data stay intact while you arrange the update.</string>
+    <string name="update_later">Later</string>
+    <string name="diagnostics_send">Send diagnostics</string>
+    <string name="diagnostics_privacy">Share recent connection states, failure codes, app version and anonymous support identifiers with someone you choose. No browsing history, messages, destinations or credentials are included. Nothing is uploaded automatically.</string>
+    <string name="diagnostics_failed">Diagnostics could not be exported. Your connection is unchanged.</string>
 </resources>

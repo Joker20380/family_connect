@@ -17,6 +17,7 @@ final class AppUpdateUi {
     private final ExecutorService worker=Executors.newSingleThreadExecutor();
     private volatile boolean closed,cancelled;private boolean busy;private AppUpdate candidate;private File ready;
     private TextView status;private Button action,cancel;private ProgressBar progress;private int message=R.string.update_hint,percent;
+    private boolean foreground;private Runnable openSettings;
     AppUpdateUi(Activity activity){this.activity=activity;}
     void attach(LinearLayout panel){
         status=TerminalUi.label(panel,activity.getString(message),12,TerminalUi.MUTED);
@@ -29,7 +30,10 @@ final class AppUpdateUi {
     private long installedCode()throws Exception{PackageInfo p=activity.getPackageManager().getPackageInfo(activity.getPackageName(),0);return code(p);}
     private static long code(PackageInfo p){return Build.VERSION.SDK_INT>=28?p.getLongVersionCode():p.versionCode;}
     private void check(){busy=true;cancelled=false;message=R.string.update_checking;render();worker.execute(()->{
-        try{AppUpdate found=AppUpdate.check();long current=installedCode();boolean supported=Arrays.asList(Build.SUPPORTED_ABIS).contains("arm64-v8a")&&activity.getPackageName().equals("com.familyconnect.app.friends");post(()->{busy=false;if(cancelled){message=R.string.update_cancelled;}else if(!supported){message=R.string.update_unsupported;}else if(found.code<=current){message=R.string.update_current;}else{candidate=found;message=R.string.update_available;}render();});}
+        try{android.content.SharedPreferences prefs=activity.getSharedPreferences("app-updates",Context.MODE_PRIVATE);
+            AndroidUpdateManifest manifest=AndroidUpdateManifest.verify(AppUpdate.fetchManifest(),System.currentTimeMillis()/1000,prefs.getLong("sequence",0),prefs.getString("digest",""));
+            if(!prefs.edit().putLong("sequence",manifest.sequence).putString("digest",manifest.digest).commit())throw new IOException("Update state");
+            AppUpdate found=manifest.update;long current=installedCode();boolean supported=Arrays.asList(Build.SUPPORTED_ABIS).contains("arm64-v8a")&&activity.getPackageName().equals("com.familyconnect.app.friends");post(()->{busy=false;if(cancelled){message=R.string.update_cancelled;}else if(!supported){message=R.string.update_unsupported;}else if(found.code<=current){message=R.string.update_current;}else{candidate=found;message=R.string.update_available;if(foreground)notice(manifest.required(current,System.currentTimeMillis()/1000));}foreground=false;render();});}
         catch(Exception e){post(()->{busy=false;message=cancelled?R.string.update_cancelled:R.string.update_check_failed;render();});}
     });}
     private void download(){busy=true;cancelled=false;percent=0;message=R.string.update_downloading;render();AppUpdate update=candidate;worker.execute(()->{
@@ -52,6 +56,7 @@ final class AppUpdateUi {
         if(apk==null||!context.getPackageName().equals(apk.packageName)||code(apk)!=update.code||code(apk)<=installed||!update.version.equals(apk.versionName))throw new SecurityException("APK identity");
         android.content.pm.Signature[] a=signatures(apk),b=signatures(own);
         if(a==null||b==null||a.length!=1||b.length!=1||!a[0].equals(b[0]))throw new SecurityException("APK signer");
+        if(!AndroidUpdateManifest.SIGNER.equals(AppUpdate.hex(java.security.MessageDigest.getInstance("SHA-256").digest(a[0].toByteArray()))))throw new SecurityException("Expected APK signer");
     }
     private static android.content.pm.Signature[] signatures(PackageInfo p){return Build.VERSION.SDK_INT>=28?(p.signingInfo==null?null:p.signingInfo.getApkContentsSigners()):p.signatures;}
     private void install(){
@@ -64,6 +69,21 @@ final class AppUpdateUi {
             Uri uri=new Uri.Builder().scheme("content").authority(activity.getPackageName()+".updates").appendPath(ready.getName()).build();
             Intent intent=new Intent(Intent.ACTION_INSTALL_PACKAGE).setDataAndType(uri,"application/vnd.android.package-archive").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);intent.setClipData(ClipData.newRawUri("APK",uri));activity.startActivity(intent);message=R.string.update_ready;render();
         }catch(Exception e){message=R.string.update_install_failed;render();}
+    }
+    void onForeground(Runnable settings){
+        openSettings=settings;if(closed||busy||ready!=null)return;
+        android.content.SharedPreferences prefs=activity.getSharedPreferences("app-updates",Context.MODE_PRIVATE);long now=System.currentTimeMillis();
+        if(now-prefs.getLong("checked_at",0)<6*3600000L)return;
+        prefs.edit().putLong("checked_at",now).apply();foreground=true;check();
+    }
+    private void notice(boolean required){
+        android.content.SharedPreferences prefs=activity.getSharedPreferences("app-updates",Context.MODE_PRIVATE);long now=System.currentTimeMillis();
+        if(now-prefs.getLong("notified_at",0)<24*3600000L||activity.isFinishing()||activity.isDestroyed())return;
+        prefs.edit().putLong("notified_at",now).apply();
+        new android.app.AlertDialog.Builder(activity).setTitle(R.string.update_notice_title)
+            .setMessage(required?R.string.update_required_notice:R.string.update_optional_notice)
+            .setPositiveButton(R.string.update_install,(dialog,which)->{if(openSettings!=null)openSettings.run();})
+            .setNegativeButton(R.string.update_later,null).show();
     }
     void close(){closed=true;cancelled=true;worker.shutdownNow();main.removeCallbacksAndMessages(null);}
 }

@@ -186,6 +186,7 @@ public final class FriendsActivity extends LocalizedActivity {
         if(!device.isEmpty())TerminalUi.label(panel,"ID · "+device,12,TerminalUi.MUTED);
         TerminalUi.label(panel,getString(R.string.product_version,TerminalUi.version(this)),12,TerminalUi.MUTED);
         appUpdate.attach(panel);
+        TerminalUi.button(panel,R.string.diagnostics_send,()->Diagnostics.share(this));
         TerminalUi.label(panel,getString(R.string.friends_hint),12,TerminalUi.MUTED);
         attach(panel,activate);
         Button readiness=new Button(this);readiness.setText(R.string.readiness_title);panel.addView(readiness);
@@ -365,7 +366,7 @@ public final class FriendsActivity extends LocalizedActivity {
         row.addView(load,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
         row.setMinimumHeight(TerminalUi.dp(c,48));row.setPadding(TerminalUi.dp(c,12),TerminalUi.dp(c,6),TerminalUi.dp(c,12),TerminalUi.dp(c,6));return row;
     }
-    @Override protected void onResume(){super.onResume();if(getPreferences(MODE_PRIVATE).getBoolean("activated",false)){ChatNotifications.request(this);ChatDeliveryService.start(this);}if(dashboardLocation!=null&&dashboardLocation.permitted())dashboardLocation.start();if(appUpdate!=null)appUpdate.render();loadResumed=true;handler.post(loadRefresh);handler.post(restrictedRefresh);handler.post(refresh);if(routeLocation!=null&&routeLocation.permitted())routeLocation.start();}
+    @Override protected void onResume(){super.onResume();if(getPreferences(MODE_PRIVATE).getBoolean("activated",false)){ChatNotifications.request(this);ChatDeliveryService.start(this);}if(dashboardLocation!=null&&dashboardLocation.permitted())dashboardLocation.start();if(appUpdate!=null){appUpdate.render();appUpdate.onForeground(this::showSettings);}loadResumed=true;handler.post(loadRefresh);handler.post(restrictedRefresh);handler.post(refresh);if(routeLocation!=null&&routeLocation.permitted())routeLocation.start();}
     @Override protected void onPause(){if(dashboardLocation!=null)dashboardLocation.stop();loadResumed=false;handler.removeCallbacks(loadRefresh);handler.removeCallbacks(restrictedRefresh);handler.removeCallbacks(refresh);if(telemetry!=null)telemetry.pause();if(routeLocation!=null)routeLocation.stop();super.onPause();}
     @Override protected void onDestroy(){handler.removeCallbacks(refresh);handler.removeCallbacks(restrictedRefresh);if(routeLocation!=null)routeLocation.stop();loadResumed=false;handler.removeCallbacks(loadRefresh);loadWorker.shutdownNow();if(appUpdate!=null)appUpdate.close();worker.shutdownNow();super.onDestroy();}
 }

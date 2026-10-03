@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+## FIELD-1-RELEASE + DIAG-1A — local foundation,03.10.2026
+
+Stage5N CLOSED. Candidate source beta59/code59, not installed/published. Stage5N
+checkpoint `ea25a5e`, no push. Signed Android discovery/private bounded diagnostics
+added for validation. Live07:34UTC: public51,28 activated(24 non-revoked), one known
+Android receipt(private58), other27 platform/version unknown; admission1/no wildcard.
+Redmi disconnected; in-place59/identity/readiness/Auto/UX acceptance pending.
+No server change or data reset; unrelated VPN-health work preserved.
+[Release policy and remaining gates](releases/2026-10-03-field1-release-diag1a.md).
+
 ## 5N-PHYSICAL-RESTRICTED-REHEARSAL — PASS; STAGE 5N CLOSED, 03.10.2026
 
 Финальная физическая проверка завершена на установленном private canary58, без

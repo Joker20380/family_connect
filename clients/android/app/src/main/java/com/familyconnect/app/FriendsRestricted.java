@@ -26,6 +26,7 @@ final class FriendsRestricted {
                 if(reconciled.compareAndSet(false,true)){
                     ReadinessImportResult restored;OwnerPrewarmReceipt previous;
                     synchronized(RestrictedVault.LOCK){restored=product.restart(System.currentTimeMillis()/1000);previous=cache.context();}
+                    Diagnostics.readinessResult(context,restored.code());
                     if(previous==null)product.record(restored);
                     else product.publish(restored,payload->new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+15000).readinessAck(identity,payload));
                 }
@@ -46,11 +47,12 @@ final class FriendsRestricted {
                     try{synchronized(RestrictedVault.LOCK){cache.denied();}}catch(Exception failure){code=ReadinessImportResult.Code.PERSISTENCE_FAILED;}
                     result=product.failed(receipt,code,System.currentTimeMillis()/1000);refresh="AUTHORIZATION_REJECTED";
                 }catch(Exception | LinkageError failure){receipt.failed();result=product.failed(receipt,ReadinessImportResult.Code.FETCH_FAILED,System.currentTimeMillis()/1000);refresh="UNAVAILABLE";}
+                Diagnostics.readinessResult(context,result.code());
                 product.publish(result,payload->new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+15000).readinessAck(identity,payload));
             }catch(Exception | LinkageError failure){refresh="UNAVAILABLE";
                 ReadinessImportResult result=new ReadinessImportResult(receipt,ReadinessImportResult.Code.INTERNAL_ERROR,null,System.currentTimeMillis()/1000,"import",BuildConfig.VERSION_NAME,BuildConfig.VERSION_CODE);
                 if(product==null)product=new ReadinessProduct(null,new ReadinessReceiptStore(context),BuildConfig.VERSION_NAME,BuildConfig.VERSION_CODE);
-                product.record(result);
+                product.record(result);Diagnostics.readinessResult(context,result.code());
             }
             finally{running.set(false);}
         },"friends-readiness").start();

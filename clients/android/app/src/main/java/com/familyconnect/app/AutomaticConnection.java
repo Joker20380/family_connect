@@ -71,7 +71,8 @@ final class AutomaticConnection implements TunnelEngine,ConnectivityOrchestrator
             health=new VpnHealth(context);
             while(true) {
                 orchestrator.check(deadline);
-                if(health.check(normal.source,deadline))break;
+                boolean good=health.check(normal.source,deadline);Diagnostics.dns(context,good);
+                if(good)break;
                 pause(100);
             }
         }
@@ -96,6 +97,7 @@ final class AutomaticConnection implements TunnelEngine,ConnectivityOrchestrator
             if(!restricted.healthy())orchestrator.lost(ConnectivityOrchestrator.Failure.INTERNAL);
         } else if(active instanceof AutomaticNormalEngine) {
             boolean good=health.check(((AutomaticNormalEngine)active).source);
+            Diagnostics.dns(context,good);
             if(interrupted!=null)orchestrator.lost(interrupted);
             else if(good)unhealthy=0;
             else if(++unhealthy>=2)orchestrator.lost(ConnectivityOrchestrator.Failure.NETWORK);
@@ -120,6 +122,7 @@ final class AutomaticConnection implements TunnelEngine,ConnectivityOrchestrator
         Transport.parse(id);context.getSharedPreferences("connectivity",Context.MODE_PRIVATE).edit().putString("normal_hint",id).apply();
     }
     public void event(ConnectivityOrchestrator.Event event) {
+        Diagnostics.event(context,event);
         if(event.failure==ConnectivityOrchestrator.Failure.AUTH||event.failure==ConnectivityOrchestrator.Failure.CONFIGURATION)
             context.getSharedPreferences("connectivity",Context.MODE_PRIVATE).edit().remove("normal_hint").apply();
         changed.accept(event);

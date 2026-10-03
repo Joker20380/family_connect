@@ -10,7 +10,7 @@ import javax.net.ssl.HttpsURLConnection;
 /** HTTPS discovery; APK signing identity is independently checked before installation. */
 final class AppUpdate {
     static final String BASE="https://185.251.89.19:8443";
-    static final String INDEX=BASE+"/updates/android-friends.json";
+    static final String INDEX=BASE+"/updates/android-friends-v2.json";
     final int code;final String version,sha256,url;final long size;
     private AppUpdate(int code,String version,String sha256,String url,long size){this.code=code;this.version=version;this.sha256=sha256;this.url=url;this.size=size;}
     static AppUpdate parse(byte[] bytes){
@@ -27,10 +27,10 @@ final class AppUpdate {
         HttpsURLConnection c=(HttpsURLConnection)new URL(url).openConnection();c.setConnectTimeout(10000);c.setReadTimeout(10000);c.setInstanceFollowRedirects(false);c.setUseCaches(false);
         if(c.getResponseCode()!=200){c.disconnect();throw new IOException("HTTP response");}return c;
     }
-    static AppUpdate check()throws IOException{
+    static byte[] fetchManifest()throws IOException{
         HttpsURLConnection c=open(INDEX);
         try(InputStream in=c.getInputStream();ByteArrayOutputStream out=new ByteArrayOutputStream()){
-            byte[] b=new byte[2048];int n;while((n=in.read(b))!=-1){if(out.size()+n>8192)throw new IOException("Oversized manifest");out.write(b,0,n);}return parse(out.toByteArray());
+            byte[] b=new byte[2048];int n;while((n=in.read(b))!=-1){if(out.size()+n>16384)throw new IOException("Oversized manifest");out.write(b,0,n);}return out.toByteArray();
         }finally{c.disconnect();}
     }
     interface Progress { void update(int percent)throws IOException; }

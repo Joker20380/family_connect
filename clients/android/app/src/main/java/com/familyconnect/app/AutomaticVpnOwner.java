@@ -57,13 +57,13 @@ final class AutomaticVpnOwner {
     ParcelFileDescriptor replace(VpnService.Builder builder) throws Exception {
         ParcelFileDescriptor next=builder.establish();
         if(next==null)throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.AUTH);
-        ParcelFileDescriptor previous=tun;tun=next;
+        ParcelFileDescriptor previous=tun;tun=next;Diagnostics.vpn(context,true);
         if(previous!=null)previous.close();
         return next;
     }
     void block() throws Exception { if(service!=null)replace(builder()); }
     void close() throws Exception {
-        if(tun!=null) { tun.close();tun=null; }
+        if(tun!=null) { tun.close();tun=null;Diagnostics.vpn(context,false); }
         if(service!=null) { service.revoked=null;service.stopSelf();service.stopped.get(3,TimeUnit.SECONDS);service=null; }
     }
 }

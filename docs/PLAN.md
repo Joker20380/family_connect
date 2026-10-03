@@ -2,6 +2,16 @@
 
 ## Current engineering priority / Текущий critical path
 
+**FIELD-1-RELEASE + DIAG-1A authorized03.10; Stage5N remains CLOSED.**
+1. Validate committed59: JVM/native/Python/lint/APK/privacy guards.
+2. Owner in-place58→59/UID/identity/enrollment/readiness/Auto acceptance; no connected
+   Redmi now. No diagnostic exhaustion in FIELD.
+3. After acceptance only: immutable59, signed+legacy discovery, Android-only landing
+   update, RU/EN hashes; no push before acceptance.
+4. Select1–2 more trusted devices for2–3 total; current admission1 owner/no wildcard.
+5. Observe receipts/incidents, no invented adoption or automatic widening/DIAG-1B.
+[Current report](releases/2026-10-03-field1-release-diag1a.md). Below is history.
+
 **5N-PHYSICAL-RESTRICTED-REHEARSAL = PASS; STAGE 5N = CLOSED,03.10.2026.**
 Физический ручной CONNECT на private58 прошёл существующий production BOOT-1,
 Family auth/Room Broker/dedicated restricted session и whole-device VPN.

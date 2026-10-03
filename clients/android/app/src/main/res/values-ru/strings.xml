@@ -230,4 +230,11 @@
     <string name="chat_voice_ready_status">%1$s   Можно отправить</string>
     <string name="chat_voice_sending">%1$s   Сохранение…</string>
     <string name="gateway_selected">Сервер выбран</string>
+    <string name="update_notice_title">Обновление Family Connect</string>
+    <string name="update_optional_notice">Доступна новая версия Family Connect. Обновите её в настройках; активация и данные сохранятся.</string>
+    <string name="update_required_notice">Для поддержки нужна новая версия Family Connect. Обновите её в настройках. Пока обновление недоступно, соединение и данные сохраняются.</string>
+    <string name="update_later">Позже</string>
+    <string name="diagnostics_send">Отправить диагностику</string>
+    <string name="diagnostics_privacy">Передайте выбранному получателю недавние состояния подключения, коды ошибок, версию и случайные идентификаторы поддержки. История сайтов, сообщения, адреса и ключи не включены. Автоматической отправки нет.</string>
+    <string name="diagnostics_failed">Не удалось экспортировать диагностику. Подключение не изменилось.</string>
 </resources>

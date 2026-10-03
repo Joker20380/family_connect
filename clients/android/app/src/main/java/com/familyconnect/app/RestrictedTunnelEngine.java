@@ -66,6 +66,7 @@ final class RestrictedTunnelEngine implements TunnelEngine {
             try(ControlIdentity identity=new FriendsIdentityVault(context).load()) {
                 byte[] response;
                 synchronized(RestrictedVault.LOCK){response=FriendsRestricted.cache(context,identity).usable();}
+                Diagnostics.readiness(context,response!=null);
                 if(response==null)throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
                 byte[] full=identity.material(),material=java.util.Arrays.copyOf(full,64);java.util.Arrays.fill(full,(byte)0);
                 try{handle=NativeRestricted.beginReady(response,material,ControlTrust.anchor(context),resolver,service);}
@@ -110,8 +111,9 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     void evidence() throws Exception {
         if (handle<=0) return;
         File output=new File(context.getFilesDir(),"restricted-evidence.jsonl");
-        if (output.length()>1024*1024) return;
         JSONObject snapshot=new JSONObject(NativeRestricted.stats(handle));
+        Diagnostics.nativeStats(context,snapshot);
+        if (output.length()>1024*1024) return;
         snapshot.put("elapsed_ms",SystemClock.elapsedRealtime());
         snapshot.put("pss_kib",Debug.getPss());
         snapshot.put("cpu_ms",android.os.Process.getElapsedCpuTime());

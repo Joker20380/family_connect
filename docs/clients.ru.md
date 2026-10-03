@@ -1,5 +1,9 @@
 # Установка клиентов
 
+FIELD-кандидат03.10: beta59/code59 проверяется локально, **не установлена и не
+опубликована**. Основная загрузка51 до приёмки обновления поверх58; не удалять
+приложение/данные/Device Identity. [Статус](releases/2026-10-03-field1-release-diag1a.md).
+
 Последний приватный checkpoint03.10.2026: **`0.1.18-canary58-physical`/58 установлена
 поверх57**, те же Friends package/signer/UID/data, encrypted restart READY/ACK_RECEIVED.
 SHA256 APK `91e8910896ff84b31a7cebf40f840256dca283d684b075577290d1282f227194`;
