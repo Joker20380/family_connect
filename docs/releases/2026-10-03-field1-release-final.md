@@ -62,6 +62,13 @@ these are not waived or misrepresented as resolved by the Python fixture fix.
 Current rerun's Windows2022 compatibility upgrade also failed its broker-restart
 assertion; final repeat and terminal Android evidence still required.
 
+Follow-up source `ef554e75e54d1193ada96086480eac1087d6ca3b`: hosted phase0 full
+pytest+cargo PASS and Linux-control full pytest/render interaction PASS (remaining
+packaging steps pending at observation). Docker's seeded Go modules must also be
+shared explicitly across its root-to-runner boundary; use `/opt/fc-go`, owned by the
+test runner, and disable network module fallback after the seed step. Isolated
+Python3.13 root-DAC tests22 PASS locally; operator/provisioner regressions21 PASS.
+
 ## Support HTTP delivery and owner completion — 2026-10-03
 
 This supersedes the blocked Support/status observations below. Same FIELD-1/DIAG-1A;
