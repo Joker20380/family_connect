@@ -11,7 +11,8 @@ final class DiagnosticRing {
         NATIVE_VALIDATION_FAILED, BOOTSTRAP_VALIDATION_FAILED, ATOMIC_IMPORT_FAILED, PERSISTENCE_FAILED,
         EXPIRED_ON_IMPORT, ORCHESTRATOR_NOT_USABLE, INTERNAL_ERROR, STALE_STATE, AUTHORIZATION_REJECTED, FETCH_FAILED, MISSING,
         DNS_PROBE_OK, DNS_PROBE_FAILED }
-    private final String supportId,version;
+    private String supportId;
+    private final String version;
     private final int build,os;
     private final ArrayDeque<JsonObject> events=new ArrayDeque<>();
     private final JsonObject outcomes=new JsonObject(),counters=new JsonObject();
@@ -20,6 +21,7 @@ final class DiagnosticRing {
     private boolean vpn;
     private int retries;
     DiagnosticRing(String supportId,String version,int build,int os){this.supportId=supportId;this.version=version;this.build=build;this.os=os;}
+    synchronized void support(String value){supportId=SupportId.valid(value)?value:null;}
     synchronized void network(String value){network=Arrays.asList("CELLULAR","WIFI","ETHERNET","VPN","NONE").contains(value)?value:"UNKNOWN";}
     synchronized boolean event(ConnectivityOrchestrator.Event event,long now){
         if("connect_requested".equals(event.name)){

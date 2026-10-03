@@ -2,6 +2,7 @@
   "__main__.py": "scripts/friends_readiness_adapter.py",
   "control/friends/__init__.py": "control/friends/__init__.py",
   "control/friends/access.py": "control/friends/access.py",
+  "control/friends/support_ids.py": "control/friends/support_ids.py",
   "control/friends/restricted.py": "control/friends/restricted.py",
   "control/friends/readiness_receipts.py": "control/friends/readiness_receipts.py",
   "control/friends/readiness_adapter.py": "control/friends/readiness_adapter.py",

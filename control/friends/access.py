@@ -29,6 +29,8 @@ class Access:
    db.executescript('''CREATE TABLE invites(hash TEXT PRIMARY KEY, device TEXT UNIQUE, revoked INTEGER NOT NULL DEFAULT 0);
 CREATE TABLE devices(device TEXT PRIMARY KEY, public TEXT UNIQUE NOT NULL, wg TEXT UNIQUE NOT NULL, tcp TEXT UNIQUE NOT NULL, revoked INTEGER NOT NULL DEFAULT 0);
 CREATE TABLE challenges(nonce TEXT PRIMARY KEY, device TEXT NOT NULL, public TEXT NOT NULL,wg TEXT NOT NULL,purpose TEXT NOT NULL,invite TEXT,expires INTEGER NOT NULL,used INTEGER NOT NULL DEFAULT 0);''')
+   from .support_ids import create
+   create(db)
  @staticmethod
  def code_hash(code):
   if not isinstance(code,str):raise Rejected()
@@ -45,7 +47,7 @@ CREATE TABLE challenges(nonce TEXT PRIMARY KEY, device TEXT NOT NULL, public TEX
   key=_decode(public,64);_decode(wg,32)
   return hashlib.sha256(key).hexdigest()[:32]
  def challenge(self,public_identity,wireguard_public_key,purpose,invitation=''):
-  if purpose not in ('activate','status','ru','nl','refer','notices-role','notices-publish','notices-list','notices-edit'):raise Rejected()
+  if purpose not in ('activate','status','support','ru','nl','refer','notices-role','notices-publish','notices-list','notices-edit'):raise Rejected()
   device=self.binding(public_identity,wireguard_public_key);now=int(self.clock());invite=None
   with self.db() as db:
    row=db.execute('SELECT * FROM devices WHERE device=?',(device,)).fetchone()
@@ -76,6 +78,8 @@ CREATE TABLE challenges(nonce TEXT PRIMARY KEY, device TEXT NOT NULL, public TEX
     row=db.execute('SELECT * FROM devices WHERE device=?',(device,)).fetchone()
    if row['revoked'] or row['public']!=proof['public_identity'] or row['wg']!=proof['wireguard_public_key']:raise Rejected()
    db.execute('UPDATE challenges SET used=1 WHERE nonce=?',(nonce,))
+   from .support_ids import registered
+   registered(db,device)
    return {'device':device,'public_key':row['wg'],'tcp_id':row['tcp']}
  def status(self,proof):
   """Authenticated read-only recovery query. Never consumes an invitation."""

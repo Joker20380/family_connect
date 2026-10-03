@@ -234,6 +234,12 @@
     <string name="update_optional_notice">Доступна новая версия Family Connect. Обновите её в настройках; активация и данные сохранятся.</string>
     <string name="update_required_notice">Для поддержки нужна новая версия Family Connect. Обновите её в настройках. Пока обновление недоступно, соединение и данные сохраняются.</string>
     <string name="update_later">Позже</string>
+    <string name="support_title">О приложении / Диагностика</string>
+    <string name="support_unavailable">Support ID недоступен. Подключитесь к Интернету и обновите.</string>
+    <string name="support_value">Support ID: %1$s</string>
+    <string name="support_copy">Копировать Support ID</string>
+    <string name="support_copied">Support ID скопирован</string>
+    <string name="support_refresh">Обновить Support ID</string>
     <string name="diagnostics_send">Отправить диагностику</string>
     <string name="diagnostics_privacy">Передайте выбранному получателю недавние состояния подключения, коды ошибок, версию и случайные идентификаторы поддержки. История сайтов, сообщения, адреса и ключи не включены. Автоматической отправки нет.</string>
     <string name="diagnostics_failed">Не удалось экспортировать диагностику. Подключение не изменилось.</string>

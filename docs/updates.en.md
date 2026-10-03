@@ -1,5 +1,10 @@
 # Client updates
 
+FIELD final preparation keeps unpublished version59; the old local APK is retained,
+not replaced publicly. Support IDs do not grant access. Initial policy remains
+optional/minimum1; no legacy shutdown. Owner in-place acceptance precedes signing,
+publication, landing changes and push. [Current evidence](releases/2026-10-03-field1-release-final.md).
+
 Android candidate59 adds signed foreground discovery with the existing offline
 update root; publication awaits owner acceptance. Public51 has a manual Settings
 checker; older builds without it need one invitation-page upgrade. Updates never

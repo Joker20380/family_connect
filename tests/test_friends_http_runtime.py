@@ -100,13 +100,33 @@ def running(runtime):
 def nginx_sections():
     source = (ROOT / 'deploy/friends/install-access.py').read_text()
     ordinary = source[source.index('        location ~ ^/friends/'):source.index("\n'''", source.index('        location ~ ^/friends/'))]
-    old = 'referral/(issue|claim)|device/status|notices/publish)'
+    old = 'referral/(issue|claim)|device/(status|support)|notices/publish)'
     assert ordinary.count(old) == 1
-    ordinary = ordinary.replace(old, 'referral/(issue|claim)|notices/(publish|device/(role|publish|list|edit)))')
+    ordinary = ordinary.replace(old, 'referral/(issue|claim)|device/support|notices/(publish|device/(role|publish|list|edit)))')
     tree = ast.parse((ROOT / 'deploy/server-load/publish.py').read_text())
     status = next(ast.literal_eval(node.value) for node in tree.body
                   if isinstance(node, ast.Assign) and node.targets[0].id == 'section')
     return ordinary, status
+
+
+def test_support_route_requires_device_proof_and_returns_only_alias(runtime):
+    from control.friends.support_ids import normalize
+    with running(runtime):
+        number = runtime['backend']
+        device = runtime['canary']
+        status, raw = request(number, '/friends/challenge', body=dict(public_identity=device.public_identity,
+                             wireguard_public_key=device.wireguard_public_key, purpose='support', invitation=''))
+        assert status == 200
+        challenge = json.loads(raw)
+        body = dict(proof=device.prove_transport_key(challenge['challenge']), platform='android',
+                    app_version='0.1.18-beta59', version_code=59)
+        status, raw = request(number, '/friends/device/support', body=body)
+        assert status == 200
+        value = json.loads(raw)
+        assert value == dict(schema=1, device_support_id=normalize(value['device_support_id']))
+        assert device.reference.encode() not in raw
+        assert request(number, '/friends/device/support', body=body)[0] == 403
+        assert request(number, '/friends/device/support', body=dict(device_support_id=value['device_support_id']))[0] == 403
 
 
 @contextlib.contextmanager

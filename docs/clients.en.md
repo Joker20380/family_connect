@@ -1,5 +1,11 @@
 # Client installation
 
+Final FIELD preparation adds a registration-bound Support ID in Settings → About /
+Diagnostics (Copy Support ID). Candidate59 is still unpublished; old8229a36 is the
+previous local build, not the revised candidate. [Current status and tester steps](releases/2026-10-03-field1-release-final.md).
+Update over the existing app; never uninstall or clear data. Send the Support ID,
+not cryptographic keys, and wait for explicit operator admission before FIELD tests.
+
 FIELD candidate03.10: beta59/code59 source in local validation, **not installed or
 published**. Download remains51 until in-place owner acceptance. Never uninstall
 to update; retain identity/data/enrollment. [Release status](releases/2026-10-03-field1-release-diag1a.md).

@@ -2,6 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
+**FIELD-1-RELEASE-FINAL authorized03.10; Stage5N remains CLOSED.**
+1. Validate/commit additive registration Support IDs and operator cap3; build revised
+   unpublished59 from a clean export. Do not replace the previous local artifact.
+2. Backfill existing records without changing identity/enrollment/grants/revocation;
+   deploy authenticated Support ID delivery only through the existing HTTP runtime.
+3. Required owner Redmi in-place final59 acceptance: currently no ADB device.
+   Validate UID/data/identity/readiness, Support ID copy, Auto/AWG/TCP, DIAG/export.
+4. Only after acceptance and release checks: optional min1 signed+legacy catalogs,
+   immutable APK, Android-only landing update, downloaded hash verification and push.
+5. Retain owner; select only1–2 additional devices by Support ID. Never wildcard.
+[Final task report](releases/2026-10-03-field1-release-final.md).
+
+Previous foundation checkpoint (historical):
 **FIELD-1-RELEASE + DIAG-1A authorized03.10; Stage5N remains CLOSED.**
 1. DONE local source `b952c3b`: signed59,224/163 JVM,249 Python/1 skip, native race/vet,
    lint/build/package/privacy checks. Whole-index negative-test guard finding and

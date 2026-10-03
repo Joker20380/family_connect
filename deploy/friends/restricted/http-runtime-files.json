@@ -1,6 +1,7 @@
 [
   "control/friends/__init__.py",
   "control/friends/access.py",
+  "control/friends/support_ids.py",
   "control/friends/chat.py",
   "control/friends/chat_sync.py",
   "control/friends/notices.py",

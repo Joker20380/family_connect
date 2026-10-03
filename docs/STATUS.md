@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+## FIELD-1-RELEASE-FINAL — Support ID candidate,03.10.2026
+
+Stage5N CLOSED. Starting HEAD1790793; Support IDs are random registration aliases,
+not credentials. Additive backfill/operator lookup and capped explicit FIELD actions
+implemented locally; Android Settings shows/copies the bound alias, not Device Identity.
+Unpublished beta59/code59 may be rebuilt; prior8229a36 candidate retained unchanged.
+No connected owner Redmi; no install, identity reset, public catalog, landing switch
+or push. Owner acceptance remains a release gate, not a new Stage5N gate.
+Build/validation and production backfill evidence will be recorded in
+[final release report](releases/2026-10-03-field1-release-final.md).
+Current public51 and owner-only admission must stay unchanged until acceptance.
+
 ## FIELD-1-RELEASE + DIAG-1A — local foundation,03.10.2026
 
 Stage5N CLOSED. Candidate source beta59/code59, not installed/published. Stage5N

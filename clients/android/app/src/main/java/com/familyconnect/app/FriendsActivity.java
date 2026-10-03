@@ -182,8 +182,7 @@ public final class FriendsActivity extends LocalizedActivity {
                 AppLanguage.select(FriendsActivity.this,languageCodes[position]);getIntent().putExtra("tab",3);recreate();
             }
         });
-        String device=getPreferences(MODE_PRIVATE).getString("device","");
-        if(!device.isEmpty())TerminalUi.label(panel,"ID · "+device,12,TerminalUi.MUTED);
+        DeviceSupport.attach(this,panel,worker);
         TerminalUi.label(panel,getString(R.string.product_version,TerminalUi.version(this)),12,TerminalUi.MUTED);
         appUpdate.attach(panel);
         TerminalUi.button(panel,R.string.diagnostics_send,()->Diagnostics.share(this));

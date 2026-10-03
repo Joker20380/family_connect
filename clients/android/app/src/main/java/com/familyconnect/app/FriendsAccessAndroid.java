@@ -43,7 +43,7 @@ final class FriendsAccessAndroid {
     }
     private JsonObject post(String path,JsonObject body,String requestId)throws Exception{
         remaining(5000);
-        require(path.matches("/friends/(challenge|activate|restricted-readiness(/(challenge|ack-challenge|ack))?|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/status|notices/device/(role|publish|list|edit))"));
+        require(path.matches("/friends/(challenge|activate|restricted-readiness(/(challenge|ack-challenge|ack))?|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/(status|support)|notices/device/(role|publish|list|edit))"));
         HttpsURLConnection connection=direct?new ChatNetworkAndroid(context).openHttps("https://185.251.89.19:8443"+path):(HttpsURLConnection)new URL("https://185.251.89.19:8443"+path).openConnection();
         pending=connection;
         try{
@@ -110,6 +110,14 @@ final class FriendsAccessAndroid {
             require(result.get("revoked").isJsonPrimitive()&&result.get("revoked").getAsJsonPrimitive().isBoolean());
             require(result.get("active").isJsonPrimitive()&&result.get("active").getAsJsonPrimitive().isBoolean());
             return result.get("active").getAsBoolean()?text(result.get("device")):"";
+        }
+    }
+    String supportId() throws Exception {
+        try(ControlIdentity identity=identity(false)){
+            JsonObject request=new JsonObject();request.add("proof",proof(identity,"support",""));
+            request.addProperty("platform","android");request.addProperty("app_version",BuildConfig.VERSION_NAME);request.addProperty("version_code",BuildConfig.VERSION_CODE);
+            JsonObject result=post("/friends/device/support",request);fields(result,"schema device_support_id");require(integer(result.get("schema"),1)==1);
+            String support=SupportId.require(text(result.get("device_support_id")));DeviceSupport.store(context,identity.reference(),support);return support;
         }
     }
     JsonObject referral() throws Exception {

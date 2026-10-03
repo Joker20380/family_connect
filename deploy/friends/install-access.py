@@ -59,7 +59,7 @@ section='''        location = /i/ {
             add_header X-Content-Type-Options "nosniff" always;
             add_header Content-Security-Policy "'''+csp+'''" always;
         }
-        location ~ ^/friends/(challenge|activate|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/status|notices/publish)$ {
+        location ~ ^/friends/(challenge|activate|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/(status|support)|notices/publish)$ {
             if ($request_method != POST) { return 405; }
             proxy_pass http://127.0.0.1:18084;
             proxy_set_header Host 127.0.0.1;

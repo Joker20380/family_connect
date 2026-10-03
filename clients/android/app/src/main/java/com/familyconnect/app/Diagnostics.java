@@ -14,9 +14,7 @@ final class Diagnostics {
     private final Context context;
     private final DiagnosticRing ring;
     private Diagnostics(Context context){
-        this.context=context.getApplicationContext();SharedPreferences prefs=context.getSharedPreferences("diagnostics",Context.MODE_PRIVATE);
-        String support=prefs.getString("support_id",null);
-        if(support==null){support=UUID.randomUUID().toString();if(!prefs.edit().putString("support_id",support).commit())throw new IllegalStateException("Diagnostic storage");}
+        this.context=context.getApplicationContext();String support=DeviceSupport.cached(context);
         ring=new DiagnosticRing(support,BuildConfig.VERSION_NAME,BuildConfig.VERSION_CODE,Build.VERSION.SDK_INT);
     }
     private static synchronized Diagnostics get(Context context){if(instance==null)instance=new Diagnostics(context);return instance;}
@@ -43,6 +41,7 @@ final class Diagnostics {
     }
     private AtomicFile file(String name){return new AtomicFile(new File(context.getNoBackupFilesDir(),"diag-"+name+".json"));}
     private void save(boolean incident)throws IOException{
+        ring.support(DeviceSupport.observed());
         byte[] raw=ring.snapshot().toString().getBytes(StandardCharsets.UTF_8);write(file("ring"),raw);if(incident)write(file("incident"),raw);
     }
     private static void write(AtomicFile file,byte[] raw)throws IOException{
@@ -52,9 +51,10 @@ final class Diagnostics {
     static void share(android.app.Activity activity){
         new android.app.AlertDialog.Builder(activity).setTitle(R.string.diagnostics_send).setMessage(R.string.diagnostics_privacy)
             .setNegativeButton(android.R.string.cancel,null).setPositiveButton(R.string.diagnostics_send,(dialog,which)->{
-                try{Diagnostics store=get(activity);JsonObject bundle=new JsonObject();String filename="diagnostics-"+UUID.randomUUID().toString().replace("-","")+".json";synchronized(store){
+                try{Diagnostics store=get(activity);String support=DeviceSupport.cached(activity);JsonObject bundle=new JsonObject();String filename="diagnostics-"+UUID.randomUUID().toString().replace("-","")+".json";synchronized(store){
+                    store.ring.support(support);
                     for(String name:new String[]{"ring","incident"}){
-                        try{byte[] raw=store.file(name).readFully();if(raw.length>128*1024)throw new IOException("Diagnostic bound");bundle.add(name,JsonParser.parseString(new String(raw,StandardCharsets.UTF_8)));}
+                        try{byte[] raw=store.file(name).readFully();if(raw.length>128*1024)throw new IOException("Diagnostic bound");JsonObject record=JsonParser.parseString(new String(raw,StandardCharsets.UTF_8)).getAsJsonObject();record.addProperty("device_support_id",support);bundle.add(name,record);}
                         catch(FileNotFoundException missing){if(name.equals("ring"))bundle.add(name,store.ring.snapshot());}
                     }
                     File[] previous=activity.getCacheDir().listFiles((directory,name)->name.matches("diagnostics-[0-9a-f]{32}\\.json"));
