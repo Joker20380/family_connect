@@ -3,13 +3,18 @@
 ## Current engineering priority / Текущий critical path
 
 **FIELD-1 beta60 continuation authorized03.10; same milestone.**
-1. Auto TCP dual-stack production correction and focused regression; existing
-   emulator traffic test unchanged. Diagnose Manual AWG with non-masking cleanup.
-2. Resolve Windows2022 upgrade using observed SCM lifecycle and readiness evidence.
-3. Clean committed beta60/code60 build/sign; preserve historical unpublished59.
-4. Owner59→60 in-place preservation, Support ID, transports, DIAG acceptance.
-5. Require all hosted platform gates green; no catalog/publication/landing/admission
-   change. Retain one-owner/no-wildcard/cap3. No new milestone.
+1. DONE Auto TCP dual-stack fix, focused builder coverage and unchanged traffic
+   acceptance; Manual AWG primary/cleanup PASS with stale prior-failure race fixed.
+2. DONE Windows2022 SCM Start Pending observed after installer exit0; new PID and
+   authenticated broker readiness PASS with bounded polling, no fixed sleep.
+3. DONE clean source5c740f2 signed beta60/code60 SHA8ee59352; historical59 preserved.
+4. DONE owner59→60 preservation/Support/Auto/AWG/TCP/HTTPS/DIAG/share/privacy acceptance.
+   Readiness decrypted/preserved; later server-material expiry is not fresh READY.
+5. DONE required hosted gates at4963c7c; Windows control rerun on identical scoped
+   source ef554e7. STOP: publication gate READY is not permission to sign a catalog,
+   publish, edit landing or widen FIELD. One-owner/no-wildcard/cap3 unchanged.
+   Before any future restricted field use, confirm current valid readiness through
+   existing provisioning; no expiry bypass or new Stage5N gate.
 
 Previous checkpoints below remain historical evidence.
 

@@ -1,17 +1,26 @@
 # Текущее состояние / Current state
 
-## FIELD-1 beta60 candidate — IN PROGRESS,03.10.2026
+## FIELD-1 beta60 publication gate — READY,03.10.2026
 
-Authorized artifact boundary crossed:0.1.18-beta60/code60 replaces59 as the next
-candidate only. beta59 remains immutable, historical and unpublished. Auto TCP now
-assigns fd79:fc::2/128 alongside IPv4; MTU/DNS/routes unchanged. Added explicit
-dual-stack builder runtime coverage; existing Auto traffic acceptance unchanged.
-Manual AWG harness now retains primary and cleanup failures separately and waits
-for disconnect/operation release before profile cleanup. Actual primary failure
-still requires hosted reproduction. Windows2022 upgrade remains unresolved.
-No60 build/sign/install/owner acceptance or hosted PASS claimed yet. Public Android
-remains51; catalog signing/publication/landing/admission/FIELD widening forbidden.
-Stage5N CLOSED; DIAG-1A prior PASS retained, beta60 device regression pending.
+Same milestone; Stage5N CLOSED, DIAG-1A PASS on60. Signed ARM64 beta60/code60,
+package com.familyconnect.app.friends, clean source5c740f2, SHA8ee59352, signer67a90d1.
+Owner59→60 in-place PASS:UID10283/inode601521/identity/enrollment/activation/encrypted
+readiness preserved; Support ID FC-4D8Q-REEG visible/copy/restart PASS. Auto→AWG7.265s,
+AWG1.509s,TCP1.259s; HTTPS200 each. DIAG both failure snapshots/share/privacy PASS,
+4719-byte export/0 findings; temporary instrumentation removed. Current readiness
+receipt later EXPIRED_ON_IMPORT/ACK_PENDING after ordinary refresh; encrypted state
+and decryption were preserved. No claim of fresh restricted READY or renewal.
+Auto TCP production address omission corrected; existing dual-stack runtime PASS.
+AWG scenario/cleanup PASS after correcting stale off-session failure observation;
+profile-edit guard unchanged. Windows2022 Start Pending race confirmed; new-PID/
+authenticated API bounded readiness passes without changing Windows production.
+Final hosted source4963c7c: clients37123699385 ALL required jobs/steps PASS, including
+Android runtime-control; Linux-control37123699363, wire37123699362, phase0/Docker/
+index guard37123699367 PASS. Windows control37120091189 rerun PASS; its scoped
+inputs unchanged from ef554e7. No newly skipped/waived release failure.
+Public Android remains51;59/60 and signed-v2 remain unpublished. No catalog signing,
+landing/deployment/admission/FIELD widening. One-owner/no-wildcard/cap3 not changed.
+[Exact identities, runtime evidence and release boundary](releases/2026-10-03-field1-release-final.md#beta60-final-acceptance--publication-gate-ready).
 
 ## FIELD-1 platform diagnosis — artifact stop boundary,03.10.2026
 

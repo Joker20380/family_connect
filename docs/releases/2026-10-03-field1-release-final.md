@@ -1,5 +1,138 @@
 # FIELD-1-RELEASE-FINAL / DIAG-1A — 2026-10-03
 
+## beta60 final acceptance — publication gate READY
+
+Same FIELD-1 milestone; Stage5N CLOSED. All requested platform acceptance gates are
+green. DIAG-1A PASS. **Stop before catalog signing/publication/landing/FIELD widening.**
+
+### Immutable candidate
+
+- Android `0.1.18-beta60` / versionCode60, `com.familyconnect.app.friends`, ARM64.
+- Clean committed build source `5c740f2d05f725ee1bcbe63a41f886605d4c7ac4`.
+- APK SHA256 `8ee59352e5f490aea74c3c8c8aeefd0d65bec0c261a044899d512ca376cf6104`;
+  49,412,987 bytes; signer SHA256
+  `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+- Local immutable candidate: `state-client-build/field60-r2/artifacts/FamilyConnect-Test-0.1.18-beta60.apk`.
+  Source inventory SHA256 `2b30498d8c015bb8853e3cefd1a17ad0fd792a39c6a5747e87fa5906ea908654`.
+- Final hosted source `4963c7c3f46d2d55e87ea680c56982d5d7af73b7`; differences from
+  build source are test harness/regressions/docs only, no main Android/Gradle/native
+  changes. Candidate was not silently replaced after owner acceptance.
+- Historical59 remains SHA6d13720bc8cff25d51d95ff7453127577890bee881685a4a66c86fae163f2148,
+  untouched and unpublished. No59 filename/path reused for60.
+
+### Three blockers resolved
+
+1. **Auto TCP production defect:** builder omitted fd79:fc::2/128 while routing::/0.
+   Added exactly that address beside10.79.0.2/32; DNS1.1.1.1,MTU1280,routes/native
+   socket protection unchanged. Source contract strengthened and separate runtime
+   builder assertion checks both sources/default routes/DNS/MTU. Existing Auto traffic
+   test unchanged: IPv4 AND IPv6 bind/connect/HTTP acceptance now passes through real
+   emulator TUN/native TCP/synthetic peer, not an IPv4 fallback or relaxed assertion.
+2. **Manual AWG harness defect:** asynchronous connect could encounter failed=true
+   retained from the previous off/revoked session. Shared wait helper mistook that
+   stale flag for the new attempt failing, entering cleanup prematurely. Cleanup
+   used stopService then immediate profile clearing, masking the primary exception
+   with the legitimate active-VPN mutation refusal. With full Auto now passing,
+   5c740f2 additionally exposed premature foreground-service teardown in the next
+   AWG test. Helper now rejects active failures, not stale off-state failure, while
+   retaining exact requested-state success and30s failure deadline. Manual harness
+   logs primary outcome, VPN/health/requested/active/profile-present state, waits for
+   normal disconnect and idle ownership, and preserves cleanup failure as suppressed
+   when primary fails. Production AWG/service/profile authorization unchanged.
+   Final runtime12:53:06UTC: scenario PASS; screen-off5s, UDP outage20s, recovery6ms,
+   explicit disconnect during outage terminal. Before cleanup: primary=PASS, off/off,
+   requested=awg,active=awg,vpn=false,profile_present=true. Cleanup PASS12:53:07UTC.
+3. **Windows2022 readiness race:** installer Native.Install returns after `sc start`
+   accepts the request; old test required Running in a single immediate observation.
+   Final lifecycle proves installer exit0 can coincide with **Start Pending**, not a
+   broken installation or failed preserved state. Old broker PID5304; SCM stopped
+   12:48:12.060UTC, deleted/recreated with unchanged Auto/LocalSystem/image path;
+   installer return snapshot12:48:17.885 reports Start Pending/new PID7016. Bounded
+   readiness sees Running and authenticated status/request/invalid-activation rejection
+   PASS at728ms. Requires PID different from pre-upgrade, start time after upgrade,
+   and the same PID still Running after probe. Maximum60s with200ms polling; no fixed
+   startup sleep. Sentinel/runtime/broker checks retained. Production Windows code
+   unchanged. Both normal Windows and2022 compatibility pass, twice after this change.
+
+### Owner in-place evidence
+
+Owner Redmi31ce63ba updated at12:42:51UTC with `adb install -r`, never uninstalled,
+cleared or re-enrolled. UID10283, ceDataInode601521, firstInstallTime2026-09-19 unchanged.
+Pre/post instrumentation snapshots match all three encrypted files byte-for-byte
+(identity, normal configuration, restricted readiness) and enrollment fingerprint.
+Identity/readiness decryption, activation and existing signed device-status PASS.
+Existing production-bound Support ID `FC-4D8Q-REEG` visible, Copy matches, survives
+process restart; no device-generated alias or replacement registration.
+
+Normal product UI: Auto selectsAWG in7.265s, manualAWG1.509s, manualTCP1.259s;
+VPN present and test HTTPS200 for each. No normal-candidate exhaustion used on owner.
+Owner Auto TCP fallback was NOT forced; dual-stack TCP traffic evidence comes from
+the emulator's existing synthetic dual-stack contract, not a claim that the owner's
+live network exposed fd79:fc::1 or naturally forced TCP fallback.
+
+Both typed CONNECTING→FAILED and RESTORING→FAILED DIAG snapshots and Android share
+flow PASS.4719-byte bundle SHAe7e09b80b292e2adba783b8c4ada799d561e0ee3fbb0ad56f4755f7f22efa4aa;
+closed schema/event bound128, no credentials/keys/tokens/room URLs/traffic or raw DNS
+history,0 findings; no recipient selected/upload. Five existing safe instrumentation
+methods PASS. Only synthetic diagnostic artifacts and separate test package removed.
+Pulled installed60 matches candidate SHA/signer; private acceptance components absent.
+Final ordinary About UI confirms60/Support ID/Copy after restart, VPN off/Auto retained.
+A delayed final UI capture initially found a different app screen; immediate targeted
+About readback passed. This was not substituted for the actual successful Copy test.
+
+**Readiness limitation, not hidden:** initial encrypted state was preserved exactly
+and decrypts. Later normal prewarm reports EXPIRED_ON_IMPORT/NOT_READY/ACK_PENDING;
+no fresh restricted readiness or restricted connection is claimed. No server renewal,
+expiry bypass, new enrollment or admission change was made. Existing material must
+be valid before any later restricted field use. This does not invalidate the verified
+in-place data-preservation gate or the normal transport/DIAG acceptance.
+
+### Required hosted gates
+
+| Gate | Commit | Run / job | Result |
+| --- | --- | --- | --- |
+| phase0 pytest/cargo + whole-index guard |4963c7c|[37123699367](https://github.com/Joker20380/family_connect/actions/runs/37123699367),111204679104|PASS|
+| Docker build/failover/auth/offline/revocation |4963c7c|same run,111204679027|PASS|
+| Linux-control pytest/GTK/extracted packages |4963c7c|[37123699363](https://github.com/Joker20380/family_connect/actions/runs/37123699363),111204679055|PASS|
+| Android wire contract |4963c7c|[37123699362](https://github.com/Joker20380/family_connect/actions/runs/37123699362),111204678800|PASS|
+| Linux client |4963c7c|[37123699385](https://github.com/Joker20380/family_connect/actions/runs/37123699385),111204679040|PASS|
+| Android emulator + runtime control conformance |4963c7c|same run,111204679073|PASS, including steps15 AND17|
+| Windows client, running-service upgrade + UI |4963c7c|same run,111204679067|PASS|
+| Windows2022 compatibility, identical installer upgrade |4963c7c|same run,111205584991|PASS|
+| Windows control, explicit rerun after fixes |ef554e7|[37120091189](https://github.com/Joker20380/family_connect/actions/runs/37120091189),111206327208|PASS|
+
+Windows-control reruns its prior commit because its workflow path filter is unrelated
+to these changes. `git diff ef554e7..4963c7c -- clients/windows/Core clients/windows/Tests
+tests/vectors scripts/ci_release_fixtures.py .github/workflows/windows-control.yml`
+is empty: exact scoped control inputs identical, not an assumed cross-platform PASS.
+
+Final Android artifact11274129354 ZIP SHA740c8ef1b635d5df490fefa75ed13ecfa2c3710da506823e079cd96715c6b51c;
+Windows compatibility11273854400 SHA5832f627dc547db05350f12f03a995d2fc5235beced0ea7fc4e41079c58898d2.
+Both downloaded/hash-verified. Android summary60 variant cases/0 failures;32 distinct
+methods actually execute successfully. Existing variant/live-production opt-in skips
+are not newly added/waived release failures and are not counted as passes. Auto/TCP/
+AWG, builder and required control-runtime methods executed; Keystore/AtomicFile/
+outbox restart uses distinct processes and passes. No required gate skipped or xfailed.
+Earlier failing runs371224* and37122729324 remain historical evidence, not final PASS.
+
+Local clean export: Friends JVM226, Debug JVM231, standalone control JVM163 PASS,
+lintFriends/instrumentation compile PASS; focused Python15 PASS. Package/JNI symbol/
+source/secret checks PASS;1074 signed archive entries scanned with0 findings and the
+previously reviewed stdlib non-secret false positive retained. No acceptance hook
+packaged. No production change beyond Auto TCP address and Android version metadata.
+
+### Boundary and rollback
+
+No update catalog signed, no APK uploaded to production, no landing edit, no release
+tag, no grant/admission/operator mutation. Existing owner-only/no-wildcard/cap3 state
+not changed; no new production inventory count inferred. Public Android remains51.
+beta59/60 and signed-v2 download routes remain unpublished; full public51 bytes are
+checked separately in local public-readonly evidence. All source pushes use non-release
+commit messages, never `Release ` or a release tag. Unrelated VPN-health work preserved.
+Owner stays on accepted60; do not uninstall, clear data or attempt downgrade to59.
+If a new production fix is needed, create another explicitly identified candidate and
+repeat affected acceptance; never silently replace this accepted SHA.
+
 ## beta60 authorized continuation
 
 Starting HEAD9351e07; beta60/code60 production source now assigns the missing Auto

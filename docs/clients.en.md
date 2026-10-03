@@ -172,6 +172,8 @@ installation, UI, networking and recovery tests.
 WireGuard experiment; its old Tk/Windows-wrapper instructions are not current installation advice.
 # FIELD-1 candidate notice — 2026-10-03
 
-Android `0.1.18-beta60` / code60 is in preparation, not yet accepted or distributed.
+Android `0.1.18-beta60` / code60 is signed and accepted on the owner Redmi and by
+the required hosted gates, but **not publicly distributed**. Candidate SHA256:
+`8ee59352e5f490aea74c3c8c8aeefd0d65bec0c261a044899d512ca376cf6104`.
 Historical beta59 is not eligible for publication. Public invitation/downloads
-remain beta51; no download link or checksum is changed before release acceptance.
+remain beta51; no public download link or update catalog has changed.
