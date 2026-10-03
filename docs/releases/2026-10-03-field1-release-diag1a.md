@@ -74,7 +74,9 @@ protection counters only; unavailable observations absent/UNKNOWN, not zero.
 
 Settings → Send diagnostics explains fields and opens Android chooser with local
 JSON. Non-exported read-only provider, exact one cache file,≤256KiB,1h access-age
-limit. No upload/DIAG-1B. No browsing/destinations/DNS names/SSIDs/messages/raw
+limit. Each export uses a fresh unguessable URI; previous grants revoked and previous
+export deleted, so an old recipient cannot read a future bundle. No upload/DIAG-1B.
+No browsing/destinations/DNS names/SSIDs/messages/raw
 Device Identity/tokens/keys/room URLs/credentials. Existing native/private logs NOT
 bundled. Future authenticated upload may accept this schema under separately defined
 consent, retention and support-code policy. Device export validation still required.
@@ -103,7 +105,13 @@ Private acceptance APK is never a public rollback.
 
 ## Validation checkpoint
 
-Focused Python contracts28 PASS; JVM/lint/native/build/package checks pending.
+Initial clean export `ea7f69882566a78c9dc9a477e027e46fff5b9530`:224 JVM tests PASS,
+lint0 errors/37 warnings, assembleFriends PASS;243 Python PASS/7 skipped (optional
+toolchain fixtures), five native Go race packages PASS. APK1071-entry nested scan
+has0 findings after one previously reviewed hash-pinned stdlib false positive.
+JNI inputs are byte-identical to accepted58 and their native source0615953 is
+unchanged; these are reused verified native artifacts, not a fresh JNI rebuild.
+Final export after grant-lifetime hardening must be rebuilt and rechecked.
 Whole-index source guard currently FAILS on an unchanged pre-existing assertion
 at `tests/test_readiness_adapter_packaging.py:283` containing a literal private-key
 PEM header as a negative test, not key material. Preserve it; do not claim global

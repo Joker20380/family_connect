@@ -32,7 +32,10 @@ public class AppUpdateRuntimeTest {
     }
     @Test public void verifiesInstalledSignerAndRejectsDowngradeAndInvalidArchive()throws Exception{
         Context c=context();File source=new File(c.getApplicationInfo().sourceDir);AppUpdate update=metadata(source);
-        AppUpdateUi.verifyApk(c,source,update,update.code-1);
+        android.content.pm.PackageInfo installed=c.getPackageManager().getPackageInfo(c.getPackageName(),android.content.pm.PackageManager.GET_SIGNATURES);
+        boolean productSigner=AndroidUpdateManifest.SIGNER.equals(AppUpdate.hex(MessageDigest.getInstance("SHA-256").digest(installed.signatures[0].toByteArray())));
+        if(productSigner)AppUpdateUi.verifyApk(c,source,update,update.code-1);
+        else try{AppUpdateUi.verifyApk(c,source,update,update.code-1);fail("Non-product signer accepted");}catch(SecurityException expected){}
         try{AppUpdateUi.verifyApk(c,source,update,update.code);fail("Same version accepted");}catch(SecurityException expected){}
         File invalid=File.createTempFile("invalid-update-",".apk",c.getCacheDir());try{try(FileOutputStream out=new FileOutputStream(invalid)){out.write(new byte[2048]);}try{AppUpdateUi.verifyApk(c,invalid,update,update.code-1);fail("Invalid archive accepted");}catch(SecurityException expected){}}finally{invalid.delete();}
         File foreign=new File(InstrumentationRegistry.getInstrumentation().getContext().getApplicationInfo().sourceDir);

@@ -52,14 +52,19 @@ final class Diagnostics {
     static void share(android.app.Activity activity){
         new android.app.AlertDialog.Builder(activity).setTitle(R.string.diagnostics_send).setMessage(R.string.diagnostics_privacy)
             .setNegativeButton(android.R.string.cancel,null).setPositiveButton(R.string.diagnostics_send,(dialog,which)->{
-                try{Diagnostics store=get(activity);JsonObject bundle=new JsonObject();synchronized(store){
+                try{Diagnostics store=get(activity);JsonObject bundle=new JsonObject();String filename="diagnostics-"+UUID.randomUUID().toString().replace("-","")+".json";synchronized(store){
                     for(String name:new String[]{"ring","incident"}){
                         try{byte[] raw=store.file(name).readFully();if(raw.length>128*1024)throw new IOException("Diagnostic bound");bundle.add(name,JsonParser.parseString(new String(raw,StandardCharsets.UTF_8)));}
                         catch(FileNotFoundException missing){if(name.equals("ring"))bundle.add(name,store.ring.snapshot());}
                     }
-                    File target=new File(activity.getCacheDir(),"diagnostics.json");try(FileOutputStream output=new FileOutputStream(target)){output.write(bundle.toString().getBytes(StandardCharsets.UTF_8));}
+                    File[] previous=activity.getCacheDir().listFiles((directory,name)->name.matches("diagnostics-[0-9a-f]{32}\\.json"));
+                    if(previous!=null)for(File file:previous){
+                        activity.revokeUriPermission(Uri.parse("content://"+activity.getPackageName()+".diagnostics/"+file.getName()),Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        if(!file.delete())throw new IOException("Diagnostic cleanup");
+                    }
+                    File target=new File(activity.getCacheDir(),filename);try(FileOutputStream output=new FileOutputStream(target)){output.write(bundle.toString().getBytes(StandardCharsets.UTF_8));}
                 }
-                Uri uri=Uri.parse("content://"+activity.getPackageName()+".diagnostics/diagnostics.json");
+                Uri uri=Uri.parse("content://"+activity.getPackageName()+".diagnostics/"+filename);
                 Intent send=new Intent(Intent.ACTION_SEND).setType("application/json").putExtra(Intent.EXTRA_STREAM,uri).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 send.setClipData(ClipData.newRawUri("Diagnostics",uri));activity.startActivity(Intent.createChooser(send,activity.getString(R.string.diagnostics_send)));
                 }catch(Exception failure){android.widget.Toast.makeText(activity,R.string.diagnostics_failed,android.widget.Toast.LENGTH_LONG).show();}

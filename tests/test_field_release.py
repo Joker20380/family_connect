@@ -51,6 +51,9 @@ def test_public_manifest_and_export_have_no_private_controls():
     assert 'events.size()==128' in ring and 'UUID.randomUUID()' in ring
     assert 'ControlIdentity' not in ring and 'Throwable' not in ring
     assert not any(name in ring for name in ('room_url', 'oauth_token', 'private_key', 'query_name'))
+    export = (ROOT/'clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java').read_text()
+    assert 'revokeUriPermission' in export and 'UUID.randomUUID()' in export
+    assert 'if(!file.delete())' in export
 
 
 def test_update_anchor_reuses_desktop_root():

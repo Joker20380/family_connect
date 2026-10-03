@@ -10,8 +10,9 @@ import java.io.*;
 public final class DiagnosticsProvider extends ContentProvider {
     @Override public boolean onCreate(){return true;}
     private File file(Uri uri)throws FileNotFoundException{
-        if(!("content://"+getContext().getPackageName()+".diagnostics/diagnostics.json").equals(uri.toString()))throw new FileNotFoundException();
-        File result=new File(getContext().getCacheDir(),"diagnostics.json");
+        String name=uri.getLastPathSegment();
+        if(!"content".equals(uri.getScheme())||!(getContext().getPackageName()+".diagnostics").equals(uri.getAuthority())||uri.getPathSegments().size()!=1||name==null||!name.matches("diagnostics-[0-9a-f]{32}\\.json")||uri.getQuery()!=null||uri.getFragment()!=null)throw new FileNotFoundException();
+        File result=new File(getContext().getCacheDir(),name);
         if(!result.isFile()||result.length()>256*1024||System.currentTimeMillis()-result.lastModified()>3600000)throw new FileNotFoundException();return result;
     }
     @Override public ParcelFileDescriptor openFile(Uri uri,String mode)throws FileNotFoundException{if(!"r".equals(mode))throw new FileNotFoundException();return ParcelFileDescriptor.open(file(uri),ParcelFileDescriptor.MODE_READ_ONLY);}
