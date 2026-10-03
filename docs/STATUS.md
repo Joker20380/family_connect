@@ -18,6 +18,7 @@ Owner-only1/no-wildcard/cap3; no FIELD widening or operator action. No claim all
 updated; unknown legacy/manual count. Readiness remains last-observed EXPIRED_ON_IMPORT,
 not fresh READY; renew through existing provisioning before restricted FIELD tests.
 Stop here; no next milestone. [Publication/rollback/evidence](releases/2026-10-03-field1-release-final.md#beta60-publication--2026-10-03).
+Publication checkpoint741aac3 pushed to origin/main; no tag or unrelated changes.
 
 ## FIELD-1 beta60 publication gate — READY,03.10.2026
 

@@ -120,6 +120,12 @@ entries/0 blocked files; `git diff --check` PASS. Final independent public re-do
 and installed owner APK SHA match8ee59352; public signer matches67a90d1, private test
 package absent. No normal app uninstall, clear, reenrollment or transport change.
 
+Publication checkpoint `741aac3d18c9398c0b8c01dfc0327954ff160500` pushed to
+`origin/main` from evidence HEAD8316f85. Thirteen task-owned paths only: public
+signed catalog, Android landing and release/user documentation. No tag, GitHub
+binary release, production-code change or unrelated VPN-health content included.
+This follow-up records that push; the immutable APK build source remains5c740f2.
+
 ## beta60 final acceptance — publication gate READY
 
 Same FIELD-1 milestone; Stage5N CLOSED. All requested platform acceptance gates are

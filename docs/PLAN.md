@@ -15,6 +15,8 @@
 5. STOP owner1/no wildcard/cap3, no admission/audit/grant changes or FIELD widening.
    Last readiness EXPIRED_ON_IMPORT; fresh accepted readiness via existing provisioning
    is required before any later restricted field test, without expiry bypass.
+6. DONE task-owned publication checkpoint741aac3 pushed; unrelated VPN-health work
+   remains local. No new development task or FIELD expansion authorized here.
 
 The following acceptance-only checkpoint is historical and superseded by publication.
 
