@@ -13,7 +13,7 @@ public final class DiagnosticsProvider extends ContentProvider {
         String name=uri.getLastPathSegment();
         if(!"content".equals(uri.getScheme())||!(getContext().getPackageName()+".diagnostics").equals(uri.getAuthority())||uri.getPathSegments().size()!=1||name==null||!name.matches("diagnostics-[0-9a-f]{32}\\.json")||uri.getQuery()!=null||uri.getFragment()!=null)throw new FileNotFoundException();
         File result=new File(getContext().getCacheDir(),name);
-        if(!result.isFile()||result.length()>256*1024||System.currentTimeMillis()-result.lastModified()>3600000)throw new FileNotFoundException();return result;
+        if(!result.isFile()||result.length()>DiagnosticRing.EXPORT_LIMIT||System.currentTimeMillis()-result.lastModified()>3600000)throw new FileNotFoundException();return result;
     }
     @Override public ParcelFileDescriptor openFile(Uri uri,String mode)throws FileNotFoundException{if(!"r".equals(mode))throw new FileNotFoundException();return ParcelFileDescriptor.open(file(uri),ParcelFileDescriptor.MODE_READ_ONLY);}
     @Override public String getType(Uri uri){return "application/json";}

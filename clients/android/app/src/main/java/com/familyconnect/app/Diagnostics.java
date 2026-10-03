@@ -49,7 +49,7 @@ final class Diagnostics {
         byte[] raw=ring.snapshot().toString().getBytes(StandardCharsets.UTF_8);write(file("ring"),raw);if(incident)write(file("incident"),raw);
     }
     private static void write(AtomicFile file,byte[] raw)throws IOException{
-        if(raw.length>256*1024)throw new IOException("Diagnostic bound");FileOutputStream output=file.startWrite();
+        if(raw.length>DiagnosticRing.RECORD_LIMIT)throw new IOException("Diagnostic bound");FileOutputStream output=file.startWrite();
         try{output.write(raw);file.finishWrite(output);}catch(IOException failure){file.failWrite(output);throw failure;}
     }
     static void share(android.app.Activity activity){
@@ -58,7 +58,7 @@ final class Diagnostics {
                 try{Diagnostics store=get(activity);String support=DeviceSupport.cached(activity);JsonObject bundle=new JsonObject();String filename="diagnostics-"+UUID.randomUUID().toString().replace("-","")+".json";synchronized(store){
                     store.ring.support(support);
                     for(String name:new String[]{"ring","incident"}){
-                        try{byte[] raw=store.file(name).readFully();if(raw.length>256*1024)throw new IOException("Diagnostic bound");JsonObject record=JsonParser.parseString(new String(raw,StandardCharsets.UTF_8)).getAsJsonObject();record.addProperty("device_support_id",support);bundle.add(name,record);}
+                        try{byte[] raw=store.file(name).readFully();if(raw.length>DiagnosticRing.RECORD_LIMIT)throw new IOException("Diagnostic bound");JsonObject record=JsonParser.parseString(new String(raw,StandardCharsets.UTF_8)).getAsJsonObject();record.addProperty("device_support_id",support);bundle.add(name,record);}
                         catch(FileNotFoundException missing){if(name.equals("ring"))bundle.add(name,store.ring.snapshot());}
                     }
                     File[] previous=activity.getCacheDir().listFiles((directory,name)->name.matches("diagnostics-[0-9a-f]{32}\\.json"));
@@ -66,7 +66,9 @@ final class Diagnostics {
                         activity.revokeUriPermission(Uri.parse("content://"+activity.getPackageName()+".diagnostics/"+file.getName()),Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         if(!file.delete())throw new IOException("Diagnostic cleanup");
                     }
-                    File target=new File(activity.getCacheDir(),filename);try(FileOutputStream output=new FileOutputStream(target)){output.write(bundle.toString().getBytes(StandardCharsets.UTF_8));}
+                    byte[] encoded=bundle.toString().getBytes(StandardCharsets.UTF_8);
+                    if(encoded.length>DiagnosticRing.EXPORT_LIMIT)throw new IOException("Diagnostic bound");
+                    File target=new File(activity.getCacheDir(),filename);try(FileOutputStream output=new FileOutputStream(target)){output.write(encoded);}
                 }
                 Uri uri=Uri.parse("content://"+activity.getPackageName()+".diagnostics/"+filename);
                 Intent send=new Intent(Intent.ACTION_SEND).setType("application/json").putExtra(Intent.EXTRA_STREAM,uri).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

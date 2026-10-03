@@ -4,6 +4,14 @@
 
 ### Diagnostic correction r2
 
+Latest export gate: per-record persistence256KiB requires a larger complete bundle
+than the old provider's256KiB limit. Producer/provider now share513KiB bundle bound;
+fresh/read-only/one-hour expiry and exact-name/path constraints are unchanged. Added
+full-history/two-snapshot budget regression and real provider boundary test that does
+not accidentally rely on stale-file rejection. Final JVM231/lint and pytest17 PASS;
+native full race PASS unchanged. Earlier621468e/4c68c77/6585559 artifacts superseded.
+Wait for this latest source's accepted hosted CI before any signature/installation.
+
 Follow-up authorizes a corrected targeted candidate, not broad release. Local source
 uses32-byte/64hex SetupID and full diagnostic digest:
 `SHA256("family-connect/session-diagnostic/v2\0" || decoded_setup_id)`.

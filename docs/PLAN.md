@@ -8,6 +8,8 @@
 2. Local gates PASS: full carrier race,230 Friends JVM/lint,pytest17/17,diff-check.
    Final gateway shutdown/detail race regression also PASS; use fresh hosted CI
    for the final checkpoint, not superseded source621468e artifacts.
+   Export provider/persistence bounds aligned; full-history regression231 JVM PASS.
+   Use latest checkpoint CI, not intermediate4c68c77/6585559 artifacts.
 3. Sign distinct targeted beta61/code61 artifact with the same production key after
    accepted CI; retain original c98852b3 and record exact new source/APK/signer hashes.
 4. Owner in-place UID/identity/enrollment/Support/AWG/export/privacy acceptance.

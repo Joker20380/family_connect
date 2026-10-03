@@ -24,7 +24,10 @@ public class DiagnosticsProviderTest {
             try{provider.openFile(Uri.parse("content://"+info.authority+"/../identity"),"r");fail();}catch(FileNotFoundException expected){}
             assertTrue(file.setLastModified(System.currentTimeMillis()-3600001));
             try{provider.openFile(uri,"r");fail();}catch(FileNotFoundException expected){}
-            try(RandomAccessFile output=new RandomAccessFile(file,"rw")){output.setLength(256*1024+1);}
+            try(RandomAccessFile output=new RandomAccessFile(file,"rw")){output.setLength(DiagnosticRing.EXPORT_LIMIT);}
+            assertTrue(file.setLastModified(System.currentTimeMillis()));
+            try(android.os.ParcelFileDescriptor descriptor=provider.openFile(uri,"r")){assertNotNull(descriptor);}
+            try(RandomAccessFile output=new RandomAccessFile(file,"rw")){output.setLength(DiagnosticRing.EXPORT_LIMIT+1);}
             try{provider.openFile(uri,"r");fail();}catch(FileNotFoundException expected){}
         }finally{file.delete();}
     }

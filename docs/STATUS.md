@@ -13,7 +13,9 @@ shutdown/detail race tests. Source621468e initial CI is superseded by the final
 shutdown-safe bounded sink / allowlisted broker-detail checkpoint; use its fresh CI.
 Final coverage also observes actual RTP/RTCP EOF, reliable recovery exhaustion and
 distinguishes APPLICATION/WEBSOCKET heartbeat. Latest full race/JVM/lint gates PASS;
-earlier621468e/4c68c77 CI artifacts are superseded by this final source checkpoint.
+earlier621468e/4c68c77/6585559 CI artifacts are superseded by the final export-bound
+checkpoint. Persistence256KiB/record and shared provider513KiB/bundle limits now
+agree; full history/two-record regression added. Final Friends JVM231/lint PASS.
 No transport/auth/admission/retry-policy change. Hosted CI, new
 artifact/signature, in-place owner acceptance and live matching-tag session pending.
 Owner still original beta61/61 SHAc98852b3; public/tester still60. Redmi31ce63ba observed

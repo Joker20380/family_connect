@@ -42,4 +42,24 @@ public class RestrictedTraceTest {
         assertEquals(1,ring.snapshot().getAsJsonArray("restricted_history").size());
         ring.cleanup(false,400);assertEquals("RECOVERY_CLEANUP_FAILED",ring.snapshot().getAsJsonArray("events").get(0).getAsJsonObject().get("reason_code").getAsString());
     }
+    @Test public void fullHistoryAndTwoSnapshotsFitExportBudget(){
+        DiagnosticRing ring=new DiagnosticRing("FC-YHQB-9VJN","0.1.18-beta61",61,30);
+        for(int index=0;index<128;index++)ring.nativeEvent("bootstrap_family_auth",Long.MAX_VALUE);
+        for(int index=1;index<=6;index++){
+            String tag=String.format(java.util.Locale.ROOT,"%064x",index);
+            JsonObject lifecycle=snapshot(192);lifecycle.addProperty("session_tag",tag);
+            lifecycle.getAsJsonObject("first_failure").addProperty("session_tag",tag);
+            for(JsonElement element:lifecycle.getAsJsonArray("trace")){
+                JsonObject entry=element.getAsJsonObject();entry.addProperty("session_tag",tag);
+                entry.addProperty("tx",9007199254740991L);entry.addProperty("rx",9007199254740991L);
+                entry.addProperty("heartbeat_kind","APPLICATION");entry.addProperty("close_reason","READ_TIMEOUT");entry.addProperty("target","SUBSCRIBER");
+            }
+            JsonObject source=new JsonObject();source.addProperty("session_tag",tag);source.addProperty("terminal_reason","NONE");source.add("lifecycle",lifecycle);
+            ring.restricted(source,2,false,index);
+        }
+        JsonObject snapshot=ring.snapshot();assertEquals(4,snapshot.getAsJsonArray("restricted_history").size());
+        assertTrue(snapshot.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8).length<DiagnosticRing.RECORD_LIMIT);
+        JsonObject bundle=new JsonObject();bundle.add("ring",snapshot);bundle.add("incident",snapshot.deepCopy());
+        assertTrue(bundle.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8).length<DiagnosticRing.EXPORT_LIMIT);
+    }
 }
