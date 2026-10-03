@@ -280,7 +280,7 @@ def test_runtime_source_and_secret_guards(packaged):
         for name, digest in manifest['files'].items():
             raw = archive.read(name)
             assert hashlib.sha256(raw).hexdigest() == digest
-            assert b'-----BEGIN PRIVATE KEY-----' not in raw
+            assert b'-----BEGIN ' + b'PRIVATE KEY-----' not in raw
             assert b'provider.env' not in raw and b'ya29.' not in raw
             if name.endswith('.py'):
                 tree = ast.parse(raw)

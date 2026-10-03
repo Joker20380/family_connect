@@ -79,7 +79,7 @@ def test_random_collision_retries_without_changing_existing_id(access, monkeypat
     second, other = enroll(access)
     with access.db() as database:
         database.execute('DELETE FROM device_support WHERE device=?', (second.reference,))
-    characters = iter(support.replace('FC-', '').replace('-', '') + other.replace('FC-', '').replace('-', ''))
+    characters = iter(support[3:].replace('-', '') + other[3:].replace('-', ''))
     monkeypatch.setattr(support_ids.secrets, 'choice', lambda alphabet: next(characters))
     with access.db() as database:
         assert support_ids.registered(database, second.reference) == other

@@ -102,7 +102,7 @@ def nginx_sections():
     ordinary = source[source.index('        location ~ ^/friends/'):source.index("\n'''", source.index('        location ~ ^/friends/'))]
     old = 'referral/(issue|claim)|device/(status|support)|notices/publish)'
     assert ordinary.count(old) == 1
-    ordinary = ordinary.replace(old, 'referral/(issue|claim)|device/support|notices/(publish|device/(role|publish|list|edit)))')
+    ordinary = ordinary.replace(old, 'referral/(issue|claim)|device/(status|support)|notices/(publish|device/(role|publish|list|edit)))')
     tree = ast.parse((ROOT / 'deploy/server-load/publish.py').read_text())
     status = next(ast.literal_eval(node.value) for node in tree.body
                   if isinstance(node, ast.Assign) and node.targets[0].id == 'section')
@@ -216,6 +216,59 @@ def test_final_artifact_closure(runtime):
     assert all(path.startswith(str(artifact / ARCHIVE) + '/') for path in json.loads(result.stdout.splitlines()[-1]).values())
     with running(runtime):
         assert request(runtime['backend'], '/friends/challenge')[0] == 400
+
+
+@pytest.mark.parametrize('case', ['missing', 'invalid', 'unknown', 'revoked', 'invite_revoked', 'malformed', 'missing_backfill'])
+def test_support_and_status_authorization_matrix(runtime, case):
+    device = DeviceIdentity.generate() if case == 'unknown' else runtime['canary']
+    with runtime['access'].db() as database:
+        before = {table: sorted(tuple(row) for row in database.execute('SELECT * FROM ' + table))
+                  for table in ('devices', 'invites')}
+    with running(runtime), ingress(runtime, True) as frontend:
+        for purpose in ('support', 'status'):
+            path = '/friends/device/' + purpose
+            if case in ('missing', 'malformed'):
+                assert request(frontend, path, body={} if case == 'missing' else [None])[0] in (400, 403)
+                continue
+            status, raw = request(frontend, '/friends/challenge', body=dict(public_identity=device.public_identity,
+                                  wireguard_public_key=device.wireguard_public_key, purpose=purpose, invitation=''))
+            if case == 'unknown' and purpose == 'support':
+                assert status == 403
+                assert request(frontend, path, body=dict(device_support_id='FC-2222-2222'))[0] == 403
+                continue
+            assert status == 200
+            proof = device.prove_transport_key(json.loads(raw)['challenge'])
+            if case == 'invalid':
+                proof['signature'] = 'A' * 88
+            if case in ('revoked', 'invite_revoked', 'missing_backfill'):
+                with runtime['access'].db() as database:
+                    if case == 'missing_backfill':
+                        database.execute('DELETE FROM device_support WHERE device=?', (device.reference,))
+                    else:
+                        table = 'devices' if case == 'revoked' else 'invites'
+                        database.execute('UPDATE ' + table + ' SET revoked=1 WHERE device=?', (device.reference,))
+            body = dict(proof=proof, platform='android', app_version='0.1.18-beta59', version_code=59) if purpose == 'support' else proof
+            status, raw = request(frontend, path, body=body)
+            if case == 'invalid':
+                assert status in (400, 403)
+            elif purpose == 'support':
+                assert status == (503 if case == 'missing_backfill' else 403)
+            else:
+                assert status == 200
+                value = json.loads(raw)
+                assert set(value) == {'device', 'registered', 'revoked', 'active'}
+                assert value['active'] == (case == 'missing_backfill')
+                assert value['registered'] == (case != 'unknown')
+            if case in ('revoked', 'invite_revoked'):
+                if case == 'revoked':
+                    assert request(frontend, '/friends/challenge', body=dict(public_identity=device.public_identity,
+                                   wireguard_public_key=device.wireguard_public_key, purpose=purpose, invitation=''))[0] == 403
+                with runtime['access'].db() as database:
+                    database.execute('UPDATE ' + table + ' SET revoked=0 WHERE device=?', (device.reference,))
+    with runtime['access'].db() as database:
+        assert before == {table: sorted(tuple(row) for row in database.execute('SELECT * FROM ' + table)) for table in before}
+        if case == 'missing_backfill':
+            assert database.execute('SELECT count(*) FROM device_support WHERE device=?', (device.reference,)).fetchone()[0] == 0
 
 
 def test_build_reproducible_and_explicit_source_guard(tmp_path, monkeypatch):
