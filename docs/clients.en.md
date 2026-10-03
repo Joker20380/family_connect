@@ -6,6 +6,11 @@ previous local build, not the revised candidate. [Current status and tester step
 Update over the existing app; never uninstall or clear data. Send the Support ID,
 not cryptographic keys, and wait for explicit operator admission before FIELD tests.
 
+Revised local candidate: source `5abc2da`, APK SHA256
+`6d13720bc8cff25d51d95ff7453127577890bee881685a4a66c86fae163f2148`.
+Not installed/published; server alias backfill completed but Android delivery pending.
+The earlier `b952c3b` / `8229a36` build below is historical. Public download remains51.
+
 FIELD candidate03.10: beta59/code59 source in local validation, **not installed or
 published**. Download remains51 until in-place owner acceptance. Never uninstall
 to update; retain identity/data/enrollment. [Release status](releases/2026-10-03-field1-release-diag1a.md).

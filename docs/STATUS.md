@@ -8,9 +8,17 @@ implemented locally; Android Settings shows/copies the bound alias, not Device I
 Unpublished beta59/code59 may be rebuilt; prior8229a36 candidate retained unchanged.
 No connected owner Redmi; no install, identity reset, public catalog, landing switch
 or push. Owner acceptance remains a release gate, not a new Stage5N gate.
-Build/validation and production backfill evidence will be recorded in
-[final release report](releases/2026-10-03-field1-release-final.md).
-Current public51 and owner-only admission must stay unchanged until acceptance.
+Clean source5abc2da produces revised signed59 SHA256
+`6d13720bc8cff25d51d95ff7453127577890bee881685a4a66c86fae163f2148`.
+226/163 JVM,510 Python(0 skipped), lint0 errors/36 warnings, five native race/vet
+packages PASS; APK nested scan1074 entries/0 findings,27 changed-source files clean.
+RU backfill08:50UTC:28 aliases,24 non-revoked/4 revoked; platforms0 known/28 unknown,
+versions1 known58/27 unknown; all13 preexisting table rows/admission bytes preserved.
+HTTP Support delivery NOT deployed. Final owner ADB check still empty; runtime
+copy/Auto/AWG/TCP/DIAG/share and identity preservation NOT RUN. Public51 unchanged,
+admission1 owner/no wildcard, no publication/push. Whole-index negative PEM assertion
+guard finding/hosted CI remain open. FIELD BLOCKED; DIAG-1A PARTIAL.
+[Final evidence and remaining work](releases/2026-10-03-field1-release-final.md).
 
 ## FIELD-1-RELEASE + DIAG-1A — local foundation,03.10.2026
 

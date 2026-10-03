@@ -3,10 +3,12 @@
 ## Current engineering priority / Текущий critical path
 
 **FIELD-1-RELEASE-FINAL authorized03.10; Stage5N remains CLOSED.**
-1. Validate/commit additive registration Support IDs and operator cap3; build revised
-   unpublished59 from a clean export. Do not replace the previous local artifact.
-2. Backfill existing records without changing identity/enrollment/grants/revocation;
-   deploy authenticated Support ID delivery only through the existing HTTP runtime.
+1. DONE source5abc2da/revised59 SHA6d13720,226/163 JVM,510 Python, five native race/vet packages,
+   lint0 errors/36 warnings. Preserve old8229a36 artifact. Source-guard false positive
+   and hosted release validation still open.
+2. DONE RU backfill28 records,24 non-revoked/4 revoked, platform0 known/version1 known;
+   existing13 tables/admission unchanged. Deploy authenticated Support ID delivery
+   through the existing HTTP runtime/ingress; not yet deployed.
 3. Required owner Redmi in-place final59 acceptance: currently no ADB device.
    Validate UID/data/identity/readiness, Support ID copy, Auto/AWG/TCP, DIAG/export.
 4. Only after acceptance and release checks: optional min1 signed+legacy catalogs,
