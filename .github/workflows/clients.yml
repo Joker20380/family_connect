@@ -3,9 +3,9 @@ on:
   push:
     branches: ['**']
     tags: ['v*']
-    paths: ['clients/**', '.github/workflows/clients.yml', 'scripts/ci_release_fixtures.py', 'scripts/package_desktop.py', 'scripts/package_linux.py', 'packaging/**', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
+    paths: ['clients/**', 'carrier/**', 'pilot/android-restricted/**', '.github/workflows/clients.yml', 'scripts/ci_release_fixtures.py', 'scripts/package_desktop.py', 'scripts/package_linux.py', 'packaging/**', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
   pull_request:
-    paths: ['clients/**', '.github/workflows/clients.yml', 'scripts/ci_release_fixtures.py', 'scripts/package_desktop.py', 'scripts/package_linux.py', 'packaging/**', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
+    paths: ['clients/**', 'carrier/**', 'pilot/android-restricted/**', '.github/workflows/clients.yml', 'scripts/ci_release_fixtures.py', 'scripts/package_desktop.py', 'scripts/package_linux.py', 'packaging/**', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
   workflow_dispatch:
 concurrency:
   group: family-connect-clients-${{ github.ref }}
@@ -15,7 +15,7 @@ permissions:
 jobs:
   android:
     runs-on: ubuntu-latest
-    timeout-minutes: 55
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -67,6 +67,27 @@ jobs:
         run: python3 pilot/android-awg/report_ci.py
       - name: Confirm control conformance on Android runtime
         run: python3 pilot/android-awg/report_control_ci.py
+      - name: Restricted carrier race regression
+        run: go test -race ./...
+        working-directory: carrier
+      - name: Build pinned restricted native and gateway
+        shell: bash
+        run: |
+          git clone --quiet https://github.com/XTLS/Xray-core "$RUNNER_TEMP/restricted-xray"
+          git -C "$RUNNER_TEMP/restricted-xray" checkout --detach d2758a023cd7f4174a5a5fa4ff66e487d4342ba0
+          python3 pilot/android-restricted/build.py --xray "$RUNNER_TEMP/restricted-xray" --go "$(command -v go)" --ndk "$ANDROID_HOME/ndk/28.2.13676358" --out "$GITHUB_WORKSPACE/clients/android/restricted-generated"
+          mkdir -p restricted-release
+          (cd carrier && go build -trimpath -o ../restricted-release/bootstrap-broker ./cmd/bootstrap-broker)
+      - name: Build unsigned ARM64 Friends for offline signing
+        run: gradle --no-daemon -PfcTargetAbi=arm64-v8a -PfcFriendsCi=false :app:assembleFriends :app:testFriendsUnitTest :app:lintFriends
+        working-directory: clients/android
+      - name: Verify exact restricted release payload
+        run: python3 pilot/android-restricted/package_ci.py --source-commit "$GITHUB_SHA" --out restricted-release --apksigner "$ANDROID_HOME/build-tools/35.0.0/apksigner"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FamilyConnect-Android-restricted-arm64
+          path: restricted-release/
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -93,8 +93,9 @@ final class AutomaticConnection implements TunnelEngine,ConnectivityOrchestrator
         TunnelEngine active=candidate;
         if(active instanceof RestrictedTunnelEngine) {
             RestrictedTunnelEngine restricted=(RestrictedTunnelEngine)active;
+            boolean healthy=restricted.healthy();
             try { restricted.evidence(); }catch(Exception ignored){}
-            if(!restricted.healthy())orchestrator.lost(ConnectivityOrchestrator.Failure.INTERNAL);
+            if(!healthy)orchestrator.lost(ConnectivityOrchestrator.Failure.INTERNAL);
         } else if(active instanceof AutomaticNormalEngine) {
             boolean good=health.check(((AutomaticNormalEngine)active).source);
             Diagnostics.dns(context,good);

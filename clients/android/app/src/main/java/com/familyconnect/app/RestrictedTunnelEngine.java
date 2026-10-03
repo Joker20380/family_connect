@@ -112,6 +112,7 @@ final class RestrictedTunnelEngine implements TunnelEngine {
         if (handle<=0) return;
         File output=new File(context.getFilesDir(),"restricted-evidence.jsonl");
         JSONObject snapshot=new JSONObject(NativeRestricted.stats(handle));
+        snapshot.put("authorization_denied",FriendsRestricted.denied);
         Diagnostics.nativeStats(context,snapshot);
         if (output.length()>1024*1024) return;
         snapshot.put("elapsed_ms",SystemClock.elapsedRealtime());

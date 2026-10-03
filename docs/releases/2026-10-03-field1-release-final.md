@@ -1,5 +1,505 @@
 # FIELD-1-RELEASE-FINAL / DIAG-1A — 2026-10-03
 
+## Diagnostic beta61 preparation — commit/push authorized
+
+Source version raised to0.1.18-beta61/code61; beta60 remains public/invitation/catalog.
+No signed61, device installation, gateway deployment or public rollout yet.
+CI retains emulator/desktop gates, adds full carrier race tests, pinned restricted
+arm64/native gateway builds, and a dedicated unsigned artifact with source SHA,
+native byte/manifest/diagnostic-contract checks, normal native verification and
+version/package/signature-state receipt. Increased Android job budget55→75min for
+the added pinned native build. Signing remains offline after accepted CI/downloads.
+Five synthetic payload tests cover parity, stale native/manifest, wrong source pin
+and missing Java diagnostic contract. Existing local diagnostics test results below
+still apply to the preceding unversioned implementation, not a released beta61.
+Owner physical device is connected; no mutation performed in this preparation.
+Required acceptance: original signer/package/UID/identity/enrollment/Support retained
+through in-place update; real-device diagnostic contract; fresh readiness/leases;
+controlled gateway binary with executable-only rollback. Do not restore expired
+credentials, reset identities, widen admission or restart ordinary HTTP/AWG/TCP.
+Tester delivery: verified signed APK link after acceptance; download over Wi-Fi,
+install as Update, never uninstall/clear data, confirm beta61 and same Support ID,
+then wait for operator-ready gateway before one mobile Auto test/export.
+Public hashes/links remain unchanged until the signed artifact is verified/published.
+
+## Terminal-reason diagnostic implementation — local only03.10.2026
+
+User authorized work to identify and eliminate the repeated post-connect failure.
+Starting HEAD9fde56d, prior dirty observation/VPN-health documentation preserved.
+No commit/push, server/device write, registration change or release publication.
+This implementation repairs lost diagnostic evidence; the network/transport cause
+of the two real failures is not yet established or claimed fixed.
+
+### Changes
+
+- New `carrier/sessiondiag` maps typed/wrapped errors to finite categories and
+  projects only selected numeric metrics and allowed reliable/ICE/signaling states.
+  Unknown errors become UNKNOWN without raw text. Correlation uses a domain-separated
+  SHA256/128 tag of random setup ID; no original setup capability/room/address export.
+- Mux records first failure time and retains first error through cancellation,
+  including control-queue overflow. Wholedevice stores plane.Wait's category and
+  exposes the session projection. Existing fail-closed handling/limits unchanged.
+- Gateway emits `session_terminal` plus allowlisted broker reasons instead of
+  throwing away the Code. Error timestamp is separate from later cleanup/log time.
+- Android exports `restricted_session` with native_state/authorization_denied and
+  bounded projected report. Unknown fields/strings, fractional/negative/unsafe integers
+  are rejected. First terminal snapshot survives teardown; new CONNECT resets it;
+  independently retained incident persists. Poll reads health before collecting
+  evidence, so native state is current at failure. Generic terminal INTERNAL policy
+  is deliberately unchanged until cause classification.
+
+No key/profile/provider token, endpoint/ICE address, DNS name, payload or arbitrary
+error message added to shared diagnostics. Existing internal evidence still stays
+private; no raw logs/packet capture requested. Correlation tag is ephemeral, not
+a persistent device identity. No dependency/version/security-policy changes.
+
+### Checks and artifacts
+
+| Check | Result |
+| --- | --- |
+| Full carrier `go test -race ./...`, live Telemost gates disabled | PASS |
+| Go added classification/privacy/correlation/first-error/overflow/cleanup tests | PASS |
+| Final broker enum/race test after allowlist refinement | PASS |
+| Friends JVM,36 suites /228 tests | PASS,0 failures/errors/skips |
+| Android first-terminal/privacy/denied/new-connect tests | PASS |
+| `lintFriends` | PASS |
+| `tests/test_field_release.py` |4 PASS |
+| Go1.26 gateway build | PASS, local Linux binary |
+| Android arm64 native with pinned Xray/gVisor/NDK27.2 | PASS |
+| Unsigned `assembleFriends` with explicit fresh native source set | PASS |
+| APK native byte hash + build manifest + DEX diagnostic key | PASS |
+| apksigner rejects unsigned compile-only APK | Expected rejection verified |
+| `git diff --check` | PASS |
+
+Local gateway SHA256:
+`62e8de71bc1e49741739cf472ce55108c8ad8867be93822f0f7c247e8b9f9bdb`.
+Local native SHA256:
+`8771739a1a8968d173562d48d9a2c0f66670a8e2ca5e90c5ea19a7580b163d0b`.
+Compile-only unsigned APK SHA256:
+`488689f833a05f98b747f17f386961430cbc8499a6524e7974a1c4425267cfa4`.
+
+Native output under ignored `state-client-build/session-diagnostics/native/`;
+gateway `/tmp/fc-session-diagnostics-bootstrap-broker`; APK is Gradle's local
+`app-friends-unsigned.apk`. APK retains source beta60/code60 only because no release
+version change was made: **never install, distribute or sign this as replacement60**.
+It is packaging proof only, not accepted immutable release provenance/platform CI.
+Default generated native assets were not overwritten; build used a temporary Gradle
+source-set override selecting the fresh .so. No signing keys accessed.
+
+Initial Go/Gradle socket tests failed under sandbox and passed outside it. Native
+build hit /tmp disk quota twice (including outside sandbox); third build with
+TMPDIR/output on project disk passed. No preexisting files/cache removed. Gradle
+reported Python3.14/Chaquopy bytecode warning and existing deprecation/watch warnings;
+these do not constitute release-toolchain or device-runtime acceptance. Linux host
+build is not a Windows validation; no desktop binary changed.
+
+### Remaining gates / recovery
+
+Public, installed tester, invitation and Android catalog remain accepted beta60;
+Linux0.2.11/Windows0.2.15 unchanged. No new hosted CI, signature, owner installation,
+gateway rollout, tester export or physical validation yet. Source commit/push needs
+explicit authorization; then new immutable version/clean builds/CI, native+Java
+parity, platform signing and owner identity-preserving update checks precede delivery.
+Do not mistake local test success for resolution of the FIELD transport failure.
+
+Rollout: only diagnostic gateway binary and new accepted Android build, exact2/3
+cohort, no normal HTTP/AWG/TCP changes. Gateway rollback restores prior executable
+under existing guarded procedure, not expired credentials or old CRL floors.
+Revalidate/renew prior gateway/directory/device leases immediately before live work;
+the previously recorded16:17/16:22UTC deadlines have passed during local work.
+No automatic renewal or lifetime extension introduced. Runtime rollback not needed
+for this task because nothing deployed. Keep previous immutable APK/catalog assets.
+
+Next: one normal-Auto real attempt with fresh readiness; correlate both reports by
+session_tag, preserve unknowns, reproduce/fix the actual cause and add its regression
+test. Sustained/lifecycle acceptance still required. FIELD remains BLOCKED;
+no RKN attribution or cohort expansion. [Operator/diagnostic guide](../testing/restricted-session-diagnostics.ru.md).
+
+## Fifth export / second post-renewal attempt — 03.10.2026
+
+User supplied `FamilyConnect-diagnostics(5).json`,83274 bytes, SHA256
+`80fe63abd6491f4f147eecfe434bf26a22416e1df9d51f76ab3b0554e94b0e29`.
+Same tester FC-YHQB-9VJN, Android0.1.18-beta60/code60.128 events in each bounded
+snapshot, overlap deduplicated. Fresh local READY16:02:19UTC precedes normal Auto;
+no server ACK readback performed for that refresh in this export analysis.
+
+| UTC | Client evidence |
+| --- | --- |
+|16:02:41.309|Normal Auto start, incident network CELLULAR|
+|16:03:06 /16:03:28|AWG/TCP NETWORK candidate failures|
+|16:04:05.758|Restricted CONNECTED after84.449s; collected Family auth/broker/SESSION_READY|
+|16:04:20.901|INTERNAL transport loss after15.143s connected|
+|16:04:20.913–21.027|RESTORING→FAILED114ms, no further candidate attempt|
+|16:05:06|Explicit disconnect releases VPN capture|
+|16:05:15|New WIFI/AWG CONNECTED in7.432s|
+
+Incident READY/USABLE, restricted SUCCESS from establishment, capture retained.
+Counters DNS20/TCP4/active0/peak3, protect145/denied0, UDP denied15/IPv6 denied40.
+These are not destination-response/download success metrics. No AUTH, STARTUP_FAILED
+or NATIVE_VALIDATION_FAILED in either retained snapshot. Final ring does not contain
+a post-connect DNS_PROBE_OK yet; do not infer one from the previous Wi-Fi session.
+
+Compared programmatically with fourth export:30.227s versus15.143s until first
+INTERNAL after CONNECTED. Reproduced post-connect loss, not a demonstrated constant
+30s cutoff. Does not distinguish network filtering, provider/NAT, reliability or
+our protocol failure. Existing missing terminal-reason diagnostics still block cause
+attribution; no RKN attribution, timeout increase or retry-policy change justified.
+
+Read-only Amsterdam correlation at16:08:37UTC: exact unit/time filter16:02–16:06
+returned11 events, no omitted records/cap hit. Bootstrap auth16:03:42.115343,
+CREATING16:03:43.116494, CREATED/GATEWAY_JOINING16:03:46.129273,
+READY16:03:48.086468, CLIENT_ISSUED16:03:48.087938,
+handoff16:03:48.486722, family_auth16:04:03.622532,
+ACTIVE16:04:04.633890, dedicated_resources_closed/FAILED16:05:19.694063UTC.
+Final two records share journald timestamp; reverse output order is not event
+causality. ACTIVE-to-terminal record75.060s; client-to-server failure record gap
+58.793s is not proof of continuous service or of which endpoint caused loss.
+Events have no device/session ID; only one sequence in this interval correlates
+with the supplied attempt. Same active/running PID3231001, NRestarts0, since15:22:36.
+Initial bounded query timed out20s; repeat with45s allowance completed, no service
+mutation. Journal-read timeout is not a transport failure. No new certificate/CRL
+or server readiness validation. Do not treat this as permission for another retry.
+
+JSON parsing, state/capture/outcome assertions and no-startup-AUTH/import-failure
+checks PASS. No application/server code, version, binary, credential or admission
+change; no build/runtime test or rollback required. Public beta60 unchanged;
+preexisting exact2/3 policy preserved, no expansion. Next engineering work remains
+privacy-safe native/gateway terminal-reason propagation plus tests before another
+controlled attempt with fresh readiness/leases. FIELD remains BLOCKED.
+
+## Gateway correlation for fourth export — 03.10.2026 15:54UTC
+
+User requested server-side investigation, not another tester retry. Read-only
+operations limited to authorized Amsterdam/RU Family Connect resources. No service,
+configuration, admission, credential, application or catalog mutation. Starting
+HEAD9fde56d and existing dirty documentation preserved; beta60/code60 unchanged.
+
+Exact `_SYSTEMD_UNIT=family-connect-restricted-bootstrap.service` journal filter,
+15:32–15:36UTC, reverse bounded500 entries, returned11 JSON events, no omitted
+records, cap not reached. Earlier `--unit` query exceeded20s and was terminated;
+that query timeout is not a gateway/network health result. Exact-filter query
+completed twice. No broad host or neighbouring-service logs were read.
+
+| Gateway UTC | Event |
+| --- | --- |
+|15:33:56.017324|bootstrap_family_auth|
+|15:33:56.712509|CREATING|
+|15:33:56.965373|CREATED / GATEWAY_JOINING|
+|15:33:59.286103|READY / CLIENT_ISSUED|
+|15:34:00.400863|bootstrap_handoff|
+|15:34:12.378907|family_auth|
+|15:34:13.488299|ACTIVE|
+|15:34:52.100812|dedicated_resources_closed|
+|15:34:52.103185|FAILED|
+
+Gateway session active→FAILED interval38.615s. Client independently records
+CONNECTED15:34:13.877→INTERNAL15:34:44.104 (30.227s). Server failure record appears
+about8s later, but observation/cleanup delays and unsynchronized endpoint timestamp
+accuracy prevent assigning fault origin from ordering alone. Journal events lack
+session/device correlation IDs; this is the only ACTIVE/FAILED sequence in the
+bounded interval, consistent with the supplied tester export, not a cryptographic
+device-to-log binding. `dedicated_resources_closed` means Mux socket/stream/buffer
+counters were zero at cleanup; it does not prove successful payload delivery.
+
+15:51:57/15:54:02UTC systemd: active/running, PID3231001, NRestarts0, Result success,
+start15:22:36UTC; same PID as credential reload. No service crash/restart observed.
+Disk bootstrap-broker SHA256
+`e17e1fe77aa0121847c276fa15db9064d29b714977a57b568183e9950149b1b8`
+matches the accepted e808f50 build. `git diff e808f50 HEAD` for its entry point,
+broker lifecycle and gateway code is empty.
+
+Source correlation: `telemostGateway.Run` emits resources-closed after Mux cleanup
+and returns `mux.Wait()` error; `Broker.Create` maps returned error to FAILED with
+`gateway_session_failed`. The bootstrap-broker callback ignores its Code argument,
+so the journal contains FAILED only. The event order is consistent with that path;
+do not invent a lower-layer error or treat it as a logged gateway_session_failed.
+On Android, wholedevice Attach drops plane.Wait's error, JNI sees cancelled session,
+and AutomaticConnection maps unhealthy restricted to INTERNAL. Neither retained
+export nor current journal contains the original terminal Mux/reliability/transport
+reason. No amount of re-reading these same events can recover that missing value.
+
+15:54:24UTC protected file metadata projection: certificate expires16:22:33UTC,
+issuer04.10 14:13:53UTC, directory issued15:22:39.140368726/expires16:17:36.983028339UTC.
+This did not perform another live TLS or CRL verification.15:54:27UTC readback:
+owner receipt expired15:18:33; tester last ACK15:27:38 expired15:42:05, no newer
+attempt. Expiration now does not explain loss at15:34:44. Both remain admitted,
+non-revoked. Exact2/3 set,28 total/24 non-revoked/4 revoked and registration,
+invitation, Support mapping, owner grant and audit match the15:23 checkpoint.
+
+Validation: safe JSON receipts retained under ignored0600
+`state-client-build/field60-session-loss/`; invariant comparison and bounded-journal/
+same-PID assertions PASS. No runtime tests/build because runtime code unchanged.
+No deployment/rollback required; never restore expired credentials or lower floors.
+Next required work: enum-only privacy-safe terminal diagnostics propagated from
+native/session layers and retained at both endpoints, focused privacy/regression
+tests, then one controlled fresh-readiness retry. Do not blindly remap every
+INTERNAL to NETWORK or alter security/TTL policy. No tester retry requested now;
+FIELD completion/expansion remains blocked. Diagnostic patch not implemented or
+deployed by this read-only task. Documentation whitespace check PASS.
+
+## Fourth tester export: post-renewal session established, then lost
+
+Analyzed supplied `FamilyConnect-diagnostics(4).json` (83272 bytes), SHA256
+`27147fab9bdaafd43cef5a8cdf0fd69dc74133450048be75b683c1add6dd1cc7`.
+FC-YHQB-9VJN / Android0.1.18-beta60/code60. Both bounded snapshots contain128
+events; overlapping events deduplicated for the timeline. Earlier connection start
+is outside this export; no all-history counts or native event timing claimed.
+Native stage timestamps are collection times, not individual handshake durations.
+
+| UTC03.10 | Observed result |
+| --- | --- |
+|15:27:38|READY from ordinary provisioning; server ACK same second, expiry15:42:05|
+|15:32:55.942|Normal Auto connection start; incident network CELLULAR|
+|15:33:21 /15:33:43|AWG then TCP candidate NETWORK failures|
+|15:34:13.877|Restricted CONNECTED,77.935s from start; Family auth, broker descriptor, SESSION_READY|
+|15:34:44.104|Transport loss INTERNAL,30.227s after CONNECTED|
+|15:34:44.112–44.229|RESTORING→FAILED117ms, no further candidate attempt|
+|15:35:16|Explicit disconnect releases retained VPN capture|
+|15:35:26|New WIFI/AWG connection succeeds in7.105s; DNS OK through15:36:42|
+
+Read-only RU observation15:36:47UTC (prior to export analysis) confirms tester
+ACK_RECEIVED/currently_ready=true; owner ACK remains expired. Gateway renewal
+certificate expiry16:22:33UTC and directory expiry16:17:36UTC are the prior verified
+checkpoint, not a fresh host inspection here. The tester receipt was also unexpired
+at loss. No evidence supports attributing this new failure to the earlier expired
+gateway certificate; startup authentication now succeeds.
+
+Incident retained `vpn_capture_open=true`, READY/USABLE, restricted SUCCESS from
+candidate establishment. SUCCESS is not an ongoing health verdict. Counters:
+protect_ok145/protect_denied0, DNS44, TCP9/active0/peak8, UDP denied27/IPv6 denied30.
+These prove recorded activity/rejections, not successful destination responses or
+downloads. Latest ring is CONNECTED/AWG, not an ongoing restricted session.
+
+Source inspection at unchanged HEAD9fde56d: `AutomaticConnection.poll` calls
+`lost(INTERNAL)` whenever `RestrictedTunnelEngine.healthy()` is false. That predicate
+checks handle/native state2 and absence of FriendsRestricted.denied. Native state
+becomes3 on wholedevice session failure; `Session.Failed` observes cancellation,
+including after Mux.Wait returns, but its terminal error is discarded at this layer.
+The shared export does not include native state, denied flag or terminal Mux reason.
+`ConnectivityOrchestrator` deliberately treats INTERNAL as terminal, explaining
+the117ms failed restoration without establishing the underlying failure cause.
+No new AUTH, STARTUP_FAILED or NATIVE_VALIDATION_FAILED event in this export.
+Do not infer a30s timeout, provider block or crash from elapsed time alone.
+
+Validation: JSON parsed; merged event timeline/candidate order/timestamps inspected;
+source paths traced. No code change, build or runtime test performed. No APK,
+service, catalog, admission, grant or lease changes; no rollback needed for this
+read-only analysis. Existing credential recovery must never restore expired material
+or lower security floors. Exact2/3 cohort and published beta60 remain unchanged.
+Next: bounded privacy-safe gateway/native terminal correlation for this interval;
+then targeted reproduction/classification before any runtime fix. Fresh leases and
+owner receipt required before later use. FIELD remains BLOCKED on sustained session
+loss and outstanding lifecycle/network tests; no rollout/expansion authorization.
+
+## FIELD observation and explicit tester admission — 2026-10-03
+
+Same FIELD-1 milestone, Stage5N CLOSED, DIAG-1A PASS. Starting HEAD
+`9fde56dc5eae62378ae757bdf5ea15052fd26f21`. Public beta60/code60/source5c740f2,
+SHA8ee59352 and signer67a90d1 unchanged; no APK rebuild, publication, catalog or
+transport change. Unrelated dirty VPN-health documentation preserved. No commit/push
+for this observation operation.
+
+### Owner readiness renewal
+
+Read-only preflight found delegation2/owner grant2/CRL expired11:54:56UTC and gateway
+certificate expired01:57:34UTC. Existing protected offline issuer/gateway procedure
+renewed delegation3 and owner grant3 through2026-10-04 14:13:53UTC, preserving keys,
+Family, registration and identity. CRL floor1494→1495 then ordinary sync advanced it.
+Gateway credential valid through2026-10-03 15:14:31UTC; no lease extension/bypass.
+Protected host backups: `restricted-materials-stage-20261001/field60-readiness-20261003`
+on the two authorized gateways. Secrets and DB backups remain outside Git/output.
+
+Initial startup precondition found retained systemd failed state, not a fresh carrier
+failure. Saved state evidence; bounded journal read timed out, not interpreted as a
+transport result. Reset only restricted bootstrap unit's failed state; did not reset
+security floors. Fresh start14:34:22UTC, directory14:34:26UTC, exact TLS certificate
+and stable process check PASS; restored ordinary RU sync timer. No runtime redeploy.
+Do not restore expired credentials or regress revocation floors during rollback;
+use the existing renewal procedure for currently valid material.
+
+Private owner instrumentation (not the public APK) exercised normal foreground
+provisioning: READY, PRESENT_VALID provisioning/bootstrap, usable=true, revision3,
+minimum_crl1543, failure_reason NONE. Server accepted ACK14:40:34UTC; material valid
+until14:55:27UTC. Support FC-4D8Q-REEG and encrypted identity unchanged. Subsequent
+registrationSnapshot and existingIdentityStillAuthenticates PASS: UID10283,
+enrollment/activation/Support preserved, readiness decrypts. No new registration.
+This does not constitute repeated real-network FIELD acceptance.
+
+### FC-YHQB-9VJN explicit admission
+
+User explicitly selected this existing Support ID. Read-only lookup verified active,
+non-revoked device/invitation, valid existing public-identity binding and authenticated
+Support observation reporting Android0.1.18-beta60/code60. Existing operator
+`support-operator-5abc2da.pyz enable-field` applied only this admission, with expiry
+2026-10-04 14:13:53UTC matching the existing owner grant. Built-in audit:
+timestamp1791038282 (14:38:02UTC), Support FC-YHQB-9VJN, previous0, new1, APPLIED.
+
+Exact admitted set: FC-4D8Q-REEG + FC-YHQB-9VJN;2 devices, cap3, no wildcard.
+Before/after registration, invitation, Support mapping and owner grant fingerprints
+identical. Inventory28 total/24 non-revoked/4 revoked; no duplicate enrollment/alias.
+No other device enabled. If admission rollback is requested, use audited
+`disable-field` for FC-YHQB-9VJN only; preserve owner and all registration records.
+
+Normal tester challenge/fetch succeeded14:39:42UTC, revision1/minimum_crl1541,
+material expiry14:54:23UTC. Bounded370-second observation and final14:46:56UTC
+readback found no accepted ACK. Admission is successful, but local import READY and
+ACK_RECEIVED are unconfirmed. Do not force Telemost, claim ready-to-use restricted
+transport, or classify the missing receipt as censorship/client failure without
+device evidence. Request About/Diagnostics export; keep app online for ordinary
+provisioning. No arbitrary retry/grant reset or synthetic signed device requests.
+
+Private safe receipts: `state-client-build/field60-observation/` and
+`state-client-build/field60-tester/` (ignored). No raw identities, credentials,
+room URLs or browsing data in documented evidence. Real connection cycles/network
+diversity and failure classification remain pending; no FIELD completion claim.
+Existing service notices are public platform-filtered announcements, not targeted
+Support-ID delivery. No device-specific notice has been broadcast to all users.
+
+Follow-up14:51:59UTC: exact cohort/audit/registration fingerprints unchanged; owner
+still READY/ACK_RECEIVED within its lease, tester still no ACK or newer attempt.
+No retained tester ACK challenge at14:48:29UTC; expired challenges are pruned, so
+absence is not proof that no earlier ACK challenge request was attempted. Device
+receipt is needed to distinguish import failure, interrupted app execution and ACK
+delivery/rejection. Private `.friends.test` instrumentation removed successfully;
+production application/data unchanged. Documentation diff whitespace check PASS.
+
+User-requested recheck14:54:35UTC: tester still has only the14:39:42 fetch, no ACK
+and no newer attempt; its material expired14:54:23UTC. This expiration follows the
+missing ACK and does not explain the original non-delivery. Owner normal refresh
+fetched14:53:08UTC and acknowledged READY14:53:09UTC, minimum_crl1566, expiry15:08:03UTC.
+Exact2/3 admission, no wildcard, inventory28/24/4 and registration/invitation/Support/
+owner-grant/audit fingerprints unchanged. No writes to production during this check.
+
+### Tester-provided diagnostic export
+
+Received `FamilyConnect-diagnostics.json`,41168 bytes, SHA256
+`d8fb5dcf21f3d7e859c70c8a7f9c2a56e9aee9b06fe44f5a0364ff8c85a5934b`.
+Support FC-YHQB-9VJN, beta60/code60, API31, WIFI, CONNECTED, capture open,
+AWG SUCCESS. Ring128 events:127 DNS_PROBE_OK and one READINESS /
+NATIVE_VALIDATION_FAILED at14:55:44.414UTC; bootstrap_directory NOT_USABLE.
+Last exported event14:55:44.552UTC. No incident snapshot, local ACK receipt or
+native failed-predicate detail in this bundle. Event fields are typed/allowlisted;
+no extra free-form event data, credentials, keys, room/destination URLs or raw DNS
+history observed. Export kept outside Git; documented only safe summary/digest.
+
+Server readback14:58:23UTC now shows a newer tester challenge14:55:46UTC and fetch
+14:55:47UTC, revision1/minimum_crl1570, expiry15:10:15UTC, no ACK. Exported native
+failure precedes this fetch: cannot assert it explains rejection of the new payload
+or the original14:39 attempt. Classification narrowed to READINESS validation, not
+AWG failure or proven censorship. Exact signature/certificate/binding/time predicate
+remains unknown. Code publishes negative import receipts too, so native failure
+alone does not explain why no negative ACK was accepted. Need newer client receipt
+and correlated ACK/native evidence before claiming root cause or changing production.
+No grant reset, new enrollment, transport/code changes or further cohort expansion.
+
+Second export `FamilyConnect-diagnostics(2).json`,41192 bytes, SHA256
+`88716e6aaec35fa8f234124d9124879e3b9bf44aa8c2b54e83cf3890b7f3b80d`:
+same Support/build/connection/incident, AWG SUCCESS/CONNECTED/WIFI, ring126 DNS successes
+and two NATIVE_VALIDATION_FAILED events (14:55:44.414 and15:01:05.578UTC).
+Last event15:01:53.232UTC; no incident or raw readiness receipt. Privacy allowlist PASS.
+Server readback15:04:09UTC: tester challenge15:01:07/fetch15:01:08, revision1,
+minimum_crl1580, expiry15:10:15UTC, no ACK. Owner continues normal READY/ACK refresh.
+
+The repeated event/fetch pairs are consistent with the tester clock lagging by a
+few seconds, but export correlation lacks provisioning request IDs, so this remains
+a hypothesis requiring clock verification, not a proved pairing/offset. Native
+ValidateDelivery rejects delivery.IssuedAt > now.Unix() without skew allowance;
+server negative ACK validation also requires observed_at >= challenge_at. These
+two checks would explain both symptoms under device clock lag. RU timedatectl
+reports NTPSynchronized=yes; its sampled epoch lies within the local SSH request
+window (not a precision phone clock measurement). Next controlled check: tester
+automatic date/time synchronization and normal foreground provisioning. Do not relax
+time validation, reset secure state or alter the published artifact based on this
+hypothesis. No production mutations in this diagnostic step; FIELD remains blocked.
+
+### Tester readiness resolved after clock synchronization
+
+User confirmed automatic-time action complete. Read-only production verification
+2026-10-03 15:11:19UTC finds FC-YHQB-9VJN normal challenge/fetch15:10:06UTC and
+signed receipt accepted15:10:07UTC: READY / ACK_RECEIVED, provisioning/bootstrap
+PRESENT_VALID, orchestrator_usable=true, failure_reason NONE, Android0.1.18-beta60/60,
+revision1/minimum_crl1597, expiry15:25:02UTC. The previous missing-ACK/native-validation
+blocker is resolved. Clock correction followed by successful retry supports the
+clock-skew diagnosis; no exact offset measurement or extra native predicate trace
+is claimed. No validation relaxation, production code change or secure-state reset.
+
+Admission readback15:11:18UTC confirms exact owner FC-4D8Q-REEG + FC-YHQB-9VJN,
+2/3, no wildcard; registration/invitation/Support mapping/owner grant/audit fingerprints
+identical to the admitted checkpoint. Inventory28 total/24 non-revoked/4 revoked.
+Owner also currently READY/ACK_RECEIVED. Safe receipts are the ignored
+`field60-tester/after-clock-*-179104027*.json` files. No production writes or pushes.
+Tester now has accepted restricted readiness; Auto remains free to prefer normal
+AWG/TCP. This does not prove an actual Telemost session or broader FIELD completion.
+Before restricted transport testing, recheck/renew gateway and directory leases:
+last recorded gateway certificate expiry15:14:31UTC is independent of tester receipt
+expiry15:25:02UTC. Existing renewal only; no expiry bypass or automatic cohort widening.
+
+### Third export: real connection incidents and gateway-only repair
+
+`FamilyConnect-diagnostics(3).json`,83713 bytes, SHA256
+`7e5aa129cd2b0628f3b61e8b4b628dd34560005ed6062310d2949a19dbdef4f0`.
+Contains bounded ring plus incident, Support FC-YHQB-9VJN, beta60/API31/WIFI.
+After deduplicating shared events, four complete new connection starts and one
+older partial connection are visible. Full observed outcomes:
+
+| UTC result | Outcome | Duration |
+| --- | --- | --- |
+|15:11:09.264|CONNECTED / AWG|7036ms|
+|15:15:35.196|FAILED / AUTH after restricted STARTUP_FAILED|62119ms|
+|15:16:54.469|FAILED / AUTH after restricted STARTUP_FAILED|62099ms|
+|15:17:36.104|CONNECTED / AWG|7082ms|
+
+Failed paths include AWG/TCP NETWORK outcomes with failed DNS probes, then restricted
+READY and BOOT_CACHE_READY/BOOT_CARRIER_READY before STARTUP_FAILED. Snapshot at
+FAILED retains vpn_capture_open=true, readiness READY, directory USABLE, outcomes
+AWG NETWORK/TCP NETWORK/restricted AUTH. This proves snapshot/correlation operation
+and capture-state retention, not packet-level no-leak or successful restricted traffic.
+Final ring state CONNECTED/AWG, readiness UNKNOWN after connection reset; do not
+interpret that metadata alone as loss of cached provisioning. This third ring has44
+successful and18 failed DNS probes, plus typed lifecycle/restricted events;
+earlier second-export counts are separate. No new native validation failure observed.
+Strict schema/event-field privacy checks PASS; no traffic payload/raw destination data.
+
+Read-only NL check15:20:41UTC proves gateway certificate expired15:14:31UTC while
+bootstrap PID3205461 remained active/running, no restarts. Directory still valid
+until15:29:22UTC, illustrating that a valid client directory is not proof of a valid
+live gateway certificate. Expiry precedes both restricted failures; classify the
+confirmed blocker as GATEWAY credential expiry, with client AUTH evidence. Exact
+failed-handshake predicate is not contained in export; post-renewal retry is required.
+Normal AWG/TCP NETWORK causes remain unproven (no censorship claim).
+
+Executed the already accepted credential-only renewal, not an application patch:
+`/tmp/fc-field60-gateway-renew.py` adapts only operator assertions from historical
+owner-only to the explicitly admitted two devices/current delegation3. Both admitted
+grants checked; all26 non-admitted registrations denied. No grant/enrollment writes.
+Issuer3/owner grant3/tester grant1 unchanged. Monotonic CRL1620; same gateway/issuer
+keys, Family, minimum revision1 and accepted one-hour gateway certificate lifetime.
+New gateway certificate15:22:33–16:22:33UTC. Native positive/negative validation PASS;
+atomic publication/service-readable979:979/0600 verified before reload.
+
+Restricted bootstrap only restarted15:22:36UTC; new PID3231001, fresh directory issued
+15:22:39.140368726UTC, expires16:17:36.983028339UTC. Existing bounded acceptance PASS,
+actual control TLS certificate matches renewed material, issuer/hostname/expiry PASS,
+35-second stable PID/no-restart check PASS. Ordinary sync timer restored; natural sync
+already delivered exactly the new directory to RU at15:23:52UTC, no extra sync trigger.
+Registration/invitation/Support mapping/grants/operator audit/admission and ordinary
+HTTP/AWG/TCP service PID/start fingerprints unchanged before/after. Exact owner+tester,
+2/3, no wildcard; inventory28/24/4. No production APK, runtime binary, source, catalog,
+landing or admission modification. No commit/push. Protected backup/receipts on both
+hosts: `restricted-materials-stage-20261001/field60-cycles-gateway-20261003`; local
+ignored evidence `state-client-build/field60-cycles/gateway-renewal/`. Never roll back
+to expired credentials or lower revocation floors; recovery uses existing renewal.
+
+An earlier read-only broad preflight failed with a redacted remote error before any
+mutation; its exact cause remains uninvestigated and it is not a service-health verdict.
+Subsequent focused certificate/unit checks and guarded renewal completed successfully.
+At15:23:56UTC tester's latest ACK still belongs to15:10 material (expiry15:25:02UTC),
+owner's latest15:03:48 ACK has expired15:18:33UTC. Require fresh ordinary provisioning
+and device-side Auto retry after gateway reload; do not claim post-repair restricted
+success or FIELD completion. No additional tester selection/expansion. Manual gateway
+lease renewal is still operationally required before its next expiry; no automatic
+renewal or lifetime policy change introduced. Documentation diff whitespace check PASS.
+
 ## beta60 publication — 2026-10-03
 
 User explicitly authorized publication after evidence checkpoint

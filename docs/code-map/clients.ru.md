@@ -1,5 +1,9 @@
 # Клиенты по платформам
 
+[Restricted session terminal diagnostics03.10](../testing/restricted-session-diagnostics.ru.md):
+локальный patch, не rollout; общая safe-проекция Go/native/Android, первая причина
+разрыва и session tag, без изменения transport/auth/retry policy.
+
 [Общая карта](README.ru.md). Платформы используют общие форматы, но не один общий runtime.
 Положительный Python/C# тест не доказывает работу Android VPN или Windows broker.
 

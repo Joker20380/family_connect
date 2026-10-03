@@ -22,6 +22,7 @@ import (
 	"github.com/Joker20380/family_connect/carrier/bootstrap"
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
+	"github.com/Joker20380/family_connect/carrier/sessiondiag"
 )
 
 func main() {
@@ -65,7 +66,16 @@ func run() error {
 		defer output.Unlock()
 		_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": event, "utc": time.Now().UTC()})
 	}
-	broker, err := roombroker.New(provider, roombroker.TelemostGateway{CredentialsPath: *path, Event: emit}, roombroker.DefaultLimits(), func(state roombroker.State, _ roombroker.Code) { emit(string(state)) })
+	diagnostic := func(report sessiondiag.Report) {
+		output.Lock()
+		defer output.Unlock()
+		_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": "session_terminal", "utc": time.Now().UTC(), "diagnostic": report})
+	}
+	broker, err := roombroker.New(provider, roombroker.TelemostGateway{CredentialsPath: *path, Event: emit, Diagnostic: diagnostic}, roombroker.DefaultLimits(), func(state roombroker.State, code roombroker.Code) {
+		output.Lock()
+		defer output.Unlock()
+		_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": string(state), "utc": time.Now().UTC(), "reason": brokerReason(code)})
+	})
 	if err != nil {
 		return err
 	}
@@ -118,5 +128,15 @@ func run() error {
 		cancel()
 		<-seedDone
 		return err
+	}
+}
+
+func brokerReason(code roombroker.Code) string {
+	switch code {
+	case "", "cancelled", "lifetime_expired", "authorization_changed", "unused_expired", "gateway_session_failed", "gateway_failed", "gateway_ready_timeout",
+		"provider_failure", "provider_response", "provider_cancelled", "provider_timeout", "provider_transport", "provider_request", "provider_bad_request", "provider_unauthorized", "provider_forbidden", "provider_rate_limited", "provider_unavailable", "provider_status", "provider_body", "provider_json", "provider_id", "provider_join_url":
+		return string(code)
+	default:
+		return "unknown"
 	}
 }

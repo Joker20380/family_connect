@@ -1,5 +1,11 @@
 # Client installation
 
+**Diagnostic beta61/code61 is being prepared, not published yet.**
+After acceptance, use the verified signed update over beta60; never uninstall or
+clear data, and retain the existing Support ID. Unsigned CI/local APKs are not
+installable updates. Links below still provide beta60 until verified publication.
+Additional diagnostics do not yet mean the session-loss cause has been fixed.
+
 **Current03.10: beta60/code60 is public**, with the same accepted APK SHA8ee59352
 and signer67a90d1. Use the [installation/update guide](getting-started.en.md).
 Settings → About / Diagnostics shows the registration-bound Support ID; copy it,

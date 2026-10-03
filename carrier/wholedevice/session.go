@@ -15,6 +15,7 @@ import (
 	"github.com/Joker20380/family_connect/carrier/bootstrap"
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
+	"github.com/Joker20380/family_connect/carrier/sessiondiag"
 	"github.com/Joker20380/family_connect/carrier/tcpforward"
 	"github.com/Joker20380/family_connect/carrier/telemost"
 	"github.com/Joker20380/family_connect/carrier/underlay"
@@ -65,6 +66,8 @@ type Session struct {
 	tcpSlots     chan struct{}
 	dnsSlots     chan struct{}
 	metrics      func() map[string]any
+	diagnostic   func() sessiondiag.Report
+	terminal     string
 	Counters     Counters
 }
 
@@ -72,7 +75,13 @@ func Attach(parent context.Context, plane DataPlane, closeCarrier func()) *Sessi
 	ctx, cancel := context.WithCancel(parent)
 	session := &Session{ctx: ctx, cancel: cancel, plane: plane, closeCarrier: closeCarrier,
 		tcpSlots: make(chan struct{}, 32), dnsSlots: make(chan struct{}, 16)}
-	go func() { plane.Wait(); cancel() }()
+	go func() {
+		reason := sessiondiag.Reason(plane.Wait())
+		session.mu.Lock()
+		session.terminal = reason
+		session.mu.Unlock()
+		cancel()
+	}()
 	return session
 }
 
@@ -362,6 +371,10 @@ func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Director
 	event("dedicated_data_ready")
 	success = true
 	session := Attach(ctx, muxPlane{mux}, func() { secured.Close(); carrier.Close() })
+	session.diagnostic = func() sessiondiag.Report {
+		failure, failedAt := mux.Terminal()
+		return sessiondiag.Capture(descriptor.SetupID, failure, failedAt, secured.ReliabilityStats(), carrier.Stats(), mux.Stats())
+	}
 	session.metrics = func() map[string]any {
 		reliable, media := secured.ReliabilityStats(), carrier.Stats()
 		return map[string]any{"reliable_buffered": reliable.BufferedBytes, "reliable_peak": reliable.MaxBufferedBytes,
@@ -376,6 +389,12 @@ func (session *Session) Snapshot() map[string]any {
 		"udp_denied": session.Counters.UDPDenied.Load(), "ipv6_denied": session.Counters.IPv6Denied.Load(),
 		"limit_denied": session.Counters.LimitDenied.Load(), "active": session.Counters.Active.Load(), "peak": session.Counters.Peak.Load(), "failed": session.Failed()}
 	stats["tcp_active"], stats["tcp_peak"] = session.Counters.TCPActive.Load(), session.Counters.TCPPeak.Load()
+	session.mu.Lock()
+	stats["terminal_reason"] = session.terminal
+	session.mu.Unlock()
+	if session.diagnostic != nil {
+		stats["diagnostic"] = session.diagnostic()
+	}
 	if session.metrics != nil {
 		stats["resources"] = session.metrics()
 	}

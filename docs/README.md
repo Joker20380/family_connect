@@ -1,5 +1,9 @@
 # Documentation
 
+[Restricted session terminal diagnostics03.10](testing/restricted-session-diagnostics.ru.md):
+local native/gateway/Android patch and tests PASS, not deployed/released; preserves
+first cause/correlation for the next controlled FIELD retry. Root cause remains open.
+
 **Current product critical path — 30.09.2026:**
 [5N-BOOT-1 → 5N.6 → MVP Orchestrator → Krasnodar FIELD-1 → 50–100-user beta](PLAN.md).
 Начните с [CURRENT PRODUCT STATE](STATUS.md), затем [продуктовой архитектуры](architecture.md):

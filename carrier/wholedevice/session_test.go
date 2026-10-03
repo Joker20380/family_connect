@@ -9,9 +9,36 @@ import (
 	"sync/atomic"
 	"testing"
 	"time"
+
+	"github.com/Joker20380/family_connect/carrier/reliablestream"
 )
 
 type testStream struct{ net.Conn }
+
+type failingPlane struct {
+	testPlane
+	failure error
+}
+
+func (plane *failingPlane) Wait() error { <-plane.done; return plane.failure }
+
+func TestTerminalReasonSurvivesClose(test *testing.T) {
+	plane := &failingPlane{testPlane: testPlane{done: make(chan struct{})}, failure: reliablestream.ErrExhausted}
+	session := Attach(context.Background(), plane, nil)
+	plane.Close()
+	select {
+	case <-session.ctx.Done():
+	case <-time.After(time.Second):
+		test.Fatal("failure not propagated")
+	}
+	if session.Snapshot()["terminal_reason"] != "RELIABLE_EXHAUSTED" {
+		test.Fatal("terminal lost")
+	}
+	session.Close()
+	if session.Snapshot()["terminal_reason"] != "RELIABLE_EXHAUSTED" {
+		test.Fatal("cleanup overwrote failure")
+	}
+}
 
 func (stream testStream) CloseWrite() error { return nil }
 func (stream testStream) Reset() error      { return stream.Close() }

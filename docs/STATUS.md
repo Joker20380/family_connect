@@ -1,5 +1,194 @@
 # Текущее состояние / Current state
 
+## Android beta61 preparation — authorized source publication03.10.2026
+
+User authorized commit/push and asked how to update the tester. Source metadata is
+now beta61/code61; it is not yet signed, installed, deployed or publicly available.
+Client CI now builds the pinned restricted arm64 native and gateway from the same
+source, runs carrier race regression and packages an unsigned Friends artifact with
+source/version/hash/native verification for offline signing. Existing Android
+runtime and desktop gates remain enabled. Signing secrets stay off CI/server.
+Previous metadata60 unsigned compile-only artifact must never be installed/published.
+Public/invitation/catalog remains beta60; Linux0.2.11/Windows0.2.15 unchanged.
+Next: accepted CI/download verification, offline signature, owner in-place acceptance,
+controlled gateway deployment/fresh leases, then tester in-place update and one retry.
+Do not uninstall/clear data or re-enroll; retain tester Support ID FC-YHQB-9VJN.
+This release diagnoses session loss; no claim that the transport failure is fixed.
+
+## FIELD terminal diagnostics — local implementation03.10.2026, no rollout
+
+Implemented privacy-safe sessiondiag projection shared by gateway/native: first Mux
+failure code/time, pseudonymous per-session tag, reliable terminal/retry counters,
+ICE/signaling enums and Mux activity. Gateway now retains allowlisted broker reasons
+and emits session_terminal; wholedevice no longer discards plane terminal category.
+Android retains an allowlisted restricted_session snapshot, native state and separate
+authorization_denied flag; first failure survives cleanup, new CONNECT resets it.
+Polling updates native health before evidence. No auth/expiry/CRL/admission/retry-policy
+weakening, new transport or lifetime changes. This fixes diagnostic loss, not yet the
+underlying real-network session failure; FIELD remains BLOCKED.
+
+Local checks PASS: full carrier `go test -race ./...` with live gates disabled;
+228 Friends JVM tests/36 suites, lintFriends, focused field-release pytest4/4;
+Android arm64 native build, gateway build and unsigned compile-only APK packaging.
+Packaged native hash8771739a matches fresh output; DEX contains restricted_session.
+Host binary SHA62e8de71; unsigned APK SHA488689f8. Unsigned APK deliberately retains
+unchanged source metadata beta60/code60: not an install/update/release candidate,
+never publish over accepted60. Full hashes/checks in dated report.
+Native build first hit /tmp quota (including outside-sandbox retry), then PASS with
+TMPDIR/output on project disk. No source/private artifacts removed. Gradle Python3.14
+bytecode warning remains; proper release tooling/CI still required before delivery.
+
+Nothing installed, signed, deployed or published; public/invitation/catalog beta60,
+Linux0.2.11/Windows0.2.15 unchanged. No server/device mutation, commit or push.
+Next: authorize source commit/push, fresh immutable release version and platform CI,
+owner in-place continuity acceptance, narrow gateway deployment with executable-only
+rollback, then one tester retry/correlated export. Previous lease deadlines now past;
+revalidate/renew through existing mechanism immediately before live work, no bypass.
+[Diagnostic contract, limitations and live procedure](testing/restricted-session-diagnostics.ru.md).
+
+## FIELD second post-renewal attempt / fifth export — 03.10.2026 16:05UTC evidence
+
+FC-YHQB-9VJN beta60/code60 repeated normal CELLULAR Auto: fresh local READY16:02:19,
+connect start16:02:41.309UTC, AWG/TCP NETWORK, restricted CONNECTED16:04:05.758UTC
+after84.449s with Family auth/broker/SESSION_READY. Lost16:04:20.901UTC after15.143s,
+then INTERNAL/RESTORING→FAILED114ms. Capture retained until explicit disconnect;
+latest ring WIFI/AWG CONNECTED16:05:15UTC. Counters DNS20/TCP4/peak3/protect145,
+protect_denied0; activity counts do not prove completed destination traffic.
+Same failure pattern twice, but durations30.227s then15.143s: no fixed30s-from-CONNECTED
+cutoff demonstrated, nor attribution to RKN/provider/network/client. No new exported
+AUTH/startup/import failure. Fresh local READY is not a new server ACK verification.
+Prior diagnostic gap remains; no runtime fix/release or further blind retry requested.
+Same exact2/3 policy; no admission/service/credential change. FIELD remains BLOCKED.
+Gateway read-only16:08:37UTC: same PID3231001/NRestarts0; bounded11-event journal
+confirms ACTIVE16:04:04.633890 and resources-closed/FAILED16:05:19.694063UTC.
+The later gateway record is not the precise loss time or proof of initiator.
+Both endpoints still omit terminal cause; no process restart observed.
+
+## FIELD session-loss gateway correlation — 03.10.2026 15:54UTC
+
+Read-only Amsterdam journal15:32–15:36UTC confirms bootstrap auth/room handoff,
+dedicated family_auth15:34:12.378907UTC, ACTIVE15:34:13.488299UTC, then
+dedicated_resources_closed15:34:52.100812UTC and FAILED15:34:52.103185UTC.
+This correlates with tester CONNECTED15:34:13.877 and INTERNAL15:34:44.104;
+cross-device timestamps alone do not prove which endpoint initiated failure.
+Gateway still active/running, same PID3231001 since15:22:36UTC, NRestarts0.
+Binary SHAe17e1fe7 matches accepted e808f50 build; broker entry/lifecycle/gateway
+sources unchanged through HEAD9fde56d. Cleanup→FAILED order is consistent with
+Mux session error, not process restart; exact lower-layer cause remains unavailable.
+Confirmed diagnostic gap: bootstrap-broker discards the broker Code; gateway Run
+returns Mux.Wait error without recording its category. Android also discards plane
+termination reason and maps unhealthy state to generic INTERNAL. Existing logs
+cannot distinguish transport loss, reliability exhaustion, protocol error or other
+session failure. No evidence warrants timeout changes or weakened auth/retry policy.
+15:54:24UTC file readback: gateway certificate expires16:22:33UTC, directory
+16:17:36.983UTC, issuer04.10 14:13:53UTC; not a new loaded-TLS/CRL validation.
+15:54:27UTC both device receipts expired; tester still last ACK15:27:38UTC.
+Exact cohort2/3, inventory28/24/4, registration/invitation/Support/owner-grant/audit
+fingerprints unchanged. No service restart, renewal, deployment, app or catalog change.
+Next: bounded privacy-safe terminal-reason diagnostics at gateway/native/client,
+targeted tests, then one controlled retry with fresh leases/receipts. Blind retries
+not requested. FIELD remains BLOCKED; beta60/code60 unchanged.
+
+## FIELD tester post-renewal restricted session — 03.10.2026 15:36UTC evidence
+
+Fourth FC-YHQB-9VJN diagnostic export supersedes the pending post-renewal retry:
+normal provisioning READY/ACK_RECEIVED15:27:38UTC, valid until15:42:05UTC
+(server readback15:36:47UTC). Owner's last receipt remains expired; no owner refresh.
+Tester normal Auto on CELLULAR started15:32:55.942UTC; AWG/TCP returned NETWORK.
+At15:34:13.877UTC restricted reached CONNECTED after77.935s, with Family auth,
+broker descriptor and SESSION_READY evidence. This proves post-renewal session
+establishment, not sustained FIELD acceptance or successful destination transfers.
+At15:34:44.104UTC,30.227s later, transport loss mapped to INTERNAL; RESTORING→FAILED
+took117ms without another candidate attempt. VPN capture stayed open until explicit
+disconnect15:35:16UTC. Snapshot counters: DNS44/TCP9/peak8, protect145/denied0;
+these are activity counts, not proof of completed queries/downloads. Last snapshot
+WIFI/AWG CONNECTED15:35:26UTC with DNS_PROBE_OK through15:36:42UTC.
+Source inspection: AutomaticConnection.poll maps any unhealthy restricted engine
+to INTERNAL; this is terminal in ConnectivityOrchestrator. Native session failure
+or FriendsRestricted.denied can trigger it; export omits the distinguishing native
+state/Mux terminal error. No new AUTH/startup/import failure in this export.
+Cause of loss remains unresolved; do not infer a30s timeout, certificate expiry,
+carrier block or crash. Next: privacy-safe gateway/native termination correlation
+for15:34:13–15:34:44UTC; retain exact2/3 cohort, no expansion. FIELD remains BLOCKED.
+Published/installed tester beta60/code60 unchanged; no runtime, service, catalog,
+admission or security-policy changes. No additional host operation in this analysis.
+
+## FIELD tester session failures / gateway renewal — 03.10.2026 15:23UTC
+
+Third FC-YHQB-9VJN export confirms actual restricted attempts after normal AWG/TCP
+NETWORK outcomes: READY, BOOT_CACHE_READY/BOOT_CARRIER_READY, then STARTUP_FAILED/AUTH.
+Two failed connections15:15:35/15:16:54UTC, VPN capture retained in incident snapshot.
+Four fully observed connection starts: two AWG connected (~7s), two failed (~62s);
+last snapshot CONNECTED/AWG. No new NATIVE_VALIDATION_FAILED in this export.
+Confirmed operational blocker: gateway certificate expired15:14:31UTC although
+bootstrap process remained active. Exact per-handshake cause is not exposed by DIAG;
+expiry is consistent with AUTH, not evidence that enrollment was revoked.
+Existing credential-only renewal PASS15:22UTC: same keys/issuer/Family, native checks,
+0600/service ownership, fresh bootstrap directory, actual loaded TLS certificate and
+35s stable PID verified. New certificate expires16:22:33UTC, directory16:17:36UTC.
+Ordinary sync delivered new directory; HTTP/AWG/TCP processes unchanged. No APK/code,
+catalog, admission or grant change; exact2/3/no wildcard, inventory28/24/4 preserved.
+At15:23:56UTC tester's last READY/ACK still predates renewal (expires15:25:02UTC);
+owner's previous receipt expired. Both need normal fresh provisioning before further
+restricted validation. Post-renewal tester retry/real restricted success not yet proven.
+No third device/expansion; FIELD completion BLOCKED pending fresh receipts and retry.
+
+## FIELD tester FC-YHQB-9VJN — READY,03.10.2026 15:11UTC
+
+After tester-reported automatic clock synchronization, normal provisioning fetched
+15:10:06UTC and server accepted the signed READY receipt15:10:07UTC. Readback15:11:19UTC:
+READY / ACK_RECEIVED, provisioning/bootstrap PRESENT_VALID, orchestrator_usable=true,
+failure_reason NONE, beta60/code60, revision1/minimum_crl1597, expiry15:25:02UTC.
+No production/code/security-policy change was needed; clock correction followed by
+successful retry supports the clock-skew diagnosis, without claiming measured offset.
+Exact admission remains owner FC-4D8Q-REEG + FC-YHQB-9VJN,2/3, no wildcard.
+Registration/invitation/Support mapping/owner grant/audit fingerprints unchanged;
+inventory28/24 non-revoked/4 revoked. Owner also currently READY/ACK_RECEIVED.
+Tester readiness blocker resolved; no actual restricted transport session proven yet.
+Before real restricted testing, revalidate gateway credential/directory leases (last
+recorded gateway certificate expiry15:14:31UTC), not just the client's readiness.
+Published beta60 unchanged; DIAG-1A PASS. Broader FIELD lifecycle/network tests pending.
+
+## FIELD-1 observation / exact tester admission — 03.10.2026
+
+Earlier investigation below is historical; tester READY result above supersedes its blocker.
+
+Same milestone; Stage5N CLOSED, DIAG-1A PASS. Published beta60/code60 unchanged
+(source5c740f2, SHA8ee59352, signer67a90d1); beta59 remains unpublished.
+Expired restricted authority/gateway material renewed through the existing protected
+mechanism, without expiry bypass: delegation3, owner grant3, existing keys/identity.
+Owner FC-4D8Q-REEG native import READY / ACK_RECEIVED at14:40:34UTC, valid until
+14:55:27UTC; bootstrap/provisioning PRESENT_VALID, orchestrator usable. Subsequent
+owner snapshot/authentication PASS: UID10283, identity/enrollment/activation/Support
+unchanged. This is time-bounded readiness evidence, not completed FIELD transport use.
+Explicit user-requested FC-YHQB-9VJN admission APPLIED at14:38:02UTC, audited0→1.
+Exact cohort2/3: owner + this tester; no wildcard or other device. Inventory28/24
+non-revoked/4 revoked unchanged; registration/invitation/Support mapping and owner
+grant fingerprints unchanged by tester admission. Tester is active Android beta60;
+existing identity/enrollment binding valid. Challenge/fetch succeeded14:39:42UTC,
+but no accepted ACK at latest14:54:35UTC readback; fetched material expired14:54:23UTC
+without a newer attempt. Owner independently refreshed READY/ACK14:53:09UTC, valid
+until15:08:03UTC. Tester READY unconfirmed;
+obtain tester diagnostics before claiming restricted runtime eligibility/success.
+No forced Telemost, app/transport/catalog changes, new registration or expansion.
+Real lifecycle/network cycles and failure classification remain pending.
+Temporary owner instrumentation removed; installed production beta60/data untouched.
+Tester-provided diagnostic export now identifies NATIVE_VALIDATION_FAILED at
+14:55:44.414UTC; bootstrap NOT_USABLE. Same snapshot records CONNECTED/WIFI,
+AWG SUCCESS and DNS_PROBE_OK, not a failed ordinary VPN session. New server
+challenge/fetch14:55:46–47UTC follows the last exported event; ACK still absent
+at14:58:23UTC. Do not conflate that new attempt with the earlier diagnostic event.
+Native rejection predicate and missing negative-receipt delivery remain unresolved;
+no production fix/expansion authorized by this evidence. Export privacy checks PASS.
+Second tester export repeats NATIVE_VALIDATION_FAILED15:01:05.578UTC, AWG still
+CONNECTED; server fetch15:01:08UTC, no ACK15:04:09UTC. Both observed pairs suggest
+device clock lag (~2–3s); native rejects issued_at in the future, ACK validation
+rejects observed_at before challenge_at. Server NTP synchronized. Clock skew is a
+leading hypothesis, not yet a measured device offset/proven final root cause.
+Next: verify/correct tester automatic date/time, retry normal provisioning and
+confirm fresh READY/ACK; no validation relaxation or production code change.
+[Current evidence and remaining work](releases/2026-10-03-field1-release-final.md#field-observation-and-explicit-tester-admission--2026-10-03).
+
 ## FIELD-1 beta60 — PUBLICATION PASS,03.10.2026
 
 Same milestone; Stage5N CLOSED, DIAG-1A PASS. Exact accepted beta60/code60 published,
@@ -445,6 +634,21 @@ Safe real device READY + correlated server evidence remains the next owner gate;
 ACK_PENDING preserves local READY but cannot invent owner acceptance. UI supplemental.
 [Full paths, inventories, contract and tests](releases/2026-10-02-5n-readiness-ack-artifact-refresh.ru.md) ·
 [Machine pins](releases/2026-10-02-5n-readiness-ack-artifact-pins.json).
+
+## VPN read-only snapshot — 02.10.2026,18:05–18:06UTC
+
+Friends access:28 activated devices/24 non-revoked/4 revoked;82 invitations/28 used.
+Compared with01.10 17:43UTC:+1 device/+1 non-revoked. NL AWG:22 peers,3 recent
+handshakes/transferring,11 handshakes<24h; RU10 peers,0 recent/transferring/24h.
+Friends TCP established0 on both. These are devices/peer observations, not people/DAU.
+CPU short samples NL6.8–8.43%,RU22.03–26.67%; available RAM555/1063–1094MiB;
+disk used26.1/69.3%. No short-sample CPU/RAM saturation. NL daily sar vda await
+138.83ms remains a concern despite1.08ms in the15s sample. Worker Docker unhealthy,
+but50 observed cycles in last15min exited0; outbox not verified. Ordinary AWG/TCP
+active with unchanged start dates; access API start02.10 09:33:26UTC, cause not
+investigated. Public monitor HTTPS/TLS PASS. No service/version/deployment changes.
+Latest documented restricted attempt14 remains rolled back; canary55 built only,
+installed54/public51 not reverified. [Evidence and remaining checks](releases/2026-10-02-vpn-health.ru.md).
 
 ## 5N-DEVICE-READINESS-RECEIPT — PASS local, 02.10.2026
 
@@ -1006,6 +1210,19 @@ directory + обязательные generic-shell/stale-CRL negatives. Journal 
 [отчёте](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
 STOP; автоматического deployment retry нет. Причина №3 остаётся UNKNOWN.
 
+## VPN read-only snapshot — 01.10.2026,17:43UTC
+
+Friends:27 activated devices/23 not revoked/4 revoked,81 invitations/27 used;
+unchanged since13:39UTC. NL5 AWG peers with handshake<5min,4 transferring in15s,
+12 with handshake<24h; RU0/0/0. Friends TCP established0 on both gateways.
+CPU busy NL9.92%/RU11.54%, available RAM532.6/1102.0MiB; no CPU/RAM saturation
+in this sample. External RX/TX NL5.0391/3.3859Mbit/s,RU0.0224/0.0200Mbit/s.
+Disk await NL144.26/RU34.33ms; worker Docker unhealthy remains. Normal AWG/TCP
+and RU access API active. API current start01.10 14:40:45UTC differs from the
+13:39 audit; cause not investigated here. No restart/deployment/version change
+by this audit; HTTPS/client E2E and restricted services not rechecked. Devices
+are not unique people/DAU. [Details](releases/2026-10-01-vpn-health.ru.md).
+
 ## 5N-DIRECTORY-VALIDATION — PASS locally, no deployment, 01.10.2026
 
 Attempt #4's unchanged private directory and exact deployed Python source reproduce
@@ -1091,6 +1308,19 @@ installation/publication claim. Redmi readiness/restart/rehearsal/browser/DNS/
 fail-closed acceptance remain unperformed. No new commits;18 unpushed retained;
 push/FIELD-1:no. Existing VPN-health work preserved.
 [Exact artifact, receipts, rollout/rollback boundary and remaining checks](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+
+## VPN read-only snapshot — 01.10.2026,13:39UTC
+
+Friends:27 activated devices/23 not revoked/4 revoked,81 invitations/27 used;
+unchanged since the morning. NL4 AWG peers with handshake<5min and transfer
+in15s,12 with handshake<24h; RU0/0. Friends TCP established0 on both gateways.
+CPU busy NL7.87%/RU25.16%, available RAM530.3/1107.3MiB; no CPU/RAM saturation
+in this sample. External RX/TX NL0.8703/0.8822Mbit/s,RU0.0221/0.0131Mbit/s.
+Disk await NL25.33/RU30.47ms; worker Docker unhealthy remains. RU restricted-sync
+unit failed; no reset/retry, restricted rollout remains rolled back. Normal AWG/TCP
+and RU access API active, start timestamps unchanged; public HTTPS status TLS PASS.
+No deployment/restart/version change or client E2E. Device counts are not unique
+people/DAU. [Details and remaining checks](releases/2026-10-01-vpn-health.ru.md).
 
 ## 5N-PROV-1 — попытка №2: DEPLOYMENT FAILED / ROLLED BACK, 01.10.2026
 

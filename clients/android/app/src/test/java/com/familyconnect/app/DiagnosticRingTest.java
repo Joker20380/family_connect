@@ -32,4 +32,42 @@ public class DiagnosticRingTest {
         String old=ring.snapshot().get("connection_id").getAsString();ring.event(event("connect_requested",ConnectivityOrchestrator.State.CONNECTING,null),2);
         assertNotEquals(old,ring.snapshot().get("connection_id").getAsString());
     }
+    @Test public void projectsNativeTerminalAndPreservesFirstFailure(){
+        DiagnosticRing ring=ring();JsonObject input=new JsonObject();
+        input.addProperty("session_tag","0123456789abcdef0123456789abcdef");
+        input.addProperty("terminal_reason","IO_CLOSED");input.addProperty("reliable_terminal","recovery_exhausted");
+        input.addProperty("signaling_failure","close_code_1006");input.addProperty("ice_failure","SUBSCRIBER_disconnected");
+        input.addProperty("retransmissions",8);input.addProperty("terminal_at_ms",123);
+        input.addProperty("room_url","https://private/?token=secret");
+        input.addProperty("publisher_state","private-peer");input.addProperty("received_bytes",-1);
+        input.addProperty("sent_bytes",1.5);input.addProperty("sent_frames",9007199254740992L);
+        ring.restricted(input,3,false,130);
+        JsonObject captured=ring.snapshot().getAsJsonObject("restricted_session");
+        assertEquals("IO_CLOSED",captured.get("terminal_reason").getAsString());
+        assertEquals("recovery_exhausted",captured.get("reliable_terminal").getAsString());
+        assertEquals(130,captured.get("terminal_observed_at_ms").getAsLong());
+        assertEquals("UNKNOWN",captured.get("publisher_state").getAsString());
+        assertFalse(captured.has("room_url"));assertFalse(captured.has("received_bytes"));
+        assertFalse(captured.has("sent_bytes"));assertFalse(captured.has("sent_frames"));
+        assertFalse(captured.toString().contains("private"));
+        input.addProperty("terminal_reason","CANCELLED");ring.restricted(input,3,true,140);
+        assertEquals(captured,ring.snapshot().getAsJsonObject("restricted_session"));
+        captured.addProperty("terminal_reason","tampered");
+        assertEquals("IO_CLOSED",ring.snapshot().getAsJsonObject("restricted_session").get("terminal_reason").getAsString());
+        ring.event(event("connect_requested",ConnectivityOrchestrator.State.CONNECTING,null),150);
+        assertEquals(0,ring.snapshot().getAsJsonObject("restricted_session").size());
+    }
+    @Test public void recordsDeniedWithoutInventingNetworkCause(){
+        DiagnosticRing ring=ring();JsonObject input=new JsonObject();
+        input.addProperty("terminal_reason","NONE");input.addProperty("session_tag","private tag");
+        input.addProperty("signaling_failure","private server error");
+        ring.restricted(input,2,false,1);
+        assertFalse(ring.snapshot().getAsJsonObject("restricted_session").has("terminal_observed_at_ms"));
+        ring.restricted(input,2,true,2);
+        JsonObject captured=ring.snapshot().getAsJsonObject("restricted_session");
+        assertEquals("NONE",captured.get("terminal_reason").getAsString());
+        assertTrue(captured.get("authorization_denied").getAsBoolean());
+        assertEquals(2,captured.get("terminal_observed_at_ms").getAsLong());
+        assertFalse(captured.toString().contains("private"));
+    }
 }

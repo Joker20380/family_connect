@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 
 	"github.com/Joker20380/family_connect/carrier/familysession"
+	"github.com/Joker20380/family_connect/carrier/sessiondiag"
 	"github.com/Joker20380/family_connect/carrier/tcpforward"
 	"github.com/Joker20380/family_connect/carrier/telemost"
 )
@@ -15,6 +16,7 @@ import (
 type TelemostGateway struct {
 	CredentialsPath string
 	Event           func(string)
+	Diagnostic      func(sessiondiag.Report)
 }
 
 const DedicatedMaxStreams = tcpforward.MuxMaxStreams
@@ -25,6 +27,7 @@ type telemostGateway struct {
 	setupID     string
 	identity    Identity
 	event       func(string)
+	diagnostic  func(sessiondiag.Report)
 }
 
 func (starter TelemostGateway) Start(lifetime, ready context.Context, room Room, id string, identity Identity) (Gateway, error) {
@@ -46,7 +49,7 @@ func (starter TelemostGateway) Start(lifetime, ready context.Context, room Room,
 	if event == nil {
 		event = func(string) {}
 	}
-	return &telemostGateway{session, raw, id, identity, event}, nil
+	return &telemostGateway{session, raw, id, identity, event, starter.Diagnostic}, nil
 }
 
 func bindingMessage(id string, nonce []byte) []byte {
@@ -103,7 +106,12 @@ func (gateway *telemostGateway) Run(ctx context.Context, active func() error) er
 			gateway.event("dedicated_resources_closed")
 		}
 	}()
-	return mux.Wait()
+	err = mux.Wait()
+	if gateway.diagnostic != nil {
+		failure, failedAt := mux.Terminal()
+		gateway.diagnostic(sessiondiag.Capture(gateway.setupID, failure, failedAt, secured.ReliabilityStats(), gateway.session.Stats(), mux.Stats()))
+	}
+	return err
 }
 
 func bindGateway(ctx context.Context, secured *familysession.Session, id string, identity Identity, active func() error) error {

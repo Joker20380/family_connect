@@ -2,6 +2,134 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Latest03.10: commit/push authorized; preparing diagnostic beta61/code61.**
+1. Commit focused diagnostics/CI/version/documentation, preserving unrelated VPN docs.
+2. Require green hosted platform gates and exact source-bound unsigned ARM64 artifact;
+   verify it before offline signing. No CI signing keys or beta60 replacement.
+3. Owner in-place acceptance before tester delivery; maintain package/signer/identity.
+4. Narrow gateway rollout with executable rollback and freshly validated leases;
+   exact two-device cohort remains unchanged. No normal-service restart.
+5. Publish verified immutable update/catalog/docs, then one tester Auto attempt and
+   correlated export. Public links remain beta60 until acceptance/publication.
+
+The previous local-only checkpoint follows; commit authorization is now granted.
+
+**Latest FIELD-1 engineering03.10: terminal diagnostics locally implemented/tested.**
+1. DONE bounded enum-only gateway/native/Android report with session tag, first
+   Mux reason/time, reliable/ICE/signaling evidence, preserved incident and separate
+   authorization_denied. No policy/TTL/security/fallback change; root cause still open.
+2. DONE full carrier race regression;228 Friends JVM tests/lint;pytest4/4; gateway,
+   Android arm64 native and unsigned compile-only APK builds. Packaging/hash checked.
+3. PENDING explicit commit/push authorization for source checkpoint and hosted CI.
+   Do not publish/install the local metadata60 unsigned APK or overwrite public60.
+   New immutable version, accepted platform CI, native+Java parity, signer/catalog,
+   owner in-place preservation and real-device diagnostics acceptance remain required.
+4. PENDING controlled gateway diagnostic rollout/rollback and one real tester run.
+   Revalidate/renew expired prior leases and obtain fresh ordinary READY/ACK first.
+   Keep exact2/3 cohort, no normal HTTP/AWG/TCP restart or identity reset.
+5. THEN correlate terminal causes by session tag; fix reproduced cause with regression
+   tests and validate sustained/lifecycle operation. No FIELD completion/RKN claim.
+   [Detailed runbook](testing/restricted-session-diagnostics.ru.md).
+
+Previous observations below motivated the patch; they are not evidence of its rollout.
+
+**Latest FIELD-1 export03.10 16:05UTC: second post-connect loss reproduced.**
+Fifth export: local READY16:02:19, restricted CONNECTED16:04:05.758UTC after84.449s;
+INTERNAL15.143s later, retained capture, failed restoration114ms. Previous session
+lasted30.227s. Pattern reproduced, fixed30s cutoff not established. No new exported
+AUTH/import failure; local fresh READY does not substitute for current server ACK.
+Keep terminal-reason diagnostics as next engineering action; no RKN attribution,
+blind timeout/security-policy change, further tester retry or cohort expansion.
+Read-only gateway correlation complete16:08UTC: ACTIVE16:04:04.634 followed by
+resources-closed/FAILED16:05:19.694, same PID/zero restarts; terminal cause absent.
+
+**Latest FIELD-1 check03.10 15:54UTC: gateway correlation complete, reason missing.**
+1. DONE read-only gateway journal: ACTIVE15:34:13.488UTC → resources closed/FAILED
+   15:34:52.10UTC; same process/PID3231001 since15:22:36UTC, zero restarts.
+2. DONE exact accepted gateway binary/source mapping and unchanged2/3 admission,
+   inventory28/24/4, registration/invitation/Support/owner-grant/audit invariants.
+3. NEXT preserve bounded enum-only terminal reasons across Mux/Family/transport,
+   gateway broker event and Android diagnostics; test privacy/failure propagation.
+   Existing server drops Code and native drops Mux terminal reason; no raw error
+   strings, room URLs, destination data or credentials in shared output.
+4. THEN one controlled retry after fresh ordinary readiness and gateway/CRL checks;
+   both receipts expired at15:54:27UTC. Certificate expiry16:22:33UTC and directory
+   expiry16:17:36.983UTC remain unchanged. Do not change TTLs/auth/retry safety
+   based on timing alone. No diagnostic implementation/deployment performed yet.
+5. FIELD remains BLOCKED on unclassified session loss; no blind repeated tests,
+   cohort expansion, new milestone, APK/catalog publication or server restart.
+
+Previous export analysis and observation checkpoints follow.
+
+**Latest FIELD-1 evidence03.10 15:36UTC: restricted connects, then loses session.**
+1. DONE fourth tester export + server readback: post-renewal READY/ACK15:27:38UTC,
+   expiry15:42:05UTC; normal CELLULAR Auto reached restricted CONNECTED15:34:13.877UTC.
+   Family auth/broker/SESSION_READY passed; startup AUTH no longer reproduces here.
+2. OPEN loss30.227s later at15:34:44.104UTC, generic INTERNAL; terminal recovery
+   reaches FAILED117ms after RESTORING without retrying a transport. Capture retained.
+   Source explains generic classification, not the underlying Mux/native failure.
+3. NEXT correlate bounded gateway/native termination evidence15:34:13–15:34:44UTC;
+   distinguish session loss from denied readiness. Do not classify from elapsed30s
+   alone, change terminal safety policy blindly, or claim completed data transfers.
+4. Owner receipt remains expired. Revalidate all leases before further live use;
+   exact owner+tester2/3 only. No new build/release/admission in this analysis.
+   FIELD completion/expansion blocked on unresolved session loss and lifecycle tests.
+
+The previous retry-pending checkpoint below is superseded by this export.
+
+**Latest FIELD-1 observation03.10 15:23UTC: gateway expiry blocker repaired; retry pending.**
+1. DONE tester third export: four full connection starts, two AWG CONNECTED, two
+   restricted STARTUP_FAILED/AUTH after AWG/TCP NETWORK outcomes; incident retained VPN.
+2. DONE existing gateway credential-only renewal after confirmed15:14:31UTC expiry;
+   native/TLS/loaded certificate/fresh directory/stability PASS, no normal-service or
+   enrollment/admission changes. Certificate now expires16:22:33UTC; directory16:17:36UTC.
+3. PENDING fresh normal foreground provisioning for owner and tester after renewal,
+   then normal Auto retry and DIAG outcome. Last tester ACK is pre-renewal; owner
+   receipt expired. Do not claim restricted success or bypass expiry based on process state.
+4. Continue only exact2/3 cohort; no widening. Investigate remaining transport failures
+   if retry fails; do not equate broad AUTH mapping with a proven TLS error trace.
+
+Earlier readiness and clock-skew evidence follows; current session gate is above.
+
+**Latest FIELD-1 result03.10 15:11UTC: FC-YHQB-9VJN READY / ACK_RECEIVED.**
+Normal retry after tester clock synchronization succeeded15:10:07UTC, valid until
+15:25:02UTC. No code/policy change, registration reset or additional admission.
+Exact2/3 cohort preserved, owner + tester, no wildcard. Readiness blocker resolved;
+earlier investigation below is evidence, not a request for further blind exports.
+Next: verify currently valid gateway/directory leases before real restricted use,
+then continue authorized normal-Auto FIELD observation; do not force Telemost.
+Last gateway certificate expiry15:14:31UTC requires existing renewal if testing later.
+Do not claim completed FIELD transport acceptance from a readiness receipt alone.
+
+**FIELD-1 real-device observation authorized03.10; same milestone.**
+1. DONE existing provisioning renewal; owner FC-4D8Q-REEG fresh native READY /
+   ACK_RECEIVED14:40:34UTC, valid until14:55:27UTC. Identity/enrollment/auth unchanged.
+   Revalidate current leases before restricted use; no expiry bypass. Gateway
+   credential currently expires15:14:31UTC; existing renewal remains required.
+2. DONE explicit admission FC-YHQB-9VJN, audit0→1/APPLIED14:38:02UTC. Preserve owner,
+   exact2/3 cohort, no wildcard, no additional selection. Inventory28/24/4 unchanged.
+3. BLOCKED tester readiness: normal challenge/fetch succeeded, but no accepted ACK
+   by14:54:35UTC; its last fetched material expired14:54:23UTC, no newer attempt.
+   Owner refreshed READY/ACK14:53:09UTC, valid until15:08:03UTC.
+   Obtain tester privacy-safe diagnostic export; do not infer local import
+   success or network failure from missing ACK. No new registration/replacement ID.
+   Export received: NATIVE_VALIDATION_FAILED14:55:44UTC, ordinary AWG CONNECTED and
+   DNS probes passing. Exact native predicate/ACK failure not included. New fetch
+   14:55:47UTC is after export's last event; no ACK14:58:23UTC. Next: correlate newer
+   device receipt/native validation evidence without weakening checks or resetting state.
+   Second export repeats failure15:01:05.578UTC versus server fetch15:01:08UTC;
+   investigate device clock lag first. Server NTP yes; strict issued_at and ACK
+   observed_at checks explain both symptoms if lag is confirmed. Ask tester to
+   verify automatic date/time, then use ordinary foreground refresh; no expiry bypass.
+4. PENDING owner repeated Auto/lifecycle/Wi-Fi/mobile/transition observations with
+   DIAG correlations; exercise tester only after fresh READY/ACK. Classify failures;
+   UNKNOWN critical failures block completion. Stop expansion on a production defect.
+5. No new build/catalog/publication/transport changes. Service notice capability is
+   a public platform-filtered feed, not Support-ID-targeted delivery; do not broadcast
+   a device-specific admission notification without explicit audience authorization.
+
+The publication checkpoint below is historical; observation supersedes its stop point.
+
 **FIELD-1 beta60 publication authorized and completed03.10; stop, no new milestone.**
 1. DONE exact accepted60 bytes published and independently downloaded/hash/signer checked;
    source5c740f2/SHA8ee59352, beta59 unpublished. No public APK rebuild/resign.

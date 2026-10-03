@@ -32,6 +32,9 @@ final class Diagnostics {
             for(String name:new String[]{"protect_ok","protect_denied"})store.ring.counter(name,stats.optLong(name,-1));
             org.json.JSONObject packet=stats.optJSONObject("packet");
             if(packet!=null)for(String name:new String[]{"dns","tcp","tcp_active","tcp_peak","udp_denied","ipv6_denied"})store.ring.counter(name,packet.optLong(name,-1));
+            org.json.JSONObject diagnostic=packet==null?null:packet.optJSONObject("diagnostic");
+            JsonObject safeInput=diagnostic==null?new JsonObject():JsonParser.parseString(diagnostic.toString()).getAsJsonObject();
+            store.ring.restricted(safeInput,stats.optInt("state",-1),stats.optBoolean("authorization_denied",false),System.currentTimeMillis());
             store.save(false);
         }}catch(Exception ignored){}
     }

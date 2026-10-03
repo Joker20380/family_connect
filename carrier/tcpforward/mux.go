@@ -64,6 +64,7 @@ type Mux struct {
 	workers       sync.WaitGroup
 	jobs          chan struct{}
 	err           error
+	failureAt     time.Time
 	stats         MuxStats
 	lookup        resolver
 	dial          dialer
@@ -176,6 +177,7 @@ func (mux *Mux) fail(err error) {
 	mux.mu.Lock()
 	if mux.err == nil {
 		mux.err = err
+		mux.failureAt = time.Now()
 	}
 	mux.cancel()
 	for _, stream := range mux.streams {
@@ -190,6 +192,11 @@ func (mux *Mux) fail(err error) {
 
 func (mux *Mux) Close() error { mux.cancel(); mux.endpoint.Close(); <-mux.done; return nil }
 func (mux *Mux) Wait() error  { <-mux.done; mux.mu.Lock(); defer mux.mu.Unlock(); return mux.err }
+func (mux *Mux) Terminal() (error, time.Time) {
+	mux.mu.Lock()
+	defer mux.mu.Unlock()
+	return mux.err, mux.failureAt
+}
 func (mux *Mux) Stats() MuxStats {
 	mux.mu.Lock()
 	defer mux.mu.Unlock()
@@ -226,7 +233,10 @@ func (mux *Mux) controlLocked(frame muxFrame) {
 		return
 	}
 	if len(mux.control) >= 2*MuxMaxStreams+2*MuxMaxDNS {
-		mux.err = ErrProtocol
+		if mux.err == nil {
+			mux.err = ErrProtocol
+			mux.failureAt = time.Now()
+		}
 		mux.cancel()
 		return
 	}
