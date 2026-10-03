@@ -19,6 +19,7 @@ import (
 
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"github.com/Joker20380/family_connect/carrier/underlay"
 	"github.com/Joker20380/family_connect/carrier/wholedevice"
 	"github.com/Joker20380/family_connect/restrictedandroid/packet"
@@ -111,6 +112,7 @@ func begin(directory, control, resolver string, profile, seed []byte, owner C.ui
 		return 0
 	}
 	ctx, cancel := context.WithCancel(context.Background())
+	ctx = sessiontrace.Watch(ctx)
 	network, err := underlay.New(ctx, resolver, func(fd int) bool { return C.fcRestrictedProtect(owner, C.int(fd)) != 0 })
 	if err != nil {
 		clear(profile)
@@ -237,6 +239,9 @@ func fcRestrictedStats(id int64) *C.char {
 	owned.events = nil
 	if owned.session != nil {
 		stats["packet"] = owned.session.Snapshot()
+	} else if trace := sessiontrace.From(owned.ctx); trace != nil {
+		snapshot := trace.Snapshot()
+		stats["packet"] = map[string]any{"diagnostic": map[string]any{"session_tag": snapshot.SessionTag, "correlation_status": snapshot.CorrelationStatus, "lifecycle": snapshot}}
 	}
 	raw, _ := json.Marshal(stats)
 	return C.CString(string(raw))
@@ -253,6 +258,7 @@ func fcRestrictedStop(id int64) int32 {
 		return 0
 	}
 	owned := current
+	sessiontrace.From(owned.ctx).Add("LOCAL_CLOSE", "STARTED", "NONE")
 	owned.cancel()
 	<-owned.done
 	if owned.session != nil {

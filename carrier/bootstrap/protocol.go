@@ -7,6 +7,7 @@ import (
 
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"github.com/Joker20380/family_connect/carrier/telemost"
 	"github.com/Joker20380/family_connect/carrier/underlay"
 )
@@ -97,12 +98,22 @@ func Exchange(ctx context.Context, endpoint familysession.PacketEndpoint, broker
 	return nil
 }
 
-func requestTransport(ctx context.Context, endpoint familysession.PacketEndpoint) (roombroker.Descriptor, error) {
+func requestTransport(ctx context.Context, endpoint familysession.PacketEndpoint) (result roombroker.Descriptor, failure error) {
 	raw, err := endpoint.Recv(ctx)
 	var hello message
 	if err != nil || strictJSON(raw, &hello, 256) != nil || hello.Type != "HELLO" || !hexID(hello.SetupID, 32) || hello.Descriptor != nil {
 		return roombroker.Descriptor{}, roombroker.Code("bootstrap_protocol_rejected")
 	}
+	trace := sessiontrace.New(hello.SetupID, nil)
+	sessiontrace.Publish(ctx, trace)
+	trace.Add("DESCRIPTOR", "STARTED", "NONE")
+	defer func() {
+		if failure != nil {
+			trace.Add("DESCRIPTOR", "FAILED", "RECOVERY_DESCRIPTOR_FAILED")
+		} else {
+			trace.Add("DESCRIPTOR", "ISSUED", "NONE")
+		}
+	}()
 	if err := send(ctx, endpoint, message{Type: "REQUEST_TRANSPORT", SetupID: hello.SetupID}); err != nil {
 		return roombroker.Descriptor{}, err
 	}

@@ -2,8 +2,6 @@ package sessiondiag
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
 	"errors"
 	"io"
 	"net"
@@ -11,32 +9,35 @@ import (
 
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/reliablestream"
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"github.com/Joker20380/family_connect/carrier/tcpforward"
 	"github.com/Joker20380/family_connect/carrier/telemost"
 )
 
 type Report struct {
-	SessionTag       string `json:"session_tag"`
-	TerminalReason   string `json:"terminal_reason"`
-	TerminalAtMS     int64  `json:"terminal_at_ms"`
-	ObservedAtMS     int64  `json:"observed_at_ms"`
-	ReliableTerminal string `json:"reliable_terminal"`
-	SignalingFailure string `json:"signaling_failure"`
-	ICEFailure       string `json:"ice_failure"`
-	EvidenceDropped  uint64 `json:"evidence_dropped"`
-	SubscriberState  string `json:"subscriber_state"`
-	PublisherState   string `json:"publisher_state"`
-	Retransmissions  uint64 `json:"retransmissions"`
-	RecoveryTimeouts uint64 `json:"recovery_timeouts"`
-	ReceivedFrames   uint64 `json:"received_frames"`
-	SentFrames       uint64 `json:"sent_frames"`
-	ProtocolErrors   uint64 `json:"protocol_errors"`
-	DNSResponses     uint64 `json:"dns_responses"`
-	DNSErrors        uint64 `json:"dns_errors"`
-	OpenOK           uint64 `json:"tcp_open_ok"`
-	OpenErrors       uint64 `json:"tcp_open_errors"`
-	SentBytes        uint64 `json:"sent_bytes"`
-	ReceivedBytes    uint64 `json:"received_bytes"`
+	Trace             *sessiontrace.Snapshot `json:"lifecycle,omitempty"`
+	CorrelationStatus string                 `json:"correlation_status"`
+	SessionTag        string                 `json:"session_tag"`
+	TerminalReason    string                 `json:"terminal_reason"`
+	TerminalAtMS      int64                  `json:"terminal_at_ms"`
+	ObservedAtMS      int64                  `json:"observed_at_ms"`
+	ReliableTerminal  string                 `json:"reliable_terminal"`
+	SignalingFailure  string                 `json:"signaling_failure"`
+	ICEFailure        string                 `json:"ice_failure"`
+	EvidenceDropped   uint64                 `json:"evidence_dropped"`
+	SubscriberState   string                 `json:"subscriber_state"`
+	PublisherState    string                 `json:"publisher_state"`
+	Retransmissions   uint64                 `json:"retransmissions"`
+	RecoveryTimeouts  uint64                 `json:"recovery_timeouts"`
+	ReceivedFrames    uint64                 `json:"received_frames"`
+	SentFrames        uint64                 `json:"sent_frames"`
+	ProtocolErrors    uint64                 `json:"protocol_errors"`
+	DNSResponses      uint64                 `json:"dns_responses"`
+	DNSErrors         uint64                 `json:"dns_errors"`
+	OpenOK            uint64                 `json:"tcp_open_ok"`
+	OpenErrors        uint64                 `json:"tcp_open_errors"`
+	SentBytes         uint64                 `json:"sent_bytes"`
+	ReceivedBytes     uint64                 `json:"received_bytes"`
 }
 
 func Reason(err error) string {
@@ -96,10 +97,7 @@ func Capture(setupID string, err error, terminalAt time.Time, reliable reliables
 	if !terminalAt.IsZero() {
 		report.TerminalAtMS = terminalAt.UnixMilli()
 	}
-	if decoded, decodeErr := hex.DecodeString(setupID); decodeErr == nil && len(decoded) == 16 {
-		digest := sha256.Sum256(append([]byte("family-connect/session-diagnostic/v1\x00"), decoded...))
-		report.SessionTag = hex.EncodeToString(digest[:16])
-	}
+	report.SessionTag, report.CorrelationStatus = sessiontrace.Tag(setupID)
 	for _, event := range media.Evidence {
 		if event.Stage == "CONNECTION_STATE" && (event.State == "failed" || event.State == "disconnected") {
 			report.ICEFailure = choice(event.Target+"_"+event.State, "SUBSCRIBER_failed", "SUBSCRIBER_disconnected", "PUBLISHER_failed", "PUBLISHER_disconnected")

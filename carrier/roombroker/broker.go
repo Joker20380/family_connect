@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"errors"
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"sync"
 	"time"
 )
@@ -73,17 +74,18 @@ type setup struct {
 }
 
 type Broker struct {
-	mu       sync.Mutex
-	provider RoomProvider
-	gateway  GatewayStarter
-	limits   Limits
-	setups   map[string]*setup
-	closed   bool
-	workers  sync.WaitGroup
-	event    func(State, Code)
+	traceSink func(sessiontrace.Event) bool
+	mu        sync.Mutex
+	provider  RoomProvider
+	gateway   GatewayStarter
+	limits    Limits
+	setups    map[string]*setup
+	closed    bool
+	workers   sync.WaitGroup
+	event     func(State, Code)
 }
 
-func New(provider RoomProvider, gateway GatewayStarter, limits Limits, event func(State, Code)) (*Broker, error) {
+func New(provider RoomProvider, gateway GatewayStarter, limits Limits, event func(State, Code), traces ...func(sessiontrace.Event) bool) (*Broker, error) {
 	if provider == nil || gateway == nil || limits.Create <= 0 || limits.Create > CreationTimeout ||
 		limits.Ready <= 0 || limits.Ready > time.Minute || limits.Unused <= 0 || limits.Unused > 2*time.Minute ||
 		limits.Lifetime <= 0 || limits.Lifetime > time.Hour || limits.Recheck <= 0 || limits.Recheck > time.Second ||
@@ -93,7 +95,11 @@ func New(provider RoomProvider, gateway GatewayStarter, limits Limits, event fun
 	if event == nil {
 		event = func(State, Code) {}
 	}
-	return &Broker{provider: provider, gateway: gateway, limits: limits, setups: make(map[string]*setup), event: event}, nil
+	broker := &Broker{provider: provider, gateway: gateway, limits: limits, setups: make(map[string]*setup), event: event}
+	if len(traces) > 0 {
+		broker.traceSink = traces[0]
+	}
+	return broker, nil
 }
 
 func authorized(ctx context.Context, authorize Authorize) (Identity, error) {
@@ -130,6 +136,9 @@ func (broker *Broker) Challenge(ctx context.Context, authorize Authorize) (strin
 		}
 	}
 	lifetime, cancel := context.WithTimeout(context.Background(), broker.limits.Lifetime)
+	trace := sessiontrace.New(hex.EncodeToString(nonce[:]), broker.traceSink)
+	lifetime = sessiontrace.With(lifetime, trace)
+	trace.Add("AUTHORIZED", "ESTABLISHED", "NONE")
 	current := &setup{id: hex.EncodeToString(nonce[:]), identity: identity, authorize: authorize, state: Authorized,
 		ctx: lifetime, cancel: cancel, deadline: time.Now().Add(broker.limits.Unused), done: make(chan struct{})}
 	broker.setups[current.id] = current
@@ -155,7 +164,7 @@ func (broker *Broker) monitor(current *setup) {
 					current.state = Expired
 					code = "lifetime_expired"
 				}
-				broker.event(current.state, code)
+				broker.emit(current, current.state, code)
 			}
 			started := current.started
 			if !started {
@@ -182,7 +191,7 @@ func (broker *Broker) terminate(current *setup, state State, code Code) {
 	broker.mu.Lock()
 	if !terminal(current.state) {
 		current.state = state
-		broker.event(state, code)
+		broker.emit(current, state, code)
 	}
 	current.cancel()
 	broker.mu.Unlock()
@@ -218,7 +227,7 @@ func (broker *Broker) Create(ctx context.Context, id string, authorize Authorize
 	}
 	current.started = true
 	current.state = Creating
-	broker.event(Creating, "")
+	broker.emit(current, Creating, "")
 	current.deadline = time.Now().Add(broker.limits.Create + broker.limits.Ready + broker.limits.Unused)
 	broker.workers.Add(1)
 	broker.mu.Unlock()
@@ -283,11 +292,11 @@ func (broker *Broker) Create(ctx context.Context, id string, authorize Authorize
 		return Descriptor{}, Code("cancelled")
 	}
 	current.state = Ready
-	broker.event(Ready, "")
+	broker.emit(current, Ready, "")
 	current.deadline = time.Now().Add(broker.limits.Unused)
 	descriptor := Descriptor{"telemost-webrtc", id, room.JoinURL, current.deadline}
 	current.state = ClientIssued
-	broker.event(ClientIssued, "")
+	broker.emit(current, ClientIssued, "")
 	broker.mu.Unlock()
 	owned = false
 	go func() {
@@ -308,7 +317,7 @@ func (broker *Broker) transition(current *setup, state State) {
 	defer broker.mu.Unlock()
 	if !terminal(current.state) {
 		current.state = state
-		broker.event(state, "")
+		broker.emit(current, state, "")
 	}
 }
 
@@ -335,7 +344,7 @@ func (broker *Broker) activate(current *setup) error {
 		return Code("stale_or_unbound_setup")
 	}
 	current.state = Active
-	broker.event(Active, "")
+	broker.emit(current, Active, "")
 	return nil
 }
 
@@ -351,6 +360,7 @@ func (broker *Broker) Cancel(ctx context.Context, id string, authorize Authorize
 }
 
 func (broker *Broker) finish(current *setup) {
+	sessiontrace.From(current.ctx).Add("CLEANUP", "COMPLETED", "NONE")
 	current.cancel()
 	broker.mu.Lock()
 	delete(broker.setups, current.id)
@@ -363,6 +373,7 @@ func (broker *Broker) Close() {
 	broker.mu.Lock()
 	broker.closed = true
 	for _, current := range broker.setups {
+		sessiontrace.From(current.ctx).Add("LOCAL_CLOSE", "STARTED", "NONE")
 		current.cancel()
 	}
 	broker.mu.Unlock()

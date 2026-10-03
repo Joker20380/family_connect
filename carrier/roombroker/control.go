@@ -7,6 +7,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"github.com/Joker20380/family_connect/carrier/underlay"
 	"io"
 	"net/http"
@@ -249,6 +250,9 @@ func (client *Client) Create(ctx context.Context) (Descriptor, error) {
 	if len(challenge.SetupID) != 64 {
 		return Descriptor{}, Code("control_response")
 	}
+	trace := sessiontrace.New(challenge.SetupID, nil)
+	sessiontrace.Publish(ctx, trace)
+	trace.Add("DESCRIPTOR", "STARTED", "NONE")
 	var descriptor Descriptor
 	err := client.call(ctx, "create", challenge.SetupID, &descriptor)
 	if err == nil && (descriptor.Transport != "telemost-webrtc" || descriptor.SetupID != challenge.SetupID ||
@@ -259,9 +263,11 @@ func (client *Client) Create(ctx context.Context) (Descriptor, error) {
 		err = client.call(ctx, "claim", descriptor.SetupID, &struct{}{})
 	}
 	if err != nil {
+		trace.Add("DESCRIPTOR", "FAILED", "RECOVERY_DESCRIPTOR_FAILED")
 		client.Cancel(challenge.SetupID)
 		return Descriptor{}, err
 	}
+	trace.Add("DESCRIPTOR", "ISSUED", "NONE")
 	return descriptor, nil
 }
 

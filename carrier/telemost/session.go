@@ -13,6 +13,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"github.com/Joker20380/family_connect/carrier/underlay"
 	"github.com/gorilla/websocket"
 	"github.com/pion/interceptor"
@@ -68,6 +69,7 @@ func (m Mode) String() string {
 
 // Config configures a Telemost carrier session.
 type Config struct {
+	Trace       *sessiontrace.Recorder
 	RoomURL     string
 	DisplayName string
 	Mode        Mode
@@ -172,6 +174,9 @@ type Session struct {
 
 // New creates an unconnected Session.
 func New(ctx context.Context, cfg Config) (*Session, error) {
+	if cfg.Trace == nil {
+		cfg.Trace = sessiontrace.From(ctx)
+	}
 	if cfg.Underlay != nil {
 		cfg.HTTPClient = cfg.Underlay.HTTPClient()
 	}
@@ -240,6 +245,8 @@ func (s *Session) Recv(ctx context.Context) ([]byte, error) {
 // Connect performs the join and blocks until the carrier is ready, ctx is
 // cancelled, or the connect deadline expires.
 func (s *Session) Connect(ctx context.Context) (connectError error) {
+	s.cfg.Trace.Add("CARRIER", "STARTED", "NONE")
+	stage, reason := "GATEWAY_JOIN", "RECOVERY_JOIN_FAILED"
 	if !s.started.CompareAndSwap(false, true) {
 		return errors.New("telemost: connect already attempted")
 	}
@@ -247,6 +254,9 @@ func (s *Session) Connect(ctx context.Context) (connectError error) {
 	defer func() {
 		s.initMu.Unlock()
 		if connectError != nil {
+			if ctx.Err() != context.Canceled {
+				s.cfg.Trace.Add(stage, "FAILED", reason)
+			}
 			_ = s.Close()
 		}
 	}()
@@ -303,6 +313,7 @@ func (s *Session) Connect(ctx context.Context) (connectError error) {
 	if err := s.sendHello(); err != nil {
 		return err
 	}
+	stage, reason = "CARRIER", "RECOVERY_CARRIER_FAILED"
 
 	select {
 	case <-s.connected:
@@ -424,6 +435,8 @@ func (s *Session) Stats() Stats {
 
 // Close tears down the session. It is idempotent.
 func (s *Session) Close() error {
+	s.cfg.Trace.Add("LOCAL_CLOSE", "STARTED", "NONE")
+	defer s.cfg.Trace.Add("CLEANUP", "COMPLETED", "NONE")
 	s.signalClosed(ErrClosed)
 	s.cleanupOnce.Do(func() {
 		s.initMu.Lock()
@@ -496,6 +509,7 @@ func (s *Session) setupPeerConnections(config webrtc.Configuration) error {
 		return fmt.Errorf("telemost: subscriber pc: %w", err)
 	}
 	sub.OnConnectionStateChange(s.onSubscriberState)
+	sub.OnICEConnectionStateChange(func(state webrtc.ICEConnectionState) { s.traceICE("SUBSCRIBER", state) })
 	sub.OnTrack(s.onSubscriberTrack)
 	sub.OnDataChannel(s.onSubscriberDataChannel)
 	s.pcSub.Store(sub)
@@ -506,6 +520,7 @@ func (s *Session) setupPeerConnections(config webrtc.Configuration) error {
 		return fmt.Errorf("telemost: publisher pc: %w", err)
 	}
 	pub.OnConnectionStateChange(s.onPublisherState)
+	pub.OnICEConnectionStateChange(func(state webrtc.ICEConnectionState) { s.traceICE("PUBLISHER", state) })
 	s.pcPub.Store(pub)
 	return nil
 }

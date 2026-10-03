@@ -9,6 +9,7 @@ import (
 
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/sessiondiag"
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"github.com/Joker20380/family_connect/carrier/tcpforward"
 	"github.com/Joker20380/family_connect/carrier/telemost"
 )
@@ -85,20 +86,28 @@ func BindClient(ctx context.Context, session *familysession.Session, descriptor 
 }
 
 func (gateway *telemostGateway) Run(ctx context.Context, active func() error) error {
+	trace := sessiontrace.From(ctx)
+	trace.Add("FAMILY_TLS", "STARTED", "NONE")
 	secured, err := familysession.Open(ctx, gateway.session, gateway.credentials, true)
 	clear(gateway.credentials)
 	if err != nil {
+		trace.Add("FAMILY_TLS", "FAILED", "FAMILY_TLS_ERROR")
 		return Code("family_admission_rejected")
 	}
+	trace.Add("FAMILY_TLS", "ESTABLISHED", "NONE")
 	defer secured.Close()
 	gateway.event("family_auth")
 	if err := bindGateway(ctx, secured, gateway.setupID, gateway.identity, active); err != nil {
+		trace.Add("GATEWAY_SESSION", "FAILED", "GATEWAY_CLOSE")
 		return err
 	}
 	mux, err := tcpforward.NewMux(ctx, secured, true, tcpforward.MuxConfig{MaxStreams: DedicatedMaxStreams})
 	if err != nil {
+		trace.Add("GATEWAY_SESSION", "FAILED", "UNKNOWN_INTERNAL")
 		return Code("mux_start_failed")
 	}
+	stopSample := sessiondiag.Sample(ctx, trace, func() (uint64, uint64) { stats := gateway.session.Stats(); return stats.BytesSent, stats.BytesReceived })
+	defer stopSample()
 	defer func() {
 		mux.Close()
 		stats := mux.Stats()
@@ -109,7 +118,10 @@ func (gateway *telemostGateway) Run(ctx context.Context, active func() error) er
 	err = mux.Wait()
 	if gateway.diagnostic != nil {
 		failure, failedAt := mux.Terminal()
-		gateway.diagnostic(sessiondiag.Capture(gateway.setupID, failure, failedAt, secured.ReliabilityStats(), gateway.session.Stats(), mux.Stats()))
+		report := sessiondiag.Capture(gateway.setupID, failure, failedAt, secured.ReliabilityStats(), gateway.session.Stats(), mux.Stats())
+		snapshot := trace.Snapshot()
+		report.Trace = &snapshot
+		gateway.diagnostic(report)
 	}
 	return err
 }

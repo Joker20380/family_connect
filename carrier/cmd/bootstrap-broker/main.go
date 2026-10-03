@@ -23,6 +23,7 @@ import (
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
 	"github.com/Joker20380/family_connect/carrier/sessiondiag"
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 )
 
 func main() {
@@ -61,6 +62,25 @@ func run() error {
 		return err
 	}
 	var output sync.Mutex
+	traceQueue := make(chan sessiontrace.Event, 256)
+	traceDone := make(chan struct{})
+	go func() {
+		defer close(traceDone)
+		for event := range traceQueue {
+			output.Lock()
+			_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": "restricted_trace", "trace": event})
+			output.Unlock()
+		}
+	}()
+	defer func() { close(traceQueue); <-traceDone }()
+	traceSink := func(event sessiontrace.Event) bool {
+		select {
+		case traceQueue <- event:
+			return true
+		default:
+			return false
+		}
+	}
 	emit := func(event string) {
 		output.Lock()
 		defer output.Unlock()
@@ -75,7 +95,7 @@ func run() error {
 		output.Lock()
 		defer output.Unlock()
 		_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": string(state), "utc": time.Now().UTC(), "reason": brokerReason(code)})
-	})
+	}, traceSink)
 	if err != nil {
 		return err
 	}

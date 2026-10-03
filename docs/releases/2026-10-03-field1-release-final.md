@@ -1,5 +1,17 @@
 # FIELD-1-RELEASE-FINAL / DIAG-1A — 2026-10-03
 
+## Latest: targeted beta61 signed / owner updated / diagnostic acceptance BLOCKED
+
+User explicitly forbids broad publication and admission changes. Existing d93a01d
+CI APK signed without product rebuild, signed SHAc98852b3, signer matches60 exactly;
+owner in-place preservation/startup/AWG/export/privacy checks PASS. Real-format
+correlation probe FAIL: broker64-hex SetupID is rejected by16-byte projection gate,
+so session_tag is empty. Old server diagnostic executable retained; full correlated
+heartbeat/lifecycle/recovery trace also remains incomplete. Tester attempts0; no
+download or catalog/invitation change. See the [targeted acceptance report](2026-10-03-beta61-targeted-acceptance.md)
+for full hashes, receipt scope, exact blockers and required next gates. Earlier
+broad-publication plans below are superseded, not authorization to publish beta61.
+
 ## Diagnostic beta61 preparation — commit/push authorized
 
 Source checkpoint `d93a01d` committed and pushed to main; unrelated VPN-health

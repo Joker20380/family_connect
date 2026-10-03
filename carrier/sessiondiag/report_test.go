@@ -41,7 +41,7 @@ func TestReasonTypedAndNeverRaw(test *testing.T) {
 }
 
 func TestCaptureBoundedProjectionAndCorrelation(test *testing.T) {
-	setup := "0123456789abcdef0123456789abcdef"
+	setup := strings.Repeat("0123456789abcdef", 4)
 	reliable := reliablestream.Stats{Terminal: "recovery_exhausted", Retransmissions: 8, Timeouts: 3}
 	media := telemost.Stats{SubscriberState: "private address", PublisherState: "connected", EvidenceDropped: 4,
 		Evidence: []telemost.Evidence{{Stage: "ICE_SELECTED_PAIR", LocalType: "private candidate"},
@@ -49,7 +49,7 @@ func TestCaptureBoundedProjectionAndCorrelation(test *testing.T) {
 			{Stage: "WS_FAIL", State: "close_code_1006", ReasonKeywords: []string{"private token"}}}}
 	when := time.Unix(1791043460, 0)
 	report := Capture(setup, io.ErrClosedPipe, when, reliable, media, tcpforward.MuxStats{DNSResponses: 4, OpenOK: 2})
-	if report.SessionTag == setup || len(report.SessionTag) != 32 || report.TerminalAtMS != when.UnixMilli() {
+	if report.SessionTag == setup || len(report.SessionTag) != 64 || report.TerminalAtMS != when.UnixMilli() {
 		test.Fatal("correlation/time")
 	}
 	if report.SessionTag != Capture(setup, nil, time.Time{}, reliable, media, tcpforward.MuxStats{}).SessionTag {

@@ -2,6 +2,36 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Latest03.10: diagnostic r2 implemented locally; acceptance still BLOCKED.**
+1. Implemented full32-byte ID digest, real producer/bootstrap regression, bounded
+   server/native lifecycle and first-observed failure, Android four-ID correlation.
+2. Local gates PASS: full carrier race,230 Friends JVM/lint,pytest15/15,diff-check.
+   NEXT independently accepted hosted Java/native CI.
+3. Sign distinct targeted beta61/code61 artifact with the same production key after
+   accepted CI; retain original c98852b3 and record exact new source/APK/signer hashes.
+4. Owner in-place UID/identity/enrollment/Support/AWG/export/privacy acceptance.
+5. Controlled gateway binary update/rollback and fresh leases; prove a real owner
+   restricted session with identical client/server tags and complete lifecycle.
+6. Only then supply existing tester. No FIELD/publication expansion or Russian retry
+   yet; no transport-fix or RKN attribution claim.
+
+**Latest03.10: BETA61 BLOCKED after targeted owner acceptance; no broad release.**
+1. DONE sign existing CI APK without rebuilding; exact beta60 signer match. Owner
+   in-place preservation, startup/restart, baseline AWG/HTTPS and privacy checks PASS.
+2. DONE typed-fixture diagnostic export; NOT live correlation acceptance. Confirmed
+   blocker: real broker64-hex SetupID rejected by16-byte sessiondiag gate, empty tag.
+3. NEXT fix contract with production-length regression and independently gated
+   artifact. Preserve signed c98852b3; no silent rebuild/overwrite or broad catalog.
+4. NEXT complete tagged server lifecycle/heartbeat/recovery trace and exact
+   Support ID/connection ID/incident ID join. Deployed gateway still old e17e1fe7.
+5. Only after diagnostic/owner/server acceptance: targeted existing tester delivery,
+   fresh READY/ACK/leases, one mobile attempt and immediate export. Attempts so far0.
+   No admission/enrollment/Support change. No transport-fix or RKN attribution claim.
+   [Acceptance and blocking evidence](releases/2026-10-03-beta61-targeted-acceptance.md).
+
+The publication step in the earlier preparation plan below is superseded by the
+user's targeted-only instruction; public catalogs/invitation must remain unchanged.
+
 **Latest03.10: commit/push authorized; preparing diagnostic beta61/code61.**
 1. DONE focused diagnostics/CI/version/documentation committed/pushed as `d93a01d`;
    unrelated VPN docs preserved. Local payload/field pytest9/9 PASS.

@@ -128,7 +128,9 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     public void down() throws Exception {
         if (handle>0) {
             try { evidence(); }catch(Exception ignored){}
-            if (!NativeRestricted.stop(handle)) throw new IllegalStateException("Restricted cleanup failed");
+            boolean stopped=NativeRestricted.stop(handle);
+            Diagnostics.cleanup(context,stopped);
+            if (!stopped) throw new IllegalStateException("Restricted cleanup failed");
             handle=0;
         }
         if (tun!=null) { if(automaticOwner==null)tun.close(); tun=null; }

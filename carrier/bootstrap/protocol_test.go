@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/Joker20380/family_connect/carrier/roombroker"
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 )
 
 type pipe struct {
@@ -235,7 +236,7 @@ func bounded(test *testing.T) context.Context {
 }
 
 func TestExchangeReadyHandoffAndOutstanding(test *testing.T) {
-	ctx := bounded(test)
+	ctx := sessiontrace.Watch(bounded(test))
 	var calls atomic.Int32
 	ready := make(chan struct{})
 	broker, back := testBroker(test, &calls, ready, "")
@@ -260,6 +261,11 @@ func TestExchangeReadyHandoffAndOutstanding(test *testing.T) {
 	}
 	if calls.Load() != 1 || descriptor.SetupID == "" {
 		test.Fatal("not broker descriptor")
+	}
+	tag, status := sessiontrace.Tag(descriptor.SetupID)
+	trace := sessiontrace.From(ctx).Snapshot()
+	if status != "VALID" || trace.SessionTag != tag || len(trace.Events) != 2 || trace.Events[1].State != "ISSUED" {
+		test.Fatal("real bootstrap handoff lost diagnostic correlation")
 	}
 	if _, err := broker.Challenge(ctx, allow); err == nil {
 		test.Fatal("outstanding limit")

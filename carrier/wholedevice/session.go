@@ -16,6 +16,7 @@ import (
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
 	"github.com/Joker20380/family_connect/carrier/sessiondiag"
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"github.com/Joker20380/family_connect/carrier/tcpforward"
 	"github.com/Joker20380/family_connect/carrier/telemost"
 	"github.com/Joker20380/family_connect/carrier/underlay"
@@ -89,6 +90,7 @@ func (session *Session) Failed() bool { return session.ctx.Err() != nil }
 
 func (session *Session) Close() {
 	session.closeOnce.Do(func() {
+		sessiontrace.From(session.ctx).Add("LOCAL_CLOSE", "STARTED", "NONE")
 		session.mu.Lock()
 		session.closed = true
 		session.cancel()
@@ -335,6 +337,14 @@ func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Director
 		return nil, err
 	}
 	event("bootstrap_closed_before_dedicated")
+	trace := sessiontrace.From(ctx)
+	if trace == nil {
+		trace = sessiontrace.New(descriptor.SetupID, nil)
+		sessiontrace.Publish(ctx, trace)
+		trace.Add("DESCRIPTOR", "ISSUED", "NONE")
+	}
+	ctx = sessiontrace.With(ctx, trace)
+	trace.Add("GATEWAY_JOIN", "STARTED", "NONE")
 	carrier, err := telemost.New(ctx, telemost.Config{RoomURL: descriptor.JoinURL, DisplayName: "Family restricted device", Mode: telemost.ModeVP8, Underlay: network})
 	if err != nil {
 		return nil, err
@@ -348,32 +358,50 @@ func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Director
 	connect, finish := context.WithTimeout(ctx, 45*time.Second)
 	defer finish()
 	if err = carrier.Connect(connect); err != nil {
+		trace.Add("GATEWAY_JOIN", "FAILED", "RECOVERY_JOIN_FAILED")
 		return nil, err
 	}
+	trace.Add("GATEWAY_JOIN", "ESTABLISHED", "NONE")
 	stopHandshake := context.AfterFunc(connect, func() { carrier.Close() })
 	defer stopHandshake()
+	trace.Add("FAMILY_TLS", "STARTED", "NONE")
 	secured, err := familysession.Open(ctx, carrier, raw, false)
 	if err != nil {
+		trace.Add("FAMILY_TLS", "FAILED", "FAMILY_TLS_ERROR")
 		return nil, err
 	}
+	trace.Add("FAMILY_TLS", "ESTABLISHED", "NONE")
 	defer func() {
 		if !success {
 			secured.Close()
 		}
 	}()
 	if err = roombroker.BindClient(connect, secured, descriptor, raw); err != nil {
+		trace.Add("GATEWAY_SESSION", "FAILED", "GATEWAY_CLOSE")
 		return nil, err
 	}
 	mux, err := tcpforward.NewMux(ctx, secured, false, tcpforward.MuxConfig{MaxStreams: roombroker.DedicatedMaxStreams})
 	if err != nil {
+		trace.Add("GATEWAY_SESSION", "FAILED", "UNKNOWN_INTERNAL")
 		return nil, err
 	}
 	event("dedicated_data_ready")
+	trace.Add("GATEWAY_SESSION", "ESTABLISHED", "NONE")
 	success = true
-	session := Attach(ctx, muxPlane{mux}, func() { secured.Close(); carrier.Close() })
+	stopSample := sessiondiag.Sample(ctx, trace, func() (uint64, uint64) { stats := carrier.Stats(); return stats.BytesSent, stats.BytesReceived })
+	session := Attach(ctx, muxPlane{mux}, func() {
+		trace.Add("LOCAL_CLOSE", "STARTED", "NONE")
+		stopSample()
+		secured.Close()
+		carrier.Close()
+		trace.Add("CLEANUP", "COMPLETED", "NONE")
+	})
 	session.diagnostic = func() sessiondiag.Report {
 		failure, failedAt := mux.Terminal()
-		return sessiondiag.Capture(descriptor.SetupID, failure, failedAt, secured.ReliabilityStats(), carrier.Stats(), mux.Stats())
+		report := sessiondiag.Capture(descriptor.SetupID, failure, failedAt, secured.ReliabilityStats(), carrier.Stats(), mux.Stats())
+		snapshot := trace.Snapshot()
+		report.Trace = &snapshot
+		return report
 	}
 	session.metrics = func() map[string]any {
 		reliable, media := secured.ReliabilityStats(), carrier.Stats()

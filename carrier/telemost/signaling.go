@@ -4,11 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"runtime"
 	"strings"
 	"time"
 
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"github.com/gorilla/websocket"
 	"github.com/pion/rtp"
 	"github.com/pion/webrtc/v4"
@@ -36,6 +38,7 @@ func (s *Session) dialWebSocket(ctx context.Context) error {
 	conn.SetReadLimit(wsReadLimit)
 	conn.SetPongHandler(func(string) error {
 		_ = conn.SetReadDeadline(time.Now().Add(wsReadTimeout))
+		s.cfg.Trace.Add("HEARTBEAT", "RX", "NONE")
 		return nil
 	})
 	_ = conn.SetReadDeadline(time.Now().Add(wsReadTimeout))
@@ -53,6 +56,7 @@ func (s *Session) writeJSON(v any) error {
 	}
 	_ = s.ws.SetWriteDeadline(time.Now().Add(wsWriteTimeout))
 	if err := s.ws.WriteJSON(v); err != nil {
+		s.cfg.Trace.Record(sessiontrace.Event{Stage: "WEBSOCKET", State: "FAILED", Reason: "SIGNAL_WS_CLOSE", CloseReason: "WRITE_ERROR"})
 		s.signalClosed(errors.New("telemost: signaling write failed"))
 		return errors.New("telemost: signaling write failed")
 	}
@@ -133,6 +137,7 @@ func (s *Session) signalingLoop() {
 			s.sendAck(uid)
 		}
 		if isEndMessage(msg) {
+			s.cfg.Trace.Add("REMOTE_CLOSE", "CLOSED", "REMOTE_CLOSE")
 			s.signalClosed(fmt.Errorf("telemost: conference ended"))
 			return
 		}
@@ -162,6 +167,14 @@ func (s *Session) wsConn() *websocket.Conn {
 
 func (s *Session) signalClosed(err error) {
 	s.closeOnce.Do(func() {
+		reason := "CARRIER_ERROR"
+		if errors.Is(err, io.EOF) {
+			reason = "CARRIER_EOF"
+		}
+		if errors.Is(err, ErrClosed) {
+			reason = "NONE"
+		}
+		s.cfg.Trace.Add("CARRIER", "CLOSED", reason)
 		s.errMu.Lock()
 		s.connectErr = err
 		s.errMu.Unlock()
@@ -486,15 +499,18 @@ func (s *Session) heartbeatLoop() {
 			s.statsMu.Lock()
 			s.applicationPings++
 			s.statsMu.Unlock()
+			s.cfg.Trace.Add("HEARTBEAT", "TX", "NONE")
 		case <-ticker.C:
 			connection := s.wsConn()
 			if connection == nil {
 				return
 			}
 			if err := connection.WriteControl(websocket.PingMessage, nil, time.Now().Add(time.Second)); err != nil {
+				s.cfg.Trace.Record(sessiontrace.Event{Stage: "WEBSOCKET", State: "FAILED", Reason: "SIGNAL_WS_CLOSE", CloseReason: "WRITE_ERROR"})
 				s.signalClosed(errors.New("telemost: signaling heartbeat failed"))
 				return
 			}
+			s.cfg.Trace.Add("HEARTBEAT", "TX", "NONE")
 		}
 	}
 }
@@ -517,6 +533,7 @@ func (s *Session) handleHousekeeping(msg map[string]any, uid string) {
 		s.statsMu.Lock()
 		s.applicationPongs++
 		s.statsMu.Unlock()
+		s.cfg.Trace.Add("HEARTBEAT", "RX", "NONE")
 		s.sendAck(uid)
 	case hasKey(msg, "ping"):
 		_ = s.writeJSON(map[string]any{"uid": uid, "pong": map[string]any{}})

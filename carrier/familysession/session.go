@@ -19,6 +19,7 @@ import (
 	"time"
 
 	"github.com/Joker20380/family_connect/carrier/reliablestream"
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 )
 
 const Protocol = "family-connect-5n3-test-v1"
@@ -236,6 +237,7 @@ type Session struct {
 	claimMu      sync.Mutex
 	tcpClaimed   bool
 	server       bool
+	trace        *sessiontrace.Recorder
 }
 
 func (session *Session) ClaimTCP(server bool) error {
@@ -276,7 +278,7 @@ func OpenReliable(ctx context.Context, endpoint PacketEndpoint, raw []byte, serv
 		return nil, ErrRejected
 	}
 	expiry = minTime(expiry, connection.ConnectionState().PeerCertificates[0].NotAfter)
-	return &Session{connection: connection, stream: transport, expiry: expiry, reliable: reliable, server: server}, nil
+	return &Session{connection: connection, stream: transport, expiry: expiry, reliable: reliable, server: server, trace: sessiontrace.From(ctx)}, nil
 }
 
 func (session *Session) ReliabilityStats() reliablestream.Stats { return session.reliable.Stats() }
@@ -285,7 +287,8 @@ func (session *Session) ConnectionState() tls.ConnectionState {
 	return session.connection.ConnectionState()
 }
 
-func (session *Session) SendContext(ctx context.Context, payload []byte) error {
+func (session *Session) SendContext(ctx context.Context, payload []byte) (failure error) {
+	defer func() { traceFailure(ctx, session.trace, failure) }()
 	session.sendMu.Lock()
 	defer session.sendMu.Unlock()
 	if len(payload) > MaxPayload || session.sendSequence == ^uint64(0) || !time.Now().Before(session.expiry) || ctx.Err() != nil {
@@ -311,7 +314,8 @@ func (session *Session) SendContext(ctx context.Context, payload []byte) error {
 	return nil
 }
 
-func (session *Session) Recv(ctx context.Context) ([]byte, error) {
+func (session *Session) Recv(ctx context.Context) (data []byte, failure error) {
+	defer func() { traceFailure(ctx, session.trace, failure) }()
 	session.recvMu.Lock()
 	defer session.recvMu.Unlock()
 	if session.recvSequence == ^uint64(0) || !time.Now().Before(session.expiry) || ctx.Err() != nil {
@@ -347,4 +351,15 @@ func (session *Session) Recv(ctx context.Context) ([]byte, error) {
 func (session *Session) Close() error {
 	session.stream.Close()
 	return session.connection.Close()
+}
+
+func traceFailure(ctx context.Context, trace *sessiontrace.Recorder, err error) {
+	if err == nil || ctx.Err() != nil {
+		return
+	}
+	reason := "FAMILY_TLS_ERROR"
+	if errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF) {
+		reason = "FAMILY_TLS_EOF"
+	}
+	trace.Add("FAMILY_TLS", "FAILED", reason)
 }

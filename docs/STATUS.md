@@ -1,5 +1,44 @@
 # Текущее состояние / Current state
 
+## Beta61 diagnostic correction r2 — LOCAL, NOT ACCEPTED03.10.2026
+
+Production SetupID producer and bootstrap validator require32 bytes/64hex. Diagnostic
+v2 hashes the complete decoded value with domain `family-connect/session-diagnostic/v2\0`
+to64hex SHA256. Invalid/missing values remain non-correlatable. Real broker/bootstrap
+regressions, bounded tagged lifecycle/heartbeat/ICE/PC/WS/TLS/carrier evidence, sticky
+first-observed failure, Android history and offline four-ID join added locally.
+Final local gates: full carrier race PASS;230 Friends JVM tests and lint PASS;
+correlation/release pytest15/15 and diff-check PASS.
+No transport/auth/admission/retry-policy change. Hosted CI, new
+artifact/signature, in-place owner acceptance and live matching-tag session pending.
+Owner still original beta61/61 SHAc98852b3; public/tester still60. Redmi31ce63ba observed
+connected, not updated again. No server mutation or tester delivery in this pass.
+[r2 acceptance ledger](releases/2026-10-03-beta61-targeted-acceptance.md#diagnostic-correction-r2).
+
+## Beta61 targeted owner acceptance — BLOCKED03.10.2026
+
+Scope now explicitly targeted only: no broad APK/catalog/invitation publication and
+no FIELD admission changes. Existing CI APK signed without product rebuild: beta61/61,
+source d93a01d, signed SHA c98852b3, same verified beta60 signer67a90d1.
+Installed in place on owner Redmi; UID10283, data inode/first install, encrypted
+identity/config/readiness state, enrollment, activation and Support FC-4D8Q-REEG
+preserved. Launch/restart, server identity proof, AWG+HTTPS200, typed-fixture export,
+provider/updater/control safety checks and signed APK privacy scan PASS. Separate
+test package and synthetic diagnostics removed; product retained, VPN off/Auto.
+Final installed bytes/signer readback matches signed candidate. RU18:37UTC confirms
+exactly2 admitted/non-revoked devices; owner61 READY/ACK then valid, tester still60
+with expired receipt. Revalidate all leases before any later live test.
+
+BLOCKER: broker SetupID is32 bytes/64 hex, but signed beta61's sessiondiag accepts
+only16 bytes. Real-format probe yields empty session_tag (gate FAIL). The previous
+synthetic unit vector missed this producer/consumer mismatch. Physical export test
+used typed fixtures, not proof of live native correlation. Server still runs old
+e17e1fe7; candidate terminal report also lacks complete tagged lifecycle/heartbeat/
+recovery trace and direct Support/connection/incident correlation. No deployment,
+tester download or tester attempt (0); transport defect is not claimed fixed.
+Need corrected/gated diagnostics before delivery, not a blind retry or silent APK
+replacement. [Full hashes, owner checks, gaps and next steps](releases/2026-10-03-beta61-targeted-acceptance.md).
+
 ## Android beta61 preparation — authorized source publication03.10.2026
 
 Source commit `d93a01d` pushed to main. Local payload/field pytest9/9 and diff-check

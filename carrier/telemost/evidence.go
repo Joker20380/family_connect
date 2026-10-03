@@ -8,11 +8,13 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"github.com/gorilla/websocket"
 	"github.com/pion/webrtc/v4"
 )
 
 func (s *Session) recordSignalingReadFailure(err error) {
+	reason := "SIGNAL_WS_CLOSE"
 	event := Evidence{Stage: "WS_FAIL", State: "read_error"}
 	var networkError net.Error
 	var closeError *websocket.CloseError
@@ -20,6 +22,7 @@ func (s *Session) recordSignalingReadFailure(err error) {
 	switch {
 	case errors.As(err, &networkError) && networkError.Timeout():
 		event.State = "read_timeout"
+		reason = "HEARTBEAT_TIMEOUT"
 	case errors.As(err, &closeError):
 		event.State = fmt.Sprintf("close_code_%d", closeError.Code)
 		for _, keyword := range []string{"ping", "timeout", "duplicate", "expired", "inactivity", "shutdown", "restart", "invalid", "ack", "idle", "session"} {
@@ -31,6 +34,21 @@ func (s *Session) recordSignalingReadFailure(err error) {
 		event.Stage = "SIGNALING_PROTOCOL_FAIL"
 		event.State = "invalid_json"
 	}
+	trace := sessiontrace.Event{Stage: "WEBSOCKET", State: "CLOSED", Reason: reason, CloseReason: "READ_ERROR"}
+	if closeError != nil {
+		trace.CloseCode = closeError.Code
+		if len(event.ReasonKeywords) > 0 {
+			trace.CloseReason = event.ReasonKeywords[0]
+		}
+	}
+	if reason == "HEARTBEAT_TIMEOUT" {
+		trace.Stage = "LIVENESS"
+		trace.CloseReason = "READ_TIMEOUT"
+	}
+	if syntaxError != nil {
+		trace.CloseReason = "INVALID_MESSAGE"
+	}
+	s.cfg.Trace.Record(trace)
 	s.recordEvidence(event)
 }
 
@@ -56,6 +74,7 @@ type MediaStats struct {
 }
 
 func (s *Session) recordEvidence(event Evidence) {
+	s.traceEvidence(event)
 	event.UTC = time.Now().UTC().Format(time.RFC3339Nano)
 	s.statsMu.Lock()
 	defer s.statsMu.Unlock()

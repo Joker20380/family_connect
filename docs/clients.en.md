@@ -1,5 +1,13 @@
 # Client installation
 
+The beta61 r2 diagnostic correction is source-only; no corrected APK is accepted.
+The original signed/installed61 SHAc98852b3 is not the corrected candidate.
+
+**Beta61 is a targeted diagnostic candidate; tester delivery is blocked.** Signed
+and checked in place on the owner device, but live diagnostic correlation is defective.
+Public distribution remains60; do not distribute61 before separate acceptance.
+[Acceptance report](releases/2026-10-03-beta61-targeted-acceptance.md).
+
 **Diagnostic beta61/code61 is being prepared, not published yet.**
 After acceptance, use the verified signed update over beta60; never uninstall or
 clear data, and retain the existing Support ID. Unsigned CI/local APKs are not

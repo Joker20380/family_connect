@@ -10,13 +10,16 @@ final class DiagnosticRing {
         BROKER_DESCRIPTOR_READY, BOOT_CLOSED, SESSION_READY, STARTUP_REJECTED, CONTROL_UNAVAILABLE, STARTUP_FAILED,
         NATIVE_VALIDATION_FAILED, BOOTSTRAP_VALIDATION_FAILED, ATOMIC_IMPORT_FAILED, PERSISTENCE_FAILED,
         EXPIRED_ON_IMPORT, ORCHESTRATOR_NOT_USABLE, INTERNAL_ERROR, STALE_STATE, AUTHORIZATION_REJECTED, FETCH_FAILED, MISSING,
-        DNS_PROBE_OK, DNS_PROBE_FAILED }
+        DNS_PROBE_OK, DNS_PROBE_FAILED, SIGNAL_WS_CLOSE, ICE_DISCONNECTED, ICE_FAILED, PEER_CONNECTION_FAILED,
+        CARRIER_EOF, CARRIER_ERROR, FAMILY_TLS_EOF, FAMILY_TLS_ERROR, GATEWAY_CLOSE, HEARTBEAT_TIMEOUT, REMOTE_CLOSE,
+        RECOVERY_CLEANUP_FAILED, RECOVERY_DESCRIPTOR_FAILED, RECOVERY_JOIN_FAILED, RECOVERY_CARRIER_FAILED, UNKNOWN_INTERNAL }
     private String supportId;
     private final String version;
     private final int build,os;
     private final ArrayDeque<JsonObject> events=new ArrayDeque<>();
     private final JsonObject outcomes=new JsonObject(),counters=new JsonObject();
     private JsonObject restrictedSession=new JsonObject();
+    private final ArrayDeque<JsonObject> restrictedHistory=new ArrayDeque<>();
     private String connectionId=UUID.randomUUID().toString(),incidentId=UUID.randomUUID().toString();
     private String state="DISCONNECTED",network="UNKNOWN",readiness="UNKNOWN",bootstrap="UNKNOWN";
     private boolean vpn;
@@ -30,13 +33,23 @@ final class DiagnosticRing {
             for(String key:new ArrayList<>(outcomes.keySet()))outcomes.remove(key);
             for(String key:new ArrayList<>(counters.keySet()))counters.remove(key);
             readiness="UNKNOWN";bootstrap="UNKNOWN";
-            restrictedSession=new JsonObject();
+            archiveRestricted();restrictedSession=new JsonObject();
         }
         if("restoration_attempted".equals(event.name)){incidentId=UUID.randomUUID().toString();retries++;}
         String transport=transport(event.candidate);
         if("candidate_failed".equals(event.name)||"candidate_succeeded".equals(event.name))outcomes.addProperty(transport,event.failure==null?"SUCCESS":event.failure.name());
         String before=state;state=event.state.name();
-        add(Component.ORCHESTRATOR,event.failure==null?Code.NONE:Code.valueOf(event.failure.name()),before,state,transport,event.elapsedMs,now);
+        Code diagnostic=event.failure==null?Code.NONE:Code.valueOf(event.failure.name());
+        if(diagnostic==Code.INTERNAL&&("restricted".equals(transport)||"restoration_failed".equals(event.name)&&restrictedSession.size()>0))diagnostic=Code.valueOf(RestrictedTrace.firstReason(restrictedSession));
+        add(Component.ORCHESTRATOR,diagnostic,before,state,transport,event.elapsedMs,now);
+        if(Arrays.asList("restoration_attempted","restoration_succeeded","restoration_failed","cleanup_failed").contains(event.name)){
+            JsonObject recent=events.getLast();recent.addProperty("event",event.name);
+            recent.addProperty("recovery_stage",event.name.equals("cleanup_failed")?"CLEANUP":"RECOVERY");
+            recent.addProperty("recovery_state",event.name.equals("restoration_attempted")?"STARTED":event.name.equals("restoration_succeeded")?"ESTABLISHED":"FAILED");
+            recent.addProperty("restricted_descriptor",incidentId.equals(text(restrictedSession,"incident_id"))?"ATTEMPTED":"NOT_ATTEMPTED");
+            if(RestrictedTrace.tag(text(restrictedSession,"session_tag")))recent.addProperty("previous_session_tag",text(restrictedSession,"session_tag"));
+            if(event.failure!=null)recent.addProperty("policy_reason",event.failure.name());
+        }
         return state.equals("FAILED")&&(before.equals("CONNECTING")||before.equals("RESTORING"));
     }
     synchronized void readiness(boolean usable,long now){
@@ -68,12 +81,24 @@ final class DiagnosticRing {
         if(Arrays.asList("dns","tcp","tcp_active","tcp_peak","udp_denied","ipv6_denied","protect_ok","protect_denied").contains(name)&&value>=0&&value<=9007199254740991L)counters.addProperty(name,value);
     }
     synchronized void restricted(JsonObject source,int nativeState,boolean denied,long now){
-        if(restrictedSession.has("terminal_observed_at_ms"))return;
         JsonObject safe=new JsonObject();
         safe.addProperty("native_state",nativeState>=0&&nativeState<=5?nativeState:-1);
         safe.addProperty("authorization_denied",denied);
         String tag=text(source,"session_tag");
-        if(tag.matches("[0-9a-f]{32}"))safe.addProperty("session_tag",tag);
+        if(RestrictedTrace.tag(tag))safe.addProperty("session_tag",tag);
+        String correlation=text(source,"correlation_status");
+        safe.addProperty("correlation_status",RestrictedTrace.tag(tag)?"VALID":"INVALID".equals(correlation)?"INVALID":tag.isEmpty()?"MISSING":"INVALID");
+        JsonObject lifecycle=RestrictedTrace.project(source.get("lifecycle"),tag);
+        boolean same=text(restrictedSession,"session_tag").equals(text(safe,"session_tag"));
+        if(same&&restrictedSession.has("terminal_observed_at_ms"))safe=restrictedSession.deepCopy();
+        if(lifecycle!=null){
+            if(same&&restrictedSession.has("lifecycle")){
+                JsonObject previous=restrictedSession.getAsJsonObject("lifecycle");
+                if(previous.has("first_failure"))lifecycle.add("first_failure",previous.get("first_failure").deepCopy());
+            }
+            safe.add("lifecycle",lifecycle);
+        }
+        if(same&&restrictedSession.has("terminal_observed_at_ms")){restrictedSession=safe;return;}
         enumField(source,safe,"terminal_reason","NONE","CANCELLED","DEADLINE","EOF","IO_CLOSED","FAMILY_REJECTED","MUX_PROTOCOL","RELIABLE_PROTOCOL","RELIABLE_EXHAUSTED","REMOTE_RESET","RELIABLE_CLOSED","NETWORK_TIMEOUT","NETWORK_ERROR","UNKNOWN");
         enumField(source,safe,"reliable_terminal","","closed","recovery_exhausted","protocol_violation","remote_reset","cancelled","carrier_closed","UNKNOWN");
         enumField(source,safe,"signaling_failure","NONE","UNKNOWN","read_error","read_timeout","invalid_json","close_code_1000","close_code_1001","close_code_1002","close_code_1003","close_code_1006","close_code_1007","close_code_1008","close_code_1009","close_code_1010","close_code_1011","close_code_1012","close_code_1013","close_code_1015");
@@ -86,7 +111,32 @@ final class DiagnosticRing {
             }
         }
         if(denied||nativeState==3||nativeState==5||!text(safe,"terminal_reason").equals("NONE")&&!text(safe,"terminal_reason").equals("UNKNOWN"))safe.addProperty("terminal_observed_at_ms",now);
+        if(!same)archiveRestricted();
+        if(RestrictedTrace.tag(tag)){
+            for(String field:new String[]{"device_support_id","connection_id","incident_id"}){
+                if(same&&restrictedSession.has(field))safe.add(field,restrictedSession.get(field).deepCopy());
+                else safe.addProperty(field,field.equals("device_support_id")?supportId:field.equals("connection_id")?connectionId:incidentId);
+            }
+        }
         restrictedSession=safe;
+    }
+    private void archiveRestricted(){
+        if(!RestrictedTrace.tag(text(restrictedSession,"session_tag")))return;
+        if(restrictedHistory.size()==4)restrictedHistory.removeFirst();
+        JsonObject archived=restrictedSession.deepCopy();
+        if(archived.has("lifecycle")){
+            JsonObject lifecycle=archived.getAsJsonObject("lifecycle");JsonArray trace=lifecycle.getAsJsonArray("trace");
+            int removed=Math.max(0,trace.size()-32);
+            while(trace.size()>32)trace.remove(0);
+            lifecycle.addProperty("archive_dropped",removed);
+        }
+        restrictedHistory.addLast(archived);
+    }
+    synchronized void cleanup(boolean success,long now){
+        add(Component.SESSION,success?Code.NONE:Code.RECOVERY_CLEANUP_FAILED,state,state,"restricted",0,now);
+        JsonObject recent=events.getLast();recent.addProperty("event",success?"cleanup_completed":"cleanup_failed");
+        String tag=text(restrictedSession,"session_tag");if(RestrictedTrace.tag(tag))recent.addProperty("session_tag",tag);
+        if(!success)recent.addProperty("recovery_stage","CLEANUP");
     }
     private static String text(JsonObject source,String field){
         JsonElement value=source.get(field);return value!=null&&value.isJsonPrimitive()&&value.getAsJsonPrimitive().isString()?value.getAsString():"";
@@ -109,6 +159,7 @@ final class DiagnosticRing {
         result.addProperty("state",state);result.addProperty("vpn_capture_open",vpn);result.addProperty("restricted_readiness",readiness);result.addProperty("bootstrap_directory",bootstrap);
         result.add("transport_outcomes",outcomes.deepCopy());result.add("counters",counters.deepCopy());
         result.add("restricted_session",restrictedSession.deepCopy());
+        JsonArray history=new JsonArray();for(JsonObject session:restrictedHistory)history.add(session.deepCopy());result.add("restricted_history",history);
         JsonArray recent=new JsonArray();for(JsonObject event:events)recent.add(event.deepCopy());result.add("events",recent);return result;
     }
 }

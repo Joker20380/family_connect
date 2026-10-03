@@ -25,6 +25,7 @@ final class Diagnostics {
     static void readinessResult(Context context,ReadinessImportResult.Code code){try{Diagnostics store=get(context);synchronized(store){store.ring.readinessResult(code,System.currentTimeMillis());store.save(false);}}catch(Exception ignored){}}
     static void vpn(Context context,boolean open){try{Diagnostics store=get(context);synchronized(store){store.ring.vpn(open,System.currentTimeMillis());store.save(false);}}catch(Exception ignored){}}
     static void dns(Context context,boolean good){try{Diagnostics store=get(context);synchronized(store){store.ring.dns(good,System.currentTimeMillis());store.save(false);}}catch(Exception ignored){}}
+    static void cleanup(Context context,boolean success){try{Diagnostics store=get(context);synchronized(store){store.ring.cleanup(success,System.currentTimeMillis());store.save(false);}}catch(Exception ignored){}}
     static void nativeStats(Context context,org.json.JSONObject stats){
         try{Diagnostics store=get(context);synchronized(store){
             org.json.JSONArray events=stats.optJSONArray("events");
@@ -48,7 +49,7 @@ final class Diagnostics {
         byte[] raw=ring.snapshot().toString().getBytes(StandardCharsets.UTF_8);write(file("ring"),raw);if(incident)write(file("incident"),raw);
     }
     private static void write(AtomicFile file,byte[] raw)throws IOException{
-        if(raw.length>128*1024)throw new IOException("Diagnostic bound");FileOutputStream output=file.startWrite();
+        if(raw.length>256*1024)throw new IOException("Diagnostic bound");FileOutputStream output=file.startWrite();
         try{output.write(raw);file.finishWrite(output);}catch(IOException failure){file.failWrite(output);throw failure;}
     }
     static void share(android.app.Activity activity){
@@ -57,7 +58,7 @@ final class Diagnostics {
                 try{Diagnostics store=get(activity);String support=DeviceSupport.cached(activity);JsonObject bundle=new JsonObject();String filename="diagnostics-"+UUID.randomUUID().toString().replace("-","")+".json";synchronized(store){
                     store.ring.support(support);
                     for(String name:new String[]{"ring","incident"}){
-                        try{byte[] raw=store.file(name).readFully();if(raw.length>128*1024)throw new IOException("Diagnostic bound");JsonObject record=JsonParser.parseString(new String(raw,StandardCharsets.UTF_8)).getAsJsonObject();record.addProperty("device_support_id",support);bundle.add(name,record);}
+                        try{byte[] raw=store.file(name).readFully();if(raw.length>256*1024)throw new IOException("Diagnostic bound");JsonObject record=JsonParser.parseString(new String(raw,StandardCharsets.UTF_8)).getAsJsonObject();record.addProperty("device_support_id",support);bundle.add(name,record);}
                         catch(FileNotFoundException missing){if(name.equals("ring"))bundle.add(name,store.ring.snapshot());}
                     }
                     File[] previous=activity.getCacheDir().listFiles((directory,name)->name.matches("diagnostics-[0-9a-f]{32}\\.json"));

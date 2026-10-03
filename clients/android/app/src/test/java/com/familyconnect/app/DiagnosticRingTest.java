@@ -34,7 +34,7 @@ public class DiagnosticRingTest {
     }
     @Test public void projectsNativeTerminalAndPreservesFirstFailure(){
         DiagnosticRing ring=ring();JsonObject input=new JsonObject();
-        input.addProperty("session_tag","0123456789abcdef0123456789abcdef");
+        input.addProperty("session_tag","0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef");
         input.addProperty("terminal_reason","IO_CLOSED");input.addProperty("reliable_terminal","recovery_exhausted");
         input.addProperty("signaling_failure","close_code_1006");input.addProperty("ice_failure","SUBSCRIBER_disconnected");
         input.addProperty("retransmissions",8);input.addProperty("terminal_at_ms",123);

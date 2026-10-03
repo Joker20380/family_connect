@@ -1,5 +1,36 @@
 # Причина завершения restricted-сессии
 
+## Коррекция r2: локально, без допуска тестера
+
+Новый контракт: полный SHA256 от domain-separated32-byte SetupID,64hex без усечения.
+Есть real-format/broker/bootstrap regression и bounded native/server lifecycle.
+Ниже старый отчёт о пустом теге относится к установленному SHAc98852b3, не исправлен
+на устройстве одним лишь изменением source. Новый APK/live acceptance ещё не готовы.
+
+Оператор объединяет разрешённый клиентский экспорт и bounded JSONL с событиями
+`restricted_trace`, без journal prefix (`journalctl -o cat` для выбранного unit).
+Не выгружать сырые provider logs, профиль, OAuth, room URL или credentials.
+
+```sh
+python scripts/correlate_restricted.py --client owner-export.json --server gateway.jsonl --find FC-4D8Q-REEG
+```
+
+`--find` также принимает connection_id, incident_id или64hex session_tag. Результат
+содержит точные привязки, порядок событий отдельно по endpoint, первую наблюдаемую
+ошибку и отдельную recovery/cleanup историю. Конфликты отклоняются; пропуски и
+неполные стадии не дают `owner_lifecycle_complete`. Привязка из экспорта не является
+авторизацией. Сырые тексты close reason отбрасываются, остаются code/enum/keyword.
+Перед передачей тестеру нужны подписанный новый hash, owner in-place и **реальная**
+совпадающая client/server корреляция. FIELD/public updater/invitation не менять.
+
+**BLOCKED03.10:** beta61 подписана и установлена только owner поверх60; baseline
+и экспорт проверочных данных прошли. Но реальный64-hex setup ID не проходит16-byte
+проверку `sessiondiag.Capture`: `session_tag` пустой. Утверждение ниже о совпадающем
+теге описывает задуманный контракт, не рабочую live-корреляцию beta61. Полная серверная
+трассировка heartbeat/lifecycle/recovery тоже не готова. Передача тестеру и попытка
+запрещены до прохождения gates; broad publication/catalog/admission не менять.
+[Актуальная приёмка и полный список пробелов](../releases/2026-10-03-beta61-targeted-acceptance.md).
+
 Реализация03.10.2026: source d93a01d, beta61/code61 прошла CI; скачанный unsigned APK
 проверен, но ещё не подписан/установлен/опубликован. Это ещё не rollout. Публичная beta60
 эти поля не экспортирует. Новый код устраняет потерю диагностической информации,
