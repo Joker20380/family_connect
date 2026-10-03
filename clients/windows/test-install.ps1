@@ -9,6 +9,48 @@ function Invoke-Checked([string]$Exe,[string]$Arguments,[int]$Seconds=90){
     }
     if($p.ExitCode -ne 0){throw "$Stage exit code: $($p.ExitCode)"}
 }
+function Get-BrokerSnapshot {
+    $service=Get-CimInstance Win32_Service -Filter "Name='FamilyConnectBroker'"
+    if($null -eq $service){return [ordered]@{utc=[DateTime]::UtcNow.ToString('o');state='Absent';pid=0}}
+    return [ordered]@{utc=[DateTime]::UtcNow.ToString('o');state=$service.State;pid=$service.ProcessId;
+        exit_code=$service.ExitCode;service_exit_code=$service.ServiceSpecificExitCode;
+        start_mode=$service.StartMode;path=$service.PathName;account=$service.StartName}
+}
+function Wait-UpgradedBroker([int]$PreviousPid,[DateTime]$Started,[string]$App){
+    $timer=[Diagnostics.Stopwatch]::StartNew()
+    $previous=''
+    while($timer.Elapsed.TotalSeconds -lt 60){
+        $snapshot=Get-BrokerSnapshot
+        $state="$($snapshot.state)/$($snapshot.pid)"
+        if($state -ne $previous){
+            $snapshot.elapsed_ms=$timer.ElapsedMilliseconds
+            $snapshot | ConvertTo-Json -Compress | Add-Content upgrade-service.jsonl
+            Write-Host "::notice::Upgrade readiness: $state elapsed_ms=$($timer.ElapsedMilliseconds)"
+            $previous=$state
+        }
+        if($snapshot.state -eq 'Running' -and $snapshot.pid -ne 0 -and $snapshot.pid -ne $PreviousPid){
+            $process=Get-Process -Id $snapshot.pid -ErrorAction SilentlyContinue
+            if($null -ne $process -and $process.StartTime.ToUniversalTime() -ge $Started){
+                $remaining=[Math]::Min(10000,[int](60000-$timer.ElapsedMilliseconds))
+                if($remaining -le 0){break}
+                $probe=Start-Process $App -ArgumentList '/broker-test' -PassThru
+                try {
+                    $finished=$probe.WaitForExit($remaining)
+                    $code=if($finished){$probe.ExitCode}else{$probe.Kill();-1}
+                    [ordered]@{utc=[DateTime]::UtcNow.ToString('o');probe='broker-status-request-activation';exit_code=$code;
+                        elapsed_ms=$timer.ElapsedMilliseconds} | ConvertTo-Json -Compress | Add-Content upgrade-service.jsonl
+                    $after=Get-BrokerSnapshot
+                    if($code -eq 0 -and $after.state -eq 'Running' -and $after.pid -eq $snapshot.pid){
+                        Write-Host "::notice::New broker PID $($after.pid) authenticated status/request/activation PASS after $($timer.ElapsedMilliseconds)ms"
+                        return
+                    }
+                } finally {$probe.Dispose();$process.Dispose()}
+            }
+        }
+        Start-Sleep -Milliseconds 200
+    }
+    throw 'Broker did not restart with a new ready process within 60 seconds'
+}
 try {
     Write-Host "::notice::Windows integration stage: $Stage"
     $app="$env:ProgramFiles/Family Connect/FamilyConnect.exe"
@@ -41,16 +83,47 @@ try {
             }
         }
         'Upgrade' {
+            $before=Get-BrokerSnapshot
+            $before | ConvertTo-Json -Compress | Set-Content upgrade-service.jsonl
+            if($before.state -ne 'Running' -or $before.pid -eq 0){throw 'Upgrade requires a running broker'}
+            $started=[DateTime]::UtcNow
+            $watch=Start-Job -ScriptBlock {
+                $ErrorActionPreference='Stop'
+                $until=[DateTime]::UtcNow.AddMinutes(5)
+                $previous=''
+                while([DateTime]::UtcNow -lt $until){
+                    $service=Get-CimInstance Win32_Service -Filter "Name='FamilyConnectBroker'"
+                    $state=if($null -eq $service){'Absent'}else{"$($service.State)/$($service.ProcessId)"}
+                    if($state -ne $previous){
+                        [ordered]@{utc=[DateTime]::UtcNow.ToString('o');transition=$state} | ConvertTo-Json -Compress
+                        $previous=$state
+                    }
+                    Start-Sleep -Milliseconds 200
+                }
+            }
             $sentinel=Join-Path $env:ProgramData 'FamilyConnect/installer-upgrade-sentinel.txt'
             [IO.File]::WriteAllText($sentinel,'preserve-existing-data')
             try {
                 $installer=(Resolve-Path "$PSScriptRoot/dist/*pilot-unsigned.exe").Path
                 Invoke-Checked $installer '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /SP- /LOG=upgrade.log' 240
-                if((Get-Service FamilyConnectBroker).Status -ne 'Running'){throw 'Broker did not restart after upgrade'}
+                $returned=Get-BrokerSnapshot
+                $returned.installer_exit_code=0
+                $returned | ConvertTo-Json -Compress | Add-Content upgrade-service.jsonl
+                Wait-UpgradedBroker -PreviousPid $before.pid -Started $started -App $app
                 if([IO.File]::ReadAllText($sentinel) -ne 'preserve-existing-data'){throw 'Upgrade changed stored data'}
                 Invoke-Checked $app '/runtime-check' 30
                 Invoke-Checked $app '/broker-test' 60
-            } finally {Remove-Item -LiteralPath $sentinel -ErrorAction SilentlyContinue}
+            } finally {
+                Stop-Job $watch
+                Receive-Job $watch | Add-Content upgrade-service.jsonl
+                Remove-Job $watch
+                Get-WinEvent -FilterHashtable @{LogName='System';ProviderName='Service Control Manager';StartTime=$started} -ErrorAction SilentlyContinue |
+                    Where-Object {$_.Message -match 'Family Connect|FamilyConnectBroker'} |
+                    ForEach-Object {[ordered]@{utc=$_.TimeCreated.ToUniversalTime().ToString('o');event_id=$_.Id;message=$_.Message} | ConvertTo-Json -Compress} |
+                    Add-Content upgrade-service.jsonl
+                Get-Content upgrade-service.jsonl | ForEach-Object {Write-Host "::notice::Broker lifecycle $_"}
+                Remove-Item -LiteralPath $sentinel -ErrorAction SilentlyContinue
+            }
         }
         'Broker' {Invoke-Checked $app '/broker-test' 60}
         'UI' {Invoke-Checked $app '/smoke' 30}

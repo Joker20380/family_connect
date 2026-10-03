@@ -1,7 +1,6 @@
 package com.familyconnect.app;
 
 import android.net.ConnectivityManager;
-import android.net.LinkAddress;
 import android.net.LinkProperties;
 import android.net.Network;
 import android.os.SystemClock;
@@ -32,8 +31,10 @@ public class AutoTcpAddressRuntimeTest {
                 SystemClock.sleep(100);
             }
             assertNotNull("Auto TCP network missing",link);
-            assertTrue(link.getLinkAddresses().contains(new LinkAddress("10.79.0.2/32")));
-            assertTrue("Auto TCP IPv6 source missing",link.getLinkAddresses().contains(new LinkAddress("fd79:fc::2/128")));
+            java.net.InetAddress ipv4=java.net.InetAddress.getByName("10.79.0.2");
+            java.net.InetAddress ipv6=java.net.InetAddress.getByName("fd79:fc::2");
+            assertTrue(link.getLinkAddresses().stream().anyMatch(address->address.getAddress().equals(ipv4)&&address.getPrefixLength()==32));
+            assertTrue("Auto TCP IPv6 source missing",link.getLinkAddresses().stream().anyMatch(address->address.getAddress().equals(ipv6)&&address.getPrefixLength()==128));
             assertTrue(link.getRoutes().stream().anyMatch(route->route.isDefaultRoute()&&route.getDestination().getAddress() instanceof java.net.Inet4Address));
             assertTrue(link.getRoutes().stream().anyMatch(route->route.isDefaultRoute()&&route.getDestination().getAddress() instanceof java.net.Inet6Address));
             assertEquals(1280,link.getMtu());

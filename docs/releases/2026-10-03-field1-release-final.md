@@ -15,6 +15,17 @@ No signing of update catalog, publication, landing, admission or FIELD expansion
 Candidate rollback means keep historical installed59 while blocked, never clear
 data or install a lower version. Final source/artifact/hosted evidence follows here.
 
+Initial candidate source f3a5d43 pushed without release trigger. Local regression13
+PASS; local build caught a hidden Android SDK LinkAddress constructor in the new
+test only; corrected to compare public address/prefix accessors. No APK signed yet.
+Windows source trace: Native.Install returns after `sc start` (SCM request accepted),
+not a Running/API-ready barrier. Upgrade test previously sampled service once.
+Test now records pre/post SCM state/PID/configuration, background transitions and SCM
+events, and requires a different newly started PID plus authenticated broker API
+status/request/activation within60s. Polling is bounded, not a fixed startup sleep.
+Sentinel/runtime/broker postchecks remain. Production Windows code unchanged;
+hosted lifecycle evidence is still needed to confirm the observed race.
+
 ## Android Auto runtime diagnosis — artifact stop boundary
 
 **FIELD-1 publication remains BLOCKED; DIAG-1A remains PASS.** Sequential work

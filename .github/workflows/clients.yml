@@ -165,6 +165,11 @@ jobs:
         with:
           name: FamilyConnect-Windows-Installer-pilot-unsigned
           path: clients/windows/dist/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-upgrade-lifecycle
+          path: upgrade-service.jsonl
   linux:
     runs-on: ubuntu-latest
     steps:
@@ -248,6 +253,7 @@ jobs:
           path: |
             install.log
             upgrade.log
+            upgrade-service.jsonl
 
   release:
     if: startsWith(github.ref, 'refs/tags/v') || (github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'Release '))
