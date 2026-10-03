@@ -3,10 +3,13 @@
 ## Current engineering priority / Текущий critical path
 
 **Latest03.10: commit/push authorized; preparing diagnostic beta61/code61.**
-1. Commit focused diagnostics/CI/version/documentation, preserving unrelated VPN docs.
-2. Require green hosted platform gates and exact source-bound unsigned ARM64 artifact;
-   verify it before offline signing. No CI signing keys or beta60 replacement.
-3. Owner in-place acceptance before tester delivery; maintain package/signer/identity.
+1. DONE focused diagnostics/CI/version/documentation committed/pushed as `d93a01d`;
+   unrelated VPN docs preserved. Local payload/field pytest9/9 PASS.
+2. DONE all Client builds `37138322487` gates, phase0, Linux control and readiness
+   PASS; unsigned ARM64 artifact11279129098 downloaded and source/hash/16KiB/privacy
+   verified. APK7e3fb204 remains unsigned and must not be handed to the tester.
+3. NEXT offline signature and owner in-place acceptance before tester delivery;
+   maintain package/signer/identity. No CI signing keys or beta60 replacement.
 4. Narrow gateway rollout with executable rollback and freshly validated leases;
    exact two-device cohort remains unchanged. No normal-service restart.
 5. Publish verified immutable update/catalog/docs, then one tester Auto attempt and

@@ -2,6 +2,19 @@
 
 ## Android beta61 preparation — authorized source publication03.10.2026
 
+Source commit `d93a01d` pushed to main. Local payload/field pytest9/9 and diff-check
+PASS. Hosted Client builds [37138322487](https://github.com/Joker20380/family_connect/actions/runs/37138322487):
+Linux, Windows, Windows compatibility and Android PASS, including emulator/runtime,
+full carrier race, fresh restricted native/gateway and final ARM64 artifact gates.
+phase0 `37138322534`, Linux control `37138322506`, Android readiness `37138322507`
+PASS. Artifact11279129098 downloaded: archive SHA11adb429 matches GitHub digest.
+Unsigned APK SHA7e3fb204 /49,604,500bytes; native bffb7c4d; gateway aca7c13a.
+Local source/package/code61/ABI/native parity/16KiB alignment/privacy checks PASS
+(1071 entries, no findings); expected unsigned rejection verified. Receipts are in
+ignored `state-client-build/field61-ci/`; full hashes in dated report. No signed61,
+owner installation, gateway rollout or public/invitation/catalog switch yet.
+Public API watcher stopped after HTTP errors; final CI authenticated readback PASS.
+
 User authorized commit/push and asked how to update the tester. Source metadata is
 now beta61/code61; it is not yet signed, installed, deployed or publicly available.
 Client CI now builds the pinned restricted arm64 native and gateway from the same
@@ -10,7 +23,7 @@ source/version/hash/native verification for offline signing. Existing Android
 runtime and desktop gates remain enabled. Signing secrets stay off CI/server.
 Previous metadata60 unsigned compile-only artifact must never be installed/published.
 Public/invitation/catalog remains beta60; Linux0.2.11/Windows0.2.15 unchanged.
-Next: accepted CI/download verification, offline signature, owner in-place acceptance,
+Next: offline signature, owner in-place acceptance,
 controlled gateway deployment/fresh leases, then tester in-place update and one retry.
 Do not uninstall/clear data or re-enroll; retain tester Support ID FC-YHQB-9VJN.
 This release diagnoses session loss; no claim that the transport failure is fixed.

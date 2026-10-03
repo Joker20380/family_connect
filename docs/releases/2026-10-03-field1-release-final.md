@@ -2,6 +2,42 @@
 
 ## Diagnostic beta61 preparation — commit/push authorized
 
+Source checkpoint `d93a01d` committed and pushed to main; unrelated VPN-health
+documents left untouched. Focused packaging/field-release pytest9/9 PASS and
+`git diff --check` PASS. CI `37138322487`: Linux, Windows and compatibility PASS;
+Android native/JVM/lint/APK verification, emulator acceptance, full carrier race,
+restricted native/gateway build and final unsigned ARM64 packaging PASS.
+phase0 `37138322534`, Linux control
+`37138322506`, readiness golden `37138322507` all PASS. No separate Windows control
+workflow triggered (its path filters are unchanged); actual Windows job ran.
+Authenticated GitHub readback is authoritative after the public API monitor hit
+HTTP errors and was stopped. All Android steps including Complete job confirmed
+successful through authenticated job111247328678 readback.
+
+Artifact11279129098 downloaded after CI verification. Local archive SHA256 matches
+GitHub's recorded digest:
+`11adb429fd70741d86d778be9864d3505d009fdc33802dbf9257f95315a75821`.
+Unsigned APK49,604,500bytes:
+`7e3fb20413d7a3598ee2fffffd8e9f52b0003cf9ceba63142f733e85051beacb`.
+Restricted native:
+`bffb7c4db1922aa5b76c49320490911264f36f5fb26cede670a9e2539b3fbe20`.
+Gateway executable:
+`aca7c13af2802d07e6fcb131367705a29d118650dbbf30ca0af1c8936ad265e4`.
+All originate from `d93a01d5f737a09ef46bfc1d4b7790560fdf26cd`. Verified APK package,
+code61/name, Friends launcher, nondebuggable/no-backup/no-cleartext manifest,
+ARM64-only, pinned Xray/patch, both native byte hashes and restricted_session DEX
+contract; zipalign16KiB PASS. Privacy scan1071 entries, zero findings; only unchanged
+previously reviewed stdlib upload.pyc false positive. apksigner rejects the unsigned
+artifact as expected. No signing keys read, APK signed, owner/device changes, gateway
+deployment or public download switch. Local receipts and immutable archive retained
+under ignored `state-client-build/field61-ci/`; no private data committed.
+
+Remaining delivery gates: offline signature, owner in-place/native acceptance,
+diagnostic gateway rollout with fresh leases/ordinary READY and executable rollback,
+then immutable public APK and increasing signed catalog before tester instructions
+are actionable. Existing public beta60 remains intact; do not install the unsigned
+CI output or uninstall the tester's current app. Root session-loss cause still open.
+
 Source version raised to0.1.18-beta61/code61; beta60 remains public/invitation/catalog.
 No signed61, device installation, gateway deployment or public rollout yet.
 CI retains emulator/desktop gates, adds full carrier race tests, pinned restricted
