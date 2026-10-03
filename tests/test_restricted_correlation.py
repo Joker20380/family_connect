@@ -74,3 +74,25 @@ def test_native_android_operator_allowlists_match():
         expected = getattr(diagnostic, name)
         assert re.search(r"const " + name.title() + r' = "([^"]+)"', native)[1] == expected
         assert re.search(name + r'="([^"]+)"', android)[1] == expected
+    assert re.search(r'const BrokerReasons = "([^"]+)"', native)[1] == diagnostic.BROKER_REASONS
+
+
+def test_large_sequence_is_bounded_and_broker_reason_preserved():
+    client, server = fixture()
+    server[0]["trace"]["sequence"] = 9007199254740991
+    server[0]["trace"]["broker_reason"] = "provider_timeout"
+    result = diagnostic.correlate([client], server, SUPPORT)["sessions"][0]
+    assert result["server_sequence_gaps"]
+    assert result["server"][0]["broker_reason"] == "provider_timeout"
+
+
+def test_different_sessions_do_not_share_bindings():
+    client, server = fixture()
+    second = copy.deepcopy(client)
+    session = second["ring"]["restricted_session"]
+    session["session_tag"] = "cd" * 32
+    session["lifecycle"]["trace"][0]["session_tag"] = session["session_tag"]
+    session["connection_id"] = "33333333-3333-3333-3333-333333333333"
+    assert len(diagnostic.correlate([client, second], server, SUPPORT)["sessions"]) == 2
+    result = diagnostic.correlate([client, second], server, CONNECTION)["sessions"]
+    assert len(result) == 1 and result[0]["session_tag"] == TAG

@@ -14,6 +14,7 @@ STAGES = "AUTHORIZED|ROOM_CREATION|DESCRIPTOR|GATEWAY_JOIN|SIGNALING|WEBSOCKET|I
 STATES = "STARTED|ESTABLISHED|ISSUED|TX|RX|FAILED|CLOSED|COMPLETED|ATTEMPTED|NOT_ATTEMPTED|new|checking|connecting|connected|completed|disconnected|failed|closed"
 REASONS = "NONE|SIGNAL_WS_CLOSE|ICE_DISCONNECTED|ICE_FAILED|PEER_CONNECTION_FAILED|CARRIER_EOF|CARRIER_ERROR|FAMILY_TLS_EOF|FAMILY_TLS_ERROR|GATEWAY_CLOSE|HEARTBEAT_TIMEOUT|REMOTE_CLOSE|RECOVERY_CLEANUP_FAILED|RECOVERY_DESCRIPTOR_FAILED|RECOVERY_JOIN_FAILED|RECOVERY_CARRIER_FAILED|UNKNOWN_INTERNAL"
 CLOSE_REASONS = "ping|timeout|duplicate|expired|inactivity|shutdown|restart|invalid|ack|idle|session|READ_ERROR|READ_TIMEOUT|INVALID_MESSAGE|WRITE_ERROR"
+BROKER_REASONS = "cancelled|lifetime_expired|authorization_changed|unused_expired|gateway_session_failed|gateway_failed|gateway_ready_timeout|provider_failure|provider_response|provider_cancelled|provider_timeout|provider_transport|provider_request|provider_bad_request|provider_unauthorized|provider_forbidden|provider_rate_limited|provider_unavailable|provider_status|provider_body|provider_json|provider_id|provider_join_url|unknown"
 REQUIRED = {"AUTHORIZED/ESTABLISHED", "ROOM_CREATION/ESTABLISHED", "DESCRIPTOR/ISSUED", "GATEWAY_JOIN/ESTABLISHED", "SIGNALING/ESTABLISHED", "WEBSOCKET/ESTABLISHED", "ICE/connected", "PEER_CONNECTION/connected", "CARRIER/STARTED", "CARRIER/ESTABLISHED", "FAMILY_TLS/ESTABLISHED", "GATEWAY_SESSION/ESTABLISHED", "HEARTBEAT/TX", "HEARTBEAT/RX", "CLEANUP/COMPLETED"}
 
 
@@ -46,6 +47,8 @@ def event(source):
         safe["close_code"] = source["close_code"]
     if source.get("close_reason") in CLOSE_REASONS.split("|"):
         safe["close_reason"] = source["close_reason"]
+    if source.get("broker_reason") in BROKER_REASONS.split("|"):
+        safe["broker_reason"] = source["broker_reason"]
     return safe
 
 
@@ -121,6 +124,9 @@ def correlate(clients, server, lookup):
                     safe["timestamp_ms"] = entry["timestamp"]
                 reason = entry.get("reason_code")
                 safe["reason"] = reason if reason in REASONS.split("|") else "UNKNOWN_INTERNAL"
+                for field, allowed in (("recovery_stage", ("CLEANUP", "RECOVERY")), ("recovery_state", ("STARTED", "ESTABLISHED", "FAILED")), ("restricted_descriptor", ("ATTEMPTED", "NOT_ATTEMPTED"))):
+                    if entry.get(field) in allowed:
+                        safe[field] = entry[field]
                 if safe not in recovery:
                     recovery.append(safe)
     for record in server:
@@ -176,7 +182,16 @@ def main():
         lines = read(args.server, 8 * 1024 * 1024).splitlines()
         if len(lines) > 10000:
             raise ValueError("server event bound")
-        result = correlate(clients, [json.loads(line) for line in lines if line.strip()], args.find)
+        server, ignored = [], 0
+        for line in lines:
+            if not line.strip():
+                continue
+            try:
+                server.append(json.loads(line))
+            except json.JSONDecodeError:
+                ignored += 1
+        result = correlate(clients, server, args.find)
+        result["ignored_non_json_lines"] = ignored
         print(json.dumps(result, ensure_ascii=True, indent=2))
         return 0 if result["sessions"] else 2
     except (OSError, UnicodeError, ValueError, TypeError, KeyError, RecursionError):

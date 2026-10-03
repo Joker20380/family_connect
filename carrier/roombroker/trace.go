@@ -1,6 +1,9 @@
 package roombroker
 
-import "github.com/Joker20380/family_connect/carrier/sessiontrace"
+import (
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+	"strings"
+)
 
 func (broker *Broker) emit(current *setup, state State, code Code) {
 	trace := sessiontrace.From(current.ctx)
@@ -22,7 +25,12 @@ func (broker *Broker) emit(current *setup, state State, code Code) {
 		stage, result = "LOCAL_CLOSE", "STARTED"
 	case Failed, Expired:
 		result, reason = "FAILED", "GATEWAY_CLOSE"
+		if strings.HasPrefix(string(code), "provider_") {
+			stage, reason = "ROOM_CREATION", "RECOVERY_DESCRIPTOR_FAILED"
+		} else if code == "gateway_failed" || code == "gateway_ready_timeout" {
+			stage, reason = "GATEWAY_JOIN", "RECOVERY_JOIN_FAILED"
+		}
 	}
-	trace.Add(stage, result, reason)
+	trace.Record(sessiontrace.Event{Stage: stage, State: result, Reason: reason, BrokerReason: string(code)})
 	broker.event(state, code)
 }

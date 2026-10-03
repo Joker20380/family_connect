@@ -62,25 +62,12 @@ func run() error {
 		return err
 	}
 	var output sync.Mutex
-	traceQueue := make(chan sessiontrace.Event, 256)
-	traceDone := make(chan struct{})
-	go func() {
-		defer close(traceDone)
-		for event := range traceQueue {
-			output.Lock()
-			_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": "restricted_trace", "trace": event})
-			output.Unlock()
-		}
-	}()
-	defer func() { close(traceQueue); <-traceDone }()
-	traceSink := func(event sessiontrace.Event) bool {
-		select {
-		case traceQueue <- event:
-			return true
-		default:
-			return false
-		}
-	}
+	traceSink, stopTrace := bufferedTrace(func(event sessiontrace.Event) {
+		output.Lock()
+		defer output.Unlock()
+		_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": "restricted_trace", "trace": event})
+	})
+	defer stopTrace()
 	emit := func(event string) {
 		output.Lock()
 		defer output.Unlock()

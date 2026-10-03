@@ -5,8 +5,9 @@
 **Latest03.10: diagnostic r2 implemented locally; acceptance still BLOCKED.**
 1. Implemented full32-byte ID digest, real producer/bootstrap regression, bounded
    server/native lifecycle and first-observed failure, Android four-ID correlation.
-2. Local gates PASS: full carrier race,230 Friends JVM/lint,pytest15/15,diff-check.
-   NEXT independently accepted hosted Java/native CI.
+2. Local gates PASS: full carrier race,230 Friends JVM/lint,pytest17/17,diff-check.
+   Final gateway shutdown/detail race regression also PASS; use fresh hosted CI
+   for the final checkpoint, not superseded source621468e artifacts.
 3. Sign distinct targeted beta61/code61 artifact with the same production key after
    accepted CI; retain original c98852b3 and record exact new source/APK/signer hashes.
 4. Owner in-place UID/identity/enrollment/Support/AWG/export/privacy acceptance.

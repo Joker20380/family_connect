@@ -8,7 +8,9 @@ to64hex SHA256. Invalid/missing values remain non-correlatable. Real broker/boot
 regressions, bounded tagged lifecycle/heartbeat/ICE/PC/WS/TLS/carrier evidence, sticky
 first-observed failure, Android history and offline four-ID join added locally.
 Final local gates: full carrier race PASS;230 Friends JVM tests and lint PASS;
-correlation/release pytest15/15 and diff-check PASS.
+correlation/release pytest17/17 and diff-check PASS, including final gateway trace
+shutdown/detail race tests. Source621468e initial CI is superseded by the final
+shutdown-safe bounded sink / allowlisted broker-detail checkpoint; use its fresh CI.
 No transport/auth/admission/retry-policy change. Hosted CI, new
 artifact/signature, in-place owner acceptance and live matching-tag session pending.
 Owner still original beta61/61 SHAc98852b3; public/tester still60. Redmi31ce63ba observed

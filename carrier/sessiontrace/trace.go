@@ -12,17 +12,18 @@ import (
 const Limit = 192
 
 type Event struct {
-	SessionTag  string `json:"session_tag"`
-	Sequence    uint64 `json:"sequence"`
-	TimestampMS int64  `json:"timestamp_ms"`
-	Stage       string `json:"stage"`
-	State       string `json:"state"`
-	Reason      string `json:"reason"`
-	Target      string `json:"target,omitempty"`
-	CloseCode   int    `json:"close_code,omitempty"`
-	CloseReason string `json:"close_reason,omitempty"`
-	TX          uint64 `json:"tx"`
-	RX          uint64 `json:"rx"`
+	SessionTag   string `json:"session_tag"`
+	Sequence     uint64 `json:"sequence"`
+	TimestampMS  int64  `json:"timestamp_ms"`
+	Stage        string `json:"stage"`
+	State        string `json:"state"`
+	Reason       string `json:"reason"`
+	Target       string `json:"target,omitempty"`
+	CloseCode    int    `json:"close_code,omitempty"`
+	CloseReason  string `json:"close_reason,omitempty"`
+	BrokerReason string `json:"broker_reason,omitempty"`
+	TX           uint64 `json:"tx"`
+	RX           uint64 `json:"rx"`
 }
 
 type Snapshot struct {
@@ -69,6 +70,7 @@ func Allowed(value, choices string) bool {
 const Stages = "AUTHORIZED|ROOM_CREATION|DESCRIPTOR|GATEWAY_JOIN|SIGNALING|WEBSOCKET|ICE|PEER_CONNECTION|CARRIER|CARRIER_ACTIVITY|FAMILY_TLS|GATEWAY_SESSION|HEARTBEAT|LIVENESS|LOCAL_CLOSE|REMOTE_CLOSE|RECOVERY|CLEANUP"
 const States = "STARTED|ESTABLISHED|ISSUED|TX|RX|FAILED|CLOSED|COMPLETED|ATTEMPTED|NOT_ATTEMPTED|new|checking|connecting|connected|completed|disconnected|failed|closed"
 const Reasons = "NONE|SIGNAL_WS_CLOSE|ICE_DISCONNECTED|ICE_FAILED|PEER_CONNECTION_FAILED|CARRIER_EOF|CARRIER_ERROR|FAMILY_TLS_EOF|FAMILY_TLS_ERROR|GATEWAY_CLOSE|HEARTBEAT_TIMEOUT|REMOTE_CLOSE|RECOVERY_CLEANUP_FAILED|RECOVERY_DESCRIPTOR_FAILED|RECOVERY_JOIN_FAILED|RECOVERY_CARRIER_FAILED|UNKNOWN_INTERNAL"
+const BrokerReasons = "cancelled|lifetime_expired|authorization_changed|unused_expired|gateway_session_failed|gateway_failed|gateway_ready_timeout|provider_failure|provider_response|provider_cancelled|provider_timeout|provider_transport|provider_request|provider_bad_request|provider_unauthorized|provider_forbidden|provider_rate_limited|provider_unavailable|provider_status|provider_body|provider_json|provider_id|provider_join_url|unknown"
 
 func (recorder *Recorder) Record(event Event) {
 	if recorder == nil {
@@ -85,6 +87,9 @@ func (recorder *Recorder) Record(event Event) {
 	}
 	if !Allowed(event.CloseReason, "|ping|timeout|duplicate|expired|inactivity|shutdown|restart|invalid|ack|idle|session|READ_ERROR|READ_TIMEOUT|INVALID_MESSAGE|WRITE_ERROR") {
 		event.CloseReason = ""
+	}
+	if event.BrokerReason != "" && !Allowed(event.BrokerReason, BrokerReasons) {
+		event.BrokerReason = "unknown"
 	}
 	recorder.sequence++
 	event.Sequence, event.TimestampMS, event.SessionTag = recorder.sequence, time.Now().UnixMilli(), recorder.value.SessionTag

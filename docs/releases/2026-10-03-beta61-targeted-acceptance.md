@@ -30,7 +30,7 @@ the matching client export. Ordering is endpoint-local, not cross-host causal pr
 Stages not executed by the unchanged recovery policy must not be claimed completed.
 
 Final local checks: full carrier race PASS;230 Friends JVM tests (0 failures/errors/
-skips) and lint PASS; correlation/release pytest15/15 and diff-check PASS. Hosted CI,
+skips) and lint PASS; correlation/release pytest17/17 and diff-check PASS. Hosted CI,
 corrected APK build,
 signature/hash, server deployment and owner real-session proof remain pending.
 No r2 signed or installed APK. Old SHAc98852b3 below is NOT the r2 hash. Redmi attached
@@ -39,6 +39,13 @@ through ADB; no server/admission/catalog/public APK mutation; tester attempts0.
 Rollback retains the old signed candidate and owner data; no uninstall/clear/reenroll.
 Future gateway rollback restores only executable, not stale credentials/CRL/directory.
 Do not deliver old broken-correlation61 or an unaccepted r2 candidate to the tester.
+
+Source621468e pushed; Client builds37148110925 initially started, readiness37148111048
+PASS. Final review found trace-sink shutdown must reject late asynchronous callbacks
+rather than send to a closed channel. Added bounded queue shutdown race regression
+and correlated allowlisted broker error details; fresh full race PASS, pytest17/17
+PASS. This refinement supersedes621468e artifacts and requires its own accepted
+source/CI. No candidate installation/deployment yet.
 
 Targeted candidate only. No broad publication, catalog/invitation change, FIELD
 admission change, tester installation or tester mobile attempt. The owner Redmi
