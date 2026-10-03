@@ -1,5 +1,14 @@
 # Client installation
 
+**Current03.10: beta60/code60 is public**, with the same accepted APK SHA8ee59352
+and signer67a90d1. Use the [installation/update guide](getting-started.en.md).
+Settings → About / Diagnostics shows the registration-bound Support ID; copy it,
+not keys, for support. Install over the app, never clear/uninstall. FIELD remains
+owner-only/cap3, independent of updates. Historical preparation notes below are
+superseded by the [publication report](releases/2026-10-03-field1-release-final.md#beta60-publication--2026-10-03).
+
+## Historical preparation checkpoints
+
 Final FIELD preparation adds a registration-bound Support ID in Settings → About /
 Diagnostics (Copy Support ID). Candidate59 is still unpublished; old8229a36 is the
 previous local build, not the revised candidate. [Current status and tester steps](releases/2026-10-03-field1-release-final.md).
@@ -89,7 +98,7 @@ not publicly distributed and not a FIELD release. Public beta51/invitation links
 remain unchanged and were not reverified. [Attempt14](releases/2026-10-02-5n-prov1-attempt14.ru.md)
 · [Canary provenance and SHA256](releases/2026-10-02-5n-android-canary-build.ru.md).
 
-Use the [friends beta guide](getting-started.en.md): Android 8+, ARM64 beta51,
+Use the [friends beta guide](getting-started.en.md): Android 8+, ARM64 beta60,
 invitation-based access, VPN, text and voice messages. The APK is distributed through
 an invitation page and HTTPS download; it is not yet a GitHub or app-store release.
 The [client workflow](../.github/workflows/clients.yml) documents source-build requirements.
@@ -170,10 +179,10 @@ installation, UI, networking and recovery tests.
 
 [Historical initial-client guide](clients-legacy.en.md) is retained for the early direct
 WireGuard experiment; its old Tk/Windows-wrapper instructions are not current installation advice.
-# FIELD-1 candidate notice — 2026-10-03
+# FIELD-1 publication notice — 2026-10-03
 
 Android `0.1.18-beta60` / code60 is signed and accepted on the owner Redmi and by
-the required hosted gates, but **not publicly distributed**. Candidate SHA256:
+the required hosted gates, and **publicly distributed unchanged**. Public SHA256:
 `8ee59352e5f490aea74c3c8c8aeefd0d65bec0c261a044899d512ca376cf6104`.
-Historical beta59 is not eligible for publication. Public invitation/downloads
-remain beta51; no public download link or update catalog has changed.
+Historical beta59 remains unpublished. Public invitation/downloads and both Android
+catalogs now reference beta60; updates are optional, minimum1, FIELD owner-only/cap3.

@@ -1,14 +1,18 @@
 # Client updates
 
-FIELD final preparation keeps unpublished version59; the old local APK is retained,
-not replaced publicly. Support IDs do not grant access. Initial policy remains
-optional/minimum1; no legacy shutdown. Owner in-place acceptance precedes signing,
-publication, landing changes and push. [Current evidence](releases/2026-10-03-field1-release-final.md).
+Android beta60/code60 is published03.10 after owner/hosted acceptance. The exact
+accepted APK is unchanged; beta59 remains unpublished. Support IDs do not grant access.
+Policy: optional, minimum_supported_version1, mandatory_after0; no legacy shutdown.
+[Publication evidence](releases/2026-10-03-field1-release-final.md#beta60-publication--2026-10-03).
 
-Android candidate59 adds signed foreground discovery with the existing offline
-update root; publication awaits owner acceptance. Public51 has a manual Settings
-checker; older builds without it need one invitation-page upgrade. Updates never
-grant restricted admission. [Policy](releases/2026-10-03-field1-release-diag1a.md).
+The production [v2 endpoint](https://185.251.89.19:8443/updates/android-friends-v2.json)
+uses the existing offline root, android-field/schema1/sequence1, expires2027-01-01
+13:34:01UTC. Signature, expiry/replay, APK hash/package/signer checks pass. Renew with
+a higher sequence before expiry. beta60 supports bounded foreground discovery and
+Settings checks; beta51's legacy Settings checker receives60 from the existing v1
+endpoint. Older builds without a checker require one invitation-page upgrade, in
+place without uninstall/clear. The number of such legacy installations is unknown.
+No silent installation or all-users-updated claim; restricted admission remains owner1/cap3.
 
 Windows0.2.13+ uses a separate signed [Windows catalog](../updates/windows.json): schema2, platform=windows, sequence10 for0.2.14. Windows0.2.12 and earlier still read the legacy shared catalog0.2.9/sequence8 and can incorrectly report the newest manual preview as current. Install0.2.14 manually once, preserving identity and data. Later Windows versions are offered by Check for updates. Linux continues to use the legacy shared channel described below.
 

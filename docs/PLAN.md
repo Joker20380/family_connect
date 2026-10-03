@@ -2,6 +2,22 @@
 
 ## Current engineering priority / Текущий critical path
 
+**FIELD-1 beta60 publication authorized and completed03.10; stop, no new milestone.**
+1. DONE exact accepted60 bytes published and independently downloaded/hash/signer checked;
+   source5c740f2/SHA8ee59352, beta59 unpublished. No public APK rebuild/resign.
+2. DONE existing offline root signs Android v2 sequence1; optional/minimum1; client
+   verifier expiry/replay/signature checks PASS. Renew before2027-01-01 13:34:01UTC
+   with a higher sequence; never overwrite immutable APK content.
+3. DONE legacy checker receives60 on Android; owner60 UI says latest; original
+   identity/enrollment/Support auth/copy/restart PASS, temporary tests removed.
+4. DONE invitation Android60/CSP; Windows/Linux links unchanged.28 registrations,
+   24 non-revoked,4 revoked;1 known Android60,27 unknown. No all-user adoption claim.
+5. STOP owner1/no wildcard/cap3, no admission/audit/grant changes or FIELD widening.
+   Last readiness EXPIRED_ON_IMPORT; fresh accepted readiness via existing provisioning
+   is required before any later restricted field test, without expiry bypass.
+
+The following acceptance-only checkpoint is historical and superseded by publication.
+
 **FIELD-1 beta60 continuation authorized03.10; same milestone.**
 1. DONE Auto TCP dual-stack fix, focused builder coverage and unchanged traffic
    acceptance; Manual AWG primary/cleanup PASS with stale prior-failure race fixed.

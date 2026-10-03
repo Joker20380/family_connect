@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+## FIELD-1 beta60 — PUBLICATION PASS,03.10.2026
+
+Same milestone; Stage5N CLOSED, DIAG-1A PASS. Exact accepted beta60/code60 published,
+not rebuilt/resigned: source5c740f2, SHA8ee59352, signer67a90d1, Friends package.
+Independent public download and owner Android download/hash/signer/reinstall checks
+PASS. Signed v2 android-field/schema1/sequence1 catalog SHAf042beca: minimum1,
+mandatory_after0, expires2027-01-01 13:34:01UTC. Client signature/expiry/replay negatives
+PASS. Legacy v1 also offers60; unchanged beta51 checker executed on Android receives60
+(not a downgraded installation). Owner60 Settings reports latest; locale-corrected
+private instrumentation passes, removed afterward. Existing identity/auth/enrollment/
+Support FC-4D8Q-REEG/copy/restart unchanged. Both invitation routes select60 with
+matching CSP; desktop links and invitation logic unchanged. beta59 remains404.
+Inventory28/24 non-revoked/4 revoked/28 Support IDs;1 known Android60,27 unknown.
+Registration/invitation/mapping/grants/admission/audit fingerprints unchanged.
+Owner-only1/no-wildcard/cap3; no FIELD widening or operator action. No claim all users
+updated; unknown legacy/manual count. Readiness remains last-observed EXPIRED_ON_IMPORT,
+not fresh READY; renew through existing provisioning before restricted FIELD tests.
+Stop here; no next milestone. [Publication/rollback/evidence](releases/2026-10-03-field1-release-final.md#beta60-publication--2026-10-03).
+
 ## FIELD-1 beta60 publication gate — READY,03.10.2026
 
 Same milestone; Stage5N CLOSED, DIAG-1A PASS on60. Signed ARM64 beta60/code60,

@@ -24,7 +24,7 @@
 <script>
 const token=location.hash.slice(1),valid=/^[a-f0-9]{64}$/.test(token),byId=id=>document.getElementById(id);
 const P={
- android:{name:'Android',version:'Beta51 · Android 8.0+ · ARM64',primary:{label:'Скачать для Android',url:'/downloads/FamilyConnect-Test-0.1.18-beta51.apk'},variants:[]},
+ android:{name:'Android',version:'Beta60 · Android 8.0+ · ARM64',primary:{label:'Скачать для Android',url:'/downloads/FamilyConnect-Test-0.1.18-beta60.apk'},variants:[]},
  windows:{name:'Windows',version:'0.2.15 · Windows 10 1809+ / 11 · x64',primary:{label:'Скачать для Windows',url:'/downloads/FamilyConnect-Setup-0.2.15-pilot-unsigned.exe'},variants:[{note:'Проблемы с установкой на старой Windows 10?',label:'Скачать совместимую версию 0.2.14',url:'/downloads/FamilyConnect-Setup-0.2.14-pilot-unsigned.exe'}]},
  linux:{name:'Linux',version:'AppImage · 0.2.11 · x86_64',primary:{label:'Скачать AppImage',url:'/downloads/FamilyConnect-0.2.11-x86_64.AppImage'},variants:[{label:'Скачать .deb (Ubuntu / Debian / Mint)',url:'/downloads/FamilyConnect_0.2.11_amd64.deb'},{label:'Для опытных пользователей — .tar.gz',url:'/downloads/FamilyConnect-Control-Linux-preview-5b02e8cb9fde119f.tar.gz'}]}
 };

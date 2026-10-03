@@ -1,10 +1,10 @@
 # Release distribution / Выпуски
 
-Android0.1.18-beta51, Windows0.2.15 and Linux0.2.11 verified 2026-09-26 by CI, real-device Android acceptance and full GitHub/HTTPS SHA256 downloads.
+Android0.1.18-beta60 published 2026-10-03 after hosted CI, owner in-place acceptance and public HTTPS SHA256/signer verification. Windows0.2.15 and Linux0.2.11 distribution remains unchanged.
 
 | Channel | Distributed version | Notes |
 | --- | --- | --- |
-| Android updater / invitation | 0.1.18-beta51, code51, ARM64 | Persistent beta certificate; in-place update |
+| Android updater / invitation | 0.1.18-beta60, code60, ARM64 | Same beta certificate; optional update; minimum1; FIELD admission separate |
 | Linux invitation | 0.2.11 AppImage + .deb (+ preview5b02e8cb9fde119f) | User installables; tar.gz stays advanced/manual |
 | Windows invitation / updater | 0.2.15 source2ffba77 (+ 0.2.14 compatibility fallback) | Independent signed catalog schema2/sequence11; no publisher signature; 0.2.14 kept for old Windows 10 |
 
@@ -32,8 +32,14 @@ SHA256 `3e610962da40510e0dce7a9d794f4352ba113e090e462f6d1c75d7712f965e6b`.
 [FamilyConnect-Setup-0.2.14-pilot-unsigned.exe](https://185.251.89.19:8443/downloads/FamilyConnect-Setup-0.2.14-pilot-unsigned.exe), 49942347 bytes.
 SHA256 `7b1af167a55a977c357c47b94407916fe27d1b343d33ecb69c42b2d11b85e886`.
 
-[FamilyConnect-Test-0.1.18-beta51.apk](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta51.apk), 36456636 bytes.
-SHA256 `79a2d28667332ea442eae1b895b4fc632b52734cbed1e75bd95f32b7175ad366`.
+[FamilyConnect-Test-0.1.18-beta60.apk](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta60.apk), 49412987 bytes.
+SHA256 `8ee59352e5f490aea74c3c8c8aeefd0d65bec0c261a044899d512ca376cf6104`.
+Signer SHA256 `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+Build source `5c740f2d05f725ee1bcbe63a41f886605d4c7ac4`; no publication rebuild or APK resigning.
+[Signed Android catalog](https://185.251.89.19:8443/updates/android-friends-v2.json)
+uses android-field/schema1/sequence1, minimum1, mandatory_after0; expires2027-01-01 13:34:01UTC.
+Renew before expiry with a higher sequence and the existing offline root. beta59 remains unpublished.
+[FIELD publication evidence](releases/2026-10-03-field1-release-final.md#beta60-publication--2026-10-03).
 
 [Discovery](https://185.251.89.19:8443/updates/android-friends.json) · [Android/Windows/Linux checks](releases/2026-09-26-server-list-crossplatform.ru.md) · [Windows0.2.14 checks](releases/2026-09-24-windows0214-installer.ru.md).
 
@@ -75,7 +81,7 @@ Python3.14's implicit-directory imports must not hide a broken isolated archive.
 The [client workflow](../.github/workflows/clients.yml) defines platform builds and
 release conditions. CI artifacts do not by themselves establish a release. Validate native
 UI/runtime and downloaded artifacts before signing/publishing. Windows cross-build alone
-is insufficient. The current release includes Android0.1.18-beta51, Linux0.2.11 and Windows0.2.15 Windows-channel release; see the [cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and the prior [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md).
+is insufficient. The current release includes Android0.1.18-beta60, Linux0.2.11 and Windows0.2.15 Windows-channel release; see the [FIELD report](releases/2026-10-03-field1-release-final.md), [desktop cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and prior [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md).
 
 Desktop catalogs use offline signing with increasing sequence numbers. Keep keys out of
 CI and servers; never replace an existing version/tag with different binaries.

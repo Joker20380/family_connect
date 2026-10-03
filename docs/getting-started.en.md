@@ -9,7 +9,7 @@ No manual service setup is needed. Affected Windows10 device acceptance is pendi
 ## First activation
 
 Android8+, ARM64; access is invitation-only. Installing the APK does not grant access.
-The invitation page and in-app updater both provide beta51.
+The invitation page and in-app updater both provide beta60. Updating does not enable restricted FIELD access.
 
 1. Ask a participant for their link/QR from **Settings → Invite a friend**. Keep it private.
 2. Download the APK and install **Family Connect Test**, allowing installation from your
@@ -22,11 +22,11 @@ The invitation page and in-app updater both provide beta51.
 
 ## Update an existing app
 
-[Download beta51 — 36.4 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta51.apk).
-Version `0.1.18-beta51`, code51, ARM64,36456636 bytes; SHA256:
+[Download beta60 — 49.4 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta60.apk).
+Version `0.1.18-beta60`, code60, ARM64,49412987 bytes; SHA256:
 
 ```text
-79a2d28667332ea442eae1b895b4fc632b52734cbed1e75bd95f32b7175ad366
+8ee59352e5f490aea74c3c8c8aeefd0d65bec0c261a044899d512ca376cf6104
 ```
 
 The app also checks for updates. Open the APK and select **Update** in Android’s system
@@ -36,7 +36,7 @@ do not copy another device’s profiles or keys.
 
 The [older universal beta13](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.12-beta13.apk)
 remains available for other architectures,240.5 MB. It lacks current features and is not
-an equivalent alternative to51.
+an equivalent alternative to60.
 
 ## Text and voice
 
@@ -63,7 +63,7 @@ not established. [Notification and announcement guide (RU)](testing/messenger-no
 - Update failure: record the error and versions; do not erase data to bypass a signature mismatch.
 
 Report model, Android/app version and network type. Exclude invitations, keys, profiles
-and messages. [Beta51 validation (RU)](releases/2026-09-26-server-list-crossplatform.ru.md).
+and messages. [Beta60 validation/publication](releases/2026-10-03-field1-release-final.md).
 
 ## Desktop clients
 

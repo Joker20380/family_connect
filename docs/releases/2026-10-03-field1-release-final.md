@@ -1,5 +1,125 @@
 # FIELD-1-RELEASE-FINAL / DIAG-1A — 2026-10-03
 
+## beta60 publication — 2026-10-03
+
+User explicitly authorized publication after evidence checkpoint
+`8316f85a34e99f57702befb4d9610ac6100861a9`. Same FIELD-1 milestone; Stage5N CLOSED,
+DIAG-1A PASS. Acceptance-only restrictions below are historical, superseded only
+for the authorized publication, not for FIELD widening or new roadmap work.
+
+### Immutable public identity
+
+- Package `com.familyconnect.app.friends`, `0.1.18-beta60`, versionCode60, ARM64.
+- Build source `5c740f2d05f725ee1bcbe63a41f886605d4c7ac4`.
+- Public URL: https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta60.apk
+- Independently downloaded outside the build workspace:49412987 bytes, SHA256
+  `8ee59352e5f490aea74c3c8c8aeefd0d65bec0c261a044899d512ca376cf6104`.
+- Public APK certificate SHA256
+  `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+- No APK rebuild, APK resigning, overwritten version or private acceptance component.
+  Historical beta59 remains unpublished: public route404 before and after.
+
+### Catalog and public paths
+
+Production `/updates/android-friends-v2.json` equals committed
+`updates/android-friends-v2.json`, SHA256
+`f042becae969474ed7ebc28890a635ae5812769a3203fa6d75cf18fd22060006`.
+Existing offline Ed25519 root; domain `family-connect/android-update/v1`,
+channel `android-field`, payload schema1, sequence1, version60. Issued2026-10-03
+13:34:01UTC, expires2027-01-01 13:34:01UTC. minimum_supported_version1,
+mandatory_after0: optional, no forced legacy shutdown. No new signing trust root.
+Catalog signature prepared only after hosted platform acceptance and verification
+of public APK bytes. Key never uploaded. HTTP cache policy no-store.
+
+Legacy `/updates/android-friends.json` also references exact60 bytes, preserving
+the existing beta51 Settings checker. Android production verifier accepts the live
+signed catalog and an identical repeat; rejects a higher replay floor, same-sequence
+different digest, expired lease, future issuance and signature tampering. Package,
+expected signer and downloaded APK SHA verified on the owner Android runtime too.
+
+Both `/invite/` and `/i/` return updated page SHA256
+`014ebdbd78966185b1d99823ae5e7e0251369dde26059bc82957e454ea99a49f`.
+Only Android display version and filename change51→60; exact text comparison proves
+Windows/Linux URLs, invitation-token handling and `familyconnect://invite/` logic
+unchanged. Script/style CSP hashes independently verified against the actual response.
+No invitation or registration created for testing.
+
+### Post-publication Android acceptance
+
+- Unchanged historical beta51 `AppUpdate.check()` source executed on the owner's
+  Android runtime via a temporary shell DEX probe: real production HTTPS discovery
+  returns code60, which is newer than51. This is legacy-checker execution, **not**
+  an installed51 UI test or a claim that another user updated. Owner not downgraded.
+- Owner60 real Settings → Check for updates reports **You have the latest version**.
+  Live download/hash/package/signer verification and same-version reinstall rejection
+  pass. Two private instrumentation tests pass; accepted release APK unchanged.
+- Initial historical UI helper failed its button lookup: system/application context
+  ru-RU differs from activity's selected English. A private test-only locator uses
+  the displayed activity locale; same product action/result assertion passes. No
+  production fix, bypass or release APK change. Direct shell touch injection was
+  rejected by MIUI; in-app instrumentation click verifies the real control instead.
+- Existing device-status authentication PASS, activated/enrollment/UID10283 and
+  encrypted Device Identity fingerprint unchanged. Support retrieval returns the
+  existing inventory alias FC-4D8Q-REEG; visible/Copy/restart PASS. No reenrollment.
+- Temporary instrumentation package and shell probe removed after verification;
+  no credentials, private keys or user traffic exported. Release-test private APK
+  was never uploaded/published. Local publication receipts are ignored state only.
+
+### Inventory, admission and readiness
+
+Read-only production before/after fingerprints match for registrations, invitations,
+Support ID mapping, restricted grants, admission bytes, operator audit and deployed
+HTTP artifact. Inventory28 records,24 non-revoked,4 revoked,28 assigned aliases.
+Platform/version known1 (Android beta60/code60), unknown27; no inferred platform or
+version. Only one known device is on60. Update-offered/pending/manual-required counts
+are unknown: this infrastructure does not provide fleet delivery/install receipts.
+No all-users-updated or DAU claim. Legacy clients without a checker must download once
+from their normal invitation link, install over the app, never uninstall/clear data.
+
+Admission remains exactly existing owner1, no wildcard, cap3. Deployed operator
+artifact SHA `b6fe9220590524905cd98580c083bfd985d80cd5d01391ae7c2b5c4152c995b7`
+unchanged; cap and audited enable/disable logic verified. No operator action,
+additional tester selection, grant change or automatic24-device admission.
+
+Readiness is **last-observed EXPIRED_ON_IMPORT / ACK_PENDING**, not fresh READY.
+Encrypted state/decryption preservation is not readiness renewal. No restricted
+transport test was attempted during publication. Before future restricted FIELD
+use, restore valid material through existing provisioning and obtain fresh accepted
+readiness; do not bypass expiry or reopen Stage5N.
+
+### Deployment scope and rollback
+
+Changes are restricted to one immutable APK, exact nginx download allowlist entry,
+two Android catalogs, Android landing text and its CSP hashes. Existing HTTP/support,
+activation, networking, enrollment, inventory and admission implementations unchanged.
+The first public GET after file upload returned404 because nginx uses exact allowlist
+routes. An initial route-patch preflight caught a nested-block match and restored
+the original configuration **before reload**. Corrected exact block insertion passed
+`nginx -t`; successful public download preceded catalog signing. No invalid config
+was activated. Both final publication/landing config tests and reloads passed.
+
+On-host backups under `state-product-https/config`: nginx files
+`.before-beta60-download`, `.before-android-update-60` where changed, and
+`.before-beta60-landing`; legacy catalog `.before-android-update-60` and
+`invite.html.before-beta60-landing`. Public release inputs kept at `release-beta60/`.
+Rollback must never replace published60 bytes or distribute59. To withdraw discovery,
+coordinate a higher-sequence signed policy/catalog with the existing offline root;
+do not replay sequence1 with different bytes or restore an older signed sequence.
+For emergency route/landing withdrawal, restore only the targeted release changes,
+validate nginx, reload, retain APK evidence and preserve all identity/admission data.
+Renew the signed catalog before expiry. No release tag or unrelated desktop release.
+
+Hosted acceptance remains the already-green runs documented below; this publication
+changes no Android/Windows/Linux implementation. Public signed catalog, landing and
+documentation form the task-owned release checkpoint; unrelated VPN-health edits
+are excluded. Stop after publication verification, before FIELD widening.
+
+Final local checks: `tests/test_field_release.py` and `tests/test_sign_update.py`
+9 PASS; documentation checker11 files/600 links/0 errors; whole-index guard1702
+entries/0 blocked files; `git diff --check` PASS. Final independent public re-download
+and installed owner APK SHA match8ee59352; public signer matches67a90d1, private test
+package absent. No normal app uninstall, clear, reenrollment or transport change.
+
 ## beta60 final acceptance — publication gate READY
 
 Same FIELD-1 milestone; Stage5N CLOSED. All requested platform acceptance gates are

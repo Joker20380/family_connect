@@ -100,9 +100,9 @@ Home Gateway и приёмка RNS-2 пока отсутствуют.
 
 [Product introduction](../README.md) · [Русская версия](../README.ru.md)
 
-Updated30 September2026. Last documented distribution: Android beta51/code51,
+Updated03 October2026. Verified Android distribution: beta60/code60,
 Linux0.2.11 / Windows0.2.15; Windows0.2.14 compatibility fallback retained.
-This documentation task does not revalidate installed/public/invitation artifacts.
+Android public bytes, signer, catalogs and invitation routes verified03.10; desktop links unchanged.
 [Current distribution](releases.md) · [Documentation required with every version](releases.md#documentation-with-every-version).
 
 Start with the guide for your role. [STATUS](STATUS.md) is the source of truth for
