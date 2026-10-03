@@ -51,7 +51,8 @@ also requires a higher sequence. Existing updaters discover it on demand.
 Failed verification/download/smoke preserves the existing application. Linux retains
 previous code for manual rollback; do not reset floors to accept old catalogs. Owner/root
 backup rollback is not hardware-prevented. Unattended installation, stable channel,
-signed root rotation/recovery and Android update integration remain future work.
+signed root rotation/recovery remain future work. Android FIELD candidate status
+and its publication gates are described above.
 
 
 ### Updating versus activation

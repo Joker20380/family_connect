@@ -105,6 +105,57 @@ Private acceptance APK is never a public rollback.
 
 ## Validation checkpoint
 
+### Final local candidate
+
+Clean committed release source **`b952c3b8a69c845913e01508ca1d722168698a07`**,
+1688 tracked source files; no source overlay.38 generated native/support files
+reused from accepted58 with byte pins and unchanged native source0615953, not a
+fresh JNI rebuild. Full local inventory hash
+`610a9b5b04f3b1e8daaaa1ee7faa4855db217b73fa5ea0aa87c3eab72a79f26f`.
+[Machine provenance](2026-10-03-beta59-provenance.json).
+
+Signed local candidate: `state-client-build/field59/artifacts/FamilyConnect-Test-0.1.18-beta59.apk`,
+49,605,499 bytes; SHA256
+`8229a36e8b176aa49346f3bf106f4f1229cb492a47c1c50e86593ddcb4c85a3b`.
+Same beta signer shown above; APK v2 signature and16KiB alignment verified.
+No release-catalog signing key used; only existing beta APK signing identity in
+memory, with protected local inputs. No private key exported/printed/committed.
+
+- 224 app JVM tests PASS;163 control JVM tests PASS (overlapping, not additive).
+- 249 scoped Python tests PASS,1 skip: pinned sync/readiness artifact test.
+  All26 dependencies match control+identity lockfiles. Java/Go readiness golden
+  checks and generated-test-key APK signing enabled in this final run.
+- Five native packages pass race tests; final-source `go vet` PASS. JNI exported
+  symbols/package equality PASS; Android JNI runtime NOT RUN without device.
+- assembleFriends/lint PASS:0 errors/36 warnings. Android instrumentation sources,
+  including provider boundary tests, compile; not executed on a device/emulator.
+- Non-debuggable, Friends launcher/package/code/name correct. Manifest AND DEX
+  exclude private Activities/DiagnosticLauncher. Required product classes present.
+- 1074-entry signed APK/nested-Python scan:0 findings after one previously reviewed,
+  hash-pinned stdlib false positive. No production token read for an exact-value scan.
+- 62 changed source files:0 source-guard findings; whole-index issue below remains.
+- Docs link check and `git diff --check` PASS.
+
+Independent full download of public51 verifies the advertised SHA256 above and
+the identical beta certificate/package/code51. This proves compatible identities,
+not owner UID/data continuity after an update that has not run.
+
+An expanded run including the separate server-readiness packaging suite returned
+255 PASS/1 skipped/24 setup errors/1 failure: missing `FC_TEST_HTTP_ARTIFACT` and
+a test requiring Git archive from a Git checkout (not an exported directory).
+Preserved in `state-client-build/field59/python-expanded-fixture-failure.log`.
+It is not a green server-packaging result and was not silently patched. The scoped
+Android/restricted suite was rerun with correct Java/Go/APK fixtures as above.
+Hosted platform CI, whole-index guard resolution and real owner acceptance remain
+publication gates; do not sign the production update catalog before those gates.
+
+**Final: built/signed locally, NOT installed/distributed; no public catalog59,
+landing update, production mutation, new FIELD admission or push.** Device Identity,
+UID/data/enrollment/readiness have not been touched; preservation after59 install
+remains unproven. Stage5N algorithms/native inputs preserved, not re-accepted on59.
+
+### Earlier local attempts (retained)
+
 Initial clean export `ea7f69882566a78c9dc9a477e027e46fff5b9530`:224 JVM tests PASS,
 lint0 errors/37 warnings, assembleFriends PASS;243 Python PASS/7 skipped (optional
 toolchain fixtures), five native Go race packages PASS. APK1071-entry nested scan

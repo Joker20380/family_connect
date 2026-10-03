@@ -10,6 +10,18 @@ Redmi disconnected; in-place59/identity/readiness/Auto/UX acceptance pending.
 No server change or data reset; unrelated VPN-health work preserved.
 [Release policy and remaining gates](releases/2026-10-03-field1-release-diag1a.md).
 
+Final local59 source `b952c3b`, signed APK SHA256
+`8229a36e8b176aa49346f3bf106f4f1229cb492a47c1c50e86593ddcb4c85a3b`, same beta signer.
+224 app/163 overlapping control JVM PASS,249 Python PASS/1 fixture skip; five Go
+race packages/vet PASS, lint0 errors/36 warnings; instrumented tests compile only.
+Public manifest/DEX contain no private controls; nested APK scan0 findings.
+Whole-index guard still flags unchanged negative PEM-header test literal;62 changed
+files clean. Extra server-packaging test run lacks its required fixtures/Git context,
+not a claimed pass. No connected Redmi: UID/identity/enrollment/readiness/Auto/export
+runtime acceptance and hosted platform CI remain pending. Local manifest verifier,
+foreground notice, ring/snapshot/export implemented; signed public59 catalog not issued.
+FIELD-1-RELEASE PARTIAL; DIAG-1A PARTIAL. Primary public51/admission1 owner unchanged.
+
 ## 5N-PHYSICAL-RESTRICTED-REHEARSAL — PASS; STAGE 5N CLOSED, 03.10.2026
 
 Финальная физическая проверка завершена на установленном private canary58, без

@@ -3,7 +3,9 @@
 ## Current engineering priority / Текущий critical path
 
 **FIELD-1-RELEASE + DIAG-1A authorized03.10; Stage5N remains CLOSED.**
-1. Validate committed59: JVM/native/Python/lint/APK/privacy guards.
+1. DONE local source `b952c3b`: signed59,224/163 JVM,249 Python/1 skip, native race/vet,
+   lint/build/package/privacy checks. Whole-index negative-test guard finding and
+   hosted platform CI remain unresolved; no public59 catalog signed.
 2. Owner in-place58→59/UID/identity/enrollment/readiness/Auto acceptance; no connected
    Redmi now. No diagnostic exhaustion in FIELD.
 3. After acceptance only: immutable59, signed+legacy discovery, Android-only landing

@@ -4,6 +4,10 @@ FIELD-кандидат03.10: beta59/code59 проверяется локальн
 опубликована**. Основная загрузка51 до приёмки обновления поверх58; не удалять
 приложение/данные/Device Identity. [Статус](releases/2026-10-03-field1-release-diag1a.md).
 
+Локальный кандидат собран/подписан из `b952c3b`, SHA256 APK
+`8229a36e8b176aa49346f3bf106f4f1229cb492a47c1c50e86593ddcb4c85a3b`.
+Это не публичная загрузка и не завершённый rollout; ссылки ниже остаются51.
+
 Последний приватный checkpoint03.10.2026: **`0.1.18-canary58-physical`/58 установлена
 поверх57**, те же Friends package/signer/UID/data, encrypted restart READY/ACK_RECEIVED.
 SHA256 APK `91e8910896ff84b31a7cebf40f840256dca283d684b075577290d1282f227194`;

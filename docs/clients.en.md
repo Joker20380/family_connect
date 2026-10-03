@@ -4,6 +4,10 @@ FIELD candidate03.10: beta59/code59 source in local validation, **not installed 
 published**. Download remains51 until in-place owner acceptance. Never uninstall
 to update; retain identity/data/enrollment. [Release status](releases/2026-10-03-field1-release-diag1a.md).
 
+Local candidate now built/signed from `b952c3b`, APK SHA256
+`8229a36e8b176aa49346f3bf106f4f1229cb492a47c1c50e86593ddcb4c85a3b`.
+This is not a public download or completed rollout; public links below stay51.
+
 Latest private checkpoint03.10.2026: **`0.1.18-canary58-physical`/58 installed over57**,
 same Friends package/signer/UID/data, encrypted restart READY/ACK_RECEIVED preserved.
 APK SHA256 `91e8910896ff84b31a7cebf40f840256dca283d684b075577290d1282f227194`;
