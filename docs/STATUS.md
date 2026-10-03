@@ -1,5 +1,29 @@
 # Текущее состояние / Current state
 
+## 5N-GATEWAY-RENEWAL-PUBLICATION — PASS, 03.10.2026
+
+Starting/final HEAD `061595376fa65ae38725ed75baac769d71623d92`, unchanged; focused
+publisher/tests/runbook edits remain uncommitted. Exact defect reproduced with real
+isolated DAC: root's `restricted_sync.atomic` creates root:root0600 temp; rename
+replaces the service-owned inode without inheriting its ownership. New privileged
+publisher applies observed UID/GID/mode, fsync and service-user read-open **before**
+rename; independent final readback and durable safe receipt. Ordinary sync unchanged.
+95 local tests PASS/26skip; all41 isolated root/DAC tests PASS, including the22
+root-only cases skipped locally; actual pinned native crypto publication check PASS.
+One live renewal02.10 23:54:48UTC: Python/native PASS; gateway.json remains
+family-restricted:family-restricted (979:979),0600, parent root:family-restricted01770.
+Same Family/issuer/gateway/sole owner; no new admissions or floor reset.
+**Gateway expiry03.10 00:54:48UTC**, fresh directory expiry00:49:51.385316605UTC.
+NL READY, stable PID2771523/restarts0 and served certificate exact-match PASS;
+unit remains active/disabled. Initial read-only observer used data ALPN; corrected to
+existing control `http/1.1`, with no repeat issuance/publication/restart.
+Minimum RU sync PASS;00:09:45UTC RU/NL authority/CRL/floor201/directory consistent.
+HTTP generation17/nginx/AWG/TCP unchanged; external200/400/400/400 PASS.
+Canary57 hash/version/signer reverified unchanged, **not installed**; no Android or
+physical rehearsal action, server binary redeployment/restaging, push or next phase.
+Stage5N remains OPEN pending the existing physical gate in a separate task.
+[Exact contract, regressions, live evidence and expiry](releases/2026-10-03-5n-gateway-renewal-publication.ru.md).
+
 ## 5N-STAGING-TRANSFER-RELIABILITY — historical localization unresolved, 02.10.2026 UTC
 
 Full requested gate **FAIL** only because attempt16's exact RU/NL timeout layers remain

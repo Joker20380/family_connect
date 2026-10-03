@@ -1,0 +1,810 @@
+{
+  "gate": "5N-GATEWAY-RENEWAL-PUBLICATION",
+  "result": "PASS",
+  "timestamp": "2026-10-03T00:11:45.569530+00:00",
+  "starting_head": "061595376fa65ae38725ed75baac769d71623d92",
+  "final_head": "061595376fa65ae38725ed75baac769d71623d92",
+  "publisher_sha256": "f9b09db899f86db9fd47c74e9cb37b9fe36c112093cdfc9e3c79f3e266a78dca",
+  "implementation_uncommitted": true,
+  "ownership_contract": {
+    "path": "/opt/apps/family_connect/friends-restricted/gateway.json",
+    "service_user": "family-restricted",
+    "service_group": "family-restricted",
+    "service_uid": 979,
+    "service_gid": 979,
+    "explicit_group": "",
+    "supplementary_groups": "",
+    "file": {
+      "uid": 979,
+      "gid": 979,
+      "owner": "family-restricted",
+      "group": "family-restricted",
+      "mode": "0o600",
+      "symlink": false,
+      "acl": false
+    },
+    "parent": {
+      "uid": 0,
+      "gid": 979,
+      "owner": "root",
+      "group": "family-restricted",
+      "mode": "0o1770",
+      "symlink": false,
+      "acl": false
+    },
+    "service_readable": true,
+    "access_probe": "runuser test -r; no credential bytes read"
+  },
+  "ownership_contract_final": {
+    "path": "/opt/apps/family_connect/friends-restricted/gateway.json",
+    "service_user": "family-restricted",
+    "service_group": "family-restricted",
+    "service_uid": 979,
+    "service_gid": 979,
+    "explicit_group": "",
+    "supplementary_groups": "",
+    "file": {
+      "uid": 979,
+      "gid": 979,
+      "owner": "family-restricted",
+      "group": "family-restricted",
+      "mode": "0o600",
+      "symlink": false,
+      "acl": false
+    },
+    "parent": {
+      "uid": 0,
+      "gid": 979,
+      "owner": "root",
+      "group": "family-restricted",
+      "mode": "0o1770",
+      "symlink": false,
+      "acl": false
+    },
+    "service_readable": true,
+    "access_probe": "runuser test -r; no credential bytes read"
+  },
+  "local_tests": {
+    "exit": 0,
+    "summary": "95 passed, 26 skipped in 0.49s",
+    "tests": [
+      "tests/test_gateway_credential_publication.py",
+      "tests/test_gateway_publication_crypto.py",
+      "tests/test_native_authority_acceptance.py",
+      "tests/test_friends_restricted.py",
+      "tests/test_restricted_provider_input.py"
+    ],
+    "publisher_sha256": "f9b09db899f86db9fd47c74e9cb37b9fe36c112093cdfc9e3c79f3e266a78dca"
+  },
+  "isolated_root_tests": {
+    "tests": 41,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": true,
+    "source_sha256": "f9b09db899f86db9fd47c74e9cb37b9fe36c112093cdfc9e3c79f3e266a78dca",
+    "failure_names": [],
+    "isolated_only": true,
+    "production_credentials_accessed": false
+  },
+  "isolated_tls_observer": {
+    "passed": true,
+    "synthetic_only": true,
+    "exact_presented_certificate": true,
+    "unauthenticated_peer_rejected": true,
+    "application_requests": 0
+  },
+  "renewal_ru": {
+    "utc": "2026-10-02T23:54:48Z",
+    "python_validation_pass": true,
+    "delegation_sequence": 2,
+    "grant_revision": 2,
+    "minimum_revision": 1,
+    "delegation_expiry": 1791028496,
+    "grant_expiry": 1791028496,
+    "issuer_expiry": "2026-10-03T11:54:56+00:00",
+    "owner_admitted": 1,
+    "non_canaries_denied": 27,
+    "crl_sequence": 172,
+    "crl_expiry": "2026-10-03T00:09:48+00:00",
+    "gateway_expiry": "2026-10-03T00:54:48+00:00",
+    "same_identities": true
+  },
+  "renewal_nl": {
+    "python_validation_pass": true,
+    "native_validation_pass": true,
+    "final_native": {
+      "version": 1,
+      "status": "PASS",
+      "stage": "complete",
+      "reason": "validated",
+      "object": "authority",
+      "comparison": "positive_and_negatives"
+    },
+    "publication": {
+      "version": 1,
+      "status": "PASS",
+      "stage": "complete",
+      "published": true,
+      "changed": true,
+      "uid": 979,
+      "gid": 979,
+      "mode": "0o600",
+      "service_readable": true,
+      "final_readback": true,
+      "timestamp": "2026-10-02T23:54:49.840898+00:00",
+      "sha256": "32c94112bd611bf7601b1fddafa31e7a517b2fc11174793655eb67136d4b52b0"
+    },
+    "independent_final_readback": true,
+    "final_uid": 979,
+    "final_gid": 979,
+    "final_mode": "0o600",
+    "service_readable": true,
+    "old_floor": 171,
+    "new_floor": 172,
+    "gateway_expiry": "2026-10-03T00:54:48+00:00",
+    "issuer_expiry": "2026-10-03T11:54:56+00:00",
+    "same_gateway_key": true,
+    "same_family": true,
+    "provider_token_not_read": true,
+    "publisher_sha256": "f9b09db899f86db9fd47c74e9cb37b9fe36c112093cdfc9e3c79f3e266a78dca"
+  },
+  "reload": {
+    "exit": 0,
+    "receipts": [
+      {
+        "event": "command",
+        "step": "state",
+        "timeout": 2,
+        "elapsed": 0.020026016980409622,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "nonempty-redacted",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:51.056540Z"
+      },
+      {
+        "event": "service_state",
+        "state": {
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "Result": "success",
+          "MainPID": 0,
+          "NRestarts": 0,
+          "ExecMainStatus": 0,
+          "ExecMainStartTimestampMonotonic": 0
+        },
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:51.058488Z"
+      },
+      {
+        "event": "command",
+        "step": "snapshot",
+        "timeout": 5,
+        "elapsed": 0.26665237499400973,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "nonempty-redacted",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:51.326431Z"
+      },
+      {
+        "event": "material",
+        "published": false,
+        "directory_valid": false,
+        "canonical_utc": false,
+        "seed_count": 0,
+        "issued_ns": 0,
+        "expires_ns": 0,
+        "crl_expires_ns": 1790986188000000000,
+        "gateway_expires_ns": 1790988888000000000,
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:51.329614Z"
+      },
+      {
+        "event": "command",
+        "step": "start",
+        "timeout": 30,
+        "elapsed": 0.024356880225241184,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "empty",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:51.355505Z"
+      },
+      {
+        "event": "command",
+        "step": "state",
+        "timeout": 2,
+        "elapsed": 0.023776585003361106,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "nonempty-redacted",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:51.381284Z"
+      },
+      {
+        "event": "service_state",
+        "state": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "Result": "success",
+          "MainPID": 2771523,
+          "NRestarts": 0,
+          "ExecMainStatus": 0,
+          "ExecMainStartTimestampMonotonic": 1693010215887
+        },
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:51.383150Z"
+      },
+      {
+        "event": "command",
+        "step": "snapshot",
+        "timeout": 5,
+        "elapsed": 0.26817901199683547,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "nonempty-redacted",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:51.652712Z"
+      },
+      {
+        "event": "material",
+        "published": false,
+        "directory_valid": false,
+        "canonical_utc": false,
+        "seed_count": 0,
+        "issued_ns": 0,
+        "expires_ns": 0,
+        "crl_expires_ns": 1790986188000000000,
+        "gateway_expires_ns": 1790988888000000000,
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:51.654768Z"
+      },
+      {
+        "event": "command",
+        "step": "state",
+        "timeout": 2,
+        "elapsed": 0.01833068300038576,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "nonempty-redacted",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:53.674536Z"
+      },
+      {
+        "event": "service_state",
+        "state": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "Result": "success",
+          "MainPID": 2771523,
+          "NRestarts": 0,
+          "ExecMainStatus": 0,
+          "ExecMainStartTimestampMonotonic": 1693010215887
+        },
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:53.676712Z"
+      },
+      {
+        "event": "command",
+        "step": "snapshot",
+        "timeout": 5,
+        "elapsed": 0.21638755197636783,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "nonempty-redacted",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:53.894376Z"
+      },
+      {
+        "event": "material",
+        "published": false,
+        "directory_valid": false,
+        "canonical_utc": false,
+        "seed_count": 0,
+        "issued_ns": 0,
+        "expires_ns": 0,
+        "crl_expires_ns": 1790986188000000000,
+        "gateway_expires_ns": 1790988888000000000,
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:53.897682Z"
+      },
+      {
+        "event": "command",
+        "step": "state",
+        "timeout": 2,
+        "elapsed": 0.011764222988858819,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "nonempty-redacted",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:55.911905Z"
+      },
+      {
+        "event": "service_state",
+        "state": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "Result": "success",
+          "MainPID": 2771523,
+          "NRestarts": 0,
+          "ExecMainStatus": 0,
+          "ExecMainStartTimestampMonotonic": 1693010215887
+        },
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:55.914225Z"
+      },
+      {
+        "event": "command",
+        "step": "snapshot",
+        "timeout": 5,
+        "elapsed": 0.21632170281372964,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "nonempty-redacted",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:56.132177Z"
+      },
+      {
+        "event": "material",
+        "published": true,
+        "directory_valid": true,
+        "canonical_utc": true,
+        "seed_count": 1,
+        "issued_ns": 1790985294796510978,
+        "expires_ns": 1790988591385316605,
+        "crl_expires_ns": 1790986188000000000,
+        "gateway_expires_ns": 1790988888000000000,
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:56.134416Z"
+      },
+      {
+        "event": "command",
+        "step": "state",
+        "timeout": 2,
+        "elapsed": 0.019445823039859533,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "nonempty-redacted",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:56.155649Z"
+      },
+      {
+        "event": "service_state",
+        "state": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "Result": "success",
+          "MainPID": 2771523,
+          "NRestarts": 0,
+          "ExecMainStatus": 0,
+          "ExecMainStartTimestampMonotonic": 1693010215887
+        },
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:56.157494Z"
+      },
+      {
+        "event": "command",
+        "step": "snapshot",
+        "timeout": 5,
+        "elapsed": 0.21711906790733337,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "nonempty-redacted",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:56.375961Z"
+      },
+      {
+        "event": "material",
+        "published": true,
+        "directory_valid": true,
+        "canonical_utc": true,
+        "seed_count": 1,
+        "issued_ns": 1790985294796510978,
+        "expires_ns": 1790988591385316605,
+        "crl_expires_ns": 1790986188000000000,
+        "gateway_expires_ns": 1790988888000000000,
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:56.380056Z"
+      },
+      {
+        "event": "ready",
+        "observed": true,
+        "seed_published": true,
+        "directory_valid": true,
+        "gateway_binding_unchanged": true,
+        "restarts": 0,
+        "signal": "fresh_validated_post_connect_export",
+        "issued_ns": 1790985294796510978,
+        "expires_ns": 1790988591385316605,
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:56.381924Z"
+      },
+      {
+        "event": "verdict",
+        "passed": true,
+        "failure": null,
+        "kind": "authoritative",
+        "generation": "gateway-renewal-publication-0615953",
+        "timestamp": "2026-10-02T23:54:56.383069Z"
+      }
+    ]
+  },
+  "loaded_certificate": {
+    "loaded_certificate_matches": true,
+    "tls_chain_hostname_verified": true,
+    "certificate_expiry": "2026-10-03T00:54:48+00:00",
+    "stable_observation_seconds": 35,
+    "state": {
+      "ActiveState": "active",
+      "SubState": "running",
+      "MainPID": "2771523",
+      "NRestarts": "0",
+      "ExecMainStartTimestampMonotonic": "1693010215887"
+    },
+    "gateway_binding_pass": true,
+    "directory": {
+      "version": 1,
+      "issued_at": "2026-10-02T23:54:54.796510978Z",
+      "expires_at": "2026-10-03T00:49:51.385316605Z"
+    },
+    "no_application_request": true,
+    "no_new_admission": true
+  },
+  "observer_correction": {
+    "initial_read_only_probe_failed": true,
+    "initial_alpn": "family-connect-5n3-test-v1",
+    "control_alpn": "http/1.1",
+    "source": "carrier/roombroker/control.go:controlALPN",
+    "repeated_issuance": false,
+    "repeated_publication": false,
+    "repeated_restart": false
+  },
+  "minimal_sync": {
+    "blocking_sync_success": true,
+    "state": {
+      "ActiveState": "inactive",
+      "Result": "success",
+      "ExecMainStatus": "0"
+    }
+  },
+  "consistency": {
+    "185.251.89.19": {
+      "authority_binding_sha256": "118457412dc1b1be015e90c15a5eef9f9d01271ebe96fdae83ad68d757984ca1",
+      "crl_sha256": "5e8de2eba834f283f7166790d1bb41e29a89b80c900f116ca82f1521b4431f5d",
+      "crl_sequence": 201,
+      "directory_sha256": "3ba8fa6b0f9e22c4bb26e895d4b65b9f862b9da1c2fe3f8bd8e73a6368db3ce3",
+      "grant_count": 1,
+      "python_validation": true
+    },
+    "186.246.45.246": {
+      "authority_binding_sha256": "118457412dc1b1be015e90c15a5eef9f9d01271ebe96fdae83ad68d757984ca1",
+      "crl_sha256": "5e8de2eba834f283f7166790d1bb41e29a89b80c900f116ca82f1521b4431f5d",
+      "crl_sequence": 201,
+      "directory_sha256": "3ba8fa6b0f9e22c4bb26e895d4b65b9f862b9da1c2fe3f8bd8e73a6368db3ce3",
+      "grant_count": null,
+      "python_validation": true
+    }
+  },
+  "canary57": {
+    "sha256": "dd3c1b1bd9031f189ef7fc606969eb7da05e44f470478c8457f9097119b9c975",
+    "version_code": 57,
+    "version_name": "0.1.18-canary57-physical",
+    "package": "com.familyconnect.app.friends",
+    "signer": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+    "signature_valid": true,
+    "unchanged": true,
+    "installed": false,
+    "adb_used": false
+  },
+  "final": {
+    "gate": "PASS",
+    "ordinary_statuses": [
+      200,
+      400,
+      400,
+      400
+    ],
+    "authority_consistent": true,
+    "no_new_admission": true,
+    "normal_services_unchanged": true,
+    "production_binaries_redeployed": false,
+    "android_installed": false,
+    "physical_rehearsal_started": false,
+    "push": false
+  },
+  "production_before": {
+    "185.251.89.19": {
+      "utc": "2026-10-02T23:39:02Z",
+      "services": {
+        "family-connect-friends-awg.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "1515959",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "2157875339292",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-tcp.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "1908885",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "1994262857345",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-http-candidate.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "3917121",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "2715884002144",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-restricted-sync.service": {
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "UnitFileState": "static",
+          "MainPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "2719517099611",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-restricted-sync.timer": {
+          "ActiveState": "active",
+          "SubState": "waiting",
+          "UnitFileState": "enabled",
+          "Result": "success"
+        }
+      },
+      "sync_sha256": "f6aa8859ab716383bf207b2ff7b302687692832b2ccb410f1aef0ada0793a9c9",
+      "delegation": {
+        "sequence": 2,
+        "minimum_revision": 1,
+        "issued_at": 1790942096,
+        "expires_at": 1791028496
+      },
+      "grant_count": 1,
+      "grants": [
+        {
+          "revision": 2,
+          "expires": 1791028496,
+          "revoked": 0
+        }
+      ],
+      "db_crl_floor": 142,
+      "http_sha256": "ad71cadba79a8fbbe4e60d8d2a1c581304e263a30fdf71fd69b002001d01dd63",
+      "nginx": {
+        "sha256": "19c04fb97209bf5d88695f97da39fd4d930dc8f69d8e3a71f2ee964cc592af69",
+        "generation17": true,
+        "candidate_upstreams": 2
+      },
+      "crl": {
+        "sequence": 142,
+        "expires": "2026-10-02T23:53:44+00:00"
+      }
+    },
+    "186.246.45.246": {
+      "utc": "2026-10-02T23:39:03Z",
+      "services": {
+        "family-connect-friends-awg.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "2729703",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "1015819537902",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-tcp.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "2420425",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "966764281443",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-restricted-bootstrap.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "disabled",
+          "MainPID": "2757605",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "1691398716368",
+          "ExecMainStatus": "0"
+        }
+      },
+      "sync_sha256": "f6aa8859ab716383bf207b2ff7b302687692832b2ccb410f1aef0ada0793a9c9",
+      "gateway_expires": "2026-10-02T23:37:09+00:00",
+      "issuer_expires": "2026-10-03T11:54:56+00:00",
+      "minimum_crl": 142,
+      "directory": {
+        "version": 1,
+        "issued_at": "2026-10-02T23:28:02.987835691Z",
+        "expires_at": "2026-10-03T00:22:59.954609523Z"
+      },
+      "crl": {
+        "sequence": 142,
+        "expires": "2026-10-02T23:53:44+00:00"
+      }
+    }
+  },
+  "production_final": {
+    "185.251.89.19": {
+      "utc": "2026-10-03T00:09:45Z",
+      "services": {
+        "family-connect-friends-awg.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "1515959",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "2157875339292",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-tcp.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "1908885",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "1994262857345",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-http-candidate.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "3917121",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "2715884002144",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-restricted-sync.service": {
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "UnitFileState": "static",
+          "MainPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "2721371905694",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-restricted-sync.timer": {
+          "ActiveState": "active",
+          "SubState": "waiting",
+          "UnitFileState": "enabled",
+          "Result": "success"
+        }
+      },
+      "sync_sha256": "f6aa8859ab716383bf207b2ff7b302687692832b2ccb410f1aef0ada0793a9c9",
+      "delegation": {
+        "sequence": 2,
+        "minimum_revision": 1,
+        "issued_at": 1790942096,
+        "expires_at": 1791028496
+      },
+      "grant_count": 1,
+      "grants": [
+        {
+          "revision": 2,
+          "expires": 1791028496,
+          "revoked": 0
+        }
+      ],
+      "db_crl_floor": 201,
+      "http_sha256": "ad71cadba79a8fbbe4e60d8d2a1c581304e263a30fdf71fd69b002001d01dd63",
+      "nginx": {
+        "sha256": "19c04fb97209bf5d88695f97da39fd4d930dc8f69d8e3a71f2ee964cc592af69",
+        "generation17": true,
+        "candidate_upstreams": 2
+      },
+      "crl": {
+        "sequence": 201,
+        "expires": "2026-10-03T00:24:38+00:00"
+      }
+    },
+    "186.246.45.246": {
+      "utc": "2026-10-03T00:09:45Z",
+      "services": {
+        "family-connect-friends-awg.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "2729703",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "1015819537902",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-tcp.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "2420425",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "966764281443",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-restricted-bootstrap.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "disabled",
+          "MainPID": "2771523",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "1693010215887",
+          "ExecMainStatus": "0"
+        }
+      },
+      "sync_sha256": "f6aa8859ab716383bf207b2ff7b302687692832b2ccb410f1aef0ada0793a9c9",
+      "gateway_expires": "2026-10-03T00:54:48+00:00",
+      "issuer_expires": "2026-10-03T11:54:56+00:00",
+      "minimum_crl": 201,
+      "directory": {
+        "version": 1,
+        "issued_at": "2026-10-02T23:54:54.796510978Z",
+        "expires_at": "2026-10-03T00:49:51.385316605Z"
+      },
+      "crl": {
+        "sequence": 201,
+        "expires": "2026-10-03T00:24:38+00:00"
+      }
+    }
+  },
+  "physical_rehearsal_started": false,
+  "stage5n_closed": false,
+  "field1_started": false,
+  "diag1_started": false,
+  "ops1_started": false,
+  "beta_started": false
+}

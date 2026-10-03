@@ -2,6 +2,20 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-GATEWAY-RENEWAL-PUBLICATION = PASS,03.10.2026.** Ownership-loss operation
+reproduced and fixed in a focused privileged publisher; 95 local tests PASS and all41
+isolated root/DAC regressions PASS. One live accepted-policy renewal with Python/native
+validation and service-owned0600 publication before rename; independent readback PASS.
+NL READY/stable PID2771523/restarts0, actual served certificate matches; RU authority,
+CRL/floor201 and directory consistent at00:09:45UTC. HTTP/AWG/TCP unchanged.
+Fresh gateway expires03.10 00:54:48UTC; directory expires00:49:51UTC. Keep these bounded
+lifetimes and fresh state checks; never reuse historical READY beyond expiry.
+Private57 artifact reverified; **no install or physical rehearsal in this task**.
+Stage5N stays OPEN; only the existing physical gate remains, under a separate task.
+No new Stage5N milestone, full deployment, artifact staging or automatic continuation.
+No push/FIELD-1/DIAG-1/OPS-1/beta.
+[Current proof and operator procedure](releases/2026-10-03-5n-gateway-renewal-publication.ru.md).
+
 **5N-STAGING-TRANSFER-RELIABILITY = FAIL (historical localization criterion),02.10.2026 UTC.**
 Reliable staging implementation/regressions and controlled RU/NL inert staging PASS;
 both READY with exact remote inventories/receipts. The historical45/50s layers remain

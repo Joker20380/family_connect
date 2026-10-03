@@ -1,5 +1,12 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+Credential-only root publication now uses the focused
+[gateway renewal procedure](GATEWAY_RENEWAL.md) and tracked
+`scripts/gateway_credential_publication.py`, not the service-account sync writer.
+Preserve discovered0600 owner/group before atomic rename; no runtime artifact staging
+or HTTP redeployment is required. Current execution/pins/expiry are in the
+[renewal publication report](../../../docs/releases/2026-10-03-5n-gateway-renewal-publication.ru.md).
+
 Local investigation02.10: [5N-REAL-OWNER-CHALLENGE-503 remains BLOCKED](../../../docs/releases/2026-10-02-5n-real-owner-challenge-503.md).
 Golden Android bytes pass the current schema; removing only the receipt table reproduces
 503, explicit existing synthetic migration restores200. This is not production attribution.
