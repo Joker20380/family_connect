@@ -62,6 +62,18 @@ def test_backfill_stable_unique_preserves_all_existing_records(access):
     assert original_rows(access) == before
 
 
+def test_delivery_never_allocates_a_missing_backfilled_id(access):
+    device, support = enroll(access)
+    with access.db() as database:
+        database.execute('DELETE FROM device_support WHERE device=?', (device.reference,))
+    before = original_rows(access)
+    with pytest.raises(RuntimeError, match='Support inventory mismatch'):
+        support_ids.request(access, request(access, device))
+    with access.db() as database:
+        assert database.execute('SELECT count(*) FROM device_support').fetchone()[0] == 0
+    assert original_rows(access) == before
+
+
 def test_random_collision_retries_without_changing_existing_id(access, monkeypatch):
     first, support = enroll(access)
     second, other = enroll(access)

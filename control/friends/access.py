@@ -79,7 +79,7 @@ CREATE TABLE challenges(nonce TEXT PRIMARY KEY, device TEXT NOT NULL, public TEX
    if row['revoked'] or row['public']!=proof['public_identity'] or row['wg']!=proof['wireguard_public_key']:raise Rejected()
    db.execute('UPDATE challenges SET used=1 WHERE nonce=?',(nonce,))
    from .support_ids import registered
-   registered(db,device)
+   if purpose!='support':registered(db,device)
    return {'device':device,'public_key':row['wg'],'tcp_id':row['tcp']}
  def status(self,proof):
   """Authenticated read-only recovery query. Never consumes an invitation."""

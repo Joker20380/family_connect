@@ -101,9 +101,10 @@ def request(access, value):
                                'ON i.device=d.device WHERE d.device=?', (record['device'],)).fetchone()
         if row is None or row['revoked'] or row['invite_revoked']:
             raise Rejected()
-        support = registered(database, record['device'])
-        if support is None:
-            raise RuntimeError('Support migration required')
+        assigned = database.execute('SELECT support_id FROM device_support WHERE device=?', (record['device'],)).fetchone()
+        if assigned is None:
+            raise RuntimeError('Support inventory mismatch')
+        support = assigned['support_id']
         database.execute('UPDATE device_support SET platform=?,app_version=?,version_code=?,last_seen=?,observation_source=? WHERE device=?',
                          (value['platform'], value['app_version'], value['version_code'], int(access.clock()), 'support_request', record['device']))
         return dict(schema=1, device_support_id=support)
