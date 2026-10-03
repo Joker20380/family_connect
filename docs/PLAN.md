@@ -3,16 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **FIELD-1-RELEASE-FINAL authorized03.10; Stage5N remains CLOSED.**
-1. DONE source5abc2da/revised59 SHA6d13720,226/163 JVM,510 Python, five native race/vet packages,
-   lint0 errors/36 warnings. Preserve old8229a36 artifact. Source-guard false positive
-   and hosted release validation still open.
-2. DONE RU backfill28 records,24 non-revoked/4 revoked, platform0 known/version1 known;
-   existing13 tables/admission unchanged. Deploy authenticated Support ID delivery
-   through the existing HTTP runtime/ingress; not yet deployed.
-3. Required owner Redmi in-place final59 acceptance: currently no ADB device.
-   Validate UID/data/identity/readiness, Support ID copy, Auto/AWG/TCP, DIAG/export.
-4. Only after acceptance and release checks: optional min1 signed+legacy catalogs,
-   immutable APK, Android-only landing update, downloaded hash verification and push.
+1. DONE existing APK5abc2da/beta59 SHA6d13720, no rebuild. Prior JVM/native/lint and
+   owner Auto/AWG/TCP accepted.518 focused Python now PASS; index guard repaired
+   by splitting the negative-test literal, not weakening secret detection.
+2. DONE authorized Support HTTP source5e0008c/ef9f2faf deployed09:52UTC; status route
+   restored. Retrieval only returns the backfilled alias; missing mapping fails closed.
+   Registration/invitation/alias/grant/admission/audit fingerprints unchanged.
+3. DONE owner existing-ID retrieval/visible/Copy/restart/status authentication;
+   unchanged installed APK/signer/UID/data/identity. DIAG snapshot/share/privacy PASS
+   with non-null alias. Inventory28/24 active/4 revoked;1 known Android59,27 unknown.
+4. NEXT hosted platform CI and downloaded-artifact/provenance checks. Prepare optional
+   min1/non-mandatory production59 catalog; offline signing only after CI. Public
+   APK/catalog/landing publication remains explicitly prohibited in this continuation.
+   Do not infer all users updated; source push must exclude unrelated health work.
 5. Retain owner; select only1–2 additional devices by Support ID. Never wildcard.
 [Final task report](releases/2026-10-03-field1-release-final.md).
 

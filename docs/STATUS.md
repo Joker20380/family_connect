@@ -1,6 +1,51 @@
 # Текущее состояние / Current state
 
+## FIELD-1 Support delivery / owner acceptance — PASS,03.10.2026
+
+Same milestone; Stage5N remains CLOSED. Explicitly authorized prerequisite deployed
+09:52:52UTC: lookup-only HTTP source5e0008c, artifactef9f2faf; existing18086 service,
+ordinary nginx device/status+support routes restored. No Android rebuild/networking
+change. Owner receives the existing backfilled alias; visible/Copy/authenticated
+device-status/process-restart stability PASS. Pulled installed59 still SHA6d13720,
+same signer/UID10283/inode601521/identity/enrollment; READY/ACK and Auto preserved.
+DIAG typed failure snapshots + MIUI share/export PASS;4695-byte bundle includes the
+same alias, closed-schema/privacy0 findings. Test artifacts/helper removed.
+Registration/invitation/alias/grant/admission/audit fingerprints unchanged;28 records,
+24 non-revoked/4 revoked,28 aliases,1 known Android59/27 platform+version unknown.
+16 live negative probes PASS; signed unknown status remains inactive200/no enrollment
+by existing contract; Support access denied403. Owner1/no wildcard/cap3 unchanged.
+518 focused Python PASS/0 skipped; whole-index guard repaired without weakening it.
+FIELD-1-RELEASE PARTIAL; DIAG-1A PASS. Hosted platform CI/artifact checks and offline
+catalog signing remain release gates. Public59/landing publication explicitly held;
+public51 unchanged. No FIELD widening. Source push not yet performed.
+[Delivery, owner checks, recovery and remaining gates](releases/2026-10-03-field1-release-final.md#support-http-delivery-and-owner-completion--2026-10-03).
+
+## FIELD-1 owner acceptance continuation — PARTIAL,03.10.2026
+
+Historical checkpoint; superseded by the completed prerequisite/owner checks above.
+
+Same milestone; Stage5N CLOSED. Owner Redmi31ce63ba authorized. Existing signed
+beta59/code59 SHA6d13720 installed **in place over private58 at09:14UTC**, no rebuild.
+UID10283, firstInstallTime and ceDataInode601521 unchanged. Encrypted identity,
+configuration/readiness bytes unchanged immediately after update; Keystore decrypts,
+activation retained. Final identity still unchanged; normal product readiness refresh
+on59 produced READY/PRESENT_VALID/ACK_RECEIVED, observed09:34:12UTC, expires09:47:58UTC.
+Auto→AWG7.275s, AWG1.260s, TCP1.258s: connected, VPN present, test HTTPS200 each.
+Five previously compiled owner-safe instrumentation tests PASS. On-device typed
+CONNECTING/RESTORING→FAILED diagnostic snapshot tests and real MIUI share chooser
+PASS;4675-byte bounded export passes closed-schema/privacy scan, no recipient/upload.
+Test-generated diagnostics and separate instrumentation package removed; app kept,
+Auto/disconnected, private acceptance components absent; pulled APK matches exact pin.
+**Blocking:** Support ID unavailable, Copy disabled, stability cannot be verified;
+Support HTTP delivery still undeployed. Existing device-status verification also
+fails: route404, not proof of lost identity/enrollment. No server changes/deployment,
+publication, CI advancement, admission widening, commit or push. Public catalog51.
+FIELD-1-RELEASE BLOCKED; DIAG-1A PARTIAL (Support ID integration remains outstanding).
+[Exact commands, failures and evidence](releases/2026-10-03-field1-release-final.md#owner-device-continuation--2026-10-03).
+
 ## FIELD-1-RELEASE-FINAL — Support ID candidate,03.10.2026
+
+Previous preparation checkpoint; owner installation status is superseded above.
 
 Stage5N CLOSED. Starting HEAD1790793; Support IDs are random registration aliases,
 not credentials. Additive backfill/operator lookup and capped explicit FIELD actions

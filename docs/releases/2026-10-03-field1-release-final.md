@@ -1,5 +1,257 @@
 # FIELD-1-RELEASE-FINAL / DIAG-1A — 2026-10-03
 
+## Support HTTP delivery and owner completion — 2026-10-03
+
+This supersedes the blocked Support/status observations below. Same FIELD-1/DIAG-1A;
+Stage5N CLOSED. Starting HEAD40e40bb. Android source remains
+`5abc2da4878d38687574776932959db284dd9797`, unchanged signed beta59/code59 APK
+`6d13720bc8cff25d51d95ff7453127577890bee881685a4a66c86fae163f2148`, signer
+`67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+No production APK rebuild, networking change, reinstall, identity reset or enrollment.
+
+### Authorized prerequisite deployment
+
+- Before09:47:57UTC: existing28/28 aliases verified; owner admission maps to an
+  existing non-revoked enrollment and alias. Neither Android nor delivery allocates
+  an ID. Source5e0008c makes support-purpose proof completion lookup-only; a missing
+  mapping returns unavailable503 without inserting anything. Regression test proves it.
+- Clean committed HTTP export5e0008c:
+  `ef9f2faf31ab66e119eb44f95f30aab94b9b6d3da11e36958b4689316e996291`.
+  Compared with livead71cadb, exactly3 entries change: Friends access, Support IDs,
+  HTTP handler. All restricted/runtime networking modules remain byte-identical.
+- Successful deployment09:52:52UTC: existing
+  `family-connect-friends-http-candidate.service`/loopback18086, same DB/permissions;
+  nginx ordinary regex adds only `device/(status|support)`. Normal/restricted routing,
+  limits, grants, admission, AWG/TCP and download routes retained.
+- Initial validation command `docker exec family-connect-product-https nginx -t`
+  used default `/etc/nginx/nginx.conf` and failed on read-only `/run/nginx.pid`.
+  Old artifact/config hashes were verified restored before retry. Correct explicit
+  `nginx -c /etc/fc/nginx.conf -t` and same-config reload PASS. No DB rollback.
+- Protected rollback files/DB snapshot/receipt:
+  `friends-access/support-delivery-5e0008c/` on the authorized RU host. Restore only
+  previous HTTP artifact/nginx config if necessary, validate explicit config/restart
+  HTTP/reload nginx. Never restore the DB or remove the existing alias backfill.
+
+### Owner and authorization results
+
+- Existing private owner instrumentation runs on the unchanged public candidate.
+  Initial cached failure remains unavailable until explicit Refresh; MIUI rejects
+  shell `input tap`. Only the separate AndroidTest helper was recompiled to invoke
+  the ordinary Refresh button; production APK not rebuilt. Correct Friends test
+  variant requires `-PfcTestBuildType=friends`; missing-property invocation compiled
+  nothing. All initial failed harness receipts retained, not reported as product PASS.
+- `supportVisibleCopiedAndStable`, `existingIdentityStillAuthenticates`, then
+  force-stop/new-process Support test PASS. ID equals the **pre-deployment owner
+  backfill row**, Copy equals that ID; status validates returned reference against
+  the existing vault identity. No new registration/invitation consumed.
+- Final09:59:02UTC after uninstalling only `.friends.test`: pulled production APK
+  SHA/signer unchanged, UID10283, ceDataInode601521, firstInstallTime unchanged;
+  actual normal Settings UI shows ID and enabled Copy. Encrypted identity unchanged
+  and decrypts, enrollment active, Auto/off retained, no private acceptance components.
+- Fresh readiness receipt on59 READY/PRESENT_VALID/ACK_RECEIVED. The prior owner
+  Auto/AWG/TCP HTTPS200 evidence remains valid; no networking changes in this step.
+- DIAG both typed CONNECTING/RESTORING failure snapshots plus Android MIUI chooser
+  PASS. These are synthetic recorder tests, not forced live transport outages.
+  Export4695 bytes SHA256
+  `1493c2f0051badb6e3f1ed490be64a8329a65bd29a6ae6771d075f83319d5504`;
+  ring+incident both contain the bound Support ID. Closed schemas/bounds/privacy
+  checks PASS, zero secret/identity/URL/destination-history findings. No recipient
+  selected/upload. Synthetic files/export URI grants and test helper removed.
+- 16 paced live HTTPS negative probes PASS: missing/invalid auth400/403, malformed
+  JSON400, wrong method405, unknown alias403/unknown lookup path404, unknown Support
+  identity403, replay403, existing revoked device challenge403 for both purposes.
+  Existing status semantics intentionally preserved: an unknown identity with its
+  own valid proof receives200 with registered=false/active=false, **no access and
+  no enrollment**, not a claimed403. Isolated real-handler/nginx tests also cover
+  revocation after challenge and revoked invitation; no production revocation edits.
+- HTTP journal13 lines: zero actual registered identity/secret-pattern matches.
+  HTTP body logging disabled; conditional nginx probe log has no body/auth/query.
+  Private proof/status/challenge bodies are not persisted in acceptance evidence.
+
+### Inventory, validation and release boundary
+
+At09:57:26UTC all six fingerprints unchanged: devices, invitations, alias mappings,
+restricted grants, admission bytes and operator audit.28 total/24 non-revoked/4 revoked,
+28 stable aliases; platform1 Android known/27 unknown; version1 beta59 known/27 unknown.
+Owner operator lookup: active, Android59, Family ACTIVE, readiness READY, admitted.
+Readiness is short-lived; this observation is not a perpetual validity claim.
+No operator enable/disable executed; unchanged pinned operator keeps audit and cap3.
+Current cohort/admission **1 owner**, additional selections0; never wildcard.
+Update-offered/pending and legacy manual-install counts remain unknown, not zero.
+
+55 route/access/Support tests and full518 focused Python tests PASS/0 skipped.
+Whole-index false positive resolved by splitting the negative PEM test literal;
+the exact assertion bytes and secret guard remain unchanged. No scanner exemption.
+Tests checkpoint416d938. Existing APK JVM/native/lint results retained.
+Protected evidence: `state-client-build/field59-delivery/`; no keys/DB/proofs in Git.
+
+FIELD-1-RELEASE **PARTIAL**; DIAG-1A **PASS** for the defined owner/local-bundle scope.
+Hosted platform CI and artifact provenance/download checks remain release gates.
+Production59 signing preparation only: min-supported1, mandatory=false, same offline
+root, increasing sequence/lease required. No production signature issued yet.
+At10:01UTC full public51 download verified36,456,636 bytes/SHA79a2d286; signed-v2
+catalog and beta59 APK routes both404. Unsigned production59 payload prepared from
+the exact installed APK (draft sequence1/min1/non-mandatory), no offline key accessed;
+refresh sequence/issued_at/expiry after CI. This is not install authorization.
+Public beta59 APK/catalog/landing publication remains explicitly prohibited in this
+continuation; do not change Windows/Linux links. Source push not yet performed.
+No FIELD widening. After release authorization, follow the existing tester instructions
+below: in-place install, no clear/uninstall, send Support ID, await operator, CONNECT.
+
+## Owner-device continuation — 2026-10-03
+
+This continues the same FIELD-1/DIAG-1A checkpoint, not a new milestone. Stage5N
+remains CLOSED. HEAD remains `40e40bb14fc1c020a87e09bc054307a6c79a6d22`;
+release source remains `5abc2da4878d38687574776932959db284dd9797`.
+The earlier sections below describe preparation before the owner reconnected;
+this section supersedes their NOT INSTALLED / NO ADB DEVICE statements.
+
+### In-place installation and preservation
+
+Owner ADB serial31ce63ba, Redmi Note9 Pro/Android12. Before: package
+`com.familyconnect.app.friends`, `0.1.18-canary58-physical`/58, UID10283,
+firstInstallTime `2026-09-19 17:30:26`, ceDataInode601521. Activation true, Auto,
+NL selected, private acceptance override OFF. Existing identity, configuration
+and encrypted readiness were fingerprinted without exporting plaintext secrets.
+The58 installed APK had SHA256
+`91e8910896ff84b31a7cebf40f840256dca283d684b075577290d1282f227194`.
+
+Exact command (09:14UTC):
+
+```sh
+adb -s 31ce63ba install -r state-client-build/field59-final/artifacts/FamilyConnect-Test-0.1.18-beta59.apk
+```
+
+Observed `Success`; no uninstall of Family Connect, pm clear, reenrollment, identity
+replacement, production APK rebuild or networking code change. After: beta59/code59,
+same package/UID10283/firstInstallTime/data directory/inode601521. Pulled installed
+APK hash equals `6d13720bc8cff25d51d95ff7453127577890bee881685a4a66c86fae163f2148`;
+signer remains `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+Installed manifest excludes private acceptance components. The public non-debuggable
+build correctly denies `run-as`; same-signer private instrumentation provided the
+subsequent safe preservation checks instead of weakening the app.
+
+Immediately after update, all three ciphertexts match byte-for-byte:
+`friends-identity.enc`, `friends-configuration.enc`, `restricted-readiness.enc`.
+Identity and readiness decrypt with the retained Android Keystore keys; activation
+true and cached normal provisioning usable. Final post-test identity fingerprint
+still matches; activation and Auto remain. No raw identity/public keys were shown.
+The pre-update readiness receipt was READY/ACK_RECEIVED, expiring09:16:39UTC.
+Normal product activity on59 subsequently refreshed short-lived readiness:
+READY, both PRESENT_VALID, orchestrator usable, ACK_RECEIVED, observed09:34:12UTC,
+expiry09:47:58UTC. This is retained identity/enrollment plus an ordinary refresh,
+not a reset or a promise of validity after expiry. No manual server renewal ran.
+
+### On-device validation
+
+| Check | Observed result |
+| --- | --- |
+| Normal launch/version after fresh process | PASS; beta59 visible |
+| Auto, real normal CONNECT | PASS; AWG selected,7.275s, VPN present, HTTPS200 |
+| Explicit AWG | PASS;1.260s, VPN present, HTTPS200 |
+| Explicit TCP | PASS;1.258s, VPN present, HTTPS200 |
+| Device identity/data/activation/readiness preservation | PASS as bounded above |
+| Previously compiled owner-safe instrumentation |5 PASS |
+| Persisted CONNECTING→FAILED incident | PASS with synthetic typed events on-device |
+| Persisted RESTORING→FAILED incident | PASS with new incident ID, synthetic typed events |
+| Send diagnostics | PASS; real `android/com.android.internal.app.MiuiChooserActivity` |
+| Export privacy | PASS;4675 bytes, bounded closed schema, no forbidden content |
+| Support ID / Copy / restart stability | BLOCKED: unavailable, Copy disabled, no ID to compare |
+| Live device-status API check | FAIL:404 route, see below |
+
+Transport checks used the existing visible transport picker and CONNECT dial through
+instrumentation; no normal-candidate exhaustion, private acceptance Activity,
+second stack, radio change, gateway change or transport override. The HTTPS request
+was a test to example.com; no traffic body was logged. Each successful test used the
+ordinary disconnect action and restored Auto. Original emulator-only suites that
+clear profiles/managed stores or require10.0.2.2 were deliberately NOT run on the owner.
+
+Five existing tests: `DiagnosticsProviderTest`, both `ControlProtocolRuntimeTest`
+methods, `AppUpdateRuntimeTest#verifiesInstalledSignerAndRejectsDowngradeAndInvalidArchive`
+and `AppUpdateRuntimeTest#providerOnlyAllowsExactReadOnlyCacheApk`.
+Additional private owner probes exercised preservation, normal product controls,
+diagnostic persistence/export and final cleanup. Only the separate test APK was
+packaged/signed; the beta59 artifact was never rebuilt or replaced. Initial owner
+probe launch-idle/selector mistakes were corrected in that private harness; original
+logs are retained as `*-initial-harness-*` / `*-v2-harness-*`, not mislabeled as
+network regressions. Final transport checks above all pass.
+
+Incident validation injected typed events into the existing DIAG recorder only;
+it did NOT force a real transport outage, repeat Stage5N physical acceptance or
+claim a spontaneous production incident. The Android confirmation opened the actual
+share chooser; no recipient was chosen and nothing was uploaded. Exact exported
+bundle SHA256 `e0f31b384a8b4c04230a01de00be23a8980eaccf6b37e3a417ffd29e038dd0e2`.
+Both ring and incident use the fixed field schema, enum-like codes, UUID correlations,
+coarse CELLULAR network class and no destinations, DNS history, credentials, keys,
+identity, messages, room URLs or tokens. `device_support_id` is null: DIAG support
+correlation remains incomplete until authentic server delivery works.
+
+### Exact failing gates — publication blocked
+
+**Support ID delivery/UI (release-blocking):**
+
+```sh
+adb -s 31ce63ba shell am instrument -w -r \
+  -e owner_serial 31ce63ba \
+  -e class com.familyconnect.app.OwnerFieldAcceptanceTest#supportVisibleCopiedAndStable \
+  com.familyconnect.app.friends.test/androidx.test.runner.AndroidJUnitRunner
+```
+
+Expected: registered `FC-XXXX-XXXX` visible, Copy enabled/matching, stable after restart.
+Observed: `Support ID unavailable: server delivery has not been deployed` assertion;
+unavailable message visible and Copy disabled again after a real process restart.
+Copy correctness and ID stability are NOT VERIFIED, not silently passed for null.
+Host route probe `POST /friends/device/support` with empty JSON returns404.
+Logs: `state-client-build/field59-owner/support-instrumentation.log`,
+`support-result.json`, `final-device.json`.
+
+**Existing device-status API (release-blocking failed live check):**
+
+```sh
+adb -s 31ce63ba shell am instrument -w -r \
+  -e owner_serial 31ce63ba \
+  -e class com.familyconnect.app.OwnerFieldAcceptanceTest#existingIdentityStillAuthenticates \
+  com.familyconnect.app.friends.test/androidx.test.runner.AndroidJUnitRunner
+```
+
+Expected: the existing signed identity proof yields active device status.
+Observed: `java.io.IOException: Test access unavailable`,
+`FriendsAccessAndroid.post:54`, `deviceStatus:106`. An independent empty-JSON
+`POST /friends/device/status` route probe returns404 (not an authorization rejection).
+Logs: `state-client-build/field59-owner/enrollment-instrumentation.log` and
+`enrollment-result.json`. This missing route is NOT evidence of lost enrollment:
+unchanged identity/configuration, activation, working transports and subsequent
+authenticated READY/ACK evidence remain intact. Nevertheless the API test did fail.
+
+All local evidence is protected under `state-client-build/field59-owner/`.
+Private test sources, APKs, exported test bundle and logs are not published or added
+to Git. The two probe commands require reinstalling that private test APK: it was
+removed after validation, not left as an acceptance surface on the phone.
+
+### Cleanup and release boundary
+
+Three test-generated diagnostic files removed by matching the synthetic connection
+ID / exact export hash; export URI permissions revoked. The separate
+`com.familyconnect.app.friends.test` package was uninstalled; the actual Friends app
+was NOT uninstalled or cleared. Final09:38:25UTC: exact signed59 installed, fresh
+normal app process, Auto/disconnected, VPN count0, Support unavailable/Copy disabled,
+UID/data inode unchanged, no private acceptance component. No downgrade attempted.
+
+Public Android catalog re-read: still beta51/code51. No catalog signing, landing
+change, publication, hosted CI advancement, server deployment, new admission,
+commit or push. Existing selected owner is the only cohort member; no widening.
+One physical beta59 installation is now evidenced; no claim that all users updated.
+
+The user's continuation permits Support HTTP deployment only after **all** owner
+checks pass, while the missing Support ID depends on that deployment. This
+prerequisite conflict is reported, not bypassed by seeding a local alias or deploying
+early. Required next decision is to permit the already-defined server delivery/route
+prerequisite before rerunning these blocked owner checks. Hosted CI/source-guard
+resolution and production publication evidence remain later gates.
+
+**FIELD-1-RELEASE = BLOCKED. DIAG-1A = PARTIAL** — on-device ring/snapshot/share/privacy
+pass, but registration Support ID delivery/copy/stability remain incomplete.
+
 ## Boundary and version policy
 
 Starting HEAD `1790793d2d2412896a6c5e23482c15c0def6b0c0`; Stage5N CLOSED.

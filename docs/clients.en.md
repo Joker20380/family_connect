@@ -8,7 +8,10 @@ not cryptographic keys, and wait for explicit operator admission before FIELD te
 
 Revised local candidate: source `5abc2da`, APK SHA256
 `6d13720bc8cff25d51d95ff7453127577890bee881685a4a66c86fae163f2148`.
-Not installed/published; server alias backfill completed but Android delivery pending.
+Installed in place on the owner Redmi03.10; not published. Identity/data retained,
+Auto/AWG/TCP pass. Authenticated server delivery now returns the original backfilled
+Support ID; visible/Copy/restart and diagnostics export pass. No replacement identity
+or enrollment. Hosted release checks/publication remain pending; no wider FIELD yet.
 The earlier `b952c3b` / `8229a36` build below is historical. Public download remains51.
 
 FIELD candidate03.10: beta59/code59 source in local validation, **not installed or
