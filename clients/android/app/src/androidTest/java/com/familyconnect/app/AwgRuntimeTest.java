@@ -23,7 +23,7 @@ public class AwgRuntimeTest {
     void shell(String command)throws Exception{try(ParcelFileDescriptor fd=InstrumentationRegistry.getInstrumentation().getUiAutomation().executeShellCommand(command);InputStream in=new ParcelFileDescriptor.AutoCloseInputStream(fd)){while(in.read()!=-1){}}}
     void waitState(String state)throws Exception{
         long until=System.currentTimeMillis()+30000;
-        while(System.currentTimeMillis()<until){if(ConnectionService.status.equals(state))return;if(ConnectionService.failed)fail("Service failed: "+ConnectionService.status);Thread.sleep(100);}
+        while(System.currentTimeMillis()<until){if(ConnectionService.status.equals(state))return;if(ConnectionService.failed&&!ConnectionService.status.equals("off"))fail("Service failed: "+ConnectionService.status);Thread.sleep(100);}
         fail("State timeout: "+ConnectionService.status);
     }
     boolean vpn(){ConnectivityManager cm=context.getSystemService(ConnectivityManager.class);for(Network n:cm.getAllNetworks()){NetworkCapabilities c=cm.getNetworkCapabilities(n);if(c!=null&&c.hasTransport(NetworkCapabilities.TRANSPORT_VPN))return true;}return false;}

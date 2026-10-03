@@ -49,6 +49,25 @@ def test_automatic_tcp_assigns_dual_stack_sources_without_bypass():
     assert '.allowBypass(' not in tcp and '.addDisallowedApplication(' not in tcp
 
 
+def test_runtime_wait_does_not_attribute_previous_off_failure_to_pending_start():
+    helper = (ROOT / 'clients/android/app/src/androidTest/java/com/familyconnect/app/AwgRuntimeTest.java').read_text()
+    wait = helper.split('void waitState(String state)', 1)[1].split('boolean vpn()', 1)[0]
+    assert 'ConnectionService.failed&&!ConnectionService.status.equals("off")' in wait
+    assert 'System.currentTimeMillis()+30000' in wait
+    assert 'fail("State timeout: "+ConnectionService.status)' in wait
+
+
+def test_windows_upgrade_requires_new_process_and_authenticated_readiness():
+    script = (ROOT / 'clients/windows/test-install.ps1').read_text()
+    assert "$snapshot.pid -ne $PreviousPid" in script
+    assert "$process.StartTime.ToUniversalTime() -ge $Started" in script
+    assert "-ArgumentList '/broker-test'" in script
+    assert "$after.pid -eq $snapshot.pid" in script
+    assert "$timer.Elapsed.TotalSeconds -lt 60" in script
+    assert "throw 'Broker did not restart with a new ready process within 60 seconds'" in script
+    assert "if([IO.File]::ReadAllText($sentinel) -ne 'preserve-existing-data')" in script
+
+
 def test_diagnostic_io_cannot_skip_native_stop_and_provisioning_reads_are_bounded():
     cleanup = source('RestrictedTunnelEngine').split('public void down()', 1)[1]
     assert 'try { evidence(); }catch(Exception ignored){}' in cleanup

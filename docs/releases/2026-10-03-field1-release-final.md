@@ -26,6 +26,21 @@ status/request/activation within60s. Polling is bounded, not a fixed startup sle
 Sentinel/runtime/broker postchecks remain. Production Windows code unchanged;
 hosted lifecycle evidence is still needed to confirm the observed race.
 
+Hosted5c740f2 client37122729324: Auto's unchanged dual-stack/fallback/exhaustion/
+cancel/revoke scenario PASS; new address/route builder check PASS. Windows main and
+Windows2022 compatibility both fully PASS, including stronger new-PID/API checks.
+Android next AWG test crashes during premature cleanup: the shared wait helper reads
+the previous revoked session's failed=true/off before the asynchronously queued
+connect is delivered; its finally stops a foreground service before promotion.
+The helper now fast-fails only a non-off failure, retaining the exact expected-state
+assertion and30s deadline. An actual start failure ending off still fails that deadline,
+not silently passes. Manual AWG scenario awaits a complete hosted reproduction.
+Only test code changed after the signed candidate source5c740f2. beta60 candidate
+SHA8ee59352e5f490aea74c3c8c8aeefd0d65bec0c261a044899d512ca376cf6104,
+signer67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a,
+package com.familyconnect.app.friends. Clean ARM64 export/JVM/lint/package/secret
+checks PASS; no private acceptance classes in APK. Owner installation pending.
+
 ## Android Auto runtime diagnosis — artifact stop boundary
 
 **FIELD-1 publication remains BLOCKED; DIAG-1A remains PASS.** Sequential work
