@@ -112,6 +112,9 @@ has0 findings after one previously reviewed hash-pinned stdlib false positive.
 JNI inputs are byte-identical to accepted58 and their native source0615953 is
 unchanged; these are reused verified native artifacts, not a fresh JNI rebuild.
 Final export after grant-lifetime hardening must be rebuilt and rechecked.
+Intermediate instrumentation compilation found one old `AppUpdate.check()` call
+in the opt-in live updater test; migrated it to signed manifest verification.
+No production fallback to unsigned discovery was introduced to satisfy the test.
 Whole-index source guard currently FAILS on an unchanged pre-existing assertion
 at `tests/test_readiness_adapter_packaging.py:283` containing a literal private-key
 PEM header as a negative test, not key material. Preserve it; do not claim global

@@ -57,7 +57,7 @@ public class AppUpdateRuntimeTest {
     }
     @Test public void downloadsPublishedApkChecksHashAndBlocksReinstall()throws Exception{
         org.junit.Assume.assumeTrue("true".equals(InstrumentationRegistry.getArguments().getString("fcLiveUpdateCheck")));
-        AppUpdate update=AppUpdate.check();File file=File.createTempFile("download-check-",".apk",context().getCacheDir());javax.net.ssl.HttpsURLConnection connection=AppUpdate.open(update.url);
+        AppUpdate update=AndroidUpdateManifest.verify(AppUpdate.fetchManifest(),System.currentTimeMillis()/1000,0,"").update;File file=File.createTempFile("download-check-",".apk",context().getCacheDir());javax.net.ssl.HttpsURLConnection connection=AppUpdate.open(update.url);
         try{try(InputStream in=connection.getInputStream();OutputStream out=new FileOutputStream(file)){update.receive(in,out,p->{});}
             AppUpdateUi.verifyApk(context(),file,update,update.code-1);
             try{AppUpdateUi.verifyApk(context(),file,update,update.code);fail("Reinstall/downgrade accepted");}catch(SecurityException expected){}
