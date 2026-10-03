@@ -1,5 +1,127 @@
 # FIELD-1-RELEASE-FINAL / DIAG-1A — 2026-10-03
 
+## beta60 authorized continuation
+
+Starting HEAD9351e07; beta60/code60 production source now assigns the missing Auto
+TCP IPv6 TUN address. DNS1.1.1.1,MTU1280,both routes and socket protection retained.
+Source contract now requires both address families; separate runtime builder test
+checks addresses/routes/DNS/MTU. Existing Auto dual-stack traffic test unchanged.
+Manual AWG primary/cleanup outcomes are separately logged, with safe state fields;
+cleanup waits for disconnect and idle operation ownership before profile deletion.
+Hosted reproduction is pending; no claim of resolved primary AWG cause yet.
+Windows compatibility remains pending. No beta60 signed artifact or owner result
+yet. beta59 SHA6d13720 remains preserved/unpublished; public Android51 unchanged.
+No signing of update catalog, publication, landing, admission or FIELD expansion.
+Candidate rollback means keep historical installed59 while blocked, never clear
+data or install a lower version. Final source/artifact/hosted evidence follows here.
+
+## Android Auto runtime diagnosis — artifact stop boundary
+
+**FIELD-1 publication remains BLOCKED; DIAG-1A remains PASS.** Sequential work
+stops at the user's explicit boundary: a required production Android correction
+would invalidate the accepted APK as the final release artifact. Stage5N remains
+CLOSED; no new milestone or physical-acceptance gate is introduced.
+
+Starting and ending HEAD: `9351e07f1c9f1e6c5b813df62b6d3404a3c60d90`.
+This continuation changes documentation only; no commit/push or hosted rerun.
+
+### Android Auto: confirmed production defect, not emulator assumption
+
+Evidence is from the requested [client run37120091287](https://github.com/Joker20380/family_connect/actions/runs/37120091287),
+Android job111194358923, source `ef554e75e54d1193ada96086480eac1087d6ca3b`.
+Fetched `android-awg-app.log` from artifact11273242837 with ZIP member CRC verified;
+local ignored evidence `state-client-build/field59-ci/android-37120091287-app.log`,
+10,874,469 bytes, SHA256
+`12d540a5e9246157dbe8df2fc38ab6b164ab5e19da865af2c0721a4a0259e893`.
+These are existing hosted runtime observations, not a newly executed acceptance.
+
+- Command: `python3 -u pilot/android-awg/run.py`, invoking
+  `:app:connectedDebugAndroidTest`. `AutoRuntimeTest` line47 waits for Auto TCP
+  selection/connected state, then calls `TcpRuntimeTest.traffic`.
+- Requested source is `fd79:fc::2`, destination `fd79:fc::1:18080` (IPv6 address
+  fd79:fc::1, port18080). The IPv4 half uses10.79.0.2 and198.19.1.1:18080 first.
+  Line23 binds before connecting; the stack explicitly fails in `Socket.bind` /
+  `IoBridge.bind`, not TLS, peer connection, DNS or a remote route.
+- Emulator underlay inventory in ConnectivityService: wlan0 has10.0.2.16/24 and
+  an fe80::/64 link-local address; eth0 has10.0.2.15/24. Underlay default route is
+  via10.0.2.2 and DNS10.0.2.3. The requested fd79 source belongs on the VPN, not on
+  these underlays; a public IPv6 underlay is not required by the synthetic TCP peer.
+- 11:43:33.992UTC (log64632–64633): retained tun0 gets10.79.0.2/32 **and**
+  fd79:fc::2/128. Earlier WG/AWG candidates likewise have their configured v4/v6
+  source pairs; Auto has not globally disabled IPv6.
+- 11:43:38.053UTC (log64772): TCP replacement tun1 gets **only10.79.0.2/32**.
+  netd adds tun1 to network102, removes tun0, adds0.0.0.0/0 and::/0 routes on
+  tun1, and removes the old fd79:fc::2/128 route (log64775–64794). Routing ::/0
+  does not assign an IPv6 source address. The sole assigned fd79 source disappears
+  when the old TUN is replaced; no IPv6 address is added to the TCP TUN.
+- 11:43:44.978UTC (log65577–65583): EADDRNOTAVAIL in TcpRuntimeTest23/AutoRuntimeTest47.
+  The finally cleanup has already restored a dual-stack blocking tun0 at11:43:44.233;
+  that later restoration must not be mistaken for the failing TCP interface state.
+- Control evidence from the **same emulator/run**: manual TCP establishes both
+  addresses at11:44:22.992UTC and subsequent TCP sessions;11:45:09.962UTC logs
+  `TCP PASS: 18 REALITY HTTP, 3 OS DNS, 12 WG/AWG UDP, 5 stops, cancel and revoke`.
+  Its shared traffic helper exercises both address families. Therefore an emulator
+  lacking IPv6 support or a universally invalid test source is not the explanation.
+
+Source trace: `ConnectivityOrchestrator.run` tries normal candidates and calls
+`AutomaticConnection.open`; that invokes `AutomaticNormalEngine.up` then IPv4-bound
+`VpnHealth.check(normal.source)` before emitting CONNECTED. In
+`AutomaticNormalEngine.java:25–30`, TCP sets10.79.0.2, installs both default routes,
+but omits `.addAddress("fd79:fc::2",128)`. `AutomaticVpnOwner.replace` establishes
+the replacement and closes the previous TUN; prior addresses do not carry over.
+`TcpTunnelEngine.java:17–18` and the retained-owner builder explicitly add both
+addresses. Both TCP engines pass the established TUN descriptor to `NativeTcp.start`;
+`pilot/android-tcp/tcp-android.go` duplicates that descriptor and protects the outer
+TCP socket to the configured peer. It does not assign missing Android interface
+addresses. The failed inner IPv6 bind occurs before its connect reaches this backend.
+
+**Exact required fix, identified but NOT applied:** add fd79:fc::2/128 to the Auto
+TCP VpnService.Builder, matching the manual TCP address contract, while retaining
+both routes, socket protection, profile restrictions and existing dual-stack traffic
+assertions. This is shared production source compiled into Friends, not test-only
+or an emulator provisioning setting. The Android/native source diff between accepted
+APK source5abc2da and current HEAD is empty; the defect is in the accepted source too.
+
+**Regression status:** no test altered/added or failure waived at this stop boundary.
+The existing Auto dual-stack runtime test already exposes the defect. On authorized
+resumption, add a focused Auto TCP LinkProperties address/route assertion before
+the existing dual-stack traffic check, then require the entire emulator and runtime
+control gates to PASS. A test-only IPv4 fallback would hide this production defect
+and is explicitly rejected. No claim of corrected dual-stack PASS is made.
+
+### Remaining sequential blockers (not advanced past the stop boundary)
+
+| Gate | Root cause / fix / regression status | Latest hosted evidence | Production changes |
+| --- | --- | --- | --- |
+| Manual AWG stability | Primary result still obscured by cleanup; actual scenario cause unproven. No harness fix yet. Required follow-up: preserve both results and pre-cleanup VPN/profile/transport state, then reproduce; do not relax active-VPN profile guard. | Same run/job: ManualAwgStabilityTest82, `Disconnect VPN before changing profiles` | None |
+| Windows2022 compatibility upgrade | Restart failure observed; SCM/process/readiness cause unproven. No arbitrary sleep or other fix/test change. Compare passing normal Windows path and instrument lifecycle before choosing bounded authoritative readiness polling. | Same run: compatibility111195231706 FAIL; normal Windows111194359044 PASS, including running-service upgrade | None |
+
+All previous terminal hosted results in the following fixture-repair section remain
+the latest evidence: Linux client/control, Windows main/control, Android wire,
+phase0, Docker failover/auth/offline/revocation and whole-index guard PASS. Android
+emulator and Windows compatibility FAIL; Android runtime-control conformance was
+not executed after the failed emulator step. No full-green or accepted completion claim.
+
+### Artifact and safety boundary
+
+Rechecked with SHA256, `apksigner verify --print-certs`, and `aapt dump badging`:
+`com.familyconnect.app.friends`, `0.1.18-beta59`/59; APK
+`6d13720bc8cff25d51d95ff7453127577890bee881685a4a66c86fae163f2148`, signer
+`67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+Bytes and signature remain intact, but **that artifact cannot represent the required
+production fix and is not eligible for publication under the dual-stack gate**.
+No rebuild, APK replacement, device install/reset, production deployment, admission
+mutation, catalog signing, public publication, landing change, tag or push occurred.
+No new production inventory query: last authoritative owner1/no-wildcard/cap3 and
+Support/enrollment/backfill evidence remain unchanged, not newly measured here.
+Previously accepted DIAG-1A and owner results remain historical PASS evidence.
+Unrelated VPN-health edits are preserved. No runtime rollback is needed because no
+runtime change was applied; documentation-only additions can be reverted separately.
+
+Next action requires authorization to change the Android candidate/release identity,
+then a clean committed build, renewed owner acceptance and the remaining sequential
+hosted gates. Existing publication prohibition remains in force even after a rebuild.
+
 ## Hosted fixture repair — 2026-10-03
 
 ### Final observed result

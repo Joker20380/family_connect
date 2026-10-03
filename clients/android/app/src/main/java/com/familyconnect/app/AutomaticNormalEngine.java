@@ -25,7 +25,7 @@ final class AutomaticNormalEngine implements TunnelEngine {
         if(transport==Transport.TCP) {
             source="10.79.0.2";
             VpnService.Builder builder=owner.service().new Builder().setSession("Family Connect").setMtu(1280)
-                .addAddress(source,32).addRoute("0.0.0.0",0).addRoute("::",0)
+                .addAddress(source,32).addAddress("fd79:fc::2",128).addRoute("0.0.0.0",0).addRoute("::",0)
                 .addDnsServer("1.1.1.1").setBlocking(false);
             tcp=NativeTcp.start(owner.replace(builder).getFd(),profile,owner.service());
             if(tcp<=0)throw new ConnectivityOrchestrator.Rejected(tcp==-2?ConnectivityOrchestrator.Failure.CONFIGURATION:ConnectivityOrchestrator.Failure.INTERNAL);

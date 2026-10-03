@@ -170,3 +170,8 @@ installation, UI, networking and recovery tests.
 
 [Historical initial-client guide](clients-legacy.en.md) is retained for the early direct
 WireGuard experiment; its old Tk/Windows-wrapper instructions are not current installation advice.
+# FIELD-1 candidate notice — 2026-10-03
+
+Android `0.1.18-beta60` / code60 is in preparation, not yet accepted or distributed.
+Historical beta59 is not eligible for publication. Public invitation/downloads
+remain beta51; no download link or checksum is changed before release acceptance.

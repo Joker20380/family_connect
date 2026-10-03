@@ -1,5 +1,37 @@
 # Текущее состояние / Current state
 
+## FIELD-1 beta60 candidate — IN PROGRESS,03.10.2026
+
+Authorized artifact boundary crossed:0.1.18-beta60/code60 replaces59 as the next
+candidate only. beta59 remains immutable, historical and unpublished. Auto TCP now
+assigns fd79:fc::2/128 alongside IPv4; MTU/DNS/routes unchanged. Added explicit
+dual-stack builder runtime coverage; existing Auto traffic acceptance unchanged.
+Manual AWG harness now retains primary and cleanup failures separately and waits
+for disconnect/operation release before profile cleanup. Actual primary failure
+still requires hosted reproduction. Windows2022 upgrade remains unresolved.
+No60 build/sign/install/owner acceptance or hosted PASS claimed yet. Public Android
+remains51; catalog signing/publication/landing/admission/FIELD widening forbidden.
+Stage5N CLOSED; DIAG-1A prior PASS retained, beta60 device regression pending.
+
+## FIELD-1 platform diagnosis — artifact stop boundary,03.10.2026
+
+Same milestone; Stage5N CLOSED and DIAG-1A PASS. Sequential investigation of the
+Android Auto failure confirms a **production TUN address omission**, not an invalid
+dual-stack emulator assumption. Hosted37120091287 log: Auto TCP replaces dual-stack
+tun0 with tun1 containing only10.79.0.2/32 at11:43:38UTC; ::/0 remains routed but
+fd79:fc::2 is no longer assigned. Socket.bind fails EADDRNOTAVAIL before IPv6 connect.
+Manual TCP assigns both addresses and passes dual-stack traffic in the same run.
+Required correction is in shared production AutomaticNormalEngine TCP setup, so
+the accepted signed APK cannot remain the final release artifact after that fix.
+Per explicit stop-on-artifact-change instruction, no source fix/rebuild/CI push was
+performed; Manual AWG teardown and Windows2022 upgrade remain unresolved, not waived.
+Existing59 SHA6d13720/signer67a90d1 and package/version reverified unchanged; prior
+owner acceptance is retained evidence, not a substitute for this missing gate.
+No production/admission changes, catalog signing, publication, landing edit or FIELD
+widening. Required next decision: permit a changed Android candidate and renewed
+acceptance, then resume the remaining sequential platform gates.
+[Runtime evidence and exact stop boundary](releases/2026-10-03-field1-release-final.md#android-auto-runtime-diagnosis--artifact-stop-boundary).
+
 ## FIELD-1 fixture repair — PASS; release BLOCKED,03.10.2026
 
 Same milestone, Stage5N CLOSED; owner and DIAG-1A acceptance remain PASS. Source-only

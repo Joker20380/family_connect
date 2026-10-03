@@ -43,7 +43,7 @@ public class ManualAwgStabilityTest {
             catch(SocketTimeoutException expected){}
         }
     }
-    @Test public void screenOffOutageRecoveryAndExplicitDisconnect()throws Exception{
+    @Test public void screenOffOutageRecoveryAndExplicitDisconnect()throws Throwable{
         assertTrue(android.os.Build.FINGERPRINT.contains("generic")||android.os.Build.MODEL.contains("sdk"));
         helper.clean();
         helper.shell("appops set "+context.getPackageName()+" ACTIVATE_VPN allow");
@@ -51,6 +51,7 @@ public class ManualAwgStabilityTest {
         Activity activity=InstrumentationRegistry.getInstrumentation().startActivitySync(
             new Intent(context,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         ProfileStore store=new ProfileStore(context,Transport.AWG);
+        Throwable primary=null;
         try{
             control.control("up");store.save(ProfileValidator.validate(AwgRuntimeTest.profile(Transport.AWG),Transport.AWG));
             start();helper.waitState("on");waitHealth("ok");helper.traffic(Transport.AWG);
@@ -76,10 +77,26 @@ public class ManualAwgStabilityTest {
             control.control("up");SystemClock.sleep(5000);
             assertEquals("off",ConnectionService.status);assertEquals("off",ConnectionService.healthStatus);helper.clean();assertTrue(store.exists());
             android.util.Log.i("FamilyConnect","MANUAL AWG STABILITY PASS: screen off 5s, UDP outage 20s, recovery_ms="+recovery+", disconnect during outage remains off");
+        }catch(Throwable failure){
+            primary=failure;
+            android.util.Log.e("FamilyConnect","MANUAL AWG primary FAIL",failure);
+            throw failure;
         }finally{
-            helper.shell("input keyevent 224");helper.shell("wm dismiss-keyguard");
-            try{control.control("up");}finally{
-                context.stopService(new Intent(context,ConnectionService.class));store.clear();
+            android.util.Log.i("FamilyConnect","MANUAL AWG before cleanup: primary="+(primary==null?"PASS":"FAIL")+
+                " status="+ConnectionService.status+" health="+ConnectionService.healthStatus+
+                " requested="+ConnectionService.requestedTransport+" active="+ConnectionService.activeTransport+
+                " vpn="+helper.vpn()+" profile_present="+store.exists());
+            try{
+                helper.shell("input keyevent 224");helper.shell("wm dismiss-keyguard");
+                control.control("up");
+                control.stop();
+                ControlOperations.APP.requireIdle();
+                store.clear();
+                android.util.Log.i("FamilyConnect","MANUAL AWG cleanup PASS");
+            }catch(Throwable cleanup){
+                android.util.Log.e("FamilyConnect","MANUAL AWG cleanup FAIL",cleanup);
+                if(primary!=null)primary.addSuppressed(cleanup);else throw cleanup;
+            }finally{
                 InstrumentationRegistry.getInstrumentation().runOnMainSync(activity::finish);
             }
         }

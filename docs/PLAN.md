@@ -2,6 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
+**FIELD-1 beta60 continuation authorized03.10; same milestone.**
+1. Auto TCP dual-stack production correction and focused regression; existing
+   emulator traffic test unchanged. Diagnose Manual AWG with non-masking cleanup.
+2. Resolve Windows2022 upgrade using observed SCM lifecycle and readiness evidence.
+3. Clean committed beta60/code60 build/sign; preserve historical unpublished59.
+4. Owner59→60 in-place preservation, Support ID, transports, DIAG acceptance.
+5. Require all hosted platform gates green; no catalog/publication/landing/admission
+   change. Retain one-owner/no-wildcard/cap3. No new milestone.
+
+Previous checkpoints below remain historical evidence.
+
 **FIELD-1-RELEASE-FINAL authorized03.10; Stage5N remains CLOSED.**
 1. DONE existing APK5abc2da/beta59 SHA6d13720, no rebuild. Prior JVM/native/lint and
    owner Auto/AWG/TCP accepted.518 focused Python now PASS; index guard repaired
@@ -17,8 +28,14 @@
    Windows control37120091189, Android wire37120091156 PASS at ef554e7.
    BLOCKED terminal client37120091287: Linux/Windows main PASS, Android emulator
    Auto IPv6 bind EADDRNOTAVAIL and manual AWG teardown refusal FAIL; Windows2022
-   upgrade broker-restart FAIL. Diagnose/resolve these existing release gates without
-   weakening coverage or modifying networking merely for CI. No all-green claim.
+   upgrade broker-restart FAIL. Sequential Auto diagnosis now confirms production
+   TCP TUN missing fd79:fc::2, with hosted address/route evidence and same-emulator
+   manual dual-stack PASS. STOP at the explicit accepted-APK identity boundary:
+   correcting AutomaticNormalEngine requires a changed Android binary. No production
+   fix/rebuild performed. Resume only with authorization for changed candidate and
+   renewed acceptance; then preserve/report Manual AWG primary+cleanup results and
+   diagnose Windows2022 restart using bounded authoritative readiness, in that order.
+   Existing IPv6 assertions remain intact; no all-green claim or new milestone.
    Unsigned min1/non-mandatory production59 payload prepared; offline signing only
    after accepted CI/downloads. Public APK/catalog/landing publication remains
    explicitly prohibited. Public51 bytes verified; no all-users-updated claim.
