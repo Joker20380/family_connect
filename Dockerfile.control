@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir -r requirements.lock
 FROM base AS tests
 COPY --from=test-go /usr/local/go /usr/local/go
 ENV PATH=/usr/local/go/bin:$PATH
-RUN apt-get update && apt-get install -y --no-install-recommends git nginx iproute2 keepassxc ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends git nginx iproute2 keepassxc ca-certificates curl python3 util-linux && rm -rf /var/lib/apt/lists/*
 COPY device_identity/requirements.lock /tmp/identity-requirements.lock
 RUN pip install --no-cache-dir -r /tmp/identity-requirements.lock
 ADD .ci-release-source/current.tar /app/
@@ -16,6 +16,9 @@ COPY .ci-release-source/current.commit .ci-release-source/tracked.paths .ci-rele
 RUN python scripts/ci_release_fixtures.py restore-git --commit-file /opt/fc-ci-source/current.commit --paths-file /opt/fc-ci-source/tracked.paths
 RUN cd carrier && go mod download
 RUN python scripts/ci_release_fixtures.py prepare --output /opt/fc-release-fixtures --go /usr/local/go/bin/go --historical-archive /opt/fc-ci-source/historical.tar
+RUN python -m pytest -q tests/test_gateway_credential_publication.py::IsolatedRootTests
+RUN useradd --create-home --uid 1000 runner && chown -R runner:runner /app
+USER runner
 RUN python scripts/ci_release_fixtures.py run --fixtures /opt/fc-release-fixtures --go /usr/local/go/bin/go --nginx /usr/sbin/nginx -- python -m pytest -q && touch /tmp/tests-passed
 
 FROM base AS runtime

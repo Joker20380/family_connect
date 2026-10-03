@@ -15,6 +15,8 @@
 4. IN PROGRESS shared committed-source release-fixture provisioning; full local
    suite1691 PASS/26 existing environment-dependent skips; no test bypass added.
    Re-run every hosted release gate and require Android/Windows terminal success.
+   First rerun833ab39 resolves fixture/collection failures; correct operator ZIP
+   namespace portability and Docker UID/tools, then repeat all hosted gates.
    Prior failures at pushed source1b791c2: phase0 and Linux-control broad pytest
    fail with missing artifact fixtures (7 failures/25 errors); failover Docker image
    has14 collection errors. Triage CI fixture/build-context failures before rerun;

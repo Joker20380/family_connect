@@ -1,4 +1,4 @@
-"""Provision closed, source-pinned release test artifacts; never production state."""
+"""Provision closed, source-pinned release artifacts for unprivileged tests; never production state."""
 import argparse
 import hashlib
 import io

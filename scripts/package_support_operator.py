@@ -18,11 +18,14 @@ def build(output, source=ROOT):
                 or not path.is_file() or any(parent.is_symlink() for parent in (path, *path.parents))):
             raise ValueError('Unsafe operator source')
         content[name] = path.read_bytes()
+        for parent in Path(name).parents:
+            if parent != Path('.'):
+                content[str(parent) + '/'] = b''
     with zipfile.ZipFile(output, 'x', compression=zipfile.ZIP_DEFLATED) as archive:
         for name, raw in sorted(content.items()):
             entry = zipfile.ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
             entry.create_system = 3
-            entry.external_attr = 0o100644 << 16
+            entry.external_attr = (0o40755 if name.endswith('/') else 0o100644) << 16
             archive.writestr(entry, raw)
     return dict(sha256=hashlib.sha256(output.read_bytes()).hexdigest(),
                 files={name: hashlib.sha256(raw).hexdigest() for name, raw in content.items()})

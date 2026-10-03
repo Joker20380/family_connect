@@ -36,6 +36,32 @@ so Android runtime conformance was not executed and is not accepted.
 Rollback is source-only: revert the CI/test provisioner changes if necessary; no
 production rollback or device data operation is involved. Public51 remains in place.
 
+### First hosted repair run
+
+Source `833ab39f5697d79464a603dcc40617158f84472f`, pushed without release trigger.
+phase0 run37119299194 and Linux-control37119299193 now provision successfully and
+collect the full suite; the missing25 fixture errors are gone. Both expose the same
+remaining operator ZIP failure: Python3.13 isolated execution cannot import namespace
+`control` without directory entries. Reproduced with Python3.13.15 in the existing
+CI container: before `ModuleNotFoundError: control`, after explicit deterministic
+ZIP directory entries `--help` PASS. No operator semantics or Android sources changed.
+
+Docker now reaches all tests (no collection errors); its remaining environment gaps
+are root nginx workers unable to read pytest's private static-fixture directories,
+missing `/usr/bin/python3` for service-UID DAC probes and missing `/usr/bin/curl`.
+Supply tools; execute root-DAC tests separately as root and full suite as a normal
+runner, matching the accepted local/hosted execution identity. Do not chmod private
+state, run nginx with extra privileges, weaken assertions or bypass root tests.
+
+The first complete prior Android artifact confirms a distinct release blocker:
+`AutoRuntimeTest` calls dual-stack `TcpRuntimeTest.traffic()` although Auto TCP only
+assigns10.79.0.2 and retains the IPv6 default route fail-closed; binding fd79:fc::2
+raises EADDRNOTAVAIL. Manual TCP's dual-stack test passes. Manual AWG also reports
+an asynchronous-cleanup profile-edit refusal. Tests and networking are unchanged;
+these are not waived or misrepresented as resolved by the Python fixture fix.
+Current rerun's Windows2022 compatibility upgrade also failed its broker-restart
+assertion; final repeat and terminal Android evidence still required.
+
 ## Support HTTP delivery and owner completion — 2026-10-03
 
 This supersedes the blocked Support/status observations below. Same FIELD-1/DIAG-1A;

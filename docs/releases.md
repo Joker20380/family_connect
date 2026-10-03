@@ -65,6 +65,13 @@ then provisions artifacts before collection. The runtime stage does not inherit
 test artifacts, Go, Git metadata or synthetic device state. Remove/regenerate this
 ignored export directory after changing the committed source.
 
+Docker first runs the real root-DAC publication tests with `setpriv` and
+`/usr/bin/python3`, then runs full pytest as an unprivileged runner like hosted CI.
+This keeps nginx's synthetic static files readable by the same test identity without
+relaxing private fixture permissions. `curl` is also required by the desktop tests.
+The operator ZIP includes explicit namespace-directory entries for Python3.13;
+Python3.14's implicit-directory imports must not hide a broken isolated archive.
+
 The [client workflow](../.github/workflows/clients.yml) defines platform builds and
 release conditions. CI artifacts do not by themselves establish a release. Validate native
 UI/runtime and downloaded artifacts before signing/publishing. Windows cross-build alone

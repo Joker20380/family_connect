@@ -11,6 +11,10 @@ metadata, with fixtures built before collection. Hosted rerun pending; publicati
 signing, landing changes and FIELD widening remain prohibited. Accepted beta59 APK
 is unchanged; no production/admission/networking edits. Prior client run completed:
 Windows+compatibility/Linux PASS, Android emulator gate FAIL (under investigation).
+First repair rerun833ab39 resolves missing fixtures/collection; further Python3.13
+operator ZIP namespace and Docker UID/system-tool prerequisites corrected locally.
+Hosted repeat pending; Android Auto IPv6 expectation mismatch and Windows2022
+broker-restart failure remain unwaived release blockers until terminal verification.
 [Repair evidence](releases/2026-10-03-field1-release-final.md#hosted-fixture-repair--2026-10-03).
 
 ## FIELD-1 Support delivery / owner acceptance — PASS,03.10.2026

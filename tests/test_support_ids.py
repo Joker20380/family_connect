@@ -201,8 +201,13 @@ def test_operator_retains_owner_and_caps_admission(access, tmp_path):
 def test_operator_artifact_is_reproducible_and_isolated(tmp_path):
     import subprocess
     import sys
+    import zipfile
     from scripts.package_support_operator import build
     first, second = tmp_path / 'first.pyz', tmp_path / 'second.pyz'
     assert build(first) == build(second)
+    with zipfile.ZipFile(first) as archive:
+        assert archive.getinfo('control/').is_dir()
+        assert archive.getinfo('clients/').is_dir()
+        assert archive.getinfo('clients/desktop/').is_dir()
     result = subprocess.run([sys.executable, '-I', str(first), '--help'], cwd=tmp_path, capture_output=True, text=True, check=True)
     assert 'enable-field' in result.stdout and 'disable-field' in result.stdout
