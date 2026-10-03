@@ -358,8 +358,12 @@ func traceFailure(ctx context.Context, trace *sessiontrace.Recorder, err error) 
 		return
 	}
 	reason := "FAMILY_TLS_ERROR"
+	stage := "FAMILY_TLS"
 	if errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF) {
 		reason = "FAMILY_TLS_EOF"
 	}
-	trace.Add("FAMILY_TLS", "FAILED", reason)
+	if errors.Is(err, reliablestream.ErrExhausted) {
+		stage, reason = "RECOVERY", "RECOVERY_CARRIER_FAILED"
+	}
+	trace.Add(stage, "FAILED", reason)
 }

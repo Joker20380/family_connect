@@ -13,6 +13,8 @@
 4. Owner in-place UID/identity/enrollment/Support/AWG/export/privacy acceptance.
 5. Controlled gateway binary update/rollback and fresh leases; prove a real owner
    restricted session with identical client/server tags and complete lifecycle.
+   NL19:43UTC actually served expired16:22:33UTC certificate; renew through protected
+   procedure, preserving exact2-device admission. Do not reuse stale owner receipts.
 6. Only then supply existing tester. No FIELD/publication expansion or Russian retry
    yet; no transport-fix or RKN attribution claim.
 

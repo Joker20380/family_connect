@@ -12,18 +12,19 @@ import (
 const Limit = 192
 
 type Event struct {
-	SessionTag   string `json:"session_tag"`
-	Sequence     uint64 `json:"sequence"`
-	TimestampMS  int64  `json:"timestamp_ms"`
-	Stage        string `json:"stage"`
-	State        string `json:"state"`
-	Reason       string `json:"reason"`
-	Target       string `json:"target,omitempty"`
-	CloseCode    int    `json:"close_code,omitempty"`
-	CloseReason  string `json:"close_reason,omitempty"`
-	BrokerReason string `json:"broker_reason,omitempty"`
-	TX           uint64 `json:"tx"`
-	RX           uint64 `json:"rx"`
+	SessionTag    string `json:"session_tag"`
+	Sequence      uint64 `json:"sequence"`
+	TimestampMS   int64  `json:"timestamp_ms"`
+	Stage         string `json:"stage"`
+	State         string `json:"state"`
+	Reason        string `json:"reason"`
+	Target        string `json:"target,omitempty"`
+	CloseCode     int    `json:"close_code,omitempty"`
+	CloseReason   string `json:"close_reason,omitempty"`
+	BrokerReason  string `json:"broker_reason,omitempty"`
+	HeartbeatKind string `json:"heartbeat_kind,omitempty"`
+	TX            uint64 `json:"tx"`
+	RX            uint64 `json:"rx"`
 }
 
 type Snapshot struct {
@@ -90,6 +91,9 @@ func (recorder *Recorder) Record(event Event) {
 	}
 	if event.BrokerReason != "" && !Allowed(event.BrokerReason, BrokerReasons) {
 		event.BrokerReason = "unknown"
+	}
+	if !Allowed(event.HeartbeatKind, "APPLICATION|WEBSOCKET") {
+		event.HeartbeatKind = ""
 	}
 	recorder.sequence++
 	event.Sequence, event.TimestampMS, event.SessionTag = recorder.sequence, time.Now().UnixMilli(), recorder.value.SessionTag

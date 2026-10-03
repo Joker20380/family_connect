@@ -43,6 +43,8 @@ def event(source):
             safe[field] = source[field]
     if source.get("target") in ("SUBSCRIBER", "PUBLISHER"):
         safe["target"] = source["target"]
+    if source.get("heartbeat_kind") in ("APPLICATION", "WEBSOCKET"):
+        safe["heartbeat_kind"] = source["heartbeat_kind"]
     if number(source.get("close_code")) and 1000 <= source["close_code"] <= 4999:
         safe["close_code"] = source["close_code"]
     if source.get("close_reason") in CLOSE_REASONS.split("|"):

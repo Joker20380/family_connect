@@ -1,9 +1,23 @@
 package telemost
 
 import (
+	"errors"
+	"io"
+
 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"github.com/pion/webrtc/v4"
 )
+
+func (s *Session) traceCarrierReadEnd(target string, err error) {
+	reason := "NONE"
+	if !s.closed.Load() {
+		reason = "CARRIER_ERROR"
+		if errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF) {
+			reason = "CARRIER_EOF"
+		}
+	}
+	s.cfg.Trace.Record(sessiontrace.Event{Stage: "CARRIER", State: "CLOSED", Target: target, Reason: reason})
+}
 
 func (s *Session) traceEvidence(event Evidence) {
 	trace := s.cfg.Trace

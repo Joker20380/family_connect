@@ -568,6 +568,7 @@ func (s *Session) setupTransport() error {
 			buffer := make([]byte, 1500)
 			for {
 				if _, _, err := sender.Read(buffer); err != nil {
+					s.traceCarrierReadEnd("PUBLISHER", err)
 					return
 				}
 			}

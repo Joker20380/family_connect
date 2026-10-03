@@ -31,6 +31,7 @@ final class RestrictedTrace {
         for(String field:new String[]{"sequence","timestamp_ms","tx","rx"})number(source,safe,field);
         if(!safe.has("sequence")||safe.get("sequence").getAsLong()==0||!safe.has("timestamp_ms"))return null;
         String target=text(source,"target");if(allowed(target,"SUBSCRIBER|PUBLISHER"))safe.addProperty("target",target);
+        String heartbeat=text(source,"heartbeat_kind");if(allowed(heartbeat,"APPLICATION|WEBSOCKET"))safe.addProperty("heartbeat_kind",heartbeat);
         String close=text(source,"close_reason");if(allowed(close,"ping|timeout|duplicate|expired|inactivity|shutdown|restart|invalid|ack|idle|session|READ_ERROR|READ_TIMEOUT|INVALID_MESSAGE|WRITE_ERROR"))safe.addProperty("close_reason",close);
         number(source,safe,"close_code");
         if(safe.has("close_code")&&(safe.get("close_code").getAsLong()<1000||safe.get("close_code").getAsLong()>4999))safe.remove("close_code");

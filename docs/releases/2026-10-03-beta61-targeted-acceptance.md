@@ -47,6 +47,22 @@ and correlated allowlisted broker error details; fresh full race PASS, pytest17/
 PASS. This refinement supersedes621468e artifacts and requires its own accepted
 source/CI. No candidate installation/deployment yet.
 
+Final coverage refinement: actual RTP/RTCP read EOF/error is observed without changing
+the read loop's return/close behavior; reliable exhaustion is classified separately.
+APPLICATION and WEBSOCKET heartbeat TX/RX are distinct, and WS liveness timeout is
+identified as such. Fresh full carrier race,230 Friends JVM/lint and pytest17/17 PASS.
+Use final checkpoint CI, not superseded621468e/4c68c77 artifacts. Private owner-only
+harness compiled (not signed/installed): real controlled restricted connection and
+product Share export; it does not pretend to exercise Russian mobile fallback.
+
+Read-only NL19:43:40UTC: active PID3345011/NRestarts4, loaded binarye17e1fe7. Both
+configured and actually served TLS certificate expiry16:22:33UTC confirmed via
+loopback handshake, with exact cert match. No server write/restart in this task.
+Owner/tester earlier READY receipts were expired at19:32UTC; admission remained both
+existing devices. Protected JIT gateway renewal + fresh ordinary owner READY/ACK are
+mandatory before live proof. This is a current acceptance blocker, not a diagnosis
+of the original15/30-second disconnect. Private receipts underfield61-r2.
+
 Targeted candidate only. No broad publication, catalog/invitation change, FIELD
 admission change, tester installation or tester mobile attempt. The owner Redmi
 was connected after the initial ADB check and was updated in place successfully.

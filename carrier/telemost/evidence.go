@@ -44,6 +44,7 @@ func (s *Session) recordSignalingReadFailure(err error) {
 	if reason == "HEARTBEAT_TIMEOUT" {
 		trace.Stage = "LIVENESS"
 		trace.CloseReason = "READ_TIMEOUT"
+		trace.HeartbeatKind = "WEBSOCKET"
 	}
 	if syntaxError != nil {
 		trace.CloseReason = "INVALID_MESSAGE"

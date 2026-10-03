@@ -11,10 +11,17 @@ Final local gates: full carrier race PASS;230 Friends JVM tests and lint PASS;
 correlation/release pytest17/17 and diff-check PASS, including final gateway trace
 shutdown/detail race tests. Source621468e initial CI is superseded by the final
 shutdown-safe bounded sink / allowlisted broker-detail checkpoint; use its fresh CI.
+Final coverage also observes actual RTP/RTCP EOF, reliable recovery exhaustion and
+distinguishes APPLICATION/WEBSOCKET heartbeat. Latest full race/JVM/lint gates PASS;
+earlier621468e/4c68c77 CI artifacts are superseded by this final source checkpoint.
 No transport/auth/admission/retry-policy change. Hosted CI, new
 artifact/signature, in-place owner acceptance and live matching-tag session pending.
 Owner still original beta61/61 SHAc98852b3; public/tester still60. Redmi31ce63ba observed
 connected, not updated again. No server mutation or tester delivery in this pass.
+Read-only NL19:43UTC: loaded executable still e17e1fe7, active/PID3345011/restarts4;
+both profile and actually served certificate expired16:22:33UTC. Fresh protected
+gateway renewal and owner READY/ACK required just before controlled restricted test.
+This new preflight barrier is not attributed as cause of the earlier Russian loss.
 [r2 acceptance ledger](releases/2026-10-03-beta61-targeted-acceptance.md#diagnostic-correction-r2).
 
 ## Beta61 targeted owner acceptance — BLOCKED03.10.2026

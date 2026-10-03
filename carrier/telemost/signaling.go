@@ -38,7 +38,7 @@ func (s *Session) dialWebSocket(ctx context.Context) error {
 	conn.SetReadLimit(wsReadLimit)
 	conn.SetPongHandler(func(string) error {
 		_ = conn.SetReadDeadline(time.Now().Add(wsReadTimeout))
-		s.cfg.Trace.Add("HEARTBEAT", "RX", "NONE")
+		s.cfg.Trace.Record(sessiontrace.Event{Stage: "HEARTBEAT", State: "RX", Reason: "NONE", HeartbeatKind: "WEBSOCKET"})
 		return nil
 	})
 	_ = conn.SetReadDeadline(time.Now().Add(wsReadTimeout))
@@ -499,7 +499,7 @@ func (s *Session) heartbeatLoop() {
 			s.statsMu.Lock()
 			s.applicationPings++
 			s.statsMu.Unlock()
-			s.cfg.Trace.Add("HEARTBEAT", "TX", "NONE")
+			s.cfg.Trace.Record(sessiontrace.Event{Stage: "HEARTBEAT", State: "TX", Reason: "NONE", HeartbeatKind: "APPLICATION"})
 		case <-ticker.C:
 			connection := s.wsConn()
 			if connection == nil {
@@ -510,7 +510,7 @@ func (s *Session) heartbeatLoop() {
 				s.signalClosed(errors.New("telemost: signaling heartbeat failed"))
 				return
 			}
-			s.cfg.Trace.Add("HEARTBEAT", "TX", "NONE")
+			s.cfg.Trace.Record(sessiontrace.Event{Stage: "HEARTBEAT", State: "TX", Reason: "NONE", HeartbeatKind: "WEBSOCKET"})
 		}
 	}
 }
@@ -533,7 +533,7 @@ func (s *Session) handleHousekeeping(msg map[string]any, uid string) {
 		s.statsMu.Lock()
 		s.applicationPongs++
 		s.statsMu.Unlock()
-		s.cfg.Trace.Add("HEARTBEAT", "RX", "NONE")
+		s.cfg.Trace.Record(sessiontrace.Event{Stage: "HEARTBEAT", State: "RX", Reason: "NONE", HeartbeatKind: "APPLICATION"})
 		s.sendAck(uid)
 	case hasKey(msg, "ping"):
 		_ = s.writeJSON(map[string]any{"uid": uid, "pong": map[string]any{}})
@@ -708,6 +708,7 @@ func (s *Session) readVP8Track(track *webrtc.TrackRemote) {
 	for {
 		n, _, err := track.Read(buf)
 		if err != nil {
+			s.traceCarrierReadEnd("SUBSCRIBER", err)
 			return
 		}
 		pkt := &rtp.Packet{}
