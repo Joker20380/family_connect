@@ -12,11 +12,14 @@
 3. DONE owner existing-ID retrieval/visible/Copy/restart/status authentication;
    unchanged installed APK/signer/UID/data/identity. DIAG snapshot/share/privacy PASS
    with non-null alias. Inventory28/24 active/4 revoked;1 known Android59,27 unknown.
-4. BLOCKED hosted CI at pushed source1b791c2: phase0 and Linux-control broad pytest
+4. IN PROGRESS shared committed-source release-fixture provisioning; full local
+   suite1691 PASS/26 existing environment-dependent skips; no test bypass added.
+   Re-run every hosted release gate and require Android/Windows terminal success.
+   Prior failures at pushed source1b791c2: phase0 and Linux-control broad pytest
    fail with missing artifact fixtures (7 failures/25 errors); failover Docker image
    has14 collection errors. Triage CI fixture/build-context failures before rerun;
    never mask them with skips. Windows control/Android wire/Linux client PASS;
-   Android/Windows client completion and artifact download/provenance still pending.
+   Windows+compatibility now PASS; Android emulator gate failed and needs diagnosis.
    Unsigned min1/non-mandatory production59 payload prepared; offline signing only
    after accepted CI/downloads. Public APK/catalog/landing publication remains
    explicitly prohibited. Public51 bytes verified; no all-users-updated claim.

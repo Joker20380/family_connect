@@ -5,20 +5,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
       - name: Check public source inventory (no secret values in output)
         run: python scripts/check_public_sources.py
       - name: Install local vault test dependency (synthetic keys only)
-        run: sudo apt-get update && sudo apt-get install -y keepassxc
+        run: sudo apt-get update && sudo apt-get install -y keepassxc nginx iproute2
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.0'
+          cache-dependency-path: carrier/go.sum
       - run: pip install -r control/requirements.lock -r device_identity/requirements.lock
-      - run: python -m pytest -q
+      - run: go mod download
+        working-directory: carrier
+      - name: Provision source-pinned release fixtures
+        run: python scripts/ci_release_fixtures.py prepare --output "$RUNNER_TEMP/fc-release-fixtures" --go "$(command -v go)"
+      - name: Full pytest with required release fixtures
+        run: python scripts/ci_release_fixtures.py run --fixtures "$RUNNER_TEMP/fc-release-fixtures" --go "$(command -v go)" --nginx /usr/sbin/nginx -- python -m pytest -q
       - run: cargo test --manifest-path core/Cargo.toml --locked
   failover:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Export only committed public sources for Docker tests
+        run: python scripts/ci_release_fixtures.py export --output .ci-release-source
       - name: Build isolated failover stack
         shell: bash
         run: |

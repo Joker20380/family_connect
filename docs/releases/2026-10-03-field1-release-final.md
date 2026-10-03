@@ -1,5 +1,41 @@
 # FIELD-1-RELEASE-FINAL / DIAG-1A — 2026-10-03
 
+## Hosted fixture repair — 2026-10-03
+
+Starting HEAD `fc2b3efcaabbe75195b869d5586de65c0b0dc55c`; same milestone,
+Stage5N CLOSED, owner/DIAG-1A PASS retained. No product source or accepted APK changes.
+Publication/signing/landing/FIELD widening remain prohibited throughout this repair.
+
+The successful518-focused local path explicitly supplied `FC_TEST_HTTP_ARTIFACT`,
+HTTP SHA, sync artifact/SHA, readiness artifact, immutable historical HTTP artifact,
+Go1.26.0 and nginx. Hosted broad pytest supplied none of these; Docker's selective
+COPY additionally omitted modules/manifests required during collection. This is a
+test provisioning defect, not evidence of three separate networking defects.
+
+`scripts/ci_release_fixtures.py` builds closed fixtures from committed source,
+checks source commit and every inventory hash before execution, and independently
+enforces historical HTTP SHA460e7520. phase0/Linux-control explicitly seed Go modules
+and provision before full pytest. Docker consumes only public `git archive` exports,
+restores the exact verified tree/commit without host Git configuration, then builds
+fixtures in the test stage before collection. Runtime stage is unchanged. Synthetic
+keys remain local test data, never production credentials or persistent secrets.
+
+Three formerly hidden fixture assumptions are corrected without removing assertions:
+historical cadence uses the pinned historical server instead of the current server;
+current preflight requires the explicit current SHA (no permissive fallback);
+missing-module tests explicitly import the selected dependency, including lazy ones.
+No skip/xfail/conditional bypass introduced. New tests verify public-only exports,
+exact source restoration, hash/commit rejection and deterministic sync ZIP metadata.
+
+Local full provisioned pytest:1691 PASS/26 existing environment-dependent skips,
+256.21s; new provisioner tests3 PASS. Logs retained in ignored
+`state-client-build/field59-ci/`. Hosted rerun remains pending. The earlier client
+run37115119418 is terminal: Windows/compatibility/Linux PASS; Android emulator FAIL,
+so Android runtime conformance was not executed and is not accepted.
+
+Rollback is source-only: revert the CI/test provisioner changes if necessary; no
+production rollback or device data operation is involved. Public51 remains in place.
+
 ## Support HTTP delivery and owner completion — 2026-10-03
 
 This supersedes the blocked Support/status observations below. Same FIELD-1/DIAG-1A;

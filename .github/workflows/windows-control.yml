@@ -1,9 +1,9 @@
 name: Windows control conformance
 on:
   push:
-    paths: ['clients/windows/Core/**', 'clients/windows/Tests/**', 'tests/vectors/**', '.github/workflows/windows-control.yml']
+    paths: ['clients/windows/Core/**', 'clients/windows/Tests/**', 'tests/vectors/**', 'scripts/ci_release_fixtures.py', '.github/workflows/windows-control.yml']
   pull_request:
-    paths: ['clients/windows/Core/**', 'clients/windows/Tests/**', 'tests/vectors/**', '.github/workflows/windows-control.yml']
+    paths: ['clients/windows/Core/**', 'clients/windows/Tests/**', 'tests/vectors/**', 'scripts/ci_release_fixtures.py', '.github/workflows/windows-control.yml']
   workflow_dispatch:
 permissions:
   contents: read

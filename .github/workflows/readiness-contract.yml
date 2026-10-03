@@ -1,9 +1,9 @@
 name: Android Friends readiness wire contract
 on:
   push:
-    paths: ['clients/android/**', 'control/friends/**', 'deploy/friends/**', 'device_identity/**', 'scripts/package_friends_http.py', 'tests/**', '.github/workflows/readiness-contract.yml']
+    paths: ['scripts/ci_release_fixtures.py', 'clients/android/**', 'control/friends/**', 'deploy/friends/**', 'device_identity/**', 'scripts/package_friends_http.py', 'tests/**', '.github/workflows/readiness-contract.yml']
   pull_request:
-    paths: ['clients/android/**', 'control/friends/**', 'deploy/friends/**', 'device_identity/**', 'scripts/package_friends_http.py', 'tests/**', '.github/workflows/readiness-contract.yml']
+    paths: ['scripts/ci_release_fixtures.py', 'clients/android/**', 'control/friends/**', 'deploy/friends/**', 'device_identity/**', 'scripts/package_friends_http.py', 'tests/**', '.github/workflows/readiness-contract.yml']
 permissions:
   contents: read
 jobs:

@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+## FIELD-1 hosted fixture repair — IN PROGRESS,03.10.2026
+
+Same milestone, Stage5N CLOSED; owner and DIAG-1A acceptance retained. Missing
+explicit HTTP/sync/readiness/historical fixtures and Go/nginx provisioning reproduced.
+Shared source-pinned provisioner now passes the full local suite:1691 PASS/26 existing
+environment-dependent skips (no new skips), plus3 provisioner regressions. Docker
+test context now uses committed public archives and verified credential-free Git
+metadata, with fixtures built before collection. Hosted rerun pending; publication,
+signing, landing changes and FIELD widening remain prohibited. Accepted beta59 APK
+is unchanged; no production/admission/networking edits. Prior client run completed:
+Windows+compatibility/Linux PASS, Android emulator gate FAIL (under investigation).
+[Repair evidence](releases/2026-10-03-field1-release-final.md#hosted-fixture-repair--2026-10-03).
+
 ## FIELD-1 Support delivery / owner acceptance — PASS,03.10.2026
 
 Same milestone; Stage5N remains CLOSED. Explicitly authorized prerequisite deployed

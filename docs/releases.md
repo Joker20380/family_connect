@@ -39,6 +39,32 @@ SHA256 `79a2d28667332ea442eae1b895b4fc632b52734cbed1e75bd95f32b7175ad366`.
 
 ## Release procedure
 
+### Release-test fixture prerequisite
+
+Full Python release tests require closed HTTP, sync and readiness artifacts, their
+SHA256 pins, the immutable historical HTTP fixture, Go1.26.0 and nginx. Use the same
+provisioner in hosted phase0/Linux-control and Docker; do not substitute production
+state or skip tests when fixtures are absent. From a committed checkout with full
+history, install the two Python lockfiles, Go1.26.0, nginx, iproute2 and keepassxc:
+
+```sh
+(cd carrier && go mod download)
+python scripts/ci_release_fixtures.py prepare --output /tmp/fc-release-fixtures --go "$(command -v go)"
+python scripts/ci_release_fixtures.py run --fixtures /tmp/fc-release-fixtures --go "$(command -v go)" --nginx /usr/sbin/nginx -- python -m pytest -q
+```
+
+Use a fresh output directory for each source commit. Inventory hashes and HEAD are
+checked before test execution. The historical regression retains its independent
+immutable pin; current readiness tests receive the current source artifact explicitly.
+Before `docker compose build`, run
+`python scripts/ci_release_fixtures.py export --output .ci-release-source`.
+This exports only committed public source and the pinned historical source, never
+host Git configuration, ignored state, device credentials or signing keys. Docker's
+test stage restores and checks the exact source tree/commit for clean-export tests,
+then provisions artifacts before collection. The runtime stage does not inherit
+test artifacts, Go, Git metadata or synthetic device state. Remove/regenerate this
+ignored export directory after changing the committed source.
+
 The [client workflow](../.github/workflows/clients.yml) defines platform builds and
 release conditions. CI artifacts do not by themselves establish a release. Validate native
 UI/runtime and downloaded artifacts before signing/publishing. Windows cross-build alone

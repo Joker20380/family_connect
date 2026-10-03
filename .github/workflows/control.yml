@@ -1,9 +1,9 @@
 name: Linux control preview
 on:
   push:
-    paths: ['control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'scripts/friends_http_transition.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
+    paths: ['scripts/ci_release_fixtures.py', 'control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'scripts/friends_http_transition.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
   pull_request:
-    paths: ['control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'scripts/friends_http_transition.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
+    paths: ['scripts/ci_release_fixtures.py', 'control/friends/**', 'deploy/friends/**', 'scripts/package_restricted_runtime.py', 'scripts/package_friends_http.py', 'scripts/friends_http_acceptance.py', 'scripts/friends_http_transition.py', 'provisioning/**', 'device_identity/**', 'clients/desktop/**', 'scripts/package_control.py', 'scripts/run_control_preview.py', 'scripts/package_desktop.py', 'tests/**', '.github/workflows/control.yml', 'VERSION']
   workflow_dispatch:
 permissions:
   contents: read
@@ -16,16 +16,24 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
       - run: pip install -r control/requirements.lock -r device_identity/requirements.lock
       - name: Local HTTP contract proxy
-        run: sudo apt-get update && sudo apt-get install -y nginx iproute2
+        run: sudo apt-get update && sudo apt-get install -y nginx iproute2 keepassxc
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.0'
+          cache-dependency-path: carrier/go.sum
+      - run: go mod download
+        working-directory: carrier
+      - name: Provision source-pinned release fixtures
+        run: python scripts/ci_release_fixtures.py prepare --output "$RUNNER_TEMP/fc-release-fixtures" --go "$(command -v go)"
       - name: Protocol, crash recovery, arbiter and packaging regression
-        env:
-          FC_TEST_NGINX: /usr/sbin/nginx
-        run: python -m pytest -q
+        run: python scripts/ci_release_fixtures.py run --fixtures "$RUNNER_TEMP/fc-release-fixtures" --go "$(command -v go)" --nginx /usr/sbin/nginx -- python -m pytest -q
       - name: System GTK dependencies
         run: sudo apt-get update && sudo apt-get install -y python3-gi python3-gi-cairo python3-venv gir1.2-gtk-4.0 gir1.2-adw-1 libqrencode4 libzbar0 python3-cryptography xvfb dbus-x11
       - name: Render and interaction regression

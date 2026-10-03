@@ -143,7 +143,9 @@ def test_missing_transitive_module_fails_despite_checkout_pythonpath(bundle, tmp
         for entry in original.infolist():
             if entry.filename != missing:
                 output.writestr(entry, original.read(entry))
-    result = subprocess.run([sys.executable, '-I', str(broken), '--help'], cwd=ROOT,
+    probe = ('import importlib,runpy,sys;archive,module=sys.argv[1:];sys.path.insert(0,archive);'
+             'importlib.import_module(module);sys.argv=[archive,"--help"];runpy.run_path(archive,run_name="__main__")')
+    result = subprocess.run([sys.executable, '-I', '-c', probe, str(broken), missing[:-3].replace('/', '.')], cwd=ROOT,
                             env=dict(environment(), PYTHONPATH=str(ROOT)), capture_output=True, timeout=30)
     assert result.returncode != 0
     assert b'ImportError' in result.stderr or b'ModuleNotFoundError' in result.stderr

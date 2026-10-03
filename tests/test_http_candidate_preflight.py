@@ -237,7 +237,7 @@ def test_old_health_failure_is_pre_mutation(candidate, evidence):
 
 
 def test_source_unit_route_and_immutable_archive_guards(candidate):
-    assert candidate.sha256 == '460e75205eb9baff313dc7dd963cdb7bceddf2d1e13405a71686f9ec6c976d71' or not os.environ.get('FC_TEST_HTTP_ARTIFACT')
+    assert candidate.sha256 == os.environ['FC_TEST_HTTP_SHA256']
     unit = Path('deploy/friends/restricted/family-connect-friends-http-candidate.service').read_text()
     assert unit.count('@CANDIDATE_PORT@') == 1 and '18085' not in unit
     ordinary, status = nginx_sections()

@@ -117,6 +117,9 @@ def record_measurement(material, label, record):
 
 @pytest.mark.parametrize('lane', ['matrix', 'observer'])
 def test_exact_attempt9_cadence_reproduces_shared_per_ip_limit(runtime, lane):
+    historical = Path(os.environ['FC_TEST_HISTORICAL_HTTP_ARTIFACT'])
+    runtime['artifact'] = historical.parent
+    runtime['command'][2] = str(historical)
     assert hashlib.sha256((runtime['artifact']/'friends-http.pyz').read_bytes()).hexdigest() == PIN
     fixtures = json.loads((ROOT/'tests/fixtures/http_attempt9_transition.json').read_text())[lane]
     fixtures = [record for record in fixtures if record['transport_error'] != 'interrupted']
