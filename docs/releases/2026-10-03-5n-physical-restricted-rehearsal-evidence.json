@@ -1,0 +1,618 @@
+{
+  "gate": "5N-PHYSICAL-RESTRICTED-REHEARSAL",
+  "result": "BLOCKED",
+  "utc": "2026-10-02T23:31:15.947595+00:00",
+  "source_head": "061595376fa65ae38725ed75baac769d71623d92",
+  "artifact": {
+    "source_head": "061595376fa65ae38725ed75baac769d71623d92",
+    "apk": "state-client-build/physical-rehearsal-0615953/artifacts/FamilyConnect-canary57-physical-0615953-arm64.apk",
+    "apk_sha256": "dd3c1b1bd9031f189ef7fc606969eb7da05e44f470478c8457f9097119b9c975",
+    "bytes": 52727109,
+    "application_id": "com.familyconnect.app.friends",
+    "version_code": 57,
+    "version_name": "0.1.18-canary57-physical",
+    "debuggable": true,
+    "private_acceptance_only": true,
+    "certificate_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+    "native_sha256": {
+      "libfc-awg.so": "1910ccac238884dd55120917c509571117f2aa2e95d10e9255ea00a069738517",
+      "libfc_restricted.so": "0307df7e41bd2a002ee9cde37002862d5c6a445e319c9ea297829975b7e6da21"
+    },
+    "go": "1.26.1",
+    "ndk": "27.2.12479018",
+    "xray_revision": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+    "entries_scanned": 1079,
+    "oauth_exact_check": false,
+    "findings": [],
+    "reviewed_false_positives": [
+      {
+        "entry": "assets/chaquopy/stdlib-common.imy!distutils/command/upload.pyc",
+        "category": "literal-authorization",
+        "reason": "trusted beta51 stdlib bytecode; standalone Basic scheme, zero literal credential constants"
+      }
+    ]
+  },
+  "tests": {
+    "tests": 218,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": "PASS",
+  "source_export": "Exact tracked committed blobs verified before building; private Gradle init overlay only",
+  "packaging_sha256": "9ec89fc2dfc146097ba6e0657319f0960c3d40bccd6535edfd7930c4d681cc9e",
+  "authority_refresh_required": true,
+  "authority_ru": {
+    "utc": "2026-10-02T23:24:27Z",
+    "python_validation_pass": true,
+    "delegation_sequence": 2,
+    "grant_revision": 2,
+    "minimum_revision": 1,
+    "delegation_expiry": 1791028496,
+    "grant_expiry": 1791028496,
+    "issuer_expiry": "2026-10-03T11:54:56+00:00",
+    "owner_admitted": 1,
+    "non_canaries_denied": 27,
+    "crl_sequence": 115,
+    "crl_expiry": "2026-10-02T23:39:27+00:00",
+    "gateway_expiry": "2026-10-03T00:24:27+00:00",
+    "same_identities": true
+  },
+  "authority_nl": {
+    "python_validation_pass": true,
+    "native_validation_pass": true,
+    "native": {
+      "version": 1,
+      "status": "PASS",
+      "stage": "complete",
+      "reason": "validated",
+      "object": "authority",
+      "comparison": "positive_and_negatives"
+    },
+    "old_floor": 114,
+    "new_floor": 115,
+    "gateway_expiry": "2026-10-03T00:24:27+00:00",
+    "issuer_expiry": "2026-10-03T11:54:56+00:00",
+    "same_gateway_key": true,
+    "same_family": true,
+    "provider_token_not_read": true
+  },
+  "reload": {
+    "exit": 1,
+    "receipts": [
+      {
+        "event": "command",
+        "step": "state",
+        "timeout": 2,
+        "elapsed": 0.020142049994319677,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "nonempty-redacted",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "physical-credential-renewal-0615953",
+        "timestamp": "2026-10-02T23:24:32.619802Z"
+      },
+      {
+        "event": "service_state",
+        "state": {
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "Result": "success",
+          "MainPID": 0,
+          "NRestarts": 0,
+          "ExecMainStatus": 0,
+          "ExecMainStartTimestampMonotonic": 0
+        },
+        "kind": "authoritative",
+        "generation": "physical-credential-renewal-0615953",
+        "timestamp": "2026-10-02T23:24:32.622061Z"
+      },
+      {
+        "event": "command",
+        "step": "snapshot",
+        "timeout": 5,
+        "elapsed": 0.21635193610563874,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "nonempty-redacted",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "physical-credential-renewal-0615953",
+        "timestamp": "2026-10-02T23:24:32.839854Z"
+      },
+      {
+        "event": "material",
+        "published": false,
+        "directory_valid": false,
+        "canonical_utc": false,
+        "seed_count": 0,
+        "issued_ns": 0,
+        "expires_ns": 0,
+        "crl_expires_ns": 1790984367000000000,
+        "gateway_expires_ns": 1790987067000000000,
+        "kind": "authoritative",
+        "generation": "physical-credential-renewal-0615953",
+        "timestamp": "2026-10-02T23:24:32.842224Z"
+      },
+      {
+        "event": "command",
+        "step": "start",
+        "timeout": 30,
+        "elapsed": 0.01799614797346294,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "empty",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "physical-credential-renewal-0615953",
+        "timestamp": "2026-10-02T23:24:32.861880Z"
+      },
+      {
+        "event": "command",
+        "step": "state",
+        "timeout": 2,
+        "elapsed": 0.02335904398933053,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "nonempty-redacted",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "physical-credential-renewal-0615953",
+        "timestamp": "2026-10-02T23:24:32.887696Z"
+      },
+      {
+        "event": "service_state",
+        "state": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "Result": "success",
+          "MainPID": 2755730,
+          "NRestarts": 0,
+          "ExecMainStatus": 0,
+          "ExecMainStartTimestampMonotonic": 1691191724767
+        },
+        "kind": "authoritative",
+        "generation": "physical-credential-renewal-0615953",
+        "timestamp": "2026-10-02T23:24:32.890265Z"
+      },
+      {
+        "event": "command",
+        "step": "snapshot",
+        "timeout": 5,
+        "elapsed": 0.2183388948906213,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "nonempty-redacted",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "physical-credential-renewal-0615953",
+        "timestamp": "2026-10-02T23:24:33.111075Z"
+      },
+      {
+        "event": "material",
+        "published": false,
+        "directory_valid": false,
+        "canonical_utc": false,
+        "seed_count": 0,
+        "issued_ns": 0,
+        "expires_ns": 0,
+        "crl_expires_ns": 1790984367000000000,
+        "gateway_expires_ns": 1790987067000000000,
+        "kind": "authoritative",
+        "generation": "physical-credential-renewal-0615953",
+        "timestamp": "2026-10-02T23:24:33.113394Z"
+      },
+      {
+        "event": "command",
+        "step": "state",
+        "timeout": 2,
+        "elapsed": 0.020373541163280606,
+        "exit_status": 0,
+        "timeout_expired": false,
+        "stdout_class": "nonempty-redacted",
+        "stderr_class": "empty",
+        "kind": "authoritative",
+        "generation": "physical-credential-renewal-0615953",
+        "timestamp": "2026-10-02T23:24:35.135263Z"
+      },
+      {
+        "event": "service_state",
+        "state": {
+          "ActiveState": "activating",
+          "SubState": "auto-restart",
+          "Result": "exit-code",
+          "MainPID": 0,
+          "NRestarts": 0,
+          "ExecMainStatus": 1,
+          "ExecMainStartTimestampMonotonic": 1691191724767
+        },
+        "kind": "authoritative",
+        "generation": "physical-credential-renewal-0615953",
+        "timestamp": "2026-10-02T23:24:35.137936Z"
+      },
+      {
+        "event": "verdict",
+        "passed": false,
+        "failure": "service_unhealthy",
+        "kind": "authoritative",
+        "generation": "physical-credential-renewal-0615953",
+        "timestamp": "2026-10-02T23:24:35.139683Z"
+      }
+    ],
+    "stack_redeployed": false,
+    "credential_reload_only": true
+  },
+  "rollback": {
+    "rollback_complete": true,
+    "previous_certificate_restored": true,
+    "security_floor_preserved": true,
+    "crl_floor": 122,
+    "profile_uid": 979,
+    "service_uid": 979,
+    "owner_readable": true,
+    "bootstrap_ready": true,
+    "observations": [
+      {
+        "ActiveState": "active",
+        "SubState": "running",
+        "MainPID": "2757605",
+        "NRestarts": "0",
+        "ExecMainStatus": "0"
+      },
+      {
+        "ActiveState": "active",
+        "SubState": "running",
+        "MainPID": "2757605",
+        "NRestarts": "0",
+        "ExecMainStatus": "0"
+      },
+      {
+        "ActiveState": "active",
+        "SubState": "running",
+        "MainPID": "2757605",
+        "NRestarts": "0",
+        "ExecMainStatus": "0"
+      },
+      {
+        "ActiveState": "active",
+        "SubState": "running",
+        "MainPID": "2757605",
+        "NRestarts": "0",
+        "ExecMainStatus": "0"
+      }
+    ],
+    "gateway_expiry": "2026-10-02T23:37:09+00:00",
+    "no_acceptance_retry": true,
+    "directory": {
+      "version": 1,
+      "issued_at": "2026-10-02T23:28:02.987835691Z",
+      "expires_at": "2026-10-03T00:22:59.954609523Z"
+    }
+  },
+  "production_before": {
+    "185.251.89.19": {
+      "utc": "2026-10-02T23:12:08Z",
+      "services": {
+        "family-connect-friends-awg.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "1515959",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "2157875339292",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-tcp.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "1908885",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "1994262857345",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-http-candidate.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "3917121",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "2715884002144",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-restricted-sync.service": {
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "UnitFileState": "static",
+          "MainPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "2717903112996",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-restricted-sync.timer": {
+          "ActiveState": "active",
+          "SubState": "waiting",
+          "UnitFileState": "enabled",
+          "Result": "success"
+        }
+      },
+      "sync_sha256": "f6aa8859ab716383bf207b2ff7b302687692832b2ccb410f1aef0ada0793a9c9",
+      "delegation": {
+        "sequence": 2,
+        "minimum_revision": 1,
+        "issued_at": 1790942096,
+        "expires_at": 1791028496
+      },
+      "grant_count": 1,
+      "grants": [
+        {
+          "revision": 2,
+          "expires": 1791028496,
+          "revoked": 0
+        }
+      ],
+      "db_crl_floor": 91,
+      "http_sha256": "ad71cadba79a8fbbe4e60d8d2a1c581304e263a30fdf71fd69b002001d01dd63",
+      "nginx": {
+        "sha256": "19c04fb97209bf5d88695f97da39fd4d930dc8f69d8e3a71f2ee964cc592af69",
+        "generation17": true,
+        "candidate_upstreams": 2
+      },
+      "crl": {
+        "sequence": 91,
+        "expires": "2026-10-02T23:26:50+00:00"
+      }
+    },
+    "186.246.45.246": {
+      "utc": "2026-10-02T23:12:09Z",
+      "services": {
+        "family-connect-friends-awg.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "2729703",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "1015819537902",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-tcp.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "2420425",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "966764281443",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-restricted-bootstrap.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "disabled",
+          "MainPID": "2731387",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "1688355979679",
+          "ExecMainStatus": "0"
+        }
+      },
+      "sync_sha256": "f6aa8859ab716383bf207b2ff7b302687692832b2ccb410f1aef0ada0793a9c9",
+      "gateway_expires": "2026-10-02T23:37:09+00:00",
+      "issuer_expires": "2026-10-03T11:54:56+00:00",
+      "minimum_crl": 91,
+      "directory": {
+        "version": 1,
+        "issued_at": "2026-10-02T22:37:20.478060279Z",
+        "expires_at": "2026-10-02T23:32:17.284783304Z"
+      },
+      "crl": {
+        "sequence": 91,
+        "expires": "2026-10-02T23:26:50+00:00"
+      }
+    }
+  },
+  "production_final": {
+    "185.251.89.19": {
+      "utc": "2026-10-02T23:29:46Z",
+      "services": {
+        "family-connect-friends-awg.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "1515959",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "2157875339292",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-tcp.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "1908885",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "1994262857345",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-http-candidate.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "3917121",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "2715884002144",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-restricted-sync.service": {
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "UnitFileState": "static",
+          "MainPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "2718970099041",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-restricted-sync.timer": {
+          "ActiveState": "active",
+          "SubState": "waiting",
+          "UnitFileState": "enabled",
+          "Result": "success"
+        }
+      },
+      "sync_sha256": "f6aa8859ab716383bf207b2ff7b302687692832b2ccb410f1aef0ada0793a9c9",
+      "delegation": {
+        "sequence": 2,
+        "minimum_revision": 1,
+        "issued_at": 1790942096,
+        "expires_at": 1791028496
+      },
+      "grant_count": 1,
+      "grants": [
+        {
+          "revision": 2,
+          "expires": 1791028496,
+          "revoked": 0
+        }
+      ],
+      "db_crl_floor": 125,
+      "http_sha256": "ad71cadba79a8fbbe4e60d8d2a1c581304e263a30fdf71fd69b002001d01dd63",
+      "nginx": {
+        "sha256": "19c04fb97209bf5d88695f97da39fd4d930dc8f69d8e3a71f2ee964cc592af69",
+        "generation17": true,
+        "candidate_upstreams": 2
+      },
+      "crl": {
+        "sequence": 125,
+        "expires": "2026-10-02T23:44:37+00:00"
+      }
+    },
+    "186.246.45.246": {
+      "utc": "2026-10-02T23:29:47Z",
+      "services": {
+        "family-connect-friends-awg.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "2729703",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "1015819537902",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-tcp.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "2420425",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "966764281443",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-restricted-bootstrap.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "disabled",
+          "MainPID": "2757605",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "1691398716368",
+          "ExecMainStatus": "0"
+        }
+      },
+      "sync_sha256": "f6aa8859ab716383bf207b2ff7b302687692832b2ccb410f1aef0ada0793a9c9",
+      "gateway_expires": "2026-10-02T23:37:09+00:00",
+      "issuer_expires": "2026-10-03T11:54:56+00:00",
+      "minimum_crl": 125,
+      "directory": {
+        "version": 1,
+        "issued_at": "2026-10-02T23:28:02.987835691Z",
+        "expires_at": "2026-10-03T00:22:59.954609523Z"
+      },
+      "crl": {
+        "sequence": 125,
+        "expires": "2026-10-02T23:44:37+00:00"
+      }
+    }
+  },
+  "ordinary_before": {
+    "gate": "PASS",
+    "statuses": [
+      200,
+      400,
+      400,
+      400
+    ],
+    "interval": 1.1
+  },
+  "ordinary_final": {
+    "gate": "PASS",
+    "statuses": [
+      200,
+      400,
+      400,
+      400
+    ],
+    "interval": 1.1
+  },
+  "device_before": {
+    "utc": "2026-10-02T23:12:13.393267+00:00",
+    "model": "Redmi Note 9 Pro",
+    "android": "12",
+    "abi": "arm64-v8a,armeabi-v7a,armeabi",
+    "version_code": 55,
+    "wifi": "0",
+    "cellular": "1",
+    "reverse_empty": true,
+    "forward_empty": true
+  },
+  "device_final": {
+    "utc": "2026-10-02T23:29:51.684639+00:00",
+    "version_code": 55,
+    "wifi": "0",
+    "cellular": "1",
+    "reverse_empty": true,
+    "forward_empty": true,
+    "installed_update": false,
+    "data_reset": false,
+    "diagnostic_override_enabled": false
+  },
+  "blocking_reason": "credential-only reload service_unhealthy: replacement live gateway.json root:root 0600 while service User=family-restricted; accepted owner-preserving publication step omitted by this session adapter",
+  "in_place_update": "NOT RUN; installed canary55 retained",
+  "device_identity": "No device mutation; retained, not freshly challenged",
+  "readiness_after_apk_update": "NOT RUN",
+  "diagnostic": "Existing committed debug exhaustion hook packaged privately; never installed or enabled",
+  "physical_checks": {
+    "orchestrator_path": "NOT RUN / NOT MEASURED",
+    "BOOT-1": "NOT RUN / NOT MEASURED",
+    "restricted_session": "NOT RUN / NOT MEASURED",
+    "android_restricted_vpn": "NOT RUN / NOT MEASURED",
+    "chrome_tls": "NOT RUN / NOT MEASURED",
+    "family_dns": "NOT RUN / NOT MEASURED",
+    "concurrent_tcp": "NOT RUN / NOT MEASURED",
+    "direct_dns_leak": "NOT RUN / NOT MEASURED",
+    "protected_tcp_bypass": "NOT RUN / NOT MEASURED",
+    "udp_quic": "NOT RUN / NOT MEASURED",
+    "ipv6": "NOT RUN / NOT MEASURED",
+    "underlay_protection": "NOT RUN / NOT MEASURED",
+    "controlled_failure": "NOT RUN / NOT MEASURED"
+  },
+  "diagnostic_override_enabled": false,
+  "server_binaries_redeployed": false,
+  "ingress_changed": false,
+  "stage_5n_closed": false,
+  "push": false,
+  "field1_started": false,
+  "diag1_started": false,
+  "ops1_started": false,
+  "beta_started": false
+}

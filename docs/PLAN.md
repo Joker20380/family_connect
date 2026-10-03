@@ -2,6 +2,51 @@
 
 ## Current engineering priority / Текущий critical path
 
+**5N-PHYSICAL-RESTRICTED-REHEARSAL = PASS; STAGE 5N = CLOSED,03.10.2026.**
+Физический ручной CONNECT на private58 прошёл существующий production BOOT-1,
+Family auth/Room Broker/dedicated restricted session и whole-device VPN.
+Chrome/TLS, Family DNS, параллельный TCP и fail-closed измерены в Android user0;
+границы доказательства и контролируемый RESTORING→FAILED сохранены в отчёте.
+Override OFF подтверждён новым процессом, Auto восстановлен, READY/ACK сохранены.
+Код/APK/server binaries не менялись; renewal в этой задаче не выполнялся; push нет.
+**Дополнительного Stage5N gate нет. Следующая проектная фаза:**
+1. 2–3 доверенных реальных field-canary.
+2. DIAG-1A параллельно.
+Эти работы не запущены автоматически; FIELD-1/DIAG-1/OPS-1/beta не начаты.
+Короткоживущие credentials требуют обычной свежей проверки перед будущим запуском,
+а не повторного развёртывания или открытия Stage5N.
+[Финальное физическое доказательство](releases/2026-10-03-5n-physical-manual-rehearsal.ru.md).
+Все следующие записи FAIL/BLOCKED и OPEN — сохранённая история, не текущий приоритет.
+
+**5N-PHYSICAL-RESTRICTED-REHEARSAL = BLOCKED,03.10.2026; private hook FIX PASS.**
+Canary58 privately installed in place; launcher resolved from package, checked durable
+ON/OFF and fresh-process cleanup tests PASS.223 JVM/4 Python contracts, lint/build/APK
+checks PASS; real encrypted restart READY/ACK_RECEIVED. No transport implementation change.
+Actual remaining boundary is attended physical CONNECT: MIUI rejects ADB touch injection,
+and no manual action occurred during120-second observation. No restricted CONNECT ran.
+Override now OFF, Auto retained, app disconnected. Do not change security settings or
+silently bypass the normal product action; no automatic retry/next phase in this task.
+One credential-only renewal: gateway expires03.10 01:57:34UTC/directory01:52:37UTC;
+NL READY/RU consistent, HTTP/AWG/TCP unchanged. Fresh checks remain necessary later.
+Stage5N OPEN, same physical acceptance remains; no additional Stage5N gate is created.
+No push/FIELD-1/DIAG-1/OPS-1/beta. Source fix/tests/docs remain uncommitted at911fea5.
+[Current exact evidence](releases/2026-10-03-5n-physical-hook-fix-and-rehearsal.ru.md).
+
+**5N-PHYSICAL-RESTRICTED-REHEARSAL = FAIL, final attempt03.10.2026.** Stop boundary:
+private diagnostic Activity navigates to undeclared MainActivity in the Friends APK.
+No restricted CONNECT was attempted; this is not evidence of transport failure.
+Provenance committed as911fea5, exact57 now privately installed in place; real encrypted
+restart READY/ACK_RECEIVED survives update. Override OFF in fresh process, Auto retained,
+app disconnected. No automatic retry or live hotfix. Same physical acceptance remains
+uncompleted; do not create another Stage5N gate or close Stage5N without measurements.
+One accepted renewal gave gateway expiry03.10 01:27:17UTC/directory01:22:20UTC,
+NL READY/RU consistent, HTTP/AWG/TCP unchanged. Do not use these historical windows
+without fresh checks. No server redeployment/restaging, push or next-phase start.
+[Current exact failure and evidence](releases/2026-10-03-5n-physical-restricted-rehearsal-final.ru.md).
+
+Earlier checkpoints below are historical; their installed/version/expiry statements
+do not override this result.
+
 **5N-GATEWAY-RENEWAL-PUBLICATION = PASS,03.10.2026.** Ownership-loss operation
 reproduced and fixed in a focused privileged publisher; 95 local tests PASS and all41
 isolated root/DAC regressions PASS. One live accepted-policy renewal with Python/native
@@ -16,6 +61,47 @@ No new Stage5N milestone, full deployment, artifact staging or automatic continu
 No push/FIELD-1/DIAG-1/OPS-1/beta.
 [Current proof and operator procedure](releases/2026-10-03-5n-gateway-renewal-publication.ru.md).
 
+Previous physical-task boundary (its publication blocker is resolved above):
+
+**5N-PHYSICAL-RESTRICTED-REHEARSAL = BLOCKED,03.10.2026 (live02.10UTC).**
+The final physical gate remains the only unproven Stage5N acceptance; no replacement
+milestone. Exact HEAD0615953 private57 built/signed,218 tests/lint/APK checks PASS,
+existing diagnostic exhaustion hook packaged privately; not installed or enabled.
+Credential-only renewal Python/native PASS, but this session's publication adapter
+lost live gateway profile service ownership; NL reload exited1 before READY.
+Failure persisted, previous certificate/service ownership restored with new CRL floors
+retained; bootstrap active/restarts0, ordinary HTTP/AWG/TCP unchanged. Redmi stays55.
+Gateway expiry02.10 23:37:09UTC; next separately authorized continuation must use the
+already accepted owner-preserving JIT publication, not a full redeployment or stale
+authority/ACK. Do not automatically retry. No new source/runtime fix or gate here.
+Still required: in-place57/persisted READY, normal Auto diagnostic exhaustion,
+real BOOT-1→restricted whole-device VPN, Chrome/TLS/DNS/concurrentTCP, measured
+fail-closed and safe controlled failure, then disable override. No physical checks run.
+Stage5N OPEN; no push/FIELD-1/DIAG-1/OPS-1/beta.
+[Evidence and rollback boundary](releases/2026-10-03-5n-physical-restricted-rehearsal.ru.md).
+
+Prior accepted deployment checkpoint (not repeated in the physical task):
+
+**5N-PROV-1 attempt17 = DEPLOYED / PHYSICAL BLOCKED,03.10.2026 (live02.10UTC).**
+At `0615953`, accepted artifacts/source and exact installed55 PASS; hardened READY
+staging verified/reused, schema14 present, same sole-owner authority Python/native PASS.
+NL authoritative bootstrap and RU full sync PASS; closed HTTP/direct/fixture and
+external ingress PASS. Actual owner challenge/fetch200/200 → authenticated READY ACK;
+fresh encrypted persisted-state restart READY ACK PASS. HTTP committed only afterward;
+old18084 retired,18086+NL+sync timer active,18085/AWG/TCP unchanged, floors preserved.
+**Do not close Stage5N yet:** physical normal exhaustion and full restricted BOOT-1→
+dedicated VPN→Chrome/TLS/DNS/TCP/fail-closed criteria remain unproven. Cellular-only
+Friends VPN observed but not restricted; immutable non-debuggable55 lacks the debug
+exhaustion entrypoint. No new gate/version/injection/shared gateway disruption. Keep
+the accepted deployment/product evidence; later physical work must use fresh current
+authority/directory/ACKs (gateway expiry02.10 23:37:09UTC), not replay old READY.
+Post-use RU staging diagnostic found only generated bytecode; original9pins unchanged,
+but strict inventory now rejects further reuse. Pre-consumption READY was PASS;
+no cache cleanup, blind restage or post-hoc acceptance gate. See exact receipts.
+No rollback or automatic retry; no push/FIELD-1/DIAG-1/OPS-1/beta. Next phases only
+after existing5N closure:2–3trusted field canaries and DIAG-1A, not started here.
+[Attempt17 evidence, remaining checks and committed-state rollback](releases/2026-10-03-5n-prov1-attempt17.ru.md).
+
 **5N-STAGING-TRANSFER-RELIABILITY = FAIL (historical localization criterion),02.10.2026 UTC.**
 Reliable staging implementation/regressions and controlled RU/NL inert staging PASS;
 both READY with exact remote inventories/receipts. The historical45/50s layers remain
@@ -27,6 +113,41 @@ authority, DB and Redmi unchanged; no push. [Report/contract](releases/2026-10-0
 STOP here: Stage5N OPEN, no automatic PROV-1/FIELD-1/DIAG-1/OPS-1/beta. Future explicitly
 authorized retry must consume receipt-verified staging, separately validate fresh
 authority and complete the same existing real-owner/persistence/traffic criteria.
+
+**5N-PROV-1 attempt16 = DEPLOYMENT FAILED / ROLLED BACK,02.10.2026.** Authorized9b3ec45
+and exact current three pins/inventories plus installed55 verification PASS. Migrated
+schema retained; RU Python JIT authority PASS, same sole owner/identities/delegation2/
+grant2, CRL27→28. SSH command timeouts: operator staging45s, NL native-checker transfer50s;
+read-only reconciliation found no completion artifacts. No native PASS, service startup,
+ingress switch or owner request. Failure durable before rollback; normal services/config/
+ports unchanged, final200/400/400/404, restricted RU/NL inactive. Stage5N stays OPEN.
+Remaining: resolve pinned operator/native-checker delivery under explicit scope, then
+the same existing end-to-end criteria, not a new gate or architecture. No automatic
+retry, FIELD-1/DIAG-1/OPS-1/beta or push. Migration prerequisite remains satisfied;
+historical attempt15 cause UNKNOWN. [Report/evidence](releases/2026-10-02-5n-prov1-attempt16.ru.md).
+
+**5N-PROD-READINESS-SCHEMA = PASS,02.10.2026.** Explicit migration-only authorization
+completed20:48:50UTC: protected online backup, one exact pinned receipts migration,
+COMMITTED35.893ms. Required table present/empty; cookie14, user_version0. Existing
+rows/schema unchanged; ordinary200/400/400/404, normal API/AWG/TCP unchanged, restricted
+RU/NL inactive and route404. Local rollback/idempotence PASS,125 focused tests/6skip,
+JVM↔Python23 PASS. No runtime deployment, authority refresh, ingress/device action or push.
+Current schema prerequisite is satisfied; retain additive table on runtime rollback,
+do not restore old full DB. Historical attempt15 cause remains unresolved. STOP: no
+automatic PROV-1 retry, FIELD-1/DIAG-1/OPS-1/beta. A future explicitly scoped retry still
+needs its own runtime/authority/server/real-owner acceptance; canary55 wire-compatible,
+canary56 not required for functionality. [Evidence and limits](releases/2026-10-02-5n-prod-readiness-schema.md).
+Earlier forensics authorization/missing-current-schema statements below are historical,
+superseded by this completed migration only; no wider production authorization is implied.
+
+**5N-PROD-SCHEMA-FORENSICS = HISTORICAL CAUSE UNRESOLVED,02.10.2026.** Read-only RU
+confirms missing receipts table now and in18:40:27 pre-attempt15 backup; no migration
+ledger/failure-time snapshot proves its18:45:03.869 state. Existing unnumbered migration
+is additive; exact observed-schema local503→migration→200,99 regressions PASS/4skip.
+Current schema upgrade remains required before any retry, but needs separate migration-only
+authorization. Do not promote historical attribution or run a migration/authority refresh,
+service/deploy/ingress/Redmi action, signing, push or PROV-1 retry. Canary55 remains wire
+compatible;56 is not required for functionality. [Forensics/safety/next boundary](releases/2026-10-02-5n-prod-schema-forensics.md).
 
 **5N-REAL-OWNER-CHALLENGE-503 = BLOCKED (local investigation),02.10.2026.** Actual
 Android-generated bytes pass200 on current synthetic state; legacy missing receipts
@@ -42,6 +163,23 @@ Next: obtain already retained sanitized attempt15 backend/schema evidence and fi
 the proven cause. No production access/refresh/retry/service/ingress/push authorization
 is implied. Prior rollout remains rolled back, installed55/public51 unchanged/unverified.
 
+**5N-PROV-1 attempt15 = DEPLOYMENT FAILED / ROLLED BACK,02.10.2026.** Authorized
+`014e6f9`/fresh exact pins: preflight, Python/native authority, NL, RU, candidate
+and external server gates PASS; canary55 installed in place over54. Real Friends
+restricted challenge503 prevents real-owner fetch/import/ACK/READY acceptance.
+Failure persisted, routing restored/proved/drained before candidate stop, restricted
+runtime rolled back. Ordinary18084/18085/AWG retained; delegation2/grant2/CRL27 retained.
+No429/502 in scoped probes. [Full attempt15 record](releases/2026-10-02-5n-prov1-attempt15.ru.md).
+
+STOP after this attempt; no automatic retry/live hotfix/push/DIAG-1/OPS-1/FIELD-1/beta.
+Stage5N production provisioning/recovery line is **not closed**: actual product
+challenge503 remains unresolved, not a new acceptance requirement. Existing remaining
+checks are real-owner fetch/native encrypted import/READY/ACK, restart persistence,
+local restricted rehearsal and browser/TLS/DNS/TCP/leak/fail-closed acceptance.
+No root cause or pass is inferred from fixture F/G. Phone stays private55; no downgrade,
+data reset, new release or public link changes. Any later work requires new scope;
+do not execute it as continuation of this failed production transaction.
+
 **5N-READINESS-ACK-ARTIFACT-REFRESH = PASS locally,02.10.2026.** HTTP, candidate adapter
 and sync all required refresh; exact clean `a24f090` artifacts/source inventories are
 now pinned, tested together and ready for a separately authorized deployment.
@@ -54,6 +192,12 @@ policies and establish real app post-import READY evidence, not fixture F/G or H
 Authenticated ACK correlates server challenge/fetch to device result; failed delivery
 keeps local READY and server UNKNOWN. UI gestures are supplemental, never authoritative.
 Prepared artifacts do not waive physical owner import/restart/rehearsal/traffic gates.
+
+Read-only VPN audit02.10 18:05–18:06UTC complete:28 activated/24 non-revoked devices,
+3 recent NL AWG peers,0 RU; no observed CPU/RAM saturation. Follow-up observations:
+NL daily disk latency138.83ms; worker Docker unhealthy despite50 successful recent
+cycles (outbox unverified); access API start changed. No repair/deploy/retry authority
+or critical-path change. [Snapshot, limits and remaining checks](releases/2026-10-02-vpn-health.ru.md).
 
 **5N-DEVICE-READINESS-RECEIPT = PASS locally,02.10.2026.** Post-validation/post-atomic
 import product receipt v1 and authenticated ACK now replace UI-only owner acceptance.
@@ -69,6 +213,29 @@ fresh production gates. Old attempt14 archives cannot serve the new ACK endpoint
 build/review/pin compatible server/runtime bundles first in a future authorized task.
 No owner key export or UI automation prerequisite may replace the new product receipt.
 Historical deployment checkpoints below are preserved, not new execution authority.
+
+**Attempt #14,02.10.2026 — DEPLOYMENT FAILED / ROLLED BACK.** Accepted `d5105e8`
+and pinned sync/HTTP/closed-readiness/APK inventories PASS. Actual JIT Python/native,
+NL authoritative READY, full RU sync, direct candidate B–E plus controlled fixture
+F/G, ingress switch and external A–E all PASS. No new acceptance requirement/source
+change. Sole owner unchanged; delegation2/grant2/CRL25 retained.
+
+Canary54 installed in place over field52; exact final APK/signature verified.
+Server challenge/readiness200/200 observed during app launch, but owner UI receipt/
+encrypted import/readiness was not collected: ADB input swipe failed255. These
+server traces alone do not establish OWNER_PRODUCT_READY. Failure persisted, old
+ingress restored/proved/drained before candidate stop; restricted stack rolled back.
+Normal18084/18085/AWG/TCP unchanged; no commit or old retirement. Installed54 is
+private, not a public/FIELD release; no downgrade/data clear.
+
+STOP after this authorized attempt. No retry, live hotfix, attempt15, DIAG-1, OPS-1,
+regional beta or FIELD-1. Remaining owner readiness/correlation, persistence,
+restricted rehearsal, browser/DNS/concurrent-TCP and fail-closed checks are NOT RUN
+or unverified, not waived. Any separately authorized execution must read actual
+state, preserve monotonic25 (stage24 is historical), and refresh expired authority
+through accepted machinery; old server PASS does not substitute fresh gates.
+[Attempt14 evidence and rollback paths](releases/2026-10-02-5n-prov1-attempt14.ru.md).
+Earlier checkpoints below remain historical and do not authorize further work.
 
 **5N-HTTP-READINESS-ADAPTER-PACKAGING = PASS locally,02.10.2026.** Exact attempt13
 transitive `provisioning` import failure reproduced before edits; the accepted HTTP
@@ -87,6 +254,41 @@ Do not reuse old authority or treat controlled fixtures as owner evidence. No
 automatic attempt14, DIAG-1, distributed beta, FIELD-1, Android release or push.
 [Exact local report](releases/2026-10-02-5n-http-readiness-adapter-packaging.ru.md).
 Earlier deployment observations below are historical, not renewed by this task.
+
+**Resumed attempt #13,02.10.2026 — DEPLOYMENT FAILED / ROLLED BACK.** The earlier
+no-device stop was pre-production only, not a production failure. Owner-authorized
+resume verifies one Redmi/Android12/arm64 and field52 signature/in-place compatibility.
+Accepted HEAD/APK/server pins/current native provenance PASS; no artifact rebuild
+or application/committed-harness source change. JIT Python/native, NL authoritative
+acceptance and RU --check/full acceptance PASS; retained history2/2/23.
+
+HTTP candidate18086 starts with verified owned loopback PID, but the operator's
+readiness callback raises `ModuleNotFoundError` before any controlled F/G/direct B–E
+receipts. Exact module/traceback not captured. Ingress untouched, candidate stopped,
+restricted rollback confirmed; old18084/18085 and normal product metadata unchanged.
+Baseline/final ordinary200/400/400/404 PASS; no429/502 in8 resumed checks. Device
+remains field52; canary54 uninstalled, no actual owner proof/import evidence.
+
+STOP: investigate the scoped readiness adapter offline under separate authorization;
+do not diagnose this as a proven HTTP server failure or change accepted source live.
+No automatic retry. A future authorized execution must reconcile23 (stage22 is old),
+check fresh validity/ports/pins, repeat NL/RU/complete candidate/external gates, then
+install canary54 in place and require actual OWNER_PRODUCT_READY before retirement.
+Restart/rehearsal/browser/DNS/TCP/fail-closed acceptance remains NOT RUN. No final
+FIELD APK/public Android release, DIAG-1, distributed beta, FIELD-1 or push.
+[Exact attempt13 evidence, failure boundary and rollback](releases/2026-10-02-5n-prov1-attempt13.ru.md).
+Earlier entries below are historical checkpoints, not later live observations.
+
+**5N-ANDROID-CANARY-BUILD = PASS locally.** Private canary54/code54 now contains
+the accepted owner-proof handoff at `4bb53b0605c2c898b6a3feca6ee15fd34b943a94`.
+Clean export, fresh arm64 JNI, full Gradle assembly/tests/lint and beta signing
+completed; stale generated Python venv repaired through existing configuration.
+No source fix/commit, installation, public distribution or production change.
+Use only the exact [canary54 artifact/provenance](releases/2026-10-02-5n-android-canary-build.ru.md)
+for a separately authorized attempt; canary53 lacks the new diagnostics.
+Still pending: live prerequisites/server transaction, in-place installation at
+post-switch product phase, real owner F/G, restart persistence and physical gates.
+Local tests are not owner-device acceptance. No automatic attempt13 or FIELD-1.
 
 **5N-OWNER-PROOF-HANDOFF = PASS locally.** The attempt12 acceptance boundary is
 corrected: controlled isolated F/G plus live B–E/authority before switch; external
@@ -109,6 +311,28 @@ No app version/public distribution changed. See
 STOP after task-owned commit; no push or automatic attempt13/DIAG-1/beta/FIELD-1.
 Entries below describe earlier checkpoints, including the now-resolved proof blocker.
 
+**Attempt #12,02.10.2026 — DEPLOYMENT FAILED / ROLLED BACK.** Current source
+`a02b82ec70269cd1e5486a26172b7a04d347cb7a`; fixed checker clean-export rebuild and
+40 focused tests PASS. Python/native live authority, NL authoritative READY/BOOT-1
+and RU isolated --check/full acceptance (including both negatives) PASS. History
+advanced CRL19→20→21, delegation2/grant2 unchanged. Normal service metadata and
+ingress18084 unchanged;18085 forbidden/untouched;18086 never started and free.
+
+The remaining blocker is **accepted real-owner proof integration for HTTP G**:
+the generic `Session.matrix` requires proof and cryptographic readiness callbacks,
+but no real-owner signing bridge was available to this operator. The Android app
+signs its own readiness request internally; do not extract keys, use a diagnostic
+identity, skip G, or move physical work before server PASS without a new explicit
+contract. Redmi connected (user report) is not equivalent to that proof integration.
+This prerequisite should be resolved and checked offline **before** any next
+authority refresh/runtime startup, not by another live attempt or hotfix.
+
+Failure receipts preceded restricted-only rollback; current DB/runtime/NL CRL21
+retained, RU stage20 historical. Full direct B–G/external A–G and all device gates
+remain NOT RUN; no final FIELD APK. No commit/push/version change. STOP after
+[attempt12 report](releases/2026-10-02-5n-prov1-attempt12.ru.md); no automatic retry,
+DIAG-1, regional beta or FIELD-1. Earlier entries below are historical checkpoints.
+
 **5N-NATIVE-AUTHORITY-COMPAT = PASS offline.** Exact #11 binary/material replay
 proves the failed predicate: negative floor1+1 equals signed owner revision2,
 so native admission succeeds and the old operator reports failure. Native runtime
@@ -129,6 +353,33 @@ then repeat every NL/RU/HTTP/device gate. Do not use historical debugger clock r
 for acceptance of expired live authority; production tools have no clock override.
 No source/authority workaround, skipped negative, Python-only fallback, beta or FIELD-1.
 
+**Attempt #11,02.10.2026 — DEPLOYMENT FAILED / ROLLED BACK before runtime startup.**
+Accepted HEAD `4f482027…`, sync `9d965b95…`, HTTP `460e7520…`: exact source/inventory
+and isolated artifact gates PASS; live18086 ss+bind availability PASS,18084/18085
+owners untouched. Same-key24h authority renewal completed: delegation2, sole-owner
+grant revision2, minimum revision1, expiry03.10 11:54:56UTC. CRL19 expires02.10
+12:12:08UTC; gateway leaf12:57:08UTC. Existing native authority checker exit1 at
+11:57:10UTC is a mandatory prerequisite FAIL, not permission to weaken a negative
+check. [Attempt #11 result and exact limits](releases/2026-10-02-5n-prov1-attempt11.ru.md).
+
+STOP after scoped rollback/state confirmation; no automatic retry, DIAG-1, beta or
+FIELD-1. Do not reset delegation/grant/CRL history or use expired reservation1 as
+current authority. Fresh inspection must reconcile manifest2, renewal reservation,
+grant2 and floor19 on RU DB/runtime/stage and NL. Static retained checker source
+uses minimum_revision+1 as its negative threshold, which is no longer necessarily
+above renewed owner revision2; actual failure branch is suppressed/unobserved.
+This is a separately scoped review candidate, not a confirmed live TLS root cause
+or an implemented fix. No runtime/harness source or security policy changed here.
+
+NL authoritative bootstrap, RU live --check/full sync including both negatives,
+HTTP direct B–G/ingress A–G and commit remain NOT RUN. So do Redmi prewarm/restart,
+local restricted rehearsal/user-level traffic and final private FIELD APK. Final
+ordinary200/400/400/restricted404 and unchanged normal service metadata PASS;
+AWG/TCP active, no new dataplane validation. Retain new authority/floors, protected
+rollback inputs and all receipts; any later authorized attempt needs sufficient
+fresh validity and complete gates. No commit/push/version change; unrelated work
+and #3 UNKNOWN/#9 incomplete attribution preserved.
+
 **5N-HTTP-CANDIDATE-PREFLIGHT = PASS locally, no deployment.**118 focused tests pass
 without skips; actual isolated nginx and unchanged pinned archives are used. Use the guarded
 public `transaction`/`Candidate` contract, not the old port18085 assumption or the
@@ -146,6 +397,26 @@ admissions, TTL policy and floors; staged16 must not replace authoritative18.
 No refresh/deployment/phone/build/push in this task; no automatic attempt #11.
 Retain all #10/#9 evidence and unrelated work; local task-only commit is authorized.
 
+**Attempt #10,02.10.2026 — pre-deployment STOP; production unchanged.** Explicit
+authorization does not make candidate18085 available: live RU readback identifies
+that socket as the existing Friends TCP/Xray API, PID1908885. Never stop/rebind it
+for HTTP. Exact pins/source inventories/imports PASS; paced ordinary baseline
+200/400/400/restricted404 PASS. Independent exact-archive localhost check finds
+direct A/status501: status200 belongs to static nginx, whereas prior local
+candidate tests exercised direct B–G only.
+[Attempt #10 report](releases/2026-10-02-5n-prov1-attempt10.ru.md).
+
+Next requires an explicitly accepted transition contract with an unused candidate
+listener and clarified direct/ingress status gates, not a silent port substitution,
+weakened acceptance or live handler hotfix. No automatic attempt #11. Authority
+refresh was not performed: delegation/issuer/owner grant expired10:44:11UTC;
+runtime/DB/NL floor18 must not be reset to staged16. Keep the same Family/issuer/
+gateway/owner and TTL policy during any future authorized renewal. NL/RU acceptance,
+candidate/ingress A–G, physical prewarm/restart/rehearsal and final private FIELD APK
+remain NOT RUN for #10. Runtime/ingress/services/registration and grant rows remain
+in #9 rollback state; old18084 stays alive, AWG/TCP not restarted. No code/version
+change, commit, push, beta or FIELD-1; existing dirty work/history preserved.
+
 **5N-HTTP-TRANSITION-DIAG: BLOCKED only on exact historical attribution.** Actual
 nginx1.30.4 reproduces #9's429 schedule through unchanged shared `per_ip` policy;
 stop-before-start reproduces a socket-refused502 window. #9 lacked upstream/rule/
@@ -162,6 +433,28 @@ contemporary evidence if available; no automatic rollout can reconstruct it.
 STOP: no attempt #10, phone, Android build, authority/admission change, push, beta
 or FIELD-1. A future deployment still requires explicit authorization and all gates.
 
+**Attempt #9,02.10.2026 — DEPLOYMENT FAILED / ROLLED BACK.** Authorized source
+`028300e…` and exact sync/HTTP pins PASS. Corrected committed NL operator now
+passes live authoritative READY/directory/stability even with diagnostic journal
+timeout. RU `--check` and complete committed sync/negatives/final readback PASS.
+HTTP activation still fails the hard ordinary-route gate: transition429/502;
+matrix A–D PASS individually, non-canary loop6×403 then429, F/G not reached.
+[Separate #9 report and evidence](releases/2026-10-02-5n-prov1-attempt9.ru.md).
+Scoped rollback complete; ordinary200/400/400/restricted404 restored, AWG/TCP
+unrestarted, normal registrations/grants preserved, sole owner and27 denied.
+Authoritative final floor18 retained on RU DB/runtime and NL; staged16 is stale.
+Delegation/grant expiry10:44:11UTC, gateway10:31:33UTC, final CRL09:48:20UTC.
+
+**STOP after #9, no automatic production retry or hotfix.** Next separately scoped
+work should explain the durable HTTP transition429/502 and non-canary429, including
+probe cadence/ingress behavior, without assuming that it explains historical #3
+(still UNKNOWN). Any future attempt needs explicit authorization, current-source
+pins, fresh authority/JIT and complete gates again. Owner HTTP F/G, normal product
+regression completion, Redmi product prewarm/restart, local restricted rehearsal,
+browser/DNS/leak/fail-closed/underlay checks and final private FIELD APK remain
+unperformed. No protocol/admission change, public release, push, beta or FIELD-1.
+The earlier STOP notes below describe their own historical task boundaries.
+
 **5N-NL-ACCEPTANCE = PASS,02.10 — local operator correction.** Authoritative NL acceptance
 now uses fresh READY-only export plus valid directory, same gateway profile and
 healthy stable service; fsynced authoritative verdict comes before optional journal.
@@ -176,6 +469,59 @@ current authority/JIT, baseline, new NL operator, complete RU sync/negative gate
 HTTP A–G and all physical gates. Attempt #8 remains a rollback caused by the old
 operator's diagnostic gate, not a bootstrap/provider defect. No credentials,
 production operations, Redmi, Android build, push, beta or FIELD-1 in this task.
+
+**Attempt #8,02.10.2026 — DEPLOYMENT FAILED / ROLLED BACK.** Exact accepted HEAD,
+new sync `9d965b95…` and unchanged HTTP `460e7520…` pass source/inventory/isolated
+checks. JIT CRL15 and gateway renewal PASS; one NL seed/live directory validation
+PASS. The NL operator then incorrectly gated acceptance on diagnostic journal
+collection;5s timeout caused rollback before RU precheck/full sync and HTTP.
+This is an operator error, not evidence of a broken pinned artifact or provider.
+[Exact timestamps, acceptance limits and rollback](releases/2026-10-02-5n-prov1-attempt8.ru.md).
+Baseline/final ordinary200/400/400, restricted404; normal PIDs and registration/
+grant rows unchanged. Actual registry28 total/27 restricted-denied, sole owner
+canary unchanged. Authority expiry02.10 10:44:11UTC; CRL15 expiry08:51:45UTC and
+gateway expiry09:36:45UTC. RU DB/stage and NL floor15 must be preserved; inactive
+RU runtime14 is not authoritative. No Redmi/APK/commit/push/beta/FIELD-1.
+
+**STOP after attempt #8; no automatic retry or production repair.** A subsequent
+separately authorized task must make NL journal diagnostics non-gating and retain
+the exact failed-command category before verdict/rollback, without changing runtime
+architecture. Then a newly authorized rollout must recheck current pins/authority,
+reconcile monotonic floors, JIT refresh and repeat every live and physical gate in
+order. The committed RU sync operator was not reached and must not be replaced by
+the historical inline/journal-gated flow. Real owner HTTP G/readiness, restart,
+local restricted rehearsal and final private FIELD APK remain unperformed.
+Historical #3 UNKNOWN and #6/#7 pre-production stops remain unchanged.
+
+**5N-SYNC-ARTIFACT-REFRESH = PASS locally, 01.10.2026.** Exact clean source
+`f4c06df…` now has a matching sync candidate `9d965b95…`, not an exception to the
+source pin. `restricted.py` is required by sync and CRL publication; preserve the
+existing minimal explicit manifest.17-entry inventory/all source bytes match HEAD;
+194 committed regressions +7 exact-archive checks PASS, no skips, including local
+complete operator/negative sequence and new-sync→unchanged-HTTP signed readiness.
+Old sync `cb6f050e…` retired as a deployment input, kept unchanged as evidence;
+HTTP `460e7520…` unchanged/not rebuilt. [New pin, dependency proof and test limits](releases/2026-10-01-5n-sync-artifact-refresh.ru.md).
+Attempt #7 history remains a pre-production STOP; no rollback required. Its local
+artifact blocker is resolved, but no production gate is thereby accepted. Only a
+separately authorized attempt may consume the new exact pin after fresh baseline,
+JIT authority, NL READY/live directory, RU precheck/full sync negatives, HTTP A–G,
+normal regression and physical gates. No credentials/services/Redmi/APK/push here.
+STOP; do not automatically start attempt #8, beta or Krasnodar FIELD-1.
+
+**Attempt #7 STOP — exact-source/pinned-sync conflict, 01.10.2026 19:55UTC.**
+HEAD `f4c06df…` and both requested hashes PASS; full17/25-entry inventories and
+embedded bytes PASS. HTTP matches accepted HEAD. Pinned sync's shared
+`control/friends/restricted.py` differs only in the documented HTTP challenge
+input-validation hunk (`9b5d5ce2…` versus HEAD `ab3542b9…`); its accepted precise
+directory code is not the mismatch. Followed the explicit any-mismatch STOP rule
+before production access, without declaring the known difference exempt. No
+refresh/deployment/live gates/Redmi/APK/rollback/retry/commit/push. [Attempt #7
+receipt, source diff and remaining checks](releases/2026-10-01-5n-prov1-attempt7.ru.md).
+Next needs a separately explicit decision accepting that exact sync-source
+difference, or a separately accepted matching artifact/source checkpoint and
+updated pins. Do not rebuild/substitute under attempt #7. After resolution, a new
+authorized attempt must repeat fresh baseline/JIT/NL/RU/full negative/HTTP/physical
+gates in order. Attempts #1–#6 preserved; #3 remains UNKNOWN. No beta/FIELD-1.
 
 **New-session recheck01.10:** actual entry `d8624dea2cffe3c41d9d136a6f93ee527b8f3812`
 already includes both requested HTTP commits. Fresh clean export rebuilt the same
@@ -544,9 +890,12 @@ network context только укрупнённый, с минимизацией
   наличие/валидность existing BOOT-1 activation/cache на field device не проверены.
   [Build receipt](releases/2026-10-01-field1-apk.ru.md). **FIELD-1 NOT STARTED**;
   сборка не закрывает field gate и не выполняет provisioning отсутствующего cache.
-- Read-only audit01.10,05:29–05:31UTC:27 устройств/23 не отозвано,
-  NL5 свежих AWG peers; CPU/RAM без перегрузки в снимке. Disk latency и
-  worker healthcheck/outbox остаются открытыми; capacity/DAU не измерены.
+- Read-only audit01.10,17:43UTC:27 устройств/23 не отозвано, без прироста с13:39;
+  NL5 свежих AWG peers/12 с handshake<24ч,4 с transfer за15с;RU0,TCP0 обоих gateways.
+  CPU NL9.92%/RU11.54%, CPU/RAM без перегрузки в15с снимке; HTTPS не перепроверен.
+  Disk await NL144.26/RU34.33ms и worker healthcheck/outbox остаются открытыми;
+  RU API start01.10 14:40:45UTC изменился с прошлого аудита, причина не проверена.
+  Restricted services не перепроверялись; никаких restart/deploy, capacity/DAU не измерены.
   [Снимок и границы](releases/2026-10-01-vpn-health.ru.md). FIELD-1 не начат.
 - CI после sync: phase0 failover-stack build и Android emulator lifecycle FAIL;
   исправление отдельно, без переоценки принятых isolated gates. [Статус](STATUS.md).

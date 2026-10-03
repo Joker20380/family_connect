@@ -1,0 +1,39 @@
+{
+  "base_head": "911fea59e08e5ee8844852ae1e2834812632fbde",
+  "source_description": "Isolated git archive plus the exact task-owned overlay below; uncommitted fix, not a clean-HEAD build claim",
+  "source_inventory": "state-client-build/physical58/source-inventory.json",
+  "source_inventory_sha256": "26067d3f90a3dbf70dc673e54bc419b8a9d07ed01c4523a2c0c84f480672641e",
+  "source_overlay": {
+    "clients/android/app/src/debug/java/com/familyconnect/app/OrchestratorDiagnosticActivity.java": "28f7bf786a6c9d983b686a64ac3c7c0b36cc1bc9c13f951db3510bf0127a8c75",
+    "clients/android/app/src/debug/java/com/familyconnect/app/DiagnosticLauncher.java": "25803559a92f0a36e6b2ebbd7d6c6372cc5567cf47be3b12ac8764838a190dbc",
+    "clients/android/app/src/testDebug/java/com/familyconnect/app/DiagnosticLauncherTest.java": "c73a391aa1cdb48e3f2da845c17827d2e0e8e63830d540974d457b7a6ab5c6fe",
+    "deploy/friends/restricted/android-canary58-physical.gradle": "aa1b088d735aaf32877556b011c7e7e5f1f9db8f2644a200b0cb319b07aa4184",
+    "tests/test_android_acceptance_hook.py": "64b784c662a636ada7d2b07111860cb669617e3225f9322cf5e23a82ee1763e3"
+  },
+  "artifact": {
+    "path": "state-client-build/physical58/artifacts/FamilyConnect-canary58-physical-911fea5-arm64.apk",
+    "package": "com.familyconnect.app.friends",
+    "version_code": 58,
+    "version_name": "0.1.18-canary58-physical",
+    "abi": "arm64-v8a",
+    "bytes": 52731205,
+    "sha256": "91e8910896ff84b31a7cebf40f840256dca283d684b075577290d1282f227194",
+    "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+    "debuggable": true,
+    "private_only": true
+  },
+  "unchanged_native_inputs": {
+    "source_head": "061595376fa65ae38725ed75baac769d71623d92",
+    "libfc-awg.so": "1910ccac238884dd55120917c509571117f2aa2e95d10e9255ea00a069738517",
+    "libfc_restricted.so": "0307df7e41bd2a002ee9cde37002862d5c6a445e319c9ea297829975b7e6da21",
+    "description": "Verified unchanged generated inputs from accepted57; no native transport rebuild or change"
+  },
+  "jvm_tests": {"tests": 223, "failures": 0, "errors": 0, "skipped": 0},
+  "lint": {"errors": 0, "warnings": 37},
+  "host_contract_tests_passed": 4,
+  "explicit_private_device_hook_regression": "PASS: ON, OFF, actual launcher, fresh-process OFF",
+  "ordinary_friends_merged_manifest": "non-debuggable; no diagnostic Activities",
+  "installed": true,
+  "publicly_distributed": false,
+  "push": false
+}

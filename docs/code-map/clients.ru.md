@@ -5,6 +5,32 @@
 
 ## Android
 
+Private58 hook fix03.10 supersedes the earlier build-only notes: debug-source
+`DiagnosticLauncher` resolves the installed package launch Intent and bounds missing
+launcher/start exceptions. `OrchestratorDiagnosticActivity` checks durable deny-flag
+commit/readback and writes fsynced ON/OFF evidence. No main transport source changes.
+`src/testDebug/.../DiagnosticLauncherTest` has5 JVM cases; Python source/manifest
+contracts and opt-in `test_android_acceptance_hook_device.py` verify private58 ON/OFF
+and fresh-process OFF. Public Friends manifest has no diagnostic Activities.
+Private58 installed; READY persisted. Physical CONNECT blocked on MIUI input permission,
+not hook navigation; override OFF. [Current evidence](../releases/2026-10-03-5n-physical-hook-fix-and-rehearsal.ru.md).
+
+Physical acceptance03.10: private57 is built/signed only from exact committed0615953
+source with an isolated Gradle init overlay: Friends debuggable and existing
+`src/debug` Activities/manifest. `OrchestratorDiagnosticActivity` sets existing
+`deny_awg/deny_wg/deny_tcp`; `AutomaticConnection` emits structured events and treats
+those normal candidates as unavailable. Restricted implementation remains unchanged.
+No tracked public build/runtime source change. Not installed/enabled; Redmi still55
+because credential reload prerequisite failed and was rolled back before Android work.
+218 unit tests/lint/APK checks PASS. [Current checkpoint](../releases/2026-10-03-5n-physical-restricted-rehearsal.ru.md).
+
+Attempt15,02.10: same-source private canary55 installed in place over54 and final
+hash/package/signer verified; no Android source change/reset. App challenge503,
+no authoritative READY/ACK observed; restricted server rollout rolled back. UI
+gestures did not gate acceptance. Phone remains55; no public/FIELD release.
+[Attempt15](../releases/2026-10-02-5n-prov1-attempt15.ru.md) supersedes older installation
+checkpoints below; restart/rehearsal/user-traffic acceptance remains unperformed.
+
 5N-DEVICE-READINESS-RECEIPT,02.10: `ReadinessProduct` separates import/evaluate/publish;
 `RestrictedCache.importProduct/evaluate` validates native credentials/directory, atomic
 vault readback and the same `usable()` used by `RestrictedTunnelEngine`. Safe v1
@@ -16,6 +42,19 @@ previous receipt is never a readiness authority. BuildConfig supplies the app ve
 `--readiness-ack` read-only server inspection feeds `OwnerProduct.observe`; UI is
 supplemental. No exported component, signing API or app private-state dump.
 Private canary55 built/signed only, not installed; [evidence/schema](../releases/2026-10-02-5n-device-readiness-receipt.ru.md).
+
+Attempt14,02.10: private canary54 installed in place on owner Redmi, APK/signature
+verified; no Android source change. Server gates PASS, but owner readiness UI
+observation failed (ADB input255); correlated import/cache acceptance unverified.
+Server restricted stack rolled back, phone stays54; no public/FIELD release.
+[Exact outcome](../releases/2026-10-02-5n-prov1-attempt14.ru.md).
+
+5N-ANDROID-CANARY-BUILD,02.10: clean-source `4bb53b0` now packaged as private
+canary54/code54 with the product helper/diagnostics below. Full Gradle PASS,
+204 app JVM tests,149 separate overlapping control JVM tests, lint0errors/37warnings;
+fresh exact arm64 JNI and existing beta signature. At build gate: not installed/distributed.
+No Android source changes in this build gate. Stale ignored Chaquopy venv repaired,
+not a build-script defect. [Artifact and setup](../releases/2026-10-02-5n-android-canary-build.ru.md).
 
 5N-OWNER-PROOF-HANDOFF,02.10: normal product prewarm remains in `FriendsRestricted`.
 `FriendsReadinessProtocol` holds the unchanged challenge/sign/fetch sequence for

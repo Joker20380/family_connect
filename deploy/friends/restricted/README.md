@@ -7,6 +7,18 @@ Preserve discovered0600 owner/group before atomic rename; no runtime artifact st
 or HTTP redeployment is required. Current execution/pins/expiry are in the
 [renewal publication report](../../../docs/releases/2026-10-03-5n-gateway-renewal-publication.ru.md).
 
+Current execution03.10: attempt17 production/owner acceptance passed; the subsequent
+[physical rehearsal is BLOCKED](../../../docs/releases/2026-10-03-5n-physical-restricted-rehearsal.ru.md)
+before Android installation. No full redeployment/staging is needed solely for rehearsal.
+Credential-only JIT renewal must retain the **existing** owner-preserving publication
+sequence (create/write/fchown/fsync/rename/directory-fsync) for live gateway.json:
+root's generic `restricted_sync.atomic` creates root0600 and is not a replacement for
+the accepted service-owned publication step. This session omitted that step; bootstrap
+reload exited1. Previous certificate and service ownership restored, CRL floors retained;
+no acceptance retry. NL active/restarts0 but unit disabled; restored certificate expiry
+02.10 23:37:09UTC. HTTP generation17/AWG/TCP unchanged. Do not treat a running process
+or historical READY as proof after expiry; do not redo schema/stack/owner provisioning.
+
 Local investigation02.10: [5N-REAL-OWNER-CHALLENGE-503 remains BLOCKED](../../../docs/releases/2026-10-02-5n-real-owner-challenge-503.md).
 Golden Android bytes pass the current schema; removing only the receipt table reproduces
 503, explicit existing synthetic migration restores200. This is not production attribution.
@@ -15,6 +27,14 @@ preflight must check the receipts schema, not only authority/sync. Challenge nev
 an already completed fetch/ACK. New safe logs contain only stage/reason; external503
 semantics are unchanged. Do not auto-migrate production, restart services or retry here.
 Diagnostic artifacts are local only; no new deployment is accepted by this report.
+
+Latest authorized execution: [attempt15,02.10.2026](../../../docs/releases/2026-10-02-5n-prov1-attempt15.ru.md)
+**DEPLOYMENT FAILED / ROLLED BACK**. Exact `014e6f9`/accepted fresh pins; server gates
+PASS and canary55 installed, but real app challenge503 prevented product READY/ACK.
+Failure durable before rollback; old18084 ingress restored/proved/drained before
+candidate stop,18085/AWG untouched, restricted RU/NL disabled, CRL27 retained.
+No live hotfix/retry/UI gate. Stage5N not closed; no new gate, push, FIELD-1, DIAG-1,
+OPS-1 or beta. Previous build-only and attempt14 statements below are historical.
 
 Artifact refresh02.10: [new ACK-compatible pins and exact source inventories](../../../docs/releases/2026-10-02-5n-readiness-ack-artifact-pins.json)
 replace the old HTTP/readiness/sync pins for a **future separately authorized** attempt.
@@ -34,6 +54,13 @@ not a local readiness failure. This is source-only; old pinned attempt14 artifac
 are unchanged. Private canary55 built/signed, not installed. New API/runtime packaging
 needs separate review/pins before any future deployment. No production authorization
 or automatic retry is granted by this local gate.
+
+Latest authorized execution: [attempt14,02.10.2026](../../../docs/releases/2026-10-02-5n-prov1-attempt14.ru.md)
+rolled back after owner UI observation failed (ADB input255). Pinned closed adapter,
+NL/RU/server gates passed; actual owner cache/correlation not accepted despite
+server-side challenge/readiness200/200. Old18084 restored/proved before stopping18086;
+18085 untouched, CRL25 retained. Canary54 remains installed privately. No automatic
+retry or authorization for another attempt; current contract below is unchanged.
 
 ## Current owner-proof handoff contract
 
@@ -297,6 +324,34 @@ RU policy is unchanged: `restricted_sync_acceptance.py` already bases acceptance
 on blocking unit/material/negative checks, not journal retrieval. The independent
 NL operator is not merged into RU or into either immutable runtime archive.
 No production deployment/refresh/Redmi/APK/push or automatic attempt #9.
+
+## Current local sync pin — source-aligned refresh, 01.10.2026
+
+The replacement sync candidate built from clean exact source
+`f4c06df5f16593273b4c8bffa75646f1df17c2fb` is:
+
+- Path: `state-client-build/sync-artifact-refresh/bundle/restricted-sync.pyz`.
+- SHA256: `9d965b955cbd5375c82adadb3f25736d1cca3fe86ab477ea73269ef1499a5a2d`.
+- Inventory:17 entries,10 tracked Python modules plus generated entrypoint; all
+  tracked inputs match that HEAD. Explicit manifest unchanged: `restricted.py` is
+  a required runtime dependency, not a removable HTTP-only module.
+- HTTP remains `460e75205eb9baff313dc7dd963cdb7bceddf2d1e13405a71686f9ec6c976d71`,
+  unchanged and not rebuilt. Offline new-sync→HTTP signed readiness fixture PASS.
+
+Old sync `cb6f050ec49ee4b65fa65c5327e32d6271d714ef6f8e695f16cb3c85b60f386f`
+is **retired as a deployment candidate**, retained unchanged for historical tests
+and evidence. Lower references to its acceptance describe earlier checkpoints,
+not the current source-aligned candidate. The committed HTTP interoperability test
+hardcodes that historical pin; its old-pin acceptance must not be mistaken for
+new-pin validation. The new candidate has separate exact-archive evidence in
+`state-client-build/sync-artifact-refresh/`, including the unchanged committed sync
+operator exercised with synthetic authority and isolated gateway processes.
+
+194 committed regression checks and7 exact-archive checks PASS, no skips. Systemd
+state and SSH transport remain local simulations; no service/production acceptance.
+See [provenance, closure and limitations](../../../docs/releases/2026-10-01-5n-sync-artifact-refresh.ru.md).
+Attempt #7 remains a pre-production source-gate stop, not a live failure or rollback.
+This artifact refresh grants no deployment authorization; STOP before attempt #8.
 
 ## Committed HTTP packaging checkpoint — local only, 01.10.2026
 

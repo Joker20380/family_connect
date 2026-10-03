@@ -26,21 +26,35 @@ public final class OrchestratorDiagnosticActivity extends Activity {
                         Files.delete(file.toPath());
                     }
                 }
-                getSharedPreferences("orchestrator-diagnostic",MODE_PRIVATE).edit().clear()
+                boolean committed=getSharedPreferences("orchestrator-diagnostic",MODE_PRIVATE).edit().clear()
                     .putBoolean("deny_awg",getIntent().getBooleanExtra("deny_normal",false)||getIntent().getBooleanExtra("deny_primary",false))
                     .putBoolean("deny_wg",getIntent().getBooleanExtra("deny_normal",false))
-                    .putBoolean("deny_tcp",getIntent().getBooleanExtra("deny_normal",false)).apply();
+                    .putBoolean("deny_tcp",getIntent().getBooleanExtra("deny_normal",false)).commit();
+                if(!committed)throw new IllegalStateException();
+                if(getSharedPreferences("orchestrator-diagnostic",MODE_PRIVATE).getBoolean("deny_awg",false)!=(getIntent().getBooleanExtra("deny_normal",false)||getIntent().getBooleanExtra("deny_primary",false))
+                    ||getSharedPreferences("orchestrator-diagnostic",MODE_PRIVATE).getBoolean("deny_wg",false)!=getIntent().getBooleanExtra("deny_normal",false)
+                    ||getSharedPreferences("orchestrator-diagnostic",MODE_PRIVATE).getBoolean("deny_tcp",false)!=getIntent().getBooleanExtra("deny_normal",false))throw new IllegalStateException();
                 if(getIntent().getBooleanExtra("reset_hint",false))getSharedPreferences("connectivity",MODE_PRIVATE).edit().remove("normal_hint").apply();
                 getSharedPreferences("connectivity",MODE_PRIVATE).edit().putString("preferred","awg").apply();
-                evidence(true,null);
-                runOnUiThread(()->{startActivity(new Intent(this,MainActivity.class));finish();});
+                runOnUiThread(()->{
+                    boolean opened=DiagnosticLauncher.open(new DiagnosticLauncher.Host<Intent>() {
+                        public Intent resolve(){return getPackageManager().getLaunchIntentForPackage(getPackageName());}
+                        public void start(Intent launch){startActivity(launch);}
+                    });
+                    if(!opened)getSharedPreferences("orchestrator-diagnostic",MODE_PRIVATE).edit().clear().commit();
+                    evidence(opened,opened?null:"LAUNCHER_UNAVAILABLE");finish();
+                });
             }catch(Exception failure) { evidence(false,failure.getClass().getSimpleName());runOnUiThread(this::finish); }
         },"fc-auto-diagnostic").start();
     }
     private void evidence(boolean ready,String failure) {
         try(java.io.FileOutputStream output=openFileOutput("orchestrator-prepared.json",MODE_PRIVATE)) {
             org.json.JSONObject record=new org.json.JSONObject();record.put("ready",ready);record.put("failure",failure);
-            output.write(record.toString().getBytes(StandardCharsets.UTF_8));
+            boolean awg=getSharedPreferences("orchestrator-diagnostic",MODE_PRIVATE).getBoolean("deny_awg",false);
+            boolean wg=getSharedPreferences("orchestrator-diagnostic",MODE_PRIVATE).getBoolean("deny_wg",false);
+            boolean tcp=getSharedPreferences("orchestrator-diagnostic",MODE_PRIVATE).getBoolean("deny_tcp",false);
+            record.put("acceptance_override",awg&&wg&&tcp?"ON":!awg&&!wg&&!tcp?"OFF":"PARTIAL");
+            output.write(record.toString().getBytes(StandardCharsets.UTF_8));output.getFD().sync();
         }catch(Exception ignored){}
     }
 }

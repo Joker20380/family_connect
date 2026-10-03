@@ -1,5 +1,31 @@
 # Установка клиентов
 
+Последний приватный checkpoint03.10.2026: **`0.1.18-canary58-physical`/58 установлена
+поверх57**, те же Friends package/signer/UID/data, encrypted restart READY/ACK_RECEIVED.
+SHA256 APK `91e8910896ff84b31a7cebf40f840256dca283d684b075577290d1282f227194`;
+signer `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+Private launcher hook исправлен, ON/OFF проверены на устройстве. Physical BLOCKED:
+MIUI запрещает ADB input, ручной CONNECT не наблюдался. После restart override OFF,
+приложение отключено. Не public release; invitation/download/catalog не менялись и
+не перепроверялись. [Текущее состояние/источники](releases/2026-10-03-5n-physical-hook-fix-and-rehearsal.ru.md).
+
+Текущий приватный checkpoint03.10.2026: точная `0.1.18-canary57-physical`/57
+**установлена поверх55**, package/signer и данные сохранены; encrypted restart
+READY/ACK_RECEIVED. SHA256
+`dd3c1b1bd9031f189ef7fc606969eb7da05e44f470478c8457f9097119b9c975`.
+До restricted CONNECT diagnostic Activity упала при переходе в отсутствующую MainActivity.
+Override OFF, Auto сохранён, приложение отключено. Physical acceptance FAIL; Stage5N OPEN.
+Не public release: invitation/download/update-каталоги не менялись и не перепроверялись.
+[Установка, persistence и точный отказ](releases/2026-10-03-5n-physical-restricted-rehearsal-final.ru.md).
+Ниже сохранены исторические build-only checkpoints.
+
+Приватная acceptance-сборка03.10.2026: `0.1.18-canary57-physical`/57 arm64 подписана,
+**не установлена и не опубликована**; Redmi остаётся canary55. Те же package/signer;
+debuggable-упаковка включает существующие diagnostic Activities только для приёмки.
+SHA256 APK `dd3c1b1bd9031f189ef7fc606969eb7da05e44f470478c8457f9097119b9c975`.
+Public/invitation/update-каталоги не менялись; не распространять diagnostic-сборку.
+[Подпись, тесты и блокер credential reload](releases/2026-10-03-5n-physical-restricted-rehearsal.ru.md).
+
 Windows: версия0.2.15, Windows10 1809+ /11 x64. .NET включён в установщик.
 После неудачной установки0.2.13 запустите новый установщик поверх оставшихся файлов.
 Ручная настройка служб не требуется. Проверка на проблемном Win10 ПК ещё ожидается.
@@ -17,6 +43,14 @@ SHA256 `5ca1d29101df529cce197e5eeb82f231b50e3f4fc76c8835ba12fdad0c2122b0`.
 перепроверялись. Новых download/update ссылок/каталогов нет. Причина production503
 не доказана; [локальные тесты, pins и BLOCKED gate](releases/2026-10-02-5n-real-owner-challenge-503.md).
 
+Attempt15,02.10.2026: приватный `0.1.18-canary55-receipt`/55 **установлен поверх54**
+на Redmi владельца; APK/подпись проверены, uninstall/data reset не было. SHA256
+`680a21f60e69cb62d2c7a70be07234b34196e178f0207ed69cb4b422b7bc6247`.
+Реальный app challenge503 не позволил подтвердить READY; серверный restricted rollout
+откачен. На телефоне55, не public/FIELD release. Public beta51/страница приглашений
+не менялись и не перепроверялись. Build-only блоки ниже — исторические checkpoint.
+[Доказательства и ограничения attempt15](releases/2026-10-02-5n-prov1-attempt15.ru.md).
+
 Локальная сборка02.10.2026: приватный `0.1.18-canary55-receipt`/55 arm64 добавляет
 структурированный post-import readiness receipt и аутентифицированный ACK.
 Прежние package/beta signer; update-compatible с54; **собран/подписан, НЕ установлен
@@ -24,6 +58,15 @@ SHA256 `5ca1d29101df529cce197e5eeb82f231b50e3f4fc76c8835ba12fdad0c2122b0`.
 [Локальный путь APK, проверки и контракт](releases/2026-10-02-5n-device-readiness-receipt.ru.md). Установленный54 и
 public beta51/страница приглашений ниже — последние документированные состояния;
 публичные ссылки не заменены и артефакты не перепроверены. Production/authority не менялись.
+
+Состояние02.10.2026: приватный `0.1.18-canary54-prov1`/54 собран, подписан прежним
+beta-сертификатом и **установлен поверх field52 на Redmi владельца** в attempt14.
+Финальные APK/hash/signature проверены16:47UTC; uninstall/data clear не было.
+Серверная попытка откачена после ошибки UI observation; restricted cache readiness
+не подтверждена. На телефоне остаётся54; публичной раздачи/FIELD release нет.
+Ссылки public beta51/страницы приглашений не менялись и не перепроверялись.
+[Результат attempt14](releases/2026-10-02-5n-prov1-attempt14.ru.md) ·
+[Provenance и SHA256 canary](releases/2026-10-02-5n-android-canary-build.ru.md).
 
 [Инструкция Friends beta](getting-started.ru.md): Android 8+, ARM64 beta51,
 доступ по приглашению, VPN, текст и голосовые. APK распространяется

@@ -1,0 +1,12 @@
+allprojects {
+    afterEvaluate {
+        if (name == 'app') {
+            android.defaultConfig.versionCode = 58
+            android.defaultConfig.versionName = '0.1.18-canary58-physical'
+            android.buildTypes.friends.debuggable = true
+            android.sourceSets.friends.java.srcDir 'src/debug/java'
+            android.sourceSets.friends.manifest.srcFile 'src/debug/AndroidManifest.xml'
+            android.sourceSets.testFriends.java.srcDir 'src/testDebug/java'
+        }
+    }
+}

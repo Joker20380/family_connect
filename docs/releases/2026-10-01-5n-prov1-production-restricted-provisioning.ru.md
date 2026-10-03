@@ -122,6 +122,129 @@ VPN-health и предыдущий deployment checkpoint не включаютс
 Без secrets/runtime artifacts в Git. STOP, push:no, production changed:no;
 автоматического deployment retry нет.
 
+## Попытка №5 — DEPLOYMENT FAILED / ROLLED BACK, 01.10.2026
+
+Явно разрешённая попытка из `20b91ce03dcd00e18deb5b4f0e5614f99d224a06`.
+**NL READY и исправленная live Directory validation PASS; RU isolated `--check`
+PASS. Полный RU↔NL acceptance gate не завершён: оператор получил
+`TimeoutExpired`; restricted-стек откачен до HTTP activation.** Повторный sync,
+live hotfix, Redmi, APK, push, beta и FIELD-1 не выполнялись.
+Причина HTTP-отказа исторической попытки №3 остаётся **UNKNOWN**.
+
+### Закрепление и границы worktree
+
+- HEAD до/после попытки: `20b91ce03dcd00e18deb5b4f0e5614f99d224a06`.
+- Accepted corrected `restricted-sync.pyz`:
+  `cb6f050ec49ee4b65fa65c5327e32d6271d714ef6f8e695f16cb3c85b60f386f`;
+  все17 inventory entries совпали. Повторные `python -I` CLI checks из временного
+  каталога вне checkout PASS, без `PYTHONPATH`/source-tree dependency. Synthetic
+  precise-clock/default-clock PASS; намеренно усечённый clock строго отвергнут.
+- Существующий accepted `friends-http.pyz`:
+  `eb9eb06fd38a0ec498445877fcfb5908a8566b96c7a25f44e2a4619170743a2f`;
+  все25 entries совпали. Архив не пересобирался и **не активировался**.
+- До работы зафиксированы пути/SHA256 всех13 retained changed/untracked файлов
+  в `state-client-build/prov1-attempt5/protected-files.json`; после отката все
+  совпадают. HTTP/workflow/VPN-health изменения не stage/reset/restore/stash/commit.
+  В частности, уже изменённые STATUS/PLAN/runbook сохранены побайтно по прямому
+  требованию пользователя; актуальный итог этой попытки записан только здесь.
+- Root-only rollback snapshots на обоих разрешённых хостах:
+  `restricted-materials-stage-20261001/canary-rollout-attempt5-20b91ce/` под
+  `/opt/apps/family_connect`. Сохранены unit/API/ingress, SQLite online backup,
+  относящиеся к restricted материалы и оба pinned candidate bundles.
+
+### Authority, NL и RU — наблюдения, не предположения
+
+1. Baseline17:52UTC: RU ordinary API/AWG/TCP и NL AWG/TCP active;
+   restricted services/timer inactive, NL sync authorization отсутствует,
+   directory отсутствует. Один прежний owner admitted, остальные26 rejected;
+   новых admissions0. `provider.env` — regular root:root0600, токен не читался
+   оператором. Authoritative DB/staged CRL12; неактивный RU runtime ещё CRL11.
+   Для refresh использован authoritative floor12, не старый runtime11.
+2. JIT17:54:54UTC: штатный publisher **CRL12→13**, expiry
+   **2026-10-01T18:09:54Z**. Gateway certificate expiry
+   **2026-10-01T18:54:54Z**. Family/owner/issuer/gateway неизменны;
+   grant revision1/delegation sequence1 и их expiry02.10 10:44:11UTC сохранены.
+   CRL signature/issuer/admission/native gateway+canary compatibility и negatives
+   PASS. TTL policy не расширялась; новая canary-validation leaf — только
+   серверная проверка, не provisioning телефона.
+3. NL17:54:57UTC: запущен accepted bootstrap с прежним provider/gateway.
+   Один `bootstrap_seed_ready`, NRestarts0, чувствительных log markers нет.
+   Live directory291 bytes/один seed, issued
+   **2026-10-01T17:55:01.522912683Z**, expires
+   **2026-10-01T18:49:57.49730091Z**. Canonical UTC-Z PASS.
+   Pinned closed validator `directory-check` сохранил fsynced receipt
+   **17:55:05.049979Z**, `result=passed`, observed_at_ns1790877305050221170.
+   Повторения `issued_in_future` **нет**. Квитанция сохраняется до проверки verdict.
+4. RU17:55:43UTC: установлен именно закреплённый corrected archive;
+   `python -I ... sync ... --check` exit0, ожидаемый stdout, пустой stderr.
+   API source/ingress при этом не изменялись. Сохранён `ru-check.json`.
+5. RU live gate начат17:55:44UTC. Сохранён `ru-sync.json`:
+   `live_sync_pass=false`, `failure_type=TimeoutExpired`. Приёмка остановлена;
+   никакого повторного запуска или live исправления.
+6. После отката read-only evidence показал: sync unit starting17:55:45.142969UTC,
+   deactivated/finished17:55:48.876781–878411UTC, `Result=success`;
+   **DB/RU runtime/NL profile CRL14**, expiry RU CRL
+   **2026-10-01T18:10:45Z**. Это доказывает выполнение sync и доставку CRL, но
+   **не превращает незавершённый acceptance gate в PASS**.
+   `ru-service-observation.json`, `generic-shell.json`, `stale-crl.json`
+   отсутствуют: negative probes не достигнуты. В операторском порядке между
+   start и первой service-observation находится `journalctl` с timeout10s;
+   фактическое окно и отсутствие этой квитанции указывают на этот этап.
+   В самой failure receipt сохранён только класс `TimeoutExpired`, не аргументы
+   subprocess; нельзя выдавать реконструкцию за записанный exception context.
+   Последующее bounded read-only чтение журнала успешно; ModuleNotFoundError,
+   ValueError/directory_validation_failed в полученных событиях не обнаружены.
+
+### Долговечные HTTP-квитанции
+
+Все времена01.10.2026 UTC; transport_error=null. Для ordinary responses
+classification=`json-object`, для disabled restricted route=`html`.
+Probe persist выполняет file fsync → rename → directory fsync до оценки HTTP-кода.
+В generic probe metadata restricted malformed имеет expected400 для enabled gate;
+baseline/rollback явно сравнивают с **404**, поскольку route должен отсутствовать.
+
+| Probe | Baseline `attempt5-baseline` | После отката `attempt5-rollback` |
+| --- | --- | --- |
+| Ordinary status | 17:52:03.853543Z → **200** | 17:56:50.876667Z → **200** |
+| Ordinary malformed challenge | 17:52:04.032286Z → **400** | 17:56:51.103469Z → **400** |
+| Safe ordinary chat challenge | 17:52:04.197930Z → **400** | 17:56:51.290831Z → **400** |
+| Restricted malformed challenge, route disabled | 17:52:04.345832Z → **404** | 17:56:51.473165Z → **404** |
+
+Enabled HTTP matrix, real non-canary HTTP rejection, real owner challenge и
+owner readiness fetch **NOT REACHED**. Baseline DB admission audit1/26 — не
+подмена этих HTTP checks. API downtime не наблюдался: не было activation/restart,
+PID/start timestamp/NRestarts совпадают с baseline; непрерывный E2E uptime этим
+не утверждается. AWG/TCP на обоих хостах active и без restart/PID/start drift;
+это service-level health, не новая клиентская transport E2E приёмка.
+
+### Откат, итоговое состояние и evidence
+
+Откат **17:56:02UTC RU /17:56:06UTC NL**, readback17:56:54–55UTC PASS:
+restricted sync/timer/bootstrap inactive, timer/bootstrap disabled, NL forced-key
+authorization отключена, seed directory приватно quarantined. Ordinary API/app/
+ingress побайтно прежние, additive HTTP drop-ins отсутствуют; devices/invites/
+restricted_grants rows неизменны. Обычные сервисы и соседние компоненты не
+перезапускались. Исправленный inactive sync archive оставлен установленным;
+это не включённый restricted rollout. Монотонные DB/CRL/certificate history не
+откачены: authoritative floor теперь14, staging13 нельзя использовать как floor
+следующей попытки. Gateway identity/certificate не заменялись rollback-ом.
+
+Redmi/production prewarm, restricted provisioning/BOOT-1 readiness, effective
+device expiry, process restart persistence, cellular restricted rehearsal,
+Chrome≥2 HTTPS/TLS, Family DNS, concurrent TCP, DNS leak/TCP bypass scope,
+UDP/IPv6 fail-closed и underlay protection **NOT RUN**. Итоговый FIELD APK не
+производился. Нет подтверждения физической readiness из этой попытки.
+
+Локальные защищённые receipts/operator:
+`state-client-build/prov1-attempt5/` — `pin.json`, `protected-files.json`,
+`baseline-http/`, host baselines, prepare/refresh/NL/RU receipts, rollback/readback,
+`rollback-http/`, `failure-evidence.json`. NL `live-directory-receipt.json` и
+RU service/negative receipt presence отдельно сохранены в protected host snapshot;
+raw directory/URLs/identity/proofs/OAuth не попадают в этот отчёт/командный вывод.
+
+**STOP. Push:no; FIELD-1:no; beta:no; новых commits нет.** Attempt #5 authorization
+не используется для retry или hotfix. Попытка №3 historical HTTP cause UNKNOWN.
+
 ## 5N-DIRECTORY-VALIDATION — PASS, offline repair after attempt #4
 
 Starting HEAD `d27156d92fdb829fdc82471b05074270b54cd1a9`. Implementation commit

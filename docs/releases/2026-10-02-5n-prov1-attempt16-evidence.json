@@ -1,0 +1,542 @@
+{
+  "baseline-summary": {
+    "gate": "PASS",
+    "interval": 1.1,
+    "statuses": [
+      200,
+      400,
+      400,
+      404
+    ]
+  },
+  "device-preflight": {
+    "abi": "arm64-v8a",
+    "android": "12",
+    "gate": "PASS",
+    "in_place_compatible": true,
+    "installed_sha256": "680a21f60e69cb62d2c7a70be07234b34196e178f0207ed69cb4b422b7bc6247",
+    "installed_version": "0.1.18-canary55-receipt",
+    "installed_version_code": 55,
+    "model": "Redmi Note 9 Pro",
+    "no_reset": true,
+    "private_key_accessed": false,
+    "signature_verified": true,
+    "target": 55
+  },
+  "failure-before-rollback": {
+    "http_operator_staged": false,
+    "http_staging_timeout_seconds": 45,
+    "native_authority_pass": false,
+    "native_authority_status": "NOT_ESTABLISHED",
+    "native_authority_transfer_timeout_seconds": 50,
+    "no_activation": true,
+    "no_hotfix": true,
+    "no_owner_request": true,
+    "no_retry": true,
+    "python_authority_pass": true,
+    "reason": "SSH_COMMAND_TIMEOUT",
+    "result": "DEPLOYMENT_FAILED",
+    "stage": "OPERATOR_STAGING_AND_NATIVE_AUTHORITY_TRANSFER",
+    "utc": "2026-10-02T21:13:02.961396+00:00"
+  },
+  "failure-persisted-185.251.89.19": {
+    "persisted": true
+  },
+  "failure-persisted-186.246.45.246": {
+    "persisted": true
+  },
+  "final-detail-185.251.89.19": {
+    "crl_floor": 28,
+    "grants_unchanged": true,
+    "host": "185.251.89.19",
+    "ingress_unchanged": true,
+    "normal_services_unchanged": true,
+    "ordinary_handler_unchanged": true,
+    "ordinary_rows_unchanged": false,
+    "receipt_table_count": 0,
+    "schema_unchanged": true,
+    "schema_version": 14
+  },
+  "final-detail-186.246.45.246": {
+    "authorization_absent": true,
+    "directory_absent": true,
+    "host": "186.246.45.246",
+    "normal_services_unchanged": true
+  },
+  "final-ports": {
+    "bind_available": true,
+    "candidate_port": 18086,
+    "classification": "free_at_preflight",
+    "expected_owners": true,
+    "gate": "PASS",
+    "listeners": {
+      "18084": [
+        {
+          "address": "127.0.0.1:18084",
+          "pids": [
+            1566654
+          ]
+        }
+      ],
+      "18085": [
+        {
+          "address": "127.0.0.1:18085",
+          "pids": [
+            1908885
+          ]
+        }
+      ],
+      "18086": []
+    },
+    "production_files_changed": false,
+    "services": {
+      "18084": {
+        "ActiveState": "active",
+        "ExecMainStartTimestampMonotonic": "2668799957553",
+        "MainPID": "1566654"
+      },
+      "18085": {
+        "ActiveState": "active",
+        "ExecMainStartTimestampMonotonic": "1994262857345",
+        "MainPID": "1908885"
+      }
+    },
+    "utc": "2026-10-02T21:13:17Z"
+  },
+  "final-result": {
+    "crl_floor_retained": 28,
+    "field_started": false,
+    "ingress_changed": false,
+    "ordinary": [
+      200,
+      400,
+      400,
+      404
+    ],
+    "push": false,
+    "receipt_schema_retained": true,
+    "redmi_modified": false,
+    "restricted_started": false,
+    "result": "DEPLOYMENT FAILED / ROLLED BACK",
+    "source_changed": false,
+    "stage_5n_closed": false
+  },
+  "final-table-comparison": {
+    "challenges": {
+      "after_count": 1,
+      "before_count": 1,
+      "equal": true
+    },
+    "chat_bindings": {
+      "after_count": 17,
+      "before_count": 17,
+      "equal": true
+    },
+    "chat_challenges": {
+      "after_count": 1,
+      "before_count": 1,
+      "equal": true
+    },
+    "chat_sequence": {
+      "after_count": 1,
+      "before_count": 1,
+      "equal": false
+    },
+    "devices": {
+      "after_count": 28,
+      "before_count": 28,
+      "equal": true
+    },
+    "invites": {
+      "after_count": 82,
+      "before_count": 82,
+      "equal": true
+    },
+    "referral_claims": {
+      "after_count": 24,
+      "before_count": 24,
+      "equal": true
+    },
+    "referral_links": {
+      "after_count": 8,
+      "before_count": 8,
+      "equal": true
+    },
+    "restricted_certificates": {
+      "after_count": 3,
+      "before_count": 2,
+      "equal": false
+    },
+    "restricted_challenges": {
+      "after_count": 1,
+      "before_count": 1,
+      "equal": true
+    },
+    "restricted_crl_sequence": {
+      "after_count": 1,
+      "before_count": 1,
+      "equal": false
+    },
+    "restricted_grants": {
+      "after_count": 1,
+      "before_count": 1,
+      "equal": true
+    },
+    "restricted_readiness_results": {
+      "after_count": 0,
+      "before_count": 0,
+      "equal": true
+    }
+  },
+  "head": "9b3ec45e83ccb226ec4373087329cfdc218b0fac",
+  "historical_attempt15_cause": "UNKNOWN",
+  "host-preflight": {
+    "crl_floor": 27,
+    "gate": "PASS",
+    "normal_ports_verified": true,
+    "restricted_inactive": true
+  },
+  "http": {
+    "baseline": [
+      {
+        "active_generation": null,
+        "candidate_port": null,
+        "elapsed_ms": 288.489,
+        "expected": 200,
+        "generation": "attempt16-baseline",
+        "ingress_upstream_status": null,
+        "label": "status",
+        "layer": "ingress_external",
+        "probe_id": "389588c6db00ebb5cfb636194c71e39e",
+        "rate_limit_class": "unknown",
+        "rate_limit_rule_id": null,
+        "receipt_class": "server_probe",
+        "response_class": "json-object",
+        "response_origin": "unknown",
+        "route_owner": "nginx_static",
+        "status": 200,
+        "timestamp": "2026-10-02T21:06:09.528182Z",
+        "transport_error": null,
+        "upstream_connect_seconds": null,
+        "upstream_error": "unknown",
+        "upstream_header_seconds": null,
+        "valid": true
+      },
+      {
+        "active_generation": null,
+        "candidate_port": null,
+        "elapsed_ms": 550.642,
+        "expected": 400,
+        "generation": "attempt16-baseline",
+        "ingress_upstream_status": null,
+        "label": "ordinary_challenge",
+        "layer": "ingress_external",
+        "probe_id": "5d241cf46cee699e3f2acdd71e245c7a",
+        "rate_limit_class": "unknown",
+        "rate_limit_rule_id": null,
+        "receipt_class": "server_probe",
+        "response_class": "json-object",
+        "response_origin": "unknown",
+        "route_owner": "friends_application",
+        "status": 400,
+        "timestamp": "2026-10-02T21:06:10.628266Z",
+        "transport_error": null,
+        "upstream_connect_seconds": null,
+        "upstream_error": "unknown",
+        "upstream_header_seconds": null,
+        "valid": true
+      },
+      {
+        "active_generation": null,
+        "candidate_port": null,
+        "elapsed_ms": 399.871,
+        "expected": 400,
+        "generation": "attempt16-baseline",
+        "ingress_upstream_status": null,
+        "label": "ordinary_chat",
+        "layer": "ingress_external",
+        "probe_id": "0ae7532bdcfdfe5ea6038bb98c21ef2f",
+        "rate_limit_class": "unknown",
+        "rate_limit_rule_id": null,
+        "receipt_class": "server_probe",
+        "response_class": "json-object",
+        "response_origin": "unknown",
+        "route_owner": "friends_application",
+        "status": 400,
+        "timestamp": "2026-10-02T21:06:11.728374Z",
+        "transport_error": null,
+        "upstream_connect_seconds": null,
+        "upstream_error": "unknown",
+        "upstream_header_seconds": null,
+        "valid": true
+      },
+      {
+        "active_generation": null,
+        "candidate_port": null,
+        "elapsed_ms": 318.285,
+        "expected": 404,
+        "generation": "attempt16-baseline",
+        "ingress_upstream_status": null,
+        "label": "restricted_malformed",
+        "layer": "ingress_external",
+        "probe_id": "95392bc4e10f0bd9f6bd2f6a02b29e5e",
+        "rate_limit_class": "unknown",
+        "rate_limit_rule_id": null,
+        "receipt_class": "server_probe",
+        "response_class": "html",
+        "response_origin": "unknown",
+        "route_owner": "friends_application",
+        "status": 404,
+        "timestamp": "2026-10-02T21:06:12.828426Z",
+        "transport_error": null,
+        "upstream_connect_seconds": null,
+        "upstream_error": "unknown",
+        "upstream_header_seconds": null,
+        "valid": true
+      }
+    ],
+    "final": [
+      {
+        "active_generation": null,
+        "candidate_port": null,
+        "elapsed_ms": 310.578,
+        "expected": 200,
+        "generation": "attempt16-final",
+        "ingress_upstream_status": null,
+        "label": "status",
+        "layer": "ingress_external",
+        "probe_id": "19899d9a8a96e9218a1c719d50cc7aae",
+        "rate_limit_class": "unknown",
+        "rate_limit_rule_id": null,
+        "receipt_class": "server_probe",
+        "response_class": "json-object",
+        "response_origin": "unknown",
+        "route_owner": "nginx_static",
+        "status": 200,
+        "timestamp": "2026-10-02T21:13:17.995840Z",
+        "transport_error": null,
+        "upstream_connect_seconds": null,
+        "upstream_error": "unknown",
+        "upstream_header_seconds": null,
+        "valid": true
+      },
+      {
+        "active_generation": null,
+        "candidate_port": null,
+        "elapsed_ms": 317.315,
+        "expected": 400,
+        "generation": "attempt16-final",
+        "ingress_upstream_status": null,
+        "label": "ordinary_challenge",
+        "layer": "ingress_external",
+        "probe_id": "914ccc0c911b4c16122841f63419f07f",
+        "rate_limit_class": "unknown",
+        "rate_limit_rule_id": null,
+        "receipt_class": "server_probe",
+        "response_class": "json-object",
+        "response_origin": "unknown",
+        "route_owner": "friends_application",
+        "status": 400,
+        "timestamp": "2026-10-02T21:13:19.095919Z",
+        "transport_error": null,
+        "upstream_connect_seconds": null,
+        "upstream_error": "unknown",
+        "upstream_header_seconds": null,
+        "valid": true
+      },
+      {
+        "active_generation": null,
+        "candidate_port": null,
+        "elapsed_ms": 290.279,
+        "expected": 400,
+        "generation": "attempt16-final",
+        "ingress_upstream_status": null,
+        "label": "ordinary_chat",
+        "layer": "ingress_external",
+        "probe_id": "24d722a5cc80250709c38295a994ac19",
+        "rate_limit_class": "unknown",
+        "rate_limit_rule_id": null,
+        "receipt_class": "server_probe",
+        "response_class": "json-object",
+        "response_origin": "unknown",
+        "route_owner": "friends_application",
+        "status": 400,
+        "timestamp": "2026-10-02T21:13:20.196009Z",
+        "transport_error": null,
+        "upstream_connect_seconds": null,
+        "upstream_error": "unknown",
+        "upstream_header_seconds": null,
+        "valid": true
+      },
+      {
+        "active_generation": null,
+        "candidate_port": null,
+        "elapsed_ms": 360.712,
+        "expected": 404,
+        "generation": "attempt16-final",
+        "ingress_upstream_status": null,
+        "label": "restricted_malformed",
+        "layer": "ingress_external",
+        "probe_id": "94ff6f9fa98291127ec7e640ad14180b",
+        "rate_limit_class": "unknown",
+        "rate_limit_rule_id": null,
+        "receipt_class": "server_probe",
+        "response_class": "html",
+        "response_origin": "unknown",
+        "route_owner": "friends_application",
+        "status": 404,
+        "timestamp": "2026-10-02T21:13:21.296153Z",
+        "transport_error": null,
+        "upstream_connect_seconds": null,
+        "upstream_error": "unknown",
+        "upstream_header_seconds": null,
+        "valid": true
+      }
+    ]
+  },
+  "http-staging-reconciliation": {
+    "all_match": false,
+    "files": {
+      "candidate-readiness.pyz": "ABSENT",
+      "candidate.service": "ABSENT",
+      "friends_http_acceptance.py": "ABSENT",
+      "friends_http_transition.py": "ABSENT",
+      "http_operator.py": "ABSENT",
+      "nginx-template.conf": "ABSENT",
+      "provenance.json": "ABSENT",
+      "readiness-delivery-check": "ABSENT",
+      "readiness.lock": "ABSENT"
+    },
+    "folder_exists": false
+  },
+  "isolated": {
+    "adapter_isolated_check": true,
+    "archive_help_checks": 3,
+    "embedded_inventory": true,
+    "live_candidate_acceptance": false,
+    "native_inventory": true,
+    "passed": true
+  },
+  "pins": {
+    "apk": {
+      "apk": "state-client-build/android-canary55-receipt-e817380/artifacts/FamilyConnect-canary55-receipt-e817380-arm64.apk",
+      "application_id": "com.familyconnect.app.friends",
+      "build_source": "e81738083457912da5b1032c45cfbe92bad112cc",
+      "compiled_sources_unchanged": true,
+      "device_access": false,
+      "install": false,
+      "rebuild": false,
+      "sha256": "680a21f60e69cb62d2c7a70be07234b34196e178f0207ed69cb4b422b7bc6247",
+      "signing_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+      "version_code": 55,
+      "version_name": "0.1.18-canary55-receipt"
+    },
+    "artifacts": {
+      "http": {
+        "current_source": true,
+        "inventory": true,
+        "sha256": "ad71cadba79a8fbbe4e60d8d2a1c581304e263a30fdf71fd69b002001d01dd63"
+      },
+      "readiness": {
+        "current_source": true,
+        "inventory": true,
+        "sha256": "9f914a07dd925c892ea489e0f38b3db488a462544a574d7df7a7c4e54671c64b"
+      },
+      "sync": {
+        "current_source": true,
+        "inventory": true,
+        "sha256": "f6aa8859ab716383bf207b2ff7b302687692832b2ccb410f1aef0ada0793a9c9"
+      }
+    },
+    "gate": "PASS",
+    "head": "9b3ec45e83ccb226ec4373087329cfdc218b0fac",
+    "utc": "2026-10-02T21:03:20.103317+00:00"
+  },
+  "prepare-185.251.89.19": {
+    "accepted_sync_verified": true,
+    "backup_path": "/opt/apps/family_connect/restricted-materials-stage-20261001/canary-rollout-attempt16-9b3ec45",
+    "backup_ready": true,
+    "host": "185.251.89.19",
+    "http_candidate_verified": true,
+    "runtime_changed": false,
+    "utc": 1790975200
+  },
+  "prepare-186.246.45.246": {
+    "accepted_sync_verified": true,
+    "backup_path": "/opt/apps/family_connect/restricted-materials-stage-20261001/canary-rollout-attempt16-9b3ec45",
+    "backup_ready": true,
+    "host": "186.246.45.246",
+    "http_candidate_verified": true,
+    "runtime_changed": false,
+    "utc": 1790975208
+  },
+  "refresh-nl-reconciliation": {
+    "missing": [
+      "renewal-nl-intent.json",
+      "renewal-nl-applied.json",
+      "native-authority.json"
+    ],
+    "native_checker_directory_exists": false,
+    "receipts": {}
+  },
+  "refresh-ru": {
+    "crl_expiry": "2026-10-02T21:23:43+00:00",
+    "crl_sequence": 28,
+    "delegation_expiry": 1791028496,
+    "delegation_sequence": 2,
+    "gateway_expiry": "2026-10-02T22:08:44+00:00",
+    "grant_expiry": 1791028496,
+    "grant_revision": 2,
+    "issuer_expiry": "2026-10-03T11:54:56+00:00",
+    "minimum_revision": 1,
+    "non_canaries_denied": 27,
+    "owner_admitted": 1,
+    "python_validation_pass": true,
+    "same_identities": true,
+    "utc": "2026-10-02T21:08:44Z"
+  },
+  "rollback-185.251.89.19": {
+    "authority_and_monotonic_history_retained": true,
+    "host": "185.251.89.19",
+    "normal_services_not_restarted": true,
+    "restricted_inactive": true,
+    "units": {
+      "family-connect-restricted-sync.service": {
+        "ActiveState": "inactive",
+        "MainPID": "0",
+        "UnitFileState": "static"
+      },
+      "family-connect-restricted-sync.timer": {
+        "ActiveState": "inactive",
+        "UnitFileState": "disabled"
+      }
+    },
+    "utc": "2026-10-02T21:13:09Z"
+  },
+  "rollback-186.246.45.246": {
+    "authority_and_monotonic_history_retained": true,
+    "host": "186.246.45.246",
+    "normal_services_not_restarted": true,
+    "restricted_inactive": true,
+    "units": {
+      "family-connect-restricted-bootstrap.service": {
+        "ActiveState": "inactive",
+        "MainPID": "0",
+        "UnitFileState": "disabled"
+      }
+    },
+    "utc": "2026-10-02T21:13:10Z"
+  },
+  "transport_timeouts": [
+    {
+      "host": "185.251.89.19",
+      "timeout": 45,
+      "utc": "2026-10-02T21:08:39.197644+00:00"
+    },
+    {
+      "host": "186.246.45.246",
+      "timeout": 50,
+      "utc": "2026-10-02T21:09:34.485577+00:00"
+    }
+  ]
+}

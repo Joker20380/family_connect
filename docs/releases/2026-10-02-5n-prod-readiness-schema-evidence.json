@@ -1,0 +1,609 @@
+{
+  "after": {
+    "counts": {
+      "challenges": 1,
+      "chat_bindings": 17,
+      "chat_challenges": 1,
+      "chat_sequence": 1,
+      "devices": 28,
+      "invites": 82,
+      "referral_claims": 24,
+      "referral_links": 8,
+      "restricted_certificates": 2,
+      "restricted_challenges": 1,
+      "restricted_crl_sequence": 1,
+      "restricted_grants": 1,
+      "restricted_readiness_results": 0
+    },
+    "database": "/opt/apps/family_connect/friends-access/access.db",
+    "database_size": 184320,
+    "files": {
+      "/opt/apps/family_connect/friends-access/access-api.py": "16e557b1ceb4099897558ade00b53b265566e34e76ab88d4a673af444ab1795a",
+      "/opt/apps/family_connect/state-product-https/config/nginx.conf": "4426bfa9b589fcca124aed99daaaa9dedcf04cbd2c385a322d9fd92ead925267"
+    },
+    "migration_archive": "/opt/apps/family_connect/restricted-materials-stage-20261001/canary-rollout-attempt15-014e6f9/sync-candidate/restricted-sync.pyz",
+    "migration_archive_sha256": "0237527cc0fbe6ea5498b0f1d2025894ae3f347c4bb26b4da9f702bfc25f4f1c",
+    "migration_source_sha256": "4e45675f2d3a9a08fbaa43e9ff048c509902902a8ab26d5f5ca5f3799fb13237",
+    "observed_at": "2026-10-02T20:50:06.492833+00:00",
+    "quick_check": true,
+    "receipt_table_present": true,
+    "restricted_dropins_absent": true,
+    "restricted_ingress_absent": true,
+    "runtime_database_lines": [
+      "access=Access(ROOT/'access.db');slots=threading.BoundedSemaphore(4)"
+    ],
+    "runtime_root_lines": [
+      "ROOT=Path('/opt/apps/family_connect/friends-access')"
+    ],
+    "services": {
+      "family-connect-friends-access.service": {
+        "ActiveState": "active",
+        "ExecMainStartTimestampMonotonic": "2668799957553",
+        "LoadState": "loaded",
+        "MainPID": "1566654",
+        "NRestarts": "0",
+        "SubState": "running",
+        "UnitFileState": "enabled"
+      },
+      "family-connect-friends-awg.service": {
+        "ActiveState": "active",
+        "ExecMainStartTimestampMonotonic": "2157875339292",
+        "LoadState": "loaded",
+        "MainPID": "1515959",
+        "NRestarts": "0",
+        "SubState": "running",
+        "UnitFileState": "enabled"
+      },
+      "family-connect-friends-http-candidate.service": {
+        "ActiveState": "inactive",
+        "ExecMainStartTimestampMonotonic": "0",
+        "LoadState": "not-found",
+        "MainPID": "0",
+        "NRestarts": "0",
+        "SubState": "dead",
+        "UnitFileState": ""
+      },
+      "family-connect-friends-tcp.service": {
+        "ActiveState": "active",
+        "ExecMainStartTimestampMonotonic": "1994262857345",
+        "LoadState": "loaded",
+        "MainPID": "1908885",
+        "NRestarts": "0",
+        "SubState": "running",
+        "UnitFileState": "enabled"
+      },
+      "family-connect-restricted-sync.service": {
+        "ActiveState": "inactive",
+        "ExecMainStartTimestampMonotonic": "0",
+        "LoadState": "loaded",
+        "MainPID": "0",
+        "NRestarts": "0",
+        "SubState": "dead",
+        "UnitFileState": "static"
+      },
+      "family-connect-restricted-sync.timer": {
+        "ActiveState": "inactive",
+        "LoadState": "loaded",
+        "SubState": "dead",
+        "UnitFileState": "disabled"
+      }
+    },
+    "sidecars": {},
+    "versions": {
+      "application_id": 0,
+      "journal_mode": "delete",
+      "schema_version": 14,
+      "user_version": 0
+    }
+  },
+  "before": {
+    "counts": {
+      "challenges": 1,
+      "chat_bindings": 17,
+      "chat_challenges": 1,
+      "chat_sequence": 1,
+      "devices": 28,
+      "invites": 82,
+      "referral_claims": 24,
+      "referral_links": 8,
+      "restricted_certificates": 2,
+      "restricted_challenges": 1,
+      "restricted_crl_sequence": 1,
+      "restricted_grants": 1
+    },
+    "database": "/opt/apps/family_connect/friends-access/access.db",
+    "database_size": 184320,
+    "files": {
+      "/opt/apps/family_connect/friends-access/access-api.py": "16e557b1ceb4099897558ade00b53b265566e34e76ab88d4a673af444ab1795a",
+      "/opt/apps/family_connect/state-product-https/config/nginx.conf": "4426bfa9b589fcca124aed99daaaa9dedcf04cbd2c385a322d9fd92ead925267"
+    },
+    "migration_archive": "/opt/apps/family_connect/restricted-materials-stage-20261001/canary-rollout-attempt15-014e6f9/sync-candidate/restricted-sync.pyz",
+    "migration_archive_sha256": "0237527cc0fbe6ea5498b0f1d2025894ae3f347c4bb26b4da9f702bfc25f4f1c",
+    "migration_source_sha256": "4e45675f2d3a9a08fbaa43e9ff048c509902902a8ab26d5f5ca5f3799fb13237",
+    "observed_at": "2026-10-02T20:42:00.529882+00:00",
+    "quick_check": true,
+    "receipt_table_present": false,
+    "restricted_dropins_absent": true,
+    "restricted_ingress_absent": true,
+    "runtime_database_lines": [
+      "access=Access(ROOT/'access.db');slots=threading.BoundedSemaphore(4)"
+    ],
+    "runtime_root_lines": [
+      "ROOT=Path('/opt/apps/family_connect/friends-access')"
+    ],
+    "services": {
+      "family-connect-friends-access.service": {
+        "ActiveState": "active",
+        "ExecMainStartTimestampMonotonic": "2668799957553",
+        "LoadState": "loaded",
+        "MainPID": "1566654",
+        "NRestarts": "0",
+        "SubState": "running",
+        "UnitFileState": "enabled"
+      },
+      "family-connect-friends-awg.service": {
+        "ActiveState": "active",
+        "ExecMainStartTimestampMonotonic": "2157875339292",
+        "LoadState": "loaded",
+        "MainPID": "1515959",
+        "NRestarts": "0",
+        "SubState": "running",
+        "UnitFileState": "enabled"
+      },
+      "family-connect-friends-http-candidate.service": {
+        "ActiveState": "inactive",
+        "ExecMainStartTimestampMonotonic": "0",
+        "LoadState": "not-found",
+        "MainPID": "0",
+        "NRestarts": "0",
+        "SubState": "dead",
+        "UnitFileState": ""
+      },
+      "family-connect-friends-tcp.service": {
+        "ActiveState": "active",
+        "ExecMainStartTimestampMonotonic": "1994262857345",
+        "LoadState": "loaded",
+        "MainPID": "1908885",
+        "NRestarts": "0",
+        "SubState": "running",
+        "UnitFileState": "enabled"
+      },
+      "family-connect-restricted-sync.service": {
+        "ActiveState": "inactive",
+        "ExecMainStartTimestampMonotonic": "0",
+        "LoadState": "loaded",
+        "MainPID": "0",
+        "NRestarts": "0",
+        "SubState": "dead",
+        "UnitFileState": "static"
+      },
+      "family-connect-restricted-sync.timer": {
+        "ActiveState": "inactive",
+        "LoadState": "loaded",
+        "SubState": "dead",
+        "UnitFileState": "disabled"
+      }
+    },
+    "sidecars": {},
+    "versions": {
+      "application_id": 0,
+      "journal_mode": "delete",
+      "schema_version": 13,
+      "user_version": 0
+    }
+  },
+  "counts_before_after_equal_except_empty_new_table": true,
+  "downtime_evidence": "11 bounded successful-status probes; no probe overlaps the 35.893ms transaction; no service restart observed; zero downtime not proven",
+  "existing_rows_unchanged_inside_write_transaction": true,
+  "existing_schema_unchanged": true,
+  "gate": "5N-PROD-READINESS-SCHEMA",
+  "http": {
+    "after": [
+      {
+        "elapsed_ms": 339.114,
+        "expected": 200,
+        "generation": "readiness-schema-after",
+        "label": "status",
+        "method": "GET",
+        "path": "/status/server-load.json",
+        "response_class": "json-object",
+        "status": 200,
+        "timestamp": "2026-10-02T20:49:05.094428Z",
+        "transport_error": null
+      },
+      {
+        "elapsed_ms": 341.881,
+        "expected": 400,
+        "generation": "readiness-schema-after",
+        "label": "ordinary_challenge",
+        "method": "POST",
+        "path": "/friends/challenge",
+        "response_class": "json-object",
+        "status": 400,
+        "timestamp": "2026-10-02T20:49:06.545674Z",
+        "transport_error": null
+      },
+      {
+        "elapsed_ms": 301.221,
+        "expected": 400,
+        "generation": "readiness-schema-after",
+        "label": "ordinary_chat",
+        "method": "POST",
+        "path": "/friends/chat/challenge",
+        "response_class": "json-object",
+        "status": 400,
+        "timestamp": "2026-10-02T20:49:07.997192Z",
+        "transport_error": null
+      },
+      {
+        "elapsed_ms": 375.183,
+        "expected": 404,
+        "generation": "readiness-schema-after",
+        "label": "restricted_malformed",
+        "method": "POST",
+        "path": "/friends/restricted-readiness/challenge",
+        "response_class": "html",
+        "status": 404,
+        "timestamp": "2026-10-02T20:49:09.408053Z",
+        "transport_error": null
+      }
+    ],
+    "before": [
+      {
+        "elapsed_ms": 318.857,
+        "expected": 200,
+        "generation": "readiness-schema-before",
+        "label": "status",
+        "method": "GET",
+        "path": "/status/server-load.json",
+        "response_class": "json-object",
+        "status": 200,
+        "timestamp": "2026-10-02T20:42:09.644719Z",
+        "transport_error": null
+      },
+      {
+        "elapsed_ms": 326.465,
+        "expected": 400,
+        "generation": "readiness-schema-before",
+        "label": "ordinary_challenge",
+        "method": "POST",
+        "path": "/friends/challenge",
+        "response_class": "json-object",
+        "status": 400,
+        "timestamp": "2026-10-02T20:42:11.069497Z",
+        "transport_error": null
+      },
+      {
+        "elapsed_ms": 324.088,
+        "expected": 400,
+        "generation": "readiness-schema-before",
+        "label": "ordinary_chat",
+        "method": "POST",
+        "path": "/friends/chat/challenge",
+        "response_class": "json-object",
+        "status": 400,
+        "timestamp": "2026-10-02T20:42:12.506768Z",
+        "transport_error": null
+      },
+      {
+        "elapsed_ms": 263.855,
+        "expected": 404,
+        "generation": "readiness-schema-before",
+        "label": "restricted_malformed",
+        "method": "POST",
+        "path": "/friends/restricted-readiness/challenge",
+        "response_class": "html",
+        "status": 404,
+        "timestamp": "2026-10-02T20:42:13.936161Z",
+        "transport_error": null
+      }
+    ],
+    "during": [
+      {
+        "elapsed_ms": 300.508,
+        "expected": 200,
+        "generation": "readiness-schema-during",
+        "label": "status",
+        "method": "GET",
+        "path": "/status/server-load.json",
+        "response_class": "json-object",
+        "status": 200,
+        "timestamp": "2026-10-02T20:48:46.867545Z",
+        "transport_error": null
+      },
+      {
+        "elapsed_ms": 297.737,
+        "expected": 400,
+        "generation": "readiness-schema-during",
+        "label": "ordinary_challenge",
+        "method": "POST",
+        "path": "/friends/challenge",
+        "response_class": "json-object",
+        "status": 400,
+        "timestamp": "2026-10-02T20:48:48.277689Z",
+        "transport_error": null
+      },
+      {
+        "elapsed_ms": 349.538,
+        "expected": 200,
+        "generation": "readiness-schema-during",
+        "label": "status",
+        "method": "GET",
+        "path": "/status/server-load.json",
+        "response_class": "json-object",
+        "status": 200,
+        "timestamp": "2026-10-02T20:48:49.681199Z",
+        "transport_error": null
+      }
+    ]
+  },
+  "local_validator": {
+    "idempotent": true,
+    "migration_archive_sha256": "0237527cc0fbe6ea5498b0f1d2025894ae3f347c4bb26b4da9f702bfc25f4f1c",
+    "observations": [
+      {
+        "existing_synthetic_rows_preserved": true,
+        "injected_schema_validation_failure": false,
+        "receipt_table_present": true,
+        "transaction": "COMMITTED"
+      },
+      {
+        "existing_synthetic_rows_preserved": true,
+        "injected_schema_validation_failure": true,
+        "receipt_table_present": false,
+        "transaction": "ROLLED_BACK"
+      }
+    ],
+    "production_access": false
+  },
+  "migration": {
+    "backup": {
+      "counts": {
+        "challenges": 1,
+        "chat_bindings": 17,
+        "chat_challenges": 1,
+        "chat_sequence": 1,
+        "devices": 28,
+        "invites": 82,
+        "referral_claims": 24,
+        "referral_links": 8,
+        "restricted_certificates": 2,
+        "restricted_challenges": 1,
+        "restricted_crl_sequence": 1,
+        "restricted_grants": 1
+      },
+      "elapsed_ms": 44.16,
+      "finished_at": "2026-10-02T20:48:50.266342+00:00",
+      "live_journal_mode": "delete",
+      "live_sidecars": {},
+      "live_size_before": 184320,
+      "mode": "0o600",
+      "path": "/opt/apps/family_connect/readiness-schema-migration-20261002-9b3ec45/access-before-readiness-schema.db",
+      "quick_check": true,
+      "sha256": "e47be43919250196807d12da9040b6014ab282c32be04289162fb6d94c88b76a",
+      "size": 184320,
+      "started_at": "2026-10-02T20:48:50.222236+00:00",
+      "versions": {
+        "application_id": 0,
+        "journal_mode": "delete",
+        "schema_version": 1,
+        "user_version": 0
+      }
+    },
+    "begin_immediate_ms": 0.131,
+    "busy_or_lock_error": false,
+    "commit_ms": 32.59,
+    "counts_before": {
+      "challenges": 1,
+      "chat_bindings": 17,
+      "chat_challenges": 1,
+      "chat_sequence": 1,
+      "devices": 28,
+      "invites": 82,
+      "referral_claims": 24,
+      "referral_links": 8,
+      "restricted_certificates": 2,
+      "restricted_challenges": 1,
+      "restricted_crl_sequence": 1,
+      "restricted_grants": 1
+    },
+    "database": "/opt/apps/family_connect/friends-access/access.db",
+    "existing_rows_unchanged_in_transaction": true,
+    "finished_at": "2026-10-02T20:48:50.452896+00:00",
+    "gate": "5N-PROD-READINESS-SCHEMA",
+    "migration": {
+      "archive": "/opt/apps/family_connect/restricted-materials-stage-20261001/canary-rollout-attempt15-014e6f9/sync-candidate/restricted-sync.pyz",
+      "archive_sha256": "0237527cc0fbe6ea5498b0f1d2025894ae3f347c4bb26b4da9f702bfc25f4f1c",
+      "call": "control.friends.readiness_receipts.migrate",
+      "calls": 1,
+      "module_origin": "/opt/apps/family_connect/restricted-materials-stage-20261001/canary-rollout-attempt15-014e6f9/sync-candidate/restricted-sync.pyz/control/friends/readiness_receipts.py",
+      "source_sha256": "4e45675f2d3a9a08fbaa43e9ff048c509902902a8ab26d5f5ca5f3799fb13237"
+    },
+    "migration_call_ms": 0.44,
+    "outcome": "PASS",
+    "readonly_application_readback": "UNKNOWN_NO_INSERT",
+    "started_at": "2026-10-02T20:48:49.839623+00:00",
+    "table_validation": {
+      "columns": [
+        [
+          0,
+          "correlation",
+          "TEXT",
+          0,
+          null,
+          1
+        ],
+        [
+          1,
+          "nonce",
+          "TEXT",
+          1,
+          null,
+          0
+        ],
+        [
+          2,
+          "device",
+          "TEXT",
+          1,
+          null,
+          0
+        ],
+        [
+          3,
+          "challenge_at",
+          "INTEGER",
+          1,
+          null,
+          0
+        ],
+        [
+          4,
+          "fetch_id",
+          "TEXT",
+          0,
+          null,
+          0
+        ],
+        [
+          5,
+          "fetch_at",
+          "INTEGER",
+          0,
+          null,
+          0
+        ],
+        [
+          6,
+          "revision",
+          "INTEGER",
+          0,
+          null,
+          0
+        ],
+        [
+          7,
+          "minimum_crl",
+          "INTEGER",
+          0,
+          null,
+          0
+        ],
+        [
+          8,
+          "expires",
+          "INTEGER",
+          0,
+          null,
+          0
+        ],
+        [
+          9,
+          "ack",
+          "TEXT",
+          0,
+          null,
+          0
+        ],
+        [
+          10,
+          "ack_at",
+          "INTEGER",
+          0,
+          null,
+          0
+        ]
+      ],
+      "foreign_keys": [],
+      "indexes": [
+        {
+          "columns": [
+            [
+              0,
+              1,
+              "nonce",
+              0,
+              "BINARY",
+              1
+            ],
+            [
+              1,
+              -1,
+              null,
+              0,
+              "BINARY",
+              0
+            ]
+          ],
+          "properties": [
+            0,
+            "sqlite_autoindex_restricted_readiness_results_2",
+            1,
+            "u",
+            0
+          ]
+        },
+        {
+          "columns": [
+            [
+              0,
+              0,
+              "correlation",
+              0,
+              "BINARY",
+              1
+            ],
+            [
+              1,
+              -1,
+              null,
+              0,
+              "BINARY",
+              0
+            ]
+          ],
+          "properties": [
+            1,
+            "sqlite_autoindex_restricted_readiness_results_1",
+            1,
+            "pk",
+            0
+          ]
+        }
+      ],
+      "sql": "CREATE TABLE restricted_readiness_results (correlation TEXT PRIMARY KEY, nonce TEXT UNIQUE NOT NULL, device TEXT NOT NULL, challenge_at INTEGER NOT NULL, fetch_id TEXT, fetch_at INTEGER, revision INTEGER, minimum_crl INTEGER, expires INTEGER, ack TEXT, ack_at INTEGER)"
+    },
+    "transaction": "COMMITTED",
+    "transaction_elapsed_ms": 35.893,
+    "transaction_finished_at": "2026-10-02T20:48:50.319772+00:00",
+    "transaction_started_at": "2026-10-02T20:48:50.283870+00:00",
+    "unrelated_schema_changes": false
+  },
+  "nl_bootstrap_before_after_equal": true,
+  "nl_bootstrap_final": {
+    "ActiveState": "inactive",
+    "ExecMainStartTimestampMonotonic": "0",
+    "Id": "family-connect-restricted-bootstrap.service",
+    "LoadState": "loaded",
+    "MainPID": "0",
+    "NRestarts": "0",
+    "SubState": "dead",
+    "UnitFileState": "disabled"
+  },
+  "outcome": "PASS",
+  "restrictions": {
+    "authority_refreshed": false,
+    "push": false,
+    "redmi_touched": false,
+    "restricted_routes_enabled": false,
+    "restricted_services_started": false,
+    "runtime_deployed": false
+  },
+  "starting_head": "9b3ec45e83ccb226ec4373087329cfdc218b0fac",
+  "tests": {
+    "focused": "125 passed, 6 skipped",
+    "jvm_python_roundtrip_suite": "23 passed, 0 skipped",
+    "local_idempotence": true,
+    "local_transaction_validation": "success and injected-failure rollback verified"
+  }
+}

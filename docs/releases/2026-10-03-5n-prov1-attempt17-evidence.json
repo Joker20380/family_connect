@@ -1,0 +1,735 @@
+{
+  "version": 1,
+  "source_head": "061595376fa65ae38725ed75baac769d71623d92",
+  "result": "5N-PROV-1 = DEPLOYED / PHYSICAL BLOCKED",
+  "pins": {
+    "utc": "2026-10-02T22:12:40.195929+00:00",
+    "gate": "PASS",
+    "head": "061595376fa65ae38725ed75baac769d71623d92",
+    "artifacts": {
+      "http": {
+        "sha256": "ad71cadba79a8fbbe4e60d8d2a1c581304e263a30fdf71fd69b002001d01dd63",
+        "inventory": true,
+        "current_source": true
+      },
+      "readiness": {
+        "sha256": "9f914a07dd925c892ea489e0f38b3db488a462544a574d7df7a7c4e54671c64b",
+        "inventory": true,
+        "current_source": true
+      },
+      "sync": {
+        "sha256": "f6aa8859ab716383bf207b2ff7b302687692832b2ccb410f1aef0ada0793a9c9",
+        "inventory": true,
+        "current_source": true
+      }
+    },
+    "apk": {
+      "apk": "state-client-build/android-canary55-receipt-e817380/artifacts/FamilyConnect-canary55-receipt-e817380-arm64.apk",
+      "application_id": "com.familyconnect.app.friends",
+      "build_source": "e81738083457912da5b1032c45cfbe92bad112cc",
+      "compiled_sources_unchanged": true,
+      "device_access": false,
+      "install": false,
+      "rebuild": false,
+      "sha256": "680a21f60e69cb62d2c7a70be07234b34196e178f0207ed69cb4b422b7bc6247",
+      "signing_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+      "version_code": 55,
+      "version_name": "0.1.18-canary55-receipt"
+    }
+  },
+  "installed_device": {
+    "gate": "PASS",
+    "model": "Redmi Note 9 Pro",
+    "android": "12",
+    "abi": "arm64-v8a",
+    "installed_version_code": 55,
+    "installed_version": "0.1.18-canary55-receipt",
+    "installed_sha256": "680a21f60e69cb62d2c7a70be07234b34196e178f0207ed69cb4b422b7bc6247",
+    "target": 55,
+    "signature_verified": true,
+    "in_place_compatible": true,
+    "no_reset": true,
+    "private_key_accessed": false
+  },
+  "staging": {
+    "ru": {
+      "pre_use_state": "READY",
+      "reused": true,
+      "files": 9,
+      "bytes": 7806192,
+      "finished": 1790979192.2286491
+    },
+    "nl": {
+      "pre_use_state": "READY",
+      "reused": true,
+      "files": 3,
+      "bytes": 5683055,
+      "finished": 1790979193.1350958
+    }
+  },
+  "post_use_staging_diagnostic": {
+    "inspect_state": "FAILED",
+    "reason": "additional_generated_python_bytecode",
+    "required_pre_use_gate": "PASS",
+    "new_acceptance_gate": false,
+    "reusable_ready_now": false,
+    "reconciliation": {
+      "files": {
+        "friends_http_transition.py": {
+          "hash_match": true,
+          "size_match": true,
+          "mode_match": true,
+          "uid": 0,
+          "gid": 0,
+          "symlink": false
+        },
+        "friends_http_acceptance.py": {
+          "hash_match": true,
+          "size_match": true,
+          "mode_match": true,
+          "uid": 0,
+          "gid": 0,
+          "symlink": false
+        },
+        "candidate.service": {
+          "hash_match": true,
+          "size_match": true,
+          "mode_match": true,
+          "uid": 0,
+          "gid": 0,
+          "symlink": false
+        },
+        "nginx-template.conf": {
+          "hash_match": true,
+          "size_match": true,
+          "mode_match": true,
+          "uid": 0,
+          "gid": 0,
+          "symlink": false
+        },
+        "http_operator.py": {
+          "hash_match": true,
+          "size_match": true,
+          "mode_match": true,
+          "uid": 0,
+          "gid": 0,
+          "symlink": false
+        },
+        "candidate-readiness.pyz": {
+          "hash_match": true,
+          "size_match": true,
+          "mode_match": true,
+          "uid": 0,
+          "gid": 0,
+          "symlink": false
+        },
+        "readiness-delivery-check": {
+          "hash_match": true,
+          "size_match": true,
+          "mode_match": true,
+          "uid": 0,
+          "gid": 0,
+          "symlink": false
+        },
+        "readiness.lock": {
+          "hash_match": true,
+          "size_match": true,
+          "mode_match": true,
+          "uid": 0,
+          "gid": 0,
+          "symlink": false
+        },
+        "provenance.json": {
+          "hash_match": true,
+          "size_match": true,
+          "mode_match": true,
+          "uid": 0,
+          "gid": 0,
+          "symlink": false
+        }
+      },
+      "extras": [
+        {
+          "name": "__pycache__",
+          "directory": true,
+          "mode": 493,
+          "uid": 0,
+          "gid": 0
+        }
+      ],
+      "cache_items": [
+        {
+          "name": "friends_http_transition.cpython-314.pyc",
+          "bytes": 50755,
+          "mtime": 1790980689.7541616
+        }
+      ],
+      "artifacts_unchanged": true
+    }
+  },
+  "authority": {
+    "ru": {
+      "utc": "2026-10-02T22:37:09Z",
+      "python_validation_pass": true,
+      "delegation_sequence": 2,
+      "grant_revision": 2,
+      "minimum_revision": 1,
+      "delegation_expiry": 1791028496,
+      "grant_expiry": 1791028496,
+      "issuer_expiry": "2026-10-03T11:54:56+00:00",
+      "owner_admitted": 1,
+      "non_canaries_denied": 27,
+      "crl_sequence": 29,
+      "crl_expiry": "2026-10-02T22:52:09+00:00",
+      "gateway_expiry": "2026-10-02T23:37:09+00:00",
+      "same_identities": true
+    },
+    "nl": {
+      "utc": "2026-10-02T22:37:11Z",
+      "native_validation_pass": true,
+      "native_exit": 0,
+      "delegation_sequence": 2,
+      "issuer_expiry": "2026-10-03T11:54:56+00:00",
+      "crl_sequence": 29,
+      "crl_expiry": "2026-10-02T22:52:09+00:00",
+      "gateway_expiry": "2026-10-02T23:37:09+00:00",
+      "same_gateway_key": true,
+      "provider_metadata_valid": true,
+      "token_not_read": true,
+      "native_receipt": {
+        "version": 1,
+        "timestamp": "2026-10-02T22:37:11.107614+00:00",
+        "attempt": "7b33a6d1598f31c6d7d0bcd4b26a00b0",
+        "passed": true,
+        "classification": "native_pass",
+        "binary_sha256": "a1df5f88a103340a6ba9d67ae8842147afd99d430fba6b30b8ba7b212373ce90",
+        "exit": 0,
+        "native": {
+          "version": 1,
+          "status": "PASS",
+          "stage": "complete",
+          "reason": "validated",
+          "object": "authority",
+          "comparison": "positive_and_negatives"
+        }
+      }
+    }
+  },
+  "baseline": {
+    "gate": "PASS",
+    "statuses": [
+      200,
+      400,
+      400,
+      404
+    ],
+    "interval": 1.1
+  },
+  "nl_acceptance": {
+    "authoritative": "PASS",
+    "journal": "diagnostic_timeout",
+    "verdict": [
+      {
+        "event": "verdict",
+        "passed": true,
+        "failure": null,
+        "kind": "authoritative",
+        "generation": "attempt17-nl",
+        "timestamp": "2026-10-02T22:37:22.822373Z"
+      }
+    ]
+  },
+  "ru_sync": {
+    "event": "verdict",
+    "passed": true,
+    "completed": [
+      "unit",
+      "fresh_readback",
+      "generic_shell",
+      "stale_crl"
+    ],
+    "observed_after": {
+      "crl_sequence": 30,
+      "database_sequence": 30,
+      "directory_version": 1,
+      "directory_issued_ns": 1790980640478060279,
+      "directory_expires_ns": 1790983937284783304,
+      "directory_valid": true
+    },
+    "generation": "attempt17-sync",
+    "timestamp": "2026-10-02T22:37:42.876079Z"
+  },
+  "http": {
+    "result": {
+      "result": "PASS",
+      "committed": true,
+      "owner_product_ready": true,
+      "generation": "attempt17-0615953",
+      "operator_exit": 0
+    },
+    "candidate": {
+      "port": 18086,
+      "generation": "attempt17-0615953",
+      "pid": 3917121,
+      "start": "271588400",
+      "http_sha256": "ad71cadba79a8fbbe4e60d8d2a1c581304e263a30fdf71fd69b002001d01dd63"
+    },
+    "probes": [
+      {
+        "layer": "server_contract_fixture",
+        "label": "ordinary_challenge",
+        "status": 400,
+        "valid": true,
+        "receipt_class": "server_contract_fixture"
+      },
+      {
+        "layer": "server_contract_fixture",
+        "label": "ordinary_chat",
+        "status": 400,
+        "valid": true,
+        "receipt_class": "server_contract_fixture"
+      },
+      {
+        "layer": "server_contract_fixture",
+        "label": "restricted_malformed",
+        "status": 400,
+        "valid": true,
+        "receipt_class": "server_contract_fixture"
+      },
+      {
+        "layer": "server_contract_fixture",
+        "label": "restricted_non_canary",
+        "status": 403,
+        "valid": true,
+        "receipt_class": "server_contract_fixture"
+      },
+      {
+        "layer": "server_contract_fixture",
+        "label": "restricted_canary",
+        "status": 200,
+        "valid": true,
+        "receipt_class": "server_contract_fixture"
+      },
+      {
+        "layer": "server_contract_fixture",
+        "label": "restricted_readiness",
+        "status": 200,
+        "valid": true,
+        "receipt_class": "server_contract_fixture"
+      },
+      {
+        "layer": "direct_candidate",
+        "label": "ordinary_challenge",
+        "status": 400,
+        "valid": true,
+        "receipt_class": "server_probe"
+      },
+      {
+        "layer": "direct_candidate",
+        "label": "ordinary_chat",
+        "status": 400,
+        "valid": true,
+        "receipt_class": "server_probe"
+      },
+      {
+        "layer": "direct_candidate",
+        "label": "restricted_malformed",
+        "status": 400,
+        "valid": true,
+        "receipt_class": "server_probe"
+      },
+      {
+        "layer": "direct_candidate",
+        "label": "restricted_non_canary",
+        "status": 403,
+        "valid": true,
+        "receipt_class": "server_probe"
+      }
+    ],
+    "external": [
+      {
+        "label": "status",
+        "status": 200,
+        "valid": true,
+        "active_generation": "attempt17-0615953"
+      },
+      {
+        "label": "ordinary_challenge",
+        "status": 400,
+        "valid": true,
+        "active_generation": "attempt17-0615953"
+      },
+      {
+        "label": "ordinary_chat",
+        "status": 400,
+        "valid": true,
+        "active_generation": "attempt17-0615953"
+      },
+      {
+        "label": "restricted_malformed",
+        "status": 400,
+        "valid": true,
+        "active_generation": "attempt17-0615953"
+      },
+      {
+        "label": "restricted_non_canary",
+        "status": 403,
+        "valid": true,
+        "active_generation": "attempt17-0615953"
+      },
+      {
+        "label": "ordinary_challenge",
+        "status": 400,
+        "valid": true,
+        "active_generation": null
+      },
+      {
+        "label": "ordinary_chat",
+        "status": 400,
+        "valid": true,
+        "active_generation": null
+      },
+      {
+        "label": "restricted_malformed",
+        "status": 404,
+        "valid": true,
+        "active_generation": null
+      },
+      {
+        "label": "status",
+        "status": 200,
+        "valid": true,
+        "active_generation": null
+      },
+      {
+        "label": "ordinary_challenge",
+        "status": 400,
+        "valid": true,
+        "active_generation": "attempt17-0615953"
+      },
+      {
+        "label": "restricted_malformed",
+        "status": 400,
+        "valid": true,
+        "active_generation": "attempt17-0615953"
+      },
+      {
+        "label": "ordinary_chat",
+        "status": 400,
+        "valid": true,
+        "active_generation": "attempt17-0615953"
+      },
+      {
+        "label": "status",
+        "status": 200,
+        "valid": true,
+        "active_generation": "attempt17-0615953"
+      }
+    ],
+    "operator_429_502": 0
+  },
+  "owner": {
+    "version": 1,
+    "correlation_id": "3cc7d19e3fc848e4be03d0c4780e4c61",
+    "status": "ACK_RECEIVED",
+    "receipt": {
+      "app_version": "0.1.18-canary55-receipt",
+      "bootstrap": "PRESENT_VALID",
+      "challenge_id": "3cc7d19e3fc848e4be03d0c4780e4c61",
+      "correlation_id": "3cc7d19e3fc848e4be03d0c4780e4c61",
+      "expires_at": 1790981529,
+      "failure_reason": "NONE",
+      "fetch_id": "d08e1e886f09449fab874e387358cd33",
+      "minimum_crl": 30,
+      "observed_at": 1790980775,
+      "orchestrator_usable": true,
+      "phase": "import",
+      "provisioning": "PRESENT_VALID",
+      "result": "READY",
+      "revision": 2,
+      "type": "READINESS_IMPORT_RESULT",
+      "version": 1,
+      "version_code": 55
+    },
+    "received_at": 1790980776
+  },
+  "restart": {
+    "process": {
+      "previous_pid": "10415",
+      "current_pid": "11129",
+      "changed": true
+    },
+    "acknowledgement": {
+      "version": 1,
+      "correlation_id": "3cc7d19e3fc848e4be03d0c4780e4c61",
+      "status": "ACK_RECEIVED",
+      "receipt": {
+        "app_version": "0.1.18-canary55-receipt",
+        "bootstrap": "PRESENT_VALID",
+        "challenge_id": "3cc7d19e3fc848e4be03d0c4780e4c61",
+        "correlation_id": "3cc7d19e3fc848e4be03d0c4780e4c61",
+        "expires_at": 1790981529,
+        "failure_reason": "NONE",
+        "fetch_id": "d08e1e886f09449fab874e387358cd33",
+        "minimum_crl": 30,
+        "observed_at": 1790980946,
+        "orchestrator_usable": true,
+        "phase": "restart",
+        "provisioning": "PRESENT_VALID",
+        "result": "READY",
+        "revision": 2,
+        "type": "READINESS_IMPORT_RESULT",
+        "version": 1,
+        "version_code": 55
+      },
+      "received_at": 1790980947
+    },
+    "result": {
+      "gate": "PASS",
+      "fresh_process": true,
+      "fresh_authenticated_restart_receipt": true
+    }
+  },
+  "physical": {
+    "preflight": {
+      "utc": "2026-10-02T22:43:59.397685+00:00",
+      "wifi_on": "1",
+      "mobile_data": "1",
+      "vpn_connected_count": 0,
+      "cellular_connected": true,
+      "wifi_connected": true,
+      "intended_package_debuggable": false,
+      "diagnostic_exhaustion_activity_in_installed_manifest": false,
+      "keyguard_showing": false,
+      "radios_changed": false,
+      "connection_started": false,
+      "private_state_accessed": false
+    },
+    "observed_vpn": {
+      "observations": [
+        {
+          "utc": "2026-10-02T22:47:05.949032+00:00",
+          "exit": 0,
+          "connected_vpn_count": 1
+        }
+      ],
+      "elapsed": 0.0791084959928412,
+      "connection_injected": false,
+      "result": "VPN_OBSERVED_NOT_YET_RESTRICTED_PROOF",
+      "operator_wait_only_not_acceptance_verdict": true
+    },
+    "os": {
+      "utc": "2026-10-02T22:52:19.033434+00:00",
+      "connected_vpn_count": 1,
+      "friends_session": true,
+      "restricted_dns_configured": false,
+      "restricted_address_configured": false,
+      "both_default_routes": true,
+      "nonbypassable": true,
+      "normal_exhaustion_injected": false,
+      "raw_networks_not_retained": true
+    },
+    "journal_diagnostic": {
+      "status": "diagnostic_timeout",
+      "non_gating": true,
+      "events": null
+    },
+    "normal_exhaustion": "NOT_ESTABLISHED",
+    "restricted_rehearsal": "BLOCKED_NOT_PROVEN",
+    "chrome_tls": "NOT_RUN",
+    "family_dns": "NOT_PROVEN",
+    "concurrent_tcp": "NOT_RUN",
+    "direct_dns_leak_zero": "NOT_PROVEN",
+    "protected_tcp_bypass_zero": "NOT_PROVEN",
+    "udp_quic_fail_closed": "NOT_PROVEN",
+    "ipv6_fail_closed": "NOT_PROVEN",
+    "underlay_protection": "NOT_PROVEN"
+  },
+  "production": {
+    "ru": {
+      "utc": "2026-10-02T22:55:22Z",
+      "outcome": "DEPLOYED / PHYSICAL BLOCKED",
+      "stage_5n_closed": false,
+      "physical_reason": "NORMAL_EXHAUSTION_NOT_ESTABLISHED; ACCEPTED_CANARY55_HAS_NO_DIAGNOSTIC_EXHAUSTION_ACTIVITY",
+      "rollback_executed": false,
+      "services": {
+        "family-connect-friends-awg.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "1515959",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "2157875339292",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-tcp.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "1908885",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "1994262857345",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-http-candidate.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "3917121",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "2715884002144",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-access.service": {
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "UnitFileState": "disabled",
+          "MainPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "2668799957553",
+          "ExecMainStatus": "15"
+        },
+        "family-connect-restricted-sync.timer": {
+          "ActiveState": "active",
+          "SubState": "waiting",
+          "UnitFileState": "enabled",
+          "Result": "success"
+        },
+        "family-connect-restricted-sync.service": {
+          "ActiveState": "inactive",
+          "SubState": "dead",
+          "UnitFileState": "static",
+          "MainPID": "0",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "2716905101307",
+          "ExecMainStatus": "0"
+        }
+      },
+      "db_crl_floor": 60,
+      "schema_version": 14,
+      "grants": 1,
+      "current_owner_ack": {
+        "version": 1,
+        "correlation_id": "d42c8cba556e4f2fa7bb5ba4a4c26146",
+        "status": "ACK_RECEIVED",
+        "receipt": {
+          "app_version": "0.1.18-canary55-receipt",
+          "bootstrap": "PRESENT_VALID",
+          "challenge_id": "d42c8cba556e4f2fa7bb5ba4a4c26146",
+          "correlation_id": "d42c8cba556e4f2fa7bb5ba4a4c26146",
+          "expires_at": 1790982129,
+          "failure_reason": "NONE",
+          "fetch_id": "690b4150b40449a8a60af9e4b0bfd240",
+          "minimum_crl": 45,
+          "observed_at": 1790981247,
+          "orchestrator_usable": true,
+          "phase": "import",
+          "provisioning": "PRESENT_VALID",
+          "result": "READY",
+          "revision": 2,
+          "type": "READINESS_IMPORT_RESULT",
+          "version": 1,
+          "version_code": 55
+        },
+        "received_at": 1790981248
+      },
+      "isolated_check_exit": 0
+    },
+    "nl": {
+      "utc": "2026-10-02T22:55:24Z",
+      "outcome": "DEPLOYED / PHYSICAL BLOCKED",
+      "stage_5n_closed": false,
+      "physical_reason": "NORMAL_EXHAUSTION_NOT_ESTABLISHED; ACCEPTED_CANARY55_HAS_NO_DIAGNOSTIC_EXHAUSTION_ACTIVITY",
+      "rollback_executed": false,
+      "services": {
+        "family-connect-friends-awg.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "2729703",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "1015819537902",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-friends-tcp.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "enabled",
+          "MainPID": "2420425",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "966764281443",
+          "ExecMainStatus": "0"
+        },
+        "family-connect-restricted-bootstrap.service": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "UnitFileState": "disabled",
+          "MainPID": "2731387",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestampMonotonic": "1688355979679",
+          "ExecMainStatus": "0"
+        }
+      },
+      "snapshot": {
+        "published": true,
+        "directory_valid": true,
+        "canonical_utc": true,
+        "seed_count": 1,
+        "issued_ns": 1790980640478060279,
+        "expires_ns": 1790983937284783304,
+        "crl_expires_ns": 1790982612000000000,
+        "gateway_expires_ns": 1790984229000000000
+      }
+    },
+    "ingress": {
+      "sha256": "19c04fb97209bf5d88695f97da39fd4d930dc8f69d8e3a71f2ee964cc592af69",
+      "candidate_upstreams": 2,
+      "old_upstreams": 0,
+      "generation": true
+    },
+    "ports": {
+      "18084": {
+        "listening": false,
+        "owned_pid_present": null,
+        "loopback_only": true
+      },
+      "18085": {
+        "listening": true,
+        "owned_pid_present": null,
+        "loopback_only": true
+      },
+      "18086": {
+        "listening": true,
+        "owned_pid_present": true,
+        "loopback_only": true
+      }
+    },
+    "external_final": {
+      "gate": "PASS",
+      "statuses": [
+        200,
+        400,
+        400,
+        400
+      ],
+      "interval": 1.1
+    }
+  },
+  "stage_5n_closed": false,
+  "rollback_executed": false,
+  "push": false,
+  "field_1_started": false,
+  "diag_1_started": false,
+  "ops_1_started": false,
+  "beta_started": false,
+  "historical_attempt15_cause": "UNKNOWN",
+  "historical_attempt16_cause": "UNKNOWN"
+}

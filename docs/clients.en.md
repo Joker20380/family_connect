@@ -1,5 +1,31 @@
 # Client installation
 
+Latest private checkpoint03.10.2026: **`0.1.18-canary58-physical`/58 installed over57**,
+same Friends package/signer/UID/data, encrypted restart READY/ACK_RECEIVED preserved.
+APK SHA256 `91e8910896ff84b31a7cebf40f840256dca283d684b075577290d1282f227194`;
+signer `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+Private launcher hook fixed and live ON/OFF tested. Physical rehearsal BLOCKED on
+MIUI-denied ADB input/no manual CONNECT. Override OFF after restart; app disconnected.
+Not a public release; public/invitation/catalog links unchanged and not reverified.
+[Current installed state/provenance](releases/2026-10-03-5n-physical-hook-fix-and-rehearsal.ru.md).
+
+Current private-device checkpoint03.10.2026: exact `0.1.18-canary57-physical`/57 is
+**installed in place over55**, with the same package/signer and encrypted readiness
+preserved (restart READY/ACK_RECEIVED). SHA256
+`dd3c1b1bd9031f189ef7fc606969eb7da05e44f470478c8457f9097119b9c975`.
+Private hook navigation crashed before restricted CONNECT; diagnostic override is OFF,
+Auto retained, app disconnected. Physical acceptance FAIL, Stage5N not closed.
+Not publicly distributed; public/invitation/catalog links unchanged and not reverified.
+[Current installed state and exact failure](releases/2026-10-03-5n-physical-restricted-rehearsal-final.ru.md).
+Earlier build-only statements below are historical.
+
+Private acceptance build03.10.2026: `0.1.18-canary57-physical`/57 arm64 is signed,
+**not installed or published**; the Redmi remains canary55. Same Friends package/signer;
+debuggable packaging exposes existing diagnostic Activities for private acceptance only.
+APK SHA256 `dd3c1b1bd9031f189ef7fc606969eb7da05e44f470478c8457f9097119b9c975`.
+No public/invitation/update-catalog change; do not distribute this diagnostic build.
+[Exact signer, local tests and credential-reload blocker](releases/2026-10-03-5n-physical-restricted-rehearsal.ru.md).
+
 Windows0.2.15 targets Windows10 1809+ /11 x64 and bundles .NET.
 After a failed0.2.13 installation, run the new installer over the remaining files.
 No manual service setup is needed. Affected Windows10 device acceptance is pending.
@@ -17,6 +43,14 @@ Installed private55 and public/invitation51 remain last documented, unchanged an
 not reverified. No new download/update link or catalog. Production503 cause remains
 unproven; [local tests, pins and BLOCKED gate](releases/2026-10-02-5n-real-owner-challenge-503.md).
 
+Attempt15,02.10.2026: private `0.1.18-canary55-receipt`/55 **installed over54** on the
+owner Redmi, exact APK/signature verified; no uninstall/data reset. SHA256
+`680a21f60e69cb62d2c7a70be07234b34196e178f0207ed69cb4b422b7bc6247`.
+Real app challenge503 blocked READY; server restricted rollout rolled back. Phone
+remains55, not a public/FIELD release. Public beta51/invitation downloads unchanged
+and not reverified. Build-only statements below are historical checkpoints.
+[Attempt15 evidence and limits](releases/2026-10-02-5n-prov1-attempt15.ru.md).
+
 Local build checkpoint,2026-10-02: private `0.1.18-canary55-receipt`/55 arm64 adds
 post-import structured readiness receipt and authenticated ACK. Same package/beta
 signer, update-compatible with54; **built/signed, NOT installed or publicly distributed**.
@@ -24,6 +58,14 @@ SHA256 `680a21f60e69cb62d2c7a70be07234b34196e178f0207ed69cb4b422b7bc6247`.
 [Local APK path, checks and contract](releases/2026-10-02-5n-device-readiness-receipt.ru.md). Installed54 and public
 beta51/invitation links below remain last documented; no download link was replaced
 or public artifact reverified. No production/authority change or rollout in this gate.
+
+Checkpoint, 2026-10-02: private `0.1.18-canary54-prov1`/54 is built, beta-signed and
+**installed in place on the owner Redmi** during attempt14; final APK/hash/signature
+verified16:47UTC. No uninstall/data clear. Server deployment rolled back after owner
+UI observation failed; restricted cache readiness is unverified. The app remains54,
+not publicly distributed and not a FIELD release. Public beta51/invitation links
+remain unchanged and were not reverified. [Attempt14](releases/2026-10-02-5n-prov1-attempt14.ru.md)
+· [Canary provenance and SHA256](releases/2026-10-02-5n-android-canary-build.ru.md).
 
 Use the [friends beta guide](getting-started.en.md): Android 8+, ARM64 beta51,
 invitation-based access, VPN, text and voice messages. The APK is distributed through
