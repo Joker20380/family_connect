@@ -303,8 +303,13 @@ GoBackend VpnService. New guard establishment precedes old fd closure/backend st
 RestrictedTunnelEngine uses this owner and shared `wholedevice.OpenCached`; no fake
 loopback control probe is required in Auto. Failed sessions retain a guard until
 DISCONNECT; explicit OS revocation/process death still require platform lockdown
-for a stronger guarantee. Opaque restricted session loss is conservatively terminal
-because the existing native API cannot distinguish revocation from network loss.
+for a stronger guarantee. Opaque restricted session loss remains terminal. The local
+04.10 recovery patch admits only correlated first-failure CARRIER/FAILED/
+RELIABLE_RETRY_EXHAUSTED with reliable recovery_exhausted and a compatible terminal
+reason into the existing single restoration pass. Native AUTH, explicit denial and
+owner interruption override that classification; a fresh attempt still validates
+cached material and performs BOOT-1/TLS admission. No blanket network-loss fallback.
+[Validation and delivery boundary](releases/2026-10-04-restricted-recovery-classification.md).
 
 Main/Friends default to Auto; explicit manual diagnostics and managed journal policy
 remain available. Local atomic diagnostics contain at most128 state/candidate/category/

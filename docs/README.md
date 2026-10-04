@@ -1,8 +1,20 @@
 # Documentation
 
+[Beta62 mobile export(11),04.10](releases/2026-10-04-field-export11-beta62.md):
+real tester/server correlation, precise retry exhaustion with continuing ACK traffic,
+and independently proven INTERNAL recovery-policy stop. No further tester repetition
+needed now. [Local recovery classification fix](releases/2026-10-04-restricted-recovery-classification.md)
+passes Android243/lint, Python100 and targeted Go race checks; not delivered in an APK.
+Original transport cause remains unproven.
+
+[Beta62 four-hour server rollout04.10](releases/2026-10-04-beta62-four-hour-rollout.md):
+tester upgrade confirmed, compatible policies/full material chain/owner long import,
+real correlation and tester long READY/ACK PASS. One mobile reproduction next within
+the recorded actual validity window; no original disconnect-fix claim.
+
 [Beta62 owner acceptance and targeted download04.10](releases/2026-10-04-beta62-recovery-candidate.md):
 exact-source CI/signature/in-place Redmi acceptance, real four-ID correlation and
-downloaded SHA/signer PASS. Tester upgrade only; four-hour server activation and next
+downloaded SHA/signer PASS. Subsequent server activation is recorded above; next
 Russian mobile reproduction pending. Default/updater remain60; no transport-fix claim.
 
 [Restricted session terminal diagnostics03.10](testing/restricted-session-diagnostics.ru.md):

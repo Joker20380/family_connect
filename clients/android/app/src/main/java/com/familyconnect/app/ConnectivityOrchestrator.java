@@ -73,6 +73,7 @@ final class ConnectivityOrchestrator {
     }
     void lost(Failure reason) {
         if(state!=State.CONNECTED)return;
+        if(interrupted!=null)reason=interrupted;
         emit("transport_lost",selected,reason);
         state=State.RESTORING;started=host.now();emit("restoration_attempted",selected,reason);
         if(terminal(reason)||restorations++>=MAX_RESTORATIONS) { finish(reason,true);return; }

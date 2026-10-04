@@ -93,6 +93,10 @@ Real Keystore/process-restart/production-control validation still requires the
 authorized deployment and in-place private APK; no new APK shipped in this gate.
 
 MVP Auto: `ConnectivityOrchestrator` — pure deterministic policy/tests;
+`RestrictedRecovery` — pure allowlisted native first-failure classification;
+`RestrictedRecoveryTest` + `ConnectivityOrchestratorTest` cover retry exhaustion,
+one fresh attempt, cleanup/denial/cancellation and owner AUTH race. Unknown causes
+stay terminal; runtime adapter samples evidence once before cleanup.
 `AutomaticConnection` — adapter/lifecycle host на existing ConnectionService worker;
 `AutomaticVpnOwner` — full-route guard и TUN handover в existing TcpVpnService;
 `AutomaticNormalEngine` — existing AWG JNI/NativeTcp без второго service owner.

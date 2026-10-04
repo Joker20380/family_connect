@@ -2,7 +2,38 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Current04.10 12:41UTC: beta62 owner accepted; targeted upgrade only.**
+**Beta63 release/owner acceptance authorized04.10; IN PROGRESS.**
+1. DONE remote/device preflight: main cb76f115, no beta63 tag, owner installed62/UID10283.
+2. IN PROGRESS immutable successor0.1.18-beta63/code63 and exact-source platform CI.
+3. THEN downloaded asset/provenance checks, offline signing, owner in-place preservation,
+   AWG/TCP and restricted recovery/security acceptance with current material headroom.
+4. HOLD targeted publication until gates pass; retain beta60 defaults/catalog/invitation,
+   immutable62, tester admission and identity. No tester repeat now.
+   [Exact release state](releases/2026-10-04-beta63-recovery-candidate.md).
+
+**Current export(11): mobile reproduction received and correlated.**
+1. DONE four retained sessions/four-ID lookups; gap-free server evidence and privacy PASS.
+2. DONE exact new established-session failure: retry budget8, outstanding8, recent ACK
+   without cumulative progress; TLS errors follow cleanup. Expiry is not this blocker.
+3. DONE recovery code/evidence match: unhealthy restricted→INTERNAL→terminal finish,
+   cleanup completed/new descriptor NOT_ATTEMPTED. Original DATA-stall cause still open.
+4. DONE local bounded recovery classification fix: only correlated retry exhaustion
+   is NETWORK; unknown/auth/protocol remain terminal. Native/cache expiry validation,
+   cleanup guard and one-restoration limit preserved; owner AUTH race and pre-start
+   denial checked. Android243/lint, Python100 and four Go race packages PASS; real
+   export replay PASS. Not built into or installed as an APK; no server changes.
+5. DONE deterministic missing-head-DATA + fresh ACK reproduction and healed-gap control.
+   NEXT targeted framing/loss investigation: this proves neither field drop location
+   nor RKN involvement; no blind retry/RTO increases.
+   No more field repeats now. Any changed APK requires fresh immutable release/platform
+   and owner gates. Next delivery must verify actual validity headroom and physical
+   cleanup/new-descriptor/reconnect/security behavior before tester distribution.
+   [Local patch/checks](releases/2026-10-04-restricted-recovery-classification.md) ·
+   [Export(11)](releases/2026-10-04-field-export11-beta62.md).
+
+**Prior readiness sequence below: mobile reproduction gate now satisfied by export(11).**
+
+**Current04.10: beta62 tester upgrade confirmed; long server/owner window accepted.**
 1. DONE source42a5e59 exact-source four CI workflows, artifact verification/offline
    signing, in-place owner update and UID/identity/enrollment/activation/Support checks.
    AWG/export/privacy PASS;182 Python/full Go race and Android233/lint PASS.
@@ -11,14 +42,19 @@
    Server retry exhaustion after intentional close is not the Russian failure.
 3. DONE separate beta62 download: HTTP200, downloaded APK/signer verified. Default,
    updater/invitation remain60; no FIELD expansion or old artifact replacement.
-4. NEXT tester FC-YHQB-9VJN installs62 in place on Wi-Fi without clearing/uninstalling
-   or reenrolling. Verify version/Support; do not start a mobile attempt yet.
-5. THEN activate compatible RU policy and renew full issuer/grant/gateway/device/CRL/
-   actual seed chain; prove owner remaining headroom >=3h45m and tester fresh READY/ACK.
-   Current policy remains3600s; old61 native rejects long material. No four-hour claim yet.
-6. THEN exactly one mobile reproduction/immediate export; correlate first failure and
+4. DONE tester62/code62 authenticated receipt, same Support/admission, normal short
+   READY13:16 after initial native import failure. That receipt expired13:23.
+5. DONE compatible RU/NL policy/issuer/grants/gateway/CRL/real4h seed;197 exact overlay
+   tests PASS. Owner long native import/ACK and controlled healthy session PASS,
+   headroom3h52m56s. Actual earliest server bound17:30:19UTC/20:30:19 Moscow.
+6. DONE tester long READY/ACK13:39UTC, initial headroom3h51m15s; resumed14:55 readback
+   still usable with2h34m59s remaining, same gateway/restarts0. Owner correlation48/88
+   events/lifecycle/privacy PASS; archive reader scoped to actual current journal file.
+7. NEXT exactly one mobile reproduction/immediate export inside the verified window;
+   if delayed past expiry renew full chain/readiness first. Correlate first failure and
    ACK/progress evidence, fix only the proven cause with regression. No RKN/fix claim.
-   [Artifacts, checks, rollback and remaining gates](releases/2026-10-04-beta62-recovery-candidate.md).
+   [Four-hour rollout and remaining gate](releases/2026-10-04-beta62-four-hour-rollout.md) ·
+   [APK/source acceptance](releases/2026-10-04-beta62-recovery-candidate.md).
 
 **Historical source checkpoint04.10 — superseded by the current sequence above.**
 1. DONE verify exact installed r2 bytes/signer, UID/activation/identity/Support and

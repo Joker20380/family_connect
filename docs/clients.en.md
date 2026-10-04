@@ -1,5 +1,10 @@
 # Client installation
 
+**Recovery candidate beta63 is not yet delivered.** `0.1.18-beta63`/code63 is being
+prepared for CI and owner-device acceptance. No verified download/checksum yet;
+keep the installed version and data, and do not repeat the mobile test.
+Default/updater/invitation remain60. [Release gates](releases/2026-10-04-beta63-recovery-candidate.md).
+
 **Beta62/code62 is a verified targeted upgrade only for FC-YHQB-9VJN.**
 [Android beta62 diagnostic](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta62.apk)
 passed in-place owner Redmi acceptance over61 r2; data/UID/Identity/Support, AWG and export pass.
@@ -7,8 +12,12 @@ HTTP200, downloaded SHA256 `f60b8d3a74b85a5934b942d7e273831e7c1d88d35e4d8a87db73
 signer SHA256 `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
 Choose **Update** over the existing installation on working Wi-Fi. Do not uninstall
 or clear app data; no new invitation is required. Verify62 and unchanged Support ID.
-**Do not start a mobile attempt yet:** four-hour server mode is not activated;
-tester upgrade, renewed material chain and fresh READY/ACK must come first.
+**Mobile export(11) has been received and correlated; no repeat is needed now.**
+[First failure and recovery-policy blocker](releases/2026-10-04-field-export11-beta62.md).
+Do not clear cache/data or reinstall the app.
+Current server bound04.10 17:30:19UTC (20:30:19 Moscow), not four new hours on every
+app open; about2h35m remained at14:55UTC. After expiry, refresh materials on working
+Wi-Fi and verify readiness first. [Window verification](releases/2026-10-04-beta62-four-hour-rollout.md).
 Real owner-session correlation is proven; the original disconnect is not claimed fixed.
 [Checks and limitations](releases/2026-10-04-beta62-recovery-candidate.md).
 Default download/updater remain60; the published61 r2 asset is not replaced.

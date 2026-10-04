@@ -17,8 +17,8 @@ android {
         minSdk 26
         targetSdk 35
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        versionCode 62
-        versionName '0.1.18-beta62'
+        versionCode 63
+        versionName '0.1.18-beta63'
         manifestPlaceholders = [appLabel: 'family_connect', launcherActivity: 'com.familyconnect.app.MainActivity']
     }
     compileOptions {

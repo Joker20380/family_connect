@@ -1,6 +1,78 @@
 # Текущее состояние / Current state
 
-## Beta62 — owner accepted, targeted upgrade available04.10.2026 12:41UTC
+## Beta63 recovery candidate — release preparation04.10
+
+User authorized successor release/owner acceptance. Source version0.1.18-beta63/code63;
+not yet CI-accepted, signed, installed or distributed. Remote main cb76f115 and no beta63
+tag at preflight; attached Redmi31ce63ba still62/code62, UID10283/first install unchanged.
+Latest baseline phase0 CI37203525069 PASS; this does not accept the new source.
+NEXT exact-source CI, downloaded artifact verification/offline signing, in-place owner
+acceptance and controlled recovery/security checks with a fresh validated material window.
+Default/catalog/invitation remain60; no tester repeat or broad rollout.
+[Candidate ledger](releases/2026-10-04-beta63-recovery-candidate.md).
+
+## Export(11) recovery classification — local fix validated04.10
+
+Source-only patch on cb76f115; no version bump, APK build/install/publication or server
+mutation in this task. Beta62/code62 remains the last accepted targeted artifact;
+default/updater/invitation remain60 per the prior rollout record, not a new live check.
+Proven correlated CARRIER/FAILED/RELIABLE_RETRY_EXHAUSTED with recovery_exhausted and
+compatible terminal reason now maps to NETWORK instead of INTERNAL. One existing bounded
+restoration pass, guard-before-cleanup and fresh validated BOOT-1 path are preserved.
+Unknown/TLS/protocol failures remain terminal; denial/native AUTH/cancellation take
+precedence. Added startup denial gates and owner-AUTH-versus-cancellation race regression.
+PASS: Android243 tests/38 suites + lint;100 Python checks with control/identity locks;
+Go race for reliable/Telemost/sessiondiag/sessiontrace. Local replay of export(11)
+classifies all three retained retry-failure sessions NETWORK, setup failure INTERNAL.
+Deterministic missing-DATA/fresh-ACK test reproduces8-retry exhaustion; delivering the
+gap before the limit restores progress without tuning. This does NOT locate field loss.
+NEXT owner/platform release gates for an immutable successor and targeted framing/loss
+investigation; no tester repeat now, no primary-disconnect/RKN fix claim.
+[Patch, exact checks, rollout and rollback](releases/2026-10-04-restricted-recovery-classification.md).
+
+## Export(11) — mobile failure correlated; recovery policy defect identified04.10
+
+FC-YHQB-9VJN beta62/CELLULAR: four retained sessions correlated with Amsterdam,
+all four lookup directions PASS, server sequences gap-free, export/trace privacy PASS.
+Two new established sessions fail RELIABLE_RETRY_EXHAUSTED before client cleanup:
+8 retries,8 pending, recent ACK428/1527ms but no cumulative progress8155/7886ms.
+Not material expiry; precise cause of DATA/ACK progress loss and RKN attribution unproven.
+One other new setup fails SIGNAL_WS_CLOSE/READ_ERROR before TLS establishment.
+Recovery is independently blocked by AutomaticConnection unhealthy→INTERNAL and
+terminal(INTERNAL): observed cleanup succeeds but new descriptor NOT_ATTEMPTED.
+NEXT local regression-backed recovery classification and targeted DATA/ACK investigation,
+not another tester attempt or blind timeout increase. No behavior/APK/runtime change
+in this analysis; beta60/default/catalog/admission preserved.
+[Evidence and boundaries](releases/2026-10-04-field-export11-beta62.md).
+
+The following readiness checkpoint precedes export(11); its request for a mobile
+attempt is now satisfied, not an instruction to repeat the test.
+
+## Beta62 — long window/owner/tester ACK PASS; one mobile reproduction next04.10.2026
+
+Tester FC-YHQB-9VJN confirmed62/code62, same Support/admission. Initial13:10 native
+import failure followed by normal READY13:16; old receipt expired13:23, not a long-window
+ACK. One-second phone/server issuance ordering recorded, not a proven rejection branch.
+Compatible RU HTTP09888949 (only restricted.py changed), RU/NL sync9ed01927 (three
+restricted modules), exact overlaid197 tests PASS. Existing gateway6773423c unchanged.
+Root delegation3→4/same key and family; grant revisions3/1/admission unchanged, expiries
+renewed. API/CRL explicit14400s, actual seed4h, gateway loaded/native acceptance PASS.
+Earliest server bound **04.10 17:30:19UTC /20:30:19 Moscow**, not four hours per fetch.
+Owner authenticated long import/ACK13:37:23 PASS, no cache/data clear; remaining usable
+headroom3h52m56s. Controlled restricted session59509ms, established/healthy, export PASS;
+48 client/88 server events, all four IDs/lifecycle/privacy PASS, no sequence gaps.
+Journal archive queries timed out; observed current-file/exact-interval query recovered
+complete evidence without any service restart. Owner AWG/HTTPS and final preservation PASS.
+No product APK rebuild/re-sign/reinstall; beta62 SHA f60b8d3a unchanged. Default/update
+catalogs/invitation remain60, ordinary AWG/TCP and other downloads unchanged.
+Tester long fetch13:39:03/ACK13:39:04UTC READY/PRESENT_VALID, same Support/revision1;
+headroom at import3h51m15s. Resumed14:55:19UTC readback: still usable, same gateway
+PID/restarts0, matching RU/NL CRL4207, actual remaining2h34m59s. No new4h claim after delay.
+NEXT exactly one mobile attempt inside that window and immediate diagnostic export.
+If delayed past the bound, renew full chain/readiness before attempting. Original disconnect not fixed or
+attributed to RKN. [Exact rollout, validation and rollback](releases/2026-10-04-beta62-four-hour-rollout.md).
+
+## Prior beta62 delivery checkpoint04.10.2026 12:41UTC — long-window status superseded above
 
 Built/signed/installed owner/public targeted download:0.1.18-beta62/code62,
 source42a5e59b4bc2c43e56e018ce7287cd7b6e901db2. All four exact-source CI workflows PASS;

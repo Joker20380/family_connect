@@ -41,6 +41,7 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     }
 
     public void up(String control) throws Exception {
+        checkAccess();
         if (automaticOwner==null && (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE)==0)
             throw new IllegalStateException("Diagnostic only");
         if (VpnService.prepare(context)!=null) throw new IllegalStateException("VPN permission required");
@@ -69,19 +70,20 @@ final class RestrictedTunnelEngine implements TunnelEngine {
                 Diagnostics.readiness(context,response!=null);
                 if(response==null)throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
                 byte[] full=identity.material(),material=java.util.Arrays.copyOf(full,64);java.util.Arrays.fill(full,(byte)0);
-                try{handle=NativeRestricted.beginReady(response,material,ControlTrust.anchor(context),resolver,service);}
+                try{checkAccess();handle=NativeRestricted.beginReady(response,material,ControlTrust.anchor(context),resolver,service);}
                 finally{java.util.Arrays.fill(material,(byte)0);java.util.Arrays.fill(response,(byte)0);}
             }
         } else {
             if (!directory.isDirectory()) throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
+            checkAccess();
             handle=NativeRestricted.begin(directory.getAbsolutePath(),automaticOwner==null?control:"auto",resolver,service);
         }
         if (handle<=0) throw new IllegalStateException("Restricted startup rejected");
         long deadline=Math.min(connectDeadline,SystemClock.elapsedRealtime()+200000);
         int phase;
-        while ((phase=NativeRestricted.state(handle))==0 && SystemClock.elapsedRealtime()<deadline && !cancelled.getAsBoolean() && !revoked) Thread.sleep(100);
+        while ((phase=NativeRestricted.state(handle))==0 && SystemClock.elapsedRealtime()<deadline && !cancelled.getAsBoolean() && !authorizationDenied()) Thread.sleep(100);
         evidence();
-        if (cancelled.getAsBoolean() || revoked) throw new ConnectivityOrchestrator.Rejected(revoked?ConnectivityOrchestrator.Failure.AUTH:ConnectivityOrchestrator.Failure.CANCELLED);
+        checkAccess();
         if (!control.isEmpty() && phase==4) return;
         if (phase!=1) throw new ConnectivityOrchestrator.Rejected(phase==5?ConnectivityOrchestrator.Failure.AUTH:ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
         if(automaticOwner!=null)tun=automaticOwner.replace(automaticOwner.builder());
@@ -95,6 +97,28 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     }
 
     boolean healthy() { return handle>0 && NativeRestricted.state(handle)==2 && (!context.getPackageName().equals("com.familyconnect.app.friends") || !FriendsRestricted.denied); }
+
+    private boolean authorizationDenied() {
+        return revoked||(context.getPackageName().equals("com.familyconnect.app.friends")&&FriendsRestricted.denied);
+    }
+
+    private void checkAccess() throws ConnectivityOrchestrator.Rejected {
+        if(authorizationDenied())throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.AUTH);
+        if(cancelled.getAsBoolean())throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.CANCELLED);
+    }
+
+    ConnectivityOrchestrator.Failure connectionFailure() {
+        int phase=-1;
+        String snapshot=null;
+        try {
+            if(handle>0) {
+                phase=NativeRestricted.state(handle);
+                snapshot=NativeRestricted.stats(handle);
+                evidence(new JSONObject(snapshot));
+            }
+        } catch(Exception | LinkageError unavailable) {}
+        return RestrictedRecovery.failure(phase,cancelled.getAsBoolean(),authorizationDenied(),snapshot);
+    }
 
     static void failure(Context context,Throwable failure) {
         try {
@@ -110,8 +134,11 @@ final class RestrictedTunnelEngine implements TunnelEngine {
 
     void evidence() throws Exception {
         if (handle<=0) return;
+        evidence(new JSONObject(NativeRestricted.stats(handle)));
+    }
+
+    private void evidence(JSONObject snapshot) throws Exception {
         File output=new File(context.getFilesDir(),"restricted-evidence.jsonl");
-        JSONObject snapshot=new JSONObject(NativeRestricted.stats(handle));
         snapshot.put("authorization_denied",FriendsRestricted.denied);
         Diagnostics.nativeStats(context,snapshot);
         if (output.length()>1024*1024) return;

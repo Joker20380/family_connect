@@ -103,6 +103,26 @@ def test_debug_fault_controls_are_not_release_entry_points():
     assert 'if(automatic)startAutomatic' in source('ConnectionService')
 
 
+def test_restricted_loss_uses_typed_cause_before_cleanup_and_revalidates_access():
+    host = source('AutomaticConnection')
+    poll = host.split('void poll()', 1)[1].split('boolean connected()', 1)[0]
+    assert 'restricted.connectionFailure()' in poll
+    assert 'if(failure!=null)orchestrator.lost(failure)' in poll
+    assert 'orchestrator.lost(ConnectivityOrchestrator.Failure.INTERNAL)' not in poll
+    engine = source('RestrictedTunnelEngine')
+    failure = engine.split('ConnectivityOrchestrator.Failure connectionFailure()', 1)[1].split('static void failure(', 1)[0]
+    assert failure.count('NativeRestricted.stats(handle)') == 1
+    assert 'evidence(new JSONObject(snapshot))' in failure
+    assert 'authorizationDenied(),snapshot)' in failure
+    startup = engine.split('public void up(', 1)[1].split('boolean healthy()', 1)[0]
+    assert startup.index('checkAccess();') < startup.index('NativeRestricted.load()')
+    assert startup.index('.usable()') < startup.index('NativeRestricted.beginReady(')
+    assert 'try{checkAccess();handle=NativeRestricted.beginReady(' in startup
+    assert 'while ((phase=NativeRestricted.state(handle))==0' in startup
+    assert '!authorizationDenied()' in startup
+    assert 'if(denied||phase==5)return Failure.AUTH' in source('RestrictedRecovery')
+
+
 def load_runner():
     directory = ROOT / 'pilot/android-restricted'
     sys.path.insert(0, str(directory))

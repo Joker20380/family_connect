@@ -17,12 +17,13 @@ public class ConnectivityOrchestratorTest {
         int active,peak,opens,releases;
         boolean guard=true,cleanupFailure;
         String hint,cancelCandidate,cancelPhase;
+        Failure pauseInterruption;
         final List<String> attempts=new ArrayList<>(),phases=new ArrayList<>();
         final Map<String,Failure> failures=new HashMap<>();
         final ConnectivityOrchestrator core=new ConnectivityOrchestrator(this);
         public long now(){return time;}
         public List<String> configure(List<String> configured,long deadline){guard=true;return configured;}
-        public void pause(long millis){assertTrue(guard);time+=millis;}
+        public void pause(long millis){assertTrue(guard);time+=millis;if(pauseInterruption!=null)core.interrupt(pauseInterruption);}
         public void open(String candidate,long deadline)throws Exception{
             assertTrue(guard);assertEquals(0,active);active++;peak=Math.max(peak,active);opens++;attempts.add(candidate);
             for(String phase:RESTRICTED.equals(candidate)?new String[]{"bootstrap","broker","dedicated"}:new String[]{"normal"}){
@@ -97,6 +98,53 @@ public class ConnectivityOrchestratorTest {
         Fixture fixture=new Fixture();fixture.connect();fixture.core.lost(Failure.AUTH);
         assertEquals(State.FAILED,fixture.core.state());assertEquals(1,fixture.opens);assertTrue(fixture.guard);
         assertEquals(1,fixture.count("restoration_failed"));
+    }
+    @Test public void provenRestrictedRetryLossStartsOneFreshSessionAfterCleanup(){
+        Fixture fixture=new Fixture();fixture.core.connect(new ArrayList<>(),null,null);
+        Failure reason=RestrictedRecovery.failure(3,false,false,RestrictedRecoveryTest.snapshot().toString());
+        fixture.core.lost(reason);
+        assertEquals(State.CONNECTED,fixture.core.state());assertEquals(Arrays.asList(RESTRICTED,RESTRICTED),fixture.attempts);
+        assertEquals(Arrays.asList("bootstrap","broker","dedicated","bootstrap","broker","dedicated"),fixture.phases);
+        assertEquals(1,fixture.peak);assertTrue(fixture.guard);assertEquals(0,fixture.releases);
+        assertEquals(1,fixture.count("restoration_succeeded"));
+        fixture.core.lost(reason);
+        assertEquals(State.FAILED,fixture.core.state());assertEquals(2,fixture.opens);assertEquals(0,fixture.active);
+        assertTrue(fixture.guard);assertEquals(1,fixture.count("restoration_failed"));
+    }
+    @Test public void restrictedRecoveryCannotBypassCleanupOrInterruption(){
+        for(Failure interruption:new Failure[]{null,Failure.AUTH,Failure.CANCELLED}){
+            Fixture fixture=new Fixture();fixture.core.connect(new ArrayList<>(),null,null);
+            if(interruption==null)fixture.cleanupFailure=true;else fixture.core.interrupt(interruption);
+            fixture.core.lost(RestrictedRecovery.failure(3,false,false,RestrictedRecoveryTest.snapshot().toString()));
+            assertEquals(1,fixture.opens);assertEquals(0,fixture.count("restoration_succeeded"));
+            assertEquals(interruption==Failure.CANCELLED?State.DISCONNECTED:State.FAILED,fixture.core.state());
+        }
+    }
+    @Test public void freshRestrictedRecoveryRejectionNeverLoops(){
+        for(Failure rejection:new Failure[]{Failure.AUTH,Failure.CONFIGURATION,Failure.BOOTSTRAP_UNAVAILABLE,Failure.INTERNAL}){
+            Fixture fixture=new Fixture();fixture.core.connect(new ArrayList<>(),null,null);
+            fixture.failures.put(RESTRICTED,rejection);
+            fixture.core.lost(RestrictedRecovery.failure(3,false,false,RestrictedRecoveryTest.snapshot().toString()));
+            assertEquals(State.FAILED,fixture.core.state());assertEquals(2,fixture.opens);assertEquals(0,fixture.active);
+            assertEquals(1,fixture.count("restoration_failed"));assertTrue(fixture.guard);
+            fixture.core.lost(Failure.NETWORK);assertEquals(2,fixture.opens);
+        }
+    }
+    @Test public void revocationOrCancellationDuringRecoveryDelayPreventsFreshDescriptor(){
+        for(Failure reason:new Failure[]{Failure.AUTH,Failure.CANCELLED}){
+            Fixture fixture=new Fixture();fixture.core.connect(new ArrayList<>(),null,null);fixture.pauseInterruption=reason;
+            fixture.core.lost(RestrictedRecovery.failure(3,false,false,RestrictedRecoveryTest.snapshot().toString()));
+            assertEquals(1,fixture.opens);assertEquals(0,fixture.active);assertEquals(0,fixture.count("restoration_succeeded"));
+            assertEquals(reason==Failure.CANCELLED?State.DISCONNECTED:State.FAILED,fixture.core.state());
+        }
+    }
+    @Test public void ownerAuthInterruptionIsNotDowngradedBySnapshotCancellation(){
+        Fixture fixture=new Fixture();fixture.core.connect(new ArrayList<>(),null,null);fixture.core.interrupt(Failure.AUTH);
+        fixture.core.lost(RestrictedRecovery.failure(3,true,false,RestrictedRecoveryTest.snapshot().toString()));
+        assertEquals(State.FAILED,fixture.core.state());assertEquals(1,fixture.opens);assertTrue(fixture.guard);
+        assertEquals(0,fixture.releases);
+        Event last=fixture.core.events().get(fixture.core.events().size()-1);
+        assertEquals("restoration_failed",last.name);assertEquals(Failure.AUTH,last.failure);
     }
     @Test public void hintsAreFilteredAgainstCurrentConfig(){
         assertEquals(Arrays.asList("tcp","awg",RESTRICTED),order(Arrays.asList("awg","tcp","tcp"),"awg","tcp"));

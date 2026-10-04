@@ -1,6 +1,7 @@
 package reliablestream
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"strings"
@@ -9,6 +10,82 @@ import (
 
 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 )
+
+func TestFreshACKWithoutProgressDoesNotResetRetryBudget(test *testing.T) {
+	for _, recoverGap := range []bool{false, true} {
+		name := "persistent_gap"
+		if recoverGap {
+			name = "recovered_gap"
+		}
+		test.Run(name, func(test *testing.T) {
+			states := connectedEngines()
+			sender, receiver := states[0], states[1]
+			now := sender.started
+			payload := []byte("bounded-test-block")
+			for index := 0; index < sender.config.SendWindow; index++ {
+				packet, err := sender.send(payload, now)
+				if err != nil {
+					test.Fatal(err)
+				}
+				if index > 0 {
+					if _, err = receiver.input(packet, now); err != nil {
+						test.Fatal(err)
+					}
+				}
+			}
+			for attempt := 1; attempt <= sender.config.MaxRetries+1; attempt++ {
+				tickAt := now.Add(time.Duration(attempt) * sender.config.RTO)
+				if _, err := sender.input(receiver.ack(), tickAt.Add(-200*time.Millisecond)); err != nil {
+					test.Fatal(err)
+				}
+				packets, err := sender.tick(tickAt)
+				if attempt > sender.config.MaxRetries {
+					trace := sender.failureTrace
+					if !errors.Is(err, ErrExhausted) || trace.Reason != "RELIABLE_RETRY_EXHAUSTED" || trace.ReliableRetries != 8 || trace.ReliablePending != 8 || trace.ReliableSacked != 0 || trace.ReliableACKAgeMS != 200 || trace.ReliableProgressAgeMS != 9000 {
+						test.Fatal("fresh ACK hid persistent missing DATA", err, trace)
+					}
+					return
+				}
+				if err != nil {
+					test.Fatal(err)
+				}
+				retries := 0
+				for _, packet := range packets {
+					if packet.kind != dataFrame {
+						continue
+					}
+					retries++
+					if packet.seq != 0 {
+						test.Fatal("retransmitted SACKed block")
+					}
+					if recoverGap && attempt == 4 {
+						if _, err = receiver.input(packet, tickAt); err != nil {
+							test.Fatal(err)
+						}
+					}
+				}
+				if retries != 1 {
+					test.Fatal("missing selective retry", retries)
+				}
+				if recoverGap && attempt == 4 {
+					for index := 0; index < sender.config.SendWindow; index++ {
+						data, ack := receiver.consume()
+						if !bytes.Equal(data, payload) {
+							test.Fatal("gap recovery lost ordered data")
+						}
+						if _, err = sender.input(ack, tickAt); err != nil {
+							test.Fatal(err)
+						}
+					}
+					if len(sender.sent) != 0 || !sender.writable() || sender.failureTrace.Reason != "" {
+						test.Fatal("recovered stream did not release its window")
+					}
+					return
+				}
+			}
+		})
+	}
+}
 
 func TestExhaustionBranchesRetainBoundedEvidence(test *testing.T) {
 	for _, kind := range []string{"handshake", "frame", "retry", "sacked"} {
