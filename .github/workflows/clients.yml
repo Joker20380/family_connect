@@ -40,6 +40,15 @@ jobs:
       - name: JVM control conformance
         run: gradle --no-daemon test
         working-directory: clients/android/control-tests
+      - name: Restricted carrier race regression
+        shell: bash
+        run: go test -race ./... 2>&1 | tee ../restricted-carrier-race.log
+        working-directory: carrier
+      - name: Restricted diagnostic and readiness contracts
+        shell: bash
+        run: |
+          python3 -m pip install pytest==9.1.1 -r device_identity/requirements.lock
+          FC_TEST_GO="$(command -v go)" python3 -m pytest -q tests/test_restricted_correlation.py tests/test_directory_validation.py tests/test_restricted_test_window.py 2>&1 | tee restricted-contracts.log
       - name: Build pinned unified Android VPN library
         shell: bash # Explicit bash enables pipefail: tee must not hide a failed native build.
         run: ANDROID_NDK_HOME="$ANDROID_HOME/ndk/28.2.13676358" python3 -u pilot/android-awg/build.py 2>&1 | tee android-awg-build.log
@@ -67,13 +76,6 @@ jobs:
         run: python3 pilot/android-awg/report_ci.py
       - name: Confirm control conformance on Android runtime
         run: python3 pilot/android-awg/report_control_ci.py
-      - name: Restricted carrier race regression
-        run: go test -race ./...
-        working-directory: carrier
-      - name: Restricted diagnostic and readiness contracts
-        run: |
-          python3 -m pip install pytest==9.1.1
-          FC_TEST_GO="$(command -v go)" python3 -m pytest -q tests/test_restricted_correlation.py tests/test_directory_validation.py tests/test_restricted_test_window.py
       - name: Build pinned restricted native and gateway
         shell: bash
         run: |
@@ -111,6 +113,8 @@ jobs:
             android-control-storage-result.json
             android-tcp-*.log
             android-tcp-peer-result.json
+            restricted-carrier-race.log
+            restricted-contracts.log
   windows:
     runs-on: windows-latest
     timeout-minutes: 30

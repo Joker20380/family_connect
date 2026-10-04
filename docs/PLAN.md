@@ -8,9 +8,11 @@
 2. DONE local first-failure-before-cleanup fix and exact exhaustion branch/ACK evidence;
    retain retry/timer/wire semantics. This fixes an observability gap, not packet loss.
    Python171, Android233/lint, full Go and focused race/repeated-ordering checks PASS.
-3. IN PROGRESS authorized source checkpoint2c52e82 pushed; CI caught three stale
-   directory-contract tests. Correct boundary/stub tests and add them to Android CI,
-   then verify/sign the corrected-source artifact and perform owner in-place acceptance.
+3. IN PROGRESS corrected sourceb04f5c2 pushed: directory contracts99 local PASS;
+   phase0/Linux control/readiness CI PASS. Android runtime PASS, later Go race step
+   failed; retry/full local/25 repeated core race PASS. Retry then exposed missingRNS
+   in new Python CI contract environment, reproduced cleanly. Add pinned identity
+   lockfile/log capture, rerun CI, then verify/sign and perform in-place acceptance.
    Do not sign/publish unverified/stale native code with new Java.
 4. THEN coordinated long-material activation/owner proof, targeted tester delivery,
    one reproduction to distinguish missing ACK, retry budget, age and SACK backpressure.

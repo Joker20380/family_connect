@@ -16,7 +16,13 @@ Source checkpoint2c52e82 pushed; hosted CI exposed three stale directory-contrac
 tests (old1h ceiling and missing lifetime keyword in a test stub). Corrected tests
 cover4h+1ns rejection, exact4h acceptance and unchanged900s sync default; Android CI
 now includes these Python/native contracts. No APK signed/installed/published or
-server activation. Await corrected-source CI before using any artifact.
+server activation. Corrected sourceb04f5c2: phase0, Linux control preview and readiness
+contract PASS; Android emulator transport/control PASS, subsequent full Go race CI
+failed. Local full non-cached race suite and25 repeated core race runs PASS. Same-source
+Android retry passed race but exposed missingRNS in the newly added Python test
+environment, reproduced in a clean venv. Fix CI lockfile installation/log retention;
+run these checks before expensive native/emulator work. Next corrected CI checkpoint.
+No restricted release artifact accepted and no CI bypass. Fresh owner READY required.
 Checks: Python171 PASS; Android233 unit tests/lint PASS with generated62 metadata;
 full Go suite PASS outside socket-restricted sandbox, four core packages race PASS,
 new cause-ordering cases10 repeated race runs PASS. Owner encrypted identity and

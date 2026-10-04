@@ -2,9 +2,9 @@
 
 ## Distribution and owner state
 
-Source metadata: `0.1.18-beta62`, versionCode62, based on
-source checkpoint2c52e82bf1897fe840935b5a9335186bef84ceb8, pushed with explicit user
-authorization. Hosted CI started; no accepted signature, installation or publication yet; therefore
+Source metadata: `0.1.18-beta62`, versionCode62, current checkpoint
+`b04f5c2a5827c7d3ad108b4ec68923f20f3518ac`, following2c52e82. Both scoped commits
+pushed with explicit user authorization. No accepted signature, installation or publication yet; therefore
 there is no beta62 APK SHA256 or beta62 download to report. A Java unit-test/lint
 build is not a newly rebuilt/verified restricted native library or deliverable APK.
 Existing dirty work, including unrelated VPN health docs, is preserved.
@@ -15,6 +15,29 @@ and a publish_crl test stub did not accept the new lifetime keyword. Corrected t
 4h+1ns, asserted unchanged900s sync default, added native/Python acceptance at
 1h+1ns and exactly4h. Android CI now runs directory and long-window contracts too.
 Do not accept the initial source artifact before corrected-source CI passes.
+
+Corrected-source local directory/readiness/correlation suite99 PASS. Hosted phase0
+37197973235, Linux control preview37197973213 and readiness contract37197973259 PASS.
+Client builds37197973321 passed Android emulator WG/AWG/TCP/Auto and control checks,
+then failed the full Go race step in job111423710235. The complete local non-cached
+`go test -race -count=1 ./...` subsequently passed all carrier packages. One repeat
+of the same Android job was requested; no transport/code change or failure waiver.
+The failed job produced no restricted release artifact. Precise initial CI failure
+is not established from the bounded log projection; do not call it a proven flake.
+Private owner instrumentation compiled separately, not yet signed or installed.
+
+Same-source retry job111428157461 passed full Go race, but the newly added Python
+contracts failed during collection. Reproduced locally in a clean cryptography/pytest
+environment: missing `RNS`, imported by DeviceIdentity. Install the existing pinned
+device_identity lockfile for this CI-only check. Move race/contracts before the
+expensive native/emulator steps and retain their logs in the existing diagnostic CI
+artifact with pipefail, without removing or relaxing any release check. Local four
+core packages repeated25 times under race also PASS; no product transport change.
+
+Read-only server preflight11:26UTC: exact two-device admission, beta60 default and
+discovery/invitation hashes unchanged; gateway binaryb9b7d542 still loaded, certificate
+expires13:39:54UTC, issuer14:13:53UTC. CRL3826 and directory match RU/NL; old cached
+owner/tester receipts expired. Fresh owner READY/ACK is required, not an old snapshot.
 
 Connected owner Redmi31ce63ba remains0.1.18-beta61/code61, UID10283. Pulled installed APK:
 SHA256 `4297ea1a7124f048bdfca4889e89114e84465fab3100a3caea7cbe23cd5e35fb`;
@@ -86,8 +109,8 @@ absent and the outer orchestrator displayed UNKNOWN_INTERNAL.
 
 ## Release gates and rollback
 
-Next: obtain authorization for a scoped commit/push, run platform CI on that exact
-source, download/verify its matching native+Java APK and gateway, sign Android with
+Next: finish platform CI on the authorized pushed source, download/verify its
+matching native+Java APK and gateway, sign Android with
 the accepted key, and install62 in place on this Redmi. Recheck UID/identity/enrollment/
 activation/Support, AWG, export/privacy and a real restricted session. If a local
 failure reproduction is used, record exact branch and prove first_failure precedes
