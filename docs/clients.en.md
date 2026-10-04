@@ -1,8 +1,10 @@
 # Client installation
 
-**Beta64/code64 is a local source candidate only**, not an installable release.
-Paired diagnostics still require exact-source CI and physical owner/gateway acceptance.
-Published links/checksums below are unchanged; no tester repeat is requested.
+**Beta64/code64 passed CI and is signed locally, not installed or published.**
+APK SHA256 `b1a9f62116265b13a8482292175d3a685dca23ad3a5be0e4af5ef995a4d32d69`,49671035bytes;
+the original signer67a90d1b is verified. Physical paired owner/gateway acceptance with
+fresh valid materials is still required. Published links/checksums below are unchanged;
+there is no public64 download yet and no tester repeat is requested.
 [Release preparation](releases/2026-10-04-beta64-paired-candidate.md).
 
 **Beta63/code63 is installed and checked on the owner Redmi.** CI/offline signing and

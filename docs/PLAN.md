@@ -2,15 +2,16 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Beta64 release preparation04.10: local candidate64, exact-source CI pending.**
+**Beta64 source/CI/offline signing DONE04.10; physical acceptance pending.**
 1. DONE main/last release CI readback; same owner Redmi connected, beta64 URL404/no tag.
-2. DONE local version64/documentation, Android246/lint, Python52 and docs checks;
-   no signed release or deployment.
-3. DONE explicit commit/push approval; NEXT scoped commit/push preserving unrelated
-   changes, exact-source platform CI, artifact verification/offline signing.
-4. THEN matching gateway/owner acceptance with renewed full material chain (old bound
-  17:30:19UTC elapsed), paired snapshots/privacy, cleanup/recovery and auth/revoke checks.
-   Owner63/tester62/default60 stay unchanged until verified gates; no tester repeat.
+2. DONE local version64/documentation, Android246/lint, Python52 and docs checks.
+3. DONE scoped commit/push ce73ddf, four exact-source CI workflows, downloaded artifact
+   verification and offline signing: APK b1a9f621, matching gateway f71b7e7b. Readiness
+   attempt1 failed; unchanged attempt2 PASS. Initial failure retained, not declared fixed.
+4. NEXT matching gateway/owner acceptance with renewed full material chain (old bound
+   17:30:19UTC elapsed), paired snapshots/privacy, cleanup/recovery and auth/revoke checks.
+   APK64 is signed locally only, gateway64 built only. Owner63/tester62/default60 stay
+   unchanged until verified gates; no tester repeat or public64 download yet.
    [Candidate checkpoint](releases/2026-10-04-beta64-paired-candidate.md).
 
 **Paired delivery diagnostics source-only DONE04.10; runtime gate pending.**

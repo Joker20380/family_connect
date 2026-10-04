@@ -1,18 +1,22 @@
 # Текущее состояние / Current state
 
-## Beta64 — local release candidate prepared04.10; CI pending
+## Beta64 — exact-source CI / artifact / offline signing PASS04.10
 
-Version `0.1.18-beta64`/code64 selected for paired delivery diagnostics. Remote main
-still de7cacd; latest client CI37214189165/attempt2 SUCCESS belongs to63, not64.
-Read-only preflight18:08UTC: same owner Redmi31ce63ba connected; beta64 download404,
-no matching beta64 tag. Candidate is uncommitted, not CI-built/signed/installed/deployed.
-User authorized scoped commit/push; preparing exact-source CI. No release acceptance
-is inferred until the new source commit's jobs complete and artifacts are verified.
-Candidate64 local checks PASS: Android246 unit/lint, Python52 focused, docs473/2869
-links and whitespace. These do not replace hosted release/runtime acceptance.
-Last verified owner63/tester62/default/catalog/invitation60 and gateway6773423c remain
-the baseline. Prior material bound17:30:19UTC has elapsed: renew/revalidate full chain
-before physical owner acceptance, not before a potentially long build wait.
+User-authorized source `ce73ddf3e0dfc25546850b083b7dae4680720397` pushed to main;
+`0.1.18-beta64`/code64. All four workflows PASS: phase0, Linux control, clients and
+readiness contract. Readiness attempt1 failed in Python/HTTP tests; unchanged attempt2
+PASS, no assertion/source relaxation or root-cause-fix claim. Local reproduction113
+PASS/4 optional Go checks skipped; Android246/lint and prior Python52 PASS.
+Accepted artifact11311153048 downloaded with matching ZIP SHA; ARM64 native/gateway
+provenance, non-debuggable,16KiB alignment/privacy and offline original-signer checks PASS.
+Signed APK SHA256 `b1a9f62116265b13a8482292175d3a685dca23ad3a5be0e4af5ef995a4d32d69`,
+49671035bytes. Matching CI gateway f71b7e7b is built, **not deployed**.
+**APK signed locally only, not installed or publicly distributed.** Last verified
+owner63/tester62/default/catalog/invitation60 and live gateway6773423c remain baseline.
+No live mutation/material renewal. Prior bound17:30:19UTC has elapsed. NEXT fresh full
+material chain, owner baseline/preservation, matching gateway and paired owner acceptance.
+Initial artifact transfer403 included a fresh-link CDN1010; standard HTTP User-Agent
+resolved it, bytes then verified. No tester repeat, default promotion or field-fix claim.
 [Candidate, release gates and rollback](releases/2026-10-04-beta64-paired-candidate.md).
 
 ## Paired delivery diagnostics — source-only PASS04.10

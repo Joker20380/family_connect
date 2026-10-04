@@ -1,8 +1,9 @@
 # Documentation
 
 [Beta64 paired-diagnostics candidate04.10](releases/2026-10-04-beta64-paired-candidate.md):
-local version64 prepared; commit/push authorized, exact-source CI pending. No new
-APK installation or gateway deployment; expired materials require renewal before owner testing.
+source ce73ddf pushed, all four CI workflows and downloaded artifact/offline signing PASS.
+APK64 signed locally only; no installation/gateway deployment. Renew expired materials
+and complete paired owner acceptance before distribution.
 
 [Paired DATA/ACK/fragment diagnostics04.10](releases/2026-10-04-paired-delivery-diagnostics.md):
 source-only implementation and local tests PASS; bounded endpoint samples, Android

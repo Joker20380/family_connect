@@ -1,8 +1,10 @@
 # Release distribution / Выпуски
 
-**Beta64/code64: local candidate only04.10.** Paired delivery diagnostics are prepared,
-not CI-built, signed, installed or published. Owner63, tester last receipt62 and default/
-updater/invitation60 remain the verified baseline. No new download/checksum is advertised.
+**Beta64/code64: CI-accepted and signed locally04.10, not installed/published.** Source
+ce73ddf passed four workflows; artifact/provenance/offline signer verified. Signed APK
+SHA256 `b1a9f62116265b13a8482292175d3a685dca23ad3a5be0e4af5ef995a4d32d69`,49671035bytes.
+Owner63, tester last receipt62 and default/updater/invitation60 remain the baseline;
+matching new gateway is built only. No public64 download URL is advertised.
 [Exact gate and remaining work](releases/2026-10-04-beta64-paired-candidate.md).
 
 **Beta63/code63 source de7cacd: CI/signing/owner and targeted delivery PASS.**
