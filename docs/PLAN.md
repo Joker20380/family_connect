@@ -8,9 +8,10 @@
 2. DONE local first-failure-before-cleanup fix and exact exhaustion branch/ACK evidence;
    retain retry/timer/wire semantics. This fixes an observability gap, not packet loss.
    Python171, Android233/lint, full Go and focused race/repeated-ordering checks PASS.
-3. NEXT authorized scoped source checkpoint/push and platform CI; native and Java from
-   the same immutable source, verify/sign beta62, in-place owner acceptance. No new APK
-   or hosted CI yet. Do not sign/publish unverified/stale native code with new Java.
+3. IN PROGRESS authorized source checkpoint2c52e82 pushed; CI caught three stale
+   directory-contract tests. Correct boundary/stub tests and add them to Android CI,
+   then verify/sign the corrected-source artifact and perform owner in-place acceptance.
+   Do not sign/publish unverified/stale native code with new Java.
 4. THEN coordinated long-material activation/owner proof, targeted tester delivery,
    one reproduction to distinguish missing ACK, retry budget, age and SACK backpressure.
    Fix proven cause with regression; no arbitrary timeout increase or RKN claim.

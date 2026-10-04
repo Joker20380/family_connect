@@ -64,7 +64,7 @@ def negative(case):
     elif case == 'empty': value['seeds'] = []
     elif case == 'many': value['seeds'] = [seed] * 5
     elif case == 'duplicate': value['seeds'].append(seed)
-    elif case == 'lifetime': value['expires_at'] = '2026-10-01T18:13:53.532852359Z'
+    elif case == 'lifetime': value['expires_at'] = '2026-10-01T21:13:53.532852359Z'
     elif case == 'ordering': value['expires_at'] = value['issued_at']
     elif case == 'seed_null': value['seeds'] = [None]
     else: seed['join_url'] = case
@@ -165,7 +165,9 @@ def test_sync_does_not_truncate_receiver_clock(tmp_path, monkeypatch):
     service.access.clock = lambda: Decimal(NOW_NS) / 1_000_000_000
     monkeypatch.setenv('FC_FRIENDS_RESTRICTED_DIR', str(tmp_path))
     monkeypatch.setattr(restricted_sync, 'from_env', lambda access: service)
-    monkeypatch.setattr(restricted_sync, 'publish_crl', lambda service, target: None)
+    published_lifetimes = []
+    monkeypatch.setattr(restricted_sync, 'publish_crl',
+                        lambda service, target, *, lifetime: published_lifetimes.append(lifetime))
     def receive(command, **kwargs):
         kwargs['stdout'].write(encoded())
         kwargs['stdout'].flush()
@@ -173,6 +175,7 @@ def test_sync_does_not_truncate_receiver_clock(tmp_path, monkeypatch):
     monkeypatch.setattr(restricted_sync.subprocess, 'run', receive)
     restricted_sync.sync(service.access, '186.246.45.246', tmp_path / 'key', tmp_path / 'known_hosts')
     assert (tmp_path / 'directory.json').read_bytes() == encoded()
+    assert published_lifetimes == [900]
 
 
 @pytest.mark.parametrize('case', NEGATIVES)
@@ -187,6 +190,16 @@ def test_native_nanosecond_edges(native):
         assert native_request(native, encoded(), instant).returncode != 0
     for instant in (issued, issued + 1, expires - 1):
         assert native_request(native, encoded(), instant).returncode == 0
+
+
+@pytest.mark.parametrize('expires_at', ['2026-10-01T18:13:53.532852359Z',
+                                       '2026-10-01T21:13:53.532852358Z'])
+def test_extended_directory_lifetime_security_parity(native, expires_at):
+    value = copy.deepcopy(FIXTURE['directory'])
+    value['expires_at'] = expires_at
+    raw = encoded(value)
+    assert directory(raw, FAMILY, GATEWAY, now_ns=NOW_NS) == value
+    assert native_request(native, raw).returncode == 0
 
 
 def test_packaged_failure_receipt_survives_shell_exit_and_rollback(tmp_path):

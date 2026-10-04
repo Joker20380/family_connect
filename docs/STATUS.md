@@ -12,7 +12,11 @@ exhaustion with bounded ACK/progress/queue evidence before carrier cleanup. Same
 retry/timer/wire behavior; not a transport fix. Four-hour source work retained.
 Next source checkpoint/platform CI and exact native+Java artifact verification,
 production Android signing, then owner in-place update and long-material acceptance.
-No new APK built/signed/installed/published or server activation; no commit/push yet.
+Source checkpoint2c52e82 pushed; hosted CI exposed three stale directory-contract
+tests (old1h ceiling and missing lifetime keyword in a test stub). Corrected tests
+cover4h+1ns rejection, exact4h acceptance and unchanged900s sync default; Android CI
+now includes these Python/native contracts. No APK signed/installed/published or
+server activation. Await corrected-source CI before using any artifact.
 Checks: Python171 PASS; Android233 unit tests/lint PASS with generated62 metadata;
 full Go suite PASS outside socket-restricted sandbox, four core packages race PASS,
 new cause-ordering cases10 repeated race runs PASS. Owner encrypted identity and

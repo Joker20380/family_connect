@@ -70,10 +70,10 @@ jobs:
       - name: Restricted carrier race regression
         run: go test -race ./...
         working-directory: carrier
-      - name: Restricted diagnostic correlation contract
+      - name: Restricted diagnostic and readiness contracts
         run: |
           python3 -m pip install pytest==9.1.1
-          python3 -m pytest -q tests/test_restricted_correlation.py
+          FC_TEST_GO="$(command -v go)" python3 -m pytest -q tests/test_restricted_correlation.py tests/test_directory_validation.py tests/test_restricted_test_window.py
       - name: Build pinned restricted native and gateway
         shell: bash
         run: |

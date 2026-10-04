@@ -3,11 +3,18 @@
 ## Distribution and owner state
 
 Source metadata: `0.1.18-beta62`, versionCode62, based on
-64849e828add45407625d31df61413ac98e9a2cc plus uncommitted scoped changes. No new commit,
-hosted CI, native/APK build, signature, installation or publication yet; therefore
+source checkpoint2c52e82bf1897fe840935b5a9335186bef84ceb8, pushed with explicit user
+authorization. Hosted CI started; no accepted signature, installation or publication yet; therefore
 there is no beta62 APK SHA256 or beta62 download to report. A Java unit-test/lint
 build is not a newly rebuilt/verified restricted native library or deliverable APK.
 Existing dirty work, including unrelated VPN health docs, is preserved.
+
+Initial Linux control preview37197471972 exposed three related stale tests: the
+negative directory lifetime still used1h+1ns, native parity shared that fixture,
+and a publish_crl test stub did not accept the new lifetime keyword. Corrected to
+4h+1ns, asserted unchanged900s sync default, added native/Python acceptance at
+1h+1ns and exactly4h. Android CI now runs directory and long-window contracts too.
+Do not accept the initial source artifact before corrected-source CI passes.
 
 Connected owner Redmi31ce63ba remains0.1.18-beta61/code61, UID10283. Pulled installed APK:
 SHA256 `4297ea1a7124f048bdfca4889e89114e84465fab3100a3caea7cbe23cd5e35fb`;
