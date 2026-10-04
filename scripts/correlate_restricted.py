@@ -12,7 +12,7 @@ UUID = re.compile(r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\Z")
 SUPPORT = re.compile(r"FC-[A-Z0-9]{4}-[A-Z0-9]{4}\Z")
 STAGES = "AUTHORIZED|ROOM_CREATION|DESCRIPTOR|GATEWAY_JOIN|SIGNALING|WEBSOCKET|ICE|PEER_CONNECTION|CARRIER|CARRIER_ACTIVITY|FAMILY_TLS|GATEWAY_SESSION|HEARTBEAT|LIVENESS|LOCAL_CLOSE|REMOTE_CLOSE|RECOVERY|CLEANUP"
 STATES = "STARTED|ESTABLISHED|ISSUED|TX|RX|FAILED|CLOSED|COMPLETED|ATTEMPTED|NOT_ATTEMPTED|new|checking|connecting|connected|completed|disconnected|failed|closed"
-REASONS = "NONE|SIGNAL_WS_CLOSE|ICE_DISCONNECTED|ICE_FAILED|PEER_CONNECTION_FAILED|CARRIER_EOF|CARRIER_ERROR|FAMILY_TLS_EOF|FAMILY_TLS_ERROR|GATEWAY_CLOSE|HEARTBEAT_TIMEOUT|REMOTE_CLOSE|RECOVERY_CLEANUP_FAILED|RECOVERY_DESCRIPTOR_FAILED|RECOVERY_JOIN_FAILED|RECOVERY_CARRIER_FAILED|UNKNOWN_INTERNAL"
+REASONS = "NONE|SIGNAL_WS_CLOSE|ICE_DISCONNECTED|ICE_FAILED|PEER_CONNECTION_FAILED|CARRIER_EOF|CARRIER_ERROR|FAMILY_TLS_EOF|FAMILY_TLS_ERROR|GATEWAY_CLOSE|HEARTBEAT_TIMEOUT|REMOTE_CLOSE|RECOVERY_CLEANUP_FAILED|RECOVERY_DESCRIPTOR_FAILED|RECOVERY_JOIN_FAILED|RECOVERY_CARRIER_FAILED|RELIABLE_HANDSHAKE_TIMEOUT|RELIABLE_FRAME_TIMEOUT|RELIABLE_RETRY_EXHAUSTED|UNKNOWN_INTERNAL"
 CLOSE_REASONS = "ping|timeout|duplicate|expired|inactivity|shutdown|restart|invalid|ack|idle|session|READ_ERROR|READ_TIMEOUT|INVALID_MESSAGE|WRITE_ERROR"
 BROKER_REASONS = "cancelled|lifetime_expired|authorization_changed|unused_expired|gateway_session_failed|gateway_failed|gateway_ready_timeout|provider_failure|provider_response|provider_cancelled|provider_timeout|provider_transport|provider_request|provider_bad_request|provider_unauthorized|provider_forbidden|provider_rate_limited|provider_unavailable|provider_status|provider_body|provider_json|provider_id|provider_join_url|unknown"
 REQUIRED = {"AUTHORIZED/ESTABLISHED", "ROOM_CREATION/ESTABLISHED", "DESCRIPTOR/ISSUED", "GATEWAY_JOIN/ESTABLISHED", "SIGNALING/ESTABLISHED", "WEBSOCKET/ESTABLISHED", "ICE/connected", "PEER_CONNECTION/connected", "CARRIER/STARTED", "CARRIER/ESTABLISHED", "FAMILY_TLS/ESTABLISHED", "GATEWAY_SESSION/ESTABLISHED", "HEARTBEAT/TX", "HEARTBEAT/RX", "CLEANUP/COMPLETED"}
@@ -38,7 +38,8 @@ def event(source):
         if not number(source.get(field)) or source[field] == 0:
             raise ValueError("invalid trace sequence/time")
         safe[field] = source[field]
-    for field in ("tx", "rx"):
+    for field in ("tx", "rx", "reliable_age_ms", "reliable_retries", "reliable_pending", "reliable_sacked",
+                  "reliable_ack_age_ms", "reliable_progress_age_ms", "reliable_ack_received"):
         if number(source.get(field)):
             safe[field] = source[field]
     if source.get("target") in ("SUBSCRIBER", "PUBLISHER"):

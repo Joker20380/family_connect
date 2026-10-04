@@ -16,7 +16,7 @@ from cryptography import x509
 
 from provisioning.friends_catalog import fields, parse, require
 from .access import Access
-from .restricted import DirectoryValidationError, bounded_file, clock_nanoseconds, delegation, directory, from_env, iso, utc
+from .restricted import MAX_TEST_LIFETIME, DirectoryValidationError, bounded_file, clock_nanoseconds, delegation, directory, from_env, iso, utc
 from .restricted_admin import publish_crl
 
 
@@ -57,7 +57,7 @@ def gateway(profile_path, directory_path, request, now=None):
     require(number >= max(old_number, profile['minimum_crl']))
     require(incoming.last_update_utc <= utc(time.time() if now is None else now) < incoming.next_update_utc)
     require(incoming.last_update_utc >= previous.last_update_utc)
-    require((incoming.next_update_utc - incoming.last_update_utc).total_seconds() <= 3600)
+    require((incoming.next_update_utc - incoming.last_update_utc).total_seconds() <= MAX_TEST_LIFETIME)
     if number == old_number:
         require(value['revocations'] == profile['revocations'])
     profile['revocations'], profile['minimum_crl'] = value['revocations'], number
@@ -67,11 +67,11 @@ def gateway(profile_path, directory_path, request, now=None):
     return raw
 
 
-def sync(access, host, ssh_key, known_hosts):
+def sync(access, host, ssh_key, known_hosts, *, crl_lifetime=900):
     require(host == '186.246.45.246')
     root = Path(os.environ['FC_FRIENDS_RESTRICTED_DIR'])
     service = from_env(access)
-    publish_crl(service, root / 'revocations.pem')
+    publish_crl(service, root / 'revocations.pem', lifetime=crl_lifetime)
     trust, _ = delegation(service.manifest, service.anchor, int(access.clock()))
     command = ['/usr/bin/ssh', '-i', str(ssh_key), '-o', 'IdentitiesOnly=yes', '-o', 'BatchMode=yes',
                '-o', 'StrictHostKeyChecking=yes', '-o', 'UserKnownHostsFile=' + str(known_hosts),
@@ -135,6 +135,8 @@ def main():
     worker.add_argument('--host', required=True)
     worker.add_argument('--ssh-key', type=Path, required=True)
     worker.add_argument('--known-hosts', type=Path, required=True)
+    worker.add_argument('--crl-lifetime', type=int, choices=(900, 3600, MAX_TEST_LIFETIME), default=900,
+                        help='Signed CRL lifetime; testing policies require compatible clients and gateway')
     worker.add_argument('--check', action='store_true', help='Validate local inputs only; no publisher, SSH or writes')
     validator = commands.add_parser('directory-check', help='Read-only BOOT-1 validation; persist a redacted receipt before exit')
     validator.add_argument('--profile', type=Path, required=True)
@@ -158,7 +160,7 @@ def main():
             check(Access(args.db), args.host, args.ssh_key, args.known_hosts)
             print('Restricted runtime pre-network check passed')
         else:
-            sync(Access(args.db), args.host, args.ssh_key, args.known_hosts)
+            sync(Access(args.db), args.host, args.ssh_key, args.known_hosts, crl_lifetime=args.crl_lifetime)
     except DirectoryValidationError as error:
         print(str(error), file=sys.stderr)
         raise SystemExit(1) from None

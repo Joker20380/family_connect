@@ -127,7 +127,7 @@ func ValidateDelivery(raw, public, anchor []byte, now time.Time) (ReadinessDeliv
 	}
 	reference := sha256.Sum256(public)
 	nonce, err := base64.StdEncoding.DecodeString(delivery.Challenge)
-	if err != nil || len(nonce) != 32 || delivery.Device != hex.EncodeToString(reference[:16]) || delivery.Version != 1 || delivery.Revision < 1 || delivery.MinimumCRL < 1 || delivery.IssuedAt > now.Unix() || delivery.ExpiresAt <= now.Unix() || delivery.ExpiresAt <= delivery.IssuedAt || delivery.ExpiresAt-delivery.IssuedAt > 3600 {
+	if err != nil || len(nonce) != 32 || delivery.Device != hex.EncodeToString(reference[:16]) || delivery.Version != 1 || delivery.Revision < 1 || delivery.MinimumCRL < 1 || delivery.IssuedAt > now.Unix() || delivery.ExpiresAt <= now.Unix() || delivery.ExpiresAt <= delivery.IssuedAt || delivery.ExpiresAt-delivery.IssuedAt > int64(bootstrap.MaxAge/time.Second) {
 		return fail()
 	}
 	payload, err := base64.StdEncoding.DecodeString(delivery.Issuer.Payload)
@@ -181,7 +181,7 @@ func ValidateDelivery(raw, public, anchor []byte, now time.Time) (ReadinessDeliv
 		return fail()
 	}
 	crl, err := x509.ParseRevocationList(crlBlock.Bytes)
-	if err != nil || crl.CheckSignatureFrom(authority) != nil || crl.Number == nil || !crl.Number.IsInt64() || crl.Number.Int64() != delivery.MinimumCRL || now.Before(crl.ThisUpdate) || !now.Before(crl.NextUpdate) || crl.NextUpdate.Sub(crl.ThisUpdate) > time.Hour {
+	if err != nil || crl.CheckSignatureFrom(authority) != nil || crl.Number == nil || !crl.Number.IsInt64() || crl.Number.Int64() != delivery.MinimumCRL || now.Before(crl.ThisUpdate) || !now.Before(crl.NextUpdate) || crl.NextUpdate.Sub(crl.ThisUpdate) > bootstrap.MaxAge {
 		return fail()
 	}
 	for _, revoked := range crl.RevokedCertificateEntries {

@@ -11,7 +11,8 @@ No production deployment, client version change or full-device integration.
 `directory.go`: strict version-1 JSON directory, Family binding, issued/expiry
 times, 1–4 seeds (`transport`, `join_url`, expected gateway identity). Only exact
 Telemost HTTPS `/j/` URLs; no query, fragment, userinfo, alternative port or host.
-8 KiB maximum; maximum age/lifetime one hour; no future issuance. Credentials,
+8 KiB maximum; maximum age/lifetime four hours in the local04.10 diagnostic candidate;
+accepted beta61 r2 still permits only one hour. No future issuance. Credentials,
 private keys, provider OAuth and dedicated descriptors are not directory fields.
 Duplicates, unknown fields, stale/equal conflicting replacements are rejected.
 
@@ -21,7 +22,9 @@ UTC with trailing `Z`; offsets are converted arithmetically, never relabeled.
 The shared Go/Python wire profile supports optional1–9 fractional digits
 (nanoseconds), clock hours00–23, minutes/seconds00–59, and valid calendar dates;
 naive timestamps, malformed offsets, leap seconds, extra precision and junk fail
-closed. Expiry is exclusive, future issuance forbidden, lifetime≤1h unchanged.
+closed. Expiry is exclusive and future issuance forbidden. The local04.10 candidate
+raises the validation ceiling to4h, not the default issued lifetime; incompatible
+clients must be upgraded before long directories or CRLs are activated.
 Python compares exact UTC nanoseconds rather than truncating fractions to seconds
 or microseconds; integer readiness envelope expiry remains conservative seconds.
 Go seed publication explicitly converts the inherited context deadline to UTC,

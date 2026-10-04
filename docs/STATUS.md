@@ -1,6 +1,243 @@
 # Текущее состояние / Current state
 
-## Beta61 diagnostic correction r2 — LOCAL, NOT ACCEPTED03.10.2026
+## Beta62 diagnostic source — owner connected, not installed04.10.2026
+
+Redmi31ce63ba baseline verified: UID10283, beta61/code61, exact r2 APK4297ea1a and
+signer67a90d1; activated, existing identity/readiness decrypt, Support FC-4D8Q-REEG.
+Encrypted-state/enrollment fingerprints saved privately. Temporary accepted owner
+test package removed; product not replaced/uninstalled/cleared or reenrolled.
+New source metadata0.1.18-beta62/code62 avoids replacing immutable r2. Locally fixed
+causal diagnostic ordering: ReliableStream records handshake/frame-age/retry-budget
+exhaustion with bounded ACK/progress/queue evidence before carrier cleanup. Same
+retry/timer/wire behavior; not a transport fix. Four-hour source work retained.
+Next source checkpoint/platform CI and exact native+Java artifact verification,
+production Android signing, then owner in-place update and long-material acceptance.
+No new APK built/signed/installed/published or server activation; no commit/push yet.
+Checks: Python171 PASS; Android233 unit tests/lint PASS with generated62 metadata;
+full Go suite PASS outside socket-restricted sandbox, four core packages race PASS,
+new cause-ordering cases10 repeated race runs PASS. Owner encrypted identity and
+enrollment/activation/Support also match the prior accepted r2 baseline exactly.
+[Candidate report](releases/2026-10-04-beta62-recovery-candidate.md).
+
+## Export(10) — real restricted disconnect correlated04.10.2026
+
+FC-YHQB-9VJN beta61/code61: two non-empty session tags now match NL lifecycle logs
+by all four identifiers. Both established Family TLS/gateway sessions and carried
+bidirectional traffic before readiness expiry10:34:57UTC. Client terminal times
+10:23:53.513 and10:25:48.944UTC: IO_CLOSED / reliable_terminal=recovery_exhausted,
+23/74 retransmissions,24/75 recovery timeouts; no authorization denial or recorded
+signaling/ICE failure. Latest saved incident CELLULAR, latest ring WIFI/AWG connected.
+Server traces54/69 events, no sequence gaps, complete required stage checklist.
+However structured first_failure is absent on both endpoints; TLS_ERROR/GATEWAY_CLOSE
+are after LOCAL_CLOSE. Do not substitute cleanup failures for the trigger. Reliable
+recovery exhaustion is proven; retry-count versus frame-age branch and why progress
+stopped remain unknown. Recovery cleaned up but did not attempt a new descriptor.
+No expiry/RKN attribution, retry-limit tuning, runtime or transport behavior change.
+[Report and exact correlation](releases/2026-10-04-field-export10-reliable.md).
+
+## Four-hour readiness — source/tests only, not deployed04.10.2026
+
+User authorizes a complete longer testing window. Local Go/Python directory, CRL and
+delivery validation now support14400s; server issuance is opt-in, default3600s delivery
+and900s CRL unchanged. Old short device certificates no longer silently cap long-mode
+refresh; all issuer/grant/directory/CRL expiry and revocation checks remain. Android
+summary accepts14400s. Python168 tests PASS including native4h acceptance/expiry;
+Go bootstrap/wholedevice/bootstrap-broker PASS; focused JVM4 tests PASS.
+No version/APK change, build/sign/install/publication or server activation yet. ADB
+reports no attached owner device; existing beta61 r2 rejects long material. NEXT
+compatible immutable diagnostic build, platform checks and in-place owner acceptance,
+then coordinated issuer/grant/gateway/seed/CRL/delivery renewal with measured headroom.
+Do not send14400s CRLs to existing old clients prematurely. beta60/FIELD unchanged.
+[Rollout gates and limitations](releases/2026-10-04-four-hour-readiness.md).
+
+## Export(9) — tester fresh READY/ACK confirmed04.10.2026 10:17UTC
+
+Clarification: four hours applies only to the gateway certificate, not end-to-end
+tester readiness. The accepted10:05 delivery has only29m42s until directory expiry;
+17m55s is its remaining life at10:17, not a newly issued lifetime. Practical long
+testing-window objective remains incomplete. Native delivery still caps at3600s;
+a true four-hour offline window cannot be achieved by gateway renewal alone.
+
+FC-YHQB-9VJN reports beta61/code61. Attempts10:03:03–10:03:55 and10:04:06–10:04:58UTC
+failed before restricted startup: AWG/TCP NETWORK, restricted NOT_READY then
+BOOTSTRAP_UNAVAILABLE. Saved latest incident is CELLULAR; no restricted session/tag.
+Client then records READY10:05:15.521UTC; RU confirms fetch10:05:15/ACK10:05:16UTC,
+READY/PRESENT_VALID/orchestrator_usable, revision1/CRL3680, expires10:34:57UTC.
+At10:17:02UTC this leaves17m55s. Latest Wi-Fi/AWG is connected; snapshot UNKNOWN is
+reset by a new connect_requested, not evidence that the accepted cache was rejected.
+RU/NL current CRL3701 matches, lifetime3600s; same directory, loaded4h gateway
+certificate/PID/restarts0 and targeted sync; exact2 admission/default beta60 unchanged.
+Native-import failure10:00:12.968UTC remains unexplained; no restricted disconnect
+or RKN cause established. NEXT one coordinated mobile test only while READY remains
+valid with fallback headroom; immediately export afterward. If delayed beyond this
+window, refresh on working Wi-Fi and recheck before testing. No runtime/APK change.
+[Evidence, limits and next step](releases/2026-10-04-field-export9-readiness.md).
+
+## FIELD testing window — server rollout PASS; rechecked04.10.2026 10:00UTC
+
+User explicitly authorizes removing the impractical15-minute testing cap without
+disabling validation. RU sync now uses an opt-in3600s CRL policy (default900 unchanged),
+targeted archive SHA1bfa085b03edf6b1cfbfab05ac6b4ca1e8626932669d49d7ef3325bf0f0fc0d0.
+Only restricted_admin/restricted_sync differ from deployed f6aa8859 baseline; preserved
+old access module and manifest, no unrelated Support-ID source update. Local138 tests
+including native compatibility PASS; exact targeted archive66 tests PASS. No new CI
+run/commit claimed. Gateway certificate renewed/actually loaded for4h until13:39:54UTC,
+issuer unchanged14:13:53UTC. Same gatewayb9b7d542, PID3789112/restarts0, native+/− and
+35s stable readback PASS. Ordinary HTTP/AWG/TCP/cohort/grants/Support unchanged.
+RU/NL09:44 CRL3643 matches with3600s lifetime (until10:44:36UTC), directory matches
+until10:34:57UTC; sync timer active. Public HTTPS beta60 catalogs/invite byte-identical.
+Final10:00 readback again matches RU/NL: CRL3671 still3600s (until10:59:56UTC), same
+directory/certificate/runtime/PID/restarts0; new tester READY/ACK still absent.
+APK unchanged; beta61 r2 remains4297ea1a/signer67a90d1, not rebuilt or promoted.
+Tester still has expired08:58 READY; NEXT normal foreground Wi-Fi refresh and actual
+READY/ACK with remaining usable lifetime before another mobile test. Native import
+failure/original disconnect not fixed by this policy. [Report/rollback](releases/2026-10-04-field-test-window.md).
+
+## Longer readiness request — policy clarification04.10.2026
+
+User requests longer certificate validity. Source audit: readiness is capped by the
+CRL published with hard-coded900s lifetime, not only the gateway certificate.
+Installed native validator allows at most3600s for delivery/CRL/directory. Extending
+only gateway validity will not remove this client15-minute cap. Proposed ceiling:
+60-minute CRL/readiness, still bounded by certificate/directory/issuer expiry; this
+also lengthens the maximum accepted age of revocation information. Confirm that
+policy change before implementation/deployment; no TTL/runtime change made yet.
+[Scope and tradeoff](releases/2026-10-04-field-export8-expired.md#requested-longer-validity).
+
+## Export(8) — mobile attempt after readiness expiry04.10.2026 09:23UTC
+
+New tester connection3c0262d6/incident49da78f6, CELLULAR: start09:15:18.687UTC,
+159.687s after the accepted readiness expired09:12:39UTC. Earlier AWG disconnect
+09:12:27UTC; refresh09:12:43.110UTC FETCH_FAILED. AWG/TCP NETWORK, then restricted
+NOT_READY09:16:10.773/BOOTSTRAP_UNAVAILABLE, terminal FAILED after52.198s.
+No restricted session/history/tag; not a reproduced established-session disconnect.
+Read-only RU09:23:49 confirms latest tester READY/ACK still08:58:11–12UTC, expired;
+no newer recorded challenge/fetch. NL09:23:51 actual certificate/profile match,
+expiry09:39:30UTC, same b9b7d542/PID3757156/restarts0. RU/NL directory/CRL3604 match;
+directory expires09:34:32UTC. Exactly2 admitted/non-revoked; beta60 discovery/landing
+unchanged. No renewal/retry/APK/transport change in this task. NEXT working Wi-Fi,
+fresh normal READY/ACK and remaining lease check before separately coordinating a
+new attempt; allow for ~52s Auto fallback. No expiry bypass, RKN or fix claim.
+[Evidence and limits](releases/2026-10-04-field-export8-expired.md).
+
+## Export(7) — fresh tester READY/ACK confirmed04.10.2026 09:01UTC
+
+FC-YHQB-9VJN beta61/code61 export: WIFI/AWG CONNECTED,125 recorded DNS probes OK;
+native-import failures08:44:55.981/08:49:55.924UTC followed by READY08:58:11.277UTC.
+The incident object is identical to export(6), not a new mobile attempt. No restricted
+session/history/tag yet. Export does not attest installed APK bytes or native failure
+branch. Read-only RU09:01:24 confirms normal tester fetch08:58:11/ACK08:58:12UTC,
+READY/PRESENT_VALID/orchestrator_usable, revision1/CRL3556, expires**09:12:39UTC**.
+NL09:01:27 actual loaded certificate matches profile, expiry09:39:30UTC; same binary
+b9b7d542/PID3757156/restarts0. RU/NL directory matches, expiry09:34:32UTC; signed
+CRL3563 matches, expiry09:16:24UTC; issuer14:13:53UTC. Exactly2 admitted, same Support
+IDs; beta60 discovery/landing hashes unchanged. No writes/rebuild or security bypass.
+NEXT one coordinated mobile Auto attempt within fresh leases, immediate export after
+failure/disconnect and client/server correlation. If delayed, recheck readiness first.
+Transient native-validation cause and original session-loss remain unresolved; no RKN
+or transport-fix claim. [Evidence](releases/2026-10-04-field-export7-ready.md).
+
+## Export(6) follow-up — gateway PASS; tester import BLOCKED04.10.2026 08:51UTC
+
+User authorized prerequisite restoration. Existing protected credential-only renewal
+completed08:39:30UTC; actual served certificate matches profile, issuer/hostname
+validation PASS, expires09:39:30UTC. Fresh directory issued08:39:34.925582899UTC,
+expires09:34:32.702517154UTC; RU/NL bytes match at08:42. Signed CRL3527 matches on
+both hosts, expires08:56:49UTC; existing sync timer restored/active. Issuer remains
+valid until14:13:53UTC; no lifetime extension or security-floor reset.
+NL PID3757156/restarts0; same accepted diagnostic executableb9b7d542,35s stable
+loaded readback PASS. Exactly2 admitted; grants/enrollment/Support mappings and
+ordinary HTTP/AWG/TCP service fingerprints unchanged. APK/build/catalog unchanged.
+Tester normal beta61 READY/ACK appeared08:34:46–47UTC, expiry08:49:22UTC, but predates
+gateway renewal. Post-renewal fetch08:44:56UTC received an authenticated failure ACK:
+NATIVE_VALIDATION_FAILED, NOT_READY, orchestrator_usable=false. Ordinary refresh at
+08:49:56UTC repeats that failure. Final08:51 RU/NL readback: same active PID/restarts0,
+loaded certificate unchanged, matching directory and signed CRL3543 until09:05:33UTC.
+Both failure receipts have client observed_at one second before server fetch; exact
+native failure branch/clock offset is not established. NEXT fresh tester diagnostic
+export while on Wi-Fi and native-import evidence/time checks; no mobile test yet.
+Bounded polling stopped; no cache/backoff bypass, transport change or fix claim.
+[Operation, evidence and remaining gate](releases/2026-10-04-field-export6-readiness.md#authorized-prerequisite-restoration).
+
+## FIELD export(6) — pre-session readiness failure04.10.2026
+
+FC-YHQB-9VJN export reports beta61/code61. CELLULAR attempt08:28:06.614UTC fails
+after52.244s: cached readiness EXPIRED_ON_IMPORT, refresh FETCH_FAILED, AWG/TCP
+NETWORK, restricted NOT_READY/BOOTSTRAP_UNAVAILABLE. No restricted CONNECTED,
+restricted_session/history or tag; this is before native beginReady, not the old
+15/30s established-session loss or evidence of a tag parsing regression. Latest ring
+then WIFI/AWG CONNECTED08:29:23.580UTC. Export alone does not attest exact APK hash.
+Read-only RU08:32 confirms both existing devices admitted/non-revoked, tester's last
+READY/ACK still03.10 19:42:49UTC (expired19:57:16); no new successful delivery/ACK.
+NL08:32 loaded diagnostic binaryb9b7d542 active, actual served/profile certificate
+expired03.10 21:18:57UTC; fresh directory does not cure expired Family TLS credentials.
+Expiry is an independent server blocker, not proof of why mobile refresh failed.
+No server/client writes or retry. NEXT protected gateway renewal + loaded readback,
+fresh tester READY/ACK over working Wi-Fi, then coordinate one mobile attempt. Do not
+uninstall/reenroll, widen FIELD or infer RKN/original transport fix.
+[Evidence and limits](releases/2026-10-04-field-export6-readiness.md).
+
+## Beta61 r2 direct diagnostic delivery — PASS04.10.2026 03:34UTC
+
+Existing accepted signed APK published unchanged as a separate exact-match download:
+[Android beta61 r2 diagnostic](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta61-r2.apk).
+Public HTTPS200 readback49654651bytes, SHA4297ea1a7124f048bdfca4889e89114e84465fab3100a3caea7cbe23cd5e35fb,
+signer67a90d1 matches beta60. No rebuild/resign, GitHub Release or new version.
+Added only the APK and its nginx route; nginx syntax/reload PASS. No landing edit.
+Public beta60 APK re-downloaded: SHA8ee59352 unchanged; default invitation Android
+still60. Signed catalogf042beca and discovery6e5817dc byte-identical, version60/code60,
+mandatory_after0. All pre-existing download hashes (including Linux/Windows), static
+pages/catalogs, admission/Support/enrollment/grants and ordinary service PIDs unchanged.
+Targeted for existing FC-YHQB-9VJN, not production promotion or mandatory update.
+Tester installation/reproduction not performed. Before one later coordinated mobile
+attempt, revalidate current gateway leases and tester READY/ACK; original disconnect
+not claimed fixed. [Delivery evidence/rollback](releases/2026-10-04-beta61-r2-direct-delivery.md).
+
+## Historical GitHub delivery blocker — superseded by direct delivery04.10.2026
+
+Owner authorizes a separate GitHub prerelease `android-beta61-r2-diagnostic`, not
+production promotion. Existing signed APK4297ea1a reverified locally; signer67a90d1
+independently matches retained beta60. No rebuild/resign. Intended source64849e8,
+one APK asset only, prerelease=true/make_latest=false; release notes prepared.
+Target Release GET returned404. No Release creation/upload mutation is available in
+the connected GitHub tools; local `gh` and an authenticated CLI upload session are
+absent. Publication not attempted: no verified prerelease/download URL or downloaded
+SHA. Need an authenticated GitHub CLI/API release-upload capability (Contents:write),
+then recheck existing tag/release, upload exact bytes and verify downloaded SHA/signer.
+Production beta60/catalog/landing/FIELD/Support IDs untouched. Diagnostic owner
+acceptance below remains valid historical evidence, not a current lease/readiness
+check or proof of Russian transport repair.
+[Delivery gate/report](releases/2026-10-04-beta61-r2-github-delivery.md).
+
+## Beta61 diagnostic r2 — RUSSIAN DIAGNOSTIC READY03.10.2026
+
+Final source64849e828add45407625d31df61413ac98e9a2cc: Client builds37149708390,
+phase037149708372 and Android readiness37149708383 PASS. Artifact11283533158
+verified against GitHub digest. Beta61/code61 signed offline, no post-sign rebuild;
+APK SHA4297ea1a7124f048bdfca4889e89114e84465fab3100a3caea7cbe23cd5e35fb,
+production signer67a90d1 matches accepted60 exactly. Owner Redmi in-place update
+from original61 preserves UID10283/data inode/encrypted identity/config/readiness/
+enrollment/activation/Support. Authentication, AWG+HTTPS200, provider/control/updater
+runtime checks, fixture export and restart PASS. Signed APK privacy1074 entries clean.
+NL gateway credentials renewed through existing protected operator, same identity;
+certificate valid until21:18:57UTC. Diagnostic executableb9b7d542 loaded/read back,
+fresh directory accepted. Exact2-device admission/grants and ordinary RU services
+unchanged. Fresh ordinary owner READY/ACK20:30:43UTC. Controlled real owner restricted
+session20:31:17–20:32:14UTC established and healthy at capture; product Share export
+contains full tag4a78f228…3966c06, identical on server.48 client/75 server events,
+four-ID lookup PASS, no sequence gaps, all required positive lifecycle stages and
+bidirectional carrier activity present; APPLICATION/WEBSOCKET heartbeat TX/RX and
+cleanup observed. No primary failure; later cleanup errors stay separate. Export and
+strict server trace privacy checks PASS. Final installed APK/signature/UID/Identity/
+enrollment/Support verified; private test package removed, real evidence retained.
+Local verified handoff prepared only for FC-YHQB-9VJN under
+`state-client-build/field61-r2-delivery/`; NOT uploaded/sent. Public/catalog/invitation
+remain60, FIELD admission unchanged, tester attempts0. Before later Russian attempt,
+revalidate/renew leases and fresh tester READY/ACK; exactly one mobile attempt then
+immediate export/correlation. No original-disconnect fix or RKN attribution. Full hashes/rollback in
+[acceptance ledger](releases/2026-10-03-beta61-targeted-acceptance.md).
+
+### Historical r2 implementation checkpoint (superseded by acceptance above)
 
 Production SetupID producer and bootstrap validator require32 bytes/64hex. Diagnostic
 v2 hashes the complete decoded value with domain `family-connect/session-diagnostic/v2\0`

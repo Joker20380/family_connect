@@ -3,6 +3,8 @@ package reliablestream
 import (
 	"bytes"
 	"time"
+
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 )
 
 type Event struct {
@@ -69,6 +71,9 @@ type engine struct {
 	buffer       map[uint64][]byte
 	gaps         map[uint64]time.Time
 	stats        Stats
+	lastACK      time.Time
+	lastProgress time.Time
+	failureTrace sessiontrace.Event
 }
 
 func newEngine(config Config, local epoch, now time.Time) *engine {
@@ -159,6 +164,10 @@ func (state *engine) input(packet frame, now time.Time) ([]frame, error) {
 		if packet.bits != 0 {
 			state.stats.SACKReceived++
 		}
+		state.lastACK = now
+		if packet.ack > state.base {
+			state.lastProgress = now
+		}
 		for seq, block := range state.sent {
 			if seq < packet.ack {
 				state.stats.BufferedBytes -= len(block.data)
@@ -245,10 +254,30 @@ func (state *engine) consume() ([]byte, frame) {
 	return data, state.ack()
 }
 
+func (state *engine) exhausted(reason string, block *pending, now time.Time) error {
+	age := func(since time.Time) uint64 {
+		if since.IsZero() {
+			since = state.started
+		}
+		return uint64(max(0, now.Sub(since).Milliseconds()))
+	}
+	state.failureTrace = sessiontrace.Event{Stage: "CARRIER", State: "FAILED", Reason: reason,
+		ReliablePending: uint64(len(state.sent)), ReliableACKReceived: state.stats.ACKReceived,
+		ReliableACKAgeMS: age(state.lastACK), ReliableProgressAgeMS: age(state.lastProgress)}
+	if block != nil {
+		state.failureTrace.ReliableAgeMS = age(block.first)
+		state.failureTrace.ReliableRetries = uint64(block.retries)
+		if block.sacked {
+			state.failureTrace.ReliableSacked = 1
+		}
+	}
+	return ErrExhausted
+}
+
 func (state *engine) tick(now time.Time) ([]frame, error) {
 	if state.remote == (epoch{}) {
 		if now.Sub(state.started) >= state.config.MaxAge {
-			return nil, ErrExhausted
+			return nil, state.exhausted("RELIABLE_HANDSHAKE_TIMEOUT", nil, now)
 		}
 		if state.lastOpen.IsZero() || now.Sub(state.lastOpen) >= state.config.RTO {
 			state.lastOpen = now
@@ -264,14 +293,14 @@ func (state *engine) tick(now time.Time) ([]frame, error) {
 	for seq := state.base; seq < state.next; seq++ {
 		block := state.sent[seq]
 		if now.Sub(block.first) >= state.config.MaxAge {
-			return nil, ErrExhausted
+			return nil, state.exhausted("RELIABLE_FRAME_TIMEOUT", block, now)
 		}
 		if block.sacked || now.Sub(block.last) < state.config.RTO {
 			continue
 		}
 		state.stats.Timeouts++
 		if block.retries >= state.config.MaxRetries {
-			return nil, ErrExhausted
+			return nil, state.exhausted("RELIABLE_RETRY_EXHAUSTED", block, now)
 		}
 		block.last, block.retries = now, block.retries+1
 		packet := state.packet(dataFrame)

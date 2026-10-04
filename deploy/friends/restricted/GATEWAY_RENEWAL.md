@@ -4,6 +4,15 @@ This is the existing credential-only JIT path, not PROV-1 deployment or physical
 rehearsal. Do not rebuild/restage runtime artifacts, change HTTP/AWG/TCP, install an
 APK, create identities/admissions, reset security floors or extend the accepted TTL.
 
+Explicit FIELD testing exception04.10.2026: the user authorized a longer bounded
+window. Gateway certificate renewed for four hours, capped by existing issuer expiry;
+RU sync separately enables `--crl-lifetime 3600` using a verified two-module patch.
+This does not remove expiry/revocation checks or change the default900s policy.
+See [exact deployment, validation and rollback](../../../docs/releases/2026-10-04-field-test-window.md).
+Use that recorded live policy for this cohort; never infer indefinite authority or
+silently restore an expired certificate. A certificate-only renewal does not activate
+the hour-long CRL policy by itself.
+
 ## Discover the installed contract
 
 Read the actual bootstrap unit's `User`, `Group`, `WorkingDirectory` and `ExecStart`.

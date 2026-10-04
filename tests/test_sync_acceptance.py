@@ -257,7 +257,8 @@ def test_real_journal_delay_reproduces_ten_second_boundary(receipts):
     assert 10 <= receipt['elapsed'] < 15
 
 
-def test_isolated_cli_publisher_gateway_and_safe_snapshot_timing(bundle, tmp_path):
+@pytest.mark.parametrize('lifetime', [900, 3600, 14400])
+def test_isolated_cli_publisher_gateway_and_safe_snapshot_timing(bundle, tmp_path, lifetime):
     import time
     material, service = material_fixture(bundle)
     profile, seed = tmp_path / 'gateway.json', tmp_path / 'seed.json'
@@ -269,7 +270,7 @@ def test_isolated_cli_publisher_gateway_and_safe_snapshot_timing(bundle, tmp_pat
     profile.chmod(0o600)
     seed.chmod(0o600)
     script = '''import contextlib,io,json,runpy,subprocess,sys,time
-archive,root,profile,seed=sys.argv[1:]
+archive,root,profile,seed,lifetime=sys.argv[1:]
 started=time.monotonic();sys.argv=[archive,'--help']
 with contextlib.redirect_stdout(io.StringIO()):
     try:runpy.run_path(archive,run_name='__main__')
@@ -279,8 +280,8 @@ from pathlib import Path
 assert sync.__file__.startswith(archive+'/')
 assert not any('PycharmProjects' in value for value in sys.path)
 real_run=subprocess.run;real_publish=sync.publish_crl;timings={}
-def publish(*args):
-    start=time.monotonic();result=real_publish(*args);timings['publisher_seconds']=time.monotonic()-start;return result
+def publish(*args,**kwargs):
+    start=time.monotonic();result=real_publish(*args,**kwargs);timings['publisher_seconds']=time.monotonic()-start;return result
 def ssh(command,**kwargs):
     assert command[0]=='/usr/bin/ssh' and 'StrictHostKeyChecking=yes' in command and command[-1]=='restricted-sync'
     start=time.monotonic();time.sleep(.02)
@@ -291,11 +292,15 @@ def ssh(command,**kwargs):
     return subprocess.CompletedProcess(command,0)
 sync.publish_crl=publish;subprocess.run=ssh
 sys.argv=[archive,'sync','--db',root+'/friends-access/access.db','--host','186.246.45.246','--ssh-key',root+'/friends-restricted/sync.key','--known-hosts',root+'/friends-restricted/known_hosts']
+sys.argv+=['--crl-lifetime',lifetime]
 sync.main();timings['isolated_cli_seconds']=time.monotonic()-started
+from cryptography import x509
+crl=x509.load_pem_x509_crl((Path(root)/'friends-restricted/revocations.pem').read_bytes())
+assert (crl.next_update_utc-crl.last_update_utc).total_seconds()==int(lifetime)
 print(json.dumps(timings))
 '''
     output = subprocess.run([sys.executable, '-I', '-c', script, str(bundle / 'restricted-sync.pyz'),
-                             str(bundle.parent), str(profile), str(seed)], env=environment(material),
+                             str(bundle.parent), str(profile), str(seed), str(lifetime)], env=environment(material),
                             cwd=tmp_path, capture_output=True, check=True, timeout=25)
     timings = json.loads(output.stdout)
     started = time.monotonic()

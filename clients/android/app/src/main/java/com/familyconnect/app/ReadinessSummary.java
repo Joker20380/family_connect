@@ -21,7 +21,7 @@ final class ReadinessSummary {
             try {
                 if(value.has(name)&&value.get(name).getAsJsonPrimitive().isNumber())count=value.get(name).getAsLong();
             } catch(RuntimeException ignored) {}
-            if(count < -3600 || count > (name.equals("seeds")?4:3600))count=-1;
+            if(count < -14400 || count > (name.equals("seeds")?4:14400))count=-1;
             text.append(name).append(": ").append(count).append('\n');
         }
         return text.toString();

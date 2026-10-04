@@ -1,8 +1,14 @@
 # Documentation
 
+[Beta62 diagnostic source candidate04.10](releases/2026-10-04-beta62-recovery-candidate.md):
+four-hour readiness plus precise ReliableStream failure-before-cleanup evidence;
+owner Redmi connected/baselined, not updated. No new signed APK or publication yet.
+
 [Restricted session terminal diagnostics03.10](testing/restricted-session-diagnostics.ru.md):
-local native/gateway/Android patch and tests PASS, not deployed/released; preserves
-first cause/correlation for the next controlled FIELD retry. Root cause remains open.
+targeted beta61 r2 owner update and diagnostic gateway deployed/accepted: real
+four-ID correlation, lifecycle and privacy PASS. [Separate diagnostic download04.10](releases/2026-10-04-beta61-r2-direct-delivery.md)
+verified; beta60 remains production/default/updater, no FIELD expansion. Russian
+reproduction and root cause remain open.
 
 **Current product critical path — 30.09.2026:**
 [5N-BOOT-1 → 5N.6 → MVP Orchestrator → Krasnodar FIELD-1 → 50–100-user beta](PLAN.md).

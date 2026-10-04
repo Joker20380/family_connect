@@ -27,6 +27,7 @@ from . import readiness_receipts
 DOMAIN = b'family-connect/restricted-issuer/v1\0'
 PROTOCOL = 'family-connect-5n3-test-v1'
 MAX_RESPONSE = 65536
+MAX_TEST_LIFETIME = 14400
 
 
 class ChallengeUnavailable(RuntimeError):
@@ -64,10 +65,13 @@ def from_env(access):
     fields(policy, 'devices')
     require(type(policy['devices']) is list and len(policy['devices']) <= 256)
     require(all(type(device) is str and (device == '*' or re.fullmatch('[0-9a-f]{32}', device)) for device in policy['devices']))
+    lifetime = os.environ.get('FC_FRIENDS_RESTRICTED_DELIVERY_LIFETIME', '3600')
+    require(lifetime in ('3600', '14400'))
     return RestrictedReadiness(access, manifest=parse(bounded_file(root / 'issuer.json', 16384)),
                               anchor=anchor, signing_key=load_pem_private_key(bounded_file(root / 'issuer.key', 4096, True), None),
                               seed_source=lambda: bounded_file(root / 'directory.json', 8192),
-                              crl_source=lambda: bounded_file(root / 'revocations.pem', 16384), eligible_devices=policy['devices'])
+                              crl_source=lambda: bounded_file(root / 'revocations.pem', 16384), eligible_devices=policy['devices'],
+                              delivery_lifetime=int(lifetime))
 
 
 def request(access, action, value, request_id=None):
@@ -186,7 +190,7 @@ def directory(raw, family, gateway, now=None, *, now_ns=None):
     issued, expires = instants['issued_at'], instants['expires_at']
     directory_require(issued <= now_ns, 'time', 'issued_in_future', 'issued_at')
     directory_require(now_ns < expires, 'time', 'expired', 'expires_at')
-    directory_require(0 < expires - issued <= 3600 * 1_000_000_000, 'time', 'invalid_lifetime', 'expires_at')
+    directory_require(0 < expires - issued <= MAX_TEST_LIFETIME * 1_000_000_000, 'time', 'invalid_lifetime', 'expires_at')
     directory_require(type(value['seeds']) is list and 1 <= len(value['seeds']) <= 4,
                       'structure', 'invalid_seed_count', 'seeds')
     seen = set()
@@ -224,10 +228,12 @@ def migrate(access):
 
 
 class RestrictedReadiness:
-    def __init__(self, access, *, manifest, anchor, signing_key, seed_source, crl_source, eligible_devices=None):
+    def __init__(self, access, *, manifest, anchor, signing_key, seed_source, crl_source, eligible_devices=None, delivery_lifetime=3600):
+        require(type(delivery_lifetime) is int and delivery_lifetime in (3600, MAX_TEST_LIFETIME))
         self.access, self.manifest, self.anchor = access, manifest, anchor
         self.signing_key, self.seed_source, self.crl_source = signing_key, seed_source, crl_source
         self.eligible_devices = None if eligible_devices is None else frozenset(eligible_devices)
+        self.delivery_lifetime = delivery_lifetime
 
     def _enroll(self, database, device, public, wg, trust, now):
         if database.execute('SELECT 1 FROM restricted_grants WHERE device=?', (device,)).fetchone():
@@ -251,7 +257,7 @@ class RestrictedReadiness:
         require(crl.is_signature_valid(authority.public_key()))
         require(crl.issuer == authority.subject)
         require(crl.last_update_utc <= utc(now) < crl.next_update_utc)
-        require((crl.next_update_utc - crl.last_update_utc).total_seconds() <= 3600)
+        require((crl.next_update_utc - crl.last_update_utc).total_seconds() <= MAX_TEST_LIFETIME)
         number = crl.extensions.get_extension_for_class(x509.CRLNumber).value.crl_number
         require(0 < number < 2**53)
         return trust, authority, crl, raw.decode(), number
@@ -325,7 +331,9 @@ class RestrictedReadiness:
                     or row['revision'] < trust['minimum_revision']
                     or challenge['family'] != row['family'] or challenge['revision'] != row['revision']):
                 raise Rejected()
-            expires = min(now + 3600, row['expires'] if row['expires'] is not None else trust['expires_at'], trust['expires_at'], int(crl.next_update_utc.timestamp()))
+            expires = min(now + self.delivery_lifetime, row['expires'] if row['expires'] is not None else trust['expires_at'], trust['expires_at'], int(crl.next_update_utc.timestamp()))
+            if self.delivery_lifetime == MAX_TEST_LIFETIME:
+                expires = min(expires, timestamp(seeds['expires_at']))
             database.execute('DELETE FROM restricted_certificates WHERE expires<=?', (now,))
             current = database.execute('SELECT serial FROM restricted_certificates WHERE device=? AND revision=?',
                                        (device, row['revision'])).fetchall()
@@ -333,7 +341,7 @@ class RestrictedReadiness:
                 raise Rejected()
             previous = database.execute('SELECT * FROM restricted_certificates WHERE device=? AND revision=? '
                                         'AND expires>? ORDER BY expires DESC LIMIT 1', (device, row['revision'], now + 300)).fetchone()
-            if previous is None:
+            if previous is None or (self.delivery_lifetime == MAX_TEST_LIFETIME and previous['expires'] < expires):
                 certificate = self._issue(row, authority, now, expires)
                 pem = certificate.public_bytes(Encoding.PEM).decode()
                 database.execute('INSERT INTO restricted_certificates VALUES (?,?,?,?,?)',

@@ -1,5 +1,9 @@
 # Release distribution / Выпуски
 
+Android0.1.18-beta62/code62 is a [local source-only diagnostic candidate](releases/2026-10-04-beta62-recovery-candidate.md),
+not built/signed/installed/published. Installed owner baseline and targeted download
+remain61 r2; default Android distribution remains60. No62 download/hash claimed.
+
 Android0.1.18-beta60 published 2026-10-03 after hosted CI, owner in-place acceptance and public HTTPS SHA256/signer verification. Windows0.2.15 and Linux0.2.11 distribution remains unchanged.
 
 | Channel | Distributed version | Notes |
@@ -42,6 +46,18 @@ Renew before expiry with a higher sequence and the existing offline root. beta59
 [FIELD publication evidence](releases/2026-10-03-field1-release-final.md#beta60-publication--2026-10-03).
 
 [Discovery](https://185.251.89.19:8443/updates/android-friends.json) · [Android/Windows/Linux checks](releases/2026-09-26-server-list-crossplatform.ru.md) · [Windows0.2.14 checks](releases/2026-09-24-windows0214-installer.ru.md).
+
+## Targeted diagnostic download — not production
+
+[Android beta61 r2 diagnostic](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta61-r2.apk),
+published separately04.10.2026 for existing tester FC-YHQB-9VJN. Version/code
+`0.1.18-beta61`/61,49654651bytes; same already accepted APK, no rebuild/resign.
+Downloaded SHA256 `4297ea1a7124f048bdfca4889e89114e84465fab3100a3caea7cbe23cd5e35fb`;
+signer SHA256 `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+HTTP200/readback PASS. Beta60 remains default/production and both update catalogs
+remain60; landing, desktop downloads and FIELD admission unchanged. No GitHub Release.
+Install over60 without uninstall/data clear/new invitation; the original disconnect
+is not claimed fixed. [Evidence and rollback](releases/2026-10-04-beta61-r2-direct-delivery.md).
 
 ## Release procedure
 

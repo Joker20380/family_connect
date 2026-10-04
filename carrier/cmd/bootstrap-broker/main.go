@@ -36,7 +36,7 @@ func main() {
 func run() error {
 	path := flag.String("family-config", "", "private gateway profile")
 	address := flag.String("listen", "127.0.0.1:18444", "isolated mTLS cache preparation endpoint")
-	duration := flag.Duration("duration", 10*time.Minute, "isolated process/seed lifetime, at most one hour")
+	duration := flag.Duration("duration", 10*time.Minute, "isolated process/seed lifetime, at most four hours; long windows require compatible clients")
 	export := flag.String("directory-export", "", "optional protected READY seed snapshot for Friends control")
 	flag.Parse()
 	host, _, err := net.SplitHostPort(*address)

@@ -53,7 +53,7 @@ def test_original_offset_failure_and_precise_bounds():
         old_timestamp(value['expires_at'])
     assert directory(json.dumps(value).encode(), 'a' * 32, 'b' * 32, TIME_CONTRACT['now']) == dict(value, expires_at=TIME_CONTRACT['valid'][3]['canonical'])
     for issued, expires in [('2026-10-01T11:45:00.000000001Z', '2026-10-01T12:00:00Z'),
-                            ('2026-10-01T11:00:00Z', '2026-10-01T15:00:00.000000001+03:00')]:
+                            ('2026-10-01T11:00:00Z', '2026-10-01T18:00:00.000000001+03:00')]:
         raw = json.dumps(dict(value, issued_at=issued, expires_at=expires)).encode()
         with pytest.raises(ValueError):
             directory(raw, 'a' * 32, 'b' * 32, TIME_CONTRACT['now'])
@@ -64,7 +64,7 @@ def setup(tmp_path):
     return configured(tmp_path, 1800000000)
 
 
-def configured(tmp_path, now):
+def configured(tmp_path, now, *, delivery_lifetime=3600, directory_lifetime=3600):
     access = Access(tmp_path / 'access.db', clock=lambda: now)
     access.initialize()
     migrate(access)
@@ -87,12 +87,13 @@ def configured(tmp_path, now):
     manifest = dict(payload=base64.b64encode(payload).decode(), signature=base64.b64encode(root.sign(DOMAIN + payload)).decode())
     crl = (x509.CertificateRevocationListBuilder().issuer_name(name).last_update(utc(now-1)).next_update(utc(now+3599))
            .add_extension(x509.CRLNumber(1), False).sign(signing, None))
-    seed = json.dumps(dict(version=1, family=family, issued_at=iso(now-1), expires_at=iso(now+3599),
+    seed = json.dumps(dict(version=1, family=family, issued_at=iso(now-1), expires_at=iso(now+directory_lifetime-1),
                            seeds=[dict(transport='telemost-webrtc', join_url='https://telemost.yandex.ru/j/test-only', gateway=gateway)])).encode()
     with access.db() as database:
         database.execute('INSERT INTO restricted_grants VALUES (?,?,?,?,0)', (device.reference, family, 1, now+86400))
     service = RestrictedReadiness(access, manifest=manifest, anchor=root.public_key().public_bytes_raw(), signing_key=signing,
-                                 seed_source=lambda: seed, crl_source=lambda: crl.public_bytes(Encoding.PEM))
+                                 seed_source=lambda: seed, crl_source=lambda: crl.public_bytes(Encoding.PEM),
+                                 delivery_lifetime=delivery_lifetime)
     return service, device, now
 
 
@@ -225,7 +226,7 @@ def test_request_limits_and_trust_bounds(setup):
     with pytest.raises(ValueError):
         directory(b' ' * 8193, 'a'*32, 'b'*32, now)
     original = json.loads(service.seed_source())
-    for change in ({'expires_at': iso(now+3601)}, {'family': 'c'*32}, {'signature': 'unsupported'}):
+    for change in ({'expires_at': iso(now+14400)}, {'family': 'c'*32}, {'signature': 'unsupported'}):
         with pytest.raises(ValueError):
             directory(json.dumps(dict(original, **change)).encode(), 'a'*32, 'b'*32, now)
     service.anchor = bytes(32)
@@ -246,14 +247,15 @@ def test_revoked_certificate_not_reissued_as_bypass(setup):
         service.fetch(proof(service, device))
 
 
-def test_grant_revision_and_crl_publication(setup, tmp_path):
+@pytest.mark.parametrize('lifetime', [900, 3600, 14400])
+def test_grant_revision_and_crl_publication(setup, tmp_path, lifetime):
     from control.friends.restricted_admin import grant, publish_crl
     service, device, now = setup
     first = service.fetch(proof(service, device))
     old = x509.load_pem_x509_certificate(first['certificate'].encode())
     grant(service.access, device.reference, 'a'*32, now+600)
     target = tmp_path / 'revocations.pem'
-    publish_crl(service, target)
+    publish_crl(service, target, lifetime=lifetime)
     service.crl_source = target.read_bytes
     assert x509.load_pem_x509_crl(target.read_bytes()).get_revoked_certificate_by_serial_number(old.serial_number) is not None
     second = service.fetch(proof(service, device))
@@ -261,11 +263,56 @@ def test_grant_revision_and_crl_publication(setup, tmp_path):
     assert second['expires_at'] <= now+600
     with service.access.db() as database:
         database.execute('UPDATE devices SET revoked=1')
-    publish_crl(service, target)
+    publish_crl(service, target, lifetime=lifetime)
     latest = x509.load_pem_x509_certificate(second['certificate'].encode())
     assert x509.load_pem_x509_crl(target.read_bytes()).get_revoked_certificate_by_serial_number(latest.serial_number) is not None
     with pytest.raises(Rejected):
         service.challenge(device.public_identity, device.wireguard_public_key)
+
+
+@pytest.mark.parametrize('lifetime', [900, 3600, 14400])
+def test_crl_readiness_lifetime_bounds(setup, tmp_path, lifetime):
+    from control.friends.restricted_admin import publish_crl
+    service, device, now = setup
+    target = tmp_path / 'revocations.pem'
+    publish_crl(service, target, lifetime=lifetime)
+    service.crl_source = target.read_bytes
+    crl = x509.load_pem_x509_crl(target.read_bytes())
+    assert crl.last_update_utc == utc(now)
+    assert crl.next_update_utc == utc(now + lifetime)
+    assert crl.is_signature_valid(service.signing_key.public_key())
+    response = service.fetch(proof(service, device))
+    assert response['expires_at'] == now + min(lifetime, 3599)
+    service._trust(now + lifetime - 1)
+    with pytest.raises(ValueError):
+        service._trust(now + lifetime)
+
+
+def test_long_crl_capped_by_delegation(setup, tmp_path):
+    from control.friends.restricted_admin import publish_crl
+    service, _, now = setup
+    root = Ed25519PrivateKey.generate()
+    trust = json.loads(base64.b64decode(service.manifest['payload']))
+    trust['expires_at'] = now + 1200
+    payload = json.dumps(trust).encode()
+    service.anchor = root.public_key().public_bytes_raw()
+    service.manifest = dict(payload=base64.b64encode(payload).decode(),
+                            signature=base64.b64encode(root.sign(DOMAIN + payload)).decode())
+    target = tmp_path / 'revocations.pem'
+    publish_crl(service, target, lifetime=3600)
+    assert x509.load_pem_x509_crl(target.read_bytes()).next_update_utc == utc(now + 1200)
+
+
+@pytest.mark.parametrize('lifetime', [-1, 0, 899, 14401, True, 900.0, '3600', None])
+def test_invalid_crl_lifetime_has_no_mutation(setup, tmp_path, lifetime):
+    from control.friends.restricted_admin import publish_crl
+    service, _, _ = setup
+    before = service.access.path.read_bytes()
+    target = tmp_path / 'revocations.pem'
+    with pytest.raises(ValueError, match='invalid CRL lifetime'):
+        publish_crl(service, target, lifetime=lifetime)
+    assert not target.exists()
+    assert service.access.path.read_bytes() == before
 
 
 def test_http_routes_bounds_and_disabled_feature(setup, monkeypatch):

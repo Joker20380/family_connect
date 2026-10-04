@@ -79,6 +79,13 @@ congestion control; this adapter adds reliability/flow control only.
 
 ## Bounds and shutdown
 
+- Local beta62 diagnostic candidate records exact handshake, outstanding-frame-age
+  or retry-budget exhaustion in sessiontrace **before** sending RESET/closing the
+  carrier, so later TLS/cleanup errors cannot hide the initiating failure. Failure
+  metadata includes outstanding count, selected block's age/retries/SACK state,
+  received ACK count, and time since last valid non-stale ACK/cumulative progress
+  (since stream start when none). Zero-valued native fields are omitted. No payload,
+  packet bytes, epochs or credentials are recorded; timers/retry/wire rules unchanged.
 - Payload hard maximum32KiB, each window1–32, maximum framed size32KiB+64B.
 - Default retained DATA bytes ≤(8+16)×16KiB =393,216; hard config bound2MiB.
 - The first128 numeric gap/retry events and a separate rolling tail of the latest128

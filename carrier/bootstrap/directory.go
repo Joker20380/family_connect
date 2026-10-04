@@ -18,7 +18,7 @@ import (
 
 const MaxDirectory = 8192
 const MaxSeeds = 4
-const MaxAge = time.Hour
+const MaxAge = 4 * time.Hour
 
 type Seed struct {
 	Transport string `json:"transport"`

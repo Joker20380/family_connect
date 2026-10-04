@@ -1,5 +1,14 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+Current FIELD diagnostic lifetime exception04.10: explicit user authorization enables
+`sync --crl-lifetime 3600` on RU only; default remains900. Both are validated against
+the existing one-hour native limit. Actual readiness remains the minimum of CRL,
+client certificate, directory and issuer/grant expiry, not a guaranteed full hour.
+Longer CRL validity permits older signed revocation information; signature, revocation,
+monotonic-floor and expiry checks stay enabled. Repeated sync preserves the selected
+policy. [Verified target archive, source provenance and reversible drop-in](../../../docs/releases/2026-10-04-field-test-window.md).
+No Android update or FIELD admission expansion accompanies this operational change.
+
 Credential-only root publication now uses the focused
 [gateway renewal procedure](GATEWAY_RENEWAL.md) and tracked
 `scripts/gateway_credential_publication.py`, not the service-account sync writer.
@@ -904,3 +913,13 @@ working after rollback; the existing Orchestrator must fail closed on exhaustion
 
 No deployment, root signing, live proof, APK release, push or FIELD-1 was performed
 while writing this runbook. See the [gate report](../../../docs/releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
+# Four-hour diagnostic candidate — local only04.10.2026
+
+Do not activate against accepted beta61 r2: its native validator rejects material
+over one hour. New source accepts directory/CRL/delivery lifetimes up to14400s.
+Explicit `FC_FRIENDS_RESTRICTED_DELIVERY_LIFETIME=14400` selects long issuance;
+default is3600. RU sync `--crl-lifetime 14400` and compatible NL gateway sync are
+also required; CRL default remains900. Bootstrap broker `--duration 4h` must create
+a real long-lived seed, not merely rewrite directory timestamps. See the
+[candidate gates and rollback](../../../docs/releases/2026-10-04-four-hour-readiness.md).
+No four-hour deployment, signed APK or owner acceptance is claimed yet.

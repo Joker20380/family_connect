@@ -1,24 +1,30 @@
 # Client installation
 
-The beta61 r2 diagnostic correction is source-only; no corrected APK is accepted.
-The original signed/installed61 SHAc98852b3 is not the corrected candidate.
+**Beta62/code62 is a source-only diagnostic candidate, not an available update.**
+Four-hour readiness and precise ReliableStream failure-before-cleanup diagnostics
+are being prepared; no signed APK/download exists yet. Connected Redmi's61 r2
+baseline is verified, not upgraded. [Status and checks](releases/2026-10-04-beta62-recovery-candidate.md).
+Default download/updater remain60; the published61 r2 asset is not replaced.
 
-**Beta61 is a targeted diagnostic candidate; tester delivery is blocked.** Signed
-and checked in place on the owner device, but live diagnostic correlation is defective.
-Public distribution remains60; do not distribute61 before separate acceptance.
-[Acceptance report](releases/2026-10-03-beta61-targeted-acceptance.md).
-
-**Diagnostic beta61/code61 is being prepared, not published yet.**
-After acceptance, use the verified signed update over beta60; never uninstall or
-clear data, and retain the existing Support ID. Unsigned CI/local APKs are not
-installable updates. Links below still provide beta60 until verified publication.
-Additional diagnostics do not yet mean the session-loss cause has been fixed.
+**Beta61 r2: owner diagnostic acceptance PASS; only for FC-YHQB-9VJN.**
+Data continuity/AWG/export and real client/server correlation pass; the original
+disconnect is not claimed fixed. Separate verified download04.10:
+[Android beta61 r2 diagnostic](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta61-r2.apk).
+SHA256 `4297ea1a7124f048bdfca4889e89114e84465fab3100a3caea7cbe23cd5e35fb`;
+versionName/code `0.1.18-beta61`/61, unchanged production signer. Do not supply
+old61/c98852b3. [Acceptance/signature/rollback](releases/2026-10-03-beta61-targeted-acceptance.md).
+HTTP200 and downloaded SHA256/signer verified; [delivery report](releases/2026-10-04-beta61-r2-direct-delivery.md).
+This is not the default Android release: landing/updater and links below remain60. Supply only
+the signed APK and choose **Update** over60, without uninstall, data clear or new
+invitation; verify unchanged Support ID FC-YHQB-9VJN. Before one mobile attempt,
+the operator must revalidate leases and fresh READY/ACK; export immediately after
+disconnect. FIELD admission and the public updater remain unchanged.
 
 **Current03.10: beta60/code60 is public**, with the same accepted APK SHA8ee59352
 and signer67a90d1. Use the [installation/update guide](getting-started.en.md).
 Settings → About / Diagnostics shows the registration-bound Support ID; copy it,
-not keys, for support. Install over the app, never clear/uninstall. FIELD remains
-owner-only/cap3, independent of updates. Historical preparation notes below are
+not keys, for support. Install over the app, never clear/uninstall. Existing FIELD
+cohort owner+FC-YHQB-9VJN (2/cap3) is not expanded by updates. Historical preparation notes below are
 superseded by the [publication report](releases/2026-10-03-field1-release-final.md#beta60-publication--2026-10-03).
 
 ## Historical preparation checkpoints

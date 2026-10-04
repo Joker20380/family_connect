@@ -41,9 +41,11 @@ def tools(tmp_path_factory):
     return result
 
 
-def fixture(tmp_path, *, sequence=2, revision=2, crl_number=19, floor=1, family=None):
+def fixture(tmp_path, *, sequence=2, revision=2, crl_number=19, floor=1, family=None,
+            crl_lifetime=900, gateway_lifetime=3600, delivery_lifetime=3600, directory_lifetime=3600):
     now = int(time.time())
-    service, owner, _ = configured(tmp_path, now)
+    service, owner, _ = configured(tmp_path, now, delivery_lifetime=delivery_lifetime,
+                                    directory_lifetime=directory_lifetime)
     root = Ed25519PrivateKey.from_private_bytes(bytes([41]) * 32)
     gateway = DeviceIdentity.generate()
     payload = json.loads(base64.b64decode(service.manifest['payload']))
@@ -67,11 +69,11 @@ def fixture(tmp_path, *, sequence=2, revision=2, crl_number=19, floor=1, family=
     crl_path.chmod(0o600)
     service.crl_source = crl_path.read_bytes
     for expected in range(2, crl_number + 1):
-        assert publish_crl(service, crl_path) == expected
+        assert publish_crl(service, crl_path, lifetime=crl_lifetime) == expected
     trust, authority = delegation(service.manifest, service.anchor, now)
     gateway_certificate = service._issue(dict(public=gateway.public_identity, device=gateway.reference,
                                              family=trust['family'], revision=floor), authority,
-                                         now, now + 3600, 'gateway')
+                                         now, now + gateway_lifetime, 'gateway')
     private = Ed25519PrivateKey.from_private_bytes(gateway._identity.get_private_key()[32:])
     profile = dict(certificate=gateway_certificate.public_bytes(Encoding.PEM).decode(),
                    private_key=private.private_bytes(Encoding.PEM, PrivateFormat.PKCS8, NoEncryption()).decode(),
@@ -94,6 +96,41 @@ def delivery(binary, service, owner, now, response, *, public_only=False):
     if public_only:
         payload['public'] = owner.public_identity
     return subprocess.run([str(binary)], input=json.dumps(payload).encode(), cwd='/', capture_output=True, timeout=10)
+
+
+def test_long_testing_window_preserves_native_expiry_checks(tools, tmp_path):
+    service, owner, now, profile = fixture(tmp_path, crl_number=2, crl_lifetime=3600,
+                                          gateway_lifetime=14400)
+    response = service.fetch(proof(service, owner))
+    assert response['expires_at'] == now + 3599
+    result = native(tools['current'], tmp_path, profile, response['certificate'])
+    assert result.returncode == 0 and json.loads(result.stdout)['status'] == 'PASS'
+    assert delivery(tools['delivery'], service, owner, now + 1800, response, public_only=True).returncode == 0
+    assert delivery(tools['delivery'], service, owner, now + 3599, response, public_only=True).returncode != 0
+
+
+def test_four_hour_real_delivery_cross_language(tools, tmp_path):
+    service, owner, now, profile = fixture(tmp_path, crl_number=2, crl_lifetime=14400,
+                                          gateway_lifetime=14400, delivery_lifetime=14400,
+                                          directory_lifetime=14400)
+    response = service.fetch(proof(service, owner))
+    assert response['expires_at'] == now + 14399
+    result = native(tools['current'], tmp_path, profile, response['certificate'])
+    assert result.returncode == 0 and json.loads(result.stdout)['status'] == 'PASS'
+    assert delivery(tools['delivery'], service, owner, now, response).returncode == 0
+    for observed in (now, now + 7200, now + 14398):
+        assert delivery(tools['delivery'], service, owner, observed, response, public_only=True).returncode == 0
+    for observed in (now - 1, now + 14399, now + 14400):
+        assert delivery(tools['delivery'], service, owner, observed, response, public_only=True).returncode != 0
+    overlong = dict(response, expires_at=now + 14401)
+    assert delivery(tools['delivery'], service, owner, now, overlong, public_only=True).returncode != 0
+    trust, authority = delegation(service.manifest, service.anchor, now)
+    crl = (x509.CertificateRevocationListBuilder().issuer_name(authority.subject)
+           .last_update(utc(now)).next_update(utc(now + 14401))
+           .add_extension(x509.CRLNumber(response['minimum_crl']), False).sign(service.signing_key, None))
+    overlong = dict(response, revocations=crl.public_bytes(Encoding.PEM).decode())
+    assert delivery(tools['delivery'], service, owner, now, overlong, public_only=True).returncode != 0
+    assert trust['expires_at'] > response['expires_at']
 
 
 @pytest.mark.parametrize('sequence,revision,crl_number,old_exit', [(1,1,1,0), (2,2,2,1), (2,2,19,1), (37,37,43,1), (2,1,19,0)])

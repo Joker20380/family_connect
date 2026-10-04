@@ -4,7 +4,7 @@ import com.google.gson.*;
 import java.util.Arrays;
 
 final class RestrictedTrace {
-    static final String REASONS="NONE|SIGNAL_WS_CLOSE|ICE_DISCONNECTED|ICE_FAILED|PEER_CONNECTION_FAILED|CARRIER_EOF|CARRIER_ERROR|FAMILY_TLS_EOF|FAMILY_TLS_ERROR|GATEWAY_CLOSE|HEARTBEAT_TIMEOUT|REMOTE_CLOSE|RECOVERY_CLEANUP_FAILED|RECOVERY_DESCRIPTOR_FAILED|RECOVERY_JOIN_FAILED|RECOVERY_CARRIER_FAILED|UNKNOWN_INTERNAL";
+    static final String REASONS="NONE|SIGNAL_WS_CLOSE|ICE_DISCONNECTED|ICE_FAILED|PEER_CONNECTION_FAILED|CARRIER_EOF|CARRIER_ERROR|FAMILY_TLS_EOF|FAMILY_TLS_ERROR|GATEWAY_CLOSE|HEARTBEAT_TIMEOUT|REMOTE_CLOSE|RECOVERY_CLEANUP_FAILED|RECOVERY_DESCRIPTOR_FAILED|RECOVERY_JOIN_FAILED|RECOVERY_CARRIER_FAILED|RELIABLE_HANDSHAKE_TIMEOUT|RELIABLE_FRAME_TIMEOUT|RELIABLE_RETRY_EXHAUSTED|UNKNOWN_INTERNAL";
     static final String STAGES="AUTHORIZED|ROOM_CREATION|DESCRIPTOR|GATEWAY_JOIN|SIGNALING|WEBSOCKET|ICE|PEER_CONNECTION|CARRIER|CARRIER_ACTIVITY|FAMILY_TLS|GATEWAY_SESSION|HEARTBEAT|LIVENESS|LOCAL_CLOSE|REMOTE_CLOSE|RECOVERY|CLEANUP";
     static final String STATES="STARTED|ESTABLISHED|ISSUED|TX|RX|FAILED|CLOSED|COMPLETED|ATTEMPTED|NOT_ATTEMPTED|new|checking|connecting|connected|completed|disconnected|failed|closed";
     static String text(JsonObject source,String field){
@@ -28,7 +28,7 @@ final class RestrictedTrace {
             safe.addProperty(field,value);
         }
         safe.addProperty("session_tag",tag);
-        for(String field:new String[]{"sequence","timestamp_ms","tx","rx"})number(source,safe,field);
+        for(String field:new String[]{"sequence","timestamp_ms","tx","rx","reliable_age_ms","reliable_retries","reliable_pending","reliable_sacked","reliable_ack_age_ms","reliable_progress_age_ms","reliable_ack_received"})number(source,safe,field);
         if(!safe.has("sequence")||safe.get("sequence").getAsLong()==0||!safe.has("timestamp_ms"))return null;
         String target=text(source,"target");if(allowed(target,"SUBSCRIBER|PUBLISHER"))safe.addProperty("target",target);
         String heartbeat=text(source,"heartbeat_kind");if(allowed(heartbeat,"APPLICATION|WEBSOCKET"))safe.addProperty("heartbeat_kind",heartbeat);

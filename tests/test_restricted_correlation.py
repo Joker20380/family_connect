@@ -77,6 +77,25 @@ def test_native_android_operator_allowlists_match():
     assert re.search(r'const BrokerReasons = "([^"]+)"', native)[1] == diagnostic.BROKER_REASONS
 
 
+@pytest.mark.parametrize('reason', ['RELIABLE_HANDSHAKE_TIMEOUT', 'RELIABLE_FRAME_TIMEOUT', 'RELIABLE_RETRY_EXHAUSTED'])
+def test_reliable_first_failure_survives_cleanup_and_redaction(reason):
+    client, server = fixture()
+    first = entry(2, reason)
+    first.update(stage='CARRIER', state='FAILED', reliable_pending=8, reliable_retries=8,
+                 reliable_age_ms=9000, reliable_ack_age_ms=2000, reliable_progress_age_ms=9000,
+                 reliable_ack_received=17, reliable_sacked=0, reliable_payload='DO_NOT_EXPORT')
+    client['ring']['restricted_session']['lifecycle'].update(first_failure=first, trace=[entry(), first])
+    close = dict(entry(3), stage='LOCAL_CLOSE', state='STARTED')
+    server += [{'event': 'restricted_trace', 'trace': item} for item in (first, close, entry(4, 'FAMILY_TLS_ERROR'))]
+    result = diagnostic.correlate([client], server, SUPPORT)['sessions'][0]
+    assert result['first_client_failure'] == result['first_server_failure']
+    assert result['first_client_failure']['reason'] == reason
+    assert result['first_client_failure']['reliable_pending'] == 8
+    assert result['first_client_failure']['reliable_sacked'] == 0
+    assert result['first_client_failure']['reliable_ack_received'] == 17
+    assert 'DO_NOT_EXPORT' not in str(result)
+
+
 def test_large_sequence_is_bounded_and_broker_reason_preserved():
     client, server = fixture()
     server[0]["trace"]["sequence"] = 9007199254740991

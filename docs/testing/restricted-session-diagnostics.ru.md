@@ -1,11 +1,17 @@
 # Причина завершения restricted-сессии
 
-## Коррекция r2: локально, без допуска тестера
+## Коррекция r2: реальная owner-корреляция принята
 
 Новый контракт: полный SHA256 от domain-separated32-byte SetupID,64hex без усечения.
 Есть real-format/broker/bootstrap regression и bounded native/server lifecycle.
 Ниже старый отчёт о пустом теге относится к установленному SHAc98852b3, не исправлен
-на устройстве одним лишь изменением source. Новый APK/live acceptance ещё не готовы.
+на устройстве одним лишь изменением source. Исправленный подписанный APK4297ea1a
+установлен owner; gatewayb9b7d542 загружен. Реальная сессия20:31–20:32UTC прошла:
+48 client/75 server events, одинаковый полный tag, lookup по четырём ID, все
+положительные lifecycle стадии/heartbeat/cleanup, без пропусков и утечек секретов.
+Для существующего FC-YHQB-9VJN04.10 опубликована отдельная
+[диагностическая загрузка](../releases/2026-10-04-beta61-r2-direct-delivery.md), readback PASS.
+FIELD/default production/updater не меняются, исходный разрыв не объявлен исправленным.
 
 Оператор объединяет разрешённый клиентский экспорт и bounded JSONL с событиями
 `restricted_trace`, без journal prefix (`journalctl -o cat` для выбранного unit).
@@ -23,7 +29,7 @@ python scripts/correlate_restricted.py --client owner-export.json --server gatew
 Перед передачей тестеру нужны подписанный новый hash, owner in-place и **реальная**
 совпадающая client/server корреляция. FIELD/public updater/invitation не менять.
 
-**BLOCKED03.10:** beta61 подписана и установлена только owner поверх60; baseline
+**Исторический BLOCKED03.10, старый SHAc98852b3:** beta61 подписана и установлена только owner поверх60; baseline
 и экспорт проверочных данных прошли. Но реальный64-hex setup ID не проходит16-byte
 проверку `sessiondiag.Capture`: `session_tag` пустой. Утверждение ниже о совпадающем
 теге описывает задуманный контракт, не рабочую live-корреляцию beta61. Полная серверная
@@ -77,8 +83,8 @@ NONE при `evidence_dropped>0` не доказывает отсутствие 
 
 1. Принятый source checkpoint → platform CI → новые native/Java из одного source.
    Compile-only unsigned APK с metadata60 не является релизом и не устанавливается.
-   Для доставки нужна новая immutable версия, штатная подпись, hash/signer verification,
-   каталог и документация; публичную beta60 не переписывать. Проверить owner in-place
+   Для текущего targeted61 нужны отдельный проверенный hash, штатная подпись и
+   документация; публичные APK/каталог/приглашение60 не менять. Проверить owner in-place
    update/UID/identity/enrollment/Support до публикации.
 2. Gateway: проверенный бинарный hash, защищённый backup прежнего executable,
    узкий restart только restricted bootstrap по существующему runbook. HTTP/AWG/TCP
@@ -98,12 +104,13 @@ FIELD completion остаётся заблокированным до класс
 
 ## Как обновить тестировщику до beta61
 
-Сначала дождаться принятого подписанного APK и проверенной ссылки: сейчас готовится
-кандидат61, публичная загрузка/страница приглашения/каталог пока предоставляют60.
+Подписанный r2 APK4297ea1a доступен по отдельной проверенной ссылке:
+[Android beta61 r2 diagnostic](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta61-r2.apk).
+Основная загрузка/страница приглашения/каталог по-прежнему предоставляют60.
 Не передавать `*-unsigned.apk` или тестовый APK из GitHub Actions.
 
-1. По Wi-Fi отключить Family Connect и скачать подписанный APK по предоставленной
-   после приёмки ссылке. Если Android просит, разрешить установку именно браузеру.
+1. По Wi-Fi отключить Family Connect и получить от оператора принятый подписанный
+   r2 APK. Если Android просит, разрешить установку только приложению получения файла.
 2. Открыть APK и выбрать **Обновить** существующий **Family Connect Test**.
    Не удалять приложение, не очищать его данные и не активировать новое приглашение.
 3. В «Настройки → О приложении / Диагностика» проверить **0.1.18-beta61** и прежний
@@ -117,3 +124,11 @@ FIELD completion остаётся заблокированным до класс
 
 Обновление61 добавляет сведения о причине разрыва; само по себе не доказывает,
 что проблема соединения уже устранена, и не меняет допуск в FIELD.
+# Beta62 — local source candidate04.10.2026
+
+Export(10) proves real sessions ending in reliable_terminal=recovery_exhausted;
+TLS/gateway errors follow LOCAL_CLOSE. Source62 now records RELIABLE_HANDSHAKE_TIMEOUT,
+RELIABLE_FRAME_TIMEOUT or RELIABLE_RETRY_EXHAUSTED before cleanup with numeric ACK,
+progress, pending-frame, age/retry/SACK metadata. New native, Java and operator
+allowlists match; no retry/transport tuning. This is not installed or published.
+[Candidate/owner baseline](../releases/2026-10-04-beta62-recovery-candidate.md).

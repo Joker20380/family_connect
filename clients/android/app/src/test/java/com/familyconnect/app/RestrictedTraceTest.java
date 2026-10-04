@@ -5,6 +5,31 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class RestrictedTraceTest {
+    @Test public void reliableCauseAndProgressAreSafeAndPreserved(){
+        for(String reason:new String[]{"RELIABLE_HANDSHAKE_TIMEOUT","RELIABLE_FRAME_TIMEOUT","RELIABLE_RETRY_EXHAUSTED"}){
+            JsonObject source=snapshot(1),first=event(1,reason);
+            first.addProperty("stage","CARRIER");first.addProperty("state","FAILED");
+            first.addProperty("reliable_pending",8);first.addProperty("reliable_retries",8);
+            first.addProperty("reliable_age_ms",9000);first.addProperty("reliable_ack_received",17);
+            first.addProperty("reliable_ack_age_ms",1000);first.addProperty("reliable_progress_age_ms",9000);
+            first.addProperty("reliable_sacked",0);first.addProperty("reliable_payload","secret-payload");
+            source.add("first_failure",first);
+            JsonObject safe=RestrictedTrace.project(source,TAG);
+            JsonObject cause=safe.getAsJsonObject("first_failure");
+            assertEquals(reason,cause.get("reason").getAsString());
+            assertEquals(17,cause.get("reliable_ack_received").getAsInt());
+            assertEquals(0,cause.get("reliable_sacked").getAsInt());
+            assertFalse(safe.toString().contains("secret"));
+            JsonObject nativeValue=new JsonObject();nativeValue.addProperty("session_tag",TAG);nativeValue.add("lifecycle",source);
+            DiagnosticRing ring=new DiagnosticRing("FC-YHQB-9VJN","diagnostic",61,30);
+            ring.restricted(nativeValue,3,false,100);
+            assertEquals(reason,RestrictedTrace.firstReason(ring.snapshot().getAsJsonObject("restricted_session")));
+            assertEquals(reason,DiagnosticRing.Code.valueOf(reason).name());
+            first.addProperty("reliable_age_ms",-1);first.addProperty("reliable_retries",1.5);
+            cause=RestrictedTrace.project(source,TAG).getAsJsonObject("first_failure");
+            assertFalse(cause.has("reliable_age_ms"));assertFalse(cause.has("reliable_retries"));
+        }
+    }
     private static final String TAG="abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789";
     private JsonObject event(long sequence,String reason){
         JsonObject event=new JsonObject();event.addProperty("session_tag",TAG);event.addProperty("sequence",sequence);

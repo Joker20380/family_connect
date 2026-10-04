@@ -10,7 +10,7 @@ from cryptography import x509
 from cryptography.hazmat.primitives.serialization import Encoding
 
 from .access import Access
-from .restricted import from_env, migrate, delegation, utc
+from .restricted import MAX_TEST_LIFETIME, from_env, migrate, delegation, utc
 
 
 def grant(access, device, family, expires, minimum_revision=1):
@@ -25,7 +25,9 @@ def grant(access, device, family, expires, minimum_revision=1):
                          (device, family, max(old['revision'] + 1 if old else 1, minimum_revision), expires))
 
 
-def publish_crl(service, path):
+def publish_crl(service, path, *, lifetime=900):
+    if type(lifetime) is not int or not 900 <= lifetime <= MAX_TEST_LIFETIME:
+        raise ValueError('invalid CRL lifetime')
     now = int(service.access.clock())
     trust, authority = delegation(service.manifest, service.anchor, now)
     with service.access.db() as database:
@@ -42,7 +44,7 @@ def publish_crl(service, path):
                          (previous_number + 1, previous_number))
         number = database.execute('SELECT sequence FROM restricted_crl_sequence WHERE singleton=1').fetchone()[0]
         builder = (x509.CertificateRevocationListBuilder().issuer_name(authority.subject).last_update(utc(now))
-                   .next_update(utc(min(now + 900, trust['expires_at'])))
+                   .next_update(utc(min(now + lifetime, trust['expires_at'])))
                    .add_extension(x509.CRLNumber(number), critical=False))
         rows = database.execute('SELECT c.* FROM restricted_certificates c WHERE c.expires>?', (now,)).fetchall()
         for certificate in rows:

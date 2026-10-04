@@ -21,6 +21,25 @@ func testDirectory(now time.Time) Directory {
 
 func encode(value any) []byte { raw, _ := json.Marshal(value); return raw }
 
+func TestFourHourDirectoryBoundaries(test *testing.T) {
+	now := time.Now().UTC()
+	value := testDirectory(now)
+	value.IssuedAt = now
+	value.ExpiresAt = now.Add(4 * time.Hour)
+	for _, observed := range []time.Time{now, value.ExpiresAt.Add(-time.Nanosecond)} {
+		if _, err := ParseDirectory(encode(value), testFamily, testGateway, observed); err != nil {
+			test.Fatal("valid four-hour directory rejected", err)
+		}
+	}
+	if _, err := ParseDirectory(encode(value), testFamily, testGateway, value.ExpiresAt); err == nil {
+		test.Fatal("expired directory accepted")
+	}
+	value.ExpiresAt = value.ExpiresAt.Add(time.Nanosecond)
+	if _, err := ParseDirectory(encode(value), testFamily, testGateway, now); err == nil {
+		test.Fatal("overlong directory accepted")
+	}
+}
+
 func TestDirectoryValidation(test *testing.T) {
 	now := time.Now().UTC()
 	for name, mutate := range map[string]func(*Directory){

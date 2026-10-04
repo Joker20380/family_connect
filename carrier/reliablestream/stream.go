@@ -6,6 +6,8 @@ import (
 	"errors"
 	"sync"
 	"time"
+
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 )
 
 type Endpoint interface {
@@ -157,6 +159,7 @@ func (stream *Stream) run(ctx context.Context) {
 	terminal := ErrClosed
 	defer func() {
 		stream.mu.Lock()
+		failureTrace := stream.state.failureTrace
 		packet := stream.state.packet(resetFrame)
 		stream.state.stats.Resets++
 		stream.state.stats.Terminal = "closed"
@@ -178,6 +181,9 @@ func (stream *Stream) run(ctx context.Context) {
 		stream.state.stats.BufferedBytes = 0
 		stream.state.depths()
 		stream.mu.Unlock()
+		if errors.Is(terminal, ErrExhausted) {
+			sessiontrace.From(ctx).Record(failureTrace)
+		}
 		if packet.target != (epoch{}) && terminal != ErrReset {
 			resetContext, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 			_ = stream.endpoint.SendContext(resetContext, encode(packet))

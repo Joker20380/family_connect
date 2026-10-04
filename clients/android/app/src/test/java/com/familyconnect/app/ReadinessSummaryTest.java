@@ -5,6 +5,15 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ReadinessSummaryTest {
+    @Test public void fourHourWindowIsVisibleAndBounded() {
+        JsonObject value=new JsonObject();
+        value.addProperty("remaining_seconds",14400);
+        assertTrue(ReadinessSummary.restricted(value).contains("remaining_seconds: 14400"));
+        value.addProperty("remaining_seconds",14401);
+        assertTrue(ReadinessSummary.restricted(value).contains("remaining_seconds: -1"));
+        value.addProperty("seeds",5);
+        assertTrue(ReadinessSummary.restricted(value).contains("seeds: -1"));
+    }
     @Test public void missingIsUnknownAndNotUsable() {
         String result=ReadinessSummary.restricted(new JsonObject());
         assertTrue(result.contains("cache: UNKNOWN"));

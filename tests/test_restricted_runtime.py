@@ -104,11 +104,13 @@ def test_old_runtime_layout_reproduces_missing_clients(tmp_path):
 
 def test_final_artifact_isolated_imports_and_exact_sources(bundle, tmp_path):
     smoke(bundle, sys.executable)
+    source_root = Path(os.environ.get('FC_TEST_SYNC_SOURCE', ROOT)).resolve()
+    required = json.loads((source_root / CONTRACT / 'runtime-files.json').read_text())
     with zipfile.ZipFile(bundle / ARCHIVE) as archive:
         sources = {name for name in archive.namelist() if name.endswith('.py')}
-        assert sources == set(REQUIRED) | {'__main__.py'}
-        for name in REQUIRED:
-            assert archive.read(name) == (ROOT / name).read_bytes() == (bundle / 'app' / name).read_bytes()
+        assert sources == set(required) | {'__main__.py'}
+        for name in required:
+            assert archive.read(name) == (source_root / name).read_bytes() == (bundle / 'app' / name).read_bytes()
         assert {name for name in sources if name.startswith('clients/')} == {'clients/desktop/profile_config.py'}
     probe = ('import runpy,sys,json;sys.argv=[sys.argv[1],"--help"]\n'
              'try:runpy.run_path(sys.argv[0],run_name="__main__")\n'
