@@ -34,6 +34,15 @@ expensive native/emulator steps and retain their logs in the existing diagnostic
 artifact with pipefail, without removing or relaxing any release check. Local four
 core packages repeated25 times under race also PASS; no product transport change.
 
+Follow-up CI902e4db (Client builds37200537346, job111431145897) passed race and
+installed the correct dependencies. Retained contract log proves13 failures/86 PASS:
+Python3.10 datetime.fromisoformat rejects production nine-digit fractional seconds.
+The same tests on Python3.13/3.14 passed; this is not evidence of a live Russian
+transport failure. Parse validated whole seconds/zone with datetime, then add the
+original exact fraction as integer nanoseconds. No rounding, grace or expiry change.
+Added27 fraction-width/zone regressions and existing Friends timestamp vectors to
+the early Android Python3.10 CI contract gate. No product APK accepted or deployed.
+
 Read-only server preflight11:26UTC: exact two-device admission, beta60 default and
 discovery/invitation hashes unchanged; gateway binaryb9b7d542 still loaded, certificate
 expires13:39:54UTC, issuer14:13:53UTC. CRL3826 and directory match RU/NL; old cached

@@ -12,7 +12,9 @@
    phase0/Linux control/readiness CI PASS. Android runtime PASS, later Go race step
    failed; retry/full local/25 repeated core race PASS. Retry then exposed missingRNS
    in new Python CI contract environment, reproduced cleanly. Add pinned identity
-   lockfile/log capture, rerun CI, then verify/sign and perform in-place acceptance.
+   lockfile/log capture. CI902e4db logs then proved Python3.10 fractional timestamp
+   incompatibility; fix exact-nanosecond parsing and27 regression cases, rerun full
+   gates, then verify/sign and perform in-place acceptance. No transport change.
    Do not sign/publish unverified/stale native code with new Java.
 4. THEN coordinated long-material activation/owner proof, targeted tester delivery,
    one reproduction to distinguish missing ACK, retry budget, age and SACK backpressure.

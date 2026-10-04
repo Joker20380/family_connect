@@ -1,5 +1,6 @@
 import copy
 import base64
+from datetime import datetime
 from decimal import Decimal
 import json
 import os
@@ -100,6 +101,18 @@ def test_default_clock_preserves_nanoseconds(monkeypatch):
     assert directory(encoded(), FAMILY, GATEWAY)
     assert restricted.clock_nanoseconds(restricted.time.time) == NOW_NS
     assert restricted.clock_nanoseconds(lambda: Decimal(NOW_NS) / 1_000_000_000) == NOW_NS
+
+
+@pytest.mark.parametrize('fraction', ['1', '12', '123', '1234', '12345', '123456', '1234567', '12345678', '123456789'])
+@pytest.mark.parametrize('zone', ['Z', '+03:00', '-05:30'])
+def test_fraction_is_exact_without_datetime_fraction_support(monkeypatch, fraction, zone):
+    instant = '2026-10-01T17:13:53'
+    expected_seconds = int(datetime.fromisoformat(instant + zone.replace('Z', '+00:00')).timestamp())
+    def whole_seconds_only(value):
+        assert '.' not in value
+        return datetime.fromisoformat(value)
+    monkeypatch.setattr(restricted, 'datetime', SimpleNamespace(fromisoformat=whole_seconds_only))
+    assert timestamp_ns(instant + '.' + fraction + zone) == expected_seconds * 1_000_000_000 + int(fraction.ljust(9, '0'))
 
 
 def test_gateway_and_delivery_sample_precise_clock_after_read(tmp_path, monkeypatch):

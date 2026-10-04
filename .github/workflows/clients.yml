@@ -48,7 +48,7 @@ jobs:
         shell: bash
         run: |
           python3 -m pip install pytest==9.1.1 -r device_identity/requirements.lock
-          FC_TEST_GO="$(command -v go)" python3 -m pytest -q tests/test_restricted_correlation.py tests/test_directory_validation.py tests/test_restricted_test_window.py 2>&1 | tee restricted-contracts.log
+          FC_TEST_GO="$(command -v go)" python3 -m pytest -q tests/test_restricted_correlation.py tests/test_directory_validation.py tests/test_restricted_test_window.py tests/test_friends_restricted.py 2>&1 | tee restricted-contracts.log
       - name: Build pinned unified Android VPN library
         shell: bash # Explicit bash enables pipefail: tee must not hide a failed native build.
         run: ANDROID_NDK_HOME="$ANDROID_HOME/ndk/28.2.13676358" python3 -u pilot/android-awg/build.py 2>&1 | tee android-awg-build.log

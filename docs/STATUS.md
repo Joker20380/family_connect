@@ -21,7 +21,10 @@ contract PASS; Android emulator transport/control PASS, subsequent full Go race 
 failed. Local full non-cached race suite and25 repeated core race runs PASS. Same-source
 Android retry passed race but exposed missingRNS in the newly added Python test
 environment, reproduced in a clean venv. Fix CI lockfile installation/log retention;
-run these checks before expensive native/emulator work. Next corrected CI checkpoint.
+run these checks before expensive native/emulator work. CI902e4db then passed race
+but proved Python3.10 rejects9-digit fractions in datetime parsing (13 contract
+failures). Correct whole-second parsing plus exact integer nanoseconds; add27
+width/zone regressions, retain strict future/expiry boundaries. Next corrected CI.
 No restricted release artifact accepted and no CI bypass. Fresh owner READY required.
 Checks: Python171 PASS; Android233 unit tests/lint PASS with generated62 metadata;
 full Go suite PASS outside socket-restricted sandbox, four core packages race PASS,

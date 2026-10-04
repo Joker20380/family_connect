@@ -109,12 +109,12 @@ def timestamp(value):
 
 def timestamp_ns(value):
     require(type(value) is str)
-    match = re.fullmatch(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]'
-                         r'(?:\.([0-9]{1,9}))?(?:Z|[+-](?:[01][0-9]|2[0-3]):[0-5][0-9])', value)
+    match = re.fullmatch(r'([0-9]{4}-[0-9]{2}-[0-9]{2}T(?:[01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9])'
+                         r'(?:\.([0-9]{1,9}))?(Z|[+-](?:[01][0-9]|2[0-3]):[0-5][0-9])', value)
     require(match is not None)
-    instant = datetime.fromisoformat(value.replace('Z', '+00:00')).astimezone(timezone.utc)
-    seconds = int(instant.replace(microsecond=0).timestamp())
-    return seconds * 1_000_000_000 + int((match.group(1) or '').ljust(9, '0'))
+    instant = datetime.fromisoformat(match.group(1) + match.group(3).replace('Z', '+00:00')).astimezone(timezone.utc)
+    seconds = int(instant.timestamp())
+    return seconds * 1_000_000_000 + int((match.group(2) or '').ljust(9, '0'))
 
 
 def utc(value):
