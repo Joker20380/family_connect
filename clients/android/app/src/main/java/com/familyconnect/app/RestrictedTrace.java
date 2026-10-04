@@ -28,6 +28,7 @@ final class RestrictedTrace {
             safe.addProperty(field,value);
         }
         safe.addProperty("session_tag",tag);
+        JsonObject delivery=RestrictedDelivery.project(source.get("delivery"));if(delivery!=null)safe.add("delivery",delivery);
         for(String field:new String[]{"sequence","timestamp_ms","tx","rx","reliable_age_ms","reliable_retries","reliable_pending","reliable_sacked","reliable_ack_age_ms","reliable_progress_age_ms","reliable_ack_received"})number(source,safe,field);
         if(!safe.has("sequence")||safe.get("sequence").getAsLong()==0||!safe.has("timestamp_ms"))return null;
         String target=text(source,"target");if(allowed(target,"SUBSCRIBER|PUBLISHER"))safe.addProperty("target",target);
@@ -42,7 +43,7 @@ final class RestrictedTrace {
         JsonObject source=input.getAsJsonObject(),safe=new JsonObject();
         if(!tag.equals(text(source,"session_tag"))||!"VALID".equals(text(source,"correlation_status")))return null;
         safe.addProperty("session_tag",tag);safe.addProperty("correlation_status","VALID");
-        for(String field:new String[]{"trace_dropped","export_dropped"})number(source,safe,field);
+        for(String field:new String[]{"trace_dropped","export_dropped","delivery_dropped"})number(source,safe,field);
         JsonObject first=event(source.get("first_failure"),tag);
         if(first!=null&&!"NONE".equals(text(first,"reason")))safe.add("first_failure",first);
         JsonArray trace=new JsonArray();int rejected=0;
@@ -54,6 +55,12 @@ final class RestrictedTrace {
                 if(item!=null&&item.get("sequence").getAsLong()>sequence){sequence=item.get("sequence").getAsLong();trace.add(item);}else rejected++;
             }
         }
+        int retained=0,removed=0;
+        for(int index=trace.size()-1;index>=0;index--){
+            JsonObject item=trace.get(index).getAsJsonObject();
+            if(item.has("delivery")&&++retained>RestrictedDelivery.LIMIT){item.remove("delivery");removed++;}
+        }
+        safe.addProperty("delivery_projection_dropped",removed);
         safe.add("trace",trace);safe.addProperty("projection_dropped",rejected);return safe;
     }
     static String firstReason(JsonObject session){

@@ -1,20 +1,80 @@
 # Текущее состояние / Current state
 
-## Beta63 recovery candidate — release preparation04.10
+## Beta64 — local release candidate prepared04.10; CI pending
 
-User authorized successor release/owner acceptance. Source version0.1.18-beta63/code63;
-not yet CI-accepted, signed, installed or distributed. Remote main cb76f115 and no beta63
-tag at preflight; attached Redmi31ce63ba still62/code62, UID10283/first install unchanged.
-Latest baseline phase0 CI37203525069 PASS; this does not accept the new source.
-NEXT exact-source CI, downloaded artifact verification/offline signing, in-place owner
-acceptance and controlled recovery/security checks with a fresh validated material window.
-Default/catalog/invitation remain60; no tester repeat or broad rollout.
+Version `0.1.18-beta64`/code64 selected for paired delivery diagnostics. Remote main
+still de7cacd; latest client CI37214189165/attempt2 SUCCESS belongs to63, not64.
+Read-only preflight18:08UTC: same owner Redmi31ce63ba connected; beta64 download404,
+no matching beta64 tag. Candidate is uncommitted, not CI-built/signed/installed/deployed.
+User authorized scoped commit/push; preparing exact-source CI. No release acceptance
+is inferred until the new source commit's jobs complete and artifacts are verified.
+Candidate64 local checks PASS: Android246 unit/lint, Python52 focused, docs473/2869
+links and whitespace. These do not replace hosted release/runtime acceptance.
+Last verified owner63/tester62/default/catalog/invitation60 and gateway6773423c remain
+the baseline. Prior material bound17:30:19UTC has elapsed: renew/revalidate full chain
+before physical owner acceptance, not before a potentially long build wait.
+[Candidate, release gates and rollback](releases/2026-10-04-beta64-paired-candidate.md).
+
+## Paired delivery diagnostics — source-only PASS04.10
+
+Local uncommitted patch above de7cacd adds bounded DATA/ACK/SACK and fragment snapshots
+on client/gateway, Android allowlist/export and offline paired comparison. Last8 detail
+samples plus pinned first failure; existing2s cadence plus final sample. No payload,
+addresses, CRC values, keys, wire-format, retry/RTO or recovery-policy changes.
+PASS full Go suite, six-package race, Android246 unit/lint and Python52 focused tests.
+Initial sandbox socket denial and test-fixture visibility error resolved; final runs PASS.
+**Not built as a release, signed, installed or deployed.** Installed owner63/ce81216a,
+tester last receipt62, default/catalog/invitation60 and gateway6773423c remain the last
+verified deployment state; no new live readback or validity renewal in this task.
+NEXT immutable successor and matching gateway exact-source CI/owner paired acceptance,
+with fresh material validity and preservation checks before any tester attempt.
+Original field DATA loss remains unlocalized; no tester repeat now.
+[Contract, checks and rollout/rollback boundaries](releases/2026-10-04-paired-delivery-diagnostics.md).
+
+## Beta63 — genuine native exhaustion→poll recovery PASS04.10
+
+Owner installed63/de7cacd unchanged. Test-only process-local RTP receive filter induced
+real native RELIABLE_RETRY_EXHAUSTED (8 retries/8 pending), without injecting a policy
+failure/snapshot. Filter removal→production poll→NETWORK→old cleanup/new BOOT-1/session→
+HTTPS200 PASS; one restoration observed. Original/restored server tags53/56 gap-free events.
+Known gateway→phone loss also gives server fresh ACK664ms/no progress9139ms: useful
+controlled analogue, not field drop localization or an RKN conclusion. Private test
+package/library/filters removed, identity/enrollment/Support preserved. No APK/runtime/
+admission changes; owner63, tester last receipt62, default/catalog/invitation60.
+Live gate ran inside verified17:30:19UTC bound, not a renewed four-hour window.
+PASS local actual-framing/reliability regression (no loss/healed/persistent RTP gap),
+full race for four packages and three repeated focused runs. `/tmp` quota affected only
+initial compilation; workspace build storage resolved it. NEXT paired bounded DATA/ACK/fragment
+evidence before another mobile test; no tester repeat now.
+[Native fault, scope and preservation](releases/2026-10-04-beta63-native-exhaustion.md).
+
+## Beta63 — owner policy recovery and targeted publication PASS04.10
+
+Source de7cacd,0.1.18-beta63/code63: all four exact-source CI PASS; client workflow
+attempt1 invitation runtime failure retained, unchanged attempt2 PASS. Accepted artifact
+downloaded/verified and offline signed with existing key. Owner Redmi updated in place;
+UID/identity/enrollment/activation/Support preserved, pulled installed SHA ce81216a verified.
+AWG/TCP HTTPS200, diagnostics/privacy/provider/update/Support/restart PASS. Real native
+cleanup/new BOOT-1/session/HTTPS200 and one-restoration guard limit PASS with **injected
+policy cause and test-only restricted candidate selection**, not genuine native exhaustion.
+AUTH startup/connected denial and cancellation PASS; no real server revocation performed.
+Two native tags matched server56/132 events, gap-free. Temporary instrumentation removed.
+Retained owner failures: profile precondition in harness; one initial session setup failure
+before denial injection, unchanged retry PASS. These do not establish field stability.
+Owner validated import/ACK16:33UTC;16:42 server bound17:30:19UTC, no new four-hour renewal.
+Gateway6773423c/PID3908811/restarts0 unchanged. Initial partial upload reconciled/resumed;
+targeted publication16:56UTC and HTTPS200/downloaded SHA/signer16:57UTC PASS. No rebuild,
+old downloads/admission/normal services preserved; only HTTPS nginx reloaded for63's route.
+Default/catalog/invitation remain60,
+tester last receipt62; no tester repeat or broad rollout. The native-exhaustion→poll
+gate was subsequently passed above; targeted DATA/ACK investigation remains, original stall/RKN cause unproven.
 [Candidate ledger](releases/2026-10-04-beta63-recovery-candidate.md).
 
 ## Export(11) recovery classification — local fix validated04.10
 
-Source-only patch on cb76f115; no version bump, APK build/install/publication or server
-mutation in this task. Beta62/code62 remains the last accepted targeted artifact;
+Historical local-patch checkpoint on cb76f115, superseded by beta63 acceptance above.
+At that checkpoint no version bump, APK build/install/publication or server mutation.
+Beta62/code62 was the last accepted targeted artifact;
 default/updater/invitation remain60 per the prior rollout record, not a new live check.
 Proven correlated CARRIER/FAILED/RELIABLE_RETRY_EXHAUSTED with recovery_exhausted and
 compatible terminal reason now maps to NETWORK instead of INTERNAL. One existing bounded

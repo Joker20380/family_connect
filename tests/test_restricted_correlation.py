@@ -13,6 +13,80 @@ INCIDENT = "22222222-2222-2222-2222-222222222222"
 SUPPORT = "FC-YHQB-9VJN"
 
 
+def progress():
+    flow = dict.fromkeys("send_base send_next receive_next receive_mask ack_base ack_mask pending buffered head_retries".split(), 0)
+    flow.update(send_next=8, pending=8, ack_seen=True, ack_mask=254, head_sacked=False)
+    point = dict(sender=1, message=42, total=3, mask=7, data_known=True, data_sequence=0)
+    return dict(flow=flow, queued=point, written=point.copy())
+
+
+def test_delivery_projection_and_optional_detail_merge():
+    value = entry()
+    value['delivery'] = progress()
+    value['delivery']['flow']['private_key'] = 'DO_NOT_EXPORT'
+    records = {}
+    diagnostic.insert(records, value)
+    diagnostic.insert(records, entry())
+    assert records[1]['delivery']['flow']['send_base'] == 0
+    assert 'DO_NOT_EXPORT' not in str(records)
+    wrong = copy.deepcopy(value)
+    wrong['delivery']['flow']['ack_mask'] = 0
+    with pytest.raises(ValueError, match='conflicting delivery'):
+        diagnostic.insert(records, wrong)
+
+
+@pytest.mark.parametrize('field,value', [('pending', True), ('pending', 1.5), ('send_next', 33), ('receive_mask', 2**32), ('send_base', -1), ('receive_next', 2**53), ('ack_seen', 'true')])
+def test_invalid_delivery_component_is_not_coerced(field, value):
+    source = progress()
+    source['flow'][field] = value
+    assert 'flow' not in diagnostic.delivery(source)
+
+
+def test_paired_flow_and_partial_message_do_not_claim_causality():
+    client, server = fixture()
+    client['ring']['restricted_session']['lifecycle']['trace'][0]['delivery'] = progress()
+    received = progress()
+    received['flow'].update(send_next=0, pending=0, ack_mask=0, receive_mask=254, buffered=7)
+    received['pending'] = dict(sender=1, message=42, total=3, mask=6, data_known=False, data_sequence=0)
+    server[0]['trace']['delivery'] = received
+    result = diagnostic.correlate([client], server, SUPPORT)['sessions'][0]['delivery_comparison'][0]
+    assert result['head_data_sequence'] == 0
+    assert result['receiver_head_observation'] == 'not_buffered_at_sample'
+    assert result['simultaneous'] is False
+    assert len(result['fragment_matches']) == 2
+    assert result['fragment_matches'][0]['received']['mask'] == 6
+    received['flow']['receive_mask'] = 255
+    assert diagnostic.compare_delivery([diagnostic.event(client['ring']['restricted_session']['lifecycle']['trace'][0])], [diagnostic.event(server[0]['trace'])], 'client_to_server')['receiver_head_observation'] == 'buffered_not_consumed'
+    received['flow'].update(receive_next=8, receive_mask=0)
+    assert diagnostic.compare_delivery([diagnostic.event(client['ring']['restricted_session']['lifecycle']['trace'][0])], [diagnostic.event(server[0]['trace'])], 'client_to_server')['receiver_head_observation'] == 'consumed'
+
+
+@pytest.mark.parametrize('change', [dict(message=43), dict(total=4), dict(data_known=True, data_sequence=1)])
+def test_fragment_comparison_rejects_mismatched_identity(change):
+    sender, receiver = entry(), entry()
+    sender['delivery'] = progress()
+    receiver['delivery'] = dict(flow=progress()['flow'], pending=progress()['written'])
+    receiver['delivery']['pending'].update(change)
+    comparison = diagnostic.compare_delivery([sender], [receiver], 'client_to_server')
+    assert comparison['fragment_matches'] == []
+
+
+def test_delivery_comparison_requires_both_flows():
+    sender = entry()
+    sender['delivery'] = progress()
+    assert diagnostic.compare_delivery([sender], [entry()], 'client_to_server') is None
+    sender['delivery']['flow']['pending'] = 0
+    assert diagnostic.compare_delivery([sender], [sender], 'client_to_server') is None
+
+
+def test_drained_final_sample_does_not_revive_old_pending_head():
+    pending, drained = entry(1), entry(2)
+    pending['delivery'] = progress()
+    drained['delivery'] = progress()
+    drained['delivery']['flow'].update(send_base=8, pending=0)
+    assert diagnostic.compare_delivery([pending, drained], [pending], 'client_to_server') is None
+
+
 def entry(sequence=1, reason="NONE"):
     return dict(session_tag=TAG, sequence=sequence, timestamp_ms=1000 + sequence,
                 stage="WEBSOCKET", state="ESTABLISHED", reason=reason, tx=1, rx=2,

@@ -40,6 +40,15 @@ type Report struct {
 	ReceivedBytes     uint64                 `json:"received_bytes"`
 }
 
+func Delivery(reliable reliablestream.Stats, media telemost.Stats) *sessiontrace.Delivery {
+	value := sessiontrace.CloneDelivery(media.Delivery)
+	if value == nil {
+		value = &sessiontrace.Delivery{}
+	}
+	value.Flow = &reliable.Flow
+	return value
+}
+
 func Reason(err error) string {
 	var network net.Error
 	switch {

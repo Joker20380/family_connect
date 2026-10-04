@@ -12,29 +12,31 @@ import (
 const Limit = 192
 
 type Event struct {
-	SessionTag            string `json:"session_tag"`
-	Sequence              uint64 `json:"sequence"`
-	TimestampMS           int64  `json:"timestamp_ms"`
-	Stage                 string `json:"stage"`
-	State                 string `json:"state"`
-	Reason                string `json:"reason"`
-	Target                string `json:"target,omitempty"`
-	CloseCode             int    `json:"close_code,omitempty"`
-	CloseReason           string `json:"close_reason,omitempty"`
-	BrokerReason          string `json:"broker_reason,omitempty"`
-	HeartbeatKind         string `json:"heartbeat_kind,omitempty"`
-	TX                    uint64 `json:"tx"`
-	RX                    uint64 `json:"rx"`
-	ReliableAgeMS         uint64 `json:"reliable_age_ms,omitempty"`
-	ReliableRetries       uint64 `json:"reliable_retries,omitempty"`
-	ReliablePending       uint64 `json:"reliable_pending,omitempty"`
-	ReliableSacked        uint64 `json:"reliable_sacked,omitempty"`
-	ReliableACKAgeMS      uint64 `json:"reliable_ack_age_ms,omitempty"`
-	ReliableProgressAgeMS uint64 `json:"reliable_progress_age_ms,omitempty"`
-	ReliableACKReceived   uint64 `json:"reliable_ack_received,omitempty"`
+	Delivery              *Delivery `json:"delivery,omitempty"`
+	SessionTag            string    `json:"session_tag"`
+	Sequence              uint64    `json:"sequence"`
+	TimestampMS           int64     `json:"timestamp_ms"`
+	Stage                 string    `json:"stage"`
+	State                 string    `json:"state"`
+	Reason                string    `json:"reason"`
+	Target                string    `json:"target,omitempty"`
+	CloseCode             int       `json:"close_code,omitempty"`
+	CloseReason           string    `json:"close_reason,omitempty"`
+	BrokerReason          string    `json:"broker_reason,omitempty"`
+	HeartbeatKind         string    `json:"heartbeat_kind,omitempty"`
+	TX                    uint64    `json:"tx"`
+	RX                    uint64    `json:"rx"`
+	ReliableAgeMS         uint64    `json:"reliable_age_ms,omitempty"`
+	ReliableRetries       uint64    `json:"reliable_retries,omitempty"`
+	ReliablePending       uint64    `json:"reliable_pending,omitempty"`
+	ReliableSacked        uint64    `json:"reliable_sacked,omitempty"`
+	ReliableACKAgeMS      uint64    `json:"reliable_ack_age_ms,omitempty"`
+	ReliableProgressAgeMS uint64    `json:"reliable_progress_age_ms,omitempty"`
+	ReliableACKReceived   uint64    `json:"reliable_ack_received,omitempty"`
 }
 
 type Snapshot struct {
+	DeliveryDropped   uint64  `json:"delivery_dropped"`
 	SessionTag        string  `json:"session_tag"`
 	CorrelationStatus string  `json:"correlation_status"`
 	Events            []Event `json:"trace"`
@@ -103,12 +105,13 @@ func (recorder *Recorder) Record(event Event) {
 		event.HeartbeatKind = ""
 	}
 	recorder.sequence++
+	event = cloneEvent(event)
 	event.Sequence, event.TimestampMS, event.SessionTag = recorder.sequence, time.Now().UnixMilli(), recorder.value.SessionTag
 	if event.Stage == "LOCAL_CLOSE" {
 		recorder.closing = true
 	}
 	if event.Reason != "NONE" && !recorder.closing && recorder.value.FirstFailure == nil {
-		first := event
+		first := cloneEvent(event)
 		recorder.value.FirstFailure = &first
 	}
 	if len(recorder.value.Events) == Limit {
@@ -116,8 +119,22 @@ func (recorder *Recorder) Record(event Event) {
 		recorder.value.Events = recorder.value.Events[:Limit-1]
 		recorder.value.Dropped++
 	}
+	if event.Delivery != nil {
+		retained := 1
+		for index := len(recorder.value.Events) - 1; index >= 0; index-- {
+			if recorder.value.Events[index].Delivery == nil {
+				continue
+			}
+			if retained >= DeliveryLimit {
+				recorder.value.Events[index].Delivery = nil
+				recorder.value.DeliveryDropped++
+			} else {
+				retained++
+			}
+		}
+	}
 	recorder.value.Events = append(recorder.value.Events, event)
-	if recorder.sink != nil && !recorder.sink(event) {
+	if recorder.sink != nil && !recorder.sink(cloneEvent(event)) {
 		recorder.value.ExportDropped++
 	}
 }
@@ -134,8 +151,11 @@ func (recorder *Recorder) Snapshot() Snapshot {
 	defer recorder.mu.Unlock()
 	value := recorder.value
 	value.Events = append([]Event{}, value.Events...)
+	for index := range value.Events {
+		value.Events[index] = cloneEvent(value.Events[index])
+	}
 	if value.FirstFailure != nil {
-		first := *value.FirstFailure
+		first := cloneEvent(*value.FirstFailure)
 		value.FirstFailure = &first
 	}
 	return value

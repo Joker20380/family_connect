@@ -1,13 +1,35 @@
 # Release distribution / Выпуски
 
+**Beta64/code64: local candidate only04.10.** Paired delivery diagnostics are prepared,
+not CI-built, signed, installed or published. Owner63, tester last receipt62 and default/
+updater/invitation60 remain the verified baseline. No new download/checksum is advertised.
+[Exact gate and remaining work](releases/2026-10-04-beta64-paired-candidate.md).
+
+**Beta63/code63 source de7cacd: CI/signing/owner and targeted delivery PASS.**
+Owner in-place63 and pulled APK SHA256
+`ce81216a84005880eef834dd5f576d0c43082b1c501767c7cf83522a765aebb8` verified with existing signer.
+[Targeted beta63 APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta63.apk),
+49654651bytes;16:57UTC HTTPS200/downloaded SHA and signer67a90d1 PASS, no rebuild/resign.
+Initial restricted acceptance used an injected policy cause; subsequent
+[genuine native exhaustion recovery](releases/2026-10-04-beta63-native-exhaustion.md) passed
+on unchanged63. No original field-fix claim. Default/catalog/invitation remain60,
+tester last receipt62; no repeat now.
+[Exact acceptance, failed attempts, scope and rollback](releases/2026-10-04-beta63-recovery-candidate.md).
+
+**Mobile export(11),04.10 — evidence, not a new release:**
+[correlated mobile failure and recovery policy](releases/2026-10-04-field-export11-beta62.md).
+Retry exhaustion with fresh ACK/no progress; INTERNAL prevents fresh descriptor recovery.
+No APK/runtime/catalog change in that analysis; beta63 follow-up above. Beta60 stays default.
+
 Android0.1.18-beta62/code62 is [owner accepted and separately published](releases/2026-10-04-beta62-recovery-candidate.md)
 for diagnostic tester FC-YHQB-9VJN only. Source42a5e59; CI/signing/in-place owner and
 real correlation PASS. [Targeted beta62 APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta62.apk)
 downloaded with HTTP200/TLS verification; SHA256
 `f60b8d3a74b85a5934b942d7e273831e7c1d88d35e4d8a87db7332fb7d7703d4`, signer
 `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
-Upgrade over existing app, never uninstall/clear data/reenroll. Tester installation
-not yet confirmed; four-hour server activation/mobile reproduction still pending.
+Upgrade over existing app, never uninstall/clear data/reenroll. Tester62 is now confirmed;
+[four-hour server activation and owner import/session PASS](releases/2026-10-04-beta62-four-hour-rollout.md).
+Tester long READY/ACK confirmed13:39UTC and rechecked14:55UTC; mobile reproduction pending.
 Production/default/updater/invitation remain60; immutable61 r2 remains unchanged.
 
 Android0.1.18-beta60 published 2026-10-03 after hosted CI, owner in-place acceptance and public HTTPS SHA256/signer verification. Windows0.2.15 and Linux0.2.11 distribution remains unchanged.

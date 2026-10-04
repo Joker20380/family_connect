@@ -2,13 +2,60 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Beta63 release/owner acceptance authorized04.10; IN PROGRESS.**
+**Beta64 release preparation04.10: local candidate64, exact-source CI pending.**
+1. DONE main/last release CI readback; same owner Redmi connected, beta64 URL404/no tag.
+2. DONE local version64/documentation, Android246/lint, Python52 and docs checks;
+   no signed release or deployment.
+3. DONE explicit commit/push approval; NEXT scoped commit/push preserving unrelated
+   changes, exact-source platform CI, artifact verification/offline signing.
+4. THEN matching gateway/owner acceptance with renewed full material chain (old bound
+  17:30:19UTC elapsed), paired snapshots/privacy, cleanup/recovery and auth/revoke checks.
+   Owner63/tester62/default60 stay unchanged until verified gates; no tester repeat.
+   [Candidate checkpoint](releases/2026-10-04-beta64-paired-candidate.md).
+
+**Paired delivery diagnostics source-only DONE04.10; runtime gate pending.**
+1. DONE bounded flow/ACK/SACK, queued/written/CRC-complete/oldest-partial fragment
+   snapshots on both endpoints; Android projection and paired offline comparison.
+2. DONE full Go suite, race for six affected packages, Android246/lint, Python52;
+   max-value export budget, immutable snapshots, missing-head RTP and healed controls.
+3. NEXT release a fresh immutable Android successor and matching gateway only after
+   exact-source CI/artifact checks; owner paired runtime gate, same identity/admission,
+   AUTH/revoke/cancel preservation and actual refreshed material headroom required.
+4. THEN inspect paired evidence before deciding whether another tester attempt adds
+   information. Last samples are not simultaneous; missing matching fragment evidence
+   is unknown, not a localized drop or RKN verdict. No retry/RTO tuning.
+   No version/deployment change in this source task; owner63/tester62/default60 unchanged.
+   [Source report and remaining gates](releases/2026-10-04-paired-delivery-diagnostics.md).
+
+**Native exhaustion→production poll physical gate PASS04.10; DATA loss still open.**
+1. DONE real process-local RTP receive loss on installed63: native8-retry exhaustion,
+   production poll NETWORK, old cleanup/fresh BOOT-1/session/HTTPS200; no synthetic cause.
+2. DONE server original/restored tags53/56 gap-free, filters/library/test APK removed,
+   identity/enrollment/Support preserved; no server or product binary mutation.
+3. DONE cross-layer ReliableStream/fragment/VP8/RTP regression with fresh ACK,
+   missing head DATA and healed-gap control; four-package race and three repeated runs
+   PASS. Compilation moved off quota-limited `/tmp`; no timer or runtime code changes.
+4. DONE local bounded paired per-sequence ACK/SACK/reassembly instrumentation (above);
+   NEXT deployed paired acceptance before field-loss investigation. No blind tuning or
+   repeat mobile test; material expiry must be rechecked.
+   [Exact native evidence](releases/2026-10-04-beta63-native-exhaustion.md).
+
+**Beta63 source/CI/signing/owner policy acceptance and targeted delivery DONE04.10.**
 1. DONE remote/device preflight: main cb76f115, no beta63 tag, owner installed62/UID10283.
-2. IN PROGRESS immutable successor0.1.18-beta63/code63 and exact-source platform CI.
-3. THEN downloaded asset/provenance checks, offline signing, owner in-place preservation,
-   AWG/TCP and restricted recovery/security acceptance with current material headroom.
-4. HOLD targeted publication until gates pass; retain beta60 defaults/catalog/invitation,
-   immutable62, tester admission and identity. No tester repeat now.
+2. DONE de7cacd/0.1.18-beta63/code63, all four exact-source CI PASS (client attempt2;
+   initial invitation runtime failure retained), downloaded artifact/provenance/offline signing.
+3. DONE owner in-place preservation and final installed SHA ce81216a; AWG/TCP HTTPS200,
+   diagnostics/privacy/Support/restart and test-package removal. Injected policy cause
+   drives real native cleanup/new descriptor/session/HTTPS200; one-restoration guard,
+   injected local AUTH and cancellation PASS. Test-only restricted selection, not a
+   genuine exhaustion→native poll physical test. Server two tags56/132 gap-free events.
+4. DONE targeted publication16:56UTC, verified HTTP200/downloaded SHA/signer16:57UTC.
+   Initial partial upload reconciled/resumed before route activation; default60, immutable
+   older downloads, admission/identity and normal services unchanged. Only HTTPS nginx
+   reloaded. Tester last receipt62; no repeat or broad rollout.
+5. DONE subsequent genuine native exhaustion→poll physical gate (see above); NEXT DATA/ACK loss investigation.
+   Original stall/setup reliability is not fixed by this policy patch. Recorded material
+   bound17:30:19UTC is not a fresh four-hour window; revalidate/renew before later testing.
    [Exact release state](releases/2026-10-04-beta63-recovery-candidate.md).
 
 **Current export(11): mobile reproduction received and correlated.**
@@ -21,7 +68,7 @@
    is NETWORK; unknown/auth/protocol remain terminal. Native/cache expiry validation,
    cleanup guard and one-restoration limit preserved; owner AUTH race and pre-start
    denial checked. Android243/lint, Python100 and four Go race packages PASS; real
-   export replay PASS. Not built into or installed as an APK; no server changes.
+   export replay PASS. Subsequent beta63 delivery/owner state recorded above; no gateway change.
 5. DONE deterministic missing-head-DATA + fresh ACK reproduction and healed-gap control.
    NEXT targeted framing/loss investigation: this proves neither field drop location
    nor RKN involvement; no blind retry/RTO increases.

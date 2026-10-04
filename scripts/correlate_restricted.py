@@ -30,6 +30,9 @@ def event(source):
     if not isinstance(source, dict) or not matches(TAG, source.get("session_tag")):
         raise ValueError("invalid trace correlation")
     safe = {"session_tag": source["session_tag"]}
+    progress = delivery(source.get("delivery"))
+    if progress:
+        safe["delivery"] = progress
     for field, choices in (("stage", STAGES), ("state", STATES), ("reason", REASONS)):
         if source.get(field) not in choices.split("|"):
             raise ValueError("invalid trace enum")
@@ -55,14 +58,77 @@ def event(source):
     return safe
 
 
+def delivery(source):
+    if not isinstance(source, dict):
+        return {}
+    safe = {}
+    shapes = {
+        "flow": ("send_base send_next receive_next receive_mask ack_base ack_mask pending buffered head_retries", "ack_seen head_sacked"),
+        "assembly": ("fragments completed expired malformed duplicate conflict capacity crc_failed recent pending rtp rtp_gaps vp8_frames", ""),
+        **{key: ("sender message total mask data_sequence", "data_known") for key in ("pending", "queued", "written", "received")},
+    }
+    for key, (numbers, flags) in shapes.items():
+        value = source.get(key)
+        if not isinstance(value, dict) or not all(number(value.get(field)) for field in numbers.split()) or not all(type(value.get(field)) is bool for field in flags.split()):
+            continue
+        if key == "flow":
+            if not 0 <= value["send_next"] - value["send_base"] <= 32 or any(value[field] > 32 for field in ("pending", "buffered", "head_retries")) or any(value[field] > 4294967295 for field in ("receive_mask", "ack_mask")) or value["ack_base"] > value["send_next"]:
+                continue
+        elif key == "assembly":
+            if value["pending"] > 16:
+                continue
+        elif value["sender"] > 4294967295 or value["message"] > 4294967295 or not 1 <= value["total"] <= 8 or value["mask"] >= 1 << value["total"] or not value["data_known"] and value["data_sequence"] != 0:
+            continue
+        safe[key] = {field: value[field] for field in (numbers + " " + flags).split()}
+    return safe
+
+
 def insert(events, source, expected=None):
     safe = event(source)
     if expected is not None and safe["session_tag"] != expected:
         raise ValueError("cross-session evidence")
     key = safe["sequence"]
     if key in events and events[key] != safe:
-        raise ValueError("conflicting sequence evidence")
+        previous = events[key]
+        if {name: value for name, value in previous.items() if name != "delivery"} != {name: value for name, value in safe.items() if name != "delivery"}:
+            raise ValueError("conflicting sequence evidence")
+        combined = dict(previous.get("delivery", {}))
+        for name, value in safe.get("delivery", {}).items():
+            if name in combined and combined[name] != value:
+                raise ValueError("conflicting delivery evidence")
+            combined[name] = value
+        if combined:
+            safe["delivery"] = combined
     events[key] = safe
+
+
+def compare_delivery(sender, receiver, direction):
+    transmitting = next((entry for entry in reversed(sender) if "flow" in entry.get("delivery", {})), None)
+    receiving = next((entry for entry in reversed(receiver) if "flow" in entry.get("delivery", {})), None)
+    if transmitting is None or receiving is None or transmitting["delivery"]["flow"]["pending"] == 0:
+        return None
+    sent, received = transmitting["delivery"], receiving["delivery"]
+    head = sent["flow"]["send_base"]
+    offset = head - received["flow"]["receive_next"]
+    state = "consumed" if offset < 0 else "outside_sample_window" if offset >= 32 else "buffered_not_consumed" if received["flow"]["receive_mask"] & (1 << offset) else "not_buffered_at_sample"
+    result = dict(direction=direction, head_data_sequence=head, sender_event_sequence=transmitting["sequence"],
+                  receiver_event_sequence=receiving["sequence"], sender_flow=sent["flow"], receiver_flow=received["flow"],
+                  receiver_head_observation=state, simultaneous=False, fragment_matches=[])
+    for boundary in ("queued", "written"):
+        point = sent.get(boundary)
+        if not point or not point["data_known"] or point["data_sequence"] != head:
+            continue
+        for entry in reversed(receiver):
+            for name in ("pending", "received"):
+                candidate = entry.get("delivery", {}).get(name)
+                if candidate and (candidate["sender"], candidate["message"], candidate["total"]) == (point["sender"], point["message"], point["total"]) and (not candidate["data_known"] or candidate["data_sequence"] == head):
+                    result["fragment_matches"].append(dict(sender_boundary=boundary, receiver_boundary=name,
+                                                          receiver_event_sequence=entry["sequence"], sent=point, received=candidate))
+                    break
+            else:
+                continue
+            break
+    return result
 
 
 def correlate(clients, server, lookup):
@@ -109,6 +175,7 @@ def correlate(clients, server, lookup):
                     if safe["session_tag"] != tag or safe["reason"] == "NONE" or firsts.get(tag, safe) != safe:
                         raise ValueError("ambiguous first failure")
                     firsts[tag] = safe
+                    insert(client_events.setdefault(tag, {}), safe, tag)
             entries = record.get("events", [])
             if not isinstance(entries, list) or len(entries) > 128:
                 raise ValueError("invalid event bound")
@@ -156,6 +223,7 @@ def correlate(clients, server, lookup):
                 first_remote = entry
                 break
         results.append({**binding, "client": local, "server": remote, "recovery": related,
+                        "delivery_comparison": [value for value in (compare_delivery(local, remote, "client_to_server"), compare_delivery(remote, local, "server_to_client")) if value is not None],
                         "first_client_failure": firsts.get(tag), "first_server_failure": first_remote,
                         "server_sequence_gaps": gaps, "missing_server_stages": missing,
                         "carrier_bidirectional_activity": activity,

@@ -106,7 +106,10 @@ func (gateway *telemostGateway) Run(ctx context.Context, active func() error) er
 		trace.Add("GATEWAY_SESSION", "FAILED", "UNKNOWN_INTERNAL")
 		return Code("mux_start_failed")
 	}
-	stopSample := sessiondiag.Sample(ctx, trace, func() (uint64, uint64) { stats := gateway.session.Stats(); return stats.BytesSent, stats.BytesReceived })
+	stopSample := sessiondiag.Sample(ctx, trace, func() (uint64, uint64) { stats := gateway.session.Stats(); return stats.BytesSent, stats.BytesReceived },
+		func() *sessiontrace.Delivery {
+			return sessiondiag.Delivery(secured.ReliabilityStats(), gateway.session.Stats())
+		})
 	defer stopSample()
 	defer func() {
 		mux.Close()

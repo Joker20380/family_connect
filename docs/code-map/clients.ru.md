@@ -1,5 +1,15 @@
 # Клиенты по платформам
 
+[Paired delivery diagnostics04.10](../releases/2026-10-04-paired-delivery-diagnostics.md),
+source-only: `carrier/sessiontrace/delivery.go` задаёт bounded flow/fragment schema,
+`reliablestream` и `telemost` собирают состояния, `sessiondiag.Sample` передаёт их
+из `wholedevice`/`roombroker`. Android `RestrictedDelivery`/`RestrictedTrace` сохраняют
+last8+first_failure через существующий `DiagnosticRing`; `scripts/correlate_restricted.py`
+сопоставляет flow и message IDs без утверждения одновременности/причины потери.
+Тесты: `delivery_test.go`, `diagnostic_test.go`, `reliable_framing_test.go`,
+`RestrictedDeliveryTest`, `RestrictedTraceTest`, `test_restricted_correlation.py`.
+Старые экспорты совместимы; новая диагностика ещё не установлена на owner63/gateway.
+
 [Restricted session terminal diagnostics03.10](../testing/restricted-session-diagnostics.ru.md):
 локальный patch, не rollout; общая safe-проекция Go/native/Android, первая причина
 разрыва и session tag, без изменения transport/auth/retry policy.

@@ -57,6 +57,9 @@ func (stream *Stream) Stats() Stats {
 	stream.mu.Lock()
 	defer stream.mu.Unlock()
 	stats := stream.state.stats
+	if stats.Terminal == "" {
+		stats.Flow = stream.state.flow()
+	}
 	stats.Events = append([]Event(nil), stats.Events...)
 	stats.RecentEvents = append([]Event(nil), stats.RecentEvents...)
 	return stats
@@ -160,6 +163,7 @@ func (stream *Stream) run(ctx context.Context) {
 	defer func() {
 		stream.mu.Lock()
 		failureTrace := stream.state.failureTrace
+		stream.state.stats.Flow = stream.state.flow()
 		packet := stream.state.packet(resetFrame)
 		stream.state.stats.Resets++
 		stream.state.stats.Terminal = "closed"

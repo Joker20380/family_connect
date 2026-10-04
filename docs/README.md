@@ -1,10 +1,27 @@
 # Documentation
 
+[Beta64 paired-diagnostics candidate04.10](releases/2026-10-04-beta64-paired-candidate.md):
+local version64 prepared; commit/push authorized, exact-source CI pending. No new
+APK installation or gateway deployment; expired materials require renewal before owner testing.
+
+[Paired DATA/ACK/fragment diagnostics04.10](releases/2026-10-04-paired-delivery-diagnostics.md):
+source-only implementation and local tests PASS; bounded endpoint samples, Android
+export and offline comparison. Not yet installed/deployed; field DATA loss remains open.
+
+[Beta63 genuine native exhaustion04.10](releases/2026-10-04-beta63-native-exhaustion.md):
+real8-retry native failure→production poll→new session/HTTPS PASS; process-local RTP
+fault only, unchanged product/server. Original field DATA loss remains unlocalized.
+
+[Beta63 recovery release/owner acceptance04.10](releases/2026-10-04-beta63-recovery-candidate.md):
+exact-source CI/signing/in-place Redmi63 PASS; real native reconnect with injected policy
+cause, bounded guard and AUTH/cancellation PASS. Targeted download SHA/signer PASS; default60,
+tester last receipt62. Later native exhaustion→poll acceptance is above; field DATA stall remains open.
+
 [Beta62 mobile export(11),04.10](releases/2026-10-04-field-export11-beta62.md):
 real tester/server correlation, precise retry exhaustion with continuing ACK traffic,
 and independently proven INTERNAL recovery-policy stop. No further tester repetition
 needed now. [Local recovery classification fix](releases/2026-10-04-restricted-recovery-classification.md)
-passes Android243/lint, Python100 and targeted Go race checks; not delivered in an APK.
+passes Android243/lint, Python100 and targeted Go race checks; delivered to owner in63 above.
 Original transport cause remains unproven.
 
 [Beta62 four-hour server rollout04.10](releases/2026-10-04-beta62-four-hour-rollout.md):

@@ -1,8 +1,21 @@
 # Client installation
 
-**Recovery candidate beta63 is not yet delivered.** `0.1.18-beta63`/code63 is being
-prepared for CI and owner-device acceptance. No verified download/checksum yet;
-keep the installed version and data, and do not repeat the mobile test.
+**Beta64/code64 is a local source candidate only**, not an installable release.
+Paired diagnostics still require exact-source CI and physical owner/gateway acceptance.
+Published links/checksums below are unchanged; no tester repeat is requested.
+[Release preparation](releases/2026-10-04-beta64-paired-candidate.md).
+
+**Beta63/code63 is installed and checked on the owner Redmi.** CI/offline signing and
+in-place identity preservation PASS. [Separate beta63 APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta63.apk)
+verified04.10 16:57UTC: HTTP200,49654651bytes, downloaded/installed SHA256
+`ce81216a84005880eef834dd5f576d0c43082b1c501767c7cf83522a765aebb8`;
+signer SHA256 `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+Owner is already updated; any later authorized update must be in place, never uninstall,
+clear data or reenroll. Verify63 and unchanged Support ID.
+Initial reconnect acceptance used an injected policy cause. Subsequent
+[genuine native exhaustion→poll→reconnect](releases/2026-10-04-beta63-native-exhaustion.md)
+also passed on unchanged63 under controlled RTP loss. The original mobile stall is not claimed fixed.
+Tester: keep the installed version/data and do not repeat the mobile test now.
 Default/updater/invitation remain60. [Release gates](releases/2026-10-04-beta63-recovery-candidate.md).
 
 **Beta62/code62 is a verified targeted upgrade only for FC-YHQB-9VJN.**
@@ -22,7 +35,7 @@ Real owner-session correlation is proven; the original disconnect is not claimed
 [Checks and limitations](releases/2026-10-04-beta62-recovery-candidate.md).
 Default download/updater remain60; the published61 r2 asset is not replaced.
 
-**Previous beta61 r2 targeted release — historical acceptance; current candidate62 above.**
+**Previous beta61 r2 targeted release — historical acceptance; newer releases above.**
 Data continuity/AWG/export and real client/server correlation pass; the original
 disconnect is not claimed fixed. Separate verified download04.10:
 [Android beta61 r2 diagnostic](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta61-r2.apk).

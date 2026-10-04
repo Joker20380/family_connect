@@ -628,6 +628,9 @@ func (s *Session) writeVP8Sample(data []byte) {
 	}
 	s.statsMu.Lock()
 	s.mediaStats.SamplesWritten++
+	if fragment, valid := decodeVP8Frame(data); valid {
+		s.written = advanceFragment(s.written, fragment)
+	}
 	s.statsMu.Unlock()
 }
 
@@ -647,7 +650,13 @@ func (s *Session) writeDCMessage(data []byte) bool {
 		case <-time.After(5 * time.Millisecond):
 		}
 	}
-	return dc.Send(data) == nil
+	if dc.Send(data) != nil {
+		return false
+	}
+	s.statsMu.Lock()
+	s.written = advanceFragment(s.written, data)
+	s.statsMu.Unlock()
+	return true
 }
 
 // capabilitiesOffer is the Telemost feature matrix advertised in hello.

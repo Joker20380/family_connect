@@ -6,6 +6,9 @@ import (
 	"hash/crc32"
 	"sync"
 	"time"
+
+	"github.com/Joker20380/family_connect/carrier/reliablestream"
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 )
 
 const (
@@ -24,20 +27,23 @@ var (
 )
 
 type fragmentBuilder struct {
-	total    uint32
-	length   uint32
-	checksum uint32
-	received map[uint32][]byte
-	deadline time.Time
+	diagnostic sessiontrace.Fragment
+	total      uint32
+	length     uint32
+	checksum   uint32
+	received   map[uint32][]byte
+	deadline   time.Time
 }
 
 type reassembler struct {
-	mu     sync.Mutex
-	builds map[[2]uint32]*fragmentBuilder
-	recent map[[2]uint32]time.Time
-	onData func([]byte)
-	selfID uint32
-	now    func() time.Time
+	metrics  sessiontrace.Assembly
+	received *sessiontrace.Fragment
+	mu       sync.Mutex
+	builds   map[[2]uint32]*fragmentBuilder
+	recent   map[[2]uint32]time.Time
+	onData   func([]byte)
+	selfID   uint32
+	now      func() time.Time
 }
 
 func newReassembler(selfID uint32, onData func([]byte)) *reassembler {
@@ -46,6 +52,7 @@ func newReassembler(selfID uint32, onData func([]byte)) *reassembler {
 
 func (r *reassembler) ingest(data []byte) {
 	if len(data) < fragmentHeaderLen || len(data) > fragmentHeaderLen+maxFragmentPayload {
+		r.malformed()
 		return
 	}
 	sender := binary.BigEndian.Uint32(data[0:4])
@@ -54,38 +61,56 @@ func (r *reassembler) ingest(data []byte) {
 	total := binary.BigEndian.Uint32(data[12:16])
 	length := binary.BigEndian.Uint32(data[16:20])
 	checksum := binary.BigEndian.Uint32(data[20:24])
-	if sender == r.selfID || length > MaxMessageSize || total == 0 || total > maxFragmentsPerMessage || sequence >= total {
+	if sender == r.selfID {
+		return
+	}
+	if length > MaxMessageSize || total == 0 || total > maxFragmentsPerMessage || sequence >= total {
+		r.malformed()
 		return
 	}
 	expectedTotal := max(uint32(1), (length+maxFragmentPayload-1)/maxFragmentPayload)
 	expectedLength := min(uint32(maxFragmentPayload), length-sequence*maxFragmentPayload)
 	if total != expectedTotal || uint32(len(data)-fragmentHeaderLen) != expectedLength {
+		r.malformed()
 		return
 	}
 	key := [2]uint32{sender, messageID}
 	r.mu.Lock()
+	r.metrics.Fragments++
 	r.pruneLocked(r.now())
 	if _, seen := r.recent[key]; seen {
+		r.metrics.Recent++
 		r.mu.Unlock()
 		return
 	}
 	builder := r.builds[key]
 	if builder == nil {
 		if len(r.builds) >= maxPendingMessages || len(r.recent)+len(r.builds) >= maxRecentMessages {
+			r.metrics.Capacity++
 			r.mu.Unlock()
 			return
 		}
 		builder = &fragmentBuilder{total: total, length: length, checksum: checksum, received: make(map[uint32][]byte), deadline: r.now().Add(reassemblyTimeout)}
+		builder.diagnostic = sessiontrace.Fragment{Sender: sender, Message: messageID, Total: total}
 		r.builds[key] = builder
 	}
 	_, duplicate := builder.received[sequence]
 	if duplicate || builder.total != total || builder.length != length || builder.checksum != checksum {
+		if duplicate {
+			r.metrics.Duplicate++
+		} else {
+			r.metrics.Conflict++
+		}
 		delete(r.builds, key)
 		r.recent[key] = builder.deadline
 		r.mu.Unlock()
 		return
 	}
 	builder.received[sequence] = append([]byte(nil), data[fragmentHeaderLen:]...)
+	builder.diagnostic.Mask |= 1 << sequence
+	if sequence == 0 {
+		builder.diagnostic.DataSequence, builder.diagnostic.DataKnown = reliablestream.DataSequencePrefix(data[fragmentHeaderLen:], length)
+	}
 	if uint32(len(builder.received)) != total {
 		r.mu.Unlock()
 		return
@@ -97,7 +122,19 @@ func (r *reassembler) ingest(data []byte) {
 	delete(r.builds, key)
 	r.recent[key] = r.now().Add(reassemblyTimeout)
 	r.mu.Unlock()
-	if r.onData != nil && crc32.ChecksumIEEE(output) == checksum {
+	valid := crc32.ChecksumIEEE(output) == checksum
+	r.mu.Lock()
+	if valid {
+		r.metrics.Completed++
+		if builder.diagnostic.DataKnown {
+			point := builder.diagnostic
+			r.received = &point
+		}
+	} else {
+		r.metrics.CRCFailed++
+	}
+	r.mu.Unlock()
+	if r.onData != nil && valid {
 		r.onData(output)
 	}
 }
@@ -110,10 +147,58 @@ func (r *reassembler) pruneLocked(now time.Time) {
 	}
 	for key, builder := range r.builds {
 		if !now.Before(builder.deadline) {
+			r.metrics.Expired++
 			delete(r.builds, key)
 			r.recent[key] = now.Add(reassemblyTimeout)
 		}
 	}
+}
+
+func (r *reassembler) malformed() {
+	r.mu.Lock()
+	r.metrics.Malformed++
+	r.mu.Unlock()
+}
+
+func (r *reassembler) delivery() *sessiontrace.Delivery {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	metrics := r.metrics
+	metrics.Pending = uint32(len(r.builds))
+	value := &sessiontrace.Delivery{Assembly: &metrics, Received: r.received}
+	var oldest *fragmentBuilder
+	for _, builder := range r.builds {
+		if oldest == nil || builder.deadline.Before(oldest.deadline) || builder.deadline.Equal(oldest.deadline) && (builder.diagnostic.Sender < oldest.diagnostic.Sender || builder.diagnostic.Sender == oldest.diagnostic.Sender && builder.diagnostic.Message < oldest.diagnostic.Message) {
+			oldest = builder
+		}
+	}
+	if oldest != nil {
+		value.Pending = &oldest.diagnostic
+	}
+	return sessiontrace.CloneDelivery(value)
+}
+
+func advanceFragment(previous *sessiontrace.Fragment, data []byte) *sessiontrace.Fragment {
+	if len(data) < fragmentHeaderLen {
+		return previous
+	}
+	sender, message := binary.BigEndian.Uint32(data), binary.BigEndian.Uint32(data[4:])
+	sequence, total := binary.BigEndian.Uint32(data[8:]), binary.BigEndian.Uint32(data[12:])
+	length := binary.BigEndian.Uint32(data[16:])
+	if total == 0 || total > maxFragmentsPerMessage || sequence >= total {
+		return previous
+	}
+	if previous != nil && previous.Sender == sender && previous.Message == message {
+		value := *previous
+		value.Mask |= 1 << sequence
+		return &value
+	}
+	if sequence == 0 {
+		if dataSequence, known := reliablestream.DataSequencePrefix(data[fragmentHeaderLen:], length); known {
+			return &sessiontrace.Fragment{Sender: sender, Message: message, Total: total, Mask: 1, DataKnown: true, DataSequence: dataSequence}
+		}
+	}
+	return previous
 }
 
 func (r *reassembler) prune() {

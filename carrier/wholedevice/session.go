@@ -388,7 +388,10 @@ func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Director
 	event("dedicated_data_ready")
 	trace.Add("GATEWAY_SESSION", "ESTABLISHED", "NONE")
 	success = true
-	stopSample := sessiondiag.Sample(ctx, trace, func() (uint64, uint64) { stats := carrier.Stats(); return stats.BytesSent, stats.BytesReceived })
+	stopSample := sessiondiag.Sample(ctx, trace, func() (uint64, uint64) { stats := carrier.Stats(); return stats.BytesSent, stats.BytesReceived },
+		func() *sessiontrace.Delivery {
+			return sessiondiag.Delivery(secured.ReliabilityStats(), carrier.Stats())
+		})
 	session := Attach(ctx, muxPlane{mux}, func() {
 		trace.Add("LOCAL_CLOSE", "STARTED", "NONE")
 		stopSample()

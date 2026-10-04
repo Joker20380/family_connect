@@ -30,13 +30,13 @@ public class RestrictedTraceTest {
             assertFalse(cause.has("reliable_age_ms"));assertFalse(cause.has("reliable_retries"));
         }
     }
-    private static final String TAG="abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789";
-    private JsonObject event(long sequence,String reason){
+    static final String TAG="abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789";
+    private static JsonObject event(long sequence,String reason){
         JsonObject event=new JsonObject();event.addProperty("session_tag",TAG);event.addProperty("sequence",sequence);
         event.addProperty("timestamp_ms",100+sequence);event.addProperty("stage","WEBSOCKET");event.addProperty("state","CLOSED");
         event.addProperty("reason",reason);event.addProperty("close_code",1006);event.addProperty("raw_reason","secret-room-token");return event;
     }
-    private JsonObject snapshot(int size){
+    static JsonObject snapshot(int size){
         JsonObject source=new JsonObject();source.addProperty("session_tag",TAG);source.addProperty("correlation_status","VALID");
         JsonArray trace=new JsonArray();for(int index=1;index<=size;index++)trace.add(event(index,"NONE"));
         source.add("trace",trace);source.add("first_failure",event(1,"SIGNAL_WS_CLOSE"));return source;
@@ -74,9 +74,11 @@ public class RestrictedTraceTest {
             String tag=String.format(java.util.Locale.ROOT,"%064x",index);
             JsonObject lifecycle=snapshot(192);lifecycle.addProperty("session_tag",tag);
             lifecycle.getAsJsonObject("first_failure").addProperty("session_tag",tag);
+            lifecycle.getAsJsonObject("first_failure").add("delivery",RestrictedDeliveryTest.largestFixture());
             for(JsonElement element:lifecycle.getAsJsonArray("trace")){
                 JsonObject entry=element.getAsJsonObject();entry.addProperty("session_tag",tag);
                 entry.addProperty("tx",9007199254740991L);entry.addProperty("rx",9007199254740991L);
+                entry.add("delivery",RestrictedDeliveryTest.largestFixture());
                 entry.addProperty("heartbeat_kind","APPLICATION");entry.addProperty("close_reason","READ_TIMEOUT");entry.addProperty("target","SUBSCRIBER");
             }
             JsonObject source=new JsonObject();source.addProperty("session_tag",tag);source.addProperty("terminal_reason","NONE");source.add("lifecycle",lifecycle);

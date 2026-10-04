@@ -82,6 +82,7 @@ type Config struct {
 
 // Stats is a point-in-time snapshot of carrier metrics.
 type Stats struct {
+	Delivery          *sessiontrace.Delivery
 	SendQueueDepth    int
 	ReceiveQueueDepth int
 	Mode              string
@@ -165,6 +166,8 @@ type Session struct {
 	evidence         []Evidence
 	evidenceDropped  uint64
 	mediaStats       MediaStats
+	queued           *sessiontrace.Fragment
+	written          *sessiontrace.Fragment
 	applicationPongs uint64
 	applicationPings uint64
 	signalingACKs    uint64
@@ -366,6 +369,9 @@ func (s *Session) SendContext(ctx context.Context, payload []byte) error {
 		}
 		select {
 		case s.sendQueue <- out:
+			s.statsMu.Lock()
+			s.queued = advanceFragment(s.queued, frag)
+			s.statsMu.Unlock()
 		case <-ctx.Done():
 			return ctx.Err()
 		case <-s.closeCh:
@@ -397,7 +403,13 @@ func (s *Session) Stats() Stats {
 	applicationPongs := s.applicationPongs
 	applicationPings := s.applicationPings
 	signalingACKs := s.signalingACKs
+	delivery := sessiontrace.CloneDelivery(&sessiontrace.Delivery{Queued: s.queued, Written: s.written})
 	s.statsMu.Unlock()
+	if s.reassembler != nil {
+		received := s.reassembler.delivery()
+		delivery.Assembly, delivery.Pending, delivery.Received = received.Assembly, received.Pending, received.Received
+		delivery.Assembly.RTP, delivery.Assembly.RTPGaps, delivery.Assembly.VP8Frames = mediaStats.RTPReceived, mediaStats.SequenceGaps, mediaStats.BinaryFrames
+	}
 
 	var setupMs int64
 	if !setupDone.IsZero() {
@@ -412,6 +424,7 @@ func (s *Session) Stats() Stats {
 		pub = pubPC.ConnectionState().String()
 	}
 	return Stats{
+		Delivery:          delivery,
 		SendQueueDepth:    len(s.sendQueue),
 		ReceiveQueueDepth: len(s.recvQueue),
 		Mode:              s.mode.String(),

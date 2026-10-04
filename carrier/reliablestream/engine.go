@@ -17,6 +17,7 @@ type Event struct {
 }
 
 type Stats struct {
+	Flow               sessiontrace.Flow
 	DataSent           uint64
 	DataReceived       uint64
 	ACKSent            uint64
@@ -73,6 +74,9 @@ type engine struct {
 	stats        Stats
 	lastACK      time.Time
 	lastProgress time.Time
+	ackSeen      bool
+	ackBase      uint64
+	ackMask      uint32
 	failureTrace sessiontrace.Event
 }
 
@@ -165,6 +169,7 @@ func (state *engine) input(packet frame, now time.Time) ([]frame, error) {
 			state.stats.SACKReceived++
 		}
 		state.lastACK = now
+		state.ackSeen, state.ackBase, state.ackMask = true, packet.ack, packet.bits
 		if packet.ack > state.base {
 			state.lastProgress = now
 		}
@@ -264,6 +269,8 @@ func (state *engine) exhausted(reason string, block *pending, now time.Time) err
 	state.failureTrace = sessiontrace.Event{Stage: "CARRIER", State: "FAILED", Reason: reason,
 		ReliablePending: uint64(len(state.sent)), ReliableACKReceived: state.stats.ACKReceived,
 		ReliableACKAgeMS: age(state.lastACK), ReliableProgressAgeMS: age(state.lastProgress)}
+	flow := state.flow()
+	state.failureTrace.Delivery = &sessiontrace.Delivery{Flow: &flow}
 	if block != nil {
 		state.failureTrace.ReliableAgeMS = age(block.first)
 		state.failureTrace.ReliableRetries = uint64(block.retries)
@@ -272,6 +279,19 @@ func (state *engine) exhausted(reason string, block *pending, now time.Time) err
 		}
 	}
 	return ErrExhausted
+}
+
+func (state *engine) flow() sessiontrace.Flow {
+	value := sessiontrace.Flow{SendBase: state.base, SendNext: state.next, ReceiveNext: state.receive,
+		ACKSeen: state.ackSeen, ACKBase: state.ackBase, ACKMask: state.ackMask,
+		Pending: uint32(len(state.sent)), Buffered: uint32(len(state.buffer))}
+	for sequence := range state.buffer {
+		value.ReceiveMask |= 1 << (sequence - state.receive)
+	}
+	if head := state.sent[state.base]; head != nil {
+		value.HeadRetries, value.HeadSacked = uint32(head.retries), head.sacked
+	}
+	return value
 }
 
 func (state *engine) tick(now time.Time) ([]frame, error) {
