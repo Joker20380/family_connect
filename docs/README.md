@@ -1,8 +1,9 @@
 # Documentation
 
-[Beta62 diagnostic source candidate04.10](releases/2026-10-04-beta62-recovery-candidate.md):
-four-hour readiness plus precise ReliableStream failure-before-cleanup evidence;
-owner Redmi connected/baselined, not updated. No new signed APK or publication yet.
+[Beta62 owner acceptance and targeted download04.10](releases/2026-10-04-beta62-recovery-candidate.md):
+exact-source CI/signature/in-place Redmi acceptance, real four-ID correlation and
+downloaded SHA/signer PASS. Tester upgrade only; four-hour server activation and next
+Russian mobile reproduction pending. Default/updater remain60; no transport-fix claim.
 
 [Restricted session terminal diagnostics03.10](testing/restricted-session-diagnostics.ru.md):
 targeted beta61 r2 owner update and diagnostic gateway deployed/accepted: real

@@ -1,8 +1,14 @@
 # Release distribution / Выпуски
 
-Android0.1.18-beta62/code62 is a [local source-only diagnostic candidate](releases/2026-10-04-beta62-recovery-candidate.md),
-not built/signed/installed/published. Installed owner baseline and targeted download
-remain61 r2; default Android distribution remains60. No62 download/hash claimed.
+Android0.1.18-beta62/code62 is [owner accepted and separately published](releases/2026-10-04-beta62-recovery-candidate.md)
+for diagnostic tester FC-YHQB-9VJN only. Source42a5e59; CI/signing/in-place owner and
+real correlation PASS. [Targeted beta62 APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta62.apk)
+downloaded with HTTP200/TLS verification; SHA256
+`f60b8d3a74b85a5934b942d7e273831e7c1d88d35e4d8a87db7332fb7d7703d4`, signer
+`67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+Upgrade over existing app, never uninstall/clear data/reenroll. Tester installation
+not yet confirmed; four-hour server activation/mobile reproduction still pending.
+Production/default/updater/invitation remain60; immutable61 r2 remains unchanged.
 
 Android0.1.18-beta60 published 2026-10-03 after hosted CI, owner in-place acceptance and public HTTPS SHA256/signer verification. Windows0.2.15 and Linux0.2.11 distribution remains unchanged.
 

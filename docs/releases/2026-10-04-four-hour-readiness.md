@@ -1,9 +1,12 @@
 # Four-hour restricted readiness — local candidate, 2026-10-04
 
-Follow-up: [beta62 source candidate](2026-10-04-beta62-recovery-candidate.md) now has
-distinct62 version metadata and the connected owner's61 r2 baseline. Historical
-no-version-change/no-attached-device notes below describe the previous checkpoint;
-no new APK or four-hour deployment has occurred.
+Follow-up12:41UTC: [beta62 accepted build](2026-10-04-beta62-recovery-candidate.md)
+is signed, installed in place on owner and published as a separate targeted upgrade.
+Real restricted correlation/diagnostic gateway accepted. Four-hour server policy and
+full material renewal are NOT activated: CRL policy remains3600s, tester last reports61.
+Upgrade tester first, then coordinate compatible policy/full chain and fresh READY/ACK.
+Historical source-only/no-attached-device notes below describe the earlier checkpoint,
+not current APK availability. No end-to-end four-hour readiness is claimed.
 
 ## Scope and status
 

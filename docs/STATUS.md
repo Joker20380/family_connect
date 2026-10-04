@@ -1,6 +1,35 @@
 # Текущее состояние / Current state
 
-## Beta62 diagnostic source — owner connected, not installed04.10.2026
+## Beta62 — owner accepted, targeted upgrade available04.10.2026 12:41UTC
+
+Built/signed/installed owner/public targeted download:0.1.18-beta62/code62,
+source42a5e59b4bc2c43e56e018ce7287cd7b6e901db2. All four exact-source CI workflows PASS;
+local182 Python checks/full Go race PASS, Android233 unit tests/lint PASS.
+APK/download SHA256 `f60b8d3a74b85a5934b942d7e273831e7c1d88d35e4d8a87db7332fb7d7703d4`;
+signer `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a` matches60/61.
+Redmi updated in place: UID10283, Device Identity, enrollment, activation, app data
+and Support FC-4D8Q-REEG preserved; no uninstall/clear/reenroll. AWG/HTTPS200,
+diagnostic export/privacy/restart PASS. Real owner restricted session established,
+48 client/75 server events match all four correlation IDs; lifecycle complete,
+no sequence gaps or trace privacy findings. Later server retry exhaustion follows
+intentional owner shutdown by9.35s: not an unplanned disconnect/Russian reproduction.
+NL gateway loaded diagnostic binary6773423c from the same source; ordinary services,
+RU policy/admission/identities unchanged. No transport/retry behavior tuning.
+[Targeted beta62 APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta62.apk)
+downloaded back with TLS validation, HTTP200 and exact SHA/signer PASS. No rebuild or
+resign for publication. Beta60 remains primary/updater/invitation; Linux/Windows,
+all prior APKs and FIELD cohort unchanged. No GitHub Release or new landing link.
+
+NEXT FC-YHQB-9VJN installs62 over existing app on working Wi-Fi, preserving data and
+Support ID; no mobile attempt yet. Last tester receipt still61, readiness expired.
+Four-hour source support is present, but server CRL policy remains3600s and the complete
+long-lived material chain is NOT activated. After compatible tester is confirmed,
+coordinate full issuer/grant/gateway/device/CRL/seed renewal and compatible RU policy,
+prove owner headroom and fresh tester READY/ACK, then exactly one mobile reproduction.
+Original recovery-exhaustion cause remains unknown; neither expiry nor RKN established.
+[Checks, exact artifacts, rollout/rollback](releases/2026-10-04-beta62-recovery-candidate.md).
+
+## Historical beta62 source checkpoint — superseded by acceptance above
 
 Redmi31ce63ba baseline verified: UID10283, beta61/code61, exact r2 APK4297ea1a and
 signer67a90d1; activated, existing identity/readiness decrypt, Support FC-4D8Q-REEG.
@@ -48,7 +77,10 @@ stopped remain unknown. Recovery cleaned up but did not attempt a new descriptor
 No expiry/RKN attribution, retry-limit tuning, runtime or transport behavior change.
 [Report and exact correlation](releases/2026-10-04-field-export10-reliable.md).
 
-## Four-hour readiness — source/tests only, not deployed04.10.2026
+## Historical four-hour source checkpoint04.10.2026 — activation still pending
+
+Superseded build/device status: compatible beta62 is now accepted on owner and offered
+for targeted upgrade. Four-hour policy/material activation remains pending; see top.
 
 User authorizes a complete longer testing window. Local Go/Python directory, CRL and
 delivery validation now support14400s; server issuance is opt-in, default3600s delivery

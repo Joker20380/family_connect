@@ -2,7 +2,25 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Latest04.10: owner connected, beta62 diagnostic source prepared.**
+**Current04.10 12:41UTC: beta62 owner accepted; targeted upgrade only.**
+1. DONE source42a5e59 exact-source four CI workflows, artifact verification/offline
+   signing, in-place owner update and UID/identity/enrollment/activation/Support checks.
+   AWG/export/privacy PASS;182 Python/full Go race and Android233/lint PASS.
+2. DONE matching diagnostic gateway deployed; real controlled restricted session has
+   non-empty matching tag,48 client/75 server events, all four lookups and lifecycle PASS.
+   Server retry exhaustion after intentional close is not the Russian failure.
+3. DONE separate beta62 download: HTTP200, downloaded APK/signer verified. Default,
+   updater/invitation remain60; no FIELD expansion or old artifact replacement.
+4. NEXT tester FC-YHQB-9VJN installs62 in place on Wi-Fi without clearing/uninstalling
+   or reenrolling. Verify version/Support; do not start a mobile attempt yet.
+5. THEN activate compatible RU policy and renew full issuer/grant/gateway/device/CRL/
+   actual seed chain; prove owner remaining headroom >=3h45m and tester fresh READY/ACK.
+   Current policy remains3600s; old61 native rejects long material. No four-hour claim yet.
+6. THEN exactly one mobile reproduction/immediate export; correlate first failure and
+   ACK/progress evidence, fix only the proven cause with regression. No RKN/fix claim.
+   [Artifacts, checks, rollback and remaining gates](releases/2026-10-04-beta62-recovery-candidate.md).
+
+**Historical source checkpoint04.10 — superseded by the current sequence above.**
 1. DONE verify exact installed r2 bytes/signer, UID/activation/identity/Support and
    private encrypted-state baseline on Redmi; temporary test harness removed.
 2. DONE local first-failure-before-cleanup fix and exact exhaustion branch/ACK evidence;
@@ -21,7 +39,7 @@
    Fix proven cause with regression; no arbitrary timeout increase or RKN claim.
    [Exact status](releases/2026-10-04-beta62-recovery-candidate.md).
 
-**Latest04.10 export(10): restricted disconnect reproduced and correlated, not fixed.**
+**Historical export(10) checkpoint: failure evidence remains valid; build/device gates superseded above.**
 1. DONE match two real tester session tags to server lifecycle; Family TLS, gateway
    and bidirectional traffic precede IO_CLOSED/recovery_exhausted before expiry.
 2. NEXT identify the exact ReliableStream exhaustion branch and missing ACK/progress

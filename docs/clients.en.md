@@ -1,12 +1,19 @@
 # Client installation
 
-**Beta62/code62 is a source-only diagnostic candidate, not an available update.**
-Four-hour readiness and precise ReliableStream failure-before-cleanup diagnostics
-are being prepared; no signed APK/download exists yet. Connected Redmi's61 r2
-baseline is verified, not upgraded. [Status and checks](releases/2026-10-04-beta62-recovery-candidate.md).
+**Beta62/code62 is a verified targeted upgrade only for FC-YHQB-9VJN.**
+[Android beta62 diagnostic](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta62.apk)
+passed in-place owner Redmi acceptance over61 r2; data/UID/Identity/Support, AWG and export pass.
+HTTP200, downloaded SHA256 `f60b8d3a74b85a5934b942d7e273831e7c1d88d35e4d8a87db7332fb7d7703d4`;
+signer SHA256 `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+Choose **Update** over the existing installation on working Wi-Fi. Do not uninstall
+or clear app data; no new invitation is required. Verify62 and unchanged Support ID.
+**Do not start a mobile attempt yet:** four-hour server mode is not activated;
+tester upgrade, renewed material chain and fresh READY/ACK must come first.
+Real owner-session correlation is proven; the original disconnect is not claimed fixed.
+[Checks and limitations](releases/2026-10-04-beta62-recovery-candidate.md).
 Default download/updater remain60; the published61 r2 asset is not replaced.
 
-**Beta61 r2: owner diagnostic acceptance PASS; only for FC-YHQB-9VJN.**
+**Previous beta61 r2 targeted release — historical acceptance; current candidate62 above.**
 Data continuity/AWG/export and real client/server correlation pass; the original
 disconnect is not claimed fixed. Separate verified download04.10:
 [Android beta61 r2 diagnostic](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta61-r2.apk).
