@@ -3,6 +3,10 @@
 ## Beta65 — authorized source/CI release preparation04.10
 
 Candidate0.1.18-beta65/code65 contains the retained-cache early-refresh correction.
+Initial source2fd6b4a pushed; readiness/phase0 PASS, clients failed before APK on
+existing TCP immediate-reset race regression (`OPEN: connect_failed`). No signing.
+Follow-up cache cadence/server refresh/revocation regressions: Python119 and focused
+JVM PASS; final exact-source CI remains required, no failed gate waived.
 User authorized scoped commit/push and next release pipeline. Version checks/CI,
 artifact verification/offline signing and physical **ordinary prewarm** acceptance
 are required before delivery. No new APK installed/published: owner64/tester64/public64,

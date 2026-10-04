@@ -234,6 +234,34 @@ def test_request_limits_and_trust_bounds(setup):
         service.challenge(device.public_identity, device.wireguard_public_key)
 
 
+@pytest.mark.parametrize('lifetime', [3600, 14400])
+def test_refresh_replaces_unexpired_seed_without_reenrollment(tmp_path, lifetime):
+    service, device, now = configured(tmp_path, 1800000000, delivery_lifetime=lifetime, directory_lifetime=lifetime)
+    first = service.fetch(proof(service, device))
+    with service.access.db() as database:
+        grants = list(database.execute('SELECT * FROM restricted_grants'))
+    refreshed_at = now + 300
+    assert first['expires_at'] > refreshed_at + 300
+    service.access.clock = lambda: refreshed_at
+    seed = json.loads(service.seed_source())
+    seed['issued_at'] = iso(refreshed_at)
+    seed['expires_at'] = iso(refreshed_at + lifetime - 1)
+    seed['seeds'][0]['join_url'] = 'https://telemost.yandex.ru/j/replacement-test-only'
+    service.seed_source = lambda: json.dumps(seed).encode()
+    refreshed = service.fetch(proof(service, device))
+    assert refreshed['directory'] == seed and refreshed['directory'] != first['directory']
+    assert refreshed['challenge'] != first['challenge']
+    assert refreshed['issued_at'] == refreshed_at
+    assert refreshed['directory']['family'] == first['directory']['family']
+    for field in ('device', 'revision', 'minimum_crl', 'issuer'):
+        assert refreshed[field] == first[field]
+    with service.access.db() as database:
+        assert list(database.execute('SELECT * FROM restricted_grants')) == grants
+        database.execute('UPDATE devices SET revoked=1 WHERE device=?', (device.reference,))
+    with pytest.raises(Rejected):
+        service.fetch(proof(service, device))
+
+
 def test_revoked_certificate_not_reissued_as_bypass(setup):
     service, device, now = setup
     first = service.fetch(proof(service, device))

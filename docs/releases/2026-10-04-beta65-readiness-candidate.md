@@ -17,6 +17,22 @@ source commit where not required for the new release/current-state documentation
 
 ## Evidence and gates
 
+Initial source `2fd6b4a5114b1db9cbd5f8c65e458947c6458c1f` was pushed.
+Readiness37229125304 and phase037229125311 passed. Clients37229125318 failed
+before APK construction: `TestAuthenticatedImmediateResetPreservesOpen` reported
+`TCP OPEN: connect_failed` in the carrier race step. Diagnostic artifact11313272643
+SHA256 `917d881a11e7f1d56299eb33306d036daa3e7b7de357a8ada5e7c347f3db057d`
+retains the failure; it is not a refresh regression or a successful release gate.
+Linux control was not triggered by the initial path set. No artifact was signed.
+
+Follow-up regression checks the complete four-hour persisted300s cadence and server
+replacement of still-valid one-/four-hour directories using the same registration,
+unchanged grants and security floors; revoked devices remain denied. Python119 PASS
+and the focused JVM cache class PASS. Initial new server assertions incorrectly
+looked for family at the top level (two KeyErrors); corrected the test to the actual
+`directory.family` schema, without changing production code or weakening denial.
+The follow-up source must pass all four workflows before any signing/delivery.
+
 Before version preparation, Android254 unit/lint, standalone JVM171 and Python117
 passed, including Java HTTP and four native Go compatibility cases. Five new red
 regressions reproduced the old behavior first. Native validation in the scheduled

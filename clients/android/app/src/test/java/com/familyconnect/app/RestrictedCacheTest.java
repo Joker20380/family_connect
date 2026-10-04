@@ -16,7 +16,11 @@ public class RestrictedCacheTest {
         assertArrayEquals(saved,restarted.usable());
         assertFalse(cache(storage,1301).attempt(1301));
         assertFalse(cache(storage,1599).attempt(1599));
-        assertTrue(cache(storage,1600).attempt(1600));
+        for(long next=1600;next<15400;next+=300){
+            assertFalse(cache(storage,next-1).attempt(next-1));
+            assertTrue(cache(storage,next).attempt(next));
+            assertArrayEquals(saved,cache(storage,next).usable());
+        }
     }
     @Test public void earlyRefreshFailurePreservesCacheAndAllReplayFloors()throws Exception{
         Memory storage=new Memory();RestrictedCache original=cache(storage,1000);

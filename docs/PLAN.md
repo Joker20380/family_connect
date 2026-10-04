@@ -3,8 +3,10 @@
 ## Current engineering priority / Текущий critical path
 
 **Beta65 — authorized scoped commit/push and release pipeline04.10.**
-1. IN PROGRESS candidate65 version checks, documentation and scoped source commit/push.
-2. NEXT four exact-source CI workflows, accepted artifact verification and offline signing.
+1. DONE candidate65 version checks and initial scoped source2fd6b4a commit/push.
+2. IN PROGRESS follow-up cadence/server-refresh tests (Python119/focused JVM PASS),
+   final source push and four exact-source workflows. Initial clients failed before
+   APK on TCP immediate-reset race regression; retain evidence, no signing yet.
 3. THEN renewed/validated material headroom and owner in-place65: ordinary foreground
    prewarm from retained valid old cache, not forced fetch; identity/security checks.
 4. THEN targeted65 delivery/download verification, tester fresh READY/ACK and one mobile
