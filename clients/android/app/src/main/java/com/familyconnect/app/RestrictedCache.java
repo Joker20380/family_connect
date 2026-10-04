@@ -58,8 +58,6 @@ final class RestrictedCache {
     }
     boolean attempt(long now)throws Exception{
         JsonObject value=state();if(integer(value.get("next_attempt"),0)>now)return false;
-        byte[] raw=usable();
-        if(raw!=null&&integer(parse(raw).getAsJsonObject().get("expires_at"),1)>now+300)return false;
         value.addProperty("next_attempt",now+300);save(value);return true;
     }
     void denied()throws Exception{JsonObject value=state();value.addProperty("denied",true);save(value);}

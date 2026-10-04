@@ -1,10 +1,19 @@
 # Release distribution / Выпуски
 
-**Beta64/code64: CI-accepted and signed locally04.10, not installed/published.** Source
+**Candidate65/code65:** retained-cache refresh correction, authorized scoped commit/push.
+Not yet CI-accepted, signed, installed or publicly distributed; no new checksum/link.
+Owner/tester/targeted public64 and default/catalog/invitation60 are unchanged.
+[Candidate checks and rollback](releases/2026-10-04-beta65-readiness-candidate.md).
+
+**Beta64/code64: owner/gateway acceptance PASS; targeted publication04.10 19:13UTC.** Source
 ce73ddf passed four workflows; artifact/provenance/offline signer verified. Signed APK
 SHA256 `b1a9f62116265b13a8482292175d3a685dca23ad3a5be0e4af5ef995a4d32d69`,49671035bytes.
-Owner63, tester last receipt62 and default/updater/invitation60 remain the baseline;
-matching new gateway is built only. No public64 download URL is advertised.
+Owner64 installed bytes/signer/identity verified; matching gateway f71b7e7b deployed.
+Native exhaustion→poll recovery, saved four-ID correlation and AUTH/cancel/privacy PASS.
+Actual material bound04.10 22:57:31UTC. Tester64 ACK confirmed19:21:49UTC;
+default/updater/invitation60 unchanged. [Separate beta64 APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta64.apk),
+downloaded SHA/signer/HTTPS200 verified19:14UTC. User authorized one Krasnodar trial
+after fresh current-directory fetch/native READY/ACK:64 still ACKs old cache, so this gate remains pending.
 [Exact gate and remaining work](releases/2026-10-04-beta64-paired-candidate.md).
 
 **Beta63/code63 source de7cacd: CI/signing/owner and targeted delivery PASS.**

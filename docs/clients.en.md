@@ -1,23 +1,35 @@
 # Client installation
 
-**Beta64/code64 passed CI and is signed locally, not installed or published.**
+**Beta65 is in preparation** with the retained-cache refresh fix; no new download
+or installation yet. Targeted64 below remains immutable. CI and ordinary owner
+foreground-refresh acceptance, without clearing data, precede testing.
+[Release65 gates](releases/2026-10-04-beta65-readiness-candidate.md).
+
+**Beta64/code64: [targeted APK for the authorized trial](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta64.apk).**
+Installed on owner Redmi; published19:13UTC, downloaded SHA/signer/HTTPS200 verified19:14UTC.
 APK SHA256 `b1a9f62116265b13a8482292175d3a685dca23ad3a5be0e4af5ef995a4d32d69`,49671035bytes;
-the original signer67a90d1b is verified. Physical paired owner/gateway acceptance with
-fresh valid materials is still required. Published links/checksums below are unchanged;
-there is no public64 download yet and no tester repeat is requested.
+installed bytes/original signer67a90d1b and identity preservation are verified. Matching
+gateway/native exhaustion→recovery, saved paired diagnostics, AUTH/cancel and privacy PASS.
+Effective material bound04.10 22:57:31UTC requires revalidation before later checks.
+Earlier APKs/checksums and default60 are unchanged. Update in place over Wi-Fi, never
+uninstall, clear data or reenroll. Verify64 and unchanged Support ID; open with VPN off.
+Before one mobile Auto attempt, the operator confirms **fresh current-directory
+fetch/native READY/ACK**, not an old cache re-ACK. Export JSON after failure before
+manual reconnection. Tester64 is confirmed by server ACK19:21:49UTC, but that ACK
+reuses old cache; fresh fetch is not confirmed and the mobile attempt remains gated.
 [Release preparation](releases/2026-10-04-beta64-paired-candidate.md).
 
-**Beta63/code63 is installed and checked on the owner Redmi.** CI/offline signing and
+**Previous targeted public version: beta63/code63.** Its earlier CI/offline signing and
 in-place identity preservation PASS. [Separate beta63 APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta63.apk)
 verified04.10 16:57UTC: HTTP200,49654651bytes, downloaded/installed SHA256
 `ce81216a84005880eef834dd5f576d0c43082b1c501767c7cf83522a765aebb8`;
 signer SHA256 `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
-Owner is already updated; any later authorized update must be in place, never uninstall,
-clear data or reenroll. Verify63 and unchanged Support ID.
+Owner is now on64; do not downgrade to63. Any later authorized update must be in place,
+never uninstall, clear data or reenroll. Verify the expected version and unchanged Support ID.
 Initial reconnect acceptance used an injected policy cause. Subsequent
 [genuine native exhaustion→poll→reconnect](releases/2026-10-04-beta63-native-exhaustion.md)
 also passed on unchanged63 under controlled RTP loss. The original mobile stall is not claimed fixed.
-Tester: keep the installed version/data and do not repeat the mobile test now.
+The no-repeat instruction belongs to the earlier63 checkpoint; use the targeted64 procedure above.
 Default/updater/invitation remain60. [Release gates](releases/2026-10-04-beta63-recovery-candidate.md).
 
 **Beta62/code62 is a verified targeted upgrade only for FC-YHQB-9VJN.**

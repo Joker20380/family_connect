@@ -91,6 +91,11 @@ existing `ControlIdentity` proof, no pre-existing Family TLS. `FriendsRestricted
 provides single-flight bounded prewarm; `RestrictedCache` validates/rejects replay
 and retains old state on failure; `RestrictedVault` commits one Keystore-encrypted
 AtomicFile. `FriendsReadiness` exposes only redacted production state.
+The04.10 local early-refresh patch keeps the persisted300s attempt cooldown but no
+longer suppresses foreground refresh merely because cached credentials are unexpired.
+`ReadinessRefreshTest` covers scheduled challenge/fetch/import/ACK from retained valid
+old state; native/Keystore/physical acceptance is a separate release gate.
+[Scope and rollout status](../releases/2026-10-04-readiness-early-refresh.md).
 `NativeRestricted.validateDelivery/beginReady` bridge to
 `carrier/wholedevice/provisioning.go`: root delegation/X509/CRL/BOOT-1 checks and
 in-memory TLS key from existing identity. `RestrictedTunnelEngine` uses that bundle

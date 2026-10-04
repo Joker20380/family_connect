@@ -2,19 +2,58 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Beta64 source/CI/offline signing DONE04.10; physical acceptance pending.**
+**Beta65 — authorized scoped commit/push and release pipeline04.10.**
+1. IN PROGRESS candidate65 version checks, documentation and scoped source commit/push.
+2. NEXT four exact-source CI workflows, accepted artifact verification and offline signing.
+3. THEN renewed/validated material headroom and owner in-place65: ordinary foreground
+   prewarm from retained valid old cache, not forced fetch; identity/security checks.
+4. THEN targeted65 delivery/download verification, tester fresh READY/ACK and one mobile
+   trial. Owner/tester/public64 and default/catalog/invitation60 unchanged for now.
+   [Release gates/rollback](releases/2026-10-04-beta65-readiness-candidate.md).
+
+**Early readiness refresh correction — current blocker04.10.**
+1. DONE reproduce long-valid retained-cache suppression (13 tests/5 failures on old code).
+2. DONE remove expiry suppression only; retain persisted300s cooldown, single-flight,
+   native/authority validation, atomic cache, anti-rollback and AUTH handling.
+3. DONE Android254/lint, standalone JVM171 and Python117 including Java HTTP and
+   native Go compatibility. Initial Java-PATH failure retained; corrected environment PASS.
+   Scheduled authenticated fetch/import/ACK regression is now in the CI source set.
+4. NEXT immutable successor/exact-source CI and offline signing, then owner upgrade
+   with **ordinary prewarm over retained valid old cache** and preservation/security gates.
+   Source commit/push authorization required; no release version changed in this patch.
+5. THEN targeted delivery/tester fresh current-directory READY/ACK and one mobile trial.
+   Current installed/public64 is unchanged. Do not replace its immutable binary.
+   [Patch and acceptance limits](releases/2026-10-04-readiness-early-refresh.md).
+
+**Beta64 source/CI/signing and paired owner/gateway acceptance DONE04.10.**
 1. DONE main/last release CI readback; same owner Redmi connected, beta64 URL404/no tag.
 2. DONE local version64/documentation, Android246/lint, Python52 and docs checks.
 3. DONE scoped commit/push ce73ddf, four exact-source CI workflows, downloaded artifact
    verification and offline signing: APK b1a9f621, matching gateway f71b7e7b. Readiness
    attempt1 failed; unchanged attempt2 PASS. Initial failure retained, not declared fixed.
-4. NEXT matching gateway/owner acceptance with renewed full material chain (old bound
-   17:30:19UTC elapsed), paired snapshots/privacy, cleanup/recovery and auth/revoke checks.
-   APK64 is signed locally only, gateway64 built only. Owner63/tester62/default60 stay
-   unchanged until verified gates; no tester repeat or public64 download yet.
+4. DONE in-place owner64/identity preservation, matching gateway f71b7e7b deployment,
+   credential renewal and loaded TLS validation; issuer4/admission/grants unchanged.
+   Actual minimum bound04.10 22:57:31UTC; client/directory22:59:29 is not the full bound.
+5. DONE genuine native8-retry exhaustion→poll NETWORK→new session/HTTPS200; saved
+   ring/incident and paired original32/55, restored28/58 events, four-ID lookup/privacy,
+   gap-free server cleanup. Local AUTH/cancel, AWG/TCP, export/restart/Support PASS.
+   Private test APK removed. First stale-directory setup failure retained; synchronized
+   authenticated refresh passed. No injected policy cause, no real server revocation.
+6. DONE targeted64 publication19:13UTC/downloaded SHA/signer/HTTPS20019:14UTC.
+   DONE tester64 authenticated ACK19:21:49UTC/same Support; readback19:23UTC.
+   NEXT safe early-refresh fix/acceptance or verified ordinary current-directory
+   fetch/native READY/ACK, then authorized single Krasnodar mobile attempt/export.
+   No fragment-ID match in these asynchronous samples: do not localize field loss from
+   it. Enforce RU/NL generation equality before client refresh after reload; automatic
+   gateway-leaf renewal remains absent. Revalidate full chain before later work.
+   Owner64/tester64/default/catalog/invitation60. Old tester directory
+   expires21:32:03UTC; normal cache refresh waits until<=300s remaining. Cached READY
+   or its re-ACK by64 does not meet the fresh-fetch gate: latest fetch still17:39:16UTC.
+   Ordinary threshold21:27:03UTC/05.10 00:27:03 Moscow is not guaranteed readiness.
+   No mobile attempt yet; do not reset identity/security floors or device clock.
    [Candidate checkpoint](releases/2026-10-04-beta64-paired-candidate.md).
 
-**Paired delivery diagnostics source-only DONE04.10; runtime gate pending.**
+**Paired delivery diagnostics implementation checkpoint (runtime gate now passed above).**
 1. DONE bounded flow/ACK/SACK, queued/written/CRC-complete/oldest-partial fragment
    snapshots on both endpoints; Android projection and paired offline comparison.
 2. DONE full Go suite, race for six affected packages, Android246/lint, Python52;

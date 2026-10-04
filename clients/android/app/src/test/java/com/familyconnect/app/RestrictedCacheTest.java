@@ -7,6 +7,54 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class RestrictedCacheTest {
+    @Test public void validLongLivedCacheStillRefreshesOnPersistentCadence()throws Exception{
+        Memory storage=new Memory();RestrictedCache original=cache(storage,1000);
+        assertTrue(original.attempt(1000));
+        byte[] saved=response(1000,15400,5,7,2,"retired-seed");original.accept(saved);
+        RestrictedCache restarted=cache(storage,1200);
+        assertFalse(restarted.attempt(1299));assertTrue(restarted.attempt(1300));
+        assertArrayEquals(saved,restarted.usable());
+        assertFalse(cache(storage,1301).attempt(1301));
+        assertFalse(cache(storage,1599).attempt(1599));
+        assertTrue(cache(storage,1600).attempt(1600));
+    }
+    @Test public void earlyRefreshFailurePreservesCacheAndAllReplayFloors()throws Exception{
+        Memory storage=new Memory();RestrictedCache original=cache(storage,1000);
+        byte[] saved=response(1000,15400,5,7,2,"retired-seed");original.accept(saved);
+        assertTrue(original.attempt(1300));
+        RestrictedCache restarted=cache(storage,1400);
+        assertArrayEquals(saved,restarted.usable());assertFalse(restarted.attempt(1400));
+        rejected(restarted,response(1300,15700,4,7,2,"revision-rollback"));
+        rejected(restarted,response(1300,15700,5,6,2,"crl-rollback"));
+        rejected(restarted,response(1300,15700,5,7,1,"issuer-rollback"));
+        rejected(restarted,response(999,15700,5,7,2,"time-rollback"));
+        rejected(restarted,response(1000,15400,5,7,2,"same-time-conflict"));
+        assertArrayEquals(saved,restarted.usable());assertTrue(restarted.attempt(1600));
+    }
+    @Test public void earlyRefreshCannotResurrectDeniedCache()throws Exception{
+        Memory storage=new Memory();RestrictedCache original=cache(storage,1000);
+        byte[] saved=response(1000,15400,5,7,2,"seed");original.accept(saved);
+        assertTrue(original.attempt(1300));original.denied();
+        RestrictedCache restarted=cache(storage,1400);
+        assertNull(restarted.usable());assertFalse(restarted.attempt(1400));
+        assertTrue(restarted.attempt(1600));rejected(restarted,saved);
+        assertNull(cache(storage,1600).usable());
+    }
+    @Test public void failedCooldownWriteCannotAuthorizeAnAttempt()throws Exception{
+        Memory storage=new Memory();RestrictedCache original=cache(storage,1000);
+        byte[] saved=response(1000,15400,5,7,2,"seed");original.accept(saved);
+        storage.fail=true;
+        try{original.attempt(1300);fail("attempt without durable cooldown");}
+        catch(java.io.IOException expected){}
+        assertArrayEquals(saved,cache(storage,1300).usable());
+    }
+    @Test public void invalidCacheRefreshDoesNotBypassValidationOrCooldown()throws Exception{
+        Memory storage=new Memory();byte[] saved=response(1000,15400,5,7,2,"seed");
+        cache(storage,1000).accept(saved);
+        RestrictedCache invalid=new RestrictedCache(storage,raw->false);
+        assertTrue(invalid.attempt(1300));assertNull(invalid.usable());
+        assertFalse(invalid.attempt(1301));rejected(invalid,saved);assertNull(invalid.usable());
+    }
     @Test public void renewedAuthorityFloorsAndConflictingContent()throws Exception{
         Memory storage=new Memory();RestrictedCache cache=cache(storage,1000);
         cache.accept(response(1000,2000,1,1,1,"initial"));
@@ -65,7 +113,7 @@ public class RestrictedCacheTest {
         byte[] response=response(1000,4600,1,1,1,"https://seed-private.invalid");cache.accept(response);
         assertArrayEquals(response,cache(storage,1000).usable());assertTrue(cache.summary().startsWith("READY"));
         assertFalse(cache.summary().contains("https"));assertFalse(cache.summary().contains("seed-private"));
-        assertFalse(cache.attempt(1000));
+        assertTrue(cache.attempt(1000));assertFalse(cache(storage,1001).attempt(1001));
     }
     @Test public void expiredAndCooldownSurviveRestart()throws Exception{
         Memory storage=new Memory();RestrictedCache cache=cache(storage,1000);

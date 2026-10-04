@@ -1,6 +1,33 @@
 # Текущее состояние / Current state
 
-## Beta64 — exact-source CI / artifact / offline signing PASS04.10
+## Beta65 — authorized source/CI release preparation04.10
+
+Candidate0.1.18-beta65/code65 contains the retained-cache early-refresh correction.
+User authorized scoped commit/push and next release pipeline. Version checks/CI,
+artifact verification/offline signing and physical **ordinary prewarm** acceptance
+are required before delivery. No new APK installed/published: owner64/tester64/public64,
+default/catalog/invitation60 and gateway f71b7e7b remain the last verified live state.
+No tester repeat yet. [Candidate and gates](releases/2026-10-04-beta65-readiness-candidate.md).
+
+## Early readiness refresh — local correction04.10, release pending
+
+Historical local-patch checkpoint; authorized65 release preparation is now above.
+
+User-authorized stale-cache fix removes the expiry-based suppression from the existing
+persisted300s attempt gate. Valid four-hour credentials no longer prevent an ordinary
+foreground refresh; cache/identity/security floors remain intact. Red regression13 tests/
+5 failures reproduced the old behavior. Android254 unit/lint (0 errors/37 warnings),
+standalone JVM171 and Python117 (including Java HTTP and four native Go cases) PASS.
+First Python run116 PASS/1 environment failure (`java` absent from PATH); explicit
+local JDK PATH rerun117 PASS, no assertion/source relaxation.
+No APK/version/sign/install/server/publication change: owner64/tester64/targeted public64,
+default/catalog/invitation60 and gateway f71b7e7b remain the last verified state.
+NEXT scoped commit/push authorization, immutable successor/exact-source CI, then physical **ordinary
+prewarm with retained valid old cache**, not forced fetch. Fresh tester import/mobile
+attempt remains pending; no request to reset data or repeat the mobile test now.
+[Change, regression scope and delivery gates](releases/2026-10-04-readiness-early-refresh.md).
+
+## Beta64 — owner / matching gateway / paired acceptance PASS04.10
 
 User-authorized source `ce73ddf3e0dfc25546850b083b7dae4680720397` pushed to main;
 `0.1.18-beta64`/code64. All four workflows PASS: phase0, Linux control, clients and
@@ -10,16 +37,38 @@ PASS/4 optional Go checks skipped; Android246/lint and prior Python52 PASS.
 Accepted artifact11311153048 downloaded with matching ZIP SHA; ARM64 native/gateway
 provenance, non-debuggable,16KiB alignment/privacy and offline original-signer checks PASS.
 Signed APK SHA256 `b1a9f62116265b13a8482292175d3a685dca23ad3a5be0e4af5ef995a4d32d69`,
-49671035bytes. Matching CI gateway f71b7e7b is built, **not deployed**.
-**APK signed locally only, not installed or publicly distributed.** Last verified
-owner63/tester62/default/catalog/invitation60 and live gateway6773423c remain baseline.
-No live mutation/material renewal. Prior bound17:30:19UTC has elapsed. NEXT fresh full
-material chain, owner baseline/preservation, matching gateway and paired owner acceptance.
+49671035bytes. **Installed in place on owner Redmi64**, pulled installed bytes and
+original signer verified; UID/inode/identity/enrollment/activation/Support preserved.
+Matching CI gateway f71b7e7b **deployed18:59UTC**; previous6773423c retained for rollback.
+Gateway credential renewed, actual loaded TLS chain/hostname/leaf verified, issuer4 and
+two-device admission/grant revisions unchanged. Effective bound **04.10 22:57:31UTC**,
+not the later directory/client expiry22:59:29UTC; no indefinite or automatic renewal.
+Authenticated native READY/ACK, AWG/TCP HTTPS200, genuine8-retry exhaustion→production
+poll NETWORK→old cleanup/new BOOT-1/session/HTTPS200 PASS; one restoration observed.
+Saved ring/incident45480bytes: original32/55 and restored28/58 client/server events,
+all four lookups, no server gaps, bounded/private delivery fields and cleanup PASS.
+Local AUTH startup/connected-denial and cancellation, diagnostic sharing/privacy,
+Support/restart PASS; private test APK/filter/library removed. No real server revocation.
+First attempt used an older still-valid RU directory after NL reload and stopped before
+session/fault injection; fresh synchronized import passed. Initial failure retained.
+**Targeted64 published19:13UTC, downloaded SHA/signer/HTTPS200 verified19:14UTC**;
+tester64 confirmed by authenticated ACK19:21:49UTC, default/catalog/invitation60 unchanged.
+Readback19:23UTC: same Support/admission, but fetch remains17:39:16UTC and old expiry;
+the64 READY is a re-ACK of the older cache, not a new import. User authorized one
+Krasnodar trial. NEXT safe early-refresh correction/acceptance or verified ordinary
+current-directory fetch/native READY/ACK, then one mobile attempt/export. Cached READY is insufficient:
+old tester directory expires21:32:03UTC; normal refresh waits until<=300s remaining.
+Tester upgrade is confirmed; fresh fetch and mobile result are not. Ordinary refresh
+threshold21:27:03UTC (05.10 00:27:03 Moscow) is not a guaranteed fetch time. Gateway
+remains active/f71b7e7b/NRestarts0, leaf valid22:57:31UTC. Do not clear data, change the
+clock or bypass validation. No runtime changes in this readback; field loss remains open.
 Initial artifact transfer403 included a fresh-link CDN1010; standard HTTP User-Agent
-resolved it, bytes then verified. No tester repeat, default promotion or field-fix claim.
+resolved it, bytes then verified. No default promotion or field-fix claim.
 [Candidate, release gates and rollback](releases/2026-10-04-beta64-paired-candidate.md).
 
 ## Paired delivery diagnostics — source-only PASS04.10
+
+Historical implementation checkpoint; beta64 runtime acceptance now supersedes it above.
 
 Local uncommitted patch above de7cacd adds bounded DATA/ACK/SACK and fragment snapshots
 on client/gateway, Android allowlist/export and offline paired comparison. Last8 detail

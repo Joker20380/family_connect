@@ -1,13 +1,24 @@
 # Documentation
 
+[Beta65 retained-cache refresh candidate04.10](releases/2026-10-04-beta65-readiness-candidate.md):
+version65 prepared with authorized scoped commit/push; CI/signing/ordinary physical
+prewarm gates pending. Installed/public64 and default60 remain unchanged.
+
+[Early readiness refresh correction04.10](releases/2026-10-04-readiness-early-refresh.md):
+local source fix for valid old-directory cache blocking refresh; persisted300s cadence
+and validation preserved. Not yet in a new APK; ordinary physical prewarm gate pending.
+
 [Beta64 paired-diagnostics candidate04.10](releases/2026-10-04-beta64-paired-candidate.md):
 source ce73ddf pushed, all four CI workflows and downloaded artifact/offline signing PASS.
-APK64 signed locally only; no installation/gateway deployment. Renew expired materials
-and complete paired owner acceptance before distribution.
+Owner64 installed in place and matching gateway deployed; native exhaustion→poll recovery,
+real saved diagnostics/four-ID paired correlation and AUTH/cancel/privacy PASS. Effective
+material bound04.10 22:57:31UTC. Separate APK64 published/verified19:14UTC; default60
+unchanged. One Krasnodar trial authorized after tester update and fresh current-directory
+fetch/native READY/ACK; cached READY is insufficient, tester completion still pending.
 
 [Paired DATA/ACK/fragment diagnostics04.10](releases/2026-10-04-paired-delivery-diagnostics.md):
 source-only implementation and local tests PASS; bounded endpoint samples, Android
-export and offline comparison. Not yet installed/deployed; field DATA loss remains open.
+export and offline comparison. Subsequently accepted on owner64/gateway above; field DATA loss remains open.
 
 [Beta63 genuine native exhaustion04.10](releases/2026-10-04-beta63-native-exhaustion.md):
 real8-retry native failure→production poll→new session/HTTPS PASS; process-local RTP
