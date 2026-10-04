@@ -1,8 +1,10 @@
 # Release distribution / Выпуски
 
-**Candidate65/code65:** retained-cache refresh correction, authorized scoped commit/push.
-Not yet CI-accepted, signed, installed or publicly distributed; no new checksum/link.
-Owner/tester/targeted public64 and default/catalog/invitation60 are unchanged.
+**Candidate65/code65:** source86fa1ba, four exact-source CI PASS, verified/offline signed,
+installed in place on owner Redmi. Ordinary retained-cache refresh/native READY/ACK PASS.
+SHA256 `dfbdb5352b8c707fb77ff3d7392d8217f898aa8e999b6a0f52fad8172185778e`,49671035bytes.
+Publication held: recovery attempted but bootstrap exchange failed before descriptor.
+No public65 URL; tester/targeted public64 and default/catalog/invitation60 unchanged.
 [Candidate checks and rollback](releases/2026-10-04-beta65-readiness-candidate.md).
 
 **Beta64/code64: owner/gateway acceptance PASS; targeted publication04.10 19:13UTC.** Source

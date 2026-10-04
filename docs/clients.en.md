@@ -1,8 +1,11 @@
 # Client installation
 
-**Beta65 is in preparation** with the retained-cache refresh fix; no new download
-or installation yet. Targeted64 below remains immutable. CI and ordinary owner
-foreground-refresh acceptance, without clearing data, precede testing.
+**Beta65 is installed only on the owner device; publication is held.** Four CI gates,
+original signing and ordinary retained-cache refresh on Redmi passed without a reset.
+A subsequent restricted reconnect failed before descriptor issuance; that gate is open.
+SHA25665 `dfbdb5352b8c707fb77ff3d7392d8217f898aa8e999b6a0f52fad8172185778e`.
+No new public link: the tester stays on64 and should not repeat the mobile trial yet.
+Default download/catalog/invitation60 are unchanged; identity and Support are preserved.
 [Release65 gates](releases/2026-10-04-beta65-readiness-candidate.md).
 
 **Beta64/code64: [targeted APK for the authorized trial](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta64.apk).**

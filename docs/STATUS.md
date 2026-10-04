@@ -1,21 +1,32 @@
 # Текущее состояние / Current state
 
-## Beta65 — authorized source/CI release preparation04.10
+## Beta65 — cache refresh accepted; publication held04.10
 
-Candidate0.1.18-beta65/code65 contains the retained-cache early-refresh correction.
-Initial source2fd6b4a pushed; readiness/phase0 PASS, clients failed before APK on
-existing TCP immediate-reset race regression (`OPEN: connect_failed`). No signing.
-Follow-up cache cadence/server refresh/revocation regressions: Python119 and focused
-JVM PASS; final exact-source CI remains required, no failed gate waived.
-User authorized scoped commit/push and next release pipeline. Version checks/CI,
-artifact verification/offline signing and physical **ordinary prewarm** acceptance
-are required before delivery. No new APK installed/published: owner64/tester64/public64,
-default/catalog/invitation60 and gateway f71b7e7b remain the last verified live state.
-No tester repeat yet. [Candidate and gates](releases/2026-10-04-beta65-readiness-candidate.md).
+Source86fa1bae8b97ff34d3e8cbd5b3cfe923cb7d71a6 pushed; all four exact-source
+workflows PASS. Artifact11313732252 verified/offline signed with the original key.
+APK65 SHA256 `dfbdb5352b8c707fb77ff3d7392d8217f898aa8e999b6a0f52fad8172185778e`,
+49671035bytes, installed in place on owner Redmi; pulled bytes/signer and UID/inode/
+identity/enrollment/Support preserved. Private test APK removed.
+**Ordinary Activity launch refreshed retained valid cache** (9576s remaining), no
+forced fetch or clearing; native import/READY/new ACK PASS, server fetch20:19:56UTC.
+AWG/TCP, enrollment, local AUTH startup/connected denial, cancellation, export/privacy
+and restart PASS. BUT policy-loss recovery20:21UTC failed after first restricted
+HTTPS200: NETWORK→old cleanup→new attempt→BOOTSTRAP_UNAVAILABLE. Server confirms
+bootstrap family auth then exchange failure, before a new descriptor; exact rejection
+cause is not exposed. `device_busy` is only a code-path hypothesis, not a proven cause.
+No repeat-until-green or publication. Saved failure/client/server evidence retained.
+Initial source2fd6b4a CI also failed TCP immediate-reset regression; local30 repeats
+and final-source CI PASS without transport changes, not a proven flake fix.
+Python119/Android254/lint/JVM171 and docs475/2891 PASS. Tester/public64 and
+default/catalog/invitation60 unchanged; gateway f71b7e7b unchanged, loaded leaf bound
+04.10 22:57:31UTC. Final readback20:30UTC confirms owner65 ordinary fetch20:27:45/
+ACK20:27:52, tester64 unchanged. NEXT diagnose bounded bootstrap exchange/admission rejection and
+pass owner recovery gate before targeted65 delivery/tester update/mobile attempt.
+[Exact receipts, remaining gates and rollback](releases/2026-10-04-beta65-readiness-candidate.md).
 
 ## Early readiness refresh — local correction04.10, release pending
 
-Historical local-patch checkpoint; authorized65 release preparation is now above.
+Historical local-patch checkpoint; installed65 cache acceptance now supersedes it above.
 
 User-authorized stale-cache fix removes the expiry-based suppression from the existing
 persisted300s attempt gate. Valid four-hour credentials no longer prevent an ordinary

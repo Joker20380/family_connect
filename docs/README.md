@@ -1,12 +1,12 @@
 # Documentation
 
 [Beta65 retained-cache refresh candidate04.10](releases/2026-10-04-beta65-readiness-candidate.md):
-version65 prepared with authorized scoped commit/push; CI/signing/ordinary physical
-prewarm gates pending. Installed/public64 and default60 remain unchanged.
+source86fa1ba/four CI/signing/in-place owner65 and ordinary physical refresh PASS.
+Publication held on bootstrap recovery failure; tester/public64 and default60 unchanged.
 
 [Early readiness refresh correction04.10](releases/2026-10-04-readiness-early-refresh.md):
-local source fix for valid old-directory cache blocking refresh; persisted300s cadence
-and validation preserved. Not yet in a new APK; ordinary physical prewarm gate pending.
+valid old-directory cache refresh correction; persisted300s cadence and validation
+preserved. Installed65 ordinary prewarm PASS; separate bootstrap recovery gate remains.
 
 [Beta64 paired-diagnostics candidate04.10](releases/2026-10-04-beta64-paired-candidate.md):
 source ce73ddf pushed, all four CI workflows and downloaded artifact/offline signing PASS.

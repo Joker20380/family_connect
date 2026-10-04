@@ -2,18 +2,23 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Beta65 — authorized scoped commit/push and release pipeline04.10.**
-1. DONE candidate65 version checks and initial scoped source2fd6b4a commit/push.
-2. IN PROGRESS follow-up cadence/server-refresh tests (Python119/focused JVM PASS),
-   final source push and four exact-source workflows. Initial clients failed before
-   APK on TCP immediate-reset race regression; retain evidence, no signing yet.
-3. THEN renewed/validated material headroom and owner in-place65: ordinary foreground
-   prewarm from retained valid old cache, not forced fetch; identity/security checks.
-4. THEN targeted65 delivery/download verification, tester fresh READY/ACK and one mobile
-   trial. Owner/tester/public64 and default/catalog/invitation60 unchanged for now.
+**Beta65 — ordinary cache refresh PASS; bootstrap recovery gate failed04.10.**
+1. DONE scoped source86fa1ba push, four exact-source CI PASS, artifact verification,
+   offline original-signer signing; Python119/Android254/lint/JVM171 and docs PASS.
+2. DONE owner64→65 preserving data, ordinary foreground fetch/native READY/ACK with
+   valid retained cache (9576s remaining), no forced fetch. AWG/TCP/auth/cancel/privacy
+   and final installed-byte/identity checks PASS; private test APK removed.
+3. NEXT diagnose saved20:21UTC recovery failure: old cleanup/new attempt occurred,
+   bootstrap family auth succeeded, exchange failed before descriptor. Exact rejection
+   unknown; inspect/instrument bounded admission reason without relaxing security.
+   No timeout increase, blind rerun, publication or claim that field DATA loss is fixed.
+4. THEN pass owner recovery/security gate and revalidate actual credential headroom,
+   targeted65 delivery/download verification, tester fresh READY/ACK and one mobile
+   trial. Owner65, tester/public64, default/catalog/invitation60; gateway f71b7e7b
+   unchanged, current loaded leaf bound04.10 22:57:31UTC. Publication is held.
    [Release gates/rollback](releases/2026-10-04-beta65-readiness-candidate.md).
 
-**Early readiness refresh correction — current blocker04.10.**
+**Early readiness refresh correction — historical source checkpoint04.10.**
 1. DONE reproduce long-valid retained-cache suppression (13 tests/5 failures on old code).
 2. DONE remove expiry suppression only; retain persisted300s cooldown, single-flight,
    native/authority validation, atomic cache, anti-rollback and AUTH handling.
