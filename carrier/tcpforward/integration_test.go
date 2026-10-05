@@ -226,9 +226,17 @@ func TestAuthenticatedImmediateResetPreservesOpen(test *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	client, server := authenticatedPair(test, ctx)
-	port := startFixture(test, func(connection *net.TCPConn) { connection.SetLinger(0) })
+	port, dial := startResetFixture(test, "")
+	policy, err := gatewayPolicy(Policy{TestOnlyLoopbackPort: port})
+	if err != nil {
+		test.Fatal(err)
+	}
+	if err := server.ClaimTCP(true); err != nil {
+		test.Fatal(err)
+	}
+	metrics := &Metrics{}
 	done := make(chan error, 1)
-	go func() { done <- Serve(ctx, server, Policy{TestOnlyLoopbackPort: port}, nil) }()
+	go func() { done <- serve(ctx, server, policy, metrics, net.DefaultResolver, dial) }()
 	stream, err := OpenTCP(ctx, client, OpenRequest{Host: "127.0.0.1", Port: port})
 	if err != nil {
 		test.Fatalf("OPEN_OK lost during reset: %v", err)
@@ -239,6 +247,9 @@ func TestAuthenticatedImmediateResetPreservesOpen(test *testing.T) {
 	}
 	stream.Close()
 	completed(test, done, false)
+	if stats := metrics.Snapshot(); stats.OpenOK != 1 || stats.OpenErrors != 0 || stats.ActiveSockets != 0 {
+		test.Fatal("OPEN or socket cleanup invariant failed", stats)
+	}
 }
 
 type tlsTestStream struct{ *Stream }

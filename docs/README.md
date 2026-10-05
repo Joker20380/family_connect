@@ -2,7 +2,10 @@
 
 [Bootstrap cleanup race correction05.10](releases/2026-10-05-bootstrap-cleanup-race.md):
 source-only bounded cleanup wait and safe rejection diagnostics; fresh-fixture50
-repeats/full Go race PASS. No deployment; renew expired material before owner gate.
+repeats/full local Go race PASS. CI blocked twice by existing TCP reset tests,
+reproduced on prior accepted source. Authorized fixture-only correction passes1500
+repeats per reset test; full local recheck blocked by disk quota. No deployment;
+owner/Krasnodar gates held.
 
 [Beta65 retained-cache refresh candidate04.10](releases/2026-10-04-beta65-readiness-candidate.md):
 source86fa1ba/four CI/signing/in-place owner65 and ordinary physical refresh PASS.

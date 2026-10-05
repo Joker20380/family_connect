@@ -2,7 +2,23 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Bootstrap cleanup race — source3ba5270 pushed05.10; CI/deployment pending.**
+**TCP reset fixture stabilization — scoped source delivery authorized05.10.**
+1. DONE synchronize successful TCP dial → target RST/close → return socket to
+   unchanged forwarding code, before server OPEN_OK. No post-OPEN sleep or weaker
+   assertion; keep real Family TLS, policy and ClaimTCP in authenticated case.
+2. DONE race stress500 repeats per scheduler1/2/4 (1500 per reset test) PASS.
+   Full fresh-fixture race suite BLOCKED by disk quota: parallel/serial runs passed
+   tcpforward but could not link telemost-binary; approved build-cache cleanup did
+   not resolve quota and clean-cache build failed before tests. No full PASS claim.
+3. IN PROGRESS scoped test-source commit/push authorized05.10, then exact-source
+   CI/gateway artifact verification.
+   Existing Clients3ba5270 attempts1/2 remain failed; no third unchanged retry.
+4. THEN fresh actual gateway credentials, verified binary deployment and owner65
+   recovery/security gates before targeted65 delivery/tester READY/Krasnodar trial.
+   No production/version/installed/public state change in this local test-only patch.
+
+**Bootstrap cleanup race — source3ba5270; CI blocked by baseline reset tests05.10.**
+Historical blocker checkpoint; fixture correction is tracked above.
 1. DONE correlate67 gap-free old-session server events: server cleanup18.482s after
    local cleanup and10.386s after next bootstrap rejection. Original rejection code
    was not logged; active-slot `device_busy` mechanism reproduced by a red test.
@@ -13,9 +29,12 @@
    Python94 PASS. Preserve deadline-race and overnight expired-fixture failures in
    the report; no timer increase, revocation bypass or original DATA-stall fix claim.
 4. DONE scoped commit/push3ba5270; source guard1761/0 blocked, committed docs476/2883.
-   IN PROGRESS Clients37284062212 and phase037284062182 at08:31UTC; other workflows
-   do not trigger for this path set. Exact-source CI/artifact verification pending,
-   then matching gateway deployment with fresh credentials and actual
+   phase037284062182 PASS; Clients37284062212 FAIL twice on two existing TCP reset
+   tests before gateway build. Bootstrap/room-broker tests PASS in both attempts.
+   GOMAXPROCS=1/200 reproduced failures on candidate and prior86fa1ba; no TCP source
+   edits or third rerun. NEXT separately scoped fixture synchronization preserving
+   OPEN_OK/reset assertions, then exact-source CI/artifact acceptance. Other workflows
+   do not trigger for this path set. Only then matching gateway deployment with actual
    loaded-chain/RU-NL generation verification. Last verified leaf expired04.10
    22:57:31UTC. No production changes or new APK made by this local patch.
 5. THEN owner65 recovery/security/ordinary-VPN acceptance before targeted immutable65

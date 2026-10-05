@@ -1,6 +1,50 @@
 # Текущее состояние / Current state
 
-## Bootstrap cleanup race — source pushed05.10, CI pending, not deployed
+## TCP reset fixtures — source delivery authorized05.10, CI pending
+
+Only `carrier/tcpforward/forward_test.go` and `integration_test.go` changed in code.
+The target now waits for successful real TCP dial, then sets zero linger and closes;
+the test dialer waits for that close before returning the socket to the unchanged
+forwarder. Reset therefore still precedes server OPEN_OK processing, rather than
+being postponed until client OPEN_OK. No sleeps, timeout increases or accepted
+connect failures. Authenticated case retains real Family TLS, gateway policy and
+ClaimTCP admission through the existing internal dialer seam. Both tests require
+OPEN success, exact ErrReset and zero remaining sockets; OPEN_OK=1/OpenErrors=0
+is also checked. Production Go files and exported API unchanged.
+Focused race stress PASS:500 repeats at each of GOMAXPROCS1/2/4,1500 per reset test,
+49.755s. Full local race acceptance BLOCKED: parallel/serial runs passed tcpforward
+and other test packages but hit linker `disk quota exceeded` on cmd/telemost-binary.
+Fresh isolated TLS fixtures generated; approved rebuildable-cache cleanup did not
+resolve the quota. Clean-cache full run failed compiling runtime/dependencies before
+tests; no full-suite PASS claim. Docs476/2898, gofmt and diff checks PASS.
+User authorized scoped commit/push and full documentation05.10; delivery in progress.
+No new accepted CI, APK signing/installation, server renewal/deployment or public
+delivery. Existing3ba5270 CI
+failure remains a gate; owner/Krasnodar testing still held.
+[Correction and exact checks](releases/2026-10-05-bootstrap-cleanup-race.md).
+
+## Bootstrap cleanup race — CI blocked by existing TCP reset tests05.10
+
+Historical blocker checkpoint; authorized local fixture correction is above.
+
+Source3ba5270: phase037284062182 PASS; Clients37284062212 attempts1/2 FAIL at
+`Restricted carrier race regression`, before gateway/release APK construction.
+Attempt1: `TestAuthenticatedImmediateResetPreservesOpen`; one unchanged job rerun
+then failed `TestImmediateCloseResetCancellation/reset`. Both return TCP OPEN
+`connect_failed`; bootstrap/room-broker tests PASS in both runs. No third CI rerun.
+Default local authenticated test200 repeats PASS, but GOMAXPROCS=1/200 reproduces
+both failures on3ba5270 AND accepted baseline86fa1ba (7/9 failed test cases).
+Unchanged TCP fixture immediately closes with RST and can race connection completion;
+this does not demonstrate lost OPEN_OK or a bootstrap regression. TCP/test source
+was not changed. Preserve both checksum-verified diagnostic ZIPs and local logs in
+`state-client-build/bootstrap-cleanup-ci/`. NEXT separately scope stabilization of
+the two reset fixtures while preserving OPEN_OK/reset assertions, then exact-source
+CI/artifact acceptance. Do not skip assertions or rerun until green. No gateway,
+credential, APK, device, public delivery or enrollment mutation. Last verified leaf
+bound04.10 22:57:31UTC remains expired; owner acceptance/Krasnodar trial still held.
+[Failure receipts and pending gates](releases/2026-10-05-bootstrap-cleanup-race.md).
+
+### Source-delivery checkpoint (historical08:31UTC)
 
 Authorized scoped source `3ba52709253dba05a780aaa06d858a1a51f4ca5d` pushed to main.
 At05.10 08:31UTC exact-source Clients37284062212 and phase037284062182 are running,

@@ -90,6 +90,11 @@ func startFixture(test *testing.T, handle func(*net.TCPConn)) int {
 
 func startGateway(test *testing.T, port int) (*Stream, *Metrics, <-chan error, context.CancelFunc) {
 	test.Helper()
+	return startGatewayWithDialer(test, port, tcpDial)
+}
+
+func startGatewayWithDialer(test *testing.T, port int, dial dialer) (*Stream, *Metrics, <-chan error, context.CancelFunc) {
+	test.Helper()
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	test.Cleanup(cancel)
 	client, gateway := pipePair()
@@ -97,7 +102,7 @@ func startGateway(test *testing.T, port int) (*Stream, *Metrics, <-chan error, c
 	metrics := &Metrics{}
 	done := make(chan error, 1)
 	go func() {
-		done <- serve(ctx, gateway, Policy{TestOnlyLoopbackPort: port}, metrics, net.DefaultResolver, tcpDial)
+		done <- serve(ctx, gateway, Policy{TestOnlyLoopbackPort: port}, metrics, net.DefaultResolver, dial)
 	}()
 	stream, err := openTCP(ctx, client, OpenRequest{Host: "127.0.0.1", Port: port})
 	if err != nil {
@@ -113,6 +118,50 @@ func tcpDial(ctx context.Context, network, address string) (socket, error) {
 		return nil, err
 	}
 	return connection.(*net.TCPConn), nil
+}
+
+func startResetFixture(test *testing.T, prefix string) (int, dialer) {
+	test.Helper()
+	ctx, cancel := context.WithCancel(context.Background())
+	connected := make(chan struct{})
+	reset := make(chan error, 1)
+	port := startFixture(test, func(connection *net.TCPConn) {
+		select {
+		case <-connected:
+		case <-ctx.Done():
+			return
+		}
+		if prefix != "" {
+			if _, err := io.WriteString(connection, prefix); err != nil {
+				reset <- err
+				return
+			}
+		}
+		if err := connection.SetLinger(0); err != nil {
+			reset <- err
+			return
+		}
+		reset <- connection.Close()
+	})
+	test.Cleanup(cancel)
+	return port, func(ctx context.Context, network, address string) (socket, error) {
+		connection, err := tcpDial(ctx, network, address)
+		if err != nil {
+			return nil, err
+		}
+		close(connected)
+		select {
+		case err := <-reset:
+			if err == nil {
+				return connection, nil
+			}
+			connection.Close()
+			return nil, err
+		case <-ctx.Done():
+			connection.Close()
+			return nil, ctx.Err()
+		}
+	}
 }
 
 func completed(test *testing.T, done <-chan error, clean bool) {
@@ -221,18 +270,18 @@ func TestLocalHalfCloseResponseAfterEOF(test *testing.T) {
 func TestImmediateCloseResetCancellation(test *testing.T) {
 	for _, mode := range []string{"eof", "reset", "cancel", "session_close", "client_reset"} {
 		test.Run(mode, func(test *testing.T) {
-			port := startFixture(test, func(connection *net.TCPConn) {
-				if mode == "eof" {
-					return
-				}
-				if mode == "reset" {
-					connection.Write([]byte("prefix"))
-					connection.SetLinger(0)
-					return
-				}
-				io.Copy(io.Discard, connection)
-			})
-			stream, metrics, done, cancel := startGateway(test, port)
+			var port int
+			dial := dialer(tcpDial)
+			if mode == "reset" {
+				port, dial = startResetFixture(test, "prefix")
+			} else {
+				port = startFixture(test, func(connection *net.TCPConn) {
+					if mode != "eof" {
+						io.Copy(io.Discard, connection)
+					}
+				})
+			}
+			stream, metrics, done, cancel := startGatewayWithDialer(test, port, dial)
 			switch mode {
 			case "cancel":
 				cancel()
@@ -248,12 +297,17 @@ func TestImmediateCloseResetCancellation(test *testing.T) {
 				}
 				stream.CloseWrite()
 				stream.Close()
+			} else if mode == "reset" && err != ErrReset {
+				test.Fatalf("RST became another terminal result: %v", err)
 			} else if err == nil {
 				test.Fatal("failure converted to EOF")
 			}
 			completed(test, done, mode == "eof")
 			if metrics.Snapshot().ActiveSockets != 0 {
 				test.Fatal("socket leak")
+			}
+			if stats := metrics.Snapshot(); stats.OpenOK != 1 || stats.OpenErrors != 0 {
+				test.Fatal("expected exactly one successful OPEN", stats)
 			}
 		})
 	}
