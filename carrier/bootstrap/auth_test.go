@@ -2,6 +2,9 @@ package bootstrap
 
 import (
 	"context"
+	"crypto/ed25519"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -44,7 +47,7 @@ func TestProductIdentityOverBootstrapCarrier(test *testing.T) {
 		test.Run(name, func(test *testing.T) {
 			ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 			defer cancel()
-			var calls, admissions atomic.Int32
+			var calls, admissions, failures atomic.Int32
 			broker, _ := testBroker(test, &calls, nil, "")
 			client, server := pair()
 			finished := make(chan error, 1)
@@ -54,7 +57,7 @@ func TestProductIdentityOverBootstrapCarrier(test *testing.T) {
 						if event == "bootstrap_family_auth" {
 							admissions.Add(1)
 						}
-					})
+					}, func(ExchangeFailure) { failures.Add(1) })
 				})
 			}()
 			profileName := name
@@ -79,6 +82,9 @@ func TestProductIdentityOverBootstrapCarrier(test *testing.T) {
 			descriptor, err := recoverCarrier(ctx, client, raw, func(string) {})
 			cancel()
 			<-finished
+			if failures.Load() != 0 {
+				test.Fatal("successful exchange or rejected TLS emitted exchange failure")
+			}
 			if name == "valid" {
 				if err != nil || descriptor.SetupID == "" || calls.Load() != 1 || admissions.Load() != 1 {
 					test.Fatal("valid auth/handoff failed", err)
@@ -87,6 +93,57 @@ func TestProductIdentityOverBootstrapCarrier(test *testing.T) {
 				test.Fatal("unauthorized creation", name)
 			}
 		})
+	}
+}
+
+func TestAuthenticatedBusyExchangeReportsChallengeReason(test *testing.T) {
+	path := gatewayProfile(test)
+	ctx, cancel := context.WithCancel(bounded(test))
+	defer cancel()
+	var credentials familysession.Credentials
+	raw := fixture(test, "valid")
+	if json.Unmarshal(raw, &credentials) != nil {
+		test.Fatal("invalid disposable fixture")
+	}
+	pairing, err := tls.X509KeyPair([]byte(credentials.Certificate), []byte(credentials.PrivateKey))
+	if err != nil {
+		test.Fatal("invalid disposable certificate")
+	}
+	certificate, err := x509.ParseCertificate(pairing.Certificate[0])
+	if err != nil {
+		test.Fatal("invalid disposable certificate")
+	}
+	identity := roombroker.Identity{Family: credentials.Family, Device: certificate.Subject.SerialNumber}
+	copy(identity.PublicKey[:], certificate.PublicKey.(ed25519.PublicKey))
+	authorize := func(context.Context) (roombroker.Identity, error) { return identity, nil }
+	var calls atomic.Int32
+	broker, _ := testBroker(test, &calls, nil, "")
+	if _, err := broker.Challenge(ctx, authorize); err != nil {
+		test.Fatal(err)
+	}
+	client, server := pair()
+	reports := make(chan ExchangeFailure, 1)
+	finished := make(chan error, 1)
+	go func() {
+		finished <- ServeCarrier(ctx, server, func(ctx context.Context, endpoint familysession.PacketEndpoint) {
+			OpenServer(ctx, endpoint, path, broker, func(string) {}, func(report ExchangeFailure) { reports <- report })
+		})
+	}()
+	if _, err := recoverCarrier(ctx, client, raw, func(string) {}); err != roombroker.Code("bootstrap_protocol_rejected") {
+		test.Fatal("client wire reason changed", err)
+	}
+	cancel()
+	<-finished
+	select {
+	case report := <-reports:
+		if report != (ExchangeFailure{Stage: "challenge", Reason: "device_busy"}) {
+			test.Fatal("server reason missing", report)
+		}
+	default:
+		test.Fatal("no server rejection evidence")
+	}
+	if calls.Load() != 0 {
+		test.Fatal("second device room created")
 	}
 }
 

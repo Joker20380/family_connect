@@ -1,5 +1,9 @@
 # Documentation
 
+[Bootstrap cleanup race correction05.10](releases/2026-10-05-bootstrap-cleanup-race.md):
+source-only bounded cleanup wait and safe rejection diagnostics; fresh-fixture50
+repeats/full Go race PASS. No deployment; renew expired material before owner gate.
+
 [Beta65 retained-cache refresh candidate04.10](releases/2026-10-04-beta65-readiness-candidate.md):
 source86fa1ba/four CI/signing/in-place owner65 and ordinary physical refresh PASS.
 Publication held on bootstrap recovery failure; tester/public64 and default60 unchanged.

@@ -1,5 +1,10 @@
 # Android beta65 — retained-cache refresh candidate, 2026-10-04
 
+Follow-up05.10: [bootstrap cleanup-race correction](2026-10-05-bootstrap-cleanup-race.md)
+is locally validated, not deployed. Server cleanup lag is now correlated and the
+active-slot rejection reproduced; the historical rejection code remains unavailable.
+APK65 bytes/publication hold remain unchanged. The04.10 loaded leaf bound has expired.
+
 ## Release state
 
 User authorized a separate commit/push for CI and the next APK. Candidate version

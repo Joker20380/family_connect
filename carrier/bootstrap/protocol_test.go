@@ -242,7 +242,8 @@ func TestExchangeReadyHandoffAndOutstanding(test *testing.T) {
 	broker, back := testBroker(test, &calls, ready, "")
 	client, server := pair()
 	done := make(chan error, 1)
-	go func() { done <- Exchange(ctx, server, broker, allow) }()
+	var failures atomic.Int32
+	go func() { done <- exchange(ctx, server, broker, allow, func(ExchangeFailure) { failures.Add(1) }) }()
 	result := make(chan roombroker.Descriptor, 1)
 	failed := make(chan error, 1)
 	go func() { descriptor, err := requestTransport(ctx, client); result <- descriptor; failed <- err }()
@@ -259,7 +260,7 @@ func TestExchangeReadyHandoffAndOutstanding(test *testing.T) {
 	if err := <-done; err != nil {
 		test.Fatal(err)
 	}
-	if calls.Load() != 1 || descriptor.SetupID == "" {
+	if calls.Load() != 1 || descriptor.SetupID == "" || failures.Load() != 0 {
 		test.Fatal("not broker descriptor")
 	}
 	tag, status := sessiontrace.Tag(descriptor.SetupID)
@@ -358,7 +359,10 @@ func TestExchangeFailureAndCancellation(test *testing.T) {
 			broker, _ := testBroker(test, &calls, ready, failure)
 			client, server := pair()
 			done := make(chan error, 1)
-			go func() { done <- Exchange(ctx, server, broker, allow) }()
+			reports := make(chan ExchangeFailure, 1)
+			go func() {
+				done <- exchange(ctx, server, broker, allow, func(report ExchangeFailure) { reports <- report })
+			}()
 			if failure == "cancel" {
 				time.AfterFunc(20*time.Millisecond, cancel)
 			}
@@ -367,6 +371,10 @@ func TestExchangeFailureAndCancellation(test *testing.T) {
 			}
 			if err := <-done; err == nil {
 				test.Fatal("server accepted")
+			}
+			report := <-reports
+			if failure != "cancel" && report.Stage != "create" || failure == "provider" && report.Reason != "provider_failure" || failure == "ready" && report.Reason != "gateway_failed" {
+				test.Fatal("provider/gateway failure misclassified", report)
 			}
 		})
 	}

@@ -96,8 +96,10 @@ capped at four; normal dedicated carrier configuration is unchanged.
 1. Lease → existing ReliableStream → existing Family TLS1.3 (no new stack).
 2. `SessionAuthorizer` reuses the control authorizer with the original Family
    ALPN, certificate chain, role, Family, identity, revision, CRL and expiry checks.
-3. Existing `Broker.Challenge` generates the one-use server setup ID, sent in
-   `HELLO`. The client echoes exactly that ID in `REQUEST_TRANSPORT`.
+3. `Broker.ChallengeAfterCleanup` waits if this authenticated identity still owns
+   an active/closing dedicated session, then uses the existing `Broker.Challenge`
+   to generate the one-use server setup ID, sent in `HELLO`. The client echoes
+   exactly that ID in `REQUEST_TRANSPORT`.
 4. Existing `Broker.Create` waits for dedicated gateway READY. `Claim` binds the
    same authenticated identity. Only then `TRANSPORT_READY` carries the descriptor.
 5. Client `BYE`, server `BYE`, final client `BYE`; server permits up to3s final
@@ -117,6 +119,18 @@ bounded by the broker's unused60s expiry; bootstrap is already closed and does
 not secretly call ordinary control to cancel. Once bound, normal dedicated
 gateway/Mux cleanup applies. This deliberately favors bounded cleanup over
 pretending that a disconnected receiver's delivery state is knowable.
+
+The cleanup wait is part of the existing120s authenticated exchange budget (or
+the caller's earlier deadline), not an additional timeout or client retry. It
+waits for gateway close and broker slot removal without cancelling the old session.
+The same Family/device/key authorization is rechecked at the broker's existing
+interval and before the new challenge. Revocation, changed identity, cancellation
+and expiry fail closed. Non-active unfinished setup duplicates still reject
+immediately; HTTP challenge semantics and outstanding limits are unchanged.
+`bootstrap_exchange_rejected` logs only UTC, a fixed stage and an allowlisted reason
+on the server; unknown/raw errors become `unknown`. No descriptor, URL, identity,
+key or certificate details are included. The wire still carries only generic ERROR,
+and the existing `bootstrap_exchange_failed` event is retained.
 
 ## Limits
 

@@ -65,6 +65,15 @@ expiry means Family Connect stops using/accepting the descriptor, not that the
 provider removes its conference object. Rapid sequential authorized setups are
 not governed by a long-term quota in this MVP.
 
+BOOT-1 uses `ChallengeAfterCleanup` for an already authenticated exchange: an active
+or started terminal setup for the same Family/device/key is allowed to finish its
+normal cleanup before another challenge is requested. The wait ends only after
+gateway close and slot removal, and never evicts the old session. It is bounded by
+the caller's context (BOOT-1 retains its120s total budget), with authorization and
+identity rechecks at the existing interval. Pending non-active setup duplicates
+still fail immediately. HTTP `Challenge` remains immediate, and single-device,
+global outstanding, replay and authorization guards remain unchanged.
+
 ## Isolated use
 
 Run `cmd/room-broker --family-config <private-gateway-profile>` on the gateway.

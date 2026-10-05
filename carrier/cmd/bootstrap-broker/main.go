@@ -115,7 +115,11 @@ func run() error {
 	seedDone, httpDone := make(chan error, 1), make(chan error, 1)
 	go func() {
 		seedDone <- manager.Run(ctx, provider, bootstrap.TelemostSeed, credentials.Family, credentials.Gateway, *duration, func(ctx context.Context, endpoint familysession.PacketEndpoint) {
-			bootstrap.OpenServer(ctx, endpoint, *path, broker, emit)
+			bootstrap.OpenServer(ctx, endpoint, *path, broker, emit, func(failure bootstrap.ExchangeFailure) {
+				output.Lock()
+				defer output.Unlock()
+				_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": "bootstrap_exchange_rejected", "utc": time.Now().UTC(), "stage": failure.Stage, "reason": failure.Reason})
+			})
 		})
 	}()
 	go func() { httpDone <- server.Serve(tls.NewListener(netutil.LimitListener(listener, 8), config)) }()

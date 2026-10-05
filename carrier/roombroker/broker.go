@@ -147,6 +147,77 @@ func (broker *Broker) Challenge(ctx context.Context, authorize Authorize) (strin
 	return current.id, nil
 }
 
+func (broker *Broker) ChallengeAfterCleanup(ctx context.Context, authorize Authorize) (string, error) {
+	if err := ctx.Err(); err != nil {
+		return "", err
+	}
+	identity, err := authorized(ctx, authorize)
+	if err != nil {
+		if interrupted := ctx.Err(); interrupted != nil {
+			return "", interrupted
+		}
+		return "", err
+	}
+	check := func(ctx context.Context) (Identity, error) {
+		current, err := authorized(ctx, authorize)
+		if err != nil || current != identity {
+			return Identity{}, Code("unauthorized")
+		}
+		return current, nil
+	}
+	for {
+		if err := ctx.Err(); err != nil {
+			return "", err
+		}
+		id, err := broker.Challenge(ctx, check)
+		if err != Code("device_busy") {
+			if err != nil && ctx.Err() != nil {
+				return "", ctx.Err()
+			}
+			return id, err
+		}
+		broker.mu.Lock()
+		var pending *setup
+		for _, current := range broker.setups {
+			if current.identity == identity {
+				pending = current
+				break
+			}
+		}
+		waitable := pending == nil || pending.state == Active || pending.started && terminal(pending.state)
+		broker.mu.Unlock()
+		if !waitable {
+			return "", err
+		}
+		if pending == nil {
+			continue
+		}
+		if err := waitForCleanup(ctx, pending.done, broker.limits.Recheck, check); err != nil {
+			return "", err
+		}
+	}
+}
+
+func waitForCleanup(ctx context.Context, done <-chan struct{}, interval time.Duration, authorize Authorize) error {
+	ticker := time.NewTicker(interval)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-done:
+			return nil
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-ticker.C:
+			if _, err := authorize(ctx); err != nil {
+				if interrupted := ctx.Err(); interrupted != nil {
+					return interrupted
+				}
+				return err
+			}
+		}
+	}
+}
+
 func (broker *Broker) monitor(current *setup) {
 	defer broker.workers.Done()
 	ticker := time.NewTicker(broker.limits.Recheck)

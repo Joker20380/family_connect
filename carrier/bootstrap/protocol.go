@@ -40,6 +40,18 @@ func send(ctx context.Context, endpoint familysession.PacketEndpoint, input mess
 }
 
 func Exchange(ctx context.Context, endpoint familysession.PacketEndpoint, broker *roombroker.Broker, authorize roombroker.Authorize, onHandoff ...func()) (resultErr error) {
+	return exchange(ctx, endpoint, broker, authorize, nil, onHandoff...)
+}
+
+func exchange(ctx context.Context, endpoint familysession.PacketEndpoint, broker *roombroker.Broker, authorize roombroker.Authorize, observe func(ExchangeFailure), onHandoff ...func()) (resultErr error) {
+	ctx, cancel := context.WithTimeout(ctx, ExchangeTimeout)
+	defer cancel()
+	stage := "challenge"
+	defer func() {
+		if resultErr != nil && observe != nil {
+			observe(ExchangeFailure{Stage: stage, Reason: exchangeReason(resultErr)})
+		}
+	}()
 	defer endpoint.Close()
 	defer func() {
 		if resultErr != nil {
@@ -48,7 +60,7 @@ func Exchange(ctx context.Context, endpoint familysession.PacketEndpoint, broker
 			_ = send(bounded, endpoint, message{Type: "ERROR"})
 		}
 	}()
-	id, err := broker.Challenge(ctx, authorize)
+	id, err := broker.ChallengeAfterCleanup(ctx, authorize)
 	if err != nil {
 		return err
 	}
@@ -60,31 +72,40 @@ func Exchange(ctx context.Context, endpoint familysession.PacketEndpoint, broker
 			_ = broker.Cancel(cleanup, id, authorize)
 		}
 	}()
+	stage = "hello_send"
 	if err := send(ctx, endpoint, message{Type: "HELLO", SetupID: id}); err != nil {
 		return err
 	}
+	stage = "request_receive"
 	if _, err := receive(ctx, endpoint, "REQUEST_TRANSPORT", id); err != nil {
 		return err
 	}
+	stage = "create"
 	descriptor, err := broker.Create(ctx, id, authorize)
 	if err != nil {
 		return err
 	}
+	stage = "claim"
 	if err := broker.Claim(ctx, id, authorize); err != nil {
 		return err
 	}
+	stage = "ready_send"
 	if err := send(ctx, endpoint, message{Type: "TRANSPORT_READY", SetupID: id, Descriptor: &descriptor}); err != nil {
 		return err
 	}
+	stage = "bye_receive"
 	if _, err := receive(ctx, endpoint, "BYE", id); err != nil {
 		return err
 	}
+	stage = "descriptor_expiry"
 	if !time.Now().Before(descriptor.ExpiresAt) {
 		return roombroker.Code("descriptor_expired")
 	}
+	stage = "authorize"
 	if _, err := authorize(ctx); err != nil {
 		return err
 	}
+	stage = "bye_send"
 	if err := send(ctx, endpoint, message{Type: "BYE", SetupID: id}); err != nil {
 		return err
 	}
@@ -138,7 +159,7 @@ func requestTransport(ctx context.Context, endpoint familysession.PacketEndpoint
 	return *descriptor, nil
 }
 
-func OpenServer(ctx context.Context, endpoint familysession.PacketEndpoint, path string, broker *roombroker.Broker, event func(string)) {
+func OpenServer(ctx context.Context, endpoint familysession.PacketEndpoint, path string, broker *roombroker.Broker, event func(string), failures ...func(ExchangeFailure)) {
 	raw, err := roombroker.LoadCredentials(path)
 	if err != nil {
 		return
@@ -154,7 +175,13 @@ func OpenServer(ctx context.Context, endpoint familysession.PacketEndpoint, path
 	}
 	defer secured.Close()
 	event("bootstrap_family_auth")
-	err = Exchange(ctx, secured, broker, roombroker.SessionAuthorizer(path, secured.ConnectionState()), func() { event("bootstrap_handoff") })
+	err = exchange(ctx, secured, broker, roombroker.SessionAuthorizer(path, secured.ConnectionState()), func(failure ExchangeFailure) {
+		for _, observe := range failures {
+			if observe != nil {
+				observe(failure)
+			}
+		}
+	}, func() { event("bootstrap_handoff") })
 	if err != nil {
 		event("bootstrap_exchange_failed")
 	}

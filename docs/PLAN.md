@@ -2,7 +2,27 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Bootstrap cleanup race — local correction PASS05.10; delivery pending.**
+1. DONE correlate67 gap-free old-session server events: server cleanup18.482s after
+   local cleanup and10.386s after next bootstrap rejection. Original rejection code
+   was not logged; active-slot `device_busy` mechanism reproduced by a red test.
+2. DONE wait for actual matching server cleanup within existing120s BOOT-1 budget;
+   retain auth/identity rechecks, cancellation, single-device/global limits and
+   immediate HTTP/unfinished-setup refusal. Add closed-enum server rejection reasons.
+3. DONE final fresh-fixture50-repeat regression and full uncached Go race suite;
+   Python94 PASS. Preserve deadline-race and overnight expired-fixture failures in
+   the report; no timer increase, revocation bypass or original DATA-stall fix claim.
+4. IN PROGRESS scoped source commit/push authorized05.10; exact-source CI/artifact
+   verification pending, then matching gateway deployment with fresh credentials and actual
+   loaded-chain/RU-NL generation verification. Last verified leaf expired04.10
+   22:57:31UTC. No production changes or new APK made by this local patch.
+5. THEN owner65 recovery/security/ordinary-VPN acceptance before targeted immutable65
+   delivery, tester fresh fetch/native READY/ACK and one Krasnodar mobile trial.
+   Preserve owner65/tester/public64/default60 and data; do not replace APK65 bytes.
+   [Exact checkpoint and rollback](releases/2026-10-05-bootstrap-cleanup-race.md).
+
 **Beta65 — ordinary cache refresh PASS; bootstrap recovery gate failed04.10.**
+Historical checkpoint; the current source correction and next gates are above.
 1. DONE scoped source86fa1ba push, four exact-source CI PASS, artifact verification,
    offline original-signer signing; Python119/Android254/lint/JVM171 and docs PASS.
 2. DONE owner64→65 preserving data, ordinary foreground fetch/native READY/ACK with

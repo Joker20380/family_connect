@@ -1,6 +1,35 @@
 # Текущее состояние / Current state
 
+## Bootstrap cleanup race — local fix PASS05.10, not deployed
+
+Source correction prepared on HEAD5263410; scoped commit/push authorized05.10,
+CI receipt pending. No APK/version, signing, installation, gateway deployment or
+public delivery in this step. Original beta65
+recovery evidence now includes67 gap-free server events: client cleanup04.10
+20:21:16.631UTC, next authenticated exchange rejected20:21:24.726987UTC, old server
+session cleanup only20:21:35.113UTC (18.482s after local cleanup). Historical journal
+has no rejection code; `device_busy` during this overlap is deterministically
+reproduced, not retrospectively observed. Original DATA/ACK stall remains unlocalized.
+BOOT-1 now waits for the matching active/closing session's actual server cleanup
+inside the existing120s exchange budget, then requests a fresh challenge. No old
+session eviction, parallel setup, timeout increase or auth bypass. Auth/identity
+is rechecked while waiting; cancellation and deadlines terminate the wait.
+Server-only closed-enum stage/reason diagnostics preserve generic wire ERROR.
+Final05.10 full Go `-race -count=1 ./...` PASS; focused50 repeats PASS with fresh
+disposable ProductStore/TLS fixtures. Python94 PASS04.10; docs476/2896, formatting
+and diff checks PASS05.10. Earlier stress exposed a
+deadline/auth polling race, now fixed; overnight TLS failures were expired fixtures,
+not suppressed assertions. Owner65/tester64/public64/default60 remain last verified
+04.10, not a fresh live read. Last loaded gateway leaf bound04.10 22:57:31UTC has
+**expired**; renew and verify actual loaded chain and RU/NL directory generation
+before hardware acceptance. NEXT scoped source delivery/exact-source CI, matching
+gateway update, owner recovery/security gate, then targeted65/tester fresh READY/ACK
+and one Krasnodar mobile trial. Publication still held.
+[Evidence, tests and rollout/rollback](releases/2026-10-05-bootstrap-cleanup-race.md).
+
 ## Beta65 — cache refresh accepted; publication held04.10
+
+Historical installed-build checkpoint; source-only cleanup correction is above.
 
 Source86fa1bae8b97ff34d3e8cbd5b3cfe923cb7d71a6 pushed; all four exact-source
 workflows PASS. Artifact11313732252 verified/offline signed with the original key.
