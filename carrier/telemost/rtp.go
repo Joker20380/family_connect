@@ -45,6 +45,7 @@ func (b *reorderBuffer) push(pkt *rtp.Packet, deliver func(*rtp.Packet)) {
 	if seqLess(pkt.SequenceNumber, b.nextSeq) {
 		return
 	}
+	previousNext := b.nextSeq
 	if uint16(pkt.SequenceNumber-b.nextSeq) >= reorderWindow {
 		for sequence, queued := range b.pkts {
 			b.recycle(queued)
@@ -62,7 +63,7 @@ func (b *reorderBuffer) push(pkt *rtp.Packet, deliver func(*rtp.Packet)) {
 	b.drain(deliver)
 	if len(b.pkts) == 0 {
 		b.gapSince = time.Time{}
-	} else if b.gapSince.IsZero() {
+	} else if b.gapSince.IsZero() || b.nextSeq != previousNext {
 		b.gapSince = time.Now()
 	}
 }
