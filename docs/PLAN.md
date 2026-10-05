@@ -2,7 +2,7 @@
 
 ## Current engineering priority / Текущий critical path
 
-**TCP reset fixture stabilization — scoped source delivery authorized05.10.**
+**Bootstrap recovery candidate — a813dc5 CI/artifact PASS05.10, deployment pending.**
 1. DONE synchronize successful TCP dial → target RST/close → return socket to
    unchanged forwarding code, before server OPEN_OK. No post-OPEN sleep or weaker
    assertion; keep real Family TLS, policy and ClaimTCP in authenticated case.
@@ -10,12 +10,15 @@
    Full fresh-fixture race suite BLOCKED by disk quota: parallel/serial runs passed
    tcpforward but could not link telemost-binary; approved build-cache cleanup did
    not resolve quota and clean-cache build failed before tests. No full PASS claim.
-3. IN PROGRESS scoped test-source commit/push authorized05.10, then exact-source
-   CI/gateway artifact verification.
-   Existing Clients3ba5270 attempts1/2 remain failed; no third unchanged retry.
-4. THEN fresh actual gateway credentials, verified binary deployment and owner65
+3. DONE scoped commit/pusha813dc5, source guard1761/0 blocked; phase037291210868
+   and Clients37291211020 PASS attempt1. Full carrier race/Android emulator/native
+   and platform checks PASS. Artifact11337447479 downloaded/verified; gateway05571644
+   source/ELF/hash verified. Failed3ba5270/quota receipts retained, not erased.
+4. NEXT fresh actual gateway credentials, verified binary deployment and owner65
    recovery/security gates before targeted65 delivery/tester READY/Krasnodar trial.
-   No production/version/installed/public state change in this local test-only patch.
+   Live read-only09:47UTC: ADB connected, old gateway f71b7e7b/expired leaf still loaded,
+   both admissions intact but no current usable readiness. Issuer headroom must be
+   checked too; last issuer4 bound05.10 13:28:47UTC. No production mutation here.
 
 **Bootstrap cleanup race — source3ba5270; CI blocked by baseline reset tests05.10.**
 Historical blocker checkpoint; fixture correction is tracked above.

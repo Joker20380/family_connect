@@ -4,8 +4,9 @@
 source-only bounded cleanup wait and safe rejection diagnostics; fresh-fixture50
 repeats/full local Go race PASS. CI blocked twice by existing TCP reset tests,
 reproduced on prior accepted source. Authorized fixture-only correction passes1500
-repeats per reset test; full local recheck blocked by disk quota. No deployment;
-owner/Krasnodar gates held.
+repeats per reset test; pusheda813dc5 passes both CI workflows on attempt1. Gateway
+artifact11337447479/hash05571644 verified. Local full rebuild quota failure retained.
+No deployment; live gateway still has expired material and owner/Krasnodar gates held.
 
 [Beta65 retained-cache refresh candidate04.10](releases/2026-10-04-beta65-readiness-candidate.md):
 source86fa1ba/four CI/signing/in-place owner65 and ordinary physical refresh PASS.

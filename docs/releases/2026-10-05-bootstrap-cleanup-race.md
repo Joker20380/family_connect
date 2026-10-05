@@ -4,7 +4,8 @@
 
 Continuation of the [beta65 failed recovery gate](2026-10-04-beta65-readiness-candidate.md).
 Source prepared on HEAD `5263410`; user authorized scoped commit/push05.10.
-CI receipt pending; no version change, APK build/signing, installation, gateway
+Final sourcea813dc5 passes CI and gateway artifact verification (checkpoint below).
+No version change, local APK signing, installation, gateway
 mutation or public rollout in this step. Unrelated dirty
 documentation is preserved. This is a locally verified server-side correction,
 not evidence that installed beta65 recovery now works against production.
@@ -20,6 +21,82 @@ PID4077612 at04.10 20:30UTC. This report does not assert a new live state readba
 
 ## Evidence and limits
 
+### Final CI and gateway artifact acceptance05.10
+
+Source **`a813dc5c80b27025222f317a068d16c71d6dc64c`**:
+- `phase0` run37291210868 and `Client builds` run37291211020 both **success**,
+  attempt1, confirmed by exact-SHA API readback05.10 09:56:53UTC.
+- Previously failing full carrier race step passed, as did Android emulator
+  WG/AWG/TCP/Auto lifecycle, native build, release verification, Linux, Windows and
+  Windows compatibility. Other path-filtered workflows did not run; not four CI PASS.
+- Artifact11337447479, `FamilyConnect-Android-restricted-arm64`,58409367bytes,
+  SHA256 `195e7575e0f3aae4d8a944533bcc6abc522af137d0ba7b4792ebbfcb1de29fe4`.
+  Downloaded ZIP matches GitHub metadata, exact workflow/source and expected four
+  entries. CRC, manifest version/package/source and contained APK hash/size checked.
+- Extracted gateway17373323bytes, Linux/amd64 ELF,
+  SHA256 `055716447a1fe4bd8859dc2877410e756a9dc60a81b0ae5203a23f99606326a0`;
+  manifest hash and embedded VCS revision matcha813dc5.
+
+The temporary verifier initially required `vcs.modified=false`, which this build
+does not claim. Readback shows **vcs.modified=true**, also present in accepted64.
+The workflow creates untracked root logs/summary before Go build; these are not
+ignored. The committed packaging gate separately runs `git diff --exit-code HEAD`
+over carrier/client/native source and passed in exact-source job111701775294.
+Acceptance uses that existing source guard plus immutable artifact digest, source
+manifest and embedded revision, not a fictitious clean-worktree flag. This flag and
+the verifier's rejected assumption are retained in the receipt/documentation.
+
+Initial Python download got HTTP403; same unexpired URL with the established curl
+User-Agent succeeded. No artifact was substituted or rebuilt. Subsequent verification
+reused the saved ZIP rather than redownloading. Gateway receipt and ZIP are retained
+under `state-client-build/bootstrap-cleanup-ci/a813dc5-artifact/`; file
+`gateway-verification.json` records all hashes and provenance checks.
+
+The ZIP contains a **new unsigned same-version65 CI APK**, not a new distributable
+release. It was not extracted as an installable delivery, signed, installed or
+published. Existing signed owner65 `dfbdb535...` stays immutable. Read-only ADB
+metadata confirms installed `0.1.18-beta65`/65 and UID10283, without modifying data.
+
+No remote deployment, credential renewal, ordinary-service restart or public-route
+change in this task. Local disk-quota failures remain real failed local validation
+attempts; the now-successful remote CI provides independent full-build evidence.
+Next gate is verified gateway05571644 deployment with fresh valid credentials and
+owner recovery/security acceptance, not a Krasnodar mobile retry yet.
+
+### Earlier new-source/live readback checkpoint05.10
+
+User-authorized source `a813dc5c80b27025222f317a068d16c71d6dc64c` committed/pushed
+from parenta5acb73. Exactly six scoped files (two tests/four documents), no production
+TCP changes; ten unrelated dirty files remain local. Source guard1761 entries/0
+blocked; documentation476/2898 before checkpoint updates.
+
+New exact-source `phase0` run37291210868 **PASS**, attempt1. `Client builds`
+run37291211020 is still **in_progress**, attempt1. Android job111701775294 has
+already passed `Restricted carrier race regression`; its emulator lifecycle stage
+is running. Linux, Windows and Windows compatibility passed. This removes the
+observed earlier carrier-test blocker on CI but is not full artifact acceptance.
+Status receipts are persisted in
+`state-client-build/bootstrap-cleanup-ci/a813dc5-ci-status.json`.
+
+Read-only05.10 **09:47UTC** RU/NL/device check:
+- Owner Redmi is connected over ADB. Both existing admissions remain non-revoked;
+  no identity/grant changes. Owner's last ACK is65 from04.10; tester latest05.10
+  readiness fetch has no ACK and does not establish its installed version.
+- Neither device currently has usable readiness. Previous READY receipts have
+  expired and must not be mistaken for current readiness.
+- NL bootstrap is active/PID254601/NRestarts3 with unchanged loaded binary
+  `f71b7e7bb92d7f312d210d41ebf200cf4416ed73ca7fe3a33ae2e13d4d3f2ebf`.
+  The certificate actually served on the existing control listener matches the
+  profile and still expires04.10 **22:57:31UTC**. This task did not restart/renew it.
+- Last recorded issuer4 expiry is05.10 **13:28:47UTC**, less than4h after this
+  readback. A future leaf renewal must respect the verified current issuer/grant
+  bound; it cannot silently promise4h or weaken floors to bypass expiry.
+
+Safe live receipts `readiness-*.json` and `loaded-gateway-*.json` are in the same
+private CI evidence directory. No profile/key/database or raw transport URL is
+included in repository documentation. Gateway-only artifact verification is prepared;
+no signing, APK installation, renewal, server update or public publication occurred.
+
 ### Overall problem progress05.10
 
 1. Original export11 classification defect: fixed in the beta63/64 line. Beta64
@@ -32,9 +109,9 @@ PID4077612 at04.10 20:30UTC. This report does not assert a new live state readba
    pushed, locally tested, but not deployed. Old journal has generic rejection only;
    exact historical `device_busy` is not claimed observed.
 4. Release-gate TCP reset fixture race: reproduced on previous accepted source,
-   corrected only in test files,1500 repetitions per case passed. User authorized
-   scoped commit/push05.10. Full local rebuild remains blocked by disk quota; a new
-   exact-source CI result is required, not a third unchanged retry of failed3ba5270.
+   corrected only in test files,1500 repetitions per case passed. Sourcea813dc5
+   pushed; new exact-source CI and gateway artifact now PASS on attempt1. Local
+   quota failures retained; this is not a third unchanged retry of failed3ba5270.
 5. Original restricted-network DATA/ACK stall: loss location and RKN involvement
    remain unknown. Neither a local test fix nor successful CI proves field stability.
    Next runtime sequence is accepted gateway artifact → valid loaded credentials →
@@ -217,9 +294,8 @@ No physical owner acceptance or Krasnodar mobile trial was repeated in this step
 
 ## Next gates and rollback
 
-1. Scoped commit/push3ba5270 complete; resolve the baseline TCP reset test blocker
-   without weakening checks, then obtain successful exact-source CI and verify matching
-   gateway artifact provenance. Existing accepted APK65 can be used for this
+1. DONE scoped bootstrap3ba5270 and test-fixturea813dc5 delivery; successful exact-source
+   CI and matching gateway05571644 artifact provenance. Existing accepted APK65 can be used for this
    wire-compatible server correction; do not rebuild/re-sign it under the same version.
 2. Before hardware testing, renew/revalidate material: last actually loaded gateway
    leaf bound **04.10 22:57:31UTC has expired**. Later directory bound22:59:29UTC did

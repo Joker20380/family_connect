@@ -1,6 +1,28 @@
 # Текущее состояние / Current state
 
-## TCP reset fixtures — source delivery authorized05.10, CI pending
+## Bootstrap recovery candidate — a813dc5 CI/artifact PASS05.10, not deployed
+
+Scoped source `a813dc5c80b27025222f317a068d16c71d6dc64c` pushed to main: two test
+files plus four related documents only; ten unrelated dirty files excluded.
+Public-source guard1761 entries/0 blocked. New phase037291210868 and
+Clients37291211020 both PASS on attempt1, confirmed09:56UTC. Full carrier race,
+Android emulator/native/unsigned artifact checks, Linux/Windows compatibility PASS.
+Artifact11337447479 downloaded/verified,58409367bytes, ZIP SHA256
+`195e7575e0f3aae4d8a944533bcc6abc522af137d0ba7b4792ebbfcb1de29fe4`.
+Gateway Linux/amd64 SHA256
+`055716447a1fe4bd8859dc2877410e756a9dc60a81b0ae5203a23f99606326a0`,17373323bytes;
+embedded revision and successful CI tracked-source guard matcha813dc5. Go metadata
+vcs.modified=true is retained, as in accepted64 (generated CI logs outside source);
+not claimed a clean-worktree build. No new APK signing/install or deployment.
+Read-only live check05.10 09:47UTC: owner Redmi reachable over ADB; both device
+admissions intact/non-revoked, neither has currently usable readiness. Owner's last
+ACK is still65/04.10; tester latest fetch05.10 has no ACK (not a new version proof).
+NL active/PID254601/NRestarts3, actual loaded binary f71b7e7b and certificate match
+old profile; loaded expiry04.10 22:57:31UTC is past. No renewal/restart performed by
+this task. Issuer4's last recorded bound05.10 13:28:47UTC also caps any new leaf;
+never assume a new full4h window without validating current issuer/grant headroom.
+
+### Local fixture validation checkpoint
 
 Only `carrier/tcpforward/forward_test.go` and `integration_test.go` changed in code.
 The target now waits for successful real TCP dial, then sets zero linger and closes;
@@ -17,10 +39,10 @@ and other test packages but hit linker `disk quota exceeded` on cmd/telemost-bin
 Fresh isolated TLS fixtures generated; approved rebuildable-cache cleanup did not
 resolve the quota. Clean-cache full run failed compiling runtime/dependencies before
 tests; no full-suite PASS claim. Docs476/2898, gofmt and diff checks PASS.
-User authorized scoped commit/push and full documentation05.10; delivery in progress.
-No new accepted CI, APK signing/installation, server renewal/deployment or public
-delivery. Existing3ba5270 CI
-failure remains a gate; owner/Krasnodar testing still held.
+User authorized scoped commit/push and full documentation05.10; source delivery is
+complete above. No APK signing/installation, server renewal/deployment or public
+delivery. Failed3ba5270 receipts remain historical; new exact-source full CI and
+artifact acceptance are now complete above. Owner/Krasnodar testing remains held.
 [Correction and exact checks](releases/2026-10-05-bootstrap-cleanup-race.md).
 
 ## Bootstrap cleanup race — CI blocked by existing TCP reset tests05.10
@@ -69,7 +91,7 @@ deadline/auth polling race, now fixed; overnight TLS failures were expired fixtu
 not suppressed assertions. Owner65/tester64/public64/default60 remain last verified
 04.10, not a fresh live read. Last loaded gateway leaf bound04.10 22:57:31UTC has
 **expired**; renew and verify actual loaded chain and RU/NL directory generation
-before hardware acceptance. NEXT exact-source CI completion/artifact verification, matching
+before hardware acceptance. Historical NEXT at that checkpoint: exact-source CI completion/artifact verification, matching
 gateway update, owner recovery/security gate, then targeted65/tester fresh READY/ACK
 and one Krasnodar mobile trial. Publication still held.
 [Evidence, tests and rollout/rollback](releases/2026-10-05-bootstrap-cleanup-race.md).
