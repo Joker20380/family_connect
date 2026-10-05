@@ -2142,6 +2142,7 @@ health/rollback/restart на устройствах; Windows C# тесты на 
 | 4. Три клиента и выпуск | Закрыт как пилотный выпуск по приёмке пользователя 23.09.2026 |
 | 5. Служебный канал и парк серверов | В работе:5.1 завершён;5.2 backend/SSH/scheduler/offline publish подготовлены;5.3а managed AWG3.1 требует native/Friends integration и device acceptance. Сейчас —5.3а, Android service/UI acceptance |
 | 6. Недоступный gateway | Нужна сквозная смена endpoint через независимый канал |
+| 5N-MC. Multi-carrier restricted path | **После Краснодар FIELD-1:** Carrier API v1 → WB как второй provider → VK → bounded automatic failover; DION/Bitrix только по field evidence |
 | 7. Сервис и коммерческая версия | Согласована7.1 — единая Django-админка; оплата/подписки не реализованы |
 
 **Текущая точка (superseded immediate ordering / backlog):** этап5.3в, локальная реализация XHTTP/TLS по новому прямому запросу;
@@ -2158,6 +2159,178 @@ enrollment, разрешением VPN, restart/rollback и трафиком. Д
 originals, внешний носитель и full DR остаются отдельными обязательными пунктами. Исследование третьего транспорта5.3б остаётся
 согласованным, но отдельный production transport ещё не выбран. Новый сервер для
 текущей локальной работы не нужен; независимый ingress нужен для сетевой приёмки6.
+
+<a id="multi-carrier-roadmap"></a>
+## После Краснодар FIELD-1: multi-carrier restricted path
+
+**Порядок зафиксирован 05.10.2026. Не начинать реализацию до завершения и разбора
+одного авторизованного Краснодар FIELD-1 на текущем Telemost path.** FIELD-1 должен
+сохранить точную версию клиента/gateway, оператор/тип сети/время, readiness,
+session diagnostics и результат полезного HTTPS/DNS трафика. Не приписывать сбой
+DPI/оператору/provider без доказательств. Успешный Telemost FIELD-1 не отменяет
+multi-carrier roadmap, но определяет его срочность и критерии failover.
+
+Цель следующего блока — не добавить пользователю выбор ещё нескольких протоколов,
+а превратить restricted transport в заменяемую платформу. Обычный пользователь
+видит только CONNECTING / CONNECTED / RESTORING; Telemost/WB/VK и конкретный media
+transport остаются в diagnostics. Device Identity, Family admission, Family TLS,
+ReliableStream, Mux, DNS/TCP policy, whole-device/TUN и privacy boundaries должны
+оставаться общими и не дублироваться под каждого provider.
+
+### 5N-MC0 — FIELD-1 decision gate
+
+1. DONE только после фактического Краснодар FIELD-1: зафиксировать PASS/FAIL и
+   первую доказанную причину/стадию отказа текущего Telemost пути.
+2. Сравнить, нужен ли второй carrier прежде всего для coverage, reliability,
+   capacity или provider-independence. Не подменять измерение количеством transports.
+3. Сохранить текущий Telemost implementation как regression baseline; новые
+   abstractions сначала обязаны прогнать его старые live/unit acceptance без
+   ослабления timeout/replay/admission/privacy контрактов.
+4. До закрытия MC0 не менять FIELD-1 APK/gateway ради WB/VK и не смешивать
+   multi-carrier refactor с расследованием текущего Telemost DATA/recovery дефекта.
+
+### 5N-MC1 — Carrier API v1 / разделение provider и media transport
+
+Сделать provider-independent boundary вместо прямых вызовов telemost.New из
+bootstrap/whole-device кода.
+
+Целевая модель:
+
+    WholeDevice / Connectivity Orchestrator
+                  |
+            Family TLS 1.3
+                  |
+            ReliableStream
+                  |
+           CarrierTransport
+            /            \
+          VP8         DataChannel
+            \            /
+             ProviderEngine
+           /      |       \
+     Telemost   WB       VK
+
+Требования:
+
+- общий bounded Carrier/session contract: connect, send, receive, close, stats,
+  cancellation и terminal failure; без provider URL/token/cookie в верхних слоях;
+- отдельный ProviderEngine/factory registry по стабильному transport/provider ID;
+- разделить media encapsulation (сначала VP8; DataChannel только где доказан) и
+  provider signaling/SFU/session lifecycle;
+- provider-neutral descriptor/bootstrap schema с versioning и строгой allowlist
+  известных provider/transport combinations; старый Telemost snapshot должен
+  мигрировать явно, а не приниматься эвристикой;
+- RoomProvider расширить до provider-neutral setup lifecycle без передачи OAuth,
+  cookies или CAPTCHA material на Android;
+- Telemost первым перевести на новый API **без изменения wire semantics**;
+  прежние Family TLS/ReliableStream/Mux/whole-device gates должны пройти повторно;
+- dependency/license/security audit обязателен до копирования или адаптации
+  upstream кода whitelist-bypass/olcRTC; не импортировать чужой код только
+  потому, что live feasibility уже показана upstream.
+
+**MC1 PASS:** один и тот же существующий Telemost restricted path проходит старый
+live acceptance через новый interface; верхний Family/TUN stack не импортирует
+Telemost package напрямую, кроме provider registration/composition root.
+
+### 5N-MC2 — WB Stream как второй независимый carrier
+
+WB выбирается первым вторым provider-кандидатом после MC1, потому что upstream
+показывает headless LiveKit/VP8 path и guest-oriented session flow; это только
+feasibility evidence, не наша acceptance.
+
+Порядок:
+
+1. Реализовать isolated ProviderEngine для WB и минимальный server-side
+   session/bootstrap lifecycle; Android не должен получать provider secrets.
+2. Первый gate — Linux↔real WB service/SFU↔Linux exact-byte VP8 carrier:
+   1B, 1KiB, 64KiB, batch traffic, bounded teardown/cancel и controlled loss.
+3. Второй gate — запустить **неизменённые** Family TLS + ReliableStream поверх WB;
+   replay/admission/identity/privacy negative cases обязательны.
+4. Третий gate — неизменённый Mux/DNS/TCP: несколько HTTPS streams, Family DNS,
+   destination TLS verification, bounded buffers/resources.
+5. Четвёртый gate — physical Android whole-device/TUN через WB на обычной сети;
+   restricted/allowlist mobile acceptance — отдельно и только при наличии
+   наблюдаемого подходящего режима сети.
+6. Добавить WB stats/error categories в существующий privacy-safe diagnostics,
+   не логировать room/token/guest credentials/media payload.
+
+**MC2 PASS:** Telemost и WB независимо несут один Family session stack и одинаковый
+Mux/DNS/TCP contract; отказ одного provider не требует новой APK или смены
+пользовательской конфигурации.
+
+### 5N-MC3 — VK Calls как третий carrier
+
+VK добавлять после подтверждения MC2, чтобы третий provider проверял масштабируемость
+абстракции, а не становился ещё одним special case.
+
+- использовать официальный/допустимый auth/session path где возможно;
+- **никакого AI/автоматического обхода CAPTCHA**: CAPTCHA считается auth lifecycle
+  gate; допустим manual/operator bootstrap и bounded сохранённая сессия;
+- provider cookies/tokens хранятся server-side и не входят в Family provisioning,
+  Android APK, diagnostics или room descriptor;
+- сначала Linux real-service VP8 exact-byte gate, затем Family TLS/ReliableStream,
+  затем Mux/DNS/TCP и только после этого Android whole-device;
+- DataChannel можно исследовать отдельно, но он не заменяет VP8 acceptance и не
+  должен усложнять общий API до появления измеримого выигрыша;
+- account/session expiry, captcha-required, rate-limit/provider rejection должны
+  иметь отдельные bounded reason codes и не маскироваться как generic network loss.
+
+**MC3 PASS:** Telemost/WB/VK работают через один Carrier API; добавление VK не
+требует правок Family TLS, Mux, DNS/TCP или Android packet engine.
+
+### 5N-MC4 — автоматический multi-carrier policy и failover
+
+После минимум двух наших физически принятых restricted carriers подключить их к
+Connectivity Orchestrator.
+
+- policy выбирает capability, а не бренд: normal AWG/TCP остаются предпочтительными
+  на обычной сети; restricted carriers — recovery/fallback;
+- health score учитывает setup success, time-to-ready, recent terminal category,
+  bounded cooldown и provider/session availability; содержимое пользовательского
+  трафика и destination history не собирать;
+- один terminal provider failure может вызвать ограниченный переход на другой
+  provider только после cleanup/security gates; никаких бесконечных циклов;
+- auth/policy/revocation failure не должен обходиться переключением provider;
+- сохранять VPN guard/TUN ownership во время восстановления согласно действующему
+  fail-closed contract; не допускать direct traffic leak между попытками;
+- deterministic tests: provider A unavailable → B succeeds; A+B unavailable →
+  bounded user-visible failure; auth/revoked → no fallback bypass; cancellation →
+  все owned sessions закрыты;
+- physical acceptance: Telemost→WB и WB→Telemost recovery, затем VK как дополнительный
+  candidate; измерять restoration time и ручные действия, а не только throughput.
+
+**MC4 PASS:** пользователь нажимает CONNECT один раз; смена restricted provider не
+требует выбора комнаты/provider/transport и происходит bounded/fail-closed.
+
+### 5N-MC5 — расширение парка providers только по данным
+
+DION, Bitrix, Jitsi и другие upstream-доказанные сервисы остаются кандидатами, а
+не обязательным чек-листом. Новый provider добавлять только если он даёт измеримый
+выигрыш хотя бы по одному критерию: coverage другого оператора/региона, независимость
+от одного vendor, capacity, setup reliability или recovery time.
+
+Для каждого нового provider минимальный шаблон одинаков:
+real service carrier → Family TLS → ReliableStream → Mux/DNS/TCP → Android TUN →
+target field acceptance. Нельзя объявлять provider готовым только по upstream
+README, локальному WebRTC/DataChannel или созданию комнаты.
+
+### Выход multi-carrier блока в продукт
+
+До targeted beta для обычных пользователей требуется минимум:
+
+- два независимых restricted provider прошли наши physical end-to-end gates;
+- Orchestrator умеет bounded automatic fallback и fail-closed cancellation/revocation;
+- provider credentials/session renewal обслуживаются server-side;
+- Telemost/WB/VK названия скрыты из основного UX и остаются в advanced diagnostics;
+- privacy scan, resource bounds, dependency/license audit и rollback выполнены;
+- immutable Android build проходит owner preservation/security gates и один
+  контролируемый restricted field trial после exact-source CI/artifact verification.
+
+Оценка не является deadline: после FIELD-1 сначала MC1, затем WB MC2; VK MC3 —
+следом. DION/Bitrix не делать параллельно без evidence. При чистом abstraction
+target engineering budget для Telemost+WB+VK+orchestrator — ориентировочно
+7–15 рабочих дней, но каждый live gate может остановить оценку и потребовать
+перепланирования.
 
 <a id="release-gates-three-platforms"></a>
 ## Условия выпуска трёх платформ
