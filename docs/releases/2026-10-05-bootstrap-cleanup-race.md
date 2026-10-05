@@ -20,6 +20,27 @@ PID4077612 at04.10 20:30UTC. This report does not assert a new live state readba
 
 ## Evidence and limits
 
+### Source delivery checkpoint05.10 08:31UTC
+
+User-authorized commit `3ba52709253dba05a780aaa06d858a1a51f4ca5d` contains only the14
+scoped code/test/contract/state/report files. Push to `origin/main` succeeded from
+parent5263410. Ten unrelated dirty files remain local and unstaged; no keys/runtime
+state or APK assets are included. Public source index guard:1761 entries,0 blocked.
+Committed-source export documentation:476 files/2883 links, zero errors (working-tree
+count differs because unrelated documentation edits were intentionally excluded).
+First archive-doc check lacked Git metadata; rerun supplied the unchanged index as
+read-only inventory with the exported worktree, without altering documents/assertions.
+
+GitHub exact-source readback: `Client builds` run37284062212 and `phase0`
+run37284062182 are **in_progress**, not PASS. Readiness/Linux control workflows do
+not trigger for the carrier/docs-only path set; earlier beta65 four-workflow PASS
+belongs to86fa1ba, not this correction. No CI results are borrowed across SHAs.
+CI may build new same-version APK artifacts: do not sign, install or publish them
+as immutable65. Existing accepted signed65 stays unchanged; the deliverable being
+considered here is the matching gateway binary, after CI/artifact acceptance.
+
+### Correlated original failure
+
 Original owner test injected a NETWORK policy cause after real restricted HTTPS200;
 it was not a genuine native retry-exhaustion injection. Client cleanup occurred at
 04.10 **20:21:16.631UTC**. New bootstrap family authentication succeeded at
@@ -91,7 +112,7 @@ No physical owner acceptance or Krasnodar mobile trial was repeated in this step
 
 ## Next gates and rollback
 
-1. Scoped commit/push authorized05.10; run exact-source CI and verify matching
+1. Scoped commit/push3ba5270 complete; await exact-source CI and verify matching
    gateway artifact provenance. Existing accepted APK65 can be used for this
    wire-compatible server correction; do not rebuild/re-sign it under the same version.
 2. Before hardware testing, renew/revalidate material: last actually loaded gateway

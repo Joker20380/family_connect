@@ -1,10 +1,13 @@
 # Текущее состояние / Current state
 
-## Bootstrap cleanup race — local fix PASS05.10, not deployed
+## Bootstrap cleanup race — source pushed05.10, CI pending, not deployed
 
-Source correction prepared on HEAD5263410; scoped commit/push authorized05.10,
-CI receipt pending. No APK/version, signing, installation, gateway deployment or
-public delivery in this step. Original beta65
+Authorized scoped source `3ba52709253dba05a780aaa06d858a1a51f4ca5d` pushed to main.
+At05.10 08:31UTC exact-source Clients37284062212 and phase037284062182 are running,
+not accepted. Other workflows are not triggered by this carrier/docs-only path set;
+no claim of four-workflow PASS. Public-source guard1761 entries/0 blocked and committed
+export docs476/2883 PASS; unrelated dirty files excluded. No version, signing,
+installation, gateway deployment or public delivery in this step. Original beta65
 recovery evidence now includes67 gap-free server events: client cleanup04.10
 20:21:16.631UTC, next authenticated exchange rejected20:21:24.726987UTC, old server
 session cleanup only20:21:35.113UTC (18.482s after local cleanup). Historical journal
@@ -22,7 +25,7 @@ deadline/auth polling race, now fixed; overnight TLS failures were expired fixtu
 not suppressed assertions. Owner65/tester64/public64/default60 remain last verified
 04.10, not a fresh live read. Last loaded gateway leaf bound04.10 22:57:31UTC has
 **expired**; renew and verify actual loaded chain and RU/NL directory generation
-before hardware acceptance. NEXT scoped source delivery/exact-source CI, matching
+before hardware acceptance. NEXT exact-source CI completion/artifact verification, matching
 gateway update, owner recovery/security gate, then targeted65/tester fresh READY/ACK
 and one Krasnodar mobile trial. Publication still held.
 [Evidence, tests and rollout/rollback](releases/2026-10-05-bootstrap-cleanup-race.md).

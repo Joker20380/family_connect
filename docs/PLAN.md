@@ -2,7 +2,7 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Bootstrap cleanup race — local correction PASS05.10; delivery pending.**
+**Bootstrap cleanup race — source3ba5270 pushed05.10; CI/deployment pending.**
 1. DONE correlate67 gap-free old-session server events: server cleanup18.482s after
    local cleanup and10.386s after next bootstrap rejection. Original rejection code
    was not logged; active-slot `device_busy` mechanism reproduced by a red test.
@@ -12,8 +12,10 @@
 3. DONE final fresh-fixture50-repeat regression and full uncached Go race suite;
    Python94 PASS. Preserve deadline-race and overnight expired-fixture failures in
    the report; no timer increase, revocation bypass or original DATA-stall fix claim.
-4. IN PROGRESS scoped source commit/push authorized05.10; exact-source CI/artifact
-   verification pending, then matching gateway deployment with fresh credentials and actual
+4. DONE scoped commit/push3ba5270; source guard1761/0 blocked, committed docs476/2883.
+   IN PROGRESS Clients37284062212 and phase037284062182 at08:31UTC; other workflows
+   do not trigger for this path set. Exact-source CI/artifact verification pending,
+   then matching gateway deployment with fresh credentials and actual
    loaded-chain/RU-NL generation verification. Last verified leaf expired04.10
    22:57:31UTC. No production changes or new APK made by this local patch.
 5. THEN owner65 recovery/security/ordinary-VPN acceptance before targeted immutable65
