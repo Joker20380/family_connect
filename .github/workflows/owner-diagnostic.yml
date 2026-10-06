@@ -1,0 +1,62 @@
+name: Owner diagnostic pair acceptance
+on:
+  push:
+    tags: ['v*-ownerDiagnostic-ci*']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  owner-pair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.1'
+          cache: false
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+      - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0' 'ndk;28.2.13676358'
+      - name: Build source-bound normal and restricted JNI
+        shell: bash
+        run: |
+          test -z "$(git status --porcelain)"
+          ANDROID_NDK_HOME="$ANDROID_HOME/ndk/28.2.13676358" python3 pilot/android-awg/build.py --abi arm64-v8a
+          git clone --quiet https://github.com/XTLS/Xray-core "$RUNNER_TEMP/owner-xray"
+          git -C "$RUNNER_TEMP/owner-xray" checkout --detach d2758a023cd7f4174a5a5fa4ff66e487d4342ba0
+          python3 pilot/android-restricted/build.py --xray "$RUNNER_TEMP/owner-xray" --go "$(command -v go)" --ndk "$ANDROID_HOME/ndk/28.2.13676358" --out "$GITHUB_WORKSPACE/clients/android/restricted-generated"
+          python3 pilot/android-restricted/build.py --owner-diagnostic --xray "$RUNNER_TEMP/owner-xray" --go "$(command -v go)" --ndk "$ANDROID_HOME/ndk/28.2.13676358" --out "$GITHUB_WORKSPACE/clients/android/owner-restricted-generated"
+      - name: Build unsigned packages and Android acceptance
+        working-directory: clients/android
+        run: gradle --no-daemon -PfcTargetAbi=arm64-v8a -PfcFriendsCi=false :app:assembleOwnerDiagnostic :app:assembleFriends :app:testOwnerDiagnosticUnitTest :app:lintOwnerDiagnostic :app:testFriendsUnitTest :app:lintFriends
+      - name: Verify packages and build matching gateway
+        shell: bash
+        run: |
+          mkdir -p state-client-build/owner-ci
+          python3 pilot/android-awg/verify-apk.py --apk clients/android/app/build/outputs/apk/ownerDiagnostic/app-ownerDiagnostic-unsigned.apk --abis arm64-v8a --report state-client-build/owner-ci/normal.json
+          python3 pilot/android-restricted/owner_package.py --owner clients/android/app/build/outputs/apk/ownerDiagnostic/app-ownerDiagnostic-unsigned.apk --friends clients/android/app/build/outputs/apk/friends/app-friends-unsigned.apk --generated clients/android/owner-restricted-generated --revision "$GITHUB_SHA" --aapt "$ANDROID_HOME/build-tools/35.0.0/aapt" --go "$(command -v go)" --report state-client-build/owner-ci/packaging.json
+          (cd carrier && go test -race -tags=fc_owner_diagnostic ./... && go build -trimpath -tags=fc_owner_diagnostic -o ../state-client-build/owner-ci/bootstrap-broker ./cmd/bootstrap-broker)
+          test -z "$(git status --porcelain)"
+          cp clients/android/app/build/outputs/apk/ownerDiagnostic/app-ownerDiagnostic-unsigned.apk state-client-build/owner-ci/
+          cp clients/android/owner-restricted-generated/jniLibs/arm64-v8a/libfc_restricted.so state-client-build/owner-ci/
+          cp clients/android/awg-generated/jniLibs/arm64-v8a/libfc-awg.so state-client-build/owner-ci/
+          cp clients/android/owner-restricted-generated/assets/restricted-build.json state-client-build/owner-ci/
+          cp clients/android/awg-generated/assets/awg-build.json state-client-build/owner-ci/
+          (cd state-client-build/owner-ci && sha256sum app-ownerDiagnostic-unsigned.apk bootstrap-broker libfc_restricted.so libfc-awg.so > SHA256SUMS)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ownerDiagnostic-unsigned-pair
+          path: state-client-build/owner-ci/
+          if-no-files-found: error
