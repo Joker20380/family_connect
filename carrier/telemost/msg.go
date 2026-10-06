@@ -36,6 +36,7 @@ type fragmentBuilder struct {
 }
 
 type reassembler struct {
+	trace    *sessiontrace.Recorder
 	metrics  sessiontrace.Assembly
 	received *sessiontrace.Fragment
 	mu       sync.Mutex
@@ -75,10 +76,14 @@ func (r *reassembler) ingest(data []byte) {
 		return
 	}
 	key := [2]uint32{sender, messageID}
+	point := fragmentBoundary(data)
+	point.Direction, point.Stage, point.Result = "rx", "carrier_message_completed", "ok"
 	r.mu.Lock()
 	r.metrics.Fragments++
 	r.pruneLocked(r.now())
 	if _, seen := r.recent[key]; seen {
+		point.Result = "recent"
+		r.trace.Boundary(point)
 		r.metrics.Recent++
 		r.mu.Unlock()
 		return
@@ -86,6 +91,8 @@ func (r *reassembler) ingest(data []byte) {
 	builder := r.builds[key]
 	if builder == nil {
 		if len(r.builds) >= maxPendingMessages || len(r.recent)+len(r.builds) >= maxRecentMessages {
+			point.Result = "capacity"
+			r.trace.Boundary(point)
 			r.metrics.Capacity++
 			r.mu.Unlock()
 			return
@@ -97,10 +104,13 @@ func (r *reassembler) ingest(data []byte) {
 	_, duplicate := builder.received[sequence]
 	if duplicate || builder.total != total || builder.length != length || builder.checksum != checksum {
 		if duplicate {
+			point.Result = "duplicate"
 			r.metrics.Duplicate++
 		} else {
+			point.Result = "conflict"
 			r.metrics.Conflict++
 		}
+		r.trace.Boundary(point)
 		delete(r.builds, key)
 		r.recent[key] = builder.deadline
 		r.mu.Unlock()
@@ -123,6 +133,11 @@ func (r *reassembler) ingest(data []byte) {
 	r.recent[key] = r.now().Add(reassemblyTimeout)
 	r.mu.Unlock()
 	valid := crc32.ChecksumIEEE(output) == checksum
+	point.DataKnown, point.DataSequence = builder.diagnostic.DataKnown, builder.diagnostic.DataSequence
+	if !valid {
+		point.Result = "crc"
+	}
+	r.trace.Boundary(point)
 	r.mu.Lock()
 	if valid {
 		r.metrics.Completed++
@@ -147,6 +162,7 @@ func (r *reassembler) pruneLocked(now time.Time) {
 	}
 	for key, builder := range r.builds {
 		if !now.Before(builder.deadline) {
+			r.trace.Boundary(sessiontrace.Boundary{Direction: "rx", Stage: "carrier_message_completed", Result: "expired", MessageKnown: true, Sender: key[0], Message: key[1], Total: builder.total, DataKnown: builder.diagnostic.DataKnown, DataSequence: builder.diagnostic.DataSequence})
 			r.metrics.Expired++
 			delete(r.builds, key)
 			r.recent[key] = now.Add(reassemblyTimeout)

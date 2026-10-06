@@ -36,21 +36,26 @@ type Event struct {
 }
 
 type Snapshot struct {
-	DeliveryDropped   uint64  `json:"delivery_dropped"`
-	SessionTag        string  `json:"session_tag"`
-	CorrelationStatus string  `json:"correlation_status"`
-	Events            []Event `json:"trace"`
-	FirstFailure      *Event  `json:"first_failure,omitempty"`
-	Dropped           uint64  `json:"trace_dropped"`
-	ExportDropped     uint64  `json:"export_dropped"`
+	Fault             *FaultReceipt `json:"fault,omitempty"`
+	Boundaries        *Boundaries   `json:"boundaries,omitempty"`
+	DeliveryDropped   uint64        `json:"delivery_dropped"`
+	SessionTag        string        `json:"session_tag"`
+	CorrelationStatus string        `json:"correlation_status"`
+	Events            []Event       `json:"trace"`
+	FirstFailure      *Event        `json:"first_failure,omitempty"`
+	Dropped           uint64        `json:"trace_dropped"`
+	ExportDropped     uint64        `json:"export_dropped"`
 }
 
 type Recorder struct {
-	mu       sync.Mutex
-	value    Snapshot
-	sequence uint64
-	closing  bool
-	sink     func(Event) bool
+	fault        faultControl
+	boundaries   [BoundaryLimit]Boundary
+	boundaryNext uint64
+	mu           sync.Mutex
+	value        Snapshot
+	sequence     uint64
+	closing      bool
+	sink         func(Event) bool
 }
 
 func Tag(identifier string) (string, string) {
@@ -95,6 +100,7 @@ func (recorder *Recorder) Record(event Event) {
 	if event.CloseCode < 1000 || event.CloseCode > 4999 {
 		event.CloseCode = 0
 	}
+	recorder.faultEvent(event)
 	if !Allowed(event.CloseReason, "|ping|timeout|duplicate|expired|inactivity|shutdown|restart|invalid|ack|idle|session|READ_ERROR|READ_TIMEOUT|INVALID_MESSAGE|WRITE_ERROR") {
 		event.CloseReason = ""
 	}
@@ -134,8 +140,17 @@ func (recorder *Recorder) Record(event Event) {
 		}
 	}
 	recorder.value.Events = append(recorder.value.Events, event)
-	if recorder.sink != nil && !recorder.sink(cloneEvent(event)) {
-		recorder.value.ExportDropped++
+	if recorder.sink != nil {
+		exported := cloneEvent(event)
+		if exported.Stage == "CARRIER_ACTIVITY" && recorder.boundaryNext > 0 {
+			if exported.Delivery == nil {
+				exported.Delivery = &Delivery{}
+			}
+			exported.Delivery.Boundaries = recorder.boundarySnapshot()
+		}
+		if !recorder.sink(exported) {
+			recorder.value.ExportDropped++
+		}
 	}
 }
 
@@ -150,6 +165,8 @@ func (recorder *Recorder) Snapshot() Snapshot {
 	recorder.mu.Lock()
 	defer recorder.mu.Unlock()
 	value := recorder.value
+	value.Fault = recorder.faultSnapshot()
+	value.Boundaries = recorder.boundarySnapshot()
 	value.Events = append([]Event{}, value.Events...)
 	for index := range value.Events {
 		value.Events[index] = cloneEvent(value.Events[index])

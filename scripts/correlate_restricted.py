@@ -58,10 +58,38 @@ def event(source):
     return safe
 
 
+BOUNDARY_STAGES = "reliable_send|carrier_queued|carrier_written|rtp_written|rtp_received|vp8_reassembled|carrier_message_completed|reliable_data_accepted|ack_generated|ack_sent|ack_received"
+BOUNDARY_RESULTS = "ok|write_error|no_rtp|incomplete|duplicate|stale|recent|capacity|conflict|expired|crc|malformed|protocol|old_rtp|window|frame_discard"
+
+
+def boundaries(source):
+    if not isinstance(source, dict) or not number(source.get("dropped")) or not isinstance(source.get("events"), list):
+        return None
+    entries, previous = [], 0
+    rejected = max(0, len(source["events"]) - 64)
+    limits = {field: 2**53 - 1 for field in "index at_ms data_sequence ack_base".split()}
+    limits.update({field: 2**32 - 1 for field in "sender message timestamp media_track packets ack_mask".split()})
+    limits.update(attempt=32, total=8, fragment=8, first_rtp=65535, last_rtp=65535)
+    flags = "data_known attempt_known message_known frame_known".split()
+    for item in source["events"][-64:]:
+        if not isinstance(item, dict) or item.get("stage") not in BOUNDARY_STAGES.split("|") or item.get("result") not in BOUNDARY_RESULTS.split("|") or item.get("direction") not in ("tx", "rx"):
+            rejected += 1
+            continue
+        if any(not number(item[field]) or item[field] > limit for field, limit in limits.items() if field in item) or any(type(item[field]) is not bool for field in flags if field in item) or not number(item.get("index")) or item["index"] <= previous or not number(item.get("at_ms")):
+            rejected += 1
+            continue
+        entries.append({field: item[field] for field in [*limits, *flags, "stage", "result", "direction"] if field in item})
+        previous = item["index"]
+    return {"events": entries, "dropped": source["dropped"], "projection_dropped": rejected}
+
+
 def delivery(source):
     if not isinstance(source, dict):
         return {}
     safe = {}
+    ring = boundaries(source.get("boundaries"))
+    if ring is not None:
+        safe["boundaries"] = ring
     shapes = {
         "flow": ("send_base send_next receive_next receive_mask ack_base ack_mask pending buffered head_retries", "ack_seen head_sacked"),
         "assembly": ("fragments completed expired malformed duplicate conflict capacity crc_failed recent pending rtp rtp_gaps vp8_frames", ""),
@@ -133,6 +161,7 @@ def compare_delivery(sender, receiver, direction):
 
 def correlate(clients, server, lookup):
     bindings, client_events, server_events, firsts = {}, {}, {}, {}
+    client_boundaries = {}
     recovery = []
     for bundle in clients:
         if not isinstance(bundle, dict):
@@ -164,6 +193,11 @@ def correlate(clients, server, lookup):
                 lifecycle = session.get("lifecycle", {})
                 if not isinstance(lifecycle, dict):
                     raise ValueError("invalid lifecycle")
+                ring = boundaries(lifecycle.get("boundaries"))
+                if ring is not None:
+                    previous = client_boundaries.get(tag, {"events": []})
+                    if not previous["events"] or ring["events"] and ring["events"][-1]["index"] >= previous["events"][-1]["index"]:
+                        client_boundaries[tag] = ring
                 entries = lifecycle.get("trace", [])
                 if not isinstance(entries, list) or len(entries) > 192:
                     raise ValueError("invalid lifecycle bound")
@@ -223,6 +257,7 @@ def correlate(clients, server, lookup):
                 first_remote = entry
                 break
         results.append({**binding, "client": local, "server": remote, "recovery": related,
+                        "client_boundaries": client_boundaries.get(tag),
                         "delivery_comparison": [value for value in (compare_delivery(local, remote, "client_to_server"), compare_delivery(remote, local, "server_to_client")) if value is not None],
                         "first_client_failure": firsts.get(tag), "first_server_failure": first_remote,
                         "server_sequence_gaps": gaps, "missing_server_stages": missing,

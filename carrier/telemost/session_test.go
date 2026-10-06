@@ -117,7 +117,7 @@ func TestSendAndRecvBackpressure(t *testing.T) {
 	session.subReady.Store(true)
 	session.pubReady.Store(true)
 	for range cap(session.sendQueue) {
-		session.sendQueue <- []byte{1}
+		session.sendQueue <- outboundFrame{data: []byte{1}}
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond)
 	defer cancel()

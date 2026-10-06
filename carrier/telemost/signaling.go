@@ -596,7 +596,7 @@ func (s *Session) writerLoop() {
 				if !ok {
 					return
 				}
-				s.writeVP8Sample(frame)
+				s.writeVP8Sample(frame.data, frame.point)
 				time.Sleep(vp8SendInterval)
 			}
 		}
@@ -610,7 +610,7 @@ func (s *Session) writerLoop() {
 			if !ok {
 				return
 			}
-			if !s.writeDCMessage(frame) {
+			if !s.writeDCMessage(frame.data) {
 				s.signalClosed(errors.New("telemost: data channel write failed"))
 				return
 			}
@@ -618,14 +618,33 @@ func (s *Session) writerLoop() {
 	}
 }
 
-func (s *Session) writeVP8Sample(data []byte) {
+func (s *Session) writeVP8Sample(data []byte, queued ...sessiontrace.Boundary) {
+	point := sessiontrace.Boundary{Stage: "carrier_written", Direction: "tx", Result: "no_rtp"}
+	if fragment, valid := decodeVP8Frame(data); valid {
+		point = s.cfg.Trace.MessageAttempt(fragmentBoundary(fragment))
+		point.Stage, point.Direction, point.Result = "carrier_written", "tx", "no_rtp"
+	}
+	if len(queued) > 0 {
+		point = queued[0]
+		point.Stage, point.Direction, point.Result = "carrier_written", "tx", "incomplete"
+		s.cfg.Trace.Boundary(point)
+		point.Result = "no_rtp"
+	}
 	if s.track == nil {
+		s.cfg.Trace.Boundary(point)
 		return
 	}
+	before := s.rtpWrites.Load()
 	if err := s.track.WriteSample(media.Sample{Data: data, Duration: vp8FrameDuration}); err != nil {
+		point.Result = "write_error"
+		s.cfg.Trace.Boundary(point)
 		s.signalClosed(errors.New("telemost: VP8 write failed"))
 		return
 	}
+	if s.rtpWrites.Load() != before {
+		point.Result = "ok"
+	}
+	s.cfg.Trace.Boundary(point)
 	s.statsMu.Lock()
 	s.mediaStats.SamplesWritten++
 	if fragment, valid := decodeVP8Frame(data); valid {
@@ -713,6 +732,12 @@ func capabilitiesOffer() map[string]any {
 func (s *Session) readVP8Track(track *webrtc.TrackRemote) {
 	var state vp8FrameState
 	reorder := newReorderBuffer()
+	reorder.trace = s.cfg.Trace
+	state.trace = s.cfg.Trace
+	observer := rtpBoundary{trace: s.cfg.Trace, stage: "rtp_received", direction: "rx"}
+	observer.track = s.rxTracks.Add(1)
+	reorder.mediaTrack, state.mediaTrack = observer.track, observer.track
+	defer observer.flush("incomplete")
 	buf := make([]byte, 65536)
 	for {
 		n, _, err := track.Read(buf)
@@ -724,6 +749,7 @@ func (s *Session) readVP8Track(track *webrtc.TrackRemote) {
 		if pkt.Unmarshal(buf[:n]) != nil {
 			continue
 		}
+		observer.packet(&pkt.Header, pkt.Payload, "ok")
 		s.statsMu.Lock()
 		s.mediaStats.RTPReceived++
 		if len(pkt.Payload) == 0 {
@@ -744,6 +770,11 @@ func (s *Session) readVP8Track(track *webrtc.TrackRemote) {
 			s.mediaStats.FramesReceived++
 			s.statsMu.Unlock()
 			if frag, ok := decodeVP8Frame(frame); ok {
+				point := fragmentBoundary(frag)
+				point.Stage, point.Direction, point.Result = "vp8_reassembled", "rx", "ok"
+				point.FrameKnown, point.Timestamp, point.LastRTP = true, ordered.Timestamp, ordered.SequenceNumber
+				point.MediaTrack = observer.track
+				s.cfg.Trace.Boundary(point)
 				s.statsMu.Lock()
 				s.mediaStats.BinaryFrames++
 				s.statsMu.Unlock()

@@ -4,6 +4,7 @@ def targetAbi = providers.gradleProperty('fcTargetAbi').getOrElse('all')
 def friendsCi = providers.gradleProperty('fcFriendsCi').getOrElse('false') == 'true'
 def restrictedDiagnostic = providers.gradleProperty('fcRestrictedDiagnostic').getOrElse('false') == 'true'
 def orchestratorDiagnostic = providers.gradleProperty('fcOrchestratorDiagnostic').getOrElse('false') == 'true'
+def ownerRestrictedDirectory = providers.gradleProperty('fcOwnerRestrictedDirectory').getOrElse('../owner-restricted-generated')
 if (!(targetAbi in ['all', 'arm64-v8a']) && !(friendsCi && targetAbi == 'x86_64')) throw new GradleException('Unsupported fcTargetAbi')
 android {
     buildFeatures { buildConfig = true }
@@ -32,6 +33,10 @@ android {
     sourceSets { main { java.srcDir '../awg-generated/java'; jniLibs.srcDir '../awg-generated/jniLibs'; assets.srcDir '../awg-generated/assets' } }
     sourceSets { debug { jniLibs.srcDir '../restricted-generated/jniLibs'; assets.srcDir '../restricted-generated/assets' } }
     sourceSets { friends { jniLibs.srcDir '../restricted-generated/jniLibs'; assets.srcDir '../restricted-generated/assets' } }
+    sourceSets { ownerDiagnostic {
+        jniLibs.srcDir "${ownerRestrictedDirectory}/jniLibs"
+        assets.srcDir "${ownerRestrictedDirectory}/assets"
+    } }
     packaging { jniLibs {
         keepDebugSymbols += ['**/libfc-awg.so']
         // Extract compressed libraries on install; preserve their verified bytes.
@@ -55,6 +60,26 @@ android {
             matchingFallbacks = ['release']
             manifestPlaceholders = [appLabel: 'family_connect', launcherActivity: 'com.familyconnect.app.FriendsActivity']
         }
+        ownerDiagnostic {
+            initWith friends
+            signingConfig null
+            debuggable false
+            matchingFallbacks = ["friends", "release"]
+            manifestPlaceholders = [appLabel: "OWNER DIAGNOSTIC ONLY", launcherActivity: "com.familyconnect.app.FriendsActivity"]
+        }
+    }
+    applicationVariants.all { variant ->
+        if (variant.buildType.name == "ownerDiagnostic") {
+            variant.outputs.all {
+                versionCodeOverride = 66
+                versionNameOverride = "0.1.18-beta66"
+            }
+        }
+    }
+}
+androidComponents {
+    onVariants(selector().withBuildType('ownerDiagnostic')) { variant ->
+        variant.packaging.jniLibs.keepDebugSymbols.add('**/libfc_restricted.so')
     }
 }
 dependencies {

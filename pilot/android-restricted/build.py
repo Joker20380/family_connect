@@ -19,7 +19,10 @@ def main():
     parser.add_argument('--go', required=True)
     parser.add_argument('--ndk', type=Path, required=True)
     parser.add_argument('--out', type=Path, required=True)
+    parser.add_argument('--owner-diagnostic', action='store_true')
     args = parser.parse_args()
+    if args.owner_diagnostic:
+        os.environ['GOFLAGS'] = '-tags=fc_owner_diagnostic'
     revision = subprocess.check_output(['git', '-C', str(args.xray), 'rev-parse', 'HEAD'], text=True).strip()
     if revision != REVISION or args.out.exists():
         raise RuntimeError('Pinned source and fresh output required')
@@ -58,6 +61,8 @@ def main():
         manifest = {'xray_revision': REVISION, 'gvisor_version': 'v0.0.0-20260122175437-89a5d21be8f0',
                     'patch_sha256': hashlib.sha256((source / 'xray-packet-boundary.patch').read_bytes()).hexdigest(),
                     'binary_sha256': hashlib.sha256(output.read_bytes()).hexdigest(), 'diagnostic_only': True}
+        manifest['owner_diagnostic_fault_schema'] = 1 if args.owner_diagnostic else 0
+        manifest['source_revision'] = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
         (args.out / 'assets/restricted-build.json').write_text(json.dumps(manifest, indent=2)+'\n')
         print(json.dumps(manifest))
 

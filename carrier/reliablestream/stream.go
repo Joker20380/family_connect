@@ -202,7 +202,31 @@ func (stream *Stream) run(ctx context.Context) {
 	transmit := func(packets []frame) error {
 		for _, packet := range packets {
 			sendContext, cancel := context.WithTimeout(ctx, min(stream.state.config.MaxAge, 2*time.Second))
+			point := sessiontrace.Boundary{Direction: "tx", Result: "ok"}
+			if packet.kind == dataFrame {
+				stream.mu.Lock()
+				attempt := uint32(stream.state.sent[packet.seq].retries)
+				stream.mu.Unlock()
+				sendContext = sessiontrace.WithAttempt(sendContext, packet.seq, attempt)
+				point = sessiontrace.AttemptFrom(sendContext)
+				point.Direction, point.Stage, point.Result = "tx", "reliable_send", "ok"
+				sessiontrace.From(ctx).Boundary(point)
+				if sessiontrace.From(ctx).DropDiagnostic(point) {
+					cancel()
+					continue
+				}
+			} else if packet.kind == ackFrame {
+				point.Stage, point.ACKBase, point.ACKMask = "ack_generated", packet.ack, packet.bits
+				sessiontrace.From(ctx).Boundary(point)
+			}
 			err := stream.endpoint.SendContext(sendContext, encode(packet))
+			if packet.kind == ackFrame {
+				point.Stage = "ack_sent"
+				if err != nil {
+					point.Result = "write_error"
+				}
+				sessiontrace.From(ctx).Boundary(point)
+			}
 			cancel()
 			if err != nil {
 				return err
@@ -256,8 +280,25 @@ func (stream *Stream) run(ctx context.Context) {
 				packet, err = decode(record.data)
 				if err == nil {
 					stream.mu.Lock()
+					duplicates, stale := stream.state.stats.Duplicates, stream.state.stats.Stale
 					packets, err = stream.state.input(packet, time.Now())
+					point := sessiontrace.Boundary{Direction: "rx", Result: "ok"}
+					if err != nil {
+						point.Result = "protocol"
+					} else if stream.state.stats.Stale != stale {
+						point.Result = "stale"
+					} else if stream.state.stats.Duplicates != duplicates {
+						point.Result = "duplicate"
+					}
+					if packet.kind == dataFrame {
+						point.Stage, point.DataKnown, point.DataSequence = "reliable_data_accepted", true, packet.seq
+					} else if packet.kind == ackFrame {
+						point.Stage, point.ACKBase, point.ACKMask = "ack_received", packet.ack, packet.bits
+					}
 					stream.mu.Unlock()
+					if point.Stage != "" {
+						sessiontrace.From(ctx).Boundary(point)
+					}
 				}
 			}
 		case now := <-ticker.C:

@@ -42,12 +42,13 @@ type Assembly struct {
 }
 
 type Delivery struct {
-	Flow     *Flow     `json:"flow,omitempty"`
-	Assembly *Assembly `json:"assembly,omitempty"`
-	Pending  *Fragment `json:"pending,omitempty"`
-	Queued   *Fragment `json:"queued,omitempty"`
-	Written  *Fragment `json:"written,omitempty"`
-	Received *Fragment `json:"received,omitempty"`
+	Boundaries *Boundaries `json:"boundaries,omitempty"`
+	Flow       *Flow       `json:"flow,omitempty"`
+	Assembly   *Assembly   `json:"assembly,omitempty"`
+	Pending    *Fragment   `json:"pending,omitempty"`
+	Queued     *Fragment   `json:"queued,omitempty"`
+	Written    *Fragment   `json:"written,omitempty"`
+	Received   *Fragment   `json:"received,omitempty"`
 }
 
 func copyValue[Value any](value *Value) *Value {
@@ -63,8 +64,16 @@ func CloneDelivery(value *Delivery) *Delivery {
 		return nil
 	}
 	return &Delivery{Flow: copyValue(value.Flow), Assembly: copyValue(value.Assembly),
-		Pending: copyValue(value.Pending), Queued: copyValue(value.Queued),
+		Boundaries: cloneBoundaries(value.Boundaries),
+		Pending:    copyValue(value.Pending), Queued: copyValue(value.Queued),
 		Written: copyValue(value.Written), Received: copyValue(value.Received)}
+}
+
+func cloneBoundaries(value *Boundaries) *Boundaries {
+	if value == nil {
+		return nil
+	}
+	return &Boundaries{Dropped: value.Dropped, Events: append([]Boundary(nil), value.Events...)}
 }
 
 func cloneEvent(value Event) Event {

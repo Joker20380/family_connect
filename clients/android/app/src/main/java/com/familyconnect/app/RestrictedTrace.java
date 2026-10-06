@@ -43,6 +43,7 @@ final class RestrictedTrace {
         JsonObject source=input.getAsJsonObject(),safe=new JsonObject();
         if(!tag.equals(text(source,"session_tag"))||!"VALID".equals(text(source,"correlation_status")))return null;
         safe.addProperty("session_tag",tag);safe.addProperty("correlation_status","VALID");
+        JsonObject boundaries=RestrictedDelivery.boundaries(source.get("boundaries"));if(boundaries!=null)safe.add("boundaries",boundaries);
         for(String field:new String[]{"trace_dropped","export_dropped","delivery_dropped"})number(source,safe,field);
         JsonObject first=event(source.get("first_failure"),tag);
         if(first!=null&&!"NONE".equals(text(first,"reason")))safe.add("first_failure",first);

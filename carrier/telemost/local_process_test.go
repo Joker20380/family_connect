@@ -8,10 +8,12 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strings"
 	"testing"
 	"time"
 
 	"github.com/Joker20380/family_connect/carrier/frame"
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"github.com/pion/webrtc/v4"
 )
 
@@ -80,12 +82,13 @@ func TestLocalEndpointHelper(t *testing.T) {
 func localEndpoint(role string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 40*time.Second)
 	defer cancel()
-	session, err := New(ctx, Config{RoomURL: "local-test"})
+	diagnostics := sessiontrace.New(strings.Repeat("a", 64), nil)
+	session, err := New(ctx, Config{RoomURL: "local-test", Trace: diagnostics})
 	if err != nil {
 		return err
 	}
 	defer session.Close()
-	api, err := newWebRTCAPI()
+	api, err := diagnosticWebRTCAPI(nil, &boundaryFactory{trace: diagnostics, writes: &session.rtpWrites})
 	if err != nil {
 		return err
 	}
@@ -205,6 +208,14 @@ func localEndpoint(role string) error {
 	stats := session.Stats()
 	if stats.MessagesRecv != 207 || stats.Media.BinaryFrames < 315 || stats.Media.RTPReceived < stats.Media.BinaryFrames {
 		return fmt.Errorf("incomplete local media evidence")
+	}
+	written, received := false, false
+	for _, point := range diagnostics.Snapshot().Boundaries.Events {
+		written = written || point.Stage == "rtp_written" && point.Result == "ok" && point.Packets > 0
+		received = received || point.Stage == "rtp_received" && point.Result == "ok" && point.Packets > 0
+	}
+	if !written || !received || session.rtpWrites.Load() == 0 {
+		return fmt.Errorf("actual PeerConnection RTP boundary evidence missing")
 	}
 	return frame.WriteFrame(os.Stdout, frame.Frame{Version: frame.Version, Opcode: frame.OpStatusResp, Payload: []byte("207 byte-for-byte checks")})
 }

@@ -140,10 +140,12 @@ type Session struct {
 	ws   *websocket.Conn
 
 	msgID       atomic.Uint32
+	rtpWrites   atomic.Uint64
+	rxTracks    atomic.Uint32
 	subSequence atomic.Uint32
 	reassembler *reassembler
 
-	sendQueue chan []byte
+	sendQueue chan outboundFrame
 	closeCh   chan struct{}
 	closeOnce sync.Once
 	closed    atomic.Bool
@@ -200,7 +202,7 @@ func New(ctx context.Context, cfg Config) (*Session, error) {
 		mode:         cfg.Mode,
 		senderID:     randomUint32(),
 		auth:         NewAuth(cfg.HTTPClient),
-		sendQueue:    make(chan []byte, sendQueueSize),
+		sendQueue:    make(chan outboundFrame, sendQueueSize),
 		closeCh:      make(chan struct{}),
 		connected:    make(chan struct{}),
 		setupStarted: time.Now(),
@@ -212,6 +214,7 @@ func New(ctx context.Context, cfg Config) (*Session, error) {
 	s.recvQueue = make(chan []byte, 16)
 	s.pendingICE = make(map[string][]webrtc.ICECandidateInit)
 	s.reassembler = newReassembler(s.senderID, s.deliver)
+	s.reassembler.trace = cfg.Trace
 	go func() { <-s.ctx.Done(); _ = s.Close() }()
 	return s, nil
 }
@@ -367,8 +370,15 @@ func (s *Session) SendContext(ctx context.Context, payload []byte) error {
 		if s.mode == ModeVP8 {
 			out = encodeVP8DataFrame(frag)
 		}
+		point := fragmentBoundary(frag)
+		attempt := sessiontrace.AttemptFrom(ctx)
+		if attempt.AttemptKnown {
+			point.DataKnown, point.DataSequence, point.AttemptKnown, point.Attempt = attempt.DataKnown, attempt.DataSequence, true, attempt.Attempt
+		}
+		point.Stage, point.Direction, point.Result = "carrier_queued", "tx", "ok"
 		select {
-		case s.sendQueue <- out:
+		case s.sendQueue <- outboundFrame{data: out, point: point}:
+			s.cfg.Trace.Boundary(point)
 			s.statsMu.Lock()
 			s.queued = advanceFragment(s.queued, frag)
 			s.statsMu.Unlock()
@@ -513,7 +523,7 @@ func (s *Session) dcOpen() *webrtc.DataChannel {
 }
 
 func (s *Session) setupPeerConnections(config webrtc.Configuration) error {
-	api, err := newWebRTCAPI(s.cfg.Underlay)
+	api, err := diagnosticWebRTCAPI(s.cfg.Underlay, &boundaryFactory{trace: s.cfg.Trace, writes: &s.rtpWrites})
 	if err != nil {
 		return err
 	}
@@ -539,9 +549,17 @@ func (s *Session) setupPeerConnections(config webrtc.Configuration) error {
 }
 
 func newWebRTCAPI(networks ...*underlay.Network) (*webrtc.API, error) {
+	var network *underlay.Network
+	if len(networks) > 0 {
+		network = networks[0]
+	}
+	return diagnosticWebRTCAPI(network, nil)
+}
+
+func diagnosticWebRTCAPI(network *underlay.Network, diagnostic interceptor.Factory) (*webrtc.API, error) {
 	settings := webrtc.SettingEngine{}
-	if len(networks) > 0 && networks[0] != nil {
-		settings.SetNet(networks[0])
+	if network != nil {
+		settings.SetNet(network)
 	}
 	logger := logging.NewDefaultLoggerFactory()
 	logger.Writer = io.Discard
@@ -554,6 +572,9 @@ func newWebRTCAPI(networks ...*underlay.Network) (*webrtc.API, error) {
 		return nil, fmt.Errorf("telemost: register codecs: %w", err)
 	}
 	registry := &interceptor.Registry{}
+	if diagnostic != nil {
+		registry.Add(diagnostic)
+	}
 	if err := webrtc.RegisterDefaultInterceptors(mediaEngine, registry); err != nil {
 		return nil, fmt.Errorf("telemost: interceptors: %w", err)
 	}
