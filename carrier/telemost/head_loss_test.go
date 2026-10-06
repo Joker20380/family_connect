@@ -52,7 +52,8 @@ type headAttempt struct {
 }
 
 type headLossEndpoint struct {
-	dropACK atomic.Bool
+	rewriteRTP bool
+	dropACK    atomic.Bool
 	*Session
 	peer         *headLossEndpoint
 	sendMu       sync.Mutex
@@ -128,6 +129,11 @@ func (point *headLossEndpoint) receive(packets []*rtp.Packet) {
 	point.receiveMu.Lock()
 	defer point.receiveMu.Unlock()
 	for _, packet := range packets {
+		if point.rewriteRTP {
+			packet = packet.Clone()
+			packet.SequenceNumber += 1234
+			packet.Timestamp += 90000
+		}
 		point.observer.packet(&packet.Header, packet.Payload, "ok")
 		point.reorder.push(packet, func(ordered *rtp.Packet) {
 			point.correlated.packet(&ordered.Header, ordered.Payload, "ok")

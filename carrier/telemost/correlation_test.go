@@ -12,6 +12,52 @@ import (
 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 )
 
+func TestCorrelationPionRewrittenSubscriberLeg(test *testing.T) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	sender, receiver := headLossPair(test, ctx, 19, "none")
+	defer sender.Close()
+	defer receiver.Close()
+	receiver.rewriteRTP = true
+	armed, err := receiver.cfg.Trace.PrearmCorrelation(sessiontrace.CorrelationKey{Session: receiver.cfg.Trace.Snapshot().SessionTag, Direction: "client_to_gateway", Sequence: 19, Attempt: 1}, "rx")
+	if err != nil {
+		test.Fatal(err)
+	}
+	if _, err := sender.cfg.Trace.PrearmCorrelation(armed.Key, "tx"); err != nil {
+		test.Fatal(err)
+	}
+	data := diagnosticData()
+	binary.BigEndian.PutUint64(data[40:], 19)
+	if err := sender.SendContext(sessiontrace.WithAttempt(ctx, 19, 0), data); err != nil {
+		test.Fatal(err)
+	}
+	if err := sender.SendContext(sessiontrace.WithAttempt(ctx, 19, 1), data); err != nil {
+		test.Fatal(err)
+	}
+	described, _ := sender.cfg.Trace.CorrelationStatus(armed.Key, false)
+	if described.Descriptor == nil {
+		test.Fatal("publisher descriptor missing")
+	}
+	matched, err := receiver.cfg.Trace.BindCorrelation(*described.Descriptor)
+	if err != nil || matched.State != "CARRIER_COMPLETE" || !matched.MediaComplete {
+		test.Fatalf("subscriber leg not correlated: %+v %v", matched, err)
+	}
+	for _, media := range described.Descriptor.Media {
+		var observed sessiontrace.MediaIdentity
+		for _, candidate := range matched.Candidates {
+			if candidate.Message == described.Descriptor.Message {
+				observed = candidate.Media[media.Fragment]
+			}
+		}
+		if observed.Timestamp != media.Timestamp+90000 || observed.First != media.First+1234 || observed.Picture != media.Picture {
+			test.Fatal("leg evidence lost or payload identity changed")
+		}
+	}
+	if received, err := receiver.Recv(ctx); err != nil || !bytes.Equal(received, data) {
+		test.Fatal("rewritten RTP changed carrier payload", err)
+	}
+}
+
 func TestCorrelationPionRetryDiscrimination(test *testing.T) {
 	for _, mode := range []string{"none", "late_message", "late_rtp", "duplicate", "reorder"} {
 		test.Run(mode, func(test *testing.T) {

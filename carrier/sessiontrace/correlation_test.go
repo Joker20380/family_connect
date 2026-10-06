@@ -101,19 +101,12 @@ func TestCorrelationRetryMatrix(test *testing.T) {
 }
 
 func TestCorrelationFragmentMixAndIdentity(test *testing.T) {
-	for _, field := range []string{"fragment_mix", "picture", "timestamp", "range"} {
+	for _, field := range []string{"fragment_mix", "picture"} {
 		test.Run(field, func(test *testing.T) {
 			recorder, key := correlationFixture(test)
 			descriptor := correlationDescriptor(key, 11, 2)
 			if field == "picture" {
 				descriptor.Media[0].Picture++
-			}
-			if field == "timestamp" {
-				descriptor.Media[0].Timestamp++
-			}
-			if field == "range" {
-				descriptor.Media[0].First++
-				descriptor.Media[0].Last++
 			}
 			if _, err := recorder.BindCorrelation(descriptor); err != nil {
 				test.Fatal(err)

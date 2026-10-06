@@ -216,7 +216,8 @@ func (watch *correlationWatch) complete() {
 			continue
 		}
 		for _, media := range descriptor.Media {
-			if candidate.Media[media.Fragment] != media || (watch.local == "rx" && !candidate.Reconstructed[media.Fragment]) {
+			observed, exists := candidate.Media[media.Fragment]
+			if !exists || observed.Fragment != media.Fragment || observed.Total != media.Total || observed.Picture != media.Picture || !validRTPRange(observed) || (watch.local == "tx" && observed != media) || (watch.local == "rx" && !candidate.Reconstructed[media.Fragment]) {
 				return
 			}
 		}
@@ -245,6 +246,10 @@ func (watch *correlationWatch) complete() {
 		watch.value.State = "COMPLETE"
 		return
 	}
+}
+
+func validRTPRange(media MediaIdentity) bool {
+	return media.Packets > 0 && media.Packets <= 256 && uint32(uint16(media.Last-media.First))+1 == media.Packets
 }
 
 func (recorder *Recorder) correlationBoundary(point Boundary, now time.Time) {
