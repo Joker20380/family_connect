@@ -56,7 +56,7 @@ func TestCorrelationAuthenticatedRuntime(test *testing.T) {
 	}
 	correlationAttempt(recorder, 11, 2)
 	complete := controlExchange(test, path, correlationRequest{Operation: "status", Key: armed.Key})
-	if complete.State != "COMPLETE" {
+	if complete.State != "CARRIER_COMPLETE" || !complete.MediaComplete {
 		test.Fatal(complete)
 	}
 	replay := controlExchange(test, path, correlationRequest{Operation: "bind", Key: armed.Key, Descriptor: &descriptor})

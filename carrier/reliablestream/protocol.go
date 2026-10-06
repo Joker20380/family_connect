@@ -3,6 +3,7 @@ package reliablestream
 import (
 	"encoding/binary"
 	"errors"
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"time"
 )
 
@@ -45,15 +46,16 @@ func (config Config) validate() error {
 type epoch [16]byte
 
 type frame struct {
-	kind    byte
-	source  epoch
-	target  epoch
-	seq     uint64
-	ack     uint64
-	bits    uint32
-	window  int
-	payload int
-	data    []byte
+	observation sessiontrace.ACKObservation
+	kind        byte
+	source      epoch
+	target      epoch
+	seq         uint64
+	ack         uint64
+	bits        uint32
+	window      int
+	payload     int
+	data        []byte
 }
 
 func encode(packet frame) []byte {

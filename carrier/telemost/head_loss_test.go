@@ -83,6 +83,7 @@ func headLossPair(test *testing.T, ctx context.Context, head uint64, fault strin
 		point.reorder.trace, point.frame.trace = trace, trace
 		point.observer = rtpBoundary{trace: trace, stage: "rtp_received", direction: "rx"}
 		point.correlated = rtpBoundary{trace: trace, stage: "rtp_correlated", direction: "rx", correlationOnly: true}
+		session.reassembler.onMessage = nil
 		session.reassembler.onData = func(data []byte) {
 			sequence, known := reliablestream.DataSequencePrefix(data, uint32(len(data)))
 			if known && sequence == point.head && point.dropDelivery {

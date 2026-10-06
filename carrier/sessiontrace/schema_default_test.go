@@ -4,6 +4,7 @@ package sessiontrace
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"os"
 	"reflect"
@@ -46,6 +47,10 @@ func TestPublicForensicsCannotEnterExport(test *testing.T) {
 	recorder.Boundary(point)
 	before, _ := json.Marshal(recorder.Snapshot())
 	for index := 0; index < 2100; index++ {
+		recorder.ReceiverAccepted(ReceiveIdentity{}, 19, "ok", ReceiveState{}, ReceiveState{})
+		recorder.ReceiverConsumed(19, ReceiveState{}, ReceiveState{}, StampACK(), 20, 0)
+		recorder.ReceiverACKSent(StampACK(), 20, 0, true)
+		point.CaptureACK(WithACKObservation(context.Background(), StampACK(), 20, 0))
 		recorder.RecordConsumed(19, 20, 127)
 		recorder.RecordBaseAdvanced(20, 127)
 		for _, stage := range []string{"reliable_consumed", "base_advanced", "rtp_correlated"} {
@@ -66,7 +71,7 @@ func TestPublicForensicsCannotEnterExport(test *testing.T) {
 		if err != nil {
 			test.Fatal(err)
 		}
-		for _, forbidden := range []string{"reliable_consumed", "base_advanced", "picture_known", "picture_id", "evidence_watch", "descriptor", "generation", "nonce", "candidates", "prearm", "secret"} {
+		for _, forbidden := range []string{"reliable_consumed", "base_advanced", "picture_known", "picture_id", "evidence_watch", "descriptor", "generation", "nonce", "candidates", "prearm", "secret", "created_ns", "sent_ns", "accepted", "media_complete"} {
 			if strings.Contains(string(raw), forbidden) {
 				test.Fatal("forensic metadata in public export", forbidden)
 			}

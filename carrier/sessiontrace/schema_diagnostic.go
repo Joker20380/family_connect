@@ -5,6 +5,7 @@ package sessiontrace
 const BoundaryStages = "reliable_send|carrier_queued|carrier_written|rtp_written|rtp_received|vp8_reassembled|carrier_message_completed|reliable_data_accepted|reliable_consumed|ack_generated|ack_sent|ack_received|base_advanced"
 
 type Boundary struct {
+	ackWrite     ackWrite
 	Index        uint64 `json:"index"`
 	AtMS         int64  `json:"at_ms"`
 	Direction    string `json:"direction"`

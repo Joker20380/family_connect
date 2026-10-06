@@ -36,15 +36,16 @@ type fragmentBuilder struct {
 }
 
 type reassembler struct {
-	trace    *sessiontrace.Recorder
-	metrics  sessiontrace.Assembly
-	received *sessiontrace.Fragment
-	mu       sync.Mutex
-	builds   map[[2]uint32]*fragmentBuilder
-	recent   map[[2]uint32]time.Time
-	onData   func([]byte)
-	selfID   uint32
-	now      func() time.Time
+	trace     *sessiontrace.Recorder
+	metrics   sessiontrace.Assembly
+	received  *sessiontrace.Fragment
+	mu        sync.Mutex
+	builds    map[[2]uint32]*fragmentBuilder
+	recent    map[[2]uint32]time.Time
+	onData    func([]byte)
+	onMessage func([]byte, sessiontrace.Boundary)
+	selfID    uint32
+	now       func() time.Time
 }
 
 func newReassembler(selfID uint32, onData func([]byte)) *reassembler {
@@ -149,7 +150,9 @@ func (r *reassembler) ingest(data []byte) {
 		r.metrics.CRCFailed++
 	}
 	r.mu.Unlock()
-	if r.onData != nil && valid {
+	if r.onMessage != nil && valid {
+		r.onMessage(output, point)
+	} else if r.onData != nil && valid {
 		r.onData(output)
 	}
 }

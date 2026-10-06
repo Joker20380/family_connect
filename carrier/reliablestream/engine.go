@@ -124,6 +124,7 @@ func (state *engine) ack() frame {
 	if packet.bits != 0 {
 		state.stats.SACKSent++
 	}
+	packet.observation = sessiontrace.StampACK()
 	return packet
 }
 

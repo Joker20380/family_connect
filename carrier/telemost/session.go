@@ -132,7 +132,7 @@ type Session struct {
 	cleanupDone   chan struct{}
 	connectedOnce sync.Once
 	errMu         sync.Mutex
-	recvQueue     chan []byte
+	recvQueue     chan receiveMessage
 	disconnects   atomic.Uint32
 	pendingICE    map[string][]webrtc.ICECandidateInit
 
@@ -211,21 +211,26 @@ func New(ctx context.Context, cfg Config) (*Session, error) {
 	s.subSequence.Store(1)
 	s.ctx, s.cancel = context.WithCancel(ctx)
 	s.cleanupDone = make(chan struct{})
-	s.recvQueue = make(chan []byte, 16)
+	s.recvQueue = make(chan receiveMessage, 16)
 	s.pendingICE = make(map[string][]webrtc.ICECandidateInit)
 	s.reassembler = newReassembler(s.senderID, s.deliver)
 	s.reassembler.trace = cfg.Trace
+	s.configureReceiveObservation()
 	go func() { <-s.ctx.Done(); _ = s.Close() }()
 	return s, nil
 }
 
 func (s *Session) deliver(payload []byte) {
+	s.deliverObserved(payload, sessiontrace.Boundary{})
+}
+
+func (s *Session) deliverObserved(payload []byte, point sessiontrace.Boundary) {
 	s.statsMu.Lock()
 	s.bytesRecv += uint64(len(payload))
 	s.msgsRecv++
 	s.statsMu.Unlock()
 	select {
-	case s.recvQueue <- payload:
+	case s.recvQueue <- packReceive(payload, point):
 	case <-s.closeCh:
 	default:
 		s.signalClosed(errors.New("telemost: receive queue full"))
@@ -240,7 +245,7 @@ func (s *Session) Recv(ctx context.Context) ([]byte, error) {
 	}
 	select {
 	case payload := <-s.recvQueue:
-		return payload, nil
+		return unpackReceive(ctx, payload), nil
 	case <-ctx.Done():
 		return nil, ctx.Err()
 	case <-s.closeCh:
@@ -371,6 +376,7 @@ func (s *Session) SendContext(ctx context.Context, payload []byte) error {
 			out = encodeVP8DataFrame(frag)
 		}
 		point := fragmentBoundary(frag)
+		point.CaptureACK(ctx)
 		attempt := sessiontrace.AttemptFrom(ctx)
 		if attempt.AttemptKnown {
 			point.DataKnown, point.DataSequence, point.AttemptKnown, point.Attempt = attempt.DataKnown, attempt.DataSequence, true, attempt.Attempt

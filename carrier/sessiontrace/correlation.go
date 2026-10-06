@@ -52,6 +52,7 @@ type CorrelationDescriptor struct {
 }
 
 type ProvisionalCandidate struct {
+	callbacks     *ReceiverEvidence
 	Sender        uint32                   `json:"sender"`
 	Message       uint32                   `json:"message"`
 	SequenceKnown bool                     `json:"sequence_known"`
@@ -63,12 +64,14 @@ type ProvisionalCandidate struct {
 }
 
 type CorrelationReceipt struct {
-	Schema      int                    `json:"schema"`
-	Key         CorrelationKey         `json:"key"`
-	State       string                 `json:"state"`
-	ExpiresAtMS int64                  `json:"expires_at_ms"`
-	Candidates  []ProvisionalCandidate `json:"candidates"`
-	Descriptor  *CorrelationDescriptor `json:"descriptor,omitempty"`
+	MediaComplete bool                   `json:"media_complete,omitempty"`
+	Reliable      *ReceiverEvidence      `json:"reliable,omitempty"`
+	Schema        int                    `json:"schema"`
+	Key           CorrelationKey         `json:"key"`
+	State         string                 `json:"state"`
+	ExpiresAtMS   int64                  `json:"expires_at_ms"`
+	Candidates    []ProvisionalCandidate `json:"candidates"`
+	Descriptor    *CorrelationDescriptor `json:"descriptor,omitempty"`
 }
 
 type correlationWatch struct {
@@ -147,12 +150,14 @@ func (watch *correlationWatch) purge(state string) {
 	watch.excludedCount = 0
 	watch.value.Candidates = nil
 	watch.value.Descriptor = nil
+	watch.value.Reliable = nil
+	watch.value.MediaComplete = false
 	watch.identity = nil
 	watch.value.State = state
 }
 
 func (watch *correlationWatch) expire(now time.Time) {
-	if !now.Before(watch.deadline) && Allowed(watch.value.State, "ARMED|BOUND|COMPLETE") {
+	if !now.Before(watch.deadline) && Allowed(watch.value.State, "ARMED|BOUND|CARRIER_COMPLETE|RELIABLE_ACCEPTED|CONSUMED|ACK_GENERATED|ACK_SENT|COMPLETE") {
 		watch.purge("EXPIRED")
 	}
 }
@@ -214,6 +219,28 @@ func (watch *correlationWatch) complete() {
 			if candidate.Media[media.Fragment] != media || (watch.local == "rx" && !candidate.Reconstructed[media.Fragment]) {
 				return
 			}
+		}
+		watch.value.MediaComplete = true
+		if watch.local == "tx" {
+			watch.value.State = "COMPLETE"
+			return
+		}
+		watch.value.State = "CARRIER_COMPLETE"
+		watch.value.Reliable = candidate.callbacks
+		if candidate.callbacks == nil {
+			return
+		}
+		watch.value.State = "RELIABLE_ACCEPTED"
+		if candidate.callbacks.Consumed == nil {
+			return
+		}
+		watch.value.State = "CONSUMED"
+		if candidate.callbacks.ACK == nil {
+			return
+		}
+		watch.value.State = "ACK_GENERATED"
+		if candidate.callbacks.ACK.SentNS == 0 || candidate.callbacks.ACK.Result != "ok" {
+			return
 		}
 		watch.value.State = "COMPLETE"
 		return
@@ -325,9 +352,11 @@ func (recorder *Recorder) correlationEvent(event Event) {
 }
 
 func cloneCorrelation(value CorrelationReceipt) CorrelationReceipt {
+	value.Reliable = cloneReceiver(value.Reliable)
 	value.Candidates = append([]ProvisionalCandidate(nil), value.Candidates...)
 	for index := range value.Candidates {
 		candidate := &value.Candidates[index]
+		candidate.callbacks = cloneReceiver(candidate.callbacks)
 		media := make(map[uint32]MediaIdentity, len(candidate.Media))
 		for key, item := range candidate.Media {
 			media[key] = item

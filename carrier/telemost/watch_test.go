@@ -24,6 +24,7 @@ func selectedRetryPinned(test *testing.T, size int) {
 	ctx, cancel := context.WithTimeout(context.Background(), 12*time.Second)
 	defer cancel()
 	leftEndpoint, rightEndpoint := headLossPair(test, ctx, 19, "none")
+	rightEndpoint.configureReceiveObservation()
 	leftTrace, rightTrace := leftEndpoint.cfg.Trace, rightEndpoint.cfg.Trace
 	left, err := reliablestream.New(sessiontrace.With(ctx, leftTrace), leftEndpoint, reliablestream.DefaultConfig())
 	if err != nil {
@@ -87,6 +88,10 @@ func selectedRetryPinned(test *testing.T, size int) {
 	received, err := rightTrace.BindCorrelation(*sent.Descriptor)
 	if err != nil || received.State != "COMPLETE" {
 		test.Fatalf("receiver incomplete: %+v %v", received, err)
+	}
+	proof := received.Reliable
+	if proof == nil || proof.Accepted == nil || proof.Consumed == nil || proof.ACK == nil || proof.Accepted.Sequence != 19 || proof.Consumed.Sequence != 19 || proof.Consumed.Before.Next != 19 || proof.Consumed.After.Next != 20 || proof.ACK.Base != 20 || proof.ACK.Result != "ok" || proof.ACK.SentNS == 0 {
+		test.Fatalf("exact Reliable/ACK callbacks not retained: %+v", proof)
 	}
 	if len(sent.Descriptor.Media) < 1 || (size > 8192 && len(sent.Descriptor.Media) < 2) {
 		test.Fatal("fragments missing")

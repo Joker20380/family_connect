@@ -90,7 +90,7 @@ func TestCorrelationRetryMatrix(test *testing.T) {
 				recorder.Boundary(Boundary{Direction: "rx", Stage: "rtp_received", Result: "ok"})
 			}
 			receipt, _ = recorder.CorrelationStatus(key, false)
-			if receipt.State != "COMPLETE" || receipt.Descriptor.Message != 11 {
+			if receipt.State != "CARRIER_COMPLETE" || !receipt.MediaComplete || receipt.Descriptor.Message != 11 {
 				test.Fatal("selected proof lost", receipt)
 			}
 			if _, err := recorder.BindCorrelation(descriptor); err == nil {
@@ -126,7 +126,7 @@ func TestCorrelationFragmentMixAndIdentity(test *testing.T) {
 				correlationAttempt(recorder, 11, 2)
 			}
 			receipt, _ := recorder.CorrelationStatus(key, false)
-			if receipt.State == "COMPLETE" {
+			if receipt.MediaComplete {
 				test.Fatal("mixed identity accepted")
 			}
 		})
@@ -223,7 +223,7 @@ func TestCorrelationConcurrentDirectionAndCopies(test *testing.T) {
 	workers.Wait()
 	descriptor := correlationDescriptor(key, 11, 1)
 	receipt, err := recorder.BindCorrelation(descriptor)
-	if err != nil || receipt.State != "COMPLETE" || len(receipt.Candidates) != 1 {
+	if err != nil || receipt.State != "CARRIER_COMPLETE" || !receipt.MediaComplete || len(receipt.Candidates) != 1 {
 		test.Fatal("reverse direction interference")
 	}
 	delete(receipt.Candidates[0].Media, 0)

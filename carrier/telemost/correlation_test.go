@@ -52,7 +52,7 @@ func TestCorrelationPionRetryDiscrimination(test *testing.T) {
 				test.Fatal("sender incomplete", descriptor)
 			}
 			selected, err := right.BindCorrelation(*descriptor.Descriptor)
-			if err != nil || selected.State != "COMPLETE" {
+			if err != nil || selected.State != "CARRIER_COMPLETE" || !selected.MediaComplete {
 				test.Fatalf("exact selected proof incomplete: %+v / %v", selected, err)
 			}
 			if selected.Descriptor.Message != sender.attempts[1].message || selected.Descriptor.Message == sender.attempts[0].message || selected.Descriptor.Message == sender.attempts[2].message {

@@ -26,6 +26,7 @@ func (recorder *Recorder) Boundary(point Boundary) {
 	recorder.boundaryNext++
 	point.Index, point.AtMS = recorder.boundaryNext, time.Now().UnixMilli()
 	recorder.correlationBoundary(point, time.Now())
+	recorder.receiverACKWritten(point)
 	recorder.boundaries[(point.Index-1)%BoundaryLimit] = point
 	recorder.watchBoundary(point, time.Now())
 }

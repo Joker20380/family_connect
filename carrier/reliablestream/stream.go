@@ -22,8 +22,9 @@ type request struct {
 }
 
 type received struct {
-	data []byte
-	err  error
+	data     []byte
+	err      error
+	identity sessiontrace.ReceiveIdentity
 }
 
 type Stream struct {
@@ -148,9 +149,10 @@ func (stream *Stream) run(ctx context.Context) {
 	go func() {
 		defer close(readerDone)
 		for {
-			data, err := stream.endpoint.Recv(ctx)
+			receiveContext, observation := sessiontrace.WithReceiveObservation(ctx)
+			data, err := stream.endpoint.Recv(receiveContext)
 			select {
-			case incoming <- received{data, err}:
+			case incoming <- received{data: data, err: err, identity: observation.Identity()}:
 			case <-ctx.Done():
 				return
 			}
@@ -216,6 +218,7 @@ func (stream *Stream) run(ctx context.Context) {
 					continue
 				}
 			} else if packet.kind == ackFrame {
+				sendContext = sessiontrace.WithACKObservation(sendContext, packet.observation, packet.ack, packet.bits)
 				point.Stage, point.ACKBase, point.ACKMask = "ack_generated", packet.ack, packet.bits
 				sessiontrace.From(ctx).Boundary(point)
 			}
@@ -271,8 +274,11 @@ func (stream *Stream) run(ctx context.Context) {
 		case reads <- data:
 			stream.mu.Lock()
 			consumed := stream.state.receive
+			before := stream.state.receiveObservation()
 			_, packet := stream.state.consume()
+			after := stream.state.receiveObservation()
 			stream.mu.Unlock()
+			sessiontrace.From(ctx).ReceiverConsumed(consumed, before, after, packet.observation, packet.ack, packet.bits)
 			sessiontrace.From(ctx).RecordConsumed(consumed, packet.ack, packet.bits)
 			packets = []frame{packet}
 		case record := <-incoming:
@@ -283,7 +289,9 @@ func (stream *Stream) run(ctx context.Context) {
 				if err == nil {
 					stream.mu.Lock()
 					duplicates, stale, previousBase := stream.state.stats.Duplicates, stream.state.stats.Stale, stream.state.base
+					before := stream.state.receiveObservation()
 					packets, err = stream.state.input(packet, time.Now())
+					after := stream.state.receiveObservation()
 					advanced := stream.state.base > previousBase
 					currentBase := stream.state.base
 					point := sessiontrace.Boundary{Direction: "rx", Result: "ok"}
@@ -300,6 +308,9 @@ func (stream *Stream) run(ctx context.Context) {
 						point.Stage, point.ACKBase, point.ACKMask = "ack_received", packet.ack, packet.bits
 					}
 					stream.mu.Unlock()
+					if packet.kind == dataFrame {
+						sessiontrace.From(ctx).ReceiverAccepted(record.identity, packet.seq, point.Result, before, after)
+					}
 					if point.Stage != "" {
 						sessiontrace.From(ctx).Boundary(point)
 					}
