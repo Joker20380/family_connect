@@ -1,5 +1,12 @@
 # Текущее состояние / Current state
 
+## PINNED-EVIDENCE-FREEZE-1 — validation snapshot, not accepted freeze
+
+Owner-only beta67/code67 source preparation. Correlation and telemetry-isolation
+prerequisites accepted; full source-bound Python/native/Android/hosted CI acceptance
+pending. This private validation commit is explicitly authorized to bind fixtures.
+No publication/install/deploy/credentials/physical run. Sealed beta66 unchanged.
+
 ## Bootstrap recovery candidate — a813dc5 CI/artifact PASS05.10, not deployed
 
 Scoped source `a813dc5c80b27025222f317a068d16c71d6dc64c` pushed to main: two test

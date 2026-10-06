@@ -71,8 +71,8 @@ android {
     applicationVariants.all { variant ->
         if (variant.buildType.name == "ownerDiagnostic") {
             variant.outputs.all {
-                versionCodeOverride = 66
-                versionNameOverride = "0.1.18-beta66"
+                versionCodeOverride = 67
+                versionNameOverride = "0.1.18-beta67"
             }
         }
     }

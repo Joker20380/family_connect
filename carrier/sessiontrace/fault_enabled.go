@@ -15,6 +15,8 @@ type faultControl struct {
 	receipt FaultReceipt
 }
 
+func evidenceWatchEnabled() bool { return true }
+
 func (recorder *Recorder) faultEvent(event Event) {
 	if event.State == "ESTABLISHED" && event.Stage == "FAMILY_TLS" {
 		recorder.fault.family = true
@@ -66,6 +68,9 @@ func (recorder *Recorder) DropDiagnostic(point Boundary) bool {
 	defer recorder.mu.Unlock()
 	if !recorder.fault.receipt.Armed || !recorder.fault.family || !recorder.fault.gateway || recorder.closing {
 		return false
+	}
+	if recorder.watch.value == nil {
+		recorder.enableEvidenceWatch(WatchTarget{Direction: "tx", Sequence: point.DataSequence, Attempt: 1}, time.Now())
 	}
 	recorder.fault.receipt.Armed = false
 	recorder.fault.receipt.Consumed = true

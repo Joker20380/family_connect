@@ -270,8 +270,10 @@ func (stream *Stream) run(ctx context.Context) {
 			op.done <- err
 		case reads <- data:
 			stream.mu.Lock()
+			consumed := stream.state.receive
 			_, packet := stream.state.consume()
 			stream.mu.Unlock()
+			sessiontrace.From(ctx).RecordConsumed(consumed, packet.ack, packet.bits)
 			packets = []frame{packet}
 		case record := <-incoming:
 			err = record.err
@@ -280,8 +282,10 @@ func (stream *Stream) run(ctx context.Context) {
 				packet, err = decode(record.data)
 				if err == nil {
 					stream.mu.Lock()
-					duplicates, stale := stream.state.stats.Duplicates, stream.state.stats.Stale
+					duplicates, stale, previousBase := stream.state.stats.Duplicates, stream.state.stats.Stale, stream.state.base
 					packets, err = stream.state.input(packet, time.Now())
+					advanced := stream.state.base > previousBase
+					currentBase := stream.state.base
 					point := sessiontrace.Boundary{Direction: "rx", Result: "ok"}
 					if err != nil {
 						point.Result = "protocol"
@@ -298,6 +302,9 @@ func (stream *Stream) run(ctx context.Context) {
 					stream.mu.Unlock()
 					if point.Stage != "" {
 						sessiontrace.From(ctx).Boundary(point)
+					}
+					if advanced {
+						sessiontrace.From(ctx).RecordBaseAdvanced(currentBase, packet.bits)
 					}
 				}
 			}

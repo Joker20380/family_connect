@@ -60,6 +60,7 @@ type headLossEndpoint struct {
 	reorder      *reorderBuffer
 	frame        vp8FrameState
 	observer     rtpBoundary
+	correlated   rtpBoundary
 	packets      []*rtp.Packet
 	attempts     []headAttempt
 	head         uint64
@@ -73,7 +74,7 @@ func headLossPair(test *testing.T, ctx context.Context, head uint64, fault strin
 	test.Helper()
 	points := make([]*headLossEndpoint, 2)
 	for index := range points {
-		trace := sessiontrace.New(strings.Repeat(fmt.Sprint(index+1), 64), nil)
+		trace := sessiontrace.New(strings.Repeat("a", 64), nil)
 		session, err := New(sessiontrace.With(ctx, trace), Config{RoomURL: "local-test"})
 		if err != nil {
 			test.Fatal(err)
@@ -81,6 +82,7 @@ func headLossPair(test *testing.T, ctx context.Context, head uint64, fault strin
 		point := &headLossEndpoint{Session: session, reorder: newReorderBuffer(), head: head}
 		point.reorder.trace, point.frame.trace = trace, trace
 		point.observer = rtpBoundary{trace: trace, stage: "rtp_received", direction: "rx"}
+		point.correlated = rtpBoundary{trace: trace, stage: "rtp_correlated", direction: "rx", correlationOnly: true}
 		session.reassembler.onData = func(data []byte) {
 			sequence, known := reliablestream.DataSequencePrefix(data, uint32(len(data)))
 			if known && sequence == point.head && point.dropDelivery {
@@ -127,6 +129,7 @@ func (point *headLossEndpoint) receive(packets []*rtp.Packet) {
 	for _, packet := range packets {
 		point.observer.packet(&packet.Header, packet.Payload, "ok")
 		point.reorder.push(packet, func(ordered *rtp.Packet) {
+			point.correlated.packet(&ordered.Header, ordered.Payload, "ok")
 			if data := point.frame.process(ordered); data != nil {
 				if fragment, valid := decodeVP8Frame(data); valid {
 					boundary := fragmentBoundary(fragment)
@@ -160,6 +163,12 @@ func (point *headLossEndpoint) SendContext(ctx context.Context, data []byte) err
 		point.writeVP8Sample(frame.data, frame.point)
 	}
 	packets := point.packets
+	if point.fault == "reorder" && isHead {
+		packets = append([]*rtp.Packet(nil), packets...)
+		for index := 1; index+1 < len(packets); index += 2 {
+			packets[index], packets[index+1] = packets[index+1], packets[index]
+		}
+	}
 	if isHead {
 		point.attempts = append(point.attempts, headAttempt{message: message, point: sessiontrace.AttemptFrom(ctx), packets: packets})
 		if len(point.attempts) == 1 {

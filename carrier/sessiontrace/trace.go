@@ -35,19 +35,9 @@ type Event struct {
 	ReliableACKReceived   uint64    `json:"reliable_ack_received,omitempty"`
 }
 
-type Snapshot struct {
-	Fault             *FaultReceipt `json:"fault,omitempty"`
-	Boundaries        *Boundaries   `json:"boundaries,omitempty"`
-	DeliveryDropped   uint64        `json:"delivery_dropped"`
-	SessionTag        string        `json:"session_tag"`
-	CorrelationStatus string        `json:"correlation_status"`
-	Events            []Event       `json:"trace"`
-	FirstFailure      *Event        `json:"first_failure,omitempty"`
-	Dropped           uint64        `json:"trace_dropped"`
-	ExportDropped     uint64        `json:"export_dropped"`
-}
-
 type Recorder struct {
+	correlation  correlationControl
+	watch        watchControl
 	fault        faultControl
 	boundaries   [BoundaryLimit]Boundary
 	boundaryNext uint64
@@ -101,6 +91,8 @@ func (recorder *Recorder) Record(event Event) {
 		event.CloseCode = 0
 	}
 	recorder.faultEvent(event)
+	recorder.watchEvent(event)
+	recorder.correlationEvent(event)
 	if !Allowed(event.CloseReason, "|ping|timeout|duplicate|expired|inactivity|shutdown|restart|invalid|ack|idle|session|READ_ERROR|READ_TIMEOUT|INVALID_MESSAGE|WRITE_ERROR") {
 		event.CloseReason = ""
 	}
@@ -142,6 +134,7 @@ func (recorder *Recorder) Record(event Event) {
 	recorder.value.Events = append(recorder.value.Events, event)
 	if recorder.sink != nil {
 		exported := cloneEvent(event)
+		recorder.decorateWatchEvent(&exported)
 		if exported.Stage == "CARRIER_ACTIVITY" && recorder.boundaryNext > 0 {
 			if exported.Delivery == nil {
 				exported.Delivery = &Delivery{}
@@ -165,6 +158,7 @@ func (recorder *Recorder) Snapshot() Snapshot {
 	recorder.mu.Lock()
 	defer recorder.mu.Unlock()
 	value := recorder.value
+	recorder.decorateWatchSnapshot(&value)
 	value.Fault = recorder.faultSnapshot()
 	value.Boundaries = recorder.boundarySnapshot()
 	value.Events = append([]Event{}, value.Events...)

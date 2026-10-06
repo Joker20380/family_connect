@@ -44,6 +44,10 @@ func TestOperationalFaultRetriesThroughRuntime(test *testing.T) {
 	if receipt.Count != 1 || !receipt.Consumed || receipt.Armed {
 		test.Fatal("fault receipt", receipt)
 	}
+	watch := trace.Snapshot().Watch
+	if watch == nil || watch.Target.Direction != "tx" || watch.Target.Sequence != receipt.Sequence || watch.Target.Attempt != 1 {
+		test.Fatal("selected retry not pinned automatically", watch)
+	}
 	seenRetry := false
 	for _, point := range trace.Snapshot().Boundaries.Events {
 		if point.Stage == "reliable_send" && point.DataSequence == receipt.Sequence && point.Attempt == 1 {

@@ -736,6 +736,8 @@ func (s *Session) readVP8Track(track *webrtc.TrackRemote) {
 	state.trace = s.cfg.Trace
 	observer := rtpBoundary{trace: s.cfg.Trace, stage: "rtp_received", direction: "rx"}
 	observer.track = s.rxTracks.Add(1)
+	correlated := rtpBoundary{trace: s.cfg.Trace, stage: "rtp_correlated", direction: "rx", correlationOnly: true, track: observer.track}
+	defer correlated.flush("incomplete")
 	reorder.mediaTrack, state.mediaTrack = observer.track, observer.track
 	defer observer.flush("incomplete")
 	buf := make([]byte, 65536)
@@ -757,6 +759,7 @@ func (s *Session) readVP8Track(track *webrtc.TrackRemote) {
 		}
 		s.statsMu.Unlock()
 		reorder.push(pkt, func(ordered *rtp.Packet) {
+			correlated.packet(&ordered.Header, ordered.Payload, "ok")
 			s.statsMu.Lock()
 			if state.haveLastSeq && ordered.SequenceNumber != state.lastSeq+1 {
 				s.mediaStats.SequenceGaps++

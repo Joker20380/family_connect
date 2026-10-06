@@ -137,6 +137,7 @@ func (broker *Broker) Challenge(ctx context.Context, authorize Authorize) (strin
 	}
 	lifetime, cancel := context.WithTimeout(context.Background(), broker.limits.Lifetime)
 	trace := sessiontrace.New(hex.EncodeToString(nonce[:]), broker.traceSink)
+	sessiontrace.StartDiagnosticControl(lifetime, trace, "gateway")
 	lifetime = sessiontrace.With(lifetime, trace)
 	trace.Add("AUTHORIZED", "ESTABLISHED", "NONE")
 	current := &setup{id: hex.EncodeToString(nonce[:]), identity: identity, authorize: authorize, state: Authorized,

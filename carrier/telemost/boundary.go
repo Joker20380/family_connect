@@ -35,11 +35,12 @@ func fragmentBoundary(data []byte) sessiontrace.Boundary {
 }
 
 type rtpBoundary struct {
-	track     uint32
-	point     sessiontrace.Boundary
-	trace     *sessiontrace.Recorder
-	stage     string
-	direction string
+	correlationOnly bool
+	track           uint32
+	point           sessiontrace.Boundary
+	trace           *sessiontrace.Recorder
+	stage           string
+	direction       string
 }
 
 func (observer *rtpBoundary) flush(result string) {
@@ -47,12 +48,16 @@ func (observer *rtpBoundary) flush(result string) {
 		return
 	}
 	observer.point.Stage, observer.point.Direction, observer.point.Result = observer.stage, observer.direction, result
-	observer.trace.Boundary(observer.point)
+	if observer.correlationOnly {
+		observer.trace.CorrelationMedia(observer.point)
+	} else {
+		observer.trace.Boundary(observer.point)
+	}
 	observer.point = sessiontrace.Boundary{}
 }
 
 func (observer *rtpBoundary) packet(header *rtp.Header, payload []byte, result string) {
-	if observer.trace == nil {
+	if observer.trace == nil || (observer.correlationOnly && !sessiontrace.CorrelationEnabled()) {
 		return
 	}
 	if observer.point.Packets > 0 && observer.point.Timestamp != header.Timestamp {
@@ -64,6 +69,7 @@ func (observer *rtpBoundary) packet(header *rtp.Header, payload []byte, result s
 			if fragment, valid := decodeVP8Frame(data); valid {
 				observer.point = fragmentBoundary(fragment)
 			}
+			observer.point.RecordPicture(descriptor.I == 1, descriptor.PictureID)
 		}
 		if observer.direction == "tx" {
 			observer.point = observer.trace.MessageAttempt(observer.point)

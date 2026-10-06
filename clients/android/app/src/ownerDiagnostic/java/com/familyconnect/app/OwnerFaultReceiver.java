@@ -7,9 +7,21 @@ import android.content.Intent;
 public final class OwnerFaultReceiver extends BroadcastReceiver {
     private static native String control(String command);
 
-    @Override public void onReceive(Context context, Intent intent) {
+    static String request(Intent intent) {
         String command = intent == null ? null : intent.getStringExtra("command");
+        if ("correlation".equals(command)) {
+            String body = intent.getStringExtra("request");
+            return body != null && body.length() <= 16384 ? "correlation:" + body : null;
+        }
         if (!"arm".equals(command) && !"status".equals(command) && !"disarm".equals(command)) {
+            return null;
+        }
+        return command;
+    }
+
+    @Override public void onReceive(Context context, Intent intent) {
+        String command = request(intent);
+        if (command == null) {
             setResultCode(1);
             return;
         }

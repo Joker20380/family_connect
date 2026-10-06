@@ -2,6 +2,13 @@
 
 ## Current engineering priority / Текущий critical path
 
+## PINNED-EVIDENCE-FREEZE-1 — validation snapshot, not accepted freeze
+
+Owner-only beta67/code67 source preparation. Correlation and telemetry-isolation
+prerequisites accepted; full source-bound Python/native/Android/hosted CI acceptance
+pending. This private validation commit is explicitly authorized to bind fixtures.
+No publication/install/deploy/credentials/physical run. Sealed beta66 unchanged.
+
 **Bootstrap recovery candidate — a813dc5 CI/artifact PASS05.10, deployment pending.**
 1. DONE synchronize successful TCP dial → target RST/close → return socket to
    unchanged forwarding code, before server OPEN_OK. No post-OPEN sleep or weaker
