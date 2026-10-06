@@ -1,7 +1,7 @@
 name: Owner diagnostic pair acceptance
 on:
   push:
-    tags: ['v*-ownerDiagnostic-ci*']
+    tags: ['diag-owner-*']
   workflow_dispatch:
 permissions:
   contents: read
