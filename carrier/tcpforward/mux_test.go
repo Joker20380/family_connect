@@ -9,6 +9,7 @@ import (
 	"io"
 	"net"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -183,7 +184,25 @@ func TestMuxLimitAndIndependentReset(test *testing.T) {
 
 func TestMuxSlowConsumerAndInteractive(test *testing.T) {
 	port := muxFixture(test, muxEcho)
-	ctx, client, _ := muxPair(test, port, 4, 4)
+	ctx, client, server := muxPair(test, port, 4, 4)
+	slowTarget, slowPeer := net.Pipe()
+	echoDone := make(chan struct{})
+	go func() {
+		defer close(echoDone)
+		io.Copy(slowPeer, slowPeer)
+	}()
+	test.Cleanup(func() {
+		slowTarget.Close()
+		slowPeer.Close()
+		<-echoDone
+	})
+	var dials atomic.Uint32
+	server.dial = func(ctx context.Context, network, address string) (socket, error) {
+		if dials.Add(1) == 1 {
+			return pipeSocket{slowTarget}, nil
+		}
+		return tcpDial(ctx, network, address)
+	}
 	slow := muxOpen(test, ctx, client, port)
 	written := make(chan error, 1)
 	go func() { _, err := slow.Write(bytes.Repeat([]byte("bulk"), 1<<20)); written <- err }()
