@@ -14,14 +14,15 @@ public class AutoRuntimeTest {
  final AwgRuntimeTest helper=new AwgRuntimeTest();final Context context=helper.context;
  void control(String mode)throws Exception{
   ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
+  java.io.IOException unavailable=new java.io.IOException("No reachable emulator control network");
   for(Network network:manager.getAllNetworks()){
    NetworkCapabilities c=manager.getNetworkCapabilities(network);if(c==null||c.hasTransport(NetworkCapabilities.TRANSPORT_VPN)||!c.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET))continue;
    try(Socket s=network.getSocketFactory().createSocket()){
     s.connect(new java.net.InetSocketAddress("10.0.2.2",51902),3000);s.setSoTimeout(3000);
     s.getOutputStream().write(("GET /"+mode+" HTTP/1.0\r\nHost: fixture\r\n\r\n").getBytes(StandardCharsets.US_ASCII));
     byte[] b=new byte[512];int n=s.getInputStream().read(b);assertTrue(n>0&&new String(b,0,n,StandardCharsets.US_ASCII).contains(" 200 "));return;
-   }
-  }throw new AssertionError("No emulator control network");
+   }catch(java.io.IOException failure){unavailable.addSuppressed(failure);}
+  }throw unavailable;
  }
  void start(){context.startForegroundService(new Intent(context,ConnectionService.class).setAction("connect").putExtra("transport","auto"));}
  void on(String type)throws Exception{
@@ -36,11 +37,12 @@ public class AutoRuntimeTest {
   long until=System.currentTimeMillis()+150000;while(!ConnectionService.status.equals("failed")&&System.currentTimeMillis()<until)Thread.sleep(100);
   assertEquals("failed",ConnectionService.status);assertTrue(ConnectionService.failed);
  }
- @Test public void automaticFallbackHealthLossExhaustionCancelAndRevoke()throws Exception{
+ @Test public void automaticFallbackHealthLossExhaustionCancelAndRevoke()throws Throwable{
   assertTrue(android.os.Build.FINGERPRINT.contains("generic")||android.os.Build.MODEL.contains("sdk"));helper.clean();
   helper.shell("appops set "+context.getPackageName()+" ACTIVATE_VPN allow");helper.shell("pm grant "+context.getPackageName()+" android.permission.POST_NOTIFICATIONS");
   Activity activity=InstrumentationRegistry.getInstrumentation().startActivitySync(new Intent(context,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
   ProfileStore wg=new ProfileStore(context,Transport.WG),awg=new ProfileStore(context,Transport.AWG),tcp=new ProfileStore(context,Transport.TCP);
+  Throwable primary=null;
   try{
    wg.save(ProfileValidator.validate(AwgRuntimeTest.profile(Transport.WG)));awg.save(ProfileValidator.validate(AwgRuntimeTest.profile(Transport.AWG),Transport.AWG));tcp.save(TcpProfile.validate(TcpRuntimeTest.profile()));
    control("wg-down");start();on("awg");helper.traffic(Transport.AWG);
@@ -53,6 +55,9 @@ public class AutoRuntimeTest {
    control("up");wg.clear();start();on("awg");try{wg.save(ProfileValidator.validate(AwgRuntimeTest.profile(Transport.WG)));fail("Active VPN must reject profile edits");}catch(java.io.IOException expected){}helper.shell("appops set "+context.getPackageName()+" ACTIVATE_VPN deny");helper.revokeThroughSystemDialog();failed();stop();assertNotNull(VpnService.prepare(context));wg.save(ProfileValidator.validate(AwgRuntimeTest.profile(Transport.WG)));
    assertTrue(wg.exists());assertTrue(awg.exists());assertTrue(tcp.exists());
    android.util.Log.i("FamilyConnect","AUTO PASS: blocked WG to AWG, live AWG loss to TCP, WG priority, missing WG, exhaustion, in-flight cancel, system revoke; 12 UDP, 6 REALITY HTTP, 1 OS DNS; 5 cleanup scenarios");
-  }finally{try{control("up");stop();wg.clear();awg.clear();tcp.clear();}finally{InstrumentationRegistry.getInstrumentation().runOnMainSync(activity::finish);}}
+  }catch(Throwable failure){primary=failure;throw failure;}
+  finally{
+   TcpTrafficDiagnostics.cleanup(primary,()->control("up"),()->{stop();wg.clear();awg.clear();tcp.clear();},()->InstrumentationRegistry.getInstrumentation().runOnMainSync(activity::finish));
+  }
  }
 }

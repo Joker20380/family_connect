@@ -28,11 +28,29 @@ public class AwgRuntimeTest {
     }
     boolean vpn(){ConnectivityManager cm=context.getSystemService(ConnectivityManager.class);for(Network n:cm.getAllNetworks()){NetworkCapabilities c=cm.getNetworkCapabilities(n);if(c!=null&&c.hasTransport(NetworkCapabilities.TRANSPORT_VPN))return true;}return false;}
     void clean()throws Exception{long until=System.currentTimeMillis()+15000;while(vpn()&&System.currentTimeMillis()<until)Thread.sleep(100);assertFalse("VPN remains",vpn());}
+    Network readyNetwork(String source)throws Exception{
+        ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
+        java.util.concurrent.CountDownLatch ready=new java.util.concurrent.CountDownLatch(1);
+        java.util.concurrent.atomic.AtomicReference<Network> selected=new java.util.concurrent.atomic.AtomicReference<>();
+        ConnectivityManager.NetworkCallback callback=new ConnectivityManager.NetworkCallback(){
+            @Override public void onLinkPropertiesChanged(Network network,LinkProperties properties){
+                boolean address=properties.getLinkAddresses().stream().anyMatch(link->link.getAddress().getHostAddress().equals(source));
+                boolean ipv4=properties.getRoutes().stream().anyMatch(route->route.isDefaultRoute()&&route.getDestination().getAddress() instanceof Inet4Address);
+                boolean ipv6=properties.getRoutes().stream().anyMatch(route->route.isDefaultRoute()&&route.getDestination().getAddress() instanceof Inet6Address);
+                if(address&&ipv4&&ipv6){selected.set(network);ready.countDown();}
+            }
+        };
+        manager.registerNetworkCallback(new NetworkRequest.Builder().removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN).addTransportType(NetworkCapabilities.TRANSPORT_VPN).build(),callback);
+        try{assertTrue("VPN routes not published for "+source,ready.await(15,java.util.concurrent.TimeUnit.SECONDS));return selected.get();}
+        finally{manager.unregisterNetworkCallback(callback);}
+    }
     void traffic(Transport type)throws Exception{
         android.util.Log.i("FamilyConnect","Traffic "+type);
         String[] sources=type==Transport.WG?new String[]{"10.77.0.4","fd77:92::4"}:new String[]{"10.78.0.4","fd78:92::4"};
         String[] targets={"198.19.0.1","fd78:fccc::1"};
-        for(int family=0;family<2;family++)try(DatagramSocket socket=new DatagramSocket(new InetSocketAddress(InetAddress.getByName(sources[family]),0))){
+        Network network=readyNetwork(sources[0]);
+        for(int family=0;family<2;family++)try(DatagramSocket socket=new DatagramSocket(null)){
+            network.bindSocket(socket);socket.bind(new InetSocketAddress(InetAddress.getByName(sources[family]),0));
             socket.setSoTimeout(2500);
             for(int i=0;i<3;i++){
                 byte[] nonce=UUID.randomUUID().toString().getBytes(StandardCharsets.US_ASCII);boolean received=false;
