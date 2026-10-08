@@ -1,5 +1,6 @@
 import json
 import time
+from types import SimpleNamespace
 
 import pytest
 
@@ -13,7 +14,11 @@ from test_friends_http_runtime import runtime, running
 
 @pytest.fixture
 def ready(tmp_path):
-    service, owner, now = configured(tmp_path, int(time.time()))
+    return build_ready(tmp_path, int(time.time()))
+
+
+def build_ready(tmp_path, now):
+    service, owner, now = configured(tmp_path, now)
     service.eligible_devices = frozenset([owner.reference])
     challenge = service.challenge(owner.public_identity, owner.wireguard_public_key, request_id='a' * 32)
     response = service.fetch(owner.prove_transport_key(challenge['challenge']), request_id='b' * 32)
@@ -118,17 +123,86 @@ def test_readback_rechecks_revocation_and_expiry(ready):
     assert receipts.readback(service, 'a' * 32, owner.reference)['status'] == 'ACK_PENDING'
 
 
-def test_ui_unavailable_server_ack_is_authoritative(ready, tmp_path):
-    service, owner, now, payload = ready
+@pytest.fixture
+def product_clock(monkeypatch):
+    clock = SimpleNamespace(wall=1791468197.9, monotonic=100.0)
+    monkeypatch.setattr('scripts.friends_http_transition.time', SimpleNamespace(
+        time=lambda: clock.wall, monotonic=lambda: clock.monotonic))
+    return clock
+
+
+def product_trace(product, payload, observed):
+    return [dict(probe_id=payload[field], generation=product.generation, timestamp=observed,
+                 status=200, upstream_status='200', product_step=step)
+            for field, step in [('challenge_id','challenge'), ('fetch_id','readiness')]]
+
+
+@pytest.mark.parametrize('opened, observed', [
+    (1791468197.9, 1791468197.9),
+    (1791468197.9, 1791468198.1),
+    (1791468198.0, 1791468198.0),
+], ids=['same-second', 'second-boundary', 'equal-boundary'])
+def test_ui_unavailable_server_ack_is_authoritative(tmp_path, product_clock, opened, observed):
+    evidence = Evidence(tmp_path / 'acceptance', 'candidate')
+    try:
+        product_clock.wall = opened
+        product = OwnerProduct(evidence, 'candidate')
+        product_clock.wall = observed
+        product_clock.monotonic += observed - opened
+        service, owner, now, payload = build_ready(tmp_path, int(product_clock.wall))
+        acknowledge(service, owner, payload)
+        trace = product_trace(product, payload, product_clock.wall)
+        assert product.observe(receipts.readback(service, 'a' * 32, owner.reference), trace)
+        assert product.passed
+    finally:
+        evidence.close()
+
+
+def test_receipt_before_controller_open_remains_stale(tmp_path, product_clock):
+    evidence = Evidence(tmp_path / 'acceptance', 'candidate')
+    try:
+        service, owner, now, payload = build_ready(tmp_path, int(product_clock.wall))
+        acknowledge(service, owner, payload)
+        observed = product_clock.wall
+        product_clock.wall = 1791468198.0154948
+        product_clock.monotonic += 1
+        product = OwnerProduct(evidence, 'candidate')
+        assert payload['observed_at'] < int(product.opened)
+        assert not product.observe(receipts.readback(service, 'a' * 32, owner.reference),
+                                   product_trace(product, payload, observed))
+        assert not product.passed
+    finally:
+        evidence.close()
+
+
+def test_receipt_from_previous_generation_rejected(tmp_path, product_clock):
+    evidence = Evidence(tmp_path / 'acceptance', 'candidate')
+    try:
+        previous = OwnerProduct(evidence, 'previous')
+        service, owner, now, payload = build_ready(tmp_path, int(product_clock.wall))
+        acknowledge(service, owner, payload)
+        product = OwnerProduct(evidence, 'candidate')
+        assert product.opened == previous.opened
+        assert not product.observe(receipts.readback(service, 'a' * 32, owner.reference),
+                                   product_trace(previous, payload, product_clock.wall))
+        assert not product.passed
+    finally:
+        evidence.close()
+
+
+@pytest.mark.parametrize('future', ['observed', 'received'])
+def test_future_receipt_rejected_by_existing_window(tmp_path, product_clock, future):
     evidence = Evidence(tmp_path / 'acceptance', 'candidate')
     try:
         product = OwnerProduct(evidence, 'candidate')
+        now = int(product_clock.wall)
+        service, owner, _, payload = build_ready(tmp_path, now + (future == 'observed'))
+        service.access.clock = lambda: now + 1
         acknowledge(service, owner, payload)
-        trace = [dict(probe_id=payload[field], generation='candidate', timestamp=product.opened,
-                      status=200, upstream_status='200', product_step=step)
-                 for field, step in [('challenge_id','challenge'), ('fetch_id','readiness')]]
-        assert product.observe(receipts.readback(service, 'a' * 32, owner.reference), trace)
-        assert product.passed
+        readback = receipts.readback(service, 'a' * 32, owner.reference)
+        assert readback['received_at'] > product_clock.wall
+        assert not product.observe(readback, product_trace(product, payload, product_clock.wall))
+        assert not product.passed
     finally:
         evidence.close()
 
