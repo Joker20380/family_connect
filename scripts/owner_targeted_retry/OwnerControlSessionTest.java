@@ -18,7 +18,7 @@ public class OwnerControlSessionTest extends OwnerFieldAcceptanceTest {
         else if(value.isJsonArray())for(JsonElement item:value.getAsJsonArray())noWatch(item);
     }
     @Test public void statusOnlySession() throws Exception {
-        guard();assertEquals("70",arguments.getString("expected_version"));
+        guard();assertEquals("71",arguments.getString("expected_version"));
         ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
         NetworkCapabilities network=manager.getNetworkCapabilities(manager.getActiveNetwork());
         assertNotNull(network);assertTrue(network.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR));

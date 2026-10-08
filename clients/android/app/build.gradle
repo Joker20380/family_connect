@@ -37,6 +37,11 @@ android {
         jniLibs.srcDir "${ownerRestrictedDirectory}/jniLibs"
         assets.srcDir "${ownerRestrictedDirectory}/assets"
     } }
+    sourceSets {
+        debug { java.srcDir 'src/publicStartup/java' }
+        release { java.srcDir 'src/publicStartup/java' }
+        friends { java.srcDir 'src/publicStartup/java' }
+    }
     packaging { jniLibs {
         keepDebugSymbols += ['**/libfc-awg.so']
         // Extract compressed libraries on install; preserve their verified bytes.
@@ -71,8 +76,8 @@ android {
     applicationVariants.all { variant ->
         if (variant.buildType.name == "ownerDiagnostic") {
             variant.outputs.all {
-                versionCodeOverride = 70
-                versionNameOverride = "0.1.18-beta70"
+                versionCodeOverride = 71
+                versionNameOverride = "0.1.18-beta71"
             }
         }
     }

@@ -1,0 +1,54 @@
+package bootstrap
+
+import (
+    "context"
+    "encoding/json"
+    "errors"
+    "sync"
+    "time"
+    "github.com/Joker20380/family_connect/carrier/familysession"
+    "github.com/Joker20380/family_connect/carrier/roombroker"
+    "github.com/Joker20380/family_connect/carrier/startupdiag"
+)
+
+var fixtureMu sync.Mutex
+var fixtureContexts []context.Context
+
+type fixtureEndpoint struct { mode string; received int }
+func (endpoint *fixtureEndpoint) SendContext(context.Context, []byte) error { return nil }
+func (endpoint *fixtureEndpoint) Close() error { return errors.New("PRIVATE cleanup /profile token") }
+func (endpoint *fixtureEndpoint) Recv(ctx context.Context) ([]byte, error) {
+    switch endpoint.mode {
+    case "deadline", "cleanup": return nil, context.DeadlineExceeded
+    case "unknown": return nil, errors.New("PRIVATE https://room.invalid/?token=secret SDP /profile")
+    case "family": return nil, familysession.ErrRejected
+    case "cancel": <-ctx.Done(); return nil, ctx.Err()
+    }
+    endpoint.received++
+    setup := "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    value := message{Type:"BYE", SetupID:setup}
+    if endpoint.received == 1 { value.Type = "HELLO" }
+    if endpoint.received == 2 {
+        value.Type = "TRANSPORT_READY"
+        value.Descriptor = &roombroker.Descriptor{SetupID:setup, Transport:"telemost-webrtc", JoinURL:"https://telemost.yandex.ru/j/fixture-only", ExpiresAt:time.Now().Add(time.Minute)}
+    }
+    return json.Marshal(value)
+}
+
+func LocalStartupFixture(ctx context.Context, mode string) error {
+    fixtureMu.Lock()
+    fixtureContexts = append(fixtureContexts, ctx)
+    fixtureMu.Unlock()
+    endpoint := &fixtureEndpoint{mode:mode}
+    _, err := requestTransport(ctx, endpoint)
+    if mode == "cleanup" { startupdiag.Failure(ctx, "SEED_CONNECT", endpoint.Close()) }
+    return err
+}
+
+func LocalStaleFixture(index int) {
+    fixtureMu.Lock()
+    ctx := fixtureContexts[index]
+    fixtureMu.Unlock()
+    startupdiag.Failure(ctx, "SEED_CONNECT", context.DeadlineExceeded)
+    startupdiag.Complete(ctx, context.Canceled)
+}

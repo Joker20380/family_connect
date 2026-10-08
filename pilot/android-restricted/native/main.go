@@ -20,6 +20,7 @@ import (
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+	"github.com/Joker20380/family_connect/carrier/startupdiag"
 	"github.com/Joker20380/family_connect/carrier/underlay"
 	"github.com/Joker20380/family_connect/carrier/wholedevice"
 	"github.com/Joker20380/family_connect/restrictedandroid/packet"
@@ -121,6 +122,8 @@ func begin(directory, control, resolver string, profile, seed []byte, owner C.ui
 		return 0
 	}
 	sequence++
+	ctx = startupdiag.Start(ctx, sequence)
+	retainStartup(ctx)
 	owned := &ownedSession{id: sequence, owner: owner, ctx: ctx, cancel: cancel, done: make(chan struct{}), network: network, fd: -1}
 	current = owned
 	go func() {
@@ -132,6 +135,8 @@ func begin(directory, control, resolver string, profile, seed []byte, owner C.ui
 			bounded, finish := context.WithTimeout(ctx, 30*time.Second)
 			defer finish()
 			err = wholedevice.Refresh(bounded, path, cache, control, network)
+			startupdiag.Failure(ctx, "CONTROL_REFRESH", err)
+			startupdiag.Complete(ctx, err)
 			owned.failure(err)
 			if err == nil {
 				owned.event("bootstrap_cache_stored")
@@ -156,9 +161,11 @@ func begin(directory, control, resolver string, profile, seed []byte, owner C.ui
 		owned.failure(err)
 		owned.mu.Lock()
 		defer owned.mu.Unlock()
+		startupdiag.Complete(ctx, err)
 		if err != nil {
 			owned.state = 3
-			if errors.Is(err, familysession.ErrRejected) || errors.Is(err, roombroker.Code("credentials_rejected")) || errors.Is(err, roombroker.Code("bootstrap_auth_failed")) {
+			legacy := startupdiag.Legacy(err)
+			if errors.Is(legacy, familysession.ErrRejected) || errors.Is(legacy, roombroker.Code("credentials_rejected")) || errors.Is(legacy, roombroker.Code("bootstrap_auth_failed")) {
 				owned.state = 5
 			}
 			return
@@ -227,7 +234,10 @@ func fcRestrictedStats(id int64) *C.char {
 	ownerMu.Lock()
 	defer ownerMu.Unlock()
 	if current == nil || current.id != id {
-		return C.CString("{}")
+		stats := map[string]any{}
+		startupStats(stats, id)
+		raw, _ := json.Marshal(stats)
+		return C.CString(string(raw))
 	}
 	owned := current
 	owned.mu.Lock()
@@ -236,6 +246,7 @@ func fcRestrictedStats(id int64) *C.char {
 	runtime.ReadMemStats(&memory)
 	stats := map[string]any{"events": owned.events, "state": owned.state, "goroutines": runtime.NumGoroutine(),
 		"go_heap": memory.Alloc, "protect_ok": owned.network.Protected.Load(), "protect_denied": owned.network.Rejected.Load(), "underlay_dns": owned.network.DNS.Load()}
+	startupStats(stats, id)
 	owned.events = nil
 	if owned.session != nil {
 		stats["packet"] = owned.session.Snapshot()
@@ -259,6 +270,7 @@ func fcRestrictedStop(id int64) int32 {
 	}
 	owned := current
 	sessiontrace.From(owned.ctx).Add("LOCAL_CLOSE", "STARTED", "NONE")
+	startupdiag.Cancel(owned.ctx)
 	owned.cancel()
 	<-owned.done
 	if owned.session != nil {

@@ -26,7 +26,10 @@ public class OwnerPairBaselineTest extends OwnerFieldAcceptanceTest {
     }
 
     @Test public void restrictedBaseline() throws Exception {
-        guard();assertEquals("70",arguments.getString("expected_version"));
+        guard();assertEquals("71",arguments.getString("expected_version"));
+        assertEquals(arguments.getString("expected_apk_sha256"),OwnerStartupEvidence.digest(new java.io.File(context.getApplicationInfo().sourceDir)));
+        assertEquals(arguments.getString("expected_native_sha256"),OwnerStartupEvidence.digest(new java.io.File(context.getApplicationInfo().nativeLibraryDir,"libfc_restricted.so")));
+        long previousAttempt=0;
         assertEquals("off",ConnectionService.status);
         assertEquals("FC-4D8Q-REEG",DeviceSupport.cached(context));
         NativeRestricted.load();
@@ -40,6 +43,8 @@ public class OwnerPairBaselineTest extends OwnerFieldAcceptanceTest {
             evidence.addProperty("phase","starting");report(evidence);
             AutomaticVpnOwner owner=new AutomaticVpnOwner(context);
             RestrictedTunnelEngine engine=null;
+            Throwable primary=null;
+            long startupHandle=0;
             try {
                 owner.open(()->{});
                 engine=new RestrictedTunnelEngine(context,()->false,connected->{},owner,SystemClock.elapsedRealtime()+180000);
@@ -62,9 +67,37 @@ public class OwnerPairBaselineTest extends OwnerFieldAcceptanceTest {
                 evidence.addProperty("tcp",true);
                 for(int sample=0;sample<15;sample++){assertTrue(engine.healthy());SystemClock.sleep(1000);}
                 evidence.add("fault_after_traffic",fault());evidence.addProperty("phase","traffic_pass");report(evidence);
+            } catch(Exception | Error failure) {
+                primary=failure;
+                evidence.addProperty("operation_result","FAILED");
+                throw failure;
             } finally {
-                try {if(engine!=null)engine.down();} finally {owner.close();}
-                evidence.add("fault_after_cleanup",fault());evidence.addProperty("cleanup_complete",true);report(evidence);
+                Throwable secondary=null;
+                boolean engineStopped=false,ownerStopped=false;
+                try {
+                    startupHandle=OwnerStartupEvidence.handle(engine);
+                    JsonObject startup=OwnerStartupEvidence.capture(context,startupHandle);
+                    evidence.add("startup_before_cleanup",startup);report(evidence);
+                    OwnerStartupEvidence.requireComplete(startup,previousAttempt);
+                    previousAttempt=startupHandle;
+                } catch(Exception | Error failure) {
+                    secondary=failure;evidence.addProperty("startup_collection_error",true);report(evidence);
+                }
+                try {if(engine!=null)engine.down();engineStopped=true;}
+                catch(Exception | Error failure) {if(secondary==null)secondary=failure;else OwnerStartupEvidence.attach(secondary,failure);}
+                try {owner.close();ownerStopped=true;}
+                catch(Exception | Error failure) {if(secondary==null)secondary=failure;else OwnerStartupEvidence.attach(secondary,failure);}
+                try {
+                    evidence.add("startup_after_cleanup",OwnerStartupEvidence.capture(context,startupHandle));
+                    evidence.add("fault_after_cleanup",fault());
+                    evidence.addProperty("cleanup_complete",engineStopped && ownerStopped && (engine==null || OwnerStartupEvidence.handle(engine)==0));
+                    report(evidence);
+                } catch(Exception | Error failure) {if(secondary==null)secondary=failure;else OwnerStartupEvidence.attach(secondary,failure);}
+                if(secondary!=null) {
+                    if(primary!=null)OwnerStartupEvidence.attach(primary,secondary);
+                    else if(secondary instanceof Exception)throw (Exception)secondary;
+                    else throw (Error)secondary;
+                }
             }
         }
     }

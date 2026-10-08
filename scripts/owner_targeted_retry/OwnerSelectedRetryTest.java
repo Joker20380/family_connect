@@ -33,7 +33,7 @@ public class OwnerSelectedRetryTest extends OwnerFieldAcceptanceTest {
         value.addProperty("tcp",true);return value;
     }
     @Test public void singleExperiment() throws Exception {
-        guard();assertEquals("70",arguments.getString("expected_version"));assertEquals("off",ConnectionService.status);
+        guard();assertEquals("71",arguments.getString("expected_version"));assertEquals("off",ConnectionService.status);
         ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
         NetworkCapabilities network=manager.getNetworkCapabilities(manager.getActiveNetwork());
         assertNotNull(network);assertTrue(network.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR));

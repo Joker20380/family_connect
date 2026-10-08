@@ -41,7 +41,7 @@ manifest=verify_pair(output/'accepted-pair.json')
 validate(preflight['observed'],manifest)
 assert preflight['result']=='PASS' and time.time()-datetime.datetime.fromisoformat(preflight['utc']).timestamp()<900
 assert datetime.datetime.fromisoformat(preflight['leaf_expiry']).timestamp()-time.time()>1800
-helper=output/'baseline-helper-beta70.apk'
+helper=output/'baseline-helper-beta71.apk'
 assert hashlib.sha256(helper.read_bytes()).hexdigest()==json.loads((output/'helper-signature.json').read_text())['sha256']
 assert 'Success' in adb('install','-r',str(helper))
 gateway_source=r'''
@@ -70,11 +70,11 @@ for line in sys.stdin:
 '''
 remote=subprocess.Popen(['ssh','-o','BatchMode=yes','-o','StrictHostKeyChecking=yes','root@186.246.45.246','python3 -u -c '+shlex.quote(gateway_source)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=(output/'gateway-operator.log').open('x'),text=True,bufsize=1)
 assert receive(remote.stdout)=={'ready':True}
-bridge='fc_selected70_'+secrets.token_hex(16)
+bridge='fc_selected71_'+secrets.token_hex(16)
 port=int(adb('forward','tcp:0','localabstract:'+bridge).strip())
 save('ONE-EXPERIMENT-STARTED.json',dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),direction='owner_to_gateway',maximum_fault_arms=1,maximum_receiver_prearms=1))
 instrument_log=(output/'instrumentation.log').open('x')
-instrument=subprocess.Popen(['adb','-s','31ce63ba','shell','am','instrument','-w','-r','-e','class','com.familyconnect.app.OwnerSelectedRetryTest#singleExperiment','-e','owner_serial','31ce63ba','-e','expected_version','70','-e','bridge',bridge,'com.familyconnect.app.friends.test/androidx.test.runner.AndroidJUnitRunner'],stdout=instrument_log,stderr=subprocess.STDOUT)
+instrument=subprocess.Popen(['adb','-s','31ce63ba','shell','am','instrument','-w','-r','-e','class','com.familyconnect.app.OwnerSelectedRetryTest#singleExperiment','-e','owner_serial','31ce63ba','-e','expected_version','71','-e','bridge',bridge,'com.familyconnect.app.friends.test/androidx.test.runner.AndroidJUnitRunner'],stdout=instrument_log,stderr=subprocess.STDOUT)
 connection=None;phone=None;key=None;session=None;proof=False
 try:
     deadline=time.monotonic()+25

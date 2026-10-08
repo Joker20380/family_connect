@@ -17,11 +17,13 @@ assert receipt['result'] == 'PASS'
 assert 0 <= time.time() - datetime.datetime.fromisoformat(receipt['utc']).timestamp() < 900
 assert datetime.datetime.fromisoformat(receipt['leaf_expiry']).timestamp() - time.time() > 1800
 validate(receipt['observed'], manifest)
-assert digest(output / 'baseline-helper-beta70.apk') == json.loads((output / 'helper-signature.json').read_text())['sha256']
+assert digest(output / 'baseline-helper-beta71.apk') == json.loads((output / 'helper-signature.json').read_text())['sha256']
 target = {'baseline': 'OwnerPairBaselineTest#restrictedBaseline', 'control': 'OwnerControlSessionTest#statusOnlySession'}[action]
 command = ['adb', '-s', '31ce63ba', 'shell', 'am', 'instrument', '-w', '-r', '-e',
            'class', 'com.familyconnect.app.' + target, '-e', 'owner_serial', '31ce63ba',
-           '-e', 'expected_version', '70', 'com.familyconnect.app.friends.test/androidx.test.runner.AndroidJUnitRunner']
+           '-e', 'expected_version', '71', '-e', 'expected_apk_sha256', manifest['signed_apk_sha256'],
+           '-e', 'expected_native_sha256', manifest['files']['libfc_restricted.so'],
+           'com.familyconnect.app.friends.test/androidx.test.runner.AndroidJUnitRunner']
 with (output / (action + '-attempt.json')).open('x') as stream:
     json.dump(dict(started=time.time(), command=command), stream)
 response = subprocess.run(command, capture_output=True, text=True, timeout=480)

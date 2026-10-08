@@ -12,18 +12,18 @@ class PairContractTests(unittest.TestCase):
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
         files = {}
-        for name in ('FamilyConnect-OwnerDiagnostic-0.1.18-beta70.apk', 'bootstrap-broker', 'libfc_restricted.so', 'libfc-awg.so'):
+        for name in ('FamilyConnect-OwnerDiagnostic-0.1.18-beta71.apk', 'bootstrap-broker', 'libfc_restricted.so', 'libfc-awg.so'):
             path = self.root / name
             path.write_bytes(name.encode())
             files[name] = digest(path)
         self.manifest = dict(result='PASS', sealed=True, source_revision='a' * 40,
-                             source_tag='diag-owner-beta70-ci1', version='0.1.18-beta70',
-                             version_code=70, package_id='com.familyconnect.app.friends',
+                             source_tag='diag-owner-beta71-ci1', version='0.1.18-beta71',
+                             version_code=71, package_id='com.familyconnect.app.friends',
                              debuggable=False, android_architecture='arm64-v8a',
                              gateway_architecture='linux/amd64', signer_sha256=SIGNER,
                              expected_signer_sha256=SIGNER, publication_jobs='skipped',
                              callback_chain_acceptance='PASS', files=files,
-                             signed_apk_sha256=files['FamilyConnect-OwnerDiagnostic-0.1.18-beta70.apk'])
+                             signed_apk_sha256=files['FamilyConnect-OwnerDiagnostic-0.1.18-beta71.apk'])
         path = self.root / 'pair-manifest.json'
         path.write_text(json.dumps(self.manifest))
         self.acceptance = self.root / 'accepted-pair.json'
@@ -43,7 +43,7 @@ class PairContractTests(unittest.TestCase):
                     validate(observation, self.manifest)
 
     def test_reject_newer_or_older_version(self):
-        for version in ('69', '71'):
+        for version in ('70', '72'):
             observation = expected(self.manifest) | dict(version_code=version)
             with self.assertRaises(AssertionError):
                 validate(observation, self.manifest)

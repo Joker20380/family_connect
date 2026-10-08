@@ -1,6 +1,41 @@
 # Текущее состояние / Current state
 
-## TARGETED-RETRY-OWNER-1 — beta70 source candidate, acceptance pending
+## BOOTSTRAP-CAUSE-OWNER-1 — beta71 diagnostic successor preparation
+
+Next free owner-only version verified: beta71/code71. Exact accepted33-file
+BOOTSTRAP-PRIMARY-CAUSE-1 patch restored on7b27d79; only release metadata and
+exact-version/artifact test helpers added. Source/CI, signed pair, loaded-byte
+identity, Android ART/persistence and one initial/reconnect episode are pending.
+Installed beta70 and historical receipts remain unchanged at this source checkpoint.
+No transport, interframe, targeted-arm, retry/RTO/pacing/TLS/Mux changes.
+One episode only: original restricted cellular initial traffic baseline, normal
+down, then one reconnect; early initial failure prevents reconnect. Export before
+cleanup, zero prearm/bind/arms/drops. No separate reconnect admission test.
+No publication/distribution, Krasnodar, soak or next release. Stop on a new blocker.
+Historical reconnect cause remains UNKNOWN; diagnostics are not a reconnect fix.
+[Exact scope/gates](releases/2026-10-08-bootstrap-cause-owner-1.ru.md).
+
+## BOOTSTRAP-PRIMARY-CAUSE-1 — source-only diagnostic preservation PASS
+
+Isolated changes on `7b27d79c08b133e595fe0a1ebf5a3a4af2602662` retain a bounded,
+attempt-bound owner-only startup result before DESCRIPTOR/ring publication. Original
+HELLO primary-error regression is GREEN without changing its expectation. Default
+and owner Go/race, real host Go/JNI/Java, focused Android JVM66/Python30 and exporter
+checks pass; actual Android arm64 native compilation passes. Android ART/VPN/service
+execution is NOT_RUN. No APK/release rebuild, source commit, signing, deployment,
+owner modification, server operation or physical experiment in this task.
+
+Installed beta70/code70 and its immutable manifest remain unchanged; interframe,
+transport/readiness/retry/TLS policy and public diagnostic schema remain unchanged.
+The prior TARGETED-RETRY-OWNER-1 remains PARTIAL (source/CI, signed pair and deployment
+PASS; second baseline cycle failed). BOOTSTRAP-RECONNECT-LOCALIZE-1 remains FAIL.
+Историческая причина reconnect — UNKNOWN; реальное исправление reconnect не доказано;
+physical selected-retry не выполнялся (preparations/arms/drops0).
+NEXT: separate immutable diagnostic-successor acceptance; no automatic packaging/live.
+Detailed patch/receipts: `state-client-build/bootstrap-primary-cause-1/REPORT.md`.
+[Scope and limitations](releases/2026-10-08-bootstrap-primary-cause-1.ru.md).
+
+## Historical TARGETED-RETRY-OWNER-1 — pre-acceptance source checkpoint
 
 Restored accepted targeted-arm on baseline986323ecef112fcc421a22263e6fbfc9d6cf1922
 in a separate clean source copy. Only ownerDiagnostic metadata advances to70;

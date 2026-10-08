@@ -26,7 +26,7 @@ public class OwnerFieldAcceptanceTest {
     String hash(byte[] raw)throws Exception{return AppUpdate.hex(MessageDigest.getInstance("SHA-256").digest(raw));}
     File file(String name){return new File(context.getNoBackupFilesDir(),name);}
     String text(File file)throws Exception{return new String(Files.readAllBytes(file.toPath()),java.nio.charset.StandardCharsets.UTF_8);}
-    void guard()throws Exception{assertEquals("com.familyconnect.app.friends",context.getPackageName());assertEquals("31ce63ba",arguments.getString("owner_serial"));assertEquals("70",arguments.getString("expected_version"));assertEquals(70,context.getPackageManager().getPackageInfo(context.getPackageName(),0).versionCode);}
+    void guard()throws Exception{assertEquals("com.familyconnect.app.friends",context.getPackageName());assertEquals("31ce63ba",arguments.getString("owner_serial"));assertEquals("71",arguments.getString("expected_version"));assertEquals(71,context.getPackageManager().getPackageInfo(context.getPackageName(),0).versionCode);}
     FriendsActivity open(int tab)throws Exception{
         try(ParcelFileDescriptor descriptor=instrumentation.getUiAutomation().executeShellCommand("am start -W -n "+context.getPackageName()+"/com.familyconnect.app.FriendsActivity --ei tab "+tab)){try(InputStream stream=new FileInputStream(descriptor.getFileDescriptor())){while(stream.read()!=-1){}}}
         AtomicReference<FriendsActivity> found=new AtomicReference<>();long deadline=SystemClock.elapsedRealtime()+10000;

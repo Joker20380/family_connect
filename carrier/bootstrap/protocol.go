@@ -8,6 +8,7 @@ import (
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+	"github.com/Joker20380/family_connect/carrier/startupdiag"
 	"github.com/Joker20380/family_connect/carrier/telemost"
 	"github.com/Joker20380/family_connect/carrier/underlay"
 )
@@ -24,6 +25,16 @@ func receive(ctx context.Context, endpoint familysession.PacketEndpoint, kind, i
 	limit := 256
 	if kind == "TRANSPORT_READY" {
 		limit = 4096
+	}
+	if err != nil {
+		stage := "UNKNOWN"
+		if kind == "TRANSPORT_READY" {
+			stage = "DESCRIPTOR_RECEIVE"
+		}
+		if kind == "BYE" {
+			stage = "BYE_RECEIVE"
+		}
+		startupdiag.Failure(ctx, stage, err)
 	}
 	if err != nil || strictJSON(raw, &input, limit) != nil || input.Type != kind || input.SetupID != id || (kind != "TRANSPORT_READY" && input.Descriptor != nil) {
 		return message{}, roombroker.Code("bootstrap_protocol_rejected")
@@ -122,7 +133,12 @@ func exchange(ctx context.Context, endpoint familysession.PacketEndpoint, broker
 func requestTransport(ctx context.Context, endpoint familysession.PacketEndpoint) (result roombroker.Descriptor, failure error) {
 	raw, err := endpoint.Recv(ctx)
 	var hello message
-	if err != nil || strictJSON(raw, &hello, 256) != nil || hello.Type != "HELLO" || !hexID(hello.SetupID, 32) || hello.Descriptor != nil {
+	if err != nil {
+		startupdiag.Failure(ctx, "HELLO_RECEIVE", err)
+		return roombroker.Descriptor{}, startupdiag.Preserve(roombroker.Code("bootstrap_protocol_rejected"), err)
+	}
+	if strictJSON(raw, &hello, 256) != nil || hello.Type != "HELLO" || !hexID(hello.SetupID, 32) || hello.Descriptor != nil {
+		startupdiag.Failure(ctx, "HELLO_RECEIVE", roombroker.Code("bootstrap_protocol_rejected"))
 		return roombroker.Descriptor{}, roombroker.Code("bootstrap_protocol_rejected")
 	}
 	trace := sessiontrace.New(hello.SetupID, nil)
@@ -136,23 +152,29 @@ func requestTransport(ctx context.Context, endpoint familysession.PacketEndpoint
 		}
 	}()
 	if err := send(ctx, endpoint, message{Type: "REQUEST_TRANSPORT", SetupID: hello.SetupID}); err != nil {
+		startupdiag.Failure(ctx, "REQUEST_SEND", err)
 		return roombroker.Descriptor{}, err
 	}
 	ready, err := receive(ctx, endpoint, "TRANSPORT_READY", hello.SetupID)
 	if err != nil {
+		startupdiag.Failure(ctx, "DESCRIPTOR_RECEIVE", err)
 		return roombroker.Descriptor{}, err
 	}
 	descriptor := ready.Descriptor
 	if descriptor == nil || descriptor.SetupID != hello.SetupID || descriptor.Transport != "telemost-webrtc" || !roombroker.ValidJoinURL(descriptor.JoinURL) || !time.Now().Before(descriptor.ExpiresAt) || time.Until(descriptor.ExpiresAt) > 2*time.Minute {
+		startupdiag.Failure(ctx, "DESCRIPTOR_VALIDATE", roombroker.Code("descriptor_rejected"))
 		return roombroker.Descriptor{}, roombroker.Code("descriptor_rejected")
 	}
 	if err := send(ctx, endpoint, message{Type: "BYE", SetupID: hello.SetupID}); err != nil {
+		startupdiag.Failure(ctx, "BYE_SEND", err)
 		return roombroker.Descriptor{}, err
 	}
 	if _, err := receive(ctx, endpoint, "BYE", hello.SetupID); err != nil {
+		startupdiag.Failure(ctx, "BYE_RECEIVE", err)
 		return roombroker.Descriptor{}, err
 	}
 	if !time.Now().Before(descriptor.ExpiresAt) {
+		startupdiag.Failure(ctx, "DESCRIPTOR_VALIDATE", roombroker.Code("descriptor_expired"))
 		return roombroker.Descriptor{}, roombroker.Code("descriptor_expired")
 	}
 	_ = send(ctx, endpoint, message{Type: "BYE", SetupID: hello.SetupID})
@@ -190,10 +212,12 @@ func OpenServer(ctx context.Context, endpoint familysession.PacketEndpoint, path
 func Recover(ctx context.Context, directory Directory, raw []byte, event func(string), networks ...*underlay.Network) (roombroker.Descriptor, error) {
 	var credentials familysession.Credentials
 	if json.Unmarshal(raw, &credentials) != nil {
+		startupdiag.Failure(ctx, "PROFILE", roombroker.Code("credentials_rejected"))
 		return roombroker.Descriptor{}, roombroker.Code("credentials_rejected")
 	}
 	encoded, _ := json.Marshal(directory)
 	if _, err := ParseDirectory(encoded, credentials.Family, credentials.Gateway, time.Now()); err != nil {
+		startupdiag.Failure(ctx, "DIRECTORY", err)
 		return roombroker.Descriptor{}, err
 	}
 	ctx, cancel := context.WithTimeout(ctx, ExchangeTimeout)
@@ -204,6 +228,7 @@ func Recover(ctx context.Context, directory Directory, raw []byte, event func(st
 	}
 	carrier, err := telemost.New(ctx, config)
 	if err != nil {
+		startupdiag.Failure(ctx, "SEED_CREATE", err)
 		return roombroker.Descriptor{}, roombroker.Code("bootstrap_carrier")
 	}
 	defer carrier.Close()
@@ -211,14 +236,17 @@ func Recover(ctx context.Context, directory Directory, raw []byte, event func(st
 	err = carrier.Connect(connecting)
 	stop()
 	if err != nil {
+		startupdiag.Failure(ctx, "SEED_CONNECT", err)
 		return roombroker.Descriptor{}, roombroker.Code("bootstrap_connect_timeout")
 	}
 	event("bootstrap_carrier_connected")
 	descriptor, err := recoverCarrier(ctx, carrier, raw, event)
 	if err == nil && descriptor.JoinURL == directory.Seeds[0].JoinURL {
+		startupdiag.Failure(ctx, "DESCRIPTOR_VALIDATE", roombroker.Code("dedicated_room_required"))
 		return roombroker.Descriptor{}, roombroker.Code("dedicated_room_required")
 	}
 	if err == nil && !time.Now().Before(descriptor.ExpiresAt) {
+		startupdiag.Failure(ctx, "DESCRIPTOR_VALIDATE", roombroker.Code("descriptor_expired"))
 		return roombroker.Descriptor{}, roombroker.Code("descriptor_expired")
 	}
 	return descriptor, err
@@ -232,6 +260,7 @@ func recoverCarrier(ctx context.Context, carrier familysession.PacketEndpoint, r
 	defer stop()
 	session, err := connectLease(admission, carrier)
 	if err != nil {
+		startupdiag.Failure(ctx, "SEED_ADMISSION", err)
 		return roombroker.Descriptor{}, err
 	}
 	defer session.Close()
@@ -243,6 +272,7 @@ func recoverCarrier(ctx context.Context, carrier familysession.PacketEndpoint, r
 	closeAdmission()
 	stop()
 	if err != nil {
+		startupdiag.Failure(ctx, "FAMILY_AUTH", err)
 		return roombroker.Descriptor{}, roombroker.Code("bootstrap_auth_failed")
 	}
 	defer secured.Close()

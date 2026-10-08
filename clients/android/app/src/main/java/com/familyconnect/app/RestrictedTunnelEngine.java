@@ -79,13 +79,14 @@ final class RestrictedTunnelEngine implements TunnelEngine {
             handle=NativeRestricted.begin(directory.getAbsolutePath(),automaticOwner==null?control:"auto",resolver,service);
         }
         if (handle<=0) throw new IllegalStateException("Restricted startup rejected");
+        StartupDiagnostics.begin(context,handle);
         long deadline=Math.min(connectDeadline,SystemClock.elapsedRealtime()+200000);
         int phase;
         while ((phase=NativeRestricted.state(handle))==0 && SystemClock.elapsedRealtime()<deadline && !cancelled.getAsBoolean() && !authorizationDenied()) Thread.sleep(100);
         evidence();
         checkAccess();
         if (!control.isEmpty() && phase==4) return;
-        if (phase!=1) throw new ConnectivityOrchestrator.Rejected(phase==5?ConnectivityOrchestrator.Failure.AUTH:ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
+        if (phase!=1) throw StartupDiagnostics.rejected(handle,phase==5?ConnectivityOrchestrator.Failure.AUTH:ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
         if(automaticOwner!=null)tun=automaticOwner.replace(automaticOwner.builder());
         else tun=service.new Builder().setSession("Family restricted diagnostic").setMtu(1280)
             .addAddress("10.79.0.2",32).addAddress("fd79:fc::2",128)
@@ -103,8 +104,8 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     }
 
     private void checkAccess() throws ConnectivityOrchestrator.Rejected {
-        if(authorizationDenied())throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.AUTH);
-        if(cancelled.getAsBoolean())throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.CANCELLED);
+        if(authorizationDenied())throw StartupDiagnostics.rejected(handle,ConnectivityOrchestrator.Failure.AUTH);
+        if(cancelled.getAsBoolean())throw StartupDiagnostics.rejected(handle,ConnectivityOrchestrator.Failure.CANCELLED);
     }
 
     ConnectivityOrchestrator.Failure connectionFailure() {
@@ -138,6 +139,7 @@ final class RestrictedTunnelEngine implements TunnelEngine {
     }
 
     private void evidence(JSONObject snapshot) throws Exception {
+        StartupDiagnostics.capture(context,handle,snapshot);
         File output=new File(context.getFilesDir(),"restricted-evidence.jsonl");
         snapshot.put("authorization_denied",FriendsRestricted.denied);
         Diagnostics.nativeStats(context,snapshot);
@@ -156,6 +158,7 @@ final class RestrictedTunnelEngine implements TunnelEngine {
         if (handle>0) {
             try { evidence(); }catch(Exception ignored){}
             boolean stopped=NativeRestricted.stop(handle);
+            StartupDiagnostics.stopped(context,handle);
             Diagnostics.cleanup(context,stopped);
             if (!stopped) throw new IllegalStateException("Restricted cleanup failed");
             handle=0;

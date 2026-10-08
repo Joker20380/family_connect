@@ -9,6 +9,7 @@ public final class OwnerFaultReceiver extends BroadcastReceiver {
 
     static String request(Intent intent) {
         String command = intent == null ? null : intent.getStringExtra("command");
+        if ("startup".equals(command)) return command;
         if ("correlation".equals(command)) {
             String body = intent.getStringExtra("request");
             return body != null && body.length() <= 16384 ? "correlation:" + body : null;
@@ -23,6 +24,11 @@ public final class OwnerFaultReceiver extends BroadcastReceiver {
         String command = request(intent);
         if (command == null) {
             setResultCode(1);
+            return;
+        }
+        if ("startup".equals(command)) {
+            setResultData(StartupDiagnostics.read(context));
+            setResultCode(0);
             return;
         }
         try {

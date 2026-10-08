@@ -1,0 +1,18 @@
+package wholedevice
+
+import (
+    "context"
+    "path/filepath"
+    "sync"
+    "github.com/Joker20380/family_connect/carrier/bootstrap"
+)
+
+type fixturePlane struct { done chan struct{}; once sync.Once }
+func (plane *fixturePlane) Open(context.Context, string, uint16) (Stream, error) { return nil, ErrClosed }
+func (plane *fixturePlane) QueryDNS(context.Context, []byte) ([]byte, error) { return nil, ErrClosed }
+func (plane *fixturePlane) Close() error { plane.once.Do(func(){close(plane.done)}); return nil }
+func (plane *fixturePlane) Wait() error { <-plane.done; return ErrClosed }
+func localStartupFixture(ctx context.Context, path string) (*Session, error) {
+    if err := bootstrap.LocalStartupFixture(ctx, filepath.Base(filepath.Dir(path))); err != nil { return nil, err }
+    return Attach(ctx, &fixturePlane{done:make(chan struct{})}, func(){}), nil
+}

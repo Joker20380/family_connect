@@ -21,8 +21,8 @@ def verify_pair(acceptance_path):
     assert manifest['result'] == 'PASS' and manifest['sealed'] is True
     assert manifest['source_revision'] == acceptance['source_revision']
     assert re.fullmatch('[0-9a-f]{40}', manifest['source_revision'])
-    assert manifest['source_tag'] == 'diag-owner-beta70-ci1'
-    assert manifest['version'] == '0.1.18-beta70' and manifest['version_code'] == 70
+    assert manifest['source_tag'] == 'diag-owner-beta71-ci1'
+    assert manifest['version'] == '0.1.18-beta71' and manifest['version_code'] == 71
     assert manifest['package_id'] == 'com.familyconnect.app.friends'
     assert manifest['debuggable'] is False
     assert manifest['android_architecture'] == 'arm64-v8a'
@@ -34,14 +34,14 @@ def verify_pair(acceptance_path):
     for name, expected in manifest['files'].items():
         assert Path(name).name == name
         assert digest(pair / name) == expected, 'Artifact changed: ' + name
-    assert manifest['files']['FamilyConnect-OwnerDiagnostic-0.1.18-beta70.apk'] == manifest['signed_apk_sha256']
+    assert manifest['files']['FamilyConnect-OwnerDiagnostic-0.1.18-beta71.apk'] == manifest['signed_apk_sha256']
     assert all(name in manifest['files'] for name in ('bootstrap-broker', 'libfc_restricted.so', 'libfc-awg.so'))
     return manifest
 
 
 def expected(manifest):
-    return dict(package='com.familyconnect.app.friends', version_name='0.1.18-beta70',
-                version_code='70', abi='arm64-v8a', debuggable=False,
+    return dict(package='com.familyconnect.app.friends', version_name='0.1.18-beta71',
+                version_code='71', abi='arm64-v8a', debuggable=False,
                 apk_sha256=manifest['signed_apk_sha256'], signer=SIGNER,
                 gateway_sha256=manifest['files']['bootstrap-broker'],
                 revision=manifest['source_revision'], serial='31ce63ba', uid='10283')

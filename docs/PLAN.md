@@ -14,7 +14,37 @@ NEXT: exact-SHA acceptance, then CI-only tag and hosted gates before signing.
 
 ## Current engineering priority / Текущий critical path
 
-### TARGETED-RETRY-OWNER-1 — bounded owner diagnostic successor
+### BOOTSTRAP-CAUSE-OWNER-1 — authorized bounded successor and owner episode
+
+Accept one exact beta71 SHA with existing local and hosted gates; publication skipped.
+Then existing vault-backed signer and immutable matching pair; fresh bounded RU/NL
+and owner preflight, routine credential renewal only if required, in-place owner
+installation/loaded-byte verification. Keep rollback credentials current; no unsafe
+Android downgrade. No second reconcile, healthcheck repair or unrelated restart.
+One synthetic ART persistence fixture uses only its own cache directory, no startup.
+One actual initial/reconnect episode is both deployment-baseline and diagnostic gate.
+Capture safe attempt/stage/cause and AtomicFile before cleanup even on failure.
+No automatic retry, selected-retry, arm/drop, runtime fix or expanded transport scope.
+This source checkpoint is not a CI/signing/deployment/live PASS.
+[Procedure and evidence](releases/2026-10-08-bootstrap-cause-owner-1.ru.md).
+
+### BOOTSTRAP-PRIMARY-CAUSE-1 — source gate complete; stop before successor
+
+Accept only diagnostic primary-cause preservation on exact beta70 source7b27d79.
+The old RED expectation now passes; real host JNI owner/default projections and
+deterministic failure/cancel/stale-attempt/retention regressions pass. Android native
+compile and focused JVM checks pass, not Android ART/VPN runtime acceptance.
+No network/reconnect repair is claimed. The historical reconnect cause and gateway
+restart remain UNKNOWN, physical selected-retry remains NOT_RUN.
+
+One next gate: separately accepted immutable diagnostic successor, retaining current
+beta70 runtime/manifest until then. Any later controlled runtime observation needs
+fresh restricted chain/leaf/readiness and bounded gateway lifecycle evidence;
+peer-worker matters only if its bootstrap dependency is proved. Do not launch that
+gate, renew credentials, package, deploy or run live automatically in this task.
+[Source-only report](releases/2026-10-08-bootstrap-primary-cause-1.ru.md).
+
+### Historical TARGETED-RETRY-OWNER-1 — successor source plan
 
 Accept exact restored targeted-arm + owner-only beta70 metadata/test helpers at
 one clean validation SHA; then existing local and four hosted gates, skipped
