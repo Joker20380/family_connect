@@ -15,11 +15,17 @@ import (
 
 func TestSelectedRetryPinnedAcrossBoundPionAndRingFlood(test *testing.T) {
 	for _, size := range []int{1, reliablestream.DefaultConfig().Payload} {
-		test.Run(fmt.Sprint(size), func(test *testing.T) { selectedRetryPinned(test, size) })
+		test.Run(fmt.Sprint(size), func(test *testing.T) { selectedRetryPinned(test, size, false) })
 	}
 }
 
-func selectedRetryPinned(test *testing.T, size int) {
+func TestTargetedRetryPinnedAcrossBoundPionAndRingFlood(test *testing.T) {
+	for _, size := range []int{1, reliablestream.DefaultConfig().Payload} {
+		test.Run(fmt.Sprint(size), func(test *testing.T) { selectedRetryPinned(test, size, true) })
+	}
+}
+
+func selectedRetryPinned(test *testing.T, size int, targeted bool) {
 	test.Helper()
 	ctx, cancel := context.WithTimeout(context.Background(), 12*time.Second)
 	defer cancel()
@@ -57,13 +63,20 @@ func selectedRetryPinned(test *testing.T, size int) {
 	}
 	leftTrace.Add("FAMILY_TLS", "ESTABLISHED", "NONE")
 	leftTrace.Add("GATEWAY_SESSION", "ESTABLISHED", "NONE")
-	if !leftTrace.FaultCommand("arm").Armed {
+	if targeted {
+		if receipt := leftTrace.TargetedArm(armed); receipt.Result != "ARMED" {
+			test.Fatal(receipt)
+		}
+	} else if !leftTrace.FaultCommand("arm").Armed {
 		test.Fatal("fault not armed")
 	}
 	for offset := 0; offset < 8; offset++ {
 		if err := left.SendContext(ctx, bytes.Repeat([]byte{byte(offset + 1)}, size)); err != nil {
 			test.Fatal(err)
 		}
+	}
+	if targeted {
+		waitHeadState(test, ctx, func() bool { return right.Stats().Flow.Buffered == 8 })
 	}
 	for offset := 0; offset < 8; offset++ {
 		data, err := right.Recv(ctx)
@@ -92,6 +105,9 @@ func selectedRetryPinned(test *testing.T, size int) {
 	proof := received.Reliable
 	if proof == nil || proof.Accepted == nil || proof.Consumed == nil || proof.ACK == nil || proof.Accepted.Sequence != 19 || proof.Consumed.Sequence != 19 || proof.Consumed.Before.Next != 19 || proof.Consumed.After.Next != 20 || proof.ACK.Base != 20 || proof.ACK.Result != "ok" || proof.ACK.SentNS == 0 {
 		test.Fatalf("exact Reliable/ACK callbacks not retained: %+v", proof)
+	}
+	if targeted && (proof.Accepted.Before.Buffered == 0 || !proof.Consumed.BufferedSuccessorReady || proof.Consumed.After.Mask&1 == 0) {
+		test.Fatal("gap/buffered successor proof absent", proof)
 	}
 	if len(sent.Descriptor.Media) < 1 || (size > 8192 && len(sent.Descriptor.Media) < 2) {
 		test.Fatal("fragments missing")

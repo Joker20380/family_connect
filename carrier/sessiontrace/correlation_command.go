@@ -12,6 +12,7 @@ type correlationRequest struct {
 	Operation  string                 `json:"operation"`
 	Key        CorrelationKey         `json:"key"`
 	Descriptor *CorrelationDescriptor `json:"descriptor,omitempty"`
+	Prearm     *CorrelationReceipt    `json:"prearm,omitempty"`
 }
 
 func (recorder *Recorder) CorrelationCommand(raw, role string) string {
@@ -36,6 +37,15 @@ func (recorder *Recorder) CorrelationCommand(raw, role string) string {
 	var receipt CorrelationReceipt
 	var err error
 	switch request.Operation {
+	case "targeted_arm":
+		if local != "tx" || request.Prearm == nil || request.Prearm.Key != request.Key {
+			return rejected
+		}
+		encoded, encodeErr := json.Marshal(recorder.TargetedArm(*request.Prearm))
+		if encodeErr != nil {
+			return rejected
+		}
+		return string(encoded)
 	case "prearm":
 		receipt, err = recorder.PrearmCorrelation(request.Key, local)
 	case "status", "cleanup":

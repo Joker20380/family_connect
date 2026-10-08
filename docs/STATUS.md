@@ -1,5 +1,34 @@
 # Текущее состояние / Current state
 
+## TARGETED-RETRY-OWNER-1 — beta70 source candidate, acceptance pending
+
+Restored accepted targeted-arm on baseline986323ecef112fcc421a22263e6fbfc9d6cf1922
+in a separate clean source copy. Only ownerDiagnostic metadata advances to70;
+test-only baseline/selected-retry helpers now require exact70 and accepted pair
+manifest identity. Public versions/catalogs unchanged. Source/CI, signing,
+owner-only deployment/baseline and one selected logical DATA N experiment are
+separate sequential gates; stop at the first blocker. None is claimed complete
+by this source checkpoint. Installed beta69 and sealed67/68/69 remain preserved.
+Keyframe rejected after attempt2 REGRESSION_OBSERVED; retain interframe path.
+Krasnodar and historical restart remain UNKNOWN.
+[Scope and gates](releases/2026-10-08-targeted-retry-owner-1.md).
+
+## TARGETED-DATA-FAULT-1 — local source acceptance PASS
+
+Isolated source-only change on986323ecef112fcc421a22263e6fbfc9d6cf1922.
+Criterion explicitly selects logical Reliable DATA N, not an application/writer.
+Atomic live head check + targeted arm share Reliable allocation mutex; only N/attempt0
+can consume the one-shot fault while its exact correlation window remains valid.
+Receiver correlation generation and independent fault nonce remain separate.
+Default and diagnostic affected-package race PASS; targeted local Pion pinned chain,
+gap/buffered successor and ordered recovery PASS. Python privacy/control49 PASS;
+controller mocks5 PASS. No physical run, packaging, signing, install, deploy or CI.
+Sealed67/68/69 and prior receipts remain immutable; old bytes do not contain this feature.
+Historical physical FAIL and selection/gateway UNKNOWN, link NOT_ESTABLISHED unchanged.
+Main dirty worktree untouched; this STATUS applies only to the isolated candidate.
+NEXT: separately authorize successor packaging/provenance, not a physical retry on beta69.
+[Contract and complete scope](releases/2026-10-07-targeted-data-fault-1.md).
+
 ## Beta69 isolated validation candidate
 
 RTP-IDENTITY-FREEZE-1 validation candidate: ownerDiagnostic0.1.18-beta69/code69.

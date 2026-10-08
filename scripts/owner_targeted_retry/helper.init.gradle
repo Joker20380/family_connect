@@ -1,0 +1,10 @@
+allprojects { project ->
+    project.plugins.withId('com.android.application') {
+        def helper = new File(project.rootDir, '../../scripts/owner_targeted_retry')
+        project.android.sourceSets.androidTest.java.srcDirs = [helper]
+        project.android.sourceSets.androidTest.manifest.srcFile new File(helper, 'test-manifest.xml')
+    }
+    project.tasks.configureEach { task ->
+        if (!task.name.contains('AndroidTest')) { task.enabled = false }
+    }
+}

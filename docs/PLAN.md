@@ -1,6 +1,6 @@
 # Рабочий план / Working plan
 
-## Beta69 isolated validation candidate
+## Historical beta69 isolated validation candidate
 
 RTP-IDENTITY-FREEZE-1 validation candidate: ownerDiagnostic0.1.18-beta69/code69.
 Baseline1abaa3a8a9ba8ad9fa2a71c126620175b713c321; five accepted diagnostic/test files,
@@ -13,6 +13,31 @@ Beta68 sealed/runtime pair unchanged. No install/deploy/arm/renewal permitted.
 NEXT: exact-SHA acceptance, then CI-only tag and hosted gates before signing.
 
 ## Current engineering priority / Текущий critical path
+
+### TARGETED-RETRY-OWNER-1 — bounded owner diagnostic successor
+
+Accept exact restored targeted-arm + owner-only beta70 metadata/test helpers at
+one clean validation SHA; then existing local and four hosted gates, skipped
+publication, vault-backed signing and immutable pair. Only after fresh identity,
+credential, served-chain and owner cellular baseline acceptance: one receiver
+prearm → atomic target N arm → selected retry experiment. Rejection stops with
+PREPARATION_ABORTED/drops0, not reselection. Every path exports then cleans up.
+No keyframe, transport retuning, public release or Krasnodar operation.
+This checkpoint has not built/signed/deployed the successor. Main dirty worktree
+and historical sealed pairs remain untouched; no safe Android downgrade assumed.
+[Current scoped report](releases/2026-10-08-targeted-retry-owner-1.md).
+
+### TARGETED-DATA-FAULT-1 — locally accepted source only
+
+Logical DATA identity replaces application-writer ownership for this experiment.
+No writer lease, TLS/Mux marking, pacing/RTO/retry change or producer freeze.
+Atomic targeted control and local race/Pion/default/privacy/controller checks PASS.
+No version/tag/commit, successor artifact or physical acceptance claimed.
+Next decision: separate authorization for successor packaging and its provenance;
+existing sealed beta69 cannot be represented as providing targeted control.
+Do not run physical prearm/arm/drop, gateway observer or deployment automatically.
+Historical gateway restart remains separate UNKNOWN; original FAIL is preserved.
+
 
 ## PINNED-EVIDENCE-FREEZE-1 — validation snapshot, not accepted freeze
 

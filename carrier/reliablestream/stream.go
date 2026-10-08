@@ -50,6 +50,7 @@ func New(ctx context.Context, endpoint Endpoint, config Config) (*Stream, error)
 	}
 	ctx, cancel := context.WithCancel(ctx)
 	stream := &Stream{endpoint: endpoint, state: newEngine(config, local, time.Now()), sendGate: make(chan struct{}, 1), requests: make(chan request), output: make(chan []byte), done: make(chan struct{}), ready: make(chan struct{}), cancel: cancel}
+	stream.bindDiagnosticAllocation(ctx)
 	go stream.run(ctx)
 	return stream, nil
 }

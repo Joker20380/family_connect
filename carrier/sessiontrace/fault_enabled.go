@@ -9,10 +9,16 @@ import (
 )
 
 type faultControl struct {
-	family  bool
-	gateway bool
-	used    bool
-	receipt FaultReceipt
+	targeted   bool
+	target     CorrelationKey
+	deadline   time.Time
+	allocation func(func(Flow))
+	alive      func() bool
+	owner      uint64
+	family     bool
+	gateway    bool
+	used       bool
+	receipt    FaultReceipt
 }
 
 func evidenceWatchEnabled() bool { return true }
@@ -27,10 +33,23 @@ func (recorder *Recorder) faultEvent(event Event) {
 	if event.Stage == "LOCAL_CLOSE" || event.Stage == "CLEANUP" || event.State == "FAILED" || event.State == "CLOSED" {
 		recorder.fault.gateway = false
 		recorder.fault.receipt.Armed = false
+		if recorder.fault.targeted && !recorder.fault.receipt.Consumed {
+			recorder.fault.receipt.State = "CLOSED"
+		}
 	}
 }
 
 func (recorder *Recorder) faultSnapshot() *FaultReceipt {
+	if recorder.fault.targeted {
+		recorder.targetValid(time.Now())
+		value := recorder.fault.receipt
+		value.Schema = 1
+		value.Target = "logical_data_attempt0"
+		if value.State == "" {
+			value.State = "DISARMED"
+		}
+		return &value
+	}
 	value := recorder.fault.receipt
 	value.Schema = 1
 	value.Target = "outbound_data_attempt0_after_established"
@@ -47,7 +66,12 @@ func (recorder *Recorder) FaultCommand(command string) FaultReceipt {
 	}
 	recorder.mu.Lock()
 	defer recorder.mu.Unlock()
-	if command == "arm" && recorder.value.CorrelationStatus == "VALID" && recorder.fault.family && recorder.fault.gateway && !recorder.closing && !recorder.fault.used {
+	if command == "arm" && recorder.fault.targeted {
+		value := *recorder.faultSnapshot()
+		value.Armed, value.State = false, "TARGETED_ONLY"
+		return value
+	}
+	if command == "arm" && !recorder.fault.targeted && recorder.value.CorrelationStatus == "VALID" && recorder.fault.family && recorder.fault.gateway && !recorder.closing && !recorder.fault.used {
 		var nonce [16]byte
 		if _, err := rand.Read(nonce[:]); err == nil {
 			recorder.fault.used = true
@@ -56,6 +80,10 @@ func (recorder *Recorder) FaultCommand(command string) FaultReceipt {
 	}
 	if command == "disarm" {
 		recorder.fault.receipt.Armed = false
+		if recorder.fault.targeted && !recorder.fault.receipt.Consumed {
+			recorder.fault.receipt.State = "CANCELLED"
+			recorder.fault.used = true
+		}
 	}
 	return *recorder.faultSnapshot()
 }
@@ -66,6 +94,18 @@ func (recorder *Recorder) DropDiagnostic(point Boundary) bool {
 	}
 	recorder.mu.Lock()
 	defer recorder.mu.Unlock()
+	if recorder.fault.targeted {
+		if !recorder.targetValid(time.Now()) {
+			return false
+		}
+		if point.DataSequence != recorder.fault.target.Sequence {
+			if point.DataSequence > recorder.fault.target.Sequence {
+				recorder.fault.receipt.Armed = false
+				recorder.fault.receipt.State = "TARGET_MISSED"
+			}
+			return false
+		}
+	}
 	if !recorder.fault.receipt.Armed || !recorder.fault.family || !recorder.fault.gateway || recorder.closing {
 		return false
 	}
@@ -74,6 +114,9 @@ func (recorder *Recorder) DropDiagnostic(point Boundary) bool {
 	}
 	recorder.fault.receipt.Armed = false
 	recorder.fault.receipt.Consumed = true
+	if recorder.fault.targeted {
+		recorder.fault.receipt.State = "CONSUMED"
+	}
 	recorder.fault.receipt.Count = 1
 	recorder.fault.receipt.Sequence = point.DataSequence
 	recorder.fault.receipt.ConsumedAtMS = time.Now().UnixMilli()
