@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+## OWNER-EPISODE-RETAINED-DIAGNOSTICS-1 — ACCESS_BLOCKED (15.10)
+
+Scoped local retained-export search and read-only owner ADB/historical journal
+retrieval are complete. Current installed APK matches exact research84 SHA256;
+`restricted-evidence.jsonl` is inaccessible: non-debuggable run-as and shell
+permission denial. File absence/size/retention are unknown. Exact retained source
+shows normal export deletes previous exports and omits this JSONL, so it was not
+invoked. The exact historical candidate invocation/time-filter journal returned
+no rows; rotation/event absence is not inferred. No new owner-native snapshot,
+session binding, READY, packet counters or first native failure was recovered.
+Production FAIL / root cause NOT_PROVEN / missing boundary
+**EVIDENCE_INSUFFICIENT_AT_OWNER_DEDICATED_SESSION_READY** remain unchanged.
+See the [sanitized retrieval report](releases/2026-10-15-owner-episode-retained-diagnostics-1.md).
+Raw supplemental capsule remains private. No CONNECT, disconnect, native stats
+poll, export/broadcast, install, instrumentation, restart, provider/credential
+action, trigger, product patch/build, A/B/C or deployment. Only four safe docs are
+updated on the review branch; dirty original main and frozen sources are preserved.
+
 ## PUBLISH-SUPERVISOR-RESEARCH-STATE-1 — review publication (15.10)
 
 Reading branch `review/supervisor-state-20261015` starts from actual local/public

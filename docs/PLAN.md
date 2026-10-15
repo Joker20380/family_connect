@@ -8,6 +8,23 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### OWNER-EPISODE-RETAINED-DIAGNOSTICS-1 — terminal ACCESS_BLOCKED (15.10)
+
+- Read the [retained-diagnostics result](releases/2026-10-15-owner-episode-retained-diagnostics-1.md)
+  and updated [publication index](releases/2026-10-15-supervisor-publication-index.md)
+  before deciding a separate next task. No new engineering work is authorized here.
+- Retained local sources yielded no matching owner-native diagnostic record;
+  ordinary ADB app-private access is denied. Exact installed research84 is confirmed.
+- Do not use the existing export UI under the no-deletion constraint: exact source
+  deletes earlier exports and does not export restricted-evidence.jsonl.
+- Historical invocation journal returned no rows; neither missing events nor
+  rotation is proven. Dedicated READY/session binding/counters/first failure remain
+  unresolved; root cause NOT_PROVEN and production acceptance FAIL are preserved.
+- Retrieval is stopped; do not repeat this evidence audit or automatically begin
+  CONNECT, EXACT-LOCAL-TESTABILITY, A/B/C, recovery, patch/build or deployment.
+- Keep raw supplemental evidence private; publish only the report and these
+  documentation pointers. No changes to main, workflows or frozen snapshots.
+
 ### PUBLISH-SUPERVISOR-RESEARCH-STATE-1 — reading branch, no engineering continuation (15.10)
 
 - Publish already completed reports and exact source-file snapshots on

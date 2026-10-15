@@ -7,6 +7,13 @@ Production FAIL сохраняется; root cause не доказана. Сна
 
 ## Начать здесь
 
+- [Retained owner diagnostics — ACCESS_BLOCKED](2026-10-15-owner-episode-retained-diagnostics-1.md):
+  отдельная ограниченная read-only проверка после исходной публикации
+  `f5d7a4b156f66f2ce38fe7976d99f6f39678bb00`. APK research84 подтверждён; app-private
+  JSONL недоступен разрешёнными способами, штатный export не запускался из-за
+  удаления прежних exports. Historical invocation journal не вернул записей.
+  Новых owner-native records/binding/READY/counters не получено; FAIL и NOT_PROVEN
+  не изменены. Публичны только безопасные выдержки и таблица пределов вывода.
 - [Основной rootcause report — PARTIAL](2026-10-15-supervisor-candidate-dataplane-rootcause-1.md).
 - [Production episode — FAIL, единственный rollback](2026-10-15-seed-supervisor-owner-acceptance-3-final.md):
   byte-identical копия существующего episode-90m/REPORT.md, SHA256
@@ -79,6 +86,14 @@ Research84 — selected source slice, не полный APK build tree. Семь
 production result projection, rootcause result projection, historical trigger-test
 differential. Их PASS/FAIL/NOT_RUN относятся к исходным задачам, не к этой публикации.
 No owner READY/packet evidence добавлено или выдумано.
+
+Supplemental retained-diagnostics task публикует только новый отчёт и обновления
+STATUS/PLAN/этого указателя. Raw ADB/journal receipts, копии прежних diagnostic
+receipts и provenance находятся в отдельной private capsule, не в исходном seal.
+Полные exact research84 StartupDiagnostics/Diagnostics/DiagnosticsProvider прочитаны
+из сохранённого source; их digests и короткие безопасные code excerpts есть в новом
+отчёте, но selected source slice не расширялся. Public source/frozen identities не
+менялись; новый documentation commit не является source SHA исследуемого бинарника.
 
 **Только локально:** raw episode journal/UI/support exports, полные sealed capsules,
 APK/native/gateway binaries, Git bundles, build archives и большие test logs; все
