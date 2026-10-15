@@ -8,6 +8,22 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### OWNER-CUMULATIVE-CLIENT-ACCEPTANCE-1-RESUME — installed, waiting for owner (15.10)
+
+- [Continuation checkpoint](releases/2026-10-15-owner-cumulative-client-acceptance-1-resume.md):
+  signed cumulative APK installed once; installed/native/signature/UID readback PASS,
+  normal app launch observed, VPN OFF. No new device CONNECT or export yet.
+- Obtain current owner confirmation of Netherlands/Telemost in the actual UI, without
+  pressing CONNECT yet. No blind taps, protected-screen extraction or historical ready.
+- Then short freshness/owner check, bounded evidence and CONNECT1; real traffic plus
+  240seconds before any CONNECT2.18-minute total budget begins at first CONNECT.
+  Earliest server limit observed18:17UTC is21:37:06UTC; do not spend owner delay as
+  if validity were frozen. No automatic recovery/reinstall/rebuild/re-signing.
+- On first unexpected startup/traffic failure: no CONNECT2; one normal support export,
+  cleanup and safe original-APK return only if a regression is confirmed.
+- Handoff/chat-first and normal export remain unproven; supervisor FAIL and historical
+  C1/I1 NOT_PROVEN remain unchanged. Earlier entries below are historical checkpoints.
+
 ### CURRENT4H-EXPIRED-RECOVERY-DEPLOY-AND-RESTORE-1 — live recovery complete (15.10)
 
 - [Controlled management deployment and recovery](releases/2026-10-15-current4h-expired-recovery-deploy-and-restore-1.md)

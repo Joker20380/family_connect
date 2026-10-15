@@ -7,6 +7,17 @@ Production FAIL сохраняется; root cause не доказана. Сна
 
 ## Начать здесь
 
+- [Owner cumulative acceptance resume — установлен, WAITING_FOR_OWNER_ACTION](2026-10-15-owner-cumulative-client-acceptance-1-resume.md):
+  одна обычная replace-install; installed APK3c733d2f…140513/native2a974350…4b88c,
+  прежний signer/UID10283 проверены. Свежий server preflight пригоден18:17UTC;
+  final device18:25:10UTC: EXIT открыт, VPN OFF. CONNECT1/2 и новый export не выполнялись.
+  Нужен текущий выбор Netherlands/Telemost владельцем перед первой попыткой.
+  [Безопасный checkpoint receipt](evidence/2026-10-15-owner-cumulative-client-resume-checkpoint.json).
+  Source/build/frozen snapshots не менялись; raw metadata и APK остаются приватными.
+  Host quota interruption при readback не является client failure. Server administrative
+  changes0; обычная фоновая app/protocol activity не объявляется нулевой. Handoff,
+  client smoke и export acceptance не повышены; исторический supervisor FAIL сохранён.
+
 - [Current4h expired recovery — management deployed, ENVIRONMENT_RESTORED](2026-10-15-current4h-expired-recovery-deploy-and-restore-1.md):
   отдельно разрешённое production management применение exact13-module map5109a7c9…30145;
   один request/offline-root signing/apply, COMMITTED, cleanup RU/NL подтверждён.
