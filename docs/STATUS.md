@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+## CURRENT4H-EXPIRED-RECOVERY-DEPLOY-AND-RESTORE-1 — ENVIRONMENT_RESTORED (15.10)
+
+Authorized management map5109a7c9…30145 installed on RU/NL; one explicit expired
+request/offline-root signature/apply completed COMMITTED with protected cleanup.
+Baseline21f0a0fd…70509a loaded unchanged; live seed READY, strict served TLS and new
+runtime-bound RU/NL directory verified. Fixed120seconds: same PID/invocation, no
+restart/new fatal. Evaluate and actual scheduled current4h run both NOOP; timer
+restored enabled/active, HTTP/directory services restored, legacy writer disabled.
+[Deployment receipts, exact identities and UTC boundaries](releases/2026-10-15-current4h-expired-recovery-deploy-and-restore-1.md).
+Final check17:43:43UTC: earliest leaf/CRL boundary21:37:06UTC15Oct; authority/grants
+expire17:34:58UTC16Oct, next operator threshold11:34:58UTC16Oct. Current4h does not
+autonomously renew authority/grants. Server18-minute device window was sufficient
+at check, not a permanent readiness promise. Management/credentials/runtime changed.
+Phone untouched; signed APK3c733d2f…140513 unchanged; install and CONNECT1/2 NOT_RUN.
+Next: short fresh environment/owner check, then remaining existing client acceptance
+steps without rebuild/resign/full offline audit. No automatic device action.
+DEVICE_ACCEPTANCE=NOT_RUN; PRODUCTION_ACCEPTANCE=FAIL;
+HISTORICAL_CAUSAL_BINDING=NOT_PROVEN remain unchanged. Earlier entries are historical.
+
 ## CURRENT4H-EXPIRED-PREDECESSOR-RECOVERY-1 — IMPLEMENTED_AND_LOCALLY_VERIFIED (15.10)
 
 Separate management-only expired predecessor request/offline-root/apply/resume path

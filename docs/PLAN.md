@@ -8,6 +8,23 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### CURRENT4H-EXPIRED-RECOVERY-DEPLOY-AND-RESTORE-1 — live recovery complete (15.10)
+
+- [Controlled management deployment and recovery](releases/2026-10-15-current4h-expired-recovery-deploy-and-restore-1.md)
+  COMMITTED; baseline/seed/TLS/directory live checks and fixed120seconds passed.
+  Current4h scheduling restored; actual scheduled NOOP observed, no pending recovery.
+- Next is the remaining OWNER-CUMULATIVE-CLIENT-ACCEPTANCE-1 install/device sequence,
+  only after short fresh environment and owner-state checks. Reuse signed APK;
+  no rebuild, resigning, full offline audit or automatic CONNECT. Both attempts unused.
+- Readiness expires: final server check17:43:43UTC15Oct; current earliest bound
+  leaf/CRL21:37:06UTC. Charge preparation against actual headroom for the18-minute
+  device sequence; observe any natural invocation/directory change rather than pinning
+  old runtime. No device smoke/handoff acceptance is implied by server TLS.
+- Daily operator authority/grant maintenance remains necessary: next threshold
+  16Oct11:34:58UTC, expiry17:34:58UTC. Current4h covers leaf/CRL only. No new TTL policy.
+- Preserve historical production FAIL and causal binding NOT_PROVEN. The following
+  implementation/blocker entries describe their earlier task endpoints, not live state.
+
 ### CURRENT4H-EXPIRED-PREDECESSOR-RECOVERY-1 — local implementation complete (15.10)
 
 - [Implemented recovery and local acceptance](releases/2026-10-15-current4h-expired-predecessor-recovery-1.md):

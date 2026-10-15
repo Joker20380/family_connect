@@ -7,6 +7,18 @@ Production FAIL сохраняется; root cause не доказана. Сна
 
 ## Начать здесь
 
+- [Current4h expired recovery — management deployed, ENVIRONMENT_RESTORED](2026-10-15-current4h-expired-recovery-deploy-and-restore-1.md):
+  отдельно разрешённое production management применение exact13-module map5109a7c9…30145;
+  один request/offline-root signing/apply, COMMITTED, cleanup RU/NL подтверждён.
+  Неизменный baseline запущен штатно, seed READY / served TLS / новая directory PASS,
+  фиксированные120секунд стабильны. Evaluate и фактический scheduled run NOOP;
+  current4h/HTTP/directory states восстановлены. [Безопасный receipt](evidence/2026-10-15-current4h-expired-recovery-deployment.json).
+  Check17:43:43UTC15Oct; leaf/CRL limit21:37:06UTC; следующий operator threshold
+  16Oct11:34:58UTC. Это не device acceptance и не закрытие historical production FAIL.
+  Телефон не затронут, APK неизменён, CONNECT1/2 не запускались. Raw requests/bundles,
+  grant IDs, credentials, backups и журналы приватны. Нижние пункты — результаты
+  прежних задач на момент их выполнения, не утверждение текущего failed runtime.
+
 - [Current4h expired-predecessor recovery — реализован и локально проверен](2026-10-15-current4h-expired-predecessor-recovery-1.md):
   отдельно разрешённый management delta на accepted9423d45/archive5fa24f53…c0e00,
   [before/after source, patch, tests, runner и runbook](../../research/current4h-expired-recovery-20261015/README.md).
