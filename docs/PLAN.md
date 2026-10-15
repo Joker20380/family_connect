@@ -8,21 +8,23 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
-### OWNER-CUMULATIVE-CLIENT-ACCEPTANCE-1-RESUME — installed, waiting for owner (15.10)
+### OWNER-CUMULATIVE-CLIENT-ACCEPTANCE-1-RESUME — bounded smoke complete, PARTIAL (15.10)
 
-- [Continuation checkpoint](releases/2026-10-15-owner-cumulative-client-acceptance-1-resume.md):
-  signed cumulative APK installed once; installed/native/signature/UID readback PASS,
-  normal app launch observed, VPN OFF. No new device CONNECT or export yet.
-- Obtain current owner confirmation of Netherlands/Telemost in the actual UI, without
-  pressing CONNECT yet. No blind taps, protected-screen extraction or historical ready.
-- Then short freshness/owner check, bounded evidence and CONNECT1; real traffic plus
-  240seconds before any CONNECT2.18-minute total budget begins at first CONNECT.
-  Earliest server limit observed18:17UTC is21:37:06UTC; do not spend owner delay as
-  if validity were frozen. No automatic recovery/reinstall/rebuild/re-signing.
-- On first unexpected startup/traffic failure: no CONNECT2; one normal support export,
-  cleanup and safe original-APK return only if a regression is confirmed.
-- Handoff/chat-first and normal export remain unproven; supervisor FAIL and historical
-  C1/I1 NOT_PROVEN remain unchanged. Earlier entries below are historical checkpoints.
+- [Final report](releases/2026-10-15-owner-cumulative-client-acceptance-1-resume.md):
+  one restricted device smoke PASS; real native readiness/attach, two owner HTTPS
+  observations, matched DNS42/responses42/errors0, fixed240seconds and normal cleanup.
+- One normal export received and triaged: current successful ring/session is bound
+  to the saved gateway; older FAILED incident excluded. Export success does not test
+  receive-failure observation/local_stop fidelity. No additional poll/fault/CONNECT.
+- Full acceptance remains PARTIAL: CONNECT2 NOT_RUN for cleanup budget; chat-first,
+  borrowing/handoff unproven and chat recovery unmeasured. Preserve nonzero per-stream
+  counters and post-DISCONNECT server close codes in the report; no causal guess.
+- End state: VPN OFF, cumulative client installed privately, no rollback; gateway
+  baseline active with no administrative changes in this task. Review remaining gaps
+  before separately authorizing more device work; do not automatically repeat tests,
+  install, export or recovery. No build/sign/release/main/workflow/catalog changes.
+- Historical supervisor FAIL and C1/I1 NOT_PROVEN remain. Lower sections describe
+  earlier task endpoints, not a directive to repeat recovery or installation now.
 
 ### CURRENT4H-EXPIRED-RECOVERY-DEPLOY-AND-RESTORE-1 — live recovery complete (15.10)
 

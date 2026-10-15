@@ -1,23 +1,29 @@
 # Текущее состояние / Current state
 
-## OWNER-CUMULATIVE-CLIENT-ACCEPTANCE-1-RESUME — WAITING_FOR_OWNER_ACTION (15.10)
+## OWNER-CUMULATIVE-CLIENT-ACCEPTANCE-1-RESUME — PARTIAL (15.10)
 
-Fresh18:17UTC server/owner preflight passed installation prerequisites. One ordinary
-replace-install succeeded18:21:58UTC; installed APK3c733d2f…140513, native2a974350…4b88c,
-original signer and UID10283 verified from actual installed bytes. Normal EXIT launch
-succeeded; final18:25:10UTC app present/VPN OFF. Host `/tmp` quota interrupted APK
-readback, resolved with private disk-backed destination; no reinstall/client repair.
-[Resume checkpoint and exact identities](releases/2026-10-15-owner-cumulative-client-acceptance-1-resume.md).
-CONNECT1/2, traffic,240s and support export NOT_RUN; both attempts remain unspent.
-Next owner action: on the opened EXIT main screen select Netherlands/Telemost, leave
-CONNECT unpressed and confirm readiness. Protected UI was not extracted or tapped.
-Then briefly refresh prerequisites and continue the existing bounded device sequence,
-without rebuild/resign/reinstall/recovery. Observed server limit21:37:06UTC is not
-a permanent promise; charge preparation/owner delay against the18-minute budget.
-CLIENT_DEVICE_SMOKE=NOT_RUN; HANDOFF_ON_DEVICE=NOT_PROVEN; NORMAL_EXPORT_ON_DEVICE=NOT_RUN.
-Historical supervisor PRODUCTION_ACCEPTANCE=FAIL and causal binding NOT_PROVEN remain.
-Client did change; server management/executable/config/credentials had no administrative
-changes in this task. Background application/protocol activity is not asserted zero.
+CLIENT_DEVICE_SMOKE=PASS for one restricted connection: installed APK3c733d2f…140513,
+native2a974350…4b88c, unchanged signer/UID10283. Normal support export matches current
+startup SUCCEEDED, dedicated SESSION_READY, native_state2 and restricted CONNECTED;
+session tag matches saved gateway traces, directory fingerprint matches fresh preflight.
+Owner reports two VPN-bound HTTPS checks with expected NL egress; matched counters
+DNS42/responses42/errors0. Fixed240.045seconds observed; app disconnected after833.746s
+from the recorded CONNECT transition, with cleanup_completed and VPN_RELEASED.
+VPN OFF confirmed18:56:01UTC; cumulative APK stays installed privately; rollback0.
+CONNECT2 deliberately NOT_RUN to reserve sequence cleanup margin. CHAT_FIRST,
+BORROWING and HANDOFF_ON_DEVICE=NOT_PROVEN; CHAT_RECOVERY=NOT_MEASURED.
+NORMAL_EXPORT_ON_DEVICE=PASS for the successful attempt; failure-only diagnostic facts
+not exercised. Old FAILED incident is separate, not the new build outcome. Nonzero
+Mux/Open/retransmission counters and server close errors after DISCONNECT are retained
+as limitations, not hidden or turned into startup failure. No full device acceptance.
+[Final continuation report](releases/2026-10-15-owner-cumulative-client-acceptance-1-resume.md)
+and [safe attempt receipt](releases/evidence/2026-10-15-owner-cumulative-client-resume-attempt-1.json).
+Next: review the remaining reconnect/chat evidence gaps separately; no automatic new
+CONNECT, export, recovery or patch. One install, CONNECT1, DISCONNECT1, normal export1;
+no server administrative changes, native extra pollers or public APK release. Normal
+app/provider/provisioning/ACK/lease activity is not asserted zero. Original dirty
+checkout/frozen sources preserved. Supervisor PRODUCTION_ACCEPTANCE=FAIL and
+HISTORICAL_CAUSAL_BINDING=NOT_PROVEN unchanged. Earlier entries are historical.
 
 ## CURRENT4H-EXPIRED-RECOVERY-DEPLOY-AND-RESTORE-1 — ENVIRONMENT_RESTORED (15.10)
 
