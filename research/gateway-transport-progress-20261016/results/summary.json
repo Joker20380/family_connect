@@ -1,0 +1,3369 @@
+{
+  "mixed-results": [
+    {
+      "mode": "normal",
+      "exit": 1,
+      "elapsed_seconds": 113.37457525299396,
+      "log_sha256": "d39e2f0d9cc1d2d32367e21d2b868e968a06bdd4c610c33eccbf9c132a847a2e",
+      "outcomes": [
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/40"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/40"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/40"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/40"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayOutboundStall"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOutboundStall/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOutboundStall/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayOutboundStall/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOutboundStall/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOverloadAndCancel"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySustainedRealPeerOverload"
+        }
+      ],
+      "failure_lines": [
+        "mixed_test.go:344: gate timeout prefix dequeued"
+      ]
+    },
+    {
+      "mode": "race",
+      "exit": 1,
+      "elapsed_seconds": 175.21453772700625,
+      "log_sha256": "9fcc666c019d73d38c42a8aa54d352653510e5e86f90c681a5dc82e4d2668edc",
+      "outcomes": [
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/40"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/40"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/40"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/40"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayOutboundStall"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOutboundStall/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOutboundStall/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayOutboundStall/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOutboundStall/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOverloadAndCancel"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySustainedRealPeerOverload"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/40"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/40"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/40"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/40"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayOutboundStall"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOutboundStall/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOutboundStall/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayOutboundStall/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOutboundStall/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOverloadAndCancel"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySustainedRealPeerOverload"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/40"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/40"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/40"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/40"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayOutboundStall"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOutboundStall/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOutboundStall/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayOutboundStall/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOutboundStall/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOverloadAndCancel"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySustainedRealPeerOverload"
+        }
+      ],
+      "failure_lines": [
+        "mixed_test.go:344: gate timeout prefix dequeued",
+        "mixed_test.go:344: gate timeout prefix dequeued",
+        "mixed_test.go:344: gate timeout prefix dequeued"
+      ]
+    },
+    {
+      "mode": "multicore",
+      "exit": 1,
+      "elapsed_seconds": 26.323889994993806,
+      "log_sha256": "7bfd39f148aaa0bd9df893911be402f663a0f78c98b002b92d9dfda50e4bba28",
+      "outcomes": [
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_NEW_RECEIVES_G_CANDIDATE/40"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_NEW/40"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/C_INSTALLED_RECEIVES_G_CANDIDATE/40"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/0"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/8"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/16"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/19"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/20"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySupported/G_CANDIDATE_RECEIVES_C_INSTALLED/40"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayOutboundStall"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOutboundStall/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOutboundStall/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayOutboundStall/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOutboundStall/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_NEW_RECEIVES_G_CANDIDATE/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_NEW/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/C_INSTALLED_RECEIVES_G_CANDIDATE/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/false"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/false/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/true"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayLifecycle/G_CANDIDATE_RECEIVES_C_INSTALLED/true/B"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySACKReorder/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayOverloadAndCancel"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/C_NEW_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/G_CANDIDATE_RECEIVES_C_NEW"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/C_INSTALLED_RECEIVES_G_CANDIDATE"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewayFamilyTLS/G_CANDIDATE_RECEIVES_C_INSTALLED"
+        },
+        {
+          "status": "PASS",
+          "test": "TestGatewaySustainedRealPeerOverload"
+        }
+      ],
+      "failure_lines": [
+        "mixed_test.go:344: gate timeout prefix dequeued"
+      ]
+    }
+  ],
+  "installed-stall-control": [
+    {
+      "mode": "normal",
+      "exit": 1,
+      "elapsed_seconds": 3.6718565649935044,
+      "log_sha256": "df597feab01565b3093774f2961b89cc1a2c2177656aac3920567a6ef8ad52da",
+      "outcomes": [
+        {
+          "status": "FAIL",
+          "test": "TestGatewayInstalledOutboundStallDifferential"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayInstalledOutboundStallDifferential/oldgateway"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayInstalledOutboundStallDifferential/candidate"
+        }
+      ],
+      "failure_lines": [
+        "mixed_test.go:344: gate timeout prefix dequeued",
+        "mixed_test.go:344: gate timeout prefix dequeued"
+      ]
+    },
+    {
+      "mode": "race",
+      "exit": 1,
+      "elapsed_seconds": 8.431840339035261,
+      "log_sha256": "0e4ba7e4f077e064bb4b29b150a35dfac113cc2e7583e67f79cbc23e41591275",
+      "outcomes": [
+        {
+          "status": "FAIL",
+          "test": "TestGatewayInstalledOutboundStallDifferential"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayInstalledOutboundStallDifferential/oldgateway"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayInstalledOutboundStallDifferential/candidate"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayInstalledOutboundStallDifferential"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayInstalledOutboundStallDifferential/oldgateway"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayInstalledOutboundStallDifferential/candidate"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayInstalledOutboundStallDifferential"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayInstalledOutboundStallDifferential/oldgateway"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayInstalledOutboundStallDifferential/candidate"
+        }
+      ],
+      "failure_lines": [
+        "mixed_test.go:344: gate timeout prefix dequeued",
+        "mixed_test.go:344: gate timeout prefix dequeued",
+        "mixed_test.go:344: gate timeout prefix dequeued",
+        "mixed_test.go:344: gate timeout prefix dequeued",
+        "mixed_test.go:344: gate timeout prefix dequeued",
+        "mixed_test.go:344: gate timeout prefix dequeued"
+      ]
+    },
+    {
+      "mode": "multicore",
+      "exit": 1,
+      "elapsed_seconds": 2.8689740150002763,
+      "log_sha256": "f6081c0f4caf5961f71eb4b7ee09f417d2ea3b87566a161ae6e634134911908d",
+      "outcomes": [
+        {
+          "status": "FAIL",
+          "test": "TestGatewayInstalledOutboundStallDifferential"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayInstalledOutboundStallDifferential/oldgateway"
+        },
+        {
+          "status": "FAIL",
+          "test": "TestGatewayInstalledOutboundStallDifferential/candidate"
+        }
+      ],
+      "failure_lines": [
+        "mixed_test.go:344: gate timeout prefix dequeued",
+        "mixed_test.go:344: gate timeout prefix dequeued"
+      ]
+    }
+  ],
+  "regressions": [
+    {
+      "suite": "baseline",
+      "mode": "normal",
+      "exit": 1,
+      "sha256": "42d67a9ccd3c5999a23270c9fd90545dda7e41dde270a4eb1efba01c7bb1f6ce",
+      "top_level_counts": {
+        "pass": 206,
+        "skip": 6,
+        "fail": 3
+      },
+      "failed": [
+        "bootstrap/TestProductIdentityOverBootstrapCarrier",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/revoked",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-crl",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-revision",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/unknown",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-family",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-gateway",
+        "bootstrap/TestSharedTimestampContract",
+        "cmd/bootstrap-broker/TestSeedReadMatrix",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/conference_ended",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/local_close",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/peer_timeout",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/queue_full",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/remote_reset",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/signal_read"
+      ],
+      "skipped": [
+        "bootstrap/TestSeedPublishedOnlyAfterReadyAndWithdrawn/PythonPublicationContract",
+        "cmd/bootstrap-broker/TestSignalReadReceiptBridge",
+        "telemost/TestLiveFamilyHandshakeReplay",
+        "telemost/TestLiveReliableGap",
+        "telemost/TestLiveSignalingClosure",
+        "telemost/TestLocalEndpointHelper",
+        "telemost/TestMessengerLocalProvider"
+      ],
+      "passed_top_level": [
+        "bootstrap/FuzzCarrier",
+        "bootstrap/FuzzDirectory",
+        "bootstrap/TestActiveGatewayBlocksNewExchangeUntilServerCleanup",
+        "bootstrap/TestAuthenticatedBusyExchangeReportsChallengeReason",
+        "bootstrap/TestAuthenticatedDirectoryDeliveryAndRestart",
+        "bootstrap/TestAuthorizationRevisionChangeBeforeReady",
+        "bootstrap/TestCacheAtomicRestartStaleAndRace",
+        "bootstrap/TestCarrierBusyTimeoutAndCancellation",
+        "bootstrap/TestCarrierExclusiveLeaseIsolationAndShutdown",
+        "bootstrap/TestCarrierParser",
+        "bootstrap/TestDescriptorExpiryDuringBye",
+        "bootstrap/TestDirectoryValidation",
+        "bootstrap/TestExchangeFailureAndCancellation",
+        "bootstrap/TestExchangeReadyHandoffAndOutstanding",
+        "bootstrap/TestExchangeReasonDoesNotExposeRawErrors",
+        "bootstrap/TestExchangeRejectsDataReplayAndDisconnect",
+        "bootstrap/TestExpiredDescriptorBeforeHandoff",
+        "bootstrap/TestFiniteSeedOverlapAndOldCleanup",
+        "bootstrap/TestFourHourDirectoryBoundaries",
+        "bootstrap/TestGlobalOutstandingBound",
+        "bootstrap/TestLateByeCannotReviveExpiredSetup",
+        "bootstrap/TestLocalizeBootstrapHELLOPreservesPrimaryFailure",
+        "bootstrap/TestLostOpenAndAcceptDoNotAllocateExtraSessions",
+        "bootstrap/TestNegativeAuthMandatoryRejectionBoundary",
+        "bootstrap/TestObservedChallengeRejectionsKeepWireAndAdmissionClosed",
+        "bootstrap/TestObservedMalformedRequestReportsReceiveStage",
+        "bootstrap/TestObservedSeedForwardsSignalingSnapshot",
+        "bootstrap/TestObservedSeedReadKeepsLegacyErrorAndFirstClose",
+        "bootstrap/TestOverlappingSeedsKeepSingleAuthenticatedOwner",
+        "bootstrap/TestSeedAuthRejectThenNextPeer",
+        "bootstrap/TestSeedFailureAndNotReady",
+        "bootstrap/TestSeedMalformedPacketsThenValidRead",
+        "bootstrap/TestSeedObservationPreservesLegacyReturn",
+        "bootstrap/TestSeedOverlapCancellationAndFailedReplacement",
+        "bootstrap/TestSeedOverlapRejectsInsufficientHeadroom",
+        "bootstrap/TestSeedPerExchangeFailureKeepsSharedCarrier",
+        "bootstrap/TestSeedPublishedOnlyAfterReadyAndWithdrawn",
+        "bootstrap/TestSeedReadPreservesFirstError",
+        "bootstrap/TestSilentHandshakeDeadlineCleanup",
+        "bootstrap/TestTimestampReplayUsesInstants",
+        "bootstrap/TestUnusedHandoffCleanupAfterDedicatedJoinOrAuthFailure",
+        "familysession/TestAdmissionFailures",
+        "familysession/TestCanonicalMatrixAndCancellation",
+        "familysession/TestExpiredLeaseAndBounds",
+        "familysession/TestHandshakeProofReplayRejected",
+        "familysession/TestProductStoreFixtures",
+        "familysession/TestReliableTLSExhaustion",
+        "familysession/TestReliableTLSFaultMatrix",
+        "familysession/TestStopSourceDistinguishesCredentialExpiryAndParent",
+        "familysession/TestTLSFailureDiagnosticClassification",
+        "familysession/TestTLSRecordReplayRejected",
+        "reliablestream/FuzzEngine",
+        "reliablestream/FuzzFrame",
+        "reliablestream/TestAdapterBackpressureCancellation",
+        "reliablestream/TestAdapterExhaustionAndCancellation",
+        "reliablestream/TestBoundedRecentTelemetry",
+        "reliablestream/TestCarrierStallAndClose",
+        "reliablestream/TestDATA19ACKProofSemantics",
+        "reliablestream/TestDeliveryTracksHeadSACKAndConsumption",
+        "reliablestream/TestDeterministicFaultMatrix",
+        "reliablestream/TestDiagnosticPrefixDoesNotExposeBytes",
+        "reliablestream/TestEstablishedRetryFailurePrecedesCleanup",
+        "reliablestream/TestExhaustionBranchesRetainBoundedEvidence",
+        "reliablestream/TestExhaustionRecordedBeforeCarrierCleanup",
+        "reliablestream/TestForensicsPreservesReliableWireAndConfig",
+        "reliablestream/TestFreshACKWithoutProgressDoesNotResetRetryBudget",
+        "reliablestream/TestHeadLossAndDuplicateVirtualClock",
+        "reliablestream/TestMalformedAndConfigurationBounds",
+        "reliablestream/TestNegotiatedPayload",
+        "reliablestream/TestSelectiveRetryAndConsumedACKLoss",
+        "reliablestream/TestSlowReceiverAgeAndMalformedACK",
+        "reliablestream/TestWindowBoundsRetryAndStale",
+        "roombroker/TestActiveExpiryRevocationAndGlobalBound",
+        "roombroker/TestBoundSetupOverExistingFamilyTLS",
+        "roombroker/TestConcurrentDuplicateAndChallengeCleanup",
+        "roombroker/TestFailuresReleaseResources",
+        "roombroker/TestGatewayFirstBoundAndReplay",
+        "roombroker/TestJoinURLAndRedaction",
+        "roombroker/TestLeaseControlRevalidatesAdmission",
+        "roombroker/TestLeaseControlRevocationBeforeConfirmation",
+        "roombroker/TestLeaseControlStopsAtSecurityLimit",
+        "roombroker/TestLeaseLegacyClientAndServer",
+        "roombroker/TestLeaseLostResponseReconciliation",
+        "roombroker/TestLeasePreviousGenerationCannotAffectReplacement",
+        "roombroker/TestLeaseRealFamilyMuxPersistentTCP",
+        "roombroker/TestLeaseRenewalCancellationAndExpiryRaces",
+        "roombroker/TestLeaseSchedulerBoundedRenewal",
+        "roombroker/TestLeaseSecurityAndReplay",
+        "roombroker/TestLeaseTwoRenewalsSameHolder",
+        "roombroker/TestLifetimeFreshAndPartiallySpentChallenge",
+        "roombroker/TestLifetimeProcessReopenRejectsPriorDescriptor",
+        "roombroker/TestLifetimeRecoveryGetsFreshChallengeWithoutExtendingOldLease",
+        "roombroker/TestOwnershipActualHolderNotNearestActive",
+        "roombroker/TestOwnershipCaptureBoundAndSnapshotIsolation",
+        "roombroker/TestOwnershipPendingSetupAndPreAcquisitionFailure",
+        "roombroker/TestOwnershipProviderErrorAndTimeoutRelease",
+        "roombroker/TestOwnershipTerminalHeldUntilGatewayClose",
+        "roombroker/TestOwnershipWaitDeadlineAndReleaseGeneration",
+        "roombroker/TestProductStoreMTLSControl",
+        "roombroker/TestProductionSetupLifecycleCorrelation",
+        "roombroker/TestProviderCancellationTimeoutAndRedirect",
+        "roombroker/TestTelemostProvider",
+        "tcpforward/FuzzFrame",
+        "tcpforward/FuzzMuxCreditAndState",
+        "tcpforward/FuzzMuxDNS",
+        "tcpforward/FuzzMuxFrame",
+        "tcpforward/TestActualRefusedAndPrematureClose",
+        "tcpforward/TestAuthenticatedImmediateResetPreservesOpen",
+        "tcpforward/TestAuthenticatedReliableTCPNoDuplicateBytes",
+        "tcpforward/TestAuthenticationRequired",
+        "tcpforward/TestBackpressure",
+        "tcpforward/TestControlOverflowRecordsTime",
+        "tcpforward/TestDNSPinnedAndConnectDeadline",
+        "tcpforward/TestDestinationCanonicalPinnedDualStack",
+        "tcpforward/TestDestinationConcurrentResolutionNoSharedUnboundedCache",
+        "tcpforward/TestDestinationDNSFailureTimeoutCancellation",
+        "tcpforward/TestDestinationIDNAPolicyAndBounds",
+        "tcpforward/TestDestinationResolvedSSRFAllCandidates",
+        "tcpforward/TestEndSiteTLSRemoteClosureBeforeTCPFIN",
+        "tcpforward/TestFullDuplexSegmentationAndHalfClose",
+        "tcpforward/TestGatewayBackpressureBothDirections",
+        "tcpforward/TestHostnameHTTPSWithBrokenClientDNS",
+        "tcpforward/TestImmediateCloseResetCancellation",
+        "tcpforward/TestLocalHalfCloseResponseAfterEOF",
+        "tcpforward/TestMalformedAndLifecycleFrames",
+        "tcpforward/TestMuxAuthenticatedLossReorderDuplicate",
+        "tcpforward/TestMuxCollisionStaleAndExhaustion",
+        "tcpforward/TestMuxConcurrentExactSegmentation",
+        "tcpforward/TestMuxConnectFailuresDoNotKillSibling",
+        "tcpforward/TestMuxDNSAnswersDuplicateAndMismatch",
+        "tcpforward/TestMuxDNSCancellationAndShutdown",
+        "tcpforward/TestMuxDNSConcurrentBulkAndMatching",
+        "tcpforward/TestMuxDNSOutstandingLimitAndRelease",
+        "tcpforward/TestMuxGlobalBlockedWriterShutdown",
+        "tcpforward/TestMuxHalfCloseAndOpenErrors",
+        "tcpforward/TestMuxLimitAndIndependentReset",
+        "tcpforward/TestMuxMalformedStateIsolation",
+        "tcpforward/TestMuxMalformedWireBounds",
+        "tcpforward/TestMuxOpenCloseCancellationStress",
+        "tcpforward/TestMuxPartialSocketWriter",
+        "tcpforward/TestMuxSchedulerRoundRobinAndPriority",
+        "tcpforward/TestMuxSessionCancellationManyStreams",
+        "tcpforward/TestMuxSlowConsumerAndInteractive",
+        "tcpforward/TestMuxTerminalTransitionsIsolated",
+        "tcpforward/TestOpenErrorsAndPolicy",
+        "tcpforward/TestPartialTCPWrites",
+        "tcpforward/TestRemoteHalfCloseStillAllowsWrite",
+        "tcpforward/TestServiceDestinationsAreClosedAndOperatorPinned",
+        "tcpforward/TestServiceOnlyRejectsPublicAndPrivateWithoutDial",
+        "tcpforward/TestTerminalPreservesFirstCauseAndTime",
+        "telemost/FuzzReassembler",
+        "telemost/TestApplicationHeartbeatAndPongAcknowledgment",
+        "telemost/TestAssemblyRejectCountersDoNotChangeDelivery",
+        "telemost/TestCRCAndRecentMessageBound",
+        "telemost/TestConcurrentCloseAndReady",
+        "telemost/TestConnectFailureAndCancellationCleanup",
+        "telemost/TestEarlyICEBoundAndEndParser",
+        "telemost/TestEvidenceBoundAndRedaction",
+        "telemost/TestForensicsObserverPreservesRTPBytes",
+        "telemost/TestFragmentDeliveryMappingAndMissingHeader",
+        "telemost/TestFragmentRoundTrips",
+        "telemost/TestHTTPFlowAndRedaction",
+        "telemost/TestHeadLossBoundPionAttempts",
+        "telemost/TestLocalTwoProcessVP8",
+        "telemost/TestNineFreshBoundMediaIdentitiesForSameDATA",
+        "telemost/TestPerformanceSnapshotQueues",
+        "telemost/TestRTPRejectsMixedTimestamps",
+        "telemost/TestRTPReorderAndBounds",
+        "telemost/TestRTPReorderDoesNotExtendUnchangedGap",
+        "telemost/TestRTPReorderFreshGapPreservesCarrierMessage",
+        "telemost/TestRTPReorderGivesEachGapItsOwnDeadline",
+        "telemost/TestReassemblyBoundsAndTimeout",
+        "telemost/TestReassemblyRejectsMalformedAndDuplicates",
+        "telemost/TestReceiveQueueFailureKeepsSourceBeforeCleanup",
+        "telemost/TestReliableStreamOverVP8MissingRTPWithFreshACK",
+        "telemost/TestRestrictedHTTPAndWebSocketCannotBypassProtection",
+        "telemost/TestRoomAndSignalingValidation",
+        "telemost/TestSendAndRecvBackpressure",
+        "telemost/TestSignalingBoundaryLocalShutdown",
+        "telemost/TestSignalingBoundaryMatrix",
+        "telemost/TestSignalingCloseEvidenceRedactsReason",
+        "telemost/TestSignalingClosureAndInvalidJSON",
+        "telemost/TestSignalingFailureClassification",
+        "telemost/TestSignalingHelloAndSDPSequence",
+        "telemost/TestSignalingLowLevelClassifier",
+        "telemost/TestSignalingLowLevelFirstImmutable",
+        "telemost/TestTypedLifecycleFirstFailureAndPrivacy",
+        "telemost/TestUnboundWriteSampleIsNotRTPEmission",
+        "telemost/TestVP8ModeRejectsDataChannelDelivery",
+        "telemost/TestVP8RTPRoundTripAndLoss"
+      ],
+      "failure_examples": {
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/unknown": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-family": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/revoked": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-gateway": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-crl": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-revision": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier": [],
+        "bootstrap/TestSharedTimestampContract": [
+          "timestamp_test.go:24: fixture unavailable"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/peer_timeout": [
+          "seed_read_matrix_test.go:104: cause=IO_TIMEOUT expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/remote_reset": [
+          "seed_read_matrix_test.go:104: cause=CONNECTION_RESET expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/local_close": [
+          "seed_read_matrix_test.go:104: cause=NET_CLOSED expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/signal_read": [
+          "seed_read_matrix_test.go:104: cause=SIGNAL_READ expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/queue_full": [
+          "seed_read_matrix_test.go:104: cause=RECEIVE_QUEUE_FULL expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/conference_ended": [
+          "seed_read_matrix_test.go:104: cause=CONFERENCE_ENDED expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix": []
+      },
+      "retained_resource": []
+    },
+    {
+      "suite": "baseline",
+      "mode": "race",
+      "exit": 1,
+      "sha256": "7eeab7d049198b6841062d85f399388a05352016755b71177e08cf680f2d4c71",
+      "top_level_counts": {
+        "pass": 613,
+        "skip": 18,
+        "fail": 14
+      },
+      "failed": [
+        "bootstrap/TestAuthenticatedBusyExchangeReportsChallengeReason",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/revoked",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-crl",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-revision",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/unknown",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-family",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-gateway",
+        "bootstrap/TestSharedTimestampContract",
+        "cmd/bootstrap-broker/TestSeedReadMatrix",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/conference_ended",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/local_close",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/peer_timeout",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/queue_full",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/remote_reset",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/signal_read",
+        "tcpforward/TestMuxConcurrentExactSegmentation",
+        "tcpforward/TestMuxConcurrentExactSegmentation/32"
+      ],
+      "skipped": [
+        "bootstrap/TestSeedPublishedOnlyAfterReadyAndWithdrawn/PythonPublicationContract",
+        "cmd/bootstrap-broker/TestSignalReadReceiptBridge",
+        "telemost/TestLiveFamilyHandshakeReplay",
+        "telemost/TestLiveReliableGap",
+        "telemost/TestLiveSignalingClosure",
+        "telemost/TestLocalEndpointHelper",
+        "telemost/TestMessengerLocalProvider"
+      ],
+      "passed_top_level": [
+        "bootstrap/FuzzCarrier",
+        "bootstrap/FuzzDirectory",
+        "bootstrap/TestActiveGatewayBlocksNewExchangeUntilServerCleanup",
+        "bootstrap/TestAuthenticatedBusyExchangeReportsChallengeReason",
+        "bootstrap/TestAuthenticatedDirectoryDeliveryAndRestart",
+        "bootstrap/TestAuthorizationRevisionChangeBeforeReady",
+        "bootstrap/TestCacheAtomicRestartStaleAndRace",
+        "bootstrap/TestCarrierBusyTimeoutAndCancellation",
+        "bootstrap/TestCarrierExclusiveLeaseIsolationAndShutdown",
+        "bootstrap/TestCarrierParser",
+        "bootstrap/TestDescriptorExpiryDuringBye",
+        "bootstrap/TestDirectoryValidation",
+        "bootstrap/TestExchangeFailureAndCancellation",
+        "bootstrap/TestExchangeReadyHandoffAndOutstanding",
+        "bootstrap/TestExchangeReasonDoesNotExposeRawErrors",
+        "bootstrap/TestExchangeRejectsDataReplayAndDisconnect",
+        "bootstrap/TestExpiredDescriptorBeforeHandoff",
+        "bootstrap/TestFiniteSeedOverlapAndOldCleanup",
+        "bootstrap/TestFourHourDirectoryBoundaries",
+        "bootstrap/TestGlobalOutstandingBound",
+        "bootstrap/TestLateByeCannotReviveExpiredSetup",
+        "bootstrap/TestLocalizeBootstrapHELLOPreservesPrimaryFailure",
+        "bootstrap/TestLostOpenAndAcceptDoNotAllocateExtraSessions",
+        "bootstrap/TestNegativeAuthMandatoryRejectionBoundary",
+        "bootstrap/TestObservedChallengeRejectionsKeepWireAndAdmissionClosed",
+        "bootstrap/TestObservedMalformedRequestReportsReceiveStage",
+        "bootstrap/TestObservedSeedForwardsSignalingSnapshot",
+        "bootstrap/TestObservedSeedReadKeepsLegacyErrorAndFirstClose",
+        "bootstrap/TestOverlappingSeedsKeepSingleAuthenticatedOwner",
+        "bootstrap/TestSeedAuthRejectThenNextPeer",
+        "bootstrap/TestSeedFailureAndNotReady",
+        "bootstrap/TestSeedMalformedPacketsThenValidRead",
+        "bootstrap/TestSeedObservationPreservesLegacyReturn",
+        "bootstrap/TestSeedOverlapCancellationAndFailedReplacement",
+        "bootstrap/TestSeedOverlapRejectsInsufficientHeadroom",
+        "bootstrap/TestSeedPerExchangeFailureKeepsSharedCarrier",
+        "bootstrap/TestSeedPublishedOnlyAfterReadyAndWithdrawn",
+        "bootstrap/TestSeedReadPreservesFirstError",
+        "bootstrap/TestSilentHandshakeDeadlineCleanup",
+        "bootstrap/TestTimestampReplayUsesInstants",
+        "bootstrap/TestUnusedHandoffCleanupAfterDedicatedJoinOrAuthFailure",
+        "familysession/TestAdmissionFailures",
+        "familysession/TestCanonicalMatrixAndCancellation",
+        "familysession/TestExpiredLeaseAndBounds",
+        "familysession/TestHandshakeProofReplayRejected",
+        "familysession/TestProductStoreFixtures",
+        "familysession/TestReliableTLSExhaustion",
+        "familysession/TestReliableTLSFaultMatrix",
+        "familysession/TestStopSourceDistinguishesCredentialExpiryAndParent",
+        "familysession/TestTLSFailureDiagnosticClassification",
+        "familysession/TestTLSRecordReplayRejected",
+        "reliablestream/FuzzEngine",
+        "reliablestream/FuzzFrame",
+        "reliablestream/TestAdapterBackpressureCancellation",
+        "reliablestream/TestAdapterExhaustionAndCancellation",
+        "reliablestream/TestBoundedRecentTelemetry",
+        "reliablestream/TestCarrierStallAndClose",
+        "reliablestream/TestDATA19ACKProofSemantics",
+        "reliablestream/TestDeliveryTracksHeadSACKAndConsumption",
+        "reliablestream/TestDeterministicFaultMatrix",
+        "reliablestream/TestDiagnosticPrefixDoesNotExposeBytes",
+        "reliablestream/TestEstablishedRetryFailurePrecedesCleanup",
+        "reliablestream/TestExhaustionBranchesRetainBoundedEvidence",
+        "reliablestream/TestExhaustionRecordedBeforeCarrierCleanup",
+        "reliablestream/TestForensicsPreservesReliableWireAndConfig",
+        "reliablestream/TestFreshACKWithoutProgressDoesNotResetRetryBudget",
+        "reliablestream/TestHeadLossAndDuplicateVirtualClock",
+        "reliablestream/TestMalformedAndConfigurationBounds",
+        "reliablestream/TestNegotiatedPayload",
+        "reliablestream/TestSelectiveRetryAndConsumedACKLoss",
+        "reliablestream/TestSlowReceiverAgeAndMalformedACK",
+        "reliablestream/TestWindowBoundsRetryAndStale",
+        "roombroker/TestActiveExpiryRevocationAndGlobalBound",
+        "roombroker/TestBoundSetupOverExistingFamilyTLS",
+        "roombroker/TestConcurrentDuplicateAndChallengeCleanup",
+        "roombroker/TestFailuresReleaseResources",
+        "roombroker/TestGatewayFirstBoundAndReplay",
+        "roombroker/TestJoinURLAndRedaction",
+        "roombroker/TestLeaseControlRevalidatesAdmission",
+        "roombroker/TestLeaseControlRevocationBeforeConfirmation",
+        "roombroker/TestLeaseControlStopsAtSecurityLimit",
+        "roombroker/TestLeaseLegacyClientAndServer",
+        "roombroker/TestLeaseLostResponseReconciliation",
+        "roombroker/TestLeasePreviousGenerationCannotAffectReplacement",
+        "roombroker/TestLeaseRealFamilyMuxPersistentTCP",
+        "roombroker/TestLeaseRenewalCancellationAndExpiryRaces",
+        "roombroker/TestLeaseSchedulerBoundedRenewal",
+        "roombroker/TestLeaseSecurityAndReplay",
+        "roombroker/TestLeaseTwoRenewalsSameHolder",
+        "roombroker/TestLifetimeFreshAndPartiallySpentChallenge",
+        "roombroker/TestLifetimeProcessReopenRejectsPriorDescriptor",
+        "roombroker/TestLifetimeRecoveryGetsFreshChallengeWithoutExtendingOldLease",
+        "roombroker/TestOwnershipActualHolderNotNearestActive",
+        "roombroker/TestOwnershipCaptureBoundAndSnapshotIsolation",
+        "roombroker/TestOwnershipPendingSetupAndPreAcquisitionFailure",
+        "roombroker/TestOwnershipProviderErrorAndTimeoutRelease",
+        "roombroker/TestOwnershipTerminalHeldUntilGatewayClose",
+        "roombroker/TestOwnershipWaitDeadlineAndReleaseGeneration",
+        "roombroker/TestProductStoreMTLSControl",
+        "roombroker/TestProductionSetupLifecycleCorrelation",
+        "roombroker/TestProviderCancellationTimeoutAndRedirect",
+        "roombroker/TestTelemostProvider",
+        "tcpforward/FuzzFrame",
+        "tcpforward/FuzzMuxCreditAndState",
+        "tcpforward/FuzzMuxDNS",
+        "tcpforward/FuzzMuxFrame",
+        "tcpforward/TestActualRefusedAndPrematureClose",
+        "tcpforward/TestAuthenticatedImmediateResetPreservesOpen",
+        "tcpforward/TestAuthenticatedReliableTCPNoDuplicateBytes",
+        "tcpforward/TestAuthenticationRequired",
+        "tcpforward/TestBackpressure",
+        "tcpforward/TestControlOverflowRecordsTime",
+        "tcpforward/TestDNSPinnedAndConnectDeadline",
+        "tcpforward/TestDestinationCanonicalPinnedDualStack",
+        "tcpforward/TestDestinationConcurrentResolutionNoSharedUnboundedCache",
+        "tcpforward/TestDestinationDNSFailureTimeoutCancellation",
+        "tcpforward/TestDestinationIDNAPolicyAndBounds",
+        "tcpforward/TestDestinationResolvedSSRFAllCandidates",
+        "tcpforward/TestEndSiteTLSRemoteClosureBeforeTCPFIN",
+        "tcpforward/TestFullDuplexSegmentationAndHalfClose",
+        "tcpforward/TestGatewayBackpressureBothDirections",
+        "tcpforward/TestHostnameHTTPSWithBrokenClientDNS",
+        "tcpforward/TestImmediateCloseResetCancellation",
+        "tcpforward/TestLocalHalfCloseResponseAfterEOF",
+        "tcpforward/TestMalformedAndLifecycleFrames",
+        "tcpforward/TestMuxAuthenticatedLossReorderDuplicate",
+        "tcpforward/TestMuxCollisionStaleAndExhaustion",
+        "tcpforward/TestMuxConnectFailuresDoNotKillSibling",
+        "tcpforward/TestMuxDNSAnswersDuplicateAndMismatch",
+        "tcpforward/TestMuxDNSCancellationAndShutdown",
+        "tcpforward/TestMuxDNSConcurrentBulkAndMatching",
+        "tcpforward/TestMuxDNSOutstandingLimitAndRelease",
+        "tcpforward/TestMuxGlobalBlockedWriterShutdown",
+        "tcpforward/TestMuxHalfCloseAndOpenErrors",
+        "tcpforward/TestMuxLimitAndIndependentReset",
+        "tcpforward/TestMuxMalformedStateIsolation",
+        "tcpforward/TestMuxMalformedWireBounds",
+        "tcpforward/TestMuxOpenCloseCancellationStress",
+        "tcpforward/TestMuxPartialSocketWriter",
+        "tcpforward/TestMuxSchedulerRoundRobinAndPriority",
+        "tcpforward/TestMuxSessionCancellationManyStreams",
+        "tcpforward/TestMuxSlowConsumerAndInteractive",
+        "tcpforward/TestMuxTerminalTransitionsIsolated",
+        "tcpforward/TestOpenErrorsAndPolicy",
+        "tcpforward/TestPartialTCPWrites",
+        "tcpforward/TestRemoteHalfCloseStillAllowsWrite",
+        "tcpforward/TestServiceDestinationsAreClosedAndOperatorPinned",
+        "tcpforward/TestServiceOnlyRejectsPublicAndPrivateWithoutDial",
+        "tcpforward/TestTerminalPreservesFirstCauseAndTime",
+        "telemost/FuzzReassembler",
+        "telemost/TestApplicationHeartbeatAndPongAcknowledgment",
+        "telemost/TestAssemblyRejectCountersDoNotChangeDelivery",
+        "telemost/TestCRCAndRecentMessageBound",
+        "telemost/TestConcurrentCloseAndReady",
+        "telemost/TestConnectFailureAndCancellationCleanup",
+        "telemost/TestEarlyICEBoundAndEndParser",
+        "telemost/TestEvidenceBoundAndRedaction",
+        "telemost/TestForensicsObserverPreservesRTPBytes",
+        "telemost/TestFragmentDeliveryMappingAndMissingHeader",
+        "telemost/TestFragmentRoundTrips",
+        "telemost/TestHTTPFlowAndRedaction",
+        "telemost/TestHeadLossBoundPionAttempts",
+        "telemost/TestLocalTwoProcessVP8",
+        "telemost/TestNineFreshBoundMediaIdentitiesForSameDATA",
+        "telemost/TestPerformanceSnapshotQueues",
+        "telemost/TestRTPRejectsMixedTimestamps",
+        "telemost/TestRTPReorderAndBounds",
+        "telemost/TestRTPReorderDoesNotExtendUnchangedGap",
+        "telemost/TestRTPReorderFreshGapPreservesCarrierMessage",
+        "telemost/TestRTPReorderGivesEachGapItsOwnDeadline",
+        "telemost/TestReassemblyBoundsAndTimeout",
+        "telemost/TestReassemblyRejectsMalformedAndDuplicates",
+        "telemost/TestReceiveQueueFailureKeepsSourceBeforeCleanup",
+        "telemost/TestReliableStreamOverVP8MissingRTPWithFreshACK",
+        "telemost/TestRestrictedHTTPAndWebSocketCannotBypassProtection",
+        "telemost/TestRoomAndSignalingValidation",
+        "telemost/TestSendAndRecvBackpressure",
+        "telemost/TestSignalingBoundaryLocalShutdown",
+        "telemost/TestSignalingBoundaryMatrix",
+        "telemost/TestSignalingCloseEvidenceRedactsReason",
+        "telemost/TestSignalingClosureAndInvalidJSON",
+        "telemost/TestSignalingFailureClassification",
+        "telemost/TestSignalingHelloAndSDPSequence",
+        "telemost/TestSignalingLowLevelClassifier",
+        "telemost/TestSignalingLowLevelFirstImmutable",
+        "telemost/TestTypedLifecycleFirstFailureAndPrivacy",
+        "telemost/TestUnboundWriteSampleIsNotRTPEmission",
+        "telemost/TestVP8ModeRejectsDataChannelDelivery",
+        "telemost/TestVP8RTPRoundTripAndLoss"
+      ],
+      "failure_examples": {
+        "tcpforward/TestMuxConcurrentExactSegmentation/32": [
+          "mux_test.go:147: TCP forwarding reset"
+        ],
+        "tcpforward/TestMuxConcurrentExactSegmentation": [],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/unknown": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-family": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/revoked": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-gateway": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-crl": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-revision": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier": [],
+        "bootstrap/TestAuthenticatedBusyExchangeReportsChallengeReason": [
+          "auth_test.go:133: client wire reason changed room broker: bootstrap_protocol_rejected"
+        ],
+        "bootstrap/TestSharedTimestampContract": [
+          "timestamp_test.go:24: fixture unavailable"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/peer_timeout": [
+          "seed_read_matrix_test.go:104: cause=IO_TIMEOUT expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/remote_reset": [
+          "seed_read_matrix_test.go:104: cause=CONNECTION_RESET expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/local_close": [
+          "seed_read_matrix_test.go:104: cause=NET_CLOSED expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/signal_read": [
+          "seed_read_matrix_test.go:104: cause=SIGNAL_READ expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/queue_full": [
+          "seed_read_matrix_test.go:104: cause=RECEIVE_QUEUE_FULL expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/conference_ended": [
+          "seed_read_matrix_test.go:104: cause=CONFERENCE_ENDED expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix": []
+      },
+      "retained_resource": []
+    },
+    {
+      "suite": "baseline",
+      "mode": "multicore",
+      "exit": 1,
+      "sha256": "d6eaf28eb92e7e5d400f26df4868ddcb6b17b2897e7efa87fad6f68151b0e8f5",
+      "top_level_counts": {
+        "pass": 206,
+        "skip": 6,
+        "fail": 3
+      },
+      "failed": [
+        "bootstrap/TestProductIdentityOverBootstrapCarrier",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/revoked",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-crl",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-revision",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/unknown",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-family",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-gateway",
+        "bootstrap/TestSharedTimestampContract",
+        "cmd/bootstrap-broker/TestSeedReadMatrix",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/conference_ended",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/local_close",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/peer_timeout",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/queue_full",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/remote_reset",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/signal_read"
+      ],
+      "skipped": [
+        "bootstrap/TestSeedPublishedOnlyAfterReadyAndWithdrawn/PythonPublicationContract",
+        "cmd/bootstrap-broker/TestSignalReadReceiptBridge",
+        "telemost/TestLiveFamilyHandshakeReplay",
+        "telemost/TestLiveReliableGap",
+        "telemost/TestLiveSignalingClosure",
+        "telemost/TestLocalEndpointHelper",
+        "telemost/TestMessengerLocalProvider"
+      ],
+      "passed_top_level": [
+        "bootstrap/FuzzCarrier",
+        "bootstrap/FuzzDirectory",
+        "bootstrap/TestActiveGatewayBlocksNewExchangeUntilServerCleanup",
+        "bootstrap/TestAuthenticatedBusyExchangeReportsChallengeReason",
+        "bootstrap/TestAuthenticatedDirectoryDeliveryAndRestart",
+        "bootstrap/TestAuthorizationRevisionChangeBeforeReady",
+        "bootstrap/TestCacheAtomicRestartStaleAndRace",
+        "bootstrap/TestCarrierBusyTimeoutAndCancellation",
+        "bootstrap/TestCarrierExclusiveLeaseIsolationAndShutdown",
+        "bootstrap/TestCarrierParser",
+        "bootstrap/TestDescriptorExpiryDuringBye",
+        "bootstrap/TestDirectoryValidation",
+        "bootstrap/TestExchangeFailureAndCancellation",
+        "bootstrap/TestExchangeReadyHandoffAndOutstanding",
+        "bootstrap/TestExchangeReasonDoesNotExposeRawErrors",
+        "bootstrap/TestExchangeRejectsDataReplayAndDisconnect",
+        "bootstrap/TestExpiredDescriptorBeforeHandoff",
+        "bootstrap/TestFiniteSeedOverlapAndOldCleanup",
+        "bootstrap/TestFourHourDirectoryBoundaries",
+        "bootstrap/TestGlobalOutstandingBound",
+        "bootstrap/TestLateByeCannotReviveExpiredSetup",
+        "bootstrap/TestLocalizeBootstrapHELLOPreservesPrimaryFailure",
+        "bootstrap/TestLostOpenAndAcceptDoNotAllocateExtraSessions",
+        "bootstrap/TestNegativeAuthMandatoryRejectionBoundary",
+        "bootstrap/TestObservedChallengeRejectionsKeepWireAndAdmissionClosed",
+        "bootstrap/TestObservedMalformedRequestReportsReceiveStage",
+        "bootstrap/TestObservedSeedForwardsSignalingSnapshot",
+        "bootstrap/TestObservedSeedReadKeepsLegacyErrorAndFirstClose",
+        "bootstrap/TestOverlappingSeedsKeepSingleAuthenticatedOwner",
+        "bootstrap/TestSeedAuthRejectThenNextPeer",
+        "bootstrap/TestSeedFailureAndNotReady",
+        "bootstrap/TestSeedMalformedPacketsThenValidRead",
+        "bootstrap/TestSeedObservationPreservesLegacyReturn",
+        "bootstrap/TestSeedOverlapCancellationAndFailedReplacement",
+        "bootstrap/TestSeedOverlapRejectsInsufficientHeadroom",
+        "bootstrap/TestSeedPerExchangeFailureKeepsSharedCarrier",
+        "bootstrap/TestSeedPublishedOnlyAfterReadyAndWithdrawn",
+        "bootstrap/TestSeedReadPreservesFirstError",
+        "bootstrap/TestSilentHandshakeDeadlineCleanup",
+        "bootstrap/TestTimestampReplayUsesInstants",
+        "bootstrap/TestUnusedHandoffCleanupAfterDedicatedJoinOrAuthFailure",
+        "familysession/TestAdmissionFailures",
+        "familysession/TestCanonicalMatrixAndCancellation",
+        "familysession/TestExpiredLeaseAndBounds",
+        "familysession/TestHandshakeProofReplayRejected",
+        "familysession/TestProductStoreFixtures",
+        "familysession/TestReliableTLSExhaustion",
+        "familysession/TestReliableTLSFaultMatrix",
+        "familysession/TestStopSourceDistinguishesCredentialExpiryAndParent",
+        "familysession/TestTLSFailureDiagnosticClassification",
+        "familysession/TestTLSRecordReplayRejected",
+        "reliablestream/FuzzEngine",
+        "reliablestream/FuzzFrame",
+        "reliablestream/TestAdapterBackpressureCancellation",
+        "reliablestream/TestAdapterExhaustionAndCancellation",
+        "reliablestream/TestBoundedRecentTelemetry",
+        "reliablestream/TestCarrierStallAndClose",
+        "reliablestream/TestDATA19ACKProofSemantics",
+        "reliablestream/TestDeliveryTracksHeadSACKAndConsumption",
+        "reliablestream/TestDeterministicFaultMatrix",
+        "reliablestream/TestDiagnosticPrefixDoesNotExposeBytes",
+        "reliablestream/TestEstablishedRetryFailurePrecedesCleanup",
+        "reliablestream/TestExhaustionBranchesRetainBoundedEvidence",
+        "reliablestream/TestExhaustionRecordedBeforeCarrierCleanup",
+        "reliablestream/TestForensicsPreservesReliableWireAndConfig",
+        "reliablestream/TestFreshACKWithoutProgressDoesNotResetRetryBudget",
+        "reliablestream/TestHeadLossAndDuplicateVirtualClock",
+        "reliablestream/TestMalformedAndConfigurationBounds",
+        "reliablestream/TestNegotiatedPayload",
+        "reliablestream/TestSelectiveRetryAndConsumedACKLoss",
+        "reliablestream/TestSlowReceiverAgeAndMalformedACK",
+        "reliablestream/TestWindowBoundsRetryAndStale",
+        "roombroker/TestActiveExpiryRevocationAndGlobalBound",
+        "roombroker/TestBoundSetupOverExistingFamilyTLS",
+        "roombroker/TestConcurrentDuplicateAndChallengeCleanup",
+        "roombroker/TestFailuresReleaseResources",
+        "roombroker/TestGatewayFirstBoundAndReplay",
+        "roombroker/TestJoinURLAndRedaction",
+        "roombroker/TestLeaseControlRevalidatesAdmission",
+        "roombroker/TestLeaseControlRevocationBeforeConfirmation",
+        "roombroker/TestLeaseControlStopsAtSecurityLimit",
+        "roombroker/TestLeaseLegacyClientAndServer",
+        "roombroker/TestLeaseLostResponseReconciliation",
+        "roombroker/TestLeasePreviousGenerationCannotAffectReplacement",
+        "roombroker/TestLeaseRealFamilyMuxPersistentTCP",
+        "roombroker/TestLeaseRenewalCancellationAndExpiryRaces",
+        "roombroker/TestLeaseSchedulerBoundedRenewal",
+        "roombroker/TestLeaseSecurityAndReplay",
+        "roombroker/TestLeaseTwoRenewalsSameHolder",
+        "roombroker/TestLifetimeFreshAndPartiallySpentChallenge",
+        "roombroker/TestLifetimeProcessReopenRejectsPriorDescriptor",
+        "roombroker/TestLifetimeRecoveryGetsFreshChallengeWithoutExtendingOldLease",
+        "roombroker/TestOwnershipActualHolderNotNearestActive",
+        "roombroker/TestOwnershipCaptureBoundAndSnapshotIsolation",
+        "roombroker/TestOwnershipPendingSetupAndPreAcquisitionFailure",
+        "roombroker/TestOwnershipProviderErrorAndTimeoutRelease",
+        "roombroker/TestOwnershipTerminalHeldUntilGatewayClose",
+        "roombroker/TestOwnershipWaitDeadlineAndReleaseGeneration",
+        "roombroker/TestProductStoreMTLSControl",
+        "roombroker/TestProductionSetupLifecycleCorrelation",
+        "roombroker/TestProviderCancellationTimeoutAndRedirect",
+        "roombroker/TestTelemostProvider",
+        "tcpforward/FuzzFrame",
+        "tcpforward/FuzzMuxCreditAndState",
+        "tcpforward/FuzzMuxDNS",
+        "tcpforward/FuzzMuxFrame",
+        "tcpforward/TestActualRefusedAndPrematureClose",
+        "tcpforward/TestAuthenticatedImmediateResetPreservesOpen",
+        "tcpforward/TestAuthenticatedReliableTCPNoDuplicateBytes",
+        "tcpforward/TestAuthenticationRequired",
+        "tcpforward/TestBackpressure",
+        "tcpforward/TestControlOverflowRecordsTime",
+        "tcpforward/TestDNSPinnedAndConnectDeadline",
+        "tcpforward/TestDestinationCanonicalPinnedDualStack",
+        "tcpforward/TestDestinationConcurrentResolutionNoSharedUnboundedCache",
+        "tcpforward/TestDestinationDNSFailureTimeoutCancellation",
+        "tcpforward/TestDestinationIDNAPolicyAndBounds",
+        "tcpforward/TestDestinationResolvedSSRFAllCandidates",
+        "tcpforward/TestEndSiteTLSRemoteClosureBeforeTCPFIN",
+        "tcpforward/TestFullDuplexSegmentationAndHalfClose",
+        "tcpforward/TestGatewayBackpressureBothDirections",
+        "tcpforward/TestHostnameHTTPSWithBrokenClientDNS",
+        "tcpforward/TestImmediateCloseResetCancellation",
+        "tcpforward/TestLocalHalfCloseResponseAfterEOF",
+        "tcpforward/TestMalformedAndLifecycleFrames",
+        "tcpforward/TestMuxAuthenticatedLossReorderDuplicate",
+        "tcpforward/TestMuxCollisionStaleAndExhaustion",
+        "tcpforward/TestMuxConcurrentExactSegmentation",
+        "tcpforward/TestMuxConnectFailuresDoNotKillSibling",
+        "tcpforward/TestMuxDNSAnswersDuplicateAndMismatch",
+        "tcpforward/TestMuxDNSCancellationAndShutdown",
+        "tcpforward/TestMuxDNSConcurrentBulkAndMatching",
+        "tcpforward/TestMuxDNSOutstandingLimitAndRelease",
+        "tcpforward/TestMuxGlobalBlockedWriterShutdown",
+        "tcpforward/TestMuxHalfCloseAndOpenErrors",
+        "tcpforward/TestMuxLimitAndIndependentReset",
+        "tcpforward/TestMuxMalformedStateIsolation",
+        "tcpforward/TestMuxMalformedWireBounds",
+        "tcpforward/TestMuxOpenCloseCancellationStress",
+        "tcpforward/TestMuxPartialSocketWriter",
+        "tcpforward/TestMuxSchedulerRoundRobinAndPriority",
+        "tcpforward/TestMuxSessionCancellationManyStreams",
+        "tcpforward/TestMuxSlowConsumerAndInteractive",
+        "tcpforward/TestMuxTerminalTransitionsIsolated",
+        "tcpforward/TestOpenErrorsAndPolicy",
+        "tcpforward/TestPartialTCPWrites",
+        "tcpforward/TestRemoteHalfCloseStillAllowsWrite",
+        "tcpforward/TestServiceDestinationsAreClosedAndOperatorPinned",
+        "tcpforward/TestServiceOnlyRejectsPublicAndPrivateWithoutDial",
+        "tcpforward/TestTerminalPreservesFirstCauseAndTime",
+        "telemost/FuzzReassembler",
+        "telemost/TestApplicationHeartbeatAndPongAcknowledgment",
+        "telemost/TestAssemblyRejectCountersDoNotChangeDelivery",
+        "telemost/TestCRCAndRecentMessageBound",
+        "telemost/TestConcurrentCloseAndReady",
+        "telemost/TestConnectFailureAndCancellationCleanup",
+        "telemost/TestEarlyICEBoundAndEndParser",
+        "telemost/TestEvidenceBoundAndRedaction",
+        "telemost/TestForensicsObserverPreservesRTPBytes",
+        "telemost/TestFragmentDeliveryMappingAndMissingHeader",
+        "telemost/TestFragmentRoundTrips",
+        "telemost/TestHTTPFlowAndRedaction",
+        "telemost/TestHeadLossBoundPionAttempts",
+        "telemost/TestLocalTwoProcessVP8",
+        "telemost/TestNineFreshBoundMediaIdentitiesForSameDATA",
+        "telemost/TestPerformanceSnapshotQueues",
+        "telemost/TestRTPRejectsMixedTimestamps",
+        "telemost/TestRTPReorderAndBounds",
+        "telemost/TestRTPReorderDoesNotExtendUnchangedGap",
+        "telemost/TestRTPReorderFreshGapPreservesCarrierMessage",
+        "telemost/TestRTPReorderGivesEachGapItsOwnDeadline",
+        "telemost/TestReassemblyBoundsAndTimeout",
+        "telemost/TestReassemblyRejectsMalformedAndDuplicates",
+        "telemost/TestReceiveQueueFailureKeepsSourceBeforeCleanup",
+        "telemost/TestReliableStreamOverVP8MissingRTPWithFreshACK",
+        "telemost/TestRestrictedHTTPAndWebSocketCannotBypassProtection",
+        "telemost/TestRoomAndSignalingValidation",
+        "telemost/TestSendAndRecvBackpressure",
+        "telemost/TestSignalingBoundaryLocalShutdown",
+        "telemost/TestSignalingBoundaryMatrix",
+        "telemost/TestSignalingCloseEvidenceRedactsReason",
+        "telemost/TestSignalingClosureAndInvalidJSON",
+        "telemost/TestSignalingFailureClassification",
+        "telemost/TestSignalingHelloAndSDPSequence",
+        "telemost/TestSignalingLowLevelClassifier",
+        "telemost/TestSignalingLowLevelFirstImmutable",
+        "telemost/TestTypedLifecycleFirstFailureAndPrivacy",
+        "telemost/TestUnboundWriteSampleIsNotRTPEmission",
+        "telemost/TestVP8ModeRejectsDataChannelDelivery",
+        "telemost/TestVP8RTPRoundTripAndLoss"
+      ],
+      "failure_examples": {
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/unknown": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-family": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/revoked": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-gateway": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-crl": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-revision": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier": [],
+        "bootstrap/TestSharedTimestampContract": [
+          "timestamp_test.go:24: fixture unavailable"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/peer_timeout": [
+          "seed_read_matrix_test.go:104: cause=IO_TIMEOUT expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/remote_reset": [
+          "seed_read_matrix_test.go:104: cause=CONNECTION_RESET expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/local_close": [
+          "seed_read_matrix_test.go:104: cause=NET_CLOSED expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/signal_read": [
+          "seed_read_matrix_test.go:104: cause=SIGNAL_READ expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/queue_full": [
+          "seed_read_matrix_test.go:104: cause=RECEIVE_QUEUE_FULL expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/conference_ended": [
+          "seed_read_matrix_test.go:104: cause=CONFERENCE_ENDED expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix": []
+      },
+      "retained_resource": []
+    },
+    {
+      "suite": "candidate",
+      "mode": "normal",
+      "exit": 1,
+      "sha256": "ccd6ac6b31be2252dd62edfa2fd9d8abda189b6f410322125d8fea51719b159a",
+      "top_level_counts": {
+        "pass": 206,
+        "skip": 6,
+        "fail": 3
+      },
+      "failed": [
+        "bootstrap/TestProductIdentityOverBootstrapCarrier",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/revoked",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-crl",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-revision",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/unknown",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-family",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-gateway",
+        "bootstrap/TestSharedTimestampContract",
+        "cmd/bootstrap-broker/TestSeedReadMatrix",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/conference_ended",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/local_close",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/peer_timeout",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/queue_full",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/remote_reset",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/signal_read"
+      ],
+      "skipped": [
+        "bootstrap/TestSeedPublishedOnlyAfterReadyAndWithdrawn/PythonPublicationContract",
+        "cmd/bootstrap-broker/TestSignalReadReceiptBridge",
+        "telemost/TestLiveFamilyHandshakeReplay",
+        "telemost/TestLiveReliableGap",
+        "telemost/TestLiveSignalingClosure",
+        "telemost/TestLocalEndpointHelper",
+        "telemost/TestMessengerLocalProvider"
+      ],
+      "passed_top_level": [
+        "bootstrap/FuzzCarrier",
+        "bootstrap/FuzzDirectory",
+        "bootstrap/TestActiveGatewayBlocksNewExchangeUntilServerCleanup",
+        "bootstrap/TestAuthenticatedBusyExchangeReportsChallengeReason",
+        "bootstrap/TestAuthenticatedDirectoryDeliveryAndRestart",
+        "bootstrap/TestAuthorizationRevisionChangeBeforeReady",
+        "bootstrap/TestCacheAtomicRestartStaleAndRace",
+        "bootstrap/TestCarrierBusyTimeoutAndCancellation",
+        "bootstrap/TestCarrierExclusiveLeaseIsolationAndShutdown",
+        "bootstrap/TestCarrierParser",
+        "bootstrap/TestDescriptorExpiryDuringBye",
+        "bootstrap/TestDirectoryValidation",
+        "bootstrap/TestExchangeFailureAndCancellation",
+        "bootstrap/TestExchangeReadyHandoffAndOutstanding",
+        "bootstrap/TestExchangeReasonDoesNotExposeRawErrors",
+        "bootstrap/TestExchangeRejectsDataReplayAndDisconnect",
+        "bootstrap/TestExpiredDescriptorBeforeHandoff",
+        "bootstrap/TestFiniteSeedOverlapAndOldCleanup",
+        "bootstrap/TestFourHourDirectoryBoundaries",
+        "bootstrap/TestGlobalOutstandingBound",
+        "bootstrap/TestLateByeCannotReviveExpiredSetup",
+        "bootstrap/TestLocalizeBootstrapHELLOPreservesPrimaryFailure",
+        "bootstrap/TestLostOpenAndAcceptDoNotAllocateExtraSessions",
+        "bootstrap/TestNegativeAuthMandatoryRejectionBoundary",
+        "bootstrap/TestObservedChallengeRejectionsKeepWireAndAdmissionClosed",
+        "bootstrap/TestObservedMalformedRequestReportsReceiveStage",
+        "bootstrap/TestObservedSeedForwardsSignalingSnapshot",
+        "bootstrap/TestObservedSeedReadKeepsLegacyErrorAndFirstClose",
+        "bootstrap/TestOverlappingSeedsKeepSingleAuthenticatedOwner",
+        "bootstrap/TestSeedAuthRejectThenNextPeer",
+        "bootstrap/TestSeedFailureAndNotReady",
+        "bootstrap/TestSeedMalformedPacketsThenValidRead",
+        "bootstrap/TestSeedObservationPreservesLegacyReturn",
+        "bootstrap/TestSeedOverlapCancellationAndFailedReplacement",
+        "bootstrap/TestSeedOverlapRejectsInsufficientHeadroom",
+        "bootstrap/TestSeedPerExchangeFailureKeepsSharedCarrier",
+        "bootstrap/TestSeedPublishedOnlyAfterReadyAndWithdrawn",
+        "bootstrap/TestSeedReadPreservesFirstError",
+        "bootstrap/TestSilentHandshakeDeadlineCleanup",
+        "bootstrap/TestTimestampReplayUsesInstants",
+        "bootstrap/TestUnusedHandoffCleanupAfterDedicatedJoinOrAuthFailure",
+        "familysession/TestAdmissionFailures",
+        "familysession/TestCanonicalMatrixAndCancellation",
+        "familysession/TestExpiredLeaseAndBounds",
+        "familysession/TestHandshakeProofReplayRejected",
+        "familysession/TestProductStoreFixtures",
+        "familysession/TestReliableTLSExhaustion",
+        "familysession/TestReliableTLSFaultMatrix",
+        "familysession/TestStopSourceDistinguishesCredentialExpiryAndParent",
+        "familysession/TestTLSFailureDiagnosticClassification",
+        "familysession/TestTLSRecordReplayRejected",
+        "reliablestream/FuzzEngine",
+        "reliablestream/FuzzFrame",
+        "reliablestream/TestAdapterBackpressureCancellation",
+        "reliablestream/TestAdapterExhaustionAndCancellation",
+        "reliablestream/TestBoundedRecentTelemetry",
+        "reliablestream/TestCarrierStallAndClose",
+        "reliablestream/TestDATA19ACKProofSemantics",
+        "reliablestream/TestDeliveryTracksHeadSACKAndConsumption",
+        "reliablestream/TestDeterministicFaultMatrix",
+        "reliablestream/TestDiagnosticPrefixDoesNotExposeBytes",
+        "reliablestream/TestEstablishedRetryFailurePrecedesCleanup",
+        "reliablestream/TestExhaustionBranchesRetainBoundedEvidence",
+        "reliablestream/TestExhaustionRecordedBeforeCarrierCleanup",
+        "reliablestream/TestForensicsPreservesReliableWireAndConfig",
+        "reliablestream/TestFreshACKWithoutProgressDoesNotResetRetryBudget",
+        "reliablestream/TestHeadLossAndDuplicateVirtualClock",
+        "reliablestream/TestMalformedAndConfigurationBounds",
+        "reliablestream/TestNegotiatedPayload",
+        "reliablestream/TestSelectiveRetryAndConsumedACKLoss",
+        "reliablestream/TestSlowReceiverAgeAndMalformedACK",
+        "reliablestream/TestWindowBoundsRetryAndStale",
+        "roombroker/TestActiveExpiryRevocationAndGlobalBound",
+        "roombroker/TestBoundSetupOverExistingFamilyTLS",
+        "roombroker/TestConcurrentDuplicateAndChallengeCleanup",
+        "roombroker/TestFailuresReleaseResources",
+        "roombroker/TestGatewayFirstBoundAndReplay",
+        "roombroker/TestJoinURLAndRedaction",
+        "roombroker/TestLeaseControlRevalidatesAdmission",
+        "roombroker/TestLeaseControlRevocationBeforeConfirmation",
+        "roombroker/TestLeaseControlStopsAtSecurityLimit",
+        "roombroker/TestLeaseLegacyClientAndServer",
+        "roombroker/TestLeaseLostResponseReconciliation",
+        "roombroker/TestLeasePreviousGenerationCannotAffectReplacement",
+        "roombroker/TestLeaseRealFamilyMuxPersistentTCP",
+        "roombroker/TestLeaseRenewalCancellationAndExpiryRaces",
+        "roombroker/TestLeaseSchedulerBoundedRenewal",
+        "roombroker/TestLeaseSecurityAndReplay",
+        "roombroker/TestLeaseTwoRenewalsSameHolder",
+        "roombroker/TestLifetimeFreshAndPartiallySpentChallenge",
+        "roombroker/TestLifetimeProcessReopenRejectsPriorDescriptor",
+        "roombroker/TestLifetimeRecoveryGetsFreshChallengeWithoutExtendingOldLease",
+        "roombroker/TestOwnershipActualHolderNotNearestActive",
+        "roombroker/TestOwnershipCaptureBoundAndSnapshotIsolation",
+        "roombroker/TestOwnershipPendingSetupAndPreAcquisitionFailure",
+        "roombroker/TestOwnershipProviderErrorAndTimeoutRelease",
+        "roombroker/TestOwnershipTerminalHeldUntilGatewayClose",
+        "roombroker/TestOwnershipWaitDeadlineAndReleaseGeneration",
+        "roombroker/TestProductStoreMTLSControl",
+        "roombroker/TestProductionSetupLifecycleCorrelation",
+        "roombroker/TestProviderCancellationTimeoutAndRedirect",
+        "roombroker/TestTelemostProvider",
+        "tcpforward/FuzzFrame",
+        "tcpforward/FuzzMuxCreditAndState",
+        "tcpforward/FuzzMuxDNS",
+        "tcpforward/FuzzMuxFrame",
+        "tcpforward/TestActualRefusedAndPrematureClose",
+        "tcpforward/TestAuthenticatedImmediateResetPreservesOpen",
+        "tcpforward/TestAuthenticatedReliableTCPNoDuplicateBytes",
+        "tcpforward/TestAuthenticationRequired",
+        "tcpforward/TestBackpressure",
+        "tcpforward/TestControlOverflowRecordsTime",
+        "tcpforward/TestDNSPinnedAndConnectDeadline",
+        "tcpforward/TestDestinationCanonicalPinnedDualStack",
+        "tcpforward/TestDestinationConcurrentResolutionNoSharedUnboundedCache",
+        "tcpforward/TestDestinationDNSFailureTimeoutCancellation",
+        "tcpforward/TestDestinationIDNAPolicyAndBounds",
+        "tcpforward/TestDestinationResolvedSSRFAllCandidates",
+        "tcpforward/TestEndSiteTLSRemoteClosureBeforeTCPFIN",
+        "tcpforward/TestFullDuplexSegmentationAndHalfClose",
+        "tcpforward/TestGatewayBackpressureBothDirections",
+        "tcpforward/TestHostnameHTTPSWithBrokenClientDNS",
+        "tcpforward/TestImmediateCloseResetCancellation",
+        "tcpforward/TestLocalHalfCloseResponseAfterEOF",
+        "tcpforward/TestMalformedAndLifecycleFrames",
+        "tcpforward/TestMuxAuthenticatedLossReorderDuplicate",
+        "tcpforward/TestMuxCollisionStaleAndExhaustion",
+        "tcpforward/TestMuxConcurrentExactSegmentation",
+        "tcpforward/TestMuxConnectFailuresDoNotKillSibling",
+        "tcpforward/TestMuxDNSAnswersDuplicateAndMismatch",
+        "tcpforward/TestMuxDNSCancellationAndShutdown",
+        "tcpforward/TestMuxDNSConcurrentBulkAndMatching",
+        "tcpforward/TestMuxDNSOutstandingLimitAndRelease",
+        "tcpforward/TestMuxGlobalBlockedWriterShutdown",
+        "tcpforward/TestMuxHalfCloseAndOpenErrors",
+        "tcpforward/TestMuxLimitAndIndependentReset",
+        "tcpforward/TestMuxMalformedStateIsolation",
+        "tcpforward/TestMuxMalformedWireBounds",
+        "tcpforward/TestMuxOpenCloseCancellationStress",
+        "tcpforward/TestMuxPartialSocketWriter",
+        "tcpforward/TestMuxSchedulerRoundRobinAndPriority",
+        "tcpforward/TestMuxSessionCancellationManyStreams",
+        "tcpforward/TestMuxSlowConsumerAndInteractive",
+        "tcpforward/TestMuxTerminalTransitionsIsolated",
+        "tcpforward/TestOpenErrorsAndPolicy",
+        "tcpforward/TestPartialTCPWrites",
+        "tcpforward/TestRemoteHalfCloseStillAllowsWrite",
+        "tcpforward/TestServiceDestinationsAreClosedAndOperatorPinned",
+        "tcpforward/TestServiceOnlyRejectsPublicAndPrivateWithoutDial",
+        "tcpforward/TestTerminalPreservesFirstCauseAndTime",
+        "telemost/FuzzReassembler",
+        "telemost/TestApplicationHeartbeatAndPongAcknowledgment",
+        "telemost/TestAssemblyRejectCountersDoNotChangeDelivery",
+        "telemost/TestCRCAndRecentMessageBound",
+        "telemost/TestConcurrentCloseAndReady",
+        "telemost/TestConnectFailureAndCancellationCleanup",
+        "telemost/TestEarlyICEBoundAndEndParser",
+        "telemost/TestEvidenceBoundAndRedaction",
+        "telemost/TestForensicsObserverPreservesRTPBytes",
+        "telemost/TestFragmentDeliveryMappingAndMissingHeader",
+        "telemost/TestFragmentRoundTrips",
+        "telemost/TestHTTPFlowAndRedaction",
+        "telemost/TestHeadLossBoundPionAttempts",
+        "telemost/TestLocalTwoProcessVP8",
+        "telemost/TestNineFreshBoundMediaIdentitiesForSameDATA",
+        "telemost/TestPerformanceSnapshotQueues",
+        "telemost/TestRTPRejectsMixedTimestamps",
+        "telemost/TestRTPReorderAndBounds",
+        "telemost/TestRTPReorderDoesNotExtendUnchangedGap",
+        "telemost/TestRTPReorderFreshGapPreservesCarrierMessage",
+        "telemost/TestRTPReorderGivesEachGapItsOwnDeadline",
+        "telemost/TestReassemblyBoundsAndTimeout",
+        "telemost/TestReassemblyRejectsMalformedAndDuplicates",
+        "telemost/TestReceiveQueueFailureKeepsSourceBeforeCleanup",
+        "telemost/TestReliableStreamOverVP8MissingRTPWithFreshACK",
+        "telemost/TestRestrictedHTTPAndWebSocketCannotBypassProtection",
+        "telemost/TestRoomAndSignalingValidation",
+        "telemost/TestSendAndRecvBackpressure",
+        "telemost/TestSignalingBoundaryLocalShutdown",
+        "telemost/TestSignalingBoundaryMatrix",
+        "telemost/TestSignalingCloseEvidenceRedactsReason",
+        "telemost/TestSignalingClosureAndInvalidJSON",
+        "telemost/TestSignalingFailureClassification",
+        "telemost/TestSignalingHelloAndSDPSequence",
+        "telemost/TestSignalingLowLevelClassifier",
+        "telemost/TestSignalingLowLevelFirstImmutable",
+        "telemost/TestTypedLifecycleFirstFailureAndPrivacy",
+        "telemost/TestUnboundWriteSampleIsNotRTPEmission",
+        "telemost/TestVP8ModeRejectsDataChannelDelivery",
+        "telemost/TestVP8RTPRoundTripAndLoss"
+      ],
+      "failure_examples": {
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/unknown": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-family": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/revoked": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-gateway": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-crl": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-revision": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier": [],
+        "bootstrap/TestSharedTimestampContract": [
+          "timestamp_test.go:24: fixture unavailable"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/peer_timeout": [
+          "seed_read_matrix_test.go:104: cause=IO_TIMEOUT expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/remote_reset": [
+          "seed_read_matrix_test.go:104: cause=CONNECTION_RESET expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/local_close": [
+          "seed_read_matrix_test.go:104: cause=NET_CLOSED expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/signal_read": [
+          "seed_read_matrix_test.go:104: cause=SIGNAL_READ expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/queue_full": [
+          "seed_read_matrix_test.go:104: cause=RECEIVE_QUEUE_FULL expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/conference_ended": [
+          "seed_read_matrix_test.go:104: cause=CONFERENCE_ENDED expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix": []
+      },
+      "retained_resource": []
+    },
+    {
+      "suite": "candidate",
+      "mode": "race",
+      "exit": 1,
+      "sha256": "4507d84de9bfa251dd5f241ba3dc2d8771e2546e7cb4b7d82e80147eb08bed1a",
+      "top_level_counts": {
+        "pass": 615,
+        "skip": 18,
+        "fail": 12
+      },
+      "failed": [
+        "bootstrap/TestAuthenticatedBusyExchangeReportsChallengeReason",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/revoked",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-crl",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-revision",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/unknown",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-family",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-gateway",
+        "bootstrap/TestSharedTimestampContract",
+        "cmd/bootstrap-broker/TestSeedReadMatrix",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/conference_ended",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/local_close",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/peer_timeout",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/queue_full",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/remote_reset",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/signal_read",
+        "tcpforward/TestMuxConcurrentExactSegmentation",
+        "tcpforward/TestMuxConcurrentExactSegmentation/32"
+      ],
+      "skipped": [
+        "bootstrap/TestSeedPublishedOnlyAfterReadyAndWithdrawn/PythonPublicationContract",
+        "cmd/bootstrap-broker/TestSignalReadReceiptBridge",
+        "telemost/TestLiveFamilyHandshakeReplay",
+        "telemost/TestLiveReliableGap",
+        "telemost/TestLiveSignalingClosure",
+        "telemost/TestLocalEndpointHelper",
+        "telemost/TestMessengerLocalProvider"
+      ],
+      "passed_top_level": [
+        "bootstrap/FuzzCarrier",
+        "bootstrap/FuzzDirectory",
+        "bootstrap/TestActiveGatewayBlocksNewExchangeUntilServerCleanup",
+        "bootstrap/TestAuthenticatedBusyExchangeReportsChallengeReason",
+        "bootstrap/TestAuthenticatedDirectoryDeliveryAndRestart",
+        "bootstrap/TestAuthorizationRevisionChangeBeforeReady",
+        "bootstrap/TestCacheAtomicRestartStaleAndRace",
+        "bootstrap/TestCarrierBusyTimeoutAndCancellation",
+        "bootstrap/TestCarrierExclusiveLeaseIsolationAndShutdown",
+        "bootstrap/TestCarrierParser",
+        "bootstrap/TestDescriptorExpiryDuringBye",
+        "bootstrap/TestDirectoryValidation",
+        "bootstrap/TestExchangeFailureAndCancellation",
+        "bootstrap/TestExchangeReadyHandoffAndOutstanding",
+        "bootstrap/TestExchangeReasonDoesNotExposeRawErrors",
+        "bootstrap/TestExchangeRejectsDataReplayAndDisconnect",
+        "bootstrap/TestExpiredDescriptorBeforeHandoff",
+        "bootstrap/TestFiniteSeedOverlapAndOldCleanup",
+        "bootstrap/TestFourHourDirectoryBoundaries",
+        "bootstrap/TestGlobalOutstandingBound",
+        "bootstrap/TestLateByeCannotReviveExpiredSetup",
+        "bootstrap/TestLocalizeBootstrapHELLOPreservesPrimaryFailure",
+        "bootstrap/TestLostOpenAndAcceptDoNotAllocateExtraSessions",
+        "bootstrap/TestNegativeAuthMandatoryRejectionBoundary",
+        "bootstrap/TestObservedChallengeRejectionsKeepWireAndAdmissionClosed",
+        "bootstrap/TestObservedMalformedRequestReportsReceiveStage",
+        "bootstrap/TestObservedSeedForwardsSignalingSnapshot",
+        "bootstrap/TestObservedSeedReadKeepsLegacyErrorAndFirstClose",
+        "bootstrap/TestOverlappingSeedsKeepSingleAuthenticatedOwner",
+        "bootstrap/TestSeedAuthRejectThenNextPeer",
+        "bootstrap/TestSeedFailureAndNotReady",
+        "bootstrap/TestSeedMalformedPacketsThenValidRead",
+        "bootstrap/TestSeedObservationPreservesLegacyReturn",
+        "bootstrap/TestSeedOverlapCancellationAndFailedReplacement",
+        "bootstrap/TestSeedOverlapRejectsInsufficientHeadroom",
+        "bootstrap/TestSeedPerExchangeFailureKeepsSharedCarrier",
+        "bootstrap/TestSeedPublishedOnlyAfterReadyAndWithdrawn",
+        "bootstrap/TestSeedReadPreservesFirstError",
+        "bootstrap/TestSilentHandshakeDeadlineCleanup",
+        "bootstrap/TestTimestampReplayUsesInstants",
+        "bootstrap/TestUnusedHandoffCleanupAfterDedicatedJoinOrAuthFailure",
+        "familysession/TestAdmissionFailures",
+        "familysession/TestCanonicalMatrixAndCancellation",
+        "familysession/TestExpiredLeaseAndBounds",
+        "familysession/TestHandshakeProofReplayRejected",
+        "familysession/TestProductStoreFixtures",
+        "familysession/TestReliableTLSExhaustion",
+        "familysession/TestReliableTLSFaultMatrix",
+        "familysession/TestStopSourceDistinguishesCredentialExpiryAndParent",
+        "familysession/TestTLSFailureDiagnosticClassification",
+        "familysession/TestTLSRecordReplayRejected",
+        "reliablestream/FuzzEngine",
+        "reliablestream/FuzzFrame",
+        "reliablestream/TestAdapterBackpressureCancellation",
+        "reliablestream/TestAdapterExhaustionAndCancellation",
+        "reliablestream/TestBoundedRecentTelemetry",
+        "reliablestream/TestCarrierStallAndClose",
+        "reliablestream/TestDATA19ACKProofSemantics",
+        "reliablestream/TestDeliveryTracksHeadSACKAndConsumption",
+        "reliablestream/TestDeterministicFaultMatrix",
+        "reliablestream/TestDiagnosticPrefixDoesNotExposeBytes",
+        "reliablestream/TestEstablishedRetryFailurePrecedesCleanup",
+        "reliablestream/TestExhaustionBranchesRetainBoundedEvidence",
+        "reliablestream/TestExhaustionRecordedBeforeCarrierCleanup",
+        "reliablestream/TestForensicsPreservesReliableWireAndConfig",
+        "reliablestream/TestFreshACKWithoutProgressDoesNotResetRetryBudget",
+        "reliablestream/TestHeadLossAndDuplicateVirtualClock",
+        "reliablestream/TestMalformedAndConfigurationBounds",
+        "reliablestream/TestNegotiatedPayload",
+        "reliablestream/TestSelectiveRetryAndConsumedACKLoss",
+        "reliablestream/TestSlowReceiverAgeAndMalformedACK",
+        "reliablestream/TestWindowBoundsRetryAndStale",
+        "roombroker/TestActiveExpiryRevocationAndGlobalBound",
+        "roombroker/TestBoundSetupOverExistingFamilyTLS",
+        "roombroker/TestConcurrentDuplicateAndChallengeCleanup",
+        "roombroker/TestFailuresReleaseResources",
+        "roombroker/TestGatewayFirstBoundAndReplay",
+        "roombroker/TestJoinURLAndRedaction",
+        "roombroker/TestLeaseControlRevalidatesAdmission",
+        "roombroker/TestLeaseControlRevocationBeforeConfirmation",
+        "roombroker/TestLeaseControlStopsAtSecurityLimit",
+        "roombroker/TestLeaseLegacyClientAndServer",
+        "roombroker/TestLeaseLostResponseReconciliation",
+        "roombroker/TestLeasePreviousGenerationCannotAffectReplacement",
+        "roombroker/TestLeaseRealFamilyMuxPersistentTCP",
+        "roombroker/TestLeaseRenewalCancellationAndExpiryRaces",
+        "roombroker/TestLeaseSchedulerBoundedRenewal",
+        "roombroker/TestLeaseSecurityAndReplay",
+        "roombroker/TestLeaseTwoRenewalsSameHolder",
+        "roombroker/TestLifetimeFreshAndPartiallySpentChallenge",
+        "roombroker/TestLifetimeProcessReopenRejectsPriorDescriptor",
+        "roombroker/TestLifetimeRecoveryGetsFreshChallengeWithoutExtendingOldLease",
+        "roombroker/TestOwnershipActualHolderNotNearestActive",
+        "roombroker/TestOwnershipCaptureBoundAndSnapshotIsolation",
+        "roombroker/TestOwnershipPendingSetupAndPreAcquisitionFailure",
+        "roombroker/TestOwnershipProviderErrorAndTimeoutRelease",
+        "roombroker/TestOwnershipTerminalHeldUntilGatewayClose",
+        "roombroker/TestOwnershipWaitDeadlineAndReleaseGeneration",
+        "roombroker/TestProductStoreMTLSControl",
+        "roombroker/TestProductionSetupLifecycleCorrelation",
+        "roombroker/TestProviderCancellationTimeoutAndRedirect",
+        "roombroker/TestTelemostProvider",
+        "tcpforward/FuzzFrame",
+        "tcpforward/FuzzMuxCreditAndState",
+        "tcpforward/FuzzMuxDNS",
+        "tcpforward/FuzzMuxFrame",
+        "tcpforward/TestActualRefusedAndPrematureClose",
+        "tcpforward/TestAuthenticatedImmediateResetPreservesOpen",
+        "tcpforward/TestAuthenticatedReliableTCPNoDuplicateBytes",
+        "tcpforward/TestAuthenticationRequired",
+        "tcpforward/TestBackpressure",
+        "tcpforward/TestControlOverflowRecordsTime",
+        "tcpforward/TestDNSPinnedAndConnectDeadline",
+        "tcpforward/TestDestinationCanonicalPinnedDualStack",
+        "tcpforward/TestDestinationConcurrentResolutionNoSharedUnboundedCache",
+        "tcpforward/TestDestinationDNSFailureTimeoutCancellation",
+        "tcpforward/TestDestinationIDNAPolicyAndBounds",
+        "tcpforward/TestDestinationResolvedSSRFAllCandidates",
+        "tcpforward/TestEndSiteTLSRemoteClosureBeforeTCPFIN",
+        "tcpforward/TestFullDuplexSegmentationAndHalfClose",
+        "tcpforward/TestGatewayBackpressureBothDirections",
+        "tcpforward/TestHostnameHTTPSWithBrokenClientDNS",
+        "tcpforward/TestImmediateCloseResetCancellation",
+        "tcpforward/TestLocalHalfCloseResponseAfterEOF",
+        "tcpforward/TestMalformedAndLifecycleFrames",
+        "tcpforward/TestMuxAuthenticatedLossReorderDuplicate",
+        "tcpforward/TestMuxCollisionStaleAndExhaustion",
+        "tcpforward/TestMuxConcurrentExactSegmentation",
+        "tcpforward/TestMuxConnectFailuresDoNotKillSibling",
+        "tcpforward/TestMuxDNSAnswersDuplicateAndMismatch",
+        "tcpforward/TestMuxDNSCancellationAndShutdown",
+        "tcpforward/TestMuxDNSConcurrentBulkAndMatching",
+        "tcpforward/TestMuxDNSOutstandingLimitAndRelease",
+        "tcpforward/TestMuxGlobalBlockedWriterShutdown",
+        "tcpforward/TestMuxHalfCloseAndOpenErrors",
+        "tcpforward/TestMuxLimitAndIndependentReset",
+        "tcpforward/TestMuxMalformedStateIsolation",
+        "tcpforward/TestMuxMalformedWireBounds",
+        "tcpforward/TestMuxOpenCloseCancellationStress",
+        "tcpforward/TestMuxPartialSocketWriter",
+        "tcpforward/TestMuxSchedulerRoundRobinAndPriority",
+        "tcpforward/TestMuxSessionCancellationManyStreams",
+        "tcpforward/TestMuxSlowConsumerAndInteractive",
+        "tcpforward/TestMuxTerminalTransitionsIsolated",
+        "tcpforward/TestOpenErrorsAndPolicy",
+        "tcpforward/TestPartialTCPWrites",
+        "tcpforward/TestRemoteHalfCloseStillAllowsWrite",
+        "tcpforward/TestServiceDestinationsAreClosedAndOperatorPinned",
+        "tcpforward/TestServiceOnlyRejectsPublicAndPrivateWithoutDial",
+        "tcpforward/TestTerminalPreservesFirstCauseAndTime",
+        "telemost/FuzzReassembler",
+        "telemost/TestApplicationHeartbeatAndPongAcknowledgment",
+        "telemost/TestAssemblyRejectCountersDoNotChangeDelivery",
+        "telemost/TestCRCAndRecentMessageBound",
+        "telemost/TestConcurrentCloseAndReady",
+        "telemost/TestConnectFailureAndCancellationCleanup",
+        "telemost/TestEarlyICEBoundAndEndParser",
+        "telemost/TestEvidenceBoundAndRedaction",
+        "telemost/TestForensicsObserverPreservesRTPBytes",
+        "telemost/TestFragmentDeliveryMappingAndMissingHeader",
+        "telemost/TestFragmentRoundTrips",
+        "telemost/TestHTTPFlowAndRedaction",
+        "telemost/TestHeadLossBoundPionAttempts",
+        "telemost/TestLocalTwoProcessVP8",
+        "telemost/TestNineFreshBoundMediaIdentitiesForSameDATA",
+        "telemost/TestPerformanceSnapshotQueues",
+        "telemost/TestRTPRejectsMixedTimestamps",
+        "telemost/TestRTPReorderAndBounds",
+        "telemost/TestRTPReorderDoesNotExtendUnchangedGap",
+        "telemost/TestRTPReorderFreshGapPreservesCarrierMessage",
+        "telemost/TestRTPReorderGivesEachGapItsOwnDeadline",
+        "telemost/TestReassemblyBoundsAndTimeout",
+        "telemost/TestReassemblyRejectsMalformedAndDuplicates",
+        "telemost/TestReceiveQueueFailureKeepsSourceBeforeCleanup",
+        "telemost/TestReliableStreamOverVP8MissingRTPWithFreshACK",
+        "telemost/TestRestrictedHTTPAndWebSocketCannotBypassProtection",
+        "telemost/TestRoomAndSignalingValidation",
+        "telemost/TestSendAndRecvBackpressure",
+        "telemost/TestSignalingBoundaryLocalShutdown",
+        "telemost/TestSignalingBoundaryMatrix",
+        "telemost/TestSignalingCloseEvidenceRedactsReason",
+        "telemost/TestSignalingClosureAndInvalidJSON",
+        "telemost/TestSignalingFailureClassification",
+        "telemost/TestSignalingHelloAndSDPSequence",
+        "telemost/TestSignalingLowLevelClassifier",
+        "telemost/TestSignalingLowLevelFirstImmutable",
+        "telemost/TestTypedLifecycleFirstFailureAndPrivacy",
+        "telemost/TestUnboundWriteSampleIsNotRTPEmission",
+        "telemost/TestVP8ModeRejectsDataChannelDelivery",
+        "telemost/TestVP8RTPRoundTripAndLoss"
+      ],
+      "failure_examples": {
+        "tcpforward/TestMuxConcurrentExactSegmentation/32": [
+          "mux_test.go:147: TCP forwarding reset"
+        ],
+        "tcpforward/TestMuxConcurrentExactSegmentation": [],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/unknown": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-family": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/revoked": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-gateway": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-crl": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-revision": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier": [],
+        "bootstrap/TestSharedTimestampContract": [
+          "timestamp_test.go:24: fixture unavailable"
+        ],
+        "bootstrap/TestAuthenticatedBusyExchangeReportsChallengeReason": [
+          "auth_test.go:133: client wire reason changed room broker: bootstrap_protocol_rejected"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/peer_timeout": [
+          "seed_read_matrix_test.go:104: cause=IO_TIMEOUT expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/remote_reset": [
+          "seed_read_matrix_test.go:104: cause=CONNECTION_RESET expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/local_close": [
+          "seed_read_matrix_test.go:104: cause=NET_CLOSED expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/signal_read": [
+          "seed_read_matrix_test.go:104: cause=SIGNAL_READ expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/queue_full": [
+          "seed_read_matrix_test.go:104: cause=RECEIVE_QUEUE_FULL expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/conference_ended": [
+          "seed_read_matrix_test.go:104: cause=CONFERENCE_ENDED expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix": []
+      },
+      "retained_resource": []
+    },
+    {
+      "suite": "candidate",
+      "mode": "multicore",
+      "exit": 1,
+      "sha256": "d19ba18fe441470d7fe37335c47700197838a3120676b3b9d8f1748c01c671c6",
+      "top_level_counts": {
+        "pass": 206,
+        "skip": 6,
+        "fail": 3
+      },
+      "failed": [
+        "bootstrap/TestProductIdentityOverBootstrapCarrier",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/revoked",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-crl",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-revision",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/unknown",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-family",
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-gateway",
+        "bootstrap/TestSharedTimestampContract",
+        "cmd/bootstrap-broker/TestSeedReadMatrix",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/conference_ended",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/local_close",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/peer_timeout",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/queue_full",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/remote_reset",
+        "cmd/bootstrap-broker/TestSeedReadMatrix/signal_read"
+      ],
+      "skipped": [
+        "bootstrap/TestSeedPublishedOnlyAfterReadyAndWithdrawn/PythonPublicationContract",
+        "cmd/bootstrap-broker/TestSignalReadReceiptBridge",
+        "telemost/TestLiveFamilyHandshakeReplay",
+        "telemost/TestLiveReliableGap",
+        "telemost/TestLiveSignalingClosure",
+        "telemost/TestLocalEndpointHelper",
+        "telemost/TestMessengerLocalProvider"
+      ],
+      "passed_top_level": [
+        "bootstrap/FuzzCarrier",
+        "bootstrap/FuzzDirectory",
+        "bootstrap/TestActiveGatewayBlocksNewExchangeUntilServerCleanup",
+        "bootstrap/TestAuthenticatedBusyExchangeReportsChallengeReason",
+        "bootstrap/TestAuthenticatedDirectoryDeliveryAndRestart",
+        "bootstrap/TestAuthorizationRevisionChangeBeforeReady",
+        "bootstrap/TestCacheAtomicRestartStaleAndRace",
+        "bootstrap/TestCarrierBusyTimeoutAndCancellation",
+        "bootstrap/TestCarrierExclusiveLeaseIsolationAndShutdown",
+        "bootstrap/TestCarrierParser",
+        "bootstrap/TestDescriptorExpiryDuringBye",
+        "bootstrap/TestDirectoryValidation",
+        "bootstrap/TestExchangeFailureAndCancellation",
+        "bootstrap/TestExchangeReadyHandoffAndOutstanding",
+        "bootstrap/TestExchangeReasonDoesNotExposeRawErrors",
+        "bootstrap/TestExchangeRejectsDataReplayAndDisconnect",
+        "bootstrap/TestExpiredDescriptorBeforeHandoff",
+        "bootstrap/TestFiniteSeedOverlapAndOldCleanup",
+        "bootstrap/TestFourHourDirectoryBoundaries",
+        "bootstrap/TestGlobalOutstandingBound",
+        "bootstrap/TestLateByeCannotReviveExpiredSetup",
+        "bootstrap/TestLocalizeBootstrapHELLOPreservesPrimaryFailure",
+        "bootstrap/TestLostOpenAndAcceptDoNotAllocateExtraSessions",
+        "bootstrap/TestNegativeAuthMandatoryRejectionBoundary",
+        "bootstrap/TestObservedChallengeRejectionsKeepWireAndAdmissionClosed",
+        "bootstrap/TestObservedMalformedRequestReportsReceiveStage",
+        "bootstrap/TestObservedSeedForwardsSignalingSnapshot",
+        "bootstrap/TestObservedSeedReadKeepsLegacyErrorAndFirstClose",
+        "bootstrap/TestOverlappingSeedsKeepSingleAuthenticatedOwner",
+        "bootstrap/TestSeedAuthRejectThenNextPeer",
+        "bootstrap/TestSeedFailureAndNotReady",
+        "bootstrap/TestSeedMalformedPacketsThenValidRead",
+        "bootstrap/TestSeedObservationPreservesLegacyReturn",
+        "bootstrap/TestSeedOverlapCancellationAndFailedReplacement",
+        "bootstrap/TestSeedOverlapRejectsInsufficientHeadroom",
+        "bootstrap/TestSeedPerExchangeFailureKeepsSharedCarrier",
+        "bootstrap/TestSeedPublishedOnlyAfterReadyAndWithdrawn",
+        "bootstrap/TestSeedReadPreservesFirstError",
+        "bootstrap/TestSilentHandshakeDeadlineCleanup",
+        "bootstrap/TestTimestampReplayUsesInstants",
+        "bootstrap/TestUnusedHandoffCleanupAfterDedicatedJoinOrAuthFailure",
+        "familysession/TestAdmissionFailures",
+        "familysession/TestCanonicalMatrixAndCancellation",
+        "familysession/TestExpiredLeaseAndBounds",
+        "familysession/TestHandshakeProofReplayRejected",
+        "familysession/TestProductStoreFixtures",
+        "familysession/TestReliableTLSExhaustion",
+        "familysession/TestReliableTLSFaultMatrix",
+        "familysession/TestStopSourceDistinguishesCredentialExpiryAndParent",
+        "familysession/TestTLSFailureDiagnosticClassification",
+        "familysession/TestTLSRecordReplayRejected",
+        "reliablestream/FuzzEngine",
+        "reliablestream/FuzzFrame",
+        "reliablestream/TestAdapterBackpressureCancellation",
+        "reliablestream/TestAdapterExhaustionAndCancellation",
+        "reliablestream/TestBoundedRecentTelemetry",
+        "reliablestream/TestCarrierStallAndClose",
+        "reliablestream/TestDATA19ACKProofSemantics",
+        "reliablestream/TestDeliveryTracksHeadSACKAndConsumption",
+        "reliablestream/TestDeterministicFaultMatrix",
+        "reliablestream/TestDiagnosticPrefixDoesNotExposeBytes",
+        "reliablestream/TestEstablishedRetryFailurePrecedesCleanup",
+        "reliablestream/TestExhaustionBranchesRetainBoundedEvidence",
+        "reliablestream/TestExhaustionRecordedBeforeCarrierCleanup",
+        "reliablestream/TestForensicsPreservesReliableWireAndConfig",
+        "reliablestream/TestFreshACKWithoutProgressDoesNotResetRetryBudget",
+        "reliablestream/TestHeadLossAndDuplicateVirtualClock",
+        "reliablestream/TestMalformedAndConfigurationBounds",
+        "reliablestream/TestNegotiatedPayload",
+        "reliablestream/TestSelectiveRetryAndConsumedACKLoss",
+        "reliablestream/TestSlowReceiverAgeAndMalformedACK",
+        "reliablestream/TestWindowBoundsRetryAndStale",
+        "roombroker/TestActiveExpiryRevocationAndGlobalBound",
+        "roombroker/TestBoundSetupOverExistingFamilyTLS",
+        "roombroker/TestConcurrentDuplicateAndChallengeCleanup",
+        "roombroker/TestFailuresReleaseResources",
+        "roombroker/TestGatewayFirstBoundAndReplay",
+        "roombroker/TestJoinURLAndRedaction",
+        "roombroker/TestLeaseControlRevalidatesAdmission",
+        "roombroker/TestLeaseControlRevocationBeforeConfirmation",
+        "roombroker/TestLeaseControlStopsAtSecurityLimit",
+        "roombroker/TestLeaseLegacyClientAndServer",
+        "roombroker/TestLeaseLostResponseReconciliation",
+        "roombroker/TestLeasePreviousGenerationCannotAffectReplacement",
+        "roombroker/TestLeaseRealFamilyMuxPersistentTCP",
+        "roombroker/TestLeaseRenewalCancellationAndExpiryRaces",
+        "roombroker/TestLeaseSchedulerBoundedRenewal",
+        "roombroker/TestLeaseSecurityAndReplay",
+        "roombroker/TestLeaseTwoRenewalsSameHolder",
+        "roombroker/TestLifetimeFreshAndPartiallySpentChallenge",
+        "roombroker/TestLifetimeProcessReopenRejectsPriorDescriptor",
+        "roombroker/TestLifetimeRecoveryGetsFreshChallengeWithoutExtendingOldLease",
+        "roombroker/TestOwnershipActualHolderNotNearestActive",
+        "roombroker/TestOwnershipCaptureBoundAndSnapshotIsolation",
+        "roombroker/TestOwnershipPendingSetupAndPreAcquisitionFailure",
+        "roombroker/TestOwnershipProviderErrorAndTimeoutRelease",
+        "roombroker/TestOwnershipTerminalHeldUntilGatewayClose",
+        "roombroker/TestOwnershipWaitDeadlineAndReleaseGeneration",
+        "roombroker/TestProductStoreMTLSControl",
+        "roombroker/TestProductionSetupLifecycleCorrelation",
+        "roombroker/TestProviderCancellationTimeoutAndRedirect",
+        "roombroker/TestTelemostProvider",
+        "tcpforward/FuzzFrame",
+        "tcpforward/FuzzMuxCreditAndState",
+        "tcpforward/FuzzMuxDNS",
+        "tcpforward/FuzzMuxFrame",
+        "tcpforward/TestActualRefusedAndPrematureClose",
+        "tcpforward/TestAuthenticatedImmediateResetPreservesOpen",
+        "tcpforward/TestAuthenticatedReliableTCPNoDuplicateBytes",
+        "tcpforward/TestAuthenticationRequired",
+        "tcpforward/TestBackpressure",
+        "tcpforward/TestControlOverflowRecordsTime",
+        "tcpforward/TestDNSPinnedAndConnectDeadline",
+        "tcpforward/TestDestinationCanonicalPinnedDualStack",
+        "tcpforward/TestDestinationConcurrentResolutionNoSharedUnboundedCache",
+        "tcpforward/TestDestinationDNSFailureTimeoutCancellation",
+        "tcpforward/TestDestinationIDNAPolicyAndBounds",
+        "tcpforward/TestDestinationResolvedSSRFAllCandidates",
+        "tcpforward/TestEndSiteTLSRemoteClosureBeforeTCPFIN",
+        "tcpforward/TestFullDuplexSegmentationAndHalfClose",
+        "tcpforward/TestGatewayBackpressureBothDirections",
+        "tcpforward/TestHostnameHTTPSWithBrokenClientDNS",
+        "tcpforward/TestImmediateCloseResetCancellation",
+        "tcpforward/TestLocalHalfCloseResponseAfterEOF",
+        "tcpforward/TestMalformedAndLifecycleFrames",
+        "tcpforward/TestMuxAuthenticatedLossReorderDuplicate",
+        "tcpforward/TestMuxCollisionStaleAndExhaustion",
+        "tcpforward/TestMuxConcurrentExactSegmentation",
+        "tcpforward/TestMuxConnectFailuresDoNotKillSibling",
+        "tcpforward/TestMuxDNSAnswersDuplicateAndMismatch",
+        "tcpforward/TestMuxDNSCancellationAndShutdown",
+        "tcpforward/TestMuxDNSConcurrentBulkAndMatching",
+        "tcpforward/TestMuxDNSOutstandingLimitAndRelease",
+        "tcpforward/TestMuxGlobalBlockedWriterShutdown",
+        "tcpforward/TestMuxHalfCloseAndOpenErrors",
+        "tcpforward/TestMuxLimitAndIndependentReset",
+        "tcpforward/TestMuxMalformedStateIsolation",
+        "tcpforward/TestMuxMalformedWireBounds",
+        "tcpforward/TestMuxOpenCloseCancellationStress",
+        "tcpforward/TestMuxPartialSocketWriter",
+        "tcpforward/TestMuxSchedulerRoundRobinAndPriority",
+        "tcpforward/TestMuxSessionCancellationManyStreams",
+        "tcpforward/TestMuxSlowConsumerAndInteractive",
+        "tcpforward/TestMuxTerminalTransitionsIsolated",
+        "tcpforward/TestOpenErrorsAndPolicy",
+        "tcpforward/TestPartialTCPWrites",
+        "tcpforward/TestRemoteHalfCloseStillAllowsWrite",
+        "tcpforward/TestServiceDestinationsAreClosedAndOperatorPinned",
+        "tcpforward/TestServiceOnlyRejectsPublicAndPrivateWithoutDial",
+        "tcpforward/TestTerminalPreservesFirstCauseAndTime",
+        "telemost/FuzzReassembler",
+        "telemost/TestApplicationHeartbeatAndPongAcknowledgment",
+        "telemost/TestAssemblyRejectCountersDoNotChangeDelivery",
+        "telemost/TestCRCAndRecentMessageBound",
+        "telemost/TestConcurrentCloseAndReady",
+        "telemost/TestConnectFailureAndCancellationCleanup",
+        "telemost/TestEarlyICEBoundAndEndParser",
+        "telemost/TestEvidenceBoundAndRedaction",
+        "telemost/TestForensicsObserverPreservesRTPBytes",
+        "telemost/TestFragmentDeliveryMappingAndMissingHeader",
+        "telemost/TestFragmentRoundTrips",
+        "telemost/TestHTTPFlowAndRedaction",
+        "telemost/TestHeadLossBoundPionAttempts",
+        "telemost/TestLocalTwoProcessVP8",
+        "telemost/TestNineFreshBoundMediaIdentitiesForSameDATA",
+        "telemost/TestPerformanceSnapshotQueues",
+        "telemost/TestRTPRejectsMixedTimestamps",
+        "telemost/TestRTPReorderAndBounds",
+        "telemost/TestRTPReorderDoesNotExtendUnchangedGap",
+        "telemost/TestRTPReorderFreshGapPreservesCarrierMessage",
+        "telemost/TestRTPReorderGivesEachGapItsOwnDeadline",
+        "telemost/TestReassemblyBoundsAndTimeout",
+        "telemost/TestReassemblyRejectsMalformedAndDuplicates",
+        "telemost/TestReceiveQueueFailureKeepsSourceBeforeCleanup",
+        "telemost/TestReliableStreamOverVP8MissingRTPWithFreshACK",
+        "telemost/TestRestrictedHTTPAndWebSocketCannotBypassProtection",
+        "telemost/TestRoomAndSignalingValidation",
+        "telemost/TestSendAndRecvBackpressure",
+        "telemost/TestSignalingBoundaryLocalShutdown",
+        "telemost/TestSignalingBoundaryMatrix",
+        "telemost/TestSignalingCloseEvidenceRedactsReason",
+        "telemost/TestSignalingClosureAndInvalidJSON",
+        "telemost/TestSignalingFailureClassification",
+        "telemost/TestSignalingHelloAndSDPSequence",
+        "telemost/TestSignalingLowLevelClassifier",
+        "telemost/TestSignalingLowLevelFirstImmutable",
+        "telemost/TestTypedLifecycleFirstFailureAndPrivacy",
+        "telemost/TestUnboundWriteSampleIsNotRTPEmission",
+        "telemost/TestVP8ModeRejectsDataChannelDelivery",
+        "telemost/TestVP8RTPRoundTripAndLoss"
+      ],
+      "failure_examples": {
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/unknown": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-family": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/revoked": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/wrong-gateway": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-crl": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier/stale-revision": [
+          "auth_test.go:86: successful exchange or rejected TLS emitted exchange failure"
+        ],
+        "bootstrap/TestProductIdentityOverBootstrapCarrier": [],
+        "bootstrap/TestSharedTimestampContract": [
+          "timestamp_test.go:24: fixture unavailable"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/peer_timeout": [
+          "seed_read_matrix_test.go:104: cause=IO_TIMEOUT expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/remote_reset": [
+          "seed_read_matrix_test.go:104: cause=CONNECTION_RESET expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/local_close": [
+          "seed_read_matrix_test.go:104: cause=NET_CLOSED expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/signal_read": [
+          "seed_read_matrix_test.go:104: cause=SIGNAL_READ expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/queue_full": [
+          "seed_read_matrix_test.go:104: cause=RECEIVE_QUEUE_FULL expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix/conference_ended": [
+          "seed_read_matrix_test.go:104: cause=CONFERENCE_ENDED expected=UNKNOWN fatal=true closed=2"
+        ],
+        "cmd/bootstrap-broker/TestSeedReadMatrix": []
+      },
+      "retained_resource": []
+    },
+    {
+      "suite": "progress-resource",
+      "mode": "normal",
+      "exit": 0,
+      "sha256": "17837c7b2cf07fc0bc533e5f3ba8ca56e6e4489e2e61c7c7a3d35768fac72328",
+      "top_level_counts": {
+        "pass": 12
+      },
+      "failed": [],
+      "skipped": [],
+      "passed_top_level": [
+        "telemost/TestGatewayRetainedQueueAfterClose",
+        "telemost/TestReceiveBurstCancelFullQueue",
+        "telemost/TestReceiveBurstFiniteCapacityAndClose",
+        "telemost/TestReceiveStallActualSendQueueCancellation",
+        "telemost/TestReceiveStallBoundedBurst",
+        "telemost/TestReceiveStallCoalescedACK",
+        "telemost/TestReceiveStallControlAndSlowConsumer",
+        "telemost/TestReceiveStallPersistentBlockBounded",
+        "telemost/TestReceiveStallProgress",
+        "telemost/TestReceiveStallResumeByteExact",
+        "telemost/TestReceiveStallSequentialCleanup",
+        "telemost/TestReceiveStallUnpacedGuardCharacterization"
+      ],
+      "failure_examples": {},
+      "retained_resource": [
+        "gateway_resource_test.go:29: cleanup_done=true retained_payload_before_fixture_drain=4194304 capacity=64; Close does not promise zero queue references"
+      ]
+    },
+    {
+      "suite": "progress-resource",
+      "mode": "race",
+      "exit": 0,
+      "sha256": "49f500f94932dfef963ffbb2243a72f9c84d4a0d4a6a0bcedc92e993832742b9",
+      "top_level_counts": {
+        "pass": 36
+      },
+      "failed": [],
+      "skipped": [],
+      "passed_top_level": [
+        "telemost/TestGatewayRetainedQueueAfterClose",
+        "telemost/TestReceiveBurstCancelFullQueue",
+        "telemost/TestReceiveBurstFiniteCapacityAndClose",
+        "telemost/TestReceiveStallActualSendQueueCancellation",
+        "telemost/TestReceiveStallBoundedBurst",
+        "telemost/TestReceiveStallCoalescedACK",
+        "telemost/TestReceiveStallControlAndSlowConsumer",
+        "telemost/TestReceiveStallPersistentBlockBounded",
+        "telemost/TestReceiveStallProgress",
+        "telemost/TestReceiveStallResumeByteExact",
+        "telemost/TestReceiveStallSequentialCleanup",
+        "telemost/TestReceiveStallUnpacedGuardCharacterization"
+      ],
+      "failure_examples": {},
+      "retained_resource": [
+        "gateway_resource_test.go:29: cleanup_done=true retained_payload_before_fixture_drain=4194304 capacity=64; Close does not promise zero queue references",
+        "gateway_resource_test.go:29: cleanup_done=true retained_payload_before_fixture_drain=4194304 capacity=64; Close does not promise zero queue references",
+        "gateway_resource_test.go:29: cleanup_done=true retained_payload_before_fixture_drain=4194304 capacity=64; Close does not promise zero queue references"
+      ]
+    },
+    {
+      "suite": "progress-resource",
+      "mode": "multicore",
+      "exit": 0,
+      "sha256": "f34bbb9710af4a9f2dee64836f2c1fb1cbebc6e7ccb6e0979d2f98eb32bd7dd0",
+      "top_level_counts": {
+        "pass": 12
+      },
+      "failed": [],
+      "skipped": [],
+      "passed_top_level": [
+        "telemost/TestGatewayRetainedQueueAfterClose",
+        "telemost/TestReceiveBurstCancelFullQueue",
+        "telemost/TestReceiveBurstFiniteCapacityAndClose",
+        "telemost/TestReceiveStallActualSendQueueCancellation",
+        "telemost/TestReceiveStallBoundedBurst",
+        "telemost/TestReceiveStallCoalescedACK",
+        "telemost/TestReceiveStallControlAndSlowConsumer",
+        "telemost/TestReceiveStallPersistentBlockBounded",
+        "telemost/TestReceiveStallProgress",
+        "telemost/TestReceiveStallResumeByteExact",
+        "telemost/TestReceiveStallSequentialCleanup",
+        "telemost/TestReceiveStallUnpacedGuardCharacterization"
+      ],
+      "failure_examples": {},
+      "retained_resource": [
+        "gateway_resource_test.go:29: cleanup_done=true retained_payload_before_fixture_drain=4194304 capacity=64; Close does not promise zero queue references"
+      ]
+    }
+  ],
+  "timestamp-fixture": [
+    {
+      "suite": "baseline",
+      "mode": "normal",
+      "exit": 0,
+      "sha256": "015248fdd9f8918f74dfbc8bbb1999954503e3d80578390e206f98ede2de1160",
+      "top_level_counts": {
+        "pass": 1
+      },
+      "failed": [],
+      "skipped": [],
+      "passed_top_level": [
+        "bootstrap/TestSharedTimestampContract"
+      ],
+      "failure_examples": {},
+      "retained_resource": []
+    },
+    {
+      "suite": "baseline",
+      "mode": "race",
+      "exit": 0,
+      "sha256": "bec7f09ed7726ee631fb1d6b44de0e9428cd3362418fa0dfdc6fd422663327ba",
+      "top_level_counts": {
+        "pass": 3
+      },
+      "failed": [],
+      "skipped": [],
+      "passed_top_level": [
+        "bootstrap/TestSharedTimestampContract"
+      ],
+      "failure_examples": {},
+      "retained_resource": []
+    },
+    {
+      "suite": "baseline",
+      "mode": "multicore",
+      "exit": 0,
+      "sha256": "efc85db946ad87ae9ab84ea24743e4110ee829f99840c708c8355a38a60e2a0c",
+      "top_level_counts": {
+        "pass": 1
+      },
+      "failed": [],
+      "skipped": [],
+      "passed_top_level": [
+        "bootstrap/TestSharedTimestampContract"
+      ],
+      "failure_examples": {},
+      "retained_resource": []
+    },
+    {
+      "suite": "candidate",
+      "mode": "normal",
+      "exit": 0,
+      "sha256": "479753bd2e165ed14f377d1532c5194f7ccba042688b1d818a48023df66a0f2e",
+      "top_level_counts": {
+        "pass": 1
+      },
+      "failed": [],
+      "skipped": [],
+      "passed_top_level": [
+        "bootstrap/TestSharedTimestampContract"
+      ],
+      "failure_examples": {},
+      "retained_resource": []
+    },
+    {
+      "suite": "candidate",
+      "mode": "race",
+      "exit": 0,
+      "sha256": "1825860b1d70eb4acc234a9f06a3249401b9be769a9cae6a4465ee7de338e132",
+      "top_level_counts": {
+        "pass": 3
+      },
+      "failed": [],
+      "skipped": [],
+      "passed_top_level": [
+        "bootstrap/TestSharedTimestampContract"
+      ],
+      "failure_examples": {},
+      "retained_resource": []
+    },
+    {
+      "suite": "candidate",
+      "mode": "multicore",
+      "exit": 0,
+      "sha256": "01aa71e5a0aeb7c1306aa2ee30b2bec0789d354d033e6f8565d8e1e7594dfc92",
+      "top_level_counts": {
+        "pass": 1
+      },
+      "failed": [],
+      "skipped": [],
+      "passed_top_level": [
+        "bootstrap/TestSharedTimestampContract"
+      ],
+      "failure_examples": {},
+      "retained_resource": []
+    }
+  ],
+  "build-receipt": {
+    "source_inventory": "722746429539a1307d693ce6fcc83579a842d3f1c549a626a36676a6d665c42e",
+    "command": [
+      "$TOOLS/go/bin/go",
+      "build",
+      "-trimpath",
+      "-buildvcs=false",
+      "-o",
+      "$WORK/build/bootstrap-broker-transport-progress",
+      "./cmd/bootstrap-broker"
+    ],
+    "toolchain": "go version go1.26.1 linux/amd64",
+    "platform": {
+      "GOOS": "linux",
+      "GOARCH": "amd64",
+      "GOAMD64": "v1",
+      "CGO_ENABLED": "1"
+    },
+    "tags": [],
+    "build_delta": "buildvcs=false for manifest-addressed source projection; baseline recorded original git revision/dirty state. No compiler, CGO, dependencies, trimpath or tags delta.",
+    "dependencies_equal_baseline": true,
+    "test_adapters_in_build": false,
+    "binary_sha256": "a537257162348afc35b1ebc08755d8c5dc1cd90e74c49e3987fb3eb81885e61f",
+    "binary_size": 17711831,
+    "binary_executed": false
+  },
+  "build-abi-receipt": {
+    "required_glibc_versions": [
+      "GLIBC_2.2.5",
+      "GLIBC_2.3.2",
+      "GLIBC_2.3.4",
+      "GLIBC_2.32",
+      "GLIBC_2.34"
+    ],
+    "glibc_abi_requirements_equal_baseline": true,
+    "baseline_binary_sha256": "21f0a0fdc27b50c00ea922f0b716516e2422aedf1b3797369718f7d00070509a",
+    "candidate_binary_sha256": "a537257162348afc35b1ebc08755d8c5dc1cd90e74c49e3987fb3eb81885e61f",
+    "current_cc": "gcc",
+    "current_cc_version": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "baseline_external_cc_version": "NOT_RECORDED",
+    "binary_executed": false
+  }
+}

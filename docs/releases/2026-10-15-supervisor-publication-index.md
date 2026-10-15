@@ -8,6 +8,15 @@ production FAIL сохраняется; historical root cause не доказа�
 
 ## Начать здесь
 
+- [Gateway transport-progress candidate — locally verified](2026-10-16-gateway-transport-progress-burst-candidate-1.md)
+  and [server patch/tests/build receipts/runbook](../../research/gateway-transport-progress-20261016/README.md):
+  baseline server derivative, three files only. Actual C_NEW↔G_CANDIDATE supported
+  bursts pass both directions; installed-client ordinary compatibility passes, its
+  old large-burst/outbound-stall limits remain. Server full-suite failures are preserved
+  with no new failing subtests; async/resource tests pass. Inventory72274642…665c42e,
+  private gateway binarya5372571…885e61f, CGO1/no tags. No client rebuild or live actions.
+  Gateway-first readiness is for a separately authorized bounded trial, not deployment.
+
 - [Mixed-peer receive burst — PARTIAL, client-only gate blocked](2026-10-15-mixed-peer-receive-burst-acceptance-1.md)
   and [source/tests/commands/results](../../research/mixed-peer-burst-20261015/README.md):
   exact NEW/OLD modules and synthetic real Family/TLS. Client receive reserve64 fixes

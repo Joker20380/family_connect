@@ -1,5 +1,30 @@
 # Текущее состояние / Current state
 
+## GATEWAY-TRANSPORT-PROGRESS-BURST-CANDIDATE-1 — local server candidate (16.10)
+
+[Report](releases/2026-10-16-gateway-transport-progress-burst-candidate-1.md),
+[patch/tests/results](../research/gateway-transport-progress-20261016/README.md) and
+[future-only rollout](../research/gateway-transport-progress-20261016/RUNBOOK.md).
+Exact baseline21f0a0fd…70509a derivative changes only Reliable stream/protocol and
+Telemost session: bounded async writer +receiveQueue64; server observability retained.
+Actual C_NEW↔G_CANDIDATE normal/Family-TLS/bursts8/16/19/20/stress40 PASS both ways,
+normal1/race3/multicore1. Installed-client normal/Family-TLS/8/16/reconnect compatibility
+PASS. Old-client larger incoming bursts still FAIL; its outbound-stall failure also
+reproduces against old gateway in paired fixed controls. These are not positive gates.
+Seven-package server suites remain non-green; no candidate-only failed subtests in
+same-mode comparison. Resource/async12/36/12 PASS; timestamp supplemental1/3/1 each
+side PASS. Full raw outcomes retained; no all-suite PASS claim or assertions rewrite.
+Candidate inventory72274642…665c42e; built linux-amd64/CGO1 binarya5372571…885e61f,
+Go1.26.1/no research tags/exact dependencies; buildvcs=false metadata delta recorded.
+Reader/writer cleanup bounded; closed queue can retain4MiB while Session referenced.
+Aggregate RSS is not proven by broker32; seed/pre-auth/overlap limits documented.
+PAIR_LOCAL_ACCEPTANCE=PASS_SUPPORTED_ENVELOPE. Gateway-first is ready only for a
+separately authorized controlled trial with fresh live prerequisites; not deployed.
+C_NEW source/native/unsigned APK unchanged, no rebuild/sign/install. LIVE_ACTIONS=0.
+Previous smoke PASS/reconnect FAIL, supervisor acceptance and historical B NOT_PROVEN
+stay unchanged. Next is an explicit controlled gateway-first/device task, not automatic
+rollout, renewal, current4h intervention or a new broad offline audit.
+
 ## MIXED-PEER-RECEIVE-BURST-ACCEPTANCE-1 — PARTIAL, client-only gate blocked (15.10)
 
 [Report](releases/2026-10-15-mixed-peer-receive-burst-acceptance-1.md) and

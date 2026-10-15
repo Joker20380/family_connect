@@ -1,0 +1,626 @@
+{
+  "namespace_only_transformation_verified": true,
+  "count": 124,
+  "files": {
+    "candidate/sessiontrace/boundary.go": {
+      "compiled_sha256": "a2359a00f369c985c80e845632755cf3d59f462b92f26da0cb3658a2e13e51e5",
+      "original_sha256": "a2359a00f369c985c80e845632755cf3d59f462b92f26da0cb3658a2e13e51e5",
+      "adapter": false
+    },
+    "candidate/sessiontrace/correlation_disabled.go": {
+      "compiled_sha256": "d52ca5f689884cbb7fa3962f4cc96fa788327d52c789c799288518a229eb7d93",
+      "original_sha256": "d52ca5f689884cbb7fa3962f4cc96fa788327d52c789c799288518a229eb7d93",
+      "adapter": false
+    },
+    "candidate/sessiontrace/delivery.go": {
+      "compiled_sha256": "bec25c21a9f036d01545c2192850bc8de50fced54e091079c4b54781dc8c80cb",
+      "original_sha256": "bec25c21a9f036d01545c2192850bc8de50fced54e091079c4b54781dc8c80cb",
+      "adapter": false
+    },
+    "candidate/sessiontrace/fault_disabled.go": {
+      "compiled_sha256": "4a4fd9306a78f10cc0f9cc7c7f0c8229e04cd32350c643e5351935ae1b6ebd1b",
+      "original_sha256": "4a4fd9306a78f10cc0f9cc7c7f0c8229e04cd32350c643e5351935ae1b6ebd1b",
+      "adapter": false
+    },
+    "candidate/sessiontrace/fault_receipt.go": {
+      "compiled_sha256": "44de47eeb717d8035ebe152f990a2cee903a87254c95686ab990d5ebf7e3c7d6",
+      "original_sha256": "44de47eeb717d8035ebe152f990a2cee903a87254c95686ab990d5ebf7e3c7d6",
+      "adapter": false
+    },
+    "candidate/sessiontrace/forensics_default.go": {
+      "compiled_sha256": "f5a03569ecdc3d8ae2a43f0dffd85b989939a922da2271ef199a096ed3fae195",
+      "original_sha256": "f5a03569ecdc3d8ae2a43f0dffd85b989939a922da2271ef199a096ed3fae195",
+      "adapter": false
+    },
+    "candidate/sessiontrace/receiver_default.go": {
+      "compiled_sha256": "32f466695288a51d6071caff959e2735126ea92506182bb2a296f164c7b59ccd",
+      "original_sha256": "32f466695288a51d6071caff959e2735126ea92506182bb2a296f164c7b59ccd",
+      "adapter": false
+    },
+    "candidate/sessiontrace/schema_default.go": {
+      "compiled_sha256": "56fbf8cdacc63062aafc85d742c8c1a40b9d47cf99e229f314e69462efe46c98",
+      "original_sha256": "56fbf8cdacc63062aafc85d742c8c1a40b9d47cf99e229f314e69462efe46c98",
+      "adapter": false
+    },
+    "candidate/sessiontrace/trace.go": {
+      "compiled_sha256": "38f8e6213c7c1b12aca79dcfccfbab77f4a1fd694218d85f0568ce07abd3bc20",
+      "original_sha256": "38f8e6213c7c1b12aca79dcfccfbab77f4a1fd694218d85f0568ce07abd3bc20",
+      "adapter": false
+    },
+    "candidate/sessiontrace/watch_target.go": {
+      "compiled_sha256": "60728c0f21d21df9c69799809daccc1d02819999542746e1df2dd165bad3d380",
+      "original_sha256": "60728c0f21d21df9c69799809daccc1d02819999542746e1df2dd165bad3d380",
+      "adapter": false
+    },
+    "candidate/reliablestream/diagnostic.go": {
+      "compiled_sha256": "a9cbcd01af396c14e74a0b67924f623c5574d77d87b2febec317f9cf52e99f4f",
+      "original_sha256": "a9cbcd01af396c14e74a0b67924f623c5574d77d87b2febec317f9cf52e99f4f",
+      "adapter": false
+    },
+    "candidate/reliablestream/engine.go": {
+      "compiled_sha256": "ff2a4a405fecff0fe9cb1114b7061b71e6c4089d72e3f9dbbfff2a267205a53e",
+      "original_sha256": "c635cd3746d06c8eb0a736e46c0fcfa1c0976ee4f2a34a96094a22470109bbb4",
+      "adapter": false
+    },
+    "candidate/reliablestream/protocol.go": {
+      "compiled_sha256": "b33a5160df769db2cc032ca90bf65153fbbd9d469cd62ea99be637857f316628",
+      "original_sha256": "ff5c4226caa63a49d62dac11d6079726ce78b296c3a9e843100a0ba634064bba",
+      "adapter": false
+    },
+    "candidate/reliablestream/receive_default.go": {
+      "compiled_sha256": "4e791c315f125448b999764123481436bb29421790d83c154f2201f764e51bb1",
+      "original_sha256": "c10d1813fdb5258ae183527fbe8024c510c689f3de0f77b073eabc857ee75067",
+      "adapter": false
+    },
+    "candidate/reliablestream/stream.go": {
+      "compiled_sha256": "b59546118524ec835840272150c595cafbfedb44912e9b8c01624d15809e53e6",
+      "original_sha256": "d3e3df02613f4a644d9831e68045efa8fdbed72ecb26cc6f112d2528ad6382c8",
+      "adapter": false
+    },
+    "candidate/reliablestream/target_default.go": {
+      "compiled_sha256": "05549f98b65e4a5baddeea291cc5a6884ebf412364e108114d763452f503cd6b",
+      "original_sha256": "05549f98b65e4a5baddeea291cc5a6884ebf412364e108114d763452f503cd6b",
+      "adapter": false
+    },
+    "candidate/familysession/session.go": {
+      "compiled_sha256": "3cc085edb9539b54d13dc2b3ed669a50bbf0f36403b98c0e5c3ac5bc1063d860",
+      "original_sha256": "51bddca0c1cb2966c4d5aeb1ebd5e360cbeede5a5508e14d79a88d3d29a09619",
+      "adapter": false
+    },
+    "candidate/underlay/network.go": {
+      "compiled_sha256": "c22ba2f7e7a1b14efb640f169f02437cc30a04bc9c8edac3745d11fe42254bf9",
+      "original_sha256": "c22ba2f7e7a1b14efb640f169f02437cc30a04bc9c8edac3745d11fe42254bf9",
+      "adapter": false
+    },
+    "candidate/telemost/auth.go": {
+      "compiled_sha256": "e1455d0a9ea609a5cf06e612dec128cf69b3a5e8651674e965e6be3c121d214b",
+      "original_sha256": "e1455d0a9ea609a5cf06e612dec128cf69b3a5e8651674e965e6be3c121d214b",
+      "adapter": false
+    },
+    "candidate/telemost/boundary.go": {
+      "compiled_sha256": "c852779b80956d1e29b2a8d2d4f1b31b7485416d799fe9a2015fa1c607bec227",
+      "original_sha256": "57233f63fee83b6624d658091a6b08dbd3214747375674d025b9580cb2b259fd",
+      "adapter": false
+    },
+    "candidate/telemost/evidence.go": {
+      "compiled_sha256": "d0f10a3b3bee54c3eec2035d47081eab221dc0541ff377d46559dce2f337912d",
+      "original_sha256": "c0a816f1793bb8e43bbf95850bfa6f7c50581baf58575836df51f75a3138bc9f",
+      "adapter": false
+    },
+    "candidate/telemost/mixed_fixture.go": {
+      "compiled_sha256": "8673bf037340f0fd231b7f2a2d74f5968a58353724d540b58dc33d0e8b8c3e77",
+      "original_sha256": "a05004e4962952f46dabfd1dd26b71fd9d96edf74626285cc47f5eef8ef27d58",
+      "adapter": true
+    },
+    "candidate/telemost/msg.go": {
+      "compiled_sha256": "6b4dcc7f140ada61845072e56b832db9348c823b9e426407f2a8ca23822eb604",
+      "original_sha256": "9a72f4538400158a735fd7b75c5c297da454e7d08f371edda19a43cd07ae3ac1",
+      "adapter": false
+    },
+    "candidate/telemost/performance.go": {
+      "compiled_sha256": "f864ca739e609e47e7cecec817268d3c24b85d52f4d4df105765f96471168cf5",
+      "original_sha256": "f864ca739e609e47e7cecec817268d3c24b85d52f4d4df105765f96471168cf5",
+      "adapter": false
+    },
+    "candidate/telemost/receive_default.go": {
+      "compiled_sha256": "91d51cb6c0110eecd7bdd7fa7038852212360303684852f84fc138bec28af907",
+      "original_sha256": "ce572532f9b9819d98bda257b0fe0db71f6f9b42b062cbb66c084ba0b00d6748",
+      "adapter": false
+    },
+    "candidate/telemost/rtp.go": {
+      "compiled_sha256": "3ad216434566adcde4fba04a7de1c07ef6e03e62d6df7647e947da34cff101ce",
+      "original_sha256": "c9c08a2910f1bfb931eb6aca39df9b48f4be38d720a24a31d655856dd0360733",
+      "adapter": false
+    },
+    "candidate/telemost/session.go": {
+      "compiled_sha256": "1ed616aed9f5221166e69ae0592a4f027da2d427203a5b6253b78f666ef1f7f0",
+      "original_sha256": "e4608a9488768f61b798fd00d4f74cb6397ce6b5977dcdc62b9266c8448b8339",
+      "adapter": false
+    },
+    "candidate/telemost/signaling.go": {
+      "compiled_sha256": "b43820a3daf9d9ca5c23e58fe1704442b2dd6d2ac1018509af4c34a64f52d3b6",
+      "original_sha256": "dbc7213d8550967563d7036582a73e5656a3c7a59dd16dc895a095c0496c095b",
+      "adapter": false
+    },
+    "candidate/telemost/signaling_failure.go": {
+      "compiled_sha256": "9a77f6281abff3afe1d19e39e55d0eeb4e91696076afabe25d567b1c6e2c83cf",
+      "original_sha256": "9a77f6281abff3afe1d19e39e55d0eeb4e91696076afabe25d567b1c6e2c83cf",
+      "adapter": false
+    },
+    "candidate/telemost/trace.go": {
+      "compiled_sha256": "018a4978a40806824bc8da8b67e9d64ed346bb3b595dfd53c8b8ab24cb481708",
+      "original_sha256": "add7ec28f14c4df249b8bda28f3019ad984a43ffba7dd8c23d0aa032e46ba51e",
+      "adapter": false
+    },
+    "candidate/telemost/vp8.go": {
+      "compiled_sha256": "1a7cfb445a18bf14405addb74259662353202d602203ad7e13e9171042d07acc",
+      "original_sha256": "1a7cfb445a18bf14405addb74259662353202d602203ad7e13e9171042d07acc",
+      "adapter": false
+    },
+    "oldclient/sessiontrace/boundary.go": {
+      "compiled_sha256": "a2359a00f369c985c80e845632755cf3d59f462b92f26da0cb3658a2e13e51e5",
+      "original_sha256": "a2359a00f369c985c80e845632755cf3d59f462b92f26da0cb3658a2e13e51e5",
+      "adapter": false
+    },
+    "oldclient/sessiontrace/correlation_disabled.go": {
+      "compiled_sha256": "d52ca5f689884cbb7fa3962f4cc96fa788327d52c789c799288518a229eb7d93",
+      "original_sha256": "d52ca5f689884cbb7fa3962f4cc96fa788327d52c789c799288518a229eb7d93",
+      "adapter": false
+    },
+    "oldclient/sessiontrace/delivery.go": {
+      "compiled_sha256": "bec25c21a9f036d01545c2192850bc8de50fced54e091079c4b54781dc8c80cb",
+      "original_sha256": "bec25c21a9f036d01545c2192850bc8de50fced54e091079c4b54781dc8c80cb",
+      "adapter": false
+    },
+    "oldclient/sessiontrace/fault_disabled.go": {
+      "compiled_sha256": "4a4fd9306a78f10cc0f9cc7c7f0c8229e04cd32350c643e5351935ae1b6ebd1b",
+      "original_sha256": "4a4fd9306a78f10cc0f9cc7c7f0c8229e04cd32350c643e5351935ae1b6ebd1b",
+      "adapter": false
+    },
+    "oldclient/sessiontrace/fault_receipt.go": {
+      "compiled_sha256": "44de47eeb717d8035ebe152f990a2cee903a87254c95686ab990d5ebf7e3c7d6",
+      "original_sha256": "44de47eeb717d8035ebe152f990a2cee903a87254c95686ab990d5ebf7e3c7d6",
+      "adapter": false
+    },
+    "oldclient/sessiontrace/forensics_default.go": {
+      "compiled_sha256": "f5a03569ecdc3d8ae2a43f0dffd85b989939a922da2271ef199a096ed3fae195",
+      "original_sha256": "f5a03569ecdc3d8ae2a43f0dffd85b989939a922da2271ef199a096ed3fae195",
+      "adapter": false
+    },
+    "oldclient/sessiontrace/receiver_default.go": {
+      "compiled_sha256": "32f466695288a51d6071caff959e2735126ea92506182bb2a296f164c7b59ccd",
+      "original_sha256": "32f466695288a51d6071caff959e2735126ea92506182bb2a296f164c7b59ccd",
+      "adapter": false
+    },
+    "oldclient/sessiontrace/schema_default.go": {
+      "compiled_sha256": "56fbf8cdacc63062aafc85d742c8c1a40b9d47cf99e229f314e69462efe46c98",
+      "original_sha256": "56fbf8cdacc63062aafc85d742c8c1a40b9d47cf99e229f314e69462efe46c98",
+      "adapter": false
+    },
+    "oldclient/sessiontrace/trace.go": {
+      "compiled_sha256": "38f8e6213c7c1b12aca79dcfccfbab77f4a1fd694218d85f0568ce07abd3bc20",
+      "original_sha256": "38f8e6213c7c1b12aca79dcfccfbab77f4a1fd694218d85f0568ce07abd3bc20",
+      "adapter": false
+    },
+    "oldclient/sessiontrace/watch_target.go": {
+      "compiled_sha256": "60728c0f21d21df9c69799809daccc1d02819999542746e1df2dd165bad3d380",
+      "original_sha256": "60728c0f21d21df9c69799809daccc1d02819999542746e1df2dd165bad3d380",
+      "adapter": false
+    },
+    "oldclient/reliablestream/diagnostic.go": {
+      "compiled_sha256": "a9cbcd01af396c14e74a0b67924f623c5574d77d87b2febec317f9cf52e99f4f",
+      "original_sha256": "a9cbcd01af396c14e74a0b67924f623c5574d77d87b2febec317f9cf52e99f4f",
+      "adapter": false
+    },
+    "oldclient/reliablestream/engine.go": {
+      "compiled_sha256": "78fe99b95934f19262cc1467ff36caa112cba505005dc9cc5e014defcb1ce40e",
+      "original_sha256": "c635cd3746d06c8eb0a736e46c0fcfa1c0976ee4f2a34a96094a22470109bbb4",
+      "adapter": false
+    },
+    "oldclient/reliablestream/protocol.go": {
+      "compiled_sha256": "8f025e9b72a92fb3f101239ba8450f876a54b07fc7a00782709a497e8242af08",
+      "original_sha256": "7c0a9e002b4d92203e8a188be30917c3df477e40adf8fc673a2ad903503527c1",
+      "adapter": false
+    },
+    "oldclient/reliablestream/receive_default.go": {
+      "compiled_sha256": "fdf5c05672b65ff2b013f00b7d02bab17931bdebb8663d7ecd4218395fb15993",
+      "original_sha256": "c10d1813fdb5258ae183527fbe8024c510c689f3de0f77b073eabc857ee75067",
+      "adapter": false
+    },
+    "oldclient/reliablestream/stream.go": {
+      "compiled_sha256": "e8fbf7ed36e3267b61e3e69b5998f9759624955a1fea21e5131168c72d57521a",
+      "original_sha256": "545f7be195b4241ef61846e40d37850736b4b669fdfdb3ec5082382e1d5ab17d",
+      "adapter": false
+    },
+    "oldclient/reliablestream/target_default.go": {
+      "compiled_sha256": "05549f98b65e4a5baddeea291cc5a6884ebf412364e108114d763452f503cd6b",
+      "original_sha256": "05549f98b65e4a5baddeea291cc5a6884ebf412364e108114d763452f503cd6b",
+      "adapter": false
+    },
+    "oldclient/familysession/receive_observer.go": {
+      "compiled_sha256": "5988fe2a03ea0fabc0b72a5e5842735bb8658644ead169ffbdd49bfb36ba8445",
+      "original_sha256": "5988fe2a03ea0fabc0b72a5e5842735bb8658644ead169ffbdd49bfb36ba8445",
+      "adapter": false
+    },
+    "oldclient/familysession/session.go": {
+      "compiled_sha256": "cea9df96a8b51379ab5c39ae8c26af42c88c2ecea0cb51281ceb3716bd001ca5",
+      "original_sha256": "eb686d7c9e4ab00d4265cde70f688bbb1a5ec1ceee546da8010ea74ad25756d5",
+      "adapter": false
+    },
+    "oldclient/underlay/network.go": {
+      "compiled_sha256": "c22ba2f7e7a1b14efb640f169f02437cc30a04bc9c8edac3745d11fe42254bf9",
+      "original_sha256": "c22ba2f7e7a1b14efb640f169f02437cc30a04bc9c8edac3745d11fe42254bf9",
+      "adapter": false
+    },
+    "oldclient/telemost/auth.go": {
+      "compiled_sha256": "e1455d0a9ea609a5cf06e612dec128cf69b3a5e8651674e965e6be3c121d214b",
+      "original_sha256": "e1455d0a9ea609a5cf06e612dec128cf69b3a5e8651674e965e6be3c121d214b",
+      "adapter": false
+    },
+    "oldclient/telemost/boundary.go": {
+      "compiled_sha256": "a65aae28027b44edd2a29b9085c8bd80bd870bee0cbe8a5478d2efae2c6a2722",
+      "original_sha256": "57233f63fee83b6624d658091a6b08dbd3214747375674d025b9580cb2b259fd",
+      "adapter": false
+    },
+    "oldclient/telemost/evidence.go": {
+      "compiled_sha256": "1ec68d7ec179390d6d214caceb75cb2c507d6ba32afff84b774c12156c40e1d6",
+      "original_sha256": "080e868b8d6b75edf22d54be03f4b6fda0ae27940c49e7429b7ced046bf14246",
+      "adapter": false
+    },
+    "oldclient/telemost/mixed_fixture.go": {
+      "compiled_sha256": "6e5b15a5b5cfe1be76f228a134456283dae82aee3eaa9653bdd6abc51df934ae",
+      "original_sha256": "a05004e4962952f46dabfd1dd26b71fd9d96edf74626285cc47f5eef8ef27d58",
+      "adapter": true
+    },
+    "oldclient/telemost/msg.go": {
+      "compiled_sha256": "cc269899db4e8390e0e9c492b4743e87f4361ee927a1598a9a5cb872b433edaa",
+      "original_sha256": "9a72f4538400158a735fd7b75c5c297da454e7d08f371edda19a43cd07ae3ac1",
+      "adapter": false
+    },
+    "oldclient/telemost/performance.go": {
+      "compiled_sha256": "f864ca739e609e47e7cecec817268d3c24b85d52f4d4df105765f96471168cf5",
+      "original_sha256": "f864ca739e609e47e7cecec817268d3c24b85d52f4d4df105765f96471168cf5",
+      "adapter": false
+    },
+    "oldclient/telemost/receive_default.go": {
+      "compiled_sha256": "db209f154757668f139b1a3f6bec8c8896350c1a1b49aa2c3b70a5ef749136ad",
+      "original_sha256": "ce572532f9b9819d98bda257b0fe0db71f6f9b42b062cbb66c084ba0b00d6748",
+      "adapter": false
+    },
+    "oldclient/telemost/rtp.go": {
+      "compiled_sha256": "62e73bfa7ed3386fdf4c42d32f120b831518ee884337d60eadfec51524caeb67",
+      "original_sha256": "c9c08a2910f1bfb931eb6aca39df9b48f4be38d720a24a31d655856dd0360733",
+      "adapter": false
+    },
+    "oldclient/telemost/session.go": {
+      "compiled_sha256": "4b5c6c54e9c281b9abbd519a7350a23495930db6a51030019dee2d41ca5910a4",
+      "original_sha256": "b1cc32330c0c192718c3973f4f7e64f02b3690dbecd40f0b7cb5d89498abb440",
+      "adapter": false
+    },
+    "oldclient/telemost/signaling.go": {
+      "compiled_sha256": "f281fcc7cbaabfc5068d9b5585158936ef9353f46d6e13afb80af19cb8f5acb2",
+      "original_sha256": "dbc7213d8550967563d7036582a73e5656a3c7a59dd16dc895a095c0496c095b",
+      "adapter": false
+    },
+    "oldclient/telemost/trace.go": {
+      "compiled_sha256": "44049420a75011d7532520b7e03284733ec629ad42b720d5a7c93a58339db8a1",
+      "original_sha256": "add7ec28f14c4df249b8bda28f3019ad984a43ffba7dd8c23d0aa032e46ba51e",
+      "adapter": false
+    },
+    "oldclient/telemost/vp8.go": {
+      "compiled_sha256": "1a7cfb445a18bf14405addb74259662353202d602203ad7e13e9171042d07acc",
+      "original_sha256": "1a7cfb445a18bf14405addb74259662353202d602203ad7e13e9171042d07acc",
+      "adapter": false
+    },
+    "oldgateway/sessiontrace/boundary.go": {
+      "compiled_sha256": "a2359a00f369c985c80e845632755cf3d59f462b92f26da0cb3658a2e13e51e5",
+      "original_sha256": "a2359a00f369c985c80e845632755cf3d59f462b92f26da0cb3658a2e13e51e5",
+      "adapter": false
+    },
+    "oldgateway/sessiontrace/correlation_disabled.go": {
+      "compiled_sha256": "d52ca5f689884cbb7fa3962f4cc96fa788327d52c789c799288518a229eb7d93",
+      "original_sha256": "d52ca5f689884cbb7fa3962f4cc96fa788327d52c789c799288518a229eb7d93",
+      "adapter": false
+    },
+    "oldgateway/sessiontrace/delivery.go": {
+      "compiled_sha256": "bec25c21a9f036d01545c2192850bc8de50fced54e091079c4b54781dc8c80cb",
+      "original_sha256": "bec25c21a9f036d01545c2192850bc8de50fced54e091079c4b54781dc8c80cb",
+      "adapter": false
+    },
+    "oldgateway/sessiontrace/fault_disabled.go": {
+      "compiled_sha256": "4a4fd9306a78f10cc0f9cc7c7f0c8229e04cd32350c643e5351935ae1b6ebd1b",
+      "original_sha256": "4a4fd9306a78f10cc0f9cc7c7f0c8229e04cd32350c643e5351935ae1b6ebd1b",
+      "adapter": false
+    },
+    "oldgateway/sessiontrace/fault_receipt.go": {
+      "compiled_sha256": "44de47eeb717d8035ebe152f990a2cee903a87254c95686ab990d5ebf7e3c7d6",
+      "original_sha256": "44de47eeb717d8035ebe152f990a2cee903a87254c95686ab990d5ebf7e3c7d6",
+      "adapter": false
+    },
+    "oldgateway/sessiontrace/forensics_default.go": {
+      "compiled_sha256": "f5a03569ecdc3d8ae2a43f0dffd85b989939a922da2271ef199a096ed3fae195",
+      "original_sha256": "f5a03569ecdc3d8ae2a43f0dffd85b989939a922da2271ef199a096ed3fae195",
+      "adapter": false
+    },
+    "oldgateway/sessiontrace/receiver_default.go": {
+      "compiled_sha256": "32f466695288a51d6071caff959e2735126ea92506182bb2a296f164c7b59ccd",
+      "original_sha256": "32f466695288a51d6071caff959e2735126ea92506182bb2a296f164c7b59ccd",
+      "adapter": false
+    },
+    "oldgateway/sessiontrace/schema_default.go": {
+      "compiled_sha256": "56fbf8cdacc63062aafc85d742c8c1a40b9d47cf99e229f314e69462efe46c98",
+      "original_sha256": "56fbf8cdacc63062aafc85d742c8c1a40b9d47cf99e229f314e69462efe46c98",
+      "adapter": false
+    },
+    "oldgateway/sessiontrace/trace.go": {
+      "compiled_sha256": "38f8e6213c7c1b12aca79dcfccfbab77f4a1fd694218d85f0568ce07abd3bc20",
+      "original_sha256": "38f8e6213c7c1b12aca79dcfccfbab77f4a1fd694218d85f0568ce07abd3bc20",
+      "adapter": false
+    },
+    "oldgateway/sessiontrace/watch_target.go": {
+      "compiled_sha256": "60728c0f21d21df9c69799809daccc1d02819999542746e1df2dd165bad3d380",
+      "original_sha256": "60728c0f21d21df9c69799809daccc1d02819999542746e1df2dd165bad3d380",
+      "adapter": false
+    },
+    "oldgateway/reliablestream/diagnostic.go": {
+      "compiled_sha256": "a9cbcd01af396c14e74a0b67924f623c5574d77d87b2febec317f9cf52e99f4f",
+      "original_sha256": "a9cbcd01af396c14e74a0b67924f623c5574d77d87b2febec317f9cf52e99f4f",
+      "adapter": false
+    },
+    "oldgateway/reliablestream/engine.go": {
+      "compiled_sha256": "642995ee151f3309e2282c7bcffabc26b34657e4cc76775082f45fc6bcbb687d",
+      "original_sha256": "c635cd3746d06c8eb0a736e46c0fcfa1c0976ee4f2a34a96094a22470109bbb4",
+      "adapter": false
+    },
+    "oldgateway/reliablestream/protocol.go": {
+      "compiled_sha256": "170a17748d8f9ad0e94a258228be066a914a478e0357842df1dd284bcaf8a001",
+      "original_sha256": "7c0a9e002b4d92203e8a188be30917c3df477e40adf8fc673a2ad903503527c1",
+      "adapter": false
+    },
+    "oldgateway/reliablestream/receive_default.go": {
+      "compiled_sha256": "b17f4818529ea2f133112b215962807951288c87c84b1443e268de27e99d3783",
+      "original_sha256": "c10d1813fdb5258ae183527fbe8024c510c689f3de0f77b073eabc857ee75067",
+      "adapter": false
+    },
+    "oldgateway/reliablestream/stream.go": {
+      "compiled_sha256": "615ad0b22d4d7e691b22c51f2e90129ced6f963eac9d0f1024fc9fe8f4325d49",
+      "original_sha256": "545f7be195b4241ef61846e40d37850736b4b669fdfdb3ec5082382e1d5ab17d",
+      "adapter": false
+    },
+    "oldgateway/reliablestream/target_default.go": {
+      "compiled_sha256": "05549f98b65e4a5baddeea291cc5a6884ebf412364e108114d763452f503cd6b",
+      "original_sha256": "05549f98b65e4a5baddeea291cc5a6884ebf412364e108114d763452f503cd6b",
+      "adapter": false
+    },
+    "oldgateway/familysession/session.go": {
+      "compiled_sha256": "58e2ce9a1527582935ef461a1e365ff1ce0c63ee1bc52e64c0e357a86b41ee8d",
+      "original_sha256": "51bddca0c1cb2966c4d5aeb1ebd5e360cbeede5a5508e14d79a88d3d29a09619",
+      "adapter": false
+    },
+    "oldgateway/underlay/network.go": {
+      "compiled_sha256": "c22ba2f7e7a1b14efb640f169f02437cc30a04bc9c8edac3745d11fe42254bf9",
+      "original_sha256": "c22ba2f7e7a1b14efb640f169f02437cc30a04bc9c8edac3745d11fe42254bf9",
+      "adapter": false
+    },
+    "oldgateway/telemost/auth.go": {
+      "compiled_sha256": "e1455d0a9ea609a5cf06e612dec128cf69b3a5e8651674e965e6be3c121d214b",
+      "original_sha256": "e1455d0a9ea609a5cf06e612dec128cf69b3a5e8651674e965e6be3c121d214b",
+      "adapter": false
+    },
+    "oldgateway/telemost/boundary.go": {
+      "compiled_sha256": "ca58c9fcda84021422bae8c79b9b751dc72ed0643fe07a76dcecceeb04eb4b43",
+      "original_sha256": "57233f63fee83b6624d658091a6b08dbd3214747375674d025b9580cb2b259fd",
+      "adapter": false
+    },
+    "oldgateway/telemost/evidence.go": {
+      "compiled_sha256": "94fe4ff014dc6b0edf94c4189ff8b56e9e10266acbdc480e9963a9d94d07dda8",
+      "original_sha256": "c0a816f1793bb8e43bbf95850bfa6f7c50581baf58575836df51f75a3138bc9f",
+      "adapter": false
+    },
+    "oldgateway/telemost/mixed_fixture.go": {
+      "compiled_sha256": "e642b00432f59d25988ca696b2ae77ef28fbfa7b5797d0f3d0904d634e569292",
+      "original_sha256": "a05004e4962952f46dabfd1dd26b71fd9d96edf74626285cc47f5eef8ef27d58",
+      "adapter": true
+    },
+    "oldgateway/telemost/msg.go": {
+      "compiled_sha256": "951904f0b30ed78e0577f139205a550074fd0191718e5c4d5e0045926d6784e7",
+      "original_sha256": "9a72f4538400158a735fd7b75c5c297da454e7d08f371edda19a43cd07ae3ac1",
+      "adapter": false
+    },
+    "oldgateway/telemost/performance.go": {
+      "compiled_sha256": "f864ca739e609e47e7cecec817268d3c24b85d52f4d4df105765f96471168cf5",
+      "original_sha256": "f864ca739e609e47e7cecec817268d3c24b85d52f4d4df105765f96471168cf5",
+      "adapter": false
+    },
+    "oldgateway/telemost/receive_default.go": {
+      "compiled_sha256": "543446945b379ee8ac67d40785b7f18e1b032042ea1dfd971f6c584870f8b2a8",
+      "original_sha256": "ce572532f9b9819d98bda257b0fe0db71f6f9b42b062cbb66c084ba0b00d6748",
+      "adapter": false
+    },
+    "oldgateway/telemost/rtp.go": {
+      "compiled_sha256": "0836090b5b951aed15527ca49f30e013d541f20368bc01b686af197f25d21982",
+      "original_sha256": "c9c08a2910f1bfb931eb6aca39df9b48f4be38d720a24a31d655856dd0360733",
+      "adapter": false
+    },
+    "oldgateway/telemost/session.go": {
+      "compiled_sha256": "4cdff23b5153d7eb5fb09f68e2baae380f9cbccf0441b170a8084b8a4779ccb1",
+      "original_sha256": "6958eb9a1f9fe26a8ba7cad7707c00523ab7e7daf4b9504d6cbc4a1d8202c1a2",
+      "adapter": false
+    },
+    "oldgateway/telemost/signaling.go": {
+      "compiled_sha256": "c607a928887450a7e85214a007cffdc91a3dae7483843a5f5013b160972b7111",
+      "original_sha256": "dbc7213d8550967563d7036582a73e5656a3c7a59dd16dc895a095c0496c095b",
+      "adapter": false
+    },
+    "oldgateway/telemost/signaling_failure.go": {
+      "compiled_sha256": "9a77f6281abff3afe1d19e39e55d0eeb4e91696076afabe25d567b1c6e2c83cf",
+      "original_sha256": "9a77f6281abff3afe1d19e39e55d0eeb4e91696076afabe25d567b1c6e2c83cf",
+      "adapter": false
+    },
+    "oldgateway/telemost/trace.go": {
+      "compiled_sha256": "dc3482a3a86a7170119985013adedeb96a294f1041326ba61b9e9464a37bd227",
+      "original_sha256": "add7ec28f14c4df249b8bda28f3019ad984a43ffba7dd8c23d0aa032e46ba51e",
+      "adapter": false
+    },
+    "oldgateway/telemost/vp8.go": {
+      "compiled_sha256": "1a7cfb445a18bf14405addb74259662353202d602203ad7e13e9171042d07acc",
+      "original_sha256": "1a7cfb445a18bf14405addb74259662353202d602203ad7e13e9171042d07acc",
+      "adapter": false
+    },
+    "new/sessiontrace/boundary.go": {
+      "compiled_sha256": "a2359a00f369c985c80e845632755cf3d59f462b92f26da0cb3658a2e13e51e5",
+      "original_sha256": "a2359a00f369c985c80e845632755cf3d59f462b92f26da0cb3658a2e13e51e5",
+      "adapter": false
+    },
+    "new/sessiontrace/correlation_disabled.go": {
+      "compiled_sha256": "d52ca5f689884cbb7fa3962f4cc96fa788327d52c789c799288518a229eb7d93",
+      "original_sha256": "d52ca5f689884cbb7fa3962f4cc96fa788327d52c789c799288518a229eb7d93",
+      "adapter": false
+    },
+    "new/sessiontrace/delivery.go": {
+      "compiled_sha256": "bec25c21a9f036d01545c2192850bc8de50fced54e091079c4b54781dc8c80cb",
+      "original_sha256": "bec25c21a9f036d01545c2192850bc8de50fced54e091079c4b54781dc8c80cb",
+      "adapter": false
+    },
+    "new/sessiontrace/fault_disabled.go": {
+      "compiled_sha256": "4a4fd9306a78f10cc0f9cc7c7f0c8229e04cd32350c643e5351935ae1b6ebd1b",
+      "original_sha256": "4a4fd9306a78f10cc0f9cc7c7f0c8229e04cd32350c643e5351935ae1b6ebd1b",
+      "adapter": false
+    },
+    "new/sessiontrace/fault_receipt.go": {
+      "compiled_sha256": "44de47eeb717d8035ebe152f990a2cee903a87254c95686ab990d5ebf7e3c7d6",
+      "original_sha256": "44de47eeb717d8035ebe152f990a2cee903a87254c95686ab990d5ebf7e3c7d6",
+      "adapter": false
+    },
+    "new/sessiontrace/forensics_default.go": {
+      "compiled_sha256": "f5a03569ecdc3d8ae2a43f0dffd85b989939a922da2271ef199a096ed3fae195",
+      "original_sha256": "f5a03569ecdc3d8ae2a43f0dffd85b989939a922da2271ef199a096ed3fae195",
+      "adapter": false
+    },
+    "new/sessiontrace/receiver_default.go": {
+      "compiled_sha256": "32f466695288a51d6071caff959e2735126ea92506182bb2a296f164c7b59ccd",
+      "original_sha256": "32f466695288a51d6071caff959e2735126ea92506182bb2a296f164c7b59ccd",
+      "adapter": false
+    },
+    "new/sessiontrace/schema_default.go": {
+      "compiled_sha256": "56fbf8cdacc63062aafc85d742c8c1a40b9d47cf99e229f314e69462efe46c98",
+      "original_sha256": "56fbf8cdacc63062aafc85d742c8c1a40b9d47cf99e229f314e69462efe46c98",
+      "adapter": false
+    },
+    "new/sessiontrace/trace.go": {
+      "compiled_sha256": "38f8e6213c7c1b12aca79dcfccfbab77f4a1fd694218d85f0568ce07abd3bc20",
+      "original_sha256": "38f8e6213c7c1b12aca79dcfccfbab77f4a1fd694218d85f0568ce07abd3bc20",
+      "adapter": false
+    },
+    "new/sessiontrace/watch_target.go": {
+      "compiled_sha256": "60728c0f21d21df9c69799809daccc1d02819999542746e1df2dd165bad3d380",
+      "original_sha256": "60728c0f21d21df9c69799809daccc1d02819999542746e1df2dd165bad3d380",
+      "adapter": false
+    },
+    "new/reliablestream/diagnostic.go": {
+      "compiled_sha256": "a9cbcd01af396c14e74a0b67924f623c5574d77d87b2febec317f9cf52e99f4f",
+      "original_sha256": "a9cbcd01af396c14e74a0b67924f623c5574d77d87b2febec317f9cf52e99f4f",
+      "adapter": false
+    },
+    "new/reliablestream/engine.go": {
+      "compiled_sha256": "c635cd3746d06c8eb0a736e46c0fcfa1c0976ee4f2a34a96094a22470109bbb4",
+      "original_sha256": "c635cd3746d06c8eb0a736e46c0fcfa1c0976ee4f2a34a96094a22470109bbb4",
+      "adapter": false
+    },
+    "new/reliablestream/protocol.go": {
+      "compiled_sha256": "ff5c4226caa63a49d62dac11d6079726ce78b296c3a9e843100a0ba634064bba",
+      "original_sha256": "ff5c4226caa63a49d62dac11d6079726ce78b296c3a9e843100a0ba634064bba",
+      "adapter": false
+    },
+    "new/reliablestream/receive_default.go": {
+      "compiled_sha256": "c10d1813fdb5258ae183527fbe8024c510c689f3de0f77b073eabc857ee75067",
+      "original_sha256": "c10d1813fdb5258ae183527fbe8024c510c689f3de0f77b073eabc857ee75067",
+      "adapter": false
+    },
+    "new/reliablestream/stream.go": {
+      "compiled_sha256": "d3e3df02613f4a644d9831e68045efa8fdbed72ecb26cc6f112d2528ad6382c8",
+      "original_sha256": "d3e3df02613f4a644d9831e68045efa8fdbed72ecb26cc6f112d2528ad6382c8",
+      "adapter": false
+    },
+    "new/reliablestream/target_default.go": {
+      "compiled_sha256": "05549f98b65e4a5baddeea291cc5a6884ebf412364e108114d763452f503cd6b",
+      "original_sha256": "05549f98b65e4a5baddeea291cc5a6884ebf412364e108114d763452f503cd6b",
+      "adapter": false
+    },
+    "new/familysession/receive_observer.go": {
+      "compiled_sha256": "5988fe2a03ea0fabc0b72a5e5842735bb8658644ead169ffbdd49bfb36ba8445",
+      "original_sha256": "5988fe2a03ea0fabc0b72a5e5842735bb8658644ead169ffbdd49bfb36ba8445",
+      "adapter": false
+    },
+    "new/familysession/session.go": {
+      "compiled_sha256": "eb686d7c9e4ab00d4265cde70f688bbb1a5ec1ceee546da8010ea74ad25756d5",
+      "original_sha256": "eb686d7c9e4ab00d4265cde70f688bbb1a5ec1ceee546da8010ea74ad25756d5",
+      "adapter": false
+    },
+    "new/underlay/network.go": {
+      "compiled_sha256": "c22ba2f7e7a1b14efb640f169f02437cc30a04bc9c8edac3745d11fe42254bf9",
+      "original_sha256": "c22ba2f7e7a1b14efb640f169f02437cc30a04bc9c8edac3745d11fe42254bf9",
+      "adapter": false
+    },
+    "new/telemost/auth.go": {
+      "compiled_sha256": "e1455d0a9ea609a5cf06e612dec128cf69b3a5e8651674e965e6be3c121d214b",
+      "original_sha256": "e1455d0a9ea609a5cf06e612dec128cf69b3a5e8651674e965e6be3c121d214b",
+      "adapter": false
+    },
+    "new/telemost/boundary.go": {
+      "compiled_sha256": "57233f63fee83b6624d658091a6b08dbd3214747375674d025b9580cb2b259fd",
+      "original_sha256": "57233f63fee83b6624d658091a6b08dbd3214747375674d025b9580cb2b259fd",
+      "adapter": false
+    },
+    "new/telemost/evidence.go": {
+      "compiled_sha256": "080e868b8d6b75edf22d54be03f4b6fda0ae27940c49e7429b7ced046bf14246",
+      "original_sha256": "080e868b8d6b75edf22d54be03f4b6fda0ae27940c49e7429b7ced046bf14246",
+      "adapter": false
+    },
+    "new/telemost/mixed_fixture.go": {
+      "compiled_sha256": "a05004e4962952f46dabfd1dd26b71fd9d96edf74626285cc47f5eef8ef27d58",
+      "original_sha256": "a05004e4962952f46dabfd1dd26b71fd9d96edf74626285cc47f5eef8ef27d58",
+      "adapter": true
+    },
+    "new/telemost/msg.go": {
+      "compiled_sha256": "9a72f4538400158a735fd7b75c5c297da454e7d08f371edda19a43cd07ae3ac1",
+      "original_sha256": "9a72f4538400158a735fd7b75c5c297da454e7d08f371edda19a43cd07ae3ac1",
+      "adapter": false
+    },
+    "new/telemost/performance.go": {
+      "compiled_sha256": "f864ca739e609e47e7cecec817268d3c24b85d52f4d4df105765f96471168cf5",
+      "original_sha256": "f864ca739e609e47e7cecec817268d3c24b85d52f4d4df105765f96471168cf5",
+      "adapter": false
+    },
+    "new/telemost/receive_default.go": {
+      "compiled_sha256": "ce572532f9b9819d98bda257b0fe0db71f6f9b42b062cbb66c084ba0b00d6748",
+      "original_sha256": "ce572532f9b9819d98bda257b0fe0db71f6f9b42b062cbb66c084ba0b00d6748",
+      "adapter": false
+    },
+    "new/telemost/rtp.go": {
+      "compiled_sha256": "c9c08a2910f1bfb931eb6aca39df9b48f4be38d720a24a31d655856dd0360733",
+      "original_sha256": "c9c08a2910f1bfb931eb6aca39df9b48f4be38d720a24a31d655856dd0360733",
+      "adapter": false
+    },
+    "new/telemost/session.go": {
+      "compiled_sha256": "71031dbebd96e9273d99ad81225cb80dc5f06c9e94fbcaf8c87ef93cf5fc67db",
+      "original_sha256": "71031dbebd96e9273d99ad81225cb80dc5f06c9e94fbcaf8c87ef93cf5fc67db",
+      "adapter": false
+    },
+    "new/telemost/signaling.go": {
+      "compiled_sha256": "dbc7213d8550967563d7036582a73e5656a3c7a59dd16dc895a095c0496c095b",
+      "original_sha256": "dbc7213d8550967563d7036582a73e5656a3c7a59dd16dc895a095c0496c095b",
+      "adapter": false
+    },
+    "new/telemost/trace.go": {
+      "compiled_sha256": "add7ec28f14c4df249b8bda28f3019ad984a43ffba7dd8c23d0aa032e46ba51e",
+      "original_sha256": "add7ec28f14c4df249b8bda28f3019ad984a43ffba7dd8c23d0aa032e46ba51e",
+      "adapter": false
+    },
+    "new/telemost/vp8.go": {
+      "compiled_sha256": "1a7cfb445a18bf14405addb74259662353202d602203ad7e13e9171042d07acc",
+      "original_sha256": "1a7cfb445a18bf14405addb74259662353202d602203ad7e13e9171042d07acc",
+      "adapter": false
+    }
+  }
+}

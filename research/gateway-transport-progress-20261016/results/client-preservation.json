@@ -1,0 +1,11 @@
+{
+  "client_product_inventory_verified_unchanged": true,
+  "checked_files": 35,
+  "unsigned_apk_sha256": "cc5b883395c59d2f76f4cf8ce1d787fa764c1fac2936c9148f9876697d2c5013",
+  "native_sha256": "253e0e15f38223288571d3e682f6876269aa9c6d1c0c5157588ed8287ba6f3a3",
+  "embedded_native_matches": true,
+  "client_builds": 0,
+  "signing": 0,
+  "installs": 0,
+  "device_access": 0
+}

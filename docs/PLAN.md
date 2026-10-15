@@ -8,6 +8,24 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### GATEWAY-TRANSPORT-PROGRESS-BURST-CANDIDATE-1 — local pair accepted (16.10)
+
+- [Report](releases/2026-10-16-gateway-transport-progress-burst-candidate-1.md): actual
+  baseline-derived G_CANDIDATE +unchanged C_NEW pass supported bursts both directions,
+  Family/TLS, stalls, SACK, slow consumer and lifecycle in fixed normal/race/multicore.
+- Installed-client ordinary compatibility/8/16 PASS; larger incoming burst and old
+  synchronous outbound stall remain explicit intermediate-version limitations.
+- Candidate binarya5372571…885e61f is built, not deployed. Source inventory72274642…665c42e;
+  only three product files, no supervisor/management/security/Android changes.
+- Full server suites retain baseline failures; exact differential shows no new failing
+  subtest. Extra async/resource12/36/12 PASS; no unjustified all-suite PASS claim.
+- Follow the [future-only runbook](../research/gateway-transport-progress-20261016/RUNBOOK.md)
+  only under a separate authorization: fresh environment/session/outage check, gateway
+  executable-only transition, current directory validation, then client update and
+  bounded owner reconnect acceptance. Do not silently perform renewal/recovery.
+- Preserve client artifacts without rebuilding/signing now; live/device NOT_RUN,
+  historical B NOT_PROVEN and previous owner reconnect FAIL/supervisor status unchanged.
+
 ### MIXED-PEER-RECEIVE-BURST-ACCEPTANCE-1 — local client correction; reverse gate FAIL
 
 - [Report](releases/2026-10-15-mixed-peer-receive-burst-acceptance-1.md) and
