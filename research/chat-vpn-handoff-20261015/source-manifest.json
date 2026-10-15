@@ -1,0 +1,66 @@
+{
+  "base_review": "4598287c82fcc35101574f19d4df30a70a763eb9",
+  "scope": "EXACT_RESEARCH84_DERIVATIVE_NOT_ACCEPTED_CANDIDATE",
+  "files": [
+    {
+      "path": "carrier/restrictedowner/owner.go",
+      "before_sha256": null,
+      "after_sha256": "8d4204a1af49254541dc464e59305c10ba348505703d5add2264c3efd2911995",
+      "bytes": 6125
+    },
+    {
+      "path": "carrier/restrictedowner/owner_test.go",
+      "before_sha256": null,
+      "after_sha256": "bf3e45dc0fdab8540eab7652237475ba7aed3bf15477af9aa9a0b70f6ccb157b",
+      "bytes": 10264
+    },
+    {
+      "path": "pilot/android-restricted/native/main.go",
+      "before_sha256": "75784f8bef32b6f3964bdae38a4fae9b86ff2edd90698d3d01ed080f7faa274a",
+      "after_sha256": "e9c8cb0959b56dc1051b89f000272f49f926578944619886c822aea1d185b392",
+      "bytes": 9925
+    },
+    {
+      "path": "pilot/android-restricted/native/chat.go",
+      "before_sha256": "ad8556ea7bf9f87fa94fa33b2c3ed1139771a14b74be244ae6812bfba666e6a4",
+      "after_sha256": "4f6a63b7d6f305442b73ef7adf880dbf54ae58e4baaaa9cca4370b369b578b45",
+      "bytes": 7848
+    },
+    {
+      "path": "pilot/android-restricted/native/bridge.c",
+      "before_sha256": "a6007f2a5b4b4fda1d3e76087c3a70c2b56abea9d6e5c123418614abd65b1eed",
+      "after_sha256": "89f37742fe0399477df70d97a3dc694dc6881196d25c3de76f38cba20ef4583e",
+      "bytes": 7498
+    },
+    {
+      "path": "pilot/android-restricted/native/chat_lab_check.go",
+      "before_sha256": "74336438ce9fd4380c6b392834fc6d9d2b837fdd770b59eaf29358f18d948980",
+      "after_sha256": "0dc717f18cfe9996ada100431b682c457064693409509be7943f4b832aaa22fb",
+      "bytes": 3457
+    },
+    {
+      "path": "pilot/android-restricted/native/chat_lab_bridge.c",
+      "before_sha256": "8e53bddbf2e1a0fb7570d31bc6de70f6f36ba4ca48fcfe632b2fa063b9f343d3",
+      "after_sha256": "2f6cf60795ffcd1e7ab70fc108cdbd40527393cf45a08a18d2856240095eee7c",
+      "bytes": 1698
+    },
+    {
+      "path": "clients/android/app/src/main/java/com/familyconnect/app/NativeRestricted.java",
+      "before_sha256": "f7ed710345c42a481505ebefd61ca4fdf6a29a3ad8d78a9c04a5302c04cf68a6",
+      "after_sha256": "2feb811258e9aa0c55cfda4ef194e1a01cd7b5ce4f2b8e1918dbaa9a93cb910e",
+      "bytes": 1236
+    },
+    {
+      "path": "clients/android/app/src/main/java/com/familyconnect/app/RestrictedTunnelEngine.java",
+      "before_sha256": "5bf6aec300dfd7dd6cb998ed8e7693da8a80edb708e50fb3fcd5d00aba22f0ff",
+      "after_sha256": "ff8bea6a852fc70cdae2ad01db7f4277d1fa17677f8ada5d93f3712ba62de875",
+      "bytes": 9347
+    },
+    {
+      "path": "clients/android/chat-runtime/app/src/lab/java/com/familyconnect/app/MessengerLabActivity.java",
+      "before_sha256": "7da011f7268b3edc668c461b41536137f405d447110f02079ac9294d1fb9a56c",
+      "after_sha256": "bdd6c8269398b6d70f96bd3639253e4bb783ce64aea42cd48c28b62c445fffac",
+      "bytes": 9004
+    }
+  ]
+}

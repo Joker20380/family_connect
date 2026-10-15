@@ -1,0 +1,249 @@
+{
+  "scope": "LOCAL_SOURCE_TESTS_NOT_ANDROID_EXECUTION",
+  "repetitions": {
+    "normal": 1,
+    "race": 3
+  },
+  "runs": [
+    {
+      "command": [
+        "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+        "test",
+        "-c",
+        "-tags=seedacceptance",
+        "-o",
+        "/tmp/fc-chat-vpn-handoff-1/matrix/restrictedowner-normal.test",
+        "./restrictedowner"
+      ],
+      "log": "restrictedowner-normal-build.log",
+      "exit": 0,
+      "elapsed_s": 7.776,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/fc-chat-vpn-handoff-1/matrix/restrictedowner-normal.test",
+        "-test.v",
+        "-test.run=^Test",
+        "-test.count=1",
+        "-test.timeout=90s"
+      ],
+      "log": "restrictedowner-normal.log",
+      "exit": 0,
+      "elapsed_s": 0.032,
+      "sha256": "c3c67905c0d2c091ed4c3d21b41cd00120c8e84429cfd47b003a69415ede6c21"
+    },
+    {
+      "command": [
+        "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+        "test",
+        "-c",
+        "-tags=seedacceptance",
+        "-o",
+        "/tmp/fc-chat-vpn-handoff-1/matrix/bootstrap-normal.test",
+        "./bootstrap"
+      ],
+      "log": "bootstrap-normal-build.log",
+      "exit": 0,
+      "elapsed_s": 13.451,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/fc-chat-vpn-handoff-1/matrix/bootstrap-normal.test",
+        "-test.v",
+        "-test.run=^Test(HandoffRealBroker|ReproAdmission)$",
+        "-test.count=1",
+        "-test.timeout=90s"
+      ],
+      "log": "bootstrap-normal.log",
+      "exit": 0,
+      "elapsed_s": 0.867,
+      "sha256": "6ec830f4d962733d09abd23658cf486fffcc74d2ff74bba7e1f6205216d5232f"
+    },
+    {
+      "command": [
+        "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+        "test",
+        "-c",
+        "-tags=seedacceptance",
+        "-o",
+        "/tmp/fc-chat-vpn-handoff-1/matrix/wholedevice-normal.test",
+        "./wholedevice"
+      ],
+      "log": "wholedevice-normal-build.log",
+      "exit": 0,
+      "elapsed_s": 1.923,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/fc-chat-vpn-handoff-1/matrix/wholedevice-normal.test",
+        "-test.v",
+        "-test.run=^Test(ProductionDeliveryRejectsBindingTrustExpiryBounds|CachedBootstrapCryptoDeadlinesAndRevocation|ProductionDeliveryToExistingFamilyMaterial)$",
+        "-test.count=1",
+        "-test.timeout=90s"
+      ],
+      "log": "wholedevice-normal.log",
+      "exit": 0,
+      "elapsed_s": 0.032,
+      "sha256": "12a14c98345604f3b27a70903097a4bee732d22ac527731f8b82f640158ae1eb"
+    },
+    {
+      "command": [
+        "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+        "test",
+        "-c",
+        "-tags=seedacceptance",
+        "-o",
+        "/tmp/fc-chat-vpn-handoff-1/matrix/familysession-normal.test",
+        "./familysession"
+      ],
+      "log": "familysession-normal-build.log",
+      "exit": 0,
+      "elapsed_s": 0.816,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/fc-chat-vpn-handoff-1/matrix/familysession-normal.test",
+        "-test.v",
+        "-test.run=^Test(AdmissionFailures|ExpiredLeaseAndBounds)$",
+        "-test.count=1",
+        "-test.timeout=90s"
+      ],
+      "log": "familysession-normal.log",
+      "exit": 0,
+      "elapsed_s": 1.87,
+      "sha256": "c53b66ab55158ee2e4d477d84829283e73faeaa712b9f95994a6d2f8a5c99907"
+    },
+    {
+      "command": [
+        "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+        "test",
+        "-c",
+        "-tags=seedacceptance",
+        "-o",
+        "/tmp/fc-chat-vpn-handoff-1/matrix/restrictedowner-race.test",
+        "-race",
+        "./restrictedowner"
+      ],
+      "log": "restrictedowner-race-build.log",
+      "exit": 0,
+      "elapsed_s": 12.938,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/fc-chat-vpn-handoff-1/matrix/restrictedowner-race.test",
+        "-test.v",
+        "-test.run=^Test",
+        "-test.count=3",
+        "-test.timeout=90s"
+      ],
+      "log": "restrictedowner-race.log",
+      "exit": 0,
+      "elapsed_s": 1.168,
+      "sha256": "935315fd077c3caafaa73879dac1d360a1d2f99cd2e65a3dc2c3cf038dfa9cd6"
+    },
+    {
+      "command": [
+        "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+        "test",
+        "-c",
+        "-tags=seedacceptance",
+        "-o",
+        "/tmp/fc-chat-vpn-handoff-1/matrix/bootstrap-race.test",
+        "-race",
+        "./bootstrap"
+      ],
+      "log": "bootstrap-race-build.log",
+      "exit": 0,
+      "elapsed_s": 18.544,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/fc-chat-vpn-handoff-1/matrix/bootstrap-race.test",
+        "-test.v",
+        "-test.run=^Test(HandoffRealBroker|ReproAdmission)$",
+        "-test.count=3",
+        "-test.timeout=90s"
+      ],
+      "log": "bootstrap-race.log",
+      "exit": 0,
+      "elapsed_s": 4.275,
+      "sha256": "f5c2927dc0b40bc0393f17d7aa533335543ce245b3fdeac17cbb3560ecd972fc"
+    },
+    {
+      "command": [
+        "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+        "test",
+        "-c",
+        "-tags=seedacceptance",
+        "-o",
+        "/tmp/fc-chat-vpn-handoff-1/matrix/wholedevice-race.test",
+        "-race",
+        "./wholedevice"
+      ],
+      "log": "wholedevice-race-build.log",
+      "exit": 0,
+      "elapsed_s": 2.321,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/fc-chat-vpn-handoff-1/matrix/wholedevice-race.test",
+        "-test.v",
+        "-test.run=^Test(ProductionDeliveryRejectsBindingTrustExpiryBounds|CachedBootstrapCryptoDeadlinesAndRevocation|ProductionDeliveryToExistingFamilyMaterial)$",
+        "-test.count=3",
+        "-test.timeout=90s"
+      ],
+      "log": "wholedevice-race.log",
+      "exit": 0,
+      "elapsed_s": 1.267,
+      "sha256": "fca61719c6ab0ab42de4dbd773087336d8c810e61ba172ca143349a8fbc0e084"
+    },
+    {
+      "command": [
+        "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+        "test",
+        "-c",
+        "-tags=seedacceptance",
+        "-o",
+        "/tmp/fc-chat-vpn-handoff-1/matrix/familysession-race.test",
+        "-race",
+        "./familysession"
+      ],
+      "log": "familysession-race-build.log",
+      "exit": 0,
+      "elapsed_s": 1.067,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/tmp/fc-chat-vpn-handoff-1/matrix/familysession-race.test",
+        "-test.v",
+        "-test.run=^Test(AdmissionFailures|ExpiredLeaseAndBounds)$",
+        "-test.count=3",
+        "-test.timeout=90s"
+      ],
+      "log": "familysession-race.log",
+      "exit": 0,
+      "elapsed_s": 7.131,
+      "sha256": "ed540d2de7ccc8880acaba3b05040826b47bf75a48ceb34a784a1a090966d87f"
+    }
+  ],
+  "go": "go version go1.26.1 linux/amd64",
+  "binaries": {
+    "restrictedowner-normal.test": "d589cc6b32c6a688c12ff1481e8cc313ec7130726ccff7531fe5b463afc0a8b0",
+    "bootstrap-normal.test": "9277ab43feff1723c5426dfedfdfc1aae39b35934eff89b8cdac1b2ce2ab0d03",
+    "wholedevice-normal.test": "2aa58dbf95087c63c3cdcddfba274a8039e458401071ebc6cee1e7b96df3a634",
+    "familysession-normal.test": "be99ce164df71be73fcea45b31345ffba50bba0e81f2541c199e6ea2db55be99",
+    "restrictedowner-race.test": "f40a736dcda2161db5b6229c945fa69f20a93662ee2e4ff7a742527f4fb2e724",
+    "bootstrap-race.test": "e02b215b0e514f12077a77bde5a697ce5b0cbeb00c20cae61d1af176e8738825",
+    "wholedevice-race.test": "7c45bf66379a4df67999386467a6136f7520b549fdf42927cb596117a71c6a4b",
+    "familysession-race.test": "dbc73738c39643e3143eb5cae1ae0c2ca82283ab34aa9505d6ca440398fb14e7"
+  },
+  "result": "PASS"
+}

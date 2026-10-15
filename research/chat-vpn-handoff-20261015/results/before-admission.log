@@ -1,0 +1,11 @@
+=== RUN   TestReproAdmission
+=== RUN   TestReproAdmission/B_active_same_deadline
+    admission_repro_test.go:291: REPRO ownership {"action":"busy","present":true,"reason":"device_busy","same_identity":"true","sequence":9,"state":"ACTIVE"}
+    admission_repro_test.go:291: REPRO ownership {"action":"wait","present":true,"reason":"device_busy","same_identity":"true","sequence":10,"state":"ACTIVE"}
+    admission_repro_test.go:291: REPRO ownership {"action":"wait_end","present":true,"reason":"context_deadline","same_identity":"true","sequence":11,"state":"ACTIVE"}
+    admission_repro_test.go:291: REPRO ownership {"action":"busy","present":true,"reason":"device_busy","same_identity":"true","sequence":12,"state":"ACTIVE"}
+    admission_repro_test.go:297: REPRO admission {"hello_received":0,"hello_sent":0,"recv":{"cause_canceled":false,"cause_deadline":true,"closed_pipe":false,"context_canceled":false,"context_cause_type":"context.deadlineExceededError","context_deadline":false,"ctx_canceled":false,"ctx_deadline":true,"ctx_err_type":"context.deadlineExceededError","eof":false,"go_type":"*net.OpError","os_deadline":true,"timeout":true,"timeout_implemented":true,"unexpected_eof":false},"scenario":"B_active_same_deadline","server_error":{"cause_canceled":false,"cause_deadline":true,"closed_pipe":false,"context_canceled":false,"context_cause_type":"context.deadlineExceededError","context_deadline":true,"ctx_canceled":false,"ctx_deadline":true,"ctx_err_type":"context.deadlineExceededError","eof":false,"go_type":"context.deadlineExceededError","os_deadline":false,"timeout":true,"timeout_implemented":true,"unexpected_eof":false},"startup":{"schema":1,"attempt":1,"started_unix_ms":1792065463839,"observed_ms":200,"completed_ms":200,"complete":true,"status":"FAILED","stage":"HELLO_RECEIVE","cause":"UNKNOWN"}}
+    admission_repro_test.go:135: REPRO cleanup {"broker_close_returned":true,"gateways":1}
+--- PASS: TestReproAdmission (0.32s)
+    --- PASS: TestReproAdmission/B_active_same_deadline (0.32s)
+PASS

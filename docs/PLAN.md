@@ -8,6 +8,19 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### RESTRICTED-CHAT-VPN-HANDOFF-1 — implemented and locally tested (15.10)
+
+- [Product-source derivative and evidence](releases/2026-10-15-restricted-chat-vpn-handoff-1.md):
+  KNOWN_CALLER_CONFLICT_FIXED_LOCALLY, not another characterization-only result.
+- Completed reserve/drain/join/open/borrow contract, stale-generation/worker ownership,
+  shared startup budget, host normal/race tests and local Java/JNI compatibility builds.
+- Review the exact-base patch and limitations before separately authorizing Android
+  runtime integration. No new accepted/release candidate or automatic device test.
+- Keep DEVICE_ACCEPTANCE=NOT_RUN, PRODUCTION_ACCEPTANCE=FAIL and historical causal
+  binding NOT_PROVEN. Do not resume A/B/C, recovery acceptance or production here.
+- Context-qualified deadline/closed-pipe classification remains a separate next
+  change; no classifier patch included in this ownership implementation.
+
 ### BOOTSTRAP-HELLO-ADMISSION-REPRO-1 — terminal SOURCE_CHARACTERIZATION PASS (15.10)
 
 - [Completed characterization](releases/2026-10-15-bootstrap-hello-admission-repro-1.md):

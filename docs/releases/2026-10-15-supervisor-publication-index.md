@@ -7,6 +7,15 @@ Production FAIL сохраняется; root cause не доказана. Сна
 
 ## Начать здесь
 
+- [Restricted chat → VPN handoff — локально реализован](2026-10-15-restricted-chat-vpn-handoff-1.md):
+  новый отдельно разрешённый product patch в изолированной research84 derivative,
+  не правка архивных snapshots/root main. [Diff, before/after files, tests, runners](../../research/chat-vpn-handoff-20261015/README.md)
+  и фиксированные normal/race/build receipts опубликованы для review. Это расширение
+  первоначальной publication-only задачи; source SHA APK и frozen identities прежние.
+  Native/Java compile PASS не является device acceptance; historical binding
+  NOT_PROVEN и production FAIL сохраняются. Бинарники/полный retained Android build
+  context остаются локальными, как явно описано в отчёте.
+
 - [Штатный support export — EVIDENCE_RECOVERED](2026-10-15-owner-support-export-and-triage-1.md):
   получен один указанный владельцем JSON; ring/incident содержат matching C1/I1.
   Complete startup FAILED на HELLO_RECEIVE доказан до descriptor/dedicated startup,

@@ -1,0 +1,50 @@
+[
+  {
+    "log": "bootstrap-normal.log",
+    "sha256": "6ec830f4d962733d09abd23658cf486fffcc74d2ff74bba7e1f6205216d5232f",
+    "pass_lines": 6,
+    "fail_lines": 0
+  },
+  {
+    "log": "bootstrap-race.log",
+    "sha256": "f5c2927dc0b40bc0393f17d7aa533335543ce245b3fdeac17cbb3560ecd972fc",
+    "pass_lines": 18,
+    "fail_lines": 0
+  },
+  {
+    "log": "familysession-normal.log",
+    "sha256": "c53b66ab55158ee2e4d477d84829283e73faeaa712b9f95994a6d2f8a5c99907",
+    "pass_lines": 16,
+    "fail_lines": 0
+  },
+  {
+    "log": "familysession-race.log",
+    "sha256": "ed540d2de7ccc8880acaba3b05040826b47bf75a48ceb34a784a1a090966d87f",
+    "pass_lines": 48,
+    "fail_lines": 0
+  },
+  {
+    "log": "restrictedowner-normal.log",
+    "sha256": "c3c67905c0d2c091ed4c3d21b41cd00120c8e84429cfd47b003a69415ede6c21",
+    "pass_lines": 11,
+    "fail_lines": 0
+  },
+  {
+    "log": "restrictedowner-race.log",
+    "sha256": "935315fd077c3caafaa73879dac1d360a1d2f99cd2e65a3dc2c3cf038dfa9cd6",
+    "pass_lines": 33,
+    "fail_lines": 0
+  },
+  {
+    "log": "wholedevice-normal.log",
+    "sha256": "12a14c98345604f3b27a70903097a4bee732d22ac527731f8b82f640158ae1eb",
+    "pass_lines": 11,
+    "fail_lines": 0
+  },
+  {
+    "log": "wholedevice-race.log",
+    "sha256": "fca61719c6ab0ab42de4dbd773087336d8c810e61ba172ca143349a8fbc0e084",
+    "pass_lines": 33,
+    "fail_lines": 0
+  }
+]

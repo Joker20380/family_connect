@@ -1,0 +1,15 @@
+{
+  "base": "f5240994869826c6a28f59e58e38256c688cf6eb",
+  "source_delta_sha256": "d7907697d71f119c21bced533f08abae06ae33ef9159c5fd9bd54cf031a481e7",
+  "files": {
+    "clients/android/app/build.gradle": "612c2275f882743dafc91f63df3947e50c98508fc493d656f51c51f92b045cd4",
+    "clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java": "3a39576e727efe83eec8bc4127a9ae4107df6ab55d1f184af644ac8c1c7554f1",
+    "clients/android/app/src/main/java/com/familyconnect/app/FriendsRestricted.java": "3f0432ceff8cb7befd5e3c950fe7be5c19d4c40a836afe38a8893cbb9768b67d",
+    "clients/android/app/src/provisioningDisabled/java/com/familyconnect/app/ProvisioningTestGate.java": "a9473243b585383eb390bdad0f918c8722adef5cf8194533bd95ec928a586346",
+    "clients/android/app/src/provisioningResearch/java/com/familyconnect/app/ProvisioningTestGate.java": "7a99dfe77bb174f8be4a27f125cc0a9b05be17726ed4c12095882304d98e92d7",
+    "clients/android/app/src/provisioningResearch/java/com/familyconnect/app/ProvisioningWindow.java": "95402c748f7ae511f4fa65e3189b2568da4df6948c035bd547bc8629b528e69b",
+    "clients/android/app/src/testResearchProvisioning/java/com/familyconnect/app/ProvisioningWindowTest.java": "bd120dc2e51f336296d3da6e5d93d720cbb904f87eb91dae9c05c0ee227ecb0c",
+    "pilot/android-restricted/verify_provisioning_research.py": "7475986ebe9ee634df5bb0687b0b5375a20e6b7e66bc8f24069c4d119d652746"
+  },
+  "isolated": true
+}

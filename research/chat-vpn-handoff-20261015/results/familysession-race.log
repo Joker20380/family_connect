@@ -1,0 +1,97 @@
+=== RUN   TestAdmissionFailures
+=== RUN   TestAdmissionFailures/wrong-family
+=== RUN   TestAdmissionFailures/stale-revision
+=== RUN   TestAdmissionFailures/wrong-gateway
+=== RUN   TestAdmissionFailures/unknown-authority
+=== RUN   TestAdmissionFailures/stale-crl
+=== RUN   TestAdmissionFailures/bad-crl
+=== RUN   TestAdmissionFailures/bad-key
+=== RUN   TestAdmissionFailures/role
+=== RUN   TestAdmissionFailures/expired-certificate
+--- PASS: TestAdmissionFailures (1.42s)
+    --- PASS: TestAdmissionFailures/wrong-family (0.12s)
+    --- PASS: TestAdmissionFailures/stale-revision (0.13s)
+    --- PASS: TestAdmissionFailures/wrong-gateway (0.13s)
+    --- PASS: TestAdmissionFailures/unknown-authority (0.15s)
+    --- PASS: TestAdmissionFailures/stale-crl (0.21s)
+    --- PASS: TestAdmissionFailures/bad-crl (0.21s)
+    --- PASS: TestAdmissionFailures/bad-key (0.22s)
+    --- PASS: TestAdmissionFailures/role (0.12s)
+    --- PASS: TestAdmissionFailures/expired-certificate (0.13s)
+=== RUN   TestExpiredLeaseAndBounds
+=== RUN   TestExpiredLeaseAndBounds/expired
+=== RUN   TestExpiredLeaseAndBounds/oversized
+=== RUN   TestExpiredLeaseAndBounds/repeated-sequence
+=== RUN   TestExpiredLeaseAndBounds/cancel-read
+=== RUN   TestExpiredLeaseAndBounds/deadline-read
+--- PASS: TestExpiredLeaseAndBounds (0.64s)
+    --- PASS: TestExpiredLeaseAndBounds/expired (0.12s)
+    --- PASS: TestExpiredLeaseAndBounds/oversized (0.12s)
+    --- PASS: TestExpiredLeaseAndBounds/repeated-sequence (0.12s)
+    --- PASS: TestExpiredLeaseAndBounds/cancel-read (0.13s)
+    --- PASS: TestExpiredLeaseAndBounds/deadline-read (0.15s)
+=== RUN   TestAdmissionFailures
+=== RUN   TestAdmissionFailures/wrong-family
+=== RUN   TestAdmissionFailures/stale-revision
+=== RUN   TestAdmissionFailures/wrong-gateway
+=== RUN   TestAdmissionFailures/unknown-authority
+=== RUN   TestAdmissionFailures/stale-crl
+=== RUN   TestAdmissionFailures/bad-crl
+=== RUN   TestAdmissionFailures/bad-key
+=== RUN   TestAdmissionFailures/role
+=== RUN   TestAdmissionFailures/expired-certificate
+--- PASS: TestAdmissionFailures (1.38s)
+    --- PASS: TestAdmissionFailures/wrong-family (0.13s)
+    --- PASS: TestAdmissionFailures/stale-revision (0.12s)
+    --- PASS: TestAdmissionFailures/wrong-gateway (0.12s)
+    --- PASS: TestAdmissionFailures/unknown-authority (0.13s)
+    --- PASS: TestAdmissionFailures/stale-crl (0.21s)
+    --- PASS: TestAdmissionFailures/bad-crl (0.21s)
+    --- PASS: TestAdmissionFailures/bad-key (0.21s)
+    --- PASS: TestAdmissionFailures/role (0.12s)
+    --- PASS: TestAdmissionFailures/expired-certificate (0.12s)
+=== RUN   TestExpiredLeaseAndBounds
+=== RUN   TestExpiredLeaseAndBounds/expired
+=== RUN   TestExpiredLeaseAndBounds/oversized
+=== RUN   TestExpiredLeaseAndBounds/repeated-sequence
+=== RUN   TestExpiredLeaseAndBounds/cancel-read
+=== RUN   TestExpiredLeaseAndBounds/deadline-read
+--- PASS: TestExpiredLeaseAndBounds (0.64s)
+    --- PASS: TestExpiredLeaseAndBounds/expired (0.12s)
+    --- PASS: TestExpiredLeaseAndBounds/oversized (0.13s)
+    --- PASS: TestExpiredLeaseAndBounds/repeated-sequence (0.12s)
+    --- PASS: TestExpiredLeaseAndBounds/cancel-read (0.13s)
+    --- PASS: TestExpiredLeaseAndBounds/deadline-read (0.14s)
+=== RUN   TestAdmissionFailures
+=== RUN   TestAdmissionFailures/wrong-family
+=== RUN   TestAdmissionFailures/stale-revision
+=== RUN   TestAdmissionFailures/wrong-gateway
+=== RUN   TestAdmissionFailures/unknown-authority
+=== RUN   TestAdmissionFailures/stale-crl
+=== RUN   TestAdmissionFailures/bad-crl
+=== RUN   TestAdmissionFailures/bad-key
+=== RUN   TestAdmissionFailures/role
+=== RUN   TestAdmissionFailures/expired-certificate
+--- PASS: TestAdmissionFailures (1.36s)
+    --- PASS: TestAdmissionFailures/wrong-family (0.12s)
+    --- PASS: TestAdmissionFailures/stale-revision (0.12s)
+    --- PASS: TestAdmissionFailures/wrong-gateway (0.13s)
+    --- PASS: TestAdmissionFailures/unknown-authority (0.12s)
+    --- PASS: TestAdmissionFailures/stale-crl (0.21s)
+    --- PASS: TestAdmissionFailures/bad-crl (0.21s)
+    --- PASS: TestAdmissionFailures/bad-key (0.21s)
+    --- PASS: TestAdmissionFailures/role (0.12s)
+    --- PASS: TestAdmissionFailures/expired-certificate (0.12s)
+=== RUN   TestExpiredLeaseAndBounds
+=== RUN   TestExpiredLeaseAndBounds/expired
+=== RUN   TestExpiredLeaseAndBounds/oversized
+=== RUN   TestExpiredLeaseAndBounds/repeated-sequence
+=== RUN   TestExpiredLeaseAndBounds/cancel-read
+=== RUN   TestExpiredLeaseAndBounds/deadline-read
+--- PASS: TestExpiredLeaseAndBounds (0.67s)
+    --- PASS: TestExpiredLeaseAndBounds/expired (0.13s)
+    --- PASS: TestExpiredLeaseAndBounds/oversized (0.14s)
+    --- PASS: TestExpiredLeaseAndBounds/repeated-sequence (0.13s)
+    --- PASS: TestExpiredLeaseAndBounds/cancel-read (0.13s)
+    --- PASS: TestExpiredLeaseAndBounds/deadline-read (0.14s)
+PASS

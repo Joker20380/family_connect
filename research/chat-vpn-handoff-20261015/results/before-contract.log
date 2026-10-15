@@ -1,0 +1,5 @@
+FAIL VPN reserves shared gate before bootstrap
+FAIL VPN awaits real cleanup before bootstrap
+FAIL chat acquires through same production gate
+FAIL chat does not take ownerMu
+PASS Java can reacquire cancelled handles

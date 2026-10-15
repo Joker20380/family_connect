@@ -1,0 +1,24 @@
+=== RUN   TestChatFirstCleanupGate
+--- PASS: TestChatFirstCleanupGate (0.00s)
+=== RUN   TestVPNFirstDisconnectStaleGeneration
+--- PASS: TestVPNFirstDisconnectStaleGeneration (0.00s)
+=== RUN   TestOpeningLatePublication
+--- PASS: TestOpeningLatePublication (0.00s)
+=== RUN   TestCancellationAndStartupFailure
+=== RUN   TestCancellationAndStartupFailure/before_reserve
+=== RUN   TestCancellationAndStartupFailure/during_cleanup
+=== RUN   TestCancellationAndStartupFailure/after_cleanup
+=== RUN   TestCancellationAndStartupFailure/startup_failure
+=== RUN   TestCancellationAndStartupFailure/budget
+--- PASS: TestCancellationAndStartupFailure (0.01s)
+    --- PASS: TestCancellationAndStartupFailure/before_reserve (0.00s)
+    --- PASS: TestCancellationAndStartupFailure/during_cleanup (0.00s)
+    --- PASS: TestCancellationAndStartupFailure/after_cleanup (0.00s)
+    --- PASS: TestCancellationAndStartupFailure/startup_failure (0.00s)
+    --- PASS: TestCancellationAndStartupFailure/budget (0.01s)
+=== RUN   TestSimultaneousAcquireReserve
+--- PASS: TestSimultaneousAcquireReserve (0.00s)
+=== RUN   TestCompatibilityExpiryAndFailure
+--- PASS: TestCompatibilityExpiryAndFailure (0.01s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/restrictedowner	0.024s

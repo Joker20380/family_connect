@@ -1,5 +1,25 @@
 # Текущее состояние / Current state
 
+## RESTRICTED-CHAT-VPN-HANDOFF-1 — KNOWN_CALLER_CONFLICT_FIXED_LOCALLY (15.10)
+
+Implemented an isolated exact-research84 derivative: process-local VPN reservation,
+independent chat cancellation and joined cleanup, then ordinary bootstrap and strict
+profile-compatible borrowing. Native request/mailbox workers and JNI disposal are
+inside the cleanup boundary; stale handles/generations cannot close a replacement.
+Existing total connect budget is passed Java→JNI; no timeout/security/server change.
+Production coordinator, real Broker/Family-TLS handoff, unchanged broker A–D and
+targeted security tests PASS: fixed one normal + three race suite repetitions.
+Three arm64 JNI variants and Java/generated-header C contract compile/link PASS;
+not Android/JNI runtime, full APK, DNS/HTTPS or provider acceptance. Before caller
+evidence is a failed source contract plus real blocked server B, not a device test.
+See [implementation report](releases/2026-10-15-restricted-chat-vpn-handoff-1.md) and
+[actual patch/tests/build receipts](../research/chat-vpn-handoff-20261015/README.md).
+Root dirty checkout, frozen snapshots, main and installed artifacts unchanged.
+DEVICE_ACCEPTANCE=NOT_RUN; PRODUCTION_ACCEPTANCE=FAIL; HISTORICAL_CAUSAL_BINDING=
+NOT_PROVEN. Diagnostic deadline/closed-pipe classification is still unmodified.
+No owner/runtime/provider/deployment/release action; only authorized review source
+and documentation publication. Device integration and classification remain open.
+
 ## BOOTSTRAP-HELLO-ADMISSION-REPRO-1 — SOURCE_CHARACTERIZATION PASS (15.10)
 
 Real Broker/Exchange + local Family/TLS reproduce same-identity ACTIVE admission

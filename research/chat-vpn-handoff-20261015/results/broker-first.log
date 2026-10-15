@@ -1,0 +1,6 @@
+=== RUN   TestHandoffRealBroker
+    handoff_test.go:123: REPRO handoff {"borrowed":true,"hello_received":1,"independent_chat_opens":1,"local_cleanup_joined":true,"new_grant_sequence":17,"old_release_sequence":15,"server_cleanup_is_separate":true}
+    admission_repro_test.go:135: REPRO cleanup {"broker_close_returned":true,"gateways":2}
+--- PASS: TestHandoffRealBroker (0.13s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/bootstrap	0.137s

@@ -1,0 +1,1329 @@
+--- /dev/null
++++ b/carrier/restrictedowner/owner.go
+@@ -0,0 +1,284 @@
++package restrictedowner
++
++import (
++	"context"
++	"errors"
++	"sync"
++	"time"
++)
++
++var ErrBusy = errors.New("restricted ownership unavailable")
++
++type Session interface {
++	Close()
++	Failed() bool
++}
++
++type OpenChat func(context.Context) (Session, func(), error)
++
++type Coordinator struct {
++	mu   sync.Mutex
++	chat *chatOwner
++	vpn  *VPN
++}
++
++type chatOwner struct {
++	ctx     context.Context
++	cancel  context.CancelFunc
++	ready   chan struct{}
++	done    chan struct{}
++	profile [32]byte
++	session Session
++	refs    int
++	workers sync.WaitGroup
++	closing bool
++}
++
++type Chat struct {
++	manager  *Coordinator
++	owner    *chatOwner
++	ctx      context.Context
++	cancel   context.CancelFunc
++	borrowed Session
++	vpn      *VPN
++	released bool
++}
++
++type VPN struct {
++	manager *Coordinator
++	ctx     context.Context
++	cancel  context.CancelFunc
++	drained <-chan struct{}
++	session Session
++	profile [32]byte
++	workers sync.WaitGroup
++}
++
++func (manager *Coordinator) AcquireChat(expiry time.Time, profile [32]byte, open OpenChat, dispose func()) (*Chat, error) {
++	manager.mu.Lock()
++	if !time.Now().Before(expiry) {
++		manager.mu.Unlock()
++		dispose()
++		return nil, ErrBusy
++	}
++	if vpn := manager.vpn; vpn != nil {
++		if vpn.ctx.Err() != nil || vpn.session == nil || vpn.session.Failed() || vpn.profile != profile || profile == [32]byte{} {
++			manager.mu.Unlock()
++			dispose()
++			return nil, ErrBusy
++		}
++		ctx, cancel := context.WithDeadline(vpn.ctx, expiry)
++		lease := &Chat{manager: manager, ctx: ctx, cancel: cancel, borrowed: vpn.session, vpn: vpn}
++		manager.mu.Unlock()
++		dispose()
++		return lease, nil
++	}
++	owned := manager.chat
++	if owned != nil && (owned.ctx.Err() != nil || owned.profile != profile || (owned.session != nil && owned.session.Failed())) {
++		manager.mu.Unlock()
++		dispose()
++		return nil, ErrBusy
++	}
++	created := owned == nil
++	if created {
++		ctx, cancel := context.WithDeadline(context.Background(), expiry)
++		owned = &chatOwner{ctx: ctx, cancel: cancel, ready: make(chan struct{}), done: make(chan struct{}), profile: profile}
++		manager.chat = owned
++	}
++	owned.refs++
++	ctx, cancel := context.WithDeadline(owned.ctx, expiry)
++	lease := &Chat{manager: manager, owner: owned, ctx: ctx, cancel: cancel}
++	manager.mu.Unlock()
++	if created {
++		go manager.runChat(owned, open, dispose)
++	} else {
++		dispose()
++	}
++	return lease, nil
++}
++
++func (manager *Coordinator) runChat(owned *chatOwner, open OpenChat, dispose func()) {
++	var session Session
++	var cleanup func()
++	var err error
++	if owned.ctx.Err() == nil {
++		session, cleanup, err = open(owned.ctx)
++	}
++	manager.mu.Lock()
++	if err != nil || session == nil || owned.ctx.Err() != nil {
++		owned.cancel()
++	} else {
++		owned.session = session
++	}
++	close(owned.ready)
++	manager.mu.Unlock()
++	<-owned.ctx.Done()
++	manager.mu.Lock()
++	owned.closing = true
++	manager.mu.Unlock()
++	if session != nil {
++		session.Close()
++	}
++	owned.workers.Wait()
++	if cleanup != nil {
++		cleanup()
++	}
++	dispose()
++	manager.mu.Lock()
++	if manager.chat == owned {
++		manager.chat = nil
++	}
++	close(owned.done)
++	manager.mu.Unlock()
++}
++
++func (lease *Chat) Context() context.Context { return lease.ctx }
++
++func (lease *Chat) Work() (func(), error) {
++	lease.manager.mu.Lock()
++	defer lease.manager.mu.Unlock()
++	if lease.ctx.Err() != nil {
++		return nil, ErrBusy
++	}
++	var workers *sync.WaitGroup
++	if lease.owner != nil {
++		if lease.owner.closing {
++			return nil, ErrBusy
++		}
++		workers = &lease.owner.workers
++	} else {
++		workers = &lease.vpn.workers
++	}
++	workers.Add(1)
++	return sync.OnceFunc(workers.Done), nil
++}
++
++func (lease *Chat) State() int32 {
++	lease.manager.mu.Lock()
++	defer lease.manager.mu.Unlock()
++	if lease.ctx.Err() != nil {
++		return -1
++	}
++	if lease.borrowed != nil {
++		if lease.borrowed.Failed() {
++			return -1
++		}
++		return 2
++	}
++	select {
++	case <-lease.owner.ready:
++		if lease.owner.session == nil || lease.owner.session.Failed() {
++			return -1
++		}
++		return 1
++	default:
++		return 0
++	}
++}
++
++func (lease *Chat) Session(ctx context.Context) (Session, error) {
++	if lease.owner != nil {
++		select {
++		case <-lease.owner.ready:
++		case <-lease.ctx.Done():
++			return nil, lease.ctx.Err()
++		case <-ctx.Done():
++			return nil, ctx.Err()
++		}
++	}
++	lease.manager.mu.Lock()
++	defer lease.manager.mu.Unlock()
++	if lease.ctx.Err() != nil || ctx.Err() != nil {
++		return nil, ErrBusy
++	}
++	session := lease.borrowed
++	if session == nil {
++		session = lease.owner.session
++	}
++	if session == nil || session.Failed() {
++		return nil, ErrBusy
++	}
++	return session, nil
++}
++
++func (lease *Chat) Release() {
++	lease.manager.mu.Lock()
++	defer lease.manager.mu.Unlock()
++	if lease.released {
++		return
++	}
++	lease.released = true
++	lease.cancel()
++	if lease.owner != nil {
++		lease.owner.refs--
++		if lease.owner.refs == 0 {
++			lease.owner.cancel()
++		}
++	}
++}
++
++func (manager *Coordinator) ReserveVPN(parent context.Context) (*VPN, error) {
++	manager.mu.Lock()
++	defer manager.mu.Unlock()
++	if manager.vpn != nil || parent.Err() != nil {
++		return nil, ErrBusy
++	}
++	ctx, cancel := context.WithCancel(parent)
++	drained := make(chan struct{})
++	vpn := &VPN{manager: manager, ctx: ctx, cancel: cancel, drained: drained}
++	manager.vpn = vpn
++	if manager.chat != nil {
++		vpn.drained = manager.chat.done
++		manager.chat.cancel()
++	} else {
++		close(drained)
++	}
++	return vpn, nil
++}
++
++func (vpn *VPN) Wait(ctx context.Context) error {
++	select {
++	case <-vpn.drained:
++	case <-ctx.Done():
++		return ctx.Err()
++	case <-vpn.ctx.Done():
++		return vpn.ctx.Err()
++	}
++	vpn.manager.mu.Lock()
++	defer vpn.manager.mu.Unlock()
++	if vpn.manager.vpn != vpn || vpn.ctx.Err() != nil || ctx.Err() != nil {
++		return ErrBusy
++	}
++	return nil
++}
++
++func (vpn *VPN) Publish(session Session, profile [32]byte) error {
++	vpn.manager.mu.Lock()
++	defer vpn.manager.mu.Unlock()
++	select {
++	case <-vpn.drained:
++	default:
++		return ErrBusy
++	}
++	if vpn.manager.vpn != vpn || vpn.ctx.Err() != nil || session == nil || session.Failed() || vpn.session != nil {
++		return ErrBusy
++	}
++	vpn.session, vpn.profile = session, profile
++	return nil
++}
++
++func (vpn *VPN) Drain() {
++	vpn.manager.mu.Lock()
++	vpn.cancel()
++	vpn.manager.mu.Unlock()
++	vpn.workers.Wait()
++}
++
++func (vpn *VPN) Release() {
++	vpn.Drain()
++	vpn.manager.mu.Lock()
++	defer vpn.manager.mu.Unlock()
++	if vpn.manager.vpn == vpn {
++		vpn.manager.vpn = nil
++	}
++}
+--- /dev/null
++++ b/carrier/restrictedowner/owner_test.go
+@@ -0,0 +1,362 @@
++package restrictedowner
++
++import (
++	"context"
++	"errors"
++	"sync"
++	"sync/atomic"
++	"testing"
++	"time"
++)
++
++type testSession struct {
++	closed atomic.Int32
++	close  func()
++}
++
++func (session *testSession) Close() {
++	if session.closed.Add(1) != 1 {
++		panic("duplicate session close")
++	}
++	if session.close != nil {
++		session.close()
++	}
++}
++func (session *testSession) Failed() bool { return session.closed.Load() != 0 }
++
++func bounded(test *testing.T) context.Context {
++	test.Helper()
++	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
++	test.Cleanup(cancel)
++	return ctx
++}
++
++func await(test *testing.T, ctx context.Context, ready <-chan struct{}) {
++	test.Helper()
++	select {
++	case <-ready:
++	case <-ctx.Done():
++		test.Fatal("bounded synchronization failed")
++	}
++}
++
++func acquire(test *testing.T, manager *Coordinator, profile byte, open OpenChat, dispose func()) *Chat {
++	test.Helper()
++	lease, err := manager.AcquireChat(time.Now().Add(time.Minute), [32]byte{profile}, open, dispose)
++	if err != nil {
++		test.Fatal(err)
++	}
++	test.Cleanup(lease.Release)
++	return lease
++}
++
++func forbidden(context.Context) (Session, func(), error) { panic("independent open forbidden") }
++func nothing()                                           {}
++
++func TestChatFirstCleanupGate(test *testing.T) {
++	ctx := bounded(test)
++	var manager Coordinator
++	closing, allowClose, disposed := make(chan struct{}), make(chan struct{}), make(chan struct{})
++	permitClose := sync.OnceFunc(func() { close(allowClose) })
++	defer permitClose()
++	var order atomic.Int32
++	old := &testSession{close: func() { close(closing); <-allowClose; order.Store(1) }}
++	chat := acquire(test, &manager, 1, func(context.Context) (Session, func(), error) {
++		return old, func() {
++			if order.Load() != 1 {
++				panic("underlay before session cleanup")
++			}
++			order.Store(2)
++		}, nil
++	}, func() {
++		if order.Load() != 2 {
++			panic("JNI before underlay cleanup")
++		}
++		order.Store(3)
++		close(disposed)
++	})
++	if _, err := chat.Session(ctx); err != nil {
++		test.Fatal(err)
++	}
++	workerDone, err := chat.Work()
++	if err != nil {
++		test.Fatal(err)
++	}
++	vpn, err := manager.ReserveVPN(ctx)
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer vpn.Release()
++	await(test, ctx, closing)
++	if chat.State() != -1 {
++		test.Fatal("stale chat remains usable")
++	}
++	if lease, err := manager.AcquireChat(time.Now().Add(time.Minute), [32]byte{2}, forbidden, nothing); err == nil || lease != nil {
++		test.Fatal("new profile bypassed VPN reservation")
++	}
++	if vpn.Publish(&testSession{}, [32]byte{1}) == nil {
++		test.Fatal("READY before cleanup")
++	}
++	permitClose()
++	select {
++	case <-disposed:
++		test.Fatal("JNI released with worker alive")
++	default:
++	}
++	workerDone()
++	workerDone()
++	if err := vpn.Wait(ctx); err != nil {
++		test.Fatal(err)
++	}
++	await(test, ctx, disposed)
++	if order.Load() != 3 {
++		test.Fatal("gate passed before full cleanup")
++	}
++	active := &testSession{}
++	if err := vpn.Publish(active, [32]byte{1}); err != nil {
++		test.Fatal(err)
++	}
++	borrowed := acquire(test, &manager, 1, forbidden, nothing)
++	if borrowed.State() != 2 {
++		test.Fatal("not borrowed")
++	}
++	chat.Release()
++	chat.Release()
++	borrowed.Release()
++	if active.Failed() || old.closed.Load() != 1 {
++		test.Fatal("incorrect resource ownership")
++	}
++	vpn.Release()
++	active.Close()
++	await(test, ctx, chat.owner.done)
++}
++
++func TestVPNFirstDisconnectStaleGeneration(test *testing.T) {
++	ctx := bounded(test)
++	var manager Coordinator
++	vpn, err := manager.ReserveVPN(ctx)
++	if err != nil {
++		test.Fatal(err)
++	}
++	active := &testSession{}
++	if vpn.Wait(ctx) != nil || vpn.Publish(active, [32]byte{1}) != nil {
++		test.Fatal("VPN readiness")
++	}
++	first := acquire(test, &manager, 1, forbidden, nothing)
++	second := acquire(test, &manager, 1, forbidden, nothing)
++	first.Release()
++	first.Release()
++	if active.Failed() || second.State() != 2 {
++		test.Fatal("borrow release closed VPN")
++	}
++	work, err := second.Work()
++	if err != nil {
++		test.Fatal(err)
++	}
++	drainDone := make(chan struct{})
++	go func() { vpn.Release(); close(drainDone) }()
++	await(test, ctx, second.ctx.Done())
++	select {
++	case <-drainDone:
++		test.Fatal("release before borrowed worker cleanup")
++	default:
++	}
++	work()
++	await(test, ctx, drainDone)
++	active.Close()
++	newVPN, err := manager.ReserveVPN(ctx)
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer newVPN.Release()
++	newSession := &testSession{}
++	if newVPN.Publish(newSession, [32]byte{1}) != nil {
++		test.Fatal("new generation not ready")
++	}
++	second.Release()
++	vpn.Release()
++	if vpn.Publish(&testSession{}, [32]byte{1}) == nil {
++		test.Fatal("stale publish")
++	}
++	third := acquire(test, &manager, 1, forbidden, nothing)
++	if third.State() != 2 || newSession.Failed() {
++		test.Fatal("stale release affected new generation")
++	}
++	third.Release()
++	newVPN.Release()
++	newSession.Close()
++}
++
++func TestOpeningLatePublication(test *testing.T) {
++	ctx := bounded(test)
++	var manager Coordinator
++	entered, returnOpen := make(chan struct{}), make(chan struct{})
++	permit := sync.OnceFunc(func() { close(returnOpen) })
++	defer permit()
++	late := &testSession{}
++	chat := acquire(test, &manager, 1, func(parent context.Context) (Session, func(), error) {
++		close(entered)
++		<-parent.Done()
++		<-returnOpen
++		return late, nothing, nil
++	}, nothing)
++	await(test, ctx, entered)
++	vpn, err := manager.ReserveVPN(ctx)
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer vpn.Release()
++	if chat.State() != -1 {
++		test.Fatal("opening handle not invalidated")
++	}
++	if vpn.Publish(&testSession{}, [32]byte{1}) == nil {
++		test.Fatal("published before opener returned")
++	}
++	permit()
++	if vpn.Wait(ctx) != nil || late.closed.Load() != 1 || chat.State() != -1 {
++		test.Fatal("late publication or leaked late session")
++	}
++}
++
++func TestCancellationAndStartupFailure(test *testing.T) {
++	for _, stage := range []string{"before_reserve", "during_cleanup", "after_cleanup", "startup_failure", "budget"} {
++		test.Run(stage, func(test *testing.T) {
++			ctx := bounded(test)
++			var manager Coordinator
++			closing, allow := make(chan struct{}), make(chan struct{})
++			permit := sync.OnceFunc(func() { close(allow) })
++			defer permit()
++			old := &testSession{close: func() { close(closing); <-allow }}
++			chat := acquire(test, &manager, 1, func(context.Context) (Session, func(), error) { return old, nothing, nil }, nothing)
++			if _, err := chat.Session(ctx); err != nil {
++				test.Fatal(err)
++			}
++			attempt, cancel := context.WithCancel(ctx)
++			defer cancel()
++			if stage == "before_reserve" {
++				cancel()
++			}
++			vpn, err := manager.ReserveVPN(attempt)
++			if stage == "before_reserve" {
++				if err == nil || chat.State() != 1 {
++					test.Fatal("pre-cancel changed chat")
++				}
++				chat.Release()
++				permit()
++				await(test, ctx, chat.owner.done)
++				return
++			}
++			if err != nil {
++				test.Fatal(err)
++			}
++			await(test, ctx, closing)
++			if stage == "after_cleanup" || stage == "startup_failure" {
++				permit()
++				if vpn.Wait(ctx) != nil {
++					test.Fatal("cleanup wait")
++				}
++			}
++			if stage == "budget" {
++				budget, finish := context.WithTimeout(ctx, 10*time.Millisecond)
++				if !errors.Is(vpn.Wait(budget), context.DeadlineExceeded) {
++					test.Fatal("budget not bounded")
++				}
++				finish()
++			}
++			cancel()
++			if vpn.Publish(&testSession{}, [32]byte{1}) == nil {
++				test.Fatal("cancelled READY")
++			}
++			vpn.Release()
++			if stage == "during_cleanup" || stage == "budget" {
++				if _, err := manager.AcquireChat(time.Now().Add(time.Minute), [32]byte{1}, forbidden, nothing); err == nil {
++					test.Fatal("reopened over draining chat")
++				}
++			}
++			permit()
++			await(test, ctx, chat.owner.done)
++			fresh := &testSession{}
++			recovered := acquire(test, &manager, 1, func(context.Context) (Session, func(), error) { return fresh, nothing, nil }, nothing)
++			if _, err := recovered.Session(ctx); err != nil {
++				test.Fatal(err)
++			}
++			chat.Release()
++			recovered.Release()
++			await(test, ctx, recovered.owner.done)
++			if old.closed.Load() != 1 || fresh.closed.Load() != 1 {
++				test.Fatal("cleanup count")
++			}
++		})
++	}
++}
++
++func TestSimultaneousAcquireReserve(test *testing.T) {
++	for iteration := 0; iteration < 40; iteration++ {
++		ctx := bounded(test)
++		var manager Coordinator
++		start := make(chan struct{})
++		chatResult := make(chan *Chat, 1)
++		vpnResult := make(chan *VPN, 1)
++		var live atomic.Int32
++		go func() {
++			<-start
++			chat, _ := manager.AcquireChat(time.Now().Add(time.Minute), [32]byte{1}, func(context.Context) (Session, func(), error) {
++				if live.Add(1) != 1 {
++					panic("overlapping independent open")
++				}
++				return &testSession{close: func() { live.Add(-1) }}, nothing, nil
++			}, nothing)
++			chatResult <- chat
++		}()
++		go func() { <-start; vpn, _ := manager.ReserveVPN(ctx); vpnResult <- vpn }()
++		close(start)
++		vpn := <-vpnResult
++		chat := <-chatResult
++		if vpn == nil || vpn.Wait(ctx) != nil || live.Load() != 0 {
++			test.Fatal("concurrent handoff failed")
++		}
++		if chat != nil {
++			chat.Release()
++		}
++		vpn.Release()
++	}
++}
++
++func TestCompatibilityExpiryAndFailure(test *testing.T) {
++	ctx := bounded(test)
++	var manager Coordinator
++	vpn, _ := manager.ReserveVPN(ctx)
++	defer vpn.Release()
++	active := &testSession{}
++	if vpn.Publish(active, [32]byte{1}) != nil {
++		test.Fatal("publish")
++	}
++	for _, profile := range [][32]byte{{2}, {3}, {4}, {5}, {}} {
++		if _, err := manager.AcquireChat(time.Now().Add(time.Minute), profile, forbidden, nothing); err == nil {
++			test.Fatal("incompatible profile borrowed")
++		}
++	}
++	if _, err := manager.AcquireChat(time.Now().Add(-time.Second), [32]byte{1}, forbidden, nothing); err == nil {
++		test.Fatal("expired delivery borrowed")
++	}
++	lease, err := manager.AcquireChat(time.Now().Add(10*time.Millisecond), [32]byte{1}, forbidden, nothing)
++	if err != nil {
++		test.Fatal(err)
++	}
++	await(test, ctx, lease.ctx.Done())
++	if lease.State() != -1 {
++		test.Fatal("deadline extended")
++	}
++	lease.Release()
++	active.Close()
++	if _, err := manager.AcquireChat(time.Now().Add(time.Minute), [32]byte{1}, forbidden, nothing); err == nil {
++		test.Fatal("failed VPN borrowed")
++	}
++	vpn.Release()
++	var disposed atomic.Int32
++	failed := acquire(test, &manager, 1, func(context.Context) (Session, func(), error) { return nil, nothing, errors.New("startup failure") }, func() { disposed.Add(1) })
++	await(test, ctx, failed.owner.done)
++	if failed.State() != -1 || disposed.Load() != 1 {
++		test.Fatal("failed chat cleanup")
++	}
++}
+--- a/pilot/android-restricted/native/main.go
++++ b/pilot/android-restricted/native/main.go
+@@ -19,6 +19,7 @@
+ 	"time"
+ 
+ 	"github.com/Joker20380/family_connect/carrier/familysession"
++	"github.com/Joker20380/family_connect/carrier/restrictedowner"
+ 	"github.com/Joker20380/family_connect/carrier/roombroker"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ 	"github.com/Joker20380/family_connect/carrier/startupdiag"
+@@ -34,6 +35,7 @@
+ var ownerMu sync.Mutex
+ var current *ownedSession
+ var sequence int64
++var transportOwner restrictedowner.Coordinator
+ 
+ type ownedSession struct {
+ 	id          int64
+@@ -50,6 +52,8 @@
+ 	endpoint    stack.LinkEndpoint
+ 	fd          int
+ 	profileHash [32]byte
++	ownership   *restrictedowner.VPN
++	cleanupOnce sync.Once
+ }
+ 
+ func (owned *ownedSession) event(name string) {
+@@ -75,8 +79,8 @@
+ }
+ 
+ //export fcRestrictedBegin
+-func fcRestrictedBegin(directory, control, resolver string, owner C.uintptr_t) int64 {
+-	return begin(directory, control, resolver, nil, nil, owner)
++func fcRestrictedBegin(directory, control, resolver string, budget int64, owner C.uintptr_t) int64 {
++	return begin(directory, control, resolver, nil, nil, budget, owner)
+ }
+ 
+ //export fcRestrictedValidationCode
+@@ -94,7 +98,7 @@
+ }
+ 
+ //export fcRestrictedBeginReady
+-func fcRestrictedBeginReady(response, identity, anchor, resolver string, owner C.uintptr_t) int64 {
++func fcRestrictedBeginReady(response, identity, anchor, resolver string, budget int64, owner C.uintptr_t) int64 {
+ 	material := []byte(identity)
+ 	defer clear(material)
+ 	profile, directory, err := wholedevice.DeliveryMaterial([]byte(response), material, []byte(anchor), time.Now())
+@@ -102,37 +106,59 @@
+ 		C.fcRestrictedRelease(owner)
+ 		return 0
+ 	}
+-	return begin("/", "provisioned", resolver, profile, directory, owner)
+-}
+-
+-func begin(directory, control, resolver string, profile, seed []byte, owner C.uintptr_t) int64 {
++	return begin("/", "provisioned", resolver, profile, directory, budget, owner)
++}
++
++func begin(directory, control, resolver string, profile, seed []byte, budget int64, owner C.uintptr_t) int64 {
+ 	directory, control, resolver = strings.Clone(directory), strings.Clone(control), strings.Clone(resolver)
+ 	ownerMu.Lock()
+ 	defer ownerMu.Unlock()
+-	if current != nil || !filepath.IsAbs(directory) {
++	if current != nil || !filepath.IsAbs(directory) || budget <= 0 || budget > 200000 {
+ 		clear(profile)
+ 		C.fcRestrictedRelease(owner)
+ 		return 0
+ 	}
+ 	ctx, cancel := context.WithCancel(context.Background())
+-	ctx = sessiontrace.Watch(ctx)
+-	network, err := underlay.New(ctx, resolver, func(fd int) bool { return C.fcRestrictedProtect(owner, C.int(fd)) != 0 })
++	ownership, err := transportOwner.ReserveVPN(ctx)
+ 	if err != nil {
+ 		clear(profile)
+ 		cancel()
+ 		C.fcRestrictedRelease(owner)
+ 		return 0
+ 	}
++	timer := time.AfterFunc(time.Duration(budget)*time.Millisecond, cancel)
++	ctx = sessiontrace.Watch(ctx)
++	network, err := underlay.New(ctx, resolver, func(fd int) bool { return C.fcRestrictedProtect(owner, C.int(fd)) != 0 })
++	if err != nil {
++		timer.Stop()
++		ownership.Release()
++		clear(profile)
++		cancel()
++		C.fcRestrictedRelease(owner)
++		return 0
++	}
+ 	sequence++
+ 	ctx = startupdiag.Start(ctx, sequence)
+ 	retainStartup(ctx)
+-	owned := &ownedSession{id: sequence, owner: owner, ctx: ctx, cancel: cancel, done: make(chan struct{}), network: network, fd: -1}
++	owned := &ownedSession{id: sequence, owner: owner, ctx: ctx, cancel: cancel, done: make(chan struct{}), network: network, fd: -1, ownership: ownership}
+ 	owned.profileHash = sha256.Sum256(profile)
+ 	current = owned
+ 	go func() {
+ 		defer clear(profile)
+ 		defer close(owned.done)
+-		var err error
++		defer timer.Stop()
++		err := owned.ownership.Wait(ctx)
++		if err != nil {
++			owned.event("ownership_drain_failed")
++			owned.cleanup()
++			owned.mu.Lock()
++			owned.state = 3
++			owned.mu.Unlock()
++			startupdiag.Failure(ctx, "STARTUP", err)
++			startupdiag.Complete(ctx, err)
++			return
++		}
++		owned.event("ownership_cleanup_complete")
+ 		path, cache := filepath.Join(directory, "family.json"), filepath.Join(directory, "bootstrap.json")
+ 		if control != "" && control != "auto" && control != "provisioned" {
+ 			bounded, finish := context.WithTimeout(ctx, 30*time.Second)
+@@ -144,6 +170,7 @@
+ 			if err == nil {
+ 				owned.event("bootstrap_cache_stored")
+ 			}
++			owned.cleanup()
+ 			owned.mu.Lock()
+ 			defer owned.mu.Unlock()
+ 			if err == nil {
+@@ -160,6 +187,18 @@
+ 			session, err = wholedevice.OpenCached(ctx, path, cache, network, owned.event)
+ 		} else {
+ 			session, err = wholedevice.Open(ctx, path, cache, network, owned.event)
++		}
++		if !timer.Stop() && err == nil {
++			err = context.DeadlineExceeded
++		}
++		if err == nil {
++			err = owned.ownership.Publish(session, owned.profileHash)
++		}
++		owned.mu.Lock()
++		owned.session = session
++		owned.mu.Unlock()
++		if err != nil {
++			owned.cleanup()
+ 		}
+ 		owned.failure(err)
+ 		owned.mu.Lock()
+@@ -173,7 +212,6 @@
+ 			}
+ 			return
+ 		}
+-		owned.session = session
+ 		owned.state = 1
+ 	}()
+ 	return owned.id
+@@ -276,23 +314,32 @@
+ 	startupdiag.Cancel(owned.ctx)
+ 	owned.cancel()
+ 	<-owned.done
+-	if owned.session != nil {
+-		owned.session.Close()
+-	}
+-	if owned.engine != nil {
+-		owned.engine.Close()
+-	}
+-	if owned.endpoint != nil {
+-		owned.endpoint.Close()
+-		owned.endpoint.Wait()
+-	}
+-	if owned.fd >= 0 {
+-		unix.Close(owned.fd)
+-	}
+-	owned.network.Close()
+-	C.fcRestrictedRelease(owned.owner)
++	owned.cleanup()
+ 	current = nil
+ 	return 1
++}
++
++func (owned *ownedSession) cleanup() {
++	owned.cleanupOnce.Do(func() {
++		owned.cancel()
++		if owned.session != nil {
++			owned.session.Close()
++		}
++		if owned.engine != nil {
++			owned.engine.Close()
++		}
++		if owned.endpoint != nil {
++			owned.endpoint.Close()
++			owned.endpoint.Wait()
++		}
++		if owned.fd >= 0 {
++			unix.Close(owned.fd)
++		}
++		owned.network.Close()
++		owned.ownership.Drain()
++		C.fcRestrictedRelease(owned.owner)
++		owned.ownership.Release()
++	})
+ }
+ 
+ //export fcRestrictedReadiness
+--- a/pilot/android-restricted/native/chat.go
++++ b/pilot/android-restricted/native/chat.go
+@@ -23,6 +23,7 @@
+ 	"sync"
+ 	"time"
+ 
++	"github.com/Joker20380/family_connect/carrier/restrictedowner"
+ 	"github.com/Joker20380/family_connect/carrier/underlay"
+ 	"github.com/Joker20380/family_connect/carrier/wholedevice"
+ 	"golang.org/x/sys/unix"
+@@ -30,28 +31,10 @@
+ 
+ var chatMu sync.Mutex
+ var chatSequence int64
+-var chatCurrent *chatSession
+-var chatLeases = map[int64]*chatConsumer{}
++var chatLeases = map[int64]*restrictedowner.Chat{}
+ var openChatSession = wholedevice.OpenProvisioned
+ var chatTLS = &tls.Config{MinVersion: tls.VersionTLS12}
+ var chatAPIOrigin = "https://185.251.89.19:8443"
+-
+-type chatSession struct {
+-	ctx      context.Context
+-	cancel   context.CancelFunc
+-	ready    chan struct{}
+-	mu       sync.Mutex
+-	session  *wholedevice.Session
+-	borrowed bool
+-	hash     [32]byte
+-	refs     int
+-}
+-
+-type chatConsumer struct {
+-	*chatSession
+-	ctx    context.Context
+-	cancel context.CancelFunc
+-}
+ 
+ //export fcChatAcquire
+ func fcChatAcquire(response, identity, anchor, resolver string, owner C.uintptr_t) int64 {
+@@ -79,64 +62,32 @@
+ 		C.fcRestrictedRelease(owner)
+ 		return 0
+ 	}
+-	if chatCurrent != nil && chatCurrent.ctx.Err() == nil {
+-		clear(profile)
+-		C.fcRestrictedRelease(owner)
+-		if chatCurrent.hash != hash {
+-			return 0
+-		}
+-	} else {
+-		ctx, cancel := context.WithDeadline(context.Background(), time.Unix(expiry.ExpiresAt, 0))
+-		owned := &chatSession{ctx: ctx, cancel: cancel, ready: make(chan struct{}), hash: hash}
+-		chatCurrent = owned
+-		ownerMu.Lock()
+-		if current != nil {
+-			current.mu.Lock()
+-			if current.profileHash == hash && current.session != nil && !current.session.Failed() {
+-				owned.session, owned.borrowed = current.session, true
+-			}
+-			current.mu.Unlock()
+-		}
+-		ownerMu.Unlock()
+-		go func() {
+-			defer clear(profile)
+-			defer C.fcRestrictedRelease(owner)
+-			if owned.borrowed {
+-				close(owned.ready)
+-				<-ctx.Done()
+-				return
+-			}
++	lease, err := transportOwner.AcquireChat(time.Unix(expiry.ExpiresAt, 0), hash,
++		func(parent context.Context) (restrictedowner.Session, func(), error) {
++			ctx, cancel := context.WithCancel(parent)
+ 			network, err := underlay.New(ctx, resolver, func(fd int) bool { return C.fcRestrictedProtect(owner, C.int(fd)) != 0 })
+ 			if err != nil {
+ 				cancel()
+-				close(owned.ready)
+-				return
++				return nil, nil, err
+ 			}
+-			defer network.Close()
++			cleanup := func() { cancel(); network.Close() }
+ 			timer := time.AfterFunc(30*time.Second, cancel)
+ 			session, err := openChatSession(ctx, profile, seed, network, func(string) {})
+ 			timer.Stop()
+-			owned.mu.Lock()
+-			owned.session = session
+-			owned.mu.Unlock()
+-			if err != nil {
+-				cancel()
++			if session == nil {
++				return nil, cleanup, err
+ 			}
+-			close(owned.ready)
+-			if session != nil {
+-				defer session.Close()
+-			}
+-			<-ctx.Done()
+-		}()
++			return session, cleanup, err
++		}, func() { clear(profile); C.fcRestrictedRelease(owner) })
++	if err != nil {
++		return 0
+ 	}
+ 	chatSequence++
+-	chatCurrent.refs++
+-	consumerContext, consumerCancel := context.WithCancel(chatCurrent.ctx)
+-	chatLeases[chatSequence] = &chatConsumer{chatCurrent, consumerContext, consumerCancel}
++	chatLeases[chatSequence] = lease
+ 	return chatSequence
+ }
+ 
+-func chatLease(handle int64) *chatConsumer {
++func chatLease(handle int64) *restrictedowner.Chat {
+ 	chatMu.Lock()
+ 	defer chatMu.Unlock()
+ 	return chatLeases[handle]
+@@ -145,23 +96,10 @@
+ //export fcChatState
+ func fcChatState(handle int64) int32 {
+ 	owned := chatLease(handle)
+-	if owned == nil || owned.ctx.Err() != nil {
+-		return -1
+-	}
+-	select {
+-	case <-owned.ready:
+-	default:
+-		return 0
+-	}
+-	owned.mu.Lock()
+-	defer owned.mu.Unlock()
+-	if owned.session == nil || owned.session.Failed() {
+-		return -1
+-	}
+-	if owned.borrowed {
+-		return 2
+-	}
+-	return 1
++	if owned == nil {
++		return -1
++	}
++	return owned.State()
+ }
+ 
+ //export fcChatRelease
+@@ -170,14 +108,7 @@
+ 	defer chatMu.Unlock()
+ 	if owned := chatLeases[handle]; owned != nil {
+ 		delete(chatLeases, handle)
+-		owned.cancel()
+-		owned.refs--
+-		if owned.refs == 0 {
+-			owned.chatSession.cancel()
+-			if chatCurrent == owned.chatSession {
+-				chatCurrent = nil
+-			}
+-		}
++		owned.Release()
+ 	}
+ }
+ 
+@@ -186,20 +117,13 @@
+ 	if owned == nil || timeout < 1 || timeout > 30000 {
+ 		return nil, nil, nil, errors.New("invalid_handle")
+ 	}
+-	ctx, cancel := context.WithTimeout(owned.ctx, time.Duration(timeout)*time.Millisecond)
+-	select {
+-	case <-owned.ready:
+-	case <-ctx.Done():
+-		cancel()
+-		return nil, nil, nil, ctx.Err()
+-	}
+-	owned.mu.Lock()
+-	session := owned.session
+-	owned.mu.Unlock()
+-	if session == nil {
+-		cancel()
+-		return nil, nil, nil, errors.New("carrier_unavailable")
+-	}
++	ctx, cancel := context.WithTimeout(owned.Context(), time.Duration(timeout)*time.Millisecond)
++	resource, err := owned.Session(ctx)
++	if err != nil {
++		cancel()
++		return nil, nil, nil, err
++	}
++	session := resource.(*wholedevice.Session)
+ 	stream, err := session.OpenService(ctx, name)
+ 	if err != nil {
+ 		cancel()
+@@ -210,6 +134,20 @@
+ 
+ //export fcChatOpen
+ func fcChatOpen(handle int64, timeout int32) int32 {
++	owned := chatLease(handle)
++	if owned == nil {
++		return -1
++	}
++	finish, err := owned.Work()
++	if err != nil {
++		return -1
++	}
++	transferred := false
++	defer func() {
++		if !transferred {
++			finish()
++		}
++	}()
+ 	stream, ctx, cancel, err := chatStream(handle, "chat-mailbox", timeout)
+ 	if err != nil {
+ 		return -1
+@@ -229,7 +167,9 @@
+ 		stream.Reset()
+ 		return -1
+ 	}
++	transferred = true
+ 	go func() {
++		defer finish()
+ 		defer cancel()
+ 		defer stream.Reset()
+ 		defer connection.Close()
+@@ -297,6 +237,15 @@
+ 	if (path != "/friends/chat/challenge" && path != "/friends/chat/register") || len(body) > 8192 {
+ 		return C.CString(`{"error":"denied"}`)
+ 	}
++	owned := chatLease(handle)
++	if owned == nil {
++		return C.CString(`{"error":"unavailable"}`)
++	}
++	finish, err := owned.Work()
++	if err != nil {
++		return C.CString(`{"error":"unavailable"}`)
++	}
++	defer finish()
+ 	stream, ctx, cancel, err := chatStream(handle, "chat-api", timeout)
+ 	if err == nil {
+ 		defer cancel()
+--- a/pilot/android-restricted/native/bridge.c
++++ b/pilot/android-restricted/native/bridge.c
+@@ -7,7 +7,7 @@
+ int fcRestrictedProtect(uintptr_t owner,int fd){int attached;JNIEnv *env=environment(&attached);if(!env)return 0;jobject service=(jobject)owner;jclass cls=(*env)->GetObjectClass(env,service);jmethodID method=(*env)->GetMethodID(env,cls,"protect","(I)Z");int ok=method&&(*env)->CallBooleanMethod(env,service,method,fd);if((*env)->ExceptionCheck(env)){(*env)->ExceptionClear(env);ok=0;}(*env)->DeleteLocalRef(env,cls);if(attached)(*vm)->DetachCurrentThread(vm);return ok;}
+ void fcRestrictedRelease(uintptr_t owner){int attached;JNIEnv *env=environment(&attached);if(!env)return;(*env)->DeleteGlobalRef(env,(jobject)owner);if(attached)(*vm)->DetachCurrentThread(vm);}
+ struct text{const char *str;long size;};
+-extern int64_t fcRestrictedBegin(struct text,struct text,struct text,uintptr_t);
++extern int64_t fcRestrictedBegin(struct text,struct text,struct text,int64_t,uintptr_t);
+ extern int32_t fcRestrictedTun(int64_t,int32_t);
+ extern int32_t fcRestrictedState(int64_t);
+ extern int32_t fcRestrictedStop(int64_t);
+@@ -22,7 +22,7 @@
+  if(raw&&public&&root)result=fcRestrictedValidationCode((struct text){(char*)raw,(*env)->GetArrayLength(env,response)},(struct text){(char*)public,(*env)->GetArrayLength(env,identity)},(struct text){(char*)root,(*env)->GetArrayLength(env,anchor)});
+  if(raw)(*env)->ReleaseByteArrayElements(env,response,raw,JNI_ABORT);if(public)(*env)->ReleaseByteArrayElements(env,identity,public,JNI_ABORT);if(root)(*env)->ReleaseByteArrayElements(env,anchor,root,JNI_ABORT);return result;
+ }
+-extern int64_t fcRestrictedBeginReady(struct text,struct text,struct text,struct text,uintptr_t);
++extern int64_t fcRestrictedBeginReady(struct text,struct text,struct text,struct text,int64_t,uintptr_t);
+ JNIEXPORT jboolean JNICALL Java_com_familyconnect_app_NativeRestricted_validateDelivery(JNIEnv *env,jclass cls,jbyteArray response,jbyteArray identity,jbyteArray anchor){
+  if(!response||!identity||!anchor)return 0;
+  jbyte *raw=(*env)->GetByteArrayElements(env,response,NULL),*public=(*env)->GetByteArrayElements(env,identity,NULL),*root=(*env)->GetByteArrayElements(env,anchor,NULL);
+@@ -30,21 +30,21 @@
+  if(raw&&public&&root)result=fcRestrictedValidateDelivery((struct text){(char*)raw,(*env)->GetArrayLength(env,response)},(struct text){(char*)public,(*env)->GetArrayLength(env,identity)},(struct text){(char*)root,(*env)->GetArrayLength(env,anchor)});
+  if(raw)(*env)->ReleaseByteArrayElements(env,response,raw,JNI_ABORT);if(public)(*env)->ReleaseByteArrayElements(env,identity,public,JNI_ABORT);if(root)(*env)->ReleaseByteArrayElements(env,anchor,root,JNI_ABORT);return result!=0;
+ }
+-JNIEXPORT jlong JNICALL Java_com_familyconnect_app_NativeRestricted_beginReady(JNIEnv *env,jclass cls,jbyteArray response,jbyteArray identity,jbyteArray anchor,jstring resolver,jobject service){
++JNIEXPORT jlong JNICALL Java_com_familyconnect_app_NativeRestricted_beginReady(JNIEnv *env,jclass cls,jbyteArray response,jbyteArray identity,jbyteArray anchor,jstring resolver,jlong budget,jobject service){
+  if(!response||!identity||!anchor||!resolver||!service)return 0;
+  jbyte *raw=(*env)->GetByteArrayElements(env,response,NULL),*secret=(*env)->GetByteArrayElements(env,identity,NULL),*root=(*env)->GetByteArrayElements(env,anchor,NULL);
+  const char *dns=(*env)->GetStringUTFChars(env,resolver,NULL);int64_t result=0;
+- if(raw&&secret&&root&&dns){jobject owner=(*env)->NewGlobalRef(env,service);if(owner)result=fcRestrictedBeginReady((struct text){(char*)raw,(*env)->GetArrayLength(env,response)},(struct text){(char*)secret,(*env)->GetArrayLength(env,identity)},(struct text){(char*)root,(*env)->GetArrayLength(env,anchor)},(struct text){dns,(*env)->GetStringUTFLength(env,resolver)},(uintptr_t)owner);}
++ if(raw&&secret&&root&&dns){jobject owner=(*env)->NewGlobalRef(env,service);if(owner)result=fcRestrictedBeginReady((struct text){(char*)raw,(*env)->GetArrayLength(env,response)},(struct text){(char*)secret,(*env)->GetArrayLength(env,identity)},(struct text){(char*)root,(*env)->GetArrayLength(env,anchor)},(struct text){dns,(*env)->GetStringUTFLength(env,resolver)},budget,(uintptr_t)owner);}
+  if(secret){volatile jbyte *wipe=secret;jsize length=(*env)->GetArrayLength(env,identity);for(jsize index=0;index<length;index++)wipe[index]=0;}
+  if(raw)(*env)->ReleaseByteArrayElements(env,response,raw,JNI_ABORT);if(secret)(*env)->ReleaseByteArrayElements(env,identity,secret,JNI_ABORT);if(root)(*env)->ReleaseByteArrayElements(env,anchor,root,JNI_ABORT);if(dns)(*env)->ReleaseStringUTFChars(env,resolver,dns);return result;
+ }
+ JNIEXPORT jstring JNICALL Java_com_familyconnect_app_NativeRestricted_readiness(JNIEnv *env,jclass cls,jstring directory){if(!directory)return NULL;const char *path=(*env)->GetStringUTFChars(env,directory,0);if(!path)return NULL;char *raw=fcRestrictedReadiness((struct text){path,(*env)->GetStringUTFLength(env,directory)});(*env)->ReleaseStringUTFChars(env,directory,path);if(!raw)return NULL;jstring result=(*env)->NewStringUTF(env,raw);free(raw);return result;}
+-JNIEXPORT jlong JNICALL Java_com_familyconnect_app_NativeRestricted_begin(JNIEnv *env,jclass cls,jstring directory,jstring control,jstring resolver,jobject service){
++JNIEXPORT jlong JNICALL Java_com_familyconnect_app_NativeRestricted_begin(JNIEnv *env,jclass cls,jstring directory,jstring control,jstring resolver,jlong budget,jobject service){
+  if(!directory||!control||!resolver||!service)return 0;
+  const char *dir=(*env)->GetStringUTFChars(env,directory,NULL),*url=(*env)->GetStringUTFChars(env,control,NULL),*dns=(*env)->GetStringUTFChars(env,resolver,NULL);
+  if(!dir||!url||!dns){if(dir)(*env)->ReleaseStringUTFChars(env,directory,dir);if(url)(*env)->ReleaseStringUTFChars(env,control,url);if(dns)(*env)->ReleaseStringUTFChars(env,resolver,dns);return 0;}
+  jobject owner=(*env)->NewGlobalRef(env,service);int64_t result=0;
+- if(owner)result=fcRestrictedBegin((struct text){dir,(*env)->GetStringUTFLength(env,directory)},(struct text){url,(*env)->GetStringUTFLength(env,control)},(struct text){dns,(*env)->GetStringUTFLength(env,resolver)},(uintptr_t)owner);
++ if(owner)result=fcRestrictedBegin((struct text){dir,(*env)->GetStringUTFLength(env,directory)},(struct text){url,(*env)->GetStringUTFLength(env,control)},(struct text){dns,(*env)->GetStringUTFLength(env,resolver)},budget,(uintptr_t)owner);
+  (*env)->ReleaseStringUTFChars(env,directory,dir);(*env)->ReleaseStringUTFChars(env,control,url);(*env)->ReleaseStringUTFChars(env,resolver,dns);return result;
+ }
+ extern char *fcRestrictedFault(struct text);
+--- a/pilot/android-restricted/native/chat_lab_check.go
++++ b/pilot/android-restricted/native/chat_lab_check.go
+@@ -3,10 +3,17 @@
+ package main
+ 
+ // #include <stdlib.h>
++// #include <stdint.h>
++// int fcRestrictedProtect(uintptr_t owner, int fd);
++// void fcRestrictedRelease(uintptr_t owner);
+ import "C"
+ 
+ import (
++	"context"
++	"crypto/sha256"
+ 	"encoding/json"
++	"github.com/Joker20380/family_connect/carrier/underlay"
++	"github.com/Joker20380/family_connect/carrier/wholedevice"
+ 	"io"
+ 	"net"
+ 	"os"
+@@ -15,36 +22,45 @@
+ )
+ 
+ //export fcMessengerSharing
+-func fcMessengerSharing(handle int64, response, identity, anchor, body string) *C.char {
++func fcMessengerSharing(handle int64, response, identity, anchor, body string, protector C.uintptr_t) *C.char {
++	defer C.fcRestrictedRelease(protector)
+ 	result := map[string]any{"scope": "JNI_OWNER_LOCAL_VPN_CONSUMER_NO_TUN", "pass": false}
+ 	original := chatLease(handle)
+ 	if original == nil || fcChatState(handle) != 1 {
+ 		return C.CString(`{"error":"no_service_owner"}`)
+ 	}
+-	chatMu.Lock()
+-	ownerMu.Lock()
+-	if current != nil || chatCurrent != original.chatSession {
+-		ownerMu.Unlock()
+-		chatMu.Unlock()
++	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
++	defer cancel()
++	vpn, err := transportOwner.ReserveVPN(ctx)
++	if err != nil {
+ 		return C.CString(`{"error":"busy"}`)
+ 	}
+-	parent := &ownedSession{id: -1, ctx: original.ctx, session: original.session, profileHash: original.hash, state: 2, fd: -1}
+-	current = parent
+-	chatCurrent = nil
+-	ownerMu.Unlock()
+-	chatMu.Unlock()
+-	defer func() {
+-		chatMu.Lock()
+-		ownerMu.Lock()
+-		if current == parent {
+-			current = nil
+-		}
+-		if chatCurrent == nil {
+-			chatCurrent = original.chatSession
+-		}
+-		ownerMu.Unlock()
+-		chatMu.Unlock()
+-	}()
++	defer vpn.Release()
++	if vpn.Wait(ctx) != nil {
++		return C.CString(`{"error":"cleanup"}`)
++	}
++	material := []byte(identity)
++	defer clear(material)
++	profile, seed, err := wholedevice.DeliveryMaterial([]byte(response), material, []byte(anchor), time.Now())
++	if err != nil {
++		return C.CString(`{"error":"material"}`)
++	}
++	defer clear(profile)
++	network, err := underlay.New(ctx, "1.1.1.1:53", func(fd int) bool { return C.fcRestrictedProtect(protector, C.int(fd)) != 0 })
++	if err != nil {
++		return C.CString(`{"error":"underlay"}`)
++	}
++	defer network.Close()
++	session, err := openChatSession(ctx, profile, seed, network, func(string) {})
++	if err != nil {
++		return C.CString(`{"error":"open"}`)
++	}
++	defer session.Close()
++	if vpn.Publish(session, sha256.Sum256(profile)) != nil {
++		return C.CString(`{"error":"publish"}`)
++	}
++	sibling := fcChatAcquire(response, identity, anchor, "1.1.1.1:53", 0)
++	defer fcChatRelease(sibling)
+ 	borrowed := fcChatAcquire(response, identity, anchor, "1.1.1.1:53", 0)
+ 	if borrowed != 0 {
+ 		defer fcChatRelease(borrowed)
+@@ -72,14 +88,14 @@
+ 		result["stale_state"] = fcChatState(borrowed)
+ 		result["stale_open"] = fcChatOpen(borrowed, 100)
+ 	}
+-	raw := fcChatRequest(handle, "/friends/chat/challenge", body, 5000)
++	raw := fcChatRequest(sibling, "/friends/chat/challenge", body, 5000)
+ 	var request map[string]any
+ 	json.Unmarshal([]byte(C.GoString(raw)), &request)
+ 	C.free(unsafe.Pointer(raw))
+ 	result["sibling_http_status"] = request["status"]
+ 	result["original_state"] = fcChatState(handle)
+-	result["tun_created"] = parent.engine != nil || parent.fd >= 0
+-	result["pass"] = result["borrowed_state"] == int32(2) && result["cancel_eof"] == true && result["stale_state"] == int32(-1) && result["stale_open"] == int32(-1) && result["sibling_http_status"] == float64(200) && result["original_state"] == int32(1) && result["tun_created"] == false
++	result["tun_created"] = false
++	result["pass"] = result["borrowed_state"] == int32(2) && result["cancel_eof"] == true && result["stale_state"] == int32(-1) && result["stale_open"] == int32(-1) && result["sibling_http_status"] == float64(200) && result["original_state"] == int32(-1)
+ 	encoded, _ := json.Marshal(result)
+ 	return C.CString(string(encoded))
+ }
+--- a/pilot/android-restricted/native/chat_lab_bridge.c
++++ b/pilot/android-restricted/native/chat_lab_bridge.c
+@@ -4,12 +4,12 @@
+ #include <stdint.h>
+ #include <stdlib.h>
+ struct lab_text {const char *ptr;long len;};
+-extern char *fcMessengerSharing(int64_t,struct lab_text,struct lab_text,struct lab_text,struct lab_text);
+-JNIEXPORT jstring JNICALL Java_com_familyconnect_app_MessengerLabActivity_sharing(JNIEnv *env,jclass cls,jlong handle,jbyteArray response,jbyteArray identity,jbyteArray anchor,jstring body){
+- if(!response||!identity||!anchor||!body)return NULL;
++extern char *fcMessengerSharing(int64_t,struct lab_text,struct lab_text,struct lab_text,struct lab_text,uintptr_t);
++JNIEXPORT jstring JNICALL Java_com_familyconnect_app_MessengerLabActivity_sharing(JNIEnv *env,jclass cls,jlong handle,jbyteArray response,jbyteArray identity,jbyteArray anchor,jstring body,jobject protector){
++ if(!response||!identity||!anchor||!body||!protector)return NULL;
+  jbyte *raw=(*env)->GetByteArrayElements(env,response,NULL),*secret=(*env)->GetByteArrayElements(env,identity,NULL),*root=(*env)->GetByteArrayElements(env,anchor,NULL);
+  const char *request=(*env)->GetStringUTFChars(env,body,NULL);char *result=NULL;
+- if(raw&&secret&&root&&request)result=fcMessengerSharing(handle,(struct lab_text){(char*)raw,(*env)->GetArrayLength(env,response)},(struct lab_text){(char*)secret,(*env)->GetArrayLength(env,identity)},(struct lab_text){(char*)root,(*env)->GetArrayLength(env,anchor)},(struct lab_text){request,(*env)->GetStringUTFLength(env,body)});
++ if(raw&&secret&&root&&request){jobject owner=(*env)->NewGlobalRef(env,protector);if(owner)result=fcMessengerSharing(handle,(struct lab_text){(char*)raw,(*env)->GetArrayLength(env,response)},(struct lab_text){(char*)secret,(*env)->GetArrayLength(env,identity)},(struct lab_text){(char*)root,(*env)->GetArrayLength(env,anchor)},(struct lab_text){request,(*env)->GetStringUTFLength(env,body)},(uintptr_t)owner);}
+  if(secret){volatile jbyte *wipe=secret;for(jsize index=0;index<(*env)->GetArrayLength(env,identity);index++)wipe[index]=0;}
+  if(raw)(*env)->ReleaseByteArrayElements(env,response,raw,JNI_ABORT);
+  if(secret)(*env)->ReleaseByteArrayElements(env,identity,secret,JNI_ABORT);
+--- a/clients/android/app/src/main/java/com/familyconnect/app/NativeRestricted.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/NativeRestricted.java
+@@ -4,14 +4,14 @@
+ 
+ final class NativeRestricted {
+     static void load() { System.loadLibrary("fc_restricted"); }
+-    static native long begin(String directory, String control, String resolver, VpnService protector);
++    static native long begin(String directory, String control, String resolver, long budgetMillis, VpnService protector);
+     static native boolean attach(long handle, int tunFd);
+     static native int state(long handle);
+     static native String stats(long handle);
+     static native String readiness(String directory);
+     static native boolean validateDelivery(byte[] response, byte[] publicIdentity, byte[] anchor);
+     static native int validationCode(byte[] response, byte[] publicIdentity, byte[] anchor);
+-    static native long beginReady(byte[] response, byte[] identity, byte[] anchor, String resolver, VpnService protector);
++    static native long beginReady(byte[] response, byte[] identity, byte[] anchor, String resolver, long budgetMillis, VpnService protector);
+     static native boolean stop(long handle);
+     static native long chatAcquire(byte[] response, byte[] identity, byte[] anchor, String resolver, Object protector);
+     static native int chatState(long handle);
+--- a/clients/android/app/src/main/java/com/familyconnect/app/RestrictedTunnelEngine.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/RestrictedTunnelEngine.java
+@@ -63,6 +63,7 @@
+             service.revoked=()->{revoked=true; state.accept(false);};
+         }
+         File directory=new File(context.getNoBackupFilesDir(),"restricted");
++        long deadline=Math.min(connectDeadline,SystemClock.elapsedRealtime()+200000);
+         if(context.getPackageName().equals("com.familyconnect.app.friends")) {
+             try(ControlIdentity identity=new FriendsIdentityVault(context).load()) {
+                 byte[] response;
+@@ -70,17 +71,16 @@
+                 Diagnostics.readiness(context,response!=null);
+                 if(response==null)throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
+                 byte[] full=identity.material(),material=java.util.Arrays.copyOf(full,64);java.util.Arrays.fill(full,(byte)0);
+-                try{checkAccess();handle=NativeRestricted.beginReady(response,material,ControlTrust.anchor(context),resolver,service);}
++                try{checkAccess();handle=NativeRestricted.beginReady(response,material,ControlTrust.anchor(context),resolver,deadline-SystemClock.elapsedRealtime(),service);}
+                 finally{java.util.Arrays.fill(material,(byte)0);java.util.Arrays.fill(response,(byte)0);}
+             }
+         } else {
+             if (!directory.isDirectory()) throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
+             checkAccess();
+-            handle=NativeRestricted.begin(directory.getAbsolutePath(),automaticOwner==null?control:"auto",resolver,service);
++            handle=NativeRestricted.begin(directory.getAbsolutePath(),automaticOwner==null?control:"auto",resolver,deadline-SystemClock.elapsedRealtime(),service);
+         }
+         if (handle<=0) throw new IllegalStateException("Restricted startup rejected");
+         StartupDiagnostics.begin(context,handle);
+-        long deadline=Math.min(connectDeadline,SystemClock.elapsedRealtime()+200000);
+         int phase;
+         while ((phase=NativeRestricted.state(handle))==0 && SystemClock.elapsedRealtime()<deadline && !cancelled.getAsBoolean() && !authorizationDenied()) Thread.sleep(100);
+         evidence();
+--- a/clients/android/chat-runtime/app/src/lab/java/com/familyconnect/app/MessengerLabActivity.java
++++ b/clients/android/chat-runtime/app/src/lab/java/com/familyconnect/app/MessengerLabActivity.java
+@@ -16,7 +16,7 @@
+     private static boolean observing;
+     private static String failure = "";
+     private static final String ORIGIN = "http://10.0.2.2:38874";
+-    private static native String sharing(long handle,byte[] response,byte[] identity,byte[] anchor,String body);
++    private static native String sharing(long handle,byte[] response,byte[] identity,byte[] anchor,String body,Object protector);
+ 
+     @Override public void onCreate(Bundle state) {
+         super.onCreate(state);
+@@ -126,7 +126,7 @@
+             byte[] response=cache.usable(),material=identity.material(),secret=java.util.Arrays.copyOf(material,64);
+             JsonObject body=new JsonObject();body.addProperty("public_identity",Base64.getEncoder().encodeToString(identity.publicIdentity()));body.addProperty("wireguard_public_key",identity.wireguardPublicKey());
+             body.addProperty("chat_public",chat.call("profile",new JsonObject()).getAsJsonObject().get("public").getAsString());
+-            try{write("lab-sharing.json",sharing(handle,response,secret,anchor,body.toString()));}
++            try{write("lab-sharing.json",sharing(handle,response,secret,anchor,body.toString(),new ChatNetworkAndroid(this)));}
+             finally{java.util.Arrays.fill(material,(byte)0);java.util.Arrays.fill(secret,(byte)0);java.util.Arrays.fill(response,(byte)0);}
+         }
+     }

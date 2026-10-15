@@ -1,0 +1,11 @@
+# github.com/Joker20380/family_connect/carrier/restrictedowner
+restrictedowner/owner.go:4:2: package context is not in std (/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/src/context)
+# github.com/Joker20380/family_connect/carrier/restrictedowner
+restrictedowner/owner.go:5:2: package errors is not in std (/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/src/errors)
+# github.com/Joker20380/family_connect/carrier/restrictedowner
+restrictedowner/owner.go:6:2: package sync is not in std (/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/src/sync)
+# github.com/Joker20380/family_connect/carrier/restrictedowner
+restrictedowner/owner.go:7:2: package time is not in std (/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/src/time)
+FAIL	github.com/Joker20380/family_connect/carrier/restrictedowner [setup failed]
+FAIL
+go: failed to trim cache: open /home/joker/.cache/go-build/trim.txt: read-only file system
