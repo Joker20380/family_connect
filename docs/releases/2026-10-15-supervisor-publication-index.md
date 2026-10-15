@@ -7,6 +7,12 @@ Production FAIL сохраняется; root cause не доказана. Сна
 
 ## Начать здесь
 
+- [Штатный support export — WAITING_FOR_OWNER_EXPORT](2026-10-15-owner-support-export-and-triage-1.md):
+  однократный export и его cache-ротация теперь явно разрешены. Требуется одно
+  сохранение владельцем через установленного локального получателя; JSON ещё не
+  получен, отсутствие исторических записей не установлено. Опубликованы только
+  проверенный путь штатного экспорта, схема и текущие пределы вывода; исходные
+  FAIL/NOT_PROVEN и frozen sources не меняются.
 - [Retained owner diagnostics — ACCESS_BLOCKED](2026-10-15-owner-episode-retained-diagnostics-1.md):
   отдельная ограниченная read-only проверка после исходной публикации
   `f5d7a4b156f66f2ce38fe7976d99f6f39678bb00`. APK research84 подтверждён; app-private

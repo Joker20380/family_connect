@@ -8,6 +8,22 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### OWNER-SUPPORT-EXPORT-AND-TRIAGE-1 — waiting for one normal export (15.10)
+
+- The newly authorized export/cache-rotation exception overrides the previous
+  task's export stop, not the primary-log/identity protection or zero VPN actions.
+- Await the single owner save described in the
+  [support-export report](releases/2026-10-15-owner-support-export-and-triage-1.md).
+  No export was confirmed by the agent; do not classify pending delivery as missing
+  historical evidence and do not ask for CONNECT or a second export.
+- When received, preserve the JSON privately with transfer/time/size/SHA256; inspect
+  ring, incident and restricted history separately using only exported schema fields.
+  Match early failures by identifiers/version/sequence without requiring an unissued tag.
+- Use the retained gateway log first if binding becomes possible. No repeat broad
+  search, sealed audit, run-as/cat or the already empty invocation query.
+- If the export has no matching attempt, end this path as EXPORTED_NO_MATCHING_EPISODE.
+  Do not automatically start A/B/C, patches/builds, deployment or recovery acceptance.
+
 ### OWNER-EPISODE-RETAINED-DIAGNOSTICS-1 — terminal ACCESS_BLOCKED (15.10)
 
 - Read the [retained-diagnostics result](releases/2026-10-15-owner-episode-retained-diagnostics-1.md)

@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+## OWNER-SUPPORT-EXPORT-AND-TRIAGE-1 — WAITING_FOR_OWNER_EXPORT (15.10)
+
+The owner now authorizes one standard diagnostic export and its normal cache/URI
+rotation; the previous no-deletion export stop is superseded for this task only.
+The exact retained research84 callback reads ring/incident without native polling
+or transport startup; restricted-evidence.jsonl is NOT_EXPORTED. The app is already
+foreground and installed JSON ACTION_SEND local receivers are identified. Standard
+screen capture yielded no image, so no blind UI taps or export confirmation were
+performed. One explicit owner save through Total Commander is pending; no support
+JSON has been obtained and historical coverage is NOT_ASSESSED, not absent.
+See the [support-export report](releases/2026-10-15-owner-support-export-and-triage-1.md).
+Export/cache mutations performed by the agent = 0 so far, separately accounted from
+zero CONNECT/reconnect, restart/install, deployment, credential/provider actions and
+product patches. No repeat local search, run-as/cat, sealed audit or journal query.
+Production FAIL, root cause NOT_PROVEN and missing owner dedicated READY evidence
+remain unchanged. Await only the requested export; do not start another VPN test.
+
 ## OWNER-EPISODE-RETAINED-DIAGNOSTICS-1 — ACCESS_BLOCKED (15.10)
 
 Scoped local retained-export search and read-only owner ADB/historical journal
