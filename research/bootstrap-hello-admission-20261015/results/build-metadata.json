@@ -1,0 +1,171 @@
+{
+  "status": "SOURCE_CHARACTERIZATION",
+  "starting_review_sha": "2843b88252728902b23ca62d8df8c25914cdc5c8",
+  "go_version": "go version go1.26.1 linux/amd64",
+  "go_environment": {
+    "CGO_ENABLED": "1",
+    "GOARCH": "amd64",
+    "GOOS": "linux",
+    "GOPROXY": "off",
+    "GOSUMDB": "off",
+    "GOTOOLCHAIN": "local"
+  },
+  "host": "Linux-7.0.0-34-generic-x86_64-with-glibc2.43",
+  "test_sources": {
+    "admission_repro_test.go": "35568b5c06de22154c2f737e9d61ae258ee5dcf4132a1ed1d0813d960d3de094",
+    "tls_fixture_test.go": "3b32a95912710fe5fd6fd98c0ec96c22f35b18029580b7aaf35c30e28cb54445"
+  },
+  "runs": [
+    {
+      "variant": "baseline",
+      "mode": "normal",
+      "build": {
+        "command": [
+          "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+          "test",
+          "-c",
+          "-tags=seedacceptance",
+          "-o",
+          "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/baseline-normal.test",
+          "./bootstrap"
+        ],
+        "cwd": "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/baseline/carrier",
+        "log": "baseline-normal-build.log",
+        "exit": 0,
+        "elapsed_s": 12.505,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "binary_sha256": "0d06e6e2ed73bf7b2ef968339ff8cb9a770b1a8209eb0e9e6122988bd5bdce6a",
+      "binary_metadata": "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/baseline-normal.test: go1.26.1\n\tpath\tgithub.com/Joker20380/family_connect/carrier/bootstrap.test\n\tmod\tgithub.com/Joker20380/family_connect/carrier\t(devel)\t\n\tbuild\t-buildmode=exe\n\tbuild\t-compiler=gc\n\tbuild\t-tags=seedacceptance\n\tbuild\tDefaultGODEBUG=containermaxprocs=0,cryptocustomrand=1,decoratemappings=0,tlssecpmlkem=0,tlssha1=1,updatemaxprocs=0,urlstrictcolons=0,x509sha256skid=0\n\tbuild\tCGO_ENABLED=1\n\tbuild\tCGO_CFLAGS=\n\tbuild\tCGO_CPPFLAGS=\n\tbuild\tCGO_CXXFLAGS=\n\tbuild\tCGO_LDFLAGS=\n\tbuild\tGOARCH=amd64\n\tbuild\tGOOS=linux\n\tbuild\tGOAMD64=v1\n",
+      "test": {
+        "command": [
+          "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/baseline-normal.test",
+          "-test.run=^TestRepro",
+          "-test.v",
+          "-test.failfast",
+          "-test.timeout=90s",
+          "-test.count=1"
+        ],
+        "cwd": "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/baseline/carrier",
+        "log": "baseline-normal-test.log",
+        "exit": 0,
+        "elapsed_s": 5.931,
+        "log_sha256": "7078d8b2192165f6b8512ab424f0d185bbd8d920ff69478a71e3bcaf1ffbb02e"
+      }
+    },
+    {
+      "variant": "baseline",
+      "mode": "race",
+      "build": {
+        "command": [
+          "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+          "test",
+          "-c",
+          "-tags=seedacceptance",
+          "-o",
+          "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/baseline-race.test",
+          "-race",
+          "./bootstrap"
+        ],
+        "cwd": "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/baseline/carrier",
+        "log": "baseline-race-build.log",
+        "exit": 0,
+        "elapsed_s": 22.117,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "binary_sha256": "35cca2690de307efa582766d43fdd267c550342d7a93a1309862adb92eaf764e",
+      "binary_metadata": "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/baseline-race.test: go1.26.1\n\tpath\tgithub.com/Joker20380/family_connect/carrier/bootstrap.test\n\tmod\tgithub.com/Joker20380/family_connect/carrier\t(devel)\t\n\tbuild\t-buildmode=exe\n\tbuild\t-compiler=gc\n\tbuild\t-race=true\n\tbuild\t-tags=seedacceptance\n\tbuild\tDefaultGODEBUG=containermaxprocs=0,cryptocustomrand=1,decoratemappings=0,tlssecpmlkem=0,tlssha1=1,updatemaxprocs=0,urlstrictcolons=0,x509sha256skid=0\n\tbuild\tCGO_ENABLED=1\n\tbuild\tCGO_CFLAGS=\n\tbuild\tCGO_CPPFLAGS=\n\tbuild\tCGO_CXXFLAGS=\n\tbuild\tCGO_LDFLAGS=\n\tbuild\tGOARCH=amd64\n\tbuild\tGOOS=linux\n\tbuild\tGOAMD64=v1\n",
+      "test": {
+        "command": [
+          "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/baseline-race.test",
+          "-test.run=^TestRepro",
+          "-test.v",
+          "-test.failfast",
+          "-test.timeout=90s",
+          "-test.count=3"
+        ],
+        "cwd": "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/baseline/carrier",
+        "log": "baseline-race-test.log",
+        "exit": 0,
+        "elapsed_s": 20.003,
+        "log_sha256": "703fdbd06ed2207b9e8b92001108ed40cb9c3609b414aba58601cc2c2ccbeefe"
+      }
+    },
+    {
+      "variant": "frozen-candidate",
+      "mode": "normal",
+      "build": {
+        "command": [
+          "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+          "test",
+          "-c",
+          "-tags=seedacceptance",
+          "-o",
+          "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/frozen-candidate-normal.test",
+          "./bootstrap"
+        ],
+        "cwd": "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/frozen-candidate/carrier",
+        "log": "frozen-candidate-normal-build.log",
+        "exit": 0,
+        "elapsed_s": 1.923,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "binary_sha256": "9c6b0c7317f4fb540bcc6ca0b44e69f3daf9a6be232e80a8b6520ecdfd8e8d1e",
+      "binary_metadata": "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/frozen-candidate-normal.test: go1.26.1\n\tpath\tgithub.com/Joker20380/family_connect/carrier/bootstrap.test\n\tmod\tgithub.com/Joker20380/family_connect/carrier\t(devel)\t\n\tbuild\t-buildmode=exe\n\tbuild\t-compiler=gc\n\tbuild\t-tags=seedacceptance\n\tbuild\tDefaultGODEBUG=containermaxprocs=0,cryptocustomrand=1,decoratemappings=0,tlssecpmlkem=0,tlssha1=1,updatemaxprocs=0,urlstrictcolons=0,x509sha256skid=0\n\tbuild\tCGO_ENABLED=1\n\tbuild\tCGO_CFLAGS=\n\tbuild\tCGO_CPPFLAGS=\n\tbuild\tCGO_CXXFLAGS=\n\tbuild\tCGO_LDFLAGS=\n\tbuild\tGOARCH=amd64\n\tbuild\tGOOS=linux\n\tbuild\tGOAMD64=v1\n",
+      "test": {
+        "command": [
+          "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/frozen-candidate-normal.test",
+          "-test.run=^TestRepro",
+          "-test.v",
+          "-test.failfast",
+          "-test.timeout=90s",
+          "-test.count=1"
+        ],
+        "cwd": "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/frozen-candidate/carrier",
+        "log": "frozen-candidate-normal-test.log",
+        "exit": 0,
+        "elapsed_s": 5.775,
+        "log_sha256": "b685e6912980a9ffcf06cb8ec0486cb41e27f08207593f9b5f3ee18cc4dd768e"
+      }
+    },
+    {
+      "variant": "frozen-candidate",
+      "mode": "race",
+      "build": {
+        "command": [
+          "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+          "test",
+          "-c",
+          "-tags=seedacceptance",
+          "-o",
+          "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/frozen-candidate-race.test",
+          "-race",
+          "./bootstrap"
+        ],
+        "cwd": "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/frozen-candidate/carrier",
+        "log": "frozen-candidate-race-build.log",
+        "exit": 0,
+        "elapsed_s": 3.472,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "binary_sha256": "8d99b4c05a0ddc13a57677d7e555adab6d5edbc2577375b1789001a435c7c271",
+      "binary_metadata": "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/frozen-candidate-race.test: go1.26.1\n\tpath\tgithub.com/Joker20380/family_connect/carrier/bootstrap.test\n\tmod\tgithub.com/Joker20380/family_connect/carrier\t(devel)\t\n\tbuild\t-buildmode=exe\n\tbuild\t-compiler=gc\n\tbuild\t-race=true\n\tbuild\t-tags=seedacceptance\n\tbuild\tDefaultGODEBUG=containermaxprocs=0,cryptocustomrand=1,decoratemappings=0,tlssecpmlkem=0,tlssha1=1,updatemaxprocs=0,urlstrictcolons=0,x509sha256skid=0\n\tbuild\tCGO_ENABLED=1\n\tbuild\tCGO_CFLAGS=\n\tbuild\tCGO_CPPFLAGS=\n\tbuild\tCGO_CXXFLAGS=\n\tbuild\tCGO_LDFLAGS=\n\tbuild\tGOARCH=amd64\n\tbuild\tGOOS=linux\n\tbuild\tGOAMD64=v1\n",
+      "test": {
+        "command": [
+          "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/frozen-candidate-race.test",
+          "-test.run=^TestRepro",
+          "-test.v",
+          "-test.failfast",
+          "-test.timeout=90s",
+          "-test.count=3"
+        ],
+        "cwd": "/tmp/fc-bootstrap-hello-admission-repro-1/matrix-final/frozen-candidate/carrier",
+        "log": "frozen-candidate-race-test.log",
+        "exit": 0,
+        "elapsed_s": 20.157,
+        "log_sha256": "ae578189ce2949bfad2b5516205ea023db9502e3c2278daa2d81b1deba105e42"
+      }
+    }
+  ],
+  "result": "PASS"
+}

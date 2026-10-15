@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+## BOOTSTRAP-HELLO-ADMISSION-REPRO-1 — SOURCE_CHARACTERIZATION PASS (15.10)
+
+Real Broker/Exchange + local Family/TLS reproduce same-identity ACTIVE admission
+wait before HELLO, no waiter eviction, and admission only after completed cleanup.
+Baseline/candidate A–D: 32/32 passing cases including expected B failure; separate
+real Recv/requestTransport/startupdiag tests: 304/304 passing cases. Both normal and
+race builds pass. Raw os deadline/closed-pipe errors become HELLO_RECEIVE/UNKNOWN.
+Exact retained research84 permits chat-first ownership overlap: VPN begin neither
+borrows nor releases an existing independent chat session. VPN-first ready can be
+borrowed by chat. Service presence alone does not prove chat acquired a session.
+Historical C1/I1 causal binding remains NOT_PROVEN, ROOT_CAUSE_PROVEN=NO, S1 unbound;
+equal source behavior is not supervisor regression or frozen-binary acceptance.
+See [characterization report](releases/2026-10-15-bootstrap-hello-admission-repro-1.md)
+and [tests/bindings/results](../research/bootstrap-hello-admission-20261015/README.md).
+No product/diagnostic patch, version, release, install or runtime change. Ownership
+coordination and context-aware diagnostic correction are proposals for separately
+authorized work; production FAIL and omitted Android/provider checks remain open.
+
 ## OWNER-SUPPORT-EXPORT-AND-TRIAGE-1 — EVIDENCE_RECOVERED (15.10)
 
 One owner-supplied JSON was copied privately: 66,200 bytes, SHA256

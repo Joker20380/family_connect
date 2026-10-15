@@ -1,0 +1,1338 @@
+{
+  "status": "SOURCE_CHARACTERIZATION",
+  "scope": "Actual go-list-selected files in five mechanism packages; standard library, generated testmain and other dependency sources excluded. No whole-tree equivalence claim. Added test files staged only. seedacceptance, linux/amd64; race instrumented same source files.",
+  "go_version": "go version go1.26.1 linux/amd64",
+  "query": [
+    "go",
+    "list",
+    "-deps",
+    "-test",
+    "-json",
+    "-buildvcs=false",
+    "-tags=seedacceptance",
+    "./bootstrap"
+  ],
+  "query_note": "Metadata-only go list initially failed VCS discovery in disposable non-Git copy; -buildvcs=false disables stamping for query only. Initial collector rejected generated testmain outside source tree; corrected exclusion. Test builds/runs already passed; no test replay.",
+  "files": [
+    {
+      "variant": "baseline",
+      "package": "reliablestream",
+      "file": "reliablestream/diagnostic.go",
+      "sha256": "a9cbcd01af396c14e74a0b67924f623c5574d77d87b2febec317f9cf52e99f4f",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/reliablestream/diagnostic.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "reliablestream",
+      "file": "reliablestream/engine.go",
+      "sha256": "c635cd3746d06c8eb0a736e46c0fcfa1c0976ee4f2a34a96094a22470109bbb4",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/reliablestream/engine.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "reliablestream",
+      "file": "reliablestream/protocol.go",
+      "sha256": "7c0a9e002b4d92203e8a188be30917c3df477e40adf8fc673a2ad903503527c1",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/reliablestream/protocol.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "reliablestream",
+      "file": "reliablestream/receive_default.go",
+      "sha256": "c10d1813fdb5258ae183527fbe8024c510c689f3de0f77b073eabc857ee75067",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/reliablestream/receive_default.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "reliablestream",
+      "file": "reliablestream/stream.go",
+      "sha256": "545f7be195b4241ef61846e40d37850736b4b669fdfdb3ec5082382e1d5ab17d",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/reliablestream/stream.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "reliablestream",
+      "file": "reliablestream/target_default.go",
+      "sha256": "05549f98b65e4a5baddeea291cc5a6884ebf412364e108114d763452f503cd6b",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/reliablestream/target_default.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "reliablestream",
+      "file": "reliablestream/ack_proof_test.go",
+      "sha256": "4a46181c183fc43099f692759da339b6ab43ffadaf8757d631d9c6f8a8a3d8bf",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/reliablestream/ack_proof_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "reliablestream",
+      "file": "reliablestream/diagnostic_test.go",
+      "sha256": "8691a7a7b11d8f643f6a70193660b081d5d9bfbe06925d0393eb9289201d6aba",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/reliablestream/diagnostic_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "reliablestream",
+      "file": "reliablestream/engine_test.go",
+      "sha256": "522021ee68de8152273b3db178b22b4e1367d8d54ccb2ed4a1d32e2abaf5cd0a",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/reliablestream/engine_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "reliablestream",
+      "file": "reliablestream/forensics_bytes_test.go",
+      "sha256": "c5c921b7e59564803c1e5bceac5f436e6edacab6918c648f39f3d38839cc1cc3",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/reliablestream/forensics_bytes_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "reliablestream",
+      "file": "reliablestream/head_loss_test.go",
+      "sha256": "e9f15c0470fa775ad1398bcf4ae9c7ab19e7baa8d8292826d023e820de8af141",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/reliablestream/head_loss_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "reliablestream",
+      "file": "reliablestream/stream_test.go",
+      "sha256": "ca0fe426f7a78a95726fb3604b2ca09e4ac836ef6adcf2c69925167c3c72de8b",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/reliablestream/stream_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "reliablestream",
+      "file": "reliablestream/trace_test.go",
+      "sha256": "8bdcef9f57420820bf78203785621634e0bdff4d606da9596942ba78fe150e7e",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/reliablestream/trace_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "familysession",
+      "file": "familysession/session.go",
+      "sha256": "51bddca0c1cb2966c4d5aeb1ebd5e360cbeede5a5508e14d79a88d3d29a09619",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/familysession/session.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "familysession",
+      "file": "familysession/close_source_test.go",
+      "sha256": "80da82310bbdf5a7995380d70b4004b456f37c443e28d5907891df189cd85195",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/familysession/close_source_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "familysession",
+      "file": "familysession/session_test.go",
+      "sha256": "0260e3190ef36f4095ea2f15027349b55a2ca3cd6b4ff43136e090463830d8f0",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/familysession/session_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "familysession",
+      "file": "familysession/trace_test.go",
+      "sha256": "04c5691d5dd0aa4398576f8c2db33875934d887ca324cd16c0dabfcd3b9ed860",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/familysession/trace_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/broker.go",
+      "sha256": "5694d2aad6dba91a11c6c63232c1f9ae6081dae4d27c6c3e00a1aa7214352a71",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/broker.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/control.go",
+      "sha256": "7c961e05502eb9f604425218d30cceb07824eff294bac1339fb52327063fc378",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/control.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/gateway.go",
+      "sha256": "e1b68d98b1a92931794d6e637b1295d550ea1914598d8e9fecb21124f6031ea1",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/gateway.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/lease.go",
+      "sha256": "1ce798a57d8a887c234fb725b1f5f4875ea0e8c3c0d9351f1017abc777ebf856",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/lease.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/lease_control.go",
+      "sha256": "1653be99655c50e1aa274ef090c95fc755b9e27e701e11671421ccf20120391f",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/lease_control.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/ownership.go",
+      "sha256": "49a879222dd13c5209b2b467ecd1e56bb156dbc153c092e4fb30771174a45f8b",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/ownership.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/provider.go",
+      "sha256": "76dee527ba2ca915a9770cf63dcd69136b761e84aeb06b57db22e540dc60fba2",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/provider.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/trace.go",
+      "sha256": "b379b8ef82319a7813c025c4c7e4bf188ed9ec7cedd65e8d67fb60ea9b5e18ed",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/trace.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/binding_test.go",
+      "sha256": "389e29bf75ca0f208d35fcea269f66e89c67b73c320662c3afcf640edaf895b6",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/binding_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/broker_test.go",
+      "sha256": "69c896dc20f7dd1c9b6d94a62c648cf99e9c810c78385d44901e88d729c911f6",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/broker_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/control_test.go",
+      "sha256": "42642a39cfbb6dd1f4649cf5dbe9729cd25cf40921b7e574027b90aaabd5d8f5",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/control_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/lease_mux_test.go",
+      "sha256": "fb09095a6543240e951927325a009ad8f718c51b5459cf9d0ef1fe1a10f6296a",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/lease_mux_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/lease_scheduler_test.go",
+      "sha256": "dae4589eec08aed4c300fbc5db6e13f9fc6d2a43f9ffe8f4a37afbae1bb5328d",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/lease_scheduler_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/lease_test.go",
+      "sha256": "74ffa0c46ffebdb9ab7f9c3c4d388ff017008724653b78e14e52f84cfde7ee8d",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/lease_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/lifetime_contract_test.go",
+      "sha256": "7f457436ad8029a3b04394b48959377d358213f68989b19fab20aeda2ce9c3e3",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/lifetime_contract_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/ownership_test.go",
+      "sha256": "6ab81c4aa4f2c8676b4b99c367b75d8b95e3e4a0ec68bae5033024dedeafc458",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/ownership_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/provider_test.go",
+      "sha256": "0d5e0984ed83d0a09f1edcc14cb153e41cc70d0b36db06b48bf83fc5af6b18b2",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/provider_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "roombroker",
+      "file": "roombroker/trace_test.go",
+      "sha256": "2ae9ac4f3814faf90302136f670d511c47537969b902232bcf73794329d64e0b",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/roombroker/trace_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "startupdiag",
+      "file": "startupdiag/enabled.go",
+      "sha256": "81d7b51d30771cb1ec116e9e4890fa995f724c58e958e125543f8ee094d90a2f",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/startupdiag/enabled.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "startupdiag",
+      "file": "startupdiag/error.go",
+      "sha256": "7526938f060f375eeb708277ea5f277f8f1ac2f42fd4a029f60de4c36d7e8dc7",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/startupdiag/error.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "startupdiag",
+      "file": "startupdiag/result.go",
+      "sha256": "a9685d4f2c1bf219be50a08d7fbce1b19ed0c7ee7cfd25153bf3e5fc2fdff884",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/startupdiag/result.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "startupdiag",
+      "file": "startupdiag/enabled_test.go",
+      "sha256": "db258f6fb08bfddd9e3b0fa9515e85da2dc667fbc0eb1f4b301efca907eb8adb",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/startupdiag/enabled_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "startupdiag",
+      "file": "startupdiag/error_test.go",
+      "sha256": "302dae26277cb2c3e46aa7959c9c937c05728fa876e310acecc21fa1e982062e",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/startupdiag/error_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "startupdiag",
+      "file": "startupdiag/public_result_test.go",
+      "sha256": "846c763f52245ce69ac3134178155d9f48a355267d7467691f5ce92d2a842d88",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/startupdiag/public_result_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/carrier.go",
+      "sha256": "84830f2c31d07efad50ae19fd18efe8b2b2c4689e813a660c741b208f3f10f5a",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/carrier.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": false,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/diagnostic.go",
+      "sha256": "73765ea87ed556e765dbf72be68644157b4dc7382d88485baebc3ef31e286c1f",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/diagnostic.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/directory.go",
+      "sha256": "79ab44cd607742080b53a78d46f8a0732dc201af9db15407aa2092731e110de5",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/directory.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/protocol.go",
+      "sha256": "61bcdce34f004ea5d0c1bd20ff5012152c8b7dbf120d0bb8ee07b92d60550f6a",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/protocol.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/seed.go",
+      "sha256": "2e465921849c3aaa9832512417be3c9bd9de1f8fabc4330aa772aa5497dbed2b",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/seed.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": false,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_overlap.go",
+      "sha256": "33cd91445c40d25f8bca93947daa438fe389bb982113b2ffd6ec6528f4bcc700",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/seed_overlap.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": false,
+      "test_only": false
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/admission_repro_test.go",
+      "sha256": "35568b5c06de22154c2f737e9d61ae258ee5dcf4132a1ed1d0813d960d3de094",
+      "original_snapshot_path": null,
+      "same_as_snapshot": false,
+      "matches_retained_research84": null,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/auth_test.go",
+      "sha256": "496203b992667b038977a8c6dc3c3a1f33acc78ba4931db93f5f704e8f18f32f",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/auth_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/carrier_test.go",
+      "sha256": "a8ac365a74fe90398f6f730b40ed89c1a40b8ef047204aaaae5fe47a17a236a6",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/carrier_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/diagnostic_test.go",
+      "sha256": "29880efa960301051f911b18bfcc075a7466f082502ee755dfd9a63abe95e5b9",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/diagnostic_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/directory_test.go",
+      "sha256": "5ed97b52198e07a7b8b169e4c05955f15fe3f5d91d2d7c2aaaa8a1607d93137c",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/directory_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/localize_primary_error_test.go",
+      "sha256": "4a7bc4d0c70d54e1887c8b9cb82195fe8a70100a78f436f4b8dc71d68738b666",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/localize_primary_error_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/negative_boundary_test.go",
+      "sha256": "63735ba4ad001fba530ec0bf917453fcdae75a99ce3b26069591e0a1ad81d1ee",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/negative_boundary_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/protocol_test.go",
+      "sha256": "d5cc9e67f04eb1a86c1db48c9ebb89e0942abac48555c54d4db366cc3c87c10d",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/protocol_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_close_source_test.go",
+      "sha256": "cfe4d3fd2c4b289038cfdb583c60359202ae76174e4f98cdad5adb33c736c1be",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/seed_close_source_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": null,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_observation_test.go",
+      "sha256": "cf465f4f59519911841e4c31ff1dcc223004a9525a357909c8594643737f4f34",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/seed_observation_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": null,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_overlap_test.go",
+      "sha256": "fb1c2a85a117fa0fd1a1e6395e4c74844cba230174cb766d33c315707d6a98ff",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/seed_overlap_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": false,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_peer_contract_test.go",
+      "sha256": "86f54851479ddb51115817cffefdd69b15566e2bb3b7eda0cf83161d6feda348",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/seed_peer_contract_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": null,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_test.go",
+      "sha256": "f0983057f5c911bd7e9d4c1712ab0ac8ba97dfaca39c261767fa047fa6d8da81",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/seed_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/signaling_observation_test.go",
+      "sha256": "f4338b71fec0c20b8282ec0d8e1cec1e59aa74b490b6ee75c1ba84969c21360c",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/signaling_observation_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": null,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/timestamp_test.go",
+      "sha256": "d0d6fc04052145a145b684a7cf6c3cd01925b568ac9113a2057c1b0dd69511b7",
+      "original_snapshot_path": "research/supervisor-20261015/baseline/carrier/bootstrap/timestamp_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "baseline",
+      "package": "bootstrap",
+      "file": "bootstrap/tls_fixture_test.go",
+      "sha256": "3b32a95912710fe5fd6fd98c0ec96c22f35b18029580b7aaf35c30e28cb54445",
+      "original_snapshot_path": null,
+      "same_as_snapshot": false,
+      "matches_retained_research84": null,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "reliablestream",
+      "file": "reliablestream/diagnostic.go",
+      "sha256": "a9cbcd01af396c14e74a0b67924f623c5574d77d87b2febec317f9cf52e99f4f",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/reliablestream/diagnostic.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "reliablestream",
+      "file": "reliablestream/engine.go",
+      "sha256": "c635cd3746d06c8eb0a736e46c0fcfa1c0976ee4f2a34a96094a22470109bbb4",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/reliablestream/engine.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "reliablestream",
+      "file": "reliablestream/protocol.go",
+      "sha256": "7c0a9e002b4d92203e8a188be30917c3df477e40adf8fc673a2ad903503527c1",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/reliablestream/protocol.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "reliablestream",
+      "file": "reliablestream/receive_default.go",
+      "sha256": "c10d1813fdb5258ae183527fbe8024c510c689f3de0f77b073eabc857ee75067",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/reliablestream/receive_default.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "reliablestream",
+      "file": "reliablestream/stream.go",
+      "sha256": "545f7be195b4241ef61846e40d37850736b4b669fdfdb3ec5082382e1d5ab17d",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/reliablestream/stream.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "reliablestream",
+      "file": "reliablestream/target_default.go",
+      "sha256": "05549f98b65e4a5baddeea291cc5a6884ebf412364e108114d763452f503cd6b",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/reliablestream/target_default.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "reliablestream",
+      "file": "reliablestream/ack_proof_test.go",
+      "sha256": "4a46181c183fc43099f692759da339b6ab43ffadaf8757d631d9c6f8a8a3d8bf",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/reliablestream/ack_proof_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "reliablestream",
+      "file": "reliablestream/diagnostic_test.go",
+      "sha256": "8691a7a7b11d8f643f6a70193660b081d5d9bfbe06925d0393eb9289201d6aba",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/reliablestream/diagnostic_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "reliablestream",
+      "file": "reliablestream/engine_test.go",
+      "sha256": "522021ee68de8152273b3db178b22b4e1367d8d54ccb2ed4a1d32e2abaf5cd0a",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/reliablestream/engine_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "reliablestream",
+      "file": "reliablestream/forensics_bytes_test.go",
+      "sha256": "c5c921b7e59564803c1e5bceac5f436e6edacab6918c648f39f3d38839cc1cc3",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/reliablestream/forensics_bytes_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "reliablestream",
+      "file": "reliablestream/head_loss_test.go",
+      "sha256": "e9f15c0470fa775ad1398bcf4ae9c7ab19e7baa8d8292826d023e820de8af141",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/reliablestream/head_loss_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "reliablestream",
+      "file": "reliablestream/stream_test.go",
+      "sha256": "ca0fe426f7a78a95726fb3604b2ca09e4ac836ef6adcf2c69925167c3c72de8b",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/reliablestream/stream_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "reliablestream",
+      "file": "reliablestream/trace_test.go",
+      "sha256": "8bdcef9f57420820bf78203785621634e0bdff4d606da9596942ba78fe150e7e",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/reliablestream/trace_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "familysession",
+      "file": "familysession/session.go",
+      "sha256": "51bddca0c1cb2966c4d5aeb1ebd5e360cbeede5a5508e14d79a88d3d29a09619",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/familysession/session.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "familysession",
+      "file": "familysession/close_source_test.go",
+      "sha256": "80da82310bbdf5a7995380d70b4004b456f37c443e28d5907891df189cd85195",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/familysession/close_source_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "familysession",
+      "file": "familysession/session_test.go",
+      "sha256": "0260e3190ef36f4095ea2f15027349b55a2ca3cd6b4ff43136e090463830d8f0",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/familysession/session_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "familysession",
+      "file": "familysession/trace_test.go",
+      "sha256": "04c5691d5dd0aa4398576f8c2db33875934d887ca324cd16c0dabfcd3b9ed860",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/familysession/trace_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/broker.go",
+      "sha256": "5694d2aad6dba91a11c6c63232c1f9ae6081dae4d27c6c3e00a1aa7214352a71",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/broker.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/control.go",
+      "sha256": "7c961e05502eb9f604425218d30cceb07824eff294bac1339fb52327063fc378",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/control.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/gateway.go",
+      "sha256": "e1b68d98b1a92931794d6e637b1295d550ea1914598d8e9fecb21124f6031ea1",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/gateway.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/lease.go",
+      "sha256": "1ce798a57d8a887c234fb725b1f5f4875ea0e8c3c0d9351f1017abc777ebf856",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/lease.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/lease_control.go",
+      "sha256": "1653be99655c50e1aa274ef090c95fc755b9e27e701e11671421ccf20120391f",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/lease_control.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/ownership.go",
+      "sha256": "49a879222dd13c5209b2b467ecd1e56bb156dbc153c092e4fb30771174a45f8b",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/ownership.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/provider.go",
+      "sha256": "76dee527ba2ca915a9770cf63dcd69136b761e84aeb06b57db22e540dc60fba2",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/provider.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/trace.go",
+      "sha256": "b379b8ef82319a7813c025c4c7e4bf188ed9ec7cedd65e8d67fb60ea9b5e18ed",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/trace.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/binding_test.go",
+      "sha256": "389e29bf75ca0f208d35fcea269f66e89c67b73c320662c3afcf640edaf895b6",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/binding_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/broker_test.go",
+      "sha256": "69c896dc20f7dd1c9b6d94a62c648cf99e9c810c78385d44901e88d729c911f6",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/broker_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/control_test.go",
+      "sha256": "42642a39cfbb6dd1f4649cf5dbe9729cd25cf40921b7e574027b90aaabd5d8f5",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/control_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/lease_mux_test.go",
+      "sha256": "fb09095a6543240e951927325a009ad8f718c51b5459cf9d0ef1fe1a10f6296a",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/lease_mux_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/lease_scheduler_test.go",
+      "sha256": "dae4589eec08aed4c300fbc5db6e13f9fc6d2a43f9ffe8f4a37afbae1bb5328d",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/lease_scheduler_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/lease_test.go",
+      "sha256": "74ffa0c46ffebdb9ab7f9c3c4d388ff017008724653b78e14e52f84cfde7ee8d",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/lease_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/lifetime_contract_test.go",
+      "sha256": "7f457436ad8029a3b04394b48959377d358213f68989b19fab20aeda2ce9c3e3",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/lifetime_contract_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/ownership_test.go",
+      "sha256": "6ab81c4aa4f2c8676b4b99c367b75d8b95e3e4a0ec68bae5033024dedeafc458",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/ownership_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/provider_test.go",
+      "sha256": "0d5e0984ed83d0a09f1edcc14cb153e41cc70d0b36db06b48bf83fc5af6b18b2",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/provider_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "roombroker",
+      "file": "roombroker/trace_test.go",
+      "sha256": "2ae9ac4f3814faf90302136f670d511c47537969b902232bcf73794329d64e0b",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/trace_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "startupdiag",
+      "file": "startupdiag/enabled.go",
+      "sha256": "81d7b51d30771cb1ec116e9e4890fa995f724c58e958e125543f8ee094d90a2f",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/startupdiag/enabled.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "startupdiag",
+      "file": "startupdiag/error.go",
+      "sha256": "7526938f060f375eeb708277ea5f277f8f1ac2f42fd4a029f60de4c36d7e8dc7",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/startupdiag/error.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "startupdiag",
+      "file": "startupdiag/result.go",
+      "sha256": "a9685d4f2c1bf219be50a08d7fbce1b19ed0c7ee7cfd25153bf3e5fc2fdff884",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/startupdiag/result.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "startupdiag",
+      "file": "startupdiag/enabled_test.go",
+      "sha256": "db258f6fb08bfddd9e3b0fa9515e85da2dc667fbc0eb1f4b301efca907eb8adb",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/startupdiag/enabled_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "startupdiag",
+      "file": "startupdiag/error_test.go",
+      "sha256": "302dae26277cb2c3e46aa7959c9c937c05728fa876e310acecc21fa1e982062e",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/startupdiag/error_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "startupdiag",
+      "file": "startupdiag/public_result_test.go",
+      "sha256": "846c763f52245ce69ac3134178155d9f48a355267d7467691f5ce92d2a842d88",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/startupdiag/public_result_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/carrier.go",
+      "sha256": "84830f2c31d07efad50ae19fd18efe8b2b2c4689e813a660c741b208f3f10f5a",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/carrier.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": false,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/diagnostic.go",
+      "sha256": "73765ea87ed556e765dbf72be68644157b4dc7382d88485baebc3ef31e286c1f",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/diagnostic.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/directory.go",
+      "sha256": "79ab44cd607742080b53a78d46f8a0732dc201af9db15407aa2092731e110de5",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/directory.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/protocol.go",
+      "sha256": "61bcdce34f004ea5d0c1bd20ff5012152c8b7dbf120d0bb8ee07b92d60550f6a",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/protocol.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/seed.go",
+      "sha256": "4b754f9e01aa714759d53315979787d8f3e9e385553e8cc6a900f69c1cefe176",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/seed.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": false,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_acceptance_linux.go",
+      "sha256": "9e09d8cdbae3b5645510a72176000c659a586b8f9c86a1c324de51e0ac5ba76a",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/seed_acceptance_linux.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": null,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_acceptance_receipt_linux.go",
+      "sha256": "87e3524ea0aecc47c19df76f22481cfc74c2ca7c7476a528daff67c2b46e5b46",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/seed_acceptance_receipt_linux.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": null,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_overlap.go",
+      "sha256": "cd00861412061dd578ccd5ef4bde1a83529f644ac1cf65080cd7c4779ffb8aaa",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/seed_overlap.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": false,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_supervisor.go",
+      "sha256": "8136578037a3a6ce2d41802b3c2ba6fd4e83fd4c3670e8afe9560dfff96b6a91",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/seed_supervisor.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": null,
+      "test_only": false
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/admission_repro_test.go",
+      "sha256": "35568b5c06de22154c2f737e9d61ae258ee5dcf4132a1ed1d0813d960d3de094",
+      "original_snapshot_path": null,
+      "same_as_snapshot": false,
+      "matches_retained_research84": null,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/auth_test.go",
+      "sha256": "496203b992667b038977a8c6dc3c3a1f33acc78ba4931db93f5f704e8f18f32f",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/auth_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/carrier_test.go",
+      "sha256": "a8ac365a74fe90398f6f730b40ed89c1a40b8ef047204aaaae5fe47a17a236a6",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/carrier_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/diagnostic_test.go",
+      "sha256": "29880efa960301051f911b18bfcc075a7466f082502ee755dfd9a63abe95e5b9",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/diagnostic_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/directory_test.go",
+      "sha256": "5ed97b52198e07a7b8b169e4c05955f15fe3f5d91d2d7c2aaaa8a1607d93137c",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/directory_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/localize_primary_error_test.go",
+      "sha256": "4a7bc4d0c70d54e1887c8b9cb82195fe8a70100a78f436f4b8dc71d68738b666",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/localize_primary_error_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/negative_boundary_test.go",
+      "sha256": "63735ba4ad001fba530ec0bf917453fcdae75a99ce3b26069591e0a1ad81d1ee",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/negative_boundary_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/protocol_test.go",
+      "sha256": "d5cc9e67f04eb1a86c1db48c9ebb89e0942abac48555c54d4db366cc3c87c10d",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/protocol_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_acceptance_linux_test.go",
+      "sha256": "9aa50752470ae79ee6ac96d7ca81ca046fb834a622e1e03ccdf55955898bd97c",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/seed_acceptance_linux_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": null,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_close_source_test.go",
+      "sha256": "cfe4d3fd2c4b289038cfdb583c60359202ae76174e4f98cdad5adb33c736c1be",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/seed_close_source_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": null,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_late_ready_test.go",
+      "sha256": "68f1705f8a3a2109b9568875440c689c3a594be7ceea3d431b2a6634c574280a",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/seed_late_ready_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": null,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_observation_test.go",
+      "sha256": "cf465f4f59519911841e4c31ff1dcc223004a9525a357909c8594643737f4f34",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/seed_observation_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": null,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_overlap_test.go",
+      "sha256": "fb1c2a85a117fa0fd1a1e6395e4c74844cba230174cb766d33c315707d6a98ff",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/seed_overlap_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": false,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_peer_contract_test.go",
+      "sha256": "86f54851479ddb51115817cffefdd69b15566e2bb3b7eda0cf83161d6feda348",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/seed_peer_contract_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": null,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_supervisor_test.go",
+      "sha256": "6dfa0a5f2d4b94fb4cc843af2d379a0730d2d31311dafb44d59a59316013d119",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/seed_supervisor_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": null,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/seed_test.go",
+      "sha256": "f0983057f5c911bd7e9d4c1712ab0ac8ba97dfaca39c261767fa047fa6d8da81",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/seed_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/signaling_observation_test.go",
+      "sha256": "f4338b71fec0c20b8282ec0d8e1cec1e59aa74b490b6ee75c1ba84969c21360c",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/signaling_observation_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": null,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/timestamp_test.go",
+      "sha256": "d0d6fc04052145a145b684a7cf6c3cd01925b568ac9113a2057c1b0dd69511b7",
+      "original_snapshot_path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/timestamp_test.go",
+      "same_as_snapshot": true,
+      "matches_retained_research84": true,
+      "test_only": true
+    },
+    {
+      "variant": "frozen-candidate",
+      "package": "bootstrap",
+      "file": "bootstrap/tls_fixture_test.go",
+      "sha256": "3b32a95912710fe5fd6fd98c0ec96c22f35b18029580b7aaf35c30e28cb54445",
+      "original_snapshot_path": null,
+      "same_as_snapshot": false,
+      "matches_retained_research84": null,
+      "test_only": true
+    }
+  ]
+}

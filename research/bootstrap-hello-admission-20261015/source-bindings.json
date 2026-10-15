@@ -1,0 +1,556 @@
+{
+  "purpose": "Necessary source bindings only, not a repeated sealed-evidence audit",
+  "research84_source_base": "f5240994869826c6a28f59e58e38256c688cf6eb",
+  "research84_delta_sha256": "d7907697d71f119c21bced533f08abae06ae33ef9159c5fd9bd54cf031a481e7",
+  "retained_origin": "whitelist-provisioning-block-seam-1/source",
+  "starting_review_sha": "2843b88252728902b23ca62d8df8c25914cdc5c8",
+  "research84_native_build": {
+    "evidence": "retained research-manifest.json native_reused fields and read-only go version -m of retained restricted-native/jniLibs/arm64-v8a/libfc_restricted.so; no renewed seal audit",
+    "recorded_native_sha256": "cb3af31f62fdc1339df5f03374652ef6c62c4382ed10ef2d314bd6b610c989e2",
+    "build_tags": [],
+    "go_version": "go1.26.1",
+    "goos": "android",
+    "goarch": "arm64",
+    "buildmode": "c-shared",
+    "excluded_chat_overrides": ["chat_lab.go: android && fc_messenger_lab", "chat_owner.go: android && fc_messenger_owner"],
+    "meaning": "Default chat.go openChatSession binding applies; lab/owner overrides are not installed research84 caller paths. No new Android build or runtime test."
+  },
+  "files": [
+    {
+      "relative": "clients/android/app/src/main/java/com/familyconnect/app/ChatDeliveryService.java",
+      "retained_research84_sha256": "e15de691059fcac43af03eef8a706dce93b640424380badc853e60f352d67b01",
+      "bytes": 1232,
+      "published": [
+        {
+          "snapshot": "research84-source",
+          "path": "research/bootstrap-hello-admission-20261015/research84-source/clients/android/app/src/main/java/com/familyconnect/app/ChatDeliveryService.java",
+          "sha256": "e15de691059fcac43af03eef8a706dce93b640424380badc853e60f352d67b01",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "clients/android/app/src/main/java/com/familyconnect/app/ChatRuntime.java",
+      "retained_research84_sha256": "8a30cad5a6e978d6dd91670c1746c509bfe45b1631d4f739ba369e249d33a74c",
+      "bytes": 8731,
+      "published": [
+        {
+          "snapshot": "research84-source",
+          "path": "research/bootstrap-hello-admission-20261015/research84-source/clients/android/app/src/main/java/com/familyconnect/app/ChatRuntime.java",
+          "sha256": "8a30cad5a6e978d6dd91670c1746c509bfe45b1631d4f739ba369e249d33a74c",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "clients/android/app/src/main/java/com/familyconnect/app/ChatCarrier.java",
+      "retained_research84_sha256": "0f6bd99e072a8aae1ba2cd33aaad1ac50f9c134e929b07bd2f0b538ed17e4424",
+      "bytes": 3809,
+      "published": [
+        {
+          "snapshot": "research84-source",
+          "path": "research/bootstrap-hello-admission-20261015/research84-source/clients/android/app/src/main/java/com/familyconnect/app/ChatCarrier.java",
+          "sha256": "0f6bd99e072a8aae1ba2cd33aaad1ac50f9c134e929b07bd2f0b538ed17e4424",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "clients/android/app/src/main/java/com/familyconnect/app/ChatNetworkAndroid.java",
+      "retained_research84_sha256": "7fe705f607315cbaadb686647802b277d32126da6a54b3fa8037827a1dbde9d4",
+      "bytes": 2568,
+      "published": [
+        {
+          "snapshot": "research84-source",
+          "path": "research/bootstrap-hello-admission-20261015/research84-source/clients/android/app/src/main/java/com/familyconnect/app/ChatNetworkAndroid.java",
+          "sha256": "7fe705f607315cbaadb686647802b277d32126da6a54b3fa8037827a1dbde9d4",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java",
+      "retained_research84_sha256": "3a39576e727efe83eec8bc4127a9ae4107df6ab55d1f184af644ac8c1c7554f1",
+      "bytes": 20910,
+      "published": [
+        {
+          "snapshot": "research84-source",
+          "path": "research/bootstrap-hello-admission-20261015/research84-source/clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java",
+          "sha256": "3a39576e727efe83eec8bc4127a9ae4107df6ab55d1f184af644ac8c1c7554f1",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "clients/android/app/src/main/java/com/familyconnect/app/FriendsIdentityVault.java",
+      "retained_research84_sha256": "5a99173963eb04be4e3e302d563795075eccc75c35caa1c565175dbe0817a7e9",
+      "bytes": 3815,
+      "published": [
+        {
+          "snapshot": "research84-source",
+          "path": "research/bootstrap-hello-admission-20261015/research84-source/clients/android/app/src/main/java/com/familyconnect/app/FriendsIdentityVault.java",
+          "sha256": "5a99173963eb04be4e3e302d563795075eccc75c35caa1c565175dbe0817a7e9",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "clients/android/app/src/main/java/com/familyconnect/app/RestrictedCache.java",
+      "retained_research84_sha256": "a4c5281c53bff56e201556e04f79f8a9a9616d1455a052bc67989ecbb9f1596b",
+      "bytes": 9222,
+      "published": [
+        {
+          "snapshot": "research84-source",
+          "path": "research/bootstrap-hello-admission-20261015/research84-source/clients/android/app/src/main/java/com/familyconnect/app/RestrictedCache.java",
+          "sha256": "a4c5281c53bff56e201556e04f79f8a9a9616d1455a052bc67989ecbb9f1596b",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "clients/android/app/src/main/java/com/familyconnect/app/RestrictedVault.java",
+      "retained_research84_sha256": "6753b686078d5715050ab919c1c4309b0c205e04f631fe8cccebb2bba5125c02",
+      "bytes": 3732,
+      "published": [
+        {
+          "snapshot": "research84-source",
+          "path": "research/bootstrap-hello-admission-20261015/research84-source/clients/android/app/src/main/java/com/familyconnect/app/RestrictedVault.java",
+          "sha256": "6753b686078d5715050ab919c1c4309b0c205e04f631fe8cccebb2bba5125c02",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "clients/android/app/src/main/java/com/familyconnect/app/RestrictedTunnelEngine.java",
+      "retained_research84_sha256": "5bf6aec300dfd7dd6cb998ed8e7693da8a80edb708e50fb3fcd5d00aba22f0ff",
+      "bytes": 9269,
+      "published": [
+        {
+          "snapshot": "research84",
+          "path": "research/supervisor-20261015/research84/clients/android/app/src/main/java/com/familyconnect/app/RestrictedTunnelEngine.java",
+          "sha256": "5bf6aec300dfd7dd6cb998ed8e7693da8a80edb708e50fb3fcd5d00aba22f0ff",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "clients/android/app/src/main/java/com/familyconnect/app/AutomaticVpnOwner.java",
+      "retained_research84_sha256": "1a397a3a6dca5838d56ff470f43300f489ac22c958c96ac0bf10d317186ccc11",
+      "bytes": 3739,
+      "published": [
+        {
+          "snapshot": "research84",
+          "path": "research/supervisor-20261015/research84/clients/android/app/src/main/java/com/familyconnect/app/AutomaticVpnOwner.java",
+          "sha256": "1a397a3a6dca5838d56ff470f43300f489ac22c958c96ac0bf10d317186ccc11",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "clients/android/app/src/main/java/com/familyconnect/app/ConnectionService.java",
+      "retained_research84_sha256": "612e83c170da5769c1bfaa5c70fb9d3da8fe1ca272895a099e912caa27433ba2",
+      "bytes": 24105,
+      "published": [
+        {
+          "snapshot": "research84",
+          "path": "research/supervisor-20261015/research84/clients/android/app/src/main/java/com/familyconnect/app/ConnectionService.java",
+          "sha256": "612e83c170da5769c1bfaa5c70fb9d3da8fe1ca272895a099e912caa27433ba2",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "clients/android/app/src/main/java/com/familyconnect/app/ConnectivityOrchestrator.java",
+      "retained_research84_sha256": "26fa1f3fd271cd3ebfbe8b7f1c9e04fb42af6f9cdef922b21343e0b5e51efb75",
+      "bytes": 8833,
+      "published": [
+        {
+          "snapshot": "research84",
+          "path": "research/supervisor-20261015/research84/clients/android/app/src/main/java/com/familyconnect/app/ConnectivityOrchestrator.java",
+          "sha256": "26fa1f3fd271cd3ebfbe8b7f1c9e04fb42af6f9cdef922b21343e0b5e51efb75",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "clients/android/app/src/main/java/com/familyconnect/app/NativeRestricted.java",
+      "retained_research84_sha256": "f7ed710345c42a481505ebefd61ca4fdf6a29a3ad8d78a9c04a5302c04cf68a6",
+      "bytes": 1198,
+      "published": [
+        {
+          "snapshot": "research84",
+          "path": "research/supervisor-20261015/research84/clients/android/app/src/main/java/com/familyconnect/app/NativeRestricted.java",
+          "sha256": "f7ed710345c42a481505ebefd61ca4fdf6a29a3ad8d78a9c04a5302c04cf68a6",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "pilot/android-restricted/native/main.go",
+      "retained_research84_sha256": "75784f8bef32b6f3964bdae38a4fae9b86ff2edd90698d3d01ed080f7faa274a",
+      "bytes": 8646,
+      "published": [
+        {
+          "snapshot": "research84",
+          "path": "research/supervisor-20261015/research84/pilot/android-restricted/native/main.go",
+          "sha256": "75784f8bef32b6f3964bdae38a4fae9b86ff2edd90698d3d01ed080f7faa274a",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "pilot/android-restricted/native/chat.go",
+      "retained_research84_sha256": "ad8556ea7bf9f87fa94fa33b2c3ed1139771a14b74be244ae6812bfba666e6a4",
+      "bytes": 8850,
+      "published": [
+        {
+          "snapshot": "research84-source",
+          "path": "research/bootstrap-hello-admission-20261015/research84-source/pilot/android-restricted/native/chat.go",
+          "sha256": "ad8556ea7bf9f87fa94fa33b2c3ed1139771a14b74be244ae6812bfba666e6a4",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/bootstrap/protocol.go",
+      "retained_research84_sha256": "61bcdce34f004ea5d0c1bd20ff5012152c8b7dbf120d0bb8ee07b92d60550f6a",
+      "bytes": 11247,
+      "published": [
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/bootstrap/protocol.go",
+          "sha256": "61bcdce34f004ea5d0c1bd20ff5012152c8b7dbf120d0bb8ee07b92d60550f6a",
+          "matches_research84": true
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/protocol.go",
+          "sha256": "61bcdce34f004ea5d0c1bd20ff5012152c8b7dbf120d0bb8ee07b92d60550f6a",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/bootstrap/carrier.go",
+      "retained_research84_sha256": "f46f5d0b6cab633def4956bd424189f13006eb17b4549b343ef0ec59df2e8958",
+      "bytes": 6475,
+      "published": [
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/bootstrap/carrier.go",
+          "sha256": "84830f2c31d07efad50ae19fd18efe8b2b2c4689e813a660c741b208f3f10f5a",
+          "matches_research84": false
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/carrier.go",
+          "sha256": "84830f2c31d07efad50ae19fd18efe8b2b2c4689e813a660c741b208f3f10f5a",
+          "matches_research84": false
+        },
+        {
+          "snapshot": "research84-source",
+          "path": "research/bootstrap-hello-admission-20261015/research84-source/carrier/bootstrap/carrier.go",
+          "sha256": "f46f5d0b6cab633def4956bd424189f13006eb17b4549b343ef0ec59df2e8958",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/bootstrap/seed.go",
+      "retained_research84_sha256": "5952af726f016861fc8a49730714415ed220f51e76de60be2252247117af3df4",
+      "bytes": 4233,
+      "published": [
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/bootstrap/seed.go",
+          "sha256": "2e465921849c3aaa9832512417be3c9bd9de1f8fabc4330aa772aa5497dbed2b",
+          "matches_research84": false
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/bootstrap/seed.go",
+          "sha256": "4b754f9e01aa714759d53315979787d8f3e9e385553e8cc6a900f69c1cefe176",
+          "matches_research84": false
+        },
+        {
+          "snapshot": "research84-source",
+          "path": "research/bootstrap-hello-admission-20261015/research84-source/carrier/bootstrap/seed.go",
+          "sha256": "5952af726f016861fc8a49730714415ed220f51e76de60be2252247117af3df4",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/familysession/session.go",
+      "retained_research84_sha256": "51bddca0c1cb2966c4d5aeb1ebd5e360cbeede5a5508e14d79a88d3d29a09619",
+      "bytes": 12391,
+      "published": [
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/familysession/session.go",
+          "sha256": "51bddca0c1cb2966c4d5aeb1ebd5e360cbeede5a5508e14d79a88d3d29a09619",
+          "matches_research84": true
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/familysession/session.go",
+          "sha256": "51bddca0c1cb2966c4d5aeb1ebd5e360cbeede5a5508e14d79a88d3d29a09619",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/startupdiag/enabled.go",
+      "retained_research84_sha256": "81d7b51d30771cb1ec116e9e4890fa995f724c58e958e125543f8ee094d90a2f",
+      "bytes": 4029,
+      "published": [
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/startupdiag/enabled.go",
+          "sha256": "81d7b51d30771cb1ec116e9e4890fa995f724c58e958e125543f8ee094d90a2f",
+          "matches_research84": true
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/startupdiag/enabled.go",
+          "sha256": "81d7b51d30771cb1ec116e9e4890fa995f724c58e958e125543f8ee094d90a2f",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/startupdiag/error.go",
+      "retained_research84_sha256": "7526938f060f375eeb708277ea5f277f8f1ac2f42fd4a029f60de4c36d7e8dc7",
+      "bytes": 569,
+      "published": [
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/startupdiag/error.go",
+          "sha256": "7526938f060f375eeb708277ea5f277f8f1ac2f42fd4a029f60de4c36d7e8dc7",
+          "matches_research84": true
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/startupdiag/error.go",
+          "sha256": "7526938f060f375eeb708277ea5f277f8f1ac2f42fd4a029f60de4c36d7e8dc7",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/startupdiag/result.go",
+      "retained_research84_sha256": "a9685d4f2c1bf219be50a08d7fbce1b19ed0c7ee7cfd25153bf3e5fc2fdff884",
+      "bytes": 540,
+      "published": [
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/startupdiag/result.go",
+          "sha256": "a9685d4f2c1bf219be50a08d7fbce1b19ed0c7ee7cfd25153bf3e5fc2fdff884",
+          "matches_research84": true
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/startupdiag/result.go",
+          "sha256": "a9685d4f2c1bf219be50a08d7fbce1b19ed0c7ee7cfd25153bf3e5fc2fdff884",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/roombroker/broker.go",
+      "retained_research84_sha256": "5694d2aad6dba91a11c6c63232c1f9ae6081dae4d27c6c3e00a1aa7214352a71",
+      "bytes": 14950,
+      "published": [
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/roombroker/broker.go",
+          "sha256": "5694d2aad6dba91a11c6c63232c1f9ae6081dae4d27c6c3e00a1aa7214352a71",
+          "matches_research84": true
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/broker.go",
+          "sha256": "5694d2aad6dba91a11c6c63232c1f9ae6081dae4d27c6c3e00a1aa7214352a71",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/roombroker/ownership.go",
+      "retained_research84_sha256": "49a879222dd13c5209b2b467ecd1e56bb156dbc153c092e4fb30771174a45f8b",
+      "bytes": 4185,
+      "published": [
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/roombroker/ownership.go",
+          "sha256": "49a879222dd13c5209b2b467ecd1e56bb156dbc153c092e4fb30771174a45f8b",
+          "matches_research84": true
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/ownership.go",
+          "sha256": "49a879222dd13c5209b2b467ecd1e56bb156dbc153c092e4fb30771174a45f8b",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/roombroker/control.go",
+      "retained_research84_sha256": "7c961e05502eb9f604425218d30cceb07824eff294bac1339fb52327063fc378",
+      "bytes": 8729,
+      "published": [
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/roombroker/control.go",
+          "sha256": "7c961e05502eb9f604425218d30cceb07824eff294bac1339fb52327063fc378",
+          "matches_research84": true
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/control.go",
+          "sha256": "7c961e05502eb9f604425218d30cceb07824eff294bac1339fb52327063fc378",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/roombroker/lease.go",
+      "retained_research84_sha256": "1ce798a57d8a887c234fb725b1f5f4875ea0e8c3c0d9351f1017abc777ebf856",
+      "bytes": 3693,
+      "published": [
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/roombroker/lease.go",
+          "sha256": "1ce798a57d8a887c234fb725b1f5f4875ea0e8c3c0d9351f1017abc777ebf856",
+          "matches_research84": true
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/lease.go",
+          "sha256": "1ce798a57d8a887c234fb725b1f5f4875ea0e8c3c0d9351f1017abc777ebf856",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/roombroker/lease_control.go",
+      "retained_research84_sha256": "1653be99655c50e1aa274ef090c95fc755b9e27e701e11671421ccf20120391f",
+      "bytes": 8487,
+      "published": [
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/roombroker/lease_control.go",
+          "sha256": "1653be99655c50e1aa274ef090c95fc755b9e27e701e11671421ccf20120391f",
+          "matches_research84": true
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/roombroker/lease_control.go",
+          "sha256": "1653be99655c50e1aa274ef090c95fc755b9e27e701e11671421ccf20120391f",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/reliablestream/stream.go",
+      "retained_research84_sha256": "545f7be195b4241ef61846e40d37850736b4b669fdfdb3ec5082382e1d5ab17d",
+      "bytes": 9219,
+      "published": [
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/reliablestream/stream.go",
+          "sha256": "545f7be195b4241ef61846e40d37850736b4b669fdfdb3ec5082382e1d5ab17d",
+          "matches_research84": true
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/reliablestream/stream.go",
+          "sha256": "545f7be195b4241ef61846e40d37850736b4b669fdfdb3ec5082382e1d5ab17d",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/reliablestream/engine.go",
+      "retained_research84_sha256": "c635cd3746d06c8eb0a736e46c0fcfa1c0976ee4f2a34a96094a22470109bbb4",
+      "bytes": 10491,
+      "published": [
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/reliablestream/engine.go",
+          "sha256": "c635cd3746d06c8eb0a736e46c0fcfa1c0976ee4f2a34a96094a22470109bbb4",
+          "matches_research84": true
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/reliablestream/engine.go",
+          "sha256": "c635cd3746d06c8eb0a736e46c0fcfa1c0976ee4f2a34a96094a22470109bbb4",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/reliablestream/protocol.go",
+      "retained_research84_sha256": "7c0a9e002b4d92203e8a188be30917c3df477e40adf8fc673a2ad903503527c1",
+      "bytes": 3488,
+      "published": [
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/reliablestream/protocol.go",
+          "sha256": "7c0a9e002b4d92203e8a188be30917c3df477e40adf8fc673a2ad903503527c1",
+          "matches_research84": true
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/reliablestream/protocol.go",
+          "sha256": "7c0a9e002b4d92203e8a188be30917c3df477e40adf8fc673a2ad903503527c1",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/wholedevice/session.go",
+      "retained_research84_sha256": "425b602c9e543af2752b78329db9c588907b3b7b94d84885fbe3cbd32bf1d66e",
+      "bytes": 13404,
+      "published": [
+        {
+          "snapshot": "research84",
+          "path": "research/supervisor-20261015/research84/carrier/wholedevice/session.go",
+          "sha256": "425b602c9e543af2752b78329db9c588907b3b7b94d84885fbe3cbd32bf1d66e",
+          "matches_research84": true
+        },
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/wholedevice/session.go",
+          "sha256": "425b602c9e543af2752b78329db9c588907b3b7b94d84885fbe3cbd32bf1d66e",
+          "matches_research84": true
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/wholedevice/session.go",
+          "sha256": "425b602c9e543af2752b78329db9c588907b3b7b94d84885fbe3cbd32bf1d66e",
+          "matches_research84": true
+        }
+      ]
+    },
+    {
+      "relative": "carrier/wholedevice/provisioning.go",
+      "retained_research84_sha256": "d170a09a18354f190caae7198f53357414b4e7989cf434cbf49ac0a1a54515b4",
+      "bytes": 8426,
+      "published": [
+        {
+          "snapshot": "baseline",
+          "path": "research/supervisor-20261015/baseline/carrier/wholedevice/provisioning.go",
+          "sha256": "d170a09a18354f190caae7198f53357414b4e7989cf434cbf49ac0a1a54515b4",
+          "matches_research84": true
+        },
+        {
+          "snapshot": "frozen-candidate",
+          "path": "research/supervisor-20261015/frozen-candidate/carrier/wholedevice/provisioning.go",
+          "sha256": "d170a09a18354f190caae7198f53357414b4e7989cf434cbf49ac0a1a54515b4",
+          "matches_research84": true
+        }
+      ]
+    }
+  ]
+}

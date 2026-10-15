@@ -8,6 +8,22 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### BOOTSTRAP-HELLO-ADMISSION-REPRO-1 — terminal SOURCE_CHARACTERIZATION PASS (15.10)
+
+- [Completed characterization](releases/2026-10-15-bootstrap-hello-admission-repro-1.md):
+  baseline/candidate same-identity wait/cleanup matrix and actual Family/TLS error
+  classification pass, 336 case executions, including fixed race repetitions.
+- Mechanism reproduced; exact research84 source permits conditional chat-first
+  overlap, while ready VPN-first can be shared. No runtime chat-holder fact inferred.
+- Keep HISTORICAL_CAUSAL_BINDING=NOT_PROVEN, S1 unbound, ROOT_CAUSE_PROVEN=NO;
+  no supervisor regression or FROZEN_BINARY_ACCEPTED inference.
+- Possible next tasks, separately authorized: per-identity caller ownership/handoff
+  coordination and a distinct diagnostic correction/regression for os deadline,
+  local cancellation and peer close. No implementation is included in this task.
+- Preserve production and frozen artifacts; do not repeat export/seal/testability
+  audits or start owner CONNECT, Android tests, live provider, deployment/recovery
+  acceptance automatically. Build/installed/public/invitation versions unchanged.
+
 ### OWNER-SUPPORT-EXPORT-AND-TRIAGE-1 — terminal EVIDENCE_RECOVERED (15.10)
 
 - Read the [completed support-export triage](releases/2026-10-15-owner-support-export-and-triage-1.md):

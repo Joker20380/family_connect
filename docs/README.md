@@ -1,5 +1,10 @@
 # Documentation
 
+[Bootstrap HELLO admission characterization15.10](releases/2026-10-15-bootstrap-hello-admission-repro-1.md):
+real baseline/candidate Broker + Family/TLS matrix, exact research84 caller bindings,
+actual deadline/closed-pipe UNKNOWN paths; source-only PASS, historical cause unproven,
+production unchanged. [Reproducible tests/results](../research/bootstrap-hello-admission-20261015/README.md).
+
 [Bootstrap cleanup race correction05.10](releases/2026-10-05-bootstrap-cleanup-race.md):
 source-only bounded cleanup wait and safe rejection diagnostics; fresh-fixture50
 repeats/full local Go race PASS. CI blocked twice by existing TCP reset tests,
