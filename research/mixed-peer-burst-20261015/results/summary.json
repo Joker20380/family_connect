@@ -1,0 +1,3506 @@
+{
+  "result": "PARTIAL_CLIENT_RECEIVE_FIXED_MIXED_REVERSE_BURST_FAILED",
+  "live_actions": 0,
+  "historical_B_causal_binding": "NOT_PROVEN",
+  "client_only_device_trial_ready": "NO_OLD_GATEWAY_REVERSE_RECEIVE_QUEUE_BOUNDARY",
+  "old_old_burst_acceptance": "FAIL_NEGATIVE_CONTROL_NOT_PROMOTED_BY_TEST_EXIT0",
+  "runs": [
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "exit": 1,
+      "seconds": 11.692994570999872,
+      "raw_private_sha256": "f59b60a88b5cd658501736668429260db359d3e9b94a4ae4efd83ae1e161da6a",
+      "published_sha256": "e2a5208d9f1360c98502eea9cefd844ec49a9a5de64767ef7c63333761bdc836",
+      "published_log": "before-final/normal.log",
+      "top_level_pass": 3,
+      "top_level_fail": 3,
+      "race_reports": 0
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "exit": 1,
+      "seconds": 30.548076704028063,
+      "raw_private_sha256": "96715c34209bdcc5e7b36a830648a8a7f8c4e26e3c4cef2025e340104593dbf4",
+      "published_sha256": "a953e6a8a6b440e1ade635a3412cc7514082b39a0065d6a45adabaa5e60d6884",
+      "published_log": "before-final/race.log",
+      "top_level_pass": 9,
+      "top_level_fail": 9,
+      "race_reports": 0
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "exit": 0,
+      "seconds": 11.993978989019524,
+      "raw_private_sha256": "9ec208d4397e3fe47e183db0e76de77eebc5cdebc5692d40f83b55e2534618b3",
+      "published_sha256": "3af5db7e8c5e01b4eaaf54faaf43f475962b5f6c69c4473ea8d83c47282e643b",
+      "published_log": "after-final/normal.log",
+      "top_level_pass": 6,
+      "top_level_fail": 0,
+      "race_reports": 0
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "exit": 0,
+      "seconds": 30.441302769992035,
+      "raw_private_sha256": "4629eddd709ee1b087ad1c763d741ccdadfad8e32a9775d91a3a409525908d1d",
+      "published_sha256": "3ddecd4a06c2bd0860d1853095a43c8b9ff35874b68f6f19dede50edb113f245",
+      "published_log": "after-final/race.log",
+      "top_level_pass": 18,
+      "top_level_fail": 0,
+      "race_reports": 0
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "exit": 0,
+      "seconds": 8.08775153500028,
+      "raw_private_sha256": "32cb9d73e220b94ca288bf93e0b61126ec871769c563770080841b8601146ec7",
+      "published_sha256": "f2e47b60d01e7d9eb4601de38098ea94b05da6a2f157795cc8ab525ff233188e",
+      "published_log": "after-final/multicore.log",
+      "top_level_pass": 6,
+      "top_level_fail": 0,
+      "race_reports": 0
+    },
+    {
+      "group": "sustained",
+      "mode": "normal",
+      "exit": 0,
+      "seconds": 11.148042536980938,
+      "raw_private_sha256": "9b9bae9adf7228b4b2a81e9ff35d975d95509dddbc46b65efbb0c2cc99f4fd35",
+      "published_sha256": "019424021086a50d0bbc1411c4db8ea72e0bf08b6c494474cc13a8aa11340d83",
+      "published_log": "sustained/normal.log",
+      "top_level_pass": 1,
+      "top_level_fail": 0,
+      "race_reports": 0
+    },
+    {
+      "group": "sustained",
+      "mode": "race",
+      "exit": 0,
+      "seconds": 29.38782375800656,
+      "raw_private_sha256": "a187788b5a8dbcd0ce3bfc923a264c1d52ad60743c3d16944d502ebf0ed9ee3f",
+      "published_sha256": "b1d438f99a2b53adcdd131215d31eaeb4e7a33b2eade752944a64149c613b9b2",
+      "published_log": "sustained/race.log",
+      "top_level_pass": 3,
+      "top_level_fail": 0,
+      "race_reports": 0
+    },
+    {
+      "group": "sustained",
+      "mode": "multicore",
+      "exit": 0,
+      "seconds": 10.047731363971252,
+      "raw_private_sha256": "952ab0e304a3c75d455e3c59b4dadf6c8a476c5edd25840adb355675ba0a0e75",
+      "published_sha256": "b7b81a2bd26e82314ad610ea8782839f8afff13e57b990d9811bcb72984c3c83",
+      "published_log": "sustained/multicore.log",
+      "top_level_pass": 1,
+      "top_level_fail": 0,
+      "race_reports": 0
+    },
+    {
+      "group": "reverse",
+      "mode": "normal",
+      "exit": 1,
+      "seconds": 4.476051083009224,
+      "raw_private_sha256": "dbc45bc757729e814b548f6235b6c1984393f2136a9440d7529fb5060c308ff6",
+      "published_sha256": "606db4c1b6e5953560206472d9249de60690ccebca2ef3c5b5f02b1a13d4b545",
+      "published_log": "reverse/normal.log",
+      "top_level_pass": 0,
+      "top_level_fail": 1,
+      "race_reports": 0
+    },
+    {
+      "group": "reverse",
+      "mode": "race",
+      "exit": 1,
+      "seconds": 12.756529005011544,
+      "raw_private_sha256": "46fbf5b3893b08b86537dbb2d242146f0554d6d0a9b318b6ff445480d0321716",
+      "published_sha256": "e57128a688315e2c61ce8780d1f9a3f4391cbdd2998a625e0fe297f706ee706b",
+      "published_log": "reverse/race.log",
+      "top_level_pass": 0,
+      "top_level_fail": 3,
+      "race_reports": 0
+    },
+    {
+      "group": "reverse",
+      "mode": "multicore",
+      "exit": 1,
+      "seconds": 4.02861879800912,
+      "raw_private_sha256": "1bd88518b3936aa73119b05e86ff23b18aac058342ec9ffb152a1ace1d2b5c6c",
+      "published_sha256": "41f68efa41fd4d06be910a9bc81055b0017087c0b9e8c3ca8a8c84b919e7060e",
+      "published_log": "reverse/multicore.log",
+      "top_level_pass": 0,
+      "top_level_fail": 1,
+      "race_reports": 0
+    }
+  ],
+  "regressions": [
+    {
+      "group": "regressions",
+      "mode": "normal",
+      "exit": 0,
+      "raw_private_sha256": "62328b15473fc6a78b51ba3be416b7d8e7a2c238a76e4823742eff40802c40a4",
+      "top_level_pass": 154,
+      "top_level_fail": 0,
+      "race_reports": 0
+    },
+    {
+      "group": "regressions",
+      "mode": "race",
+      "exit": 0,
+      "raw_private_sha256": "9a8adb4450401fbd98f4ab861fa1d13282a4ea68f77f8c04b6a8b983ae4831f6",
+      "top_level_pass": 462,
+      "top_level_fail": 0,
+      "race_reports": 0
+    },
+    {
+      "group": "combined-host",
+      "mode": "normal",
+      "exit": 0,
+      "raw_private_sha256": "69158e3965c94a42d9d914846e61f064b90d6a9c82085a77e8b4eb605aef5c5a",
+      "top_level_pass": 20,
+      "top_level_fail": 0,
+      "race_reports": 0
+    },
+    {
+      "group": "combined-host",
+      "mode": "race",
+      "exit": 0,
+      "raw_private_sha256": "679e33ddc19d11042899166d3153486ca8b536346f984b3f5b76ddeef039e1f2",
+      "top_level_pass": 60,
+      "top_level_fail": 0,
+      "race_reports": 0
+    },
+    {
+      "group": "full-queue-cancel",
+      "mode": "normal",
+      "exit": 0,
+      "raw_private_sha256": "7ce0e7a1bc7d2513026ecdb249fbf92f31b4b46158aedc5d69fba3ccfb4004b3",
+      "top_level_pass": 2,
+      "top_level_fail": 0,
+      "race_reports": 0
+    },
+    {
+      "group": "full-queue-cancel",
+      "mode": "race",
+      "exit": 0,
+      "raw_private_sha256": "10bf02a382287e4a2d5316df8fd31261fb9c98aad9090b0ec6a9ffacd482fccf",
+      "top_level_pass": 6,
+      "top_level_fail": 0,
+      "race_reports": 0
+    }
+  ],
+  "matrix": [
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 23185,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 13689,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 40135,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 44580,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 63563,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 6976,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 30011,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 30936,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 44905,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 134521,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 3,
+        "3": 5
+      },
+      "duration_ns": 6151,
+      "epoch_pairs": 1,
+      "unique_data": 3,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 2611,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 7,
+        "3": 12
+      },
+      "duration_ns": 15185,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 8,
+        "3": 12
+      },
+      "duration_ns": 10298,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 22,
+        "3": 18,
+        "repeated_data": 14
+      },
+      "duration_ns": 58782,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedOutboundStall",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 30292,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedLifecycle/false/B",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 10007,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "normal",
+      "case": "TestMixedLifecycle/true/B",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 9476,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 16408,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 26193,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 354281,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 92965,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 90020,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 14500,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 31695,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 79246,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 54784,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 100177,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 3,
+        "3": 5
+      },
+      "duration_ns": 21998,
+      "epoch_pairs": 1,
+      "unique_data": 3,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 6,
+        "3": 10
+      },
+      "duration_ns": 26835,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 7,
+        "3": 12
+      },
+      "duration_ns": 154908,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 8,
+        "3": 12
+      },
+      "duration_ns": 52957,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 24,
+        "3": 16,
+        "repeated_data": 16
+      },
+      "duration_ns": 172476,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedOutboundStall",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 128825,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedLifecycle/false/B",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 144241,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedLifecycle/true/B",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 141167,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 15974,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 44750,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 86355,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 86867,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 68141,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 12733,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 24724,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 42322,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 42026,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 62070,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 3,
+        "3": 5
+      },
+      "duration_ns": 14298,
+      "epoch_pairs": 1,
+      "unique_data": 3,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 6,
+        "3": 10
+      },
+      "duration_ns": 26884,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 8,
+        "3": 11
+      },
+      "duration_ns": 51404,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 9,
+        "3": 11,
+        "repeated_data": 1
+      },
+      "duration_ns": 51183,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 22,
+        "3": 18,
+        "repeated_data": 14
+      },
+      "duration_ns": 98048,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedOutboundStall",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 46012,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedLifecycle/false/B",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 85555,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedLifecycle/true/B",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 49383,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 14943,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 25117,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 87485,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 65585,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 99560,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 21275,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 47790,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 80861,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 77282,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 70237,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 3,
+        "3": 5
+      },
+      "duration_ns": 15611,
+      "epoch_pairs": 1,
+      "unique_data": 3,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 6,
+        "3": 10
+      },
+      "duration_ns": 43713,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 8,
+        "3": 11
+      },
+      "duration_ns": 70600,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 8,
+        "3": 12
+      },
+      "duration_ns": 50080,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 22,
+        "3": 18,
+        "repeated_data": 14
+      },
+      "duration_ns": 100359,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedOutboundStall",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 46339,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedLifecycle/false/B",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 82889,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "before-final",
+      "mode": "race",
+      "case": "TestMixedLifecycle/true/B",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 55764,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 5682,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 64,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 8102,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 64,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/19",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 9355,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 18
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/20",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 9545,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/40",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 38528,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 64,
+      "sampled_high_water": 39
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 1892,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 8429,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 57075,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 36698,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 41084,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 3,
+        "3": 5
+      },
+      "duration_ns": 1728,
+      "epoch_pairs": 1,
+      "unique_data": 3,
+      "queue_capacity": 64,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 6,
+        "3": 10
+      },
+      "duration_ns": 4363,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/19",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 19,
+      "composition": {
+        "2": 7,
+        "3": 12
+      },
+      "duration_ns": 10357,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 64,
+      "sampled_high_water": 18
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/20",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 8,
+        "3": 12
+      },
+      "duration_ns": 10139,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/40",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 40,
+      "composition": {
+        "2": 23,
+        "3": 17,
+        "repeated_data": 15
+      },
+      "duration_ns": 20527,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 64,
+      "sampled_high_water": 39
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedOutboundStall",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 11606,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedLifecycle/false/B",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 11662,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "normal",
+      "case": "TestMixedLifecycle/true/B",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 11755,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 52538,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 64,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 51140,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 64,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/19",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 108000,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 18
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/20",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 30534,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/40",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 59297,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 64,
+      "sampled_high_water": 39
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 52324,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 167069,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 94051,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 113600,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 84282,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 3,
+        "3": 5
+      },
+      "duration_ns": 14314,
+      "epoch_pairs": 1,
+      "unique_data": 3,
+      "queue_capacity": 64,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 7,
+        "3": 9
+      },
+      "duration_ns": 98913,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 64,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/19",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 19,
+      "composition": {
+        "2": 7,
+        "3": 12
+      },
+      "duration_ns": 115656,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 64,
+      "sampled_high_water": 18
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/20",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 8,
+        "3": 12
+      },
+      "duration_ns": 35995,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/40",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 40,
+      "composition": {
+        "2": 23,
+        "3": 17,
+        "repeated_data": 15
+      },
+      "duration_ns": 72194,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 64,
+      "sampled_high_water": 39
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedOutboundStall",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 38362,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedLifecycle/false/B",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 45736,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedLifecycle/true/B",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 57115,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 53110,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 64,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 80273,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 64,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/19",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 94839,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 18
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/20",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 115600,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/40",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 251005,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 64,
+      "sampled_high_water": 39
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 58088,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 27043,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 46136,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 47126,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 226131,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 3,
+        "3": 5
+      },
+      "duration_ns": 21828,
+      "epoch_pairs": 1,
+      "unique_data": 3,
+      "queue_capacity": 64,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 6,
+        "3": 10
+      },
+      "duration_ns": 53273,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/19",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 19,
+      "composition": {
+        "2": 8,
+        "3": 11
+      },
+      "duration_ns": 123802,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 64,
+      "sampled_high_water": 18
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/20",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 8,
+        "3": 12
+      },
+      "duration_ns": 145289,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/40",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 268453,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 64,
+      "sampled_high_water": 39
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedOutboundStall",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 118410,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedLifecycle/false/B",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 123008,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedLifecycle/true/B",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 129213,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 15006,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 64,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 102726,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 64,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/19",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 113539,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 18
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/20",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 83982,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/40",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 221212,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 64,
+      "sampled_high_water": 39
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 55932,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 97084,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 164648,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 55830,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 102835,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 3,
+        "3": 5
+      },
+      "duration_ns": 28645,
+      "epoch_pairs": 1,
+      "unique_data": 3,
+      "queue_capacity": 64,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 6,
+        "3": 10
+      },
+      "duration_ns": 70263,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/19",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 19,
+      "composition": {
+        "2": 7,
+        "3": 12
+      },
+      "duration_ns": 57859,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 64,
+      "sampled_high_water": 18
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/20",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 8,
+        "3": 12
+      },
+      "duration_ns": 33988,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/40",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 40,
+      "composition": {
+        "2": 23,
+        "3": 17,
+        "repeated_data": 15
+      },
+      "duration_ns": 259673,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 64,
+      "sampled_high_water": 39
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedOutboundStall",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 61674,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedLifecycle/false/B",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 126875,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "race",
+      "case": "TestMixedLifecycle/true/B",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 210128,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 12400,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 64,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 16230,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 64,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/19",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 17497,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 18
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/20",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 19183,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/NEW_CLIENT_OLD_GATEWAY/40",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 32808,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 64,
+      "sampled_high_water": 39
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 2,
+        "3": 6
+      },
+      "duration_ns": 12164,
+      "epoch_pairs": 1,
+      "unique_data": 2,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 5,
+        "3": 11
+      },
+      "duration_ns": 14560,
+      "epoch_pairs": 1,
+      "unique_data": 5,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 6,
+        "3": 13
+      },
+      "duration_ns": 11000,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 17073,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/OLD_CLIENT_OLD_GATEWAY/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 16,
+        "3": 24,
+        "repeated_data": 8
+      },
+      "duration_ns": 48003,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/0",
+      "outcome": "PASS_NORMAL_TRAFFIC"
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 3,
+        "3": 5
+      },
+      "duration_ns": 16994,
+      "epoch_pairs": 1,
+      "unique_data": 3,
+      "queue_capacity": 64,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 6,
+        "3": 10
+      },
+      "duration_ns": 16176,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/19",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 19,
+      "composition": {
+        "2": 7,
+        "3": 12
+      },
+      "duration_ns": 15471,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 64,
+      "sampled_high_water": 18
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/20",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 7,
+        "3": 13
+      },
+      "duration_ns": 16088,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedSupported/NEW_CLIENT_NEW_GATEWAY/40",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 40,
+      "composition": {
+        "2": 22,
+        "3": 18,
+        "repeated_data": 14
+      },
+      "duration_ns": 27064,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 64,
+      "sampled_high_water": 39
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedOutboundStall",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 16354,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedLifecycle/false/B",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 23639,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "after-final",
+      "mode": "multicore",
+      "case": "TestMixedLifecycle/true/B",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 20,
+      "composition": {
+        "2": 6,
+        "3": 14
+      },
+      "duration_ns": 15823,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 64,
+      "sampled_high_water": 19
+    },
+    {
+      "group": "reverse",
+      "mode": "normal",
+      "case": "TestMixedReverseSupported/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 3,
+        "3": 5
+      },
+      "duration_ns": 5287,
+      "epoch_pairs": 1,
+      "unique_data": 3,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "reverse",
+      "mode": "normal",
+      "case": "TestMixedReverseSupported/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 7,
+        "3": 9
+      },
+      "duration_ns": 6436,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "reverse",
+      "mode": "normal",
+      "case": "TestMixedReverseSupported/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 7,
+        "3": 12
+      },
+      "duration_ns": 21422,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "reverse",
+      "mode": "normal",
+      "case": "TestMixedReverseSupported/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 7,
+        "3": 13
+      },
+      "duration_ns": 20982,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "reverse",
+      "mode": "normal",
+      "case": "TestMixedReverseSupported/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 21,
+        "3": 19,
+        "repeated_data": 13
+      },
+      "duration_ns": 35236,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "reverse",
+      "mode": "race",
+      "case": "TestMixedReverseSupported/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 3,
+        "3": 5
+      },
+      "duration_ns": 71186,
+      "epoch_pairs": 1,
+      "unique_data": 3,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "reverse",
+      "mode": "race",
+      "case": "TestMixedReverseSupported/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 6,
+        "3": 10
+      },
+      "duration_ns": 116675,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "reverse",
+      "mode": "race",
+      "case": "TestMixedReverseSupported/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 8,
+        "3": 11
+      },
+      "duration_ns": 256192,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "reverse",
+      "mode": "race",
+      "case": "TestMixedReverseSupported/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 7,
+        "3": 13
+      },
+      "duration_ns": 302101,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "reverse",
+      "mode": "race",
+      "case": "TestMixedReverseSupported/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 24,
+        "3": 16,
+        "repeated_data": 16
+      },
+      "duration_ns": 270644,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "reverse",
+      "mode": "race",
+      "case": "TestMixedReverseSupported/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 3,
+        "3": 5
+      },
+      "duration_ns": 62139,
+      "epoch_pairs": 1,
+      "unique_data": 3,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "reverse",
+      "mode": "race",
+      "case": "TestMixedReverseSupported/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 6,
+        "3": 10
+      },
+      "duration_ns": 41530,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "reverse",
+      "mode": "race",
+      "case": "TestMixedReverseSupported/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 7,
+        "3": 12
+      },
+      "duration_ns": 174557,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "reverse",
+      "mode": "race",
+      "case": "TestMixedReverseSupported/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 8,
+        "3": 12
+      },
+      "duration_ns": 86117,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "reverse",
+      "mode": "race",
+      "case": "TestMixedReverseSupported/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 24,
+        "3": 16,
+        "repeated_data": 16
+      },
+      "duration_ns": 228149,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "reverse",
+      "mode": "race",
+      "case": "TestMixedReverseSupported/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 3,
+        "3": 5
+      },
+      "duration_ns": 96607,
+      "epoch_pairs": 1,
+      "unique_data": 3,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "reverse",
+      "mode": "race",
+      "case": "TestMixedReverseSupported/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 6,
+        "3": 10
+      },
+      "duration_ns": 101219,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "reverse",
+      "mode": "race",
+      "case": "TestMixedReverseSupported/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 7,
+        "3": 12
+      },
+      "duration_ns": 171293,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "reverse",
+      "mode": "race",
+      "case": "TestMixedReverseSupported/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 7,
+        "3": 13
+      },
+      "duration_ns": 199475,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "reverse",
+      "mode": "race",
+      "case": "TestMixedReverseSupported/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 24,
+        "3": 16,
+        "repeated_data": 16
+      },
+      "duration_ns": 314759,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "reverse",
+      "mode": "multicore",
+      "case": "TestMixedReverseSupported/8",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 8,
+      "composition": {
+        "2": 3,
+        "3": 5
+      },
+      "duration_ns": 32367,
+      "epoch_pairs": 1,
+      "unique_data": 3,
+      "queue_capacity": 16,
+      "sampled_high_water": 7
+    },
+    {
+      "group": "reverse",
+      "mode": "multicore",
+      "case": "TestMixedReverseSupported/16",
+      "outcome": "PASS_BYTE_EXACT_ACK_AND_POST_BURST_DUPLEX",
+      "count": 16,
+      "composition": {
+        "2": 6,
+        "3": 10
+      },
+      "duration_ns": 15594,
+      "epoch_pairs": 1,
+      "unique_data": 6,
+      "queue_capacity": 16,
+      "sampled_high_water": 15
+    },
+    {
+      "group": "reverse",
+      "mode": "multicore",
+      "case": "TestMixedReverseSupported/19",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 19,
+      "composition": {
+        "2": 7,
+        "3": 12
+      },
+      "duration_ns": 38890,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "reverse",
+      "mode": "multicore",
+      "case": "TestMixedReverseSupported/20",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 20,
+      "composition": {
+        "2": 7,
+        "3": 13
+      },
+      "duration_ns": 42853,
+      "epoch_pairs": 1,
+      "unique_data": 7,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    },
+    {
+      "group": "reverse",
+      "mode": "multicore",
+      "case": "TestMixedReverseSupported/40",
+      "outcome": "BURST_FAILED_RECEIVE_QUEUE_FULL",
+      "count": 40,
+      "composition": {
+        "2": 21,
+        "3": 19,
+        "repeated_data": 13
+      },
+      "duration_ns": 75205,
+      "epoch_pairs": 1,
+      "unique_data": 8,
+      "queue_capacity": 16,
+      "sampled_high_water": 16
+    }
+  ],
+  "initial_iterations": [
+    {
+      "group": "before-initial",
+      "mode": "normal",
+      "exit": 1,
+      "log_sha256": "a7dd69b84e1730318477381b0e175c5a07ac77bc570e85fee0040d1db4550ea9",
+      "published": false,
+      "reason": "original before/after development run retained privately; final same-load strengthened test logs published"
+    },
+    {
+      "group": "before-race",
+      "mode": "race",
+      "exit": 1,
+      "log_sha256": "3296f9b0aa393565cfe9aeb7bf4ad5919f2eab09d32321452a4946a6d3845617",
+      "published": false,
+      "reason": "original before/after development run retained privately; final same-load strengthened test logs published"
+    },
+    {
+      "group": "after-initial",
+      "mode": "normal",
+      "exit": 0,
+      "log_sha256": "d2d1b3afc6313b0406664f21ae390ae7956fad31fc1a8aa8e1f20bc6cd8ccc2f",
+      "published": false,
+      "reason": "original before/after development run retained privately; final same-load strengthened test logs published"
+    }
+  ],
+  "native": {
+    "normal": {
+      "sha256": "253e0e15f38223288571d3e682f6876269aa9c6d1c0c5157588ed8287ba6f3a3",
+      "size": 28802080,
+      "tags": ""
+    },
+    "diagnostic": {
+      "sha256": "e0cc37dfc3e5899075c9474f43e67b26d5af3ee6afeb0d7dc78f3e2aaa00edb3",
+      "size": 28937832,
+      "tags": "fc_owner_diagnostic"
+    },
+    "messenger-lab": {
+      "sha256": "f46882db8c9a57eab5dc3d1db74954504e11ca9e1047b9b46a2b99024b29332c",
+      "size": 28836520,
+      "tags": "fc_messenger_lab"
+    }
+  },
+  "jni": [
+    {
+      "name": "module.log",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "normal.log",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "diagnostic.log",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "messenger-lab.log",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-contract.log",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "jni-NativeRestricted.log",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "jni-MessengerLabActivity.log",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "gradle": {
+    "exit": 0,
+    "variant": "researchProvisioning",
+    "source_delta_sha256": "c2dc3dd860044b31696893244995cbc5cc8eb805ee34319df99cce085cf40d08",
+    "native_sha256": "253e0e15f38223288571d3e682f6876269aa9c6d1c0c5157588ed8287ba6f3a3",
+    "apk": {
+      "name": "app-researchProvisioning-unsigned.apk",
+      "sha256": "cc5b883395c59d2f76f4cf8ce1d787fa764c1fac2936c9148f9876697d2c5013",
+      "embedded_native_sha256": "253e0e15f38223288571d3e682f6876269aa9c6d1c0c5157588ed8287ba6f3a3",
+      "size": 55981564
+    },
+    "log_sha256": "b8046d93f2d31f7c9736b19d2b6c8e95c28a9047fb4ab9ef4a72ce134c41f964",
+    "device_tests": "NOT_RUN"
+  },
+  "jvm": [
+    {
+      "name": "com.familyconnect.app.DiagnosticRingTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.RestrictedStartupTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.StartupFidelityTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "client_inbound_acceptance": "PASS_AFTER_CORRECTION",
+  "mixed_bidirectional_supported_burst_acceptance": "FAIL",
+  "reverse_gate_added_before_execution": "Same positive envelope checked on old gateway receiver; not negative control or unsupported overload"
+}

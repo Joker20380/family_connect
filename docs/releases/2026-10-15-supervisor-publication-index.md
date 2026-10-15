@@ -8,6 +8,14 @@ production FAIL сохраняется; historical root cause не доказа�
 
 ## Начать здесь
 
+- [Mixed-peer receive burst — PARTIAL, client-only gate blocked](2026-10-15-mixed-peer-receive-burst-acceptance-1.md)
+  and [source/tests/commands/results](../../research/mixed-peer-burst-20261015/README.md):
+  exact NEW/OLD modules and synthetic real Family/TLS. Client receive reserve64 fixes
+  supported8/16/19/20 plus40 stress; reverse NEW→OLD gateway still closes queue16.
+  Not an accepted overload guard; CLIENT_ONLY_DEVICE_TRIAL_READY=NO. Regression,
+  JNI/full assemble PASS; inventory c2dc3dd8…5cf40d08. Unsigned artifacts private.
+  No gateway/device/live action; old reports and historical statuses preserved.
+
 - [Receive queue stall — progress defect fixed locally](2026-10-15-receive-queue-stall-repro-and-fix-1.md)
   and [source/tests/commands/results](../../research/receive-queue-stall-20261015/README.md):
   exact installed cumulative source derivative; two-file bounded writer correction.

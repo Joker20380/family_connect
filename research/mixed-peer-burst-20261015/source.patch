@@ -1,0 +1,136 @@
+--- a/carrier/telemost/session.go
++++ b/carrier/telemost/session.go
+@@ -42,7 +42,8 @@
+ 	// amount crosses this threshold, providing simple backpressure.
+ 	dcBufferedHighWaterMark = 1 << 20
+ 
+-	sendQueueSize = 256
++	sendQueueSize    = 256
++	receiveQueueSize = 64
+ )
+ 
+ // Mode selects the carrier transport.
+@@ -211,7 +212,7 @@
+ 	s.subSequence.Store(1)
+ 	s.ctx, s.cancel = context.WithCancel(ctx)
+ 	s.cleanupDone = make(chan struct{})
+-	s.recvQueue = make(chan receiveMessage, 16)
++	s.recvQueue = make(chan receiveMessage, receiveQueueSize)
+ 	s.pendingICE = make(map[string][]webrtc.ICECandidateInit)
+ 	s.reassembler = newReassembler(s.senderID, s.deliver)
+ 	s.reassembler.trace = cfg.Trace
+--- a/carrier/telemost/receive_stall_test.go
++++ b/carrier/telemost/receive_stall_test.go
+@@ -110,7 +110,7 @@
+ 		if err != nil {
+ 			t.Fatal(err)
+ 		}
+-		if cap(session.recvQueue) != 16 || cap(session.sendQueue) != 256 {
++		if cap(session.recvQueue) != 64 || cap(session.sendQueue) != 256 {
+ 			t.Fatal("production capacity changed")
+ 		}
+ 		points[index] = &stallEndpoint{session: session}
+@@ -389,7 +389,7 @@
+ 	if point.activeSend.Load() != 0 || point.activeRecv.Load() != 0 {
+ 		t.Fatal("endpoint workers survived Close")
+ 	}
+-	if cap(point.session.recvQueue) != 16 || cap(point.session.sendQueue) != 256 {
++	if cap(point.session.recvQueue) != 64 || cap(point.session.sendQueue) != 256 {
+ 		t.Fatal("capacity changed")
+ 	}
+ }
+--- /dev/null
++++ b/carrier/telemost/receive_burst_test.go
+@@ -0,0 +1,74 @@
++package telemost
++
++import (
++	"bytes"
++	"context"
++	"testing"
++	"time"
++)
++
++func TestReceiveBurstFiniteCapacityAndClose(test *testing.T) {
++	session, err := New(context.Background(), Config{RoomURL: "bounded-local-fixture"})
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer session.Close()
++	if cap(session.recvQueue) != 64 || MaxMessageSize != 65536 {
++		test.Fatal("memory envelope changed")
++	}
++	for index := 0; index < 64; index++ {
++		session.deliver(bytes.Repeat([]byte{byte(index)}, MaxMessageSize))
++	}
++	if session.closed.Load() || len(session.recvQueue) != 64 {
++		test.Fatal("bounded complete burst rejected")
++	}
++	session.deliver([]byte("one message beyond capacity"))
++	if !session.closed.Load() {
++		test.Fatal("overload must remain observable")
++	}
++	if err := session.Close(); err != nil {
++		test.Fatal(err)
++	}
++	select {
++	case <-session.cleanupDone:
++	default:
++		test.Fatal("cleanup incomplete")
++	}
++}
++
++func TestReceiveBurstCancelFullQueue(test *testing.T) {
++	for _, parentCancel := range []bool{false, true} {
++		name := "close"
++		if parentCancel {
++			name = "parent-cancel"
++		}
++		test.Run(name, func(test *testing.T) {
++			ctx, cancel := context.WithCancel(context.Background())
++			defer cancel()
++			session, err := New(ctx, Config{RoomURL: "bounded-local-fixture"})
++			if err != nil {
++				test.Fatal(err)
++			}
++			defer session.Close()
++			for index := 0; index < 64; index++ {
++				session.deliver([]byte{byte(index)})
++			}
++			if session.closed.Load() || len(session.recvQueue) != 64 {
++				test.Fatal("full queue prematurely closed")
++			}
++			if parentCancel {
++				cancel()
++			} else if err := session.Close(); err != nil {
++				test.Fatal(err)
++			}
++			select {
++			case <-session.cleanupDone:
++			case <-time.After(time.Second):
++				test.Fatal("full-queue cleanup timeout")
++			}
++			if !session.closed.Load() {
++				test.Fatal("close not recorded")
++			}
++		})
++	}
++}
+--- a/carrier/reliablestream/README.md
++++ b/carrier/reliablestream/README.md
+@@ -97,11 +97,12 @@
+ - Header decoding allocates no payload; validation precedes cloning/buffering.
+ - Huge sequence jumps, receive-window overflow and conflicting buffered duplicates
+   reset the session. No sequence wrap or resizing to a peer-provided distance.
+-- Existing carrier queues remain bounded:256 outgoing fragments and16 messages;
++- Existing carrier queues remain bounded:256 outgoing fragments and64 messages;
+   they are not hidden in ReliableStream's byte accounting. Encoding, the64KiB
+   TLS bridge and one delivered block are additional fixed/temporary allocations.
+-- Two owned goroutines: one state/IO loop, one carrier reader with a1-slot channel.
+-  All public waiters select cancellation/terminal state. Close joins both workers.
++- Three owned goroutines: one state loop, one carrier reader with a1-slot channel,
++  and one serialized bounded writer. All public waiters select cancellation/terminal
++  state. Close joins the reader and writer. Pending outgoing jobs are limited to34.
+ - Context cancellation, carrier/WS/PC termination, TLS termination, local Close,
+   remote RESET and retry exhaustion abort the stream and clear retained buffers.
+   RESET is best-effort with100ms send budget. It is an abort, not a reliable FIN or

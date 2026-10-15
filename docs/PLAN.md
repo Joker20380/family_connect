@@ -8,6 +8,21 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### MIXED-PEER-RECEIVE-BURST-ACCEPTANCE-1 — local client correction; reverse gate FAIL
+
+- [Report](releases/2026-10-15-mixed-peer-receive-burst-acceptance-1.md) and
+  [reproducible package](../research/mixed-peer-burst-20261015/README.md): exact mixed
+  modules, real peer frames, finite client-inbound8/16/19/20 plus40 stress pass after
+  bounded receive reserve64. Preserve the prior async writer/handoff/diagnostic fixes.
+- Required reverse gate NEW→OLD gateway still fails19/20/40 at unchanged recvQueue16.
+  This is a supported-load failure, not an allowed guard. Client-only readiness NO;
+  do not infer rollout readiness from NEW/NEW or normal Family/TLS success.
+- Remaining decision, only in a separate task: address/accept the exact old-receiver
+  boundary with appropriate scope. No automatic gateway change, signing or CONNECT.
+- Local race, cleanup, genuine sustained overload, JNI and full Gradle/JVM completed.
+  New unsigned artifacts stay private. Previous smoke PASS/reconnect FAIL, supervisor
+  status and historical B NOT_PROVEN are unchanged. LIVE_ACTIONS=0.
+
 ### RECEIVE-QUEUE-STALL-REPRO-AND-FIX-1 — locally verified, no live rollout (15.10)
 
 - [Report](releases/2026-10-15-receive-queue-stall-repro-and-fix-1.md) and

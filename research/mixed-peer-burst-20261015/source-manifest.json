@@ -1,0 +1,38 @@
+{
+  "input_review": "ba89a5fcdd3442474ae900abe63050e365f2f3d2",
+  "base_cumulative": "af315dce15e16c3b5d372dee4294192339443ac0cd79364748bd2f53c156be61",
+  "new_cumulative": "c2dc3dd860044b31696893244995cbc5cc8eb805ee34319df99cce085cf40d08",
+  "baseline": {
+    "snapshot": "471d1d62e1385a9ffc5ff6a16a5a7e9fe043fae2",
+    "source_base": "a4087e000fdbe674b72ede3a6c8822445c87c654",
+    "source_delta_sha256": "7e7d408670a6ac6afa18e856beb8dcc0ca26a3b6f074e205d4dd25e62d78967b",
+    "binary_sha256": "21f0a0fdc27b50c00ea922f0b716516e2422aedf1b3797369718f7d00070509a"
+  },
+  "files": [
+    {
+      "path": "carrier/telemost/session.go",
+      "scope": "product",
+      "before_sha256": "b1cc32330c0c192718c3973f4f7e64f02b3690dbecd40f0b7cb5d89498abb440",
+      "after_sha256": "71031dbebd96e9273d99ad81225cb80dc5f06c9e94fbcaf8c87ef93cf5fc67db"
+    },
+    {
+      "path": "carrier/telemost/receive_stall_test.go",
+      "scope": "test-capacity-expectation-only",
+      "before_sha256": "bd6ce172bf825cbe5dab14755319b4a438b4fc53cdd3a7fe7fb3273f5b511e26",
+      "after_sha256": "db8a35f3158e7fac34183c30b96ea373431956777f2871c3c90ba34ba43fc7f8"
+    },
+    {
+      "path": "carrier/telemost/receive_burst_test.go",
+      "scope": "test",
+      "before_sha256": null,
+      "after_sha256": "eda3774a6f3a07356f7ad0af7c2f74eb5c8958728da9124bbaa66f6f49042ba1"
+    },
+    {
+      "path": "carrier/reliablestream/README.md",
+      "scope": "documentation",
+      "before_sha256": "48661a89e5dff71e15df831ed58f36d0bffc9f1dd6fdb6ba37bb50679ef60898",
+      "after_sha256": "3d872c619bc7b5c960d9529fdd0a27dded918f85418295ffedeb850735dfe101"
+    }
+  ],
+  "patch_sha256": "3fc9101a336a32831bb8f1ec0146ba2a3fb7f996c4df02b7df08d5170b014eab"
+}

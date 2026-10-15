@@ -1,5 +1,27 @@
 # Текущее состояние / Current state
 
+## MIXED-PEER-RECEIVE-BURST-ACCEPTANCE-1 — PARTIAL, client-only gate blocked (15.10)
+
+[Report](releases/2026-10-15-mixed-peer-receive-burst-acceptance-1.md) and
+[source/tests/results](../research/mixed-peer-burst-20261015/README.md).
+Actual OLD_GATEWAY baseline module and NEW/OLD client modules are independently
+compiled; Family/TLS and normal duplex pass. Correct peer-generated19/20/40 bursts
+reproduce recvQueue16 failure. One client product file raises the fixed reserve to64
+(4MiB maximum queued payload); async writer, handoff, diagnostics and timers remain.
+Same client-inbound burst load passes normal1/race3/multicore1, including short send
+stall, slow consumer, SACK and A→B/held cleanup. Sustained blocked consumer remains
+bounded: actual old-peer retransmissions close queue64 in8.302–8.695s; cleanup passes.
+Reverse positive gate remains FAIL: real NEW sender→OLD gateway recvQueue16 closes
+on19/20/40. OLD/OLD burst failure is not a PASS guard; NEW/NEW cannot justify rollout.
+CLIENT_ONLY_DEVICE_TRIAL_READY=NO for the complete bidirectional envelope. Do not
+automatically sign/install or change baseline. A separate decision about the old
+gateway receive boundary is required; no pacing/protocol workaround is introduced.
+Regression154/462 and handoff/diagnostic20/60 PASS; full-queue cancel2/6 PASS. JNI and
+full researchProvisioning assemble/JVM10 PASS. Local inventory c2dc3dd8…5cf40d08,
+native253e0e15…ba6f3a3, unsigned APKcc5b8833…d2c5013; no signing/install/public APK.
+LIVE_ACTIONS=0. Previous smoke PASS/reconnect FAIL and historical B NOT_PROVEN stay.
+Frozen snapshots, previous reports, installed client, gateway and dirty root preserved.
+
 ## RECEIVE-QUEUE-STALL-REPRO-AND-FIX-1 — progress defect fixed locally (15.10)
 
 Exact cumulative a4d48907…b916d5 derivative: production Reliable run synchronously
