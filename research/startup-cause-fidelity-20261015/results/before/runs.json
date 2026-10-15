@@ -1,0 +1,19 @@
+[
+  {
+    "mode": "before",
+    "count": 1,
+    "exit": 1,
+    "command": [
+      "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+      "test",
+      "-tags=seedacceptance",
+      "-v",
+      "-count=1",
+      "-timeout=180s",
+      "-run=^TestFidelityReceive$",
+      "./bootstrap"
+    ],
+    "log": "before.log",
+    "sha256": "1e53c07f963390d7104e5fea757a50ada2e3760cc7424f4c1cdd49ac96d7ae1c"
+  }
+]

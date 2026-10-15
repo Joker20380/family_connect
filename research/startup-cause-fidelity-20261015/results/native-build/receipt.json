@@ -1,0 +1,140 @@
+{
+  "scope": "COMPILE_LINK_ONLY_NO_APK_NO_DEVICE",
+  "runs": [
+    {
+      "command": [
+        "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+        "mod",
+        "edit",
+        "-modfile=/tmp/fc-startup-cause-fidelity-1/native-build/native.mod",
+        "-replace=github.com/Joker20380/family_connect/carrier=/tmp/fc-startup-cause-fidelity-1/source/carrier",
+        "-replace=github.com/xtls/xray-core=/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/native-packet-tests/xray"
+      ],
+      "log": "module.log",
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+        "build",
+        "-buildvcs=false",
+        "-modfile=/tmp/fc-startup-cause-fidelity-1/native-build/native.mod",
+        "-trimpath",
+        "-ldflags=-checklinkname=0",
+        "-buildmode=c-shared",
+        "-o",
+        "/tmp/fc-startup-cause-fidelity-1/native-build/normal/libfc_restricted.so",
+        "./native"
+      ],
+      "log": "normal.log",
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+        "build",
+        "-buildvcs=false",
+        "-modfile=/tmp/fc-startup-cause-fidelity-1/native-build/native.mod",
+        "-trimpath",
+        "-ldflags=-checklinkname=0",
+        "-buildmode=c-shared",
+        "-o",
+        "/tmp/fc-startup-cause-fidelity-1/native-build/diagnostic/libfc_restricted.so",
+        "-tags=fc_owner_diagnostic",
+        "./native"
+      ],
+      "log": "diagnostic.log",
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+        "build",
+        "-buildvcs=false",
+        "-modfile=/tmp/fc-startup-cause-fidelity-1/native-build/native.mod",
+        "-trimpath",
+        "-ldflags=-checklinkname=0",
+        "-buildmode=c-shared",
+        "-o",
+        "/tmp/fc-startup-cause-fidelity-1/native-build/messenger-lab/libfc_restricted.so",
+        "-tags=fc_messenger_lab",
+        "./native"
+      ],
+      "log": "messenger-lab.log",
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/jdk/bin/javac",
+        "-source",
+        "17",
+        "-target",
+        "17",
+        "-implicit:none",
+        "-classpath",
+        "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/whitelist-provisioning-block-seam-1/build/android/app/intermediates/javac/researchProvisioning/compileResearchProvisioningJavaWithJavac/classes:/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/android/platforms/android-35/android.jar:/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/gradle-home/caches/modules-2/files-2.1/com.google.code.gson/gson/2.13.2/48b8230771e573b54ce6e867a9001e75977fe78e/gson-2.13.2.jar",
+        "-d",
+        "/tmp/fc-startup-cause-fidelity-1/native-build/classes",
+        "-h",
+        "/tmp/fc-startup-cause-fidelity-1/native-build/headers",
+        "/tmp/fc-startup-cause-fidelity-1/source/clients/android/app/src/main/java/com/familyconnect/app/NativeRestricted.java",
+        "/tmp/fc-startup-cause-fidelity-1/source/clients/android/app/src/main/java/com/familyconnect/app/RestrictedTunnelEngine.java",
+        "/tmp/fc-startup-cause-fidelity-1/source/clients/android/app/src/main/java/com/familyconnect/app/ChatCarrier.java",
+        "/tmp/fc-startup-cause-fidelity-1/source/clients/android/chat-runtime/app/src/lab/java/com/familyconnect/app/MessengerLabActivity.java"
+      ],
+      "log": "java-contract.log",
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/android/ndk/28.2.13676358/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android26-clang",
+        "-fsyntax-only",
+        "-include",
+        "/tmp/fc-startup-cause-fidelity-1/native-build/headers/com_familyconnect_app_NativeRestricted.h",
+        "/tmp/fc-startup-cause-fidelity-1/source/pilot/android-restricted/native/bridge.c"
+      ],
+      "log": "jni-NativeRestricted.log",
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/android/ndk/28.2.13676358/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android26-clang",
+        "-fsyntax-only",
+        "-include",
+        "/tmp/fc-startup-cause-fidelity-1/native-build/headers/com_familyconnect_app_MessengerLabActivity.h",
+        "/tmp/fc-startup-cause-fidelity-1/source/pilot/android-restricted/native/chat_lab_bridge.c"
+      ],
+      "log": "jni-MessengerLabActivity.log",
+      "exit": 0,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "binaries": {
+    "normal": {
+      "sha256": "2a974350c168913ca8a217d3fc73f452fdd709c3619d0c690abd5d884c54b88c",
+      "size": 28790120,
+      "tags": "",
+      "go_version_m": "/tmp/fc-startup-cause-fidelity-1/native-build/normal/libfc_restricted.so: go1.26.1\n\tpath\tgithub.com/Joker20380/family_connect/restrictedandroid/native\n\tmod\tgithub.com/Joker20380/family_connect/restrictedandroid\t(devel)\t\n\tdep\tgithub.com/Joker20380/family_connect/carrier\tv0.0.0\n\t=>\t/tmp/fc-startup-cause-fidelity-1/source/carrier\t(devel)\t\n\t\n\tdep\tgithub.com/google/btree\tv1.1.2\th1:xf4v41cLI2Z6FxbKm+8Bu+m8ifhj15JuZ9sa0jZCMUU=\n\tdep\tgithub.com/google/uuid\tv1.6.0\th1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=\n\tdep\tgithub.com/gorilla/websocket\tv1.5.3\th1:saDtZ6Pbx/0u+bgYQ3q96pZgCzfhKXGPqt7kZ72aNNg=\n\tdep\tgithub.com/pion/datachannel\tv1.6.0\th1:XecBlj+cvsxhAMZWFfFcPyUaDZtd7IJvrXqlXD/53i0=\n\tdep\tgithub.com/pion/dtls/v3\tv3.1.4\th1:QhvtMflMfu9Kf0RcDC5BJBle4caPskByrKQR6uuYqpY=\n\tdep\tgithub.com/pion/ice/v4\tv4.2.7\th1:zDEbC6MiEdhQpF8TxBOTws+NU6ZgGpveHrQq4Lc1kao=\n\tdep\tgithub.com/pion/interceptor\tv0.1.45\th1:6PUo/5829bIfRFIPPJQzuDn8EjxRTSB/CSD7QVCOaqo=\n\tdep\tgithub.com/pion/logging\tv0.2.4\th1:tTew+7cmQ+Mc1pTBLKH2puKsOvhm32dROumOZ655zB8=\n\tdep\tgithub.com/pion/mdns/v2\tv2.1.0\th1:3IJ9+Xio6tWYjhN6WwuY142P/1jA0D5ERaIqawg/fOY=\n\tdep\tgithub.com/pion/randutil\tv0.1.0\th1:CFG1UdESneORglEsnimhUjf33Rwjubwj6xfiOXBa3mA=\n\tdep\tgithub.com/pion/rtcp\tv1.2.16\th1:fk1B1dNW4hsI78XUCljZJlC4kZOPk67mNRuQ0fcEkSo=\n\tdep\tgithub.com/pion/rtp\tv1.10.2\th1:l+f6tTDcAH6xwepaAoW791ddhuYsJlqRATOzirO04Mo=\n\tdep\tgithub.com/pion/sctp\tv1.10.0\th1:qeoD6swF/2M5bYRcAGayqSbTKX3m4AW29CiQxG1+Pfg=\n\tdep\tgithub.com/pion/sdp/v3\tv3.0.18\th1:l0bAXazKHpepazVdp+tPYnrsy9dfh7ZbT8DxesH5ZnI=\n\tdep\tgithub.com/pion/srtp/v3\tv3.0.11\th1:GiESUr54/K4UuPigfq/CvWUed80JenQAHXn0C2MQQIQ=\n\tdep\tgithub.com/pion/stun/v3\tv3.1.5\th1:Y1FHlhaI6+4UoC5i/zQf4F7JvdZtB24/05oyy/GF1x8=\n\tdep\tgithub.com/pion/transport/v4\tv4.0.2\th1:ifYlPqNwsy6aKQ9y8yzxXlHae5431ZrH2avkD/Rn6Tk=\n\tdep\tgithub.com/pion/turn/v5\tv5.0.9\th1:zNeBfRyzGn7MPyUTvmvxeltLEjlFdSLPT1tlakoaOXM=\n\tdep\tgithub.com/pion/webrtc/v4\tv4.2.15\th1:Ir/MauNFCfg+kgyBYPQLiGdVWFlzEcLxqtuzAkYkky0=\n\tdep\tgithub.com/pires/go-proxyproto\tv0.11.0\th1:gUQpS85X/VJMdUsYyEgyn59uLJvGqPhJV5YvG68wXH4=\n\tdep\tgithub.com/sagernet/sing\tv0.5.1\th1:mhL/MZVq0TjuvHcpYcFtmSD1BFOxZ/+8ofbNZcg1k1Y=\n\tdep\tgithub.com/wlynxg/anet\tv0.0.5\th1:J3VJGi1gvo0JwZ/P1/Yc/8p63SoW98B5dHkYDmpgvvU=\n\tdep\tgithub.com/xtls/xray-core\tv1.260327.0\n\t=>\t/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/native-packet-tests/xray\t(devel)\t\n\t\n\tdep\tgolang.org/x/crypto\tv0.49.0\th1:+Ng2ULVvLHnJ/ZFEq4KdcDd/cfjrrjjNSXNzxg0Y4U4=\n\tdep\tgolang.org/x/exp\tv0.0.0-20240506185415-9bf2ced13842\th1:vr/HnozRka3pE4EsMEg1lgkXJkTFJCVUX+S/ZT6wYzM=\n\tdep\tgolang.org/x/net\tv0.52.0\th1:He/TN1l0e4mmR3QqHMT2Xab3Aj3L9qjbhRm78/6jrW0=\n\tdep\tgolang.org/x/sys\tv0.42.0\th1:omrd2nAlyT5ESRdCLYdm3+fMfNFE/+Rf4bDIQImRJeo=\n\tdep\tgolang.org/x/time\tv0.14.0\th1:MRx4UaLrDotUKUdCIqzPC48t1Y9hANFKIRpNx+Te8PI=\n\tdep\tgoogle.golang.org/protobuf\tv1.36.11\th1:fV6ZwhNocDyBLK0dj+fg8ektcVegBBuEolpbTQyBNVE=\n\tdep\tgvisor.dev/gvisor\tv0.0.0-20260122175437-89a5d21be8f0\th1:Lk6hARj5UPY47dBep70OD/TIMwikJ5fGUGX0Rm3Xigk=\n\tbuild\t-buildmode=c-shared\n\tbuild\t-compiler=gc\n\tbuild\t-trimpath=true\n\tbuild\tCGO_ENABLED=1\n\tbuild\tGOARCH=arm64\n\tbuild\tGOOS=android\n\tbuild\tGOARM64=v8.0\n"
+    },
+    "diagnostic": {
+      "sha256": "76a51bffe7fa4d76d65147cab723a2d877b2a03d16a03097ff5a13b021b9c103",
+      "size": 28925064,
+      "tags": "fc_owner_diagnostic",
+      "go_version_m": "/tmp/fc-startup-cause-fidelity-1/native-build/diagnostic/libfc_restricted.so: go1.26.1\n\tpath\tgithub.com/Joker20380/family_connect/restrictedandroid/native\n\tmod\tgithub.com/Joker20380/family_connect/restrictedandroid\t(devel)\t\n\tdep\tgithub.com/Joker20380/family_connect/carrier\tv0.0.0\n\t=>\t/tmp/fc-startup-cause-fidelity-1/source/carrier\t(devel)\t\n\t\n\tdep\tgithub.com/google/btree\tv1.1.2\th1:xf4v41cLI2Z6FxbKm+8Bu+m8ifhj15JuZ9sa0jZCMUU=\n\tdep\tgithub.com/google/uuid\tv1.6.0\th1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=\n\tdep\tgithub.com/gorilla/websocket\tv1.5.3\th1:saDtZ6Pbx/0u+bgYQ3q96pZgCzfhKXGPqt7kZ72aNNg=\n\tdep\tgithub.com/pion/datachannel\tv1.6.0\th1:XecBlj+cvsxhAMZWFfFcPyUaDZtd7IJvrXqlXD/53i0=\n\tdep\tgithub.com/pion/dtls/v3\tv3.1.4\th1:QhvtMflMfu9Kf0RcDC5BJBle4caPskByrKQR6uuYqpY=\n\tdep\tgithub.com/pion/ice/v4\tv4.2.7\th1:zDEbC6MiEdhQpF8TxBOTws+NU6ZgGpveHrQq4Lc1kao=\n\tdep\tgithub.com/pion/interceptor\tv0.1.45\th1:6PUo/5829bIfRFIPPJQzuDn8EjxRTSB/CSD7QVCOaqo=\n\tdep\tgithub.com/pion/logging\tv0.2.4\th1:tTew+7cmQ+Mc1pTBLKH2puKsOvhm32dROumOZ655zB8=\n\tdep\tgithub.com/pion/mdns/v2\tv2.1.0\th1:3IJ9+Xio6tWYjhN6WwuY142P/1jA0D5ERaIqawg/fOY=\n\tdep\tgithub.com/pion/randutil\tv0.1.0\th1:CFG1UdESneORglEsnimhUjf33Rwjubwj6xfiOXBa3mA=\n\tdep\tgithub.com/pion/rtcp\tv1.2.16\th1:fk1B1dNW4hsI78XUCljZJlC4kZOPk67mNRuQ0fcEkSo=\n\tdep\tgithub.com/pion/rtp\tv1.10.2\th1:l+f6tTDcAH6xwepaAoW791ddhuYsJlqRATOzirO04Mo=\n\tdep\tgithub.com/pion/sctp\tv1.10.0\th1:qeoD6swF/2M5bYRcAGayqSbTKX3m4AW29CiQxG1+Pfg=\n\tdep\tgithub.com/pion/sdp/v3\tv3.0.18\th1:l0bAXazKHpepazVdp+tPYnrsy9dfh7ZbT8DxesH5ZnI=\n\tdep\tgithub.com/pion/srtp/v3\tv3.0.11\th1:GiESUr54/K4UuPigfq/CvWUed80JenQAHXn0C2MQQIQ=\n\tdep\tgithub.com/pion/stun/v3\tv3.1.5\th1:Y1FHlhaI6+4UoC5i/zQf4F7JvdZtB24/05oyy/GF1x8=\n\tdep\tgithub.com/pion/transport/v4\tv4.0.2\th1:ifYlPqNwsy6aKQ9y8yzxXlHae5431ZrH2avkD/Rn6Tk=\n\tdep\tgithub.com/pion/turn/v5\tv5.0.9\th1:zNeBfRyzGn7MPyUTvmvxeltLEjlFdSLPT1tlakoaOXM=\n\tdep\tgithub.com/pion/webrtc/v4\tv4.2.15\th1:Ir/MauNFCfg+kgyBYPQLiGdVWFlzEcLxqtuzAkYkky0=\n\tdep\tgithub.com/pires/go-proxyproto\tv0.11.0\th1:gUQpS85X/VJMdUsYyEgyn59uLJvGqPhJV5YvG68wXH4=\n\tdep\tgithub.com/sagernet/sing\tv0.5.1\th1:mhL/MZVq0TjuvHcpYcFtmSD1BFOxZ/+8ofbNZcg1k1Y=\n\tdep\tgithub.com/wlynxg/anet\tv0.0.5\th1:J3VJGi1gvo0JwZ/P1/Yc/8p63SoW98B5dHkYDmpgvvU=\n\tdep\tgithub.com/xtls/xray-core\tv1.260327.0\n\t=>\t/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/native-packet-tests/xray\t(devel)\t\n\t\n\tdep\tgolang.org/x/crypto\tv0.49.0\th1:+Ng2ULVvLHnJ/ZFEq4KdcDd/cfjrrjjNSXNzxg0Y4U4=\n\tdep\tgolang.org/x/exp\tv0.0.0-20240506185415-9bf2ced13842\th1:vr/HnozRka3pE4EsMEg1lgkXJkTFJCVUX+S/ZT6wYzM=\n\tdep\tgolang.org/x/net\tv0.52.0\th1:He/TN1l0e4mmR3QqHMT2Xab3Aj3L9qjbhRm78/6jrW0=\n\tdep\tgolang.org/x/sys\tv0.42.0\th1:omrd2nAlyT5ESRdCLYdm3+fMfNFE/+Rf4bDIQImRJeo=\n\tdep\tgolang.org/x/time\tv0.14.0\th1:MRx4UaLrDotUKUdCIqzPC48t1Y9hANFKIRpNx+Te8PI=\n\tdep\tgoogle.golang.org/protobuf\tv1.36.11\th1:fV6ZwhNocDyBLK0dj+fg8ektcVegBBuEolpbTQyBNVE=\n\tdep\tgvisor.dev/gvisor\tv0.0.0-20260122175437-89a5d21be8f0\th1:Lk6hARj5UPY47dBep70OD/TIMwikJ5fGUGX0Rm3Xigk=\n\tbuild\t-buildmode=c-shared\n\tbuild\t-compiler=gc\n\tbuild\t-tags=fc_owner_diagnostic\n\tbuild\t-trimpath=true\n\tbuild\tCGO_ENABLED=1\n\tbuild\tGOARCH=arm64\n\tbuild\tGOOS=android\n\tbuild\tGOARM64=v8.0\n"
+    },
+    "messenger-lab": {
+      "sha256": "56b78f2f100eff5cdf61aea4a3c055b9aec0be03cca33d7bcef74ce8f9c5589c",
+      "size": 28824944,
+      "tags": "fc_messenger_lab",
+      "go_version_m": "/tmp/fc-startup-cause-fidelity-1/native-build/messenger-lab/libfc_restricted.so: go1.26.1\n\tpath\tgithub.com/Joker20380/family_connect/restrictedandroid/native\n\tmod\tgithub.com/Joker20380/family_connect/restrictedandroid\t(devel)\t\n\tdep\tgithub.com/Joker20380/family_connect/carrier\tv0.0.0\n\t=>\t/tmp/fc-startup-cause-fidelity-1/source/carrier\t(devel)\t\n\t\n\tdep\tgithub.com/google/btree\tv1.1.2\th1:xf4v41cLI2Z6FxbKm+8Bu+m8ifhj15JuZ9sa0jZCMUU=\n\tdep\tgithub.com/google/uuid\tv1.6.0\th1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=\n\tdep\tgithub.com/gorilla/websocket\tv1.5.3\th1:saDtZ6Pbx/0u+bgYQ3q96pZgCzfhKXGPqt7kZ72aNNg=\n\tdep\tgithub.com/pion/datachannel\tv1.6.0\th1:XecBlj+cvsxhAMZWFfFcPyUaDZtd7IJvrXqlXD/53i0=\n\tdep\tgithub.com/pion/dtls/v3\tv3.1.4\th1:QhvtMflMfu9Kf0RcDC5BJBle4caPskByrKQR6uuYqpY=\n\tdep\tgithub.com/pion/ice/v4\tv4.2.7\th1:zDEbC6MiEdhQpF8TxBOTws+NU6ZgGpveHrQq4Lc1kao=\n\tdep\tgithub.com/pion/interceptor\tv0.1.45\th1:6PUo/5829bIfRFIPPJQzuDn8EjxRTSB/CSD7QVCOaqo=\n\tdep\tgithub.com/pion/logging\tv0.2.4\th1:tTew+7cmQ+Mc1pTBLKH2puKsOvhm32dROumOZ655zB8=\n\tdep\tgithub.com/pion/mdns/v2\tv2.1.0\th1:3IJ9+Xio6tWYjhN6WwuY142P/1jA0D5ERaIqawg/fOY=\n\tdep\tgithub.com/pion/randutil\tv0.1.0\th1:CFG1UdESneORglEsnimhUjf33Rwjubwj6xfiOXBa3mA=\n\tdep\tgithub.com/pion/rtcp\tv1.2.16\th1:fk1B1dNW4hsI78XUCljZJlC4kZOPk67mNRuQ0fcEkSo=\n\tdep\tgithub.com/pion/rtp\tv1.10.2\th1:l+f6tTDcAH6xwepaAoW791ddhuYsJlqRATOzirO04Mo=\n\tdep\tgithub.com/pion/sctp\tv1.10.0\th1:qeoD6swF/2M5bYRcAGayqSbTKX3m4AW29CiQxG1+Pfg=\n\tdep\tgithub.com/pion/sdp/v3\tv3.0.18\th1:l0bAXazKHpepazVdp+tPYnrsy9dfh7ZbT8DxesH5ZnI=\n\tdep\tgithub.com/pion/srtp/v3\tv3.0.11\th1:GiESUr54/K4UuPigfq/CvWUed80JenQAHXn0C2MQQIQ=\n\tdep\tgithub.com/pion/stun/v3\tv3.1.5\th1:Y1FHlhaI6+4UoC5i/zQf4F7JvdZtB24/05oyy/GF1x8=\n\tdep\tgithub.com/pion/transport/v4\tv4.0.2\th1:ifYlPqNwsy6aKQ9y8yzxXlHae5431ZrH2avkD/Rn6Tk=\n\tdep\tgithub.com/pion/turn/v5\tv5.0.9\th1:zNeBfRyzGn7MPyUTvmvxeltLEjlFdSLPT1tlakoaOXM=\n\tdep\tgithub.com/pion/webrtc/v4\tv4.2.15\th1:Ir/MauNFCfg+kgyBYPQLiGdVWFlzEcLxqtuzAkYkky0=\n\tdep\tgithub.com/pires/go-proxyproto\tv0.11.0\th1:gUQpS85X/VJMdUsYyEgyn59uLJvGqPhJV5YvG68wXH4=\n\tdep\tgithub.com/sagernet/sing\tv0.5.1\th1:mhL/MZVq0TjuvHcpYcFtmSD1BFOxZ/+8ofbNZcg1k1Y=\n\tdep\tgithub.com/wlynxg/anet\tv0.0.5\th1:J3VJGi1gvo0JwZ/P1/Yc/8p63SoW98B5dHkYDmpgvvU=\n\tdep\tgithub.com/xtls/xray-core\tv1.260327.0\n\t=>\t/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/native-packet-tests/xray\t(devel)\t\n\t\n\tdep\tgolang.org/x/crypto\tv0.49.0\th1:+Ng2ULVvLHnJ/ZFEq4KdcDd/cfjrrjjNSXNzxg0Y4U4=\n\tdep\tgolang.org/x/exp\tv0.0.0-20240506185415-9bf2ced13842\th1:vr/HnozRka3pE4EsMEg1lgkXJkTFJCVUX+S/ZT6wYzM=\n\tdep\tgolang.org/x/net\tv0.52.0\th1:He/TN1l0e4mmR3QqHMT2Xab3Aj3L9qjbhRm78/6jrW0=\n\tdep\tgolang.org/x/sys\tv0.42.0\th1:omrd2nAlyT5ESRdCLYdm3+fMfNFE/+Rf4bDIQImRJeo=\n\tdep\tgolang.org/x/time\tv0.14.0\th1:MRx4UaLrDotUKUdCIqzPC48t1Y9hANFKIRpNx+Te8PI=\n\tdep\tgoogle.golang.org/protobuf\tv1.36.11\th1:fV6ZwhNocDyBLK0dj+fg8ektcVegBBuEolpbTQyBNVE=\n\tdep\tgvisor.dev/gvisor\tv0.0.0-20260122175437-89a5d21be8f0\th1:Lk6hARj5UPY47dBep70OD/TIMwikJ5fGUGX0Rm3Xigk=\n\tbuild\t-buildmode=c-shared\n\tbuild\t-compiler=gc\n\tbuild\t-tags=fc_messenger_lab\n\tbuild\t-trimpath=true\n\tbuild\tCGO_ENABLED=1\n\tbuild\tGOARCH=arm64\n\tbuild\tGOOS=android\n\tbuild\tGOARM64=v8.0\n"
+    }
+  },
+  "result": "PASS",
+  "reference_classes": "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/whitelist-provisioning-block-seam-1/build/android/app/intermediates/javac/researchProvisioning/compileResearchProvisioningJavaWithJavac/classes"
+}

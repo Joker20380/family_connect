@@ -8,6 +8,21 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### STARTUP-DIAGNOSTIC-CAUSE-FIDELITY-1 — local implementation complete (15.10)
+
+- Review the [diagnostic delta and combined source](releases/2026-10-15-startup-diagnostic-cause-fidelity-1.md)
+  above the handoff, including separate operation/context/local-stop facts and
+  unchanged runtime error/policy behavior.
+- Completed real receive before/after regression, fixed normal/race combined
+  handoff/broker tests, native/JNI builds, full researchProvisioning assemble and
+  normal projection/persisted-bundle JVM tests. Unexpected intermediate failures
+  and their narrow fixes are retained in the publication.
+- Remaining: separately authorized Android runtime/device/export acceptance;
+  local build and JVM tests do not execute JNI or Share UI on the owner device.
+- No automatic CONNECT/export, A/B/C, live acceptance, deployment or release.
+  Keep DEVICE_ACCEPTANCE=NOT_RUN, PRODUCTION_ACCEPTANCE=FAIL and
+  HISTORICAL_CAUSAL_BINDING=NOT_PROVEN. Historical UNKNOWN remains unchanged.
+
 ### RESTRICTED-CHAT-VPN-HANDOFF-1 — implemented and locally tested (15.10)
 
 - [Product-source derivative and evidence](releases/2026-10-15-restricted-chat-vpn-handoff-1.md):
@@ -18,8 +33,8 @@ Verify reboot automount separately; no engineering release gate changes.
   runtime integration. No new accepted/release candidate or automatic device test.
 - Keep DEVICE_ACCEPTANCE=NOT_RUN, PRODUCTION_ACCEPTANCE=FAIL and historical causal
   binding NOT_PROVEN. Do not resume A/B/C, recovery acceptance or production here.
-- Context-qualified deadline/closed-pipe classification remains a separate next
-  change; no classifier patch included in this ownership implementation.
+- Diagnostic classification was deliberately excluded from the ownership patch;
+  its separately authorized cumulative implementation is recorded above.
 
 ### BOOTSTRAP-HELLO-ADMISSION-REPRO-1 — terminal SOURCE_CHARACTERIZATION PASS (15.10)
 

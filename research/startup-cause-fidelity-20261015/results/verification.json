@@ -1,0 +1,127 @@
+{
+  "original_worktree_unchanged": true,
+  "native_embedded_exactly": true,
+  "dex_markers": {
+    "IO_DEADLINE": true,
+    "CLOSED_PIPE": true,
+    "OWNERSHIP_DRAIN": true,
+    "stop_at_observation": true,
+    "STARTUP_BUDGET": true
+  },
+  "junit": [
+    {
+      "name": "com.familyconnect.app.DiagnosticRingTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.RestrictedStartupTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.StartupFidelityTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "observed_variants": [
+    {
+      "mode": "normal",
+      "scenario": "cancel",
+      "operation_category": "CLOSED_PIPE",
+      "context_at_observation": "CANCELLED",
+      "count": 1
+    },
+    {
+      "mode": "normal",
+      "scenario": "invalid_hello",
+      "operation_category": "PROTOCOL_REJECTED",
+      "context_at_observation": "LIVE",
+      "count": 1
+    },
+    {
+      "mode": "normal",
+      "scenario": "io_deadline",
+      "operation_category": "IO_DEADLINE",
+      "context_at_observation": "LIVE",
+      "count": 1
+    },
+    {
+      "mode": "normal",
+      "scenario": "parent_deadline",
+      "operation_category": "CLOSED_PIPE",
+      "context_at_observation": "DEADLINE",
+      "count": 1
+    },
+    {
+      "mode": "normal",
+      "scenario": "peer_close",
+      "operation_category": "CLOSED_PIPE",
+      "context_at_observation": "LIVE",
+      "count": 1
+    },
+    {
+      "mode": "normal",
+      "scenario": "success",
+      "operation_category": "NONE",
+      "context_at_observation": "NONE",
+      "count": 1
+    },
+    {
+      "mode": "race",
+      "scenario": "cancel",
+      "operation_category": "CLOSED_PIPE",
+      "context_at_observation": "CANCELLED",
+      "count": 3
+    },
+    {
+      "mode": "race",
+      "scenario": "invalid_hello",
+      "operation_category": "PROTOCOL_REJECTED",
+      "context_at_observation": "LIVE",
+      "count": 3
+    },
+    {
+      "mode": "race",
+      "scenario": "io_deadline",
+      "operation_category": "IO_DEADLINE",
+      "context_at_observation": "LIVE",
+      "count": 3
+    },
+    {
+      "mode": "race",
+      "scenario": "parent_deadline",
+      "operation_category": "CLOSED_PIPE",
+      "context_at_observation": "DEADLINE",
+      "count": 2
+    },
+    {
+      "mode": "race",
+      "scenario": "parent_deadline",
+      "operation_category": "IO_DEADLINE",
+      "context_at_observation": "LIVE",
+      "count": 1
+    },
+    {
+      "mode": "race",
+      "scenario": "peer_close",
+      "operation_category": "CLOSED_PIPE",
+      "context_at_observation": "LIVE",
+      "count": 3
+    },
+    {
+      "mode": "race",
+      "scenario": "success",
+      "operation_category": "NONE",
+      "context_at_observation": "NONE",
+      "count": 3
+    }
+  ]
+}

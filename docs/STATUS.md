@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+## STARTUP-DIAGNOSTIC-CAUSE-FIDELITY-1 — IMPLEMENTED_AND_LOCALLY_VERIFIED (15.10)
+
+Diagnostic-only delta above the exact research84 chat/VPN handoff now preserves
+original receive error category, context at observation and separately recorded
+local stop intent before cleanup. IO_DEADLINE / CLOSED_PIPE / unqualified timeout
+and OWNERSHIP_DRAIN survive the normal researchProvisioning export projection.
+Historical UNKNOWN and causal binding are unchanged. Real Family/TLS receive tests,
+all handoff regressions and broker A–D PASS: fixed 1 normal + 3 race suites.
+All three native/JNI modes compile/link; full offline researchProvisioning assemble
+and 10 selected JVM tests PASS. Embedded native SHA256
+`2a974350c168913ca8a217d3fc73f452fdd709c3619d0c690abd5d884c54b88c` matches the checked
+normal build exactly. Unsigned APK is local only, not installed/distributed/accepted.
+See [report](releases/2026-10-15-startup-diagnostic-cause-fidelity-1.md) and
+[cumulative reproduction/delta/results](../research/startup-cause-fidelity-20261015/README.md).
+Review remains required; device/JNI runtime and actual Share UI were not exercised.
+Ownership/security/retry/timeout policy, frozen snapshots and main are unchanged.
+DEVICE_ACCEPTANCE=NOT_RUN; PRODUCTION_ACCEPTANCE=FAIL;
+HISTORICAL_CAUSAL_BINDING=NOT_PROVEN. All owner/runtime/provider/deployment counters 0.
+
 ## RESTRICTED-CHAT-VPN-HANDOFF-1 — KNOWN_CALLER_CONFLICT_FIXED_LOCALLY (15.10)
 
 Implemented an isolated exact-research84 derivative: process-local VPN reservation,
@@ -16,7 +35,8 @@ See [implementation report](releases/2026-10-15-restricted-chat-vpn-handoff-1.md
 [actual patch/tests/build receipts](../research/chat-vpn-handoff-20261015/README.md).
 Root dirty checkout, frozen snapshots, main and installed artifacts unchanged.
 DEVICE_ACCEPTANCE=NOT_RUN; PRODUCTION_ACCEPTANCE=FAIL; HISTORICAL_CAUSAL_BINDING=
-NOT_PROVEN. Diagnostic deadline/closed-pipe classification is still unmodified.
+NOT_PROVEN. At this handoff checkpoint diagnostic classification was unmodified;
+the separately authorized cumulative diagnostic delta is recorded above.
 No owner/runtime/provider/deployment/release action; only authorized review source
 and documentation publication. Device integration and classification remain open.
 

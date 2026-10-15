@@ -1,0 +1,43 @@
+[
+  {
+    "mode": "normal",
+    "count": 1,
+    "exit": 1,
+    "command": [
+      "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+      "test",
+      "-tags=seedacceptance",
+      "-v",
+      "-count=1",
+      "-timeout=180s",
+      "-run=TestFidelity|TestHandoff|TestReproAdmission|TestPrimary|TestAttempt|TestCause|TestFriendsStartup|TestDirectory|TestPreserve|TestLegacy|TestCoordinator|TestChat|TestVPN|TestSecurity|TestCleanup|TestCancel|TestOpening|TestBorrow|TestConcurrent|TestStale",
+      "./startupdiag",
+      "./restrictedowner",
+      "./bootstrap",
+      "./familysession"
+    ],
+    "log": "normal.log",
+    "sha256": "c29e370e4e00523cc388e9c24776e91540fb29f947c6d6320cbbd99983dc663c"
+  },
+  {
+    "mode": "race",
+    "count": 3,
+    "exit": 1,
+    "command": [
+      "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+      "test",
+      "-tags=seedacceptance",
+      "-v",
+      "-count=3",
+      "-timeout=180s",
+      "-race",
+      "-run=TestFidelity|TestHandoff|TestReproAdmission|TestPrimary|TestAttempt|TestCause|TestFriendsStartup|TestDirectory|TestPreserve|TestLegacy|TestCoordinator|TestChat|TestVPN|TestSecurity|TestCleanup|TestCancel|TestOpening|TestBorrow|TestConcurrent|TestStale",
+      "./startupdiag",
+      "./restrictedowner",
+      "./bootstrap",
+      "./familysession"
+    ],
+    "log": "race.log",
+    "sha256": "23ddb8a8718cc8cfb4ad47367b7cf561548b4e7e722db2ee560a2b6764515d77"
+  }
+]

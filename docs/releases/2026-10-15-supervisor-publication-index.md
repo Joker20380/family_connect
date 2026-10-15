@@ -7,6 +7,14 @@ Production FAIL сохраняется; root cause не доказана. Сна
 
 ## Начать здесь
 
+- [Startup diagnostic cause fidelity — реализовано поверх handoff](2026-10-15-startup-diagnostic-cause-fidelity-1.md):
+  [отдельный delta, cumulative apply, tests/build receipts](../../research/startup-cause-fidelity-20261015/README.md).
+  Real Family/TLS receive before/after, combined handoff/race, native/JNI и полный
+  researchProvisioning assemble/JVM tests PASS. В APK встроена новая проверенная
+  library; APK остаётся локальным unsigned test build, не accepted candidate.
+  Штатная export projection сохраняет bounded facts; новый owner export не выполнялся.
+  Исходные frozen SHA и historical UNKNOWN неизменны; device NOT_RUN, production FAIL.
+
 - [Restricted chat → VPN handoff — локально реализован](2026-10-15-restricted-chat-vpn-handoff-1.md):
   новый отдельно разрешённый product patch в изолированной research84 derivative,
   не правка архивных snapshots/root main. [Diff, before/after files, tests, runners](../../research/chat-vpn-handoff-20261015/README.md)

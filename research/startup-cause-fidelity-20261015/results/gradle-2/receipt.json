@@ -1,0 +1,39 @@
+{
+  "command": [
+    "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/gradle-8.11.1/bin/gradle",
+    "--no-daemon",
+    "--max-workers=1",
+    "--offline",
+    "-I",
+    "/tmp/fc-startup-cause-fidelity-1/gradle-2/android.init.gradle",
+    "--project-cache-dir",
+    "/tmp/fc-startup-cause-fidelity-1/gradle-2/cache",
+    "-PfcTargetAbi=arm64-v8a",
+    "-PfcFriendsCi=false",
+    "-PfcProvisioningSeamSource=f997e9977e81d8d2571bedcebb7ad028f7af55d62cc32fdac4a717b7137a71be",
+    "-PfcProvisioningSeamAssets=/tmp/fc-startup-cause-fidelity-1/gradle-2/research-assets",
+    "-PfcBuildPython=/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/telemost-lease-continuity-1/build/tools/python/bin/python3.10",
+    "-PfcRadioNative=/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/exit-krasnodar-candidate-1/audio-native",
+    "-PfcFriendsRestrictedDirectory=/tmp/fc-startup-cause-fidelity-1/gradle-2/native",
+    ":app:assembleResearchProvisioning",
+    ":app:testResearchProvisioningUnitTest",
+    "--tests",
+    "com.familyconnect.app.StartupFidelityTest",
+    "--tests",
+    "com.familyconnect.app.RestrictedStartupTest",
+    "--tests",
+    "com.familyconnect.app.DiagnosticRingTest"
+  ],
+  "source_delta_sha256": "f997e9977e81d8d2571bedcebb7ad028f7af55d62cc32fdac4a717b7137a71be",
+  "variant": "researchProvisioning",
+  "native_sha256": "2a974350c168913ca8a217d3fc73f452fdd709c3619d0c690abd5d884c54b88c",
+  "device_tests": "NOT_RUN",
+  "exit": 1,
+  "log_sha256": "e7f7280fa8ddc46c75cfd0404202d0c46ba900ffcf0b71206bb7ffe887aefd07",
+  "apk": {
+    "name": "app-researchProvisioning-unsigned.apk",
+    "sha256": "1827630487e7625e5d39d9df8c313fb94cf0b8a18c6b3c6a25689fc169b6c6c0",
+    "embedded_native_sha256": "2a974350c168913ca8a217d3fc73f452fdd709c3619d0c690abd5d884c54b88c",
+    "size": 55978340
+  }
+}

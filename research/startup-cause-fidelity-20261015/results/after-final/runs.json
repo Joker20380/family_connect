@@ -1,0 +1,41 @@
+[
+  {
+    "mode": "normal",
+    "count": 1,
+    "exit": 0,
+    "command": [
+      "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+      "test",
+      "-tags=seedacceptance",
+      "-v",
+      "-count=1",
+      "-timeout=180s",
+      "-run=TestFidelity|TestHandoff|TestReproAdmission|TestPrimary|TestControlled|TestIndependent|TestCause|TestFriendsStartup|TestDirectory|TestPreserve|TestChat|TestVPN|TestCancellation|TestOpening|TestSimultaneous|TestCompatibility",
+      "./startupdiag",
+      "./restrictedowner",
+      "./bootstrap"
+    ],
+    "log": "normal.log",
+    "sha256": "03606cc528b7221164b9e4e6417a9a19a2c0dddff5dfe4955eb52db8d6180185"
+  },
+  {
+    "mode": "race",
+    "count": 3,
+    "exit": 0,
+    "command": [
+      "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+      "test",
+      "-tags=seedacceptance",
+      "-v",
+      "-count=3",
+      "-timeout=180s",
+      "-race",
+      "-run=TestFidelity|TestHandoff|TestReproAdmission|TestPrimary|TestControlled|TestIndependent|TestCause|TestFriendsStartup|TestDirectory|TestPreserve|TestChat|TestVPN|TestCancellation|TestOpening|TestSimultaneous|TestCompatibility",
+      "./startupdiag",
+      "./restrictedowner",
+      "./bootstrap"
+    ],
+    "log": "race.log",
+    "sha256": "6668bb96a3fdcedf61cbf81c95cd9ffc959e58c44d56656aa3cf86713f226bb3"
+  }
+]

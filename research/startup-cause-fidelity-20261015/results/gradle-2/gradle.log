@@ -1,0 +1,133 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.11.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :app:generateResearchProvisioningPythonJniLibs
+> Task :app:preBuild UP-TO-DATE
+
+> Task :app:verifyProvisioningResearchInputs
+{"source_base": "f5240994869826c6a28f59e58e38256c688cf6eb", "source_delta_sha256": "f997e9977e81d8d2571bedcebb7ad028f7af55d62cc32fdac4a717b7137a71be", "native_reused": true, "research_only": true}
+
+> Task :app:preResearchProvisioningBuild
+> Task :app:mergeResearchProvisioningJniLibFolders
+> Task :app:mergeResearchProvisioningNativeLibs
+> Task :app:stripResearchProvisioningDebugSymbols
+> Task :app:extractResearchProvisioningNativeSymbolTables
+> Task :app:mergeResearchProvisioningNativeDebugMetadata
+> Task :app:checkResearchProvisioningDuplicateClasses
+> Task :app:generateResearchProvisioningBuildConfig
+> Task :app:extractResearchProvisioningPythonBuildPackages
+
+> Task :app:generateResearchProvisioningPythonRequirements
+Chaquopy: Installing for arm64-v8a
+Looking in indexes: https://pypi.org/simple, https://chaquo.com/pypi-13.1
+Collecting rns==1.5.1
+  Using cached rns-1.5.1-py3-none-any.whl (631 kB)
+Collecting pyserial==3.5
+  Using cached pyserial-3.5-py2.py3-none-any.whl (90 kB)
+Collecting lxmf==1.1.1
+  Using cached lxmf-1.1.1-py3-none-any.whl (67 kB)
+Installing collected packages: rns, pyserial, lxmf
+Successfully installed lxmf-1.1.1 pyserial-3.5 rns-1.5.1
+
+> Task :app:stageChatPython
+> Task :app:mergeResearchProvisioningPythonSources
+> Task :app:generateResearchProvisioningPythonProxies
+> Task :app:javaPreCompileResearchProvisioning
+> Task :app:checkResearchProvisioningAarMetadata
+> Task :app:generateResearchProvisioningResValues
+> Task :app:mapResearchProvisioningSourceSetPaths
+> Task :app:generateResearchProvisioningResources
+> Task :app:mergeResearchProvisioningResources
+> Task :app:packageResearchProvisioningResources
+> Task :app:parseResearchProvisioningLocalResources
+> Task :app:createResearchProvisioningCompatibleScreenManifests
+> Task :app:extractDeepLinksResearchProvisioning
+> Task :app:processResearchProvisioningMainManifest
+> Task :app:processResearchProvisioningManifest
+> Task :app:processResearchProvisioningManifestForPackage
+> Task :app:processResearchProvisioningResources
+
+> Task :app:compileResearchProvisioningJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :app:dexBuilderResearchProvisioning
+> Task :app:desugarResearchProvisioningFileDependencies
+> Task :app:mergeResearchProvisioningStartupProfile
+> Task :app:mergeExtDexResearchProvisioning
+> Task :app:mergeDexResearchProvisioning
+> Task :app:mergeResearchProvisioningArtProfile
+> Task :app:mergeResearchProvisioningGlobalSynthetics
+> Task :app:compileResearchProvisioningArtProfile
+> Task :app:mergeResearchProvisioningShaders
+> Task :app:compileResearchProvisioningShaders NO-SOURCE
+> Task :app:generateResearchProvisioningAssets UP-TO-DATE
+> Task :app:generateResearchProvisioningPythonMiscAssets
+> Task :app:generateResearchProvisioningPythonRequirementsAssets
+> Task :app:generateResearchProvisioningPythonSourceAssets
+> Task :app:generateResearchProvisioningPythonBuildAssets
+> Task :app:mergeResearchProvisioningAssets
+> Task :app:compressResearchProvisioningAssets
+> Task :app:extractResearchProvisioningVersionControlInfo
+> Task :app:extractProguardFiles
+> Task :app:generateResearchProvisioningLintVitalReportModel
+> Task :app:lintVitalAnalyzeResearchProvisioning
+> Task :app:lintVitalReportResearchProvisioning
+> Task :app:lintVitalResearchProvisioning
+> Task :app:processResearchProvisioningJavaRes NO-SOURCE
+> Task :app:mergeResearchProvisioningJavaResource
+> Task :app:optimizeResearchProvisioningResources
+> Task :app:collectResearchProvisioningDependencies
+> Task :app:sdkResearchProvisioningDependencyData
+> Task :app:writeResearchProvisioningAppMetadata
+> Task :app:writeResearchProvisioningSigningConfigVersions
+> Task :app:packageResearchProvisioning
+> Task :app:createResearchProvisioningApkListingFileRedirect
+> Task :app:assembleResearchProvisioning
+> Task :app:bundleResearchProvisioningClassesToRuntimeJar
+> Task :app:bundleResearchProvisioningClassesToCompileJar
+> Task :app:preResearchProvisioningUnitTestBuild UP-TO-DATE
+> Task :app:javaPreCompileResearchProvisioningUnitTest
+
+> Task :app:compileResearchProvisioningUnitTestJavaWithJavac FAILED
+/tmp/fc-startup-cause-fidelity-1/gradle-2/source/clients/android/app/src/test/java/com/familyconnect/app/StartupFidelityTest.java:24: error: cannot find symbol
+            Files.writeString(incident,ring.snapshot().toString());
+                 ^
+  symbol:   method writeString(Path,String)
+  location: class Files
+/tmp/fc-startup-cause-fidelity-1/gradle-2/source/clients/android/app/src/test/java/com/familyconnect/app/StartupFidelityTest.java:33: error: cannot find symbol
+            Files.writeString(current,ring.snapshot().toString());
+                 ^
+  symbol:   method writeString(Path,String)
+  location: class Files
+2 errors
+[Incubating] Problems report is available at: file:///tmp/fc-startup-cause-fidelity-1/gradle-2/source/clients/android/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileResearchProvisioningUnitTestJavaWithJavac'.
+> Compilation failed; see the compiler output below.
+  /tmp/fc-startup-cause-fidelity-1/gradle-2/source/clients/android/app/src/test/java/com/familyconnect/app/StartupFidelityTest.java:24: error: cannot find symbol
+              Files.writeString(incident,ring.snapshot().toString());
+                   ^
+    symbol:   method writeString(Path,String)
+    location: class Files
+  /tmp/fc-startup-cause-fidelity-1/gradle-2/source/clients/android/app/src/test/java/com/familyconnect/app/StartupFidelityTest.java:33: error: cannot find symbol
+              Files.writeString(current,ring.snapshot().toString());
+                   ^
+    symbol:   method writeString(Path,String)
+    location: class Files
+  2 errors
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to get full insights.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.11.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 1m 23s
+63 actionable tasks: 63 executed

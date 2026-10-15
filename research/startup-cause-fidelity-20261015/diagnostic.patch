@@ -1,0 +1,675 @@
+--- /dev/null
++++ b/carrier/familysession/receive_observer.go
+@@ -0,0 +1,15 @@
++package familysession
++
++import "context"
++
++type receiveObserverKey struct{}
++
++func WatchReceive(ctx context.Context, observer func(context.Context, error)) context.Context {
++	return context.WithValue(ctx, receiveObserverKey{}, observer)
++}
++
++func observeReceive(ctx context.Context, err error) {
++	if observer, ok := ctx.Value(receiveObserverKey{}).(func(context.Context, error)); ok {
++		observer(ctx, err)
++	}
++}
+--- a/carrier/familysession/session.go
++++ b/carrier/familysession/session.go
+@@ -323,6 +323,7 @@
+ 	session.recvMu.Lock()
+ 	defer session.recvMu.Unlock()
+ 	if session.recvSequence == ^uint64(0) || !time.Now().Before(session.expiry) || ctx.Err() != nil {
++		observeReceive(ctx, ErrRejected)
+ 		session.traceStop(ctx, "FAMILY_CONTRACT")
+ 		session.stream.stop()
+ 		return nil, ErrRejected
+@@ -336,18 +337,21 @@
+ 	defer stop()
+ 	header := make([]byte, 12)
+ 	if _, err := io.ReadFull(session.connection, header); err != nil {
++		observeReceive(ctx, err)
+ 		session.traceStop(ctx, "FAMILY_READ")
+ 		session.stream.stop()
+ 		return nil, err
+ 	}
+ 	length := binary.BigEndian.Uint32(header)
+ 	if length > MaxPayload || binary.BigEndian.Uint64(header[4:]) != session.recvSequence {
++		observeReceive(ctx, ErrRejected)
+ 		session.traceStop(ctx, "FAMILY_CONTRACT")
+ 		session.stream.stop()
+ 		return nil, ErrRejected
+ 	}
+ 	payload := make([]byte, length)
+ 	if _, err := io.ReadFull(session.connection, payload); err != nil {
++		observeReceive(ctx, err)
+ 		session.traceStop(ctx, "FAMILY_READ")
+ 		session.stream.stop()
+ 		return nil, err
+--- a/carrier/startupdiag/enabled.go
++++ b/carrier/startupdiag/enabled.go
+@@ -7,26 +7,39 @@
+ 	"encoding/hex"
+ 	"errors"
+ 	"io"
++	"os"
+ 	"sync"
+ 	"time"
+ 
++	"github.com/Joker20380/family_connect/carrier/familysession"
+ 	"github.com/Joker20380/family_connect/carrier/roombroker"
+ 	"github.com/Joker20380/family_connect/carrier/telemost"
+ )
+ 
+ type key struct{}
+ type recorder struct {
+-	mu      sync.Mutex
+-	started time.Time
+-	result  Result
++	mu            sync.Mutex
++	started       time.Time
++	result        Result
++	observedError error
++	observation   *Observation
+ }
+ 
+ func Start(ctx context.Context, attempt int64) context.Context {
+ 	started := time.Now()
+-	return context.WithValue(ctx, key{}, &recorder{started: started, result: Result{
++	record := &recorder{started: started, result: Result{
+ 		Schema: 1, Attempt: attempt, StartedUnixMS: started.UnixMilli(), CompletedMS: -1,
+ 		ObservedMS: -1, Status: "RUNNING", Stage: "STARTUP", Cause: "NONE",
+-	}})
++	}}
++	ctx = context.WithValue(ctx, key{}, record)
++	return familysession.WatchReceive(ctx, func(observed context.Context, err error) {
++		record.mu.Lock()
++		defer record.mu.Unlock()
++		if record.observation == nil && !record.result.Complete && record.result.Status == "RUNNING" {
++			record.observedError = err
++			record.observation = record.facts(observed, err, "FAMILY_RECEIVE")
++		}
++	})
+ }
+ 
+ func get(ctx context.Context) *recorder {
+@@ -36,7 +49,7 @@
+ 
+ func stageCode(stage string) string {
+ 	switch stage {
+-	case "STARTUP", "PROFILE", "DIRECTORY", "SEED_CREATE", "SEED_CONNECT", "SEED_ADMISSION", "SEED_READ",
++	case "STARTUP", "OWNERSHIP_DRAIN", "PROFILE", "DIRECTORY", "SEED_CREATE", "SEED_CONNECT", "SEED_ADMISSION", "SEED_READ",
+ 		"FAMILY_AUTH", "HELLO_RECEIVE", "REQUEST_SEND", "DESCRIPTOR_RECEIVE", "DESCRIPTOR_VALIDATE", "BYE_SEND", "BYE_RECEIVE",
+ 		"DEDICATED_CREATE", "DEDICATED_CONNECT", "DEDICATED_AUTH", "DEDICATED_BIND", "DEDICATED_MUX", "CONTROL_REFRESH":
+ 		return stage
+@@ -50,6 +63,9 @@
+ 	}
+ 	if errors.Is(err, context.DeadlineExceeded) {
+ 		return "DEADLINE"
++	}
++	if errors.Is(err, os.ErrDeadlineExceeded) {
++		return "IO_DEADLINE"
+ 	}
+ 	var invalid x509.CertificateInvalidError
+ 	if errors.As(err, &invalid) {
+@@ -74,6 +90,9 @@
+ 	}
+ 	if errors.Is(err, io.EOF) || errors.Is(err, io.ErrUnexpectedEOF) {
+ 		return "EOF"
++	}
++	if errors.Is(err, io.ErrClosedPipe) {
++		return "CLOSED_PIPE"
+ 	}
+ 	var code roombroker.Code
+ 	if errors.As(err, &code) {
+@@ -90,14 +109,37 @@
+ 			return "EXCHANGE_CLOSED"
+ 		}
+ 	}
++	var timed interface{ Timeout() bool }
++	if errors.As(err, &timed) && timed.Timeout() {
++		return "TIMEOUT_UNQUALIFIED"
++	}
+ 	return "UNKNOWN"
+ }
+ 
+-func (record *recorder) failure(stage string, err error) {
++func (record *recorder) facts(ctx context.Context, err error, point string) *Observation {
++	state := "LIVE"
++	if errors.Is(ctx.Err(), context.DeadlineExceeded) {
++		state = "DEADLINE"
++	} else if ctx.Err() != nil {
++		state = "CANCELLED"
++	}
++	stop := "NONE"
++	if record.result.LocalStop != nil {
++		stop = record.result.LocalStop.Source
++	}
++	return &Observation{Point: point, ErrorCategory: causeCode(err), ContextState: state,
++		StopAtObservation: stop, ElapsedMS: time.Since(record.started).Milliseconds()}
++}
++
++func (record *recorder) failure(ctx context.Context, stage string, err error) {
+ 	if err == nil || record.result.Complete || record.result.Status != "RUNNING" {
+ 		return
+ 	}
+ 	record.result.Stage, record.result.Cause = stageCode(stage), causeCode(err)
++	record.result.Observation = record.facts(ctx, err, "STARTUP_CALLER")
++	if record.observation != nil && errors.Is(err, record.observedError) {
++		record.result.Observation = record.observation
++	}
+ 	record.result.Status = "FAILED"
+ 	if record.result.Cause == "CANCELLED" {
+ 		record.result.Status = "CANCELLED"
+@@ -109,7 +151,7 @@
+ 	if record := get(ctx); record != nil {
+ 		record.mu.Lock()
+ 		defer record.mu.Unlock()
+-		record.failure(stage, err)
++		record.failure(ctx, stage, err)
+ 	}
+ }
+ 
+@@ -122,7 +164,7 @@
+ 		if record.result.Complete {
+ 			return
+ 		}
+-		record.failure("STARTUP", err)
++		record.failure(ctx, "STARTUP", err)
+ 		if record.result.Status == "RUNNING" {
+ 			record.result.Status = "SUCCEEDED"
+ 		}
+@@ -136,6 +178,14 @@
+ 		record.mu.Lock()
+ 		defer record.mu.Unlock()
+ 		result := record.result
++		if result.Observation != nil {
++			copy := *result.Observation
++			result.Observation = &copy
++		}
++		if result.LocalStop != nil {
++			copy := *result.LocalStop
++			result.LocalStop = &copy
++		}
+ 		return &result
+ 	}
+ 	return nil
+--- a/carrier/startupdiag/enabled_test.go
++++ b/carrier/startupdiag/enabled_test.go
+@@ -7,6 +7,7 @@
+ 	"errors"
+ 	"fmt"
+ 	"io"
++	"reflect"
+ 	"strings"
+ 	"testing"
+ 
+@@ -27,7 +28,7 @@
+ 		test.Fatal("primary changed", after)
+ 	}
+ 	Complete(ctx, nil)
+-	if *Snapshot(ctx) != *after {
++	if !reflect.DeepEqual(Snapshot(ctx), after) {
+ 		test.Fatal("completion was not immutable")
+ 	}
+ }
+--- /dev/null
++++ b/carrier/startupdiag/fidelity_test.go
+@@ -0,0 +1,141 @@
++package startupdiag
++
++import (
++	"context"
++	"crypto/x509"
++	"errors"
++	"fmt"
++	"io"
++	"os"
++	"testing"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/restrictedowner"
++	"github.com/Joker20380/family_connect/carrier/roombroker"
++)
++
++type fidelityTimeout struct{}
++
++func (fidelityTimeout) Error() string { return "not exported" }
++func (fidelityTimeout) Timeout() bool { return true }
++
++func TestFidelityCategoriesAndFirstFailure(test *testing.T) {
++	for _, item := range []struct {
++		err      error
++		category string
++	}{
++		{fmt.Errorf("private: %w", os.ErrDeadlineExceeded), "IO_DEADLINE"},
++		{context.DeadlineExceeded, "DEADLINE"}, {context.Canceled, "CANCELLED"},
++		{fidelityTimeout{}, "TIMEOUT_UNQUALIFIED"}, {io.ErrClosedPipe, "CLOSED_PIPE"},
++		{io.EOF, "EOF"}, {x509.UnknownAuthorityError{}, "CERTIFICATE_AUTHORITY"},
++		{x509.CertificateInvalidError{Reason: x509.Expired}, "CERTIFICATE_TIME_INVALID"},
++		{roombroker.Code("credentials_rejected"), "CREDENTIALS_REJECTED"},
++		{roombroker.Code("bootstrap_protocol_rejected"), "PROTOCOL_REJECTED"},
++		{errors.New("private"), "UNKNOWN"},
++	} {
++		ctx, cancel := context.WithCancel(context.Background())
++		ctx = Start(ctx, 1)
++		Failure(ctx, "FAMILY_AUTH", item.err)
++		Stop(ctx, "CLEANUP")
++		cancel()
++		Cancel(ctx)
++		Complete(ctx, item.err)
++		result := Snapshot(ctx)
++		if result.Cause != item.category || result.Stage != "FAMILY_AUTH" || result.Observation.ContextState != "LIVE" || result.Observation.StopAtObservation != "NONE" || result.LocalStop.Source != "CLEANUP" {
++			test.Fatalf("first facts changed: %+v", result)
++		}
++		result.Observation.ContextState = "mutated"
++		if Snapshot(ctx).Observation.ContextState != "LIVE" {
++			test.Fatal("snapshot aliases recorder")
++		}
++	}
++}
++
++type fidelitySession struct{}
++
++func (*fidelitySession) Close()       {}
++func (*fidelitySession) Failed() bool { return false }
++
++func TestFidelityOwnershipDrainStop(test *testing.T) {
++	for _, source := range []string{"STARTUP_BUDGET", "CONNECT_CANCEL", "CLEANUP"} {
++		test.Run(source, func(test *testing.T) {
++			var coordinator restrictedowner.Coordinator
++			cleanup := make(chan struct{})
++			entered := make(chan struct{})
++			chat, err := coordinator.AcquireChat(time.Now().Add(time.Minute), [32]byte{}, func(context.Context) (restrictedowner.Session, func(), error) {
++				return &fidelitySession{}, func() { close(entered); <-cleanup }, nil
++			}, func() {})
++			if err != nil {
++				test.Fatal(err)
++			}
++			if _, err = chat.Session(context.Background()); err != nil {
++				test.Fatal(err)
++			}
++			parent, cancel := context.WithCancel(context.Background())
++			ctx := Start(parent, 1)
++			vpn, err := coordinator.ReserveVPN(ctx)
++			if err != nil {
++				test.Fatal(err)
++			}
++			<-entered
++			if source == "STARTUP_BUDGET" {
++				defer StartBudget(ctx, 20*time.Millisecond, cancel)()
++			} else {
++				if source == "CLEANUP" {
++					Failure(ctx, "OWNERSHIP_DRAIN", errors.New("unknown drain failure"))
++				}
++				Stop(ctx, source)
++				cancel()
++			}
++			err = vpn.Wait(ctx)
++			Failure(ctx, "OWNERSHIP_DRAIN", err)
++			Stop(ctx, "CLEANUP")
++			cancel()
++			Complete(ctx, err)
++			result := Snapshot(ctx)
++			if result.Stage != "OWNERSHIP_DRAIN" || result.LocalStop.Source != source {
++				test.Fatalf("wrong drain attribution: %+v", result)
++			}
++			if source == "CLEANUP" {
++				if result.Cause != "UNKNOWN" || result.Observation.ContextState != "LIVE" {
++					test.Fatal("cleanup became cause")
++				}
++			} else if result.Cause != "CANCELLED" || result.Observation.StopAtObservation != source {
++				test.Fatal("budget cancel reclassified runtime error")
++			}
++			close(cleanup)
++			vpn.Release()
++			chat.Release()
++			test.Logf("stage=%s error=%s local_stop=%s observed_context=%s", result.Stage, result.Cause, result.LocalStop.Source, result.Observation.ContextState)
++		})
++	}
++}
++
++func TestFidelityBudgetSuccessAndGeneration(test *testing.T) {
++	ctx, cancel := context.WithCancel(context.Background())
++	defer cancel()
++	ctx = Start(ctx, 1)
++	stop := StartBudget(ctx, 20*time.Millisecond, cancel)
++	if !stop() {
++		test.Fatal("timer already fired")
++	}
++	Complete(ctx, nil)
++	old, oldCancel := context.WithCancel(context.Background())
++	old = Start(old, 2)
++	StartBudget(old, 20*time.Millisecond, oldCancel)
++	select {
++	case <-old.Done():
++	case <-time.After(time.Second):
++		test.Fatal("old timer did not fire")
++	}
++	if ctx.Err() != nil || Snapshot(ctx).Status != "SUCCEEDED" || Snapshot(ctx).LocalStop != nil {
++		test.Fatal("stopped/old timer killed successful generation")
++	}
++	Stop(ctx, "CONNECT_CANCEL")
++	cancel()
++	Cancel(ctx)
++	Complete(ctx, context.Canceled)
++	if Snapshot(ctx).Status != "SUCCEEDED" || Snapshot(ctx).Observation != nil {
++		test.Fatal("late stop created failure")
++	}
++}
+--- a/carrier/startupdiag/result.go
++++ b/carrier/startupdiag/result.go
+@@ -1,14 +1,29 @@
+ package startupdiag
+ 
+ type Result struct {
+-	Schema               int    `json:"schema"`
+-	Attempt              int64  `json:"attempt"`
+-	StartedUnixMS        int64  `json:"started_unix_ms"`
+-	ObservedMS           int64  `json:"observed_ms"`
+-	CompletedMS          int64  `json:"completed_ms"`
+-	Complete             bool   `json:"complete"`
+-	Status               string `json:"status"`
+-	Stage                string `json:"stage"`
+-	Cause                string `json:"cause"`
+-	DirectoryFingerprint string `json:"directory_fingerprint,omitempty"`
++	Schema               int          `json:"schema"`
++	Attempt              int64        `json:"attempt"`
++	StartedUnixMS        int64        `json:"started_unix_ms"`
++	ObservedMS           int64        `json:"observed_ms"`
++	CompletedMS          int64        `json:"completed_ms"`
++	Complete             bool         `json:"complete"`
++	Status               string       `json:"status"`
++	Stage                string       `json:"stage"`
++	Cause                string       `json:"cause"`
++	DirectoryFingerprint string       `json:"directory_fingerprint,omitempty"`
++	Observation          *Observation `json:"observation,omitempty"`
++	LocalStop            *LocalStop   `json:"local_stop,omitempty"`
+ }
++
++type Observation struct {
++	Point             string `json:"point"`
++	ErrorCategory     string `json:"error_category"`
++	ContextState      string `json:"context_state"`
++	StopAtObservation string `json:"stop_at_observation"`
++	ElapsedMS         int64  `json:"elapsed_ms"`
++}
++
++type LocalStop struct {
++	Source    string `json:"source"`
++	ElapsedMS int64  `json:"elapsed_ms"`
++}
+--- /dev/null
++++ b/carrier/startupdiag/stop.go
+@@ -0,0 +1,29 @@
++package startupdiag
++
++import (
++	"context"
++	"time"
++)
++
++func Stop(ctx context.Context, source string) {
++	switch source {
++	case "STARTUP_BUDGET", "CONNECT_CANCEL", "CLEANUP":
++	default:
++		return
++	}
++	if record := get(ctx); record != nil {
++		record.mu.Lock()
++		defer record.mu.Unlock()
++		if record.result.LocalStop == nil {
++			record.result.LocalStop = &LocalStop{Source: source, ElapsedMS: time.Since(record.started).Milliseconds()}
++		}
++	}
++}
++
++func StartBudget(ctx context.Context, duration time.Duration, cancel context.CancelFunc) func() bool {
++	timer := time.AfterFunc(duration, func() {
++		Stop(ctx, "STARTUP_BUDGET")
++		cancel()
++	})
++	return timer.Stop
++}
+--- a/clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java
+@@ -2,6 +2,8 @@
+ 
+ import com.google.gson.*;
+ import java.util.*;
++import java.io.IOException;
++import java.nio.charset.StandardCharsets;
+ 
+ final class DiagnosticRing {
+     static final int RECORD_LIMIT=256*1024,EXPORT_LIMIT=2*RECORD_LIMIT+1024;
+@@ -153,6 +155,17 @@
+         safe.addProperty("connection_id",connectionId);safe.addProperty("incident_id",incidentId);
+         restrictedStartup=safe;
+     }
++    synchronized void startupStats(JsonObject stats){startup(stats.get("owner_startup"));}
++    static void exportRecord(JsonObject bundle,String name,byte[] raw,String support)throws IOException{
++        if(raw.length>RECORD_LIMIT)throw new IOException("Diagnostic bound");
++        JsonObject record=JsonParser.parseString(new String(raw,StandardCharsets.UTF_8)).getAsJsonObject();
++        record.addProperty("device_support_id",support);bundle.add(name,record);
++    }
++    static byte[] exportBytes(JsonObject bundle)throws IOException{
++        byte[] encoded=bundle.toString().getBytes(StandardCharsets.UTF_8);
++        if(encoded.length>EXPORT_LIMIT)throw new IOException("Diagnostic bound");
++        return encoded;
++    }
+     private static String text(JsonObject source,String field){
+         JsonElement value=source.get(field);return value!=null&&value.isJsonPrimitive()&&value.getAsJsonPrimitive().isString()?value.getAsString():"";
+     }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java
+@@ -29,7 +29,7 @@
+     static void nativeStats(Context context,org.json.JSONObject stats){
+         try{Diagnostics store=get(context);synchronized(store){
+             org.json.JSONObject startup=stats.optJSONObject("owner_startup");
+-            if(startup!=null)store.ring.startup(JsonParser.parseString(startup.toString()));
++            if(startup!=null){JsonObject input=new JsonObject();input.add("owner_startup",JsonParser.parseString(startup.toString()));store.ring.startupStats(input);}
+             org.json.JSONArray events=stats.optJSONArray("events");
+             if(events!=null)for(int index=0;index<Math.min(32,events.length());index++)store.ring.nativeEvent(events.optString(index),System.currentTimeMillis());
+             for(String name:new String[]{"protect_ok","protect_denied"})store.ring.counter(name,stats.optLong(name,-1));
+@@ -60,7 +60,7 @@
+                 try{Diagnostics store=get(activity);String support=DeviceSupport.cached(activity);JsonObject bundle=new JsonObject();String filename="diagnostics-"+UUID.randomUUID().toString().replace("-","")+".json";synchronized(store){
+                     store.ring.support(support);
+                     for(String name:new String[]{"ring","incident"}){
+-                        try{byte[] raw=store.file(name).readFully();if(raw.length>DiagnosticRing.RECORD_LIMIT)throw new IOException("Diagnostic bound");JsonObject record=JsonParser.parseString(new String(raw,StandardCharsets.UTF_8)).getAsJsonObject();record.addProperty("device_support_id",support);bundle.add(name,record);}
++                        try{DiagnosticRing.exportRecord(bundle,name,store.file(name).readFully(),support);}
+                         catch(FileNotFoundException missing){if(name.equals("ring"))bundle.add(name,store.ring.snapshot());}
+                     }
+                     File[] previous=activity.getCacheDir().listFiles((directory,name)->name.matches("diagnostics-[0-9a-f]{32}\\.json"));
+@@ -68,8 +68,7 @@
+                         activity.revokeUriPermission(Uri.parse("content://"+activity.getPackageName()+".diagnostics/"+file.getName()),Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                         if(!file.delete())throw new IOException("Diagnostic cleanup");
+                     }
+-                    byte[] encoded=bundle.toString().getBytes(StandardCharsets.UTF_8);
+-                    if(encoded.length>DiagnosticRing.EXPORT_LIMIT)throw new IOException("Diagnostic bound");
++                    byte[] encoded=DiagnosticRing.exportBytes(bundle);
+                     File target=new File(activity.getCacheDir(),filename);try(FileOutputStream output=new FileOutputStream(target)){output.write(encoded);}
+                 }
+                 Uri uri=Uri.parse("content://"+activity.getPackageName()+".diagnostics/"+filename);
+--- a/clients/android/app/src/main/java/com/familyconnect/app/RestrictedStartup.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/RestrictedStartup.java
+@@ -11,14 +11,34 @@
+         if(!safe.has("schema")||safe.get("schema").getAsLong()!=1||!safe.has("attempt")||safe.get("attempt").getAsLong()<1||!safe.has("started_unix_ms"))return null;
+         String status=RestrictedTrace.text(source,"status"),stage=RestrictedTrace.text(source,"stage"),cause=RestrictedTrace.text(source,"cause");
+         if(!RestrictedTrace.allowed(status,"RUNNING|SUCCEEDED|FAILED|CANCELLED"))return null;
+-        if(!RestrictedTrace.allowed(stage,"STARTUP|PROFILE|DIRECTORY|SEED_CREATE|SEED_CONNECT|SEED_ADMISSION|SEED_READ|FAMILY_AUTH|HELLO_RECEIVE|REQUEST_SEND|DESCRIPTOR_RECEIVE|DESCRIPTOR_VALIDATE|BYE_SEND|BYE_RECEIVE|DEDICATED_CREATE|DEDICATED_CONNECT|DEDICATED_AUTH|DEDICATED_BIND|DEDICATED_MUX|CONTROL_REFRESH|UNKNOWN"))stage="UNKNOWN";
+-        if(!RestrictedTrace.allowed(cause,"NONE|CANCELLED|DEADLINE|CERTIFICATE_TIME_INVALID|CERTIFICATE_INVALID|CERTIFICATE_AUTHORITY|CERTIFICATE_HOSTNAME|PROVIDER_API|CARRIER_CLOSED|EOF|PROTOCOL_REJECTED|CREDENTIALS_REJECTED|DESCRIPTOR_REJECTED|DESCRIPTOR_EXPIRED|EXCHANGE_CLOSED|UNKNOWN"))cause="UNKNOWN";
++        if(!RestrictedTrace.allowed(stage,"STARTUP|OWNERSHIP_DRAIN|PROFILE|DIRECTORY|SEED_CREATE|SEED_CONNECT|SEED_ADMISSION|SEED_READ|FAMILY_AUTH|HELLO_RECEIVE|REQUEST_SEND|DESCRIPTOR_RECEIVE|DESCRIPTOR_VALIDATE|BYE_SEND|BYE_RECEIVE|DEDICATED_CREATE|DEDICATED_CONNECT|DEDICATED_AUTH|DEDICATED_BIND|DEDICATED_MUX|CONTROL_REFRESH|UNKNOWN"))stage="UNKNOWN";
++        if(!RestrictedTrace.allowed(cause,CAUSES))cause="UNKNOWN";
+         safe.addProperty("status",status);safe.addProperty("stage",stage);safe.addProperty("cause",cause);
+         JsonElement complete=source.get("complete");
+         if(complete==null||!complete.isJsonPrimitive()||!complete.getAsJsonPrimitive().isBoolean())return null;
+         safe.addProperty("complete",complete.getAsBoolean());
+         String fingerprint=RestrictedTrace.text(source,"directory_fingerprint");
+         if(RestrictedTrace.tag(fingerprint))safe.addProperty("directory_fingerprint",fingerprint);
++        projectFacts(source,safe,"observation");
++        projectFacts(source,safe,"local_stop");
+         return safe;
+     }
++    private static final String CAUSES="NONE|CANCELLED|DEADLINE|IO_DEADLINE|CLOSED_PIPE|TIMEOUT_UNQUALIFIED|CERTIFICATE_TIME_INVALID|CERTIFICATE_INVALID|CERTIFICATE_AUTHORITY|CERTIFICATE_HOSTNAME|PROVIDER_API|CARRIER_CLOSED|EOF|PROTOCOL_REJECTED|CREDENTIALS_REJECTED|DESCRIPTOR_REJECTED|DESCRIPTOR_EXPIRED|EXCHANGE_CLOSED|UNKNOWN";
++    private static final String STOPS="NONE|STARTUP_BUDGET|CONNECT_CANCEL|CLEANUP";
++    private static void code(JsonObject source,JsonObject safe,String field,String choices){
++        String value=RestrictedTrace.text(source,field);
++        safe.addProperty(field,RestrictedTrace.allowed(value,choices)?value:"UNKNOWN");
++    }
++    private static void projectFacts(JsonObject source,JsonObject safe,String name){
++        JsonElement input=source.get(name);if(input==null||!input.isJsonObject())return;
++        JsonObject facts=input.getAsJsonObject(),output=new JsonObject();
++        if(name.equals("observation")){
++            code(facts,output,"point","FAMILY_RECEIVE|STARTUP_CALLER");
++            code(facts,output,"error_category",CAUSES);
++            code(facts,output,"context_state","LIVE|DEADLINE|CANCELLED");
++            code(facts,output,"stop_at_observation",STOPS);
++        }else code(facts,output,"source",STOPS);
++        RestrictedTrace.number(facts,output,"elapsed_ms");
++        safe.add(name,output);
++    }
+ }
+--- /dev/null
++++ b/clients/android/app/src/test/java/com/familyconnect/app/StartupFidelityTest.java
+@@ -0,0 +1,63 @@
++package com.familyconnect.app;
++
++import com.google.gson.*;
++import java.io.IOException;
++import java.nio.charset.StandardCharsets;
++import java.nio.file.*;
++import org.junit.Test;
++import static org.junit.Assert.*;
++
++public class StartupFidelityTest {
++    private JsonObject nativeRecord(int attempt,long started,String cause){
++        return JsonParser.parseString("{\"schema\":1,\"attempt\":"+attempt+",\"started_unix_ms\":"+started+",\"observed_ms\":10,\"completed_ms\":12,\"complete\":true,\"status\":\"FAILED\",\"stage\":\"HELLO_RECEIVE\",\"cause\":\""+cause+"\",\"observation\":{\"point\":\"FAMILY_RECEIVE\",\"error_category\":\""+cause+"\",\"context_state\":\"LIVE\",\"stop_at_observation\":\"NONE\",\"elapsed_ms\":9,\"raw_error\":\"secret\"},\"local_stop\":{\"source\":\"CLEANUP\",\"elapsed_ms\":11},\"private\":\"secret\"}").getAsJsonObject();
++    }
++    private DiagnosticRing ring(){
++        DiagnosticRing ring=new DiagnosticRing("synthetic","research",84,31);
++        ring.event(new ConnectivityOrchestrator.Event("connect_requested","restricted",null,ConnectivityOrchestrator.State.CONNECTING,0),100);
++        return ring;
++    }
++    private void stats(DiagnosticRing ring,JsonObject record){JsonObject input=new JsonObject();input.add("owner_startup",record);ring.startupStats(input);}
++    @Test public void normalPersistedExportKeepsFactsAndSeparatesIncident()throws Exception{
++        DiagnosticRing ring=ring();stats(ring,nativeRecord(1,101,"IO_DEADLINE"));
++        Path incident=Files.createTempFile("synthetic-incident-",".json"),current=Files.createTempFile("synthetic-ring-",".json");
++        try{
++            Files.write(incident,ring.snapshot().toString().getBytes(StandardCharsets.UTF_8));
++            stats(ring,nativeRecord(1,101,"CANCELLED"));ring.cleanup(true,120);
++            assertEquals("IO_DEADLINE",ring.snapshot().getAsJsonObject("restricted_startup").get("cause").getAsString());
++            ring.event(new ConnectivityOrchestrator.Event("connect_requested","restricted",null,ConnectivityOrchestrator.State.CONNECTING,0),200);
++            stats(ring,nativeRecord(1,101,"UNKNOWN"));
++            assertEquals(0,ring.snapshot().getAsJsonObject("restricted_startup").size());
++            JsonObject drain=nativeRecord(2,201,"CANCELLED");drain.addProperty("stage","OWNERSHIP_DRAIN");
++            drain.getAsJsonObject("observation").addProperty("stop_at_observation","STARTUP_BUDGET");
++            drain.getAsJsonObject("local_stop").addProperty("source","STARTUP_BUDGET");stats(ring,drain);
++            Files.write(current,ring.snapshot().toString().getBytes(StandardCharsets.UTF_8));
++            JsonObject bundle=new JsonObject();
++            DiagnosticRing.exportRecord(bundle,"ring",Files.readAllBytes(current),"synthetic");
++            DiagnosticRing.exportRecord(bundle,"incident",Files.readAllBytes(incident),"synthetic");
++            byte[] encoded=DiagnosticRing.exportBytes(bundle);
++            JsonObject exported=JsonParser.parseString(new String(encoded,StandardCharsets.UTF_8)).getAsJsonObject();
++            JsonObject first=exported.getAsJsonObject("incident").getAsJsonObject("restricted_startup");
++            assertEquals("IO_DEADLINE",first.get("cause").getAsString());
++            assertEquals("LIVE",first.getAsJsonObject("observation").get("context_state").getAsString());
++            assertEquals("NONE",first.getAsJsonObject("observation").get("stop_at_observation").getAsString());
++            assertEquals("CLEANUP",first.getAsJsonObject("local_stop").get("source").getAsString());
++            assertEquals("OWNERSHIP_DRAIN",exported.getAsJsonObject("ring").getAsJsonObject("restricted_startup").get("stage").getAsString());
++            assertNotEquals(exported.getAsJsonObject("ring").get("connection_id"),exported.getAsJsonObject("incident").get("connection_id"));
++            assertFalse(new String(encoded,StandardCharsets.UTF_8).contains("secret"));
++        }finally{Files.deleteIfExists(current);Files.deleteIfExists(incident);}
++    }
++    @Test public void oldSchemaMissingAndUnknownFieldsRemainCompatible()throws Exception{
++        JsonObject legacy=nativeRecord(1,101,"UNKNOWN");legacy.remove("observation");legacy.remove("local_stop");
++        DiagnosticRing ring=ring();stats(ring,legacy);
++        JsonObject projected=ring.snapshot().getAsJsonObject("restricted_startup");
++        assertFalse(projected.has("observation"));assertFalse(projected.has("local_stop"));
++        assertEquals("UNKNOWN",projected.get("cause").getAsString());
++        for(String cause:new String[]{"CLOSED_PIPE","DEADLINE","TIMEOUT_UNQUALIFIED","PROTOCOL_REJECTED","CERTIFICATE_AUTHORITY"})
++            assertEquals(cause,RestrictedStartup.project(nativeRecord(2,201,cause)).get("cause").getAsString());
++        JsonObject unsafe=nativeRecord(3,301,"UNKNOWN");unsafe.getAsJsonObject("observation").addProperty("context_state","secret");
++        assertEquals("UNKNOWN",RestrictedStartup.project(unsafe).getAsJsonObject("observation").get("context_state").getAsString());
++        assertThrows(IOException.class,()->DiagnosticRing.exportRecord(new JsonObject(),"ring",new byte[DiagnosticRing.RECORD_LIMIT+1],"synthetic"));
++        JsonObject huge=new JsonObject();huge.addProperty("data","x".repeat(DiagnosticRing.EXPORT_LIMIT));
++        assertThrows(IOException.class,()->DiagnosticRing.exportBytes(huge));
++    }
++}
+--- a/pilot/android-restricted/native/main.go
++++ b/pilot/android-restricted/native/main.go
+@@ -126,11 +126,12 @@
+ 		C.fcRestrictedRelease(owner)
+ 		return 0
+ 	}
+-	timer := time.AfterFunc(time.Duration(budget)*time.Millisecond, cancel)
++	ctx = startupdiag.Start(ctx, sequence+1)
++	stopBudget := startupdiag.StartBudget(ctx, time.Duration(budget)*time.Millisecond, cancel)
+ 	ctx = sessiontrace.Watch(ctx)
+ 	network, err := underlay.New(ctx, resolver, func(fd int) bool { return C.fcRestrictedProtect(owner, C.int(fd)) != 0 })
+ 	if err != nil {
+-		timer.Stop()
++		stopBudget()
+ 		ownership.Release()
+ 		clear(profile)
+ 		cancel()
+@@ -138,7 +139,6 @@
+ 		return 0
+ 	}
+ 	sequence++
+-	ctx = startupdiag.Start(ctx, sequence)
+ 	retainStartup(ctx)
+ 	owned := &ownedSession{id: sequence, owner: owner, ctx: ctx, cancel: cancel, done: make(chan struct{}), network: network, fd: -1, ownership: ownership}
+ 	owned.profileHash = sha256.Sum256(profile)
+@@ -146,15 +146,15 @@
+ 	go func() {
+ 		defer clear(profile)
+ 		defer close(owned.done)
+-		defer timer.Stop()
++		defer stopBudget()
+ 		err := owned.ownership.Wait(ctx)
+ 		if err != nil {
+ 			owned.event("ownership_drain_failed")
++			startupdiag.Failure(ctx, "OWNERSHIP_DRAIN", err)
+ 			owned.cleanup()
+ 			owned.mu.Lock()
+ 			owned.state = 3
+ 			owned.mu.Unlock()
+-			startupdiag.Failure(ctx, "STARTUP", err)
+ 			startupdiag.Complete(ctx, err)
+ 			return
+ 		}
+@@ -188,7 +188,7 @@
+ 		} else {
+ 			session, err = wholedevice.Open(ctx, path, cache, network, owned.event)
+ 		}
+-		if !timer.Stop() && err == nil {
++		if !stopBudget() && err == nil {
+ 			err = context.DeadlineExceeded
+ 		}
+ 		if err == nil {
+@@ -198,6 +198,7 @@
+ 		owned.session = session
+ 		owned.mu.Unlock()
+ 		if err != nil {
++			startupdiag.Failure(ctx, "STARTUP", err)
+ 			owned.cleanup()
+ 		}
+ 		owned.failure(err)
+@@ -311,6 +312,7 @@
+ 	}
+ 	owned := current
+ 	sessiontrace.From(owned.ctx).Add("LOCAL_CLOSE", "STARTED", "NONE")
++	startupdiag.Stop(owned.ctx, "CONNECT_CANCEL")
+ 	startupdiag.Cancel(owned.ctx)
+ 	owned.cancel()
+ 	<-owned.done
+@@ -321,6 +323,7 @@
+ 
+ func (owned *ownedSession) cleanup() {
+ 	owned.cleanupOnce.Do(func() {
++		startupdiag.Stop(owned.ctx, "CLEANUP")
+ 		owned.cancel()
+ 		if owned.session != nil {
+ 			owned.session.Close()
