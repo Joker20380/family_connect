@@ -7,6 +7,13 @@ Production FAIL сохраняется; root cause не доказана. Сна
 
 ## Начать здесь
 
+- [Restricted baseline environment recovery — BLOCKED](2026-10-15-restricted-baseline-environment-recovery-1.md):
+  штатные authority-request/operator entrypoints вызваны, но отклонили просроченный
+  predecessor до подписи/публикации. Зафиксирован отсутствующий применимый accepted
+  expired-parent recovery contract под current4h. Baseline остаётся failed; binary,
+  config, floors и signed APK неизменны; телефон не затронут. Это не восстановленное
+  окружение и не расходование device acceptance попыток.
+
 - [Owner cumulative client acceptance — ENVIRONMENT_BLOCKED](2026-10-15-owner-cumulative-client-acceptance-1.md):
   проверенный APK подписан прежним signer без rebuild; исходный установленный APK
   сохранён. Свежий gateway failed/PID0/no listener, security/directory просрочены.

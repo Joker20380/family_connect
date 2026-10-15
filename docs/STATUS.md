@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+## RESTRICTED-BASELINE-ENVIRONMENT-RECOVERY-1 — BLOCKED (15.10)
+
+Accepted current4h/operator entrypoints attempted with one operation ID, not just
+read-only preflight: authority-request REJECTED/UNKNOWN; operator run
+FAIL_CLOSED/SNAPSHOT_VALIDATION_FAILED. Deployed exact parser rejects expired prior
+authority at its current-time validity gate. The accepted path has no applicable
+expired-authority/CRL/grants recovery contract under current4h coordination; legacy
+issuer5→6/old-timer operations were not adapted or used to bypass validation.
+No signing, credential publication, start/reset/restart or phone access occurred.
+Final13:54:08UTC: baseline still failed/PID0/no listener; disk binary21f0a0fd…70509a,
+unit configuration, security floors/material and grants unchanged. Last gateway
+fatal independently records PROFILE/CREDENTIALS_REJECTED at11:08:07UTC.
+Current4h timer active, latest actual run FAIL_CLOSED; device window NOT_READY.
+Signed cumulative APK3c733d2f…140513 unchanged; install and CONNECT1/2 remain unspent.
+[Exact blocked entrypoints, receipts and UTC limits](releases/2026-10-15-restricted-baseline-environment-recovery-1.md).
+Next requires an applicable accepted expired-parent operator recovery path, not
+blind renewal/restart retries. Device/prod acceptance and historical causality
+remain unchanged; no automatic owner action.
+
 ## OWNER-CUMULATIVE-CLIENT-ACCEPTANCE-1 — ENVIRONMENT_BLOCKED (15.10)
 
 Existing cumulative APK signed with the original Android signer; no rebuild.

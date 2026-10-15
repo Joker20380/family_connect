@@ -8,6 +8,20 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### RESTRICTED-BASELINE-ENVIRONMENT-RECOVERY-1 — blocked operator boundary (15.10)
+
+- [Actual operator attempts and missing contract](releases/2026-10-15-restricted-baseline-environment-recovery-1.md):
+  accepted current4h refuses an already expired predecessor before offline handoff
+  and transaction entry. No materials published or gateway started; no phone access.
+- Obtain an applicable accepted expired-authority/CRL/grants recovery path integrated
+  with current4h lock/CAS/publication gates. Do not improvise a writer, reuse the
+  old issuer5→6 transaction, change TTL/clock or bypass validation.
+- Keep restricted admission closed until coherent valid publication is verified;
+  current4h active timer alone is not recovery. Do not retry the same failed command.
+- After environment restoration, resume the already signed cumulative client at
+  fresh short environment/owner checks, then install/device stages. No rebuild,
+  resigning, full offline audit or automatic CONNECT. Both attempts remain unused.
+
 ### OWNER-CUMULATIVE-CLIENT-ACCEPTANCE-1 — pre-install environment stop (15.10)
 
 - [Bounded device-acceptance preparation](releases/2026-10-15-owner-cumulative-client-acceptance-1.md)
