@@ -1,19 +1,28 @@
 # Текущее состояние / Current state
 
-## OWNER-RESTRICTED-RECONNECT-AND-CHAT-1 — WAITING_FOR_OWNER_ACTION (15.10)
+## OWNER-RESTRICTED-RECONNECT-AND-CHAT-1 — FAIL, evidence retained (15.10)
 
-New lifecycle episode, separate from prior smoke/unused old CONNECT2. Narrow residual
-review: UNATTRIBUTED_COUNTERS and POST_DISCONNECT_TERMINAL, no new causal claim or
-proven security blocker. Fresh19:30UTC prerequisites: same installed cumulative
-APK/native binding, UID10283/PID26459, VPN OFF; baseline/served TLS/directory valid,
-no pending maintenance or competing writer. Earliest security bound21:37:06UTC at
-check, not a frozen guarantee. Existing bounded collectors prepared; no native poller.
-Next owner action is ordinary pre-VPN chat sync and status-only observation, then
-separately instructed A→local OFF→B without app restart or waiting for server slot.
-Maximum2 new CONNECT,18minutes from A through cleanup; no repeated240second test.
-[Lifecycle checkpoint](releases/2026-10-15-owner-restricted-reconnect-and-chat-1.md).
-New CONNECT/install/restart/export/server-admin actions0. Previous CLIENT_DEVICE_SMOKE
-PASS and old CONNECT2 NOT_RUN preserved; handoff unproven, supervisor FAIL unchanged.
+New episode: A restricted startup/owner HTTPS succeeds; local OFF→B in4.158seconds,
+same app PID26459, two distinct connection/incident/session tags exactly bound to
+saved gateway traces. B reaches dedicated SESSION_READY/SUCCEEDED/CONNECTED, then
+8.472seconds later records CARRIER/CLOSED/CARRIER_ERROR with RECEIVE_QUEUE_FULL
+at19:53:16.918UTC. Owner IP check fails; restoration_failed follows. Cause of queue
+saturation and any stale-cleanup/chat relationship remain NOT_PROVEN. No third CONNECT.
+A DNS18 responses/0 errors; B6 queries/6 responses/0 errors before failure. A protocol
+errors5 are unattributed; B0. Server A terminal is post-DISCONNECT; B server terminal
+is later than its recorded client close, not substituted for the initial failure.
+[Final lifecycle report](releases/2026-10-15-owner-restricted-reconnect-and-chat-1.md)
+and [safe A/B receipt](releases/evidence/2026-10-15-owner-restricted-reconnect-and-chat-1.json).
+One normal export recovered A history/B current ring; older incident remains separate.
+First runtime failure survives cleanup; B startup stays SUCCEEDED, not rewritten.
+Chat На связи on A is UI-only; borrowing/handoff NOT_PROVEN, post-OFF chat NOT_MEASURED.
+Final local OFF19:54:38.454UTC,825.716seconds from A CONNECT; metadata confirms OFF
+and same process through20:06:39UTC. Cumulative APK unchanged, no reinstall/rollback.
+New CONNECT2, recorded DISCONNECT transitions2, export1; no app restart, server admin,
+manual credential mutation, extra native poll or fault. Ordinary protocol activity
+not asserted zero. Previous CLIENT_DEVICE_SMOKE PASS/old CONNECT2 NOT_RUN unchanged;
+supervisor FAIL and historical C1/I1 NOT_PROVEN remain. Next work, if requested, is
+separate offline analysis of this receive-queue boundary, not another live retry.
 
 ## OWNER-CUMULATIVE-CLIENT-ACCEPTANCE-1-RESUME — PARTIAL (15.10)
 

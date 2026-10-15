@@ -1,0 +1,765 @@
+{
+  "task": "OWNER-RESTRICTED-RECONNECT-AND-CHAT-1",
+  "result": "FAIL_RECONNECT_RUNTIME_TRAFFIC; historical smoke preserved",
+  "export": {
+    "sha256": "3e830cfe8850aa4129da0c41e116ddba23a9aedbf40123d67a5dd54de5a49104",
+    "size_bytes": 156569,
+    "received_utc": "2026-10-15T19:59:32.702305+00:00",
+    "transfer": "OWNER_SUPPLIED_LOCAL_FILE_AFTER_NORMAL_SHARE",
+    "raw_published": false
+  },
+  "installed_identity": {
+    "apk_sha256": "3c733d2fc3a0ec377143b668244a4c7d6619ff24abe024da4ee9bfe31d140513",
+    "native_sha256": "2a974350c168913ca8a217d3fc73f452fdd709c3619d0c690abd5d884c54b88c",
+    "package": "com.familyconnect.app.friends",
+    "uid": 10283,
+    "app_pid_unchanged": 26459,
+    "identity_basis": "fresh preflight installed APK hash equals previously extracted exact APK/native bytes; no install in this task"
+  },
+  "attempts": {
+    "A": {
+      "source": "ring.restricted_history[1]",
+      "connection_alias": "CONNECTION_A",
+      "incident_alias": "INCIDENT_A",
+      "session_alias": "SESSION_A",
+      "client_server_binding": "EXACT_FULL_SESSION_TAG_MATCH_PRIVATE; public alias SESSION_A",
+      "session_snapshot_utc": "2026-10-15T19:52:38.071Z",
+      "snapshot": {
+        "native_state": 2,
+        "authorization_denied": false,
+        "correlation_status": "VALID",
+        "terminal_reason": "NONE",
+        "reliable_terminal": "",
+        "signaling_failure": "NONE",
+        "ice_failure": "NONE",
+        "retransmissions": 17,
+        "recovery_timeouts": 17,
+        "protocol_errors": 5,
+        "dns_responses": 18,
+        "dns_errors": 0,
+        "tcp_open_ok": 48,
+        "tcp_open_errors": 0,
+        "sent_bytes": 81634,
+        "received_bytes": 233606,
+        "evidence_dropped": 0
+      },
+      "lifecycle": {
+        "trace_count": 32,
+        "drops": {
+          "trace_dropped": 372,
+          "export_dropped": 0,
+          "delivery_dropped": 329,
+          "delivery_projection_dropped": 0,
+          "projection_dropped": 0,
+          "archive_dropped": 160
+        },
+        "boundary_count": 64,
+        "boundary_dropped": 28993
+      },
+      "selected_events": [
+        {
+          "component": "ORCHESTRATOR",
+          "state_from": "DISCONNECTED",
+          "state_to": "CONNECTING",
+          "transport_class": "none",
+          "reason_code": "NONE",
+          "retry_count": 0,
+          "source": "ring.events[34]",
+          "utc": "2026-10-15T19:40:52.738Z",
+          "connection_alias": "CONNECTION_A",
+          "incident_alias": "INCIDENT_A"
+        },
+        {
+          "component": "FAMILY_AUTH",
+          "state_from": "CONNECTING",
+          "state_to": "CONNECTING",
+          "transport_class": "restricted",
+          "reason_code": "FAMILY_AUTH_READY",
+          "retry_count": 0,
+          "source": "ring.events[41]",
+          "utc": "2026-10-15T19:41:22.638Z",
+          "connection_alias": "CONNECTION_A",
+          "incident_alias": "INCIDENT_A"
+        },
+        {
+          "component": "ROOM_BROKER",
+          "state_from": "CONNECTING",
+          "state_to": "CONNECTING",
+          "transport_class": "restricted",
+          "reason_code": "BROKER_DESCRIPTOR_READY",
+          "retry_count": 0,
+          "source": "ring.events[42]",
+          "utc": "2026-10-15T19:41:22.638Z",
+          "connection_alias": "CONNECTION_A",
+          "incident_alias": "INCIDENT_A"
+        },
+        {
+          "component": "SESSION",
+          "state_from": "CONNECTING",
+          "state_to": "CONNECTING",
+          "transport_class": "restricted",
+          "reason_code": "SESSION_READY",
+          "retry_count": 0,
+          "source": "ring.events[44]",
+          "utc": "2026-10-15T19:41:22.638Z",
+          "connection_alias": "CONNECTION_A",
+          "incident_alias": "INCIDENT_A"
+        },
+        {
+          "component": "ORCHESTRATOR",
+          "state_from": "CONNECTING",
+          "state_to": "CONNECTED",
+          "transport_class": "restricted",
+          "reason_code": "NONE",
+          "retry_count": 0,
+          "source": "ring.events[46]",
+          "utc": "2026-10-15T19:41:22.778Z",
+          "connection_alias": "CONNECTION_A",
+          "incident_alias": "INCIDENT_A"
+        },
+        {
+          "component": "ORCHESTRATOR",
+          "state_from": "CONNECTED",
+          "state_to": "DISCONNECTING",
+          "transport_class": "restricted",
+          "reason_code": "CANCELLED",
+          "retry_count": 0,
+          "source": "ring.events[50]",
+          "utc": "2026-10-15T19:52:38.036Z",
+          "connection_alias": "CONNECTION_A",
+          "incident_alias": "INCIDENT_A"
+        },
+        {
+          "component": "SESSION",
+          "state_from": "DISCONNECTING",
+          "state_to": "DISCONNECTING",
+          "transport_class": "restricted",
+          "reason_code": "NONE",
+          "retry_count": 0,
+          "event": "cleanup_completed",
+          "source": "ring.events[52]",
+          "utc": "2026-10-15T19:52:38.164Z",
+          "connection_alias": "CONNECTION_A",
+          "incident_alias": "INCIDENT_A"
+        },
+        {
+          "component": "VPN",
+          "state_from": "DISCONNECTING",
+          "state_to": "DISCONNECTING",
+          "transport_class": "none",
+          "reason_code": "VPN_RELEASED",
+          "retry_count": 0,
+          "source": "ring.events[53]",
+          "utc": "2026-10-15T19:52:38.292Z",
+          "connection_alias": "CONNECTION_A",
+          "incident_alias": "INCIDENT_A"
+        },
+        {
+          "component": "ORCHESTRATOR",
+          "state_from": "DISCONNECTING",
+          "state_to": "DISCONNECTED",
+          "transport_class": "none",
+          "reason_code": "CANCELLED",
+          "retry_count": 0,
+          "source": "ring.events[54]",
+          "utc": "2026-10-15T19:52:38.368Z",
+          "connection_alias": "CONNECTION_A",
+          "incident_alias": "INCIDENT_A"
+        }
+      ],
+      "recorded_retry_counts": [
+        0
+      ],
+      "connected_seconds_before_off": 675.59,
+      "startup_record": "NOT_EXPORTED_FOR_ARCHIVED_ATTEMPT; readiness retained in ring events and native_state2 in session snapshot",
+      "packet_counters": "NOT_EXPORTED_FOR_ARCHIVED_ATTEMPT; do not reuse B ring counters",
+      "server": {
+        "matched_trace_count": 340,
+        "first_utc": "2026-10-15T19:41:03.379Z",
+        "last_utc": "2026-10-15T19:52:47.593Z",
+        "selected_events": [
+          {
+            "sequence": 17,
+            "stage": "DESCRIPTOR",
+            "state": "ISSUED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:41:07.180Z"
+          },
+          {
+            "sequence": 18,
+            "stage": "FAMILY_TLS",
+            "state": "STARTED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:41:07.182Z"
+          },
+          {
+            "sequence": 22,
+            "stage": "FAMILY_TLS",
+            "state": "ESTABLISHED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:41:17.710Z"
+          },
+          {
+            "sequence": 24,
+            "stage": "GATEWAY_SESSION",
+            "state": "ESTABLISHED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:41:20.845Z"
+          },
+          {
+            "sequence": 26,
+            "stage": "GATEWAY_SESSION",
+            "state": "ESTABLISHED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:41:23.016Z"
+          },
+          {
+            "sequence": 28,
+            "stage": "GATEWAY_SESSION",
+            "state": "ESTABLISHED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:41:24.981Z"
+          },
+          {
+            "sequence": 401,
+            "stage": "GATEWAY_SESSION",
+            "state": "ESTABLISHED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:49:07.638Z"
+          },
+          {
+            "sequence": 402,
+            "stage": "GATEWAY_SESSION",
+            "state": "ESTABLISHED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:49:08.364Z"
+          },
+          {
+            "sequence": 403,
+            "stage": "GATEWAY_SESSION",
+            "state": "ESTABLISHED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:49:08.365Z"
+          },
+          {
+            "sequence": 405,
+            "stage": "GATEWAY_SESSION",
+            "state": "ESTABLISHED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:49:09.457Z"
+          },
+          {
+            "sequence": 581,
+            "stage": "CARRIER",
+            "state": "FAILED",
+            "reason": "RELIABLE_RETRY_EXHAUSTED",
+            "utc": "2026-10-15T19:52:47.584Z"
+          },
+          {
+            "sequence": 589,
+            "stage": "CLEANUP",
+            "state": "COMPLETED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:52:47.591Z"
+          },
+          {
+            "sequence": 590,
+            "stage": "FAMILY_TLS",
+            "state": "CLOSED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:52:47.591Z"
+          },
+          {
+            "sequence": 591,
+            "stage": "FAMILY_TLS",
+            "state": "FAILED",
+            "reason": "FAMILY_TLS_ERROR",
+            "utc": "2026-10-15T19:52:47.591Z"
+          },
+          {
+            "sequence": 593,
+            "stage": "FAMILY_TLS",
+            "state": "CLOSED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:52:47.591Z"
+          },
+          {
+            "sequence": 596,
+            "stage": "CLEANUP",
+            "state": "COMPLETED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:52:47.591Z"
+          },
+          {
+            "sequence": 597,
+            "stage": "FAMILY_TLS",
+            "state": "CLOSED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:52:47.591Z"
+          },
+          {
+            "sequence": 601,
+            "stage": "GATEWAY_SESSION",
+            "state": "FAILED",
+            "reason": "GATEWAY_CLOSE",
+            "utc": "2026-10-15T19:52:47.593Z"
+          },
+          {
+            "sequence": 603,
+            "stage": "CLEANUP",
+            "state": "COMPLETED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:52:47.593Z"
+          },
+          {
+            "sequence": 604,
+            "stage": "CLEANUP",
+            "state": "COMPLETED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:52:47.593Z"
+          }
+        ],
+        "explicit_broker_release_grant": "NOT_RECORDED_IN_SAVED_WINDOWS"
+      }
+    },
+    "B": {
+      "source": "ring.restricted_session",
+      "connection_alias": "CONNECTION_B",
+      "incident_alias": "INCIDENT_B",
+      "session_alias": "SESSION_B",
+      "client_server_binding": "EXACT_FULL_SESSION_TAG_MATCH_PRIVATE; public alias SESSION_B",
+      "session_snapshot_utc": "2026-10-15T19:53:18.488Z",
+      "snapshot": {
+        "native_state": 3,
+        "authorization_denied": false,
+        "correlation_status": "VALID",
+        "terminal_reason": "IO_CLOSED",
+        "reliable_terminal": "carrier_closed",
+        "signaling_failure": "NONE",
+        "ice_failure": "NONE",
+        "retransmissions": 6,
+        "recovery_timeouts": 6,
+        "protocol_errors": 0,
+        "dns_responses": 6,
+        "dns_errors": 0,
+        "tcp_open_ok": 4,
+        "tcp_open_errors": 0,
+        "sent_bytes": 5187,
+        "received_bytes": 3925,
+        "evidence_dropped": 0
+      },
+      "lifecycle": {
+        "trace_count": 43,
+        "drops": {
+          "trace_dropped": 0,
+          "export_dropped": 0,
+          "delivery_dropped": 0,
+          "delivery_projection_dropped": 0,
+          "projection_dropped": 0
+        },
+        "boundary_count": 64,
+        "boundary_dropped": 1225,
+        "first_failure": {
+          "stage": "CARRIER",
+          "state": "CLOSED",
+          "reason": "CARRIER_ERROR",
+          "close_source": "RECEIVE_QUEUE_FULL",
+          "sequence": 28,
+          "utc": "2026-10-15T19:53:16.918Z"
+        },
+        "first_close": {
+          "stage": "CARRIER",
+          "state": "CLOSED",
+          "reason": "CARRIER_ERROR",
+          "close_source": "RECEIVE_QUEUE_FULL",
+          "sequence": 28,
+          "utc": "2026-10-15T19:53:16.918Z"
+        }
+      },
+      "selected_events": [
+        {
+          "component": "ORCHESTRATOR",
+          "state_from": "DISCONNECTED",
+          "state_to": "CONNECTING",
+          "transport_class": "none",
+          "reason_code": "NONE",
+          "retry_count": 0,
+          "source": "ring.events[55]",
+          "utc": "2026-10-15T19:52:42.526Z",
+          "connection_alias": "CONNECTION_B",
+          "incident_alias": "INCIDENT_B"
+        },
+        {
+          "component": "FAMILY_AUTH",
+          "state_from": "CONNECTING",
+          "state_to": "CONNECTING",
+          "transport_class": "restricted",
+          "reason_code": "FAMILY_AUTH_READY",
+          "retry_count": 0,
+          "source": "ring.events[62]",
+          "utc": "2026-10-15T19:53:08.303Z",
+          "connection_alias": "CONNECTION_B",
+          "incident_alias": "INCIDENT_B"
+        },
+        {
+          "component": "ROOM_BROKER",
+          "state_from": "CONNECTING",
+          "state_to": "CONNECTING",
+          "transport_class": "restricted",
+          "reason_code": "BROKER_DESCRIPTOR_READY",
+          "retry_count": 0,
+          "source": "ring.events[63]",
+          "utc": "2026-10-15T19:53:08.303Z",
+          "connection_alias": "CONNECTION_B",
+          "incident_alias": "INCIDENT_B"
+        },
+        {
+          "component": "SESSION",
+          "state_from": "CONNECTING",
+          "state_to": "CONNECTING",
+          "transport_class": "restricted",
+          "reason_code": "SESSION_READY",
+          "retry_count": 0,
+          "source": "ring.events[65]",
+          "utc": "2026-10-15T19:53:08.303Z",
+          "connection_alias": "CONNECTION_B",
+          "incident_alias": "INCIDENT_B"
+        },
+        {
+          "component": "ORCHESTRATOR",
+          "state_from": "CONNECTING",
+          "state_to": "CONNECTED",
+          "transport_class": "restricted",
+          "reason_code": "NONE",
+          "retry_count": 0,
+          "source": "ring.events[67]",
+          "utc": "2026-10-15T19:53:08.446Z",
+          "connection_alias": "CONNECTION_B",
+          "incident_alias": "INCIDENT_B"
+        },
+        {
+          "component": "ORCHESTRATOR",
+          "state_from": "CONNECTED",
+          "state_to": "CONNECTED",
+          "transport_class": "restricted",
+          "reason_code": "CARRIER_ERROR",
+          "retry_count": 0,
+          "source": "ring.events[69]",
+          "utc": "2026-10-15T19:53:18.505Z",
+          "connection_alias": "CONNECTION_B",
+          "incident_alias": "INCIDENT_B"
+        },
+        {
+          "component": "SESSION",
+          "state_from": "CONNECTED",
+          "state_to": "CONNECTED",
+          "transport_class": "restricted",
+          "reason_code": "NONE",
+          "retry_count": 0,
+          "event": "cleanup_completed",
+          "source": "ring.events[71]",
+          "utc": "2026-10-15T19:53:18.644Z",
+          "connection_alias": "CONNECTION_B",
+          "incident_alias": "INCIDENT_B"
+        },
+        {
+          "component": "ORCHESTRATOR",
+          "state_from": "CONNECTED",
+          "state_to": "FAILED",
+          "transport_class": "none",
+          "reason_code": "CARRIER_ERROR",
+          "retry_count": 0,
+          "event": "restoration_failed",
+          "source": "ring.events[72]",
+          "utc": "2026-10-15T19:53:18.651Z",
+          "connection_alias": "CONNECTION_B",
+          "incident_alias": "INCIDENT_B"
+        },
+        {
+          "component": "ORCHESTRATOR",
+          "state_from": "FAILED",
+          "state_to": "DISCONNECTING",
+          "transport_class": "none",
+          "reason_code": "CANCELLED",
+          "retry_count": 0,
+          "source": "ring.events[73]",
+          "utc": "2026-10-15T19:54:38.252Z",
+          "connection_alias": "CONNECTION_B",
+          "incident_alias": "INCIDENT_B"
+        },
+        {
+          "component": "VPN",
+          "state_from": "DISCONNECTING",
+          "state_to": "DISCONNECTING",
+          "transport_class": "none",
+          "reason_code": "VPN_RELEASED",
+          "retry_count": 0,
+          "source": "ring.events[74]",
+          "utc": "2026-10-15T19:54:38.385Z",
+          "connection_alias": "CONNECTION_B",
+          "incident_alias": "INCIDENT_B"
+        },
+        {
+          "component": "ORCHESTRATOR",
+          "state_from": "DISCONNECTING",
+          "state_to": "DISCONNECTED",
+          "transport_class": "none",
+          "reason_code": "CANCELLED",
+          "retry_count": 0,
+          "source": "ring.events[75]",
+          "utc": "2026-10-15T19:54:38.454Z",
+          "connection_alias": "CONNECTION_B",
+          "incident_alias": "INCIDENT_B"
+        }
+      ],
+      "recorded_retry_counts": [
+        0
+      ],
+      "connected_seconds_before_off": 90.008,
+      "startup_record": {
+        "schema": 1,
+        "attempt": 3,
+        "completed_ms": 23791,
+        "status": "SUCCEEDED",
+        "stage": "STARTUP",
+        "cause": "NONE",
+        "complete": true,
+        "started_utc": "2026-10-15T19:52:44.443Z"
+      },
+      "packet_counters": {
+        "protect_ok": 148,
+        "protect_denied": 0,
+        "dns": 6,
+        "tcp": 3,
+        "tcp_active": 0,
+        "tcp_peak": 3,
+        "udp_denied": 0,
+        "ipv6_denied": 1
+      },
+      "server": {
+        "matched_trace_count": 62,
+        "first_utc": "2026-10-15T19:52:52.816Z",
+        "last_utc": "2026-10-15T19:53:25.639Z",
+        "selected_events": [
+          {
+            "sequence": 17,
+            "stage": "DESCRIPTOR",
+            "state": "ISSUED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:52:56.528Z"
+          },
+          {
+            "sequence": 18,
+            "stage": "FAMILY_TLS",
+            "state": "STARTED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:52:56.529Z"
+          },
+          {
+            "sequence": 22,
+            "stage": "FAMILY_TLS",
+            "state": "ESTABLISHED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:53:06.839Z"
+          },
+          {
+            "sequence": 23,
+            "stage": "GATEWAY_SESSION",
+            "state": "ESTABLISHED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:53:08.000Z"
+          },
+          {
+            "sequence": 24,
+            "stage": "GATEWAY_SESSION",
+            "state": "ESTABLISHED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:53:08.780Z"
+          },
+          {
+            "sequence": 27,
+            "stage": "GATEWAY_SESSION",
+            "state": "ESTABLISHED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:53:10.210Z"
+          },
+          {
+            "sequence": 40,
+            "stage": "CARRIER",
+            "state": "FAILED",
+            "reason": "RELIABLE_RETRY_EXHAUSTED",
+            "utc": "2026-10-15T19:53:25.631Z"
+          },
+          {
+            "sequence": 48,
+            "stage": "CLEANUP",
+            "state": "COMPLETED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:53:25.637Z"
+          },
+          {
+            "sequence": 49,
+            "stage": "FAMILY_TLS",
+            "state": "CLOSED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:53:25.637Z"
+          },
+          {
+            "sequence": 50,
+            "stage": "FAMILY_TLS",
+            "state": "FAILED",
+            "reason": "FAMILY_TLS_ERROR",
+            "utc": "2026-10-15T19:53:25.637Z"
+          },
+          {
+            "sequence": 54,
+            "stage": "CLEANUP",
+            "state": "COMPLETED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:53:25.638Z"
+          },
+          {
+            "sequence": 59,
+            "stage": "GATEWAY_SESSION",
+            "state": "FAILED",
+            "reason": "GATEWAY_CLOSE",
+            "utc": "2026-10-15T19:53:25.639Z"
+          },
+          {
+            "sequence": 61,
+            "stage": "CLEANUP",
+            "state": "COMPLETED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:53:25.639Z"
+          },
+          {
+            "sequence": 62,
+            "stage": "CLEANUP",
+            "state": "COMPLETED",
+            "reason": "NONE",
+            "utc": "2026-10-15T19:53:25.639Z"
+          }
+        ],
+        "explicit_broker_release_grant": "NOT_RECORDED_IN_SAVED_WINDOWS"
+      }
+    }
+  },
+  "timing": {
+    "local_off_A_to_connect_B_seconds": 4.158,
+    "connected_B_to_first_local_failure_seconds": 8.472,
+    "first_connect_to_final_local_off_seconds": 825.716,
+    "device_sequence_budget_seconds": 1080,
+    "export_received_after_sequence_off": true,
+    "lifecycle_event_time_not_snapshot_poll_time": true
+  },
+  "server": {
+    "invocation": "c11ce23c7d124f2790fa9f35f13f5693",
+    "loaded_baseline_sha256": "21f0a0fdc27b50c00ea922f0b716516e2422aedf1b3797369718f7d00070509a",
+    "unchanged_pid": 3903125,
+    "nrestarts": 0,
+    "observed_active_at": "2026-10-15T19:56:04Z",
+    "files": [
+      {
+        "name": "a-ready-journal.jsonl",
+        "sha256": "e3b16f7e0723a9c2fe083d2193ec6500d39800a8339100e0cd209ae4a0fed2e1",
+        "size_bytes": 818386,
+        "rows": 109,
+        "row_cap_reached": false
+      },
+      {
+        "name": "b-failure-journal.jsonl",
+        "sha256": "00879385daea27cfd8100dbcbb4ea7f16caf3cbe3b7bdf0b8f6f0073ac82a750",
+        "size_bytes": 2718259,
+        "rows": 320,
+        "row_cap_reached": true
+      }
+    ],
+    "unparsed_json_messages": [
+      {
+        "file": "b-failure-journal.jsonl",
+        "line": 233
+      },
+      {
+        "file": "b-failure-journal.jsonl",
+        "line": 234
+      }
+    ],
+    "terminal_snapshots": [
+      {
+        "terminal_reason": "IO_CLOSED",
+        "reliable_terminal": "recovery_exhausted",
+        "retransmissions": 71,
+        "protocol_errors": 0,
+        "dns_responses": 6,
+        "dns_errors": 0,
+        "tcp_open_ok": 5,
+        "tcp_open_errors": 0,
+        "sent_bytes": 4217,
+        "received_bytes": 5098,
+        "session_alias": "SESSION_B",
+        "source": "b-failure-journal.jsonl:311",
+        "observed_utc": "2026-10-15T19:53:25.638Z",
+        "terminal_utc": "2026-10-15T19:53:25.637Z"
+      }
+    ],
+    "coverage": "BOUNDED_WINDOWS; row cap and unparseable MESSAGE values prevent completeness claim"
+  },
+  "excluded": {
+    "prior_smoke_history_index": 0,
+    "old_incident": "OTHER_ATTEMPT_NOT_CURRENT_RESULT",
+    "old_incident_state": "FAILED",
+    "old_incident_event_range_utc": [
+      "2026-10-14T18:36:36.664Z",
+      "2026-10-15T13:23:42.694Z"
+    ],
+    "pre_task_ring_events_excluded": 34
+  },
+  "final": {
+    "ring_state": "DISCONNECTED",
+    "vpn_capture_open": false,
+    "metadata_check_utc": "2026-10-15T20:06:39.554Z",
+    "vpn_present": false,
+    "process_preserved": true,
+    "selected_new_crash_linkage_log_lines": 0
+  },
+  "assessment": {
+    "connect_A": "PASS_RESTRICTED_STARTUP_OWNER_HTTPS; chat UI only",
+    "connect_B": "STARTUP_SUCCEEDED_THEN_RUNTIME_TRAFFIC_FAILURE",
+    "reconnect_without_app_restart": "EXERCISED_SAME_PROCESS",
+    "fast_reconnect": "EXERCISED_LOCAL_OFF_TO_B_4.158_SECONDS; no server-free gate",
+    "old_cleanup_does_not_close_new_session": "NOT_PROVEN; distinct session identities and B READY do not explain receive queue failure",
+    "https_A": "PASS_OWNER_REPORTED_EXPECTED_NL_EGRESS",
+    "https_B": "FAIL_OWNER_REPORTED_NO_SUCCESSFUL_IP_RESPONSE",
+    "dns_A": "18_RESPONSES_0_ERRORS_MATCHED_ARCHIVED_SESSION; query count NOT_EXPORTED",
+    "dns_B": "6_QUERIES_6_RESPONSES_0_ERRORS_BEFORE_TERMINATION; not whole-session PASS",
+    "chat_first": "NOT_PROVEN",
+    "chat_while_A": "OWNER_REPORTED_ON_LINE_UI; completed mailbox operation/route NOT_PROVEN",
+    "chat_while_B": "NOT_MEASURED",
+    "chat_after_disconnect": "NOT_MEASURED; no extra attempt or extended runtime sequence",
+    "borrowing": "NOT_PROVEN",
+    "handoff_on_device": "NOT_PROVEN",
+    "normal_export": "PASS_BOUNDED_CURRENT_AND_ARCHIVED_ATTEMPT_PROJECTION",
+    "startup_failure_cause_observation_context_local_stop": "NOT_APPLICABLE_SUCCESSFUL_STARTUP; do not reclassify later runtime failure as bootstrap failure",
+    "first_failure": "B_CLIENT_CARRIER/CLOSED/CARRIER_ERROR; RECEIVE_QUEUE_FULL",
+    "root_cause": "NOT_PROVEN; why receive queue saturated and whether reconnect/chat caused it require separate work",
+    "prior_smoke": "PASS_UNCHANGED; old CONNECT2 NOT_RUN",
+    "supervisor_acceptance": "FAIL_UNCHANGED",
+    "historical_C1_I1": "NOT_PROVEN_UNCHANGED"
+  },
+  "action_counts": {
+    "intentional_connects": 2,
+    "third_connect": 0,
+    "recorded_disconnect_transitions": 2,
+    "owner_intent_for_final_B_cancel": "NOT_INDEPENDENTLY_CONFIRMED; do not infer button press from CANCELLED alone",
+    "automatic_new_connect_attempts_in_saved_ring": 0,
+    "restoration_failed_events": 1,
+    "normal_support_exports": 1,
+    "normal_export_cache_rotation": "ALLOWED_NORMAL_SHARE; exact deleted-file count NOT_MEASURED",
+    "installs_rebuilds_resigns_rollbacks": 0,
+    "app_restart_force_stop": 0,
+    "native_extra_polls_instrumentation": 0,
+    "server_administrative_or_manual_credential_mutations": 0,
+    "intentional_faults": 0,
+    "ordinary_app_provider_provisioning_ack_lease_activity": "PRESENT_OR_POSSIBLE_NOT_CLAIMED_ZERO"
+  }
+}

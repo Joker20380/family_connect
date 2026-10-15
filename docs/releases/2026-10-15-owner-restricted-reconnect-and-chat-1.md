@@ -1,14 +1,141 @@
 # OWNER-RESTRICTED-RECONNECT-AND-CHAT-1
 
-**RESULT: WAITING_FOR_OWNER_ACTION — fresh prerequisites ready; new CONNECT A/B
-have not been performed. Next: ordinary pre-VPN chat synchronization.**
+**RESULT: FAIL — B completed restricted startup, then suffered a runtime/traffic
+failure. No third CONNECT. Previous CLIENT_DEVICE_SMOKE=PASS remains unchanged.**
 
-This is a new lifecycle episode, not completion of the old CONNECT2. Input review:
-0b371946e63e1e3eea0dd80e71a772a0c5e735de. The
-[previous smoke report](2026-10-15-owner-cumulative-client-acceptance-1-resume.md)
-and its [receipt](evidence/2026-10-15-owner-cumulative-client-resume-attempt-1.json)
-remain unchanged: CLIENT_DEVICE_SMOKE=PASS for one connection; old CONNECT2=NOT_RUN.
-Historical supervisor acceptance remains FAIL; C1/I1 causal binding NOT_PROVEN.
+Input publication: 0b371946e63e1e3eea0dd80e71a772a0c5e735de. This is a new episode;
+the old CONNECT2 remains NOT_RUN. Its [smoke report](2026-10-15-owner-cumulative-client-acceptance-1-resume.md)
+and [receipt](evidence/2026-10-15-owner-cumulative-client-resume-attempt-1.json) are unchanged.
+Supervisor PRODUCTION_ACCEPTANCE=FAIL and historical C1/I1 causal binding NOT_PROVEN.
+
+The [sanitized A/B receipt](evidence/2026-10-15-owner-restricted-reconnect-and-chat-1.json)
+contains exact export/journal hashes, source record indexes, distinct attempt aliases,
+per-session counters and selected client/server timelines. Raw exports and journal
+rows remain private. No new runtime observer, native poller, test or patch was added.
+
+## Outcome and attempt matrix
+
+| Boundary | A | B |
+| --- | --- | --- |
+| Intentional CONNECT, UTC | 19:40:52.738 | 19:52:42.526 |
+| Restricted descriptor / dedicated readiness | BROKER_DESCRIPTOR_READY and SESSION_READY recorded19:41:22.638 | BROKER_DESCRIPTOR_READY and SESSION_READY recorded19:53:08.303; native GATEWAY_SESSION ESTABLISHED19:53:08.234 |
+| Startup record | Archived startup object NOT_EXPORTED; readiness retained separately | Native attempt3, SUCCEEDED/STARTUP/NONE, complete=true,23791ms; started19:52:44.443 |
+| Native/attach | Archived session native_state2 observed19:52:38.071; successful restricted connection | Successful attach follows the exact engine contract before CONNECTED; final native_state3. An earlier state2 scalar sample is NOT_RETAINED in this export |
+| App CONNECTED | 19:41:22.778 | 19:53:08.446 |
+| Owner VPN-bound HTTPS | Owner reports same expected NL egress | Owner reports external-IP check unsuccessful, then tunnel stopped; no successful B HTTPS response established |
+| DNS | Matched archived session18 responses,0 errors; original packet-query count NOT_EXPORTED | Current ring6 DNS queries; same-session6 responses,0 errors before termination. This does not make B a successful traffic session |
+| TCP/Mux |48 opens OK,0 open errors,5 protocol errors |4 opens OK,0 open errors,0 protocol errors; owner HTTPS still failed |
+| Chat | Owner reports На связи; completed mailbox transaction and route not independently proven | NOT_MEASURED after failure |
+| First local recorded failure | None in last archived snapshot; incomplete lifecycle tail |19:53:16.918 CARRIER/CLOSED/CARRIER_ERROR, close_source RECEIVE_QUEUE_FULL |
+| Local cleanup / final OFF | cleanup_completed19:52:38.164; DISCONNECTED19:52:38.368 | cleanup_completed19:53:18.644; FAILED19:53:18.651; DISCONNECTED19:54:38.454 |
+
+A readiness events sharing one observation timestamp are not exact timestamps of every
+underlying native operation. Native B lifecycle timestamps and later snapshot receipt
+are likewise distinguished. Current ring readiness READY / transport outcome SUCCESS
+refer to startup: final ring DISCONNECTED and a native terminal are not contradictory.
+The exact engine checks phase1, creates/replaces the TUN, requires successful attach,
+then calls state.accept(true). This source-contract inference is not an independently
+retained B phase2 sample. Neither system VPN presence nor an UI label alone is used
+as proof of dedicated readiness.
+
+## Reconnect timing and session correlation
+
+- Local A OFF19:52:38.368 → B CONNECT19:52:42.526: **4.158seconds**.
+- Fast reconnect was actually exercised without an intentional server-slot-free gate.
+  Owner was instructed to wait only for local OFF/enabled CONNECT, not an agent reply.
+- Same app PID26459 before A, during A, after B failure and after export. No intentional
+  app restart/force-stop. Two distinct connection IDs, incident IDs and session tags
+  match the corresponding full server tags privately; public aliases are SESSION_A/B.
+- B started before recorded server A terminal19:52:47.584, yet obtained its own
+  descriptor, Family TLS and dedicated session. This is not a self-blocking HELLO
+  failure in the recorded B startup. No exact server holder release/grant receipt is
+  present: CLEANUP/COMPLETED is not treated as broker-holder removal.
+- A server terminal RELIABLE_RETRY_EXHAUSTED occurs after local A DISCONNECT/OFF.
+  It is retained as POST_DISCONNECT_TERMINAL, not reassigned to B.
+- B server session established19:53:08.000; its RELIABLE_RETRY_EXHAUSTED is recorded
+ 19:53:25.631, Family TLS error19:53:25.637 and gateway close19:53:25.639.
+  These are later recorded server events, not the initial client startup failure.
+- **OLD_CLEANUP_DOES_NOT_CLOSE_NEW_SESSION=NOT_PROVEN.** Distinct tags and B READY prove
+  separation and startup progress, not why B subsequently lost its receive path.
+
+Cross-host timestamps are recorded clocks, not a sub-millisecond synchronization or
+causality proof. The4.158s interval uses one client clock. New sequence A CONNECT→final
+local OFF lasted825.716s (13m45.716s), within1080s. No repeated240s stability wait was
+required. Final export and offline analysis occurred after VPN OFF; no device test was
+continued to fill missing chat observations or obtain a more convenient retry.
+
+## First failure, preserved diagnostic semantics
+
+The earliest B client first_failure and first_close are the same lifecycle record:
+
+```json
+{"session_alias":"SESSION_B","sequence":28,"utc":"2026-10-15T19:53:16.918Z","stage":"CARRIER","state":"CLOSED","reason":"CARRIER_ERROR","close_source":"RECEIVE_QUEUE_FULL"}
+```
+
+This is8.472s after app CONNECTED, not bootstrap failure. Retained cumulative
+telemost/session.go deliverObserved records this bounded source on its nonblocking
+receive-queue enqueue default branch. It identifies the local recorded queue-overflow
+boundary, **not the cause of queue saturation** (consumer stall, burst or lifecycle
+interaction are not established here). No source change or new experiment follows.
+
+Client terminal IO_CLOSED/carrier_closed is stamped19:53:16.927, captured by a native
+snapshot19:53:18.488 and observed by Java19:53:18.492. The orchestrator records
+CARRIER_ERROR19:53:18.505 and restoration_failed19:53:18.651. Later CANCELLED/OFF at
+19:54:38 does not overwrite or explain that initial failure. Server B diagnostic says
+IO_CLOSED/recovery_exhausted,71 retransmissions,6 DNS responses/0 errors,5 TCP opens/0
+errors,0 protocol errors; these are **server counters**, not substitutes for client4
+opens/6 retransmissions. Neither side maps the failed owner IP request to a specific
+stream. No data-corruption or harmlessness claim is made from aggregate counters.
+
+Startup remains SUCCEEDED/STARTUP/NONE after cleanup/export. The startup-failure-only
+observation/context/local_stop fields are not applicable to a successful startup and
+are absent here; no fake startup failure is synthesized to exercise them. The preserved
+runtime lifecycle supplies first_failure/close_source. This verifies normal export of
+this actual failure, not every diagnostic-fidelity scenario or automatic recovery.
+
+## Chat coverage and remaining uncertainty
+
+CHAT_FIRST_PRECONDITION=NOT_PROVEN. Before A and on A, owner reports На связи.
+ChatDeliveryService remains present, but this does not identify a live independent
+restricted holder, a completed mailbox operation or borrowing through the VPN.
+CHAT_WHILE_VPN_A=OWNER_REPORTED_ON_LINE_UI; CHAT_WHILE_VPN_B=NOT_MEASURED;
+CHAT_AFTER_DISCONNECT=NOT_MEASURED. BORROWING and HANDOFF_ON_DEVICE=NOT_PROVEN.
+No messages, contacts, vault or unrelated app data were read. No messages were sent
+to third parties. A/B tags are separated; the role of stale chat handles in B failure
+is not proven or ruled out. A successful local handoff implementation and previous
+smoke remain evidence of their own scope, not a full lifecycle PASS.
+
+## Normal export, completeness and privacy
+
+One owner-provided normal share JSON was copied privately before analysis:
+SHA2563e830cfe8850aa4129da0c41e116ddba23a9aedbf40123d67a5dd54de5a49104,
+156569bytes, received2026-10-15T19:59:32.702305Z. Export receipt time is not event time.
+The expected app/version schema is present. restricted_history[0] is the prior smoke,
+[1] is A; current restricted_session/startup/counters bind to B. Current ring contains
+exactly two new DISCONNECTED→CONNECTING transitions. All retained new retry_count
+values are0; one restoration_failed is recorded, no further new CONNECT transition.
+This is bounded observation, not a claim that ordinary protocol retries were zero.
+
+The separate FAILED incident is an older attempt with events14Oct18:36:36.664 through
+15Oct13:23:42.694UTC and different IDs. It is excluded, not labeled as the B incident.
+Normal export includes the new failed session in ring; it does not refresh every
+persisted historical incident. No new native stats poll was performed to obtain data.
+
+| Coverage limitation | A | B |
+| --- | --- | --- |
+| Client lifecycle retained trace / source trace_dropped |32 /372 |43 /0 |
+| delivery_dropped / archive_dropped |329 /160 |0 /not applicable |
+| Boundary tail retained / dropped |64 /28993 |64 /1225 |
+| Projection/export drop values |Recorded0; does not undo source/archive losses |Recorded0; boundary tail still incomplete |
+
+The A-ready server window contains109 JSON rows. The post-B window reaches its320-row
+cap; two MESSAGE JSON values are unparseable and excluded without guessing. Windows
+are attributed to the actual invocation, deduplicated by session/sequence/timestamp,
+and are not a complete journal. Their raw hashes are in the safe receipt. Raw JSON,
+server rows, source-origin path and real client/session/support IDs remain private.
+Normal Share cache rotation is authorized; exact old-cache deletion count was not
+measured. Primary diagnostics/app data were not cleared. NORMAL_EXPORT=PASS within
+these bounded schema/retention limits.
 
 ## Residual observations from the previous smoke
 
@@ -82,52 +209,42 @@ Preparation occurs before CONNECT. Existing current4h scheduling remains untouch
 natural changes will be recorded rather than administratively reverted. No installation,
 app start/restart, signer operation, manual credential renewal or server mutation.
 
-## Prepared collection and owner sequence
+## Final state, identities and actions
 
-The existing bounded collector is copied into a separate private task capsule and
-parameterized with this fresh invocation and start19:30:04UTC, at most320 journal rows
-per window, explicit new intentional-CONNECT count and UID10283 error logs. It reads
-system metadata and saved gateway events only. There is no additional native stats
-reader, Android observer/helper, instrumentation, screenshot or protected UI extraction.
-If invocation changes, state readback exposes the mismatch rather than attributing
-old-invocation records to the new runtime.
+| Item | Final observation / count |
+| --- | --- |
+| Installed APK SHA256 |3c733d2fc3a0ec377143b668244a4c7d6619ff24abe024da4ee9bfe31d140513 |
+| Native SHA256 |2a974350c168913ca8a217d3fc73f452fdd709c3619d0c690abd5d884c54b88c |
+| Signer SHA256 |67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a |
+| Identity basis |Fresh preflight APK equals previously pulled verified bytes/native; package/UID10283 preserved; no install in this task |
+| Device state |VPN OFF19:56:04 and20:06:39UTC readbacks, same app PID26459; final ring DISCONNECTED/vpn_capture_open=false |
+| Gateway |Same baseline/PID3903125/invocation c11ce23c7d124f2790fa9f35f13f5693, active/running/NRestarts0 at19:56:04; no gateway deployment, restart, config or manual credential action |
+| Intentional CONNECT |2; third0 |
+| Local DISCONNECT transitions |2. A follows requested normal owner action; B final CANCELLED origin is not independently identified as an owner button press |
+| Runtime terminal/restoration_failed |1 new B runtime failure; ordinary app/protocol retries not disabled |
+| Normal support export |1; normal cache/URI rotation allowed, exact mutations not enumerated |
+| APK build/sign/install/downgrade/rollback |0 |
+| App force-stop/restart, clear data/cache, enrollment |0 |
+| Extra native polls/helper/instrumentation/fault injection |0 |
+| Server administrative / manual credential mutations |0; ordinary app/provider/provisioning/ACK/lease activity not asserted zero |
 
-Next owner action: open the normal chat list with VPN OFF, allow ordinary automatic
-sync and report only the status text, not contacts or message contents. If a registration
-screen appears, stop without registering. Fresh route/service labels alone do not prove
-an independent restricted holder. Lack of that proof limits handoff, not reconnect.
+The cumulative APK remains installed privately. No speculative rollback/rebuild is
+permitted in this task. Existing baseline and scheduling were not administratively
+changed. Selected UID crash/linkage log checks found0 new matching lines, not a claim
+of complete Android logs. No full post-test PKI/current4h audit was repeated; no
+invocation change was observed in the bounded episode.
 
-Then at most two intentional CONNECT actions, separately labeled A/B. A must reach
-restricted READY/CONNECTED, successful VPN-bound HTTPS and ordinary chat operation.
-After A succeeds: ordinary DISCONNECT; wait only for local OFF and the enabled CONNECT
-button, then B without an intentional server-holder-release wait or app restart. No
-CONNECT while local DISCONNECT is ongoing; no hidden retry. B must have distinct
-connection/attempt/session binding, traffic and no interference from A cleanup. After
-B: ordinary DISCONNECT and available chat sync, then one normal support export. Stop
-on first startup/traffic failure without B. No additional240second stability wait.
+## Conclusion and publication scope
 
-The18-minute limit begins at actual first CONNECT, includes final cleanup, and is not
-extended for diagnostics. Record local-OFF→B interval; a large operator pause means
-fast reconnect NOT_EXERCISED, with no third attempt to improve timing. Do not wait for
-server slot=free before B. Final export will be interpreted according to its real
-archived-session schema, without mixing old counters/startup or assuming missing fields.
+RECONNECT_WITHOUT_APP_RESTART and FAST_RECONNECT_BOUNDARY_EXERCISED are exercised,
+but the runtime/traffic requirement **fails on B**. SESSION_A_B_BINDING is proven;
+DNS activity before failure is observed separately, not used to override failed HTTPS.
+Previous CLIENT_DEVICE_SMOKE=PASS is preserved; this new lifecycle result is FAIL.
+HANDOFF_ON_DEVICE stays NOT_PROVEN; full client/supervisor acceptance is not promoted.
+Historical C1/I1 root cause is not established by this new episode.
 
-## Current matrix and counts
-
-CONNECT_A / CONNECT_B = NOT_RUN / NOT_RUN. RECONNECT_WITHOUT_APP_RESTART,
-FAST_RECONNECT_BOUNDARY_EXERCISED, SESSION_A_B_BINDING and
-OLD_CLEANUP_DOES_NOT_CLOSE_NEW_SESSION = NOT_TESTED.
-HTTPS/DNS per new session = NOT_RUN. CHAT_FIRST_PRECONDITION = NOT_PROVEN.
-CHAT_WHILE_VPN / CHAT_AFTER_DISCONNECT = NOT_MEASURED; BORROWING and
-HANDOFF_ON_DEVICE = NOT_PROVEN. NORMAL_EXPORT = NOT_RUN for this new episode.
-FIRST_FAILURE = none observed in a new connection, because none started.
-
-New-episode intentional CONNECT0; DISCONNECT0; export0; install/rebuild/resign/rollback0;
-app force-stop/restart0; extra native polls0; server administrative/credential actions0;
-fault triggers0. Normal background app/provider/provisioning/lease activity is not
-asserted zero. Final observed device state at this checkpoint is VPN OFF, original
-cumulative package and process preserved. Await owner chat observation before A.
-
-Only safe review documents are published; raw preflight/journal data and upcoming
-exports remain in the separate private capsule. Previous smoke report/receipt and
-frozen/product sources are unchanged. No new acceptance result is claimed yet.
+Remaining exact question is why the B local receive queue reached RECEIVE_QUEUE_FULL
+after successful startup. This task ends with evidence preservation, not a product
+patch, extra CONNECT, reinstall or server intervention. Only this report, its safe
+receipt, STATUS/PLAN and publication index change. Prior smoke documents, frozen
+sources/binaries, workflows, main and original dirty worktree remain unchanged.

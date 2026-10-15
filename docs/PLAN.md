@@ -8,21 +8,24 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
-### OWNER-RESTRICTED-RECONNECT-AND-CHAT-1 — prepared, owner chat action pending (15.10)
+### OWNER-RESTRICTED-RECONNECT-AND-CHAT-1 — completed, lifecycle FAIL (15.10)
 
-- [New lifecycle checkpoint](releases/2026-10-15-owner-restricted-reconnect-and-chat-1.md):
-  residual counter review complete without attributing unknown increments; fresh
-  client/baseline/TLS/security prerequisites ready19:30UTC. No new CONNECT yet.
-- Obtain ordinary pre-VPN chat sync/status, without reading messages or registering;
-  absent independent restricted-holder proof does not block reconnect smoke.
-- A restricted READY→HTTPS/chat→local DISCONNECT complete→B promptly, without app
-  restart or server-slot gate. At most2 intentional CONNECT,18minutes including cleanup;
-  no repeated stability wait. Stop on first startup/traffic failure, no hidden retry.
-- Distinguish A/B session IDs, measure local-OFF→B interval and stale-cleanup effects;
-  final VPN OFF/chat sync and one normal export. Do not invent archived startup fields
-  or borrowing from service/route labels. Preserve prior report/receipt unchanged.
-- No install/build/sign/rollback, gateway/management/credential changes, native extra
-  pollers or fault triggers. Historical supervisor FAIL/C1-I1 NOT_PROVEN unchanged.
+- [Final report](releases/2026-10-15-owner-restricted-reconnect-and-chat-1.md) and
+  [safe A/B receipt](releases/evidence/2026-10-15-owner-restricted-reconnect-and-chat-1.json):
+  A traffic succeeds; B starts4.158s after local OFF without app restart, reaches
+  dedicated/native attach contract/CONNECTED, then RECEIVE_QUEUE_FULL at19:53:16.918UTC.
+- First runtime failure preserved by normal export. B startup SUCCEEDED is not
+  overwritten by late cancellation. Separate A/B tags match server; old incident
+  and prior smoke are excluded. Do not call later server retry exhaustion bootstrap.
+- Runtime/traffic result FAIL; queue-saturation mechanism/stale-handle causality
+  NOT_PROVEN. Do not begin fixes, new live attempts, APK rollback or server changes.
+  If separately requested, analyze this bound receive-queue failure offline.
+- Two intentional CONNECT, final OFF within825.716s; export1; unchanged cumulative
+  client/process and baseline invocation. No third CONNECT or repeated stability test.
+- DNS response evidence is scoped per session, not a substitute for failed B HTTPS.
+  Chat UI on A only; borrowing/handoff and post-OFF recovery remain unproven/unmeasured.
+- Preserve previous smoke PASS/old CONNECT2 NOT_RUN, historical C1/I1 NOT_PROVEN and
+  supervisor FAIL. Raw exports/journal private; frozen/product/workflow/main untouched.
 
 ### OWNER-CUMULATIVE-CLIENT-ACCEPTANCE-1-RESUME — bounded smoke complete, PARTIAL (15.10)
 

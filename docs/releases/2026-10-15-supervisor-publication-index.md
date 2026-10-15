@@ -8,12 +8,16 @@ production FAIL сохраняется; historical root cause не доказа�
 
 ## Начать здесь
 
-- [Owner restricted reconnect/chat — WAITING_FOR_OWNER_ACTION](2026-10-15-owner-restricted-reconnect-and-chat-1.md):
-  новый bounded lifecycle episode, не продолжение старого CONNECT2. Остаточные counters
-  UNATTRIBUTED, server terminal POST_DISCONNECT; свежий19:30UTC preflight пригоден.
-  До CONNECT требуется обычная chat sync/status observation. A/B ещё NOT_RUN;
-  прежний smoke PASS и его report/receipt сохранены без изменений. No install/restart,
-  server-admin mutations, extra native polls или новый export в этом checkpoint.
+- [Owner restricted reconnect/chat — FAIL, new episode](2026-10-15-owner-restricted-reconnect-and-chat-1.md)
+  and [sanitized A/B receipt](evidence/2026-10-15-owner-restricted-reconnect-and-chat-1.json):
+  A HTTPS succeeds; B starts4.158s after local OFF without app restart and reaches READY,
+  then client RECEIVE_QUEUE_FULL/CARRIER_ERROR after8.472s; owner IP request fails.
+  Exact client/server A/B tag binding and first failure preserved in normal export.
+  Why the receive queue saturated, stale cleanup and chat borrowing remain unproven.
+  Final OFF within18minutes, two CONNECT/export1; same installed client and gateway,
+  no install/restart/admin change/extra native poll. Prior smoke report/receipt unchanged.
+  Raw JSON/journal and identifier mappings remain private; published hashes and bounded
+  extracts are evidence of this new episode, not historical C1/I1 root-cause proof.
 
 - [Owner cumulative acceptance resume — PARTIAL, single-connection smoke PASS](2026-10-15-owner-cumulative-client-acceptance-1-resume.md):
   installed cumulative APK3c733d2f…140513/native2a974350…4b88c, same signer/UID10283.
