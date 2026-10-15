@@ -1,0 +1,98 @@
+diff --git a/carrier/bootstrap/seed_acceptance_receipt_linux.go b/carrier/bootstrap/seed_acceptance_receipt_linux.go
+new file mode 100644
+index 0000000..4d5a694
+--- /dev/null
++++ b/carrier/bootstrap/seed_acceptance_receipt_linux.go
+@@ -0,0 +1,92 @@
++//go:build seedacceptance && linux
++
++package bootstrap
++
++import (
++	"encoding/json"
++	"fmt"
++	"os"
++	"path/filepath"
++	"sort"
++	"time"
++)
++
++type SeedAcceptanceReceipt struct {
++	Schema              int                   `json:"schema"`
++	UTC                 time.Time             `json:"utc"`
++	Binding             SeedAcceptanceBinding `json:"binding"`
++	NonceHash           string                `json:"nonce_hash,omitempty"`
++	State               string                `json:"state"`
++	PreTriggerSeedState string                `json:"pre_trigger_seed_state"`
++	ActionApplied       bool                  `json:"action_applied"`
++	ReaderObserved1011  bool                  `json:"reader_observed_1011"`
++	TestTriggered       bool                  `json:"test_triggered"`
++	ProviderGenerated   bool                  `json:"provider_generated"`
++	RecoveryOutcome     string                `json:"recovery_outcome"`
++	CleanupOutcome      string                `json:"cleanup_outcome"`
++}
++
++func (control *seedAcceptance) writeReceipts(directory string) {
++	defer close(control.writerDone)
++	sequence := 0
++	for receipt := range control.queue {
++		sequence++
++		writeAcceptanceReceipt(directory, receipt, sequence)
++	}
++}
++
++func writeAcceptanceReceipt(directory string, receipt SeedAcceptanceReceipt, sequence int) error {
++	raw, err := json.Marshal(receipt)
++	if err != nil || len(raw) > 4096 {
++		return acceptanceRejected
++	}
++	file, err := os.CreateTemp(directory, ".seed-trigger-")
++	if err != nil {
++		return err
++	}
++	defer os.Remove(file.Name())
++	if _, err = file.Write(raw); err == nil {
++		err = file.Sync()
++	}
++	closeError := file.Close()
++	if err != nil {
++		return err
++	}
++	if closeError != nil {
++		return closeError
++	}
++	name := fmt.Sprintf("seed-trigger-%020d-%020d-%03d.json", receipt.Binding.PID, receipt.Binding.StartTicks, sequence)
++	if err = os.Link(file.Name(), filepath.Join(directory, name)); err != nil {
++		return err
++	}
++	entries, err := os.ReadDir(directory)
++	if err != nil {
++		return err
++	}
++	var retained []os.FileInfo
++	for _, entry := range entries {
++		var pid int
++		var ticks uint64
++		var serial int
++		if entry.Type().IsRegular() {
++			if count, _ := fmt.Sscanf(entry.Name(), "seed-trigger-%020d-%020d-%03d.json", &pid, &ticks, &serial); count == 3 && entry.Name() == fmt.Sprintf("seed-trigger-%020d-%020d-%03d.json", pid, ticks, serial) {
++				if info, failure := entry.Info(); failure == nil {
++					retained = append(retained, info)
++				}
++			}
++		}
++	}
++	sort.Slice(retained, func(left, right int) bool {
++		if retained[left].ModTime().Equal(retained[right].ModTime()) {
++			return retained[left].Name() < retained[right].Name()
++		}
++		return retained[left].ModTime().Before(retained[right].ModTime())
++	})
++	for len(retained) > 64 {
++		if err = os.Remove(filepath.Join(directory, retained[0].Name())); err != nil {
++			return err
++		}
++		retained = retained[1:]
++	}
++	return nil
++}

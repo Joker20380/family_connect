@@ -1,0 +1,12 @@
+FILE	FUNCTION	CHANGE_KIND	PURPOSE	LIFECYCLE_EFFECT	SECURITY_EFFECT	WIRE_EFFECT
+carrier/bootstrap/seed.go	TelemostSeed; SeedManager.Run	BEHAVIOUR	bounded same-room generation supervision	RECOVER_1011_ONLY	PRESERVE; REVALIDATE_IF_RECOVERY	NONE
+carrier/bootstrap/seed_late_ready_test.go	Test*	TEST	local regression gates	NONE	PRESERVE; REVALIDATE_IF_RECOVERY	NONE
+carrier/bootstrap/seed_overlap.go	SeedManager.runOverlap	BEHAVIOUR	bounded same-room generation supervision	RECOVER_1011_ONLY	PRESERVE; REVALIDATE_IF_RECOVERY	NONE
+carrier/bootstrap/seed_supervisor.go	supervise; recoverSeed; swapGeneration; seedGeneration.close; SeedRecovery safe event hook	BEHAVIOUR	bounded same-room generation supervision	RECOVER_1011_ONLY	PRESERVE; REVALIDATE_IF_RECOVERY	NONE
+carrier/bootstrap/seed_supervisor_test.go	Test*	TEST	local regression gates	NONE	PRESERVE; REVALIDATE_IF_RECOVERY	NONE
+carrier/cmd/bootstrap-broker/main.go	runObserved	BEHAVIOUR+OBSERVABILITY	wire recovery validation/sink	SEED_ONLY	PRESERVE; REVALIDATE_IF_RECOVERY	NONE
+carrier/cmd/bootstrap-broker/seed_recovery_receipt.go	bufferedSeedRecovery; writeSeedRecovery	OBSERVABILITY	bounded safe recovery receipts	NONE	PRESERVE; REVALIDATE_IF_RECOVERY	NONE
+carrier/cmd/bootstrap-broker/seed_recovery_receipt_test.go	Test*	OBSERVABILITY	bounded safe recovery receipts	NONE	PRESERVE; REVALIDATE_IF_RECOVERY	NONE
+carrier/cmd/bootstrap-broker/seed_recovery_storage_test.go	Test*	TEST	local regression gates	NONE	PRESERVE; REVALIDATE_IF_RECOVERY	NONE
+carrier/cmd/bootstrap-broker/seed_security.go	seedRecoverySecurity	BEHAVIOUR	fresh existing validation before rejoin	FAIL_CLOSED	PRESERVE; REVALIDATE_IF_RECOVERY	NONE
+carrier/cmd/bootstrap-broker/seed_security_test.go	Test*	TEST	local regression gates	NONE	PRESERVE; REVALIDATE_IF_RECOVERY	NONE

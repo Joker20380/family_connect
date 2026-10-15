@@ -1,0 +1,1283 @@
+diff --git a/carrier/bootstrap/seed.go b/carrier/bootstrap/seed.go
+index 1324a70..6f98880 100644
+--- a/carrier/bootstrap/seed.go
++++ b/carrier/bootstrap/seed.go
+@@ -43,6 +43,7 @@ type SeedManager struct {
+ }
+ 
+ func TelemostSeed(lifetime, ready context.Context, room roombroker.Room) (familysession.PacketEndpoint, error) {
++	lifetime = acceptanceSeedContext(lifetime, room.ID)
+ 	trace := newSeedTrace()
+ 	carrier, err := telemost.New(lifetime, telemost.Config{RoomURL: room.JoinURL, DisplayName: "Family bootstrap gateway", Mode: telemost.ModeVP8, MaxVideoTracks: 4, Trace: trace})
+ 	if err != nil {
+diff --git a/carrier/bootstrap/seed_acceptance_disabled.go b/carrier/bootstrap/seed_acceptance_disabled.go
+new file mode 100644
+index 0000000..277309a
+--- /dev/null
++++ b/carrier/bootstrap/seed_acceptance_disabled.go
+@@ -0,0 +1,8 @@
++//go:build !seedacceptance || !linux
++
++package bootstrap
++
++import "context"
++
++func acceptanceSeedContext(ctx context.Context, roomID string) context.Context { return ctx }
++func (manager *SeedManager) acceptanceGeneration(*seedGeneration)              {}
+diff --git a/carrier/bootstrap/seed_acceptance_linux.go b/carrier/bootstrap/seed_acceptance_linux.go
+new file mode 100644
+index 0000000..90890fa
+--- /dev/null
++++ b/carrier/bootstrap/seed_acceptance_linux.go
+@@ -0,0 +1,456 @@
++//go:build seedacceptance && linux
++
++package bootstrap
++
++import (
++	"bytes"
++	"context"
++	"crypto/sha256"
++	"encoding/hex"
++	"encoding/json"
++	"errors"
++	"io"
++	"net"
++	"os"
++	"path/filepath"
++	"strconv"
++	"strings"
++	"sync"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/telemost"
++	"golang.org/x/sys/unix"
++)
++
++const acceptanceCommand = "CLOSE_CURRENT_SEED_SIGNALING_1011"
++const acceptanceMessageLimit = 2048
++
++var acceptanceRejected = errors.New("seed_acceptance_rejected")
++
++type acceptanceContextKey struct{}
++
++type SeedAcceptanceConfig struct {
++	Schema       int       `json:"schema"`
++	Enabled      bool      `json:"enabled"`
++	BinarySHA256 string    `json:"binary_sha256"`
++	Directory    string    `json:"directory"`
++	ExpiresAt    time.Time `json:"expires_at"`
++}
++
++type SeedAcceptanceBinding struct {
++	BinarySHA256 string `json:"binary_sha256"`
++	PID          int    `json:"pid"`
++	StartTicks   uint64 `json:"start_ticks"`
++	InvocationID string `json:"invocation_id"`
++	Generation   uint64 `json:"generation"`
++	RoomHash     string `json:"room_hash"`
++}
++
++type SeedAcceptanceCommand struct {
++	Schema    int                   `json:"schema"`
++	Command   string                `json:"command"`
++	Binding   SeedAcceptanceBinding `json:"binding"`
++	Nonce     string                `json:"nonce"`
++	ArmedAt   time.Time             `json:"armed_at"`
++	ExpiresAt time.Time             `json:"expires_at"`
++}
++
++type acceptanceTarget struct {
++	generation uint64
++	active     func() *telemost.Session
++}
++
++type seedAcceptance struct {
++	mu         sync.Mutex
++	binding    SeedAcceptanceBinding
++	target     *acceptanceTarget
++	consumed   bool
++	applied    bool
++	created    time.Time
++	expires    time.Time
++	listener   *net.UnixListener
++	queue      chan SeedAcceptanceReceipt
++	writerDone chan struct{}
++	done       chan struct{}
++	ctx        context.Context
++	cancel     context.CancelFunc
++	selected   *telemost.Session
++	nonceHash  string
++	closed     bool
++	outcome    chan string
++}
++
++func acceptanceSeedContext(ctx context.Context, roomID string) context.Context {
++	if control, ok := ctx.Value(acceptanceContextKey{}).(*seedAcceptance); ok && control.ctx.Err() == nil {
++		return telemost.WithResearchSeedBoundary(ctx, acceptanceHash([]byte(roomID)))
++	}
++	return ctx
++}
++
++func (manager *SeedManager) acceptanceGeneration(generation *seedGeneration) {
++	if generation == nil {
++		return
++	}
++	control, ok := generation.ctx.Value(acceptanceContextKey{}).(*seedAcceptance)
++	if !ok {
++		return
++	}
++	control.mu.Lock()
++	defer control.mu.Unlock()
++	if control.closed || control.ctx.Err() != nil {
++		return
++	}
++	control.target = &acceptanceTarget{generation: generation.id, active: func() *telemost.Session {
++		manager.mu.Lock()
++		defer manager.mu.Unlock()
++		if manager.current != generation || generation.ctx.Err() != nil || manager.directory == nil {
++			return nil
++		}
++		observed, ok := generation.carrier.(*observedSeed)
++		if !ok {
++			return nil
++		}
++		session, ok := observed.PacketEndpoint.(*telemost.Session)
++		if !ok || session.SignalingReadFailure().Kind != "" {
++			return nil
++		}
++		stats := session.Stats()
++		if stats.SubscriberState != "connected" || stats.PublisherState != "connected" {
++			return nil
++		}
++		return session
++	}}
++	if observed, ok := generation.carrier.(*observedSeed); ok {
++		if session, ok := observed.PacketEndpoint.(*telemost.Session); ok {
++			if control.consumed && control.binding.Generation != generation.id && control.binding.RoomHash == session.ResearchRoomHash() {
++				select {
++				case control.outcome <- "RECOVERED":
++				default:
++				}
++			} else if !control.consumed {
++				binding := control.binding
++				binding.Generation = generation.id
++				binding.RoomHash = session.ResearchRoomHash()
++				select {
++				case control.queue <- SeedAcceptanceReceipt{Schema: 1, UTC: time.Now().UTC(), Binding: binding, State: "TARGET_AVAILABLE", PreTriggerSeedState: "ACTIVE", RecoveryOutcome: "NOT_TRIGGERED", CleanupOutcome: "PENDING"}:
++				default:
++				}
++			}
++		}
++	}
++}
++
++func strictAcceptanceJSON(raw []byte, value any) error {
++	if len(raw) > acceptanceMessageLimit {
++		return acceptanceRejected
++	}
++	if uniqueAcceptanceKeys(json.NewDecoder(bytes.NewReader(raw)), 0) != nil {
++		return acceptanceRejected
++	}
++	decoder := json.NewDecoder(bytes.NewReader(raw))
++	decoder.DisallowUnknownFields()
++	if decoder.Decode(value) != nil {
++		return acceptanceRejected
++	}
++	var extra any
++	if decoder.Decode(&extra) != io.EOF {
++		return acceptanceRejected
++	}
++	return nil
++}
++
++func uniqueAcceptanceKeys(decoder *json.Decoder, depth int) error {
++	if depth > 4 {
++		return acceptanceRejected
++	}
++	token, err := decoder.Token()
++	if err != nil {
++		return err
++	}
++	if delimiter, ok := token.(json.Delim); ok {
++		if delimiter != '{' {
++			return acceptanceRejected
++		}
++		seen := map[string]bool{}
++		for decoder.More() {
++			key, err := decoder.Token()
++			if err != nil {
++				return err
++			}
++			name, ok := key.(string)
++			if !ok || seen[name] || name != strings.ToLower(name) {
++				return acceptanceRejected
++			}
++			seen[name] = true
++			if err := uniqueAcceptanceKeys(decoder, depth+1); err != nil {
++				return err
++			}
++		}
++		end, err := decoder.Token()
++		if err != nil || end != json.Delim('}') {
++			return acceptanceRejected
++		}
++	}
++	return nil
++}
++
++func trustedAcceptanceParents(path string, serviceUID uint32) bool {
++	for directory := filepath.Dir(path); ; directory = filepath.Dir(directory) {
++		var stat unix.Stat_t
++		if unix.Lstat(directory, &stat) != nil || stat.Mode&unix.S_IFMT != unix.S_IFDIR || stat.Mode&0022 != 0 || (stat.Uid != 0 && stat.Uid != serviceUID) {
++			return false
++		}
++		if directory == "/" {
++			return true
++		}
++	}
++}
++
++func acceptanceHash(raw []byte) string {
++	digest := sha256.Sum256(raw)
++	return hex.EncodeToString(digest[:])
++}
++
++func acceptanceProcessBinding() (SeedAcceptanceBinding, error) {
++	binary, err := os.Open("/proc/self/exe")
++	if err != nil {
++		return SeedAcceptanceBinding{}, err
++	}
++	defer binary.Close()
++	digest := sha256.New()
++	if _, err = io.Copy(digest, binary); err != nil {
++		return SeedAcceptanceBinding{}, err
++	}
++	raw, err := os.ReadFile("/proc/self/stat")
++	if err != nil {
++		return SeedAcceptanceBinding{}, err
++	}
++	end := strings.LastIndex(string(raw), ")")
++	if end < 0 {
++		return SeedAcceptanceBinding{}, acceptanceRejected
++	}
++	fields := strings.Fields(string(raw[end+1:]))
++	if len(fields) < 20 {
++		return SeedAcceptanceBinding{}, acceptanceRejected
++	}
++	ticks, err := strconv.ParseUint(fields[19], 10, 64)
++	if err != nil {
++		return SeedAcceptanceBinding{}, err
++	}
++	invocation := os.Getenv("INVOCATION_ID")
++	if invocation != "" {
++		if len(invocation) != 32 {
++			return SeedAcceptanceBinding{}, acceptanceRejected
++		}
++		if _, err = hex.DecodeString(invocation); err != nil {
++			return SeedAcceptanceBinding{}, acceptanceRejected
++		}
++	}
++	return SeedAcceptanceBinding{BinarySHA256: hex.EncodeToString(digest.Sum(nil)), PID: os.Getpid(), StartTicks: ticks, InvocationID: invocation}, nil
++}
++
++func readAcceptanceConfig(path string) (SeedAcceptanceConfig, error) {
++	var config SeedAcceptanceConfig
++	if !filepath.IsAbs(path) {
++		return config, acceptanceRejected
++	}
++	if !trustedAcceptanceParents(path, 0) {
++		return config, acceptanceRejected
++	}
++	var parent unix.Stat_t
++	if unix.Lstat(filepath.Dir(path), &parent) != nil || parent.Mode&unix.S_IFMT != unix.S_IFDIR || parent.Uid != 0 || parent.Mode&0022 != 0 {
++		return config, acceptanceRejected
++	}
++	descriptor, err := unix.Open(path, unix.O_RDONLY|unix.O_NOFOLLOW|unix.O_CLOEXEC, 0)
++	if err != nil {
++		return config, acceptanceRejected
++	}
++	file := os.NewFile(uintptr(descriptor), path)
++	defer file.Close()
++	var stat unix.Stat_t
++	if unix.Fstat(descriptor, &stat) != nil || stat.Uid != 0 || stat.Mode&unix.S_IFMT != unix.S_IFREG || (stat.Mode&0777 != 0600 && stat.Mode&0777 != 0640) {
++		return config, acceptanceRejected
++	}
++	raw, err := io.ReadAll(io.LimitReader(file, acceptanceMessageLimit+1))
++	if err != nil || strictAcceptanceJSON(raw, &config) != nil {
++		return config, acceptanceRejected
++	}
++	return config, nil
++}
++
++func StartSeedAcceptance(ctx context.Context, configPath string) (context.Context, func(), error) {
++	if configPath == "" {
++		return ctx, func() {}, nil
++	}
++	config, err := readAcceptanceConfig(configPath)
++	if err != nil {
++		return ctx, nil, err
++	}
++	if !trustedAcceptanceParents(filepath.Join(config.Directory, "seed-acceptance.sock"), uint32(os.Geteuid())) {
++		return ctx, nil, acceptanceRejected
++	}
++	binding, err := acceptanceProcessBinding()
++	if err != nil {
++		return ctx, nil, acceptanceRejected
++	}
++	return startSeedAcceptance(ctx, config, binding, 0)
++}
++
++func startSeedAcceptance(parent context.Context, config SeedAcceptanceConfig, binding SeedAcceptanceBinding, peerUID uint32) (context.Context, func(), error) {
++	now := time.Now()
++	if config.Schema != 1 || !config.Enabled || config.BinarySHA256 != binding.BinarySHA256 || !config.ExpiresAt.After(now) || config.ExpiresAt.After(now.Add(25*time.Minute)) || !filepath.IsAbs(config.Directory) {
++		return parent, nil, acceptanceRejected
++	}
++	var stat unix.Stat_t
++	if unix.Lstat(config.Directory, &stat) != nil || stat.Mode&unix.S_IFMT != unix.S_IFDIR || stat.Mode&0777 != 0700 || stat.Uid != uint32(os.Geteuid()) {
++		return parent, nil, acceptanceRejected
++	}
++	listener, err := net.ListenUnix("unix", &net.UnixAddr{Name: filepath.Join(config.Directory, "seed-acceptance.sock"), Net: "unix"})
++	if err != nil {
++		return parent, nil, acceptanceRejected
++	}
++	listener.SetUnlinkOnClose(true)
++	if os.Chmod(listener.Addr().String(), 0600) != nil {
++		listener.Close()
++		return parent, nil, acceptanceRejected
++	}
++	ctx, cancel := context.WithDeadline(parent, config.ExpiresAt)
++	control := &seedAcceptance{binding: binding, created: now, expires: config.ExpiresAt, listener: listener, queue: make(chan SeedAcceptanceReceipt, 32), writerDone: make(chan struct{}), done: make(chan struct{}), ctx: ctx, cancel: cancel, outcome: make(chan string, 1)}
++	go control.writeReceipts(config.Directory)
++	control.emit("DISABLED", false, "NOT_TRIGGERED", "PENDING")
++	stop := context.AfterFunc(ctx, func() { listener.Close() })
++	go func() {
++		defer close(control.done)
++		defer func() {
++			control.mu.Lock()
++			control.closed = true
++			control.selected = nil
++			control.target = nil
++			close(control.queue)
++			control.mu.Unlock()
++		}()
++		defer stop()
++		defer cancel()
++		for {
++			connection, err := listener.AcceptUnix()
++			if err != nil {
++				break
++			}
++			control.handle(connection, peerUID)
++			connection.Close()
++		}
++		control.mu.Lock()
++		consumed := control.consumed
++		applied := control.applied
++		control.mu.Unlock()
++		if !consumed {
++			control.emit("EXPIRED", false, "NOT_TRIGGERED", "PENDING")
++		}
++		outcome := "NOT_TRIGGERED"
++		if consumed {
++			timer := time.NewTimer(ConnectTimeout + 5*time.Second)
++			select {
++			case outcome = <-control.outcome:
++			case <-timer.C:
++				outcome = "NOT_OBSERVED_WITHIN_BUDGET"
++			case <-ctx.Done():
++				outcome = "SERVICE_STOP_OR_CONTROL_EXPIRY"
++			}
++			timer.Stop()
++		}
++		_, err := os.Lstat(listener.Addr().String())
++		cleanup := "FAILED"
++		if os.IsNotExist(err) {
++			cleanup = "REMOVED"
++		}
++		control.emit("CLEANED", applied, outcome, cleanup)
++	}()
++	return context.WithValue(parent, acceptanceContextKey{}, control), func() { cancel(); <-control.done; <-control.writerDone }, nil
++}
++
++func (control *seedAcceptance) emit(state string, applied bool, recovery, cleanup string) {
++	control.mu.Lock()
++	defer control.mu.Unlock()
++	if control.closed {
++		return
++	}
++	receipt := SeedAcceptanceReceipt{Schema: 1, UTC: time.Now().UTC(), Binding: control.binding, NonceHash: control.nonceHash, State: state, ActionApplied: applied, RecoveryOutcome: recovery, CleanupOutcome: cleanup, TestTriggered: applied}
++	receipt.PreTriggerSeedState = "NOT_TARGETED"
++	if control.selected != nil {
++		receipt.PreTriggerSeedState = "ACTIVE"
++		receipt.ReaderObserved1011 = control.selected.ResearchTriggerObserved()
++	}
++	select {
++	case control.queue <- receipt:
++	default:
++	}
++}
++
++func (control *seedAcceptance) handle(connection *net.UnixConn, peerUID uint32) {
++	connection.SetDeadline(time.Now().Add(time.Second))
++	authorized := false
++	raw, err := connection.SyscallConn()
++	if err == nil {
++		err = raw.Control(func(descriptor uintptr) {
++			credentials, failure := unix.GetsockoptUcred(int(descriptor), unix.SOL_SOCKET, unix.SO_PEERCRED)
++			authorized = failure == nil && credentials.Uid == peerUID
++		})
++	}
++	if err != nil || !authorized {
++		io.WriteString(connection, "REJECTED\n")
++		return
++	}
++	request, err := io.ReadAll(io.LimitReader(connection, acceptanceMessageLimit+1))
++	var command SeedAcceptanceCommand
++	if err != nil || strictAcceptanceJSON(request, &command) != nil || !control.consume(command, time.Now()) {
++		io.WriteString(connection, "REJECTED\n")
++		return
++	}
++	io.WriteString(connection, "CONSUMED\n")
++	control.listener.Close()
++}
++
++func (control *seedAcceptance) consume(command SeedAcceptanceCommand, now time.Time) bool {
++	control.mu.Lock()
++	if control.consumed || control.ctx.Err() != nil || command.Schema != 1 || command.Command != acceptanceCommand || command.ArmedAt.Before(control.created) || command.ArmedAt.After(now) || !command.ExpiresAt.After(now) || command.ExpiresAt.After(control.expires) || command.ExpiresAt.Sub(command.ArmedAt) > time.Minute || len(command.Nonce) != 64 {
++		control.mu.Unlock()
++		return false
++	}
++	if _, err := hex.DecodeString(command.Nonce); err != nil {
++		control.mu.Unlock()
++		return false
++	}
++	target := control.target
++	expected := control.binding
++	control.mu.Unlock()
++	if target == nil {
++		return false
++	}
++	session := target.active()
++	if session == nil {
++		return false
++	}
++	expected.Generation = target.generation
++	expected.RoomHash = session.ResearchRoomHash()
++	if command.Binding != expected {
++		return false
++	}
++	control.mu.Lock()
++	if control.consumed || control.target != target || control.ctx.Err() != nil {
++		control.mu.Unlock()
++		return false
++	}
++	control.consumed = true
++	control.binding = expected
++	control.selected = session
++	control.nonceHash = acceptanceHash([]byte(command.Nonce))
++	control.mu.Unlock()
++	control.emit("ARMED", false, "PENDING", "PENDING")
++	control.emit("READY", false, "PENDING", "PENDING")
++	applied := session.ResearchCloseSeed1011()
++	control.mu.Lock()
++	control.applied = applied
++	control.mu.Unlock()
++	control.emit("CONSUMED", applied, "SEE_SEED_RECOVERY_RECEIPT", "PENDING")
++	return true
++}
+diff --git a/carrier/bootstrap/seed_acceptance_linux_test.go b/carrier/bootstrap/seed_acceptance_linux_test.go
+new file mode 100644
+index 0000000..2c731a6
+--- /dev/null
++++ b/carrier/bootstrap/seed_acceptance_linux_test.go
+@@ -0,0 +1,334 @@
++//go:build seedacceptance && linux
++
++package bootstrap
++
++import (
++	"context"
++	"encoding/json"
++	"io"
++	"net"
++	"os"
++	"path/filepath"
++	"strings"
++	"testing"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/telemost"
++)
++
++func acceptanceFixture(test *testing.T, uid uint32) (context.Context, *seedAcceptance, func()) {
++	test.Helper()
++	directory := test.TempDir()
++	if os.Chmod(directory, 0700) != nil {
++		test.Fatal("permissions")
++	}
++	binding, err := acceptanceProcessBinding()
++	if err != nil {
++		test.Fatal(err)
++	}
++	config := SeedAcceptanceConfig{Schema: 1, Enabled: true, BinarySHA256: binding.BinarySHA256, Directory: directory, ExpiresAt: time.Now().Add(time.Minute)}
++	ctx, stop, err := startSeedAcceptance(context.Background(), config, binding, uid)
++	if err != nil {
++		test.Fatal(err)
++	}
++	control := ctx.Value(acceptanceContextKey{}).(*seedAcceptance)
++	test.Cleanup(stop)
++	return ctx, control, stop
++}
++
++func TestAcceptanceRejectBindingAndState(test *testing.T) {
++	for _, name := range []string{"binary", "pid", "ticks", "invocation", "generation", "room", "expired", "future", "long_ttl", "before_start", "nonce", "schema", "command", "consumed", "before_active", "recovering", "stale_generation", "stopped"} {
++		test.Run(name, func(test *testing.T) {
++			_, control, _ := acceptanceFixture(test, uint32(os.Geteuid()))
++			session, err := telemost.New(context.Background(), telemost.Config{RoomURL: "https://telemost.yandex.ru/j/12345678901234", Mode: telemost.ModeVP8})
++			if err != nil {
++				test.Fatal(err)
++			}
++			defer session.Close()
++			control.mu.Lock()
++			control.target = &acceptanceTarget{generation: 1, active: func() *telemost.Session { return session }}
++			binding := control.binding
++			binding.Generation = 1
++			binding.RoomHash = session.ResearchRoomHash()
++			command := SeedAcceptanceCommand{Schema: 1, Command: acceptanceCommand, Binding: binding, Nonce: strings.Repeat("a", 64), ArmedAt: time.Now(), ExpiresAt: time.Now().Add(10 * time.Second)}
++			switch name {
++			case "binary":
++				command.Binding.BinarySHA256 = strings.Repeat("b", 64)
++			case "pid":
++				command.Binding.PID++
++			case "ticks":
++				command.Binding.StartTicks++
++			case "invocation":
++				command.Binding.InvocationID = "different"
++			case "generation":
++				command.Binding.Generation++
++			case "room":
++				command.Binding.RoomHash = strings.Repeat("b", 64)
++			case "expired":
++				command.ExpiresAt = time.Now().Add(-time.Second)
++			case "future":
++				command.ArmedAt = time.Now().Add(time.Second)
++			case "long_ttl":
++				command.ExpiresAt = time.Now().Add(time.Hour)
++			case "before_start":
++				command.ArmedAt = control.created.Add(-time.Second)
++			case "nonce":
++				command.Nonce = "bad"
++			case "schema":
++				command.Schema = 2
++			case "command":
++				command.Command = "anything"
++			case "consumed":
++				control.consumed = true
++			case "before_active":
++				control.target = nil
++			case "recovering":
++				control.target.active = func() *telemost.Session { return nil }
++			case "stale_generation":
++				control.target.generation = 2
++			case "stopped":
++				control.cancel()
++			}
++			control.mu.Unlock()
++			if control.consume(command, time.Now()) {
++				test.Fatal("invalid accepted")
++			}
++			if session.ResearchTriggerObserved() {
++				test.Fatal("invalid closed websocket")
++			}
++		})
++	}
++}
++
++func TestAcceptanceSocketPermissionsUnprivilegedAndCleanup(test *testing.T) {
++	if os.Geteuid() == 0 {
++		test.Skip("requires actual non-root SO_PEERCRED")
++	}
++	_, control, stop := acceptanceFixture(test, 0)
++	session, err := telemost.New(context.Background(), telemost.Config{RoomURL: "https://telemost.yandex.ru/j/12345678901234", Mode: telemost.ModeVP8})
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer session.Close()
++	control.mu.Lock()
++	control.target = &acceptanceTarget{generation: 1, active: func() *telemost.Session { return session }}
++	binding := control.binding
++	binding.Generation = 1
++	binding.RoomHash = session.ResearchRoomHash()
++	control.mu.Unlock()
++	command := SeedAcceptanceCommand{Schema: 1, Command: acceptanceCommand, Binding: binding, Nonce: strings.Repeat("a", 64), ArmedAt: time.Now(), ExpiresAt: time.Now().Add(10 * time.Second)}
++	request, err := json.Marshal(command)
++	if err != nil {
++		test.Fatal(err)
++	}
++	path := control.listener.Addr().String()
++	info, err := os.Stat(path)
++	if err != nil || info.Mode().Perm() != 0600 {
++		test.Fatal("socket permissions")
++	}
++	connection, err := net.DialUnix("unix", nil, &net.UnixAddr{Name: path, Net: "unix"})
++	if err != nil {
++		test.Fatal(err)
++	}
++	connection.SetDeadline(time.Now().Add(2 * time.Second))
++	connection.Write(request)
++	connection.CloseWrite()
++	raw, _ := io.ReadAll(connection)
++	connection.Close()
++	if string(raw) != "REJECTED\n" {
++		test.Fatal("unauthorized peer accepted")
++	}
++	stop()
++	if _, err = os.Lstat(path); !os.IsNotExist(err) {
++		test.Fatal("socket retained")
++	}
++	if control.consumed {
++		test.Fatal("unused control consumed")
++	}
++}
++
++func TestAcceptanceMalformedAndOversized(test *testing.T) {
++	for _, raw := range []string{"", "{", `{"schema":1,"unexpected":true}`, `{"schema":1,"schema":1}`, `{"binding":{"pid":1,"pid":2}}`, `{} {}`, strings.Repeat("x", 2049)} {
++		var command SeedAcceptanceCommand
++		if strictAcceptanceJSON([]byte(raw), &command) == nil {
++			test.Fatal("invalid schema accepted")
++		}
++	}
++}
++
++func TestAcceptanceStorageRetentionPrivacyAndFailure(test *testing.T) {
++	directory := test.TempDir()
++	foreign := filepath.Join(directory, "preserve.json")
++	os.WriteFile(foreign, []byte("PRIVATE_REASON"), 0600)
++	for index := 1; index <= 70; index++ {
++		receipt := SeedAcceptanceReceipt{Schema: 1, UTC: time.Now().UTC(), State: "CLEANED", Binding: SeedAcceptanceBinding{PID: 123, StartTicks: 456}, NonceHash: strings.Repeat("a", 64)}
++		if err := writeAcceptanceReceipt(directory, receipt, index); err != nil {
++			test.Fatal(err)
++		}
++	}
++	entries, _ := os.ReadDir(directory)
++	if len(entries) != 65 {
++		test.Fatal("retention", len(entries))
++	}
++	for _, entry := range entries {
++		info, _ := entry.Info()
++		if info.Mode().Perm() != 0600 {
++			test.Fatal("file mode")
++		}
++		if entry.Name() == "preserve.json" {
++			continue
++		}
++		raw, _ := os.ReadFile(filepath.Join(directory, entry.Name()))
++		var receipt SeedAcceptanceReceipt
++		if json.Unmarshal(raw, &receipt) != nil || strings.Contains(string(raw), "PRIVATE_REASON") {
++			test.Fatal("privacy")
++		}
++	}
++	if writeAcceptanceReceipt(filepath.Join(directory, "missing"), SeedAcceptanceReceipt{}, 1) == nil {
++		test.Fatal("write failure not surfaced to writer")
++	}
++	_, control, stop := acceptanceFixture(test, uint32(os.Geteuid()))
++	control.emit("READY", false, "PENDING", "PENDING")
++	stop()
++	if control.consumed {
++		test.Fatal("receipt changed protocol")
++	}
++}
++
++func TestAcceptanceConfigurationAndLifecycle(test *testing.T) {
++	ctx := context.Background()
++	unchanged, stop, err := StartSeedAcceptance(ctx, "")
++	if err != nil || unchanged != ctx {
++		test.Fatal("default enabled")
++	}
++	stop()
++	for _, name := range []string{"wrong_hash", "disabled", "expired", "long_window", "directory_mode", "occupied_socket"} {
++		test.Run(name, func(test *testing.T) {
++			directory := test.TempDir()
++			os.Chmod(directory, 0700)
++			binding, err := acceptanceProcessBinding()
++			if err != nil {
++				test.Fatal(err)
++			}
++			config := SeedAcceptanceConfig{Schema: 1, Enabled: true, BinarySHA256: binding.BinarySHA256, Directory: directory, ExpiresAt: time.Now().Add(time.Minute)}
++			switch name {
++			case "wrong_hash":
++				config.BinarySHA256 = "bad"
++			case "disabled":
++				config.Enabled = false
++			case "expired":
++				config.ExpiresAt = time.Now().Add(-time.Second)
++			case "long_window":
++				config.ExpiresAt = time.Now().Add(time.Hour)
++			case "directory_mode":
++				os.Chmod(directory, 0755)
++			case "occupied_socket":
++				os.WriteFile(filepath.Join(directory, "seed-acceptance.sock"), []byte("preserve"), 0600)
++			}
++			if _, stop, err := startSeedAcceptance(ctx, config, binding, uint32(os.Geteuid())); err == nil {
++				stop()
++				test.Fatal("unsafe config accepted")
++			}
++		})
++	}
++	path := filepath.Join(test.TempDir(), "config.json")
++	os.WriteFile(path, []byte(`{}`), 0600)
++	if _, err := readAcceptanceConfig(path); err == nil {
++		test.Fatal("non-root/untrusted path accepted")
++	}
++	symlink := path + ".link"
++	os.Symlink(path, symlink)
++	if _, err := readAcceptanceConfig(symlink); err == nil {
++		test.Fatal("symlink config")
++	}
++	if trustedAcceptanceParents(path, 0) {
++		test.Fatal("world-writable ancestry")
++	}
++	_, control, finish := acceptanceFixture(test, uint32(os.Geteuid()))
++	connection, err := net.DialUnix("unix", nil, &net.UnixAddr{Name: control.listener.Addr().String(), Net: "unix"})
++	if err != nil {
++		test.Fatal(err)
++	}
++	connection.Write([]byte("{"))
++	connection.Close()
++	finish()
++	if control.consumed {
++		test.Fatal("helper crash caused trigger")
++	}
++}
++
++func TestAcceptanceUnusedExpiry(test *testing.T) {
++	directory := test.TempDir()
++	os.Chmod(directory, 0700)
++	binding, err := acceptanceProcessBinding()
++	if err != nil {
++		test.Fatal(err)
++	}
++	ctx, finish, err := startSeedAcceptance(context.Background(), SeedAcceptanceConfig{Schema: 1, Enabled: true, BinarySHA256: binding.BinarySHA256, Directory: directory, ExpiresAt: time.Now().Add(30 * time.Millisecond)}, binding, uint32(os.Geteuid()))
++	if err != nil {
++		test.Fatal(err)
++	}
++	control := ctx.Value(acceptanceContextKey{}).(*seedAcceptance)
++	select {
++	case <-control.done:
++	case <-time.After(time.Second):
++		test.Fatal("control not expired")
++	}
++	finish()
++	if ctx.Err() != nil {
++		test.Fatal("control expiry cancelled service context")
++	}
++	if control.consumed {
++		test.Fatal("expiry triggered")
++	}
++	if _, err := os.Stat(filepath.Join(directory, "seed-acceptance.sock")); !os.IsNotExist(err) {
++		test.Fatal("expiry cleanup")
++	}
++}
++
++func TestAcceptanceRootPolicyEntry(test *testing.T) {
++	if os.Geteuid() != 0 {
++		test.Skip("root-only positive policy test requires explicit local authorization")
++	}
++	directory, err := os.MkdirTemp("/run", "fc-seed-acceptance-local-")
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer os.RemoveAll(directory)
++	os.Chmod(directory, 0700)
++	binding, err := acceptanceProcessBinding()
++	if err != nil {
++		test.Fatal(err)
++	}
++	config := SeedAcceptanceConfig{Schema: 1, Enabled: true, BinarySHA256: binding.BinarySHA256, Directory: directory, ExpiresAt: time.Now().Add(time.Minute)}
++	raw, _ := json.Marshal(config)
++	path := filepath.Join(directory, "policy.json")
++	if os.WriteFile(path, raw, 0600) != nil {
++		test.Fatal("write fixture policy")
++	}
++	parent, cancel := context.WithCancel(context.Background())
++	defer cancel()
++	ctx, finish, err := StartSeedAcceptance(parent, path)
++	if err != nil {
++		test.Fatal(err)
++	}
++	control := ctx.Value(acceptanceContextKey{}).(*seedAcceptance)
++	if control.binding != binding {
++		test.Fatal("process binding")
++	}
++	finish()
++	if parent.Err() != nil {
++		test.Fatal("control cleanup cancelled parent")
++	}
++	for _, mode := range []os.FileMode{0644, 0660, 0666} {
++		os.Chmod(path, mode)
++		if _, err := readAcceptanceConfig(path); err == nil {
++			test.Fatal("unsafe root policy mode")
++		}
++	}
++	os.Chmod(path, 0640)
++	if _, err := readAcceptanceConfig(path); err != nil {
++		test.Fatal("read-only service-group policy")
++	}
++	test.Log("ROOT_POLICY_ENTRY=PASS ROOT_OWNERSHIP=PASS ROOT_PROCESS_BINDING=PASS CONTROL_CLEANUP=PASS")
++}
+diff --git a/carrier/bootstrap/seed_supervisor.go b/carrier/bootstrap/seed_supervisor.go
+index bb965fd..11f36aa 100644
+--- a/carrier/bootstrap/seed_supervisor.go
++++ b/carrier/bootstrap/seed_supervisor.go
+@@ -64,6 +64,7 @@ func (manager *SeedManager) swapGeneration(previous, next *seedGeneration) bool
+ 		return false
+ 	}
+ 	manager.current = next
++	manager.acceptanceGeneration(next)
+ 	return true
+ }
+ 
+diff --git a/carrier/cmd/bootstrap-broker/main.go b/carrier/cmd/bootstrap-broker/main.go
+index 9cab978..3b05138 100644
+--- a/carrier/cmd/bootstrap-broker/main.go
++++ b/carrier/cmd/bootstrap-broker/main.go
+@@ -69,6 +69,7 @@ func runObserved(observer *fatalObserver) (result error) {
+ 	chatServices := flag.Bool("chat-services", false, "enable pinned Friends API and mailbox services alongside public VPN destinations")
+ 	peerEvidence := flag.String("research-peer-evidence", "", "protected temporary metadata directory; disabled after twenty minutes")
+ 	ownershipEvidence := flag.String("research-admission-evidence", "", "exclusive protected ownership file; at most 512 events and fifteen minutes")
++	startSeedAcceptance := seedAcceptanceOptions()
+ 	flag.Parse()
+ 	peerSink, startupSink, stopPeer, err := newPeerEvidence(*peerEvidence)
+ 	if err != nil {
+@@ -152,6 +153,13 @@ func runObserved(observer *fatalObserver) (result error) {
+ 	defer signal.Stop(observer.signals)
+ 	ctx, cancel := context.WithTimeout(ctx, *duration)
+ 	defer cancel()
++	acceptanceContext, stopSeedAcceptance, acceptanceErr := startSeedAcceptance(ctx)
++	if acceptanceErr != nil {
++		emit("research_control_unavailable")
++	} else {
++		ctx = acceptanceContext
++		defer stopSeedAcceptance()
++	}
+ 	manager := &bootstrap.SeedManager{Event: emit, RotateAfter: *rotateAfter, Observe: observer.failure}
+ 	recoverySink, stopRecovery := bufferedSeedRecovery(observer.dir)
+ 	defer stopRecovery()
+diff --git a/carrier/cmd/bootstrap-broker/seed_acceptance_disabled.go b/carrier/cmd/bootstrap-broker/seed_acceptance_disabled.go
+new file mode 100644
+index 0000000..d0f2d66
+--- /dev/null
++++ b/carrier/cmd/bootstrap-broker/seed_acceptance_disabled.go
+@@ -0,0 +1,9 @@
++//go:build !seedacceptance || !linux
++
++package main
++
++import "context"
++
++func seedAcceptanceOptions() func(context.Context) (context.Context, func(), error) {
++	return func(ctx context.Context) (context.Context, func(), error) { return ctx, func() {}, nil }
++}
+diff --git a/carrier/cmd/bootstrap-broker/seed_acceptance_linux.go b/carrier/cmd/bootstrap-broker/seed_acceptance_linux.go
+new file mode 100644
+index 0000000..f501f25
+--- /dev/null
++++ b/carrier/cmd/bootstrap-broker/seed_acceptance_linux.go
+@@ -0,0 +1,16 @@
++//go:build seedacceptance && linux
++
++package main
++
++import (
++	"context"
++	"flag"
++	"github.com/Joker20380/family_connect/carrier/bootstrap"
++)
++
++func seedAcceptanceOptions() func(context.Context) (context.Context, func(), error) {
++	path := flag.String("research-seed-acceptance-config", "", "root-owned local seed acceptance policy; disabled by default")
++	return func(ctx context.Context) (context.Context, func(), error) {
++		return bootstrap.StartSeedAcceptance(ctx, *path)
++	}
++}
+diff --git a/carrier/telemost/acceptance_disabled.go b/carrier/telemost/acceptance_disabled.go
+new file mode 100644
+index 0000000..aa616cc
+--- /dev/null
++++ b/carrier/telemost/acceptance_disabled.go
+@@ -0,0 +1,11 @@
++//go:build !seedacceptance || !linux
++
++package telemost
++
++import "github.com/gorilla/websocket"
++
++type acceptanceBoundary struct{}
++
++func (session *Session) researchSignalingBoundary(connection *websocket.Conn) (*websocket.Conn, error) {
++	return connection, nil
++}
+diff --git a/carrier/telemost/acceptance_linux.go b/carrier/telemost/acceptance_linux.go
+new file mode 100644
+index 0000000..3cc2bca
+--- /dev/null
++++ b/carrier/telemost/acceptance_linux.go
+@@ -0,0 +1,179 @@
++//go:build seedacceptance && linux
++
++package telemost
++
++import (
++	"bufio"
++	"context"
++	"crypto/sha256"
++	"encoding/hex"
++	"errors"
++	"net"
++	"net/http"
++	"net/url"
++	"sync"
++	"sync/atomic"
++	"time"
++
++	"github.com/gorilla/websocket"
++)
++
++type acceptanceKey struct{}
++
++func WithResearchSeedBoundary(ctx context.Context, roomHash string) context.Context {
++	return context.WithValue(ctx, acceptanceKey{}, roomHash)
++}
++
++type acceptanceBoundary struct {
++	bridge atomic.Pointer[acceptanceBridge]
++}
++
++type acceptanceBridge struct {
++	upstream  *websocket.Conn
++	server    *websocket.Conn
++	client    *websocket.Conn
++	ending    sync.Once
++	workers   sync.WaitGroup
++	triggered atomic.Bool
++	done      chan struct{}
++}
++
++type pipeUpgrade struct {
++	connection net.Conn
++	reader     *bufio.Reader
++	header     http.Header
++}
++
++func (upgrade *pipeUpgrade) Header() http.Header { return upgrade.header }
++func (upgrade *pipeUpgrade) WriteHeader(int)     {}
++func (upgrade *pipeUpgrade) Write([]byte) (int, error) {
++	return 0, errors.New("research_upgrade_failed")
++}
++func (upgrade *pipeUpgrade) Hijack() (net.Conn, *bufio.ReadWriter, error) {
++	return upgrade.connection, bufio.NewReadWriter(upgrade.reader, bufio.NewWriter(upgrade.connection)), nil
++}
++
++func newAcceptanceBridge(ctx context.Context, upstream *websocket.Conn) (*acceptanceBridge, error) {
++	clientPipe, serverPipe := net.Pipe()
++	deadline := time.Now().Add(time.Second)
++	clientPipe.SetDeadline(deadline)
++	serverPipe.SetDeadline(deadline)
++	serverResult := make(chan *websocket.Conn, 1)
++	go func() {
++		reader := bufio.NewReader(serverPipe)
++		request, err := http.ReadRequest(reader)
++		if err != nil {
++			serverPipe.Close()
++			serverResult <- nil
++			return
++		}
++		upgrader := websocket.Upgrader{CheckOrigin: func(*http.Request) bool { return true }}
++		server, err := upgrader.Upgrade(&pipeUpgrade{serverPipe, reader, make(http.Header)}, request, nil)
++		if err != nil {
++			serverPipe.Close()
++			serverResult <- nil
++			return
++		}
++		serverResult <- server
++	}()
++	client, _, err := websocket.NewClient(clientPipe, &url.URL{Scheme: "ws", Host: "research.invalid", Path: "/"}, nil, 4096, 4096)
++	server := <-serverResult
++	if err != nil || server == nil {
++		clientPipe.Close()
++		serverPipe.Close()
++		upstream.Close()
++		return nil, errors.New("research_upgrade_failed")
++	}
++	clientPipe.SetDeadline(time.Time{})
++	serverPipe.SetDeadline(time.Time{})
++	client.SetReadLimit(wsReadLimit)
++	server.SetReadLimit(wsReadLimit)
++	bridge := &acceptanceBridge{upstream: upstream, server: server, client: client, done: make(chan struct{})}
++	server.SetPingHandler(func(payload string) error {
++		return upstream.WriteControl(websocket.PingMessage, []byte(payload), time.Now().Add(wsWriteTimeout))
++	})
++	upstream.SetPongHandler(func(payload string) error {
++		return server.WriteControl(websocket.PongMessage, []byte(payload), time.Now().Add(wsWriteTimeout))
++	})
++	upstream.SetPingHandler(func(payload string) error {
++		return server.WriteControl(websocket.PingMessage, []byte(payload), time.Now().Add(wsWriteTimeout))
++	})
++	server.SetPongHandler(func(payload string) error {
++		return upstream.WriteControl(websocket.PongMessage, []byte(payload), time.Now().Add(wsWriteTimeout))
++	})
++	stop := context.AfterFunc(ctx, func() { bridge.end(0, false) })
++	bridge.workers.Add(2)
++	go bridge.pump(upstream, server)
++	go bridge.pump(server, upstream)
++	go func() { bridge.workers.Wait(); stop(); close(bridge.done) }()
++	return bridge, nil
++}
++
++func (bridge *acceptanceBridge) pump(source, destination *websocket.Conn) {
++	defer bridge.workers.Done()
++	for {
++		kind, payload, err := source.ReadMessage()
++		if err != nil {
++			code := 0
++			var closeError *websocket.CloseError
++			if errors.As(err, &closeError) && closeError.Code != 1006 && closeError.Code != 1005 {
++				code = closeError.Code
++			}
++			bridge.end(code, false)
++			return
++		}
++		destination.SetWriteDeadline(time.Now().Add(wsWriteTimeout))
++		if destination.WriteMessage(kind, payload) != nil {
++			bridge.end(0, false)
++			return
++		}
++	}
++}
++
++func (bridge *acceptanceBridge) end(code int, triggered bool) bool {
++	applied := false
++	bridge.ending.Do(func() {
++		applied = triggered
++		bridge.triggered.Store(triggered)
++		bridge.upstream.Close()
++		if code != 0 {
++			bridge.server.WriteControl(websocket.CloseMessage, websocket.FormatCloseMessage(code, ""), time.Now().Add(time.Second))
++		}
++		bridge.server.Close()
++	})
++	return applied
++}
++
++func (session *Session) researchSignalingBoundary(upstream *websocket.Conn) (*websocket.Conn, error) {
++	if roomHash, _ := session.ctx.Value(acceptanceKey{}).(string); len(roomHash) != 64 {
++		return upstream, nil
++	}
++	bridge, err := newAcceptanceBridge(session.ctx, upstream)
++	if err != nil {
++		return nil, err
++	}
++	session.bridge.Store(bridge)
++	return bridge.client, nil
++}
++
++func (session *Session) ResearchCloseSeed1011() bool {
++	bridge := session.bridge.Load()
++	if bridge == nil || session.ctx.Err() != nil || session.closed.Load() {
++		return false
++	}
++	return bridge.end(websocket.CloseInternalServerErr, true)
++}
++
++func (session *Session) ResearchTriggerObserved() bool {
++	bridge := session.bridge.Load()
++	observed := session.SignalingReadFailure()
++	return bridge != nil && bridge.triggered.Load() && observed.Kind == "WS_CLOSE" && observed.CloseCode == 1011 && observed.ContextState == "ACTIVE" && !observed.CarrierClosed
++}
++
++func (session *Session) ResearchRoomHash() string {
++	if roomHash, ok := session.ctx.Value(acceptanceKey{}).(string); ok && len(roomHash) == 64 {
++		return roomHash
++	}
++	digest := sha256.Sum256([]byte(session.cfg.RoomURL))
++	return hex.EncodeToString(digest[:])
++}
+diff --git a/carrier/telemost/acceptance_linux_test.go b/carrier/telemost/acceptance_linux_test.go
+new file mode 100644
+index 0000000..ea1b027
+--- /dev/null
++++ b/carrier/telemost/acceptance_linux_test.go
+@@ -0,0 +1,145 @@
++//go:build seedacceptance && linux
++
++package telemost
++
++import (
++	"context"
++	"errors"
++	"net/http"
++	"net/http/httptest"
++	"strconv"
++	"strings"
++	"testing"
++	"time"
++
++	"github.com/gorilla/websocket"
++)
++
++func TestAcceptanceRealGorillaBoundary(test *testing.T) {
++	closed := make(chan struct{})
++	server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
++		upgrader := websocket.Upgrader{}
++		connection, err := upgrader.Upgrade(writer, request, nil)
++		if err != nil {
++			return
++		}
++		defer close(closed)
++		defer connection.Close()
++		for {
++			kind, payload, err := connection.ReadMessage()
++			if err != nil {
++				return
++			}
++			if connection.WriteMessage(kind, payload) != nil {
++				return
++			}
++		}
++	}))
++	defer server.Close()
++	upstream, _, err := websocket.DefaultDialer.Dial("ws"+strings.TrimPrefix(server.URL, "http"), nil)
++	if err != nil {
++		test.Fatal(err)
++	}
++	ctx, cancel := context.WithCancel(context.Background())
++	defer cancel()
++	bridge, err := newAcceptanceBridge(ctx, upstream)
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer bridge.client.Close()
++	for range 5 {
++		if bridge.client.WriteJSON(map[string]string{"nonce": "synthetic-local"}) != nil {
++			test.Fatal("send")
++		}
++		var message map[string]string
++		if bridge.client.ReadJSON(&message) != nil || message["nonce"] != "synthetic-local" {
++			test.Fatal("transparent forwarding")
++		}
++	}
++	result := make(chan error, 1)
++	go func() { var message map[string]any; result <- bridge.client.ReadJSON(&message) }()
++	if !bridge.end(1011, true) {
++		test.Fatal("not applied")
++	}
++	select {
++	case <-closed:
++	case <-time.After(time.Second):
++		test.Fatal("real upstream still open")
++	}
++	select {
++	case err := <-result:
++		var closeError *websocket.CloseError
++		if !errors.As(err, &closeError) || closeError.Code != 1011 || closeError.Text != "" {
++			test.Fatalf("not real Gorilla CloseError: %T", err)
++		}
++		classification := classifySignalingRead(err, ctx, false)
++		if classification.Kind != "WS_CLOSE" || classification.CloseCode != 1011 || classification.ContextState != "ACTIVE" || classification.CarrierClosed {
++			test.Fatal(classification)
++		}
++		test.Logf("REAL_UPSTREAM_CLOSED=true REAL_CLOSE_FRAME=true error_type=%T code=1011 context=ACTIVE provider_generated=false", err)
++	case <-time.After(time.Second):
++		test.Fatal("reader did not see close frame")
++	}
++	if bridge.end(1011, true) {
++		test.Fatal("replay")
++	}
++	select {
++	case <-bridge.done:
++	case <-time.After(time.Second):
++		test.Fatal("pump leak")
++	}
++}
++
++func TestAcceptanceDisabledBoundary(test *testing.T) {
++	session := testSession(test)
++	connection := &websocket.Conn{}
++	actual, err := session.researchSignalingBoundary(connection)
++	if err != nil || actual != connection || session.bridge.Load() != nil {
++		test.Fatal("disabled changed transport")
++	}
++	if session.ResearchCloseSeed1011() {
++		test.Fatal("disabled allowed trigger")
++	}
++}
++
++func TestAcceptanceNaturalCloseFailClosed(test *testing.T) {
++	for _, code := range []int{1000, 1002, 1007, 1008, 1011} {
++		test.Run(strconv.Itoa(code), func(test *testing.T) {
++			server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
++				upgrader := websocket.Upgrader{}
++				connection, err := upgrader.Upgrade(writer, request, nil)
++				if err != nil {
++					return
++				}
++				defer connection.Close()
++				var message any
++				connection.ReadJSON(&message)
++				connection.WriteControl(websocket.CloseMessage, websocket.FormatCloseMessage(code, "PRIVATE_REASON"), time.Now().Add(time.Second))
++			}))
++			defer server.Close()
++			upstream, _, err := websocket.DefaultDialer.Dial("ws"+strings.TrimPrefix(server.URL, "http"), nil)
++			if err != nil {
++				test.Fatal(err)
++			}
++			ctx, cancel := context.WithCancel(context.Background())
++			defer cancel()
++			bridge, err := newAcceptanceBridge(ctx, upstream)
++			if err != nil {
++				test.Fatal(err)
++			}
++			defer bridge.client.Close()
++			bridge.client.WriteJSON(map[string]string{"nonce": "local"})
++			var message any
++			err = bridge.client.ReadJSON(&message)
++			var closeError *websocket.CloseError
++			if !errors.As(err, &closeError) || closeError.Code != code || closeError.Text != "" || bridge.triggered.Load() {
++				test.Fatalf("boundary %T", err)
++			}
++			select {
++			case <-bridge.done:
++			case <-time.After(time.Second):
++				test.Fatal("pump leak")
++			}
++		})
++	}
++}
+diff --git a/carrier/telemost/session.go b/carrier/telemost/session.go
+index 797115c..9d69457 100644
+--- a/carrier/telemost/session.go
++++ b/carrier/telemost/session.go
+@@ -107,6 +107,7 @@ type Stats struct {
+ // It is not safe for concurrent Send; callers must serialise sends or use the
+ // isolated IPC process which already does.
+ type Session struct {
++	acceptanceBoundary
+ 	cfg      Config
+ 	mode     Mode
+ 	senderID uint32
+diff --git a/carrier/telemost/signaling.go b/carrier/telemost/signaling.go
+index 994badd..c6b10f1 100644
+--- a/carrier/telemost/signaling.go
++++ b/carrier/telemost/signaling.go
+@@ -36,6 +36,10 @@ func (s *Session) dialWebSocket(ctx context.Context) error {
+ 		return errors.New("telemost: signaling connection failed")
+ 	}
+ 	conn.SetReadLimit(wsReadLimit)
++	conn, err = s.researchSignalingBoundary(conn)
++	if err != nil {
++		return errors.New("telemost: research boundary unavailable")
++	}
+ 	conn.SetPongHandler(func(string) error {
+ 		_ = conn.SetReadDeadline(time.Now().Add(wsReadTimeout))
+ 		s.cfg.Trace.Record(sessiontrace.Event{Stage: "HEARTBEAT", State: "RX", Reason: "NONE", HeartbeatKind: "WEBSOCKET"})

@@ -1,0 +1,25 @@
+FILE | FUNCTION | CHANGE_KIND | PURPOSE | LIFECYCLE_EFFECT | SECURITY_EFFECT | WIRE_EFFECT
+carrier/bootstrap/seed.go | TelemostSeed | ACCEPTANCE_HOOK | mark only seed connector with room hash in explicitly enabled context | none when disabled | dedicated connectors excluded | NONE
+carrier/bootstrap/seed_supervisor.go | swapGeneration | ACCEPTANCE_HOOK | register current target; nonblocking audit | no policy/budget/swap change | stale generation comparison | NONE
+carrier/telemost/session.go | Session | ACCEPTANCE_STORAGE | generation-local bridge pointer; empty public stub | generation ownership only | no global socket registry | NONE
+carrier/telemost/signaling.go | signaling dial path | ACCEPTANCE_HOOK | optional private pipe after original authenticated upstream dial | original conn returned when disabled | original trust/auth unchanged | NONE
+carrier/telemost/acceptance_linux.go | researchSignalingBoundary/pump/end | RESEARCH_BEHAVIOUR | forward in-memory WS; close one upstream and send actual empty-reason1011 frame when consumed | bounded generation-owned pumps; no service cancel | seed-only opt-in, no remote endpoint; non-close errors never promoted1011 | NONE (test fault only)
+carrier/telemost/acceptance_disabled.go | researchSignalingBoundary | PUBLIC_STUB | preserve original upstream, no seam | NONE | compile-time inert | NONE
+carrier/bootstrap/seed_acceptance_linux.go | StartSeedAcceptance/consume/handle | RESEARCH_CONTROL | root policy, AF_UNIX, kernel peer auth, exact process/generation binding, bounded one shot | service context survives control expiry; stop cancels listener | UID0, strict schema, expiry/replay rejection | NONE
+carrier/bootstrap/seed_acceptance_receipt_linux.go | writeAcceptanceReceipt/writeReceipts | OBSERVABILITY | sanitized bounded asynchronous atomic receipts | no I/O under broker/seed locks; write failure ignored by protocol | private files, no raw errors or provider data | NONE
+carrier/bootstrap/seed_acceptance_disabled.go | acceptanceSeedContext/acceptanceGeneration | PUBLIC_STUB | no registration/control | NONE | compile-time inert | NONE
+carrier/cmd/bootstrap-broker/main.go | main | ACCEPTANCE_WIRING | explicit research option initializer | invalid/expired policy disables only seam, not service | no environment or remote activation | NONE
+carrier/cmd/bootstrap-broker/seed_acceptance_linux.go | seedAcceptanceOptions | RESEARCH_CLI | explicit root config path, default empty | NONE when absent | research tag only | NONE
+carrier/cmd/bootstrap-broker/seed_acceptance_disabled.go | seedAcceptanceOptions | PUBLIC_STUB | no option/control | NONE | compile-time absent activation | NONE
+carrier/bootstrap/seed_acceptance_linux_test.go | TestAcceptance* | TEST | permission/binding/state/storage/failure fixtures | local only | disposable fixture identities only | NONE
+carrier/telemost/acceptance_linux_test.go | TestAcceptance* | TEST | actual Gorilla frame/forwarding/natural-close/disabled guards | local only | no live Telemost | NONE
+validation/carrier | acceptanceRealPion | NEVER_DEPLOY_TEST_OVERLAY | accepted local SFU and real Pion/Family/Reliable/Mux/TCP topology | fixture only | loopback and disposable identities | NONE to production
+trigger_once.py | main | ROOT_LOCAL_HELPER | exact receipt/process/peer verification, one15s nonce command, no retry | future explicit local execution only | never remote, root required | NONE
+schemas/*.json; validate.py; api_validation.py; finalize.py; *.md | artifact/acceptance tooling | DOC_TEST_ONLY | reproducibility/provenance/local gates/runbooks | no production action | no identities/secrets/export | NONE
+
+Inherited seed-supervisor-behaviour.diff is copied byte-for-byte as provenance only.
+It is already present in c9d75db; NEVER reapply it to that baseline.
+acceptance-trigger.diff and observability.diff partition this task's new delta.
+No changes: supervisor classifier, attempts/backoff/deadlines, auth/admission/lease,
+Family/Reliable/Mux, directory serialization/publication, API/issuer/publisher/schema,
+systemd. No release/public code can activate the seam.

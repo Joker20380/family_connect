@@ -1,0 +1,57 @@
+{
+  "source": "completed rootcause analysis/result.json",
+  "source_sha256": "ccb4d897e9815af092d5ead94ded0052eb75a755119c97b419d129dbb1668332",
+  "projection": {
+    "task": "SUPERVISOR-CANDIDATE-DATAPLANE-ROOTCAUSE-1",
+    "result": "PARTIAL",
+    "terminal": "EVIDENCE_INSUFFICIENT_AT_EXACT_BOUNDARY",
+    "first_missing_boundary": "EVIDENCE_INSUFFICIENT_AT_OWNER_DEDICATED_SESSION_READY",
+    "root_cause_proven": false,
+    "production_acceptance_result_preserved": "SEED-SUPERVISOR-OWNER-ACCEPTANCE-3-FINAL=FAIL",
+    "matrix": {
+      "BASELINE_DATA_PLANE": {
+        "status": "NOT_RUN",
+        "seed_ready": "NOT_RUN",
+        "dedicated_ready": "NOT_RUN",
+        "dns": "NOT_RUN",
+        "https_opentcp": "NOT_RUN",
+        "exact_response": "NOT_RUN",
+        "cleanup": "NOT_APPLICABLE_NO_PROCESS_STARTED"
+      },
+      "CANDIDATE_NORMAL_CONFIG_DATA_PLANE": {
+        "status": "NOT_RUN",
+        "seed_ready": "NOT_RUN",
+        "dedicated_ready": "NOT_RUN",
+        "dns": "NOT_RUN",
+        "https_opentcp": "NOT_RUN",
+        "exact_response": "NOT_RUN",
+        "cleanup": "NOT_APPLICABLE_NO_PROCESS_STARTED"
+      },
+      "CANDIDATE_ACCEPTANCE_CONFIG_DATA_PLANE": {
+        "status": "NOT_RUN",
+        "seed_ready": "NOT_RUN",
+        "dedicated_ready": "NOT_RUN",
+        "dns": "NOT_RUN",
+        "https_opentcp": "NOT_RUN",
+        "exact_response": "NOT_RUN",
+        "cleanup": "NOT_APPLICABLE_NO_PROCESS_STARTED"
+      }
+    },
+    "matrix_blocker": "Existing accepted local stack is a rebuilt sameroomfixture source overlay, not an executable adapter for either exact binary. Frozen executable uses production provider endpoints. No live provider call, replacement binary or new helper was allowed/performed.",
+    "classification": "NOT_ESTABLISHED_WITHOUT_A_B_C",
+    "source_patch": "NOT_CREATED_ROOT_CAUSE_GATE_CLOSED",
+    "new_candidate": "NOT_CREATED",
+    "counters": {
+      "PRODUCTION_DEPLOYMENT": 0,
+      "PRODUCTION_RESTART": 0,
+      "OWNER_CONNECT": 0,
+      "OWNER_INSTRUMENTATION": 0,
+      "TRIGGER": 0,
+      "CREDENTIAL_MUTATIONS": 0,
+      "APK_INSTALL": 0,
+      "LIVE_PROVIDER_ACTIONS": 0,
+      "SOURCE_CHANGES": 0,
+      "SYNTHETIC_IDENTITY_CREATIONS": 0
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "source": "sealed episode-90m/result.json",
+  "source_sha256": "f8e28d3500e1efbce242f1199d53c038d2ca9eb16e3833e6fb0ff2299a37b9ae",
+  "projection": {
+    "task": "SEED-SUPERVISOR-OWNER-ACCEPTANCE-3-FINAL",
+    "result": "FAIL",
+    "first_failed_product_check": "FIRST_OWNER_HTTPS_DNS",
+    "observed_error": "DNS_PROBE_FINISHED_NO_INTERNET",
+    "failure_phase": "BEFORE_WS1011",
+    "SUPERVISOR_RECOVERY": "NOT_RUN",
+    "ROLLBACK_STATE": "PASS_EXACT_BASELINE_RESTORED",
+    "controlled_deployments": 1,
+    "rollbacks": 1,
+    "physical_connects": 1,
+    "trigger_executions": 0,
+    "credential_mutations": 0,
+    "data_clears": 0,
+    "recovery_defect_proven": false
+  }
+}

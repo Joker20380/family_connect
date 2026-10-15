@@ -1,0 +1,60 @@
+package main
+
+import (
+    "crypto/tls"
+    "crypto/x509"
+    "encoding/json"
+    "encoding/pem"
+    "errors"
+    "fmt"
+    "os"
+    "time"
+
+    "github.com/Joker20380/family_connect/carrier/familysession"
+)
+
+func check() error {
+    if len(os.Args) != 3 { return errors.New("arguments") }
+    raw, err := os.ReadFile(os.Args[1])
+    if err != nil { return err }
+    configuration, expiry, err := familysession.Configuration(raw, true)
+    if err != nil || !expiry.After(time.Now()) { return errors.New("configuration") }
+    var credentials familysession.Credentials
+    if json.Unmarshal(raw, &credentials) != nil { return errors.New("credentials") }
+    canaryRaw, err := os.ReadFile(os.Args[2])
+    if err != nil { return err }
+    block, remaining := pem.Decode(canaryRaw)
+    if block == nil || len(remaining) != 0 { return errors.New("certificate") }
+    canary, err := x509.ParseCertificate(block.Bytes)
+    if err != nil { return err }
+    chains, err := canary.Verify(x509.VerifyOptions{Roots: configuration.ClientCAs, KeyUsages: []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth}})
+    if err != nil { return err }
+    state := tls.ConnectionState{Version: tls.VersionTLS13, NegotiatedProtocol: familysession.Protocol, PeerCertificates: []*x509.Certificate{canary}, VerifiedChains: chains}
+    if configuration.VerifyConnection(state) != nil { return errors.New("canary admission") }
+    gateway, err := x509.ParseCertificate(configuration.Certificates[0].Certificate[0])
+    if err != nil { return err }
+    gatewayChains, err := gateway.Verify(x509.VerifyOptions{Roots: configuration.RootCAs, DNSName: "gateway.family-connect.test", KeyUsages: []x509.ExtKeyUsage{x509.ExtKeyUsageServerAuth}})
+    if err != nil { return err }
+    client, _, err := familysession.Configuration(raw, false)
+    if err != nil || client.VerifyConnection(tls.ConnectionState{Version: tls.VersionTLS13, NegotiatedProtocol: familysession.Protocol, PeerCertificates: []*x509.Certificate{gateway}, VerifiedChains: gatewayChains}) != nil { return errors.New("gateway binding") }
+    for _, mutation := range []string{"family", "revision", "crl"} {
+        changed := credentials
+        switch mutation {
+        case "family": changed.Family = "00000000000000000000000000000000"
+        case "revision": changed.MinimumRevision++
+        case "crl": changed.MinimumCRL++
+        }
+        encoded, _ := json.Marshal(changed)
+        altered, _, failure := familysession.Configuration(encoded, true)
+        if failure == nil && altered.VerifyConnection(state) == nil { return errors.New("negative admission") }
+    }
+    fmt.Println("native_gateway_and_canary_certificates=PASS family_revision_crl_negatives=PASS effective_expiry=" + expiry.UTC().Format(time.RFC3339))
+    return nil
+}
+
+func main() {
+    if check() != nil {
+        fmt.Fprintln(os.Stderr, "offline native validation failed; details suppressed")
+        os.Exit(1)
+    }
+}

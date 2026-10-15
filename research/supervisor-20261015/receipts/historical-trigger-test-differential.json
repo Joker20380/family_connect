@@ -1,0 +1,134 @@
+{
+  "api_baseline_failures": [
+    "FAILED tests/test_friends_restricted.py::test_crl_readiness_lifetime_bounds[14400]",
+    "FAILED tests/test_friends_restricted.py::test_crl_readiness_lifetime_bounds[3600]",
+    "FAILED tests/test_friends_restricted.py::test_refresh_replaces_unexpired_seed_without_reenrollment[14400]",
+    "FAILED tests/test_friends_restricted.py::test_refresh_replaces_unexpired_seed_without_reenrollment[3600]",
+    "FAILED tests/test_readiness_receipts.py::test_source_guards_no_exported_diagnostics_or_ui_requirement"
+  ],
+  "api_regression": "329 passed,70 skipped,5 unchanged baseline failures",
+  "busy_wire": "NOT_OBSERVED_NOT_CLAIMED_FIXED",
+  "full_suite": "NOT_GREEN",
+  "go": {
+    "hardened-full-research": {
+      "failures": [
+        "github.com/Joker20380/family_connect/carrier/bootstrap::PACKAGE",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/revoked",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/stale-crl",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/stale-revision",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/unknown",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/wrong-family",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/wrong-gateway",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestSharedTimestampContract",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::PACKAGE",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/conference_ended",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/local_close",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/peer_timeout",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/queue_full",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/remote_reset",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/signal_read"
+      ],
+      "passed": 670,
+      "skipped": 8
+    },
+    "hardened-trigger-race3": {
+      "failures": [],
+      "passed": 114,
+      "skipped": 3
+    },
+    "sealed-full-baseline": {
+      "failures": [
+        "github.com/Joker20380/family_connect/carrier/bootstrap::PACKAGE",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/revoked",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/stale-crl",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/stale-revision",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/unknown",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/wrong-family",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/wrong-gateway",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestSharedTimestampContract",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::PACKAGE",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/conference_ended",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/local_close",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/peer_timeout",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/queue_full",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/remote_reset",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/signal_read"
+      ],
+      "passed": 632,
+      "skipped": 7
+    },
+    "sealed-full-public": {
+      "failures": [
+        "github.com/Joker20380/family_connect/carrier/bootstrap::PACKAGE",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/revoked",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/stale-crl",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/stale-revision",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/unknown",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/wrong-family",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/wrong-gateway",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestSharedTimestampContract",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::PACKAGE",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/conference_ended",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/local_close",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/peer_timeout",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/queue_full",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/remote_reset",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/signal_read"
+      ],
+      "passed": 632,
+      "skipped": 7
+    },
+    "sealed-full-research": {
+      "failures": [
+        "github.com/Joker20380/family_connect/carrier/bootstrap::PACKAGE",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/revoked",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/stale-crl",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/stale-revision",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/unknown",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/wrong-family",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestProductIdentityOverBootstrapCarrier/wrong-gateway",
+        "github.com/Joker20380/family_connect/carrier/bootstrap::TestSharedTimestampContract",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::PACKAGE",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/conference_ended",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/local_close",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/peer_timeout",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/queue_full",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/remote_reset",
+        "github.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker::TestSeedReadMatrix/signal_read"
+      ],
+      "passed": 670,
+      "skipped": 8
+    },
+    "sealed-media-race3": {
+      "failures": [],
+      "passed": 6,
+      "skipped": 0
+    },
+    "sealed-security-baseline-race3": {
+      "failures": [],
+      "passed": 447,
+      "skipped": 0
+    },
+    "sealed-security-candidate-race3": {
+      "failures": [],
+      "passed": 447,
+      "skipped": 0
+    },
+    "sealed-trigger-race3": {
+      "failures": [],
+      "passed": 114,
+      "skipped": 3
+    }
+  },
+  "no_new_failures": true,
+  "publisher": "19 PASS",
+  "root_policy_and_real_stack": "PASS"
+}

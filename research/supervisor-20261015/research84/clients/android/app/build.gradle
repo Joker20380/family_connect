@@ -1,0 +1,175 @@
+plugins { id 'com.android.application'; id 'com.chaquo.python' }
+// Optional compact pilot; ordinary platform CI keeps all four ABIs.
+def targetAbi = providers.gradleProperty('fcTargetAbi').getOrElse('all')
+def friendsCi = providers.gradleProperty('fcFriendsCi').getOrElse('false') == 'true'
+def restrictedDiagnostic = providers.gradleProperty('fcRestrictedDiagnostic').getOrElse('false') == 'true'
+def orchestratorDiagnostic = providers.gradleProperty('fcOrchestratorDiagnostic').getOrElse('false') == 'true'
+def ownerRestrictedDirectory = providers.gradleProperty('fcOwnerRestrictedDirectory').getOrElse('../owner-restricted-generated')
+def friendsRestrictedDirectory = providers.gradleProperty('fcFriendsRestrictedDirectory').getOrElse('../restricted-generated')
+if (!(targetAbi in ['all', 'arm64-v8a']) && !(friendsCi && targetAbi == 'x86_64')) throw new GradleException('Unsupported fcTargetAbi')
+android {
+    buildFeatures { buildConfig = true }
+    namespace 'com.familyconnect.app'
+    compileSdk 35
+    // Manual signed Friends UI acceptance; ordinary CI continues to test debug.
+    testBuildType providers.gradleProperty('fcTestBuildType').getOrElse('debug')
+    defaultConfig {
+        applicationId 'com.familyconnect.app'
+        ndk { abiFilters.addAll(targetAbi == 'all' ? ['armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'] : [targetAbi]) }
+        minSdk 26
+        targetSdk 35
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        versionCode 65
+        versionName '0.1.18-beta65'
+        buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'
+        buildConfigField 'String', 'PROVISIONING_SEAM_SOURCE', '""'
+        manifestPlaceholders = [appLabel: 'family_connect', launcherActivity: 'com.familyconnect.app.MainActivity']
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    sourceSets {
+        test { java.srcDir 'src/controlTest/java'; resources.srcDir '../../../tests/vectors' }
+        androidTest { java.srcDir 'src/controlTest/java'; assets.srcDir '../../../tests/vectors' }
+    }
+    sourceSets { main { java.srcDir '../awg-generated/java'; jniLibs.srcDir '../awg-generated/jniLibs'; assets.srcDir '../awg-generated/assets' } }
+    sourceSets { main { jniLibs.srcDir providers.gradleProperty('fcRadioNative').getOrElse('../audio-generated/jniLibs'); assets.srcDir '../audio/assets' } }
+    sourceSets { debug { jniLibs.srcDir '../restricted-generated/jniLibs'; assets.srcDir '../restricted-generated/assets' } }
+    sourceSets { friends { jniLibs.srcDir "${friendsRestrictedDirectory}/jniLibs"; assets.srcDir "${friendsRestrictedDirectory}/assets" } }
+    sourceSets { ownerDiagnostic {
+        jniLibs.srcDir "${ownerRestrictedDirectory}/jniLibs"
+        assets.srcDir "${ownerRestrictedDirectory}/assets"
+    } }
+    sourceSets {
+        debug { java.srcDir 'src/publicStartup/java' }
+        release { java.srcDir 'src/publicStartup/java' }
+        friends { java.srcDir 'src/publicStartup/java' }
+    }
+    sourceSets {
+        debug { java.srcDir 'src/provisioningDisabled/java' }
+        release { java.srcDir 'src/provisioningDisabled/java' }
+        friends { java.srcDir 'src/provisioningDisabled/java' }
+        ownerDiagnostic { java.srcDir 'src/provisioningDisabled/java' }
+        researchProvisioning {
+            java.srcDirs 'src/publicStartup/java', 'src/provisioningResearch/java'
+            jniLibs.srcDir "${friendsRestrictedDirectory}/jniLibs"
+            assets.srcDir "${friendsRestrictedDirectory}/assets"
+            assets.srcDir providers.gradleProperty('fcProvisioningSeamAssets').getOrElse('../provisioning-seam-generated')
+        }
+    }
+    packaging { jniLibs {
+        keepDebugSymbols += ['**/libfc-awg.so']
+        // Extract compressed libraries on install; preserve their verified bytes.
+        if (targetAbi != 'all') useLegacyPackaging = true
+    } }
+    buildTypes {
+        debug {
+            // Technical pilots coexist with old CI-signed installs; never uninstall their data.
+            applicationIdSuffix orchestratorDiagnostic ? '.orchestrator' : restrictedDiagnostic ? '.eu6' : '.pilot'
+            manifestPlaceholders = [appLabel: 'family_connect_pilot', launcherActivity: 'com.familyconnect.app.MainActivity']
+        }
+        release { minifyEnabled false }
+        friends {
+            initWith release
+            // Disposable emulator only: never use this APK to update a beta-signed phone.
+            if (friendsCi) {
+                signingConfig signingConfigs.debug
+            }
+            applicationIdSuffix '.friends'
+            debuggable false
+            matchingFallbacks = ['release']
+            manifestPlaceholders = [appLabel: 'EXIT', launcherActivity: 'com.familyconnect.app.FriendsActivity']
+        }
+        ownerDiagnostic {
+            initWith friends
+            signingConfig null
+            debuggable false
+            matchingFallbacks = ["friends", "release"]
+            manifestPlaceholders = [appLabel: "OWNER DIAGNOSTIC ONLY", launcherActivity: "com.familyconnect.app.FriendsActivity"]
+        }
+        researchProvisioning {
+            initWith friends
+            signingConfig null
+            debuggable false
+            matchingFallbacks = ['friends', 'release']
+            buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'true'
+            buildConfigField 'String', 'PROVISIONING_SEAM_SOURCE', '"' + providers.gradleProperty('fcProvisioningSeamSource').getOrElse('') + '"'
+        }
+    }
+    applicationVariants.all { variant ->
+        if (variant.buildType.name == "friends") {
+            variant.outputs.all { versionCodeOverride = 83; versionNameOverride = "0.1.18-research83-bootstrap" }
+        }
+        if (variant.buildType.name == "ownerDiagnostic") {
+            variant.outputs.all {
+                versionCodeOverride = 71
+                versionNameOverride = "0.1.18-beta71"
+            }
+        }
+        if (variant.buildType.name == 'researchProvisioning') {
+            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-provisioning-seam' }
+        }
+    }
+}
+androidComponents {
+    beforeVariants(selector().withBuildType('researchProvisioning')) { builder -> builder.minSdk = 31 }
+    onVariants(selector().withBuildType('friends')) { variant ->
+        variant.packaging.jniLibs.keepDebugSymbols.add('**/libfc_restricted.so')
+    }
+    onVariants(selector().withBuildType('ownerDiagnostic')) { variant ->
+        variant.packaging.jniLibs.keepDebugSymbols.add('**/libfc_restricted.so')
+    }
+    onVariants(selector().withBuildType('researchProvisioning')) { variant ->
+        variant.packaging.jniLibs.keepDebugSymbols.add('**/libfc_restricted.so')
+    }
+}
+def verifyFriendsRestrictedInputs = tasks.register('verifyFriendsRestrictedInputs', Exec) {
+    workingDir rootProject.file('../..')
+    commandLine providers.gradleProperty('fcBuildPython').getOrElse('python3'), 'pilot/android-restricted/package_ci.py',
+        '--source-commit', providers.exec { commandLine 'git', '-C', rootProject.file('../..'), 'rev-parse', 'HEAD' }.standardOutput.asText.get().trim(),
+        '--check-generated', file(friendsRestrictedDirectory).absolutePath
+}
+def verifyProvisioningResearchInputs = tasks.register('verifyProvisioningResearchInputs', Exec) {
+    workingDir rootProject.file('../..')
+    commandLine providers.gradleProperty('fcBuildPython').getOrElse('python3'), 'pilot/android-restricted/verify_provisioning_research.py',
+        '--native-directory', file(friendsRestrictedDirectory).absolutePath,
+        '--source-delta', providers.gradleProperty('fcProvisioningSeamSource').getOrElse(''),
+        '--assets', file(providers.gradleProperty('fcProvisioningSeamAssets').getOrElse('../provisioning-seam-generated')).absolutePath
+}
+tasks.configureEach { task ->
+    if (task.name == 'preFriendsBuild') task.dependsOn verifyFriendsRestrictedInputs
+    if (task.name == 'preResearchProvisioningBuild') {
+        task.dependsOn verifyProvisioningResearchInputs
+        task.doFirst {
+            if (!(providers.gradleProperty('fcProvisioningSeamSource').getOrElse('') ==~ /[0-9a-f]{64}/)) throw new GradleException('Research source digest required')
+            if (friendsCi) throw new GradleException('Disposable signing is not a research field artifact')
+        }
+    }
+}
+dependencies {
+    implementation 'com.google.zxing:core:3.5.3'
+    implementation 'org.bouncycastle:bcprov-jdk18on:1.85.2'
+    implementation 'com.google.code.gson:gson:2.13.2'
+    implementation 'androidx.annotation:annotation:1.7.1'
+    implementation 'androidx.collection:collection:1.4.0'
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+}
+
+// Keep four-ABI support. VPN identity and chat storage keys stay in Java.
+chaquopy {
+    defaultConfig {
+        version '3.10'
+        pip {
+            options '--no-deps'
+            install 'rns==1.5.1'
+            install 'pyserial==3.5'
+        }
+    }
+}
+
+ext.chatCoreDirectory = file('../../../messenger')
+apply from: '../chat-python.gradle'

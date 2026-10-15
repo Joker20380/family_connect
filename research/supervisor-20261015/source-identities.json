@@ -1,0 +1,33 @@
+{
+  "purpose": "Read-only publication metadata; not a build, validation or new candidate",
+  "baseline": {
+    "source_base": "a4087e000fdbe674b72ede3a6c8822445c87c654",
+    "source_delta_sha256": "7e7d408670a6ac6afa18e856beb8dcc0ca26a3b6f074e205d4dd25e62d78967b",
+    "preserved_snapshot_commit": "471d1d62e1385a9ffc5ff6a16a5a7e9fe043fae2",
+    "binary_sha256": "21f0a0fdc27b50c00ea922f0b716516e2422aedf1b3797369718f7d00070509a",
+    "published_subtree": "baseline/carrier"
+  },
+  "accepted_supervisor_parent": {
+    "source": "c9d75db6020f9f605e891036cbb9b68cebede708",
+    "binary_sha256": "d6875817cf33fdd85c6ad78a342fc93afd16864293e94a6e5b7136eec5125765",
+    "published_representation": "baseline plus provenance/trigger/seed-supervisor-behaviour.diff and inherited-supervisor-observability.diff; not a Git ancestry import"
+  },
+  "failed_frozen_candidate": {
+    "source": "134083d87773dacc038c9593afdaff0c57ea951d",
+    "binary_sha256": "53beb661cab014c32494fa8d7384f9565300311ef467e62ae9f8c20201e5138f",
+    "build_tag": "seedacceptance",
+    "published_subtree": "frozen-candidate/carrier"
+  },
+  "research84": {
+    "source_base": "f5240994869826c6a28f59e58e38256c688cf6eb",
+    "source_delta_sha256": "d7907697d71f119c21bced533f08abae06ae33ef9159c5fd9bd54cf031a481e7",
+    "native_sha256": "cb3af31f62fdc1339df5f03374652ef6c62c4382ed10ef2d314bd6b610c989e2",
+    "published_subtree": "research84 (selected source files only)"
+  },
+  "original_source_commit_objects_imported": false,
+  "github_prepublication_git_commit_checks": {
+    "134083d87773dacc038c9593afdaff0c57ea951d": 404,
+    "a4087e000fdbe674b72ede3a6c8822445c87c654": 404,
+    "f5240994869826c6a28f59e58e38256c688cf6eb": 404
+  }
+}
