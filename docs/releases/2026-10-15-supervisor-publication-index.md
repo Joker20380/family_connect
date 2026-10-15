@@ -7,6 +7,17 @@ Production FAIL сохраняется; root cause не доказана. Сна
 
 ## Начать здесь
 
+- [Current4h expired-predecessor recovery — реализован и локально проверен](2026-10-15-current4h-expired-predecessor-recovery-1.md):
+  отдельно разрешённый management delta на accepted9423d45/archive5fa24f53…c0e00,
+  [before/after source, patch, tests, runner и runbook](../../research/current4h-expired-recovery-20261015/README.md).
+  Request→offline-root authorization→controller/node publication→normal strict validation;
+  221 Python tests, fixed fault repeats и Family/TLS normal/race PASS. Source map
+  `5109a7c92ddd1937fe75ed7199866855a8cc20279bc226c35475d4cc81330145` подготовлен,
+  не установлен. Actual base Git commit не добавлен в историю; full retained source
+  archive/cryptographic fixtures/private runtime data не опубликованы. Для полного
+  воспроизведения нужен указанный archive; публичные safe receipts доступны по ссылкам.
+  Production actions=0; ENVIRONMENT_RESTORED не заявляется; signed APK неизменён.
+
 - [Restricted baseline environment recovery — BLOCKED](2026-10-15-restricted-baseline-environment-recovery-1.md):
   штатные authority-request/operator entrypoints вызваны, но отклонили просроченный
   predecessor до подписи/публикации. Зафиксирован отсутствующий применимый accepted

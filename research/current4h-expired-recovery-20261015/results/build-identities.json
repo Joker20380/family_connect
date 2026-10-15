@@ -1,0 +1,13 @@
+{
+  "python": "3.14.4",
+  "go": "go1.26.1 linux/amd64",
+  "normal_test_binary_sha256": "c1bac6497ee816e5337f56a0292c150eb6ac3e80a3d4d32d1246a46b37f90e0c",
+  "race_test_binary_sha256": "bcc1ccbe0b38959453f13dcdf8b1dce4c2f8e7cce69490baa255a207ca366c3b",
+  "binaries_published": false,
+  "gateway_executable_built": false,
+  "accepted_release_candidate": false,
+  "management_source_sha256": "5109a7c92ddd1937fe75ed7199866855a8cc20279bc226c35475d4cc81330145",
+  "reconstructed_source_matches": true,
+  "zero_context_patch_check": "PASS",
+  "package_reproduction": "PASS"
+}

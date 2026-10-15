@@ -1,0 +1,7 @@
+=== RUN   TestExpiredRecoveryStrictFamilyTLS
+--- PASS: TestExpiredRecoveryStrictFamilyTLS (0.42s)
+=== RUN   TestExpiredRecoveryStrictFamilyTLS
+--- PASS: TestExpiredRecoveryStrictFamilyTLS (0.42s)
+=== RUN   TestExpiredRecoveryStrictFamilyTLS
+--- PASS: TestExpiredRecoveryStrictFamilyTLS (0.37s)
+PASS

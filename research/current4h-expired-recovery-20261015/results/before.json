@@ -1,0 +1,1 @@
+{"credential_mutations": 0, "outcomes": {"authority_request": "UNKNOWN", "operator": "SNAPSHOT_VALIDATION_FAILED", "scheduled": "SNAPSHOT_VALIDATION_FAILED"}, "production_inputs": 0, "result": "EXPIRED_PREDECESSOR_REPRODUCED"}

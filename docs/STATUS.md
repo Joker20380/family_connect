@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+## CURRENT4H-EXPIRED-PREDECESSOR-RECOVERY-1 — IMPLEMENTED_AND_LOCALLY_VERIFIED (15.10)
+
+Separate management-only expired predecessor request/offline-root/apply/resume path
+implemented on exact accepted current-policy archive9423d45 (not root main). Normal
+admission/TLS/scheduled validation stays strict; no allow-expired runtime bypass.
+Explicit root approval binds predecessor/checkpoint, scope, current eligibility/floors,
+successor and operation. Existing locks/outage/CAS protect RU API and NL publication;
+partial recovery is forward-only and completed operations are idempotent.
+221 Python tests, 3×7 partial-write repeats, 3 config tests and real Family/TLS
+1 normal +3 race runs PASS. [Source, results and limitations](releases/2026-10-15-current4h-expired-predecessor-recovery-1.md);
+[ready management deployment/recovery runbook](../research/current4h-expired-recovery-20261015/RUNBOOK.md).
+**Not deployed; ENVIRONMENT_RESTORED is not claimed.** No SSH/ADB/real signing,
+credentials publication, service start or owner action. Signed APK3c733d2f…140513
+rehashed unchanged; original dirty worktree/frozen artifacts preserved.
+Next: separately controlled management version switch + offline key-owner recovery,
+then fresh environment check before remaining owner install/CONNECT steps.
+DEVICE_ACCEPTANCE=NOT_RUN; PRODUCTION_ACCEPTANCE=FAIL;
+HISTORICAL_CAUSAL_BINDING=NOT_PROVEN. Prior blocked production report remains historical.
+
 ## RESTRICTED-BASELINE-ENVIRONMENT-RECOVERY-1 — BLOCKED (15.10)
 
 Accepted current4h/operator entrypoints attempted with one operation ID, not just

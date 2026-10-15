@@ -1,0 +1,61 @@
+{
+  "accepted_archive_sha256": "5fa24f5383e3f64c6ce7368e807972a6a4e4e9d832268feabefb9fea396c0e00",
+  "base_commit": "9423d45ee013b349f342a81be502757b17b3fbf2",
+  "configuration_projection_tests": {
+    "passed": 3
+  },
+  "cumulative_inventory_sha256": "338faa75b96ff7ad3eb0d961e1cfa47d79eb75e60d285165cacec9ddf7df3e8b",
+  "family_tls": {
+    "clients_per_count": 3,
+    "frozen_binary_accepted": "NOT_TESTED",
+    "normal_count": 1,
+    "provider_actions": 0,
+    "race_count": 3
+  },
+  "filesystem_sqlite_fault_repetitions": {
+    "count": 3,
+    "passed_each": 7
+  },
+  "full_python_suite": {
+    "count": 1,
+    "existing": 154,
+    "new_recovery": 67,
+    "passed": 221
+  },
+  "management_source_sha256": "5109a7c92ddd1937fe75ed7199866855a8cc20279bc226c35475d4cc81330145",
+  "production_actions": 0,
+  "receipt_sha256": {
+    "before.json": "9d37e0f7833a11b480c7b39fa9f8daad4eebf83246bda0e7244bf93ed0c6ecf8",
+    "family-normal-final.log": "e5eb942492ec313e8dacb17b6cd4fc3f69ddda99bb17a5f01157d8a0c86b576a",
+    "family-race-fresh.log": "12e77b96f92a1dd0e2216f9dee1d09791773e368c4b4080e4e48bf4cb71a0630",
+    "final-full-01.log": "390fab25f6ef44330a3f8c24d955f9618afb5437fff42dffb039b4ec43c0085f",
+    "fixed-fault-1.log": "9b98eb7aec5d7a5ccc298968dfe6f07f8f4da6c3f7bb5675227bd45e7b048aee",
+    "fixed-fault-2.log": "b0a2e3d3576427112315bc7483df565dccdf83e72884488d6a23783706732331",
+    "fixed-fault-3.log": "827c376f6acb467e0632487eed678307529fd43154568914524fe0af75c2038a",
+    "package-tests.log": "bf22e88f0e3a0e89eddb09d252b1661a48c9dfc4bd5aa177b5efca41f2700a18"
+  },
+  "result": "RECOVERY_PATH_IMPLEMENTED_AND_LOCALLY_VERIFIED",
+  "signed_client_sha256": "3c733d2fc3a0ec377143b668244a4c7d6619ff24abe024da4ee9bfe31d140513",
+  "unexpected_failures": [
+    {
+      "cause": "missing private request/result directory; missing archived owner.json",
+      "correction": "mkdir0700 with directory validation; use committed plan expected hashes for unchanged files",
+      "stage": "initial smoke"
+    },
+    {
+      "cause": "frozen node fixture time earlier than live CLI request time",
+      "correction": "CLI test uses current node clock; product validation remains strict",
+      "stage": "CLI fixture"
+    },
+    {
+      "cause": "disk quota exceeded in tmp build; one initial race command emitted bare FAIL",
+      "correction": "diagnostic build confirmed quota; use disk-backed GOTMPDIR/GOCACHE and p=1",
+      "stage": "Go compilation"
+    },
+    {
+      "cause": "one-hour synthetic client fixture expired during build; normal validators rejected all three attempts",
+      "correction": "retain failed receipts; build binaries before generating fresh fixture; no TTL changes; fixed final 1 normal/3 race batch",
+      "stage": "first executable race batch"
+    }
+  ]
+}

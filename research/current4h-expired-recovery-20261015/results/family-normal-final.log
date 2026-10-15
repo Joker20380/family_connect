@@ -1,0 +1,3 @@
+=== RUN   TestExpiredRecoveryStrictFamilyTLS
+--- PASS: TestExpiredRecoveryStrictFamilyTLS (0.32s)
+PASS

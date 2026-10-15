@@ -8,13 +8,27 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### CURRENT4H-EXPIRED-PREDECESSOR-RECOVERY-1 — local implementation complete (15.10)
+
+- [Implemented recovery and local acceptance](releases/2026-10-15-current4h-expired-predecessor-recovery-1.md):
+  actual controller/node/offline verification, strict normal validators, current
+  entitlement/CAS checks and durable forward-only recovery. Fixed regression matrix PASS.
+- Next is separately authorized **controlled management deployment and real offline
+  root-owner recovery**, using the [complete runbook](../research/current4h-expired-recovery-20261015/RUNBOOK.md),
+  not another search for a nonexistent entrypoint and not an automatic production action.
+- Preserve baseline executable/APK/trust/TTL/floors. Verify protected committed state,
+  declared reader topology, compatible RU/NL source maps and current authoritative grants
+  before signing/apply. Lost state, stale approval or failed one-shot start remains fail-closed.
+- Local PASS does not restore the environment. Owner client install/CONNECT remains
+  unspent; resume only after separately demonstrated live recovery and fresh short checks.
+
 ### RESTRICTED-BASELINE-ENVIRONMENT-RECOVERY-1 — blocked operator boundary (15.10)
 
 - [Actual operator attempts and missing contract](releases/2026-10-15-restricted-baseline-environment-recovery-1.md):
   accepted current4h refuses an already expired predecessor before offline handoff
   and transaction entry. No materials published or gateway started; no phone access.
-- Obtain an applicable accepted expired-authority/CRL/grants recovery path integrated
-  with current4h lock/CAS/publication gates. Do not improvise a writer, reuse the
+- The separate expired recovery implementation is now locally verified (above),
+  but not deployed/accepted in production. Do not improvise a writer, reuse the
   old issuer5→6 transaction, change TTL/clock or bypass validation.
 - Keep restricted admission closed until coherent valid publication is verified;
   current4h active timer alone is not recovery. Do not retry the same failed command.

@@ -1,0 +1,1247 @@
+--- /dev/null
++++ b/controller/characterize_expired.py
+@@ -0,0 +1,32 @@
++import json
++import tempfile
++from pathlib import Path
++
++from credential_renewal import DAY, Rejected, canonical, digest
++from test_production_controller import ControllerFixture
++
++
++def main():
++    with tempfile.TemporaryDirectory(prefix='current4h-before-') as directory:
++        fixture = ControllerFixture(Path(directory))
++        assert fixture.run()['result'] == 'COMMITTED'
++        fixture.nodes.now += 2*DAY
++        before = digest(canonical(fixture.actual()))
++        outcomes = {}
++        for name, action in (
++            ('authority_request', lambda: fixture.nodes.nodes['RU'].authority_request('before-expired-operation-0002')),
++            ('operator', lambda: fixture.controller.run('before-expired-operation-0002')),
++            ('scheduled', lambda: fixture.controller.run('before-expired-operation-0002', scheduled=True))):
++            try:
++                action()
++            except Exception as error:
++                outcomes[name] = str(error) if isinstance(error, Rejected) else 'UNKNOWN'
++            else:
++                raise AssertionError('expired predecessor unexpectedly admitted')
++            assert digest(canonical(fixture.actual())) == before
++        print(json.dumps(dict(result='EXPIRED_PREDECESSOR_REPRODUCED', outcomes=outcomes, credential_mutations=0,
++                              production_inputs=0), sort_keys=True))
++
++
++if __name__ == '__main__':
++    main()
+--- /dev/null
++++ b/controller/expired_recovery.py
+@@ -0,0 +1,239 @@
++import base64
++from dataclasses import dataclass
++import hmac
++import re
++
++from cryptography import x509
++from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
++from cryptography.hazmat.primitives.serialization import Encoding
++from cryptography.x509.oid import ExtendedKeyUsageOID, NameOID
++
++from credential_renewal import DAY, VALIDITY, Rejected, canonical, digest, parse, require, spki, utc
++from grant_cutover import GRANT_FIELDS
++
++
++PURPOSE = 'EXPIRED_PREDECESSOR_RECOVERY'
++DOMAIN = b'family-connect/expired-predecessor-recovery/v1\0'
++ISSUER_DOMAIN = b'family-connect/restricted-issuer/v1\0'
++UPDATES = ['authority', 'grants', 'leaf', 'crl', 'profile', 'directory']
++
++
++@dataclass(frozen=True)
++class HistoricalPredecessor:
++    encoded: bytes
++    trust: dict
++    issuer: object
++    crl: object
++    leaf: object
++
++    @property
++    def snapshot(self):
++        return parse(self.encoded)
++
++
++@dataclass(frozen=True)
++class RecoveryAuthorization:
++    request: dict
++    authority: dict
++    predecessor: HistoricalPredecessor
++
++
++def fields(value, names):
++    require(type(value) is dict and set(value) == set(names.split()), 'RECOVERY_SCHEMA')
++
++
++def historical(raw, anchor):
++    try:
++        value = parse(raw)
++        fields(value, 'schema authority crl certificate grants')
++        require(type(value['schema']) is int and value['schema'] == 1, 'RECOVERY_SCHEMA')
++        envelope = value['authority']
++        fields(envelope, 'payload signature')
++        payload = base64.b64decode(envelope['payload'], validate=True)
++        require(len(payload) <= 8192, 'RECOVERY_SCHEMA')
++        Ed25519PublicKey.from_public_bytes(anchor).verify(
++            base64.b64decode(envelope['signature'], validate=True), ISSUER_DOMAIN + payload)
++        trust = parse(payload)
++        fields(trust, 'version sequence family gateway authority minimum_revision issued_at expires_at')
++        require(type(trust['version']) is int and trust['version'] == 1, 'RECOVERY_SCHEMA')
++        require(type(trust['sequence']) is int and 0 < trust['sequence'] < 2**53, 'RECOVERY_FLOOR')
++        require(type(trust['minimum_revision']) is int and 0 < trust['minimum_revision'] < 2**31,
++                'RECOVERY_FLOOR')
++        require(all(type(trust[name]) is str and re.fullmatch('[0-9a-f]{32}', trust[name])
++                    for name in ('family', 'gateway')), 'RECOVERY_SCOPE')
++        require(all(type(trust[name]) is int for name in ('issued_at', 'expires_at'))
++                and 0 < trust['expires_at'] - trust['issued_at'] <= VALIDITY['authority'], 'RECOVERY_INTERVAL')
++        issuer = x509.load_pem_x509_certificate(trust['authority'].encode())
++        require(issuer.public_bytes(Encoding.PEM).decode() == trust['authority']
++                and isinstance(issuer.public_key(), Ed25519PublicKey), 'RECOVERY_ISSUER')
++        issuer.verify_directly_issued_by(issuer)
++        require(issuer.extensions.get_extension_for_class(x509.BasicConstraints).value.ca, 'RECOVERY_ISSUER')
++        usage = issuer.extensions.get_extension_for_class(x509.KeyUsage).value
++        require(usage.key_cert_sign and usage.crl_sign, 'RECOVERY_ISSUER')
++        require(0 < (issuer.not_valid_after_utc - issuer.not_valid_before_utc).total_seconds()
++                <= VALIDITY['authority'] + 5, 'RECOVERY_INTERVAL')
++        require(int(issuer.not_valid_before_utc.timestamp()) <= trust['issued_at']
++                and trust['expires_at'] <= int(issuer.not_valid_after_utc.timestamp()), 'RECOVERY_INTERVAL')
++        crl = x509.load_pem_x509_crl(value['crl'].encode())
++        leaf = x509.load_pem_x509_certificate(value['certificate'].encode())
++        require(crl.public_bytes(Encoding.PEM).decode() == value['crl']
++                and crl.issuer == issuer.subject and crl.is_signature_valid(issuer.public_key()), 'RECOVERY_CRL')
++        leaf.verify_directly_issued_by(issuer)
++        from control.friends.restricted import PROTOCOL
++        require(leaf.public_bytes(Encoding.PEM).decode() == value['certificate']
++                and isinstance(leaf.public_key(), Ed25519PublicKey)
++                and not leaf.extensions.get_extension_for_class(x509.BasicConstraints).value.ca
++                and ExtendedKeyUsageOID.SERVER_AUTH in leaf.extensions.get_extension_for_class(x509.ExtendedKeyUsage).value,
++                'RECOVERY_GATEWAY_BINDING')
++        require([entry.value for entry in leaf.subject.get_attributes_for_oid(NameOID.SERIAL_NUMBER)] == [trust['gateway']],
++                'RECOVERY_GATEWAY_BINDING')
++        attributes = [entry.value for entry in leaf.subject.get_attributes_for_oid(NameOID.ORGANIZATIONAL_UNIT_NAME)]
++        require(len(attributes) == 4 and set(attributes[:3]) == {'protocol='+PROTOCOL, 'family='+trust['family'], 'role=gateway'}
++                and re.fullmatch('revision=[1-9][0-9]*', attributes[3])
++                and int(attributes[3].split('=')[1]) >= trust['minimum_revision'], 'RECOVERY_GATEWAY_BINDING')
++        identifiers = leaf.extensions.get_extension_for_class(x509.SubjectAlternativeName).value.get_values_for_type(x509.UniformResourceIdentifier)
++        require(len(identifiers) == 1 and re.fullmatch('urn:family-connect:identity:[0-9a-f]{128}', identifiers[0]),
++                'RECOVERY_GATEWAY_BINDING')
++        identity = bytes.fromhex(identifiers[0].split(':')[-1])
++        require(digest(identity)[:32] == trust['gateway'] and identity[32:] == leaf.public_key().public_bytes_raw(),
++                'RECOVERY_GATEWAY_BINDING')
++        require(leaf.extensions.get_extension_for_class(x509.AuthorityKeyIdentifier).value.key_identifier
++                == issuer.extensions.get_extension_for_class(x509.SubjectKeyIdentifier).value.digest, 'RECOVERY_ISSUER')
++        require(0 < (leaf.not_valid_after_utc - leaf.not_valid_before_utc).total_seconds() <= VALIDITY['leaf'] + 5
++                and 0 < (crl.next_update_utc - crl.last_update_utc).total_seconds() <= VALIDITY['crl'], 'RECOVERY_INTERVAL')
++        require(issuer.not_valid_before_utc <= min(leaf.not_valid_before_utc, crl.last_update_utc)
++                and max(leaf.not_valid_after_utc, crl.next_update_utc) <= issuer.not_valid_after_utc, 'RECOVERY_INTERVAL')
++        number = crl.extensions.get_extension_for_class(x509.CRLNumber).value.crl_number
++        require(type(number) is int and 0 < number < 2**53, 'RECOVERY_FLOOR')
++        require(type(value['grants']) is list and 0 < len(value['grants']) <= 256, 'RECOVERY_SCHEMA')
++        seen = set()
++        for row in value['grants']:
++            fields(row, ' '.join(GRANT_FIELDS))
++            require(type(row['device']) is str and re.fullmatch('[0-9a-f]{32}', row['device'])
++                    and row['device'] not in seen, 'RECOVERY_SCOPE')
++            seen.add(row['device'])
++            require(row['family'] == trust['family'] and type(row['revision']) is int
++                    and trust['minimum_revision'] <= row['revision'] < 2**31
++                    and type(row['revoked']) is int and row['revoked'] in (0, 1)
++                    and type(row['expires']) is int and row['expires'] <= trust['expires_at'], 'RECOVERY_FLOOR')
++        return HistoricalPredecessor(canonical(value), trust, issuer, crl, leaf)
++    except Rejected:
++        raise
++    except Exception:
++        raise Rejected('RECOVERY_PREDECESSOR_UNTRUSTED') from None
++
++
++def floors(predecessor):
++    require(type(predecessor) is HistoricalPredecessor, 'RECOVERY_TYPE')
++    return dict(authority=predecessor.trust['sequence'], minimum_revision=predecessor.trust['minimum_revision'],
++                crl=predecessor.crl.extensions.get_extension_for_class(x509.CRLNumber).value.crl_number,
++                grants={row['device']: row['revision'] for row in predecessor.snapshot['grants']})
++
++
++def request_check(request, validator, now, *, accepted_at=None):
++    fields(request, 'schema purpose operation_id predecessor predecessor_sha256 scope floors checkpoint expected grant_scope updates successor_payload created_at expires_at')
++    require(type(request['schema']) is int and request['schema'] == 3 and request['purpose'] == PURPOSE, 'RECOVERY_PURPOSE')
++    require(type(request['operation_id']) is str and re.fullmatch('[a-z0-9-]{16,96}', request['operation_id']), 'OPERATION_ID')
++    require(all(type(request[name]) is int for name in ('created_at', 'expires_at'))
++            and 0 < request['expires_at'] - request['created_at'] <= DAY, 'RECOVERY_APPROVAL_EXPIRED')
++    observed = now if accepted_at is None else accepted_at
++    require(type(observed) is int and request['created_at'] <= observed <= now < request['expires_at'],
++            'RECOVERY_APPROVAL_EXPIRED')
++    predecessor = historical(canonical(request['predecessor']), validator.anchor)
++    require(predecessor.trust['expires_at'] <= request['created_at']
++            and predecessor.leaf.not_valid_after_utc <= utc(request['created_at'])
++            and predecessor.crl.next_update_utc <= utc(request['created_at'])
++            and all(row['revoked'] or row['expires'] <= request['created_at']
++                    for row in predecessor.snapshot['grants']), 'RECOVERY_NOT_REQUIRED')
++    require(digest(predecessor.encoded) == request['predecessor_sha256'], 'RECOVERY_PREDECESSOR_DIGEST')
++    require(request['scope'] == {name: predecessor.trust[name] for name in ('family', 'gateway')}
++            and request['floors'] == floors(predecessor), 'RECOVERY_SCOPE_OR_FLOOR')
++    fields(request['checkpoint'], 'operation_id plan_sha256 snapshot_sha256')
++    require(set(request['expected']) == {'RU', 'NL'}, 'RECOVERY_SCHEMA')
++    approved = request['grant_scope']
++    require(type(approved) is list and approved == sorted(set(approved)) and bool(approved)
++            and approved == sorted(row['device'] for row in predecessor.snapshot['grants'] if not row['revoked']),
++            'RECOVERY_GRANT_SCOPE')
++    require(request['updates'] == UPDATES, 'RECOVERY_UPDATE_SCOPE')
++    successor = request['successor_payload']
++    require(type(successor) is dict and set(successor) == set(predecessor.trust), 'RECOVERY_SCHEMA')
++    require(all(successor[name] == predecessor.trust[name] for name in ('version', 'family', 'gateway', 'minimum_revision'))
++            and successor['sequence'] == predecessor.trust['sequence'] + 1, 'RECOVERY_SCOPE_OR_FLOOR')
++    require(type(successor['issued_at']) is int and type(successor['expires_at']) is int
++            and successor['expires_at'] - successor['issued_at'] == VALIDITY['authority']
++            and successor['issued_at'] <= now < successor['expires_at']
++            and successor['expires_at'] > predecessor.trust['expires_at'], 'RECOVERY_SUCCESSOR_INVALID')
++    issuer = x509.load_pem_x509_certificate(successor['authority'].encode())
++    issuer.verify_directly_issued_by(issuer)
++    require(hmac.compare_digest(spki(issuer.public_key()), spki(predecessor.issuer.public_key()))
++            and issuer.subject == predecessor.issuer.subject and issuer.issuer == predecessor.issuer.issuer
++            and tuple(issuer.extensions) == tuple(predecessor.issuer.extensions), 'RECOVERY_ISSUER')
++    require(int(issuer.not_valid_before_utc.timestamp()) == successor['issued_at']
++            and int(issuer.not_valid_after_utc.timestamp()) == successor['expires_at'], 'RECOVERY_INTERVAL')
++    return predecessor
++
++
++def sign(request, validator, signer, now):
++    require(signer.public_key().public_bytes_raw() == validator.anchor, 'TRUST_ROOT_KEY_MISMATCH')
++    request_check(request, validator, now)
++    payload = canonical(request['successor_payload'])
++    authority = dict(payload=base64.b64encode(payload).decode(),
++                     signature=base64.b64encode(signer.sign(ISSUER_DOMAIN + payload)).decode())
++    validator.delegation_parser(authority, validator.anchor, now)
++    payload = canonical(dict(request=request, authority=authority))
++    return canonical(dict(payload=base64.b64encode(payload).decode(),
++                          signature=base64.b64encode(signer.sign(DOMAIN + payload)).decode()))
++
++
++def verify(raw, validator, operation, now, *, accepted_at=None):
++    try:
++        bundle = parse(raw)
++        fields(bundle, 'payload signature')
++        payload = base64.b64decode(bundle['payload'], validate=True)
++        try:
++            Ed25519PublicKey.from_public_bytes(validator.anchor).verify(
++                base64.b64decode(bundle['signature'], validate=True), DOMAIN + payload)
++        except Exception:
++            raise Rejected('RECOVERY_SIGNATURE_INVALID') from None
++        value = parse(payload)
++        fields(value, 'request authority')
++        request = value['request']
++        predecessor = request_check(request, validator, now, accepted_at=accepted_at)
++        require(request['operation_id'] == operation, 'RECOVERY_OPERATION_MISMATCH')
++        trust, _ = validator.delegation_parser(value['authority'], validator.anchor, now)
++        require(trust == request['successor_payload'], 'RECOVERY_SUCCESSOR_INVALID')
++        return RecoveryAuthorization(request, value['authority'], predecessor)
++    except Rejected:
++        raise
++    except Exception:
++        raise Rejected('RECOVERY_SUCCESSOR_INVALID') from None
++
++
++def transition(validator, authorization, candidate, now):
++    require(type(authorization) is RecoveryAuthorization, 'RECOVERY_TYPE')
++    old = authorization.predecessor
++    try:
++        validated = validator.validate(canonical(candidate), now)
++    except Exception:
++        raise Rejected('RECOVERY_STRICT_SUCCESSOR_INVALID') from None
++    _, trust, issuer, crl, leaf = validated
++    require(candidate['authority'] == authorization.authority, 'RECOVERY_SUCCESSOR_INVALID')
++    require(spki(old.leaf.public_key()) == spki(leaf.public_key()) and old.leaf.subject == leaf.subject
++            and tuple(old.leaf.extensions) == tuple(leaf.extensions), 'RECOVERY_GATEWAY_BINDING')
++    require(leaf.not_valid_after_utc > old.leaf.not_valid_after_utc
++            and crl.next_update_utc > old.crl.next_update_utc, 'RECOVERY_FLOOR')
++    require(crl.extensions.get_extension_for_class(x509.CRLNumber).value.crl_number == floors(old)['crl'] + 1,
++            'RECOVERY_FLOOR')
++    for entry in old.crl:
++        successor = crl.get_revoked_certificate_by_serial_number(entry.serial_number)
++        require(successor is not None and successor.revocation_date_utc == entry.revocation_date_utc
++                and tuple(successor.extensions) == tuple(entry.extensions), 'REVOCATION_SET_LOSS')
++    require(len(old.snapshot['grants']) == len(candidate['grants']), 'RECOVERY_GRANT_SCOPE')
++    for before, after in zip(old.snapshot['grants'], candidate['grants']):
++        require({key: value for key, value in before.items() if key not in ('revision', 'expires')}
++                == {key: value for key, value in after.items() if key not in ('revision', 'expires')}, 'RECOVERY_GRANT_SCOPE')
++        if before['device'] not in authorization.request['grant_scope']:
++            require(after == before, 'RECOVERY_GRANT_SCOPE')
++        else:
++            require(after['revision'] == before['revision'] + 1 and after['expires'] > before['expires'], 'RECOVERY_FLOOR')
++    return validated
+--- a/controller/grant_cutover.py
++++ b/controller/grant_cutover.py
+@@ -150 +150,34 @@
+-    def apply(self, plan, candidate_crl, issuer, now, *, readers_quiesced):
++    def recovery_plan(self, issuer, now, authorization, *, issued_at=None):
++        from expired_recovery import RecoveryAuthorization
++        require(type(authorization) is RecoveryAuthorization, 'RECOVERY_TYPE')
++        issued = now if issued_at is None else issued_at
++        require(type(issued) is int and issued <= now, 'RECOVERY_PLAN_TIME')
++        with self.connect() as database:
++            before = self.snapshot(database)
++            require(digest(canonical(before)) == authorization.request['expected']['RU']['database_sha256'],
++                    'RECOVERY_STALE_APPROVAL')
++            require(before['restricted_grants'] == authorization.predecessor.snapshot['grants'], 'RECOVERY_GRANT_SCOPE')
++            after = [dict(row) for row in before['restricted_grants']]
++            approved = authorization.request['grant_scope']
++            require(sorted(row['device'] for row in after if not row['revoked']) == approved, 'RECOVERY_GRANT_SCOPE')
++            require(all(row['expires'] <= now for row in before['restricted_certificates']),
++                    'RECOVERY_UNEXPIRED_CERTIFICATE')
++            with sqlite3.connect(':memory:') as proposal:
++                database.backup(proposal)
++                proposal.row_factory = sqlite3.Row
++                for row in after:
++                    if row['device'] not in approved:
++                        continue
++                    row['expires'] = min(issued + VALIDITY['grant'], int(issuer.not_valid_after_utc.timestamp()))
++                    row['revision'] += 1
++                    require(row['expires'] > now, 'RECOVERY_STRICT_SUCCESSOR_INVALID')
++                    proposal.execute('UPDATE restricted_grants SET revision=?,expires=? WHERE device=?',
++                                     (row['revision'], row['expires'], row['device']))
++                    try:
++                        self.grant_validator(proposal, row['device'], now)
++                    except ValueError:
++                        require(False, 'RECOVERY_ENTITLEMENT_REJECTED')
++            return dict(schema=1, model='MAINTENANCE_CUTOVER_NO_OVERLAP', before=before,
++                        after_grants=after, predecessors=[], before_sha256=digest(canonical(before)), issued_at=issued)
++
++    def apply(self, plan, candidate_crl, issuer, now, *, readers_quiesced, recovery_authorization=None):
+@@ -152 +185 @@
+-        validate_grant_plan(plan, now)
++        validate_grant_plan(plan, now if recovery_authorization is None else plan['issued_at'])
+@@ -154 +187,3 @@
+-            independently_planned = self.plan(issuer, plan['issued_at'], readers_quiesced=readers_quiesced)
++            independently_planned = (self.plan(issuer, plan['issued_at'], readers_quiesced=readers_quiesced)
++                if recovery_authorization is None else self.recovery_plan(issuer, now, recovery_authorization,
++                    issued_at=plan['issued_at']))
+--- a/controller/node.py
++++ b/controller/node.py
+@@ -15 +15 @@
+-                         'grant_cutover.py','offline_handoff.py'))
++                         'grant_cutover.py','offline_handoff.py','expired_recovery.py'))
+@@ -83,0 +84,7 @@
++    if action == 'recovery-evidence':
++        return node.recovery_evidence(payload)
++    if action == 'recovery-authority-request':
++        return node.recovery_authority_request(operation, payload)
++    if action == 'prepare-expired':
++        require(type(payload) is dict and set(payload) == {'gateway', 'bundle'}, 'RPC_SCHEMA')
++        return node.prepare(operation, payload['gateway'], expired_handoff=base64.b64decode(payload['bundle'], validate=True))
+--- a/controller/production_controller.py
++++ b/controller/production_controller.py
+@@ -18,0 +19,145 @@
++
++    def recovery_checkpoint(self):
++        marker = self.root/'transaction.json'
++        require(marker.exists() and (self.root/'plan.json').exists(), 'RECOVERY_CHECKPOINT_UNCONFIRMED')
++        record = parse(read_private(marker))
++        require(record['state'] == 'COMMITTED' and record['commit_decided'], 'OTHER_OPERATION_RECOVERY_REQUIRED')
++        plan = parse(read_private(self.root/'plan.json'))
++        plan_hash = digest(canonical(plan))
++        require(plan['operation_id'] == record['operation_id']
++                and all(value['plan_sha256'] == plan_hash for value in record['reconciliation'].values()),
++                'RECOVERY_CHECKPOINT_UNCONFIRMED')
++        return dict(operation_id=record['operation_id'], plan_sha256=plan_hash,
++                    snapshot_sha256=digest(canonical(plan['candidate'])))
++
++    def recovery_state(self, operation):
++        from expired_recovery import historical
++        checkpoint = self.recovery_checkpoint()
++        authority = self.nodes['RU'].call('public-authority', operation)
++        gateway = self.nodes['NL'].call('public-gateway', operation)
++        predecessor = historical(canonical(dict(schema=1, authority=authority['authority'], crl=authority['crl'],
++            certificate=gateway['certificate'], grants=authority['grants'])), self.validator.anchor)
++        require(gateway['authority'] == predecessor.trust['authority'] and gateway['revocations'] == authority['crl']
++                and all(gateway[name] == predecessor.trust[name] for name in ('family', 'gateway', 'minimum_revision')),
++                'RECOVERY_SCOPE')
++        from expired_recovery import floors
++        require(0 < gateway['minimum_crl'] <= floors(predecessor)['crl'], 'RECOVERY_FLOOR')
++        current = {role: node.call('recovery-evidence', operation, checkpoint)['current']
++                   for role, node in self.nodes.items()}
++        require(current['NL']['files']['gateway.json'] == gateway['profile_sha256'], 'RECOVERY_STALE_APPROVAL')
++        return predecessor, gateway, current, checkpoint
++
++    def recovery_request(self, operation, grant_scope):
++        from expired_recovery import PURPOSE, UPDATES, floors
++        require(type(operation) is str and re.fullmatch('[a-z0-9-]{16,96}', operation), 'OPERATION_ID')
++        require(type(grant_scope) is list and all(type(device) is str for device in grant_scope), 'RECOVERY_GRANT_SCOPE')
++        with self.operation.lock():
++            requests = self.root/'recovery-requests'
++            requests.mkdir(mode=0o700, exist_ok=True)
++            private_directory(requests)
++            path = requests/(operation+'.json')
++            if path.exists():
++                request = parse(read_private(path))
++                require(request['grant_scope'] == sorted(grant_scope), 'RECOVERY_REPLAY_MISMATCH')
++                return request
++            require(len(list(requests.iterdir())) < 256, 'OPERATION_HISTORY_CAPACITY')
++            predecessor, _, current, checkpoint = self.recovery_state(operation)
++            now = int(self.clock())
++            require(predecessor.trust['expires_at'] <= now, 'RECOVERY_NOT_REQUIRED')
++            request = dict(schema=3, purpose=PURPOSE, operation_id=operation, predecessor=predecessor.snapshot,
++                predecessor_sha256=digest(predecessor.encoded), scope={name:predecessor.trust[name] for name in ('family', 'gateway')},
++                floors=floors(predecessor), checkpoint=checkpoint, expected=current, grant_scope=sorted(grant_scope),
++                updates=UPDATES, successor_payload=None, created_at=now, expires_at=now+86400)
++            request = self.nodes['RU'].call('recovery-authority-request', operation, request)
++            require({role:node.call('inspect', operation) for role,node in self.nodes.items()} == current,
++                    'RECOVERY_STALE_APPROVAL')
++            atomic(path, canonical(request))
++            return request
++
++    def run_expired(self, operation, bundle, *, approval=None, resume=False):
++        from expired_recovery import verify
++        require(type(operation) is str and re.fullmatch('[a-z0-9-]{16,96}', operation), 'OPERATION_ID')
++        with self.operation.lock():
++            results = self.root/'recovery-results'
++            results.mkdir(mode=0o700, exist_ok=True)
++            private_directory(results)
++            completed = results/(operation+'.json')
++            binding = digest(bundle)
++            if completed.exists():
++                receipt = parse(read_private(completed))
++                require(receipt['bundle_sha256'] == binding, 'RECOVERY_REPLAY_MISMATCH')
++                return dict(result='COMMITTED', operation_id=operation, idempotent=True,
++                            current={role:node.call('inspect', operation) for role,node in self.nodes.items()})
++            marker = self.root/'transaction.json'
++            record = parse(read_private(marker)) if marker.exists() else None
++            if record and record.get('mode') == 'expired' and record['operation_id'] == operation:
++                require(record['bundle_sha256'] == binding, 'RECOVERY_REPLAY_MISMATCH')
++                if record['state'] == 'COMMITTED':
++                    atomic(completed, canonical(dict(bundle_sha256=binding, operation_id=operation)))
++                    return dict(result='COMMITTED', operation_id=operation, idempotent=True)
++                require(resume, 'RECOVERY_EXPLICIT_RESUME_REQUIRED')
++            else:
++                require(not resume, 'RECOVERY_OPERATION_MISMATCH')
++                require(record is not None and record['state'] == 'COMMITTED', 'OTHER_OPERATION_RECOVERY_REQUIRED')
++                authorization = verify(bundle, self.validator, operation, int(self.clock()))
++                request = authorization.request
++                require(read_private(self.root/'recovery-requests'/(operation+'.json')) == canonical(request),
++                        'RECOVERY_STALE_APPROVAL')
++                predecessor, gateway, current, checkpoint = self.recovery_state(operation)
++                require(predecessor.encoded == authorization.predecessor.encoded and current == request['expected']
++                        and checkpoint == request['checkpoint'], 'RECOVERY_STALE_APPROVAL')
++                gate = maintenance_gate(operation, current, int(self.clock()), approval=approval)
++                require(gate['result'] == 'RENEWAL_READY', 'MAINTENANCE_APPROVAL_REQUIRED')
++                record = dict(schema=1, mode='expired', operation_id=operation, state='ACQUIRING', cursor=0,
++                    first_cause=None, before_sha256=digest(canonical(current)), before=current,
++                    previous=predecessor.snapshot, gateway=gateway, bundle=base64.b64encode(bundle).decode(),
++                    bundle_sha256=binding, commit_decided=False, gate=gate)
++                self.save(record, 'ACQUIRING')
++            try:
++                result = self.expired_rollforward(record)
++                if result['result'] == 'COMMITTED':
++                    atomic(completed, canonical(dict(bundle_sha256=binding, operation_id=operation)))
++                return result
++            except Exception as error:
++                record['first_cause'] = record['first_cause'] or (str(error) if isinstance(error, Rejected) else 'IO_OR_TRANSPORT_FAILURE')
++                if record['state'] != 'CLEANING':
++                    for node in self.nodes.values():
++                        try:
++                            node.call('fence', operation)
++                        except Exception:
++                            pass
++                    self.save(record, 'RECOVERY_REQUIRED')
++                self.receipts(record)
++                return dict(result='PUBLICATION_INCOMPLETE', first_cause=record['first_cause'], automatic_restart=False)
++
++    def expired_rollforward(self, record):
++        operation = record['operation_id']
++        if record['state'] == 'CLEANING':
++            return self.cleanup(record)
++        steps = [('RU','acquire'), ('NL','acquire'), ('RU','quiesce'), ('NL','quiesce'),
++                 ('RU','prepare-expired'), ('RU','stage'), ('NL','stage'), ('RU','promote'), ('NL','promote')]
++        while record['cursor'] < len(steps):
++            role, action = steps[record['cursor']]
++            payload = None
++            if action == 'acquire':
++                payload = record['before'][role]
++            elif action == 'prepare-expired':
++                payload = dict(gateway=record['gateway'], bundle=record['bundle'])
++            elif action == 'stage':
++                payload = parse(read_private(self.root/'plan.json'))
++            response = self.nodes[role].call(action, operation, payload)
++            if action == 'prepare-expired':
++                require(response['operation_id'] == operation and response['previous'] == record['previous'], 'PLAN_BINDING')
++                atomic(self.root/'plan.json', canonical(response))
++            if action == 'stage':
++                require(response['plan_sha256'] == digest(canonical(payload)), 'STAGE_RECEIPT_MISMATCH')
++            record['cursor'] += 1
++            self.save(record, 'RECOVERY_STEP_'+str(record['cursor']))
++        if not record['commit_decided']:
++            receipts = {role:node.call('readback', operation) for role,node in self.nodes.items()}
++            require(receipts['RU'] == receipts['NL'] and receipts['RU']['plan_sha256']
++                    == digest(read_private(self.root/'plan.json')), 'RU_NL_MISMATCH')
++            record['reconciliation'] = receipts
++            record['commit_decided'] = True
++            self.save(record, 'COMMIT_DECIDED')
++        return self.finish(record)
+@@ -52,0 +198 @@
++                require(previous_record.get('mode') != 'expired', 'OPERATOR_RECOVERY_REQUIRED')
+@@ -151,0 +298 @@
++        require(record.get('mode') != 'expired', 'OPERATOR_RECOVERY_REQUIRED')
+--- a/controller/production_node.py
++++ b/controller/production_node.py
+@@ -111,0 +112,84 @@
++    def recovery_evidence(self, checkpoint):
++        try:
++            return self._recovery_evidence(checkpoint)
++        except Rejected:
++            raise
++        except Exception:
++            raise Rejected('RECOVERY_CHECKPOINT_UNCONFIRMED') from None
++
++    def _recovery_evidence(self, checkpoint, owned_operation=None):
++        from expired_recovery import fields
++        fields(checkpoint, 'operation_id plan_sha256 snapshot_sha256')
++        import re
++        require(re.fullmatch('[a-z0-9-]{16,96}', checkpoint['operation_id']) is not None, 'OPERATION_ID')
++        if (self.state/'owner.json').exists():
++            require(owned_operation is not None and self.owner(owned_operation)['state'] == 'QUIESCED',
++                    'OTHER_OPERATION_RECOVERY_REQUIRED')
++        ledger = parse(read_private(self.state/'completed.json'))
++        require(checkpoint['operation_id'] in ledger, 'RECOVERY_CHECKPOINT_UNCONFIRMED')
++        location = self.state/'archive'/checkpoint['operation_id']
++        manifest = parse(read_private(location/'archive-manifest.json'))
++        require(digest(canonical(manifest)) == ledger[checkpoint['operation_id']]['manifest_sha256'],
++                'RECOVERY_CHECKPOINT_UNCONFIRMED')
++        saved = {}
++        for name in ('plan.json', 'files.json', 'reconciliation.json'):
++            raw = read_private(location/name)
++            require(digest(raw) == manifest.get(name), 'RECOVERY_CHECKPOINT_UNCONFIRMED')
++            saved[name] = parse(raw)
++        plan = saved['plan.json']
++        require(digest(canonical(plan)) == checkpoint['plan_sha256']
++                and digest(canonical(plan['candidate'])) == checkpoint['snapshot_sha256']
++                and all(item['plan_sha256'] == checkpoint['plan_sha256']
++                        for item in saved['reconciliation.json'].values()), 'RECOVERY_CHECKPOINT_UNCONFIRMED')
++        for name in self.names():
++            expected = saved['files.json'].get(name, {}).get('after',
++                plan['ru_expected']['files'].get(name) if self.role == 'RU' else plan['nl_profile_sha256'])
++            require(expected is not None and digest(self.read(name)[0]) == expected,
++                    'RECOVERY_CHECKPOINT_UNCONFIRMED')
++        if self.role == 'RU':
++            current = self.database.snapshot()
++            old = {row['device']: row for row in plan['candidate']['grants']}
++            devices = {row['device']: row for row in plan['grant_plan']['before']['devices']}
++            present = {row['device']: row for row in current['devices']}
++            for row in current['restricted_grants']:
++                previous = old.get(row['device'])
++                require(previous is not None and row['family'] == previous['family']
++                        and row['revision'] >= previous['revision'] and row['revoked'] >= previous['revoked'],
++                        'RECOVERY_FLOOR')
++                require(row['device'] in devices and row['device'] in present
++                        and present[row['device']]['public'] == devices[row['device']]['public'], 'RECOVERY_DEVICE_BINDING')
++            crl = x509.load_pem_x509_crl(self.read('revocations.pem')[0])
++            require(current['restricted_crl_sequence'][0]['sequence']
++                    == crl.extensions.get_extension_for_class(x509.CRLNumber).value.crl_number, 'RECOVERY_FLOOR')
++        return dict(checkpoint=checkpoint, current=self.inspect())
++
++    def recovery_authority_request(self, operation_id, request):
++        from expired_recovery import historical, request_check
++        require(self.role == 'RU', 'NODE_ROLE')
++        with self.operation.lock():
++            require(operation_id == request['operation_id'], 'RECOVERY_OPERATION_MISMATCH')
++            evidence = self.recovery_evidence(request['checkpoint'])
++            require(evidence['current'] == request['expected']['RU'], 'RECOVERY_STALE_APPROVAL')
++            old = historical(canonical(request['predecessor']), self.validator.anchor)
++            import json
++            require(old.snapshot['authority'] == json.loads(self.read('issuer.json')[0])
++                    and old.snapshot['crl'].encode() == self.read('revocations.pem')[0]
++                    and old.snapshot['grants'] == self.database.snapshot()['restricted_grants'], 'RECOVERY_STALE_APPROVAL')
++            signer = load_pem_private_key(self.read('issuer.key')[0], None)
++            require(spki(signer.public_key()) == spki(old.issuer.public_key()), 'ISSUER_SIGNING_KEY_MISMATCH')
++            now = int(self.clock())
++            start = now - 5
++            builder = (x509.CertificateBuilder().subject_name(old.issuer.subject).issuer_name(old.issuer.issuer)
++                .public_key(old.issuer.public_key()).serial_number(x509.random_serial_number())
++                .not_valid_before(utc(start)).not_valid_after(utc(start + VALIDITY['authority'])))
++            for extension in old.issuer.extensions:
++                builder = builder.add_extension(extension.value, extension.critical)
++            issuer = builder.sign(signer, None)
++            request = dict(request, successor_payload=dict(old.trust, sequence=old.trust['sequence'] + 1,
++                issued_at=start, expires_at=start + VALIDITY['authority'], authority=issuer.public_bytes(Encoding.PEM).decode()))
++            request_check(request, self.validator, now)
++            from expired_recovery import RecoveryAuthorization
++            authorization = RecoveryAuthorization(request, {}, old)
++            self.database.recovery_plan(issuer, now, authorization)
++            return request
++
+@@ -167 +251 @@
+-    def prepare(self, operation_id, gateway, *, authority_handoff=None):
++    def prepare(self, operation_id, gateway, *, authority_handoff=None, expired_handoff=None):
+@@ -187 +271,11 @@
+-            _,trust,issuer,_,leaf = self.validator.validate(previous,now,expired_leaf_predecessor=True)
++            authorization = None
++            if expired_handoff is None:
++                _,trust,issuer,_,leaf = self.validator.validate(previous,now,expired_leaf_predecessor=True)
++            else:
++                from expired_recovery import verify
++                require(authority_handoff is None, 'RECOVERY_PURPOSE')
++                authorization = verify(expired_handoff, self.validator, operation_id, now)
++                require(authorization.predecessor.encoded == previous
++                        and authorization.request['expected']['RU'] == owner['expected_state'], 'RECOVERY_STALE_APPROVAL')
++                trust,issuer,leaf = (authorization.predecessor.trust, authorization.predecessor.issuer,
++                                     authorization.predecessor.leaf)
+@@ -194,0 +289,4 @@
++            if authorization is not None:
++                self._recovery_evidence(authorization.request['checkpoint'], operation_id)
++                envelope = authorization.authority
++                trust,issuer = self.validator.delegation_parser(envelope,self.validator.anchor,now)
+@@ -196 +294,2 @@
+-            grant_plan = self.database.plan(issuer,now,readers_quiesced=self.barrier.stopped)
++            grant_plan = (self.database.plan(issuer,now,readers_quiesced=self.barrier.stopped)
++                if authorization is None else self.database.recovery_plan(issuer, now, authorization))
+@@ -214,0 +314,2 @@
++            if authorization is not None:
++                plan['expired_recovery'] = dict(bundle=base64.b64encode(expired_handoff).decode(), accepted_at=now)
+@@ -224 +325,2 @@
+-        require(set(plan) == {'schema','operation_id','previous','candidate','grant_plan','ru_expected','nl_profile_sha256'}
++        extra = {'expired_recovery'} if 'expired_recovery' in plan else set()
++        require(set(plan) == {'schema','operation_id','previous','candidate','grant_plan','ru_expected','nl_profile_sha256'} | extra
+@@ -229 +331,7 @@
+-        self.validator.transition(previous,candidate,validation_time,revoke=True,expired_leaf_predecessor=True)
++        if extra:
++            from expired_recovery import transition
++            authorization = self.recovery_authorization(plan, durable=recovery)
++            require(previous == authorization.predecessor.encoded, 'RECOVERY_PREDECESSOR_DIGEST')
++            transition(self.validator, authorization, plan['candidate'], now)
++        else:
++            self.validator.transition(previous,candidate,validation_time,revoke=True,expired_leaf_predecessor=True)
+@@ -238,0 +347,7 @@
++    def recovery_authorization(self, plan, *, durable):
++        from expired_recovery import fields, verify
++        evidence = plan['expired_recovery']
++        fields(evidence, 'bundle accepted_at')
++        return verify(base64.b64decode(evidence['bundle'], validate=True), self.validator, plan['operation_id'],
++                      int(self.clock()), accepted_at=evidence['accepted_at'] if durable else None)
++
+@@ -244,0 +360,3 @@
++            if 'expired_recovery' in plan:
++                authorization = self.recovery_authorization(plan, durable=False)
++                require(owner['expected_state'] == authorization.request['expected'][self.role], 'RECOVERY_STALE_APPROVAL')
+@@ -314,0 +433,11 @@
++            if 'expired_recovery' in plan:
++                current = self.inspect()
++                require(current.get('policy') == owner['expected_state'].get('policy'), 'RECOVERY_STALE_APPROVAL')
++                require(all(current['files'][name] in (item['before'], item['after']) for name,item in metadata.items()),
++                        'RECOVERY_STALE_APPROVAL')
++                if self.role == 'RU':
++                    expected = dict(plan['grant_plan']['before'], restricted_grants=plan['grant_plan']['after_grants'])
++                    crl = x509.load_pem_x509_crl(plan['candidate']['crl'].encode())
++                    expected['restricted_crl_sequence'] = [dict(singleton=1, sequence=crl.extensions.get_extension_for_class(x509.CRLNumber).value.crl_number)]
++                    require(current['database_sha256'] in (plan['grant_plan']['before_sha256'], digest(canonical(expected))),
++                            'RECOVERY_STALE_APPROVAL')
+@@ -325 +454,3 @@
+-                                    readers_quiesced=self.barrier.stopped)
++                                    readers_quiesced=self.barrier.stopped,
++                                    recovery_authorization=self.recovery_authorization(plan, durable=True)
++                                    if 'expired_recovery' in plan else None)
+@@ -351,0 +483,4 @@
++            prepared = self.state/'prepared-plan.json'
++            staged = self.state/'plan.json'
++            require(not any(path.exists() and 'expired_recovery' in parse(read_private(path))
++                            for path in (prepared, staged)), 'RECOVERY_ROLLFORWARD_ONLY')
+--- a/controller/production_transport.py
++++ b/controller/production_transport.py
+@@ -20 +20 @@
+-ACTIONS = frozenset(('inspect','public-gateway','public-authority','public-directory','publish-directory','authority-request','prepare','acquire','quiesce','stopped','stage','promote','readback','restore',
++ACTIONS = frozenset(('recovery-evidence','recovery-authority-request','prepare-expired','inspect','public-gateway','public-authority','public-directory','publish-directory','authority-request','prepare','acquire','quiesce','stopped','stage','promote','readback','restore',
+--- /dev/null
++++ b/controller/recovery_vectors.py
+@@ -0,0 +1,39 @@
++import argparse
++import os
++from pathlib import Path
++import time
++
++from cryptography.hazmat.primitives.serialization import Encoding, PrivateFormat, NoEncryption
++
++from credential_renewal import atomic, canonical, digest, parse
++from test_expired_recovery import RecoveryFixture
++
++
++def main():
++    os.umask(0o077)
++    parser = argparse.ArgumentParser()
++    parser.add_argument('directory', type=Path)
++    args = parser.parse_args()
++    args.directory.mkdir(mode=0o700)
++    fixture = RecoveryFixture(args.directory, now=int(time.time()))
++    before = parse((fixture.nodes.nodes['NL'].live/'gateway.json').read_bytes())
++    assert fixture.apply(fixture.bundle())['result'] == 'COMMITTED'
++    snapshot = fixture.strict()
++    issuer = fixture.validator.validate(canonical(snapshot), fixture.nodes.now)[2]
++    after = parse((fixture.nodes.nodes['NL'].live/'gateway.json').read_bytes())
++    clients = []
++    with fixture.nodes.fixture.access.db() as database:
++        for device in fixture.nodes.fixture.devices:
++            row = fixture.nodes.fixture.service._grant(database, device, fixture.nodes.now)
++            certificate = fixture.nodes.fixture.service._issue(row, issuer, fixture.nodes.now,
++                                                               min(row['expires']-5, fixture.nodes.now+3600))
++            clients.append(dict(after, certificate=certificate.public_bytes(Encoding.PEM).decode(),
++                private_key=fixture.nodes.fixture.keys[device].private_bytes(Encoding.PEM, PrivateFormat.PKCS8, NoEncryption()).decode()))
++    vectors = canonical(dict(server_before=before, server_after=after, clients_after=clients))
++    atomic(args.directory/'vectors.json', vectors)
++    print(canonical(dict(result='GENERATED_DISPOSABLE_RECOVERY_ONLY', vector_sha256=digest(vectors),
++                         production_inputs=0)).decode())
++
++
++if __name__ == '__main__':
++    main()
+--- a/controller/runtime_controller.py
++++ b/controller/runtime_controller.py
+@@ -31 +31 @@
+-    parser.add_argument('--mode', choices=('evaluate','scheduled','operator','recover'), default='evaluate')
++    parser.add_argument('--mode', choices=('evaluate','scheduled','operator','recover','expired-request','expired-apply','expired-resume'), default='evaluate')
+@@ -34,0 +35,2 @@
++    parser.add_argument('--grant-scope', type=Path)
++    parser.add_argument('--request-output', type=Path)
+@@ -36,0 +39,2 @@
++        require(args.mode.startswith('expired-') or (args.grant_scope is None and args.request_output is None),
++                'RECOVERY_EXPLICIT_MODE_REQUIRED')
+@@ -47 +51,20 @@
+-        if args.mode == 'evaluate':
++        if args.mode.startswith('expired-'):
++            require(args.operation is not None, 'OPERATION_ID')
++            if args.mode == 'expired-request':
++                require(args.grant_scope is not None and args.request_output is not None
++                        and args.authority_bundle is None, 'RECOVERY_ARGUMENTS')
++                request = controller.recovery_request(operation, parse(read_private(args.grant_scope)))
++                from credential_renewal import atomic
++                require(not args.request_output.exists()
++                        or read_private(args.request_output) == canonical(request), 'RECOVERY_REPLAY_MISMATCH')
++                atomic(args.request_output, canonical(request))
++                result = dict(result='RECOVERY_REQUESTED', operation_id=operation, request_sha256=digest(canonical(request)))
++            else:
++                require(args.approve_maintenance_outage and args.authority_bundle is not None
++                        and args.grant_scope is None and args.request_output is None, 'MAINTENANCE_APPROVAL_REQUIRED')
++                bundle = read_private(args.authority_bundle)
++                current = {role:node.call('inspect',operation) for role,node in nodes.items()}
++                now = int(time.time())
++                approval = MaintenanceAuthorization(operation,digest(canonical(current)),now,now+900)
++                result = controller.run_expired(operation,bundle,approval=approval,resume=args.mode == 'expired-resume')
++        elif args.mode == 'evaluate':
+@@ -71 +94 @@
+-        if result['result'] not in ('NOOP','COMMITTED'):
++        if result['result'] not in ('NOOP','COMMITTED','RECOVERY_REQUESTED'):
+--- a/controller/sign_authority_offline.py
++++ b/controller/sign_authority_offline.py
+@@ -46,0 +47 @@
++    parser.add_argument('--expired-recovery', action='store_true')
+@@ -56 +57,12 @@
+-        output = sign(request,anchor,key_bytes,Validator(anchor,delegation),int(time.time()))
++        if args.expired_recovery:
++            from expired_recovery import sign as recovery_sign
++            if len(key_bytes) == 32:
++                signer = Ed25519PrivateKey.from_private_bytes(key_bytes)
++            elif key_bytes.startswith(b'-----BEGIN'):
++                signer = load_pem_private_key(key_bytes,None)
++            else:
++                signer = Ed25519PrivateKey.from_private_bytes(base64.b64decode(key_bytes.strip(),validate=True))
++            require(isinstance(signer,Ed25519PrivateKey), 'TRUST_ROOT_KEY_MISMATCH')
++            output = recovery_sign(request,Validator(anchor,delegation),signer,int(time.time()))
++        else:
++            output = sign(request,anchor,key_bytes,Validator(anchor,delegation),int(time.time()))
+@@ -60,2 +72,3 @@
+-    except Exception:
+-        print(canonical(dict(result='OFFLINE_SIGNING_REJECTED')).decode())
++    except Exception as error:
++        from credential_renewal import Rejected
++        print(canonical(dict(result='OFFLINE_SIGNING_REJECTED', cause=str(error) if isinstance(error,Rejected) else 'RECOVERY_SIGNING_INVALID')).decode())
+--- /dev/null
++++ b/controller/test_expired_recovery.py
+@@ -0,0 +1,444 @@
++import base64
++import copy
++import json
++import multiprocessing
++import os
++from pathlib import Path
++import subprocess
++import sys
++import time
++
++import pytest
++from cryptography.hazmat.primitives.serialization import Encoding
++
++from credential_renewal import DAY, Rejected, atomic, canonical, digest, parse, read_private
++from expired_recovery import DOMAIN, historical, sign, verify
++from maintenance_policy import MaintenanceAuthorization
++from production_controller import ProductionController
++from production_transport import UNITS
++from test_production_controller import ControllerFixture
++from test_production_adapter import NodesFixture
++from test_production_controller import LocalRpc
++
++
++class RecoveryFixture(ControllerFixture):
++    operation = 'expired-recovery-fixture-0002'
++
++    def __init__(self, root, now=None):
++        if now is None:
++            super().__init__(root)
++        else:
++            self.nodes = NodesFixture(root, now=now-2*DAY)
++            self.root = root/'coordinator'
++            self.root.mkdir(mode=0o700)
++            self.rpc = {role:LocalRpc(node) for role,node in self.nodes.nodes.items()}
++            self.controller = ProductionController(self.root, self.rpc, self.nodes.fixture.fixture.validator,
++                                                   clock=lambda:self.nodes.now)
++            self.approval = MaintenanceAuthorization(self.nodes.operation, digest(canonical(self.actual())),
++                self.nodes.now, self.nodes.now+900)
++        assert self.run()['result'] == 'COMMITTED'
++        self.nodes.now += 2 * DAY
++        self.validator = self.nodes.fixture.fixture.validator
++        self.signer = self.nodes.fixture.fixture.root_key
++        from control.friends.restricted import iso
++        for node in self.nodes.nodes.values():
++            path = node.state.parent/'next-directory.json'
++            directory = parse(read_private(path))
++            directory.update(issued_at=iso(self.nodes.now - 1), expires_at=iso(self.nodes.now + 3599))
++            atomic(path, canonical(directory))
++
++    def request(self, scope=None):
++        return self.controller.recovery_request(self.operation,
++            self.nodes.fixture.devices if scope is None else scope)
++
++    def bundle(self, request=None):
++        return sign(self.request() if request is None else request, self.validator, self.signer, self.nodes.now)
++
++    def apply(self, bundle, resume=False):
++        approval = MaintenanceAuthorization(self.operation, digest(canonical(self.actual())), self.nodes.now,
++                                            self.nodes.now + 900)
++        return self.controller.run_expired(self.operation, bundle, approval=approval, resume=resume)
++
++    def strict(self):
++        snapshot, _, _, _ = self.controller.read('strict-post-recovery-0003')
++        self.validator.validate(canonical(snapshot), self.nodes.now)
++        return snapshot
++
++    def closed(self):
++        return all(node.barrier.stopped() for node in self.nodes.nodes.values())
++
++    def restart_controller(self):
++        self.controller = ProductionController(self.root, self.rpc, self.validator, clock=lambda:self.nodes.now)
++
++
++@pytest.fixture
++def recovery(tmp_path):
++    return RecoveryFixture(tmp_path)
++
++
++def test_expired_full_chain_and_idempotence(recovery):
++    before = recovery.actual()
++    request = recovery.request()
++    assert recovery.actual() == before
++    bundle = recovery.bundle(request)
++    assert recovery.apply(bundle)['result'] == 'COMMITTED'
++    successor = recovery.strict()
++    assert successor['authority'] != request['predecessor']['authority']
++    after = recovery.actual()
++    assert recovery.apply(bundle)['idempotent'] is True
++    assert recovery.actual() == after
++    assert recovery.controller.run('scheduled-after-recovery-0003', scheduled=True)['result'] == 'NOOP'
++    with pytest.raises(Rejected, match='RECOVERY_REPLAY_MISMATCH'):
++        recovery.apply(bundle + b' ')
++
++
++def test_expired_normal_paths_remain_closed(recovery):
++    before = recovery.actual()
++    for action in (lambda: recovery.nodes.nodes['RU'].authority_request(recovery.operation),
++                   lambda: recovery.controller.run(recovery.operation),
++                   lambda: recovery.controller.run(recovery.operation, scheduled=True)):
++        with pytest.raises(Exception):
++            action()
++        assert recovery.actual() == before
++
++
++@pytest.mark.parametrize('field', ['signature', 'anchor', 'scope', 'key', 'schema', 'interval'])
++def test_untrusted_historical_predecessor(recovery, field):
++    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
++    request = recovery.request()
++    predecessor = copy.deepcopy(request['predecessor'])
++    anchor = recovery.validator.anchor
++    if field == 'signature':
++        predecessor['authority']['signature'] = base64.b64encode(bytes(64)).decode()
++    elif field == 'anchor':
++        anchor = Ed25519PrivateKey.generate().public_key().public_bytes_raw()
++    elif field == 'scope':
++        predecessor['grants'][0]['family'] = 'b' * 32
++    elif field == 'key':
++        predecessor['certificate'] = recovery.nodes.fixture.old_certificates[recovery.nodes.fixture.devices[0]].public_bytes(Encoding.PEM).decode()
++    elif field == 'schema':
++        predecessor['unexpected'] = 1
++    else:
++        trust = parse(base64.b64decode(predecessor['authority']['payload']))
++        trust['expires_at'] = trust['issued_at'] - 1
++        payload = canonical(trust)
++        predecessor['authority'] = dict(payload=base64.b64encode(payload).decode(), signature=base64.b64encode(
++            recovery.signer.sign(b'family-connect/restricted-issuer/v1\0' + payload)).decode())
++    before = recovery.actual()
++    with pytest.raises(Rejected):
++        historical(canonical(predecessor), anchor)
++    assert recovery.actual() == before
++
++
++@pytest.mark.parametrize('field', ['digest', 'scope', 'floor', 'successor', 'updates', 'expired', 'extra'])
++def test_offline_verifier_rejects_request_mutation(recovery, field):
++    request = copy.deepcopy(recovery.request())
++    if field == 'digest':
++        request['predecessor_sha256'] = '0' * 64
++    elif field == 'scope':
++        request['scope']['family'] = 'b' * 32
++    elif field == 'floor':
++        request['floors']['crl'] -= 1
++    elif field == 'successor':
++        request['successor_payload']['sequence'] -= 1
++    elif field == 'updates':
++        request['updates'].append('trust_anchor')
++    elif field == 'expired':
++        request['expires_at'] = recovery.nodes.now
++    else:
++        request['extra'] = True
++    before = recovery.actual()
++    with pytest.raises(Rejected):
++        recovery.bundle(request)
++    assert recovery.actual() == before
++
++
++@pytest.mark.parametrize('field', ['signature', 'operation', 'successor', 'expired'])
++def test_apply_rejects_bad_offline_approval(recovery, field):
++    bundle = recovery.bundle()
++    if field == 'expired':
++        recovery.nodes.now += DAY
++    else:
++        envelope = parse(bundle)
++        if field == 'signature':
++            envelope['signature'] = base64.b64encode(bytes(64)).decode()
++        else:
++            payload = parse(base64.b64decode(envelope['payload']))
++            if field == 'operation':
++                payload['request']['operation_id'] = 'wrong-recovery-operation-0004'
++            else:
++                payload['authority'] = payload['request']['predecessor']['authority']
++            raw = canonical(payload)
++            envelope = dict(payload=base64.b64encode(raw).decode(),
++                signature=base64.b64encode(recovery.signer.sign(DOMAIN + raw)).decode())
++        bundle = canonical(envelope)
++    before = recovery.actual()
++    with pytest.raises(Rejected):
++        recovery.apply(bundle)
++    assert recovery.actual() == before
++    assert all(not (node.state/'owner.json').exists() for node in recovery.nodes.nodes.values())
++
++
++@pytest.mark.parametrize('change', ['device', 'invite', 'entitlement', 'floor', 'device_key', 'checkpoint'])
++def test_authoritative_state_and_checkpoint_rejection(recovery, change):
++    device = recovery.nodes.fixture.devices[0]
++    with recovery.nodes.fixture.access.db() as database:
++        if change in ('device', 'invite'):
++            database.execute('UPDATE '+('devices' if change == 'device' else 'invites')+' SET revoked=1 WHERE device=?', (device,))
++        elif change == 'floor':
++            database.execute('UPDATE restricted_grants SET revision=0 WHERE device=?', (device,))
++        elif change == 'device_key':
++            database.execute('UPDATE devices SET public=? WHERE device=?', (base64.b64encode(bytes(64)).decode(), device))
++    if change == 'entitlement':
++        recovery.nodes.fixture.service.eligible_devices = set()
++    if change == 'checkpoint':
++        node = recovery.nodes.nodes['RU']
++        atomic(node.state/'completed.json', canonical({}))
++    before = recovery.actual()
++    with pytest.raises(Rejected):
++        recovery.request()
++    assert recovery.actual() == before
++
++
++@pytest.mark.parametrize('change', ['revoked', 'deleted'])
++def test_removed_grants_are_not_restored(recovery, change):
++    device = recovery.nodes.fixture.devices[0]
++    with recovery.nodes.fixture.access.db() as database:
++        if change == 'revoked':
++            database.execute('UPDATE restricted_grants SET revoked=1 WHERE device=?', (device,))
++        else:
++            database.execute('DELETE FROM restricted_grants WHERE device=?', (device,))
++    with pytest.raises(Rejected, match='RECOVERY_GRANT_SCOPE'):
++        recovery.request()
++    scope = recovery.nodes.fixture.devices[1:]
++    request = recovery.request(scope)
++    assert recovery.apply(recovery.bundle(request))['result'] == 'COMMITTED'
++    rows = recovery.strict()['grants']
++    assert all(row['device'] != device or row['revoked'] == 1 for row in rows)
++
++
++@pytest.mark.parametrize('when', ['before_sign', 'after_sign', 'after_acquire'])
++def test_stale_authorization_cas(recovery, when):
++    request = recovery.request()
++    def revoke():
++        with recovery.nodes.fixture.access.db() as database:
++            database.execute('UPDATE invites SET revoked=1 WHERE device=?', (recovery.nodes.fixture.devices[0],))
++    if when == 'before_sign':
++        revoke()
++    bundle = recovery.bundle(request)
++    if when == 'after_sign':
++        revoke()
++    if when == 'after_acquire':
++        def fault(stage):
++            if stage == 'RECOVERY_STEP_2':
++                revoke()
++        recovery.controller.fault = fault
++        result = recovery.apply(bundle)
++        assert result['result'] == 'PUBLICATION_INCOMPLETE'
++        assert result['first_cause'] == 'STALE_NODE_STATE'
++        assert recovery.closed()
++    else:
++        before = recovery.actual()
++        with pytest.raises(Rejected, match='RECOVERY_STALE_APPROVAL'):
++            recovery.apply(bundle)
++        assert recovery.actual() == before
++
++
++def test_short_locks_and_competing_owners(recovery):
++    bundle = recovery.bundle()
++    with recovery.controller.operation.lock():
++        with pytest.raises(Rejected, match='OPERATION_BUSY'):
++            recovery.apply(bundle)
++    node = recovery.nodes.nodes['RU']
++    node.acquire('competing-operation-owner-0004', node.inspect())
++    with pytest.raises(Rejected, match='OTHER_OPERATION_RECOVERY_REQUIRED'):
++        recovery.apply(bundle)
++    assert node.owner('competing-operation-owner-0004')['state'] == 'ACQUIRED'
++
++
++CRASH_STAGES = ['ACQUIRING'] + ['RECOVERY_STEP_'+str(index) for index in range(1, 10)] + [
++    'COMMIT_DECIDED', 'DECISION_REPLICATED', 'NL_RESUMED', 'RU_RESUMED', 'CLEANING', 'COMMITTED']
++
++
++@pytest.mark.parametrize('stage', CRASH_STAGES)
++def test_controller_process_crash_forward_only(recovery, stage):
++    bundle = recovery.bundle()
++    def child():
++        recovery.controller.fault = lambda current: os._exit(73) if current == stage else None
++        recovery.apply(bundle)
++        os._exit(99)
++    process = multiprocessing.get_context('fork').Process(target=child)
++    process.start()
++    process.join(30)
++    assert process.exitcode == 73
++    record = parse(read_private(recovery.root/'transaction.json'))
++    if not record['commit_decided'] and record['cursor'] >= 4:
++        assert recovery.closed()
++    before = recovery.actual()
++    if record['state'] != 'COMMITTED':
++        with pytest.raises(Rejected, match='OPERATOR_RECOVERY_REQUIRED'):
++            recovery.controller.run('scheduled-competing-0004', scheduled=True)
++        assert recovery.actual() == before
++    recovery.restart_controller()
++    assert recovery.apply(bundle, resume=True)['result'] == 'COMMITTED'
++    recovery.strict()
++    for node in recovery.nodes.nodes.values():
++        assert not (node.state/'owner.json').exists()
++    counts = json.loads((recovery.nodes.nodes['NL'].state.parent/'counts.json').read_bytes())
++    assert counts['start '+UNITS['NL'][0]] == 2
++
++
++@pytest.mark.parametrize('role,stage', [('RU', 'stage-issuer.json'), ('RU', 'stage-revocations.pem'),
++    ('NL', 'stage-gateway.json'), ('RU', 'after-rename-issuer.json'), ('RU', 'after-rename-revocations.pem'),
++    ('RU', 'after-sqlite-commit'), ('NL', 'after-rename-gateway.json')])
++def test_partial_node_writes_resume(recovery, role, stage):
++    bundle = recovery.bundle()
++    node = recovery.nodes.nodes[role]
++    def fault(current):
++        if current == stage:
++            node.fault = lambda value: None
++            raise OSError('disposable fault')
++    node.fault = fault
++    result = recovery.apply(bundle)
++    assert result['result'] == 'PUBLICATION_INCOMPLETE'
++    assert result['first_cause'] == 'IO_OR_TRANSPORT_FAILURE'
++    assert recovery.closed()
++    sequence = recovery.nodes.fixture.database.snapshot()['restricted_crl_sequence'][0]['sequence']
++    with pytest.raises(Rejected, match='RECOVERY_ROLLFORWARD_ONLY'):
++        recovery.nodes.nodes['RU'].rollback(recovery.operation)
++    recovery.restart_controller()
++    result = recovery.apply(bundle, resume=True)
++    assert result['result'] == 'COMMITTED' and result['first_cause'] == 'IO_OR_TRANSPORT_FAILURE'
++    assert recovery.nodes.fixture.database.snapshot()['restricted_crl_sequence'][0]['sequence'] >= sequence
++    recovery.strict()
++
++
++@pytest.mark.parametrize('role,action', [('RU','commit-decision'), ('NL','commit-decision'),
++    ('NL','resume'), ('RU','publish-directory'), ('RU','resume'), ('RU','cleanup'), ('NL','cleanup')])
++def test_lost_response_after_publication_or_cleanup(recovery, role, action):
++    bundle = recovery.bundle()
++    def child():
++        rpc = recovery.rpc[role]
++        original = rpc.call
++        def call(actual_action, operation, payload=None):
++            result = original(actual_action, operation, payload)
++            if actual_action == action:
++                os._exit(74)
++            return result
++        rpc.call = call
++        recovery.apply(bundle)
++        os._exit(99)
++    process = multiprocessing.get_context('fork').Process(target=child)
++    process.start()
++    process.join(30)
++    assert process.exitcode == 74
++    recovery.restart_controller()
++    assert recovery.apply(bundle, resume=True)['result'] == 'COMMITTED'
++    recovery.strict()
++
++
++def test_expired_successor_during_partial_commit_stays_closed(recovery):
++    bundle = recovery.bundle()
++    recovery.rpc['NL'].fail = 'promote'
++    assert recovery.apply(bundle)['result'] == 'PUBLICATION_INCOMPLETE'
++    before = recovery.actual()
++    recovery.nodes.now += DAY
++    result = recovery.apply(bundle, resume=True)
++    assert result['result'] == 'PUBLICATION_INCOMPLETE' and recovery.closed()
++    assert recovery.actual() == before
++
++
++def test_strict_successor_tamper_never_opens_readers(recovery):
++    bundle = recovery.bundle()
++    recovery.rpc['RU'].fail = 'stage'
++    assert recovery.apply(bundle)['result'] == 'PUBLICATION_INCOMPLETE'
++    path = recovery.root/'plan.json'
++    plan = parse(read_private(path))
++    plan['candidate']['certificate'] = plan['previous']['certificate']
++    atomic(path, canonical(plan))
++    before = recovery.actual()
++    assert recovery.apply(bundle, resume=True)['result'] == 'PUBLICATION_INCOMPLETE'
++    assert recovery.closed() and recovery.actual() == before
++
++
++def test_stale_database_after_stage_rejected_before_first_publication(recovery):
++    bundle = recovery.bundle()
++    recovery.rpc['RU'].fail = 'promote'
++    assert recovery.apply(bundle)['result'] == 'PUBLICATION_INCOMPLETE'
++    with recovery.nodes.fixture.access.db() as database:
++        database.execute('UPDATE invites SET revoked=1 WHERE device=?', (recovery.nodes.fixture.devices[0],))
++    before = recovery.actual()
++    result = recovery.apply(bundle, resume=True)
++    assert result['result'] == 'PUBLICATION_INCOMPLETE'
++    assert recovery.closed() and recovery.actual() == before
++
++
++def test_scheduled_leaf_crl_after_recovery_no_authority_power(recovery):
++    assert recovery.apply(recovery.bundle())['result'] == 'COMMITTED'
++    before = recovery.strict()
++    recovery.nodes.now += 10000
++    from control.friends.restricted import iso
++    for node in recovery.nodes.nodes.values():
++        path = node.state.parent/'next-directory.json'
++        directory = parse(read_private(path))
++        directory.update(issued_at=iso(recovery.nodes.now-1), expires_at=iso(recovery.nodes.now+3599))
++        atomic(path, canonical(directory))
++    result = recovery.controller.run('scheduled-leaf-crl-after-0004', scheduled=True, approved_leaf_crl_schedule=True)
++    assert result['result'] == 'COMMITTED'
++    after = recovery.strict()
++    assert after['authority'] == before['authority'] and after['grants'] == before['grants']
++    assert after['crl'] != before['crl'] and after['certificate'] != before['certificate']
++
++
++def test_cli_request_offline_fd_sign_apply(tmp_path, monkeypatch, capsys):
++    import runtime_controller
++    recovery = RecoveryFixture(tmp_path, now=int(time.time()))
++    for node in recovery.nodes.nodes.values():
++        node.clock = lambda: int(time.time())
++    config = recovery.root/'config.json'
++    atomic(config, canonical(dict(schema=1, node_config=str(recovery.root/'unused-node.json'),
++        coordinator_state=str(recovery.root), nl_source_sha256='a'*64,
++        ssh=dict(key='/unused', known_hosts='/unused'), approved_leaf_crl_schedule=True)))
++    scope = recovery.root/'scope.json'
++    request_path, bundle_path = recovery.root/'request.json', recovery.root/'bundle.json'
++    atomic(scope, canonical(recovery.nodes.fixture.devices))
++    monkeypatch.setattr(runtime_controller, 'construct', lambda path: (recovery.nodes.nodes['RU'], 'a'*64))
++    monkeypatch.setattr(runtime_controller, 'SshNode', lambda *args, **kwargs: recovery.rpc['NL'])
++    common = ['runtime_controller.py', '--config', str(config), '--operation', recovery.operation]
++    monkeypatch.setattr(sys, 'argv', common+['--mode', 'expired-request', '--grant-scope', str(scope),
++                                           '--request-output', str(request_path)])
++    runtime_controller.main()
++    assert json.loads(capsys.readouterr().out)['result'] == 'RECOVERY_REQUESTED'
++    anchor = recovery.root/'anchor.pub'
++    atomic(anchor, base64.b64encode(recovery.validator.anchor))
++    read_fd, write_fd = os.pipe()
++    try:
++        os.write(write_fd, recovery.signer.private_bytes_raw())
++        os.close(write_fd)
++        result = subprocess.run([sys.executable, str(Path(__file__).with_name('sign_authority_offline.py')),
++            '--request', str(request_path), '--anchor', str(anchor), '--root-key-fd', str(read_fd),
++            '--output', str(bundle_path), '--expired-recovery', '--confirm-authority-renewal'],
++            pass_fds=(read_fd,), capture_output=True, timeout=20, check=False)
++    finally:
++        os.close(read_fd)
++    assert result.returncode == 0, result.stdout
++    assert json.loads(result.stdout)['result'] == 'SIGNED_OFFLINE'
++    monkeypatch.setattr(sys, 'argv', common+['--mode', 'expired-apply', '--authority-bundle', str(bundle_path),
++                                           '--approve-maintenance-outage'])
++    runtime_controller.main()
++    assert json.loads(capsys.readouterr().out)['result'] == 'COMMITTED'
++    recovery.nodes.now = int(time.time())
++    recovery.strict()
++
++
++def test_failed_gateway_start_is_not_retried(recovery):
++    bundle = recovery.bundle()
++    node = recovery.nodes.nodes['NL']
++    (node.state.parent/'reject-start').write_bytes(b'fixture')
++    result = recovery.apply(bundle)
++    assert result['result'] == 'PUBLICATION_INCOMPLETE' and recovery.closed()
++    counts = json.loads((node.state.parent/'counts.json').read_bytes())
++    assert counts['start '+UNITS['NL'][0]] == 2
++    assert recovery.apply(bundle, resume=True)['result'] == 'PUBLICATION_INCOMPLETE'
++    assert json.loads((node.state.parent/'counts.json').read_bytes())['start '+UNITS['NL'][0]] == 2
++    assert recovery.closed()
+--- /dev/null
++++ b/gateway/familysession/expired_recovery_test.go
+@@ -0,0 +1,40 @@
++package familysession
++
++import (
++	"context"
++	"encoding/json"
++	"errors"
++	"os"
++	"testing"
++	"time"
++)
++
++func TestExpiredRecoveryStrictFamilyTLS(test *testing.T) {
++	path := os.Getenv("FC_EXPIRED_RECOVERY_FIXTURE")
++	if path == "" {
++		test.Skip("explicit disposable expired recovery fixture required")
++	}
++	raw, err := os.ReadFile(path)
++	if err != nil {
++		test.Fatal("fixture unavailable")
++	}
++	var fixture struct {
++		ServerBefore Credentials   `json:"server_before"`
++		ServerAfter  Credentials   `json:"server_after"`
++		ClientsAfter []Credentials `json:"clients_after"`
++	}
++	if json.Unmarshal(raw, &fixture) != nil || len(fixture.ClientsAfter) != 3 {
++		test.Fatal("fixture schema invalid")
++	}
++	if _, _, err := Configuration(encoded(fixture.ServerBefore), true); !errors.Is(err, ErrRejected) {
++		test.Fatal("expired predecessor accepted by normal validator")
++	}
++	if _, _, err := Configuration(encoded(fixture.ServerAfter), true); err != nil {
++		test.Fatal("successor rejected by normal validator")
++	}
++	for _, client := range fixture.ClientsAfter {
++		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
++		connect(test, ctx, client, fixture.ServerAfter)
++		cancel()
++	}
++}
