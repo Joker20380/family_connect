@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+## OWNER-CUMULATIVE-CLIENT-ACCEPTANCE-1 — ENVIRONMENT_BLOCKED (15.10)
+
+Existing cumulative APK signed with the original Android signer; no rebuild.
+Signed SHA256 `3c733d2fc3a0ec377143b668244a4c7d6619ff24abe024da4ee9bfe31d140513`;
+DEX/native payload unchanged. Original installed research84 APK pulled and verified
+for a compatible same-version/signer return path. **No install or CONNECT occurred.**
+Fresh NL preflight13:12:51UTC: restricted unit failed, PID0, no listener; authority,
+leaf, CRL and directory already expired. Do not use old baseline-active assertions.
+Final13:16UTC readback: owner original APK/UID unchanged, VPN OFF; gateway still
+failed, disk binary/config/profile/directory hashes unchanged. No server repair.
+CLIENT_DEVICE_SMOKE=NOT_RUN; HANDOFF_ON_DEVICE=NOT_PROVEN; DEVICE_ACCEPTANCE=NOT_RUN.
+PRODUCTION_ACCEPTANCE=FAIL; HISTORICAL_CAUSAL_BINDING=NOT_PROVEN remain unchanged.
+[Full report, signed/installed identities, attempt matrix and counters](releases/2026-10-15-owner-cumulative-client-acceptance-1.md).
+Signed APK/rollback backup/raw evidence are private, not distributed. Background
+chat protocol activity was not measured; it is not claimed to be zero.
+Separate environment decision required before any newly authorized acceptance;
+no automatic server renewal/restart, owner install or CONNECT.
+
 ## STARTUP-DIAGNOSTIC-CAUSE-FIDELITY-1 — IMPLEMENTED_AND_LOCALLY_VERIFIED (15.10)
 
 Diagnostic-only delta above the exact research84 chat/VPN handoff now preserves

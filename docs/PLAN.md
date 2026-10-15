@@ -8,6 +8,20 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### OWNER-CUMULATIVE-CLIENT-ACCEPTANCE-1 — pre-install environment stop (15.10)
+
+- [Bounded device-acceptance preparation](releases/2026-10-15-owner-cumulative-client-acceptance-1.md)
+  completed signing and owner metadata/original-APK preservation, not installation.
+- Fresh gateway state is failed/no PID/no listener, with expired security/directory
+  material. Client CONNECT1/2, TUN traffic, 240-second stability and borrowing were
+  NOT_RUN / NOT_MEASURED; this is not a cumulative-client failure.
+- Retain the signed APK and original same-version/signer backup. Do not rebuild,
+  re-enroll, clear data, change gateway or retry CONNECT to bypass this gate.
+- Next requires a separate decision on the environment blocker; any later device
+  attempt requires fresh preflight, not an old readiness confirmation.
+- Keep DEVICE_ACCEPTANCE=NOT_RUN, HANDOFF_ON_DEVICE=NOT_PROVEN,
+  PRODUCTION_ACCEPTANCE=FAIL and HISTORICAL_CAUSAL_BINDING=NOT_PROVEN.
+
 ### STARTUP-DIAGNOSTIC-CAUSE-FIDELITY-1 — local implementation complete (15.10)
 
 - Review the [diagnostic delta and combined source](releases/2026-10-15-startup-diagnostic-cause-fidelity-1.md)

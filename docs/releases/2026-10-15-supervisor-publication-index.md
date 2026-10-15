@@ -7,6 +7,13 @@ Production FAIL сохраняется; root cause не доказана. Сна
 
 ## Начать здесь
 
+- [Owner cumulative client acceptance — ENVIRONMENT_BLOCKED](2026-10-15-owner-cumulative-client-acceptance-1.md):
+  проверенный APK подписан прежним signer без rebuild; исходный установленный APK
+  сохранён. Свежий gateway failed/PID0/no listener, security/directory просрочены.
+  Установка и оба CONNECT не выполнялись; owner остался на исходном research84,
+  VPN OFF. Signed/rollback APK и raw evidence только локально. Device acceptance
+  не повышается; серверные binary/config/profile/directory не изменены задачей.
+
 - [Startup diagnostic cause fidelity — реализовано поверх handoff](2026-10-15-startup-diagnostic-cause-fidelity-1.md):
   [отдельный delta, cumulative apply, tests/build receipts](../../research/startup-cause-fidelity-20261015/README.md).
   Real Family/TLS receive before/after, combined handoff/race, native/JNI и полный
