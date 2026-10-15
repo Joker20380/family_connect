@@ -8,21 +8,20 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
-### OWNER-SUPPORT-EXPORT-AND-TRIAGE-1 — waiting for one normal export (15.10)
+### OWNER-SUPPORT-EXPORT-AND-TRIAGE-1 — terminal EVIDENCE_RECOVERED (15.10)
 
-- The newly authorized export/cache-rotation exception overrides the previous
-  task's export stop, not the primary-log/identity protection or zero VPN actions.
-- Await the single owner save described in the
-  [support-export report](releases/2026-10-15-owner-support-export-and-triage-1.md).
-  No export was confirmed by the agent; do not classify pending delivery as missing
-  historical evidence and do not ask for CONNECT or a second export.
-- When received, preserve the JSON privately with transfer/time/size/SHA256; inspect
-  ring, incident and restricted history separately using only exported schema fields.
-  Match early failures by identifiers/version/sequence without requiring an unissued tag.
-- Use the retained gateway log first if binding becomes possible. No repeat broad
-  search, sealed audit, run-as/cat or the already empty invocation query.
-- If the export has no matching attempt, end this path as EXPORTED_NO_MATCHING_EPISODE.
-  Do not automatically start A/B/C, patches/builds, deployment or recovery acceptance.
+- Read the [completed support-export triage](releases/2026-10-15-owner-support-export-and-triage-1.md):
+  matching C1/I1 startup failed at HELLO_RECEIVE before descriptor/dedicated startup;
+  source-gated non-entry into native attach is now proven. Cause remains UNKNOWN.
+- Keep ring/incident distinct: incident READY versus later FETCH_FAILED; preserve
+  missing counters as NOT_RECORDED, not zero, and raw JSONL as NOT_EXPORTED.
+- Do not require an unissued session tag to recognize this early failure. Directory
+  hash matches saved context but is not a unique server-session binding; S1 stays unbound.
+- Export retrieval/triage is complete. Do not repeat export, broad search, run-as/cat,
+  sealed audit or empty journal query. Raw payload and alias mapping remain private.
+- Production FAIL and root cause NOT_PROVEN remain; this is not candidate-regression
+  proof or DNS-only defect evidence. Await a separately authorized next task; do not
+  start CONNECT, A/B/C, product patches/builds, deployment or recovery acceptance.
 
 ### OWNER-EPISODE-RETAINED-DIAGNOSTICS-1 — terminal ACCESS_BLOCKED (15.10)
 

@@ -1,21 +1,25 @@
 # Текущее состояние / Current state
 
-## OWNER-SUPPORT-EXPORT-AND-TRIAGE-1 — WAITING_FOR_OWNER_EXPORT (15.10)
+## OWNER-SUPPORT-EXPORT-AND-TRIAGE-1 — EVIDENCE_RECOVERED (15.10)
 
-The owner now authorizes one standard diagnostic export and its normal cache/URI
-rotation; the previous no-deletion export stop is superseded for this task only.
-The exact retained research84 callback reads ring/incident without native polling
-or transport startup; restricted-evidence.jsonl is NOT_EXPORTED. The app is already
-foreground and installed JSON ACTION_SEND local receivers are identified. Standard
-screen capture yielded no image, so no blind UI taps or export confirmation were
-performed. One explicit owner save through Total Commander is pending; no support
-JSON has been obtained and historical coverage is NOT_ASSESSED, not absent.
-See the [support-export report](releases/2026-10-15-owner-support-export-and-triage-1.md).
-Export/cache mutations performed by the agent = 0 so far, separately accounted from
-zero CONNECT/reconnect, restart/install, deployment, credential/provider actions and
-product patches. No repeat local search, run-as/cat, sealed audit or journal query.
-Production FAIL, root cause NOT_PROVEN and missing owner dedicated READY evidence
-remain unchanged. Await only the requested export; do not start another VPN test.
+One owner-supplied JSON was copied privately: 66,200 bytes, SHA256
+85722f4a9fe2a1089f7b7e20cbafec5b5546cc545dbf3160a8f57e9f10e16a1a.
+Ring/incident match the owner episode through C1/I1, research84, the startup/event
+sequence, sealed TUN timing and matching directory fingerprint. Native startup
+records complete FAILED / HELLO_RECEIVE / cause UNKNOWN (attempt1, +120001ms),
+native_state3. Exact source gates place this failure before descriptor/dedicated
+startup and native packet attach. First failed stage is now proven; the former
+owner READY evidence gap is narrowed, not merely repeated. App orchestrator records
+CONNECTING → FAILED, not a working dedicated CONNECTED session. Cleanup and later
+VPN release are recorded. protect_ok=74/protect_denied=0 are explicit; DNS/TCP
+counters are absent, not zero. Incident readiness READY must not be replaced with
+the later ring's FETCH_FAILED. No unique server-session binding or causal mechanism
+is proven: production FAIL / root cause NOT_PROVEN remain.
+See the [completed support-export triage](releases/2026-10-15-owner-support-export-and-triage-1.md).
+No repeat export/device access/journal query or product/deployment action followed
+file delivery. Agent export/cache operations=0; owner's authorized export/rotation
+counts were not witnessed. Raw JSON stays private. Do not start CONNECT, A/B/C,
+patches or recovery automatically.
 
 ## OWNER-EPISODE-RETAINED-DIAGNOSTICS-1 — ACCESS_BLOCKED (15.10)
 
