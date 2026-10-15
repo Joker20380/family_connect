@@ -1,0 +1,177 @@
+=== RUN   TestPrimaryBeforeCleanupCancellationAndCompletion
+--- PASS: TestPrimaryBeforeCleanupCancellationAndCompletion (0.00s)
+=== RUN   TestControlledConcurrentPublicationOrders
+=== RUN   TestControlledConcurrentPublicationOrders/failure
+=== RUN   TestControlledConcurrentPublicationOrders/cancel
+=== RUN   TestControlledConcurrentPublicationOrders/success
+--- PASS: TestControlledConcurrentPublicationOrders (0.00s)
+    --- PASS: TestControlledConcurrentPublicationOrders/failure (0.00s)
+    --- PASS: TestControlledConcurrentPublicationOrders/cancel (0.00s)
+    --- PASS: TestControlledConcurrentPublicationOrders/success (0.00s)
+=== RUN   TestIndependentAttemptsAndRetention
+--- PASS: TestIndependentAttemptsAndRetention (0.00s)
+=== RUN   TestCauseAllowlistAndPrivacy
+--- PASS: TestCauseAllowlistAndPrivacy (0.00s)
+=== RUN   TestPreservedErrorHasLegacyCategoryAndOriginalIdentity
+--- PASS: TestPreservedErrorHasLegacyCategoryAndOriginalIdentity (0.00s)
+=== RUN   TestFidelityCategoriesAndFirstFailure
+--- PASS: TestFidelityCategoriesAndFirstFailure (0.00s)
+=== RUN   TestFidelityOwnershipDrainStop
+=== RUN   TestFidelityOwnershipDrainStop/STARTUP_BUDGET
+    fidelity_test.go:109: stage=OWNERSHIP_DRAIN error=CANCELLED local_stop=STARTUP_BUDGET observed_context=CANCELLED
+=== RUN   TestFidelityOwnershipDrainStop/CONNECT_CANCEL
+    fidelity_test.go:109: stage=OWNERSHIP_DRAIN error=CANCELLED local_stop=CONNECT_CANCEL observed_context=CANCELLED
+=== RUN   TestFidelityOwnershipDrainStop/CLEANUP
+    fidelity_test.go:109: stage=OWNERSHIP_DRAIN error=UNKNOWN local_stop=CLEANUP observed_context=LIVE
+--- PASS: TestFidelityOwnershipDrainStop (0.02s)
+    --- PASS: TestFidelityOwnershipDrainStop/STARTUP_BUDGET (0.02s)
+    --- PASS: TestFidelityOwnershipDrainStop/CONNECT_CANCEL (0.00s)
+    --- PASS: TestFidelityOwnershipDrainStop/CLEANUP (0.00s)
+=== RUN   TestFidelityBudgetSuccessAndGeneration
+--- PASS: TestFidelityBudgetSuccessAndGeneration (0.02s)
+=== RUN   TestFriendsStartupResultRetainsSeedCause
+--- PASS: TestFriendsStartupResultRetainsSeedCause (0.00s)
+=== RUN   TestDirectoryFingerprintIsFirstAndDoesNotExportDirectory
+--- PASS: TestDirectoryFingerprintIsFirstAndDoesNotExportDirectory (0.00s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/startupdiag	0.049s
+=== RUN   TestChatFirstCleanupGate
+--- PASS: TestChatFirstCleanupGate (0.00s)
+=== RUN   TestVPNFirstDisconnectStaleGeneration
+--- PASS: TestVPNFirstDisconnectStaleGeneration (0.00s)
+=== RUN   TestOpeningLatePublication
+--- PASS: TestOpeningLatePublication (0.00s)
+=== RUN   TestCancellationAndStartupFailure
+=== RUN   TestCancellationAndStartupFailure/before_reserve
+=== RUN   TestCancellationAndStartupFailure/during_cleanup
+=== RUN   TestCancellationAndStartupFailure/after_cleanup
+=== RUN   TestCancellationAndStartupFailure/startup_failure
+=== RUN   TestCancellationAndStartupFailure/budget
+--- PASS: TestCancellationAndStartupFailure (0.02s)
+    --- PASS: TestCancellationAndStartupFailure/before_reserve (0.00s)
+    --- PASS: TestCancellationAndStartupFailure/during_cleanup (0.00s)
+    --- PASS: TestCancellationAndStartupFailure/after_cleanup (0.00s)
+    --- PASS: TestCancellationAndStartupFailure/startup_failure (0.00s)
+    --- PASS: TestCancellationAndStartupFailure/budget (0.01s)
+=== RUN   TestSimultaneousAcquireReserve
+--- PASS: TestSimultaneousAcquireReserve (0.00s)
+=== RUN   TestCompatibilityExpiryAndFailure
+--- PASS: TestCompatibilityExpiryAndFailure (0.01s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/restrictedowner	0.034s
+=== RUN   TestReproAdmission
+=== RUN   TestReproAdmission/A_empty
+    admission_repro_test.go:291: REPRO ownership {"action":"grant","present":true,"reason":"acquired","same_identity":"true","sequence":1,"state":"AUTHORIZED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"hello_sent","present":false,"reason":"ok","same_identity":"unknown","sequence":2,"state":""}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":3,"state":"CREATING"}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":4,"state":"CREATED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":5,"state":"GATEWAY_JOINING"}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":6,"state":"READY"}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":7,"state":"CLIENT_ISSUED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"claim","present":true,"reason":"descriptor_claimed","same_identity":"unknown","sequence":8,"state":"CLIENT_ISSUED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"descriptor_sent","present":false,"reason":"ok","same_identity":"unknown","sequence":9,"state":""}
+    admission_repro_test.go:291: REPRO ownership {"action":"handoff","present":false,"reason":"ok","same_identity":"unknown","sequence":10,"state":""}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":11,"state":"ACTIVE"}
+    admission_repro_test.go:297: REPRO admission {"hello_received":1,"hello_sent":1,"recv":{"cause_canceled":false,"cause_deadline":false,"closed_pipe":false,"context_canceled":false,"context_cause_type":"\u003cnil\u003e","context_deadline":false,"ctx_canceled":false,"ctx_deadline":false,"ctx_err_type":"\u003cnil\u003e","eof":false,"go_type":"\u003cnil\u003e","hello":true,"os_deadline":false,"timeout":false,"timeout_implemented":false,"unexpected_eof":false},"scenario":"A_empty","server_error":{"cause_canceled":false,"cause_deadline":false,"closed_pipe":false,"context_canceled":false,"context_cause_type":"\u003cnil\u003e","context_deadline":false,"ctx_canceled":false,"ctx_deadline":false,"ctx_err_type":"\u003cnil\u003e","eof":false,"go_type":"\u003cnil\u003e","os_deadline":false,"timeout":false,"timeout_implemented":false,"unexpected_eof":false},"startup":{"schema":1,"attempt":1,"started_unix_ms":1792096567518,"observed_ms":-1,"completed_ms":10,"complete":true,"status":"SUCCEEDED","stage":"STARTUP","cause":"NONE"}}
+    admission_repro_test.go:135: REPRO cleanup {"broker_close_returned":true,"gateways":1}
+=== RUN   TestReproAdmission/B_active_same_deadline
+    admission_repro_test.go:291: REPRO ownership {"action":"busy","present":true,"reason":"device_busy","same_identity":"true","sequence":9,"state":"ACTIVE"}
+    admission_repro_test.go:291: REPRO ownership {"action":"wait","present":true,"reason":"device_busy","same_identity":"true","sequence":10,"state":"ACTIVE"}
+    admission_repro_test.go:291: REPRO ownership {"action":"wait_end","present":true,"reason":"context_deadline","same_identity":"true","sequence":11,"state":"ACTIVE"}
+    admission_repro_test.go:291: REPRO ownership {"action":"busy","present":true,"reason":"device_busy","same_identity":"true","sequence":12,"state":"ACTIVE"}
+    admission_repro_test.go:297: REPRO admission {"hello_received":0,"hello_sent":0,"recv":{"cause_canceled":false,"cause_deadline":true,"closed_pipe":false,"context_canceled":false,"context_cause_type":"context.deadlineExceededError","context_deadline":false,"ctx_canceled":false,"ctx_deadline":true,"ctx_err_type":"context.deadlineExceededError","eof":false,"go_type":"*net.OpError","os_deadline":true,"timeout":true,"timeout_implemented":true,"unexpected_eof":false},"scenario":"B_active_same_deadline","server_error":{"cause_canceled":false,"cause_deadline":true,"closed_pipe":false,"context_canceled":false,"context_cause_type":"context.deadlineExceededError","context_deadline":true,"ctx_canceled":false,"ctx_deadline":true,"ctx_err_type":"context.deadlineExceededError","eof":false,"go_type":"context.deadlineExceededError","os_deadline":false,"timeout":true,"timeout_implemented":true,"unexpected_eof":false},"startup":{"schema":1,"attempt":1,"started_unix_ms":1792096567640,"observed_ms":203,"completed_ms":203,"complete":true,"status":"FAILED","stage":"HELLO_RECEIVE","cause":"IO_DEADLINE","observation":{"point":"FAMILY_RECEIVE","error_category":"IO_DEADLINE","context_state":"LIVE","stop_at_observation":"NONE","elapsed_ms":203}}}
+    admission_repro_test.go:135: REPRO cleanup {"broker_close_returned":true,"gateways":1}
+=== RUN   TestReproAdmission/C_cleanup_before_deadline
+    admission_repro_test.go:291: REPRO ownership {"action":"busy","present":true,"reason":"device_busy","same_identity":"true","sequence":9,"state":"ACTIVE"}
+    admission_repro_test.go:291: REPRO ownership {"action":"wait","present":true,"reason":"device_busy","same_identity":"true","sequence":10,"state":"ACTIVE"}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"cancelled","same_identity":"unknown","sequence":11,"state":"CANCELLED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"gateway_run_end","present":true,"reason":"context_cancelled","same_identity":"unknown","sequence":12,"state":"CANCELLED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"gateway_close_begin","present":true,"reason":"worker_cleanup","same_identity":"unknown","sequence":13,"state":"CANCELLED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"gateway_close_end","present":true,"reason":"worker_cleanup","same_identity":"unknown","sequence":14,"state":"CANCELLED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"release","present":false,"reason":"worker_finished","same_identity":"unknown","sequence":15,"state":"CANCELLED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"wait_end","present":false,"reason":"cleanup_done","same_identity":"true","sequence":16,"state":"CANCELLED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"grant","present":true,"reason":"acquired","same_identity":"true","sequence":17,"state":"AUTHORIZED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"hello_sent","present":false,"reason":"ok","same_identity":"unknown","sequence":18,"state":""}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":19,"state":"CREATING"}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":20,"state":"CREATED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":21,"state":"GATEWAY_JOINING"}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":22,"state":"READY"}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":23,"state":"CLIENT_ISSUED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"claim","present":true,"reason":"descriptor_claimed","same_identity":"unknown","sequence":24,"state":"CLIENT_ISSUED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"descriptor_sent","present":false,"reason":"ok","same_identity":"unknown","sequence":25,"state":""}
+    admission_repro_test.go:291: REPRO ownership {"action":"handoff","present":false,"reason":"ok","same_identity":"unknown","sequence":26,"state":""}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":27,"state":"ACTIVE"}
+    admission_repro_test.go:297: REPRO admission {"hello_received":1,"hello_sent":1,"recv":{"cause_canceled":false,"cause_deadline":false,"closed_pipe":false,"context_canceled":false,"context_cause_type":"\u003cnil\u003e","context_deadline":false,"ctx_canceled":false,"ctx_deadline":false,"ctx_err_type":"\u003cnil\u003e","eof":false,"go_type":"\u003cnil\u003e","hello":true,"os_deadline":false,"timeout":false,"timeout_implemented":false,"unexpected_eof":false},"scenario":"C_cleanup_before_deadline","server_error":{"cause_canceled":false,"cause_deadline":false,"closed_pipe":false,"context_canceled":false,"context_cause_type":"\u003cnil\u003e","context_deadline":false,"ctx_canceled":false,"ctx_deadline":false,"ctx_err_type":"\u003cnil\u003e","eof":false,"go_type":"\u003cnil\u003e","os_deadline":false,"timeout":false,"timeout_implemented":false,"unexpected_eof":false},"startup":{"schema":1,"attempt":1,"started_unix_ms":1792096567961,"observed_ms":-1,"completed_ms":6,"complete":true,"status":"SUCCEEDED","stage":"STARTUP","cause":"NONE"}}
+    admission_repro_test.go:135: REPRO cleanup {"broker_close_returned":true,"gateways":2}
+=== RUN   TestReproAdmission/D_other_identity
+    admission_repro_test.go:291: REPRO ownership {"action":"grant","present":true,"reason":"acquired","same_identity":"true","sequence":9,"state":"AUTHORIZED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"hello_sent","present":false,"reason":"ok","same_identity":"unknown","sequence":10,"state":""}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":11,"state":"CREATING"}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":12,"state":"CREATED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":13,"state":"GATEWAY_JOINING"}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":14,"state":"READY"}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":15,"state":"CLIENT_ISSUED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"claim","present":true,"reason":"descriptor_claimed","same_identity":"unknown","sequence":16,"state":"CLIENT_ISSUED"}
+    admission_repro_test.go:291: REPRO ownership {"action":"descriptor_sent","present":false,"reason":"ok","same_identity":"unknown","sequence":17,"state":""}
+    admission_repro_test.go:291: REPRO ownership {"action":"handoff","present":false,"reason":"ok","same_identity":"unknown","sequence":18,"state":""}
+    admission_repro_test.go:291: REPRO ownership {"action":"transition","present":true,"reason":"","same_identity":"unknown","sequence":19,"state":"ACTIVE"}
+    admission_repro_test.go:297: REPRO admission {"hello_received":1,"hello_sent":1,"recv":{"cause_canceled":false,"cause_deadline":false,"closed_pipe":false,"context_canceled":false,"context_cause_type":"\u003cnil\u003e","context_deadline":false,"ctx_canceled":false,"ctx_deadline":false,"ctx_err_type":"\u003cnil\u003e","eof":false,"go_type":"\u003cnil\u003e","hello":true,"os_deadline":false,"timeout":false,"timeout_implemented":false,"unexpected_eof":false},"scenario":"D_other_identity","server_error":{"cause_canceled":false,"cause_deadline":false,"closed_pipe":false,"context_canceled":false,"context_cause_type":"\u003cnil\u003e","context_deadline":false,"ctx_canceled":false,"ctx_deadline":false,"ctx_err_type":"\u003cnil\u003e","eof":false,"go_type":"\u003cnil\u003e","os_deadline":false,"timeout":false,"timeout_implemented":false,"unexpected_eof":false},"startup":{"schema":1,"attempt":1,"started_unix_ms":1792096568074,"observed_ms":-1,"completed_ms":4,"complete":true,"status":"SUCCEEDED","stage":"STARTUP","cause":"NONE"}}
+    admission_repro_test.go:135: REPRO cleanup {"broker_close_returned":true,"gateways":2}
+--- PASS: TestReproAdmission (0.67s)
+    --- PASS: TestReproAdmission/A_empty (0.12s)
+    --- PASS: TestReproAdmission/B_active_same_deadline (0.31s)
+    --- PASS: TestReproAdmission/C_cleanup_before_deadline (0.12s)
+    --- PASS: TestReproAdmission/D_other_identity (0.11s)
+=== RUN   TestDirectoryValidation
+=== RUN   TestDirectoryValidation/too_many
+=== RUN   TestDirectoryValidation/duplicate
+=== RUN   TestDirectoryValidation/expired
+=== RUN   TestDirectoryValidation/pin
+=== RUN   TestDirectoryValidation/url
+=== RUN   TestDirectoryValidation/version
+=== RUN   TestDirectoryValidation/future
+=== RUN   TestDirectoryValidation/lifetime
+=== RUN   TestDirectoryValidation/transport
+=== RUN   TestDirectoryValidation/userinfo
+=== RUN   TestDirectoryValidation/family
+=== RUN   TestDirectoryValidation/empty
+--- PASS: TestDirectoryValidation (0.00s)
+    --- PASS: TestDirectoryValidation/too_many (0.00s)
+    --- PASS: TestDirectoryValidation/duplicate (0.00s)
+    --- PASS: TestDirectoryValidation/expired (0.00s)
+    --- PASS: TestDirectoryValidation/pin (0.00s)
+    --- PASS: TestDirectoryValidation/url (0.00s)
+    --- PASS: TestDirectoryValidation/version (0.00s)
+    --- PASS: TestDirectoryValidation/future (0.00s)
+    --- PASS: TestDirectoryValidation/lifetime (0.00s)
+    --- PASS: TestDirectoryValidation/transport (0.00s)
+    --- PASS: TestDirectoryValidation/userinfo (0.00s)
+    --- PASS: TestDirectoryValidation/family (0.00s)
+    --- PASS: TestDirectoryValidation/empty (0.00s)
+=== RUN   TestFidelityReceive
+=== RUN   TestFidelityReceive/io_deadline
+    fidelity_test.go:67: REPRO fidelity {"actual_recv":{"cause_canceled":false,"cause_deadline":false,"closed_pipe":false,"context_canceled":false,"context_cause_type":"\u003cnil\u003e","context_deadline":false,"ctx_canceled":false,"ctx_deadline":false,"ctx_err_type":"\u003cnil\u003e","eof":false,"go_type":"*net.OpError","os_deadline":true,"timeout":true,"timeout_implemented":true,"unexpected_eof":false},"after_cleanup":{"schema":1,"attempt":1,"started_unix_ms":1792096568194,"observed_ms":151,"completed_ms":151,"complete":true,"status":"FAILED","stage":"HELLO_RECEIVE","cause":"IO_DEADLINE","observation":{"point":"FAMILY_RECEIVE","error_category":"IO_DEADLINE","context_state":"LIVE","stop_at_observation":"NONE","elapsed_ms":150}},"before_cleanup":{"schema":1,"attempt":1,"started_unix_ms":1792096568194,"observed_ms":151,"completed_ms":-1,"complete":false,"status":"FAILED","stage":"HELLO_RECEIVE","cause":"IO_DEADLINE","observation":{"point":"FAMILY_RECEIVE","error_category":"IO_DEADLINE","context_state":"LIVE","stop_at_observation":"NONE","elapsed_ms":150}},"scenario":"io_deadline"}
+=== RUN   TestFidelityReceive/parent_deadline
+    fidelity_test.go:67: REPRO fidelity {"actual_recv":{"cause_canceled":false,"cause_deadline":true,"closed_pipe":true,"context_canceled":false,"context_cause_type":"context.deadlineExceededError","context_deadline":false,"ctx_canceled":false,"ctx_deadline":true,"ctx_err_type":"context.deadlineExceededError","eof":false,"go_type":"*errors.errorString","os_deadline":false,"timeout":false,"timeout_implemented":false,"unexpected_eof":false},"after_cleanup":{"schema":1,"attempt":1,"started_unix_ms":1792096568450,"observed_ms":150,"completed_ms":150,"complete":true,"status":"FAILED","stage":"HELLO_RECEIVE","cause":"CLOSED_PIPE","observation":{"point":"FAMILY_RECEIVE","error_category":"CLOSED_PIPE","context_state":"DEADLINE","stop_at_observation":"NONE","elapsed_ms":150}},"before_cleanup":{"schema":1,"attempt":1,"started_unix_ms":1792096568450,"observed_ms":150,"completed_ms":-1,"complete":false,"status":"FAILED","stage":"HELLO_RECEIVE","cause":"CLOSED_PIPE","observation":{"point":"FAMILY_RECEIVE","error_category":"CLOSED_PIPE","context_state":"DEADLINE","stop_at_observation":"NONE","elapsed_ms":150}},"scenario":"parent_deadline"}
+=== RUN   TestFidelityReceive/cancel
+    fidelity_test.go:67: REPRO fidelity {"actual_recv":{"cause_canceled":true,"cause_deadline":false,"closed_pipe":true,"context_canceled":false,"context_cause_type":"*errors.errorString","context_deadline":false,"ctx_canceled":true,"ctx_deadline":false,"ctx_err_type":"*errors.errorString","eof":false,"go_type":"*errors.errorString","os_deadline":false,"timeout":false,"timeout_implemented":false,"unexpected_eof":false},"after_cleanup":{"schema":1,"attempt":1,"started_unix_ms":1792096568708,"observed_ms":4,"completed_ms":4,"complete":true,"status":"FAILED","stage":"HELLO_RECEIVE","cause":"CLOSED_PIPE","observation":{"point":"FAMILY_RECEIVE","error_category":"CLOSED_PIPE","context_state":"CANCELLED","stop_at_observation":"NONE","elapsed_ms":4}},"before_cleanup":{"schema":1,"attempt":1,"started_unix_ms":1792096568708,"observed_ms":4,"completed_ms":-1,"complete":false,"status":"FAILED","stage":"HELLO_RECEIVE","cause":"CLOSED_PIPE","observation":{"point":"FAMILY_RECEIVE","error_category":"CLOSED_PIPE","context_state":"CANCELLED","stop_at_observation":"NONE","elapsed_ms":4}},"scenario":"cancel"}
+=== RUN   TestFidelityReceive/peer_close
+    fidelity_test.go:67: REPRO fidelity {"actual_recv":{"cause_canceled":false,"cause_deadline":false,"closed_pipe":true,"context_canceled":false,"context_cause_type":"\u003cnil\u003e","context_deadline":false,"ctx_canceled":false,"ctx_deadline":false,"ctx_err_type":"\u003cnil\u003e","eof":false,"go_type":"*errors.errorString","os_deadline":false,"timeout":false,"timeout_implemented":false,"unexpected_eof":false},"after_cleanup":{"schema":1,"attempt":1,"started_unix_ms":1792096568821,"observed_ms":1,"completed_ms":1,"complete":true,"status":"FAILED","stage":"HELLO_RECEIVE","cause":"CLOSED_PIPE","observation":{"point":"FAMILY_RECEIVE","error_category":"CLOSED_PIPE","context_state":"LIVE","stop_at_observation":"NONE","elapsed_ms":1}},"before_cleanup":{"schema":1,"attempt":1,"started_unix_ms":1792096568821,"observed_ms":1,"completed_ms":-1,"complete":false,"status":"FAILED","stage":"HELLO_RECEIVE","cause":"CLOSED_PIPE","observation":{"point":"FAMILY_RECEIVE","error_category":"CLOSED_PIPE","context_state":"LIVE","stop_at_observation":"NONE","elapsed_ms":1}},"scenario":"peer_close"}
+=== RUN   TestFidelityReceive/invalid_hello
+    fidelity_test.go:67: REPRO fidelity {"actual_recv":{"cause_canceled":false,"cause_deadline":false,"closed_pipe":false,"context_canceled":false,"context_cause_type":"\u003cnil\u003e","context_deadline":false,"ctx_canceled":false,"ctx_deadline":false,"ctx_err_type":"\u003cnil\u003e","eof":false,"go_type":"\u003cnil\u003e","os_deadline":false,"timeout":false,"timeout_implemented":false,"unexpected_eof":false},"after_cleanup":{"schema":1,"attempt":1,"started_unix_ms":1792096568925,"observed_ms":1,"completed_ms":1,"complete":true,"status":"FAILED","stage":"HELLO_RECEIVE","cause":"PROTOCOL_REJECTED","observation":{"point":"STARTUP_CALLER","error_category":"PROTOCOL_REJECTED","context_state":"LIVE","stop_at_observation":"NONE","elapsed_ms":1}},"before_cleanup":{"schema":1,"attempt":1,"started_unix_ms":1792096568925,"observed_ms":1,"completed_ms":-1,"complete":false,"status":"FAILED","stage":"HELLO_RECEIVE","cause":"PROTOCOL_REJECTED","observation":{"point":"STARTUP_CALLER","error_category":"PROTOCOL_REJECTED","context_state":"LIVE","stop_at_observation":"NONE","elapsed_ms":1}},"scenario":"invalid_hello"}
+=== RUN   TestFidelityReceive/success
+    fidelity_test.go:67: REPRO fidelity {"actual_recv":{"cause_canceled":false,"cause_deadline":false,"closed_pipe":false,"context_canceled":false,"context_cause_type":"\u003cnil\u003e","context_deadline":false,"ctx_canceled":false,"ctx_deadline":false,"ctx_err_type":"\u003cnil\u003e","eof":false,"go_type":"\u003cnil\u003e","hello":true,"os_deadline":false,"timeout":false,"timeout_implemented":false,"unexpected_eof":false},"after_cleanup":{"schema":1,"attempt":1,"started_unix_ms":1792096569037,"observed_ms":-1,"completed_ms":1,"complete":true,"status":"SUCCEEDED","stage":"STARTUP","cause":"NONE"},"before_cleanup":{"schema":1,"attempt":1,"started_unix_ms":1792096569037,"observed_ms":-1,"completed_ms":-1,"complete":false,"status":"RUNNING","stage":"STARTUP","cause":"NONE"},"scenario":"success"}
+    admission_repro_test.go:135: REPRO cleanup {"broker_close_returned":true,"gateways":1}
+--- PASS: TestFidelityReceive (0.95s)
+    --- PASS: TestFidelityReceive/io_deadline (0.26s)
+    --- PASS: TestFidelityReceive/parent_deadline (0.26s)
+    --- PASS: TestFidelityReceive/cancel (0.11s)
+    --- PASS: TestFidelityReceive/peer_close (0.11s)
+    --- PASS: TestFidelityReceive/invalid_hello (0.11s)
+    --- PASS: TestFidelityReceive/success (0.11s)
+=== RUN   TestHandoffRealBroker
+    handoff_test.go:123: REPRO handoff {"borrowed":true,"hello_received":1,"independent_chat_opens":1,"local_cleanup_joined":true,"new_grant_sequence":17,"old_release_sequence":15,"server_cleanup_is_separate":true}
+    admission_repro_test.go:135: REPRO cleanup {"broker_close_returned":true,"gateways":2}
+--- PASS: TestHandoffRealBroker (0.12s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/bootstrap	1.762s

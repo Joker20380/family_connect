@@ -1,5 +1,27 @@
 # Текущее состояние / Current state
 
+## RECEIVE-QUEUE-STALL-REPRO-AND-FIX-1 — progress defect fixed locally (15.10)
+
+Exact cumulative a4d48907…b916d5 derivative: production Reliable run synchronously
+waited in outgoing SendContext, starving incoming DATA/ACK and then recvQueue.
+Reproduced with original capacities/timeouts in fresh and A→B fixtures. Two-file
+bounded writer correction passes unchanged failing assertions; one writer, pending
+frames max34, ACK/OPEN coalescing, actual send completion, cancellation/join preserved.
+Carrier queues16/256, protocol/windows/security/timeouts/ownership remain unchanged.
+[Report](releases/2026-10-15-receive-queue-stall-repro-and-fix-1.md) and
+[source/tests/results](../research/receive-queue-stall-20261015/README.md).
+Normal1/race3 full suites151/453 top-level PASS, combined handoff/diagnostic20/60 PASS;
+supplementary coalesced ACK/unpaced guard normal1/race3 PASS. All JNI modes compile.
+Full researchProvisioning assemble +10 JVM tests PASS after one environment-only
+java.io.tmpdir correction; initial quota failure retained. New local inventory
+af315dce…156be61, native1d80aa44…3b24b5, unsigned APK bba6a8fb…83656c76; no signing/install.
+Historical B remains NOT_PROVEN: retained burst19 completions in2ms, no worker/queue
+snapshot at failure. Unpaced20/40 can still hit the preserved overload guard even
+with this correction. Do not equate local progress fix with historical B remediation.
+LIVE_ACTIONS=0. Installed APK/native, gateway, prior reports and dirty root unchanged.
+Previous single smoke PASS, latest reconnect FAIL, device tests NOT_RUN; no automatic
+live acceptance, patch deployment or new observer. Further scope requires a separate task.
+
 ## OWNER-RESTRICTED-RECONNECT-AND-CHAT-1 — FAIL, evidence retained (15.10)
 
 New episode: A restricted startup/owner HTTPS succeeds; local OFF→B in4.158seconds,

@@ -8,6 +8,21 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### RECEIVE-QUEUE-STALL-REPRO-AND-FIX-1 — locally verified, no live rollout (15.10)
+
+- [Report](releases/2026-10-15-receive-queue-stall-repro-and-fix-1.md) and
+  [reproducible patch](../research/receive-queue-stall-20261015/README.md): original
+  synchronous transmit progress defect reproduced fresh/reconnect, minimally fixed
+  with one bounded writer. Same before-failing tests PASS after, normal1/race3.
+- Existing handoff/diagnostic/Broker-Family-TLS and Reliable/Mux regressions PASS.
+  JNI and full researchProvisioning assemble/JVM PASS; unsigned local artifact only.
+  Initial JVM temp-quota failure and environment-only repair explicitly retained.
+- Historical B linkage NOT_PROVEN; post-close Flow is not queue occupancy. A retained
+  19-message burst and remaining unpaced overload guard prevent a claim that B is fixed.
+- No live actions, signing, installation, server changes or new observer. Preserve
+  previous smoke PASS and reconnect FAIL until a separately authorized device test.
+  Do not automatically repeat owner CONNECT or begin an additional diagnostic patch.
+
 ### OWNER-RESTRICTED-RECONNECT-AND-CHAT-1 — completed, lifecycle FAIL (15.10)
 
 - [Final report](releases/2026-10-15-owner-restricted-reconnect-and-chat-1.md) and

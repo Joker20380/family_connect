@@ -1,0 +1,168 @@
+{
+  "result": "REPRODUCED_PROGRESS_DEFECT_FIXED_LOCALLY",
+  "historical_B_causal_binding": "NOT_PROVEN",
+  "live_actions": 0,
+  "base_cumulative": "a4d489079e3da0df7fdd01b7977962b20ddbbf8605fbf682a349703a88b916d5",
+  "new_cumulative": "af315dce15e16c3b5d372dee4294192339443ac0cd79364748bd2f53c156be61",
+  "materializer_all_inventory_hashes_match": true,
+  "native": {
+    "result": "PASS",
+    "modes": {
+      "normal": {
+        "sha256": "1d80aa445c60453a5b38cb00eb71801b5340670fda4956cf846873efc93b24b5",
+        "size": 28801976,
+        "tags": ""
+      },
+      "diagnostic": {
+        "sha256": "18e100506bab415a756658796ee7230225691030febd60c08553bf2aa5529088",
+        "size": 28938040,
+        "tags": "fc_owner_diagnostic"
+      },
+      "messenger-lab": {
+        "sha256": "0d68b6f701b787073bae1d2a00c1350fe0fc3e820dc120772c4d148c26e95052",
+        "size": 28836592,
+        "tags": "fc_messenger_lab"
+      }
+    },
+    "jni_signature_checks": [
+      {
+        "name": "module.log",
+        "exit": 0
+      },
+      {
+        "name": "normal.log",
+        "exit": 0
+      },
+      {
+        "name": "diagnostic.log",
+        "exit": 0
+      },
+      {
+        "name": "messenger-lab.log",
+        "exit": 0
+      },
+      {
+        "name": "java-contract.log",
+        "exit": 0
+      },
+      {
+        "name": "jni-NativeRestricted.log",
+        "exit": 0
+      },
+      {
+        "name": "jni-MessengerLabActivity.log",
+        "exit": 0
+      }
+    ]
+  },
+  "gradle": {
+    "variant": "researchProvisioning",
+    "assemble": "PASS",
+    "initial_full_command_exit": 1,
+    "initial_unit_tests": "9/10; synthetic temp file IOException: Disk quota exceeded before assertion",
+    "initial_log_sha256": "962544aa6eeaecf84d8da1c140576211d8768668e01e1ff47ee125eb660da7ea",
+    "environment_repair": {
+      "exit": 0,
+      "environment_only_change": "JAVA_TOOL_OPTIONS=-Djava.io.tmpdir=<private-disk-fixture-tmp>",
+      "initial_failure": "java.io.IOException: Disk quota exceeded; synthetic temp-file write before assertion",
+      "same_command": true,
+      "source_unchanged": true,
+      "log_sha256": "0c2b8b88945a0c2552b3a96dd66709d3e46041b5101e8b17706072dea7dbf139"
+    },
+    "final_full_command": "PASS",
+    "final_test_counts": [
+      {
+        "name": "com.familyconnect.app.DiagnosticRingTest",
+        "tests": "5",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.familyconnect.app.RestrictedStartupTest",
+        "tests": "3",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.familyconnect.app.StartupFidelityTest",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "apk": {
+      "name": "app-researchProvisioning-unsigned.apk",
+      "sha256": "bba6a8fb3275f8d5a0b9a7f05d3bf1a4deb47ef4cac88c9d580b152b83656c76",
+      "embedded_native_sha256": "1d80aa445c60453a5b38cb00eb71801b5340670fda4956cf846873efc93b24b5",
+      "size": 55981492
+    },
+    "signed": false,
+    "installed": false,
+    "published": false
+  },
+  "suites": {
+    "before": [
+      {
+        "mode": "normal",
+        "count": 1,
+        "exit": 1,
+        "sha256": "6067435abbab2209c3f594f987be23f22d2f255de92ddcc7d7c8cd5c0ac8924c"
+      },
+      {
+        "mode": "race",
+        "count": 3,
+        "exit": 1,
+        "sha256": "ae7c6685a0620586407c4e5833414ef149d7656d045a1a360af25709b051d640"
+      }
+    ],
+    "after": [
+      {
+        "mode": "normal",
+        "count": 1,
+        "exit": 0,
+        "sha256": "bb116679a82b72035cac905b0b080075e03112e6bc81285b41848d156af25b73",
+        "raw_private_sha256": "10f2f092caf710fd3e24cb7ac3eca5875596d0a451ed95a84dbb27cbf97e0926",
+        "publication_redactions": {
+          "SSRF_fixture_destination_alias_occurrences": 2
+        }
+      },
+      {
+        "mode": "race",
+        "count": 3,
+        "exit": 0,
+        "sha256": "7e643d91a37ccbb5d301468d78e389c73f2e2d3904a6ddfb35f1cdfd582652a2",
+        "raw_private_sha256": "243d4ae12c6cb1e1d3893a6a23db44993177b64726964b53435ac7a1fc39db18",
+        "publication_redactions": {
+          "SSRF_fixture_destination_alias_occurrences": 6
+        }
+      }
+    ],
+    "combined": [
+      {
+        "mode": "normal",
+        "count": 1,
+        "exit": 0,
+        "sha256": "2b367186e869b64a3d19fd1df8ba608b280fb195018c37ea84f93bef472c5ed9"
+      },
+      {
+        "mode": "race",
+        "count": 3,
+        "exit": 0,
+        "sha256": "bf9ab46cf4e6f00fe08dac0c45992910b7155481f9ed153f3f700865ba133429"
+      }
+    ]
+  },
+  "supplement": {
+    "normal_count": 1,
+    "race_count": 3,
+    "cases": [
+      "TestReceiveStallCoalescedACK",
+      "TestReceiveStallUnpacedGuardCharacterization"
+    ],
+    "result": "PASS"
+  },
+  "iterations": "initial before failure; minimal product patch; original after PASS; fixed expanded normal1/race3; two added supplementary cases normal1/race3; no randomized retry-until-pass"
+}

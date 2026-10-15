@@ -1,0 +1,26 @@
+=== RUN   TestReceiveStallControlAndSlowConsumer
+--- PASS: TestReceiveStallControlAndSlowConsumer (0.10s)
+=== RUN   TestReceiveStallProgress
+--- PASS: TestReceiveStallProgress (0.20s)
+=== RUN   TestReceiveStallBoundedBurst
+=== RUN   TestReceiveStallBoundedBurst/8
+    receive_stall_test.go:235: burst=8 received=14 ACKReceived=11 recvQueue=0 closed=false
+=== RUN   TestReceiveStallBoundedBurst/20
+    receive_stall_test.go:235: burst=20 received=24 ACKReceived=21 recvQueue=0 closed=false
+=== RUN   TestReceiveStallBoundedBurst/40
+    receive_stall_test.go:235: burst=40 received=45 ACKReceived=43 recvQueue=0 closed=false
+--- PASS: TestReceiveStallBoundedBurst (0.30s)
+    --- PASS: TestReceiveStallBoundedBurst/8 (0.10s)
+    --- PASS: TestReceiveStallBoundedBurst/20 (0.10s)
+    --- PASS: TestReceiveStallBoundedBurst/40 (0.10s)
+=== RUN   TestReceiveStallSequentialCleanup
+=== RUN   TestReceiveStallSequentialCleanup/false
+=== RUN   TestReceiveStallSequentialCleanup/true
+--- PASS: TestReceiveStallSequentialCleanup (0.40s)
+    --- PASS: TestReceiveStallSequentialCleanup/false (0.20s)
+    --- PASS: TestReceiveStallSequentialCleanup/true (0.20s)
+=== RUN   TestReceiveStallActualSendQueueCancellation
+    receive_stall_test.go:316: real sendQueue=256/256 recvQueue=0/16
+--- PASS: TestReceiveStallActualSendQueueCancellation (0.00s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/telemost	1.016s

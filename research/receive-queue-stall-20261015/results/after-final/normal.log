@@ -1,0 +1,649 @@
+=== RUN   TestDATA19ACKProofSemantics
+--- PASS: TestDATA19ACKProofSemantics (0.00s)
+=== RUN   TestDeliveryTracksHeadSACKAndConsumption
+--- PASS: TestDeliveryTracksHeadSACKAndConsumption (0.00s)
+=== RUN   TestDiagnosticPrefixDoesNotExposeBytes
+--- PASS: TestDiagnosticPrefixDoesNotExposeBytes (0.00s)
+=== RUN   TestBoundedRecentTelemetry
+--- PASS: TestBoundedRecentTelemetry (0.00s)
+=== RUN   TestDeterministicFaultMatrix
+=== RUN   TestDeterministicFaultMatrix/duplicate
+=== RUN   TestDeterministicFaultMatrix/delayed
+=== RUN   TestDeterministicFaultMatrix/combined
+=== RUN   TestDeterministicFaultMatrix/one_missing
+=== RUN   TestDeterministicFaultMatrix/prolonged_gap
+=== RUN   TestDeterministicFaultMatrix/ordered
+=== RUN   TestDeterministicFaultMatrix/burst
+=== RUN   TestDeterministicFaultMatrix/ack_loss
+=== RUN   TestDeterministicFaultMatrix/retransmit_duplicate
+=== RUN   TestDeterministicFaultMatrix/multiple_missing
+=== RUN   TestDeterministicFaultMatrix/every_nth
+=== RUN   TestDeterministicFaultMatrix/out_of_order
+--- PASS: TestDeterministicFaultMatrix (0.91s)
+    --- PASS: TestDeterministicFaultMatrix/duplicate (0.06s)
+    --- PASS: TestDeterministicFaultMatrix/delayed (0.10s)
+    --- PASS: TestDeterministicFaultMatrix/combined (0.18s)
+    --- PASS: TestDeterministicFaultMatrix/one_missing (0.04s)
+    --- PASS: TestDeterministicFaultMatrix/prolonged_gap (0.04s)
+    --- PASS: TestDeterministicFaultMatrix/ordered (0.06s)
+    --- PASS: TestDeterministicFaultMatrix/burst (0.05s)
+    --- PASS: TestDeterministicFaultMatrix/ack_loss (0.08s)
+    --- PASS: TestDeterministicFaultMatrix/retransmit_duplicate (0.10s)
+    --- PASS: TestDeterministicFaultMatrix/multiple_missing (0.05s)
+    --- PASS: TestDeterministicFaultMatrix/every_nth (0.04s)
+    --- PASS: TestDeterministicFaultMatrix/out_of_order (0.09s)
+=== RUN   TestWindowBoundsRetryAndStale
+--- PASS: TestWindowBoundsRetryAndStale (0.00s)
+=== RUN   TestSelectiveRetryAndConsumedACKLoss
+--- PASS: TestSelectiveRetryAndConsumedACKLoss (0.00s)
+=== RUN   TestSlowReceiverAgeAndMalformedACK
+--- PASS: TestSlowReceiverAgeAndMalformedACK (0.00s)
+=== RUN   TestMalformedAndConfigurationBounds
+--- PASS: TestMalformedAndConfigurationBounds (0.00s)
+=== RUN   TestForensicsPreservesReliableWireAndConfig
+--- PASS: TestForensicsPreservesReliableWireAndConfig (0.00s)
+=== RUN   TestHeadLossAndDuplicateVirtualClock
+=== RUN   TestHeadLossAndDuplicateVirtualClock/DATA48/late=false
+=== RUN   TestHeadLossAndDuplicateVirtualClock/DATA48/late=true
+=== RUN   TestHeadLossAndDuplicateVirtualClock/DATA58/late=false
+=== RUN   TestHeadLossAndDuplicateVirtualClock/DATA58/late=true
+--- PASS: TestHeadLossAndDuplicateVirtualClock (0.00s)
+    --- PASS: TestHeadLossAndDuplicateVirtualClock/DATA48/late=false (0.00s)
+    --- PASS: TestHeadLossAndDuplicateVirtualClock/DATA48/late=true (0.00s)
+    --- PASS: TestHeadLossAndDuplicateVirtualClock/DATA58/late=false (0.00s)
+    --- PASS: TestHeadLossAndDuplicateVirtualClock/DATA58/late=true (0.00s)
+=== RUN   TestAdapterBackpressureCancellation
+--- PASS: TestAdapterBackpressureCancellation (0.05s)
+=== RUN   TestAdapterExhaustionAndCancellation
+=== RUN   TestAdapterExhaustionAndCancellation/exhaustion
+=== RUN   TestAdapterExhaustionAndCancellation/cancel
+--- PASS: TestAdapterExhaustionAndCancellation (0.27s)
+    --- PASS: TestAdapterExhaustionAndCancellation/exhaustion (0.22s)
+    --- PASS: TestAdapterExhaustionAndCancellation/cancel (0.05s)
+=== RUN   TestCarrierStallAndClose
+--- PASS: TestCarrierStallAndClose (0.00s)
+=== RUN   TestNegotiatedPayload
+--- PASS: TestNegotiatedPayload (0.10s)
+=== RUN   TestFreshACKWithoutProgressDoesNotResetRetryBudget
+=== RUN   TestFreshACKWithoutProgressDoesNotResetRetryBudget/persistent_gap
+=== RUN   TestFreshACKWithoutProgressDoesNotResetRetryBudget/recovered_gap
+--- PASS: TestFreshACKWithoutProgressDoesNotResetRetryBudget (0.00s)
+    --- PASS: TestFreshACKWithoutProgressDoesNotResetRetryBudget/persistent_gap (0.00s)
+    --- PASS: TestFreshACKWithoutProgressDoesNotResetRetryBudget/recovered_gap (0.00s)
+=== RUN   TestExhaustionBranchesRetainBoundedEvidence
+=== RUN   TestExhaustionBranchesRetainBoundedEvidence/handshake
+=== RUN   TestExhaustionBranchesRetainBoundedEvidence/frame
+=== RUN   TestExhaustionBranchesRetainBoundedEvidence/retry
+=== RUN   TestExhaustionBranchesRetainBoundedEvidence/sacked
+--- PASS: TestExhaustionBranchesRetainBoundedEvidence (0.00s)
+    --- PASS: TestExhaustionBranchesRetainBoundedEvidence/handshake (0.00s)
+    --- PASS: TestExhaustionBranchesRetainBoundedEvidence/frame (0.00s)
+    --- PASS: TestExhaustionBranchesRetainBoundedEvidence/retry (0.00s)
+    --- PASS: TestExhaustionBranchesRetainBoundedEvidence/sacked (0.00s)
+=== RUN   TestExhaustionRecordedBeforeCarrierCleanup
+--- PASS: TestExhaustionRecordedBeforeCarrierCleanup (0.05s)
+=== RUN   TestEstablishedRetryFailurePrecedesCleanup
+--- PASS: TestEstablishedRetryFailurePrecedesCleanup (0.08s)
+=== RUN   FuzzFrame
+=== RUN   FuzzFrame/seed#0
+=== RUN   FuzzFrame/seed#1
+--- PASS: FuzzFrame (0.00s)
+    --- PASS: FuzzFrame/seed#0 (0.00s)
+    --- PASS: FuzzFrame/seed#1 (0.00s)
+=== RUN   FuzzEngine
+=== RUN   FuzzEngine/seed#0
+--- PASS: FuzzEngine (0.00s)
+    --- PASS: FuzzEngine/seed#0 (0.00s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/reliablestream	1.482s
+=== RUN   TestReceiveQueueFailureKeepsSourceBeforeCleanup
+--- PASS: TestReceiveQueueFailureKeepsSourceBeforeCleanup (0.00s)
+=== RUN   TestFragmentDeliveryMappingAndMissingHeader
+--- PASS: TestFragmentDeliveryMappingAndMissingHeader (0.00s)
+=== RUN   TestAssemblyRejectCountersDoNotChangeDelivery
+--- PASS: TestAssemblyRejectCountersDoNotChangeDelivery (0.00s)
+=== RUN   TestSignalingCloseEvidenceRedactsReason
+--- PASS: TestSignalingCloseEvidenceRedactsReason (0.00s)
+=== RUN   TestSignalingFailureClassification
+--- PASS: TestSignalingFailureClassification (0.00s)
+=== RUN   TestEvidenceBoundAndRedaction
+--- PASS: TestEvidenceBoundAndRedaction (0.00s)
+=== RUN   TestLiveFamilyHandshakeReplay
+    family_replay_live_test.go:35: explicit opt-in, Family echo and orchestrated fresh server required
+--- SKIP: TestLiveFamilyHandshakeReplay (0.00s)
+=== RUN   TestForensicsObserverPreservesRTPBytes
+--- PASS: TestForensicsObserverPreservesRTPBytes (0.00s)
+=== RUN   TestFragmentRoundTrips
+--- PASS: TestFragmentRoundTrips (0.00s)
+=== RUN   TestReassemblyBoundsAndTimeout
+--- PASS: TestReassemblyBoundsAndTimeout (0.01s)
+=== RUN   TestReassemblyRejectsMalformedAndDuplicates
+--- PASS: TestReassemblyRejectsMalformedAndDuplicates (0.00s)
+=== RUN   TestCRCAndRecentMessageBound
+--- PASS: TestCRCAndRecentMessageBound (0.13s)
+=== RUN   TestRTPRejectsMixedTimestamps
+--- PASS: TestRTPRejectsMixedTimestamps (0.00s)
+=== RUN   TestVP8RTPRoundTripAndLoss
+--- PASS: TestVP8RTPRoundTripAndLoss (0.00s)
+=== RUN   TestRTPReorderAndBounds
+--- PASS: TestRTPReorderAndBounds (0.00s)
+=== RUN   TestHeadLossBoundPionAttempts
+=== RUN   TestHeadLossBoundPionAttempts/DATA48/logical
+    head_loss_test.go:301: same DATA48 attempts0/1 message IDs distinct; bound Pion RTP=15/15; ACK/base=56; no restart
+=== RUN   TestHeadLossBoundPionAttempts/DATA48/carrier
+    head_loss_test.go:301: same DATA48 attempts0/1 message IDs distinct; bound Pion RTP=0/15; ACK/base=56; no restart
+=== RUN   TestHeadLossBoundPionAttempts/DATA48/frame
+    head_loss_test.go:301: same DATA48 attempts0/1 message IDs distinct; bound Pion RTP=15/15; ACK/base=56; no restart
+=== RUN   TestHeadLossBoundPionAttempts/DATA48/duplicate
+    head_loss_test.go:301: same DATA48 attempts0/1 message IDs distinct; bound Pion RTP=15/15; ACK/base=56; no restart
+=== RUN   TestHeadLossBoundPionAttempts/DATA48/late_message
+    head_loss_test.go:301: same DATA48 attempts0/1 message IDs distinct; bound Pion RTP=15/15; ACK/base=56; no restart
+=== RUN   TestHeadLossBoundPionAttempts/DATA48/late_rtp
+    head_loss_test.go:301: same DATA48 attempts0/1 message IDs distinct; bound Pion RTP=15/15; ACK/base=56; no restart
+=== RUN   TestHeadLossBoundPionAttempts/DATA58/logical
+    head_loss_test.go:301: same DATA58 attempts0/1 message IDs distinct; bound Pion RTP=15/15; ACK/base=66; no restart
+=== RUN   TestHeadLossBoundPionAttempts/DATA58/carrier
+    head_loss_test.go:301: same DATA58 attempts0/1 message IDs distinct; bound Pion RTP=0/15; ACK/base=66; no restart
+=== RUN   TestHeadLossBoundPionAttempts/DATA58/frame
+    head_loss_test.go:301: same DATA58 attempts0/1 message IDs distinct; bound Pion RTP=15/15; ACK/base=66; no restart
+=== RUN   TestHeadLossBoundPionAttempts/DATA58/duplicate
+    head_loss_test.go:301: same DATA58 attempts0/1 message IDs distinct; bound Pion RTP=15/15; ACK/base=66; no restart
+=== RUN   TestHeadLossBoundPionAttempts/DATA58/late_message
+    head_loss_test.go:301: same DATA58 attempts0/1 message IDs distinct; bound Pion RTP=15/15; ACK/base=66; no restart
+=== RUN   TestHeadLossBoundPionAttempts/DATA58/late_rtp
+    head_loss_test.go:301: same DATA58 attempts0/1 message IDs distinct; bound Pion RTP=15/15; ACK/base=66; no restart
+--- PASS: TestHeadLossBoundPionAttempts (14.43s)
+    --- PASS: TestHeadLossBoundPionAttempts/DATA48/logical (1.20s)
+    --- PASS: TestHeadLossBoundPionAttempts/DATA48/carrier (1.20s)
+    --- PASS: TestHeadLossBoundPionAttempts/DATA48/frame (1.20s)
+    --- PASS: TestHeadLossBoundPionAttempts/DATA48/duplicate (1.20s)
+    --- PASS: TestHeadLossBoundPionAttempts/DATA48/late_message (1.20s)
+    --- PASS: TestHeadLossBoundPionAttempts/DATA48/late_rtp (1.20s)
+    --- PASS: TestHeadLossBoundPionAttempts/DATA58/logical (1.20s)
+    --- PASS: TestHeadLossBoundPionAttempts/DATA58/carrier (1.20s)
+    --- PASS: TestHeadLossBoundPionAttempts/DATA58/frame (1.20s)
+    --- PASS: TestHeadLossBoundPionAttempts/DATA58/duplicate (1.20s)
+    --- PASS: TestHeadLossBoundPionAttempts/DATA58/late_message (1.20s)
+    --- PASS: TestHeadLossBoundPionAttempts/DATA58/late_rtp (1.20s)
+=== RUN   TestUnboundWriteSampleIsNotRTPEmission
+--- PASS: TestUnboundWriteSampleIsNotRTPEmission (0.00s)
+=== RUN   TestNineFreshBoundMediaIdentitiesForSameDATA
+=== RUN   TestNineFreshBoundMediaIdentitiesForSameDATA/48
+=== RUN   TestNineFreshBoundMediaIdentitiesForSameDATA/58
+--- PASS: TestNineFreshBoundMediaIdentitiesForSameDATA (0.01s)
+    --- PASS: TestNineFreshBoundMediaIdentitiesForSameDATA/48 (0.01s)
+    --- PASS: TestNineFreshBoundMediaIdentitiesForSameDATA/58 (0.00s)
+=== RUN   TestLiveSignalingClosure
+    live_test.go:18: explicit live opt-in and remote VP8 echo required
+--- SKIP: TestLiveSignalingClosure (0.00s)
+=== RUN   TestLocalTwoProcessVP8
+    local_process_test.go:67: PRELIMINARY ONLY: two local processes, real Pion VP8 RTP/DTLS, 7 sizes + 100x1KiB + 100x16KiB; NOT Telemost acceptance
+--- PASS: TestLocalTwoProcessVP8 (1.17s)
+=== RUN   TestLocalEndpointHelper
+    local_process_test.go:73: private subprocess helper
+--- SKIP: TestLocalEndpointHelper (0.00s)
+=== RUN   TestMessengerLocalProvider
+    messenger_local_test.go:52: disposable local provider only
+--- SKIP: TestMessengerLocalProvider (0.00s)
+=== RUN   TestPerformanceSnapshotQueues
+--- PASS: TestPerformanceSnapshotQueues (0.00s)
+=== RUN   TestReceiveStallControlAndSlowConsumer
+--- PASS: TestReceiveStallControlAndSlowConsumer (0.10s)
+=== RUN   TestReceiveStallProgress
+--- PASS: TestReceiveStallProgress (0.20s)
+=== RUN   TestReceiveStallBoundedBurst
+=== RUN   TestReceiveStallBoundedBurst/8
+    receive_stall_test.go:242: burst=8 received=13 ACKReceived=10 recvQueue=0 closed=false
+=== RUN   TestReceiveStallBoundedBurst/20
+    receive_stall_test.go:242: burst=20 received=25 ACKReceived=22 recvQueue=0 closed=false
+=== RUN   TestReceiveStallBoundedBurst/40
+    receive_stall_test.go:242: burst=40 received=45 ACKReceived=43 recvQueue=0 closed=false
+--- PASS: TestReceiveStallBoundedBurst (0.30s)
+    --- PASS: TestReceiveStallBoundedBurst/8 (0.10s)
+    --- PASS: TestReceiveStallBoundedBurst/20 (0.10s)
+    --- PASS: TestReceiveStallBoundedBurst/40 (0.10s)
+=== RUN   TestReceiveStallSequentialCleanup
+=== RUN   TestReceiveStallSequentialCleanup/false
+=== RUN   TestReceiveStallSequentialCleanup/true
+--- PASS: TestReceiveStallSequentialCleanup (0.41s)
+    --- PASS: TestReceiveStallSequentialCleanup/false (0.20s)
+    --- PASS: TestReceiveStallSequentialCleanup/true (0.21s)
+=== RUN   TestReceiveStallActualSendQueueCancellation
+    receive_stall_test.go:323: real sendQueue=256/256 recvQueue=0/16
+--- PASS: TestReceiveStallActualSendQueueCancellation (0.00s)
+=== RUN   TestReceiveStallResumeByteExact
+--- PASS: TestReceiveStallResumeByteExact (0.10s)
+=== RUN   TestReceiveStallPersistentBlockBounded
+--- PASS: TestReceiveStallPersistentBlockBounded (2.20s)
+=== RUN   TestReliableStreamOverVP8MissingRTPWithFreshACK
+=== RUN   TestReliableStreamOverVP8MissingRTPWithFreshACK/no_loss
+    reliable_framing_test.go:184: head DATA attempts=1 dropped RTP=0 ACKs=8 SACKs=7
+=== RUN   TestReliableStreamOverVP8MissingRTPWithFreshACK/healed_gap
+    reliable_framing_test.go:184: head DATA attempts=5 dropped RTP=4 ACKs=12 SACKs=9
+=== RUN   TestReliableStreamOverVP8MissingRTPWithFreshACK/persistent_gap
+    reliable_framing_test.go:184: head DATA attempts=9 dropped RTP=9 ACKs=13 SACKs=11
+--- PASS: TestReliableStreamOverVP8MissingRTPWithFreshACK (14.21s)
+    --- PASS: TestReliableStreamOverVP8MissingRTPWithFreshACK/no_loss (0.10s)
+    --- PASS: TestReliableStreamOverVP8MissingRTPWithFreshACK/healed_gap (4.40s)
+    --- PASS: TestReliableStreamOverVP8MissingRTPWithFreshACK/persistent_gap (9.70s)
+=== RUN   TestLiveReliableGap
+    reliable_live_test.go:33: explicit physical live gap opt-in
+--- SKIP: TestLiveReliableGap (0.00s)
+=== RUN   TestRTPReorderGivesEachGapItsOwnDeadline
+=== RUN   TestRTPReorderGivesEachGapItsOwnDeadline/healed_gap
+=== RUN   TestRTPReorderGivesEachGapItsOwnDeadline/skipped_gap
+=== RUN   TestRTPReorderGivesEachGapItsOwnDeadline/healed_gap_wrap
+=== RUN   TestRTPReorderGivesEachGapItsOwnDeadline/skipped_gap_wrap
+--- PASS: TestRTPReorderGivesEachGapItsOwnDeadline (0.00s)
+    --- PASS: TestRTPReorderGivesEachGapItsOwnDeadline/healed_gap (0.00s)
+    --- PASS: TestRTPReorderGivesEachGapItsOwnDeadline/skipped_gap (0.00s)
+    --- PASS: TestRTPReorderGivesEachGapItsOwnDeadline/healed_gap_wrap (0.00s)
+    --- PASS: TestRTPReorderGivesEachGapItsOwnDeadline/skipped_gap_wrap (0.00s)
+=== RUN   TestRTPReorderFreshGapPreservesCarrierMessage
+--- PASS: TestRTPReorderFreshGapPreservesCarrierMessage (0.00s)
+=== RUN   TestRTPReorderDoesNotExtendUnchangedGap
+--- PASS: TestRTPReorderDoesNotExtendUnchangedGap (0.00s)
+=== RUN   TestRoomAndSignalingValidation
+--- PASS: TestRoomAndSignalingValidation (0.00s)
+=== RUN   TestHTTPFlowAndRedaction
+--- PASS: TestHTTPFlowAndRedaction (0.00s)
+=== RUN   TestConnectFailureAndCancellationCleanup
+--- PASS: TestConnectFailureAndCancellationCleanup (0.11s)
+=== RUN   TestConcurrentCloseAndReady
+--- PASS: TestConcurrentCloseAndReady (0.00s)
+=== RUN   TestSendAndRecvBackpressure
+--- PASS: TestSendAndRecvBackpressure (0.00s)
+=== RUN   TestVP8ModeRejectsDataChannelDelivery
+--- PASS: TestVP8ModeRejectsDataChannelDelivery (0.00s)
+=== RUN   TestSignalingClosureAndInvalidJSON
+=== RUN   TestSignalingClosureAndInvalidJSON/{
+=== RUN   TestSignalingClosureAndInvalidJSON/{"conferenceEnded":{}}
+=== RUN   TestSignalingClosureAndInvalidJSON/{"subscriberSdpOffer":{"sdp":"invalid-secret-sdp"}}
+=== RUN   TestSignalingClosureAndInvalidJSON/#00
+--- PASS: TestSignalingClosureAndInvalidJSON (0.03s)
+    --- PASS: TestSignalingClosureAndInvalidJSON/{ (0.02s)
+    --- PASS: TestSignalingClosureAndInvalidJSON/{"conferenceEnded":{}} (0.00s)
+    --- PASS: TestSignalingClosureAndInvalidJSON/{"subscriberSdpOffer":{"sdp":"invalid-secret-sdp"}} (0.01s)
+    --- PASS: TestSignalingClosureAndInvalidJSON/#00 (0.00s)
+=== RUN   TestEarlyICEBoundAndEndParser
+--- PASS: TestEarlyICEBoundAndEndParser (0.01s)
+=== RUN   TestSignalingHelloAndSDPSequence
+--- PASS: TestSignalingHelloAndSDPSequence (0.40s)
+=== RUN   TestApplicationHeartbeatAndPongAcknowledgment
+--- PASS: TestApplicationHeartbeatAndPongAcknowledgment (5.01s)
+=== RUN   TestTypedLifecycleFirstFailureAndPrivacy
+--- PASS: TestTypedLifecycleFirstFailureAndPrivacy (0.00s)
+=== RUN   TestRestrictedHTTPAndWebSocketCannotBypassProtection
+--- PASS: TestRestrictedHTTPAndWebSocketCannotBypassProtection (0.00s)
+=== RUN   FuzzReassembler
+=== RUN   FuzzReassembler/seed#0
+--- PASS: FuzzReassembler (0.00s)
+    --- PASS: FuzzReassembler/seed#0 (0.00s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/telemost	38.870s
+=== RUN   TestStopSourceDistinguishesCredentialExpiryAndParent
+=== RUN   TestStopSourceDistinguishesCredentialExpiryAndParent/credential
+=== RUN   TestStopSourceDistinguishesCredentialExpiryAndParent/parent
+=== RUN   TestStopSourceDistinguishesCredentialExpiryAndParent/read
+--- PASS: TestStopSourceDistinguishesCredentialExpiryAndParent (0.00s)
+    --- PASS: TestStopSourceDistinguishesCredentialExpiryAndParent/credential (0.00s)
+    --- PASS: TestStopSourceDistinguishesCredentialExpiryAndParent/parent (0.00s)
+    --- PASS: TestStopSourceDistinguishesCredentialExpiryAndParent/read (0.00s)
+=== RUN   TestCanonicalMatrixAndCancellation
+--- PASS: TestCanonicalMatrixAndCancellation (0.13s)
+=== RUN   TestAdmissionFailures
+=== RUN   TestAdmissionFailures/wrong-family
+=== RUN   TestAdmissionFailures/stale-revision
+=== RUN   TestAdmissionFailures/wrong-gateway
+=== RUN   TestAdmissionFailures/unknown-authority
+=== RUN   TestAdmissionFailures/stale-crl
+=== RUN   TestAdmissionFailures/bad-crl
+=== RUN   TestAdmissionFailures/bad-key
+=== RUN   TestAdmissionFailures/role
+=== RUN   TestAdmissionFailures/expired-certificate
+--- PASS: TestAdmissionFailures (1.24s)
+    --- PASS: TestAdmissionFailures/wrong-family (0.10s)
+    --- PASS: TestAdmissionFailures/stale-revision (0.11s)
+    --- PASS: TestAdmissionFailures/wrong-gateway (0.11s)
+    --- PASS: TestAdmissionFailures/unknown-authority (0.11s)
+    --- PASS: TestAdmissionFailures/stale-crl (0.20s)
+    --- PASS: TestAdmissionFailures/bad-crl (0.20s)
+    --- PASS: TestAdmissionFailures/bad-key (0.20s)
+    --- PASS: TestAdmissionFailures/role (0.10s)
+    --- PASS: TestAdmissionFailures/expired-certificate (0.10s)
+=== RUN   TestExpiredLeaseAndBounds
+=== RUN   TestExpiredLeaseAndBounds/expired
+=== RUN   TestExpiredLeaseAndBounds/oversized
+=== RUN   TestExpiredLeaseAndBounds/repeated-sequence
+=== RUN   TestExpiredLeaseAndBounds/cancel-read
+=== RUN   TestExpiredLeaseAndBounds/deadline-read
+--- PASS: TestExpiredLeaseAndBounds (0.54s)
+    --- PASS: TestExpiredLeaseAndBounds/expired (0.10s)
+    --- PASS: TestExpiredLeaseAndBounds/oversized (0.10s)
+    --- PASS: TestExpiredLeaseAndBounds/repeated-sequence (0.10s)
+    --- PASS: TestExpiredLeaseAndBounds/cancel-read (0.11s)
+    --- PASS: TestExpiredLeaseAndBounds/deadline-read (0.12s)
+=== RUN   TestTLSRecordReplayRejected
+--- PASS: TestTLSRecordReplayRejected (0.00s)
+=== RUN   TestProductStoreFixtures
+    session_test.go:326: disposable ProductStore fixture integration is opt-in
+--- SKIP: TestProductStoreFixtures (0.00s)
+=== RUN   TestHandshakeProofReplayRejected
+--- PASS: TestHandshakeProofReplayRejected (0.00s)
+=== RUN   TestReliableTLSFaultMatrix
+--- PASS: TestReliableTLSFaultMatrix (6.68s)
+=== RUN   TestReliableTLSExhaustion
+--- PASS: TestReliableTLSExhaustion (0.11s)
+=== RUN   TestTLSFailureDiagnosticClassification
+--- PASS: TestTLSFailureDiagnosticClassification (0.00s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/familysession	8.721s
+=== RUN   TestDestinationCanonicalPinnedDualStack
+--- PASS: TestDestinationCanonicalPinnedDualStack (0.00s)
+=== RUN   TestDestinationResolvedSSRFAllCandidates
+=== RUN   TestDestinationResolvedSSRFAllCandidates/127.0.0.1
+=== RUN   TestDestinationResolvedSSRFAllCandidates/10.0.0.1
+=== RUN   TestDestinationResolvedSSRFAllCandidates/169.254.169.254
+=== RUN   TestDestinationResolvedSSRFAllCandidates/::1
+=== RUN   TestDestinationResolvedSSRFAllCandidates/fc00::1
+=== RUN   TestDestinationResolvedSSRFAllCandidates/fe80::1
+=== RUN   TestDestinationResolvedSSRFAllCandidates/100.64.0.1
+=== RUN   TestDestinationResolvedSSRFAllCandidates/0.0.0.0
+=== RUN   TestDestinationResolvedSSRFAllCandidates/ff02::1
+=== RUN   TestDestinationResolvedSSRFAllCandidates/GATEWAY_DESTINATION_FIXTURE
+--- PASS: TestDestinationResolvedSSRFAllCandidates (0.00s)
+    --- PASS: TestDestinationResolvedSSRFAllCandidates/127.0.0.1 (0.00s)
+    --- PASS: TestDestinationResolvedSSRFAllCandidates/10.0.0.1 (0.00s)
+    --- PASS: TestDestinationResolvedSSRFAllCandidates/169.254.169.254 (0.00s)
+    --- PASS: TestDestinationResolvedSSRFAllCandidates/::1 (0.00s)
+    --- PASS: TestDestinationResolvedSSRFAllCandidates/fc00::1 (0.00s)
+    --- PASS: TestDestinationResolvedSSRFAllCandidates/fe80::1 (0.00s)
+    --- PASS: TestDestinationResolvedSSRFAllCandidates/100.64.0.1 (0.00s)
+    --- PASS: TestDestinationResolvedSSRFAllCandidates/0.0.0.0 (0.00s)
+    --- PASS: TestDestinationResolvedSSRFAllCandidates/ff02::1 (0.00s)
+    --- PASS: TestDestinationResolvedSSRFAllCandidates/GATEWAY_DESTINATION_FIXTURE (0.00s)
+=== RUN   TestDestinationDNSFailureTimeoutCancellation
+=== RUN   TestDestinationDNSFailureTimeoutCancellation/nxdomain
+=== RUN   TestDestinationDNSFailureTimeoutCancellation/timeout
+=== RUN   TestDestinationDNSFailureTimeoutCancellation/cancelled
+=== RUN   TestDestinationDNSFailureTimeoutCancellation/empty
+--- PASS: TestDestinationDNSFailureTimeoutCancellation (0.02s)
+    --- PASS: TestDestinationDNSFailureTimeoutCancellation/nxdomain (0.00s)
+    --- PASS: TestDestinationDNSFailureTimeoutCancellation/timeout (0.02s)
+    --- PASS: TestDestinationDNSFailureTimeoutCancellation/cancelled (0.00s)
+    --- PASS: TestDestinationDNSFailureTimeoutCancellation/empty (0.00s)
+=== RUN   TestDestinationIDNAPolicyAndBounds
+--- PASS: TestDestinationIDNAPolicyAndBounds (0.00s)
+=== RUN   TestDestinationConcurrentResolutionNoSharedUnboundedCache
+--- PASS: TestDestinationConcurrentResolutionNoSharedUnboundedCache (0.00s)
+=== RUN   TestHostnameHTTPSWithBrokenClientDNS
+--- PASS: TestHostnameHTTPSWithBrokenClientDNS (0.09s)
+=== RUN   TestFullDuplexSegmentationAndHalfClose
+=== RUN   TestFullDuplexSegmentationAndHalfClose/1
+=== RUN   TestFullDuplexSegmentationAndHalfClose/32
+=== RUN   TestFullDuplexSegmentationAndHalfClose/1024
+=== RUN   TestFullDuplexSegmentationAndHalfClose/16384
+=== RUN   TestFullDuplexSegmentationAndHalfClose/65536
+=== RUN   TestFullDuplexSegmentationAndHalfClose/3145728
+--- PASS: TestFullDuplexSegmentationAndHalfClose (0.02s)
+    --- PASS: TestFullDuplexSegmentationAndHalfClose/1 (0.00s)
+    --- PASS: TestFullDuplexSegmentationAndHalfClose/32 (0.00s)
+    --- PASS: TestFullDuplexSegmentationAndHalfClose/1024 (0.00s)
+    --- PASS: TestFullDuplexSegmentationAndHalfClose/16384 (0.00s)
+    --- PASS: TestFullDuplexSegmentationAndHalfClose/65536 (0.00s)
+    --- PASS: TestFullDuplexSegmentationAndHalfClose/3145728 (0.02s)
+=== RUN   TestRemoteHalfCloseStillAllowsWrite
+--- PASS: TestRemoteHalfCloseStillAllowsWrite (0.00s)
+=== RUN   TestLocalHalfCloseResponseAfterEOF
+--- PASS: TestLocalHalfCloseResponseAfterEOF (0.00s)
+=== RUN   TestImmediateCloseResetCancellation
+=== RUN   TestImmediateCloseResetCancellation/eof
+=== RUN   TestImmediateCloseResetCancellation/reset
+=== RUN   TestImmediateCloseResetCancellation/cancel
+=== RUN   TestImmediateCloseResetCancellation/session_close
+=== RUN   TestImmediateCloseResetCancellation/client_reset
+--- PASS: TestImmediateCloseResetCancellation (0.00s)
+    --- PASS: TestImmediateCloseResetCancellation/eof (0.00s)
+    --- PASS: TestImmediateCloseResetCancellation/reset (0.00s)
+    --- PASS: TestImmediateCloseResetCancellation/cancel (0.00s)
+    --- PASS: TestImmediateCloseResetCancellation/session_close (0.00s)
+    --- PASS: TestImmediateCloseResetCancellation/client_reset (0.00s)
+=== RUN   TestOpenErrorsAndPolicy
+=== RUN   TestOpenErrorsAndPolicy/port
+=== RUN   TestOpenErrorsAndPolicy/url
+=== RUN   TestOpenErrorsAndPolicy/private
+=== RUN   TestOpenErrorsAndPolicy/dns
+=== RUN   TestOpenErrorsAndPolicy/mixedDNS
+=== RUN   TestOpenErrorsAndPolicy/refused
+=== RUN   TestOpenErrorsAndPolicy/timeout
+=== RUN   TestOpenErrorsAndPolicy/unreachable
+--- PASS: TestOpenErrorsAndPolicy (0.00s)
+    --- PASS: TestOpenErrorsAndPolicy/port (0.00s)
+    --- PASS: TestOpenErrorsAndPolicy/url (0.00s)
+    --- PASS: TestOpenErrorsAndPolicy/private (0.00s)
+    --- PASS: TestOpenErrorsAndPolicy/dns (0.00s)
+    --- PASS: TestOpenErrorsAndPolicy/mixedDNS (0.00s)
+    --- PASS: TestOpenErrorsAndPolicy/refused (0.00s)
+    --- PASS: TestOpenErrorsAndPolicy/timeout (0.00s)
+    --- PASS: TestOpenErrorsAndPolicy/unreachable (0.00s)
+=== RUN   TestDNSPinnedAndConnectDeadline
+--- PASS: TestDNSPinnedAndConnectDeadline (0.02s)
+=== RUN   TestPartialTCPWrites
+--- PASS: TestPartialTCPWrites (0.00s)
+=== RUN   TestBackpressure
+--- PASS: TestBackpressure (0.03s)
+=== RUN   TestMalformedAndLifecycleFrames
+--- PASS: TestMalformedAndLifecycleFrames (0.00s)
+=== RUN   TestGatewayBackpressureBothDirections
+=== RUN   TestGatewayBackpressureBothDirections/0
+=== RUN   TestGatewayBackpressureBothDirections/1
+--- PASS: TestGatewayBackpressureBothDirections (0.06s)
+    --- PASS: TestGatewayBackpressureBothDirections/0 (0.03s)
+    --- PASS: TestGatewayBackpressureBothDirections/1 (0.03s)
+=== RUN   TestActualRefusedAndPrematureClose
+--- PASS: TestActualRefusedAndPrematureClose (0.10s)
+=== RUN   TestAuthenticatedReliableTCPNoDuplicateBytes
+    integration_test.go:209: gaps=14 recovered=14 retransmissions=27 duplicates_filtered=64
+    integration_test.go:209: gaps=14 recovered=14 retransmissions=27 duplicates_filtered=64
+--- PASS: TestAuthenticatedReliableTCPNoDuplicateBytes (0.59s)
+=== RUN   TestAuthenticationRequired
+--- PASS: TestAuthenticationRequired (0.00s)
+=== RUN   TestAuthenticatedImmediateResetPreservesOpen
+--- PASS: TestAuthenticatedImmediateResetPreservesOpen (0.01s)
+=== RUN   TestEndSiteTLSRemoteClosureBeforeTCPFIN
+--- PASS: TestEndSiteTLSRemoteClosureBeforeTCPFIN (0.00s)
+=== RUN   TestMuxDNSOutstandingLimitAndRelease
+--- PASS: TestMuxDNSOutstandingLimitAndRelease (0.00s)
+=== RUN   TestMuxMalformedWireBounds
+--- PASS: TestMuxMalformedWireBounds (0.00s)
+=== RUN   TestMuxTerminalTransitionsIsolated
+=== RUN   TestMuxTerminalTransitionsIsolated/4
+=== RUN   TestMuxTerminalTransitionsIsolated/5
+--- PASS: TestMuxTerminalTransitionsIsolated (0.00s)
+    --- PASS: TestMuxTerminalTransitionsIsolated/4 (0.00s)
+    --- PASS: TestMuxTerminalTransitionsIsolated/5 (0.00s)
+=== RUN   TestTerminalPreservesFirstCauseAndTime
+--- PASS: TestTerminalPreservesFirstCauseAndTime (0.00s)
+=== RUN   TestControlOverflowRecordsTime
+--- PASS: TestControlOverflowRecordsTime (0.00s)
+=== RUN   TestMuxAuthenticatedLossReorderDuplicate
+--- PASS: TestMuxAuthenticatedLossReorderDuplicate (6.57s)
+=== RUN   TestMuxConnectFailuresDoNotKillSibling
+=== RUN   TestMuxConnectFailuresDoNotKillSibling/connection_refused
+=== RUN   TestMuxConnectFailuresDoNotKillSibling/context_deadline_exceeded
+=== RUN   TestMuxConnectFailuresDoNotKillSibling/context_canceled
+--- PASS: TestMuxConnectFailuresDoNotKillSibling (0.00s)
+    --- PASS: TestMuxConnectFailuresDoNotKillSibling/connection_refused (0.00s)
+    --- PASS: TestMuxConnectFailuresDoNotKillSibling/context_deadline_exceeded (0.00s)
+    --- PASS: TestMuxConnectFailuresDoNotKillSibling/context_canceled (0.00s)
+=== RUN   TestMuxCollisionStaleAndExhaustion
+--- PASS: TestMuxCollisionStaleAndExhaustion (0.00s)
+=== RUN   TestMuxDNSAnswersDuplicateAndMismatch
+=== RUN   TestMuxDNSAnswersDuplicateAndMismatch/TypeA
+=== RUN   TestMuxDNSAnswersDuplicateAndMismatch/TypeAAAA
+=== RUN   TestMuxDNSAnswersDuplicateAndMismatch/TypeCNAME
+--- PASS: TestMuxDNSAnswersDuplicateAndMismatch (0.00s)
+    --- PASS: TestMuxDNSAnswersDuplicateAndMismatch/TypeA (0.00s)
+    --- PASS: TestMuxDNSAnswersDuplicateAndMismatch/TypeAAAA (0.00s)
+    --- PASS: TestMuxDNSAnswersDuplicateAndMismatch/TypeCNAME (0.00s)
+=== RUN   TestMuxOpenCloseCancellationStress
+--- PASS: TestMuxOpenCloseCancellationStress (0.04s)
+=== RUN   TestMuxGlobalBlockedWriterShutdown
+--- PASS: TestMuxGlobalBlockedWriterShutdown (0.00s)
+=== RUN   TestMuxConcurrentExactSegmentation
+=== RUN   TestMuxConcurrentExactSegmentation/1
+=== RUN   TestMuxConcurrentExactSegmentation/4
+=== RUN   TestMuxConcurrentExactSegmentation/8
+=== RUN   TestMuxConcurrentExactSegmentation/16
+=== RUN   TestMuxConcurrentExactSegmentation/32
+--- PASS: TestMuxConcurrentExactSegmentation (1.46s)
+    --- PASS: TestMuxConcurrentExactSegmentation/1 (0.01s)
+    --- PASS: TestMuxConcurrentExactSegmentation/4 (0.05s)
+    --- PASS: TestMuxConcurrentExactSegmentation/8 (0.10s)
+    --- PASS: TestMuxConcurrentExactSegmentation/16 (0.30s)
+    --- PASS: TestMuxConcurrentExactSegmentation/32 (1.01s)
+=== RUN   TestMuxLimitAndIndependentReset
+--- PASS: TestMuxLimitAndIndependentReset (0.00s)
+=== RUN   TestMuxSlowConsumerAndInteractive
+--- PASS: TestMuxSlowConsumerAndInteractive (0.00s)
+=== RUN   TestMuxHalfCloseAndOpenErrors
+--- PASS: TestMuxHalfCloseAndOpenErrors (0.00s)
+=== RUN   TestMuxSessionCancellationManyStreams
+--- PASS: TestMuxSessionCancellationManyStreams (0.00s)
+=== RUN   TestMuxSchedulerRoundRobinAndPriority
+--- PASS: TestMuxSchedulerRoundRobinAndPriority (0.00s)
+=== RUN   TestMuxDNSConcurrentBulkAndMatching
+--- PASS: TestMuxDNSConcurrentBulkAndMatching (0.03s)
+=== RUN   TestMuxDNSCancellationAndShutdown
+--- PASS: TestMuxDNSCancellationAndShutdown (0.02s)
+=== RUN   TestMuxMalformedStateIsolation
+=== RUN   TestMuxMalformedStateIsolation/4
+=== RUN   TestMuxMalformedStateIsolation/5
+=== RUN   TestMuxMalformedStateIsolation/1
+=== RUN   TestMuxMalformedStateIsolation/7
+=== RUN   TestMuxMalformedStateIsolation/8
+--- PASS: TestMuxMalformedStateIsolation (0.00s)
+    --- PASS: TestMuxMalformedStateIsolation/4 (0.00s)
+    --- PASS: TestMuxMalformedStateIsolation/5 (0.00s)
+    --- PASS: TestMuxMalformedStateIsolation/1 (0.00s)
+    --- PASS: TestMuxMalformedStateIsolation/7 (0.00s)
+    --- PASS: TestMuxMalformedStateIsolation/8 (0.00s)
+=== RUN   TestMuxPartialSocketWriter
+--- PASS: TestMuxPartialSocketWriter (0.00s)
+=== RUN   TestServiceDestinationsAreClosedAndOperatorPinned
+--- PASS: TestServiceDestinationsAreClosedAndOperatorPinned (0.00s)
+=== RUN   TestServiceOnlyRejectsPublicAndPrivateWithoutDial
+--- PASS: TestServiceOnlyRejectsPublicAndPrivateWithoutDial (0.00s)
+=== RUN   FuzzFrame
+=== RUN   FuzzFrame/seed#0
+=== RUN   FuzzFrame/seed#1
+--- PASS: FuzzFrame (0.00s)
+    --- PASS: FuzzFrame/seed#0 (0.00s)
+    --- PASS: FuzzFrame/seed#1 (0.00s)
+=== RUN   FuzzMuxFrame
+=== RUN   FuzzMuxFrame/seed#0
+=== RUN   FuzzMuxFrame/seed#1
+--- PASS: FuzzMuxFrame (0.00s)
+    --- PASS: FuzzMuxFrame/seed#0 (0.00s)
+    --- PASS: FuzzMuxFrame/seed#1 (0.00s)
+=== RUN   FuzzMuxCreditAndState
+=== RUN   FuzzMuxCreditAndState/seed#0
+--- PASS: FuzzMuxCreditAndState (0.00s)
+    --- PASS: FuzzMuxCreditAndState/seed#0 (0.00s)
+=== RUN   FuzzMuxDNS
+=== RUN   FuzzMuxDNS/seed#0
+--- PASS: FuzzMuxDNS (0.00s)
+    --- PASS: FuzzMuxDNS/seed#0 (0.00s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/tcpforward	9.100s
+=== RUN   TestBoundaryBoundPrivacyCopiesAndConcurrentSnapshot
+--- PASS: TestBoundaryBoundPrivacyCopiesAndConcurrentSnapshot (0.00s)
+=== RUN   TestMessageAttemptEvictionIsUnknown
+--- PASS: TestMessageAttemptEvictionIsUnknown (0.00s)
+=== RUN   TestFirstCloseSurvivesCleanupAndRingEviction
+--- PASS: TestFirstCloseSurvivesCleanupAndRingEviction (0.00s)
+=== RUN   TestCloseSourcePrivacyAndLeaseBounds
+--- PASS: TestCloseSourcePrivacyAndLeaseBounds (0.00s)
+=== RUN   TestDeliveryRetentionAndDeepCopies
+--- PASS: TestDeliveryRetentionAndDeepCopies (0.00s)
+=== RUN   TestFaultDefaultBuildCannotArm
+--- PASS: TestFaultDefaultBuildCannotArm (0.00s)
+=== RUN   TestLeaseReceiptProjection
+--- PASS: TestLeaseReceiptProjection (0.00s)
+=== RUN   TestPublicSchemaGolden
+--- PASS: TestPublicSchemaGolden (0.00s)
+=== RUN   TestPublicForensicsCannotEnterExport
+--- PASS: TestPublicForensicsCannotEnterExport (0.00s)
+=== RUN   TestProductionIdentifier
+--- PASS: TestProductionIdentifier (0.00s)
+=== RUN   TestFirstFailureBoundPrivacyAndSnapshots
+--- PASS: TestFirstFailureBoundPrivacyAndSnapshots (0.00s)
+=== RUN   TestCloseAndBrokerDetailsAreAllowlisted
+--- PASS: TestCloseAndBrokerDetailsAreAllowlisted (0.00s)
+=== RUN   TestEvidenceWatchDisabledInProduct
+--- PASS: TestEvidenceWatchDisabledInProduct (0.00s)
+=== RUN   TestCorrelationNoDefaultEndpoint
+--- PASS: TestCorrelationNoDefaultEndpoint (0.00s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/sessiontrace	0.009s
+=== RUN   TestChatFirstCleanupGate
+--- PASS: TestChatFirstCleanupGate (0.00s)
+=== RUN   TestVPNFirstDisconnectStaleGeneration
+--- PASS: TestVPNFirstDisconnectStaleGeneration (0.00s)
+=== RUN   TestOpeningLatePublication
+--- PASS: TestOpeningLatePublication (0.00s)
+=== RUN   TestCancellationAndStartupFailure
+=== RUN   TestCancellationAndStartupFailure/before_reserve
+=== RUN   TestCancellationAndStartupFailure/during_cleanup
+=== RUN   TestCancellationAndStartupFailure/after_cleanup
+=== RUN   TestCancellationAndStartupFailure/startup_failure
+=== RUN   TestCancellationAndStartupFailure/budget
+--- PASS: TestCancellationAndStartupFailure (0.01s)
+    --- PASS: TestCancellationAndStartupFailure/before_reserve (0.00s)
+    --- PASS: TestCancellationAndStartupFailure/during_cleanup (0.00s)
+    --- PASS: TestCancellationAndStartupFailure/after_cleanup (0.00s)
+    --- PASS: TestCancellationAndStartupFailure/startup_failure (0.00s)
+    --- PASS: TestCancellationAndStartupFailure/budget (0.01s)
+=== RUN   TestSimultaneousAcquireReserve
+--- PASS: TestSimultaneousAcquireReserve (0.00s)
+=== RUN   TestCompatibilityExpiryAndFailure
+--- PASS: TestCompatibilityExpiryAndFailure (0.01s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/restrictedowner	0.024s
+=== RUN   TestPrimaryBeforeCleanupCancellationAndCompletion
+--- PASS: TestPrimaryBeforeCleanupCancellationAndCompletion (0.00s)
+=== RUN   TestControlledConcurrentPublicationOrders
+=== RUN   TestControlledConcurrentPublicationOrders/failure
+=== RUN   TestControlledConcurrentPublicationOrders/cancel
+=== RUN   TestControlledConcurrentPublicationOrders/success
+--- PASS: TestControlledConcurrentPublicationOrders (0.00s)
+    --- PASS: TestControlledConcurrentPublicationOrders/failure (0.00s)
+    --- PASS: TestControlledConcurrentPublicationOrders/cancel (0.00s)
+    --- PASS: TestControlledConcurrentPublicationOrders/success (0.00s)
+=== RUN   TestIndependentAttemptsAndRetention
+--- PASS: TestIndependentAttemptsAndRetention (0.00s)
+=== RUN   TestCauseAllowlistAndPrivacy
+--- PASS: TestCauseAllowlistAndPrivacy (0.00s)
+=== RUN   TestPreservedErrorHasLegacyCategoryAndOriginalIdentity
+--- PASS: TestPreservedErrorHasLegacyCategoryAndOriginalIdentity (0.00s)
+=== RUN   TestFidelityCategoriesAndFirstFailure
+--- PASS: TestFidelityCategoriesAndFirstFailure (0.00s)
+=== RUN   TestFidelityOwnershipDrainStop
+=== RUN   TestFidelityOwnershipDrainStop/STARTUP_BUDGET
+    fidelity_test.go:109: stage=OWNERSHIP_DRAIN error=CANCELLED local_stop=STARTUP_BUDGET observed_context=CANCELLED
+=== RUN   TestFidelityOwnershipDrainStop/CONNECT_CANCEL
+    fidelity_test.go:109: stage=OWNERSHIP_DRAIN error=CANCELLED local_stop=CONNECT_CANCEL observed_context=CANCELLED
+=== RUN   TestFidelityOwnershipDrainStop/CLEANUP
+    fidelity_test.go:109: stage=OWNERSHIP_DRAIN error=UNKNOWN local_stop=CLEANUP observed_context=LIVE
+--- PASS: TestFidelityOwnershipDrainStop (0.02s)
+    --- PASS: TestFidelityOwnershipDrainStop/STARTUP_BUDGET (0.02s)
+    --- PASS: TestFidelityOwnershipDrainStop/CONNECT_CANCEL (0.00s)
+    --- PASS: TestFidelityOwnershipDrainStop/CLEANUP (0.00s)
+=== RUN   TestFidelityBudgetSuccessAndGeneration
+--- PASS: TestFidelityBudgetSuccessAndGeneration (0.02s)
+=== RUN   TestFriendsStartupResultRetainsSeedCause
+--- PASS: TestFriendsStartupResultRetainsSeedCause (0.00s)
+=== RUN   TestDirectoryFingerprintIsFirstAndDoesNotExportDirectory
+--- PASS: TestDirectoryFingerprintIsFirstAndDoesNotExportDirectory (0.00s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/startupdiag	0.045s

@@ -1,0 +1,44 @@
+{
+  "base": "f5240994869826c6a28f59e58e38256c688cf6eb",
+  "cumulative": "a4d489079e3da0df7fdd01b7977962b20ddbbf8605fbf682a349703a88b916d5",
+  "task": "RECEIVE-QUEUE-STALL-REPRO-AND-FIX-1",
+  "input_review": "da8cd59cc910be13fe48931284ff6d19e75626cd",
+  "installed_apk_sha256": "3c733d2fc3a0ec377143b668244a4c7d6619ff24abe024da4ee9bfe31d140513",
+  "installed_native_sha256": "2a974350c168913ca8a217d3fc73f452fdd709c3619d0c690abd5d884c54b88c",
+  "base_files": {
+    "carrier/telemost/session.go": "b1cc32330c0c192718c3973f4f7e64f02b3690dbecd40f0b7cb5d89498abb440",
+    "carrier/reliablestream/stream.go": "545f7be195b4241ef61846e40d37850736b4b669fdfdb3ec5082382e1d5ab17d",
+    "carrier/reliablestream/engine.go": "c635cd3746d06c8eb0a736e46c0fcfa1c0976ee4f2a34a96094a22470109bbb4",
+    "carrier/reliablestream/protocol.go": "7c0a9e002b4d92203e8a188be30917c3df477e40adf8fc673a2ad903503527c1",
+    "carrier/familysession/session.go": "eb686d7c9e4ab00d4265cde70f688bbb1a5ec1ceee546da8010ea74ad25756d5",
+    "carrier/tcpforward/mux.go": "fa2923a80b501251ded1aa37ad9b405e08a60c820ac12b66e0c6537c24c5f130",
+    "carrier/tcpforward/mux_stream.go": "7ae48a711ec1c4410b4cd6e1d3cc2edb3332698708c383398ee072357cc184b8",
+    "carrier/restrictedowner/owner.go": "8d4204a1af49254541dc464e59305c10ba348505703d5add2264c3efd2911995",
+    "pilot/android-restricted/native/chat.go": "4f6a63b7d6f305442b73ef7adf880dbf54ae58e4baaaa9cca4370b369b578b45",
+    "pilot/android-restricted/native/main.go": "dc7fffdc80fd312869cd9008226eb27c26ea7e3853cec7d32189b5845cb57928",
+    "carrier/telemost/msg.go": "9a72f4538400158a735fd7b75c5c297da454e7d08f371edda19a43cd07ae3ac1",
+    "carrier/telemost/signaling.go": "dbc7213d8550967563d7036582a73e5656a3c7a59dd16dc895a095c0496c095b"
+  },
+  "files": [
+    {
+      "path": "carrier/reliablestream/stream.go",
+      "before_sha256": "545f7be195b4241ef61846e40d37850736b4b669fdfdb3ec5082382e1d5ab17d",
+      "after_sha256": "d3e3df02613f4a644d9831e68045efa8fdbed72ecb26cc6f112d2528ad6382c8",
+      "scope": "product"
+    },
+    {
+      "path": "carrier/reliablestream/protocol.go",
+      "before_sha256": "7c0a9e002b4d92203e8a188be30917c3df477e40adf8fc673a2ad903503527c1",
+      "after_sha256": "ff5c4226caa63a49d62dac11d6079726ce78b296c3a9e843100a0ba634064bba",
+      "scope": "product"
+    },
+    {
+      "path": "carrier/telemost/receive_stall_test.go",
+      "before_sha256": null,
+      "after_sha256": "bd6ce172bf825cbe5dab14755319b4a438b4fc53cdd3a7fe7fb3273f5b511e26",
+      "scope": "test-only"
+    }
+  ],
+  "patch_sha256": "7a55749ba02957ca072de5f55ebf0e105a2a3fee53785effd4cd23c7585e9e65",
+  "cumulative_after": "af315dce15e16c3b5d372dee4294192339443ac0cd79364748bd2f53c156be61"
+}

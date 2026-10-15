@@ -1,0 +1,37 @@
+=== RUN   TestReceiveStallControlAndSlowConsumer
+--- PASS: TestReceiveStallControlAndSlowConsumer (0.10s)
+=== RUN   TestReceiveStallProgress
+    receive_stall_test.go:196: gate timeout DATA processing while transmit blocked
+    receive_stall_test.go:197: PROGRESS_DEFECT: transmit blocked; real Recv returns=7 recvQueue=2 DataReceived=0
+--- FAIL: TestReceiveStallProgress (0.50s)
+=== RUN   TestReceiveStallBoundedBurst
+=== RUN   TestReceiveStallBoundedBurst/8
+    receive_stall_test.go:235: burst=8 received=9 ACKReceived=4 recvQueue=6 closed=false
+    receive_stall_test.go:239: gate timeout all bounded ACKs processed
+    receive_stall_test.go:240: ACK progress stopped by transmit
+=== RUN   TestReceiveStallBoundedBurst/20
+    receive_stall_test.go:235: burst=20 received=9 ACKReceived=4 recvQueue=16 closed=true
+    receive_stall_test.go:237: bounded control replay overflowed despite active consumer
+=== RUN   TestReceiveStallBoundedBurst/40
+    receive_stall_test.go:235: burst=40 received=9 ACKReceived=4 recvQueue=16 closed=true
+    receive_stall_test.go:237: bounded control replay overflowed despite active consumer
+--- FAIL: TestReceiveStallBoundedBurst (1.04s)
+    --- FAIL: TestReceiveStallBoundedBurst/8 (0.54s)
+    --- FAIL: TestReceiveStallBoundedBurst/20 (0.20s)
+    --- FAIL: TestReceiveStallBoundedBurst/40 (0.30s)
+=== RUN   TestReceiveStallSequentialCleanup
+=== RUN   TestReceiveStallSequentialCleanup/false
+    receive_stall_test.go:284: gate timeout B progress
+    receive_stall_test.go:285: B stalled like fresh session
+=== RUN   TestReceiveStallSequentialCleanup/true
+    receive_stall_test.go:284: gate timeout B progress
+    receive_stall_test.go:285: B stalled like fresh session
+--- FAIL: TestReceiveStallSequentialCleanup (1.20s)
+    --- FAIL: TestReceiveStallSequentialCleanup/false (0.60s)
+    --- FAIL: TestReceiveStallSequentialCleanup/true (0.60s)
+=== RUN   TestReceiveStallActualSendQueueCancellation
+    receive_stall_test.go:316: real sendQueue=256/256 recvQueue=0/16
+--- PASS: TestReceiveStallActualSendQueueCancellation (0.00s)
+FAIL
+FAIL	github.com/Joker20380/family_connect/carrier/telemost	2.856s
+FAIL

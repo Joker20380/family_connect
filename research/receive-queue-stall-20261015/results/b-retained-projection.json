@@ -1,0 +1,354 @@
+{
+  "task": "RECEIVE-QUEUE-STALL-REPRO-AND-FIX-1",
+  "session_alias": "SESSION_B",
+  "raw_sha256": "3e830cfe8850aa4129da0c41e116ddba23a9aedbf40123d67a5dd54de5a49104",
+  "source": "ring.restricted_session",
+  "flow_records": [
+    {
+      "source_sequence": 21,
+      "timestamp_ms": 1792093990236,
+      "after_first_failure": false,
+      "delivery": {
+        "flow": {
+          "send_base": 4,
+          "send_next": 7,
+          "receive_next": 5,
+          "receive_mask": 0,
+          "ack_base": 4,
+          "ack_mask": 1,
+          "pending": 3,
+          "buffered": 0,
+          "head_retries": 0,
+          "ack_seen": true,
+          "head_sacked": true
+        },
+        "assembly": {
+          "fragments": 29,
+          "completed": 29,
+          "expired": 0,
+          "malformed": 0,
+          "duplicate": 0,
+          "conflict": 0,
+          "capacity": 0,
+          "crc_failed": 0,
+          "recent": 0,
+          "pending": 0,
+          "rtp": 35,
+          "rtp_gaps": 3,
+          "vp8_frames": 29
+        },
+        "queued": {
+          "total": 1,
+          "mask": 1,
+          "data_sequence": 6,
+          "data_known": true
+        },
+        "written": {
+          "total": 1,
+          "mask": 1,
+          "data_sequence": 6,
+          "data_known": true
+        },
+        "received": {
+          "total": 1,
+          "mask": 1,
+          "data_sequence": 4,
+          "data_known": true
+        }
+      }
+    },
+    {
+      "source_sequence": 24,
+      "timestamp_ms": 1792093992235,
+      "after_first_failure": false,
+      "delivery": {
+        "flow": {
+          "send_base": 9,
+          "send_next": 9,
+          "receive_next": 9,
+          "receive_mask": 0,
+          "ack_base": 9,
+          "ack_mask": 0,
+          "pending": 0,
+          "buffered": 0,
+          "head_retries": 0,
+          "ack_seen": true,
+          "head_sacked": false
+        },
+        "assembly": {
+          "fragments": 47,
+          "completed": 47,
+          "expired": 0,
+          "malformed": 0,
+          "duplicate": 0,
+          "conflict": 0,
+          "capacity": 0,
+          "crc_failed": 0,
+          "recent": 0,
+          "pending": 0,
+          "rtp": 54,
+          "rtp_gaps": 4,
+          "vp8_frames": 47
+        },
+        "queued": {
+          "total": 1,
+          "mask": 1,
+          "data_sequence": 7,
+          "data_known": true
+        },
+        "written": {
+          "total": 1,
+          "mask": 1,
+          "data_sequence": 7,
+          "data_known": true
+        },
+        "received": {
+          "total": 1,
+          "mask": 1,
+          "data_sequence": 8,
+          "data_known": true
+        }
+      }
+    },
+    {
+      "source_sequence": 25,
+      "timestamp_ms": 1792093994236,
+      "after_first_failure": false,
+      "delivery": {
+        "flow": {
+          "send_base": 16,
+          "send_next": 19,
+          "receive_next": 16,
+          "receive_mask": 0,
+          "ack_base": 16,
+          "ack_mask": 0,
+          "pending": 3,
+          "buffered": 0,
+          "head_retries": 0,
+          "ack_seen": true,
+          "head_sacked": false
+        },
+        "assembly": {
+          "fragments": 71,
+          "completed": 71,
+          "expired": 0,
+          "malformed": 0,
+          "duplicate": 0,
+          "conflict": 0,
+          "capacity": 0,
+          "crc_failed": 0,
+          "recent": 0,
+          "pending": 0,
+          "rtp": 79,
+          "rtp_gaps": 5,
+          "vp8_frames": 71
+        },
+        "queued": {
+          "total": 1,
+          "mask": 1,
+          "data_sequence": 18,
+          "data_known": true
+        },
+        "written": {
+          "total": 1,
+          "mask": 1,
+          "data_sequence": 18,
+          "data_known": true
+        },
+        "received": {
+          "total": 1,
+          "mask": 1,
+          "data_sequence": 15,
+          "data_known": true
+        }
+      }
+    },
+    {
+      "source_sequence": 27,
+      "timestamp_ms": 1792093996236,
+      "after_first_failure": false,
+      "delivery": {
+        "flow": {
+          "send_base": 20,
+          "send_next": 28,
+          "receive_next": 29,
+          "receive_mask": 0,
+          "ack_base": 20,
+          "ack_mask": 126,
+          "pending": 8,
+          "buffered": 0,
+          "head_retries": 1,
+          "ack_seen": true,
+          "head_sacked": false
+        },
+        "assembly": {
+          "fragments": 99,
+          "completed": 99,
+          "expired": 0,
+          "malformed": 0,
+          "duplicate": 0,
+          "conflict": 0,
+          "capacity": 0,
+          "crc_failed": 0,
+          "recent": 0,
+          "pending": 0,
+          "rtp": 109,
+          "rtp_gaps": 5,
+          "vp8_frames": 99
+        },
+        "queued": {
+          "total": 1,
+          "mask": 1,
+          "data_sequence": 27,
+          "data_known": true
+        },
+        "written": {
+          "total": 1,
+          "mask": 1,
+          "data_sequence": 27,
+          "data_known": true
+        },
+        "received": {
+          "total": 1,
+          "mask": 1,
+          "data_sequence": 28,
+          "data_known": true
+        }
+      }
+    },
+    {
+      "source_sequence": 43,
+      "timestamp_ms": 1792093998236,
+      "after_first_failure": true,
+      "delivery": {
+        "flow": {
+          "send_base": 28,
+          "send_next": 34,
+          "receive_next": 31,
+          "receive_mask": 0,
+          "ack_base": 28,
+          "ack_mask": 1,
+          "pending": 6,
+          "buffered": 0,
+          "head_retries": 0,
+          "ack_seen": true,
+          "head_sacked": true
+        },
+        "assembly": {
+          "fragments": 131,
+          "completed": 131,
+          "expired": 0,
+          "malformed": 0,
+          "duplicate": 0,
+          "conflict": 0,
+          "capacity": 0,
+          "crc_failed": 0,
+          "recent": 0,
+          "pending": 0,
+          "rtp": 142,
+          "rtp_gaps": 6,
+          "vp8_frames": 131
+        },
+        "queued": {
+          "total": 1,
+          "mask": 1,
+          "data_sequence": 33,
+          "data_known": true
+        },
+        "written": {
+          "total": 1,
+          "mask": 1,
+          "data_sequence": 33,
+          "data_known": true
+        },
+        "received": {
+          "total": 1,
+          "mask": 1,
+          "data_sequence": 38,
+          "data_known": true
+        }
+      }
+    }
+  ],
+  "first_failure": {
+    "stage": "CARRIER",
+    "state": "CLOSED",
+    "reason": "CARRIER_ERROR",
+    "close_source": "RECEIVE_QUEUE_FULL",
+    "sequence": 28,
+    "timestamp_ms": 1792093996918,
+    "tx": 0,
+    "rx": 0
+  },
+  "boundary_tail": {
+    "retained": 64,
+    "dropped": 1225,
+    "first_ms": 1792093996301,
+    "last_ms": 1792093996920,
+    "stages": {
+      "carrier_written": 3,
+      "rtp_written": 2,
+      "rtp_received": 20,
+      "vp8_reassembled": 19,
+      "carrier_message_completed": 19,
+      "ack_received": 1
+    },
+    "carrier_completed_summary": {
+      "at_ms": {
+        "1792093996917": 11,
+        "1792093996918": 8
+      },
+      "result": {
+        "ok": 19
+      },
+      "data_sequence": {
+        "32": 1,
+        "33": 1,
+        "34": 1,
+        "35": 1,
+        "36": 1,
+        "37": 1,
+        "38": 1
+      }
+    },
+    "selected": [
+      {
+        "index": 1226,
+        "at_ms": 1792093996301,
+        "data_sequence": 33,
+        "data_known": true,
+        "stage": "carrier_written",
+        "result": "incomplete",
+        "direction": "tx"
+      },
+      {
+        "index": 1228,
+        "at_ms": 1792093996301,
+        "data_sequence": 33,
+        "data_known": true,
+        "stage": "carrier_written",
+        "result": "ok",
+        "direction": "tx"
+      },
+      {
+        "index": 1230,
+        "at_ms": 1792093996452,
+        "stage": "carrier_written",
+        "result": "ok",
+        "direction": "tx"
+      },
+      {
+        "index": 1289,
+        "at_ms": 1792093996920,
+        "ack_base": 28,
+        "ack_mask": 1,
+        "stage": "ack_received",
+        "result": "ok",
+        "direction": "rx"
+      }
+    ]
+  },
+  "trace_dropped": 0,
+  "queue_depth_or_worker_stack_at_failure": "NOT_RECORDED",
+  "interpretation": "Partial tail; missing consume/accepted does not prove absence. Last flow after close is not queue state at overflow. Sender/message identifiers omitted."
+}

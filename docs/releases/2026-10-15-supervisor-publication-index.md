@@ -8,6 +8,15 @@ production FAIL сохраняется; historical root cause не доказа�
 
 ## Начать здесь
 
+- [Receive queue stall — progress defect fixed locally](2026-10-15-receive-queue-stall-repro-and-fix-1.md)
+  and [source/tests/commands/results](../../research/receive-queue-stall-20261015/README.md):
+  exact installed cumulative source derivative; two-file bounded writer correction.
+  Fixed normal/race, handoff/diagnostic/Family fixtures, JNI and full Gradle/JVM verified.
+  New local inventory af315dce…156be61; unsigned APK/native remain private, not deployed.
+  Historical B linkage NOT_PROVEN: unpaced bursts may still hit the preserved guard.
+  Safe B Flow/tail projection published; raw export and production identifiers private.
+  Old smoke PASS and reconnect FAIL unchanged; LIVE_ACTIONS=0.
+
 - [Owner restricted reconnect/chat — FAIL, new episode](2026-10-15-owner-restricted-reconnect-and-chat-1.md)
   and [sanitized A/B receipt](evidence/2026-10-15-owner-restricted-reconnect-and-chat-1.json):
   A HTTPS succeeds; B starts4.158s after local OFF without app restart and reaches READY,
