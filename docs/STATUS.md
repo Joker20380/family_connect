@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+## OWNER-RESTRICTED-RECONNECT-AND-CHAT-1 — WAITING_FOR_OWNER_ACTION (15.10)
+
+New lifecycle episode, separate from prior smoke/unused old CONNECT2. Narrow residual
+review: UNATTRIBUTED_COUNTERS and POST_DISCONNECT_TERMINAL, no new causal claim or
+proven security blocker. Fresh19:30UTC prerequisites: same installed cumulative
+APK/native binding, UID10283/PID26459, VPN OFF; baseline/served TLS/directory valid,
+no pending maintenance or competing writer. Earliest security bound21:37:06UTC at
+check, not a frozen guarantee. Existing bounded collectors prepared; no native poller.
+Next owner action is ordinary pre-VPN chat sync and status-only observation, then
+separately instructed A→local OFF→B without app restart or waiting for server slot.
+Maximum2 new CONNECT,18minutes from A through cleanup; no repeated240second test.
+[Lifecycle checkpoint](releases/2026-10-15-owner-restricted-reconnect-and-chat-1.md).
+New CONNECT/install/restart/export/server-admin actions0. Previous CLIENT_DEVICE_SMOKE
+PASS and old CONNECT2 NOT_RUN preserved; handoff unproven, supervisor FAIL unchanged.
+
 ## OWNER-CUMULATIVE-CLIENT-ACCEPTANCE-1-RESUME — PARTIAL (15.10)
 
 CLIENT_DEVICE_SMOKE=PASS for one restricted connection: installed APK3c733d2f…140513,

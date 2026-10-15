@@ -8,6 +8,13 @@ production FAIL сохраняется; historical root cause не доказа�
 
 ## Начать здесь
 
+- [Owner restricted reconnect/chat — WAITING_FOR_OWNER_ACTION](2026-10-15-owner-restricted-reconnect-and-chat-1.md):
+  новый bounded lifecycle episode, не продолжение старого CONNECT2. Остаточные counters
+  UNATTRIBUTED, server terminal POST_DISCONNECT; свежий19:30UTC preflight пригоден.
+  До CONNECT требуется обычная chat sync/status observation. A/B ещё NOT_RUN;
+  прежний smoke PASS и его report/receipt сохранены без изменений. No install/restart,
+  server-admin mutations, extra native polls или новый export в этом checkpoint.
+
 - [Owner cumulative acceptance resume — PARTIAL, single-connection smoke PASS](2026-10-15-owner-cumulative-client-acceptance-1-resume.md):
   installed cumulative APK3c733d2f…140513/native2a974350…4b88c, same signer/UID10283.
   One real restricted CONNECT: SUCCEEDED, dedicated READY/native2/CONNECTED,
