@@ -8,6 +8,24 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### BOOTSTRAP-PRE-HELLO-OBSERVED-TRIAL-1 — owner confirmation pending (16.10)
+
+- [Checkpoint](releases/2026-10-16-bootstrap-pre-hello-observed-trial-1.md): one
+  signing/replace-install/ordinary launch done; APK8e5579f0…4a8845/nativebe70a66c…0a92b2,
+  signer/code84/UID10283 preserved, VPN OFF/PID12008 at10:49:01UTC. No repeat install.
+- Obtain fresh post-install owner availability before gateway capture/restart. No
+  CONNECT/export/SSH/server mutation yet; WAITING_FOR_OWNER_ACTION, not trial PASS.
+- Resume with short fresh environment/security/scheduling/device prerequisites and
+  existing coordinated service control; prepare exact removal of only own temporary
+  admission flag. Same gateway binary, one authorized restart,15min/512 capture.
+- Verify header/runtime publication and remaining window, then ONE restricted
+  CONNECT, optional one VPN-bound HTTPS if successful, normal OFF/export. No retry,
+  reconnect or artificial holder. Save raw evidence privately; exact exchange join
+  plus complete significant-event coverage, not helper COMPLETE_WINDOW alone.
+- Let capture expire normally, restore next-start config without unnecessary restart.
+  Preserve restart state loss and UNKNOWN premise/role limits. Historical A/B and
+  full device/supervisor acceptance remain unchanged; no product/release/main changes.
+
 ### BOOTSTRAP-PRE-HELLO-CORRELATION-1 — diagnostic prerequisite complete (16.10)
 
 - [Local result](releases/2026-10-16-bootstrap-pre-hello-correlation-1.md): early

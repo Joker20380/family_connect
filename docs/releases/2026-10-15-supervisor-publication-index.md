@@ -1,5 +1,16 @@
 # PUBLISH-SUPERVISOR-RESEARCH-STATE-1 — указатель review-публикации
 
+## Bootstrap pre-HELLO observed trial —16Oct2026, installation checkpoint
+
+[BOOTSTRAP-PRE-HELLO-OBSERVED-TRIAL-1](2026-10-16-bootstrap-pre-hello-observed-trial-1.md):
+WAITING_FOR_OWNER_ACTION after one signing/replace-install/ordinary launch. Diagnostic
+APK8e5579f0…4a8845/nativebe70a66c…0a92b2 verified on device, same signer/code84/UID10283;
+VPN OFF/PID12008 at10:49:01UTC. Previous APK retained, no rollback/rebuild/data clear.
+No CONNECT/export/SSH/restart/capture/config mutation yet. Requires fresh post-install
+owner readiness, then fresh environment and capture gates; no repeat signing/install.
+Only safe documentation published, no APK/private receipts/raw logs. Historical A/B
+and supervisor/device acceptance are not promoted; no startup-fix or release claim.
+
 ## Bootstrap pre-HELLO correlation —16Oct2026, local diagnostics ready
 
 [BOOTSTRAP-PRE-HELLO-CORRELATION-1](2026-10-16-bootstrap-pre-hello-correlation-1.md)

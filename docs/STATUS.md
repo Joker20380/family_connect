@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+## BOOTSTRAP-PRE-HELLO-OBSERVED-TRIAL-1 — WAITING_FOR_OWNER_ACTION (16.10)
+
+[Installation checkpoint](releases/2026-10-16-bootstrap-pre-hello-observed-trial-1.md):
+retained diagnostic APK signed without rebuild and installed once privately,
+APK8e5579f0…4a8845/nativebe70a66c…0a92b2. Same signer/code84/actual UID10283;
+installed readback/signature/native verified, all unsigned non-signature payload
+preserved.10:49:01UTC ordinary launch PASS/PID12008/VPN OFF; bounded UID error sample
+has no recent matching error lines, not exhaustive ANR/stability acceptance.
+Previous3c733d2f…140513 rollback artifact retained, no rollback/data clear/uninstall.
+Need fresh post-install owner readiness for ONE CONNECT; signing interaction is not
+readiness. Do not sign/install again on resume. CONNECT/export0, SSH/restart/capture/
+config changes0; gateway not touched, fresh live readiness still pending. Only after
+owner confirmation: short prerequisites, coordinated existing capture activation on
+same binary, then one observed trial. Restart loses old in-memory holders; no historic
+A continuation. No product changes, release, supervisor promotion or acceptance PASS.
+
 ## BOOTSTRAP-PRE-HELLO-CORRELATION-1 — local diagnostics ready (16.10)
 
 [Report](releases/2026-10-16-bootstrap-pre-hello-correlation-1.md) and
