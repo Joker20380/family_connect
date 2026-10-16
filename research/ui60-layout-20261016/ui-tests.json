@@ -1,0 +1,578 @@
+{
+  "api": 31,
+  "isolated_canvas_configurations": [
+    {
+      "configuration": "en-392-780-1",
+      "scenes": [
+        {
+          "name": "candidate-en-392-780-1.0-home-off",
+          "width": 392,
+          "height": 780,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-392-780-1.0-home-connecting",
+          "width": 392,
+          "height": 780,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-392-780-1.0-home-on",
+          "width": 392,
+          "height": 780,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-392-780-1.0-home-disconnecting",
+          "width": 392,
+          "height": 780,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-392-780-1.0-home-failed",
+          "width": 392,
+          "height": 780,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-392-780-1.0-home-restoring",
+          "width": 392,
+          "height": 780,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-392-780-1.0-home-cleanup-required",
+          "width": 392,
+          "height": 780,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-392-780-1.0-route",
+          "width": 392,
+          "height": 780,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-392-780-1.0-settings",
+          "width": 392,
+          "height": 780,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-392-780-1.0-chat-empty",
+          "width": 392,
+          "height": 780,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-392-780-1.0-chat-list",
+          "width": 392,
+          "height": 780,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-392-780-1.0-chat-conversation",
+          "width": 392,
+          "height": 780,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        }
+      ],
+      "navigation": [
+        {
+          "navigationCycles": 2,
+          "liveControlsPreserved": true,
+          "sessionPreserved": true,
+          "serviceRequests": 0
+        }
+      ]
+    },
+    {
+      "configuration": "en-780-392-1",
+      "scenes": [
+        {
+          "name": "candidate-en-780-392-1.0-home-off",
+          "width": 780,
+          "height": 392,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-780-392-1.0-home-scrolled",
+          "width": 780,
+          "height": 392,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-780-392-1.0-home-connecting",
+          "width": 780,
+          "height": 392,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-780-392-1.0-home-on",
+          "width": 780,
+          "height": 392,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-780-392-1.0-home-disconnecting",
+          "width": 780,
+          "height": 392,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-780-392-1.0-home-failed",
+          "width": 780,
+          "height": 392,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-780-392-1.0-home-restoring",
+          "width": 780,
+          "height": 392,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-780-392-1.0-home-cleanup-required",
+          "width": 780,
+          "height": 392,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-780-392-1.0-route",
+          "width": 780,
+          "height": 392,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-780-392-1.0-settings",
+          "width": 780,
+          "height": 392,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-780-392-1.0-chat-empty",
+          "width": 780,
+          "height": 392,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-780-392-1.0-chat-list",
+          "width": 780,
+          "height": 392,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-780-392-1.0-chat-conversation",
+          "width": 780,
+          "height": 392,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        }
+      ],
+      "navigation": [
+        {
+          "navigationCycles": 2,
+          "liveControlsPreserved": true,
+          "sessionPreserved": true,
+          "serviceRequests": 0
+        }
+      ]
+    },
+    {
+      "configuration": "ru-320-640-1.5",
+      "scenes": [
+        {
+          "name": "candidate-ru-320-640-1.5-home-off",
+          "width": 320,
+          "height": 640,
+          "locale": "ru",
+          "fontScale": 1.5,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-320-640-1.5-home-scrolled",
+          "width": 320,
+          "height": 640,
+          "locale": "ru",
+          "fontScale": 1.5,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-320-640-1.5-home-connecting",
+          "width": 320,
+          "height": 640,
+          "locale": "ru",
+          "fontScale": 1.5,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-320-640-1.5-home-on",
+          "width": 320,
+          "height": 640,
+          "locale": "ru",
+          "fontScale": 1.5,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-320-640-1.5-home-disconnecting",
+          "width": 320,
+          "height": 640,
+          "locale": "ru",
+          "fontScale": 1.5,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-320-640-1.5-home-failed",
+          "width": 320,
+          "height": 640,
+          "locale": "ru",
+          "fontScale": 1.5,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-320-640-1.5-home-restoring",
+          "width": 320,
+          "height": 640,
+          "locale": "ru",
+          "fontScale": 1.5,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-320-640-1.5-home-cleanup-required",
+          "width": 320,
+          "height": 640,
+          "locale": "ru",
+          "fontScale": 1.5,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-320-640-1.5-route",
+          "width": 320,
+          "height": 640,
+          "locale": "ru",
+          "fontScale": 1.5,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-320-640-1.5-settings",
+          "width": 320,
+          "height": 640,
+          "locale": "ru",
+          "fontScale": 1.5,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-320-640-1.5-chat-empty",
+          "width": 320,
+          "height": 640,
+          "locale": "ru",
+          "fontScale": 1.5,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-320-640-1.5-chat-list",
+          "width": 320,
+          "height": 640,
+          "locale": "ru",
+          "fontScale": 1.5,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-320-640-1.5-chat-conversation",
+          "width": 320,
+          "height": 640,
+          "locale": "ru",
+          "fontScale": 1.5,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        }
+      ],
+      "navigation": [
+        {
+          "navigationCycles": 2,
+          "liveControlsPreserved": true,
+          "sessionPreserved": true,
+          "serviceRequests": 0
+        }
+      ]
+    },
+    {
+      "configuration": "ru-392-780-1",
+      "scenes": [
+        {
+          "name": "candidate-ru-392-780-1.0-home-off",
+          "width": 392,
+          "height": 780,
+          "locale": "ru",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-392-780-1.0-home-connecting",
+          "width": 392,
+          "height": 780,
+          "locale": "ru",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-392-780-1.0-home-on",
+          "width": 392,
+          "height": 780,
+          "locale": "ru",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-392-780-1.0-home-disconnecting",
+          "width": 392,
+          "height": 780,
+          "locale": "ru",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-392-780-1.0-home-failed",
+          "width": 392,
+          "height": 780,
+          "locale": "ru",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-392-780-1.0-home-restoring",
+          "width": 392,
+          "height": 780,
+          "locale": "ru",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-392-780-1.0-home-cleanup-required",
+          "width": 392,
+          "height": 780,
+          "locale": "ru",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-392-780-1.0-route",
+          "width": 392,
+          "height": 780,
+          "locale": "ru",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-392-780-1.0-settings",
+          "width": 392,
+          "height": 780,
+          "locale": "ru",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-392-780-1.0-chat-empty",
+          "width": 392,
+          "height": 780,
+          "locale": "ru",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-392-780-1.0-chat-list",
+          "width": 392,
+          "height": 780,
+          "locale": "ru",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-392-780-1.0-chat-conversation",
+          "width": 392,
+          "height": 780,
+          "locale": "ru",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
+        }
+      ],
+      "navigation": [
+        {
+          "navigationCycles": 2,
+          "liveControlsPreserved": true,
+          "sessionPreserved": true,
+          "serviceRequests": 0
+        }
+      ]
+    }
+  ],
+  "real_ime_component": true,
+  "keyboard": [
+    {
+      "name": "candidate-real-ime-chat-component",
+      "width": 432,
+      "height": 567,
+      "locale": "en-US",
+      "fontScale": 1,
+      "density": 1.125,
+      "secure": true,
+      "serviceRequests": 0
+    },
+    {
+      "realImeVisible": true,
+      "systemBars": "Insets{left=0, top=27, right=0, bottom=54}",
+      "imeInsets": "Insets{left=0, top=0, right=0, bottom=366}",
+      "draftSelectionPreserved": true
+    }
+  ],
+  "api35_runtime": "NOT_RUN",
+  "live_actions": 0
+}

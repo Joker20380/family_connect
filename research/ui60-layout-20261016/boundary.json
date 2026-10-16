@@ -1,0 +1,20 @@
+{
+  "changed_files": [
+    "clients/android/app/build.gradle",
+    "clients/android/app/src/androidTest/java/com/familyconnect/app/DashboardLayoutRuntimeTest.java",
+    "clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java",
+    "clients/android/app/src/main/java/com/familyconnect/app/LiveNetworkPanel.java",
+    "clients/android/app/src/main/java/com/familyconnect/app/RouteMapView.java",
+    "clients/android/app/src/main/java/com/familyconnect/app/TerminalToggle.java",
+    "clients/android/app/src/main/java/com/familyconnect/app/TerminalUi.java",
+    "clients/android/app/src/main/java/com/familyconnect/app/Ui60Presentation.java",
+    "clients/android/app/src/main/res/values-ru/ui60.xml",
+    "clients/android/app/src/main/res/values/ui60.xml",
+    "clients/android/app/src/test/java/com/familyconnect/app/Ui60PresentationTest.java"
+  ],
+  "non_ui_sources_identical": true,
+  "friends_navigation_lifecycle_and_operations_identical": true,
+  "telemetry_sample_accept_pause_identical": true,
+  "native_rebuilt": false,
+  "delta_patch_sha256": "14ff1849098aab2dd62cfef0676fecd9c2f6083c746515ce266ef5f370c5292b"
+}

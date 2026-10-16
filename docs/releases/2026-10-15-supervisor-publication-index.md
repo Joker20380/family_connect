@@ -1,5 +1,18 @@
 # PUBLISH-SUPERVISOR-RESEARCH-STATE-1 — указатель review-публикации
 
+## UI60 restoration and field preparation —16Oct2026, visual approval pending
+
+[Implemented UI candidate](2026-10-16-ui60-layout-current-style-1.md),
+[safe delta/tests/comparisons](../../research/ui60-layout-20261016/README.md),
+[FIELD-1 stage, NOT_STARTED](2026-10-16-field-1-ui60-warm-start.md).
+Exact retained modern source, resolved beta60 visual ref only; no old behavior copied.
+New unsigned UI APK52e903bb…617fcf6f/code84, inventorydbd0aeb6…a3efdd0a;
+nativebe70a66c and native provenance unchanged. Full Gradle/14 targeted JVM cases;
+real-code synthetic UI renders, not live CONNECT evidence. Owner visual approval
+precedes product signing, compatibility/grant check and private tester transfer.
+No owner/tester device or gateway actions. Prior acceptance and historical reports
+remain unchanged; new UI is not device-accepted, no supervisor/release promotion.
+
 ## Accepted transport-pair checkpoint and maintenance —16Oct2026, COMMITTED
 
 [ACCEPTED-TRANSPORT-PAIR-CHECKPOINT-AND-MAINTENANCE-1](2026-10-16-accepted-transport-pair-checkpoint-and-maintenance-1.md)

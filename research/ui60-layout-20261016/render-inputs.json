@@ -1,0 +1,38 @@
+{
+  "beta60": {
+    "label": "beta60",
+    "original_apk_sha256": "8ee59352e5f490aea74c3c8c8aeefd0d65bec0c261a044899d512ca376cf6104",
+    "renderer_apk_sha256": "3dccee4d0b1acba2c3e57faa5366f5c6ce2aa27addc653f6aae44ae85b2bfd58",
+    "only_disposable_renderer": true,
+    "production_key_used": false,
+    "internet_permission": false,
+    "native_libraries": false,
+    "original_ui_dex_and_resources": true,
+    "original_oncreate_onresume_not_invoked": true,
+    "secure_flag": true
+  },
+  "current": {
+    "label": "current",
+    "original_apk_sha256": "b2a4b76b3218ec06f3409154a1a14f71bf4feff3206be3282c25852eabdd35ca",
+    "renderer_apk_sha256": "6b627cb25aa841ffc2978a43dc67c10c42652dcf711d5c801212881449376aa8",
+    "only_disposable_renderer": true,
+    "production_key_used": false,
+    "internet_permission": false,
+    "native_libraries": false,
+    "original_ui_dex_and_resources": true,
+    "original_oncreate_onresume_not_invoked": true,
+    "secure_flag": true
+  },
+  "candidate": {
+    "label": "candidate",
+    "original_apk_sha256": "52e903bb95a21b7b9d91eb01a7188fba6d15a79d2a25bc3dcb6acd7b617fcf6f",
+    "renderer_apk_sha256": "77b1f804888c7ce309a840135b48390dc56fd5aab581810266f942c6f2c288af",
+    "only_disposable_renderer": true,
+    "production_key_used": false,
+    "internet_permission": false,
+    "native_libraries": false,
+    "original_ui_dex_and_resources": true,
+    "original_oncreate_onresume_not_invoked": true,
+    "secure_flag": true
+  }
+}

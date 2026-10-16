@@ -1,0 +1,74 @@
+{
+  "all_embedded_native_payloads_identical": true,
+  "native_entries": {
+    "lib/arm64-v8a/libchaquopy_java.so": "d3b5b10f7410297880679cd665e96795f5745e3488a038bbbcca344c95ca7e18",
+    "lib/arm64-v8a/libcodec2.so": "43edfebbde718cce7df47930322cc3cc5278aa7552e143913fd0814302aafaa5",
+    "lib/arm64-v8a/libcrypto_chaquopy.so": "e316322aafee29c518084f478c1f84fb6048dc489dd5aad8d0822fbece416483",
+    "lib/arm64-v8a/libcrypto_python.so": "c6b20b0ed4be44731123a4e0ccb0958abb14d467826a42a1999e0cdbf9c7afd7",
+    "lib/arm64-v8a/libexit_audio.so": "aad0fcaec2683e74ac0d70d4f9fde1f65afd32c4416070ad1c5a13dc3725191c",
+    "lib/arm64-v8a/libfc-awg.so": "9d20e5312e4d22c3c3d650513e82a43ec5c37a472810eb5e3acf206713023fbb",
+    "lib/arm64-v8a/libfc_restricted.so": "be70a66ccc2bcbf0478915fd414c32de3bedb2a0ae0c3222a53e65eebd0a92b2",
+    "lib/arm64-v8a/libpython3.10.so": "194781d8bba9ad0db34725390957bb73a71c0ab2c9c1d449b94cd80680bb149e",
+    "lib/arm64-v8a/libsqlite3_chaquopy.so": "626ef9b3e6eb661df9513f7f79f6a0d197bcfb0b43f813663ed9d5e7fcace172",
+    "lib/arm64-v8a/libsqlite3_python.so": "fa355dda67c86b62f67026b7b5a8ec17732ee30e9e8280b86362b4e2a886548b",
+    "lib/arm64-v8a/libssl_chaquopy.so": "70b94a18ae17a1b103cc0f52b3f5fa3f7740c6899eddb6fa3b1f16ba8051025b",
+    "lib/arm64-v8a/libssl_python.so": "6c780070647187d8e4fca72f46e7be90ddb0e38000d2f5681c218fe12583ce5c"
+  },
+  "restricted_manifest_byte_identical": true,
+  "permissions_sdk_abi_features_unchanged": true,
+  "manifest_scope": [
+    "targetSdkVersion:'35'",
+    "uses-permission: name='android.permission.RECORD_AUDIO'",
+    "uses-permission: name='android.permission.INTERNET'",
+    "uses-permission: name='android.permission.ACCESS_NETWORK_STATE'",
+    "uses-permission: name='android.permission.ACCESS_COARSE_LOCATION'",
+    "uses-permission: name='android.permission.FOREGROUND_SERVICE'",
+    "uses-permission: name='android.permission.FOREGROUND_SERVICE_SPECIAL_USE'",
+    "uses-permission: name='android.permission.POST_NOTIFICATIONS'",
+    "uses-permission: name='android.permission.RECEIVE_BOOT_COMPLETED'",
+    "uses-permission: name='android.permission.REQUEST_INSTALL_PACKAGES'",
+    "native-code: 'arm64-v8a'"
+  ],
+  "tests": [
+    {
+      "name": "com.familyconnect.app.BootstrapCorrelationTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.DiagnosticRingTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.RestrictedStartupTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.StartupFidelityTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.Ui60PresentationTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "unsigned_apk_sha256": "52e903bb95a21b7b9d91eb01a7188fba6d15a79d2a25bc3dcb6acd7b617fcf6f",
+  "product_signing": "NOT_PERFORMED",
+  "unsigned_verified": true,
+  "zip_alignment": true,
+  "renderer_absent_from_product": true
+}

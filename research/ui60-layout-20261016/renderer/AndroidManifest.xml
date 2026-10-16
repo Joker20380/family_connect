@@ -1,0 +1,8 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.familyconnect.app.friends" android:versionCode="1" android:versionName="render-fixture-only">
+    <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="31"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <application android:label="UI fixture only" android:debuggable="true" android:allowBackup="false" android:theme="@android:style/Theme.Material.NoActionBar">
+        <activity android:name="com.familyconnect.app.FixtureHostActivity" android:exported="false" android:windowSoftInputMode="adjustResize"/>
+    </application>
+    <instrumentation android:name="com.familyconnect.app.UiFixtureInstrumentation" android:targetPackage="com.familyconnect.app.friends" android:functionalTest="true"/>
+</manifest>

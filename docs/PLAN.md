@@ -8,6 +8,23 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### UI60-RESTORE-AND-FIELD-1 — implementation checkpoint (16.10)
+
+- [UI implementation and real-code comparisons](releases/2026-10-16-ui60-layout-current-style-1.md):
+  beta60 composition + current thin styling implemented on retained accepted source,
+  not root main. Unsigned APK52e903bb…617fcf6f/code84, nativebe70a66c unchanged.
+- Full UI assemble and14 targeted JVM/export tests complete; evidence includes
+  normal/narrow/large-font/RU/EN layouts and navigation fixtures, with runtime limits.
+- **Await owner visual approval of images before product signing or tester transfer.**
+- Continue [FIELD-1](releases/2026-10-16-field-1-ui60-warm-start.md) in this task:
+  existing agreed tester's actual compatibility/authorization and availability;
+  private owner transfer; warm preparation without Wi-Fi VPN CONNECT; one bounded
+  mobile restricted CONNECT only after fresh prerequisites. Field NOT_STARTED.
+- Do not repeat UI work, owner reconnect, transport suites or maintenance simply
+  because the next stage waits. No automatic capture, new grant, restart or release.
+- Previous exact-pair fast-reconnect milestone stays closed. Historical causality,
+  chat handoff, supervisor and broad/long-duration field coverage stay independent.
+
 ### ACCEPTED-TRANSPORT-PAIR-CHECKPOINT-AND-MAINTENANCE-1 — complete (16.10)
 
 - [Accepted-pair checkpoint / maintenance result](releases/2026-10-16-accepted-transport-pair-checkpoint-and-maintenance-1.md):

@@ -1,5 +1,25 @@
 # Текущее состояние / Current state
 
+## UI60-RESTORE-AND-FIELD-1 — UI implemented, owner visual approval pending (16.10)
+
+[UI candidate / comparisons](releases/2026-10-16-ui60-layout-current-style-1.md),
+[field continuation, NOT STARTED](releases/2026-10-16-field-1-ui60-warm-start.md).
+Isolated derivative of accepted inventoryb36c4a21; beta60 visual ref
+5c740f2d05f725ee1bcbe63a41f886605d4c7ac4 supplies composition, not behavior.
+Large main dial, beta60 block order/geometry and shared chamfered frames restored;
+current palette/thin strokes/typography, modern restricted/diagnostic/chat behavior
+retained. Normal/narrow/font/language UI fixtures and targeted tests are published.
+Unsigned UI APK52e903bb…617fcf6f, UI inventorydbd0aeb6…a3efdd0a,
+versionName0.1.18-research84-ui60-1/code84. All native payloads unchanged, restricted
+nativebe70a66c…0a92b2 and original native provenance preserved. Full Gradle +14 targeted
+JVM cases pass; no native rebuild. Not signed with product key, installed or sent.
+**Next: owner visual approval**, then existing tester compatibility/grant/readiness,
+safe signing/private owner transfer and one bounded warm-start field CONNECT in the
+same task. Do not repeat owner A→B. PHONE_UNTOUCHED; SERVER_UNTOUCHED; field not begun.
+Prior exact APK8e5579f0/gatewaya5372571 PASS_BOUNDED remains closed for that pair;
+new UI APK is not automatically device-accepted. Historical causes, handoff,
+supervisor, long-duration acceptance and public release remain separate/open.
+
 ## ACCEPTED-TRANSPORT-PAIR-CHECKPOINT-AND-MAINTENANCE-1 — committed (16.10)
 
 [Checkpoint and maintenance](releases/2026-10-16-accepted-transport-pair-checkpoint-and-maintenance-1.md):
