@@ -6,18 +6,24 @@ marked started or complete by this document.
 
 | Criterion | Current result |
 |---|---|
-| UI implementation | [Unsigned candidate implemented](2026-10-16-ui60-layout-current-style-1.md) |
-| UI_VISUAL_APPROVED | Other layout accepted; WAITING_FOR_FINAL_MAP_IMAGE_CONFIRMATION |
+| UI implementation | [UI60-3 implemented; owner inspection installation completed](2026-10-16-ui60-layout-current-style-1.md) |
+| UI_VISUAL_APPROVED | YES; final map approved before explicit owner-phone installation request |
 | ARTIFACT_COMPATIBLE | NOT_YET_CHECKED_FOR_TESTER |
 | TESTER_AUTHORIZED | NOT_YET_CHECKED; registration is not a restricted grant |
 | FIELD_WARM_START | NOT_STARTED |
 | TARGET_RESTRICTION_OBSERVED | NOT_TESTED |
 | Field CONNECT / export | 0 / 0 |
-| Product signing / transfer / install | 0 / 0 / 0 |
+| Product signing / owner install / tester transfer / tester install | 1 / 1 / 0 / 0 |
 | First field failure | NONE_OBSERVED; no attempt |
-| Final device state | No owner/tester device queried or changed; no fresh device-state claim |
+| Final device state | Owner UI60-3 installed and launched, VPN OFF at17:11:25UTC; tester untouched |
 
-## Next continuation, after visual approval
+## Next continuation, after owner inspection
+
+Owner explicitly requested installation on their own phone after approving the
+final UI image. Owner compatibility was checked and one existing-key signing plus
+ordinary same-code replace-install completed, with no CONNECT. This is **not** a
+tester compatibility/grant check or the field episode. Do not transfer owner UID,
+ABI/Android observations or authorization to the tester.
 
 Use the already agreed tester, not a database-selected person. Review known facts
 first; collect missing device/API/ABI, package/version/signer, operator/region,
@@ -31,10 +37,14 @@ inactive provisioning research gate and normal export. A lower-code tester APK i
 not promised as an ordinary rollback. No `-d`, uninstall, data/cache clear or
 re-enrollment. Absent entitlement means TESTER_NOT_AUTHORIZED, not transport failure.
 
-Only then sign the verified unsigned hash
+The verified unsigned hash
 `ef3c7e06f5666c87b8e31bf1eddc318d1a7cd97a0c720187f05e342a2a1ec95b`
-using the existing key/workflow; recheck payload/native/provenance and retain the
-signed hash. Owner privately transfers to one agreed recipient. No catalog,
+was signed for the requested owner inspection using the existing key/workflow:
+`e6c9dce07520abb40ce29e7bfc7e39e2483db0572d22c31ab27931478da4b00f`.
+Signature, alignment and unchanged DEX/native/non-signature entries verified; see
+the [safe receipt](../../research/ui60-layout-20261016/owner-install.json).
+After tester compatibility/authorization/readiness checks, reuse this exact signed
+artifact without re-signing. Owner privately transfers to one agreed recipient. No catalog,
 landing, invitation or public release change. If unavailable:
 READY_WAITING_FOR_TESTER_ACTION; no capture or security window held open.
 

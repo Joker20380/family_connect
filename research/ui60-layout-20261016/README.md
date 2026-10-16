@@ -31,8 +31,10 @@ map rendering fills available width without making surrounding panels taller.
 [Map-only pixel check](map-revision-check.json) confirms normal RU/EN OFF pixels
 outside the map are identical to revision2; eight actual width/height/density cases
 per configuration cover the narrowed-map regression. [Execution receipt](map-revision-execution.json)
-records bounded build/KVM checks and final emulator OFF. Owner accepts the rest;
-the final map image awaits confirmation before signing or tester transfer.
+records bounded build/KVM checks and final emulator OFF. Owner approved the final
+map, then requested installation on their own phone. The [owner-install receipt](owner-install.json)
+records one existing-key signing/replace-install and ordinary launch, not a CONNECT
+or field trial. No emulator/build/tests were restarted for this installation.
 Network/signal, battery percentage/bar, traffic grid and connection selectors retain
 modern data sources. Message-route information remains in the existing panel's
 detail dialog/accessibility description, not in the graph. Four extra scenes use
@@ -124,7 +126,8 @@ changed to address that emulator condition. See the final receipt for IME outcom
 
 - The image suite is isolated UI-code rendering, not screenshots of a live connected
   owner/tester session. Modern background chat is not stopped or manufactured on a
-  real phone. No credentials, grants, identities or provider rooms are accessed.
+  real phone for these fixtures. Owner installation later used only scoped package,
+  VPN and startup observations; no private identity/database or conversation reads.
 - API31 renderer coverage does not claim API35 edge-to-edge/OEM keyboard validation.
   Existing inset/IME handling is not reverted. Insets/keyboard receipt has its own
   scope; view-tree fixtures are not evidence of full Android lifecycle acceptance.
@@ -133,9 +136,10 @@ changed to address that emulator condition. See the final receipt for IME outcom
   is generated from a real device. Shared frame geometry applies to those dialogs.
 - Same code84 enables potential same-signer owner replacement/return without `-d`;
   a tester's lower version is not promised as an ordinary rollback target.
-- Await **owner visual approval** before applicability/grant/readiness checks and
-  product signing/private owner transfer. The authorized field continuation remains
-  one CONNECT,240s/18min, no reconnect or server repair. It has not started.
+- **Owner visual approval received; owner inspection installation complete.**
+  Tester applicability/grant/readiness checks and private owner transfer remain
+  pending. Reuse the verified signed candidate, do not sign/build again. The field
+  continuation remains one CONNECT,240s/18min, no reconnect or server repair, not started.
 
 Historical A/B causes, chat handoff, supervisor, broad field acceptance and release
 are unchanged. Accepted old-APK no-restart PASS is not reassigned to the new UI APK.

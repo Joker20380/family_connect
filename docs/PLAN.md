@@ -8,7 +8,7 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
-### UI60-RESTORE-AND-FIELD-1 — implementation checkpoint (16.10)
+### UI60-RESTORE-AND-FIELD-1 — owner installation checkpoint (16.10)
 
 - Requested revision3 map-width change verified; approved rest of the layout and
   native are unchanged. Normal RU/EN OFF pixels outside the map match revision2.
@@ -22,10 +22,14 @@ Verify reboot automount separately; no engineering release gate changes.
 - Revision3 visual/IME and map width/density checks complete; KVM emulator stopped.
   Do not restart software emulation; future local rendering requires usable KVM,
   host GPU, CPU quota, temperature cutoff and a finite runtime.
-- **Await final map-image confirmation before product signing or tester transfer.**
+- **Final map visually approved; requested owner installation completed.** Signed
+  APKe6c9dce0…8da4b00f/code84 installed once with `-r`, previous signer/UID10283
+  retained; normal launch PID19934/VPN OFF. Native unchanged. Owner now inspects
+  the real phone UI; this is not transport acceptance or a field CONNECT.
 - Continue [FIELD-1](releases/2026-10-16-field-1-ui60-warm-start.md) in this task:
   existing agreed tester's actual compatibility/authorization and availability;
-  private owner transfer; warm preparation without Wi-Fi VPN CONNECT; one bounded
+  private owner transfer of the already signed candidate, without re-signing;
+  warm preparation without Wi-Fi VPN CONNECT; one bounded
   mobile restricted CONNECT only after fresh prerequisites. Field NOT_STARTED.
 - Do not repeat UI work, owner reconnect, transport suites or maintenance simply
   because the next stage waits. No automatic capture, new grant, restart or release.

@@ -1,11 +1,12 @@
 # Текущее состояние / Current state
 
-## UI60-RESTORE-AND-FIELD-1 — UI implemented, owner visual approval pending (16.10)
+## UI60-RESTORE-AND-FIELD-1 — visually approved, installed for owner inspection (16.10)
 
 Owner accepts the other elements; revision3 implements the requested full-width map.
 Build/visual verification complete:15 JVM cases,54 scenes,8 map dimension/density
 cases per configuration; normal RU/EN OFF pixels outside the map match revision2.
-Final map visual confirmation pending. No product signing, transfer or field attempt.
+Owner approved the final map and explicitly requested installation on their phone.
+One existing-key signing and one ordinary replace-install completed; no field attempt.
 
 [UI candidate / comparisons](releases/2026-10-16-ui60-layout-current-style-1.md),
 [field continuation, NOT STARTED](releases/2026-10-16-field-1-ui60-warm-start.md).
@@ -20,10 +21,15 @@ measured emulator peak84°C, emulator now OFF. No software CPU fallback.
 Unsigned UI APKef3c7e06…2a1ec95b, UI inventory7f8fd0dd…33d9c39d,
 versionName0.1.18-research84-ui60-3/code84. All native payloads unchanged, restricted
 nativebe70a66c…0a92b2 and original native provenance preserved. Full Gradle +15 targeted
-JVM cases pass; no native rebuild. Not signed with product key, installed or sent.
-**Next: owner visual approval**, then existing tester compatibility/grant/readiness,
-safe signing/private owner transfer and one bounded warm-start field CONNECT in the
-same task. Do not repeat owner A→B. PHONE_UNTOUCHED; SERVER_UNTOUCHED; field not begun.
+JVM cases pass; no native rebuild. Signed/installed APKe6c9dce0…8da4b00f uses the
+previous signer, code84 and actual UID10283; Android API31/ARM64 compatibility verified.
+At17:11:25UTC ordinary launch confirmed PID19934, VPN OFF, no errors in the bounded
+UID-filtered startup sample. No data/cache clear or private identity/database reads;
+previous actual installed APK8e5579f0 retained privately as same-code compatible backup.
+**Next: owner inspection on the phone**, then existing tester compatibility/grant/
+readiness and private owner transfer of the verified signed candidate, without another
+signing/build. One bounded warm-start field CONNECT remains a later continuation.
+Do not repeat owner A→B. OWNER_PHONE_UPDATED; TESTER_UNTOUCHED; SERVER_UNTOUCHED.
 Prior exact APK8e5579f0/gatewaya5372571 PASS_BOUNDED remains closed for that pair;
 new UI APK is not automatically device-accepted. Historical causes, handoff,
 supervisor, long-duration acceptance and public release remain separate/open.

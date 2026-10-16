@@ -1,9 +1,48 @@
 # UI60-LAYOUT-CURRENT-STYLE-1 — implemented UI candidate
 
-Part one of UI60-RESTORE-AND-FIELD-1. **Visual approval pending; no tester delivery.**
+Part one of UI60-RESTORE-AND-FIELD-1. **Visually approved; installed for owner inspection.**
 This is an isolated derivative of the retained accepted diagnostic product, not a
 checkout of beta60 or the dirty root main. Existing snapshots, accepted artifacts and
 historical acceptance reports are retained. The field stage has **not started**.
+
+## Owner approval and requested installation —16Oct17:11UTC
+
+After approving the full-width map, the owner explicitly requested installation on
+their own phone. This extends the earlier no-phone-actions implementation checkpoint;
+it does not authorize a VPN CONNECT, tester delivery or gateway action. Safe selected
+evidence: [owner-install.json](../../research/ui60-layout-20261016/owner-install.json).
+
+- Preflight confirmed one authorized physical phone, API31/ARM64, expected installed
+  diagnostic APK8e5579f0…4a8845, code84, sole previous signer and actual UID10283.
+  No active VPN transport or app VPN service was observed. The actual installed APK
+  was pulled into private storage and verified as the immediate backup.
+- Existing local vault/memfd workflow signed the exact already-tested unsigned
+  APKef3c7e06…2a1ec95b once; no rebuild, new key, secret output or plaintext key export.
+  Signed SHA256: **`e6c9dce07520abb40ce29e7bfc7e39e2483db0572d22c31ab27931478da4b00f`**;
+  size56,011,667bytes. Signature and16K alignment pass. Every original non-META-INF
+  entry, including DEX/native payloads and native provenance, is unchanged by signing.
+- Sole signer SHA256 remains
+  `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+  Native SHA256 remains
+  `be70a66ccc2bcbf0478915fd414c32de3bedb2a0ae0c3222a53e65eebd0a92b2`.
+- One ordinary `adb install -r` began17:11:02.152UTC and returned success17:11:07.696UTC.
+  Installed APK readback equals the signed hash; package, signer, UID10283 and code84
+  are preserved. VersionName is0.1.18-research84-ui60-3. No `-d`, uninstall, data/cache
+  clear, re-enrollment, private database/identity read or force-stop was used.
+- Ordinary launcher start17:11:21.106UTC succeeded. At17:11:25.772UTC PID19934 was alive,
+  VPN OFF, no active app VPN service, and the bounded UID-filtered startup log sample
+  contained no new errors. This short observation is not exhaustive crash/ANR coverage,
+  a traffic check, a full on-device visual review or device transport acceptance.
+- Same code84/package/signer and unchanged storage sources preserve ordinary replace
+  compatibility with the verified immediate backup8e5579f0…4a8845. No rollback was
+  performed. Data preservation means replace-install without clearing data and retained
+  UID, not a byte-exact audit of private contents. The owner can now inspect the UI.
+
+This continuation adds signing1, owner replace-install1 and normal launch1;
+CONNECT/export/server operations/tester transfer0. Emulator, builds and tests were not
+restarted. Signed APK and backup stay private; no catalog, landing or public release
+changes. Tester compatibility/grant/readiness remain unverified. Reuse this exact signed
+candidate after those checks; do not rebuild/re-sign merely because field work waits.
 
 ## Owner-requested revision 3 — map width
 
@@ -15,7 +54,7 @@ Route screen are unchanged. This is map rendering only, not a session/state chan
 Revision2 unsigned APK1a11f98f…2e2ea92a and its receipts/renderer images remain archived;
 its published checkpoint is42196f866ef501918ada272884b6aaef8dbcd8e8.
 Revision3 unsigned build,15 targeted JVM checks and bounded visual verification
-pass. No product signing/transfer. Only `RouteMapView.java` and the private
+pass. At that build checkpoint product signing/transfer had not occurred. Only `RouteMapView.java` and the private
 candidate versionName differ from revision2 product sources.
 
 At the392px fixture viewport, the unchanged368px-wide/114px-high map frame now
@@ -51,7 +90,8 @@ accessibility description, rather than occupying beta60's graph area.
 
 Previous unsigned UI candidate52e903bb…617fcf6f and its changed sources are archived
 locally; the original comparisons remain in publication8aa905994e42c5d41a9aa7d1231d1538f2873e87.
-The revised images require confirmation before product signing or tester transfer.
+At that revision2 checkpoint the revised images still required owner confirmation;
+the later revision3 approval and owner installation are recorded separately above.
 
 Revision2 emulator preparation initially failed before UI tests: the Android system
 process reported `IllegalStateException: Lost network stack`, and PackageManager
@@ -93,13 +133,15 @@ See [bounded execution receipt](../../research/ui60-layout-20261016/emulator-exe
 | Modern before-render input, unsigned APK | `b2a4b76b3218ec06f3409154a1a14f71bf4feff3206be3282c25852eabdd35ca` |
 | New UI cumulative source inventory, not a Git commit | `7f8fd0dd8498c61c4f182b1f3322d9c2d38d17dc4f30ff9e06cef0b733d9c39d` |
 | **New unsigned UI APK** | `ef3c7e06f5666c87b8e31bf1eddc318d1a7cd97a0c720187f05e342a2a1ec95b` |
+| **Signed and owner-installed UI APK** | `e6c9dce07520abb40ce29e7bfc7e39e2483db0572d22c31ab27931478da4b00f` |
 | Embedded restricted native, reused unchanged | `be70a66ccc2bcbf0478915fd414c32de3bedb2a0ae0c3222a53e65eebd0a92b2` |
 | Gateway retained identity, no live query in this task | `a537257162348afc35b1ebc08755d8c5dc1cd90e74c49e3987fb3eb81885e61f` |
 
 Package `com.familyconnect.app.friends`; versionName **0.1.18-research84-ui60-3**;
 versionCode **84**, minSdk31, arm64-v8a, unsigned size55,990,388bytes.
-No production signing or installation. Code84 deliberately remains compatible with
-same-code replacement of the accepted owner APK after matching signer checks. This
+Existing-key signing and owner installation completed as recorded above. Code84
+retains same-code replacement compatibility with the accepted owner APK; signer and
+package were verified against the actual installed backup before replacement. This
 does **not** promise ordinary rollback to an unknown tester's lower-code APK. Tester
 version/signer/ABI/API and authorization remain prerequisites after visual approval.
 
@@ -207,21 +249,21 @@ applicability is still a separate post-approval check, not inferred from owner U
 | CURRENT_STYLE_AND_THIN_STROKES_PRESERVED | Current palette/background/type and state sources retained; common density-scaled strokes |
 | UI_STATE_AND_NAVIGATION_TESTS | 15 targeted JVM cases;54 fixture scenes;8 navigation cycles;real IME component check pass |
 | TRANSPORT_NATIVE_SECURITY_UNCHANGED | Exact source boundary and all embedded native payload checks pass; no native rebuild |
-| NEW_UI_SIGNED_APK | NOT_CREATED; only the unsigned candidate identified above |
-| TESTER_COMPATIBILITY_AND_AUTHORIZATION | NOT_CHECKED; after owner visual approval |
-| FIELD_STAGE_AND_RESULT | NOT_STARTED / WAITING_FOR_OWNER_VISUAL_APPROVAL |
-| FIRST_FAILURE_OR_REMAINING_BLOCKER | No live failure; owner accepts other layout, final map-image confirmation is next |
-| FINAL_DEVICE_STATE | Phone/tester untouched; no fresh device-state assertion |
-| ACTION_COUNTS | UI assemble11 cumulative,1 in revision3; native rebuild0; product signing/install0; CONNECT/export0; server operations0 |
+| NEW_UI_SIGNED_APK | e6c9dce0…8da4b00f; installed hash matches, full identity above |
+| TESTER_COMPATIBILITY_AND_AUTHORIZATION | NOT_CHECKED; owner compatibility does not establish tester applicability |
+| FIELD_STAGE_AND_RESULT | NOT_STARTED / owner on-phone inspection, then tester preparation |
+| FIRST_FAILURE_OR_REMAINING_BLOCKER | No installation/startup error observed; owner inspection and tester checks remain |
+| FINAL_DEVICE_STATE | Owner UI60-3/PID19934/VPN OFF at17:11:25UTC; tester untouched; gateway not queried or changed |
+| ACTION_COUNTS | UI assemble11 cumulative,1 in revision3; native rebuild0; product signing1/owner install1/normal launch1; CONNECT/export0; server operations0 |
 
-**UI_VISUAL_APPROVAL=WAITING_FOR_OWNER_VISUAL_APPROVAL.**
-Product unsigned APK remains local. Production signing, tester selection/contact,
-delivery, installation, CONNECT/export, owner ADB and server SSH/actions: **0**.
-Only a disposable credential-free emulator is used for fixtures; its debug-only
-renderer packages are not product or distribution artifacts.
+**UI_VISUAL_APPROVAL=APPROVED.** Owner inspection installation is complete; it is not
+a tester field episode. Both unsigned and signed APKs remain private. Tester selection/
+contact/delivery/install, CONNECT/export and server SSH/actions: **0**. Only a disposable
+credential-free emulator was used for fixtures; its debug-only renderer packages are
+not product or distribution artifacts. The emulator remains off.
 
 Previous NEW_PAIR_FAST_RECONNECT=PASS_BOUNDED remains bound to the **previous exact
 APK** and gateway. The new UI APK is not automatically device-accepted. Historical
 causality, chat handoff, supervisor, field coverage and public release remain open.
-Continue with the [field-stage record](2026-10-16-field-1-ui60-warm-start.md) only after
-owner visual approval; do not repeat UI development or prior owner reconnect tests.
+Continue with the [field-stage record](2026-10-16-field-1-ui60-warm-start.md) after
+owner inspection and tester prerequisites; do not repeat UI development or owner reconnect.

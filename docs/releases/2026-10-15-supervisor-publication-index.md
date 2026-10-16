@@ -1,6 +1,6 @@
 # PUBLISH-SUPERVISOR-RESEARCH-STATE-1 — указатель review-публикации
 
-## UI60 restoration and field preparation —16Oct2026, visual approval pending
+## UI60 restoration and field preparation —16Oct2026, approved / owner installed
 
 [Implemented UI candidate](2026-10-16-ui60-layout-current-style-1.md),
 [safe delta/tests/comparisons](../../research/ui60-layout-20261016/README.md),
@@ -10,9 +10,13 @@ Revision2: beta60 network/battery block and square corners; revision3 widens onl
 the compact map. Other pixels match in normal RU/EN OFF comparison; owner accepts rest.
 New unsigned UI APKef3c7e06…2a1ec95b/code84, inventory7f8fd0dd…33d9c39d;
 nativebe70a66c and native provenance unchanged. Full Gradle/15 targeted JVM cases;
-real-code synthetic UI renders, not live CONNECT evidence. Owner visual approval
-precedes product signing, compatibility/grant check and private tester transfer.
-No owner/tester device or gateway actions. Prior acceptance and historical reports
+real-code synthetic UI renders, not live CONNECT evidence. Final owner visual approval
+received, followed by explicit owner-phone installation request. One existing-key
+signing/ordinary replace-install: APKe6c9dce0…8da4b00f, UID10283, code84, native unchanged.
+Normal launch17:11UTC/PID19934, VPN OFF; previous signed APK retained privately.
+See [safe owner-install receipt](../../research/ui60-layout-20261016/owner-install.json).
+Tester compatibility/grant/transfer and field remain pending; no gateway actions.
+Prior acceptance and historical reports
 remain unchanged; new UI is not device-accepted, no supervisor/release promotion.
 
 ## Accepted transport-pair checkpoint and maintenance —16Oct2026, COMMITTED
