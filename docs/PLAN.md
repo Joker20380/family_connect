@@ -8,6 +8,19 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### ADMISSION-OWNER-BROWSING-SLOW-1 — fresh performance evidence next (17.10)
+
+- [Owner reports sites opening but slow](releases/2026-10-17-admission-owner-browsing-slow-1.md)
+  on the newly installed pair; this supersedes waiting for initial browsing feedback,
+  not the historical installation report. No measured speed improvement or acceptance.
+- Obtain one fresh normal export and Wi-Fi/mobile confirmation from this episode;
+  do not reuse export11 as current counters, request another CONNECT or reinstall.
+- Separate admission wait from shared reliable head/window/recovery stalls and
+  underlay/provider/site latency using available session-bound evidence. Missing
+  counters are not zeros; define a small timed transfer only if evidence needs it.
+- No blind window/queue increase, server restart/maintenance or new speed promise.
+  Ten-minute continuity, field, handoff, supervisor and release remain separate.
+
 ### BROWSER-ADMISSION-OWNER-INSTALL-1 — pair updated; next owner browsing check (17.10)
 
 - [Rollout completed](releases/2026-10-17-browser-admission-owner-install-1.md): exact

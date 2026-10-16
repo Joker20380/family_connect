@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+## ADMISSION-OWNER-BROWSING-SLOW-1 — sites open, speed unresolved (17.10)
+
+[Owner follow-up](releases/2026-10-17-admission-owner-browsing-slow-1.md): sites now
+open but remain very slow; some seem slower. Owner-reported, not timed/HTTP-receipted
+or an acceptance PASS. Last installed APK761430c0/native6d41518f/gateway079729e4;
+no fresh device/server readback. Current VPN state/session/underlay not confirmed.
+Retained source still uses the shared reliable path, sender8×up-to16KiB and RTO1s;
+admission changes do not increase carrier bandwidth. Loss/window/queue/underlay/site
+latency remain hypotheses, not current cause. Next: one fresh normal export and
+underlay confirmation, without reconnect/reinstall or blind capacity tuning.
+No product edits, tests/builds, SSH/ADB or live changes in this follow-up.
+
 ## BROWSER-ADMISSION-OWNER-INSTALL-1 — installed/deployed, browsing check pending (17.10)
 
 [Coordinated private pair rollout](releases/2026-10-17-browser-admission-owner-install-1.md):

@@ -1,5 +1,9 @@
 # Documentation
 
+[Owner browsing follow-up17.10](releases/2026-10-17-admission-owner-browsing-slow-1.md):
+sites now open but loading remains very slow; qualitative observation, no throughput
+PASS. Await one fresh normal export/underlay confirmation; no further live changes.
+
 [Admission candidate owner installation17.10](releases/2026-10-17-browser-admission-owner-install-1.md):
 signed/installed APK761430c0, native6d41518f, deployed gateway079729e4. One ordinary
 replacement and coordinated transition; seed/TLS/new directory PASS, final VPN OFF.
