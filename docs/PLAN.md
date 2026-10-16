@@ -8,6 +8,24 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### NEW-PAIR-OWNER-RECONNECT-ACCEPTANCE-1 — owner sequence pending (16.10)
+
+- [Checkpoint](releases/2026-10-16-new-pair-owner-reconnect-acceptance-1.md): verified
+  C_NEW signed/installed once, APK28772ccb…1c004b/native253e0e15…6f3a3, code84/UID10283.
+  Same-key signed rollback3c733d2f…140513 preserved; rollback not exercised. VPN OFF.
+- Exactly next: current owner availability, short fresh gateway/device/PID checks and
+  existing bounded-window rebind. Prepared18-minute A→OFF→immediate B, maximum two
+  intentional CONNECTs; do not insert an agent response wait between OFF_A and B.
+- A needs restricted READY/native/app plus VPN-bound HTTPS; unexpected A failure
+  stops B. B needs new session/attempt, initial HTTPS, fixed240s from READY, repeated
+  HTTPS and normal OFF. Capture separate DNS and one ordinary private support export.
+- At09:02UTC new scheduled leaf/CRL expires12:43:43UTC; operator threshold11:34:58.
+  Current readiness is time-limited, not a license to repair or wait indefinitely.
+  Gatewaya5372571 unchanged by task; no rebuild/reinstall/extra native reader.
+- WAITING_FOR_OWNER_ACTION, CONNECT0/2; no new-pair device PASS yet. Chat borrowing/
+  handoff remain separate NOT_PROVEN when absent. No public release/catalog change,
+  supervisor promotion, historical-B attribution or reinterpretation of old outcomes.
+
 ### GATEWAY-TRANSPORT-PROGRESS-LIVE-1 — server step complete, device gate open (16.10)
 
 - [Report](releases/2026-10-16-gateway-transport-progress-live-1.md): candidatea5372571…885e61f

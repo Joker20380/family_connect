@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+## NEW-PAIR-OWNER-RECONNECT-ACCEPTANCE-1 — WAITING_FOR_OWNER_ACTION (16.10)
+
+[New device episode](releases/2026-10-16-new-pair-owner-reconnect-acceptance-1.md):
+existing C_NEW signed without rebuild, installed once and read back: APK28772ccb…1c004b,
+native253e0e15…6f3a3, same signer67a90d1b…0848a/package/code84/UID10283. Previous
+signed3c733d2f…140513 preserved and verified for ordinary client-only rollback; rollback0.
+Startup bounded checks show no new crash/ANR/JNI error; actual restricted attach NOT_RUN.
+Final09:06:21UTC VPN OFF, FriendsActivity/PID30105; installation replaced old PID26459.
+Fresh09:00–09:02UTC gateway candidatea5372571…885e61f, PID265201/invocationd578312a…5feec,
+seed/strict served chain/current RU directory PASS. Natural scheduled renewal observed:
+leaf/CRL now12:43:43UTC, current4h NOOP/no due or alerts/no pending owner/writer;
+operator threshold11:34:58 remains. No server mutation or separate stability suite.
+CONNECT A/B0/2; HTTPS/DNS/240s/chat/export NOT_RUN or NOT_MEASURED, not acceptance PASS.
+No current owner availability confirmation and no long wait. Next: owner availability,
+short fresh readiness/PID and collector rebind, then the prepared18-minute A→OFF→B
+sequence without agent wait between OFF_A and CONNECT_B. Do not sign/install again.
+Private same-version replacement only; public release/catalog/invitations unchanged.
+Old smoke PASS/reconnect FAIL, historical B NOT_PROVEN and supervisor status unchanged.
+
 ## GATEWAY-TRANSPORT-PROGRESS-LIVE-1 — candidate deployed, bounded readiness PASS (16.10)
 
 [Live report](releases/2026-10-16-gateway-transport-progress-live-1.md) and

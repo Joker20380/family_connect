@@ -1,5 +1,18 @@
 # PUBLISH-SUPERVISOR-RESEARCH-STATE-1 — указатель review-публикации
 
+## New-pair owner preparation —16Oct2026
+
+[NEW-PAIR-OWNER-RECONNECT-ACCEPTANCE-1](2026-10-16-new-pair-owner-reconnect-acceptance-1.md):
+WAITING_FOR_OWNER_ACTION. Existing unsigned C_NEW signed without rebuild and installed
+once; exact signed/installed28772ccb…1c004b/native253e0e15…6f3a3, same signer/code84/UID10283.
+Previous signed3c733d2f…140513 privately preserved, rollback0. New post-install PID30105,
+VPN OFF; A/B0/2, traffic/DNS/240s/export not run. Fresh current candidate runtime and
+actual scheduled renewal recorded, not assumed from the old threshold. No server change.
+Only report/STATUS/PLAN/index published; APKs, raw receipts and wrappers remain private.
+Next is current owner availability plus short fresh readiness and the prepared bounded
+sequence, not another signing/install. Historical smoke/reconnect/supervisor outcomes
+and public release/catalog/invitation versions remain unchanged.
+
 ## Gateway live rollout supplement —16Oct2026
 
 [Executable-only live report](2026-10-16-gateway-transport-progress-live-1.md) and
