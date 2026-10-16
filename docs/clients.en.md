@@ -1,5 +1,14 @@
 # Client installation
 
+**Combined private candidate16.10:** `0.1.18-research84-ui60-4-speed-recovery1`,
+code84, API31+/ARM64. [Built artifacts, checks and limits](releases/2026-10-16-transport-speed-cutover-candidate-1.md).
+Unsigned APK `2cf26421b67e536b5c178af7020cade9b499fec06822c82b713461cf534f5ac1`;
+combines restoration and early retransmission with an explicitly rebuilt native library.
+Not signed/installed. The gateway candidate is local only too; installing Android
+alone does not update the server's downlink sender. Ordinary replacement requires
+fresh actual phone metadata and VPN OFF. Public links/catalog/invitations/tester
+remain unchanged; previous signed APKs are preserved.
+
 **Private recovery candidate16.10:** `0.1.18-research84-ui60-4-recovery1`, code84;
 [build identities and check status](releases/2026-10-16-cutover-recovery-local-1.md).
 This is a separate Java derivative of UI60-4 with the accepted native library, not

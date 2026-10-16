@@ -1,0 +1,50 @@
+[
+  {
+    "label": "build-baseline-normal",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 9.004,
+    "max_cpu_celsius": 57.0,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "build-candidate-normal",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 8.005,
+    "max_cpu_celsius": 51.0,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "matrix-normal",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 68.025,
+    "max_cpu_celsius": 68.0,
+    "log_sha256": "7051e071c161637926ffac1b6d8ba931bdfcb546628ae6688d07b29e58ebe9a4"
+  },
+  {
+    "label": "build-baseline-race",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 120.084,
+    "max_cpu_celsius": 71.0,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "build-candidate-race",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 12.061,
+    "max_cpu_celsius": 65.0,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "matrix-race",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 78.107,
+    "max_cpu_celsius": 57.0,
+    "log_sha256": "d9edde320144ad947af637b71299e027fff5b4432f35b633ea8775c39bfe29d4"
+  }
+]

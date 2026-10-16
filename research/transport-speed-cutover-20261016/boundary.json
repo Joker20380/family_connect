@@ -1,0 +1,59 @@
+{
+  "baseline_source_inventory": "e90893aee5fdc04aae1cacd296d5291ca8a743350de42334b290f08504c48fce",
+  "changed_files": {
+    "carrier/reliablestream/engine.go": {
+      "before": "c635cd3746d06c8eb0a736e46c0fcfa1c0976ee4f2a34a96094a22470109bbb4",
+      "after": "635b938ee243b55c4b5385bd82ae42069b1c213ebb9aae04ebf8b9135e7b558e"
+    },
+    "carrier/reliablestream/fast_recovery_test.go": {
+      "before": null,
+      "after": "49dc24c23eb3c256d8943aab2694aa2f513cd8daa664cf23707cd54396ed5f6e"
+    },
+    "carrier/reliablestream/throughput_comparison_test.go": {
+      "before": null,
+      "after": "7f989b72753a5563da5fc48fb25567a154c4315078abc27f811a584f10310501"
+    },
+    "clients/android/app/build.gradle": {
+      "before": "c7c9b26c236bf47a3559c9bd207b29666f6f206a90d284aed8e807dc19c55ac0",
+      "after": "953c4d1b263bdee5d2ffcc391e36b31bd850e3bc48634163e16f662b8a9d264c"
+    },
+    "clients/android/app/src/main/java/com/familyconnect/app/AutomaticConnection.java": {
+      "before": "a394bea66317ca50b0b63d776a206c0ce981ebbcf264a51046b722143537294b",
+      "after": "09e610e920c7cacbb6051b35b666b6667eb41edf84e041e483d7792167931781"
+    },
+    "clients/android/app/src/main/java/com/familyconnect/app/ConnectivityOrchestrator.java": {
+      "before": "26fa1f3fd271cd3ebfbe8b7f1c9e04fb42af6f9cdef922b21343e0b5e51efb75",
+      "after": "67c6511c8c3e30f2471cc3a2f64f4d206dc595c5a551190f4ea7adacf81b1517"
+    },
+    "clients/android/app/src/main/java/com/familyconnect/app/FriendsRestricted.java": {
+      "before": "3f0432ceff8cb7befd5e3c950fe7be5c19d4c40a836afe38a8893cbb9768b67d",
+      "after": "302ec057411b9fdb78076ca1759bdbbe8d8114fb10d50541ad13989d462c1fac"
+    },
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedBootstrap.java": {
+      "before": "c66ddf8c02e2a9ba9f2a2659df9a445f42707983bec73fb9b9d5c8c94acdeabe",
+      "after": "098067724f8be3866c9f280e9df5feed09781c09eb8f559df91832f6d222288a"
+    },
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedRecovery.java": {
+      "before": "399ef823855a3f47e1e1e9a963bed4c1618d1ff0a44f7d2b38ff4a647a12ceb2",
+      "after": "a0736fcf8874f0d63896592225826fb2a0a071cd8eb006f2d25621a6f9440ee1"
+    },
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedTunnelEngine.java": {
+      "before": "ff8bea6a852fc70cdae2ad01db7f4277d1fa17677f8ada5d93f3712ba62de875",
+      "after": "c7adec7bf8e40c269e7669047c17bb509a562fe1a018aadf623cd83948c5298f"
+    },
+    "clients/android/app/src/test/java/com/familyconnect/app/CutoverRecoveryTest.java": {
+      "before": null,
+      "after": "c2c886cef5e546ba17c327e7bc835fcd4b18b5aec22a7234e6210df70c19a476"
+    }
+  },
+  "unchanged_files": 2003,
+  "patch_sha256": "89b0cdd752788e860a44d9d62c4e4c6cb961bc3f56643c0e33a2a8ada0f2c09c",
+  "patch_apply_verified": true,
+  "native_stats_call_sites_unchanged": 2,
+  "native_jni_ui_security_sources_unchanged": true,
+  "fast_retransmit_included": true,
+  "carrier_product_changed_files": [
+    "carrier/reliablestream/engine.go"
+  ],
+  "recovery_source_inventory": "ea9312d013aac02a190a06b8ad9091e1245ef63a994db6618054dde27739c0d4"
+}

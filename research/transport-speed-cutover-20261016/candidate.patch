@@ -1,0 +1,954 @@
+--- a/carrier/reliablestream/engine.go
++++ b/carrier/reliablestream/engine.go
+@@ -295,6 +295,19 @@
+ 	return value
+ }
+ 
++func (state *engine) fastRetransmit(sequence uint64, block *pending, now time.Time) bool {
++	if sequence != state.base || block.retries != 0 || now.Sub(block.last) < state.config.RTO/4 {
++		return false
++	}
++	confirmed := 0
++	for later := sequence + 1; later < state.next; later++ {
++		if state.sent[later].sacked {
++			confirmed++
++		}
++	}
++	return confirmed >= 3
++}
++
+ func (state *engine) tick(now time.Time) ([]frame, error) {
+ 	if state.remote == (epoch{}) {
+ 		if now.Sub(state.started) >= state.config.MaxAge {
+@@ -316,10 +329,13 @@
+ 		if now.Sub(block.first) >= state.config.MaxAge {
+ 			return nil, state.exhausted("RELIABLE_FRAME_TIMEOUT", block, now)
+ 		}
+-		if block.sacked || now.Sub(block.last) < state.config.RTO {
++		timedOut := now.Sub(block.last) >= state.config.RTO
++		if block.sacked || (!timedOut && !state.fastRetransmit(seq, block, now)) {
+ 			continue
+ 		}
+-		state.stats.Timeouts++
++		if timedOut {
++			state.stats.Timeouts++
++		}
+ 		if block.retries >= state.config.MaxRetries {
+ 			return nil, state.exhausted("RELIABLE_RETRY_EXHAUSTED", block, now)
+ 		}
+--- /dev/null
++++ b/carrier/reliablestream/fast_recovery_test.go
+@@ -0,0 +1,176 @@
++package reliablestream
++
++import (
++	"bytes"
++	"errors"
++	"testing"
++	"time"
++)
++
++func fastRecoveryWindow(test *testing.T) (*engine, *engine, []frame) {
++	test.Helper()
++	states := connectedEngines()
++	sender, receiver := states[0], states[1]
++	var packets []frame
++	for index := 0; index < sender.config.SendWindow; index++ {
++		packet, err := sender.send([]byte{byte(index)}, sender.started)
++		if err != nil {
++			test.Fatal(err)
++		}
++		packets = append(packets, packet)
++	}
++	return sender, receiver, packets
++}
++
++func fastRecoveryDeliver(test *testing.T, sender, receiver *engine, packet frame, now time.Time) {
++	test.Helper()
++	responses, err := receiver.input(packet, now)
++	if err != nil {
++		test.Fatal(err)
++	}
++	for _, response := range responses {
++		if _, err = sender.input(response, now); err != nil {
++			test.Fatal(err)
++		}
++	}
++}
++
++func fastRecoveryData(test *testing.T, sender *engine, elapsed time.Duration) []frame {
++	test.Helper()
++	packets, err := sender.tick(sender.started.Add(elapsed))
++	if err != nil {
++		test.Fatal(err)
++	}
++	var data []frame
++	for _, packet := range packets {
++		if packet.kind == dataFrame {
++			data = append(data, packet)
++		}
++	}
++	return data
++}
++
++func TestFastRecoveryDistinctSACKThreshold(test *testing.T) {
++	for confirmations := 0; confirmations <= 3; confirmations++ {
++		sender, receiver, packets := fastRecoveryWindow(test)
++		for index := 1; index <= confirmations; index++ {
++			fastRecoveryDeliver(test, sender, receiver, packets[index], sender.started)
++		}
++		for duplicate := 0; duplicate < 40; duplicate++ {
++			if _, err := sender.input(receiver.ack(), sender.started); err != nil {
++				test.Fatal(err)
++			}
++		}
++		got := fastRecoveryData(test, sender, sender.config.RTO/4)
++		if confirmations < 3 && len(got) != 0 {
++			test.Fatal("duplicate ACKs must not create distinct SACK evidence", confirmations)
++		}
++		if confirmations == 3 && (len(got) != 1 || got[0].seq != 0) {
++			test.Fatal("three later SACKed blocks must recover only the head", got)
++		}
++	}
++}
++
++func TestFastRecoveryGraceSingleShotAndFallback(test *testing.T) {
++	sender, receiver, packets := fastRecoveryWindow(test)
++	for _, packet := range packets[1:] {
++		fastRecoveryDeliver(test, sender, receiver, packet, sender.started)
++	}
++	grace := sender.config.RTO / 4
++	if len(fastRecoveryData(test, sender, grace-time.Nanosecond)) != 0 {
++		test.Fatal("reordering grace shortened")
++	}
++	retries := fastRecoveryData(test, sender, grace)
++	if len(retries) != 1 || !bytes.Equal(encode(retries[0]), encode(packets[0])) {
++		test.Fatal("retransmission changed wire identity/payload")
++	}
++	if sender.stats.Timeouts != 0 || sender.stats.Retransmissions != 1 || sender.sent[0].retries != 1 {
++		test.Fatal("early recovery must not invent an RTO timeout")
++	}
++	for step := 1; step <= 9; step++ {
++		now := grace + time.Duration(step)*sender.config.RTO/10
++		if _, err := sender.input(receiver.ack(), sender.started.Add(now)); err != nil {
++			test.Fatal(err)
++		}
++		if len(fastRecoveryData(test, sender, now)) != 0 {
++			test.Fatal("unchanged SACK repeatedly triggered fast retry")
++		}
++	}
++	retries = fastRecoveryData(test, sender, grace+sender.config.RTO)
++	if len(retries) != 1 || sender.sent[0].retries != 2 || sender.stats.Timeouts != 1 {
++		test.Fatal("lost fast retry did not fall back to ordinary RTO")
++	}
++}
++
++func TestFastRecoveryReorderingAndSlowConsumer(test *testing.T) {
++	for _, consume := range []bool{false, true} {
++		sender, receiver, packets := fastRecoveryWindow(test)
++		for _, packet := range packets[1:] {
++			fastRecoveryDeliver(test, sender, receiver, packet, sender.started)
++		}
++		fastRecoveryDeliver(test, sender, receiver, packets[0], sender.started.Add(200*time.Millisecond))
++		if consume {
++			for index := range packets {
++				data, ack := receiver.consume()
++				if !bytes.Equal(data, []byte{byte(index)}) {
++					test.Fatal("ordered bytes changed")
++				}
++				if _, err := sender.input(ack, sender.started.Add(200*time.Millisecond)); err != nil {
++					test.Fatal(err)
++				}
++			}
++		}
++		if len(fastRecoveryData(test, sender, 900*time.Millisecond)) != 0 {
++			test.Fatal("delayed original or SACKed unconsumed head retransmitted")
++		}
++	}
++}
++
++func TestFastRecoveryStaleAndCumulativeACK(test *testing.T) {
++	sender, receiver, packets := fastRecoveryWindow(test)
++	for _, packet := range packets[1:] {
++		if _, err := receiver.input(packet, sender.started); err != nil {
++			test.Fatal(err)
++		}
++	}
++	stale := receiver.ack()
++	stale.source = epoch{3}
++	if _, err := sender.input(stale, sender.started); err != nil {
++		test.Fatal(err)
++	}
++	if len(fastRecoveryData(test, sender, 500*time.Millisecond)) != 0 {
++		test.Fatal("foreign epoch provided fast-recovery evidence")
++	}
++	if _, err := sender.input(receiver.ack(), sender.started); err != nil {
++		test.Fatal(err)
++	}
++	fastRecoveryDeliver(test, sender, receiver, packets[0], sender.started)
++	_, ack := receiver.consume()
++	if _, err := sender.input(ack, sender.started); err != nil {
++		test.Fatal(err)
++	}
++	if sender.base != 1 || len(fastRecoveryData(test, sender, 500*time.Millisecond)) != 0 {
++		test.Fatal("consumed head or SACKed successor retransmitted")
++	}
++}
++
++func TestFastRecoveryExhaustionBounds(test *testing.T) {
++	for _, expired := range []bool{false, true} {
++		sender, receiver, packets := fastRecoveryWindow(test)
++		for _, packet := range packets[1:] {
++			fastRecoveryDeliver(test, sender, receiver, packet, sender.started)
++		}
++		reason := "RELIABLE_RETRY_EXHAUSTED"
++		elapsed := sender.config.RTO
++		sender.sent[0].retries = sender.config.MaxRetries
++		if expired {
++			reason, elapsed = "RELIABLE_FRAME_TIMEOUT", sender.config.MaxAge
++		}
++		if _, err := sender.tick(sender.started.Add(elapsed)); !errors.Is(err, ErrExhausted) || sender.failureTrace.Reason != reason {
++			test.Fatal("exhaustion identity or age bound changed", err, sender.failureTrace)
++		}
++		if sender.stats.Retransmissions != 0 {
++			test.Fatal("retry budget bypassed")
++		}
++	}
++}
+--- /dev/null
++++ b/carrier/reliablestream/throughput_comparison_test.go
+@@ -0,0 +1,236 @@
++package reliablestream
++
++import (
++	"bytes"
++	"context"
++	"encoding/json"
++	"os"
++	"testing"
++	"time"
++)
++
++type throughputCase struct {
++	name          string
++	missing       []uint64
++	lossAttempts  int
++	headDelayMS   int
++	ackDelayMS    int
++	ackDropUntil  int
++	consumeFromMS int
++	duplicateACK  bool
++}
++
++type throughputFlight struct {
++	packet frame
++	to     int
++	due    int
++}
++
++type throughputResult struct {
++	Variant        string  `json:"variant"`
++	Case           string  `json:"case"`
++	Bytes          int     `json:"bytes"`
++	VirtualMS      int     `json:"virtual_ms"`
++	MaxNoDelivery  int     `json:"max_no_delivery_ms"`
++	ModelMbit      float64 `json:"model_mbit_s"`
++	Retransmits    uint64  `json:"retransmits"`
++	Timeouts       uint64  `json:"rto_timeouts"`
++	ReceiverDupes  uint64  `json:"receiver_duplicates"`
++	SendHighWater  int     `json:"send_high_water"`
++	BytesIdentical bool    `json:"bytes_identical"`
++}
++
++func TestThroughputComparison(test *testing.T) {
++	cases := []throughputCase{
++		{name: "ordered"},
++		{name: "head_loss", missing: []uint64{0}, lossAttempts: 1},
++		{name: "middle_loss", missing: []uint64{2}, lossAttempts: 1},
++		{name: "periodic_head_loss", missing: []uint64{0, 8, 16, 24, 32, 40, 48, 56}, lossAttempts: 1},
++		{name: "three_holes", missing: []uint64{0, 1, 2}, lossAttempts: 1},
++		{name: "fast_retry_lost", missing: []uint64{0}, lossAttempts: 2},
++		{name: "tail_loss", missing: []uint64{63}, lossAttempts: 1},
++		{name: "short_reordering", headDelayMS: 80},
++		{name: "long_reordering", headDelayMS: 400},
++		{name: "reverse_ack_delay", ackDelayMS: 400},
++		{name: "reverse_ack_outage", ackDropUntil: 450},
++		{name: "duplicate_acks", duplicateACK: true},
++		{name: "slow_consumer", consumeFromMS: 450},
++	}
++	for _, scenario := range cases {
++		test.Run(scenario.name, func(test *testing.T) {
++			result := throughputSimulation(test, scenario)
++			raw, err := json.Marshal(result)
++			if err != nil {
++				test.Fatal(err)
++			}
++			test.Log("THROUGHPUT_RESULT " + string(raw))
++			if !result.BytesIdentical || result.SendHighWater > DefaultConfig().SendWindow {
++				test.Fatal("byte identity or memory window bound changed", result)
++			}
++			if scenario.name == "ordered" || scenario.name == "short_reordering" || scenario.name == "reverse_ack_delay" || scenario.name == "duplicate_acks" || scenario.name == "slow_consumer" {
++				if result.Retransmits != 0 {
++					test.Fatal("spurious recovery in protected no-loss case", result)
++				}
++			}
++		})
++	}
++}
++
++func throughputSimulation(test *testing.T, scenario throughputCase) throughputResult {
++	test.Helper()
++	states := connectedEngines()
++	const blockCount = 64
++	source := make([]byte, blockCount*DefaultConfig().Payload)
++	for index := range source {
++		source[index] = byte(index*37 + index/1009)
++	}
++	var flights []throughputFlight
++	attempts := make(map[uint64]int)
++	clock, serializedUntil, position := 0, 0, 0
++	lastDelivery, maxNoDelivery := 0, 0
++	var delivered []byte
++	queue := func(packet frame, destination int) {
++		due := clock + 60
++		if packet.kind == dataFrame {
++			attempts[packet.seq]++
++			due = max(clock, serializedUntil) + 60
++			serializedUntil = max(clock, serializedUntil) + 6
++			for _, missing := range scenario.missing {
++				if packet.seq == missing && attempts[packet.seq] <= scenario.lossAttempts {
++					return
++				}
++			}
++			if packet.seq%8 == 0 && attempts[packet.seq] == 1 {
++				due += scenario.headDelayMS
++			}
++		} else if packet.kind == ackFrame {
++			if clock < scenario.ackDropUntil {
++				return
++			}
++			due += scenario.ackDelayMS
++		}
++		flights = append(flights, throughputFlight{packet, destination, due})
++		if scenario.duplicateACK && packet.kind == ackFrame {
++			for extra := 1; extra <= 3; extra++ {
++				flights = append(flights, throughputFlight{packet, destination, due + extra*10})
++			}
++		}
++	}
++	for clock = 0; clock <= 20000; clock += 10 {
++		now := states[0].started.Add(time.Duration(clock) * time.Millisecond)
++		for states[0].writable() && position < len(source) {
++			end := min(position+states[0].config.Payload, len(source))
++			packet, err := states[0].send(source[position:end], now)
++			if err != nil {
++				test.Fatal(err)
++			}
++			queue(packet, 1)
++			position = end
++		}
++		current := flights
++		flights = nil
++		for _, transit := range current {
++			if transit.due > clock {
++				flights = append(flights, transit)
++				continue
++			}
++			packet, err := decode(encode(transit.packet))
++			if err != nil {
++				test.Fatal(err)
++			}
++			responses, err := states[transit.to].input(packet, now)
++			if err != nil {
++				test.Fatal(err)
++			}
++			for _, response := range responses {
++				queue(response, 1-transit.to)
++			}
++		}
++		for clock >= scenario.consumeFromMS && states[1].buffer[states[1].receive] != nil {
++			data, ack := states[1].consume()
++			delivered = append(delivered, data...)
++			maxNoDelivery = max(maxNoDelivery, clock-lastDelivery)
++			lastDelivery = clock
++			queue(ack, 0)
++		}
++		if clock%100 == 0 {
++			for side, state := range states {
++				responses, err := state.tick(now)
++				if err != nil {
++					test.Fatal(err)
++				}
++				for _, response := range responses {
++					queue(response, 1-side)
++				}
++			}
++		}
++		if len(delivered) == len(source) && states[0].base == blockCount {
++			return throughputResult{Variant: os.Getenv("FC_PERF_VARIANT"), Case: scenario.name,
++				Bytes: len(source), VirtualMS: lastDelivery, MaxNoDelivery: maxNoDelivery,
++				ModelMbit:   float64(len(source)*8) / float64(lastDelivery) / 1000,
++				Retransmits: states[0].stats.Retransmissions, Timeouts: states[0].stats.Timeouts,
++				ReceiverDupes: states[1].stats.Duplicates, SendHighWater: states[0].stats.SendHighWater,
++				BytesIdentical: bytes.Equal(delivered, source)}
++		}
++	}
++	test.Fatal("finite virtual transfer budget exceeded")
++	return throughputResult{}
++}
++
++func TestThroughputAdapterHeadLoss(test *testing.T) {
++	ctx, cancel := context.WithTimeout(context.Background(), 4*time.Second)
++	defer cancel()
++	leftEndpoint, rightEndpoint := endpoints()
++	dropped := false
++	leftEndpoint.drop = func(raw []byte) bool {
++		packet, err := decode(raw)
++		if err == nil && packet.kind == dataFrame && packet.seq == 0 && !dropped {
++			dropped = true
++			return true
++		}
++		return false
++	}
++	left, err := New(ctx, leftEndpoint, DefaultConfig())
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer left.Close()
++	right, err := New(ctx, rightEndpoint, DefaultConfig())
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer right.Close()
++	payload := bytes.Repeat([]byte("synthetic-byte-exact-stream"), 600)
++	started := time.Now()
++	finished := make(chan error, 1)
++	go func() {
++		for index := 0; index < 8; index++ {
++			if sendErr := left.SendContext(ctx, payload); sendErr != nil {
++				finished <- sendErr
++				return
++			}
++		}
++		finished <- nil
++	}()
++	for index := 0; index < 8; index++ {
++		data, receiveErr := right.Recv(ctx)
++		if receiveErr != nil || !bytes.Equal(data, payload) {
++			test.Fatal("runtime ordered transfer failed", receiveErr)
++		}
++	}
++	if err := <-finished; err != nil {
++		test.Fatal(err)
++	}
++	stats := left.Stats()
++	if stats.Retransmissions != 1 {
++		test.Fatal("single head loss generated repeated retransmits", stats.Retransmissions)
++	}
++	expectedTimeouts := uint64(0)
++	if os.Getenv("FC_PERF_VARIANT") == "baseline" {
++		expectedTimeouts = 1
++	}
++	if stats.Timeouts != expectedTimeouts {
++		test.Fatal("runtime recovery did not use expected path", stats.Timeouts)
++	}
++	test.Logf("ADAPTER_RESULT variant=%s elapsed_ms=%d bytes=%d retransmits=%d rto_timeouts=%d", os.Getenv("FC_PERF_VARIANT"), time.Since(started).Milliseconds(), len(payload)*8, stats.Retransmissions, stats.Timeouts)
++}
+--- a/clients/android/app/build.gradle
++++ b/clients/android/app/build.gradle
+@@ -108,7 +108,7 @@
+             }
+         }
+         if (variant.buildType.name == 'researchProvisioning') {
+-            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-ui60-4' }
++            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-ui60-4-speed-recovery1' }
+         }
+     }
+ }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/AutomaticConnection.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/AutomaticConnection.java
+@@ -66,7 +66,7 @@
+     public void open(String id,long deadline) throws Exception {
+         orchestrator.check(deadline);ConnectionService.activeTransport=id;
+         if(ConnectivityOrchestrator.RESTRICTED.equals(id)) {
+-            RestrictedTunnelEngine restricted=new RestrictedTunnelEngine(context,()->interrupted!=null,up->{},owner,deadline);
++            RestrictedTunnelEngine restricted=new RestrictedTunnelEngine(context,()->interrupted!=null,up->{},owner,deadline,orchestrator.state()==ConnectivityOrchestrator.State.RESTORING);
+             candidate=restricted;restricted.up("");ConnectionService.vpnSource="10.79.0.2";
+         } else {
+             if(debug&&context.getSharedPreferences("orchestrator-diagnostic",Context.MODE_PRIVATE).getBoolean("deny_"+id,false))
+--- a/clients/android/app/src/main/java/com/familyconnect/app/ConnectivityOrchestrator.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/ConnectivityOrchestrator.java
+@@ -11,11 +11,17 @@
+     enum Failure { CANCELLED, AUTH, CONFIGURATION, NETWORK, TRANSPORT_UNAVAILABLE, BOOTSTRAP_UNAVAILABLE, INTERNAL }
+     static final long NORMAL_TIMEOUT_MS=20000, RESTRICTED_TIMEOUT_MS=200000, CONNECT_TIMEOUT_MS=300000;
+     static final int MAX_EVENTS=128, MAX_RESTORATIONS=1;
++    static final int MAX_BOOTSTRAP_RECOVERIES=2;
+     static final long RECOVERY_BACKOFF_MS=30000, MAX_RECOVERY_BACKOFF_MS=120000;
+     static final String RESTRICTED="restricted";
+     static final class Rejected extends Exception {
+         final Failure category;
+-        Rejected(Failure category) { super(category.name()); this.category=category; }
++        final boolean temporaryBootstrap;
++        Rejected(Failure category) { this(category,false); }
++        Rejected(Failure category,boolean temporaryBootstrap) {
++            super(category.name());this.category=category;
++            this.temporaryBootstrap=category==Failure.BOOTSTRAP_UNAVAILABLE&&temporaryBootstrap;
++        }
+     }
+     static final class Event {
+         final String name,candidate;
+@@ -48,6 +54,7 @@
+     private long retryAt;
+     private int failedSeries;
+     private Failure retryReason;
++    private int bootstrapRecoveries;
+     ConnectivityOrchestrator(Host host) { this.host=host; }
+     State state() { return state; }
+     String selected() { return selected; }
+@@ -63,7 +70,7 @@
+     }
+     void connect(List<String> configured,String preferred,String lastGood) {
+         if(state!=State.DISCONNECTED)return;
+-        started=host.now();restorations=0;failedSeries=0;retryAt=0;requested=true;state=State.CONNECTING;emit("connect_requested",null,null);
++        started=host.now();restorations=0;failedSeries=0;bootstrapRecoveries=0;retryAt=0;requested=true;state=State.CONNECTING;emit("connect_requested",null,null);
+         try { candidates=order(host.configure(configured,started+30000),preferred,lastGood);check(started+CONNECT_TIMEOUT_MS); }
+         catch(Exception|LinkageError failure) { finish(interrupted!=null?interrupted:classify(failure),false);return; }
+         run(false);
+@@ -100,6 +107,7 @@
+     private void run(boolean restoring) {
+         long deadline=started+CONNECT_TIMEOUT_MS;
+         Failure last=Failure.TRANSPORT_UNAVAILABLE;
++        boolean temporaryBootstrap=false;
+         for(int index=0;index<candidates.size();index++) {
+             String candidate=candidates.get(index);
+             try {
+@@ -112,20 +120,21 @@
+                 check(deadline);emit("candidate_attempted",candidate,null);
+                 long candidateDeadline=Math.min(deadline,host.now()+(RESTRICTED.equals(candidate)?RESTRICTED_TIMEOUT_MS:NORMAL_TIMEOUT_MS));
+                 host.open(candidate,candidateDeadline);check(candidateDeadline);
+-                selected=candidate;state=State.CONNECTED;retryAt=0;failedSeries=0;
++                selected=candidate;state=State.CONNECTED;retryAt=0;failedSeries=0;bootstrapRecoveries=0;
+                 if(!RESTRICTED.equals(candidate))host.remember(candidate);
+                 emit("candidate_succeeded",candidate,null);emit("time_to_connected",candidate,null);
+                 if(restoring)emit("restoration_succeeded",candidate,null);
+                 return;
+             } catch(Exception|LinkageError failure) {
+                 last=interrupted!=null?interrupted:classify(failure);
++                temporaryBootstrap=interrupted==null&&failure instanceof Rejected&&((Rejected)failure).temporaryBootstrap;
+                 emit("candidate_failed",candidate,last);
+                 try { host.closeCandidate(); }
+                 catch(Exception|LinkageError cleanup) { finish(Failure.INTERNAL,restoring);return; }
+-                if(terminal(last)||host.now()>=deadline) { finish(last,restoring);return; }
++                if(terminal(last)||host.now()>=deadline) { finish(last,restoring,temporaryBootstrap);return; }
+             }
+         }
+-        finish(last,restoring);
++        finish(last,restoring,temporaryBootstrap);
+     }
+     static Failure classify(Throwable failure) {
+         if(failure instanceof Rejected)return ((Rejected)failure).category;
+@@ -139,10 +148,15 @@
+     }
+     private static boolean retryable(Failure reason){return reason==Failure.NETWORK||reason==Failure.TRANSPORT_UNAVAILABLE;}
+     private void finish(Failure reason,boolean restoring) {
++        finish(reason,restoring,false);
++    }
++    private void finish(Failure reason,boolean restoring,boolean temporaryBootstrap) {
+         try { host.closeCandidate(); } catch(Exception|LinkageError failure) { reason=Failure.INTERNAL; }
+         selected=null;
+         if(reason==Failure.CANCELLED) { disconnect();return; }
+-        if(restoring&&requested&&retryable(reason)){
++        boolean bootstrapRetry=reason==Failure.BOOTSTRAP_UNAVAILABLE&&temporaryBootstrap&&bootstrapRecoveries<MAX_BOOTSTRAP_RECOVERIES;
++        if(restoring&&requested&&(retryable(reason)||bootstrapRetry)){
++            if(bootstrapRetry)bootstrapRecoveries++;
+             long delay=Math.min(MAX_RECOVERY_BACKOFF_MS,RECOVERY_BACKOFF_MS<<Math.min(failedSeries,2));
+             failedSeries=Math.min(2,failedSeries+1);retryReason=reason;retryAt=host.now()+delay;
+             state=State.RESTORING;emit("restoration_failed",null,reason);emit("recovery_wait",null,reason);return;
+--- a/clients/android/app/src/main/java/com/familyconnect/app/FriendsRestricted.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/FriendsRestricted.java
+@@ -11,8 +11,9 @@
+     private static final class Selection {
+         final boolean attempted;
+         private final byte[] response;
+-        Selection(boolean attempted,byte[] response){this.attempted=attempted;this.response=response==null?null:response.clone();}
+-        byte[] copy(){return response==null?null:response.clone();}
++        private final boolean availabilityFailure;
++        Selection(boolean attempted,byte[] response,boolean availabilityFailure){this.attempted=attempted;this.response=response==null?null:response.clone();this.availabilityFailure=availabilityFailure;}
++        byte[] copy(boolean restoring)throws ConnectivityOrchestrator.Rejected{return RestrictedBootstrap.select(response,availabilityFailure,restoring);}
+     }
+     private static CompletableFuture<Selection> running;
+     private static final AtomicBoolean reconciled=new AtomicBoolean();
+@@ -24,6 +25,9 @@
+         return RestrictedCache.detailed(new RestrictedVault(context),raw->{NativeRestricted.load();int code=NativeRestricted.validationCode(raw,publicIdentity,anchor);return code==0?ReadinessImportResult.Code.READY:code==2?ReadinessImportResult.Code.BOOTSTRAP_VALIDATION_FAILED:ReadinessImportResult.Code.NATIVE_VALIDATION_FAILED;});
+     }
+     static byte[] ready(Context context,ControlIdentity identity,long deadline,java.util.function.BooleanSupplier cancelled)throws Exception{
++        return ready(context,identity,deadline,cancelled,false);
++    }
++    static byte[] ready(Context context,ControlIdentity identity,long deadline,java.util.function.BooleanSupplier cancelled,boolean restoring)throws Exception{
+         check(deadline,cancelled);
+         Selection selected=await(start(context,true),deadline,cancelled);
+         check(deadline,cancelled);
+@@ -31,7 +35,7 @@
+             selected=await(start(context,true),deadline,cancelled);
+             check(deadline,cancelled);
+         }
+-        return selected.copy();
++        return selected.copy(restoring);
+     }
+     private static void check(long deadline,java.util.function.BooleanSupplier cancelled)throws ConnectivityOrchestrator.Rejected{
+         if(denied)throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.AUTH);
+@@ -54,6 +58,7 @@
+         Context context=source.getApplicationContext();
+         new Thread(()->{
+             boolean attempted=false;
++            boolean availabilityFailure=false;
+             byte[] selected=null;
+             OwnerPrewarmReceipt receipt=new OwnerPrewarmReceipt();
+             ReadinessProduct product=null;
+@@ -76,17 +81,18 @@
+                     ()->{permit.requireAvailable();return new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+30000).restrictedReadiness(identity,receipt);},
+                     RestrictedVault.LOCK,()->System.currentTimeMillis()/1000);
+                 result=startup.result;selected=startup.response;refresh=startup.status;
++                availabilityFailure=startup.availabilityFailure;
+                 if(startup.authorizationRejected)denied=true;
+                 else if(result.code()==ReadinessImportResult.Code.READY)denied=false;
+                 Diagnostics.readinessResult(context,result.code());
+                 if(permit.blocked())product.record(result);
+                 else product.publish(result,payload->new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+15000).readinessAck(identity,payload));
+-            }catch(Exception | LinkageError failure){if(selected!=null){Arrays.fill(selected,(byte)0);selected=null;}refresh="UNAVAILABLE";
++            }catch(Exception | LinkageError failure){availabilityFailure=false;if(selected!=null){Arrays.fill(selected,(byte)0);selected=null;}refresh="UNAVAILABLE";
+                 ReadinessImportResult result=new ReadinessImportResult(receipt,ReadinessImportResult.Code.INTERNAL_ERROR,null,System.currentTimeMillis()/1000,"import",BuildConfig.VERSION_NAME,BuildConfig.VERSION_CODE);
+                 if(product==null)product=new ReadinessProduct(null,new ReadinessReceiptStore(context),BuildConfig.VERSION_NAME,BuildConfig.VERSION_CODE);
+                 product.record(result);Diagnostics.readinessResult(context,result.code());
+             }
+-            finally{pending.complete(new Selection(attempted,selected));if(selected!=null)Arrays.fill(selected,(byte)0);}
++            finally{pending.complete(new Selection(attempted,selected,availabilityFailure));if(selected!=null)Arrays.fill(selected,(byte)0);}
+         },"friends-readiness").start();
+         return pending;
+     }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/RestrictedBootstrap.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/RestrictedBootstrap.java
+@@ -9,10 +9,20 @@
+         final ReadinessImportResult result;
+         final String status;
+         final boolean authorizationRejected;
++        final boolean availabilityFailure;
+         final byte[] response;
+         Selection(ReadinessImportResult result,String status,boolean rejected,byte[] response){
++            this(result,status,rejected,response,false);
++        }
++        Selection(ReadinessImportResult result,String status,boolean rejected,byte[] response,boolean unavailable){
+             this.result=result;this.status=status;authorizationRejected=rejected;this.response=response;
++            availabilityFailure=unavailable&&!rejected;
+         }
++    }
++    static byte[] select(byte[] response,boolean availabilityFailure,boolean restoring)throws ConnectivityOrchestrator.Rejected{
++        if(availabilityFailure&&(restoring||response==null))
++            throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE,true);
++        return response==null?null:response.clone();
+     }
+     static boolean unavailable(Exception failure){
+         return FriendsReadinessProtocol.unavailable(failure);
+@@ -34,7 +44,7 @@
+             }
+             String status=rejected?"AUTHORIZATION_REJECTED":failure instanceof FriendsReadinessProtocol.ChallengeFailure?
+                 ((FriendsReadinessProtocol.ChallengeFailure)failure).code.name():"UNAVAILABLE";
+-            return new Selection(product.failed(receipt,code,now.getAsLong()),cached==null?status:"CACHED_VALID_REFRESH_UNAVAILABLE",rejected,cached);
++            return new Selection(product.failed(receipt,code,now.getAsLong()),cached==null?status:"CACHED_VALID_REFRESH_UNAVAILABLE",rejected,cached,unavailable(failure)&&cached!=null);
+         }
+         try{
+             ReadinessImportResult result;
+--- a/clients/android/app/src/main/java/com/familyconnect/app/RestrictedRecovery.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/RestrictedRecovery.java
+@@ -5,6 +5,30 @@
+ import static com.familyconnect.app.ConnectivityOrchestrator.Failure;
+ 
+ final class RestrictedRecovery {
++    static boolean bootstrapRetryable(long handle,int phase,boolean cancelled,boolean denied,String snapshot) {
++        if(handle<=0||phase!=3||cancelled||denied||snapshot==null)return false;
++        try {
++            JsonObject source=JsonParser.parseString(snapshot).getAsJsonObject().getAsJsonObject("owner_startup");
++            JsonObject startup=RestrictedStartup.project(source);
++            if(startup==null||!startup.has("observation"))return false;
++            JsonObject observation=startup.getAsJsonObject("observation");
++            if(!"NONE".equals(RestrictedTrace.text(observation,"stop_at_observation"))
++                ||!"STARTUP_CALLER".equals(RestrictedTrace.text(observation,"point"))
++                ||!RestrictedTrace.allowed(RestrictedTrace.text(observation,"context_state"),"LIVE|DEADLINE")
++                ||!RestrictedTrace.text(startup,"cause").equals(RestrictedTrace.text(observation,"error_category")))return false;
++            if(source.has("local_stop")){
++                JsonObject stop=startup.getAsJsonObject("local_stop");
++                if(stop==null||!"CLEANUP".equals(RestrictedTrace.text(stop,"source"))
++                    ||!stop.has("elapsed_ms")||!observation.has("elapsed_ms")
++                    ||stop.get("elapsed_ms").getAsLong()<observation.get("elapsed_ms").getAsLong())return false;
++            }
++            return startup.get("attempt").getAsLong()==handle
++                &&startup.get("complete").getAsBoolean()
++                &&"FAILED".equals(RestrictedTrace.text(startup,"status"))
++                &&"SEED_ADMISSION".equals(RestrictedTrace.text(startup,"stage"))
++                &&RestrictedTrace.allowed(RestrictedTrace.text(startup,"cause"),"DEADLINE|IO_DEADLINE");
++        } catch(RuntimeException invalid) { return false; }
++    }
+     static Failure failure(int phase,boolean cancelled,boolean denied,String snapshot) {
+         if(denied||phase==5)return Failure.AUTH;
+         if(cancelled)return Failure.CANCELLED;
+--- a/clients/android/app/src/main/java/com/familyconnect/app/RestrictedTunnelEngine.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/RestrictedTunnelEngine.java
+@@ -30,14 +30,19 @@
+     private volatile boolean revoked;
+     private final AutomaticVpnOwner automaticOwner;
+     private final long connectDeadline;
++    private final boolean restoring;
++    private boolean temporaryBootstrap;
+ 
+     RestrictedTunnelEngine(Context context, BooleanSupplier cancelled, Consumer<Boolean> state) {
+         this(context,cancelled,state,null,Long.MAX_VALUE);
+     }
+ 
+     RestrictedTunnelEngine(Context context, BooleanSupplier cancelled, Consumer<Boolean> state,AutomaticVpnOwner owner,long deadline) {
++        this(context,cancelled,state,owner,deadline,false);
++    }
++    RestrictedTunnelEngine(Context context, BooleanSupplier cancelled, Consumer<Boolean> state,AutomaticVpnOwner owner,long deadline,boolean restoring) {
+         this.context=context; this.cancelled=cancelled; this.state=state;
+-        automaticOwner=owner;connectDeadline=deadline;
++        automaticOwner=owner;connectDeadline=deadline;this.restoring=restoring;
+     }
+ 
+     public void up(String control) throws Exception {
+@@ -67,7 +72,7 @@
+         if(context.getPackageName().equals("com.familyconnect.app.friends")) {
+             try(ControlIdentity identity=new FriendsIdentityVault(context).load()) {
+                 byte[] response;
+-                response=FriendsRestricted.ready(context,identity,connectDeadline,cancelled);
++                response=FriendsRestricted.ready(context,identity,connectDeadline,cancelled,restoring);
+                 Diagnostics.readiness(context,response!=null);
+                 if(response==null)throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
+                 byte[] full=identity.material(),material=java.util.Arrays.copyOf(full,64);java.util.Arrays.fill(full,(byte)0);
+@@ -86,7 +91,12 @@
+         evidence();
+         checkAccess();
+         if (!control.isEmpty() && phase==4) return;
+-        if (phase!=1) throw StartupDiagnostics.rejected(handle,phase==5?ConnectivityOrchestrator.Failure.AUTH:ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
++        if (phase!=1) {
++            ConnectivityOrchestrator.Rejected original=StartupDiagnostics.rejected(handle,phase==5?ConnectivityOrchestrator.Failure.AUTH:ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
++            ConnectivityOrchestrator.Rejected failure=new ConnectivityOrchestrator.Rejected(original.category,temporaryBootstrap);
++            if(original.getCause()!=null)failure.initCause(original.getCause());
++            throw failure;
++        }
+         if(automaticOwner!=null)tun=automaticOwner.replace(automaticOwner.builder());
+         else tun=service.new Builder().setSession("Family restricted diagnostic").setMtu(1280)
+             .addAddress("10.79.0.2",32).addAddress("fd79:fc::2",128)
+@@ -139,6 +149,7 @@
+     }
+ 
+     private void evidence(JSONObject snapshot) throws Exception {
++        temporaryBootstrap=RestrictedRecovery.bootstrapRetryable(handle,snapshot.optInt("state",-1),cancelled.getAsBoolean(),authorizationDenied(),snapshot.toString());
+         StartupDiagnostics.capture(context,handle,snapshot);
+         File output=new File(context.getFilesDir(),"restricted-evidence.jsonl");
+         snapshot.put("authorization_denied",FriendsRestricted.denied);
+--- /dev/null
++++ b/clients/android/app/src/test/java/com/familyconnect/app/CutoverRecoveryTest.java
+@@ -0,0 +1,204 @@
++package com.familyconnect.app;
++
++import com.google.gson.JsonObject;
++import java.net.SocketTimeoutException;
++import java.util.ArrayList;
++import java.util.Arrays;
++import java.util.List;
++import org.junit.Test;
++import static org.junit.Assert.*;
++import static com.familyconnect.app.ConnectivityOrchestrator.*;
++
++public class CutoverRecoveryTest {
++    private static JsonObject startup(long attempt) {
++        JsonObject result=new JsonObject();
++        result.addProperty("schema",1);result.addProperty("attempt",attempt);
++        result.addProperty("started_unix_ms",1000);result.addProperty("complete",true);
++        result.addProperty("status","FAILED");result.addProperty("stage","SEED_ADMISSION");
++        result.addProperty("cause","DEADLINE");
++        JsonObject observation=new JsonObject();observation.addProperty("point","STARTUP_CALLER");
++        observation.addProperty("error_category","DEADLINE");observation.addProperty("context_state","DEADLINE");
++        observation.addProperty("stop_at_observation","NONE");observation.addProperty("elapsed_ms",30000);
++        result.add("observation",observation);
++        JsonObject cleanup=new JsonObject();cleanup.addProperty("source","CLEANUP");cleanup.addProperty("elapsed_ms",30001);
++        result.add("local_stop",cleanup);
++        return result;
++    }
++    private static boolean retryable(JsonObject result) {
++        JsonObject snapshot=new JsonObject();snapshot.add("owner_startup",result);
++        return RestrictedRecovery.bootstrapRetryable(2,3,false,false,snapshot.toString());
++    }
++    private static byte[] response(long issued) {
++        return ReadinessProductTest.response(issued,10000);
++    }
++    private static final class Fixture implements Host {
++        long time,issued=1000;
++        int active,opens,nativeStarts,releases;
++        boolean unavailable,seedDeadline,cleanupFailure;
++        Exception fetchFailure;
++        Rejected forced;
++        final List<Long> selected=new ArrayList<>();
++        final ReadinessProductTest.Memory storage=new ReadinessProductTest.Memory();
++        final RestrictedCache cache=ReadinessProductTest.cache(storage);
++        final ReadinessProduct product=new ReadinessProduct(cache,new ReadinessProductTest.Memory(),"fixture",84,()->1500);
++        final ConnectivityOrchestrator core=new ConnectivityOrchestrator(this);
++        public long now(){return time;}
++        public void pause(long millis){time+=millis;}
++        public void open(String candidate,long deadline)throws Exception {
++            assertEquals(RESTRICTED,candidate);assertEquals(0,active);opens++;
++            assertTrue(deadline-time<=RESTRICTED_TIMEOUT_MS);
++            if(forced!=null)throw forced;
++            OwnerPrewarmReceipt receipt=new OwnerPrewarmReceipt();
++            RestrictedBootstrap.Selection selection=RestrictedBootstrap.refresh(cache,product,receipt,()->{
++                if(fetchFailure!=null)throw fetchFailure;
++                if(unavailable)throw new SocketTimeoutException();
++                receipt.challengeIssued();receipt.fetchAuthorized();
++                return response(issued);
++            },this,()->1500);
++            if(selection.authorizationRejected)throw new Rejected(Failure.AUTH);
++            byte[] raw=RestrictedBootstrap.select(selection.response,selection.availabilityFailure,core.state()==State.RESTORING);
++            if(raw==null)throw new Rejected(Failure.BOOTSTRAP_UNAVAILABLE);
++            selected.add(ControlJson.parse(raw).getAsJsonObject().get("issued_at").getAsLong());
++            Arrays.fill(raw,(byte)0);active++;nativeStarts++;
++            if(seedDeadline){time+=30000;throw new Rejected(Failure.BOOTSTRAP_UNAVAILABLE,retryable(startup(2)));}
++        }
++        public void closeCandidate(){if(cleanupFailure)throw new IllegalStateException();active=0;}
++        public void release(){releases++;}
++        public void remember(String candidate){fail();}
++        public void event(Event event){}
++        void connect(){core.connect(List.of(),null,null);if(!unavailable)assertEquals(State.CONNECTED,core.state());}
++        void advance(long delay){time+=delay;core.retryIfDue();}
++        long count(String event){return core.events().stream().filter(value->event.equals(value.name)).count();}
++    }
++    @Test public void refreshOutageDoesNotRestartOldRuntimeAndNextRefreshRecovers() {
++        Fixture fixture=new Fixture();fixture.connect();fixture.unavailable=true;
++        fixture.core.lost(Failure.NETWORK);
++        assertEquals(State.RESTORING,fixture.core.state());assertEquals(1,fixture.nativeStarts);
++        assertEquals(0,fixture.active);assertEquals(0,fixture.releases);
++        fixture.advance(RECOVERY_BACKOFF_MS-1);assertEquals(2,fixture.opens);
++        fixture.unavailable=false;fixture.issued=1200;fixture.advance(1);
++        assertEquals(State.CONNECTED,fixture.core.state());assertEquals(List.of(1000L,1200L),fixture.selected);
++        assertEquals(1,fixture.count("restoration_succeeded"));assertEquals(1,fixture.active);
++        fixture.advance(MAX_RECOVERY_BACKOFF_MS);assertEquals(3,fixture.opens);
++        assertEquals(Failure.NETWORK,fixture.core.events().stream().filter(event->event.name.equals("transport_lost")).findFirst().get().failure);
++    }
++    @Test public void stillPublishedOldDirectorySeedDeadlineGetsBoundedFreshRetry() {
++        Fixture fixture=new Fixture();fixture.connect();fixture.seedDeadline=true;
++        fixture.core.lost(Failure.NETWORK);assertEquals(State.RESTORING,fixture.core.state());
++        assertEquals(List.of(1000L,1000L),fixture.selected);
++        fixture.seedDeadline=false;fixture.issued=1300;fixture.advance(RECOVERY_BACKOFF_MS);
++        assertEquals(State.CONNECTED,fixture.core.state());assertEquals(List.of(1000L,1000L,1300L),fixture.selected);
++        assertTrue(fixture.core.events().stream().anyMatch(event->event.name.equals("candidate_failed")&&event.failure==Failure.BOOTSTRAP_UNAVAILABLE));
++    }
++    @Test public void bootstrapRecoveryStopsAfterTwoDelayedSeries() {
++        Fixture fixture=new Fixture();fixture.connect();fixture.unavailable=true;fixture.core.lost(Failure.NETWORK);
++        fixture.advance(30000);assertEquals(State.RESTORING,fixture.core.state());
++        fixture.advance(59999);assertEquals(3,fixture.opens);
++        fixture.advance(1);assertEquals(State.FAILED,fixture.core.state());assertEquals(4,fixture.opens);
++        for(int index=0;index<20;index++)fixture.advance(MAX_RECOVERY_BACKOFF_MS);
++        assertEquals(4,fixture.opens);assertEquals(2,fixture.count("recovery_wait"));
++        assertEquals(0,fixture.active);assertEquals(0,fixture.releases);
++    }
++    @Test public void successfulRecoveryResetsOnlyItsBootstrapBudget() {
++        Fixture fixture=new Fixture();fixture.connect();fixture.unavailable=true;fixture.core.lost(Failure.NETWORK);
++        fixture.unavailable=false;fixture.advance(30000);assertEquals(State.CONNECTED,fixture.core.state());
++        fixture.unavailable=true;fixture.core.lost(Failure.NETWORK);fixture.advance(30000);
++        assertEquals(State.RESTORING,fixture.core.state());fixture.advance(60000);
++        assertEquals(State.RESTORING,fixture.core.state());fixture.advance(120000);
++        assertEquals(State.FAILED,fixture.core.state());
++    }
++    @Test public void initialConnectNeverEntersAutomaticBootstrapLoop() {
++        Fixture fixture=new Fixture();fixture.unavailable=true;fixture.connect();
++        assertEquals(State.FAILED,fixture.core.state());fixture.advance(120000);
++        assertEquals(1,fixture.opens);assertEquals(0,fixture.count("recovery_wait"));
++    }
++    @Test public void unknownBootstrapAndSecurityFailuresRemainTerminal() {
++        for(Failure failure:List.of(Failure.AUTH,Failure.CONFIGURATION,Failure.INTERNAL,Failure.BOOTSTRAP_UNAVAILABLE)){
++            Fixture fixture=new Fixture();fixture.connect();fixture.forced=new Rejected(failure);
++            fixture.core.lost(Failure.NETWORK);assertEquals(State.FAILED,fixture.core.state());
++            fixture.advance(120000);assertEquals(2,fixture.opens);
++        }
++        assertFalse(new Rejected(Failure.AUTH,true).temporaryBootstrap);
++    }
++    @Test public void authAndCancelDuringWaitPreventAnyNewOpen() {
++        for(Failure reason:List.of(Failure.AUTH,Failure.CANCELLED)){
++            Fixture fixture=new Fixture();fixture.connect();fixture.unavailable=true;fixture.core.lost(Failure.NETWORK);
++            fixture.core.interrupt(reason);fixture.advance(30000);
++            assertEquals(reason==Failure.AUTH?State.FAILED:State.DISCONNECTED,fixture.core.state());
++            assertEquals(2,fixture.opens);assertEquals(reason==Failure.AUTH?0:1,fixture.releases);
++            fixture.advance(120000);assertEquals(2,fixture.opens);
++        }
++    }
++    @Test public void disconnectAndCleanupFailureNeverStartAnotherCandidate() {
++        Fixture fixture=new Fixture();fixture.connect();fixture.unavailable=true;fixture.core.lost(Failure.NETWORK);
++        fixture.core.disconnect();fixture.advance(30000);assertEquals(2,fixture.opens);assertEquals(1,fixture.releases);
++        fixture=new Fixture();fixture.connect();fixture.cleanupFailure=true;fixture.core.lost(Failure.NETWORK);
++        fixture.advance(120000);assertEquals(State.FAILED,fixture.core.state());assertEquals(1,fixture.opens);
++    }
++    @Test public void rejectedChallengeTrustAndStaleImportNeverGainRetries() {
++        for(Exception failure:List.of(new FriendsReadinessProtocol.AuthorizationFailure(),new javax.net.ssl.SSLHandshakeException("fixture"),
++                new FriendsReadinessProtocol.ChallengeFailure(FriendsReadinessProtocol.ChallengeCode.CHALLENGE_INCOMPATIBLE_RESPONSE))){
++            Fixture fixture=new Fixture();fixture.connect();fixture.fetchFailure=failure;
++            fixture.core.lost(Failure.NETWORK);assertEquals(State.FAILED,fixture.core.state());assertEquals(0,fixture.count("recovery_wait"));
++        }
++        Fixture stale=new Fixture();stale.connect();stale.issued=999;stale.core.lost(Failure.NETWORK);
++        assertEquals(State.FAILED,stale.core.state());assertEquals(1,stale.nativeStarts);
++    }
++    @Test public void normalWarmStartCacheAndOtherConsumerRemainUnmodified()throws Exception {
++        byte[] cached=response(1000),before=cached.clone();
++        assertArrayEquals(cached,RestrictedBootstrap.select(cached,true,false));
++        try{RestrictedBootstrap.select(cached,true,true);fail();}catch(Rejected failure){assertTrue(failure.temporaryBootstrap);}
++        assertArrayEquals(before,cached);assertArrayEquals(before,RestrictedBootstrap.select(cached,true,false));
++        assertArrayEquals(before,RestrictedBootstrap.select(cached,false,true));
++    }
++    @Test public void unavailableRefreshWithRevokedExpiredOrInvalidCacheIsNotRetryable()throws Exception {
++        Fixture revoked=new Fixture();revoked.connect();revoked.cache.denied();revoked.unavailable=true;
++        revoked.core.lost(Failure.NETWORK);assertEquals(State.FAILED,revoked.core.state());assertEquals(0,revoked.count("recovery_wait"));
++        for(boolean expired:new boolean[]{false,true}){
++            ReadinessProductTest.Memory storage=new ReadinessProductTest.Memory();
++            boolean[] valid={true};
++            RestrictedCache cache=RestrictedCache.detailed(storage,raw->valid[0]?ReadinessImportResult.Code.READY:ReadinessImportResult.Code.NATIVE_VALIDATION_FAILED);
++            cache.importProduct(response(1000),new OwnerPrewarmReceipt(),1500);valid[0]=expired;
++            ReadinessProduct product=new ReadinessProduct(cache,new ReadinessProductTest.Memory(),"fixture",84,()->1500);
++            RestrictedBootstrap.Selection selected=RestrictedBootstrap.refresh(cache,product,new OwnerPrewarmReceipt(),()->{throw new SocketTimeoutException();},this,()->expired?10000:1500);
++            assertFalse(selected.availabilityFailure);assertNull(selected.response);
++        }
++    }
++    @Test public void onlyMatchingCompletedPreLeaseDeadlineIsEligible() {
++        assertTrue(retryable(startup(2)));assertFalse(retryable(startup(1)));
++        for(String stage:List.of("HELLO_RECEIVE","FAMILY_AUTH","DIRECTORY","DEDICATED_AUTH","UNKNOWN")){
++            JsonObject result=startup(2);result.addProperty("stage",stage);assertFalse(stage,retryable(result));
++        }
++        for(String cause:List.of("UNKNOWN","CANCELLED","CERTIFICATE_TIME_INVALID","CREDENTIALS_REJECTED","PROTOCOL_REJECTED")){
++            JsonObject result=startup(2);result.addProperty("cause",cause);assertFalse(cause,retryable(result));
++        }
++        JsonObject result=startup(2);result.addProperty("cause","IO_DEADLINE");result.getAsJsonObject("observation").addProperty("error_category","IO_DEADLINE");assertTrue(retryable(result));
++        result.addProperty("complete",false);assertFalse(retryable(result));
++        for(String status:List.of("SUCCEEDED","RUNNING","CANCELLED")){
++            result=startup(2);result.addProperty("status",status);assertFalse(retryable(result));
++        }
++        for(String stop:List.of("CLEANUP","CONNECT_CANCEL","STARTUP_BUDGET")){
++            result=startup(2);JsonObject stopped=new JsonObject();stopped.addProperty("source",stop);result.add("local_stop",stopped);assertFalse(retryable(result));
++        }
++    }
++    @Test public void firstDeadlineSurvivesLaterCleanupButNotPriorLocalStop() {
++        JsonObject result=startup(2);String original=result.toString();
++        assertTrue(retryable(result));assertEquals(original,result.toString());
++        result.getAsJsonObject("observation").addProperty("context_state","LIVE");assertTrue(retryable(result));
++        result.remove("local_stop");assertTrue(retryable(result));
++        result=startup(2);result.getAsJsonObject("local_stop").addProperty("elapsed_ms",29999);assertFalse(retryable(result));
++        for(String stop:List.of("CONNECT_CANCEL","STARTUP_BUDGET","CLEANUP")){
++            result=startup(2);result.getAsJsonObject("observation").addProperty("stop_at_observation",stop);assertFalse(retryable(result));
++        }
++        result=startup(2);result.remove("observation");assertFalse(retryable(result));
++        result=startup(2);result.getAsJsonObject("observation").addProperty("context_state","CANCELLED");assertFalse(retryable(result));
++    }
++    @Test public void phaseCancellationDenialAndMalformedEvidenceFailClosed() {
++        JsonObject snapshot=new JsonObject();snapshot.add("owner_startup",startup(2));String raw=snapshot.toString();
++        for(int phase:new int[]{-1,0,1,2,4,5})assertFalse(RestrictedRecovery.bootstrapRetryable(2,phase,false,false,raw));
++        assertFalse(RestrictedRecovery.bootstrapRetryable(2,3,true,false,raw));
++        assertFalse(RestrictedRecovery.bootstrapRetryable(2,3,false,true,raw));
++        for(String invalid:new String[]{null,"", "{}", "null", "[]", "{"})assertFalse(RestrictedRecovery.bootstrapRetryable(2,3,false,false,invalid));
++        assertEquals(raw,snapshot.toString());
++    }
++}

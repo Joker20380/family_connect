@@ -1,5 +1,13 @@
 # Release distribution / Выпуски
 
+**Combined private speed/restoration candidate16.10, code84:**
+`0.1.18-research84-ui60-4-speed-recovery1`, unsigned APK
+`2cf26421b67e536b5c178af7020cade9b499fec06822c82b713461cf534f5ac1`.
+[Exact source/native/gateway identities and local checks](releases/2026-10-16-transport-speed-cutover-candidate-1.md).
+Native/APK/gateway built locally;60 full-path cases and97 JVM checks PASS, JNI and
+artifact checks PASS. Not signed/installed/deployed or distributed. Previous signed
+code84 artifacts retained; no public asset/catalog/invitation changes or owner CONNECT.
+
 **Private Java recovery derivative16.10, code84:**
 `0.1.18-research84-ui60-4-recovery1`; [exact local build/checkpoint](releases/2026-10-16-cutover-recovery-local-1.md).
 Retains accepted native bytes; not combined with fast retransmit, not signed,

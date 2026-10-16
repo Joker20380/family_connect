@@ -1,0 +1,26 @@
+[
+  {
+    "label": "build-baseline-normal",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 110.063,
+    "max_cpu_celsius": 79.0,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "build-candidate-normal",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 11.004,
+    "max_cpu_celsius": 61.0,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "matrix-normal",
+    "reason": "command_exit",
+    "exit": 1,
+    "elapsed_seconds": 22.008,
+    "max_cpu_celsius": 64.0,
+    "log_sha256": "864d5882cac67b0f22a3422b5b94219562511e949f40fe3c8c2dc3cbe09cb801"
+  }
+]

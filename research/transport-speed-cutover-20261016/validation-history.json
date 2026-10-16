@@ -1,0 +1,25 @@
+{
+  "first_batch": {
+    "result": "FIXTURE_FAILURE",
+    "product_changed": false,
+    "clean_loss_passed": 4,
+    "reorder_final_readback_failed": 2,
+    "fixture_sha256": "ed02bf69958875f0c389dca0c2ea1027454164a66a9e2e6c29df23f141e174c4",
+    "cause": "delayed fixture kept per-call send context after sender cancelled it on return"
+  },
+  "corrected_client_matrix": {
+    "normal": 24,
+    "race": 12,
+    "result": "PASS"
+  },
+  "exact_gateway_supplement": {
+    "normal": 12,
+    "race": 12,
+    "result": "PASS"
+  },
+  "automatic_retries": false,
+  "build_batches": 1,
+  "phone_actions": 0,
+  "server_actions": 0,
+  "live_connects": 0
+}

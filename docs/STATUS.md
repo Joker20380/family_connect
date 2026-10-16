@@ -1,5 +1,25 @@
 # Текущее состояние / Current state
 
+## TRANSPORT-SPEED-CUTOVER-CANDIDATE-1 — combined local PASS / rollout pending (16.10)
+
+[Combined candidate checkpoint](releases/2026-10-16-transport-speed-cutover-candidate-1.md):
+36 client-derived plus24 exact-gateway-source TLS/mux/VP8 cases PASS, including real
+mixed old/new compiled peers and race. Byte-exact bulk, interactive and synthetic
+DNS pass. One loss each direction:3976→2436ms in the normal exact-peer local case;
+not measured mobile bandwidth.400ms reordering adds one redundant retry per updated
+sender. The earlier fixture-context failure is retained, not hidden as product PASS.
+Combined source211b127d…0e2ae86 includes the independently verified restoration change.
+Normal ARM64 nativef25124ba…3a1f4729, unsigned APK2cf26421…534f5ac1,
+version0.1.18-research84-ui60-4-speed-recovery1/code84; full assemble,97 JVM checks,
+JNI/provenance/alignment/package/permission checks PASS. Other11 native libraries
+and UI60-4 layout unchanged. Gateway candidate5de40b9c…46b33047 built from exact
+retained gateway source plus the engine-only delta; not executed/deployed.
+CPU peak79°C under half-core quota; no emulator. No signing/install/deployment or
+live CONNECT. Preserve prior exact accepted artifacts. Next: fresh actual phone
+identity/VPN OFF, previous-key signing and coordinated server readiness/outage before
+the requested rollout. Downlink optimization requires updating the gateway sender,
+not merely installing the client. Live recovery/speed acceptance remains open.
+
 ## CUTOVER-RECOVERY-LOCAL-1 — local PASS / unsigned / not installed (16.10)
 
 [Independent UI60-4 recovery derivative](releases/2026-10-16-cutover-recovery-local-1.md):
@@ -12,9 +32,9 @@ remain unchanged; no fast-retransmit delta is included. Private candidate versio
 PASS; full assemble/vital lint/provenance/embedded native checks PASS. Source inventory
 ea9312d0…739c0d4; unsigned APK7774249a…51678c2. CPU peak77°C under half-core quota,
 no emulator. Earlier stopped/fixture-failure batches are retained, not counted PASS.
-Owner requests installation after checks. Before combined installation, complete
-the separate throughput candidate's full stack/mixed-peer gate and exact combined
-artifact checks; do not mislabel this recovery-only candidate as the combined APK.
+Owner requests installation after checks. The full-stack/mixed-peer and combined
+artifact gates are now complete in the newer checkpoint above; do not mislabel
+this preserved recovery-only candidate as the combined APK.
 No phone/server action or new CONNECT. Live recovery/speed still unproved.
 
 ## RELIABLE-FAST-RECOVERY-LOCAL-1 — implemented/local PASS, not deployed (16.10)
@@ -28,8 +48,8 @@ persistent loss may exhaust earlier. Candidate inventorybb23c58f…1c9bcc0.
 functions pass. Periodic-loss virtual transfer9460→3160ms; real local Stream adapter
 about1200→400ms. No-loss unchanged; ACK delay/outage/tail loss not improved.
 Long reordering adds8 redundant retries: benefit is bounded, not a mobile-speed claim.
-Next: reordering cost, full local TLS/mux/VP8 and mixed-version validation. No new
-native/APK/gateway executable, signing/install/phone/server action. CPU peak80°C
+That candidate's full-path/mixed-peer/build follow-up is now complete above; this
+original checkpoint had no native/APK/gateway build or live action. CPU peak80°C
 under50%-core quota/85°C cutoff; no emulator. Current installed UI60-4 stays unchanged.
 
 ## UI60-RESTORE-AND-FIELD-1 — revision4 approved and owner-installed (16.10)

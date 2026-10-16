@@ -1,5 +1,11 @@
 # Documentation
 
+[Combined speed/restoration candidate16.10](releases/2026-10-16-transport-speed-cutover-candidate-1.md):
+full local Family TLS/mux/VP8, mixed peers and exact retained gateway-source checks
+PASS. Combined native/APK/gateway built,97 JVM and JNI/artifact checks PASS; unsigned,
+not installed/deployed. Limits remain separate from the measured synthetic loss
+benefit. [Runners and source boundary](../research/transport-speed-cutover-20261016/README.md).
+
 [Android cutover recovery16.10](releases/2026-10-16-cutover-recovery-local-1.md):
 independent Java candidate from UI60-4, fresh restoration selection and bounded
 pre-lease retries.97 JVM checks plus14 fixed-repeat PASS; full unsigned assemble and

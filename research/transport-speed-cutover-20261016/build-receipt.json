@@ -1,0 +1,233 @@
+{
+  "result": "PASS_LOCAL_COMBINED_BUILD",
+  "version_name": "0.1.18-research84-ui60-4-speed-recovery1",
+  "version_code": 84,
+  "native_rebuilt": true,
+  "signing": false,
+  "installed": false,
+  "runs": [
+    {
+      "label": "module",
+      "exit": 0,
+      "command": [
+        "$STATE/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+        "mod",
+        "edit",
+        "-modfile=$STATE/transport-speed-cutover-1/build/native.mod",
+        "-replace=github.com/Joker20380/family_connect/carrier=$STATE/transport-speed-cutover-1/source/carrier",
+        "-replace=github.com/xtls/xray-core=$STATE/field65-export16/native-packet-tests/xray"
+      ],
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "native",
+      "exit": 0,
+      "command": [
+        "$STATE/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+        "build",
+        "-p=1",
+        "-buildvcs=false",
+        "-modfile=$STATE/transport-speed-cutover-1/build/native.mod",
+        "-trimpath",
+        "-ldflags=-checklinkname=0",
+        "-buildmode=c-shared",
+        "-o",
+        "$STATE/transport-speed-cutover-1/build/native/jniLibs/arm64-v8a/libfc_restricted.so",
+        "./native"
+      ],
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "assemble-tests",
+      "exit": 0,
+      "command": [
+        "$STATE/field65-export16/diag-source-freeze-1/resume-tools/gradle-8.11.1/bin/gradle",
+        "--offline",
+        "--no-daemon",
+        "--max-workers=1",
+        "-I",
+        "$STATE/transport-speed-cutover-1/build/android.init.gradle",
+        "--project-cache-dir",
+        "$STATE/transport-speed-cutover-1/build/cache",
+        "-PfcTargetAbi=arm64-v8a",
+        "-PfcFriendsCi=false",
+        "-PfcProvisioningSeamSource=211b127d545af5c129acc93bf0ff78cac3af93707aad8def27bb6da830e2ae86",
+        "-PfcProvisioningSeamAssets=$STATE/transport-speed-cutover-1/build/research-assets",
+        "-PfcFriendsRestrictedDirectory=$STATE/transport-speed-cutover-1/build/native",
+        "-PfcBuildPython=$STATE/field65-export16/telemost-lease-continuity-1/build/tools/python/bin/python3.10",
+        "-PfcRadioNative=$STATE/field65-export16/exit-krasnodar-candidate-1/audio-native",
+        ":app:assembleResearchProvisioning",
+        ":app:testResearchProvisioningUnitTest",
+        "--tests",
+        "com.familyconnect.app.CutoverRecoveryTest",
+        "--tests",
+        "com.familyconnect.app.ConnectivityOrchestratorTest",
+        "--tests",
+        "com.familyconnect.app.RestrictedBootstrapTest",
+        "--tests",
+        "com.familyconnect.app.RestrictedRecoveryTest",
+        "--tests",
+        "com.familyconnect.app.ReadinessProductTest",
+        "--tests",
+        "com.familyconnect.app.RestrictedCacheTest",
+        "--tests",
+        "com.familyconnect.app.FriendsReadinessProtocolTest",
+        "--tests",
+        "com.familyconnect.app.RestrictedStartupTest",
+        "--tests",
+        "com.familyconnect.app.StartupFidelityTest",
+        "--tests",
+        "com.familyconnect.app.DiagnosticRingTest",
+        "--tests",
+        "com.familyconnect.app.BootstrapCorrelationTest",
+        "--tests",
+        "com.familyconnect.app.Ui60PresentationTest"
+      ],
+      "log_sha256": "6da009621aca56002f24646cabf7bf85ff2b2ecba54357f97d512afb9669a96a"
+    },
+    {
+      "label": "jni-java",
+      "exit": 0,
+      "command": [
+        "$STATE/field65-export16/diag-source-freeze-1/resume-tools/jdk/bin/javac",
+        "-source",
+        "17",
+        "-target",
+        "17",
+        "-implicit:none",
+        "-classpath",
+        "$STATE/transport-speed-cutover-1/build/android/app/intermediates/javac/researchProvisioning/compileResearchProvisioningJavaWithJavac/classes:$STATE/field65-export16/diag-source-freeze-1/resume-tools/android/platforms/android-35/android.jar:$STATE/field65-export16/diag-source-freeze-1/resume-tools/gradle-home/caches/modules-2/files-2.1/com.google.code.gson/gson/2.13.2/48b8230771e573b54ce6e867a9001e75977fe78e/gson-2.13.2.jar",
+        "-d",
+        "$STATE/transport-speed-cutover-1/build/classes",
+        "-h",
+        "$STATE/transport-speed-cutover-1/build/headers",
+        "$STATE/transport-speed-cutover-1/source/clients/android/app/src/main/java/com/familyconnect/app/NativeRestricted.java"
+      ],
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "jni-c",
+      "exit": 0,
+      "command": [
+        "$STATE/field65-export16/diag-source-freeze-1/resume-tools/android/ndk/28.2.13676358/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android26-clang",
+        "-fsyntax-only",
+        "-include",
+        "$STATE/transport-speed-cutover-1/build/headers/com_familyconnect_app_NativeRestricted.h",
+        "$STATE/transport-speed-cutover-1/source/pilot/android-restricted/native/bridge.c"
+      ],
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "gateway-build",
+      "exit": 0,
+      "command": [
+        "$STATE/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+        "build",
+        "-p=1",
+        "-trimpath",
+        "-buildvcs=false",
+        "-o",
+        "$STATE/transport-speed-cutover-1/build/bootstrap-broker-speed1",
+        "./cmd/bootstrap-broker"
+      ],
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "source_inventory": "211b127d545af5c129acc93bf0ff78cac3af93707aad8def27bb6da830e2ae86",
+  "native_sha256": "f25124ba1c94a0c6f4258e8b67488e8febf9a1c9e88cb2073790564c3a1f4729",
+  "native_go_version_m": "$STATE/transport-speed-cutover-1/build/native/jniLibs/arm64-v8a/libfc_restricted.so: go1.26.1\n\tpath\tgithub.com/Joker20380/family_connect/restrictedandroid/native\n\tmod\tgithub.com/Joker20380/family_connect/restrictedandroid\t(devel)\t\n\tdep\tgithub.com/Joker20380/family_connect/carrier\tv0.0.0\n\t=>\t$STATE/transport-speed-cutover-1/source/carrier\t(devel)\t\n\t\n\tdep\tgithub.com/google/btree\tv1.1.2\th1:xf4v41cLI2Z6FxbKm+8Bu+m8ifhj15JuZ9sa0jZCMUU=\n\tdep\tgithub.com/google/uuid\tv1.6.0\th1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=\n\tdep\tgithub.com/gorilla/websocket\tv1.5.3\th1:saDtZ6Pbx/0u+bgYQ3q96pZgCzfhKXGPqt7kZ72aNNg=\n\tdep\tgithub.com/pion/datachannel\tv1.6.0\th1:XecBlj+cvsxhAMZWFfFcPyUaDZtd7IJvrXqlXD/53i0=\n\tdep\tgithub.com/pion/dtls/v3\tv3.1.4\th1:QhvtMflMfu9Kf0RcDC5BJBle4caPskByrKQR6uuYqpY=\n\tdep\tgithub.com/pion/ice/v4\tv4.2.7\th1:zDEbC6MiEdhQpF8TxBOTws+NU6ZgGpveHrQq4Lc1kao=\n\tdep\tgithub.com/pion/interceptor\tv0.1.45\th1:6PUo/5829bIfRFIPPJQzuDn8EjxRTSB/CSD7QVCOaqo=\n\tdep\tgithub.com/pion/logging\tv0.2.4\th1:tTew+7cmQ+Mc1pTBLKH2puKsOvhm32dROumOZ655zB8=\n\tdep\tgithub.com/pion/mdns/v2\tv2.1.0\th1:3IJ9+Xio6tWYjhN6WwuY142P/1jA0D5ERaIqawg/fOY=\n\tdep\tgithub.com/pion/randutil\tv0.1.0\th1:CFG1UdESneORglEsnimhUjf33Rwjubwj6xfiOXBa3mA=\n\tdep\tgithub.com/pion/rtcp\tv1.2.16\th1:fk1B1dNW4hsI78XUCljZJlC4kZOPk67mNRuQ0fcEkSo=\n\tdep\tgithub.com/pion/rtp\tv1.10.2\th1:l+f6tTDcAH6xwepaAoW791ddhuYsJlqRATOzirO04Mo=\n\tdep\tgithub.com/pion/sctp\tv1.10.0\th1:qeoD6swF/2M5bYRcAGayqSbTKX3m4AW29CiQxG1+Pfg=\n\tdep\tgithub.com/pion/sdp/v3\tv3.0.18\th1:l0bAXazKHpepazVdp+tPYnrsy9dfh7ZbT8DxesH5ZnI=\n\tdep\tgithub.com/pion/srtp/v3\tv3.0.11\th1:GiESUr54/K4UuPigfq/CvWUed80JenQAHXn0C2MQQIQ=\n\tdep\tgithub.com/pion/stun/v3\tv3.1.5\th1:Y1FHlhaI6+4UoC5i/zQf4F7JvdZtB24/05oyy/GF1x8=\n\tdep\tgithub.com/pion/transport/v4\tv4.0.2\th1:ifYlPqNwsy6aKQ9y8yzxXlHae5431ZrH2avkD/Rn6Tk=\n\tdep\tgithub.com/pion/turn/v5\tv5.0.9\th1:zNeBfRyzGn7MPyUTvmvxeltLEjlFdSLPT1tlakoaOXM=\n\tdep\tgithub.com/pion/webrtc/v4\tv4.2.15\th1:Ir/MauNFCfg+kgyBYPQLiGdVWFlzEcLxqtuzAkYkky0=\n\tdep\tgithub.com/pires/go-proxyproto\tv0.11.0\th1:gUQpS85X/VJMdUsYyEgyn59uLJvGqPhJV5YvG68wXH4=\n\tdep\tgithub.com/sagernet/sing\tv0.5.1\th1:mhL/MZVq0TjuvHcpYcFtmSD1BFOxZ/+8ofbNZcg1k1Y=\n\tdep\tgithub.com/wlynxg/anet\tv0.0.5\th1:J3VJGi1gvo0JwZ/P1/Yc/8p63SoW98B5dHkYDmpgvvU=\n\tdep\tgithub.com/xtls/xray-core\tv1.260327.0\n\t=>\t$STATE/field65-export16/native-packet-tests/xray\t(devel)\t\n\t\n\tdep\tgolang.org/x/crypto\tv0.49.0\th1:+Ng2ULVvLHnJ/ZFEq4KdcDd/cfjrrjjNSXNzxg0Y4U4=\n\tdep\tgolang.org/x/exp\tv0.0.0-20240506185415-9bf2ced13842\th1:vr/HnozRka3pE4EsMEg1lgkXJkTFJCVUX+S/ZT6wYzM=\n\tdep\tgolang.org/x/net\tv0.52.0\th1:He/TN1l0e4mmR3QqHMT2Xab3Aj3L9qjbhRm78/6jrW0=\n\tdep\tgolang.org/x/sys\tv0.42.0\th1:omrd2nAlyT5ESRdCLYdm3+fMfNFE/+Rf4bDIQImRJeo=\n\tdep\tgolang.org/x/time\tv0.14.0\th1:MRx4UaLrDotUKUdCIqzPC48t1Y9hANFKIRpNx+Te8PI=\n\tdep\tgoogle.golang.org/protobuf\tv1.36.11\th1:fV6ZwhNocDyBLK0dj+fg8ektcVegBBuEolpbTQyBNVE=\n\tdep\tgvisor.dev/gvisor\tv0.0.0-20260122175437-89a5d21be8f0\th1:Lk6hARj5UPY47dBep70OD/TIMwikJ5fGUGX0Rm3Xigk=\n\tbuild\t-buildmode=c-shared\n\tbuild\t-compiler=gc\n\tbuild\t-trimpath=true\n\tbuild\tCGO_ENABLED=1\n\tbuild\tGOARCH=arm64\n\tbuild\tGOOS=android\n\tbuild\tGOARM64=v8.0\n",
+  "jvm_suites": [
+    {
+      "name": "com.familyconnect.app.DiagnosticRingTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.RestrictedStartupTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.StartupFidelityTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.Ui60PresentationTest",
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.CutoverRecoveryTest",
+      "tests": "14",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.RestrictedCacheTest",
+      "tests": "14",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.RestrictedRecoveryTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.RestrictedBootstrapTest",
+      "tests": "6",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.ReadinessProductTest",
+      "tests": "10",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.ConnectivityOrchestratorTest",
+      "tests": "29",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.FriendsReadinessProtocolTest",
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    },
+    {
+      "name": "com.familyconnect.app.BootstrapCorrelationTest",
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0"
+    }
+  ],
+  "unsigned_apk_sha256": "2cf26421b67e536b5c178af7020cade9b499fec06822c82b713461cf534f5ac1",
+  "apk_size": 55992676,
+  "gateway_source_inventory": "3693f70552d27365a56eb9f625f8afe03c01f7e513acdc04cb31e107f52d837e",
+  "gateway_sha256": "5de40b9ce9c15aac85475df05c449bddf2ecfe61a1928fa3844b4a8446b33047",
+  "gateway_buildinfo": "$STATE/transport-speed-cutover-1/build/bootstrap-broker-speed1: go1.26.1\n\tpath\tgithub.com/Joker20380/family_connect/carrier/cmd/bootstrap-broker\n\tmod\tgithub.com/Joker20380/family_connect/carrier\t(devel)\t\n\tdep\tgithub.com/google/uuid\tv1.6.0\th1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=\n\tdep\tgithub.com/gorilla/websocket\tv1.5.3\th1:saDtZ6Pbx/0u+bgYQ3q96pZgCzfhKXGPqt7kZ72aNNg=\n\tdep\tgithub.com/pion/datachannel\tv1.6.0\th1:XecBlj+cvsxhAMZWFfFcPyUaDZtd7IJvrXqlXD/53i0=\n\tdep\tgithub.com/pion/dtls/v3\tv3.1.4\th1:QhvtMflMfu9Kf0RcDC5BJBle4caPskByrKQR6uuYqpY=\n\tdep\tgithub.com/pion/ice/v4\tv4.2.7\th1:zDEbC6MiEdhQpF8TxBOTws+NU6ZgGpveHrQq4Lc1kao=\n\tdep\tgithub.com/pion/interceptor\tv0.1.45\th1:6PUo/5829bIfRFIPPJQzuDn8EjxRTSB/CSD7QVCOaqo=\n\tdep\tgithub.com/pion/logging\tv0.2.4\th1:tTew+7cmQ+Mc1pTBLKH2puKsOvhm32dROumOZ655zB8=\n\tdep\tgithub.com/pion/mdns/v2\tv2.1.0\th1:3IJ9+Xio6tWYjhN6WwuY142P/1jA0D5ERaIqawg/fOY=\n\tdep\tgithub.com/pion/randutil\tv0.1.0\th1:CFG1UdESneORglEsnimhUjf33Rwjubwj6xfiOXBa3mA=\n\tdep\tgithub.com/pion/rtcp\tv1.2.16\th1:fk1B1dNW4hsI78XUCljZJlC4kZOPk67mNRuQ0fcEkSo=\n\tdep\tgithub.com/pion/rtp\tv1.10.2\th1:l+f6tTDcAH6xwepaAoW791ddhuYsJlqRATOzirO04Mo=\n\tdep\tgithub.com/pion/sctp\tv1.10.0\th1:qeoD6swF/2M5bYRcAGayqSbTKX3m4AW29CiQxG1+Pfg=\n\tdep\tgithub.com/pion/sdp/v3\tv3.0.18\th1:l0bAXazKHpepazVdp+tPYnrsy9dfh7ZbT8DxesH5ZnI=\n\tdep\tgithub.com/pion/srtp/v3\tv3.0.11\th1:GiESUr54/K4UuPigfq/CvWUed80JenQAHXn0C2MQQIQ=\n\tdep\tgithub.com/pion/stun/v3\tv3.1.5\th1:Y1FHlhaI6+4UoC5i/zQf4F7JvdZtB24/05oyy/GF1x8=\n\tdep\tgithub.com/pion/transport/v4\tv4.0.2\th1:ifYlPqNwsy6aKQ9y8yzxXlHae5431ZrH2avkD/Rn6Tk=\n\tdep\tgithub.com/pion/turn/v5\tv5.0.9\th1:zNeBfRyzGn7MPyUTvmvxeltLEjlFdSLPT1tlakoaOXM=\n\tdep\tgithub.com/pion/webrtc/v4\tv4.2.15\th1:Ir/MauNFCfg+kgyBYPQLiGdVWFlzEcLxqtuzAkYkky0=\n\tdep\tgithub.com/wlynxg/anet\tv0.0.5\th1:J3VJGi1gvo0JwZ/P1/Yc/8p63SoW98B5dHkYDmpgvvU=\n\tdep\tgolang.org/x/crypto\tv0.48.0\th1:/VRzVqiRSggnhY7gNRxPauEQ5Drw9haKdM0jqfcCFts=\n\tdep\tgolang.org/x/net\tv0.50.0\th1:ucWh9eiCGyDR3vtzso0WMQinm2Dnt8cFMuQa9K33J60=\n\tdep\tgolang.org/x/sys\tv0.41.0\th1:Ivj+2Cp/ylzLiEU89QhWblYnOE9zerudt9Ftecq2C6k=\n\tdep\tgolang.org/x/time\tv0.14.0\th1:MRx4UaLrDotUKUdCIqzPC48t1Y9hANFKIRpNx+Te8PI=\n\tbuild\t-buildmode=exe\n\tbuild\t-compiler=gc\n\tbuild\t-trimpath=true\n\tbuild\tDefaultGODEBUG=containermaxprocs=0,cryptocustomrand=1,decoratemappings=0,tlssecpmlkem=0,tlssha1=1,updatemaxprocs=0,urlstrictcolons=0,x509sha256skid=0\n\tbuild\tCGO_ENABLED=1\n\tbuild\tGOARCH=amd64\n\tbuild\tGOOS=linux\n\tbuild\tGOAMD64=v1\n",
+  "gateway_dependencies_unchanged": true,
+  "gateway_executed": false,
+  "gateway_deployed": false
+}

@@ -8,6 +8,20 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### TRANSPORT-SPEED-CUTOVER-CANDIDATE-1 — full-path gate complete (16.10)
+
+- [Full local path/mixed peers](releases/2026-10-16-transport-speed-cutover-candidate-1.md):
+  36+24 fixed normal/race cases PASS, with exact retained gateway-source supplement.
+  Preserve reordering cost, synthetic DNS/provider limits and the failed fixture receipt.
+- Combined native/APK/gateway candidate built and verified: source211b127d,
+  APK2cf26421, nativef25124ba, gateway5de40b9c;97 JVM/full assemble/JNI/artifact checks
+  PASS. UI60-4 layout/code84/current security/ownership bounds preserved; no test adapters.
+- Before the requested installation: actual current phone
+  identity/VPN OFF, prior signed backup and existing-key workflow. Server rollout
+  requires fresh readiness/accepted outage coordination; do not infer owner CONNECT.
+- No device-speed/recovery acceptance, universal ten-minute fix, field, handoff,
+  supervisor, historical-causality or public-release promotion.
+
 ### CUTOVER-RECOVERY-LOCAL-1 — independent recovery candidate (16.10)
 
 - [Implemented narrow restoration change](releases/2026-10-16-cutover-recovery-local-1.md)
@@ -17,8 +31,8 @@ Verify reboot automount separately; no engineering release gate changes.
   assemble with accepted native bytes. Sourceea9312d0…739c0d4; APK7774249a…51678c2.
   Alignment, package/code84/API31/ARM64, permissions and native payload verified.
   No repeated transport/PKI suites or thermal-heavy emulator; peak77°C.
-- Owner requests installation afterwards: first finish independent fast-retransmit
-  TLS/mux/VP8/mixed-peer/reordering validation, then check the exact combined artifact.
+- Owner requests installation afterwards: independent fast-retransmit full-path/
+  mixed-peer/reordering validation and combined artifact checks are complete above.
   Fresh actual phone identity and VPN OFF precede signing/compatible replace-install;
   do not infer approval for an automatic CONNECT or gateway maintenance outage.
 - No live recovery or speed acceptance yet; not a universal ten-minute cutoff fix.
@@ -31,8 +45,8 @@ Verify reboot automount separately; no engineering release gate changes.
   Periodic-loss model2.99× faster; real local adapter1200→400ms. Not phone capacity.
 - Preserve the tradeoff: long reordering adds redundant retries; one early retry
   consumes existing budget. ACK delay/outage and tail loss remain unimproved.
-- Next focused gate: reordering cost and complete local TLS/mux/VP8/mixed-peer behavior,
-  before native/APK/gateway builds or any separately authorized device comparison.
+- Focused reordering/full local TLS/mux/VP8/mixed-peer/build gates are now complete
+  in the combined checkpoint; live comparison/rollout remains separate.
   Do not combine window, queue, pacing, admission/security or recovery-orchestration changes.
 - Installed UI60-4/gateway and accepted artifacts untouched. Cutover recovery remains
   independent; field, historical causality, handoff, supervisor and release not promoted.
