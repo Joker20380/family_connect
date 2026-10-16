@@ -10,6 +10,11 @@ Subsequent ordinary owner use produced a slow-loading complaint and export9.
 server correlation and delivery-pressure evidence, without proving the primary
 bottleneck or a UI regression. No code/configuration change or new acceptance follows.
 
+Later [export10/call interruption](2026-10-16-ui60-owner-call-drop-export10.md) preserves
+the same session's maintenance-driven closure and failed automatic seed admission
+using the pre-cutover directory. This is a separate read-only diagnosis, not a UI fix,
+new device acceptance or completed field trial. The final provided phone state is OFF.
+
 ## Owner approval and requested installation —16Oct17:11UTC
 
 After approving the full-width map, the owner explicitly requested installation on

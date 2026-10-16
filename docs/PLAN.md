@@ -10,6 +10,15 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ### UI60-RESTORE-AND-FIELD-1 — owner installation checkpoint (16.10)
 
+- [Export10 interruption](releases/2026-10-16-ui60-owner-call-drop-export10.md): exact
+  active SESSION_S9 is closed during scheduled maintenance, before client retry exhaustion.
+  Automatic restoration uses the archived pre-cutover directory, not the newly accepted
+  directory; SEED_ADMISSION/DEADLINE then BOOTSTRAP_UNAVAILABLE ends recovery. Final OFF.
+  Next focused engineering work: cutover-aware directory freshness/recovery and local
+  regression coverage, preserving auth/deadlines and existing maintenance policy.
+  This read-only diagnosis performs no implementation, repeat CONNECT or server repair;
+  speed bottleneck remains separate/unproved, FIELD-1 still NOT_STARTED.
+
 - Owner-reported slowness: [export9/exact-session journal analysis](releases/2026-10-16-ui60-owner-slowness-export9.md)
   records recovery, incomplete-message expiry and downlink ACK-window pressure,
   not a proven primary bottleneck or UI regression. A narrow performance follow-up

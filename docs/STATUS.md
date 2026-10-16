@@ -2,6 +2,16 @@
 
 ## UI60-RESTORE-AND-FIELD-1 — visually approved, installed for owner inspection (16.10)
 
+New [export10/call interruption analysis](releases/2026-10-16-ui60-owner-call-drop-export10.md)
+matches the same SESSION_S9 to a scheduled credential-maintenance stop at17:47:47UTC,
+before client RELIABLE_RETRY_EXHAUSTED. One automatic restoration reuses the exact
+pre-cutover directory (archived NL-before match, RU-accepted mismatch), then fails
+SEED_ADMISSION/DEADLINE; BOOTSTRAP_UNAVAILABLE ends recovery. Normal OFF is retained.
+Fresh read-only gateway hash remainsa5372571; renewal committed/cleaned, with later
+natural process changes. No task-controlled restart/patch/phone action. Cutover-aware
+directory freshness/recovery is the next focused engineering follow-up; throughput
+bottleneck remains NOT_PROVEN. FIELD-1 remains NOT_STARTED.
+
 Owner reports slow loading during subsequent ordinary use. [Export9 analysis](releases/2026-10-16-ui60-owner-slowness-export9.md)
 matches current restricted SESSION_S9 to320 bounded server trace rows; startup succeeds,
 VPN remains CONNECTED at17:28:09UTC. Recovery/receive-assembly expiry and server send-window
@@ -32,7 +42,7 @@ previous signer, code84 and actual UID10283; Android API31/ARM64 compatibility v
 At17:11:25UTC ordinary launch confirmed PID19934, VPN OFF, no errors in the bounded
 UID-filtered startup sample. No data/cache clear or private identity/database reads;
 previous actual installed APK8e5579f0 retained privately as same-code compatible backup.
-**Next: owner inspection/performance follow-up**, then existing tester compatibility/grant/
+**Next: cutover recovery and performance follow-up**, then existing tester compatibility/grant/
 readiness and private owner transfer of the verified signed candidate, without another
 signing/build. One bounded warm-start field CONNECT remains a later continuation.
 Do not repeat owner A→B. OWNER_PHONE_UPDATED; TESTER_UNTOUCHED; SERVER_UNTOUCHED.

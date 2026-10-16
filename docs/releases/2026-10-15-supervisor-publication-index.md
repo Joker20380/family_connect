@@ -1,5 +1,14 @@
 # PUBLISH-SUPERVISOR-RESEARCH-STATE-1 — указатель review-публикации
 
+## UI60 owner call interruption —16Oct2026, read-only export10 analysis
+
+[Exact-session cutover and failed restoration](2026-10-16-ui60-owner-call-drop-export10.md):
+scheduled maintenance stops SESSION_S9 before client retry exhaustion. Automatic
+restoration selects the exact archived pre-cutover directory and fails at
+SEED_ADMISSION/DEADLINE, not HELLO. RU/NL operation COMMITTED/CLEANED; current loaded
+gateway hash unchanged. No task-controlled restart, phone action or policy fix.
+Final export OFF; throughput cause still open, FIELD-1 not started; historical scopes unchanged.
+
 ## UI60 owner slow-loading follow-up —16Oct2026, read-only export9 analysis
 
 [Current-session findings and limits](2026-10-16-ui60-owner-slowness-export9.md):
