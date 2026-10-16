@@ -1,0 +1,7 @@
+/mnt/data/PycharmProjects/family_connect/state-client-build/browser-admission-fix-1/source/clients/android/app/src/test/java/com/familyconnect/app/AdmissionDiagnosticsTest.java:17: error: unreported exception IOException; must be caught or declared to be thrown
+        JsonObject bundle=new JsonObject();DiagnosticRing.exportRecord(bundle,"ring",ring.snapshot().toString().getBytes(StandardCharsets.UTF_8),"synthetic");
+                                                                      ^
+/mnt/data/PycharmProjects/family_connect/state-client-build/browser-admission-fix-1/source/clients/android/app/src/test/java/com/familyconnect/app/AdmissionDiagnosticsTest.java:18: error: unreported exception IOException; must be caught or declared to be thrown
+        JsonObject exported=JsonParser.parseString(new String(DiagnosticRing.exportBytes(bundle),StandardCharsets.UTF_8)).getAsJsonObject().getAsJsonObject("ring");
+                                                                                        ^
+2 errors

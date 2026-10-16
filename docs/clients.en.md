@@ -1,5 +1,15 @@
 # Client installation
 
+**Local fix build17.10, not installed:** `0.1.18-research84-ui60-4-admission1`,
+code84, API31+/ARM64. [Changes, checks, identities and limits](releases/2026-10-17-browser-admission-fix-1.md).
+Unsigned APK `ff4a844f8de2df2aac4df5f7e5ec35ae10746033730177e3a9f19e8c0c35edda`;
+native `6d41518ffbe2b10c767552dbb4c1bc732911fb8439a525215c353541ca41cfab`.
+Bounded connection admission and separate renewal/DNS capacity; not measured mobile
+acceleration or a proven cure for the owner's disconnect. No signing, installation
+or tester delivery; the new pair needs a separate check. The last installed version
+below remains unchanged; its later browsing check failed. Public links/catalog/
+invitations remain unchanged.
+
 **Combined private candidate16.10:** `0.1.18-research84-ui60-4-speed-recovery1`,
 code84, API31+/ARM64. [Built artifacts, checks and limits](releases/2026-10-16-transport-speed-cutover-candidate-1.md).
 Unsigned APK `2cf26421b67e536b5c178af7020cade9b499fec06822c82b713461cf534f5ac1`;

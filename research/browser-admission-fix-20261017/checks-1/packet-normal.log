@@ -1,0 +1,6 @@
+=== RUN   TestExistingPacketEngineTCPDNSAndFailClosed
+    engine_test.go:176: Family DNS read udp 10.79.0.2:45000: i/o timeout
+--- FAIL: TestExistingPacketEngineTCPDNSAndFailClosed (0.20s)
+FAIL
+FAIL	github.com/Joker20380/family_connect/restrictedandroid/packet	0.202s
+FAIL

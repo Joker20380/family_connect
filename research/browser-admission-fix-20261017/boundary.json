@@ -1,0 +1,36 @@
+{
+  "client_delta": [
+    "carrier/roombroker/lease_mux_test.go",
+    "carrier/sessiondiag/report.go",
+    "carrier/sessiondiag/report_test.go",
+    "carrier/tcpforward/admission.go",
+    "carrier/tcpforward/admission_test.go",
+    "carrier/tcpforward/mux.go",
+    "carrier/tcpforward/mux_protocol.go",
+    "carrier/tcpforward/mux_stream.go",
+    "carrier/wholedevice/session.go",
+    "carrier/wholedevice/session_test.go",
+    "clients/android/app/build.gradle",
+    "clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java",
+    "clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java",
+    "clients/android/app/src/test/java/com/familyconnect/app/AdmissionDiagnosticsTest.java",
+    "pilot/android-restricted/packet/engine_test.go",
+    "pilot/android-restricted/xray-packet-boundary.patch"
+  ],
+  "gateway_delta": [
+    "sessiondiag/report.go",
+    "tcpforward/admission.go",
+    "tcpforward/admission_test.go",
+    "tcpforward/mux.go",
+    "tcpforward/mux_protocol.go",
+    "tcpforward/mux_stream.go"
+  ],
+  "source_inventory": "c1eade0110278827c1681438a80c0509f352e2c9174badef0d3b228cc7161e9c",
+  "gateway_inventory": "0742212c5ebe38f9673dc53321d3af56c14b978e1080cbe104216ac21b40293f",
+  "xray_changed_file_sha256": "cdf53f05c1f09a031333296909c1cff6570f141224e588151f9a38f88e5fbaa6",
+  "product_patch_sha256": "30ae85fb0f03737eff7c71e491eb95ce1c6993484b5a9e228ff062b0aeec2fec",
+  "parent_sources_preserved": true,
+  "transport_reliable_media_security_unchanged": true,
+  "ui_unchanged": true,
+  "jni_contract_unchanged": true
+}

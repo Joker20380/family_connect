@@ -1,5 +1,11 @@
 # Documentation
 
+[Bounded admission product fix17.10](releases/2026-10-17-browser-admission-fix-1.md):
+local64-stream/FIFO32 candidate with reserved lease/DNS capacity, SYN-slot lifecycle
+fix and refusal counters in normal export. Targeted tests pass; artifact status and
+exact hashes are in the report. Not signed, installed, deployed or device-accepted.
+[Source delta, fixtures and retained failures](../research/browser-admission-fix-20261017/README.md).
+
 [Browser-shaped admission investigation17.10](releases/2026-10-17-browser-admission-local-1.md):
 existing search/asset HTTPS works while new connections fail at32 occupied slots;
 releasing one restores access, on previous/current sources.30 fixed local normal/race

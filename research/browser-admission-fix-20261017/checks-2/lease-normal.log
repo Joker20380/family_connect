@@ -1,0 +1,78 @@
+=== RUN   TestLeaseFullDataCapacityStillRenews
+--- PASS: TestLeaseFullDataCapacityStillRenews (0.14s)
+=== RUN   TestLeaseRealFamilyMuxPersistentTCP
+    lease_mux_test.go:256: sequence=0 lease_clock=2026-10-17T00:45:29.426563152+02:00 same_mux_stream=0x2e4694aeaa50 accepted_tcp=1
+    lease_mux_test.go:263: sequence=1 lease_clock=2026-10-17T00:55:29.426563152+02:00 same_mux_stream=0x2e4694aeaa50 accepted_tcp=1
+    lease_mux_test.go:270: sequence=2 lease_clock=2026-10-17T01:05:29.426563152+02:00 same_mux_stream=0x2e4694aeaa50 accepted_tcp=1
+    lease_mux_test.go:272: sequence=3 lease_clock=2026-10-17T01:07:29.426563152+02:00 same_mux_stream=0x2e4694aeaa50 accepted_tcp=1
+--- PASS: TestLeaseRealFamilyMuxPersistentTCP (0.13s)
+=== RUN   TestLeaseLegacyClientAndServer
+=== RUN   TestLeaseLegacyClientAndServer/false
+=== RUN   TestLeaseLegacyClientAndServer/true
+--- PASS: TestLeaseLegacyClientAndServer (0.21s)
+    --- PASS: TestLeaseLegacyClientAndServer/false (0.11s)
+    --- PASS: TestLeaseLegacyClientAndServer/true (0.11s)
+=== RUN   TestLeaseControlRevalidatesAdmission
+--- PASS: TestLeaseControlRevalidatesAdmission (0.11s)
+=== RUN   TestLeaseControlStopsAtSecurityLimit
+--- PASS: TestLeaseControlStopsAtSecurityLimit (0.11s)
+=== RUN   TestLeaseControlRevocationBeforeConfirmation
+--- PASS: TestLeaseControlRevocationBeforeConfirmation (0.11s)
+=== RUN   TestLeaseSecurityAndReplay
+=== RUN   TestLeaseSecurityAndReplay/identity
+=== RUN   TestLeaseSecurityAndReplay/session
+=== RUN   TestLeaseSecurityAndReplay/replay
+=== RUN   TestLeaseSecurityAndReplay/expired_security
+=== RUN   TestLeaseSecurityAndReplay/revoked
+=== RUN   TestLeaseSecurityAndReplay/cancelled
+=== RUN   TestLeaseSecurityAndReplay/late
+=== RUN   TestLeaseSecurityAndReplay/security_bound
+--- PASS: TestLeaseSecurityAndReplay (0.02s)
+    --- PASS: TestLeaseSecurityAndReplay/identity (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/session (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/replay (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/expired_security (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/revoked (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/cancelled (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/late (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/security_bound (0.00s)
+=== RUN   TestLeaseFullDataCapacityStillRenews
+--- PASS: TestLeaseFullDataCapacityStillRenews (0.15s)
+=== RUN   TestLeaseRealFamilyMuxPersistentTCP
+    lease_mux_test.go:256: sequence=0 lease_clock=2026-10-17T00:45:30.276563039+02:00 same_mux_stream=0x2e4694520a50 accepted_tcp=1
+    lease_mux_test.go:263: sequence=1 lease_clock=2026-10-17T00:55:30.276563039+02:00 same_mux_stream=0x2e4694520a50 accepted_tcp=1
+    lease_mux_test.go:270: sequence=2 lease_clock=2026-10-17T01:05:30.276563039+02:00 same_mux_stream=0x2e4694520a50 accepted_tcp=1
+    lease_mux_test.go:272: sequence=3 lease_clock=2026-10-17T01:07:30.276563039+02:00 same_mux_stream=0x2e4694520a50 accepted_tcp=1
+--- PASS: TestLeaseRealFamilyMuxPersistentTCP (0.13s)
+=== RUN   TestLeaseLegacyClientAndServer
+=== RUN   TestLeaseLegacyClientAndServer/false
+=== RUN   TestLeaseLegacyClientAndServer/true
+--- PASS: TestLeaseLegacyClientAndServer (0.22s)
+    --- PASS: TestLeaseLegacyClientAndServer/false (0.11s)
+    --- PASS: TestLeaseLegacyClientAndServer/true (0.11s)
+=== RUN   TestLeaseControlRevalidatesAdmission
+--- PASS: TestLeaseControlRevalidatesAdmission (0.11s)
+=== RUN   TestLeaseControlStopsAtSecurityLimit
+--- PASS: TestLeaseControlStopsAtSecurityLimit (0.11s)
+=== RUN   TestLeaseControlRevocationBeforeConfirmation
+--- PASS: TestLeaseControlRevocationBeforeConfirmation (0.10s)
+=== RUN   TestLeaseSecurityAndReplay
+=== RUN   TestLeaseSecurityAndReplay/identity
+=== RUN   TestLeaseSecurityAndReplay/session
+=== RUN   TestLeaseSecurityAndReplay/replay
+=== RUN   TestLeaseSecurityAndReplay/expired_security
+=== RUN   TestLeaseSecurityAndReplay/revoked
+=== RUN   TestLeaseSecurityAndReplay/cancelled
+=== RUN   TestLeaseSecurityAndReplay/late
+=== RUN   TestLeaseSecurityAndReplay/security_bound
+--- PASS: TestLeaseSecurityAndReplay (0.01s)
+    --- PASS: TestLeaseSecurityAndReplay/identity (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/session (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/replay (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/expired_security (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/revoked (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/cancelled (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/late (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/security_bound (0.00s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/roombroker	1.732s

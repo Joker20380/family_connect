@@ -1,0 +1,24 @@
+=== RUN   TestAdmissionFIFOAndCancellation
+--- PASS: TestAdmissionFIFOAndCancellation (0.00s)
+=== RUN   TestAdmissionQueueBoundAndShutdown
+--- PASS: TestAdmissionQueueBoundAndShutdown (0.04s)
+=== RUN   TestAdmissionDeadlineAndImmediateCounter
+--- PASS: TestAdmissionDeadlineAndImmediateCounter (0.00s)
+=== RUN   TestAdmissionLeaseReserveAndUnconfiguredPeer
+=== RUN   TestAdmissionLeaseReserveAndUnconfiguredPeer/reserved
+=== RUN   TestAdmissionLeaseReserveAndUnconfiguredPeer/unconfigured
+--- PASS: TestAdmissionLeaseReserveAndUnconfiguredPeer (0.00s)
+    --- PASS: TestAdmissionLeaseReserveAndUnconfiguredPeer/reserved (0.00s)
+    --- PASS: TestAdmissionLeaseReserveAndUnconfiguredPeer/unconfigured (0.00s)
+=== RUN   TestMuxLimitAndIndependentReset
+--- PASS: TestMuxLimitAndIndependentReset (0.00s)
+=== RUN   TestMuxHalfCloseAndOpenErrors
+--- PASS: TestMuxHalfCloseAndOpenErrors (0.00s)
+=== RUN   TestMuxSessionCancellationManyStreams
+--- PASS: TestMuxSessionCancellationManyStreams (0.01s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/tcpforward	0.059s
+=== RUN   TestReasonTypedAndNeverRaw
+--- PASS: TestReasonTypedAndNeverRaw (0.00s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/sessiondiag	0.002s

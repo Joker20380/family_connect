@@ -1,0 +1,766 @@
+--- a/carrier/roombroker/lease_mux_test.go
++++ b/carrier/roombroker/lease_mux_test.go
+@@ -219,6 +219,29 @@
+ 	test.Logf("sequence=%d lease_clock=%s same_mux_stream=%p accepted_tcp=1", sequence, fixture.clock.Now().Format(time.RFC3339Nano), stream)
+ }
+ 
++func TestLeaseFullDataCapacityStillRenews(test *testing.T) {
++	fixture := newLeaseMuxFixture(test, true)
++	for index := 0; index < 32; index++ {
++		stream, err := fixture.client.OpenTCP(fixture.ctx, tcpforward.OpenRequest{Host: "127.0.0.1", Port: fixture.port})
++		if err != nil {
++			test.Fatal(err)
++		}
++		defer stream.Reset()
++	}
++	known, _, err := exchangeLease(fixture.ctx, fixture.client, fixture.id, LeaseReceipt{}, false)
++	if err != nil {
++		test.Fatal("initial lease at full data capacity", err)
++	}
++	fixture.clock.Advance(8 * time.Minute)
++	next, _, err := exchangeLease(fixture.ctx, fixture.client, fixture.id, known, true)
++	if err != nil || next.Sequence != known.Sequence+1 || !next.ExpiresAt.After(known.ExpiresAt) {
++		test.Fatal("renewal at full data capacity", err, next)
++	}
++	if fixture.server.Stats().ActiveSockets != 32 {
++		test.Fatal("data sessions displaced")
++	}
++}
++
+ func TestLeaseRealFamilyMuxPersistentTCP(test *testing.T) {
+ 	fixture := newLeaseMuxFixture(test, true)
+ 	stream, err := fixture.client.OpenTCP(fixture.ctx, tcpforward.OpenRequest{Host: "127.0.0.1", Port: fixture.port})
+--- a/carrier/sessiondiag/report.go
++++ b/carrier/sessiondiag/report.go
+@@ -15,29 +15,35 @@
+ )
+ 
+ type Report struct {
+-	Trace             *sessiontrace.Snapshot `json:"lifecycle,omitempty"`
+-	CorrelationStatus string                 `json:"correlation_status"`
+-	SessionTag        string                 `json:"session_tag"`
+-	TerminalReason    string                 `json:"terminal_reason"`
+-	TerminalAtMS      int64                  `json:"terminal_at_ms"`
+-	ObservedAtMS      int64                  `json:"observed_at_ms"`
+-	ReliableTerminal  string                 `json:"reliable_terminal"`
+-	SignalingFailure  string                 `json:"signaling_failure"`
+-	ICEFailure        string                 `json:"ice_failure"`
+-	EvidenceDropped   uint64                 `json:"evidence_dropped"`
+-	SubscriberState   string                 `json:"subscriber_state"`
+-	PublisherState    string                 `json:"publisher_state"`
+-	Retransmissions   uint64                 `json:"retransmissions"`
+-	RecoveryTimeouts  uint64                 `json:"recovery_timeouts"`
+-	ReceivedFrames    uint64                 `json:"received_frames"`
+-	SentFrames        uint64                 `json:"sent_frames"`
+-	ProtocolErrors    uint64                 `json:"protocol_errors"`
+-	DNSResponses      uint64                 `json:"dns_responses"`
+-	DNSErrors         uint64                 `json:"dns_errors"`
+-	OpenOK            uint64                 `json:"tcp_open_ok"`
+-	OpenErrors        uint64                 `json:"tcp_open_errors"`
+-	SentBytes         uint64                 `json:"sent_bytes"`
+-	ReceivedBytes     uint64                 `json:"received_bytes"`
++	Trace              *sessiontrace.Snapshot `json:"lifecycle,omitempty"`
++	CorrelationStatus  string                 `json:"correlation_status"`
++	SessionTag         string                 `json:"session_tag"`
++	TerminalReason     string                 `json:"terminal_reason"`
++	TerminalAtMS       int64                  `json:"terminal_at_ms"`
++	ObservedAtMS       int64                  `json:"observed_at_ms"`
++	ReliableTerminal   string                 `json:"reliable_terminal"`
++	SignalingFailure   string                 `json:"signaling_failure"`
++	ICEFailure         string                 `json:"ice_failure"`
++	EvidenceDropped    uint64                 `json:"evidence_dropped"`
++	SubscriberState    string                 `json:"subscriber_state"`
++	PublisherState     string                 `json:"publisher_state"`
++	Retransmissions    uint64                 `json:"retransmissions"`
++	RecoveryTimeouts   uint64                 `json:"recovery_timeouts"`
++	ReceivedFrames     uint64                 `json:"received_frames"`
++	SentFrames         uint64                 `json:"sent_frames"`
++	ProtocolErrors     uint64                 `json:"protocol_errors"`
++	DNSResponses       uint64                 `json:"dns_responses"`
++	DNSErrors          uint64                 `json:"dns_errors"`
++	OpenOK             uint64                 `json:"tcp_open_ok"`
++	OpenErrors         uint64                 `json:"tcp_open_errors"`
++	AdmissionWaits     uint64                 `json:"tcp_admission_waits"`
++	AdmissionRejected  uint64                 `json:"tcp_admission_rejected"`
++	AdmissionTimeouts  uint64                 `json:"tcp_admission_timeouts"`
++	AdmissionCancelled uint64                 `json:"tcp_admission_cancelled"`
++	AdmissionWaiting   int                    `json:"tcp_admission_waiting"`
++	LeaseRejected      uint64                 `json:"lease_admission_rejected"`
++	SentBytes          uint64                 `json:"sent_bytes"`
++	ReceivedBytes      uint64                 `json:"received_bytes"`
+ }
+ 
+ func Delivery(reliable reliablestream.Stats, media telemost.Stats) *sessiontrace.Delivery {
+@@ -102,7 +108,10 @@
+ 		Retransmissions: reliable.Retransmissions, RecoveryTimeouts: reliable.Timeouts,
+ 		ReceivedFrames: media.Media.FramesReceived, SentFrames: media.Media.SamplesWritten,
+ 		ProtocolErrors: mux.ProtocolErrors, DNSResponses: mux.DNSResponses, DNSErrors: mux.DNSErrors,
+-		OpenOK: mux.OpenOK, OpenErrors: mux.OpenErrors, SentBytes: mux.SentBytes, ReceivedBytes: mux.ReceivedBytes}
++		OpenOK: mux.OpenOK, OpenErrors: mux.OpenErrors, SentBytes: mux.SentBytes, ReceivedBytes: mux.ReceivedBytes,
++		AdmissionWaits: mux.AdmissionWaits, AdmissionRejected: mux.AdmissionRejected,
++		AdmissionTimeouts: mux.AdmissionTimeouts, AdmissionCancelled: mux.AdmissionCancelled,
++		AdmissionWaiting: mux.AdmissionWaiting, LeaseRejected: mux.LeaseRejected}
+ 	if !terminalAt.IsZero() {
+ 		report.TerminalAtMS = terminalAt.UnixMilli()
+ 	}
+--- a/carrier/sessiondiag/report_test.go
++++ b/carrier/sessiondiag/report_test.go
+@@ -16,6 +16,14 @@
+ 	"github.com/Joker20380/family_connect/carrier/tcpforward"
+ 	"github.com/Joker20380/family_connect/carrier/telemost"
+ )
++
++func TestAdmissionCountersCaptured(test *testing.T) {
++	report := Capture("fixture", nil, time.Time{}, reliablestream.Stats{}, telemost.Stats{}, tcpforward.MuxStats{
++		AdmissionWaits: 9, AdmissionRejected: 8, AdmissionTimeouts: 7, AdmissionCancelled: 6, AdmissionWaiting: 5, LeaseRejected: 4})
++	if report.AdmissionWaits != 9 || report.AdmissionRejected != 8 || report.AdmissionTimeouts != 7 || report.AdmissionCancelled != 6 || report.AdmissionWaiting != 5 || report.LeaseRejected != 4 {
++		test.Fatal(report)
++	}
++}
+ 
+ func TestReasonTypedAndNeverRaw(test *testing.T) {
+ 	for _, row := range []struct {
+--- /dev/null
++++ b/carrier/tcpforward/admission.go
+@@ -0,0 +1,110 @@
++package tcpforward
++
++import (
++	"context"
++	"time"
++)
++
++type admissionWaiter struct{ lease bool }
++
++func leaseRequest(request OpenRequest) bool {
++	return canonicalHost(request.Host) == LeaseRenewalHost && request.Port == 1
++}
++
++func (mux *Mux) jobSlots(lease bool) chan struct{} {
++	if lease {
++		return mux.leaseJobs
++	}
++	return mux.jobs
++}
++
++func (mux *Mux) slotAvailableLocked(lease bool) bool {
++	count := 0
++	for _, stream := range mux.streams {
++		if stream.lease == lease {
++			count++
++		}
++	}
++	if lease {
++		return count < 1
++	}
++	return count < mux.config.MaxStreams
++}
++
++func (mux *Mux) rejectAdmissionLocked(lease bool) {
++	if lease {
++		mux.stats.LeaseRejected++
++	} else {
++		mux.stats.AdmissionRejected++
++	}
++}
++
++func (mux *Mux) admitLocked(ctx context.Context, lease bool, deadline <-chan time.Time) error {
++	pending := 0
++	for _, waiter := range mux.admission {
++		if waiter.lease == lease {
++			pending++
++		}
++	}
++	if mux.slotAvailableLocked(lease) && pending == 0 {
++		return nil
++	}
++	closingLease := false
++	for _, stream := range mux.streams {
++		if stream.lease && stream.terminal != nil {
++			closingLease = true
++		}
++	}
++	if lease && (pending != 0 || !closingLease) || !lease && (!mux.config.WaitForSlot || pending >= MuxMaxPendingOpens) {
++		mux.rejectAdmissionLocked(lease)
++		return ErrStreamLimit
++	}
++	waiter := &admissionWaiter{lease: lease}
++	mux.admission = append(mux.admission, waiter)
++	mux.stats.AdmissionWaits++
++	defer func() {
++		for index, current := range mux.admission {
++			if current == waiter {
++				copy(mux.admission[index:], mux.admission[index+1:])
++				mux.admission[len(mux.admission)-1] = nil
++				mux.admission = mux.admission[:len(mux.admission)-1]
++				break
++			}
++		}
++		mux.signalLocked()
++	}()
++	for {
++		if ctx.Err() != nil || mux.ctx.Err() != nil {
++			mux.stats.AdmissionCancelled++
++			return ErrReset
++		}
++		select {
++		case <-deadline:
++			mux.stats.AdmissionTimeouts++
++			return ErrReset
++		default:
++		}
++		first := false
++		for _, current := range mux.admission {
++			if current.lease == lease {
++				first = current == waiter
++				break
++			}
++		}
++		if first && mux.slotAvailableLocked(lease) {
++			return nil
++		}
++		changed := mux.changed
++		mux.mu.Unlock()
++		select {
++		case <-changed:
++		case <-ctx.Done():
++		case <-mux.ctx.Done():
++		case <-deadline:
++			mux.mu.Lock()
++			mux.stats.AdmissionTimeouts++
++			return ErrReset
++		}
++		mux.mu.Lock()
++	}
++}
+--- /dev/null
++++ b/carrier/tcpforward/admission_test.go
+@@ -0,0 +1,162 @@
++package tcpforward
++
++import (
++	"context"
++	"io"
++	"testing"
++	"time"
++)
++
++func awaitAdmission(test *testing.T, mux *Mux, count int) {
++	test.Helper()
++	deadline := time.Now().Add(2 * time.Second)
++	for time.Now().Before(deadline) {
++		if mux.Stats().AdmissionWaiting == count {
++			return
++		}
++		time.Sleep(time.Millisecond)
++	}
++	test.Fatalf("admission waiting: wanted=%d got=%d", count, mux.Stats().AdmissionWaiting)
++}
++
++func TestAdmissionFIFOAndCancellation(test *testing.T) {
++	port := muxFixture(test, muxEcho)
++	ctx, client, _ := muxPair(test, port, 1, 1)
++	client.config.WaitForSlot = true
++	held := muxOpen(test, ctx, client, port)
++	type result struct {
++		stream *MuxStream
++		err    error
++	}
++	first, second := make(chan result, 1), make(chan result, 1)
++	go func() {
++		stream, err := client.OpenTCP(ctx, OpenRequest{Host: "127.0.0.1", Port: port})
++		first <- result{stream, err}
++	}()
++	awaitAdmission(test, client, 1)
++	secondCtx, cancel := context.WithCancel(ctx)
++	go func() {
++		stream, err := client.OpenTCP(secondCtx, OpenRequest{Host: "127.0.0.1", Port: port})
++		second <- result{stream, err}
++	}()
++	awaitAdmission(test, client, 2)
++	if err := exactMux(held, []byte("held flow survives and closes")); err != nil {
++		test.Fatal(err)
++	}
++	opened := <-first
++	if opened.err != nil {
++		test.Fatal(opened.err)
++	}
++	defer opened.stream.Reset()
++	awaitAdmission(test, client, 1)
++	select {
++	case <-second:
++		test.Fatal("second waiter bypassed first")
++	default:
++	}
++	cancel()
++	if next := <-second; next.err != ErrReset {
++		test.Fatal("cancelled waiter", next.err)
++	}
++	awaitAdmission(test, client, 0)
++	if client.Stats().AdmissionWaits != 2 || client.Stats().AdmissionCancelled != 1 {
++		test.Fatal(client.Stats())
++	}
++	if err := exactMux(opened.stream, []byte("admitted FIFO body")); err != nil {
++		test.Fatal(err)
++	}
++}
++
++func TestAdmissionQueueBoundAndShutdown(test *testing.T) {
++	port := muxFixture(test, muxEcho)
++	ctx, client, _ := muxPair(test, port, 1, 1)
++	client.config.WaitForSlot = true
++	muxOpen(test, ctx, client, port)
++	results := make(chan error, MuxMaxPendingOpens)
++	for index := 0; index < MuxMaxPendingOpens; index++ {
++		go func() { _, err := client.OpenTCP(ctx, OpenRequest{Host: "127.0.0.1", Port: port}); results <- err }()
++		awaitAdmission(test, client, index+1)
++	}
++	if _, err := client.OpenTCP(ctx, OpenRequest{Host: "127.0.0.1", Port: port}); err != ErrStreamLimit {
++		test.Fatal(err)
++	}
++	if client.Stats().AdmissionRejected != 1 || client.Stats().Opened != 1 {
++		test.Fatal(client.Stats())
++	}
++	client.Close()
++	for index := 0; index < MuxMaxPendingOpens; index++ {
++		if err := <-results; err != ErrReset {
++			test.Fatal(err)
++		}
++	}
++	awaitAdmission(test, client, 0)
++	if client.Stats().AdmissionCancelled != MuxMaxPendingOpens {
++		test.Fatal(client.Stats())
++	}
++}
++
++func TestAdmissionDeadlineAndImmediateCounter(test *testing.T) {
++	port := muxFixture(test, muxEcho)
++	ctx, client, _ := muxPair(test, port, 1, 1)
++	muxOpen(test, ctx, client, port)
++	if _, err := client.OpenTCP(ctx, OpenRequest{Host: "127.0.0.1", Port: port}); err != ErrStreamLimit {
++		test.Fatal(err)
++	}
++	if client.Stats().AdmissionRejected != 1 || client.Stats().OpenErrors != 0 {
++		test.Fatal(client.Stats())
++	}
++	deadline := make(chan time.Time, 1)
++	deadline <- time.Now()
++	client.mu.Lock()
++	client.config.WaitForSlot = true
++	err := client.admitLocked(ctx, false, deadline)
++	client.mu.Unlock()
++	if err != ErrReset || client.Stats().AdmissionTimeouts != 1 || client.Stats().AdmissionWaiting != 0 {
++		test.Fatal(err, client.Stats())
++	}
++}
++
++func TestAdmissionLeaseReserveAndUnconfiguredPeer(test *testing.T) {
++	for _, configured := range []bool{true, false} {
++		test.Run(map[bool]string{true: "reserved", false: "unconfigured"}[configured], func(test *testing.T) {
++			port := muxFixture(test, muxEcho)
++			ctx, client, server := muxPair(test, port, 4, 4)
++			if configured {
++				server.mu.Lock()
++				server.config.LeaseRenewal = func(ctx context.Context, stream *MuxStream) { stream.Write([]byte{42}); io.Copy(io.Discard, stream) }
++				server.mu.Unlock()
++			}
++			var flows []*MuxStream
++			for index := 0; index < 4; index++ {
++				flows = append(flows, muxOpen(test, ctx, client, port))
++			}
++			lease, err := client.OpenTCP(ctx, OpenRequest{Host: LeaseRenewalHost, Port: 1})
++			if !configured {
++				if err == nil {
++					lease.Reset()
++					test.Fatal("unconfigured control bypassed capacity/policy")
++				}
++				return
++			}
++			if err != nil {
++				test.Fatal(err)
++			}
++			defer lease.Reset()
++			var response [1]byte
++			if _, err := io.ReadFull(lease, response[:]); err != nil || response[0] != 42 {
++				test.Fatal(err)
++			}
++			if _, err := client.OpenTCP(ctx, OpenRequest{Host: LeaseRenewalHost, Port: 1}); err != ErrStreamLimit {
++				test.Fatal("unbounded control reserve", err)
++			}
++			if client.Stats().LeaseRejected != 1 || server.Stats().ActiveSockets != 4 || server.Stats().ActiveStreams != 5 {
++				test.Fatal(client.Stats(), server.Stats())
++			}
++			for _, stream := range flows {
++				if err := exactMux(stream, []byte("sibling remains usable")); err != nil {
++					test.Fatal(err)
++				}
++			}
++		})
++	}
++}
+--- a/carrier/tcpforward/mux.go
++++ b/carrier/tcpforward/mux.go
+@@ -15,6 +15,7 @@
+ 
+ type MuxConfig struct {
+ 	MaxStreams   int
++	WaitForSlot  bool
+ 	Policy       Policy
+ 	DNSUpstream  string
+ 	LeaseRenewal func(context.Context, *MuxStream)
+@@ -30,6 +31,12 @@
+ 	Opened             uint64
+ 	OpenOK             uint64
+ 	OpenErrors         uint64
++	AdmissionWaits     uint64
++	AdmissionRejected  uint64
++	AdmissionTimeouts  uint64
++	AdmissionCancelled uint64
++	AdmissionWaiting   int
++	LeaseRejected      uint64
+ 	Resets             uint64
+ 	ProtocolErrors     uint64
+ 	SentBytes          uint64
+@@ -66,6 +73,8 @@
+ 	done          chan struct{}
+ 	workers       sync.WaitGroup
+ 	jobs          chan struct{}
++	leaseJobs     chan struct{}
++	admission     []*admissionWaiter
+ 	err           error
+ 	failureAt     time.Time
+ 	stats         MuxStats
+@@ -118,6 +127,7 @@
+ 	}
+ 	ctx, cancel := context.WithCancel(parent)
+ 	mux := &Mux{ctx: ctx, cancel: cancel, endpoint: endpoint, server: server, config: config, streams: make(map[uint32]*MuxStream), nextID: 1, changed: make(chan struct{}), done: make(chan struct{}), jobs: make(chan struct{}, config.MaxStreams), lookup: net.DefaultResolver, dns: make(map[uint32]*dnsCall), dnsNext: 1, dnsJobs: make(chan struct{}, MuxMaxDNS)}
++	mux.leaseJobs = make(chan struct{}, 1)
+ 	mux.dial = func(ctx context.Context, network, address string) (socket, error) {
+ 		connection, err := (&net.Dialer{KeepAlive: 30 * time.Second}).DialContext(ctx, network, address)
+ 		if err != nil {
+@@ -226,6 +236,7 @@
+ 		retained += len(call.query) + len(call.response)
+ 	}
+ 	mux.stats.ActiveStreams = len(mux.streams)
++	mux.stats.AdmissionWaiting = len(mux.admission)
+ 	mux.stats.MaxActiveStreams = max(mux.stats.MaxActiveStreams, len(mux.streams))
+ 	mux.stats.RetainedBytes = retained
+ 	mux.stats.RetainedHighWater = max(mux.stats.RetainedHighWater, retained)
+@@ -354,13 +365,17 @@
+ 			mux.controlLocked(muxFrame{openError, frame.id, []byte(`{"code":"malformed_request"}`)})
+ 			return
+ 		}
+-		if len(mux.streams) >= mux.config.MaxStreams || len(mux.jobs) >= cap(mux.jobs) {
++		lease := leaseRequest(request) && mux.config.LeaseRenewal != nil
++		jobs := mux.jobSlots(lease)
++		if !mux.slotAvailableLocked(lease) || len(jobs) >= cap(jobs) {
+ 			mux.stats.OpenErrors++
++			mux.rejectAdmissionLocked(lease)
+ 			mux.controlLocked(muxFrame{openError, frame.id, []byte(`{"code":"stream_limit"}`)})
+ 			return
+ 		}
+ 		stream = mux.makeStreamLocked(frame.id)
+-		mux.jobs <- struct{}{}
++		stream.lease = lease
++		jobs <- struct{}{}
+ 		mux.workers.Add(1)
+ 		go mux.forward(stream, request)
+ 		return
+@@ -441,7 +456,7 @@
+ 
+ func (mux *Mux) forward(stream *MuxStream, request OpenRequest) {
+ 	defer mux.workers.Done()
+-	defer func() { <-mux.jobs }()
++	defer func() { <-mux.jobSlots(stream.lease) }()
+ 	if canonicalHost(request.Host) == LeaseRenewalHost && request.Port == 1 && mux.config.LeaseRenewal != nil {
+ 		mux.mu.Lock()
+ 		for mux.leaseOpen && stream.terminal == nil && stream.ctx.Err() == nil {
+--- a/carrier/tcpforward/mux_protocol.go
++++ b/carrier/tcpforward/mux_protocol.go
+@@ -6,7 +6,8 @@
+ )
+ 
+ const MuxWindow = 64 << 10
+-const MuxMaxStreams = 32
++const MuxMaxStreams = 64
++const MuxMaxPendingOpens = 32
+ const muxMaxID = 1<<31 - 1
+ const muxWindowUpdate byte = 8
+ const muxDNSQuery byte = 9
+--- a/carrier/tcpforward/mux_stream.go
++++ b/carrier/tcpforward/mux_stream.go
+@@ -17,6 +17,7 @@
+ 	stop             func() bool
+ 	writeMu          sync.Mutex
+ 	opened           bool
++	lease            bool
+ 	localFIN         bool
+ 	remoteFIN        bool
+ 	closeRequested   bool
+@@ -64,28 +65,30 @@
+ 	if err := validate(request); err != nil {
+ 		return nil, err
+ 	}
++	deadline := time.NewTimer(40 * time.Second)
++	defer deadline.Stop()
+ 	mux.mu.Lock()
+ 	if mux.server || mux.ctx.Err() != nil || ctx.Err() != nil {
+ 		mux.mu.Unlock()
+ 		return nil, ErrReset
+ 	}
+-	if len(mux.streams) >= mux.config.MaxStreams {
+-		mux.mu.Unlock()
+-		return nil, ErrStreamLimit
++	lease := leaseRequest(request)
++	if err := mux.admitLocked(ctx, lease, deadline.C); err != nil {
++		mux.mu.Unlock()
++		return nil, err
+ 	}
+ 	if mux.nextID > muxMaxID {
+ 		mux.mu.Unlock()
+ 		return nil, ErrIDExhausted
+ 	}
+ 	stream := mux.makeStreamLocked(mux.nextID)
++	stream.lease = lease
+ 	mux.nextID += 2
+ 	payload, _ := json.Marshal(request)
+ 	mux.controlLocked(muxFrame{openFrame, stream.id, payload})
+ 	stream.stop = context.AfterFunc(ctx, func() { stream.Reset() })
+ 	mux.measureLocked()
+ 	mux.signalLocked()
+-	deadline := time.NewTimer(40 * time.Second)
+-	defer deadline.Stop()
+ 	for !stream.opened && stream.terminal == nil && mux.ctx.Err() == nil {
+ 		changed := mux.changed
+ 		mux.mu.Unlock()
+--- a/carrier/wholedevice/session.go
++++ b/carrier/wholedevice/session.go
+@@ -77,7 +77,7 @@
+ func Attach(parent context.Context, plane DataPlane, closeCarrier func()) *Session {
+ 	ctx, cancel := context.WithCancel(parent)
+ 	session := &Session{ctx: ctx, cancel: cancel, plane: plane, closeCarrier: closeCarrier,
+-		tcpSlots: make(chan struct{}, 32), dnsSlots: make(chan struct{}, 16), serviceSlots: make(chan struct{}, 4)}
++		tcpSlots: make(chan struct{}, tcpforward.MuxMaxStreams+tcpforward.MuxMaxPendingOpens), dnsSlots: make(chan struct{}, 16), serviceSlots: make(chan struct{}, 4)}
+ 	go func() {
+ 		reason := sessiondiag.Reason(plane.Wait())
+ 		session.mu.Lock()
+@@ -130,7 +130,7 @@
+ 		return
+ 	}
+ 	slots := session.tcpSlots
+-	if protocol == "udp" {
++	if protocol == "udp" || port == 53 {
+ 		slots = session.dnsSlots
+ 	}
+ 	session.mu.Lock()
+@@ -391,7 +391,7 @@
+ 		trace.Add("GATEWAY_SESSION", "FAILED", "GATEWAY_CLOSE")
+ 		return nil, err
+ 	}
+-	mux, err := tcpforward.NewMux(ctx, secured, false, tcpforward.MuxConfig{MaxStreams: roombroker.DedicatedMaxStreams})
++	mux, err := tcpforward.NewMux(ctx, secured, false, tcpforward.MuxConfig{MaxStreams: roombroker.DedicatedMaxStreams, WaitForSlot: true})
+ 	if err != nil {
+ 		startupdiag.Failure(ctx, "DEDICATED_MUX", err)
+ 		trace.Add("GATEWAY_SESSION", "FAILED", "UNKNOWN_INTERNAL")
+--- a/carrier/wholedevice/session_test.go
++++ b/carrier/wholedevice/session_test.go
+@@ -172,7 +172,7 @@
+ 	session := Attach(ctx, plane, nil)
+ 	defer session.Close()
+ 	var applications []net.Conn
+-	for index := 0; index < 32; index++ {
++	for index := 0; index < cap(session.tcpSlots); index++ {
+ 		app, engine := net.Pipe()
+ 		applications = append(applications, app)
+ 		go session.Handle(engine, "tcp", "1.1.1.1", 443)
+@@ -192,7 +192,7 @@
+ 		test.Fatal("flow limit")
+ 	}
+ 	app.Close()
+-	if plane.calls.Load() != 32 {
++	if int(plane.calls.Load()) != cap(session.tcpSlots) {
+ 		test.Fatal("extra outbound")
+ 	}
+ 	cancel()
+@@ -200,7 +200,7 @@
+ 	for _, app := range applications {
+ 		app.Close()
+ 	}
+-	if session.Counters.Active.Load() != 0 || session.Counters.Peak.Load() != 32 {
++	if session.Counters.Active.Load() != 0 || session.Counters.Peak.Load() != int64(cap(session.tcpSlots)) {
+ 		test.Fatal("unbounded cleanup", session.Snapshot())
+ 	}
+ 	if _, err := Open(context.Background(), "unused", "unused", nil, func(string) {}); err == nil {
+--- a/clients/android/app/build.gradle
++++ b/clients/android/app/build.gradle
+@@ -108,7 +108,7 @@
+             }
+         }
+         if (variant.buildType.name == 'researchProvisioning') {
+-            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-ui60-4-speed-recovery1' }
++            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-ui60-4-admission1' }
+         }
+     }
+ }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java
+@@ -86,7 +86,7 @@
+         }
+     }
+     synchronized void counter(String name,long value){
+-        if(Arrays.asList("dns","tcp","tcp_active","tcp_peak","udp_denied","ipv6_denied","protect_ok","protect_denied").contains(name)&&value>=0&&value<=9007199254740991L)counters.addProperty(name,value);
++        if(Arrays.asList("dns","tcp","tcp_active","tcp_peak","limit_denied","udp_denied","ipv6_denied","protect_ok","protect_denied").contains(name)&&value>=0&&value<=9007199254740991L)counters.addProperty(name,value);
+     }
+     synchronized void restricted(JsonObject source,int nativeState,boolean denied,long now){
+         JsonObject safe=new JsonObject();
+@@ -112,7 +112,7 @@
+         enumField(source,safe,"signaling_failure","NONE","UNKNOWN","read_error","read_timeout","invalid_json","close_code_1000","close_code_1001","close_code_1002","close_code_1003","close_code_1006","close_code_1007","close_code_1008","close_code_1009","close_code_1010","close_code_1011","close_code_1012","close_code_1013","close_code_1015");
+         enumField(source,safe,"ice_failure","NONE","UNKNOWN","SUBSCRIBER_failed","SUBSCRIBER_disconnected","PUBLISHER_failed","PUBLISHER_disconnected");
+         for(String field:new String[]{"subscriber_state","publisher_state"})enumField(source,safe,field,"new","connecting","connected","disconnected","failed","closed","UNKNOWN");
+-        for(String field:new String[]{"terminal_at_ms","observed_at_ms","retransmissions","recovery_timeouts","received_frames","sent_frames","protocol_errors","dns_responses","dns_errors","tcp_open_ok","tcp_open_errors","sent_bytes","received_bytes","evidence_dropped"}){
++        for(String field:new String[]{"terminal_at_ms","observed_at_ms","retransmissions","recovery_timeouts","received_frames","sent_frames","protocol_errors","dns_responses","dns_errors","tcp_open_ok","tcp_open_errors","tcp_admission_waits","tcp_admission_rejected","tcp_admission_timeouts","tcp_admission_cancelled","tcp_admission_waiting","lease_admission_rejected","sent_bytes","received_bytes","evidence_dropped"}){
+             JsonElement value=source.get(field);
+             if(value!=null&&value.isJsonPrimitive()&&value.getAsJsonPrimitive().isNumber()){
+                 try{long count=value.getAsBigDecimal().longValueExact();if(count>=0&&count<=9007199254740991L)safe.addProperty(field,count);}catch(ArithmeticException|NumberFormatException ignored){}
+--- a/clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java
+@@ -34,12 +34,22 @@
+             if(events!=null)for(int index=0;index<Math.min(32,events.length());index++)store.ring.nativeEvent(events.optString(index),System.currentTimeMillis());
+             for(String name:new String[]{"protect_ok","protect_denied"})store.ring.counter(name,stats.optLong(name,-1));
+             org.json.JSONObject packet=stats.optJSONObject("packet");
+-            if(packet!=null)for(String name:new String[]{"dns","tcp","tcp_active","tcp_peak","udp_denied","ipv6_denied"})store.ring.counter(name,packet.optLong(name,-1));
++            if(packet!=null)nativePacket(store.ring,packet.toString());
+             org.json.JSONObject diagnostic=packet==null?null:packet.optJSONObject("diagnostic");
+             JsonObject safeInput=diagnostic==null?new JsonObject():JsonParser.parseString(diagnostic.toString()).getAsJsonObject();
+             store.ring.restricted(safeInput,stats.optInt("state",-1),stats.optBoolean("authorization_denied",false),System.currentTimeMillis());
+             store.save(false);
+         }}catch(Exception ignored){}
++    }
++    static void nativePacket(DiagnosticRing ring,String packet){
++        try{JsonObject source=JsonParser.parseString(packet).getAsJsonObject();
++            for(String name:new String[]{"dns","tcp","tcp_active","tcp_peak","limit_denied","udp_denied","ipv6_denied"}){
++                JsonElement value=source.get(name);
++                if(value!=null&&value.isJsonPrimitive()&&value.getAsJsonPrimitive().isNumber()){
++                    try{ring.counter(name,value.getAsBigDecimal().longValueExact());}catch(ArithmeticException|NumberFormatException ignored){}
++                }
++            }
++        }catch(Exception ignored){}
+     }
+     static void nativeStartup(DiagnosticRing ring,String startup){
+         JsonObject input=new JsonObject();input.add("owner_startup",JsonParser.parseString(startup));ring.startupStats(input);
+--- /dev/null
++++ b/clients/android/app/src/test/java/com/familyconnect/app/AdmissionDiagnosticsTest.java
+@@ -0,0 +1,42 @@
++package com.familyconnect.app;
++
++import com.google.gson.*;
++import java.nio.charset.StandardCharsets;
++import org.junit.Test;
++import static org.junit.Assert.*;
++
++public class AdmissionDiagnosticsTest {
++    private static final String TAG="0123456789abcdef".repeat(4);
++    private static final String[] FIELDS={"tcp_admission_waits","tcp_admission_rejected","tcp_admission_timeouts","tcp_admission_cancelled","tcp_admission_waiting","lease_admission_rejected"};
++    private DiagnosticRing ring(){return new DiagnosticRing("synthetic","research",84,31);}
++    @Test public void admissionCountersSurviveNormalBundleAndReset() throws Exception{
++        DiagnosticRing ring=ring();Diagnostics.nativePacket(ring,"{\"limit_denied\":7,\"tcp\":65,\"private_destination\":\"secret\"}");
++        JsonObject nativeStats=new JsonObject();nativeStats.addProperty("session_tag",TAG);nativeStats.addProperty("terminal_reason","NONE");
++        for(String field:FIELDS)nativeStats.addProperty(field,3);
++        nativeStats.addProperty("private_destination","not-exportable");ring.restricted(nativeStats,2,false,100);
++        JsonObject bundle=new JsonObject();DiagnosticRing.exportRecord(bundle,"ring",ring.snapshot().toString().getBytes(StandardCharsets.UTF_8),"synthetic");
++        JsonObject exported=JsonParser.parseString(new String(DiagnosticRing.exportBytes(bundle),StandardCharsets.UTF_8)).getAsJsonObject().getAsJsonObject("ring");
++        assertEquals(7,exported.getAsJsonObject("counters").get("limit_denied").getAsLong());
++        for(String field:FIELDS)assertEquals(3,exported.getAsJsonObject("restricted_session").get(field).getAsLong());
++        assertFalse(exported.toString().contains("not-exportable"));
++        ring.event(new ConnectivityOrchestrator.Event("connect_requested","restricted",null,ConnectivityOrchestrator.State.CONNECTING,0),200);
++        assertEquals(0,ring.snapshot().getAsJsonObject("restricted_session").size());
++        assertFalse(ring.snapshot().getAsJsonObject("counters").has("limit_denied"));
++    }
++    @Test public void invalidAndLegacyValuesDoNotBecomeZeros(){
++        DiagnosticRing ring=ring();JsonObject input=new JsonObject();input.addProperty("session_tag",TAG);input.addProperty("terminal_reason","NONE");
++        ring.restricted(input,2,false,1);
++        for(String field:FIELDS)assertFalse(ring.snapshot().getAsJsonObject("restricted_session").has(field));
++        input.addProperty(FIELDS[0],-1);input.addProperty(FIELDS[1],0.5);input.addProperty(FIELDS[2],9007199254740992L);input.addProperty(FIELDS[3],"secret");
++        ring.restricted(input,2,false,2);Diagnostics.nativePacket(ring,"{\"limit_denied\":-1}");Diagnostics.nativePacket(ring,"{\"limit_denied\":0.5}");
++        for(String field:FIELDS)assertFalse(ring.snapshot().getAsJsonObject("restricted_session").has(field));
++        assertFalse(ring.snapshot().getAsJsonObject("counters").has("limit_denied"));
++    }
++    @Test public void lateCleanupDoesNotReplaceFirstSessionCounters(){
++        DiagnosticRing ring=ring();JsonObject input=new JsonObject();input.addProperty("session_tag",TAG);input.addProperty("terminal_reason","IO_CLOSED");
++        input.addProperty("tcp_admission_rejected",5);ring.restricted(input,3,false,100);
++        input.addProperty("tcp_admission_rejected",0);input.addProperty("terminal_reason","CANCELLED");ring.restricted(input,3,false,200);
++        JsonObject saved=ring.snapshot().getAsJsonObject("restricted_session");
++        assertEquals(5,saved.get("tcp_admission_rejected").getAsLong());assertEquals("IO_CLOSED",saved.get("terminal_reason").getAsString());
++    }
++}
+--- a/pilot/android-restricted/packet/engine_test.go
++++ b/pilot/android-restricted/packet/engine_test.go
+@@ -133,6 +133,30 @@
+ 	if plane.opens.Load() != 4 {
+ 		test.Fatal("TCP conversion", plane.opens.Load())
+ 	}
++	var held []net.Conn
++	defer func() {
++		for _, connection := range held {
++			connection.Close()
++		}
++	}()
++	for index := 0; index < 72; index++ {
++		bounded, finish := context.WithTimeout(ctx, time.Second)
++		connection, err := gonet.DialTCPWithBind(bounded, application, tcpip.FullAddress{NIC: 1}, tcpip.FullAddress{NIC: 1, Addr: tcpip.AddrFrom4([4]byte{93, 184, 216, 34}), Port: 443}, ipv4.ProtocolNumber)
++		finish()
++		if err != nil {
++			test.Fatalf("established sockets must not consume SYN admission: index=%d error=%v", index, err)
++		}
++		held = append(held, connection)
++		connection.SetDeadline(time.Now().Add(time.Second))
++		payload := []byte{byte(index), 42}
++		if _, err := connection.Write(payload); err != nil {
++			test.Fatal(err)
++		}
++		response := make([]byte, 2)
++		if _, err := io.ReadFull(connection, response); err != nil || string(response) != string(payload) {
++			test.Fatal("held TCP traffic", err)
++		}
++	}
+ 	for _, port := range []uint16{53, 443} {
+ 		connection, err := gonet.DialUDP(application, nil, &tcpip.FullAddress{NIC: 1, Addr: tcpip.AddrFrom4([4]byte{10, 79, 0, 1}), Port: port}, ipv4.ProtocolNumber)
+ 		if err != nil {
+@@ -155,6 +179,9 @@
+ 	if plane.dns.Load() != 1 {
+ 		test.Fatal("DNS bypass")
+ 	}
++	for _, connection := range held {
++		connection.Close()
++	}
+ 	plane.Close()
+ 	session.Close()
+ 	if session.Counters.Active.Load() != 0 || session.Allow("tcp", "1.1.1.1", 443) {
+--- a/pilot/android-restricted/xray-packet-boundary.patch
++++ b/pilot/android-restricted/xray-packet-boundary.patch
+@@ -51,7 +51,24 @@
+  		go func(r *tcp.ForwarderRequest) {
+  			var wq waiter.Queue
+  			var id = r.ID()
+-@@ -114,6 +119,7 @@ func (t *stackGVisor) Start() error {
++@@ -83,6 +88,7 @@ func (t *stackGVisor) Start() error {
++ 				return
++ 			}
+++			r.Complete(false)
++ 
++ 			options := ep.SocketOptions()
++ 			options.SetKeepAlive(false)
++ 			options.SetReuseAddress(true)
++@@ -97,8 +103,6 @@ func (t *stackGVisor) Start() error {
++ 			// close the socket
++ 			ep.Close()
++-			// send connection complete upstream
++-			r.Complete(false)
++ 		}(r)
++ 	})
++ 	ipStack.SetTransportProtocolHandler(tcp.ProtocolNumber, tcpForwarder.HandlePacket)
++ 
++@@ -114,6 +118,7 @@ func (t *stackGVisor) Start() error {
+  		// this function handle packets passing from the tun to the gVisor, therefore the src/dst assignement
+  		src := net.UDPDestination(net.IPAddress(id.RemoteAddress.AsSlice()), net.Port(id.RemotePort))
+  		dst := net.UDPDestination(net.IPAddress(id.LocalAddress.AsSlice()), net.Port(id.LocalPort))

@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+## BROWSER-ADMISSION-FIX-1 — local candidate built/checked, not deployed (17.10)
+
+[Implemented bounded admission fix](releases/2026-10-17-browser-admission-fix-1.md):
+64 ordinary mux streams, FIFO32 within the same40s open budget, reserved lease
+capacity and independent TCP DNS slots. Established sockets no longer retain gVisor
+SYN admission slots. Both refusal surfaces survive normal export. Client/gateway
+normal/race, real lease/security fixtures,72-flow packet tests and12 direct JVM tests
+PASS; full native/JNI/Gradle/gateway gate and100 selected JVM tests PASS. New source
+c1eade01, unsigned APKff4a844f, native6d41518f, gateway079729e4; code84/admission1.
+Initial packet DNS failure,
+skipped real lease tests and test-only JVM compile correction remain recorded.
+No signing/install/deployment, SSH/ADB/CONNECT/restart or emulator. Installed pair
+28543d46/f25124ba/5de40b9c remains the last observed pair, not newly accepted. Exact
+failed-owner-request binding, ten-minute cause and client10 mux errors remain open;
+server origin-close errors1/28 in local fixtures are separate. Next is separately
+authorized fresh private pair rollout and bounded owner browsing check.
+No field, release, handoff, supervisor or historical-causality promotion.
+
 ## BROWSER-ADMISSION-LOCAL-1 — partial connectivity mechanism reproduced (17.10)
 
 [Bounded local investigation](releases/2026-10-17-browser-admission-local-1.md):

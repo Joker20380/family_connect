@@ -8,6 +8,21 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### BROWSER-ADMISSION-FIX-1 — local artifact gate complete; rollout pending (17.10)
+
+- [Local product delta](releases/2026-10-17-browser-admission-fix-1.md) implements
+  bounded64+32 admission, separate lease/DNS capacity, correct SYN completion and
+  normal-export counters. Retained source/native/API/security boundaries are explicit.
+- Targeted normal/race, real lease/security, packet and12 direct JVM tests PASS.
+  Preserve initial skipped/failed receipts; native/JNI/Gradle/gateway gate and100 selected
+  JVM tests PASS. Unsigned APKff4a844f/native6d41518f/gateway079729e4 built privately.
+- No current phone/server action. New candidate is not automatically device-accepted;
+  any private paired rollout needs fresh readiness and exact
+  previous artifacts, then a separately agreed bounded browsing/asset test.
+- Do not call this measured bandwidth improvement or proven cure for the ten-minute
+  cutoff. Keep the client10 protocol errors and historical causality open. No automatic
+  field, A→B repeat, maintenance, handoff/supervisor or public release.
+
 ### BROWSER-ADMISSION-LOCAL-1 — next: bounded admission and visibility (17.10)
 
 - [Completed local investigation](releases/2026-10-17-browser-admission-local-1.md):

@@ -1,0 +1,58 @@
+[
+  {
+    "label": "fixture-generate",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 2.001,
+    "max_cpu_celsius": 67.0,
+    "log_sha256": "8a6a89e2866b58082491c36efd16fcdfd5b924dccb0481eb541d0a5d90a450c9"
+  },
+  {
+    "label": "lease-normal",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 4.003,
+    "max_cpu_celsius": 62.0,
+    "log_sha256": "2b8b5f6d72c3b0e95c2f478cd4ae8caba92f9317b9ff63ac32c36142bbb4d317"
+  },
+  {
+    "label": "lease-race",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 5.003,
+    "max_cpu_celsius": 65.0,
+    "log_sha256": "01fb54d72c2bff72811f5c5fe5815987ef957bf38f87b106d54dd3470cbde8d0"
+  },
+  {
+    "label": "packet-module",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 1.001,
+    "max_cpu_celsius": 62.0,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "packet-normal",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 4.003,
+    "max_cpu_celsius": 68.0,
+    "log_sha256": "a810b0962872e188dc86638e5052a02500df2da075c0a3f0640cce63c4db3ad1"
+  },
+  {
+    "label": "packet-race",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 118.095,
+    "max_cpu_celsius": 79.0,
+    "log_sha256": "f15bf9212541031f8e56326189a8136c23eddcf1d9bb0b735f4d283ae62f6548"
+  },
+  {
+    "label": "jvm-compile",
+    "reason": "command_exit",
+    "exit": 1,
+    "elapsed_seconds": 10.071,
+    "max_cpu_celsius": 70.0,
+    "log_sha256": "2e8d8249de890a6826959d7fb2de3141a1d2a25fd9572af82c48a76bd46c2ecc"
+  }
+]

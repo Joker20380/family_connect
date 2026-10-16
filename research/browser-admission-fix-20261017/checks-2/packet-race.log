@@ -1,0 +1,4 @@
+=== RUN   TestExistingPacketEngineTCPDNSAndFailClosed
+--- PASS: TestExistingPacketEngineTCPDNSAndFailClosed (0.59s)
+PASS
+ok  	github.com/Joker20380/family_connect/restrictedandroid/packet	1.621s

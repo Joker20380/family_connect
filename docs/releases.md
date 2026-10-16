@@ -1,5 +1,12 @@
 # Release distribution / Выпуски
 
+**Local admission fix17.10, built only:** `0.1.18-research84-ui60-4-admission1`,
+code84, unsigned APK `ff4a844f8de2df2aac4df5f7e5ec35ae10746033730177e3a9f19e8c0c35edda`.
+[Exact source/native/gateway identities and checks](releases/2026-10-17-browser-admission-fix-1.md).
+No signing, installation, deployment, public download/catalog or invitation change.
+The prior installed pair below is unchanged; later owner browsing failure is not
+closed by this local candidate. Native/transport code is rebuilt, not UI-only.
+
 **Combined private speed/restoration owner installation16.10, code84:**
 `0.1.18-research84-ui60-4-speed-recovery1`, signed/installed APK
 `28543d4690327e29a6eb6a60e52fa50232a407663ed7e610f1434cd56f86193d`.

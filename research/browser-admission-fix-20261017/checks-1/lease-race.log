@@ -1,0 +1,43 @@
+=== RUN   TestLeaseFullDataCapacityStillRenews
+    lease_mux_test.go:223: requires disposable ProductStore profiles
+--- SKIP: TestLeaseFullDataCapacityStillRenews (0.00s)
+=== RUN   TestLeaseRealFamilyMuxPersistentTCP
+    lease_mux_test.go:246: requires disposable ProductStore profiles
+--- SKIP: TestLeaseRealFamilyMuxPersistentTCP (0.00s)
+=== RUN   TestLeaseLegacyClientAndServer
+=== RUN   TestLeaseLegacyClientAndServer/false
+    lease_mux_test.go:289: requires disposable ProductStore profiles
+=== RUN   TestLeaseLegacyClientAndServer/true
+    lease_mux_test.go:289: requires disposable ProductStore profiles
+--- PASS: TestLeaseLegacyClientAndServer (0.00s)
+    --- SKIP: TestLeaseLegacyClientAndServer/false (0.00s)
+    --- SKIP: TestLeaseLegacyClientAndServer/true (0.00s)
+=== RUN   TestLeaseControlRevalidatesAdmission
+    lease_mux_test.go:306: requires disposable ProductStore profiles
+--- SKIP: TestLeaseControlRevalidatesAdmission (0.00s)
+=== RUN   TestLeaseControlStopsAtSecurityLimit
+    lease_mux_test.go:373: requires disposable ProductStore profiles
+--- SKIP: TestLeaseControlStopsAtSecurityLimit (0.00s)
+=== RUN   TestLeaseControlRevocationBeforeConfirmation
+    lease_mux_test.go:388: requires disposable ProductStore profiles
+--- SKIP: TestLeaseControlRevocationBeforeConfirmation (0.00s)
+=== RUN   TestLeaseSecurityAndReplay
+=== RUN   TestLeaseSecurityAndReplay/identity
+=== RUN   TestLeaseSecurityAndReplay/session
+=== RUN   TestLeaseSecurityAndReplay/replay
+=== RUN   TestLeaseSecurityAndReplay/expired_security
+=== RUN   TestLeaseSecurityAndReplay/revoked
+=== RUN   TestLeaseSecurityAndReplay/cancelled
+=== RUN   TestLeaseSecurityAndReplay/late
+=== RUN   TestLeaseSecurityAndReplay/security_bound
+--- PASS: TestLeaseSecurityAndReplay (0.08s)
+    --- PASS: TestLeaseSecurityAndReplay/identity (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/session (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/replay (0.05s)
+    --- PASS: TestLeaseSecurityAndReplay/expired_security (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/revoked (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/cancelled (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/late (0.00s)
+    --- PASS: TestLeaseSecurityAndReplay/security_bound (0.01s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/roombroker	1.094s

@@ -1,0 +1,18 @@
+[
+  {
+    "label": "jvm-compile",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 7.003,
+    "max_cpu_celsius": 71.0,
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "jvm-export",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 2.003,
+    "max_cpu_celsius": 67.0,
+    "log_sha256": "08e37543987fa878c6c21d55c9fd95af05c92d96aa740988653e2a3f98f91582"
+  }
+]
