@@ -25,8 +25,8 @@
   },
   "candidate": {
     "label": "candidate",
-    "original_apk_sha256": "52e903bb95a21b7b9d91eb01a7188fba6d15a79d2a25bc3dcb6acd7b617fcf6f",
-    "renderer_apk_sha256": "77b1f804888c7ce309a840135b48390dc56fd5aab581810266f942c6f2c288af",
+    "original_apk_sha256": "1a11f98f9200b477b0821b0588b860c66ae9ea0aaa6de98b7c32e59d2e2ea92a",
+    "renderer_apk_sha256": "405611df20c8bdd3dc54773c927c510e04e7b2daa41b796fd56ba6ceefec398a",
     "only_disposable_renderer": true,
     "production_key_used": false,
     "internet_permission": false,

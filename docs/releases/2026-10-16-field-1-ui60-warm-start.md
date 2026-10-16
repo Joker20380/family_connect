@@ -25,14 +25,14 @@ existing restricted entitlement, working preparation network and availability in
 one short request. Do not send messages to third parties. Verify grant scope using
 the existing read-only authorized route; no grant/identity creation or owner profile.
 
-Check this **new UI APK**, versionName0.1.18-research84-ui60-1/code84/minSdk31/arm64:
+Check this **new UI APK**, versionName0.1.18-research84-ui60-2/code84/minSdk31/arm64:
 safe same-signer replacement, actual device compatibility, normal restricted path,
 inactive provisioning research gate and normal export. A lower-code tester APK is
 not promised as an ordinary rollback. No `-d`, uninstall, data/cache clear or
 re-enrollment. Absent entitlement means TESTER_NOT_AUTHORIZED, not transport failure.
 
 Only then sign the verified unsigned hash
-`52e903bb95a21b7b9d91eb01a7188fba6d15a79d2a25bc3dcb6acd7b617fcf6f`
+`1a11f98f9200b477b0821b0588b860c66ae9ea0aaa6de98b7c32e59d2e2ea92a`
 using the existing key/workflow; recheck payload/native/provenance and retain the
 signed hash. Owner privately transfers to one agreed recipient. No catalog,
 landing, invitation or public release change. If unavailable:

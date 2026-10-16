@@ -123,6 +123,16 @@
           "density": 1,
           "secure": true,
           "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-392-780-1.0-home-network-fixture",
+          "width": 392,
+          "height": 780,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
         }
       ],
       "navigation": [
@@ -131,6 +141,14 @@
           "liveControlsPreserved": true,
           "sessionPreserved": true,
           "serviceRequests": 0
+        }
+      ],
+      "presentation": [
+        {
+          "beta60TelemetryGrouping": true,
+          "rectangularFrameCorners": true,
+          "messageRouteDetailsPreserved": true,
+          "syntheticTelemetry": true
         }
       ]
     },
@@ -266,6 +284,16 @@
           "density": 1,
           "secure": true,
           "serviceRequests": 0
+        },
+        {
+          "name": "candidate-en-780-392-1.0-home-network-fixture",
+          "width": 780,
+          "height": 392,
+          "locale": "en",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
         }
       ],
       "navigation": [
@@ -274,6 +302,14 @@
           "liveControlsPreserved": true,
           "sessionPreserved": true,
           "serviceRequests": 0
+        }
+      ],
+      "presentation": [
+        {
+          "beta60TelemetryGrouping": true,
+          "rectangularFrameCorners": true,
+          "messageRouteDetailsPreserved": true,
+          "syntheticTelemetry": true
         }
       ]
     },
@@ -409,6 +445,16 @@
           "density": 1,
           "secure": true,
           "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-320-640-1.5-home-network-fixture",
+          "width": 320,
+          "height": 640,
+          "locale": "ru",
+          "fontScale": 1.5,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
         }
       ],
       "navigation": [
@@ -417,6 +463,14 @@
           "liveControlsPreserved": true,
           "sessionPreserved": true,
           "serviceRequests": 0
+        }
+      ],
+      "presentation": [
+        {
+          "beta60TelemetryGrouping": true,
+          "rectangularFrameCorners": true,
+          "messageRouteDetailsPreserved": true,
+          "syntheticTelemetry": true
         }
       ]
     },
@@ -542,6 +596,16 @@
           "density": 1,
           "secure": true,
           "serviceRequests": 0
+        },
+        {
+          "name": "candidate-ru-392-780-1.0-home-network-fixture",
+          "width": 392,
+          "height": 780,
+          "locale": "ru",
+          "fontScale": 1,
+          "density": 1,
+          "secure": true,
+          "serviceRequests": 0
         }
       ],
       "navigation": [
@@ -550,6 +614,14 @@
           "liveControlsPreserved": true,
           "sessionPreserved": true,
           "serviceRequests": 0
+        }
+      ],
+      "presentation": [
+        {
+          "beta60TelemetryGrouping": true,
+          "rectangularFrameCorners": true,
+          "messageRouteDetailsPreserved": true,
+          "syntheticTelemetry": true
         }
       ]
     }

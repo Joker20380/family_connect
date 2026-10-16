@@ -6,12 +6,15 @@
 [field continuation, NOT STARTED](releases/2026-10-16-field-1-ui60-warm-start.md).
 Isolated derivative of accepted inventoryb36c4a21; beta60 visual ref
 5c740f2d05f725ee1bcbe63a41f886605d4c7ac4 supplies composition, not behavior.
-Large main dial, beta60 block order/geometry and shared chamfered frames restored;
+Large main dial and beta60 block order restored. Owner-requested revision2 restores
+the network/battery/graph grouping and replaces chamfers with square corners;
 current palette/thin strokes/typography, modern restricted/diagnostic/chat behavior
 retained. Normal/narrow/font/language UI fixtures and targeted tests are published.
-Unsigned UI APK52e903bb…617fcf6f, UI inventorydbd0aeb6…a3efdd0a,
-versionName0.1.18-research84-ui60-1/code84. All native payloads unchanged, restricted
-nativebe70a66c…0a92b2 and original native provenance preserved. Full Gradle +14 targeted
+Revision2 real-IME check completed with KVM/host GPU under a50%-of-one-core quota
+after stopping the overheated software emulator; measured peak78°C, emulator now OFF.
+Unsigned UI APK1a11f98f…2e2ea92a, UI inventoryab982dc2…2b4029d1,
+versionName0.1.18-research84-ui60-2/code84. All native payloads unchanged, restricted
+nativebe70a66c…0a92b2 and original native provenance preserved. Full Gradle +15 targeted
 JVM cases pass; no native rebuild. Not signed with product key, installed or sent.
 **Next: owner visual approval**, then existing tester compatibility/grant/readiness,
 safe signing/private owner transfer and one bounded warm-start field CONNECT in the

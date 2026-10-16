@@ -25,9 +25,16 @@ EN fixtures. Constrained main workspace scrolls; bottom navigation stays fixed.
 Country names wrap instead of reproducing beta60's tiny text. Blank metrics remain
 unknown; fixture/emulator telemetry is never described as owner TUN proof.
 
-Final checks:50 candidate scenes across four configurations, eight navigation
-cycles, zero service requests, secure flag retained, and14 targeted JVM cases pass.
-The75 PNGs comprise24 reference frames and51 candidate/component frames.
+Revision2 follows the owner's requested beta60 telemetry grouping and square corners.
+Network/signal, battery percentage/bar, traffic grid and connection selectors retain
+modern data sources. Message-route information remains in the existing panel's
+detail dialog/accessibility description, not in the graph. Four extra scenes use
+explicit synthetic telemetry; they are not observations of a phone connection.
+
+Final checks:54 candidate scenes across four configurations, eight navigation
+cycles, zero service requests, secure flag retained, and15 targeted JVM cases pass.
+Each configuration checks telemetry grouping and real rectangular-frame pixels.
+The79 PNGs comprise24 reference frames and55 candidate/component frames.
 [Real keyboard component viewport](screenshots/candidate-real-ime-chat-component.png)
 is an additional measured IME check, not a picture of the keyboard itself:
 IME visible, bottom inset366px, system bars27/54px, draft/selection preserved.
@@ -43,7 +50,7 @@ IME visible, bottom inset366px, system bars27/54px, draft/selection preserved.
 - [`build-cumulative-source.json`](build-cumulative-source.json): cumulative file
   inventory against baselinef524099, not a publication commit or native rebuild.
 - [`build-receipt.json`](build-receipt.json) / [`artifact-check.json`](artifact-check.json):
-  full UI assemble,14 targeted JVM tests, identical native payloads and restricted
+  full UI assemble,15 targeted JVM tests, identical native payloads and restricted
   provenance, identical permissions/SDK/ABI/features. Code84 is unchanged; versionName
   identifies the new UI candidate. No production signing/install or public APK.
 - [`render-inputs.json`](render-inputs.json), [`screenshots.json`](screenshots.json),
@@ -81,6 +88,16 @@ Product onCreate/onResume is not invoked. Reflection calls actual view builders 
 chat projection callbacks with synthetic contacts/messages and connection states.
 Canvas reads the view tree with FLAG_SECURE still enabled. No product security flag
 or manifest changes are used to obtain screenshots.
+
+Do not repeat the original software-CPU emulator launch. It was stopped after the
+owner's host-temperature warning. KVM is usable on this host outside the filesystem
+sandbox; sandbox absence of `/dev/kvm` must not trigger `-accel off` fallback. Future
+local runs require an approved `-accel on -gpu host` launch, verified hardware
+acceleration, a cgroup CPU quota, temperature cutoff and finite lifetime. The final
+outstanding IME check used50% of one core/nice10,85°C cutoff and10-minute cap, then
+stopped after103.422seconds. No whole scene matrix or product build was repeated for
+that mode change. [Execution receipt](emulator-execution.json) records the78°C peak
+and shutdown limitation; the emulator is not left running between tasks.
 
 Navigation exercises two route→settings→home cycles per configuration, retaining
 the same main controls and session ID/status. A context guard rejects service start/

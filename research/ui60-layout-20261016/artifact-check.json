@@ -60,13 +60,13 @@
     },
     {
       "name": "com.familyconnect.app.Ui60PresentationTest",
-      "tests": "2",
+      "tests": "3",
       "failures": "0",
       "errors": "0",
       "skipped": "0"
     }
   ],
-  "unsigned_apk_sha256": "52e903bb95a21b7b9d91eb01a7188fba6d15a79d2a25bc3dcb6acd7b617fcf6f",
+  "unsigned_apk_sha256": "1a11f98f9200b477b0821b0588b860c66ae9ea0aaa6de98b7c32e59d2e2ea92a",
   "product_signing": "NOT_PERFORMED",
   "unsigned_verified": true,
   "zip_alignment": true,

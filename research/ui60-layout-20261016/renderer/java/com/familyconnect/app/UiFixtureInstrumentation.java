@@ -157,6 +157,24 @@ public final class UiFixtureInstrumentation extends Instrumentation {
         if(!session.equals(field(service,"sessionId").get(null))||!"off".equals(field(service,"status").get(null))||serviceRequests!=0)throw new AssertionError("Navigation changed session");
         JSONObject row=new JSONObject();row.put("navigationCycles",2);row.put("liveControlsPreserved",true);row.put("sessionPreserved",true);row.put("serviceRequests",serviceRequests);results.put(row);
     }
+    private void networkPresentation(String language,float font,int width,int height,String prefix)throws Exception{
+        Activity activity=home(language,font,"off");Object panel=get(activity,"telemetry");
+        Class<?>[] sampleTypes={String.class,int.class,int.class,long.class,long.class,long.class};
+        invoke(panel,"acceptSample",sampleTypes,"Wi-Fi",-54,64,1000L,1024L,1024L);
+        invoke(panel,"acceptSample",sampleTypes,"Wi-Fi",-54,64,2000L,5120L,3072L);
+        save(activity,prefix+"-home-network-fixture",width,height);
+        android.widget.TextView[] fields=(android.widget.TextView[])get(panel,"fields");
+        if(font>1&&fields[1].getLayout().getLineBottom(1)<Math.round(26*font))throw new AssertionError("Telemetry text ignored system font scale");
+        View countries=(View)get(activity,"countries"),heading=(View)get(panel,"connectionHeading");
+        if(fields[0].getLeft()>=fields[1].getLeft()||fields[4].getLeft()>=countries.getLeft()||heading.getBottom()>countries.getTop())throw new AssertionError("Beta60 telemetry grouping changed");
+        if(!fields[1].getText().toString().contains("64%")||!((View)panel).getContentDescription().toString().contains(((android.widget.TextView)get(activity,"messageRoute")).getText()))throw new AssertionError("Telemetry value or retained details missing");
+        Method factory=type("TerminalUi").getDeclaredMethod("frame",Context.class,int.class,int.class);factory.setAccessible(true);
+        android.graphics.drawable.Drawable frame=(android.graphics.drawable.Drawable)factory.invoke(null,activity,0xff102321,0xff416861);
+        Bitmap bitmap=Bitmap.createBitmap(48,48,Bitmap.Config.ARGB_8888);frame.setBounds(0,0,48,48);frame.draw(new Canvas(bitmap));
+        boolean rectangular=bitmap.getPixel(2,2)==0xff102321&&bitmap.getPixel(45,2)==0xff102321&&bitmap.getPixel(2,45)==0xff102321&&bitmap.getPixel(45,45)==0xff102321;bitmap.recycle();
+        if(!rectangular)throw new AssertionError("Frame still has cut or rounded corners");
+        JSONObject row=new JSONObject();row.put("beta60TelemetryGrouping",true);row.put("rectangularFrameCorners",true);row.put("messageRouteDetailsPreserved",true);row.put("syntheticTelemetry",true);results.put(row);
+    }
     private void keyboard()throws Exception{
         Activity host=startActivitySync(new Intent(getTargetContext(),FixtureHostActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         final android.widget.EditText[] composer={null};
@@ -199,7 +217,7 @@ public final class UiFixtureInstrumentation extends Instrumentation {
                     invoke(activity,"showSettings",new Class<?>[0]);save(activity,prefix+"-settings",width,height);}
                 }
                 if(!"home-off".equals(arguments.getString("screens")))for(String screen:new String[]{"empty","list","conversation"})save(chat(language,font,screen),prefix+"-chat-"+screen,width,height);
-                if("candidate".equals(arguments.getString("label")))navigation(language,font);
+                if("candidate".equals(arguments.getString("label"))){navigation(language,font);networkPresentation(language,font,width,height,prefix);}
             }catch(Throwable error){failure[0]=error;}});
             if(failure[0]!=null)throw new RuntimeException(failure[0]);
             report.putString("result",results.toString());finish(Activity.RESULT_OK,report);

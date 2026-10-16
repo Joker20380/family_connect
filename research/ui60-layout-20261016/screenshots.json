@@ -121,257 +121,277 @@
   },
   {
     "name": "candidate-en-392-780-1.0-chat-conversation.png",
-    "sha256": "f8eb738a2318cbe6caaa48c14788d0cf7cd51ac7fa800136fbb82948e3d48a7c",
+    "sha256": "9c413c5d65a63395fde1d47d55ba3df47c508f87d4b16f18b650a9ba627542b9",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-chat-empty.png",
-    "sha256": "d142ab8c79a7f674cc7c615ecc3b6f49c4e05d0a25615d689d81b13dced95021",
+    "sha256": "4252bdb2ab0f17e30924496976bcf1eebfba2a53e873c720070774484c023318",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-chat-list.png",
-    "sha256": "0693e374df5747b8928334a5099d76b0e9c1931a611456a76e7831c4f9f46281",
+    "sha256": "1bc8b7642e6361871d0f07587671028683278e9cf48cfc4edc2f19019fc73041",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-home-cleanup-required.png",
-    "sha256": "bbc70cd1be70cbc12f9fbe3db319c9350224b365ca0acb0735008af1ab243476",
+    "sha256": "7ca4b17c368bef0370d62a1e63749e8f6294ebcb2dbe0ad50220fe72af24b20f",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-home-connecting.png",
-    "sha256": "98f305c51ce5c5ba18b754f3ae55f0f2b7f848272f9a714d71a918313d7385de",
+    "sha256": "00bea9ccb33c0ddc8e976adbf6ed5a0a3d5c2ab4f4b3c712037072fef9fb3a15",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-home-disconnecting.png",
-    "sha256": "e4a2603af878bdb483d84f350765ebacb51cd41bb775428a2633d5dc6c18d9a0",
+    "sha256": "aaf9a39412e9423d65071460adc671aef1e1a350b2a34db6be91c42e11b5abda",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-home-failed.png",
-    "sha256": "d2701aec9a1f1cff793053ec4a378fe6bcc87c255b6fd520d03c8d9fd6a4daf7",
+    "sha256": "662cd555a9d633e3d5f76a88e31110642bb7e7c300e14d89bb8daa104b7db360",
+    "fixture": true
+  },
+  {
+    "name": "candidate-en-392-780-1.0-home-network-fixture.png",
+    "sha256": "83952de3ea6ffe6c9e7f21101faea94784a930a7a0ff0532c4fbcb756cdf2530",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-home-off.png",
-    "sha256": "03c04c4f7d8d768bc17b6a4824097ff2fa9ccc5707322ceaafda0e9750b222fb",
+    "sha256": "3af685f3e346fb085dc2dcd3bfb3c6c47288788273e1ab304779f4f352182b80",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-home-on.png",
-    "sha256": "01b6747cd23dd851d64faabf17c469d1411e7133da1c99f7c8bb7c4b194d9898",
+    "sha256": "29fc73c564cedb3b42f4d4f7f29632a9bd6555f1cdd92d0cf3db1b403fe43009",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-home-restoring.png",
-    "sha256": "dd55278dd930262545577ad5ea48d928e55e1db26e8b8782c76df491e4cb9b1f",
+    "sha256": "426810f1b4df7ade57e323aaeb885129a345d18122cee332c6a83f9c7efade17",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-route.png",
-    "sha256": "41d54ef3e0cc48d9c9d1f27815c7c385509ed332163b0e07eb6ab4aa34fa0215",
+    "sha256": "b1fdb21d7360182877a6d9140876f2cb871d01fee4d705dcc9cfbde57545fc41",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-settings.png",
-    "sha256": "bd365c64254954d7d39ea7531776dbad711293247b04b65d80818a1fa84b4d62",
+    "sha256": "54a14e869f2ad16c470b800bd899384712b91e4289b1e5dfcd91e86e6612888f",
     "fixture": true
   },
   {
     "name": "candidate-en-780-392-1.0-chat-conversation.png",
-    "sha256": "21793f59f3a5aa74383d6d7cf187fa2b74228050ddcb62c8db666bf62d1d09a3",
+    "sha256": "6a4192fa0c2fcc2036b89105dae15a52e031546b89187265b89203dbad64f29b",
     "fixture": true
   },
   {
     "name": "candidate-en-780-392-1.0-chat-empty.png",
-    "sha256": "a833d7b5be8c3024817530293673131917ff7b8e22b8634d6ef615401aab969d",
+    "sha256": "436f2823e75832c22e98a4ca0452ea3b98e17420d17ff408253609459341e8da",
     "fixture": true
   },
   {
     "name": "candidate-en-780-392-1.0-chat-list.png",
-    "sha256": "a833d7b5be8c3024817530293673131917ff7b8e22b8634d6ef615401aab969d",
+    "sha256": "436f2823e75832c22e98a4ca0452ea3b98e17420d17ff408253609459341e8da",
     "fixture": true
   },
   {
     "name": "candidate-en-780-392-1.0-home-cleanup-required.png",
-    "sha256": "b7ccc61abc4e160430c278f0a44d8cbbc724ae97024effd0cd8a2c7558f1bbd8",
+    "sha256": "83ad8f522f01b7246c1d017e2363ec5164397c2ec5ced5c7a77ea9cbbc310d00",
     "fixture": true
   },
   {
     "name": "candidate-en-780-392-1.0-home-connecting.png",
-    "sha256": "6637d67c889181ca84b2365339bcdc0e5be9ca838cbdb42b2eef58511857ed52",
+    "sha256": "662d0de8b5c40e7ae3843f1b5e94582c93466387b8cdd1737a4c7700e0d01119",
     "fixture": true
   },
   {
     "name": "candidate-en-780-392-1.0-home-disconnecting.png",
-    "sha256": "c4ab60f57d251e716a25a8c223b1c05d03d0146621d9f3e2d67e5ac308832b0c",
+    "sha256": "15c482d182a705781008483271ad815860e384650dd68f29ef161dc094479519",
     "fixture": true
   },
   {
     "name": "candidate-en-780-392-1.0-home-failed.png",
-    "sha256": "2c632b612684962b41e79b3a344630e492e9cec8c35a04b716b800077a764094",
+    "sha256": "36274176ade6223426cacce38137bbde6cf6dff02dec9a679d1c2bdf1b3271cd",
+    "fixture": true
+  },
+  {
+    "name": "candidate-en-780-392-1.0-home-network-fixture.png",
+    "sha256": "0b1f3b57b4e76f8742a42554c2ca141dcf21eb4902118748e3900ac5f8033157",
     "fixture": true
   },
   {
     "name": "candidate-en-780-392-1.0-home-off.png",
-    "sha256": "bd4133fe988631a06cf9de2d7778a26be700a450af4fc7224f90b2097ada529d",
+    "sha256": "878130f66d7591b0cfdfe946ae2901911feae87be5b3c395e6e836cb227fa0f8",
     "fixture": true
   },
   {
     "name": "candidate-en-780-392-1.0-home-on.png",
-    "sha256": "77611f37c89309ea4c776942cb9764d3513bbd8ded62fc424c3d8325f7c422ef",
+    "sha256": "4ad652cbb968fa396091ae51a0b6f43f8a573d7e0cffaba84039a2649cc97bc6",
     "fixture": true
   },
   {
     "name": "candidate-en-780-392-1.0-home-restoring.png",
-    "sha256": "918b0e0ea56afe62fd2b15a82d42d13222293446f759a6e12545648887f362b7",
+    "sha256": "d8e39bb03a886da3a1346c8ba9632991e1a02a1f4e64ee63b96073b8c4cf5187",
     "fixture": true
   },
   {
     "name": "candidate-en-780-392-1.0-home-scrolled.png",
-    "sha256": "a001f9ce1a327ebf7451737804d1d077d023c187ccca0ca544ff75441b785601",
+    "sha256": "c4cccb562ab24e39c7a95d43919882ead5f2ab140fa63a8df7cc373eaad5bc77",
     "fixture": true
   },
   {
     "name": "candidate-en-780-392-1.0-route.png",
-    "sha256": "6a4f2e358201c0ea84507cd9a33cc3f30647926560bd2c9a2ab7f78e35bd0f76",
+    "sha256": "373af0cb281a84e4d591681caee6261b00dc762729ef0a0fea6ec59d6478c5e8",
     "fixture": true
   },
   {
     "name": "candidate-en-780-392-1.0-settings.png",
-    "sha256": "b1d4aed357fdc899924a8a6d7a8a66afedabc394aaf82f94c1c81ff58373de8f",
+    "sha256": "04663e0af90c041612d9b94b790fae24bd0c71662729fe75c3763574d06485be",
     "fixture": true
   },
   {
     "name": "candidate-real-ime-chat-component.png",
-    "sha256": "94e489c8f43c21b4e92b3347fc9ddc8b72bf06496fc2746a9e1feea97b4c28b8",
+    "sha256": "aa422585b2e06494cb7905ea7a7db3b95bb38ed1efc3985596c156affb71c228",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-chat-conversation.png",
-    "sha256": "4f3dea6daa299545a298f3f65f79d514c6cd4d0e722399cc9e43b52cc4e82391",
+    "sha256": "cec2a68401fd6aca6d0123bd3bbc4f120fe406c5dbd0cb60a6fb34d5bcbb463e",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-chat-empty.png",
-    "sha256": "ab071aeb5513852fbba93e99a4128b9ffc4b2bb2e7ae8907b3ee7969bdcc2d02",
+    "sha256": "381b5e563a15f3dd949e4b68668a825cec05791f871ca65bfddae95b6be4ff4a",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-chat-list.png",
-    "sha256": "b1d78e5fdfb77ee9ef3d71b951b047a040933bf73d7194fb839f46e7ae3140ec",
+    "sha256": "6061d207ee354d0ed359d8faa5ed8d0c44e67a8d487d0bbbc57bae645bc57e5a",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-home-cleanup-required.png",
-    "sha256": "0aeeb1f948e321fb808720d87819cddeca5f650d3d235f79bb1a7d8ff400a03f",
+    "sha256": "00d2ebd573d4f57bf0b0fccf00b3bc815b27c2cd83902dcbfe479773fb7e6200",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-home-connecting.png",
-    "sha256": "33f6478a36bd42e8137510d7315d510b23f57a261d1602636bc5a04aad34631f",
+    "sha256": "d40848c93e74a11ab58abebb0c3de4c77d83f6409cb58ef754aae089f6eb89c1",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-home-disconnecting.png",
-    "sha256": "9ebe7777a2d60473fef6484afe622d5a5569c991723cd1d07d8fb3f2bb51e96d",
+    "sha256": "44ee63f727e29463c2b8499bf2050144647204cd00d9fdff3cbf5081a525ab98",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-home-failed.png",
-    "sha256": "082fc4e39c8ada063522f64d49395d082519c309edb5fd544b11232c78c94fe8",
+    "sha256": "bc7b067a48889427d6a6d2d22a6a6a0a88073ff5fd32a9f804b883609f2ecb5b",
+    "fixture": true
+  },
+  {
+    "name": "candidate-ru-320-640-1.5-home-network-fixture.png",
+    "sha256": "ca6547ffa6825152d75d148f5afe231b4850aeda28b2ffaf2cad53a4a8987574",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-home-off.png",
-    "sha256": "e1a2b8f39ebe08cf0741acb6bd75b920af4992366dda6bf71f518598cbfb1c0b",
+    "sha256": "445cc179026d83f99e2862aa7d128d2e70f22b009c33380b450d59d58a73be82",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-home-on.png",
-    "sha256": "96308e1cb0d72160abb3b1ed583b6d92f1c2e2d43534d6dc92c174938a5cf683",
+    "sha256": "4c02ebe9339d338fb1dcc26138b62d48df01e4e94cc13192df988237f5c8e2f4",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-home-restoring.png",
-    "sha256": "a81b9f24f8ea91007960fbd257e4f002583450831aaa7704a93abbc1c5620281",
+    "sha256": "734b4086fe35e0a0c0a07c2da9e8e2ee0e39b5ac69378d3bc24da0f68afe5b30",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-home-scrolled.png",
-    "sha256": "8b0f7a274486395635013dfaf5cf3a5be1f4601fcc48cb1d7e104348b4c82e6e",
+    "sha256": "ca9aa67d55b386eea48f755ed1fce9438299f347180c6d6ce7ac5690e97227c6",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-route.png",
-    "sha256": "40aca51b92182a25202d3d957a4bb383268b233668d485b63fc83fdfa7747f06",
+    "sha256": "4bbe75ad610f137563d1803eaf2e8d032622ffcb163031a25df9a0d199ddd666",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-settings.png",
-    "sha256": "127c78c9c53295fc9a7aed38daf7f60527a52862ed6537b93d938149c7d7451d",
+    "sha256": "67850a69a869628b13b70f8eacaf7e8763042bbe75bed6a97c777a3572635863",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-chat-conversation.png",
-    "sha256": "666156afb6789da35dc26787af7a3dbbcb29ad71d8f0da36bc01b5f972960de3",
+    "sha256": "2491788abed25e92d5b0778099629f80ac866a33b6ec36bef5c9793147848516",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-chat-empty.png",
-    "sha256": "4b09f09d69d05445a972d85a707490b1d4f0cb0ba8ae5db379ce7e3358e4c9fa",
+    "sha256": "f2e70190432519dc6cca54faab176a0411044f7697a53ad01e3e064189fb0aa2",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-chat-list.png",
-    "sha256": "95f0f833b2c10f3175a5afc3a6542349553e22e0fca34c15ed98b381088b0171",
+    "sha256": "3da53adbd7c0574ab01df2612fb510e4acbcbd9ef39db9287f881a14748ac2c5",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-home-cleanup-required.png",
-    "sha256": "fe0980599a0af7c4fe873398aa37f9cba8a63fada19c478cd495ec1c55aa5637",
+    "sha256": "cbd823f5971a358905ce07582970b42e6d2e0c6897eb8e9d12a1451c2e840851",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-home-connecting.png",
-    "sha256": "a3f7aab09a5f7246bd477ce43720138185819b672af30139c89631df40060572",
+    "sha256": "efb7fa59e6a3db4365b2629c8fb7e6335f04ae77a1e0dedfc143b516982b8083",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-home-disconnecting.png",
-    "sha256": "442d48161066abd0e17563a699e7f4ddff47265569fe260a4e7b9f772f69af4d",
+    "sha256": "9ec3584e95ce2c3dff80caa126a4b6573b58f930e90d27d0a6044b5e0788b2a5",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-home-failed.png",
-    "sha256": "f59f2d22dd1287ecf6147f11361d802b51a429f56ccaaa0205d4c73d29ea9ef2",
+    "sha256": "71c5d8da04e16b94f869740bacec04168a3ef7feb1ffda68628dc1454fbe1093",
+    "fixture": true
+  },
+  {
+    "name": "candidate-ru-392-780-1.0-home-network-fixture.png",
+    "sha256": "43296fe7d730fc8f795dbdff4a408ab3867401be362bb12bdd1449d3e3d3097a",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-home-off.png",
-    "sha256": "2720004d946bfd927b5b9e99fd7132b82cc7d7aaec8e2546a0f4a3dba9ecc399",
+    "sha256": "c152a4fec9f87cd777fdea3e34e0aa520b2a1520d0071d63a204571e724bf752",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-home-on.png",
-    "sha256": "0dc701b4638036c91b00c3c69f4be1cd126d62161b13b69c9a8955c49128ac5f",
+    "sha256": "6cf113c524a9baf823f64833c778a591429adc4d5edec09a6c90d8be3e600132",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-home-restoring.png",
-    "sha256": "c5be6fa4a346606da969ed4f6e9cbc1fa586e312ec79c7818322ed16c303ec89",
+    "sha256": "3280289525ae6d7ae0b1827ce9d10939bd9e9fe7c3dc1711941446b6ffb65921",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-route.png",
-    "sha256": "905af88e7faeeb64e6032da07a9544b8e7be4ded68b0231b4d922377f5fa9d2b",
+    "sha256": "ba9222fc2d9e86c7d7c7410a979cab81568c3490bb4a529fac2a6a64fe7b822b",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-settings.png",
-    "sha256": "44d8687a703da293a8f7f20fa3790cb44b559024b3f6df763893e206dc3f16b5",
+    "sha256": "9ed630e3e80cf98a104578c8f2dba41ada2c8acdf703bf7fd0703d382b063bde",
     "fixture": true
   }
 ]

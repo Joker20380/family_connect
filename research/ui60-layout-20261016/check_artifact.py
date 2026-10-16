@@ -31,7 +31,7 @@ tests=[]
 for path in sorted((out/'android/app/test-results/testResearchProvisioningUnitTest').glob('TEST-*.xml')):
     suite=ET.parse(path).getroot();assert suite.attrib['failures']==suite.attrib['errors']=='0'
     tests.append({key:suite.attrib[key] for key in ['name','tests','failures','errors','skipped']})
-assert sum(int(item['tests']) for item in tests)==14
+assert sum(int(item['tests']) for item in tests)==15
 receipt=dict(all_embedded_native_payloads_identical=True,native_entries=after,restricted_manifest_byte_identical=True,permissions_sdk_abi_features_unchanged=True,manifest_scope=selected(new_badging),tests=tests,unsigned_apk_sha256=digest((out/apk).read_bytes()),product_signing='NOT_PERFORMED',unsigned_verified=True,zip_alignment=True,renderer_absent_from_product=True)
 (root/'artifact-check.json').write_text(json.dumps(receipt,indent=2)+'\n')
 print(json.dumps({key:value for key,value in receipt.items() if key not in ['native_entries','manifest_scope']}))

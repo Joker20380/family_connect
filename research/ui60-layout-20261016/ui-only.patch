@@ -5,7 +5,7 @@
          }
          if (variant.buildType.name == 'researchProvisioning') {
 -            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-provisioning-seam' }
-+            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-ui60-1' }
++            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-ui60-2' }
          }
      }
  }
@@ -96,12 +96,12 @@
      private final TextView[] fields=new TextView[7];
 -    private int count,rowHeight;
 +    private android.widget.Spinner countries,transports;
-+    private TextView delivery;
-+    private int count,rowHeight,choicesTop,graphTop;
++    private TextView delivery,connectionHeading;
++    private int count,rowHeight,choicesTop,graphTop,selectorTop,batteryBarTop;
      private long lastTime,lastRx=-1,lastTx=-1;
      private String country="—",protocol="—",connectionState="—";
      private String network="—",battery="—",signal="—",rate="—";
-@@ -24,7 +26,7 @@
+@@ -24,9 +26,12 @@
          String[] names={"network","battery","signal","country","traffic","protocol","state"};
          for(int index=0;index<fields.length;index++){
              TextView field=new TextView(context);TerminalUi.textStyle(field,12,TerminalUi.TEXT);field.setIncludeFontPadding(false);
@@ -109,8 +109,13 @@
 +            field.setPadding(0,0,0,0);field.setMaxLines(4);field.setHorizontallyScrolling(false);field.setTag("metric_"+names[index]);
              fields[index]=field;addView(field);
          }
++        connectionHeading=new TextView(context);TerminalUi.textStyle(connectionHeading,10,TerminalUi.MUTED);
++        connectionHeading.setIncludeFontPadding(false);connectionHeading.setText(R.string.live_connection);
++        connectionHeading.setVisibility(GONE);addView(connectionHeading);
          setOnClickListener(view->new android.app.AlertDialog.Builder(context).setTitle(R.string.live_traffic).setMessage(getContentDescription()).setPositiveButton(android.R.string.ok,null).show());
-@@ -34,25 +36,53 @@
+         display();
+     }
+@@ -34,25 +39,58 @@
          TextView text=new TextView(context);text.setTextSize(12);
          return 2*(int)Math.ceil(text.getPaint().getFontMetrics().bottom-text.getPaint().getFontMetrics().top)+TerminalUi.dp(context,2);
      }
@@ -118,37 +123,44 @@
 +    static int minimumHeight(Context context){int row=rowHeight(context);return Math.max(row*7/2+2*Math.max(TerminalUi.dp(context,48),row)+TerminalUi.dp(context,16),row*5+TerminalUi.dp(context,48));}
 +    void selectors(android.widget.Spinner countries,android.widget.Spinner transports,TextView delivery){
 +        this.countries=countries;this.transports=transports;this.delivery=delivery;
-+        for(View child:new View[]{countries,transports,delivery})addView(child);
++        for(View child:new View[]{countries,transports})addView(child);
 +        fields[3].setVisibility(GONE);fields[5].setVisibility(GONE);
-+        delivery.setPadding(0,0,0,0);delivery.setMaxLines(Integer.MAX_VALUE);delivery.setTextSize(11);
-+        delivery.setEllipsize(null);
++        connectionHeading.setVisibility(VISIBLE);
++        display();
 +    }
 +    int requiredHeight(int width){measure(MeasureSpec.makeMeasureSpec(width,MeasureSpec.EXACTLY),MeasureSpec.makeMeasureSpec(0,MeasureSpec.UNSPECIFIED));return getMeasuredHeight();}
      @Override protected void onMeasure(int widthSpec,int heightSpec){
-         int width=MeasureSpec.getSize(widthSpec),height=MeasureSpec.getSize(heightSpec),padding=TerminalUi.dp(getContext(),8);
+-        int width=MeasureSpec.getSize(widthSpec),height=MeasureSpec.getSize(heightSpec),padding=TerminalUi.dp(getContext(),8);
++        int width=MeasureSpec.getSize(widthSpec),height=MeasureSpec.getSize(heightSpec),padding=TerminalUi.dp(getContext(),12);
          rowHeight=rowHeight(getContext());
 +        if(countries!=null){
-+            int column=(width-3*padding)/2;
-+            for(View field:fields)field.measure(MeasureSpec.makeMeasureSpec(column,MeasureSpec.EXACTLY),MeasureSpec.makeMeasureSpec(0,MeasureSpec.UNSPECIFIED));
++            int column=width/2-2*padding,batteryLeft=Math.round(width*.62f);
++            for(int index=0;index<fields.length;index++){
++                int fieldWidth=index==0||index==2?batteryLeft-2*padding:index==1?width-batteryLeft-padding:column;
++                fields[index].measure(MeasureSpec.makeMeasureSpec(fieldWidth,MeasureSpec.EXACTLY),MeasureSpec.makeMeasureSpec(0,MeasureSpec.UNSPECIFIED));
++            }
++            connectionHeading.measure(MeasureSpec.makeMeasureSpec(column,MeasureSpec.EXACTLY),MeasureSpec.makeMeasureSpec(0,MeasureSpec.UNSPECIFIED));
 +            for(View picker:new View[]{countries,transports})picker.measure(MeasureSpec.makeMeasureSpec(column,MeasureSpec.EXACTLY),MeasureSpec.makeMeasureSpec(0,MeasureSpec.UNSPECIFIED));
-+            delivery.measure(MeasureSpec.makeMeasureSpec(column,MeasureSpec.EXACTLY),MeasureSpec.makeMeasureSpec(0,MeasureSpec.UNSPECIFIED));
-+            choicesTop=padding+Math.max(fields[0].getMeasuredHeight()+fields[2].getMeasuredHeight(),fields[1].getMeasuredHeight());
-+            graphTop=choicesTop+fields[4].getMeasuredHeight();
-+            int required=padding+Math.max(choicesTop+countries.getMeasuredHeight()+transports.getMeasuredHeight()+fields[6].getMeasuredHeight(),graphTop+TerminalUi.dp(getContext(),32)+delivery.getMeasuredHeight());
++            batteryBarTop=padding+fields[1].getMeasuredHeight()+TerminalUi.dp(getContext(),6);
++            choicesTop=Math.max(TerminalUi.dp(getContext(),70),padding+Math.max(fields[0].getMeasuredHeight()+fields[2].getMeasuredHeight()+TerminalUi.dp(getContext(),2),fields[1].getMeasuredHeight()+TerminalUi.dp(getContext(),10))+TerminalUi.dp(getContext(),8));
++            graphTop=choicesTop+fields[4].getMeasuredHeight()+TerminalUi.dp(getContext(),8);
++            selectorTop=choicesTop+connectionHeading.getMeasuredHeight()+TerminalUi.dp(getContext(),4);
++            int required=padding+Math.max(selectorTop+countries.getMeasuredHeight()+transports.getMeasuredHeight()+fields[6].getMeasuredHeight(),graphTop+TerminalUi.dp(getContext(),40));
 +            setMeasuredDimension(width,Math.max(height,required));return;
 +        }
          for(int index=0;index<fields.length;index++)fields[index].measure(MeasureSpec.makeMeasureSpec(index==4?width-2*padding:(width-3*padding)/2,MeasureSpec.EXACTLY),MeasureSpec.makeMeasureSpec(rowHeight+(index>=5?rowHeight/2:0),MeasureSpec.EXACTLY));
          setMeasuredDimension(width,height);
      }
      @Override protected void onLayout(boolean changed,int left,int top,int right,int bottom){
-         int padding=TerminalUi.dp(getContext(),8),column=(right-left-3*padding)/2;
+-        int padding=TerminalUi.dp(getContext(),8),column=(right-left-3*padding)/2;
++        int padding=TerminalUi.dp(getContext(),12),column=(right-left-3*padding)/2;
 +        if(countries!=null){
-+            place(fields[0],padding,padding);place(fields[1],2*padding+column,padding);
-+            place(fields[2],padding,padding+fields[0].getMeasuredHeight());place(fields[4],padding,choicesTop);
-+            int start=2*padding+column;
-+            place(countries,start,choicesTop);place(transports,start,choicesTop+countries.getMeasuredHeight());
-+            place(fields[6],start,choicesTop+countries.getMeasuredHeight()+transports.getMeasuredHeight());
-+            place(delivery,padding,bottom-top-padding-delivery.getMeasuredHeight());return;
++            place(fields[0],padding,padding);place(fields[1],Math.round((right-left)*.62f),padding);
++            place(fields[2],padding,padding+fields[0].getMeasuredHeight()+TerminalUi.dp(getContext(),2));place(fields[4],padding,choicesTop);
++            int start=(right-left)/2+padding;
++            place(connectionHeading,start,choicesTop);
++            place(countries,start,selectorTop);place(transports,start,selectorTop+countries.getMeasuredHeight());
++            place(fields[6],start,selectorTop+countries.getMeasuredHeight()+transports.getMeasuredHeight());return;
 +        }
          for(int index=0;index<fields.length;index++){
              int row=index<4?index/2:index==4?2:3;
@@ -165,7 +177,7 @@
      void sample(){
          Context context=getContext();ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
          NetworkCapabilities capabilities=manager.getNetworkCapabilities(manager.getActiveNetwork());
-@@ -76,7 +106,7 @@
+@@ -76,20 +114,35 @@
      private void display(){
          Context context=getContext();
          String[] labels={context.getString(R.string.live_network),context.getString(R.string.live_battery),context.getString(R.string.live_signal,"").replace(":","").trim(),context.getString(R.string.terminal_country),context.getString(R.string.live_traffic),context.getString(R.string.terminal_transport),context.getString(R.string.live_connection)};
@@ -173,16 +185,36 @@
 +        String[] values={network,battery,signal,country,rate,protocol,countries==null?connectionState:protocol+" · "+connectionState};
          StringBuilder description=new StringBuilder();
          for(int index=0;index<fields.length;index++){
-             android.text.SpannableString text=new android.text.SpannableString(labels[index]+"\n"+values[index]);
-@@ -87,9 +117,10 @@
+-            android.text.SpannableString text=new android.text.SpannableString(labels[index]+"\n"+values[index]);
+-            text.setSpan(new android.text.style.RelativeSizeSpan(.85f),0,labels[index].length(),0);
+-            text.setSpan(new android.text.style.ForegroundColorSpan(TerminalUi.MUTED),0,labels[index].length(),0);
++            String label=labels[index],value=values[index];
++            boolean signalField=index==2,stateField=countries!=null&&index==6;
++            String content=signalField?context.getString(R.string.live_signal,value):stateField?value:label+"\n"+value;
++            android.text.SpannableString text=new android.text.SpannableString(content);
++            int valueStart=signalField||stateField?0:label.length()+1;
++            text.setSpan(new android.text.style.RelativeSizeSpan(10f/12),0,text.length(),0);
++            text.setSpan(new android.text.style.ForegroundColorSpan(TerminalUi.MUTED),0,text.length(),0);
++            text.setSpan(new android.text.style.RelativeSizeSpan((index<2?16f:index==4?11f:10f)/10),valueStart,text.length(),0);
++            text.setSpan(new android.text.style.ForegroundColorSpan(index==0?TerminalUi.MINT:index==1?TerminalUi.AMBER:index==4?TerminalUi.TEXT:TerminalUi.MUTED),valueStart,text.length(),0);
+             fields[index].setText(text);description.append(labels[index]).append(": ").append(values[index]).append("; ");
+         }
++        if(delivery!=null)description.append(delivery.getText());
          setContentDescription(description);invalidate();
      }
      @Override protected void onDraw(Canvas canvas){
 -        float density=getResources().getDisplayMetrics().density,left=8*density,right=getWidth()-8*density,top=8*density+4*rowHeight+rowHeight/2,bottom=getHeight()-8*density,maximum=1;
 -        paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(density);paint.setColor(TerminalUi.FRAME);
-+        float density=getResources().getDisplayMetrics().density,left=8*density,right=countries==null?getWidth()-8*density:getWidth()/2f-8*density,top=countries==null?8*density+4.5f*rowHeight:graphTop,bottom=countries==null?getHeight()-8*density:delivery.getTop()-8*density,maximum=1;
++        float density=getResources().getDisplayMetrics().density,left=12*density,right=countries==null?getWidth()-12*density:getWidth()/2f-10*density,top=countries==null?12*density+4.5f*rowHeight:graphTop,bottom=getHeight()-8*density,maximum=1;
++        float batteryFraction=Ui60Presentation.batteryFraction(battery);
++        if(countries!=null&&batteryFraction>=0){
++            float batteryLeft=getWidth()*.62f,batteryRight=getWidth()-12*density;
++            paint.setStyle(Paint.Style.FILL);paint.setColor(TerminalUi.FRAME);canvas.drawRect(batteryLeft,batteryBarTop,batteryRight,batteryBarTop+4*density,paint);
++            paint.setColor(TerminalUi.AMBER);canvas.drawRect(batteryLeft,batteryBarTop,batteryLeft+(batteryRight-batteryLeft)*batteryFraction,batteryBarTop+4*density,paint);
++        }
 +        paint.setStyle(Paint.Style.STROKE);paint.setStrokeWidth(TerminalUi.stroke(getContext(),TerminalUi.STROKE_FINE));paint.setColor(TerminalUi.FRAME);
 +        if(countries!=null)canvas.drawLine(getWidth()/2f,choicesTop,getWidth()/2f,getHeight()-8*density,paint);
++        if(bottom>top)for(int index=0;index<4;index++){float position=top+(bottom-top)*index/3;canvas.drawLine(left,position,right,position,paint);}
          for(int index=0;index<count;index++)maximum=Math.max(maximum,samples[index]);
 -        if(count>0){line.reset();for(int index=0;index<count;index++){float x=right-(count-1-index)*(right-left)/(samples.length-1),y=bottom-samples[index]/maximum*(bottom-top);if(index==0)line.moveTo(x,y);else line.lineTo(x,y);}paint.setColor(TerminalUi.MINT);canvas.drawPath(line,paint);}
 +        if(count>0&&bottom>top){line.reset();for(int index=0;index<count;index++){float x=right-(count-1-index)*(right-left)/(samples.length-1),y=bottom-samples[index]/maximum*(bottom-top);if(index==0)line.moveTo(x,y);else line.lineTo(x,y);}paint.setColor(TerminalUi.MINT);paint.setStrokeWidth(TerminalUi.stroke(getContext(),TerminalUi.STROKE_DETAIL));canvas.drawPath(line,paint);}
@@ -317,8 +349,8 @@
          TerminalFrame(Context c,int fill,int stroke){d=c.getResources().getDisplayMetrics().density;this.fill=fill;this.stroke=stroke;}
 -        @Override protected void onBoundsChange(Rect b){border.reset();border.addRect(b.left+d/2,b.top+d/2,b.right-d/2,b.bottom-d/2,Path.Direction.CW);}
 +        @Override protected void onBoundsChange(Rect bounds){
-+            float left=bounds.left+d/2,top=bounds.top+d/2,right=bounds.right-d/2,bottom=bounds.bottom-d/2,corner=Math.min(5*d,Math.min(bounds.width(),bounds.height())/2f);
-+            border.reset();border.moveTo(left+corner,top);border.lineTo(right-corner,top);border.lineTo(right,top+corner);border.lineTo(right,bottom-corner);border.lineTo(right-corner,bottom);border.lineTo(left+corner,bottom);border.lineTo(left,bottom-corner);border.lineTo(left,top+corner);border.close();
++            float left=bounds.left+d/2,top=bounds.top+d/2,right=bounds.right-d/2,bottom=bounds.bottom-d/2;
++            border.reset();border.addRect(left,top,right,bottom,Path.Direction.CW);
 +        }
          @Override public void draw(Canvas canvas){
              Rect b=getBounds();canvas.save();canvas.clipPath(border);paint.setStyle(Paint.Style.FILL);paint.setColor(fill);canvas.drawRect(b,paint);
@@ -329,7 +361,7 @@
          @Override public void setAlpha(int alpha){paint.setAlpha(alpha);invalidateSelf();}
 --- /dev/null
 +++ b/clients/android/app/src/main/java/com/familyconnect/app/Ui60Presentation.java
-@@ -0,0 +1,15 @@
+@@ -0,0 +1,20 @@
 +package com.familyconnect.app;
 +
 +final class Ui60Presentation {
@@ -343,6 +375,11 @@
 +        return R.string.connecting;
 +    }
 +    static int mapHeight(int available,int minimum){return available>=minimum?available:0;}
++    static float batteryFraction(String value){
++        if(value==null||!value.endsWith("%"))return -1;
++        try{int level=Integer.parseInt(value.substring(0,value.length()-1));return level>=0&&level<=100?level/100f:-1;}
++        catch(NumberFormatException unknown){return -1;}
++    }
 +    static int dialHeight(int width,int height,int minimum){return width>height?minimum:Math.max(minimum,Math.round(width*.60f));}
 +}
 --- /dev/null
@@ -361,13 +398,19 @@
 +</resources>
 --- /dev/null
 +++ b/clients/android/app/src/test/java/com/familyconnect/app/Ui60PresentationTest.java
-@@ -0,0 +1,27 @@
+@@ -0,0 +1,33 @@
 +package com.familyconnect.app;
 +
 +import org.junit.Test;
 +import static org.junit.Assert.*;
 +
 +public final class Ui60PresentationTest {
++    @Test public void batteryBarUsesOnlyValidObservedPercent(){
++        assertEquals(0f,Ui60Presentation.batteryFraction("0%"),0f);
++        assertEquals(.42f,Ui60Presentation.batteryFraction("42%"),0f);
++        assertEquals(1f,Ui60Presentation.batteryFraction("100%"),0f);
++        for(String value:new String[]{null,"—","42","101%","-1%","unknown%"})assertEquals(-1f,Ui60Presentation.batteryFraction(value),0f);
++    }
 +    @Test public void truthfulStates(){
 +        assertEquals(R.string.off,Ui60Presentation.status("off",false));
 +        assertEquals(R.string.connecting,Ui60Presentation.status("connecting",false));
