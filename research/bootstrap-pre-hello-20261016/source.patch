@@ -1,0 +1,364 @@
+--- a/carrier/bootstrap/protocol.go
++++ b/carrier/bootstrap/protocol.go
+@@ -291,6 +291,7 @@
+ 		return roombroker.Descriptor{}, err
+ 	}
+ 	defer session.Close()
++	ctx = startupdiag.Bootstrap(ctx, hex.EncodeToString(session.server[:]))
+ 	readerDone := make(chan struct{})
+ 	go func() { defer close(readerDone); readLease(ctx, session) }()
+ 	defer func() { cancel(); carrier.Close(); <-readerDone }()
+@@ -304,6 +305,7 @@
+ 	}
+ 	defer secured.Close()
+ 	event("bootstrap_family_auth")
++	startupdiag.BootstrapAuthenticated(ctx)
+ 	descriptor, err := requestTransport(ctx, secured)
+ 	if err == nil {
+ 		event("bootstrap_descriptor_received")
+--- a/carrier/startupdiag/enabled.go
++++ b/carrier/startupdiag/enabled.go
+@@ -13,10 +13,52 @@
+ 
+ 	"github.com/Joker20380/family_connect/carrier/familysession"
+ 	"github.com/Joker20380/family_connect/carrier/roombroker"
++	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ 	"github.com/Joker20380/family_connect/carrier/telemost"
+ )
+ 
+ type key struct{}
++type bootstrapKey struct{}
++type bootstrapReference struct {
++	tag   string
++	index int
++	owner *recorder
++}
++
++func Bootstrap(ctx context.Context, nonce string) context.Context {
++	record := get(ctx)
++	tag, status := sessiontrace.Tag(nonce)
++	if record == nil || status != "VALID" {
++		return ctx
++	}
++	record.mu.Lock()
++	defer record.mu.Unlock()
++	if record.result.Complete || record.result.Status != "RUNNING" {
++		return ctx
++	}
++	reference := bootstrapReference{tag: tag, index: -1, owner: record}
++	if len(record.result.BootstrapExchanges) < BootstrapExchangeLimit {
++		reference.index = len(record.result.BootstrapExchanges)
++		record.result.BootstrapExchanges = append(record.result.BootstrapExchanges, BootstrapExchange{Tag: tag})
++	} else {
++		record.result.BootstrapExchangesDropped++
++	}
++	return context.WithValue(ctx, bootstrapKey{}, reference)
++}
++
++func BootstrapAuthenticated(ctx context.Context) {
++	reference, ok := ctx.Value(bootstrapKey{}).(bootstrapReference)
++	record := get(ctx)
++	if !ok || record == nil || reference.owner != record || reference.index < 0 {
++		return
++	}
++	record.mu.Lock()
++	defer record.mu.Unlock()
++	if !record.result.Complete && record.result.Status == "RUNNING" {
++		record.result.BootstrapExchanges[reference.index].FamilyAuthenticated = true
++	}
++}
++
+ type recorder struct {
+ 	mu            sync.Mutex
+ 	started       time.Time
+@@ -127,7 +169,11 @@
+ 	if record.result.LocalStop != nil {
+ 		stop = record.result.LocalStop.Source
+ 	}
+-	return &Observation{Point: point, ErrorCategory: causeCode(err), ContextState: state,
++	reference, _ := ctx.Value(bootstrapKey{}).(bootstrapReference)
++	if reference.owner != record {
++		reference.tag = ""
++	}
++	return &Observation{BootstrapExchangeTag: reference.tag, Point: point, ErrorCategory: causeCode(err), ContextState: state,
+ 		StopAtObservation: stop, ElapsedMS: time.Since(record.started).Milliseconds()}
+ }
+ 
+@@ -178,6 +224,7 @@
+ 		record.mu.Lock()
+ 		defer record.mu.Unlock()
+ 		result := record.result
++		result.BootstrapExchanges = append([]BootstrapExchange(nil), result.BootstrapExchanges...)
+ 		if result.Observation != nil {
+ 			copy := *result.Observation
+ 			result.Observation = &copy
+--- a/carrier/startupdiag/result.go
++++ b/carrier/startupdiag/result.go
+@@ -1,26 +1,36 @@
+ package startupdiag
+ 
+ type Result struct {
+-	Schema               int          `json:"schema"`
+-	Attempt              int64        `json:"attempt"`
+-	StartedUnixMS        int64        `json:"started_unix_ms"`
+-	ObservedMS           int64        `json:"observed_ms"`
+-	CompletedMS          int64        `json:"completed_ms"`
+-	Complete             bool         `json:"complete"`
+-	Status               string       `json:"status"`
+-	Stage                string       `json:"stage"`
+-	Cause                string       `json:"cause"`
+-	DirectoryFingerprint string       `json:"directory_fingerprint,omitempty"`
+-	Observation          *Observation `json:"observation,omitempty"`
+-	LocalStop            *LocalStop   `json:"local_stop,omitempty"`
++	Schema                    int                 `json:"schema"`
++	Attempt                   int64               `json:"attempt"`
++	StartedUnixMS             int64               `json:"started_unix_ms"`
++	ObservedMS                int64               `json:"observed_ms"`
++	CompletedMS               int64               `json:"completed_ms"`
++	Complete                  bool                `json:"complete"`
++	Status                    string              `json:"status"`
++	Stage                     string              `json:"stage"`
++	Cause                     string              `json:"cause"`
++	DirectoryFingerprint      string              `json:"directory_fingerprint,omitempty"`
++	Observation               *Observation        `json:"observation,omitempty"`
++	LocalStop                 *LocalStop          `json:"local_stop,omitempty"`
++	BootstrapExchanges        []BootstrapExchange `json:"bootstrap_exchanges,omitempty"`
++	BootstrapExchangesDropped uint64              `json:"bootstrap_exchanges_dropped,omitempty"`
++}
++
++const BootstrapExchangeLimit = 4
++
++type BootstrapExchange struct {
++	Tag                 string `json:"bootstrap_exchange_tag"`
++	FamilyAuthenticated bool   `json:"family_authenticated"`
+ }
+ 
+ type Observation struct {
+-	Point             string `json:"point"`
+-	ErrorCategory     string `json:"error_category"`
+-	ContextState      string `json:"context_state"`
+-	StopAtObservation string `json:"stop_at_observation"`
+-	ElapsedMS         int64  `json:"elapsed_ms"`
++	BootstrapExchangeTag string `json:"bootstrap_exchange_tag,omitempty"`
++	Point                string `json:"point"`
++	ErrorCategory        string `json:"error_category"`
++	ContextState         string `json:"context_state"`
++	StopAtObservation    string `json:"stop_at_observation"`
++	ElapsedMS            int64  `json:"elapsed_ms"`
+ }
+ 
+ type LocalStop struct {
+--- /dev/null
++++ b/carrier/startupdiag/bootstrap_test.go
+@@ -0,0 +1,55 @@
++package startupdiag
++
++import (
++	"context"
++	"encoding/hex"
++	"encoding/json"
++	"os"
++	"sync"
++	"testing"
++)
++
++func TestCorrelationAttemptIsolationAndBound(test *testing.T) {
++	vpn := Start(context.Background(), 1)
++	chat := Start(vpn, 2)
++	nonce := [32]byte{1}
++	first := Bootstrap(vpn, hex.EncodeToString(nonce[:]))
++	BootstrapAuthenticated(first)
++	var workers sync.WaitGroup
++	for index := 2; index < 10; index++ {
++		workers.Add(1)
++		go func(index int) {
++			defer workers.Done()
++			nonce := [32]byte{byte(index)}
++			ctx := Bootstrap(vpn, hex.EncodeToString(nonce[:]))
++			BootstrapAuthenticated(ctx)
++			Snapshot(vpn)
++		}(index)
++	}
++	workers.Wait()
++	snapshot := Snapshot(vpn)
++	if len(snapshot.BootstrapExchanges) != 4 || snapshot.BootstrapExchangesDropped != 5 || len(Snapshot(chat).BootstrapExchanges) != 0 {
++		test.Fatal("attempt bound/isolation")
++	}
++	firstTag := snapshot.BootstrapExchanges[0].Tag
++	snapshot.BootstrapExchanges[0].Tag = "mutated"
++	Failure(first, "HELLO_RECEIVE", os.ErrDeadlineExceeded)
++	Stop(first, "CLEANUP")
++	Cancel(first)
++	Complete(first, context.Canceled)
++	actual := Snapshot(vpn)
++	if actual.Observation.BootstrapExchangeTag != firstTag || actual.Cause != "IO_DEADLINE" || actual.BootstrapExchanges[0].Tag != firstTag {
++		test.Fatal("first failure/clone lost")
++	}
++	before, _ := json.Marshal(actual)
++	BootstrapAuthenticated(Bootstrap(vpn, hex.EncodeToString(nonce[:])))
++	after, _ := json.Marshal(Snapshot(vpn))
++	if string(before) != string(after) {
++		test.Fatal("late exchange changed closed attempt")
++	}
++	inherited := Start(first, 3)
++	BootstrapAuthenticated(inherited)
++	if len(Snapshot(inherited).BootstrapExchanges) != 0 {
++		test.Fatal("inherited handle altered new attempt")
++	}
++}
+--- a/clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java
+@@ -29,7 +29,7 @@
+     static void nativeStats(Context context,org.json.JSONObject stats){
+         try{Diagnostics store=get(context);synchronized(store){
+             org.json.JSONObject startup=stats.optJSONObject("owner_startup");
+-            if(startup!=null){JsonObject input=new JsonObject();input.add("owner_startup",JsonParser.parseString(startup.toString()));store.ring.startupStats(input);}
++            if(startup!=null)nativeStartup(store.ring,startup.toString());
+             org.json.JSONArray events=stats.optJSONArray("events");
+             if(events!=null)for(int index=0;index<Math.min(32,events.length());index++)store.ring.nativeEvent(events.optString(index),System.currentTimeMillis());
+             for(String name:new String[]{"protect_ok","protect_denied"})store.ring.counter(name,stats.optLong(name,-1));
+@@ -40,6 +40,9 @@
+             store.ring.restricted(safeInput,stats.optInt("state",-1),stats.optBoolean("authorization_denied",false),System.currentTimeMillis());
+             store.save(false);
+         }}catch(Exception ignored){}
++    }
++    static void nativeStartup(DiagnosticRing ring,String startup){
++        JsonObject input=new JsonObject();input.add("owner_startup",JsonParser.parseString(startup));ring.startupStats(input);
+     }
+     private void network(){
+         ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);NetworkCapabilities caps=manager.getNetworkCapabilities(manager.getActiveNetwork());
+--- a/clients/android/app/src/main/java/com/familyconnect/app/RestrictedStartup.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/RestrictedStartup.java
+@@ -1,6 +1,7 @@
+ package com.familyconnect.app;
+ 
+ import com.google.gson.JsonElement;
++import com.google.gson.JsonArray;
+ import com.google.gson.JsonObject;
+ 
+ final class RestrictedStartup {
+@@ -21,7 +22,33 @@
+         if(RestrictedTrace.tag(fingerprint))safe.addProperty("directory_fingerprint",fingerprint);
+         projectFacts(source,safe,"observation");
+         projectFacts(source,safe,"local_stop");
++        projectBootstrap(source,safe);
+         return safe;
++    }
++    private static void projectBootstrap(JsonObject source,JsonObject safe){
++        JsonElement exchanges=source.get("bootstrap_exchanges");
++        if(exchanges==null||!exchanges.isJsonArray())return;
++        JsonArray output=new JsonArray();
++        long dropped=0;
++        JsonElement count=source.get("bootstrap_exchanges_dropped");
++        if(count!=null&&count.isJsonPrimitive()&&count.getAsJsonPrimitive().isNumber()){
++            try{dropped=Math.max(0,count.getAsLong());}catch(RuntimeException ignored){}
++        }
++        JsonArray input=exchanges.getAsJsonArray();
++        for(int index=0;index<Math.min(4,input.size());index++){
++            JsonElement entry=input.get(index);
++            if(!entry.isJsonObject())continue;
++            JsonObject exchange=entry.getAsJsonObject();
++            String tag=RestrictedTrace.text(exchange,"bootstrap_exchange_tag");
++            JsonElement authenticated=exchange.get("family_authenticated");
++            if(!RestrictedTrace.tag(tag)||authenticated==null||!authenticated.isJsonPrimitive()||!authenticated.getAsJsonPrimitive().isBoolean())continue;
++            JsonObject projected=new JsonObject();
++            projected.addProperty("bootstrap_exchange_tag",tag);
++            projected.addProperty("family_authenticated",authenticated.getAsBoolean());output.add(projected);
++        }
++        safe.add("bootstrap_exchanges",output);
++        long excess=Math.max(0,input.size()-output.size());
++        safe.addProperty("bootstrap_exchanges_dropped",dropped>Long.MAX_VALUE-excess?Long.MAX_VALUE:dropped+excess);
+     }
+     private static final String CAUSES="NONE|CANCELLED|DEADLINE|IO_DEADLINE|CLOSED_PIPE|TIMEOUT_UNQUALIFIED|CERTIFICATE_TIME_INVALID|CERTIFICATE_INVALID|CERTIFICATE_AUTHORITY|CERTIFICATE_HOSTNAME|PROVIDER_API|CARRIER_CLOSED|EOF|PROTOCOL_REJECTED|CREDENTIALS_REJECTED|DESCRIPTOR_REJECTED|DESCRIPTOR_EXPIRED|EXCHANGE_CLOSED|UNKNOWN";
+     private static final String STOPS="NONE|STARTUP_BUDGET|CONNECT_CANCEL|CLEANUP";
+@@ -33,6 +60,8 @@
+         JsonElement input=source.get(name);if(input==null||!input.isJsonObject())return;
+         JsonObject facts=input.getAsJsonObject(),output=new JsonObject();
+         if(name.equals("observation")){
++            String tag=RestrictedTrace.text(facts,"bootstrap_exchange_tag");
++            if(RestrictedTrace.tag(tag))output.addProperty("bootstrap_exchange_tag",tag);
+             code(facts,output,"point","FAMILY_RECEIVE|STARTUP_CALLER");
+             code(facts,output,"error_category",CAUSES);
+             code(facts,output,"context_state","LIVE|DEADLINE|CANCELLED");
+--- /dev/null
++++ b/clients/android/app/src/test/java/com/familyconnect/app/BootstrapCorrelationTest.java
+@@ -0,0 +1,74 @@
++package com.familyconnect.app;
++
++import com.google.gson.*;
++import java.io.*;
++import java.nio.charset.StandardCharsets;
++import java.nio.file.*;
++import org.junit.Test;
++import static org.junit.Assert.*;
++
++public class BootstrapCorrelationTest {
++    private JsonObject receipt()throws Exception{
++        try(InputStream input=getClass().getResourceAsStream("/bootstrap-deadline-native.json")){
++            assertNotNull("real lease fixture receipt required",input);
++            return JsonParser.parseString(new String(input.readAllBytes(),StandardCharsets.UTF_8)).getAsJsonObject();
++        }
++    }
++    private String tag(JsonObject startup){return startup.getAsJsonArray("bootstrap_exchanges").get(0).getAsJsonObject().get("bootstrap_exchange_tag").getAsString();}
++    @Test public void realPreHelloReceiptSurvivesNormalBundle()throws Exception{
++        JsonObject receipt=receipt(),startup=receipt.getAsJsonObject("owner_startup");
++        long started=startup.get("started_unix_ms").getAsLong();
++        DiagnosticRing ring=new DiagnosticRing("synthetic","research",84,31);
++        ring.event(new ConnectivityOrchestrator.Event("connect_requested","restricted",null,ConnectivityOrchestrator.State.CONNECTING,0),started-1);
++        Diagnostics.nativeStartup(ring,startup.toString());
++        String expected=tag(startup);
++        Path incident=Files.createTempFile("correlation-incident-",".json");
++        try{
++            Files.write(incident,ring.snapshot().toString().getBytes(StandardCharsets.UTF_8));
++            JsonObject late=startup.deepCopy();late.addProperty("cause","CANCELLED");late.getAsJsonArray("bootstrap_exchanges").get(0).getAsJsonObject().addProperty("bootstrap_exchange_tag","f".repeat(64));
++            Diagnostics.nativeStartup(ring,late.toString());ring.cleanup(true,started+3000);
++            assertEquals(expected,tag(ring.snapshot().getAsJsonObject("restricted_startup")));
++            ring.event(new ConnectivityOrchestrator.Event("connect_requested","restricted",null,ConnectivityOrchestrator.State.CONNECTING,0),started+4000);
++            Diagnostics.nativeStartup(ring,late.toString());
++            assertEquals(0,ring.snapshot().getAsJsonObject("restricted_startup").size());
++            JsonObject bundle=new JsonObject();
++            DiagnosticRing.exportRecord(bundle,"incident",Files.readAllBytes(incident),"synthetic");
++            DiagnosticRing.exportRecord(bundle,"ring",ring.snapshot().toString().getBytes(StandardCharsets.UTF_8),"synthetic");
++            JsonObject exported=JsonParser.parseString(new String(DiagnosticRing.exportBytes(bundle),StandardCharsets.UTF_8)).getAsJsonObject();
++            JsonObject actual=exported.getAsJsonObject("incident").getAsJsonObject("restricted_startup");
++            assertEquals(expected,tag(actual));
++            assertEquals(startup.get("cause"),actual.get("cause"));
++            assertEquals("HELLO_RECEIVE",actual.get("stage").getAsString());
++            assertEquals(startup.get("observation"),actual.get("observation"));
++            assertEquals("CLEANUP",actual.getAsJsonObject("local_stop").get("source").getAsString());
++            boolean matched=false;
++            for(JsonElement element:receipt.getAsJsonObject("ownership").getAsJsonArray("events")){
++                JsonObject event=element.getAsJsonObject();
++                if(event.has("exchange")&&expected.equals(event.get("exchange").getAsString())&&"wait".equals(event.get("action").getAsString())){
++                    assertEquals(receipt.get("holder_dedicated_tag"),event.get("generation"));
++                    assertEquals("true",event.get("same_identity").getAsString());matched=true;
++                }
++            }
++            assertTrue("export must match real server wait",matched);
++            assertFalse(actual.has("session_tag"));
++        }finally{Files.deleteIfExists(incident);}
++    }
++    @Test public void optionalLegacyPrivacyAndBound()throws Exception{
++        JsonObject startup=receipt().getAsJsonObject("owner_startup");
++        JsonObject legacy=startup.deepCopy();legacy.remove("bootstrap_exchanges");legacy.getAsJsonObject("observation").remove("bootstrap_exchange_tag");legacy.addProperty("cause","UNKNOWN");
++        assertFalse(RestrictedStartup.project(legacy).has("bootstrap_exchanges"));
++        assertEquals("UNKNOWN",RestrictedStartup.project(legacy).get("cause").getAsString());
++        JsonArray entries=startup.getAsJsonArray("bootstrap_exchanges");
++        JsonObject first=entries.get(0).getAsJsonObject();first.addProperty("nonce","secret");first.addProperty("room_url","secret");
++        first.addProperty("family_authenticated",false);
++        for(int index=0;index<7;index++)entries.add(first.deepCopy());
++        startup.addProperty("bootstrap_exchanges_dropped",2);
++        JsonObject safe=RestrictedStartup.project(startup);
++        assertEquals(4,safe.getAsJsonArray("bootstrap_exchanges").size());
++        assertEquals(6,safe.get("bootstrap_exchanges_dropped").getAsLong());
++        assertFalse(safe.getAsJsonArray("bootstrap_exchanges").get(0).getAsJsonObject().get("family_authenticated").getAsBoolean());
++        assertFalse(safe.toString().contains("secret"));
++        first.addProperty("bootstrap_exchange_tag","https://private.invalid");
++        assertFalse(RestrictedStartup.project(startup).toString().contains("private.invalid"));
++    }
++}
+--- /dev/null
++++ b/clients/android/app/src/test/resources/bootstrap-deadline-native.json
+@@ -0,0 +1 @@
++{"holder_dedicated_tag":"677b0ea21122aa036630b482e450c827619778ed30e48c0e8384183931202956","owner_startup":{"schema":1,"attempt":2,"started_unix_ms":1792145970288,"observed_ms":2000,"completed_ms":2000,"complete":true,"status":"FAILED","stage":"HELLO_RECEIVE","cause":"CLOSED_PIPE","observation":{"bootstrap_exchange_tag":"b21696d18cd0756ce7b577b1d95f466b904603720c93fafc98446b07691b2db9","point":"FAMILY_RECEIVE","error_category":"CLOSED_PIPE","context_state":"DEADLINE","stop_at_observation":"NONE","elapsed_ms":2000},"local_stop":{"source":"CLEANUP","elapsed_ms":2000},"bootstrap_exchanges":[{"bootstrap_exchange_tag":"b21696d18cd0756ce7b577b1d95f466b904603720c93fafc98446b07691b2db9","family_authenticated":true}]},"ownership":{"schema":"admission-ownership-v1","limited":false,"events":[{"sequence":1,"timestamp_ms":1792145970270,"exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","scope":"broker_identity","action":"authenticated","started":false,"claimed":false,"present":false,"same_identity":"unknown","reason":"ok"},{"sequence":2,"timestamp_ms":1792145970275,"exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","holder_exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","scope":"broker_identity","action":"grant","generation":"677b0ea21122aa036630b482e450c827619778ed30e48c0e8384183931202956","holder_state":"AUTHORIZED","started":false,"claimed":false,"present":true,"created_ms":1792145970275,"deadline_ms":1792146030275,"lease_deadline_ms":1792146570275,"same_identity":"true","reason":"acquired"},{"sequence":3,"timestamp_ms":1792145970275,"exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","scope":"broker_identity","action":"hello_sent","started":false,"claimed":false,"present":false,"same_identity":"unknown","reason":"ok"},{"sequence":4,"timestamp_ms":1792145970277,"holder_exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","scope":"broker_identity","action":"transition","generation":"677b0ea21122aa036630b482e450c827619778ed30e48c0e8384183931202956","holder_state":"CREATING","started":true,"claimed":false,"present":true,"created_ms":1792145970275,"deadline_ms":1792146030275,"lease_deadline_ms":1792146570275,"same_identity":"unknown","reason":""},{"sequence":5,"timestamp_ms":1792145970278,"holder_exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","scope":"broker_identity","action":"transition","generation":"677b0ea21122aa036630b482e450c827619778ed30e48c0e8384183931202956","holder_state":"CREATED","started":true,"claimed":false,"present":true,"created_ms":1792145970275,"deadline_ms":1792146090277,"lease_deadline_ms":1792146570275,"same_identity":"unknown","reason":""},{"sequence":6,"timestamp_ms":1792145970278,"holder_exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","scope":"broker_identity","action":"transition","generation":"677b0ea21122aa036630b482e450c827619778ed30e48c0e8384183931202956","holder_state":"GATEWAY_JOINING","started":true,"claimed":false,"present":true,"created_ms":1792145970275,"deadline_ms":1792146090277,"lease_deadline_ms":1792146570275,"same_identity":"unknown","reason":""},{"sequence":7,"timestamp_ms":1792145970281,"holder_exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","scope":"broker_identity","action":"transition","generation":"677b0ea21122aa036630b482e450c827619778ed30e48c0e8384183931202956","holder_state":"READY","started":true,"claimed":false,"present":true,"created_ms":1792145970275,"deadline_ms":1792146090277,"lease_deadline_ms":1792146570275,"same_identity":"unknown","reason":""},{"sequence":8,"timestamp_ms":1792145970281,"holder_exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","scope":"broker_identity","action":"transition","generation":"677b0ea21122aa036630b482e450c827619778ed30e48c0e8384183931202956","holder_state":"CLIENT_ISSUED","started":true,"claimed":false,"present":true,"created_ms":1792145970275,"deadline_ms":1792146030281,"lease_deadline_ms":1792146570275,"same_identity":"unknown","reason":""},{"sequence":9,"timestamp_ms":1792145970283,"exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","holder_exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","scope":"broker_identity","action":"claim","generation":"677b0ea21122aa036630b482e450c827619778ed30e48c0e8384183931202956","holder_state":"CLIENT_ISSUED","started":true,"claimed":true,"present":true,"created_ms":1792145970275,"deadline_ms":1792146030281,"lease_deadline_ms":1792146570275,"same_identity":"unknown","reason":"descriptor_claimed"},{"sequence":10,"timestamp_ms":1792145970283,"exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","scope":"broker_identity","action":"descriptor_sent","started":false,"claimed":false,"present":false,"same_identity":"unknown","reason":"ok"},{"sequence":11,"timestamp_ms":1792145970286,"exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","scope":"broker_identity","action":"handoff","started":false,"claimed":false,"present":false,"same_identity":"unknown","reason":"ok"},{"sequence":12,"timestamp_ms":1792145970286,"exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","scope":"broker_identity","action":"exchange_end","started":false,"claimed":false,"present":false,"same_identity":"unknown","reason":"ok"},{"sequence":13,"timestamp_ms":1792145970288,"holder_exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","scope":"broker_identity","action":"transition","generation":"677b0ea21122aa036630b482e450c827619778ed30e48c0e8384183931202956","holder_state":"ACTIVE","started":true,"claimed":true,"present":true,"created_ms":1792145970275,"deadline_ms":1792146030281,"lease_deadline_ms":1792146570275,"same_identity":"unknown","reason":""},{"sequence":14,"timestamp_ms":1792145970398,"exchange":"b21696d18cd0756ce7b577b1d95f466b904603720c93fafc98446b07691b2db9","scope":"broker_identity","action":"authenticated","started":false,"claimed":false,"present":false,"same_identity":"unknown","reason":"ok"},{"sequence":15,"timestamp_ms":1792145970402,"exchange":"b21696d18cd0756ce7b577b1d95f466b904603720c93fafc98446b07691b2db9","holder_exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","scope":"broker_identity","action":"busy","generation":"677b0ea21122aa036630b482e450c827619778ed30e48c0e8384183931202956","holder_state":"ACTIVE","started":true,"claimed":true,"present":true,"created_ms":1792145970275,"deadline_ms":1792146030281,"lease_deadline_ms":1792146570275,"same_identity":"true","reason":"device_busy"},{"sequence":16,"timestamp_ms":1792145970402,"exchange":"b21696d18cd0756ce7b577b1d95f466b904603720c93fafc98446b07691b2db9","holder_exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","scope":"broker_identity","action":"wait","generation":"677b0ea21122aa036630b482e450c827619778ed30e48c0e8384183931202956","holder_state":"ACTIVE","started":true,"claimed":true,"present":true,"created_ms":1792145970275,"deadline_ms":1792146030281,"lease_deadline_ms":1792146570275,"same_identity":"true","reason":"device_busy"},{"sequence":17,"timestamp_ms":1792145972289,"exchange":"b21696d18cd0756ce7b577b1d95f466b904603720c93fafc98446b07691b2db9","holder_exchange":"489d6b6f6d228b7a8c3ba965fac72c3c7bce42c8c4b300b49cc85f8f23351494","scope":"broker_identity","action":"wait_end","generation":"677b0ea21122aa036630b482e450c827619778ed30e48c0e8384183931202956","holder_state":"ACTIVE","started":true,"claimed":true,"present":true,"created_ms":1792145970275,"deadline_ms":1792146030281,"lease_deadline_ms":1792146570275,"same_identity":"true","reason":"context_cancelled"},{"sequence":18,"timestamp_ms":1792145972289,"exchange":"b21696d18cd0756ce7b577b1d95f466b904603720c93fafc98446b07691b2db9","scope":"broker_identity","action":"exchange_end","started":false,"claimed":false,"present":false,"same_identity":"unknown","reason":"context_cancelled"}]}}
+\ No newline at end of file

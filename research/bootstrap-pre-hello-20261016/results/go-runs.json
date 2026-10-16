@@ -1,0 +1,78 @@
+[
+  {
+    "mode": "normal",
+    "variant": "client",
+    "count": 1,
+    "command": [
+      "/home/joker/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+      "test",
+      "-tags=seedacceptance",
+      "-v",
+      "-count=1",
+      "-timeout=90s",
+      "-run=^TestCorrelation",
+      "./bootstrap",
+      "./startupdiag"
+    ],
+    "exit": 0,
+    "log": "client-normal.log",
+    "sha256": "d8199003079b2a92f69776827146c7dc77a00bb865a4b59b91918a50ea230197"
+  },
+  {
+    "mode": "normal",
+    "variant": "gateway",
+    "count": 1,
+    "command": [
+      "/home/joker/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+      "test",
+      "-tags=seedacceptance",
+      "-v",
+      "-count=1",
+      "-timeout=90s",
+      "-run=^TestCorrelation",
+      "./cmd/bootstrap-broker"
+    ],
+    "exit": 0,
+    "log": "gateway-normal.log",
+    "sha256": "d27590f8817177f5b00858b8d609664556165cf39c8cf21c670bcfdce73c062c"
+  },
+  {
+    "mode": "race",
+    "variant": "client",
+    "count": 3,
+    "command": [
+      "/home/joker/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+      "test",
+      "-tags=seedacceptance",
+      "-v",
+      "-count=3",
+      "-timeout=90s",
+      "-race",
+      "-run=^TestCorrelation",
+      "./bootstrap",
+      "./startupdiag"
+    ],
+    "exit": 0,
+    "log": "client-race.log",
+    "sha256": "b81ba549bb3f61a2fc709ec83a5530549faef81de2ce5cef5c2185694200313d"
+  },
+  {
+    "mode": "race",
+    "variant": "gateway",
+    "count": 3,
+    "command": [
+      "/home/joker/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+      "test",
+      "-tags=seedacceptance",
+      "-v",
+      "-count=3",
+      "-timeout=90s",
+      "-race",
+      "-run=^TestCorrelation",
+      "./cmd/bootstrap-broker"
+    ],
+    "exit": 0,
+    "log": "gateway-race.log",
+    "sha256": "b4d730b33364c8cbda5408d13901c2558a2488fda6904434bd998bb61bee8ed8"
+  }
+]

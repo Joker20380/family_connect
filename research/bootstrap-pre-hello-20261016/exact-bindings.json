@@ -1,0 +1,122 @@
+{
+  "carrier/bootstrap/protocol.go": {
+    "C_NEW": "61bcdce34f004ea5d0c1bd20ff5012152c8b7dbf120d0bb8ee07b92d60550f6a",
+    "diagnostic": "a99e2f18f96c26b5a913f9ba656f5eca085a3958dc999ae571dfe0707d8f7c19",
+    "gateway": "61bcdce34f004ea5d0c1bd20ff5012152c8b7dbf120d0bb8ee07b92d60550f6a"
+  },
+  "carrier/startupdiag/enabled.go": {
+    "C_NEW": "c3d24bc16e9273a6207474d5665b26a289531894314f57b6de014b85aa877cdb",
+    "diagnostic": "86f2874879cdfcdcddc0b41943fc36c663f3f12fd0418b93d9780a7a5e06cf45",
+    "gateway": "81d7b51d30771cb1ec116e9e4890fa995f724c58e958e125543f8ee094d90a2f"
+  },
+  "carrier/startupdiag/result.go": {
+    "C_NEW": "224e74c3489d60b0f0f2e819206ea34b57e9336f999be6acb580e09685da8269",
+    "diagnostic": "4802c80fcfb5299de29349156c757c55f06c888872b535eda527b7f12e6ff70c",
+    "gateway": "a9685d4f2c1bf219be50a08d7fbce1b19ed0c7ee7cfd25153bf3e5fc2fdff884"
+  },
+  "carrier/startupdiag/bootstrap_test.go": {
+    "C_NEW": null,
+    "diagnostic": "f4bd4a84cee89aed54a339e42575274cdd4670952e4286df63e00c7d0fbdf3c7",
+    "gateway": null
+  },
+  "clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java": {
+    "C_NEW": "36193efb27920a455dbe7205db6ffab964bf26d23d3aed47e31168e36a86dcdf",
+    "diagnostic": "9422534be08b10ded8c5f4211a7cf023c9ae72a05e69ed8a80751c4d5e885065",
+    "gateway": null
+  },
+  "clients/android/app/src/main/java/com/familyconnect/app/RestrictedStartup.java": {
+    "C_NEW": "64c4de506ba2804811a9c980b910a79e1e7695cb5e8c7c88852f9b41849028de",
+    "diagnostic": "14e0d7e20efe0e44b7ec360c4d2ff2cecd7fd3350e25e19e7d2b4664d1cd538f",
+    "gateway": null
+  },
+  "clients/android/app/src/test/java/com/familyconnect/app/BootstrapCorrelationTest.java": {
+    "C_NEW": null,
+    "diagnostic": "896733f044051b4b1aa9a9052cdc15a639919091e94ae569e5d318610b998ee7",
+    "gateway": null
+  },
+  "clients/android/app/src/test/resources/bootstrap-deadline-native.json": {
+    "C_NEW": null,
+    "diagnostic": "c8927c243f62af4300f460d4122f6ff37d59c67fd8cef06198acbf907e315458",
+    "gateway": null
+  },
+  "carrier/bootstrap/carrier.go": {
+    "C_NEW": "f46f5d0b6cab633def4956bd424189f13006eb17b4549b343ef0ec59df2e8958",
+    "diagnostic": "f46f5d0b6cab633def4956bd424189f13006eb17b4549b343ef0ec59df2e8958",
+    "gateway": "84830f2c31d07efad50ae19fd18efe8b2b2c4689e813a660c741b208f3f10f5a"
+  },
+  "carrier/roombroker/ownership.go": {
+    "C_NEW": "49a879222dd13c5209b2b467ecd1e56bb156dbc153c092e4fb30771174a45f8b",
+    "diagnostic": "49a879222dd13c5209b2b467ecd1e56bb156dbc153c092e4fb30771174a45f8b",
+    "gateway": "49a879222dd13c5209b2b467ecd1e56bb156dbc153c092e4fb30771174a45f8b"
+  },
+  "carrier/cmd/bootstrap-broker/ownership.go": {
+    "C_NEW": "60f3c73d5c09db09e0c57b2c0f90c3582c74ebbcc44786f7f91912ab9688890b",
+    "diagnostic": "60f3c73d5c09db09e0c57b2c0f90c3582c74ebbcc44786f7f91912ab9688890b",
+    "gateway": "60f3c73d5c09db09e0c57b2c0f90c3582c74ebbcc44786f7f91912ab9688890b"
+  },
+  "carrier/cmd/bootstrap-broker/main.go": {
+    "C_NEW": "3e0047b1c55591add788a6728b6f134aead12387c3e5033a94f4a38b6e3e4faa",
+    "diagnostic": "3e0047b1c55591add788a6728b6f134aead12387c3e5033a94f4a38b6e3e4faa",
+    "gateway": "5a0d3ff13dc9c39954b61987f92e954e1b0f4f59f55531df8f11efc6cbfb4b65"
+  },
+  "carrier/familysession/session.go": {
+    "C_NEW": "eb686d7c9e4ab00d4265cde70f688bbb1a5ec1ceee546da8010ea74ad25756d5",
+    "diagnostic": "eb686d7c9e4ab00d4265cde70f688bbb1a5ec1ceee546da8010ea74ad25756d5",
+    "gateway": "51bddca0c1cb2966c4d5aeb1ebd5e360cbeede5a5508e14d79a88d3d29a09619"
+  },
+  "carrier/familysession/receive_observer.go": {
+    "C_NEW": "5988fe2a03ea0fabc0b72a5e5842735bb8658644ead169ffbdd49bfb36ba8445",
+    "diagnostic": "5988fe2a03ea0fabc0b72a5e5842735bb8658644ead169ffbdd49bfb36ba8445",
+    "gateway": null
+  },
+  "carrier/sessiontrace/trace.go": {
+    "C_NEW": "38f8e6213c7c1b12aca79dcfccfbab77f4a1fd694218d85f0568ce07abd3bc20",
+    "diagnostic": "38f8e6213c7c1b12aca79dcfccfbab77f4a1fd694218d85f0568ce07abd3bc20",
+    "gateway": "38f8e6213c7c1b12aca79dcfccfbab77f4a1fd694218d85f0568ce07abd3bc20"
+  },
+  "carrier/startupdiag/stop.go": {
+    "C_NEW": "ef517c0b97e17cfa53c276b0a8464ca87333d40a63319c85b2dee3be380fbee8",
+    "diagnostic": "ef517c0b97e17cfa53c276b0a8464ca87333d40a63319c85b2dee3be380fbee8",
+    "gateway": null
+  },
+  "pilot/android-restricted/native/startup_owner.go": {
+    "C_NEW": "f9e96fdad59e255dc4808a196e146265d3ad77ead697b7ac33b2ebdbf99700f5",
+    "diagnostic": "f9e96fdad59e255dc4808a196e146265d3ad77ead697b7ac33b2ebdbf99700f5",
+    "gateway": null
+  },
+  "pilot/android-restricted/native/main.go": {
+    "C_NEW": "dc7fffdc80fd312869cd9008226eb27c26ea7e3853cec7d32189b5845cb57928",
+    "diagnostic": "dc7fffdc80fd312869cd9008226eb27c26ea7e3853cec7d32189b5845cb57928",
+    "gateway": null
+  },
+  "pilot/android-restricted/native/chat_owner.go": {
+    "C_NEW": "5a92d437a16866eebbbcd266e539d7a0fdcba60d56d580289015fd5b6768a5c2",
+    "diagnostic": "5a92d437a16866eebbbcd266e539d7a0fdcba60d56d580289015fd5b6768a5c2",
+    "gateway": null
+  },
+  "pilot/android-restricted/native/bridge.c": {
+    "C_NEW": "89f37742fe0399477df70d97a3dc694dc6881196d25c3de76f38cba20ef4583e",
+    "diagnostic": "89f37742fe0399477df70d97a3dc694dc6881196d25c3de76f38cba20ef4583e",
+    "gateway": null
+  },
+  "clients/android/app/src/main/java/com/familyconnect/app/NativeRestricted.java": {
+    "C_NEW": "2feb811258e9aa0c55cfda4ef194e1a01cd7b5ce4f2b8e1918dbaa9a93cb910e",
+    "diagnostic": "2feb811258e9aa0c55cfda4ef194e1a01cd7b5ce4f2b8e1918dbaa9a93cb910e",
+    "gateway": null
+  },
+  "clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java": {
+    "C_NEW": "e14483bd5f65cd77d234a0708b10ae3dad573ec9d757b435e3f8857b0a25dd47",
+    "diagnostic": "e14483bd5f65cd77d234a0708b10ae3dad573ec9d757b435e3f8857b0a25dd47",
+    "gateway": null
+  },
+  "clients/android/app/src/publicStartup/java/com/familyconnect/app/StartupDiagnostics.java": {
+    "C_NEW": "02e9ad77efa1597ca38b7170d5b90899f107a1a820afe55853969ff2215ef149",
+    "diagnostic": "02e9ad77efa1597ca38b7170d5b90899f107a1a820afe55853969ff2215ef149",
+    "gateway": null
+  },
+  "clients/android/app/build.gradle": {
+    "C_NEW": "612c2275f882743dafc91f63df3947e50c98508fc493d656f51c51f92b045cd4",
+    "diagnostic": "612c2275f882743dafc91f63df3947e50c98508fc493d656f51c51f92b045cd4",
+    "gateway": null
+  }
+}

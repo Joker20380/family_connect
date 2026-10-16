@@ -1,0 +1,41 @@
+{
+  "command": [
+    "/home/joker/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/gradle-8.11.1/bin/gradle",
+    "--no-daemon",
+    "--max-workers=1",
+    "--offline",
+    "-I",
+    "/home/joker/PycharmProjects/family_connect/state-client-build/bootstrap-pre-hello-correlation-1/gradle-build/android.init.gradle",
+    "--project-cache-dir",
+    "/home/joker/PycharmProjects/family_connect/state-client-build/bootstrap-pre-hello-correlation-1/gradle-build/cache",
+    "-PfcTargetAbi=arm64-v8a",
+    "-PfcFriendsCi=false",
+    "-PfcProvisioningSeamSource=d8bdb76cc1e6c60867de8a1e2004a2db0c28c9f9ad8d5dc8b37052fdc84c4676",
+    "-PfcProvisioningSeamAssets=/home/joker/PycharmProjects/family_connect/state-client-build/bootstrap-pre-hello-correlation-1/gradle-build/research-assets",
+    "-PfcBuildPython=/home/joker/PycharmProjects/family_connect/state-client-build/field65-export16/telemost-lease-continuity-1/build/tools/python/bin/python3.10",
+    "-PfcRadioNative=/home/joker/PycharmProjects/family_connect/state-client-build/field65-export16/exit-krasnodar-candidate-1/audio-native",
+    "-PfcFriendsRestrictedDirectory=/home/joker/PycharmProjects/family_connect/state-client-build/bootstrap-pre-hello-correlation-1/gradle-build/native",
+    ":app:assembleResearchProvisioning",
+    ":app:testResearchProvisioningUnitTest",
+    "--tests",
+    "com.familyconnect.app.StartupFidelityTest",
+    "--tests",
+    "com.familyconnect.app.RestrictedStartupTest",
+    "--tests",
+    "com.familyconnect.app.DiagnosticRingTest",
+    "--tests",
+    "com.familyconnect.app.BootstrapCorrelationTest"
+  ],
+  "source_delta_sha256": "d8bdb76cc1e6c60867de8a1e2004a2db0c28c9f9ad8d5dc8b37052fdc84c4676",
+  "variant": "researchProvisioning",
+  "native_sha256": "be70a66ccc2bcbf0478915fd414c32de3bedb2a0ae0c3222a53e65eebd0a92b2",
+  "device_tests": "NOT_RUN",
+  "exit": 1,
+  "log_sha256": "9b1aa75f555ee440aebd4b838e438ac8326041fb39b5cd7bfe1f9c0b24ff7231",
+  "apk": {
+    "name": "app-researchProvisioning-unsigned.apk",
+    "sha256": "88590f36a0bf7caee7b189912385648d70a049755ee9cbef135801c9d76c5fd8",
+    "embedded_native_sha256": "be70a66ccc2bcbf0478915fd414c32de3bedb2a0ae0c3222a53e65eebd0a92b2",
+    "size": 55986184
+  }
+}

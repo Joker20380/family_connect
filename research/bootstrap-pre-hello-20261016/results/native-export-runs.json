@@ -1,0 +1,26 @@
+[
+  {
+    "mode": "normal",
+    "count": 1,
+    "exit": 0,
+    "run": "^TestCorrelationLease$/^B_active_deadline$",
+    "package": "./bootstrap",
+    "tags": "seedacceptance",
+    "timeout": "30s",
+    "race": false,
+    "log_sha256": "90e3979357db22729a780fccc9cf5f2e3eb940782eee3efebb6fea25165a2cc0",
+    "scope": "supplemental actual native startupStats boundary; not full matrix"
+  },
+  {
+    "mode": "race",
+    "count": 3,
+    "exit": 0,
+    "run": "^TestCorrelationLease$/^B_active_deadline$",
+    "package": "./bootstrap",
+    "tags": "seedacceptance",
+    "timeout": "30s",
+    "race": true,
+    "log_sha256": "e07a496ced57ae767a0d74415becd39cedca98c9081e5e7df63569f180756422",
+    "scope": "supplemental actual native startupStats boundary; not full matrix"
+  }
+]

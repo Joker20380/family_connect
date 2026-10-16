@@ -1,0 +1,16 @@
+=== RUN   TestCorrelationCaptureLifecycle
+=== RUN   TestCorrelationCaptureLifecycle/disabled
+=== RUN   TestCorrelationCaptureLifecycle/normal
+=== RUN   TestCorrelationCaptureLifecycle/output_failure
+=== RUN   TestCorrelationCaptureLifecycle/expired
+=== RUN   TestCorrelationCaptureLifecycle/limited
+--- PASS: TestCorrelationCaptureLifecycle (0.01s)
+    --- PASS: TestCorrelationCaptureLifecycle/disabled (0.00s)
+    --- PASS: TestCorrelationCaptureLifecycle/normal (0.00s)
+    --- PASS: TestCorrelationCaptureLifecycle/output_failure (0.00s)
+    --- PASS: TestCorrelationCaptureLifecycle/expired (0.01s)
+    --- PASS: TestCorrelationCaptureLifecycle/limited (0.00s)
+=== RUN   TestCorrelationCaptureWriteFailure
+--- PASS: TestCorrelationCaptureWriteFailure (0.00s)
+PASS
+ok  	fixture.invalid/gateway/cmd/bootstrap-broker	0.013s

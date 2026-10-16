@@ -1,0 +1,46 @@
+[
+  {
+    "name": "com.familyconnect.app.BootstrapCorrelationTest",
+    "tests": "2",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-16T10:22:16",
+    "hostname": "joker-XPS",
+    "time": "0.039",
+    "sha256": "aae3a2fe07034905385931e8c3105b6b2f62b6d937ed365c166eb32289e8e836"
+  },
+  {
+    "name": "com.familyconnect.app.DiagnosticRingTest",
+    "tests": "5",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-16T10:22:16",
+    "hostname": "joker-XPS",
+    "time": "0.013",
+    "sha256": "866518db1d9f2f5a36fed2f86135a04910d289b8c7bd603bcca0d29c6775fad8"
+  },
+  {
+    "name": "com.familyconnect.app.RestrictedStartupTest",
+    "tests": "3",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-16T10:22:16",
+    "hostname": "joker-XPS",
+    "time": "0.011",
+    "sha256": "e2b5525fea3f9b9745af7efcb3ec4a871806af555720775883505f462047d568"
+  },
+  {
+    "name": "com.familyconnect.app.StartupFidelityTest",
+    "tests": "2",
+    "skipped": "0",
+    "failures": "0",
+    "errors": "0",
+    "timestamp": "2026-10-16T10:22:16",
+    "hostname": "joker-XPS",
+    "time": "0.02",
+    "sha256": "85212252c3e48e5e595b5c0beb48316cd16ff97a66c711f41fc00880df6e7e96"
+  }
+]

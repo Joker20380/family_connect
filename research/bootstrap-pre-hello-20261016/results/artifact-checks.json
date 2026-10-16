@@ -1,0 +1,36 @@
+{
+  "result": "PASS_UNSIGNED_LOCAL",
+  "identity": [
+    "package: name='com.familyconnect.app.friends' versionCode='84' versionName='0.1.18-research84-provisioning-seam' platformBuildVersionName='15' platformBuildVersionCode='35' compileSdkVersion='35' compileSdkVersionCodename='15'",
+    "sdkVersion:'31'",
+    "targetSdkVersion:'35'",
+    "uses-permission: name='android.permission.RECORD_AUDIO'",
+    "uses-permission: name='android.permission.INTERNET'",
+    "uses-permission: name='android.permission.ACCESS_NETWORK_STATE'",
+    "uses-permission: name='android.permission.ACCESS_COARSE_LOCATION'",
+    "uses-permission: name='android.permission.FOREGROUND_SERVICE'",
+    "uses-permission: name='android.permission.FOREGROUND_SERVICE_SPECIAL_USE'",
+    "uses-permission: name='android.permission.POST_NOTIFICATIONS'",
+    "uses-permission: name='android.permission.RECEIVE_BOOT_COMPLETED'",
+    "uses-permission: name='android.permission.REQUEST_INSTALL_PACKAGES'"
+  ],
+  "manifest_byte_identical": true,
+  "alignment_16k": true,
+  "unsigned_verify_exit": 1,
+  "unsigned_reason": "DOES NOT VERIFY\nERROR: Missing META-INF/MANIFEST.MF",
+  "apk_sha256": "b2a4b76b3218ec06f3409154a1a14f71bf4feff3206be3282c25852eabdd35ca",
+  "native_sha256": "be70a66ccc2bcbf0478915fd414c32de3bedb2a0ae0c3222a53e65eebd0a92b2",
+  "source_inventory": "b36c4a21ee6cf04acb192a0e6d140fa565b3e5ae75f6fc8d028d029c3152781d",
+  "delta_files": [
+    "carrier/bootstrap/protocol.go",
+    "carrier/startupdiag/bootstrap_test.go",
+    "carrier/startupdiag/enabled.go",
+    "carrier/startupdiag/result.go",
+    "clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java",
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedStartup.java",
+    "clients/android/app/src/test/java/com/familyconnect/app/BootstrapCorrelationTest.java",
+    "clients/android/app/src/test/resources/bootstrap-deadline-native.json"
+  ],
+  "runtime_policy_files_unchanged": true,
+  "signing_install_live_actions": 0
+}

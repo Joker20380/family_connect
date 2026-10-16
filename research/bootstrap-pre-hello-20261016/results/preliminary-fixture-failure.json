@@ -1,0 +1,21 @@
+[
+  {
+    "mode": "normal",
+    "variant": "client",
+    "count": 1,
+    "command": [
+      "/home/joker/PycharmProjects/family_connect/state-client-build/field65-export16/diag-source-freeze-1/resume-tools/go/bin/go",
+      "test",
+      "-tags=seedacceptance",
+      "-v",
+      "-count=1",
+      "-timeout=90s",
+      "-run=^TestCorrelation",
+      "./bootstrap",
+      "./startupdiag"
+    ],
+    "exit": 1,
+    "log": "client-normal.log",
+    "sha256": "8ee03447e276159bbf2fe925f3879dce4ebad9cd2b8750da557d5011d975aa1f"
+  }
+]

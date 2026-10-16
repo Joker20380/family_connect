@@ -8,6 +8,21 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### BOOTSTRAP-PRE-HELLO-CORRELATION-1 — diagnostic prerequisite complete (16.10)
+
+- [Local result](releases/2026-10-16-bootstrap-pre-hello-correlation-1.md): early
+  lease-derived exchange tag reaches normal support serialization; exact local
+  requester/holder-generation join, first failure and auth separation verified.
+- Unsigned diagnostic APKb2a4b76b…dd35ca/nativebe70a66c…0a92b2; native/JNI/full assemble
+  and12 JVM tests PASS. Code84 unchanged, no device/server actions, not a release.
+- [Next-episode runbook](../research/bootstrap-pre-hello-20261016/RUNBOOK.md) requires
+  separate authorization, fresh validity/runtime/owner/capture readiness and an
+  observed initial holder premise. Collector startup15min/512; a new process loses
+  old Broker state and cannot continue historical A. No DIRECT blocking/new identity.
+- Historical A cause remains NOT_PROVEN. Successful trial without the original
+  premise is NOT_REPRODUCED, not a fix. No automatic signing/install/restart/CONNECT,
+  supervisor promotion or public release/main merge. Prior results below unchanged.
+
 ### NEW-PAIR-OWNER-RECONNECT-ACCEPTANCE-1 — terminal FAIL_A_STARTUP (16.10)
 
 - [Final evidence](releases/2026-10-16-new-pair-owner-reconnect-acceptance-1.md):

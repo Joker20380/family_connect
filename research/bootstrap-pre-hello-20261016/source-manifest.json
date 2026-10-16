@@ -1,0 +1,38 @@
+{
+  "input_review": "a63d446acc788d791d76fa938a8575d115b5e411",
+  "input_cumulative": "c2dc3dd860044b31696893244995cbc5cc8eb805ee34319df99cce085cf40d08",
+  "files": {
+    "carrier/bootstrap/protocol.go": {
+      "before": "61bcdce34f004ea5d0c1bd20ff5012152c8b7dbf120d0bb8ee07b92d60550f6a",
+      "after": "a99e2f18f96c26b5a913f9ba656f5eca085a3958dc999ae571dfe0707d8f7c19"
+    },
+    "carrier/startupdiag/enabled.go": {
+      "before": "c3d24bc16e9273a6207474d5665b26a289531894314f57b6de014b85aa877cdb",
+      "after": "86f2874879cdfcdcddc0b41943fc36c663f3f12fd0418b93d9780a7a5e06cf45"
+    },
+    "carrier/startupdiag/result.go": {
+      "before": "224e74c3489d60b0f0f2e819206ea34b57e9336f999be6acb580e09685da8269",
+      "after": "4802c80fcfb5299de29349156c757c55f06c888872b535eda527b7f12e6ff70c"
+    },
+    "carrier/startupdiag/bootstrap_test.go": {
+      "before": null,
+      "after": "f4bd4a84cee89aed54a339e42575274cdd4670952e4286df63e00c7d0fbdf3c7"
+    },
+    "clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java": {
+      "before": "36193efb27920a455dbe7205db6ffab964bf26d23d3aed47e31168e36a86dcdf",
+      "after": "9422534be08b10ded8c5f4211a7cf023c9ae72a05e69ed8a80751c4d5e885065"
+    },
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedStartup.java": {
+      "before": "64c4de506ba2804811a9c980b910a79e1e7695cb5e8c7c88852f9b41849028de",
+      "after": "14e0d7e20efe0e44b7ec360c4d2ff2cecd7fd3350e25e19e7d2b4664d1cd538f"
+    },
+    "clients/android/app/src/test/java/com/familyconnect/app/BootstrapCorrelationTest.java": {
+      "before": null,
+      "after": "896733f044051b4b1aa9a9052cdc15a639919091e94ae569e5d318610b998ee7"
+    },
+    "clients/android/app/src/test/resources/bootstrap-deadline-native.json": {
+      "before": null,
+      "after": "c8927c243f62af4300f460d4122f6ff37d59c67fd8cef06198acbf907e315458"
+    }
+  }
+}

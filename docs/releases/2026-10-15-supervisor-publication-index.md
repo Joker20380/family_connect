@@ -1,5 +1,19 @@
 # PUBLISH-SUPERVISOR-RESEARCH-STATE-1 — указатель review-публикации
 
+## Bootstrap pre-HELLO correlation —16Oct2026, local diagnostics ready
+
+[BOOTSTRAP-PRE-HELLO-CORRELATION-1](2026-10-16-bootstrap-pre-hello-correlation-1.md)
+and [source/tests/results/runbook](../../research/bootstrap-pre-hello-20261016/README.md):
+diagnostic-only delta from exact retained C_NEW; early shared lease tag survives native
+stats and ordinary Java bundle. Real local bootstrap/Family/TLS/Broker ties requester
+wait to actual holder generation/dedicated trace; role UNKNOWN unless separately proven.
+Existing server collector unchanged,15min/512 and restart/incomplete-output limits
+explicit. Fixed normal/race, native/JNI,12 JVM and unsigned full assemble PASS.
+Final local APKb2a4b76b…dd35ca/nativebe70a66c…0a92b2/cumulativeb36c4a21…52781d.
+No live action, signing/install, server binary rebuild/deploy or public release.
+Historical A cause NOT_PROVEN; no new-pair device acceptance or supervisor promotion.
+Safe fixture-derived receipts only, no owner raw export/APK/key/private journal.
+
 ## New-pair owner acceptance —16Oct2026, FAIL_A_STARTUP
 
 [NEW-PAIR-OWNER-RECONNECT-ACCEPTANCE-1](2026-10-16-new-pair-owner-reconnect-acceptance-1.md):

@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+## BOOTSTRAP-PRE-HELLO-CORRELATION-1 — local diagnostics ready (16.10)
+
+[Report](releases/2026-10-16-bootstrap-pre-hello-correlation-1.md) and
+[bounded future-trial runbook](../research/bootstrap-pre-hello-20261016/RUNBOOK.md):
+diagnostic-only derivative of retained C_NEW, not the rolled-back phone APK.
+Existing lease nonce/tag recorded before HELLO; attempt-local bounded list/auth fact
+survives actual native stats and ordinary Java incident/export projection. Real local
+lease/Family/TLS/Broker ties requester wait to holder exchange/generation/dedicated
+trace without guessing holder role. Existing gateway collector reused unchanged;
+15min/512 and restart state-loss/incomplete-output limits explicit. Fixed normal/race,
+native/JNI,12 JVM and full unsigned assemble PASS. APKb2a4b76b…dd35ca/nativebe70a66c…0a92b2,
+cumulativeb36c4a21…52781d, code84/manifest/permissions unchanged. Not signed/installed.
+LIVE_ACTIONS=0; actual gatewaya5372571 retained executable unchanged, no server rebuild
+or fresh live readiness claim. Next only separately authorized observed trial, with
+fresh environment/owner/capture readiness and observed holder premise. Historical A
+cause NOT_PROVEN; old device FAIL, rollback, smoke/reconnect and supervisor results stand.
+
 ## NEW-PAIR-OWNER-RECONNECT-ACCEPTANCE-1 — FAIL_A_STARTUP / client rolled back (16.10)
 
 [Final report](releases/2026-10-16-new-pair-owner-reconnect-acceptance-1.md): C_NEW
