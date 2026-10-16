@@ -1,5 +1,23 @@
 # PUBLISH-SUPERVISOR-RESEARCH-STATE-1 — указатель review-публикации
 
+## Gateway live rollout supplement —16Oct2026
+
+[Executable-only live report](2026-10-16-gateway-transport-progress-live-1.md) and
+[safe selected observations](evidence/2026-10-16-gateway-transport-progress-live-1.json)
+publish one controlled candidate transition, actual seed/strict served TLS/runtime
+publication and120-second observation. Candidatea5372571…885e61f remains running;
+source inventory72274642…665c42e is unchanged and is NOT a publication Git commit.
+[Existing source/build/local acceptance](2026-10-16-gateway-transport-progress-burst-candidate-1.md)
+and its patch/manifest remain authoritative; no new product source or rebuild here.
+Initial pretransition baseline fatal/guard abort and natural background renewal are
+retained separately. Only docs plus allowlisted evidence are newly public. Raw receipts,
+unit/config snapshots, private operational wrappers, exact executable/backup and APK
+remain in protected local/server storage, not accessible GitHub evidence.
+Final server-only window was valid at16Oct08:27:17UTC, earliest limit10:12:45;
+operator threshold11:34:58. Future device work requires fresh checks. Phone unchanged,
+no signing/install/CONNECT; previous owner/reconnect/supervisor statuses not promoted.
+
+
 Repository: **Joker20380/family_connect**, ветка **review/supervisor-state-20261015**.
 Первоначальная задача была publication-only; ниже отдельно отмечены последующие
 авторизованные implementation/recovery/device этапы и их ограничения. Supervisor

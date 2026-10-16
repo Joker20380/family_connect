@@ -8,6 +8,22 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### GATEWAY-TRANSPORT-PROGRESS-LIVE-1 — server step complete, device gate open (16.10)
+
+- [Report](releases/2026-10-16-gateway-transport-progress-live-1.md): candidatea5372571…885e61f
+  deployed once; seed/strict served TLS/current RU directory and fixed120s readiness PASS.
+  One earlier guard abort was before all mutations; baseline primary failure preserved.
+- Candidate remains active; no rollback. Management/config/security policy unchanged by
+  task, current4h active; natural overnight renewal/runtime changes not hidden.
+- At16Oct08:27:17UTC earliest leaf/CRL boundary10:12:45; operator threshold11:34:58.
+ 18-minute client sequence fits at check only; charge later preparation to actual validity.
+- Next separately authorize short fresh environment/owner check and existing C_NEW
+  signing/replace-install workflow, then bounded new-pair reconnect acceptance. Use
+  unsignedcc5b8833…c5013/native253e0e15…6f3a3 without rebuilding; do not auto CONNECT.
+- Installed old-client limits remain. No full production/new-pair device acceptance,
+  no historical B causality and no supervisor closure. Preserve old smoke PASS and
+  latest reconnect FAIL, inherited non-green suites and immutable baseline rollback.
+
 ### GATEWAY-TRANSPORT-PROGRESS-BURST-CANDIDATE-1 — local pair accepted (16.10)
 
 - [Report](releases/2026-10-16-gateway-transport-progress-burst-candidate-1.md): actual

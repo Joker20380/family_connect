@@ -1,0 +1,279 @@
+{
+  "schema": 1,
+  "task": "GATEWAY-TRANSPORT-PROGRESS-LIVE-1",
+  "result": "GATEWAY_CANDIDATE_DEPLOYED_AND_READINESS_VERIFIED",
+  "input_review": "12e71d72013e0f6ed4d0d599983d10cd7892a546",
+  "candidate_source_inventory": "722746429539a1307d693ce6fcc83579a842d3f1c549a626a36676a6d665c42e",
+  "candidate_executable_sha256": "a537257162348afc35b1ebc08755d8c5dc1cd90e74c49e3987fb3eb81885e61f",
+  "baseline_executable_sha256": "21f0a0fdc27b50c00ea922f0b716516e2422aedf1b3797369718f7d00070509a",
+  "target_abi": {
+    "architecture": "x86_64",
+    "libc": "glibc 2.43",
+    "candidate_max_required_glibc": "2.34",
+    "cgo_enabled": true,
+    "rebuild": false
+  },
+  "pretransition_guard_abort": {
+    "utc": "2026-10-15T23:13:01Z",
+    "before_stop_rename_start": true,
+    "baseline_first_failure": {
+      "utc": "2026-10-15T23:12:52.655923011Z",
+      "stage": "SEED_READ",
+      "cause": "PUBLISHER_DISCONNECTED",
+      "application_cleanup_completed": true,
+      "systemd_exit_status": 1
+    },
+    "durable_stage_readback_proved_no_deploy_intent": true,
+    "original_receipts_retained": true
+  },
+  "transition": {
+    "intent_utc": "2026-10-16T08:22:22.548231+00:00",
+    "stopped_utc": "2026-10-16T08:22:22.667760+00:00",
+    "stop_returncode": 0,
+    "replaced_utc": "2026-10-16T08:22:22.708819+00:00",
+    "started_utc": "2026-10-16T08:22:22.773725+00:00",
+    "start_returncode": 0,
+    "loaded_verified_utc": "2026-10-16T08:22:22.830413+00:00",
+    "scope": "restricted gateway executable only",
+    "session_count": "UNKNOWN_NO_LIVE_HOLDER_INVENTORY",
+    "maintenance_outage_authorized": true,
+    "existing_coordinator_and_both_node_locks_released": true
+  },
+  "gateway_final": {
+    "pid": "251251",
+    "invocation": "f58c3d9428864605adce61854d08b86d",
+    "active": "active",
+    "substate": "running",
+    "nrestarts": "0",
+    "configured_and_loaded_match": true,
+    "argv_unchanged_no_research_flags": true,
+    "listener": true
+  },
+  "seed_ready": {
+    "utc": "2026-10-16T08:22:25.762125+00:00",
+    "invocation": "f58c3d9428864605adce61854d08b86d"
+  },
+  "served_tls": {
+    "stage": "SERVER_CERTIFICATE_CHAIN",
+    "python": "3.14.4",
+    "openssl": "OpenSSL 3.5.5 27 Jan 2026",
+    "verify_flags": 557088,
+    "verify_mode": 2,
+    "check_hostname": true,
+    "ca_sha256": "9f4411d0274d4e0aa75693a60bdd70616adc174824c0d9fb7baae641a08f47c6",
+    "expected_leaf_sha256": "6cb7843e5aeef7388bc6075ac419b2973d5a67ecdbd49cdc2cfece3dc0940062",
+    "client_certificate_present": false,
+    "CLIENT_MTLS_AUTHENTICATION": "NOT_ATTEMPTED",
+    "APPLICATION_READY": "NOT_ATTEMPTED",
+    "EXPECTED_CERTIFICATE_MATCH": "PASS",
+    "SERVER_CERTIFICATE_CHAIN": "PASS"
+  },
+  "directory": {
+    "sha256": "3b40b1f52ffcf04a6005d3f3613fb9c8ae6cc8f650d74683e2662bc307f663fc",
+    "issued_at": "2026-10-16T08:22:25.759283692Z",
+    "expires_at": "2026-10-16T12:22:22.809417585Z",
+    "scope_valid": true,
+    "runtime_binding": "issued after start, same-invocation seed READY; existing directory scope validator PASS",
+    "ru_nl_equal": true,
+    "publication": "ordinary directory-sync service; no manual sync start"
+  },
+  "observation": {
+    "start_utc": "2026-10-16T08:23:47.488293+00:00",
+    "end_utc": "2026-10-16T08:25:47.488362+00:00",
+    "seconds": 120.00006914138794,
+    "pid_invocation_state_unchanged": true,
+    "new_application_fatal_receipt": false,
+    "new_systemd_terminal_receipt": false,
+    "scoped_fatal_panic_oom_failed_journal_matches": 0,
+    "journal_query_returncode": 1,
+    "long_term_or_load_acceptance": false
+  },
+  "resources": {
+    "ready": {
+      "utc": "2026-10-16T08:22:49.686887+00:00",
+      "process": {
+        "VmHWM": "22984 kB",
+        "VmRSS": "22984 kB",
+        "Threads": "7"
+      },
+      "cgroup": {
+        "memory.current": "11767808",
+        "memory.peak": "11919360",
+        "memory.max": "max",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "pids.current": "7",
+        "pids.max": "357"
+      }
+    },
+    "final": {
+      "utc": "2026-10-16T08:26:36.193499+00:00",
+      "process": {
+        "VmHWM": "23224 kB",
+        "VmRSS": "23224 kB",
+        "Threads": "7"
+      },
+      "cgroup": {
+        "memory.current": "28327936",
+        "memory.peak": "28585984",
+        "memory.max": "max",
+        "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+        "pids.current": "7",
+        "pids.max": "357"
+      }
+    },
+    "measurement": "point samples, not filled-queue/RSS capacity proof"
+  },
+  "unchanged_comparisons": {
+    "NL": {
+      "management_hashes": true,
+      "config_copies": true,
+      "unit_files": true
+    },
+    "RU": {
+      "management_hashes": true,
+      "config_copies": true,
+      "unit_files": true
+    }
+  },
+  "security_unchanged_during_resumed_transition": true,
+  "security": {
+    "authority_until": "2026-10-16T17:34:58+00:00",
+    "grants_min_until": "2026-10-16T17:34:58+00:00",
+    "leaf_until": "2026-10-16T10:12:45+00:00",
+    "crl_next_update": "2026-10-16T10:12:45+00:00",
+    "crl_number": 27101,
+    "minimum_revision": 1,
+    "minimum_crl": 27088,
+    "revocations_and_grants_unchanged": true
+  },
+  "natural_changes_before_resumed_preflight": {
+    "crl_number_before_pause": 27098,
+    "crl_number_on_resume": 27101,
+    "leaf_and_runtime_changed": true,
+    "authority_grants_unchanged": true,
+    "not_issued_by_this_task": true
+  },
+  "current4h": {
+    "evaluate": {
+      "alerts": [
+        "CRL_T_MINUS_120M",
+        "LEAF_T_MINUS_120M"
+      ],
+      "due": [],
+      "files_changed": 0,
+      "headroom": {
+        "authority": 32861,
+        "crl": 6328,
+        "grant": 32861,
+        "leaf": 6328
+      },
+      "policy": "CURRENT_PRODUCTION_VALIDITY_LIMITS",
+      "remote_alert_delivery": "UNAVAILABLE",
+      "remote_writes": 0,
+      "restarts": 0,
+      "result": "NOOP"
+    },
+    "timer": {
+      "ActiveState": "active",
+      "SubState": "waiting",
+      "UnitFileState": "enabled",
+      "InvocationID": "715418a53927456e909007ca9ad6f888",
+      "NextElapseUSecMonotonic": "1month 2w 9h 45min 100.763ms",
+      "LastTriggerUSecMonotonic": "1month 2w 9h 30min 96.253ms",
+      "Result": "success"
+    },
+    "service": {
+      "ActiveState": "inactive",
+      "SubState": "dead",
+      "UnitFileState": "static",
+      "InvocationID": "6d636f045fe943d68f8a602257a92725",
+      "MainPID": "0",
+      "Result": "success",
+      "NRestarts": "0",
+      "ExecMainStatus": "0"
+    },
+    "next_run_estimated_utc": "2026-10-16T08:28:26.833654+00:00",
+    "scheduled_run_inside_120s": "NOT_OBSERVED",
+    "timer_stop_or_schedule_change": false,
+    "last_observed_scheduled_result": [
+      {
+        "utc": "2026-10-16T08:13:30.772957+00:00",
+        "result": "NOOP",
+        "files_changed": 0,
+        "remote_writes": 0,
+        "restarts": 0,
+        "due": [],
+        "alerts": [
+          "CRL_T_MINUS_120M",
+          "LEAF_T_MINUS_120M"
+        ]
+      }
+    ]
+  },
+  "boundaries": {
+    "final_check_utc": "2026-10-16T08:27:17.655502+00:00",
+    "leaf_crl_renewal_threshold_utc": "2026-10-16T08:42:45+00:00",
+    "operator_maintenance_threshold_utc": "2026-10-16T11:34:58+00:00",
+    "conservative_process_boundary_utc": "2026-10-16T12:22:22.735879+00:00",
+    "earliest_device_limit_utc": "2026-10-16T10:12:45+00:00",
+    "latest_connect_for_18_minutes_at_unchanged_bounds": "2026-10-16T09:54:45+00:00",
+    "seconds_to_earliest_limit_at_check": 6327.344497919083,
+    "preparation_allowance_after_18_minute_sequence_seconds": 5247.344497919083,
+    "server_window_ready_at_check": true
+  },
+  "client_preservation": {
+    "unsigned_apk_sha256": "cc5b883395c59d2f76f4cf8ce1d787fa764c1fac2936c9148f9876697d2c5013",
+    "native_sha256": "253e0e15f38223288571d3e682f6876269aa9c6d1c0c5157588ed8287ba6f3a3",
+    "checked_utc": "2026-10-16T08:25:24.795913+00:00",
+    "embedded_native_matches": true,
+    "rebuilds": 0,
+    "signing": 0,
+    "adb": 0,
+    "installs": 0,
+    "owner_connects": 0
+  },
+  "action_counts": {
+    "staged_candidate_uploads": 1,
+    "pretransition_guard_aborts": 1,
+    "controlled_service_stops": 1,
+    "controlled_service_starts": 1,
+    "executable_replacements": 1,
+    "candidate_automatic_restarts_observed": 0,
+    "rollbacks": 0,
+    "management_deployments": 0,
+    "config_unit_environment_changes": 0,
+    "manual_credential_operations": 0,
+    "current4h_stops_schedule_changes": 0,
+    "unrelated_service_restarts": 0,
+    "adb": 0,
+    "apk_build_sign_install": 0,
+    "owner_connect_export": 0,
+    "fault_triggers": 0
+  },
+  "normal_provider_activity": "gateway seed creation/publication occurred; not zero provider activity",
+  "acceptance": {
+    "gateway_deployment": "PASS",
+    "live_gateway_readiness": "PASS_BOUNDED",
+    "new_pair_device_acceptance": "NOT_RUN",
+    "old_smoke": "PASS_PRESERVED",
+    "old_reconnect": "FAIL_PRESERVED",
+    "historical_b_causal_binding": "NOT_PROVEN",
+    "supervisor_acceptance": "NOT_CLOSED"
+  },
+  "collection_limitations": [
+    "Historical seed active-file query had no match; scoped all-journal query recovered current seed event.",
+    "All-journal scheduled query timed out; active-system-file query recovered the same bounded interval.",
+    "Old transition-window journal had no rows; retained application/systemd receipts establish the baseline failure.",
+    "Local extra-readback wrapper had two quoting errors before any remote invocation; corrected without product changes."
+  ],
+  "private_receipt_sha256": {
+    "private/final-durable.json": "d0189529147e80c722aa1b9b24287e3d57904bea8090a4a4c6a8e159d91529ff",
+    "private/candidate-ready-journal.jsonl": "9d143872457a6d9948880034f42ed8b928a8eee3ed79a8077c779f0fdf3b63ea",
+    "receipts/observation.json": "c3e3317b84484855113b408b907342d1f6dec8dbf182769b8d769c8b684606a5",
+    "private/candidate-failure-query.json": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "private/candidate-final-NL-security.json": "c3e7c7284f27aee4c42c04a5458d9871660d03cc1ab75157c858ea97ad84b46a",
+    "private/candidate-final-NL-entry.json": "1e28c7396680c0c5d94ad77cfbc9b7ef95e57a9b3bcdf41fc2eae535b65b6798",
+    "private/candidate-final-RU-security.json": "9f2255b13bd0807aac9ff6e63010df8e55b4b8eb89e4253ca51a95d8911abe7f",
+    "private/final-evaluate.json": "d8193efeedd781ff4eccb1898adb132406c0cf0254c05277e7295ff799dd313a"
+  }
+}

@@ -1,5 +1,29 @@
 # Текущее состояние / Current state
 
+## GATEWAY-TRANSPORT-PROGRESS-LIVE-1 — candidate deployed, bounded readiness PASS (16.10)
+
+[Live report](releases/2026-10-16-gateway-transport-progress-live-1.md) and
+[safe receipts](releases/evidence/2026-10-16-gateway-transport-progress-live-1.json).
+One executable-only controlled stop/atomic replacement/start: loadeda5372571…885e61f,
+source inventory72274642…665c42e, PID251251/invocationf58c3d94…08b86d at final check.
+Actual seed READY08:22:25UTC, strict served TLS/leaf match and new runtime directory
+published on RU PASS. Fixed08:23:47–08:25:47UTC120s: same PID/invocation, no new fatal,
+NRestarts0, OOM counters0; no load/long-term or owner mTLS/data-plane acceptance claim.
+Initial15Oct23:13 pretransition guard aborted before mutation because baseline naturally
+exited SEED_READ/PUBLISHER_DISCONNECTED. Durable readback after interruption proved
+no deploy intent/stop/rename/start. Fresh preflight preceded the single actual transition.
+Current4h never stopped; management/unit/config/policy unchanged by task. Normal provider
+activity occurred; overnight background leaf/CRL/runtime changes are separately recorded.
+Final check16Oct08:27:17UTC: leaf/CRL until10:12:45; authority/grants until17:34:58;
+operator threshold11:34:58. Existing evaluate NOOP with leaf/CRL120m alerts, due empty;
+timer enabled/active, next run estimated08:28:26 at check, not a promised renewal.
+18-minute future device window fit at check only; recheck freshness before client work.
+Candidate left active; rollback0. Phone/C_NEW artifacts unchanged, no rebuild/sign/install.
+NEW_PAIR_DEVICE_ACCEPTANCE=NOT_RUN; installed client retains known queue16/sync-writer
+limits. Previous smoke PASS, reconnect FAIL, historical B NOT_PROVEN and supervisor
+acceptance remain unchanged. Next is separately authorized C_NEW client trial, not
+an automatic install/CONNECT, renewal or additional gateway restart.
+
 ## GATEWAY-TRANSPORT-PROGRESS-BURST-CANDIDATE-1 — local server candidate (16.10)
 
 [Report](releases/2026-10-16-gateway-transport-progress-burst-candidate-1.md),
