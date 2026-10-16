@@ -5,7 +5,7 @@
          }
          if (variant.buildType.name == 'researchProvisioning') {
 -            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-provisioning-seam' }
-+            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-ui60-3' }
++            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-ui60-4' }
          }
      }
  }
@@ -97,7 +97,7 @@
 -    private int count,rowHeight;
 +    private android.widget.Spinner countries,transports;
 +    private TextView delivery,connectionHeading;
-+    private int count,rowHeight,choicesTop,graphTop,selectorTop,batteryBarTop;
++    private int count,rowHeight,choicesTop,graphTop,selectorTop,batteryBarTop,verticalCompression;
      private long lastTime,lastRx=-1,lastTx=-1;
      private String country="—",protocol="—",connectionState="—";
      private String network="—",battery="—",signal="—",rate="—";
@@ -128,7 +128,7 @@
 +        connectionHeading.setVisibility(VISIBLE);
 +        display();
 +    }
-+    int requiredHeight(int width){measure(MeasureSpec.makeMeasureSpec(width,MeasureSpec.EXACTLY),MeasureSpec.makeMeasureSpec(0,MeasureSpec.UNSPECIFIED));return getMeasuredHeight();}
++    int requiredHeight(int width,int compression){verticalCompression=Math.max(0,Math.min(compression,TerminalUi.dp(getContext(),20)));forceLayout();measure(MeasureSpec.makeMeasureSpec(width,MeasureSpec.EXACTLY),MeasureSpec.makeMeasureSpec(0,MeasureSpec.UNSPECIFIED));return getMeasuredHeight();}
      @Override protected void onMeasure(int widthSpec,int heightSpec){
 -        int width=MeasureSpec.getSize(widthSpec),height=MeasureSpec.getSize(heightSpec),padding=TerminalUi.dp(getContext(),8);
 +        int width=MeasureSpec.getSize(widthSpec),height=MeasureSpec.getSize(heightSpec),padding=TerminalUi.dp(getContext(),12);
@@ -142,7 +142,7 @@
 +            connectionHeading.measure(MeasureSpec.makeMeasureSpec(column,MeasureSpec.EXACTLY),MeasureSpec.makeMeasureSpec(0,MeasureSpec.UNSPECIFIED));
 +            for(View picker:new View[]{countries,transports})picker.measure(MeasureSpec.makeMeasureSpec(column,MeasureSpec.EXACTLY),MeasureSpec.makeMeasureSpec(0,MeasureSpec.UNSPECIFIED));
 +            batteryBarTop=padding+fields[1].getMeasuredHeight()+TerminalUi.dp(getContext(),6);
-+            choicesTop=Math.max(TerminalUi.dp(getContext(),70),padding+Math.max(fields[0].getMeasuredHeight()+fields[2].getMeasuredHeight()+TerminalUi.dp(getContext(),2),fields[1].getMeasuredHeight()+TerminalUi.dp(getContext(),10))+TerminalUi.dp(getContext(),8));
++            choicesTop=Math.max(TerminalUi.dp(getContext(),70)-verticalCompression,padding+Math.max(fields[0].getMeasuredHeight()+fields[2].getMeasuredHeight()+TerminalUi.dp(getContext(),2),fields[1].getMeasuredHeight()+TerminalUi.dp(getContext(),10))+TerminalUi.dp(getContext(),8));
 +            graphTop=choicesTop+fields[4].getMeasuredHeight()+TerminalUi.dp(getContext(),8);
 +            selectorTop=choicesTop+connectionHeading.getMeasuredHeight()+TerminalUi.dp(getContext(),4);
 +            int required=padding+Math.max(selectorTop+countries.getMeasuredHeight()+transports.getMeasuredHeight()+fields[6].getMeasuredHeight(),graphTop+TerminalUi.dp(getContext(),40));
@@ -222,7 +222,23 @@
  }
 --- a/clients/android/app/src/main/java/com/familyconnect/app/RouteMapView.java
 +++ b/clients/android/app/src/main/java/com/familyconnect/app/RouteMapView.java
-@@ -104,7 +104,7 @@
+@@ -53,13 +53,14 @@
+         });
+     }
+     void compactPreview(){compact=true;motion=false;setBackground(TerminalUi.frame(getContext(),TerminalUi.SURFACE,TerminalUi.FRAME));setContentDescription(getContext().getString(R.string.dashboard_route));}
++    int compactHeight(int width){return Ui60Presentation.mapHeight(width,TerminalUi.dp(getContext(),6),(float)((north-south)/(east-west)));}
+     private float longitudeX(double lon){return (float)((lon-west)/(east-west));}
+     private float latitudeY(double lat){return (float)((north-lat)/(north-south));}
+     private float nodeX(String code){return longitudeX(code.equals("nl")?5:38);}
+     private float nodeY(String code){return latitudeY(code.equals("nl")?52:56);}
+     void locate(android.location.Location location){
+         if(origin==null){north=Math.min(90,Math.max(85,location.getLatitude()+4));south=Math.max(-90,Math.min(-60,location.getLatitude()-4));zoom=1;panX=panY=0;}
+-        origin=new android.location.Location(location);dotsDirty=true;animateState();postInvalidateOnAnimation();
++        origin=new android.location.Location(location);dotsDirty=true;if(compact)requestLayout();animateState();postInvalidateOnAnimation();
+     }
+     private void clamp(){panX=Math.max(getWidth()*(1-zoom),Math.min(0,panX));panY=Math.max(getHeight()*.78f*(1-zoom),Math.min(0,panY));}
+     @android.annotation.SuppressLint("ClickableViewAccessibility") // GestureDetector calls performClick for confirmed taps.
+@@ -104,7 +105,7 @@
              }
              dotsDirty=false;
          }
@@ -231,12 +247,13 @@
          // One opacity for all land; pixel-aligned centers give equal raster coverage.
          float shimmer=motion?(float)Math.sin(2*Math.PI*phase):0;
          paint.setAlpha(120+Math.round(6*shimmer));
-@@ -114,12 +114,12 @@
+@@ -114,12 +115,13 @@
      @Override protected void onDraw(Canvas c){
          float w=getWidth(),h=getHeight(),mapH=compact?Math.min(h,w*145f/360f):h*.78f,d=getResources().getDisplayMetrics().density;
          if(compact){
 -            float inset=6*d;w=Math.min(w-2*inset,(h-2*inset)*360f/145f);mapH=w*145f/360f;
-+            float inset=6*d;w-=2*inset;mapH=Math.min(h-2*inset,w*145f/360f);
++            float inset=TerminalUi.dp(getContext(),6),aspect=(float)((north-south)/(east-west));
++            w=Math.max(0,Math.min(w-2*inset,(h-2*inset)/aspect));mapH=w*aspect;
              c.translate((getWidth()-w)/2,(h-mapH)/2);
          }
          int viewport=c.save();c.clipRect(0,0,w,mapH);
@@ -277,7 +294,7 @@
  
      static int dp(Context context, int value) { return Math.round(value * context.getResources().getDisplayMetrics().density); }
  
-@@ -55,14 +57,38 @@
+@@ -55,14 +57,42 @@
  
      /** Keep navigation reachable while the workspace adapts to actual viewport pixels. */
      private static final class DashboardLayout extends LinearLayout {
@@ -307,22 +324,26 @@
 +        @Override protected void onMeasure(int widthSpec,int heightSpec){
 +            if(dial==null){super.onMeasure(widthSpec,heightSpec);return;}
 +            int width=MeasureSpec.getSize(widthSpec)-getPaddingLeft()-getPaddingRight();
-+            ((LayoutParams)workspace.getLayoutParams()).height=((LiveNetworkPanel)((ViewGroup)workspace).getChildAt(0)).requiredHeight(width);
++            LiveNetworkPanel network=(LiveNetworkPanel)((ViewGroup)workspace).getChildAt(0);
++            LayoutParams networkParams=(LayoutParams)workspace.getLayoutParams();networkParams.height=network.requiredHeight(width,0);
 +            LayoutParams dialParams=(LayoutParams)dial.getLayoutParams();dialParams.weight=0;dialParams.height=Ui60Presentation.dialHeight(width-panel.getPaddingLeft()-panel.getPaddingRight(),MeasureSpec.getSize(heightSpec),dp(getContext(),120));
 +            LayoutParams mapParams=(LayoutParams)map.getLayoutParams();mapParams.height=0;map.setVisibility(GONE);
 +            panel.forceLayout();dial.forceLayout();body.forceLayout();scroll.forceLayout();
 +            super.onMeasure(widthSpec,heightSpec);
 +            int free=scroll.getMeasuredHeight()-panel.getMeasuredHeight()-workspace.getMeasuredHeight()-dp(getContext(),16);
-+            int preview=Ui60Presentation.mapHeight(free,dp(getContext(),88));
-+            mapParams.height=preview;map.setVisibility(preview>0?VISIBLE:GONE);
-+            body.forceLayout();scroll.forceLayout();super.onMeasure(widthSpec,heightSpec);
++            int preview=((RouteMapView)map).compactHeight(width),deficit=Math.max(0,preview-free);
++            int compactNetwork=network.requiredHeight(width,deficit);
++            deficit=Math.max(0,deficit-(networkParams.height-compactNetwork));networkParams.height=compactNetwork;
++            dialParams.height=Ui60Presentation.compactDialHeight(dialParams.height,dp(getContext(),120),deficit);
++            mapParams.height=preview;map.setVisibility(VISIBLE);
++            panel.forceLayout();dial.forceLayout();workspace.forceLayout();body.forceLayout();scroll.forceLayout();super.onMeasure(widthSpec,heightSpec);
 +        }
 +    }
 +    static void compactDashboardDial(LinearLayout root,LinearLayout panel,Dial dial,View workspace,View map){((DashboardLayout)root).compact(panel,dial,workspace,map);}
  
      static void dashboardHeader(LinearLayout root) {
          root.addView(new BrandHeader(root.getContext()),new LinearLayout.LayoutParams(-1,dp(root.getContext(),72)));
-@@ -90,7 +116,7 @@
+@@ -90,7 +120,7 @@
              paint.setTypeface(Typeface.MONOSPACE);paint.setTextScaleX(1);paint.setTextSize(9*d);paint.setColor(MINT);
              String sub="PERSONAL COMMUNICATIONS";paint.setTextSize(Math.min(9*d,paint.getTextSize()*available/paint.measureText(sub)));
              canvas.drawText(sub,left,h*.73f,paint);
@@ -331,7 +352,7 @@
              canvas.drawLine(left,h*.55f,left+ruleWidth,h*.55f,paint);canvas.drawLine(left,h*.81f,left+ruleWidth,h*.81f,paint);
          }
      }
-@@ -225,15 +251,8 @@
+@@ -225,15 +255,8 @@
      }
  
      static final class InlineLabel extends TextView {
@@ -349,7 +370,7 @@
      }
      static void inlinePicker(Spinner spinner,String[] items){
          Context c=spinner.getContext();
-@@ -279,10 +298,13 @@
+@@ -279,10 +302,13 @@
          private final Paint paint=new Paint(Paint.ANTI_ALIAS_FLAG);private final Path border=new Path();
          private final float d;private final int fill,stroke;
          TerminalFrame(Context c,int fill,int stroke){d=c.getResources().getDisplayMetrics().density;this.fill=fill;this.stroke=stroke;}
@@ -367,7 +388,7 @@
          @Override public void setAlpha(int alpha){paint.setAlpha(alpha);invalidateSelf();}
 --- /dev/null
 +++ b/clients/android/app/src/main/java/com/familyconnect/app/Ui60Presentation.java
-@@ -0,0 +1,20 @@
+@@ -0,0 +1,21 @@
 +package com.familyconnect.app;
 +
 +final class Ui60Presentation {
@@ -380,7 +401,8 @@
 +        if("on".equals(state))return R.string.on;
 +        return R.string.connecting;
 +    }
-+    static int mapHeight(int available,int minimum){return available>=minimum?available:0;}
++    static int mapHeight(int width,int inset,float aspect){return (int)Math.ceil(Math.max(0,width-2*inset)*aspect)+2*inset;}
++    static int compactDialHeight(int preferred,int minimum,int deficit){return Math.max(minimum,preferred-Math.max(0,deficit));}
 +    static float batteryFraction(String value){
 +        if(value==null||!value.endsWith("%"))return -1;
 +        try{int level=Integer.parseInt(value.substring(0,value.length()-1));return level>=0&&level<=100?level/100f:-1;}
@@ -404,7 +426,7 @@
 +</resources>
 --- /dev/null
 +++ b/clients/android/app/src/test/java/com/familyconnect/app/Ui60PresentationTest.java
-@@ -0,0 +1,33 @@
+@@ -0,0 +1,36 @@
 +package com.familyconnect.app;
 +
 +import org.junit.Test;
@@ -432,9 +454,12 @@
 +        assertEquals(209,Ui60Presentation.dialHeight(348,780,120));
 +        assertEquals(166,Ui60Presentation.dialHeight(276,640,120));
 +        assertEquals(120,Ui60Presentation.dialHeight(736,392,120));
-+        assertEquals(0,Ui60Presentation.mapHeight(-50,88));
-+        assertEquals(0,Ui60Presentation.mapHeight(87,88));
-+        assertEquals(88,Ui60Presentation.mapHeight(88,88));
-+        assertEquals(160,Ui60Presentation.mapHeight(160,88));
++        assertEquals(188,Ui60Presentation.compactDialHeight(209,120,21));
++        assertEquals(120,Ui60Presentation.compactDialHeight(166,120,300));
++        assertEquals(209,Ui60Presentation.compactDialHeight(209,120,-30));
++        assertEquals(156,Ui60Presentation.mapHeight(368,6,145f/360f));
++        assertEquals(127,Ui60Presentation.mapHeight(296,6,145f/360f));
++        assertEquals(311,Ui60Presentation.mapHeight(736,12,145f/360f));
++        assertEquals(161,Ui60Presentation.mapHeight(368,6,150f/360f));
 +    }
 +}

@@ -28,11 +28,12 @@ assert before_panel[before_panel.index('    void sample()'):before_panel.index('
 patch = ''.join(''.join(difflib.unified_diff(old[name].read_text().splitlines(True) if name in old else [], new[name].read_text().splitlines(True), fromfile='a/'+name if name in old else '/dev/null', tofile='b/'+name)) for name in changed)
 (root / 'ui-only.patch').write_text(patch)
 receipt = dict(changed_files=changed, non_ui_sources_identical=True, friends_navigation_lifecycle_and_operations_identical=True, telemetry_sample_accept_pause_identical=True, native_rebuilt=False, delta_patch_sha256=hashlib.sha256(patch.encode()).hexdigest())
-previous_inventory = root / 'revisions/ui60-2/cumulative-source.json'
+previous_inventory = root / 'revisions/ui60-3/build/cumulative-source.json'
 if previous_inventory.exists():
     previous_files = json.loads(previous_inventory.read_text())['files']
     revision_changes = sorted(name for name, digest in previous_files.items() if hashlib.sha256((source / name).read_bytes()).hexdigest() != digest)
-    assert revision_changes == ['clients/android/app/build.gradle', java + 'RouteMapView.java'], revision_changes
-    receipt['revision3_changes_from_revision2'] = revision_changes
+    expected = ['clients/android/app/build.gradle', java + 'LiveNetworkPanel.java', java + 'RouteMapView.java', java + 'TerminalUi.java', java + 'Ui60Presentation.java', 'clients/android/app/src/test/java/com/familyconnect/app/Ui60PresentationTest.java']
+    assert revision_changes == sorted(expected), revision_changes
+    receipt['revision4_changes_from_revision3'] = revision_changes
 (root / 'boundary.json').write_text(json.dumps(receipt, indent=2) + '\n')
 print(json.dumps(receipt))

@@ -6,13 +6,23 @@
         392,
         780
       ],
-      "map_bounds": [
-        12,
-        600,
-        380,
-        714
-      ],
-      "outside_map_pixel_identical_to_revision2": true
+      "bounds": {
+        "home_map": {
+          "before_height": 114,
+          "after_height": 156,
+          "width": 368
+        },
+        "home_connection": {
+          "before_height": 300,
+          "after_height": 265,
+          "width": 368
+        },
+        "home_workspace": {
+          "before_height": 204,
+          "after_height": 197,
+          "width": 368
+        }
+      }
     },
     {
       "language": "en",
@@ -20,14 +30,24 @@
         392,
         780
       ],
-      "map_bounds": [
-        12,
-        600,
-        380,
-        714
-      ],
-      "outside_map_pixel_identical_to_revision2": true
+      "bounds": {
+        "home_map": {
+          "before_height": 114,
+          "after_height": 156,
+          "width": 368
+        },
+        "home_connection": {
+          "before_height": 300,
+          "after_height": 265,
+          "width": 368
+        },
+        "home_workspace": {
+          "before_height": 204,
+          "after_height": 197,
+          "width": 368
+        }
+      }
     }
   ],
-  "scope": "Normal-size RU/EN OFF fixtures; synthetic data"
+  "scope": "Revision4 normal RU/EN OFF real-code fixtures; compact middle panel, proportional full-width map"
 }

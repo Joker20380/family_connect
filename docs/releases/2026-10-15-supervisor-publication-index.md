@@ -1,5 +1,14 @@
 # PUBLISH-SUPERVISOR-RESEARCH-STATE-1 — указатель review-публикации
 
+## UI60 revision4 — proportional map / compact panels, unsigned candidate
+
+[UI report](2026-10-16-ui60-layout-current-style-1.md#revision4--proportional-map-and-more-compact-neighboring-blocks):
+map preserves continent proportions, with full width and increased height taken from
+neighboring panels. Actual comparisons,15 JVM checks,54 fixtures/32 map cases retained;
+fresh IME check lacks window focus and is not promoted to PASS. Native unchanged;
+unsigned APK64b4c71f…0b655ba1/inventorye90893ae…04c48fce, code84/ui60-4.
+Visual approval pending; installed UI60-3 untouched, no field action/signing/install.
+
 ## UI60 owner call interruption —16Oct2026, read-only export10 analysis
 
 [Exact-session cutover and failed restoration](2026-10-16-ui60-owner-call-drop-export10.md):

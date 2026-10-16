@@ -1,0 +1,42 @@
+{
+  "revision": 4,
+  "cpu_quota_percent_of_one_core": 50,
+  "software_cpu_fallback_allowed": false,
+  "kvm": true,
+  "gpu": "host",
+  "temperature_cutoff_celsius": 85,
+  "build": {
+    "reason": "command_exit",
+    "elapsed_seconds": 372.483,
+    "returncode": 0,
+    "samples": 186,
+    "maximum_cpu_celsius": 73.0,
+    "last_cpu_celsius": 53.0
+  },
+  "renderer_build": {
+    "reason": "command_exit",
+    "elapsed_seconds": 30.014,
+    "returncode": 0,
+    "samples": 15,
+    "maximum_cpu_celsius": 68.0,
+    "last_cpu_celsius": 51.0
+  },
+  "emulator_maximum_cpu_celsius": 66.0,
+  "emulator_stop": {
+    "reason": "InterruptedError: Host requested stop",
+    "elapsed_seconds": 261.222,
+    "emulator_returncode": -6,
+    "software_cpu_fallback_allowed": false
+  },
+  "final_emulator": "OFF",
+  "fixture_configurations": 4,
+  "fixture_scenes": 54,
+  "map_dimension_density_cases_per_configuration": 8,
+  "real_ime_attempt": "NOT_VERIFIED: focus=true, windowFocus=false, attached=true",
+  "previous_real_ime_pass": "revision3; not relabelled as revision4 pass",
+  "phone_actions": 0,
+  "server_actions": 0,
+  "product_signing": 0,
+  "native_rebuild": 0,
+  "comparison_sha256": "3695ac9345d8b3a2f9ed8669822482b44b39130c4861cc27de842a7835a98f80"
+}

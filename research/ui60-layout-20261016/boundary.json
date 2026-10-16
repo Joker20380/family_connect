@@ -16,9 +16,13 @@
   "friends_navigation_lifecycle_and_operations_identical": true,
   "telemetry_sample_accept_pause_identical": true,
   "native_rebuilt": false,
-  "delta_patch_sha256": "11888b19c71045d5b181ee544562f97c7f7bd55c4a19f8dd912de0c4d015161c",
-  "revision3_changes_from_revision2": [
+  "delta_patch_sha256": "ef30f25fd7b8a7fd85b3b1a28523288d8157f7c5c927866cf0b1804cb3be0046",
+  "revision4_changes_from_revision3": [
     "clients/android/app/build.gradle",
-    "clients/android/app/src/main/java/com/familyconnect/app/RouteMapView.java"
+    "clients/android/app/src/main/java/com/familyconnect/app/LiveNetworkPanel.java",
+    "clients/android/app/src/main/java/com/familyconnect/app/RouteMapView.java",
+    "clients/android/app/src/main/java/com/familyconnect/app/TerminalUi.java",
+    "clients/android/app/src/main/java/com/familyconnect/app/Ui60Presentation.java",
+    "clients/android/app/src/test/java/com/familyconnect/app/Ui60PresentationTest.java"
   ]
 }

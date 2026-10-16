@@ -136,42 +136,42 @@
   },
   {
     "name": "candidate-en-392-780-1.0-home-cleanup-required.png",
-    "sha256": "dd5f9cc16de39f5788ab0ec5ac874ced610d0b309ce1920eb4a19bb9f4536029",
+    "sha256": "5240d572e4e595c396c139941d0453d95876dea34dc0c8e75aec0455e0654810",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-home-connecting.png",
-    "sha256": "d77b6287289521163f40e0929aa5640083e0bec91543ddf9bed073e0c3a8ac54",
+    "sha256": "24241677362be6d65f6b74c255406d765bf17ecbe8bfa2683cf2bd180b30d9bc",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-home-disconnecting.png",
-    "sha256": "442f97d0c46d3b00674e9c72c6708377de6125797f0068e6db04836eaa0a66e1",
+    "sha256": "9bc39dd40b36fb0923f9b1a5ca9ddf09ee85ccf51b554a8e899484d453f10a4e",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-home-failed.png",
-    "sha256": "e0985b8629b9bdbc4cd6bdad46445cba2cfba385dce5a25c85e81a5a5befb342",
+    "sha256": "20d89eec10dfede054037e4bbb63da03776de30cf25d2f01e523fbef34d6b586",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-home-network-fixture.png",
-    "sha256": "3b931626ea4a6f6ed0f439b9a113b265657024d450d463cc6faf950c0b70e6be",
+    "sha256": "759d326b320951bf4a35d6830b4e2b58684367bd3c8e69fbcb1cc64e4c625d75",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-home-off.png",
-    "sha256": "830c36db686b3da74798a5c676ada47ad1eb141d05224504c567fed1287c578f",
+    "sha256": "2600969fce38eb7043c14521bf026af8a547a5fae4816807ad05701dc31b36f8",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-home-on.png",
-    "sha256": "6e36ececc7d74e41dc00c1b0613a8219ea01a2fd921627d396de641f2b63ee10",
+    "sha256": "645f7338b895ae953ea69eb11a613aca9defbdbe0999d49aa8672b86f7a847c7",
     "fixture": true
   },
   {
     "name": "candidate-en-392-780-1.0-home-restoring.png",
-    "sha256": "0f839cee2f8cbe7b1c9c176a1c2a332efbd9bfbc10d4056993a9537ce987b1d5",
+    "sha256": "1aea10cbd31f6bf21d9a83eab2085021eb9a039732c80f024f0ed27c6b959a34",
     "fixture": true
   },
   {
@@ -241,7 +241,7 @@
   },
   {
     "name": "candidate-en-780-392-1.0-home-scrolled.png",
-    "sha256": "c4cccb562ab24e39c7a95d43919882ead5f2ab140fa63a8df7cc373eaad5bc77",
+    "sha256": "82fe1d42b29972457f4e2ff7a7bc2eb04cbba82055afd95cf340e243fb3a3b82",
     "fixture": true
   },
   {
@@ -252,11 +252,6 @@
   {
     "name": "candidate-en-780-392-1.0-settings.png",
     "sha256": "04663e0af90c041612d9b94b790fae24bd0c71662729fe75c3763574d06485be",
-    "fixture": true
-  },
-  {
-    "name": "candidate-real-ime-chat-component.png",
-    "sha256": "aa422585b2e06494cb7905ea7a7db3b95bb38ed1efc3985596c156affb71c228",
     "fixture": true
   },
   {
@@ -276,47 +271,47 @@
   },
   {
     "name": "candidate-ru-320-640-1.5-home-cleanup-required.png",
-    "sha256": "00d2ebd573d4f57bf0b0fccf00b3bc815b27c2cd83902dcbfe479773fb7e6200",
+    "sha256": "634e9485dd22710df715e3e5a6a5a60f184ad3b9b320d026d62632ea908571db",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-home-connecting.png",
-    "sha256": "d40848c93e74a11ab58abebb0c3de4c77d83f6409cb58ef754aae089f6eb89c1",
+    "sha256": "a48b098283d85e55b6ea177640528d43b1b5550bdd98cc5c40b80728760763dd",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-home-disconnecting.png",
-    "sha256": "44ee63f727e29463c2b8499bf2050144647204cd00d9fdff3cbf5081a525ab98",
+    "sha256": "16adcfe0cb31ad64edab05f7d665a1133550e8db1cb84847f529fddb7178a81f",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-home-failed.png",
-    "sha256": "bc7b067a48889427d6a6d2d22a6a6a0a88073ff5fd32a9f804b883609f2ecb5b",
+    "sha256": "353ba1d8c7830198b84d48776187b5080a46a25570c210ae261ab8ae21c09f19",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-home-network-fixture.png",
-    "sha256": "ca6547ffa6825152d75d148f5afe231b4850aeda28b2ffaf2cad53a4a8987574",
+    "sha256": "ef77fa2c71c7cfbb19c22254e3849f5d64eb19d9d21dc53b72610bf9c7838035",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-home-off.png",
-    "sha256": "445cc179026d83f99e2862aa7d128d2e70f22b009c33380b450d59d58a73be82",
+    "sha256": "5071b8fa4f37d05d573a907945cb9cac3670bf596b4628e5f3caf108fd8d264d",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-home-on.png",
-    "sha256": "4c02ebe9339d338fb1dcc26138b62d48df01e4e94cc13192df988237f5c8e2f4",
+    "sha256": "d4fabda458168cba281133de4b37182f11b55e72ec1ca60ca5d85af25a80f0a1",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-home-restoring.png",
-    "sha256": "734b4086fe35e0a0c0a07c2da9e8e2ee0e39b5ac69378d3bc24da0f68afe5b30",
+    "sha256": "02878babcca4abe3cc31d00d7469587e75b92005d5929d3ceb1058c8646ac8c0",
     "fixture": true
   },
   {
     "name": "candidate-ru-320-640-1.5-home-scrolled.png",
-    "sha256": "ca9aa67d55b386eea48f755ed1fce9438299f347180c6d6ce7ac5690e97227c6",
+    "sha256": "45778ed74100ab40e00c2cffca9993651b8ed2f8275da6e360be5a5e06978db4",
     "fixture": true
   },
   {
@@ -346,42 +341,42 @@
   },
   {
     "name": "candidate-ru-392-780-1.0-home-cleanup-required.png",
-    "sha256": "aaa032973de9b2cfd4750fc5c24376338584a8e7ab8117f135c02694e27be008",
+    "sha256": "90970f31f12c1882aacfe6a476ec39f66e122a06eeaac31208b9eed2abab0491",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-home-connecting.png",
-    "sha256": "9c7030ab0e139012f67c39b4eecedc4a1340910015d8f2df9682139bb90d15e5",
+    "sha256": "58d150dc461bcdd1b29714d04f4123c446e7140892ed559cc6975294f9375e65",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-home-disconnecting.png",
-    "sha256": "d40dd84fe78391582f9962a9b665ae977e6ab6ef357f31703e813f0ee360af24",
+    "sha256": "27ce07ad5021c5d12c87ed39f2d0a5a63cc04e7e68d4d88ec86f2c621fb543e8",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-home-failed.png",
-    "sha256": "71c5d8da04e16b94f869740bacec04168a3ef7feb1ffda68628dc1454fbe1093",
+    "sha256": "ad8128f0d943cb98cd9b90767b97c66ffc473ee898f50fd900d7afea7778ab77",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-home-network-fixture.png",
-    "sha256": "2d9e9cd7864bf2e4e16f71c384606b390f79cb6d7ca9f9410e02026cbd2a21cd",
+    "sha256": "58673d45c7d09809c5192f56f0ec3c93cf07eaab1b3478ce7a6da308bb0ae239",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-home-off.png",
-    "sha256": "3dac09db1e05291cea7498e894dc10ef4dd2f791dd4a6a2931a2d1922519c6e8",
+    "sha256": "80fe3a4abd3eefce7e247d79de57ab16a3bb145d17963fa18520cd4779399b7d",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-home-on.png",
-    "sha256": "67ab3f5739fed5f0f449b84fa66b3857e2ebe9ebb69cea729b0780f6c78bfd42",
+    "sha256": "21d6d041bcdf046f8b1e8b44b5b508dd8d25a098ee700df890b7b3cdb0dff29a",
     "fixture": true
   },
   {
     "name": "candidate-ru-392-780-1.0-home-restoring.png",
-    "sha256": "5bd18347d08ba9dbdfda2dcf38148c5ee783a8db601aafd2fe39d92763dac711",
+    "sha256": "c24b7f2c97de09154e166f9ef5486114ca9e4800dc94794d76983ea21e8a932e",
     "fixture": true
   },
   {

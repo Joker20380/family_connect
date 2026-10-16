@@ -18,9 +18,12 @@ for name in ['AndroidManifest.xml','build_fixture.py','run.py']:
 shutil.copytree(root/'renderer/java',renderer/'java',dirs_exist_ok=True)
 images=publication/'screenshots';images.mkdir(exist_ok=True)
 records=[]
+keyboard=(root/'renderer/keyboard.log').read_text()
+keyboard_pass='INSTRUMENTATION_CODE: -1' in keyboard and 'INSTRUMENTATION_RESULT: error=' not in keyboard
 for label in ['beta60','current','candidate']:
     origin=root/'renderer'/('renders-'+label)/'ui60-fixtures'
     for path in sorted(origin.glob(label+'-*.png')):
+        if path.name=='candidate-real-ime-chat-component.png' and not keyboard_pass:continue
         if label!='candidate' and not any(marker in path.name for marker in ['-ru-392-780-1.0-','-en-392-780-1.0-']):continue
         if label!='candidate' and '-home-' in path.name and not path.name.endswith('-home-off.png'):continue
         shutil.copy2(path,images/path.name)
@@ -60,10 +63,8 @@ for path in sorted((root/'renderer/renders-candidate').glob('*.log')):
     presentation=[row for row in rows if 'beta60TelemetryGrouping' in row]
     assert len(presentation)==1 and all(presentation[0].values())
     map_width=[row for row in rows if 'compactMapFillsWidth' in row]
-    assert len(map_width)==1 and map_width[0]['compactMapFillsWidth'] and len(map_width[0]['cases'])==8
+    assert len(map_width)==1 and map_width[0]['compactMapFillsWidth'] and map_width[0]['compactMapPreservesAspect'] and len(map_width[0]['cases'])==8
     tests.append(dict(configuration=path.stem,scenes=scenes,navigation=navigation,presentation=presentation,compact_map_width=map_width))
-keyboard=(root/'renderer/keyboard.log').read_text()
-keyboard_pass='INSTRUMENTATION_CODE: -1' in keyboard and 'INSTRUMENTATION_RESULT: error=' not in keyboard
 keyboard_rows=json.loads(keyboard.split('INSTRUMENTATION_RESULT: result=',1)[1].split('\nINSTRUMENTATION_CODE:',1)[0]) if keyboard_pass else []
-(publication/'ui-tests.json').write_text(json.dumps(dict(api=31,isolated_canvas_configurations=tests,real_ime_component=keyboard_pass,keyboard=[{key:value for key,value in row.items() if key!='views'} for row in keyboard_rows],api35_runtime='NOT_RUN',live_actions=0),indent=2)+'\n')
+(publication/'ui-tests.json').write_text(json.dumps(dict(api=31,isolated_canvas_configurations=tests,real_ime_component=keyboard_pass,real_ime_attempt_status='PASS' if keyboard_pass else 'NOT_VERIFIED_WINDOW_FOCUS_UNAVAILABLE',keyboard=[{key:value for key,value in row.items() if key!='views'} for row in keyboard_rows],api35_runtime='NOT_RUN',live_actions=0),indent=2)+'\n')
 print(json.dumps(dict(published_screenshots=len(records),real_ime_component=keyboard_pass,product_apk_published=False)))

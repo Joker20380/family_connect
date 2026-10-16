@@ -6,18 +6,27 @@ marked started or complete by this document.
 
 | Criterion | Current result |
 |---|---|
-| UI implementation | [UI60-3 implemented; owner inspection installation completed](2026-10-16-ui60-layout-current-style-1.md) |
-| UI_VISUAL_APPROVED | YES; final map approved before explicit owner-phone installation request |
+| UI implementation | [UI60-4 proportional map/compact panels built unsigned; UI60-3 stays installed](2026-10-16-ui60-layout-current-style-1.md) |
+| UI_VISUAL_APPROVED | Revision3 YES; revision4 WAITING_FOR_OWNER_VISUAL_APPROVAL |
 | ARTIFACT_COMPATIBLE | NOT_YET_CHECKED_FOR_TESTER |
 | TESTER_AUTHORIZED | NOT_YET_CHECKED; registration is not a restricted grant |
 | FIELD_WARM_START | NOT_STARTED |
 | TARGET_RESTRICTION_OBSERVED | NOT_TESTED |
 | Field CONNECT / export | 0 / 0 |
-| Product signing / owner install / tester transfer / tester install | 1 / 1 / 0 / 0 |
+| Product signing / owner install / tester transfer / tester install | Revision3:1 /1 /0 /0; revision4:0 /0 /0 /0 |
 | First field failure | NONE_OBSERVED; no attempt |
-| Final device state | Owner UI60-3 installed and launched, VPN OFF at17:11:25UTC; tester untouched |
+| Final device state | Owner UI60-3 unchanged; latest supplied export10 is DISCONNECTED/TUN closed; tester untouched |
 
-## Next continuation, after owner inspection
+## Next continuation, after revision4 visual approval
+
+Revision4 is a newly requested geometry correction, not a repeat of completed UI60-3
+installation. Current unsigned candidate is
+`64b4c71f8fc91ce91a457e1c99c1b171adeaad58d226a7c05e71e32c0b655ba1`,
+source inventory `e90893aee5fdc04aae1cacd296d5291ca8a743350de42334b290f08504c48fce`.
+No signing, transfer or device action for it has occurred. The ordinary-use
+[maintenance/restoration finding](2026-10-16-ui60-owner-call-drop-export10.md) remains
+separate from UI geometry and from any future field result; no repair or CONNECT is
+started here. Fresh gateway/security readiness will still be needed for field work.
 
 Owner explicitly requested installation on their own phone after approving the
 final UI image. Owner compatibility was checked and one existing-key signing plus
@@ -31,20 +40,22 @@ existing restricted entitlement, working preparation network and availability in
 one short request. Do not send messages to third parties. Verify grant scope using
 the existing read-only authorized route; no grant/identity creation or owner profile.
 
-Check this **new UI APK**, versionName0.1.18-research84-ui60-3/code84/minSdk31/arm64:
+Check the approved **UI60-4 APK**, versionName0.1.18-research84-ui60-4/code84/minSdk31/arm64:
 safe same-signer replacement, actual device compatibility, normal restricted path,
 inactive provisioning research gate and normal export. A lower-code tester APK is
 not promised as an ordinary rollback. No `-d`, uninstall, data/cache clear or
 re-enrollment. Absent entitlement means TESTER_NOT_AUTHORIZED, not transport failure.
 
-The verified unsigned hash
+The historical revision3 verified unsigned hash
 `ef3c7e06f5666c87b8e31bf1eddc318d1a7cd97a0c720187f05e342a2a1ec95b`
 was signed for the requested owner inspection using the existing key/workflow:
 `e6c9dce07520abb40ce29e7bfc7e39e2483db0572d22c31ab27931478da4b00f`.
 Signature, alignment and unchanged DEX/native/non-signature entries verified; see
 the [safe receipt](../../research/ui60-layout-20261016/owner-install.json).
-After tester compatibility/authorization/readiness checks, reuse this exact signed
-artifact without re-signing. Owner privately transfers to one agreed recipient. No catalog,
+Do not present that already signed revision3 as revision4. After revision4 visual
+approval and tester compatibility/authorization/readiness checks, sign the exact
+verified revision4 unsigned artifact once using the existing protected workflow and
+verify payload/native preservation. Owner privately transfers to one agreed recipient. No catalog,
 landing, invitation or public release change. If unavailable:
 READY_WAITING_FOR_TESTER_ACTION; no capture or security window held open.
 

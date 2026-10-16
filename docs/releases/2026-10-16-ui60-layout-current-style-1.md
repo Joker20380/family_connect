@@ -1,6 +1,7 @@
 # UI60-LAYOUT-CURRENT-STYLE-1 — implemented UI candidate
 
-Part one of UI60-RESTORE-AND-FIELD-1. **Visually approved; installed for owner inspection.**
+Part one of UI60-RESTORE-AND-FIELD-1. **Revision4 unsigned candidate ready for visual
+review; revision3 remains the owner-approved installed version.**
 This is an isolated derivative of the retained accepted diagnostic product, not a
 checkout of beta60 or the dirty root main. Existing snapshots, accepted artifacts and
 historical acceptance reports are retained. The field stage has **not started**.
@@ -14,6 +15,66 @@ Later [export10/call interruption](2026-10-16-ui60-owner-call-drop-export10.md) 
 the same session's maintenance-driven closure and failed automatic seed admission
 using the pre-cutover directory. This is a separate read-only diagnosis, not a UI fix,
 new device acceptance or completed field trial. The final provided phone state is OFF.
+
+## Revision4 — proportional map and more compact neighboring blocks
+
+Owner explicitly requests full map width **without stretching continents**, allowing
+more map height at the expense of the other two blocks, and prefers the compact
+central composition of beta60. This is a UI-only continuation, not a transport fix.
+
+- Compact map uses the same scale on both axes in the existing geographic projection.
+  Its preferred height derives from actual map bounds and available content width;
+  a separately undersized container fits it uniformly rather than flattening it.
+  Initial location-bound changes request layout; no transport operation is added.
+- At392×780/density1, RU and EN OFF fixtures: map **368×114→368×156px**;
+  connection/dial panel **300→265px** high; middle network panel **204→197px**.
+  Widths, block order, square corners, palette and thin strokes are preserved.
+- Space comes from the dial and spare network-panel spacing, not smaller text or
+  overlapping/shrunken selectors. The middle panel remains taller than beta60's
+  compact reference because the modern controls retain their readable labels and
+  minimum touch areas. On constrained/large-font viewports the body scrolls instead
+  of hiding or distorting the map; bottom navigation stays fixed.
+- [beta60 → installed revision3 → revision4 comparison](../../research/ui60-layout-20261016/comparisons/home-map-revision4.png)
+  and [revision4 main image](../../research/ui60-layout-20261016/screenshots/candidate-ru-392-780-1.0-home-off.png)
+  are real UI-code renders with synthetic data, not live CONNECTs.
+
+| Revision4 identity | Value |
+|---|---|
+| Version | `0.1.18-research84-ui60-4`, code84, minSdk31, arm64-v8a |
+| UI source inventory, not Git SHA | `e90893aee5fdc04aae1cacd296d5291ca8a743350de42334b290f08504c48fce` |
+| Unsigned APK | `64b4c71f8fc91ce91a457e1c99c1b171adeaad58d226a7c05e71e32c0b655ba1` |
+| Unsigned size |55,990,836bytes|
+| Native, unchanged | `be70a66ccc2bcbf0478915fd414c32de3bedb2a0ae0c3222a53e65eebd0a92b2` |
+| Native source inventory, unchanged | `b36c4a21ee6cf04acb192a0e6d140fa565b3e5ae75f6fc8d028d029c3152781d` |
+| Product signing / install / transfer |0 /0 /0; revision4 remains private and unsigned|
+
+Full offline Gradle assemble plus15 targeted JVM/export/presentation cases PASS.
+All native payloads and restricted native manifest are byte-identical; permissions,
+SDK/ABI/features unchanged; unsigned signature state/alignment verified. Six paths
+change from revision3: four presentation classes, presentation test and private
+versionName. No lifecycle/connection handler, native/security/transport logic change.
+Accepted artifacts and revision3 source/build/render snapshots remain retained.
+
+Four isolated Android31 configurations render54 scenes (RU/EN, normal/narrow,
+fontScale1/1.5, landscape),8 navigation cycles and32 map dimension/density cases;
+no service/session side effects, clipped network labels or reduced button targets
+were detected by the existing checks. Actual dot-cloud bounds also check proportional
+rendering in deliberately short fixture containers. Normal RU/EN measured block
+heights are asserted by [map geometry checks](../../research/ui60-layout-20261016/map-revision-check.json).
+
+**Fresh real-IME check was NOT_VERIFIED**: the disposable host had text focus but
+not window focus, so IME was not visible. No production chat change is made to hide
+that harness limitation; revision3's prior IME PASS is retained separately, not
+relabelled as a revision4 PASS. Chat fixture/navigation renders pass; Android35 live
+runtime remains NOT_RUN. No retry/restart loop was used to turn the IME check green.
+
+One bounded KVM/host-GPU render run,50%-of-one-core quota,85°C cutoff; measured maxima
+**build73°C, emulator66°C**. Emulator was explicitly stopped after the IME attempt;
+the wrapper reports the requested interruption, not a successful natural exit.
+[Execution receipt](../../research/ui60-layout-20261016/map-revision4-execution.json).
+No phone/server action accompanies this UI revision. Current installed UI60-3 and
+its existing signed backup are untouched. Revision4 visual approval/signing/install
+are pending; code84 is retained, not increased. FIELD-1 remains NOT_STARTED.
 
 ## Owner approval and requested installation —16Oct17:11UTC
 
@@ -131,7 +192,7 @@ remained. Shutdown reported emulator returncode-6; this is retained as a host-em
 shutdown observation, not a product crash or an assertion of graceful internal exit.
 See [bounded execution receipt](../../research/ui60-layout-20261016/emulator-execution.json).
 
-## Exact identities
+## Revision3 identities — installed owner checkpoint
 
 | Identity | Value |
 |---|---|
@@ -251,7 +312,7 @@ The normal research provisioning mechanism is retained. No gate is enabled, no
 credential cache copied, and no identity is embedded for a tester. Its actual device
 applicability is still a separate post-approval check, not inferred from owner UID.
 
-## Result / next boundary
+## Revision3 result / installation checkpoint (preserved)
 
 | Criterion | Result at this checkpoint |
 |---|---|

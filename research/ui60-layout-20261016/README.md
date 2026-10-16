@@ -26,13 +26,19 @@ Country names wrap instead of reproducing beta60's tiny text. Blank metrics rema
 unknown; fixture/emulator telemetry is never described as owner TUN proof.
 
 Revision2 follows the owner's requested beta60 telemetry grouping and square corners.
-Revision3 changes only the compact map width and private versionName. The actual
-map rendering fills available width without making surrounding panels taller.
-[Map-only pixel check](map-revision-check.json) confirms normal RU/EN OFF pixels
-outside the map are identical to revision2; eight actual width/height/density cases
-per configuration cover the narrowed-map regression. [Execution receipt](map-revision-execution.json)
-records bounded build/KVM checks and final emulator OFF. Owner approved the final
-map, then requested installation on their own phone. The [owner-install receipt](owner-install.json)
+Revision3 changed only the compact map width and private versionName. Its
+[retained map-only pixel check](revision3/map-revision-check.json) and
+[execution receipt](map-revision-execution.json) describe that earlier checkpoint.
+Owner approved that map, then requested installation on their own phone.
+Revision4 now preserves continent proportions rather than flattening the map:
+normal map height114→156, connection panel300→265, middle panel204→197px.
+[Three-way revision comparison](comparisons/home-map-revision4.png),
+[current geometry checks](map-revision-check.json) and
+[bounded execution](map-revision4-execution.json) distinguish it from installed revision3.
+Eight map width/height/density cases per configuration include deliberately undersized
+containers; proportional fit is retained even then. Revision4 remains unsigned and
+awaits visual approval, not installation or field acceptance. The earlier
+[owner-install receipt](owner-install.json)
 records one existing-key signing/replace-install and ordinary launch, not a CONNECT
 or field trial. No emulator/build/tests were restarted for this installation.
 Network/signal, battery percentage/bar, traffic grid and connection selectors retain
@@ -43,10 +49,12 @@ explicit synthetic telemetry; they are not observations of a phone connection.
 Final checks:54 candidate scenes across four configurations, eight navigation
 cycles, zero service requests, secure flag retained, and15 targeted JVM cases pass.
 Each configuration checks telemetry grouping and real rectangular-frame pixels.
-The79 PNGs comprise24 reference frames and55 candidate/component frames.
-[Real keyboard component viewport](screenshots/candidate-real-ime-chat-component.png)
-is an additional measured IME check, not a picture of the keyboard itself:
-IME visible, bottom inset366px, system bars27/54px, draft/selection preserved.
+The current78-image inventory comprises24 reference frames and54 revision4 candidate
+frames. The [prior revision3 real keyboard component viewport](revision3/real-ime-chat-component.png)
+is retained as historical evidence only. Revision4's additional real-IME attempt had
+no window focus and could not show the keyboard: NOT_VERIFIED, not PASS. Its chat
+canvas/navigation checks pass; this window-focus limitation does not trigger a product
+chat patch. No stale keyboard screenshot is counted as a new revision4 render.
 
 ## Source and artifact boundary
 
@@ -136,9 +144,10 @@ changed to address that emulator condition. See the final receipt for IME outcom
   is generated from a real device. Shared frame geometry applies to those dialogs.
 - Same code84 enables potential same-signer owner replacement/return without `-d`;
   a tester's lower version is not promised as an ordinary rollback target.
-- **Owner visual approval received; owner inspection installation complete.**
+- **Revision3 approval/installation complete; revision4 visual approval pending.**
   Tester applicability/grant/readiness checks and private owner transfer remain
-  pending. Reuse the verified signed candidate, do not sign/build again. The field
+  pending. Revision4 is built unsigned; only after approval/applicability sign that
+  exact artifact, not another build or the old revision3. The field
   continuation remains one CONNECT,240s/18min, no reconnect or server repair, not started.
 
 Historical A/B causes, chat handoff, supervisor, broad field acceptance and release

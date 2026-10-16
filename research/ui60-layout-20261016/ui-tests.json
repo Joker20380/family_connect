@@ -154,62 +154,80 @@
       "compact_map_width": [
         {
           "compactMapFillsWidth": true,
+          "compactMapPreservesAspect": true,
+          "undersizedMapFitsWithoutStretching": true,
           "cases": [
             {
               "widthDp": 296,
-              "heightDp": 88,
+              "heightDp": 127,
+              "shortageDp": 0,
               "density": 1,
               "minLandX": 1.5,
-              "maxLandX": 282.5
+              "maxLandX": 282.5,
+              "landAspect": 0.38434162735939026
             },
             {
               "widthDp": 296,
-              "heightDp": 114,
-              "density": 1,
-              "minLandX": 0.5,
-              "maxLandX": 282.5
-            },
-            {
-              "widthDp": 368,
-              "heightDp": 88,
+              "heightDp": 87,
+              "shortageDp": 40,
               "density": 1,
               "minLandX": 1.5,
-              "maxLandX": 355.5
+              "maxLandX": 185.5,
+              "landAspect": 0.3804347813129425
             },
             {
               "widthDp": 368,
-              "heightDp": 114,
+              "heightDp": 156,
+              "shortageDp": 0,
               "density": 1,
-              "minLandX": 0.5,
-              "maxLandX": 355.5
-            },
-            {
-              "widthDp": 296,
-              "heightDp": 88,
-              "density": 2,
-              "minLandX": 2.5,
-              "maxLandX": 565.5
-            },
-            {
-              "widthDp": 296,
-              "heightDp": 114,
-              "density": 2,
-              "minLandX": 0.5,
-              "maxLandX": 565.5
+              "minLandX": 1.5,
+              "maxLandX": 355.5,
+              "landAspect": 0.38418078422546387
             },
             {
               "widthDp": 368,
-              "heightDp": 88,
+              "heightDp": 116,
+              "shortageDp": 40,
+              "density": 1,
+              "minLandX": 1.5,
+              "maxLandX": 257.5,
+              "landAspect": 0.3828125
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 126.5,
+              "shortageDp": 0,
               "density": 2,
               "minLandX": 2.5,
-              "maxLandX": 710.5
+              "maxLandX": 565.5,
+              "landAspect": 0.3836589753627777
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 86.5,
+              "shortageDp": 40,
+              "density": 2,
+              "minLandX": 2.5,
+              "maxLandX": 365.5,
+              "landAspect": 0.38567492365837097
             },
             {
               "widthDp": 368,
-              "heightDp": 114,
+              "heightDp": 155.5,
+              "shortageDp": 0,
+              "density": 2,
+              "minLandX": 2.5,
+              "maxLandX": 710.5,
+              "landAspect": 0.3827683627605438
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 115.5,
+              "shortageDp": 40,
               "density": 2,
               "minLandX": 0.5,
-              "maxLandX": 710.5
+              "maxLandX": 512.5,
+              "landAspect": 0.3828125
             }
           ]
         }
@@ -378,62 +396,80 @@
       "compact_map_width": [
         {
           "compactMapFillsWidth": true,
+          "compactMapPreservesAspect": true,
+          "undersizedMapFitsWithoutStretching": true,
           "cases": [
             {
               "widthDp": 296,
-              "heightDp": 88,
+              "heightDp": 127,
+              "shortageDp": 0,
               "density": 1,
               "minLandX": 1.5,
-              "maxLandX": 282.5
+              "maxLandX": 282.5,
+              "landAspect": 0.38434162735939026
             },
             {
               "widthDp": 296,
-              "heightDp": 114,
-              "density": 1,
-              "minLandX": 0.5,
-              "maxLandX": 282.5
-            },
-            {
-              "widthDp": 368,
-              "heightDp": 88,
+              "heightDp": 87,
+              "shortageDp": 40,
               "density": 1,
               "minLandX": 1.5,
-              "maxLandX": 355.5
+              "maxLandX": 185.5,
+              "landAspect": 0.3804347813129425
             },
             {
               "widthDp": 368,
-              "heightDp": 114,
+              "heightDp": 156,
+              "shortageDp": 0,
               "density": 1,
-              "minLandX": 0.5,
-              "maxLandX": 355.5
-            },
-            {
-              "widthDp": 296,
-              "heightDp": 88,
-              "density": 2,
-              "minLandX": 2.5,
-              "maxLandX": 565.5
-            },
-            {
-              "widthDp": 296,
-              "heightDp": 114,
-              "density": 2,
-              "minLandX": 0.5,
-              "maxLandX": 565.5
+              "minLandX": 1.5,
+              "maxLandX": 355.5,
+              "landAspect": 0.38418078422546387
             },
             {
               "widthDp": 368,
-              "heightDp": 88,
+              "heightDp": 116,
+              "shortageDp": 40,
+              "density": 1,
+              "minLandX": 1.5,
+              "maxLandX": 257.5,
+              "landAspect": 0.3828125
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 126.5,
+              "shortageDp": 0,
               "density": 2,
               "minLandX": 2.5,
-              "maxLandX": 710.5
+              "maxLandX": 565.5,
+              "landAspect": 0.3836589753627777
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 86.5,
+              "shortageDp": 40,
+              "density": 2,
+              "minLandX": 2.5,
+              "maxLandX": 365.5,
+              "landAspect": 0.38567492365837097
             },
             {
               "widthDp": 368,
-              "heightDp": 114,
+              "heightDp": 155.5,
+              "shortageDp": 0,
+              "density": 2,
+              "minLandX": 2.5,
+              "maxLandX": 710.5,
+              "landAspect": 0.3827683627605438
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 115.5,
+              "shortageDp": 40,
               "density": 2,
               "minLandX": 0.5,
-              "maxLandX": 710.5
+              "maxLandX": 512.5,
+              "landAspect": 0.3828125
             }
           ]
         }
@@ -602,62 +638,80 @@
       "compact_map_width": [
         {
           "compactMapFillsWidth": true,
+          "compactMapPreservesAspect": true,
+          "undersizedMapFitsWithoutStretching": true,
           "cases": [
             {
               "widthDp": 296,
-              "heightDp": 88,
+              "heightDp": 127,
+              "shortageDp": 0,
               "density": 1,
               "minLandX": 1.5,
-              "maxLandX": 282.5
+              "maxLandX": 282.5,
+              "landAspect": 0.38434162735939026
             },
             {
               "widthDp": 296,
-              "heightDp": 114,
-              "density": 1,
-              "minLandX": 0.5,
-              "maxLandX": 282.5
-            },
-            {
-              "widthDp": 368,
-              "heightDp": 88,
+              "heightDp": 87,
+              "shortageDp": 40,
               "density": 1,
               "minLandX": 1.5,
-              "maxLandX": 355.5
+              "maxLandX": 185.5,
+              "landAspect": 0.3804347813129425
             },
             {
               "widthDp": 368,
-              "heightDp": 114,
+              "heightDp": 156,
+              "shortageDp": 0,
               "density": 1,
-              "minLandX": 0.5,
-              "maxLandX": 355.5
-            },
-            {
-              "widthDp": 296,
-              "heightDp": 88,
-              "density": 2,
-              "minLandX": 2.5,
-              "maxLandX": 565.5
-            },
-            {
-              "widthDp": 296,
-              "heightDp": 114,
-              "density": 2,
-              "minLandX": 0.5,
-              "maxLandX": 565.5
+              "minLandX": 1.5,
+              "maxLandX": 355.5,
+              "landAspect": 0.38418078422546387
             },
             {
               "widthDp": 368,
-              "heightDp": 88,
+              "heightDp": 116,
+              "shortageDp": 40,
+              "density": 1,
+              "minLandX": 1.5,
+              "maxLandX": 257.5,
+              "landAspect": 0.3828125
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 126.5,
+              "shortageDp": 0,
               "density": 2,
               "minLandX": 2.5,
-              "maxLandX": 710.5
+              "maxLandX": 565.5,
+              "landAspect": 0.3836589753627777
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 86.5,
+              "shortageDp": 40,
+              "density": 2,
+              "minLandX": 2.5,
+              "maxLandX": 365.5,
+              "landAspect": 0.38567492365837097
             },
             {
               "widthDp": 368,
-              "heightDp": 114,
+              "heightDp": 155.5,
+              "shortageDp": 0,
+              "density": 2,
+              "minLandX": 2.5,
+              "maxLandX": 710.5,
+              "landAspect": 0.3827683627605438
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 115.5,
+              "shortageDp": 40,
               "density": 2,
               "minLandX": 0.5,
-              "maxLandX": 710.5
+              "maxLandX": 512.5,
+              "landAspect": 0.3828125
             }
           ]
         }
@@ -816,87 +870,89 @@
       "compact_map_width": [
         {
           "compactMapFillsWidth": true,
+          "compactMapPreservesAspect": true,
+          "undersizedMapFitsWithoutStretching": true,
           "cases": [
             {
               "widthDp": 296,
-              "heightDp": 88,
+              "heightDp": 127,
+              "shortageDp": 0,
               "density": 1,
               "minLandX": 1.5,
-              "maxLandX": 282.5
+              "maxLandX": 282.5,
+              "landAspect": 0.38434162735939026
             },
             {
               "widthDp": 296,
-              "heightDp": 114,
-              "density": 1,
-              "minLandX": 0.5,
-              "maxLandX": 282.5
-            },
-            {
-              "widthDp": 368,
-              "heightDp": 88,
+              "heightDp": 87,
+              "shortageDp": 40,
               "density": 1,
               "minLandX": 1.5,
-              "maxLandX": 355.5
+              "maxLandX": 185.5,
+              "landAspect": 0.3804347813129425
             },
             {
               "widthDp": 368,
-              "heightDp": 114,
+              "heightDp": 156,
+              "shortageDp": 0,
               "density": 1,
-              "minLandX": 0.5,
-              "maxLandX": 355.5
-            },
-            {
-              "widthDp": 296,
-              "heightDp": 88,
-              "density": 2,
-              "minLandX": 2.5,
-              "maxLandX": 565.5
-            },
-            {
-              "widthDp": 296,
-              "heightDp": 114,
-              "density": 2,
-              "minLandX": 0.5,
-              "maxLandX": 565.5
+              "minLandX": 1.5,
+              "maxLandX": 355.5,
+              "landAspect": 0.38418078422546387
             },
             {
               "widthDp": 368,
-              "heightDp": 88,
+              "heightDp": 116,
+              "shortageDp": 40,
+              "density": 1,
+              "minLandX": 1.5,
+              "maxLandX": 257.5,
+              "landAspect": 0.3828125
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 126.5,
+              "shortageDp": 0,
               "density": 2,
               "minLandX": 2.5,
-              "maxLandX": 710.5
+              "maxLandX": 565.5,
+              "landAspect": 0.3836589753627777
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 86.5,
+              "shortageDp": 40,
+              "density": 2,
+              "minLandX": 2.5,
+              "maxLandX": 365.5,
+              "landAspect": 0.38567492365837097
             },
             {
               "widthDp": 368,
-              "heightDp": 114,
+              "heightDp": 155.5,
+              "shortageDp": 0,
+              "density": 2,
+              "minLandX": 2.5,
+              "maxLandX": 710.5,
+              "landAspect": 0.3827683627605438
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 115.5,
+              "shortageDp": 40,
               "density": 2,
               "minLandX": 0.5,
-              "maxLandX": 710.5
+              "maxLandX": 512.5,
+              "landAspect": 0.3828125
             }
           ]
         }
       ]
     }
   ],
-  "real_ime_component": true,
-  "keyboard": [
-    {
-      "name": "candidate-real-ime-chat-component",
-      "width": 432,
-      "height": 567,
-      "locale": "en-US",
-      "fontScale": 1,
-      "density": 1.125,
-      "secure": true,
-      "serviceRequests": 0
-    },
-    {
-      "realImeVisible": true,
-      "systemBars": "Insets{left=0, top=27, right=0, bottom=54}",
-      "imeInsets": "Insets{left=0, top=0, right=0, bottom=366}",
-      "draftSelectionPreserved": true
-    }
-  ],
+  "real_ime_component": false,
+  "real_ime_attempt_status": "NOT_VERIFIED_WINDOW_FOCUS_UNAVAILABLE",
+  "keyboard": [],
   "api35_runtime": "NOT_RUN",
   "live_actions": 0
 }

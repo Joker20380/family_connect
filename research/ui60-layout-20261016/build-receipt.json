@@ -1,11 +1,11 @@
 {
   "exit": 0,
-  "ui_source_inventory": "7f8fd0dd8498c61c4f182b1f3322d9c2d38d17dc4f30ff9e06cef0b733d9c39d",
+  "ui_source_inventory": "e90893aee5fdc04aae1cacd296d5291ca8a743350de42334b290f08504c48fce",
   "native_source_inventory": "b36c4a21ee6cf04acb192a0e6d140fa565b3e5ae75f6fc8d028d029c3152781d",
   "native_sha256": "be70a66ccc2bcbf0478915fd414c32de3bedb2a0ae0c3222a53e65eebd0a92b2",
   "native_rebuilt": false,
   "native_manifest_preserved": true,
-  "gradle_log_sha256": "c8e055c32d20f0a90788657d5da358590d1bc55e9874e1503c807d85c963c466",
-  "unsigned_apk_sha256": "ef3c7e06f5666c87b8e31bf1eddc318d1a7cd97a0c720187f05e342a2a1ec95b",
-  "apk_size": 55990388
+  "gradle_log_sha256": "1056fe6917445d9f0a682f3cba513d7c7761491547b1d722f07aab24aef29533",
+  "unsigned_apk_sha256": "64b4c71f8fc91ce91a457e1c99c1b171adeaad58d226a7c05e71e32c0b655ba1",
+  "apk_size": 55990836
 }

@@ -8,7 +8,14 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
-### UI60-RESTORE-AND-FIELD-1 — owner installation checkpoint (16.10)
+### UI60-RESTORE-AND-FIELD-1 — revision4 review / revision3 installed (16.10)
+
+- Requested revision4 is built unsigned: full-width proportional map with more height,
+  more compact neighboring panels, unchanged native/security/state sources. Review
+  [actual comparison](../research/ui60-layout-20261016/comparisons/home-map-revision4.png)
+  before any signing/install/transfer.15 JVM cases/54 fixtures/32 map cases PASS;
+  fresh real IME not verified because disposable window lacked focus. Prior revision3
+  remains installed; no phone or server change in this UI continuation.
 
 - [Export10 interruption](releases/2026-10-16-ui60-owner-call-drop-export10.md): exact
   active SESSION_S9 is closed during scheduled maintenance, before client retry exhaustion.
@@ -42,8 +49,9 @@ Verify reboot automount separately; no engineering release gate changes.
   retained; normal launch PID19934/VPN OFF. Native unchanged. Owner now inspects
   the real phone UI; this is not transport acceptance or a field CONNECT.
 - Continue [FIELD-1](releases/2026-10-16-field-1-ui60-warm-start.md) in this task:
-  existing agreed tester's actual compatibility/authorization and availability;
-  private owner transfer of the already signed candidate, without re-signing;
+  revision4 visual approval, existing agreed tester's actual compatibility/
+  authorization and availability; signing the exact applicable approved revision4,
+  then private owner transfer (revision3 signing is not revision4 signing);
   warm preparation without Wi-Fi VPN CONNECT; one bounded
   mobile restricted CONNECT only after fresh prerequisites. Field NOT_STARTED.
 - Do not repeat UI work, owner reconnect, transport suites or maintenance simply
