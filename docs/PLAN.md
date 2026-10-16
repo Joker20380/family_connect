@@ -8,6 +8,21 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### SPEED-CANDIDATE-WEB-TRAFFIC-FAILURE-1 — investigate admission/lifecycle (17.10 local)
+
+- [Owner export11](releases/2026-10-17-speed-candidate-web-traffic-failure-1.md):
+  practical web traffic FAIL. Preserve distinct S1 handshake timeout and S2 successful
+  startup/poor browsing; no gateway restart in the recorded interval.
+- Leading hypothesis:32 TCP slots occupied, new-flow immediate refusal. Existing
+  `limit_denied` is omitted from normal export; specific rejected-site count unknown.
+  Scope checked code is unchanged versus UI60-4; new fast-retransmit cause NOT_PROVEN.
+- Two existing local cap/DNS tests PASS, not live browser reproduction. No product
+  edits, builds, installs or rollback. Keep VPN OFF and do not repeat CONNECT automatically.
+- Next requires an explicit change decision: compatible pair rollback to remove the
+  new variable (not a cure for the inherited cap), or bounded TCP admission/lifecycle
+  and existing-counter projection work with browser-like local concurrency tests.
+  Do not blindly increase capacity or kill valid long-lived streams.
+
 ### TRANSPORT-SPEED-CUTOVER-OWNER-INSTALL-1 — rollout complete (16.10)
 
 - [Owner/server installation](releases/2026-10-16-transport-speed-cutover-owner-install-1.md)
@@ -16,9 +31,9 @@ Verify reboot automount separately; no engineering release gate changes.
 - One coordinated gateway stop/start; seed/strict TLS/current NL→RU directory PASS.
   Earlier scheduled FAIL_CLOSED and initial SSH/publication limitations remain visible;
   no owner markers/writer, current evaluate NOOP, unchanged timer/security/argv.
-- Final phone VPN OFF. No new CONNECT/export, benchmark or live recovery acceptance.
-  Next is an owner-agreed ordinary traffic/call observation, not another rebuild or
-  automatic field/A→B test. Do not promote prior exact-APK acceptance to this pair.
+- At installation completion phone VPN OFF; later owner browsing failure/export11
+  is recorded above. No benchmark/live recovery acceptance. Do not promote prior
+  exact-APK acceptance to this pair or repeat field/A→B tests automatically.
 - Preserve public catalogs/invitations, historical causality, handoff and supervisor
   boundaries. Future scheduled operation is not assumed successful in advance.
 

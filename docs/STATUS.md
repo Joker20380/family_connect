@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+## SPEED-CANDIDATE-WEB-TRAFFIC-FAILURE-1 — traffic FAIL / cause not fully proven (17.10 local)
+
+[Export11 investigation](releases/2026-10-17-speed-candidate-web-traffic-failure-1.md):
+owner reports most pages/static assets failing on installed APK28543d46/nativef25124ba
+and gateway5de40b9c. Two distinct attempts: earlier S1 native/server reliable handshake
+timeout, then S2 restricted READY/CONNECTED with288 DNS responses/0 recorded DNS errors,
+77 TCP opens/0 exported open errors, but32 active/peak TCP slots and10 mux protocol
+errors. Source refuses new flows at32; existing refusal counter is dropped by Java
+projection. Actual failed-site quota refusals and fast-retransmit causality NOT_PROVEN.
+The cap/projection code predates this candidate. Two targeted inherited local tests
+PASS; no product change. Exact S2 server trace matches; late terminal follows recorded
+owner OFF, not assigned as cause of earlier web failures. Same gateway invocation;
+phone now PID32071/VPN OFF, intervening app-process change unexplained. No install,
+rollback/restart/CONNECT requested by agent. Hold further distribution/acceptance;
+next decision is safe explicitly approved rollback versus targeted admission/lifecycle
+and diagnostic-counter work, not another blind performance tune or repeated field test.
+
 ## TRANSPORT-SPEED-CUTOVER-OWNER-INSTALL-1 — installed/deployed (16.10)
 
 [Actual rollout and safe receipts](releases/2026-10-16-transport-speed-cutover-owner-install-1.md):
@@ -15,7 +32,8 @@ COMMITTED/no owners/no writer permit transition, not a renewal claim. Initial di
 RU SSH failed; authorized NL ProxyJump worked. No CONNECT/export/rebuild/emulator or
 public distribution. Live speed/call continuity/recovery still unmeasured; no blanket
 ten-minute-disconnect fix, field/handoff/supervisor or historical-causality promotion.
-Next: separately observed ordinary owner traffic/call check; do not repeat build work.
+The subsequent owner traffic check is unsuccessful and recorded above; do not repeat
+it or promote this installation-readiness result to device acceptance.
 
 ## TRANSPORT-SPEED-CUTOVER-CANDIDATE-1 — combined local PASS / rollout pending (16.10)
 

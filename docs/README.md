@@ -1,5 +1,10 @@
 # Documentation
 
+[Speed candidate web traffic failure17.10 local](releases/2026-10-17-speed-candidate-web-traffic-failure-1.md):
+export11 separates earlier handshake failure from later restricted browsing failure.
+TCP32 cap reached; existing refusal counter omitted from export. Leading hypothesis,
+not proved per-site rejection or fast-retransmit causality. No rollback/product changes.
+
 [Private speed/restoration owner rollout16.10](releases/2026-10-16-transport-speed-cutover-owner-install-1.md):
 signed/installed APK28543d46 and nativef25124ba, deployed gateway5de40b9c.
 One compatible phone replacement and coordinated gateway transition; strict readiness

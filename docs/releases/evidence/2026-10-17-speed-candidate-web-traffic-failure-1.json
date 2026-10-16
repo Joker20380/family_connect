@@ -1,0 +1,431 @@
+{
+  "result": "WEB_TRAFFIC_FAIL_OWNER_REPORTED_CAUSE_NOT_FULLY_PROVEN",
+  "current_pair": {
+    "apk": "28543d4690327e29a6eb6a60e52fa50232a407663ed7e610f1434cd56f86193d",
+    "native": "f25124ba1c94a0c6f4258e8b67488e8febf9a1c9e88cb2073790564c3a1f4729",
+    "gateway": "5de40b9ce9c15aac85475df05c449bddf2ecfe61a1928fa3844b4a8446b33047"
+  },
+  "export": {
+    "sha256": "bcc5a08d4638550c136b7c97243cb18a8a071eac1ff7022a8993c46b48a83c30",
+    "bytes": 98943,
+    "provenance": "owner-supplied normal support export11; private immutable analysis copy"
+  },
+  "episodes": {
+    "S1_EARLIER_STARTUP": {
+      "alias": "S1_EARLIER_STARTUP",
+      "surface": "incident",
+      "state": "FAILED",
+      "network_class": "CELLULAR",
+      "counters": {
+        "protect_ok": 115,
+        "protect_denied": 0
+      },
+      "startup": {
+        "attempt": 1,
+        "started_unix_ms": 1792186926385,
+        "completed_ms": 56348,
+        "status": "FAILED",
+        "stage": "DEDICATED_AUTH",
+        "cause": "UNKNOWN",
+        "complete": true,
+        "bootstrap_exchanges_dropped": 0
+      },
+      "bootstrap_exchange_count": 1,
+      "family_authenticated": [
+        true
+      ],
+      "session": {
+        "native_state": 5,
+        "authorization_denied": false,
+        "correlation_status": "VALID",
+        "terminal_reason": "UNKNOWN",
+        "reliable_terminal": ""
+      },
+      "server_exact_dedicated_matches": 42,
+      "retention": {
+        "trace_dropped": 0,
+        "export_dropped": 0,
+        "delivery_dropped": 0,
+        "delivery_projection_dropped": 0,
+        "projection_dropped": 0
+      },
+      "trace_retained": 39,
+      "boundary_retained": 64,
+      "boundary_dropped": 84,
+      "boundary_projection_dropped": 0,
+      "app_events_retained": 17,
+      "archive_records": 0,
+      "first_failure": {
+        "stage": "CARRIER",
+        "state": "FAILED",
+        "reason": "RELIABLE_HANDSHAKE_TIMEOUT",
+        "close_source": "RELIABLE_EXHAUSTION",
+        "sequence": 25,
+        "timestamp_ms": 1792186982728,
+        "tx": 0,
+        "rx": 0,
+        "reliable_ack_age_ms": 20000,
+        "reliable_progress_age_ms": 20000
+      },
+      "observation": {
+        "point": "STARTUP_CALLER",
+        "error_category": "UNKNOWN",
+        "context_state": "LIVE",
+        "stop_at_observation": "NONE",
+        "elapsed_ms": 56347
+      },
+      "local_stop": {
+        "source": "CLEANUP",
+        "elapsed_ms": 56347
+      },
+      "server_failures": [
+        {
+          "sequence": 39,
+          "timestamp_ms": 1792186965533,
+          "stage": "GATEWAY_SESSION",
+          "state": "FAILED",
+          "reason": "GATEWAY_CLOSE",
+          "broker_reason": "gateway_session_failed",
+          "lease_deadline_ms": 1792187540634,
+          "tx": 0,
+          "rx": 0
+        },
+        {
+          "sequence": 38,
+          "timestamp_ms": 1792186965533,
+          "stage": "FAMILY_TLS",
+          "state": "FAILED",
+          "reason": "FAMILY_TLS_ERROR",
+          "tx": 0,
+          "rx": 0
+        },
+        {
+          "sequence": 26,
+          "timestamp_ms": 1792186965527,
+          "stage": "CARRIER",
+          "state": "FAILED",
+          "reason": "RELIABLE_HANDSHAKE_TIMEOUT",
+          "close_source": "RELIABLE_EXHAUSTION",
+          "tx": 0,
+          "rx": 0,
+          "reliable_ack_age_ms": 20000,
+          "reliable_progress_age_ms": 20000
+        }
+      ]
+    },
+    "S2_WEB_TRAFFIC": {
+      "alias": "S2_WEB_TRAFFIC",
+      "surface": "ring",
+      "state": "DISCONNECTED",
+      "network_class": "CELLULAR",
+      "counters": {
+        "protect_ok": 116,
+        "protect_denied": 0,
+        "dns": 288,
+        "tcp": 76,
+        "tcp_active": 32,
+        "tcp_peak": 32,
+        "udp_denied": 435,
+        "ipv6_denied": 811
+      },
+      "startup": {
+        "attempt": 1,
+        "started_unix_ms": 1792187659517,
+        "completed_ms": 21546,
+        "status": "SUCCEEDED",
+        "stage": "STARTUP",
+        "cause": "NONE",
+        "complete": true,
+        "bootstrap_exchanges_dropped": 0
+      },
+      "bootstrap_exchange_count": 1,
+      "family_authenticated": [
+        true
+      ],
+      "session": {
+        "native_state": 2,
+        "authorization_denied": false,
+        "correlation_status": "VALID",
+        "terminal_reason": "NONE",
+        "reliable_terminal": "",
+        "retransmissions": 59,
+        "recovery_timeouts": 56,
+        "received_frames": 7966,
+        "sent_frames": 7367,
+        "protocol_errors": 10,
+        "dns_responses": 288,
+        "dns_errors": 0,
+        "tcp_open_ok": 77,
+        "tcp_open_errors": 0,
+        "sent_bytes": 567399,
+        "received_bytes": 6009776,
+        "evidence_dropped": 0,
+        "observed_at_ms": 1792188002970
+      },
+      "server_exact_dedicated_matches": 311,
+      "retention": {
+        "trace_dropped": 85,
+        "export_dropped": 0,
+        "delivery_dropped": 152,
+        "delivery_projection_dropped": 0,
+        "projection_dropped": 0
+      },
+      "trace_retained": 192,
+      "boundary_retained": 64,
+      "boundary_dropped": 70957,
+      "boundary_projection_dropped": 0,
+      "app_events_retained": 22,
+      "archive_records": 0,
+      "server_failures": [
+        {
+          "sequence": 292,
+          "timestamp_ms": 1792188012980,
+          "stage": "CARRIER",
+          "state": "FAILED",
+          "reason": "RELIABLE_RETRY_EXHAUSTED",
+          "close_source": "RELIABLE_EXHAUSTION",
+          "tx": 0,
+          "rx": 0,
+          "reliable_age_ms": 9470,
+          "reliable_retries": 8,
+          "reliable_pending": 5,
+          "reliable_ack_age_ms": 9793,
+          "reliable_progress_age_ms": 14453,
+          "reliable_ack_received": 4453
+        },
+        {
+          "sequence": 302,
+          "timestamp_ms": 1792188012989,
+          "stage": "FAMILY_TLS",
+          "state": "FAILED",
+          "reason": "FAMILY_TLS_ERROR",
+          "tx": 0,
+          "rx": 0
+        },
+        {
+          "sequence": 311,
+          "timestamp_ms": 1792188012994,
+          "stage": "GATEWAY_SESSION",
+          "state": "FAILED",
+          "reason": "GATEWAY_CLOSE",
+          "broker_reason": "gateway_session_failed",
+          "lease_deadline_ms": 1792188268062,
+          "tx": 0,
+          "rx": 0
+        }
+      ],
+      "timeline": [
+        {
+          "utc": "2026-10-16T21:54:17.592000+00:00",
+          "component": "ORCHESTRATOR",
+          "reason": "NONE",
+          "state_from": "DISCONNECTED",
+          "state_to": "CONNECTING"
+        },
+        {
+          "utc": "2026-10-16T21:54:17.648000+00:00",
+          "component": "ORCHESTRATOR",
+          "reason": "NONE",
+          "state_from": "CONNECTING",
+          "state_to": "CONNECTING"
+        },
+        {
+          "utc": "2026-10-16T21:54:41.165000+00:00",
+          "component": "SESSION",
+          "reason": "SESSION_READY",
+          "state_from": "CONNECTING",
+          "state_to": "CONNECTING"
+        },
+        {
+          "utc": "2026-10-16T21:54:41.381000+00:00",
+          "component": "ORCHESTRATOR",
+          "reason": "NONE",
+          "state_from": "CONNECTING",
+          "state_to": "CONNECTED"
+        },
+        {
+          "utc": "2026-10-16T21:54:41.396000+00:00",
+          "component": "ORCHESTRATOR",
+          "reason": "NONE",
+          "state_from": "CONNECTED",
+          "state_to": "CONNECTED"
+        },
+        {
+          "utc": "2026-10-16T22:00:02.884000+00:00",
+          "component": "ORCHESTRATOR",
+          "reason": "CANCELLED",
+          "state_from": "CONNECTED",
+          "state_to": "DISCONNECTING"
+        },
+        {
+          "utc": "2026-10-16T22:00:03.102000+00:00",
+          "component": "SESSION",
+          "reason": "NONE",
+          "state_from": "DISCONNECTING",
+          "state_to": "DISCONNECTING"
+        },
+        {
+          "utc": "2026-10-16T22:00:03.222000+00:00",
+          "component": "ORCHESTRATOR",
+          "reason": "CANCELLED",
+          "state_from": "DISCONNECTING",
+          "state_to": "DISCONNECTED"
+        }
+      ],
+      "server_failure_before_off_retained": 0,
+      "last_client_flow": {
+        "send_base": 2649,
+        "send_next": 2649,
+        "receive_next": 3008,
+        "receive_mask": 0,
+        "ack_base": 2649,
+        "ack_mask": 0,
+        "pending": 0,
+        "buffered": 0,
+        "head_retries": 0,
+        "ack_seen": true,
+        "head_sacked": false
+      },
+      "last_server_flow_before_off": {
+        "send_base": 3008,
+        "send_next": 3008,
+        "receive_next": 2649,
+        "receive_mask": 0,
+        "ack_seen": true,
+        "ack_base": 3008,
+        "ack_mask": 0,
+        "pending": 0,
+        "buffered": 0,
+        "head_retries": 0,
+        "head_sacked": false
+      },
+      "last_client_assembly": {
+        "fragments": 7799,
+        "completed": 7171,
+        "expired": 16,
+        "malformed": 0,
+        "duplicate": 0,
+        "conflict": 0,
+        "capacity": 0,
+        "crc_failed": 0,
+        "recent": 0,
+        "pending": 0,
+        "rtp": 12478,
+        "rtp_gaps": 37,
+        "vp8_frames": 7799
+      },
+      "late_server_terminal_after_off_ms": 10096
+    }
+  },
+  "independent_connections": true,
+  "source_equality": {
+    "carrier/wholedevice/session.go": {
+      "unchanged": true,
+      "sha256": "425b602c9e543af2752b78329db9c588907b3b7b94d84885fbe3cbd32bf1d66e"
+    },
+    "carrier/tcpforward/mux.go": {
+      "unchanged": true,
+      "sha256": "fa2923a80b501251ded1aa37ad9b405e08a60c820ac12b66e0c6537c24c5f130"
+    },
+    "carrier/tcpforward/mux_stream.go": {
+      "unchanged": true,
+      "sha256": "7ae48a711ec1c4410b4cd6e1d3cc2edb3332698708c383398ee072357cc184b8"
+    },
+    "clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java": {
+      "unchanged": true,
+      "sha256": "9422534be08b10ded8c5f4211a7cf023c9ae72a05e69ed8a80751c4d5e885065"
+    },
+    "clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java": {
+      "unchanged": true,
+      "sha256": "e14483bd5f65cd77d234a0708b10ae3dad573ec9d757b435e3f8857b0a25dd47"
+    }
+  },
+  "tests": [
+    {
+      "label": "existing-flow-limit-and-dns",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 12.005,
+      "max_cpu_celsius": 74.0,
+      "log_sha256": "a2db74617aa18293243e312e2f6bead6f2e8b276f6d2a182f5f53aef747152f1"
+    }
+  ],
+  "findings": {
+    "tcp_limit_reached": true,
+    "limit_denied": "NOT_EXPORTED",
+    "live_quota_rejections": "NOT_PROVEN",
+    "primary_hypothesis": "TCP slot saturation/admission and lifecycle; inherited limit, not demonstrated new fast-retransmit cause",
+    "detailed_protocol_error_causes": "NOT_EXPORTED",
+    "dns_scope": "288 responses, zero recorded aggregate DNS errors; no per-domain coverage proof",
+    "user_http_receipts": "NOT_CAPTURED",
+    "throughput_benchmark": "NOT_PERFORMED",
+    "fast_retransmit_causal_binding": "NOT_PROVEN"
+  },
+  "final_device": {
+    "epoch": 1792188051.0132167,
+    "package": "com.familyconnect.app.friends",
+    "uid": 10283,
+    "version_code": 84,
+    "version_name": "0.1.18-research84-ui60-4-speed-recovery1",
+    "apk_sha256": "28543d4690327e29a6eb6a60e52fa50232a407663ed7e610f1434cd56f86193d",
+    "sdk": 31,
+    "abi_list": [
+      "arm64-v8a",
+      "armeabi-v7a",
+      "armeabi"
+    ],
+    "vpn_transport_present": false,
+    "vpn_service_present": false,
+    "app_pids": [
+      "32071"
+    ]
+  },
+  "gateway": {
+    "epoch": 1792188052.5140538,
+    "state": {
+      "ActiveState": "active",
+      "SubState": "running",
+      "InvocationID": "843cf76698cd472995fbc6024dfa0b6c",
+      "MainPID": "746768",
+      "Result": "success",
+      "NRestarts": "0",
+      "ExecMainStartTimestamp": "Sat 2026-10-17 00:39:17 MSK",
+      "ExecMainStatus": "0"
+    },
+    "loaded_sha256": "5de40b9ce9c15aac85475df05c449bddf2ecfe61a1928fa3844b4a8446b33047"
+  },
+  "journal": {
+    "exit": 0,
+    "rows": 320,
+    "limit": 320,
+    "since": "30 minutes ago",
+    "until": "2026-10-16 22:00:52 UTC",
+    "sha256": "85f7fd62ea7fa8bfcd2a3897b3c3db3a2979f7fc2a72239d5fc2a16c0ca3896c"
+  },
+  "prior_journal": {
+    "exit": 0,
+    "rows": 42,
+    "limit": 80,
+    "since_utc": "2026-10-16 21:42:01 UTC",
+    "until_utc": "2026-10-16 21:44:36 UTC",
+    "sha256": "93ca5713db100ce9f3d4faeb72c6146afd34ad907be26a9bfa113e2eee7f387a",
+    "matching": "EXACT_DEDICATED_TAG",
+    "writes": 0
+  },
+  "action_counts": {
+    "readonly_ssh": 3,
+    "normal_export_supplied": 1,
+    "normal_targeted_tests": 2,
+    "agent_connect": 0,
+    "agent_disconnect": 0,
+    "signing": 0,
+    "install": 0,
+    "rollback": 0,
+    "service_restart": 0,
+    "native_stats_polls": 0,
+    "product_patches": 0,
+    "product_builds": 0,
+    "emulator": 0
+  },
+  "remaining": "No redistribution/device acceptance. Repair or rollback requires an explicit next change; previous pair shares the TCP limit."
+}
