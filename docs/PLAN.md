@@ -8,6 +8,23 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### ACCEPTED-TRANSPORT-PAIR-CHECKPOINT-AND-MAINTENANCE-1 — complete (16.10)
+
+- [Accepted-pair checkpoint / maintenance result](releases/2026-10-16-accepted-transport-pair-checkpoint-and-maintenance-1.md):
+  preserve exact diagnostic APK8e5579f0/nativebe70a66c and gatewaya5372571;
+  NEW_PAIR_FAST_RECONNECT=PASS_BOUNDED is closed, not reopened by unexercised DNS_A.
+- One ordinary offline-root/operator operation COMMITTED, protected cleanup complete.
+  Same keys/grant scope/security floors/policy and gateway bytes; authority/grants/CRL
+  updated, current leaf retained. No phone action, new tests/build or management changes.
+- Gateway/strict TLS/seed/new RU directory ready; timer restored. Operator threshold
+  **17Oct07:10:22UTC**; authority/grants expire17Oct13:10:22UTC. Retained leaf expires
+  16Oct15:14:20UTC, scheduled threshold13:44:20UTC; do not assume future renewal occurred.
+- **Next product criterion: separately authorized bounded field trial in the target network.**
+  Check fresh conditions for that task; do not run CONNECT, a new acceptance or release now.
+- Historical causal binding, chat handoff, supervisor, long-duration coverage and public
+  release remain separate open tasks. Maintenance's new invocation does not invalidate
+  the earlier completed no-restart test; historical FAIL reports remain unchanged.
+
 ### NEW-PAIR-FAST-RECONNECT-NO-RESTART-1 — completed bounded lifecycle (16.10)
 
 - [Final result](releases/2026-10-16-new-pair-fast-reconnect-no-restart-1.md):

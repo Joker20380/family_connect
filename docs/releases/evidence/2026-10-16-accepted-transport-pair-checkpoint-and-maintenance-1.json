@@ -1,0 +1,132 @@
+{
+  "actions": {
+    "directory_timer_workflow_stop_start": 1,
+    "gateway_workflow_stop_start": 1,
+    "logical_maintenance_operations": 1,
+    "manual_extra_restarts": 0,
+    "phone_adb_sign_install_connect_export": 0,
+    "product_builds_patches_deployments": 0,
+    "renewal_timer_pause": 1,
+    "renewal_timer_restore": 1,
+    "ru_http_workflow_stop_start": 1
+  },
+  "boundaries": {
+    "handoff_on_device": "NOT_PROVEN",
+    "historical_a_cause": "NOT_PROVEN",
+    "historical_b_causal_binding": "NOT_PROVEN",
+    "live_burst_envelope": "NOT_DIRECTLY_EXERCISED",
+    "next_product_criterion": "SEPARATELY_AUTHORIZED_BOUNDED_FIELD_TRIAL_IN_TARGET_NETWORK",
+    "operational_material": "UPDATED",
+    "phone": "UNTOUCHED",
+    "product_binaries": "UNCHANGED",
+    "release": "NOT_AUTHORIZED",
+    "supervisor_acceptance": "NOT_PROMOTED"
+  },
+  "checkpoint": {
+    "b_connected_seconds": 270.203,
+    "dns_a": "NOT_DIRECTLY_EXERCISED",
+    "new_device_observations": 0,
+    "new_pair_fast_reconnect": "PASS_BOUNDED",
+    "off_a_to_connect_b_ms": 3431,
+    "old_app_pid": 12008,
+    "old_gateway_pid": 356992,
+    "owner_https_source": "OWNER_REPORTED_UI_ALL_THREE_NL"
+  },
+  "identities": {
+    "apk_sha256": "8e5579f04de91e4ec00e3e79271dbb0f380b1ed91945ff89016aa50d274a8845",
+    "client_source_inventory": "b36c4a21ee6cf04acb192a0e6d140fa565b3e5ae75f6fc8d028d029c3152781d",
+    "gateway_executable_sha256": "a537257162348afc35b1ebc08755d8c5dc1cd90e74c49e3987fb3eb81885e61f",
+    "gateway_source_inventory": "722746429539a1307d693ce6fcc83579a842d3f1c549a626a36676a6d665c42e",
+    "installed_management_map": "5109a7c92ddd1937fe75ed7199866855a8cc20279bc226c35475d4cc81330145",
+    "native_sha256": "be70a66ccc2bcbf0478915fd414c32de3bedb2a0ae0c3222a53e65eebd0a92b2",
+    "offline_signer_sha256": "2de81e84c6b5fb39cbf5ca840e7a4791edec256bbb6e3fe7924efc24319ba5f6"
+  },
+  "input_review_sha": "bf9b3c6c81847b6c75085d6184eac35dab5f30fc",
+  "maintenance": {
+    "accepted_requests": 1,
+    "applies": 1,
+    "apply_finished_utc": "2026-10-16T13:13:20.418807Z",
+    "apply_started_utc": "2026-10-16T13:12:51.854702Z",
+    "authority_sequence_after": 15,
+    "authority_sequence_before": 14,
+    "credential_rollbacks": 0,
+    "crl_revoked_entries_after": 1,
+    "crl_revoked_entries_before": 0,
+    "crl_sequence_after": 27104,
+    "crl_sequence_before": 27103,
+    "eligible_unrevoked_grants": 2,
+    "existing_revocations_preserved": true,
+    "first_cause": null,
+    "gateway_leaf": "UNCHANGED_NOT_DUE_AT_OPERATION",
+    "grant_revision_delta_each": 1,
+    "grant_scope_unchanged": true,
+    "keys_identity_policy_and_floors_preserved": true,
+    "needed_at_check": "AUTHORITY_AND_GRANTS_OPERATOR_THRESHOLD_PASSED_MATERIAL_VALID",
+    "offline_signatures": 1,
+    "request_format_rejections_before_issuance": 1,
+    "result": "COMMITTED",
+    "resumes": 0,
+    "session_count": "UNKNOWN_OUTAGE_AUTHORIZED",
+    "workflow": "EXISTING_ORDINARY_OPERATOR_OFFLINE"
+  },
+  "residual": {
+    "active_writer_observed": false,
+    "node_owners": false,
+    "nodes": {
+      "NL": {
+        "archive_file_count": 8,
+        "archive_hashes_verified": true,
+        "result": "CLEANED",
+        "retained_operation_count": 24,
+        "retention_limit_operations": 256
+      },
+      "RU": {
+        "archive_file_count": 13,
+        "archive_hashes_verified": true,
+        "result": "CLEANED",
+        "retained_operation_count": 24,
+        "retention_limit_operations": 256
+      }
+    },
+    "pending_authority_request": false,
+    "renewal_service": "success",
+    "renewal_timer": "active"
+  },
+  "result": "ACCEPTED_PAIR_PRESERVED_MAINTENANCE_COMMITTED",
+  "runtime": {
+    "alias_after": "INV_MAINT",
+    "alias_before": "INV_FAST",
+    "configured_and_loaded_binary_unchanged": true,
+    "conservative_process_deadline_utc": "2026-10-16T17:13:14.494025Z",
+    "directory_expiry_utc": "2026-10-16T17:13:14.64949583Z",
+    "directory_issued_utc": "2026-10-16T13:13:17.674917466Z",
+    "directory_ru_nl_equal": true,
+    "directory_sha256": "7f63f2e0ec83f157b074aa0d2377cdf58d6eeda24571f493c9bbeb05d01fae73",
+    "final_observed_utc": "2026-10-16T13:17:17.275139+00:00",
+    "listener_18444": true,
+    "new_runtime_binding": true,
+    "normal_strict_material_validation": "PASS",
+    "pid_after": 430332,
+    "pid_before": 356992,
+    "seed_ready": [
+      {
+        "event": "bootstrap_seed_ready",
+        "utc": "2026-10-16T13:13:17.67763208Z"
+      }
+    ],
+    "strict_served_chain": "PASS",
+    "unit_and_argv_unchanged": true
+  },
+  "schema": 1,
+  "task": "ACCEPTED-TRANSPORT-PAIR-CHECKPOINT-AND-MAINTENANCE-1",
+  "validity": {
+    "authority_and_grants_expiry_utc": "2026-10-17T13:10:22Z",
+    "crl_expiry_utc": "2026-10-16T17:13:01Z",
+    "crl_scheduled_threshold_utc": "2026-10-16T15:43:01Z",
+    "future_renewal_not_assumed": true,
+    "leaf_expiry_utc": "2026-10-16T15:14:20Z",
+    "leaf_scheduled_threshold_utc": "2026-10-16T13:44:20Z",
+    "next_current4h_run_estimate_utc": "2026-10-16T13:31:09.646150Z",
+    "next_operator_threshold_utc": "2026-10-17T07:10:22Z"
+  }
+}

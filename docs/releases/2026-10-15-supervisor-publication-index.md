@@ -1,5 +1,19 @@
 # PUBLISH-SUPERVISOR-RESEARCH-STATE-1 — указатель review-публикации
 
+## Accepted transport-pair checkpoint and maintenance —16Oct2026, COMMITTED
+
+[ACCEPTED-TRANSPORT-PAIR-CHECKPOINT-AND-MAINTENANCE-1](2026-10-16-accepted-transport-pair-checkpoint-and-maintenance-1.md)
+and [safe evidence](evidence/2026-10-16-accepted-transport-pair-checkpoint-and-maintenance-1.json):
+retain exact APK8e5579f0/nativebe70a66c/gatewaya5372571 and closed fast-reconnect
+PASS_BOUNDED without another phone query/test. One existing ordinary offline-root/operator
+maintenance committed, protected cleanup complete, same keys/scope/floors/policy and
+product binaries. Authority/grants/CRL updated; still-valid leaf retained. New runtime/
+seed/strict TLS/RU directory ready, timer restored; operator threshold17Oct07:10:22UTC,
+current limiting leaf16Oct15:14:20UTC. No future renewal assumed. Private custody/requests/
+grant lists/credentials stay private. Next product criterion is a separately authorized
+bounded target-network field trial; historical causality, handoff, supervisor and release
+not promoted, historical reports unchanged. PHONE_UNTOUCHED, no main/workflow/catalog changes.
+
 ## Fast reconnect without restart —16Oct2026, PASS_BOUNDED
 
 [NEW-PAIR-FAST-RECONNECT-NO-RESTART-1](2026-10-16-new-pair-fast-reconnect-no-restart-1.md):

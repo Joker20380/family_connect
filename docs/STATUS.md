@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+## ACCEPTED-TRANSPORT-PAIR-CHECKPOINT-AND-MAINTENANCE-1 — committed (16.10)
+
+[Checkpoint and maintenance](releases/2026-10-16-accepted-transport-pair-checkpoint-and-maintenance-1.md):
+NEW_PAIR_FAST_RECONNECT=PASS_BOUNDED stays closed for the retained exact pair:
+APK8e5579f0…4a8845/nativebe70a66c…0a92b2, client inventoryb36c4a21…52781d;
+gatewaya5372571…885e61f/inventory72274642…5c42e. No repeated device test or phone query.
+One accepted ordinary offline-root/operator maintenance COMMITTED; RU/NL protected
+cleanup verified, owners/pending absent. Authority/grants and CRL updated, existing
+keys/scope/revocations/floors/policy preserved; gateway leaf unchanged because not due.
+Same executable/unit/argv, new PID430332/INV_MAINT, seed/strict TLS/runtime-bound RU
+directory ready. Timer restored enabled/active; no management/product deployment.
+Next operator threshold **17Oct07:10:22UTC**; authority/grants expire17Oct13:10:22UTC.
+Current leaf remains limiting at16Oct15:14:20UTC; scheduled threshold13:44:20UTC.
+Next run estimate at13:17 readback:16Oct13:31:09.646UTC, not a completed renewal.
+PRODUCT_BINARIES_UNCHANGED; OPERATIONAL_MATERIAL_UPDATED; PHONE_UNTOUCHED.
+Next product criterion is a separately authorized bounded target-network field trial,
+not automatic CONNECT/release. DNS_A not exercised does not reopen the closed milestone;
+historical causes, chat handoff, supervisor and long-duration/release gates stay separate.
+
 ## NEW-PAIR-FAST-RECONNECT-NO-RESTART-1 — PASS_BOUNDED (16.10)
 
 [Final report](releases/2026-10-16-new-pair-fast-reconnect-no-restart-1.md) and
