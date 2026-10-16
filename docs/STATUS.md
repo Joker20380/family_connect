@@ -1,23 +1,29 @@
 # Текущее состояние / Current state
 
-## NEW-PAIR-OWNER-RECONNECT-ACCEPTANCE-1 — WAITING_FOR_OWNER_ACTION (16.10)
+## NEW-PAIR-OWNER-RECONNECT-ACCEPTANCE-1 — FAIL_A_STARTUP / client rolled back (16.10)
 
-[New device episode](releases/2026-10-16-new-pair-owner-reconnect-acceptance-1.md):
-existing C_NEW signed without rebuild, installed once and read back: APK28772ccb…1c004b,
-native253e0e15…6f3a3, same signer67a90d1b…0848a/package/code84/UID10283. Previous
-signed3c733d2f…140513 preserved and verified for ordinary client-only rollback; rollback0.
-Startup bounded checks show no new crash/ANR/JNI error; actual restricted attach NOT_RUN.
-Final09:06:21UTC VPN OFF, FriendsActivity/PID30105; installation replaced old PID26459.
-Fresh09:00–09:02UTC gateway candidatea5372571…885e61f, PID265201/invocationd578312a…5feec,
-seed/strict served chain/current RU directory PASS. Natural scheduled renewal observed:
-leaf/CRL now12:43:43UTC, current4h NOOP/no due or alerts/no pending owner/writer;
-operator threshold11:34:58 remains. No server mutation or separate stability suite.
-CONNECT A/B0/2; HTTPS/DNS/240s/chat/export NOT_RUN or NOT_MEASURED, not acceptance PASS.
-No current owner availability confirmation and no long wait. Next: owner availability,
-short fresh readiness/PID and collector rebind, then the prepared18-minute A→OFF→B
-sequence without agent wait between OFF_A and CONNECT_B. Do not sign/install again.
-Private same-version replacement only; public release/catalog/invitations unchanged.
-Old smoke PASS/reconnect FAIL, historical B NOT_PROVEN and supervisor status unchanged.
+[Final report](releases/2026-10-16-new-pair-owner-reconnect-acceptance-1.md): C_NEW
+signed without rebuild, installed once: APK28772ccb…1c004b/native253e0e15…6f3a3.
+Fresh readiness/current owner confirmation preceded one restricted CONNECT A at
+09:23:48.498UTC. Native attempt1 failed HELLO_RECEIVE/IO_DEADLINE after120005ms;
+FAMILY_RECEIVE/context DEADLINE/stop NONE, cleanup3ms later. No dedicated READY,
+native data-plane attach or app CONNECTED. B skipped; no further CONNECT.
+Normal OFF09:26:13.660,145.162s from CONNECT. A app PID30105 unchanged before rollback.
+One normal15962-byte export preserved: ring20/incident17 events, same new A IDs;
+startup failure evidence present, lifecycle/session tag/drop counters absent—not zeros.
+Server challenge/context_deadline is later and lacks exact client-tag binding; not
+assigned as primary cause. RECEIVE_QUEUE_FULL not observed; deeper cause NOT_PROVEN.
+DNS/HTTPS/240s not measured/run; chat borrowing/handoff NOT_PROVEN. SSH collector
+timeouts retained; later narrow bootstrap window succeeds. No new native poller.
+Gateway09:33:18UTC stilla5372571…885e61f/PID265201/invocationd578312a…5feec; no
+server change/restart. Pre-A scheduled renewal is separate, not attributed to client.
+After evidence, one authorized compatible client-only rollback succeeds. Final
+09:36:30UTC APK3c733d2f…140513/native2a974350…4b88c, same signer/code84/UID10283,
+PID4826, VPN OFF. No data clear/uninstall/-d; no post-rollback CONNECT or claim of
+network recovery. New-pair device acceptance FAIL; old-client transport limits remain.
+Next only separately scoped investigation of HELLO/challenge deadline/binding gap;
+no automatic repair, another trial, public release/catalog or supervisor promotion.
+Old smoke PASS/reconnect FAIL and historical B NOT_PROVEN remain unchanged.
 
 ## GATEWAY-TRANSPORT-PROGRESS-LIVE-1 — candidate deployed, bounded readiness PASS (16.10)
 

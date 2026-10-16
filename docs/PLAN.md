@@ -8,23 +8,23 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
-### NEW-PAIR-OWNER-RECONNECT-ACCEPTANCE-1 — owner sequence pending (16.10)
+### NEW-PAIR-OWNER-RECONNECT-ACCEPTANCE-1 — terminal FAIL_A_STARTUP (16.10)
 
-- [Checkpoint](releases/2026-10-16-new-pair-owner-reconnect-acceptance-1.md): verified
-  C_NEW signed/installed once, APK28772ccb…1c004b/native253e0e15…6f3a3, code84/UID10283.
-  Same-key signed rollback3c733d2f…140513 preserved; rollback not exercised. VPN OFF.
-- Exactly next: current owner availability, short fresh gateway/device/PID checks and
-  existing bounded-window rebind. Prepared18-minute A→OFF→immediate B, maximum two
-  intentional CONNECTs; do not insert an agent response wait between OFF_A and B.
-- A needs restricted READY/native/app plus VPN-bound HTTPS; unexpected A failure
-  stops B. B needs new session/attempt, initial HTTPS, fixed240s from READY, repeated
-  HTTPS and normal OFF. Capture separate DNS and one ordinary private support export.
-- At09:02UTC new scheduled leaf/CRL expires12:43:43UTC; operator threshold11:34:58.
-  Current readiness is time-limited, not a license to repair or wait indefinitely.
-  Gatewaya5372571 unchanged by task; no rebuild/reinstall/extra native reader.
-- WAITING_FOR_OWNER_ACTION, CONNECT0/2; no new-pair device PASS yet. Chat borrowing/
-  handoff remain separate NOT_PROVEN when absent. No public release/catalog change,
-  supervisor promotion, historical-B attribution or reinterpretation of old outcomes.
+- [Final evidence](releases/2026-10-16-new-pair-owner-reconnect-acceptance-1.md):
+  one restricted CONNECT A, HELLO_RECEIVE/IO_DEADLINE before dedicated READY. B not
+  run after first failure; no timing retry or additional CONNECT. OFF in145.162s.
+- First observation FAMILY_RECEIVE/context DEADLINE/stop NONE; cleanup follows.
+  Later unbound server challenge timeout/cancellation is not the primary cause.
+  RECEIVE_QUEUE_FULL not established; full client/server session binding absent.
+- Exact C_NEW APK28772ccb…1c004b/native253e0e15…6f3a3 retained privately, not accepted.
+  One conservative client-only rollback completed to3c733d2f…140513/native2a974350…4b88c;
+  signer/code84/UID10283 preserved, VPN OFF/PID4826. Network restoration untested.
+- Existing gatewaya5372571 remains unchanged. One normal export and bounded server
+  windows retained, including SSH gaps. No extra native reader, rebuild or suites.
+- Next requires a separately scoped evidence-led HELLO/challenge deadline and
+  correlation-gap investigation; this task does not authorize repairs, another owner
+  CONNECT, deployment or release. DNS/HTTPS/240s acceptance not reached. Chat/handoff,
+  supervisor and historical-B causality are not promoted; old experiment results stand.
 
 ### GATEWAY-TRANSPORT-PROGRESS-LIVE-1 — server step complete, device gate open (16.10)
 

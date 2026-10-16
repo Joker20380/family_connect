@@ -1,17 +1,20 @@
 # PUBLISH-SUPERVISOR-RESEARCH-STATE-1 — указатель review-публикации
 
-## New-pair owner preparation —16Oct2026
+## New-pair owner acceptance —16Oct2026, FAIL_A_STARTUP
 
 [NEW-PAIR-OWNER-RECONNECT-ACCEPTANCE-1](2026-10-16-new-pair-owner-reconnect-acceptance-1.md):
-WAITING_FOR_OWNER_ACTION. Existing unsigned C_NEW signed without rebuild and installed
-once; exact signed/installed28772ccb…1c004b/native253e0e15…6f3a3, same signer/code84/UID10283.
-Previous signed3c733d2f…140513 privately preserved, rollback0. New post-install PID30105,
-VPN OFF; A/B0/2, traffic/DNS/240s/export not run. Fresh current candidate runtime and
-actual scheduled renewal recorded, not assumed from the old threshold. No server change.
-Only report/STATUS/PLAN/index published; APKs, raw receipts and wrappers remain private.
-Next is current owner availability plus short fresh readiness and the prepared bounded
-sequence, not another signing/install. Historical smoke/reconnect/supervisor outcomes
-and public release/catalog/invitation versions remain unchanged.
+C_NEW signed/installed without rebuild,28772ccb…1c004b/native253e0e15…6f3a3. Fresh
+readiness precedes one A CONNECT; HELLO_RECEIVE/IO_DEADLINE before dedicated READY,
+not a demonstrated receive-queue overflow. B correctly skipped. One normal export
+retains startup observation/context/cleanup ordering; exact server-tag binding absent.
+Later server challenge timeout is not assigned as first cause. OFF in145.162s.
+After evidence, one compatible client-only rollback restores3c733d2f…140513, same
+signer/code84/UID10283; final PID4826/VPN OFF. No new CONNECT or network-repair claim.
+Gatewaya5372571 unchanged; SSH collection gaps explicit. Historical preparation at
+81ccf286 remains in the report, superseded by this outcome, not erased.
+Only report/STATUS/PLAN/index published; APKs, raw receipts and wrappers stay private.
+No release/catalog/main change, supervisor promotion, historical-B attribution or
+reinterpretation of the old smoke PASS/reconnect FAIL. Further work needs separate scope.
 
 ## Gateway live rollout supplement —16Oct2026
 
