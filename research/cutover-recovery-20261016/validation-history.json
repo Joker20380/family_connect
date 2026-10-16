@@ -1,0 +1,53 @@
+{
+  "stopped_before_test_results": [
+    {
+      "reason": "InterruptedError",
+      "elapsed_seconds": 63.355,
+      "exit": -15,
+      "maximum_cpu_celsius": 64.0,
+      "cpu_quota": "50%",
+      "start_limit_celsius": 75,
+      "stop_limit_celsius": 85,
+      "emulator": false
+    },
+    {
+      "reason": "InterruptedError",
+      "elapsed_seconds": 63.878,
+      "exit": -15,
+      "maximum_cpu_celsius": 65.0,
+      "cpu_quota": "50%",
+      "start_limit_celsius": 75,
+      "stop_limit_celsius": 85,
+      "emulator": false
+    }
+  ],
+  "fixture_failure": {
+    "jvm_tests": 97,
+    "failures": 8,
+    "inherited_tests_passed": 83,
+    "new_tests_passed": 6,
+    "native_or_product_patch_needed": false,
+    "changed_files_for_correction": [
+      "clients/android/app/src/test/java/com/familyconnect/app/CutoverRecoveryTest.java"
+    ],
+    "thermal": {
+      "reason": "command_exit",
+      "elapsed_seconds": 372.382,
+      "exit": 1,
+      "maximum_cpu_celsius": 77.0,
+      "cpu_quota": "50%",
+      "start_limit_celsius": 75,
+      "stop_limit_celsius": 85,
+      "emulator": false
+    }
+  },
+  "final_jvm_runs": [
+    97,
+    14
+  ],
+  "final_failures": 0,
+  "build_batches": 4,
+  "gradle_invocations": 5,
+  "completed_unsigned_assemblies": 2,
+  "live_actions": 0
+}

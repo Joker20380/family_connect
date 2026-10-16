@@ -1,5 +1,13 @@
 # Client installation
 
+**Private recovery candidate16.10:** `0.1.18-research84-ui60-4-recovery1`, code84;
+[build identities and check status](releases/2026-10-16-cutover-recovery-local-1.md).
+This is a separate Java derivative of UI60-4 with the accepted native library, not
+the throughput build. Not signed/installed; last verified owner artifact is UI60-4,
+APK `1bf56c381e76913d77c4dc518961020d82d2bfec33da69777a504b7569be15ef`.
+No public download/catalog/invitation change or tester delivery. Notes below are
+historical release records, not a claim about the current private owner build.
+
 **Beta65 is installed only on the owner device; publication is held.** Four CI gates,
 original signing and ordinary retained-cache refresh on Redmi passed without a reset.
 A subsequent restricted reconnect failed before descriptor issuance; that gate is open.

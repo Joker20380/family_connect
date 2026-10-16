@@ -8,6 +8,22 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### CUTOVER-RECOVERY-LOCAL-1 — independent recovery candidate (16.10)
+
+- [Implemented narrow restoration change](releases/2026-10-16-cutover-recovery-local-1.md)
+  from exact installed UI60-4 sources, with14 new synthetic JVM cases. Preserve
+  previous-key artifacts and separate source/native build identities.
+- Complete:97 targeted JVM/export/UI checks plus fixed14-test repeat and full unsigned
+  assemble with accepted native bytes. Sourceea9312d0…739c0d4; APK7774249a…51678c2.
+  Alignment, package/code84/API31/ARM64, permissions and native payload verified.
+  No repeated transport/PKI suites or thermal-heavy emulator; peak77°C.
+- Owner requests installation afterwards: first finish independent fast-retransmit
+  TLS/mux/VP8/mixed-peer/reordering validation, then check the exact combined artifact.
+  Fresh actual phone identity and VPN OFF precede signing/compatible replace-install;
+  do not infer approval for an automatic CONNECT or gateway maintenance outage.
+- No live recovery or speed acceptance yet; not a universal ten-minute cutoff fix.
+  Historical causality, chat handoff, supervisor, field and public release stay open.
+
 ### RELIABLE-FAST-RECOVERY-LOCAL-1 — first local candidate checked (16.10)
 
 - [Implemented candidate and fixed comparison](releases/2026-10-16-reliable-fast-recovery-local-1.md):

@@ -1,5 +1,11 @@
 # Release distribution / Выпуски
 
+**Private Java recovery derivative16.10, code84:**
+`0.1.18-research84-ui60-4-recovery1`; [exact local build/checkpoint](releases/2026-10-16-cutover-recovery-local-1.md).
+Retains accepted native bytes; not combined with fast retransmit, not signed,
+installed or distributed. Prior signed UI60-4 backup remains private. No public
+catalog, release asset or invitation-page changes.
+
 **Candidate65/code65:** source86fa1ba, four exact-source CI PASS, verified/offline signed,
 installed in place on owner Redmi. Ordinary retained-cache refresh/native READY/ACK PASS.
 SHA256 `dfbdb5352b8c707fb77ff3d7392d8217f898aa8e999b6a0f52fad8172185778e`,49671035bytes.

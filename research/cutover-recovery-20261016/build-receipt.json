@@ -1,0 +1,120 @@
+{
+  "source_inventory": "ea9312d013aac02a190a06b8ad9091e1245ef63a994db6618054dde27739c0d4",
+  "native_sha256": "be70a66ccc2bcbf0478915fd414c32de3bedb2a0ae0c3222a53e65eebd0a92b2",
+  "native_source_inventory": "b36c4a21ee6cf04acb192a0e6d140fa565b3e5ae75f6fc8d028d029c3152781d",
+  "native_rebuilt": false,
+  "version_name": "0.1.18-research84-ui60-4-recovery1",
+  "version_code": 84,
+  "runs": [
+    {
+      "label": "assemble-tests",
+      "exit": 0,
+      "log_sha256": "0a9171d2aa2ca72b5a43010cbd50629e88baf9242d7645e5d43397ac1c5fab83",
+      "suites": [
+        {
+          "name": "com.familyconnect.app.DiagnosticRingTest",
+          "tests": "5",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        },
+        {
+          "name": "com.familyconnect.app.RestrictedStartupTest",
+          "tests": "3",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        },
+        {
+          "name": "com.familyconnect.app.StartupFidelityTest",
+          "tests": "2",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        },
+        {
+          "name": "com.familyconnect.app.Ui60PresentationTest",
+          "tests": "3",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        },
+        {
+          "name": "com.familyconnect.app.CutoverRecoveryTest",
+          "tests": "14",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        },
+        {
+          "name": "com.familyconnect.app.RestrictedCacheTest",
+          "tests": "14",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        },
+        {
+          "name": "com.familyconnect.app.RestrictedRecoveryTest",
+          "tests": "5",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        },
+        {
+          "name": "com.familyconnect.app.RestrictedBootstrapTest",
+          "tests": "6",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        },
+        {
+          "name": "com.familyconnect.app.ReadinessProductTest",
+          "tests": "10",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        },
+        {
+          "name": "com.familyconnect.app.ConnectivityOrchestratorTest",
+          "tests": "29",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        },
+        {
+          "name": "com.familyconnect.app.FriendsReadinessProtocolTest",
+          "tests": "4",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        },
+        {
+          "name": "com.familyconnect.app.BootstrapCorrelationTest",
+          "tests": "2",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        }
+      ]
+    },
+    {
+      "label": "fixed-repeat",
+      "exit": 0,
+      "log_sha256": "77704a70faa03213937f8c8d27953e60e467eaa463f87a7019a2f9a0dc00c6ab",
+      "suites": [
+        {
+          "name": "com.familyconnect.app.CutoverRecoveryTest",
+          "tests": "14",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0"
+        }
+      ]
+    }
+  ],
+  "unsigned_apk_sha256": "7774249a4c6a99c3ffb8af24daa1ac0d76b5d5a14a3436bdb5ed2b8b451678c2",
+  "apk_size": 55992668,
+  "embedded_native_verified": true,
+  "signing": false,
+  "installed": false
+}

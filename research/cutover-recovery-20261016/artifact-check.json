@@ -1,0 +1,33 @@
+{
+  "unsigned_apk_sha256": "7774249a4c6a99c3ffb8af24daa1ac0d76b5d5a14a3436bdb5ed2b8b451678c2",
+  "package": "com.familyconnect.app.friends",
+  "version_code": 84,
+  "version_name": "0.1.18-research84-ui60-4-recovery1",
+  "min_sdk": 31,
+  "target_sdk": 35,
+  "abi": [
+    "arm64-v8a"
+  ],
+  "debuggable": false,
+  "alignment": "PASS",
+  "unsigned_verified": true,
+  "unchanged_native_libraries": {
+    "lib/arm64-v8a/libchaquopy_java.so": "d3b5b10f7410297880679cd665e96795f5745e3488a038bbbcca344c95ca7e18",
+    "lib/arm64-v8a/libcodec2.so": "43edfebbde718cce7df47930322cc3cc5278aa7552e143913fd0814302aafaa5",
+    "lib/arm64-v8a/libcrypto_chaquopy.so": "e316322aafee29c518084f478c1f84fb6048dc489dd5aad8d0822fbece416483",
+    "lib/arm64-v8a/libcrypto_python.so": "c6b20b0ed4be44731123a4e0ccb0958abb14d467826a42a1999e0cdbf9c7afd7",
+    "lib/arm64-v8a/libexit_audio.so": "aad0fcaec2683e74ac0d70d4f9fde1f65afd32c4416070ad1c5a13dc3725191c",
+    "lib/arm64-v8a/libfc-awg.so": "9d20e5312e4d22c3c3d650513e82a43ec5c37a472810eb5e3acf206713023fbb",
+    "lib/arm64-v8a/libfc_restricted.so": "be70a66ccc2bcbf0478915fd414c32de3bedb2a0ae0c3222a53e65eebd0a92b2",
+    "lib/arm64-v8a/libpython3.10.so": "194781d8bba9ad0db34725390957bb73a71c0ab2c9c1d449b94cd80680bb149e",
+    "lib/arm64-v8a/libsqlite3_chaquopy.so": "626ef9b3e6eb661df9513f7f79f6a0d197bcfb0b43f813663ed9d5e7fcace172",
+    "lib/arm64-v8a/libsqlite3_python.so": "fa355dda67c86b62f67026b7b5a8ec17732ee30e9e8280b86362b4e2a886548b",
+    "lib/arm64-v8a/libssl_chaquopy.so": "70b94a18ae17a1b103cc0f52b3f5fa3f7740c6899eddb6fa3b1f16ba8051025b",
+    "lib/arm64-v8a/libssl_python.so": "6c780070647187d8e4fca72f46e7be90ddb0e38000d2f5681c218fe12583ce5c"
+  },
+  "permissions_unchanged": true,
+  "previous_unsigned_sha256": "64b4c71f8fc91ce91a457e1c99c1b171adeaad58d226a7c05e71e32c0b655ba1",
+  "native_manifest_unchanged": true,
+  "phone_read": false,
+  "installed": false
+}

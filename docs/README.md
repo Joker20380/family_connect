@@ -1,5 +1,11 @@
 # Documentation
 
+[Android cutover recovery16.10](releases/2026-10-16-cutover-recovery-local-1.md):
+independent Java candidate from UI60-4, fresh restoration selection and bounded
+pre-lease retries.97 JVM checks plus14 fixed-repeat PASS; full unsigned assemble and
+unchanged-native readback PASS. Not installed or combined with fast retransmit.
+[Patch/tests and limits](../research/cutover-recovery-20261016/README.md).
+
 [Bootstrap HELLO admission characterization15.10](releases/2026-10-15-bootstrap-hello-admission-repro-1.md):
 real baseline/candidate Broker + Family/TLS matrix, exact research84 caller bindings,
 actual deadline/closed-pipe UNKNOWN paths; source-only PASS, historical cause unproven,

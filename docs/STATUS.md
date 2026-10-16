@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+## CUTOVER-RECOVERY-LOCAL-1 — local PASS / unsigned / not installed (16.10)
+
+[Independent UI60-4 recovery derivative](releases/2026-10-16-cutover-recovery-local-1.md):
+restoration does not reuse cached runtime data after temporary refresh failure;
+matching pre-lease deadline can trigger at most2 additional delayed bootstrap series.
+AUTH/OFF, unusable cached permission, unknown failures and HELLO waits are not given
+this allowance. Existing native, Go transport, JNI, UI, security and timeout values
+remain unchanged; no fast-retransmit delta is included. Private candidate version
+`0.1.18-research84-ui60-4-recovery1`/84:97 targeted JVM tests PASS plus14 fixed-repeat
+PASS; full assemble/vital lint/provenance/embedded native checks PASS. Source inventory
+ea9312d0…739c0d4; unsigned APK7774249a…51678c2. CPU peak77°C under half-core quota,
+no emulator. Earlier stopped/fixture-failure batches are retained, not counted PASS.
+Owner requests installation after checks. Before combined installation, complete
+the separate throughput candidate's full stack/mixed-peer gate and exact combined
+artifact checks; do not mislabel this recovery-only candidate as the combined APK.
+No phone/server action or new CONNECT. Live recovery/speed still unproved.
+
 ## RELIABLE-FAST-RECOVERY-LOCAL-1 — implemented/local PASS, not deployed (16.10)
 
 [Local source candidate/results](releases/2026-10-16-reliable-fast-recovery-local-1.md):

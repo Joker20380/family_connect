@@ -1,0 +1,10 @@
+{
+  "reason": "command_exit",
+  "elapsed_seconds": 362.435,
+  "exit": 0,
+  "maximum_cpu_celsius": 77.0,
+  "cpu_quota": "50%",
+  "start_limit_celsius": 75,
+  "stop_limit_celsius": 85,
+  "emulator": false
+}
