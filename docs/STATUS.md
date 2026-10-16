@@ -1,8 +1,8 @@
 # Текущее состояние / Current state
 
-## UI60-RESTORE-AND-FIELD-1 — revision4 awaiting review; revision3 installed (16.10)
+## UI60-RESTORE-AND-FIELD-1 — revision4 approved and owner-installed (16.10)
 
-Owner-requested **revision4** is now implemented and unsigned, awaiting visual approval:
+Owner-requested **revision4** is implemented, visually approved and owner-installed:
 proportional full-width map (normal fixture368×156, previously368×114), connection
 panel300→265 and middle network panel204→197; thin square style and touch areas kept.
 [Current images/identities](releases/2026-10-16-ui60-layout-current-style-1.md#revision4--proportional-map-and-more-compact-neighboring-blocks).
@@ -10,7 +10,12 @@ APK64b4c71f…0b655ba1/inventorye90893ae…04c48fce, code84/ui60-4; nativebe70a6
 Full build/15 targeted JVM cases/54 real-code fixtures and32 map cases PASS. Fresh
 real-IME check NOT_VERIFIED (disposable window lacked focus); prior IME PASS is not
 promoted. KVM/50%-core run ended; peaks build73°C/emulator66°C, emulator OFF.
-No signing/install/phone/server action for revision4; **owner still has UI60-3**.
+At19:52UTC the exact tested unsigned APK was signed once with the previous key and
+installed once with ordinary `-r`: signed/installed SHA1bf56c38…69be15ef, code84,
+same signer/UID10283. Actual UI60-3 APKe6c9dce0…8da4b00f saved as compatible backup.
+Normal launch19:53:00UTC;19:53:05UTC observation PID9111/VPN OFF/no new errors in
+the bounded UID-filtered startup sample. No rebuild, CONNECT, export or server action.
+[Revision4 installation receipt](../research/ui60-layout-20261016/owner-install4.json).
 
 New [export10/call interruption analysis](releases/2026-10-16-ui60-owner-call-drop-export10.md)
 matches the same SESSION_S9 to a scheduled credential-maintenance stop at17:47:47UTC,
@@ -52,9 +57,9 @@ previous signer, code84 and actual UID10283; Android API31/ARM64 compatibility v
 At17:11:25UTC ordinary launch confirmed PID19934, VPN OFF, no errors in the bounded
 UID-filtered startup sample. No data/cache clear or private identity/database reads;
 previous actual installed APK8e5579f0 retained privately as same-code compatible backup.
-**Next: revision4 visual review, cutover recovery and performance follow-up**, then
-existing tester compatibility/grant/readiness. Sign the exact approved applicable
-revision4 only after those gates; do not silently transfer the old UI60-3 as UI60-4.
+**Next: owner inspection of installed revision4, cutover recovery and performance follow-up**,
+then existing tester compatibility/grant/readiness. Reuse the exact signed revision4
+after those gates; no automatic re-signing, transfer or substitution of UI60-3.
 One bounded warm-start field CONNECT remains a later continuation.
 Do not repeat owner A→B. OWNER_PHONE_UPDATED; TESTER_UNTOUCHED; SERVER_UNTOUCHED.
 Prior exact APK8e5579f0/gatewaya5372571 PASS_BOUNDED remains closed for that pair;

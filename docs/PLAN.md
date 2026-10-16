@@ -8,14 +8,17 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
-### UI60-RESTORE-AND-FIELD-1 — revision4 review / revision3 installed (16.10)
+### UI60-RESTORE-AND-FIELD-1 — revision4 approved / owner-installed (16.10)
 
-- Requested revision4 is built unsigned: full-width proportional map with more height,
-  more compact neighboring panels, unchanged native/security/state sources. Review
+- Requested revision4 is built and visually approved: full-width proportional map with
+  more height, more compact neighboring panels, unchanged native/security/state sources.
   [actual comparison](../research/ui60-layout-20261016/comparisons/home-map-revision4.png)
-  before any signing/install/transfer.15 JVM cases/54 fixtures/32 map cases PASS;
+  retained.15 JVM cases/54 fixtures/32 map cases PASS;
   fresh real IME not verified because disposable window lacked focus. Prior revision3
-  remains installed; no phone or server change in this UI continuation.
+  retained privately as backup; explicit owner request followed by one previous-key
+  signing and ordinary replace-install of revision4 at19:52UTC. Signed/installed
+  APK1bf56c38…69be15ef/code84, same signer/UID10283. Normal launch PID9111/VPN OFF,
+  no new errors in bounded startup sample. No rebuild, CONNECT or server action.
 
 - [Export10 interruption](releases/2026-10-16-ui60-owner-call-drop-export10.md): exact
   active SESSION_S9 is closed during scheduled maintenance, before client retry exhaustion.
@@ -44,14 +47,14 @@ Verify reboot automount separately; no engineering release gate changes.
 - Revision3 visual/IME and map width/density checks complete; KVM emulator stopped.
   Do not restart software emulation; future local rendering requires usable KVM,
   host GPU, CPU quota, temperature cutoff and a finite runtime.
-- **Final map visually approved; requested owner installation completed.** Signed
+- **Historical revision3 map approval/owner installation completed.** Signed
   APKe6c9dce0…8da4b00f/code84 installed once with `-r`, previous signer/UID10283
-  retained; normal launch PID19934/VPN OFF. Native unchanged. Owner now inspects
-  the real phone UI; this is not transport acceptance or a field CONNECT.
+  retained; normal launch PID19934/VPN OFF. Native unchanged. Superseded only by the
+  newly approved revision4 installation, not by transport acceptance or a field CONNECT.
 - Continue [FIELD-1](releases/2026-10-16-field-1-ui60-warm-start.md) in this task:
-  revision4 visual approval, existing agreed tester's actual compatibility/
-  authorization and availability; signing the exact applicable approved revision4,
-  then private owner transfer (revision3 signing is not revision4 signing);
+  existing agreed tester's actual compatibility/authorization and availability;
+  then private owner transfer of the exact already signed approved revision4
+  (owner compatibility is not tester compatibility; do not re-sign/rebuild);
   warm preparation without Wi-Fi VPN CONNECT; one bounded
   mobile restricted CONNECT only after fresh prerequisites. Field NOT_STARTED.
 - Do not repeat UI work, owner reconnect, transport suites or maintenance simply

@@ -34,10 +34,12 @@ Revision4 now preserves continent proportions rather than flattening the map:
 normal map height114→156, connection panel300→265, middle panel204→197px.
 [Three-way revision comparison](comparisons/home-map-revision4.png),
 [current geometry checks](map-revision-check.json) and
-[bounded execution](map-revision4-execution.json) distinguish it from installed revision3.
+[bounded execution](map-revision4-execution.json) distinguish it from prior revision3.
 Eight map width/height/density cases per configuration include deliberately undersized
-containers; proportional fit is retained even then. Revision4 remains unsigned and
-awaits visual approval, not installation or field acceptance. The earlier
+containers; proportional fit is retained even then. Revision4 is now visually approved,
+signed and owner-installed: [revision4 install receipt](owner-install4.json),
+signed/installed SHA1bf56c38…69be15ef, same code84/signer/UID10283, native unchanged.
+Normal launch PID9111/VPN OFF; no CONNECT or field acceptance. The earlier
 [owner-install receipt](owner-install.json)
 records one existing-key signing/replace-install and ordinary launch, not a CONNECT
 or field trial. No emulator/build/tests were restarted for this installation.
@@ -69,7 +71,8 @@ chat patch. No stale keyboard screenshot is counted as a new revision4 render.
 - [`build-receipt.json`](build-receipt.json) / [`artifact-check.json`](artifact-check.json):
   full UI assemble,15 targeted JVM tests, identical native payloads and restricted
   provenance, identical permissions/SDK/ABI/features. Code84 is unchanged; versionName
-  identifies the new UI candidate. No production signing/install or public APK.
+  identifies the new UI candidate. These build receipts predate the separately recorded
+  owner signing/install; no public APK distribution.
 - [`render-inputs.json`](render-inputs.json), [`screenshots.json`](screenshots.json),
   [`ui-tests.json`](ui-tests.json): exact input APK identities, image hashes and bounded
   fixture results. Renderer-debug APK hashes are **not** product artifact identities.
@@ -144,10 +147,10 @@ changed to address that emulator condition. See the final receipt for IME outcom
   is generated from a real device. Shared frame geometry applies to those dialogs.
 - Same code84 enables potential same-signer owner replacement/return without `-d`;
   a tester's lower version is not promised as an ordinary rollback target.
-- **Revision3 approval/installation complete; revision4 visual approval pending.**
+- **Revision3 and revision4 approval/owner installation complete.**
   Tester applicability/grant/readiness checks and private owner transfer remain
-  pending. Revision4 is built unsigned; only after approval/applicability sign that
-  exact artifact, not another build or the old revision3. The field
+  pending. Reuse the exact signed revision4 after tester applicability checks, not
+  another build or the old revision3; no repeated signing needed. The field
   continuation remains one CONNECT,240s/18min, no reconnect or server repair, not started.
 
 Historical A/B causes, chat handoff, supervisor, broad field acceptance and release

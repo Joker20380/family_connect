@@ -6,24 +6,27 @@ marked started or complete by this document.
 
 | Criterion | Current result |
 |---|---|
-| UI implementation | [UI60-4 proportional map/compact panels built unsigned; UI60-3 stays installed](2026-10-16-ui60-layout-current-style-1.md) |
-| UI_VISUAL_APPROVED | Revision3 YES; revision4 WAITING_FOR_OWNER_VISUAL_APPROVAL |
+| UI implementation | [UI60-4 proportional map/compact panels approved and owner-installed](2026-10-16-ui60-layout-current-style-1.md) |
+| UI_VISUAL_APPROVED | Revision3 YES; revision4 YES |
 | ARTIFACT_COMPATIBLE | NOT_YET_CHECKED_FOR_TESTER |
 | TESTER_AUTHORIZED | NOT_YET_CHECKED; registration is not a restricted grant |
 | FIELD_WARM_START | NOT_STARTED |
 | TARGET_RESTRICTION_OBSERVED | NOT_TESTED |
 | Field CONNECT / export | 0 / 0 |
-| Product signing / owner install / tester transfer / tester install | Revision3:1 /1 /0 /0; revision4:0 /0 /0 /0 |
+| Product signing / owner install / tester transfer / tester install | Revision3:1 /1 /0 /0; revision4:1 /1 /0 /0 |
 | First field failure | NONE_OBSERVED; no attempt |
-| Final device state | Owner UI60-3 unchanged; latest supplied export10 is DISCONNECTED/TUN closed; tester untouched |
+| Final device state | Owner UI60-4 installed; normal launch PID9111/VPN OFF at19:53:05UTC; tester untouched |
 
-## Next continuation, after revision4 visual approval
+## Next continuation, after revision4 owner installation
 
 Revision4 is a newly requested geometry correction, not a repeat of completed UI60-3
 installation. Current unsigned candidate is
 `64b4c71f8fc91ce91a457e1c99c1b171adeaad58d226a7c05e71e32c0b655ba1`,
 source inventory `e90893aee5fdc04aae1cacd296d5291ca8a743350de42334b290f08504c48fce`.
-No signing, transfer or device action for it has occurred. The ordinary-use
+Owner approved revision4 and requested installation. One previous-key signing and
+ordinary owner replace-install completed; signed/installed SHA
+`1bf56c381e76913d77c4dc518961020d82d2bfec33da69777a504b7569be15ef`.
+No tester transfer or field CONNECT occurred. The ordinary-use
 [maintenance/restoration finding](2026-10-16-ui60-owner-call-drop-export10.md) remains
 separate from UI geometry and from any future field result; no repair or CONNECT is
 started here. Fresh gateway/security readiness will still be needed for field work.
@@ -52,10 +55,11 @@ was signed for the requested owner inspection using the existing key/workflow:
 `e6c9dce07520abb40ce29e7bfc7e39e2483db0572d22c31ab27931478da4b00f`.
 Signature, alignment and unchanged DEX/native/non-signature entries verified; see
 the [safe receipt](../../research/ui60-layout-20261016/owner-install.json).
-Do not present that already signed revision3 as revision4. After revision4 visual
-approval and tester compatibility/authorization/readiness checks, sign the exact
-verified revision4 unsigned artifact once using the existing protected workflow and
-verify payload/native preservation. Owner privately transfers to one agreed recipient. No catalog,
+Do not present that previously signed revision3 as revision4. The exact tested revision4
+is now signed for the separately authorized owner installation; signature/alignment and
+payload/native preservation verified in the [new receipt](../../research/ui60-layout-20261016/owner-install4.json).
+After tester compatibility/authorization/readiness checks, reuse that signed revision4
+without rebuild/re-signing. Owner privately transfers to one agreed recipient. No catalog,
 landing, invitation or public release change. If unavailable:
 READY_WAITING_FOR_TESTER_ACTION; no capture or security window held open.
 

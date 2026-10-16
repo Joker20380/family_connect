@@ -1,7 +1,7 @@
 # UI60-LAYOUT-CURRENT-STYLE-1 — implemented UI candidate
 
-Part one of UI60-RESTORE-AND-FIELD-1. **Revision4 unsigned candidate ready for visual
-review; revision3 remains the owner-approved installed version.**
+Part one of UI60-RESTORE-AND-FIELD-1. **Revision4 visually approved, signed and
+installed on the owner's phone; revision3 retained as the immediate compatible backup.**
 This is an isolated derivative of the retained accepted diagnostic product, not a
 checkout of beta60 or the dirty root main. Existing snapshots, accepted artifacts and
 historical acceptance reports are retained. The field stage has **not started**.
@@ -46,7 +46,8 @@ central composition of beta60. This is a UI-only continuation, not a transport f
 | Unsigned size |55,990,836bytes|
 | Native, unchanged | `be70a66ccc2bcbf0478915fd414c32de3bedb2a0ae0c3222a53e65eebd0a92b2` |
 | Native source inventory, unchanged | `b36c4a21ee6cf04acb192a0e6d140fa565b3e5ae75f6fc8d028d029c3152781d` |
-| Product signing / install / transfer |0 /0 /0; revision4 remains private and unsigned|
+| Signed / installed APK | `1bf56c381e76913d77c4dc518961020d82d2bfec33da69777a504b7569be15ef` |
+| Product signing / owner install / tester transfer |1 /1 /0; revision4 stays private|
 
 Full offline Gradle assemble plus15 targeted JVM/export/presentation cases PASS.
 All native payloads and restricted native manifest are byte-identical; permissions,
@@ -72,9 +73,49 @@ One bounded KVM/host-GPU render run,50%-of-one-core quota,85°C cutoff; measured
 **build73°C, emulator66°C**. Emulator was explicitly stopped after the IME attempt;
 the wrapper reports the requested interruption, not a successful natural exit.
 [Execution receipt](../../research/ui60-layout-20261016/map-revision4-execution.json).
-No phone/server action accompanies this UI revision. Current installed UI60-3 and
-its existing signed backup are untouched. Revision4 visual approval/signing/install
-are pending; code84 is retained, not increased. FIELD-1 remains NOT_STARTED.
+No phone/server action accompanied the build/render checkpoint. The later owner
+approval and installation are recorded separately below; neither repeats those
+checks nor changes code84. FIELD-1 remains NOT_STARTED.
+
+## Revision4 owner approval and installation —16Oct19:52UTC
+
+Owner accepted the proportional map/compact panels and explicitly requested installation.
+The initial ADB5037 enumeration found no phone; after USB connection, the already
+running local ADB5040 held the sole authorized physical phone. The existing private
+installer used that server without restarting either ADB process or launching an emulator.
+No install was attempted before successful preflight. Safe selected evidence:
+[owner-install4.json](../../research/ui60-layout-20261016/owner-install4.json).
+
+- Fresh preflight verified API31/ARM64, package/code84, actual UID10283, expected
+  installed UI60-3 hash `e6c9dce07520abb40ce29e7bfc7e39e2483db0572d22c31ab27931478da4b00f`,
+  sole previous signer, VPN OFF and no active app VPN service. The actual installed
+  signed APK was pulled and verified as the private immediate backup.
+- Existing vault/memfd workflow signed the already-tested unsigned revision4 once;
+  no rebuild, new key, plaintext key export or secret output. At19:52:15.089UTC,
+  signature and16K alignment verified; signed size56,011,667bytes. Every original
+  non-META-INF entry, including DEX/native/provenance, is unchanged by signing.
+  Signed hash differs from both unsigned revision4 and previous installed revision3.
+- Sole signer stays
+  `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`;
+  native stays `be70a66ccc2bcbf0478915fd414c32de3bedb2a0ae0c3222a53e65eebd0a92b2`.
+  One ordinary `adb install -r` began19:52:28.958UTC and succeeded19:52:34.525UTC.
+  Pulled installed APK equals the signed hash above, versionNameui60-4/code84,
+  same package/signer/UID10283. No `-d`, uninstall, data/cache clear or re-enrollment.
+- Ordinary launch19:53:00.806UTC succeeded; at19:53:05.468UTC PID9111 was alive,
+  VPN OFF and no app VPN service. A single bounded UID-filtered startup sample had
+  zero new error lines; not exhaustive crash/ANR coverage or on-device UI acceptance.
+- Same code/package/signer and unchanged storage sources support ordinary compatible
+  replacement by the saved UI60-3 backup. No rollback performed. Data preservation
+  means no clearing plus retained UID, not a byte-exact audit of private contents;
+  no private identity/database or conversation reads occurred.
+
+Actions in this installation continuation: signing1, replace-install1, normal launch1;
+CONNECT/export/rollback/force-stop/build/emulator/server/tester-transfer0. This does
+not fix the previously documented cutover/restoration or performance issue, and does
+not reassign old exact-pair acceptance to UI60-4. Public catalogs/landing/guides and
+their download checksums stay unchanged: this APK is private, not publicly distributed.
+Owner can inspect the installed UI. Tester compatibility/grant/readiness remain pending;
+reuse this exact signed artifact after those checks rather than re-signing or rebuilding.
 
 ## Owner approval and requested installation —16Oct17:11UTC
 
