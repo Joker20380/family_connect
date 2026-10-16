@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+## BROWSER-ADMISSION-OWNER-INSTALL-1 — installed/deployed, browsing check pending (17.10)
+
+[Coordinated private pair rollout](releases/2026-10-17-browser-admission-owner-install-1.md):
+signed/installed APK761430c0…2149b1f, native6d41518f…41cfab, loaded gateway079729e4…49639d.
+Same code84/package/signer/UID10283; previous APK28543d46 and gateway5de40b9c retained.
+One ordinary replacement and one locked gateway stop/start; no rebuild or repeated suites.
+Normal app PID13244, bounded startup-error sample empty; final23:11:53UTC VPN OFF.
+Gateway PID802042/invocation8c5b2036, seed/strict TLS/listener/current NL→RU directory
+PASS. Unit/argv/material/current4h unchanged; COMMITTED/no owner/writer, evaluate NOOP
+with CRL_T_MINUS_120M warning, not renewal. Limiting CRL00:48:26UTC17Oct, next scheduled
+23:19:00UTC16Oct; future success is not assumed. No CONNECT/export/rollback/acceptance.
+Next: one agreed short owner site/asset check; bandwidth, ten-minute continuity and
+historical causes remain unproved. No field, handoff, supervisor or release promotion.
+
 ## BROWSER-ADMISSION-FIX-1 — local candidate built/checked, not deployed (17.10)
 
 [Implemented bounded admission fix](releases/2026-10-17-browser-admission-fix-1.md):

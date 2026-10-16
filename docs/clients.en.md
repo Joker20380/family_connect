@@ -1,14 +1,19 @@
 # Client installation
 
-**Local fix build17.10, not installed:** `0.1.18-research84-ui60-4-admission1`,
+**Privately owner-installed17.10; browsing check still pending:** `0.1.18-research84-ui60-4-admission1`,
 code84, API31+/ARM64. [Changes, checks, identities and limits](releases/2026-10-17-browser-admission-fix-1.md).
 Unsigned APK `ff4a844f8de2df2aac4df5f7e5ec35ae10746033730177e3a9f19e8c0c35edda`;
 native `6d41518ffbe2b10c767552dbb4c1bc732911fb8439a525215c353541ca41cfab`.
-Bounded connection admission and separate renewal/DNS capacity; not measured mobile
-acceleration or a proven cure for the owner's disconnect. No signing, installation
-or tester delivery; the new pair needs a separate check. The last installed version
-below remains unchanged; its later browsing check failed. Public links/catalog/
-invitations remain unchanged.
+Signed/installed APK `761430c0989fd2443cebad39f6cf972d21ef25123114e118ee841029c2149b1f`;
+gateway `079729e4de680cb416c55c2b9b592c6450e4254a306a6960b087930cc549639d`.
+[Rollout, backups and readiness](releases/2026-10-17-browser-admission-owner-install-1.md).
+One ordinary replacement, same package/signer/UID10283, no data clear; final VPN OFF.
+Gateway updated with one coordinated stop/start; seed/TLS/directory verified.
+Bounded connection admission and separate renewal/DNS capacity are not measured mobile
+acceleration or a proven cure for the owner's disconnect. No CONNECT yet.
+The previous pair below is retained as backup; its failed browsing check remains
+historical evidence. No tester delivery or public links/catalog/invitation changes.
+The entries below describe earlier stages, not the current installation.
 
 **Combined private candidate16.10:** `0.1.18-research84-ui60-4-speed-recovery1`,
 code84, API31+/ARM64. [Built artifacts, checks and limits](releases/2026-10-16-transport-speed-cutover-candidate-1.md).

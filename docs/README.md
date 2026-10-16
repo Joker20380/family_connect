@@ -1,5 +1,10 @@
 # Documentation
 
+[Admission candidate owner installation17.10](releases/2026-10-17-browser-admission-owner-install-1.md):
+signed/installed APK761430c0, native6d41518f, deployed gateway079729e4. One ordinary
+replacement and coordinated transition; seed/TLS/new directory PASS, final VPN OFF.
+No CONNECT or browsing/long-call acceptance yet; public distribution unchanged.
+
 [Bounded admission product fix17.10](releases/2026-10-17-browser-admission-fix-1.md):
 local64-stream/FIFO32 candidate with reserved lease/DNS capacity, SYN-slot lifecycle
 fix and refusal counters in normal export. Targeted tests pass; artifact status and

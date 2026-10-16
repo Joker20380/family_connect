@@ -1,11 +1,16 @@
 # Release distribution / Выпуски
 
-**Local admission fix17.10, built only:** `0.1.18-research84-ui60-4-admission1`,
+**Private admission fix17.10, owner-installed/gateway-deployed:** `0.1.18-research84-ui60-4-admission1`,
 code84, unsigned APK `ff4a844f8de2df2aac4df5f7e5ec35ae10746033730177e3a9f19e8c0c35edda`.
 [Exact source/native/gateway identities and checks](releases/2026-10-17-browser-admission-fix-1.md).
-No signing, installation, deployment, public download/catalog or invitation change.
-The prior installed pair below is unchanged; later owner browsing failure is not
-closed by this local candidate. Native/transport code is rebuilt, not UI-only.
+Signed/installed APK `761430c0989fd2443cebad39f6cf972d21ef25123114e118ee841029c2149b1f`,
+native6d41518f, loaded gateway079729e4; [rollout and readiness receipt](releases/2026-10-17-browser-admission-owner-install-1.md).
+Same code84/package/signer/UID10283, one replace-install and one gateway stop/start.
+Seed/strict TLS/current directory PASS; final phone VPN OFF, no CONNECT/export yet.
+Prior APK28543d46/gateway5de40b9c preserved as backups. Their browsing failure is not
+closed by installation alone. Native/transport code is rebuilt, not UI-only.
+No public download/catalog/invitation change or tester delivery. Entries below are
+historical stages, not the current private installation.
 
 **Combined private speed/restoration owner installation16.10, code84:**
 `0.1.18-research84-ui60-4-speed-recovery1`, signed/installed APK

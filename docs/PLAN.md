@@ -8,6 +8,20 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### BROWSER-ADMISSION-OWNER-INSTALL-1 — pair updated; next owner browsing check (17.10)
+
+- [Rollout completed](releases/2026-10-17-browser-admission-owner-install-1.md): exact
+  signed/installed APK761430c0/native6d41518f and loaded gateway079729e4, code84.
+  Same signer/UID, private backups verified; one install and one locked stop/start.
+- App starts normally, VPN OFF. Seed/strict TLS/current runtime directory PASS.
+  Existing schedule/argv/security material preserved; CRL warning is not an outage
+  or performed renewal. Observe real current scheduling before any longer trial.
+- Next is one intentional restricted CONNECT with built-in IP and problematic-site/
+  asset checks. On first failure: ordinary OFF and one export, no blind reconnect.
+  No owner traffic acceptance has occurred in this installation continuation.
+- Ten-minute/call continuity, client10 protocol-error causality, field/handoff/
+  supervisor/public release remain separate open criteria. Do not rerun prior A→B.
+
 ### BROWSER-ADMISSION-FIX-1 — local artifact gate complete; rollout pending (17.10)
 
 - [Local product delta](releases/2026-10-17-browser-admission-fix-1.md) implements

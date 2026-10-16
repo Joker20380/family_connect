@@ -1,0 +1,188 @@
+{
+  "result": "OWNER_INSTALLED_GATEWAY_DEPLOYED_READINESS_PASS_BOUNDED",
+  "input_review_sha": "bbeb0fb1f46b2ab359622ced70737fa9d5165161",
+  "device_acceptance": "NOT_RUN",
+  "public_distribution": false,
+  "artifacts": {
+    "version_name": "0.1.18-research84-ui60-4-admission1",
+    "version_code": 84,
+    "unsigned_apk_sha256": "ff4a844f8de2df2aac4df5f7e5ec35ae10746033730177e3a9f19e8c0c35edda",
+    "signed_apk_sha256": "761430c0989fd2443cebad39f6cf972d21ef25123114e118ee841029c2149b1f",
+    "installed_apk_sha256": "761430c0989fd2443cebad39f6cf972d21ef25123114e118ee841029c2149b1f",
+    "native_sha256": "6d41518ffbe2b10c767552dbb4c1bc732911fb8439a525215c353541ca41cfab",
+    "client_source_inventory": "c1eade0110278827c1681438a80c0509f352e2c9174badef0d3b228cc7161e9c",
+    "gateway_sha256": "079729e4de680cb416c55c2b9b592c6450e4254a306a6960b087930cc549639d",
+    "gateway_source_inventory": "0742212c5ebe38f9673dc53321d3af56c14b978e1080cbe104216ac21b40293f"
+  },
+  "phone": {
+    "package": "com.familyconnect.app.friends",
+    "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+    "uid": 10283,
+    "api": 31,
+    "abi": "arm64-v8a",
+    "before_apk_sha256": "28543d4690327e29a6eb6a60e52fa50232a407663ed7e610f1434cd56f86193d",
+    "before_native_sha256": "f25124ba1c94a0c6f4258e8b67488e8febf9a1c9e88cb2073790564c3a1f4729",
+    "backup_verified": true,
+    "alignment_16k": "PASS",
+    "signature": "PASS",
+    "unsigned_non_signature_entries_identical": true,
+    "dex_native_readback_identical": true,
+    "same_version_code_replace_compatible": true,
+    "storage_source_unchanged": true,
+    "data_preservation": "ordinary -r, same package/signer/UID; private DB not inspected",
+    "signing_utc": "2026-10-16T23:09:30.321130+00:00",
+    "install_result_utc": "2026-10-16T23:10:44.945557+00:00",
+    "installed_readback_utc": "2026-10-16T23:10:45.643763+00:00",
+    "launch_utc": "2026-10-16T23:11:16.545557+00:00",
+    "startup_error_lines": 0,
+    "startup_sample_limit": "single bounded UID-filtered startup sample; no runtime/device acceptance",
+    "pid_after_launch": [
+      "13244"
+    ],
+    "final_pid": [
+      "13244"
+    ],
+    "final_utc": "2026-10-16T23:11:53.904414+00:00",
+    "vpn_transport_present": false,
+    "vpn_service_present": false
+  },
+  "gateway": {
+    "before": {
+      "MainPID": "788798",
+      "InvocationID": "4d3a4cfb8de8472cbfb446c971e181f5",
+      "NRestarts": "0"
+    },
+    "after": {
+      "MainPID": "802042",
+      "InvocationID": "8c5b2036b4194acf824450b4096d17a3",
+      "NRestarts": "0",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "previous_binary_sha256": "5de40b9ce9c15aac85475df05c449bddf2ecfe61a1928fa3844b4a8446b33047",
+    "backup_verified": true,
+    "unit_argv_unchanged": true,
+    "profile_crl_authority_unchanged": true,
+    "existing_ru_nl_locks": true,
+    "restricted_sessions_before": "UNKNOWN",
+    "interruption_authorized": true,
+    "transition_utc": {
+      "before.json": "2026-10-16T23:09:26.695865+00:00",
+      "deploy-intent.json": "2026-10-16T23:10:55.502754+00:00",
+      "deploy-stopped.json": "2026-10-16T23:10:55.635657+00:00",
+      "deploy-replaced.json": "2026-10-16T23:10:55.676823+00:00",
+      "deploy-started.json": "2026-10-16T23:10:55.731469+00:00",
+      "deploy-result.json": "2026-10-16T23:10:55.801839+00:00"
+    },
+    "seed_ready_utc": "2026-10-16T23:10:58.314534741Z",
+    "readiness": {
+      "epoch": 1792192282.3329897,
+      "result": "PASS_BOUNDED_READINESS",
+      "loaded_sha256": "079729e4de680cb416c55c2b9b592c6450e4254a306a6960b087930cc549639d",
+      "invocation": "8c5b2036b4194acf824450b4096d17a3",
+      "pid": "802042",
+      "directory_sha256": "f24bc874475a9301121a2422c349aca7b65cbc2c8732e4cc4aa54e63d27c49c8",
+      "directory_issued_at": "2026-10-16T23:10:58.312047971Z",
+      "directory_expires_at": "2026-10-17T03:10:55.792427415Z",
+      "material_limit_utc": "2026-10-17T00:48:26+00:00",
+      "next_scheduled_utc": "2026-10-16T23:19:00.834393+00:00",
+      "served_strict_chain": "PASS",
+      "pending_owners": false,
+      "transaction": "COMMITTED",
+      "active_restricted_count": "UNKNOWN",
+      "last_scheduled_service_result": "success"
+    },
+    "initial_ru_directory": "MATCHED_CURRENT_RUNTIME",
+    "final_ru_directory_matches": true,
+    "authority_expiry_utc": "2026-10-17T13:10:22+00:00",
+    "leaf_expiry_utc": "2026-10-17T02:48:54+00:00",
+    "crl_expiry_utc": "2026-10-17T00:48:26+00:00",
+    "operator_threshold_utc": "2026-10-17T07:10:22+00:00",
+    "last_scheduled": {
+      "result": "success",
+      "transaction_state": "COMMITTED",
+      "predated_candidate": true
+    },
+    "evaluate_before": {
+      "epoch": 1792192210.8646328,
+      "exit": 0,
+      "command_mode": "evaluate",
+      "mutations_requested": 0,
+      "evaluation": {
+        "result": "NOOP",
+        "files_changed": 0,
+        "remote_writes": 0,
+        "restarts": 0,
+        "due": [],
+        "alerts": [
+          "CRL_T_MINUS_120M"
+        ]
+      }
+    },
+    "evaluate_after": {
+      "epoch": 1792192317.7692873,
+      "exit": 0,
+      "command_mode": "evaluate",
+      "mutations_requested": 0,
+      "evaluation": {
+        "result": "NOOP",
+        "files_changed": 0,
+        "remote_writes": 0,
+        "restarts": 0,
+        "due": [],
+        "alerts": [
+          "CRL_T_MINUS_120M"
+        ]
+      }
+    },
+    "current4h_timer_unchanged": true,
+    "no_failure_reset_requested": true
+  },
+  "action_counts": {
+    "signing": 1,
+    "replace_install": 1,
+    "ordinary_app_launch": 1,
+    "gateway_stop": 1,
+    "gateway_start": 1,
+    "gateway_binary_replacement": 1,
+    "client_rollback": 0,
+    "gateway_rollback": 0,
+    "connect": 0,
+    "export": 0,
+    "rebuild": 0,
+    "new_test_suites": 0,
+    "emulator": 0,
+    "credential_renewal_recovery": 0,
+    "unit_argv_edits": 0,
+    "manual_directory_publish": 0,
+    "native_stats_pollers_added": 0,
+    "uninstall": 0,
+    "clear_data_cache": 0,
+    "ssh_command_attempts": 23,
+    "scp_transfers": 1
+  },
+  "limitations": [
+    "Real phone throughput and call continuity not measured.",
+    "Prior no-restart PASS remains bound to its old exact pair.",
+    "Current4h evaluate NOOP is not renewal; CRL_T_MINUS_120M is a warning, with no due operation at the check.",
+    "Seed/TLS/directory readiness is not Android TUN/DNS/HTTPS acceptance.",
+    "Old broker in-memory holders were lost at the authorized restart; no holder count inferred.",
+    "Existing authorized NL ProxyJump used for RU, without key transfer or SSH policy changes."
+  ],
+  "private_receipt_sha256": {
+    "owner-install/receipts/before.json": "399b2c86178aa8e6624adcba33de935b78be17d7fdf44165095431343492a67c",
+    "owner-install/receipts/signing.json": "1c1d2a0ab94927f85ff134d5993570d6110d23eeb87da1f938cb7b1016f83ac4",
+    "owner-install/receipts/install-intent.json": "142785ece15f1208e384fa07ea077ff640f5da6f1b0468361d4d71fea9d4024e",
+    "owner-install/receipts/install-result.json": "9a9d2bfdd1094cbc388729a16ca1c7178258fb0dd67eac3535dd99272dfbcc13",
+    "owner-install/receipts/installed.json": "bce29f91f2f853aa93fa1b2feb265590631224eb4c3b28c871f5076447ffecec",
+    "owner-install/receipts/launched.json": "a7c23652f3762694f27d60794feeaec72bfcc10705e373ead11acdbb17c2ef2a",
+    "owner-install/receipts/final.json": "1b90e270ed8a38497c87ade68b7024c7612a4e7d92f49a2626daacdcb67b4a7c",
+    "rollout/private/deployment-durable.json": "f6661d08a28d871f881505d16641a18e6630d33fa5164d7a3b5acf1d2836e89c",
+    "rollout/private/previous-scheduled.jsonl": "eaa31c9d19b6cc55b8767aff13756d218ccb1b7fc6b072cddfaf3dc0e303bb21",
+    "rollout/private/posttransition-NL-entry.json": "90124dfe9a63e2acc6056e03eb198eff17fb0f96367f1f62189213f3f673cee5",
+    "rollout/private/posttransition-RU-entry.json": "384c089ba6fc5108945983c032b8d16d0ce6354314344a0e978d35448f9e75e4",
+    "rollout/private/posttransition-NL-bounds.json": "50d702b6827585c37a5494a06f4fdd06096cd1ebba9ae1a07254fb8e01a41dec",
+    "rollout/private/posttransition-RU-bounds.json": "5c7e94570b569cf8d6ce058ef873cd5724a7cea4e7fcf7314a77a2997fa94a86",
+    "rollout/private/posttransition-seed-journal.jsonl": "bdf2a11a17e6b7082219fc19dcab004a4bebfa23a814eef471907413b3d619b0"
+  }
+}
