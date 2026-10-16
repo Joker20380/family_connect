@@ -1,9 +1,14 @@
 # Documentation
 
+[Private speed/restoration owner rollout16.10](releases/2026-10-16-transport-speed-cutover-owner-install-1.md):
+signed/installed APK28543d46 and nativef25124ba, deployed gateway5de40b9c.
+One compatible phone replacement and coordinated gateway transition; strict readiness
+and new runtime directory PASS. VPN OFF; no live speed/recovery acceptance or release.
+
 [Combined speed/restoration candidate16.10](releases/2026-10-16-transport-speed-cutover-candidate-1.md):
 full local Family TLS/mux/VP8, mixed peers and exact retained gateway-source checks
-PASS. Combined native/APK/gateway built,97 JVM and JNI/artifact checks PASS; unsigned,
-not installed/deployed. Limits remain separate from the measured synthetic loss
+PASS. Combined native/APK/gateway built,97 JVM and JNI/artifact checks PASS; originally
+unsigned/not installed at that checkpoint. Later rollout is linked above. Limits remain separate from the measured synthetic loss
 benefit. [Runners and source boundary](../research/transport-speed-cutover-20261016/README.md).
 
 [Android cutover recovery16.10](releases/2026-10-16-cutover-recovery-local-1.md):

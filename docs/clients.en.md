@@ -4,16 +4,19 @@
 code84, API31+/ARM64. [Built artifacts, checks and limits](releases/2026-10-16-transport-speed-cutover-candidate-1.md).
 Unsigned APK `2cf26421b67e536b5c178af7020cade9b499fec06822c82b713461cf534f5ac1`;
 combines restoration and early retransmission with an explicitly rebuilt native library.
-Not signed/installed. The gateway candidate is local only too; installing Android
-alone does not update the server's downlink sender. Ordinary replacement requires
-fresh actual phone metadata and VPN OFF. Public links/catalog/invitations/tester
-remain unchanged; previous signed APKs are preserved.
+Now privately owner-installed, signed/installed SHA256
+`28543d4690327e29a6eb6a60e52fa50232a407663ed7e610f1434cd56f86193d`;
+nativef25124ba and deployed gateway5de40b9c. [Rollout and limits](releases/2026-10-16-transport-speed-cutover-owner-install-1.md).
+One ordinary replacement, same signer/UID10283, no data clear, final VPN OFF.
+Actual throughput and restoration remain unmeasured. Public links/catalog/invitations/
+tester remain unchanged; previous signed APKs are preserved.
 
 **Private recovery candidate16.10:** `0.1.18-research84-ui60-4-recovery1`, code84;
 [build identities and check status](releases/2026-10-16-cutover-recovery-local-1.md).
 This is a separate Java derivative of UI60-4 with the accepted native library, not
-the throughput build. Not signed/installed; last verified owner artifact is UI60-4,
-APK `1bf56c381e76913d77c4dc518961020d82d2bfec33da69777a504b7569be15ef`.
+the throughput build. This independent candidate is not signed/installed; prior UI60-4
+APK `1bf56c381e76913d77c4dc518961020d82d2bfec33da69777a504b7569be15ef` is preserved.
+The current combined installation is listed above.
 No public download/catalog/invitation change or tester delivery. Notes below are
 historical release records, not a claim about the current private owner build.
 

@@ -1,6 +1,25 @@
 # Текущее состояние / Current state
 
+## TRANSPORT-SPEED-CUTOVER-OWNER-INSTALL-1 — installed/deployed (16.10)
+
+[Actual rollout and safe receipts](releases/2026-10-16-transport-speed-cutover-owner-install-1.md):
+exact tested APK signed once and owner-installed with ordinary `-r`, code84/
+`0.1.18-research84-ui60-4-speed-recovery1`. Signed/installed SHA28543d46…f86193d;
+nativef25124ba…3a1f4729, same signer/UID10283. Previous UI60-4 APK privately preserved.
+Normal launch PID24627, bounded startup-error sample empty, final21:40:28UTC VPN OFF.
+Gateway5de40b9c…46b33047 deployed once under existing RU/NL locks; PID746768 /
+invocation843cf76698cd472995fbc6024dfa0b6c. Seed/TLS/listener and fresh NL→RU directory
+PASS by21:40:27UTC. Previous a5372571 executable preserved; argv/profile/credentials/
+timer unchanged. Earlier scheduled FAIL_CLOSED remains recorded; fresh evaluate NOOP,
+COMMITTED/no owners/no writer permit transition, not a renewal claim. Initial direct
+RU SSH failed; authorized NL ProxyJump worked. No CONNECT/export/rebuild/emulator or
+public distribution. Live speed/call continuity/recovery still unmeasured; no blanket
+ten-minute-disconnect fix, field/handoff/supervisor or historical-causality promotion.
+Next: separately observed ordinary owner traffic/call check; do not repeat build work.
+
 ## TRANSPORT-SPEED-CUTOVER-CANDIDATE-1 — combined local PASS / rollout pending (16.10)
+
+Historical local-build checkpoint; the later actual rollout is recorded above.
 
 [Combined candidate checkpoint](releases/2026-10-16-transport-speed-cutover-candidate-1.md):
 36 client-derived plus24 exact-gateway-source TLS/mux/VP8 cases PASS, including real

@@ -1,5 +1,8 @@
 # TRANSPORT-SPEED-CUTOVER-CANDIDATE-1 — local validation and combined candidate
 
+Subsequent owner-authorized [signing, installation and gateway rollout](2026-10-16-transport-speed-cutover-owner-install-1.md)
+are recorded separately. The original local-checkpoint outcomes/counts below are retained.
+
 Continuation from review `ce16c96d8b049a3a42b2d452f72882127c996f76`.
 The owner requests the speed and restoration changes together, followed by installation.
 This checkpoint separates implementation/build validation from phone/server rollout.

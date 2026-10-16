@@ -8,6 +8,20 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### TRANSPORT-SPEED-CUTOVER-OWNER-INSTALL-1 — rollout complete (16.10)
+
+- [Owner/server installation](releases/2026-10-16-transport-speed-cutover-owner-install-1.md)
+  complete: signed/installed APK28543d46, nativef25124ba, loaded gateway5de40b9c.
+  Same code84/signer/UID; compatible prior signed APK and exact a537 gateway retained.
+- One coordinated gateway stop/start; seed/strict TLS/current NL→RU directory PASS.
+  Earlier scheduled FAIL_CLOSED and initial SSH/publication limitations remain visible;
+  no owner markers/writer, current evaluate NOOP, unchanged timer/security/argv.
+- Final phone VPN OFF. No new CONNECT/export, benchmark or live recovery acceptance.
+  Next is an owner-agreed ordinary traffic/call observation, not another rebuild or
+  automatic field/A→B test. Do not promote prior exact-APK acceptance to this pair.
+- Preserve public catalogs/invitations, historical causality, handoff and supervisor
+  boundaries. Future scheduled operation is not assumed successful in advance.
+
 ### TRANSPORT-SPEED-CUTOVER-CANDIDATE-1 — full-path gate complete (16.10)
 
 - [Full local path/mixed peers](releases/2026-10-16-transport-speed-cutover-candidate-1.md):
@@ -16,9 +30,8 @@ Verify reboot automount separately; no engineering release gate changes.
 - Combined native/APK/gateway candidate built and verified: source211b127d,
   APK2cf26421, nativef25124ba, gateway5de40b9c;97 JVM/full assemble/JNI/artifact checks
   PASS. UI60-4 layout/code84/current security/ownership bounds preserved; no test adapters.
-- Before the requested installation: actual current phone
-  identity/VPN OFF, prior signed backup and existing-key workflow. Server rollout
-  requires fresh readiness/accepted outage coordination; do not infer owner CONNECT.
+- Requested installation and fresh coordinated rollout are now complete in the newer
+  checkpoint above; retained local-build evidence remains unchanged. No owner CONNECT.
 - No device-speed/recovery acceptance, universal ten-minute fix, field, handoff,
   supervisor, historical-causality or public-release promotion.
 

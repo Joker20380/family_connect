@@ -1,0 +1,186 @@
+{
+  "result": "OWNER_INSTALLED_GATEWAY_DEPLOYED_READINESS_PASS_BOUNDED",
+  "input_review_sha": "bc1df88a848e623b8ad2d90dd17ad5eef7a027aa",
+  "device_acceptance": "NOT_RUN",
+  "public_distribution": false,
+  "artifacts": {
+    "version_name": "0.1.18-research84-ui60-4-speed-recovery1",
+    "version_code": 84,
+    "unsigned_apk_sha256": "2cf26421b67e536b5c178af7020cade9b499fec06822c82b713461cf534f5ac1",
+    "signed_apk_sha256": "28543d4690327e29a6eb6a60e52fa50232a407663ed7e610f1434cd56f86193d",
+    "installed_apk_sha256": "28543d4690327e29a6eb6a60e52fa50232a407663ed7e610f1434cd56f86193d",
+    "native_sha256": "f25124ba1c94a0c6f4258e8b67488e8febf9a1c9e88cb2073790564c3a1f4729",
+    "client_source_inventory": "211b127d545af5c129acc93bf0ff78cac3af93707aad8def27bb6da830e2ae86",
+    "gateway_sha256": "5de40b9ce9c15aac85475df05c449bddf2ecfe61a1928fa3844b4a8446b33047",
+    "gateway_source_inventory": "3693f70552d27365a56eb9f625f8afe03c01f7e513acdc04cb31e107f52d837e"
+  },
+  "phone": {
+    "package": "com.familyconnect.app.friends",
+    "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+    "uid": 10283,
+    "api": 31,
+    "abi": "arm64-v8a",
+    "before_apk_sha256": "1bf56c381e76913d77c4dc518961020d82d2bfec33da69777a504b7569be15ef",
+    "before_native_sha256": "be70a66ccc2bcbf0478915fd414c32de3bedb2a0ae0c3222a53e65eebd0a92b2",
+    "backup_verified": true,
+    "alignment_16k": "PASS",
+    "signature": "PASS",
+    "unsigned_non_signature_entries_identical": true,
+    "dex_native_readback_identical": true,
+    "same_version_code_replace_compatible": true,
+    "storage_source_unchanged": true,
+    "data_preservation": "ordinary -r, same package/signer/UID; private DB not inspected",
+    "signing_utc": "2026-10-16T21:35:11.627762+00:00",
+    "install_result_utc": "2026-10-16T21:36:18.766394+00:00",
+    "installed_readback_utc": "2026-10-16T21:36:19.441539+00:00",
+    "launch_utc": "2026-10-16T21:36:22.735565+00:00",
+    "startup_error_lines": 0,
+    "startup_sample_limit": "single bounded UID-filtered startup sample; no runtime/device acceptance",
+    "pid_after_launch": [
+      "24627"
+    ],
+    "final_pid": [
+      "24627"
+    ],
+    "final_utc": "2026-10-16T21:40:28.493984+00:00",
+    "vpn_transport_present": false,
+    "vpn_service_present": false
+  },
+  "gateway": {
+    "before": {
+      "MainPID": "716284",
+      "InvocationID": "999c9d2561d545ce80d4b7436da3f7c1",
+      "NRestarts": "0"
+    },
+    "after": {
+      "MainPID": "746768",
+      "InvocationID": "843cf76698cd472995fbc6024dfa0b6c",
+      "NRestarts": "0",
+      "ActiveState": "active",
+      "SubState": "running"
+    },
+    "previous_binary_sha256": "a537257162348afc35b1ebc08755d8c5dc1cd90e74c49e3987fb3eb81885e61f",
+    "backup_verified": true,
+    "unit_argv_unchanged": true,
+    "profile_crl_authority_unchanged": true,
+    "existing_ru_nl_locks": true,
+    "restricted_sessions_before": "UNKNOWN",
+    "interruption_authorized": true,
+    "transition_utc": {
+      "before.json": "2026-10-16T21:39:09.356877+00:00",
+      "deploy-intent.json": "2026-10-16T21:39:17.775373+00:00",
+      "deploy-stopped.json": "2026-10-16T21:39:17.900220+00:00",
+      "deploy-replaced.json": "2026-10-16T21:39:17.936790+00:00",
+      "deploy-started.json": "2026-10-16T21:39:17.996531+00:00",
+      "deploy-result.json": "2026-10-16T21:39:18.055155+00:00"
+    },
+    "seed_ready_utc": "2026-10-16T21:39:20.693753365Z",
+    "readiness": {
+      "epoch": 1792186848.9234216,
+      "result": "PASS_BOUNDED_READINESS",
+      "loaded_sha256": "5de40b9ce9c15aac85475df05c449bddf2ecfe61a1928fa3844b4a8446b33047",
+      "invocation": "843cf76698cd472995fbc6024dfa0b6c",
+      "pid": "746768",
+      "directory_sha256": "8c89debec9d8e682875a7a40cc10d4b07d3bfd141dff7f0553403a7d3cac5700",
+      "directory_issued_at": "2026-10-16T21:39:20.690477049Z",
+      "directory_expires_at": "2026-10-17T01:39:18.031522505Z",
+      "material_limit_utc": "2026-10-17T00:18:20+00:00",
+      "next_scheduled_utc": "2026-10-16T21:48:30.833397+00:00",
+      "served_strict_chain": "PASS",
+      "pending_owners": false,
+      "transaction": "COMMITTED",
+      "active_restricted_count": "UNKNOWN",
+      "last_scheduled_service_result": "exit-code"
+    },
+    "initial_ru_directory": "PREVIOUS_RUNTIME_UNTIL_NORMAL_SYNC",
+    "final_ru_directory_matches": true,
+    "authority_expiry_utc": "2026-10-17T13:10:22+00:00",
+    "leaf_expiry_utc": "2026-10-17T00:18:20+00:00",
+    "crl_expiry_utc": "2026-10-17T00:48:26+00:00",
+    "operator_threshold_utc": "2026-10-17T07:10:22+00:00",
+    "last_scheduled": {
+      "result": "FAIL_CLOSED",
+      "cause": "REMOTE_OUTCOME_UNKNOWN_READBACK_REQUIRED",
+      "automatic_retry": false,
+      "remote_alert_delivery": "UNAVAILABLE",
+      "predated_candidate": true
+    },
+    "evaluate_before": {
+      "epoch": 1792186691.634419,
+      "exit": 0,
+      "command_mode": "evaluate",
+      "mutations_requested": 0,
+      "evaluation": {
+        "result": "NOOP",
+        "files_changed": 0,
+        "remote_writes": 0,
+        "restarts": 0,
+        "due": [],
+        "alerts": []
+      }
+    },
+    "evaluate_after": {
+      "epoch": 1792186781.2606947,
+      "exit": 0,
+      "command_mode": "evaluate",
+      "mutations_requested": 0,
+      "evaluation": {
+        "result": "NOOP",
+        "files_changed": 0,
+        "remote_writes": 0,
+        "restarts": 0,
+        "due": [],
+        "alerts": []
+      }
+    },
+    "current4h_timer_unchanged": true,
+    "last_service_failure_not_reset": true
+  },
+  "action_counts": {
+    "signing": 1,
+    "replace_install": 1,
+    "ordinary_app_launch": 1,
+    "gateway_stop": 1,
+    "gateway_start": 1,
+    "gateway_binary_replacement": 1,
+    "client_rollback": 0,
+    "gateway_rollback": 0,
+    "connect": 0,
+    "export": 0,
+    "rebuild": 0,
+    "new_test_suites": 0,
+    "emulator": 0,
+    "credential_renewal_recovery": 0,
+    "unit_argv_edits": 0,
+    "manual_directory_publish": 0,
+    "native_stats_pollers_added": 0,
+    "uninstall": 0,
+    "clear_data_cache": 0,
+    "ssh_command_attempts": 29,
+    "scp_transfers": 1
+  },
+  "limitations": [
+    "Real phone throughput and call continuity not measured.",
+    "Prior no-restart PASS remains bound to its old exact pair.",
+    "Current4h evaluate NOOP is not renewal and does not rewrite the earlier failed scheduled result.",
+    "Seed/TLS/directory readiness is not Android TUN/DNS/HTTPS acceptance.",
+    "Old broker in-memory holders were lost at the authorized restart; no holder count inferred.",
+    "Initial direct RU SSH timed out; existing authorized NL used as ProxyJump, without key transfer."
+  ],
+  "private_receipt_sha256": {
+    "owner-install/receipts/before.json": "28a1e62bb60d8e5868fc93966c406172942e742fc7c70395b7d64cb10e98608d",
+    "owner-install/receipts/signing.json": "736e53c089da0aab11e0c4380bf6dde4a8970858666e453e56db431d9a9ea127",
+    "owner-install/receipts/install-intent.json": "ac4e1ed525ac85225939f4684ea2dd0d815c16a113f0d653198301b0dd62c101",
+    "owner-install/receipts/install-result.json": "3143393e2f4f699092af125b87d2b5126502128945e990116ca6fcf3ca3b1939",
+    "owner-install/receipts/installed.json": "38654b709a75ab6d2b7df27f4d5ba031de40d8c8726b23f75f914e384ead5237",
+    "owner-install/receipts/launched.json": "62cac31aab792ebc7a542b431e210dcb1edde0e96f0715fe53550e1362951068",
+    "owner-install/receipts/final.json": "2dd7071c298b2e99c0ec999b105f71b54ffb319d45fdf6cf4ce5d8b1449146c3",
+    "rollout/private/deployment-durable.json": "ea181ee786b6a3b4901b386c82880c5affb41f020a07bac8f56bba88fec36511",
+    "rollout/private/previous-scheduled.jsonl": "fa4d74de94be05c6f58e457d622f4b14c05b003c58220c040f92d36c7a9afaaf",
+    "rollout/private/final-NL-entry.json": "ce4ce23e33d0d65e9bbbb26a0120028a25159cbbed7291aaeb4db279c01457ea",
+    "rollout/private/final-RU-entry.json": "9c19c8f5129eaa724268dc66415ff20a5b2180a002e3f66bb8f66a5c6c30c582",
+    "rollout/private/final-NL-bounds.json": "beea7065715e47a3bfb81c6b07c20f349c5e52faca22f8be822b0894b37e61ba",
+    "rollout/private/final-RU-bounds.json": "c720e476c9dc3a41b405cc24bfce576da791c7baed8a20fde1c7977bb34d5c42",
+    "rollout/private/final-seed-journal.jsonl": "c32ee5d1d3515d4c511b34a8009291b731052975ec7e3c517fd1ff3d33e7b647"
+  }
+}
