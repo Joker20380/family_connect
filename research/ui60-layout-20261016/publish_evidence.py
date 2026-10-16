@@ -8,7 +8,7 @@ root=Path(__file__).resolve().parent
 review=root.parent/'owner-cumulative-client-acceptance-1-resume/review-publication'
 publication=review/'research/ui60-layout-20261016'
 publication.mkdir(parents=True,exist_ok=True)
-for name in ['ui-only.patch','boundary.json','artifact-check.json','verify_boundary.py','check_artifact.py','build_ui.py','prepare.py','publish_evidence.py']:
+for name in ['ui-only.patch','boundary.json','artifact-check.json','verify_boundary.py','check_artifact.py','build_ui.py','prepare.py','publish_evidence.py','check_map_revision.py','map-revision-check.json']:
     shutil.copy2(root/name,publication/name)
 for name in ['receipt.json','cumulative-source.json']:
     shutil.copy2(root/'build'/name,publication/('build-'+name))
@@ -59,7 +59,9 @@ for path in sorted((root/'renderer/renders-candidate').glob('*.log')):
                 assert panel['top']<=view['top'] and view['top']+view['height']<=panel['top']+panel['height'],view
     presentation=[row for row in rows if 'beta60TelemetryGrouping' in row]
     assert len(presentation)==1 and all(presentation[0].values())
-    tests.append(dict(configuration=path.stem,scenes=scenes,navigation=navigation,presentation=presentation))
+    map_width=[row for row in rows if 'compactMapFillsWidth' in row]
+    assert len(map_width)==1 and map_width[0]['compactMapFillsWidth'] and len(map_width[0]['cases'])==8
+    tests.append(dict(configuration=path.stem,scenes=scenes,navigation=navigation,presentation=presentation,compact_map_width=map_width))
 keyboard=(root/'renderer/keyboard.log').read_text()
 keyboard_pass='INSTRUMENTATION_CODE: -1' in keyboard and 'INSTRUMENTATION_RESULT: error=' not in keyboard
 keyboard_rows=json.loads(keyboard.split('INSTRUMENTATION_RESULT: result=',1)[1].split('\nINSTRUMENTATION_CODE:',1)[0]) if keyboard_pass else []

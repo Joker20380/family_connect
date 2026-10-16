@@ -26,6 +26,13 @@ Country names wrap instead of reproducing beta60's tiny text. Blank metrics rema
 unknown; fixture/emulator telemetry is never described as owner TUN proof.
 
 Revision2 follows the owner's requested beta60 telemetry grouping and square corners.
+Revision3 changes only the compact map width and private versionName. The actual
+map rendering fills available width without making surrounding panels taller.
+[Map-only pixel check](map-revision-check.json) confirms normal RU/EN OFF pixels
+outside the map are identical to revision2; eight actual width/height/density cases
+per configuration cover the narrowed-map regression. [Execution receipt](map-revision-execution.json)
+records bounded build/KVM checks and final emulator OFF. Owner accepts the rest;
+the final map image awaits confirmation before signing or tester transfer.
 Network/signal, battery percentage/bar, traffic grid and connection selectors retain
 modern data sources. Message-route information remains in the existing panel's
 detail dialog/accessibility description, not in the graph. Four extra scenes use

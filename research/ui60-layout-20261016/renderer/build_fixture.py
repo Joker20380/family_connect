@@ -19,7 +19,7 @@ elif label=='current': base=state/'bootstrap-pre-hello-correlation-1/gradle-nati
 else: base=Path(sys.argv[2]).resolve()
 destination=root/label;destination.mkdir(exist_ok=True)
 classes=destination/'classes';classes.mkdir(exist_ok=True)
-subprocess.run([str(tools/'jdk/bin/javac'),'-source','17','-target','17','-classpath',str(android),'-d',str(classes),
+subprocess.run([str(tools/'jdk/bin/javac'),'-encoding','UTF-8','-source','17','-target','17','-classpath',str(android),'-d',str(classes),
     *[str(path) for path in (root/'java').rglob('*.java')]],env=env,check=True)
 dex=destination/'dex';dex.mkdir(exist_ok=True)
 subprocess.run([str(build_tools/'d8'),'--lib',str(android),'--min-api','26','--output',str(dex),*[str(path) for path in classes.rglob('*.class')]],env=env,check=True)

@@ -7,7 +7,7 @@ marked started or complete by this document.
 | Criterion | Current result |
 |---|---|
 | UI implementation | [Unsigned candidate implemented](2026-10-16-ui60-layout-current-style-1.md) |
-| UI_VISUAL_APPROVED | WAITING_FOR_OWNER_VISUAL_APPROVAL |
+| UI_VISUAL_APPROVED | Other layout accepted; WAITING_FOR_FINAL_MAP_IMAGE_CONFIRMATION |
 | ARTIFACT_COMPATIBLE | NOT_YET_CHECKED_FOR_TESTER |
 | TESTER_AUTHORIZED | NOT_YET_CHECKED; registration is not a restricted grant |
 | FIELD_WARM_START | NOT_STARTED |
@@ -25,14 +25,14 @@ existing restricted entitlement, working preparation network and availability in
 one short request. Do not send messages to third parties. Verify grant scope using
 the existing read-only authorized route; no grant/identity creation or owner profile.
 
-Check this **new UI APK**, versionName0.1.18-research84-ui60-2/code84/minSdk31/arm64:
+Check this **new UI APK**, versionName0.1.18-research84-ui60-3/code84/minSdk31/arm64:
 safe same-signer replacement, actual device compatibility, normal restricted path,
 inactive provisioning research gate and normal export. A lower-code tester APK is
 not promised as an ordinary rollback. No `-d`, uninstall, data/cache clear or
 re-enrollment. Absent entitlement means TESTER_NOT_AUTHORIZED, not transport failure.
 
 Only then sign the verified unsigned hash
-`1a11f98f9200b477b0821b0588b860c66ae9ea0aaa6de98b7c32e59d2e2ea92a`
+`ef3c7e06f5666c87b8e31bf1eddc318d1a7cd97a0c720187f05e342a2a1ec95b`
 using the existing key/workflow; recheck payload/native/provenance and retain the
 signed hash. Owner privately transfers to one agreed recipient. No catalog,
 landing, invitation or public release change. If unavailable:

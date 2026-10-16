@@ -16,5 +16,9 @@
   "friends_navigation_lifecycle_and_operations_identical": true,
   "telemetry_sample_accept_pause_identical": true,
   "native_rebuilt": false,
-  "delta_patch_sha256": "779eefa13f0f9eed5a66ca3a70d310a4340dbb24fc822b4e65ab4e24c37f9ca1"
+  "delta_patch_sha256": "11888b19c71045d5b181ee544562f97c7f7bd55c4a19f8dd912de0c4d015161c",
+  "revision3_changes_from_revision2": [
+    "clients/android/app/build.gradle",
+    "clients/android/app/src/main/java/com/familyconnect/app/RouteMapView.java"
+  ]
 }

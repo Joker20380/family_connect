@@ -1,0 +1,33 @@
+{
+  "checks": [
+    {
+      "language": "ru",
+      "viewport": [
+        392,
+        780
+      ],
+      "map_bounds": [
+        12,
+        600,
+        380,
+        714
+      ],
+      "outside_map_pixel_identical_to_revision2": true
+    },
+    {
+      "language": "en",
+      "viewport": [
+        392,
+        780
+      ],
+      "map_bounds": [
+        12,
+        600,
+        380,
+        714
+      ],
+      "outside_map_pixel_identical_to_revision2": true
+    }
+  ],
+  "scope": "Normal-size RU/EN OFF fixtures; synthetic data"
+}

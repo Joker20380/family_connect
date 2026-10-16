@@ -175,6 +175,22 @@ public final class UiFixtureInstrumentation extends Instrumentation {
         if(!rectangular)throw new AssertionError("Frame still has cut or rounded corners");
         JSONObject row=new JSONObject();row.put("beta60TelemetryGrouping",true);row.put("rectangularFrameCorners",true);row.put("messageRouteDetailsPreserved",true);row.put("syntheticTelemetry",true);results.put(row);
     }
+    private void compactMapWidth(String language,float font)throws Exception{
+        Activity scene=home(language,font,"off");JSONArray cases=new JSONArray();
+        Constructor<?> constructor=type("RouteMapView").getDeclaredConstructor(Context.class,java.util.function.Consumer.class);constructor.setAccessible(true);
+        for(int density:new int[]{1,2})for(int widthDp:new int[]{296,368})for(int heightDp:new int[]{88,114}){
+            Configuration config=new Configuration(scene.getResources().getConfiguration());config.densityDpi=160*density;
+            View map=(View)constructor.newInstance(scene.createConfigurationContext(config),(java.util.function.Consumer<String>)value->{throw new AssertionError("Map renderer must not navigate");});
+            invoke(map,"compactPreview",new Class<?>[0]);int width=widthDp*density,height=heightDp*density;
+            map.measure(View.MeasureSpec.makeMeasureSpec(width,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(height,View.MeasureSpec.EXACTLY));map.layout(0,0,width,height);
+            Bitmap bitmap=Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888);map.draw(new Canvas(bitmap));bitmap.recycle();
+            float minX=Float.POSITIVE_INFINITY,maxX=Float.NEGATIVE_INFINITY;
+            for(float[] batch:(float[][])get(map,"dotBatches"))for(int index=0;index<batch.length;index+=2){minX=Math.min(minX,batch[index]);maxX=Math.max(maxX,batch[index]);}
+            if(minX>30*density||maxX<width-30*density||maxX>width-12*density)throw new AssertionError("Compact map is narrowed or outside horizontal bounds: "+minX+".."+maxX+" of "+width);
+            JSONObject row=new JSONObject();row.put("widthDp",widthDp);row.put("heightDp",heightDp);row.put("density",density);row.put("minLandX",minX);row.put("maxLandX",maxX);cases.put(row);
+        }
+        JSONObject result=new JSONObject();result.put("compactMapFillsWidth",true);result.put("cases",cases);results.put(result);
+    }
     private void keyboard()throws Exception{
         Activity host=startActivitySync(new Intent(getTargetContext(),FixtureHostActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         final android.widget.EditText[] composer={null};
@@ -217,7 +233,7 @@ public final class UiFixtureInstrumentation extends Instrumentation {
                     invoke(activity,"showSettings",new Class<?>[0]);save(activity,prefix+"-settings",width,height);}
                 }
                 if(!"home-off".equals(arguments.getString("screens")))for(String screen:new String[]{"empty","list","conversation"})save(chat(language,font,screen),prefix+"-chat-"+screen,width,height);
-                if("candidate".equals(arguments.getString("label"))){navigation(language,font);networkPresentation(language,font,width,height,prefix);}
+                if("candidate".equals(arguments.getString("label"))){navigation(language,font);networkPresentation(language,font,width,height,prefix);compactMapWidth(language,font);}
             }catch(Throwable error){failure[0]=error;}});
             if(failure[0]!=null)throw new RuntimeException(failure[0]);
             report.putString("result",results.toString());finish(Activity.RESULT_OK,report);

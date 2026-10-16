@@ -150,6 +150,69 @@
           "messageRouteDetailsPreserved": true,
           "syntheticTelemetry": true
         }
+      ],
+      "compact_map_width": [
+        {
+          "compactMapFillsWidth": true,
+          "cases": [
+            {
+              "widthDp": 296,
+              "heightDp": 88,
+              "density": 1,
+              "minLandX": 1.5,
+              "maxLandX": 282.5
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 114,
+              "density": 1,
+              "minLandX": 0.5,
+              "maxLandX": 282.5
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 88,
+              "density": 1,
+              "minLandX": 1.5,
+              "maxLandX": 355.5
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 114,
+              "density": 1,
+              "minLandX": 0.5,
+              "maxLandX": 355.5
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 88,
+              "density": 2,
+              "minLandX": 2.5,
+              "maxLandX": 565.5
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 114,
+              "density": 2,
+              "minLandX": 0.5,
+              "maxLandX": 565.5
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 88,
+              "density": 2,
+              "minLandX": 2.5,
+              "maxLandX": 710.5
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 114,
+              "density": 2,
+              "minLandX": 0.5,
+              "maxLandX": 710.5
+            }
+          ]
+        }
       ]
     },
     {
@@ -310,6 +373,69 @@
           "rectangularFrameCorners": true,
           "messageRouteDetailsPreserved": true,
           "syntheticTelemetry": true
+        }
+      ],
+      "compact_map_width": [
+        {
+          "compactMapFillsWidth": true,
+          "cases": [
+            {
+              "widthDp": 296,
+              "heightDp": 88,
+              "density": 1,
+              "minLandX": 1.5,
+              "maxLandX": 282.5
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 114,
+              "density": 1,
+              "minLandX": 0.5,
+              "maxLandX": 282.5
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 88,
+              "density": 1,
+              "minLandX": 1.5,
+              "maxLandX": 355.5
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 114,
+              "density": 1,
+              "minLandX": 0.5,
+              "maxLandX": 355.5
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 88,
+              "density": 2,
+              "minLandX": 2.5,
+              "maxLandX": 565.5
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 114,
+              "density": 2,
+              "minLandX": 0.5,
+              "maxLandX": 565.5
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 88,
+              "density": 2,
+              "minLandX": 2.5,
+              "maxLandX": 710.5
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 114,
+              "density": 2,
+              "minLandX": 0.5,
+              "maxLandX": 710.5
+            }
+          ]
         }
       ]
     },
@@ -472,6 +598,69 @@
           "messageRouteDetailsPreserved": true,
           "syntheticTelemetry": true
         }
+      ],
+      "compact_map_width": [
+        {
+          "compactMapFillsWidth": true,
+          "cases": [
+            {
+              "widthDp": 296,
+              "heightDp": 88,
+              "density": 1,
+              "minLandX": 1.5,
+              "maxLandX": 282.5
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 114,
+              "density": 1,
+              "minLandX": 0.5,
+              "maxLandX": 282.5
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 88,
+              "density": 1,
+              "minLandX": 1.5,
+              "maxLandX": 355.5
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 114,
+              "density": 1,
+              "minLandX": 0.5,
+              "maxLandX": 355.5
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 88,
+              "density": 2,
+              "minLandX": 2.5,
+              "maxLandX": 565.5
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 114,
+              "density": 2,
+              "minLandX": 0.5,
+              "maxLandX": 565.5
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 88,
+              "density": 2,
+              "minLandX": 2.5,
+              "maxLandX": 710.5
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 114,
+              "density": 2,
+              "minLandX": 0.5,
+              "maxLandX": 710.5
+            }
+          ]
+        }
       ]
     },
     {
@@ -622,6 +811,69 @@
           "rectangularFrameCorners": true,
           "messageRouteDetailsPreserved": true,
           "syntheticTelemetry": true
+        }
+      ],
+      "compact_map_width": [
+        {
+          "compactMapFillsWidth": true,
+          "cases": [
+            {
+              "widthDp": 296,
+              "heightDp": 88,
+              "density": 1,
+              "minLandX": 1.5,
+              "maxLandX": 282.5
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 114,
+              "density": 1,
+              "minLandX": 0.5,
+              "maxLandX": 282.5
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 88,
+              "density": 1,
+              "minLandX": 1.5,
+              "maxLandX": 355.5
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 114,
+              "density": 1,
+              "minLandX": 0.5,
+              "maxLandX": 355.5
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 88,
+              "density": 2,
+              "minLandX": 2.5,
+              "maxLandX": 565.5
+            },
+            {
+              "widthDp": 296,
+              "heightDp": 114,
+              "density": 2,
+              "minLandX": 0.5,
+              "maxLandX": 565.5
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 88,
+              "density": 2,
+              "minLandX": 2.5,
+              "maxLandX": 710.5
+            },
+            {
+              "widthDp": 368,
+              "heightDp": 114,
+              "density": 2,
+              "minLandX": 0.5,
+              "maxLandX": 710.5
+            }
+          ]
         }
       ]
     }

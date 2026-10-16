@@ -5,6 +5,38 @@ This is an isolated derivative of the retained accepted diagnostic product, not 
 checkout of beta60 or the dirty root main. Existing snapshots, accepted artifacts and
 historical acceptance reports are retained. The field stage has **not started**.
 
+## Owner-requested revision 3 — map width
+
+The owner approved the remaining composition and requested only a wider main map.
+The compact preview no longer derives its drawing width from the short block's
+height. It uses the full existing content width minus the same6dp inset on each side;
+height, surrounding panels, navigation, country/transport controls and the full
+Route screen are unchanged. This is map rendering only, not a session/state change.
+Revision2 unsigned APK1a11f98f…2e2ea92a and its receipts/renderer images remain archived;
+its published checkpoint is42196f866ef501918ada272884b6aaef8dbcd8e8.
+Revision3 unsigned build,15 targeted JVM checks and bounded visual verification
+pass. No product signing/transfer. Only `RouteMapView.java` and the private
+candidate versionName differ from revision2 product sources.
+
+At the392px fixture viewport, the unchanged368px-wide/114px-high map frame now
+draws across356px inside its6px insets instead of shrinking to about253px. Both
+normal RU/EN OFF fixtures are pixel-identical to revision2 outside that map frame.
+The actual map class passes eight width/height/density cases per configuration
+(296/368dp widths,88/114dp heights,1x/2x density), including measured land-dot extent.
+All54 scenes/eight navigation cycles and the real-IME component check use the new
+APK; no previous candidate's render is relabeled as revision3.
+
+The single UI assemble used a50%-of-one-core cgroup quota and85°C guard:338.464s,
+peak78°C. Test-renderer preparation first failed under the service's ASCII locale;
+explicit javac UTF-8 encoding fixed the harness only, with no repeated product build.
+The successful renderer preparation took32.092s/peak70°C. KVM/Intel-GPU UI checks
+used the same quota/cutoff and10-minute cap:132.080s,65 temperature samples,
+peak84°C/last75°C. The service stopped after evidence was saved; the emulator is OFF.
+As in revision2, emulator shutdown returned-6; graceful internal exit is not asserted.
+These bounds/measurements are not a general temperature guarantee for other workloads.
+See [map-only pixel check](../../research/ui60-layout-20261016/map-revision-check.json)
+and [execution receipt](../../research/ui60-layout-20261016/map-revision-execution.json).
+
 ## Owner-requested revision 2
 
 The owner accepted the general direction and requested the beta60 network/battery
@@ -59,13 +91,13 @@ See [bounded execution receipt](../../research/ui60-layout-20261016/emulator-exe
 | Accepted modern cumulative source inventory | `b36c4a21ee6cf04acb192a0e6d140fa565b3e5ae75f6fc8d028d029c3152781d` |
 | Retained accepted signed APK, not the UI candidate | `8e5579f04de91e4ec00e3e79271dbb0f380b1ed91945ff89016aa50d274a8845` |
 | Modern before-render input, unsigned APK | `b2a4b76b3218ec06f3409154a1a14f71bf4feff3206be3282c25852eabdd35ca` |
-| New UI cumulative source inventory, not a Git commit | `ab982dc266c849577dff2c2330d9346e15c5e6233914d8083904b1882b4029d1` |
-| **New unsigned UI APK** | `1a11f98f9200b477b0821b0588b860c66ae9ea0aaa6de98b7c32e59d2e2ea92a` |
+| New UI cumulative source inventory, not a Git commit | `7f8fd0dd8498c61c4f182b1f3322d9c2d38d17dc4f30ff9e06cef0b733d9c39d` |
+| **New unsigned UI APK** | `ef3c7e06f5666c87b8e31bf1eddc318d1a7cd97a0c720187f05e342a2a1ec95b` |
 | Embedded restricted native, reused unchanged | `be70a66ccc2bcbf0478915fd414c32de3bedb2a0ae0c3222a53e65eebd0a92b2` |
 | Gateway retained identity, no live query in this task | `a537257162348afc35b1ebc08755d8c5dc1cd90e74c49e3987fb3eb81885e61f` |
 
-Package `com.familyconnect.app.friends`; versionName **0.1.18-research84-ui60-2**;
-versionCode **84**, minSdk31, arm64-v8a, unsigned size55,990,392bytes.
+Package `com.familyconnect.app.friends`; versionName **0.1.18-research84-ui60-3**;
+versionCode **84**, minSdk31, arm64-v8a, unsigned size55,990,388bytes.
 No production signing or installation. Code84 deliberately remains compatible with
 same-code replacement of the accepted owner APK after matching signer checks. This
 does **not** promise ordinary rollback to an unknown tester's lower-code APK. Tester
@@ -80,7 +112,7 @@ the library is not represented as rebuilt from UI sources.
 
 - Main screen returns to beta60 ordering: full header; large centered circular
   switch/status/server load; two-column telemetry and country/transport controls;
-  compact map; fixed four-item bottom navigation. No old transport list is copied.
+  compact full-width map; fixed four-item bottom navigation. No old transport list is copied.
 - Square frame geometry follows the owner's revision2 request through the shared drawable, including
   buttons, navigation, chat bubbles, route/settings panels and common dialogs.
   Current background, palette, text styling, health colors and animation logic remain.
@@ -148,12 +180,13 @@ This does not substitute current product code into the historical reference.
   cycles, retained controls/session state, zero service requests, secure flag retained.
   Button targets remain at least48 logical pixels; selectors have no measured ellipsis.
   Each configuration checks beta60 telemetry grouping, retained message-route details
-  and actual rectangular frame pixels. A separate real-IME ChatThreadView check preserves draft and
+  and actual rectangular frame pixels; revision3 adds eight map dimension/density
+  cases per configuration. A separate real-IME ChatThreadView check preserves draft and
   selection; system-bar insets27/54px and IME bottom366px are recorded, not inferred.
   The79 safe screenshots include24 reference frames and55 candidate/component frames.
 
 Eight UI-only assembles preceded the first checkpoint; revision2 uses two additional
-UI-only assembles. The final unique test count is15, not an aggregate count. An initial
+UI-only assembles and revision3 uses one. The final unique test count is15, not an aggregate count. An initial
 sandbox Gradle socket denial was resolved by the normal approved external execution.
 No transport/race/PKI suite, native rebuild or live acceptance was substituted.
 
@@ -170,16 +203,16 @@ applicability is still a separate post-approval check, not inferred from owner U
 
 | Criterion | Result at this checkpoint |
 |---|---|
-| UI_LAYOUT_RESTORED | Main and beta60 telemetry composition; square frames per revision2 request; chat/route/settings hierarchy retained; accessibility deviations listed above |
+| UI_LAYOUT_RESTORED | Main/beta60 telemetry; square frames; revision3 full-width compact map; other layout retained; accessibility deviations listed above |
 | CURRENT_STYLE_AND_THIN_STROKES_PRESERVED | Current palette/background/type and state sources retained; common density-scaled strokes |
 | UI_STATE_AND_NAVIGATION_TESTS | 15 targeted JVM cases;54 fixture scenes;8 navigation cycles;real IME component check pass |
 | TRANSPORT_NATIVE_SECURITY_UNCHANGED | Exact source boundary and all embedded native payload checks pass; no native rebuild |
 | NEW_UI_SIGNED_APK | NOT_CREATED; only the unsigned candidate identified above |
 | TESTER_COMPATIBILITY_AND_AUTHORIZATION | NOT_CHECKED; after owner visual approval |
 | FIELD_STAGE_AND_RESULT | NOT_STARTED / WAITING_FOR_OWNER_VISUAL_APPROVAL |
-| FIRST_FAILURE_OR_REMAINING_BLOCKER | No live failure; owner visual decision is the next gate |
+| FIRST_FAILURE_OR_REMAINING_BLOCKER | No live failure; owner accepts other layout, final map-image confirmation is next |
 | FINAL_DEVICE_STATE | Phone/tester untouched; no fresh device-state assertion |
-| ACTION_COUNTS | UI assemble10 cumulative,2 in revision2; native rebuild0; product signing/install0; CONNECT/export0; server operations0 |
+| ACTION_COUNTS | UI assemble11 cumulative,1 in revision3; native rebuild0; product signing/install0; CONNECT/export0; server operations0 |
 
 **UI_VISUAL_APPROVAL=WAITING_FOR_OWNER_VISUAL_APPROVAL.**
 Product unsigned APK remains local. Production signing, tester selection/contact,

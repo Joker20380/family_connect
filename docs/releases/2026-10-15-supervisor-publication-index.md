@@ -6,8 +6,9 @@
 [safe delta/tests/comparisons](../../research/ui60-layout-20261016/README.md),
 [FIELD-1 stage, NOT_STARTED](2026-10-16-field-1-ui60-warm-start.md).
 Exact retained modern source, resolved beta60 visual ref only; no old behavior copied.
-Revision2: beta60 network/battery block and square corners at owner's request.
-New unsigned UI APK1a11f98f…2e2ea92a/code84, inventoryab982dc2…2b4029d1;
+Revision2: beta60 network/battery block and square corners; revision3 widens only
+the compact map. Other pixels match in normal RU/EN OFF comparison; owner accepts rest.
+New unsigned UI APKef3c7e06…2a1ec95b/code84, inventory7f8fd0dd…33d9c39d;
 nativebe70a66c and native provenance unchanged. Full Gradle/15 targeted JVM cases;
 real-code synthetic UI renders, not live CONNECT evidence. Owner visual approval
 precedes product signing, compatibility/grant check and private tester transfer.

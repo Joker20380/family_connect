@@ -1,0 +1,21 @@
+{
+  "revision": "ui60-3",
+  "unsigned_apk_sha256": "ef3c7e06f5666c87b8e31bf1eddc318d1a7cd97a0c720187f05e342a2a1ec95b",
+  "renderer_apk_sha256": "ce5c3dc78a5ecc764cc7fec067352b2571def590477aa417c16d95230f4f451d",
+  "cpu_max": "50000 100000",
+  "nice": 10,
+  "temperature_guard_celsius": 85,
+  "build": {"elapsed_seconds":338.464,"peak_celsius":78,"jvm_cases":15,"result":"PASS"},
+  "renderer_preparation": {"initial_failure":"javac inherited ASCII locale; harness now declares UTF-8","elapsed_seconds_after_fix":32.092,"peak_celsius_after_fix":70,"product_rebuild_after_harness_fix":false},
+  "emulator": {"acceleration":"KVM verified by open descriptors; Intel host GPU","runtime_cap_seconds":600,"elapsed_seconds":132.080,"temperature_samples":65,"peak_celsius":84,"last_celsius":75,"shutdown_returncode":-6,"graceful_internal_exit_asserted":false,"final_state":"OFF"},
+  "map_cases_per_configuration":8,
+  "configurations":4,
+  "scene_count":54,
+  "navigation_cycles":8,
+  "real_ime_check":"PASS",
+  "outside_map_ru_en_off_pixels":"IDENTICAL_TO_REVISION2",
+  "product_ui_assembles_this_revision":1,
+  "native_rebuilds":0,
+  "product_signing_installs":0,
+  "phone_server_live_operations":0
+}

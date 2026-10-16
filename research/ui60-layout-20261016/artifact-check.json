@@ -66,7 +66,7 @@
       "skipped": "0"
     }
   ],
-  "unsigned_apk_sha256": "1a11f98f9200b477b0821b0588b860c66ae9ea0aaa6de98b7c32e59d2e2ea92a",
+  "unsigned_apk_sha256": "ef3c7e06f5666c87b8e31bf1eddc318d1a7cd97a0c720187f05e342a2a1ec95b",
   "product_signing": "NOT_PERFORMED",
   "unsigned_verified": true,
   "zip_alignment": true,

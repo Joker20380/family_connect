@@ -5,7 +5,7 @@
          }
          if (variant.buildType.name == 'researchProvisioning') {
 -            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-provisioning-seam' }
-+            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-ui60-2' }
++            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-ui60-3' }
          }
      }
  }
@@ -231,7 +231,13 @@
          // One opacity for all land; pixel-aligned centers give equal raster coverage.
          float shimmer=motion?(float)Math.sin(2*Math.PI*phase):0;
          paint.setAlpha(120+Math.round(6*shimmer));
-@@ -119,7 +119,7 @@
+@@ -114,12 +114,12 @@
+     @Override protected void onDraw(Canvas c){
+         float w=getWidth(),h=getHeight(),mapH=compact?Math.min(h,w*145f/360f):h*.78f,d=getResources().getDisplayMetrics().density;
+         if(compact){
+-            float inset=6*d;w=Math.min(w-2*inset,(h-2*inset)*360f/145f);mapH=w*145f/360f;
++            float inset=6*d;w-=2*inset;mapH=Math.min(h-2*inset,w*145f/360f);
+             c.translate((getWidth()-w)/2,(h-mapH)/2);
          }
          int viewport=c.save();c.clipRect(0,0,w,mapH);
          try {

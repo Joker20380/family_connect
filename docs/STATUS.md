@@ -2,6 +2,11 @@
 
 ## UI60-RESTORE-AND-FIELD-1 — UI implemented, owner visual approval pending (16.10)
 
+Owner accepts the other elements; revision3 implements the requested full-width map.
+Build/visual verification complete:15 JVM cases,54 scenes,8 map dimension/density
+cases per configuration; normal RU/EN OFF pixels outside the map match revision2.
+Final map visual confirmation pending. No product signing, transfer or field attempt.
+
 [UI candidate / comparisons](releases/2026-10-16-ui60-layout-current-style-1.md),
 [field continuation, NOT STARTED](releases/2026-10-16-field-1-ui60-warm-start.md).
 Isolated derivative of accepted inventoryb36c4a21; beta60 visual ref
@@ -10,10 +15,10 @@ Large main dial and beta60 block order restored. Owner-requested revision2 resto
 the network/battery/graph grouping and replaces chamfers with square corners;
 current palette/thin strokes/typography, modern restricted/diagnostic/chat behavior
 retained. Normal/narrow/font/language UI fixtures and targeted tests are published.
-Revision2 real-IME check completed with KVM/host GPU under a50%-of-one-core quota
-after stopping the overheated software emulator; measured peak78°C, emulator now OFF.
-Unsigned UI APK1a11f98f…2e2ea92a, UI inventoryab982dc2…2b4029d1,
-versionName0.1.18-research84-ui60-2/code84. All native payloads unchanged, restricted
+Revision3 KVM/host-GPU checks ran under50%-of-one-core quota and85°C cutoff;
+measured emulator peak84°C, emulator now OFF. No software CPU fallback.
+Unsigned UI APKef3c7e06…2a1ec95b, UI inventory7f8fd0dd…33d9c39d,
+versionName0.1.18-research84-ui60-3/code84. All native payloads unchanged, restricted
 nativebe70a66c…0a92b2 and original native provenance preserved. Full Gradle +15 targeted
 JVM cases pass; no native rebuild. Not signed with product key, installed or sent.
 **Next: owner visual approval**, then existing tester compatibility/grant/readiness,

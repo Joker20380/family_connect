@@ -10,16 +10,19 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ### UI60-RESTORE-AND-FIELD-1 — implementation checkpoint (16.10)
 
+- Requested revision3 map-width change verified; approved rest of the layout and
+  native are unchanged. Normal RU/EN OFF pixels outside the map match revision2.
 - [UI implementation and real-code comparisons](releases/2026-10-16-ui60-layout-current-style-1.md):
   beta60 composition + current thin styling implemented on retained accepted source,
   not root main. Revision2 restores network/battery geometry and square corners.
-  Unsigned APK1a11f98f…2e2ea92a/code84, nativebe70a66c unchanged.
+  Revision3 map fills existing content width. Unsigned APKef3c7e06…2a1ec95b/code84,
+  nativebe70a66c unchanged.
 - Full UI assemble and15 targeted JVM/export tests complete; evidence includes
   normal/narrow/large-font/RU/EN layouts and navigation fixtures, with runtime limits.
-- Revision2 visual/IME checks are complete; bounded KVM emulator is stopped.
+- Revision3 visual/IME and map width/density checks complete; KVM emulator stopped.
   Do not restart software emulation; future local rendering requires usable KVM,
   host GPU, CPU quota, temperature cutoff and a finite runtime.
-- **Await owner visual approval of images before product signing or tester transfer.**
+- **Await final map-image confirmation before product signing or tester transfer.**
 - Continue [FIELD-1](releases/2026-10-16-field-1-ui60-warm-start.md) in this task:
   existing agreed tester's actual compatibility/authorization and availability;
   private owner transfer; warm preparation without Wi-Fi VPN CONNECT; one bounded
