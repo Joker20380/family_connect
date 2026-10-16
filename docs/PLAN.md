@@ -34,6 +34,11 @@ Verify reboot automount separately; no engineering release gate changes.
   not a proven primary bottleneck or UI regression. A narrow performance follow-up
   remains open; no automatic policy/queue patch, benchmark or repeated CONNECT.
   This ordinary-use observation is not FIELD-1 and does not reopen the prior bounded PASS.
+  [Source-only throughput follow-up](releases/2026-10-16-ui60-throughput-follow-up.md)
+  identifies fixed1s recovery without SACK fast retransmit as an optimization candidate.
+  Proposed next scope: fixed bounded local baseline/candidate comparison of loss,
+  reordering and reverse ACK delay; only then window/pacing if measurements justify it.
+  Not implemented or run; no speculative queue growth or live setting change.
 
 - Requested revision3 map-width change verified; approved rest of the layout and
   native are unchanged. Normal RU/EN OFF pixels outside the map match revision2.

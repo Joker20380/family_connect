@@ -16,6 +16,11 @@ same signer/UID10283. Actual UI60-3 APKe6c9dce0…8da4b00f saved as compatible b
 Normal launch19:53:00UTC;19:53:05UTC observation PID9111/VPN OFF/no new errors in
 the bounded UID-filtered startup sample. No rebuild, CONNECT, export or server action.
 [Revision4 installation receipt](../research/ui60-layout-20261016/owner-install4.json).
+Owner's on-phone UI impression is positive; speed remains inadequate subjectively.
+[Read-only throughput follow-up](releases/2026-10-16-ui60-throughput-follow-up.md)
+confirms retained fixed1s recovery/no SACK fast retransmit and window8×up-to16KiB.
+Loss-recovery versus ACK-delay/window limits need a bounded local comparison before
+any transport change. No speed gain, new benchmark or fix is claimed; no live actions.
 
 New [export10/call interruption analysis](releases/2026-10-16-ui60-owner-call-drop-export10.md)
 matches the same SESSION_S9 to a scheduled credential-maintenance stop at17:47:47UTC,

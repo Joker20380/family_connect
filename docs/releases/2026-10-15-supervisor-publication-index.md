@@ -1,5 +1,12 @@
 # PUBLISH-SUPERVISOR-RESEARCH-STATE-1 — указатель review-публикации
 
+## UI60 throughput — read-only follow-up, no speed fix claimed
+
+[Retained source and optimization candidates](2026-10-16-ui60-throughput-follow-up.md):
+owner likes installed UI60-4 but still reports inadequate speed. Existing exact-session
+ACK pressure and fixed1s recovery motivate a bounded local comparison, not a proven
+capacity ceiling or automatic window/queue change. No patch/build/test/phone/server action.
+
 ## UI60 revision4 — proportional map / compact panels, owner-approved and installed
 
 [UI report](2026-10-16-ui60-layout-current-style-1.md#revision4--proportional-map-and-more-compact-neighboring-blocks):
