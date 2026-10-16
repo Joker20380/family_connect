@@ -8,6 +8,20 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### NEW-PAIR-FAST-RECONNECT-NO-RESTART-1 — completed bounded lifecycle (16.10)
+
+- [Final result](releases/2026-10-16-new-pair-fast-reconnect-no-restart-1.md):
+  PASS_BOUNDED, two restricted CONNECTs;3431ms OFF→B, same app/gateway processes.
+- Owner explicitly confirms NL for A/B-initial/B-after240s VPN-bound checks; no HTTP
+  response receipt. B270.203s connected, total334.941s; final OFF/one normal export.
+- Preserve exact dedicated correlation and limits: A early/startup scalar absent,
+  B attempt3/tag retained; no new ownership capture. Late server terminals follow OFF.
+  DNS A not exercised, B12/0; per-surface retention and journal reassembly documented.
+- Leave existing diagnostic APK/native/signer/UID unchanged. No install/restart/rollback,
+  schedule/config change, new native reader, additional CONNECT or implicit next trial.
+- Chat operation/borrowing/handoff, live burst/full-device/supervisor and release remain
+  separate open criteria. Do not promote historical A/B causality from this success.
+
 ### BOOTSTRAP-PRE-HELLO-OBSERVED-TRIAL-1 — completed single observed trial (16.10)
 
 - [Result](releases/2026-10-16-bootstrap-pre-hello-observed-trial-1.md):

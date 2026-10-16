@@ -1,5 +1,18 @@
 # PUBLISH-SUPERVISOR-RESEARCH-STATE-1 — указатель review-публикации
 
+## Fast reconnect without restart —16Oct2026, PASS_BOUNDED
+
+[NEW-PAIR-FAST-RECONNECT-NO-RESTART-1](2026-10-16-new-pair-fast-reconnect-no-restart-1.md):
+[safe selected evidence](evidence/2026-10-16-new-pair-fast-reconnect-no-restart-1.json)
+for two restricted CONNECTs,3431ms local OFF→B, same app12008/gateway356992/INV_FAST;
+owner-confirmed NL for all three VPN-bound IP checks including after240s. B270.203s
+connected, final OFF in334.941s. Exact dedicated/native/app readiness; A early tag/scalar
+not archived, B attempt3/REQ_B retained, ownership capture not re-armed. DNS A0/0 not
+exercised/B12/0; late server terminals and retention limits explicit. One normal export;
+raw data private, aliases only. APK/native retained unchanged, no install/sign/restart/
+rollback/manual renewal/config change. Chat/historical causality/supervisor/release
+not promoted; historical reports unchanged.
+
 ## Bootstrap pre-HELLO observed trial —16Oct2026, SUCCESS_NOT_REPRODUCED
 
 [Final report](2026-10-16-bootstrap-pre-hello-observed-trial-1.md) and

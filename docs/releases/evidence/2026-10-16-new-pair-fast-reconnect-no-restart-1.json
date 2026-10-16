@@ -1,0 +1,310 @@
+{
+  "task": "NEW-PAIR-FAST-RECONNECT-NO-RESTART-1",
+  "result": "PASS_BOUNDED",
+  "installed": {
+    "apk_sha256": "8e5579f04de91e4ec00e3e79271dbb0f380b1ed91945ff89016aa50d274a8845",
+    "native_sha256": "be70a66ccc2bcbf0478915fd414c32de3bedb2a0ae0c3222a53e65eebd0a92b2",
+    "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+    "uid": 10283,
+    "version_code": 84
+  },
+  "source_inventory": "b36c4a21ee6cf04acb192a0e6d140fa565b3e5ae75f6fc8d028d029c3152781d",
+  "gateway": {
+    "executable_sha256": "a537257162348afc35b1ebc08755d8c5dc1cd90e74c49e3987fb3eb81885e61f",
+    "gateway_pid": "356992",
+    "same_invocation": true,
+    "ordinary_argv": true,
+    "capture_flag": false
+  },
+  "invocation_alias": "INV_FAST",
+  "app_pid": "12008",
+  "off_a_to_connect_b_ms": 3431,
+  "total_episode_ms": 334941,
+  "attempts": {
+    "A": {
+      "connection_alias": "CONN_A",
+      "incident_alias": "INC_A",
+      "dedicated_alias": "SESSION_A",
+      "connect_ms": 1792152166558,
+      "server_dedicated_ready_ms": 1792152179753,
+      "server_established_ms": 1792152190081,
+      "app_connected_ms": 1792152190619,
+      "disconnect_ms": 1792152198705,
+      "off_ms": 1792152198997,
+      "app_connected_until_disconnect_ms": 8086,
+      "native_state": 2,
+      "native_observed_at_ms": 1792152198749,
+      "native_terminal": "NONE",
+      "app_retry_count_max": 0,
+      "client_traffic": {
+        "dns_responses": 0,
+        "dns_errors": 0,
+        "tcp_open_ok": 4,
+        "tcp_open_errors": 0,
+        "protocol_errors": 0,
+        "sent_bytes": 3215,
+        "received_bytes": 5648,
+        "sent_frames": 95,
+        "received_frames": 83,
+        "retransmissions": 8,
+        "recovery_timeouts": 8
+      },
+      "client_retention": {
+        "trace_retained": 27,
+        "trace_sequence": [
+          1,
+          27
+        ],
+        "trace_counters": {
+          "trace_dropped": 0,
+          "export_dropped": 0,
+          "projection_dropped": 0,
+          "archive_dropped": 0,
+          "delivery_dropped": 0,
+          "delivery_projection_dropped": 0
+        },
+        "boundary_retained": 64,
+        "boundary_counters": {
+          "dropped": 773,
+          "projection_dropped": 0
+        },
+        "native_evidence_dropped": 0
+      },
+      "server_retention": {
+        "trace_retained": 56,
+        "trace_sequence": [
+          1,
+          56
+        ],
+        "trace_counters": {
+          "trace_dropped": 0,
+          "export_dropped": 0,
+          "projection_dropped": "NOT_EXPORTED",
+          "archive_dropped": "NOT_EXPORTED",
+          "delivery_dropped": 2,
+          "delivery_projection_dropped": "NOT_EXPORTED"
+        },
+        "boundary_retained": 64,
+        "boundary_counters": {
+          "dropped": 995,
+          "projection_dropped": "NOT_EXPORTED"
+        },
+        "native_evidence_dropped": 0
+      },
+      "server_trace_union_count": 63,
+      "server_trace_union_contiguous": true,
+      "server_terminal": {
+        "terminal_reason": "IO_CLOSED",
+        "terminal_at_ms": 1792152208769,
+        "reliable_terminal": "recovery_exhausted"
+      },
+      "server_terminal_after_off_ms": 9772,
+      "server_traffic": {
+        "dns_responses": 0,
+        "dns_errors": 0,
+        "tcp_open_ok": 4,
+        "tcp_open_errors": 0,
+        "protocol_errors": 0,
+        "sent_bytes": 5779,
+        "received_bytes": 3126,
+        "sent_frames": 145,
+        "received_frames": 87,
+        "retransmissions": 27,
+        "recovery_timeouts": 28
+      }
+    },
+    "B": {
+      "connection_alias": "CONN_B",
+      "incident_alias": "INC_B",
+      "dedicated_alias": "SESSION_B",
+      "connect_ms": 1792152202428,
+      "server_dedicated_ready_ms": 1792152218789,
+      "server_established_ms": 1792152230319,
+      "app_connected_ms": 1792152230946,
+      "disconnect_ms": 1792152501149,
+      "off_ms": 1792152501499,
+      "app_connected_until_disconnect_ms": 270203,
+      "native_state": 2,
+      "native_observed_at_ms": 1792152501197,
+      "native_terminal": "NONE",
+      "app_retry_count_max": 0,
+      "client_traffic": {
+        "dns_responses": 12,
+        "dns_errors": 0,
+        "tcp_open_ok": 26,
+        "tcp_open_errors": 0,
+        "protocol_errors": 0,
+        "sent_bytes": 34860,
+        "received_bytes": 103589,
+        "sent_frames": 1125,
+        "received_frames": 1126,
+        "retransmissions": 16,
+        "recovery_timeouts": 16
+      },
+      "client_retention": {
+        "trace_retained": 192,
+        "trace_sequence": [
+          45,
+          236
+        ],
+        "trace_counters": {
+          "trace_dropped": 44,
+          "export_dropped": 0,
+          "projection_dropped": 0,
+          "archive_dropped": "NOT_EXPORTED",
+          "delivery_dropped": 127,
+          "delivery_projection_dropped": 0
+        },
+        "boundary_retained": 64,
+        "boundary_counters": {
+          "dropped": 9955,
+          "projection_dropped": 0
+        },
+        "native_evidence_dropped": 0
+      },
+      "server_retention": {
+        "trace_retained": 192,
+        "trace_sequence": [
+          74,
+          265
+        ],
+        "trace_counters": {
+          "trace_dropped": 73,
+          "export_dropped": 0,
+          "projection_dropped": "NOT_EXPORTED",
+          "archive_dropped": "NOT_EXPORTED",
+          "delivery_dropped": 133,
+          "delivery_projection_dropped": "NOT_EXPORTED"
+        },
+        "boundary_retained": 64,
+        "boundary_counters": {
+          "dropped": 10158,
+          "projection_dropped": "NOT_EXPORTED"
+        },
+        "native_evidence_dropped": 0
+      },
+      "server_trace_union_count": 272,
+      "server_trace_union_contiguous": true,
+      "server_terminal": {
+        "terminal_reason": "IO_CLOSED",
+        "terminal_at_ms": 1792152511202,
+        "reliable_terminal": "recovery_exhausted"
+      },
+      "server_terminal_after_off_ms": 9703,
+      "server_traffic": {
+        "dns_responses": 12,
+        "dns_errors": 0,
+        "tcp_open_ok": 26,
+        "tcp_open_errors": 0,
+        "protocol_errors": 0,
+        "sent_bytes": 103720,
+        "received_bytes": 34771,
+        "sent_frames": 1181,
+        "received_frames": 1120,
+        "retransmissions": 39,
+        "recovery_timeouts": 40
+      }
+    }
+  },
+  "startup_A": "SUCCESS_BOUNDARIES_CONFIRMED; SCALAR_AND_EARLY_TAG_NOT_ARCHIVED",
+  "startup_B": {
+    "attempt": 3,
+    "started_unix_ms": 1792152204532,
+    "completed_ms": 26196,
+    "status": "SUCCEEDED",
+    "stage": "STARTUP",
+    "cause": "NONE",
+    "complete": true,
+    "bootstrap_exchanges_dropped": 0
+  },
+  "native_ready_B_ms": 1792152230728,
+  "early_B_alias": "REQ_B",
+  "early_B_authenticated": true,
+  "B_directory_matches_runtime": true,
+  "early_server_ownership_binding": "NOT_OBSERVED_CAPTURE_DISABLED",
+  "https": {
+    "A": "OWNER_REPORTED_UI_SUCCESS_NL",
+    "B_initial": "OWNER_REPORTED_UI_SUCCESS_NL",
+    "B_after_240s": "OWNER_REPORTED_UI_SUCCESS_NL",
+    "response_receipts": false,
+    "exact_request_timestamps": "NOT_RECORDED"
+  },
+  "chat": {
+    "UI_ONLINE": "NOT_PROVEN",
+    "OPERATION_COMPLETED": "NOT_PROVEN",
+    "BORROWING": "NOT_PROVEN",
+    "HANDOFF_ON_DEVICE": "NOT_PROVEN"
+  },
+  "retention": {
+    "ring_events": 73,
+    "ring_drop": "NOT_EXPORTED",
+    "incident_events": 17,
+    "incident_drop": "NOT_EXPORTED",
+    "incident_is_historical": true,
+    "history_sessions": 2,
+    "older_history_retention": {
+      "trace_retained": 32,
+      "trace_sequence": [
+        12,
+        43
+      ],
+      "trace_counters": {
+        "trace_dropped": 0,
+        "export_dropped": 0,
+        "projection_dropped": 0,
+        "archive_dropped": 11,
+        "delivery_dropped": 6,
+        "delivery_projection_dropped": 0
+      },
+      "boundary_retained": 64,
+      "boundary_counters": {
+        "dropped": 2303,
+        "projection_dropped": 0
+      },
+      "native_evidence_dropped": 0
+    },
+    "current_bootstrap_entries": 1,
+    "archived_A_startup_scalar_and_early_tag": "NOT_EXPORTED",
+    "journal_windows": 13,
+    "journal_row_cap": 320,
+    "row_cap_reached_windows": 2,
+    "unique_journal_rows": 362,
+    "B_terminal_line_max_reassembly_bytes": [
+      49152,
+      13613
+    ]
+  },
+  "action_counts": {
+    "owner_connect": 2,
+    "ordinary_disconnect": 2,
+    "normal_export": 1,
+    "automatic_retry_observed": 0,
+    "native_stats_pollers_added": 0,
+    "controlled_gateway_restart": 0,
+    "observed_gateway_restart": 0,
+    "app_restart": 0,
+    "install": 0,
+    "signing": 0,
+    "build": 0,
+    "rollback": 0,
+    "admission_capture_rearm": 0,
+    "manual_renewal_recovery": 0,
+    "firewall_DNS_changes": 0,
+    "data_cache_clear": 0,
+    "server_config_changes": 0
+  },
+  "final": {
+    "VPN": "OFF",
+    "diagnostic_APK": "LEFT_INSTALLED_PRIVATELY",
+    "app_process_unchanged": true,
+    "gateway_process_unchanged": true
+  },
+  "limitations": {
+    "A_DNS": "0 responses / 0 errors; no fresh DNS transaction demonstrated",
+    "historical_A_cause": "NOT_PROVEN",
+    "historical_B_causal_binding": "NOT_PROVEN",
+    "live_burst_envelope": "NOT_DIRECTLY_EXERCISED",
+    "supervisor_acceptance": "NOT_PROMOTED",
+    "public_release": false
+  }
+}

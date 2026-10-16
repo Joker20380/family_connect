@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+## NEW-PAIR-FAST-RECONNECT-NO-RESTART-1 — PASS_BOUNDED (16.10)
+
+[Final report](releases/2026-10-16-new-pair-fast-reconnect-no-restart-1.md) and
+[safe evidence](releases/evidence/2026-10-16-new-pair-fast-reconnect-no-restart-1.json):
+new restricted A→OFF→B, OFF_A→CONNECT_B3431ms, same app12008/gateway356992/INV_FAST.
+Exact dedicated tags match native/server readiness. Three VPN-bound IP checks show NL,
+explicitly owner-confirmed UI; no saved HTTP response/timestamps. B CONNECTED270.203s,
+after240s IP success; total334.941s to final OFF. DNS A0/0 not exercised; B12/0.
+One normal export retains A and B, old observed trial and old failed incident separately.
+A startup scalar/early tag not archived; B attempt3/REQ_B authenticated/dropped0 retained.
+No admission re-arm; late exact server IO_CLOSED/recovery_exhausted follows each OFF,
+not assigned as startup cause or universally benign. Retention/drop limits explicit.
+Final12:14 APK8e5579f0…4a8845/nativebe70a66c…0a92b2, signer/code84/UID10283/PID12008,
+VPN OFF; gatewaya5372571 unchanged, ordinary argv. No install/restart/rollback/repair.
+Existing scheduled maintenance warning is not active outage; no override. Chat operation/
+borrowing/handoff NOT_PROVEN; historical A/B, supervisor and release status unchanged.
+
 ## BOOTSTRAP-PRE-HELLO-OBSERVED-TRIAL-1 — SUCCESS_NOT_REPRODUCED (16.10)
 
 [Final report](releases/2026-10-16-bootstrap-pre-hello-observed-trial-1.md) and
