@@ -2,6 +2,12 @@
 
 ## UI60-RESTORE-AND-FIELD-1 — visually approved, installed for owner inspection (16.10)
 
+Owner reports slow loading during subsequent ordinary use. [Export9 analysis](releases/2026-10-16-ui60-owner-slowness-export9.md)
+matches current restricted SESSION_S9 to320 bounded server trace rows; startup succeeds,
+VPN remains CONNECTED at17:28:09UTC. Recovery/receive-assembly expiry and server send-window
+pressure are observed; primary throughput bottleneck is NOT_PROVEN. No patch, reconnect,
+restart or speed test. Historical incident is separate; FIELD-1 still NOT_STARTED.
+
 Owner accepts the other elements; revision3 implements the requested full-width map.
 Build/visual verification complete:15 JVM cases,54 scenes,8 map dimension/density
 cases per configuration; normal RU/EN OFF pixels outside the map match revision2.
@@ -26,7 +32,7 @@ previous signer, code84 and actual UID10283; Android API31/ARM64 compatibility v
 At17:11:25UTC ordinary launch confirmed PID19934, VPN OFF, no errors in the bounded
 UID-filtered startup sample. No data/cache clear or private identity/database reads;
 previous actual installed APK8e5579f0 retained privately as same-code compatible backup.
-**Next: owner inspection on the phone**, then existing tester compatibility/grant/
+**Next: owner inspection/performance follow-up**, then existing tester compatibility/grant/
 readiness and private owner transfer of the verified signed candidate, without another
 signing/build. One bounded warm-start field CONNECT remains a later continuation.
 Do not repeat owner A→B. OWNER_PHONE_UPDATED; TESTER_UNTOUCHED; SERVER_UNTOUCHED.

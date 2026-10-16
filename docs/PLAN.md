@@ -10,6 +10,12 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ### UI60-RESTORE-AND-FIELD-1 — owner installation checkpoint (16.10)
 
+- Owner-reported slowness: [export9/exact-session journal analysis](releases/2026-10-16-ui60-owner-slowness-export9.md)
+  records recovery, incomplete-message expiry and downlink ACK-window pressure,
+  not a proven primary bottleneck or UI regression. A narrow performance follow-up
+  remains open; no automatic policy/queue patch, benchmark or repeated CONNECT.
+  This ordinary-use observation is not FIELD-1 and does not reopen the prior bounded PASS.
+
 - Requested revision3 map-width change verified; approved rest of the layout and
   native are unchanged. Normal RU/EN OFF pixels outside the map match revision2.
 - [UI implementation and real-code comparisons](releases/2026-10-16-ui60-layout-current-style-1.md):

@@ -5,6 +5,11 @@ This is an isolated derivative of the retained accepted diagnostic product, not 
 checkout of beta60 or the dirty root main. Existing snapshots, accepted artifacts and
 historical acceptance reports are retained. The field stage has **not started**.
 
+Subsequent ordinary owner use produced a slow-loading complaint and export9.
+[Separate read-only analysis](2026-10-16-ui60-owner-slowness-export9.md) records exact
+server correlation and delivery-pressure evidence, without proving the primary
+bottleneck or a UI regression. No code/configuration change or new acceptance follows.
+
 ## Owner approval and requested installation —16Oct17:11UTC
 
 After approving the full-width map, the owner explicitly requested installation on

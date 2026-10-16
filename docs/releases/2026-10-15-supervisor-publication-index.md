@@ -1,5 +1,13 @@
 # PUBLISH-SUPERVISOR-RESEARCH-STATE-1 — указатель review-публикации
 
+## UI60 owner slow-loading follow-up —16Oct2026, read-only export9 analysis
+
+[Current-session findings and limits](2026-10-16-ui60-owner-slowness-export9.md):
+restricted startup succeeds; export remains CONNECTED. Exact dedicated tag matches
+320 capped server records; recovery/assembly expiry and downlink ACK-window pressure
+are observed. Primary throughput bottleneck NOT_PROVEN; historical incident separated.
+No product change, restart/reconnect, speed test, new field acceptance or release.
+
 ## UI60 restoration and field preparation —16Oct2026, approved / owner installed
 
 [Implemented UI candidate](2026-10-16-ui60-layout-current-style-1.md),
