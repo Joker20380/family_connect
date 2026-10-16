@@ -1,20 +1,27 @@
 # Текущее состояние / Current state
 
-## BOOTSTRAP-PRE-HELLO-OBSERVED-TRIAL-1 — WAITING_FOR_OWNER_ACTION (16.10)
+## BOOTSTRAP-PRE-HELLO-OBSERVED-TRIAL-1 — SUCCESS_NOT_REPRODUCED (16.10)
 
-[Installation checkpoint](releases/2026-10-16-bootstrap-pre-hello-observed-trial-1.md):
-retained diagnostic APK signed without rebuild and installed once privately,
-APK8e5579f0…4a8845/nativebe70a66c…0a92b2. Same signer/code84/actual UID10283;
-installed readback/signature/native verified, all unsigned non-signature payload
-preserved.10:49:01UTC ordinary launch PASS/PID12008/VPN OFF; bounded UID error sample
-has no recent matching error lines, not exhaustive ANR/stability acceptance.
-Previous3c733d2f…140513 rollback artifact retained, no rollback/data clear/uninstall.
-Need fresh post-install owner readiness for ONE CONNECT; signing interaction is not
-readiness. Do not sign/install again on resume. CONNECT/export0, SSH/restart/capture/
-config changes0; gateway not touched, fresh live readiness still pending. Only after
-owner confirmation: short prerequisites, coordinated existing capture activation on
-same binary, then one observed trial. Restart loses old in-memory holders; no historic
-A continuation. No product changes, release, supervisor promotion or acceptance PASS.
+[Final report](releases/2026-10-16-bootstrap-pre-hello-observed-trial-1.md) and
+[safe selected evidence](releases/evidence/2026-10-16-bootstrap-pre-hello-observed-trial-1.json):
+one restricted CONNECT11:04:10UTC, exact early REQ_1→server authenticated/grant/HELLO;
+client HELLO validated, dedicated GEN_1 READY/native startup SUCCEEDED/app CONNECTED.
+One VPN-bound IP check owner-reported successful, no saved HTTP response; linked
+DNS6 responses/0 errors. OFF11:05:09, same app PID12008; one normal export retains
+current ring23 events and old historical A incident17, not a new failure. Late exact
+server IO_CLOSED/recovery_exhausted follows owner OFF; not assigned as startup cause.
+Capture valid18-event footer/contiguous sequence/limited=false, but planned15min window
+ends49.725s early at11:14:24 during ordinary current4h renewal/restart. Positive matched
+request through release retained; no global holder-absence claim or re-arm. Initial
+controlled capture restart1, later observed scheduled start1, restoration restart0.
+Own next-start delta removed immediately after activation; final runtime has ordinary
+argv/no capture flag. Gatewaya5372571 unchanged, final scheduled PID356992/INV_POST_SCHEDULED,
+seed/strict TLS/new RU directory PASS; actual leaf/CRL expiry15:14:20UTC. No manual renewal.
+Final11:18:29 device APK8e5579f0…4a8845/nativebe70a66c…0a92b2, same signer/code84/UID10283,
+PID12008/VPN OFF. One signing/install, no rebuild/rollback/data clear; previous APK retained.
+Original chat/holder premise NOT_PROVEN, historical A not explained/fixed; handoff and
+historical-B causality NOT_PROVEN. Full device/supervisor acceptance remains open,
+not a public release. One-shot task complete; no further CONNECT authorized here.
 
 ## BOOTSTRAP-PRE-HELLO-CORRELATION-1 — local diagnostics ready (16.10)
 

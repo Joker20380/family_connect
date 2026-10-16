@@ -8,23 +8,25 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
-### BOOTSTRAP-PRE-HELLO-OBSERVED-TRIAL-1 — owner confirmation pending (16.10)
+### BOOTSTRAP-PRE-HELLO-OBSERVED-TRIAL-1 — completed single observed trial (16.10)
 
-- [Checkpoint](releases/2026-10-16-bootstrap-pre-hello-observed-trial-1.md): one
-  signing/replace-install/ordinary launch done; APK8e5579f0…4a8845/nativebe70a66c…0a92b2,
-  signer/code84/UID10283 preserved, VPN OFF/PID12008 at10:49:01UTC. No repeat install.
-- Obtain fresh post-install owner availability before gateway capture/restart. No
-  CONNECT/export/SSH/server mutation yet; WAITING_FOR_OWNER_ACTION, not trial PASS.
-- Resume with short fresh environment/security/scheduling/device prerequisites and
-  existing coordinated service control; prepare exact removal of only own temporary
-  admission flag. Same gateway binary, one authorized restart,15min/512 capture.
-- Verify header/runtime publication and remaining window, then ONE restricted
-  CONNECT, optional one VPN-bound HTTPS if successful, normal OFF/export. No retry,
-  reconnect or artificial holder. Save raw evidence privately; exact exchange join
-  plus complete significant-event coverage, not helper COMPLETE_WINDOW alone.
-- Let capture expire normally, restore next-start config without unnecessary restart.
-  Preserve restart state loss and UNKNOWN premise/role limits. Historical A/B and
-  full device/supervisor acceptance remain unchanged; no product/release/main changes.
+- [Result](releases/2026-10-16-bootstrap-pre-hello-observed-trial-1.md):
+  SUCCESS_NOT_REPRODUCED; exact REQ_1 authenticated→grant→HELLO send and independent
+  client HELLO validation, dedicated/app readiness; one CONNECT, normal OFF/export.
+- Preserve bounded conclusions: one owner-reported VPN-bound IP check (no response
+  receipt), linked DNS6/0; no original chat/holder premise or historical-A explanation.
+  New ring success and old cached incident are separate; later server terminal follows OFF.
+- Capture closes with18 contiguous events/valid footer/limited=false but49.725s before
+  planned expiry due ordinary current4h restart. Positive request-through-release scope
+  retained; do not promote helper COMPLETE_WINDOW to full-window/holder-absence proof.
+- Cleanup complete: one task-controlled restart, no restoration/re-arm; own next-start
+  delta removed before subsequent scheduled start. Unchanged gatewaya5372571, final
+  runtime seed/TLS/RU directory ready. Scheduler/renewal never manually driven or stopped.
+- Final diagnostic APK8e5579f0…4a8845/nativebe70a66c…0a92b2 retained privately, signer/code84/
+  UID10283 preserved, PID12008/VPN OFF. No rollback or additional CONNECT; previous APK kept.
+- Full A→B/device/supervisor acceptance and chat handoff remain open for separately
+  authorized work with fresh prerequisites. No product fix/release/main/catalog change;
+  historical smoke/reconnect/A/B results unchanged. No further action under this episode.
 
 ### BOOTSTRAP-PRE-HELLO-CORRELATION-1 — diagnostic prerequisite complete (16.10)
 
