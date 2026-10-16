@@ -8,6 +8,19 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### RELIABLE-FAST-RECOVERY-LOCAL-1 — first local candidate checked (16.10)
+
+- [Implemented candidate and fixed comparison](releases/2026-10-16-reliable-fast-recovery-local-1.md):
+  engine-only source delta;13 scenarios normal3/race2, focused new/inherited checks PASS.
+  Periodic-loss model2.99× faster; real local adapter1200→400ms. Not phone capacity.
+- Preserve the tradeoff: long reordering adds redundant retries; one early retry
+  consumes existing budget. ACK delay/outage and tail loss remain unimproved.
+- Next focused gate: reordering cost and complete local TLS/mux/VP8/mixed-peer behavior,
+  before native/APK/gateway builds or any separately authorized device comparison.
+  Do not combine window, queue, pacing, admission/security or recovery-orchestration changes.
+- Installed UI60-4/gateway and accepted artifacts untouched. Cutover recovery remains
+  independent; field, historical causality, handoff, supervisor and release not promoted.
+
 ### UI60-RESTORE-AND-FIELD-1 — revision4 approved / owner-installed (16.10)
 
 - Requested revision4 is built and visually approved: full-width proportional map with
@@ -36,9 +49,8 @@ Verify reboot automount separately; no engineering release gate changes.
   This ordinary-use observation is not FIELD-1 and does not reopen the prior bounded PASS.
   [Source-only throughput follow-up](releases/2026-10-16-ui60-throughput-follow-up.md)
   identifies fixed1s recovery without SACK fast retransmit as an optimization candidate.
-  Proposed next scope: fixed bounded local baseline/candidate comparison of loss,
-  reordering and reverse ACK delay; only then window/pacing if measurements justify it.
-  Not implemented or run; no speculative queue growth or live setting change.
+  The first isolated fixed comparison is now complete above. Window/pacing remain
+  unchanged; further tuning requires measurements. No live setting change.
 
 - Requested revision3 map-width change verified; approved rest of the layout and
   native are unchanged. Normal RU/EN OFF pixels outside the map match revision2.

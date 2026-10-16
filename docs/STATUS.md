@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+## RELIABLE-FAST-RECOVERY-LOCAL-1 — implemented/local PASS, not deployed (16.10)
+
+[Local source candidate/results](releases/2026-10-16-reliable-fast-recovery-local-1.md):
+isolated derivative of installed UI60-4 sources; only ReliableStream engine changes.
+One early head retry after3 distinct later SACKs andRTO/4 grace; same windows/queues,
+wire and configured timeout/budget values. Early retry consumes existing budget, so
+persistent loss may exhaust earlier. Candidate inventorybb23c58f…1c9bcc0.
+13 comparison cases, fixed normal3/race2;5 new unit tests and15 inherited regression
+functions pass. Periodic-loss virtual transfer9460→3160ms; real local Stream adapter
+about1200→400ms. No-loss unchanged; ACK delay/outage/tail loss not improved.
+Long reordering adds8 redundant retries: benefit is bounded, not a mobile-speed claim.
+Next: reordering cost, full local TLS/mux/VP8 and mixed-version validation. No new
+native/APK/gateway executable, signing/install/phone/server action. CPU peak80°C
+under50%-core quota/85°C cutoff; no emulator. Current installed UI60-4 stays unchanged.
+
 ## UI60-RESTORE-AND-FIELD-1 — revision4 approved and owner-installed (16.10)
 
 Owner-requested **revision4** is implemented, visually approved and owner-installed:
@@ -19,8 +34,8 @@ the bounded UID-filtered startup sample. No rebuild, CONNECT, export or server a
 Owner's on-phone UI impression is positive; speed remains inadequate subjectively.
 [Read-only throughput follow-up](releases/2026-10-16-ui60-throughput-follow-up.md)
 confirms retained fixed1s recovery/no SACK fast retransmit and window8×up-to16KiB.
-Loss-recovery versus ACK-delay/window limits need a bounded local comparison before
-any transport change. No speed gain, new benchmark or fix is claimed; no live actions.
+That source-only checkpoint is now followed by the isolated local comparison above;
+no live-speed gain or fix of the owner's root cause is claimed. No live actions.
 
 New [export10/call interruption analysis](releases/2026-10-16-ui60-owner-call-drop-export10.md)
 matches the same SESSION_S9 to a scheduled credential-maintenance stop at17:47:47UTC,

@@ -1,0 +1,456 @@
+--- a/carrier/reliablestream/engine.go
++++ b/carrier/reliablestream/engine.go
+@@ -295,6 +295,19 @@
+ 	return value
+ }
+ 
++func (state *engine) fastRetransmit(sequence uint64, block *pending, now time.Time) bool {
++	if sequence != state.base || block.retries != 0 || now.Sub(block.last) < state.config.RTO/4 {
++		return false
++	}
++	confirmed := 0
++	for later := sequence + 1; later < state.next; later++ {
++		if state.sent[later].sacked {
++			confirmed++
++		}
++	}
++	return confirmed >= 3
++}
++
+ func (state *engine) tick(now time.Time) ([]frame, error) {
+ 	if state.remote == (epoch{}) {
+ 		if now.Sub(state.started) >= state.config.MaxAge {
+@@ -316,10 +329,13 @@
+ 		if now.Sub(block.first) >= state.config.MaxAge {
+ 			return nil, state.exhausted("RELIABLE_FRAME_TIMEOUT", block, now)
+ 		}
+-		if block.sacked || now.Sub(block.last) < state.config.RTO {
++		timedOut := now.Sub(block.last) >= state.config.RTO
++		if block.sacked || (!timedOut && !state.fastRetransmit(seq, block, now)) {
+ 			continue
+ 		}
+-		state.stats.Timeouts++
++		if timedOut {
++			state.stats.Timeouts++
++		}
+ 		if block.retries >= state.config.MaxRetries {
+ 			return nil, state.exhausted("RELIABLE_RETRY_EXHAUSTED", block, now)
+ 		}
+--- /dev/null
++++ b/carrier/reliablestream/fast_recovery_test.go
+@@ -0,0 +1,176 @@
++package reliablestream
++
++import (
++	"bytes"
++	"errors"
++	"testing"
++	"time"
++)
++
++func fastRecoveryWindow(test *testing.T) (*engine, *engine, []frame) {
++	test.Helper()
++	states := connectedEngines()
++	sender, receiver := states[0], states[1]
++	var packets []frame
++	for index := 0; index < sender.config.SendWindow; index++ {
++		packet, err := sender.send([]byte{byte(index)}, sender.started)
++		if err != nil {
++			test.Fatal(err)
++		}
++		packets = append(packets, packet)
++	}
++	return sender, receiver, packets
++}
++
++func fastRecoveryDeliver(test *testing.T, sender, receiver *engine, packet frame, now time.Time) {
++	test.Helper()
++	responses, err := receiver.input(packet, now)
++	if err != nil {
++		test.Fatal(err)
++	}
++	for _, response := range responses {
++		if _, err = sender.input(response, now); err != nil {
++			test.Fatal(err)
++		}
++	}
++}
++
++func fastRecoveryData(test *testing.T, sender *engine, elapsed time.Duration) []frame {
++	test.Helper()
++	packets, err := sender.tick(sender.started.Add(elapsed))
++	if err != nil {
++		test.Fatal(err)
++	}
++	var data []frame
++	for _, packet := range packets {
++		if packet.kind == dataFrame {
++			data = append(data, packet)
++		}
++	}
++	return data
++}
++
++func TestFastRecoveryDistinctSACKThreshold(test *testing.T) {
++	for confirmations := 0; confirmations <= 3; confirmations++ {
++		sender, receiver, packets := fastRecoveryWindow(test)
++		for index := 1; index <= confirmations; index++ {
++			fastRecoveryDeliver(test, sender, receiver, packets[index], sender.started)
++		}
++		for duplicate := 0; duplicate < 40; duplicate++ {
++			if _, err := sender.input(receiver.ack(), sender.started); err != nil {
++				test.Fatal(err)
++			}
++		}
++		got := fastRecoveryData(test, sender, sender.config.RTO/4)
++		if confirmations < 3 && len(got) != 0 {
++			test.Fatal("duplicate ACKs must not create distinct SACK evidence", confirmations)
++		}
++		if confirmations == 3 && (len(got) != 1 || got[0].seq != 0) {
++			test.Fatal("three later SACKed blocks must recover only the head", got)
++		}
++	}
++}
++
++func TestFastRecoveryGraceSingleShotAndFallback(test *testing.T) {
++	sender, receiver, packets := fastRecoveryWindow(test)
++	for _, packet := range packets[1:] {
++		fastRecoveryDeliver(test, sender, receiver, packet, sender.started)
++	}
++	grace := sender.config.RTO / 4
++	if len(fastRecoveryData(test, sender, grace-time.Nanosecond)) != 0 {
++		test.Fatal("reordering grace shortened")
++	}
++	retries := fastRecoveryData(test, sender, grace)
++	if len(retries) != 1 || !bytes.Equal(encode(retries[0]), encode(packets[0])) {
++		test.Fatal("retransmission changed wire identity/payload")
++	}
++	if sender.stats.Timeouts != 0 || sender.stats.Retransmissions != 1 || sender.sent[0].retries != 1 {
++		test.Fatal("early recovery must not invent an RTO timeout")
++	}
++	for step := 1; step <= 9; step++ {
++		now := grace + time.Duration(step)*sender.config.RTO/10
++		if _, err := sender.input(receiver.ack(), sender.started.Add(now)); err != nil {
++			test.Fatal(err)
++		}
++		if len(fastRecoveryData(test, sender, now)) != 0 {
++			test.Fatal("unchanged SACK repeatedly triggered fast retry")
++		}
++	}
++	retries = fastRecoveryData(test, sender, grace+sender.config.RTO)
++	if len(retries) != 1 || sender.sent[0].retries != 2 || sender.stats.Timeouts != 1 {
++		test.Fatal("lost fast retry did not fall back to ordinary RTO")
++	}
++}
++
++func TestFastRecoveryReorderingAndSlowConsumer(test *testing.T) {
++	for _, consume := range []bool{false, true} {
++		sender, receiver, packets := fastRecoveryWindow(test)
++		for _, packet := range packets[1:] {
++			fastRecoveryDeliver(test, sender, receiver, packet, sender.started)
++		}
++		fastRecoveryDeliver(test, sender, receiver, packets[0], sender.started.Add(200*time.Millisecond))
++		if consume {
++			for index := range packets {
++				data, ack := receiver.consume()
++				if !bytes.Equal(data, []byte{byte(index)}) {
++					test.Fatal("ordered bytes changed")
++				}
++				if _, err := sender.input(ack, sender.started.Add(200*time.Millisecond)); err != nil {
++					test.Fatal(err)
++				}
++			}
++		}
++		if len(fastRecoveryData(test, sender, 900*time.Millisecond)) != 0 {
++			test.Fatal("delayed original or SACKed unconsumed head retransmitted")
++		}
++	}
++}
++
++func TestFastRecoveryStaleAndCumulativeACK(test *testing.T) {
++	sender, receiver, packets := fastRecoveryWindow(test)
++	for _, packet := range packets[1:] {
++		if _, err := receiver.input(packet, sender.started); err != nil {
++			test.Fatal(err)
++		}
++	}
++	stale := receiver.ack()
++	stale.source = epoch{3}
++	if _, err := sender.input(stale, sender.started); err != nil {
++		test.Fatal(err)
++	}
++	if len(fastRecoveryData(test, sender, 500*time.Millisecond)) != 0 {
++		test.Fatal("foreign epoch provided fast-recovery evidence")
++	}
++	if _, err := sender.input(receiver.ack(), sender.started); err != nil {
++		test.Fatal(err)
++	}
++	fastRecoveryDeliver(test, sender, receiver, packets[0], sender.started)
++	_, ack := receiver.consume()
++	if _, err := sender.input(ack, sender.started); err != nil {
++		test.Fatal(err)
++	}
++	if sender.base != 1 || len(fastRecoveryData(test, sender, 500*time.Millisecond)) != 0 {
++		test.Fatal("consumed head or SACKed successor retransmitted")
++	}
++}
++
++func TestFastRecoveryExhaustionBounds(test *testing.T) {
++	for _, expired := range []bool{false, true} {
++		sender, receiver, packets := fastRecoveryWindow(test)
++		for _, packet := range packets[1:] {
++			fastRecoveryDeliver(test, sender, receiver, packet, sender.started)
++		}
++		reason := "RELIABLE_RETRY_EXHAUSTED"
++		elapsed := sender.config.RTO
++		sender.sent[0].retries = sender.config.MaxRetries
++		if expired {
++			reason, elapsed = "RELIABLE_FRAME_TIMEOUT", sender.config.MaxAge
++		}
++		if _, err := sender.tick(sender.started.Add(elapsed)); !errors.Is(err, ErrExhausted) || sender.failureTrace.Reason != reason {
++			test.Fatal("exhaustion identity or age bound changed", err, sender.failureTrace)
++		}
++		if sender.stats.Retransmissions != 0 {
++			test.Fatal("retry budget bypassed")
++		}
++	}
++}
+--- /dev/null
++++ b/carrier/reliablestream/throughput_comparison_test.go
+@@ -0,0 +1,236 @@
++package reliablestream
++
++import (
++	"bytes"
++	"context"
++	"encoding/json"
++	"os"
++	"testing"
++	"time"
++)
++
++type throughputCase struct {
++	name          string
++	missing       []uint64
++	lossAttempts  int
++	headDelayMS   int
++	ackDelayMS    int
++	ackDropUntil  int
++	consumeFromMS int
++	duplicateACK  bool
++}
++
++type throughputFlight struct {
++	packet frame
++	to     int
++	due    int
++}
++
++type throughputResult struct {
++	Variant        string  `json:"variant"`
++	Case           string  `json:"case"`
++	Bytes          int     `json:"bytes"`
++	VirtualMS      int     `json:"virtual_ms"`
++	MaxNoDelivery  int     `json:"max_no_delivery_ms"`
++	ModelMbit      float64 `json:"model_mbit_s"`
++	Retransmits    uint64  `json:"retransmits"`
++	Timeouts       uint64  `json:"rto_timeouts"`
++	ReceiverDupes  uint64  `json:"receiver_duplicates"`
++	SendHighWater  int     `json:"send_high_water"`
++	BytesIdentical bool    `json:"bytes_identical"`
++}
++
++func TestThroughputComparison(test *testing.T) {
++	cases := []throughputCase{
++		{name: "ordered"},
++		{name: "head_loss", missing: []uint64{0}, lossAttempts: 1},
++		{name: "middle_loss", missing: []uint64{2}, lossAttempts: 1},
++		{name: "periodic_head_loss", missing: []uint64{0, 8, 16, 24, 32, 40, 48, 56}, lossAttempts: 1},
++		{name: "three_holes", missing: []uint64{0, 1, 2}, lossAttempts: 1},
++		{name: "fast_retry_lost", missing: []uint64{0}, lossAttempts: 2},
++		{name: "tail_loss", missing: []uint64{63}, lossAttempts: 1},
++		{name: "short_reordering", headDelayMS: 80},
++		{name: "long_reordering", headDelayMS: 400},
++		{name: "reverse_ack_delay", ackDelayMS: 400},
++		{name: "reverse_ack_outage", ackDropUntil: 450},
++		{name: "duplicate_acks", duplicateACK: true},
++		{name: "slow_consumer", consumeFromMS: 450},
++	}
++	for _, scenario := range cases {
++		test.Run(scenario.name, func(test *testing.T) {
++			result := throughputSimulation(test, scenario)
++			raw, err := json.Marshal(result)
++			if err != nil {
++				test.Fatal(err)
++			}
++			test.Log("THROUGHPUT_RESULT " + string(raw))
++			if !result.BytesIdentical || result.SendHighWater > DefaultConfig().SendWindow {
++				test.Fatal("byte identity or memory window bound changed", result)
++			}
++			if scenario.name == "ordered" || scenario.name == "short_reordering" || scenario.name == "reverse_ack_delay" || scenario.name == "duplicate_acks" || scenario.name == "slow_consumer" {
++				if result.Retransmits != 0 {
++					test.Fatal("spurious recovery in protected no-loss case", result)
++				}
++			}
++		})
++	}
++}
++
++func throughputSimulation(test *testing.T, scenario throughputCase) throughputResult {
++	test.Helper()
++	states := connectedEngines()
++	const blockCount = 64
++	source := make([]byte, blockCount*DefaultConfig().Payload)
++	for index := range source {
++		source[index] = byte(index*37 + index/1009)
++	}
++	var flights []throughputFlight
++	attempts := make(map[uint64]int)
++	clock, serializedUntil, position := 0, 0, 0
++	lastDelivery, maxNoDelivery := 0, 0
++	var delivered []byte
++	queue := func(packet frame, destination int) {
++		due := clock + 60
++		if packet.kind == dataFrame {
++			attempts[packet.seq]++
++			due = max(clock, serializedUntil) + 60
++			serializedUntil = max(clock, serializedUntil) + 6
++			for _, missing := range scenario.missing {
++				if packet.seq == missing && attempts[packet.seq] <= scenario.lossAttempts {
++					return
++				}
++			}
++			if packet.seq%8 == 0 && attempts[packet.seq] == 1 {
++				due += scenario.headDelayMS
++			}
++		} else if packet.kind == ackFrame {
++			if clock < scenario.ackDropUntil {
++				return
++			}
++			due += scenario.ackDelayMS
++		}
++		flights = append(flights, throughputFlight{packet, destination, due})
++		if scenario.duplicateACK && packet.kind == ackFrame {
++			for extra := 1; extra <= 3; extra++ {
++				flights = append(flights, throughputFlight{packet, destination, due + extra*10})
++			}
++		}
++	}
++	for clock = 0; clock <= 20000; clock += 10 {
++		now := states[0].started.Add(time.Duration(clock) * time.Millisecond)
++		for states[0].writable() && position < len(source) {
++			end := min(position+states[0].config.Payload, len(source))
++			packet, err := states[0].send(source[position:end], now)
++			if err != nil {
++				test.Fatal(err)
++			}
++			queue(packet, 1)
++			position = end
++		}
++		current := flights
++		flights = nil
++		for _, transit := range current {
++			if transit.due > clock {
++				flights = append(flights, transit)
++				continue
++			}
++			packet, err := decode(encode(transit.packet))
++			if err != nil {
++				test.Fatal(err)
++			}
++			responses, err := states[transit.to].input(packet, now)
++			if err != nil {
++				test.Fatal(err)
++			}
++			for _, response := range responses {
++				queue(response, 1-transit.to)
++			}
++		}
++		for clock >= scenario.consumeFromMS && states[1].buffer[states[1].receive] != nil {
++			data, ack := states[1].consume()
++			delivered = append(delivered, data...)
++			maxNoDelivery = max(maxNoDelivery, clock-lastDelivery)
++			lastDelivery = clock
++			queue(ack, 0)
++		}
++		if clock%100 == 0 {
++			for side, state := range states {
++				responses, err := state.tick(now)
++				if err != nil {
++					test.Fatal(err)
++				}
++				for _, response := range responses {
++					queue(response, 1-side)
++				}
++			}
++		}
++		if len(delivered) == len(source) && states[0].base == blockCount {
++			return throughputResult{Variant: os.Getenv("FC_PERF_VARIANT"), Case: scenario.name,
++				Bytes: len(source), VirtualMS: lastDelivery, MaxNoDelivery: maxNoDelivery,
++				ModelMbit:   float64(len(source)*8) / float64(lastDelivery) / 1000,
++				Retransmits: states[0].stats.Retransmissions, Timeouts: states[0].stats.Timeouts,
++				ReceiverDupes: states[1].stats.Duplicates, SendHighWater: states[0].stats.SendHighWater,
++				BytesIdentical: bytes.Equal(delivered, source)}
++		}
++	}
++	test.Fatal("finite virtual transfer budget exceeded")
++	return throughputResult{}
++}
++
++func TestThroughputAdapterHeadLoss(test *testing.T) {
++	ctx, cancel := context.WithTimeout(context.Background(), 4*time.Second)
++	defer cancel()
++	leftEndpoint, rightEndpoint := endpoints()
++	dropped := false
++	leftEndpoint.drop = func(raw []byte) bool {
++		packet, err := decode(raw)
++		if err == nil && packet.kind == dataFrame && packet.seq == 0 && !dropped {
++			dropped = true
++			return true
++		}
++		return false
++	}
++	left, err := New(ctx, leftEndpoint, DefaultConfig())
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer left.Close()
++	right, err := New(ctx, rightEndpoint, DefaultConfig())
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer right.Close()
++	payload := bytes.Repeat([]byte("synthetic-byte-exact-stream"), 600)
++	started := time.Now()
++	finished := make(chan error, 1)
++	go func() {
++		for index := 0; index < 8; index++ {
++			if sendErr := left.SendContext(ctx, payload); sendErr != nil {
++				finished <- sendErr
++				return
++			}
++		}
++		finished <- nil
++	}()
++	for index := 0; index < 8; index++ {
++		data, receiveErr := right.Recv(ctx)
++		if receiveErr != nil || !bytes.Equal(data, payload) {
++			test.Fatal("runtime ordered transfer failed", receiveErr)
++		}
++	}
++	if err := <-finished; err != nil {
++		test.Fatal(err)
++	}
++	stats := left.Stats()
++	if stats.Retransmissions != 1 {
++		test.Fatal("single head loss generated repeated retransmits", stats.Retransmissions)
++	}
++	expectedTimeouts := uint64(0)
++	if os.Getenv("FC_PERF_VARIANT") == "baseline" {
++		expectedTimeouts = 1
++	}
++	if stats.Timeouts != expectedTimeouts {
++		test.Fatal("runtime recovery did not use expected path", stats.Timeouts)
++	}
++	test.Logf("ADAPTER_RESULT variant=%s elapsed_ms=%d bytes=%d retransmits=%d rto_timeouts=%d", os.Getenv("FC_PERF_VARIANT"), time.Since(started).Milliseconds(), len(payload)*8, stats.Retransmissions, stats.Timeouts)
++}

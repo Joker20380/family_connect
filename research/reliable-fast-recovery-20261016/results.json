@@ -1,0 +1,569 @@
+{
+  "scope": "synthetic virtual-clock reliable-engine and real in-memory Stream adapter, not provider or device capacity",
+  "transfer_bytes": 1048576,
+  "forward_one_way_ms": 60,
+  "reverse_one_way_ms": 60,
+  "modeled_data_serialization_ms": 6,
+  "virtual_step_ms": 10,
+  "tick_ms": 100,
+  "fixed_normal_repeats": 3,
+  "fixed_race_repeats": 2,
+  "identical_virtual_results_across_repeats": true,
+  "comparisons": [
+    {
+      "case": "duplicate_acks",
+      "baseline": {
+        "variant": "baseline",
+        "case": "duplicate_acks",
+        "bytes": 1048576,
+        "virtual_ms": 1040,
+        "max_no_delivery_ms": 80,
+        "model_mbit_s": 8.06596923076923,
+        "retransmits": 0,
+        "rto_timeouts": 0,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "candidate": {
+        "variant": "candidate",
+        "case": "duplicate_acks",
+        "bytes": 1048576,
+        "virtual_ms": 1040,
+        "max_no_delivery_ms": 80,
+        "model_mbit_s": 8.06596923076923,
+        "retransmits": 0,
+        "rto_timeouts": 0,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "model_completion_speedup": 1.0
+    },
+    {
+      "case": "fast_retry_lost",
+      "baseline": {
+        "variant": "baseline",
+        "case": "fast_retry_lost",
+        "bytes": 1048576,
+        "virtual_ms": 3040,
+        "max_no_delivery_ms": 2060,
+        "model_mbit_s": 2.7594105263157895,
+        "retransmits": 2,
+        "rto_timeouts": 2,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "candidate": {
+        "variant": "candidate",
+        "case": "fast_retry_lost",
+        "bytes": 1048576,
+        "virtual_ms": 2340,
+        "max_no_delivery_ms": 1360,
+        "model_mbit_s": 3.584875213675214,
+        "retransmits": 2,
+        "rto_timeouts": 1,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "model_completion_speedup": 1.2991
+    },
+    {
+      "case": "head_loss",
+      "baseline": {
+        "variant": "baseline",
+        "case": "head_loss",
+        "bytes": 1048576,
+        "virtual_ms": 2040,
+        "max_no_delivery_ms": 1060,
+        "model_mbit_s": 4.112062745098039,
+        "retransmits": 1,
+        "rto_timeouts": 1,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "candidate": {
+        "variant": "candidate",
+        "case": "head_loss",
+        "bytes": 1048576,
+        "virtual_ms": 1340,
+        "max_no_delivery_ms": 360,
+        "model_mbit_s": 6.260155223880597,
+        "retransmits": 1,
+        "rto_timeouts": 0,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "model_completion_speedup": 1.5224
+    },
+    {
+      "case": "long_reordering",
+      "baseline": {
+        "variant": "baseline",
+        "case": "long_reordering",
+        "bytes": 1048576,
+        "virtual_ms": 4170,
+        "max_no_delivery_ms": 530,
+        "model_mbit_s": 2.011656594724221,
+        "retransmits": 0,
+        "rto_timeouts": 0,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "candidate": {
+        "variant": "candidate",
+        "case": "long_reordering",
+        "bytes": 1048576,
+        "virtual_ms": 3160,
+        "max_no_delivery_ms": 400,
+        "model_mbit_s": 2.6546227848101265,
+        "retransmits": 8,
+        "rto_timeouts": 0,
+        "receiver_duplicates": 7,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "model_completion_speedup": 1.3196
+    },
+    {
+      "case": "middle_loss",
+      "baseline": {
+        "variant": "baseline",
+        "case": "middle_loss",
+        "bytes": 1048576,
+        "virtual_ms": 2020,
+        "max_no_delivery_ms": 990,
+        "model_mbit_s": 4.152776237623763,
+        "retransmits": 1,
+        "rto_timeouts": 1,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "candidate": {
+        "variant": "candidate",
+        "case": "middle_loss",
+        "bytes": 1048576,
+        "virtual_ms": 1320,
+        "max_no_delivery_ms": 290,
+        "model_mbit_s": 6.355006060606061,
+        "retransmits": 1,
+        "rto_timeouts": 0,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "model_completion_speedup": 1.5303
+    },
+    {
+      "case": "ordered",
+      "baseline": {
+        "variant": "baseline",
+        "case": "ordered",
+        "bytes": 1048576,
+        "virtual_ms": 1040,
+        "max_no_delivery_ms": 80,
+        "model_mbit_s": 8.06596923076923,
+        "retransmits": 0,
+        "rto_timeouts": 0,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "candidate": {
+        "variant": "candidate",
+        "case": "ordered",
+        "bytes": 1048576,
+        "virtual_ms": 1040,
+        "max_no_delivery_ms": 80,
+        "model_mbit_s": 8.06596923076923,
+        "retransmits": 0,
+        "rto_timeouts": 0,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "model_completion_speedup": 1.0
+    },
+    {
+      "case": "periodic_head_loss",
+      "baseline": {
+        "variant": "baseline",
+        "case": "periodic_head_loss",
+        "bytes": 1048576,
+        "virtual_ms": 9460,
+        "max_no_delivery_ms": 1200,
+        "model_mbit_s": 0.8867450317124735,
+        "retransmits": 8,
+        "rto_timeouts": 8,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "candidate": {
+        "variant": "candidate",
+        "case": "periodic_head_loss",
+        "bytes": 1048576,
+        "virtual_ms": 3160,
+        "max_no_delivery_ms": 400,
+        "model_mbit_s": 2.6546227848101265,
+        "retransmits": 8,
+        "rto_timeouts": 0,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "model_completion_speedup": 2.9937
+    },
+    {
+      "case": "reverse_ack_delay",
+      "baseline": {
+        "variant": "baseline",
+        "case": "reverse_ack_delay",
+        "bytes": 1048576,
+        "virtual_ms": 3840,
+        "max_no_delivery_ms": 480,
+        "model_mbit_s": 2.1845333333333334,
+        "retransmits": 0,
+        "rto_timeouts": 0,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "candidate": {
+        "variant": "candidate",
+        "case": "reverse_ack_delay",
+        "bytes": 1048576,
+        "virtual_ms": 3840,
+        "max_no_delivery_ms": 480,
+        "model_mbit_s": 2.1845333333333334,
+        "retransmits": 0,
+        "rto_timeouts": 0,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "model_completion_speedup": 1.0
+    },
+    {
+      "case": "reverse_ack_outage",
+      "baseline": {
+        "variant": "baseline",
+        "case": "reverse_ack_outage",
+        "bytes": 1048576,
+        "virtual_ms": 1980,
+        "max_no_delivery_ms": 1020,
+        "model_mbit_s": 4.236670707070707,
+        "retransmits": 8,
+        "rto_timeouts": 8,
+        "receiver_duplicates": 8,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "candidate": {
+        "variant": "candidate",
+        "case": "reverse_ack_outage",
+        "bytes": 1048576,
+        "virtual_ms": 1980,
+        "max_no_delivery_ms": 1020,
+        "model_mbit_s": 4.236670707070707,
+        "retransmits": 8,
+        "rto_timeouts": 8,
+        "receiver_duplicates": 8,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "model_completion_speedup": 1.0
+    },
+    {
+      "case": "short_reordering",
+      "baseline": {
+        "variant": "baseline",
+        "case": "short_reordering",
+        "bytes": 1048576,
+        "virtual_ms": 1610,
+        "max_no_delivery_ms": 210,
+        "model_mbit_s": 5.210315527950311,
+        "retransmits": 0,
+        "rto_timeouts": 0,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "candidate": {
+        "variant": "candidate",
+        "case": "short_reordering",
+        "bytes": 1048576,
+        "virtual_ms": 1610,
+        "max_no_delivery_ms": 210,
+        "model_mbit_s": 5.210315527950311,
+        "retransmits": 0,
+        "rto_timeouts": 0,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "model_completion_speedup": 1.0
+    },
+    {
+      "case": "slow_consumer",
+      "baseline": {
+        "variant": "baseline",
+        "case": "slow_consumer",
+        "bytes": 1048576,
+        "virtual_ms": 1430,
+        "max_no_delivery_ms": 450,
+        "model_mbit_s": 5.86615944055944,
+        "retransmits": 0,
+        "rto_timeouts": 0,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "candidate": {
+        "variant": "candidate",
+        "case": "slow_consumer",
+        "bytes": 1048576,
+        "virtual_ms": 1430,
+        "max_no_delivery_ms": 450,
+        "model_mbit_s": 5.86615944055944,
+        "retransmits": 0,
+        "rto_timeouts": 0,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "model_completion_speedup": 1.0
+    },
+    {
+      "case": "tail_loss",
+      "baseline": {
+        "variant": "baseline",
+        "case": "tail_loss",
+        "bytes": 1048576,
+        "virtual_ms": 2060,
+        "max_no_delivery_ms": 1030,
+        "model_mbit_s": 4.072139805825243,
+        "retransmits": 1,
+        "rto_timeouts": 1,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "candidate": {
+        "variant": "candidate",
+        "case": "tail_loss",
+        "bytes": 1048576,
+        "virtual_ms": 2060,
+        "max_no_delivery_ms": 1030,
+        "model_mbit_s": 4.072139805825243,
+        "retransmits": 1,
+        "rto_timeouts": 1,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "model_completion_speedup": 1.0
+    },
+    {
+      "case": "three_holes",
+      "baseline": {
+        "variant": "baseline",
+        "case": "three_holes",
+        "bytes": 1048576,
+        "virtual_ms": 2040,
+        "max_no_delivery_ms": 1060,
+        "model_mbit_s": 4.112062745098039,
+        "retransmits": 3,
+        "rto_timeouts": 3,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "candidate": {
+        "variant": "candidate",
+        "case": "three_holes",
+        "bytes": 1048576,
+        "virtual_ms": 1720,
+        "max_no_delivery_ms": 360,
+        "model_mbit_s": 4.8770976744186045,
+        "retransmits": 3,
+        "rto_timeouts": 0,
+        "receiver_duplicates": 0,
+        "send_high_water": 8,
+        "bytes_identical": true
+      },
+      "model_completion_speedup": 1.186
+    }
+  ],
+  "runtime_adapter_samples": {
+    "baseline-normal": [
+      {
+        "variant": "baseline",
+        "elapsed_ms": 1201,
+        "bytes": 129600,
+        "retransmits": 1,
+        "rto_timeouts": 1
+      },
+      {
+        "variant": "baseline",
+        "elapsed_ms": 1200,
+        "bytes": 129600,
+        "retransmits": 1,
+        "rto_timeouts": 1
+      },
+      {
+        "variant": "baseline",
+        "elapsed_ms": 1201,
+        "bytes": 129600,
+        "retransmits": 1,
+        "rto_timeouts": 1
+      }
+    ],
+    "candidate-normal": [
+      {
+        "variant": "candidate",
+        "elapsed_ms": 401,
+        "bytes": 129600,
+        "retransmits": 1,
+        "rto_timeouts": 0
+      },
+      {
+        "variant": "candidate",
+        "elapsed_ms": 401,
+        "bytes": 129600,
+        "retransmits": 1,
+        "rto_timeouts": 0
+      },
+      {
+        "variant": "candidate",
+        "elapsed_ms": 400,
+        "bytes": 129600,
+        "retransmits": 1,
+        "rto_timeouts": 0
+      }
+    ],
+    "baseline-race": [
+      {
+        "variant": "baseline",
+        "elapsed_ms": 1201,
+        "bytes": 129600,
+        "retransmits": 1,
+        "rto_timeouts": 1
+      },
+      {
+        "variant": "baseline",
+        "elapsed_ms": 1202,
+        "bytes": 129600,
+        "retransmits": 1,
+        "rto_timeouts": 1
+      }
+    ],
+    "candidate-race": [
+      {
+        "variant": "candidate",
+        "elapsed_ms": 401,
+        "bytes": 129600,
+        "retransmits": 1,
+        "rto_timeouts": 0
+      },
+      {
+        "variant": "candidate",
+        "elapsed_ms": 402,
+        "bytes": 129600,
+        "retransmits": 1,
+        "rto_timeouts": 0
+      }
+    ],
+    "regressions-normal": [],
+    "regressions-race": []
+  },
+  "test_pass_events_including_subtests": {
+    "baseline-normal": 45,
+    "candidate-normal": 60,
+    "baseline-race": 30,
+    "candidate-race": 40,
+    "regressions-normal": 39,
+    "regressions-race": 39
+  },
+  "max_cpu_celsius": 80.0,
+  "receipts": [
+    {
+      "label": "baseline-normal",
+      "variant": "baseline",
+      "race": false,
+      "fixed_count": 3,
+      "selected": "TestThroughput",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 67.025,
+      "max_cpu_celsius": 80.0,
+      "log_sha256": "1e5f7bb10cef053dd18cd49faad27f2133b439933df5bd64ec9aa09ad80cbf69"
+    },
+    {
+      "label": "candidate-normal",
+      "variant": "candidate",
+      "race": false,
+      "fixed_count": 3,
+      "selected": "Test(FastRecovery|Throughput)",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 7.004,
+      "max_cpu_celsius": 60.0,
+      "log_sha256": "8fcad781dfe0e0f56229d44882c13677779c9382eb6a5eb3e3d3af9bf50f28f2"
+    },
+    {
+      "label": "baseline-race",
+      "variant": "baseline",
+      "race": true,
+      "fixed_count": 2,
+      "selected": "TestThroughput",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 72.02,
+      "max_cpu_celsius": 73.0,
+      "log_sha256": "54ce86d1b895f87ed2a3ac19a28c3f7c8a3b52ddb28f2b12cee98362ca5a4811"
+    },
+    {
+      "label": "candidate-race",
+      "variant": "candidate",
+      "race": true,
+      "fixed_count": 2,
+      "selected": "Test(FastRecovery|Throughput)",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 7.004,
+      "max_cpu_celsius": 57.0,
+      "log_sha256": "44083174ae63ca71e6ebd026f9318cb807f655d8c572fde932bcf369539d35d9"
+    },
+    {
+      "label": "regressions-normal",
+      "variant": "candidate",
+      "race": false,
+      "fixed_count": 1,
+      "selected": "Test(DeterministicFaultMatrix|WindowBoundsRetryAndStale|SelectiveRetryAndConsumedACKLoss|SlowReceiverAgeAndMalformedACK|MalformedAndConfigurationBounds|HeadLossAndDuplicateVirtualClock|DATA19ACKProofSemantics|AdapterBackpressureCancellation|AdapterExhaustionAndCancellation|CarrierStallAndClose|NegotiatedPayload|FreshACKWithoutProgressDoesNotResetRetryBudget|ExhaustionBranchesRetainBoundedEvidence|ExhaustionRecordedBeforeCarrierCleanup|EstablishedRetryFailurePrecedesCleanup)$",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 2.003,
+      "max_cpu_celsius": 51.0,
+      "log_sha256": "94d965aacafec5f5648ac6d49c98c8e212a5d20d11cc3033e0cffe9f40466ea3"
+    },
+    {
+      "label": "regressions-race",
+      "variant": "candidate",
+      "race": true,
+      "fixed_count": 1,
+      "selected": "Test(DeterministicFaultMatrix|WindowBoundsRetryAndStale|SelectiveRetryAndConsumedACKLoss|SlowReceiverAgeAndMalformedACK|MalformedAndConfigurationBounds|HeadLossAndDuplicateVirtualClock|DATA19ACKProofSemantics|AdapterBackpressureCancellation|AdapterExhaustionAndCancellation|CarrierStallAndClose|NegotiatedPayload|FreshACKWithoutProgressDoesNotResetRetryBudget|ExhaustionBranchesRetainBoundedEvidence|ExhaustionRecordedBeforeCarrierCleanup|EstablishedRetryFailurePrecedesCleanup)$",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 5.036,
+      "max_cpu_celsius": 51.0,
+      "log_sha256": "68756fc72fedb9568cb8e3463705b107b2c3451495a8571d07d6d45672313762"
+    }
+  ]
+}

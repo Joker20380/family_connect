@@ -1,5 +1,14 @@
 # PUBLISH-SUPERVISOR-RESEARCH-STATE-1 — указатель review-публикации
 
+## Reliable fast recovery — local implemented candidate, no rollout
+
+[Engine-only candidate and normal/race comparison](2026-10-16-reliable-fast-recovery-local-1.md),
+[source/tests/reproducer](../../research/reliable-fast-recovery-20261016/README.md):
+first early retry after distinct SACK evidence improves selected data-loss cases;
+13 fixed cases preserve exact bytes, no-loss time unchanged. Long reordering causes
+redundant retries; reverse ACK delay and tail loss not fixed. Model2.99× and local
+adapter1200→400ms are not measured owner speed. No native/APK/gateway build or live action.
+
 ## UI60 throughput — read-only follow-up, no speed fix claimed
 
 [Retained source and optimization candidates](2026-10-16-ui60-throughput-follow-up.md):

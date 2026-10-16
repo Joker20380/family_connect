@@ -1,0 +1,22 @@
+{
+  "parent_inventory": "e90893aee5fdc04aae1cacd296d5291ca8a743350de42334b290f08504c48fce",
+  "candidate_inventory": "bb23c58fcfe27bcb817141167eb30b9ea638145dc06c19c24de8ed4831c9bcc0",
+  "changed_files": [
+    "carrier/reliablestream/engine.go",
+    "carrier/reliablestream/fast_recovery_test.go",
+    "carrier/reliablestream/throughput_comparison_test.go"
+  ],
+  "product_changed_files": [
+    "carrier/reliablestream/engine.go"
+  ],
+  "all_other_sources_identical": true,
+  "baseline_sources_identical": true,
+  "comparison_fixture_identical": true,
+  "parent_engine_sha256": "c635cd3746d06c8eb0a736e46c0fcfa1c0976ee4f2a34a96094a22470109bbb4",
+  "candidate_engine_sha256": "635b938ee243b55c4b5385bd82ae42069b1c213ebb9aae04ebf8b9135e7b558e",
+  "patch_sha256": "bd9fc084f6684019d62518dca08bfd08f698f68df976597959ccbf734dd5524e",
+  "candidate_native_built": false,
+  "candidate_apk_built": false,
+  "candidate_gateway_built": false,
+  "installed_apk_and_gateway_untouched": true
+}
