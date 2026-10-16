@@ -1,5 +1,12 @@
 # Documentation
 
+[Browser-shaped admission investigation17.10](releases/2026-10-17-browser-admission-local-1.md):
+existing search/asset HTTPS works while new connections fail at32 occupied slots;
+releasing one restores access, on previous/current sources.30 fixed local normal/race
+cases PASS, including close/reset cleanup and shared control-capacity observation gaps.
+Not exact failed-site attribution, lease-cause proof, a product fix or new owner trial.
+[Fixtures and runner](../research/browser-admission-20261017/README.md).
+
 [Speed candidate web traffic failure17.10 local](releases/2026-10-17-speed-candidate-web-traffic-failure-1.md):
 export11 separates earlier handshake failure from later restricted browsing failure.
 TCP32 cap reached; existing refusal counter omitted from export. Leading hypothesis,

@@ -8,6 +8,21 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### BROWSER-ADMISSION-LOCAL-1 — next: bounded admission and visibility (17.10)
+
+- [Completed local investigation](releases/2026-10-17-browser-admission-local-1.md):
+  same existing-search/new-site split at TCP32 on previous/current sources; releasing
+  one slot restores new HTTPS.30 fixed normal/race cases PASS; no product/live change.
+- Wholedevice refusal and mux-local refusal are separate paths; the latter also fails
+  with31 data +1 control and increments neither existing failure counter. Preserve
+  both through the normal diagnostics pipeline in the next narrowly scoped candidate.
+- Control shares the32-stream budget; investigate bounded control capacity/admission
+  without blind limit increase, arbitrary idle eviction or changed security policy.
+  No leak in covered TLS/server-close/RST paths; other lifecycle paths remain untested.
+- Actual failed-site binding,10 mux protocol errors and ten-minute/fast-retransmit
+  causality remain unproved. No new CONNECT, pair rollback or deployment is automatic.
+  Keep field/release/device acceptance on hold; do not repeat completed historical tests.
+
 ### SPEED-CANDIDATE-WEB-TRAFFIC-FAILURE-1 — investigate admission/lifecycle (17.10 local)
 
 - [Owner export11](releases/2026-10-17-speed-candidate-web-traffic-failure-1.md):

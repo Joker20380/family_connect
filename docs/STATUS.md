@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+## BROWSER-ADMISSION-LOCAL-1 — partial connectivity mechanism reproduced (17.10)
+
+[Bounded local investigation](releases/2026-10-17-browser-admission-local-1.md):
+owner confirms search works. Real local Family TLS/mux/wholedevice/HTTPS reproduces
+existing-search success and new-connection refusal at32 occupied slots on both previous
+UI60-4 and current speed sources. Releasing one restores new HTTPS. Normal TLS close,
+origin close and TCP reset reclaim slots in40-request cases; no universal leak proven.
+31 data +1 control also blocks new data, without packet limit_denied or mux OpenErrors;
+32 data prevents control admission. Live lease starvation/ten-minute cause NOT_PROVEN.
+Race origin-close also records server protocol errors26/current,30/previous without
+body/cleanup failure; distinct from owner's client10.30 fixed normal/race leaf cases
+and1,140 synthetic HTTPS bodies PASS; peak83°C under
+50%-core quota. No product patch/build or live action. Exact failed-phone-request quota
+binding still NOT_PROVEN; ten mux errors unexplained. Next: bounded admission/control
+capacity plus both refusal counters in existing export pipeline, not blind cap increase
+or automatic rollback. Installed pair remains unaccepted; old phone OFF receipt is not
+a new observation. [Tests and limits](../research/browser-admission-20261017/README.md).
+
 ## SPEED-CANDIDATE-WEB-TRAFFIC-FAILURE-1 — traffic FAIL / cause not fully proven (17.10 local)
 
 [Export11 investigation](releases/2026-10-17-speed-candidate-web-traffic-failure-1.md):

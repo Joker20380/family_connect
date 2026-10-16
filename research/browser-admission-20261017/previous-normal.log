@@ -1,0 +1,36 @@
+=== RUN   TestBrowserAdmissionSearchAndNewOrigins
+    browser_admission_test.go:234: 32 occupied: reused search=3/3 asset=1/1; new TLS refused before origin; UDP DNS=PASS TCP DNS=REFUSED; limit_denied=2 mux_open_errors_delta=0 control=stream_limit; release_one_new_HTTPS=PASS; cleanup=0
+--- PASS: TestBrowserAdmissionSearchAndNewOrigins (0.45s)
+=== RUN   TestBrowserAdmissionLifecycle
+=== RUN   TestBrowserAdmissionLifecycle/application_close
+    browser_admission_test.go:260: 40 sequential verified HTTPS bodies; active packet/client/server sockets=0 after each; refusal=0; client_protocol_errors=0 server_protocol_errors=0
+=== RUN   TestBrowserAdmissionLifecycle/origin_close
+    browser_admission_test.go:260: 40 sequential verified HTTPS bodies; active packet/client/server sockets=0 after each; refusal=0; client_protocol_errors=0 server_protocol_errors=0
+=== RUN   TestBrowserAdmissionLifecycle/application_reset
+    browser_admission_test.go:260: 40 sequential verified HTTPS bodies; active packet/client/server sockets=0 after each; refusal=0; client_protocol_errors=0 server_protocol_errors=0
+--- PASS: TestBrowserAdmissionLifecycle (1.25s)
+    --- PASS: TestBrowserAdmissionLifecycle/application_close (0.44s)
+    --- PASS: TestBrowserAdmissionLifecycle/origin_close (0.42s)
+    --- PASS: TestBrowserAdmissionLifecycle/application_reset (0.40s)
+=== RUN   TestBrowserAdmissionControlUsesSharedCap
+    browser_admission_test.go:302: 31 TCP + 1 control fills mux; new TLS refused; packet limit_denied=0 mux_open_errors_delta=0; search=PASS; control_release_new_HTTPS=PASS
+--- PASS: TestBrowserAdmissionControlUsesSharedCap (0.38s)
+=== RUN   TestBrowserAdmissionSearchAndNewOrigins
+    browser_admission_test.go:234: 32 occupied: reused search=3/3 asset=1/1; new TLS refused before origin; UDP DNS=PASS TCP DNS=REFUSED; limit_denied=2 mux_open_errors_delta=0 control=stream_limit; release_one_new_HTTPS=PASS; cleanup=0
+--- PASS: TestBrowserAdmissionSearchAndNewOrigins (0.52s)
+=== RUN   TestBrowserAdmissionLifecycle
+=== RUN   TestBrowserAdmissionLifecycle/application_close
+    browser_admission_test.go:260: 40 sequential verified HTTPS bodies; active packet/client/server sockets=0 after each; refusal=0; client_protocol_errors=0 server_protocol_errors=0
+=== RUN   TestBrowserAdmissionLifecycle/origin_close
+    browser_admission_test.go:260: 40 sequential verified HTTPS bodies; active packet/client/server sockets=0 after each; refusal=0; client_protocol_errors=0 server_protocol_errors=0
+=== RUN   TestBrowserAdmissionLifecycle/application_reset
+    browser_admission_test.go:260: 40 sequential verified HTTPS bodies; active packet/client/server sockets=0 after each; refusal=0; client_protocol_errors=0 server_protocol_errors=0
+--- PASS: TestBrowserAdmissionLifecycle (1.27s)
+    --- PASS: TestBrowserAdmissionLifecycle/application_close (0.46s)
+    --- PASS: TestBrowserAdmissionLifecycle/origin_close (0.44s)
+    --- PASS: TestBrowserAdmissionLifecycle/application_reset (0.38s)
+=== RUN   TestBrowserAdmissionControlUsesSharedCap
+    browser_admission_test.go:302: 31 TCP + 1 control fills mux; new TLS refused; packet limit_denied=0 mux_open_errors_delta=0; search=PASS; control_release_new_HTTPS=PASS
+--- PASS: TestBrowserAdmissionControlUsesSharedCap (0.39s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/tcpforward	4.271s
