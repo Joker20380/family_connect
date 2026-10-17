@@ -1,5 +1,9 @@
 # Documentation
 
+[Volgograd private update preparation17.10](releases/2026-10-17-field-1-volgograd-batch1-preparation.md):
+current signed batch1 kit locally verified; selected recipient registered but lacks
+restricted grant/admission. Compatibility pending, no transfer/CONNECT or catalog change.
+
 [Owner clarification17.10](releases/2026-10-17-batch-owner-speedtest-sites-1.md):
 sites later open again after earlier failures; several services reportedly show
 about0.5Mbit/s in one unspecified direction and high ping. Intermittent reachability,

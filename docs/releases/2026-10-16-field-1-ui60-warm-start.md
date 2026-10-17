@@ -94,3 +94,12 @@ TESTER_NOT_AUTHORIZED or WAITING_FOR_TESTER_ACTION, **only once supported by evi
 Warm-start does not prove cold enrollment in a restricted network or all operators.
 Prior owner acceptance, historical causality, chat handoff, supervisor and release
 are not promoted by UI work or a future single field result.
+
+## Later continuation17 October — selected recipient, current batch1
+
+[New preparation record](2026-10-17-field-1-volgograd-batch1-preparation.md) selects
+the owner's named recipient and the already installed batch1 derivative, not the
+historical UI60-4 APK above. Existing signed artifact verified; no rebuild/re-sign,
+transfer or field CONNECT. Registration is active, but restricted grant/admission
+are absent; device compatibility also remains unconfirmed. The field episode is
+still NOT_STARTED. Historical owner UI installation is not tester authorization.

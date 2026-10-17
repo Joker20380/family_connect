@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+## FIELD-1-VOLGOGRAD-BATCH1 — update prepared, entitlement/compatibility pending (17.10)
+
+[Selected recipient preparation](releases/2026-10-17-field-1-volgograd-batch1-preparation.md):
+owner requests current batch1 for one ready tester; defer speed work. Existing signed
+APK697f9c24/native dd722ead reverified, private local kit staged, not transferred.
+Read-only lookup: active registration, last reported beta60/code60, but NOT_PROVISIONED
+and not FIELD-admitted. TESTER_NOT_AUTHORIZED; model/API/ABI/current signer pending.
+Private Android replacement update is the route, not the shared catalog; Android12+
+ARM64 required, code60 rollback not promised. No grants, install, CONNECT or server
+changes. Need compatibility details and explicit authorization for new restricted
+access; fresh runtime/security check only when ready. Field episode NOT_STARTED.
+
 ## BATCH-OWNER-EXPORT13-1 — intermittent reachability, low rate/high latency (17.10)
 
 [Latest owner correction](releases/2026-10-17-batch-owner-speedtest-sites-1.md#later-correction--pages-open-again-low-rate-and-high-latency):

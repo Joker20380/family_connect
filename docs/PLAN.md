@@ -8,6 +8,22 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### FIELD-1-VOLGOGRAD-BATCH1 — private update preparation first (17.10)
+
+- [Owner selected one tester](releases/2026-10-17-field-1-volgograd-batch1-preparation.md)
+  and deferred speed work. Reuse verified signed batch1 APK697f9c24/native dd722ead;
+  no rebuild, re-sign or broad catalog publication. Kit is local, not delivered.
+- Recipient's last support observation is beta60/code60; confirm model/Android/ARM64,
+  current package/signer and mobile operator without assuming owner-device facts.
+- Existing lookup: active registration but no restricted grant/FIELD admission.
+  TESTER_NOT_AUTHORIZED. Obtain explicit grant authorization before the existing
+  operator procedure; no new rights, identity or manual DB edits in preparation.
+- Simple private APK replacement can preserve data after checks; shared updater
+  cannot target this research build to one recipient. No downgrade promise to60.
+- Only after gates and fresh runtime readiness: one bounded warm-start mobile episode,
+  240s observation, final OFF/export, no reconnect/soak/re-arm/restart. Reported local
+  restrictions are not yet tested. Speed regression work below stays open, deferred.
+
 ### BATCH-OWNER-EXPORT13-1 — intermittent stalls, throughput and latency (17.10)
 
 - Latest correction: sites open again; several services reportedly measured about
