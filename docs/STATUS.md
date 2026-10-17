@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+## FIELD-1-VOLGOGRAD-EXPORT17 — updated app; access rejected before transport (17.10)
+
+[Tester export17](releases/2026-10-17-field-1-volgograd-export17.md) now reports
+batch1/code84 on Android14/API34: the earlier not-delivered stage is historical.
+Eight distinct connection lifecycles: six restricted AUTH failures in82–260ms,
+then two pre-candidate CONFIGURATION failures; no native startup/session recorded.
+Eight AUTHORIZATION_REJECTED readiness events. Fresh scoped lookup12:28UTC confirms
+active/non-revoked registration but NOT_PROVISIONED and field_admission=false.
+Update alone did not confer restricted access; owner authorization remains retained,
+but the separately identified legacy admission-tool incompatibility is unresolved.
+Final app DISCONNECTED/capture closed; network snapshot WIFI, not proof of the
+underlay for every attempt. No mobile whitelist/throughput verdict or field PASS.
+API34 is confirmed; installed checksum/signer/ABI and the later configuration cause
+are not established by this export. Read-only SSH1; assistant CONNECT/device/grant/
+product/service changes0. Next: scoped compatible admission workflow, not more retries.
+
 ## FIELD-1-VOLGOGRAD — access authorized; installed operator incompatible (17.10)
 
 [Grant preflight](releases/2026-10-17-field-1-volgograd-grant-preflight.md): owner

@@ -10,11 +10,19 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ### FIELD-1-VOLGOGRAD-BATCH1 — admission operator compatibility first (17.10)
 
+- [Export17 supersedes preparation-only state](releases/2026-10-17-field-1-volgograd-export17.md):
+  tester runs batch1/code84 on API34; six restricted AUTH failures, then two separate
+  pre-candidate CONFIGURATION failures. Fresh12:28UTC lookup still NOT_PROVISIONED/
+  not admitted. No working transport or controlled mobile field result; final app OFF.
+  Do not request another CONNECT or APK replacement to resolve missing entitlement.
+  Keep later configuration cause separate; active-VPN guard is a code possibility,
+  not proof of another VPN. Export WIFI snapshot does not identify each attempt's underlay.
 - [Owner selected one tester](releases/2026-10-17-field-1-volgograd-batch1-preparation.md)
   and deferred speed work. Reuse verified signed batch1 APK697f9c24/native dd722ead;
-  no rebuild, re-sign or broad catalog publication. Kit is local, not delivered.
-- Recipient's last support observation is beta60/code60; confirm model/Android/ARM64,
-  current package/signer and mobile operator without assuming owner-device facts.
+  no rebuild, re-sign or broad catalog publication. Version metadata now confirms
+  tester update; exact installed bytes/signature are not read back from this export.
+- Recipient's export reports Android14/API34, superseding old beta60 observation.
+  Model/ABI/current signer and mobile operator remain unverified; no owner-device assumptions.
 - Owner explicitly authorized T1's new restricted access. [Read-only preflight](releases/2026-10-17-field-1-volgograd-grant-preflight.md)
   finds the old installed FIELD CLI rejects current4h CRL duration and hardcodes15min
   publication. GRANT_NOT_APPLIED; do not ask again for entitlement approval or run a

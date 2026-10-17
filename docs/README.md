@@ -1,5 +1,10 @@
 # Documentation
 
+[Volgograd tester export17](releases/2026-10-17-field-1-volgograd-export17.md):
+batch1/code84/API34 now running, but six restricted AUTH failures precede native
+startup. Fresh recipient lookup confirms missing admission/provisioning. Two later
+configuration failures remain separate; final app OFF, no mobile field PASS.
+
 [Volgograd grant preflight17.10](releases/2026-10-17-field-1-volgograd-grant-preflight.md):
 owner approved access, but old FIELD operator rejects current4h CRL and hardcodes15min
 publication. No grant attempt/mutation; compatible operator work needed, field not started.
