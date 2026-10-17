@@ -1,5 +1,14 @@
 # Client installation
 
+**Private owner installation completed17.10:** `0.1.18-research84-ui60-4-batch1`, code84.
+Installed signed APK `697f9c244b67f75e7e3e612dbcd91a48891d32ee77e23fd9bce173a5f049233f`,
+native `dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23`.
+Existing signer/UID preserved, no data clear; gateway4b722d2d deployed after accepted
+maintenance. [Readbacks, bounds and return path](releases/2026-10-17-transport-batch-maintenance-and-rollout-1.md).
+VPN OFF at readback; mobile throughput unmeasured. Not a public download or device
+acceptance. Previous same-code APK retained; no rollback performed. Entries below are
+earlier historical stages, not the current installation status.
+
 **Signed but NOT installed17.10:** `0.1.18-research84-ui60-4-batch1`, code84.
 Signed APK `697f9c244b67f75e7e3e612dbcd91a48891d32ee77e23fd9bce173a5f049233f`;
 native dd722ead, payload/existing signer/alignment verified. [Status and hashes](releases/2026-10-17-transport-batch-owner-rollout-1.md).

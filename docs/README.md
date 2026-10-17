@@ -1,5 +1,10 @@
 # Documentation
 
+[Batch maintenance and private rollout17.10](releases/2026-10-17-transport-batch-maintenance-and-rollout-1.md):
+accepted offline maintenance COMMITTED/CLEANED; APK697f9c24/native dd722ead now installed,
+gateway4b722d2d loaded and strict ready. VPN OFF at readback; actual mobile speed check
+pending. No repeated build/signing, public release or automatic acceptance.
+
 [Batch candidate rollout checkpoint17.10](releases/2026-10-17-transport-batch-owner-rollout-1.md):
 signed APK697f9c24 ready; no install/deploy. Current material valid, but operator
 authority/grant renewal is due and the accepted transition guard stops the rollout.

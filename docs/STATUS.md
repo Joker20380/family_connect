@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+## TRANSPORT-BATCH-MAINTENANCE-AND-ROLLOUT-1 — installed/deployed; speed pending (17.10)
+
+[Completed private rollout](releases/2026-10-17-transport-batch-maintenance-and-rollout-1.md):
+one approved ordinary offline operation COMMITTED/CLEANED on RU/NL, original keys,
+grant scope/revocations/policy/floors preserved. Authority15→16, CRL27111→27112,
+leaf renewed; authority/grants expire18Oct08:57:40UTC, next operator threshold
+18Oct02:57:40UTC. Leaf/CRL expire17Oct12:58:21UTC. Timer restored, evaluate NOOP;
+previous scheduled exit75 remains historical, future renewal not assumed.
+Maintenance preserved079729e4; subsequent coordinated binary rollout loaded4b722d2d,
+PID1162821/INV e1a7f717217a4132b5f5a4b81b10e95d. Strict TLS/seed/current NL→RU
+directory PASS at09:01UTC; no writer/pending owner. Already signed batch1 APK697f9c24
+installed once, native dd722ead, signer/code84/UID10283 preserved; ordinary launch
+PID14226, bounded startup errors0, VPN OFF. No data clear or private DB read.
+No rebuild/re-sign/CONNECT/export. Previous APK/gateway retained; rollback not used.
+Next: one owner restricted CONNECT and small timed mobile download; actual speed
+NOT_MEASURED, no new device/field/supervisor/release acceptance. Earlier entries are
+historical stages, including the resolved maintenance gate below.
+
 ## TRANSPORT-BATCH-OWNER-ROLLOUT-1 — signed; operator gate blocks rollout (17.10)
 
 [Checkpoint08:39–08:41UTC](releases/2026-10-17-transport-batch-owner-rollout-1.md):

@@ -1,5 +1,14 @@
 # Установка клиентов
 
+**Установлено владельцу приватно17.10:** `0.1.18-research84-ui60-4-batch1`, code84.
+Signed/installed APK `697f9c244b67f75e7e3e612dbcd91a48891d32ee77e23fd9bce173a5f049233f`,
+native `dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23`.
+Прежний signer/UID сохранены, данные не очищались. После штатного обслуживания
+gateway обновлён до4b722d2d. [Проверки, сроки и возврат](releases/2026-10-17-transport-batch-maintenance-and-rollout-1.md).
+При readback VPN OFF; реальная мобильная скорость ещё не измерена. Это не публичная
+раздача и не device acceptance. Прежний APK того же code сохранён; rollback не выполнялся.
+Ниже — исторические этапы, а не текущий статус установки.
+
 **Подписан, но НЕ установлен17.10:** `0.1.18-research84-ui60-4-batch1`, code84.
 Signed APK `697f9c244b67f75e7e3e612dbcd91a48891d32ee77e23fd9bce173a5f049233f`;
 native dd722ead, payload/прежний signer/alignment проверены. [Статус и хэши](releases/2026-10-17-transport-batch-owner-rollout-1.md).

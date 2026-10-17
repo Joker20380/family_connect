@@ -8,6 +8,21 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### TRANSPORT-BATCH-MAINTENANCE-AND-ROLLOUT-1 — mobile measurement next (17.10)
+
+- [Maintenance and paired rollout complete](releases/2026-10-17-transport-batch-maintenance-and-rollout-1.md):
+  owner APK697f9c24/native dd722ead installed, gateway4b722d2d loaded/strict ready.
+  Authority/grants/leaf/CRL updated by accepted operation; cleanup verified, timer restored.
+  Preserve receipts/return artifacts; no repeat build, signing, maintenance or install.
+- Next owner action: one ordinary restricted CONNECT on the same mobile underlay,
+  VPN-bound IP check and a small timed uncached download with size/time/source recorded.
+  Compare the same resource without VPN where available; do not substitute host traffic.
+- Real speed remains unmeasured; the local synthetic4.65× result is not phone acceptance.
+  First failure: normal OFF and export, no automatic retry/reconnect/restart/rollback.
+- Track fresh security/scheduling for later tests: operator threshold18Oct02:57:40UTC;
+  leaf/CRL expiry17Oct12:58:21UTC, future renewal not assumed. No release/handoff/
+  supervisor/field promotion. The earlier maintenance-approval gate is resolved.
+
 ### TRANSPORT-BATCH-OWNER-ROLLOUT-1 — maintenance approval before rollout (17.10)
 
 - [Signing/preflight checkpoint](releases/2026-10-17-transport-batch-owner-rollout-1.md):
