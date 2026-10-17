@@ -8,6 +8,20 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### ADMISSION-OVERNIGHT-EXPORT12-1 — identify slot retention before another fix (17.10)
+
+- [Fresh mobile export analysed](releases/2026-10-17-admission-overnight-export12-1.md):
+ 29 admission waits/9 timeouts on40s budget; current connection51m32s and lease renewal
+ matched. New evidence obtained; do not request export12 again or reuse old incident.
+- Locally reproduce browser-style occupied/idle/closing TCP slots and cancellation,
+ measuring admission delay/release before selecting a fix. Current evidence does not
+ distinguish ordinary keepalive occupancy from a leak, or explain all37 mux errors.
+- Retained server flow samples do not prove persistent window saturation. No blind
+ cap/window/timeout increase, DNS policy change, forced close or live reinstall.
+- Six automatic restorations succeeded; two exact-tag sessions close during observed
+ server stop/start. Earlier causes/operational scheduling remain separate, not an
+ instruction to maintain/restart the gateway. No new CONNECT or field acceptance.
+
 ### ADMISSION-OWNER-BROWSING-SLOW-1 — fresh performance evidence next (17.10)
 
 - [Owner reports sites opening but slow](releases/2026-10-17-admission-owner-browsing-slow-1.md)

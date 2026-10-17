@@ -1,5 +1,9 @@
 # Documentation
 
+[Overnight mobile export12,17.10](releases/2026-10-17-admission-overnight-export12-1.md):
+29 admission waits/9 timeouts; separate exact-session server restarts and successful
+automatic restoration. Partial cause, not measured bandwidth or release acceptance.
+
 [Owner browsing follow-up17.10](releases/2026-10-17-admission-owner-browsing-slow-1.md):
 sites now open but loading remains very slow; qualitative observation, no throughput
 PASS. Await one fresh normal export/underlay confirmation; no further live changes.

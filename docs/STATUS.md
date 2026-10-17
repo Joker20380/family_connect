@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+## ADMISSION-OVERNIGHT-EXPORT12-1 — admission waits and separate restarts (17.10)
+
+[Night export12 analysis](releases/2026-10-17-admission-overnight-export12-1.md):
+CELLULAR/admission1, current N5 CONNECTED for51m32s at last sample;29 admission waits,
+9 exhausted40s slot budgets, TCP peak64/current18,397 DNS responses/0 exported errors.
+37 mux errors and96 retransmissions remain aggregate, not a full speed diagnosis.
+Six automatic RESTORING→CONNECTED cycles retained; exact N3/N4 server sessions close
+during gateway stop/start. N1/N2 rotated-journal reads time out, causes remain open.
+N5 exact server lease extension accepted/applied; no unconditional ten-minute cutoff
+shown. Current loaded gateway079729e4, unchanged by this task. Phone state only from
+export, VPN open; no claim final OFF. Two read-only SSH calls; no product/live changes.
+Next: local slot-retention/release/latency reproduction, not blind limit/window tuning.
+
 ## ADMISSION-OWNER-BROWSING-SLOW-1 — sites open, speed unresolved (17.10)
 
 [Owner follow-up](releases/2026-10-17-admission-owner-browsing-slow-1.md): sites now

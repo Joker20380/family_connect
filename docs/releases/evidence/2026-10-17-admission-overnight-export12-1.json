@@ -1,0 +1,1036 @@
+{
+  "result": "PARTIAL_CAUSE_IDENTIFIED_ADMISSION_DELAYS_AND_EXTERNAL_INTERRUPTION",
+  "input_review_sha": "a4759da01a707e0a01fb72618b7817e854ea9a61",
+  "export": {
+    "sha256": "9a222d91bc4ebf941dac531d76cf20c6d3bbd25dfe041512521d25bb38dbe2dc",
+    "bytes": 251985,
+    "received_copy_utc": "2026-10-17T07:49:39Z",
+    "provenance": "owner-supplied normal export12; immutable private copy; source mtime is not event time"
+  },
+  "identity": {
+    "export_version": "0.1.18-research84-ui60-4-admission1",
+    "export_code": 84,
+    "last_verified_apk_sha256": "761430c0989fd2443cebad39f6cf972d21ef25123114e118ee841029c2149b1f",
+    "last_verified_native_sha256": "6d41518ffbe2b10c767552dbb4c1bc732911fb8439a525215c353541ca41cfab",
+    "client_source_inventory": "c1eade0110278827c1681438a80c0509f352e2c9174badef0d3b228cc7161e9c",
+    "loaded_gateway_sha256": "079729e4de680cb416c55c2b9b592c6450e4254a306a6960b087930cc549639d",
+    "fresh_device_binary_readback": false
+  },
+  "current": {
+    "state": "CONNECTED",
+    "network": "CELLULAR",
+    "owner_underlay": "mobile",
+    "vpn_capture_open": true,
+    "counters": {
+      "protect_ok": 116,
+      "protect_denied": 0,
+      "dns": 397,
+      "tcp": 278,
+      "tcp_active": 18,
+      "tcp_peak": 64,
+      "limit_denied": 0,
+      "udp_denied": 135,
+      "ipv6_denied": 335
+    },
+    "startup": {
+      "schema": 1,
+      "attempt": 9,
+      "started_unix_ms": 1792220002614,
+      "completed_ms": 27331,
+      "status": "SUCCEEDED",
+      "stage": "STARTUP",
+      "cause": "NONE",
+      "complete": true,
+      "bootstrap_exchanges": [
+        {
+          "family_authenticated": true
+        }
+      ],
+      "bootstrap_exchanges_dropped": 0
+    },
+    "seconds_connected_at_last_native_sample": 3091.92,
+    "https_receipt": "NOT_EXPORTED",
+    "controlled_throughput": "NOT_MEASURED"
+  },
+  "historical_incident": {
+    "version": "0.1.18-research84-ui60-4-speed-recovery1",
+    "state": "FAILED",
+    "startup": {
+      "schema": 1,
+      "attempt": 1,
+      "started_unix_ms": 1792186926385,
+      "observed_ms": 56347,
+      "completed_ms": 56348,
+      "status": "FAILED",
+      "stage": "DEDICATED_AUTH",
+      "cause": "UNKNOWN",
+      "complete": true,
+      "observation": {
+        "point": "STARTUP_CALLER",
+        "error_category": "UNKNOWN",
+        "context_state": "LIVE",
+        "stop_at_observation": "NONE",
+        "elapsed_ms": 56347
+      },
+      "local_stop": {
+        "source": "CLEANUP",
+        "elapsed_ms": 56347
+      },
+      "bootstrap_exchanges": [
+        {
+          "family_authenticated": true
+        }
+      ],
+      "bootstrap_exchanges_dropped": 0
+    },
+    "scope": "old speed-recovery1 failure; not a new admission1 failure"
+  },
+  "app_transitions": [
+    {
+      "utc": "2026-10-17T00:02:33.684000+00:00",
+      "session_alias": "EVICTED_OR_SETUP",
+      "state_from": "CONNECTING",
+      "state_to": "CONNECTED",
+      "reason_code": "NONE",
+      "retry_count": 0
+    },
+    {
+      "utc": "2026-10-17T01:20:30.101000+00:00",
+      "session_alias": "EVICTED_OR_SETUP",
+      "state_from": "CONNECTED",
+      "state_to": "RESTORING",
+      "reason_code": "NETWORK",
+      "retry_count": 1
+    },
+    {
+      "utc": "2026-10-17T01:21:03.431000+00:00",
+      "session_alias": "EVICTED_OR_SETUP",
+      "state_from": "RESTORING",
+      "state_to": "CONNECTED",
+      "reason_code": "NONE",
+      "retry_count": 1
+    },
+    {
+      "utc": "2026-10-17T01:50:32.743000+00:00",
+      "session_alias": "EVICTED_OR_SETUP",
+      "state_from": "CONNECTED",
+      "state_to": "RESTORING",
+      "reason_code": "NETWORK",
+      "retry_count": 1
+    },
+    {
+      "utc": "2026-10-17T01:52:04.410000+00:00",
+      "session_alias": "N1",
+      "state_from": "RESTORING",
+      "state_to": "CONNECTED",
+      "reason_code": "NONE",
+      "retry_count": 2
+    },
+    {
+      "utc": "2026-10-17T03:52:11.464000+00:00",
+      "session_alias": "N1",
+      "state_from": "CONNECTED",
+      "state_to": "RESTORING",
+      "reason_code": "NETWORK",
+      "retry_count": 2
+    },
+    {
+      "utc": "2026-10-17T03:53:12.993000+00:00",
+      "session_alias": "N2",
+      "state_from": "RESTORING",
+      "state_to": "CONNECTED",
+      "reason_code": "NONE",
+      "retry_count": 3
+    },
+    {
+      "utc": "2026-10-17T04:20:54.827000+00:00",
+      "session_alias": "N2",
+      "state_from": "CONNECTED",
+      "state_to": "RESTORING",
+      "reason_code": "NETWORK",
+      "retry_count": 3
+    },
+    {
+      "utc": "2026-10-17T04:22:00.507000+00:00",
+      "session_alias": "N3",
+      "state_from": "RESTORING",
+      "state_to": "CONNECTED",
+      "reason_code": "NONE",
+      "retry_count": 4
+    },
+    {
+      "utc": "2026-10-17T06:21:35.583000+00:00",
+      "session_alias": "N3",
+      "state_from": "CONNECTED",
+      "state_to": "RESTORING",
+      "reason_code": "NETWORK",
+      "retry_count": 4
+    },
+    {
+      "utc": "2026-10-17T06:22:36.171000+00:00",
+      "session_alias": "N4",
+      "state_from": "RESTORING",
+      "state_to": "CONNECTED",
+      "reason_code": "NONE",
+      "retry_count": 5
+    },
+    {
+      "utc": "2026-10-17T06:52:49.582000+00:00",
+      "session_alias": "N4",
+      "state_from": "CONNECTED",
+      "state_to": "RESTORING",
+      "reason_code": "NETWORK",
+      "retry_count": 5
+    },
+    {
+      "utc": "2026-10-17T06:53:50.147000+00:00",
+      "session_alias": "N5",
+      "state_from": "RESTORING",
+      "state_to": "CONNECTED",
+      "reason_code": "NONE",
+      "retry_count": 6
+    }
+  ],
+  "sessions": [
+    {
+      "native_state": 3,
+      "authorization_denied": false,
+      "session_alias": "N1",
+      "correlation_status": "VALID",
+      "terminal_reason": "IO_CLOSED",
+      "reliable_terminal": "recovery_exhausted",
+      "signaling_failure": "NONE",
+      "ice_failure": "NONE",
+      "subscriber_state": "closed",
+      "publisher_state": "closed",
+      "terminal_at_ms": 1792209128123,
+      "observed_at_ms": 1792209131172,
+      "retransmissions": 36,
+      "recovery_timeouts": 36,
+      "received_frames": 12855,
+      "sent_frames": 13013,
+      "protocol_errors": 6,
+      "dns_responses": 64,
+      "dns_errors": 0,
+      "tcp_open_ok": 74,
+      "tcp_open_errors": 1,
+      "tcp_admission_waits": 0,
+      "tcp_admission_rejected": 0,
+      "tcp_admission_timeouts": 0,
+      "tcp_admission_cancelled": 0,
+      "tcp_admission_waiting": 0,
+      "lease_admission_rejected": 0,
+      "sent_bytes": 216936,
+      "received_bytes": 325056,
+      "evidence_dropped": 0,
+      "terminal_observed_at_ms": 1792209131208,
+      "observed_utc": "2026-10-17T03:52:11.172000+00:00",
+      "terminal_utc": "2026-10-17T03:52:08.123000+00:00",
+      "retention": {
+        "trace_dropped": 5637,
+        "export_dropped": 0,
+        "delivery_dropped": 3596,
+        "delivery_projection_dropped": 0,
+        "projection_dropped": 0,
+        "archive_dropped": 160
+      },
+      "trace_count": 32,
+      "trace_range_utc": [
+        "2026-10-17T03:51:50.087000+00:00",
+        "2026-10-17T03:52:10.088000+00:00"
+      ],
+      "first_failure": {
+        "stage": "CARRIER",
+        "state": "FAILED",
+        "reason": "RELIABLE_RETRY_EXHAUSTED",
+        "session_alias": "N1",
+        "close_source": "RELIABLE_EXHAUSTION",
+        "delivery": {
+          "flow": {
+            "send_base": 1031,
+            "send_next": 1032,
+            "receive_next": 1009,
+            "receive_mask": 0,
+            "ack_base": 1031,
+            "ack_mask": 0,
+            "pending": 1,
+            "buffered": 0,
+            "head_retries": 8,
+            "ack_seen": true,
+            "head_sacked": false
+          }
+        },
+        "sequence": 5813,
+        "timestamp_ms": 1792209128093,
+        "tx": 0,
+        "rx": 0,
+        "reliable_age_ms": 9562,
+        "reliable_retries": 8,
+        "reliable_pending": 1,
+        "reliable_ack_age_ms": 104142,
+        "reliable_progress_age_ms": 104142,
+        "reliable_ack_received": 8262
+      },
+      "boundaries": {
+        "dropped": 103291,
+        "projection_dropped": 0,
+        "retained": 64
+      },
+      "first_failure_equals_first_close": true,
+      "delivery_samples_retained": 8,
+      "last_flow": {
+        "send_base": 1031,
+        "send_next": 1032,
+        "receive_next": 1009,
+        "receive_mask": 0,
+        "ack_base": 1031,
+        "ack_mask": 0,
+        "pending": 1,
+        "buffered": 0,
+        "head_retries": 8,
+        "ack_seen": true,
+        "head_sacked": false
+      },
+      "last_assembly": {
+        "fragments": 9300,
+        "completed": 9296,
+        "expired": 0,
+        "malformed": 0,
+        "duplicate": 0,
+        "conflict": 0,
+        "capacity": 0,
+        "crc_failed": 0,
+        "recent": 0,
+        "pending": 0,
+        "rtp": 13041,
+        "rtp_gaps": 8,
+        "vp8_frames": 9300
+      }
+    },
+    {
+      "native_state": 3,
+      "authorization_denied": false,
+      "session_alias": "N2",
+      "correlation_status": "VALID",
+      "terminal_reason": "IO_CLOSED",
+      "reliable_terminal": "recovery_exhausted",
+      "signaling_failure": "NONE",
+      "ice_failure": "NONE",
+      "subscriber_state": "closed",
+      "publisher_state": "closed",
+      "terminal_at_ms": 1792210851181,
+      "observed_at_ms": 1792210854421,
+      "retransmissions": 31,
+      "recovery_timeouts": 30,
+      "received_frames": 3823,
+      "sent_frames": 3861,
+      "protocol_errors": 3,
+      "dns_responses": 70,
+      "dns_errors": 0,
+      "tcp_open_ok": 41,
+      "tcp_open_errors": 1,
+      "tcp_admission_waits": 0,
+      "tcp_admission_rejected": 0,
+      "tcp_admission_timeouts": 0,
+      "tcp_admission_cancelled": 0,
+      "tcp_admission_waiting": 0,
+      "lease_admission_rejected": 0,
+      "sent_bytes": 162554,
+      "received_bytes": 211358,
+      "evidence_dropped": 0,
+      "terminal_observed_at_ms": 1792210854461,
+      "observed_utc": "2026-10-17T04:20:54.421000+00:00",
+      "terminal_utc": "2026-10-17T04:20:51.181000+00:00",
+      "retention": {
+        "trace_dropped": 1179,
+        "export_dropped": 0,
+        "delivery_dropped": 823,
+        "delivery_projection_dropped": 0,
+        "projection_dropped": 0,
+        "archive_dropped": 160
+      },
+      "trace_count": 32,
+      "trace_range_utc": [
+        "2026-10-17T04:20:32.665000+00:00",
+        "2026-10-17T04:20:52.665000+00:00"
+      ],
+      "first_failure": {
+        "stage": "CARRIER",
+        "state": "FAILED",
+        "reason": "RELIABLE_RETRY_EXHAUSTED",
+        "session_alias": "N2",
+        "close_source": "RELIABLE_EXHAUSTION",
+        "delivery": {
+          "flow": {
+            "send_base": 571,
+            "send_next": 572,
+            "receive_next": 561,
+            "receive_mask": 0,
+            "ack_base": 571,
+            "ack_mask": 0,
+            "pending": 1,
+            "buffered": 0,
+            "head_retries": 8,
+            "ack_seen": true,
+            "head_sacked": false
+          }
+        },
+        "sequence": 1355,
+        "timestamp_ms": 1792210851147,
+        "tx": 0,
+        "rx": 0,
+        "reliable_age_ms": 9631,
+        "reliable_retries": 8,
+        "reliable_pending": 1,
+        "reliable_ack_age_ms": 19974,
+        "reliable_progress_age_ms": 26803,
+        "reliable_ack_received": 2423
+      },
+      "boundaries": {
+        "dropped": 31996,
+        "projection_dropped": 0,
+        "retained": 64
+      },
+      "first_failure_equals_first_close": true,
+      "delivery_samples_retained": 8,
+      "last_flow": {
+        "send_base": 571,
+        "send_next": 572,
+        "receive_next": 561,
+        "receive_mask": 0,
+        "ack_base": 571,
+        "ack_mask": 0,
+        "pending": 1,
+        "buffered": 0,
+        "head_retries": 8,
+        "ack_seen": true,
+        "head_sacked": false
+      },
+      "last_assembly": {
+        "fragments": 2999,
+        "completed": 2999,
+        "expired": 0,
+        "malformed": 0,
+        "duplicate": 0,
+        "conflict": 0,
+        "capacity": 0,
+        "crc_failed": 0,
+        "recent": 0,
+        "pending": 0,
+        "rtp": 3951,
+        "rtp_gaps": 3,
+        "vp8_frames": 2999
+      }
+    },
+    {
+      "native_state": 3,
+      "authorization_denied": false,
+      "session_alias": "N3",
+      "correlation_status": "VALID",
+      "terminal_reason": "IO_CLOSED",
+      "reliable_terminal": "recovery_exhausted",
+      "signaling_failure": "NONE",
+      "ice_failure": "NONE",
+      "subscriber_state": "closed",
+      "publisher_state": "closed",
+      "terminal_at_ms": 1792218093740,
+      "observed_at_ms": 1792218095274,
+      "retransmissions": 61,
+      "recovery_timeouts": 61,
+      "received_frames": 13893,
+      "sent_frames": 13922,
+      "protocol_errors": 19,
+      "dns_responses": 64,
+      "dns_errors": 0,
+      "tcp_open_ok": 96,
+      "tcp_open_errors": 1,
+      "tcp_admission_waits": 0,
+      "tcp_admission_rejected": 0,
+      "tcp_admission_timeouts": 0,
+      "tcp_admission_cancelled": 0,
+      "tcp_admission_waiting": 0,
+      "lease_admission_rejected": 0,
+      "sent_bytes": 255518,
+      "received_bytes": 1271236,
+      "evidence_dropped": 0,
+      "terminal_observed_at_ms": 1792218095308,
+      "observed_utc": "2026-10-17T06:21:35.274000+00:00",
+      "terminal_utc": "2026-10-17T06:21:33.740000+00:00",
+      "retention": {
+        "trace_dropped": 5613,
+        "export_dropped": 0,
+        "delivery_dropped": 3580,
+        "delivery_projection_dropped": 0,
+        "projection_dropped": 0,
+        "archive_dropped": 160
+      },
+      "trace_count": 32,
+      "trace_range_utc": [
+        "2026-10-17T06:21:14.660000+00:00",
+        "2026-10-17T06:21:34.185000+00:00"
+      ],
+      "first_failure": {
+        "stage": "CARRIER",
+        "state": "FAILED",
+        "reason": "RELIABLE_RETRY_EXHAUSTED",
+        "session_alias": "N3",
+        "close_source": "RELIABLE_EXHAUSTION",
+        "delivery": {
+          "flow": {
+            "send_base": 1374,
+            "send_next": 1375,
+            "receive_next": 1398,
+            "receive_mask": 0,
+            "ack_base": 1374,
+            "ack_mask": 0,
+            "pending": 1,
+            "buffered": 0,
+            "head_retries": 8,
+            "ack_seen": true,
+            "head_sacked": false
+          }
+        },
+        "sequence": 5789,
+        "timestamp_ms": 1792218093704,
+        "tx": 0,
+        "rx": 0,
+        "reliable_age_ms": 9541,
+        "reliable_retries": 8,
+        "reliable_pending": 1,
+        "reliable_ack_age_ms": 10101,
+        "reliable_progress_age_ms": 46246,
+        "reliable_ack_received": 8783
+      },
+      "boundaries": {
+        "dropped": 112407,
+        "projection_dropped": 0,
+        "retained": 64
+      },
+      "first_failure_equals_first_close": true,
+      "delivery_samples_retained": 8,
+      "last_flow": {
+        "send_base": 1374,
+        "send_next": 1375,
+        "receive_next": 1398,
+        "receive_mask": 0,
+        "ack_base": 1374,
+        "ack_mask": 0,
+        "pending": 1,
+        "buffered": 0,
+        "head_retries": 8,
+        "ack_seen": true,
+        "head_sacked": false
+      },
+      "last_assembly": {
+        "fragments": 10307,
+        "completed": 10229,
+        "expired": 3,
+        "malformed": 0,
+        "duplicate": 0,
+        "conflict": 0,
+        "capacity": 0,
+        "crc_failed": 0,
+        "recent": 0,
+        "pending": 0,
+        "rtp": 14866,
+        "rtp_gaps": 23,
+        "vp8_frames": 10307
+      }
+    },
+    {
+      "native_state": 3,
+      "authorization_denied": false,
+      "session_alias": "N4",
+      "correlation_status": "VALID",
+      "terminal_reason": "IO_CLOSED",
+      "reliable_terminal": "recovery_exhausted",
+      "signaling_failure": "NONE",
+      "ice_failure": "NONE",
+      "subscriber_state": "closed",
+      "publisher_state": "closed",
+      "terminal_at_ms": 1792219968595,
+      "observed_at_ms": 1792219969227,
+      "retransmissions": 29,
+      "recovery_timeouts": 30,
+      "received_frames": 6726,
+      "sent_frames": 6906,
+      "protocol_errors": 20,
+      "dns_responses": 127,
+      "dns_errors": 0,
+      "tcp_open_ok": 96,
+      "tcp_open_errors": 1,
+      "tcp_admission_waits": 0,
+      "tcp_admission_rejected": 0,
+      "tcp_admission_timeouts": 0,
+      "tcp_admission_cancelled": 0,
+      "tcp_admission_waiting": 0,
+      "lease_admission_rejected": 0,
+      "sent_bytes": 501315,
+      "received_bytes": 1039210,
+      "evidence_dropped": 0,
+      "terminal_observed_at_ms": 1792219969302,
+      "observed_utc": "2026-10-17T06:52:49.227000+00:00",
+      "terminal_utc": "2026-10-17T06:52:48.595000+00:00",
+      "retention": {
+        "trace_dropped": 1302,
+        "export_dropped": 0,
+        "delivery_dropped": 899,
+        "delivery_projection_dropped": 0,
+        "projection_dropped": 0,
+        "archive_dropped": 160
+      },
+      "trace_count": 32,
+      "trace_range_utc": [
+        "2026-10-17T06:52:29.838000+00:00",
+        "2026-10-17T06:52:48.596000+00:00"
+      ],
+      "first_failure": {
+        "stage": "CARRIER",
+        "state": "FAILED",
+        "reason": "RELIABLE_RETRY_EXHAUSTED",
+        "session_alias": "N4",
+        "close_source": "RELIABLE_EXHAUSTION",
+        "delivery": {
+          "flow": {
+            "send_base": 1701,
+            "send_next": 1702,
+            "receive_next": 1708,
+            "receive_mask": 0,
+            "ack_base": 1701,
+            "ack_mask": 0,
+            "pending": 1,
+            "buffered": 0,
+            "head_retries": 8,
+            "ack_seen": true,
+            "head_sacked": false
+          }
+        },
+        "sequence": 1479,
+        "timestamp_ms": 1792219968552,
+        "tx": 0,
+        "rx": 0,
+        "reliable_age_ms": 9590,
+        "reliable_retries": 8,
+        "reliable_pending": 1,
+        "reliable_ack_age_ms": 77726,
+        "reliable_progress_age_ms": 80027,
+        "reliable_ack_received": 4072
+      },
+      "boundaries": {
+        "dropped": 60181,
+        "projection_dropped": 0,
+        "retained": 64
+      },
+      "first_failure_equals_first_close": true,
+      "delivery_samples_retained": 8,
+      "last_flow": {
+        "send_base": 1701,
+        "send_next": 1702,
+        "receive_next": 1708,
+        "receive_mask": 0,
+        "ack_base": 1701,
+        "ack_mask": 0,
+        "pending": 1,
+        "buffered": 0,
+        "head_retries": 8,
+        "ack_seen": true,
+        "head_sacked": false
+      },
+      "last_assembly": {}
+    },
+    {
+      "native_state": 2,
+      "authorization_denied": false,
+      "session_alias": "N5",
+      "correlation_status": "VALID",
+      "terminal_reason": "NONE",
+      "reliable_terminal": "",
+      "signaling_failure": "NONE",
+      "ice_failure": "NONE",
+      "subscriber_state": "connected",
+      "publisher_state": "connected",
+      "terminal_at_ms": 0,
+      "observed_at_ms": 1792223122067,
+      "retransmissions": 96,
+      "recovery_timeouts": 82,
+      "received_frames": 17788,
+      "sent_frames": 17323,
+      "protocol_errors": 37,
+      "dns_responses": 397,
+      "dns_errors": 0,
+      "tcp_open_ok": 287,
+      "tcp_open_errors": 2,
+      "tcp_admission_waits": 29,
+      "tcp_admission_rejected": 0,
+      "tcp_admission_timeouts": 9,
+      "tcp_admission_cancelled": 0,
+      "tcp_admission_waiting": 0,
+      "lease_admission_rejected": 0,
+      "sent_bytes": 1168472,
+      "received_bytes": 10023143,
+      "evidence_dropped": 0,
+      "observed_utc": "2026-10-17T07:45:22.067000+00:00",
+      "terminal_utc": null,
+      "retention": {
+        "trace_dropped": 2316,
+        "export_dropped": 0,
+        "delivery_dropped": 1538,
+        "delivery_projection_dropped": 0,
+        "projection_dropped": 0
+      },
+      "trace_count": 192,
+      "trace_range_utc": [
+        "2026-10-17T07:41:25.949000+00:00",
+        "2026-10-17T07:45:21.949000+00:00"
+      ],
+      "first_failure": null,
+      "boundaries": {
+        "dropped": 157560,
+        "projection_dropped": 0,
+        "retained": 64
+      },
+      "first_failure_equals_first_close": null,
+      "delivery_samples_retained": 8,
+      "last_flow": {
+        "send_base": 4878,
+        "send_next": 4885,
+        "receive_next": 5528,
+        "receive_mask": 0,
+        "ack_base": 4878,
+        "ack_mask": 0,
+        "pending": 7,
+        "buffered": 0,
+        "head_retries": 0,
+        "ack_seen": true,
+        "head_sacked": false
+      },
+      "last_assembly": {
+        "fragments": 16229,
+        "completed": 15321,
+        "expired": 39,
+        "malformed": 0,
+        "duplicate": 0,
+        "conflict": 0,
+        "capacity": 0,
+        "crc_failed": 0,
+        "recent": 0,
+        "pending": 1,
+        "rtp": 25448,
+        "rtp_gaps": 92,
+        "vp8_frames": 16229
+      }
+    }
+  ],
+  "server_sessions": [
+    {
+      "alias": "N1",
+      "exit": 1,
+      "limit": 80,
+      "rows": 0,
+      "matched": 0,
+      "range_utc": [],
+      "states": {},
+      "last_flow": null,
+      "invocation_alias": "NOT_OBSERVED",
+      "sampled_sender_pending_histogram": {},
+      "sampled_head_retries_max": null,
+      "lease_events": []
+    },
+    {
+      "alias": "N2",
+      "exit": 1,
+      "limit": 80,
+      "rows": 0,
+      "matched": 0,
+      "range_utc": [],
+      "states": {},
+      "last_flow": null,
+      "invocation_alias": "NOT_OBSERVED",
+      "sampled_sender_pending_histogram": {},
+      "sampled_head_retries_max": null,
+      "lease_events": []
+    },
+    {
+      "alias": "N3",
+      "exit": 0,
+      "limit": 80,
+      "rows": 80,
+      "matched": 78,
+      "range_utc": [
+        "2026-10-17T06:20:13.907000+00:00",
+        "2026-10-17T06:21:23.625000+00:00"
+      ],
+      "states": {
+        "CARRIER_ACTIVITY/ESTABLISHED/NONE": 35,
+        "HEARTBEAT/TX/NONE": 17,
+        "HEARTBEAT/RX/NONE": 3,
+        "LOCAL_CLOSE/STARTED/NONE": 9,
+        "CARRIER_ACTIVITY/COMPLETED/NONE": 1,
+        "CARRIER/CLOSED/NONE": 3,
+        "FAMILY_TLS/CLOSED/NONE": 2,
+        "ICE/closed/NONE": 2,
+        "PEER_CONNECTION/closed/NONE": 2,
+        "CLEANUP/COMPLETED/NONE": 4
+      },
+      "last_flow": {
+        "send_base": 1398,
+        "send_next": 1399,
+        "receive_next": 1374,
+        "receive_mask": 0,
+        "ack_seen": true,
+        "ack_base": 1398,
+        "ack_mask": 0,
+        "pending": 1,
+        "buffered": 0,
+        "head_retries": 0,
+        "head_sacked": false
+      },
+      "invocation_alias": "G3",
+      "sampled_sender_pending_histogram": {
+        "0": 31,
+        "1": 4,
+        "4": 1
+      },
+      "sampled_head_retries_max": 0,
+      "lease_events": []
+    },
+    {
+      "alias": "N4",
+      "exit": 0,
+      "limit": 80,
+      "rows": 80,
+      "matched": 78,
+      "range_utc": [
+        "2026-10-17T06:50:23.013000+00:00",
+        "2026-10-17T06:51:31.400000+00:00"
+      ],
+      "states": {
+        "CARRIER_ACTIVITY/ESTABLISHED/NONE": 35,
+        "HEARTBEAT/TX/NONE": 17,
+        "HEARTBEAT/RX/NONE": 3,
+        "LOCAL_CLOSE/STARTED/NONE": 9,
+        "CARRIER_ACTIVITY/COMPLETED/NONE": 1,
+        "CARRIER/CLOSED/NONE": 3,
+        "FAMILY_TLS/CLOSED/NONE": 2,
+        "ICE/closed/NONE": 2,
+        "PEER_CONNECTION/closed/NONE": 2,
+        "CLEANUP/COMPLETED/NONE": 4
+      },
+      "last_flow": {
+        "send_base": 1708,
+        "send_next": 1708,
+        "receive_next": 1701,
+        "receive_mask": 0,
+        "ack_seen": true,
+        "ack_base": 1708,
+        "ack_mask": 0,
+        "pending": 0,
+        "buffered": 0,
+        "head_retries": 0,
+        "head_sacked": false
+      },
+      "invocation_alias": "G4",
+      "sampled_sender_pending_histogram": {
+        "0": 35,
+        "2": 1
+      },
+      "sampled_head_retries_max": 0,
+      "lease_events": []
+    },
+    {
+      "alias": "N5",
+      "exit": 0,
+      "limit": 260,
+      "rows": 260,
+      "matched": 260,
+      "range_utc": [
+        "2026-10-17T07:40:41.088000+00:00",
+        "2026-10-17T07:45:59.479000+00:00"
+      ],
+      "states": {
+        "CARRIER_ACTIVITY/ESTABLISHED/NONE": 160,
+        "HEARTBEAT/TX/NONE": 80,
+        "HEARTBEAT/RX/NONE": 16,
+        "GATEWAY_SESSION/ESTABLISHED/NONE": 4
+      },
+      "last_flow": {
+        "send_base": 5672,
+        "send_next": 5672,
+        "receive_next": 5094,
+        "receive_mask": 0,
+        "ack_seen": true,
+        "ack_base": 5672,
+        "ack_mask": 0,
+        "pending": 0,
+        "buffered": 0,
+        "head_retries": 0,
+        "head_sacked": false
+      },
+      "invocation_alias": "G5",
+      "sampled_sender_pending_histogram": {
+        "0": 134,
+        "1": 7,
+        "2": 8,
+        "3": 3,
+        "4": 5,
+        "5": 2,
+        "8": 1
+      },
+      "sampled_head_retries_max": 0,
+      "lease_events": [
+        {
+          "sequence": 2344,
+          "timestamp_ms": 1792222900476,
+          "stage": "GATEWAY_SESSION",
+          "state": "ESTABLISHED",
+          "reason": "NONE",
+          "lease_deadline_ms": 1792223020395,
+          "lease_action": "offer",
+          "lease_sequence": 5,
+          "tx": 0,
+          "rx": 0,
+          "journal_utc": "2026-10-17T07:41:40.476145+00:00",
+          "utc": "2026-10-17T07:41:40.476000+00:00"
+        },
+        {
+          "sequence": 2346,
+          "timestamp_ms": 1792222901475,
+          "stage": "GATEWAY_SESSION",
+          "state": "ESTABLISHED",
+          "reason": "NONE",
+          "lease_deadline_ms": 1792223020395,
+          "lease_action": "request",
+          "lease_sequence": 6,
+          "tx": 0,
+          "rx": 0,
+          "journal_utc": "2026-10-17T07:41:41.475661+00:00",
+          "utc": "2026-10-17T07:41:41.475000+00:00"
+        },
+        {
+          "sequence": 2347,
+          "timestamp_ms": 1792222901475,
+          "stage": "GATEWAY_SESSION",
+          "state": "ESTABLISHED",
+          "reason": "NONE",
+          "lease_deadline_ms": 1792223501475,
+          "lease_action": "accepted",
+          "lease_sequence": 6,
+          "tx": 0,
+          "rx": 0,
+          "journal_utc": "2026-10-17T07:41:41.476200+00:00",
+          "utc": "2026-10-17T07:41:41.475000+00:00"
+        },
+        {
+          "sequence": 2348,
+          "timestamp_ms": 1792222902722,
+          "stage": "GATEWAY_SESSION",
+          "state": "ESTABLISHED",
+          "reason": "NONE",
+          "lease_deadline_ms": 1792223501475,
+          "lease_action": "applied",
+          "lease_sequence": 6,
+          "tx": 0,
+          "rx": 0,
+          "journal_utc": "2026-10-17T07:41:42.723091+00:00",
+          "utc": "2026-10-17T07:41:42.722000+00:00"
+        }
+      ]
+    }
+  ],
+  "server_stop_start_events": [
+    {
+      "utc": "2026-10-17T06:21:23.176497+00:00",
+      "message": "Stopping family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker..."
+    },
+    {
+      "utc": "2026-10-17T06:21:24.011223+00:00",
+      "message": "family-connect-restricted-bootstrap.service: Deactivated successfully."
+    },
+    {
+      "utc": "2026-10-17T06:21:24.012092+00:00",
+      "message": "Stopped family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker."
+    },
+    {
+      "utc": "2026-10-17T06:21:31.574280+00:00",
+      "message": "Started family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker."
+    },
+    {
+      "utc": "2026-10-17T06:51:31.387577+00:00",
+      "message": "Stopping family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker..."
+    },
+    {
+      "utc": "2026-10-17T06:51:31.514363+00:00",
+      "message": "family-connect-restricted-bootstrap.service: Deactivated successfully."
+    },
+    {
+      "utc": "2026-10-17T06:51:31.515387+00:00",
+      "message": "Stopped family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker."
+    },
+    {
+      "utc": "2026-10-17T06:51:42.911274+00:00",
+      "message": "Started family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker."
+    }
+  ],
+  "retention": {
+    "ring_events": 128,
+    "ring_event_dropped": "NOT_EXPORTED",
+    "archived_sessions": 4,
+    "archive_session_eviction_counter": "NOT_EXPORTED",
+    "incident_events": 17,
+    "server_query_scope": "current system.journal, per-tag 80 or 260 rows, fixed end 07:46UTC; positive records only",
+    "archived_query_exits": {
+      "N1": 124,
+      "N2": 124
+    },
+    "archived_service_query_exit": 124
+  },
+  "final_server": {
+    "state": "active",
+    "substate": "running",
+    "pid": "1077679",
+    "invocation_alias": "G5",
+    "readback_utc": "2026-10-17T07:54:42.675930+00:00"
+  },
+  "findings": {
+    "admission_wait_budget_seconds": 40,
+    "site_specific_delay_binding": "NOT_EXPORTED",
+    "slot_retention_idle_vs_busy_or_leak": "NOT_PROVEN",
+    "protocol_error_subcause": "NOT_EXPORTED",
+    "global_sender_window_bottleneck": "NOT_PROVEN",
+    "overnight_uninterrupted": "NO",
+    "automatic_restoring_transitions": 6,
+    "automatic_return_to_connected": 6,
+    "current_lease_extension": "MATCHED_ACCEPTED_APPLIED_SEQUENCE_6",
+    "N3_N4": "exact-tag server orderly close during stop/start precedes client retry exhaustion by recorded wall clocks; no new phone/server clock calibration",
+    "N1_N2": "server binding unavailable in retained bounded query",
+    "historical_ten_minute_cause": "NOT_PROVEN"
+  },
+  "actions": {
+    "normal_export_supplied": 1,
+    "readonly_ssh": 2,
+    "server_journal_subqueries": 9,
+    "agent_connect": 0,
+    "adb": 0,
+    "signing": 0,
+    "install": 0,
+    "restart": 0,
+    "maintenance": 0,
+    "product_patch": 0,
+    "build": 0,
+    "tests": 0,
+    "native_stats_pollers": 0
+  },
+  "next_step": "Reproduce browser-style slot retention/release and admission latency on retained source with synthetic traffic; do not blindly enlarge limits/window or alter idle/security policy. A timed transfer is a separate measurement if needed.",
+  "private_collector_receipts": {
+    "server-receipt": {
+      "sha256": "98c1d46bcab547b1b0b4402099ce5cba5c4bde1d5bf636bef12b8b4dea367e0f",
+      "bytes": 5037883,
+      "exit": 0
+    },
+    "archived-receipt": {
+      "sha256": "0b22a1e1f45d357a866cc967f1bf2953f608036ebd9b3dd16d57a6d3b3d64f94",
+      "bytes": 297,
+      "exit": 0
+    }
+  }
+}
