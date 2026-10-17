@@ -1,5 +1,9 @@
 # Documentation
 
+[Volgograd grant preflight17.10](releases/2026-10-17-field-1-volgograd-grant-preflight.md):
+owner approved access, but old FIELD operator rejects current4h CRL and hardcodes15min
+publication. No grant attempt/mutation; compatible operator work needed, field not started.
+
 [Volgograd private update preparation17.10](releases/2026-10-17-field-1-volgograd-batch1-preparation.md):
 current signed batch1 kit locally verified; selected recipient registered but lacks
 restricted grant/admission. Compatibility pending, no transfer/CONNECT or catalog change.

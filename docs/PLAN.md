@@ -8,16 +8,20 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
-### FIELD-1-VOLGOGRAD-BATCH1 — private update preparation first (17.10)
+### FIELD-1-VOLGOGRAD-BATCH1 — admission operator compatibility first (17.10)
 
 - [Owner selected one tester](releases/2026-10-17-field-1-volgograd-batch1-preparation.md)
   and deferred speed work. Reuse verified signed batch1 APK697f9c24/native dd722ead;
   no rebuild, re-sign or broad catalog publication. Kit is local, not delivered.
 - Recipient's last support observation is beta60/code60; confirm model/Android/ARM64,
   current package/signer and mobile operator without assuming owner-device facts.
-- Existing lookup: active registration but no restricted grant/FIELD admission.
-  TESTER_NOT_AUTHORIZED. Obtain explicit grant authorization before the existing
-  operator procedure; no new rights, identity or manual DB edits in preparation.
+- Owner explicitly authorized T1's new restricted access. [Read-only preflight](releases/2026-10-17-field-1-volgograd-grant-preflight.md)
+  finds the old installed FIELD CLI rejects current4h CRL duration and hardcodes15min
+  publication. GRANT_NOT_APPLIED; do not ask again for entitlement approval or run a
+  known-incompatible writer. Current4h evaluate is NOOP, not an outage/renewal need.
+- Next requires separately scoped admission-tool compatibility work and local checks;
+  no live monkey patch, CRL shortening, renewal/recovery misuse, new identity or SQL
+  workaround. Preserve the existing two recipients, current floors and revocations.
 - Simple private APK replacement can preserve data after checks; shared updater
   cannot target this research build to one recipient. No downgrade promise to60.
 - Only after gates and fresh runtime readiness: one bounded warm-start mobile episode,

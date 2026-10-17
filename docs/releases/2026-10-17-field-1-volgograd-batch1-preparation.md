@@ -85,3 +85,11 @@ build/sign/install/transfer/upload/catalog change/grant change/ADB/CONNECT/expor
 gateway restart/maintenance0. Phone state not freshly observed; owner export13's
 CONNECTED is historical, T1 VPN state UNKNOWN. Performance, full field acceptance,
 historical causality, handoff, supervisor and public release remain unpromoted.
+
+## Later continuation — authorization received, incompatible operator
+
+The owner approved issuance for T1 and described the phone as modern, without API/ABI
+confirmation. [Fresh grant preflight](2026-10-17-field-1-volgograd-grant-preflight.md)
+finds the installed historical FIELD tool incompatible with current4h materials.
+Permission is no longer missing, but no grant command or material mutation is made.
+The kit remains local, compatibility unresolved and field episode NOT_STARTED.

@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+## FIELD-1-VOLGOGRAD — access authorized; installed operator incompatible (17.10)
+
+[Grant preflight](releases/2026-10-17-field-1-volgograd-grant-preflight.md): owner
+authorized T1 restricted access; do not ask for that approval again. No grant issued:
+installed FIELD operator b6fe9220 accepts CRL lifetime<=1h, current valid CRL is4h;
+its publisher hardcodes15min. No bypass/shortened material or modifying command.
+Current4h evaluate NOOP/0 writes/restarts; transaction COMMITTED, no pending owner.
+Need a separately scoped compatible admission-tool change before issuance, not renewal
+or manual DB edits. Kit unchanged/untransferred; phone compatibility remains unknown.
+SSH read-only2, grant/device/CONNECT actions0; field NOT_STARTED.
+
 ## FIELD-1-VOLGOGRAD-BATCH1 — update prepared, entitlement/compatibility pending (17.10)
 
 [Selected recipient preparation](releases/2026-10-17-field-1-volgograd-batch1-preparation.md):
