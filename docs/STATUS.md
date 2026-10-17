@@ -2,6 +2,12 @@
 
 ## BATCH-OWNER-EXPORT13-1 — some sites fail; speed solution not accepted (17.10)
 
+[Later owner clarification](releases/2026-10-17-batch-owner-speedtest-sites-1.md):
+speed-test pages did not open at all; YouTube opened and Telegram worked, slowly.
+Partial reachability is owner-reported, not a measured rate or protocol diagnosis.
+Domains/VPN-OFF comparison remain unknown; do not infer UDP/WebSocket blocking.
+No new live actions; this clarification does not change the evidence below.
+
 [Export13 analysis](releases/2026-10-17-batch-owner-export13-1.md): owner reports some
 sites again unavailable and no subjective speed gain. Batch1/CELLULAR N1 starts
 successfully, app CONNECTED09:07:23.603 through last sample09:14:00.817.104 mux

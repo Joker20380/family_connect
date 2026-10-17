@@ -16,8 +16,11 @@ Verify reboot automount separately; no engineering release gate changes.
 - Locally combine browser-shaped concurrent/idle/closing TCP streams with directional
   loss and ACK delay on exact admission1/batch1 sources; record release/admission timing
   and error subtype before choosing a fix. No retry-until-pass or blanket suites.
-- Obtain2–3 failed URLs/main-page-versus-assets and existing VPN-OFF observations;
-  do not require another CONNECT or use a host request as phone traffic proof.
+- [Owner clarified whole speed-test pages fail](releases/2026-10-17-batch-owner-speedtest-sites-1.md),
+  while YouTube/Telegram work slowly. Obtain exact site names and any existing
+  VPN-OFF observations; do not ask again about main page versus assets or require
+  another CONNECT. Missing domains do not block the local comparison; host traffic
+  is not phone traffic proof, and a speed-test page failure is not a UDP diagnosis.
 - No automatic reinstall/rollback/restart, production cap/RTO/queue tuning or field
   trial. Last export VPN CONNECTED; final OFF not observed. Prior pair deployment
   remains complete but batch1 is not accepted as a browsing/speed solution.

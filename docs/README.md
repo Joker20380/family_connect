@@ -1,5 +1,9 @@
 # Documentation
 
+[Owner clarification17.10](releases/2026-10-17-batch-owner-speedtest-sites-1.md):
+speed-test pages fail to open; YouTube/Telegram work slowly. Partial reachability,
+no measured speed or site-specific cause; no new live actions.
+
 [Batch owner export13,17.10](releases/2026-10-17-batch-owner-export13-1.md):
 some sites fail again, subjective speed gain absent. Successful startup with104 slot
 waits/5 timeouts and reliable recovery pressure; exact gateway invocation unchanged.
