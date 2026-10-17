@@ -1,5 +1,10 @@
 # Documentation
 
+[Batch candidate rollout checkpoint17.10](releases/2026-10-17-transport-batch-owner-rollout-1.md):
+signed APK697f9c24 ready; no install/deploy. Current material valid, but operator
+authority/grant renewal is due and the accepted transition guard stops the rollout.
+Previous APK/gateway remain in place; maintenance approval and mobile test pending.
+
 [Ready-write transport modernization17.10](releases/2026-10-17-transport-write-batching-1.md):
 implemented bounded Family/mux batching, local byte-exact TCP latency comparison and
 new unsigned APK/gateway. No mobile-speed acceptance or live change.

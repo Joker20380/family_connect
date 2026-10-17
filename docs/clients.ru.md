@@ -1,5 +1,13 @@
 # Установка клиентов
 
+**Подписан, но НЕ установлен17.10:** `0.1.18-research84-ui60-4-batch1`, code84.
+Signed APK `697f9c244b67f75e7e3e612dbcd91a48891d32ee77e23fd9bce173a5f049233f`;
+native dd722ead, payload/прежний signer/alignment проверены. [Статус и хэши](releases/2026-10-17-transport-batch-owner-rollout-1.md).
+На телефоне проверен прежний admission1 APK761430c0, UID10283, VPN OFF; backup сохранён.
+Установка и gateway-обновление не начаты: требуется штатное offline operator-maintenance.
+Материалы пока действуют, но evaluate сообщает authority/grant due. Без обхода проверки,
+новой подписи/сборки или публичной раздачи. Следующие записи — более ранние этапы.
+
 **Новый приватный кандидат17.10, только собран, НЕ установлен:**
 `0.1.18-research84-ui60-4-batch1`, code84, API31+/ARM64.
 [Изменения, тесты, все хэши и ограничения](releases/2026-10-17-transport-write-batching-1.md).

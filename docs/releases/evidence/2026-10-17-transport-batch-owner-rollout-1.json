@@ -1,0 +1,139 @@
+{
+  "result": "SIGNED_READY_ROLLOUT_BLOCKED_OPERATOR_MAINTENANCE_REQUIRED",
+  "input_review_sha": "26b1776360dfe9f02629ee43bc3fb31b3dd06250",
+  "observed_utc": "2026-10-17T08:41:28.984717+00:00",
+  "candidate": {
+    "version_name": "0.1.18-research84-ui60-4-batch1",
+    "version_code": 84,
+    "unsigned_apk_sha256": "56b3c958f696d09d216e06b3128b194c5b8c7b9df21c1c2661ba1d8b18049db5",
+    "signed_apk_sha256": "697f9c244b67f75e7e3e612dbcd91a48891d32ee77e23fd9bce173a5f049233f",
+    "native_sha256": "dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23",
+    "source_inventory": "cdd089478624ff5113d14590a340092684127a674565c3acfe6750aa76a17790",
+    "gateway_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+    "gateway_source_inventory": "aeeb6755bd235160127cfed67da4a870ae340cfebe89fc6d0f937908607d9483",
+    "signing_utc": "2026-10-17T08:40:46.907889+00:00",
+    "signature_verified": true,
+    "alignment_16k": "PASS",
+    "unsigned_non_signature_entries_identical": true,
+    "installed": false,
+    "deployed": false
+  },
+  "phone": {
+    "observed_utc": "2026-10-17T08:39:46.351892+00:00",
+    "package": "com.familyconnect.app.friends",
+    "uid": 10283,
+    "installed_version": "0.1.18-research84-ui60-4-admission1",
+    "installed_apk_sha256": "761430c0989fd2443cebad39f6cf972d21ef25123114e118ee841029c2149b1f",
+    "native_sha256": "6d41518ffbe2b10c767552dbb4c1bc732911fb8439a525215c353541ca41cfab",
+    "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+    "app_pids": [
+      "13244"
+    ],
+    "api": 31,
+    "abi": "arm64-v8a",
+    "vpn_transport_present": false,
+    "vpn_service_present": false,
+    "backup_verified": true,
+    "same_code_replace_compatible": true,
+    "private_identity_database_reads": 0,
+    "data_mutations": 0
+  },
+  "gateway": {
+    "loaded_sha256": "079729e4de680cb416c55c2b9b592c6450e4254a306a6960b087930cc549639d",
+    "configured_sha256": "079729e4de680cb416c55c2b9b592c6450e4254a306a6960b087930cc549639d",
+    "state": {
+      "ActiveState": "active",
+      "SubState": "running",
+      "MainPID": "1119177",
+      "InvocationID": "58898c9dbe1e405a941c6b61e522c775",
+      "NRestarts": "1"
+    },
+    "served_chain": "PASS",
+    "listener": true,
+    "seed_ready_observed": true,
+    "directory_matches_RU": true,
+    "directory_issued_utc": "2026-10-17T07:56:33.118215037Z",
+    "directory_expiry_utc": "2026-10-17T11:56:29.994974282Z",
+    "authority_expiry_utc": "2026-10-17T13:10:22+00:00",
+    "leaf_expiry_utc": "2026-10-17T10:21:20+00:00",
+    "crl_expiry_utc": "2026-10-17T10:51:27+00:00",
+    "runtime_bound_utc": "2026-10-17T11:56:29.943631+00:00",
+    "next_scheduled_utc": "2026-10-17T08:51:50.837207+00:00",
+    "pending_owner": false,
+    "active_writer": false,
+    "transaction_state": "COMMITTED",
+    "restricted_session_count": "UNKNOWN",
+    "gateway_backup_staged": false
+  },
+  "operational_gate": {
+    "evaluate_exit": 75,
+    "evaluation": {
+      "result": "RENEWAL_REQUIRED",
+      "due": [
+        "authority",
+        "grant"
+      ],
+      "alerts": [
+        "LEAF_T_MINUS_120M",
+        "OFFLINE_AUTHORITY_RENEWAL_REQUIRED"
+      ],
+      "headroom": {
+        "authority": 16134,
+        "crl": 7799,
+        "grant": 16134,
+        "leaf": 5992
+      },
+      "files_changed": 0,
+      "remote_writes": 0,
+      "restarts": 0
+    },
+    "scheduled": {
+      "result": "MAINTENANCE_REQUIRED",
+      "alerts": [
+        "MAINTENANCE_REQUIRED",
+        "MAINTENANCE_BLOCKED_BY_SESSION_UNCERTAINTY"
+      ],
+      "mutations": 0,
+      "policy": "CURRENT_PRODUCTION_VALIDITY_LIMITS"
+    },
+    "material_expired_at_check": false,
+    "active_maintenance_at_check": false,
+    "renewal_service_state": "failed",
+    "renewal_service_exit": "75",
+    "timer_state": "active",
+    "reason": "Accepted transition guard requires a no-due evaluation; offline operator action is due. No guard bypass or implicit credential operation."
+  },
+  "action_counts": {
+    "signing": 1,
+    "adb_preflight": 1,
+    "apk_backup_pull": 1,
+    "ssh_readonly_commands": 12,
+    "scp": 0,
+    "install": 0,
+    "ordinary_launch": 0,
+    "connect": 0,
+    "export": 0,
+    "gateway_stage": 0,
+    "deploy": 0,
+    "stop": 0,
+    "start": 0,
+    "rollback": 0,
+    "rebuild": 0,
+    "new_test_suites": 0,
+    "credential_maintenance": 0,
+    "unit_argv_edits": 0,
+    "native_stats_pollers": 0,
+    "emulator": 0
+  },
+  "next": "Obtain explicit operator-maintenance approval, use accepted applicable workflow, then fresh readiness and resume using the same signed candidate; no repeat signing/build.",
+  "private_receipt_sha256": {
+    "owner-install/receipts/before.json": "6edf7e630732e738f0ea872d4e9e27effc53b74b35bffa39cd50fd105568eeb0",
+    "owner-install/receipts/signing.json": "2d445fed11665cb00caa1f4f9546869358fb4cca2abff845fd54613123a22aa6",
+    "rollout/private/before-evaluate.json": "c6c33bbbeb5fea783e24b0b7fa40bc55d7289d1abc85ec7b8befbbf43724ef5b",
+    "rollout/private/previous-scheduled.jsonl": "b54a4ecbf601d2dc62a8ebacf91a1eb6cdffd4182ffe99997ed1440d2c6427f4",
+    "rollout/private/pretransition-NL-entry.json": "1ec2df1482d67e00785bba2071bf5868b79c03c2f7cbc54928f3b6b2460c08ce",
+    "rollout/private/pretransition-RU-entry.json": "c77cbe733771fc40640dbaeffadfee717e7f48f429d902b1b0a3361e88444a72",
+    "rollout/private/pretransition-NL-bounds.json": "f283e140f1f8a2690db57cf5d33fcb6e523539ce136c2c86eec7f2c8931ade2c",
+    "rollout/private/pretransition-RU-bounds.json": "35a51b6331595c69f86d04cc6b8fdfb14dad28b987349f01da3c8f600cc1d125"
+  }
+}

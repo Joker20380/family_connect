@@ -1,5 +1,13 @@
 # Client installation
 
+**Signed but NOT installed17.10:** `0.1.18-research84-ui60-4-batch1`, code84.
+Signed APK `697f9c244b67f75e7e3e612dbcd91a48891d32ee77e23fd9bce173a5f049233f`;
+native dd722ead, payload/existing signer/alignment verified. [Status and hashes](releases/2026-10-17-transport-batch-owner-rollout-1.md).
+Phone still verifies as admission1 APK761430c0, UID10283, VPN OFF; backup preserved.
+Installation/gateway transition have not started: accepted offline operator maintenance
+is due. Material remains valid, but evaluate reports authority/grant due. No guard
+bypass, rebuild/re-sign or public distribution. Following entries are earlier stages.
+
 **New private candidate17.10, built only, NOT installed:**
 `0.1.18-research84-ui60-4-batch1`, code84, API31+/ARM64.
 [Changes, tests, full hashes and limits](releases/2026-10-17-transport-write-batching-1.md).

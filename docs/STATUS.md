@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+## TRANSPORT-BATCH-OWNER-ROLLOUT-1 — signed; operator gate blocks rollout (17.10)
+
+[Checkpoint08:39–08:41UTC](releases/2026-10-17-transport-batch-owner-rollout-1.md):
+existing-key signed batch1 APK697f9c24, native dd722ead; payload/signature/alignment
+verified, previous installed APK761430c0 privately backed up. UID10283, API31/ARM64,
+VPN OFF; no install/launch/CONNECT. Configured/loaded gateway079729e4 still active,
+strict TLS/seed/current NL→RU directory pass, no pending writer/owner; transaction
+COMMITTED. Material still valid: leaf10:21:20UTC, CRL10:51:27, authority13:10:22.
+Operational evaluate instead returns75/RENEWAL_REQUIRED for authority/grant; scheduled
+controller75/MAINTENANCE_REQUIRED, blocked by session uncertainty. Not an expired
+material/outage claim, and active timer is not renewal. Accepted NOOP transition
+guard stops before gateway staging or binary changes. Signing1/read-only SSH12;
+install/deploy/restart/maintenance0. Candidate gateway4b722d2d remains local.
+Next: request accepted offline operator-maintenance approval, then fresh readiness
+and resume this same signed pair without rebuild/re-sign. Timed mobile test pending.
+
 ## TRANSPORT-WRITE-BATCHING-1 — local speed candidate, not installed (17.10)
 
 [Implemented and built](releases/2026-10-17-transport-write-batching-1.md): ready-only

@@ -8,6 +8,20 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### TRANSPORT-BATCH-OWNER-ROLLOUT-1 — maintenance approval before rollout (17.10)
+
+- [Signing/preflight checkpoint](releases/2026-10-17-transport-batch-owner-rollout-1.md):
+  batch1 signed APK697f9c24 retained; phone still761430c0/UID10283/VPN OFF, gateway
+  still079729e4. No install, gateway stage, restart or CONNECT; no repeat build/tests.
+- Material is valid, but accepted operational evaluation reports authority/grant due,
+  not NOOP. Scheduled controller reports maintenance blocked by session uncertainty;
+  session count UNKNOWN. Do not call this expiry, infer zero sessions or bypass guard.
+- Obtain explicit approval for applicable existing offline operator maintenance with
+  its bounded outage. Do not invent recovery, loosen policy/floors or move root keys.
+- After committed cleanup/readiness, use fresh receipt namespace and current snapshots;
+  keep the same signed candidate and previous APK. Resume paired rollout, then the
+  agreed small timed mobile test. Do not re-sign/rebuild or auto-CONNECT in waiting.
+
 ### TRANSPORT-WRITE-BATCHING-1 — local gate complete; paired rollout next (17.10)
 
 - [Ready-write implementation and unsigned build complete](releases/2026-10-17-transport-write-batching-1.md):
