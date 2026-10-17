@@ -1,5 +1,10 @@
 # Documentation
 
+[Batch owner export13,17.10](releases/2026-10-17-batch-owner-export13-1.md):
+some sites fail again, subjective speed gain absent. Successful startup with104 slot
+waits/5 timeouts and reliable recovery pressure; exact gateway invocation unchanged.
+Partial diagnosis, no fix/rollback/restart; local mixed-load/loss reproduction next.
+
 [Batch maintenance and private rollout17.10](releases/2026-10-17-transport-batch-maintenance-and-rollout-1.md):
 accepted offline maintenance COMMITTED/CLEANED; APK697f9c24/native dd722ead now installed,
 gateway4b722d2d loaded and strict ready. VPN OFF at readback; actual mobile speed check

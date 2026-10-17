@@ -8,6 +8,20 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### BATCH-OWNER-EXPORT13-1 — mixed pressure/recovery reproduction next (17.10)
+
+- [New owner result is browsing FAIL, speed unmeasured](releases/2026-10-17-batch-owner-export13-1.md):
+  retain startup success separately;104 slot waits/5 admission timeouts and observed
+  reliable head/window pressure do not identify the failed sites or all50 mux errors.
+- Locally combine browser-shaped concurrent/idle/closing TCP streams with directional
+  loss and ACK delay on exact admission1/batch1 sources; record release/admission timing
+  and error subtype before choosing a fix. No retry-until-pass or blanket suites.
+- Obtain2–3 failed URLs/main-page-versus-assets and existing VPN-OFF observations;
+  do not require another CONNECT or use a host request as phone traffic proof.
+- No automatic reinstall/rollback/restart, production cap/RTO/queue tuning or field
+  trial. Last export VPN CONNECTED; final OFF not observed. Prior pair deployment
+  remains complete but batch1 is not accepted as a browsing/speed solution.
+
 ### TRANSPORT-BATCH-MAINTENANCE-AND-ROLLOUT-1 — mobile measurement next (17.10)
 
 - [Maintenance and paired rollout complete](releases/2026-10-17-transport-batch-maintenance-and-rollout-1.md):

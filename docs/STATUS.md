@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+## BATCH-OWNER-EXPORT13-1 — some sites fail; speed solution not accepted (17.10)
+
+[Export13 analysis](releases/2026-10-17-batch-owner-export13-1.md): owner reports some
+sites again unavailable and no subjective speed gain. Batch1/CELLULAR N1 starts
+successfully, app CONNECTED09:07:23.603 through last sample09:14:00.817.104 mux
+admission waits/5 expired40s budgets; TCP peak64/current26;180 retransmissions/170
+RTO events,50 aggregate mux errors. Client window full7/8 retained samples, server
+90/161 matched tail samples; receive gap and head retries observed.306 DNS responses/
+0 exported errors do not prove all failed domains. Carrier0.809Mbit/s over14s is
+not HTTP capacity or before/after speed. Old incident DEDICATED_AUTH/UNKNOWN is separate.
+Exact N1 server trace sequences1–346 bind to rollout gateway4b722d2d/unchanged invocation,
+NRestarts0. No observed gateway interruption in this episode. Site attribution/mux
+subtypes/batching causality remain open; no blind cap/window/timeout tuning.
+Two read-only SSH calls, no ADB/product/live changes. Phone last export CONNECTED,
+not newly OFF. Next: bounded mixed browser-pressure+loss local parent/candidate
+reproduction, and2–3 failed URL examples. No new installation/acceptance/release.
+
 ## TRANSPORT-BATCH-MAINTENANCE-AND-ROLLOUT-1 — installed/deployed; speed pending (17.10)
 
 [Completed private rollout](releases/2026-10-17-transport-batch-maintenance-and-rollout-1.md):

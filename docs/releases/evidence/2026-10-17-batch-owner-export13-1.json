@@ -1,0 +1,268 @@
+{
+  "schema": 1,
+  "task": "BATCH-OWNER-EXPORT13-1",
+  "result": "OWNER_BROWSING_FAIL_PARTIAL_CAUSE_ADMISSION_AND_RELIABLE_RECOVERY",
+  "input_review_sha": "8fde9476d813d938e887a8729ba12105be6cfa9f",
+  "provenance": {
+    "sha256": "104248487c972db0931d6e8ed45cc74308266543d4977f647d1d50c6cf7f171b",
+    "size": 99735,
+    "source_mtime_utc": "2026-10-17T09:14:16.617105+00:00",
+    "received_utc": "2026-10-17T09:15:36.315559+00:00",
+    "provenance": "OWNER_SUPPLIED_NORMAL_SUPPORT_EXPORT_13"
+  },
+  "user_report": {
+    "some_sites_fail": true,
+    "speed_not_improved": "SUBJECTIVE_NOT_TIMED",
+    "affected_urls": "NOT_SUPPLIED"
+  },
+  "identities": {
+    "export_version": "0.1.18-research84-ui60-4-batch1",
+    "code": 84,
+    "last_installed_apk": "697f9c244b67f75e7e3e612dbcd91a48891d32ee77e23fd9bce173a5f049233f",
+    "last_installed_native": "dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23",
+    "client_inventory": "cdd089478624ff5113d14590a340092684127a674565c3acfe6750aa76a17790",
+    "loaded_gateway": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+    "fresh_phone_hash_read": false
+  },
+  "client": {
+    "alias": "N1",
+    "network": "CELLULAR",
+    "state": "CONNECTED",
+    "vpn_open": true,
+    "connect_utc": "2026-10-17T09:06:57.023000+00:00",
+    "connected_utc": "2026-10-17T09:07:23.603000+00:00",
+    "observed_utc": "2026-10-17T09:14:00.817000+00:00",
+    "connected_to_sample_ms": 397214,
+    "startup": {
+      "attempt": 1,
+      "status": "SUCCEEDED",
+      "completed_ms": 24385,
+      "bootstrap_exchange_alias": "B1",
+      "family_authenticated": true,
+      "exchanges_dropped": 0
+    },
+    "terminal_reason": "NONE",
+    "reliable_terminal": "",
+    "first_failure_present": false,
+    "first_close_present": false,
+    "counters": {
+      "retransmissions": 180,
+      "recovery_timeouts": 170,
+      "protocol_errors": 50,
+      "dns_responses": 306,
+      "dns_errors": 0,
+      "tcp_open_ok": 237,
+      "tcp_open_errors": 1,
+      "tcp_admission_waits": 104,
+      "tcp_admission_rejected": 0,
+      "tcp_admission_timeouts": 5,
+      "tcp_admission_cancelled": 0,
+      "tcp_admission_waiting": 0,
+      "lease_admission_rejected": 0,
+      "sent_bytes": 1943417,
+      "received_bytes": 14831264,
+      "evidence_dropped": 0
+    },
+    "packet_counters": {
+      "protect_ok": 116,
+      "protect_denied": 0,
+      "dns": 306,
+      "tcp": 235,
+      "tcp_active": 26,
+      "tcp_peak": 64,
+      "limit_denied": 0,
+      "udp_denied": 282,
+      "ipv6_denied": 335
+    }
+  },
+  "client_delivery": {
+    "samples": 8,
+    "range_utc": [
+      "2026-10-17T09:13:45.387000+00:00",
+      "2026-10-17T09:13:59.387000+00:00"
+    ],
+    "full_window_samples": 7,
+    "max_head_retries": 2,
+    "last_flow": {
+      "send_base": 3899,
+      "send_next": 3902,
+      "receive_next": 3914,
+      "receive_mask": 62,
+      "ack_base": 3899,
+      "ack_mask": 0,
+      "pending": 3,
+      "buffered": 5,
+      "head_retries": 1,
+      "ack_seen": true,
+      "head_sacked": false
+    },
+    "last_assembly": {
+      "fragments": 11306,
+      "completed": 9794,
+      "expired": 32,
+      "malformed": 0,
+      "duplicate": 0,
+      "conflict": 0,
+      "capacity": 0,
+      "crc_failed": 0,
+      "recent": 0,
+      "pending": 3,
+      "rtp": 23242,
+      "rtp_gaps": 95,
+      "vp8_frames": 11306
+    },
+    "carrier_rx_delta": 1415369,
+    "interval_seconds": 14.0,
+    "aggregate_carrier_mbit_per_second": 0.8087822857142857,
+    "rate_scope": "AGGREGATE_CARRIER_OBSERVATION_NOT_HTTP_OR_CAPACITY_BENCHMARK"
+  },
+  "server": {
+    "exact_session_match": true,
+    "alias": "N1",
+    "queries": [
+      {
+        "source": "server-initial-readback.json",
+        "rows": 88,
+        "limit": 120,
+        "hit_limit": false,
+        "exit": 0,
+        "service_journal_exit": 1,
+        "service_journal_rows": 0,
+        "loaded_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+        "state": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "InvocationID": "e1a7f717217a4132b5f5a4b81b10e95d",
+          "MainPID": "1162821",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestamp": "Sat 2026-10-17 12:00:53 MSK",
+          "ExecMainStatus": "0"
+        }
+      },
+      {
+        "source": "server-readback.json",
+        "rows": 260,
+        "limit": 260,
+        "hit_limit": true,
+        "exit": 0,
+        "service_journal_exit": 1,
+        "service_journal_rows": 0,
+        "loaded_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+        "state": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "InvocationID": "e1a7f717217a4132b5f5a4b81b10e95d",
+          "MainPID": "1162821",
+          "Result": "success",
+          "NRestarts": "0",
+          "ExecMainStartTimestamp": "Sat 2026-10-17 12:00:53 MSK",
+          "ExecMainStatus": "0"
+        }
+      }
+    ],
+    "combined_rows": 346,
+    "sequence_range": [
+      1,
+      346
+    ],
+    "missing_trace_sequences": [],
+    "trace_range_utc": [
+      "2026-10-17T09:07:09.048000+00:00",
+      "2026-10-17T09:14:04.562000+00:00"
+    ],
+    "established": [
+      {
+        "utc": "2026-10-17T09:07:11.690000+00:00",
+        "stage": "DESCRIPTOR",
+        "state": "ISSUED"
+      },
+      {
+        "utc": "2026-10-17T09:07:11.691000+00:00",
+        "stage": "FAMILY_TLS",
+        "state": "STARTED"
+      },
+      {
+        "utc": "2026-10-17T09:07:20.680000+00:00",
+        "stage": "FAMILY_TLS",
+        "state": "ESTABLISHED"
+      },
+      {
+        "utc": "2026-10-17T09:07:22.560000+00:00",
+        "stage": "GATEWAY_SESSION",
+        "state": "ESTABLISHED"
+      },
+      {
+        "utc": "2026-10-17T09:07:24.166000+00:00",
+        "stage": "GATEWAY_SESSION",
+        "state": "ESTABLISHED"
+      },
+      {
+        "utc": "2026-10-17T09:07:24.825000+00:00",
+        "stage": "GATEWAY_SESSION",
+        "state": "ESTABLISHED"
+      }
+    ],
+    "failure_reason_rows": 0,
+    "tail_samples_at_or_before_client_export": 161,
+    "tail_full_window_samples": 90,
+    "tail_max_head_retries": 3,
+    "last_boundary_retained": 64,
+    "last_boundary_dropped": 109443
+  },
+  "retention": {
+    "ring_events": 17,
+    "ring_event_dropped": "NOT_EXPORTED",
+    "history_records": 0,
+    "trace_retained": 192,
+    "trace_dropped": 147,
+    "export_dropped": 0,
+    "delivery_retained": 8,
+    "delivery_dropped": 190,
+    "delivery_projection_dropped": 0,
+    "projection_dropped": 0,
+    "boundary_retained": 64,
+    "boundary_dropped": 101640,
+    "boundary_projection_dropped": 0
+  },
+  "historical_incident": {
+    "version": "0.1.18-research84-ui60-4-speed-recovery1",
+    "state": "FAILED",
+    "stage": "DEDICATED_AUTH",
+    "cause": "UNKNOWN",
+    "event_end_utc": "2026-10-16T21:43:02.997000+00:00",
+    "current_batch_failure": false
+  },
+  "limits": {
+    "site_attribution": "NOT_PROVEN",
+    "exact_mux_error_subtypes": "NOT_EXPORTED",
+    "holder_lifetime_cause": "NOT_PROVEN",
+    "before_after_speed_regression": "NOT_MEASURED",
+    "batch_causal_regression": "NOT_PROVEN",
+    "mobile_operator_dpi": "NOT_PROVEN",
+    "aggregate_dns": "306_RESPONSES_0_EXPORTED_ERRORS_NOT_ALL_DOMAINS_PROVEN",
+    "ownership_capture": "NOT_REARMED_NO_NEW_BOOTSTRAP_SERVER_BINDING",
+    "final_phone_state": "LAST_EXPORT_CONNECTED_NO_FRESH_ADB"
+  },
+  "actions": {
+    "read_only_ssh": 2,
+    "adb": 0,
+    "connect": 0,
+    "app_restart": 0,
+    "gateway_restart": 0,
+    "install": 0,
+    "rollback": 0,
+    "credential_changes": 0,
+    "rebuild": 0,
+    "tests": 0,
+    "product_patches": 0,
+    "new_export_requests": 0,
+    "native_stats_pollers": 0
+  },
+  "next_step": "LOCAL_MIXED_BROWSER_PRESSURE_AND_LOSS_PARENT_VS_BATCH_REPRODUCTION; REQUEST_FAILED_URLS",
+  "private_input_hashes": {
+    "export13.json": "104248487c972db0931d6e8ed45cc74308266543d4977f647d1d50c6cf7f171b",
+    "server-readback.json": "367d247634a123382430e57079436ff3117732137e66d4af5fb0f7210d0217c0",
+    "server-initial-readback.json": "5cca8936e4aa8d93136dc54a8c076a9eac60f63f00db9176d2d4648ba72a7c2d"
+  }
+}
