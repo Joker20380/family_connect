@@ -1,0 +1,20 @@
+=== RUN   TestMuxLatencyEnvelope
+    mux_latency_test.go:111: flows=4 body_each=65536 byte_exact=true synthetic_one_way_ms=40 elapsed_ms=983 client_frames=91 server_frames=82 retransmits=0
+--- PASS: TestMuxLatencyEnvelope (1.63s)
+=== RUN   TestBrowserSlotsReleaseEnvelope
+    mux_latency_test.go:153: held=64 waiter=1 release_ms=0
+--- PASS: TestBrowserSlotsReleaseEnvelope (0.10s)
+=== RUN   TestMuxLatencyEnvelope
+    mux_latency_test.go:111: flows=4 body_each=65536 byte_exact=true synthetic_one_way_ms=40 elapsed_ms=980 client_frames=91 server_frames=83 retransmits=0
+--- PASS: TestMuxLatencyEnvelope (1.61s)
+=== RUN   TestBrowserSlotsReleaseEnvelope
+    mux_latency_test.go:153: held=64 waiter=1 release_ms=2
+--- PASS: TestBrowserSlotsReleaseEnvelope (0.13s)
+=== RUN   TestMuxLatencyEnvelope
+    mux_latency_test.go:111: flows=4 body_each=65536 byte_exact=true synthetic_one_way_ms=40 elapsed_ms=904 client_frames=88 server_frames=84 retransmits=0
+--- PASS: TestMuxLatencyEnvelope (1.54s)
+=== RUN   TestBrowserSlotsReleaseEnvelope
+    mux_latency_test.go:153: held=64 waiter=1 release_ms=3
+--- PASS: TestBrowserSlotsReleaseEnvelope (0.13s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/tcpforward	5.146s

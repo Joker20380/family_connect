@@ -1,0 +1,481 @@
+--- /dev/null
++++ b/carrier/familysession/batch.go
+@@ -0,0 +1,59 @@
++package familysession
++
++import (
++	"context"
++	"encoding/binary"
++	"time"
++)
++
++const BatchMessageHeaderSize = 12
++const MaxBatchMessages = 32
++const tlsRecordHeaderSize = 5
++const tls13ContentTypeSize = 1
++const tls13TagSize = 16
++const MaxBatchPlaintext = (16 << 10) - tlsRecordHeaderSize - tls13ContentTypeSize - tls13TagSize
++
++func (session *Session) SendBatchContext(ctx context.Context, payloads [][]byte) (failure error) {
++	defer func() { traceFailure(ctx, session.trace, failure) }()
++	session.sendMu.Lock()
++	defer session.sendMu.Unlock()
++	size := 0
++	valid := len(payloads) > 0 && len(payloads) <= MaxBatchMessages && uint64(len(payloads)) <= ^uint64(0)-session.sendSequence
++	for _, payload := range payloads {
++		if !valid {
++			break
++		}
++		if len(payload) > MaxPayload || len(payload) > MaxBatchPlaintext-BatchMessageHeaderSize-size {
++			valid = false
++			break
++		}
++		size += BatchMessageHeaderSize + len(payload)
++	}
++	if !valid || !time.Now().Before(session.expiry) || ctx.Err() != nil {
++		session.traceStop(ctx, "FAMILY_CONTRACT")
++		session.stream.stop()
++		return ErrRejected
++	}
++	deadline := session.expiry
++	if bound, ok := ctx.Deadline(); ok {
++		deadline = minTime(deadline, bound)
++	}
++	session.connection.SetWriteDeadline(deadline)
++	stop := context.AfterFunc(ctx, func() { session.traceStop(ctx, "FAMILY_CONTEXT"); session.stream.stop() })
++	defer stop()
++	message := make([]byte, size)
++	offset := 0
++	for index, payload := range payloads {
++		binary.BigEndian.PutUint32(message[offset:], uint32(len(payload)))
++		binary.BigEndian.PutUint64(message[offset+4:], session.sendSequence+uint64(index))
++		copy(message[offset+BatchMessageHeaderSize:], payload)
++		offset += BatchMessageHeaderSize + len(payload)
++	}
++	if _, err := session.connection.Write(message); err != nil {
++		session.traceStop(ctx, "FAMILY_WRITE")
++		session.stream.stop()
++		return err
++	}
++	session.sendSequence += uint64(len(payloads))
++	return nil
++}
+--- /dev/null
++++ b/carrier/familysession/batch_test.go
+@@ -0,0 +1,75 @@
++package familysession
++
++import (
++	"bytes"
++	"context"
++	"testing"
++	"time"
++)
++
++func TestBatchLegacyReceiveAndBoundary(test *testing.T) {
++	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
++	defer cancel()
++	clientProfile, serverProfile := profiles(test)
++	client, server := connect(test, ctx, clientProfile, serverProfile)
++	payloads := [][]byte{[]byte("one"), nil, bytes.Repeat([]byte{7}, MaxBatchPlaintext-3*BatchMessageHeaderSize-3)}
++	done := make(chan error, 1)
++	go func() { done <- client.SendBatchContext(ctx, payloads) }()
++	for _, expected := range payloads {
++		received, err := server.Recv(ctx)
++		if err != nil || !bytes.Equal(received, expected) {
++			test.Fatalf("receive %d: %v", len(received), err)
++		}
++	}
++	if err := <-done; err != nil {
++		test.Fatal(err)
++	}
++	go func() { done <- client.SendContext(ctx, []byte("legacy-after-batch")) }()
++	received, err := server.Recv(ctx)
++	if err != nil || string(received) != "legacy-after-batch" {
++		test.Fatal(err)
++	}
++	if err := <-done; err != nil {
++		test.Fatal(err)
++	}
++	if client.sendSequence != 4 || server.recvSequence != 4 {
++		test.Fatal("sequence mismatch")
++	}
++}
++
++func TestBatchRejectionBeforeWrite(test *testing.T) {
++	for _, kind := range []string{"empty", "count", "bytes", "sequence", "expired", "cancelled"} {
++		test.Run(kind, func(test *testing.T) {
++			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
++			defer cancel()
++			clientProfile, serverProfile := profiles(test)
++			client, _ := connect(test, ctx, clientProfile, serverProfile)
++			payloads := [][]byte{[]byte("never sent")}
++			sendContext := ctx
++			switch kind {
++			case "empty":
++				payloads = nil
++			case "count":
++				payloads = make([][]byte, MaxBatchMessages+1)
++			case "bytes":
++				payloads = [][]byte{make([]byte, MaxBatchPlaintext)}
++			case "sequence":
++				client.sendSequence = ^uint64(0) - 1
++				payloads = [][]byte{nil, nil}
++			case "expired":
++				client.expiry = time.Now().Add(-time.Second)
++			case "cancelled":
++				var stop context.CancelFunc
++				sendContext, stop = context.WithCancel(ctx)
++				stop()
++			}
++			sequence := client.sendSequence
++			if err := client.SendBatchContext(sendContext, payloads); err != ErrRejected {
++				test.Fatalf("unexpected %v", err)
++			}
++			if client.sendSequence != sequence {
++				test.Fatal("invalid batch consumed sequence")
++			}
++		})
++	}
++}
+--- /dev/null
++++ b/carrier/tcpforward/batch_test.go
+@@ -0,0 +1,213 @@
++package tcpforward
++
++import (
++	"bytes"
++	"context"
++	"sync/atomic"
++	"testing"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/familysession"
++)
++
++type batchRecorder struct{ writes chan [][]byte }
++
++func (point *batchRecorder) SendContext(ctx context.Context, payload []byte) error {
++	return point.SendBatchContext(ctx, [][]byte{payload})
++}
++func (point *batchRecorder) SendBatchContext(ctx context.Context, payloads [][]byte) error {
++	select {
++	case point.writes <- payloads:
++		return nil
++	case <-ctx.Done():
++		return ctx.Err()
++	}
++}
++func (point *batchRecorder) Recv(ctx context.Context) ([]byte, error) {
++	<-ctx.Done()
++	return nil, ctx.Err()
++}
++func (point *batchRecorder) Close() error { return nil }
++
++func TestBatchAuthenticatedLossyMux(test *testing.T) {
++	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
++	defer cancel()
++	clientSession, serverSession := authenticatedPair(test, ctx)
++	port := muxFixture(test, muxEcho)
++	client, err := NewMux(ctx, clientSession, false, MuxConfig{MaxStreams: 4})
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer client.Close()
++	server, err := NewMux(ctx, serverSession, true, MuxConfig{MaxStreams: 4, Policy: Policy{TestOnlyLoopbackPort: port}})
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer server.Close()
++	streams := make([]*MuxStream, 3)
++	for index := range streams {
++		streams[index] = muxOpen(test, ctx, client, port)
++	}
++	done := make(chan error, len(streams))
++	for index, stream := range streams {
++		payload := bytes.Repeat([]byte{byte(index)}, 32<<10)
++		go func() { done <- exactMux(stream, payload) }()
++	}
++	for range streams {
++		if err := <-done; err != nil {
++			test.Fatal(err)
++		}
++	}
++	retransmissions := clientSession.ReliabilityStats().Retransmissions + serverSession.ReliabilityStats().Retransmissions
++	if retransmissions == 0 {
++		test.Fatal("loss fixture not exercised")
++	}
++	test.Logf("byte_exact=true loss_and_duplicates=true retransmissions=%d", retransmissions)
++}
++
++func queuedBatchMux(ctx context.Context, point *batchRecorder) *Mux {
++	ctx, cancel := context.WithCancel(ctx)
++	mux := &Mux{ctx: ctx, cancel: cancel, endpoint: point, batchSend: point.SendBatchContext, streams: make(map[uint32]*MuxStream), changed: make(chan struct{})}
++	for index := 0; index < 30; index++ {
++		id := uint32(1 + index*2)
++		stream := mux.makeStreamLocked(id)
++		stream.opened = true
++		stream.send = []muxFrame{{dataFrame, id, []byte{byte(index)}}}
++	}
++	for index := 0; index < 24; index++ {
++		mux.control = append(mux.control, muxFrame{resetFrame, 99, nil})
++	}
++	return mux
++}
++
++func TestBatchSchedulerOrderBoundsAndImmediate(test *testing.T) {
++	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
++	defer cancel()
++	point := &batchRecorder{writes: make(chan [][]byte, 64)}
++	expected := queuedBatchMux(ctx, point)
++	var wire [][]byte
++	for {
++		frame, ok := expected.nextLocked()
++		if !ok {
++			break
++		}
++		wire = append(wire, frame.encode())
++	}
++	mux := queuedBatchMux(ctx, point)
++	done := make(chan struct{})
++	go func() { mux.writeLoop(); close(done) }()
++	offset, batches := 0, 0
++	for offset < len(wire) {
++		select {
++		case frames := <-point.writes:
++			if len(frames) > familysession.MaxBatchMessages {
++				test.Fatal("message bound")
++			}
++			size := 0
++			for _, payload := range frames {
++				if offset >= len(wire) || !bytes.Equal(payload, wire[offset]) {
++					test.Fatal("scheduler order changed")
++				}
++				size += familysession.BatchMessageHeaderSize + len(payload)
++				offset++
++			}
++			if size > familysession.MaxBatchPlaintext {
++				test.Fatal("byte bound")
++			}
++			batches++
++		case <-ctx.Done():
++			test.Fatal("ready frames were delayed")
++		}
++	}
++	cancel()
++	<-done
++	if batches != 2 {
++		test.Fatalf("54 ready frames should use two writes: %d", batches)
++	}
++}
++
++type batchingPipe struct {
++	*packetPipe
++	calls atomic.Int32
++}
++
++func (point *batchingPipe) SendBatchContext(ctx context.Context, payloads [][]byte) error {
++	point.calls.Add(1)
++	for _, payload := range payloads {
++		if err := point.SendContext(ctx, payload); err != nil {
++			return err
++		}
++	}
++	return nil
++}
++
++func TestBatchMixedPeerBulkAndSlotRelease(test *testing.T) {
++	for _, sides := range []string{"client", "server", "both"} {
++		test.Run(sides, func(test *testing.T) {
++			port := muxFixture(test, muxEcho)
++			ctx, cancel := context.WithTimeout(context.Background(), 12*time.Second)
++			defer cancel()
++			left, right := pipePair()
++			var clientPoint, serverPoint familysession.PacketEndpoint = left, right
++			if sides != "server" {
++				clientPoint = &batchingPipe{packetPipe: left}
++			}
++			if sides != "client" {
++				serverPoint = &batchingPipe{packetPipe: right}
++			}
++			client := newMux(ctx, clientPoint, false, MuxConfig{MaxStreams: 1, WaitForSlot: true})
++			server := newMux(ctx, serverPoint, true, MuxConfig{MaxStreams: 1, Policy: Policy{TestOnlyLoopbackPort: port}})
++			defer client.Close()
++			defer server.Close()
++			for cycle := 0; cycle < 3; cycle++ {
++				stream := muxOpen(test, ctx, client, port)
++				if err := exactMux(stream, bytes.Repeat([]byte{byte(cycle)}, 128<<10)); err != nil {
++					test.Fatal(err)
++				}
++			}
++			deadline := time.Now().Add(time.Second)
++			for client.Stats().ActiveStreams != 0 || server.Stats().ActiveStreams != 0 {
++				if time.Now().After(deadline) {
++					test.Fatal("completed slots retained")
++				}
++				time.Sleep(time.Millisecond)
++			}
++		})
++	}
++}
++
++func TestBatchCarriedTerminalNotRemovedEarly(test *testing.T) {
++	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
++	defer cancel()
++	point := &batchRecorder{writes: make(chan [][]byte)}
++	mux := &Mux{ctx: ctx, cancel: cancel, endpoint: point, batchSend: point.SendBatchContext, streams: make(map[uint32]*MuxStream), changed: make(chan struct{})}
++	stream := mux.makeStreamLocked(1)
++	stream.terminal = ErrReset
++	stream.send = []muxFrame{{dataFrame, 1, make([]byte, 16330)}, {resetFrame, 1, nil}}
++	done := make(chan struct{})
++	go func() { mux.writeLoop(); close(done) }()
++	<-point.writes
++	mux.mu.Lock()
++	retained := mux.streams[1] != nil
++	mux.mu.Unlock()
++	if !retained {
++		test.Fatal("removed before terminal frame sent")
++	}
++	select {
++	case frames := <-point.writes:
++		frame, err := decodeMux(frames[0])
++		if err != nil || frame.kind != resetFrame {
++			test.Fatal("terminal lost")
++		}
++	case <-ctx.Done():
++		test.Fatal("carried terminal not sent")
++	}
++	cancel()
++	<-done
++	mux.mu.Lock()
++	remaining := len(mux.streams)
++	mux.mu.Unlock()
++	if remaining != 0 {
++		test.Fatal("terminal stream retained")
++	}
++}
+--- a/carrier/tcpforward/mux.go
++++ b/carrier/tcpforward/mux.go
+@@ -60,6 +60,7 @@
+ 	ctx           context.Context
+ 	cancel        context.CancelFunc
+ 	endpoint      familysession.PacketEndpoint
++	batchSend     func(context.Context, [][]byte) error
+ 	server        bool
+ 	config        MuxConfig
+ 	streams       map[uint32]*MuxStream
+@@ -128,6 +129,11 @@
+ 	ctx, cancel := context.WithCancel(parent)
+ 	mux := &Mux{ctx: ctx, cancel: cancel, endpoint: endpoint, server: server, config: config, streams: make(map[uint32]*MuxStream), nextID: 1, changed: make(chan struct{}), done: make(chan struct{}), jobs: make(chan struct{}, config.MaxStreams), lookup: net.DefaultResolver, dns: make(map[uint32]*dnsCall), dnsNext: 1, dnsJobs: make(chan struct{}, MuxMaxDNS)}
+ 	mux.leaseJobs = make(chan struct{}, 1)
++	if batch, ok := endpoint.(interface {
++		SendBatchContext(context.Context, [][]byte) error
++	}); ok {
++		mux.batchSend = batch.SendBatchContext
++	}
+ 	mux.dial = func(ctx context.Context, network, address string) (socket, error) {
+ 		connection, err := (&net.Dialer{KeepAlive: 30 * time.Second}).DialContext(ctx, network, address)
+ 		if err != nil {
+@@ -311,9 +317,34 @@
+ }
+ 
+ func (mux *Mux) writeLoop() {
++	var pending *muxFrame
+ 	for mux.ctx.Err() == nil {
+ 		mux.mu.Lock()
+-		frame, ok := mux.nextLocked()
++		var frame muxFrame
++		ok := pending != nil
++		if ok {
++			frame, pending = *pending, nil
++		} else {
++			frame, ok = mux.nextLocked()
++		}
++		var frames []muxFrame
++		if ok {
++			frames = append(frames, frame)
++			budget := familysession.BatchMessageHeaderSize + headerSize + len(frame.payload)
++			for mux.batchSend != nil && len(frames) < familysession.MaxBatchMessages && budget < familysession.MaxBatchPlaintext {
++				next, ready := mux.nextLocked()
++				if !ready {
++					break
++				}
++				cost := familysession.BatchMessageHeaderSize + headerSize + len(next.payload)
++				if budget+cost > familysession.MaxBatchPlaintext {
++					pending = &next
++					break
++				}
++				frames = append(frames, next)
++				budget += cost
++			}
++		}
+ 		changed := mux.changed
+ 		mux.mu.Unlock()
+ 		if !ok {
+@@ -323,14 +354,27 @@
+ 			}
+ 			continue
+ 		}
+-		if err := mux.endpoint.SendContext(mux.ctx, frame.encode()); err != nil {
++		var err error
++		if len(frames) == 1 {
++			err = mux.endpoint.SendContext(mux.ctx, frame.encode())
++		} else {
++			payloads := make([][]byte, len(frames))
++			for index, current := range frames {
++				payloads[index] = current.encode()
++			}
++			err = mux.batchSend(mux.ctx, payloads)
++		}
++		if err != nil {
+ 			mux.fail(err)
+ 			return
+ 		}
+ 		mux.mu.Lock()
+-		mux.stats.SchedulerFrames++
+-		if stream := mux.streams[frame.id]; stream != nil && stream.terminal != nil && len(stream.send) == 0 {
+-			mux.removeLocked(frame.id)
++		mux.stats.SchedulerFrames += uint64(len(frames))
++		for _, current := range frames {
++			terminal := current.kind == resetFrame || current.kind == closeFrame || current.kind == openError
++			if stream := mux.streams[current.id]; terminal && stream != nil && stream.terminal != nil && len(stream.send) == 0 {
++				mux.removeLocked(current.id)
++			}
+ 		}
+ 		mux.measureLocked()
+ 		mux.signalLocked()
+--- a/carrier/tcpforward/mux_stream.go
++++ b/carrier/tcpforward/mux_stream.go
+@@ -7,6 +7,8 @@
+ 	"io"
+ 	"sync"
+ 	"time"
++
++	"github.com/Joker20380/family_connect/carrier/familysession"
+ )
+ 
+ type MuxStream struct {
+@@ -213,7 +215,11 @@
+ 			return total, io.ErrClosedPipe
+ 		}
+ 		if stream.opened && len(stream.send) == 0 && stream.sendCredit > 0 {
+-			count := min(len(payload), MaxData, stream.sendCredit)
++			chunk := MaxData
++			if mux.batchSend != nil {
++				chunk = min(chunk, familysession.MaxBatchPlaintext-familysession.BatchMessageHeaderSize-headerSize)
++			}
++			count := min(len(payload), chunk, stream.sendCredit)
+ 			stream.sendCredit -= count
+ 			stream.sendHighWater = max(stream.sendHighWater, count)
+ 			stream.send = append(stream.send, muxFrame{dataFrame, stream.id, bytes.Clone(payload[:count])})
+--- a/clients/android/app/build.gradle
++++ b/clients/android/app/build.gradle
+@@ -108,7 +108,7 @@
+             }
+         }
+         if (variant.buildType.name == 'researchProvisioning') {
+-            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-ui60-4-admission1' }
++            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-ui60-4-batch1' }
+         }
+     }
+ }

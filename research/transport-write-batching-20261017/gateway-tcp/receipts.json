@@ -1,0 +1,26 @@
+[
+  {
+    "label": "tcp-envelope",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 11.004,
+    "max_cpu_celsius": 67.0,
+    "log_sha256": "cf3bd048c95044642cf85d68f74f029067fedf0da67fba17d72fb702658c421d"
+  },
+  {
+    "label": "changed-scope-normal",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 8.005,
+    "max_cpu_celsius": 63.0,
+    "log_sha256": "0733b3fe2d51d3f2325af39c066f9da509b22bd6d436be8a57a151187df47e5b"
+  },
+  {
+    "label": "changed-scope-race",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 17.059,
+    "max_cpu_celsius": 71.0,
+    "log_sha256": "b1a06b723f4ee2e4defd48644002e25ef1de8625359c3ab59c6dbb250d9f613d"
+  }
+]

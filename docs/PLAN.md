@@ -8,6 +8,24 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### TRANSPORT-WRITE-BATCHING-1 — local gate complete; paired rollout next (17.10)
+
+- [Ready-write implementation and unsigned build complete](releases/2026-10-17-transport-write-batching-1.md):
+  six-file client delta from exact admission1, matching gateway carrier delta, UI and
+  security unchanged. Version `0.1.18-research84-ui60-4-batch1`, code84, not installed.
+- Local fixed TCP comparison shows4561→980ms median at synthetic80ms RTT; byte-exact,
+  not measured mobile throughput. Normal/race/loss and100 JVM/JNI/build checks pass;
+  inherited race-fixture deadline failures and test-only clock adjustment stay visible.
+- A64-slot fixture proves ordinary closure releases capacity, not that every owner
+  keepalive state is harmless. Do not force-close idle streams or increase caps/windows
+  to hide the remaining admission waits; all37 overnight mux errors are not explained.
+- Next authorized rollout must preserve the current pair, verify fresh security/runtime
+  readiness and scheduling, then use compatible same-code/signer private installation
+  and coordinated gateway replacement. No install, signing, CONNECT or deployment here.
+- After an agreed rollout, compare a small timed download on the same mobile underlay;
+  do not promise the fixture's4.65× on real sites. First failure → normal OFF/evidence,
+  not repeated restart/reinstall. Field, handoff, supervisor and release stay separate.
+
 ### ADMISSION-OVERNIGHT-EXPORT12-1 — identify slot retention before another fix (17.10)
 
 - [Fresh mobile export analysed](releases/2026-10-17-admission-overnight-export12-1.md):

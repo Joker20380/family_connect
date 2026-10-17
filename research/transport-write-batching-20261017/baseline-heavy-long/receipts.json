@@ -1,0 +1,10 @@
+[
+  {
+    "label": "inherited-race-32-bounded-overlay",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 24.007,
+    "max_cpu_celsius": 82.0,
+    "log_sha256": "bbf4a010489f10a9264530ab960e44ac5060a2cf7d85c0ac8a998026b1b792c9"
+  }
+]

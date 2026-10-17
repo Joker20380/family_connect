@@ -1,0 +1,25 @@
+{
+  "client_delta": [
+    "carrier/familysession/batch.go",
+    "carrier/familysession/batch_test.go",
+    "carrier/tcpforward/batch_test.go",
+    "carrier/tcpforward/mux.go",
+    "carrier/tcpforward/mux_stream.go",
+    "clients/android/app/build.gradle"
+  ],
+  "gateway_delta": [
+    "familysession/batch.go",
+    "familysession/batch_test.go",
+    "tcpforward/batch_test.go",
+    "tcpforward/mux.go",
+    "tcpforward/mux_stream.go"
+  ],
+  "source_inventory": "cdd089478624ff5113d14590a340092684127a674565c3acfe6750aa76a17790",
+  "gateway_inventory": "aeeb6755bd235160127cfed67da4a870ae340cfebe89fc6d0f937908607d9483",
+  "product_patch_sha256": "183643b58321289b5cbb092d7004704dcfb73c28b49344ed9e4e230d95fcfdf9",
+  "parent_sources_preserved": true,
+  "reliable_media_admission_security_unchanged": true,
+  "ui_unchanged": true,
+  "jni_contract_unchanged": true,
+  "xray_unchanged": true
+}

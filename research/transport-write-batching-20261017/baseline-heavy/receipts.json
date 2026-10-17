@@ -1,0 +1,10 @@
+[
+  {
+    "label": "inherited-race-32",
+    "reason": "command_exit",
+    "exit": 1,
+    "elapsed_seconds": 20.049,
+    "max_cpu_celsius": 62.0,
+    "log_sha256": "79248daa2beab77aecd47a95cb924fdbb3c7be6ededee10e4d16b4bf78dd98e1"
+  }
+]

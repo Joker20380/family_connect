@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+## TRANSPORT-WRITE-BATCHING-1 — local speed candidate, not installed (17.10)
+
+[Implemented and built](releases/2026-10-17-transport-write-batching-1.md): ready-only
+Family/mux aggregation and TLS-aligned chunks; no added wait, cap/window/deadline or
+security change. Exact parent admission1 retained. Four local TCP/TLS echo flows with
+synthetic80ms RTT: median4561→980ms, byte-exact; not a mobile speed measurement.
+Normal/race loss/mixed-peer/admission checks, JNI/full assemble/100 JVM tests PASS.
+Initial inherited15s race fixture fails both parent/candidate under CPU50%; bounded
+test-only60s comparison passes both. Original failures and generated-report seal
+reconciliation retained, no product timeout or provenance bypass.
+Unsigned APK56b3c958/native dd722ead/gateway4b722d2d; private code84 `ui60-4-batch1`.
+Client inventory cdd08947, gateway inventory aeeb6755. Last installed APK761430c0 and
+gateway079729e4 unchanged by this task; no fresh live read. Phone untouched, last
+export VPN CONNECTED, not newly OFF. Test peak82°C/build73°C, no emulator.
+Next: separately coordinate a private paired rollout and timed mobile download after
+fresh readiness/backup checks. Idle64-slot waits/all37 mux errors remain unresolved;
+no new CONNECT, field/supervisor/handoff/release acceptance. Public links unchanged.
+
 ## ADMISSION-OVERNIGHT-EXPORT12-1 — admission waits and separate restarts (17.10)
 
 [Night export12 analysis](releases/2026-10-17-admission-overnight-export12-1.md):

@@ -1,5 +1,10 @@
 # Documentation
 
+[Ready-write transport modernization17.10](releases/2026-10-17-transport-write-batching-1.md):
+implemented bounded Family/mux batching, local byte-exact TCP latency comparison and
+new unsigned APK/gateway. No mobile-speed acceptance or live change.
+[Source delta, fixtures, runner and retained failures](../research/transport-write-batching-20261017/README.md).
+
 [Overnight mobile export12,17.10](releases/2026-10-17-admission-overnight-export12-1.md):
 29 admission waits/9 timeouts; separate exact-session server restarts and successful
 automatic restoration. Partial cause, not measured bandwidth or release acceptance.

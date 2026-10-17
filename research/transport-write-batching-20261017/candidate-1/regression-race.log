@@ -1,0 +1,128 @@
+=== RUN   TestBatchLegacyReceiveAndBoundary
+--- PASS: TestBatchLegacyReceiveAndBoundary (0.15s)
+=== RUN   TestBatchRejectionBeforeWrite
+=== RUN   TestBatchRejectionBeforeWrite/empty
+=== RUN   TestBatchRejectionBeforeWrite/count
+=== RUN   TestBatchRejectionBeforeWrite/bytes
+=== RUN   TestBatchRejectionBeforeWrite/sequence
+=== RUN   TestBatchRejectionBeforeWrite/expired
+=== RUN   TestBatchRejectionBeforeWrite/cancelled
+--- PASS: TestBatchRejectionBeforeWrite (0.82s)
+    --- PASS: TestBatchRejectionBeforeWrite/empty (0.14s)
+    --- PASS: TestBatchRejectionBeforeWrite/count (0.15s)
+    --- PASS: TestBatchRejectionBeforeWrite/bytes (0.14s)
+    --- PASS: TestBatchRejectionBeforeWrite/sequence (0.12s)
+    --- PASS: TestBatchRejectionBeforeWrite/expired (0.13s)
+    --- PASS: TestBatchRejectionBeforeWrite/cancelled (0.14s)
+=== RUN   TestCanonicalMatrixAndCancellation
+--- PASS: TestCanonicalMatrixAndCancellation (0.54s)
+=== RUN   TestAdmissionFailures
+=== RUN   TestAdmissionFailures/wrong-family
+=== RUN   TestAdmissionFailures/stale-revision
+=== RUN   TestAdmissionFailures/wrong-gateway
+=== RUN   TestAdmissionFailures/unknown-authority
+=== RUN   TestAdmissionFailures/stale-crl
+=== RUN   TestAdmissionFailures/bad-crl
+=== RUN   TestAdmissionFailures/bad-key
+=== RUN   TestAdmissionFailures/role
+=== RUN   TestAdmissionFailures/expired-certificate
+--- PASS: TestAdmissionFailures (1.45s)
+    --- PASS: TestAdmissionFailures/wrong-family (0.13s)
+    --- PASS: TestAdmissionFailures/stale-revision (0.13s)
+    --- PASS: TestAdmissionFailures/wrong-gateway (0.12s)
+    --- PASS: TestAdmissionFailures/unknown-authority (0.14s)
+    --- PASS: TestAdmissionFailures/stale-crl (0.21s)
+    --- PASS: TestAdmissionFailures/bad-crl (0.21s)
+    --- PASS: TestAdmissionFailures/bad-key (0.22s)
+    --- PASS: TestAdmissionFailures/role (0.14s)
+    --- PASS: TestAdmissionFailures/expired-certificate (0.14s)
+=== RUN   TestExpiredLeaseAndBounds
+=== RUN   TestExpiredLeaseAndBounds/expired
+=== RUN   TestExpiredLeaseAndBounds/oversized
+=== RUN   TestExpiredLeaseAndBounds/repeated-sequence
+=== RUN   TestExpiredLeaseAndBounds/cancel-read
+=== RUN   TestExpiredLeaseAndBounds/deadline-read
+--- PASS: TestExpiredLeaseAndBounds (0.79s)
+    --- PASS: TestExpiredLeaseAndBounds/expired (0.13s)
+    --- PASS: TestExpiredLeaseAndBounds/oversized (0.15s)
+    --- PASS: TestExpiredLeaseAndBounds/repeated-sequence (0.14s)
+    --- PASS: TestExpiredLeaseAndBounds/cancel-read (0.15s)
+    --- PASS: TestExpiredLeaseAndBounds/deadline-read (0.21s)
+=== RUN   TestTLSRecordReplayRejected
+--- PASS: TestTLSRecordReplayRejected (0.05s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/familysession	4.872s
+=== RUN   TestAdmissionFIFOAndCancellation
+--- PASS: TestAdmissionFIFOAndCancellation (0.01s)
+=== RUN   TestAdmissionQueueBoundAndShutdown
+--- PASS: TestAdmissionQueueBoundAndShutdown (0.04s)
+=== RUN   TestAdmissionDeadlineAndImmediateCounter
+--- PASS: TestAdmissionDeadlineAndImmediateCounter (0.00s)
+=== RUN   TestAdmissionLeaseReserveAndUnconfiguredPeer
+=== RUN   TestAdmissionLeaseReserveAndUnconfiguredPeer/reserved
+=== RUN   TestAdmissionLeaseReserveAndUnconfiguredPeer/unconfigured
+--- PASS: TestAdmissionLeaseReserveAndUnconfiguredPeer (0.02s)
+    --- PASS: TestAdmissionLeaseReserveAndUnconfiguredPeer/reserved (0.02s)
+    --- PASS: TestAdmissionLeaseReserveAndUnconfiguredPeer/unconfigured (0.00s)
+=== RUN   TestBatchSchedulerOrderBoundsAndImmediate
+--- PASS: TestBatchSchedulerOrderBoundsAndImmediate (0.00s)
+=== RUN   TestBatchMixedPeerBulkAndSlotRelease
+=== RUN   TestBatchMixedPeerBulkAndSlotRelease/client
+=== RUN   TestBatchMixedPeerBulkAndSlotRelease/server
+=== RUN   TestBatchMixedPeerBulkAndSlotRelease/both
+--- PASS: TestBatchMixedPeerBulkAndSlotRelease (0.60s)
+    --- PASS: TestBatchMixedPeerBulkAndSlotRelease/client (0.19s)
+    --- PASS: TestBatchMixedPeerBulkAndSlotRelease/server (0.14s)
+    --- PASS: TestBatchMixedPeerBulkAndSlotRelease/both (0.27s)
+=== RUN   TestBatchCarriedTerminalNotRemovedEarly
+--- PASS: TestBatchCarriedTerminalNotRemovedEarly (0.00s)
+=== RUN   TestMuxDNSOutstandingLimitAndRelease
+--- PASS: TestMuxDNSOutstandingLimitAndRelease (0.00s)
+=== RUN   TestMuxMalformedWireBounds
+--- PASS: TestMuxMalformedWireBounds (0.00s)
+=== RUN   TestMuxTerminalTransitionsIsolated
+=== RUN   TestMuxTerminalTransitionsIsolated/4
+=== RUN   TestMuxTerminalTransitionsIsolated/5
+--- PASS: TestMuxTerminalTransitionsIsolated (0.00s)
+    --- PASS: TestMuxTerminalTransitionsIsolated/4 (0.00s)
+    --- PASS: TestMuxTerminalTransitionsIsolated/5 (0.00s)
+=== RUN   TestMuxAuthenticatedLossReorderDuplicate
+--- PASS: TestMuxAuthenticatedLossReorderDuplicate (1.34s)
+=== RUN   TestMuxConnectFailuresDoNotKillSibling
+=== RUN   TestMuxConnectFailuresDoNotKillSibling/connection_refused
+=== RUN   TestMuxConnectFailuresDoNotKillSibling/context_deadline_exceeded
+=== RUN   TestMuxConnectFailuresDoNotKillSibling/context_canceled
+--- PASS: TestMuxConnectFailuresDoNotKillSibling (0.01s)
+    --- PASS: TestMuxConnectFailuresDoNotKillSibling/connection_refused (0.00s)
+    --- PASS: TestMuxConnectFailuresDoNotKillSibling/context_deadline_exceeded (0.00s)
+    --- PASS: TestMuxConnectFailuresDoNotKillSibling/context_canceled (0.00s)
+=== RUN   TestMuxCollisionStaleAndExhaustion
+--- PASS: TestMuxCollisionStaleAndExhaustion (0.00s)
+=== RUN   TestMuxDNSAnswersDuplicateAndMismatch
+=== RUN   TestMuxDNSAnswersDuplicateAndMismatch/TypeA
+=== RUN   TestMuxDNSAnswersDuplicateAndMismatch/TypeAAAA
+=== RUN   TestMuxDNSAnswersDuplicateAndMismatch/TypeCNAME
+--- PASS: TestMuxDNSAnswersDuplicateAndMismatch (0.00s)
+    --- PASS: TestMuxDNSAnswersDuplicateAndMismatch/TypeA (0.00s)
+    --- PASS: TestMuxDNSAnswersDuplicateAndMismatch/TypeAAAA (0.00s)
+    --- PASS: TestMuxDNSAnswersDuplicateAndMismatch/TypeCNAME (0.00s)
+=== RUN   TestMuxOpenCloseCancellationStress
+--- PASS: TestMuxOpenCloseCancellationStress (0.24s)
+=== RUN   TestMuxGlobalBlockedWriterShutdown
+--- PASS: TestMuxGlobalBlockedWriterShutdown (0.00s)
+=== RUN   TestMuxConcurrentExactSegmentation
+=== RUN   TestMuxConcurrentExactSegmentation/1
+=== RUN   TestMuxConcurrentExactSegmentation/4
+=== RUN   TestMuxConcurrentExactSegmentation/8
+=== RUN   TestMuxConcurrentExactSegmentation/16
+=== RUN   TestMuxConcurrentExactSegmentation/32
+    mux_test.go:147: TCP forwarding reset
+--- FAIL: TestMuxConcurrentExactSegmentation (24.81s)
+    --- PASS: TestMuxConcurrentExactSegmentation/1 (0.19s)
+    --- PASS: TestMuxConcurrentExactSegmentation/4 (0.84s)
+    --- PASS: TestMuxConcurrentExactSegmentation/8 (2.19s)
+    --- PASS: TestMuxConcurrentExactSegmentation/16 (6.50s)
+    --- FAIL: TestMuxConcurrentExactSegmentation/32 (15.09s)
+FAIL
+FAIL	github.com/Joker20380/family_connect/carrier/tcpforward	27.116s
+FAIL

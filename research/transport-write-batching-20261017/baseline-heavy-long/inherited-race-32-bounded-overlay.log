@@ -1,0 +1,6 @@
+=== RUN   TestMuxConcurrentExactSegmentation
+=== RUN   TestMuxConcurrentExactSegmentation/32
+--- PASS: TestMuxConcurrentExactSegmentation (17.51s)
+    --- PASS: TestMuxConcurrentExactSegmentation/32 (17.51s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/tcpforward	18.562s

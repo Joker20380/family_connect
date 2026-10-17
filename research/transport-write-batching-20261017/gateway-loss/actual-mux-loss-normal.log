@@ -1,0 +1,8 @@
+=== RUN   TestBatchAuthenticatedLossyMux
+    batch_test.go:65: byte_exact=true loss_and_duplicates=true retransmissions=14
+--- PASS: TestBatchAuthenticatedLossyMux (0.17s)
+=== RUN   TestBatchAuthenticatedLossyMux
+    batch_test.go:65: byte_exact=true loss_and_duplicates=true retransmissions=14
+--- PASS: TestBatchAuthenticatedLossyMux (0.12s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/tcpforward	0.291s

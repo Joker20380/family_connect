@@ -1,0 +1,9 @@
+{
+  "initial_postbuild_seal": "REJECTED_GENERATED_GRADLE_REPORT",
+  "generated_sha256": "926a6845ff1791611283b8ca8611e5b62d3d15319ed4ffd5c7b384562052f3fb",
+  "preserved_as": "build/gradle-generated/problems-report.html",
+  "post_relocation_exit": 1,
+  "expected_extra_path": "clients/android/build/reports/problems/problems-report.html",
+  "output": "",
+  "source_inventory_unchanged": false
+}

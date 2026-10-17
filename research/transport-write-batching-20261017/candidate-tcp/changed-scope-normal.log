@@ -1,0 +1,96 @@
+=== RUN   TestBatchLegacyReceiveAndBoundary
+--- PASS: TestBatchLegacyReceiveAndBoundary (0.11s)
+=== RUN   TestBatchRejectionBeforeWrite
+=== RUN   TestBatchRejectionBeforeWrite/empty
+=== RUN   TestBatchRejectionBeforeWrite/count
+=== RUN   TestBatchRejectionBeforeWrite/bytes
+=== RUN   TestBatchRejectionBeforeWrite/sequence
+=== RUN   TestBatchRejectionBeforeWrite/expired
+=== RUN   TestBatchRejectionBeforeWrite/cancelled
+--- PASS: TestBatchRejectionBeforeWrite (0.66s)
+    --- PASS: TestBatchRejectionBeforeWrite/empty (0.11s)
+    --- PASS: TestBatchRejectionBeforeWrite/count (0.11s)
+    --- PASS: TestBatchRejectionBeforeWrite/bytes (0.11s)
+    --- PASS: TestBatchRejectionBeforeWrite/sequence (0.11s)
+    --- PASS: TestBatchRejectionBeforeWrite/expired (0.11s)
+    --- PASS: TestBatchRejectionBeforeWrite/cancelled (0.11s)
+=== RUN   TestCanonicalMatrixAndCancellation
+--- PASS: TestCanonicalMatrixAndCancellation (0.20s)
+=== RUN   TestAdmissionFailures
+=== RUN   TestAdmissionFailures/wrong-family
+=== RUN   TestAdmissionFailures/stale-revision
+=== RUN   TestAdmissionFailures/wrong-gateway
+=== RUN   TestAdmissionFailures/unknown-authority
+=== RUN   TestAdmissionFailures/stale-crl
+=== RUN   TestAdmissionFailures/bad-crl
+=== RUN   TestAdmissionFailures/bad-key
+=== RUN   TestAdmissionFailures/role
+=== RUN   TestAdmissionFailures/expired-certificate
+--- PASS: TestAdmissionFailures (1.25s)
+    --- PASS: TestAdmissionFailures/wrong-family (0.10s)
+    --- PASS: TestAdmissionFailures/stale-revision (0.11s)
+    --- PASS: TestAdmissionFailures/wrong-gateway (0.11s)
+    --- PASS: TestAdmissionFailures/unknown-authority (0.10s)
+    --- PASS: TestAdmissionFailures/stale-crl (0.20s)
+    --- PASS: TestAdmissionFailures/bad-crl (0.20s)
+    --- PASS: TestAdmissionFailures/bad-key (0.20s)
+    --- PASS: TestAdmissionFailures/role (0.11s)
+    --- PASS: TestAdmissionFailures/expired-certificate (0.11s)
+=== RUN   TestExpiredLeaseAndBounds
+=== RUN   TestExpiredLeaseAndBounds/expired
+=== RUN   TestExpiredLeaseAndBounds/oversized
+=== RUN   TestExpiredLeaseAndBounds/repeated-sequence
+=== RUN   TestExpiredLeaseAndBounds/cancel-read
+=== RUN   TestExpiredLeaseAndBounds/deadline-read
+--- PASS: TestExpiredLeaseAndBounds (0.57s)
+    --- PASS: TestExpiredLeaseAndBounds/expired (0.11s)
+    --- PASS: TestExpiredLeaseAndBounds/oversized (0.11s)
+    --- PASS: TestExpiredLeaseAndBounds/repeated-sequence (0.11s)
+    --- PASS: TestExpiredLeaseAndBounds/cancel-read (0.11s)
+    --- PASS: TestExpiredLeaseAndBounds/deadline-read (0.12s)
+=== RUN   TestTLSRecordReplayRejected
+--- PASS: TestTLSRecordReplayRejected (0.00s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/familysession	2.793s
+=== RUN   TestAdmissionFIFOAndCancellation
+--- PASS: TestAdmissionFIFOAndCancellation (0.00s)
+=== RUN   TestAdmissionQueueBoundAndShutdown
+--- PASS: TestAdmissionQueueBoundAndShutdown (0.04s)
+=== RUN   TestAdmissionDeadlineAndImmediateCounter
+--- PASS: TestAdmissionDeadlineAndImmediateCounter (0.00s)
+=== RUN   TestAdmissionLeaseReserveAndUnconfiguredPeer
+=== RUN   TestAdmissionLeaseReserveAndUnconfiguredPeer/reserved
+=== RUN   TestAdmissionLeaseReserveAndUnconfiguredPeer/unconfigured
+--- PASS: TestAdmissionLeaseReserveAndUnconfiguredPeer (0.00s)
+    --- PASS: TestAdmissionLeaseReserveAndUnconfiguredPeer/reserved (0.00s)
+    --- PASS: TestAdmissionLeaseReserveAndUnconfiguredPeer/unconfigured (0.00s)
+=== RUN   TestBatchSchedulerOrderBoundsAndImmediate
+--- PASS: TestBatchSchedulerOrderBoundsAndImmediate (0.00s)
+=== RUN   TestBatchMixedPeerBulkAndSlotRelease
+=== RUN   TestBatchMixedPeerBulkAndSlotRelease/client
+=== RUN   TestBatchMixedPeerBulkAndSlotRelease/server
+=== RUN   TestBatchMixedPeerBulkAndSlotRelease/both
+--- PASS: TestBatchMixedPeerBulkAndSlotRelease (0.05s)
+    --- PASS: TestBatchMixedPeerBulkAndSlotRelease/client (0.03s)
+    --- PASS: TestBatchMixedPeerBulkAndSlotRelease/server (0.01s)
+    --- PASS: TestBatchMixedPeerBulkAndSlotRelease/both (0.01s)
+=== RUN   TestBatchCarriedTerminalNotRemovedEarly
+--- PASS: TestBatchCarriedTerminalNotRemovedEarly (0.00s)
+=== RUN   TestAuthenticatedReliableTCPNoDuplicateBytes
+    integration_test.go:209: gaps=27 recovered=27 retransmissions=27 duplicates_filtered=64
+    integration_test.go:209: gaps=27 recovered=27 retransmissions=27 duplicates_filtered=64
+--- PASS: TestAuthenticatedReliableTCPNoDuplicateBytes (0.24s)
+=== RUN   TestAuthenticationRequired
+--- PASS: TestAuthenticationRequired (0.00s)
+=== RUN   TestAuthenticatedImmediateResetPreservesOpen
+--- PASS: TestAuthenticatedImmediateResetPreservesOpen (0.01s)
+=== RUN   TestEndSiteTLSRemoteClosureBeforeTCPFIN
+--- PASS: TestEndSiteTLSRemoteClosureBeforeTCPFIN (0.00s)
+=== RUN   TestMuxLatencyEnvelope
+    mux_latency_test.go:111: flows=4 body_each=65536 byte_exact=true synthetic_one_way_ms=40 elapsed_ms=984 client_frames=91 server_frames=88 retransmits=0
+--- PASS: TestMuxLatencyEnvelope (1.62s)
+=== RUN   TestBrowserSlotsReleaseEnvelope
+    mux_latency_test.go:153: held=64 waiter=1 release_ms=0
+--- PASS: TestBrowserSlotsReleaseEnvelope (0.12s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/tcpforward	2.097s

@@ -1,0 +1,11 @@
+{
+  "initial_postbuild_seal": "REJECTED_GENERATED_GRADLE_REPORT",
+  "generated_sha256": "926a6845ff1791611283b8ca8611e5b62d3d15319ed4ffd5c7b384562052f3fb",
+  "preserved_as": "build/gradle-generated/problems-report.html",
+  "post_relocation_exit": 0,
+  "expected_extra_path": "clients/android/build/reports/problems/problems-report.html",
+  "inherited_nonproduct_report_restored": true,
+  "inherited_report_sha256": "9d6aa19f5e45a0e279a003b3f1934e9e457e6f7706108945aedb76692261e655",
+  "output": "{\"source\": \"cdd089478624ff5113d14590a340092684127a674565c3acfe6750aa76a17790\", \"gateway\": \"aeeb6755bd235160127cfed67da4a870ae340cfebe89fc6d0f937908607d9483\", \"files\": 6}\n",
+  "source_inventory_unchanged": true
+}

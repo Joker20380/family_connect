@@ -1,0 +1,26 @@
+[
+  {
+    "label": "envelope",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 5.002,
+    "max_cpu_celsius": 67.0,
+    "log_sha256": "10e1ae925109273611f175d41e913120fbf48ce31409dcaef07b144447cecc30"
+  },
+  {
+    "label": "regression-normal",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 14.054,
+    "max_cpu_celsius": 70.0,
+    "log_sha256": "e65afc73d68020b0aff93e42a8338315b63b15e19ac4b6a2e445ded452b34194"
+  },
+  {
+    "label": "regression-race",
+    "reason": "command_exit",
+    "exit": 1,
+    "elapsed_seconds": 40.014,
+    "max_cpu_celsius": 70.0,
+    "log_sha256": "a63ff3dbfae4e8bc38099dc54719e846d9c3dfe704b4f1a2847cfc102ef3e777"
+  }
+]

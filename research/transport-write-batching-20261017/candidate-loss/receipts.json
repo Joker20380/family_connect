@@ -1,0 +1,18 @@
+[
+  {
+    "label": "actual-mux-loss-normal",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 5.002,
+    "max_cpu_celsius": 67.0,
+    "log_sha256": "189b61cefb4bb40b77ef9c0a5cb1f11d6bb330a098f6817da57d607cc3cbe777"
+  },
+  {
+    "label": "actual-mux-loss-race",
+    "reason": "command_exit",
+    "exit": 0,
+    "elapsed_seconds": 7.011,
+    "max_cpu_celsius": 60.0,
+    "log_sha256": "905d34f9db5f2aafa0d1c3da5753e91d29df788e3f5ebe4692975074750096e6"
+  }
+]

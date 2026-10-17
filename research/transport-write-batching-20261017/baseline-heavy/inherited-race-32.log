@@ -1,0 +1,8 @@
+=== RUN   TestMuxConcurrentExactSegmentation
+=== RUN   TestMuxConcurrentExactSegmentation/32
+    mux_test.go:147: TCP forwarding reset
+--- FAIL: TestMuxConcurrentExactSegmentation (15.09s)
+    --- FAIL: TestMuxConcurrentExactSegmentation/32 (15.09s)
+FAIL
+FAIL	github.com/Joker20380/family_connect/carrier/tcpforward	15.132s
+FAIL

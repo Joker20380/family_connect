@@ -1,0 +1,491 @@
+{
+  "result": "PASS_LOCAL_BOUNDED_CANDIDATE_NOT_DEPLOYED",
+  "build": {
+    "result": "PASS_LOCAL_COMBINED_BUILD",
+    "version_name": "0.1.18-research84-ui60-4-batch1",
+    "version_code": 84,
+    "source_inventory": "cdd089478624ff5113d14590a340092684127a674565c3acfe6750aa76a17790",
+    "native_sha256": "dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23",
+    "unsigned_apk_sha256": "56b3c958f696d09d216e06b3128b194c5b8c7b9df21c1c2661ba1d8b18049db5",
+    "apk_size": 56007341,
+    "gateway_source_inventory": "aeeb6755bd235160127cfed67da4a870ae340cfebe89fc6d0f937908607d9483",
+    "gateway_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+    "gateway_dependencies_unchanged": true,
+    "gateway_executed": false,
+    "gateway_deployed": false,
+    "jvm_suites": [
+      {
+        "name": "com.familyconnect.app.AdmissionDiagnosticsTest",
+        "tests": "3",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.familyconnect.app.DiagnosticRingTest",
+        "tests": "5",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.familyconnect.app.RestrictedStartupTest",
+        "tests": "3",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.familyconnect.app.StartupFidelityTest",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.familyconnect.app.Ui60PresentationTest",
+        "tests": "3",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.familyconnect.app.CutoverRecoveryTest",
+        "tests": "14",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.familyconnect.app.RestrictedCacheTest",
+        "tests": "14",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.familyconnect.app.RestrictedRecoveryTest",
+        "tests": "5",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.familyconnect.app.RestrictedBootstrapTest",
+        "tests": "6",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.familyconnect.app.ReadinessProductTest",
+        "tests": "10",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.familyconnect.app.ConnectivityOrchestratorTest",
+        "tests": "29",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.familyconnect.app.FriendsReadinessProtocolTest",
+        "tests": "4",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      },
+      {
+        "name": "com.familyconnect.app.BootstrapCorrelationTest",
+        "tests": "2",
+        "failures": "0",
+        "errors": "0",
+        "skipped": "0"
+      }
+    ],
+    "runs": [
+      {
+        "label": "module",
+        "exit": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "native",
+        "exit": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "assemble-tests",
+        "exit": 0,
+        "log_sha256": "9dfc210a03ef15173a55a518bbd971a1463b8865da8d0cf8c03861b5bfebd417"
+      },
+      {
+        "label": "jni-java",
+        "exit": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "jni-c",
+        "exit": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "label": "gateway-build",
+        "exit": 0,
+        "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "batch": "baseline-1",
+      "label": "envelope",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 11.004,
+      "max_cpu_celsius": 70.0,
+      "log_sha256": "47b4fe0a49dc75fb5b4721db7770e0a42ff70112f68ffe3b34786516df880bca",
+      "top_level_passes": 3,
+      "top_level_skips": 0,
+      "top_level_failures": 0
+    },
+    {
+      "batch": "candidate-1",
+      "label": "envelope",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 5.002,
+      "max_cpu_celsius": 67.0,
+      "log_sha256": "10e1ae925109273611f175d41e913120fbf48ce31409dcaef07b144447cecc30",
+      "top_level_passes": 3,
+      "top_level_skips": 0,
+      "top_level_failures": 0
+    },
+    {
+      "batch": "candidate-1",
+      "label": "regression-normal",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 14.054,
+      "max_cpu_celsius": 70.0,
+      "log_sha256": "e65afc73d68020b0aff93e42a8338315b63b15e19ac4b6a2e445ded452b34194",
+      "top_level_passes": 32,
+      "top_level_skips": 0,
+      "top_level_failures": 0
+    },
+    {
+      "batch": "candidate-1",
+      "label": "regression-race",
+      "reason": "command_exit",
+      "exit": 1,
+      "elapsed_seconds": 40.014,
+      "max_cpu_celsius": 70.0,
+      "log_sha256": "a63ff3dbfae4e8bc38099dc54719e846d9c3dfe704b4f1a2847cfc102ef3e777",
+      "top_level_passes": 22,
+      "top_level_skips": 0,
+      "top_level_failures": 1
+    },
+    {
+      "batch": "baseline-heavy",
+      "label": "inherited-race-32",
+      "reason": "command_exit",
+      "exit": 1,
+      "elapsed_seconds": 20.049,
+      "max_cpu_celsius": 62.0,
+      "log_sha256": "79248daa2beab77aecd47a95cb924fdbb3c7be6ededee10e4d16b4bf78dd98e1",
+      "top_level_passes": 0,
+      "top_level_skips": 0,
+      "top_level_failures": 1
+    },
+    {
+      "batch": "baseline-tcp",
+      "label": "tcp-envelope",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 21.035,
+      "max_cpu_celsius": 65.0,
+      "log_sha256": "8db97efba1a8dffdce0b76d93f94043de2bac20aa2739b1b86790c15c257e32f",
+      "top_level_passes": 6,
+      "top_level_skips": 0,
+      "top_level_failures": 0
+    },
+    {
+      "batch": "candidate-tcp",
+      "label": "tcp-envelope",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 10.004,
+      "max_cpu_celsius": 72.0,
+      "log_sha256": "414157f6f85f2bcbaca6cd9ddedf1c93dd73909060f83ae0f46f738df2d97f54",
+      "top_level_passes": 6,
+      "top_level_skips": 0,
+      "top_level_failures": 0
+    },
+    {
+      "batch": "candidate-tcp",
+      "label": "changed-scope-normal",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 7.003,
+      "max_cpu_celsius": 62.0,
+      "log_sha256": "078df78f88c520d91b4ac5cc711d24c5f8638eda14c6a4e5f9cf5b57cb627ba7",
+      "top_level_passes": 19,
+      "top_level_skips": 0,
+      "top_level_failures": 0
+    },
+    {
+      "batch": "candidate-tcp",
+      "label": "changed-scope-race",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 15.007,
+      "max_cpu_celsius": 70.0,
+      "log_sha256": "93213314a44d933a8b0a2178342661da30e4ef21b013ef1630c1f6b08d47fcb4",
+      "top_level_passes": 19,
+      "top_level_skips": 0,
+      "top_level_failures": 0
+    },
+    {
+      "batch": "baseline-heavy-long",
+      "label": "inherited-race-32-bounded-overlay",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 24.007,
+      "max_cpu_celsius": 82.0,
+      "log_sha256": "bbf4a010489f10a9264530ab960e44ac5060a2cf7d85c0ac8a998026b1b792c9",
+      "top_level_passes": 1,
+      "top_level_skips": 0,
+      "top_level_failures": 0
+    },
+    {
+      "batch": "candidate-heavy-long",
+      "label": "inherited-race-32-bounded-overlay",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 27.05,
+      "max_cpu_celsius": 68.0,
+      "log_sha256": "3edbc0489f5c6a55f0a73dcaf1becac1b006534f465e64ba9e40e2d1448a5b42",
+      "top_level_passes": 1,
+      "top_level_skips": 0,
+      "top_level_failures": 0
+    },
+    {
+      "batch": "gateway-tcp",
+      "label": "tcp-envelope",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 11.004,
+      "max_cpu_celsius": 67.0,
+      "log_sha256": "cf3bd048c95044642cf85d68f74f029067fedf0da67fba17d72fb702658c421d",
+      "top_level_passes": 6,
+      "top_level_skips": 0,
+      "top_level_failures": 0
+    },
+    {
+      "batch": "gateway-tcp",
+      "label": "changed-scope-normal",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 8.005,
+      "max_cpu_celsius": 63.0,
+      "log_sha256": "0733b3fe2d51d3f2325af39c066f9da509b22bd6d436be8a57a151187df47e5b",
+      "top_level_passes": 19,
+      "top_level_skips": 0,
+      "top_level_failures": 0
+    },
+    {
+      "batch": "gateway-tcp",
+      "label": "changed-scope-race",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 17.059,
+      "max_cpu_celsius": 71.0,
+      "log_sha256": "b1a06b723f4ee2e4defd48644002e25ef1de8625359c3ab59c6dbb250d9f613d",
+      "top_level_passes": 19,
+      "top_level_skips": 0,
+      "top_level_failures": 0
+    },
+    {
+      "batch": "candidate-loss",
+      "label": "actual-mux-loss-normal",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 5.002,
+      "max_cpu_celsius": 67.0,
+      "log_sha256": "189b61cefb4bb40b77ef9c0a5cb1f11d6bb330a098f6817da57d607cc3cbe777",
+      "top_level_passes": 2,
+      "top_level_skips": 0,
+      "top_level_failures": 0
+    },
+    {
+      "batch": "candidate-loss",
+      "label": "actual-mux-loss-race",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 7.011,
+      "max_cpu_celsius": 60.0,
+      "log_sha256": "905d34f9db5f2aafa0d1c3da5753e91d29df788e3f5ebe4692975074750096e6",
+      "top_level_passes": 2,
+      "top_level_skips": 0,
+      "top_level_failures": 0
+    },
+    {
+      "batch": "gateway-loss",
+      "label": "actual-mux-loss-normal",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 5.002,
+      "max_cpu_celsius": 66.0,
+      "log_sha256": "b4103ed623ee3059c6dd80dbf30183688a72d8124ffa1a06e60919b337ae98de",
+      "top_level_passes": 2,
+      "top_level_skips": 0,
+      "top_level_failures": 0
+    },
+    {
+      "batch": "gateway-loss",
+      "label": "actual-mux-loss-race",
+      "reason": "command_exit",
+      "exit": 0,
+      "elapsed_seconds": 7.004,
+      "max_cpu_celsius": 65.0,
+      "log_sha256": "102df51830c31ec7fa28f558a0c0173ed30dff2141060bbf3ade84552d0ef43e",
+      "top_level_passes": 2,
+      "top_level_skips": 0,
+      "top_level_failures": 0
+    }
+  ],
+  "tcp_synthetic_40ms_one_way": {
+    "baseline-tcp": [
+      {
+        "elapsed_ms": 4487,
+        "client_frames": 435,
+        "server_frames": 430,
+        "retransmits": 0
+      },
+      {
+        "elapsed_ms": 4728,
+        "client_frames": 458,
+        "server_frames": 453,
+        "retransmits": 0
+      },
+      {
+        "elapsed_ms": 4561,
+        "client_frames": 445,
+        "server_frames": 442,
+        "retransmits": 0
+      }
+    ],
+    "candidate-tcp": [
+      {
+        "elapsed_ms": 983,
+        "client_frames": 91,
+        "server_frames": 82,
+        "retransmits": 0
+      },
+      {
+        "elapsed_ms": 980,
+        "client_frames": 91,
+        "server_frames": 83,
+        "retransmits": 0
+      },
+      {
+        "elapsed_ms": 904,
+        "client_frames": 88,
+        "server_frames": 84,
+        "retransmits": 0
+      }
+    ],
+    "gateway-tcp": [
+      {
+        "elapsed_ms": 981,
+        "client_frames": 92,
+        "server_frames": 85,
+        "retransmits": 0
+      },
+      {
+        "elapsed_ms": 899,
+        "client_frames": 88,
+        "server_frames": 81,
+        "retransmits": 0
+      },
+      {
+        "elapsed_ms": 904,
+        "client_frames": 88,
+        "server_frames": 81,
+        "retransmits": 0
+      }
+    ]
+  },
+  "thermal": {
+    "reason": "command_exit",
+    "elapsed_seconds": 458.571,
+    "exit": 0,
+    "maximum_cpu_celsius": 73.0,
+    "cpu_quota": "50%",
+    "start_limit_celsius": 75,
+    "stop_limit_celsius": 85,
+    "emulator": false
+  },
+  "postbuild_seal": {
+    "initial_postbuild_seal": "REJECTED_GENERATED_GRADLE_REPORT",
+    "generated_sha256": "926a6845ff1791611283b8ca8611e5b62d3d15319ed4ffd5c7b384562052f3fb",
+    "preserved_as": "build/gradle-generated/problems-report.html",
+    "post_relocation_exit": 0,
+    "expected_extra_path": "clients/android/build/reports/problems/problems-report.html",
+    "inherited_nonproduct_report_restored": true,
+    "inherited_report_sha256": "9d6aa19f5e45a0e279a003b3f1934e9e457e6f7706108945aedb76692261e655",
+    "output": "{\"source\": \"cdd089478624ff5113d14590a340092684127a674565c3acfe6750aa76a17790\", \"gateway\": \"aeeb6755bd235160127cfed67da4a870ae340cfebe89fc6d0f937908607d9483\", \"files\": 6}\n",
+    "source_inventory_unchanged": true
+  },
+  "source_boundary": {
+    "client_delta": [
+      "carrier/familysession/batch.go",
+      "carrier/familysession/batch_test.go",
+      "carrier/tcpforward/batch_test.go",
+      "carrier/tcpforward/mux.go",
+      "carrier/tcpforward/mux_stream.go",
+      "clients/android/app/build.gradle"
+    ],
+    "gateway_delta": [
+      "familysession/batch.go",
+      "familysession/batch_test.go",
+      "tcpforward/batch_test.go",
+      "tcpforward/mux.go",
+      "tcpforward/mux_stream.go"
+    ],
+    "source_inventory": "cdd089478624ff5113d14590a340092684127a674565c3acfe6750aa76a17790",
+    "gateway_inventory": "aeeb6755bd235160127cfed67da4a870ae340cfebe89fc6d0f937908607d9483",
+    "product_patch_sha256": "183643b58321289b5cbb092d7004704dcfb73c28b49344ed9e4e230d95fcfdf9",
+    "parent_sources_preserved": true,
+    "reliable_media_admission_security_unchanged": true,
+    "ui_unchanged": true,
+    "jni_contract_unchanged": true,
+    "xray_unchanged": true
+  },
+  "limits": {
+    "initial_inherited_race_15s": "FAILED_BOTH_PARENT_AND_CANDIDATE",
+    "bounded_test_only_60s_overlay": "PASS_BOTH",
+    "production_timeouts": "UNCHANGED",
+    "phone_throughput": "NOT_MEASURED",
+    "all_idle_64_slot_waits": "NOT_FIXED_BY_BATCHING",
+    "overnight_mux_37_error_causes": "NOT_PROVEN",
+    "field_acceptance": "NOT_RUN"
+  },
+  "action_counts": {
+    "ssh": 0,
+    "adb": 0,
+    "connect": 0,
+    "export": 0,
+    "sign": 0,
+    "install": 0,
+    "rollback": 0,
+    "deploy": 0,
+    "restart": 0,
+    "maintenance": 0,
+    "emulator": 0,
+    "native_stats_pollers": 0
+  }
+}

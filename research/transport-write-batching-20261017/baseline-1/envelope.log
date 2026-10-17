@@ -1,0 +1,11 @@
+=== RUN   TestQueuedMessageEnvelope
+    batch_envelope_test.go:60: ENVELOPE batched=false bytes=98304 messages=256 data_frames=256 elapsed_ms=2607 model=40ms_each_way_no_loss
+--- PASS: TestQueuedMessageEnvelope (2.92s)
+=== RUN   TestQueuedMessageEnvelope
+    batch_envelope_test.go:60: ENVELOPE batched=false bytes=98304 messages=256 data_frames=256 elapsed_ms=2607 model=40ms_each_way_no_loss
+--- PASS: TestQueuedMessageEnvelope (2.92s)
+=== RUN   TestQueuedMessageEnvelope
+    batch_envelope_test.go:60: ENVELOPE batched=false bytes=98304 messages=256 data_frames=256 elapsed_ms=2611 model=40ms_each_way_no_loss
+--- PASS: TestQueuedMessageEnvelope (2.92s)
+PASS
+ok  	github.com/Joker20380/family_connect/carrier/familysession	8.764s

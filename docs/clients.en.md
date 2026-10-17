@@ -1,5 +1,16 @@
 # Client installation
 
+**New private candidate17.10, built only, NOT installed:**
+`0.1.18-research84-ui60-4-batch1`, code84, API31+/ARM64.
+[Changes, tests, full hashes and limits](releases/2026-10-17-transport-write-batching-1.md).
+Unsigned APK `56b3c958f696d09d216e06b3128b194c5b8c7b9df21c1c2661ba1d8b18049db5`;
+native `dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23`;
+gateway `4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7`.
+Not signed, delivered or deployed; the installed admission1 pair below is retained.
+Owner now reports sites opening but slow; overnight export12 was CELLULAR/CONNECTED,
+not a fresh final-OFF check. Local batching acceleration is not measured phone speed.
+Public links/catalog/invitations unchanged. Following entries are installation history.
+
 **Privately owner-installed17.10; browsing check still pending:** `0.1.18-research84-ui60-4-admission1`,
 code84, API31+/ARM64. [Changes, checks, identities and limits](releases/2026-10-17-browser-admission-fix-1.md).
 Unsigned APK `ff4a844f8de2df2aac4df5f7e5ec35ae10746033730177e3a9f19e8c0c35edda`;
