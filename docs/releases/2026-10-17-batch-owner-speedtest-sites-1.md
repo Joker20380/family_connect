@@ -45,3 +45,30 @@ Actions: documentation only. Product patches, tests/builds, emulator, signing,
 install/rollback, SSH/ADB, restart, maintenance, CONNECT and new export requests:0.
 No automatic rollback or deployment; no site-specific workaround, cap/RTO/queue
 change, acceptance promotion or release. **SPEED_IMPROVEMENT=NOT_MEASURED.**
+
+## Subsequent owner comparison — regression priority
+
+The owner explicitly reports that before the latest change all sites they tried
+opened, although slowly; after the change some of those sites no longer open.
+Treat this as **OWNER_REPORTED_REACHABILITY_REGRESSION_AFTER_BATCH1**, not merely
+an unidentified site-compatibility complaint. This is a qualitative before/after
+observation, not a controlled throughput benchmark or a proven code-level cause.
+The earlier statement that exact domains were not supplied remains factual, but
+they are neither required evidence from the owner nor a gate for engineering work.
+Do not ask again for domains, a new CONNECT or another export to accept the report.
+
+Priority is to restore the preceding version's observed reachability before pursuing
+more speed tuning. Compare retained admission1 against batch1, not root main or an
+older accepted APK. The narrow local source review confirms the recorded delta:
+three runtime carrier files (Family batch send, mux writer selection/terminal removal,
+and mux stream chunk sizing), two test files and the private version name. No new
+root-cause claim follows from this inspection; mixed-load/loss reproduction remains
+pending. Existing admission waits/recovery observations must not be used to dismiss
+the owner's before/after regression or assert that batching is harmless.
+
+No product changes or tests were executed in this clarification follow-up. No build,
+phone/server action, install/rollback or automatic deployment was performed. The
+first goal of a proposed correction is no lost reachability under the bounded local
+comparison, not a better clean-link benchmark alone. Real-device improvement still
+requires its own agreed verification; the current candidate is not accepted as a
+browsing or speed solution.

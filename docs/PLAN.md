@@ -8,8 +8,11 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
-### BATCH-OWNER-EXPORT13-1 — mixed pressure/recovery reproduction next (17.10)
+### BATCH-OWNER-EXPORT13-1 — restore reachability before speed tuning (17.10)
 
+- Treat the owner's before/after result as a reported batch1 reachability regression:
+  prior tried sites opened slowly, some now do not open. Do not require site names,
+  a new export or another owner CONNECT before investigating the last change.
 - [New owner result is browsing FAIL, speed unmeasured](releases/2026-10-17-batch-owner-export13-1.md):
   retain startup success separately;104 slot waits/5 admission timeouts and observed
   reliable head/window pressure do not identify the failed sites or all50 mux errors.
@@ -17,10 +20,10 @@ Verify reboot automount separately; no engineering release gate changes.
   loss and ACK delay on exact admission1/batch1 sources; record release/admission timing
   and error subtype before choosing a fix. No retry-until-pass or blanket suites.
 - [Owner clarified whole speed-test pages fail](releases/2026-10-17-batch-owner-speedtest-sites-1.md),
-  while YouTube/Telegram work slowly. Obtain exact site names and any existing
-  VPN-OFF observations; do not ask again about main page versus assets or require
-  another CONNECT. Missing domains do not block the local comparison; host traffic
-  is not phone traffic proof, and a speed-test page failure is not a UDP diagnosis.
+  while YouTube/Telegram work slowly. No further domain request; a failing page is
+  not a UDP diagnosis. Compare the last batching delta with retained admission1,
+  including writer selection/terminal removal and chunk sizing. A better clean-link
+  benchmark alone is not sufficient; restore reachability before claiming speed gains.
 - No automatic reinstall/rollback/restart, production cap/RTO/queue tuning or field
   trial. Last export VPN CONNECTED; final OFF not observed. Prior pair deployment
   remains complete but batch1 is not accepted as a browsing/speed solution.

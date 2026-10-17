@@ -2,6 +2,12 @@
 
 ## BATCH-OWNER-EXPORT13-1 — some sites fail; speed solution not accepted (17.10)
 
+[Owner's subsequent before/after comparison](releases/2026-10-17-batch-owner-speedtest-sites-1.md#subsequent-owner-comparison--regression-priority):
+before the latest change all tried sites opened slowly; after it some no longer open.
+Track OWNER_REPORTED_REACHABILITY_REGRESSION_AFTER_BATCH1. Restore reachability before
+further speed tuning; exact domains are not required and will not be requested again.
+Narrow local delta reviewed; mixed-load comparison/fix still pending. No live changes.
+
 [Later owner clarification](releases/2026-10-17-batch-owner-speedtest-sites-1.md):
 speed-test pages did not open at all; YouTube opened and Telegram worked, slowly.
 Partial reachability is owner-reported, not a measured rate or protocol diagnosis.
@@ -21,7 +27,7 @@ NRestarts0. No observed gateway interruption in this episode. Site attribution/m
 subtypes/batching causality remain open; no blind cap/window/timeout tuning.
 Two read-only SSH calls, no ADB/product/live changes. Phone last export CONNECTED,
 not newly OFF. Next: bounded mixed browser-pressure+loss local parent/candidate
-reproduction, and2–3 failed URL examples. No new installation/acceptance/release.
+regression reproduction without requiring URL examples. No new installation/acceptance/release.
 
 ## TRANSPORT-BATCH-MAINTENANCE-AND-ROLLOUT-1 — installed/deployed; speed pending (17.10)
 
