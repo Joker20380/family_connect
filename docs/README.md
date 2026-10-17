@@ -1,9 +1,9 @@
 # Documentation
 
 [Owner clarification17.10](releases/2026-10-17-batch-owner-speedtest-sites-1.md):
-previously tried sites opened slowly; after batch1 some no longer open. Reported
-reachability regression takes priority over speed tuning. No more domain requests,
-no measured speed or proven code-level cause; no new live actions.
+sites later open again after earlier failures; several services reportedly show
+about0.5Mbit/s in one unspecified direction and high ping. Intermittent reachability,
+owner-reported measurement without a saved receipt; no proven cause or new live actions.
 
 [Batch owner export13,17.10](releases/2026-10-17-batch-owner-export13-1.md):
 some sites fail again, subjective speed gain absent. Successful startup with104 slot

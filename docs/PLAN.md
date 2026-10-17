@@ -8,17 +8,22 @@ Verify reboot automount separately; no engineering release gate changes.
 
 ## Current engineering priority / Текущий critical path
 
-### BATCH-OWNER-EXPORT13-1 — restore reachability before speed tuning (17.10)
+### BATCH-OWNER-EXPORT13-1 — intermittent stalls, throughput and latency (17.10)
 
-- Treat the owner's before/after result as a reported batch1 reachability regression:
-  prior tried sites opened slowly, some now do not open. Do not require site names,
-  a new export or another owner CONNECT before investigating the last change.
+- Latest correction: sites open again; several services reportedly measured about
+  0.5Mbit/s in one unspecified direction and high ping. Preserve earlier failures,
+  but do not describe persistent blocking or a proved batching cause. No site-name,
+  new-export or owner-CONNECT prerequisite for investigating the last change.
 - [New owner result is browsing FAIL, speed unmeasured](releases/2026-10-17-batch-owner-export13-1.md):
   retain startup success separately;104 slot waits/5 admission timeouts and observed
   reliable head/window pressure do not identify the failed sites or all50 mux errors.
 - Locally combine browser-shaped concurrent/idle/closing TCP streams with directional
   loss and ACK delay on exact admission1/batch1 sources; record release/admission timing
-  and error subtype before choosing a fix. No retry-until-pass or blanket suites.
+  and error subtype before choosing a fix. Include interactive delay during bulk load;
+  do not optimize throughput alone. No retry-until-pass or blanket suites.
+- Keep reported rate separate from saved telemetry: direction, numeric latency and
+  idle-versus-loaded ping are unknown, and speed tests are not newly bound to N1.
+  Accept any already available clarification without requiring another live test.
 - [Owner clarified whole speed-test pages fail](releases/2026-10-17-batch-owner-speedtest-sites-1.md),
   while YouTube/Telegram work slowly. No further domain request; a failing page is
   not a UDP diagnosis. Compare the last batching delta with retained admission1,

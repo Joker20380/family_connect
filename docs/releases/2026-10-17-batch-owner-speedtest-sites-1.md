@@ -72,3 +72,32 @@ first goal of a proposed correction is no lost reachability under the bounded lo
 comparison, not a better clean-link benchmark alone. Real-device improvement still
 requires its own agreed verification; the current candidate is not accepted as a
 browsing or speed solution.
+
+## Later correction — pages open again; low rate and high latency
+
+The owner subsequently reports that the sites have started opening again. Speed
+measurements on several services reportedly show approximately **0.5Mbit/s in one
+direction**, with very high ping. This supersedes a claim of continuing page
+unavailability, but does not erase the earlier page-load failures or establish a fix.
+Track intermittent reachability together with low reported throughput/high latency;
+do not present persistent site blocking or a proved batching defect as established.
+
+The rate is now an **owner-reported service measurement**, not merely a subjective
+speed impression. Direction (download/upload), opposite-direction rate, numeric
+latency, idle-versus-loaded latency and test timing are not recorded. There is no
+saved response/result receipt or controlled before/after comparison. It is not valid
+to claim0.5Mbit/s in both directions, a quantified regression or measured improvement.
+
+No new export or exact session binding accompanies this correction. Export13's
+admission timeouts, recovery and window pressure remain earlier observations, not
+counters measured during these speed tests. They motivate local queue/recovery
+analysis but do not distinguish latency from the underlay, carrier, destination or
+queued traffic in these particular measurements. Do not infer a configured rate cap
+or increase production queues/windows/RTO blindly.
+
+Continue the bounded retained-parent/batch1 comparison, recording interactive delay
+alongside bulk transfer and stream release under load/loss. Neither clean-link speed
+alone nor pages reopening is acceptance. Site names remain unnecessary; any latency
+or direction clarification should use already obtained results, not another requested
+CONNECT or load test. Phone/server state has not been freshly observed. Documentation
+only in this correction; product/test/build/live actions:0.

@@ -1,6 +1,13 @@
 # Текущее состояние / Current state
 
-## BATCH-OWNER-EXPORT13-1 — some sites fail; speed solution not accepted (17.10)
+## BATCH-OWNER-EXPORT13-1 — intermittent reachability, low rate/high latency (17.10)
+
+[Latest owner correction](releases/2026-10-17-batch-owner-speedtest-sites-1.md#later-correction--pages-open-again-low-rate-and-high-latency):
+sites open again; several services reportedly measured about0.5Mbit/s in one unspecified
+direction and very high ping. Owner-reported measurement, not a saved result receipt;
+numeric/idle-versus-loaded latency and timing unknown. Earlier failures stay recorded,
+but persistent blocking is not established. No new export/session binding or live action.
+Compare loaded interactive delay and transfer/release behavior locally; not accepted.
 
 [Owner's subsequent before/after comparison](releases/2026-10-17-batch-owner-speedtest-sites-1.md#subsequent-owner-comparison--regression-priority):
 before the latest change all tried sites opened slowly; after it some no longer open.
