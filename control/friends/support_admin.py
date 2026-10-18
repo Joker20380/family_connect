@@ -9,7 +9,7 @@ import secrets
 
 from .access import Access
 from . import support_ids
-from .restricted import from_env
+from .restricted import admission_policy, bounded_file, from_env
 from .restricted_admin import grant, publish_crl
 
 
@@ -116,7 +116,8 @@ def main():
             if args.admission is None or args.support_id is None:
                 raise ValueError('Admission file and Support ID required')
             if args.action == 'lookup':
-                result = support_ids.lookup(access, args.support_id, admission(args.admission))
+                eligible_devices, all_activated = admission_policy(bounded_file(args.admission, 16384))
+                result = support_ids.lookup(access, args.support_id, eligible_devices or (), all_activated=all_activated)
             else:
                 expected = Path(os.environ['FC_FRIENDS_RESTRICTED_DIR']) / 'admission.json'
                 if args.admission.resolve() != expected.resolve():

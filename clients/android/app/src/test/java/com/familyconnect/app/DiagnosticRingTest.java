@@ -5,6 +5,15 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class DiagnosticRingTest {
+    @Test public void additiveMeshMetadataPreservesLegacyEventsAndExportSchema(){
+        DiagnosticRing ring=ring();ring.readiness(true,1);
+        JsonObject snapshot=ring.snapshot();
+        assertEquals(1,snapshot.get("schema").getAsInt());
+        assertEquals("MESH",snapshot.getAsJsonObject("transport_metadata").getAsJsonObject("restricted").get("name").getAsString());
+        assertEquals("restricted",snapshot.getAsJsonArray("events").get(0).getAsJsonObject().get("transport_class").getAsString());
+        assertEquals("READY",snapshot.getAsJsonArray("events").get(0).getAsJsonObject().get("reason_code").getAsString());
+        assertTrue(snapshot.has("transport_outcomes"));assertTrue(snapshot.has("device_support_id"));
+    }
     private DiagnosticRing ring(){return new DiagnosticRing("random-support-id","0.1.18-beta59",59,31);}
     private ConnectivityOrchestrator.Event event(String name,ConnectivityOrchestrator.State state,ConnectivityOrchestrator.Failure failure){return new ConnectivityOrchestrator.Event(name,"tcp",failure,state,123);}
     @Test public void capturesBothFailureTransitionsAndCorrelates(){

@@ -156,6 +156,7 @@ final class DiagnosticRing {
     }
     synchronized JsonObject snapshot(){
         JsonObject result=new JsonObject();result.addProperty("schema",1);result.addProperty("device_support_id",supportId);
+        result.add("transport_metadata",TransportPresentation.diagnostics());
         result.addProperty("connection_id",connectionId);result.addProperty("incident_id",incidentId);result.addProperty("app_version",version);
         result.addProperty("version_code",build);result.addProperty("os_api",os);result.addProperty("network_class",network);
         result.addProperty("state",state);result.addProperty("vpn_capture_open",vpn);result.addProperty("restricted_readiness",readiness);result.addProperty("bootstrap_directory",bootstrap);

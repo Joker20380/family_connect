@@ -1,5 +1,38 @@
 # Architecture map / Карта архитектуры
 
+## MESH product model
+
+Decision18.10.2026: **MESH — Media Encapsulated Secure Hop** is the product-facing
+name of Family Connect's existing secure media transport. Logical current path:
+
+`Family Connect → MESH → VP8/RTP → Telemost → Gateway`
+
+Transport, carrier and provider are different concepts: Family admission/TLS,
+ReliableStream and the existing mux form the protected data path; VP8/RTP carries
+its bytes through a media session provided by Telemost. The diagram describes
+today's implementation, not an architectural requirement to use this provider.
+Third-party dependencies and their licenses remain attributed. MESH does not
+currently implement peer discovery, multi-hop routing or decentralized networking.
+
+**Compatibility:** UI MESH → selector/persisted `telemost` → runtime `restricted`
+→ signed bootstrap seed `telemost-webrtc`. Keep these distinct legacy contracts;
+do not rewrite signed data or introduce `mesh/1`. `mesh` is a possible future
+canonical ID, not a negotiated or accepted replacement today. Device Identity,
+keys, entitlement, provisioning schemas, Auto order, timeouts and gateway profiles
+are unchanged by naming. Four-hour material renewal remains a separate workstream.
+
+**Platform boundary:** the reviewed Android UI84 already selects this media path.
+Root Android sources are older and must not replace its approved UI. Windows0.2.15
+and Linux0.2.11 product selectors/backends currently implement AWG/TCP only;
+a Go/Linux gateway or lab binary is not a Linux desktop client implementation.
+Adding a functioning desktop MESH option needs separately reviewed integration;
+no inert selector, fake capability or new fallback has been added.
+
+The canonical transport contract is in [carrier/README](../carrier/README.md#mesh-product-contract),
+the naming rationale in [ADR002](adr/002-mesh-product-name.md), and maturity in
+[STATUS](STATUS.md)/[PLAN](PLAN.md). Existing evidence below retains its original
+protocol, provider and gate names, dates and limitations.
+
 ## Попытка №3 — closed runtime live PASS, API rollout откачен
 
 01.10.2026, source `2705db4`: NL READY и canonical UTC-Z → Python PASS;
@@ -320,7 +353,7 @@ and [metrics/phases](PLAN.md) distinguish code, physical proof and distribution.
 
 ### Replaceable adapters and security
 
-Telemost is the **first proven restricted service carrier**, not the product or a
+Telemost is the **current media provider for MESH**, not the product or a
 permanent dependency. Provider logic remains in adapters, including
 [RoomProvider](../carrier/roombroker/README.md). Provider/SFU/signaling are untrusted;
 **Device Identity / Family admission / Family TLS** protect Family sessions and

@@ -225,7 +225,7 @@ public final class FriendsActivity extends LocalizedActivity {
         text(connect,getString(off?R.string.connect:R.string.disconnect));connect.setChecked(on);connect.setPending(!off&&!on);boolean enabled=getPreferences(MODE_PRIVATE).getBoolean("activated",false);connect.setEnabled(!busy);text(activate,getString(enabled?R.string.referral_title:R.string.friends_activate));activate.setEnabled(!busy);
         String shownCountry=off?country:activeCountry;
         String shownTransport=off?transport:ConnectionService.activeTransport;
-        String transportLabel=shownTransport.equals("auto")?"Auto":shownTransport.equals("awg")?"AWG 3.1":shownTransport.equals("restricted")?"Restricted":"TCP REALITY";
+        String transportLabel=shownTransport.equals("auto")?"Auto":shownTransport.equals("awg")?"AWG 3.1":shownTransport.equals("restricted")?TransportPresentation.MESH:"TCP REALITY";
         String summary=getString(shownCountry.equals("nl")?R.string.gateway_netherlands:R.string.gateway_russia)+"  /  "+transportLabel;
         text(routeCaption,summary);telemetry.connection(getString(shownCountry.equals("nl")?R.string.gateway_netherlands:R.string.gateway_russia),transportLabel,getString(off?R.string.off:on?(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.health_checking):R.string.connecting));telemetry.sample();renderLoad();
         if(routeDial!=null){routeDial.setMotion(motion);routeDial.update(value,ConnectionService.healthStatus);routeDial.setEnabled(!busy);}

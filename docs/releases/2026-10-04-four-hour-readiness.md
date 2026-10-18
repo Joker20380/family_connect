@@ -1,5 +1,9 @@
 # Four-hour restricted readiness — local candidate, 2026-10-04
 
+Current follow-up: [coordinated server rollout and owner long acceptance](2026-10-04-beta62-four-hour-rollout.md)
+PASS on unchanged beta62; tester upgrade and long ACK confirmed. Mobile reproduction
+pending. The source-only and12:41 statuses below are historical, not the latest state.
+
 Follow-up12:41UTC: [beta62 accepted build](2026-10-04-beta62-recovery-candidate.md)
 is signed, installed in place on owner and published as a separate targeted upgrade.
 Real restricted correlation/diagnostic gateway accepted. Four-hour server policy and

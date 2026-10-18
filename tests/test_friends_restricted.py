@@ -251,7 +251,7 @@ def test_refresh_replaces_unexpired_seed_without_reenrollment(tmp_path, lifetime
     refreshed = service.fetch(proof(service, device))
     assert refreshed['directory'] == seed and refreshed['directory'] != first['directory']
     assert refreshed['challenge'] != first['challenge']
-    assert refreshed['issued_at'] == refreshed_at
+    assert refreshed['issued_at'] == refreshed_at - 5
     assert refreshed['directory']['family'] == first['directory']['family']
     for field in ('device', 'revision', 'minimum_crl', 'issuer'):
         assert refreshed[field] == first[field]
@@ -306,14 +306,14 @@ def test_crl_readiness_lifetime_bounds(setup, tmp_path, lifetime):
     publish_crl(service, target, lifetime=lifetime)
     service.crl_source = target.read_bytes
     crl = x509.load_pem_x509_crl(target.read_bytes())
-    assert crl.last_update_utc == utc(now)
-    assert crl.next_update_utc == utc(now + lifetime)
+    assert crl.last_update_utc == utc(now - 1)
+    assert crl.next_update_utc == utc(now + lifetime - 1)
     assert crl.is_signature_valid(service.signing_key.public_key())
     response = service.fetch(proof(service, device))
-    assert response['expires_at'] == now + min(lifetime, 3599)
-    service._trust(now + lifetime - 1)
+    assert response['expires_at'] == now + min(lifetime - 1, 3595)
+    service._trust(now + lifetime - 2)
     with pytest.raises(ValueError):
-        service._trust(now + lifetime)
+        service._trust(now + lifetime - 1)
 
 
 def test_long_crl_capped_by_delegation(setup, tmp_path):

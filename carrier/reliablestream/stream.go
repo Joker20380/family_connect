@@ -22,8 +22,9 @@ type request struct {
 }
 
 type received struct {
-	data []byte
-	err  error
+	data     []byte
+	err      error
+	identity sessiontrace.ReceiveIdentity
 }
 
 type Stream struct {
@@ -148,9 +149,10 @@ func (stream *Stream) run(ctx context.Context) {
 	go func() {
 		defer close(readerDone)
 		for {
-			data, err := stream.endpoint.Recv(ctx)
+			receiveContext, observation := sessiontrace.WithReceiveObservation(ctx)
+			data, err := stream.endpoint.Recv(receiveContext)
 			select {
-			case incoming <- received{data, err}:
+			case incoming <- received{data: data, err: err, identity: observation.Identity()}:
 			case <-ctx.Done():
 				return
 			}
@@ -202,7 +204,32 @@ func (stream *Stream) run(ctx context.Context) {
 	transmit := func(packets []frame) error {
 		for _, packet := range packets {
 			sendContext, cancel := context.WithTimeout(ctx, min(stream.state.config.MaxAge, 2*time.Second))
+			point := sessiontrace.Boundary{Direction: "tx", Result: "ok"}
+			if packet.kind == dataFrame {
+				stream.mu.Lock()
+				attempt := uint32(stream.state.sent[packet.seq].retries)
+				stream.mu.Unlock()
+				sendContext = sessiontrace.WithAttempt(sendContext, packet.seq, attempt)
+				point = sessiontrace.AttemptFrom(sendContext)
+				point.Direction, point.Stage, point.Result = "tx", "reliable_send", "ok"
+				sessiontrace.From(ctx).Boundary(point)
+				if sessiontrace.From(ctx).DropDiagnostic(point) {
+					cancel()
+					continue
+				}
+			} else if packet.kind == ackFrame {
+				sendContext = sessiontrace.WithACKObservation(sendContext, packet.observation, packet.ack, packet.bits)
+				point.Stage, point.ACKBase, point.ACKMask = "ack_generated", packet.ack, packet.bits
+				sessiontrace.From(ctx).Boundary(point)
+			}
 			err := stream.endpoint.SendContext(sendContext, encode(packet))
+			if packet.kind == ackFrame {
+				point.Stage = "ack_sent"
+				if err != nil {
+					point.Result = "write_error"
+				}
+				sessiontrace.From(ctx).Boundary(point)
+			}
 			cancel()
 			if err != nil {
 				return err
@@ -246,8 +273,13 @@ func (stream *Stream) run(ctx context.Context) {
 			op.done <- err
 		case reads <- data:
 			stream.mu.Lock()
+			consumed := stream.state.receive
+			before := stream.state.receiveObservation()
 			_, packet := stream.state.consume()
+			after := stream.state.receiveObservation()
 			stream.mu.Unlock()
+			sessiontrace.From(ctx).ReceiverConsumed(consumed, before, after, packet.observation, packet.ack, packet.bits)
+			sessiontrace.From(ctx).RecordConsumed(consumed, packet.ack, packet.bits)
 			packets = []frame{packet}
 		case record := <-incoming:
 			err = record.err
@@ -256,8 +288,35 @@ func (stream *Stream) run(ctx context.Context) {
 				packet, err = decode(record.data)
 				if err == nil {
 					stream.mu.Lock()
+					duplicates, stale, previousBase := stream.state.stats.Duplicates, stream.state.stats.Stale, stream.state.base
+					before := stream.state.receiveObservation()
 					packets, err = stream.state.input(packet, time.Now())
+					after := stream.state.receiveObservation()
+					advanced := stream.state.base > previousBase
+					currentBase := stream.state.base
+					point := sessiontrace.Boundary{Direction: "rx", Result: "ok"}
+					if err != nil {
+						point.Result = "protocol"
+					} else if stream.state.stats.Stale != stale {
+						point.Result = "stale"
+					} else if stream.state.stats.Duplicates != duplicates {
+						point.Result = "duplicate"
+					}
+					if packet.kind == dataFrame {
+						point.Stage, point.DataKnown, point.DataSequence = "reliable_data_accepted", true, packet.seq
+					} else if packet.kind == ackFrame {
+						point.Stage, point.ACKBase, point.ACKMask = "ack_received", packet.ack, packet.bits
+					}
 					stream.mu.Unlock()
+					if packet.kind == dataFrame {
+						sessiontrace.From(ctx).ReceiverAccepted(record.identity, packet.seq, point.Result, before, after)
+					}
+					if point.Stage != "" {
+						sessiontrace.From(ctx).Boundary(point)
+					}
+					if advanced {
+						sessiontrace.From(ctx).RecordBaseAdvanced(currentBase, packet.bits)
+					}
 				}
 			}
 		case now := <-ticker.C:

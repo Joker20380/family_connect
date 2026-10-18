@@ -2,6 +2,17 @@
 
 # Family Connect
 
+**MESH (Media Encapsulated Secure Hop)** is Family Connect's secure media
+transport. Its current carrier is VP8/RTP and its current media provider is
+Telemost; the product name does not depend on that provider. It is not a
+decentralized or multi-hop mesh network. Naming integration is a local Android
+candidate; desktop media integration is not implemented. See the
+[transport model and limits](carrier/README.md#mesh-product-contract) and
+[current status](docs/STATUS.md); no new release is implied.
+
+Targeted Android beta65 trial: [installation, verified download and readiness gates](docs/clients.en.md).
+Invitation/default updater remains beta60; access is not expanded.
+
 **Resilient connectivity for families and personal devices.**
 
 Family Connect helps people stay connected without having to understand which

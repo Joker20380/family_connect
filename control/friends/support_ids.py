@@ -110,7 +110,9 @@ def request(access, value):
         return dict(schema=1, device_support_id=support)
 
 
-def lookup(access, support, admitted):
+def lookup(access, support, admitted, *, all_activated=False):
+    if type(all_activated) is not bool:
+        raise ValueError('Invalid admission mode')
     support = normalize(support)
     with access.db() as database:
         row = database.execute('SELECT s.*,d.revoked,i.revoked AS invite_revoked FROM device_support s '
@@ -125,7 +127,12 @@ def lookup(access, support, admitted):
         readiness = 'UNKNOWN' if observed is None else 'EXPIRED' if not observed['expires'] or observed['expires'] <= now else 'READY' if observed['ready'] else 'NOT_READY'
         family = 'NOT_PROVISIONED' if grant is None else 'REVOKED' if grant['revoked'] else 'EXPIRED' if grant['expires'] is not None and grant['expires'] <= now else 'ACTIVE'
         revoked = bool(row['revoked'] or row['invite_revoked'])
+        active = not revoked and row['invite_revoked'] is not None
+        admitted_device = row['device'] in admitted or '*' in admitted
+        if all_activated:
+            admitted_device = active and (grant is None or not grant['revoked'])
+            family = 'ELIGIBLE' if admitted_device else 'REVOKED' if revoked or grant is not None and grant['revoked'] else 'INACTIVE'
         return dict(device_support_id=support, label=None, app_version=row['app_version'], version_code=row['version_code'],
                     platform=row['platform'], last_seen=row['last_seen'], observation_source=row['observation_source'],
-                    active=not revoked and row['invite_revoked'] is not None, revoked=revoked,
-                    family_state=family, restricted_readiness=readiness, field_admission=row['device'] in admitted)
+                    active=active, revoked=revoked,
+                    family_state=family, restricted_readiness=readiness, field_admission=admitted_device)

@@ -11,6 +11,10 @@ No manual service setup is needed. Affected Windows10 device acceptance is pendi
 Android8+, ARM64; access is invitation-only. Installing the APK does not grant access.
 The invitation page and in-app updater both provide beta60. Updating does not enable restricted FIELD access.
 
+The authorized Krasnodar trial uses [separate beta65, verified05.10](clients.en.md).
+Update in place; start the mobile attempt only after operator confirmation of fresh
+materials/native READY/ACK, not an old cached READY indication.
+
 1. Ask a participant for their link/QR from **Settings → Invite a friend**. Keep it private.
 2. Download the APK and install **Family Connect Test**, allowing installation from your
    browser when Android asks. Update an existing installation in place.

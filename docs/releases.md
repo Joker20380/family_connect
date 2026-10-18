@@ -1,11 +1,51 @@
 # Release distribution / Выпуски
 
-**Candidate65/code65:** source86fa1ba, four exact-source CI PASS, verified/offline signed,
+**Private owner research84/code84,12.10 — not publicly distributed:**
+installed in place11:47:34UTC; APK SHA256
+`fd3106170ceeb1e24dad6c8eacda4107b1ab09a6ee120ccf495d92d96841aa48`, same
+package/signer/UID, native reused unchanged. Exact cached selection PASS; bounded
+operator window timed out, gate cleaned before late user CONNECT. No blocked-warm
+or full-phase egress PASS. Natural gateway SEED_READ/UNKNOWN fatal captured separately.
+No public/tester rollout, invitation/catalog/checksum replacement or FIELD.
+[RU](releases/research84.ru.md) / [EN](releases/research84.en.md) /
+[Evidence and cleanup](releases/2026-10-12-whitelist-warm-start-1.md).
+
+**Private owner research83/code83,11.10 — not publicly distributed:**
+source f5240994, in-place installed APK SHA256
+`7208a8132e7ae2fb4245e686ecffd80adf4dc67f8bf99af41a9c56cc66c1f7c8`, same signer/package.
+One provisioning-unavailable warm-start trial fails at dedicated carrier before
+client READY; no ordinary full-phase egress requests or automatic retry. This is
+not a production/whitelist acceptance PASS. Public/invitation catalogs stay unchanged.
+[Private RU guide](releases/research83.ru.md) / [EN](releases/research83.en.md) /
+[Exact acceptance and rollback](releases/2026-10-11-whitelist-bootstrap-1.md).
+
+**Beta65/code65, targeted publication05.10:** source86fa1ba, four exact-source CI PASS, verified/offline signed,
 installed in place on owner Redmi. Ordinary retained-cache refresh/native READY/ACK PASS.
 SHA256 `dfbdb5352b8c707fb77ff3d7392d8217f898aa8e999b6a0f52fad8172185778e`,49671035bytes.
-Publication held: recovery attempted but bootstrap exchange failed before descriptor.
-No public65 URL; tester/targeted public64 and default/catalog/invitation60 unchanged.
-[Candidate checks and rollback](releases/2026-10-04-beta65-readiness-candidate.md).
+Gatewaya813dc5/05571644 deployed05.10; previously failing owner65 policy-loss recovery,
+paired server evidence, AUTH/cancel/AWG/TCP/privacy gates now PASS. Same immutable APK,
+not rebuilt/resigned: [download beta65](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta65.apk),
+published10:25UTC, downloaded HTTPS200/SHA/original signer67a90d1b verified10:27UTC.
+Exports12/13 confirm tester65. [Server readiness correction05.10](releases/2026-10-05-readiness-clock-skew.md)
+deployed without a new APK; owner65 fresh native READY/ACK13:56UTC PASS. Tester fresh
+ACK confirmed14:09:44UTC. Export14 confirms two real Telemost sessions/restoration,
+but both fail after roughly20s. Client→gateway reliable DATA holes are observed.
+New RTP gateway8d04632/7c6e1e11 deployed15:22UTC after exact-source CI/artifact PASS;
+unchanged installed owner65 native READY/ACK15:23:05 for the new directory PASS.
+CI's unsigned same-version APK is NOT signed, installed or distributed. Tester must
+refresh the new directory before one mobile trial; field resolution remains unknown.
+Tester fresh READY/ACK15:31:34 confirmed the post-deploy directory, but no mobile
+trial began. The evening window expired before work resumed after interruption.
+Credential-only renewal19:53UTC preserves binary/issuer/grants. Actual gateway bound
+now05.10 **23:53:04UTC /06.10 02:53:04 Krasnodar**; fetch/ACK the post19:53 directory
+before the mobile trial. Fresh tester65 READY ACK20:00UTC is now confirmed;
+export15 describes an earlier pre-renewal failure with no Telemost session.
+Export16 now confirms two post-fix Telemost sessions carry data, then fail after
+about20s; first restoration succeeds84.446s. Field stability FAIL; no identical retry.
+Next media-delivery investigation, no new APK or deployment during this analysis.
+Default/catalog/invitation60 and old APKs unchanged.
+[RTP gateway deployment and field gate](releases/2026-10-05-field-export14-beta65.md#gateway-ci-artifact-and-deployment-pass).
+[Deployment, public verification and rollback](releases/2026-10-05-bootstrap-cleanup-race.md).
 
 **Beta64/code64: owner/gateway acceptance PASS; targeted publication04.10 19:13UTC.** Source
 ce73ddf passed four workflows; artifact/provenance/offline signer verified. Signed APK

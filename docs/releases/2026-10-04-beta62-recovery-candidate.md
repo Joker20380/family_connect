@@ -1,5 +1,10 @@
 # Android beta62: owner accepted, targeted upgrade — 2026-10-04
 
+Follow-up: [four-hour server rollout](2026-10-04-beta62-four-hour-rollout.md) now confirms
+tester62, compatible policy/full chain and owner long import/session. APK/source/hash
+unchanged. Tester long ACK is confirmed; Russian reproduction remains pending. The12:41
+checkpoint below retains the earlier delivery/activation boundary for audit.
+
 ## Accepted checkpoint — 12:41UTC
 
 Status: **BETA62 OWNER DIAGNOSTIC ACCEPTED; TESTER UPGRADE ONLY**.

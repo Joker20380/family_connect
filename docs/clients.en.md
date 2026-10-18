@@ -1,14 +1,55 @@
 # Client installation
 
-**Beta65 is installed only on the owner device; publication is held.** Four CI gates,
-original signing and ordinary retained-cache refresh on Redmi passed without a reset.
-A subsequent restricted reconnect failed before descriptor issuance; that gate is open.
-SHA25665 `dfbdb5352b8c707fb77ff3d7392d8217f898aa8e999b6a0f52fad8172185778e`.
-No new public link: the tester stays on64 and should not repeat the mobile trial yet.
-Default download/catalog/invitation60 are unchanged; identity and Support are preserved.
-[Release65 gates](releases/2026-10-04-beta65-readiness-candidate.md).
+## Media transport name: MESH
 
-**Beta64/code64: [targeted APK for the authorized trial](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta64.apk).**
+The local candidate on the approved Android UI84 shows Auto / AWG 3.1 / TCP
+REALITY / **MESH**. It names the existing media transport, not a new protocol or
+a guaranteed bypass. Stored `telemost` selection, Device Identity and activation
+do not migrate. The candidate is unsigned, not installed or published; download
+links below are unchanged. Windows/Linux lack product media integration and do
+not receive an inert MESH option. [Status and limits](releases/2026-10-18-mesh-product-integration.md).
+
+**Private owner build, not a public release (12 Oct):** research84/code84 was
+installed in place at11:47:34UTC, retaining package/signer/UID and data. SHA256
+`fd3106170ceeb1e24dad6c8eacda4107b1ab09a6ee120ccf495d92d96841aa48`.
+Native bytes are unchanged; no uninstall/data clear/re-enrollment. Not distributed
+to testers or published; public APKs, invitation/download links/checksums unchanged.
+No warm-start PASS: CONNECT occurred after gate cleanup; a later natural gateway
+SEED_READ/UNKNOWN fatal was captured. Do not automatically repeat CONNECT.
+[Private build and limits](releases/research84.en.md) /
+[Exact outcome](releases/2026-10-12-whitelist-warm-start-1.md).
+
+**Beta65/code65: [verified targeted APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta65.apk).**
+Published05.10 10:25UTC; full HTTPS download, SHA256 and original signer verified10:27UTC.
+ARM64,49671035bytes; SHA256
+`dfbdb5352b8c707fb77ff3d7392d8217f898aa8e999b6a0f52fad8172185778e`.
+Earlier gateway cleanup fixa813dc5 acceptance passed unchanged owner65 real-session recovery
+with an injected policy-loss cause, AUTH/cancel, AWG/TCP and privacy checks. This does
+not locate the original field DATA/ACK loss. Owner data/Support and signed bytes preserved.
+Exports12/13 confirm tester65; no reinstall needed. The
+[05.10 server readiness fix](releases/2026-10-05-readiness-clock-skew.md) is active;
+unchanged owner65 obtains fresh native READY/ACK13:56:08UTC without installing an APK.
+Export14 proves Telemost traffic and automatic restoration, but both sessions fail
+after roughly20s. RTP gateway correction deployed05.10 **15:22UTC**, source8d04632/
+SHA7c6e1e11, after CI/artifact acceptance. Unchanged owner65 fresh native READY/ACK
+15:23:05 validates the new directory; no phone package of any kind installed.
+Keep the working VPN and open Family Connect to refresh its directory. **Fresh
+tester native READY/ACK for the post19:53UTC05.10 directory** must precede mobile Auto.
+The previous evening certificate expired before work resumed after the interruption.
+Credential-only renewal19:53UTC restores the window without changing the
+APK or gateway binary. Fresh tester ACK for this directory confirmed20:00UTC05.10;
+export15 contains an earlier pre-renewal attempt without a Telemost session.
+That trial is now captured in export16: two real Telemost sessions transfer data,
+but both fail after about20s despite successful first restoration. Do not repeat
+the same trial; keep the working VPN. RTP correction is insufficient; investigate
+VP8/RTP delivery instead of reinstalling or changing clocks.
+Actual gateway bound **05.10 23:53:04UTC (06.10 02:53:04 Krasnodar)**; revalidate/renew
+for later tests. After the short trial restore the working VPN and send diagnostic
+JSON. No manual clock changes. Default download/catalog/invitation60 and older APKs
+remain unchanged; access is not expanded.
+[Current gateway, tests and rollback](releases/2026-10-05-field-export14-beta65.md#gateway-ci-artifact-and-deployment-pass).
+
+**Historical beta64/code64: [immutable previous APK](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta64.apk).**
 Installed on owner Redmi; published19:13UTC, downloaded SHA/signer/HTTPS200 verified19:14UTC.
 APK SHA256 `b1a9f62116265b13a8482292175d3a685dca23ad3a5be0e4af5ef995a4d32d69`,49671035bytes;
 installed bytes/original signer67a90d1b and identity preservation are verified. Matching

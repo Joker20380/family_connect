@@ -2,7 +2,7 @@ name: Client builds
 on:
   push:
     branches: ['**']
-    tags: ['v*']
+    tags: ['v*', 'diag-owner-*']
     paths: ['clients/**', 'carrier/**', 'pilot/android-restricted/**', '.github/workflows/clients.yml', 'scripts/ci_release_fixtures.py', 'scripts/package_desktop.py', 'scripts/package_linux.py', 'packaging/**', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
   pull_request:
     paths: ['clients/**', 'carrier/**', 'pilot/android-restricted/**', '.github/workflows/clients.yml', 'scripts/ci_release_fixtures.py', 'scripts/package_desktop.py', 'scripts/package_linux.py', 'packaging/**', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
@@ -48,7 +48,7 @@ jobs:
         shell: bash
         run: |
           python3 -m pip install pytest==9.1.1 -r device_identity/requirements.lock
-          FC_TEST_GO="$(command -v go)" python3 -m pytest -q tests/test_restricted_correlation.py tests/test_directory_validation.py tests/test_restricted_test_window.py tests/test_friends_restricted.py 2>&1 | tee restricted-contracts.log
+          FC_TEST_GO="$(command -v go)" python3 -m pytest -q tests/test_mesh_product.py tests/test_restricted_correlation.py tests/test_directory_validation.py tests/test_restricted_test_window.py tests/test_friends_restricted.py 2>&1 | tee restricted-contracts.log
       - name: Build pinned unified Android VPN library
         shell: bash # Explicit bash enables pipefail: tee must not hide a failed native build.
         run: ANDROID_NDK_HOME="$ANDROID_HOME/ndk/28.2.13676358" python3 -u pilot/android-awg/build.py 2>&1 | tee android-awg-build.log

@@ -22,12 +22,12 @@ def long_window(tmp_path, *, lifetime=14400):
 def test_four_hour_delivery_and_default_opt_in(tmp_path):
     service, device, now = long_window(tmp_path, lifetime=3600)
     short = service.fetch(proof(service, device))
-    assert short['expires_at'] == now + 3600
+    assert short['expires_at'] == now + 3595
     service.delivery_lifetime = 14400
     extended = service.fetch(proof(service, device))
-    assert extended['expires_at'] == now + 14399
+    assert extended['expires_at'] == now + 14395
     assert extended['certificate'] != short['certificate']
-    assert x509.load_pem_x509_certificate(extended['certificate'].encode()).not_valid_after_utc == utc(now + 14399)
+    assert x509.load_pem_x509_certificate(extended['certificate'].encode()).not_valid_after_utc == utc(now + 14395)
     repeated = service.fetch(proof(service, device))
     assert repeated['certificate'] == extended['certificate']
     assert repeated['revision'] == extended['revision'] == short['revision'] == 1
@@ -58,7 +58,7 @@ def test_shortest_material_still_caps_long_delivery(tmp_path, boundary):
         service.manifest = dict(payload=base64.b64encode(payload).decode(),
                                 signature=base64.b64encode(root.sign(DOMAIN + payload)).decode())
     response = service.fetch(proof(service, device))
-    assert response['expires_at'] == now + (900 if boundary == 'crl' else 600)
+    assert response['expires_at'] == now + (899 if boundary == 'crl' else 600)
 
 
 def test_four_hour_directory_exact_boundary(tmp_path):

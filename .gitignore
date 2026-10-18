@@ -1,5 +1,6 @@
 state/
 artifacts/
+/artifacts
 core/target/
 __pycache__/
 .pytest_cache/
@@ -35,6 +36,7 @@ state-awg/
 
 clients/android/awg-generated
 clients/android/restricted-generated/
+clients/android/owner-restricted-generated/
 
 clients/android/control-tests/.gradle/
 clients/android/chat-runtime/.gradle/

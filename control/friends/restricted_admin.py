@@ -10,6 +10,7 @@ from cryptography import x509
 from cryptography.hazmat.primitives.serialization import Encoding
 
 from .access import Access
+from .readiness_receipts import CLOCK_SKEW_SECONDS
 from .restricted import MAX_TEST_LIFETIME, from_env, migrate, delegation, utc
 
 
@@ -32,19 +33,21 @@ def publish_crl(service, path, *, lifetime=900):
     trust, authority = delegation(service.manifest, service.anchor, now)
     with service.access.db() as database:
         previous_number = 0
+        issued = max(now - CLOCK_SKEW_SECONDS, trust['issued_at'], int(authority.not_valid_before_utc.timestamp()))
         try:
             previous = x509.load_pem_x509_crl(service.crl_source())
             if not previous.is_signature_valid(authority.public_key()) or previous.last_update_utc > utc(now):
                 raise ValueError('CRL continuity rejected')
             previous_number = previous.extensions.get_extension_for_class(x509.CRLNumber).value.crl_number
+            issued = max(issued, int(previous.last_update_utc.timestamp()))
         except FileNotFoundError:
             pass
         database.execute('CREATE TABLE IF NOT EXISTS restricted_crl_sequence (singleton INTEGER PRIMARY KEY CHECK(singleton=1), sequence INTEGER NOT NULL)')
         database.execute('INSERT INTO restricted_crl_sequence VALUES (1,?) ON CONFLICT(singleton) DO UPDATE SET sequence=max(sequence,?)+1',
                          (previous_number + 1, previous_number))
         number = database.execute('SELECT sequence FROM restricted_crl_sequence WHERE singleton=1').fetchone()[0]
-        builder = (x509.CertificateRevocationListBuilder().issuer_name(authority.subject).last_update(utc(now))
-                   .next_update(utc(min(now + lifetime, trust['expires_at'])))
+        builder = (x509.CertificateRevocationListBuilder().issuer_name(authority.subject).last_update(utc(issued))
+                   .next_update(utc(min(issued + lifetime, trust['expires_at'])))
                    .add_extension(x509.CRLNumber(number), critical=False))
         rows = database.execute('SELECT c.* FROM restricted_certificates c WHERE c.expires>?', (now,)).fetchall()
         for certificate in rows:

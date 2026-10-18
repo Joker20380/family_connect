@@ -344,6 +344,7 @@ func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Director
 		trace.Add("DESCRIPTOR", "ISSUED", "NONE")
 	}
 	ctx = sessiontrace.With(ctx, trace)
+	sessiontrace.StartDiagnosticControl(ctx, trace, "client")
 	trace.Add("GATEWAY_JOIN", "STARTED", "NONE")
 	carrier, err := telemost.New(ctx, telemost.Config{RoomURL: descriptor.JoinURL, DisplayName: "Family restricted device", Mode: telemost.ModeVP8, Underlay: network})
 	if err != nil {

@@ -1,0 +1,171 @@
+--- a/clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java
+@@ -16,7 +16,7 @@
+ 
+ /** Separate open-test launcher: one-use invitation, no accounts or billing; separate from managed journal. */
+ public final class FriendsActivity extends LocalizedActivity {
+-    private static final String[][] TRANSPORTS={{"auto","Auto"},{"awg","AWG 3.1"},{"tcp","TCP REALITY"},{"telemost","Telemost"}};
++    private static final String[][] TRANSPORTS={{"auto","Auto"},{"awg","AWG 3.1"},{"tcp","TCP REALITY"},{"telemost",TransportPresentation.MESH}};
+     private final Handler handler=new Handler(Looper.getMainLooper());
+     private final ExecutorService worker=Executors.newSingleThreadExecutor();
+     private TextView status,detail,routeCaption,routeStatus,routeDetail,messageRoute;private Button check,activate;private TerminalToggle connect;private Spinner countries,transports;
+@@ -239,7 +239,7 @@
+         if(connect==null)return;String value=ConnectionService.status;boolean on=value.equals("on"),off=value.equals("off");
+         homeBrand.connection(value,motion);
+         String actual=ConnectionService.activeTransport;
+-        text(homeActiveTransport,!on?"—":actual.equals("awg")?"AWG 3.1":actual.equals("tcp")?"TCP":actual.equals("restricted")||actual.equals("telemost")?"Telemost":"—");
++        text(homeActiveTransport,!on?"—":actual.equals("awg")?"AWG 3.1":actual.equals("tcp")?"TCP":actual.equals("restricted")||actual.equals("telemost")?TransportPresentation.MESH:"—");
+         homeActiveTransport.setContentDescription("VPN · "+getString(R.string.terminal_transport)+": "+homeActiveTransport.getText());
+         homeActiveTransport.setTooltipText(homeActiveTransport.getContentDescription());
+         int battery=getSystemService(android.os.BatteryManager.class).getIntProperty(android.os.BatteryManager.BATTERY_PROPERTY_CAPACITY);
+@@ -257,7 +257,7 @@
+         text(connect,getString(off||value.equals("failed")?R.string.connect:on?R.string.disconnect:android.R.string.cancel));connect.setChecked(on);connect.setPending(!off&&!on);boolean enabled=getPreferences(MODE_PRIVATE).getBoolean("activated",false);connect.setEnabled(!busy);text(activate,getString(enabled?R.string.referral_title:R.string.friends_activate));activate.setEnabled(!busy);
+         String shownCountry=off?country:activeCountry;
+         String shownTransport=off?transport:ConnectionService.activeTransport;
+-        String transportLabel=shownTransport.equals("auto")?"Auto":shownTransport.equals("awg")?"AWG 3.1":shownTransport.equals("restricted")||shownTransport.equals("telemost")?"Telemost":"TCP REALITY";
++        String transportLabel=shownTransport.equals("auto")?"Auto":shownTransport.equals("awg")?"AWG 3.1":shownTransport.equals("restricted")||shownTransport.equals("telemost")?TransportPresentation.MESH:"TCP REALITY";
+         String summary=getString(shownCountry.equals("nl")?R.string.gateway_netherlands:R.string.gateway_russia)+"  /  "+transportLabel;
+         text(routeCaption,summary);telemetry.connection(getString(shownCountry.equals("nl")?R.string.gateway_netherlands:R.string.gateway_russia),transportLabel,getString(off?R.string.off:on?(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.health_checking):R.string.connecting));if(connectionPane==0&&on)telemetry.sample();else telemetry.pause();renderLoad();
+         telemetry.deviceBattery(battery);
+--- a/clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java
+@@ -182,6 +182,7 @@
+     }
+     synchronized JsonObject snapshot(){
+         JsonObject result=new JsonObject();result.addProperty("schema",1);result.addProperty("device_support_id",supportId);
++        result.add("transport_metadata",TransportPresentation.diagnostics());
+         result.addProperty("connection_id",connectionId);result.addProperty("incident_id",incidentId);result.addProperty("app_version",version);
+         result.addProperty("version_code",build);result.addProperty("os_api",os);result.addProperty("network_class",network);
+         result.addProperty("state",state);result.addProperty("vpn_capture_open",vpn);result.addProperty("restricted_readiness",readiness);result.addProperty("bootstrap_directory",bootstrap);
+--- a/clients/android/app/src/main/res/values/connection_terminal.xml
++++ b/clients/android/app/src/main/res/values/connection_terminal.xml
+@@ -1,12 +1,12 @@
+ <resources>
+     <string-array name="connection_terminal_compact">
+-        <item>Preparing</item><item>AWG</item><item>TCP</item><item>Telemost</item><item>Restoring</item><item>VPN ready</item><item>Chat config</item><item>Direct config</item><item>Service config</item><item>EXIT config</item><item>Sync pending</item><item>Unavailable</item><item>Auth rejected</item><item>Failed</item><item>Cancelled</item>
++        <item>Preparing</item><item>AWG</item><item>TCP</item><item>MESH</item><item>Restoring</item><item>VPN ready</item><item>Chat config</item><item>Direct config</item><item>Service config</item><item>EXIT config</item><item>Sync pending</item><item>Unavailable</item><item>Auth rejected</item><item>Failed</item><item>Cancelled</item>
+         <item>Waiting to retry</item>
+     </string-array>
+     <string name="connection_terminal_vpn">VPN · connection</string>
+     <string name="connection_terminal_chat">Messages · not a full VPN</string>
+     <string-array name="connection_terminal_stages">
+-        <item>[ .. ] Preparing connection</item><item>[ .. ] Opening WireGuard/AWG</item><item>[ .. ] Opening TCP</item><item>[ .. ] Opening Telemost carrier</item><item>[ .. ] Restoring connection</item><item>[ OK ] VPN connection established</item><item>[ .. ] Updating chat configuration</item><item>[ OK ] Configuration received directly</item><item>[ OK ] Configuration via service carrier</item><item>[ OK ] Configuration via existing carrier</item><item>[ OK ] Mailbox configured; sync pending</item><item>[ -- ] Route unavailable; selecting next</item><item>[ !! ] Authorization rejected</item><item>[ !! ] Connection not completed</item><item>[ -- ] Cancelled</item>
++        <item>[ .. ] Preparing connection</item><item>[ .. ] Opening WireGuard/AWG</item><item>[ .. ] Opening TCP</item><item>[ .. ] Opening MESH carrier</item><item>[ .. ] Restoring connection</item><item>[ OK ] VPN connection established</item><item>[ .. ] Updating chat configuration</item><item>[ OK ] Configuration received directly</item><item>[ OK ] Configuration via service carrier</item><item>[ OK ] Configuration via existing carrier</item><item>[ OK ] Mailbox configured; sync pending</item><item>[ -- ] Route unavailable; selecting next</item><item>[ !! ] Authorization rejected</item><item>[ !! ] Connection not completed</item><item>[ -- ] Cancelled</item>
+         <item>[ .. ] Waiting before next recovery attempt</item>
+     </string-array>
+ </resources>
+--- a/clients/android/app/src/main/res/values-ru/connection_terminal.xml
++++ b/clients/android/app/src/main/res/values-ru/connection_terminal.xml
+@@ -1,12 +1,12 @@
+ <resources>
+     <string-array name="connection_terminal_compact">
+-        <item>Подготовка</item><item>AWG</item><item>TCP</item><item>Telemost</item><item>Восстановление</item><item>VPN готов</item><item>Настройка чата</item><item>DIRECT · настройки</item><item>Служебный канал</item><item>EXIT · настройки</item><item>Ожидание sync</item><item>Недоступно</item><item>Отказ доступа</item><item>Ошибка</item><item>Отменено</item>
++        <item>Подготовка</item><item>AWG</item><item>TCP</item><item>MESH</item><item>Восстановление</item><item>VPN готов</item><item>Настройка чата</item><item>DIRECT · настройки</item><item>Служебный канал</item><item>EXIT · настройки</item><item>Ожидание sync</item><item>Недоступно</item><item>Отказ доступа</item><item>Ошибка</item><item>Отменено</item>
+         <item>Ожидание повтора</item>
+     </string-array>
+     <string name="connection_terminal_vpn">VPN · подключение</string>
+     <string name="connection_terminal_chat">Сообщения · не полный VPN</string>
+     <string-array name="connection_terminal_stages">
+-        <item>[ .. ] Подготовка подключения</item><item>[ .. ] Открытие WireGuard/AWG</item><item>[ .. ] Открытие TCP</item><item>[ .. ] Открытие канала Telemost</item><item>[ .. ] Восстановление подключения</item><item>[ OK ] VPN-соединение установлено</item><item>[ .. ] Обновление настроек чата</item><item>[ OK ] Настройки получены напрямую</item><item>[ OK ] Настройки через служебный канал</item><item>[ OK ] Настройки через готовый канал</item><item>[ OK ] Mailbox настроен; ожидается sync</item><item>[ -- ] Маршрут недоступен; выбор следующего</item><item>[ !! ] Авторизация отклонена</item><item>[ !! ] Подключение не завершено</item><item>[ -- ] Отменено</item>
++        <item>[ .. ] Подготовка подключения</item><item>[ .. ] Открытие WireGuard/AWG</item><item>[ .. ] Открытие TCP</item><item>[ .. ] Открытие канала MESH</item><item>[ .. ] Восстановление подключения</item><item>[ OK ] VPN-соединение установлено</item><item>[ .. ] Обновление настроек чата</item><item>[ OK ] Настройки получены напрямую</item><item>[ OK ] Настройки через служебный канал</item><item>[ OK ] Настройки через готовый канал</item><item>[ OK ] Mailbox настроен; ожидается sync</item><item>[ -- ] Маршрут недоступен; выбор следующего</item><item>[ !! ] Авторизация отклонена</item><item>[ !! ] Подключение не завершено</item><item>[ -- ] Отменено</item>
+         <item>[ .. ] Ожидание повторной попытки</item>
+     </string-array>
+ </resources>
+--- /dev/null
++++ b/clients/android/app/src/main/java/com/familyconnect/app/TransportPresentation.java
+@@ -0,0 +1,31 @@
++package com.familyconnect.app;
++
++import com.google.gson.JsonObject;
++
++final class TransportPresentation {
++    static final String MESH="MESH";
++
++    private TransportPresentation(){}
++
++    static String label(String implementation){
++        if("telemost".equals(implementation)||"restricted".equals(implementation))return MESH;
++        if("auto".equals(implementation))return "Auto";
++        if("awg".equals(implementation))return "AWG 3.1";
++        if("wg".equals(implementation))return "WireGuard";
++        if("tcp".equals(implementation))return "TCP REALITY";
++        return "—";
++    }
++
++    static JsonObject diagnostics(){
++        JsonObject media=new JsonObject();
++        media.addProperty("name",MESH);
++        media.addProperty("implementation","restricted");
++        media.addProperty("selection_id","telemost");
++        media.addProperty("carrier","VP8/RTP");
++        media.addProperty("provider","Telemost");
++        JsonObject catalog=new JsonObject();
++        catalog.addProperty("schema",1);
++        catalog.add("restricted",media);
++        return catalog;
++    }
++}
+--- /dev/null
++++ b/clients/android/app/src/test/java/com/familyconnect/app/TransportPresentationTest.java
+@@ -0,0 +1,43 @@
++package com.familyconnect.app;
++
++import com.google.gson.JsonObject;
++import java.util.Locale;
++import org.junit.Test;
++import static org.junit.Assert.*;
++
++public class TransportPresentationTest {
++    @Test public void legacyIdsRemainPresentationOnly(){
++        assertEquals("MESH",TransportPresentation.label("telemost"));
++        assertEquals("MESH",TransportPresentation.label("restricted"));
++        assertEquals("Auto",TransportPresentation.label("auto"));
++        assertEquals("AWG 3.1",TransportPresentation.label("awg"));
++        assertEquals("TCP REALITY",TransportPresentation.label("tcp"));
++        assertEquals("WireGuard",TransportPresentation.label("wg"));
++        assertEquals("—",TransportPresentation.label("mesh"));
++        assertEquals("—",TransportPresentation.label(null));
++    }
++
++    @Test public void productNameIsNotLocalized(){
++        Locale before=Locale.getDefault();
++        try{
++            for(Locale locale:new Locale[]{Locale.ENGLISH,Locale.forLanguageTag("ru")}){
++                Locale.setDefault(locale);
++                assertEquals("MESH",TransportPresentation.label("telemost"));
++            }
++        }finally{Locale.setDefault(before);}
++    }
++
++    @Test public void diagnosticMetadataDoesNotInventProtocolOrCapabilities(){
++        JsonObject catalog=TransportPresentation.diagnostics();
++        assertEquals(1,catalog.get("schema").getAsInt());
++        JsonObject media=catalog.getAsJsonObject("restricted");
++        assertEquals("MESH",media.get("name").getAsString());
++        assertEquals("restricted",media.get("implementation").getAsString());
++        assertEquals("telemost",media.get("selection_id").getAsString());
++        assertEquals("VP8/RTP",media.get("carrier").getAsString());
++        assertEquals("Telemost",media.get("provider").getAsString());
++        assertEquals(5,media.size());
++        media.addProperty("name","tampered");
++        assertEquals("MESH",TransportPresentation.diagnostics().getAsJsonObject("restricted").get("name").getAsString());
++    }
++}
+--- a/clients/android/app/src/test/java/com/familyconnect/app/DiagnosticRingTest.java
++++ b/clients/android/app/src/test/java/com/familyconnect/app/DiagnosticRingTest.java
+@@ -5,6 +5,15 @@
+ import static org.junit.Assert.*;
+ 
+ public class DiagnosticRingTest {
++    @Test public void additiveMeshMetadataPreservesLegacyEventsAndExportSchema(){
++        DiagnosticRing ring=ring();ring.readiness(true,1);
++        JsonObject snapshot=ring.snapshot();
++        assertEquals(1,snapshot.get("schema").getAsInt());
++        assertEquals("MESH",snapshot.getAsJsonObject("transport_metadata").getAsJsonObject("restricted").get("name").getAsString());
++        assertEquals("restricted",snapshot.getAsJsonArray("events").get(0).getAsJsonObject().get("transport_class").getAsString());
++        assertEquals("READY",snapshot.getAsJsonArray("events").get(0).getAsJsonObject().get("reason_code").getAsString());
++        assertTrue(snapshot.has("transport_outcomes"));assertTrue(snapshot.has("device_support_id"));
++    }
+     private DiagnosticRing ring(){return new DiagnosticRing("random-support-id","0.1.18-beta59",59,31);}
+     private ConnectivityOrchestrator.Event event(String name,ConnectivityOrchestrator.State state,ConnectivityOrchestrator.Failure failure){return new ConnectivityOrchestrator.Event(name,"tcp",failure,state,123);}
+     @Test public void capturesBothFailureTransitionsAndCorrelates(){

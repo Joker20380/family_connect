@@ -1,5 +1,28 @@
 # Gateway credential renewal publication
 
+Current05.10 late checkpoint: same accepted gateway8d04632/7c6e1e11 renewed
+19:53UTC under unchanged issuer5 and four-hour policy after the evening window expired.
+Actual served leaf expiry **05.10 23:53:04UTC/06.10 02:53:04 Krasnodar**; native,
+ownership, loaded chain,35s stability and RU/NL directory equality PASS. No APK,
+binary, key, grant or ordinary-service change. Post-renewal tester65 native READY
+ACK20:00UTC confirmed20:03:32. Export16 subsequently reaches two authenticated data
+sessions, both exhaust reliable retries; readiness/expiry are not that trial's
+blocker. No further renewal or identical tester retry is needed for this diagnosis.
+[Exact receipt and window](../../../docs/releases/2026-10-05-field-export14-beta65.md#late-resumption-after-interruption).
+Earlier material windows below are historical, not current readiness guarantees.
+
+Latest owner/runtime checkpoint: [beta64 paired acceptance04.10](../../../docs/releases/2026-10-04-beta64-paired-candidate.md).
+Owner64/matching gateway accepted; two-device admission and the four-hour policy below
+unchanged. Actual loaded gateway leaf expires04.10 22:57:31UTC; no automatic leaf renewal.
+After every seed reload, verify RU/NL generation propagation before client refresh (step8).
+
+Policy checkpoint04.10: [beta62 coordinated four-hour rollout](../../../docs/releases/2026-10-04-beta62-four-hour-rollout.md)
+supersedes the hour-policy checkpoint below: both admitted devices report62, compatible
+API/sync accept14400s, issuer/grants renewed without revision/admission change and real
+seed uses4h. Owner long import/session and tester long ACK PASS. Reuse
+the reported live paths and floors; never restore expired old material or assume that
+certificate-only renewal covers the entire chain.
+
 This is the existing credential-only JIT path, not PROV-1 deployment or physical
 rehearsal. Do not rebuild/restage runtime artifacts, change HTTP/AWG/TCP, install an
 APK, create identities/admissions, reset security floors or extend the accepted TTL.
@@ -59,6 +82,13 @@ systemd, issue credentials or create a second authority path.
    do not send an application request or admit another client for observation.
 7. Run only the required existing sync, compare RU/NL signed CRL/floors/authority and
    directory, restore timer, and verify ordinary production unchanged.
+8. Before authenticated client refresh, verify RU has the **current NL directory
+   generation**, not merely an unexpired earlier export. A bootstrap reload retires
+   its old seed; periodic RU sync can lag the new NL publication. READY/ACK for the
+   older still-valid directory does not prove that seed remains reachable. Preserve
+   any failed attempt, wait for verified propagation, then refresh without clearing
+   identity/cache floors. Cap the operational window by the actual loaded gateway
+   certificate even when the directory/client receipt expires later.
 
 The operator can be executed in memory through the authorized protected session;
 deploying a new HTTP/sync/bootstrap runtime or staging server artifacts is unnecessary.

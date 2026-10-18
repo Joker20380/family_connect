@@ -56,21 +56,47 @@ def bounded_file(path, limit, private=False):
     return raw
 
 
+def admission_policy(raw):
+    policy = parse(raw)
+    require(type(policy) is dict)
+    if set(policy) == {'version', 'eligibility'}:
+        require(type(policy['version']) is int and policy['version'] == 2
+                and policy['eligibility'] == 'all_activated')
+        return None, True
+    fields(policy, 'devices')
+    require(type(policy['devices']) is list and len(policy['devices']) <= 256)
+    require(all(type(device) is str and (device == '*' or re.fullmatch('[0-9a-f]{32}', device)) for device in policy['devices']))
+    return policy['devices'], False
+
+
+def activated_grant(database, device, family, minimum_revision):
+    row = database.execute('SELECT d.*, i.revoked AS invite_revoked, g.family, g.revision, '
+                           'g.revoked AS grant_revoked FROM devices d '
+                           'JOIN invites i ON d.device=i.device '
+                           'LEFT JOIN restricted_grants g ON d.device=g.device WHERE d.device=?', (device,)).fetchone()
+    if row is None or row['revoked'] or row['invite_revoked'] or row['grant_revoked']:
+        raise Rejected()
+    if row['family'] is not None and (row['family'] != family or row['revision'] < minimum_revision):
+        raise Rejected()
+    result = dict(row)
+    result.update(family=family, revision=row['revision'] if row['family'] is not None else minimum_revision,
+                  expires=None, grant_revoked=0)
+    return result
+
+
 def from_env(access):
     root = Path(os.environ['FC_FRIENDS_RESTRICTED_DIR'])
     require(root.is_absolute())
     anchor = base64.b64decode(bounded_file(root / 'anchor.pub', 128).strip(), validate=True)
     require(len(anchor) == 32)
-    policy = parse(bounded_file(root / 'admission.json', 16384))
-    fields(policy, 'devices')
-    require(type(policy['devices']) is list and len(policy['devices']) <= 256)
-    require(all(type(device) is str and (device == '*' or re.fullmatch('[0-9a-f]{32}', device)) for device in policy['devices']))
+    eligible_devices, all_activated = admission_policy(bounded_file(root / 'admission.json', 16384))
     lifetime = os.environ.get('FC_FRIENDS_RESTRICTED_DELIVERY_LIFETIME', '3600')
     require(lifetime in ('3600', '14400'))
     return RestrictedReadiness(access, manifest=parse(bounded_file(root / 'issuer.json', 16384)),
                               anchor=anchor, signing_key=load_pem_private_key(bounded_file(root / 'issuer.key', 4096, True), None),
                               seed_source=lambda: bounded_file(root / 'directory.json', 8192),
-                              crl_source=lambda: bounded_file(root / 'revocations.pem', 16384), eligible_devices=policy['devices'],
+                              crl_source=lambda: bounded_file(root / 'revocations.pem', 16384), eligible_devices=eligible_devices,
+                              all_activated=all_activated,
                               delivery_lifetime=int(lifetime))
 
 
@@ -228,14 +254,18 @@ def migrate(access):
 
 
 class RestrictedReadiness:
-    def __init__(self, access, *, manifest, anchor, signing_key, seed_source, crl_source, eligible_devices=None, delivery_lifetime=3600):
+    def __init__(self, access, *, manifest, anchor, signing_key, seed_source, crl_source, eligible_devices=None, delivery_lifetime=3600, all_activated=False):
         require(type(delivery_lifetime) is int and delivery_lifetime in (3600, MAX_TEST_LIFETIME))
+        require(type(all_activated) is bool and (not all_activated or eligible_devices is None))
         self.access, self.manifest, self.anchor = access, manifest, anchor
         self.signing_key, self.seed_source, self.crl_source = signing_key, seed_source, crl_source
         self.eligible_devices = None if eligible_devices is None else frozenset(eligible_devices)
         self.delivery_lifetime = delivery_lifetime
+        self.all_activated = all_activated
 
     def _enroll(self, database, device, public, wg, trust, now):
+        if self.all_activated:
+            return
         if database.execute('SELECT 1 FROM restricted_grants WHERE device=?', (device,)).fetchone():
             return
         if self.eligible_devices is None or (device not in self.eligible_devices and '*' not in self.eligible_devices):
@@ -262,7 +292,13 @@ class RestrictedReadiness:
         require(0 < number < 2**53)
         return trust, authority, crl, raw.decode(), number
 
+    def _activated_grant(self, database, device, now):
+        trust, _ = delegation(self.manifest, self.anchor, now)
+        return activated_grant(database, device, trust['family'], trust['minimum_revision'])
+
     def _grant(self, database, device, now):
+        if getattr(self, 'all_activated', False):
+            return self._activated_grant(database, device, now)
         if self.eligible_devices is not None and device not in self.eligible_devices and '*' not in self.eligible_devices:
             raise Rejected()
         row = database.execute('SELECT d.*, g.family, g.revision, g.expires, g.revoked AS grant_revoked '
@@ -331,7 +367,8 @@ class RestrictedReadiness:
                     or row['revision'] < trust['minimum_revision']
                     or challenge['family'] != row['family'] or challenge['revision'] != row['revision']):
                 raise Rejected()
-            expires = min(now + self.delivery_lifetime, row['expires'] if row['expires'] is not None else trust['expires_at'], trust['expires_at'], int(crl.next_update_utc.timestamp()))
+            issued = max(now - readiness_receipts.CLOCK_SKEW_SECONDS, trust['issued_at'], int(authority.not_valid_before_utc.timestamp()))
+            expires = min(issued + self.delivery_lifetime, row['expires'] if row['expires'] is not None else trust['expires_at'], trust['expires_at'], int(crl.next_update_utc.timestamp()))
             if self.delivery_lifetime == MAX_TEST_LIFETIME:
                 expires = min(expires, timestamp(seeds['expires_at']))
             database.execute('DELETE FROM restricted_certificates WHERE expires<=?', (now,))
@@ -353,7 +390,7 @@ class RestrictedReadiness:
                 pem = certificate.public_bytes(Encoding.PEM).decode()
             if crl.get_revoked_certificate_by_serial_number(certificate.serial_number) is not None:
                 raise Rejected()
-            result = dict(version=1, device=device, challenge=proof['challenge'], issued_at=now,
+            result = dict(version=1, device=device, challenge=proof['challenge'], issued_at=issued,
                           expires_at=min(expires, int(certificate.not_valid_after_utc.timestamp()), timestamp(seeds['expires_at'])),
                           revision=row['revision'], issuer=self.manifest, certificate=pem,
                           revocations=crl_pem, minimum_crl=crl_number, directory=seeds)
@@ -372,7 +409,7 @@ class RestrictedReadiness:
                 'protocol=' + PROTOCOL, 'family=' + row['family'], 'role=' + role, 'revision=' + str(row['revision']))]])
         return (x509.CertificateBuilder().subject_name(subject).issuer_name(authority.subject)
                 .public_key(Ed25519PublicKey.from_public_bytes(public[32:])).serial_number(x509.random_serial_number())
-                .not_valid_before(utc(now)).not_valid_after(utc(expires))
+                .not_valid_before(max(utc(now - readiness_receipts.CLOCK_SKEW_SECONDS), authority.not_valid_before_utc)).not_valid_after(utc(expires))
                 .add_extension(x509.BasicConstraints(ca=False, path_length=None), critical=True)
                 .add_extension(x509.ExtendedKeyUsage([ExtendedKeyUsageOID.SERVER_AUTH if role == 'gateway' else ExtendedKeyUsageOID.CLIENT_AUTH]), critical=True)
                 .add_extension(x509.SubjectAlternativeName([x509.UniformResourceIdentifier(

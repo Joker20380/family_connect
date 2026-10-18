@@ -1,14 +1,31 @@
-# Bootstrap cleanup race — source correction, 2026-10-05
+# Bootstrap cleanup race — deployment and owner acceptance, 2026-10-05
+
+Superseding update: [server readiness correction05.10](2026-10-05-readiness-clock-skew.md)
+is deployed13:55–13:56UTC, issuer5 renewed, unchanged owner65 fresh READY/ACK PASS.
+Gateway executable remains05571644. New effective gateway ceiling17:52:14UTC today.
+The following export12/13 decisions precede that resumed work; tester result remains pending.
+
+Latest: [export13 mobile attempt](2026-10-05-field-export13-beta65.md) on current65
+fails before restricted native startup after AWG/TCP NETWORK and FETCH_FAILED.
+This does not exercise the new gateway recovery path. No further implementation or
+deployment occurred after the user stopped development to run that one test.
+
+Follow-up: [export12 diagnosis](2026-10-05-field-export12-beta65.md) confirms tester65
+but native import fails before a session, with client/server clock-sensitive guards.
+User explicitly defers that correction; keep working VPN for coordination and do not
+request clock changes, screenshots or another mobile trial. Earlier gates below are
+historical, not instructions to repeat the VPN-off preparation.
 
 ## Scope and delivery state
 
 Continuation of the [beta65 failed recovery gate](2026-10-04-beta65-readiness-candidate.md).
 Source prepared on HEAD `5263410`; user authorized scoped commit/push05.10.
 Final sourcea813dc5 passes CI and gateway artifact verification (checkpoint below).
-No version change, local APK signing, installation, gateway
-mutation or public rollout in this step. Unrelated dirty
-documentation is preserved. This is a locally verified server-side correction,
-not evidence that installed beta65 recovery now works against production.
+Follow-up10:13UTC deploys that gateway; owner65 runtime recovery/security acceptance
+now PASS, detailed at the end. No product APK version change, rebuild, signing or
+installation. Targeted publication of the previously accepted immutable65 and public
+download verification completed10:27UTC. Unrelated dirty documentation is preserved. Original field DATA/ACK loss
+remains unlocalized; this controlled acceptance is not a Krasnodar field-fix claim.
 
 Last verified04.10: owner Redmi `0.1.18-beta65`/65; tester and targeted public64;
 default/catalog/invitation60. Accepted APK65 source
@@ -17,7 +34,7 @@ signed APK SHA256 `dfbdb5352b8c707fb77ff3d7392d8217f898aa8e999b6a0f52fad81721857
 49671035bytes. Do not replace these bytes with a same-version rebuild.
 Last gateway binary SHA256
 `f71b7e7bb92d7f312d210d41ebf200cf4416ed73ca7fe3a33ae2e13d4d3f2ebf`;
-PID4077612 at04.10 20:30UTC. This report does not assert a new live state readback.
+PID4077612 at04.10 20:30UTC. This paragraph is historical; current readback is below.
 
 ## Evidence and limits
 
@@ -57,11 +74,11 @@ release. It was not extracted as an installable delivery, signed, installed or
 published. Existing signed owner65 `dfbdb535...` stays immutable. Read-only ADB
 metadata confirms installed `0.1.18-beta65`/65 and UID10283, without modifying data.
 
-No remote deployment, credential renewal, ordinary-service restart or public-route
-change in this task. Local disk-quota failures remain real failed local validation
+At the CI-only checkpoint no deployment, renewal or public-route change had occurred.
+Local disk-quota failures remain real failed local validation
 attempts; the now-successful remote CI provides independent full-build evidence.
-Next gate is verified gateway05571644 deployment with fresh valid credentials and
-owner recovery/security acceptance, not a Krasnodar mobile retry yet.
+The subsequent deployment and owner gates are recorded below; a Krasnodar mobile
+retry still requires the tester's own fresh current-directory READY/ACK.
 
 ### Earlier new-source/live readback checkpoint05.10
 
@@ -308,8 +325,163 @@ No physical owner acceptance or Krasnodar mobile trial was repeated in this step
    fresh authenticated fetch/native READY/ACK and run one authorized Krasnodar trial.
    Default/catalog/invitation60 remain unchanged; no readiness from cached READY alone.
 
-There is no production rollback to perform now. A later gateway rollback restores
+At the earlier predeployment checkpoint no production rollback was needed. A gateway rollback restores
 the saved f71b7e7b binary/configuration with **fresh valid credentials**, not the
 expired04.10 profile, and then revalidates service/loaded chain. Keep issuer floors,
 admission, private state and unrelated services intact. A client fix requires a
 higher-code successor, never uninstall/data clear/downgrade or immutable-byte replacement.
+
+## Server execution05.10 — owner acceptance PASS
+
+Preflight10:10UTC verified issuer4 cryptographically and unchanged owner3/tester1
+grants. Only11891s of authority headroom remained. Renewal used the existing issuer
+machinery and same gateway key, capped at `min(now+14400, issuer, grants)` rather
+than extending authority. Issued CRL6326 and gateway lifetime11808s; issuer and grants
+unchanged. Publication10:12:11UTC passed native positive/negative authority checks,
+atomic publisher metadata/fsync/readback checks, UID/GID979,0600 and actual service
+readability. Existing unit/wrapper/configuration were not replaced. Loaded TLS
+certificate matched the profile, chain/hostname verified, stable35s observation PASS.
+**Actual gateway expiry05.10 13:28:47UTC** is authoritative even though the published
+directory expires14:13:47UTC. RU sync timer restored on exit.
+
+Accepted binary deployment10:13:54UTC PASS; loaded SHA25605571644…6326a0 equals the
+verified Linux/amd64 CI artifact at sourcea813dc5. PID353567/NRestarts0, fresh validated
+directory, unchanged gateway binding. Before/after RU device/invite/grant/audit DB,
+admission, ordinary HTTP/AWG/TCP service and binary invariants equal. No product APK
+signing/install, public version or invitation/catalog change.
+
+Private receipts: `state-client-build/bootstrap-cleanup-server/` (preflight, issued,
+publication, loaded certificate, deployment and invariants). Protected remote renewal
+stage on both authorized hosts:
+`/opt/apps/family_connect/restricted-materials-stage-20261001/cleanup-renewal-a813dc5-20261005`.
+NL binary rollback directory:
+`/opt/apps/family_connect/restricted-materials-stage-20261001/cleanup-binary-a813dc5`.
+Its `bootstrap-broker.previous` is f71b7e7b. Roll back only the executable while
+preserving renewed credentials, monotonic CRL/floors and admission; revalidate loaded
+hash/chain/READY, synchronize the replacement directory to RU before client refresh.
+Never restore the expired old profile or decrement security state.
+
+### Unchanged owner65 runtime acceptance
+
+RU sync run succeeded; post-deployment RU/NL directory bytes and generation equal,
+issued10:13:50.834616272UTC, SHA256
+`6bf514cd90d55af8256e86d2fdbb7175cf6185383fa65914f29f725fb9e9e53d`.
+Only the existing matching signed private instrumentation package was installed.
+Ordinary FriendsActivity foreground obtained a fresh authenticated fetch/native
+READY/ACK65 after expired cache; no forced fetch, cooldown bypass or cache edit.
+This is an expired-cache case; retained-valid-cache ordinary refresh was already
+accepted04.10 and is not relabeled as a new retained-cache test here.
+
+`OwnerRecoveryTest#realSessionsWithInjectedPolicyLoss` now PASS against the new live
+gateway on exactly the previously installed signed65. It injects the NETWORK policy
+cause; it does **not** induce native eight-retry exhaustion or emulate RKN loss.
+Real original/restored native sessions have different handles/tags, HTTPS200 before
+and after, and the old handle is gone. The second-loss bounded guard and explicit
+disconnect cleanup remain. Separate startup AUTH denial, connected AUTH denial
+without another descriptor, and pre-start cancellation all PASS (local denial
+injection, not revocation of an actual user's access).
+
+Paired client/server evidence PASS: original59 and restored67 server events, no
+sequence gaps, complete descriptor/join/carrier/Family TLS/gateway session/cleanup
+stages. Client32/36 events with7/8 bounded delivery samples; server13/17 delivery
+samples. Old server cleanup10:18:11.285UTC precedes new descriptor10:18:15.034UTC
+by3.749s; no bootstrap exchange rejection in this bounded window. These timestamps
+prove ordering, not the duration of the specific busy-slot wait. Initial all-journal
+read failed (protected error receipt retained); reading the known active journal
+file completed and supplied the gap-free evidence. No runtime test was rerun to hide
+that observer failure.
+
+AWG/TCP ordinary product transport, existing enrollment, provider/protocol/update
+security suite, restart/Support, diagnostics/share and final cleanup PASS. Diagnostic
+export8937bytes matches the reported SHA/size, event bounds and forbidden-field scan;
+no share recipient selected/upload performed. Final pulled APK SHA256dfbdb535…5778e
+and original signer67a90d1b match; UID10283, data inode/first install, identity,
+enrollment, activation and Support remain unchanged. Readiness may legitimately
+refresh. The private test package was removed and its absence verified.
+
+Final10:22:43UTC actual loaded gateway05571644 still PID353567/NRestarts0; certificate
+matches and has11163s headroom. RU invariants equal pre-renewal state. Verified HTTPS
+status200 and expected400 for unauthenticated ordinary challenge/chat and malformed
+restricted request; both public update catalogs byte-identical, default60 unchanged.
+Private receipts: `state-client-build/bootstrap-cleanup-owner/` and the server folder.
+### Targeted public65 delivery — verified05.10 10:27UTC
+
+Owner/runtime gates above allowed delivery of the **existing** signed source86fa1ba
+APK65, not the unsigned same-version artifact from gateway CI. Source's four workflow
+successes and saved signed-artifact verification were rechecked. No rebuild/resign.
+Only a separate immutable download and exact nginx route were added; syntax check and
+reload of `family-connect-product-https` PASS10:25:54UTC. Existing downloads, catalog,
+invitation/landing bytes, admission/Support/enrollment and ordinary service processes
+unchanged. Full HTTPS download10:27:01UTC, certificate verification enabled, no redirect:
+
+- [FamilyConnect-Test-0.1.18-beta65.apk](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta65.apk),
+  HTTP200, ARM64/package `com.familyconnect.app.friends`, code65,49671035bytes.
+- Downloaded SHA256 `dfbdb5352b8c707fb77ff3d7392d8217f898aa8e999b6a0f52fad8172185778e`.
+- Verified original signer SHA256
+  `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+- Signed catalog/discovery/default APK/invitation remain60, with previous hashes;
+  old64 and all other downloads unchanged. No GitHub APK publication or new signed catalog.
+
+Private delivery receipts and downloaded APK:
+`state-client-build/field65-direct-delivery/`. RU publication/route backup:
+`/opt/apps/family_connect/release-beta65-recovery-20261005`, with nginx config backups
+and `publication.json`. Route rollback restores those configs after checking for
+later changes, runs nginx syntax check/reload, and retains immutable APK bytes.
+No client uninstall/downgrade/identity reset; a future client correction needs a
+higher versionCode. Gateway executable rollback is documented separately above.
+
+Read-only RU observation10:25:59UTC: owner65 fresh fetch/READY/ACK usable, both devices
+admitted/non-revoked. Tester latest05.10 fetch has no ACK and is expired; last confirmed
+installed version remains64. Public availability is not evidence of tester installation.
+NEXT tester updates over Wi-Fi in place, confirms65 and unchanged Support, opens with
+VPN off; operator verifies fresh current-directory native READY/ACK65. Only then one
+authorized Krasnodar mobile Auto trial; export JSON before manual reconnect on failure.
+Current material bound **05.10 16:28:47 Krasnodar/13:28:47UTC**; later trial requires
+fresh authority/material validation and renewal, not accepting expired cached READY.
+Original field DATA/ACK loss location and RKN involvement remain unproven.
+
+Documentation updated in STATUS/PLAN, documentation index, release overview,
+beta65 report and RU/EN installation/download guides, preserving pre-existing dirty
+work. Final local documentation check:476 files/2905 links, zero errors;
+`git diff --check` PASS. These edits are local/uncommitted in this continuation;
+the published APK and deployed gateway are verified separately above. No new source
+commit, APK version or claim of published GitHub documentation is made here.
+
+### Tester availability update
+
+User clarified the tester unavailable before **14:00 Brussels (CEST/UTC+2),
+15:00 Krasnodar (UTC+3),12:00UTC on05.10**. This replaces the initial provisional
+Krasnodar-time assumption. No tester action/mobile trial before availability.
+The currently verified material bound16:28:47 Krasnodar leaves1h28m47s from15:00,
+but actual gateway health, authority headroom and fresh native READY/ACK must be
+rechecked at test time. No automatic schedule, background monitoring or tester
+contact was created.
+
+### Krasnodar availability and live preflight12:26UTC
+
+User reports tester ready after a communication interruption. Read-only check05.10
+12:26:15UTC confirms actual loaded05571644, PID353567/NRestarts0, active service,
+served leaf/profile match and issuer/CRL signature validation. RU/NL directory hash
+6bf514cd…9e53d and generation10:13:50.834616272UTC match; RU sync timer active.
+Effective material headroom3751s; expiry13:28:47UTC/16:28:47 Krasnodar unchanged.
+Owner65 retained READY is not evidence of tester readiness. Tester admitted and
+non-revoked, with new fetch12:22:14UTC/revision1/minimumCRL6565 but no ACK/native READY;
+installed65 cannot be inferred from this request. No mobile trial authorized to
+start before the missing gate: confirm/update65 in place over Wi-Fi, open VPN-off,
+then verify fresh native READY/ACK. No server mutation/restart/renewal or client
+operation was performed by this preflight. Private timestamped receipts retained
+under `state-client-build/field65-krasnodar/`. STATUS/PLAN updated; diff check PASS.
+
+### Setup reported complete; READY absent12:38UTC
+
+User says preparation is done. Recheck12:38:40UTC: same gateway05571644/PID353567,
+NRestarts0, loaded leaf/profile match and RU/NL directory equality, headroom3006s.
+Tester latest challenge/fetch remains12:22:14UTC with no ACK; the user's completion
+message alone is not server-side code65/native READY proof. No new fetch or ACK is
+observed. This does not locate the fault or establish that the client is defective.
+Rather than repeat setup blindly, request a screenshot of Settings → «Готовность
+подключения» (FriendsReadiness.inspect, local inspection, no forced fetch/activation
+or access change). It reports activation/identity/provisioning/cache/refresh status
+without private identity bytes. Keep Wi-Fi and VPN off; mobile trial remains gated.
+Timestamped read-only receipts retained in the same ignored evidence directory;
+no server mutation/client reset/reinstall/test started. STATUS/PLAN and diff checked.

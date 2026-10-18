@@ -10,6 +10,8 @@ from device_identity.device import verify_transport_key_proof
 from provisioning.friends_catalog import fields, require
 from .access import Rejected, CHALLENGE_TTL
 
+CLOCK_SKEW_SECONDS = 5
+
 CODES = frozenset(('READY', 'NATIVE_VALIDATION_FAILED', 'BOOTSTRAP_VALIDATION_FAILED',
                    'ATOMIC_IMPORT_FAILED', 'PERSISTENCE_FAILED', 'EXPIRED_ON_IMPORT',
                    'ORCHESTRATOR_NOT_USABLE', 'INTERNAL_ERROR', 'STALE_STATE',
@@ -73,7 +75,8 @@ def _attempt(service, database, payload, device, now):
     row = database.execute('SELECT * FROM restricted_readiness_results WHERE correlation=? AND device=?', (payload['correlation_id'], device)).fetchone()
     grant = service._grant(database, device, now)
     trust, authority, crl, _, floor = service._trust(now)
-    if (row is None or row['challenge_at'] < now - 86400 or not row['challenge_at'] <= payload['observed_at'] <= now + 5
+    if (row is None or row['challenge_at'] < now - 86400
+            or not row['challenge_at'] - CLOCK_SKEW_SECONDS <= payload['observed_at'] <= now + CLOCK_SKEW_SECONDS
             or grant['family'] != trust['family'] or grant['revision'] < trust['minimum_revision']):
         raise Rejected()
     if row['fetch_id'] is not None and payload['fetch_id'] != row['fetch_id']:

@@ -2,7 +2,9 @@
 
 Follow-up: [local recovery classification patch and regression results](2026-10-04-restricted-recovery-classification.md)
 are now recorded separately. The analysis below describes the installed beta62 behavior;
-the patch is not installed or distributed, and does not fix the original DATA stall.
+subsequent [beta63 delivery](2026-10-04-beta63-recovery-candidate.md) and
+[native-exhaustion acceptance](2026-10-04-beta63-native-exhaustion.md) are now recorded.
+The original DATA stall is not claimed fixed.
 
 ## Результат
 

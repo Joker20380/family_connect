@@ -1,20 +1,300 @@
 # Documentation
 
+[MESH product integration,18.10](releases/2026-10-18-mesh-product-integration.md):
+MESH is the product transport, VP8/RTP its carrier, Telemost its provider.
+[Transport contract](../carrier/README.md#mesh-product-contract),
+[architecture](architecture.md#mesh-product-model), [ADR002](adr/002-mesh-product-name.md).
+Android naming is local-only; Windows/Linux media integration is not implemented.
+
+[Telemost activated access v2,18.10](releases/2026-10-18-telemost-all-activated-preflight.md):
+local HTTP rewrite and packaged-loopback checks; no per-tester grant, ordinary
+activation is entitlement and short-lived crypto remains separate. NOT_DEPLOYED:
+current4h management/planner/checkpoint integration still required; current CRL
+evaluation fails. [Candidate contract](../deploy/friends/restricted/ACTIVATED_ACCESS_V2.md).
+No server mutation or APK publication; do not switch the policy file alone.
+
+[CRL commit/read barrier13.10](releases/2026-10-13-crl-commit-read-barrier-1.md):
+PARTIAL. Exact frozen gateway accepts restored old profile N: local reload is not an
+authoritative barrier or durable floor.941 sealed inputs and38 model tests×3 checked;
+model is not a deployable distributed service. Common coordination/fencing infrastructure
+and a future gateway reader rebase are required. Exactly next: coordination/commit-ledger
+design acceptance. Writer not deployment-ready; canary policy blocked; production0.
+
+[CRL writer safety13.10](releases/2026-10-13-crl-writer-safety-1.md):
+PARTIAL, isolated unaccepted source. Exact baseline reproduced; issuer-key mismatch
+now rejects before mutation/NL request.30 local tests×3 and exact frozen TLS probe
+pass. RU/NL commit still lacks common reader-visible barrier; rollforward is not
+distributed atomicity. Next: source-only committed-state/reader-barrier acceptance,
+not canary policy or deployment. Production/owner/live actions0.
+
+[CRL writer provenance13.10](releases/2026-10-13-crl-writer-provenance-1.md):
+EXACT deployed RU/NL source recovered and byte-rebuilt; narrow independent-profile revoke
+and frozen gateway rejection proved. Full acceptance FAIL: wrong local issuer-key fixture
+replaces valid CRL before NL rejects the signature.19 characterization tests×3; no production
+mutation. Exactly next: separate source-only writer safety acceptance, not canary issuance.
+
+[Restricted canary identity policy13.10](releases/2026-10-13-restricted-canary-identity-policy-1.md):
+PARTIAL, no issuance candidate. Exact HTTP bundle resolved; deployed CRL-writer source
+provenance unresolved.23 API,10 frozen-binary TLS and6 evaluator checks PASS; TLS-only
+evidence is not seed/Mux/lease acceptance. Separate-policy design retained, frozen gateway
+unchanged. Next: recover the exact revocation-writer source capsule; no production actions.
+
+[Seed-supervisor operational readiness13.10](releases/2026-10-13-gateway-seed-supervisor-op-readiness-1.md):
+PARTIAL / READY=NO. Frozen bytes/baseline verified; fresh runtime stable, leaf expired,
+active restricted sessions UNKNOWN. Exact API policy probe cannot establish the required
+test-only identity without ordinary activation/chat eligibility. No grant, renewal,
+canary, restart or owner action. Next: separately accepted test-only issuance policy.
+
+[Seed-supervisor root-local research trigger13.10](releases/2026-10-13-gateway-seed-supervisor-trigger-1.md):
+local acceptance PASS; frozen source134083d8 / binary53beb661…5138f. Default-disabled,
+public-build-absent one-shot actual-Gorilla1011 control; same room/D/stream/old-cache
+continuity and race/security acceptance. No deployment/owner/live actions. Exactly next:
+separate operational readiness and exact-binary canary, not automatic deployment.
+
+[Seed-supervisor predeployment readiness13.10](releases/2026-10-13-gateway-seed-supervisor-predeploy-1.md):
+PARTIAL / READY=NO. Same runtime/baseline, no new fatal; process window fits, served
+Family certificate expired. Permitted synthetic identity unavailable; historical trigger
+requires a test binary, no compatible exact-binary one-shot control proven. No canary,
+renewal, restart or owner action. Next: source-only trigger candidate/local acceptance.
+
+[Seed-supervisor deployment entry13.10](releases/2026-10-13-gateway-seed-supervisor-deploy-1.md):
+PARTIAL / PRELIVE_SERVER_CHANGED before deployment. Fresh baseline hashes match;
+two normal duration-DEADLINE/exit0 completions, not new fatal1011. No restart/renewal,
+owner action or test disconnect. Next is a separate readiness gate with verified
+synthetic identity and exact-binary seed-only trigger; local candidate PASS preserved.
+
+[Seed-supervisor local candidate13.10](releases/2026-10-13-gateway-seed-supervisor-1.md):
+PASS local production supervisor acceptance; exact candidate sealed, not deployed.
+
+[Real-provider same-room rejoin12.10](releases/2026-10-12-telemost-real-same-room-rejoin-1.md):
+PASS isolated Telemost API/WSS/Pion/SFU episode. One seed create, real socket disconnect,
+fresh full-media rejoin, unchanged old D bootstrap, original dedicated Mux/TCP stream
+preserved. Code1011 test-injected, not provider-generated. No production/owner changes.
+Next is a minimal supervisor source patch/local acceptance only, not deployment.
+
+[Same-room rejoin capability12.10](releases/2026-10-12-gateway-same-room-rejoin-proof-1.md):
+PARTIAL. Real local WSS/Pion/RTP, unchanged-cache authenticated bootstrap, dedicated
+Family/Mux/TCP continuity and lease control passed. Actual Telemost room retention/full
+rejoin after1011 remains UNKNOWN: fixture persistence is not provider evidence. No
+production supervisor/deployment/owner action; exact experiment and race receipts sealed.
+
+[Gateway WS1011 continuity12.10](releases/2026-10-12-gateway-ws-1011-continuity-1.md):
+offline PARTIAL. Real close-frame→seed fatal reproduced; dedicated Family/Mux/lease
+isolation demonstrated locally. Same-room fresh Pion/media and old-cache bootstrap
+remain unproved; no speculative recovery patch or deployment. Race/differential
+receipts sealed; owner untouched. Next is that specific local continuity proof.
+
+[Warm-start formal acceptance2 — prelive abort12.10](releases/2026-10-12-warm-start-formal-acceptance-2.md):
+PARTIAL; one authorized same-key renewal, then natural SEED_READ/SIGNAL_READ
+WS_CLOSE1011 before collector deployment. Exact receipts preserved; automatic
+restart/new directory. Owner untouched and attempt unconsumed; historical functional
+PASS remains. Next is separate offline fatal analysis, not automatic live acceptance.
+
+[Warm-start collector rebase12.10](releases/2026-10-12-warm-start-collector-rebase-1.md):
+PASS local candidate; exact deployed API baseline recovered, AKI/skew/ACK/publisher
+preserved. Isolated collector source, reproducible gateway/API builds, differential
+tests and rollback sealed. Full legacy suite remains non-green with no new failures.
+No deployment or owner action; next is separate controlled collector deployment and
+formal evidence run. Functional PASS preserved; warm readiness remainsNO.
+
+[Warm-start formal acceptance12.10](releases/2026-10-12-warm-start-formal-acceptance-1.md):
+PARTIAL; deployment stopped by scope review. Archived HTTP collector candidate would
+revert deployed AKI/clock-skew/publisher behavior. Fresh source/byte diff retained;
+gateway and owner unchanged, new attempt unconsumed. Rebase collectors on the actual
+API and repeat differential acceptance first. Historical functional PASS preserved.
+
+[Warm-start evidence attribution12.10](releases/2026-10-12-warm-start-evidence-attribution-1.md):
+offline PARTIAL, functional warm-start/egress/client renewal remain PASS. Two403 lack
+principal attribution; independent server lease receipt not retained. Source-only
+bounded collectors, differential/race/privacy fixtures and conservative evaluator
+prepared; no deployment or owner action. Strict formal gate needs a separately
+authorized collector-backed evidence run, not automatic CONNECT or FIELD.
+
+[Telemost workability12.10](releases/2026-10-12-telemost-workability-proof-1.md):
+live core PASS / formal evidence PARTIAL. One ACK-before-arm physical CONNECT,
+cached native input, dedicated READY,7 ordinary HTTPS nonces via NL and controlled
+DNS proven;723.814s same-session observation, renewal1 and subsequent traffic PASS.
+Owner accepted provisioning rows0, but2 shared403 entries lack owner attribution;
+independent server lease journal timed out. Do not claim complete formal PASS.
+Attempt consumedYES; gate CLEANED, VPN OFF/app+chat ON, research84 unchanged.
+Next is offline collector-evidence readiness, not an automatic CONNECT or FIELD.
+
+[Signal-read cause12.10](releases/2026-10-12-gateway-signal-read-cause-1.md): offline
+PARTIAL; exact ReadJSON loss point established, historical low-level causeUNKNOWN.
+Local immutable typed-classifier candidate; real WS/WSS fixtures/race×3 PASS,
+legacy six diagnostic failures and baseline busy-wire flake remain. No behavioral
+fix, deployment or owner action. Next: separate observation-update acceptance/
+deployment and natural trigger, not CONNECT. Two-phase operator fixtures22 PASS.
+
+[Seed-read observability12.10](releases/2026-10-12-gateway-seed-read-observability-1.md):
+observation binary deployed once; natural SEED_READ/SIGNAL_READ captured, automatic
+restart only. PARTIAL: immediate postcheck incomplete, planned30m collector not run;
+later chain/loaded-next/publication checks pass. Lower-level signaling cause remains
+unknown. That next localization step is recorded above; no CONNECT/transport fix.
+
+[Seed-read cause12.10](releases/2026-10-12-gateway-seed-read-cause-1.md): offline
+PARTIAL; shared-seed failure boundary established, historical underlying cause
+UNKNOWN/no client attribution. Observation-only local delta and two-phase operator
+fixtures PASS; no independent behavioral defect, deployment or owner action.
+Full legacy suite remains non-green. [Future manual ACK/CONNECT runbook](whitelist-warm-start-two-phase-runbook.md)
+is prepared only; that historical next deployment step is now recorded above.
+
+[Warm-start attempt12.10](releases/2026-10-12-whitelist-warm-start-1.md):
+PARTIAL; research84 installed in place, exact cached selection/native offline PASS.
+Operator window timed out; gate cleaned before later physical CONNECT, so blocked
+warm-start/egress NOT_RUN. Natural gateway SEED_READ/UNKNOWN exit1 captured,
+automatic restart/new directory; readinessNO, one physical attempt consumed late.
+Final VPN OFF/app+chat ON; no second CONNECT, agent restart/renewal or public release.
+[Private research84 RU](releases/research84.ru.md) / [EN](releases/research84.en.md).
+
+[Provisioning-only seam12.10](releases/2026-10-12-whitelist-provisioning-block-seam-1.md):
+local PASS/condition READY; API31/API35 real-path fixtures, zero armed provisioning
+requests, cache preserved, chat/ordinary controls unaffected, bounded cleanup.
+Research84 signed but NOT installed/distributed; owner and gateway untouched.
+Fresh live preflight remains separate; clean CONNECT attempt unused.
+
+[Gateway recovery12.10](releases/2026-10-12-whitelist-gateway-recovery-2.md):
+PARTIAL; one same-key renewal/one start, strict chain/current publication PASS;
+observer bytes unchanged. Current cache refreshed by existing background activity,
+one offline exact production/native validation PASS. ReadinessNO: compliant owner-role
+provisioning denial not prepared; old source-IP503 forbidden by new scope. Collector
+bundle also remains unaccepted despite local binding fixtures. Attempt unused,
+research83 unchanged, final VPN/app/chat OFF; leaf expires13:36:04UTC12.10.
+
+[Exact selection12.10](releases/2026-10-12-whitelist-exact-selection-1.md):
+PARTIAL; one owner production identity-bound offline selection/native validation PASS.
+Cache unchanged during reader; later independent Activity/background refresh recorded.
+Gateway observer captured normal4h exit0 then PROFILE/CREDENTIALS_REJECTED exit1
+startups; current failed/PID0, readinessNO, clean CONNECT unused. No product patch,
+renewal or agent restart. Final VPN OFF/app+chat ON, no forced user-process stop.
+
+[Cache metadata11.10](releases/2026-10-11-whitelist-cache-metadata-1.md):
+PARTIAL; one authorized reader, six disposable fixtures PASS, cache unchanged.
+Actualbb5c8eb0…d8959 equals current seed; full identity-bound exact selection remains
+unproved, readinessNO. Helper removed; VPN OFF, app/chat OFF. Background refreshes
+before interruption explicitly recorded; CONNECT attempt unused, observer unchanged.
+
+[Cache readiness11.10](releases/2026-10-11-whitelist-cache-readiness-2.md):
+PARTIAL/NO; current observer/runtime/chain verified, exact owner cache inaccessible
+without separately authorized lifecycle interruption. No refresh/CONNECT/restart.
+
+[Gateway fatal observer11.10](releases/2026-10-11-gateway-fatal-cause-1.md):
+PARTIAL/ARMED_NOT_TRIGGERED after900s; safe gateway-only receipt sourceabc604b0,
+loaded/next0ccaaf81…2667a. One same-key renewal/controlled restart; strict served
+chain/publication verified. Historical fatal cause UNKNOWN, research83 unchanged,
+CONNECT0/attempt UNUSED. READY_FOR_CLEAN_RETRY=NO until separate cache/runtime
+preflight. No owner startup, transport fix, APK publication or FIELD.
+
+[Gateway readiness, read-only11.10](releases/2026-10-11-whitelist-gateway-readiness-1.md):
+READY_FOR_CLEAN_RETRY=NO; CONNECT0, clean attempt UNUSED. Historical exit cause
+UNKNOWN after bounded journal timeouts; another automatic restart observed during
+preflight, same product bytes/new publication. Served chain expired; current client
+cache digest unverified, seed overlap not restart-safe. No renewal/restart by agent,
+owner lifecycle or product patch; last18:46:28UTC VPN OFF/app+chat ON. No FIELD.
+
+[Dedicated-join review and pre-CONNECT abort11.10](releases/2026-10-11-whitelist-dedicated-join-1.md):
+call ended, but clean preparation stopped before the physical gate: gateway exited
+and automatically restarted with unchanged bytes/new directory. CONNECT0, clean
+attempt NOT_RUN/not consumed; no product patch or agent gateway restart. Harness
+gate10PASS; cleanup verified15:19:53UTC, not a current-state claim after late logs.
+Old call causation remains unestablished; CELLULAR_CALL_RESILIENCE separate. Fresh
+coherent trust/cache/server prerequisites required; no silent provisioning renewal.
+
+[Whitelist bootstrap research83,11.10](releases/2026-10-11-whitelist-bootstrap-1.md):
+private owner update/source f5240994 and matching gateway deployed; targeted local
+gates PASS, baseline lint failure retained. One physical CONNECT with scoped
+provisioning503 selects valid cache and passes seed Family auth, but dedicated
+carrier fails before client READY. No full-phase app request or repeat CONNECT.
+Warm/cold readiness NO; cleanup complete, VPN OFF/app+chat ON. No public rollout/FIELD.
+[Private build RU](releases/research83.ru.md) / [EN](releases/research83.en.md).
+
+[Full-tunnel physical-operator acceptance11.10](releases/2026-10-11-full-tunnel-egress-verify-1-manual.md):
+unchanged research82; ordinary test-app IPv4 HTTPS → TUN/Telemost/Mux → NL gateway
+→ controlled endpoint PROVEN, controlled DNS gateway PASS. Browser NOT_RUN, IPv6
+unavailable, failover leak not tested. Two later unexpected closes automatically
+recover; root cause OPEN. VPN OFF/app+chat ON; no product update/restart/uninstall.
+Direct provisioning still blocks warm/cold starts in the stated whitelist model.
+
+[Full-tunnel harness continuation11.10](releases/2026-10-11-full-tunnel-egress-verify-1-continuation.md):
+request A/B lifecycle PASS and observer startup fixed; Android denies ADB input
+before CONNECT. HARNESS_FAILURE, actual CONNECT0/full requests0. Product unchanged,
+cleanup complete. Requires a real operator trigger, not automatic retries.
+
+[Full-tunnel egress verification11.10](releases/2026-10-11-full-tunnel-egress-verify-1.md):
+research82 unchanged; VPN-OFF Orange baseline and actual Telemost TUN verified,
+but full-phase ordinary-app probe did not run. Egress UNKNOWN, not acceptance PASS.
+Required direct refresh blocks whitelist warm/cold startup. Evidence/cleanup complete;
+no automatic second CONNECT, product routing patch or public rollout.
+
+[TELEMOST-LEASE-CONTINUITY-1 candidate11.10](releases/2026-10-11-telemost-lease-continuity-1.md):
+authenticated same-holder renewal; controlled-clock real Family/Mux/TCP continuity
+locally verified. Private research82 live: two renewals and HTTPS across deadlines;
+persistent TCP only first boundary, full continuity PARTIAL. Cleanup complete,
+VPN OFF/chat ON; no public rollout or repeated trial.
+
+[Telemost lease/continuation observation11.10](releases/2026-10-11-telemost-stability-1-continuation.md):
+12min after READY; expected lease expiry, exact release, real automatic open and
+new full response; no behavioral patch, bounded diagnostic limitations explicit.
+
+[TELEMOST admission ownership10.10](releases/2026-10-10-telemost-admission-ownership-1.md):
+exact server capture loaded, one correlated diagnostic grant/HELLO/READY/release;
+historical holder UNKNOWN, no behavioral fix or stability-closure claim.
+
+[Field export16 / post-fix paired Telemost failure05.10](releases/2026-10-05-field-export16-beta65.md):
+two authenticated cellular sessions carry data; first recovery succeeds84.446s,
+both fail after about20s. Client DATA48/58 absent at gateway; RTP timer correction
+insufficient. No new readiness/retry exercise; next media-boundary investigation.
+This supersedes the pending trial in earlier checkpoints below.
+
+[Field export15 / fresh tester readiness05.10](releases/2026-10-05-field-export15-beta65.md):
+failed attempt19:40–19:41UTC predates renewal and never starts Telemost. Tester65
+fresh native READY ACK20:00UTC confirmed20:03:32; next one mobile Auto traffic trial.
+No new APK/runtime change; field stability still unproven. Supersedes pending ACK below.
+
+[Field export14 / paired Telemost evidence05.10](releases/2026-10-05-field-export14-beta65.md):
+two real tester65 sessions carry DNS/TCP data; automatic recovery now works, but
+both sessions fail after roughly20s. Client→gateway DATA holes confirmed. RTP
+reorder deadline defect reproduced; exact-source CI/artifact PASS, corrected gateway
+deployed15:22UTC. Owner65 imports15:23:05; tester65 imports15:31:34, no mobile trial yet.
+After the interruption the evening window had expired; credential-only renewal19:53
+covers through06.10 02:53:04 Krasnodar. Next fresh tester fetch/ACK for the renewed
+directory and one mobile trial; field resolution unproven, no APK replacement.
+
+[05.10 server-only readiness correction](releases/2026-10-05-readiness-clock-skew.md):
+HTTP/sync deployed, issuer5 renewed, unchanged owner65 fresh native READY/ACK PASS.
+No separate/new APK; tester65 fresh READY/ACK confirmed14:09:44UTC. Mobile result: export14 above.
+Latest gateway ceiling05.10 23:53:04UTC/06.10 02:53:04 Krasnodar after late renewal;
+earlier windows below are history.
+
+[Field export13 / mobile Auto05.10](releases/2026-10-05-field-export13-beta65.md):
+current tester65 mobile attempt fails in52.244s: FETCH_FAILED, AWG/TCP NETWORK,
+restricted NOT_READY before native startup. Earlier AWG worked, separately. No new
+runtime fix or further identical test requested; preserve working VPN for coordination.
+
+[Field export12 / beta65 readiness05.10](releases/2026-10-05-field-export12-beta65.md):
+tester65 confirmed; native import/ACK clock sensitivity correlated with server times.
+Older retained incident is beta64. Time-independence fix explicitly deferred by user;
+no manual-clock instructions or new trial, preserve working VPN for communication.
+
 [Bootstrap cleanup race correction05.10](releases/2026-10-05-bootstrap-cleanup-race.md):
 source-only bounded cleanup wait and safe rejection diagnostics; fresh-fixture50
 repeats/full local Go race PASS. CI blocked twice by existing TCP reset tests,
 reproduced on prior accepted source. Authorized fixture-only correction passes1500
 repeats per reset test; pusheda813dc5 passes both CI workflows on attempt1. Gateway
 artifact11337447479/hash05571644 verified. Local full rebuild quota failure retained.
-No deployment; live gateway still has expired material and owner/Krasnodar gates held.
+Gateway deployed05.10 10:13UTC; unchanged owner65 recovery, AUTH/cancel/AWG/TCP/privacy
+and paired59/67 gap-free server events PASS. Targeted immutable65 published/downloaded
+SHA/signer verified10:27UTC. Current material bound13:28:47UTC; tester fresh READY/ACK
+still gates Krasnodar. Original field DATA/ACK loss not localized.
 
 [Beta65 retained-cache refresh candidate04.10](releases/2026-10-04-beta65-readiness-candidate.md):
 source86fa1ba/four CI/signing/in-place owner65 and ordinary physical refresh PASS.
-Publication held on bootstrap recovery failure; tester/public64 and default60 unchanged.
+Earlier bootstrap recovery failure resolved by gateway correction above. Targeted65
+now published; tester last confirmed64, default60 unchanged.
 
 [Early readiness refresh correction04.10](releases/2026-10-04-readiness-early-refresh.md):
 valid old-directory cache refresh correction; persisted300s cadence and validation
-preserved. Installed65 ordinary prewarm PASS; separate bootstrap recovery gate remains.
+preserved. Installed65 ordinary prewarm PASS; bootstrap recovery gate now PASS above.
 
 [Beta64 paired-diagnostics candidate04.10](releases/2026-10-04-beta64-paired-candidate.md):
 source ce73ddf pushed, all four CI workflows and downloaded artifact/offline signing PASS.

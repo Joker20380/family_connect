@@ -47,6 +47,16 @@ JNIEXPORT jlong JNICALL Java_com_familyconnect_app_NativeRestricted_begin(JNIEnv
  if(owner)result=fcRestrictedBegin((struct text){dir,(*env)->GetStringUTFLength(env,directory)},(struct text){url,(*env)->GetStringUTFLength(env,control)},(struct text){dns,(*env)->GetStringUTFLength(env,resolver)},(uintptr_t)owner);
  (*env)->ReleaseStringUTFChars(env,directory,dir);(*env)->ReleaseStringUTFChars(env,control,url);(*env)->ReleaseStringUTFChars(env,resolver,dns);return result;
 }
+extern char *fcRestrictedFault(struct text);
+JNIEXPORT jstring JNICALL Java_com_familyconnect_app_OwnerFaultReceiver_control(JNIEnv *env,jclass cls,jstring command){
+ if(!command)return NULL;
+ const char *value=(*env)->GetStringUTFChars(env,command,NULL);
+ if(!value)return NULL;
+ char *raw=fcRestrictedFault((struct text){value,(*env)->GetStringUTFLength(env,command)});
+ (*env)->ReleaseStringUTFChars(env,command,value);
+ if(!raw)return NULL;
+ jstring result=(*env)->NewStringUTF(env,raw);free(raw);return result;
+}
 JNIEXPORT jint JNICALL Java_com_familyconnect_app_NativeRestricted_state(JNIEnv *env,jclass cls,jlong id){return fcRestrictedState(id);}
 JNIEXPORT jboolean JNICALL Java_com_familyconnect_app_NativeRestricted_attach(JNIEnv *env,jclass cls,jlong id,jint fd){return fcRestrictedTun(id,fd)!=0;}
 JNIEXPORT jboolean JNICALL Java_com_familyconnect_app_NativeRestricted_stop(JNIEnv *env,jclass cls,jlong id){return fcRestrictedStop(id)!=0;}

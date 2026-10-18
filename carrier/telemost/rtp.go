@@ -1,6 +1,7 @@
 package telemost
 
 import (
+	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"github.com/pion/rtp"
 	"github.com/pion/rtp/codecs"
 	"time"
@@ -23,11 +24,13 @@ func seqLess(a, b uint16) bool {
 
 // reorderBuffer restores RTP sequence order before VP8 frame assembly.
 type reorderBuffer struct {
-	pkts     map[uint16]*rtp.Packet
-	free     []*rtp.Packet
-	nextSeq  uint16
-	started  bool
-	gapSince time.Time
+	mediaTrack uint32
+	trace      *sessiontrace.Recorder
+	pkts       map[uint16]*rtp.Packet
+	free       []*rtp.Packet
+	nextSeq    uint16
+	started    bool
+	gapSince   time.Time
 }
 
 func newReorderBuffer() *reorderBuffer {
@@ -36,6 +39,7 @@ func newReorderBuffer() *reorderBuffer {
 
 func (b *reorderBuffer) push(pkt *rtp.Packet, deliver func(*rtp.Packet)) {
 	if len(pkt.Payload) > 2048 {
+		b.drop(pkt, "malformed")
 		return
 	}
 	if !b.started {
@@ -43,17 +47,20 @@ func (b *reorderBuffer) push(pkt *rtp.Packet, deliver func(*rtp.Packet)) {
 		b.nextSeq = pkt.SequenceNumber
 	}
 	if seqLess(pkt.SequenceNumber, b.nextSeq) {
+		b.drop(pkt, "old_rtp")
 		return
 	}
 	previousNext := b.nextSeq
 	if uint16(pkt.SequenceNumber-b.nextSeq) >= reorderWindow {
 		for sequence, queued := range b.pkts {
+			b.drop(queued, "window")
 			b.recycle(queued)
 			delete(b.pkts, sequence)
 		}
 		b.nextSeq = pkt.SequenceNumber
 	}
 	if old := b.pkts[pkt.SequenceNumber]; old != nil {
+		b.drop(old, "duplicate")
 		b.recycle(old)
 	}
 	b.pkts[pkt.SequenceNumber] = b.clone(pkt)
@@ -66,6 +73,10 @@ func (b *reorderBuffer) push(pkt *rtp.Packet, deliver func(*rtp.Packet)) {
 	} else if b.gapSince.IsZero() || b.nextSeq != previousNext {
 		b.gapSince = time.Now()
 	}
+}
+
+func (b *reorderBuffer) drop(packet *rtp.Packet, result string) {
+	b.trace.Boundary(sessiontrace.Boundary{Direction: "rx", Stage: "rtp_received", Result: result, FrameKnown: true, MediaTrack: b.mediaTrack, Timestamp: packet.Timestamp, FirstRTP: packet.SequenceNumber, LastRTP: packet.SequenceNumber, Packets: 1})
 }
 
 func (b *reorderBuffer) drain(deliver func(*rtp.Packet)) {
@@ -124,6 +135,8 @@ func (b *reorderBuffer) skipToOldest() {
 // vp8FrameState reassembles a VP8 frame from its RTP packets. It returns the
 // assembled frame payload when complete, or nil otherwise.
 type vp8FrameState struct {
+	mediaTrack  uint32
+	trace       *sessiontrace.Recorder
 	vp8Pkt      codecs.VP8Packet
 	frameBuf    []byte
 	lastSeq     uint16
@@ -133,6 +146,9 @@ type vp8FrameState struct {
 }
 
 func (st *vp8FrameState) process(pkt *rtp.Packet) []byte {
+	if st.frameValid && (st.haveLastSeq && pkt.SequenceNumber != st.lastSeq+1 || st.timestamp != pkt.Timestamp) {
+		st.trace.Boundary(sessiontrace.Boundary{Direction: "rx", Stage: "vp8_reassembled", Result: "frame_discard", FrameKnown: true, MediaTrack: st.mediaTrack, Timestamp: st.timestamp, LastRTP: st.lastSeq})
+	}
 	if st.haveLastSeq && pkt.SequenceNumber != st.lastSeq+1 {
 		st.frameValid = false
 		st.frameBuf = st.frameBuf[:0]

@@ -1,5 +1,12 @@
 # Personal/Home Gateway — Reticulum control, selectable data transport
 
+**Terminology18.10:** the product media transport is MESH; VP8/RTP is the current
+carrier and Telemost the current provider. Distributed mesh/Reticulum multi-hop
+is future research, not a capability established by this naming decision.
+See the current [architecture model](../architecture.md#mesh-product-model) and
+[MESH roadmap](../PLAN.md#mesh-roadmap). Historical provider/gate names below
+are retained as evidence, not additional UI transport choices.
+
 **30.09.2026 rebaseline:** этот документ сохраняет Home/RNS design и исторические
 5N requirements; Home Gateway — secondary/backlog, не текущий critical path.
 [Architecture](../architecture.md) и [PLAN](../PLAN.md) определяют актуальный порядок:

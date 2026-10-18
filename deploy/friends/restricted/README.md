@@ -1,5 +1,11 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
+18.10 requested replacement: [activated-device access v2](ACTIVATED_ACCESS_V2.md)
+separates entitlement from short-lived credentials. HTTP/source checks are local;
+the installed management controller is not yet compatible. Do not activate the v2
+policy alone or reuse the legacy FIELD writer. Older rollout checkpoints below do
+not describe the requested new policy or prove current readiness.
+
 Current FIELD diagnostic lifetime exception04.10: explicit user authorization enables
 `sync --crl-lifetime 3600` on RU only; default remains900. Both are validated against
 the existing one-hour native limit. Actual readiness remains the minimum of CRL,

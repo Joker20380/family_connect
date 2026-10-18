@@ -1,6 +1,2564 @@
 # Текущее состояние / Current state
 
-## Bootstrap recovery candidate — a813dc5 CI/artifact PASS05.10, not deployed
+## MESH product integration — PARTIAL / local only (18.10)
+
+Official name: **MESH (Media Encapsulated Secure Hop)**, untranslated. Provider
+Telemost and carrier VP8/RTP remain accurate technical terms. No wire protocol,
+crypto, identity, entitlement, Auto, timeout or production change in this task.
+UI84 presentation overlay builds locally;112 JVM tests across15 suites and190
+Python compatibility/regression tests pass. All12 native libraries are byte-identical
+to the baseline unsigned batch1/code84 APK; zip alignment also passes. Unsigned test APK
+only: not signed, installed, distributed or released; public/invitation versions
+remain unchanged. Source root still has older Android65; do not replace the
+approved UI84 with it. The checked UI84 patch is retained with a build/check runner.
+
+**Cross-platform acceptance remains open:** Windows0.2.15 and GTK Linux0.2.11
+selectors/backends implement only AWG/TCP, not the media runtime or Auto selector.
+No fake MESH option was added. A desktop integration proposal and native platform
+validation are required before claiming MESH on all three platforms. Physical
+selection/relaunch/upgrade and render QA were not performed. Current-patch remote
+CI is not run without an authorized push; older baseline CI success is separate.
+
+The earlier activated-access rewrite, including experimental management/offline
+authority changes, remains separate, unfinished and NOT_DEPLOYED. The new task
+explicitly forbids mixing it with naming or deploying/restarting gateways. No
+production mutations, signing, installation, release or push occurred.
+[Audit, compatibility, tests and remaining gates](releases/2026-10-18-mesh-product-integration.md).
+
+## Telemost activated access v2 — local API candidate / NOT_DEPLOYED (18.10)
+
+Owner requests access for all activated Family Connect devices, with research APK
+distribution kept manual/private. This supersedes the two-device cohort restriction
+as the requested policy, not as an already deployed change. No public APK release.
+Latest retained review947d816 records tester batch1/code84 already installed but
+NOT_PROVISIONED: the old FIELD operator rejects4h CRLs with its1h validator and
+would publish only15min CRLs. This was not a four-hour APK usage limit.
+Fresh RU inspection confirms two explicit admissions/two unrevoked grants, active
+HTTP archive12ca0c72…60ed and failed renewal/health. Existing read-only controller
+evaluate returns FAIL_CLOSED / CRL_EXPIRED_OR_FUTURE. No renewal was attempted.
+Wildcard alone is incompatible: automatic enrollment creates expires=NULL, while
+installed current4h validation/cutover requires integer grant expiry; expired recovery
+also checks the committed grant inventory. No wildcard/SQL/validator bypass applied.
+After the owner's clarification, HTTP entitlement was rewritten locally rather than
+patching the old FIELD writer. Explicit v2 all_activated mode uses ordinary activation
+without creating grants; preserves revocations/Family/revision/proof checks and all
+crypto validity limits. Old finite FIELD expiry is not v2 entitlement expiry; rows
+remain unchanged. Support distinguishes ELIGIBLE from native/crypto readiness.
+Legacy behavior remains default. Unit and packaged-loopback checks pass; management
+integration, coordinated migration/rollback and live acceptance remain unfinished.
+Next: adapt current4h revocation planning/snapshot/recovery for ungranted activated
+devices, then recover current materials and deploy the compatible pair. Do not switch
+admission.json alone. Production/client changes0, APK distribution unchanged.
+[Candidate contract and rollout gates](../deploy/friends/restricted/ACTIVATED_ACCESS_V2.md).
+[Exact observations, constraints and rollback](releases/2026-10-18-telemost-all-activated-preflight.md).
+
+## NL disk follow-up —17.10,12:20–12:22UTC
+
+Read-only4×15s confirms recurring write-latency bursts, not only the earlier single
+sample: write await0.42/180.52/0.51/171.79ms; burst iowait10.74/13.24%,queue5.43/6.88,
+write224/268KiB/s. Sysstat8 intervals ending11:10–12:20UTC show await169.66–192.20ms
+at12–16IOPS/~86–116KiB/s writes; sustained recurrence, no high bandwidth workload.
+systemd-journald is the largest sampled process writer (2.17/2.31MB in burst windows),
+not a proven cause of backend latency. Root ext4 has37% blocks/7% inodes used,12GiB
+free; readable kernel ring has no matched storage errors.24h kernel journal and
+bounded1200-entry journal timed out; originating log sources remain UNKNOWN.
+Journals occupy1.8GiB. AWG/TCP/restricted remain active; no server mutation or cleanup.
+Next: bounded current-log attribution and VPS storage/IOPS limits/host-side latency;
+do not declare hardware damage, disk-full or fix by deleting logs/restarting VPN.
+[Evidence and limits](releases/2026-10-17-vpn-health.ru.md#nl-диск-повторная-диагностика12201222utc).
+
+## VPN snapshot —17.10,12:07–12:09UTC
+
+Read-only RU/NL audit:44 activated/40 non-revoked/4 revoked devices;98 invites/44 used
+(+3 activated versus15.10). NL36 AWG peers,8 handshakes<5min/16<24h,9 transferring;
+RU11 peers,0 recent/24h handshakes or transfer. Friends TCP established0 both.
+AWG/TCP active; product/control/data-control healthy. Worker remains unhealthy:
+healthcheck127.0.0.1:8080/healthz gets connection refused; process running/restarts0,
+actual reconciliation/outbox unverified. CPU NL14.55%/RU19.43%,disk used37%/73%.
+NL15s sample iowait8.10%,disk busy11.92%,await188.60ms: investigate latency history,
+not a demonstrated sustained saturation. RU iowait1.55%,disk3.57%/await7.28ms.
+NL restricted active since11:37:58UTC,NRestarts0; loaded signal-observation executable
+SHA2564b722d2d…8fab7. Distinct inactive generic bootstrap file is not the loaded binary.
+On-disk leaf/CRL expire15:37:47UTC17.10;issuer08:57:40UTC18.10. Existing renewal/health
+timers returned success12:07:54/12:07:34UTC; no agent renewal/restart or strict served
+chain/E2E proof. HTTPS status200; actual public certificate valid through23.10 00:09:12UTC.
+No code/version/deployment changes; existing source-only acceptance gates preserved.
+Remaining: worker cycles/healthcheck, NL I/O trend, restricted lifecycle and separate
+client E2E. [Detailed read-only report](releases/2026-10-17-vpn-health.ru.md).
+
+## Local laptop thermal diagnosis —16.10,16:16–16:18UTC
+
+Read-only host inspection: Android AVD `ui60`, PID1005098, started16:02:16UTC
+by another Codex process, sustained101.66% CPU (approximately one logical CPU).
+Launch explicitly uses `-accel off -gpu swiftshader -no-window`; no KVM FD observed.
+CPU package86–99°C in the final15s sample, frequency up to4.208GHz; package thermal
+throttle counter increased215 (shared counter, not summed across logical CPUs).
+Fans approximately4,600/4,900RPM. NVIDIA0%/2.43W, memory available20GiB, no sampled
+swap traffic or I/O wait. Main observed heat-producing workload is software emulation;
+cooling condition and post-stop temperature remain unverified. No process stopped,
+power/fan setting changed, SSH/ADB, build, release or deployment performed.
+Next: with owner confirmation, stop the exact emulator if no longer needed and
+remeasure; verify KVM availability before any future accelerated launch.
+[Measurements and remaining checks](releases/2026-10-16-laptop-thermal-diagnostic.md).
+
+## SUPERVISOR-CANDIDATE-DATAPLANE-ROOTCAUSE-1 — PARTIAL / offline hard stop (15.10)
+
+Preserve SEED-SUPERVISOR-OWNER-ACCEPTANCE-3-FINAL=FAIL: candidate53beb661…5138f,
+one historical deployment/CONNECT/rollback, no WS1011. This task performs none.
+1,899 sealed input entries verified; exact baseline21f0a0fd…70509a and candidate
+hashes match. First missing proof is
+**EVIDENCE_INSUFFICIENT_AT_OWNER_DEDICATED_SESSION_READY**.
+Research84 AutomaticVpnOwner creates the full blocking TUN before transport startup;
+Android NetworkAgentInfo VPN CONNECTED/VALIDATED is not app/native dedicated READY.
+Saved server session a0ae95da…95b47 cannot be bound to the owner VPN; it is already
+ACTIVE before the saved TUN creation. No client session tag, native startup/terminal,
+packet counters or owner-correlated DNS/OpenTCP/socket results were captured.
+Do not turn the later unbound bootstrap challenge timeout into the DNS root cause.
+
+Exact differential:221/226 inherited carrier files unchanged; seed supervision,
+seed-only research signaling bridge and receipts added. Baseline CGO=1 versus
+candidate CGO=0 also retained as an untested build difference. Flag-enabled seed
+signaling changes even without a trigger; neither causation nor harmlessness proven.
+Exact-binary A/B/C NOT_RUN: existing accepted local stack needs a rebuilt fixture
+overlay, not these immutable binaries. No replacement tests presented as acceptance.
+ROOT_CAUSE_PROVEN=NO; patch/new candidate/freeze NOT_CREATED. No Android change,
+new helper, live provider, SSH/ADB, credential operation or production/owner action.
+Baseline active/restored is the sealed07:05:36UTC receipt, not a new live assertion.
+Remaining: owner-bound saved READY/packet evidence and an already accepted isolated
+exact-executable A/B/C route; neither authorizes another owner CONNECT or deployment.
+[Full report, evidence correction, matrix limits and rollback identity](releases/2026-10-15-supervisor-candidate-dataplane-rootcause-1.md).
+
+## VPN snapshot —15.10,06:14UTC
+
+Read-only:41 activated/37 non-revoked/4 revoked devices unchanged;95 invites/41 used.
+NL33 AWG peers,4 handshakes<5min/20<24h,3 transferring;RU11,0<5min/1<24h,0 transfer.
+TCP established0 both. CPU NL12.35%/RU21.80%,iowait0/1.51%; disk busy0.05/4.30%,
+await0.51/4.68ms. Primary AWG/TCP active; product/control healthy; worker unhealthy.
+NL restricted active since04:47:47UTC,NRestarts0. Recorded overnight fatal03:36:55UTC
+SEED_READ/HEARTBEAT_WRITE, returned_error,cleanup complete; later RUN/CANCELLED
+records04:32:38/04:47:39. Current active is not proof of permanent recovery or E2E.
+Internal CRL expires08:32:34UTC,leaf08:47:36UTC,issuer11:01:34UTC today; sampled
+credential bound is CRL, not leaf. HTTPS200/public TLS valid until19.10 12:07:37UTC.
+No server changes or rollout; source-only gates remain. Monitor renewal/restricted
+stability, investigate worker, preserve I/O history. [Report](releases/2026-10-15-vpn-health.ru.md).
+
+## VPN repeat —14.10,18:44UTC
+
+Read-only:41 activated/37 non-revoked/4 revoked devices (+1 since morning),
+95 invitations/41 used. NL33 AWG peers,9 handshakes<5min/20<24h,9 transferring;
+RU11 peers,0<5min/1<24h,1 transferring (not proof of online). TCP established0.
+CPU NL14.74%/RU27.30%,iowait0/2.09%; disk busy0.01/6.06%,await0.38/32.18ms.
+AWG/TCP active; NL restricted-bootstrap now active since18:31:23UTC,NRestarts0.
+Latest three fatal-observer records are RUN/CANCELLED, not provider failures.
+Internal leaf now valid until20:16:06UTC,issuer15.10 11:01:34UTC; CRL22:31:11UTC.
+External actions changed runtime/credentials; this audit neither renewed nor restarted.
+No E2E/readiness or root-cause-fix claim. Public HTTPS200,certificate19.10 12:07:37UTC;
+peer-worker remains unhealthy. Continue worker/I/O/restricted readiness monitoring.
+[Evening evidence](releases/2026-10-14-vpn-health.ru.md).
+
+## NL restricted failure diagnosis —14.10, read-only
+
+Matched immutable application/systemd receipts establish:07:44:21UTC
+SEED_READ/SUBSCRIBER_DISCONNECTED; restart;08:29:23UTC SEED_READ/SIGNAL_READ,
+WS_CLOSE4008 with ACTIVE context and carrier not locally closed. Five subsequent
+SEED_CREATE/provider_timeout exits each15.017–15.040s;08:33:39UTC systemd
+Start request repeated too quickly (5 starts/10min), leaving service failed.
+Provider meaning/internal cause of4008 and historical timeout network layer UNKNOWN.
+Separate blocker: internal gateway leaf expired14.10 00:46:05UTC; current profile
+readable by service,0600; CRL fresh, issuer valid until15:12:20UTC. Expiry is NOT
+attributed as the recorded exit cause. Public HTTPS certificate remains separate.
+Actual ExecStart binary21f0a0fd…509a; generic unused binary5f136c40…9cea is not runtime.
+No restart/reset-failed/renewal/deploy/provider room creation. Need controlled recovery
+with valid internal credentials and provider checks, preserving security/start limits.
+[Full causal timeline](releases/2026-10-14-restricted-failure-diagnosis.ru.md).
+
+## VPN operational snapshot —14.10,10:24UTC
+
+Read-only:40 activated/36 non-revoked/4 revoked devices (+3 since13.10 evening),
+94 invitations/40 used. NL Friends AWG32 peers,8 handshakes<5min/18<24h,
+8 transferring; RU11 peers,1 recent/1 transferring. TCP established0 both.
+15s CPU NL10.66%/RU18.26%; iowait0/1.41%; disk busy0.03/3.93%,await0.40/16.55ms.
+AWG/TCP active both; HTTPS200/TLS valid through19.10 12:07:37UTC; renewal success
+14.10 09:16:52UTC. Product/control healthy; peer-worker still unhealthy.
+**NL restricted-bootstrap failed**, exit1 at08:33:09UTC,NRestarts9; primary AWG/TCP
+remain active. Root cause/restricted E2E not established. No restart or remediation.
+Versions/deployments not changed or reverified; prior source-only gates preserved.
+Next: diagnose restricted failure and peer-worker, monitor I/O and client E2E.
+[Snapshot, timings and limits](releases/2026-10-14-vpn-health.ru.md).
+
+## CRL-COMMIT-READ-BARRIER-1 — PARTIAL / frozen reader incompatible (13.10)
+
+941 sealed input entries reverified. Exact frozen53beb661…5138f reloads local CRL
+profiles but has no authoritative barrier/durable epoch: actual same-process TLS
+probe rejects N+1 then accepts restored N. Frozen bytes/source remain unchanged.
+Independent RU/NL promotion cannot ensure strict visibility; common authoritative
+coordination and security-effect fencing are required, not another file-copy script.
+
+38 isolated cryptographic design-model tests×3 PASS, including30 abstract partition/
+crash cases. This is NOT a production reader patch or distributed fencing proof.
+Exact retained reader closures mapped; full installed-fleet inventory remains open.
+TRUE_ATOMIC_VISIBILITY=REQUIRES_NEW_INFRASTRUCTURE; frozen compatibility FAIL;
+writer deployment readiness NO; canary policy cannot continue.
+
+Exactly next: separate coordination/commit-ledger design acceptance (fresh reads,
+monotonic recovery and reader/session fencing), prerequisite to the documented
+gateway semantic rebase. No automatic deployment/rebase/canary. Production/owner/
+live actions0; no fresh runtime read; attempt unconsumed.
+[Counterexample, model limits, inventory and barrier contract](releases/2026-10-13-crl-commit-read-barrier-1.md).
+
+## CRL-WRITER-SAFETY-1 — PARTIAL / source-only, not accepted (13.10)
+
+Exact9faaa1c2…64d1 writer baseline reverified; mismatched-key defect reproduced and
+fixed in an isolated derivative. Mismatch now rejects before RU CRL/DB mutation,
+NLrequests0. Independent candidate validation, private durable marker, staged NL
+validation, local atomic replace and same-operation rollforward implemented.
+
+**First unclosed boundary: RU_COMMITTED → NL_COMMITTED lacks a common reader-visible
+commit barrier.** NL promote failure leaves valid RU N+1 / valid NL N. Retry repairs
+the skew but is not distributed atomicity. No accepted validation commit/deployable
+candidate; experimental archive54c9715c…b61b is LOCAL ONLY, not installed.
+
+30 focused safety/concurrency/crash tests×3, actual receiver zipapp and unchanged
+frozen53beb661…5138f TLS revoke/unrelated-profile tests PASS. Differential baseline
+and candidate both71 pass/15 skip/1 equal HTTP import-closure harness failure. Full
+historical suite and external Store/mailbox runtimes NOT_RUN; no all-green claim.
+
+Exactly next: source-only RU/NL committed-state publication/reader-barrier design
+and fault acceptance. Do not resume canary policy or deploy automatically. All
+task-induced production/owner/live counters0; no production runtime read/change.
+[Result, limits, artifact identities and blocked rollback/deployment plan](releases/2026-10-13-crl-writer-safety-1.md).
+
+## CRL-WRITER-PROVENANCE-1 — EXACT source / acceptance FAIL (13.10)
+
+Previous writer-provenance blocker is closed. Actual RU timer and NL forced-command
+receiver use `sync-clock-skew-20261005.pyz`, SHA9faaa1c2…64d1, not the unused default
+archive. Historical build/activation manifest +12 exact Python members + byte-identical
+reconstruction establish EXACT provenance. No guessed checkout, source patch or deployment.
+
+Narrow CANARY_REVOCATION_CONTRACT=SUPPORTED: exact API issuer fixture produces a tracked
+non-activated device leaf; exact writer revokes it; unchanged frozen53beb661…5138f rejects
+its Family TLS after previously authenticating. This is not seed/Mux/lease acceptance.
+Unchanged reconciliation immediately revokes tracked non-activated leaves; untracked
+certificates are invisible. This is not a usable test-only issuance policy yet.
+
+Full requested safety acceptance FAIL: exact `from_env → publish_crl` accepts a mismatched
+local issuer key, replaces valid RU CRL with invalid-signature bytes and commits sequence;
+NL correctly rejects. Fixture-only privileged configuration error, not a production incident.
+19 characterization tests×3, frozen TLS and local chat negatives pass; characterization
+green does not conceal this failed invariant. External mailbox/Store negatives NOT_RUN.
+
+Exactly next: separate source-only CRL-writer safety acceptance, starting with pre-write
+issuer-key validation on this exact baseline. No automatic policy implementation or issuance.
+Capsule: `state-client-build/field65-export16/crl-writer-provenance-1/manifest.json`.
+All task-induced production/owner/live mutation counters0. Existing timer autonomously
+advanced24990→25039; that is not reported as unchanged runtime bytes or task writes.
+Frozen candidate unchanged; attempt unconsumed; public release/FIELD NOT_RUN.
+[Provenance, counterexample and full contract](releases/2026-10-13-crl-writer-provenance-1.md).
+
+## RESTRICTED-CANARY-IDENTITY-POLICY-1 — PARTIAL (13.10)
+
+Mandatory gate: `DEPLOYED_REVOCATION_WRITER_SOURCE_IDENTITY_UNRESOLVED`.
+10056 inherited file hashes verified. Exact retained HTTP API12ca0c72…60ed recovered;
+deployed authority/CRL writer import/source provenance is not established by that archive
+or the supplied runtime receipts. No guessed issuer/CRL port, operator tool, migration
+or API candidate. Frozen134083d8 /53beb661…5138f remains unchanged and unrebuilt.
+23 baseline API checks,10 exact-frozen-executable TLS checks and6 evaluator tests PASS.
+Four-claim device TLS is accepted without an activation DB; a new canary role/fifth OU
+is rejected. **TLS503 without a seed is not full canary bootstrap/Mux/lease acceptance.**
+Design separates logical policy from wire role, reserves synthetic keys against later
+ordinary activation, and requires authoritative CRL integration. Issuance/security/full
+network/mailbox-Store acceptance remains NOT_RUN; policy candidate NOT_CREATED.
+Exactly next: recover/verify deployed revocation-writer source provenance, then resume
+this source-only policy task. No operational issuance/canary/deploy authorization.
+Production identities/grants/mutations/restart/renewal/owner/live rooms0; attempt unconsumed.
+[Result, scope and evidence](releases/2026-10-13-restricted-canary-identity-policy-1.md).
+
+## VPN operational snapshot — repeat13.10,17:37UTC
+
+Fresh read-only audit:37 activated/33 non-revoked/4 revoked devices, unchanged;
+91 invitations/37 used. NL AWG30 configured,6 handshakes<5min,14<24h,6 transferring;
+RU10 configured,0 recent/transferring. Friends TCP established0 both gateways.
+15s CPU NL7.56%/RU24.06%; iowait0%/2.09%; disk busy0.03%/5.11%,await0.43/112.91ms.
+Morning RU saturation not reproduced; high RU latency still requires investigation.
+Both AWG/TCP active; product/control healthy; peer-worker still unhealthy.
+Public HTTPS200/TLS valid; RU/NL telemetry fresh(4s/8s at request). Certificate
+renewal succeeded09:11:44UTC; served certificate expires19.10 12:07:37UTC.
+RU HTTP candidate/NL restricted bootstrap active since15:47:56/15:47:46UTC;
+different from morning invocation, not an audit-induced restart or binary provenance
+claim. No changes to servers, versions or release channels. No client E2E test.
+Remaining: RU I/O latency/history, worker reconciliation, E2E and renewal monitoring.
+[Repeat and morning evidence](releases/2026-10-13-vpn-health.ru.md).
+
+## VPN operational snapshot — historical13.10,05:03–05:08UTC
+
+Read-only audit:37 activated devices,33 non-revoked,4 revoked;91 invitations,
+37 used. NL AWG30 peers,5 recent handshakes(<5min),15(<24h),3 transferring;
+RU10 peers,0 recent/active. Counts are devices, not unique people. Both AWG/TCP
+services active; public HTTPS8443 status200 with TLS validation. RU certificate
+renewal failed(timeout); RU SSH/journal/Docker reads delayed and sampled iowait79.3%.
+Control15s RU sample: CPU28.41%,iowait68.93%,vda utilization94.00%,await67.71ms.
+TLS certificate valid until16.10 00:26:51UTC. Product/control containers healthy;
+peer-worker unhealthy (reconciliation/outbox not verified).
+NL iowait33.89% first sample then0%; resource snapshot is not capacity acceptance.
+Public status response contained RU only. No deployment/restart/version changes;
+existing dirty work preserved. Follow up RU I/O, renewal, missing NL telemetry and
+end-to-end client health. [Audit](releases/2026-10-13-vpn-health.ru.md).
+
+## GATEWAY-SEED-SUPERVISOR-OP-READINESS-1 — PARTIAL / READY=NO (13.10)
+
+Frozen134083d8 /53beb661…5138f unchanged;6186 inherited artifact checks PASS.
+Fresh bounded reads07:35–07:48UTC: PID1864957, invocation41b2f937…3b850,NRestarts5;
+loaded/next21f0a0fd…509a and API12ca0c72…60ed match accepted baseline. Stable in this
+task, directory/authority/CRL agree RU/NL at final snapshot. Served Family leaf expired
+00:09:41UTC; process remaining7743s is not credential headroom. Active restricted
+sessions UNKNOWN, not inferred zero. Two newly preserved **historical** fatal episodes
+05:56UTC: SEED_READ/PUBLISHER_DISCONNECTED and SEED_CREATE/provider_timeout, exit1;
+not WS1011 or planned DEADLINE. No new fatal during the observation interval.
+
+First blocker: existing accepted grant path requires ordinary activation and therefore
+also permits chat eligibility; required restricted-test-only privilege exclusion is
+not supported by that path.11 exact-API local policy checks PASS; no synthetic grant,
+issuance/staging, canary, production restart/deployment or owner action. Full collectors
+and healthy rollback remain unverified. Future2710s+180s window arithmetic PASS only.
+Exactly next: separately authorize and locally accept a test-only issuance/admission
+policy excluding ordinary activation/chat privileges; do not change/deploy frozen binary.
+Attempt unconsumed; historical functional/local supervisor PASS preserved. Public/FIELD
+NOT_RUN. [Evidence and gates](releases/2026-10-13-gateway-seed-supervisor-op-readiness-1.md).
+
+## GATEWAY-SEED-SUPERVISOR-TRIGGER-1 — local research PASS (13.10)
+
+PRODUCTION_PATCH_ACCEPTED=YES locally; deployment NOT_RUN, operational readiness still NO.
+Exact c9d75db supervisor preserved; new isolated source134083d87773dacc038c9593afdaff0c57ea951d,
+frozen research binary53beb661cab014c32494fa8d7384f9565300311ef467e62ae9f8c20201e5138f.
+Default disabled, compile-time absent in public build. Root-config/UID0 AF_UNIX control
+binds executable/PID/startticks/invocation/generation/room, absolute TTL and one-shot nonce.
+Closes only actual upstream seed WS, writes a real private-pipe Gorilla1011 close frame;
+provider_generated=false. No supervisor classifier/budget/backoff/security change.
+
+Real local Pion/SDP/ICE/RTP/Family/Reliable/Mux/TCP: same room/D, old-cache bootstrap READY,
+same original TCP stream, lease-clock renewal, two generations, bounded resources. Normal
+and receipt-write-failure fixtures race×3 PASS; actual root entry/media PASS; valid non-root
+command rejected. Trigger114PASS, baseline/candidate security447PASS each. Full Go suite
+NOT_GREEN with identical15 failed test nodes; API unchanged329PASS/5 baseline failures,
+publisher19PASS. Earlier insufficient disposable-fixture headroom receipts retained;
+fresh fixture reruns pass without changing TTL policy or any production credential.
+
+Capsule: state-client-build/field65-export16/gateway-seed-supervisor-trigger-1/manifest.json.
+Reproducible binary, separated patches/schemas, rollback/runbooks/SHA256SUMS retained.
+All production/owner/live counters0. Exactly next: separate operational readiness for
+permitted synthetic identity, fresh credential renewal, active-session inventory and
+exact frozen-binary canary. No automatic action. Historical functional warm-start PASS;
+formal readiness NO, public release/FIELD NOT_RUN.
+[Report and remaining gates](releases/2026-10-13-gateway-seed-supervisor-trigger-1.md).
+
+## GATEWAY-SEED-SUPERVISOR-PREDEPLOY-1 — PARTIAL / NOT READY (13.10)
+
+Fresh bounded NL/RU reads05:20–05:25UTC: same PID1807869/invocation00d21e8d…f9ea6,
+NRestarts3, baseline loaded/next21f0a0fd…509a. Candidate c9d75db6/d6875817…5765 unchanged;
+API archive matches protected baseline. No new fatal/receipt. Current process has10138s
+remaining; future acceptance2710s +180s margin fits4h lifetime, trigger completionT0+23min.
+**Served Family leaf expired00:09:41UTC**, strict TLS CERTIFICATE_EXPIRED. No renewal.
+Directory/authority RU=NL; CRLs equal at entry, final NL24609/RU24610 snapshots differ.
+
+READY_FOR_CONTROLLED_DEPLOYMENT=NO. FIRST_BLOCKER=SYNTHETIC_IDENTITY_UNAVAILABLE:
+known disposable profiles removed, no permitted existing production synthetic grant
+reference established. Active real restricted sessions UNKNOWN, not zero. Historical
+fault adapter needs tagged test binary; exact candidate has no verified removable
+one-shot1011 trigger. Opaque proxy/reset gives1006/reset, not1011. Full collectors and
+healthy-chain rollback readiness also incomplete. No canary or production/owner action.
+
+Local unchanged-source boundary/classifier race×3:162PASS, readiness tests5PASS.
+Exactly next: separate source-only acceptance-trigger candidate/full local acceptance,
+not deployment or grant creation. Historical functional/local supervisor PASS preserved.
+[Readiness, independent deadlines and runbook](releases/2026-10-13-gateway-seed-supervisor-predeploy-1.md).
+
+## GATEWAY-SEED-SUPERVISOR-DEPLOY-1 — PARTIAL / entry abort (13.10)
+
+PRELIVE_SERVER_CHANGED; candidate not deployed.5,337 sealed input checks PASS;
+fresh loaded/next still21f0a0fd…509a, candidate d6875817…5765 remains built only.
+At05:06:15UTC PID1807869 / invocation00d21e8d81a549f0aa9df8a2714f9ea6 / NRestarts3.
+Since the prior saved invocation, two **normal four-hour DEADLINE exits**, fatal=false,
+exit0, caused automatic restarts under unchanged Restart=always. No new WS1011/fatal.
+27 immutable receipts preserved;23 old byte-identical,4 new. No journal queries.
+
+Deployment/restart/renewal/test disconnect/live-room/owner/gate counters0. Full credential,
+active-session and RU/NL preflight stopped at entry gate; no zero-session assumption.
+Accepted binary lacks the historical test-only fault adapter; no compatible external
+seed-only trigger established. Local supervisor PASS and functional warm-start PASS remain.
+Exactly next: separate predeployment-readiness gate on current invocation, verifying
+synthetic identity and exact-binary narrow trigger before any restart. No automatic run.
+READY_FOR_FINAL_WARM_START_PREFLIGHT=NO; public release/FIELD NOT_RUN.
+[Report](releases/2026-10-13-gateway-seed-supervisor-deploy-1.md).
+
+## GATEWAY-SEED-SUPERVISOR-1 — local production candidate PASS (13.10)
+
+PRODUCTION_PATCH_ACCEPTED=YES **locally**, deployment NOT_RUN. Same-room supervisor
+handles only SEED_READ/SIGNAL_READ/WS_CLOSE1011 with ACTIVE non-local context. Three
+rejoins maximum per room lifetime; existing45s connect budget,1/2/4s backoff, fresh
+security validation and directory/security expiry bounds. UNKNOWN/protocol/policy/auth
+remain terminal. Existing planned room rotation, wire formats and systemd unchanged.
+
+Exact saved deployed gateway baseline is21f0a0fd…509a: a4087e source **plus** the sealed
+SIGNAL_READ classifier delta, not bare a4087e.20,355 input checksums verified. Go-only
+candidate; deployed API AKI/skew/ACK/publisher archive never copied into deployment scope.
+Accepted structured collector Go delta still applies cleanly; combined deployment is
+not claimed. Dirty main checkout and prior evidence preserved.
+
+Local real-WSS/Pion/SDP/ICE/RTP/Family/Reliable/Mux proof drives production supervisor:
+two recoveries, unchanged room/D, new authenticated old-cache bootstrap/dedicated READY,
+same original TCP socket/stream, traffic and authenticated lease renewal during recovery
+(controlled lease clock). Concurrent unavailable-window bootstrap is bounded. Late
+callbacks/cleanup cannot close successor. Final media/unit race×3=135PASS; security
+candidate366PASS vs baseline357PASS; baseline teardown race×3=3PASS; storage9PASS.
+WS/PC/retained peers0 after cleanup, goroutines2→2, FD6→8 bounded. Full suites NOT_GREEN:
+same15 failed assertions/parents incl known diagnostics/source guard; no new failures.
+
+Validation source `c9d75db6020f9f605e891036cbb9b68cebede708`;
+binary SHA256 `d6875817cf33fdd85c6ad78a342fc93afd16864293e94a6e5b7136eec5125765`.
+Separate behaviour/observability diffs, local Git bundle, binary, rollback reference,
+schemas, test receipts and SHA256SUMS are in the private evidence capsule. Built only,
+not installed/deployed/pushed/released. Natural provider1011 internal cause remains
+UNKNOWN; older exits are not reattributed.
+
+All production/owner/live-room counters0. Historical functional warm-start PASS retained;
+formal readiness remains NO. Exactly next: separately authorized controlled gateway
+continuity deployment/acceptance with one real seed disconnect, **no owner whitelist run**.
+[Full result and limitations](releases/2026-10-13-gateway-seed-supervisor-1.md).
+
+## TELEMOST-REAL-SAME-ROOM-REJOIN-1 — isolated live provider PASS (12.10)
+
+One NL test-only process used fresh synthetic Family identities and the real Telemost
+API/WSS/Pion/SFU. One seed room, two dedicated rooms, one actual seed signaling
+disconnect. Fresh same-room SDP/ICE/RTP succeeded; original292-byte directory D
+d9f24bda…3a93b remained unchanged and produced new authenticated bootstrap/dedicated
+READY. Existing Family/Reliable/Mux stream1/TCP socket retained28 byte-exact numbered
+frames through recovery; no reopen. Local exact-driver/matrix race×3:54PASS.
+
+SAME_ROOM_REJOIN_CAPABILITY=PROVEN_LIVE_PROVIDER for this actual-disconnect model.
+Close1011 was test-injected after closing the real upstream socket;
+PROVIDER_GENERATED_WS1011=NOT_PROVEN, provider internal cause remains UNKNOWN.
+No claim every natural1011 retains a reusable room. Real lease boundary not reached.
+
+All test processes/participants and synthetic private state cleaned. Official API
+does not expose conference deletion/object TTL in inspected methods; no invented
+DELETE/TTL or conference-object-removal claim. Exact source/binary/receipts sealed.
+Production/owner actions0; no supervisor patch/deployment, no owner attempt. Prior
+functional warm-start PASS preserved; formal readiness unchanged.
+Next: minimal production seed supervisor SOURCE patch + controlled local acceptance,
+not deployment. [Live proof and limitations](releases/2026-10-12-telemost-real-same-room-rejoin-1.md).
+
+## GATEWAY-SAME-ROOM-REJOIN-PROOF-1 — local real-media PASS, provider capability UNKNOWN (12.10)
+
+Task PARTIAL. Full local WSS/Pion/SDP/ICE/RTP path passed two seed1011 failures and
+fresh joins to the same fixture room without seed CreateRoom or cache update.
+Original serialized D passed new authenticated bootstrap and dedicated READY.
+Existing real-Pion Family/Mux stream retained one TCP socket, carried numbered frames,
+and authenticated lease sequence1 with a controlled lease clock/post-old-deadline data.
+Not a metadata-only or synthetic packet-pair proof; not Android/live-provider acceptance.
+
+FIRST_BLOCKER=REAL_PROVIDER_ROOM_RETENTION_AND_FULL_REJOIN_AFTER_1011_NOT_EVIDENCED.
+The local SFU explicitly models persistent room + fresh join permission. Exact source
+and preserved evidence do not establish that real Telemost retains the old room and
+permits full media rejoin after its natural1011. SAME_ROOM_REJOIN_CAPABILITY=UNKNOWN,
+not IMPOSSIBLE and not production-ready. No production supervisor/implementation plan.
+
+Final media/matrix race×3:54PASS/0SKIP/0FAIL; baseline/experimental security race×3:
+129PASS each. WS/PC/peers0 after cleanup, goroutines2→2, FD6→8 bounded; seed owners≤1.
+Four existing files changed only in isolated test source (network adapters/synthetic
+fixture); no main product edits. Prior4054 checksum entries verified; exact diff,
+Pion/media/cache/lease/resource receipts sealed. Full legacy suite not rerun/not green.
+
+No SSH/ADB, deployment/restart/renewal, owner access/refresh/CONNECT or live room/gate.
+Historical functional warm-start PASS retained; ATTEMPT_CONSUMED=NO. Next missing
+proof is the provider's post1011 room/full-media rejoin contract, not another metadata
+GET. No automatic production patch/deployment. FIELD/public releaseNOT_RUN.
+[Report and exact local/model boundary](releases/2026-10-12-gateway-same-room-rejoin-proof-1.md).
+
+## GATEWAY-WS-1011-CONTINUITY-1 — offline PARTIAL, no speculative retry (12.10)
+
+WS1011 boundary PROVEN; provider internal reason UNKNOWN.1920 sealed inputs verified.
+Real Gorilla close frames traverse production signalingLoop/Recv → SeedManager
+runOverlap/serveCarrier → fatal observer.20 composed cases×3 retain exact safe cause;
+non-nil seed return leads to service teardown/exit1 by the unchanged main contract.
+No retroactive attribution of earlier UNKNOWN exits.
+
+Important coupling: dedicated holders already have independent bounded lease contexts;
+they do not inherit the seed context after handoff. Real Family TLS/Mux/TCP fixture
+survives independent seed1011, renews the same holder and carries post-deadline data.
+Actual Broker.Close then terminates it: service/process teardown causes the loss.
+Dedicated carrier in this fixture is synthetic packet-pair, not provider media.
+
+FIRST_BLOCKER=SAME_ROOM_POST_1011_MEDIA_AND_CACHED_BOOTSTRAP_UNPROVEN.
+Existing-room metadata GET works against a local stub and Session.Connect is single-use.
+This does not prove room survival, new Pion publisher/subscriber READY, or bootstrap
+from unchanged old cache. OptionA is preferred for further proof, not accepted.
+No behavioural/observability patch, new production binary, validation commit or deployment.
+
+Final fixture race×3:132PASS. Exact baseline/test-only targeted race×3:414PASS/3SKIP
+each. Full suites344/345PASS,7SKIP, six identical diagnostic subfailures plus parent;
+busy-wire not reproduced/not fixed. Independent auth/security/lease rejection gates
+PASS.60 repeated signaling cleanup cycles bounded FD/goroutines, not media recovery.
+All2004 existing source files unchanged; tagged fixture bridge excluded from normal build.
+
+Only remote action:20:29:42UTC read-only gateway snapshot, PID1540161/invocation
+4fafa22a…855c7/NRestarts1, loaded=next21f0a0fd…509a, observer armed; now historical.
+No phone access, restart, renewal, publication, live room, gate or CONNECT. Functional
+warm-start historical PASS preserved; new attempt unconsumed; readiness not raised.
+One next operation: full local same-room rejoin/Pion media/unchanged-cache bootstrap
+proof, before selecting any recovery patch or deployment. FIELD/public releaseNOT_RUN.
+[Report / exact fixture boundaries and design](releases/2026-10-12-gateway-ws-1011-continuity-1.md).
+
+## WARM-START-FORMAL-ACCEPTANCE-2 — PARTIAL, prelive natural fatal (12.10)
+
+FIRST_BLOCKER=PRELIVE_SERVER_CHANGED. Accepted source473ebe57…badc and sealed
+collector artifacts verified unchanged; no scope/artifact mismatch. Initial API and
+gateway invocations matched the accepted baseline. One authorized same-key renewal
+passed strict Python/OpenSSL/native validation (14400s policy unchanged); no manual
+restart or collector deployment occurred. Sync timer restored, rollback preserved.
+
+At20:12:48UTC gateway PID1415977/invocation1613fa1c…6829f naturally exited1.
+First immutable evidence: SEED_READ → SIGNAL_READ → WS_CLOSE/1011, context ACTIVE,
+carrier_closed_at_observation=false, seed generation2. Underlying signaling-server
+reason UNKNOWN; no claim that renewal caused the fatal or that it was credential
+expiry. Old receipt explicitly retains STARTUP_NOT_AUTHORIZATION credential metadata.
+23 application/systemd receipts copied byte-exact and hashed; historical causes unchanged.
+
+Automatic restart at20:13:18UTC: PID1540161/invocation4fafa22abf6c4bcbbc137375472855c7/
+NRestarts1.20:15:25 snapshot active, existing classifier loaded=next21f0a0fd…509a,
+observer armed. API remains PID414703/invocatione9618550…3e3f, archive12ca0c72…060ed.
+New directory4d722bad…15424 equal RU/NL;20:14 strict served chain PASS, leaf expires
+13Oct00:09:41UTC/headroom14134s. These are bounded snapshots, not prelive stability.
+Sequential CRLs23600/23601 differ during normal sync; no whole-state equality claim.
+
+New attempt NOT consumed. Deployment/controlled restart/ACK/gate/owner install/
+instrumentation/refresh/CONNECT all0. Phone not accessed; previous VPN OFF/app+chat ON
+is historical only. No new egress/renewal acceptance test; functional historical PASS
+and formal PARTIAL preserved. Warm/cold readinessNO; FIELD/public releaseNOT_RUN.
+One next operation: separate offline analysis of sealed WS_CLOSE/1011 fatal before
+resuming live acceptance. Do not automatically deploy, restart or CONNECT.
+[Report / exact receipts and current identities](releases/2026-10-12-warm-start-formal-acceptance-2.md).
+
+## WARM-START-COLLECTOR-REBASE-1 — PASS, accepted local candidate only (12.10)
+
+REBASED_COLLECTOR_ACCEPTED=YES. Exact deployed API12ca0c72…060ed recovered from
+closed source archive + original build/deployment receipts and fresh read-only
+runtime hashes. AKI/skew/ACK/publisher preserved; no stale donor module replacement.
+Isolated validation source473ebe57…badc; gateway406a5ca4…dfe2 / API78bfc20f…45fc6.
+Both local builds reproducible; exact diff, schemas, rollback and dry-run plan sealed.
+
+Deployed contracts36×2, HTTP16×3, publisher19, evaluator9 PASS; lease race×3 and
+observer race×3 PASS. Expanded A/C API329PASS/70SKIP/5 identical old failures.
+Six Go diagnostic assertions remain; independent real auth decision fixtures PASS
+on both. Busy-wire not reproduced/not fixed. Full suite NOT_GREEN; no new failures.
+
+No deployment/restart/renewal/publication or phone/lifecycle access. Fresh19:25UTC
+baseline snapshots: API PID414703, gateway PID1415977/invocation1613fa1c…6829f/
+NRestarts0, gateway loaded=next21f0a0fd…509a; now historical, not a live readiness grant.
+Functional warm-start PASS preserved; formal acceptance PARTIAL, warm/cold readinessNO.
+New attempt unconsumed; owner install/instrumentation/refresh/CONNECT/gate all0.
+One next operation: separate controlled collector deployment, fresh preflight and
+one final formal warm-start run. No automatic CONNECT, release, tester send or FIELD.
+[Report / identities and sealed evidence](releases/2026-10-12-warm-start-collector-rebase-1.md).
+
+## WARM-START-FORMAL-ACCEPTANCE-1 — PARTIAL, scope gate stopped deployment (12.10)
+
+FIRST_BLOCKER=SCOPE_VIOLATION_API_BASELINE_MISMATCH. Fresh read-only comparison finds
+the archived HTTP candidate would remove deployed AKI/clock-skew fixes and publisher
+response/modules. Collector hooks themselves are not blamed; the source baseline is
+older than the actual HTTP artifact. Exact source/packaged diff retained, no silent
+rebase or deployment. Previous functional warm-start/egress/client renewal PASS stands;
+historical formal acceptance stays PARTIAL, not a functional FAIL.
+
+19:12UTC snapshots: gateway PID1415977/invocation1613fa1c…6829f/NRestarts0 unchanged,
+loaded=next21f0a0fd…509a, observer armed, no new fatal receipts. Strict served chain
+PASS, leaf expiry20:48:29UTC/headroom5757s at snapshot; directory252c3535…e4341 matches
+RU/NL. Sequential final CRLs differ23488/23489 during background sync: no whole-state
+atomic equality claim. HTTP publisher artifact12ca0c72…060ed preserved; rejected local
+candidate0f58d22a…f353e must NOT deploy. No server mutation, renewal or owner access.
+
+New attempt unconsumed: ACK/CONNECT/gate/install/refresh/instrumentation/restart0.
+Phone final state not re-observed; previous OFF VPN / ON app+chat remains historical.
+One next operation: rebase only the saved collectors on actual deployed HTTP source,
+retain AKI/skew/publisher and rerun differential acceptance before deployment.
+Warm/cold readinessNO, FIELD/public releaseNOT_RUN.
+[Report / sealed scope evidence](releases/2026-10-12-warm-start-formal-acceptance-1.md).
+
+## WARM-START-EVIDENCE-ATTRIBUTION-1 — offline PARTIAL; functional PASS preserved (12.10)
+
+Verified1616 historical inputs +122 classifier artifacts without modifying receipts.
+Two17:42:19 HTTP403 remain ATTRIBUTION_NOT_RETAINED: probe IDs are untrusted correlation,
+not principals; nginx captured only requests carrying the probe header, `other` is
+not proof of a non-provisioning route. Accepted owner DB rows0 is not zero attempts.
+Original owner-scoped B+D evidence gate remains PARTIAL, not silently reduced to C+D.
+
+CORE_WARM_START_FUNCTIONAL=PASS_IN_TESTED_SCENARIO; NL egress and controlled DNS PASS.
+Authenticated client renewal PASS, same session/sequence1, three complete requests
+started after the old deadline. Independent server acceptance receipt NOT_RETAINED;
+bounded journal TIMEOUTs were not retried. No functionality FAIL inferred.
+
+Isolated source-only HTTP provisioning and lease collectors, schemas/evaluator/diff
+and local candidate retained. HTTP13 fixtures PASS; existing Python baseline/patched
+97PASS/4SKIP/1 identical old source-guard failure. Lease race×3 baseline96/patched141
+test events PASS; observer69 PASS; evaluator9 PASS. Full bootstrap not declared green.
+Collector diff0cb0e59d…ec22a, local-only binary972613a7…8a9c1; no deployment or commit.
+Collectors retain unknown attribution as unknown, including pre-HTTP visibility limits.
+
+NEW_LIVE_RUN_REQUIRED=YES for strict formal closeout, not to rediscover functional egress.
+Warm readinessNO/coldNO; deployment/CONNECT/refresh/APK/gate/restart/renewal/FIELD/public
+releaseNOT_RUN. Owner/gateway not accessed; last ON/chatON/VPNOFF and gateway snapshot
+remain historical. Prior attempt consumedYES unchanged.
+One next operation: separately authorized collector-backed evidence-completion run,
+with controlled collector deployment/preflight and the existing research84/two-phase
+protocol/harness. No automatic CONNECT.
+[Report / capsule and hashes](releases/2026-10-12-warm-start-evidence-attribution-1.md).
+
+## TELEMOST-WORKABILITY-PROOF-1 — live core PASS, formal evidence PARTIAL (12.10)
+
+Fresh ACK → gate arm/recheck → one physical CONNECT inside the45s window.
+Provisioning-only gate900s/32 stayed active throughout;2 blocked operations.
+Exact accepted directory252c3535…e4341 reached native startup; dedicated READY and
+Family authentication succeeded. Ordinary Android TUN→Mux/Telemost→NL egress proven
+for7 HTTPS nonces with session/wire tuple/endpoint/response correlation; controlled
+DNS also crossed gateway. Source is NL/HOSTKEY, not Orange. IPv6 unavailable.
+
+723.814s after READY, same session776990f9…e5f3, one authenticated lease renewal:
+request17:44:43.828UTC, confirmed17:44:45.849; old deadline17:46:39.097 →
+17:54:44.145. Full responses after the old deadline and final17:49 request PASS.
+No unexpected close, native retry, manual reconnect or automatic recovery observed.
+8 probe operations total,3581 received bytes; parallel stream series NOT_RUN.
+
+Formal result PARTIAL, first missing boundary: independent owner-scoped zero server
+provisioning attempts. Owner accepted challenge/fetch/ACK rows stayed0, but the shared
+probe log contains2 un-attributed403 entries (one restricted challenge, one other).
+Do not call the global counter0 or assign those entries to another user. Client
+pre-dial block and unchanged cache are proven; no direct owner request is proven.
+Two distinct bounded gateway journal windows timed out, neither repeated; independent
+server lease receipt unavailable. Authenticated client renewal is still positive evidence.
+
+Observation-only classifier loaded/next21f0a0fd…509a, sourcea4087e00+diff7e7d4086…967b.
+One same-key renewal +one controlled restart total; no later restart/fatal.
+Final17:52UTC: PID1415977/invocation1613fa1c…6829f/NRestarts0, strict served chain PASS,
+expiry20:48:29UTC/headroom10568s; RU/NL directory equal. Observer ARMED_NOT_TRIGGERED.
+912.754s prelive stability PASS_LIMITED; not long-term stability.
+
+Gate CLEANED17:49:28 before expiry. Cleanup initially met an absent timer target;
+remaining own collectors and test rules were reconciled/removed, no gateway restart.
+Post-cleanup offline reader proves cache3301bytes/f6933824…faab6 and identity vault
+unchanged across the test. Temporary helpers removed. Final17:51:33: VPN OFF,
+app ON/ChatDeliveryService ON, same research84 APK/signer/UID; normal background
+refresh after restoration lies outside the closed test window. Main APK installs0.
+
+ATTEMPT_CONSUMED=YES; do not retry. WHITELIST_WARM_START_READY=NO for the strict
+evidence gate; cold startNO, real restricted FIELD/public releaseNOT_RUN.
+Next: offline collector-attribution/server-lease-evidence readiness only, no automatic
+CONNECT or deployment. [Results and limitations](releases/2026-10-12-telemost-workability-proof-1.md).
+
+## GATEWAY-SIGNAL-READ-CAUSE-1 — offline PARTIAL / classifier candidate (12.10)
+
+Historical checkpoint; its candidate is now deployed as recorded above.
+
+Exact deployeda4087e00 traced: Gorilla WebSocket1.5.3 ReadJSON error is replaced
+with a generic error at signaling.go:118 before shared seed Recv. Previous85 sealed
+artifacts verified unchanged. Natural14:22 first SEED_READ/SIGNAL_READ is proven;
+underlying historical error remainsUNKNOWN, owner CONNECT relationEXCLUDED for
+this fatal. No retroactive attribution of earlier12:17SEED_READ/UNKNOWN.
+
+Local-only five-production-file observation delta retains an immutable typed scalar
+snapshot before collapse, forwards it to optional schema1 signaling_read. No raw
+error/close reason, behavioral patch, timeout/retry/admission/directory change.
+16 real loopback WS/WSS cases +3 local shutdown cases and composed seed/fatal bridge;
+targeted race×3/first-cause/privacy/retention/negative-rejection gates PASS.
+Full suite NOT_GREEN: six old diagnostic assertions; busy-wire independently flaky
+on both sources (baseline8/20, patched9/20). No new failure-name class or data race.
+TLS close_notify/partial frame/EOF collapse to1006; malformed frame can remainUNKNOWN.
+
+Current documented sole-seed-loss contract is fail-closed; no independently proved
+behavioral defect. Restart invalidates old cached route; planned in-process overlap
+does not rescue an already-dead old seed. Recovery options require explicit provider,
+trust/replay/ownership/generation policy, not a blanket retry of UNKNOWN.
+
+One read-only14:55:43UTC snapshot: PID1328380/invocatione24e32cf…9362b/NRestarts1,
+loaded=nextfa4cf867…733eea, observer armed, no new receipt. Not continuous stability
+or fresh chain/cache readiness. No owner access; last saved VPN OFF/app+chat ON is
+historical. Local candidate/source.diff/manifest retained, no commit/push/deployment,
+restart/renewal/publication/refresh/APK/CONNECT/gate/room0. Prior attempt remains consumed.
+
+READY_FOR_CLEAN_RETRY remainsNO. One next operation: separate observation-update
+acceptance/deployment and natural-trigger capture. Two-phase operator runbook remains
+unexecuted,22 fixtures PASS. [Detailed report](releases/2026-10-12-gateway-signal-read-cause-1.md).
+
+## GATEWAY-SEED-READ-OBSERVABILITY-1 — PARTIAL / natural SIGNAL_READ captured (12.10)
+
+Historical checkpoint; next operation superseded by the offline result above.
+
+Exact two-file observation delta accepted: baseline/source differential and targeted
+race×3 PASS, no new failures; six diagnostic assertions and baseline busy-wire remain.
+Local sourcea4087e00; loaded/nextfa4cf867…733eea, baseline0ccaaf81…2667a retained.
+One same-key leaf renewal (normal4h, expiry17:39:22UTC), one controlled restart.
+Old invocation SIGTERM/exit0/fatalfalse preserved. No owner/APK/transport change.
+
+Deployment postcheck asserted after restart; mutation was not replayed. Reconciliation
+proved successful observation start, then natural14:22:01UTC SEED_READ/SIGNAL_READ
+fatalexit1 after39m46s, matching application/systemd receipts. Planned30m collector
+not started; no continuous30m health PASS claimed. Typed boundary is proven; underlying
+ReadJSON error and historical12:17 root cause remainUNKNOWN, no owner/DPI attribution.
+
+Systemd automatic restart only: final14:26–14:29 snapshots PID1328380/invocation
+e24e32cf8121436ca6ab772f7779362b/NRestarts1, observer armed, strict chain/DERPASS,
+RU/NL authority/CRL/floors/directory equal. Directory631ad219…35664; owner cache untouched.
+Ordinary AWG/TCP/API/mailbox unchanged. Rollback prepared, not executed; no cleanup restart.
+Owner actions0; last saved12:23:09VPNOFF/app+chatON, not a fresh device measurement.
+No extra test/owner rooms; normal controlled gateway start creates one shared seed,
+automatic restart another—do not claim a literal global room count0.
+
+READY_FOR_CLEAN_RETRY=NO. One next operation: separate GATEWAY-SIGNAL-READ-CAUSE
+remediation/localization using new immutable evidence, before any behavioral deployment
+or warm-start. No CONNECT/refresh/gate/owner instrumentation/FIELD/push in this task.
+[Report and exact identities](releases/2026-10-12-gateway-seed-read-observability-1.md).
+
+## GATEWAY-SEED-READ-CAUSE-1 — offline PARTIAL / local checks PASS (12.10)
+
+Exact gateway sourceabc604b0/old binary0ccaaf81…2667a inspected in an isolated
+archive; original warm-start157 + observer65 sealed evidence entries unchanged.
+SEED_READ is shared Telemost seed PacketEndpoint.Recv before FCB1 decoding, not
+one owner's Family exchange. Ordinary peer EOF/timeout/reset/auth rejection and
+malformed packets do not terminate the shared reader in local before/after tests.
+No independent behavioral defect proved; no behavioral patch.
+
+Historical first SEED_READ/UNKNOWN exit1 remains UNKNOWN. Late VPN ON snapshot
+precedes fatal, but no client↔exchange correlation survives: relationNOT_ESTABLISHED.
+Valid windowCONNECT0 / latephysicalCONNECT1 / full-phase0 / gateCLEANED preserved;
+prior attempt consumedYES, blocked warm-startNOT_TESTED, not product PASS/FAIL.
+
+Minimal **local-only** observability delta: seed carries existing first-close code
+to safe fatal receipt; typed net timeout/reset/closed classification; all existing
+returns/timers/security/exit policy unchanged. Two production files, no APK/native
+or Telemost implementation change. Targeted race/security fixtures PASS; full suite
+NOT_GREEN (six known diagnostic assertions; separate baseline busy-wire assertion
+also observed). Two-phase ACK→fresh gate check→90s physical window:22 fixtures PASS,
+late action OUTSIDE_TEST_WINDOW; finite900s/32 app gate unchanged, explicit CLOSED.
+
+No owner/server access or mutations, deployment/renewal/restart/refresh/CONNECT0.
+Last saved owner12:23:09 VPN OFF/app+chat ON; gatewayPID1255784/invocation853bf7d3…f92b/
+NRestarts1/observer armed — **historical, not current checks**. Readiness remainsNO.
+One next operation: separately authorized observation-only deployment acceptance;
+no automatic live retry. [Report](releases/2026-10-12-gateway-seed-read-cause-1.md),
+[future two-phase runbook](whitelist-warm-start-two-phase-runbook.md).
+
+## WHITELIST-WARM-START-1 — PARTIAL / late CONNECT, natural gateway fatal (12.10)
+
+Historical episode; offline follow-up above does not rewrite its receipts.
+
+Research84/code84 installed in place11:47:34UTC: APKfd310617…1aa48, previous
+signer/package/UID10283, nativecb3af31f…989e2 unchanged. No product rebuild,
+uninstall/data clear/re-enrollment. Existing3301-byte cache66e31bed…33ed, directory
+9c84fc89…9a51, exact identity-bound production selection and installed native
+offline validation PASS before arm and after cleanup. No preparation refresh needed.
+
+Provisioning-only gate900s/32 armed12:04:07UTC; physical operator window started
+12:05:10, expired after90s without Activity/CONNECT. Blocked calls0, full-phase
+requests0. Gate CLEANED12:10:44; helpers/collectors/temporary endpoint removed.
+Owner provisioning challenge/fetch/ACK0 through cleanup; two unattributed global403
+probe records occurred after the operator window, so whole armed-window global0
+is NOT claimed. App/chat restored once after cleanup; ordinary background refresh
+then resumed, separately counted. No post-restoration exact cache hash claim.
+
+User subsequently reported one physical CONNECT;12:16:49 snapshot shows VPN ON
+and TcpVpnService, NOT proven Telemost. Gate was already CLEANED: no blocked-warm
+acceptance or egress result. Late event supersedes window-only ATTEMPT_CONSUMED=NO:
+physical attempt budget consumed once, valid blocked-window CONNECT0. No repeat.
+Final12:23:09UTC **VPN OFF, app ON, ChatDeliveryService ON**, research84 unchanged.
+
+Observer caught a natural fatal12:17:02.367UTC: old invocation26e8634a…282a,
+PID1168539, returned_error, first SEED_READ/UNKNOWN, exit1; cleanup completed.
+Credential headroom4741s, parent-context cause empty; not planned4h expiry or proved
+credential rejection. PROCESS_EXIT_CAUSE=UNKNOWN; no causal link to late CONNECT,
+phone call or DPI established. Application/systemd receipts preserved verbatim.
+Automatic restart12:17:32: PID1255784/invocation853bf7d3…f92b/NRestarts1, same
+loaded/next0ccaaf81…2667a, observer armed. New directory5d3bc057…71316 RU/NL equal;
+old seed no longer served. Strict chain PASS at12:22; leaf expires13:36:04UTC,
+4390s headroom at snapshot. No agent restart/renewal/publication change.
+
+READY_FOR_CLEAN_RETRY=NO; first blocker GATEWAY_NATURAL_FATAL_SEED_READ_UNKNOWN.
+One next operation: offline localization of the preserved first SEED_READ fatal,
+without CONNECT/deployment. Warm acceptance unproved; coldNO, FIELD/public release
+NOT_RUN. Prior egress proof, lease renewal and historical OPEN failures unchanged.
+[Full timeline, counters, receipts and cleanup](releases/2026-10-12-whitelist-warm-start-1.md).
+
+## WHITELIST-PROVISIONING-BLOCK-SEAM-1 — local PASS / condition READY (12.10)
+
+Historical local-only checkpoint; later owner installation/episode is above.
+
+Isolated research84/code84 candidate adds only a bounded restricted-readiness
+provisioning gate; research83 owner and gateway untouched. Source base f5240994 +
+delta d7907697…481e7; native cb3af31f…989e2 reused unchanged. Same-signer signed APK
+fd310617…1aa48 and control helper cc567785…27064 are built, NOT installed/distributed.
+Private control binds package/UID/version/source/APK/signer/nonce; 900s/32 entries,
+auto-expiry/reboot invalidation and explicit cleanup. Public build active seam absent.
+45 Java +14 existing operator/credential tests PASS. API31/API35 real provisioning
+fixtures: armed fetch/ACK/dial0, unchanged encrypted cache, real cached selection,
+ordinary/underlay controls and running ChatDeliveryService unaffected; cleanup and
+reboot restore provisioning. Official helper now explicitly rejects wrong signer,
+including on permissive userdebug instrumentation. No claim against privileged ADB.
+Collectors READY locally only; fresh live attach/runtime/chain/cache checks still
+required. Owner CONNECT/install/instrumentation/arm/refresh0; gateway actions0;
+ATTEMPT_CONSUMED=NO. Last known owner VPN/app/chat OFF, not freshly observed here.
+Next separate operation: fresh preflight, then only if valid controlled owner update,
+arm and one physical warm-start CONNECT. No FIELD/public release.
+[Source, artifacts, scope and fixture evidence](releases/2026-10-12-whitelist-provisioning-block-seam-1.md).
+
+## WHITELIST-GATEWAY-RECOVERY-2 — PARTIAL / runtime and cache recovered (12.10)
+
+Historical runtime checkpoint; local block-condition work and next action are above.
+
+One same-key renewal under unchanged TTL policy and ONE logical gateway start PASS.
+Observer sourceabc604b0/loaded+next0ccaaf81…2667a unchanged. Invocation
+26e8634a47e24d60b6f7f55a58f7282a/PID1168539, started09:43:01UTC, NRestarts0;
+610.324s passive stability PASS, final09:58 snapshot unchanged, no new fatal receipt.
+Strict served chain/DER and RU/NL authority/directory/CRL equality PASS. Current
+directory9c84fc89…9a51; previous invocation seed not accepted. Leaf expires13:36:04UTC;
+1200s preflight cutoff13:16:04, BEFORE process deadline13:43. Manual renewal remains
+required; local guard prepared, no unattended alert/secret-bearing renewal installed.
+
+Existing app background fetched/imported/ACKed current publication09:47/09:52;
+no extra agent refresh. One offline instrumentation09:52:58 proves production
+identity-bound cache selection/native code0 for current directory. Cache3301bytes,
+SHA66e31bed…33ed unchanged; selected canonical4f587526…aa85 equals original response.
+Research83/APK7208a813…f7c8/UID10283 unchanged. Final09:58:35 VPN/app/chat OFF, helper
+removed; no launcher restoration. Background attempts are accounted separately.
+
+READY_FOR_CLEAN_RETRY=NO; first blocker PROVISIONING_BLOCK_CONDITION_NOT_READY:
+old source-IP/Nginx503 mechanism violates current no-shared-IP/no-fake-response scope.
+Not activated. Local current-binary collector binding/generator and14 guards PASS,
+but complete first-startup/admission collector bundle not yet reaccepted; new narrow
+journal query timed out once, not retried. No CONNECT/full-phase/native startup;
+ATTEMPT_CONSUMED=NO.718 old sealed entries/13 old receipts unchanged; historical
+pre-observer cause remains UNKNOWN, proved restart failure PROFILE rejection separate.
+One next operation: fixture-validate a compliant owner-role provisioning denial,
+without CONNECT. [Recovery and remaining gates](releases/2026-10-12-whitelist-gateway-recovery-2.md).
+
+## WHITELIST-EXACT-SELECTION-1 — PARTIAL / selection proved, gateway exited (12.10)
+
+Historical checkpoint; separately authorized recovery and final state are above.
+
+One authorized owner reader11.10 21:27:13UTC: exact installed production vault/cache
+selector + pure native validation PASS, all nine identity/trust/time/schema checks.
+Original cache3301bytes/SHA57575c26…898d unchanged; selected canonical response
+b457e749…a0922 equals original response byte-for-byte; directorybb5c8eb0…d8959 then
+accepted. Twelve disposable API31 cases and15 offline guards PASS. Research83,
+signer/APK7208a813…f7c8/UID10283 unchanged; no product update or second owner run.
+
+Reader ended stopped21:27:16. Separately21:28:30 FriendsActivity resumed (origin
+unestablished); background authenticated fetch/imports21:28:37 and21:34:31 observed.
+Task-initiated refresh/CONNECT/native/Telemost/TUN/Activity0, not a whole-task zero
+claim after that resumption. Last12.10 09:12:30UTC VPN OFF/app+chat ON. No force-stop
+of the now ordinary user process; cache result is timestamped, not re-read after
+background imports. Helper/emulator removed; previous542 sealed entries preserved.
+
+Observer now TRIGGERED: dd70…3384a/PID788144 normal four-hour deadline exit0 at
+11.10 23:19:05UTC, then five automatic startups exit1 with first typed
+PROFILE/CREDENTIALS_REJECTED. Expiry21:37:28 predates these failures. Exact13 receipts
+preserved. Historical pre-observer cause remains UNKNOWN. Final gateway failed,
+MainPID0/last invocationc1ad4d44…80d7d/NRestarts6; next0ccaaf81…2667a unchanged,
+loaded NONE. On-diskbb5c…d8959 not served; current accepted set empty. No agent
+restart/renewal/publication. Preparation stopped, clean CONNECT attempt UNUSED.
+
+READY_FOR_CLEAN_RETRY=NO; first blocker GATEWAY_INVOCATION_CHANGED. Exact-selection
+blocker is closed for captured state; credentials expired, block source scope and
+complete collectors also not ready. One next operation: separate operational
+gateway credential-recovery preflight for proved PROFILE/CREDENTIALS_REJECTED via
+accepted same-key runbook; no automatic CONNECT/FIELD or transport patch.
+[Exact selection and natural-exit evidence](releases/2026-10-12-whitelist-exact-selection-1.md).
+
+## WHITELIST-CACHE-METADATA-1 — PARTIAL / cache read, selection not fully proved (11.10)
+
+Historical checkpoint; subsequent exact validation and final lifecycle are above.
+
+One authorized metadata-only instrumentation on Redmi completed20:30:13UTC after
+six disposable API31/non-debuggable fixture cases PASS. Reader has no permissions
+or components, same freshly verified owner signer; no Activity/native/CONNECT.
+Research83/APK7208a813…f7c8/UID10283 unchanged. Cache3301 bytes/SHA57575c26…898d,
+committed file and absent sidecars identical before/after; reader UID traffic0/0.
+Helper removed. Final20:37UTC **VPN OFF, app OFF, ChatDeliveryService OFF**. No safe
+restart without Activity/prewarm/restricted networking was proved, so none performed.
+
+Actual directorybb5c8eb0…d8959 matches current RU/NL and invocation seed1; route-level
+CACHE_CURRENT_AND_ACCEPTED. Delivery revision3/CRL22295/issuer10 expires21:37:28UTC,
+not the nominal directory23:19 deadline. Issuer/leaf/CRL signatures and cached
+revocation checks pass on Redmi. Full identity-bound native validation was NOT
+executed/reproduced; ACK has no digest. Exact fallback candidate B is known, but
+EXACT_CONNECT_SELECTION=CONNECT_SELECTION_UNKNOWN. READY_FOR_CLEAN_RETRY=NO;
+first blocker EXACT_CONNECT_SELECTION_UNVERIFIED, **not** expired/incompatible cache.
+
+Existing running app made two background provisioning fetch/import/ACKs20:20/20:25
+before interruption; not initiated by harness and not mislabeled as chat sync.
+Task-initiated refresh0; task-wide background refresh count is not zero. No forced
+refresh/cache write/renewal/restart/publication/product patch. Observer final20:37:09:
+same PID788144/invocationdd70fcd8…3384a/NRestarts0, loaded/next0ccaaf81…2667a,
+ARMED_NOT_TRIGGERED. Strict chain PASS20:36:59; limiting headroom3618s at final.
+
+15 offline guard/role-block fixtures PASS;434 prior sealed entries preserved;
+108 new evidence entries sealed. Block condition NOT_READY (source exclusivity
+unproved); collectors not ready for observer binary/client lifecycle. CONNECT0,
+native startup0, task-created Telemost0, full-phase0; ATTEMPT_CONSUMED=NO.
+One next operation: separately scoped metadata-only identity-bound cache validation
+and exact-selection proof, without CONNECT/refresh; no second reader run authorized
+by this task. [Reader, evidence and limits](releases/2026-10-11-whitelist-cache-metadata-1.md).
+
+## WHITELIST-CACHE-READINESS-2 — PARTIAL / cache access gate (11.10)
+
+READY_FOR_CLEAN_RETRY=NO. First blocker:
+CLIENT_CACHE_ACCESS_REQUIRES_LIFECYCLE_PERMISSION. Research83 has no available
+non-lifecycle live cache export; installed instrumentation is inactive and its old
+wrapper starts Activity. Neither was invoked. Exact cache/selection/client expiry
+remain UNKNOWN; no blind refresh/import from a new server publication.
+
+Fresh19:53–19:59UTC: observer invocationdd70fcd8…3384a/PID788144/NRestarts0 unchanged,
+loaded/next0ccaaf81…2667a; chain/served DER PASS, security expiry21:37:28UTC. RU/NL
+directorybb5c8eb0…d8959 and CRL22247 agree. Current invocation accepts seed1 only;
+same-process overlap does not restore old-process seeds. Server headroom exceeds
+existing1200s guard; current client headroom cannot be inferred from it. Last server
+ACK18:08:32 has no directory digest and its response expired19:09:37, not current
+cache proof. Observer stays armed; historical fatal cause remains UNKNOWN.
+
+Five offline guards/condition fixtures PASS; prior413 sealed entries unchanged.
+Scoped-block template is not armed/ready for immediate use (fresh exclusive source
+scope unproven); old gateway collector still pins pre-observer binary. Those later
+gates are not silently passed. Final observer20:02:44UTC remains the same invocation,
+no new terminal receipt; server headroom5683s. New21 evidence entries sealed.
+Owner83/APK7208a813…f7c8/PID19925 unchanged, VPN OFF,
+app/chat ON; messenger route/native admission UNKNOWN without lifecycle export.
+CONNECT0/full-phase0/attempt UNUSED; no renewal/restart/publication/product patch.
+One next operation: explicit lifecycle permission for metadata-only cache inspection,
+without Activity/refresh/CONNECT. [Readiness report](releases/2026-10-11-whitelist-cache-readiness-2.md).
+
+## GATEWAY-FATAL-CAUSE-1 — PARTIAL / observer armed, not triggered (11.10)
+
+Gateway-only observation sourceabc604b0 (isolated clean clone of research83/f5240994),
+loaded/next SHA0ccaaf81…2667a. Existing transport/admission/lease/timing/framing and
+research83 APK7208a813…f7c8 unchanged. Safe typed first-cause receipt plus systemd
+exit receipt, bounded32 files/layer,0700/0600; no raw error/profile/identity/token.
+Local before/after exit1 preserved, targeted3-package race tests×3 PASS, real local
+systemd259 normal/error/SIGTERM PASS; full suite not claimed green.
+
+Expired-state evidence saved; one standard same-key renewal (authority/grants/floors
+preserved), one controlled restart19:19:05UTC. Loaded invocationdd70fcd8…3384a,
+PID788144/NRestarts0. Deployment post-check asserted; no replay/restart: independent
+readback reconciled bytes/argv/env/ordinary service state. Earlier baseline had another
+automatic restart toNRestarts3 before observer; that cause is still UNKNOWN.
+
+Passive19:22:09–19:37:09UTC900.025s/31 samples: no exit/new invocation. Observer
+remains installed; PROCESS_EXIT_CAUSE=UNKNOWN, ARMED_NOT_TRIGGERED. Root manager
+receipt captures only the controlled baseline stop(exit0), not a natural fatal.
+Final strict chain/served DER PASS, leaf06c2c41e…d1a17 expires21:37:28UTC; RU/NL
+directorybb5c8eb0…d8959 and CRL22209 equal at19:37:55–57UTC. Directory expiry23:19
+does not extend security expiry. Final owner19:37:57: same83/UID10283/PID19925,
+VPN OFF/app ON/chat ON; no owner lifecycle/cache import. CONNECT0; attempt UNUSED.
+
+READY_FOR_CLEAN_RETRY stays NO. One next operation: separate readiness/cache-
+compatibility preflight in an agreed window. No automatic CONNECT/FIELD/APK rollout.
+[Source, schema, limitations, exact evidence and rollback](releases/2026-10-11-gateway-fatal-cause-1.md).
+
+## WHITELIST-GATEWAY-READINESS-1 — read-only; READY_FOR_CLEAN_RETRY=NO (11.10)
+
+No CONNECT/startup/prewarm/instrumentation or product changes; sole clean attempt
+UNUSED, full-phase requests0. Research83/code83/APK7208a813…f7c8/signer/UID10283
+verified unchanged; gateway loaded/next5e877eb1…fe81f unchanged. Old exit root cause
+UNKNOWN: generic non-nil run() error/exit1, not a proved provider/Reliable cause.
+Its4h deadline/then-valid credentials do not explain15:09 exit. One bounded unit/
+kernel query batch timed out with zero bytes; no retry or logging-config change.
+
+New finding: during read-only checks gateway **again automatically restarted**,
+NRestarts1→2. Prior PID642809/invocation63bd9c55…bb4 → PID768197/invocation
+78333d45…1485, start18:45:56UTC. Same binary/config; publication D=a20c2622…820cd
+synchronized RU/NL. Earlier C=b5ce6045…f11ad was the configured3h in-process seed
+rotation. No agent restart/renewal/publication; no manually created room. Short8s
+stable snapshots do not override the observed additional restart across preflight.
+
+Strict server-only TLS FAIL/CERTIFICATE_EXPIRED: same profile leaf expires17:49:16;
+active/running and directory validity cannot replace it. Exact served-DER match
+NOT_REACHED, owner mTLS/application readiness NOT_ATTEMPTED. Authority/grant still
+valid at observation, signed RU/NL CRL22115 matched. Old-process seed is not retained
+across restart: existing overlap is same-process only. Current client cache digest
+UNKNOWN without owner lifecycle; last existing authenticated ACK18:08:32/import
+READY has no directory fingerprint and is not current cache proof.
+
+Primary gate blocker: changed gateway invocation during this preflight; independent
+expired-chain/cache-compatibility gates also prevent acceptance.5 local readiness
+guard tests PASS; new21 evidence entries sealed, prior157+2+168 unchanged. Last
+device check18:46:28UTC: VPN OFF/app process ON/ChatDeliveryService ON, same PID;
+no helper/install, user-data change or cleanup restart. Next separate operation:
+design safe typed-cause capture for a future fatal exit, no historical-cause claim
+or speculative transport patch. FIELD NOT_RUN; no release/tester delivery.
+[Exact three-invocation timeline, trust/cache limits and readiness gates](releases/2026-10-11-whitelist-gateway-readiness-1.md).
+
+## WHITELIST-DEDICATED-JOIN-1 — clean preparation aborted before CONNECT (11.10)
+
+Operator confirmed the call had ended. **PRECONNECT_ABORT_GATEWAY_RESTART_AND_NEW_DIRECTORY**:
+zero physical/programmatic CONNECTs and zero full-phase requests; literal manual
+CONNECT gate was never displayed. The authorized clean live attempt is NOT_RUN,
+not consumed. Entry14:55UTC verifies unchanged research83/code83/APK7208a813…f7c8,
+same package/signer/UID and source f5240994; gateway loaded/next5e877eb1…fe81f.
+Existing protected cache selected CACHED_VALID_REFRESH_UNAVAILABLE under scoped503;
+no new provisioning import, credential renewal or product rebuild requested.
+
+Final preflight15:09:08UTC BLOCKED: gateway process exited1, auto-restart/MainPID0,
+served-chain endpoint refused connection. Old invocation's last text is generic
+`bootstrap broker stopped` at15:09:07.176700; root cause NOT_ESTABLISHED. Systemd
+restarted it15:09:37 without agent action; last observed PID642809/invocation
+63bd9c55…bb4/NRestarts1, same binary bytes but directory changed831abdd2…8b36f →
+457a277f…ee3e04. Do not attribute unrelated server sessions to this zero-CONNECT
+preparation or the earlier phone call; no dedicated/transport defect proved here.
+
+Harness only: fast-click tests7PASS; corrected BLOCKED-preflight guard10PASS after
+abort, not exercised by another live attempt. Preserved raw internal gate-timeout
+receipt is not operator failure. Existing ordinary-app lifecycle remains unchanged.
+New168 sealed entries and prior157 entries verified. Cleanup as of15:19:53UTC:
+VPN OFF/app ON/ChatDeliveryService ON; original ingress bytes restored, owned
+collectors/endpoints/firewall/timers removed, helpers idle, owner data not reset.
+No agent gateway restart. Late journal read does not refresh device/trust status;
+last verified security bound17:49:15UTC is no longer current headroom. Fresh coherent
+gateway/publication/cache/trust checks are required before any future operator gate;
+do not silently renew/import to manufacture this unchanged-cache scenario.
+Warm NO, cold NO, architecture PARTIAL; FIELD NOT_RUN. Old call causation remains
+NOT_ESTABLISHED; CELLULAR_CALL_RESILIENCE is separate future work.
+[Evidence, harness limits and pre-CONNECT stop](releases/2026-10-11-whitelist-dedicated-join-1.md).
+
+## WHITELIST-DEDICATED-JOIN-1 — voice-call confounder, offline review (11.10)
+
+Historical offline checkpoint; the later clean preparation is recorded above.
+
+Operator reports an incoming call during the sole research83 trial. Preserve that
+trial as **POTENTIALLY_CONFOUNDED_BY_VOICE_CALL_UNDERLAY_UNOBSERVED**, not evidence of
+a Reliable/dedicated-startup defect. Client descriptor14:03:59.563UTC → dedicated
+join14:03:59.574 → client first failure14:04:14.576 → server handshake timeout
+14:04:18.656. The19.093s window has no saved Android network-state checkpoints;
+call timestamps, callback events, active Network handle, RAT/suspend and link/DNS
+changes were not captured. Snapshot CELLULAR is a coarse last sample, not stability.
+PHONE_CALL_CAUSATION=NOT_ESTABLISHED; UNDERLAY_STABILITY=NOT_ESTABLISHED. Neither
+confirmed call-induced change nor confirmed stable underlay can be asserted.
+
+Offline only:157 prior sealed entries verified unchanged; no call logs/numbers,
+new sensitive permissions, device reads, product patches or server operations.
+Cached fallback/seed-auth observations remain valid; warm acceptance remains NO.
+One separately authorized clean repeat is NOT_RUN: operator no-call confirmation,
+still-valid existing cache (no new provisioning), blocked direct provisioning,
+corrected/local-tested operator gate, collectors ready before one physical CONNECT.
+Do not press CONNECT before that gate. CELLULAR_CALL_RESILIENCE is separate future
+work, not a prerequisite for initial dedicated acceptance. Last verified cleanup
+remains14:15UTC VPN OFF/app+chat ON; no fresh runtime assertion in this offline review.
+[Timeline, evidence limits and separate clean-repeat/resilience scopes](releases/2026-10-11-whitelist-dedicated-join-1.md).
+
+## WHITELIST-BOOTSTRAP-1 — research83 installed; one live startup FAILED (11.10)
+
+Isolated clean source f5240994/tree630464f6, research83/code83 installed in place;
+APK7208a813…f7c8, same package/signer/UID10283. Source-bound gateway loaded/next
+5e877eb1…fe81f deployed once, PID596825/invocation521233df…e788/NRestarts0.
+Same-key AKI renewal used the existing4h policy; no arbitrary TTL change.
+Current RU/NL directory831abdd2…8b36f and served chain PASS at14:15UTC.
+Main dirty product files and frozen research82 artifacts/proven egress preserved.
+
+Validated-cache fallback, exact fresh-B handoff, sticky AUTH denial, persistent
+floors and finite same-Broker seed overlap pass local tests. Directory v1 is
+authenticated-delivery data, **not independently signed**. Integration correction
+restores original RestrictedStartup diagnostics; new coordinator is RestrictedBootstrap.
+74 targeted Gradle tests, 48 focused JVM tests, 15 actual startup-gate scenarios,
+fresh-fixture Go race×3/overlap×5 and packaged JNI fixture PASS. Lint remains FAIL:
+unchanged ChatAudio MissingPermission (also on82), zero new errors; original six
+diagnostic assertions and baseline busy-wire equality remain separate known issues.
+
+Exactly one physical CONNECT14:03:27.667UTC with source-scoped provisioning503:
+CACHED_VALID_REFRESH_UNAVAILABLE → seed Family auth → dedicated descriptor issued.
+Client fails DEDICATED_CONNECT at14:04:14.576 (RECOVERY_JOIN_FAILED); gateway later
+reports RELIABLE_HANDSHAKE_TIMEOUT at14:04:18.656, not lease expiry (deadline14:13:46.294).
+No dedicated client READY, no full-phase ordinary-app requests. Warm start is NOT
+accepted. Fast-click harness guard also failed; its default OPERATOR_GATE_TIMEOUT
+label is reconciled, not evidence of zero CONNECT. No retry or live product patch.
+
+Cleanup14:15:32UTC: VPN OFF/app ON/ChatDeliveryService ON; exact original ingress
+restored; temporary endpoints, firewall rules, collectors/timers removed; gateway
+not restarted for cleanup. Helpers retained installed idle; cache/enrollment/AWG/
+publisher/history not cleared. Warm ready NO, cold ready NO, architecture PARTIAL;
+restricted FIELD NOT_RUN. Existing82 full-tunnel proof stands;83 egress NOT_RUN.
+[Exact failure boundary, provenance, tests, cleanup and remaining work](releases/2026-10-11-whitelist-bootstrap-1.md).
+
+## FULL-TUNNEL-EGRESS-VERIFY-1 manual — ordinary-app IPv4 egress PROVEN (11.10)
+
+One physical operator CONNECT; zero injected input/permission changes/product updates.
+Research82/code82 APK c84060e7…6b18, source fbbecb81 and gateway34704e26…d958 unchanged.
+Existing deterministic probe/readonly observer APKs reused unchanged. Ordinary test
+app executes two fresh HTTPS nonces through tun1 → same Telemost Family/Mux session
+(streams5/7) → NL outbound TCP tuples → controlled endpoint; complete responses
+return to the app. Endpoint source is gateway, AS57043 HOSTKEY, not OrangeAS47377.
+Controlled DNS nonce also reaches the gateway on that session and returns an answer.
+Browser confirmation NOT_RUN (no nonce/port traffic in180s); underlay IPv6 unavailable,
+not an IPv6 PASS. Failover leak NOT_TESTED; no app request during RESTORING.
+Two unexpected post-test RELIABLE_EXHAUSTION closes at11:54:03.755/11:58:52.522UTC,
+automatic READY at11:54:42.302/12:00:01.990. First-close evidence retained; underlying
+cause OPEN, not reclassified as expected lease expiry. No manual reconnect/fault
+injection or product patch. Egress proof is not uninterrupted-connectivity proof.
+Direct authenticated provisioning still required: warm/cold whitelist starts NO
+when that endpoint is blocked. Real restricted-network FIELD NOT_RUN.
+Cleanup verified12:01:12UTC: VPN OFF/app ON/ChatDeliveryService ON; temporary server
+resources removed, gateway same PID/invocation/NRestarts0. Helpers retained installed
+idle (no uninstall allowed), instrumentation finished. Cache/enrollment/AWG/history
+preserved; prior163+124 manifest entries unchanged. No release/APK distribution.
+[Exact matrix, correlation reconciliation and remaining gaps](releases/2026-10-11-full-tunnel-egress-verify-1-manual.md).
+
+## FULL-TUNNEL-EGRESS-VERIFY-1 continuation — HARNESS_FAILURE before CONNECT (11.10)
+
+Product frozen: research82/code82 APK c84060e7…6b18, same signer/source fbbecb81,
+gateway loaded/next34704e26…d958, same PID/invocation/directory/served chain.
+Ordinary-app lifecycle now locally PASS: unique A/B each observed once in the same
+process, onNewIntent, explicit timeout, next run succeeds, duplicate rejected.
+Read-only owner observer reaches ACTIVITY_READY205ms after OBSERVER_READY and has
+no CONNECT capability. New Socket/TLS harness gets one permitted VPN-OFF baseline:
+437-byte complete response, same Orange source IP as previous verified baseline.
+Full runs and collectors armed before the attempted UI action. Android then rejects
+the single ADB tap with INJECT_EVENTS SecurityException/exit255. Actual CONNECT0,
+full requests0, no VPN_READY; all full run records remain ARMED. No alternate input
+path, permission change or automatic retry. This is HARNESS_FAILURE, not a product
+routing failure or UNKNOWN_NETWORK. Full egress/correlation remain unmeasured.
+Global underlay IPv6 absent; UNAVAILABLE / leak NOT_APPLICABLE for this attempt.
+DNS/recovery/lease-boundary live checks NOT_RUN. Direct provisioning dependency and
+warm/cold whitelist NO unchanged; previous research82 lease evidence preserved.
+Evidence sealed; cleanup verified11:29:42UTC: VPN OFF/app ON/ChatDeliveryService ON,
+all three helpers and temporary server resources removed, production restarts0.
+Next gate: actual operator UI interaction in a separately prepared bounded episode;
+do not replay the blocked ADB trigger or weaken Android security/product auth.
+[Exact failure, local lifecycle proof and matrix](releases/2026-10-11-full-tunnel-egress-verify-1-continuation.md).
+
+## FULL-TUNNEL-EGRESS-VERIFY-1 — acceptance PARTIAL, egress UNKNOWN (11.10)
+
+Research82/code82 APK c84060e7…6b18 and gateway34704e26…d958 freshly verified,
+unchanged; exact source fbbecb81…5961 and previous lease evidence preserved.
+VPN-OFF ordinary test app + Chrome baseline reaches controlled endpoint through
+Orange Belgium AS47377; underlay IPv6 unavailable. One UI Telemost CONNECT,
+300.705s after READY: actual Android TUN, both default routes, inclusive UID range,
+Telemost packet processing confirmed. NOT full-device egress acceptance: delayed
+UI instrumentation outlived its coordinator; subsequent test-app launch reused the
+baseline Activity and sent zero full-phase nonces. No full-phase browser launch,
+no gateway↔endpoint nonce correlation, no second CONNECT. Thus IPv4/IPv6/DNS egress
+and live recovery leak remain UNKNOWN, not a proven Orange leak or gateway PASS.
+54 JVM tests, targeted Go/race x3 and actual packet-converter race tests PASS;
+zero-network before/after fixture fixes only the test-app task-launch defect.
+UI-helper startup/cancellation still needs validation before a separately authorized
+episode. No product routing patch or APK update. Warm/cold whitelist start both NO:
+research82 requires direct authenticated provisioning refresh before each new
+connection, even with valid cache. Lease regression PASS; live renewal NOT_RUN
+(short window); previous two-renewal evidence unchanged. Historical six diagnostic
+assertions remain known FAIL, not weakened; historical unexpected closes OPEN.
+Evidence sealed; VPN OFF/app ON/ChatDeliveryService ON verified10:35:31UTC,
+helpers/temporary endpoints/rules/collectors removed, production restarts0.
+No cache/data/enrollment/AWG/publisher change, public release or restricted FIELD.
+[Matrix, evidence limitations, source contracts and next gates](releases/2026-10-11-full-tunnel-egress-verify-1.md).
+
+## TELEMOST-LEASE-CONTINUITY-1 — renewal live PASS, persistent TCP PARTIAL (11.10)
+
+New product continuity requirement; prior600s expiry remains expected historical
+behavior. Candidate only in `state-client-build/field65-export16/telemost-lease-continuity-1/source`:
+authenticated same-holder renewal over existing Family/Mux; bounded timer/security
+deadlines, replay protection, no new admission/room. Local real TCP socket persists
+through two renewed lease boundaries under controlled clock; not live Telemost.
+Explicitly authorized isolated commit fbbecb81…5961, no push. Research82/code82
+APK c84060e7…6b18 installed in place with the same signer/UID; restricted native
+743080ad…8664 and gateway34704e26…d958 use that source. Other23 native libraries
+unchanged from81. Targeted Go/race and51 Android JVM tests + actual JNI smoke PASS;
+six historical diagnostic assertions remain FAIL, mandatory auth rejection PASS.
+Same-key gateway leaf renewed under existing4h policy, authority10/grants unchanged;
+one NL reload, loaded/next match, served-chain/directory preflight PASS. One22min
+live trial: two matched renewals on the same holder/session,11 full HTTPS responses
+after both prior deadlines. Persistent socket delivered chunks0–169 across the
+first boundary, then helper assertion170 failed (exact cause UNKNOWN); no reopen.
+Full SEAMLESS_CONTINUITY NOT established. Selected carrier had no unexpected loss
+or recovery; separate pre-CONNECT session remains separately recorded.742,656
+verified payload bytes. Evidence/cleanup complete, VPN OFF/ChatDeliveryService ON,
+helpers removed, cleanup restarts0. No public/FIELD/UI rollback; historical losses OPEN.
+[Contract, evidence, remaining gates and rollback](releases/2026-10-11-telemost-lease-continuity-1.md).
+
+## TELEMOST-STABILITY-1 — expected lease / actual recovery observed (11.10)
+
+Research81/code81 APK06513be8…543f and gatewayc101065a…cc54c7 freshly verified,
+unchanged. One diagnostic CONNECT,720.095s after READY,17 verified full64KiB HTTPS206
+responses/1.0625MiB,one request error at expected600s broker lease. Exact server
+PARENT_DEADLINE/BROKER_LIFETIME precedes client exhaustion; holder released.
+One actual automatic native open/new holder/READY and new full response proven;
+manual reconnect0,behavior patch0,control0. Unexpected prelease loss not reproduced.
+Negative-auth security boundary6/6 PASS + valid control: diagnostic mismatch A;
+full bootstrap suite still FAIL, separate DIAG-AUTH-REJECTION-1 OPEN.
+One existing-binary collector rearm restart,renewal0,ordinary services/mailbox unchanged.
+Ownership36/512 completed; peer bridge STOP_TIMEOUT reconciled without restart,
+direct immutable first-close retained; second peer trace/persisted incident copy incomplete.
+TEST_STOP closes second session;VPN OFF/app+ChatDeliveryService ON,helper removed,
+loaded/next consistent,security/publisher preserved. Historical admission remains
+ROOT_CAUSE_UNKNOWN/CORRELATION_NOT_RETAINED; search closed, no retrospective attribution.
+[Exact timeline, limitations, cleanup and rollback](releases/2026-10-11-telemost-stability-1-continuation.md).
+
+## TELEMOST-ADMISSION-OWNERSHIP-1 — bounded PARTIAL, historical cause UNKNOWN (10.10)
+
+Server-only ownership capture built/loaded: c101065a…cc54c7, invocation
+d1e195e9…c4c5; research81/code81 APK06513be8…543f unchanged. Historical20:03 records
+lack exchange→holder binding; adjacent ACTIVE not attributed. One explicit Telemost
+diagnostic with ordinary ChatDeliveryService: exact client tag→exchange→grant2ms→
+HELLO→READY, DNS/4 full64KiB HTTPS206 responses;120s/no unexpected client loss.
+Same generation Close/release recorded; no incumbent/wait in new clean invocation.
+No lifecycle violation proven, no behavioral fix/control episode/stability closure.
+Local ownership race regressions PASS; expanded negative-auth diagnostic assertion
+FAIL reproduced on unchanged baseline, not hidden as global PASS. Same-key AKI
+authority9→10, existing24h/4h policy; issuer reload1/NL deploy1, AWG/TCP unchanged.
+Owner VPN OFF/app+ChatDeliveryService ON; helper removed. Final21:57:14UTC observer
+expiry/security/loaded-next checks PASS;18 events, no cleanup restart. Historical
+root, chat-first integrated contention and old DATA/carrier failures remain unresolved.
+No blind CONNECT/general journal replay, public release/FIELD/UI rollback.
+[Evidence, tests, remaining boundaries and rollback](releases/2026-10-10-telemost-admission-ownership-1.md).
+
+## Project storage relocation — 10.10.2026
+
+Entire project moved to `/mnt/data/PycharmProjects/family_connect` (ext4 on
+nvme0n1p7); old `/home/joker/PycharmProjects/family_connect` remains a compatibility
+symlink. 304009 regular files, 2334 symlinks; allocated size
+50.72GiB. Full checksum/metadata comparison before
+and after path switch PASS; 31 Git HEAD objects plus one pre-existing
+unborn test repository preserved (32 Git roots total), dirty tracked
+delta/status and critical research81/evidence SHA256 values preserved. Old verified
+duplicate removed: root free 51.66GiB after migration (before
+0.94GiB). Ownership, mode, ACL/xattrs and internal hardlinks
+retained; one root-owned0600 file transferred with system-authorized privileges.
+No code/version/build/install/server/runtime change. Existing dirty work retained;
+only this migration documentation added afterward. New work should use the new
+physical root; reopen old terminals/Codex sessions retaining the old directory inode.
+External SDK/cache/vault locations were not moved. Do not remove the compatibility
+symlink until old absolute paths and shared-clone alternates are separately audited.
+[Verification and paths](releases/2026-10-10-project-storage-move.md).
+
+## VPN health snapshot — 10.10 01:44–01:47 Brussels / 09.10 23:44–23:47UTC
+
+Read-only RU/NL:34 enrolled devices,30 nonrevoked,4 revoked;88 invites/34 used.
+NL open AWG27 peers,1 recent handshake/15 within24h,1 transfer-active in15s/60s;
+RU10 peers,0 recent/active; Friends TCP established0 on both. AWG/TCP and RU HTTP
+active; public HTTPS200/TLS PASS. Minute CPU busy NL7.76%/RU23.15%,available RAM
+454.4/981.8MiB; disk await NL157.09ms/RU29.01ms, no CPU/RAM saturation in this window.
+RU worker unhealthy is an API-probe mismatch: worker command inherits localhost8080
+healthcheck,5/5 recent checks connection refused; last10m34 cycles exit0,outbox3/3
+matched/0errors,oldest check5.8s. Healthcheck not fixed; no restart/deploy/renewal.
+NL restricted-bootstrap active,NRestarts0,current process start09.10 20:44:25UTC;
+previous count8 is not comparable after lifecycle reset, cause not investigated.
+Remaining: correct worker-specific monitoring separately,monitor disk latency,
+explain HTTP/restricted lifecycle changes and verify actual client E2E.
+[Measurements, versions and limits](releases/2026-10-10-vpn-health.ru.md).
+
+## VPN health snapshot — 09.10 06:24–06:25UTC
+
+Read-only RU/NL:33 enrolled devices,29 nonrevoked,4 revoked;87 invites/33 used.
+NL open AWG26 peers,4 recent handshakes/14 within24h,3–5 transfer-active in15s;
+RU10 peers,0 recent/active. AWG/TCP and RU HTTP active; public HTTPS200/TLS PASS.
+RU worker unhealthy,failing streak28268; restricted sync success/timer waiting.
+NL restricted-bootstrap active,NRestarts8 (previous snapshot5). RU disk await34.03ms;
+NL transient204.17ms/iowait13.25%, repeat0.5ms/0%. No restart/deploy/renewal.
+Client E2E,worker cause and restricted restart causes remain unverified.
+[Measurements and limits](releases/2026-10-09-vpn-health.ru.md).
+
+## VPN health snapshot — 08.10 08:06–08:07UTC
+
+Read-only RU/NL check:31 enrolled devices,27 nonrevoked,4 revoked;85 invites/31 used.
+NL open AWG25 peers,5 recent handshakes/4 transfer-active in15s; RU10 peers,0 active.
+AWG/TCP and RU HTTP active,public HTTPS200/TLS PASS. RU worker still unhealthy;
+restricted sync last success,NL bootstrap active but NRestarts5. RU disk await32.87ms.
+No restart/deployment/renewal; E2E and worker/restart causes unverified.
+[Snapshot and remaining checks](releases/2026-10-08-vpn-health.ru.md).
+
+## Owner DATA-selection audit — completed / existing beta69 scenario NO (07.10)
+
+All reachable new DATA source classes mapped on exact986323ec. Exclusive helper
+ownership NO; safe full requested selection scenario through beta69 exposed controls NO.
+Real unfiltered TUN, receive-driven Mux WINDOW/FIN/reset/DNS and scheduler/TLS/bridge
+in-flight writes can allocate N after snapshot. Generic fault arm neither reserves N
+nor atomically binds correlation generation/TTL. Prior validation patch remains useful
+diagnostics, not a safety solution. No runtime/test-send correction installed or built.
+Minimal contract alternatives compared; full test-send ownership requires diagnostic
+allocation lease/ownership handoff (or separately approved changed selection objective).
+Import-safe bounded gateway invocation observer prepared, NOT RUN;12 local mock/source
+checks PASS. Historical selection/gateway causes UNKNOWN, link NOT_ESTABLISHED unchanged.
+Prior physical FAIL remains; no new session/prearm/arm/drop/renewal/service mutation.
+NEXT: separately decide/authorize the minimal diagnostic-contract scope, not an owner
+replay on current controls. No new release/freeze authorized by this audit.
+[Writer audit and design](releases/2026-10-07-owner-retry-selection-audit-1.md).
+
+## OWNER-RETRY-PREP-REVIEW-1 — PASS / bounded review, not experiment acceptance (07.10)
+
+Selection failure cause UNKNOWN: the ten historical polling samples were not saved.
+Gateway exit cause UNKNOWN; causal link NOT_ESTABLISHED. Effective preserved unit
+duration4h (55m main ExecStart overridden by reset+4h drop-in), Restartalways/30s,
+RuntimeMax infinity, Watchdog0. Normal configured expiry20:53:05UTC does not explain
+the process replacement observed18:26:59UTC. Old exit time/code/signals unavailable;
+bounded service journal windows timed out, kernel query unavailable, not absence proof.
+Test-only selection candidate retains pending0/base==next/stable-next, adds explicit
+session/sample validation and bounded failure-only metadata (10 polls/2.1s unchanged).
+12 local regressions PASS; not installed or physically exercised. Sampled Flow plus
+generic next-DATA arm is NOT atomic reservation of N; no runtime/API change made.
+Original50 receipts and sealed67/68/69 rehashed unchanged; selected-retry remains FAIL.
+No session, prearm, fault, renewal, service mutation, build, CI or publication here.
+NEXT: resolve/document exclusive-writer/selection-to-prearm safety under the existing
+contract before requesting a separate owner run; do not replay automatically.
+[Review and precise chronology](releases/2026-10-07-owner-retry-prep-review-1.md).
+
+## OWNER-SELECTED-RETRY-BETA69-1 — FAIL / prearm abort, automatic gateway restart (07.10)
+
+Exactly one helper/session launch18:24:37UTC. Healthy restricted pre-arm DNS/full
+HTTPS577bytes/TCP PASS, DISARMED/count0. Accepted controller stopped at
+`No stable quiescent selection point` after unchanged10 observations/2.1s spacing.
+DATA N not selected; receiver/sender prearms0, fault arms0, intentional drops0,
+descriptor binds0. Fault-injection attempt NOT consumed; no second launch/retry.
+Selected retry/pinned Reliable→ACK chain NOT REACHED, not a proven packet loss.
+Temporary test-only helper7120e394 exact69 adaptation, four local contract tests PASS;
+production APK/native/gateway, frozen source/tag/manifest unchanged, no release CI.
+Fresh preflight18:23:37UTC: valid grants/admission/revocation, matching RU/NL authority/
+directory/CRL, authenticated69 READY/ACK, current served chain; limiting20:13:53UTC,
+headroom6615s (6555s at launch). No renewal/manual gateway restart performed.
+Helper intentional cleanup finished18:25:25UTC, exit0/OK1 means lifecycle only.
+Post-cleanup readback found PID1943512→1992456/NRestarts0→1, new process start
+18:26:59UTC; exact gateway bytes unchanged. Existing same-PID cleanup check FAIL.
+Cause/old-process exit time UNKNOWN; two bounded journal reads timed out. Do not
+attribute unknown reverse-direction events to selected DATA: no DATA/drop was selected.
+Safe state verified: disarmed/count0/no generation, diag67 empty0700 UID/GID979,
+no stale control sockets, helper/USB forward removed, owner data/identity/enrollment/
+activation and sealed67/68/69 preserved. Unit/sandbox unchanged; no arm left behind.
+Historical first beta68 stop remains UNKNOWN; historical TCP disposition unchanged.
+NEXT: separate investigation of saved selection-point failure and new gateway restart;
+no new physical attempt, runtime fix, publication or Krasnodar without authorization.
+Receipt: field65-export16/owner-selected-retry-beta69-1/resume1/FAIL.json.
+[Experiment report](releases/2026-10-07-owner-selected-retry-beta69-1.md).
+
+## RTP-IDENTITY-DEPLOY-1 — PASS / owner-only beta69 deployment (07.10)
+
+Remaining restricted cellular gates completed with separately authorized test-only
+helper8090fa13; exact code68→69 assertions/launch gate, no weakened checks or
+timeout/retry increases. HTTPS strengthened to EOF/expected content. Five local
+contract tests PASS including wrong-version/artifact fixtures. Only AndroidTest
+tasks built; frozen production source/classes/artifacts not rebuilt or changed.
+Installed owner0.1.18-beta69/code69 APK237660f3/signer67a90d1b and loaded gateway
+edf60a6e/source986323ec reverified against sealed manifeste039486c.
+Two restricted-only cellular cycles PASS: DNS, complete HTTPS200/577bytes, TCP,
+disconnect/reconnect and repeat traffic/cleanup. Explicit RestrictedTunnelEngine,
+VPN default routes and two corresponding gateway sessions; no normal/fallback path.
+Active controls DISARMED/count0/no watch/generation; gateway socket ownership/access
+and Android DUMP enforcement PASS. An incorrect permission-runner launch was retained
+as tooling failure (test never ran), then corrected to the unchanged accepted standalone
+probe; no baseline retry. App restart produced a new authenticated import→READY→ACK,
+distinct from the earlier restored readiness. Temporary helpers removed.
+Final served chain at07.10 17:56:20UTC PASS, limiting expiry20:13:53UTC/headroom8252s;
+RU/NL consistent, PID1943512/NRestarts0, unit/sandbox/diag67 unchanged. No new renewal
+needed this continuation. Owner UID/data/identity/enrollment/activation preserved;
+no stale watch/socket state. Sealed67/68/69 unchanged; gateway rollback verified with
+renewed credentials retained. Historical first failure remains UNKNOWN, not reopened.
+No publication, fault/prearm/bind, selected-retry, soak, impairment or tester operation.
+NEXT: separately authorized owner selected-retry with accepted full pinned-chain
+criterion and fresh credential/headroom/empty-control preflight; NOT started here.
+Receipt: field65-export16/rtp-identity-deploy-1/helper69/PASS.json.
+[Deployment report](releases/2026-10-07-rtp-identity-deploy-1.md).
+
+## Historical RTP-IDENTITY-DEPLOY-1 — PARTIAL / baseline pending (superseded)
+
+Recovery and exact immutable beta69 deployment completed; earlier STOP below is
+historical. Owner0.1.18-beta69/code69 APK237660f3/signer67a90d1b and loaded NL
+gatewayedf60a6e/source986323ec verified against sealed manifest. UID10283, data
+inode, Support ID, encrypted identity, enrollment and activation preserved.
+Effective beta68 gateway.json had expired authority/CRL; access, format, signatures,
+bindings and floors verified. Historical first process failure remains UNKNOWN.
+Standard renewal: issuer7 (existing root/issuer keys), unchanged owner3/tester1
+grant revisions, admission/bindings/revocation; accepted24h authority and4h CRL/leaf.
+One controlled beta68 recovery PASS, then planned beta69 deployment PASS; service
+unit/sandbox/diag67 unchanged. Actual served chain at17:26:27UTC matches profile,
+signature/hostname/revocation PASS; limiting leaf expiry20:13:53UTC, headroom10045s.
+RU/NL directory and authority consistency PASS; PID1943512/NRestarts0, no loop.
+Fresh beta69 authenticated fetch→READY→ACK PASS; restart restored READY/ACK PASS,
+not represented as another fresh fetch. Wi-Fi off/mobile data enabled.
+Restricted-only cellular DNS/full HTTPS/TCP, reconnect and active-session controls
+NOT RUN: existing accepted baseline/control helper hardcodes code68. No spoofed
+version, assertion bypass or forbidden rebuild/signing. Idle controls unarmed/count0,
+no generation; gateway diagnostic directory/socket state clear. Temporary helper removed.
+All sealed67/68/69 files unchanged. Gateway rollback binary hash-verified in protected
+stage; retain renewed credentials/floors on rollback. Android downgrade not assumed safe.
+No fault/prearm/bind, selected-retry, soak, publication or tester operation.
+NEXT: provide/authorize beta69-compatible test-only restricted baseline helper and
+complete the existing remaining gates; selected-retry is NOT ready.
+Evidence: field65-export16/rtp-identity-deploy-1/resume/PARTIAL.json and
+[updated deployment report](releases/2026-10-07-rtp-identity-deploy-1.md).
+
+## Historical RTP-IDENTITY-DEPLOY-1 — PARTIAL / existing gateway failure STOP (superseded)
+
+Owner-only deployment authorized, including standard credential renewal if needed;
+selected-retry/fault injection excluded. Sealed beta69/source986323ec verified.
+Fresh owner Redmi remains beta68/code68, APK4c9c3b99, compatible signer67a90d1b,
+UID10283/data inode601521, Support ID FC-4D8Q-REEG. Read-only identity/enrollment/
+activation preservation PASS; temporary accepted test-helper removed afterward.
+NL bootstrap was already failed before any deployment: MainPID0, exit1,
+NRestarts11, no18444 listener. On-disk binary3038888a/revision1abaa3a8 remains
+beta68; no currently loaded executable. Bounded retained application journal says
+`bootstrap broker stopped` repeatedly; underlying causal error is not exposed.
+Existing credentials are expired (leaf06.10 23:48:47UTC; issuer/grants/CRL07.10
+14:45:31UTC), but expiry alone is not established as the restart failure's cause.
+No blind restart/renewal/deployment performed; this is not an authorization blocker.
+At07.10 15:52:44–46UTC RU/NL directory hashes match, both expired07:55:02UTC;
+CRL11922 metadata match, admission/bindings/grant revisions/revocation unchanged.
+No live TLS headroom can be asserted without a listener; crypto chain not accepted.
+diag67 retained0700 UID/GID979, empty; Android idle disarmed/count0.
+No beta69 READY/ACK/baseline/reconnect/restart or active-session control acceptance.
+Beta67/beta68/beta69 all seals unchanged. No owner update, gateway/credential
+mutation, arming, selected-retry, publication or tester operation. Rollback was not
+newly staged; Android data-preserving downgrade is not assumed safe.
+NEXT: resolve the preserved existing gateway startup failure causally, then resume
+the already-authorized renewal/deployment; do not start selected-retry.
+[Deployment evidence](releases/2026-10-07-rtp-identity-deploy-1.md).
+
+## RTP-IDENTITY-FREEZE-1 — PASS / signed immutable beta69 pair (07.10)
+
+Frozen SHA `986323ecef112fcc421a22263e6fbfc9d6cf1922`, existing CI-only tag
+`diag-owner-beta69-ci2`, ownerDiagnostic `0.1.18-beta69` / code69. No source,
+commit, version, tag or accepted unsigned payload changes; no rebuild/CI rerun.
+Existing vault-backed reader/signer used with operator local password dialog;
+required certificate pin verified before signing. No plaintext secret export.
+Signed APK SHA256 `237660f3ed909b1598934beb4ed4fb3331a651fa3c3fd17473e0870235d86c51`.
+Signer `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a` matches
+retained beta68 installed lineage. Signature, package/version, arm64-v8a,
+non-debuggable, alignment, unchanged embedded bytes and matching gateway PASS.
+Final read-only pair: field65-export16/rtp-identity-freeze-1/immutable-ownerDiagnostic-beta69/;
+manifest SHA256 `e039486c269b5fe1b99b51583bb155c540a32ca46dc49f8b96eb8431741189d9`.
+Accepted Android37635226335/Client37635226241/owner-pair37635226230 receipts
+bound into manifest; publication jobs skipped. hop-local-rtp-v1 and complete
+pinned Reliable→ACK callback acceptance retained. Historical TCP unchanged:
+NON_REPRODUCED_HISTORICAL_FAILURE. Beta67/beta68 all seals unchanged before/after.
+Signed/frozen is NOT installed, deployed, published or invitation-page rollout.
+No credential renewal, diagnostic arm or physical experiment. Existing deployed
+versions and rollback pairs remain unchanged. NEXT: separately authorize/review
+beta69 owner deployment; no deployment performed or implied by freeze completion.
+[Final freeze report](releases/2026-10-06-rtp-identity-freeze-1.md).
+
+## Historical RTP-IDENTITY-FREEZE-1 — PARTIAL / vault signing input pending (superseded)
+
+Accepted SHA `986323ecef112fcc421a22263e6fbfc9d6cf1922` remains clean and
+unchanged; `diag-owner-beta69-ci2` resolves to that exact source. No new commit.
+Fresh read-only CI checks reconfirm Android37635226335, Client37635226241,
+owner-pair37635226230 and TCP37635226392 success on attempt1; mandatory steps
+match accepted receipts, release/setup_release jobs remain skipped. No CI rerun.
+Downloaded owner-pair artifact11489391476, verified archive digest, all payload
+hashes, source-bound native provenance, arm64 APK package/version beta69/code69,
+non-debuggable state, embedded native bytes and 16KiB alignment. Gateway is
+linux/amd64. Existing beta68 signer lineage reverified against its sealed APK
+and retained installed-attribution receipt, without accessing the physical device.
+Beta67/beta68 sealed files and manifests rehashed before/after: unchanged.
+Signing is authorized by the current user request, but the required vault path,
+entry and keystore/password member identifiers are unavailable. No legacy-key
+fallback, signing attempt, final immutable pair manifest or deployment approval.
+Evidence: `state-client-build/field65-export16/rtp-identity-freeze-1/resume4/`;
+`pair-manifest-DRAFT.json` is explicitly unsealed, not an accepted pair.
+No install, gateway deployment, arm, credential renewal, physical experiment or
+publication. Installed/public/invitation-page versions and rollback paths unchanged.
+NEXT: supply only non-secret vault signing identifiers; enter the password in
+the local signing dialog, then finish signed-APK verification and immutable seal.
+[Freeze checkpoint](releases/2026-10-06-rtp-identity-freeze-1.md).
+
+## ANDROID-HARNESS-ACCEPTANCE-1 — PASS / exact-SHA local and hosted acceptance (07.10)
+
+Replacement validation 986323ecef112fcc421a22263e6fbfc9d6cf1922, new CI-only tag diag-owner-beta69-ci2.
+Exactly six androidTest files added to accepted beta69 + deterministic Go mux
+correction; runtime/version/protocol/RTP/Reliable/ACK/transport source unchanged.
+Complete local acceptance PASS: Python1809/26 skips, Go default/diagnostic race,
+callback matrices, mux50/20/10,43 source guards,7 JVM +7 Android cleanup tests,
+network/readiness/binding/forced-ENETUNREACH regressions, native provenance and
+Android258 unit tests per owner/Friends variant with zero lint errors.
+Full emulator48 reported/28 executed/20 existing skips, zero failures; storage
+process restart and post-instrumentation control/RNS conformance PASS.
+All17 hosted workflows PASS on attempt1. Complete Android diagnostic
+run37635226335 and Client builds run37635226241 PASS, including
+post-instrumentation, native/release payload verification and artifact steps.
+Client release and TCP release/setup_release SKIPPED; no distribution run.
+Historical TCP stays NON_REPRODUCED_HISTORICAL_FAILURE; beta69 unimplicated.
+No release signing, physical-device install, gateway deployment, arming or field
+experiment. Built unsigned is not installed/public/invitation-page rollout.
+NEXT: resume RTP-IDENTITY-FREEZE-1 from this accepted replacement SHA; no implied
+permission to sign or deploy. Existing deployed versions/rollback paths unchanged.
+[Complete evidence](releases/2026-10-07-android-harness-acceptance-1.md).
+
+## Historical checkpoint — exact-SHA acceptance running (superseded by PASS)
+
+Expanded six-file androidTest scope explicitly authorized. Replacement validation
+SHA986323ecef112fcc421a22263e6fbfc9d6cf1922 created from accepted6d1bddaa,
+adding exactly the six authorized instrumentation/helper/regression files.
+Runtime/version/protocol/RTP/Reliable/ACK/transport source unchanged.
+Full source-bound Python1809 passed/26 skipped; default Go/full diagnostic race,
+callback matrix, mux50/20/10, source guards43, JVM cleanup7, network/readiness
+simulations, native provenance, owner/Friends258 tests each/lint/package gates PASS.
+Full48-case emulator acceptance is running; hosted gates not yet reached. A
+conditional runner may create/push NEW diag-owner-beta69-ci2 ONLY after emulator
+lifecycle/post-instrumentation and all exact-SHA gates pass. No release publication.
+Historical TCP remains NON_REPRODUCED_HISTORICAL_FAILURE. No signing/physical
+device install/gateway deploy/arming/field action. Older scope STOP is superseded.
+Evidence: android-harness-acceptance-1/resume2/ under the field65-export16 session.
+
+## Historical checkpoint — PARTIAL / replacement scope clarification (superseded)
+
+Resumed after TCP-LOW-PERTURBATION-REPLAY-1 PASS. Historical TCP remains
+NON_REPRODUCED_HISTORICAL_FAILURE; no additional replay or new TCP failure.
+Review found that the current Auto/TCP corrections reference TcpTrafficDiagnostics
+and TcpNetworkEvidence, both untracked and absent from validation6d1bddaa.
+TcpTrafficDiagnosticsTest is a third additional test-only file containing the
+cleanup regressions. The requested exactly-three-file correction is therefore
+not self-contained. No helper addition or accepted-source refactor was assumed.
+No replacement commit/tag/CI; new exact-SHA and complete hosted gates NOT RUN.
+Working-tree diff check PASS. No production/runtime/version modification;
+beta69/code69 remains unimplicated, not accepted for freeze/signing/deployment.
+NEXT: authorize the two existing helper files and regression file in the narrow
+instrumentation allowlist. Earlier TCP STOP entries below are historical.
+[Review and remaining gates](releases/2026-10-07-android-harness-acceptance-1.md).
+
+VPN read-only07.10 13:13–13:15UTC:30 activated devices,26 non-revoked,4 revoked;
+84 invites/30 used. NL AWG24 peers,3 recent/traffic-active; RU10 peers,0 active;
+Friends TCP0 on both. CPU NL7.97%/RU17.09%, available RAM503/1048MiB;
+no short-sample saturation. RU disk await17.66ms, free7.86GiB warrants monitoring.
+AWG/TCP active; RU restricted-sync and NL restricted-bootstrap failed; product
+peer-worker Docker unhealthy (actual cycles unverified). Public HTTPS/TLS passes,
+certificate expires12.10 12:11UTC; renewal latest success07.10 09:15UTC.
+No runtime/config/version/deploy change; existing engineering STOPs unchanged.
+[Full counts, limits and follow-up](releases/2026-10-07-vpn-health.ru.md).
+
+## TCP-LOW-PERTURBATION-REPLAY-1 — PASS / historical blocker reclassified (07.10)
+
+Fixed historical-sequence replay60/60 complete lifecycle iterations PASS:
+minimal20/20, richer20/20, original-like20/20. Same installed runtime APK hash
+verified before every trial and before/after matrix; ONLY instrumentation APK
+replaced. Minimal/original-like emit no success receipts or hot-path network
+queries. Historical final-TCP Wi-Fi→eth0 default transition still occurs55/60.
+HTTP fixture1080 completed requests; cleanup/diagnostic regressions7/7 on JVM and
+7/7 on Android. No observed failure-rate difference; rare races are not excluded.
+Old predicate/root cause remains unknown: NON_REPRODUCED_HISTORICAL_FAILURE.
+Decision NO: this isolated historical failure no longer proportionately blocks
+ANDROID-HARNESS-ACCEPTANCE-1 by itself. Relevant runtime source unchanged across
+beta68/beta69, fixture deterministic in audit, cleanup fixed, no production causal
+evidence. Harness review may resume; exact-SHA/full-hosted gates still block final
+freeze/signing. No runtime/version/RTP/Reliable/fixture change, commit/tag/push/CI,
+signing, physical-device/owner or gateway action. Emulator stopped, ports clear.
+NEXT: resume ANDROID-HARNESS-ACCEPTANCE-1 with preserved historical/replay evidence.
+[Matrix, limitations and decision](releases/2026-10-07-tcp-low-perturbation-replay-1.md).
+
+## TCP-INSTRUMENTATION-PRIMARY-1 — PARTIAL / bounded non-reproduction (07.10)
+
+Test-only status/body diagnostics and Auto/TCP primary-preserving cleanup are now
+uncommitted in the checkout. Seven regression checks pass on JVM and Android;
+finish failures are suppressed, duplicate/self-suppression is prevented, all
+cleanup actions run. Existing HTTP predicates, timeouts and data path unchanged.
+Exact TCP lifecycle method48/48 PASS:44 class-alone,3 after Auto-address+AWG,
+1 after Auto exhaustion/revoke+Auto-address+AWG. Separate no-prior-switch probe3/3
+PASS;894 successful HTTP receipts total. No initiating TCP failure reproduced:
+the historical status-versus-body predicate and network state remain UNKNOWN.
+Instrumentation overhead may affect scheduling; these passes do not resolve the
+old failure. Exact HTTP fixture handler24/24 concurrent loopback checks PASS.
+Relevant beta68/beta69 source identical; no independent beta68 APK trial claimed.
+No runtime/fixture/version/RTP/Reliable/ACK change, replacement SHA, CI/tag/push,
+signing, owner install or deployment. Emulator stopped; fixture ports clear.
+ANDROID-HARNESS-ACCEPTANCE-1 and RTP-IDENTITY-FREEZE-1 remain blocked.
+NEXT: capture the old initiating failure with lower-perturbation diagnostic replay
+of its preserved network/lifecycle state, before proposing any TCP correction.
+[Scope, exact counts and limitations](releases/2026-10-07-tcp-instrumentation-primary-1.md).
+
+## ANDROID-HARNESS-ACCEPTANCE-1 — FAIL / TCP precommit STOP (07.10)
+
+Acceptance stopped before any source change/commit/tag/push. Existing corrected
+harness TCP-only repeats: PASS48.145s, PASS46.352s, FAIL32.046s. Preserved primary:
+`java.lang.AssertionError`, `TcpRuntimeTest.traffic:26`, called from lifecycle:43,
+after the final TCP transition. Line26 contains both HTTP200 and body-suffix
+assertions; failed predicate/response bytes are not recorded. Do not classify or
+fix speculatively. Old cleanup-masked full-trial receipt remains intact; identical
+cause is NOT established. Beta69 runtime regression remains unproven.
+Independent exact-cleanup replay also rejects universal primary preservation:
+activity finish can mask the primary in Auto/TCP; reused cleanup exception can
+trigger Auto self-suppression. No fixes made after the mandatory TCP STOP.
+No replacement SHA, new CI-only tag or hosted run. Base6d1bddaa unchanged;
+existing three-file patch unchanged. Emulator stopped; fixture ports clear.
+RTP-IDENTITY-FREEZE-1 remains blocked. NEXT: investigate the preserved TCP primary
+without changing runtime or rerunning acceptance blindly.
+[Failure receipt and review limits](releases/2026-10-07-android-harness-acceptance-1.md).
+
+## ANDROID-EMULATOR-NETWORK-1 — PARTIAL / local harness acceptance (07.10)
+
+Exact6d1bddaa886d7320faa7b8ea978a55167c5c0981 hosted artifacts recovered and
+hash-verified. Diagnostic37597746736: emulator Wi-Fi IPv4 route installation
+failed before VPN tests; test control selected an unreachable network and cleanup
+masked the primary error/left profiles. Client37597746771: first WG traffic raced
+Android VPN route publication; later netd missing-device errors followed teardown.
+These harness/runtime source paths are unchanged from beta68/1abaa3a8.
+Only three androidTest files corrected: control-network iteration, callback-based
+VPN readiness/socket binding, and primary-preserving Auto/TCP cleanup.
+Forced emulator control failure3/3 original versus3/3 corrected PASS; exact-method
+JVM replays100 each PASS. Final41-case instrumentation repeated2/2 PASS
+(21 executed/20 existing assumption skips each). An earlier full trial's masked
+TCP failure is retained; TCP-only repeats3/3 PASS, primary not independently recovered.
+No beta69 runtime/RTP/Reliable/ACK/version/tag/release change; no physical device or
+gateway action. Hosted reruns, original runner post-instrumentation checks and exact
+new harness-source acceptance remain; RTP-IDENTITY-FREEZE-1 MUST NOT be promoted.
+[Causal timelines, acceptance limits and rollback](releases/2026-10-07-android-emulator-network-1.md).
+
+Local workstation storage07.10: ext4 `/mnt/data` mounted by UUID; personal folders
+and37 inactive build/application/cache directories migrated with checksum verification
+and old-path symlinks. Root now36GiB free/76% used; data volume287GiB free.
+Active field65-export16, Codex, browser, Docker and MicroTrader remain unchanged.
+No release/version/install/deployment change; remaining offline migration and rollback:
+[local storage receipt](releases/2026-10-07-local-storage-migration.md).
+
+## RTP-IDENTITY-FREEZE-1 — PARTIAL / replacement SHA hosted-CI STOP (07.10)
+
+Replacement validation6d1bddaa886d7320faa7b8ea978a55167c5c0981 contains the exact
+accepted beta69/code69 ten-file scope plus ONLY the deterministic TCP mux test.
+Old763c3b3 retained unchanged. Fresh exact-SHA Python1809/26skipped; default Go,
+diagnostic race, RTP rewrite/full Reliable→ACK matrices, single-core mux50/20/10,
+native provenance, Android258tests each/lint/JVM/package checks and43 guards PASS.
+Safe CI-only tag `diag-owner-beta69-ci1` pushed;15/17 hosted workflows PASS.
+Android diagnostic37597746736 and Client builds37597746771 FAIL at the real
+WG/AWG/TCP/Auto Android emulator lifecycle step. Root cause not established.
+Owner diagnostic pair workflow PASS is insufficient: mandatory CI STOP honored.
+No signing/immutable beta69 pair/accepted release freeze; no owner install,
+gateway deployment, arming or physical run. Beta67/beta68 seals unchanged.
+NEXT: investigate the two failed emulator lifecycle receipts on this exact SHA.
+[Exact acceptance and CI STOP](releases/2026-10-06-rtp-identity-freeze-1.md).
+
+## TCP-MUX-SCHEDULING-1 — PASS / pre-existing single-core test flake (07.10)
+
+Unchanged beta68 and beta69 both reproduce `TestMuxSlowConsumerAndInteractive`:
+the finite4MiB writer can finish before Reset while the reverse window remains full.
+This is SINGLE_CORE_SENSITIVITY / pre-existing TEST_FLAKE, not an RTP identity
+regression. Test-only unbuffered slow-target fixture fixes the assumption without
+changing assertions, timeouts, mux/runtime code or diagnostic instrumentation.
+Corrected beta69 overlay: isolated50/package20/mux10 per CPU1/2/12 all PASS;
+race PASS; full default suite PASS atCPU1 and12. Identical test fix on beta68 PASS.
+Committed SHA763c3b326c5710c39a7cbd681f4160d9ce8fb1f8 remains clean/unchanged;
+the working-tree test correction is NOT in that SHA. Freeze cannot include the fix
+on the same SHA: a new scoped validation anchor and source-bound acceptance remain.
+No commit/tag/push/sign/install/deploy/arm; beta67/beta68 seals reverified unchanged.
+[Matrix, causal evidence and suspend-contaminated batch](releases/2026-10-07-tcp-mux-scheduling-1.md).
+
+## RTP-IDENTITY-FREEZE-1 — PARTIAL / Go acceptance STOP after storage recovery (06.10)
+
+Same clean validation SHA763c3b326c5710c39a7cbd681f4160d9ce8fb1f8; no new commit.
+Fresh source-bound fixtures PASS; full Python3.13 workflow1809 passed/26 skipped,
+26 unique control/identity pins verified. Full Go default suite failed at
+TestMuxSlowConsumerAndInteractive: `blocked writer did not fail` (mux_test.go212).
+Validation used serial package builds and GOMAXPROCS=1; cause is not established.
+Storage remained healthy (~9.1GiB root/~5.9GiB tmp); this is not the old quota STOP.
+Default sessiontrace/public golden passed; overall Go gate not accepted. Diagnostic
+race/matrices/native/Android/hosted CI/signing not reached. No retry-to-green or source
+change; no promotion/tag/push/install/deploy/arm. Beta67/beta68 final rehash PASS.
+NEXT: investigate the TCP mux acceptance failure and scheduling sensitivity offline.
+[Current evidence and retained earlier STOP](releases/2026-10-06-rtp-identity-freeze-1.md).
+
+## RTP-IDENTITY-FREEZE-1 — PARTIAL / fixture quota STOP (06.10)
+
+One isolated beta69/code69 validation commit763c3b326c5710c39a7cbd681f4160d9ce8fb1f8
+on beta68 baseline1abaa3a8; exact10-file allowlist, clean candidate, unrelated work
+preserved. Fresh exact-SHA release fixture prepare failed three times with Go1.26.0
+compiler disk-quota errors, including CPU-serial retry. Python3.13 full release run
+not reached;43 source guards and full exact-SHA default/public-golden suite PASS.
+Diagnostic race build also hit disk quota/no space; callback matrix not started.
+Final beta68 file/manifest rehash PASS, candidate remains clean and unpromoted.
+No promotion/tag/push/sign/native/Android/CI claim.
+No install/deploy/renewal/arm/physical run; beta68 sealed/runtime artifacts untouched.
+NEXT: restore build quota/storage, then resume fixtures against the same validation SHA.
+[Scope, blocker and acceptance receipts](releases/2026-10-06-rtp-identity-freeze-1.md).
+
+## RTP-IDENTITY-REWRITE-1 — PASS / local only (06.10)
+
+Frozen beta68/client-pinned Pion audit and208 preserved evidence-file hashes checked.
+Selected DATA60/attempt1 remote media/carrier uniquely correlated within trusted
+session scope despite publisher/subscriber RTP header rewrite; PictureID214 stable
+for this observation, not promised for every SFU. Precise server rewrite algorithm
+unknown. Diagnostic matcher now separates leg-local RTP from stable carrier/frame
+identity; transport/wire/ACK-token code and deployed beta68 unchanged.
+Full default/public golden, diagnostic race (serial build), final sessiontrace race
+and43 Python guards PASS. No new physical run, arm, install or deployment.
+Original experiment still FAIL: receiver Reliable/consumption/ACK callbacks missing.
+NEXT: review/freeze the diagnostic-only correction with source-bound acceptance.
+[Contract, chronology, hierarchy and limitations](releases/2026-10-06-rtp-identity-rewrite-1.md).
+
+## OWNER-SELECTED-RETRY-BETA68-1 — FAIL / one authorized experiment consumed (06.10)
+
+Accepted private ACK-token clarification applied; token remains internal. Fresh
+preflight PASS at20:54 UTC: exact beta68 bytes/identity, READY/ACK, RU/NL equality,
+valid served chain with10433s headroom, empty/unarmed controls. One physical session
+and one attempt0 drop consumed for owner→gateway DATA60 at20:57:30.801 UTC.
+Attempt1 actual RTP write and sender ACK/base61 mask3 pinned COMPLETE; DNS/full
+HTTPS577-byte bodies/TCP completed for all three modest requests, sampled session
+unchanged and no sampled terminal failure. Receiver retained matching carrier/PictureID
+but different remote RTP timestamp/sequence; exact descriptor remained BOUND then
+OVERFLOW, not COMPLETE. Mandatory receiver Reliable→ACK write proof is missing.
+No relaxed correlation, second experiment or runtime/source fix. Cleanup independently
+PASS at20:58:41 UTC: both watches CLEANED, Android unarmed/no generation, gateway
+directory empty/PID1401423 unchanged; identity, config and both sealed pairs preserved.
+NEXT: offline review of the retained receiver RTP-identity mismatch and overflow.
+[Single-run receipts and limitations](releases/2026-10-06-owner-selected-retry-beta68-1.md).
+
+### Historical pre-arm pause — resolved by user clarification
+
+Zero experiments, fault arms or prearms. Deployed beta68 acceptance remains PASS.
+Exact frozen source confirms ACK correlation token is private/unexported; pinned JSON
+exports base/mask/created_ns/sent_ns/result, with exact private-token matching inside
+the actual carrier-write callback. User asks for unique ACK token in mandatory pinned
+evidence; no substitution of timestamps for token uniqueness made. Clarify whether
+token-matched callback proof plus accepted source/CI is sufficient without token export
+before consuming the one physical experiment. No runtime mutation or fresh full
+runtime preflight yet; prior headroom is not treated as current.
+NEXT: confirm that the private ACK token need not be exported for this physical task.
+[Exact evidence-contract question](releases/2026-10-06-owner-selected-retry-beta68-1.md).
+
+## PINNED-EVIDENCE-DEPLOY-2 — PASS / owner-only beta68 (06.10)
+
+Resumed existing task under explicit loaded-bytes→sealed-manifest callback-schema
+evidence clarification. Exact sealed beta68 installed in place and gateway loaded;
+APK signer/JNI/normal native, gateway SHA/revision1abaa3a8 and manifest binding PASS.
+UID10283/inode601521/Support ID/encrypted identity/enrollment/activation preserved.
+Fresh beta68 READY/ACK plus two cellular restricted DNS/HTTPS/TCP/reconnect/cleanup
+cycles PASS; app restart READY/ACK PASS. Android DUMP protection/status unarmed,
+gateway UID/socket isolation and final empty directory PASS; no stale watch/generation.
+Live credentials/RU-NL equality PASS; expiry 2026-10-06T23:48:47+00:00, headroom 12133s at
+2026-10-06T20:26:33.437015+00:00. Gateway PID1401423/NRestarts0, config unchanged.
+Beta67 rollback binary/APK and both sealed pairs retained unchanged. No public
+publication, selected-retry experiment, intentional drop, fault/prearm or impairment.
+NEXT: separately authorize the owner beta68 physical selected-retry task with fresh
+headroom/control preflight; technically unblocked, not executed or armed here.
+[Exact deployment, attribution and rollback receipts](releases/2026-10-06-pinned-evidence-deploy-2.md).
+
+## PINNED-EVIDENCE-DEPLOY-2 — PARTIAL / runtime capability-reporting gate (06.10)
+
+Resumed existing task after credential renewal; prior STOP/evidence retained.
+Fresh sealed beta67/beta68 hashes PASS; Redmi remains beta67/code67, exact APK hash,
+UID10283/inode601521, Wi-Fi OFF/cellular ON, status unarmed/count0. Credentials PASS:
+served leaf expires23:48:47UTC, headroom 13732s at 2026-10-06T19:59:54.606516+00:00;
+exact RU/NL directory/authority/CRL equality and unchanged grants/admission PASS.
+Pre-install acceptance feasibility blocker: frozen beta68 has the accepted callback
+implementation, but no read-only runtime report advertising pinned-reliable-callbacks-v1.
+That label is a sealed artifact contract only. Fault status reports control schema1;
+correlation status rejects without an existing prearm watch. No prearm used as a probe.
+No beta68 installation/gateway replacement or baseline attempted with this unresolved
+mandatory reporting gate. Freeze remains PASS; runtime callback inactivity is NOT claimed.
+NEXT: obtain explicit acceptance of exact loaded-binary-to-manifest attribution as
+callback-schema evidence, instead of the unavailable runtime capability report.
+[Resumption evidence and remaining gates](releases/2026-10-06-pinned-evidence-deploy-2.md).
+
+## GATEWAY-CREDENTIAL-RENEWAL-2 — PASS (06.10, credentials only)
+
+Renewed expired gateway leaf/profile through accepted issuer/publication/bootstrap
+procedure; issuer6 and owner3/tester1 grants unchanged and valid until07.10 14:45:31UTC.
+Actual served leaf matches profile, signature/hostname/validity/non-revocation PASS;
+limiting expiry 2026-10-06T23:48:47+00:00, headroom 13943s at 2026-10-06T19:56:23.678871+00:00.
+RU/NL generation 2026-10-06T19:49:15.595849272Z and exact directory/authority/CRL match.
+Fresh unchanged beta67 authenticated fetch 2026-10-06T19:55:09+00:00 → native READY →
+ACK 2026-10-06T19:55:10+00:00. APK/UID/inode, gateway beta67 binary, diagnostic config,
+admission/revisions/revocation/identity bindings and beta67/beta68 seals preserved.
+No beta68 install/deploy, fault/prearm or physical experiment. Deploy2 remains PARTIAL.
+NEXT: resume PINNED-EVIDENCE-DEPLOY-2 with fresh headroom/preflight checks, separately.
+[Credential renewal and bounded evidence](releases/2026-10-06-gateway-credential-renewal-2.md).
+
+## VPN health — read-only 06.10 19:52–19:53UTC
+
+Friends DB:29 activated devices,25 non-revoked,4 revoked;83 invites/29 used.
+NL AWG:23 peers,7 recent handshakes and7 transferring during15s,14 within24h;
+RU AWG:10 peers,0 recent/24h/transferring. These are devices, not unique people.
+CPU NL19.3%,RU19.83–24.09%; RAM available440MiB/~1008–1059MiB.
+RU disk await70.44/105.25ms on two samples remains a risk; no current swapping
+in five vmstat intervals. AWG/TCP active,NRestarts0. Product/control healthy;
+peer-worker Docker unhealthy, cycles/outbox not checked. Public HTTPS renewal unit
+now Result=success,exit09:19:01UTC; this does not verify served certificate or
+resolve the separate restricted gateway credential STOP below. No runtime changes.
+[Full metrics and remaining checks](releases/2026-10-06-vpn-health.ru.md#вечерняя-проверка-19521953utc).
+
+## PINNED-EVIDENCE-DEPLOY-2 — PARTIAL / credential STOP (06.10 19:10UTC)
+
+Sealed beta68 manifest/all members/package/signer/native provenance PASS; beta67
+seals unchanged. Intended owner Redmi remains beta67/code67, UID10283/inode601521,
+exact installed beta67 APK hash; Wi-Fi OFF/mobile data ON. No beta68 installation.
+NL still loads exact beta67 gateway ffd27988, PID1266691/NRestarts0; accepted diagnostic
+config unchanged, service-owned0700 directory empty. RU/NL directory hashes match.
+STOP: actually served/profile gateway leaf expired18:47:30UTC; at19:10:52UTC effective
+headroom was -1402 seconds. Issuer/grants/CRL remain future-dated, but do not rescue
+the expired leaf. Existing beta67 READY/ACK is not beta68 readiness or valid TLS proof.
+No renewal/install/deploy/arming/physical experiment; remaining deployment gates NOT RUN.
+NEXT: perform a separate authority-runbook gateway credential renewal and verify the
+actually served valid chain before resuming beta68 deployment.
+[Preflight evidence and pending gates](releases/2026-10-06-pinned-evidence-deploy-2.md).
+
+## PINNED-EVIDENCE-FREEZE-2 — PASS (06.10, test-only correction / ci2)
+
+New exact validation source `1abaa3a8a9ba8ad9fa2a71c126620175b713c321`, parent46c9c77, changes only the profile
+test to parse INI directives; no runtime/profile-generation/crypto/transport changes.
+Ten8-test suites,1000 repeated generated-profile checks and28 orchestrator tests PASS.
+Fresh source-bound Python/native/Android/Go/forensic/default-isolation acceptance
+rerun on the new SHA; see report for exact results. New CI-only tag diag-owner-beta68-ci2;
+ci1/failed receipts remain unchanged. Hosted CI 17/17 success.
+Signed immutable beta68 pair: created after full CI and artifact verification.
+Beta67 eight seals and unrelated work preserved. No install/deploy/renew/READY/arming.
+NEXT: Start a separately authorized beta68 owner-only pair deployment using the sealed manifest; do not run a physical selected-retry experiment in that step.
+[Final receipts, scope, hashes and limitations](releases/2026-10-06-pinned-evidence-freeze-2.md).
+
+## PINNED-EVIDENCE-FREEZE-2 — FAIL (06.10, authorized validation checkpoint)
+
+Single isolated validation commit `46c9c77e3f1dbed684d8a2d6c395030696deab09` contains only the accepted23 Go files
+plus ownerDiagnostic beta68/code68 version override. Baseline ffd27988468fba427aaba6213b862dca01020972;
+unrelated dirty/untracked work preserved. Exact-SHA fixtures and full Python1804 PASS/
+26 skipped; Go default/diagnostic-race and full Reliable-to-actual-ACK chain PASS.
+Native provenance/arm64/NDK PASS; Android258+258 tests, both lints, standalone JVM,
+package/native hashes and DUMP/default isolation PASS. Unchanged SHA promoted only
+after all local gates, CI-only tag diag-owner-beta68-ci1 pushed, no release branch.
+Hosted CI: 12/17 success; final result FAIL.
+STOP: phase0/failover Docker pytest failed on the profile test's arbitrary Jc substring
+check (random synthetic PrivateKey collision), not the pinned callback regression.
+No signing, immutable pair or automatic CI rerun; exact frozen source/tag retained.
+Sealed beta67 eight files unchanged; nothing installed/deployed/renewed/READY/armed.
+NEXT: Authorize a narrow correction to the randomized-profile Jc assertion in test_orchestrator_restricted_acceptance.py, followed by a newly reviewed exact-SHA validation cycle; no automatic source change or additional commit.
+[Exact scope, CI, provenance, artifacts and limitations](releases/2026-10-06-pinned-evidence-freeze-2.md).
+
+## PINNED-EVIDENCE-FREEZE-2 — PARTIAL (06.10, pre-freeze ordering blocker)
+
+Exact accepted23-file delta over ffd27988468fba427aaba6213b862dca01020972
+re-established from the hash-verified1818-file handoff; unrelated dirty work preserved.
+Fresh full default Go, diagnostic race, receiver callback/correlation/Pion/ACK matrices,
+43 Python guards, host-cgo/JNI and Android receiver routing PASS. Actual ACK carrier
+write remains mandatory for COMPLETE; beta66 public golden/privacy/bounds PASS.
+All eight beta67 sealed files rehashed unchanged before/after; no runtime operations.
+Requested beta68/code68 is not yet versioned, committed, built, tagged or signed.
+Blocker: authoritative ci_release_fixtures.py prepare archives HEAD, and run checks
+that SHA; exact-source fixtures require a validation commit BEFORE full local gates,
+whereas this task authorizes a commit only AFTER all local gates. No stale beta67
+fixtures, misleading source SHA or early commit substituted. Full Python/native/Android
+product acceptance and hosted CI remain pending; no new pair manifest or deploy gate.
+NEXT: authorize one isolated local validation commit before source-bound gates;
+freeze/tag/push/sign only after the required acceptance. No install/deploy/arming.
+[Exact scope, fresh results and remaining gates](releases/2026-10-06-pinned-evidence-freeze-2.md).
+
+## PINNED-RELIABLE-CALLBACKS-1 — PASS (06.10, source-only acceptance)
+
+Diagnostic-only receiver pinned lifecycle extended from exact media/carrier match
+through Reliable acceptance, consumption/receive_next progression and actual ACK
+carrier write. Queue success is not ACK transmission. Exact receive-envelope identity
+and private ACK creation token prevent cross-attempt/other-ACK satisfaction; default
+wire/schema/golden unchanged. Receiver COMPLETE now requires the full callback chain.
+2101-event retention/delayed bind, wrong seq/identity/direction, cleanup/TTL/restart,
+privacy/bounds, local bound-Pion and full default/diagnostic-race suites PASS;
+43 Python source guards, host-cgo/JNI and Android receiver routing PASS.
+Clean scoped source handoff based on ffd27988468fba427aaba6213b862dca01020972,
+23 Go-file delta, archive SHA256092e63c0…; tested source equals integrated worktree
+delta. No new source commit/tag, version bump, product binary, signing or deployment.
+Sealed beta67 pair reverified unchanged. Owner/gateway runtime remains beta67 and
+still lacks this new source-only receiver proof. No physical run/live fault arming.
+NEXT: separate new immutable-candidate freeze under a new identity/version; do not
+overwrite beta67 or resume the physical experiment before new pair acceptance/deploy.
+[Contract, R1–R14, exact source hashes and tests](releases/2026-10-06-pinned-reliable-callbacks-1.md).
+
+## OWNER-PINNED-EVIDENCE-1 — PARTIAL / STOP before arming (06.10)
+
+Separate owner physical run authorized, but not started: frozen beta67 receiver
+correlation pins RTP/PictureID/carrier reconstruction, not Reliable acceptance,
+receive_next/buffered transitions, reliable_consumed or ACK generation/sending.
+Legacy EvidenceWatch rejects rx targets; socket status exports correlation receipts,
+not a receiver callback watch. Cannot satisfy the requested complete pinned chain
+without relying on the forbidden ordinary64 ring. Frozen-source targeted tests confirm
+media COMPLETE without Reliable/ACK callbacks and deliberate legacy rx rejection.
+Fresh16:12UTC preflight PASS: exact beta67 APK/UID10283/inode601521/identity preserved,
+admission3 non-revoked, READY/ACK valid; exact gateway/revision/PID1266691/NRestarts0,
+RU/NL directory0c160f8b… equal, CRL9478 valid, served TLS headroom9325s until18:47:30UTC.
+Wi-FiOFF/cellularON, Android unarmed/count0, gateway directory empty. Helper removed.
+No new restricted session, prearm, fault, drop, descriptor bind or physical repeat.
+Deployment PASS remains valid for installation/control availability; it did not prove
+the stronger receiver callback retention required by this task. Physical gate blocked.
+NEXT: authorize a separately scoped diagnostic-only receiver callback-pinning/export
+change and new immutable acceptance before consuming the one physical experiment.
+[Evidence and exact missing contract](releases/2026-10-06-owner-pinned-evidence-1.md).
+
+## PINNED-EVIDENCE-DEPLOY-1 — PASS (06.10, owner-only beta67)
+
+Продолжение после explicit narrow diagnostic-config authorization завершено.
+Exact sealed beta67/code67 installed in-place on owner Redmi31ce63ba; pulled APK,
+signer, JNI/AWG, non-debuggable/arm64-only PASS. UID10283/inode601521,
+Support FC-4D8Q-REEG, encrypted/decryptable identity, enrollment/activation and
+non-revoked admission3 preserved through restart and final snapshot.
+NL loaded gateway c1370f58… / revisionffd27988468fba427aaba6213b862dca01020972,
+PID1266691/NRestarts0. Only service config delta: FC_DIAGNOSTIC_CONTROL_DIR=diag67,
+relative to unchanged WorkingDirectory /opt/apps/family_connect/friends-restricted.
+Directory0700/socket0600 UID/GID979; same-UID control parser and wrong-UID rejection
+verified with status only. No prearm/bind/fault; session cleanup leaves directory empty.
+Fresh authenticated beta67 fetch/native READY15:59:16UTC, ACK15:59:17UTC; later
+ordinary restart restored READY/ACK16:02:40UTC (not claimed as another fresh fetch).
+Cellular-only real restricted DNS/HTTPS/TCP/reconnect/cleanup baseline PASS.
+RU/NL generation15:53:17.577994843UTC hash0c160f8b… exact; issuer6, grants3/1,
+CRL9459 valid. Actual served TLS bound18:47:30UTC; headroom9961s at16:01:28UTC.
+Rollback beta66 APK/binary retained/hash-verified; no Android downgrade attempted.
+Public/default artifacts/catalog/invitations unchanged; no physical fault experiment.
+NEXT: separately authorize the owner physical evidence task with fresh credential
+headroom and empty/unarmed-state checks; this PASS does not itself authorize impairment.
+[Full receipts, config diff, runtime checks and rollback](releases/2026-10-06-pinned-evidence-deploy-1.md).
+
+The earlier STOP/PARTIAL entries below are historical and superseded by this result.
+
+## PINNED-EVIDENCE-DEPLOY-1 — PARTIAL (06.10, diagnostic configuration conflict)
+
+После AUTHORITY-RENEWAL-1 свежие owner identity/enrollment/Support/UID10283/
+inode601521/exact beta66 APK+signer PASS15:14UTC; beta67 manifest/all7 files PASS.
+Served credentials valid15:11:54UTC, headroom12935s, leaf ceiling18:47:30UTC;
+RU/NL directory303ac422… identical, compatible CRL9368. Gateway beta66 unchanged.
+Новый блокер: live PID1231405 не имеет FC_DIAGNOSTIC_CONTROL_DIR. Frozen beta67
+source при пустом env не создаёт diagnostic socket даже во время сессии.
+Требования «socket available» и «service config unchanged» одновременно невыполнимы
+без узкого согласованного исключения. Никаких config changes или beta67 install/deploy.
+Android idle status UNAVAILABLE/armedfalse/consumedfalse/count0; полные gateway
+control/stale-state gates ещё не приняты. Временный snapshot helper удалён.
+NEXT согласовать только FC_DIAGNOSTIC_CONTROL_DIR и service-owned0700 directory,
+затем продолжить deployment; physical evidence/impairment пока NOT allowed.
+[Fresh evidence и точный конфликт](releases/2026-10-06-pinned-evidence-deploy-1.md).
+
+## AUTHORITY-RENEWAL-1 — PASS (06.10, beta66 retained)
+
+Истёкшая issuer5 chain восстановлена accepted same-key/offline-control-root
+процедурой: issuer6 и grants действуют до07.10 14:45:31UTC, minimum revision1,
+owner/tester grant revisions3/1 и admission/revocation/identity bindings сохранены.
+CRL9323→9324 при renewal→9330 на closeout; штатный sync активен.
+RU/NL новая directory14:47:36.916634343UTC, SHA256303ac422… совпадает.
+Фактически served gateway leaf/profile verified; effective bound06.10 18:47:30UTC,
+headroom14211s (3h56m51s) на14:50:38UTC. Gateway beta66 hash6af92aa9… неизменен,
+PID1231405/NRestarts0 после credential reload; ordinary HTTP/AWG/TCP PIDs unchanged.
+Owner beta66/code66 exact APK/UID10283/inode601521: ordinary fetch/native READY
+14:49:38UTC→ACK14:49:39UTC PASS. Без APK install, fault/prearm/physical experiment.
+Sealed beta67 manifest/all7 files unchanged; публичные/default каналы не менялись.
+NEXT отдельно возобновить PINNED-EVIDENCE-DEPLOY-1 со свежим owner/headroom/control
+preflight; deployment ещё не PASS, physical evidence/impairment пока не разрешены.
+[Expiry, hashes, signed provenance, backups и invariants](releases/2026-10-06-authority-renewal-1.md).
+
+## PINNED-EVIDENCE-DEPLOY-1 — FAIL / STOP credentials invalid (06.10, resumed)
+
+Owner ADB blocker resolved: Redmi31ce63ba, beta66/code66, APK e1882552…,
+accepted signer, UID10283/inode601521 и firstInstallTime unchanged. Support
+FC-4D8Q-REEG, encrypted identity/decryption/enrollment/activation preserved versus
+accepted beta66 and at closeout; RU admitted/non-revoked, grant revision3.
+14:31:36UTC sealed beta67 manifest/all7 files recheck PASS, no rebuild/substitution.
+STOP14:34:40UTC: issuer/grants/CRL expired13:51:23UTC; NL profile leaf expired
+11:03:25UTC, profile headroom−12675s, actual TLS probe returned no certificate.
+Loaded NL remains beta66 hash6af92aa9…, PID1124728/NRestarts1. RU/NL directory
+generation/hash equal, but expired credentials mean readiness FAIL, not consistency PASS.
+No beta67 install/gateway replacement/renewal/READY/baseline/prearm/fault occurred.
+Temporary snapshot helper removed; owner app/data retained. Public channels unchanged.
+NEXT restore valid authority/grants/CRL/gateway credentials via accepted renewal
+procedure before resuming deployment; leaf-only renewal under expired issuer cannot
+pass the existing validator. Separate evidence/impairment task NOT allowed.
+[Full resumed preflight and exact hashes](releases/2026-10-06-pinned-evidence-deploy-1.md).
+
+## PINNED-EVIDENCE-DEPLOY-1 — PARTIAL (06.10, owner ADB unavailable)
+
+14:12:04UTC: immutable beta67/code67 manifest, все7 файлов, signer, embedded JNI/AWG,
+source revisionffd27988468fba427aaba6213b862dca01020972, schemas, arm64-only и
+non-debuggable PASS. beta66 APK и gateway retained locally/hash-verified.
+14:12:18UTC: approved outside-sandbox `adb devices -l` успешен, но устройств0;
+owner31ce63ba отсутствует. Owner preflight/UID10283/identity сейчас НЕ проверены.
+Установка beta67, gateway replacement, renewal, READY/ACK, baseline и runtime
+control/stale-state проверки НЕ выполнялись. Никаких runtime/public/catalog/
+invitation изменений, dry-prearm, fault injection или physical evidence run.
+Deployment readiness НЕ принята; evidence/impairment task начинать нельзя.
+NEXT: подключить/авторизовать owner Android в ADB и продолжить этот deploy
+с полного owner preflight, повторив immutable checks. Rollback не выполнялся;
+Android downgrade без uninstall/data-clear не предполагается поддержанным.
+[Hashes, blocked gates и rollback boundaries](releases/2026-10-06-pinned-evidence-deploy-1.md).
+
+## PINNED-EVIDENCE-FREEZE-1 — PASS (06.10, beta67 candidate only)
+
+После принятого DIAGNOSTIC-TELEMETRY-ISOLATION-1 выполнен полный повтор freeze.
+Чистый scoped source `ffd27988468fba427aaba6213b862dca01020972`; CI-only tag `diag-owner-beta67-ci1`.
+Source-bound Python3.13.16/Go1.26.0:1804 passed,26 skipped; fixtures exact HEAD PASS.
+Go default/diagnostic race, correlation/Pion/late-original/retention2000+/isolation,
+arm64 NDK28.2/Go1.26.1 JNI+AWG/TCP, host-cgo/JVM, Android258+258 unit/lint,
+privacy/source/provenance gates PASS. Все17 hosted workflows PASS; publication jobs
+skipped. Скачана/проверена CI-пара и подписан ownerDiagnostic0.1.18-beta67/code67,
+package com.familyconnect.app.friends, совместимый signer, non-debuggable,arm64-only.
+Immutable manifest SHA256 `98dabfa38cb2cd437b5ec45700e936da3ae0b94ef47f11b8904a90faa472fc77`.
+Pair: state-client-build/field65-export16/pinned-evidence-freeze-1/immutable-ownerDiagnostic-beta67/.
+Sealed beta66:5/5 SHA256 unchanged. Root HEAD8d046321/посторонняя dirty-работа сохранены.
+Ничего не installed/deployed/READY/renewed/armed; Telemost/soak/impairment/Краснодар
+не запускались. Default/catalog/invitation channels нетронуты. DATA104 не исправлялся.
+NEXT отдельная owner-only deploy-задача из immutable manifest; не автоматический запуск.
+Физический OWNER-CONTROLLED-LOSS-1 остаётся FAIL/UNKNOWN; DATA19 recovery не перепроверяется.
+[Source, CI, hashes, signing, rollback и ограничения](releases/2026-10-06-pinned-evidence-freeze-1.md).
+
+## DIAGNOSTIC-TELEMETRY-ISOLATION-1 — PASS (06.10, только исходники/локальные тесты)
+
+Закрыт default telemetry blocker freeze: Boundary/Snapshot/Delivery и список stages
+разделены compile-time по fc_owner_diagnostic. Default JSON surface совпадает с golden
+из sealed beta66; PictureID/watch-полей в default типах нет. Новые consume/base hooks
+и PictureID setter имеют no-op stubs; watch storage/default hooks пустые.
+Diagnostic сохраняет forensic stages, PictureID, watch/provisional/descriptor evidence.
+Go default ./..., diagnostic race ./..., Pion/correlation/late-original/retention2000+,
+двойные schema/byte regressions и65 scoped Python privacy/source tests PASS.
+Correlation implementation, Reliable/VP8/RTP algorithms не менялись; DATA104 не тронут.
+HEAD8d046321 и sealed beta66 неизменны, посторонняя dirty-работа сохранена.
+Версии/артефакты/подпись/CI/freeze/install/deploy/credentials/physical arm отсутствуют.
+NEXT: отдельный повтор PINNED-EVIDENCE-FREEZE-1 с source-bound Python fixtures,
+полными NDK/Android/CI/signing gates. Сам freeze пока остаётся FAIL исторического
+запуска, не принят автоматически. Runtime rollback не требуется; физический gate
+OWNER-CONTROLLED-LOSS-1 остаётся FAIL/UNKNOWN, DATA19 recovery не перепроверяется.
+[Таблица путей, контракты, тесты и Python environment](releases/2026-10-06-diagnostic-telemetry-isolation-1.md).
+
+## PINNED-EVIDENCE-FREEZE-1 — FAIL (06.10, STOP до freeze/build)
+
+Предварительная проверка чисто выделенного scope обнаружила нарушение default/public
+isolation: `reliable_consumed`, `base_advanced` и PictureID metadata добавлены в
+обычный boundary export без diagnostic build gate. Новый executable default-тест
+подтвердил все три случая; прежняя проверка no-default-endpoint этого не покрывала.
+Утверждение предыдущего gate «нет дополнительной default telemetry» опровергнуто.
+Корреляция late-original/attempt1, Pion, retention2000+ и tagged Go race проходят;
+это не устраняет блокер изоляции. Согласно stop condition исправление/выпуск здесь
+не продолжены. HEAD8d046321 неизменен; изолированная копия от5327deb4 содержит только
+allowlist и тесты. beta67/code67 — лишь неподписанная настройка исходника, не артефакт.
+Freeze-коммита, тега, новых APK/JNI/gateway, CI, подписи и pair manifest нет.
+Sealed beta66: все пять файлов повторно проверены SHA256, без изменений.
+Ничего не установлено/развёрнуто/armed, credentials не обновлялись; DATA104 не менялся.
+NEXT: отдельное scoped исправление diagnostic-only gating новых boundary stages и
+PictureID с регрессией default telemetry; затем повторная полная freeze-приёмка.
+Развёртывание нового кандидата запрещено. Runtime rollback не требуется.
+[Доказательства, исходники и результаты](releases/2026-10-06-pinned-evidence-freeze-1.md).
+
+## PINNED-EVIDENCE-CORRELATION-1 — PASS (06.10, исходники/локальные тесты)
+
+Закрыта ambiguity late attempt0: receiver больше не завершает watch по одному seq.
+Новый schema1: bounded provisional capture4 identities×8 fragments, затем один
+OS-authenticated descriptor с session/direction/seq/attempt/128-bit generation и
+точными carrier/PictureID/RTP полями всех fragments. Legacy rx API отвергается.
+Gateway control — opt-in diagnostic Unix socket0700/0600+SO_PEERCRED; Android —
+существующий ownerDiagnostic DUMP receiver/JNI. Default arm/bind/endpoint отключены,
+дополнительной default telemetry нет. TTL30s/cleanup/close очищают evidence;
+stale/replay/wrong-key и смешивание fragments отвергаются. Reverse104 не исправлялся.
+Default Go, diagnostic race, local Pion single/multi/reorder/duplicates, ACK и
+retention2000+,13 Python privacy/bounds/source guards, JVM и host-cgo routing PASS.
+Host tests не являются Android/NDK runtime acceptance. RTP/wire/retry/ACK/Family TLS
+semantics не изменены. Нового commit/source freeze/APK/JNI/gateway/signing/CI rollout
+нет; sealed beta66 не тронут, credentials/физический fault/Telemost не запускались.
+OWNER-CONTROLLED-LOSS-1 остаётся FAIL/UNKNOWN; DATA19 recovery не перепроверяется.
+NEXT отдельная задача чистого scoped candidate freeze и полной приёмки; не
+автоматическое разрешение сборки/развёртывания/физического эксперимента здесь.
+Предыдущий полный candidate gate остаётся PARTIAL до отдельной приёмки всех stages.
+Runtime rollback не требуется; откат только scoped source delta, не всего dirty tree.
+[Контракт, threat boundary, матрица C1–C13 и ограничения](releases/2026-10-06-pinned-evidence-correlation-1.md).
+
+## PINNED-EVIDENCE-CANDIDATE-1 — PARTIAL (06.10, preparation only)
+
+Read-only inventory classified82 dirty files against sealed5327deb4; existing
+implementation/unrelated work preserved. Default Go, diagnostic race, local Pion
+single/multi-fragment retention after2000 boundaries and10 privacy/bounds/packaging
+checks PASS. Exact receiver prearm acceptance FAIL: only an in-process API exists,
+no session/generation-bound runtime endpoint; receiver binds first carrier identity.
+Executable local counterexample: attempt1 watch completes on late attempt0 and
+ignores the selected retry after COMPLETE. No complete per-fragment stage chain,
+explicit purge/generation lifecycle or separate reverse104 evidence channel yet.
+STOP before freeze/build: requires reviewed diagnostic-only prearm/descriptor design,
+not a production payload/Family TLS change. No candidate commit/artifacts/version,
+CI publication, install, deployment, credential renewal or physical experiment.
+Sealed beta66 pair untouched; original physical FAIL/UNKNOWN unchanged; DATA19
+protocol recovery is established and was not re-proved. No runtime rollback needed.
+NEXT review/authorize bounded provisional matching and authenticated prearm design;
+future physical experiment is NOT evidence-ready.
+[Inventory, contracts, test limits and smallest required design](releases/2026-10-06-pinned-evidence-candidate-1.md).
+
+## VPN read-only health — 06.10.2026,08:05–08:07UTC
+
+Friends DB:29 activated devices,25 non-revoked,4 revoked;83 invites/29 used.
+NL AWG23 peers:5 handshakes<5min,12<24h,4 transferring during15s;
+RU10 peers:0 recent/24h/transferring. Friends TCP established0 on both.
+These are devices/peers, not unique users/DAU. Short CPU busy NL10.42%/RU23.05%,
+available RAM447/1030MiB, disk used28.9/70.9%; no snapshot saturation.
+AWG/TCP active,NRestarts0. RU legacy access inactive; documented replacement
+http-candidate active,NRestarts0. Product/control containers healthy, peer-worker
+still unhealthy (cycles/outbox not checked). Cert-renew FAILED/timeout, but public
+HTTPS8443 monitor200 with valid TLS until09.10 00:25:32UTC. One SSH diagnostic
+attempt timed out during banner exchange; earlier delayed calls subsequently completed.
+Renewal journal confirms05.10 21:03:23UTC start/21:08:24 timeout; next timer
+06.10 09:18:45UTC. Root cause inside renewal not established.
+No changes/restarts/deployment/version/public artifact verification or client E2E.
+Next operational checks: certificate renewal before expiry, worker health/outbox,
+SSH reachability; restricted engineering priority below remains unchanged.
+[Snapshot, limitations and rollback](releases/2026-10-06-vpn-health.ru.md).
+
+## SELECTED-RETRY-EVIDENCE-GAP-1 — PASS (06.10, offline analysis/local tests only)
+
+Preserved OWNER-CONTROLLED-LOSS-1 evidence audited:37 files unchanged,303 client
+snapshots, complete retained gateway lifecycle1–54; no phone/server/network test.
+DATA19 acceptance and in-order delivery through26 are now PROVEN at protocol level:
+ACK19/255 means head buffered;20/127 requires consume19;27/0 requires consume19–26.
+Gateway receive_next19→77 independently confirms ordered receive progress. This
+does not recover the selected retry's exact remote RTP/VP8/carrier callback records.
+Primary evidence-loss classification RING_EVICTION: gateway export815→2421,64 slots,
+missing indices816–2357; periodic2s snapshots, not individually streamed boundaries.
+Post-cleanup reverse104 is a separate pending-send/cleanup-asymmetry observation,
+not DATA19 failure. Physical gate remains FAIL/UNKNOWN; no no-exhaustion promotion.
+Local owner-diagnostic-only one-shot evidence watch pins exact sender retry and
+receiver target metadata outside the ring, retains closure/timeout receipts and
+exports pinned proof in native snapshots/gateway lifecycle. Default build disabled;
+explicit receiver prearm is required in any future harness, with exact carrier join.
+Deterministic ACK proof, single-/multi-fragment local bound-Pion watch, default suite
+and tagged race regressions PASS. No APK/gateway build, install, deploy or publication.
+Next: review the local patch and its two-sided prearm/collection contract in a
+separate candidate-preparation task, without authorizing a physical rerun here.
+[Inventory, chronology, proof limits and patch contract](releases/2026-10-06-selected-retry-evidence-gap-1.md).
+
+## OWNER-CONTROLLED-LOSS-1 — FAIL / UNKNOWN (06.10, one owner experiment)
+
+Exactly one physical cellular real-Telemost session and one ownerDiagnostic drop,
+sealed beta66/code66 APK e1882552/JNI e433a491/gateway6af92aa9 unchanged.
+Session4b0d85ac8060b0e4fbc66c5645a865de7381a08f88794ae8bb715acd3505f3f8,
+outbound DATA19 attempt0 dropped once; gateway head19/mask254/buffered7 proven.
+Attempt1 created1054ms later; exact carrier identity and actual RTP writer success
+proven. Client ACK19/255 then20/127 through27/0, send_base34 then108 proven;
+three HTTPS200/full bodies, DNS and TCP pass without session restart/recovery.
+Strict paired receive chain NOT proven: gateway bounded rings omit the selected
+retry RTP/VP8/carrier/Reliable acceptance and healing ACK-generation boundaries.
+This is UNKNOWN, not proof of RTP_NOT_RECEIVED_REMOTE. Extended closeout additionally
+finds gateway RELIABLE_RETRY_EXHAUSTED07:28:24.478UTC on reverse head104, after
+intentional client cleanup07:28:16.020UTC; no-retry-exhaustion criterion fails.
+Do not attribute that later reverse-direction termination to outbound DATA19.
+Fault auto-disarmed/count1 before explicit cleanup; restart idle UNAVAILABLE with
+armedfalse. Helper removed; owner identity/UID10283/Support and APK preserved.
+Gateway PID1000816/NRestarts0 unchanged; no rebuild/renewal/publication/tuning.
+Next separate task: investigate the selected retry's remote receive-boundary
+evidence gap only; no second experiment, soak, impairment or Krasnodar promotion.
+[Full evidence table, uncertainty and cleanup](releases/2026-10-06-owner-controlled-loss-1.md).
+
+## DIAG-PAIR-DEPLOY-1 — PASS (06.10, owner-only)
+
+Sealed5327deb4/diag-owner-beta66-ci2 pair verified and deployed without rebuild:
+owner Redmi now exact signed beta66/code66 e1882552, UID10283, data inode601521,
+Support FC-4D8Q-REEG, encrypted Device Identity/enrollment/activation preserved.
+NL exact matching gateway6af92aa9 loaded, PID1000816/NRestarts0; unit unchanged.
+Credential-only JIT renewal under issuer5/grants3+1, unchanged identity/admission;
+served leaf valid until06.10 11:03:25UTC (13:03:25Brussels), issuer13:51:23UTC.
+At07:11:39UTC effective minimum headroom13905s; RU/NL directory32b8b5af equal.
+Fresh beta66 authenticated fetch/native READY/ACK PASS, latest ACK07:11:12UTC.
+Two short real restricted/Telemost sessions over cellular pass DNS/HTTPS/TCP,
+reconnect and cleanup; app restart and identity preservation PASS. Active-session
+fault receipts schema1 DISARMED/armedfalse/consumedfalse/count0/no generation.
+Idle endpoint returns UNAVAILABLE with armedfalse/empty target (no active recorder),
+not an armed mechanism. Temporary test helper removed; owner app retained.
+Previous gateway7c6e1e11 and verified beta65 APK preserved; APK downgrade is not
+assumed safe for a non-debuggable app. No rollback performed.
+OWNER-CONTROLLED-LOSS-1 may start as a separate gated task after fresh headroom,
+readiness and DISARMED preflight. No fault injection occurred here; no DATA drop,
+soak/impairment/tester/WB/VK or public beta66/default/catalog/invitation changes.
+[Exact pair, runtime receipts and rollback instructions](releases/2026-10-06-diag-pair-deploy-1.md).
+
+## DIAG-SOURCE-FREEZE-1 — PASS (06.10, owner-only)
+
+NORMAL-NATIVE-PROVENANCE-1 and OWNER-DIAGNOSTIC-PACKAGING-1 PASS. The stale
+normal metadata STOP below is superseded by authoritative fresh AWG/TCP generation,
+complete APK verification and all17 hosted workflows PASS on clean scoped commit
+5327deb414ae8aa77ce2f9490fd99c9485eba740 (diag-owner-beta66-ci2).
+Immutable ownerDiagnostic beta66/code66 is built and signed with the existing
+Friends-compatible signer, NOT installed or publicly distributed. Package remains
+com.familyconnect.app.friends, arm64-v8a only, non-debuggable, DUMP receiver owner-only.
+Matching tagged JNI/gateway and immutable pair manifest are accepted. Default/public
+beta65/catalog/invitation bytes remain unchanged; original dirty/excluded work preserved.
+DIAG-PAIR-DEPLOY-1 may now START as a separate gated task; no runtime action authorized
+or performed here. Next: review the sealed pair manifest before that separate task.
+No deployment/install/credential renewal/READY/arming/physical/soak/tester contact.
+Raw native cross-build byte reproducibility remains NOT PASS (embedded temp paths),
+not a stale-source mismatch; exact downloaded native bytes are individually verified.
+[Final hashes, CI routing correction, signer and manifest](releases/2026-10-06-normal-native-provenance-1.md).
+
+## Previous OWNER-DIAGNOSTIC-PACKAGING-1 — FAIL, normal-native STOP (superseded)
+
+Owner source-set composition fixed using separate ignored owner-restricted-generated
+JNI/assets; default Friends paths untouched, owner-only restricted JNI bytes preserved.
+Fresh clean candidate02f7eb9618bf1b5105cea7433a0c687dd9e452b1 builds both unsigned
+APKs; owner/Friends258 tests each PASS, lint0errors/36 and37warnings. Protected
+owner receiver only, same Friends package, owner66/default65, non-debuggable.
+Restricted P1–P7 PASS: packaged JNI matches fresh build ddb730d1, schema1 and exact
+clean source revision. Overall packaging FAIL: mandatory normal AWG APK verifier
+finds tcp_source_sha256 mismatch (expected be122bb3, packaged metadata f5ec5e49).
+Original TCP source equals scoped source; reused generated AWG provenance is stale.
+Stopped without weakening/relabeling checks. No accepted freeze, hosted CI, push,
+gateway, signing or pair manifest. Candidate commit/APK are local unaccepted evidence.
+DIAG-SOURCE-FREEZE-1 remains PARTIAL; DIAG-PAIR-DEPLOY-1 remains NOT allowed.
+Next fresh authoritative normal AWG/TCP build from exact scope, then complete payload
+verification. No install/deploy/credentials/READY/arming/physical/soak/tester contact
+or public beta65/default/catalog/invitation change. Timing PASS remains valid.
+[Input table, exact hashes and STOP](releases/2026-10-06-owner-diagnostic-packaging-1.md).
+
+## NATIVE-AUTHORITY-TIME-1 — PASS, scope interaction proven (06.10)
+
+Expiry -4s is deterministic, not latency/rounding/native mutation. Preserved excluded
+restricted.py backdates issued_at by5s and caps expiry at issued_at+3600; old fixture
+directory ceiling was now+3599, so actual now+3595 is4s earlier. JSON/native preserve
+absolute integer UTC seconds; native rejects exactly at expiry. No tolerance change.
+Mixed isolated20/20 FAIL at exactly-4s; +1.25s delay5/5 still-4s. Scoped baseline+
+32 diagnostic files: isolated20/20 PASS, full compatibility19 PASS ×3, full Python
+1793 PASS/26 skipped. Module isolation identifies fetch issuance, not CRL/ACK code.
+No product/test assertion changes, no runtime/security/lifetime change, no absorption
+of excluded control edits. Original mixed compatibility file still17 PASS/2 FAIL.
+Acceptance-input correction is the isolated diagnostic snapshot, not a control rollback.
+[Exact timing trace, authoritative contract and source-attribution receipts](releases/2026-10-06-native-authority-time-1.md).
+
+## Previous packaging checkpoint — PARTIAL, inputs NOT_READY (superseded)
+
+The Python timing blocker below is resolved for the exact diagnostic scope. Remaining
+gates resumed with read-only Gradle input inspection: ownerDiagnostic does NOT inherit
+Friends restricted-generated JNI/assets paths via initWith. Its resolved inputs have
+neither libfc_restricted.so nor restricted-build.json. This is packaging preflight,
+not an APK build failure; newly built owner-tagged JNI/metadata still need explicit
+variant input integration and verification. Do not substitute historical/default JNI.
+No source freeze/commit/hosted CI, successor build/signing/pair manifest or runtime
+operation followed. Draft beta66/code66 remains unaccepted, default65 unchanged.
+Next complete owner-only native input integration/affected packaging acceptance, then
+guarded clean-scoped freeze and exact-source artifact/CI/signing gates. Earlier Android/
+Go/race receipts remain valid for unchanged source; no blanket rerun was performed.
+DIAG-PAIR-DEPLOY-1 is NOT allowed to start. All public/runtime restrictions remain.
+[Current freeze evidence](releases/2026-10-06-diag-source-freeze-1.md).
+
+### Previous resume checkpoint (superseded by the attribution above)
+
+Resume04:36–04:52UTC preserves the original53-path inventory,21-path diagnostic
+allowlist and HEAD8d046321039d0bd1e18ecc1af979ff90f591e029. Scoped source hashes match
+the previous STOP; no source edits, staging, commit or push. Unrelated work preserved.
+/tmp headroom restored, but temporary toolchains had been removed; verified tools
+and isolated caches restored under ignored task evidence, without deleting old receipts.
+Android ownerDiagnostic258 unit tests and lint0errors/36warnings PASS; default
+Friends258 tests and lint0errors/37warnings PASS; standalone JVM171 tests PASS.
+Default-disabled executable, F1–F6/runtime retry race, full Go/default race,
+full diagnostic race, explicit A–E/DATA48/58 subcases and native packet race PASS.
+Correctly provisioned Python gate FAILED:905 passed,26 skipped,1 failed at
+test_long_testing_window_preserves_native_expiry_checks: expires_at=now+3595,
+expected now+3599. This is a real assertion, not quota/sandbox failure. Full Python
+used the preserved mixed working tree and HEAD-pinned fixtures, not a clean scoped
+export; excluded pre-existing readiness/control changes affect expiry computation.
+No assertion weakening, unrelated fix or retry-to-green. STOP before freeze/hosted CI.
+Draft ownerDiagnostic0.1.18-beta66/code66 confirmed in generated BuildConfig/manifest,
+package com.familyconnect.app.friends, non-debuggable; default remains beta65/code65.
+No accepted successor APK/JNI/gateway, signature, hashes or pair manifest. No install,
+deployment, renewal, READY, phone arming, physical test, soak or tester contact.
+Public beta65/default/catalog/invitation channels untouched; no remote probe claimed.
+NEXT resolve the Python failure's source-scope attribution without absorbing excluded
+control changes, then complete clean-scoped acceptance, freeze, CI and artifact gates.
+DIAG-PAIR-DEPLOY-1 is NOT allowed to start; controlled loss remains CLOSED.
+[Exact scope, safety boundary, checks and unfinished gates](releases/2026-10-06-diag-source-freeze-1.md).
+
+## DIAG-PAIR-PREP-1 — PARTIAL, artifact gate STOP (06.10)
+
+Read-only prep03:56–04:05UTC; no install, signing, renewal, deployment or fault.
+Owner installed65/UID10283 APK dfbdb535 and production signer67a90d1b verified
+from pulled APK; JNI4fdc14f7 is NOT diagnostic JNI49406ddb. Local diagnostic
+APKf686988d is unsigned; gatewayce017d8f embeds8d04632 with vcs.modified=true.
+Hashes match DATA-HOLE-1 receipts, but an exact dirty-source/CI/signing gate is
+not established. Existing accepted signing runbook requires exact-source platform
+CI; do not install unsigned APK or substitute a test key. Runtime one-shot control
+not found in accepted source; deterministic test fixtures are not that control.
+Actual NL PID902401/NRestarts2 serves expired leaf05.10 23:53:04UTC, loaded
+binary7c6e1e11 unchanged; restart cause UNKNOWN. Observed chain bound-14629s;
+full effective authorization bound NOT established. RU/NL generation03:54:12.732057624Z
+and hash7440cbca equal, not proof of valid matching credentials. Owner READY expired.
+AWG/TCP services active/0 restarts is only service evidence, not traffic acceptance.
+No runtime mutation by this task; private identity preservation not freshly tested.
+NEXT establish exact-source accepted install-compatible diagnostic artifacts and
+disabled one-shot control before deployment/JIT renewal/fresh owner READY.
+Controlled loss, soak and Krasnodar remain CLOSED; root cause STILL UNKNOWN.
+[Hashes, gates, rollback limits and remaining checks](releases/2026-10-06-diag-pair-prep-1.md).
+
+## OWNER-CONTROLLED-LOSS-1 — PARTIAL, preflight STOP (06.10)
+
+Owner-only gate authorized, but NOT started. Read-only03:34:25UTC: owner Redmi
+beta65/UID10283, cellular LTE, Wi-Fi OFF/mobile data ON; existing owner
+FC-4D8Q-REEG admitted/non-revoked, revision3, last READY receipt expired.
+Actual NL gateway7c6e1e11 serves expired leaf05.10 23:53:04UTC; chain headroom
+-13282s. RU/NL directory hashes equal, but equality does not make credentials
+valid. PID779376/NRestarts1 differs from history; cause UNKNOWN, not a test
+restart. Two existing admissions unchanged. No diagnostic installation, fault,
+Telemost trial, soak, renewal or deployment; no Krasnodar test.
+Local diagnostic APK/JNI/gateway hashes rechecked against DATA-HOLE-1 receipts.
+Previous regression PASS receipts inspected, not rerun. All physical seq/attempt
+stages UNKNOWN; root cause STILL UNKNOWN. No transport FAIL inferred.
+NEXT prepare the install-compatible owner diagnostic pair with durable local
+scratch/evidence, then JIT credential renewal under the existing runbook and
+fresh owner READY before controlled loss.15-minute owner soak only after PASS;
+Krasnodar remains closed. Runtime rollback/cleanup not required.
+[Full preflight, artifact hashes, evidence table and remaining gates](releases/2026-10-06-owner-controlled-loss-1.md).
+
+## FIELD65-DATA-HOLE-1 — local diagnostics, field cause STILL UNKNOWN (06.10)
+
+Source audit was saved before code edits. Export16 DATA48/58 evidence establishes
+receiver holes at non-simultaneous samples, NOT the first missing transport layer.
+All per-attempt field RTP/assembly facts remain UNKNOWN; no DPI/SFU attribution.
+Local deterministic A–E tests now use production fragmentation and bound Pion
+packetization: same Reliable seq, distinct attempts/message IDs/VP8 PictureIDs/
+RTP timestamps and ranges, SACK/head recovery/ordered release/base advancement,
+safe duplicates/late originals, no session restart. All nine attempts tested.
+Full carrier Go and full race suites PASS (14 tested packages), existing healed
+gap assertions retained; real two-process Pion/DTLS/RTP207 byte checks and new
+RTP interceptor evidence PASS. Native packet race PASS; Android JVM/privacy11
+and Python correlation/privacy32 PASS. Android ARM64 JNI and gateway built locally;
+isolated Friends Gradle PASS:258 tests/0 failures, lint0 errors/37 warnings,
+unsigned ARM64 APK built; packaged JNI byte-identical to the tested local build.
+Scoped working-copy source secret scan23 files PASS. These are local gates only,
+not platform CI, signing, owner-device acceptance or release approval.
+
+Added64-entry per-session metadata ring, exact local attempt propagation through
+the unchanged256-slot queue, post-writer RTP and pre-reorder receive boundaries,
+assembly/duplicate/drop categories and allowlisted Android/offline projections.
+No payload, credentials, destinations or keys; wire/retry/RTO/pacing unchanged.
+WriteSample nil without an active binding is reproduced as an observability
+blind spot, NOT proven field causality. No versions/catalogs/production changed;
+tester remains beta65, last recorded gateway7c6e1e11 not freshly reverified.
+Owner-device head-drop→retry→remote acceptance→ACK/base→HTTPS without restart
+is NOT performed. No new Krasnodar trial, install, publication or deployment.
+NEXT separately authorize an owner-only controlled-loss acceptance of the
+diagnostic pair; immutable successor and matching gateway release remain gated.
+[Audit, DATA48/58 tables, limits, test receipts and rollback](releases/2026-10-06-field65-data-hole-1.md).
+
+## Export16 — post-fix Telemost carries traffic but stability still FAIL
+
+Real tester65 CELLULAR incident20:12–20:16UTC contains two authenticated Telemost
+sessions,15 DNS responses/13 TCP opens and bytes both ways. First failure restores
+automatically in84.446s; both sessions fail at about20s UI-connected duration with
+RELIABLE_RETRY_EXHAUSTED. Fresh material/authentication are not the blocker.
+Paired complete server traces105+57 confirm uplink DATA48/58 missing while later
+DATA is buffered; ACKs still arrive, no progress8s, head retries8. The deployed
+RTP timer fix is insufficient for field stability. After-reorder gap counters9/5
+do not identify network versus SFU versus local media processing loss.
+Read-only20:19:41UTC confirms accepted7c6e1e11/PID652351/NRestarts0, actual loaded
+chain valid until23:53:04UTC, ordinary invariants intact. No runtime/APK changes.
+NEXT local packetization/reorder/VP8 reproduction and bounded pre-reorder versus
+frame-discard evidence; no identical tester retry or blind timeout increase.
+Tester can keep the working VPN; no background observer or scheduled task remains.
+[Export16 paired evidence, limits and next gate](releases/2026-10-05-field-export16-beta65.md).
+
+## Export15 checked — fresh tester65 READY20:00UTC; mobile trial can start
+
+Export15 failure19:40:43–19:41:35UTC predates19:53 renewal: AWG/TCP NETWORK,
+restricted NOT_READY/BOOTSTRAP_UNAVAILABLE after old material expired; no native
+Telemost session or new reliable-exhaustion evidence. Earlier AWG stays connected
+about186s with37 successful DNS probes, ends CANCELLED; not Telemost acceptance.
+Read-only live20:03:29UTC: gateway7c6e1e11/PID652351/NRestarts0, actual loaded
+chain PASS,13774s headroom, ordinary invariants unchanged. Tester now fetched
+19:59:59 and signed native READY ACK20:00:00, grant1/CRL7360, admitted/non-revoked;
+this confirms the post19:53 directory on existing65. Fresh-import gate CLOSED.
+NEXT one cellular Auto trial with3–5min actual traffic, diagnostic JSON, then
+restore working VPN. Field stability/RTP effectiveness still unproven. No new APK,
+runtime change or background watcher. Actual bound remains05.10 23:53:04UTC /
+06.10 02:53:04 Krasnodar. Earlier ACK-pending checkpoints below are historical.
+[Export15 timeline, live evidence and test brief](releases/2026-10-05-field-export15-beta65.md).
+
+## Resumed after interruption05.10 — expired window renewed, tester ACK pending
+
+At19:44:21UTC readback, the previous19:38:10 leaf had expired. Tester65 had fetched
+19:36:47 and ACKed READY19:36:49, but that receipt was also expired at readback;
+it cannot authorize a new trial. Gateway still loaded accepted7c6e1e11, PID644769/
+NRestarts1; the restart cause is not established by this snapshot.
+Existing credential-only renewal issued19:53:04UTC, CRL7347, unchanged issuer5,
+keys, grants and four-hour policy. Publication/native positive-negative checks PASS;
+actual loaded TLS chain/hostname and35s stability PASS, PID652351/NRestarts0.
+New leaf bound **05.10 23:53:04UTC /06.10 01:53:04 Brussels /02:53:04 Krasnodar**.
+RU/NL directory4aa5ff38 equal, issued19:53:12UTC. No new APK or binary deployment.
+Final loaded-byte/chain check19:54:12UTC PASS,14330s headroom; ordinary services and
+admission/grant invariants unchanged, sync timer restored. Bounded seven-read tester
+observation ended19:56:11UTC without a new fetch/ACK; its last receipt remains19:36:49.
+Observer exited. Tester must open existing Family Connect over working VPN to refresh.
+NEXT fresh tester fetch/native READY ACK for this directory over working VPN,
+then one cellular Auto trial; field resolution still unproven. No automatic renewal
+or future watcher scheduled. Earlier windows below are historical.
+[Late renewal and remaining gate](releases/2026-10-05-field-export14-beta65.md#late-resumption-after-interruption).
+
+## Evening tester window prepared05.10 — same gateway/APK, fresh material
+
+Tester briefly available: fresh unchanged65 fetch15:31:33UTC/native READY ACK15:31:34,
+grant1/CRL6864 confirms the post15:22 directory. No mobile trial started. User then
+reports unavailable until21:00; interpreted as Krasnodar (20:00 Brussels/18:00UTC).
+The old leaf would expire eight minutes before that time, so existing four-hour
+credential-only renewal completed15:38UTC, without a build/install or policy change.
+Actual loaded TLS/profile expiry now **05.10 19:38:10UTC /21:38:10 Brussels /
+22:38:10 Krasnodar**. Same gateway7c6e1e11, PID519555/NRestarts0; native positive/
+negative validation,979:979/0600 publication,35s stability, loaded chain/hostname PASS.
+Issuer5, owner3/tester1 grants, admission, ordinary services and binary unchanged.
+RU/NL new directory796b17bb equal; final readback15:39:20UTC PASS,14329s headroom.
+At21:00 obtain a fresh tester fetch/ACK for the post15:38 directory over the working
+VPN, then one mobile trial. The15:31 ACK is now historical, not current-seed readiness.
+No tester action now, no background watcher, reminder or automatic renewal scheduled.
+[Renewal evidence and remaining field gate](releases/2026-10-05-field-export14-beta65.md#evening-window-renewal).
+
+## Tester unavailable — field acceptance deferred05.10
+
+Earlier checkpoint; the later evening renewal above supersedes its17:52UTC bound.
+
+User reports the Krasnodar tester is currently unavailable. No further tester action
+or repeated trial requested; bounded readiness observation ended15:30:30UTC with
+no post-deployment tester fetch/ACK. Gateway7c6e1e11 is already installed and locally/
+CI/runtime accepted as described below. Field stability is NOT accepted yet.
+No watcher remains running or future action is scheduled. At tester availability,
+recheck actual loaded health and the **17:52:14UTC/20:52:14 Krasnodar05.10** leaf bound;
+renew/revalidate through the existing path if needed, synchronize RU/NL directory,
+then obtain fresh tester READY/ACK over the working VPN before one mobile trial.
+Do not rebuild/reinstall beta65 merely because testing is delayed.
+
+## RTP gateway deployed05.10 — same beta65 owner import PASS, field trial pending
+
+Approved scoped commitd678773 contains only the two RTP files. Initial push was
+rejected because main gained documentationf992a7d; non-forced merge8d04632 preserves
+that roadmap and all local dirty work (PLAN stash retained as recovery backup).
+Exact source `8d046321039d0bd1e18ecc1af979ff90f591e029`: phase037329376362 and
+Clients37329375594 both PASS on attempt1. Artifact11354353210 SHA e5d7342e verified;
+Linux/amd64 gateway **7c6e1e11** loaded15:22UTC, PID510497/NRestarts0. Fresh validated
+bootstrap READY and RU/NL directory32fdb3ef equal. Executable-only rollback05571644
+preserved; HTTP/sync/AWG/TCP, device/grant/admission fingerprints and catalogs unchanged.
+Owner unchanged APK65/UID10283/update time/hash obtains fresh native READY/ACK
+**15:23:05UTC** for the new directory, without any installed test/product APK.
+Final live15:25:08UTC actual loaded hash/chain PASS; expiry still17:52:14UTC /
+20:52:14 Krasnodar, headroom8825s then. No material lifetime extension.
+NEXT tester opens existing Family Connect over working Wi-Fi/VPN to fetch the new
+directory, then one cellular Auto trial. Tester last ACK14:23:31 is for the retired
+directory, NOT current-seed readiness, despite currently_ready=true in the generic
+receipt view. Do not start mobile before a fresh post-deploy fetch/ACK. No reinstall,
+clock change or repeated test loop. Owner forced restricted data/recovery was NOT
+rerun using instrumentation; local/CI native compatibility and ordinary import pass,
+but field stability/causality remain unknown until the new tester trial.
+[Continuing execution](releases/2026-10-05-field-export14-beta65.md#gateway-delivery-continuation).
+
+## Export14 — real Telemost traffic and recovery; RTP correction local only
+
+Historical predeployment checkpoint; deployment continuation above supersedes its rollout state.
+
+Tester beta65 reaches two actual restricted sessions on the mobile Auto attempt:
+CONNECTED14:17:55.650UTC and14:19:29.714UTC, DNS/TCP bytes in both directions.
+First loss is NETWORK; a different session is established automatically in73.657s.
+Both connections fail after approximately20s; sustained working VPN is NOT proven.
+Paired complete gateway traces confirm missing client DATA62/117 at the reliable
+receiver while later DATA and ACKs arrive. This is not merely a lost ACK, a new
+certificate failure, or evidence identifying RKN/provider/network as the cause.
+
+Local investigation reproduces an RTP reorder defect: a new gap inherits the old
+gap's expired deadline, so arrived packets can be discarded before VP8 assembly.
+Two-line source correction resets the deadline on receive-position advancement;
+100ms reorder allowance,8 retries and all security checks remain unchanged.
+Baseline RED: four ordering cases and byte-exact VP8/carrier regression fail.
+Fixed:100 focused repetitions and full native race suite PASS (395 test/subtest
+passes,13 opt-in/helper skips;14 packages pass). Not yet CI/release/runtime accepted;
+field causality and resolution remain unproven. No APK build/install or gateway
+deployment in this task. NEXT exact-source gateway acceptance, controlled activation
+and unchanged-beta65 owner check, then one justified tester trial; no identical retry now.
+
+Read-only live14:45:25UTC: gateway05571644/PID464237/NRestarts0, HTTP43b99783 and
+sync9faaa1c2 unchanged; RU/NL directory equal, ordinary AWG/TCP PIDs unchanged.
+Tester renewed READY/ACK14:23:31UTC, grant1/CRL6739. Actual gateway expiry remains
+05.10 **17:52:14UTC /19:52:14 Brussels /20:52:14 Krasnodar**, not a renewed window.
+Owner/tester/targeted download65; default/catalog/invitation60 unchanged.
+[Evidence, regression, remaining gates and rollback](releases/2026-10-05-field-export14-beta65.md).
+
+## Readiness correction deployed05.10 — unchanged beta65 import PASS
+
+User authorizes completion, but explicitly rejects a separate diagnostic APK. That
+branch's tracked changes are removed; beta65 remains unchanged. Server issuance,
+CRL and signed ACK now tolerate bounded small clock differences without disabling
+expiry/revocation/authentication;131 source/native,295 exact-package and2 HTTP artifact
+checks PASS (overlapping suites, not a unique-test total). HTTP43b99783/sync9faaa1c2
+activated13:55–13:56UTC. Same-key/root-authorized issuer5, gateway05571644 unchanged,
+served TLS/profile and RU/NL generation verified; ordinary AWG/TCP PIDs unchanged.
+Owner65 ordinary foreground obtains fresh native READY/ACK13:56:08 without installing
+anything. Actual gateway expiry05.10 **17:52:14UTC /20:52:14 Krasnodar**; recheck later.
+Tester65 fresh fetch14:09:43UTC and signed native READY/ACK14:09:44UTC now confirmed
+at14:11:35 readback: revision1/CRL6714, admitted/non-revoked. Receipt observed_at is
+one second before the server challenge; bounded skew handling works on the actual
+tester without a new APK. Gateway read-only check14:11 passes. Bounded journal
+14:08–14:13 had no restricted-session events. The subsequent mobile trial is now
+captured in export14 above; do not repeat the earlier preparation/install cycle.
+Keep working VPN for preparation/coordination. [Report and rollback](releases/2026-10-05-readiness-clock-skew.md).
+
+## Earlier export13 — beta65 mobile Auto attempt failed in52.244s
+
+Tester65 current mobile attempt13:03:41–13:04:33UTC: FETCH_FAILED, AWG NETWORK,
+TCP NETWORK, then restricted NOT_READY/BOOTSTRAP_UNAVAILABLE before native session
+startup. Eight failed DNS probes, no successful DNS in that connection. Earlier
+distinct AWG connection has98 successful probes and explicit user disconnect;
+its underlying network type is not established by the final CELLULAR snapshot.
+RU13:07UTC: latest tester successful fetch still12:45:10UTC/no ACK, admission intact.
+No new DATA/ACK exhaustion or RKN proof. Export13's FETCH_FAILED must not be relabeled
+as another native clock-validation failure. Current-system test is complete/negative;
+do not ask for another identical attempt. Keep working VPN for communication.
+Development stopped at user's request; no clock patch, APK/server/access change made.
+Further engineering acceptance/readiness/material renewal precedes any later trial.
+[Exact timeline and limits](releases/2026-10-05-field-export13-beta65.md).
+
+## Export12 confirms tester65; clock/readiness correction deferred by user
+
+Current beta65 ring: EXPIRED_ON_IMPORT then two NATIVE_VALIDATION_FAILED events,
+no new restricted session. Retained failed incident is older beta64, not a new65
+transport failure. RU confirms fresh requests12:39:11/12:45:10UTC, no ACK; phone
+failure timestamps precede integer issuance by715/485ms. Strict native issued_at
+and ACK observed_at lower bounds give a concrete rejection mechanism; temporal
+pairing only, exact rejected-response/correlation evidence not exported. Local
+synthetic reproduction could not build due disk quota; no test PASS claim.
+User explicitly defers clock-dependency fix: no manual-clock instructions, new APK,
+retry loop or weakened expiry/security checks. Future design must use authenticated
+server time/monotonic elapsed time and handle incorrectly set clocks safely.
+Tester needs working VPN for communication; keep it on for diagnostic export.
+Screenshots are blocked; JSON export12 received. Mobile trial remains gated on actual
+READY. Latest live12:49UTC gateway05571644 stable; material bound13:28:47UTC today,
+not a valid future-test guarantee. Owner/tester/public65; default/catalog/invitation60.
+[Evidence, failed local checks and deferred requirements](releases/2026-10-05-field-export12-beta65.md).
+
+## Krasnodar tester setup reported done — READY still absent12:38UTC
+
+User reports preparation complete. Read-only recheck12:38:40UTC: gateway05571644
+still active/PID353567/NRestarts0, loaded leaf matches, RU/NL directory equal,
+effective headroom3006s. Tester latest fetch remains12:22:14UTC with no ACK; no
+new server-side version65/readiness proof. Do not repeat setup or start mobile Auto
+blindly. NEXT obtain tester Settings → Connection readiness screenshot (local
+read-only inspection) to distinguish cache/import/ACK/connectivity/identity causes.
+Keep Wi-Fi and VPN off; no reset, reinstall, server mutation or mobile test performed.
+
+## Earlier preflight12:26UTC PASS, READY pending
+
+User reports tester ready after a communication interruption. Read-only live checks
+12:26UTC: gateway05571644 active/PID353567/NRestarts0, served certificate matches,
+issuer signature/CRL signature valid, RU/NL current directory hashes equal, sync timer
+active. Effective material headroom3751s, expiry13:28:47UTC/16:28:47 Krasnodar.
+Tester remains admitted/non-revoked; fresh fetch12:22:14UTC exists but no ACK/native
+READY. Installed tester65 is not confirmed. NEXT confirm/update targeted65 in place
+over Wi-Fi, open with VPN off and obtain fresh native READY/ACK before mobile Auto.
+No mobile trial, restart, renewal, deployment or access change in this preflight.
+Receipts: ignored `state-client-build/field65-krasnodar/`; report below.
+
+## Gateway fix deployed, owner65 PASS, targeted65 published05.10
+
+At10:13:54UTC Amsterdam bounded activation PASS: accepted sourcea813dc5 gateway
+SHA256 `055716447a1fe4bd8859dc2877410e756a9dc60a81b0ae5203a23f99606326a0`
+loaded via `/proc/353567/exe`, NRestarts0. Only restricted bootstrap executable
+replaced; f71b7e7b retained for executable-only rollback. Before deployment,
+same-key credential publication/native positive+negative validation PASS; service
+UID/GID979,0600/readable preserved. Actual served leaf/chain/hostname verified;
+expiry **05.10 13:28:47UTC**, capped by unchanged issuer4, not a new full4h window.
+Grants owner3/tester1, admission/enrollment/ordinary service invariants unchanged;
+RU sync timer restored. No product APK install/signing in this server acceptance.
+Post-deploy RU/NL directory equality PASS. Ordinary foreground with expired cache
+obtained fresh native READY/ACK65, without forced fetch/reset. Previously failing
+policy-loss recovery now PASS: different native handle/session, old handle closed,
+HTTPS200 before/after, bounded second-loss guard retained. Actual native exhaustion
+was not induced in this test. Paired server59/67 events have no sequence gaps; old
+cleanup10:18:11.285UTC precedes new descriptor10:18:15.034UTC. AUTH startup/connected
+denial, cancellation, AWG/TCP, enrollment, compiled privacy/provider/update checks,
+restart, diagnostic export and cleanup PASS. Installed APK65 bytes/original signer,
+UID/data/identity/Support preserved; private tests removed. Final10:22UTC gateway
+PID353567/NRestarts0, ordinary routes/catalogs/invariants PASS. Targeted65 published
+10:25:54UTC, full HTTPS200 download/hash/original signer verified10:27:01UTC:
+[APK65](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta65.apk),49671035bytes,
+SHA256 `dfbdb5352b8c707fb77ff3d7392d8217f898aa8e999b6a0f52fad8172185778e`.
+Existing signed source86fa1ba bytes reused, not the new unsigned same-version CI APK.
+Owner installed65; tester last confirmed64 (latest fetch has no ACK); public targeted65;
+default/catalog/invitation60 unchanged. Next: tester updates in place over Wi-Fi,
+opens with VPN off; verify fresh current-directory native READY/ACK65 before one
+mobile Auto attempt. Effective material bound **05.10 16:28:47 Krasnodar/13:28:47UTC**;
+renew/revalidate for later testing. Original field DATA/ACK loss remains unlocalized.
+User clarified tester unavailable before14:00 Brussels on05.10 (CEST/UTC+2),
+equivalent to15:00 Krasnodar (UTC+3)/12:00UTC; no earlier tester action or mobile trial.
+Current material bound leaves1h28m47s from that time, subject to live revalidation.
+On availability, recheck clock/headroom and fresh READY before starting. No scheduled
+monitor or automatic contact has been created.
+[Execution/rollback](releases/2026-10-05-bootstrap-cleanup-race.md).
+
+## Historical CI-only checkpoint — a813dc5 CI/artifact PASS05.10
 
 Scoped source `a813dc5c80b27025222f317a068d16c71d6dc64c` pushed to main: two test
 files plus four related documents only; ten unrelated dirty files excluded.

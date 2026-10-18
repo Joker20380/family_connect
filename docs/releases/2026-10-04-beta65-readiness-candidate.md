@@ -1,9 +1,11 @@
 # Android beta65 — retained-cache refresh candidate, 2026-10-04
 
 Follow-up05.10: [bootstrap cleanup-race correction](2026-10-05-bootstrap-cleanup-race.md)
-is locally validated, not deployed. Server cleanup lag is now correlated and the
-active-slot rejection reproduced; the historical rejection code remains unavailable.
-APK65 bytes/publication hold remain unchanged. The04.10 loaded leaf bound has expired.
+is CI-accepted/deployed10:13UTC. Unchanged owner65 now passes policy-loss recovery,
+paired server evidence and security/ordinary VPN/privacy gates. Same signed65 publicly
+published10:25UTC, downloaded hash/signer verified10:27UTC. Fresh materials expire
+05.10 13:28:47UTC; tester fresh READY/ACK still required. Historical checkpoints below
+retain the original failure; no claim that original field DATA/ACK loss is localized.
 
 ## Release state
 
@@ -14,9 +16,9 @@ old credentials remain valid. No cache reset, identity change, schema migration,
 authority bypass or transport timeout/retry changes. Source baseline7088fb5.
 
 Final source `86fa1bae8b97ff34d3e8cbd5b3cfe923cb7d71a6` is CI-accepted, offline signed
-and installed on owner Redmi65. **Not publicly distributed: recovery gate failed.**
-Tester/targeted public64, default/catalog/invitation60 remain unchanged. Existing
-signed64 APK b1a9f621 must never be overwritten. Live gateway remains f71b7e7b;
+and installed on owner Redmi65. **04.10 checkpoint: publication held on failed recovery.**
+At that checkpoint tester/targeted public64, default/catalog/invitation60 were unchanged. Existing
+signed64 APK b1a9f621 must never be overwritten. Then-live gateway was f71b7e7b;
 `carrier` and `pilot/android-restricted` have no source changes since accepted64.
 Historical/policy documents already dirty at entry are preserved outside the scoped
 source commit where not required for the new release/current-state documentation.

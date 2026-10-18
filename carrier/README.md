@@ -1,4 +1,57 @@
-# Telemost binary carrier — experimental 5N.1–5N.5
+# MESH — Family Connect media transport and carrier implementation
+
+## MESH product contract
+
+**MESH (Media Encapsulated Secure Hop)** is Family Connect's secure media
+transport. The current carrier is **VP8/RTP** and the current provider is
+**Telemost**. These are independent concepts, not three interchangeable names.
+The existing `telemost/` package remains provider/media implementation code;
+renaming it or its event IDs is not necessary for this product change.
+
+- **Purpose and composition:** carry the admitted Family data session through
+  an available media session. Current composition: bootstrap/Room Broker → Family
+  TLS1.3 over ReliableStream → VP8/RTP/WebRTC → Telemost → gateway, with the
+  existing bounded OpenTCP/mux and Family DNS above the secure session.
+- **Security:** retain device-key proof, Family admission, signed provisioning,
+  certificates/CRLs, monotonic floors and Family TLS. Provider/SFU and signaling
+  are untrusted; room secrecy is not authorization. Provider credentials remain
+  server-side. Destination HTTPS still validates independently. Renaming neither
+  grants access nor changes certificate validity or entitlement.
+- **Lifecycle:** ordinary activation retains Device Identity; existing readiness
+  fetch/cache validates material; bootstrap obtains the dedicated descriptor;
+  the existing Android connection service owns VPN/session setup and cleanup.
+  MESH selection uses the existing exact-media path, whereas Auto retains its
+  existing selection/fallback rules. No policy, timeout or connection code changes.
+- **Reconnect:** use the existing bootstrap/recovery and provider seed-supervisor
+  implementations. The name adds no seamless handover, session preservation or
+  successful reconnect guarantee. Historical and current verification scope is
+  recorded in STATUS and the dated reports, not inferred from a label.
+- **Diagnostics:** display MESH to users. Export keeps schema1, Support ID,
+  `transport_class=restricted`, lifecycle/event identifiers, disconnect reasons,
+  recovery/fallback outcomes and all prior fields. Optional `transport_metadata`
+  has its own schema1 and maps `restricted` to name MESH, implementation
+  `restricted`, selector `telemost`, carrier VP8/RTP and provider Telemost.
+  It contains static labels only, never keys, tokens, identities or room credentials.
+  Readers must continue accepting exports without this optional metadata.
+- **Compatibility:** persisted `telemost`, runtime `restricted`,
+  `telemost-webrtc` directory seeds and existing protocol constants remain byte
+  compatible. There is no `mesh` configuration migration and no `mesh/1` protocol.
+  NetworkProvisioningState, provider catalogs, signatures and capabilities are
+  not relabeled. No reset, reinstall or identity/key regeneration is required.
+- **Limits:** media-provider reachability is not guaranteed bypass. Existing
+  throughput/RTT, provider availability, TCP/DNS scope and UDP/IPv6 restrictions
+  remain. This is not peer-to-peer routing or a distributed multi-hop mesh.
+  Android has the integrated media path; desktop AWG/TCP clients do not yet have
+  one. Linux gateway/developer CLI results do not establish desktop support.
+
+[Product architecture](../docs/architecture.md#mesh-product-model) ·
+[Naming ADR](../docs/adr/002-mesh-product-name.md) ·
+[MESH 1/2/3 roadmap](../docs/PLAN.md#mesh-roadmap)
+
+## Historical carrier acceptance — 5N.1–5N.5
+
+The following dated evidence retains its original technical names and limited
+scope. Current integration/release facts belong to [STATUS](../docs/STATUS.md).
 
 **5N.5 PASS28.09**, clean tested native/APK `c26c2b7`:
 [bounded TCP mux + wire DNS](tcpforward/MUX.md),4 public HTTPS streams and304.138s
