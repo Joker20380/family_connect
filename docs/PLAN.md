@@ -17,6 +17,10 @@ No product priority, acceptance, release or deployment gate changes.
 
 ### MESH product integration — cross-platform PARTIAL (18.10)
 
+- Owner-authorized source checkpoint `edca5447418141cb44c0706e26d1973d7defd397`
+  is pushed to `main`;59 selected publication-time checks pass, full GitHub CI is
+  pending at first readback. Review CI outcomes before treating this broad checkpoint
+  as accepted. It preserves unfinished candidates and does not authorize deployment.
 - Latest owner task supersedes the proposed «Мост» name: use **MESH**, unchanged
   across locales. Naming/diagnostic/docs only; no deployment, release or crypto change.
 - Preserve UI84 and legacy selection/runtime/signed identifiers. Local Android
@@ -28,8 +32,9 @@ No product priority, acceptance, release or deployment gate changes.
   and readiness adapter → capability-gated selector → native/platform acceptance.
   Any wire, crypto or infrastructure requirement needs a separate migration decision.
 - Keep activation-v2/authority renewal work isolated and unshipped. No production
-  restart or signing is authorized by this naming task. First select/reconcile the
-  source baseline before any future integration commit/push; preserve unrelated work.
+  restart or signing is authorized by this naming task. The later checkpoint push
+  preserves existing work but does not reconcile the old root Android source with
+  UI84; select/reconcile that baseline before release-oriented integration.
 - [Audit and exact remaining checks](releases/2026-10-18-mesh-product-integration.md).
 
 ### MESH roadmap

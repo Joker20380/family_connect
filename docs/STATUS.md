@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+## GitHub source checkpoint — pushed to main (18.10)
+
+After the naming task, the owner explicitly requested committing and pushing all
+accumulated source work. Commit `edca5447418141cb44c0706e26d1973d7defd397` was
+successfully pushed to `Joker20380/family_connect`, branch `main`, from
+`8d046321039d0bd1e18ecc1af979ff90f591e029`:240 changed files, including earlier
+unfinished research and activation-v2 candidates, not just MESH naming.
+Public-source guard checked1942 index entries with0 blocked files;59 selected
+MESH/admission/maintenance tests passed before push. Whitespace checks passed;
+the new patch file uses the existing narrow patch-context whitespace convention.
+Runtime state, APKs, databases, keys and the local `artifacts` symlink stay ignored.
+GitHub phase0 run39110077526 for this commit was IN_PROGRESS at the first readback;
+no current-checkpoint full-CI PASS is claimed. No tag, release, signing, installation
+or production deployment. MESH remains PARTIAL, desktop runtime missing, activated
+access NOT_DEPLOYED. Source publication is not product acceptance. The entries below
+retain the earlier pre-push naming evidence; the report records this later step.
+[Publication receipt and pending checks](releases/2026-10-18-mesh-product-integration.md#follow-up-owner-authorized-github-source-checkpoint).
+
 ## MESH product integration — PARTIAL / local only (18.10)
 
 Official name: **MESH (Media Encapsulated Secure Hop)**, untranslated. Provider
@@ -17,7 +35,8 @@ selectors/backends implement only AWG/TCP, not the media runtime or Auto selecto
 No fake MESH option was added. A desktop integration proposal and native platform
 validation are required before claiming MESH on all three platforms. Physical
 selection/relaunch/upgrade and render QA were not performed. Current-patch remote
-CI is not run without an authorized push; older baseline CI success is separate.
+CI was not run during naming; the later owner-authorized source push and pending
+CI are recorded above. Older baseline CI success is separate.
 
 The earlier activated-access rewrite, including experimental management/offline
 authority changes, remains separate, unfinished and NOT_DEPLOYED. The new task

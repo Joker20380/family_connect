@@ -13,6 +13,42 @@ adding an inert menu item would not meet acceptance. All-platform acceptance is
 therefore **not achieved**. The separate earlier all-activated admission problem
 also remains **NOT_DEPLOYED / unresolved in production**; renaming does not fix it.
 
+## Follow-up: owner-authorized GitHub source checkpoint
+
+After the naming task the owner explicitly requested committing everything to
+GitHub. All accumulated nonignored source/doc changes were committed and the push
+to `origin/main` succeeded:
+
+- Before: `8d046321039d0bd1e18ecc1af979ff90f591e029`.
+- Source checkpoint: `edca5447418141cb44c0706e26d1973d7defd397`,
+  [GitHub commit](https://github.com/Joker20380/family_connect/commit/edca5447418141cb44c0706e26d1973d7defd397).
+- 240 changed files,33183 insertions,163 deletions. This includes earlier carrier,
+  Android diagnostics, activation-v2/management experiments and historical reports;
+  it is deliberately a broad source checkpoint, **not** a claim that all this work
+  is production-ready or that it contains only naming changes.
+- The worktree was clean immediately after the source commit. This subsequent
+  documentation-only receipt records the successful push without altering runtime.
+- `python3 scripts/check_public_sources.py`:1942 index entries,0 blocked files.
+  This is the repository's bounded guard, not a proof that every possible secret
+  format is detectable. No state directories, private keys, databases or binaries
+  were staged. `.gitignore` now excludes the local `artifacts` symlink as well as
+  the already-ignored artifact directory. `.gitattributes` gives the MESH patch
+  the same narrow whitespace rule as the existing Xray patch, preserving valid
+  blank unified-diff context. `git diff --cached --check` passed.
+- Repeated local command, using the retained control/identity venv:
+  `python -m pytest -q tests/test_mesh_product.py tests/test_restricted_activation_policy.py tests/test_restricted_activation_http.py tests/test_activated_maintenance.py --tb=short`:
+  **59 passed in6.28s**, no skips. Authorized outside-sandbox loopback execution;
+  no live gateway/device interaction. These selected tests do not replace full CI.
+- GitHub readback for that exact SHA reports four push-triggered workflows.
+  [phase0 run39110077526](https://github.com/Joker20380/family_connect/actions/runs/39110077526)
+  was IN_PROGRESS at initial readback around08:05UTC; completion/PASS is not claimed.
+  Native/platform and full-suite outcomes remain to be reviewed.
+- No tag, release, APK installation/distribution, signing, gateway restart or
+  deployment occurred. Product versions and unresolved acceptance gates are unchanged.
+  A later rollback of source must be a reviewed revert, not a force-push or device
+  identity reset. The earlier baseline section below describes the naming phase
+  **before** this separately authorized publication.
+
 ## Baseline and provenance
 
 - Initial and final root HEAD:
