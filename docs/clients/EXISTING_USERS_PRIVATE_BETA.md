@@ -2,6 +2,31 @@
 
 ## Current status / Статус
 
+**19.10 owner measurement update / Обновление для измерений:** owner phone now
+retains `0.1.18-beta89-mesh-trace` / code89, installed over88 at14:40:47UTC with the
+same package, signer, UID and verified existing identity/key bindings/Support ID.
+This is **observation-only, not an accelerated or generally distributed APK**.
+The tested server speed candidate was rejected; original NL gateway restored and
+final MESH DNS/HTTPS passed. Existing beta88 recovery delivery below is unchanged
+and is not held for this investigation. Public/download/invitation catalogs unchanged.
+
+- Private89 file: `state-client-build/mesh-throughput-trace-20261019/delivery/FamilyConnect-0.1.18-beta89-mesh-trace.apk`.
+- Code89 SHA256: `b6ab744740726676dca8f51a73460db82b435c719828af14e6564c764ed11856`.
+- Same signer SHA256: `67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a`.
+- Restricted native SHA256: `3ca3119ac12c9a3a61b5ebb1ee0244650db39dc36743e355d35bf523b53ef992`.
+- Android12+/arm64; only restricted native changes; beta88 recovery sources
+  unchanged,169 local checks PASS. No new registration, invite or personal APK.
+
+RU: На телефоне владельца уже89. **Не устанавливайте88 поверх89 и не удаляйте
+приложение ради отката.** Для выключения наблюдаемости подходит обычное обновление
+с прежней подписью/package и code>=90, сохраняющее данные и recovery.89 не является
+обещанием ускорения; повторно активировать ID или копировать ключи не нужно.
+
+EN: The owner already has89. **Do not downgrade to88 or clear application data.**
+Remove observation only through an ordinary same-signer/package code>=90 update
+preserving recovery and data.89 does not promise higher speed and requires no
+reactivation or copied keys. [Exact measurements/limitations](../releases/2026-10-19-mesh-throughput-trace.md).
+
 **19.10 product-fix update:** signed recovery candidate
 `0.1.18-beta88-recovery` / code88 is available at
 `state-client-build/beta87-product-fix-20261019/delivery/FamilyConnect-0.1.18-beta88-recovery.apk`.
@@ -37,7 +62,7 @@ Do not distribute rejected85 or unaccepted86/87. No public release/updater chang
 See the [dated report](../releases/2026-10-19-existing-users-private-beta-1.md) for
 installed server packages, tests, failed beta85 evidence and current acceptance.
 
-## Current APK / Текущий APK
+## Existing beta88 delivery APK / APK beta88 для прежней частной поставки
 
 - File: `state-client-build/beta87-product-fix-20261019/delivery/FamilyConnect-0.1.18-beta88-recovery.apk`
 - Version: `0.1.18-beta88-recovery`, versionCode88.

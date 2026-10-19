@@ -1,5 +1,12 @@
 # Beta88 continuation — targeted throughput and concrete IPv6 resolution
 
+**Later19October continuation:** this report/evidence preserves the completed
+negative read-alignment experiment. Current owner authorization, installed89
+observation, two-sided correlation, rejected SACK-hole comparison and final
+restored gateway are in [the subsequent report](2026-10-19-mesh-throughput-trace.md).
+Amsterdam IPv6 is now **DEFERRED_BY_OWNER**; the support draft below is historical,
+not an outstanding action or prerequisite. SPb IPv6 remains separate/NOT_RUN.
+
 ## Checkpoint —19 October2026 UTC
 
 FINAL_RESULT=PARTIAL. One targeted server correction was implemented, locally

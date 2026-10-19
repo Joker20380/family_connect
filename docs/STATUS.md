@@ -1,12 +1,39 @@
 # Текущее состояние / Current state
 
+## MESH throughput continuation19.10 — localized; candidate REJECTED; safe state restored
+
+Local source checkpoint8da6fd5 on pushed76df691. Exact-base ordinary receiver/JNI/
+export trace now works physically; initial sends, retries, consume, ACK write/base
+and real ready-window/Mux-credit waits correlated. Not ownerDiagnostic/PERF-3B.
+One-line non-head SACK fast-retry candidate passes local regressions but fails
+physical acceptance: A1 singles0.580/0.775, B0.188Mbit/s plus two truncated parallel
+bodies/RELIABLE_RETRY_EXHAUSTED, A2 restored singles0.543/1.509; all12 A requests
+complete. Media-session variability prevents a unique causal rate comparison.
+No speed fix accepted; both this and prior read-alignment negatives are preserved.
+
+Installed owner APK is observation-only beta89/code89, same signer/package,
+88→89 `install -r`, exact APK/native/UID and identity/key/Support ID READY verified.
+APK `b6ab7447…ed11856`, native `3ca3119a…ef992`; recovery sources unchanged/169 JVM
+checks PASS, natural reconnection observed, no new overnight acceptance. Public,
+invitation-page/updater versions unchanged; existing beta88 delivery not held.
+Original NL4b722d…8fab7 restored15:28:56UTC/PID3142658;15:30–15:31 strict TLS/runtime/
+directory and Android-TUN DNS/HTTPS/identity checks PASS. NL counters OFF, Android89
+bounded observation ON; no active experiment. Current leaf/CRL expiry18:31:41UTC at
+readback, normal renewal/authority18/all_activated/CLEANED history unchanged.
+
+Remaining: no accepted speed improvement; exact media/return-ACK loss location
+not established. Avoid speculative window/credit/RTO tuning or automatic candidate
+reapplication. Observation removal needs a normal same-key code>=90 update, never
+downgrade/data clear. Amsterdam IPv6 DEFERRED_BY_OWNER; SPb NOT_RUN.
+[Full results, exact artifacts and rollback](releases/2026-10-19-mesh-throughput-trace.md).
+
 Source-control checkpoint19.10: owner authorized a local commit of the accumulated
 beta88/product-delivery source deltas, test fixtures and sanitized reports. Retained
 build trees, APKs, credentials, databases and raw diagnostic exports stay outside
 Git. This checkpoint is not a deployment or publication; GitHub visibility still
 requires a separately authorized push. Existing acceptance limits below remain.
 
-## Beta88 targeted throughput / IPv6 — bounded comparison complete, PARTIAL
+## Earlier beta88 targeted throughput / IPv6 — historical bounded comparison, PARTIAL
 
 One ordinary observation-only rollout then one server read-alignment candidate
 tested; no PERF-3B/handoff/API change. Real NL counters reveal16,384-byte socket

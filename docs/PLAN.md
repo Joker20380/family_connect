@@ -15,12 +15,35 @@ No product priority, acceptance, release or deployment gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+### Current owner throughput continuation19.10 — completed comparison, no accepted fix
+
+- Exact-base receiver/JNI/export/sender trace and small physical gate complete;
+  A1/B/A2 comparison retained. Local source checkpoint8da6fd5, no push.
+- Dominant observed delay is repeated head-gap/recovery with ready-window and
+  overlapping Mux-credit waits, not Android consume/local ACK-write. Bounded
+  gaps and ACK ambiguity remain explicit; exact media/return-ACK loss point unknown.
+- One minimal non-head SACK retry candidate was built/tested/deployed/compared,
+  then rejected after0.188Mbit/s single and retry-exhausted parallel. Baseline
+  return passes all cells. Do not silently reapply it or old read-alignment.
+- Original4b722d gateway restored15:28:56UTC; final TLS/runtime/directory and
+  MESH DNS/HTTPS/identity PASS. Installed observation-only89 retains88 recovery,
+  same ID/key/Support ID. NL counters OFF, Android counters ON, no experiment left.
+- Remaining acceptance fact: repeatable useful speed improvement without data/
+  recovery regression under comparable media conditions. No new general profiler,
+  owner handoff, admission migration or request for separate fix authorization.
+- Optional removal of Android observation uses a normal same-key code>=90 build,
+  never downgrade or clear data. Existing beta88 private delivery stays available;
+  public/updater/invitation versions unchanged.
+- Amsterdam IPv6 DEFERRED_BY_OWNER; SPb independent/NOT_RUN. Historical HOSTKEY
+  support draft is not a current prerequisite.
+  [Measured result and limitations](releases/2026-10-19-mesh-throughput-trace.md).
+
 Source-control follow-up19.10: preserve the accumulated reviewed source overlays,
 fixtures and sanitized evidence in a local commit. Do not push, publish artifacts,
 apply experimental patches or change runtime as part of this checkpoint. A local
 commit alone is not visible to a GitHub-backed ChatGPT connection.
 
-### Beta88 targeted throughput / IPv6 — completed bounded experiment, PARTIAL
+### Earlier beta88 throughput / IPv6 — historical checkpoint, superseded above
 
 - Ordinary observation and one read-alignment candidate were actually tested.
   Real DATA/window/SACK/Mux credit evidence retained; no owner-only infrastructure.

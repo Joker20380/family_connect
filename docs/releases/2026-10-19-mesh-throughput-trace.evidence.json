@@ -1,0 +1,4763 @@
+{
+  "schema": "family_connect_mesh_throughput_trace_v1",
+  "source_checkpoint": "8da6fd58b328ac3defe77c11fb6fc8fec15b8109",
+  "source_checkpoint_pushed": false,
+  "base_checkpoint": "76df691961aa88a46b73e7a355687fa6f9a3c457",
+  "SOURCE_AND_RUNTIME_BASELINE": {
+    "result": "PASS_EXACT_INPUTS_AND_READBACK",
+    "baseline_receipt_sha256": "8e9552bcb17d14a1957e4a1b6bea4953315f36f34e6776ef724e8b3e0cf10a4d",
+    "accepted_gateway_inventory": "aeeb6755bd235160127cfed67da4a870ae340cfebe89fc6d0f937908607d9483",
+    "observation_inventory": "472327a6449a0b866223e21de6c07a17c85f5e1e2e79c0b4507c1dd4ad580e9c",
+    "final_gateway_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+    "final_pid": "3142658",
+    "final_invocation": "560d88eec8024976b59b802f98d78971",
+    "final_verified_at": "2026-10-19T15:30:37.531483+00:00",
+    "limiting_expiry_utc": "2026-10-19T18:31:41+00:00"
+  },
+  "ANDROID_RECEIVER_TRACE": {
+    "result": "PASS_PHYSICAL",
+    "version_code": 89,
+    "tag": "fc_perf_diagnostic",
+    "path": [
+      "native callback",
+      "JNI stats",
+      "PerformanceTrace projection",
+      "DiagnosticRing export/logcat chunks",
+      "reconstructor",
+      "correlator"
+    ],
+    "still_active": true,
+    "payloads": false,
+    "secrets": false,
+    "owner_diagnostic": false
+  },
+  "NL_SENDER_ACK_TRACE": {
+    "result": "PASS_PHYSICAL_DURING_MEASUREMENT",
+    "still_active": false,
+    "events": [
+      "initial submission",
+      "local enqueue/media-write",
+      "retry attempts/reasons",
+      "ACK base/mask/input",
+      "window positions/bytes released",
+      "sender-ready full window"
+    ]
+  },
+  "CORRELATION_COMPLETENESS": {
+    "result": "BOUNDED_PARTIAL_EXPLICIT_GAPS",
+    "small_gates": {
+      "small": {
+        "small_gate_pass": true,
+        "two_sided_logical_blocks": 114,
+        "snapshot_counts": {
+          "NL": 10,
+          "Android": 3
+        },
+        "parser_error_counts": {
+          "NL": 0,
+          "Android": 0
+        },
+        "matched_requests": 1,
+        "requests": 1,
+        "parallel": [],
+        "capture": {
+          "cap_reached": [],
+          "exit_codes": [
+            0,
+            -15
+          ]
+        },
+        "source_gateway": "f8e6ff0761468672258c3fdd2b69c8c0aefe4ae7ada1fb48e64641191ded71bf",
+        "node_invocation": "02a7d1db4f4c406db37d1a84cceee9f1",
+        "application_bytes": 65536
+      },
+      "candidate-small": {
+        "small_gate_pass": false,
+        "reason": "topology_changed_during_automatic_recovery",
+        "outcome": "HTTP200_BODY65536_VALID_BUT_SESSION_NOT_STABLE",
+        "bulk_not_started": true,
+        "snapshots": null,
+        "parser_error_counts": {
+          "NL": 0,
+          "Android": 0
+        },
+        "errors": [],
+        "completeness": [
+          {
+            "node": "NL",
+            "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+            "session_tag": "27cde00075580c405717fadac4d8e2d5ad832325d7c048bb9408f49ff981631f",
+            "observed": 1673,
+            "prefix_unobserved": 0,
+            "interior_missing": 0,
+            "max_reported_overwritten": 1161,
+            "max_count": 1673
+          },
+          {
+            "node": "Android",
+            "origin": "da1526f9115a034db716970513d5943e",
+            "session_tag": "27cde00075580c405717fadac4d8e2d5ad832325d7c048bb9408f49ff981631f",
+            "observed": 1532,
+            "prefix_unobserved": 0,
+            "interior_missing": 76,
+            "max_reported_overwritten": 1096,
+            "max_count": 1608
+          }
+        ],
+        "correlation_sha256": "ffaddaff7e854ae117b3a6f6ed31404ca577b63c3619aee79aba8261d949d851"
+      },
+      "candidate-small-recheck": {
+        "small_gate_pass": true,
+        "two_sided_logical_blocks": 88,
+        "snapshot_counts": {
+          "NL": 10,
+          "Android": 4
+        },
+        "parser_error_counts": {
+          "NL": 0,
+          "Android": 0
+        },
+        "matched_requests": 1,
+        "requests": 1,
+        "parallel": [],
+        "capture": {
+          "cap_reached": [],
+          "exit_codes": [
+            0,
+            -15
+          ]
+        },
+        "source_gateway": "125895bea85a94622e196ac12e4e14d499aac55c93a83121d272d20fa74479b9",
+        "node_invocation": "85b1bdfde4364641a2e9cf02077467f3",
+        "application_bytes": 65536,
+        "topology_stable": true,
+        "final_topology": {
+          "interface": "tun1",
+          "underlay": "313",
+          "transports": "CELLULAR|VPN"
+        }
+      },
+      "small-return": {
+        "small_gate_pass": true,
+        "two_sided_logical_blocks": 90,
+        "snapshot_counts": {
+          "NL": 9,
+          "Android": 3
+        },
+        "parser_error_counts": {
+          "NL": 0,
+          "Android": 0
+        },
+        "matched_requests": 1,
+        "requests": 1,
+        "parallel": [],
+        "capture": {
+          "cap_reached": [],
+          "limit_bytes_per_node": 67108864,
+          "exit_codes": [
+            0,
+            -15
+          ]
+        },
+        "source_gateway": "f8e6ff0761468672258c3fdd2b69c8c0aefe4ae7ada1fb48e64641191ded71bf",
+        "node_invocation": "37f2d919918545198cfa18d1399defce",
+        "application_bytes": 65536,
+        "topology_stable": true,
+        "final_topology": {
+          "interface": "tun1",
+          "underlay": "313",
+          "transports": "CELLULAR|VPN"
+        }
+      }
+    },
+    "key": [
+      "session_tag",
+      "hashed ordered RS epochs/direction",
+      "sequence"
+    ],
+    "one_way_latency_computed": false,
+    "ack_token_is_cross_node_identifier": false,
+    "missing_means_packet_loss": false,
+    "legacy_fragment_error": "B NL line5287,49152 bytes,_LINE_BREAK=line-max, diagnostic/lifecycle;70 performance snapshots intact",
+    "candidate_observed_duplicate_receives": 13,
+    "candidate_observed_duplicate_ack_generations": 13,
+    "duplicate_after_consume_example": {
+      "sequence": 863,
+      "consume_count": 1,
+      "android_consume_to_duplicate_ms": 164.615573,
+      "interpretation": "Expected duplicate ACK without second consume, not inferred ACK loss location"
+    }
+  },
+  "DOMINANT_DELAY": {
+    "result": "HEAD_GAP_RECOVERY_AND_READY_WINDOW_WITH_OVERLAPPING_MUX_CREDIT",
+    "android_consume_or_local_ack_write_dominant": false,
+    "exact_network_loss_location": "UNKNOWN",
+    "baseline_nonhead_opportunities": 95,
+    "return_nonhead_opportunities": 38,
+    "retained_is_physical_flight": false,
+    "waits_additive": false,
+    "localization_receipts": {
+      "baseline": "e6318c26193adb6a107b408dfd385901f6771ecdd4c096ca823b8f7a54f2e7f0",
+      "baseline-repeat": "3564ed049e0e41ffdc6ca062635f6fc70032f2325f1aca9c2541ef762f45c0c3"
+    }
+  },
+  "TARGETED_CHANGE": {
+    "result": "REJECTED",
+    "artifact": {
+      "sha256": "125895bea85a94622e196ac12e4e14d499aac55c93a83121d272d20fa74479b9",
+      "source_inventory": "3d0a49fb36624226c1ca1a8095ec8b7500b06a28eb8b17f77c768735f0a5916d",
+      "input_engine_sha256": "7c319ed0db4654a89e8281f55e6fa00661d11937d44eef1be10877624f3aac14",
+      "output_engine_sha256": "d5d997323ac9b47fd4d6aedb701328232fff572035ed874d680a101d0d08c752",
+      "patch_sha256": "4867defbac6791a5ef6c57ddc1aa00b5c0115c0a7db1c83f56ddefa73eb4f9d5",
+      "changes": "Only remove head-only guard; preserve three later SACKs, RTO/4 age, one fast retry, retained/consume semantics, wire/config"
+    },
+    "scope": "Remove only sequence==base guard for existing >=3 later SACK, RTO/4 age, one fast retry",
+    "baseline_test": "FAIL expected lost=2 only one fast attempt",
+    "candidate_race_pass": 279,
+    "candidate_integration_pass": 228,
+    "candidate_integration_opt_in_skips": 6,
+    "physical_failure": "RELIABLE_RETRY_EXHAUSTED; two curl18 HTTP200 truncated bodies",
+    "causal_regression_uniquely_attributed": false,
+    "incorporated_in_baseline": false
+  },
+  "THROUGHPUT_BEFORE_AFTER": {
+    "phases": {
+      "baseline": {
+        "utc_start": "2026-10-19T14:54:32.525302+00:00",
+        "utc_end": "2026-10-19T14:56:28.467662+00:00",
+        "requests": [
+          {
+            "name": "single-0",
+            "intended_bytes": 2097152,
+            "body_bytes": 2097152,
+            "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+            "curl_exit": 0,
+            "http_status": "200",
+            "http_version": "1.1",
+            "tls_verify": "0",
+            "valid": true,
+            "full_request_seconds": 28.92859,
+            "ttfb_seconds": 2.728121,
+            "mbit_s": 0.5799527733636517,
+            "begin_uptime_seconds": 1668259.63,
+            "end_uptime_seconds": 1668288.57
+          },
+          {
+            "name": "parallel-0-1",
+            "intended_bytes": 2097152,
+            "body_bytes": 2097152,
+            "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+            "curl_exit": 0,
+            "http_status": "200",
+            "http_version": "1.1",
+            "tls_verify": "0",
+            "valid": true,
+            "full_request_seconds": 29.782608,
+            "ttfb_seconds": 0.653873,
+            "mbit_s": 0.5633225941797978,
+            "begin_uptime_seconds": 1668288.68,
+            "end_uptime_seconds": 1668318.47
+          },
+          {
+            "name": "parallel-0-0",
+            "intended_bytes": 2097152,
+            "body_bytes": 2097152,
+            "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+            "curl_exit": 0,
+            "http_status": "200",
+            "http_version": "1.1",
+            "tls_verify": "0",
+            "valid": true,
+            "full_request_seconds": 30.219368,
+            "ttfb_seconds": 0.955934,
+            "mbit_s": 0.5551809025258237,
+            "begin_uptime_seconds": 1668288.68,
+            "end_uptime_seconds": 1668318.91
+          },
+          {
+            "name": "single-1",
+            "intended_bytes": 2097152,
+            "body_bytes": 2097152,
+            "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+            "curl_exit": 0,
+            "http_status": "200",
+            "http_version": "1.1",
+            "tls_verify": "0",
+            "valid": true,
+            "full_request_seconds": 21.642886,
+            "ttfb_seconds": 2.126797,
+            "mbit_s": 0.7751838641112835,
+            "begin_uptime_seconds": 1668319.07,
+            "end_uptime_seconds": 1668340.72
+          },
+          {
+            "name": "parallel-1-0",
+            "intended_bytes": 2097152,
+            "body_bytes": 2097152,
+            "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+            "curl_exit": 0,
+            "http_status": "200",
+            "http_version": "1.1",
+            "tls_verify": "0",
+            "valid": true,
+            "full_request_seconds": 32.74602,
+            "ttfb_seconds": 0.702853,
+            "mbit_s": 0.5123436680243889,
+            "begin_uptime_seconds": 1668340.85,
+            "end_uptime_seconds": 1668373.61
+          },
+          {
+            "name": "parallel-1-1",
+            "intended_bytes": 2097152,
+            "body_bytes": 2097152,
+            "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+            "curl_exit": 0,
+            "http_status": "200",
+            "http_version": "1.1",
+            "tls_verify": "0",
+            "valid": true,
+            "full_request_seconds": 34.617385,
+            "ttfb_seconds": 0.856495,
+            "mbit_s": 0.4846471216702244,
+            "begin_uptime_seconds": 1668340.87,
+            "end_uptime_seconds": 1668375.5
+          }
+        ],
+        "result": {
+          "small_gate_pass": false,
+          "two_sided_logical_blocks": 937,
+          "snapshot_counts": {
+            "NL": 66,
+            "Android": 24
+          },
+          "parser_error_counts": {
+            "NL": 0,
+            "Android": 0
+          },
+          "matched_requests": 6,
+          "requests": 6,
+          "parallel": [
+            {
+              "cell": 0,
+              "wall_seconds": 30.229999999981374,
+              "bytes": 4194304,
+              "aggregate_mbit_s": 1.109971286801875
+            },
+            {
+              "cell": 1,
+              "wall_seconds": 34.64999999990687,
+              "bytes": 4194304,
+              "aggregate_mbit_s": 0.9683818759044787
+            }
+          ],
+          "capture": {
+            "cap_reached": [],
+            "exit_codes": [
+              0,
+              -15
+            ]
+          },
+          "source_gateway": "f8e6ff0761468672258c3fdd2b69c8c0aefe4ae7ada1fb48e64641191ded71bf",
+          "node_invocation": "02a7d1db4f4c406db37d1a84cceee9f1",
+          "application_bytes": 12582912
+        },
+        "completeness": [
+          {
+            "node": "NL",
+            "origin": "1009b0edd83577f37ead48b1fc1fe722",
+            "session_tag": "a20d919057c368f1dd10cc7df4e5987c318de5971ee46a8587ab3496b90348ac",
+            "observed": 31592,
+            "prefix_unobserved": 14755,
+            "interior_missing": 6368,
+            "max_reported_overwritten": 52203,
+            "max_count": 52715
+          },
+          {
+            "node": "Android",
+            "origin": "da1526f9115a034db716970513d5943e",
+            "session_tag": "a20d919057c368f1dd10cc7df4e5987c318de5971ee46a8587ab3496b90348ac",
+            "observed": 12288,
+            "prefix_unobserved": 15967,
+            "interior_missing": 23264,
+            "max_reported_overwritten": 51007,
+            "max_count": 51519
+          }
+        ],
+        "errors": [],
+        "parser_errors": {
+          "NL": [],
+          "Android": []
+        },
+        "inputs_sha256": {
+          "preflight.json": "84f3965229e643a10b9dd3493fa05804cbec7a1c98cb6cc775b47a616713b720",
+          "requests.jsonl": "6c998e52dd35640a0a2ea2732865fc69b6a5c1539c403a1ccaf623c326e431d3",
+          "result.json": "a07b8ac9386676189fe0674b68857f396fb152d05782ace3f2ebe304014b41ae",
+          "capture/NL-raw.jsonl": "2fae35ce48b7ac877a91142ecc0291bc7a71dcedae2ea696e428f1ba72ebb041",
+          "capture/Android-raw.jsonl": "eada837be24031c0f7d0de3e84887f09186c322d5ed2a1b3ae64232023b27b4d",
+          "correlation-v2-private.json": "78bf3cb5a220340a0b4b46e0f852f4559636164c05b5ef5bcf23390680734dfa"
+        },
+        "interval_analysis": {
+          "completeness": [
+            {
+              "node": "NL",
+              "origin": "1009b0edd83577f37ead48b1fc1fe722",
+              "session_tag": "a20d919057c368f1dd10cc7df4e5987c318de5971ee46a8587ab3496b90348ac",
+              "observed": 31592,
+              "prefix_unobserved": 14755,
+              "interior_missing": 6368,
+              "max_reported_overwritten": 52203,
+              "max_count": 52715
+            },
+            {
+              "node": "Android",
+              "origin": "da1526f9115a034db716970513d5943e",
+              "session_tag": "a20d919057c368f1dd10cc7df4e5987c318de5971ee46a8587ab3496b90348ac",
+              "observed": 12288,
+              "prefix_unobserved": 15967,
+              "interior_missing": 23264,
+              "max_reported_overwritten": 51007,
+              "max_count": 51519
+            }
+          ],
+          "errors": [],
+          "nodes": {
+            "NL": {
+              "sample_interval_seconds": 129.999120141,
+              "delta": {
+                "ReceiveReadyWaitNS": 60333582,
+                "ReleasedBytes": 14391113,
+                "ReleasedBlocks": 1831,
+                "FullNS": 107734035179,
+                "ReadyFullNS": 95718289800,
+                "WindowOnlyBlockedNS": 95638231676,
+                "HeadSACKedBlockedNS": 7361623254,
+                "HeadUnconfirmedLaterSACKedBlockedNS": 42606866797,
+                "NewDATA": {
+                  "Count": [
+                    672,
+                    28,
+                    67,
+                    103,
+                    113,
+                    844,
+                    0
+                  ],
+                  "Bytes": [
+                    74379,
+                    22768,
+                    98823,
+                    328146,
+                    663502,
+                    13192459,
+                    0
+                  ]
+                },
+                "RetryDATA": {
+                  "Count": [
+                    60,
+                    2,
+                    6,
+                    10,
+                    12,
+                    127,
+                    0
+                  ],
+                  "Bytes": [
+                    7009,
+                    1357,
+                    8741,
+                    30532,
+                    64748,
+                    1935560,
+                    0
+                  ]
+                },
+                "CarrierAcceptedDATA": {
+                  "Count": [
+                    732,
+                    30,
+                    73,
+                    113,
+                    125,
+                    971,
+                    0
+                  ],
+                  "Bytes": [
+                    81388,
+                    24125,
+                    107564,
+                    358678,
+                    728250,
+                    15128019,
+                    0
+                  ]
+                }
+              },
+              "intervals": {
+                "carrier_completion_to_decode_ns": {
+                  "count": 1366,
+                  "p50_ms": 0.018107,
+                  "p90_ms": 0.055185,
+                  "max_ms": 0.480772
+                },
+                "head_ready_to_consume_ns": {
+                  "count": 1376,
+                  "p50_ms": 0.012429,
+                  "p90_ms": 0.044277,
+                  "max_ms": 2.934631
+                },
+                "submission_to_first_ack_ns": {
+                  "count": 1515,
+                  "p50_ms": 321.386522,
+                  "p90_ms": 1216.777661,
+                  "max_ms": 1732.493795
+                },
+                "submission_to_release_ns": {
+                  "count": 1508,
+                  "p50_ms": 367.783562,
+                  "p90_ms": 1254.862169,
+                  "max_ms": 1732.493795
+                },
+                "ack_created_to_local_write_ns": {
+                  "count": 2108,
+                  "p50_ms": 2.097396,
+                  "p90_ms": 11.332134,
+                  "max_ms": 35.355601
+                },
+                "ack_queued_to_local_write_ns": {
+                  "count": 2123,
+                  "p50_ms": 1.971323,
+                  "p90_ms": 11.042362,
+                  "max_ms": 35.320528
+                }
+              },
+              "high_volume_streams": [
+                {
+                  "ID": 117,
+                  "Credit": 65536,
+                  "CreditUpdates": 191,
+                  "CreditBytes": 2106190,
+                  "ZeroCreditReadyNS": 24168165038,
+                  "QueueReadyNS": 5495889242,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      116,
+                      1,
+                      4,
+                      5,
+                      15,
+                      125,
+                      0
+                    ],
+                    "Bytes": [
+                      5368,
+                      944,
+                      8028,
+                      15831,
+                      94121,
+                      1981898,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 131,
+                  "Credit": 65536,
+                  "CreditUpdates": 216,
+                  "CreditBytes": 2106171,
+                  "ZeroCreditReadyNS": 17594004720,
+                  "QueueReadyNS": 24815635418,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      123,
+                      0,
+                      3,
+                      4,
+                      3,
+                      128,
+                      0
+                    ],
+                    "Bytes": [
+                      5412,
+                      0,
+                      4173,
+                      12582,
+                      22809,
+                      2061195,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 145,
+                  "Credit": 65536,
+                  "CreditUpdates": 228,
+                  "CreditBytes": 2106168,
+                  "ZeroCreditReadyNS": 8202620626,
+                  "QueueReadyNS": 30253107143,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      107,
+                      0,
+                      3,
+                      24,
+                      0,
+                      128,
+                      0
+                    ],
+                    "Bytes": [
+                      4920,
+                      0,
+                      4639,
+                      91732,
+                      0,
+                      2004877,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 143,
+                  "Credit": 65536,
+                  "CreditUpdates": 218,
+                  "CreditBytes": 2106164,
+                  "ZeroCreditReadyNS": 10962765290,
+                  "QueueReadyNS": 27622190749,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      124,
+                      0,
+                      4,
+                      6,
+                      2,
+                      127,
+                      0
+                    ],
+                    "Bytes": [
+                      5456,
+                      0,
+                      7049,
+                      17214,
+                      8346,
+                      2068099,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 129,
+                  "Credit": 65536,
+                  "CreditUpdates": 225,
+                  "CreditBytes": 2106146,
+                  "ZeroCreditReadyNS": 14604748442,
+                  "QueueReadyNS": 25186731130,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      106,
+                      0,
+                      8,
+                      21,
+                      6,
+                      127,
+                      0
+                    ],
+                    "Bytes": [
+                      4664,
+                      0,
+                      12360,
+                      67206,
+                      31383,
+                      1990533,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 137,
+                  "Credit": 65536,
+                  "CreditUpdates": 216,
+                  "CreditBytes": 2106137,
+                  "ZeroCreditReadyNS": 17912152806,
+                  "QueueReadyNS": 3200113624,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      84,
+                      0,
+                      13,
+                      19,
+                      47,
+                      120,
+                      0
+                    ],
+                    "Bytes": [
+                      3696,
+                      0,
+                      19689,
+                      53589,
+                      277207,
+                      1751956,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 95,
+                  "Credit": 0,
+                  "CreditUpdates": 137,
+                  "CreditBytes": 1102218,
+                  "ZeroCreditReadyNS": 10003624381,
+                  "QueueReadyNS": 11931518926,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      44,
+                      2,
+                      43,
+                      16,
+                      31,
+                      61,
+                      0
+                    ],
+                    "Bytes": [
+                      2208,
+                      1734,
+                      62553,
+                      47456,
+                      187033,
+                      866770,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 153,
+                  "Credit": 65536,
+                  "CreditUpdates": 56,
+                  "CreditBytes": 280496,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 8941082562,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      30,
+                      3,
+                      7,
+                      1,
+                      2,
+                      16,
+                      0
+                    ],
+                    "Bytes": [
+                      3352,
+                      2807,
+                      9977,
+                      3388,
+                      11646,
+                      249326,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 25,
+                  "Credit": 65536,
+                  "CreditUpdates": 35,
+                  "CreditBytes": 269448,
+                  "ZeroCreditReadyNS": 4081271048,
+                  "QueueReadyNS": 2978737783,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      13,
+                      1,
+                      16,
+                      4,
+                      9,
+                      12,
+                      0
+                    ],
+                    "Bytes": [
+                      688,
+                      1008,
+                      22400,
+                      12104,
+                      50479,
+                      182769,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 39,
+                  "Credit": 65536,
+                  "CreditUpdates": 18,
+                  "CreditBytes": 133600,
+                  "ZeroCreditReadyNS": 740333448,
+                  "QueueReadyNS": 1197436238,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      7,
+                      0,
+                      4,
+                      2,
+                      2,
+                      7,
+                      0
+                    ],
+                    "Bytes": [
+                      261,
+                      0,
+                      5232,
+                      6068,
+                      12049,
+                      109990,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 155,
+                  "Credit": 65536,
+                  "CreditUpdates": 18,
+                  "CreditBytes": 133155,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 3461746183,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      8,
+                      0,
+                      1,
+                      1,
+                      2,
+                      7,
+                      0
+                    ],
+                    "Bytes": [
+                      339,
+                      0,
+                      1032,
+                      3955,
+                      13449,
+                      114380,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 89,
+                  "Credit": 65536,
+                  "CreditUpdates": 24,
+                  "CreditBytes": 121864,
+                  "ZeroCreditReadyNS": 818028171,
+                  "QueueReadyNS": 606899972,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      6,
+                      0,
+                      11,
+                      2,
+                      1,
+                      6,
+                      0
+                    ],
+                    "Bytes": [
+                      251,
+                      0,
+                      15132,
+                      5834,
+                      8163,
+                      92484,
+                      0
+                    ]
+                  }
+                }
+              ],
+              "repeat_examples": [
+                {
+                  "sequence": 1997,
+                  "wire": "2be95885906b704659bc296d11d8c8c1",
+                  "retries": 1,
+                  "results": [
+                    "new"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "1009b0edd83577f37ead48b1fc1fe722",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 46291
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "1009b0edd83577f37ead48b1fc1fe722",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 23064
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1201804947
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1201833645
+                    }
+                  ]
+                },
+                {
+                  "sequence": 783,
+                  "wire": "82dc87580cedb386f9dec55fbc1e6d1d",
+                  "retries": 1,
+                  "results": [
+                    "new"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "1009b0edd83577f37ead48b1fc1fe722",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1299459040
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "1009b0edd83577f37ead48b1fc1fe722",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1306204105
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 86354
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 86094
+                    }
+                  ]
+                },
+                {
+                  "sequence": 784,
+                  "wire": "82dc87580cedb386f9dec55fbc1e6d1d",
+                  "retries": 1,
+                  "results": [
+                    "new"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "1009b0edd83577f37ead48b1fc1fe722",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1272904577
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "1009b0edd83577f37ead48b1fc1fe722",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1287004918
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 87917
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 442344
+                    }
+                  ]
+                },
+                {
+                  "sequence": 785,
+                  "wire": "82dc87580cedb386f9dec55fbc1e6d1d",
+                  "retries": 1,
+                  "results": [
+                    "new"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "1009b0edd83577f37ead48b1fc1fe722",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1259026484
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "1009b0edd83577f37ead48b1fc1fe722",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1273980355
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 78541
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 38333
+                    }
+                  ]
+                },
+                {
+                  "sequence": 786,
+                  "wire": "82dc87580cedb386f9dec55fbc1e6d1d",
+                  "retries": 1,
+                  "results": [
+                    "new"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "1009b0edd83577f37ead48b1fc1fe722",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1266948503
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "1009b0edd83577f37ead48b1fc1fe722",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1266959229
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 83646
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 827656
+                    }
+                  ]
+                },
+                {
+                  "sequence": 787,
+                  "wire": "82dc87580cedb386f9dec55fbc1e6d1d",
+                  "retries": 1,
+                  "results": [
+                    "new"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "1009b0edd83577f37ead48b1fc1fe722",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1331756030
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "1009b0edd83577f37ead48b1fc1fe722",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1331756030
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 56511
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 37552
+                    }
+                  ]
+                },
+                {
+                  "sequence": 788,
+                  "wire": "82dc87580cedb386f9dec55fbc1e6d1d",
+                  "retries": 1,
+                  "results": [
+                    "new"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "1009b0edd83577f37ead48b1fc1fe722",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1444717235
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "1009b0edd83577f37ead48b1fc1fe722",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1444717235
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 85938
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 44739
+                    }
+                  ]
+                },
+                {
+                  "sequence": 832,
+                  "wire": "82dc87580cedb386f9dec55fbc1e6d1d",
+                  "retries": 1,
+                  "results": [
+                    "new"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "1009b0edd83577f37ead48b1fc1fe722",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1348121130
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "1009b0edd83577f37ead48b1fc1fe722",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1348127581
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 33646
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 31198
+                    }
+                  ]
+                }
+              ],
+              "observed_event_kinds": {
+                "data_decode": 1366,
+                "receive": 1370,
+                "head_ready": 1370,
+                "consume": 1376,
+                "first_ack": 1515,
+                "release": 1508,
+                "retry_timeout": 168,
+                "data_carrier_queued": 1746,
+                "data_carrier_written": 3510,
+                "submission": 1525,
+                "retry_fast": 50,
+                "ack_created": 2860,
+                "ack_carrier_queued": 2126,
+                "ack_enqueue_return": 2130,
+                "ack_carrier_written": 4290,
+                "ack_decode": 2335,
+                "ack_input": 2347
+              }
+            },
+            "Android": {
+              "sample_interval_seconds": 121.660035006,
+              "delta": {
+                "ReceiveReadyWaitNS": 454902704,
+                "ReleasedBytes": 327036,
+                "ReleasedBlocks": 1562,
+                "FullNS": 33584542437,
+                "ReadyFullNS": 20369704056,
+                "WindowOnlyBlockedNS": 20326337591,
+                "HeadSACKedBlockedNS": 1040301253,
+                "HeadUnconfirmedLaterSACKedBlockedNS": 987820784,
+                "NewDATA": {
+                  "Count": [
+                    1466,
+                    19,
+                    20,
+                    41,
+                    9,
+                    1,
+                    0
+                  ],
+                  "Bytes": [
+                    95272,
+                    12180,
+                    34581,
+                    116953,
+                    49301,
+                    9208,
+                    0
+                  ]
+                },
+                "RetryDATA": {
+                  "Count": [
+                    2,
+                    1,
+                    0,
+                    3,
+                    1,
+                    0,
+                    0
+                  ],
+                  "Bytes": [
+                    244,
+                    878,
+                    0,
+                    8214,
+                    7115,
+                    0,
+                    0
+                  ]
+                },
+                "CarrierAcceptedDATA": {
+                  "Count": [
+                    1468,
+                    20,
+                    20,
+                    44,
+                    10,
+                    1,
+                    0
+                  ],
+                  "Bytes": [
+                    95516,
+                    13058,
+                    34581,
+                    125167,
+                    56416,
+                    9208,
+                    0
+                  ]
+                }
+              },
+              "intervals": {
+                "submission_to_first_ack_ns": {
+                  "count": 581,
+                  "p50_ms": 304.442031,
+                  "p90_ms": 437.914322,
+                  "max_ms": 1201.804947
+                },
+                "submission_to_release_ns": {
+                  "count": 583,
+                  "p50_ms": 312.113697,
+                  "p90_ms": 443.475937,
+                  "max_ms": 1201.833645
+                },
+                "carrier_completion_to_decode_ns": {
+                  "count": 593,
+                  "p50_ms": 0.085781,
+                  "p90_ms": 0.221458,
+                  "max_ms": 2.974271
+                },
+                "head_ready_to_consume_ns": {
+                  "count": 595,
+                  "p50_ms": 0.054532,
+                  "p90_ms": 0.877708,
+                  "max_ms": 7.531979
+                },
+                "ack_created_to_local_write_ns": {
+                  "count": 910,
+                  "p50_ms": 2.32724,
+                  "p90_ms": 7.166406,
+                  "max_ms": 25.348698
+                },
+                "ack_queued_to_local_write_ns": {
+                  "count": 913,
+                  "p50_ms": 2.185053,
+                  "p90_ms": 7.049011,
+                  "max_ms": 25.331615
+                }
+              },
+              "high_volume_streams": [
+                {
+                  "ID": 95,
+                  "Credit": 65536,
+                  "CreditUpdates": 35,
+                  "CreditBytes": 87017,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 121316822,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      17,
+                      1,
+                      2,
+                      17,
+                      4,
+                      1,
+                      0
+                    ],
+                    "Bytes": [
+                      650,
+                      1024,
+                      3895,
+                      52128,
+                      20208,
+                      9112,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 153,
+                  "Credit": 65536,
+                  "CreditUpdates": 29,
+                  "CreditBytes": 75068,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 451567447,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      13,
+                      1,
+                      1,
+                      20,
+                      1,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      575,
+                      1024,
+                      1928,
+                      64958,
+                      6583,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 25,
+                  "Credit": 65536,
+                  "CreditUpdates": 9,
+                  "CreditBytes": 28079,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 128801616,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      5,
+                      0,
+                      2,
+                      0,
+                      4,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      183,
+                      0,
+                      3818,
+                      0,
+                      24078,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 61,
+                  "Credit": 65536,
+                  "CreditUpdates": 8,
+                  "CreditBytes": 12022,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 226043,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      4,
+                      0,
+                      2,
+                      1,
+                      1,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      177,
+                      0,
+                      3596,
+                      2070,
+                      6179,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 173,
+                  "Credit": 65536,
+                  "CreditUpdates": 5,
+                  "CreditBytes": 9907,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 435089168,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      3,
+                      1,
+                      2,
+                      2,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      187,
+                      1024,
+                      3494,
+                      5202,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 163,
+                  "Credit": 65536,
+                  "CreditUpdates": 5,
+                  "CreditBytes": 9668,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 141975418,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      5,
+                      0,
+                      1,
+                      0,
+                      1,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      632,
+                      0,
+                      1965,
+                      0,
+                      7071,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 157,
+                  "Credit": 65536,
+                  "CreditUpdates": 9,
+                  "CreditBytes": 8692,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 47961668,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      7,
+                      0,
+                      2,
+                      2,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      431,
+                      0,
+                      4011,
+                      4250,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 179,
+                  "Credit": 65536,
+                  "CreditUpdates": 6,
+                  "CreditBytes": 8376,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 135819427,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      4,
+                      0,
+                      1,
+                      0,
+                      1,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      252,
+                      0,
+                      2038,
+                      0,
+                      6086,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 127,
+                  "Credit": 65536,
+                  "CreditUpdates": 6,
+                  "CreditBytes": 7621,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 210832,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      4,
+                      0,
+                      0,
+                      1,
+                      1,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      236,
+                      0,
+                      0,
+                      2245,
+                      5140,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 45,
+                  "Credit": 65536,
+                  "CreditUpdates": 9,
+                  "CreditBytes": 7582,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 245309429,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      5,
+                      1,
+                      2,
+                      1,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      275,
+                      893,
+                      3091,
+                      3323,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 123,
+                  "Credit": 65536,
+                  "CreditUpdates": 8,
+                  "CreditBytes": 6387,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 75469531,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      8,
+                      0,
+                      4,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      903,
+                      0,
+                      5484,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 181,
+                  "Credit": 65536,
+                  "CreditUpdates": 6,
+                  "CreditBytes": 6263,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 50946613,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      4,
+                      0,
+                      1,
+                      0,
+                      1,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      226,
+                      0,
+                      1929,
+                      0,
+                      4108,
+                      0,
+                      0
+                    ]
+                  }
+                }
+              ],
+              "repeat_examples": [],
+              "observed_event_kinds": {
+                "first_ack": 581,
+                "release": 583,
+                "data_carrier_written": 1130,
+                "submission": 555,
+                "data_carrier_queued": 557,
+                "retry_fast": 1,
+                "data_decode": 593,
+                "receive": 595,
+                "head_ready": 593,
+                "consume": 595,
+                "ack_decode": 790,
+                "ack_input": 791,
+                "ack_created": 1231,
+                "ack_carrier_queued": 915,
+                "ack_enqueue_return": 916,
+                "ack_carrier_written": 1862
+              }
+            }
+          }
+        }
+      },
+      "candidate-bulk": {
+        "utc_start": "2026-10-19T15:18:07.859278+00:00",
+        "utc_end": "2026-10-19T15:20:27.150199+00:00",
+        "requests": [
+          {
+            "name": "single-0",
+            "intended_bytes": 2097152,
+            "body_bytes": 2097152,
+            "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+            "curl_exit": 0,
+            "http_status": "200",
+            "http_version": "1.1",
+            "tls_verify": "0",
+            "valid": true,
+            "full_request_seconds": 89.18979,
+            "ttfb_seconds": 2.980917,
+            "mbit_s": 0.18810691223737602,
+            "begin_uptime_seconds": 1669674.97,
+            "end_uptime_seconds": 1669764.17
+          },
+          {
+            "name": "parallel-0-0",
+            "intended_bytes": 2097152,
+            "body_bytes": 515447,
+            "observed_body_sha256": "0bcd0cb6ce3da072f881cdb0a04fc4ecf7ba0b9dc4901f9166b422313b3db5ff",
+            "curl_exit": 18,
+            "http_status": "200",
+            "http_version": "1.1",
+            "tls_verify": "0",
+            "valid": false,
+            "full_request_seconds": 49.874353,
+            "ttfb_seconds": 0.753523,
+            "mbit_s": null,
+            "begin_uptime_seconds": 1669764.27,
+            "end_uptime_seconds": 1669814.16
+          },
+          {
+            "name": "parallel-0-1",
+            "intended_bytes": 2097152,
+            "body_bytes": 446144,
+            "observed_body_sha256": "ecc016e5ac699b6367a36b793207b76e86f128bf1b108e089a9254dcc1f7ad27",
+            "curl_exit": 18,
+            "http_status": "200",
+            "http_version": "1.1",
+            "tls_verify": "0",
+            "valid": false,
+            "full_request_seconds": 49.865589,
+            "ttfb_seconds": 3.404899,
+            "mbit_s": null,
+            "begin_uptime_seconds": 1669764.28,
+            "end_uptime_seconds": 1669814.17
+          }
+        ],
+        "result": {
+          "small_gate_pass": false,
+          "two_sided_logical_blocks": 671,
+          "snapshot_counts": {
+            "NL": 70,
+            "Android": 27
+          },
+          "parser_error_counts": {
+            "NL": 1,
+            "Android": 0
+          },
+          "matched_requests": 3,
+          "requests": 3,
+          "parallel": [],
+          "capture": {
+            "cap_reached": [],
+            "exit_codes": [
+              0,
+              -15
+            ]
+          },
+          "source_gateway": "125895bea85a94622e196ac12e4e14d499aac55c93a83121d272d20fa74479b9",
+          "node_invocation": "85b1bdfde4364641a2e9cf02077467f3",
+          "application_bytes": 3058743,
+          "topology_stable": false,
+          "final_topology": {
+            "interface": "tun0",
+            "underlay": "313",
+            "transports": "CELLULAR|VPN"
+          }
+        },
+        "completeness": [
+          {
+            "node": "NL",
+            "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+            "session_tag": "27cde00075580c405717fadac4d8e2d5ad832325d7c048bb9408f49ff981631f",
+            "observed": 10600,
+            "prefix_unobserved": 19508,
+            "interior_missing": 0,
+            "max_reported_overwritten": 29596,
+            "max_count": 30108
+          },
+          {
+            "node": "Android",
+            "origin": "da1526f9115a034db716970513d5943e",
+            "session_tag": "27cde00075580c405717fadac4d8e2d5ad832325d7c048bb9408f49ff981631f",
+            "observed": 8824,
+            "prefix_unobserved": 19525,
+            "interior_missing": 788,
+            "max_reported_overwritten": 28625,
+            "max_count": 29137
+          }
+        ],
+        "errors": [],
+        "parser_errors": {
+          "NL": [
+            {
+              "line": 5287,
+              "error": "Unterminated string starting at: line 1 column 49150 (char 49149)"
+            }
+          ],
+          "Android": []
+        },
+        "inputs_sha256": {
+          "preflight.json": "de6229e9c1537174fa95666ab4f5ac3e70bc3e6fd1317002414d0a929373f0ff",
+          "requests.jsonl": "ec4f541fd59cb6ca102069398062e359a4992543838be6c4e97000edc0d91c3b",
+          "result.json": "9675e11762f783ab102ecd345a025d8be4ba638ebfee2ce11291c0b2f0056e9b",
+          "capture/NL-raw.jsonl": "eff0fae038d4ba7549cc9ce3148ca27d0fc648fcc97824439ee4e63a574fe09b",
+          "capture/Android-raw.jsonl": "480e037e0972b9bd800fca35bfcd02c1778c7679dedce61c172a7e24603b4de8",
+          "correlation-private.json": "c3a9e156b98dceeef924ae3b523c527bb4a4bff39a884b03e71bf4b164275460"
+        },
+        "interval_analysis": {
+          "completeness": [
+            {
+              "node": "NL",
+              "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+              "session_tag": "27cde00075580c405717fadac4d8e2d5ad832325d7c048bb9408f49ff981631f",
+              "observed": 10600,
+              "prefix_unobserved": 19508,
+              "interior_missing": 0,
+              "max_reported_overwritten": 29596,
+              "max_count": 30108
+            },
+            {
+              "node": "Android",
+              "origin": "da1526f9115a034db716970513d5943e",
+              "session_tag": "27cde00075580c405717fadac4d8e2d5ad832325d7c048bb9408f49ff981631f",
+              "observed": 8824,
+              "prefix_unobserved": 19525,
+              "interior_missing": 788,
+              "max_reported_overwritten": 28625,
+              "max_count": 29137
+            }
+          ],
+          "errors": [],
+          "nodes": {
+            "NL": {
+              "sample_interval_seconds": 136.124474603,
+              "delta": {
+                "ReceiveReadyWaitNS": 10529699,
+                "ReleasedBytes": 3125732,
+                "ReleasedBlocks": 431,
+                "FullNS": 111444153835,
+                "ReadyFullNS": 83174266559,
+                "WindowOnlyBlockedNS": 83149041699,
+                "HeadSACKedBlockedNS": 1901390560,
+                "HeadUnconfirmedLaterSACKedBlockedNS": 71956786090,
+                "NewDATA": {
+                  "Count": [
+                    177,
+                    5,
+                    16,
+                    22,
+                    28,
+                    191,
+                    0
+                  ],
+                  "Bytes": [
+                    15209,
+                    4606,
+                    24208,
+                    66275,
+                    159812,
+                    2938100,
+                    0
+                  ]
+                },
+                "RetryDATA": {
+                  "Count": [
+                    58,
+                    2,
+                    3,
+                    4,
+                    13,
+                    253,
+                    0
+                  ],
+                  "Bytes": [
+                    5850,
+                    1726,
+                    5823,
+                    14037,
+                    75227,
+                    3921480,
+                    0
+                  ]
+                },
+                "CarrierAcceptedDATA": {
+                  "Count": [
+                    235,
+                    7,
+                    19,
+                    26,
+                    41,
+                    444,
+                    0
+                  ],
+                  "Bytes": [
+                    21059,
+                    6332,
+                    30031,
+                    80312,
+                    235039,
+                    6859580,
+                    0
+                  ]
+                }
+              },
+              "intervals": {
+                "carrier_completion_to_decode_ns": {
+                  "count": 356,
+                  "p50_ms": 0.019009,
+                  "p90_ms": 0.054003,
+                  "max_ms": 0.334159
+                },
+                "head_ready_to_consume_ns": {
+                  "count": 308,
+                  "p50_ms": 0.011888,
+                  "p90_ms": 0.094734,
+                  "max_ms": 0.769482
+                },
+                "submission_to_first_ack_ns": {
+                  "count": 453,
+                  "p50_ms": 665.054112,
+                  "p90_ms": 2729.407873,
+                  "max_ms": 8986.877113
+                },
+                "submission_to_release_ns": {
+                  "count": 447,
+                  "p50_ms": 1444.064362,
+                  "p90_ms": 4330.275563,
+                  "max_ms": 9001.857093
+                },
+                "ack_created_to_local_write_ns": {
+                  "count": 646,
+                  "p50_ms": 0.209509,
+                  "p90_ms": 12.041484,
+                  "max_ms": 42.66167
+                },
+                "ack_queued_to_local_write_ns": {
+                  "count": 646,
+                  "p50_ms": 0.156229,
+                  "p90_ms": 11.987252,
+                  "max_ms": 42.641289
+                },
+                "ack_decode_to_engine_input_ns": {
+                  "count": 911,
+                  "p50_ms": 0.001242,
+                  "p90_ms": 0.001793,
+                  "max_ms": 0.014752
+                }
+              },
+              "high_volume_streams": [
+                {
+                  "ID": 109,
+                  "Credit": 65536,
+                  "CreditUpdates": 140,
+                  "CreditBytes": 2106145,
+                  "ZeroCreditReadyNS": 80934820195,
+                  "QueueReadyNS": 3652211525,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      118,
+                      0,
+                      6,
+                      5,
+                      14,
+                      123,
+                      0
+                    ],
+                    "Bytes": [
+                      5192,
+                      0,
+                      8663,
+                      15620,
+                      78339,
+                      1998331,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 119,
+                  "Credit": 16340,
+                  "CreditUpdates": 59,
+                  "CreditBytes": 527757,
+                  "ZeroCreditReadyNS": 10029278262,
+                  "QueueReadyNS": 37655060486,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      17,
+                      0,
+                      7,
+                      8,
+                      15,
+                      33,
+                      0
+                    ],
+                    "Bytes": [
+                      748,
+                      0,
+                      10551,
+                      22778,
+                      77231,
+                      454880,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 121,
+                  "Credit": 0,
+                  "CreditUpdates": 44,
+                  "CreditBytes": 452964,
+                  "ZeroCreditReadyNS": 17160271017,
+                  "QueueReadyNS": 27530345812,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      19,
+                      1,
+                      1,
+                      5,
+                      12,
+                      30,
+                      0
+                    ],
+                    "Bytes": [
+                      836,
+                      800,
+                      1728,
+                      14898,
+                      79200,
+                      410102,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 3,
+                  "Credit": 65536,
+                  "CreditUpdates": 13,
+                  "CreditBytes": 71144,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 775042555,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      3,
+                      0,
+                      3,
+                      4,
+                      1,
+                      3,
+                      0
+                    ],
+                    "Bytes": [
+                      132,
+                      0,
+                      4173,
+                      11651,
+                      6168,
+                      49020,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 87,
+                  "Credit": 65536,
+                  "CreditUpdates": 8,
+                  "CreditBytes": 71141,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 283929462,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      1,
+                      0,
+                      2,
+                      4,
+                      4,
+                      3,
+                      0
+                    ],
+                    "Bytes": [
+                      44,
+                      0,
+                      2782,
+                      12234,
+                      20483,
+                      35598,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 19,
+                  "Credit": 65536,
+                  "CreditUpdates": 6,
+                  "CreditBytes": 15808,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 1765128,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      4,
+                      2,
+                      0,
+                      0,
+                      2,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      213,
+                      1595,
+                      0,
+                      0,
+                      14000,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 17,
+                  "Credit": 65536,
+                  "CreditUpdates": 7,
+                  "CreditBytes": 14865,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 28022020,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      3,
+                      1,
+                      1,
+                      0,
+                      2,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      143,
+                      590,
+                      1045,
+                      0,
+                      13087,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 13,
+                  "Credit": 65536,
+                  "CreditUpdates": 7,
+                  "CreditBytes": 14795,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 88475,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      3,
+                      2,
+                      0,
+                      0,
+                      2,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      143,
+                      1591,
+                      0,
+                      0,
+                      13061,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 15,
+                  "Credit": 65536,
+                  "CreditUpdates": 6,
+                  "CreditBytes": 14795,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 1160148320,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      3,
+                      2,
+                      0,
+                      1,
+                      2,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      143,
+                      1591,
+                      0,
+                      2800,
+                      10261,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 61,
+                  "Credit": 65536,
+                  "CreditUpdates": 6,
+                  "CreditBytes": 14794,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 122817,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      2,
+                      2,
+                      0,
+                      0,
+                      2,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      104,
+                      1630,
+                      0,
+                      0,
+                      13060,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 95,
+                  "Credit": 65536,
+                  "CreditUpdates": 13,
+                  "CreditBytes": 11370,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 216251,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      5,
+                      6,
+                      0,
+                      2,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      834,
+                      4744,
+                      0,
+                      5792,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 51,
+                  "Credit": 65536,
+                  "CreditUpdates": 10,
+                  "CreditBytes": 11348,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 184140,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      2,
+                      7,
+                      0,
+                      2,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      182,
+                      5374,
+                      0,
+                      5792,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                }
+              ],
+              "repeat_examples": [
+                {
+                  "sequence": 692,
+                  "wire": "519f4133d649e172f94a30d33a6db2cd",
+                  "retries": 1,
+                  "results": [
+                    "new",
+                    "duplicate"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 15073
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 8943
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 14902
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1450957864
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1450957864
+                    }
+                  ]
+                },
+                {
+                  "sequence": 697,
+                  "wire": "519f4133d649e172f94a30d33a6db2cd",
+                  "retries": 1,
+                  "results": [
+                    "new",
+                    "duplicate"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 18849
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 16415
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 20782
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1094626093
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1094805155
+                    }
+                  ]
+                },
+                {
+                  "sequence": 711,
+                  "wire": "519f4133d649e172f94a30d33a6db2cd",
+                  "retries": 1,
+                  "results": [
+                    "new",
+                    "duplicate"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 28193
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 13371
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 32871
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1171523541
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1171523541
+                    }
+                  ]
+                },
+                {
+                  "sequence": 722,
+                  "wire": "519f4133d649e172f94a30d33a6db2cd",
+                  "retries": 1,
+                  "results": [
+                    "new",
+                    "duplicate"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 17037
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 10416
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 16905
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1036570676
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1036570676
+                    }
+                  ]
+                },
+                {
+                  "sequence": 728,
+                  "wire": "519f4133d649e172f94a30d33a6db2cd",
+                  "retries": 1,
+                  "results": [
+                    "new",
+                    "duplicate"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 12659
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 8633
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 27443
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1036538853
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1036538853
+                    }
+                  ]
+                },
+                {
+                  "sequence": 729,
+                  "wire": "519f4133d649e172f94a30d33a6db2cd",
+                  "retries": 1,
+                  "results": [
+                    "new",
+                    "duplicate"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 16084
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 254086
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 22705
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1036423906
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1036423906
+                    }
+                  ]
+                },
+                {
+                  "sequence": 730,
+                  "wire": "519f4133d649e172f94a30d33a6db2cd",
+                  "retries": 1,
+                  "results": [
+                    "new",
+                    "duplicate"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 19940
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 13401
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 13370
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1035207708
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1035207708
+                    }
+                  ]
+                },
+                {
+                  "sequence": 740,
+                  "wire": "519f4133d649e172f94a30d33a6db2cd",
+                  "retries": 1,
+                  "results": [
+                    "new",
+                    "duplicate"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 18307
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 6049
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "07618c5a2f16ba151ca2ec988506fdd6",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 14232
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1750947031
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1750947031
+                    }
+                  ]
+                }
+              ],
+              "observed_event_kinds": {
+                "data_decode": 356,
+                "receive": 356,
+                "head_ready": 308,
+                "consume": 308,
+                "first_ack": 453,
+                "release": 447,
+                "submission": 453,
+                "data_carrier_queued": 786,
+                "data_carrier_written": 1572,
+                "retry_timeout": 306,
+                "retry_fast": 27,
+                "ack_created": 822,
+                "ack_decode": 911,
+                "ack_input": 911,
+                "ack_carrier_queued": 646,
+                "ack_enqueue_return": 646,
+                "ack_carrier_written": 1292
+              }
+            },
+            "Android": {
+              "sample_interval_seconds": 141.546059165,
+              "delta": {
+                "ReceiveReadyWaitNS": 139764331,
+                "ReleasedBytes": 21542,
+                "ReleasedBlocks": 289,
+                "FullNS": 2288963801,
+                "ReadyFullNS": 1243249166,
+                "WindowOnlyBlockedNS": 1242427342,
+                "HeadSACKedBlockedNS": 4059010,
+                "HeadUnconfirmedLaterSACKedBlockedNS": 0,
+                "NewDATA": {
+                  "Count": [
+                    284,
+                    8,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  "Bytes": [
+                    17258,
+                    4558,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                "RetryDATA": {
+                  "Count": [
+                    66,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  "Bytes": [
+                    4683,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                "CarrierAcceptedDATA": {
+                  "Count": [
+                    350,
+                    8,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  "Bytes": [
+                    21941,
+                    4558,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                }
+              },
+              "intervals": {
+                "submission_to_first_ack_ns": {
+                  "count": 286,
+                  "p50_ms": 515.839896,
+                  "p90_ms": 1036.570676,
+                  "max_ms": 3293.562915
+                },
+                "submission_to_release_ns": {
+                  "count": 286,
+                  "p50_ms": 526.194166,
+                  "p90_ms": 1147.1475,
+                  "max_ms": 3293.562915
+                },
+                "carrier_completion_to_decode_ns": {
+                  "count": 426,
+                  "p50_ms": 0.068177,
+                  "p90_ms": 0.131093,
+                  "max_ms": 6.439062
+                },
+                "head_ready_to_consume_ns": {
+                  "count": 398,
+                  "p50_ms": 0.07026,
+                  "p90_ms": 0.935156,
+                  "max_ms": 4.825364
+                },
+                "ack_created_to_local_write_ns": {
+                  "count": 826,
+                  "p50_ms": 0.599063,
+                  "p90_ms": 9.490938,
+                  "max_ms": 33.248125
+                },
+                "ack_queued_to_local_write_ns": {
+                  "count": 828,
+                  "p50_ms": 0.4725,
+                  "p90_ms": 9.476198,
+                  "max_ms": 33.233386
+                },
+                "ack_decode_to_engine_input_ns": {
+                  "count": 462,
+                  "p50_ms": 0.002083,
+                  "p90_ms": 0.004479,
+                  "max_ms": 0.007032
+                }
+              },
+              "high_volume_streams": [
+                {
+                  "ID": 95,
+                  "Credit": 65512,
+                  "CreditUpdates": 9,
+                  "CreditBytes": 4820,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 223645,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      5,
+                      4,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      763,
+                      2817,
+                      1264,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 53,
+                  "Credit": 65536,
+                  "CreditUpdates": 6,
+                  "CreditBytes": 4575,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 97188,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      4,
+                      0,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      540,
+                      0,
+                      1705,
+                      2330,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 57,
+                  "Credit": 65536,
+                  "CreditUpdates": 5,
+                  "CreditBytes": 4053,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 155678,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      3,
+                      0,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      559,
+                      0,
+                      1194,
+                      2300,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 101,
+                  "Credit": 65536,
+                  "CreditUpdates": 6,
+                  "CreditBytes": 3996,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 122552,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      4,
+                      0,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      271,
+                      0,
+                      1235,
+                      2490,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 63,
+                  "Credit": 65536,
+                  "CreditUpdates": 6,
+                  "CreditBytes": 3634,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 134428,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      4,
+                      1,
+                      0,
+                      1,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      271,
+                      905,
+                      0,
+                      2458,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 61,
+                  "Credit": 65536,
+                  "CreditUpdates": 6,
+                  "CreditBytes": 3436,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 338594,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      5,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      530,
+                      876,
+                      2030,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 65,
+                  "Credit": 65536,
+                  "CreditUpdates": 7,
+                  "CreditBytes": 3296,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 300730,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      7,
+                      0,
+                      0,
+                      1,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      887,
+                      0,
+                      0,
+                      2409,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 9,
+                  "Credit": 65536,
+                  "CreditUpdates": 10,
+                  "CreditBytes": 2625,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 200055,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      9,
+                      0,
+                      0,
+                      1,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      523,
+                      0,
+                      0,
+                      2102,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 23,
+                  "Credit": 65536,
+                  "CreditUpdates": 3,
+                  "CreditBytes": 2335,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 45365,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      1,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      64,
+                      516,
+                      1755,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 5,
+                  "Credit": 65424,
+                  "CreditUpdates": 5,
+                  "CreditBytes": 1776,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 123854,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      4,
+                      2,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      432,
+                      1456,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 107,
+                  "Credit": 65287,
+                  "CreditUpdates": 3,
+                  "CreditBytes": 806,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 72760,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      3,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      538,
+                      517,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 85,
+                  "Credit": 65287,
+                  "CreditUpdates": 3,
+                  "CreditBytes": 806,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 102448,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      4,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      538,
+                      517,
+                      0,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                }
+              ],
+              "repeat_examples": [],
+              "observed_event_kinds": {
+                "submission": 283,
+                "data_carrier_queued": 346,
+                "data_carrier_written": 694,
+                "first_ack": 286,
+                "release": 286,
+                "retry_timeout": 62,
+                "retry_fast": 1,
+                "data_decode": 426,
+                "receive": 426,
+                "head_ready": 396,
+                "consume": 398,
+                "ack_input": 463,
+                "ack_decode": 462,
+                "ack_created": 973,
+                "ack_carrier_queued": 828,
+                "ack_enqueue_return": 828,
+                "ack_carrier_written": 1666
+              }
+            }
+          }
+        }
+      },
+      "baseline-repeat": {
+        "utc_start": "2026-10-19T15:26:38.420432+00:00",
+        "utc_end": "2026-10-19T15:28:17.176470+00:00",
+        "requests": [
+          {
+            "name": "single-0",
+            "intended_bytes": 2097152,
+            "body_bytes": 2097152,
+            "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+            "curl_exit": 0,
+            "http_status": "200",
+            "http_version": "1.1",
+            "tls_verify": "0",
+            "valid": true,
+            "full_request_seconds": 30.88373,
+            "ttfb_seconds": 2.77157,
+            "mbit_s": 0.5432380091394401,
+            "begin_uptime_seconds": 1670185.53,
+            "end_uptime_seconds": 1670216.42
+          },
+          {
+            "name": "parallel-0-1",
+            "intended_bytes": 2097152,
+            "body_bytes": 2097152,
+            "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+            "curl_exit": 0,
+            "http_status": "200",
+            "http_version": "1.1",
+            "tls_verify": "0",
+            "valid": true,
+            "full_request_seconds": 31.602635,
+            "ttfb_seconds": 0.938222,
+            "mbit_s": 0.5308802889379319,
+            "begin_uptime_seconds": 1670216.52,
+            "end_uptime_seconds": 1670248.13
+          },
+          {
+            "name": "parallel-0-0",
+            "intended_bytes": 2097152,
+            "body_bytes": 2097152,
+            "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+            "curl_exit": 0,
+            "http_status": "200",
+            "http_version": "1.1",
+            "tls_verify": "0",
+            "valid": true,
+            "full_request_seconds": 31.80628,
+            "ttfb_seconds": 1.123604,
+            "mbit_s": 0.5274812395539497,
+            "begin_uptime_seconds": 1670216.52,
+            "end_uptime_seconds": 1670248.34
+          },
+          {
+            "name": "single-1",
+            "intended_bytes": 2097152,
+            "body_bytes": 2097152,
+            "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+            "curl_exit": 0,
+            "http_status": "200",
+            "http_version": "1.1",
+            "tls_verify": "0",
+            "valid": true,
+            "full_request_seconds": 11.121067,
+            "ttfb_seconds": 1.740901,
+            "mbit_s": 1.5085976912107444,
+            "begin_uptime_seconds": 1670248.49,
+            "end_uptime_seconds": 1670259.63
+          },
+          {
+            "name": "parallel-1-1",
+            "intended_bytes": 2097152,
+            "body_bytes": 2097152,
+            "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+            "curl_exit": 0,
+            "http_status": "200",
+            "http_version": "1.1",
+            "tls_verify": "0",
+            "valid": true,
+            "full_request_seconds": 24.203912,
+            "ttfb_seconds": 0.627866,
+            "mbit_s": 0.6931613368946309,
+            "begin_uptime_seconds": 1670259.71,
+            "end_uptime_seconds": 1670283.93
+          },
+          {
+            "name": "parallel-1-0",
+            "intended_bytes": 2097152,
+            "body_bytes": 2097152,
+            "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+            "curl_exit": 0,
+            "http_status": "200",
+            "http_version": "1.1",
+            "tls_verify": "0",
+            "valid": true,
+            "full_request_seconds": 24.499469,
+            "ttfb_seconds": 0.88392,
+            "mbit_s": 0.6847991685044276,
+            "begin_uptime_seconds": 1670259.71,
+            "end_uptime_seconds": 1670284.22
+          }
+        ],
+        "result": {
+          "small_gate_pass": false,
+          "two_sided_logical_blocks": 787,
+          "snapshot_counts": {
+            "NL": 56,
+            "Android": 21
+          },
+          "parser_error_counts": {
+            "NL": 0,
+            "Android": 0
+          },
+          "matched_requests": 6,
+          "requests": 6,
+          "parallel": [
+            {
+              "cell": 0,
+              "wall_seconds": 31.820000000065193,
+              "bytes": 4194304,
+              "aggregate_mbit_s": 1.0545076052775377
+            },
+            {
+              "cell": 1,
+              "wall_seconds": 24.510000000009313,
+              "bytes": 4194304,
+              "aggregate_mbit_s": 1.3690098735204916
+            }
+          ],
+          "capture": {
+            "cap_reached": [],
+            "limit_bytes_per_node": 67108864,
+            "exit_codes": [
+              0,
+              -15
+            ]
+          },
+          "source_gateway": "f8e6ff0761468672258c3fdd2b69c8c0aefe4ae7ada1fb48e64641191ded71bf",
+          "node_invocation": "37f2d919918545198cfa18d1399defce",
+          "application_bytes": 12582912,
+          "topology_stable": true,
+          "final_topology": {
+            "interface": "tun1",
+            "underlay": "313",
+            "transports": "CELLULAR|VPN"
+          }
+        },
+        "completeness": [
+          {
+            "node": "NL",
+            "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+            "session_tag": "1e637526f0bfe60cd428eae8c32f4f916f0627fbe760cf87bcdeffb1f53cadb9",
+            "observed": 23830,
+            "prefix_unobserved": 7501,
+            "interior_missing": 6305,
+            "max_reported_overwritten": 37124,
+            "max_count": 37636
+          },
+          {
+            "node": "Android",
+            "origin": "da1526f9115a034db716970513d5943e",
+            "session_tag": "1e637526f0bfe60cd428eae8c32f4f916f0627fbe760cf87bcdeffb1f53cadb9",
+            "observed": 10270,
+            "prefix_unobserved": 7770,
+            "interior_missing": 19548,
+            "max_reported_overwritten": 37076,
+            "max_count": 37588
+          }
+        ],
+        "errors": [],
+        "parser_errors": {
+          "NL": [],
+          "Android": []
+        },
+        "inputs_sha256": {
+          "preflight.json": "e20118ac12cb71f6b86dab1958dfce76b36fd1d42ad3da4e37cce7626287e222",
+          "requests.jsonl": "8b6ffb636ba47f50855718b4ff4a800796bd2ccde585d3bf0575b155935f1604",
+          "result.json": "45a3fa317fd3f8db72e42d27eee606f4f48a2dcaae2d05c179102de70050d575",
+          "capture/NL-raw.jsonl": "14c9474d3de9a4a4a6cec475ae90bb93ed4453ec1df340490a2a5b5266180f57",
+          "capture/Android-raw.jsonl": "f9ddf99a0b7aba330858fc13e821f0699f2a3551b5cb986cb683f48bdae4dbff",
+          "correlation-private.json": "f0376c9c2e4b5f8a09fd4b3659d2b005a6709337c782e69b40920b5c30fcd465"
+        },
+        "interval_analysis": {
+          "completeness": [
+            {
+              "node": "NL",
+              "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+              "session_tag": "1e637526f0bfe60cd428eae8c32f4f916f0627fbe760cf87bcdeffb1f53cadb9",
+              "observed": 23830,
+              "prefix_unobserved": 7501,
+              "interior_missing": 6305,
+              "max_reported_overwritten": 37124,
+              "max_count": 37636
+            },
+            {
+              "node": "Android",
+              "origin": "da1526f9115a034db716970513d5943e",
+              "session_tag": "1e637526f0bfe60cd428eae8c32f4f916f0627fbe760cf87bcdeffb1f53cadb9",
+              "observed": 10270,
+              "prefix_unobserved": 7770,
+              "interior_missing": 19548,
+              "max_reported_overwritten": 37076,
+              "max_count": 37588
+            }
+          ],
+          "errors": [],
+          "nodes": {
+            "NL": {
+              "sample_interval_seconds": 109.998756249,
+              "delta": {
+                "ReceiveReadyWaitNS": 41774741,
+                "ReleasedBytes": 12739750,
+                "ReleasedBlocks": 1489,
+                "FullNS": 76665148614,
+                "ReadyFullNS": 66956309811,
+                "WindowOnlyBlockedNS": 66876948593,
+                "HeadSACKedBlockedNS": 3463861144,
+                "HeadUnconfirmedLaterSACKedBlockedNS": 31514705362,
+                "NewDATA": {
+                  "Count": [
+                    522,
+                    21,
+                    32,
+                    47,
+                    115,
+                    753,
+                    0
+                  ],
+                  "Bytes": [
+                    55639,
+                    19043,
+                    50406,
+                    153116,
+                    662217,
+                    11799446,
+                    0
+                  ]
+                },
+                "RetryDATA": {
+                  "Count": [
+                    35,
+                    0,
+                    8,
+                    2,
+                    15,
+                    82,
+                    0
+                  ],
+                  "Bytes": [
+                    4914,
+                    0,
+                    12612,
+                    7697,
+                    86571,
+                    1271736,
+                    0
+                  ]
+                },
+                "CarrierAcceptedDATA": {
+                  "Count": [
+                    557,
+                    21,
+                    40,
+                    49,
+                    130,
+                    835,
+                    0
+                  ],
+                  "Bytes": [
+                    60553,
+                    19043,
+                    63018,
+                    160813,
+                    748788,
+                    13071182,
+                    0
+                  ]
+                }
+              },
+              "intervals": {
+                "carrier_completion_to_decode_ns": {
+                  "count": 1013,
+                  "p50_ms": 0.018368,
+                  "p90_ms": 0.053841,
+                  "max_ms": 0.61668
+                },
+                "head_ready_to_consume_ns": {
+                  "count": 1011,
+                  "p50_ms": 0.013009,
+                  "p90_ms": 0.035634,
+                  "max_ms": 1.405872
+                },
+                "submission_to_first_ack_ns": {
+                  "count": 1214,
+                  "p50_ms": 272.740008,
+                  "p90_ms": 570.536869,
+                  "max_ms": 1785.295478
+                },
+                "submission_to_release_ns": {
+                  "count": 1151,
+                  "p50_ms": 297.747505,
+                  "p90_ms": 1177.720075,
+                  "max_ms": 1785.301747
+                },
+                "ack_created_to_local_write_ns": {
+                  "count": 1611,
+                  "p50_ms": 0.350254,
+                  "p90_ms": 9.481484,
+                  "max_ms": 42.622931
+                },
+                "ack_queued_to_local_write_ns": {
+                  "count": 1615,
+                  "p50_ms": 0.258715,
+                  "p90_ms": 9.712085,
+                  "max_ms": 42.619466
+                },
+                "ack_decode_to_engine_input_ns": {
+                  "count": 1871,
+                  "p50_ms": 0.000791,
+                  "p90_ms": 0.001482,
+                  "max_ms": 0.100072
+                }
+              },
+              "high_volume_streams": [
+                {
+                  "ID": 67,
+                  "Credit": 65536,
+                  "CreditUpdates": 227,
+                  "CreditBytes": 2106209,
+                  "ZeroCreditReadyNS": 17363891129,
+                  "QueueReadyNS": 22918419341,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      119,
+                      0,
+                      9,
+                      5,
+                      0,
+                      128,
+                      0
+                    ],
+                    "Bytes": [
+                      5236,
+                      0,
+                      13413,
+                      14093,
+                      0,
+                      2073467,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 75,
+                  "Credit": 65536,
+                  "CreditUpdates": 234,
+                  "CreditBytes": 2106168,
+                  "ZeroCreditReadyNS": 14262996196,
+                  "QueueReadyNS": 17071090708,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      100,
+                      0,
+                      0,
+                      19,
+                      19,
+                      128,
+                      0
+                    ],
+                    "Bytes": [
+                      4400,
+                      0,
+                      0,
+                      60754,
+                      112216,
+                      1928798,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 61,
+                  "Credit": 65536,
+                  "CreditUpdates": 217,
+                  "CreditBytes": 2106164,
+                  "ZeroCreditReadyNS": 24516992781,
+                  "QueueReadyNS": 7781288109,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      99,
+                      1,
+                      13,
+                      20,
+                      37,
+                      117,
+                      0
+                    ],
+                    "Bytes": [
+                      6468,
+                      539,
+                      20293,
+                      71451,
+                      206840,
+                      1800573,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 65,
+                  "Credit": 65536,
+                  "CreditUpdates": 225,
+                  "CreditBytes": 2106149,
+                  "ZeroCreditReadyNS": 19142186759,
+                  "QueueReadyNS": 22790403071,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      111,
+                      1,
+                      8,
+                      2,
+                      19,
+                      127,
+                      0
+                    ],
+                    "Bytes": [
+                      4732,
+                      545,
+                      11656,
+                      5621,
+                      96668,
+                      1986927,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 77,
+                  "Credit": 65536,
+                  "CreditUpdates": 215,
+                  "CreditBytes": 2106139,
+                  "ZeroCreditReadyNS": 12438884806,
+                  "QueueReadyNS": 18502574589,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      114,
+                      0,
+                      3,
+                      4,
+                      13,
+                      128,
+                      0
+                    ],
+                    "Bytes": [
+                      5016,
+                      0,
+                      4173,
+                      11651,
+                      89153,
+                      1996146,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 71,
+                  "Credit": 65536,
+                  "CreditUpdates": 204,
+                  "CreditBytes": 2106121,
+                  "ZeroCreditReadyNS": 9113543024,
+                  "QueueReadyNS": 1401640999,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      112,
+                      6,
+                      0,
+                      2,
+                      25,
+                      123,
+                      0
+                    ],
+                    "Bytes": [
+                      4928,
+                      5876,
+                      0,
+                      6497,
+                      140491,
+                      1948329,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 31,
+                  "Credit": 65536,
+                  "CreditUpdates": 31,
+                  "CreditBytes": 271891,
+                  "ZeroCreditReadyNS": 2897717138,
+                  "QueueReadyNS": 813546750,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      15,
+                      1,
+                      4,
+                      0,
+                      2,
+                      16,
+                      0
+                    ],
+                    "Bytes": [
+                      621,
+                      982,
+                      7732,
+                      0,
+                      13063,
+                      249493,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 27,
+                  "Credit": 65536,
+                  "CreditUpdates": 22,
+                  "CreditBytes": 77377,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 354758283,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      3,
+                      1,
+                      12,
+                      1,
+                      2,
+                      3,
+                      0
+                    ],
+                    "Bytes": [
+                      119,
+                      1014,
+                      17147,
+                      2800,
+                      12041,
+                      44256,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 53,
+                  "Credit": 65536,
+                  "CreditUpdates": 11,
+                  "CreditBytes": 71132,
+                  "ZeroCreditReadyNS": 59871839,
+                  "QueueReadyNS": 189717405,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      0,
+                      0,
+                      1,
+                      4,
+                      5,
+                      3,
+                      0
+                    ],
+                    "Bytes": [
+                      0,
+                      0,
+                      1882,
+                      11923,
+                      27123,
+                      30204,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 25,
+                  "Credit": 65463,
+                  "CreditUpdates": 6,
+                  "CreditBytes": 15036,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 97929,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      2,
+                      2,
+                      1,
+                      0,
+                      2,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      104,
+                      1565,
+                      1400,
+                      0,
+                      12040,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 33,
+                  "Credit": 52473,
+                  "CreditUpdates": 0,
+                  "CreditBytes": 0,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 133653,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      0,
+                      0,
+                      1,
+                      0,
+                      2,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      0,
+                      0,
+                      1400,
+                      0,
+                      11663,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 37,
+                  "Credit": 59473,
+                  "CreditUpdates": 1,
+                  "CreditBytes": 7000,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 47463,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      2,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      0,
+                      0,
+                      0,
+                      0,
+                      13063,
+                      0,
+                      0
+                    ]
+                  }
+                }
+              ],
+              "repeat_examples": [
+                {
+                  "sequence": 299,
+                  "wire": "3ec7a7d1c8e9bea122710a2bf399df44",
+                  "retries": 1,
+                  "results": [
+                    "new",
+                    "duplicate"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 18698
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 44678
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 16386
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1256564375
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1256564375
+                    }
+                  ]
+                },
+                {
+                  "sequence": 310,
+                  "wire": "3ec7a7d1c8e9bea122710a2bf399df44",
+                  "retries": 1,
+                  "results": [
+                    "new",
+                    "duplicate"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 19208
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 15023
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 18449
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1100284166
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1499784062
+                    }
+                  ]
+                },
+                {
+                  "sequence": 1487,
+                  "wire": "3ec7a7d1c8e9bea122710a2bf399df44",
+                  "retries": 1,
+                  "results": [
+                    "new"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 13360
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 31198
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 445330313
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 445330313
+                    }
+                  ]
+                },
+                {
+                  "sequence": 331,
+                  "wire": "7aa7b7e86475907cd0024c046c254c1e",
+                  "retries": 1,
+                  "results": [
+                    "new"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1443678973
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1443686204
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 72552
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 42604
+                    }
+                  ]
+                },
+                {
+                  "sequence": 332,
+                  "wire": "7aa7b7e86475907cd0024c046c254c1e",
+                  "retries": 1,
+                  "results": [
+                    "new"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1400077573
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1415866614
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 26094
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 57396
+                    }
+                  ]
+                },
+                {
+                  "sequence": 333,
+                  "wire": "7aa7b7e86475907cd0024c046c254c1e",
+                  "retries": 1,
+                  "results": [
+                    "new"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1600143170
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1600143170
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 88854
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 41302
+                    }
+                  ]
+                },
+                {
+                  "sequence": 334,
+                  "wire": "7aa7b7e86475907cd0024c046c254c1e",
+                  "retries": 1,
+                  "results": [
+                    "new"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1560484916
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1560490805
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 82031
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 429583
+                    }
+                  ]
+                },
+                {
+                  "sequence": 335,
+                  "wire": "7aa7b7e86475907cd0024c046c254c1e",
+                  "retries": 1,
+                  "results": [
+                    "new"
+                  ],
+                  "intervals": [
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "submission_to_first_ack_ns",
+                      "recovery": true,
+                      "ns": 1680000414
+                    },
+                    {
+                      "node": "NL",
+                      "origin": "63e269352e6d30d33db6556a5cc7a6c8",
+                      "kind": "submission_to_release_ns",
+                      "recovery": true,
+                      "ns": 1680000414
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "carrier_completion_to_decode_ns",
+                      "ns": 82500
+                    },
+                    {
+                      "node": "Android",
+                      "origin": "da1526f9115a034db716970513d5943e",
+                      "kind": "head_ready_to_consume_ns",
+                      "recovery": true,
+                      "ns": 65260
+                    }
+                  ]
+                }
+              ],
+              "observed_event_kinds": {
+                "data_decode": 1013,
+                "receive": 1016,
+                "head_ready": 1008,
+                "consume": 1011,
+                "submission": 1152,
+                "data_carrier_queued": 1245,
+                "data_carrier_written": 2541,
+                "first_ack": 1214,
+                "release": 1151,
+                "retry_timeout": 59,
+                "retry_fast": 31,
+                "ack_input": 1879,
+                "ack_decode": 1871,
+                "ack_created": 2147,
+                "ack_carrier_queued": 1615,
+                "ack_enqueue_return": 1617,
+                "ack_carrier_written": 3260
+              }
+            },
+            "Android": {
+              "sample_interval_seconds": 105.600420376,
+              "delta": {
+                "ReceiveReadyWaitNS": 421561801,
+                "ReleasedBytes": 77870,
+                "ReleasedBlocks": 1254,
+                "FullNS": 22364695000,
+                "ReadyFullNS": 13116747179,
+                "WindowOnlyBlockedNS": 13084403063,
+                "HeadSACKedBlockedNS": 1076173799,
+                "HeadUnconfirmedLaterSACKedBlockedNS": 3367237966,
+                "NewDATA": {
+                  "Count": [
+                    1241,
+                    12,
+                    2,
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  "Bytes": [
+                    68564,
+                    6981,
+                    2369,
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                "RetryDATA": {
+                  "Count": [
+                    7,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  "Bytes": [
+                    388,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                "CarrierAcceptedDATA": {
+                  "Count": [
+                    1248,
+                    12,
+                    2,
+                    0,
+                    0,
+                    0,
+                    0
+                  ],
+                  "Bytes": [
+                    68952,
+                    6981,
+                    2369,
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                }
+              },
+              "intervals": {
+                "submission_to_first_ack_ns": {
+                  "count": 452,
+                  "p50_ms": 283.491823,
+                  "p90_ms": 543.330521,
+                  "max_ms": 1641.139114
+                },
+                "submission_to_release_ns": {
+                  "count": 443,
+                  "p50_ms": 292.806198,
+                  "p90_ms": 582.915469,
+                  "max_ms": 1641.139114
+                },
+                "carrier_completion_to_decode_ns": {
+                  "count": 495,
+                  "p50_ms": 0.082292,
+                  "p90_ms": 0.193229,
+                  "max_ms": 8.508802
+                },
+                "head_ready_to_consume_ns": {
+                  "count": 490,
+                  "p50_ms": 0.05651,
+                  "p90_ms": 0.920312,
+                  "max_ms": 4.441146
+                },
+                "ack_queued_to_local_write_ns": {
+                  "count": 830,
+                  "p50_ms": 1.375625,
+                  "p90_ms": 6.082291,
+                  "max_ms": 21.893073
+                },
+                "ack_created_to_local_write_ns": {
+                  "count": 821,
+                  "p50_ms": 1.750105,
+                  "p90_ms": 6.266875,
+                  "max_ms": 21.909635
+                },
+                "ack_decode_to_engine_input_ns": {
+                  "count": 645,
+                  "p50_ms": 0.000989,
+                  "p90_ms": 0.004323,
+                  "max_ms": 0.184688
+                }
+              },
+              "high_volume_streams": [
+                {
+                  "ID": 69,
+                  "Credit": 65287,
+                  "CreditUpdates": 7,
+                  "CreditBytes": 4595,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 224895,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      4,
+                      4,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      763,
+                      2817,
+                      1264,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 25,
+                  "Credit": 65536,
+                  "CreditUpdates": 7,
+                  "CreditBytes": 3570,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 147396,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      5,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      593,
+                      973,
+                      2004,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 27,
+                  "Credit": 65536,
+                  "CreditUpdates": 6,
+                  "CreditBytes": 3466,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 177918,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      5,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      574,
+                      856,
+                      2036,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 31,
+                  "Credit": 65536,
+                  "CreditUpdates": 8,
+                  "CreditBytes": 3384,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 193369060,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      7,
+                      1,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      720,
+                      692,
+                      1972,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 5,
+                  "Credit": 65536,
+                  "CreditUpdates": 2,
+                  "CreditBytes": 2436,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 22865,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      1,
+                      0,
+                      0,
+                      1,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      90,
+                      0,
+                      0,
+                      2346,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 13,
+                  "Credit": 65536,
+                  "CreditUpdates": 2,
+                  "CreditBytes": 2404,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 37291,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      1,
+                      0,
+                      0,
+                      1,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      90,
+                      0,
+                      0,
+                      2314,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 9,
+                  "Credit": 65536,
+                  "CreditUpdates": 2,
+                  "CreditBytes": 2340,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 43750,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      1,
+                      0,
+                      0,
+                      1,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      90,
+                      0,
+                      0,
+                      2250,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 15,
+                  "Credit": 65536,
+                  "CreditUpdates": 3,
+                  "CreditBytes": 2329,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 36510,
+                  "Closed": false,
+                  "HandedDATA": {
+                    "Count": [
+                      2,
+                      0,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      574,
+                      0,
+                      1755,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 33,
+                  "Credit": 65536,
+                  "CreditUpdates": 1,
+                  "CreditBytes": 2036,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 11719,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      0,
+                      0,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      0,
+                      0,
+                      2036,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 37,
+                  "Credit": 65536,
+                  "CreditUpdates": 1,
+                  "CreditBytes": 2036,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 8229,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      0,
+                      0,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      0,
+                      0,
+                      2036,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 39,
+                  "Credit": 65536,
+                  "CreditUpdates": 1,
+                  "CreditBytes": 1972,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 3333,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      0,
+                      0,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      0,
+                      0,
+                      1972,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                },
+                {
+                  "ID": 35,
+                  "Credit": 65536,
+                  "CreditUpdates": 1,
+                  "CreditBytes": 1940,
+                  "ZeroCreditReadyNS": 0,
+                  "QueueReadyNS": 3177,
+                  "Closed": true,
+                  "HandedDATA": {
+                    "Count": [
+                      0,
+                      0,
+                      1,
+                      0,
+                      0,
+                      0,
+                      0
+                    ],
+                    "Bytes": [
+                      0,
+                      0,
+                      1940,
+                      0,
+                      0,
+                      0,
+                      0
+                    ]
+                  }
+                }
+              ],
+              "repeat_examples": [],
+              "observed_event_kinds": {
+                "first_ack": 452,
+                "release": 443,
+                "submission": 420,
+                "data_carrier_queued": 426,
+                "data_carrier_written": 856,
+                "retry_timeout": 3,
+                "retry_fast": 3,
+                "data_decode": 495,
+                "receive": 496,
+                "head_ready": 488,
+                "consume": 490,
+                "ack_decode": 645,
+                "ack_input": 649,
+                "ack_carrier_written": 1683,
+                "ack_carrier_queued": 833,
+                "ack_enqueue_return": 834,
+                "ack_created": 1054
+              }
+            }
+          }
+        }
+      }
+    },
+    "intended_bytes": 31719424,
+    "received_body_bytes": 28486711,
+    "final_control_body_bytes": 215,
+    "baseline_intended_bytes": 25296896,
+    "candidate_intended_bytes": 6422528,
+    "request_timeout_seconds": 150,
+    "independent_origin_hash": false,
+    "setup_ttfb_included": true,
+    "parallel_time_basis": "common phone /proc/uptime interval",
+    "speedup_accepted": false
+  },
+  "RECOVERY_PRESERVED": {
+    "beta88_sources_identical": true,
+    "jvm_checks": 169,
+    "observation_race_pass": 273,
+    "unchanged_protocol_settings": true,
+    "natural_session_reestablishment_observed": true,
+    "intentional_production_fault": false,
+    "new_full_incident_export": false,
+    "overnight_acceptance": false,
+    "probe_purpose_note": "Retained probe helper's purpose label mentions beta88; actual installed code89/hash is independently asserted by the wrapper and recorded below.",
+    "final_production_control": {
+      "utc_start": "2026-10-19T15:30:39.940095+00:00",
+      "purpose": "beta88 in-place update production control only; no bulk or recovery claim",
+      "phone_uid": 2000,
+      "vpn_uid_range": "0-99999",
+      "vpn_interface": "tun1",
+      "vpn_dns_matches_mesh": true,
+      "curl_exit": 0,
+      "http_status": "200",
+      "http_version": "1.1",
+      "tls_verify": "0",
+      "body_bytes": 215,
+      "observed_body_sha256": "86730fe9e0f0fdc42a5c1e86aa85110ae5adfa4a0a6bae8e2960cab61cddde42",
+      "expected_nl_exit_observed": true,
+      "encoding": [
+        "identity"
+      ],
+      "matching_production_pid_socket_samples": 4,
+      "sampler_exit": 0,
+      "times_seconds": {
+        "time_namelookup": 0.214007,
+        "time_connect": 0.214852,
+        "time_appconnect": 0.681489,
+        "time_starttransfer": 0.830138,
+        "time_total": 0.830391
+      },
+      "control_pass": true,
+      "phone_temporary_files_removed": true
+    }
+  },
+  "IDENTITY_PRESERVED": {
+    "identity_preserved": true,
+    "apk_preserved": true,
+    "owner_handoff_unchanged": true,
+    "production_dns_https": "PASS",
+    "latest_ready_ack": 1792423763
+  },
+  "APK_OR_SERVER_ARTIFACT": {
+    "apk_path": "state-client-build/mesh-throughput-trace-20261019/delivery/FamilyConnect-0.1.18-beta89-mesh-trace.apk",
+    "signed": {
+      "package": "com.familyconnect.app.friends",
+      "version_code": 89,
+      "version": "0.1.18-beta89-mesh-trace",
+      "sha256": "b6ab744740726676dca8f51a73460db82b435c719828af14e6564c764ed11856",
+      "alignment_16k": true,
+      "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+    },
+    "native_sha256": "3ca3119ac12c9a3a61b5ebb1ee0244650db39dc36743e355d35bf523b53ef992",
+    "installed": {
+      "utc": "2026-10-19T14:40:47.789396+00:00",
+      "uid": 10283,
+      "code": 89,
+      "apk_sha256": "b6ab744740726676dca8f51a73460db82b435c719828af14e6564c764ed11856",
+      "native_sha256": "3ca3119ac12c9a3a61b5ebb1ee0244650db39dc36743e355d35bf523b53ef992",
+      "vpn": false,
+      "vpn_service": false
+    },
+    "public_release": false,
+    "mass_distribution": false,
+    "public_updater_invitation_versions_changed": false,
+    "current_gateway_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+    "observation_disable": "ordinary same-signer/package code>=90 update, no downgrade/data clear"
+  },
+  "SPB_IPV6_SEPARATE_STATUS": "NOT_RUN",
+  "AMSTERDAM_IPV6": "DEFERRED_BY_OWNER",
+  "FINAL_RESULT": "PARTIAL_LOCALIZED_CANDIDATE_REJECTED_SAFE_STATE_RESTORED",
+  "private_receipts": {
+    "build/receipt.json": "6192b13b4de9612654d4367c7ef240acc5f30db2183e262f00d1b093d2f85b60",
+    "delivery/signing-receipt.json": "a173c15b4c58b7ff1cebf9fb4702573393077fb5e55694257bfb3f331b62bd2b",
+    "upgrade-receipt.json": "c83034bd60643c785b296af0caa80631093fc717c6b3813a69823dc7c3dd825c",
+    "receipts/final-trace-race.json": "690770d8d6f863435a693e19bba559165caca1eceb1b43d34905aa8834a16f90",
+    "receipts/parser-final.log": "c8766e04118e55fd3e82b50edfaddd20cc8099c0d6062a210c08dbb3dc12ac8d",
+    "candidate/receipts/holes-before-cache-fixed.json": "1adf1ef015ee9f3101483e5e0f319a67cb888dd22ca69c63e8e819e4f246cef3",
+    "candidate/receipts/holes-after.json": "37d077c3ad1a811a1f3ccddf9b966a0db1d3cc86f92812bf1c66dac2ae55c991",
+    "candidate/receipts/integration-after.json": "09b617ff3bab157f76b5988a65a6c86ba8945d2ed7c38f713daf2779564eb97f",
+    "candidate/receipts/gateway-build.json": "e5dfd5c037a07c528d5c71ac1225b5b45171d5fc8947ba2976aad5149f6258b3",
+    "candidate/private/deploy-RU.stderr": "d23d2f960d403c1fdb25e20934018eab494986861e56ebf9f61acde12b5f1a50",
+    "candidate/private/deploy-resumed-NL.jsonl": "13c0bff891b38c54c109937ef3a9cd9119ee5f9eb9258e0336ad4c6309058ee7",
+    "candidate/private/rollback-NL.jsonl": "e90318218611c7605fb9938b574b2c759d01b131601dd525facee463603187e6",
+    "private/rollback-NL.jsonl": "b163246e616a48b0c8179aa53482fe934eceee0f387eabdcff903fd57745877a",
+    "receipts/accepted-return-readiness.json": "95b7f3559a61ce05b2a3facf26204cd1bdc1b7ea5b4d04c821129ab234152199",
+    "receipts/final-identity-control.json": "2b0f6096acc733f1d4eee2ca9d4830c5824140aba7acf977d26a8d65307b6d0f"
+  }
+}

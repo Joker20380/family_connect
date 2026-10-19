@@ -1,8 +1,16 @@
 # Documentation
 
+[MESH two-sided throughput trace / beta89,19.10](releases/2026-10-19-mesh-throughput-trace.md):
+current result: receiver→JNI→export correlation verified physically; one minimal
+SACK-hole candidate tested and rejected, A1/B/A2 retained. Original NL gateway
+restored and MESH/identity checks pass. Owner keeps observation-only beta89, not a
+speed release; beta88 delivery/public versions unchanged. Amsterdam IPv6 deferred
+by owner, SPb not run. Local source checkpoint8da6fd5, no push.
+
 [Beta88 targeted throughput / IPv6,19.10](releases/2026-10-19-beta88-throughput-ipv6-1.md):
 physical DATA/window/Mux comparison, rejected read-alignment candidate, accepted
-gateway restored; concrete unsent HOSTKEY request. Beta88 remains unchanged.
+gateway restored at that checkpoint; historical unsent HOSTKEY request superseded
+by the owner's deferral. Beta88 artifact remains unchanged.
 
 [Beta87→beta88 recovery candidate,19.10](releases/2026-10-19-beta87-product-fix.md):
 current product-fix priority; exact night failure reproduced. Signed same-key/native88,
