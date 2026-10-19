@@ -1,0 +1,426 @@
+--- a/clients/android/app/build.gradle
++++ b/clients/android/app/build.gradle
+@@ -108,7 +108,7 @@
+             }
+         }
+         if (variant.buildType.name == 'researchProvisioning') {
+-            variant.outputs.all { versionCodeOverride = 84; versionNameOverride = '0.1.18-research84-ui60-4-batch1' }
++            variant.outputs.all { versionCodeOverride = 85; versionNameOverride = '0.1.18-beta85-existing-users' }
+         }
+     }
+ }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/ControlRnsAndroid.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/ControlRnsAndroid.java
+@@ -13,19 +13,21 @@
+ /** One bounded RNS exchange session; Java retains device secrets and owns VPN mutations. */
+ final class ControlRnsAndroid implements ControlCarrier.Wire,AutoCloseable {
+     private final Context context;private final AtomicBoolean cancelled=new AtomicBoolean();private PyObject channel;
+-    ControlRnsAndroid(Context context){this.context=context.getApplicationContext();}
++    private final long deadline;
++    ControlRnsAndroid(Context context){this(context,Long.MAX_VALUE);}
++    ControlRnsAndroid(Context context,long deadline){this.context=context.getApplicationContext();this.deadline=deadline;}
+     public static final class Callbacks {
+-        private final Context context;private final AtomicBoolean stop;
+-        Callbacks(Context context,AtomicBoolean stop){this.context=context;this.stop=stop;}
+-        public boolean cancelled(){return stop.get();}
++        private final Context context;private final AtomicBoolean stop;private final long deadline;
++        Callbacks(Context context,AtomicBoolean stop,long deadline){this.context=context;this.stop=stop;this.deadline=deadline;}
++        public boolean cancelled(){return stop.get()||android.os.SystemClock.elapsedRealtime()>=deadline;}
+         public boolean bindSocket(int fd){
+-            if(stop.get())return false;
++            if(cancelled())return false;
+             ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
+             for(Network network:manager.getAllNetworks()){
+                 NetworkCapabilities caps=manager.getNetworkCapabilities(network);
+                 if(caps==null||!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)||!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET))continue;
+                 try(ParcelFileDescriptor socket=ParcelFileDescriptor.fromFd(fd)){
+-                    network.bindSocket(socket.getFileDescriptor());return !stop.get();
++                    network.bindSocket(socket.getFileDescriptor());return !cancelled();
+                 }catch(IOException unavailable){}
+             }
+             return false; // Never fall back into the VPN whose config is being recovered.
+@@ -42,14 +44,14 @@
+         if(cancelled())throw new IOException("RNS cancelled");
+         channel=Python.getInstance().getModule("fc_rns_transport").callAttr("Channel",
+             new File(context.getNoBackupFilesDir(),"rns-control").getAbsolutePath(),ControlJson.text(bootstrap.get("host")),
+-            ControlJson.integer(bootstrap.get("port"),1),ControlJson.text(bootstrap.get("provider_public")),new Callbacks(context,cancelled));
++            ControlJson.integer(bootstrap.get("port"),1),ControlJson.text(bootstrap.get("provider_public")),new Callbacks(context,cancelled,deadline));
+     }
+-    public boolean cancelled(){return cancelled.get();}
++    public boolean cancelled(){return cancelled.get()||android.os.SystemClock.elapsedRealtime()>=deadline;}
+     void cancel(){cancelled.set(true);}
+     public byte[] request(String path,byte[] raw)throws Exception {
+         if(channel==null||cancelled())throw new IOException("RNS unavailable");
+         String encoded=channel.callAttr("request",path,Base64.getEncoder().encodeToString(raw)).toString();
+-        if(encoded.length()>87384)throw new IOException("RNS reply too large");return ControlProtocol.base64(encoded,true);
++        if(encoded.length()>(ReadinessBootstrapRoute.allowed(path)?120000:87384))throw new IOException("RNS reply too large");return ControlProtocol.base64(encoded,true);
+     }
+     public void close(){cancel();if(channel!=null){try{channel.callAttr("close");}finally{channel.close();channel=null;}}}
+ }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java
+@@ -182,6 +182,7 @@
+     }
+     synchronized JsonObject snapshot(){
+         JsonObject result=new JsonObject();result.addProperty("schema",1);result.addProperty("device_support_id",supportId);
++        result.add("transport_metadata",TransportPresentation.diagnostics());
+         result.addProperty("connection_id",connectionId);result.addProperty("incident_id",incidentId);result.addProperty("app_version",version);
+         result.addProperty("version_code",build);result.addProperty("os_api",os);result.addProperty("network_class",network);
+         result.addProperty("state",state);result.addProperty("vpn_capture_open",vpn);result.addProperty("restricted_readiness",readiness);result.addProperty("bootstrap_directory",bootstrap);
+--- a/clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java
+@@ -18,13 +18,14 @@
+     private long deadline=Long.MAX_VALUE;
+     private volatile HttpsURLConnection pending;
+     private volatile boolean cancelled;
++    private volatile ControlRnsAndroid readinessRelay;
+     static final class Denied extends FriendsReadinessProtocol.AuthorizationFailure {}
+     static final class Conflict extends Exception {}
+     FriendsAccessAndroid(Context context){this(context,false);}
+     FriendsAccessAndroid(Context context,boolean direct){this.context=context;this.direct=direct;}
+     FriendsAccessAndroid(Context context,long deadline){this(context,true);this.deadline=deadline;}
+     FriendsAccessAndroid(Context context,ChatCarrier carrier){this(context,true);this.chatCarrier=carrier;this.deadline=android.os.SystemClock.elapsedRealtime()+60000;}
+-    void cancel(){cancelled=true;HttpsURLConnection connection=pending;if(connection!=null)connection.disconnect();}
++    void cancel(){cancelled=true;HttpsURLConnection connection=pending;if(connection!=null)connection.disconnect();ControlRnsAndroid relay=readinessRelay;if(relay!=null)relay.cancel();}
+     private int remaining(int maximum)throws IOException{
+         long remaining=deadline-android.os.SystemClock.elapsedRealtime();
+         if(cancelled)throw new IOException("Cancelled");
+@@ -55,7 +56,8 @@
+     private JsonObject directPost(String path,JsonObject body,String requestId)throws Exception{
+         remaining(5000);
+         require(path.matches("/friends/(challenge|activate|restricted-readiness(/(challenge|ack-challenge|ack))?|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/(status|support)|notices/device/(role|publish|list|edit))"));
+-        HttpsURLConnection connection=direct?new ChatNetworkAndroid(context).openHttps("https://185.251.89.19:8443"+path):(HttpsURLConnection)new URL("https://185.251.89.19:8443"+path).openConnection();
++        boolean viaVpn=ReadinessBootstrapRoute.allowed(path)&&"on".equals(ConnectionService.status)&&"ok".equals(ConnectionService.healthStatus);
++        HttpsURLConnection connection=direct&&!viaVpn?new ChatNetworkAndroid(context).openHttps("https://185.251.89.19:8443"+path):(HttpsURLConnection)new URL("https://185.251.89.19:8443"+path).openConnection();
+         pending=connection;
+         try{
+             connection.setConnectTimeout(remaining(5000));connection.setReadTimeout(remaining(15000));connection.setInstanceFollowRedirects(false);connection.setUseCaches(false);connection.setRequestMethod("POST");connection.setDoOutput(true);connection.setRequestProperty("Content-Type","application/json");
+@@ -81,15 +83,32 @@
+     byte[] restrictedReadiness(ControlIdentity identity,OwnerPrewarmReceipt receipt)throws Exception{
+         try(ProvisioningTestGate.Permit permit=ProvisioningTestGate.enter(context)){
+             permit.requireAvailable();
+-            return FriendsReadinessProtocol.fetch(this::post,identity,receipt);
+-        }
++            ReadinessBootstrapRoute route=new ReadinessBootstrapRoute(this::post,this::relayPost);
++            return FriendsReadinessProtocol.fetch(route::post,identity,receipt);
++        }finally{closeReadinessRelay();}
+     }
+     void readinessAck(ControlIdentity identity,JsonObject receipt)throws Exception{
+         try(ProvisioningTestGate.Permit permit=ProvisioningTestGate.enter(context)){
+             permit.requireAvailable();
+-            FriendsReadinessProtocol.acknowledge(this::post,identity,receipt);
+-        }
+-    }
++            ReadinessBootstrapRoute route=new ReadinessBootstrapRoute(this::post,this::relayPost);
++            FriendsReadinessProtocol.acknowledge(route::post,identity,receipt);
++        }finally{closeReadinessRelay();}
++    }
++    private JsonObject relayPost(String path,JsonObject body,String requestId)throws Exception{
++        remaining(1);
++        if(readinessRelay==null){readinessRelay=new ControlRnsAndroid(context,deadline);readinessRelay.open();}
++        JsonObject envelope=parse(readinessRelay.request(path,FriendsReadinessProtocol.wireBytes(body))).getAsJsonObject();
++        fields(envelope,"status body");int status=(int)integer(envelope.get("status"),100);require(status<=599);
++        if(path.equals("/friends/restricted-readiness/challenge"))FriendsReadinessProtocol.challengeStatus(status);
++        if(status==401||status==403)throw new Denied();
++        if(status==409)throw new Conflict();
++        if(status==429||status>=500)throw new FriendsReadinessProtocol.Unavailable();
++        if(status!=200)throw new IOException("Readiness relay rejected request");
++        byte[] raw=ControlProtocol.base64(text(envelope.get("body")),true);
++        require(raw.length>0&&raw.length<=65536);remaining(1);
++        try{return parse(raw).getAsJsonObject();}finally{Arrays.fill(raw,(byte)0);}
++    }
++    private void closeReadinessRelay(){ControlRnsAndroid relay=readinessRelay;readinessRelay=null;if(relay!=null)relay.close();}
+     void activate(String invitation)throws Exception{
+         try(ControlIdentity identity=identity(true)){
+             JsonObject result=post("/friends/activate",proof(identity,"activate",invitation));fields(result,"device status");
+--- a/clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java
+@@ -16,7 +16,7 @@
+ 
+ /** Separate open-test launcher: one-use invitation, no accounts or billing; separate from managed journal. */
+ public final class FriendsActivity extends LocalizedActivity {
+-    private static final String[][] TRANSPORTS={{"auto","Auto"},{"awg","AWG 3.1"},{"tcp","TCP REALITY"},{"telemost","Telemost"}};
++    private static final String[][] TRANSPORTS={{"auto","Auto"},{"awg","AWG 3.1"},{"tcp","TCP REALITY"},{"telemost",TransportPresentation.MESH}};
+     private final Handler handler=new Handler(Looper.getMainLooper());
+     private final ExecutorService worker=Executors.newSingleThreadExecutor();
+     private TextView status,detail,routeCaption,routeStatus,routeDetail,messageRoute;private Button check,activate;private TerminalToggle connect;private Spinner countries,transports;
+@@ -239,7 +239,7 @@
+         if(connect==null)return;String value=ConnectionService.status;boolean on=value.equals("on"),off=value.equals("off");
+         homeBrand.connection(value,motion);
+         String actual=ConnectionService.activeTransport;
+-        text(homeActiveTransport,!on?"—":actual.equals("awg")?"AWG 3.1":actual.equals("tcp")?"TCP":actual.equals("restricted")||actual.equals("telemost")?"Telemost":"—");
++        text(homeActiveTransport,!on?"—":actual.equals("awg")?"AWG 3.1":actual.equals("tcp")?"TCP":actual.equals("restricted")||actual.equals("telemost")?TransportPresentation.MESH:"—");
+         homeActiveTransport.setContentDescription("VPN · "+getString(R.string.terminal_transport)+": "+homeActiveTransport.getText());
+         homeActiveTransport.setTooltipText(homeActiveTransport.getContentDescription());
+         int battery=getSystemService(android.os.BatteryManager.class).getIntProperty(android.os.BatteryManager.BATTERY_PROPERTY_CAPACITY);
+@@ -257,7 +257,7 @@
+         text(connect,getString(off||value.equals("failed")?R.string.connect:on?R.string.disconnect:android.R.string.cancel));connect.setChecked(on);connect.setPending(!off&&!on);boolean enabled=getPreferences(MODE_PRIVATE).getBoolean("activated",false);connect.setEnabled(!busy);text(activate,getString(enabled?R.string.referral_title:R.string.friends_activate));activate.setEnabled(!busy);
+         String shownCountry=off?country:activeCountry;
+         String shownTransport=off?transport:ConnectionService.activeTransport;
+-        String transportLabel=shownTransport.equals("auto")?"Auto":shownTransport.equals("awg")?"AWG 3.1":shownTransport.equals("restricted")||shownTransport.equals("telemost")?"Telemost":"TCP REALITY";
++        String transportLabel=shownTransport.equals("auto")?"Auto":shownTransport.equals("awg")?"AWG 3.1":shownTransport.equals("restricted")||shownTransport.equals("telemost")?TransportPresentation.MESH:"TCP REALITY";
+         String summary=getString(shownCountry.equals("nl")?R.string.gateway_netherlands:R.string.gateway_russia)+"  /  "+transportLabel;
+         text(routeCaption,summary);telemetry.connection(getString(shownCountry.equals("nl")?R.string.gateway_netherlands:R.string.gateway_russia),transportLabel,getString(off?R.string.off:on?(ConnectionService.healthStatus.equals("ok")?R.string.health_ok:ConnectionService.healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.health_checking):R.string.connecting));if(connectionPane==0&&on)telemetry.sample();else telemetry.pause();renderLoad();
+         telemetry.deviceBattery(battery);
+--- /dev/null
++++ b/clients/android/app/src/main/java/com/familyconnect/app/ReadinessBootstrapRoute.java
+@@ -0,0 +1,32 @@
++package com.familyconnect.app;
++
++import com.google.gson.JsonObject;
++import java.io.IOException;
++import javax.net.ssl.SSLException;
++
++final class ReadinessBootstrapRoute {
++    private final FriendsReadinessProtocol.Transport https;
++    private final FriendsReadinessProtocol.Transport relay;
++    private boolean relaySelected;
++
++    ReadinessBootstrapRoute(FriendsReadinessProtocol.Transport https, FriendsReadinessProtocol.Transport relay) {
++        this.https=https;this.relay=relay;
++    }
++
++    static boolean allowed(String path) {
++        return path.equals("/friends/restricted-readiness") || path.equals("/friends/restricted-readiness/challenge")
++            || path.equals("/friends/restricted-readiness/ack-challenge") || path.equals("/friends/restricted-readiness/ack");
++    }
++
++    JsonObject post(String path,JsonObject body,String requestId)throws Exception {
++        if(!allowed(path))throw new IllegalArgumentException("Unsupported readiness path");
++        if(relaySelected)return relay.post(path,body,requestId);
++        try{return https.post(path,body,requestId);}
++        catch(SSLException trustFailure){throw trustFailure;}
++        catch(IOException unavailable){
++            if(!path.endsWith("/challenge")&&!path.endsWith("/ack-challenge"))throw unavailable;
++            relaySelected=true;
++            return relay.post(path,body,requestId);
++        }
++    }
++}
+--- /dev/null
++++ b/clients/android/app/src/main/java/com/familyconnect/app/TransportPresentation.java
+@@ -0,0 +1,31 @@
++package com.familyconnect.app;
++
++import com.google.gson.JsonObject;
++
++final class TransportPresentation {
++    static final String MESH="MESH";
++
++    private TransportPresentation(){}
++
++    static String label(String implementation){
++        if("telemost".equals(implementation)||"restricted".equals(implementation))return MESH;
++        if("auto".equals(implementation))return "Auto";
++        if("awg".equals(implementation))return "AWG 3.1";
++        if("wg".equals(implementation))return "WireGuard";
++        if("tcp".equals(implementation))return "TCP REALITY";
++        return "—";
++    }
++
++    static JsonObject diagnostics(){
++        JsonObject media=new JsonObject();
++        media.addProperty("name",MESH);
++        media.addProperty("implementation","restricted");
++        media.addProperty("selection_id","telemost");
++        media.addProperty("carrier","VP8/RTP");
++        media.addProperty("provider","Telemost");
++        JsonObject catalog=new JsonObject();
++        catalog.addProperty("schema",1);
++        catalog.add("restricted",media);
++        return catalog;
++    }
++}
+--- a/clients/android/app/src/main/python/fc_rns_transport.py
++++ b/clients/android/app/src/main/python/fc_rns_transport.py
+@@ -14,6 +14,8 @@
+ _runtime = None
+ _runtime_lock = threading.Lock()
+ _session_lock = threading.Lock()
++_readiness_paths = frozenset('/friends/restricted-readiness' + suffix for suffix in
++                             ('', '/challenge', '/ack-challenge', '/ack'))
+ 
+ 
+ def initialize(directory):
+@@ -102,7 +104,9 @@
+     def request(self, path, encoded):
+         path = str(path)
+         raw = base64.b64decode(str(encoded), validate=True)
+-        if path not in ('/control/v1/challenge', '/control/v1/fetch', '/control/v1/ack') or len(raw) > 4096:
++        readiness = path in _readiness_paths
++        if (path not in ('/control/v1/challenge', '/control/v1/fetch', '/control/v1/ack') and not readiness
++                or len(raw) > (8192 if readiness else 4096)):
+             raise ValueError('Invalid RNS request')
+         result = []
+         done = threading.Event()
+@@ -113,11 +117,11 @@
+             raise OSError("RNS cancelled")
+         receipt = self.link.request(path, data=raw, response_callback=received,
+                                     failed_callback=lambda _: done.set(), timeout=20,
+-                                    max_response_size=65536)
++                                    max_response_size=90000 if readiness else 65536)
+         if receipt is None or receipt is False:
+             raise OSError('RNS request unavailable')
+         self._wait(lambda: done.is_set() or self.link.status == RNS.Link.CLOSED, time.monotonic()+20)
+-        if not result or type(result[0]) is not bytes or not 0 < len(result[0]) <= 65536:
++        if not result or type(result[0]) is not bytes or not 0 < len(result[0]) <= (90000 if readiness else 65536):
+             raise OSError('Invalid RNS response')
+         if result[0] in (b'{"code":"PROVISIONING_REJECTED"}', b'{"code":"PROVISIONING_UNAVAILABLE"}'):
+             raise OSError('Relay refused request')
+--- a/clients/android/app/src/main/res/values-ru/connection_terminal.xml
++++ b/clients/android/app/src/main/res/values-ru/connection_terminal.xml
+@@ -1,12 +1,12 @@
+ <resources>
+     <string-array name="connection_terminal_compact">
+-        <item>Подготовка</item><item>AWG</item><item>TCP</item><item>Telemost</item><item>Восстановление</item><item>VPN готов</item><item>Настройка чата</item><item>DIRECT · настройки</item><item>Служебный канал</item><item>EXIT · настройки</item><item>Ожидание sync</item><item>Недоступно</item><item>Отказ доступа</item><item>Ошибка</item><item>Отменено</item>
++        <item>Подготовка</item><item>AWG</item><item>TCP</item><item>MESH</item><item>Восстановление</item><item>VPN готов</item><item>Настройка чата</item><item>DIRECT · настройки</item><item>Служебный канал</item><item>EXIT · настройки</item><item>Ожидание sync</item><item>Недоступно</item><item>Отказ доступа</item><item>Ошибка</item><item>Отменено</item>
+         <item>Ожидание повтора</item>
+     </string-array>
+     <string name="connection_terminal_vpn">VPN · подключение</string>
+     <string name="connection_terminal_chat">Сообщения · не полный VPN</string>
+     <string-array name="connection_terminal_stages">
+-        <item>[ .. ] Подготовка подключения</item><item>[ .. ] Открытие WireGuard/AWG</item><item>[ .. ] Открытие TCP</item><item>[ .. ] Открытие канала Telemost</item><item>[ .. ] Восстановление подключения</item><item>[ OK ] VPN-соединение установлено</item><item>[ .. ] Обновление настроек чата</item><item>[ OK ] Настройки получены напрямую</item><item>[ OK ] Настройки через служебный канал</item><item>[ OK ] Настройки через готовый канал</item><item>[ OK ] Mailbox настроен; ожидается sync</item><item>[ -- ] Маршрут недоступен; выбор следующего</item><item>[ !! ] Авторизация отклонена</item><item>[ !! ] Подключение не завершено</item><item>[ -- ] Отменено</item>
++        <item>[ .. ] Подготовка подключения</item><item>[ .. ] Открытие WireGuard/AWG</item><item>[ .. ] Открытие TCP</item><item>[ .. ] Открытие канала MESH</item><item>[ .. ] Восстановление подключения</item><item>[ OK ] VPN-соединение установлено</item><item>[ .. ] Обновление настроек чата</item><item>[ OK ] Настройки получены напрямую</item><item>[ OK ] Настройки через служебный канал</item><item>[ OK ] Настройки через готовый канал</item><item>[ OK ] Mailbox настроен; ожидается sync</item><item>[ -- ] Маршрут недоступен; выбор следующего</item><item>[ !! ] Авторизация отклонена</item><item>[ !! ] Подключение не завершено</item><item>[ -- ] Отменено</item>
+         <item>[ .. ] Ожидание повторной попытки</item>
+     </string-array>
+ </resources>
+--- a/clients/android/app/src/main/res/values/connection_terminal.xml
++++ b/clients/android/app/src/main/res/values/connection_terminal.xml
+@@ -1,12 +1,12 @@
+ <resources>
+     <string-array name="connection_terminal_compact">
+-        <item>Preparing</item><item>AWG</item><item>TCP</item><item>Telemost</item><item>Restoring</item><item>VPN ready</item><item>Chat config</item><item>Direct config</item><item>Service config</item><item>EXIT config</item><item>Sync pending</item><item>Unavailable</item><item>Auth rejected</item><item>Failed</item><item>Cancelled</item>
++        <item>Preparing</item><item>AWG</item><item>TCP</item><item>MESH</item><item>Restoring</item><item>VPN ready</item><item>Chat config</item><item>Direct config</item><item>Service config</item><item>EXIT config</item><item>Sync pending</item><item>Unavailable</item><item>Auth rejected</item><item>Failed</item><item>Cancelled</item>
+         <item>Waiting to retry</item>
+     </string-array>
+     <string name="connection_terminal_vpn">VPN · connection</string>
+     <string name="connection_terminal_chat">Messages · not a full VPN</string>
+     <string-array name="connection_terminal_stages">
+-        <item>[ .. ] Preparing connection</item><item>[ .. ] Opening WireGuard/AWG</item><item>[ .. ] Opening TCP</item><item>[ .. ] Opening Telemost carrier</item><item>[ .. ] Restoring connection</item><item>[ OK ] VPN connection established</item><item>[ .. ] Updating chat configuration</item><item>[ OK ] Configuration received directly</item><item>[ OK ] Configuration via service carrier</item><item>[ OK ] Configuration via existing carrier</item><item>[ OK ] Mailbox configured; sync pending</item><item>[ -- ] Route unavailable; selecting next</item><item>[ !! ] Authorization rejected</item><item>[ !! ] Connection not completed</item><item>[ -- ] Cancelled</item>
++        <item>[ .. ] Preparing connection</item><item>[ .. ] Opening WireGuard/AWG</item><item>[ .. ] Opening TCP</item><item>[ .. ] Opening MESH carrier</item><item>[ .. ] Restoring connection</item><item>[ OK ] VPN connection established</item><item>[ .. ] Updating chat configuration</item><item>[ OK ] Configuration received directly</item><item>[ OK ] Configuration via service carrier</item><item>[ OK ] Configuration via existing carrier</item><item>[ OK ] Mailbox configured; sync pending</item><item>[ -- ] Route unavailable; selecting next</item><item>[ !! ] Authorization rejected</item><item>[ !! ] Connection not completed</item><item>[ -- ] Cancelled</item>
+         <item>[ .. ] Waiting before next recovery attempt</item>
+     </string-array>
+ </resources>
+--- a/clients/android/app/src/test/java/com/familyconnect/app/DiagnosticRingTest.java
++++ b/clients/android/app/src/test/java/com/familyconnect/app/DiagnosticRingTest.java
+@@ -5,6 +5,15 @@
+ import static org.junit.Assert.*;
+ 
+ public class DiagnosticRingTest {
++    @Test public void additiveMeshMetadataPreservesLegacyEventsAndExportSchema(){
++        DiagnosticRing ring=ring();ring.readiness(true,1);
++        JsonObject snapshot=ring.snapshot();
++        assertEquals(1,snapshot.get("schema").getAsInt());
++        assertEquals("MESH",snapshot.getAsJsonObject("transport_metadata").getAsJsonObject("restricted").get("name").getAsString());
++        assertEquals("restricted",snapshot.getAsJsonArray("events").get(0).getAsJsonObject().get("transport_class").getAsString());
++        assertEquals("READY",snapshot.getAsJsonArray("events").get(0).getAsJsonObject().get("reason_code").getAsString());
++        assertTrue(snapshot.has("transport_outcomes"));assertTrue(snapshot.has("device_support_id"));
++    }
+     private DiagnosticRing ring(){return new DiagnosticRing("random-support-id","0.1.18-beta59",59,31);}
+     private ConnectivityOrchestrator.Event event(String name,ConnectivityOrchestrator.State state,ConnectivityOrchestrator.Failure failure){return new ConnectivityOrchestrator.Event(name,"tcp",failure,state,123);}
+     @Test public void capturesBothFailureTransitionsAndCorrelates(){
+--- /dev/null
++++ b/clients/android/app/src/test/java/com/familyconnect/app/ReadinessBootstrapRouteTest.java
+@@ -0,0 +1,56 @@
++package com.familyconnect.app;
++
++import com.google.gson.JsonObject;
++import java.io.IOException;
++import javax.net.ssl.SSLException;
++import org.junit.Test;
++import static org.junit.Assert.*;
++
++public class ReadinessBootstrapRouteTest {
++    private static final String ROOT="/friends/restricted-readiness";
++
++    @Test public void firstChallengeSelectsRelayForWholeProofExchange()throws Exception {
++        int[] calls={0,0};JsonObject body=new JsonObject();
++        ReadinessBootstrapRoute route=new ReadinessBootstrapRoute((path,request,id)->{
++            calls[0]++;throw new IOException("synthetic unavailable");
++        },(path,request,id)->{calls[1]++;assertSame(body,request);return request;});
++        assertSame(body,route.post(ROOT+"/challenge",body,"first"));
++        assertSame(body,route.post(ROOT,body,"proof"));
++        assertArrayEquals(new int[]{1,2},calls);
++    }
++
++    @Test public void successfulHttpsDoesNotUseRelay()throws Exception {
++        ReadinessBootstrapRoute route=new ReadinessBootstrapRoute((path,body,id)->body,
++            (path,body,id)->{fail("unexpected relay");return null;});
++        JsonObject body=new JsonObject();
++        assertSame(body,route.post(ROOT+"/challenge",body,"challenge"));
++        assertSame(body,route.post(ROOT,body,"fetch"));
++    }
++
++    @Test public void ambiguousProofTimeoutIsNotReplayedOnAnotherPath()throws Exception {
++        ReadinessBootstrapRoute route=new ReadinessBootstrapRoute((path,body,id)->{
++            if(path.equals(ROOT))throw new IOException("response lost");return body;
++        },(path,body,id)->{fail("proof must not be replayed");return null;});
++        route.post(ROOT+"/challenge",new JsonObject(),"challenge");
++        assertThrows(IOException.class,()->route.post(ROOT,new JsonObject(),"fetch"));
++    }
++
++    @Test public void trustAndAuthorizationFailuresNeverFallBack()throws Exception {
++        for(Exception failure:new Exception[]{new SSLException("synthetic"),
++                new FriendsReadinessProtocol.AuthorizationFailure(),
++                new FriendsReadinessProtocol.ChallengeFailure(FriendsReadinessProtocol.ChallengeCode.CHALLENGE_UNAUTHORIZED)}) {
++            ReadinessBootstrapRoute route=new ReadinessBootstrapRoute((path,body,id)->{throw failure;},
++                (path,body,id)->{fail("security denial must be final");return null;});
++            assertSame(failure,assertThrows(Exception.class,()->route.post(ROOT+"/challenge",new JsonObject(),"challenge")));
++        }
++    }
++
++    @Test public void ackChallengeCanSelectRelayButEnrollmentCannot()throws Exception {
++        ReadinessBootstrapRoute route=new ReadinessBootstrapRoute((path,body,id)->{throw new IOException();},
++            (path,body,id)->body);
++        JsonObject body=new JsonObject();
++        assertSame(body,route.post(ROOT+"/ack-challenge",body,"challenge"));
++        assertSame(body,route.post(ROOT+"/ack",body,"ack"));
++        assertThrows(IllegalArgumentException.class,()->route.post("/friends/activate",body,"forbidden"));
++    }
++}
+--- /dev/null
++++ b/clients/android/app/src/test/java/com/familyconnect/app/TransportPresentationTest.java
+@@ -0,0 +1,43 @@
++package com.familyconnect.app;
++
++import com.google.gson.JsonObject;
++import java.util.Locale;
++import org.junit.Test;
++import static org.junit.Assert.*;
++
++public class TransportPresentationTest {
++    @Test public void legacyIdsRemainPresentationOnly(){
++        assertEquals("MESH",TransportPresentation.label("telemost"));
++        assertEquals("MESH",TransportPresentation.label("restricted"));
++        assertEquals("Auto",TransportPresentation.label("auto"));
++        assertEquals("AWG 3.1",TransportPresentation.label("awg"));
++        assertEquals("TCP REALITY",TransportPresentation.label("tcp"));
++        assertEquals("WireGuard",TransportPresentation.label("wg"));
++        assertEquals("—",TransportPresentation.label("mesh"));
++        assertEquals("—",TransportPresentation.label(null));
++    }
++
++    @Test public void productNameIsNotLocalized(){
++        Locale before=Locale.getDefault();
++        try{
++            for(Locale locale:new Locale[]{Locale.ENGLISH,Locale.forLanguageTag("ru")}){
++                Locale.setDefault(locale);
++                assertEquals("MESH",TransportPresentation.label("telemost"));
++            }
++        }finally{Locale.setDefault(before);}
++    }
++
++    @Test public void diagnosticMetadataDoesNotInventProtocolOrCapabilities(){
++        JsonObject catalog=TransportPresentation.diagnostics();
++        assertEquals(1,catalog.get("schema").getAsInt());
++        JsonObject media=catalog.getAsJsonObject("restricted");
++        assertEquals("MESH",media.get("name").getAsString());
++        assertEquals("restricted",media.get("implementation").getAsString());
++        assertEquals("telemost",media.get("selection_id").getAsString());
++        assertEquals("VP8/RTP",media.get("carrier").getAsString());
++        assertEquals("Telemost",media.get("provider").getAsString());
++        assertEquals(5,media.size());
++        media.addProperty("name","tampered");
++        assertEquals("MESH",TransportPresentation.diagnostics().getAsJsonObject("restricted").get("name").getAsString());
++    }
++}

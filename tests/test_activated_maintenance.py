@@ -299,6 +299,69 @@ def test_offline_same_key_migration_from_daily_authority(tmp_path):
     assert cluster.snapshot()['grants'][0]['revision'] == 1
 
 
+def test_delegation_warning_does_not_block_short_lived_renewal(cluster):
+    cluster.now += 77 * DAY
+    decision = evaluate(cluster.validator.validate(canonical(cluster.snapshot()), cluster.now,
+                        expired_leaf_predecessor=True), cluster.now, all_activated=True)
+    assert decision['due'] == ['crl', 'leaf']
+    assert 'OFFLINE_AUTHORITY_MAINTENANCE_DUE' in decision['alerts']
+    assert cluster.scheduled()['result'] == 'COMMITTED'
+    cluster.validator.validate(canonical(cluster.snapshot()), cluster.now)
+
+
+def test_explicit_offline_renewal_can_run_early_without_waiting_for_expiry(cluster):
+    cluster.now += 60 * DAY
+    assert cluster.scheduled()['result'] == 'COMMITTED'
+    operation = 'test-planned-early-authority-renewal'
+    request = cluster.nodes['RU'].authority_request(operation)
+    specification = importlib.util.spec_from_file_location('planned_offline_signer',
+        MAINTENANCE.parent / 'offline/sign_authority.py')
+    module = importlib.util.module_from_spec(specification)
+    specification.loader.exec_module(module)
+    bundle = module.sign(request, cluster.service.anchor, cluster.root_key.private_bytes_raw(),
+                         cluster.validator, cluster.now)
+    current = {role: node.inspect() for role, node in cluster.nodes.items()}
+    approval = MaintenanceAuthorization(operation, digest(canonical(current)), cluster.now, cluster.now + 900)
+    result = cluster.controller.run(operation, approval=approval, authority_handoff=bundle)
+    assert result['result'] == 'COMMITTED', result
+    trust, _ = delegation(cluster.snapshot()['authority'], cluster.service.anchor, cluster.now)
+    assert trust['sequence'] == 2
+    assert trust['expires_at'] - cluster.now > 89 * DAY
+
+
+def test_operational_authority_two_existing_identities_native_compatibility(cluster, tmp_path):
+    import subprocess
+    tool, source = os.environ.get('FC_TEST_GO'), os.environ.get('FC_ACCEPTED_CARRIER_SOURCE')
+    if not tool or not source:
+        pytest.skip('explicit accepted native source/toolchain required')
+    validator = tmp_path / 'delivery-check'
+    build = subprocess.run([tool, 'build', '-p=1', '-trimpath', '-buildvcs=false', '-o', str(validator),
+                            './wholedevice/testdata/delivery-check.go'], cwd=source, capture_output=True, timeout=120)
+    assert build.returncode == 0, 'accepted-source validator build failed'
+    devices = [cluster.device, activate(cluster.service)]
+    for advance in (0, 2 * DAY, 75 * DAY):
+        cluster.now += advance
+        if advance:
+            assert cluster.scheduled('native-' + str(advance))['result'] == 'COMMITTED'
+        for device in devices:
+            response = cluster.service.fetch(proof(cluster.service, device))
+            value = dict(response=response, identity=base64.b64encode(device._identity.get_private_key()).decode(),
+                         public=device.public_identity,
+                         anchor=base64.b64encode(cluster.service.anchor).decode(), now=cluster.now)
+            result = subprocess.run([str(validator)], input=json.dumps(value).encode(), capture_output=True, timeout=20)
+            assert result.returncode == 0 and result.stdout == b'compatible\n', 'accepted native rejected operational delivery'
+        assert cluster.snapshot()['grants'] == []
+
+
+def test_scheduled_read_only_inspection_uses_activated_policy_without_legacy_grants(cluster):
+    from scheduled_evaluate import inspect
+    remote = dict(profile=cluster.nodes['NL'].public_gateway())
+    result, _ = inspect(cluster.nodes['RU'], remote, cluster.now)
+    assert result['result'] == 'NOOP'
+    assert 'grant' not in result['headroom']
+    assert result['mutations'] == result['remote_writes'] == 0
+
+
 @pytest.mark.parametrize('stage', ['RU_PROMOTED', 'NL_PROMOTED', 'COMMIT_DECIDED', 'NL_RESUMED', 'RU_RESUMED'])
 def test_interrupted_controller_reconciles_before_resume(cluster, stage):
     cluster.now += 12000

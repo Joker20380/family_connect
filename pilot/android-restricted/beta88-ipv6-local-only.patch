@@ -1,0 +1,191 @@
+--- a/carrier/wholedevice/session.go
++++ b/carrier/wholedevice/session.go
+@@ -71,12 +71,18 @@
+ 	metrics      func() map[string]any
+ 	diagnostic   func() sessiondiag.Report
+ 	terminal     string
++	ipv6         bool
+ 	Counters     Counters
+ }
+ 
+ func Attach(parent context.Context, plane DataPlane, closeCarrier func()) *Session {
++	return AttachWithIPv6(parent, plane, closeCarrier, false)
++}
++
++func AttachWithIPv6(parent context.Context, plane DataPlane, closeCarrier func(), enabled bool) *Session {
+ 	ctx, cancel := context.WithCancel(parent)
+ 	session := &Session{ctx: ctx, cancel: cancel, plane: plane, closeCarrier: closeCarrier,
++		ipv6:     enabled,
+ 		tcpSlots: make(chan struct{}, tcpforward.MuxMaxStreams+tcpforward.MuxMaxPendingOpens), dnsSlots: make(chan struct{}, 16), serviceSlots: make(chan struct{}, 4)}
+ 	go func() {
+ 		reason := sessiondiag.Reason(plane.Wait())
+@@ -110,7 +116,7 @@
+ 		return false
+ 	}
+ 	ip := net.ParseIP(host)
+-	if ip == nil || ip.To4() == nil {
++	if ip == nil || (ip.To4() == nil && (!session.ipv6 || !tcpforward.PublicLiteral(host, port))) {
+ 		session.Counters.IPv6Denied.Add(1)
+ 		return false
+ 	}
+--- /dev/null
++++ b/carrier/wholedevice/dual_stack_test.go
+@@ -0,0 +1,80 @@
++package wholedevice
++
++import (
++	"bytes"
++	"context"
++	"encoding/binary"
++	"io"
++	"net"
++	"testing"
++	"time"
++)
++
++func TestAAAAUsesExistingFamilyDNS(test *testing.T) {
++	for _, protocol := range []string{"udp", "tcp"} {
++		plane := &testPlane{done: make(chan struct{})}
++		session := AttachWithIPv6(context.Background(), plane, nil, true)
++		query := []byte{0, 42, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 7, 'e', 'x', 'a', 'm', 'p', 'l', 'e', 3, 'c', 'o', 'm', 0, 0, 28, 0, 1}
++		if protocol == "tcp" {
++			prefix := make([]byte, 2)
++			binary.BigEndian.PutUint16(prefix, uint16(len(query)))
++			query = append(prefix, query...)
++		}
++		app, engine := net.Pipe()
++		go session.Handle(engine, protocol, "10.79.0.1", 53)
++		app.SetDeadline(time.Now().Add(time.Second))
++		if _, err := app.Write(query); err != nil {
++			test.Fatal(err)
++		}
++		answer := make([]byte, len(query))
++		if _, err := io.ReadFull(app, answer); err != nil {
++			test.Fatal(err)
++		}
++		if !bytes.Equal(query[len(query)-4:], answer[len(answer)-4:]) || plane.queries.Load() != 1 || plane.calls.Load() != 0 {
++			test.Fatal("AAAA not forwarded by Family DNS")
++		}
++		app.Close()
++		session.Close()
++	}
++}
++
++func TestIPv6OptInPolicyAndByteExact(test *testing.T) {
++	for _, enabled := range []bool{false, true} {
++		plane := &testPlane{done: make(chan struct{})}
++		session := AttachWithIPv6(context.Background(), plane, nil, enabled)
++		if session.Allow("tcp", "2606:4700:4700::1111", 443) != enabled {
++			test.Fatal("opt in not enforced")
++		}
++		for _, host := range []string{"::", "::1", "fe80::1", "fe80::1%eth0", "fc00::1", "ff02::1", "2001:db8::1", "64:ff9b::a9fe:a9fe", "2002:a9fe:a9fe::1"} {
++			if session.Allow("tcp", host, 443) {
++				test.Fatal("unsafe destination", host)
++			}
++		}
++		if session.Allow("udp", "2606:4700:4700::1111", 443) {
++			test.Fatal("QUIC bypass")
++		}
++		if enabled {
++			app, engine := net.Pipe()
++			go session.Handle(engine, "tcp", "2606:4700:4700::1111", 443)
++			app.SetDeadline(time.Now().Add(time.Second))
++			payload := bytes.Repeat([]byte("fixture-ipv6"), 4096)
++			written := make(chan error, 1)
++			go func() { _, err := app.Write(payload); written <- err }()
++			received := make([]byte, len(payload))
++			if _, err := io.ReadFull(app, received); err != nil || !bytes.Equal(payload, received) {
++				test.Fatal("delivery", err)
++			}
++			if err := <-written; err != nil {
++				test.Fatal(err)
++			}
++			app.Close()
++		}
++		session.Close()
++		if session.Allow("tcp", "2606:4700:4700::1111", 443) {
++			test.Fatal("closed session")
++		}
++		if session.Counters.Active.Load() != 0 {
++			test.Fatal("worker leak")
++		}
++	}
++}
+--- a/carrier/tcpforward/policy.go
++++ b/carrier/tcpforward/policy.go
+@@ -57,6 +57,11 @@
+ 		}
+ 	}
+ 	return nil
++}
++
++func PublicLiteral(host string, port uint16) bool {
++	address, err := netip.ParseAddr(host)
++	return err == nil && address.Zone() == "" && port != 0 && (Policy{}).permits(address, int(port))
+ }
+ 
+ func (policy Policy) permits(address netip.Addr, port int) bool {
+--- /dev/null
++++ b/carrier/tcpforward/dual_stack_socket_test.go
+@@ -0,0 +1,61 @@
++package tcpforward
++
++import (
++	"context"
++	"io"
++	"net"
++	"net/netip"
++	"testing"
++	"time"
++)
++
++func TestIPv6DestinationActualSocket(test *testing.T) {
++	listener, err := net.Listen("tcp6", "[::1]:0")
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer listener.Close()
++	finished := make(chan error, 1)
++	go func() {
++		accepted, err := listener.Accept()
++		if err != nil {
++			finished <- err
++			return
++		}
++		defer accepted.Close()
++		accepted.SetDeadline(time.Now().Add(time.Second))
++		_, err = io.Copy(accepted, accepted)
++		finished <- err
++	}()
++	address := netip.MustParseAddr("2606:4700:4700::1111")
++	metrics := &DestinationMetrics{}
++	connection, err := connect(context.Background(), OpenRequest{Host: "ipv6.fixture", Port: 443}, Policy{Metrics: metrics},
++		fixedResolver{addresses: []netip.Addr{address}}, func(ctx context.Context, network, destination string) (socket, error) {
++			if destination != "[2606:4700:4700::1111]:443" {
++				test.Fatal("unpinned destination")
++			}
++			raw, err := (&net.Dialer{}).DialContext(ctx, "tcp6", listener.Addr().String())
++			if err != nil {
++				return nil, err
++			}
++			return raw.(*net.TCPConn), nil
++		})
++	if err != nil {
++		test.Fatal(err)
++	}
++	payload := []byte("synthetic-public-AAAA-local-socket-fixture")
++	if _, err = connection.Write(payload); err != nil {
++		test.Fatal(err)
++	}
++	received := make([]byte, len(payload))
++	if _, err = io.ReadFull(connection, received); err != nil || string(received) != string(payload) {
++		test.Fatal("IPv6 echo", err)
++	}
++	connection.Close()
++	if err = <-finished; err != nil {
++		test.Fatal(err)
++	}
++	if metrics.Snapshot().IPv6Selected != 1 {
++		test.Fatal("family attribution")
++	}
++}

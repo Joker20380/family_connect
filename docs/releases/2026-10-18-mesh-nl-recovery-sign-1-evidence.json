@@ -1,0 +1,516 @@
+{
+  "task": "MESH-NL-RECOVERY-SIGN-1",
+  "result": "PASS_SIGNING_ONLY",
+  "request_id": "mesh-nl-recovery-prep-20261018-01",
+  "source_head": "7656f2c65ea2928b71a928c12ee65a2f47f8ac4f",
+  "input_hashes_match": true,
+  "sequence_transition": [
+    16,
+    17
+  ],
+  "active_sequence": 16,
+  "production_unchanged": true,
+  "application_not_run": true,
+  "signed_bundle_transferred_to_production": false,
+  "private_artifact_and_receipt_hashes": {
+    "state-client-build/mesh-nl-recovery-prep-1/private/recovery-request.json": "a985777611d8b5d2a54ea8f1928b4f7537e3ff7a19ea0506fa98ff8999c3b794",
+    "state-client-build/mesh-nl-recovery-prep-1/private/successor-ca.pem": "8ef49f002afd64f7e92a7f764fdcc19784fddf6c590bf9fc79bfd041aabdc46a",
+    "state-client-build/mesh-nl-recovery-prep-1/private/authority-bundle.json": "3f7d0d1e5cd3021da25758a9965bfb8ad1caebb31d4afbe237f47be84de81c2e",
+    "state-client-build/mesh-nl-recovery-prep-1/private/anchor.pub": "d0ae60e61af6ac5018428aaad89e362ec0f75d7468633a26c22906356228d281",
+    "state-client-build/mesh-nl-recovery-sign-1/private/pre-sign-live-state.json": "d30b6a0c635080944b7156018fff7bf7492e5825b89b8593f85e96d08ab534a7",
+    "state-client-build/mesh-nl-recovery-sign-1/private/post-sign-live-state.json": "463df995a19b89e138b82954ae498420213e68fe658753bee3eea0b1db2ef405",
+    "state-client-build/mesh-nl-recovery-sign-1/private/resume-live-state.json": "0eb007e384832319622ffd3bfa7c9698829ebf9270ae486b3007201998729612",
+    "state-client-build/mesh-nl-recovery-sign-1/private/pre-sign-validation.json": "0163880d1070cac739cc08baa41491513432176ed5c8268c7ae7f2659a817f56",
+    "state-client-build/mesh-nl-recovery-sign-1/private/duplicate-check.json": "08e85a1b92ddc423bf53eb6ca23783d09cb04248bc1463f09b53a4cd454b8f8d",
+    "state-client-build/mesh-nl-recovery-sign-1/private/signing-result.json": "4bc570139df03f740eb40859418d7d96662ce3a7eb6ebbc65b312c15635cf83b",
+    "state-client-build/mesh-nl-recovery-sign-1/private/independent-verification.json": "ed931add1626c48758b307e699719ffb9052af7ce96644a1d7401ac007952e90",
+    "state-client-build/mesh-nl-recovery-sign-1/private/resume-verification.json": "6b024441949c33b9714ffb57c912195bcd998d5c47b6f2ae046b29d02ad89436"
+  },
+  "pre_sign_validation": {
+    "result": "PASS_UNSIGNED_REQUEST_ONLY",
+    "utc": "2026-10-18T10:03:51.879128+00:00",
+    "request_sha256": "a985777611d8b5d2a54ea8f1928b4f7537e3ff7a19ea0506fa98ff8999c3b794",
+    "operation_id": "mesh-nl-recovery-prep-20261018-01",
+    "source_pins": {
+      "api.pyz": "12ca0c72a89ff20c1b3c70a1182a2d5d98d4d78d25e7a079bb4d75bdf34060ed",
+      "credential_renewal.py": "fb83d851b4ac88b7ad90b97c59f516ee327bc7bbb92a642a031da08bbc50d25c",
+      "expired_recovery.py": "92fc24346df6b86b0621210e7847a2d17c11a69e8c2ae73bf32609fa2f2ab99e",
+      "grant_cutover.py": "434881ff8b1878eabb040c9c8b06bd32ad430410fbec90a24e3343b51a222f85",
+      "sign_authority_offline.py": "2de81e84c6b5fb39cbf5ca840e7a4791edec256bbb6e3fe7924efc24319ba5f6"
+    },
+    "historical_signature_checks": true,
+    "request_check": true,
+    "successor_self_signature": true,
+    "root_signer_invoked": false,
+    "request_unchanged": true,
+    "negative_cases": [
+      {
+        "case": "purpose",
+        "result": "REJECTED",
+        "cause": "RECOVERY_PURPOSE"
+      },
+      {
+        "case": "predecessor_digest",
+        "result": "REJECTED",
+        "cause": "RECOVERY_PREDECESSOR_DIGEST"
+      },
+      {
+        "case": "scope",
+        "result": "REJECTED",
+        "cause": "RECOVERY_SCOPE_OR_FLOOR"
+      },
+      {
+        "case": "crl_floor",
+        "result": "REJECTED",
+        "cause": "RECOVERY_SCOPE_OR_FLOOR"
+      },
+      {
+        "case": "authority_sequence",
+        "result": "REJECTED",
+        "cause": "RECOVERY_SCOPE_OR_FLOOR"
+      },
+      {
+        "case": "grant_scope",
+        "result": "REJECTED",
+        "cause": "RECOVERY_GRANT_SCOPE"
+      },
+      {
+        "case": "update_scope",
+        "result": "REJECTED",
+        "cause": "RECOVERY_UPDATE_SCOPE"
+      },
+      {
+        "case": "expired_request",
+        "result": "REJECTED",
+        "cause": "RECOVERY_APPROVAL_EXPIRED"
+      },
+      {
+        "case": "authority_validity_extension",
+        "result": "REJECTED",
+        "cause": "RECOVERY_SUCCESSOR_INVALID"
+      },
+      {
+        "case": "old_ca_substitution",
+        "result": "REJECTED",
+        "cause": "RECOVERY_INTERVAL"
+      },
+      {
+        "case": "predecessor_signature",
+        "result": "REJECTED",
+        "cause": "RECOVERY_PREDECESSOR_UNTRUSTED"
+      },
+      {
+        "case": "wrong_anchor",
+        "result": "REJECTED",
+        "cause": "RECOVERY_PREDECESSOR_UNTRUSTED"
+      },
+      {
+        "case": "expired_predecessor_as_live_authority",
+        "result": "REJECTED"
+      }
+    ],
+    "negative_pass_count": 13,
+    "successor_ca_pem_sha256": "8ef49f002afd64f7e92a7f764fdcc19784fddf6c590bf9fc79bfd041aabdc46a",
+    "successor_payload_sha256": "ee75a86a3387fe914ffc31e494796ce1df6b0fd5fe264c2c1561d16760a9402b",
+    "physical_or_signed_successor_acceptance": false
+  },
+  "signed_result": {
+    "bundle_sha256": "3f7d0d1e5cd3021da25758a9965bfb8ad1caebb31d4afbe237f47be84de81c2e",
+    "result": "SIGNED_OFFLINE",
+    "root_key_exported": false
+  },
+  "independent_verification": {
+    "result": "PASS_SIGNED_CANDIDATE_ONLY",
+    "utc": "2026-10-18T10:05:00+00:00",
+    "operation_id": "mesh-nl-recovery-prep-20261018-01",
+    "request_sha256": "a985777611d8b5d2a54ea8f1928b4f7537e3ff7a19ea0506fa98ff8999c3b794",
+    "successor_ca_pem_sha256": "8ef49f002afd64f7e92a7f764fdcc19784fddf6c590bf9fc79bfd041aabdc46a",
+    "signed_artifact_sha256": "3f7d0d1e5cd3021da25758a9965bfb8ad1caebb31d4afbe237f47be84de81c2e",
+    "source_pins": {
+      "api.pyz": "12ca0c72a89ff20c1b3c70a1182a2d5d98d4d78d25e7a079bb4d75bdf34060ed",
+      "credential_renewal.py": "fb83d851b4ac88b7ad90b97c59f516ee327bc7bbb92a642a031da08bbc50d25c",
+      "expired_recovery.py": "92fc24346df6b86b0621210e7847a2d17c11a69e8c2ae73bf32609fa2f2ab99e",
+      "grant_cutover.py": "434881ff8b1878eabb040c9c8b06bd32ad430410fbec90a24e3343b51a222f85",
+      "sign_authority_offline.py": "2de81e84c6b5fb39cbf5ca840e7a4791edec256bbb6e3fe7924efc24319ba5f6"
+    },
+    "anchor_sha256": "6a09fb42468acdb4cfcb4f0888e27c13705ac437a45a6624fc21dddbe83fed83",
+    "signature_verification": "expired_recovery.verify plus strict delegation_parser",
+    "predecessor_sha256": "008cbeb7adec69956b242012f17204d8ee4a242bbeec53089699587b566dd978",
+    "checkpoint": {
+      "operation_id": "scheduled-1792291291-d3bbc76b3aa8dc8d",
+      "plan_sha256": "289e59aecffe16a482ef29eb13995393d5b0e37dbe6b678c9a4dfc556052ba4d",
+      "snapshot_sha256": "008cbeb7adec69956b242012f17204d8ee4a242bbeec53089699587b566dd978"
+    },
+    "expected_state_sha256": "2a44db20325b17132224897652b158c82ab0396f675b8b72f9b8465baa2712f2",
+    "scope_sha256": "b017c61eeecddce4e7db07eeae674f76f63c3195fbaeec0280d13c99aeae9fa7",
+    "floors_sha256": "f7fba505c4fc706bd41a8434c473d1eceb704737d096b9a1e800c8e7e71907f6",
+    "predecessor_sequence": 16,
+    "successor_sequence": 17,
+    "same_issuer_key": true,
+    "scope_revocations_floors_preserved": true,
+    "crl_number": 27119,
+    "revoked_crl_entries": 2,
+    "grant_count": 2,
+    "grant_revisions": [
+      6,
+      8
+    ],
+    "minimum_revision": 1,
+    "original_inputs_unchanged": true,
+    "predecessor_authority_expires_at": "2026-10-18T08:57:40+00:00",
+    "predecessor_leaf_not_after": "2026-10-18T06:41:35+00:00",
+    "predecessor_crl_next_update": "2026-10-18T06:41:35+00:00",
+    "predecessor_grant_expiries": [
+      "2026-10-18T08:57:40+00:00"
+    ],
+    "successor_not_before": "2026-10-18T09:33:41+00:00",
+    "successor_not_after": "2026-10-19T09:33:41+00:00",
+    "request_expires_at": "2026-10-19T09:33:46+00:00",
+    "parent_headroom_seconds": 84521,
+    "four_hour_parent_cutoff": "2026-10-19T05:33:41+00:00",
+    "six_hour_grant_cutoff_exclusive": "2026-10-19T03:33:41+00:00",
+    "recommended_one_hour_reserve_cutoff": "2026-10-19T02:33:41+00:00",
+    "negative_cases": [
+      {
+        "case": "outer_signature",
+        "result": "REJECTED",
+        "cause": "RECOVERY_SIGNATURE_INVALID"
+      },
+      {
+        "case": "wrong_root",
+        "result": "REJECTED",
+        "cause": "RECOVERY_SIGNATURE_INVALID"
+      },
+      {
+        "case": "wrong_operation",
+        "result": "REJECTED",
+        "cause": "RECOVERY_OPERATION_MISMATCH"
+      },
+      {
+        "case": "inner_authority_tamper",
+        "result": "REJECTED",
+        "cause": "RECOVERY_SIGNATURE_INVALID"
+      }
+    ],
+    "grant_validity_boundary_probe": [
+      {
+        "parent_headroom_seconds": 21601,
+        "result": "ACCEPTED_BY_GRANT_PLAN_VALIDATOR_ONLY"
+      },
+      {
+        "parent_headroom_seconds": 21600,
+        "result": "REJECTED",
+        "cause": "GRANT_REVISION_OR_VALIDITY"
+      },
+      {
+        "parent_headroom_seconds": 14400,
+        "result": "REJECTED",
+        "cause": "GRANT_REVISION_OR_VALIDITY"
+      }
+    ],
+    "application_not_run": true,
+    "production_compatibility_not_proven": true
+  },
+  "resume_verification": {
+    "result": "PASS_EXISTING_SIGNED_BUNDLE",
+    "utc": "2026-10-18T10:19:14.622097+00:00",
+    "signed_artifact_sha256": "3f7d0d1e5cd3021da25758a9965bfb8ad1caebb31d4afbe237f47be84de81c2e",
+    "original_inputs_unchanged": true,
+    "signer_invoked": false,
+    "parent_headroom_seconds": 83667
+  },
+  "duplicate_check": {
+    "operation_id": "mesh-nl-recovery-prep-20261018-01",
+    "search_scope": "retained state-client-build *bundle*.json/*signed*.json <=1MiB; PREP/SIGN private output names also checked",
+    "envelope_files_checked": 2,
+    "matching_outputs": [],
+    "unreadable_files": 0
+  },
+  "live_before": {
+    "RU": {
+      "utc": "2026-10-18T09:59:15.291323+00:00",
+      "operation_id": "mesh-nl-recovery-prep-20261018-01",
+      "manifest_sha256": "5109a7c92ddd1937fe75ed7199866855a8cc20279bc226c35475d4cc81330145",
+      "predecessor_sha256": "008cbeb7adec69956b242012f17204d8ee4a242bbeec53089699587b566dd978",
+      "expected_state_sha256": "2a44db20325b17132224897652b158c82ab0396f675b8b72f9b8465baa2712f2",
+      "active_fingerprint_sha256": "5e34a50401fef9b1079039cedee9200e881b7860212ee59e4baab759ba792cd4",
+      "checkpoint": {
+        "operation_id": "scheduled-1792291291-d3bbc76b3aa8dc8d",
+        "plan_sha256": "289e59aecffe16a482ef29eb13995393d5b0e37dbe6b678c9a4dfc556052ba4d",
+        "snapshot_sha256": "008cbeb7adec69956b242012f17204d8ee4a242bbeec53089699587b566dd978"
+      },
+      "authority_sequence": 16,
+      "crl_number": 27119,
+      "revoked_crl_entries": 2,
+      "grant_count": 2,
+      "grant_revisions": [
+        6,
+        8
+      ],
+      "pending_revocations": 0,
+      "source_pins_match": true,
+      "historical_validation_pass": true,
+      "both_node_checkpoint_validation_pass": true,
+      "gateway_key_matches_leaf": true,
+      "request_check_pass": true,
+      "recovery_grant_plan_in_memory_pass": true,
+      "http_unit": {
+        "ActiveState": "active",
+        "SubState": "running",
+        "InvocationID": "bdf17918da9f4f438363a7bc46e0f467",
+        "MainPID": "1921548"
+      },
+      "active_fingerprint_unchanged": true,
+      "active_trust_chain_unchanged": true,
+      "live_grants_and_devices_unchanged": true,
+      "live_revocations_and_floors_unchanged": true,
+      "services_mutated": false
+    },
+    "NL": {
+      "utc": "2026-10-18T09:59:16.824931+00:00",
+      "gateway_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+      "profile_sha256": "de06a5b0bf468614f33baa61190cb5419874abbde379ed16ec798c8248e760d7",
+      "directory_sha256": "50aa786cb751a40c8ef6c7ccfdc60a126f6bcd9432d7f78cb912f1f9fc104ad8",
+      "node_config_sha256": "36e396a8c8c4b8d08aa4500b443546640ca92ad47cf5a50753566421102c492e",
+      "api_archive_sha256": "9faaa1c27f534e71774f5b4f34872e87747f391409c4958562694f07f86d64d1",
+      "source_manifest_sha256": "5109a7c92ddd1937fe75ed7199866855a8cc20279bc226c35475d4cc81330145",
+      "source_manifest_matches": true,
+      "unit": {
+        "ActiveState": "failed",
+        "SubState": "failed",
+        "InvocationID": "4f3ce31195364bed961748ae13fa1c00",
+        "MainPID": "0",
+        "NRestarts": "6"
+      },
+      "listener_18444": false
+    }
+  },
+  "live_after": {
+    "RU": {
+      "utc": "2026-10-18T10:08:46.154199+00:00",
+      "operation_id": "mesh-nl-recovery-prep-20261018-01",
+      "manifest_sha256": "5109a7c92ddd1937fe75ed7199866855a8cc20279bc226c35475d4cc81330145",
+      "predecessor_sha256": "008cbeb7adec69956b242012f17204d8ee4a242bbeec53089699587b566dd978",
+      "expected_state_sha256": "2a44db20325b17132224897652b158c82ab0396f675b8b72f9b8465baa2712f2",
+      "active_fingerprint_sha256": "5e34a50401fef9b1079039cedee9200e881b7860212ee59e4baab759ba792cd4",
+      "checkpoint": {
+        "operation_id": "scheduled-1792291291-d3bbc76b3aa8dc8d",
+        "plan_sha256": "289e59aecffe16a482ef29eb13995393d5b0e37dbe6b678c9a4dfc556052ba4d",
+        "snapshot_sha256": "008cbeb7adec69956b242012f17204d8ee4a242bbeec53089699587b566dd978"
+      },
+      "authority_sequence": 16,
+      "crl_number": 27119,
+      "revoked_crl_entries": 2,
+      "grant_count": 2,
+      "grant_revisions": [
+        6,
+        8
+      ],
+      "pending_revocations": 0,
+      "source_pins_match": true,
+      "historical_validation_pass": true,
+      "both_node_checkpoint_validation_pass": true,
+      "gateway_key_matches_leaf": true,
+      "request_check_pass": true,
+      "recovery_grant_plan_in_memory_pass": true,
+      "http_unit": {
+        "ActiveState": "active",
+        "SubState": "running",
+        "InvocationID": "bdf17918da9f4f438363a7bc46e0f467",
+        "MainPID": "1921548"
+      },
+      "active_fingerprint_unchanged": true,
+      "active_trust_chain_unchanged": true,
+      "live_grants_and_devices_unchanged": true,
+      "live_revocations_and_floors_unchanged": true,
+      "services_mutated": false
+    },
+    "NL": {
+      "utc": "2026-10-18T10:08:47.638280+00:00",
+      "gateway_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+      "profile_sha256": "de06a5b0bf468614f33baa61190cb5419874abbde379ed16ec798c8248e760d7",
+      "directory_sha256": "50aa786cb751a40c8ef6c7ccfdc60a126f6bcd9432d7f78cb912f1f9fc104ad8",
+      "node_config_sha256": "36e396a8c8c4b8d08aa4500b443546640ca92ad47cf5a50753566421102c492e",
+      "api_archive_sha256": "9faaa1c27f534e71774f5b4f34872e87747f391409c4958562694f07f86d64d1",
+      "source_manifest_sha256": "5109a7c92ddd1937fe75ed7199866855a8cc20279bc226c35475d4cc81330145",
+      "source_manifest_matches": true,
+      "unit": {
+        "ActiveState": "failed",
+        "SubState": "failed",
+        "InvocationID": "4f3ce31195364bed961748ae13fa1c00",
+        "MainPID": "0",
+        "NRestarts": "6"
+      },
+      "listener_18444": false
+    }
+  },
+  "live_after_resume": {
+    "RU": {
+      "utc": "2026-10-18T10:19:27.195002+00:00",
+      "operation_id": "mesh-nl-recovery-prep-20261018-01",
+      "manifest_sha256": "5109a7c92ddd1937fe75ed7199866855a8cc20279bc226c35475d4cc81330145",
+      "predecessor_sha256": "008cbeb7adec69956b242012f17204d8ee4a242bbeec53089699587b566dd978",
+      "expected_state_sha256": "2a44db20325b17132224897652b158c82ab0396f675b8b72f9b8465baa2712f2",
+      "active_fingerprint_sha256": "5e34a50401fef9b1079039cedee9200e881b7860212ee59e4baab759ba792cd4",
+      "checkpoint": {
+        "operation_id": "scheduled-1792291291-d3bbc76b3aa8dc8d",
+        "plan_sha256": "289e59aecffe16a482ef29eb13995393d5b0e37dbe6b678c9a4dfc556052ba4d",
+        "snapshot_sha256": "008cbeb7adec69956b242012f17204d8ee4a242bbeec53089699587b566dd978"
+      },
+      "authority_sequence": 16,
+      "crl_number": 27119,
+      "revoked_crl_entries": 2,
+      "grant_count": 2,
+      "grant_revisions": [
+        6,
+        8
+      ],
+      "pending_revocations": 0,
+      "source_pins_match": true,
+      "historical_validation_pass": true,
+      "both_node_checkpoint_validation_pass": true,
+      "gateway_key_matches_leaf": true,
+      "request_check_pass": true,
+      "recovery_grant_plan_in_memory_pass": true,
+      "http_unit": {
+        "ActiveState": "active",
+        "SubState": "running",
+        "InvocationID": "bdf17918da9f4f438363a7bc46e0f467",
+        "MainPID": "1921548"
+      },
+      "active_fingerprint_unchanged": true,
+      "active_trust_chain_unchanged": true,
+      "live_grants_and_devices_unchanged": true,
+      "live_revocations_and_floors_unchanged": true,
+      "services_mutated": false
+    },
+    "NL": {
+      "utc": "2026-10-18T10:19:29.148598+00:00",
+      "gateway_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+      "profile_sha256": "de06a5b0bf468614f33baa61190cb5419874abbde379ed16ec798c8248e760d7",
+      "directory_sha256": "50aa786cb751a40c8ef6c7ccfdc60a126f6bcd9432d7f78cb912f1f9fc104ad8",
+      "node_config_sha256": "36e396a8c8c4b8d08aa4500b443546640ca92ad47cf5a50753566421102c492e",
+      "api_archive_sha256": "9faaa1c27f534e71774f5b4f34872e87747f391409c4958562694f07f86d64d1",
+      "source_manifest_sha256": "5109a7c92ddd1937fe75ed7199866855a8cc20279bc226c35475d4cc81330145",
+      "source_manifest_matches": true,
+      "unit": {
+        "ActiveState": "failed",
+        "SubState": "failed",
+        "InvocationID": "4f3ce31195364bed961748ae13fa1c00",
+        "MainPID": "0",
+        "NRestarts": "6"
+      },
+      "listener_18444": false
+    }
+  },
+  "ru_recovery_journal_check": {
+    "utc": "2026-10-18T10:09:52.498433+00:00",
+    "recovery_result_for_request_exists": false,
+    "transaction_operation": "scheduled-1792291291-d3bbc76b3aa8dc8d",
+    "transaction_state": "COMMITTED",
+    "commit_decided": true,
+    "transaction_contains_current_request": false
+  },
+  "permissions": {
+    "artifact_mode": "0o600",
+    "artifact_parent_mode": "0o700",
+    "journal_parent_mode": "0o700"
+  },
+  "limitations": [
+    "Signing only; no application, native/live UI84 or physical performance acceptance.",
+    "Historical expired material is not accepted by normal live validation.",
+    "Production invariance is point-in-time observed active state, not all remote filesystem activity.",
+    "Six-hour grant-plan gate is stricter than the four-hour parent condition; preserve an extra operational hour."
+  ],
+  "repeat_authorization_readback": {
+    "result": "PASS_EXISTING_SIGNED_BUNDLE",
+    "verification": {
+      "result": "PASS_EXISTING_SIGNED_BUNDLE",
+      "utc": "2026-10-18T10:29:27.779746+00:00",
+      "request_id": "mesh-nl-recovery-prep-20261018-01",
+      "input_hashes_match": true,
+      "signed_artifact_sha256": "3f7d0d1e5cd3021da25758a9965bfb8ad1caebb31d4afbe237f47be84de81c2e",
+      "original_receipt_sha256": "ed931add1626c48758b307e699719ffb9052af7ce96644a1d7401ac007952e90",
+      "signature_verification": "expired_recovery.verify plus strict delegation_parser",
+      "sequence_transition": [
+        16,
+        17
+      ],
+      "scope_revocations_floors_preserved": true,
+      "parent_headroom_seconds": 83054,
+      "checkpoint": {
+        "operation_id": "scheduled-1792291291-d3bbc76b3aa8dc8d",
+        "plan_sha256": "289e59aecffe16a482ef29eb13995393d5b0e37dbe6b678c9a4dfc556052ba4d",
+        "snapshot_sha256": "008cbeb7adec69956b242012f17204d8ee4a242bbeec53089699587b566dd978"
+      },
+      "signer_invoked": false,
+      "vault_accessed": false,
+      "original_inputs_and_output_unchanged": true,
+      "application_not_run": true
+    },
+    "verification_receipt_sha256": "7856f0cc4ffa3602882396d35e1babe1bfcd3615d90a084ec23b1da1c0b0705a",
+    "live_receipt_sha256": "c7cb7973f46a63305501fa28a6ce56bb069abaf0014d7ca7241e61399dbefafc",
+    "live": {
+      "RU": {
+        "utc": "2026-10-18T10:29:28.447346+00:00",
+        "operation_id": "mesh-nl-recovery-prep-20261018-01",
+        "manifest_sha256": "5109a7c92ddd1937fe75ed7199866855a8cc20279bc226c35475d4cc81330145",
+        "predecessor_sha256": "008cbeb7adec69956b242012f17204d8ee4a242bbeec53089699587b566dd978",
+        "expected_state_sha256": "2a44db20325b17132224897652b158c82ab0396f675b8b72f9b8465baa2712f2",
+        "active_fingerprint_sha256": "5e34a50401fef9b1079039cedee9200e881b7860212ee59e4baab759ba792cd4",
+        "checkpoint": {
+          "operation_id": "scheduled-1792291291-d3bbc76b3aa8dc8d",
+          "plan_sha256": "289e59aecffe16a482ef29eb13995393d5b0e37dbe6b678c9a4dfc556052ba4d",
+          "snapshot_sha256": "008cbeb7adec69956b242012f17204d8ee4a242bbeec53089699587b566dd978"
+        },
+        "authority_sequence": 16,
+        "crl_number": 27119,
+        "revoked_crl_entries": 2,
+        "grant_count": 2,
+        "grant_revisions": [
+          6,
+          8
+        ],
+        "pending_revocations": 0,
+        "source_pins_match": true,
+        "historical_validation_pass": true,
+        "both_node_checkpoint_validation_pass": true,
+        "gateway_key_matches_leaf": true,
+        "request_check_pass": true,
+        "recovery_grant_plan_in_memory_pass": true,
+        "http_unit": {
+          "ActiveState": "active",
+          "SubState": "running",
+          "InvocationID": "bdf17918da9f4f438363a7bc46e0f467",
+          "MainPID": "1921548"
+        },
+        "active_fingerprint_unchanged": true,
+        "active_trust_chain_unchanged": true,
+        "live_grants_and_devices_unchanged": true,
+        "live_revocations_and_floors_unchanged": true,
+        "services_mutated": false
+      },
+      "NL": {
+        "utc": "2026-10-18T10:29:31.232096+00:00",
+        "gateway_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+        "profile_sha256": "de06a5b0bf468614f33baa61190cb5419874abbde379ed16ec798c8248e760d7",
+        "directory_sha256": "50aa786cb751a40c8ef6c7ccfdc60a126f6bcd9432d7f78cb912f1f9fc104ad8",
+        "node_config_sha256": "36e396a8c8c4b8d08aa4500b443546640ca92ad47cf5a50753566421102c492e",
+        "api_archive_sha256": "9faaa1c27f534e71774f5b4f34872e87747f391409c4958562694f07f86d64d1",
+        "source_manifest_sha256": "5109a7c92ddd1937fe75ed7199866855a8cc20279bc226c35475d4cc81330145",
+        "source_manifest_matches": true,
+        "unit": {
+          "ActiveState": "failed",
+          "SubState": "failed",
+          "InvocationID": "4f3ce31195364bed961748ae13fa1c00",
+          "MainPID": "0",
+          "NRestarts": "6"
+        },
+        "listener_18444": false
+      }
+    },
+    "production_unchanged": true,
+    "new_signature_created": false,
+    "application_not_run": true
+  }
+}

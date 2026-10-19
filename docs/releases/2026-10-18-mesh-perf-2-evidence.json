@@ -1,0 +1,789 @@
+{
+  "task": "MESH-PERF-2",
+  "result": "BLOCKED",
+  "generated_utc": "2026-10-18T08:58:30.745205+00:00",
+  "head": "7656f2c65ea2928b71a928c12ee65a2f47f8ac4f",
+  "prior_evidence_sha256": "0bc146300ccedddeaee08260a644337cf448cd922c923b4a64afdb5a593a96a3",
+  "source_checks": {
+    "cumulative-source.json": {
+      "base": "f5240994869826c6a28f59e58e38256c688cf6eb",
+      "source_delta_sha256": "cdd089478624ff5113d14590a340092684127a674565c3acfe6750aa76a17790",
+      "checked_files": 73,
+      "mismatches": []
+    },
+    "gateway-source.json": {
+      "parent_inventory": "0742212c5ebe38f9673dc53321d3af56c14b978e1080cbe104216ac21b40293f",
+      "source_inventory": "aeeb6755bd235160127cfed67da4a870ae340cfebe89fc6d0f937908607d9483",
+      "checked_files": 231,
+      "mismatches": []
+    }
+  },
+  "source_file_sha256": {
+    "carrier/familysession/batch.go": "01cae11ff7bd0c67918d969350d0340d82ed0a1d215b260792b5c5c345727cf4",
+    "carrier/familysession/session.go": "eb686d7c9e4ab00d4265cde70f688bbb1a5ec1ceee546da8010ea74ad25756d5",
+    "carrier/tcpforward/mux.go": "d0bac7c60954c0d0857ee2a9aabdb6bd002beebfa3069f5ae62292fd23384366",
+    "carrier/tcpforward/mux_stream.go": "ee085c590d88acdf686d21f369dace15f5d9d33d16d6d7bddbe235358bcdf20b",
+    "carrier/reliablestream/stream.go": "d3e3df02613f4a644d9831e68045efa8fdbed72ecb26cc6f112d2528ad6382c8",
+    "carrier/reliablestream/engine.go": "635b938ee243b55c4b5385bd82ae42069b1c213ebb9aae04ebf8b9135e7b558e",
+    "carrier/reliablestream/protocol.go": "ff5c4226caa63a49d62dac11d6079726ce78b296c3a9e843100a0ba634064bba",
+    "carrier/wholedevice/session.go": "17976638e187a11d7a241c6702114ce68ca46ad8eceb149b55d3325d99340da1",
+    "carrier/sessiontrace/schema_default.go": "56fbf8cdacc63062aafc85d742c8c1a40b9d47cf99e229f314e69462efe46c98",
+    "carrier/sessiontrace/receiver_default.go": "32f466695288a51d6071caff959e2735126ea92506182bb2a296f164c7b59ccd",
+    "carrier/sessiontrace/correlation_disabled.go": "d52ca5f689884cbb7fa3962f4cc96fa788327d52c789c799288518a229eb7d93",
+    "carrier/sessiondiag/endpoint.go": "b2f93903da5ad1c0d40696fc6a97a040c3368ff4dc53f5bb917c5bff6c9a54d3",
+    "carrier/telemost/performance.go": "f864ca739e609e47e7cecec817268d3c24b85d52f4d4df105765f96471168cf5",
+    "pilot/android-restricted/native/main.go": "dc7fffdc80fd312869cd9008226eb27c26ea7e3853cec7d32189b5845cb57928"
+  },
+  "installed_android": {
+    "observed_hash_utc": "2026-10-18T08:57:37Z",
+    "package": "com.familyconnect.app.friends",
+    "version_code": 84,
+    "version_name": "0.1.18-research84-ui60-4-batch1",
+    "sdk": 31,
+    "abi": "arm64-v8a",
+    "apk_sha256": "697f9c244b67f75e7e3e612dbcd91a48891d32ee77e23fd9bce173a5f049233f",
+    "native_libraries_sha256": {
+      "lib/arm64-v8a/libchaquopy_java.so": "d3b5b10f7410297880679cd665e96795f5745e3488a038bbbcca344c95ca7e18",
+      "lib/arm64-v8a/libcodec2.so": "43edfebbde718cce7df47930322cc3cc5278aa7552e143913fd0814302aafaa5",
+      "lib/arm64-v8a/libcrypto_chaquopy.so": "e316322aafee29c518084f478c1f84fb6048dc489dd5aad8d0822fbece416483",
+      "lib/arm64-v8a/libcrypto_python.so": "c6b20b0ed4be44731123a4e0ccb0958abb14d467826a42a1999e0cdbf9c7afd7",
+      "lib/arm64-v8a/libexit_audio.so": "aad0fcaec2683e74ac0d70d4f9fde1f65afd32c4416070ad1c5a13dc3725191c",
+      "lib/arm64-v8a/libfc-awg.so": "9d20e5312e4d22c3c3d650513e82a43ec5c37a472810eb5e3acf206713023fbb",
+      "lib/arm64-v8a/libfc_restricted.so": "dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23",
+      "lib/arm64-v8a/libpython3.10.so": "194781d8bba9ad0db34725390957bb73a71c0ab2c9c1d449b94cd80680bb149e",
+      "lib/arm64-v8a/libsqlite3_chaquopy.so": "626ef9b3e6eb661df9513f7f79f6a0d197bcfb0b43f813663ed9d5e7fcace172",
+      "lib/arm64-v8a/libsqlite3_python.so": "fa355dda67c86b62f67026b7b5a8ec17732ee30e9e8280b86362b4e2a886548b",
+      "lib/arm64-v8a/libssl_chaquopy.so": "70b94a18ae17a1b103cc0f52b3f5fa3f7740c6899eddb6fa3b1f16ba8051025b",
+      "lib/arm64-v8a/libssl_python.so": "6c780070647187d8e4fca72f46e7be90ddb0e38000d2f5681c218fe12583ce5c"
+    },
+    "all_12_match_retained_signed_apk": true,
+    "run_as": "package not debuggable",
+    "native_go_build_tags": [],
+    "vpn_observation_utc": "2026-10-18T08:51:32Z",
+    "vpn_transport_tokens": 0,
+    "service_observation": "ChatDeliveryService foreground; no TcpVpnService in targeted read",
+    "application_pid_observed": 14226,
+    "mesh_handle_attested": false,
+    "curl_path": "/system/bin/curl",
+    "iperf3_found": false,
+    "instrumentation_targets": [
+      "com.familyconnect.app.pilot",
+      "com.familyconnect.chatchecks",
+      "com.familyconnect.nativefriendsfixture"
+    ],
+    "friends_target_instrumentation_found": false
+  },
+  "nl": {
+    "utc": "2026-10-18T08:49:24.585369+00:00",
+    "unit": "family-connect-restricted-bootstrap.service",
+    "properties": {
+      "LoadState": "loaded",
+      "ActiveState": "failed",
+      "SubState": "failed",
+      "FragmentPath": "/etc/systemd/system/family-connect-restricted-bootstrap.service",
+      "DropInPaths": "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/62-four-hour.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/90-owner-diagnostic-control.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/95-exit-chat-services.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-telemost-peer-observer.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-z-admission-ownership.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zz-stability-continuation.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzz-lease-continuity82.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzz-whitelist-bootstrap83.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzz-fatal-observer.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzzz-seed-observation.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzzzz-signal-observation.conf",
+      "UnitFileState": "disabled",
+      "ActiveEnterTimestamp": "Sun 2026-10-18 09:44:21 MSK",
+      "InactiveEnterTimestamp": "Sun 2026-10-18 09:44:52 MSK",
+      "StartLimitIntervalUSec": "10min",
+      "StartLimitBurst": "5",
+      "InvocationID": "4f3ce31195364bed961748ae13fa1c00",
+      "Restart": "always",
+      "RestartUSec": "30s",
+      "MainPID": "0",
+      "Result": "exit-code",
+      "NRestarts": "6",
+      "ExecMainStartTimestamp": "Sun 2026-10-18 09:44:21 MSK",
+      "ExecMainExitTimestamp": "Sun 2026-10-18 09:44:22 MSK",
+      "ExecMainStatus": "1",
+      "ControlGroup": ""
+    },
+    "safe_flags": [
+      "--listen 127.0.0.1:18444",
+      "--duration 4h",
+      "--chat-services",
+      "--seed-rotate-after 3h"
+    ],
+    "configured_executables": {
+      "/opt/apps/family_connect/friends-restricted/bin/bootstrap-broker-signal-observation-20261012": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7"
+    },
+    "unit_file_hashes": {
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service": "306aef9328bac4ae2fca2d2b4b6f17d1f87315d192e5f5b6e7906a6c20ae5f68",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/62-four-hour.conf": "864a67582f7b478dd0ed896b36e119b4c39969636afa9a59a32a5857ea3e9167",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/90-owner-diagnostic-control.conf": "97b3cd2f868150a08fc7b81b43582a624f3d40bc75f07193bd62079cf8af4ff8",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/95-exit-chat-services.conf": "c1e33f6c2d530f007aeb6085ffdf4e20a36ed67d66765a1ab0cd198692f43b85",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-telemost-peer-observer.conf": "5d5b0dda5f3a8d0da0829490d6186606a1f04b22f07f4fd02dea53a48cfe056d",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-z-admission-ownership.conf": "7dbb4b1aedbbe4de3af18efecc45c8eb2182f83194942d145a9f7d62b727090f",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zz-stability-continuation.conf": "ce394f10f0d377ed4024533510980f47e990bca518fb50ffb6fd1c1dda441552",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzz-lease-continuity82.conf": "b1ab399971162468e27f669c374742868b32b788f34a721ad8aaa2b921064847",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzz-whitelist-bootstrap83.conf": "9e708f10b20d5ed76a38cd236507f16001658110d468936cdcb1061c7c64df89",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzz-fatal-observer.conf": "dc9d968301e30f09814893c0ee5d69f28e576b8da684c7230229c3e5167ab034",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzzz-seed-observation.conf": "125b18416694ae2fdfaef930d88d5537b0453c323d15f67f0d8ee48042133d39",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzzzz-signal-observation.conf": "a51090687818d3409fc1e597c5c57c203b942d219a4816e227353cf0509c5ff4"
+    },
+    "stop_post_tools": [
+      "/opt/apps/family_connect/friends-restricted/bin/fatal_exit_receipt_20261011.py"
+    ],
+    "related_units": [
+      [
+        "family-connect-ams-firewall.service",
+        "loaded",
+        "active",
+        "exited"
+      ],
+      [
+        "family-connect-awg31.service",
+        "loaded",
+        "active",
+        "running"
+      ],
+      [
+        "family-connect-friends-awg.service",
+        "loaded",
+        "active",
+        "running"
+      ],
+      [
+        "family-connect-friends-tcp.service",
+        "loaded",
+        "active",
+        "running"
+      ],
+      [
+        "family-connect-mailbox.service",
+        "loaded",
+        "active",
+        "running"
+      ],
+      [
+        "family-connect-restricted-bootstrap.service",
+        "loaded",
+        "failed",
+        "failed"
+      ],
+      [
+        "family-connect-reticulum.service",
+        "loaded",
+        "active",
+        "running"
+      ],
+      [
+        "family-connect-server-load.service",
+        "loaded",
+        "active",
+        "running"
+      ]
+    ],
+    "related_unit_files": [
+      [
+        "family-connect-ams-firewall.service",
+        "disabled",
+        "enabled"
+      ],
+      [
+        "family-connect-awg31.service",
+        "enabled",
+        "enabled"
+      ],
+      [
+        "family-connect-friends-awg.service",
+        "enabled",
+        "enabled"
+      ],
+      [
+        "family-connect-friends-tcp.service",
+        "enabled",
+        "enabled"
+      ],
+      [
+        "family-connect-mailbox.service",
+        "enabled",
+        "enabled"
+      ],
+      [
+        "family-connect-restricted-bootstrap.service",
+        "disabled",
+        "enabled"
+      ],
+      [
+        "family-connect-reticulum.service",
+        "enabled",
+        "enabled"
+      ],
+      [
+        "family-connect-server-load.service",
+        "enabled",
+        "enabled"
+      ]
+    ],
+    "family_processes": [
+      {
+        "pid": 7266,
+        "exe": "/opt/apps/family_connect/awg31-beta02/amneziawg-go",
+        "exe_sha256": "e7f00e47d6df853ade5dcd2fe79240f01ff897d75088c768316a444c27c87e0f",
+        "cgroup": "0::/system.slice/family-connect-awg31.service"
+      },
+      {
+        "pid": 2305195,
+        "exe": "/usr/bin/python3.14",
+        "exe_sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+        "cgroup": "0::/system.slice/family-connect-reticulum.service"
+      },
+      {
+        "pid": 2420425,
+        "exe": "/opt/apps/family_connect/friends-tcp/xray",
+        "exe_sha256": "4f7a4436f86798bbb5c875014e352021a1673710a45e170ccc507c5f59341940",
+        "cgroup": "0::/system.slice/family-connect-friends-tcp.service"
+      },
+      {
+        "pid": 2729603,
+        "exe": "/usr/bin/python3.14",
+        "exe_sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+        "cgroup": "0::/system.slice/family-connect-server-load.service"
+      },
+      {
+        "pid": 3709156,
+        "exe": "/usr/bin/python3.14",
+        "exe_sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+        "cgroup": "0::/system.slice/family-connect-mailbox.service"
+      },
+      {
+        "pid": 3736717,
+        "exe": "/usr/bin/python3.14",
+        "exe_sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+        "cgroup": "0::/system.slice/family-connect-friends-awg.service"
+      },
+      {
+        "pid": 3736719,
+        "exe": "/opt/apps/family_connect/friends-awg/amneziawg-go",
+        "exe_sha256": "e7f00e47d6df853ade5dcd2fe79240f01ff897d75088c768316a444c27c87e0f",
+        "cgroup": "0::/system.slice/family-connect-friends-awg.service"
+      }
+    ],
+    "listen_18444": false,
+    "journal": {
+      "lines_examined": 80,
+      "lifecycle": [
+        {
+          "utc": "2026-10-18T06:44:52.192232+00:00",
+          "message": "Failed to start family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker."
+        },
+        {
+          "utc": "2026-10-18T06:44:52.192171+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Failed with result 'exit-code'."
+        },
+        {
+          "utc": "2026-10-18T06:44:52.192060+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Start request repeated too quickly."
+        },
+        {
+          "utc": "2026-10-18T06:44:52.190933+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Scheduled restart job, restart counter is at 6."
+        },
+        {
+          "utc": "2026-10-18T06:44:22.074937+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Failed with result 'exit-code'."
+        },
+        {
+          "utc": "2026-10-18T06:44:22.001899+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Main process exited, code=exited, status=1/FAILURE"
+        },
+        {
+          "utc": "2026-10-18T06:44:21.999013+00:00",
+          "message": "bootstrap broker stopped"
+        },
+        {
+          "utc": "2026-10-18T06:44:21.947507+00:00",
+          "message": "Started family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker."
+        },
+        {
+          "utc": "2026-10-18T06:44:21.941192+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Scheduled restart job, restart counter is at 5."
+        },
+        {
+          "utc": "2026-10-18T06:43:51.926990+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Failed with result 'exit-code'."
+        },
+        {
+          "utc": "2026-10-18T06:43:51.835215+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Main process exited, code=exited, status=1/FAILURE"
+        },
+        {
+          "utc": "2026-10-18T06:43:51.831952+00:00",
+          "message": "bootstrap broker stopped"
+        },
+        {
+          "utc": "2026-10-18T06:43:49.445559+00:00",
+          "message": "Started family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker."
+        },
+        {
+          "utc": "2026-10-18T06:43:49.440521+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Scheduled restart job, restart counter is at 4."
+        },
+        {
+          "utc": "2026-10-18T06:43:19.293768+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Failed with result 'exit-code'."
+        },
+        {
+          "utc": "2026-10-18T06:43:19.229796+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Main process exited, code=exited, status=1/FAILURE"
+        },
+        {
+          "utc": "2026-10-18T06:43:19.227227+00:00",
+          "message": "bootstrap broker stopped"
+        },
+        {
+          "utc": "2026-10-18T06:43:19.194268+00:00",
+          "message": "Started family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker."
+        },
+        {
+          "utc": "2026-10-18T06:43:19.190738+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Scheduled restart job, restart counter is at 3."
+        },
+        {
+          "utc": "2026-10-18T06:42:49.046956+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Failed with result 'exit-code'."
+        },
+        {
+          "utc": "2026-10-18T06:42:48.983132+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Main process exited, code=exited, status=1/FAILURE"
+        },
+        {
+          "utc": "2026-10-18T06:42:48.980573+00:00",
+          "message": "bootstrap broker stopped"
+        },
+        {
+          "utc": "2026-10-18T06:42:48.944875+00:00",
+          "message": "Started family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker."
+        },
+        {
+          "utc": "2026-10-18T06:42:48.940973+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Scheduled restart job, restart counter is at 2."
+        },
+        {
+          "utc": "2026-10-18T06:42:18.810653+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Failed with result 'exit-code'."
+        },
+        {
+          "utc": "2026-10-18T06:42:18.737389+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Main process exited, code=exited, status=1/FAILURE"
+        },
+        {
+          "utc": "2026-10-18T06:42:18.734362+00:00",
+          "message": "bootstrap broker stopped"
+        },
+        {
+          "utc": "2026-10-18T06:42:17.945633+00:00",
+          "message": "Started family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker."
+        },
+        {
+          "utc": "2026-10-18T06:42:17.940947+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Scheduled restart job, restart counter is at 1."
+        },
+        {
+          "utc": "2026-10-18T06:41:47.762373+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Consumed 2min 33.393s CPU time over 4h 256ms wall clock time, 39.5M memory peak."
+        },
+        {
+          "utc": "2026-10-18T06:41:47.759976+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Deactivated successfully."
+        },
+        {
+          "utc": "2026-10-18T02:41:47.505201+00:00",
+          "message": "Started family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker."
+        },
+        {
+          "utc": "2026-10-18T02:41:39.583304+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Consumed 1min 20.339s CPU time over 2h 30min 13.705s wall clock time, 18.1M memory peak."
+        },
+        {
+          "utc": "2026-10-18T02:41:39.581515+00:00",
+          "message": "Stopped family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker."
+        },
+        {
+          "utc": "2026-10-18T02:41:39.580823+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Deactivated successfully."
+        },
+        {
+          "utc": "2026-10-18T02:41:39.474007+00:00",
+          "message": "Stopping family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker..."
+        },
+        {
+          "utc": "2026-10-18T00:11:25.878719+00:00",
+          "message": "Started family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker."
+        },
+        {
+          "utc": "2026-10-18T00:11:17.952953+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Consumed 1min 24.405s CPU time over 2h 30min 22.761s wall clock time, 23.2M memory peak."
+        },
+        {
+          "utc": "2026-10-18T00:11:17.951717+00:00",
+          "message": "Stopped family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker."
+        },
+        {
+          "utc": "2026-10-18T00:11:17.950758+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Deactivated successfully."
+        },
+        {
+          "utc": "2026-10-18T00:11:16.756257+00:00",
+          "message": "Stopping family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker..."
+        },
+        {
+          "utc": "2026-10-17T21:40:55.192577+00:00",
+          "message": "Started family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker."
+        },
+        {
+          "utc": "2026-10-17T21:40:47.429632+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Consumed 4min 56.053s CPU time over 2h 30min 37.603s wall clock time, 39.2M memory peak."
+        },
+        {
+          "utc": "2026-10-17T21:40:47.428421+00:00",
+          "message": "Stopped family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker."
+        },
+        {
+          "utc": "2026-10-17T21:40:47.427666+00:00",
+          "message": "family-connect-restricted-bootstrap.service: Deactivated successfully."
+        },
+        {
+          "utc": "2026-10-17T21:40:47.152724+00:00",
+          "message": "Stopping family-connect-restricted-bootstrap.service - Friends authenticated bootstrap seed and on-demand dedicated broker..."
+        }
+      ],
+      "other_event_counts": {
+        "bootstrap_seed_ready": 4,
+        "restricted_trace": 23,
+        "FAILED": 1,
+        "dedicated_resources_closed": 1
+      }
+    },
+    "application_receipts": [
+      {
+        "timestamp_utc": "2026-10-18T06:44:21.995489273Z",
+        "elapsed_ms": 26,
+        "pid": 1945581,
+        "binary_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+        "source_sha": "",
+        "exit_path": "returned_error",
+        "last_confirmed_stage": "PROFILE",
+        "first_stage": "PROFILE",
+        "first_cause": "CREDENTIALS_REJECTED",
+        "safe_error_class": "typed",
+        "seed_generation": 0,
+        "parent_context_at_failure": "",
+        "fatal": true,
+        "signal": "",
+        "credential_limiting_expiry": "2026-10-18T06:41:35Z",
+        "credential_headroom_seconds": -166,
+        "credential_snapshot": "STARTUP_NOT_AUTHORIZATION",
+        "broker_lifecycle": "STARTUP",
+        "cleanup_started": true,
+        "cleanup_completed": true
+      },
+      {
+        "timestamp_utc": "2026-10-18T06:43:49.478718065Z",
+        "elapsed_ms": 18,
+        "pid": 1945212,
+        "binary_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+        "source_sha": "",
+        "exit_path": "returned_error",
+        "last_confirmed_stage": "PROFILE",
+        "first_stage": "PROFILE",
+        "first_cause": "CREDENTIALS_REJECTED",
+        "safe_error_class": "typed",
+        "seed_generation": 0,
+        "parent_context_at_failure": "",
+        "fatal": true,
+        "signal": "",
+        "credential_limiting_expiry": "2026-10-18T06:41:35Z",
+        "credential_headroom_seconds": -134,
+        "credential_snapshot": "STARTUP_NOT_AUTHORIZATION",
+        "broker_lifecycle": "STARTUP",
+        "cleanup_started": true,
+        "cleanup_completed": true
+      },
+      {
+        "timestamp_utc": "2026-10-18T06:43:19.224632809Z",
+        "elapsed_ms": 15,
+        "pid": 1944987,
+        "binary_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+        "source_sha": "",
+        "exit_path": "returned_error",
+        "last_confirmed_stage": "PROFILE",
+        "first_stage": "PROFILE",
+        "first_cause": "CREDENTIALS_REJECTED",
+        "safe_error_class": "typed",
+        "seed_generation": 0,
+        "parent_context_at_failure": "",
+        "fatal": true,
+        "signal": "",
+        "credential_limiting_expiry": "2026-10-18T06:41:35Z",
+        "credential_headroom_seconds": -104,
+        "credential_snapshot": "STARTUP_NOT_AUTHORIZATION",
+        "broker_lifecycle": "STARTUP",
+        "cleanup_started": true,
+        "cleanup_completed": true
+      },
+      {
+        "timestamp_utc": "2026-10-18T06:42:48.97812489Z",
+        "elapsed_ms": 15,
+        "pid": 1944663,
+        "binary_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+        "source_sha": "",
+        "exit_path": "returned_error",
+        "last_confirmed_stage": "PROFILE",
+        "first_stage": "PROFILE",
+        "first_cause": "CREDENTIALS_REJECTED",
+        "safe_error_class": "typed",
+        "seed_generation": 0,
+        "parent_context_at_failure": "",
+        "fatal": true,
+        "signal": "",
+        "credential_limiting_expiry": "2026-10-18T06:41:35Z",
+        "credential_headroom_seconds": -73,
+        "credential_snapshot": "STARTUP_NOT_AUTHORIZATION",
+        "broker_lifecycle": "STARTUP",
+        "cleanup_started": true,
+        "cleanup_completed": true
+      },
+      {
+        "timestamp_utc": "2026-10-18T06:42:18.73106393Z",
+        "elapsed_ms": 764,
+        "pid": 1944286,
+        "binary_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+        "source_sha": "",
+        "exit_path": "returned_error",
+        "last_confirmed_stage": "PROFILE",
+        "first_stage": "PROFILE",
+        "first_cause": "CREDENTIALS_REJECTED",
+        "safe_error_class": "typed",
+        "seed_generation": 0,
+        "parent_context_at_failure": "",
+        "fatal": true,
+        "signal": "",
+        "credential_limiting_expiry": "2026-10-18T06:41:35Z",
+        "credential_headroom_seconds": -43,
+        "credential_snapshot": "STARTUP_NOT_AUTHORIZATION",
+        "broker_lifecycle": "STARTUP",
+        "cleanup_started": true,
+        "cleanup_completed": true
+      },
+      {
+        "timestamp_utc": "2026-10-18T06:41:47.662106087Z",
+        "elapsed_ms": 14400128,
+        "pid": 1808023,
+        "binary_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+        "source_sha": "",
+        "exit_path": "normal_stop",
+        "last_confirmed_stage": "SEED_RUN",
+        "first_stage": "RUN",
+        "first_cause": "DEADLINE",
+        "safe_error_class": "typed",
+        "seed_generation": 0,
+        "parent_context_at_failure": "DEADLINE",
+        "fatal": false,
+        "signal": "",
+        "credential_limiting_expiry": "2026-10-18T06:41:35Z",
+        "credential_headroom_seconds": -12,
+        "credential_snapshot": "STARTUP_NOT_AUTHORIZATION",
+        "broker_lifecycle": "SEED_PUBLISHED",
+        "cleanup_started": true,
+        "cleanup_completed": true
+      },
+      {
+        "timestamp_utc": "2026-10-18T02:41:39.483451725Z",
+        "elapsed_ms": 9013550,
+        "pid": 1722740,
+        "binary_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+        "source_sha": "",
+        "exit_path": "signal",
+        "last_confirmed_stage": "SEED_RUN",
+        "first_stage": "RUN",
+        "first_cause": "CANCELLED",
+        "safe_error_class": "typed",
+        "seed_generation": 0,
+        "parent_context_at_failure": "CANCELLED",
+        "fatal": false,
+        "signal": "SIGTERM",
+        "credential_limiting_expiry": "2026-10-18T04:11:14Z",
+        "credential_headroom_seconds": 5374,
+        "credential_snapshot": "STARTUP_NOT_AUTHORIZATION",
+        "broker_lifecycle": "SEED_PUBLISHED",
+        "cleanup_started": true,
+        "cleanup_completed": true
+      },
+      {
+        "timestamp_utc": "2026-10-18T00:11:17.73895239Z",
+        "elapsed_ms": 9022519,
+        "pid": 1638324,
+        "binary_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+        "source_sha": "",
+        "exit_path": "signal",
+        "last_confirmed_stage": "SEED_RUN",
+        "first_stage": "RUN",
+        "first_cause": "CANCELLED",
+        "safe_error_class": "typed",
+        "seed_generation": 0,
+        "parent_context_at_failure": "CANCELLED",
+        "fatal": false,
+        "signal": "SIGTERM",
+        "credential_limiting_expiry": "2026-10-18T01:40:43Z",
+        "credential_headroom_seconds": 5365,
+        "credential_snapshot": "STARTUP_NOT_AUTHORIZATION",
+        "broker_lifecycle": "SEED_PUBLISHED",
+        "cleanup_started": true,
+        "cleanup_completed": true
+      },
+      {
+        "timestamp_utc": "2026-10-17T21:40:47.158585003Z",
+        "elapsed_ms": 9037304,
+        "pid": 1544538,
+        "binary_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+        "source_sha": "",
+        "exit_path": "signal",
+        "last_confirmed_stage": "SEED_RUN",
+        "first_stage": "RUN",
+        "first_cause": "CANCELLED",
+        "safe_error_class": "typed",
+        "seed_generation": 0,
+        "parent_context_at_failure": "CANCELLED",
+        "fatal": false,
+        "signal": "SIGTERM",
+        "credential_limiting_expiry": "2026-10-17T23:09:58Z",
+        "credential_headroom_seconds": 5350,
+        "credential_snapshot": "STARTUP_NOT_AUTHORIZATION",
+        "broker_lifecycle": "SEED_PUBLISHED",
+        "cleanup_started": true,
+        "cleanup_completed": true
+      },
+      {
+        "timestamp_utc": "2026-10-17T19:10:01.472106218Z",
+        "elapsed_ms": 9024372,
+        "pid": 1454327,
+        "binary_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+        "source_sha": "",
+        "exit_path": "signal",
+        "last_confirmed_stage": "SEED_RUN",
+        "first_stage": "RUN",
+        "first_cause": "CANCELLED",
+        "safe_error_class": "typed",
+        "seed_generation": 0,
+        "parent_context_at_failure": "CANCELLED",
+        "fatal": false,
+        "signal": "SIGTERM",
+        "credential_limiting_expiry": "2026-10-17T20:39:25Z",
+        "credential_headroom_seconds": 5363,
+        "credential_snapshot": "STARTUP_NOT_AUTHORIZATION",
+        "broker_lifecycle": "SEED_PUBLISHED",
+        "cleanup_started": true,
+        "cleanup_completed": true
+      }
+    ],
+    "ipv6_default": "",
+    "ipv6_route_get": {
+      "returncode": 2,
+      "stdout": "",
+      "stderr": "RTNETLINK answers: Network is unreachable"
+    },
+    "ipv6_addresses": [
+      {
+        "interface": "fcams",
+        "prefixlen": 64,
+        "public_gua": false
+      },
+      {
+        "interface": "fcawg31",
+        "prefixlen": 64,
+        "public_gua": false
+      }
+    ],
+    "read_errors": []
+  },
+  "nl_final_service": {
+    "utc": "2026-10-18T08:52:39Z",
+    "active_state": "failed",
+    "main_pid": 0,
+    "restarts": 6
+  },
+  "nl_profile_dates": {
+    "observed_utc": "2026-10-18T08:53:23.975334+00:00",
+    "certificate": {
+      "not_before": "2026-10-18T02:41:35Z",
+      "not_after": "2026-10-18T06:41:35Z"
+    },
+    "authority": {
+      "not_before": "2026-10-17T08:57:40Z",
+      "not_after": "2026-10-18T08:57:40Z"
+    },
+    "crl": {
+      "this_update": "2026-10-18T02:41:35Z",
+      "next_update": "2026-10-18T06:41:35Z"
+    },
+    "private_values_exported": false
+  },
+  "gateway_local_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+  "gateway_build_tags": [],
+  "reliable_source_defaults": {
+    "payload": 16384,
+    "send_window": 8,
+    "receive_window": 16,
+    "rto_ms": 1000,
+    "max_retries": 8,
+    "max_age_ms": 20000,
+    "max_window": 32,
+    "live_negotiation_observed": false
+  },
+  "batching": {
+    "precedes_reliable_accounting": true,
+    "automatic_concrete_family_session_method": true,
+    "max_messages": 32,
+    "max_plaintext": 16362,
+    "mux_data_cap": 16340,
+    "wait_for_more_ready_frames": false,
+    "supported_runtime_toggle_found": false,
+    "physical_batch_invocations_measured": false
+  },
+  "github_readback": {
+    "main": "7656f2c65ea2928b71a928c12ee65a2f47f8ac4f",
+    "phase0_39110172718": {
+      "tests": "failure",
+      "failover": "failure"
+    },
+    "clients_39110077439": {
+      "android": "success",
+      "linux": "success",
+      "windows": "success",
+      "windows-compatibility": "success",
+      "release": "skipped"
+    }
+  },
+  "provider": {
+    "ripe_observed_utc": "2026-10-18T08:49:44.745922",
+    "prefix": "186.246.44.0/22",
+    "origin_asn": 57043,
+    "network_name": "HOSTKEY B.V.",
+    "ripe_url": "https://stat.ripe.net/data/network-info/data.json?resource=186.246.45.246",
+    "official_policy_url": "https://hostkey.com/documentation/faq/network_settings/",
+    "policy_read_date": "2026-10-18",
+    "published_policy": "No IPv6 for VPS; dedicated IPv6 available in Netherlands and United States",
+    "vm_type": "kvm",
+    "dmi_vendor": "QEMU",
+    "retail_provider_and_plan_confirmed": false
+  },
+  "physical_measurements": [],
+  "blockers": [
+    "NL accepted MESH broker not running; expired leaf and CRL; systemd start limit hit",
+    "No active Android MESH session; USB connection is not VPN start authorization",
+    "Approved HTTPS fixture/upload contract and route proof not verified",
+    "Accepted export lacks full DATA lengths/flight bytes and full timing distributions"
+  ],
+  "changes": {
+    "runtime": false,
+    "restart": false,
+    "install": false,
+    "credentials": false,
+    "vpn": false,
+    "publish": false,
+    "source_optimization": false
+  },
+  "readonly_auditor_sha256": "7f7f82343d4038ed15bfa15007eaea1a4f99f52297a9f99946c951c6f823f4ca"
+}

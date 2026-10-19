@@ -1,0 +1,645 @@
+{
+  "task": "MESH-NL-RECOVERY-APPLY-1",
+  "result": "PARTIAL",
+  "source_head": "7656f2c65ea2928b71a928c12ee65a2f47f8ac4f",
+  "request_id": "mesh-nl-recovery-prep-20261018-01",
+  "input_hashes": {
+    "recovery-request.json": "a985777611d8b5d2a54ea8f1928b4f7537e3ff7a19ea0506fa98ff8999c3b794",
+    "successor-ca.pem": "8ef49f002afd64f7e92a7f764fdcc19784fddf6c590bf9fc79bfd041aabdc46a",
+    "authority-bundle.json": "3f7d0d1e5cd3021da25758a9965bfb8ad1caebb31d4afbe237f47be84de81c2e",
+    "repeat-request-verification.json": "7856f0cc4ffa3602882396d35e1babe1bfcd3615d90a084ec23b1da1c0b0705a"
+  },
+  "preflight": {
+    "result": "PASS_EXACT_SIGNED_BUNDLE_PREFLIGHT",
+    "utc": "2026-10-18T10:43:35.985408+00:00",
+    "request_id": "mesh-nl-recovery-prep-20261018-01",
+    "hashes": {
+      "recovery-request.json": "a985777611d8b5d2a54ea8f1928b4f7537e3ff7a19ea0506fa98ff8999c3b794",
+      "successor-ca.pem": "8ef49f002afd64f7e92a7f764fdcc19784fddf6c590bf9fc79bfd041aabdc46a",
+      "authority-bundle.json": "3f7d0d1e5cd3021da25758a9965bfb8ad1caebb31d4afbe237f47be84de81c2e",
+      "repeat-request-verification.json": "7856f0cc4ffa3602882396d35e1babe1bfcd3615d90a084ec23b1da1c0b0705a"
+    },
+    "signature_verified": true,
+    "scope_revocations_floors_preserved": true,
+    "issuer_key_unchanged": true,
+    "checkpoint": {
+      "operation_id": "scheduled-1792291291-d3bbc76b3aa8dc8d",
+      "plan_sha256": "289e59aecffe16a482ef29eb13995393d5b0e37dbe6b678c9a4dfc556052ba4d",
+      "snapshot_sha256": "008cbeb7adec69956b242012f17204d8ee4a242bbeec53089699587b566dd978"
+    },
+    "expected_state_sha256": "2a44db20325b17132224897652b158c82ab0396f675b8b72f9b8465baa2712f2",
+    "successor_not_after": "2026-10-19T09:33:41+00:00",
+    "headroom_seconds": 82206,
+    "operational_cutoff": "2026-10-19T02:33:41+00:00",
+    "signer_invoked": false
+  },
+  "application": {
+    "automatic_retry": false,
+    "exit_code": 0,
+    "first_cause": null,
+    "operation_id": "mesh-nl-recovery-prep-20261018-01",
+    "receipt_sha256": "153e8ad5372aa901786128b65e06223101a068ca7383b79d1d3c8965ad989ea9",
+    "renewal_timer": {
+      "ActiveState": "inactive",
+      "InvocationID": "755f2c0a354241ed9ad8ae7efa50f589",
+      "SubState": "dead",
+      "UnitFileState": "enabled"
+    },
+    "result": "COMMITTED",
+    "transaction": {
+      "bundle_sha256": "3f7d0d1e5cd3021da25758a9965bfb8ad1caebb31d4afbe237f47be84de81c2e",
+      "commit_decided": true,
+      "cursor": 9,
+      "first_cause": null,
+      "mode": "expired",
+      "operation_id": "mesh-nl-recovery-prep-20261018-01",
+      "state": "COMMITTED"
+    }
+  },
+  "current_checkpoint": {
+    "operation_id": "mesh-nl-recovery-prep-20261018-01",
+    "plan_sha256": "4ed8dd3c86f5dd2c6c1124dadf175a6269dabc390561d85b22519848049a14cf",
+    "snapshot_sha256": "1a0ef9193711f23b8a39b5a62e1a7e5d44b801fd00aad8f18caac67354c80a3e"
+  },
+  "transaction": {
+    "operation_id": "mesh-nl-recovery-prep-20261018-01",
+    "state": "COMMITTED",
+    "mode": "expired",
+    "cursor": 9,
+    "first_cause": null,
+    "commit_decided": true,
+    "bundle_sha256": "3f7d0d1e5cd3021da25758a9965bfb8ad1caebb31d4afbe237f47be84de81c2e"
+  },
+  "output_hashes": {
+    "transaction.json": "8d01c9faa83cb9fee65fd2ef255c857ae6e520f854bc5b48de4366174eb9f5eb",
+    "plan.json": "4ed8dd3c86f5dd2c6c1124dadf175a6269dabc390561d85b22519848049a14cf"
+  },
+  "remote_receipt_hashes": {
+    "evaluate.json": "a8b841ea64d245dc412620a70a58402b2684c325d8e5b694fea797e2e1dfb833",
+    "authority-bundle.json": "3f7d0d1e5cd3021da25758a9965bfb8ad1caebb31d4afbe237f47be84de81c2e",
+    "apply-exit.json": "c1e733cf3a26d68752166ff44e5811ce4483d5359b9556821c50b2d81b36f4cb",
+    "apply-start.json": "5e01695de4d7a0bbe6be95160cae3b175f519c813d4494f15b3a338bbe8a7299",
+    "bundle-transfer.json": "1b2c0defb2d970a479acfa72f1b57aee56374548fc58881eec38988e86dc5e4d",
+    "timer-before.json": "ae1f0366dd15e8504fdf8e38c5d13e267f41aa72a1ab94f53a573da63ed735a5",
+    "timer-restored.json": "1542bdde787a680fb3c8f709bdf94279b0cf368924c687b016523d6616d4443e",
+    "apply-result.json": "153e8ad5372aa901786128b65e06223101a068ca7383b79d1d3c8965ad989ea9",
+    "apply.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "evaluate.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "installed_material_hashes": {
+    "issuer.json": "172ee21c9a02cd6f41a58700b684bf8d423baba8fd5c23e832503a7e76ec1042",
+    "revocations.pem": "c79c08fbe1e4fe4df734ed5a6aa09a3acb66d13f73ffb64bec80852dd3124a6d",
+    "admission.json": "e63b6438ef5a9e575681c0e1b84a1e070cf4d2164d5ee153f038cab9e6b50ac2"
+  },
+  "strict_installed_validation": {
+    "anchor": "/opt/apps/family_connect/friends-restricted/renewal/anchor.pub",
+    "api_archive": "/opt/apps/family_connect/friends-access/http-publisher-research74-20261010.pyz",
+    "api_sha256": "12ca0c72a89ff20c1b3c70a1182a2d5d98d4d78d25e7a079bb4d75bdf34060ed",
+    "authority_expiry": 1792402421,
+    "authority_sequence": 17,
+    "crl_expiry": 1792334954,
+    "crl_number": 27120,
+    "crl_revoked_count": 2,
+    "decision": {
+      "alerts": [],
+      "due": [],
+      "headroom": {
+        "authority": 81763,
+        "crl": 14296,
+        "grant": 81763,
+        "leaf": 14296
+      },
+      "result": "NOOP"
+    },
+    "eligibility": [
+      "ELIGIBLE",
+      "ELIGIBLE"
+    ],
+    "floors": {
+      "minimum_crl": 27088,
+      "minimum_revision": 1
+    },
+    "grants": [
+      {
+        "expires": 1792402421,
+        "revision": 7,
+        "revoked": 0
+      },
+      {
+        "expires": 1792402421,
+        "revision": 9,
+        "revoked": 0
+      }
+    ],
+    "leaf_expiry": 1792334954,
+    "markers": {
+      "authority-request.json": false,
+      "owner.json": false
+    },
+    "now": 1792320658,
+    "pending_revocations": false,
+    "source": "5109a7c92ddd1937fe75ed7199866855a8cc20279bc226c35475d4cc81330145",
+    "strict_validation": "PASS",
+    "transaction": {
+      "commit_decided": true,
+      "first_cause": null,
+      "operation_id": "mesh-nl-recovery-prep-20261018-01",
+      "state": "COMMITTED"
+    }
+  },
+  "independent_installed_validation": {
+    "result": "PASS_INDEPENDENT_INSTALLED_TRANSITION",
+    "utc_epoch": 1792322424,
+    "inputs_unchanged": {
+      "recovery-request.json": "a985777611d8b5d2a54ea8f1928b4f7537e3ff7a19ea0506fa98ff8999c3b794",
+      "successor-ca.pem": "8ef49f002afd64f7e92a7f764fdcc19784fddf6c590bf9fc79bfd041aabdc46a",
+      "authority-bundle.json": "3f7d0d1e5cd3021da25758a9965bfb8ad1caebb31d4afbe237f47be84de81c2e"
+    },
+    "signature_verified": true,
+    "transition_validator_pass": true,
+    "current_time_strict_validation": true,
+    "same_issuer_and_gateway_keys": true,
+    "grant_scope_binding_revocations_floors_preserved": true,
+    "authority_sequence": 17,
+    "current_checkpoint": {
+      "operation_id": "mesh-nl-recovery-prep-20261018-01",
+      "plan_sha256": "4ed8dd3c86f5dd2c6c1124dadf175a6269dabc390561d85b22519848049a14cf",
+      "snapshot_sha256": "1a0ef9193711f23b8a39b5a62e1a7e5d44b801fd00aad8f18caac67354c80a3e"
+    },
+    "both_nodes_directory_match": true,
+    "installed_profile_matches_snapshot": true,
+    "source_api_controller_units_admission_anchor_unchanged": true,
+    "signing_or_mutation": false
+  },
+  "server": {
+    "result": "PASS_SERVER_READINESS",
+    "utc": "2026-10-18T10:55:05.169283+00:00",
+    "loaded_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+    "pid": "2094910",
+    "invocation": "e9cedbb2fb9d45a2ba0aefd9f211bcb6",
+    "nrestarts": "0",
+    "profile_sha256": "64870fac58ec25d593837f0cfe7ecc6b2b58411adb03da396122f7c7b2f4bf8d",
+    "profile_uid": 979,
+    "profile_gid": 979,
+    "profile_mode": "0o600",
+    "service_readability_pass": true,
+    "extended_acl_absent": true,
+    "exec_start_sha256": "40b470266aa15a1097fa90b2e441ddb7e5461aa3054c01b61f9a1c8679ff1af9",
+    "unit_files": {
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service": "306aef9328bac4ae2fca2d2b4b6f17d1f87315d192e5f5b6e7906a6c20ae5f68",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/62-four-hour.conf": "864a67582f7b478dd0ed896b36e119b4c39969636afa9a59a32a5857ea3e9167",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/90-owner-diagnostic-control.conf": "97b3cd2f868150a08fc7b81b43582a624f3d40bc75f07193bd62079cf8af4ff8",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/95-exit-chat-services.conf": "c1e33f6c2d530f007aeb6085ffdf4e20a36ed67d66765a1ab0cd198692f43b85",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-telemost-peer-observer.conf": "5d5b0dda5f3a8d0da0829490d6186606a1f04b22f07f4fd02dea53a48cfe056d",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-z-admission-ownership.conf": "7dbb4b1aedbbe4de3af18efecc45c8eb2182f83194942d145a9f7d62b727090f",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zz-stability-continuation.conf": "ce394f10f0d377ed4024533510980f47e990bca518fb50ffb6fd1c1dda441552",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzz-lease-continuity82.conf": "b1ab399971162468e27f669c374742868b32b788f34a721ad8aaa2b921064847",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzz-whitelist-bootstrap83.conf": "9e708f10b20d5ed76a38cd236507f16001658110d468936cdcb1061c7c64df89",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzz-fatal-observer.conf": "dc9d968301e30f09814893c0ee5d69f28e576b8da684c7230229c3e5167ab034",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzzz-seed-observation.conf": "125b18416694ae2fdfaef930d88d5537b0453c323d15f67f0d8ee48042133d39",
+      "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzzzz-signal-observation.conf": "a51090687818d3409fc1e597c5c57c203b942d219a4816e227353cf0509c5ff4"
+    },
+    "tls": {
+      "chain_and_hostname_verified": true,
+      "hostname": "gateway.family-connect.test",
+      "expected_leaf_match": true,
+      "leaf_der_sha256": "f426d5c79c1dd758ff9cf911596ed92426517903fe4e45d884bf0ef495b9b5c3",
+      "not_after": "2026-10-18T14:49:14+00:00",
+      "alpn": "http/1.1",
+      "version": "TLSv1.3",
+      "client_authentication": "NOT_ATTEMPTED"
+    },
+    "journal_events": [
+      {
+        "event": "bootstrap_seed_ready",
+        "utc": "2026-10-18T10:49:33.992185808Z"
+      }
+    ],
+    "unparsed_journal_count": 0,
+    "journal_sha256": "7e60298137933d0ae31ade119b101827d83324e8d692dbe97a2d3acf50a9244e",
+    "directory_sha256": "4cbab5fe8a6856310b501380b45952acdd14d7488e41ae87cb5bdf1b32e5cf7b"
+  },
+  "final_server": {
+    "utc": "2026-10-18T11:19:53.157587+00:00",
+    "unit": {
+      "LoadState": "loaded",
+      "ActiveState": "active",
+      "SubState": "running",
+      "FragmentPath": "/etc/systemd/system/family-connect-restricted-bootstrap.service",
+      "DropInPaths": "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/62-four-hour.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/90-owner-diagnostic-control.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/95-exit-chat-services.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-telemost-peer-observer.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-z-admission-ownership.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zz-stability-continuation.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzz-lease-continuity82.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzz-whitelist-bootstrap83.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzz-fatal-observer.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzzz-seed-observation.conf /etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzzzz-signal-observation.conf",
+      "UnitFileState": "disabled",
+      "InvocationID": "e9cedbb2fb9d45a2ba0aefd9f211bcb6",
+      "MainPID": "2094910",
+      "Result": "success",
+      "NRestarts": "0",
+      "ExecMainStartTimestamp": "Sun 2026-10-18 13:49:27 MSK",
+      "ExecMainExitTimestamp": "",
+      "ExecMainStatus": "0",
+      "definition_files": {
+        "/etc/systemd/system/family-connect-restricted-bootstrap.service": "306aef9328bac4ae2fca2d2b4b6f17d1f87315d192e5f5b6e7906a6c20ae5f68",
+        "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/62-four-hour.conf": "864a67582f7b478dd0ed896b36e119b4c39969636afa9a59a32a5857ea3e9167",
+        "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/90-owner-diagnostic-control.conf": "97b3cd2f868150a08fc7b81b43582a624f3d40bc75f07193bd62079cf8af4ff8",
+        "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/95-exit-chat-services.conf": "c1e33f6c2d530f007aeb6085ffdf4e20a36ed67d66765a1ab0cd198692f43b85",
+        "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-telemost-peer-observer.conf": "5d5b0dda5f3a8d0da0829490d6186606a1f04b22f07f4fd02dea53a48cfe056d",
+        "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-z-admission-ownership.conf": "7dbb4b1aedbbe4de3af18efecc45c8eb2182f83194942d145a9f7d62b727090f",
+        "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zz-stability-continuation.conf": "ce394f10f0d377ed4024533510980f47e990bca518fb50ffb6fd1c1dda441552",
+        "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzz-lease-continuity82.conf": "b1ab399971162468e27f669c374742868b32b788f34a721ad8aaa2b921064847",
+        "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzz-whitelist-bootstrap83.conf": "9e708f10b20d5ed76a38cd236507f16001658110d468936cdcb1061c7c64df89",
+        "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzz-fatal-observer.conf": "dc9d968301e30f09814893c0ee5d69f28e576b8da684c7230229c3e5167ab034",
+        "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzzz-seed-observation.conf": "125b18416694ae2fdfaef930d88d5537b0453c323d15f67f0d8ee48042133d39",
+        "/etc/systemd/system/family-connect-restricted-bootstrap.service.d/99-zzzzzzzz-signal-observation.conf": "a51090687818d3409fc1e597c5c57c203b942d219a4816e227353cf0509c5ff4"
+      }
+    },
+    "loaded_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+    "profile_sha256": "64870fac58ec25d593837f0cfe7ecc6b2b58411adb03da396122f7c7b2f4bf8d",
+    "listener_18444": true
+  },
+  "directory": {
+    "ru_sha256": "4cbab5fe8a6856310b501380b45952acdd14d7488e41ae87cb5bdf1b32e5cf7b",
+    "nl_sha256": "4cbab5fe8a6856310b501380b45952acdd14d7488e41ae87cb5bdf1b32e5cf7b",
+    "metadata": {
+      "sha256": "4cbab5fe8a6856310b501380b45952acdd14d7488e41ae87cb5bdf1b32e5cf7b",
+      "issued_at": "2026-10-18T10:49:33.989302554Z",
+      "expires_at": "2026-10-18T14:49:31.111612545Z"
+    }
+  },
+  "cleanup": {
+    "RU": {
+      "completed": {
+        "manifest_sha256": "b793047024a0d82a27451ac0626d70a07bb56cefe05651eeadff4fba02cd48e1",
+        "result": "CLEANED",
+        "timestamp": 1792320574
+      },
+      "archive_hashes_verified": true,
+      "owner": false,
+      "authority_request": false,
+      "start_intents": [
+        {
+          "schema": 1,
+          "timestamp": 1792320574.6410494,
+          "unit": "family-connect-restricted-directory-sync.timer"
+        },
+        {
+          "schema": 1,
+          "timestamp": 1792320574.5615416,
+          "unit": "family-connect-friends-http-candidate.service"
+        }
+      ]
+    },
+    "NL": {
+      "completed": {
+        "manifest_sha256": "2abe7e067769509fd259d51ed997c6963ec45f05c7f2592b08a095f1b3ad041f",
+        "result": "CLEANED",
+        "timestamp": 1792320576
+      },
+      "archive_hashes_verified": true,
+      "owner": false,
+      "authority_request": false,
+      "start_intents": [
+        {
+          "schema": 1,
+          "timestamp": 1792320567.289143,
+          "unit": "family-connect-restricted-bootstrap.service"
+        }
+      ]
+    }
+  },
+  "configuration": {
+    "result": "PASS_IMMUTABLE_CONFIGURATION_AND_LOADED_ARGV",
+    "unit_files_identical": true,
+    "loaded_configured_argv_match": true,
+    "stable_pid_and_invocation": true,
+    "nrestarts": 0,
+    "discarded_comparison": "Full systemd ExecStart property includes runtime start/exit/PID metadata; not an immutable configuration digest",
+    "production_changes_for_check": false
+  },
+  "renewal": {
+    "timer_restoration": {
+      "restored_epoch": 1792320744.5978055,
+      "timer": {
+        "ActiveState": "active",
+        "SubState": "waiting",
+        "UnitFileState": "enabled",
+        "NextElapseUSecRealtime": "",
+        "NextElapseUSecMonotonic": "1month 2w 2d 12h 14min 44.110326s"
+      },
+      "evaluate": {
+        "alerts": [],
+        "due": [],
+        "files_changed": 0,
+        "headroom": {
+          "authority": 81677,
+          "crl": 14210,
+          "grant": 81677,
+          "leaf": 14210
+        },
+        "policy": "CURRENT_PRODUCTION_VALIDITY_LIMITS",
+        "remote_alert_delivery": "UNAVAILABLE",
+        "remote_writes": 0,
+        "restarts": 0,
+        "result": "NOOP"
+      }
+    },
+    "units": {
+      "family-connect-credential-renewal.service": {
+        "LoadState": "loaded",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "FragmentPath": "/etc/systemd/system/family-connect-credential-renewal.service",
+        "DropInPaths": "",
+        "UnitFileState": "static",
+        "InvocationID": "331848b6f423498e9258465d6c0c13b3",
+        "MainPID": "0",
+        "Result": "success",
+        "NRestarts": "0",
+        "ExecMainStartTimestamp": "Sun 2026-10-18 14:13:11 MSK",
+        "ExecMainExitTimestamp": "Sun 2026-10-18 14:13:15 MSK",
+        "ExecMainStatus": "0",
+        "definition_files": {
+          "/etc/systemd/system/family-connect-credential-renewal.service": "ed0a197396d419696e50d5d34572276a12963059fa453f5b416828e9ef9da561"
+        }
+      },
+      "family-connect-credential-renewal.timer": {
+        "LoadState": "loaded",
+        "ActiveState": "active",
+        "SubState": "waiting",
+        "FragmentPath": "/etc/systemd/system/family-connect-credential-renewal.timer",
+        "DropInPaths": "",
+        "UnitFileState": "enabled",
+        "InvocationID": "6c49719513fa470b9b31f4c33aeb955e",
+        "NextElapseUSecRealtime": "",
+        "NextElapseUSecMonotonic": "1month 2w 2d 12h 44min 45.115278s",
+        "LastTriggerUSec": "Sun 2026-10-18 14:13:11 MSK",
+        "Result": "success",
+        "definition_files": {
+          "/etc/systemd/system/family-connect-credential-renewal.timer": "8b12b62b40e11e24b9e5a0cdf35eeae5820fddd609edba6219016efa4d4e51f7"
+        }
+      },
+      "family-connect-credential-health.service": {
+        "LoadState": "loaded",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "FragmentPath": "/etc/systemd/system/family-connect-credential-health.service",
+        "DropInPaths": "",
+        "UnitFileState": "static",
+        "InvocationID": "44e8bd8d363346eeb1aebde9ab73d117",
+        "MainPID": "0",
+        "Result": "success",
+        "NRestarts": "0",
+        "ExecMainStartTimestamp": "Sun 2026-10-18 14:18:51 MSK",
+        "ExecMainExitTimestamp": "Sun 2026-10-18 14:19:15 MSK",
+        "ExecMainStatus": "0",
+        "definition_files": {
+          "/etc/systemd/system/family-connect-credential-health.service": "1a03b681fe8e8a94aa412b4a0f6e13913c3131b9c44b8c8c4169853c4d7e0b5e"
+        }
+      },
+      "family-connect-credential-health.timer": {
+        "LoadState": "loaded",
+        "ActiveState": "active",
+        "SubState": "waiting",
+        "FragmentPath": "/etc/systemd/system/family-connect-credential-health.timer",
+        "DropInPaths": "",
+        "UnitFileState": "enabled",
+        "InvocationID": "0aacd45496df4d75aefbbf45b3a0d5e3",
+        "NextElapseUSecRealtime": "",
+        "NextElapseUSecMonotonic": "1month 2w 2d 12h 45min 32.263741s",
+        "LastTriggerUSec": "Sun 2026-10-18 14:18:51 MSK",
+        "Result": "success",
+        "definition_files": {
+          "/etc/systemd/system/family-connect-credential-health.timer": "b0fa1bfe29207b44bf2040a4c2c3c7e059a26e3c5b63dfbbcc40a185c6ead7d9"
+        }
+      },
+      "family-connect-credential-renewal-alert.service": {
+        "LoadState": "loaded",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "FragmentPath": "/etc/systemd/system/family-connect-credential-renewal-alert.service",
+        "DropInPaths": "",
+        "UnitFileState": "static",
+        "InvocationID": "14499b438a4e4852a0dd60bff4bc45e3",
+        "MainPID": "0",
+        "Result": "success",
+        "NRestarts": "0",
+        "ExecMainStartTimestamp": "Sun 2026-10-18 13:49:05 MSK",
+        "ExecMainExitTimestamp": "Sun 2026-10-18 13:49:05 MSK",
+        "ExecMainStatus": "0",
+        "definition_files": {
+          "/etc/systemd/system/family-connect-credential-renewal-alert.service": "b628ffad3a6ac52f0b3a65a377f22e0735235449f707e4abf70eafcfa84e7edf"
+        }
+      },
+      "family-connect-friends-http-candidate.service": {
+        "LoadState": "loaded",
+        "ActiveState": "active",
+        "SubState": "running",
+        "FragmentPath": "/etc/systemd/system/family-connect-friends-http-candidate.service",
+        "DropInPaths": "/etc/systemd/system/family-connect-friends-http-candidate.service.d/62-four-hour.conf /etc/systemd/system/family-connect-friends-http-candidate.service.d/95-issuer-aki.conf /etc/systemd/system/family-connect-friends-http-candidate.service.d/96-owner74-publisher.conf",
+        "UnitFileState": "enabled",
+        "InvocationID": "8db61f9ec27c47c29bdcd95a3a5064dc",
+        "MainPID": "3358039",
+        "Result": "success",
+        "NRestarts": "0",
+        "ExecMainStartTimestamp": "Sun 2026-10-18 13:49:34 MSK",
+        "ExecMainExitTimestamp": "",
+        "ExecMainStatus": "0",
+        "definition_files": {
+          "/etc/systemd/system/family-connect-friends-http-candidate.service": "a338635937bb9e36d8d99fcbe9fa08dd1857cae5f62fcb5238c2148c10138520",
+          "/etc/systemd/system/family-connect-friends-http-candidate.service.d/62-four-hour.conf": "a2247aca6e717a24f4388b6fde4f2c9d4b010a192a4442f30efe74cfcd9e5122",
+          "/etc/systemd/system/family-connect-friends-http-candidate.service.d/95-issuer-aki.conf": "b290b9b94879eb574f30ecdc9d0d7fc2b7c56c6a704c6319132e9846b4904085",
+          "/etc/systemd/system/family-connect-friends-http-candidate.service.d/96-owner74-publisher.conf": "50c06c7f704b7dd09e2c4a3f912f5cfc864252ee81e7e96344bf250f57265fbe"
+        }
+      },
+      "family-connect-restricted-directory-sync.timer": {
+        "LoadState": "loaded",
+        "ActiveState": "active",
+        "SubState": "running",
+        "FragmentPath": "/etc/systemd/system/family-connect-restricted-directory-sync.timer",
+        "DropInPaths": "",
+        "UnitFileState": "enabled",
+        "InvocationID": "a5df653389e4496dad62c48a508c5788",
+        "NextElapseUSecRealtime": "",
+        "NextElapseUSecMonotonic": "infinity",
+        "LastTriggerUSec": "Sun 2026-10-18 14:19:49 MSK",
+        "Result": "success",
+        "definition_files": {
+          "/etc/systemd/system/family-connect-restricted-directory-sync.timer": "7fc3035b37cf8947f8d50aee62d4bfe09dee860bbf13f3196c88cbd878ef22b6"
+        }
+      },
+      "family-connect-restricted-sync.timer": {
+        "LoadState": "loaded",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "FragmentPath": "/etc/systemd/system/family-connect-restricted-sync.timer",
+        "DropInPaths": "",
+        "UnitFileState": "disabled",
+        "InvocationID": "",
+        "NextElapseUSecRealtime": "",
+        "NextElapseUSecMonotonic": "infinity",
+        "LastTriggerUSec": "",
+        "Result": "success",
+        "definition_files": {
+          "/etc/systemd/system/family-connect-restricted-sync.timer": "30bbf64f6b27b56d5f9822d7282df506139b3850dd3450a701e152c3795db89b"
+        }
+      }
+    },
+    "timer_snapshot": "NEXT                        LEFT LAST                             PASSED UNIT                                    ACTIVATES\nSun 2026-10-18 14:28:11 MSK 8min Sun 2026-10-18 14:13:11 MSK    6min ago family-connect-credential-renewal.timer family-connect-credential-renewal.service\nSun 2026-10-18 14:28:58 MSK 9min Sun 2026-10-18 14:18:51 MSK 1min 0s ago family-connect-credential-health.timer  family-connect-credential-health.service\n\n2 timers listed.\n",
+    "journal_limitation": "Two bounded journal queries timed out; no further broad journal retry. Service exit/state and committed checkpoint checked separately.",
+    "next_actual_rotation": "NOT_OBSERVED",
+    "next_leaf_crl_threshold_utc": "2026-10-18T13:19:14Z",
+    "operator_maintenance_threshold_utc": "2026-10-19T03:33:41Z",
+    "operator_target_before_utc": "2026-10-19T02:33:41Z",
+    "external_alert_delivery": "UNAVAILABLE"
+  },
+  "client": {
+    "preflight": {
+      "utc_epoch": 1792320787.920517,
+      "version_code": "84",
+      "version_name": "0.1.18-research84-ui60-4-batch1",
+      "apk_sha256": "697f9c244b67f75e7e3e612dbcd91a48891d32ee77e23fd9bce173a5f049233f",
+      "apk_matches_accepted": true,
+      "vpn_transport_lines": 0,
+      "tcp_vpn_service_present": false
+    },
+    "final": {
+      "utc_epoch": 1792322330.1222577,
+      "apk_sha256": "697f9c244b67f75e7e3e612dbcd91a48891d32ee77e23fd9bce173a5f049233f",
+      "apk_unchanged": true,
+      "tcp_vpn_service_present": false,
+      "vpn_transport_lines": 0,
+      "ui_compatibility": "NOT_RUN",
+      "dns_https": "NOT_RUN",
+      "connection_taps": 0,
+      "ui_observation": "Standard UI dump could not get idle state; FLAG_SECURE preserved; no new helper installed",
+      "launcher": "com.familyconnect.app.friends/com.familyconnect.app.FriendsActivity",
+      "owner_instrumentation": false,
+      "settings_modified": false
+    },
+    "admitted_devices_count": 2,
+    "server_readiness_acks": [
+      {
+        "challenge_at": 1792322115,
+        "fetch_at": 1792322115,
+        "revision": 9,
+        "minimum_crl": 27120,
+        "expires": 1792334954,
+        "ack_at": 1792322116,
+        "ack": {
+          "result": "READY",
+          "provisioning": "PRESENT_VALID",
+          "bootstrap": "PRESENT_VALID",
+          "orchestrator_usable": true,
+          "revision": 9,
+          "minimum_crl": 27120,
+          "expires_at": 1792334954,
+          "observed_at": 1792322115,
+          "phase": "import",
+          "app_version": "0.1.18-research84-ui60-4-batch1",
+          "version_code": 84,
+          "failure_reason": "NONE"
+        }
+      },
+      {
+        "challenge_at": 1792321812,
+        "fetch_at": 1792321813,
+        "revision": 9,
+        "minimum_crl": 27120,
+        "expires": 1792334954,
+        "ack_at": 1792321814,
+        "ack": {
+          "result": "READY",
+          "provisioning": "PRESENT_VALID",
+          "bootstrap": "PRESENT_VALID",
+          "orchestrator_usable": true,
+          "revision": 9,
+          "minimum_crl": 27120,
+          "expires_at": 1792334954,
+          "observed_at": 1792321813,
+          "phase": "import",
+          "app_version": "0.1.18-research84-ui60-4-batch1",
+          "version_code": 84,
+          "failure_reason": "NONE"
+        }
+      },
+      {
+        "challenge_at": 1792321512,
+        "fetch_at": 1792321513,
+        "revision": 9,
+        "minimum_crl": 27120,
+        "expires": 1792334954,
+        "ack_at": 1792321513,
+        "ack": {
+          "result": "READY",
+          "provisioning": "PRESENT_VALID",
+          "bootstrap": "PRESENT_VALID",
+          "orchestrator_usable": true,
+          "revision": 9,
+          "minimum_crl": 27120,
+          "expires_at": 1792334954,
+          "observed_at": 1792321513,
+          "phase": "import",
+          "app_version": "0.1.18-research84-ui60-4-batch1",
+          "version_code": 84,
+          "failure_reason": "NONE"
+        }
+      },
+      {
+        "challenge_at": 1792321212,
+        "fetch_at": 1792321213,
+        "revision": 9,
+        "minimum_crl": 27120,
+        "expires": 1792334954,
+        "ack_at": 1792321214,
+        "ack": {
+          "result": "READY",
+          "provisioning": "PRESENT_VALID",
+          "bootstrap": "PRESENT_VALID",
+          "orchestrator_usable": true,
+          "revision": 9,
+          "minimum_crl": 27120,
+          "expires_at": 1792334954,
+          "observed_at": 1792321213,
+          "phase": "import",
+          "app_version": "0.1.18-research84-ui60-4-batch1",
+          "version_code": 84,
+          "failure_reason": "NONE"
+        }
+      }
+    ],
+    "ack_limit": "Admitted UI84 import observations, no client directory digest or physical VPN/DNS/HTTPS proof"
+  },
+  "status": {
+    "RECOVERY_APPLICATION": "PASS",
+    "NL_GATEWAY_READINESS": "PASS_BOUNDED_SERVER",
+    "UI84_COMPATIBILITY": "NOT_RUN_DATAPLANE; IMPORT_READY_OBSERVED",
+    "RENEWAL_READINESS": "PASS_CURRENT_EVALUATION_AND_SCHEDULE; NEXT_ROTATION_NOT_OBSERVED",
+    "PERFORMANCE_BASELINE": "NOT_RUN",
+    "FINAL_RESULT": "PARTIAL"
+  },
+  "private_receipt_sha256": {
+    "preflight-signature.json": "8df71831cddb243597678148fdde8a4dfd3ef0f1a960481238feb8399db54540",
+    "preflight-contract-RU.json": "53641d60fb9de887627f99d8a8f5342baa22182e0992686d74ddc3dedb522390",
+    "preflight-contract-NL-complete.json": "dbcd108fc0722f1b165cda218b8cfdc978eff511d0427203b1187977b3523747",
+    "preflight-live-state.json": "69224eff108d725fa2664eccb244d725500ffe0626ff2e291f15a285f97486e7",
+    "post-strict-installed.json": "643eda29278062d7127e41dd3c149fb056aadd0cbeb3c1230e8b257a5c469735",
+    "cleanup-RU.json": "c987d16083b7119eb64d1ac51888f4dd48919b47818d195047d29c4b9ed8ae68",
+    "cleanup-NL.json": "640031af9121221a8c8dd10b2076e6aac8cc96e863fd0f467506439b6432acc1",
+    "server-readiness.json": "7937040c72162d548e897c8520107f76e5d7cc345464f430ff77f507f4671721",
+    "final-state-RU.json": "31e5550c6d24d742996b1d98627e7161ed6de95c8da15ce15c026c8f8aef43bf",
+    "final-state-NL.json": "8fb47d1ecd44093ef27df3e782512b86db85520b44c583d28b31ea46256ba367",
+    "independent-installed-verification.json": "47fb56c9535caf7e804a7eccb563d373f3adca0180d197163575b6f78c73f926",
+    "phone-preflight.json": "c59377cb0f7c2daede23609aa06c3fdeb77c5d2e079800f984a81cc20a650769",
+    "phone-final.json": "e8c4ddff4cc2dc04ef856a3edd4a71d36a64b182c37c4a25f56642ad35786391"
+  },
+  "boundaries": {
+    "signing": false,
+    "software_deployment": false,
+    "manual_gateway_restart": false,
+    "gateway_start_intents": 1,
+    "manual_reset_failed": false,
+    "android_install": false,
+    "transport_policy_change": false,
+    "all_activated_deployment": false,
+    "fault_injection": false,
+    "external_alert_installation": false,
+    "commit_push_release": false
+  }
+}

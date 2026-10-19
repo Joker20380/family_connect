@@ -1,0 +1,241 @@
+{
+  "task": "MESH-NL-RECOVERY-PREP-1",
+  "result": "PASS_PREPARATION_ONLY",
+  "stop_gate": "BEFORE_OFFLINE_ROOT_SIGNING_OR_ACTIVE_STATE_MUTATION",
+  "source_head": "7656f2c65ea2928b71a928c12ee65a2f47f8ac4f",
+  "source_parent": "edca5447418141cb44c0706e26d1973d7defd397",
+  "github_main_matches": true,
+  "operation_id": "mesh-nl-recovery-prep-20261018-01",
+  "authorization": {
+    "existing_expired_request_workflow": true,
+    "same_key_successor_ca_on_ru": true,
+    "offline_root_signing": false,
+    "credential_install_or_publish": false,
+    "service_start_restart_reset": false,
+    "policy_or_transport_changes": false
+  },
+  "timestamps": {
+    "audit_ru": "2026-10-18T09:33:28.148841+00:00",
+    "audit_nl": "2026-10-18T09:33:28.593729+00:00",
+    "prepare_preflight": "2026-10-18T09:33:43.398276+00:00",
+    "prepare_readback_nl": "2026-10-18T09:33:49.060560+00:00",
+    "offline_validation": "2026-10-18T09:37:42.456824+00:00",
+    "final_ru": "2026-10-18T09:41:26.524731+00:00",
+    "final_nl": "2026-10-18T09:41:31.028672+00:00",
+    "request_created": "2026-10-18T09:33:46+00:00",
+    "request_expires": "2026-10-19T09:33:46+00:00",
+    "successor_not_before": "2026-10-18T09:33:41+00:00",
+    "successor_not_after": "2026-10-19T09:33:41+00:00",
+    "next_six_hour_threshold_if_used": "2026-10-19T03:33:41+00:00",
+    "four_hour_headroom_theoretical_cutoff": "2026-10-19T05:33:41+00:00"
+  },
+  "hashes": {
+    "request_sha256": "a985777611d8b5d2a54ea8f1928b4f7537e3ff7a19ea0506fa98ff8999c3b794",
+    "successor_ca_pem_sha256": "8ef49f002afd64f7e92a7f764fdcc19784fddf6c590bf9fc79bfd041aabdc46a",
+    "successor_payload_sha256": "ee75a86a3387fe914ffc31e494796ce1df6b0fd5fe264c2c1561d16760a9402b",
+    "predecessor_sha256": "008cbeb7adec69956b242012f17204d8ee4a242bbeec53089699587b566dd978",
+    "expected_state_sha256": "2a44db20325b17132224897652b158c82ab0396f675b8b72f9b8465baa2712f2",
+    "active_fingerprint_sha256": "5e34a50401fef9b1079039cedee9200e881b7860212ee59e4baab759ba792cd4",
+    "issuer_spki_sha256": "1b86d9e01ae940e78efe7e1f29d91cec4aff06efbe92e142ca99222367100d34",
+    "anchor_sha256": "6a09fb42468acdb4cfcb4f0888e27c13705ac437a45a6624fc21dddbe83fed83",
+    "historical_authority_pem_sha256": "bd0253f87fd18d3b26ac24c4884cefff51363ad442256d5991722b1e46d22169",
+    "manifest_sha256": "5109a7c92ddd1937fe75ed7199866855a8cc20279bc226c35475d4cc81330145",
+    "local_package_inventory_sha256": "abb6bf11fc1ba6106727e387a8771f8c1254d9033af6d318fa7ddac36208da58",
+    "offline_dependency_lock_sha256": "d6870c56a9b8c435973aee3a92331fb336b0f596ba3b110c0307a1757a7c5bbe",
+    "request_checker_source_sha256": "b83a82cfc5b688d833569933a5ff0027eed1749ec0fae603cfd3eecab3a99146"
+  },
+  "source_pins": {
+    "api.pyz": "12ca0c72a89ff20c1b3c70a1182a2d5d98d4d78d25e7a079bb4d75bdf34060ed",
+    "credential_renewal.py": "fb83d851b4ac88b7ad90b97c59f516ee327bc7bbb92a642a031da08bbc50d25c",
+    "expired_recovery.py": "92fc24346df6b86b0621210e7847a2d17c11a69e8c2ae73bf32609fa2f2ab99e",
+    "grant_cutover.py": "434881ff8b1878eabb040c9c8b06bd32ad430410fbec90a24e3343b51a222f85",
+    "sign_authority_offline.py": "2de81e84c6b5fb39cbf5ca840e7a4791edec256bbb6e3fe7924efc24319ba5f6"
+  },
+  "checkpoint": {
+    "operation_id": "scheduled-1792291291-d3bbc76b3aa8dc8d",
+    "plan_sha256": "289e59aecffe16a482ef29eb13995393d5b0e37dbe6b678c9a4dfc556052ba4d",
+    "snapshot_sha256": "008cbeb7adec69956b242012f17204d8ee4a242bbeec53089699587b566dd978"
+  },
+  "generation": {
+    "live_authority_sequence": 16,
+    "candidate_authority_sequence": 17,
+    "live_crl_number": 27119,
+    "revoked_crl_entries": 2,
+    "pending_revocations": 0,
+    "nonrevoked_grants": 2,
+    "live_grant_revisions": [
+      6,
+      8
+    ],
+    "in_memory_prospective_grant_revisions": [
+      7,
+      9
+    ],
+    "grant_preview_applied": false,
+    "minimum_revision": 1,
+    "observed_profile_minimum_crl": 27088,
+    "candidate_ca_lifetime_seconds": 86400,
+    "new_leaf_or_crl_generated": false
+  },
+  "verification": {
+    "source_pins_match": true,
+    "historical_validation_pass": true,
+    "both_node_checkpoint_validation_pass": true,
+    "gateway_key_matches_leaf": true,
+    "request_check_pass": true,
+    "recovery_grant_plan_in_memory_pass": true,
+    "issuer_key_unchanged": true,
+    "issuer_extensions_unchanged": true,
+    "active_fingerprint_unchanged": true,
+    "active_trust_chain_unchanged": true,
+    "live_grants_and_devices_unchanged": true,
+    "live_revocations_and_floors_unchanged": true
+  },
+  "offline_verification": {
+    "result": "PASS_UNSIGNED_REQUEST_ONLY",
+    "utc": "2026-10-18T09:37:42.456824+00:00",
+    "request_sha256": "a985777611d8b5d2a54ea8f1928b4f7537e3ff7a19ea0506fa98ff8999c3b794",
+    "operation_id": "mesh-nl-recovery-prep-20261018-01",
+    "source_pins": {
+      "api.pyz": "12ca0c72a89ff20c1b3c70a1182a2d5d98d4d78d25e7a079bb4d75bdf34060ed",
+      "credential_renewal.py": "fb83d851b4ac88b7ad90b97c59f516ee327bc7bbb92a642a031da08bbc50d25c",
+      "expired_recovery.py": "92fc24346df6b86b0621210e7847a2d17c11a69e8c2ae73bf32609fa2f2ab99e",
+      "grant_cutover.py": "434881ff8b1878eabb040c9c8b06bd32ad430410fbec90a24e3343b51a222f85",
+      "sign_authority_offline.py": "2de81e84c6b5fb39cbf5ca840e7a4791edec256bbb6e3fe7924efc24319ba5f6"
+    },
+    "historical_signature_checks": true,
+    "request_check": true,
+    "successor_self_signature": true,
+    "root_signer_invoked": false,
+    "request_unchanged": true,
+    "negative_cases": [
+      {
+        "case": "purpose",
+        "result": "REJECTED",
+        "cause": "RECOVERY_PURPOSE"
+      },
+      {
+        "case": "predecessor_digest",
+        "result": "REJECTED",
+        "cause": "RECOVERY_PREDECESSOR_DIGEST"
+      },
+      {
+        "case": "scope",
+        "result": "REJECTED",
+        "cause": "RECOVERY_SCOPE_OR_FLOOR"
+      },
+      {
+        "case": "crl_floor",
+        "result": "REJECTED",
+        "cause": "RECOVERY_SCOPE_OR_FLOOR"
+      },
+      {
+        "case": "authority_sequence",
+        "result": "REJECTED",
+        "cause": "RECOVERY_SCOPE_OR_FLOOR"
+      },
+      {
+        "case": "grant_scope",
+        "result": "REJECTED",
+        "cause": "RECOVERY_GRANT_SCOPE"
+      },
+      {
+        "case": "update_scope",
+        "result": "REJECTED",
+        "cause": "RECOVERY_UPDATE_SCOPE"
+      },
+      {
+        "case": "expired_request",
+        "result": "REJECTED",
+        "cause": "RECOVERY_APPROVAL_EXPIRED"
+      },
+      {
+        "case": "authority_validity_extension",
+        "result": "REJECTED",
+        "cause": "RECOVERY_SUCCESSOR_INVALID"
+      },
+      {
+        "case": "old_ca_substitution",
+        "result": "REJECTED",
+        "cause": "RECOVERY_INTERVAL"
+      },
+      {
+        "case": "predecessor_signature",
+        "result": "REJECTED",
+        "cause": "RECOVERY_PREDECESSOR_UNTRUSTED"
+      },
+      {
+        "case": "wrong_anchor",
+        "result": "REJECTED",
+        "cause": "RECOVERY_PREDECESSOR_UNTRUSTED"
+      },
+      {
+        "case": "expired_predecessor_as_live_authority",
+        "result": "REJECTED"
+      }
+    ],
+    "negative_pass_count": 13,
+    "successor_ca_pem_sha256": "8ef49f002afd64f7e92a7f764fdcc19784fddf6c590bf9fc79bfd041aabdc46a",
+    "successor_payload_sha256": "ee75a86a3387fe914ffc31e494796ce1df6b0fd5fe264c2c1561d16760a9402b",
+    "physical_or_signed_successor_acceptance": false
+  },
+  "dependencies": {
+    "ru_python": "3.14.4",
+    "versions": {
+      "cryptography": "46.0.7",
+      "cffi": "2.1.1",
+      "pycparser": "3.0",
+      "rns": "1.5.1",
+      "pyserial": "3.5"
+    },
+    "installed_only_in_isolated_local_verify_venv": true,
+    "server_or_system_packages_changed": false
+  },
+  "service_readback": {
+    "ru_http_state": "active",
+    "ru_http_pid": 1921548,
+    "ru_http_identity_equal": true,
+    "nl_unit_state": "failed",
+    "nl_main_pid": 0,
+    "nl_restarts": 6,
+    "nl_unit_identity_equal": true,
+    "nl_listener_18444": false
+  },
+  "nl_unchanged_hashes": {
+    "gateway_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+    "profile_sha256": "de06a5b0bf468614f33baa61190cb5419874abbde379ed16ec798c8248e760d7",
+    "directory_sha256": "50aa786cb751a40c8ef6c7ccfdc60a126f6bcd9432d7f78cb912f1f9fc104ad8",
+    "node_config_sha256": "36e396a8c8c4b8d08aa4500b443546640ca92ad47cf5a50753566421102c492e",
+    "api_archive_sha256": "9faaa1c27f534e71774f5b4f34872e87747f391409c4958562694f07f86d64d1",
+    "source_manifest_sha256": "5109a7c92ddd1937fe75ed7199866855a8cc20279bc226c35475d4cc81330145"
+  },
+  "custody": {
+    "canonical_ru_request": "/opt/apps/family_connect/friends-restricted/renewal-coordinator/recovery-requests/mesh-nl-recovery-prep-20261018-01.json",
+    "ru_export_request": "/opt/apps/family_connect/friends-restricted/renewal-coordinator/recovery-prep/mesh-nl-recovery-prep-20261018-01/recovery-request.json",
+    "local_private_root": "state-client-build/mesh-nl-recovery-prep-1/private",
+    "ru_prep_directory_mode": "0700",
+    "ru_prep_file_modes": "0600",
+    "git_ignored": true,
+    "private_request_or_grant_rows_published": false
+  },
+  "changes": {
+    "issuer_self_signed_successor_ca_prepared": true,
+    "private_request_and_receipts_created": true,
+    "existing_advisory_locks_used": true,
+    "live_credential_installations": 0,
+    "root_signer_invocations": 0,
+    "root_key_access": false,
+    "service_mutations": 0,
+    "android_builds_or_installs": 0,
+    "runtime_changes": 0,
+    "git_commits_or_pushes": 0
+  },
+  "remaining_gates": [
+    "exact-request offline-root operator authorization and signing",
+    "fresh state/time/headroom and root-bundle verification",
+    "separately authorized leaf/CRL/grant issuance and credential publication",
+    "separately authorized bounded service recovery",
+    "native delivery and UI84 same-identity reconnect acceptance",
+    "physical performance and sustainable next-cycle renewal"
+  ]
+}

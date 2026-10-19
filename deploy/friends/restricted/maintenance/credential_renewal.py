@@ -25,6 +25,7 @@ HANDOFF_DOMAIN = b'family-connect-renewal-offline-handoff-v1\0'
 VALIDITY = {'authority': DAY, 'leaf': 4 * HOUR, 'grant': DAY, 'crl': 4 * HOUR}
 THRESHOLD = {'authority': 6 * HOUR, 'leaf': 90 * 60, 'grant': 6 * HOUR, 'crl': 90 * 60}
 ALERTS = {kind: (120 * 60, 90 * 60, 60 * 60, 30 * 60) for kind in VALIDITY}
+AUTHORITY_MAINTENANCE_LEAD = 14 * DAY
 TERMINAL = frozenset(('COMMITTED', 'ROLLED_BACK', 'ABORTED'))
 
 
@@ -234,6 +235,8 @@ def evaluate(validated, now, revocations_changed=False, *, all_activated=False):
         due.append('crl')
     if 'authority' in due:
         alerts.append('OFFLINE_AUTHORITY_RENEWAL_REQUIRED')
+    if all_activated and expiries['authority'] - now <= AUTHORITY_MAINTENANCE_LEAD:
+        alerts.append('OFFLINE_AUTHORITY_MAINTENANCE_DUE')
     return {'result': 'RENEWAL_REQUIRED' if due else 'NOOP', 'due': sorted(due), 'alerts': alerts,
             'headroom': {kind: expiry - now for kind, expiry in expiries.items()}}
 

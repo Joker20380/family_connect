@@ -26,10 +26,13 @@ def main():
     try:
         from control.friends.restricted import delegation
         config = parse(read_private(args.config))
-        require(set(config) == {'schema','state','anchor','node_sources'} and config['schema'] == 1, 'OPERATOR_CONFIG')
+        require(set(config) - {'admission_mode'} == {'schema','state','anchor','node_sources'}
+                and config['schema'] == 1, 'OPERATOR_CONFIG')
+        mode = config.get('admission_mode', 'legacy')
+        require(mode in ('legacy', 'all_activated'), 'ADMISSION_MODE')
         anchor = base64.b64decode(config['anchor'],validate=True)
         nodes = {role:SshNode(role,config['node_sources'][role]) for role in ('RU','NL')}
-        validator = Validator(anchor,delegation)
+        validator = Validator(anchor,delegation,all_activated=mode == 'all_activated')
         controller = ProductionController(Path(config['state']),nodes,validator)
         if args.action == 'authority-request':
             require(args.output is not None and not args.output.exists(), 'REQUEST_OUTPUT_REQUIRED')
@@ -39,7 +42,7 @@ def main():
         elif args.action == 'evaluate':
             snapshot,_,_,revocations_changed = controller.read(args.operation)
             result = evaluate(validator.validate(canonical(snapshot),int(time.time()),expired_leaf_predecessor=True),
-                              int(time.time()),revocations_changed)
+                              int(time.time()),revocations_changed,all_activated=validator.all_activated)
             if result['result'] != 'NOOP':
                 result['result'] = 'MAINTENANCE_REQUIRED'
         elif args.action == 'recover':

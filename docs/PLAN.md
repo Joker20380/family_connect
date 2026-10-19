@@ -15,6 +15,453 @@ No product priority, acceptance, release or deployment gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+Source-control follow-up19.10: preserve the accumulated reviewed source overlays,
+fixtures and sanitized evidence in a local commit. Do not push, publish artifacts,
+apply experimental patches or change runtime as part of this checkpoint. A local
+commit alone is not visible to a GitHub-backed ChatGPT connection.
+
+### Beta88 targeted throughput / IPv6 — completed bounded experiment, PARTIAL
+
+- Ordinary observation and one read-alignment candidate were actually tested.
+  Real DATA/window/SACK/Mux credit evidence retained; no owner-only infrastructure.
+- Candidate removes reproduced88-byte tails but does not meet repeatable physical
+  improvement gate; restored original4b722d gateway13:18:43UTC. TLS/publication and
+  Android DNS/HTTPS pass. No additional optimization or new APK is accepted.
+- Preserve exact beta88 recovery/identity and original runtime. Missing targeted
+  fact is receiver-side receive/consume/ACK-emission for the same retried NL DATA
+  sequence; do not silently start another stage to obtain it.
+- IPv6 action ready: owner sends the drafted HOSTKEY request for existing NL
+  service186.246.45.246. Confirm tariff/native allocation or separately approve
+  IPv6-capable NL service; no automatic purchase/exit-country change.
+- Results, negative local benchmark, source delta and rollback receipts:
+  [bounded comparison](releases/2026-10-19-beta88-throughput-ipv6-1.md).
+  No background measurements, FIELD/all_activated migration, public release or push.
+
+### Beta87 product fix — beta88 verified at bounded physical scope
+
+- Recovery delta is built/signed as0.1.18-beta88-recovery/code88, exact87 parent,
+  unchanged native/signer/identity schema.135+34 JVM checks PASS; first failures
+  and exact night-classification reproducer retained. No server runtime change.
+- Owner Disconnect and guarded in-place87→88 update completed11:55:55UTC; exact
+  installed APK/UID/restricted-native readback PASS, no uninstall/data clear.
+  Same-identity/key-binding/Support ID proof/import READY and initial DNS/HTTPS PASS.
+  Fresh88 export confirms one automatic retry-exhaustion recovery29.083s during
+  normal production rotation; post-recovery DNS/HTTPS and bulk pass. No new Connect
+  is needed. Do not confuse this supported case with physical SIGNAL_READ testing.
+- Both bounded throughput phases are complete; do not repeat them. Single median
+  0.528319→0.500009Mbit/s, parallel aggregate1.145593→0.912797Mbit/s, zero failed
+  requests. Same underlay but changed media session/generation; no improvement or
+  causal regression established. Phone CPU difference remains unlocalized.
+- Specific remaining performance evidence: correlate one ordinary-path single
+  download with NL sender-ready blocked time, retained bytes and Mux-credit state.
+  Current export only retains post-bulk Android flow snapshots/lifetime counters;
+  no speculative window/credit/batching change or resumed PERF-3B.
+- Physical repeated recovery/Doze/overnight remains unaccepted; use natural losses
+  and existing diagnostics, not forced production outage. Signed recovery candidate
+  is available with one physical recovery receipt, not held for IPv6 purchase.
+- IPv6 local opt-in prototype and race/AAAA tests pass independently; not enabled
+  in native/APK. NL requires provider-confirmed global allocation/default route
+  for its actual tariff. RU works but silently changing exit country is forbidden.
+- Preserve all_activated,authority18,normal renewal,Schema2 and CLEANED history.
+  No PERF-3B/canary/handoff, FIELD stage, public updater, mass distribution or push.
+  Exact artifacts/limitations: [beta87 product-fix report](releases/2026-10-19-beta87-product-fix.md).
+
+### Existing users Android private beta — preceding delivery checkpoint
+
+- PERF-3B is paused with its real PARTIAL/INCONCLUSIVE result and preserved CLEANED
+  history/floors. Do not implement its proposed PREPARED-fence change or run canary.
+- Exact-base all_activated API/management and reviewed90-day authority18 are applied
+  and read back. Preserve committed state; do not repeat cutover/signing or old recovery.
+- Beta85 exposed a concrete packaging bug: research gate only allowed84. Keep its
+  failed evidence; do not distribute it. Beta86 uses the existing production variant
+  of that gate, preserves native/storage,119 tests PASS and same-key signing complete.
+- Beta86 in-place upgrade, same-identity READY and production DNS/HTTPS pass23:23UTC.
+  Scheduled rotation actually commits23:30UTC; CRL27125, strict TLS/publication pass.
+  Two subsequent TUN probes fail DNS. Fresh export proves post-rotation restoration
+  did reach CONNECTED23:31:33, followed by another carrier failure23:32:31 and final
+  authenticated HELLO_RECEIVE/CLOSED_PIPE. Do not attribute all losses to renewal.
+- Beta87 narrowly admits that evidenced startup failure to the existing bounded
+  recovery path.125 JVM tests PASS; same native/signer; in-place install23:46:43UTC.
+  Owner Connect, same-identity87 proof/import READY and one bounded production
+  Android-TUN DNS/HTTPS control PASS23:48UTC (216bytes,17 production-PID matches).
+  Next gate: actual automatic recovery after a natural loss; existing export must
+  distinguish restored session from a fresh manual Connect. Do not force loss/renewal
+  or run background tests. Initial87 connectivity and local tests are not that PASS.
+  Preserve both failed86 probes; bounded journal timeout is not repeated. Underlying
+  ReliableStream retry exhaustion remains UNKNOWN; no PERF/transport optimization.
+- Operator authority maintenance target17 December2026, advisory2 January2027 remains.
+  Shared server renewal is verified once; end-to-end automatic recovery is not PASS.
+- Finish with actual private delivery readiness or the immediate protected-action
+  blocker and prepared artifacts; no public updater, broad main deployment or push.
+
+### MESH-PERF-3B03 — evidence-only investigation complete; no live continuation
+
+- Supplied UI84 export identifies failed attempt10 on old P before canary arm:
+  FETCH_FAILED, cached valid P, seed carrier connected, SEED_ADMISSION/DEADLINE.
+  A separate post-arm connection reached SESSION_READY; later attempt12 used R.
+  Do not continue treating the report as proof of a failed canary/owner guard.
+- 2 focused exact-API tests PASS: PREPARED/common-R rejection preserves the floor
+  but makes refresh unavailable; existing forward RETURN restores current issuance.
+  Proposed single correction is atomic authenticated PREPARED→RETURN on this
+  conflict, aborting canary rather than permitting R→older C. Not implemented;
+  exact live fetch HTTP status remains missing, causal confidence HIGH, not absolute.
+- 03 remains CLEANED, runtime unchanged. Do not reopen it or automatically create a
+  new attempt, run Connect/bulk, deploy a patch or repeat production HTTPS.
+  PERF-3B bulk measurements remain incomplete/INCONCLUSIVE. Stop after this evidence
+  reconciliation; no FIELD-READY-1/all_activated/IPv6/transport optimization now.
+  Tester preparation remains the owner's next product priority, not an active rollout.
+
+### MESH-PERF-3B03 — safe closure, no further live action
+
+- Actual C/R gate passed; C import READY, then reported connection failure. Bulk
+  not started. Forward return and production PID-attributed DNS/HTTPS verified.
+- 03/gen2 is CLEANED; canary stopped; original API restored. Two terminal records,
+  zero unfinished; schema/history/floors preserved. Do not resume03 or replay its
+  mutating commands. Prior IN_PROGRESS/checkpoint subsections below are historical.
+- PERF-3B measurements remain incomplete/INCONCLUSIVE. One missing measurement:
+  existing owner support/export record tying failed Connect to its actual stage.
+  No automatic new PERF attempt, optimization, all_activated, IPv6 or FIELD work.
+- Owner's next product priority remains tester preparation, not an implemented or
+  automatically started FIELD rollout. Stop after documenting this safe closure.
+
+### MESH-PERF-3B03 — finish forward return, no further load
+
+- Actual RETURN_GATE passed; owner imported C. After reported connection failure,
+  RETURN committed21:08:29. Do not resume bulk or launch another canary.
+- Confirm R import READY and production process-attributed DNS/HTTPS; only then
+  CLEANED through exact03/gen2 operator, stop diagnostic03 and restore original API
+  code without deleting history/floors. Keep safe return-state if verification fails.
+- Deadline21:59:22 remains fixed. No FIELD/all_activated/optimization in this turn.
+
+### MESH-PERF-3B active successor03 — finish or safely abort
+
+- Operation03/generation2 is PREPARED, candidate API active; one canary is READY.
+  Owner remains on production. Do not allocate/start again or use old01/02 commands.
+- Observe normal publication; actual R must validate before21:24:22 and preserve
+  captured owner floor → C → R. No handoff from a forecast alone. No forced renewal.
+- If gate passes: existing bounded download matrix, process-attributed DNS/HTTPS,
+  forward return, cleanup by21:59:22. On failure: no retry; verified never-armed abort
+  when applicable, stop only diagnostic03, preserve history/floors and restore API
+  code only when common issuance is safe. Guard ends22:10:22, not extendable.
+- No FIELD/all_activated/transport optimization. [Active checkpoint](releases/2026-10-18-mesh-perf-3b.md).
+
+### MESH-PERF-3B prepared successor — next check20:05:33UTC (18.10)
+
+- 19:09 read-only check confirms unchanged production generation and schema2/CLEANED;
+  no unfinished operation, active override or canary. Saved candidates/receipts match.
+- Checkpoint **2026-10-18T20:05:33Z** is ahead. Do not allocate, switch API, launch
+  canary or leave a wait/scheduler merely to reach it. No background work is armed.
+- Fresh timing: a19:09:23 start yields validated-R cutoff20:23:23, earlier than
+  eligibility20:59:33. Immediate start rejected; no canary. Projected20:59:43 target
+  gives conditional20:05:43–20:19:32 window;21:14:33 target misses by61s.
+- At the next check, read current generation/timer/controller/owner state and prove
+  the entire timing intersection. Prior20:05:33–20:19:32 bounds are conditional;
+  a timer trigger is not a publication/readback guarantee. If generation changes,
+  recalculate rather than reusing these bounds or an old CLEANED attempt.
+- On actual whole-preflight PASS, continue the existing one-successor/one-launch
+  path, actual C/R gate, owner measurement and safe forward return. Do not rerun
+  migration, restore an old DB or rebuild unchanged candidates. Physical work is
+  still NOT_RUN;18:31 production HTTPS control is not a canary/bulk acceptance.
+- Finish PERF-3B before FIELD preparation; no all_activated, transport optimization,
+  IPv6, commit/push/release. [Current readback](releases/2026-10-18-mesh-perf-3b.md).
+
+### MESH-PERF-3B successor lifecycle — current continuation (18.10)
+
+- Empty-table blocker fixed; schema2 migrated on RU with old CLEANED/floors/history
+  intact, one global open-operation constraint and explicit operation/generation.
+  108 focused tests PASS and real-DB-copy successor probe PASS; no live prepare.
+- New APIf935b8…a653e staged, original API still active. Use successor-aware operator;
+  never run the sealed fixed01/single-row writer against new storage. Exact repeats
+  require inspect/reconcile, not another service start. Snapshot is evidence only.
+- Automatic renewal observed18:29:28–18:29:53; current leaf/CRL expiry22:29:33,
+  eligibility20:59:33. Next possible preflight/start bound20:05:33; latest20:19:32.
+  Conditional20:05:39–20:19:32 window needs eligible20:59:39 cycle. If target is
+  21:14:39, no intersection (67s deficit). Timer phase and controller read-before-
+  decision matter; recheck at the boundary, never launch on the old generation or
+  equate a timer tick with publication. No clock/TTL/reserve/policy change.
+- If a current window is proven, preserve prior external closed attempt IDs, allocate
+  one fresh ID, run existing launcher once, establish actual C/R native return gate
+  and owner fence, measure single/parallel, forward-return and clean only that canary.
+  No current background launcher or pending live attempt exists.
+- Production TUN DNS/HTTPS checks18:14 and18:31 (new PID after rotation) PASS;
+  no PERF-3B bulk or physical return evidence.
+  Finish this bounded investigation before FIELD preparation. No all_activated,
+  transport tuning, IPv6, commit/push/release. See [report](releases/2026-10-18-mesh-perf-3b.md).
+
+### MESH-PERF-3B timing preflight — historical allocation blocker (18.10,17:46UTC)
+
+- Do not launch until the **whole** transaction passes, not only timer arithmetic.
+  Conditional current-generation start17:36:08–17:49:26 exists; no actual R/new C.
+  Timer17:44:27 is not renewal; earliest normal eligibility18:29:27. Times are
+  stale after this observed cycle and are not a scheduled/background attempt.
+- Exact operator gate reproduced locally: retained CLEANED row prevents sealed
+  API's empty-table-only prepare; operator is fixed to closed01. New ID alone does
+  not help.23 new focused tests PASS; all sealed candidates unchanged. No live start.
+- Single required delta: safe fresh-operation allocation with durable historical
+  receipt, preserved floors and new authenticated capture; test crash/replay/concurrency
+  before deployment, then re-evaluate timing. Do not delete/rearm CLEANED state or
+  extend a closed attempt. No API/transport code altered in timing-only continuation.
+- Production preserved;17:40 ordinary TUN DNS/HTTPS210bytes/PID attribution PASS.
+  Canary handoff, bulk/window-byte metrics and return remain NOT_RUN; cause INCONCLUSIVE.
+- PERF-3B remains unfinished, FIELD-READY-1/all_activated remain deferred; no new
+  PERF branch, optimization, IPv6, commit/push or release was started.
+- [Exact conditional deadlines and executable blocker](releases/2026-10-18-mesh-perf-3b.md).
+
+### MESH-PERF-3B retry02 — safely stopped at actual return gate (18.10)
+
+- One new operation and one canary start with real environment-only/pre-start
+  validation passed; real READY C exists. Old CLEANED operation not resumed.
+- Physical data NOT_RUN: published P predates C; unchanged UI84 rejects return.
+  Latest arm18:22:37 precedes normal renewal eligibility18:29:27 and seed overlap
+  18:59:45. No on-demand READY publisher exists; do not mint timestamps, change
+  guards/TTL, restart shared gateway or wait beyond the valid gate to force a test.
+- Canary gracefully stopped; no API/owner handoff happened. Original production
+  processes/materials and Android preserved. Ordinary import READY; after manual
+  Connect (UI84 calls the mode Telemost), fresh TUN DNS/HTTPS214bytes and production
+  PID attribution pass. Initial no-TUN preflight retained; not a bulk baseline.
+- 20 focused launcher tests and real-directory local floor checks pass, not bulk
+  acceptance. Preserve failed reads and receipts; cause remains INCONCLUSIVE.
+- Stop this attempt. A valid scheduled/fenced C→real newer R window is still the
+  specific measurement prerequisite, not an optimization. No additional retry,
+  FIELD/all_activated/IPv6/commit/push. FIELD remains next owner product priority.
+- [Current attempt and protected evidence boundaries](releases/2026-10-18-mesh-perf-3b.md).
+
+### MESH-PERF-3B — historical first safe abort (18.10)
+
+- Physical canary BLOCKED at first actual startup: missing provider EnvironmentFile
+  in test launcher,22ms fatal before READY, no owner handoff or bulk. Not transport
+  causality evidence. Preserve candidate hashes and failed receipts.
+- Limited API preparation is undone: original archive/unit restored, no active owner
+  override; CLEANED audit tombstone retained. Canary has no process/cgroup/listener.
+  Accepted NL/Android pair unchanged; normal import READY and one production TUN
+  DNS/full HTTPS control verified. No new performance claim.
+- Local-only launcher fix consumes the existing protected EnvironmentFile without
+  exporting its token;6 tests pass. Combined continuation delta22 cases pass.
+  Do not rerun the closed operation. Any later canary requires actual C→newer R
+  and the preserved-floor transaction, not another generic architectural audit.
+- Stop here as requested. Next owner priority FIELD-READY-1; do not automatically
+  start that task, all_activated, another PERF phase or transport optimization.
+- [Final continuation, exact failure and safe cleanup](releases/2026-10-18-mesh-perf-3b.md).
+
+### MESH-PERF-3B — historical starting checkpoint
+
+- Local owner-route API candidate and authenticated diagnostic owner guard exist;
+  no production deployment or physical handoff occurred. Preserve accepted and
+  PERF-3 artifacts separately; do not treat its402 PASS receipt as a new-binary
+  acceptance. New focused tests/results/failures are in the linked report.
+- Actual return gate is unmet: current directory13:29:25.934850928UTC is older than
+  any freshly created canary. Do not delete an override and serve the old JSON,
+  invent a timestamp or restart the shared gateway to satisfy monotonic ordering.
+- Complete protected operator receipts/transaction validation. A safe candidate
+  sequence stages canary and captures owner floor before an ordinary production
+  publication, then validates the genuinely newer return object before ACTIVE.
+  Future renewal is not guaranteed; expiry without that object means no handoff.
+- Only after all live gates: one owner handoff, DNS/HTTPS/session attribution,
+  authorized single/parallel download pairs, forward return/import ACK/production
+  attribution, then canary shutdown and floor-compatible cleanup. Existing
+  authorization already covers listed operations; no transport optimization.
+- Preserve19 local routing/38 API/14 Java/3 native/29 race pass results and their
+  boundaries. Physical window bytes, Mux-credit cause and end-to-end roundtrip
+  remain NOT_RUN/INCONCLUSIVE, not solved by these fixtures.
+- [MESH-PERF-3B partial result and exact missing live evidence](releases/2026-10-18-mesh-perf-3b.md).
+
+### MESH-PERF-3 — local observer ready; safe physical handoff missing (18.10)
+
+- Completed accepted-source reconstruction, reproducible baseline binary, isolated
+  instrumentation overlay, wire-identity/byte-exact/race checks and local off/on
+  measurements. Final candidate048863…a033b remains local, not accepted production.
+- Live gate **BLOCKED**: stock UI84 Friends readiness has no owner-only selector;
+  active RU readiness reads the common directory. No second publisher, shared
+  writable state, active-directory replacement or hidden gateway switch allowed.
+- One next prerequisite: design/authorize owner-scoped authenticated readiness
+  handoff and monotonic-safe return. Then measure the prepared one/two-flow pair
+  with actual retained/SACKed bytes, ready-sender wait and Mux credit together.
+  Do not tune windows, batching, ACK/RTO or pacing from prior full-slot snapshots.
+- Retain the default-suite slot-release failures and their fresh accepted-source
+  reproductions as a test limitation; no unrelated admission/runtime patch.
+- Automatic renewal observed between readbacks:13:29:01 timer, success13:29:30,
+  CRL27121/leaf+CRL expiry17:29:08, new PID2195269 on the same4b722d…8fab7 binary.
+  No task-triggered lifecycle changes; no physical run straddled rotation. CA/root
+  maintenance deadline and other admission/IPv6/source gates remain unchanged.
+- [MESH-PERF-3 result and blocked canary boundary](releases/2026-10-18-mesh-perf-3.md).
+
+### MESH-PERF-2 bulk measured — diagnose window pressure, no tuning (18.10)
+
+- Bounded physical baseline complete: three2MiB singles0.535849/0.662190/0.625820
+  Mbit/s; two concurrent HTTP/1.1/TCP requests1.124855Mbit/s aggregate. Same accepted
+  UI84/batch1, Android TUN, LTE and MESH gateway; no new endpoint gate remains.
+- Upload estimates0.418554/0.474360/0.545473Mbit/s; count header present but server
+  reader semantics/digest unverified. Preserve separation of performance measurement
+  from BYTE_EXACT_ACCEPTANCE NOT_ESTABLISHED; no origin-SHA256 claim.
+- Loaded application-response timing obtained:21 download/9 upload probes, all
+  successful. Three current idle controls, not another120-probe series; no pure RTT
+  or stable p99 inference. All failures/collector limitations documented.
+- Window pressure observed:37/42 single and15/15 parallel snapshots full. Actual
+  DATA lengths/flight bytes absent; small-record cause INCONCLUSIVE. Next experiment
+  is a separately authorized isolated NL-side bounded length/flight-byte diagnostic
+  alongside existing SessionTrace; validate overhead/local byte-exact behavior first.
+  No diagnostic build, production deployment, window/batching/RTP change now.
+- Keep recovered authority17/CRL27120 and working session; no restart/recovery/root
+  signing for measurements. Retain13:19:14 renewal threshold/14:49:14 expiry and
+  operator target **before19 October02:33:41UTC**. External alerts and other
+  admission/source/IPv6 gates remain separate; no automatic rotation observed.
+- [Completed matrix, metrics and next bounded diagnostic](releases/2026-10-18-mesh-perf-2-bulk-1.md).
+
+### Historical MESH-PERF-2 physical continuation — light-load checkpoint (18.10)
+
+The missing bulk contract below was subsequently supplied explicitly and exercised
+above; do not repeat the old endpoint request or120-probe campaign.
+
+- Physical MESH/DNS/full HTTPS PASS on unchanged UI84/batch1 over LTE. Phone VPN,
+  NL egress and matching origin socket in accepted MESH PID2094910 establish the
+  control path. No further manual Connect or UI-automation repair is needed.
+- 120/120 nominal-idle full HTTPS responses: p50 1973.500ms, p95 3124.664ms,
+  p99 3263.099ms; not pure network RTT. Bulk download/upload/4-flow and loaded
+  latency NOT_RUN until an existing approved fixed1MiB URL/SHA256 and discard-only
+  upload byte/hash receipt contract are supplied/verified. Do not select a new
+  speed-test origin or server silently; reuse the prepared cell/campaign limits.
+- Small-record limitation remains INCONCLUSIVE:97 light-load Flow samples never
+  fill8 slots, but lack bulk load and complete DATA-size/flight-byte observations.
+  Missing internal fields must not block application goodput once endpoints exist.
+  Keep batching/window/RTO/RTP/crypto unchanged; no supported A/B toggle exists.
+- Preserve authority17/CRL27120 and the recovered gateway/session; no repeated
+  recovery, restart, APK/native rebuild or security-state reset. Same process,
+  binary, configuration and directory verified through11:56UTC. Renewal remains
+  active; next rotation not observed. Retain13:19:14 due/14:49:14 expiry checks and
+  operator target **before19 October02:33:41UTC**; no new renewal/root operation
+  is authorized by this performance task. External alerts remain a separate gate.
+- [Physical measurements, observability limits and next experiment](releases/2026-10-18-mesh-perf-2-physical-1.md).
+
+### Historical MESH-NL-RECOVERY-APPLY-1 — committed / server acceptance (18.10)
+
+Physical NOT_RUN below is the APPLY-1 checkpoint, superseded for DNS/HTTPS by the
+continuation above. Preserve its forward-only recovery and lifecycle constraints.
+
+- Recovery application PASS: exact operation`mesh-nl-recovery-prep-20261018-01`
+  COMMITTED/CLEANED, authority17, CRL27120, grant revisions7/9. Preserve durable
+  checkpoint4ed8dd…14cf / snapshot1a0ef9…0a3e. Never reapply or roll back to16.
+- NL bounded server readiness PASS with accepted loaded4b722d…8fab7, strict served
+  TLS, seed READY and equal current RU/NL directory. No additional start/reset needed.
+- Physical UI84 MESH/DNS/HTTPS NOT_RUN: package/native bytes unchanged, new import
+  READY ACK observed, but UI automation cannot obtain idle and FLAG_SECURE stays on.
+  Next owner action: one ordinary manual NL/MESH Connect, then short DNS/HTTPS with
+  actual VPN-path evidence; no helper installation or Android rebuild.
+- Existing renewal restored; evaluate NOOP, scheduled exit0 and health success
+  observed. Next actual rotation NOT_OBSERVED: watch due threshold18 October13:19:14,
+  ahead of leaf/CRL14:49:14 expiry. Keep original15min schedule/4h validity unchanged.
+- Arrange operator/offline-root maintenance **before19 October02:33:41UTC**, ahead
+  of6h threshold03:33:41 and CA/authority/grant09:33:41 expiry. This recovery does
+  not authorize a new request/signature or indefinite autonomous root renewal.
+- External CRITICAL delivery still UNAVAILABLE. Full performance baseline NOT_RUN;
+  no tuning, IPv6 remediation, all-activated rollout or supervisor acceptance implied.
+  [Apply/readback evidence and forward-only recovery](releases/2026-10-18-mesh-nl-recovery-apply-1.md).
+
+Entries below are historical checkpoints. Their application/failed-NL gates are
+superseded by APPLY-1; preserve all unrelated acceptance and change-control gates.
+
+### MESH-NL-RECOVERY-SIGN-1 — PASS signing / separate application gate (18.10)
+
+- Exact PREP-1 request is root-signed through existing vault custody; bundle
+  `3f7d0d1e5cd3021da25758a9965bfb8ad1caebb31d4afbe237f47be84de81c2e`,
+  independently verified. Do not re-sign/replace it or transfer/apply without approval.
+- Repeated signing-only authorization verified idempotently10:29UTC: same bundle,
+  checkpoint and unchanged RU/NL state; no new signature or application permission.
+- Next obtain separate application/publication and bounded RU/NL outage/service
+  authorization. Revalidate exact bytes, current checkpoint/state, eligibility,
+  revocations/floors and time gates; no active successor is installed.
+- Use **strictly before19 October03:33:41UTC** for initial recovery: deployed
+  grant-plan validation requires>6h parent life, beyond the4h necessary check.
+  Keep one further operational hour: target before02:33:41UTC, preferably earlier.
+  If stale/insufficient, STOP; do not edit dates/policy or silently replace request.
+- Only after approved strict apply/readback and controlled service restoration:
+  attest loaded gateway4b722d…8fab7, fresh equal directory and same UI84 reconnect;
+  then physical PERF-2 baseline, without Android rebuild or transport tuning.
+- Preserve fail-closed publication/recovery and forward-only floors; require operator
+  coverage/acknowledged alerts and subsequent-cycle evidence for lifecycle closure.
+  [Signing evidence / remaining gates](releases/2026-10-18-mesh-nl-recovery-sign-1.md).
+
+### MESH-NL-RECOVERY-PREP-1 — PASS request preparation / STOP GATE (18.10)
+
+- Prepared through installed workflow: operation`mesh-nl-recovery-prep-20261018-01`,
+  request a9857776…3b794, same-key CA8ef49f00…dc46a; exact hashes in report. No
+  offline-root signing, active installation/publication, reset or service start.
+- Exact-request operator review/offline-root vault signing is now authorized and
+  completed in SIGN-1 above. Installation/service work remains separately gated.
+  Do not run old ordinary-maintenance/signing wrappers unchanged or re-sign output.
+- Recheck snapshot, scope/revocations/floors and time before signing/apply. Candidate
+  CA expires19 October09:33:41UTC;4h headroom limits initial prepare to before
+  05:33:41UTC with margin; SIGN-1 additionally proves a stricter>6h grant-plan gate,
+  requiring initial prepare before03:33:41UTC, with operational reserve before02:33:41.
+  No date edits, TTL extension, root-key export or request overwrite to avoid expiry.
+- Installation, bounded RU/NL maintenance and service recovery remain separately
+  authorized phases. Keep UI84/gateway bytes and transport settings. No physical
+  performance acceptance until valid loaded credentials, directory and reconnect.
+- Actual unsigned-request verification and13 negative cases PASS; active snapshots
+  unchanged. Full signed-successor/native/live acceptance and sustainable next-cycle
+  renewal remain open. [Prepared materials / risks / permissions](releases/2026-10-18-mesh-nl-recovery-prep-1.md).
+
+### MESH-NL-CREDENTIAL-LIFECYCLE-1 — authorized recovery gate (18.10)
+
+- Cause VERIFIED:15min schedule worked;03:11 authority/grant maintenance exceeded
+  its leaf/CRL-only authorization. Offline-root/operator handoff did not complete;
+  local-only logger did not provide remote alert delivery. No blind reset/restart.
+- Current authority16/grants as well as leaf/CRL are expired. Request preparation
+  (including RU successor-CA issuance) is now authorized/completed in PREP-1 above.
+  Offline-root signing is now authorized/completed in SIGN-1; installation, bounded
+  maintenance and service recovery still require separate explicit approval. The
+  signed candidate is not active trust.
+- Preserve gateway4b722d…8fab7, UI84/native bytes, deployed legacy source5109a7…30145,
+  identity, revocations and monotonic floors. Do not deploy main's all-activated
+  candidate or replay old wrappers that pin a different gateway. Verify offline
+  signer dependencies and request-bound material before mutation; no new APK.
+- Require Python/native current-clock validation, guarded publication permissions,
+  loaded binary/served-chain attestation, fresh equal directory and UI84 reconnect.
+  Expired predecessors are audit evidence, not valid rollback credentials. Reconcile
+  unknown commits and use authorized forward-resume, never reset security floors.
+- For sustainability: owner-approved alert/acknowledgment and maintenance coverage
+  before each authority-expiry-minus6h deadline; preserve24h/4h policy. Observe two
+  scheduled leaf/CRL cycles and the next authority cutover before marking PASS.
+- Physical PERF-2 remains BLOCKED until legitimate readiness;12 local decision tests
+  and19 publication checks are not live renewal or throughput acceptance.
+  [Root cause / safe plan / remaining gates](releases/2026-10-18-mesh-nl-credential-lifecycle-1.md).
+
+### MESH-PERF-2 — physical gate BLOCKED, phone now attested (18.10)
+
+- Preserve installed UI84/batch1 and retained source; no rebuild from older main.
+  APK697f9c24…233f/native dd722ead…0c23 freshly match accepted bytes. No active VPN.
+- NL is the immediate readiness blocker: expired leaf+CRL at06:41:35UTC,4h process
+  exit, repeated PROFILE/CREDENTIALS_REJECTED, then start-limit failure. No replacement
+  MESH broker/listener observed. Separately authorize accepted credential lifecycle
+  recovery before any service action; also reassess issuer expiry08:57:40UTC.
+- Existing batching precedes Reliable slots but only gathers ready frames. Obtain
+  physical A: download/upload,1/4 flows, idle/loaded RTT and correlated support export.
+  No supported batching toggle exists; do not fabricate comparison B with a rebuild.
+- Exact DATA-size/flight-byte distributions are absent from accepted public exports.
+  Run coarse baseline without new APK first; separately review bounded SessionTrace
+  extension only if needed. No selected optimization or production tuning.
+- IPv6 independent: confirm provider/plan entitlement (HOSTKEY network FAQ: no VPS
+  IPv6), then isolated exit and client policy migration tests; retain fail-closed capture.
+- [Readiness evidence, metric coverage and bounded physical run card](releases/2026-10-18-mesh-perf-2.md).
+  All-activated admission, supervisor and UI84 source-consolidation gates stay separate.
+
+### MESH-PERF-ROOTCAUSE-1 — measurement gate, no optimization rollout (18.10)
+
+- Root HEAD/GitHub7656f2c verified; phase0 source/checkpoint CI has failures, not PASS.
+- At the first audit NL configured batch1 executable4b722d2d…8fab7 was retained, but
+  service was failed/MainPID0 and no ADB device was attached (superseded by PERF-2).
+  Do not restart production or disrupt VPN
+  as part of this investigation; readiness recovery is a separate operational gate.
+- Preserve accepted UI84: root main lacks its async writer/batching changes. Both
+  source identities were audited and measured separately using test-only overlays.
+- Local measurements prove small-record slot starvation and TLS-boundary amplification,
+  not the current300Kbit/s root cause or a physical carrier ceiling. Obtain paired
+  physical layer measurements, byte-exact HTTPS and idle/loaded RTT before tuning.
+- IPv6: preserve fail-closed capture until both explicit wholedevice IPv6 denial and
+  missing NL public IPv6 egress are addressed through a reviewed migration plan.
+- No selected optimization, release, parameter change or acceptance-gate waiver.
+  All-activated admission, UI84 consolidation, supervisor and desktop gates remain open.
+- [Report, exact missing evidence and next experiment](releases/2026-10-18-mesh-perf-rootcause-1.md).
+
 ### MESH product integration — cross-platform PARTIAL (18.10)
 
 - Owner-authorized source checkpoint `edca5447418141cb44c0706e26d1973d7defd397`

@@ -1,0 +1,512 @@
+{
+  "task": "MESH-PERF-2 — UI84 PHYSICAL BASELINE continuation",
+  "result": "PARTIAL",
+  "source_head": "7656f2c65ea2928b71a928c12ee65a2f47f8ac4f",
+  "historical_report_hashes": {
+    "2026-10-18-mesh-perf-rootcause-1.md": "2f9a51218bbdd221abcd06c1a4e641132ae864310ab6f924a3b110a8db3f7c78",
+    "2026-10-18-mesh-perf-rootcause-1-evidence.json": "0bc146300ccedddeaee08260a644337cf448cd922c923b4a64afdb5a593a96a3",
+    "2026-10-18-mesh-perf-2.md": "dbcaa159e88724722d748736b55f2fd7d2f132864a52f672ae4bfc78816cc6c4",
+    "2026-10-18-mesh-nl-recovery-apply-1.md": "b0211d9610b69b11397c8a232691965b9d06789ae7812034b8c5eb65ce48814f"
+  },
+  "status": {
+    "EXACT_PHYSICAL_BASELINE": "PARTIAL_FUNCTIONAL_AND_NOMINAL_IDLE",
+    "MESH_ROUTE_CONFIRMED": "PASS_PROCESS_CORRELATED_CONTROL_REQUEST",
+    "UI84_DNS_HTTPS": "PASS_122_COMPLETE_RESPONSES",
+    "APPLICATION_GOODPUT": "BLOCKED_EXISTING_BULK_ENDPOINT_CONTRACT_NOT_VERIFIED",
+    "IDLE_AND_LOADED_LATENCY": "PARTIAL_NOMINAL_IDLE_HTTPS_ONLY",
+    "SMALL_RECORD_HYPOTHESIS": "INCONCLUSIVE",
+    "MISSING_OBSERVABILITY": "EXPLICIT_CURRENT_BUILD_AND_ACCESS_LIMITS",
+    "NEXT_ENGINEERING_ACTION": "VERIFY_EXISTING_BULK_FIXTURE_AND_DISCARD_UPLOAD_CONTRACT_THEN_RUN_UNCHANGED_PAIR",
+    "FINAL_RESULT": "PARTIAL"
+  },
+  "android": {
+    "utc": "2026-10-18T11:36:44.502987+00:00",
+    "same_adb_device_as_apply": true,
+    "apk_sha256": "697f9c244b67f75e7e3e612dbcd91a48891d32ee77e23fd9bce173a5f049233f",
+    "version_code": "84",
+    "version_name": "0.1.18-research84-ui60-4-batch1",
+    "process_pid": "14226",
+    "curl_version": "curl 7.73.0 (Android) libcurl/7.73.0 BoringSSL zlib/1.2.11"
+  },
+  "installed_native": {
+    "result": "PASS_INSTALLED_NATIVE_FILE",
+    "sha256": "dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23",
+    "apk_packaged_identity_already_verified": true
+  },
+  "nl_preflight": {
+    "utc": "2026-10-18T11:39:14.467777+00:00",
+    "service": {
+      "ActiveState": "active",
+      "SubState": "running",
+      "InvocationID": "e9cedbb2fb9d45a2ba0aefd9f211bcb6",
+      "MainPID": "2094910",
+      "NRestarts": "0",
+      "ExecMainStartTimestamp": "Sun 2026-10-18 13:49:27 MSK"
+    },
+    "loaded_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+    "profile_sha256": "64870fac58ec25d593837f0cfe7ecc6b2b58411adb03da396122f7c7b2f4bf8d",
+    "directory_sha256": "4cbab5fe8a6856310b501380b45952acdd14d7488e41ae87cb5bdf1b32e5cf7b",
+    "validity": {
+      "ca_not_after": "2026-10-19T09:33:41+00:00",
+      "leaf_not_after": "2026-10-18T14:49:14+00:00",
+      "crl_next_update": "2026-10-18T14:49:14+00:00"
+    },
+    "minimum_credential_headroom_seconds": 11399.532223,
+    "leaf_der_sha256": "f426d5c79c1dd758ff9cf911596ed92426517903fe4e45d884bf0ef495b9b5c3",
+    "crl_number": 27120,
+    "listener_18444": true
+  },
+  "ru_preflight": {
+    "role": "RU",
+    "utc": "2026-10-18T11:39:12.995523+00:00",
+    "directory_sha256": "4cbab5fe8a6856310b501380b45952acdd14d7488e41ae87cb5bdf1b32e5cf7b",
+    "directory_issued": "2026-10-18T10:49:33.989302554Z",
+    "directory_expires": "2026-10-18T14:49:31.111612545Z",
+    "authority_sequence": 17,
+    "authority_expiry": 1792402421,
+    "issuer_sha256": "172ee21c9a02cd6f41a58700b684bf8d423baba8fd5c23e832503a7e76ec1042",
+    "admission_sha256": "e63b6438ef5a9e575681c0e1b84a1e070cf4d2164d5ee153f038cab9e6b50ac2"
+  },
+  "ru_final": {
+    "role": "RU",
+    "utc": "2026-10-18T11:56:10.695956+00:00",
+    "directory_sha256": "4cbab5fe8a6856310b501380b45952acdd14d7488e41ae87cb5bdf1b32e5cf7b",
+    "issuer_sha256": "172ee21c9a02cd6f41a58700b684bf8d423baba8fd5c23e832503a7e76ec1042",
+    "admission_sha256": "e63b6438ef5a9e575681c0e1b84a1e070cf4d2164d5ee153f038cab9e6b50ac2",
+    "plan_sha256": "4ed8dd3c86f5dd2c6c1124dadf175a6269dabc390561d85b22519848049a14cf",
+    "renewal_timer": {
+      "ActiveState": "active",
+      "SubState": "waiting",
+      "UnitFileState": "enabled",
+      "LastTriggerUSec": "Sun 2026-10-18 14:43:20 MSK"
+    }
+  },
+  "nl_final": {
+    "role": "NL",
+    "utc": "2026-10-18T11:56:11.192449+00:00",
+    "directory_sha256": "4cbab5fe8a6856310b501380b45952acdd14d7488e41ae87cb5bdf1b32e5cf7b",
+    "service": {
+      "ActiveState": "active",
+      "SubState": "running",
+      "InvocationID": "e9cedbb2fb9d45a2ba0aefd9f211bcb6",
+      "MainPID": "2094910",
+      "NRestarts": "0"
+    },
+    "loaded_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+    "profile_sha256": "64870fac58ec25d593837f0cfe7ecc6b2b58411adb03da396122f7c7b2f4bf8d"
+  },
+  "route": {
+    "access": "CELLULAR LTE",
+    "topology": {
+      "vpn_network": "300",
+      "interface": "tun1",
+      "transports": "CELLULAR|VPN",
+      "underlying": "299"
+    },
+    "vpn_owner_matches_Friends_package": true,
+    "shell_uid_routed_to_tun": true,
+    "ipv4_only_test_requests": true,
+    "first_probe": {
+      "utc_start": "2026-10-18T11:42:09.709292+00:00",
+      "utc_end": "2026-10-18T11:42:13.710448+00:00",
+      "endpoint": "https://www.cloudflare.com/cdn-cgi/trace",
+      "body_bytes": 211,
+      "body_sha256": "fe7393d97207b52ae0a505f60ec5b6b16b2ca2795b3a658aacc0e00c44bf209f",
+      "egress_matches_NL": true,
+      "exit_code": 0
+    },
+    "correlation_probe": {
+      "utc_start": "2026-10-18T11:45:23.612602+00:00",
+      "utc_end": "2026-10-18T11:45:26.708936+00:00",
+      "body_bytes": 216,
+      "body_sha256": "0d8dca6a986cc8d22c28a20de86fba339bb9204db207f421b323c4ab217abb81",
+      "egress_matches_NL": true,
+      "exit_code": 0,
+      "mesh_gateway_socket_peer_match_times": [
+        "2026-10-18T11:45:25.360607+00:00",
+        "2026-10-18T11:45:26.359567+00:00"
+      ],
+      "socket_observation_limit": "Same destination/time/PID correlation, not a request nonce in gateway logs"
+    },
+    "correlation_probe_curl_metrics": {
+      "http_code": 200.0,
+      "size_download": 216.0,
+      "time_namelookup": 0.001578,
+      "time_connect": 0.003154,
+      "time_appconnect": 2.104766,
+      "time_starttransfer": 3.064296,
+      "time_total": 3.064733,
+      "ssl_verify_result": 0.0
+    },
+    "scope": "VPN route plus NL egress plus matching origin TCP peer in loaded MESH PID during request, not egress-IP-only proof; not a nonce-level packet trace or every-device-flow claim"
+  },
+  "latency_manifest": {
+    "endpoint": "https://www.cloudflare.com/cdn-cgi/trace",
+    "method": "Fresh IPv4 TCP/TLS HTTP/1.1 complete-response timing; warm existing VPN, no harness bulk load, background traffic not excluded",
+    "count_limit": 120,
+    "cadence": "Sequential, at most one request start per second; no catch-up concurrency",
+    "deadline_seconds": 720,
+    "max_body_bytes": 4096,
+    "max_time_per_request_seconds": 30,
+    "bulk_performance": false,
+    "topology": {
+      "vpn_network": "300",
+      "interface": "tun1",
+      "transports": "CELLULAR|VPN",
+      "underlying": "299"
+    },
+    "utc_start": "2026-10-18T11:49:14.592963+00:00"
+  },
+  "latency_completion": {
+    "utc_end": "2026-10-18T11:53:26.378133+00:00",
+    "completed": 120,
+    "failures": [],
+    "elapsed_seconds": 251.82762426700356,
+    "final_topology": {
+      "vpn_network": "300",
+      "interface": "tun1",
+      "transports": "CELLULAR|VPN",
+      "underlying": "299"
+    },
+    "bulk_test_run": false
+  },
+  "measurements": {
+    "result": "PARTIAL_FUNCTIONAL_AND_NOMINAL_IDLE_ONLY",
+    "probe_count": 120,
+    "failures": 0,
+    "received_control_body_bytes": 25632,
+    "campaign_seconds": 251.82762426700356,
+    "method": "Nearest-rank percentiles. Fresh TCP/TLS HTTPS full-response timing on a warm existing MESH session. No harness bulk; background not excluded. DNS/connect/TLS/HTTP totals are not pure network RTT.",
+    "timing_cumulative_ms": {
+      "time_namelookup": {
+        "n": 120,
+        "minimum": 1.3190000000000002,
+        "p50": 1.5510000000000002,
+        "p95": 4.522,
+        "p99": 5.66,
+        "maximum": 1088.702,
+        "mean": 11.007341666666667
+      },
+      "time_connect": {
+        "n": 120,
+        "minimum": 2.029,
+        "p50": 2.541,
+        "p95": 6.064,
+        "p99": 8.615,
+        "maximum": 1090.12,
+        "mean": 12.312149999999999
+      },
+      "time_appconnect": {
+        "n": 120,
+        "minimum": 466.53299999999996,
+        "p50": 1348.9560000000001,
+        "p95": 2172.828,
+        "p99": 2263.346,
+        "maximum": 2322.225,
+        "mean": 1305.8485416666667
+      },
+      "time_starttransfer": {
+        "n": 120,
+        "minimum": 718.9179999999999,
+        "p50": 1973.163,
+        "p95": 3124.431,
+        "p99": 3262.761,
+        "maximum": 3313.6299999999997,
+        "mean": 2014.0327916666668
+      },
+      "time_total": {
+        "n": 120,
+        "minimum": 719.2429999999999,
+        "p50": 1973.5,
+        "p95": 3124.664,
+        "p99": 3263.099,
+        "maximum": 3313.958,
+        "mean": 2014.373975
+      }
+    },
+    "timing_incremental_ms": {
+      "tcp_after_dns": {
+        "n": 120,
+        "minimum": 0.6859999999999997,
+        "p50": 0.8500000000000001,
+        "p95": 3.3289999999999993,
+        "p99": 4.085,
+        "maximum": 6.944,
+        "mean": 1.3048083333333327
+      },
+      "tls_after_connect": {
+        "n": 120,
+        "minimum": 461.724,
+        "p50": 1332.722,
+        "p95": 2159.82,
+        "p99": 2227.815,
+        "maximum": 2320.132,
+        "mean": 1293.5363916666668
+      },
+      "request_to_first_byte_after_tls": {
+        "n": 120,
+        "minimum": 203.85999999999993,
+        "p50": 636.1860000000001,
+        "p95": 1305.7869999999998,
+        "p99": 1548.264,
+        "maximum": 1854.2510000000002,
+        "mean": 708.18425
+      },
+      "body_after_first_byte": {
+        "n": 120,
+        "minimum": 0.17399999999989646,
+        "p50": 0.3159999999997609,
+        "p95": 0.4669999999999952,
+        "p99": 1.1969999999998926,
+        "maximum": 1.5920000000000378,
+        "mean": 0.3411833333333142
+      }
+    },
+    "phone_cpu": {
+      "samples": 252,
+      "interval_seconds": 251.03000000002794,
+      "cpu_seconds": 99.07,
+      "mean_percent_one_core": 39.46540254152451,
+      "interval_percent_one_core": {
+        "n": 251,
+        "minimum": 31.0,
+        "p50": 36.0,
+        "p95": 54.54545454596767,
+        "p99": 68.68686868751485,
+        "maximum": 73.26732673199767,
+        "mean": 39.478623435501014
+      },
+      "rss_mib_min": 100.828125,
+      "rss_mib_max": 170.16796875,
+      "thread_counts": [
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84
+      ],
+      "scope": "Whole Friends process, includes UI/chat/background, not isolated native transport"
+    },
+    "gateway_cpu": {
+      "samples": 18,
+      "interval_seconds": 16.991961002349854,
+      "cpu_seconds": 1.02,
+      "mean_percent_one_core": 6.002838635628589,
+      "rss_mib_min": 49.1640625,
+      "rss_mib_max": 49.1640625,
+      "scope": "18s route-proof interval, not simultaneous whole latency campaign and not bulk load"
+    },
+    "application_goodput": {
+      "download_one_stream": "NOT_RUN",
+      "upload_one_stream": "NOT_RUN",
+      "download_four_streams": "NOT_RUN",
+      "reason": "Prepared run card did not verify an existing bulk fixture URL/SHA256 or discard-only upload byte/hash receipt contract. No new origin chosen or created."
+    },
+    "loaded_latency": "NOT_RUN_NO_BULK",
+    "hypothesis": "INCONCLUSIVE"
+  },
+  "existing_sessiontrace": {
+    "journal_exit": 0,
+    "records": 160,
+    "max_message_bytes": 14339,
+    "message_decode_errors": [],
+    "event_types": {
+      "restricted_trace": 160
+    },
+    "trace_stage_counts": {
+      "('CARRIER_ACTIVITY', 'ESTABLISHED')": 97,
+      "('HEARTBEAT', 'TX')": 49,
+      "('HEARTBEAT', 'RX')": 10,
+      "('GATEWAY_SESSION', 'ESTABLISHED')": 4
+    },
+    "trace_records": 160,
+    "delivery_records": 97,
+    "times_ms": [
+      1792323849257,
+      1792324041347
+    ]
+  },
+  "transport_samples": {
+    "observed_start_utc": "2026-10-18T11:44:09.348000+00:00",
+    "observed_end_utc": "2026-10-18T11:47:21.347000+00:00",
+    "duration_seconds": 191.999,
+    "session_count": 1,
+    "sample_count": 97,
+    "sample_spacing_ms": {
+      "n": 96,
+      "minimum": 1995,
+      "p50": 2000,
+      "p95": 2001,
+      "p99": 2005,
+      "maximum": 2005
+    },
+    "workload": "Uncontrolled/background plus route-proof HTTPS; NOT a sustained bulk load",
+    "occupied_slots_distribution": {
+      "1": 11,
+      "0": 79,
+      "2": 3,
+      "3": 2,
+      "4": 1,
+      "6": 1
+    },
+    "full_eight_slot_samples": 0,
+    "max_occupied_slots": 6,
+    "send_base_advance": 191,
+    "send_next_advance": 190,
+    "receive_next_advance": 191,
+    "carrier_payload_tx_delta": 136432,
+    "carrier_payload_rx_delta": 76073,
+    "assembly_deltas": {
+      "fragments": 677,
+      "completed": 677,
+      "expired": 0,
+      "malformed": 0,
+      "duplicate": 0,
+      "conflict": 0,
+      "capacity": 0,
+      "crc_failed": 0,
+      "rtp": 778,
+      "rtp_gaps": 0,
+      "vp8_frames": 677
+    },
+    "unique_boundary_records": 3849,
+    "boundary_index_gaps": 3004,
+    "boundary_interval_records": 3785,
+    "boundary_stage_counts": {
+      "ack_generated": 270,
+      "carrier_queued": 349,
+      "ack_sent": 273,
+      "carrier_written": 788,
+      "rtp_written": 431,
+      "rtp_received": 455,
+      "vp8_reassembled": 377,
+      "carrier_message_completed": 381,
+      "ack_received": 312,
+      "reliable_data_accepted": 74,
+      "reliable_send": 75
+    },
+    "observed_retransmission_send_attempts": 3,
+    "max_sampled_head_retries": 0,
+    "observed_frame_discard_boundaries": 0,
+    "sampled_first_covering_ack_delay_ms": {
+      "n": 46,
+      "minimum": 150,
+      "p50": 354,
+      "p95": 850,
+      "p99": 1033,
+      "maximum": 1033
+    },
+    "sampled_cumulative_ack_delay_ms": {
+      "n": 45,
+      "minimum": 150,
+      "p50": 363,
+      "p95": 996,
+      "p99": 1620,
+      "maximum": 1620
+    },
+    "queue_to_rtp_write_sample_ms": {
+      "n": 349,
+      "minimum": 0,
+      "p50": 0,
+      "p95": 4,
+      "p99": 6,
+      "maximum": 9
+    },
+    "method": "ACK: local reliable_send completion to first covering/cumulative observed ACK; require complete boundary-index interval and no retransmit; includes carrier/peer processing, not pure network RTT. Queue: same sender/message/fragment queued-to-rtp_written, same complete-index condition.",
+    "missing": [
+      "Exact DATA payload lengths",
+      "Exact in-flight DATA bytes",
+      "Continuous window-stall durations",
+      "Wire RTP/SRTP byte rate",
+      "Complete retransmission/loss/frame-discard rate",
+      "Client-side SessionTrace export"
+    ],
+    "interpretation": "No sampled eight-slot exhaustion in this light interval does not disprove exhaustion under bulk; small-record cause remains INCONCLUSIVE"
+  },
+  "observability": {
+    "data_payload_size_distribution": "NOT_OBSERVABLE_WITH_CURRENT_BUILD_PUBLIC_SCHEMA",
+    "exact_in_flight_data_bytes": "NOT_OBSERVABLE_WITH_CURRENT_BUILD_PUBLIC_SCHEMA",
+    "continuous_window_stall_duration": "NOT_OBSERVABLE_WITH_CURRENT_BUILD_PUBLIC_SCHEMA",
+    "queue_depth_and_pre_enqueue_wait": "NOT_OBSERVABLE_WITH_CURRENT_BUILD_PUBLIC_SCHEMA",
+    "post_enqueue_queue_time": "SAMPLED_FROM_EXISTING_BOUNDARIES",
+    "ack_timing": "SAMPLED_COMPLETE_INDEX_INTERVALS_ONLY",
+    "full_wire_bitrate_and_loss_percent": "NOT_OBSERVABLE_WITH_CURRENT_BUILD_PUBLIC_INTERFACE",
+    "client_support_export": "NOT_PROVIDED; use ordinary owner share; no run-as or instrumentation",
+    "batching_toggle": "NO_SUPPORTED_SWITCH; NO_A_B"
+  },
+  "collector_corrections": [
+    "Simple literal Transports: VPN counter misses CELLULAR|VPN; structured NetworkAgent confirmed live VPN",
+    "journalctl JSON without --all made370/600 MESSAGE fields null; bounded --all read returned97 existing delivery samples; not missing runtime instrumentation"
+  ],
+  "cleanup": {
+    "removed_count": 122,
+    "hashes_checked_before_removal": true,
+    "only_this_tasks_body_files": true,
+    "app_data_touched": false
+  },
+  "source_or_runtime_configuration_changes": false,
+  "credential_or_service_operations": false,
+  "renewal_disabled": false,
+  "software_install_or_rebuild": false,
+  "network_or_transport_settings_changed": false,
+  "commit_push_publish": false,
+  "private_evidence_sha256": {
+    "package.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "trace-analysis.json": "85560e9c2e00e0914a9c854b6308d14e35ea87d0fe33938fd94af0fbd181471f",
+    "test-file-cleanup.json": "147ca775b3f6472731dfaeb8c531cacc0d2dfb9ed45a4109ab099e027de4725b",
+    "final-RU.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "connection-notification.txt": "37648ed9d7f77f56643afc2593084fd1fc45bf3779c3f1a0f8c69eba02e2e189",
+    "phone-proc-stat-before.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "thermal-before.txt": "edbf2ccc99f5519401de1f2d5d2cd8bc97ab0699fba3367132b43e54fde70d34",
+    "preflight-RU.json": "809cefff104e7be7f2bffc08190609e88e9c7aff7ebb89c187ac09f6b141e92e",
+    "https-probe.stdout": "fbf9fa5f97bf7283e10347c4298d4cc359294f95f688f3bd3a19b14de558d9b8",
+    "route-probe.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "latency-completion.json": "091be403c3aacc22ebf8e3846245505909ecf24cd3fd6fd7caa6f261db7536d3",
+    "thermal-final.txt": "edbf2ccc99f5519401de1f2d5d2cd8bc97ab0699fba3367132b43e54fde70d34",
+    "phone-page-size.txt": "25ac87b7309b7946b51c32e824793ff48b56b735efa16875cf33e4ba67523d91",
+    "phone-cpu-samples.jsonl": "d95e89b7718ea607aee554eff31e1ba312c39246e0b346017066e6c27708a37b",
+    "final-RU.json": "fc3375a8aaaccaee75bc6101852a9aaa221b5d3b407e6098a101719b6642620c",
+    "final-NL.json": "8412e139ce0e5120a9c9eea51e6041a14fd71c5fbe941c4c01ec7e78585bf26f",
+    "session-journal-fullfields.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "vpn-management.txt": "c816d83a1646134b1c258739ae901c16cc4b770b881b6a19a738f8462e137ae1",
+    "route-sockets.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "route-sockets.json": "ac4cf0bbdb5c90c39968b1993e4b664093eb0491733aaa91ae2fd886b4279e43",
+    "process.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "connectivity.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "package.txt": "7edb70c4aeed93f9d5dad086f0bfb6aa45ee1fc5b7824e8021cf7de4cc3931f7",
+    "session-journal.jsonl": "8b6ae03866f4901a0016cf61f721f9ff640ae8f58af50763d82ce7f2ed12c4e7",
+    "preflight-RU.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "shell-uid.txt": "cf6fc686878593a74a5845093454141e03f3b56cae84a559e13fddbbaca7142c",
+    "session-journal-fullfields.jsonl": "5f43a46ad57636cbc632ad0f65b487d2f5a48e40e86d89c8c930b31db36f32d6",
+    "final-NL.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "route-probe.json": "1e949310934af10c1db8d99e68f0ae5d9e11df5da462aa728fc74a89e33dda4c",
+    "latency-manifest.json": "3380de555fdcb084a8366df38f81ad7bb4400514ba654b06987cf9a97a6844e4",
+    "trace-read-summary.json": "596406a5b924fff95344c327780e939f539dd73556db27a90637d0b9ef676bff",
+    "process.txt": "0ec4a4a74be69fb775c1d143a20efc144aa89a0a648d21cb2857135b4a6f2060",
+    "phone-clock-ticks.txt": "eea8254c7500ba3de996aa8ad6af399183f04e17d4a8102fde539dbc93a90012",
+    "installed-native-check.json": "4f3804fbf2e716643c5ab9306b159a485bf1e1857debb9ca89240c958adeca87",
+    "connectivity.txt": "9e37e0121289686d0df0d1b55b847b71ab33ee3446b5c993df49ac26580c99cc",
+    "https-probe.json": "e2226f5cb52082c1ab108b47bc794fb1a479b5b29caf08aad088da7ffcdabd6d",
+    "shell-route.txt": "750ec6a705afd609e22509f3c6ee494b762f49b18813e734daa320f6e8a12926",
+    "measurement-analysis.json": "bc8b49328d332326aa07aba98ed09aa0207e1f9609ebb1507e3a8e776dd8c464",
+    "preflight-NL.json": "b75cb8613d44f4c0649aef093624b529a1156b3753788807ad17edf7eab91242",
+    "phone-cpuinfo-before.txt": "20253b17e12b005f58df50acb0b52e4cfbabb4a59634801eaf6ddc6a90f6ee26",
+    "services.txt": "69b6cbaee97ee773981295e1f020e8d360702898fa157d476359b1c9f4d5569b",
+    "session-journal.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "curl.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "preflight-NL.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "curl-help.txt": "ec54bde54fb14b3ca5ced6f128c8678f1bda5b6e20beec1baf7f1b5896d4a4a7",
+    "phone-preflight.json": "06f11f0146a1cf0ee62645b63673d0b31ad9bdb8ece215444321af85e6b64735",
+    "services.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "curl.txt": "8a6d439be44f0bf9596818d541efa370200ec96eccc02ba97497cc5ab9450add",
+    "https-probe.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "session-trace.json": "0760598c0658c6a2e3d689ba6df7fd41bb4897caab027b41a84e34105bae2ec3",
+    "route-probe.stdout": "731be7418187d8ebadacfbe939d906a0f39c619571e00e37fc750f460511b2c4",
+    "phone-proc-stat-before.txt": "8063a09f1f076e2f3ec3a7bcab55bd699577631934b8fb615cdfd0279c56868e",
+    "latency-rows.jsonl": "6fa0a61c4a24c0a0ea2dd92c2de8791ec258aa817bc5e51e2c83959dc0829eee"
+  }
+}

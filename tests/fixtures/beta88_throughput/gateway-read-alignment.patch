@@ -1,0 +1,162 @@
+--- a/tcpforward/mux.go
++++ b/tcpforward/mux.go
+@@ -599,7 +599,7 @@
+ 	defer stop()
+ 	reverse := make(chan error, 1)
+ 	go func() {
+-		buffer := make([]byte, MaxData)
++		buffer := make([]byte, mux.dataPayloadSize())
+ 		_, err := io.CopyBuffer(struct{ io.Writer }{stream}, struct{ io.Reader }{connection}, buffer)
+ 		if err == nil {
+ 			err = stream.CloseWrite()
+@@ -643,6 +643,13 @@
+ 	metrics Metrics
+ }
+ 
++func (mux *Mux) dataPayloadSize() int {
++	if mux.batchSend != nil {
++		return min(MaxData, familysession.MaxBatchPlaintext-familysession.BatchMessageHeaderSize-headerSize)
++	}
++	return MaxData
++}
++
+ func (writer *muxTargetWriter) Write(payload []byte) (int, error) {
+ 	before := writer.metrics.Snapshot().ToTarget
+ 	err := writeTarget(writer.target, payload, &writer.metrics)
+--- a/tcpforward/mux_stream.go
++++ b/tcpforward/mux_stream.go
+@@ -8,7 +8,6 @@
+ 	"sync"
+ 	"time"
+ 
+-	"github.com/Joker20380/family_connect/carrier/familysession"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ )
+ 
+@@ -226,10 +225,7 @@
+ 			return total, io.ErrClosedPipe
+ 		}
+ 		if stream.opened && len(stream.send) == 0 && stream.sendCredit > 0 {
+-			chunk := MaxData
+-			if mux.batchSend != nil {
+-				chunk = min(chunk, familysession.MaxBatchPlaintext-familysession.BatchMessageHeaderSize-headerSize)
+-			}
++			chunk := mux.dataPayloadSize()
+ 			count := min(len(payload), chunk, stream.sendCredit)
+ 			if sessiontrace.PerformanceEnabled {
+ 				stream.perf.QueuedDATA.Add(count)
+--- /dev/null
++++ b/tcpforward/read_alignment_test.go
+@@ -0,0 +1,112 @@
++package tcpforward
++
++import (
++	"bytes"
++	"context"
++	"encoding/binary"
++	"io"
++	"sync"
++	"testing"
++	"time"
++)
++
++type alignmentRecorder struct {
++	mu    sync.Mutex
++	mux   *Mux
++	body  []byte
++	sizes []int
++}
++
++func (recorder *alignmentRecorder) SendContext(ctx context.Context, payload []byte) error {
++	return recorder.SendBatchContext(ctx, [][]byte{payload})
++}
++
++func (recorder *alignmentRecorder) SendBatchContext(ctx context.Context, payloads [][]byte) error {
++	for _, payload := range payloads {
++		frame, err := decodeMux(payload)
++		if err != nil {
++			return err
++		}
++		if frame.kind != dataFrame {
++			continue
++		}
++		recorder.mu.Lock()
++		recorder.body = append(recorder.body, frame.payload...)
++		recorder.sizes = append(recorder.sizes, len(frame.payload))
++		recorder.mu.Unlock()
++		credit := make([]byte, 4)
++		binary.BigEndian.PutUint32(credit, uint32(len(frame.payload)))
++		recorder.mux.mu.Lock()
++		recorder.mux.dispatchLocked(muxFrame{kind: muxWindowUpdate, id: frame.id, payload: credit})
++		recorder.mux.mu.Unlock()
++	}
++	return nil
++}
++
++func (recorder *alignmentRecorder) Recv(ctx context.Context) ([]byte, error) {
++	<-ctx.Done()
++	return nil, ctx.Err()
++}
++
++func (recorder *alignmentRecorder) Close() error { return nil }
++
++func TestGatewayReadAlignmentAvoidsBatchTail(test *testing.T) {
++	for _, legacy := range []bool{true, false} {
++		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
++		recorder := &alignmentRecorder{}
++		mux := &Mux{ctx: ctx, cancel: cancel, endpoint: recorder, batchSend: recorder.SendBatchContext, streams: make(map[uint32]*MuxStream), changed: make(chan struct{})}
++		recorder.mux = mux
++		stream := mux.makeStreamLocked(1)
++		stream.opened = true
++		done := make(chan struct{})
++		go func() { defer close(done); mux.writeLoop() }()
++		readSize := mux.dataPayloadSize()
++		if readSize != 16340 {
++			test.Fatal("batch envelope changed", readSize)
++		}
++		payload := bytes.Repeat([]byte{0x47}, 8*readSize)
++		if legacy {
++			readSize = MaxData
++		}
++		count, err := io.CopyBuffer(struct{ io.Writer }{stream}, struct{ io.Reader }{bytes.NewReader(payload)}, make([]byte, readSize))
++		if err != nil || count != int64(len(payload)) {
++			cancel()
++			<-done
++			test.Fatal(count, err)
++		}
++		for {
++			recorder.mu.Lock()
++			complete := len(recorder.body) == len(payload)
++			recorder.mu.Unlock()
++			if complete || ctx.Err() != nil {
++				break
++			}
++			time.Sleep(time.Millisecond)
++		}
++		cancel()
++		<-done
++		if !bytes.Equal(payload, recorder.body) {
++			test.Fatal("byte mismatch")
++		}
++		tiny := 0
++		for _, size := range recorder.sizes {
++			if size == 44 {
++				tiny++
++			}
++		}
++		if legacy && tiny != 7 {
++			test.Fatal("legacy tail not reproduced", recorder.sizes)
++		}
++		if !legacy && (tiny != 0 || len(recorder.sizes) != 8) {
++			test.Fatal("aligned read fragmented", recorder.sizes)
++		}
++		test.Logf("legacy=%v payload=%d frames=%d tiny44=%d", legacy, len(payload), len(recorder.sizes), tiny)
++	}
++}
++
++func TestGatewayReadAlignmentLegacyEndpoint(test *testing.T) {
++	mux := &Mux{}
++	if mux.dataPayloadSize() != MaxData {
++		test.Fatal("nonbatch endpoint changed")
++	}
++}

@@ -1,0 +1,521 @@
+--- a/clients/android/app/build.gradle
++++ b/clients/android/app/build.gradle
+@@ -113,7 +113,7 @@
+     }
+     applicationVariants.all { variant ->
+         if (variant.buildType.name == 'privateBeta') {
+-            variant.outputs.all { versionCodeOverride = 87; versionNameOverride = '0.1.18-beta87-existing-users' }
++            variant.outputs.all { versionCodeOverride = 88; versionNameOverride = '0.1.18-beta88-recovery' }
+         }
+         if (variant.buildType.name == "friends") {
+             variant.outputs.all { versionCodeOverride = 83; versionNameOverride = "0.1.18-research83-bootstrap" }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/AutomaticConnection.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/AutomaticConnection.java
+@@ -26,6 +26,7 @@
+     private volatile FriendsAccessAndroid access;
+     private volatile ConnectivityOrchestrator.Failure interrupted;
+     private int unhealthy;
++    private long nextHealth;
+     private boolean ownerOpen;
+     private final boolean debug;
+     private final boolean restrictedOnly;
+@@ -42,6 +43,16 @@
+         orchestrator.connect(new ArrayList<>(),preferred,hint);
+     }
+     public long now() { return SystemClock.elapsedRealtime(); }
++    public long jitter(long maximum) { return java.util.concurrent.ThreadLocalRandom.current().nextLong(maximum+1); }
++    public boolean networkAvailable() {
++        android.net.ConnectivityManager manager=context.getSystemService(android.net.ConnectivityManager.class);
++        for(android.net.Network network:manager.getAllNetworks()) {
++            android.net.NetworkCapabilities capabilities=manager.getNetworkCapabilities(network);
++            if(capabilities!=null&&capabilities.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET)
++                &&capabilities.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_NOT_VPN))return true;
++        }
++        return false;
++    }
+     public void pause(long millis) throws InterruptedException { Thread.sleep(millis); }
+     public List<String> configure(List<String> ignored,long deadline) throws Exception {
+         orchestrator.check(deadline);
+@@ -82,9 +93,11 @@
+                 pause(100);
+             }
+         }
+-        orchestrator.check(deadline);unhealthy=0;
++        orchestrator.check(deadline);unhealthy=0;nextHealth=0;
++        if(health==null)health=new VpnHealth(context);
+     }
+     void interrupt(ConnectivityOrchestrator.Failure reason) {
++        if(reason==ConnectivityOrchestrator.Failure.AUTH)ConnectionService.forgetRequest(context);
+         interrupted=reason;orchestrator.interrupt(reason);
+         VpnHealth probe=health;if(probe!=null)probe.cancel();
+         FriendsAccessAndroid pending=access;if(pending!=null)pending.cancel();
+@@ -101,10 +114,19 @@
+         if(active instanceof RestrictedTunnelEngine) {
+             RestrictedTunnelEngine restricted=(RestrictedTunnelEngine)active;
+             ConnectivityOrchestrator.Failure failure=restricted.connectionFailure();
+-            if(failure!=null)orchestrator.lost(failure);
++            if(failure!=null){orchestrator.lost(failure);return;}
++            if(!networkAvailable()){orchestrator.lost(ConnectivityOrchestrator.Failure.NETWORK);return;}
++            if(now()>=nextHealth){
++                boolean good=health.check("10.79.0.2");nextHealth=now()+30000;
++                Diagnostics.dns(context,good);orchestrator.trafficHealthy(good);
++                if(interrupted!=null)orchestrator.lost(interrupted);
++                else if(good)unhealthy=0;
++                else if(++unhealthy>=3)orchestrator.lost(ConnectivityOrchestrator.Failure.NETWORK);
++            }
+         } else if(active instanceof AutomaticNormalEngine) {
+             boolean good=health.check(((AutomaticNormalEngine)active).source);
+             Diagnostics.dns(context,good);
++            orchestrator.trafficHealthy(good);
+             if(interrupted!=null)orchestrator.lost(interrupted);
+             else if(good)unhealthy=0;
+             else if(++unhealthy>=2)orchestrator.lost(ConnectivityOrchestrator.Failure.NETWORK);
+--- /dev/null
++++ b/clients/android/app/src/main/java/com/familyconnect/app/ConnectionResume.java
+@@ -0,0 +1,7 @@
++package com.familyconnect.app;
++
++final class ConnectionResume {
++    static boolean allowed(boolean requested,boolean permission,String transport) {
++        return requested&&permission&&("auto".equals(transport)||"telemost".equals(transport));
++    }
++}
+--- a/clients/android/app/src/main/java/com/familyconnect/app/ConnectionService.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/ConnectionService.java
+@@ -37,9 +37,19 @@
+     private volatile VpnHealth health;
+     private ScheduledFuture<?> pending;
+     private String source;
+-    @Override public int onStartCommand(Intent intent,int flags,int startId){
++    static void forgetRequest(android.content.Context context){context.getSharedPreferences("connection-request",MODE_PRIVATE).edit().putBoolean("requested",false).commit();}
++    private int restartMode(){return getSharedPreferences("connection-request",MODE_PRIVATE).getBoolean("requested",false)?START_STICKY:START_NOT_STICKY;}
++    private Intent resumeRequest(){
++        android.content.SharedPreferences saved=getSharedPreferences("connection-request",MODE_PRIVATE);
++        String transport=saved.getString("transport",null);
++        if(!ConnectionResume.allowed(saved.getBoolean("requested",false),VpnService.prepare(this)==null,transport)){forgetRequest(this);return null;}
++        return new Intent(this,ConnectionService.class).setAction("connect").putExtra("transport",transport).putExtra("country",saved.getString("country",null));
++    }
++    @Override public int onStartCommand(Intent incomingIntent,int flags,int startId){
++        final Intent intent=incomingIntent==null?resumeRequest():incomingIntent;
++        if(intent==null){stopSelf();return START_NOT_STICKY;}
+         startForeground(1,notification());
+-        if(intent!=null&&"disconnect".equals(intent.getAction())){if(!started){stopSelf();return START_NOT_STICKY;}cancel();worker.execute(()->owned(this::stopConnection));return START_NOT_STICKY;}
++        if("disconnect".equals(intent.getAction())){forgetRequest(this);if(!started){stopSelf();return START_NOT_STICKY;}cancel();worker.execute(()->owned(this::stopConnection));return START_NOT_STICKY;}
+         final boolean sync=intent!=null&&"sync-control".equals(intent.getAction());
+         final boolean intake=intent!=null&&"apply-control".equals(intent.getAction());
+         final boolean selection=intent!=null&&"select-gateway".equals(intent.getAction());
+@@ -54,7 +64,7 @@
+             });}finally{selectingGateway.set(false);}});
+             return START_NOT_STICKY;
+         }
+-        if(started||stopping||closing){if(intake||sync||selection)reportControl("BUSY");return START_NOT_STICKY;}
++        if(started||stopping||closing){if(intake||sync||selection)reportControl("BUSY");return restartMode();}
+         final String priorStatus=status;
+         byte[] received=null;
+         if(intake){try{received=ControlIntake.copy(intent.getByteArrayExtra("envelope"));}
+@@ -65,6 +75,13 @@
+         automatic="auto".equals(requestedTransport)||"telemost".equals(requestedTransport);
+         terminalAttempt=ConnectionTerminal.VPN.begin(ConnectionTerminal.Stage.PREPARING);
+         final boolean connectRequested=intent!=null&&"connect".equals(intent.getAction());
++        if(connectRequested){
++            boolean retain=ConnectionResume.allowed(true,true,requestedTransport);
++            if(!getSharedPreferences("connection-request",MODE_PRIVATE).edit().putBoolean("requested",retain)
++                .putString("transport",requestedTransport).putString("country",intent.getStringExtra("country")).commit()){
++                failed=true;status="failed";forgetRequest(this);stopSelf();return START_NOT_STICKY;
++            }
++        }
+         worker.execute(()->{
+             try{ControlOperations.APP.claim(operationOwner);claimed=true;}
+             catch(Exception busy){if(intake||selection)reportControl("BUSY");main.post(()->{status=priorStatus;stopSelf();});return;}
+@@ -93,11 +110,11 @@
+                 }
+                 catch(Exception|LinkageError e){
+                     if("restricted".equals(requestedTransport)||"restricted-refresh".equals(requestedTransport))RestrictedTunnelEngine.failure(this,e);
+-                    if(intake||sync||selection)reportControl("FAILED");failed=true;cancel();stopConnection();
++                    if(intake||sync||selection)reportControl("FAILED");failed=true;forgetRequest(this);cancel();stopConnection();
+                 }
+             });
+         });
+-        return START_NOT_STICKY;
++        return restartMode();
+     }
+     private void syncControl(){
+         if(!rnsEnabled||stopping||closing)return;
+@@ -152,7 +169,7 @@
+             switch(event.state){
+                 case CONNECTED:status="on";healthStatus="ok";break;
+                 case RESTORING:status="restoring";healthStatus="checking";break;
+-                case FAILED:status="failed";healthStatus="unavailable";failed=true;break;
++                case FAILED:status="failed";healthStatus="unavailable";failed=true;forgetRequest(this);break;
+                 case DISCONNECTED:status="disconnecting";healthStatus="off";break;
+                 case DISCONNECTING:status="disconnecting";break;
+                 default:status="connecting";healthStatus="checking";
+--- a/clients/android/app/src/main/java/com/familyconnect/app/ConnectivityOrchestrator.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/ConnectivityOrchestrator.java
+@@ -13,6 +13,7 @@
+     static final int MAX_EVENTS=128, MAX_RESTORATIONS=1;
+     static final int MAX_BOOTSTRAP_RECOVERIES=2;
+     static final long RECOVERY_BACKOFF_MS=30000, MAX_RECOVERY_BACKOFF_MS=120000;
++    static final long RECOVERY_COOLDOWN_MS=300000, STABLE_TRAFFIC_MS=120000;
+     static final String RESTRICTED="restricted";
+     static final class Rejected extends Exception {
+         final Failure category;
+@@ -34,6 +35,8 @@
+     }
+     interface Host {
+         long now();
++        default long jitter(long maximum) { return 0; }
++        default boolean networkAvailable() { return true; }
+         default List<String> configure(List<String> configured,long deadline) throws Exception { return configured; }
+         void pause(long millis) throws Exception;
+         void open(String candidate,long deadline) throws Exception;
+@@ -55,6 +58,7 @@
+     private int failedSeries;
+     private Failure retryReason;
+     private int bootstrapRecoveries;
++    private long healthySince=-1;
+     ConnectivityOrchestrator(Host host) { this.host=host; }
+     State state() { return state; }
+     String selected() { return selected; }
+@@ -104,6 +108,11 @@
+         run(true);
+     }
+     boolean needsPolling(){return state==State.CONNECTED||state==State.RESTORING;}
++    void trafficHealthy(boolean good) {
++        if(state!=State.CONNECTED||!good){healthySince=-1;return;}
++        if(healthySince<0)healthySince=host.now();
++        if(host.now()-healthySince>=STABLE_TRAFFIC_MS){restorations=0;failedSeries=0;bootstrapRecoveries=0;}
++    }
+     private void run(boolean restoring) {
+         long deadline=started+CONNECT_TIMEOUT_MS;
+         Failure last=Failure.TRANSPORT_UNAVAILABLE;
+@@ -112,6 +121,7 @@
+             String candidate=candidates.get(index);
+             try {
+                 check(deadline);host.closeCandidate();check(deadline);
++                if(!host.networkAvailable())throw new Rejected(Failure.TRANSPORT_UNAVAILABLE);
+                 if(index>0||restoring) {
+                     emit("fallback",candidate,last);
+                     long until=Math.min(deadline,host.now()+Math.min(4000,1000L<<index));
+@@ -120,7 +130,7 @@
+                 check(deadline);emit("candidate_attempted",candidate,null);
+                 long candidateDeadline=Math.min(deadline,host.now()+(RESTRICTED.equals(candidate)?RESTRICTED_TIMEOUT_MS:NORMAL_TIMEOUT_MS));
+                 host.open(candidate,candidateDeadline);check(candidateDeadline);
+-                selected=candidate;state=State.CONNECTED;retryAt=0;failedSeries=0;bootstrapRecoveries=0;
++                selected=candidate;state=State.CONNECTED;retryAt=0;healthySince=-1;
+                 if(!RESTRICTED.equals(candidate))host.remember(candidate);
+                 emit("candidate_succeeded",candidate,null);emit("time_to_connected",candidate,null);
+                 if(restoring)emit("restoration_succeeded",candidate,null);
+@@ -154,10 +164,12 @@
+         try { host.closeCandidate(); } catch(Exception|LinkageError failure) { reason=Failure.INTERNAL; }
+         selected=null;
+         if(reason==Failure.CANCELLED) { disconnect();return; }
+-        boolean bootstrapRetry=reason==Failure.BOOTSTRAP_UNAVAILABLE&&temporaryBootstrap&&bootstrapRecoveries<MAX_BOOTSTRAP_RECOVERIES;
+-        if(restoring&&requested&&(retryable(reason)||bootstrapRetry)){
++        boolean bootstrapRetry=reason==Failure.BOOTSTRAP_UNAVAILABLE&&temporaryBootstrap;
++        if(requested&&(retryable(reason)||bootstrapRetry)&&!candidates.isEmpty()){
+             if(bootstrapRetry)bootstrapRecoveries++;
+             long delay=Math.min(MAX_RECOVERY_BACKOFF_MS,RECOVERY_BACKOFF_MS<<Math.min(failedSeries,2));
++            if(bootstrapRetry&&bootstrapRecoveries>MAX_BOOTSTRAP_RECOVERIES){delay=RECOVERY_COOLDOWN_MS;bootstrapRecoveries=0;}
++            delay+=Math.max(0,Math.min(5000,host.jitter(5000)));
+             failedSeries=Math.min(2,failedSeries+1);retryReason=reason;retryAt=host.now()+delay;
+             state=State.RESTORING;emit("restoration_failed",null,reason);emit("recovery_wait",null,reason);return;
+         }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/RestrictedBootstrap.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/RestrictedBootstrap.java
+@@ -38,13 +38,14 @@
+                 &&((FriendsReadinessProtocol.ChallengeFailure)failure).code==FriendsReadinessProtocol.ChallengeCode.CHALLENGE_UNAUTHORIZED;
+             ReadinessImportResult.Code code=rejected?ReadinessImportResult.Code.AUTHORIZATION_REJECTED:ReadinessImportResult.Code.FETCH_FAILED;
+             byte[] cached=null;
++            boolean retry=false;
+             synchronized(lock){
+                 if(rejected){try{cache.denied();}catch(Exception storage){code=ReadinessImportResult.Code.PERSISTENCE_FAILED;}}
+-                else if(unavailable(failure))cached=cached(cache,now.getAsLong());
++                else if(unavailable(failure)){cached=cached(cache,now.getAsLong());retry=cache.refreshable(now.getAsLong());}
+             }
+             String status=rejected?"AUTHORIZATION_REJECTED":failure instanceof FriendsReadinessProtocol.ChallengeFailure?
+                 ((FriendsReadinessProtocol.ChallengeFailure)failure).code.name():"UNAVAILABLE";
+-            return new Selection(product.failed(receipt,code,now.getAsLong()),cached==null?status:"CACHED_VALID_REFRESH_UNAVAILABLE",rejected,cached,unavailable(failure)&&cached!=null);
++            return new Selection(product.failed(receipt,code,now.getAsLong()),cached==null?status:"CACHED_VALID_REFRESH_UNAVAILABLE",rejected,cached,retry);
+         }
+         try{
+             ReadinessImportResult result;
+--- a/clients/android/app/src/main/java/com/familyconnect/app/RestrictedCache.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/RestrictedCache.java
+@@ -36,6 +36,15 @@
+         byte[] raw=bytes(value.get("response"));
+         if(validation(raw,now)==ReadinessImportResult.Code.READY)return raw;
+         java.util.Arrays.fill(raw,(byte)0);return null;
++    }
++    boolean refreshable(long now)throws Exception{
++        JsonObject value=state();if(value.get("denied").getAsBoolean())return false;
++        if(value.get("response").isJsonNull())return true;
++        byte[] raw=bytes(value.get("response"));
++        try{
++            ReadinessImportResult.Code code=validation(raw,now);
++            return code==ReadinessImportResult.Code.READY||code==ReadinessImportResult.Code.EXPIRED_ON_IMPORT;
++        }finally{java.util.Arrays.fill(raw,(byte)0);}
+     }
+     OwnerPrewarmReceipt context()throws Exception{
+         JsonObject value=state();if(!value.has("receipt_context"))return null;
+--- a/clients/android/app/src/main/java/com/familyconnect/app/RestrictedRecovery.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/RestrictedRecovery.java
+@@ -57,15 +57,30 @@
+             if("FAMILY_REJECTED".equals(terminal))return Failure.AUTH;
+             if("CANCELLED".equals(terminal))return Failure.CANCELLED;
+             if(!RestrictedTrace.allowed(terminal,"RELIABLE_EXHAUSTED|IO_CLOSED|EOF"))return Failure.INTERNAL;
+-            if(!"recovery_exhausted".equals(RestrictedTrace.text(diagnostic,"reliable_terminal")))return Failure.INTERNAL;
++            String reliable=RestrictedTrace.text(diagnostic,"reliable_terminal");
++            if(!RestrictedTrace.allowed(reliable,"recovery_exhausted|carrier_closed"))return Failure.INTERNAL;
+             String tag=RestrictedTrace.text(diagnostic,"session_tag");
+             if(!"VALID".equals(RestrictedTrace.text(diagnostic,"correlation_status")))return Failure.INTERNAL;
+             JsonObject lifecycle=RestrictedTrace.project(diagnostic.get("lifecycle"),tag);
+             if(lifecycle==null||!lifecycle.has("first_failure"))return Failure.INTERNAL;
+             JsonObject first=lifecycle.getAsJsonObject("first_failure");
+-            if("CARRIER".equals(RestrictedTrace.text(first,"stage"))
++            if("recovery_exhausted".equals(reliable)&&"CARRIER".equals(RestrictedTrace.text(first,"stage"))
+                 &&"FAILED".equals(RestrictedTrace.text(first,"state"))
+                 &&"RELIABLE_RETRY_EXHAUSTED".equals(RestrictedTrace.text(first,"reason")))return Failure.NETWORK;
++            if(!"carrier_closed".equals(reliable)||!lifecycle.has("first_close"))return Failure.INTERNAL;
++            JsonObject close=lifecycle.getAsJsonObject("first_close");
++            String source=RestrictedTrace.text(close,"close_source");
++            if("WEBSOCKET".equals(RestrictedTrace.text(first,"stage"))
++                &&"CLOSED".equals(RestrictedTrace.text(first,"state"))
++                &&"SIGNAL_WS_CLOSE".equals(RestrictedTrace.text(first,"reason"))
++                &&RestrictedTrace.allowed(source,"SIGNAL_READ|SIGNAL_WRITE")
++                &&RestrictedTrace.allowed(RestrictedTrace.text(first,"close_reason"),"READ_ERROR|READ_TIMEOUT|WRITE_ERROR|timeout|restart|shutdown")
++                &&(!first.has("close_code")||RestrictedTrace.allowed(first.get("close_code").getAsString(),"1000|1001|1006|1011|1012|1013")))return Failure.NETWORK;
++            if("ICE".equals(RestrictedTrace.text(first,"stage"))
++                &&RestrictedTrace.allowed(RestrictedTrace.text(first,"reason"),"ICE_FAILED|ICE_DISCONNECTED")
++                &&RestrictedTrace.allowed(source,"SUBSCRIBER_DISCONNECTED|PUBLISHER_DISCONNECTED"))return Failure.NETWORK;
++            if("FAMILY_CREDENTIAL_EXPIRY".equals(source)
++                &&"FAMILY_TLS".equals(RestrictedTrace.text(first,"stage")))return Failure.NETWORK;
+         } catch(RuntimeException invalid) {}
+         return Failure.INTERNAL;
+     }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/TcpVpnService.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/TcpVpnService.java
+@@ -7,6 +7,6 @@
+     final CompletableFuture<Void> stopped=new CompletableFuture<>();
+     volatile Runnable revoked;
+     @Override public void onCreate(){super.onCreate();ready.complete(this);}
+-    @Override public void onRevoke(){Runnable callback=revoked;if(callback!=null)callback.run();super.onRevoke();}
++    @Override public void onRevoke(){ConnectionService.forgetRequest(this);Runnable callback=revoked;if(callback!=null)callback.run();super.onRevoke();}
+     @Override public void onDestroy(){Runnable callback=revoked;if(callback!=null)callback.run();ready=new CompletableFuture<>();super.onDestroy();stopped.complete(null);}
+ }
+--- a/clients/android/app/src/test/java/com/familyconnect/app/AuthenticatedBootstrapRecoveryTest.java
++++ b/clients/android/app/src/test/java/com/familyconnect/app/AuthenticatedBootstrapRecoveryTest.java
+@@ -85,11 +85,12 @@
+         host.recovered=true;host.time+=RECOVERY_BACKOFF_MS;owner.retryIfDue();
+         assertEquals(State.CONNECTED,owner.state());assertEquals(opens+1,host.opens);
+     }
+-    @Test public void persistentFailureExhaustsExistingLimitAndCancelStopsRetry() {
++    @Test public void persistentFailureCoolsDownAndCancelStopsRetry() {
+         ProbeHost host=new ProbeHost();ConnectivityOrchestrator owner=new ConnectivityOrchestrator(host);
+         owner.connect(Collections.emptyList(),null,null);owner.lost(Failure.NETWORK);
+         for(int attempt=0;attempt<MAX_BOOTSTRAP_RECOVERIES;attempt++){host.time+=MAX_RECOVERY_BACKOFF_MS;owner.retryIfDue();}
+-        assertEquals(State.FAILED,owner.state());assertEquals(2+MAX_BOOTSTRAP_RECOVERIES,host.opens);
++        assertEquals(State.RESTORING,owner.state());assertEquals(2+MAX_BOOTSTRAP_RECOVERIES,host.opens);
++        int waiting=host.opens;host.time+=RECOVERY_COOLDOWN_MS-1;owner.retryIfDue();assertEquals(waiting,host.opens);
+         host=new ProbeHost();owner=new ConnectivityOrchestrator(host);
+         owner.connect(Collections.emptyList(),null,null);owner.lost(Failure.NETWORK);
+         int opens=host.opens;owner.interrupt(Failure.CANCELLED);host.time+=MAX_RECOVERY_BACKOFF_MS;owner.retryIfDue();
+--- a/clients/android/app/src/test/java/com/familyconnect/app/ConnectivityOrchestratorTest.java
++++ b/clients/android/app/src/test/java/com/familyconnect/app/ConnectivityOrchestratorTest.java
+@@ -225,7 +225,7 @@
+             public void closeCandidate(){}public void release(){}public void remember(String candidate){fail();}public void event(Event event){}
+         };
+         ConnectivityOrchestrator core=new ConnectivityOrchestrator(host);core.connect(Arrays.asList("wg","awg","tcp"),null,null);
+-        assertEquals(State.FAILED,core.state());assertEquals(4,opens[0]);assertEquals(Long.valueOf(NORMAL_TIMEOUT_MS),budgets.get(0));
++        assertEquals(State.RESTORING,core.state());assertEquals(4,opens[0]);assertEquals(Long.valueOf(NORMAL_TIMEOUT_MS),budgets.get(0));
+         assertTrue(budgets.get(3)<=RESTRICTED_TIMEOUT_MS);assertTrue(time[0]<=CONNECT_TIMEOUT_MS);
+     }
+     @Test public void crossThreadCancellationIsObservedWithoutWorkerQueue()throws Exception{
+--- a/clients/android/app/src/test/java/com/familyconnect/app/CutoverRecoveryTest.java
++++ b/clients/android/app/src/test/java/com/familyconnect/app/CutoverRecoveryTest.java
+@@ -90,27 +90,30 @@
+         assertEquals(State.CONNECTED,fixture.core.state());assertEquals(List.of(1000L,1000L,1300L),fixture.selected);
+         assertTrue(fixture.core.events().stream().anyMatch(event->event.name.equals("candidate_failed")&&event.failure==Failure.BOOTSTRAP_UNAVAILABLE));
+     }
+-    @Test public void bootstrapRecoveryStopsAfterTwoDelayedSeries() {
++    @Test public void bootstrapRecoveryCoolsDownAfterTwoDelayedSeries() {
+         Fixture fixture=new Fixture();fixture.connect();fixture.unavailable=true;fixture.core.lost(Failure.NETWORK);
+         fixture.advance(30000);assertEquals(State.RESTORING,fixture.core.state());
+         fixture.advance(59999);assertEquals(3,fixture.opens);
+-        fixture.advance(1);assertEquals(State.FAILED,fixture.core.state());assertEquals(4,fixture.opens);
+-        for(int index=0;index<20;index++)fixture.advance(MAX_RECOVERY_BACKOFF_MS);
+-        assertEquals(4,fixture.opens);assertEquals(2,fixture.count("recovery_wait"));
+-        assertEquals(0,fixture.active);assertEquals(0,fixture.releases);
+-    }
+-    @Test public void successfulRecoveryResetsOnlyItsBootstrapBudget() {
++        fixture.advance(1);assertEquals(State.RESTORING,fixture.core.state());assertEquals(4,fixture.opens);
++        fixture.advance(RECOVERY_COOLDOWN_MS-1);assertEquals(4,fixture.opens);
++        fixture.unavailable=false;fixture.advance(1);assertEquals(State.CONNECTED,fixture.core.state());
++        assertEquals(5,fixture.opens);assertEquals(3,fixture.count("recovery_wait"));
++        assertEquals(1,fixture.active);assertEquals(0,fixture.releases);
++    }
++    @Test public void briefRecoveryDoesNotResetItsBootstrapBudget() {
+         Fixture fixture=new Fixture();fixture.connect();fixture.unavailable=true;fixture.core.lost(Failure.NETWORK);
+         fixture.unavailable=false;fixture.advance(30000);assertEquals(State.CONNECTED,fixture.core.state());
+         fixture.unavailable=true;fixture.core.lost(Failure.NETWORK);fixture.advance(30000);
+         assertEquals(State.RESTORING,fixture.core.state());fixture.advance(60000);
+         assertEquals(State.RESTORING,fixture.core.state());fixture.advance(120000);
+-        assertEquals(State.FAILED,fixture.core.state());
+-    }
+-    @Test public void initialConnectNeverEntersAutomaticBootstrapLoop() {
++        assertEquals(State.RESTORING,fixture.core.state());
++        fixture.core.disconnect();assertEquals(0,fixture.active);
++    }
++    @Test public void initialRequestedConnectRetriesOnlyAfterBackoff() {
+         Fixture fixture=new Fixture();fixture.unavailable=true;fixture.connect();
+-        assertEquals(State.FAILED,fixture.core.state());fixture.advance(120000);
+-        assertEquals(1,fixture.opens);assertEquals(0,fixture.count("recovery_wait"));
++        assertEquals(State.RESTORING,fixture.core.state());fixture.advance(29999);
++        assertEquals(1,fixture.opens);assertEquals(1,fixture.count("recovery_wait"));
++        fixture.unavailable=false;fixture.advance(1);assertEquals(State.CONNECTED,fixture.core.state());
+     }
+     @Test public void unknownBootstrapAndSecurityFailuresRemainTerminal() {
+         for(Failure failure:List.of(Failure.AUTH,Failure.CONFIGURATION,Failure.INTERNAL,Failure.BOOTSTRAP_UNAVAILABLE)){
+@@ -151,7 +154,7 @@
+         assertArrayEquals(before,cached);assertArrayEquals(before,RestrictedBootstrap.select(cached,true,false));
+         assertArrayEquals(before,RestrictedBootstrap.select(cached,false,true));
+     }
+-    @Test public void unavailableRefreshWithRevokedExpiredOrInvalidCacheIsNotRetryable()throws Exception {
++    @Test public void unavailableRefreshOnlyExpiredCacheRemainsRefreshable()throws Exception {
+         Fixture revoked=new Fixture();revoked.connect();revoked.cache.denied();revoked.unavailable=true;
+         revoked.core.lost(Failure.NETWORK);assertEquals(State.FAILED,revoked.core.state());assertEquals(0,revoked.count("recovery_wait"));
+         for(boolean expired:new boolean[]{false,true}){
+@@ -161,7 +164,7 @@
+             cache.importProduct(response(1000),new OwnerPrewarmReceipt(),1500);valid[0]=expired;
+             ReadinessProduct product=new ReadinessProduct(cache,new ReadinessProductTest.Memory(),"fixture",84,()->1500);
+             RestrictedBootstrap.Selection selected=RestrictedBootstrap.refresh(cache,product,new OwnerPrewarmReceipt(),()->{throw new SocketTimeoutException();},this,()->expired?10000:1500);
+-            assertFalse(selected.availabilityFailure);assertNull(selected.response);
++            assertEquals(expired,selected.availabilityFailure);assertNull(selected.response);
+         }
+     }
+     @Test public void onlyMatchingCompletedPreLeaseDeadlineIsEligible() {
+--- /dev/null
++++ b/clients/android/app/src/test/java/com/familyconnect/app/NightRecoveryTest.java
+@@ -0,0 +1,104 @@
++package com.familyconnect.app;
++
++import com.google.gson.JsonObject;
++import java.util.List;
++import org.junit.Test;
++import static org.junit.Assert.*;
++import static com.familyconnect.app.ConnectivityOrchestrator.*;
++
++public class NightRecoveryTest {
++    static JsonObject websocket() {
++        JsonObject snapshot=RestrictedRecoveryTest.snapshot();
++        JsonObject diagnostic=snapshot.getAsJsonObject("packet").getAsJsonObject("diagnostic");
++        diagnostic.addProperty("reliable_terminal","carrier_closed");
++        JsonObject lifecycle=diagnostic.getAsJsonObject("lifecycle"),first=lifecycle.getAsJsonObject("first_failure");
++        first.addProperty("stage","WEBSOCKET");first.addProperty("state","CLOSED");
++        first.addProperty("reason","SIGNAL_WS_CLOSE");first.addProperty("close_reason","READ_ERROR");
++        JsonObject close=first.deepCopy();close.addProperty("stage","CARRIER");close.addProperty("reason","CARRIER_ERROR");close.addProperty("close_source","SIGNAL_READ");
++        lifecycle.add("first_close",close);return snapshot;
++    }
++    @Test public void observedNightWebsocketCloseIsTemporaryNotInternal() {
++        assertEquals(Failure.NETWORK,RestrictedRecovery.failure(3,false,false,websocket().toString()));
++    }
++    @Test public void policyAndProtocolClosureDoNotBecomeNetwork() {
++        JsonObject snapshot=websocket(),diagnostic=snapshot.getAsJsonObject("packet").getAsJsonObject("diagnostic");
++        JsonObject first=diagnostic.getAsJsonObject("lifecycle").getAsJsonObject("first_failure");
++        first.addProperty("close_code",1008);
++        assertEquals(Failure.INTERNAL,RestrictedRecovery.failure(3,false,false,snapshot.toString()));
++        first.remove("close_code");diagnostic.addProperty("terminal_reason","MUX_PROTOCOL");
++        assertEquals(Failure.INTERNAL,RestrictedRecovery.failure(3,false,false,snapshot.toString()));
++        assertEquals(Failure.AUTH,RestrictedRecovery.failure(3,false,true,websocket().toString()));
++        assertEquals(Failure.CANCELLED,RestrictedRecovery.failure(3,true,false,websocket().toString()));
++    }
++    static final class Fixture implements Host {
++        long time;int opens,active,peak,releases;boolean network=true;
++        Failure failure;boolean temporary;ConnectivityOrchestrator core=new ConnectivityOrchestrator(this);
++        public long now(){return time;}
++        public boolean networkAvailable(){return network;}
++        public void pause(long millis){time+=millis;}
++        public void open(String candidate,long deadline)throws Exception{assertEquals(0,active);active++;peak=Math.max(peak,active);opens++;if(failure!=null)throw new Rejected(failure,temporary);}
++        public void closeCandidate(){active=0;}
++        public void release(){releases++;}
++        public void remember(String candidate){}
++        public void event(Event event){}
++        void connect(boolean auto){core.connect(auto?List.of("awg"):List.of(),null,null);}
++        void stable(){core.trafficHealthy(true);time+=STABLE_TRAFFIC_MS;core.trafficHealthy(true);}
++    }
++    @Test public void threeIndependentStableRecoveriesWorkInBothModes() {
++        for(boolean auto:new boolean[]{false,true}){
++            Fixture fixture=new Fixture();fixture.connect(auto);
++            for(int index=0;index<3;index++){
++                fixture.stable();fixture.core.lost(Failure.NETWORK);
++                assertEquals(State.CONNECTED,fixture.core.state());assertEquals(index+2,fixture.opens);
++            }
++            assertEquals(1,fixture.peak);assertEquals(0,fixture.releases);
++            fixture.core.disconnect();assertEquals(0,fixture.active);assertEquals(1,fixture.releases);
++        }
++    }
++    @Test public void exhaustedBootstrapBurstCoolsDownThenRecoversWithoutNewConnect() {
++        Fixture fixture=new Fixture();fixture.connect(false);
++        fixture.failure=Failure.BOOTSTRAP_UNAVAILABLE;fixture.temporary=true;fixture.core.lost(Failure.NETWORK);
++        fixture.time+=RECOVERY_BACKOFF_MS;fixture.core.retryIfDue();
++        fixture.time+=RECOVERY_BACKOFF_MS*2;fixture.core.retryIfDue();
++        assertEquals(State.RESTORING,fixture.core.state());int opens=fixture.opens;
++        fixture.time+=RECOVERY_COOLDOWN_MS-1;fixture.core.retryIfDue();assertEquals(opens,fixture.opens);
++        fixture.failure=null;fixture.time++;fixture.core.retryIfDue();assertEquals(State.CONNECTED,fixture.core.state());
++        assertEquals(1,fixture.peak);
++    }
++    @Test public void missingNetworkDoesNotCreateRoomsAndLaterResumes() {
++        Fixture fixture=new Fixture();fixture.connect(false);fixture.network=false;fixture.core.lost(Failure.NETWORK);
++        assertEquals(1,fixture.opens);assertEquals(0,fixture.active);assertEquals(State.RESTORING,fixture.core.state());
++        fixture.time+=RECOVERY_BACKOFF_MS;fixture.core.retryIfDue();assertEquals(1,fixture.opens);
++        fixture.network=true;fixture.time+=MAX_RECOVERY_BACKOFF_MS;fixture.core.retryIfDue();
++        assertEquals(State.CONNECTED,fixture.core.state());assertEquals(2,fixture.opens);
++    }
++    @Test public void shortConnectedDoesNotResetBackoffOrRecoveryBurst() {
++        Fixture fixture=new Fixture();fixture.connect(false);fixture.failure=Failure.NETWORK;fixture.core.lost(Failure.NETWORK);
++        fixture.time+=RECOVERY_BACKOFF_MS;fixture.failure=null;fixture.core.retryIfDue();
++        fixture.core.trafficHealthy(true);fixture.time+=1000;fixture.core.trafficHealthy(false);fixture.core.lost(Failure.NETWORK);
++        int opens=fixture.opens;fixture.time+=RECOVERY_BACKOFF_MS;fixture.core.retryIfDue();assertEquals(opens,fixture.opens);
++        fixture.time+=RECOVERY_BACKOFF_MS;fixture.core.retryIfDue();assertEquals(opens+1,fixture.opens);
++    }
++    @Test public void explicitDisconnectAndRevokeStopCooldown() {
++        for(Failure reason:new Failure[]{Failure.CANCELLED,Failure.AUTH}){
++            Fixture fixture=new Fixture();fixture.connect(false);fixture.network=false;fixture.core.lost(Failure.NETWORK);
++            fixture.core.interrupt(reason);fixture.time+=RECOVERY_COOLDOWN_MS;fixture.core.retryIfDue();
++            fixture.network=true;fixture.time+=RECOVERY_COOLDOWN_MS;fixture.core.retryIfDue();assertEquals(1,fixture.opens);
++            assertEquals(reason==Failure.AUTH?State.FAILED:State.DISCONNECTED,fixture.core.state());
++        }
++    }
++    @Test public void delayedPollAfterSleepIsOneAttemptNotCatchupLoop() {
++        Fixture fixture=new Fixture();fixture.connect(false);fixture.failure=Failure.NETWORK;fixture.core.lost(Failure.NETWORK);
++        fixture.time+=12*60*60*1000L;int opens=fixture.opens;fixture.core.retryIfDue();
++        for(int index=0;index<100;index++)fixture.core.retryIfDue();assertEquals(opens+1,fixture.opens);
++    }
++    @Test public void restartRestoresOnlyExplicitSupportedIntentWithVpnPermission() {
++        for(String mode:new String[]{"telemost","auto"}){
++            assertTrue(ConnectionResume.allowed(true,true,mode));
++            assertFalse(ConnectionResume.allowed(false,true,mode));assertFalse(ConnectionResume.allowed(true,false,mode));
++        }
++        for(String mode:new String[]{null,"restricted","restricted-refresh","awg","tcp","invalid"})assertFalse(ConnectionResume.allowed(true,true,mode));
++        Fixture replacement=new Fixture();assertEquals(State.DISCONNECTED,replacement.core.state());replacement.connect(false);
++        assertEquals(State.CONNECTED,replacement.core.state());assertEquals(1,replacement.opens);
++    }
++}
+--- a/clients/android/app/src/test/java/com/familyconnect/app/RestrictedBootstrapTest.java
++++ b/clients/android/app/src/test/java/com/familyconnect/app/RestrictedBootstrapTest.java
+@@ -85,6 +85,15 @@
+         vault.write(state.toString().getBytes(StandardCharsets.UTF_8));
+         assertNull(run(this::refused).response);
+     }
++    @Test public void unavailableApiWithoutUsableCacheRemainsTemporaryButCannotUseExpiredBytes()throws Exception{
++        RestrictedBootstrap.Selection empty=run(this::refused);
++        assertNull(empty.response);assertTrue(empty.availabilityFailure);
++        try{RestrictedBootstrap.select(empty.response,empty.availabilityFailure,true);fail();}
++        catch(ConnectivityOrchestrator.Rejected expected){assertTrue(expected.temporaryBootstrap);}
++        provision(response(1000,2000));clock.set(2000);
++        RestrictedBootstrap.Selection expired=run(this::refused);assertNull(expired.response);assertTrue(expired.availabilityFailure);
++        assertNotNull(run(()->http(response(2000,3000))).response);
++    }
+     @Test public void authTrustProtocolAndImportFailuresNeverFallBack()throws Exception{
+         provision(response(1000,2000));
+         for(Exception failure:Arrays.asList(new javax.net.ssl.SSLHandshakeException("trust"),new IOException("invalid body"),new IllegalArgumentException("binding"),

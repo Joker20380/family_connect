@@ -1,0 +1,268 @@
+--- /dev/null
++++ b/bootstrap/owner_handoff_auth_test.go
+@@ -0,0 +1,76 @@
++//go:build fc_perf_diagnostic
++
++package bootstrap
++
++import (
++	"context"
++	"encoding/json"
++	"strings"
++	"sync/atomic"
++	"testing"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/familysession"
++)
++
++func TestOwnerHandoffAdmissionBoundary(test *testing.T) {
++	path := gatewayProfile(test)
++	for _, name := range []string{"valid", "other", "unknown", "wrong-family", "revoked", "wrong-gateway", "stale-crl", "stale-revision"} {
++		test.Run(name, func(test *testing.T) {
++			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
++			defer cancel()
++			var calls, admissions, failures atomic.Int32
++			broker, _ := testBroker(test, &calls, nil, "")
++			client, server := pair()
++			finished := make(chan error, 1)
++			go func() {
++				finished <- ServeCarrier(ctx, server, func(ctx context.Context, endpoint familysession.PacketEndpoint) {
++					OpenServer(ctx, endpoint, path, broker, func(event string) {
++						if event == "bootstrap_family_auth" {
++							admissions.Add(1)
++						}
++					}, func(ExchangeFailure) { failures.Add(1) })
++				})
++			}()
++			profileName := name
++			if strings.HasPrefix(name, "stale-") || name == "wrong-gateway" {
++				profileName = "valid"
++			}
++			raw := fixture(test, profileName)
++			if name != profileName {
++				var credentials familysession.Credentials
++				if json.Unmarshal(raw, &credentials) != nil {
++					test.Fatal("fixture")
++				}
++				switch name {
++				case "stale-crl":
++					credentials.MinimumCRL = 999
++				case "stale-revision":
++					credentials.MinimumRevision = 999
++				case "wrong-gateway":
++					credentials.Gateway = strings.Repeat("0", 32)
++				}
++				raw = encode(credentials)
++			}
++			descriptor, err := recoverCarrier(ctx, client, raw, func(string) {})
++			cancel()
++			<-finished
++			test.Logf("provider_calls=%d family_auth=%d failure_events=%d", calls.Load(), admissions.Load(), failures.Load())
++			if name == "valid" {
++				if err != nil || descriptor.SetupID == "" || calls.Load() != 1 || admissions.Load() != 1 || failures.Load() != 0 {
++					test.Fatal("owner failed")
++				}
++			} else {
++				if err == nil || descriptor.SetupID != "" || calls.Load() != 0 {
++					test.Fatal("unauthorized handoff")
++				}
++				if name == "other" && admissions.Load() != 1 {
++					test.Fatal("nonowner did not reach authenticated guard")
++				}
++				if name != "other" && admissions.Load() != 0 {
++					test.Fatal("invalid peer authenticated")
++				}
++			}
++		})
++	}
++}
+--- a/roombroker/control.go
++++ b/roombroker/control.go
+@@ -110,6 +110,9 @@
+ 			return Identity{}, Code("unauthorized")
+ 		}
+ 		copy(identity.PublicKey[:], key)
++		if err := diagnosticOwner(identity); err != nil {
++			return Identity{}, err
++		}
+ 		return identity, nil
+ 	}
+ }
+--- /dev/null
++++ b/roombroker/owner_guard_off.go
+@@ -0,0 +1,5 @@
++//go:build !fc_perf_diagnostic
++
++package roombroker
++
++func diagnosticOwner(identity Identity) error { return nil }
+--- /dev/null
++++ b/roombroker/owner_guard_on.go
+@@ -0,0 +1,54 @@
++//go:build fc_perf_diagnostic
++
++package roombroker
++
++import (
++	"bytes"
++	"encoding/hex"
++	"encoding/json"
++	"io"
++	"os"
++	"time"
++)
++
++type ownerGuard struct {
++	Operation string    `json:"operation"`
++	Family    string    `json:"family"`
++	Device    string    `json:"device"`
++	PublicKey string    `json:"public_key"`
++	NotBefore time.Time `json:"not_before"`
++	NotAfter  time.Time `json:"not_after"`
++}
++
++func diagnosticOwner(identity Identity) error {
++	path := os.Getenv("FC_PERF_OWNER_GUARD")
++	if path == "" {
++		return Code("unauthorized")
++	}
++	info, err := os.Lstat(path)
++	if err != nil || !info.Mode().IsRegular() || info.Mode().Perm() != 0600 || info.Size() > 2048 {
++		return Code("unauthorized")
++	}
++	raw, err := os.ReadFile(path)
++	if err != nil {
++		return Code("unauthorized")
++	}
++	return checkOwnerGuard(raw, identity, time.Now())
++}
++
++func checkOwnerGuard(raw []byte, identity Identity, now time.Time) error {
++	var guard ownerGuard
++	decoder := json.NewDecoder(bytes.NewReader(raw))
++	decoder.DisallowUnknownFields()
++	if decoder.Decode(&guard) != nil || decoder.Decode(new(any)) != io.EOF {
++		return Code("unauthorized")
++	}
++	key, err := hex.DecodeString(guard.PublicKey)
++	if err != nil || len(key) != len(identity.PublicKey) || len(guard.Operation) == 0 || len(guard.Operation) > 96 ||
++		len(guard.Family) != 32 || len(guard.Device) != 32 || guard.Family != identity.Family || guard.Device != identity.Device ||
++		!bytes.Equal(key, identity.PublicKey[:]) || now.Before(guard.NotBefore) || !now.Before(guard.NotAfter) ||
++		guard.NotAfter.Sub(guard.NotBefore) > 4*time.Hour {
++		return Code("unauthorized")
++	}
++	return nil
++}
+--- /dev/null
++++ b/roombroker/owner_guard_test.go
+@@ -0,0 +1,109 @@
++//go:build fc_perf_diagnostic
++
++package roombroker
++
++import (
++	"context"
++	"encoding/hex"
++	"encoding/json"
++	"net/http/httptest"
++	"os"
++	"path/filepath"
++	"strings"
++	"testing"
++	"time"
++)
++
++func TestDiagnosticOwnerAfterTLS(test *testing.T) {
++	directory := os.Getenv("FC_FAMILY_TEST_FIXTURES")
++	if directory == "" {
++		test.Fatal("disposable authenticated fixtures required")
++	}
++	broker := makeBroker(test, providerFunc(fresh), gatewayFunc(func(context.Context, context.Context, Room, string, Identity) (Gateway, error) {
++		return &fakeGateway{run: waiting}, nil
++	}), shortLimits())
++	path := filepath.Join(directory, "gateway.json")
++	config, err := ServerTLS(path)
++	if err != nil {
++		test.Fatal(err)
++	}
++	server := httptest.NewUnstartedServer(broker.Handler(path))
++	server.TLS = config
++	server.StartTLS()
++	defer server.Close()
++	for _, name := range []string{"other", "valid"} {
++		raw, err := os.ReadFile(filepath.Join(directory, name+".json"))
++		if err != nil {
++			test.Fatal(err)
++		}
++		client, err := NewClient(server.URL, raw)
++		if err != nil {
++			test.Fatal(err)
++		}
++		descriptor, err := client.Create(context.Background())
++		if name == "other" {
++			if err == nil {
++				test.Fatal("authenticated nonowner admitted")
++			}
++		} else {
++			if err != nil {
++				test.Fatal(err)
++			}
++			client.Cancel(descriptor.SetupID)
++			waitEmpty(test, broker)
++		}
++	}
++}
++
++func TestDiagnosticOwnerGuard(test *testing.T) {
++	now := time.Now().UTC()
++	identity := Identity{Family: strings.Repeat("a", 32), Device: strings.Repeat("b", 32)}
++	identity.PublicKey[0] = 7
++	guard := ownerGuard{Operation: "fixture", Family: identity.Family, Device: identity.Device,
++		PublicKey: hex.EncodeToString(identity.PublicKey[:]), NotBefore: now.Add(-time.Minute), NotAfter: now.Add(time.Hour)}
++	raw, err := json.Marshal(guard)
++	if err != nil || checkOwnerGuard(raw, identity, now) != nil {
++		test.Fatal("owner rejected")
++	}
++	other := identity
++	other.Device = strings.Repeat("c", 32)
++	if checkOwnerGuard(raw, other, now) == nil {
++		test.Fatal("nonowner admitted")
++	}
++	other = identity
++	other.PublicKey[0]++
++	if checkOwnerGuard(raw, other, now) == nil {
++		test.Fatal("wrong key admitted")
++	}
++	other = identity
++	other.Family = strings.Repeat("d", 32)
++	if checkOwnerGuard(raw, other, now) == nil {
++		test.Fatal("wrong family admitted")
++	}
++	for _, clock := range []time.Time{guard.NotBefore.Add(-time.Nanosecond), guard.NotAfter} {
++		if checkOwnerGuard(raw, identity, clock) == nil {
++			test.Fatal("invalid time admitted")
++		}
++	}
++	path := filepath.Join(test.TempDir(), "owner.json")
++	test.Setenv("FC_PERF_OWNER_GUARD", path)
++	if diagnosticOwner(identity) == nil {
++		test.Fatal("missing guard admitted")
++	}
++	if err := os.WriteFile(path, raw, 0600); err != nil {
++		test.Fatal(err)
++	}
++	if diagnosticOwner(identity) != nil {
++		test.Fatal("protected guard rejected")
++	}
++	if err := os.Chmod(path, 0644); err != nil {
++		test.Fatal(err)
++	}
++	if diagnosticOwner(identity) == nil {
++		test.Fatal("insecure guard admitted")
++	}
++	test.Setenv("FC_PERF_OWNER_GUARD", "")
++	if diagnosticOwner(identity) == nil {
++		test.Fatal("unset guard admitted")
++	}
++}

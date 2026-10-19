@@ -1,13 +1,13 @@
-# Activated-device access v2 — source candidate, not deployed
+# Activated-device access v2 — private beta control plane
 
-The owner requested replacing per-tester FIELD admission, not repairing its old
-one-hour writer. All ordinarily activated Family Connect devices should be eligible;
-the owner controls distribution of the research APK. This document does not claim
-that production access has already changed.
+19 October local /18 October UTC: the exact-base API and compatible RU/NL management
+are installed with explicit v2 policy. Authority18 is committed, same-key and same
+Family/gateway. This is not yet an end-to-end APK upgrade acceptance: see the
+[private beta delivery record](../../../docs/releases/2026-10-19-existing-users-private-beta-1.md).
 
-**Do not switch the live policy file in isolation.** The installed current4h
-management controller still implements finite-grant renewal and recovery. It must
-be adapted and verified with this candidate before either API or policy activation.
+**Do not switch the policy file in isolation.** Management/API/configuration form
+one version-pinned cohort. Old grant-only writers cannot safely replace this cohort.
+The historical candidate-only findings remain in the dated preflight report.
 
 ## Separate entitlement from credential validity
 
@@ -47,33 +47,29 @@ In v2:
   policy eligibility with a valid TLS chain, native READY or working Telemost traffic.
   Old manual FIELD enable/disable fails closed on the v2 schema.
 
-The API wire response remains version1; no Android APK/schema/update catalog is changed.
+The API wire response remains version1. Beta85 changes service-path selection and
+presentation, not identity/storage or native transport. No public updater is changed.
 
-## Remaining management rewrite
+## Installed management and lifecycle
 
-The live controller source was inspected, not patched or redeployed in this task.
-The source candidate solves HTTP entitlement; it is **not** a replacement production
-maintenance system. Necessary next changes are concrete:
+The exact API archive is `e986f98e70ff7f1abc2678566dd360bb6555583f2e1744ea985c63699bcb3ef7`;
+both management source manifests are `c67332cfff9aeafd90690c13518f55a75ef9687ceadb464624263657ff005ff2`.
+The management adapter uses the API's effective activated-device predicate, including
+explicit device/invitation/grant revocations. Certificates without legacy grants are
+tracked and included in revocation planning. V2 ignores only legacy trial expiry,
+not revocation, binding or revision checks. No fabricated grants are inserted.
 
-1. Share the effective activated-device/revocation/revision predicate with management;
-   do not maintain a second, divergent authorization implementation.
-2. Stop using finite legacy grant expiry as v2 readiness/renewal authorization. Keep
-   ordinary identity records and explicit revocations authoritative. Preserve all
-   old rows/floors; do not reset the database or fabricate a historical checkpoint.
-3. Adapt revocation planning for issued certificates whose devices have no legacy
-   grant. The installed `GrantDatabase.plan` assumes each certificate has such a row;
-   replacing the old1h validator alone does not satisfy this contract.
-4. Bind access-policy mode to both nodes, source manifests, committed snapshots and
-   recovery. An old controller or mixed-mode deployment must reject before writes.
-   Exercise crash/retry/concurrent-enrollment and policy-change fencing.
-5. Retain coordinated RU/NL publication, monotonic CRL/revisions and offline authority
-   signing. Short-lived crypto renewal must not require re-authorizing each tester.
-   Current live CRL failure needs fresh interval diagnosis and supported recovery;
-   local API tests do not repair that failure.
+Admission mode is bound to both nodes/snapshots; mixed mode fails closed. Schema2,
+CLEANED history and floors remain unchanged. Serialized publication retains the
+existing forward recovery/commit receipts; no database rollback is an allowed repair.
+Scheduled inspection and the operator CLI also select the explicit v2 validator.
+
+See [operational lifecycle](EXISTING_USERS_LIFECYCLE.md) for finite90-day authority,
+4h leaf/CRL, scheduled refresh, operator deadlines and physical test limits.
 
 ## Rollout and rollback gates
 
-After shared-controller tests and exact package verification, use the existing
+For subsequent authorized cutovers, after tests and exact package verification, use the existing
 coordinated maintenance barrier. Preserve the previous source/configuration and
 private database snapshot using the established custody procedure. Install compatible
 management/API sources, switch policy as part of the observed transaction, validate

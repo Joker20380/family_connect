@@ -43,7 +43,8 @@ def inspect(node, remote, now):
     validated = node.validator.validate(canonical(snapshot),now)
     require(profile['authority'] == validated[1]['authority'] and profile['revocations'] == authority['crl'], 'RU_NL_MISMATCH')
     require(all(profile[name] == validated[1][name] for name in ('family','gateway','minimum_revision')), 'GATEWAY_BINDING')
-    result = evaluate(validated,now,revocations_changed=authority['pending_revocations'] > 0)
+    result = evaluate(validated,now,revocations_changed=authority['pending_revocations'] > 0,
+                      all_activated=node.validator.all_activated)
     if result['result'] != 'NOOP':
         result['result'] = 'MAINTENANCE_REQUIRED'
         result['alerts'].extend(['MAINTENANCE_REQUIRED','ACTIVE_SESSION_INVENTORY_UNAVAILABLE'])

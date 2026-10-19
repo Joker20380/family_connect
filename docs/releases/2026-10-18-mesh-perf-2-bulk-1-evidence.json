@@ -1,0 +1,2947 @@
+{
+  "task": "MESH-PERF-2 BULK BASELINE WITH EXPLICIT ENDPOINTS",
+  "result": "PASS_BOUNDED_PERFORMANCE_MEASUREMENT_ONLY",
+  "status": {
+    "DOWNLOAD_BASELINE": "PASS_3_SINGLE_PLUS_2_PARALLEL_COMPLETE",
+    "UPLOAD_ESTIMATE": "PASS_ESTIMATE_ONLY",
+    "UPLOAD_SERVER_RECEIPT": "PARTIAL_SERVER_COUNT_HEADER_PRESENT_READ_SEMANTICS_NOT_INDEPENDENTLY_VERIFIED",
+    "SERVER_RECEIVED_BYTES": "NOT_INDEPENDENTLY_VERIFIED",
+    "LOADED_RESPONSE_LATENCY": "PASS_APPLICATION_TIMING_SMALL_SAMPLES",
+    "BYTE_EXACT_ACCEPTANCE": "NOT_ESTABLISHED_NO_INDEPENDENT_SOURCE_DIGEST_OR_VERIFIED_SERVER_READER_CONTRACT",
+    "SMALL_RECORD_HYPOTHESIS": "INCONCLUSIVE_WINDOW_PRESSURE_OBSERVED_DATA_LENGTHS_MISSING",
+    "RUNTIME_UNCHANGED": "PASS"
+  },
+  "source_head": "7656f2c65ea2928b71a928c12ee65a2f47f8ac4f",
+  "historical_reports_sha256": {
+    "2026-10-18-mesh-perf-2-physical-1.md": "6f4a0b10c5d0028e92c56952a1dfc027937709914d4a7be422dc99080a89fe47",
+    "2026-10-18-mesh-perf-2-physical-1-evidence.json": "0ce3f815965ed1db21d28d5a4e84ad2ea481c43ea7c22308bc893e78289a323c",
+    "2026-10-18-mesh-perf-2.md": "dbcaa159e88724722d748736b55f2fd7d2f132864a52f672ae4bfc78816cc6c4",
+    "2026-10-18-mesh-perf-rootcause-1.md": "2f9a51218bbdd221abcd06c1a4e641132ae864310ab6f924a3b110a8db3f7c78",
+    "2026-10-18-mesh-perf-rootcause-1-evidence.json": "0bc146300ccedddeaee08260a644337cf448cd922c923b4a64afdb5a593a96a3",
+    "2026-09-28-webrtc-eu4-single-tcp.ru.md": "bb321ab04b545311720d766fe16c95864eb77f1b29527cf9c8db7ff6fba32f18"
+  },
+  "source_contract": {
+    "repository": "https://github.com/cloudflare/speedtest",
+    "observed_tree_sha": "a54f0c94bd40dc04400926777e20fd01dacb64ae",
+    "readme_blob_sha": "f87605f0716321165e285c630b2483bc7dfec394",
+    "bandwidth_engine_blob_sha": "9c7dd37d816c9a52ba8225e737c8c370ed7f06f7",
+    "load_network_engine_blob_sha": "828cfc7b9c93bb469f1fd31d33b20e33b18ed965",
+    "scope": "Public client engine checks HTTP and consumes response text; upload rate uses configured bytes and timing. Not audited server-side implementation or digest validator. No SDK invocation, telemetry submission, auth token or429 retry."
+  },
+  "manifest": {
+    "utc_start": "2026-10-18T12:29:19.996497+00:00",
+    "epoch_start": 1792326559.9965112,
+    "monotonic_start": 20108.962515942,
+    "wall_cap_seconds": 900,
+    "payload_cap_bytes": 33554432,
+    "request_cap_seconds": 150,
+    "request_connect_cap_seconds": 15,
+    "probe_cap_seconds": 30,
+    "probe_cadence_seconds": 5,
+    "download_sizes": [
+      65536,
+      2097152,
+      2097152,
+      2097152,
+      2097152,
+      2097152
+    ],
+    "upload_sizes": [
+      65536,
+      1048576,
+      1048576,
+      1048576
+    ],
+    "probe_max_count": 180,
+    "payload_mode": "Prepared random synthetic bytes; no user data",
+    "http": "1.1 fresh curl process per request; no connection reuse",
+    "compression": "Accept-Encoding: identity, no automatic decompression",
+    "cache": "No local cache; unique query and Cache-Control: no-cache; inspect response headers"
+  },
+  "preflight": {
+    "utc": "2026-10-18T12:27:07.039434+00:00",
+    "phone": {
+      "apk_sha256": "697f9c244b67f75e7e3e612dbcd91a48891d32ee77e23fd9bce173a5f049233f",
+      "native_sha256": "dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23",
+      "pid": "14226",
+      "uid": "2000",
+      "topology": {
+        "vpn_network": "300",
+        "interface": "tun1",
+        "transports": "CELLULAR|VPN",
+        "underlying": "299"
+      },
+      "route_uses_vpn": true,
+      "curl_version": "curl 7.73.0 (Android) libcurl/7.73.0 BoringSSL zlib/1.2.11",
+      "clock_ticks": 100,
+      "page_size": 4096
+    },
+    "nl": {
+      "utc": "2026-10-18T12:27:05.075392+00:00",
+      "service": {
+        "ActiveState": "active",
+        "SubState": "running",
+        "InvocationID": "e9cedbb2fb9d45a2ba0aefd9f211bcb6",
+        "MainPID": "2094910",
+        "NRestarts": "0"
+      },
+      "loaded_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+      "hashes": {
+        "gateway.json": "64870fac58ec25d593837f0cfe7ecc6b2b58411adb03da396122f7c7b2f4bf8d",
+        "directory.json": "4cbab5fe8a6856310b501380b45952acdd14d7488e41ae87cb5bdf1b32e5cf7b"
+      },
+      "headroom_seconds": 8528.924608,
+      "validity": {
+        "ca": "2026-10-19T09:33:41+00:00",
+        "leaf": "2026-10-18T14:49:14+00:00",
+        "crl": "2026-10-18T14:49:14+00:00"
+      },
+      "crl_number": 27120
+    },
+    "ru": {
+      "sequence": 17,
+      "expiry": 1792402421,
+      "hashes": {
+        "issuer.json": "172ee21c9a02cd6f41a58700b684bf8d423baba8fd5c23e832503a7e76ec1042",
+        "admission.json": "e63b6438ef5a9e575681c0e1b84a1e070cf4d2164d5ee153f038cab9e6b50ac2",
+        "directory.json": "4cbab5fe8a6856310b501380b45952acdd14d7488e41ae87cb5bdf1b32e5cf7b",
+        "renewal-coordinator/plan.json": "4ed8dd3c86f5dd2c6c1124dadf175a6269dabc390561d85b22519848049a14cf"
+      }
+    }
+  },
+  "completion": {
+    "utc": "2026-10-18T12:35:02.826708+00:00",
+    "halt": false,
+    "elapsed_since_campaign_start": 342.8302046610006
+  },
+  "final": {
+    "nl": {
+      "utc": "2026-10-18T12:36:10.026538+00:00",
+      "service": {
+        "ActiveState": "active",
+        "SubState": "running",
+        "InvocationID": "e9cedbb2fb9d45a2ba0aefd9f211bcb6",
+        "MainPID": "2094910",
+        "NRestarts": "0"
+      },
+      "loaded_sha256": "4b722d2d7f2159b96953e27777494bf596768f860ee8da7e634fb1100b08fab7",
+      "hashes": {
+        "gateway.json": "64870fac58ec25d593837f0cfe7ecc6b2b58411adb03da396122f7c7b2f4bf8d",
+        "directory.json": "4cbab5fe8a6856310b501380b45952acdd14d7488e41ae87cb5bdf1b32e5cf7b"
+      },
+      "headroom_seconds": 7983.973462,
+      "validity": {
+        "ca": "2026-10-19T09:33:41+00:00",
+        "leaf": "2026-10-18T14:49:14+00:00",
+        "crl": "2026-10-18T14:49:14+00:00"
+      },
+      "crl_number": 27120,
+      "hashes_unchanged": true
+    },
+    "ru": {
+      "sequence": 17,
+      "expiry": 1792402421,
+      "hashes": {
+        "issuer.json": "172ee21c9a02cd6f41a58700b684bf8d423baba8fd5c23e832503a7e76ec1042",
+        "admission.json": "e63b6438ef5a9e575681c0e1b84a1e070cf4d2164d5ee153f038cab9e6b50ac2",
+        "directory.json": "4cbab5fe8a6856310b501380b45952acdd14d7488e41ae87cb5bdf1b32e5cf7b",
+        "renewal-coordinator/plan.json": "4ed8dd3c86f5dd2c6c1124dadf175a6269dabc390561d85b22519848049a14cf"
+      },
+      "hashes_unchanged": true
+    },
+    "utc": "2026-10-18T12:36:13.854544+00:00"
+  },
+  "cleanup": {
+    "utc": "2026-10-18T12:42:24.276890+00:00",
+    "removed_files": 88,
+    "all_body_and_payload_hashes_verified": true,
+    "only_task_owned_paths": true,
+    "apk_unchanged": true,
+    "journal_entries": 208,
+    "journal_decode_errors": 0,
+    "trace_entries": 208,
+    "journal_sha256": "76109dd483eefbeb93534af0bac9860f77ba255d2f6bd73deaf70cf7a262216a"
+  },
+  "observer_cleanup": {
+    "own_sampler_pids": [],
+    "service": {
+      "ActiveState": "active",
+      "InvocationID": "e9cedbb2fb9d45a2ba0aefd9f211bcb6",
+      "MainPID": "2094910",
+      "NRestarts": "0"
+    },
+    "owner_vpn_still_present": true
+  },
+  "measurements": {
+    "requests": [
+      {
+        "name": "small-down",
+        "kind": "down",
+        "phase": "contract",
+        "intended_bytes": 65536,
+        "utc_start": "2026-10-18T12:29:19.997632+00:00",
+        "utc_end": "2026-10-18T12:29:24.067909+00:00",
+        "request_cap": 150,
+        "curl_exit": 0,
+        "actual_body_bytes": 65536,
+        "observed_sha256": "34dd6758c2908cf5be0e411173f61877f8faf2dcdcfed135b5a5fa90577447bc",
+        "performance_valid": true,
+        "device_start_uptime": 1573147.13,
+        "device_end_uptime": 1573151.14,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "65536",
+          "size_upload": "0",
+          "time_namelookup": "1.383354",
+          "time_connect": "1.386297",
+          "time_appconnect": "2.637782",
+          "time_starttransfer": "2.992872",
+          "time_total": "4.001270",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:29:22 GMT",
+          "content-type": "application/octet-stream",
+          "content-length": "65536",
+          "cache-control": "no-store, no-transform"
+        },
+        "application_goodput_mbit_s": 0.13103039784868303,
+        "mesh_pid_same_origin_socket_samples": 0
+      },
+      {
+        "name": "small-up",
+        "kind": "up",
+        "phase": "contract",
+        "intended_bytes": 65536,
+        "utc_start": "2026-10-18T12:29:24.103725+00:00",
+        "utc_end": "2026-10-18T12:29:26.765877+00:00",
+        "request_cap": 150,
+        "curl_exit": 0,
+        "actual_body_bytes": 0,
+        "observed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "performance_valid": true,
+        "device_start_uptime": 1573151.24,
+        "device_end_uptime": 1573153.83,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "0",
+          "size_upload": "65536",
+          "time_namelookup": "0.001431",
+          "time_connect": "0.002291",
+          "time_appconnect": "1.505329",
+          "time_starttransfer": "1.505581",
+          "time_total": "2.576021",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:29:26 GMT",
+          "content-type": "text/plain;charset=UTF-8",
+          "content-length": "0",
+          "cf-meta-upload-bytes": "65536"
+        },
+        "upload_estimate_mbit_s": 0.20352629112883786,
+        "mesh_pid_same_origin_socket_samples": 0,
+        "client_upload_completed_before_final_200": "NOT_CAPTURED_PILOT",
+        "server_claimed_upload_bytes": "65536"
+      },
+      {
+        "name": "idle-0",
+        "kind": "probe",
+        "phase": "idle",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:31:57.097467+00:00",
+        "utc_end": "2026-10-18T12:32:00.174395+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 210,
+        "observed_sha256": "8a7736973b743808b920a4900ac60ca3e01968a08ea36cbbc79bd6ae8c03386a",
+        "performance_valid": true,
+        "device_start_uptime": 1573304.23,
+        "device_end_uptime": 1573307.25,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "210",
+          "size_upload": "0",
+          "time_namelookup": "0.879405",
+          "time_connect": "0.880881",
+          "time_appconnect": "1.675453",
+          "time_starttransfer": "3.001121",
+          "time_total": "3.001376",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:31:59 GMT",
+          "content-type": "text/plain",
+          "content-length": "210"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 0,
+        "bulk_overlap_seconds": 0,
+        "fully_overlapped": false
+      },
+      {
+        "name": "idle-1",
+        "kind": "probe",
+        "phase": "idle",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:32:02.097428+00:00",
+        "utc_end": "2026-10-18T12:32:04.352085+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 210,
+        "observed_sha256": "a65eeb5449843f7c5c855d72d9a0c5593275712b246dd801660c873589a73096",
+        "performance_valid": true,
+        "device_start_uptime": 1573309.24,
+        "device_end_uptime": 1573311.43,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "210",
+          "size_upload": "0",
+          "time_namelookup": "0.002583",
+          "time_connect": "0.004745",
+          "time_appconnect": "1.196806",
+          "time_starttransfer": "2.169418",
+          "time_total": "2.169754",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:32:03 GMT",
+          "content-type": "text/plain",
+          "content-length": "210"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 0,
+        "fully_overlapped": false
+      },
+      {
+        "name": "idle-2",
+        "kind": "probe",
+        "phase": "idle",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:32:07.097628+00:00",
+        "utc_end": "2026-10-18T12:32:08.943438+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 215,
+        "observed_sha256": "bb7bd5928b615185399357050aaac49efbe5dc24dcd628692128681277aa9306",
+        "performance_valid": true,
+        "device_start_uptime": 1573314.25,
+        "device_end_uptime": 1573316.02,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "215",
+          "size_upload": "0",
+          "time_namelookup": "0.001848",
+          "time_connect": "0.007919",
+          "time_appconnect": "1.194624",
+          "time_starttransfer": "1.754294",
+          "time_total": "1.754557",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:32:08 GMT",
+          "content-type": "text/plain",
+          "content-length": "215"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 0,
+        "fully_overlapped": false
+      },
+      {
+        "name": "loaded-1",
+        "kind": "probe",
+        "phase": "down-0",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:32:17.199110+00:00",
+        "utc_end": "2026-10-18T12:32:21.552231+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 211,
+        "observed_sha256": "126791550ba51398f397f04dcbfe240f222894d3f03c6c364b0516e7c72d9524",
+        "performance_valid": true,
+        "device_start_uptime": 1573324.33,
+        "device_end_uptime": 1573328.63,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "211",
+          "size_upload": "0",
+          "time_namelookup": "0.001532",
+          "time_connect": "0.008814",
+          "time_appconnect": "2.536135",
+          "time_starttransfer": "4.287469",
+          "time_total": "4.287828",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:32:19 GMT",
+          "content-type": "text/plain",
+          "content-length": "211"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 4,
+        "bulk_overlap_seconds": 4.2999999998137355,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-2",
+        "kind": "probe",
+        "phase": "down-0",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:32:22.259643+00:00",
+        "utc_end": "2026-10-18T12:32:25.587068+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 211,
+        "observed_sha256": "0b80e6e366c8cae1b035127c07d5e72038d2ce8536c46301564e0993cb91b091",
+        "performance_valid": true,
+        "device_start_uptime": 1573329.39,
+        "device_end_uptime": 1573332.65,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "211",
+          "size_upload": "0",
+          "time_namelookup": "0.001497",
+          "time_connect": "0.002195",
+          "time_appconnect": "1.904158",
+          "time_starttransfer": "3.245616",
+          "time_total": "3.245960",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:32:24 GMT",
+          "content-type": "text/plain",
+          "content-length": "211"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 3,
+        "bulk_overlap_seconds": 3.2600000000093132,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-3",
+        "kind": "probe",
+        "phase": "down-0",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:32:27.295512+00:00",
+        "utc_end": "2026-10-18T12:32:29.835293+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 211,
+        "observed_sha256": "bdc75d8d8e36f07d1ce9d14dd5f5501c885f2bffe1cdeb2941956f0b066097a6",
+        "performance_valid": true,
+        "device_start_uptime": 1573334.44,
+        "device_end_uptime": 1573336.9,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "211",
+          "size_upload": "0",
+          "time_namelookup": "0.001758",
+          "time_connect": "0.005161",
+          "time_appconnect": "1.885682",
+          "time_starttransfer": "2.455863",
+          "time_total": "2.456071",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:32:29 GMT",
+          "content-type": "text/plain",
+          "content-length": "211"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 2.459999999962747,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-4",
+        "kind": "probe",
+        "phase": "down-0",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:32:32.344343+00:00",
+        "utc_end": "2026-10-18T12:32:35.351767+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 216,
+        "observed_sha256": "932fccb2f8bfb84c7c3b77f9080e498bc0b934bccc29bf4d75ff312baf50b1d4",
+        "performance_valid": true,
+        "device_start_uptime": 1573339.47,
+        "device_end_uptime": 1573342.43,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "216",
+          "size_upload": "0",
+          "time_namelookup": "0.001472",
+          "time_connect": "0.003144",
+          "time_appconnect": "1.563349",
+          "time_starttransfer": "2.939273",
+          "time_total": "2.939691",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:32:34 GMT",
+          "content-type": "text/plain",
+          "content-length": "216"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 2.959999999962747,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-5",
+        "kind": "probe",
+        "phase": "down-0",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:32:37.390967+00:00",
+        "utc_end": "2026-10-18T12:32:39.411378+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 215,
+        "observed_sha256": "e8addc2fb2cf6862693e504916a42ad913bc08d73cf1dfa991228000446eef53",
+        "performance_valid": true,
+        "device_start_uptime": 1573344.53,
+        "device_end_uptime": 1573346.48,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "215",
+          "size_upload": "0",
+          "time_namelookup": "0.001541",
+          "time_connect": "0.002351",
+          "time_appconnect": "0.631626",
+          "time_starttransfer": "1.939790",
+          "time_total": "1.940045",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:32:38 GMT",
+          "content-type": "text/plain",
+          "content-length": "215"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 1,
+        "bulk_overlap_seconds": 1.9499999999534339,
+        "fully_overlapped": true
+      },
+      {
+        "name": "down-0",
+        "kind": "down",
+        "phase": "down-0",
+        "intended_bytes": 2097152,
+        "utc_start": "2026-10-18T12:32:12.198877+00:00",
+        "utc_end": "2026-10-18T12:32:43.566050+00:00",
+        "request_cap": 150,
+        "curl_exit": 0,
+        "actual_body_bytes": 2097152,
+        "observed_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+        "performance_valid": true,
+        "device_start_uptime": 1573319.33,
+        "device_end_uptime": 1573350.65,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "2097152",
+          "size_upload": "0",
+          "time_namelookup": "0.001751",
+          "time_connect": "0.002508",
+          "time_appconnect": "2.239458",
+          "time_starttransfer": "2.449394",
+          "time_total": "31.309618",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:32:14 GMT",
+          "content-type": "application/octet-stream",
+          "content-length": "2097152",
+          "cache-control": "no-store, no-transform"
+        },
+        "application_goodput_mbit_s": 0.5358486328386377,
+        "mesh_pid_same_origin_socket_samples": 30
+      },
+      {
+        "name": "loaded-6",
+        "kind": "probe",
+        "phase": "down-0",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:32:42.421482+00:00",
+        "utc_end": "2026-10-18T12:32:44.204265+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 211,
+        "observed_sha256": "0cbdb47dcf6f1c8601eeced220fdde1282b6314f48a26b0c438add068ea69a7e",
+        "performance_valid": true,
+        "device_start_uptime": 1573349.56,
+        "device_end_uptime": 1573351.28,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "211",
+          "size_upload": "0",
+          "time_namelookup": "0.001416",
+          "time_connect": "0.003825",
+          "time_appconnect": "1.398727",
+          "time_starttransfer": "1.702998",
+          "time_total": "1.703391",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:32:43 GMT",
+          "content-type": "text/plain",
+          "content-length": "211"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 1,
+        "bulk_overlap_seconds": 1.0899999998509884,
+        "fully_overlapped": false
+      },
+      {
+        "name": "loaded-7",
+        "kind": "probe",
+        "phase": "down-1",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:32:49.263272+00:00",
+        "utc_end": "2026-10-18T12:32:50.367101+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 216,
+        "observed_sha256": "278075e964264bf55a8a62421c5e818d77774c757b8b6037c0a46e838c9df866",
+        "performance_valid": true,
+        "device_start_uptime": 1573356.41,
+        "device_end_uptime": 1573357.44,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "216",
+          "size_upload": "0",
+          "time_namelookup": "0.001599",
+          "time_connect": "0.002386",
+          "time_appconnect": "0.636554",
+          "time_starttransfer": "1.023755",
+          "time_total": "1.024010",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:32:50 GMT",
+          "content-type": "text/plain",
+          "content-length": "216"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 1,
+        "bulk_overlap_seconds": 1.0300000000279397,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-8",
+        "kind": "probe",
+        "phase": "down-1",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:32:54.274128+00:00",
+        "utc_end": "2026-10-18T12:32:57.440561+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 211,
+        "observed_sha256": "d0ee0a539c25bf15e479b5f934b287f56180ffdaafc3158134b1e7153c5ba9b2",
+        "performance_valid": true,
+        "device_start_uptime": 1573361.41,
+        "device_end_uptime": 1573364.5,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "211",
+          "size_upload": "0",
+          "time_namelookup": "0.001330",
+          "time_connect": "0.002095",
+          "time_appconnect": "1.682628",
+          "time_starttransfer": "3.091348",
+          "time_total": "3.091606",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:32:56 GMT",
+          "content-type": "text/plain",
+          "content-length": "211"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 3.090000000083819,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-9",
+        "kind": "probe",
+        "phase": "down-1",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:32:59.349211+00:00",
+        "utc_end": "2026-10-18T12:33:01.490489+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 214,
+        "observed_sha256": "008779e8af5028ba788f0f5bc8acd56de588f08a99c7ab91a548b7c873f49f0f",
+        "performance_valid": true,
+        "device_start_uptime": 1573366.49,
+        "device_end_uptime": 1573368.56,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "214",
+          "size_upload": "0",
+          "time_namelookup": "0.001512",
+          "time_connect": "0.002280",
+          "time_appconnect": "0.750921",
+          "time_starttransfer": "2.053275",
+          "time_total": "2.053623",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:33:00 GMT",
+          "content-type": "text/plain",
+          "content-length": "214"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 1,
+        "bulk_overlap_seconds": 2.0700000000651926,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-10",
+        "kind": "probe",
+        "phase": "down-1",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:33:04.399789+00:00",
+        "utc_end": "2026-10-18T12:33:06.329243+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 215,
+        "observed_sha256": "30fa6a62bdb82c75bdda50d3d1904381962bc7733ae8cd3b73b86ace34cbf9c5",
+        "performance_valid": true,
+        "device_start_uptime": 1573371.53,
+        "device_end_uptime": 1573373.39,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "215",
+          "size_upload": "0",
+          "time_namelookup": "0.001423",
+          "time_connect": "0.002295",
+          "time_appconnect": "1.457478",
+          "time_starttransfer": "1.851642",
+          "time_total": "1.851875",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:33:06 GMT",
+          "content-type": "text/plain",
+          "content-length": "215"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 1,
+        "bulk_overlap_seconds": 1.8599999998696148,
+        "fully_overlapped": true
+      },
+      {
+        "name": "down-1",
+        "kind": "down",
+        "phase": "down-1",
+        "intended_bytes": 2097152,
+        "utc_start": "2026-10-18T12:32:44.263068+00:00",
+        "utc_end": "2026-10-18T12:33:09.671823+00:00",
+        "request_cap": 150,
+        "curl_exit": 0,
+        "actual_body_bytes": 2097152,
+        "observed_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+        "performance_valid": true,
+        "device_start_uptime": 1573351.39,
+        "device_end_uptime": 1573376.74,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "2097152",
+          "size_upload": "0",
+          "time_namelookup": "0.001473",
+          "time_connect": "0.002263",
+          "time_appconnect": "1.423373",
+          "time_starttransfer": "3.615077",
+          "time_total": "25.335961",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:32:46 GMT",
+          "content-type": "application/octet-stream",
+          "content-length": "2097152",
+          "cache-control": "no-store, no-transform"
+        },
+        "application_goodput_mbit_s": 0.6621898415457775,
+        "mesh_pid_same_origin_socket_samples": 26
+      },
+      {
+        "name": "loaded-11",
+        "kind": "probe",
+        "phase": "down-1",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:33:09.440332+00:00",
+        "utc_end": "2026-10-18T12:33:11.351748+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 210,
+        "observed_sha256": "8f519a49f594b019e67fad1d15c8cffc6f7ec56f9cf76759e4c74cc046833122",
+        "performance_valid": true,
+        "device_start_uptime": 1573376.58,
+        "device_end_uptime": 1573378.42,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "210",
+          "size_upload": "0",
+          "time_namelookup": "0.001460",
+          "time_connect": "0.002907",
+          "time_appconnect": "0.730326",
+          "time_starttransfer": "1.831109",
+          "time_total": "1.831444",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:33:10 GMT",
+          "content-type": "text/plain",
+          "content-length": "210"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 1,
+        "bulk_overlap_seconds": 0.15999999991618097,
+        "fully_overlapped": false
+      },
+      {
+        "name": "loaded-12",
+        "kind": "probe",
+        "phase": "down-2",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:33:16.433661+00:00",
+        "utc_end": "2026-10-18T12:33:19.784223+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 210,
+        "observed_sha256": "f6894ee1640bf198561a0ba2344effd123b290e983c06de3494ee21dbec9a38f",
+        "performance_valid": true,
+        "device_start_uptime": 1573383.57,
+        "device_end_uptime": 1573386.85,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "210",
+          "size_upload": "0",
+          "time_namelookup": "0.001394",
+          "time_connect": "0.002394",
+          "time_appconnect": "2.677821",
+          "time_starttransfer": "3.266307",
+          "time_total": "3.266514",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:33:19 GMT",
+          "content-type": "text/plain",
+          "content-length": "210"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 3,
+        "bulk_overlap_seconds": 3.2800000000279397,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-13",
+        "kind": "probe",
+        "phase": "down-2",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:33:21.492202+00:00",
+        "utc_end": "2026-10-18T12:33:23.950189+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 211,
+        "observed_sha256": "dc3a1b4e71bf5a0e2c660e50405e02ec338fe53d1aed50c9abe7cb7c76605d25",
+        "performance_valid": true,
+        "device_start_uptime": 1573388.63,
+        "device_end_uptime": 1573391.02,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "211",
+          "size_upload": "0",
+          "time_namelookup": "0.001400",
+          "time_connect": "0.002271",
+          "time_appconnect": "1.809928",
+          "time_starttransfer": "2.378984",
+          "time_total": "2.379294",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:33:23 GMT",
+          "content-type": "text/plain",
+          "content-length": "211"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 2.390000000130385,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-14",
+        "kind": "probe",
+        "phase": "down-2",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:33:26.559493+00:00",
+        "utc_end": "2026-10-18T12:33:28.337131+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 211,
+        "observed_sha256": "b6acc450268bfab55975d0736a940bdabb3ce63cb901abb747d94f2a96c0f458",
+        "performance_valid": true,
+        "device_start_uptime": 1573393.7,
+        "device_end_uptime": 1573395.39,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "211",
+          "size_upload": "0",
+          "time_namelookup": "0.001477",
+          "time_connect": "0.002280",
+          "time_appconnect": "1.186237",
+          "time_starttransfer": "1.683375",
+          "time_total": "1.683700",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:33:27 GMT",
+          "content-type": "text/plain",
+          "content-length": "211"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 1,
+        "bulk_overlap_seconds": 1.6899999999441206,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-15",
+        "kind": "probe",
+        "phase": "down-2",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:33:31.644381+00:00",
+        "utc_end": "2026-10-18T12:33:33.823528+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 215,
+        "observed_sha256": "831bfc815726d06c11d28edff571bdbb7725b2469522d013881cb0c5828b1d05",
+        "performance_valid": true,
+        "device_start_uptime": 1573398.79,
+        "device_end_uptime": 1573400.89,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "215",
+          "size_upload": "0",
+          "time_namelookup": "0.001608",
+          "time_connect": "0.002593",
+          "time_appconnect": "1.696247",
+          "time_starttransfer": "2.098294",
+          "time_total": "2.098560",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:33:33 GMT",
+          "content-type": "text/plain",
+          "content-length": "215"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 2.0999999998603016,
+        "fully_overlapped": true
+      },
+      {
+        "name": "down-2",
+        "kind": "down",
+        "phase": "down-2",
+        "intended_bytes": 2097152,
+        "utc_start": "2026-10-18T12:33:11.433475+00:00",
+        "utc_end": "2026-10-18T12:33:38.316700+00:00",
+        "request_cap": 150,
+        "curl_exit": 0,
+        "actual_body_bytes": 2097152,
+        "observed_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+        "performance_valid": true,
+        "device_start_uptime": 1573378.57,
+        "device_end_uptime": 1573405.39,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "2097152",
+          "size_upload": "0",
+          "time_namelookup": "0.002230",
+          "time_connect": "0.003020",
+          "time_appconnect": "0.730152",
+          "time_starttransfer": "0.980859",
+          "time_total": "26.808378",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:33:12 GMT",
+          "content-type": "application/octet-stream",
+          "content-length": "2097152",
+          "cache-control": "no-store, no-transform"
+        },
+        "application_goodput_mbit_s": 0.6258198836199639,
+        "mesh_pid_same_origin_socket_samples": 26
+      },
+      {
+        "name": "loaded-16",
+        "kind": "probe",
+        "phase": "down-2",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:33:36.734008+00:00",
+        "utc_end": "2026-10-18T12:33:38.343374+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 211,
+        "observed_sha256": "7da4334128df7d115b0ee51a65ce6730d1027e89ec30c5454bd53e85cb8fa8e5",
+        "performance_valid": true,
+        "device_start_uptime": 1573403.87,
+        "device_end_uptime": 1573405.41,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "211",
+          "size_upload": "0",
+          "time_namelookup": "0.001627",
+          "time_connect": "0.003298",
+          "time_appconnect": "1.104150",
+          "time_starttransfer": "1.535128",
+          "time_total": "1.535375",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:33:38 GMT",
+          "content-type": "text/plain",
+          "content-length": "211"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 1,
+        "bulk_overlap_seconds": 1.5199999997857958,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-17",
+        "kind": "probe",
+        "phase": "parallel",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:33:43.425805+00:00",
+        "utc_end": "2026-10-18T12:33:46.100465+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 216,
+        "observed_sha256": "57207e5a9e5d0fdc576c0f880c8930a2e42df0fa4824fca213ac446327d1b3a7",
+        "performance_valid": true,
+        "device_start_uptime": 1573410.56,
+        "device_end_uptime": 1573413.17,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "216",
+          "size_upload": "0",
+          "time_namelookup": "0.001455",
+          "time_connect": "0.002222",
+          "time_appconnect": "1.963408",
+          "time_starttransfer": "2.604912",
+          "time_total": "2.605419",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:33:45 GMT",
+          "content-type": "text/plain",
+          "content-length": "216"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 2.609999999869615,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-18",
+        "kind": "probe",
+        "phase": "parallel",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:33:48.508947+00:00",
+        "utc_end": "2026-10-18T12:33:51.656284+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 215,
+        "observed_sha256": "7dc8a8162db36ec4c698fc2d486ba90b96cd54fa6149e4a8e1c61c8745e61104",
+        "performance_valid": true,
+        "device_start_uptime": 1573415.65,
+        "device_end_uptime": 1573418.72,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "215",
+          "size_upload": "0",
+          "time_namelookup": "0.001416",
+          "time_connect": "0.002177",
+          "time_appconnect": "1.539488",
+          "time_starttransfer": "3.060891",
+          "time_total": "3.061105",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:33:50 GMT",
+          "content-type": "text/plain",
+          "content-length": "215"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 3,
+        "bulk_overlap_seconds": 3.0700000000651926,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-19",
+        "kind": "probe",
+        "phase": "parallel",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:33:53.564236+00:00",
+        "utc_end": "2026-10-18T12:33:56.030618+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 216,
+        "observed_sha256": "93d7acce55e2eb7dcf732a87519ef341404ed249fdfc7996f17935ff3b57455d",
+        "performance_valid": true,
+        "device_start_uptime": 1573420.7,
+        "device_end_uptime": 1573423.1,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "216",
+          "size_upload": "0",
+          "time_namelookup": "0.001365",
+          "time_connect": "0.002261",
+          "time_appconnect": "1.854453",
+          "time_starttransfer": "2.388257",
+          "time_total": "2.388637",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:33:55 GMT",
+          "content-type": "text/plain",
+          "content-length": "216"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 2.4000000001396984,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-20",
+        "kind": "probe",
+        "phase": "parallel",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:33:58.639354+00:00",
+        "utc_end": "2026-10-18T12:34:01.406104+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 211,
+        "observed_sha256": "0cee4f563998c42c6443138d461f9ab973085eb823707d4f37116db3f831d034",
+        "performance_valid": true,
+        "device_start_uptime": 1573425.78,
+        "device_end_uptime": 1573428.47,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "211",
+          "size_upload": "0",
+          "time_namelookup": "0.001502",
+          "time_connect": "0.002376",
+          "time_appconnect": "1.300665",
+          "time_starttransfer": "2.685347",
+          "time_total": "2.685649",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:34:00 GMT",
+          "content-type": "text/plain",
+          "content-length": "211"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 2.6899999999441206,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-21",
+        "kind": "probe",
+        "phase": "parallel",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:34:03.714682+00:00",
+        "utc_end": "2026-10-18T12:34:05.673161+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 216,
+        "observed_sha256": "e4dd44340d0e3624bda63c10e905163380b70e439699809baf39ba2379b56a99",
+        "performance_valid": true,
+        "device_start_uptime": 1573430.85,
+        "device_end_uptime": 1573432.75,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "216",
+          "size_upload": "0",
+          "time_namelookup": "0.001484",
+          "time_connect": "0.004497",
+          "time_appconnect": "1.471812",
+          "time_starttransfer": "1.890096",
+          "time_total": "1.890502",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:34:05 GMT",
+          "content-type": "text/plain",
+          "content-length": "216"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 1.8999999999068677,
+        "fully_overlapped": true
+      },
+      {
+        "name": "parallel-1",
+        "kind": "down",
+        "phase": "parallel",
+        "intended_bytes": 2097152,
+        "utc_start": "2026-10-18T12:33:38.427482+00:00",
+        "utc_end": "2026-10-18T12:34:07.859996+00:00",
+        "request_cap": 150,
+        "curl_exit": 0,
+        "actual_body_bytes": 2097152,
+        "observed_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+        "performance_valid": true,
+        "device_start_uptime": 1573405.56,
+        "device_end_uptime": 1573434.94,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "2097152",
+          "size_upload": "0",
+          "time_namelookup": "0.001740",
+          "time_connect": "0.004641",
+          "time_appconnect": "0.509351",
+          "time_starttransfer": "0.872793",
+          "time_total": "29.364023",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:33:39 GMT",
+          "content-type": "application/octet-stream",
+          "content-length": "2097152",
+          "cache-control": "no-store, no-transform"
+        },
+        "application_goodput_mbit_s": 0.5713527741072809,
+        "mesh_pid_same_origin_socket_samples": 29
+      },
+      {
+        "name": "parallel-0",
+        "kind": "down",
+        "phase": "parallel",
+        "intended_bytes": 2097152,
+        "utc_start": "2026-10-18T12:33:38.427175+00:00",
+        "utc_end": "2026-10-18T12:34:08.325288+00:00",
+        "request_cap": 150,
+        "curl_exit": 0,
+        "actual_body_bytes": 2097152,
+        "observed_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+        "performance_valid": true,
+        "device_start_uptime": 1573405.57,
+        "device_end_uptime": 1573435.39,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "2097152",
+          "size_upload": "0",
+          "time_namelookup": "0.001413",
+          "time_connect": "0.002455",
+          "time_appconnect": "0.660291",
+          "time_starttransfer": "1.047640",
+          "time_total": "29.812242",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:33:39 GMT",
+          "content-type": "application/octet-stream",
+          "content-length": "2097152",
+          "cache-control": "no-store, no-transform"
+        },
+        "application_goodput_mbit_s": 0.5627626395894679,
+        "mesh_pid_same_origin_socket_samples": 29
+      },
+      {
+        "name": "loaded-22",
+        "kind": "probe",
+        "phase": "up-0",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:34:13.455088+00:00",
+        "utc_end": "2026-10-18T12:34:17.281349+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 211,
+        "observed_sha256": "1fd35d07f5ce6124145b48fc6c0eda1c9056657576bad302f694bafe0f8f4952",
+        "performance_valid": true,
+        "device_start_uptime": 1573440.59,
+        "device_end_uptime": 1573444.34,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "211",
+          "size_upload": "0",
+          "time_namelookup": "0.001749",
+          "time_connect": "0.005632",
+          "time_appconnect": "3.049539",
+          "time_starttransfer": "3.745600",
+          "time_total": "3.745915",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:34:17 GMT",
+          "content-type": "text/plain",
+          "content-length": "211"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 3.75,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-23",
+        "kind": "probe",
+        "phase": "up-0",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:34:18.517425+00:00",
+        "utc_end": "2026-10-18T12:34:22.350496+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 211,
+        "observed_sha256": "1de40146254565e1196166d28b386298c9f5909bc62cd4369ef1821a0f1d01ff",
+        "performance_valid": true,
+        "device_start_uptime": 1573445.65,
+        "device_end_uptime": 1573449.43,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "211",
+          "size_upload": "0",
+          "time_namelookup": "0.001785",
+          "time_connect": "0.002754",
+          "time_appconnect": "2.406308",
+          "time_starttransfer": "3.768988",
+          "time_total": "3.769312",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:34:22 GMT",
+          "content-type": "text/plain",
+          "content-length": "211"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 4,
+        "bulk_overlap_seconds": 3.7800000000279397,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-24",
+        "kind": "probe",
+        "phase": "up-0",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:34:23.587521+00:00",
+        "utc_end": "2026-10-18T12:34:26.480106+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 211,
+        "observed_sha256": "4324944230d3216dab38f8580414352529a76022da4fc7f87e2b294085eae3a5",
+        "performance_valid": true,
+        "device_start_uptime": 1573450.73,
+        "device_end_uptime": 1573453.54,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "211",
+          "size_upload": "0",
+          "time_namelookup": "0.001407",
+          "time_connect": "0.002741",
+          "time_appconnect": "1.516336",
+          "time_starttransfer": "2.804945",
+          "time_total": "2.805207",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:34:26 GMT",
+          "content-type": "text/plain",
+          "content-length": "211"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 2.8100000000558794,
+        "fully_overlapped": true
+      },
+      {
+        "name": "up-0",
+        "kind": "up",
+        "phase": "up-0",
+        "intended_bytes": 1048576,
+        "utc_start": "2026-10-18T12:34:08.455193+00:00",
+        "utc_end": "2026-10-18T12:34:28.580023+00:00",
+        "request_cap": 150,
+        "curl_exit": 0,
+        "actual_body_bytes": 0,
+        "observed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "performance_valid": true,
+        "device_start_uptime": 1573435.6,
+        "device_end_uptime": 1573455.65,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "0",
+          "size_upload": "1048576",
+          "time_namelookup": "0.001504",
+          "time_connect": "0.002812",
+          "time_appconnect": "2.917229",
+          "time_starttransfer": "2.917357",
+          "time_total": "20.041888",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:34:28 GMT",
+          "content-type": "text/plain;charset=UTF-8",
+          "content-length": "0",
+          "cf-meta-upload-bytes": "1048576"
+        },
+        "upload_estimate_mbit_s": 0.418553780961155,
+        "mesh_pid_same_origin_socket_samples": 19,
+        "client_upload_completed_before_final_200": true,
+        "server_claimed_upload_bytes": "1048576"
+      },
+      {
+        "name": "loaded-25",
+        "kind": "probe",
+        "phase": "up-1",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:34:33.692133+00:00",
+        "utc_end": "2026-10-18T12:34:36.528988+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 216,
+        "observed_sha256": "cb2c3063a4d245c810dd47e106e797c5829aa3e9e6fb77be0de9970ee8dbf3c9",
+        "performance_valid": true,
+        "device_start_uptime": 1573460.83,
+        "device_end_uptime": 1573463.6,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "216",
+          "size_upload": "0",
+          "time_namelookup": "0.001337",
+          "time_connect": "0.002098",
+          "time_appconnect": "1.411617",
+          "time_starttransfer": "2.762328",
+          "time_total": "2.762603",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:34:36 GMT",
+          "content-type": "text/plain",
+          "content-length": "216"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 2.7700000000186265,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-26",
+        "kind": "probe",
+        "phase": "up-1",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:34:38.737875+00:00",
+        "utc_end": "2026-10-18T12:34:41.592826+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 215,
+        "observed_sha256": "dd04b1eec63cca20da5c0c773c1a26157da165b560aa7769764aa9df56b85502",
+        "performance_valid": true,
+        "device_start_uptime": 1573465.87,
+        "device_end_uptime": 1573468.67,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "215",
+          "size_upload": "0",
+          "time_namelookup": "0.001335",
+          "time_connect": "0.002066",
+          "time_appconnect": "2.009723",
+          "time_starttransfer": "2.781328",
+          "time_total": "2.781646",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:34:41 GMT",
+          "content-type": "text/plain",
+          "content-length": "215"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 2.7999999998137355,
+        "fully_overlapped": true
+      },
+      {
+        "name": "up-1",
+        "kind": "up",
+        "phase": "up-1",
+        "intended_bytes": 1048576,
+        "utc_start": "2026-10-18T12:34:28.691854+00:00",
+        "utc_end": "2026-10-18T12:34:46.463179+00:00",
+        "request_cap": 150,
+        "curl_exit": 0,
+        "actual_body_bytes": 0,
+        "observed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "performance_valid": true,
+        "device_start_uptime": 1573455.82,
+        "device_end_uptime": 1573473.52,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "0",
+          "size_upload": "1048576",
+          "time_namelookup": "0.440551",
+          "time_connect": "0.443803",
+          "time_appconnect": "1.633031",
+          "time_starttransfer": "1.635528",
+          "time_total": "17.684062",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:34:46 GMT",
+          "content-type": "text/plain;charset=UTF-8",
+          "content-length": "0",
+          "cf-meta-upload-bytes": "1048576"
+        },
+        "upload_estimate_mbit_s": 0.47435979358136154,
+        "mesh_pid_same_origin_socket_samples": 17,
+        "client_upload_completed_before_final_200": true,
+        "server_claimed_upload_bytes": "1048576"
+      },
+      {
+        "name": "loaded-27",
+        "kind": "probe",
+        "phase": "up-1",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:34:43.803304+00:00",
+        "utc_end": "2026-10-18T12:34:46.514846+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 215,
+        "observed_sha256": "d7f073232dc44710e625de70547e103ffd301896de9163a0566fc5c766a08bec",
+        "performance_valid": true,
+        "device_start_uptime": 1573470.95,
+        "device_end_uptime": 1573473.59,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "215",
+          "size_upload": "0",
+          "time_namelookup": "0.001449",
+          "time_connect": "0.002298",
+          "time_appconnect": "1.326612",
+          "time_starttransfer": "2.623233",
+          "time_total": "2.623471",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:34:46 GMT",
+          "content-type": "text/plain",
+          "content-length": "215"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 2.5700000000651926,
+        "fully_overlapped": false
+      },
+      {
+        "name": "loaded-28",
+        "kind": "probe",
+        "phase": "up-2",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:34:51.604933+00:00",
+        "utc_end": "2026-10-18T12:34:53.613599+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 215,
+        "observed_sha256": "af1329499af48b931daaf8ffd32a206ba0c3bd9725d26912de655232fa6dc942",
+        "performance_valid": true,
+        "device_start_uptime": 1573478.73,
+        "device_end_uptime": 1573480.69,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "215",
+          "size_upload": "0",
+          "time_namelookup": "0.002415",
+          "time_connect": "0.005127",
+          "time_appconnect": "1.448439",
+          "time_starttransfer": "1.897829",
+          "time_total": "1.948988",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:34:53 GMT",
+          "content-type": "text/plain",
+          "content-length": "215"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 1,
+        "bulk_overlap_seconds": 1.959999999962747,
+        "fully_overlapped": true
+      },
+      {
+        "name": "loaded-29",
+        "kind": "probe",
+        "phase": "up-2",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:34:56.623712+00:00",
+        "utc_end": "2026-10-18T12:34:59.061951+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 216,
+        "observed_sha256": "3b2100d9406de3189e2e80b2b181d4c2a2bb915763c7eeebb6601b61ea431a9e",
+        "performance_valid": true,
+        "device_start_uptime": 1573483.76,
+        "device_end_uptime": 1573486.13,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "216",
+          "size_upload": "0",
+          "time_namelookup": "0.001664",
+          "time_connect": "0.002804",
+          "time_appconnect": "1.837603",
+          "time_starttransfer": "2.357106",
+          "time_total": "2.357392",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:34:58 GMT",
+          "content-type": "text/plain",
+          "content-length": "216"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 2,
+        "bulk_overlap_seconds": 2.369999999878928,
+        "fully_overlapped": true
+      },
+      {
+        "name": "up-2",
+        "kind": "up",
+        "phase": "up-2",
+        "intended_bytes": 1048576,
+        "utc_start": "2026-10-18T12:34:46.604857+00:00",
+        "utc_end": "2026-10-18T12:35:02.048729+00:00",
+        "request_cap": 150,
+        "curl_exit": 0,
+        "actual_body_bytes": 0,
+        "observed_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "performance_valid": true,
+        "device_start_uptime": 1573473.74,
+        "device_end_uptime": 1573489.13,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "0",
+          "size_upload": "1048576",
+          "time_namelookup": "0.002179",
+          "time_connect": "0.006128",
+          "time_appconnect": "1.715214",
+          "time_starttransfer": "1.716898",
+          "time_total": "15.378600",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:35:01 GMT",
+          "content-type": "text/plain;charset=UTF-8",
+          "content-length": "0",
+          "cf-meta-upload-bytes": "1048576"
+        },
+        "upload_estimate_mbit_s": 0.5454727998647471,
+        "mesh_pid_same_origin_socket_samples": 15,
+        "client_upload_completed_before_final_200": true,
+        "server_claimed_upload_bytes": "1048576"
+      },
+      {
+        "name": "loaded-30",
+        "kind": "probe",
+        "phase": "up-2",
+        "intended_bytes": 0,
+        "utc_start": "2026-10-18T12:35:01.670444+00:00",
+        "utc_end": "2026-10-18T12:35:02.755351+00:00",
+        "request_cap": 30,
+        "curl_exit": 0,
+        "actual_body_bytes": 211,
+        "observed_sha256": "f369edda993c9df344703bd4b727ddf30b3248f3880db3d28bc63a2935315665",
+        "performance_valid": true,
+        "device_start_uptime": 1573488.8,
+        "device_end_uptime": 1573489.83,
+        "metrics": {
+          "http_code": "200",
+          "http_version": "1.1",
+          "size_download": "211",
+          "size_upload": "0",
+          "time_namelookup": "0.001409",
+          "time_connect": "0.002652",
+          "time_appconnect": "0.665166",
+          "time_starttransfer": "1.021244",
+          "time_total": "1.021458",
+          "num_connects": "1",
+          "ssl_verify_result": "0"
+        },
+        "headers": {
+          "date": "Sun, 18 Oct 2026 12:35:02 GMT",
+          "content-type": "text/plain",
+          "content-length": "211"
+        },
+        "egress_matches_NL": true,
+        "mesh_pid_same_origin_socket_samples": 1,
+        "bulk_overlap_seconds": 0.32999999984167516,
+        "fully_overlapped": false
+      }
+    ],
+    "single_summary": {
+      "n": 3,
+      "individual_goodput": {
+        "n": 3,
+        "minimum": 0.5358486328386377,
+        "median": 0.6258198836199639,
+        "maximum": 0.6621898415457775,
+        "mean": 0.6079527860014597
+      },
+      "pooled_payload_over_sum_request_time_mbit_s": 0.6031067885732487
+    },
+    "parallel": {
+      "requests": 2,
+      "common_device_wall_seconds": 29.829999999841675,
+      "aggregate_mbit_s": 1.1248552464022157,
+      "overlap_seconds": 29.369999999878928,
+      "distinct_client_local_ports": 2,
+      "http_versions": [
+        "1.1"
+      ],
+      "num_connects": [
+        "1",
+        "1"
+      ]
+    },
+    "upload_summary": {
+      "n": 3,
+      "minimum": 0.418553780961155,
+      "median": 0.47435979358136154,
+      "maximum": 0.5454727998647471,
+      "mean": 0.4794621248024212
+    },
+    "latencies": {
+      "idle": {
+        "n": 3,
+        "seconds": [
+          3.001376,
+          2.169754,
+          1.754557
+        ],
+        "ttfb_seconds": [
+          3.001121,
+          2.169418,
+          1.754294
+        ],
+        "summary": {
+          "n": 3,
+          "minimum": 1.754557,
+          "median": 2.169754,
+          "maximum": 3.001376,
+          "mean": 2.3085623333333336
+        },
+        "failures": 0,
+        "fully_overlapped": 0,
+        "partial_overlap": 0
+      },
+      "download_loaded": {
+        "n": 21,
+        "seconds": [
+          4.287828,
+          3.24596,
+          2.456071,
+          2.939691,
+          1.940045,
+          1.703391,
+          1.02401,
+          3.091606,
+          2.053623,
+          1.851875,
+          1.831444,
+          3.266514,
+          2.379294,
+          1.6837,
+          2.09856,
+          1.535375,
+          2.605419,
+          3.061105,
+          2.388637,
+          2.685649,
+          1.890502
+        ],
+        "ttfb_seconds": [
+          4.287469,
+          3.245616,
+          2.455863,
+          2.939273,
+          1.93979,
+          1.702998,
+          1.023755,
+          3.091348,
+          2.053275,
+          1.851642,
+          1.831109,
+          3.266307,
+          2.378984,
+          1.683375,
+          2.098294,
+          1.535128,
+          2.604912,
+          3.060891,
+          2.388257,
+          2.685347,
+          1.890096
+        ],
+        "summary": {
+          "n": 21,
+          "minimum": 1.02401,
+          "median": 2.379294,
+          "maximum": 4.287828,
+          "mean": 2.381919
+        },
+        "failures": 0,
+        "fully_overlapped": 19,
+        "partial_overlap": 2
+      },
+      "upload_loaded": {
+        "n": 9,
+        "seconds": [
+          3.745915,
+          3.769312,
+          2.805207,
+          2.762603,
+          2.781646,
+          2.623471,
+          1.948988,
+          2.357392,
+          1.021458
+        ],
+        "ttfb_seconds": [
+          3.7456,
+          3.768988,
+          2.804945,
+          2.762328,
+          2.781328,
+          2.623233,
+          1.897829,
+          2.357106,
+          1.021244
+        ],
+        "summary": {
+          "n": 9,
+          "minimum": 1.021458,
+          "median": 2.762603,
+          "maximum": 3.769312,
+          "mean": 2.646221333333333
+        },
+        "failures": 0,
+        "fully_overlapped": 7,
+        "partial_overlap": 2
+      }
+    },
+    "per_cell": {
+      "down-0": {
+        "internal": {
+          "sample_count": 16,
+          "occupied_slots": {
+            "1": 1,
+            "8": 14,
+            "4": 1
+          },
+          "full_eight_slot_samples": 14,
+          "pending_segments": {
+            "n": 16,
+            "minimum": 1,
+            "median": 8.0,
+            "maximum": 8,
+            "mean": 7.3125
+          },
+          "receive_buffered_segments": {
+            "n": 16,
+            "minimum": 0,
+            "median": 0.0,
+            "maximum": 0,
+            "mean": 0
+          },
+          "max_sampled_head_retries": 1,
+          "ack_first_covering_ms": {
+            "n": 0
+          },
+          "ack_cumulative_ms": {
+            "n": 0
+          },
+          "queue_post_enqueue_to_rtp_write_ms": {
+            "n": 140,
+            "minimum": 0,
+            "median": 3.0,
+            "maximum": 20,
+            "mean": 3.8642857142857143
+          },
+          "retained_retransmission_attempts": 46,
+          "retained_frame_discard_boundaries": 0,
+          "counter_covered_seconds": 30.0,
+          "counter_deltas": {
+            "rtp": 793,
+            "rtp_gaps": 0,
+            "vp8_frames": 779,
+            "completed": 779,
+            "expired": 0,
+            "malformed": 0,
+            "duplicate": 0,
+            "conflict": 0,
+            "capacity": 0,
+            "crc_failed": 0,
+            "carrier_payload_tx": 2694974,
+            "carrier_payload_rx": 70204,
+            "send_base_advance": 325,
+            "send_next_advance": 328,
+            "receive_next_advance": 261
+          },
+          "counter_boundary_limitation": "First/last 2s snapshots inside each request interval; excludes edges and includes probes/background; parallel interval union counted once"
+        },
+        "resources": {
+          "nl": {
+            "samples": 31,
+            "covered_seconds": 30.00532341003418,
+            "cpu_seconds": 1.92,
+            "mean_percent_one_core": 6.39886454067656,
+            "interval_cpu_percent": {
+              "n": 30,
+              "minimum": 4.984613468509485,
+              "median": 6.001760888159788,
+              "maximum": 9.015747395854481,
+              "mean": 6.39923374133182
+            },
+            "rss_mib": {
+              "n": 31,
+              "minimum": 43.84375,
+              "median": 43.84375,
+              "maximum": 44.34375,
+              "mean": 43.96068548387097
+            },
+            "thread_count": {
+              "n": 31,
+              "minimum": 7,
+              "median": 7,
+              "maximum": 7,
+              "mean": 7
+            }
+          },
+          "android": {
+            "samples": 31,
+            "covered_seconds": 30.006251096725464,
+            "cpu_seconds": 12.49,
+            "mean_percent_one_core": 41.62466000747096,
+            "interval_cpu_percent": {
+              "n": 30,
+              "minimum": 34.006324036776704,
+              "median": 37.95006132017512,
+              "maximum": 70.55466646196507,
+              "mean": 41.618491928482314
+            },
+            "rss_mib": {
+              "n": 31,
+              "minimum": 119.4375,
+              "median": 132.68359375,
+              "maximum": 146.2421875,
+              "mean": 132.44304435483872
+            },
+            "thread_count": {
+              "n": 31,
+              "minimum": 82,
+              "median": 83,
+              "maximum": 84,
+              "mean": 82.80645161290323
+            }
+          }
+        }
+      },
+      "down-1": {
+        "internal": {
+          "sample_count": 13,
+          "occupied_slots": {
+            "1": 1,
+            "8": 10,
+            "6": 1,
+            "4": 1
+          },
+          "full_eight_slot_samples": 10,
+          "pending_segments": {
+            "n": 13,
+            "minimum": 1,
+            "median": 8,
+            "maximum": 8,
+            "mean": 7
+          },
+          "receive_buffered_segments": {
+            "n": 13,
+            "minimum": 0,
+            "median": 0,
+            "maximum": 0,
+            "mean": 0
+          },
+          "max_sampled_head_retries": 1,
+          "ack_first_covering_ms": {
+            "n": 6,
+            "minimum": 164,
+            "median": 303.0,
+            "maximum": 572,
+            "mean": 346.6666666666667
+          },
+          "ack_cumulative_ms": {
+            "n": 2,
+            "minimum": 164,
+            "median": 375.5,
+            "maximum": 587,
+            "mean": 375.5
+          },
+          "queue_post_enqueue_to_rtp_write_ms": {
+            "n": 95,
+            "minimum": 0,
+            "median": 1,
+            "maximum": 11,
+            "mean": 2.1789473684210527
+          },
+          "retained_retransmission_attempts": 26,
+          "retained_frame_discard_boundaries": 0,
+          "counter_covered_seconds": 24.0,
+          "counter_deltas": {
+            "rtp": 757,
+            "rtp_gaps": 1,
+            "vp8_frames": 744,
+            "completed": 744,
+            "expired": 0,
+            "malformed": 0,
+            "duplicate": 0,
+            "conflict": 0,
+            "capacity": 0,
+            "crc_failed": 0,
+            "carrier_payload_tx": 2404607,
+            "carrier_payload_rx": 64321,
+            "send_base_advance": 321,
+            "send_next_advance": 324,
+            "receive_next_advance": 248
+          },
+          "counter_boundary_limitation": "First/last 2s snapshots inside each request interval; excludes edges and includes probes/background; parallel interval union counted once"
+        },
+        "resources": {
+          "nl": {
+            "samples": 26,
+            "covered_seconds": 25.00475573539734,
+            "cpu_seconds": 1.62,
+            "mean_percent_one_core": 6.478767547833665,
+            "interval_cpu_percent": {
+              "n": 25,
+              "minimum": 3.9995394283428456,
+              "median": 6.89305204043781,
+              "maximum": 9.015848601278597,
+              "mean": 6.477277674375558
+            },
+            "rss_mib": {
+              "n": 26,
+              "minimum": 44.34375,
+              "median": 44.34375,
+              "maximum": 44.34375,
+              "mean": 44.34375
+            },
+            "thread_count": {
+              "n": 26,
+              "minimum": 7,
+              "median": 7.0,
+              "maximum": 7,
+              "mean": 7
+            }
+          },
+          "android": {
+            "samples": 25,
+            "covered_seconds": 24.001827478408813,
+            "cpu_seconds": 10.07,
+            "mean_percent_one_core": 41.95513866208151,
+            "interval_cpu_percent": {
+              "n": 24,
+              "minimum": 34.48796856268708,
+              "median": 38.994268218977716,
+              "maximum": 62.25012159151431,
+              "mean": 41.944658635331585
+            },
+            "rss_mib": {
+              "n": 25,
+              "minimum": 109.33984375,
+              "median": 133.23046875,
+              "maximum": 161.78125,
+              "mean": 135.49515625
+            },
+            "thread_count": {
+              "n": 25,
+              "minimum": 78,
+              "median": 81,
+              "maximum": 83,
+              "mean": 80.52
+            }
+          }
+        }
+      },
+      "down-2": {
+        "internal": {
+          "sample_count": 13,
+          "occupied_slots": {
+            "8": 13
+          },
+          "full_eight_slot_samples": 13,
+          "pending_segments": {
+            "n": 13,
+            "minimum": 8,
+            "median": 8,
+            "maximum": 8,
+            "mean": 8
+          },
+          "receive_buffered_segments": {
+            "n": 13,
+            "minimum": 0,
+            "median": 0,
+            "maximum": 0,
+            "mean": 0
+          },
+          "max_sampled_head_retries": 1,
+          "ack_first_covering_ms": {
+            "n": 1,
+            "minimum": 245,
+            "median": 245,
+            "maximum": 245,
+            "mean": 245
+          },
+          "ack_cumulative_ms": {
+            "n": 0
+          },
+          "queue_post_enqueue_to_rtp_write_ms": {
+            "n": 96,
+            "minimum": 0,
+            "median": 0.0,
+            "maximum": 10,
+            "mean": 1.84375
+          },
+          "retained_retransmission_attempts": 32,
+          "retained_frame_discard_boundaries": 0,
+          "counter_covered_seconds": 24.0,
+          "counter_deltas": {
+            "rtp": 739,
+            "rtp_gaps": 0,
+            "vp8_frames": 727,
+            "completed": 727,
+            "expired": 0,
+            "malformed": 0,
+            "duplicate": 0,
+            "conflict": 0,
+            "capacity": 0,
+            "crc_failed": 0,
+            "carrier_payload_tx": 2240054,
+            "carrier_payload_rx": 63128,
+            "send_base_advance": 299,
+            "send_next_advance": 299,
+            "receive_next_advance": 242
+          },
+          "counter_boundary_limitation": "First/last 2s snapshots inside each request interval; excludes edges and includes probes/background; parallel interval union counted once"
+        },
+        "resources": {
+          "nl": {
+            "samples": 27,
+            "covered_seconds": 25.978323698043823,
+            "cpu_seconds": 1.71,
+            "mean_percent_one_core": 6.582410858668158,
+            "interval_cpu_percent": {
+              "n": 26,
+              "minimum": 4.9886591755773715,
+              "median": 6.870352699786092,
+              "maximum": 9.034372931298652,
+              "mean": 6.583107685813272
+            },
+            "rss_mib": {
+              "n": 27,
+              "minimum": 44.34375,
+              "median": 44.34375,
+              "maximum": 44.34375,
+              "mean": 44.34375
+            },
+            "thread_count": {
+              "n": 27,
+              "minimum": 7,
+              "median": 7,
+              "maximum": 7,
+              "mean": 7
+            }
+          },
+          "android": {
+            "samples": 27,
+            "covered_seconds": 25.991894960403442,
+            "cpu_seconds": 10.61,
+            "mean_percent_one_core": 40.820417349960366,
+            "interval_cpu_percent": {
+              "n": 26,
+              "minimum": 32.499792080460985,
+              "median": 38.64606257336376,
+              "maximum": 66.37430559401878,
+              "mean": 40.83761472043282
+            },
+            "rss_mib": {
+              "n": 27,
+              "minimum": 144.48828125,
+              "median": 155.4609375,
+              "maximum": 161.3125,
+              "mean": 154.46209490740742
+            },
+            "thread_count": {
+              "n": 27,
+              "minimum": 78,
+              "median": 78,
+              "maximum": 79,
+              "mean": 78.48148148148148
+            }
+          }
+        }
+      },
+      "parallel": {
+        "internal": {
+          "sample_count": 15,
+          "occupied_slots": {
+            "8": 15
+          },
+          "full_eight_slot_samples": 15,
+          "pending_segments": {
+            "n": 15,
+            "minimum": 8,
+            "median": 8,
+            "maximum": 8,
+            "mean": 8
+          },
+          "receive_buffered_segments": {
+            "n": 15,
+            "minimum": 0,
+            "median": 0,
+            "maximum": 0,
+            "mean": 0
+          },
+          "max_sampled_head_retries": 1,
+          "ack_first_covering_ms": {
+            "n": 0
+          },
+          "ack_cumulative_ms": {
+            "n": 0
+          },
+          "queue_post_enqueue_to_rtp_write_ms": {
+            "n": 134,
+            "minimum": 0,
+            "median": 2.5,
+            "maximum": 16,
+            "mean": 3.4328358208955225
+          },
+          "retained_retransmission_attempts": 34,
+          "retained_frame_discard_boundaries": 0,
+          "counter_covered_seconds": 28.0,
+          "counter_deltas": {
+            "rtp": 1037,
+            "rtp_gaps": 1,
+            "vp8_frames": 1022,
+            "completed": 1022,
+            "expired": 0,
+            "malformed": 0,
+            "duplicate": 0,
+            "conflict": 0,
+            "capacity": 0,
+            "crc_failed": 0,
+            "carrier_payload_tx": 4652905,
+            "carrier_payload_rx": 92438,
+            "send_base_advance": 421,
+            "send_next_advance": 421,
+            "receive_next_advance": 377
+          },
+          "counter_boundary_limitation": "First/last 2s snapshots inside each request interval; excludes edges and includes probes/background; parallel interval union counted once"
+        },
+        "resources": {
+          "nl": {
+            "samples": 30,
+            "covered_seconds": 29.00458073616028,
+            "cpu_seconds": 1.94,
+            "mean_percent_one_core": 6.688598665318351,
+            "interval_cpu_percent": {
+              "n": 29,
+              "minimum": 5.001642051006374,
+              "median": 6.952183582310085,
+              "maximum": 8.02280806622067,
+              "mean": 6.6892977020766615
+            },
+            "rss_mib": {
+              "n": 30,
+              "minimum": 44.34375,
+              "median": 44.46875,
+              "maximum": 45.34375,
+              "mean": 44.72708333333333
+            },
+            "thread_count": {
+              "n": 30,
+              "minimum": 7,
+              "median": 7.0,
+              "maximum": 7,
+              "mean": 7
+            }
+          },
+          "android": {
+            "samples": 30,
+            "covered_seconds": 28.996317148208618,
+            "cpu_seconds": 12.35,
+            "mean_percent_one_core": 42.591615814089614,
+            "interval_cpu_percent": {
+              "n": 29,
+              "minimum": 34.97217603887517,
+              "median": 41.466217984810854,
+              "maximum": 72.44293380677095,
+              "mean": 42.588297568596104
+            },
+            "rss_mib": {
+              "n": 30,
+              "minimum": 119.5859375,
+              "median": 136.462890625,
+              "maximum": 151.3046875,
+              "mean": 135.44973958333333
+            },
+            "thread_count": {
+              "n": 30,
+              "minimum": 78,
+              "median": 79.0,
+              "maximum": 81,
+              "mean": 78.66666666666667
+            }
+          }
+        }
+      },
+      "up-0": {
+        "internal": {
+          "sample_count": 10,
+          "occupied_slots": {
+            "2": 1,
+            "1": 1,
+            "6": 4,
+            "7": 3,
+            "8": 1
+          },
+          "full_eight_slot_samples": 1,
+          "pending_segments": {
+            "n": 10,
+            "minimum": 1,
+            "median": 6.0,
+            "maximum": 8,
+            "mean": 5.6
+          },
+          "receive_buffered_segments": {
+            "n": 10,
+            "minimum": 0,
+            "median": 0.0,
+            "maximum": 0,
+            "mean": 0
+          },
+          "max_sampled_head_retries": 0,
+          "ack_first_covering_ms": {
+            "n": 1,
+            "minimum": 888,
+            "median": 888,
+            "maximum": 888,
+            "mean": 888
+          },
+          "ack_cumulative_ms": {
+            "n": 1,
+            "minimum": 888,
+            "median": 888,
+            "maximum": 888,
+            "mean": 888
+          },
+          "queue_post_enqueue_to_rtp_write_ms": {
+            "n": 50,
+            "minimum": 0,
+            "median": 2.0,
+            "maximum": 9,
+            "mean": 2.68
+          },
+          "retained_retransmission_attempts": 0,
+          "retained_frame_discard_boundaries": 0,
+          "counter_covered_seconds": 17.999,
+          "counter_deltas": {
+            "rtp": 1246,
+            "rtp_gaps": 7,
+            "vp8_frames": 443,
+            "completed": 318,
+            "expired": 2,
+            "malformed": 0,
+            "duplicate": 0,
+            "conflict": 0,
+            "capacity": 0,
+            "crc_failed": 0,
+            "carrier_payload_tx": 55157,
+            "carrier_payload_rx": 1047763,
+            "send_base_advance": 129,
+            "send_next_advance": 133,
+            "receive_next_advance": 158
+          },
+          "counter_boundary_limitation": "First/last 2s snapshots inside each request interval; excludes edges and includes probes/background; parallel interval union counted once"
+        },
+        "resources": {
+          "nl": {
+            "samples": 20,
+            "covered_seconds": 19.00192403793335,
+            "cpu_seconds": 1.04,
+            "mean_percent_one_core": 5.473129973174603,
+            "interval_cpu_percent": {
+              "n": 19,
+              "minimum": 3.9980849855575595,
+              "median": 5.021939760247894,
+              "maximum": 7.021803849538897,
+              "mean": 5.47300972612308
+            },
+            "rss_mib": {
+              "n": 20,
+              "minimum": 44.84375,
+              "median": 45.34375,
+              "maximum": 45.34375,
+              "mean": 45.31875
+            },
+            "thread_count": {
+              "n": 20,
+              "minimum": 7,
+              "median": 7.0,
+              "maximum": 7,
+              "mean": 7
+            }
+          },
+          "android": {
+            "samples": 20,
+            "covered_seconds": 19.000423431396484,
+            "cpu_seconds": 8.07,
+            "mean_percent_one_core": 42.47273766891455,
+            "interval_cpu_percent": {
+              "n": 19,
+              "minimum": 35.37293221052875,
+              "median": 37.94801299984524,
+              "maximum": 60.644748358440296,
+              "mean": 42.473746440189736
+            },
+            "rss_mib": {
+              "n": 20,
+              "minimum": 112.2734375,
+              "median": 124.099609375,
+              "maximum": 139.55859375,
+              "mean": 123.5294921875
+            },
+            "thread_count": {
+              "n": 20,
+              "minimum": 78,
+              "median": 78.0,
+              "maximum": 80,
+              "mean": 78.45
+            }
+          }
+        }
+      },
+      "up-1": {
+        "internal": {
+          "sample_count": 9,
+          "occupied_slots": {
+            "2": 1,
+            "6": 4,
+            "8": 2,
+            "7": 2
+          },
+          "full_eight_slot_samples": 2,
+          "pending_segments": {
+            "n": 9,
+            "minimum": 2,
+            "median": 6,
+            "maximum": 8,
+            "mean": 6.222222222222222
+          },
+          "receive_buffered_segments": {
+            "n": 9,
+            "minimum": 0,
+            "median": 0,
+            "maximum": 0,
+            "mean": 0
+          },
+          "max_sampled_head_retries": 0,
+          "ack_first_covering_ms": {
+            "n": 0
+          },
+          "ack_cumulative_ms": {
+            "n": 0
+          },
+          "queue_post_enqueue_to_rtp_write_ms": {
+            "n": 53,
+            "minimum": 0,
+            "median": 3,
+            "maximum": 13,
+            "mean": 3.5660377358490565
+          },
+          "retained_retransmission_attempts": 0,
+          "retained_frame_discard_boundaries": 0,
+          "counter_covered_seconds": 16.0,
+          "counter_deltas": {
+            "rtp": 1255,
+            "rtp_gaps": 7,
+            "vp8_frames": 430,
+            "completed": 319,
+            "expired": 3,
+            "malformed": 0,
+            "duplicate": 0,
+            "conflict": 0,
+            "capacity": 0,
+            "crc_failed": 0,
+            "carrier_payload_tx": 49460,
+            "carrier_payload_rx": 1062809,
+            "send_base_advance": 122,
+            "send_next_advance": 128,
+            "receive_next_advance": 156
+          },
+          "counter_boundary_limitation": "First/last 2s snapshots inside each request interval; excludes edges and includes probes/background; parallel interval union counted once"
+        },
+        "resources": {
+          "nl": {
+            "samples": 17,
+            "covered_seconds": 16.008238077163696,
+            "cpu_seconds": 0.98,
+            "mean_percent_one_core": 6.121847983995214,
+            "interval_cpu_percent": {
+              "n": 16,
+              "minimum": 3.9659045807652915,
+              "median": 6.001602409526097,
+              "maximum": 9.026013003632524,
+              "mean": 6.122361865371599
+            },
+            "rss_mib": {
+              "n": 17,
+              "minimum": 44.09375,
+              "median": 44.84375,
+              "maximum": 44.84375,
+              "mean": 44.53492647058823
+            },
+            "thread_count": {
+              "n": 17,
+              "minimum": 7,
+              "median": 7,
+              "maximum": 7,
+              "mean": 7
+            }
+          },
+          "android": {
+            "samples": 18,
+            "covered_seconds": 17.00410270690918,
+            "cpu_seconds": 6.85,
+            "mean_percent_one_core": 40.28439558422967,
+            "interval_cpu_percent": {
+              "n": 17,
+              "minimum": 35.863942372552856,
+              "median": 37.48797850028377,
+              "maximum": 71.36958393168358,
+              "mean": 40.30908443205501
+            },
+            "rss_mib": {
+              "n": 18,
+              "minimum": 121.83203125,
+              "median": 135.79296875,
+              "maximum": 143.53125,
+              "mean": 133.48328993055554
+            },
+            "thread_count": {
+              "n": 18,
+              "minimum": 76,
+              "median": 78.5,
+              "maximum": 80,
+              "mean": 78.55555555555556
+            }
+          }
+        }
+      },
+      "up-2": {
+        "internal": {
+          "sample_count": 8,
+          "occupied_slots": {
+            "3": 1,
+            "6": 1,
+            "5": 1,
+            "8": 1,
+            "7": 2,
+            "4": 1,
+            "1": 1
+          },
+          "full_eight_slot_samples": 1,
+          "pending_segments": {
+            "n": 8,
+            "minimum": 1,
+            "median": 5.5,
+            "maximum": 8,
+            "mean": 5.125
+          },
+          "receive_buffered_segments": {
+            "n": 8,
+            "minimum": 0,
+            "median": 0.0,
+            "maximum": 0,
+            "mean": 0
+          },
+          "max_sampled_head_retries": 0,
+          "ack_first_covering_ms": {
+            "n": 2,
+            "minimum": 150,
+            "median": 150.0,
+            "maximum": 150,
+            "mean": 150
+          },
+          "ack_cumulative_ms": {
+            "n": 2,
+            "minimum": 162,
+            "median": 201.0,
+            "maximum": 240,
+            "mean": 201
+          },
+          "queue_post_enqueue_to_rtp_write_ms": {
+            "n": 46,
+            "minimum": 0,
+            "median": 3.0,
+            "maximum": 11,
+            "mean": 3.5869565217391304
+          },
+          "retained_retransmission_attempts": 0,
+          "retained_frame_discard_boundaries": 0,
+          "counter_covered_seconds": 14.0,
+          "counter_deltas": {
+            "rtp": 1245,
+            "rtp_gaps": 6,
+            "vp8_frames": 455,
+            "completed": 336,
+            "expired": 4,
+            "malformed": 0,
+            "duplicate": 0,
+            "conflict": 0,
+            "capacity": 0,
+            "crc_failed": 0,
+            "carrier_payload_tx": 45028,
+            "carrier_payload_rx": 1080409,
+            "send_base_advance": 126,
+            "send_next_advance": 124,
+            "receive_next_advance": 155
+          },
+          "counter_boundary_limitation": "First/last 2s snapshots inside each request interval; excludes edges and includes probes/background; parallel interval union counted once"
+        },
+        "resources": {
+          "nl": {
+            "samples": 15,
+            "covered_seconds": 13.997928380966187,
+            "cpu_seconds": 0.87,
+            "mean_percent_one_core": 6.215205395556892,
+            "interval_cpu_percent": {
+              "n": 14,
+              "minimum": 4.984351648685957,
+              "median": 6.009338345294374,
+              "maximum": 8.049344239014037,
+              "mean": 6.215839118767811
+            },
+            "rss_mib": {
+              "n": 15,
+              "minimum": 44.09375,
+              "median": 44.09375,
+              "maximum": 44.09375,
+              "mean": 44.09375
+            },
+            "thread_count": {
+              "n": 15,
+              "minimum": 7,
+              "median": 7,
+              "maximum": 7,
+              "mean": 7
+            }
+          },
+          "android": {
+            "samples": 15,
+            "covered_seconds": 14.006785869598389,
+            "cpu_seconds": 5.69,
+            "mean_percent_one_core": 40.62316689191414,
+            "interval_cpu_percent": {
+              "n": 14,
+              "minimum": 34.57426616557751,
+              "median": 39.219335903528744,
+              "maximum": 55.76124401867614,
+              "mean": 40.630995634957415
+            },
+            "rss_mib": {
+              "n": 15,
+              "minimum": 121.09765625,
+              "median": 128.45703125,
+              "maximum": 144.93359375,
+              "mean": 133.27135416666667
+            },
+            "thread_count": {
+              "n": 15,
+              "minimum": 76,
+              "median": 77,
+              "maximum": 78,
+              "mean": 76.73333333333333
+            }
+          }
+        }
+      }
+    },
+    "total_response_bytes": 10558325,
+    "client_uploaded_bytes": 3211264,
+    "all_failures": 0,
+    "trace": {
+      "samples": 208,
+      "session_count": 1,
+      "other_trace_sessions": 0,
+      "unique_boundaries": 10269,
+      "index_gaps": 50935,
+      "stage_counts": {
+        "carrier_queued": 1084,
+        "ack_sent": 569,
+        "carrier_written": 2480,
+        "rtp_written": 1293,
+        "ack_generated": 551,
+        "rtp_received": 1122,
+        "vp8_reassembled": 951,
+        "carrier_message_completed": 924,
+        "ack_received": 715,
+        "reliable_data_accepted": 219,
+        "reliable_send": 361
+      }
+    },
+    "hypothesis": "INCONCLUSIVE_WITHOUT_DATA_LENGTHS_AND_PAIRED_CONTROL"
+  },
+  "collector_corrections": {
+    "preflight": [
+      "Android dumpsys exposes legacyNativeLibraryDir; first parser failed before traffic and was corrected",
+      "issuer.json lives on RU, not NL; corrected read-only lookup; successful preflight preserved"
+    ],
+    "pilot_sampler": "stdin EOF made initial read-only NL sampler exit without samples; bulk main sampler corrected; every main bulk request has same-origin socket observations in accepted MESH PID",
+    "journal": "Initial 6000-entry read timed out after45s; no production mutation. Existing final readback reused. Five90s,128-entry-max filtered reads recovered208 records without replaying traffic.",
+    "network_requests": "43/43 HTTP200, no HTTP/curl failure or timeout; no endpoint retries",
+    "initial_operator_note": "Initial body-empty observation was not the whole upload contract: cf-meta-upload-bytes is present in headers for all4 POSTs; report distinguishes server claim from verified reader semantics."
+  },
+  "limitations": [
+    "DATA payload sizes and true in-flight DATA bytes: NOT_OBSERVABLE_WITH_CURRENT_BUILD",
+    "No complete ACK/window-stall/retransmission history;2s snapshots and64-boundary ring",
+    "No sender queue-depth distribution or pre-enqueue wait; queued/written are fragment identities, not queue lengths",
+    "NL incoming RTP/frame deltas do not measure Android receive losses during download",
+    "No current-build full RTP/SRTP wire-byte bitrate; no complete loss percentage",
+    "No fixed origin-SHA256, no server digest, count-header read-versus-echo semantics not independently verified",
+    "One parallel run, unpaired temporal order; not causal optimization A/B",
+    "Sampling/tracing overhead not separately validated; no no-trace toggle or <=5% perturbation claim"
+  ],
+  "production_changes": false,
+  "software_changes": false,
+  "transport_or_policy_changes": false,
+  "renewal_disabled": false,
+  "commit_push_release": false,
+  "private_evidence_sha256": {
+    "loaded-18.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "journal-chunk-2.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-27.stdout": "9833634db8c5fbc86ffe83d083aa8d1631686362300c160acd623ce4cd124ded",
+    "loaded-20.stdout": "b49251035998c7fb5faeb5341752094437000870ccd3464159d20db862cb56d0",
+    "small-up.stdout": "fe43ed67e8ee8a1ed6a469e6aba40581588f3fa5ef476dcc70b5879e51960b70",
+    "loaded-4.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-25.stdout": "78037f8bda1fb6cdd58cd154bec4742c92f58440d3f5d7ccda2c5f6f52870f4a",
+    "fc-mesh-bulk-preflight.py": "6ad9093e1841e805e2cf3d06e769b563fec0c9020cb579d717144df3e7ee5a15",
+    "parallel-1.stdout": "04fbb403f2b53c5885777dcd43434f0b4e7e9cee821fb237d56c94b1fca02bee",
+    "loaded-24.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cleanup.json": "111f373b3b4dd95ef21c6efd459b5d2efd600cd8923340d6968e63c0803b4591",
+    "up-1.stdout": "ddb1de463a580e912c110da51a37d16171463db64b3b6f6bcb3396174637eee3",
+    "loaded-12.stdout": "a3d3d2274a1cd965a2af5b53ead1604231c02fe3bcb17b36b074aced65f668b6",
+    "loaded-10.stdout": "64cffc92b6d207b3b4b3d619eb3519daae4c1f10453248395fc5f96dc1a93a5e",
+    "loaded-21.stdout": "6c8624f8bfe55705495ef4a35b64cdec47601922d1b11d5c424a2ea507f416c0",
+    "loaded-17.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "preflight.json": "02102516c2f5441b87c7ee89e67f7b8d5c31a86bce86885b48b3e50ac6162efe",
+    "ru-final.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "journal.jsonl": "76109dd483eefbeb93534af0bac9860f77ba255d2f6bd73deaf70cf7a262216a",
+    "main-phone-resources.jsonl": "8897897d077165c6501e163bd351e5204c8b96c36e21830204b2b3de22e2dacc",
+    "journal-chunk-0.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "synthetic-payload-preparation.txt": "499b78d563b3461329167f025c745bed1a520a56f8469690418c818f6f685ef7",
+    "loaded-2.stdout": "7748f07cfe7bfddd4587b4a79cd0fd19912d5b2e25c747d0519902e85d57da51",
+    "thermal-before.txt": "aa0ecc2161bb2f027e829b90027b84c34540a03f1dec0d0885344c43e76cb06d",
+    "journal-chunk-3.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "idle-0.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "idle-1.stdout": "a2561e972802d6f64adb478a7b64a535aa0caf5e96b9e2bd4f28a5878f4c085d",
+    "down-0.stdout": "92a3c880343c6b0d73018e61852139ee14e294a32277e3244b5051fcadb42a3a",
+    "loaded-6.stdout": "cc7f0948936f46a0264a4914c79825e62dfa89ca7e44a269bd3ca1f9e1ab58ef",
+    "idle-2.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "journal-chunk-1.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-7.stdout": "0aa0f0be8b0377d540bc57878b54daa82447d11648101654e16c8151c885c8c5",
+    "down-2.stdout": "f5eb37afe28d028825d12b45048a5b8815b394d94796ebc53f92c2231dbcb874",
+    "ru-readback-code.txt": "673e04f168a1f628603762c14edc450e9ba3f1f5a2df7f17a087488a1d11a7c0",
+    "fc-mesh-bulk-run.py": "9daa0f9f9cdc160aa1788beb7ddf984577bd0cdf87433f706d0269175b45dbfb",
+    "fc-mesh-bulk-readback.py": "3968fd71adc0d648367a2e40d2cf0bbce25edfb8f0e7d6c64d9878257cae46a3",
+    "manifest.json": "31b48ad7efd5ac80223eeb238aca6b258ed97f902592d2e5fd870d1bd27f274e",
+    "loaded-16.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "journal-chunk-2.jsonl": "a6eff91f0c0eb7d02ff527e17f00576572fe9f58ef48f854fc6ed21b50b195df",
+    "cloudflare-tree.json": "f186e2ca13e550aba119bdb51c751ce45f6c48e53474e50fcf0aaa8e39b617c4",
+    "up-1.stderr": "0db5ab41a9ad31d2199ec442591fb161bab5a703e68a49b96bd6ebd40846f649",
+    "loaded-13.stdout": "bbe20d06f89a405e860ec18a230f3c5a6accbf1f5f4461425f017d614e8a64f9",
+    "loaded-5.stdout": "c7955bcae6b5f2a0189cb76b9260922ed89e96ae6d9f3c463c3d3aca5a89d007",
+    "loaded-30.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-2.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-14.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "nl-preflight.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-10.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pilot-complete.json": "7d088ae6506769e24348082dd976d97232d665d4391f43834dda257ea5b2baed",
+    "parallel-0.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-30.stdout": "cabc6cca1d96e8f8c506c8927317e577cd4a032ca13033b98e116d0da6ae4780",
+    "nl-readback-code.txt": "4047b31dd9a37bdf248038e2d03fd3f21f9f2b223d35d89a01a569a15667d98a",
+    "loaded-16.stdout": "8d1f7d6947a977ecafd3e2926bd00782202736d6eda645cc4b49b436a8ae3831",
+    "pilot-phone-resources.jsonl": "53fff85bddf8bab30e73844b8688c712dfff3f76d110a81f93ffdc0566563aa9",
+    "up-0.stdout": "b74e6b1a0c10d4b9c8c8459b71c1a3266c27e6d5becb48690ef144d4a0b251f5",
+    "loaded-23.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-28.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "idle-0.stdout": "ac7c0fa4b6e015406c87370991572fb86616dbf29dde421d81b1185fe1342f0b",
+    "loaded-22.stdout": "0be5cef8a2e96387f788ad44fc76d2ff04d2337ae7433cb546bcb01572385183",
+    "main-complete.json": "20498058cd35a1d353470e5e828bf68de2f3deae082b8bf0bbbf323e23aa4166",
+    "package.txt": "49f913a2fdf92765881409dadf8e5f6d7de8344d687b5f459d47f6b0c8ccaa80",
+    "loaded-23.stdout": "bd75a842542018a12253665f830f694e0d5a407c01bd3fab32a2c9dcd04940c4",
+    "observer-cleanup-check.json": "4d27a2e3f84d331ee5ea12beac86b7ee832bd7b22d93243d3384b5417279b699",
+    "idle-2.stdout": "1c4dbb1b263b408df027349f2e7a920c8b5353d7c5ddaf8dec7cda09f490c7e5",
+    "loaded-24.stdout": "3009cc4abd1651e22c8713f54635a121cb919f832d0138f934daec771ad11e1e",
+    "main-nl-resources.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "down-1.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-15.stdout": "69da0129a9dcac9963c5cfc5d0ef7acb7f84badd4a1060da5a69bffdd71a9613",
+    "loaded-15.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-3.stdout": "2ede9c971558c1ca0908f5878ba13660544a63d2d1ecf648812e613b62bf85a3",
+    "loaded-25.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-21.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "down-0.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "journal-chunk-4.jsonl": "847136029a2d77b973acb8bcadca49206131a17c055361c58d2a200b2d1bb9e6",
+    "journal-chunk-3.jsonl": "2273be05294a786c2162774c3fd6f225bb5d184ede1c1de70713522798b7a896",
+    "journal-chunk-1.jsonl": "d350283741383de75dac8a1200080dd870a392e529001b92a535e18cee5c804f",
+    "pilot-nl-resources.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "down-1.stdout": "38689a42c1e1de85b7713dd210a468a2f08bbca7138deb23543e8425ba7766c4",
+    "loaded-19.stdout": "20705d1bd57753ba02803f09154352cb850ffae500700b6a8fc35dd626db47de",
+    "loaded-19.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-8.stdout": "35787de3bb9fdf753b984f2ef5e7f5228c0f839263f40d253b0b8270630b991a",
+    "loaded-3.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "parallel-1.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "requests.jsonl": "00d5f13456feb98ed76378222ee25e4a00bf437919a69e2f7626fe5ae347f961",
+    "connectivity.txt": "eeb739f6022b93379c11d63e34df7b75ce78cd992fe003796134dfebc7d3e6b4",
+    "loaded-29.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-9.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-26.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "idle-1.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "journal-chunk-0.jsonl": "f5175aed50fc6d56ab13bf9f9e87bf219c2ec138c381a260b85de7946718c43a",
+    "up-2.stdout": "a5125301976723e863e5e96f17660de7de7624206244c81fa0b00d1b5934ba69",
+    "loaded-11.stdout": "175e73694438228088b64bcf4be55121c561724bdd844d1bf98c3814e039fef6",
+    "loaded-4.stdout": "10868e8da78e54deb99ea4ca4f601a03171abc477071195066f8e9d0b3ed6e46",
+    "loaded-13.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-11.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-29.stdout": "4679b447dea55d357d69a1816400f1a4535e2b386f7cb3ac91176a0ad316ec63",
+    "collector-corrections.json": "16959e043abf71eb0f55abe8343fdeb3ae285ef87ceaddb7d14c81cb8023ddb0",
+    "loaded-7.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "up-2.stderr": "cb926a016d7f9b770948657de37ad118279c3471baaedc896585da29b441adfc",
+    "analysis.json": "1bd04979848334a39dc23fa1181ff070a9534742fff503dc150921ccf2917791",
+    "topology-thermal.jsonl": "00da868a46cf3de1055b3d243ec801d3d81eaaf8dbc45d6278e4094f6ef21d28",
+    "down-2.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-1.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "device-files-final-sha256.txt": "477d30d7470c82918b84d7f2b1c868097ba4bda3b323ee75b506a91a02370cd7",
+    "loaded-8.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "small-down.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pilot-nl-resources.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "small-up.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "main-nl-resources.jsonl": "4bffd4b9c4a16df1e0cb3e3ded19f4b1807689ccca99cb92c9b4d92e598512f2",
+    "loaded-26.stdout": "101b2523d10a67d6b038272de21e4451d1db8ad0d9177d3892efee3ca8765e48",
+    "loaded-22.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-14.stdout": "6205c90a3a972af6a313fe738080ebcc03e83b184b2b9e0be1997321b410a170",
+    "final.json": "10771551b0164dfd834222ba896ae4febcf2f71c4ae603df223474104bc96fc7",
+    "parallel-0.stdout": "d83db42c54b94247f605aa1a203586047b800047d997d769aa025571b6003c61",
+    "loaded-20.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-27.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-6.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "up-0.stderr": "5eef2a67a7189ee5599fbce508c70ef49b2612abd071e8c55c1ed6d6f1fb31ce",
+    "loaded-17.stdout": "e05d5dc5fe0203e97fb2d0b30d068f958d3dcb045e31c305692c8793bb04916e",
+    "small-down.stdout": "5a6a0c8b1f75f47db2051c86bce935b05be34cd2071d16065b090b1229d2f357",
+    "loaded-5.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-9.stdout": "0b3a3b0afe1c07236fd383454e9264bdadbc5a6e18ee2b5b7cf793a1d37e8e55",
+    "session-trace.json": "341be9cd9d4274537c6edc8db571896a794f75b403ddc845f9bc2e601664a047",
+    "loaded-12.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "journal-chunk-4.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "loaded-18.stdout": "3053bdb868c11200ae0fd6a589372446da31062d1c353be0de93278a11dad8d2",
+    "loaded-28.stdout": "9e455658310e9fbaede9f47a38a0e4baf0622f6d9df51367f83fdce358aeacf3",
+    "fc-mesh-bulk-analyze.py": "17efb376dadd536ccbdd6ba6578c7613de6f0d0b68e1979823298b3b153bcf81",
+    "loaded-1.stdout": "d9cadcc3a80f7e7b89a3361b5bf69f87675a83f09d563dcef9836d418e8f23df",
+    "nl-final.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "adb-devices.txt": "ec1e8e91fc99168ffce5af42343a1db744ad9804a022cd80b06d8a996a07437a"
+  }
+}

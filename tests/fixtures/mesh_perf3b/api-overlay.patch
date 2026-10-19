@@ -1,0 +1,147 @@
+--- a/control/friends/restricted.py
++++ b/control/friends/restricted.py
+@@ -358,6 +358,8 @@
+                           expires_at=min(expires, int(certificate.not_valid_after_utc.timestamp()), timestamp(seeds['expires_at'])),
+                           revision=row['revision'], issuer=self.manifest, certificate=pem,
+                           revocations=crl_pem, minimum_crl=crl_number, directory=seeds)
++            from . import owner_handoff
++            result = owner_handoff.for_device(database, result, device, os.environ.get('INVOCATION_ID', ''), now, request_id)
+             encoded = json.dumps(result, separators=(',', ':')).encode()
+             require(len(encoded) <= MAX_RESPONSE)
+             database.execute('UPDATE challenges SET used=1 WHERE nonce=?', (digest,))
+--- /dev/null
++++ b/control/friends/owner_handoff.py
+@@ -0,0 +1,133 @@
++import json
++import re
++
++from provisioning.friends_catalog import require
++
++
++TABLE = 'restricted_owner_handoff'
++
++
++def migrate(database):
++    database.execute('CREATE TABLE IF NOT EXISTS restricted_owner_handoff ('
++                     'slot INTEGER PRIMARY KEY CHECK(slot=1), operation TEXT UNIQUE NOT NULL, '
++                     'device TEXT NOT NULL, family TEXT NOT NULL, gateway TEXT NOT NULL, '
++                     'phase TEXT NOT NULL, deadline INTEGER NOT NULL, invocation TEXT NOT NULL, '
++                     'canary TEXT, return_view TEXT, floor TEXT, fetch_id TEXT)')
++
++
++def encode(value):
++    return json.dumps(value, sort_keys=True, separators=(',', ':'))
++
++
++def read(database, device):
++    row = database.execute('SELECT * FROM restricted_owner_handoff WHERE slot=1 AND device=?', (device,)).fetchone()
++    require(row is not None)
++    require(row['phase'] in ('PREPARED', 'ACTIVE', 'RETURN', 'CLEANED'))
++    return row
++
++
++def ordered(next_view, previous):
++    from .restricted import timestamp_ns
++    order = timestamp_ns(next_view['issued_at']) - timestamp_ns(previous['issued_at'])
++    return order > 0 or order == 0 and next_view == previous
++
++
++def floor(response):
++    import base64
++    issuer = json.loads(base64.b64decode(response['issuer']['payload'], validate=True))
++    return dict(issued_at=response['issued_at'], revision=response['revision'],
++                minimum_crl=response['minimum_crl'], sequence=issuer['sequence'],
++                issuer=issuer, directory=response['directory'])
++
++
++def preserves(next_floor, previous):
++    return (all(next_floor[name] >= previous[name] for name in ('issued_at', 'revision', 'minimum_crl', 'sequence'))
++            and (next_floor['sequence'] > previous['sequence'] or next_floor['issuer'] == previous['issuer'])
++            and ordered(next_floor['directory'], previous['directory']))
++
++
++def prepare(database, operation, device, family, gateway, deadline, now):
++    require(re.fullmatch(r'[a-z0-9-]{1,96}', operation) is not None)
++    require(all(re.fullmatch(r'[0-9a-f]{32}', value) for value in (device, family, gateway)))
++    require(type(deadline) is int and now < deadline <= now + 14400)
++    require(database.execute('SELECT COUNT(*) FROM restricted_owner_handoff').fetchone()[0] == 0)
++    database.execute('INSERT INTO restricted_owner_handoff VALUES (1,?,?,?,?,?,?,?,NULL,NULL,NULL,NULL)',
++                     (operation, device, family, gateway, 'PREPARED', deadline, ''))
++
++
++def checked(raw, row, now):
++    from .restricted import directory
++    return directory(raw.encode(), row['family'], row['gateway'], now=now)
++
++
++def arm(database, device, operation, canary, return_view, invocation, now):
++    from .restricted import timestamp
++    row = read(database, device)
++    require(row['operation'] == operation and row['phase'] == 'PREPARED')
++    require(re.fullmatch('[0-9a-f]{32}', invocation) is not None)
++    require(now + 1800 <= row['deadline'])
++    canary = checked(encode(canary), row, now)
++    return_view = checked(encode(return_view), row, now)
++    require(canary['seeds'] != return_view['seeds'])
++    require(ordered(return_view, canary))
++    require(row['floor'] is not None)
++    previous = json.loads(row['floor'])
++    require(ordered(canary, previous['directory']))
++    require(min(timestamp(canary['expires_at']), timestamp(return_view['expires_at'])) >= row['deadline'] + 600)
++    database.execute('UPDATE restricted_owner_handoff SET phase=?,canary=?,return_view=?,invocation=? WHERE slot=1',
++                     ('ACTIVE', encode(canary), encode(return_view), invocation))
++
++
++def return_only(database, device, operation):
++    row = read(database, device)
++    require(row['operation'] == operation and row['phase'] in ('PREPARED', 'ACTIVE', 'RETURN'))
++    database.execute('UPDATE restricted_owner_handoff SET phase=? WHERE slot=1', ('RETURN',))
++
++
++def for_device(database, response, device, invocation, now, fetch_id):
++    exists = database.execute('SELECT 1 FROM sqlite_master WHERE type=? AND name=?', ('table', TABLE)).fetchone()
++    if exists is None:
++        return response
++    selected = database.execute('SELECT 1 FROM restricted_owner_handoff WHERE slot=1 AND device=?', (device,)).fetchone()
++    if selected is None:
++        return response
++    return select(database, response, device, invocation, now, fetch_id)
++
++
++def select(database, response, device, invocation, now, fetch_id):
++    row = read(database, device)
++    original = response['directory']
++    require(original['family'] == row['family'])
++    require(all(seed['gateway'] == row['gateway'] for seed in original['seeds']))
++    previous = json.loads(row['floor']) if row['floor'] else None
++    phase = row['phase']
++    if phase in ('PREPARED', 'ACTIVE') and (now >= row['deadline'] or phase == 'ACTIVE' and invocation != row['invocation']):
++        phase = 'RETURN'
++        database.execute('UPDATE restricted_owner_handoff SET phase=? WHERE slot=1', (phase,))
++    if phase == 'PREPARED':
++        require(now < row['deadline'])
++        require(previous is None or original == previous['directory'])
++    elif phase == 'ACTIVE':
++        response['directory'] = checked(row['canary'], row, now)
++    elif phase == 'RETURN':
++        saved = json.loads(row['return_view']) if row['return_view'] else original
++        baseline = original if ordered(original, saved) else checked(row['return_view'], row, now)
++        if previous is not None:
++            require(ordered(baseline, previous['directory']) or ordered(original, previous['directory']))
++        response['directory'] = original if ordered(original, baseline) else baseline
++    from .restricted import timestamp
++    response['expires_at'] = min(response['expires_at'], timestamp(response['directory']['expires_at']))
++    require(response['expires_at'] > now)
++    next_floor = floor(response)
++    require(previous is None or preserves(next_floor, previous))
++    database.execute('UPDATE restricted_owner_handoff SET floor=?,fetch_id=? WHERE slot=1',
++                     (encode(next_floor), fetch_id))
++    return response
++
++
++def cleanup(database, device, operation, current_response):
++    row = read(database, device)
++    require(row['operation'] == operation and row['phase'] == 'RETURN' and row['floor'] is not None)
++    require(preserves(floor(current_response), json.loads(row['floor'])))
++    require(current_response['directory'] == json.loads(row['floor'])['directory'])
++    database.execute('UPDATE restricted_owner_handoff SET phase=? WHERE slot=1', ('CLEANED',))

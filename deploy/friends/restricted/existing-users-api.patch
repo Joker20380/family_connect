@@ -1,0 +1,136 @@
+--- a/control/friends/restricted.py
++++ b/control/friends/restricted.py
+@@ -56,21 +56,47 @@
+     return raw
+ 
+ 
++def admission_policy(raw):
++    policy = parse(raw)
++    require(type(policy) is dict)
++    if set(policy) == {'version', 'eligibility'}:
++        require(type(policy['version']) is int and policy['version'] == 2
++                and policy['eligibility'] == 'all_activated')
++        return None, True
++    fields(policy, 'devices')
++    require(type(policy['devices']) is list and len(policy['devices']) <= 256)
++    require(all(type(device) is str and (device == '*' or re.fullmatch('[0-9a-f]{32}', device)) for device in policy['devices']))
++    return policy['devices'], False
++
++
++def activated_grant(database, device, family, minimum_revision):
++    row = database.execute('SELECT d.*, i.revoked AS invite_revoked, g.family, g.revision, '
++                           'g.revoked AS grant_revoked FROM devices d '
++                           'JOIN invites i ON d.device=i.device '
++                           'LEFT JOIN restricted_grants g ON d.device=g.device WHERE d.device=?', (device,)).fetchone()
++    if row is None or row['revoked'] or row['invite_revoked'] or row['grant_revoked']:
++        raise Rejected()
++    if row['family'] is not None and (row['family'] != family or row['revision'] < minimum_revision):
++        raise Rejected()
++    result = dict(row)
++    result.update(family=family, revision=row['revision'] if row['family'] is not None else minimum_revision,
++                  expires=None, grant_revoked=0)
++    return result
++
++
+ def from_env(access):
+     root = Path(os.environ['FC_FRIENDS_RESTRICTED_DIR'])
+     require(root.is_absolute())
+     anchor = base64.b64decode(bounded_file(root / 'anchor.pub', 128).strip(), validate=True)
+     require(len(anchor) == 32)
+-    policy = parse(bounded_file(root / 'admission.json', 16384))
+-    fields(policy, 'devices')
+-    require(type(policy['devices']) is list and len(policy['devices']) <= 256)
+-    require(all(type(device) is str and (device == '*' or re.fullmatch('[0-9a-f]{32}', device)) for device in policy['devices']))
++    eligible_devices, all_activated = admission_policy(bounded_file(root / 'admission.json', 16384))
+     lifetime = os.environ.get('FC_FRIENDS_RESTRICTED_DELIVERY_LIFETIME', '3600')
+     require(lifetime in ('3600', '14400'))
+     return RestrictedReadiness(access, manifest=parse(bounded_file(root / 'issuer.json', 16384)),
+                               anchor=anchor, signing_key=load_pem_private_key(bounded_file(root / 'issuer.key', 4096, True), None),
+                               seed_source=lambda: bounded_file(root / 'directory.json', 8192),
+-                              crl_source=lambda: bounded_file(root / 'revocations.pem', 16384), eligible_devices=policy['devices'],
++                              crl_source=lambda: bounded_file(root / 'revocations.pem', 16384), eligible_devices=eligible_devices,
++                              all_activated=all_activated,
+                               delivery_lifetime=int(lifetime))
+ 
+ 
+@@ -228,14 +254,18 @@
+ 
+ 
+ class RestrictedReadiness:
+-    def __init__(self, access, *, manifest, anchor, signing_key, seed_source, crl_source, eligible_devices=None, delivery_lifetime=3600):
++    def __init__(self, access, *, manifest, anchor, signing_key, seed_source, crl_source, eligible_devices=None, delivery_lifetime=3600, all_activated=False):
+         require(type(delivery_lifetime) is int and delivery_lifetime in (3600, MAX_TEST_LIFETIME))
++        require(type(all_activated) is bool and (not all_activated or eligible_devices is None))
+         self.access, self.manifest, self.anchor = access, manifest, anchor
+         self.signing_key, self.seed_source, self.crl_source = signing_key, seed_source, crl_source
+         self.eligible_devices = None if eligible_devices is None else frozenset(eligible_devices)
+         self.delivery_lifetime = delivery_lifetime
++        self.all_activated = all_activated
+ 
+     def _enroll(self, database, device, public, wg, trust, now):
++        if self.all_activated:
++            return
+         if database.execute('SELECT 1 FROM restricted_grants WHERE device=?', (device,)).fetchone():
+             return
+         if self.eligible_devices is None or (device not in self.eligible_devices and '*' not in self.eligible_devices):
+@@ -262,7 +292,13 @@
+         require(0 < number < 2**53)
+         return trust, authority, crl, raw.decode(), number
+ 
++    def _activated_grant(self, database, device, now):
++        trust, _ = delegation(self.manifest, self.anchor, now)
++        return activated_grant(database, device, trust['family'], trust['minimum_revision'])
++
+     def _grant(self, database, device, now):
++        if getattr(self, 'all_activated', False):
++            return self._activated_grant(database, device, now)
+         if self.eligible_devices is not None and device not in self.eligible_devices and '*' not in self.eligible_devices:
+             raise Rejected()
+         row = database.execute('SELECT d.*, g.family, g.revision, g.expires, g.revoked AS grant_revoked '
+@@ -367,10 +403,6 @@
+ 
+     def _issue(self, row, authority, now, expires, role='device'):
+         require(role in ('device', 'gateway'))
+-        try:
+-            issuer_identifier = authority.extensions.get_extension_for_class(x509.SubjectKeyIdentifier).value.digest
+-        except x509.ExtensionNotFound:
+-            issuer_identifier = x509.SubjectKeyIdentifier.from_public_key(authority.public_key()).digest
+         public = key(row['public'], 64)
+         subject = x509.Name([x509.NameAttribute(NameOID.SERIAL_NUMBER, row['device']), *[
+             x509.NameAttribute(NameOID.ORGANIZATIONAL_UNIT_NAME, value) for value in (
+@@ -378,7 +410,6 @@
+         return (x509.CertificateBuilder().subject_name(subject).issuer_name(authority.subject)
+                 .public_key(Ed25519PublicKey.from_public_bytes(public[32:])).serial_number(x509.random_serial_number())
+                 .not_valid_before(max(utc(now - readiness_receipts.CLOCK_SKEW_SECONDS), authority.not_valid_before_utc)).not_valid_after(utc(expires))
+-                .add_extension(x509.AuthorityKeyIdentifier(issuer_identifier, None, None), critical=False)
+                 .add_extension(x509.BasicConstraints(ca=False, path_length=None), critical=True)
+                 .add_extension(x509.ExtendedKeyUsage([ExtendedKeyUsageOID.SERVER_AUTH if role == 'gateway' else ExtendedKeyUsageOID.CLIENT_AUTH]), critical=True)
+                 .add_extension(x509.SubjectAlternativeName([x509.UniformResourceIdentifier(
+--- a/control/friends/support_ids.py
++++ b/control/friends/support_ids.py
+@@ -110,7 +110,9 @@
+         return dict(schema=1, device_support_id=support)
+ 
+ 
+-def lookup(access, support, admitted):
++def lookup(access, support, admitted, *, all_activated=False):
++    if type(all_activated) is not bool:
++        raise ValueError('Invalid admission mode')
+     support = normalize(support)
+     with access.db() as database:
+         row = database.execute('SELECT s.*,d.revoked,i.revoked AS invite_revoked FROM device_support s '
+@@ -125,7 +127,12 @@
+         readiness = 'UNKNOWN' if observed is None else 'EXPIRED' if not observed['expires'] or observed['expires'] <= now else 'READY' if observed['ready'] else 'NOT_READY'
+         family = 'NOT_PROVISIONED' if grant is None else 'REVOKED' if grant['revoked'] else 'EXPIRED' if grant['expires'] is not None and grant['expires'] <= now else 'ACTIVE'
+         revoked = bool(row['revoked'] or row['invite_revoked'])
++        active = not revoked and row['invite_revoked'] is not None
++        admitted_device = row['device'] in admitted or '*' in admitted
++        if all_activated:
++            admitted_device = active and (grant is None or not grant['revoked'])
++            family = 'ELIGIBLE' if admitted_device else 'REVOKED' if revoked or grant is not None and grant['revoked'] else 'INACTIVE'
+         return dict(device_support_id=support, label=None, app_version=row['app_version'], version_code=row['version_code'],
+                     platform=row['platform'], last_seen=row['last_seen'], observation_source=row['observation_source'],
+-                    active=not revoked and row['invite_revoked'] is not None, revoked=revoked,
+-                    family_state=family, restricted_readiness=readiness, field_admission=row['device'] in admitted)
++                    active=active, revoked=revoked,
++                    family_state=family, restricted_readiness=readiness, field_admission=admitted_device)

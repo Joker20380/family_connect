@@ -209,6 +209,10 @@ class ProductionController:
         previous,gateway,current,revocations_changed = self.read(operation)
         decision = evaluate(self.validator.validate(canonical(previous),int(self.clock()),expired_leaf_predecessor=True),
                             int(self.clock()),revocations_changed,all_activated=self.validator.all_activated)
+        if authority_handoff is not None and self.validator.all_activated:
+            verify_handoff(authority_handoff,self.validator,previous['authority'],operation,int(self.clock()))
+            decision['due'] = sorted(set(decision['due']) | {'authority'})
+            decision['result'] = 'RENEWAL_REQUIRED'
         if decision['result'] == 'NOOP':
             return dict(decision,files_changed=0,remote_writes=0,restarts=0)
         scheduled_scope = (scheduled and approved_leaf_crl_schedule and (not revocations_changed or self.validator.all_activated)

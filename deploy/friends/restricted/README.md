@@ -1,10 +1,11 @@
 # 5N-PROV-1 controlled deployment — authorization required
 
-18.10 requested replacement: [activated-device access v2](ACTIVATED_ACCESS_V2.md)
-separates entitlement from short-lived credentials. HTTP/source checks are local;
-the installed management controller is not yet compatible. Do not activate the v2
-policy alone or reuse the legacy FIELD writer. Older rollout checkpoints below do
-not describe the requested new policy or prove current readiness.
+19.10 private-beta control plane: [activated-device access v2](ACTIVATED_ACCESS_V2.md)
+is installed together with its compatible RU/NL management and authority18.
+[Operational lifecycle](EXISTING_USERS_LIFECYCLE.md) separates entitlement from
+short-lived credentials and shared offline-root maintenance. Do not activate policy
+alone, restore a legacy FIELD writer, or treat older rollout checkpoints below as
+current state. Physical APK upgrade/acceptance status is tracked in the dated report.
 
 Current FIELD diagnostic lifetime exception04.10: explicit user authorization enables
 `sync --crl-lifetime 3600` on RU only; default remains900. Both are validated against
