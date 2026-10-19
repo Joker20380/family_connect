@@ -1,0 +1,10 @@
+{
+  "sha256": "125895bea85a94622e196ac12e4e14d499aac55c93a83121d272d20fa74479b9",
+  "source_inventory": "3d0a49fb36624226c1ca1a8095ec8b7500b06a28eb8b17f77c768735f0a5916d",
+  "input_engine_sha256": "7c319ed0db4654a89e8281f55e6fa00661d11937d44eef1be10877624f3aac14",
+  "output_engine_sha256": "d5d997323ac9b47fd4d6aedb701328232fff572035ed874d680a101d0d08c752",
+  "patch_sha256": "4867defbac6791a5ef6c57ddc1aa00b5c0115c0a7db1c83f56ddefa73eb4f9d5",
+  "changes": "Only remove head-only guard; preserve three later SACKs, RTO/4 age, one fast retry, retained/consume semantics, wire/config",
+  "test_sha256": "eb84b6d1d61a6c9154b5e795275b4cf50bd35a147fa13455249b3ec4a0966082",
+  "baseline_inventory": "472327a6449a0b866223e21de6c07a17c85f5e1e2e79c0b4507c1dd4ad580e9c"
+}

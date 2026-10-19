@@ -1,0 +1,11 @@
+--- a/reliablestream/engine.go
++++ b/reliablestream/engine.go
+@@ -339,7 +339,7 @@
+ }
+ 
+ func (state *engine) fastRetransmit(sequence uint64, block *pending, now time.Time) bool {
+-	if sequence != state.base || block.retries != 0 || now.Sub(block.last) < state.config.RTO/4 {
++	if block.retries != 0 || now.Sub(block.last) < state.config.RTO/4 {
+ 		return false
+ 	}
+ 	confirmed := 0

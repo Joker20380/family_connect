@@ -1,5 +1,19 @@
 # MESH-PERF-3 local-only diagnostic overlay
 
+## Scope update —19 October2026 owner throughput task
+
+The original handoff/canary restriction below describes the historical PERF-3
+task, not the current authorization. The owner explicitly authorizes an ordinary
+production-compatible observation rollout of the existing NL service and a narrow
+same-package/signer Android update from accepted beta88 when needed. Use the
+19October throughput observation-rollout procedure, current credentials/floors,
+and exact accepted-source input hashes. Do not resume PERF-3B or enable its guard,
+enrollment, fault injection, routing or PREPARED fence. The read-alignment candidate
+remains rejected. This changes authorization scope, not historical test results.
+
+The ongoing receiver/export extension is in `../mesh_throughput_trace/`; it is not
+an accepted speed improvement. Existing128-entry rings are incomplete by design.
+
 This directory does not patch root `carrier/` or install anything. The overlay is
 against the **231-file accepted gateway inventory**, not main. See the
 [report](../../../docs/releases/2026-10-18-mesh-perf-3.md) for exact hashes, failed

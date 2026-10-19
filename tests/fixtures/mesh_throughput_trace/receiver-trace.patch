@@ -1,0 +1,1113 @@
+--- a/reliablestream/engine.go
++++ b/reliablestream/engine.go
+@@ -59,6 +59,9 @@
+ }
+ 
+ type engine struct {
++	trace        *sessiontrace.Recorder
++	headReady    time.Time
++	headSequence uint64
+ 	perf         *sessiontrace.WindowPerformance
+ 	perfAt       time.Time
+ 	config       Config
+@@ -123,6 +126,10 @@
+ }
+ 
+ func (state *engine) ack() frame {
++	return state.ackFor("unspecified")
++}
++
++func (state *engine) ackFor(reason string) frame {
+ 	packet := state.packet(ackFrame)
+ 	packet.ack = state.receive
+ 	for seq := range state.buffer {
+@@ -133,11 +140,21 @@
+ 		state.stats.SACKSent++
+ 	}
+ 	packet.observation = sessiontrace.StampACK()
++	if sessiontrace.PerformanceEnabled {
++		packet.observation = sessiontrace.DescribeACK(packet.observation, packet.traceWire(), reason)
++		point := sessiontrace.ACKPoint(packet.observation, packet.ack, packet.bits)
++		point.Kind = "ack_created"
++		state.trace.RecordTransport(point)
++	}
+ 	return packet
+ }
+ 
+-func (state *engine) input(packet frame, now time.Time) ([]frame, error) {
++func (state *engine) input(packet frame, now time.Time) (output []frame, failure error) {
+ 	state.perfAdvance(now)
++	if sessiontrace.PerformanceEnabled {
++		duplicates, stale, base, buffered := state.stats.Duplicates, state.stats.Stale, state.base, state.stats.BufferedBytes
++		defer func() { state.traceInput(packet, now, duplicates, stale, base, buffered, failure) }()
++	}
+ 	if packet.target != state.local && !(packet.kind == openFrame && packet.target == (epoch{})) || (state.remote != (epoch{}) && packet.source != state.remote) {
+ 		state.stats.Stale++
+ 		return nil, nil
+@@ -148,12 +165,12 @@
+ 		}
+ 		if state.remote == (epoch{}) {
+ 			state.remote, state.remoteWindow, state.remoteSize = packet.source, packet.window, packet.payload
+-			return []frame{state.opening(packet.source), state.ack()}, nil
++			return []frame{state.opening(packet.source), state.ackFor("handshake")}, nil
+ 		}
+ 		if packet.window != state.remoteWindow || packet.payload != state.remoteSize {
+ 			return nil, ErrProtocol
+ 		}
+-		return []frame{state.ack()}, nil
++		return []frame{state.ackFor("handshake")}, nil
+ 	}
+ 	if state.remote == (epoch{}) {
+ 		state.stats.Stale++
+@@ -202,7 +219,7 @@
+ 		}
+ 		if packet.seq < state.receive {
+ 			state.stats.Duplicates++
+-			return []frame{state.ack()}, nil
++			return []frame{state.ackFor("duplicate")}, nil
+ 		}
+ 		if packet.seq-state.receive >= uint64(state.config.ReceiveWindow) {
+ 			return nil, ErrProtocol
+@@ -212,7 +229,7 @@
+ 				return nil, ErrProtocol
+ 			}
+ 			state.stats.Duplicates++
+-			return []frame{state.ack()}, nil
++			return []frame{state.ackFor("duplicate")}, nil
+ 		}
+ 		state.buffer[packet.seq] = bytes.Clone(packet.data)
+ 		state.stats.BufferedBytes += len(packet.data)
+@@ -238,7 +255,7 @@
+ 			state.event("recovered", packet.seq, now, delay)
+ 			delete(state.gaps, packet.seq)
+ 		}
+-		return []frame{state.ack()}, nil
++		return []frame{state.ackFor("receive")}, nil
+ 	}
+ 	return nil, nil
+ }
+@@ -257,6 +274,7 @@
+ 	if sessiontrace.PerformanceEnabled {
+ 		state.perf.NewDATA.Add(len(data))
+ 		state.perfEvent(state.next, "submission", len(data), 0, now)
++		state.tracePoint("submission", state.next, len(data), 0, now, now)
+ 	}
+ 	state.sent[state.next] = &pending{data: packet.data, first: now, last: now}
+ 	state.next++
+@@ -268,12 +286,21 @@
+ 
+ func (state *engine) consume() ([]byte, frame) {
+ 	data := state.buffer[state.receive]
++	if sessiontrace.PerformanceEnabled {
++		point := sessiontrace.TransportPoint{Kind: "consume", Wire: state.packet(ackFrame).traceWire(), Sequence: state.receive, Bytes: len(data), Head: state.receive, Buffered: len(state.buffer)}
++		if !state.headReady.IsZero() {
++			point.FirstNS = sessiontrace.PerformanceTime(state.headReady)
++			state.perf.ReceiveReadyWaitNS += uint64(max(0, time.Since(state.headReady).Nanoseconds()))
++		}
++		state.trace.RecordTransport(point)
++	}
+ 	delete(state.buffer, state.receive)
+ 	state.receive++
+ 	state.stats.DeliveredBytes += uint64(len(data))
+ 	state.stats.BufferedBytes -= len(data)
+ 	state.depths()
+-	return data, state.ack()
++	state.traceHead(time.Now())
++	return data, state.ackFor("consume")
+ }
+ 
+ func (state *engine) exhausted(reason string, block *pending, now time.Time) error {
+@@ -339,7 +366,7 @@
+ 	var output []frame
+ 	if now.Sub(state.lastRefresh) >= state.config.RTO {
+ 		state.lastRefresh = now
+-		output = append(output, state.ack())
++		output = append(output, state.ackFor("refresh"))
+ 	}
+ 	for seq := state.base; seq < state.next; seq++ {
+ 		block := state.sent[seq]
+@@ -360,6 +387,11 @@
+ 		if sessiontrace.PerformanceEnabled {
+ 			state.perf.RetryDATA.Add(len(block.data))
+ 			state.perfEvent(seq, "retry", len(block.data), block.retries, now)
++			reason := "retry_fast"
++			if timedOut {
++				reason = "retry_timeout"
++			}
++			state.tracePoint(reason, seq, len(block.data), block.retries, block.first, now)
+ 		}
+ 		packet := state.packet(dataFrame)
+ 		packet.seq, packet.data = seq, block.data
+--- a/reliablestream/performance.go
++++ b/reliablestream/performance.go
+@@ -59,6 +59,7 @@
+ 			state.perf.FirstACKRecovery.Add(now.Sub(block.first))
+ 		}
+ 		state.perfEvent(sequence, "first_ack", len(block.data), block.retries, now)
++		state.tracePoint("first_ack", sequence, len(block.data), block.retries, block.first, now)
+ 	}
+ 	if release {
+ 		state.perf.ReleasedBlocks++
+@@ -69,6 +70,7 @@
+ 			state.perf.ReleaseRecovery.Add(now.Sub(block.first))
+ 		}
+ 		state.perfEvent(sequence, "cumulative_release", len(block.data), block.retries, now)
++		state.tracePoint("release", sequence, len(block.data), block.retries, block.first, now)
+ 	}
+ }
+ 
+@@ -78,6 +80,15 @@
+ 	}
+ 	state.perfAdvance(now)
+ 	value := *state.perf
++	value.ReceiveHead, value.ReceiveBuffered = state.receive, len(state.buffer)
++	for _, data := range state.buffer {
++		value.ReceiveBufferedBytes += uint64(len(data))
++	}
++	if !state.headReady.IsZero() {
++		value.ReceiveHeadReady = true
++		value.ReceiveHeadAgeNS = max(0, now.Sub(state.headReady).Nanoseconds())
++		value.ReceiveReadyWaitNS += uint64(value.ReceiveHeadAgeNS)
++	}
+ 	value.EffectiveWindow = min(state.config.SendWindow, state.remoteWindow)
+ 	value.SlotSpan = state.next - state.base
+ 	for _, block := range state.sent {
+--- a/reliablestream/receive_default.go
++++ b/reliablestream/receive_default.go
+@@ -1,4 +1,4 @@
+-//go:build !fc_owner_diagnostic
++//go:build !fc_owner_diagnostic && !fc_perf_diagnostic
+ 
+ package reliablestream
+ 
+--- a/reliablestream/receive_diagnostic.go
++++ b/reliablestream/receive_diagnostic.go
+@@ -1,4 +1,4 @@
+-//go:build fc_owner_diagnostic
++//go:build fc_owner_diagnostic || fc_perf_diagnostic
+ 
+ package reliablestream
+ 
+--- a/reliablestream/stream.go
++++ b/reliablestream/stream.go
+@@ -51,6 +51,7 @@
+ 	ctx, cancel := context.WithCancel(ctx)
+ 	stream := &Stream{endpoint: endpoint, state: newEngine(config, local, time.Now()), sendGate: make(chan struct{}, 1), requests: make(chan request), output: make(chan []byte), done: make(chan struct{}), ready: make(chan struct{}), cancel: cancel}
+ 	stream.bindDiagnosticAllocation(ctx)
++	stream.state.trace = sessiontrace.From(ctx)
+ 	go stream.run(ctx)
+ 	return stream, nil
+ }
+@@ -237,6 +238,7 @@
+ 		point := sessiontrace.Boundary{Direction: "tx", Result: "ok"}
+ 		if packet.kind == dataFrame {
+ 			sendContext = sessiontrace.WithAttempt(sendContext, packet.seq, job.attempt)
++			sendContext = sessiontrace.WithTransportPoint(sendContext, sessiontrace.TransportPoint{Kind: "data", Wire: packet.traceWire(), Sequence: packet.seq, Bytes: len(packet.data), Attempt: int(job.attempt)})
+ 			point = sessiontrace.AttemptFrom(sendContext)
+ 			point.Direction, point.Stage, point.Result = "tx", "reliable_send", "ok"
+ 			sessiontrace.From(ctx).Boundary(point)
+@@ -268,6 +270,14 @@
+ 			stream.mu.Unlock()
+ 		}
+ 		if packet.kind == ackFrame {
++			if sessiontrace.PerformanceEnabled {
++				ackPoint := sessiontrace.ACKPoint(packet.observation, packet.ack, packet.bits)
++				ackPoint.Kind, ackPoint.Result = "ack_enqueue_return", "ok"
++				if err != nil {
++					ackPoint.Result = "write_error"
++				}
++				sessiontrace.From(ctx).RecordTransport(ackPoint)
++			}
+ 			point.Stage = "ack_sent"
+ 			if err != nil {
+ 				point.Result = "write_error"
+@@ -419,6 +429,16 @@
+ 			if err == nil {
+ 				var packet frame
+ 				packet, err = decode(record.data)
++				if sessiontrace.PerformanceEnabled && (err != nil || packet.kind == dataFrame || packet.kind == ackFrame) {
++					kind, result := "data_decode", "ok"
++					if packet.kind == ackFrame {
++						kind = "ack_decode"
++					}
++					if err != nil {
++						kind, result = "decode_rejected", "rejected"
++					}
++					sessiontrace.From(ctx).RecordTransport(sessiontrace.TransportPoint{Kind: kind, Wire: packet.traceWire(), Sequence: packet.seq, Bytes: len(packet.data), CarrierNS: sessiontrace.ReceiveCompletedNS(record.identity), Base: packet.ack, Mask: packet.bits, Result: result})
++				}
+ 				if err == nil {
+ 					stream.mu.Lock()
+ 					duplicates, stale, previousBase := stream.state.stats.Duplicates, stream.state.stats.Stale, stream.state.base
+--- a/reliablestream/transport_adapter_test.go
++++ b/reliablestream/transport_adapter_test.go
+@@ -0,0 +1,106 @@
++//go:build fc_perf_diagnostic && !fc_owner_diagnostic
++
++package reliablestream
++
++import (
++	"bytes"
++	"context"
++	"github.com/Joker20380/family_connect/carrier/sessiontrace"
++	"strings"
++	"sync"
++	"testing"
++	"time"
++)
++
++type observedMessage struct {
++	data     []byte
++	identity sessiontrace.ReceiveIdentity
++}
++type observedEndpoint struct {
++	in, out chan observedMessage
++	done    chan struct{}
++	once    sync.Once
++	trace   *sessiontrace.Recorder
++}
++
++func (endpoint *observedEndpoint) SendContext(ctx context.Context, data []byte) error {
++	point := sessiontrace.Boundary{Stage: "carrier_queued", Direction: "tx", Result: "ok", Total: 1}
++	point.CaptureTransport(ctx)
++	endpoint.trace.Boundary(point)
++	point.Stage = "carrier_written"
++	endpoint.trace.Boundary(point)
++	message := observedMessage{bytes.Clone(data), sessiontrace.NewReceiveIdentity(sessiontrace.Boundary{MessageKnown: true})}
++	select {
++	case endpoint.out <- message:
++		return nil
++	case <-ctx.Done():
++		return ctx.Err()
++	case <-endpoint.done:
++		return ErrClosed
++	}
++}
++func (endpoint *observedEndpoint) Recv(ctx context.Context) ([]byte, error) {
++	select {
++	case message := <-endpoint.in:
++		sessiontrace.ObserveReceived(ctx, message.identity)
++		return message.data, nil
++	case <-ctx.Done():
++		return nil, ctx.Err()
++	case <-endpoint.done:
++		return nil, ErrClosed
++	}
++}
++func (endpoint *observedEndpoint) Close() error {
++	endpoint.once.Do(func() { close(endpoint.done) })
++	return nil
++}
++
++func TestTransportAdapterExport(test *testing.T) {
++	forward, reverse := make(chan observedMessage, 32), make(chan observedMessage, 32)
++	leftTrace, rightTrace := sessiontrace.New(strings.Repeat("c", 64), nil), sessiontrace.New(strings.Repeat("c", 64), nil)
++	leftEndpoint := &observedEndpoint{in: reverse, out: forward, done: make(chan struct{}), trace: leftTrace}
++	rightEndpoint := &observedEndpoint{in: forward, out: reverse, done: make(chan struct{}), trace: rightTrace}
++	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
++	defer cancel()
++	left, err := New(sessiontrace.With(ctx, leftTrace), leftEndpoint, DefaultConfig())
++	if err != nil {
++		test.Fatal(err)
++	}
++	right, err := New(sessiontrace.With(ctx, rightTrace), rightEndpoint, DefaultConfig())
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer left.Close()
++	defer right.Close()
++	if err = left.SendContext(ctx, []byte("adapter bytes")); err != nil {
++		test.Fatal(err)
++	}
++	time.Sleep(5 * time.Millisecond)
++	data, err := right.Recv(ctx)
++	if err != nil || string(data) != "adapter bytes" {
++		test.Fatal("byte exact", err)
++	}
++	for left.Stats().Flow.SendBase < 1 && ctx.Err() == nil {
++		time.Sleep(time.Millisecond)
++	}
++	if ctx.Err() != nil {
++		test.Fatal("no base release")
++	}
++	kinds := map[string]int{}
++	for _, trace := range []*sessiontrace.Recorder{leftTrace, rightTrace} {
++		for _, point := range trace.TransportSnapshot().Points {
++			kinds[point.Kind]++
++			if point.Kind == "data_decode" && (point.CarrierNS <= 0 || point.CarrierNS > point.NS) {
++				test.Fatal("carrier completion missing")
++			}
++		}
++	}
++	for _, kind := range []string{"submission", "data_carrier_written", "data_decode", "receive", "head_ready", "consume", "ack_created", "ack_carrier_queued", "ack_carrier_written", "ack_enqueue_return", "ack_decode", "ack_input", "release"} {
++		if kinds[kind] == 0 {
++			test.Fatal("missing", kind)
++		}
++	}
++	if kinds["consume"] != 1 {
++		test.Fatal("consume count", kinds)
++	}
++}
+--- a/reliablestream/transport_trace.go
++++ b/reliablestream/transport_trace.go
+@@ -0,0 +1,72 @@
++package reliablestream
++
++import (
++	"github.com/Joker20380/family_connect/carrier/sessiontrace"
++	"time"
++)
++
++func (packet frame) traceWire() string {
++	if !sessiontrace.PerformanceEnabled {
++		return ""
++	}
++	if packet.kind == ackFrame {
++		return sessiontrace.WireTag(packet.target[:], packet.source[:])
++	}
++	return sessiontrace.WireTag(packet.source[:], packet.target[:])
++}
++
++func (state *engine) tracePoint(kind string, sequence uint64, size, attempt int, first, now time.Time) {
++	if !sessiontrace.PerformanceEnabled {
++		return
++	}
++	point := sessiontrace.TransportPoint{Kind: kind, NS: sessiontrace.PerformanceTime(now), Wire: state.packet(dataFrame).traceWire(), Sequence: sequence, Bytes: size, Attempt: attempt}
++	if !first.IsZero() {
++		point.FirstNS = sessiontrace.PerformanceTime(first)
++	}
++	state.trace.RecordTransport(point)
++}
++
++func (state *engine) traceHead(now time.Time) {
++	if !sessiontrace.PerformanceEnabled {
++		return
++	}
++	if len(state.buffer[state.receive]) == 0 {
++		state.headReady = time.Time{}
++		return
++	}
++	if !state.headReady.IsZero() && state.headSequence == state.receive {
++		return
++	}
++	state.headReady, state.headSequence = now, state.receive
++	state.trace.RecordTransport(sessiontrace.TransportPoint{Kind: "head_ready", NS: sessiontrace.PerformanceTime(now), Wire: state.packet(ackFrame).traceWire(), Sequence: state.receive, Bytes: len(state.buffer[state.receive]), Head: state.receive, Buffered: len(state.buffer)})
++}
++
++func (state *engine) traceInput(packet frame, now time.Time, duplicates, stale, base uint64, buffered int, failure error) {
++	if !sessiontrace.PerformanceEnabled || (packet.kind != dataFrame && packet.kind != ackFrame) {
++		return
++	}
++	result := "new"
++	if packet.kind == ackFrame {
++		result = "accepted"
++		if packet.ack < base {
++			result = "old"
++		}
++	}
++	if failure != nil {
++		result = "rejected"
++	} else if state.stats.Stale != stale {
++		result = "stale"
++	} else if state.stats.Duplicates != duplicates {
++		result = "duplicate"
++	}
++	point := sessiontrace.TransportPoint{Kind: "receive", NS: sessiontrace.PerformanceTime(now), Wire: packet.traceWire(), Sequence: packet.seq, Bytes: len(packet.data), Result: result, Head: state.receive, Buffered: len(state.buffer)}
++	if packet.kind == dataFrame {
++		point.Mask = state.flow().ReceiveMask
++	}
++	if packet.kind == ackFrame {
++		point.Kind, point.Base, point.Mask, point.Before = "ack_input", packet.ack, packet.bits, base
++		point.Slots, point.Bytes = state.base-base, buffered-state.stats.BufferedBytes
++	}
++	state.trace.RecordTransport(point)
++	state.traceHead(now)
++}
+--- a/reliablestream/transport_trace_test.go
++++ b/reliablestream/transport_trace_test.go
+@@ -0,0 +1,201 @@
++//go:build fc_perf_diagnostic && !fc_owner_diagnostic
++
++package reliablestream
++
++import (
++	"bytes"
++	"context"
++	"encoding/json"
++	"github.com/Joker20380/family_connect/carrier/sessiontrace"
++	"os"
++	"path/filepath"
++	"strings"
++	"testing"
++	"time"
++)
++
++func TestTransportTraceScenarios(test *testing.T) {
++	config := DefaultConfig()
++	config.RTO = 10 * time.Millisecond
++	now := time.Now()
++	sender := newEngine(config, epoch{1}, now)
++	receiver := newEngine(config, epoch{2}, now)
++	sender.remote, receiver.remote = receiver.local, sender.local
++	sender.remoteWindow, receiver.remoteWindow = config.ReceiveWindow, config.ReceiveWindow
++	sender.remoteSize, receiver.remoteSize = config.Payload, config.Payload
++	sender.trace, receiver.trace = sessiontrace.New(strings.Repeat("a", 64), nil), sessiontrace.New(strings.Repeat("a", 64), nil)
++	transmit := func(state *engine, packet frame, delay bool) []frame {
++		test.Helper()
++		origin := sender
++		if state == sender {
++			origin = receiver
++		}
++		point := sessiontrace.TransportPoint{Kind: "data", Wire: packet.traceWire(), Sequence: packet.seq, Bytes: len(packet.data)}
++		if packet.kind == ackFrame {
++			point = sessiontrace.ACKPoint(packet.observation, packet.ack, packet.bits)
++		}
++		ctx := sessiontrace.WithTransportPoint(context.Background(), point)
++		boundary := sessiontrace.Boundary{Direction: "tx", Stage: "carrier_queued", Result: "ok", Total: 1}
++		boundary.CaptureTransport(ctx)
++		origin.trace.Boundary(boundary)
++		if delay {
++			time.Sleep(6 * time.Millisecond)
++		}
++		boundary.Stage = "carrier_written"
++		origin.trace.Boundary(boundary)
++		identity := sessiontrace.NewReceiveIdentity(sessiontrace.Boundary{MessageKnown: true})
++		decoded, err := decode(encode(packet))
++		if err != nil {
++			test.Fatal(err)
++		}
++		kind := "data_decode"
++		if decoded.kind == ackFrame {
++			kind = "ack_decode"
++		}
++		state.trace.RecordTransport(sessiontrace.TransportPoint{Kind: kind, Wire: decoded.traceWire(), Sequence: decoded.seq, Bytes: len(decoded.data), Base: decoded.ack, Mask: decoded.bits, CarrierNS: sessiontrace.ReceiveCompletedNS(identity), Result: "ok"})
++		output, err := state.input(decoded, time.Now())
++		if err != nil {
++			test.Fatal(err)
++		}
++		return output
++	}
++	first, _ := sender.send([]byte("first"), time.Now())
++	second, _ := sender.send([]byte("second"), time.Now())
++	transmit(receiver, second, false)
++	if len(receiver.buffer[receiver.receive]) != 0 {
++		test.Fatal("out of order exposed")
++	}
++	time.Sleep(12 * time.Millisecond)
++	retries, err := sender.tick(time.Now())
++	if err != nil {
++		test.Fatal(err)
++	}
++	found := false
++	for _, retry := range retries {
++		if retry.kind == dataFrame && retry.seq == first.seq {
++			transmit(receiver, retry, false)
++			found = true
++		}
++	}
++	if !found {
++		test.Fatal("missing original loss retry")
++	}
++	time.Sleep(5 * time.Millisecond)
++	data, _ := receiver.consume()
++	if !bytes.Equal(data, first.data) {
++		test.Fatal("first bytes differ")
++	}
++	data, ack := receiver.consume()
++	if !bytes.Equal(data, second.data) {
++		test.Fatal("second bytes differ")
++	}
++	transmit(sender, ack, false)
++	lostACK, _ := sender.send([]byte("consumed once"), time.Now())
++	transmit(receiver, lostACK, false)
++	data, _ = receiver.consume()
++	if !bytes.Equal(data, lostACK.data) {
++		test.Fatal("lost ack bytes differ")
++	}
++	time.Sleep(12 * time.Millisecond)
++	retries, err = sender.tick(time.Now())
++	if err != nil {
++		test.Fatal(err)
++	}
++	for _, retry := range retries {
++		if retry.kind == dataFrame && retry.seq == lostACK.seq {
++			acks := transmit(receiver, retry, false)
++			if len(acks) != 1 {
++				test.Fatal("duplicate should ACK")
++			}
++			transmit(sender, acks[0], true)
++		}
++	}
++	if sender.base != 3 || len(sender.sent) != 0 || receiver.receive != 3 {
++		test.Fatal("ACK did not free base")
++	}
++	normal, _ := sender.send([]byte("control"), time.Now())
++	transmit(receiver, normal, false)
++	_, ack = receiver.consume()
++	transmit(sender, ack, false)
++	stale := normal
++	stale.source = epoch{9}
++	receiver.input(stale, time.Now())
++	bad := normal
++	bad.seq = ^uint64(0)
++	if _, err = receiver.input(bad, time.Now()); err != ErrProtocol {
++		test.Fatal("invalid DATA accepted")
++	}
++	badACK := ack
++	badACK.ack = sender.next + 1
++	if _, err = sender.input(badACK, time.Now()); err != ErrProtocol {
++		test.Fatal("invalid ACK accepted")
++	}
++	duplicateConsumes := 0
++	for _, point := range receiver.trace.TransportSnapshot().Points {
++		if point.Kind == "consume" && point.Sequence == 2 {
++			duplicateConsumes++
++		}
++	}
++	if duplicateConsumes != 1 {
++		test.Fatal("duplicate consumed", duplicateConsumes)
++	}
++	refresh, _ := receiver.tick(time.Now().Add(config.RTO))
++	if len(refresh) == 0 {
++		test.Fatal("missing refresh")
++	}
++	for _, point := range receiver.trace.TransportSnapshot().Points {
++		if point.NS < 0 {
++			test.Fatal("nonmonotonic origin")
++		}
++	}
++	newSession := newEngine(config, epoch{3}, time.Now())
++	newSession.remote, newSession.remoteWindow, newSession.remoteSize = epoch{4}, config.ReceiveWindow, config.Payload
++	newSession.trace = sender.trace
++	newSession.send([]byte("new session zero"), time.Now())
++	if newSession.packet(dataFrame).traceWire() == sender.packet(dataFrame).traceWire() {
++		test.Fatal("epoch collision")
++	}
++	output := os.Getenv("MESH_TRACE_OUTPUT")
++	if output == "" {
++		return
++	}
++	if err = os.MkdirAll(output, 0700); err != nil {
++		test.Fatal(err)
++	}
++	for label, state := range map[string]*engine{"nl": sender, "android": receiver} {
++		value := &sessiontrace.TransportPerformance{Trace: state.trace.TransportSnapshot(), Window: state.perfSnapshot(time.Now())}
++		chunks, err := sessiontrace.PerformanceExport(state.trace.PerformanceTag(), value)
++		if err != nil {
++			test.Fatal(err)
++		}
++		if err = os.WriteFile(filepath.Join(output, label+"-chunks.jsonl"), bytes.Join(chunks, nil), 0600); err != nil {
++			test.Fatal(err)
++		}
++		if label == "android" {
++			raw, _ := json.Marshal(map[string]any{"state": 2, "packet": map[string]any{"diagnostic": map[string]any{"session_tag": state.trace.PerformanceTag(), "restricted_performance_v1": value}}})
++			if err = os.WriteFile(filepath.Join(output, "native-snapshot.json"), raw, 0600); err != nil {
++				test.Fatal(err)
++			}
++		}
++	}
++}
++
++func TestTransportTraceOverflow(test *testing.T) {
++	recorder := sessiontrace.New(strings.Repeat("b", 64), nil)
++	for index := 0; index < 700; index++ {
++		recorder.RecordTransport(sessiontrace.TransportPoint{Kind: "submission", Sequence: uint64(index)})
++	}
++	value := recorder.TransportSnapshot()
++	if value.Count != 700 || value.Overwritten != 188 || len(value.Points) != 512 || value.Points[0].Index != 189 {
++		test.Fatal("bad ring bounds")
++	}
++	chunks, err := sessiontrace.PerformanceExport(recorder.PerformanceTag(), &sessiontrace.TransportPerformance{Trace: value})
++	if err != nil || len(chunks) < 2 {
++		test.Fatal("missing split export", err)
++	}
++	for _, chunk := range chunks {
++		if len(chunk) > 3200 {
++			test.Fatal("oversized chunk")
++		}
++	}
++}
+--- a/roombroker/gateway.go
++++ b/roombroker/gateway.go
+@@ -126,7 +126,7 @@
+ 			media := gateway.session.Stats()
+ 			delivery := sessiondiag.Delivery(reliable, media)
+ 			if sessiontrace.PerformanceEnabled {
+-				recordPerformance(trace, &sessiontrace.TransportPerformance{Window: reliable.Performance, Mux: mux.PerformanceSnapshot(), Media: trace.PerformanceSnapshot(), CarrierQueueFrames: media.SendQueueDepth, CarrierAcceptedBytes: media.BytesSent, CarrierAcceptedMessages: media.MessagesSent})
++				recordPerformance(trace, &sessiontrace.TransportPerformance{Trace: trace.TransportSnapshot(), Window: reliable.Performance, Mux: mux.PerformanceSnapshot(), Media: trace.PerformanceSnapshot(), CarrierQueueFrames: media.SendQueueDepth, CarrierAcceptedBytes: media.BytesSent, CarrierAcceptedMessages: media.MessagesSent})
+ 			}
+ 			return delivery
+ 		})
+--- a/roombroker/performance_enabled.go
++++ b/roombroker/performance_enabled.go
+@@ -3,18 +3,18 @@
+ package roombroker
+ 
+ import (
+-	"encoding/json"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ 	"os"
+-	"time"
+ )
+ 
+ func recordPerformance(trace *sessiontrace.Recorder, value *sessiontrace.TransportPerformance) {
+-	record := struct {
+-		Event       string                             `json:"event"`
+-		SessionTag  string                             `json:"session_tag"`
+-		NodeNS      int64                              `json:"node_ns"`
+-		Performance *sessiontrace.TransportPerformance `json:"performance"`
+-	}{"restricted_performance_v1", trace.PerformanceTag(), sessiontrace.PerformanceTime(time.Now()), value}
+-	_ = json.NewEncoder(os.Stdout).Encode(record)
++	chunks, err := sessiontrace.PerformanceExport(trace.PerformanceTag(), value)
++	if err != nil {
++		return
++	}
++	for _, chunk := range chunks {
++		if _, err := os.Stdout.Write(chunk); err != nil {
++			return
++		}
++	}
+ }
+--- a/sessiondiag/report.go
++++ b/sessiondiag/report.go
+@@ -15,35 +15,36 @@
+ )
+ 
+ type Report struct {
+-	Trace              *sessiontrace.Snapshot `json:"lifecycle,omitempty"`
+-	CorrelationStatus  string                 `json:"correlation_status"`
+-	SessionTag         string                 `json:"session_tag"`
+-	TerminalReason     string                 `json:"terminal_reason"`
+-	TerminalAtMS       int64                  `json:"terminal_at_ms"`
+-	ObservedAtMS       int64                  `json:"observed_at_ms"`
+-	ReliableTerminal   string                 `json:"reliable_terminal"`
+-	SignalingFailure   string                 `json:"signaling_failure"`
+-	ICEFailure         string                 `json:"ice_failure"`
+-	EvidenceDropped    uint64                 `json:"evidence_dropped"`
+-	SubscriberState    string                 `json:"subscriber_state"`
+-	PublisherState     string                 `json:"publisher_state"`
+-	Retransmissions    uint64                 `json:"retransmissions"`
+-	RecoveryTimeouts   uint64                 `json:"recovery_timeouts"`
+-	ReceivedFrames     uint64                 `json:"received_frames"`
+-	SentFrames         uint64                 `json:"sent_frames"`
+-	ProtocolErrors     uint64                 `json:"protocol_errors"`
+-	DNSResponses       uint64                 `json:"dns_responses"`
+-	DNSErrors          uint64                 `json:"dns_errors"`
+-	OpenOK             uint64                 `json:"tcp_open_ok"`
+-	OpenErrors         uint64                 `json:"tcp_open_errors"`
+-	AdmissionWaits     uint64                 `json:"tcp_admission_waits"`
+-	AdmissionRejected  uint64                 `json:"tcp_admission_rejected"`
+-	AdmissionTimeouts  uint64                 `json:"tcp_admission_timeouts"`
+-	AdmissionCancelled uint64                 `json:"tcp_admission_cancelled"`
+-	AdmissionWaiting   int                    `json:"tcp_admission_waiting"`
+-	LeaseRejected      uint64                 `json:"lease_admission_rejected"`
+-	SentBytes          uint64                 `json:"sent_bytes"`
+-	ReceivedBytes      uint64                 `json:"received_bytes"`
++	Performance        *sessiontrace.TransportPerformance `json:"restricted_performance_v1,omitempty"`
++	Trace              *sessiontrace.Snapshot             `json:"lifecycle,omitempty"`
++	CorrelationStatus  string                             `json:"correlation_status"`
++	SessionTag         string                             `json:"session_tag"`
++	TerminalReason     string                             `json:"terminal_reason"`
++	TerminalAtMS       int64                              `json:"terminal_at_ms"`
++	ObservedAtMS       int64                              `json:"observed_at_ms"`
++	ReliableTerminal   string                             `json:"reliable_terminal"`
++	SignalingFailure   string                             `json:"signaling_failure"`
++	ICEFailure         string                             `json:"ice_failure"`
++	EvidenceDropped    uint64                             `json:"evidence_dropped"`
++	SubscriberState    string                             `json:"subscriber_state"`
++	PublisherState     string                             `json:"publisher_state"`
++	Retransmissions    uint64                             `json:"retransmissions"`
++	RecoveryTimeouts   uint64                             `json:"recovery_timeouts"`
++	ReceivedFrames     uint64                             `json:"received_frames"`
++	SentFrames         uint64                             `json:"sent_frames"`
++	ProtocolErrors     uint64                             `json:"protocol_errors"`
++	DNSResponses       uint64                             `json:"dns_responses"`
++	DNSErrors          uint64                             `json:"dns_errors"`
++	OpenOK             uint64                             `json:"tcp_open_ok"`
++	OpenErrors         uint64                             `json:"tcp_open_errors"`
++	AdmissionWaits     uint64                             `json:"tcp_admission_waits"`
++	AdmissionRejected  uint64                             `json:"tcp_admission_rejected"`
++	AdmissionTimeouts  uint64                             `json:"tcp_admission_timeouts"`
++	AdmissionCancelled uint64                             `json:"tcp_admission_cancelled"`
++	AdmissionWaiting   int                                `json:"tcp_admission_waiting"`
++	LeaseRejected      uint64                             `json:"lease_admission_rejected"`
++	SentBytes          uint64                             `json:"sent_bytes"`
++	ReceivedBytes      uint64                             `json:"received_bytes"`
+ }
+ 
+ func Delivery(reliable reliablestream.Stats, media telemost.Stats) *sessiontrace.Delivery {
+--- a/sessiontrace/boundary.go
++++ b/sessiontrace/boundary.go
+@@ -25,6 +25,7 @@
+ 	}
+ 	recorder.boundaryNext++
+ 	recorder.performanceBoundary(point, time.Now())
++	recorder.transportBoundary(point)
+ 	point.Index, point.AtMS = recorder.boundaryNext, time.Now().UnixMilli()
+ 	recorder.correlationBoundary(point, time.Now())
+ 	recorder.receiverACKWritten(point)
+--- a/sessiontrace/performance.go
++++ b/sessiontrace/performance.go
+@@ -45,6 +45,12 @@
+ }
+ 
+ type WindowPerformance struct {
++	ReceiveReadyWaitNS                  uint64
++	ReceiveHeadAgeNS                    int64
++	ReceiveHeadReady                    bool
++	ReceiveHead                         uint64
++	ReceiveBuffered                     int
++	ReceiveBufferedBytes                uint64
+ 	CarrierAcceptedDATA                 SizeHistogram
+ 	EnqueuedRetainedBytes               uint64
+ 	EnqueuedRetainedBlocks              int
+@@ -107,6 +113,7 @@
+ }
+ 
+ type TransportPerformance struct {
++	Trace                   *TransportTrace `json:",omitempty"`
+ 	CarrierQueueFrames      int
+ 	CarrierAcceptedBytes    uint64
+ 	CarrierAcceptedMessages uint64
+--- a/sessiontrace/performance_export.go
++++ b/sessiontrace/performance_export.go
+@@ -0,0 +1,49 @@
++package sessiontrace
++
++import (
++	"crypto/sha256"
++	"encoding/base64"
++	"encoding/hex"
++	"encoding/json"
++	"sync/atomic"
++	"time"
++)
++
++var performanceCapture atomic.Uint64
++
++func PerformanceExport(tag string, value *TransportPerformance) ([][]byte, error) {
++	record := struct {
++		Event       string                `json:"event"`
++		SessionTag  string                `json:"session_tag"`
++		NodeNS      int64                 `json:"node_ns"`
++		Performance *TransportPerformance `json:"performance"`
++	}{"restricted_performance_v1", tag, PerformanceTime(time.Now()), value}
++	raw, err := json.Marshal(record)
++	if err != nil {
++		return nil, err
++	}
++	digest := sha256.Sum256(raw)
++	capture := performanceCapture.Add(1)
++	const size = 1800
++	parts := (len(raw) + size - 1) / size
++	output := make([][]byte, 0, parts)
++	for part := 0; part < parts; part++ {
++		chunk := struct {
++			Event      string `json:"event"`
++			Origin     string `json:"origin"`
++			SessionTag string `json:"session_tag"`
++			Capture    uint64 `json:"capture"`
++			Part       int    `json:"part"`
++			Parts      int    `json:"parts"`
++			Bytes      int    `json:"bytes"`
++			SHA256     string `json:"sha256"`
++			Data       string `json:"data"`
++		}{"restricted_performance_chunk_v1", transportOrigin, tag, capture, part, parts, len(raw), hex.EncodeToString(digest[:]), base64.StdEncoding.EncodeToString(raw[part*size : min(len(raw), (part+1)*size)])}
++		encoded, err := json.Marshal(chunk)
++		if err != nil {
++			return nil, err
++		}
++		output = append(output, append(encoded, '\n'))
++	}
++	return output, nil
++}
+--- a/sessiontrace/receiver_default.go
++++ b/sessiontrace/receiver_default.go
+@@ -1,4 +1,4 @@
+-//go:build !fc_owner_diagnostic
++//go:build !fc_owner_diagnostic && !fc_perf_diagnostic
+ 
+ package sessiontrace
+ 
+--- a/sessiontrace/receiver_performance.go
++++ b/sessiontrace/receiver_performance.go
+@@ -0,0 +1,60 @@
++//go:build fc_perf_diagnostic && !fc_owner_diagnostic
++
++package sessiontrace
++
++import (
++	"context"
++	"sync/atomic"
++	"time"
++)
++
++type ReceiveIdentity struct{ completedNS int64 }
++type ReceiveState struct {
++	Next     uint64
++	Mask     uint32
++	Buffered uint32
++}
++type ReceiveObservation struct{ identity ReceiveIdentity }
++type receiveObservationKey struct{}
++type ACKObservation struct{ point TransportPoint }
++
++var performanceACKToken atomic.Uint64
++
++func WithReceiveObservation(ctx context.Context) (context.Context, *ReceiveObservation) {
++	observation := &ReceiveObservation{}
++	return context.WithValue(ctx, receiveObservationKey{}, observation), observation
++}
++func (observation *ReceiveObservation) Identity() ReceiveIdentity { return observation.identity }
++func ObserveReceived(ctx context.Context, identity ReceiveIdentity) {
++	if observation, ok := ctx.Value(receiveObservationKey{}).(*ReceiveObservation); ok {
++		observation.identity = identity
++	}
++}
++func NewReceiveIdentity(point Boundary) ReceiveIdentity {
++	if !point.MessageKnown {
++		return ReceiveIdentity{}
++	}
++	return ReceiveIdentity{completedNS: PerformanceTime(time.Now())}
++}
++func ReceiveCompletedNS(identity ReceiveIdentity) int64 { return identity.completedNS }
++func StampACK() ACKObservation {
++	return ACKObservation{point: TransportPoint{Kind: "ack", FirstNS: PerformanceTime(time.Now()), Token: performanceACKToken.Add(1)}}
++}
++func DescribeACK(stamp ACKObservation, wire, reason string) ACKObservation {
++	stamp.point.Wire, stamp.point.Reason = wire, reason
++	return stamp
++}
++func ACKPoint(stamp ACKObservation, base uint64, mask uint32) TransportPoint {
++	point := stamp.point
++	point.Base, point.Mask = base, mask
++	return point
++}
++func WithACKObservation(ctx context.Context, stamp ACKObservation, base uint64, mask uint32) context.Context {
++	return WithTransportPoint(ctx, ACKPoint(stamp, base, mask))
++}
++func (*Boundary) CaptureACK(context.Context)                                                   {}
++func (*Recorder) receiverACKWritten(Boundary)                                                  {}
++func (*Recorder) ReceiverAccepted(ReceiveIdentity, uint64, string, ReceiveState, ReceiveState) {}
++func (*Recorder) ReceiverConsumed(uint64, ReceiveState, ReceiveState, ACKObservation, uint64, uint32) {
++}
++func (*Recorder) ReceiverACKSent(ACKObservation, uint64, uint32, bool) {}
+--- a/sessiontrace/receiver_performance_disabled.go
++++ b/sessiontrace/receiver_performance_disabled.go
+@@ -0,0 +1,7 @@
++//go:build !fc_perf_diagnostic || fc_owner_diagnostic
++
++package sessiontrace
++
++func ReceiveCompletedNS(ReceiveIdentity) int64                     { return 0 }
++func DescribeACK(stamp ACKObservation, _, _ string) ACKObservation { return stamp }
++func ACKPoint(ACKObservation, uint64, uint32) TransportPoint       { return TransportPoint{} }
+--- a/sessiontrace/schema_default.go
++++ b/sessiontrace/schema_default.go
+@@ -5,6 +5,7 @@
+ const BoundaryStages = "reliable_send|carrier_queued|carrier_written|rtp_written|rtp_received|vp8_reassembled|carrier_message_completed|reliable_data_accepted|ack_generated|ack_sent|ack_received"
+ 
+ type Boundary struct {
++	transport    TransportPoint
+ 	Index        uint64 `json:"index"`
+ 	AtMS         int64  `json:"at_ms"`
+ 	Direction    string `json:"direction"`
+--- a/sessiontrace/schema_default_test.go
++++ b/sessiontrace/schema_default_test.go
+@@ -18,6 +18,9 @@
+ 	for name, value := range map[string]any{"Boundary": Boundary{}, "Snapshot": Snapshot{}, "Delivery": Delivery{}, "Event": Event{}, "Flow": Flow{}, "Fragment": Fragment{}, "Assembly": Assembly{}, "Boundaries": Boundaries{}} {
+ 		kind := reflect.TypeOf(value)
+ 		for index := 0; index < kind.NumField(); index++ {
++			if !kind.Field(index).IsExported() {
++				continue
++			}
+ 			actual[name] = append(actual[name], kind.Field(index).Tag.Get("json"))
+ 		}
+ 		sort.Strings(actual[name])
+--- a/sessiontrace/schema_diagnostic.go
++++ b/sessiontrace/schema_diagnostic.go
+@@ -5,6 +5,7 @@
+ const BoundaryStages = "reliable_send|carrier_queued|carrier_written|rtp_written|rtp_received|vp8_reassembled|carrier_message_completed|reliable_data_accepted|reliable_consumed|ack_generated|ack_sent|ack_received|base_advanced"
+ 
+ type Boundary struct {
++	transport    TransportPoint
+ 	ackWrite     ackWrite
+ 	Index        uint64 `json:"index"`
+ 	AtMS         int64  `json:"at_ms"`
+--- a/sessiontrace/trace.go
++++ b/sessiontrace/trace.go
+@@ -40,6 +40,7 @@
+ }
+ 
+ type Recorder struct {
++	transport    *transportRing
+ 	performance  *MediaPerformance
+ 	correlation  correlationControl
+ 	watch        watchControl
+--- a/sessiontrace/transport_trace.go
++++ b/sessiontrace/transport_trace.go
+@@ -0,0 +1,126 @@
++package sessiontrace
++
++import (
++	"context"
++	"crypto/sha256"
++	"encoding/hex"
++	"os"
++	"strconv"
++	"time"
++)
++
++const TransportTraceLimit = 512
++
++type TransportPoint struct {
++	Index     uint64 `json:"i"`
++	NS        int64  `json:"ns"`
++	Kind      string `json:"kind"`
++	Wire      string `json:"wire,omitempty"`
++	Sequence  uint64 `json:"seq"`
++	Attempt   int    `json:"attempt,omitempty"`
++	Bytes     int    `json:"bytes,omitempty"`
++	Result    string `json:"result,omitempty"`
++	Reason    string `json:"reason,omitempty"`
++	FirstNS   int64  `json:"first_ns,omitempty"`
++	CarrierNS int64  `json:"carrier_ns,omitempty"`
++	Base      uint64 `json:"base,omitempty"`
++	Mask      uint32 `json:"mask,omitempty"`
++	Before    uint64 `json:"before,omitempty"`
++	Head      uint64 `json:"head,omitempty"`
++	Buffered  int    `json:"buffered,omitempty"`
++	Token     uint64 `json:"token,omitempty"`
++	Slots     uint64 `json:"slots,omitempty"`
++}
++
++type TransportTrace struct {
++	Origin       string           `json:"origin"`
++	OriginWallNS int64            `json:"origin_wall_ns"`
++	NowNS        int64            `json:"now_ns"`
++	Count        uint64           `json:"count"`
++	Overwritten  uint64           `json:"overwritten"`
++	Points       []TransportPoint `json:"points"`
++}
++
++type transportRing struct {
++	points [TransportTraceLimit]TransportPoint
++	count  uint64
++}
++
++var transportOrigin = WireTag([]byte(strconv.FormatInt(performanceOrigin.UnixNano(), 10)), []byte(strconv.Itoa(os.Getpid())))
++
++func WireTag(source, target []byte) string {
++	value := sha256.New()
++	value.Write([]byte("family-connect/performance-wire/v1\x00"))
++	value.Write(source)
++	value.Write(target)
++	return hex.EncodeToString(value.Sum(nil)[:16])
++}
++
++func (recorder *Recorder) RecordTransport(point TransportPoint) {
++	if !PerformanceEnabled || recorder == nil {
++		return
++	}
++	recorder.mu.Lock()
++	defer recorder.mu.Unlock()
++	recorder.transportPoint(point)
++}
++
++func (recorder *Recorder) transportPoint(point TransportPoint) {
++	if recorder.transport == nil {
++		recorder.transport = &transportRing{}
++	}
++	value := recorder.transport
++	value.count++
++	point.Index = value.count
++	if point.NS == 0 {
++		point.NS = PerformanceTime(time.Now())
++	}
++	value.points[(value.count-1)%TransportTraceLimit] = point
++}
++
++func (recorder *Recorder) TransportSnapshot() *TransportTrace {
++	if !PerformanceEnabled || recorder == nil {
++		return nil
++	}
++	recorder.mu.Lock()
++	defer recorder.mu.Unlock()
++	if recorder.transport == nil {
++		return nil
++	}
++	value := recorder.transport
++	dropped := value.count - min(value.count, TransportTraceLimit)
++	result := &TransportTrace{Origin: transportOrigin, OriginWallNS: performanceOrigin.UnixNano(), NowNS: PerformanceTime(time.Now()), Count: value.count, Overwritten: dropped, Points: make([]TransportPoint, 0, value.count-dropped)}
++	for index := dropped; index < value.count; index++ {
++		result.Points = append(result.Points, value.points[index%TransportTraceLimit])
++	}
++	return result
++}
++
++type transportContextKey struct{}
++
++func WithTransportPoint(ctx context.Context, point TransportPoint) context.Context {
++	if !PerformanceEnabled {
++		return ctx
++	}
++	return context.WithValue(ctx, transportContextKey{}, point)
++}
++
++func (point *Boundary) CaptureTransport(ctx context.Context) {
++	if PerformanceEnabled {
++		point.transport, _ = ctx.Value(transportContextKey{}).(TransportPoint)
++	}
++}
++
++func (recorder *Recorder) transportBoundary(point Boundary) {
++	if !PerformanceEnabled || point.transport.Kind == "" || point.Total == 0 || point.Fragment+1 != point.Total {
++		return
++	}
++	if point.Stage != "carrier_queued" && point.Stage != "carrier_written" {
++		return
++	}
++	value := point.transport
++	value.Kind += "_" + point.Stage
++	value.Result = point.Result
++	value.NS = 0
++	recorder.transportPoint(value)
++}
+--- a/telemost/receive_default.go
++++ b/telemost/receive_default.go
+@@ -1,4 +1,4 @@
+-//go:build !fc_owner_diagnostic
++//go:build !fc_owner_diagnostic && !fc_perf_diagnostic
+ 
+ package telemost
+ 
+--- a/telemost/receive_diagnostic.go
++++ b/telemost/receive_diagnostic.go
+@@ -1,4 +1,4 @@
+-//go:build fc_owner_diagnostic
++//go:build fc_owner_diagnostic || fc_perf_diagnostic
+ 
+ package telemost
+ 
+--- a/telemost/session.go
++++ b/telemost/session.go
+@@ -387,6 +387,7 @@
+ 		}
+ 		point := fragmentBoundary(frag)
+ 		point.CaptureACK(ctx)
++		point.CaptureTransport(ctx)
+ 		attempt := sessiontrace.AttemptFrom(ctx)
+ 		if attempt.AttemptKnown {
+ 			point.DataKnown, point.DataSequence, point.AttemptKnown, point.Attempt = attempt.DataKnown, attempt.DataSequence, true, attempt.Attempt
+--- a/wholedevice/session.go
++++ b/wholedevice/session.go
+@@ -417,6 +417,10 @@
+ 		report := sessiondiag.Capture(descriptor.SetupID, failure, failedAt, secured.ReliabilityStats(), carrier.Stats(), mux.Stats())
+ 		snapshot := trace.Snapshot()
+ 		report.Trace = &snapshot
++		if sessiontrace.PerformanceEnabled {
++			media := carrier.Stats()
++			report.Performance = &sessiontrace.TransportPerformance{Trace: trace.TransportSnapshot(), Window: secured.ReliabilityStats().Performance, Mux: mux.PerformanceSnapshot(), Media: trace.PerformanceSnapshot(), CarrierQueueFrames: media.SendQueueDepth, CarrierAcceptedBytes: media.BytesSent, CarrierAcceptedMessages: media.MessagesSent}
++		}
+ 		return report
+ 	}
+ 	session.metrics = func() map[string]any {
