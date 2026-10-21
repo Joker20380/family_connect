@@ -1,0 +1,573 @@
+--- /dev/null
++++ b/localwrite/write.go
+@@ -0,0 +1,96 @@
++package localwrite
++
++import (
++	"context"
++	"errors"
++	"sync"
++	"sync/atomic"
++)
++
++type key struct{}
++
++type Write struct {
++	ctx        context.Context
++	obsolete   <-chan struct{}
++	registered atomic.Bool
++	state      atomic.Uint32
++	remaining  atomic.Int32
++	done       chan error
++	once       sync.Once
++}
++
++func Observe(ctx context.Context, obsolete <-chan struct{}) (context.Context, *Write) {
++	write := &Write{ctx: ctx, obsolete: obsolete, done: make(chan error, 1)}
++	return context.WithValue(ctx, key{}, write), write
++}
++
++func Register(ctx context.Context, fragments int) (*Write, error) {
++	write, _ := ctx.Value(key{}).(*Write)
++	if write == nil {
++		return nil, nil
++	}
++	if fragments < 1 || !write.registered.CompareAndSwap(false, true) {
++		return nil, errors.New("local write: repeated registration")
++	}
++	write.remaining.Store(int32(fragments))
++	return write, nil
++}
++
++func (write *Write) finish(err error) { write.once.Do(func() { write.done <- err }) }
++
++func (write *Write) Begin() bool {
++	if write == nil {
++		return true
++	}
++	if write.state.Load() == 0 {
++		select {
++		case <-write.obsolete:
++			if write.state.CompareAndSwap(0, 2) {
++				write.finish(nil)
++			}
++		case <-write.ctx.Done():
++			if write.state.CompareAndSwap(0, 2) {
++				write.finish(write.ctx.Err())
++			}
++		default:
++			write.state.CompareAndSwap(0, 1)
++		}
++	}
++	return write.state.Load() == 1
++}
++
++func (write *Write) Complete(err error) {
++	if write == nil {
++		return
++	}
++	if err != nil {
++		write.finish(err)
++		return
++	}
++	if write.remaining.Add(-1) == 0 {
++		write.finish(nil)
++	}
++}
++
++func (write *Write) Wait() error {
++	if !write.registered.Load() {
++		return nil
++	}
++	select {
++	case err := <-write.done:
++		return err
++	case <-write.ctx.Done():
++		write.state.CompareAndSwap(0, 2)
++		return write.ctx.Err()
++	case <-write.obsolete:
++		if write.state.CompareAndSwap(0, 2) {
++			return nil
++		}
++		select {
++		case err := <-write.done:
++			return err
++		case <-write.ctx.Done():
++			return write.ctx.Err()
++		}
++	}
++}
+--- /dev/null
++++ b/localwrite/write_test.go
+@@ -0,0 +1,90 @@
++package localwrite
++
++import (
++	"context"
++	"errors"
++	"testing"
++	"time"
++)
++
++func TestCompletionAndCancellation(test *testing.T) {
++	for _, mode := range []string{"complete", "obsolete_queued", "obsolete_partial", "deadline_queued", "deadline_partial", "error", "late", "legacy"} {
++		test.Run(mode, func(test *testing.T) {
++			ctx, cancel := context.WithCancel(context.Background())
++			defer cancel()
++			obsolete := make(chan struct{})
++			observed, completion := Observe(ctx, obsolete)
++			if mode == "legacy" {
++				if completion.Wait() != nil {
++					test.Fatal("legacy")
++				}
++				return
++			}
++			registered, err := Register(observed, 2)
++			if err != nil {
++				test.Fatal(err)
++			}
++			if _, err = Register(observed, 2); err == nil {
++				test.Fatal("reused completion")
++			}
++			if mode == "obsolete_queued" {
++				close(obsolete)
++				if completion.Wait() != nil || registered.Begin() {
++					test.Fatal("obsolete wrote")
++				}
++				return
++			}
++			if mode == "deadline_queued" {
++				cancel()
++				if !errors.Is(completion.Wait(), context.Canceled) || registered.Begin() {
++					test.Fatal("cancelled wrote")
++				}
++				return
++			}
++			if !registered.Begin() {
++				test.Fatal("not writing")
++			}
++			registered.Complete(nil)
++			done := make(chan error, 1)
++			go func() { done <- completion.Wait() }()
++			select {
++			case <-done:
++				test.Fatal("completed partial message")
++			case <-time.After(time.Millisecond):
++			}
++			if mode == "obsolete_partial" {
++				close(obsolete)
++				if !registered.Begin() {
++					test.Fatal("partial aborted")
++				}
++			}
++			if mode == "deadline_partial" || mode == "late" {
++				cancel()
++				if !errors.Is(<-done, context.Canceled) {
++					test.Fatal("deadline ignored")
++				}
++				freshCtx, fresh := Observe(context.Background(), nil)
++				next, _ := Register(freshCtx, 1)
++				registered.Complete(nil)
++				next.Begin()
++				next.Complete(nil)
++				if fresh.Wait() != nil {
++					test.Fatal("late completion changed fresh generation")
++				}
++				return
++			}
++			failure := errors.New("write failed")
++			if mode == "error" {
++				registered.Complete(failure)
++				if !errors.Is(<-done, failure) {
++					test.Fatal("error lost")
++				}
++				return
++			}
++			registered.Complete(nil)
++			if <-done != nil {
++				test.Fatal("completion failed")
++			}
++		})
++	}
++}
+--- /dev/null
++++ b/reliablestream/local_write_test.go
+@@ -0,0 +1,120 @@
++package reliablestream
++
++import (
++	"bytes"
++	"context"
++	"sync"
++	"testing"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/localwrite"
++)
++
++type localEndpoint struct {
++	*testEndpoint
++	mu       sync.Mutex
++	attempts map[uint64]int
++	retry    chan *localwrite.Write
++}
++
++func (endpoint *localEndpoint) SendContext(ctx context.Context, data []byte) error {
++	packet, err := decode(data)
++	if err != nil || packet.kind != dataFrame {
++		return endpoint.testEndpoint.SendContext(ctx, data)
++	}
++	endpoint.mu.Lock()
++	endpoint.attempts[packet.seq]++
++	attempt := endpoint.attempts[packet.seq]
++	endpoint.mu.Unlock()
++	write, err := localwrite.Register(ctx, 1)
++	if err != nil {
++		return err
++	}
++	if packet.seq == 0 && attempt == 2 {
++		endpoint.retry <- write
++		return nil
++	}
++	if write.Begin() {
++		err = endpoint.testEndpoint.SendContext(ctx, data)
++		write.Complete(err)
++	}
++	return err
++}
++
++func TestACKReleasesWhileRetryWaitsForLocalWrite(test *testing.T) {
++	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
++	defer cancel()
++	left, right := endpoints()
++	point := &localEndpoint{testEndpoint: left, attempts: make(map[uint64]int), retry: make(chan *localwrite.Write, 1)}
++	var mutex sync.Mutex
++	var held []byte
++	hold := true
++	right.drop = func(raw []byte) bool {
++		packet, _ := decode(raw)
++		mutex.Lock()
++		defer mutex.Unlock()
++		if packet.kind == ackFrame && hold {
++			if packet.ack > 0 {
++				held = bytes.Clone(raw)
++			}
++			return true
++		}
++		return false
++	}
++	config := DefaultConfig()
++	config.RTO = 30 * time.Millisecond
++	config.MaxAge = time.Second
++	sender, err := New(ctx, point, config)
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer sender.Close()
++	receiver, err := New(ctx, right, config)
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer receiver.Close()
++	if err = sender.SendContext(ctx, []byte("first")); err != nil {
++		test.Fatal(err)
++	}
++	if data, err := receiver.Recv(ctx); err != nil || string(data) != "first" {
++		test.Fatal("first delivery", err)
++	}
++	var queued *localwrite.Write
++	select {
++	case queued = <-point.retry:
++	case <-ctx.Done():
++		test.Fatal("no real sent-DATA retry")
++	}
++	mutex.Lock()
++	ack := bytes.Clone(held)
++	hold = false
++	mutex.Unlock()
++	if len(ack) == 0 {
++		test.Fatal("no actual cumulative ACK")
++	}
++	left.in <- ack
++	deadline := time.Now().Add(200 * time.Millisecond)
++	for sender.Stats().Flow.SendBase != 1 && time.Now().Before(deadline) {
++		time.Sleep(time.Millisecond)
++	}
++	if sender.Stats().Flow.SendBase != 1 {
++		test.Fatal("ACK blocked by local writer")
++	}
++	if queued.Begin() {
++		test.Fatal("ACKed queued retry still starts")
++	}
++	for index := 0; index < 12; index++ {
++		payload := bytes.Repeat([]byte{byte(index + 1)}, config.Payload)
++		if err = sender.SendContext(ctx, payload); err != nil {
++			test.Fatal(err)
++		}
++		data, err := receiver.Recv(ctx)
++		if err != nil || !bytes.Equal(data, payload) {
++			test.Fatal("subsequent byte-exact delivery", err)
++		}
++	}
++	if sender.Stats().Retransmissions != 1 {
++		test.Fatal("unexpected retry copies", sender.Stats().Retransmissions)
++	}
++}
+--- a/reliablestream/stream.go
++++ b/reliablestream/stream.go
+@@ -7,6 +7,7 @@
+ 	"sync"
+ 	"time"
+ 
++	"github.com/Joker20380/family_connect/carrier/localwrite"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ )
+ 
+@@ -146,9 +147,12 @@
+ 
+ func (stream *Stream) run(ctx context.Context) {
+ 	type queuedFrame struct {
+-		packet  frame
+-		attempt uint32
+-		done    chan error
++		packet   frame
++		attempt  uint32
++		done     chan error
++		block    *pending
++		obsolete chan struct{}
++		queued   time.Time
+ 	}
+ 	type writeResult struct {
+ 		job queuedFrame
+@@ -217,7 +221,7 @@
+ 	}()
+ 	transmit := func(job queuedFrame) error {
+ 		packet := job.packet
+-		sendContext, cancel := context.WithTimeout(ctx, min(stream.state.config.MaxAge, 2*time.Second))
++		sendContext, cancel := context.WithDeadline(ctx, job.queued.Add(min(stream.state.config.MaxAge, 2*time.Second)))
+ 		point := sessiontrace.Boundary{Direction: "tx", Result: "ok"}
+ 		if packet.kind == dataFrame {
+ 			sendContext = sessiontrace.WithAttempt(sendContext, packet.seq, job.attempt)
+@@ -233,7 +237,11 @@
+ 			point.Stage, point.ACKBase, point.ACKMask = "ack_generated", packet.ack, packet.bits
+ 			sessiontrace.From(ctx).Boundary(point)
+ 		}
++		sendContext, completion := localwrite.Observe(sendContext, job.obsolete)
+ 		err := stream.endpoint.SendContext(sendContext, encode(packet))
++		if err == nil {
++			err = completion.Wait()
++		}
+ 		if packet.kind == ackFrame {
+ 			point.Stage = "ack_sent"
+ 			if err != nil {
+@@ -267,15 +275,19 @@
+ 		}
+ 	}()
+ 	pending := make([]queuedFrame, 0, MaxWindow+2)
++	activeData := make(map[uint64]queuedFrame)
+ 	queue := func(packets []frame, done chan error) error {
+ 		for _, packet := range packets {
+-			job := queuedFrame{packet: packet, done: done}
++			job := queuedFrame{packet: packet, done: done, queued: time.Now()}
+ 			if packet.kind == dataFrame {
+ 				stream.mu.Lock()
+ 				if state := stream.state.sent[packet.seq]; state != nil {
+ 					job.attempt = uint32(state.retries)
++					job.block = state
+ 				}
+ 				stream.mu.Unlock()
++				job.obsolete = make(chan struct{})
++				activeData[packet.seq] = job
+ 			}
+ 			coalesced := false
+ 			if packet.kind == ackFrame || packet.kind == openFrame {
+@@ -303,6 +315,20 @@
+ 	defer ticker.Stop()
+ 	ready := false
+ 	for {
++		for len(pending) > 0 && pending[0].obsolete != nil {
++			select {
++			case <-pending[0].obsolete:
++				if pending[0].done != nil {
++					pending[0].done <- nil
++				}
++				copy(pending, pending[1:])
++				pending[len(pending)-1] = queuedFrame{}
++				pending = pending[:len(pending)-1]
++				continue
++			default:
++			}
++			break
++		}
+ 		stream.mu.Lock()
+ 		if !ready && stream.state.remote != (epoch{}) {
+ 			close(stream.ready)
+@@ -341,6 +367,14 @@
+ 		case result := <-written:
+ 			busy = false
+ 			err = result.err
++			if result.job.packet.kind == dataFrame {
++				stream.mu.Lock()
++				if block := stream.state.sent[result.job.packet.seq]; err == nil && block != nil && block == result.job.block && block.retries == int(result.job.attempt) && !block.sacked {
++					block.last = time.Now()
++				}
++				stream.mu.Unlock()
++				delete(activeData, result.job.packet.seq)
++			}
+ 			if result.job.done != nil {
+ 				result.job.done <- err
+ 			}
+@@ -375,6 +409,12 @@
+ 					duplicates, stale, previousBase := stream.state.stats.Duplicates, stream.state.stats.Stale, stream.state.base
+ 					before := stream.state.receiveObservation()
+ 					packets, err = stream.state.input(packet, time.Now())
++					for sequence, job := range activeData {
++						if block := stream.state.sent[sequence]; block != job.block || block == nil || block.sacked {
++							close(job.obsolete)
++							delete(activeData, sequence)
++						}
++					}
+ 					after := stream.state.receiveObservation()
+ 					advanced := stream.state.base > previousBase
+ 					currentBase := stream.state.base
+--- a/telemost/boundary.go
++++ b/telemost/boundary.go
+@@ -5,6 +5,7 @@
+ 	"sync"
+ 	"sync/atomic"
+ 
++	"github.com/Joker20380/family_connect/carrier/localwrite"
+ 	"github.com/Joker20380/family_connect/carrier/reliablestream"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ 	"github.com/pion/interceptor"
+@@ -15,6 +16,7 @@
+ type outboundFrame struct {
+ 	data  []byte
+ 	point sessiontrace.Boundary
++	local *localwrite.Write
+ }
+ 
+ func fragmentBoundary(data []byte) sessiontrace.Boundary {
+--- a/telemost/head_loss_test.go
++++ b/telemost/head_loss_test.go
+@@ -164,10 +164,15 @@
+ 	message := point.msgID.Load()
+ 	for len(point.sendQueue) > 0 {
+ 		frame := <-point.sendQueue
++		if !frame.local.Begin() {
++			continue
++		}
+ 		if isHead && point.fault == "carrier" && len(point.attempts) == 0 {
++			frame.local.Complete(nil)
+ 			continue
+ 		}
+ 		point.writeVP8Sample(frame.data, frame.point)
++		frame.local.Complete(nil)
+ 	}
+ 	packets := point.packets
+ 	if point.fault == "reorder" && isHead {
+--- a/telemost/session.go
++++ b/telemost/session.go
+@@ -13,6 +13,7 @@
+ 	"sync/atomic"
+ 	"time"
+ 
++	"github.com/Joker20380/family_connect/carrier/localwrite"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ 	"github.com/Joker20380/family_connect/carrier/underlay"
+ 	"github.com/gorilla/websocket"
+@@ -380,6 +381,10 @@
+ 	if err != nil {
+ 		return err
+ 	}
++	local, err := localwrite.Register(ctx, len(frames))
++	if err != nil {
++		return err
++	}
+ 	for _, frag := range frames {
+ 		out := frag
+ 		if s.mode == ModeVP8 {
+@@ -393,7 +398,7 @@
+ 		}
+ 		point.Stage, point.Direction, point.Result = "carrier_queued", "tx", "ok"
+ 		select {
+-		case s.sendQueue <- outboundFrame{data: out, point: point}:
++		case s.sendQueue <- outboundFrame{data: out, point: point, local: local}:
+ 			s.cfg.Trace.Boundary(point)
+ 			s.statsMu.Lock()
+ 			s.queued = advanceFragment(s.queued, frag)
+--- a/telemost/signaling.go
++++ b/telemost/signaling.go
+@@ -600,7 +600,19 @@
+ 				if !ok {
+ 					return
+ 				}
+-				s.writeVP8Sample(frame.data, frame.point)
++				if !frame.local.Begin() {
++					continue
++				}
++				written := s.writeVP8Sample(frame.data, frame.point)
++				if written {
++					frame.local.Complete(nil)
++				} else {
++					frame.local.Complete(ErrClosed)
++				}
++				if frame.local != nil && !written {
++					s.signalClosedAt(ErrClosed, "VP8_WRITE")
++					return
++				}
+ 				time.Sleep(vp8SendInterval)
+ 			}
+ 		}
+@@ -614,7 +626,16 @@
+ 			if !ok {
+ 				return
+ 			}
+-			if !s.writeDCMessage(frame.data) {
++			if !frame.local.Begin() {
++				continue
++			}
++			written := s.writeDCMessage(frame.data)
++			if written {
++				frame.local.Complete(nil)
++			} else {
++				frame.local.Complete(ErrClosed)
++			}
++			if !written {
+ 				s.signalClosedAt(errors.New("telemost: data channel write failed"), "DATA_CHANNEL_WRITE")
+ 				return
+ 			}
+@@ -622,7 +643,7 @@
+ 	}
+ }
+ 
+-func (s *Session) writeVP8Sample(data []byte, queued ...sessiontrace.Boundary) {
++func (s *Session) writeVP8Sample(data []byte, queued ...sessiontrace.Boundary) bool {
+ 	point := sessiontrace.Boundary{Stage: "carrier_written", Direction: "tx", Result: "no_rtp"}
+ 	if fragment, valid := decodeVP8Frame(data); valid {
+ 		point = s.cfg.Trace.MessageAttempt(fragmentBoundary(fragment))
+@@ -636,14 +657,14 @@
+ 	}
+ 	if s.track == nil {
+ 		s.cfg.Trace.Boundary(point)
+-		return
++		return false
+ 	}
+ 	before := s.rtpWrites.Load()
+ 	if err := s.track.WriteSample(media.Sample{Data: data, Duration: vp8FrameDuration}); err != nil {
+ 		point.Result = "write_error"
+ 		s.cfg.Trace.Boundary(point)
+ 		s.signalClosedAt(errors.New("telemost: VP8 write failed"), "VP8_WRITE")
+-		return
++		return false
+ 	}
+ 	if s.rtpWrites.Load() != before {
+ 		point.Result = "ok"
+@@ -655,6 +676,7 @@
+ 		s.written = advanceFragment(s.written, fragment)
+ 	}
+ 	s.statsMu.Unlock()
++	return point.Result == "ok"
+ }
+ 
+ func (s *Session) writeDCMessage(data []byte) bool {

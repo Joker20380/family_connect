@@ -1,0 +1,1279 @@
+{
+  "schema": "family_connect_queue_retry_v1",
+  "source_checkpoint": "dddc3347db5b02896c123488f2e5e0292ff2b7a7",
+  "pushed": false,
+  "CURRENT_BASELINE": {
+    "apk_sha256": "68cbcccfb5adf8656e8203436126330e780de099670ee2031d71019baadc3e9a",
+    "gateway_sha256": "b9ae880731517753e456637e52dcc421b9f7d7b881b400c856989ae93193e9ba",
+    "phone": {
+      "code": 90,
+      "apk_sha256": "68cbcccfb5adf8656e8203436126330e780de099670ee2031d71019baadc3e9a",
+      "pid": "19388",
+      "uid": 10283,
+      "apk_native_sha256": "dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23"
+    },
+    "gateway": {
+      "state": {
+        "ActiveState": "active",
+        "InvocationID": "6a5fc20d6b5b43de82d0612f7c5ccb01",
+        "MainPID": "3393714",
+        "NRestarts": "0",
+        "ExecMainStartTimestamp": "Tue 2026-10-20 01:13:17 MSK"
+      },
+      "sha256": "b9ae880731517753e456637e52dcc421b9f7d7b881b400c856989ae93193e9ba",
+      "leaf_expiry": "2026-10-20T02:02:34+00:00",
+      "profile_sha256": "3bce05fc3f1aa40b3f173332ffc76c65acd06b0231f4d8eb72196c8e59f91f31"
+    },
+    "verified_at": "2026-10-19T22:19:43.856698+00:00",
+    "vpn_count": 1
+  },
+  "QUEUE_RETRY_HYPOTHESIS": {
+    "local": "CONFIRMED_9_PENDING_ATTEMPTS_BEFORE_FIRST_WRITE",
+    "physical": "NOT_DEMONSTRATED_AS_CURRENT_DOMINANT_LIMIT",
+    "before_pending": 9,
+    "after_pending": 1,
+    "before_retries": 8,
+    "after_retries": 0,
+    "synthetic_rto_ms": 30,
+    "synthetic_writer_hold_ms": 340
+  },
+  "TARGETED_CHANGE": {
+    "result": "TESTED_NOT_ACCEPTED_FOR_SHIPMENT",
+    "wire_changed": false,
+    "server_only": true,
+    "normal_candidate_deployed": false
+  },
+  "BEFORE_AFTER_GOODPUT_AND_FAILURES": {
+    "baseline-raw": {
+      "attempted_bytes": 6356992,
+      "received_bytes": 6356992,
+      "failures": 0,
+      "gateway": {
+        "ActiveState": "active",
+        "InvocationID": "6a5edd64110544f18124e4d493fad2e3",
+        "MainPID": "3294035"
+      },
+      "requests": [
+        {
+          "name": "small",
+          "valid": true,
+          "bytes": 65536,
+          "curl_exit": "0",
+          "full_seconds": "2.854840",
+          "ttfb_seconds": "2.001457",
+          "observed_body_sha256": "34dd6758c2908cf5be0e411173f61877f8faf2dcdcfed135b5a5fa90577447bc",
+          "mbit_s": 0.18364882094968546
+        },
+        {
+          "name": "single-0",
+          "valid": true,
+          "bytes": 2097152,
+          "curl_exit": "0",
+          "full_seconds": "28.327875",
+          "ttfb_seconds": "2.237239",
+          "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+          "mbit_s": 0.5922511307325382
+        },
+        {
+          "name": "parallel-0-1",
+          "valid": true,
+          "bytes": 2097152,
+          "curl_exit": "0",
+          "full_seconds": "25.428600",
+          "ttfb_seconds": "0.771449",
+          "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+          "mbit_s": 0.6597774159804315
+        },
+        {
+          "name": "parallel-0-0",
+          "valid": true,
+          "bytes": 2097152,
+          "curl_exit": "0",
+          "full_seconds": "25.416390",
+          "ttfb_seconds": "0.904480",
+          "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+          "mbit_s": 0.6600943721748053
+        }
+      ],
+      "parallel": [
+        {
+          "bytes": 4194304,
+          "wall_seconds": 25.449999999953434,
+          "aggregate_mbit_s": 1.3184452652283456
+        }
+      ],
+      "topology_stable": true,
+      "capture_exit": 1,
+      "analysis": null,
+      "result_sha256": "cf3492df9e0a5c260f936ce5f6d7725c9c7ce7317b287024f1a1c2938abcfeb6"
+    },
+    "a-measure": {
+      "attempted_bytes": 0,
+      "received_bytes": 0,
+      "failures": 0,
+      "gateway": {
+        "ActiveState": "active",
+        "InvocationID": "f055d5199f4e4d1dadb09a278e639f14",
+        "MainPID": "3375268"
+      },
+      "requests": [],
+      "parallel": [],
+      "topology_stable": true,
+      "capture_exit": 0,
+      "analysis": null,
+      "result_sha256": "e64a65857aea7d7655223bb337a357cbc6f2b052da12e1d1859a58b5367763a3"
+    },
+    "a-measure-fixed": {
+      "attempted_bytes": 6356992,
+      "received_bytes": 2553039,
+      "failures": 2,
+      "gateway": {
+        "ActiveState": "active",
+        "InvocationID": "f055d5199f4e4d1dadb09a278e639f14",
+        "MainPID": "3375268"
+      },
+      "requests": [
+        {
+          "name": "small",
+          "valid": true,
+          "bytes": 65536,
+          "curl_exit": "0",
+          "full_seconds": "9.362670",
+          "ttfb_seconds": "5.721377",
+          "observed_body_sha256": "34dd6758c2908cf5be0e411173f61877f8faf2dcdcfed135b5a5fa90577447bc",
+          "mbit_s": 0.05599770151035976
+        },
+        {
+          "name": "single-0",
+          "valid": true,
+          "bytes": 2097152,
+          "curl_exit": "0",
+          "full_seconds": "75.550667",
+          "ttfb_seconds": "2.514061",
+          "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+          "mbit_s": 0.22206575621628857
+        },
+        {
+          "name": "parallel-0-1",
+          "valid": false,
+          "bytes": 154611,
+          "curl_exit": "56",
+          "full_seconds": "69.596761",
+          "ttfb_seconds": "4.479412",
+          "observed_body_sha256": "256487e1295725eff28a663264dc1680743d55c196549f76d1122316c37c2b97",
+          "mbit_s": null
+        },
+        {
+          "name": "parallel-0-0",
+          "valid": false,
+          "bytes": 235740,
+          "curl_exit": "56",
+          "full_seconds": "69.598919",
+          "ttfb_seconds": "0.987400",
+          "observed_body_sha256": "6c8401025c9f0a9e7d6d902e1200fcc2096f8fe9ba99001fbf69e93d97379be1",
+          "mbit_s": null
+        }
+      ],
+      "parallel": [],
+      "topology_stable": true,
+      "capture_exit": 1,
+      "analysis": {
+        "label": "a-measure-fixed",
+        "gateway_sha256": "79d9c8c58676d5af7ebff78fd780009d98e468e6dcafbdc47e48de755bd16f86",
+        "requests": [
+          {
+            "name": "small",
+            "valid": true,
+            "body_bytes": 65536,
+            "seconds": "9.362670",
+            "ttfb_seconds": "5.721377",
+            "mbit_s": 0.05599770151035976,
+            "gateway_cloudflare_tcp_connections_observed": 1,
+            "peak_gateway_cloudflare_sockets": 1
+          },
+          {
+            "name": "single-0",
+            "valid": true,
+            "body_bytes": 2097152,
+            "seconds": "75.550667",
+            "ttfb_seconds": "2.514061",
+            "mbit_s": 0.22206575621628857,
+            "gateway_cloudflare_tcp_connections_observed": 1,
+            "peak_gateway_cloudflare_sockets": 1
+          },
+          {
+            "name": "parallel-0-1",
+            "valid": false,
+            "body_bytes": 154611,
+            "seconds": "69.596761",
+            "ttfb_seconds": "4.479412",
+            "mbit_s": null,
+            "gateway_cloudflare_tcp_connections_observed": 2,
+            "peak_gateway_cloudflare_sockets": 2
+          },
+          {
+            "name": "parallel-0-0",
+            "valid": false,
+            "body_bytes": 235740,
+            "seconds": "69.598919",
+            "ttfb_seconds": "0.987400",
+            "mbit_s": null,
+            "gateway_cloudflare_tcp_connections_observed": 2,
+            "peak_gateway_cloudflare_sockets": 2
+          }
+        ],
+        "parallel": [],
+        "failures": 2,
+        "application_bytes": 2553039,
+        "topology_stable": true,
+        "capture_exit": 1,
+        "raw_errors": [],
+        "parser_errors": [],
+        "journal_errors": [
+          {
+            "error": "incomplete_journal_continuation",
+            "stream": [
+              "f055d5199f4e4d1dadb09a278e639f14",
+              "595c02e1627c4087bd956cd9a069d0e8",
+              "3375268"
+            ]
+          }
+        ],
+        "correlation_errors": [],
+        "coverage": [
+          {
+            "node": "NL",
+            "origin": "b01b6cf7b1f7df049b7543dc9df2c1d4",
+            "session_tag": "2219e060af8bc8a0532e29b7e55e5e2bda5eb68f592264d98400d174de714b5c",
+            "observed": 9953,
+            "prefix_unobserved": 6060,
+            "interior_missing": 0,
+            "max_reported_overwritten": 15501,
+            "max_count": 16013
+          }
+        ],
+        "counter_deltas": [
+          {
+            "session": "2219e060af8bc8a0532e29b7e55e5e2bda5eb68f592264d98400d174de714b5c",
+            "origin": "b01b6cf7b1f7df049b7543dc9df2c1d4",
+            "snapshot_count": 52,
+            "carrier_queue_frames_max": 5,
+            "ReadyFullNS_delta": 61510901991,
+            "FullNS_delta": 79214298169,
+            "WindowOnlyBlockedNS_delta": 61496751312,
+            "HeadSACKedBlockedNS_delta": 905404353,
+            "HeadUnconfirmedLaterSACKedBlockedNS_delta": 53547589005,
+            "ReleasedBytes_delta": 2633011,
+            "ReleasedBlocks_delta": 401,
+            "NewDATA_bytes_delta": 2710713,
+            "NewDATA_count_delta": 409,
+            "RetryDATA_bytes_delta": 2334740,
+            "RetryDATA_count_delta": 190,
+            "FirstACKNoRetry": {
+              "count_delta": 295,
+              "total_ns_delta": 141798671199,
+              "max_ns": 1024042057
+            },
+            "FirstACKRecovery": {
+              "count_delta": 111,
+              "total_ns_delta": 217792347488,
+              "max_ns": 6490113138
+            },
+            "ReleaseNoRetry": {
+              "count_delta": 290,
+              "total_ns_delta": 408704739174,
+              "max_ns": 6501664435
+            },
+            "ReleaseRecovery": {
+              "count_delta": 111,
+              "total_ns_delta": 256424471814,
+              "max_ns": 6490113138
+            },
+            "mux": {
+              "observed_ids": 28,
+              "max_active": 6,
+              "zero_credit_ready_ns_delta": 62723168981,
+              "ready_bytes_max": 16384,
+              "retired_count": 22,
+              "large_streams": [
+                {
+                  "id": 41,
+                  "handed_bytes_delta": 2103259,
+                  "credit_min": 0,
+                  "ready_bytes_max": 16384,
+                  "zero_credit_ready_ns_delta": 58203598693
+                },
+                {
+                  "id": 53,
+                  "handed_bytes_delta": 257023,
+                  "credit_min": 0,
+                  "ready_bytes_max": 10136,
+                  "zero_credit_ready_ns_delta": 2877968914
+                },
+                {
+                  "id": 55,
+                  "handed_bytes_delta": 208105,
+                  "credit_min": 0,
+                  "ready_bytes_max": 16384,
+                  "zero_credit_ready_ns_delta": 1641601374
+                }
+              ]
+            }
+          }
+        ],
+        "queued_to_writing": {
+          "count": 615,
+          "median_ms": 2.716689,
+          "p95_ms": 21.73432,
+          "max_ms": 38.759345
+        },
+        "queued_to_completed": {
+          "count": 615,
+          "median_ms": 5.790597,
+          "p95_ms": 24.852284,
+          "max_ms": 42.229291
+        },
+        "max_simultaneous_pending_complete_spans": 1,
+        "overlap_examples": [],
+        "cpu_ticks_delta": 551,
+        "sample_seconds": 102.61913584824651,
+        "rss_max_kib": 41484,
+        "natural_failure_events": [
+          {
+            "state": "FAILED",
+            "reason": "RELIABLE_RETRY_EXHAUSTED",
+            "stage": "CARRIER",
+            "timestamp_ms": 1792446819146
+          },
+          {
+            "state": "FAILED",
+            "reason": "FAMILY_TLS_ERROR",
+            "stage": "FAMILY_TLS",
+            "timestamp_ms": 1792446819151
+          }
+        ],
+        "cap_records": [],
+        "caveats": [
+          "Missing ring prefix/interior is not absence of retries.",
+          "Durations overlap; do not add layer waits.",
+          "Only matched complete attempt spans count; pending maximum is a lower bound.",
+          "Counter deltas exclude intervals before first snapshot; background streams included.",
+          "No Android trace; no cross-host one-way latency or unique ACK matching."
+        ]
+      },
+      "result_sha256": "2b06cba92dfdafef7bdee555c4186b2e22276e88d6254d331309dc3018b01abe"
+    },
+    "b-measure": {
+      "attempted_bytes": 65536,
+      "received_bytes": 0,
+      "failures": 1,
+      "gateway": {
+        "ActiveState": "active",
+        "InvocationID": "2aab99ec04484483971510f01f7e7623",
+        "MainPID": "3382698"
+      },
+      "requests": [
+        {
+          "name": "small",
+          "valid": false,
+          "bytes": 0,
+          "curl_exit": "6",
+          "full_seconds": "5.823325",
+          "ttfb_seconds": "0.000000",
+          "observed_body_sha256": null,
+          "mbit_s": null
+        }
+      ],
+      "parallel": [],
+      "topology_stable": false,
+      "capture_exit": 0,
+      "analysis": {
+        "label": "b-measure",
+        "gateway_sha256": "55f329b4c144df5390eb1485cec75e808492fb4053319ccc5276fa17a8931b02",
+        "requests": [
+          {
+            "name": "small",
+            "valid": false,
+            "body_bytes": 0,
+            "seconds": "5.823325",
+            "ttfb_seconds": "0.000000",
+            "mbit_s": null,
+            "gateway_cloudflare_tcp_connections_observed": 0,
+            "peak_gateway_cloudflare_sockets": 11
+          }
+        ],
+        "parallel": [],
+        "failures": 1,
+        "application_bytes": 0,
+        "topology_stable": false,
+        "capture_exit": 0,
+        "raw_errors": [],
+        "parser_errors": [],
+        "journal_errors": [],
+        "correlation_errors": [],
+        "coverage": [],
+        "counter_deltas": [],
+        "queued_to_writing": {
+          "count": 0,
+          "median_ms": null,
+          "p95_ms": null,
+          "max_ms": null
+        },
+        "queued_to_completed": {
+          "count": 0,
+          "median_ms": null,
+          "p95_ms": null,
+          "max_ms": null
+        },
+        "max_simultaneous_pending_complete_spans": 0,
+        "overlap_examples": [],
+        "cpu_ticks_delta": 8,
+        "sample_seconds": 9.142321893014014,
+        "rss_max_kib": 22924,
+        "natural_failure_events": [],
+        "cap_records": [
+          {
+            "kind": "end",
+            "cap_reached": false,
+            "partial_bytes": 0
+          }
+        ],
+        "caveats": [
+          "Missing ring prefix/interior is not absence of retries.",
+          "Durations overlap; do not add layer waits.",
+          "Only matched complete attempt spans count; pending maximum is a lower bound.",
+          "Counter deltas exclude intervals before first snapshot; background streams included.",
+          "No Android trace; no cross-host one-way latency or unique ACK matching."
+        ]
+      },
+      "result_sha256": "6ca7a0fb7c24ab5908e3266e6fdb117d403d41863cb6f1208062927bc56aec53"
+    },
+    "b-ready": {
+      "attempted_bytes": 12648448,
+      "received_bytes": 12648448,
+      "failures": 0,
+      "gateway": {
+        "ActiveState": "active",
+        "InvocationID": "2aab99ec04484483971510f01f7e7623",
+        "MainPID": "3382698"
+      },
+      "requests": [
+        {
+          "name": "small",
+          "valid": true,
+          "bytes": 65536,
+          "curl_exit": "0",
+          "full_seconds": "2.644354",
+          "ttfb_seconds": "1.804540",
+          "observed_body_sha256": "34dd6758c2908cf5be0e411173f61877f8faf2dcdcfed135b5a5fa90577447bc",
+          "mbit_s": 0.1982669491301089
+        },
+        {
+          "name": "single-0",
+          "valid": true,
+          "bytes": 2097152,
+          "curl_exit": "0",
+          "full_seconds": "31.333017",
+          "ttfb_seconds": "1.810598",
+          "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+          "mbit_s": 0.5354484695808259
+        },
+        {
+          "name": "parallel-0-0",
+          "valid": true,
+          "bytes": 2097152,
+          "curl_exit": "0",
+          "full_seconds": "32.302280",
+          "ttfb_seconds": "0.854884",
+          "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+          "mbit_s": 0.5193817897684002
+        },
+        {
+          "name": "parallel-0-1",
+          "valid": true,
+          "bytes": 2097152,
+          "curl_exit": "0",
+          "full_seconds": "32.429695",
+          "ttfb_seconds": "1.871088",
+          "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+          "mbit_s": 0.517341159082748
+        },
+        {
+          "name": "single-1",
+          "valid": true,
+          "bytes": 2097152,
+          "curl_exit": "0",
+          "full_seconds": "18.253632",
+          "ttfb_seconds": "1.275695",
+          "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+          "mbit_s": 0.9191165900572554
+        },
+        {
+          "name": "parallel-1-0",
+          "valid": true,
+          "bytes": 2097152,
+          "curl_exit": "0",
+          "full_seconds": "29.226443",
+          "ttfb_seconds": "0.768895",
+          "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+          "mbit_s": 0.5740423492520113
+        },
+        {
+          "name": "parallel-1-1",
+          "valid": true,
+          "bytes": 2097152,
+          "curl_exit": "0",
+          "full_seconds": "29.600020",
+          "ttfb_seconds": "1.137695",
+          "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+          "mbit_s": 0.5667974548665845
+        }
+      ],
+      "parallel": [
+        {
+          "bytes": 4194304,
+          "wall_seconds": 32.449999999953434,
+          "aggregate_mbit_s": 1.03403488443908
+        },
+        {
+          "bytes": 4194304,
+          "wall_seconds": 29.619999999878928,
+          "aggregate_mbit_s": 1.1328302498358256
+        }
+      ],
+      "topology_stable": true,
+      "capture_exit": 0,
+      "analysis": {
+        "label": "b-ready",
+        "gateway_sha256": "55f329b4c144df5390eb1485cec75e808492fb4053319ccc5276fa17a8931b02",
+        "requests": [
+          {
+            "name": "small",
+            "valid": true,
+            "body_bytes": 65536,
+            "seconds": "2.644354",
+            "ttfb_seconds": "1.804540",
+            "mbit_s": 0.1982669491301089,
+            "gateway_cloudflare_tcp_connections_observed": 1,
+            "peak_gateway_cloudflare_sockets": 1
+          },
+          {
+            "name": "single-0",
+            "valid": true,
+            "body_bytes": 2097152,
+            "seconds": "31.333017",
+            "ttfb_seconds": "1.810598",
+            "mbit_s": 0.5354484695808259,
+            "gateway_cloudflare_tcp_connections_observed": 1,
+            "peak_gateway_cloudflare_sockets": 1
+          },
+          {
+            "name": "parallel-0-0",
+            "valid": true,
+            "body_bytes": 2097152,
+            "seconds": "32.302280",
+            "ttfb_seconds": "0.854884",
+            "mbit_s": 0.5193817897684002,
+            "gateway_cloudflare_tcp_connections_observed": 2,
+            "peak_gateway_cloudflare_sockets": 2
+          },
+          {
+            "name": "parallel-0-1",
+            "valid": true,
+            "body_bytes": 2097152,
+            "seconds": "32.429695",
+            "ttfb_seconds": "1.871088",
+            "mbit_s": 0.517341159082748,
+            "gateway_cloudflare_tcp_connections_observed": 2,
+            "peak_gateway_cloudflare_sockets": 2
+          },
+          {
+            "name": "single-1",
+            "valid": true,
+            "body_bytes": 2097152,
+            "seconds": "18.253632",
+            "ttfb_seconds": "1.275695",
+            "mbit_s": 0.9191165900572554,
+            "gateway_cloudflare_tcp_connections_observed": 1,
+            "peak_gateway_cloudflare_sockets": 1
+          },
+          {
+            "name": "parallel-1-0",
+            "valid": true,
+            "body_bytes": 2097152,
+            "seconds": "29.226443",
+            "ttfb_seconds": "0.768895",
+            "mbit_s": 0.5740423492520113,
+            "gateway_cloudflare_tcp_connections_observed": 2,
+            "peak_gateway_cloudflare_sockets": 2
+          },
+          {
+            "name": "parallel-1-1",
+            "valid": true,
+            "body_bytes": 2097152,
+            "seconds": "29.600020",
+            "ttfb_seconds": "1.137695",
+            "mbit_s": 0.5667974548665845,
+            "gateway_cloudflare_tcp_connections_observed": 2,
+            "peak_gateway_cloudflare_sockets": 2
+          }
+        ],
+        "parallel": [
+          {
+            "bytes": 4194304,
+            "wall_seconds": 32.449999999953434,
+            "aggregate_mbit_s": 1.03403488443908
+          },
+          {
+            "bytes": 4194304,
+            "wall_seconds": 29.619999999878928,
+            "aggregate_mbit_s": 1.1328302498358256
+          }
+        ],
+        "failures": 0,
+        "application_bytes": 12648448,
+        "topology_stable": true,
+        "capture_exit": 0,
+        "raw_errors": [],
+        "parser_errors": [],
+        "journal_errors": [],
+        "correlation_errors": [],
+        "coverage": [
+          {
+            "node": "NL",
+            "origin": "db07f4d923d347353f18cbf11bc052f6",
+            "session_tag": "62ba5954fb121d34a89b12022eac0d52947bf617e78c91a411f866966ba82686",
+            "observed": 28309,
+            "prefix_unobserved": 665,
+            "interior_missing": 5194,
+            "max_reported_overwritten": 33656,
+            "max_count": 34168
+          }
+        ],
+        "counter_deltas": [
+          {
+            "session": "62ba5954fb121d34a89b12022eac0d52947bf617e78c91a411f866966ba82686",
+            "origin": "db07f4d923d347353f18cbf11bc052f6",
+            "snapshot_count": 59,
+            "carrier_queue_frames_max": 1,
+            "ReadyFullNS_delta": 74270724333,
+            "FullNS_delta": 89822249755,
+            "WindowOnlyBlockedNS_delta": 72688690941,
+            "HeadSACKedBlockedNS_delta": 4882492983,
+            "HeadUnconfirmedLaterSACKedBlockedNS_delta": 34269274489,
+            "ReleasedBytes_delta": 12829008,
+            "ReleasedBlocks_delta": 1480,
+            "NewDATA_bytes_delta": 12829472,
+            "NewDATA_count_delta": 1482,
+            "RetryDATA_bytes_delta": 2146162,
+            "RetryDATA_count_delta": 215,
+            "FirstACKNoRetry": {
+              "count_delta": 1265,
+              "total_ns_delta": 402987782771,
+              "max_ns": 994099030
+            },
+            "FirstACKRecovery": {
+              "count_delta": 215,
+              "total_ns_delta": 279591605248,
+              "max_ns": 1808150581
+            },
+            "ReleaseNoRetry": {
+              "count_delta": 1265,
+              "total_ns_delta": 567843080659,
+              "max_ns": 2032115849
+            },
+            "ReleaseRecovery": {
+              "count_delta": 215,
+              "total_ns_delta": 280224238368,
+              "max_ns": 1808227769
+            },
+            "mux": {
+              "observed_ids": 23,
+              "max_active": 7,
+              "zero_credit_ready_ns_delta": 116514444864,
+              "ready_bytes_max": 16384,
+              "retired_count": 18,
+              "large_streams": [
+                {
+                  "id": 13,
+                  "handed_bytes_delta": 2103303,
+                  "credit_min": 0,
+                  "ready_bytes_max": 16384,
+                  "zero_credit_ready_ns_delta": 26356299186
+                },
+                {
+                  "id": 25,
+                  "handed_bytes_delta": 2034564,
+                  "credit_min": 0,
+                  "ready_bytes_max": 16384,
+                  "zero_credit_ready_ns_delta": 20057664438
+                },
+                {
+                  "id": 27,
+                  "handed_bytes_delta": 2083706,
+                  "credit_min": 0,
+                  "ready_bytes_max": 16384,
+                  "zero_credit_ready_ns_delta": 20311672802
+                },
+                {
+                  "id": 33,
+                  "handed_bytes_delta": 2103260,
+                  "credit_min": 0,
+                  "ready_bytes_max": 16384,
+                  "zero_credit_ready_ns_delta": 15754068748
+                },
+                {
+                  "id": 37,
+                  "handed_bytes_delta": 2103256,
+                  "credit_min": 0,
+                  "ready_bytes_max": 16384,
+                  "zero_credit_ready_ns_delta": 17022179122
+                },
+                {
+                  "id": 39,
+                  "handed_bytes_delta": 2106141,
+                  "credit_min": 0,
+                  "ready_bytes_max": 16384,
+                  "zero_credit_ready_ns_delta": 16972542714
+                }
+              ]
+            }
+          }
+        ],
+        "queued_to_writing": {
+          "count": 1366,
+          "median_ms": 2.097505,
+          "p95_ms": 2.868581,
+          "max_ms": 11.065598
+        },
+        "queued_to_completed": {
+          "count": 1366,
+          "median_ms": 2.974371,
+          "p95_ms": 7.970684,
+          "max_ms": 12.224634
+        },
+        "max_simultaneous_pending_complete_spans": 1,
+        "overlap_examples": [],
+        "cpu_ticks_delta": 691,
+        "sample_seconds": 117.98578944290057,
+        "rss_max_kib": 41600,
+        "natural_failure_events": [],
+        "cap_records": [
+          {
+            "kind": "end",
+            "cap_reached": false,
+            "partial_bytes": 0
+          }
+        ],
+        "caveats": [
+          "Missing ring prefix/interior is not absence of retries.",
+          "Durations overlap; do not add layer waits.",
+          "Only matched complete attempt spans count; pending maximum is a lower bound.",
+          "Counter deltas exclude intervals before first snapshot; background streams included.",
+          "No Android trace; no cross-host one-way latency or unique ACK matching."
+        ]
+      },
+      "result_sha256": "a8d876a4f10cd8467183eaafeff47c546b4706af75610154e0c30de339c9bedb"
+    },
+    "a-return": {
+      "attempted_bytes": 65536,
+      "received_bytes": 65536,
+      "failures": 0,
+      "gateway": {
+        "ActiveState": "active",
+        "InvocationID": "e0594752d53044d285798ace5cc1f76a",
+        "MainPID": "3387107"
+      },
+      "requests": [
+        {
+          "name": "small",
+          "valid": true,
+          "bytes": 65536,
+          "curl_exit": "0",
+          "full_seconds": "5.269957",
+          "ttfb_seconds": "3.169066",
+          "observed_body_sha256": "34dd6758c2908cf5be0e411173f61877f8faf2dcdcfed135b5a5fa90577447bc",
+          "mbit_s": 0.09948620074129637
+        }
+      ],
+      "parallel": [],
+      "topology_stable": false,
+      "capture_exit": 0,
+      "analysis": null,
+      "result_sha256": "315632fcef0421fdca06fa6395dbf242363f744fd18d1d252ba6068959dfdfa0"
+    },
+    "a-return-ready": {
+      "attempted_bytes": 12648448,
+      "received_bytes": 12648448,
+      "failures": 0,
+      "gateway": {
+        "ActiveState": "active",
+        "InvocationID": "e0594752d53044d285798ace5cc1f76a",
+        "MainPID": "3387107"
+      },
+      "requests": [
+        {
+          "name": "small",
+          "valid": true,
+          "bytes": 65536,
+          "curl_exit": "0",
+          "full_seconds": "4.114223",
+          "ttfb_seconds": "3.068436",
+          "observed_body_sha256": "34dd6758c2908cf5be0e411173f61877f8faf2dcdcfed135b5a5fa90577447bc",
+          "mbit_s": 0.12743305358022644
+        },
+        {
+          "name": "single-0",
+          "valid": true,
+          "bytes": 2097152,
+          "curl_exit": "0",
+          "full_seconds": "31.895424",
+          "ttfb_seconds": "2.048429",
+          "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+          "mbit_s": 0.526006990846085
+        },
+        {
+          "name": "parallel-0-1",
+          "valid": true,
+          "bytes": 2097152,
+          "curl_exit": "0",
+          "full_seconds": "34.314386",
+          "ttfb_seconds": "1.484107",
+          "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+          "mbit_s": 0.4889265977249309
+        },
+        {
+          "name": "parallel-0-0",
+          "valid": true,
+          "bytes": 2097152,
+          "curl_exit": "0",
+          "full_seconds": "34.286602",
+          "ttfb_seconds": "1.369686",
+          "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+          "mbit_s": 0.48932279728390693
+        },
+        {
+          "name": "single-1",
+          "valid": true,
+          "bytes": 2097152,
+          "curl_exit": "0",
+          "full_seconds": "25.224537",
+          "ttfb_seconds": "2.347938",
+          "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+          "mbit_s": 0.6651149236158427
+        },
+        {
+          "name": "parallel-1-1",
+          "valid": true,
+          "bytes": 2097152,
+          "curl_exit": "0",
+          "full_seconds": "28.443454",
+          "ttfb_seconds": "0.699004",
+          "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+          "mbit_s": 0.5898445385711595
+        },
+        {
+          "name": "parallel-1-0",
+          "valid": true,
+          "bytes": 2097152,
+          "curl_exit": "0",
+          "full_seconds": "28.517300",
+          "ttfb_seconds": "0.873734",
+          "observed_body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419",
+          "mbit_s": 0.5883171267967163
+        }
+      ],
+      "parallel": [
+        {
+          "bytes": 4194304,
+          "wall_seconds": 34.330000000074506,
+          "aggregate_mbit_s": 0.9774084474199586
+        },
+        {
+          "bytes": 4194304,
+          "wall_seconds": 28.540000000037253,
+          "aggregate_mbit_s": 1.1756983882255152
+        }
+      ],
+      "topology_stable": true,
+      "capture_exit": 0,
+      "analysis": {
+        "label": "a-return-ready",
+        "gateway_sha256": "79d9c8c58676d5af7ebff78fd780009d98e468e6dcafbdc47e48de755bd16f86",
+        "requests": [
+          {
+            "name": "small",
+            "valid": true,
+            "body_bytes": 65536,
+            "seconds": "4.114223",
+            "ttfb_seconds": "3.068436",
+            "mbit_s": 0.12743305358022644,
+            "gateway_cloudflare_tcp_connections_observed": 1,
+            "peak_gateway_cloudflare_sockets": 1
+          },
+          {
+            "name": "single-0",
+            "valid": true,
+            "body_bytes": 2097152,
+            "seconds": "31.895424",
+            "ttfb_seconds": "2.048429",
+            "mbit_s": 0.526006990846085,
+            "gateway_cloudflare_tcp_connections_observed": 1,
+            "peak_gateway_cloudflare_sockets": 1
+          },
+          {
+            "name": "parallel-0-1",
+            "valid": true,
+            "body_bytes": 2097152,
+            "seconds": "34.314386",
+            "ttfb_seconds": "1.484107",
+            "mbit_s": 0.4889265977249309,
+            "gateway_cloudflare_tcp_connections_observed": 3,
+            "peak_gateway_cloudflare_sockets": 2
+          },
+          {
+            "name": "parallel-0-0",
+            "valid": true,
+            "body_bytes": 2097152,
+            "seconds": "34.286602",
+            "ttfb_seconds": "1.369686",
+            "mbit_s": 0.48932279728390693,
+            "gateway_cloudflare_tcp_connections_observed": 3,
+            "peak_gateway_cloudflare_sockets": 2
+          },
+          {
+            "name": "single-1",
+            "valid": true,
+            "body_bytes": 2097152,
+            "seconds": "25.224537",
+            "ttfb_seconds": "2.347938",
+            "mbit_s": 0.6651149236158427,
+            "gateway_cloudflare_tcp_connections_observed": 2,
+            "peak_gateway_cloudflare_sockets": 1
+          },
+          {
+            "name": "parallel-1-1",
+            "valid": true,
+            "body_bytes": 2097152,
+            "seconds": "28.443454",
+            "ttfb_seconds": "0.699004",
+            "mbit_s": 0.5898445385711595,
+            "gateway_cloudflare_tcp_connections_observed": 2,
+            "peak_gateway_cloudflare_sockets": 2
+          },
+          {
+            "name": "parallel-1-0",
+            "valid": true,
+            "body_bytes": 2097152,
+            "seconds": "28.517300",
+            "ttfb_seconds": "0.873734",
+            "mbit_s": 0.5883171267967163,
+            "gateway_cloudflare_tcp_connections_observed": 2,
+            "peak_gateway_cloudflare_sockets": 2
+          }
+        ],
+        "parallel": [
+          {
+            "bytes": 4194304,
+            "wall_seconds": 34.330000000074506,
+            "aggregate_mbit_s": 0.9774084474199586
+          },
+          {
+            "bytes": 4194304,
+            "wall_seconds": 28.540000000037253,
+            "aggregate_mbit_s": 1.1756983882255152
+          }
+        ],
+        "failures": 0,
+        "application_bytes": 12648448,
+        "topology_stable": true,
+        "capture_exit": 0,
+        "raw_errors": [],
+        "parser_errors": [],
+        "journal_errors": [],
+        "correlation_errors": [],
+        "coverage": [
+          {
+            "node": "NL",
+            "origin": "de661a2f2103bdcfe38bd4cd44260304",
+            "session_tag": "d2071d103f9df911cbd3e3a81ecf171704c0a31fc47193c66a08d6108ce15c25",
+            "observed": 28683,
+            "prefix_unobserved": 4159,
+            "interior_missing": 6047,
+            "max_reported_overwritten": 38377,
+            "max_count": 38889
+          }
+        ],
+        "counter_deltas": [
+          {
+            "session": "d2071d103f9df911cbd3e3a81ecf171704c0a31fc47193c66a08d6108ce15c25",
+            "origin": "de661a2f2103bdcfe38bd4cd44260304",
+            "snapshot_count": 66,
+            "carrier_queue_frames_max": 19,
+            "ReadyFullNS_delta": 73748077594,
+            "FullNS_delta": 90451515541,
+            "WindowOnlyBlockedNS_delta": 73708128311,
+            "HeadSACKedBlockedNS_delta": 4517011045,
+            "HeadUnconfirmedLaterSACKedBlockedNS_delta": 33626004088,
+            "ReleasedBytes_delta": 12814717,
+            "ReleasedBlocks_delta": 1506,
+            "NewDATA_bytes_delta": 12814717,
+            "NewDATA_count_delta": 1506,
+            "RetryDATA_bytes_delta": 1852414,
+            "RetryDATA_count_delta": 199,
+            "FirstACKNoRetry": {
+              "count_delta": 1308,
+              "total_ns_delta": 425154466581,
+              "max_ns": 1049529229
+            },
+            "FirstACKRecovery": {
+              "count_delta": 198,
+              "total_ns_delta": 254735843583,
+              "max_ns": 2099893983
+            },
+            "ReleaseNoRetry": {
+              "count_delta": 1308,
+              "total_ns_delta": 607451455382,
+              "max_ns": 1964421093
+            },
+            "ReleaseRecovery": {
+              "count_delta": 198,
+              "total_ns_delta": 255015854333,
+              "max_ns": 2099893983
+            },
+            "mux": {
+              "observed_ids": 27,
+              "max_active": 7,
+              "zero_credit_ready_ns_delta": 125952964169,
+              "ready_bytes_max": 16384,
+              "retired_count": 22,
+              "large_streams": [
+                {
+                  "id": 31,
+                  "handed_bytes_delta": 2106144,
+                  "credit_min": 0,
+                  "ready_bytes_max": 16384,
+                  "zero_credit_ready_ns_delta": 28782763760
+                },
+                {
+                  "id": 37,
+                  "handed_bytes_delta": 1961534,
+                  "credit_min": 0,
+                  "ready_bytes_max": 16384,
+                  "zero_credit_ready_ns_delta": 20790836883
+                },
+                {
+                  "id": 39,
+                  "handed_bytes_delta": 1968984,
+                  "credit_min": 0,
+                  "ready_bytes_max": 16384,
+                  "zero_credit_ready_ns_delta": 19845433911
+                },
+                {
+                  "id": 43,
+                  "handed_bytes_delta": 2103324,
+                  "credit_min": 0,
+                  "ready_bytes_max": 16384,
+                  "zero_credit_ready_ns_delta": 20856284985
+                },
+                {
+                  "id": 49,
+                  "handed_bytes_delta": 2062268,
+                  "credit_min": 0,
+                  "ready_bytes_max": 16384,
+                  "zero_credit_ready_ns_delta": 17964369164
+                },
+                {
+                  "id": 51,
+                  "handed_bytes_delta": 2082323,
+                  "credit_min": 0,
+                  "ready_bytes_max": 16384,
+                  "zero_credit_ready_ns_delta": 17713275466
+                }
+              ]
+            }
+          }
+        ],
+        "queued_to_writing": {
+          "count": 1378,
+          "median_ms": 2.812715,
+          "p95_ms": 26.742642,
+          "max_ms": 56.564965
+        },
+        "queued_to_completed": {
+          "count": 1378,
+          "median_ms": 5.607813,
+          "p95_ms": 28.881951,
+          "max_ms": 61.187668
+        },
+        "max_simultaneous_pending_complete_spans": 1,
+        "overlap_examples": [],
+        "cpu_ticks_delta": 754,
+        "sample_seconds": 131.2342746378854,
+        "rss_max_kib": 43800,
+        "natural_failure_events": [],
+        "cap_records": [
+          {
+            "kind": "end",
+            "cap_reached": false,
+            "partial_bytes": 0
+          }
+        ],
+        "caveats": [
+          "Missing ring prefix/interior is not absence of retries.",
+          "Durations overlap; do not add layer waits.",
+          "Only matched complete attempt spans count; pending maximum is a lower bound.",
+          "Counter deltas exclude intervals before first snapshot; background streams included.",
+          "No Android trace; no cross-host one-way latency or unique ACK matching."
+        ]
+      },
+      "result_sha256": "a9bf3401b18ed75bf37988ea568be1e74a2d1649f87f675f68857a0a65bfadb3"
+    }
+  },
+  "STABILITY_AND_IDENTITY_PRESERVED": {
+    "android_updated": false,
+    "identity_keys_support_id_mutated": false,
+    "admission_or_floors_rolled_back": false,
+    "bootstrap1011_preserved": true,
+    "extended_android_trace": false,
+    "temporary_server_performance_trace": false,
+    "overnight_acceptance": false,
+    "final_small_control": true,
+    "unexplained_intermediate_tun_absence": true,
+    "identity_basis": "No client install/data writes; same installed APK/native, UID and PID; prior same-key receipt retained"
+  },
+  "FINAL_CONTROL": {
+    "first_attempt": {
+      "utc": "2026-10-19T22:14:50.693721+00:00",
+      "curl_exit": 6,
+      "body_bytes": 0,
+      "pass_result": false
+    },
+    "first_retry": "NOT_RUN_NO_TUN",
+    "passive_observations": [
+      {
+        "utc": "2026-10-19T22:18:36.668651+00:00",
+        "vpn_count": 0,
+        "interfaces": []
+      },
+      {
+        "utc": "2026-10-19T22:18:41.711551+00:00",
+        "vpn_count": 0,
+        "interfaces": []
+      },
+      {
+        "utc": "2026-10-19T22:18:46.757105+00:00",
+        "vpn_count": 0,
+        "interfaces": []
+      },
+      {
+        "utc": "2026-10-19T22:18:51.808572+00:00",
+        "vpn_count": 0,
+        "interfaces": []
+      },
+      {
+        "utc": "2026-10-19T22:18:56.857450+00:00",
+        "vpn_count": 0,
+        "interfaces": []
+      },
+      {
+        "utc": "2026-10-19T22:19:01.901079+00:00",
+        "vpn_count": 0,
+        "interfaces": []
+      },
+      {
+        "utc": "2026-10-19T22:19:06.939469+00:00",
+        "vpn_count": 0,
+        "interfaces": []
+      }
+    ],
+    "confirmed_after_tun_return": {
+      "utc_start": "2026-10-19T22:21:08.846366+00:00",
+      "purpose": "current1011 exact rollback and unchanged90 control; no speed or overnight acceptance",
+      "phone_uid": 2000,
+      "vpn_uid_range": "0-99999",
+      "vpn_interface": "tun1",
+      "vpn_dns_matches_mesh": true,
+      "curl_exit": 0,
+      "http_status": "200",
+      "http_version": "1.1",
+      "tls_verify": "0",
+      "body_bytes": 211,
+      "observed_body_sha256": "939d9e838362dabe43c9ff4a6213fd1b913c2f8b372f9ad6ff61f8a827487a4a",
+      "expected_nl_exit_observed": true,
+      "encoding": [
+        "identity"
+      ],
+      "matching_production_pid_socket_samples": 21,
+      "sampler_exit": 0,
+      "times_seconds": {
+        "time_namelookup": 0.865605,
+        "time_connect": 0.867485,
+        "time_appconnect": 2.993606,
+        "time_starttransfer": 3.963759,
+        "time_total": 3.96417
+      },
+      "control_pass": true,
+      "phone_temporary_files_removed": true
+    },
+    "needed_owner_action": null,
+    "original_empty_remote_ip_socket_count": "INVALID_ATTRIBUTION_NOT_ACCEPTED; corrected guard for future controls"
+  },
+  "tests": {
+    "observation-suite-1": {
+      "sha256": "8722c0cb5bcf27f85eded01f4efbd4c724b00124d7da47cf3f68f75f22d83e59",
+      "pass_cases": 533,
+      "skip_cases": 26
+    },
+    "candidate-observed-suite": {
+      "sha256": "5b83e9561a56318fdb0f23e73457ed8b8b2f801a3a433eb768cff8476362563a",
+      "pass_cases": 543,
+      "skip_cases": 26
+    },
+    "candidate-local-default": {
+      "sha256": "f70fa072fa94e35c9290a85390a6df0097e366ceb31650568515d1a30e9ed766",
+      "pass_cases": 58,
+      "skip_cases": 0
+    },
+    "baseline-counted-queue": {
+      "sha256": "f878d2a89daa39f64d0284994190ad2bbc176342ca79da37a3beed5854db4d5d",
+      "pass_cases": 1,
+      "skip_cases": 0
+    },
+    "candidate-counted-queue": {
+      "sha256": "8d0cbff74de60329c162ca920f0507c30c70a173fe64e87c74d3eccf34002d7d",
+      "pass_cases": 1,
+      "skip_cases": 0
+    },
+    "candidate-deadlines-queue": {
+      "sha256": "9512ebe598ef9012d53a288ab845db404a89c46e0bf29ebc6432e91e9903f478",
+      "pass_cases": 2,
+      "skip_cases": 0
+    }
+  },
+  "artifacts": {
+    "observation-queue": {
+      "sha256": "79d9c8c58676d5af7ebff78fd780009d98e468e6dcafbdc47e48de755bd16f86",
+      "inventory": "f83f8c31809f9c05fe3b56fe539d108cac3c25c80265602e523a91e3ddd02831",
+      "bootstrap1011_preserved": true
+    },
+    "candidate-observed": {
+      "sha256": "55f329b4c144df5390eb1485cec75e808492fb4053319ccc5276fa17a8931b02",
+      "inventory": "9a41cabd57298b019a20903dcfdb6eabc00ebe1dd998203e10b908df46155d28",
+      "bootstrap1011_preserved": true
+    },
+    "candidate": {
+      "sha256": "fb3f416d9fc2d23bbce949856c3394a70bcc6d2774c74dc0e3d2e28f9c81f958",
+      "inventory": "f3c3b3bd6a95387b5549c83609e468cd0a00663870367cd49a64482d5505cf7b",
+      "bootstrap1011_preserved": true
+    }
+  },
+  "source_pins_sha256": "2eb2c9b65179feac1d2fb8eb4b844a7ec92df71a54d7af94c052e2fd490e4179",
+  "requested_bytes": {
+    "baseline": 25436160,
+    "candidate": 12713984,
+    "total": 38150144
+  },
+  "remaining_evidence": "Current slow physical intervals have prompt NL local writes but delayed head/ACK progress; receiver-side fate of the same natural retries is not captured on ordinary90.",
+  "FINAL_RESULT": "NO_REPEATABLE_SPEED_ACCEPTANCE_CURRENT1011_RESTORED_FINAL_SMALL_CONTROL_PASS"
+}

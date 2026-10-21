@@ -19,6 +19,7 @@ final class FriendsAccessAndroid {
     private volatile boolean cancelled;
     static final class Denied extends Exception {}
     static final class Conflict extends Exception {}
+    static final class SupportRateLimited extends IOException {}
     FriendsAccessAndroid(Context context){this(context,false);}
     FriendsAccessAndroid(Context context,boolean direct){this.context=context;this.direct=direct;}
     FriendsAccessAndroid(Context context,long deadline){this(context,true);this.deadline=deadline;}
@@ -43,7 +44,7 @@ final class FriendsAccessAndroid {
     }
     private JsonObject post(String path,JsonObject body,String requestId)throws Exception{
         remaining(5000);
-        require(path.matches("/friends/(challenge|activate|restricted-readiness(/(challenge|ack-challenge|ack))?|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/(status|support)|notices/device/(role|publish|list|edit))"));
+        require(path.matches("/friends/(challenge|activate|restricted-readiness(/(challenge|ack-challenge|ack))?|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/(status|support|diagnostics)|notices/device/(role|publish|list|edit))"));
         HttpsURLConnection connection=direct?new ChatNetworkAndroid(context).openHttps("https://185.251.89.19:8443"+path):(HttpsURLConnection)new URL("https://185.251.89.19:8443"+path).openConnection();
         pending=connection;
         try{
@@ -51,7 +52,7 @@ final class FriendsAccessAndroid {
             for(Map.Entry<String,String> header:FriendsReadinessProtocol.wireHeaders(requestId).entrySet())connection.setRequestProperty(header.getKey(),header.getValue());
             byte[] raw=FriendsReadinessProtocol.wireBytes(body);require(raw.length<=((path.equals("/friends/notices/device/publish")||path.equals("/friends/notices/device/edit"))?32768:8192));connection.setFixedLengthStreamingMode(raw.length);
             try(OutputStream out=connection.getOutputStream()){out.write(raw);}finally{Arrays.fill(raw,(byte)0);}
-            connection.setReadTimeout(remaining(15000));int status=connection.getResponseCode();if(path.equals("/friends/restricted-readiness/challenge"))FriendsReadinessProtocol.challengeStatus(status);if(status==409)throw new Conflict();if((status==400&&!path.startsWith("/friends/restricted-readiness"))||status==401||status==403)throw new Denied();if(status!=200)throw new IOException("Test access unavailable");
+            connection.setReadTimeout(remaining(15000));int status=connection.getResponseCode();if(path.equals("/friends/device/diagnostics")&&status==429)throw new SupportRateLimited();if(path.equals("/friends/restricted-readiness/challenge"))FriendsReadinessProtocol.challengeStatus(status);if(status==409)throw new Conflict();if((status==400&&!path.startsWith("/friends/restricted-readiness"))||status==401||status==403)throw new Denied();if(status!=200)throw new IOException("Test access unavailable");
             ByteArrayOutputStream bytes=new ByteArrayOutputStream();long deadline=System.nanoTime()+20_000_000_000L;
             try(InputStream input=connection.getInputStream()){byte[] buffer=new byte[1024];while(true){connection.setReadTimeout(remaining(15000));int count=input.read(buffer);if(count==-1)break;
                 if(bytes.size()+count>(path.equals("/friends/notices/device/list")?1048576:path.equals("/friends/restricted-readiness")?65536:16384)){
@@ -110,6 +111,18 @@ final class FriendsAccessAndroid {
             require(result.get("revoked").isJsonPrimitive()&&result.get("revoked").getAsJsonPrimitive().isBoolean());
             require(result.get("active").isJsonPrimitive()&&result.get("active").getAsJsonPrimitive().isBoolean());
             return result.get("active").getAsBoolean()?text(result.get("device")):"";
+        }
+    }
+    void supportDiagnostics(JsonObject report)throws Exception{
+        deadline=android.os.SystemClock.elapsedRealtime()+15000;
+        String raw=report.toString();byte[] encoded=raw.getBytes(StandardCharsets.UTF_8);require(encoded.length<=4096);
+        byte[] digest=java.security.MessageDigest.getInstance("SHA-256").digest(encoded);StringBuilder hash=new StringBuilder();
+        for(byte value:digest)hash.append(String.format(java.util.Locale.ROOT,"%02x",value&255));
+        try(ControlIdentity identity=identity(false)){
+            JsonObject request=new JsonObject();request.add("proof",proof(identity,"diagnostics:"+hash,""));request.addProperty("report",raw);
+            JsonObject result=post("/friends/device/diagnostics",request);fields(result,"schema report_id stored_at");
+            require(integer(result.get("schema"),1)==1&&text(result.get("report_id")).equals(text(report.get("report_id"))));
+            integer(result.get("stored_at"),1);
         }
     }
     String supportId() throws Exception {

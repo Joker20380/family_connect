@@ -1,0 +1,518 @@
+--- a/clients/android/app/build.gradle
++++ b/clients/android/app/build.gradle
+@@ -113,7 +113,7 @@
+     }
+     applicationVariants.all { variant ->
+         if (variant.buildType.name == 'privateBeta') {
+-            variant.outputs.all { versionCodeOverride = 95; versionNameOverride = '0.1.18-beta95-mux-profile' }
++            variant.outputs.all { versionCodeOverride = 96; versionNameOverride = '0.1.18-beta96-bootstrap' }
+         }
+         if (variant.buildType.name == "friends") {
+             variant.outputs.all { versionCodeOverride = 83; versionNameOverride = "0.1.18-research83-bootstrap" }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/ChatNetworkAndroid.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/ChatNetworkAndroid.java
+@@ -24,12 +24,18 @@
+     }
+ 
+     javax.net.ssl.HttpsURLConnection openHttps(String url)throws IOException {
++        return openHttps(url,null);
++    }
++    javax.net.ssl.HttpsURLConnection openHttps(String url,ReadinessFetchTrace trace)throws IOException {
+         ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
+         if(manager!=null)for(Network network:manager.getAllNetworks()){
+             NetworkCapabilities caps=manager.getNetworkCapabilities(network);
+-            if(caps!=null&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET))
++            if(caps!=null&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)){
++                if(trace!=null)trace.network(caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)?"CELLULAR":caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)?"WIFI":caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)?"ETHERNET":"OTHER",network.getNetworkHandle());
+                 return (javax.net.ssl.HttpsURLConnection)network.openConnection(new java.net.URL(url));
++            }
+         }
++        if(trace!=null)trace.network("NONE",0);
+         throw new IOException("Underlying network unavailable");
+     }
+ 
+--- a/clients/android/app/src/main/java/com/familyconnect/app/ControlRnsAndroid.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/ControlRnsAndroid.java
+@@ -14,11 +14,14 @@
+ final class ControlRnsAndroid implements ControlCarrier.Wire,AutoCloseable {
+     private final Context context;private final AtomicBoolean cancelled=new AtomicBoolean();private PyObject channel;
+     private final long deadline;
++    private ReadinessFetchTrace fetchTrace;
+     ControlRnsAndroid(Context context){this(context,Long.MAX_VALUE);}
+     ControlRnsAndroid(Context context,long deadline){this.context=context.getApplicationContext();this.deadline=deadline;}
+     public static final class Callbacks {
+         private final Context context;private final AtomicBoolean stop;private final long deadline;
+-        Callbacks(Context context,AtomicBoolean stop,long deadline){this.context=context;this.stop=stop;this.deadline=deadline;}
++        private final ReadinessFetchTrace trace;
++        Callbacks(Context context,AtomicBoolean stop,long deadline){this(context,stop,deadline,null);}
++        Callbacks(Context context,AtomicBoolean stop,long deadline,ReadinessFetchTrace trace){this.context=context;this.stop=stop;this.deadline=deadline;this.trace=trace;}
+         public boolean cancelled(){return stop.get()||android.os.SystemClock.elapsedRealtime()>=deadline;}
+         public boolean bindSocket(int fd){
+             if(cancelled())return false;
+@@ -27,13 +30,18 @@
+                 NetworkCapabilities caps=manager.getNetworkCapabilities(network);
+                 if(caps==null||!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)||!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET))continue;
+                 try(ParcelFileDescriptor socket=ParcelFileDescriptor.fromFd(fd)){
+-                    network.bindSocket(socket.getFileDescriptor());return !cancelled();
++                    network.bindSocket(socket.getFileDescriptor());
++                    if(trace!=null)trace.network(caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)?"CELLULAR":caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)?"WIFI":caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)?"ETHERNET":"OTHER",network.getNetworkHandle());
++                    return !cancelled();
+                 }catch(IOException unavailable){}
+             }
++            if(trace!=null)trace.network("NONE",0);
+             return false; // Never fall back into the VPN whose config is being recovered.
+         }
+     }
+-    void open()throws Exception {
++    void open()throws Exception {open(false);}
++    void openReadiness(ReadinessFetchTrace trace)throws Exception {fetchTrace=trace;open(true);}
++    private void open(boolean readiness)throws Exception {
+         JsonObject bootstrap;
+         try(InputStream in=context.getAssets().open("rns-relay.json")){
+             ByteArrayOutputStream bytes=new ByteArrayOutputStream();byte[] buffer=new byte[512];int n;while((n=in.read(buffer))!=-1){if(bytes.size()+n>2048)throw new IOException("Relay bootstrap too large");bytes.write(buffer,0,n);}
+@@ -42,9 +50,14 @@
+         ControlJson.fields(bootstrap,"host port provider_public");
+         PythonRuntimeAndroid.get(context);
+         if(cancelled())throw new IOException("RNS cancelled");
+-        channel=Python.getInstance().getModule("fc_rns_transport").callAttr("Channel",
++        PyObject opened=Python.getInstance().getModule("fc_rns_transport").callAttr(readiness?"readiness_open":"Channel",
+             new File(context.getNoBackupFilesDir(),"rns-control").getAbsolutePath(),ControlJson.text(bootstrap.get("host")),
+-            ControlJson.integer(bootstrap.get("port"),1),ControlJson.text(bootstrap.get("provider_public")),new Callbacks(context,cancelled,deadline));
++            ControlJson.integer(bootstrap.get("port"),1),ControlJson.text(bootstrap.get("provider_public")),new Callbacks(context,cancelled,deadline,fetchTrace));
++        if(readiness){
++            java.util.List<PyObject> result=opened.asList();
++            if(result.get(0).toString().equals("UNAVAILABLE"))throw new FriendsReadinessProtocol.Unavailable();
++            ControlJson.require(result.get(0).toString().equals("AVAILABLE"));channel=result.get(1);
++        }else channel=opened;
+     }
+     public boolean cancelled(){return cancelled.get()||android.os.SystemClock.elapsedRealtime()>=deadline;}
+     void cancel(){cancelled.set(true);}
+@@ -53,5 +66,14 @@
+         String encoded=channel.callAttr("request",path,Base64.getEncoder().encodeToString(raw)).toString();
+         if(encoded.length()>(ReadinessBootstrapRoute.allowed(path)?120000:87384))throw new IOException("RNS reply too large");return ControlProtocol.base64(encoded,true);
+     }
++    byte[] requestReadiness(String path,byte[] raw)throws Exception {
++        if(channel==null||cancelled())throw new IOException("RNS unavailable");
++        java.util.List<PyObject> result=channel.callAttr("readiness_request",path,Base64.getEncoder().encodeToString(raw)).asList();
++        if(result.get(0).toString().equals("UNAVAILABLE"))throw new FriendsReadinessProtocol.Unavailable();
++        ControlJson.require(result.get(0).toString().equals("AVAILABLE"));
++        String encoded=result.get(1).toString();
++        if(encoded.length()>120000)throw new IOException("RNS reply too large");
++        return ControlProtocol.base64(encoded,true);
++    }
+     public void close(){cancel();if(channel!=null){try{channel.callAttr("close");}finally{channel.close();channel=null;}}}
+ }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java
+@@ -180,6 +180,13 @@
+         event.addProperty("retry_count",retries);event.addProperty("app_version",version);
+         if(events.size()==128)events.removeFirst();events.addLast(event);
+     }
++    private JsonObject readinessFetch=new JsonObject();
++    synchronized String readinessConnection(){return connectionId;}
++    synchronized void readinessFetch(ReadinessFetchTrace trace){
++        readinessFetch=trace.json();
++        readinessFetch.addProperty("completed_connection_id",connectionId);
++        readinessFetch.addProperty("connection_changed",!connectionId.equals(readinessFetch.get("started_connection_id").getAsString()));
++    }
+     synchronized JsonObject snapshot(){
+         JsonObject result=new JsonObject();result.addProperty("schema",1);result.addProperty("device_support_id",supportId);
+         result.add("transport_metadata",TransportPresentation.diagnostics());
+@@ -189,6 +196,7 @@
+         result.add("transport_outcomes",outcomes.deepCopy());result.add("counters",counters.deepCopy());
+         result.add("restricted_session",restrictedSession.deepCopy());
+         result.add("restricted_startup",restrictedStartup.deepCopy());
++        result.add("readiness_fetch",readinessFetch.deepCopy());
+         JsonArray history=new JsonArray();for(JsonObject session:restrictedHistory)history.add(session.deepCopy());result.add("restricted_history",history);
+         JsonArray recent=new JsonArray();for(JsonObject event:events)recent.add(event.deepCopy());result.add("events",recent);return result;
+     }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java
+@@ -26,6 +26,8 @@
+     static void vpn(Context context,boolean open){try{Diagnostics store=get(context);synchronized(store){store.ring.vpn(open,System.currentTimeMillis());store.save(false);}}catch(Exception ignored){}}
+     static void dns(Context context,boolean good){try{Diagnostics store=get(context);synchronized(store){store.ring.dns(good,System.currentTimeMillis());store.save(false);}}catch(Exception ignored){}}
+     static void cleanup(Context context,boolean success){try{Diagnostics store=get(context);synchronized(store){store.ring.cleanup(success,System.currentTimeMillis());store.save(false);}}catch(Exception ignored){}}
++    static String readinessConnection(Context context){try{return get(context).ring.readinessConnection();}catch(Exception failure){return "";}}
++    static void readinessFetch(Context context,ReadinessFetchTrace trace){try{Diagnostics store=get(context);synchronized(store){store.ring.readinessFetch(trace);store.save(false);}}catch(Exception ignored){}}
+     static void nativeStats(Context context,org.json.JSONObject stats){
+         try{Diagnostics store=get(context);synchronized(store){
+             org.json.JSONObject startup=stats.optJSONObject("owner_startup");
+--- a/clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java
+@@ -19,11 +19,13 @@
+     private volatile HttpsURLConnection pending;
+     private volatile boolean cancelled;
+     private volatile ControlRnsAndroid readinessRelay;
++    private ReadinessFetchTrace fetchTrace;
+     static final class Denied extends FriendsReadinessProtocol.AuthorizationFailure {}
+     static final class Conflict extends Exception {}
+     FriendsAccessAndroid(Context context){this(context,false);}
+     FriendsAccessAndroid(Context context,boolean direct){this.context=context;this.direct=direct;}
+     FriendsAccessAndroid(Context context,long deadline){this(context,true);this.deadline=deadline;}
++    FriendsAccessAndroid(Context context,long deadline,ReadinessFetchTrace trace){this(context,deadline);fetchTrace=trace;}
+     FriendsAccessAndroid(Context context,ChatCarrier carrier){this(context,true);this.chatCarrier=carrier;this.deadline=android.os.SystemClock.elapsedRealtime()+60000;}
+     void cancel(){cancelled=true;HttpsURLConnection connection=pending;if(connection!=null)connection.disconnect();ControlRnsAndroid relay=readinessRelay;if(relay!=null)relay.cancel();}
+     private int remaining(int maximum)throws IOException{
+@@ -54,22 +56,30 @@
+         return directPost(path,body,requestId);
+     }
+     private JsonObject directPost(String path,JsonObject body,String requestId)throws Exception{
++        try{return directPostObserved(path,body,requestId);}
++        catch(Exception failure){if(fetchTrace!=null)fetchTrace.failed(failure);throw failure;}
++    }
++    private JsonObject directPostObserved(String path,JsonObject body,String requestId)throws Exception{
+         remaining(5000);
+         require(path.matches("/friends/(challenge|activate|restricted-readiness(/(challenge|ack-challenge|ack))?|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/(status|support)|notices/device/(role|publish|list|edit))"));
+         boolean viaVpn=ReadinessBootstrapRoute.allowed(path)&&"on".equals(ConnectionService.status)&&"ok".equals(ConnectionService.healthStatus);
+-        HttpsURLConnection connection=direct&&!viaVpn?new ChatNetworkAndroid(context).openHttps("https://185.251.89.19:8443"+path):(HttpsURLConnection)new URL("https://185.251.89.19:8443"+path).openConnection();
++        if(fetchTrace!=null){fetchTrace.request(path,direct&&!viaVpn?ReadinessFetchTrace.Route.HTTPS_UNDERLAY:ReadinessFetchTrace.Route.HTTPS_VPN);fetchTrace.stage(ReadinessFetchTrace.Stage.OPEN_NETWORK);}
++        HttpsURLConnection connection=direct&&!viaVpn?new ChatNetworkAndroid(context).openHttps("https://185.251.89.19:8443"+path,fetchTrace):(HttpsURLConnection)new URL("https://185.251.89.19:8443"+path).openConnection();
+         pending=connection;
+         try{
+             connection.setConnectTimeout(remaining(5000));connection.setReadTimeout(remaining(15000));connection.setInstanceFollowRedirects(false);connection.setUseCaches(false);connection.setRequestMethod("POST");connection.setDoOutput(true);connection.setRequestProperty("Content-Type","application/json");
+             for(Map.Entry<String,String> header:FriendsReadinessProtocol.wireHeaders(requestId).entrySet())connection.setRequestProperty(header.getKey(),header.getValue());
+             byte[] raw=FriendsReadinessProtocol.wireBytes(body);require(raw.length<=((path.equals("/friends/notices/device/publish")||path.equals("/friends/notices/device/edit"))?32768:8192));connection.setFixedLengthStreamingMode(raw.length);
++            if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.CONNECT_TLS_WRITE);
+             try(OutputStream out=connection.getOutputStream()){out.write(raw);}finally{Arrays.fill(raw,(byte)0);}
+-            connection.setReadTimeout(remaining(15000));int status=connection.getResponseCode();if(path.equals("/friends/restricted-readiness/challenge"))FriendsReadinessProtocol.challengeStatus(status);if(status==409)throw new Conflict();if((status==400&&!path.startsWith("/friends/restricted-readiness"))||status==401||status==403)throw new Denied();if(path.equals("/friends/restricted-readiness")&&(status==429||status>=500&&status<=599))throw new FriendsReadinessProtocol.Unavailable();if(status!=200)throw new IOException("Test access unavailable");
++            connection.setReadTimeout(remaining(15000));int status=connection.getResponseCode();if(fetchTrace!=null)fetchTrace.status(status);if(path.equals("/friends/restricted-readiness/challenge"))FriendsReadinessProtocol.challengeStatus(status);if(status==409)throw new Conflict();if((status==400&&!path.startsWith("/friends/restricted-readiness"))||status==401||status==403)throw new Denied();if(path.equals("/friends/restricted-readiness")&&(status==429||status>=500&&status<=599))throw new FriendsReadinessProtocol.Unavailable();if(status!=200)throw new IOException("Test access unavailable");
+             ByteArrayOutputStream bytes=new ByteArrayOutputStream();long deadline=System.nanoTime()+20_000_000_000L;
++            if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.READ_BODY);
+             try(InputStream input=connection.getInputStream()){byte[] buffer=new byte[1024];while(true){connection.setReadTimeout(remaining(15000));int count=input.read(buffer);if(count==-1)break;
+                 if(bytes.size()+count>(path.equals("/friends/notices/device/list")?1048576:path.equals("/friends/restricted-readiness")?65536:16384)){
+                     if(path.equals("/friends/restricted-readiness/challenge"))throw new FriendsReadinessProtocol.ChallengeFailure(FriendsReadinessProtocol.ChallengeCode.CHALLENGE_INCOMPATIBLE_RESPONSE);throw new IOException();}
+                 if(System.nanoTime()>deadline)throw new java.net.SocketTimeoutException();if(Thread.currentThread().isInterrupted())throw new IOException();bytes.write(buffer,0,count);}}
++            if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.PARSE);
+             try{return parse(bytes.toByteArray()).getAsJsonObject();}
+             catch(Exception failure){if(path.equals("/friends/restricted-readiness/challenge"))throw new FriendsReadinessProtocol.ChallengeFailure(FriendsReadinessProtocol.ChallengeCode.CHALLENGE_INCOMPATIBLE_RESPONSE);throw failure;}
+         }finally{connection.disconnect();pending=null;}
+@@ -84,7 +94,11 @@
+         try(ProvisioningTestGate.Permit permit=ProvisioningTestGate.enter(context)){
+             permit.requireAvailable();
+             ReadinessBootstrapRoute route=new ReadinessBootstrapRoute(this::post,this::relayPost);
+-            return FriendsReadinessProtocol.fetch(route::post,identity,receipt);
++            try{
++                byte[] result=FriendsReadinessProtocol.fetch(route::post,identity,receipt);
++                if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.COMPLETE);
++                return result;
++            }catch(Exception failure){if(fetchTrace!=null)fetchTrace.failed(failure);throw failure;}
+         }finally{closeReadinessRelay();}
+     }
+     void readinessAck(ControlIdentity identity,JsonObject receipt)throws Exception{
+@@ -95,10 +109,18 @@
+         }finally{closeReadinessRelay();}
+     }
+     private JsonObject relayPost(String path,JsonObject body,String requestId)throws Exception{
++        if(fetchTrace!=null)fetchTrace.request(path,ReadinessFetchTrace.Route.RNS);
++        try{return relayPostObserved(path,body,requestId);}
++        catch(Exception failure){if(fetchTrace!=null)fetchTrace.failed(failure);throw failure;}
++    }
++    private JsonObject relayPostObserved(String path,JsonObject body,String requestId)throws Exception{
+         remaining(1);
+-        if(readinessRelay==null){readinessRelay=new ControlRnsAndroid(context,deadline);readinessRelay.open();}
+-        JsonObject envelope=parse(readinessRelay.request(path,FriendsReadinessProtocol.wireBytes(body))).getAsJsonObject();
++        if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.RELAY_OPEN);
++        if(readinessRelay==null){readinessRelay=new ControlRnsAndroid(context,deadline);readinessRelay.openReadiness(fetchTrace);}
++        if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.RELAY_REQUEST);
++        JsonObject envelope=parse(readinessRelay.requestReadiness(path,FriendsReadinessProtocol.wireBytes(body))).getAsJsonObject();
+         fields(envelope,"status body");int status=(int)integer(envelope.get("status"),100);require(status<=599);
++        if(fetchTrace!=null)fetchTrace.status(status);
+         if(path.equals("/friends/restricted-readiness/challenge"))FriendsReadinessProtocol.challengeStatus(status);
+         if(status==401||status==403)throw new Denied();
+         if(status==409)throw new Conflict();
+--- a/clients/android/app/src/main/java/com/familyconnect/app/FriendsRestricted.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/FriendsRestricted.java
+@@ -56,11 +56,13 @@
+         if(running!=null&&!running.isDone())return running;
+         CompletableFuture<Selection> pending=new CompletableFuture<>();running=pending;
+         Context context=source.getApplicationContext();
++        String startedConnection=Diagnostics.readinessConnection(context);
+         new Thread(()->{
+             boolean attempted=false;
+             boolean availabilityFailure=false;
+             byte[] selected=null;
+             OwnerPrewarmReceipt receipt=new OwnerPrewarmReceipt();
++            ReadinessFetchTrace trace=new ReadinessFetchTrace(receipt,startedConnection,System.currentTimeMillis());
+             ReadinessProduct product=null;
+             try(ProvisioningTestGate.Permit permit=ProvisioningTestGate.enter(context);
+                     ControlIdentity identity=new FriendsIdentityVault(context).load()){
+@@ -78,9 +80,12 @@
+                 refresh="IN_PROGRESS";
+                 observation=receipt;ReadinessImportResult result;
+                 RestrictedBootstrap.Selection startup=RestrictedBootstrap.refresh(cache,product,receipt,
+-                    ()->{permit.requireAvailable();return new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+30000).restrictedReadiness(identity,receipt);},
++                    ()->{permit.requireAvailable();return new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+30000,trace).restrictedReadiness(identity,receipt);},
+                     RestrictedVault.LOCK,()->System.currentTimeMillis()/1000);
+                 result=startup.result;selected=startup.response;refresh=startup.status;
++                synchronized(RestrictedVault.LOCK){trace.cache(cache.diagnostic(System.currentTimeMillis()/1000));}
++                trace.complete(result.code(),selected!=null,refresh.equals("SUCCESS"),System.currentTimeMillis());
++                Diagnostics.readinessFetch(context,trace);
+                 availabilityFailure=startup.availabilityFailure;
+                 if(startup.authorizationRejected)denied=true;
+                 else if(result.code()==ReadinessImportResult.Code.READY)denied=false;
+@@ -88,6 +93,7 @@
+                 if(permit.blocked())product.record(result);
+                 else product.publish(result,payload->new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+15000).readinessAck(identity,payload));
+             }catch(Exception | LinkageError failure){availabilityFailure=false;if(selected!=null){Arrays.fill(selected,(byte)0);selected=null;}refresh="UNAVAILABLE";
++                trace.failed(failure);trace.complete(ReadinessImportResult.Code.INTERNAL_ERROR,false,false,System.currentTimeMillis());Diagnostics.readinessFetch(context,trace);
+                 ReadinessImportResult result=new ReadinessImportResult(receipt,ReadinessImportResult.Code.INTERNAL_ERROR,null,System.currentTimeMillis()/1000,"import",BuildConfig.VERSION_NAME,BuildConfig.VERSION_CODE);
+                 if(product==null)product=new ReadinessProduct(null,new ReadinessReceiptStore(context),BuildConfig.VERSION_NAME,BuildConfig.VERSION_CODE);
+                 product.record(result);Diagnostics.readinessResult(context,result.code());
+--- /dev/null
++++ b/clients/android/app/src/main/java/com/familyconnect/app/ReadinessFetchTrace.java
+@@ -0,0 +1,65 @@
++package com.familyconnect.app;
++
++import com.google.gson.JsonArray;
++import com.google.gson.JsonObject;
++
++final class ReadinessFetchTrace {
++    enum Operation { CHALLENGE, FETCH, UNKNOWN }
++    enum Stage { LOCAL, OPEN_NETWORK, CONNECT_TLS_WRITE, HTTP_STATUS, READ_BODY, PARSE, BINDING, RELAY_OPEN, RELAY_REQUEST, COMPLETE }
++    enum Route { HTTPS_UNDERLAY, HTTPS_VPN, RNS }
++    enum Error { NONE, DNS, CONNECT, SOCKET, TIMEOUT, TLS, AUTHORIZATION, HTTP, UNAVAILABLE, IO, PROTOCOL, SECURITY, INTERNAL }
++    private final JsonObject value=new JsonObject();
++    private final JsonArray failures=new JsonArray();
++    private Operation operation=Operation.UNKNOWN;
++    private Stage stage=Stage.LOCAL;
++    private Route route=Route.HTTPS_UNDERLAY;
++    private int httpStatus;
++    private final long startedNanos=System.nanoTime();
++    ReadinessFetchTrace(OwnerPrewarmReceipt receipt,String connection,long started){
++        value.addProperty("attempt_id",receipt.challengeId);value.addProperty("fetch_id",receipt.fetchId);
++        value.addProperty("started_connection_id",connection);value.addProperty("started_at",started);
++    }
++    void request(String path,Route selected){
++        operation=path.endsWith("/challenge")?Operation.CHALLENGE:path.equals("/friends/restricted-readiness")?Operation.FETCH:Operation.UNKNOWN;
++        route=selected;httpStatus=0;stage=Stage.LOCAL;
++    }
++    void stage(Stage selected){stage=selected;}
++    void status(int status){httpStatus=status>=100&&status<=599?status:0;stage=Stage.HTTP_STATUS;}
++    void network(String type,long generation){
++        value.addProperty("network_type",java.util.Arrays.asList("WIFI","CELLULAR","ETHERNET","NONE","OTHER").contains(type)?type:"OTHER");
++        value.addProperty("network_generation",Math.max(0,generation));
++    }
++    static Error classify(Throwable failure){
++        if(failure instanceof FriendsReadinessProtocol.ChallengeFailure){
++            FriendsReadinessProtocol.ChallengeFailure challenge=(FriendsReadinessProtocol.ChallengeFailure)failure;
++            if(challenge.code==FriendsReadinessProtocol.ChallengeCode.CHALLENGE_UNAUTHORIZED)return Error.AUTHORIZATION;
++            if(challenge.availabilityFailure)return Error.UNAVAILABLE;
++        }
++        if(failure instanceof javax.net.ssl.SSLException)return Error.TLS;
++        if(failure instanceof java.net.UnknownHostException)return Error.DNS;
++        if(failure instanceof java.net.ConnectException)return Error.CONNECT;
++        if(failure instanceof java.net.SocketTimeoutException)return Error.TIMEOUT;
++        if(failure instanceof java.net.SocketException)return Error.SOCKET;
++        if(failure instanceof FriendsReadinessProtocol.AuthorizationFailure)return Error.AUTHORIZATION;
++        if(failure instanceof FriendsReadinessProtocol.Unavailable)return Error.UNAVAILABLE;
++        if(failure instanceof java.io.IOException)return Error.IO;
++        if(failure instanceof SecurityException)return Error.SECURITY;
++        if(failure instanceof IllegalArgumentException)return Error.PROTOCOL;
++        return Error.INTERNAL;
++    }
++    void failed(Throwable failure){
++        JsonObject entry=new JsonObject();entry.addProperty("operation",operation.name());entry.addProperty("stage",stage.name());
++        entry.addProperty("route",route.name());entry.addProperty("error_class",classify(failure).name());
++        entry.addProperty("http_status",httpStatus);
++        if(value.has("network_type"))entry.add("network_type",value.get("network_type"));
++        if(value.has("network_generation"))entry.add("network_generation",value.get("network_generation"));
++        if(failures.size()==4)failures.remove(0);failures.add(entry);
++    }
++    void cache(JsonObject cache){value.add("cache",cache);}
++    void complete(ReadinessImportResult.Code result,boolean selected,boolean refreshed,long finished){
++        value.addProperty("refresh_result",result.name());value.addProperty("selected_source",selected?(refreshed?"REFRESH":"CACHE"):"NONE");
++        value.addProperty("finished_at",finished);value.addProperty("operation",operation.name());value.addProperty("stage",stage.name());
++        value.addProperty("duration_ms",Math.max(0,(System.nanoTime()-startedNanos)/1000000));
++    }
++    JsonObject json(){JsonObject copy=value.deepCopy();copy.add("failures",failures.deepCopy());return copy;}
++}
+--- a/clients/android/app/src/main/java/com/familyconnect/app/RestrictedCache.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/RestrictedCache.java
+@@ -27,6 +27,43 @@
+     }
+     private static byte[] bytes(JsonElement value){return value.toString().getBytes(StandardCharsets.UTF_8);}
+     private void save(JsonObject value)throws Exception{storage.write(bytes(value));}
++    JsonObject diagnostic(long now){
++        JsonObject result=new JsonObject();
++        try{
++            JsonObject saved=state();
++            if(saved.get("response").isJsonNull()){result.addProperty("validation","MISSING");return result;}
++            JsonObject response=saved.getAsJsonObject("response");byte[] raw=bytes(response);
++            try{
++                ReadinessImportResult.Code code=saved.get("denied").getAsBoolean()?ReadinessImportResult.Code.AUTHORIZATION_REJECTED:validation(raw,now);
++                result.addProperty("validation",code.name());
++                result.addProperty("age_seconds",Math.max(0,now-integer(response.get("issued_at"),0)));
++                result.addProperty("expires_at",integer(response.get("expires_at"),1));
++                result.addProperty("revision",integer(response.get("revision"),1));
++                result.addProperty("minimum_crl",integer(response.get("minimum_crl"),1));
++                byte[] hash=java.security.MessageDigest.getInstance("SHA-256").digest(raw);
++                StringBuilder fingerprint=new StringBuilder();for(byte part:hash)fingerprint.append(String.format(java.util.Locale.ROOT,"%02x",part&255));
++                result.addProperty("fingerprint",fingerprint.toString());
++                JsonObject documents=new JsonObject();
++                for(String name:new String[]{"issuer","certificate","revocations","directory"})documents.addProperty(name,code==ReadinessImportResult.Code.READY?"VALIDATED_AS_BUNDLE":"NOT_PROVEN");
++                for(String name:new String[]{"issuer","certificate","revocations","directory"}){
++                    try{
++                        long expiry;
++                        if(name.equals("issuer"))expiry=integer(issuer(response).get("expires_at"),1);
++                        else if(name.equals("directory"))expiry=java.time.Instant.parse(text(response.getAsJsonObject(name).get("expires_at"))).getEpochSecond();
++                        else{
++                            java.security.cert.CertificateFactory factory=java.security.cert.CertificateFactory.getInstance("X.509");
++                            java.io.ByteArrayInputStream input=new java.io.ByteArrayInputStream(text(response.get(name)).getBytes(StandardCharsets.UTF_8));
++                            expiry=name.equals("certificate")?((java.security.cert.X509Certificate)factory.generateCertificate(input)).getNotAfter().getTime()/1000:((java.security.cert.X509CRL)factory.generateCRL(input)).getNextUpdate().getTime()/1000;
++                        }
++                        result.addProperty(name+"_expires_at",expiry);
++                        if(expiry<=now)documents.addProperty(name,"EXPIRED");
++                    }catch(Exception unavailable){if(code!=ReadinessImportResult.Code.READY)documents.addProperty(name,"INVALID_OR_UNREADABLE");}
++                }
++                result.add("documents",documents);
++            }finally{java.util.Arrays.fill(raw,(byte)0);}
++        }catch(Exception|LinkageError failure){result.addProperty("validation","PERSISTENCE_OR_VALIDATION_ERROR");}
++        return result;
++    }
+     byte[] usable()throws Exception{
+         JsonObject value=state();if(value.get("denied").getAsBoolean()||value.get("response").isJsonNull())return null;
+         byte[] raw=bytes(value.get("response"));return validator.valid(raw)?raw:null;
+--- a/clients/android/app/src/main/python/fc_rns_transport.py
++++ b/clients/android/app/src/main/python/fc_rns_transport.py
+@@ -16,6 +16,17 @@
+ _session_lock = threading.Lock()
+ _readiness_paths = frozenset('/friends/restricted-readiness' + suffix for suffix in
+                              ('', '/challenge', '/ack-challenge', '/ack'))
++
++
++class TransportUnavailable(OSError):
++    pass
++
++
++def readiness_open(*args):
++    try:
++        return ['AVAILABLE', Channel(*args)]
++    except TransportUnavailable:
++        return ['UNAVAILABLE', None]
+ 
+ 
+ def initialize(directory):
+@@ -62,9 +73,14 @@
+             self.provider.load_public_key(public)
+             self.sock = socket.socket(socket.AF_INET6 if address.version == 6 else socket.AF_INET, socket.SOCK_STREAM)
+             if not callbacks.bindSocket(self.sock.fileno()):
+-                raise OSError('Underlying network unavailable')
++                if callbacks.cancelled():
++                    raise OSError('RNS cancelled')
++                raise TransportUnavailable('Underlying network unavailable')
+             self.sock.settimeout(5)
+-            self.sock.connect((str(address), port))
++            try:
++                self.sock.connect((str(address), port))
++            except OSError as failure:
++                raise TransportUnavailable('Relay socket unavailable') from failure
+             self.sock.settimeout(None)
+             self.interface = TCPClientInterface(RNS.Transport, {'name': 'fc-android-control'}, connected_socket=self.sock)
+             self.interface.OUT = True
+@@ -96,10 +112,18 @@
+             if self.callbacks.cancelled():
+                 raise OSError('RNS cancelled')
+             if time.monotonic() >= deadline:
+-                raise TimeoutError('RNS timeout')
++                raise TransportUnavailable('RNS timeout')
+             if predicate():
+                 return
+             time.sleep(.02)
++
++    def readiness_request(self, path, encoded):
++        if str(path) not in _readiness_paths:
++            raise ValueError('Invalid readiness request')
++        try:
++            return ['AVAILABLE', self.request(path, encoded)]
++        except TransportUnavailable:
++            return ['UNAVAILABLE', None]
+ 
+     def request(self, path, encoded):
+         path = str(path)
+--- /dev/null
++++ b/clients/android/app/src/test/java/com/familyconnect/app/MobileBootstrapTest.java
+@@ -0,0 +1,84 @@
++package com.familyconnect.app;
++
++import com.google.gson.JsonObject;
++import java.net.ConnectException;
++import java.util.concurrent.atomic.AtomicLong;
++import org.junit.Test;
++import static org.junit.Assert.*;
++
++public class MobileBootstrapTest {
++    private final AtomicLong clock=new AtomicLong(1500);
++    private final ReadinessProductTest.Memory storage=new ReadinessProductTest.Memory();
++    private final RestrictedCache cache=RestrictedCache.detailed(storage,raw->ReadinessImportResult.Code.READY);
++    private final ReadinessProduct product=new ReadinessProduct(cache,new ReadinessProductTest.Memory(),"test",96,clock::get);
++    private byte[] saved()throws Exception{
++        byte[] response=ReadinessProductTest.response(1000,2000);
++        cache.importProduct(response,new OwnerPrewarmReceipt(),clock.get());return response;
++    }
++    private RestrictedBootstrap.Selection exchange(Exception relay)throws Exception{
++        try(ControlIdentity identity=ControlIdentity.restore(new byte[96])){
++            OwnerPrewarmReceipt receipt=new OwnerPrewarmReceipt();
++            ReadinessBootstrapRoute route=new ReadinessBootstrapRoute((path,body,id)->{throw new ConnectException();},(path,body,id)->{throw relay;});
++            return RestrictedBootstrap.refresh(cache,product,receipt,()->FriendsReadinessProtocol.fetch(route::post,identity,receipt),this,clock::get);
++        }
++    }
++    @Test public void oldPythonExceptionLostAvailabilityButTypedBridgeKeepsValidCache()throws Exception{
++        byte[] response=saved();
++        assertNull(exchange(new RuntimeException("synthetic Python socket refusal")).response);
++        RestrictedBootstrap.Selection fixed=exchange(new FriendsReadinessProtocol.Unavailable());
++        assertEquals("CACHED_VALID_REFRESH_UNAVAILABLE",fixed.status);
++        assertArrayEquals(response,RestrictedBootstrap.select(fixed.response,fixed.availabilityFailure,false));
++        assertArrayEquals(response,cache.usable(clock.get()));
++    }
++    @Test public void typedAvailabilityNeverRevivesMissingExpiredOrDenied()throws Exception{
++        assertNull(exchange(new FriendsReadinessProtocol.Unavailable()).response);
++        saved();clock.set(2000);assertNull(exchange(new FriendsReadinessProtocol.Unavailable()).response);
++        clock.set(1500);cache.denied();assertNull(exchange(new FriendsReadinessProtocol.Unavailable()).response);
++    }
++    @Test public void trustProtocolAndAuthorizationDoNotBecomeAvailability()throws Exception{
++        saved();
++        for(Exception failure:new Exception[]{new javax.net.ssl.SSLHandshakeException("secret"),new IllegalArgumentException("secret"),new FriendsReadinessProtocol.ChallengeFailure(FriendsReadinessProtocol.ChallengeCode.CHALLENGE_UNAUTHORIZED)})
++            assertNull(exchange(failure).response);
++        assertNull(exchange(new FriendsReadinessProtocol.Unavailable()).response);
++    }
++    @Test public void restartAndApiRecoveryRetainFloorAndReplaceOnlyValidSnapshot()throws Exception{
++        byte[] response=saved();
++        assertArrayEquals(response,exchange(new FriendsReadinessProtocol.Unavailable()).response);
++        RestrictedCache restarted=RestrictedCache.detailed(storage,raw->ReadinessImportResult.Code.READY);
++        assertArrayEquals(response,restarted.usable(clock.get()));
++        assertEquals(ReadinessImportResult.Code.READY,product.restart(clock.get()).code());
++        byte[] next=ReadinessProductTest.response(1200,2400);
++        assertEquals(ReadinessImportResult.Code.READY,product.imported(next,new OwnerPrewarmReceipt(),clock.get()).code());
++        assertArrayEquals(next,restarted.usable(clock.get()));
++        assertEquals(ReadinessImportResult.Code.STALE_STATE,product.imported(response,new OwnerPrewarmReceipt(),clock.get()).code());
++        assertArrayEquals(next,restarted.usable(clock.get()));
++    }
++    @Test public void exportPreservesStagesCacheAndOriginalConnectionWithoutSecrets()throws Exception{
++        saved();DiagnosticRing ring=new DiagnosticRing("FC-ZMVK-MM7C","test",96,34);
++        ReadinessFetchTrace trace=new ReadinessFetchTrace(new OwnerPrewarmReceipt(),"older-connection",1000);
++        trace.request("/friends/restricted-readiness/challenge",ReadinessFetchTrace.Route.HTTPS_UNDERLAY);
++        trace.network("CELLULAR",42);trace.stage(ReadinessFetchTrace.Stage.CONNECT_TLS_WRITE);
++        trace.failed(new ConnectException("SECRET_TOKEN https://ROOM.invalid PROOF"));
++        trace.request("/friends/restricted-readiness/challenge",ReadinessFetchTrace.Route.RNS);
++        trace.stage(ReadinessFetchTrace.Stage.RELAY_OPEN);trace.failed(new FriendsReadinessProtocol.Unavailable());
++        trace.cache(cache.diagnostic(clock.get()));trace.complete(ReadinessImportResult.Code.FETCH_FAILED,true,false,1400);
++        ring.readinessFetch(trace);
++        JsonObject bundle=new JsonObject();
++        DiagnosticRing.exportRecord(bundle,"incident",ring.snapshot().toString().getBytes(java.nio.charset.StandardCharsets.UTF_8),"FC-ZMVK-MM7C");
++        String encoded=new String(DiagnosticRing.exportBytes(bundle),java.nio.charset.StandardCharsets.UTF_8);
++        assertFalse(encoded.contains("SECRET_TOKEN"));assertFalse(encoded.contains("ROOM.invalid"));assertFalse(encoded.contains("PROOF"));
++        JsonObject evidence=bundle.getAsJsonObject("incident").getAsJsonObject("readiness_fetch");
++        assertTrue(evidence.get("connection_changed").getAsBoolean());
++        assertEquals("CACHE",evidence.get("selected_source").getAsString());
++        assertEquals("READY",evidence.getAsJsonObject("cache").get("validation").getAsString());
++        assertEquals(2,evidence.getAsJsonArray("failures").size());
++        assertEquals(42,evidence.get("network_generation").getAsInt());
++    }
++    @Test public void traceBoundAndClassifierFailClosed(){
++        ReadinessFetchTrace trace=new ReadinessFetchTrace(new OwnerPrewarmReceipt(),"",0);
++        for(int count=0;count<100;count++)trace.failed(new java.io.IOException("secret"));
++        assertEquals(4,trace.json().getAsJsonArray("failures").size());
++        assertEquals(ReadinessFetchTrace.Error.TLS,ReadinessFetchTrace.classify(new javax.net.ssl.SSLException("synthetic")));
++        assertEquals(ReadinessFetchTrace.Error.DNS,ReadinessFetchTrace.classify(new java.net.UnknownHostException()));
++    }
++}

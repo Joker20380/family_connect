@@ -1,0 +1,231 @@
+--- a/carrier/cmd/bootstrap-broker/main.go
++++ b/carrier/cmd/bootstrap-broker/main.go
+@@ -176,14 +176,24 @@
+ 	observer.stage("SEED_RUN")
+ 	go func() {
+ 		defer receiptPanic(observer)
+-		seedDone <- manager.Run(ctx, provider, bootstrap.TelemostSeed, credentials.Family, credentials.Gateway, *duration, func(ctx context.Context, endpoint familysession.PacketEndpoint) {
++		exchange := func(ctx context.Context, endpoint familysession.PacketEndpoint) {
+ 			bootstrap.OpenServer(ctx, endpoint, *path, broker, emit, func(failure bootstrap.ExchangeFailure) {
+ 				startupSink("bootstrap_exchange_rejected", failure.Stage, failure.Reason)
+ 				output.Lock()
+ 				defer output.Unlock()
+ 				_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": "bootstrap_exchange_rejected", "utc": time.Now().UTC(), "stage": failure.Stage, "reason": failure.Reason})
+ 			})
+-		})
++		}
++		seedDone <- recoverSeed(ctx, func() (error, *bootstrap.SeedFailure) {
++			var first *bootstrap.SeedFailure
++			manager.Observe = func(failure bootstrap.SeedFailure) {
++				if first == nil {
++					first = &failure
++				}
++			}
++			err := manager.Run(ctx, provider, bootstrap.TelemostSeed, credentials.Family, credentials.Gateway, *duration, exchange)
++			return err, first
++		}, observer.failure, emit, waitSeedRetry)
+ 	}()
+ 	go func() {
+ 		defer receiptPanic(observer)
+--- /dev/null
++++ b/carrier/cmd/bootstrap-broker/seed_recovery.go
+@@ -0,0 +1,50 @@
++package main
++
++import (
++	"context"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/bootstrap"
++	"github.com/Joker20380/family_connect/carrier/roombroker"
++)
++
++const seedRecoveryAttempts = 3
++const seedRecoveryDelay = 30 * time.Second
++
++func recoverableSeed(err error, failure *bootstrap.SeedFailure) bool {
++	if err != roombroker.Code("seed_closed") || failure == nil || failure.ParentError != nil || failure.Stage != "SEED_READ" || failure.CloseSource != "SIGNAL_READ" {
++		return false
++	}
++	read := failure.SignalingRead
++	return read.Kind == "WS_CLOSE" && read.CloseCode == 1011 && read.ContextState == "ACTIVE" && !read.CarrierClosed
++}
++
++func waitSeedRetry(ctx context.Context) error {
++	timer := time.NewTimer(seedRecoveryDelay)
++	defer timer.Stop()
++	select {
++	case <-ctx.Done():
++		return ctx.Err()
++	case <-timer.C:
++		return ctx.Err()
++	}
++}
++
++func recoverSeed(ctx context.Context, run func() (error, *bootstrap.SeedFailure), observe func(bootstrap.SeedFailure), event func(string), wait func(context.Context) error) error {
++	for attempt := 0; ; attempt++ {
++		if ctx.Err() != nil {
++			return ctx.Err()
++		}
++		err, failure := run()
++		if ctx.Err() != nil || attempt >= seedRecoveryAttempts || !recoverableSeed(err, failure) {
++			if failure != nil {
++				observe(*failure)
++			}
++			return err
++		}
++		event("bootstrap_seed_signal_1011_retry")
++		if err := wait(ctx); err != nil {
++			return err
++		}
++	}
++}
+--- /dev/null
++++ b/carrier/cmd/bootstrap-broker/seed_recovery_test.go
+@@ -0,0 +1,146 @@
++package main
++
++import (
++	"context"
++	"errors"
++	"fmt"
++	"strings"
++	"sync/atomic"
++	"testing"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/bootstrap"
++	"github.com/Joker20380/family_connect/carrier/familysession"
++	"github.com/Joker20380/family_connect/carrier/roombroker"
++	"github.com/Joker20380/family_connect/carrier/telemost"
++)
++
++func signal1011() *bootstrap.SeedFailure {
++	return &bootstrap.SeedFailure{Stage: "SEED_READ", CloseSource: "SIGNAL_READ", Cause: errors.New("fixture"),
++		SignalingRead: telemost.SignalingReadFailure{Kind: "WS_CLOSE", CloseCode: 1011, ContextState: "ACTIVE"}}
++}
++
++func TestSeedRecoveryClassification(test *testing.T) {
++	for _, kind := range []string{"1011", "1000", "1008", "1006", "unknown", "closed", "cancelled", "parent", "stage", "source", "auth", "publication", "connect"} {
++		test.Run(kind, func(test *testing.T) {
++			failure := signal1011()
++			err := roombroker.Code("seed_closed")
++			switch kind {
++			case "1000", "1008", "1006":
++				fmt.Sscan(kind, &failure.SignalingRead.CloseCode)
++			case "unknown":
++				failure.SignalingRead.Kind = "UNKNOWN"
++			case "closed":
++				failure.SignalingRead.CarrierClosed = true
++			case "cancelled":
++				failure.SignalingRead.ContextState = "CANCELLED"
++			case "parent":
++				failure.ParentError = context.Canceled
++			case "stage":
++				failure.Stage = "SEED_CREATE"
++			case "source":
++				failure.CloseSource = "SUBSCRIBER_DISCONNECTED"
++			case "auth":
++				err = "authorization_changed"
++			case "publication":
++				err = "seed_publication_failed"
++			case "connect":
++				err = "seed_not_ready"
++			}
++			if recoverableSeed(err, failure) != (kind == "1011") {
++				test.Fatal("classification", kind)
++			}
++		})
++	}
++}
++
++func TestSeedRecoveryBudgetAndCancellation(test *testing.T) {
++	for _, cancelAt := range []int{-1, 0, 1, 2, 3} {
++		test.Run(fmt.Sprint(cancelAt), func(test *testing.T) {
++			ctx, cancel := context.WithCancel(context.Background())
++			defer cancel()
++			if cancelAt == 0 {
++				cancel()
++			}
++			runs, waits, reports := 0, 0, 0
++			err := recoverSeed(ctx, func() (error, *bootstrap.SeedFailure) {
++				runs++
++				return roombroker.Code("seed_closed"), signal1011()
++			}, func(bootstrap.SeedFailure) { reports++ }, func(string) {}, func(ctx context.Context) error {
++				waits++
++				if waits == cancelAt {
++					cancel()
++				}
++				return ctx.Err()
++			})
++			if cancelAt < 0 {
++				if runs != 4 || waits != 3 || reports != 1 || err != roombroker.Code("seed_closed") {
++					test.Fatal(runs, waits, reports, err)
++				}
++			} else if runs != cancelAt || reports != 0 || !errors.Is(err, context.Canceled) {
++				test.Fatal(runs, reports, err)
++			}
++		})
++	}
++	ctx, cancel := context.WithCancel(context.Background())
++	cancel()
++	if !errors.Is(waitSeedRetry(ctx), context.Canceled) {
++		test.Fatal("wait ignores cancellation")
++	}
++}
++
++type recoveryProvider struct{ calls atomic.Int32 }
++
++func (provider *recoveryProvider) CreateRoom(context.Context) (roombroker.Room, error) {
++	index := provider.calls.Add(1)
++	return roombroker.Room{ID: fmt.Sprint(index), JoinURL: fmt.Sprintf("https://telemost.yandex.ru/j/recovery-%d", index)}, nil
++}
++
++func TestSeedRecoveryPreservesParentAndReleasesEveryGeneration(test *testing.T) {
++	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
++	defer cancel()
++	provider := &recoveryProvider{}
++	manager := &bootstrap.SeedManager{RotateAfter: 30 * time.Minute}
++	var endpoints []*signalingMatrixEndpoint
++	var published []bootstrap.Directory
++	var observed []bootstrap.SeedFailure
++	manager.Publish = func(directory bootstrap.Directory) error { published = append(published, directory); return nil }
++	waits := 0
++	err := recoverSeed(ctx, func() (error, *bootstrap.SeedFailure) {
++		var first *bootstrap.SeedFailure
++		manager.Observe = func(value bootstrap.SeedFailure) {
++			if first == nil {
++				first = &value
++			}
++		}
++		result := manager.Run(ctx, provider, func(context.Context, context.Context, roombroker.Room) (familysession.PacketEndpoint, error) {
++			endpoint := &signalingMatrixEndpoint{matrixEndpoint: matrixEndpoint{cause: errors.New("remote close"), source: "SIGNAL_READ"}, read: signal1011().SignalingRead}
++			endpoints = append(endpoints, endpoint)
++			return endpoint, nil
++		}, strings.Repeat("a", 32), strings.Repeat("b", 32), time.Hour, func(context.Context, familysession.PacketEndpoint) { test.Error("unexpected exchange") })
++		return result, first
++	}, func(value bootstrap.SeedFailure) { observed = append(observed, value) }, func(string) {}, func(ctx context.Context) error {
++		waits++
++		if ctx.Err() != nil {
++			test.Fatal("independent dedicated parent cancelled")
++		}
++		for _, endpoint := range endpoints {
++			if endpoint.closed.Load() == 0 {
++				test.Fatal("old generation leaked")
++			}
++		}
++		return nil
++	})
++	if err != roombroker.Code("seed_closed") || len(published) != 4 || waits != 3 || len(observed) != 1 || ctx.Err() != nil {
++		test.Fatal(err, len(published), waits, len(observed), ctx.Err())
++	}
++	deadline, _ := ctx.Deadline()
++	for index, directory := range published {
++		if directory.ExpiresAt.After(deadline) || directory.Version != 1 {
++			test.Fatal("lifetime or wire changed")
++		}
++		if index > 0 && directory.Seeds[0].JoinURL == published[index-1].Seeds[0].JoinURL {
++			test.Fatal("reused closed seed")
++		}
++	}
++}

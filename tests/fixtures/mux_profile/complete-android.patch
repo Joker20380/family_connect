@@ -1,0 +1,613 @@
+--- /dev/null
++++ b/carrier/familysession/mux_profile.go
+@@ -0,0 +1,17 @@
++package familysession
++
++const MuxCredit128Protocol = "family-connect-mux-credit128-v1"
++
++func (session *Session) MuxWindow() (int, error) {
++	if session.connection == nil || !session.connection.ConnectionState().HandshakeComplete {
++		return 0, ErrRejected
++	}
++	switch session.connection.ConnectionState().NegotiatedProtocol {
++	case Protocol:
++		return 65536, nil
++	case MuxCredit128Protocol:
++		return 131072, nil
++	default:
++		return 0, ErrRejected
++	}
++}
+--- /dev/null
++++ b/carrier/familysession/mux_profile_test.go
+@@ -0,0 +1,109 @@
++package familysession
++
++import (
++	"context"
++	"crypto/tls"
++	"encoding/json"
++	"net"
++	"testing"
++	"time"
++)
++
++func TestMuxALPNProfiles(test *testing.T) {
++	for _, scenario := range []struct {
++		name           string
++		client, server bool
++		bad            string
++		want           string
++	}{
++		{"legacy", false, false, "", Protocol}, {"new-old", true, false, "", Protocol},
++		{"old-new", false, true, "", Protocol}, {"new-new", true, true, "", MuxCredit128Protocol},
++		{"disabled", true, false, "", Protocol}, {"unknown", true, true, "unknown", ""},
++		{"empty", true, true, "empty", ""}, {"no-common", true, false, "exclusive", ""},
++		{"family", true, true, "family", ""}, {"crl-floor", true, true, "crl", ""},
++		{"expired", true, true, "expired", ""},
++	} {
++		test.Run(scenario.name, func(test *testing.T) {
++			client, server := profiles(test)
++			if scenario.bad == "expired" {
++				client, server = profilesWithExpiry(test, time.Now().Add(-time.Second))
++			}
++			if scenario.bad == "family" {
++				client.Family = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
++			}
++			if scenario.bad == "crl" {
++				client.MinimumCRL++
++			}
++			clientRaw, _ := json.Marshal(client)
++			serverRaw, _ := json.Marshal(server)
++			clientConfig, _, err := MuxConfiguration(clientRaw, false, scenario.client)
++			if err != nil {
++				if scenario.bad == "crl" {
++					return
++				}
++				test.Fatal(err)
++			}
++			serverConfig, _, err := MuxConfiguration(serverRaw, true, scenario.server)
++			if err != nil {
++				test.Fatal(err)
++			}
++			if scenario.bad == "unknown" {
++				clientConfig.NextProtos = []string{"unknown-profile"}
++			}
++			if scenario.bad == "empty" {
++				clientConfig.NextProtos = nil
++			}
++			if scenario.bad == "exclusive" {
++				clientConfig.NextProtos = []string{MuxCredit128Protocol}
++			}
++			left, right := net.Pipe()
++			defer left.Close()
++			defer right.Close()
++			clientTLS, serverTLS := tls.Client(left, clientConfig), tls.Server(right, serverConfig)
++			ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
++			defer cancel()
++			completed := make(chan error, 1)
++			go func() { completed <- serverTLS.HandshakeContext(ctx) }()
++			clientErr := clientTLS.HandshakeContext(ctx)
++			serverErr := <-completed
++			if scenario.want == "" {
++				if clientErr == nil && serverErr == nil {
++					test.Fatal("unauthorized profile accepted")
++				}
++				return
++			}
++			if clientErr != nil || serverErr != nil {
++				test.Fatal(clientErr, serverErr)
++			}
++			for _, connection := range []*tls.Conn{clientTLS, serverTLS} {
++				if connection.ConnectionState().NegotiatedProtocol != scenario.want {
++					test.Fatal("wrong negotiated profile")
++				}
++				session := &Session{connection: connection}
++				window, err := session.MuxWindow()
++				want := 65536
++				if scenario.want == MuxCredit128Protocol {
++					want = 131072
++				}
++				if err != nil || window != want {
++					test.Fatal(window, err)
++				}
++			}
++		})
++	}
++}
++
++func TestMuxProfileUnknownSessionRejected(test *testing.T) {
++	if _, err := (&Session{}).MuxWindow(); err == nil {
++		test.Fatal("unverified session accepted")
++	}
++	client, _ := profiles(test)
++	raw, _ := json.Marshal(client)
++	config, _, err := Configuration(raw, false)
++	if err != nil {
++		test.Fatal(err)
++	}
++	if len(config.NextProtos) != 1 || config.NextProtos[0] != Protocol {
++		test.Fatal("generic session gained Mux extension")
++	}
++}
+--- a/carrier/familysession/session.go
++++ b/carrier/familysession/session.go
+@@ -45,6 +45,14 @@
+ }
+ 
+ func Configuration(raw []byte, server bool) (*tls.Config, time.Time, error) {
++	return configuration(raw, server, false)
++}
++
++func MuxConfiguration(raw []byte, server, credit128 bool) (*tls.Config, time.Time, error) {
++	return configuration(raw, server, credit128)
++}
++
++func configuration(raw []byte, server, credit128 bool) (*tls.Config, time.Time, error) {
+ 	if len(raw) > 48<<10 {
+ 		return nil, time.Time{}, ErrRejected
+ 	}
+@@ -94,8 +102,12 @@
+ 	if server {
+ 		config.ClientAuth = tls.RequireAndVerifyClientCert
+ 	}
++	if credit128 {
++		config.NextProtos = []string{MuxCredit128Protocol, Protocol}
++	}
+ 	config.VerifyConnection = func(state tls.ConnectionState) error {
+-		if state.Version != tls.VersionTLS13 || state.NegotiatedProtocol != Protocol || state.DidResume || len(state.PeerCertificates) != 1 || len(state.VerifiedChains) == 0 {
++		allowed := state.NegotiatedProtocol == Protocol || credit128 && state.NegotiatedProtocol == MuxCredit128Protocol
++		if state.Version != tls.VersionTLS13 || !allowed || state.DidResume || len(state.PeerCertificates) != 1 || len(state.VerifiedChains) == 0 {
+ 			return ErrRejected
+ 		}
+ 		peer := state.PeerCertificates[0]
+@@ -255,7 +267,15 @@
+ }
+ 
+ func OpenReliable(ctx context.Context, endpoint PacketEndpoint, raw []byte, server bool, reliability reliablestream.Config) (*Session, error) {
+-	config, expiry, err := Configuration(raw, server)
++	return openReliable(ctx, endpoint, raw, server, reliability, false)
++}
++
++func OpenMux(ctx context.Context, endpoint PacketEndpoint, raw []byte, server, credit128 bool) (*Session, error) {
++	return openReliable(ctx, endpoint, raw, server, reliablestream.DefaultConfig(), credit128)
++}
++
++func openReliable(ctx context.Context, endpoint PacketEndpoint, raw []byte, server bool, reliability reliablestream.Config, credit128 bool) (*Session, error) {
++	config, expiry, err := configuration(raw, server, credit128)
+ 	if err != nil {
+ 		return nil, err
+ 	}
+--- a/carrier/roombroker/control.go
++++ b/carrier/roombroker/control.go
+@@ -87,6 +87,9 @@
+ 		}
+ 		defer clear(raw)
+ 		config, _, err := familysession.Configuration(raw, true)
++		if !httpControl {
++			config, _, err = familysession.MuxConfiguration(raw, true, true)
++		}
+ 		if err != nil {
+ 			return Identity{}, Code("unauthorized")
+ 		}
+--- a/carrier/roombroker/gateway.go
++++ b/carrier/roombroker/gateway.go
+@@ -26,6 +26,7 @@
+ const DedicatedMaxStreams = tcpforward.MuxMaxStreams
+ 
+ type telemostGateway struct {
++	credit128       bool
+ 	session         *telemost.Session
+ 	credentials     []byte
+ 	setupID         string
+@@ -38,6 +39,10 @@
+ }
+ 
+ func (starter TelemostGateway) Start(lifetime, ready context.Context, room Room, id string, identity Identity) (Gateway, error) {
++	credit128, err := muxCreditPolicy()
++	if err != nil {
++		return nil, err
++	}
+ 	raw, err := LoadCredentials(starter.CredentialsPath)
+ 	if err != nil {
+ 		return nil, err
+@@ -60,7 +65,7 @@
+ 	for name, destination := range starter.Services {
+ 		services[name] = destination
+ 	}
+-	return &telemostGateway{session, raw, id, identity, event, starter.Diagnostic, services, starter.AllowInternet, starter.CredentialsPath}, nil
++	return &telemostGateway{credit128, session, raw, id, identity, event, starter.Diagnostic, services, starter.AllowInternet, starter.CredentialsPath}, nil
+ }
+ 
+ func bindingMessage(id string, nonce []byte) []byte {
+@@ -98,7 +103,7 @@
+ func (gateway *telemostGateway) Run(ctx context.Context, active func() error) error {
+ 	trace := sessiontrace.From(ctx)
+ 	trace.Add("FAMILY_TLS", "STARTED", "NONE")
+-	secured, err := familysession.Open(ctx, gateway.session, gateway.credentials, true)
++	secured, err := familysession.OpenMux(ctx, gateway.session, gateway.credentials, true, gateway.credit128)
+ 	clear(gateway.credentials)
+ 	if err != nil {
+ 		trace.Add("FAMILY_TLS", "FAILED", "FAMILY_TLS_ERROR")
+--- /dev/null
++++ b/carrier/roombroker/mux_policy_linux.go
+@@ -0,0 +1,65 @@
++//go:build linux
++
++package roombroker
++
++import (
++	"errors"
++	"io"
++	"os"
++	"strings"
++
++	"golang.org/x/sys/unix"
++)
++
++func muxOperatorValue(name string) (string, error) {
++	directory := os.Getenv("FC_DIAGNOSTIC_CONTROL_DIR")
++	if directory == "" {
++		return "", nil
++	}
++	descriptor, err := unix.Open(directory, unix.O_RDONLY|unix.O_DIRECTORY|unix.O_NOFOLLOW|unix.O_CLOEXEC, 0)
++	if err != nil {
++		return "", Code("mux_profile_configuration")
++	}
++	defer unix.Close(descriptor)
++	var info unix.Stat_t
++	if unix.Fstat(descriptor, &info) != nil || info.Uid != uint32(os.Geteuid()) || info.Mode&0777 != 0700 {
++		return "", Code("mux_profile_configuration")
++	}
++	fileDescriptor, err := unix.Openat(descriptor, name, unix.O_RDONLY|unix.O_NOFOLLOW|unix.O_NONBLOCK|unix.O_CLOEXEC, 0)
++	if errors.Is(err, unix.ENOENT) {
++		return "", nil
++	}
++	if err != nil {
++		return "", Code("mux_profile_configuration")
++	}
++	file := os.NewFile(uintptr(fileDescriptor), name)
++	defer file.Close()
++	if unix.Fstat(fileDescriptor, &info) != nil || info.Uid != uint32(os.Geteuid()) || info.Mode&0777 != 0600 || info.Mode&unix.S_IFMT != unix.S_IFREG {
++		return "", Code("mux_profile_configuration")
++	}
++	raw, err := io.ReadAll(io.LimitReader(file, 33))
++	if err != nil || len(raw) > 32 {
++		return "", Code("mux_profile_configuration")
++	}
++	return strings.TrimSpace(string(raw)), nil
++}
++
++func muxCreditPolicy() (bool, error) {
++	value, err := muxOperatorValue("mux-profile")
++	if err != nil {
++		return false, err
++	}
++	switch value {
++	case "", "LEGACY64":
++		return false, nil
++	case "CREDIT128":
++		return true, nil
++	default:
++		return false, Code("mux_profile_configuration")
++	}
++}
++
++func muxCountersEnabled() bool {
++	value, err := muxOperatorValue("mux-counters")
++	return err == nil && value == "ON"
++}
+--- /dev/null
++++ b/carrier/roombroker/mux_policy_linux_test.go
+@@ -0,0 +1,39 @@
++package roombroker
++
++import (
++	"os"
++	"path/filepath"
++	"testing"
++)
++
++func TestMuxOperatorPolicy(test *testing.T) {
++	directory := test.TempDir()
++	os.Chmod(directory, 0700)
++	test.Setenv("FC_DIAGNOSTIC_CONTROL_DIR", directory)
++	path := filepath.Join(directory, "mux-profile")
++	if enabled, err := muxCreditPolicy(); err != nil || enabled {
++		test.Fatal(enabled, err)
++	}
++	for _, value := range []string{"LEGACY64", "CREDIT128", "unknown"} {
++		if err := os.WriteFile(path, []byte(value), 0600); err != nil {
++			test.Fatal(err)
++		}
++		enabled, err := muxCreditPolicy()
++		if value == "unknown" {
++			if err == nil {
++				test.Fatal("invalid local policy accepted")
++			}
++		} else if err != nil || enabled != (value == "CREDIT128") {
++			test.Fatal(enabled, err)
++		}
++	}
++	os.Chmod(path, 0666)
++	if _, err := muxCreditPolicy(); err == nil {
++		test.Fatal("unprotected policy accepted")
++	}
++	os.Remove(path)
++	os.Symlink("missing", path)
++	if _, err := muxCreditPolicy(); err == nil {
++		test.Fatal("symlink accepted")
++	}
++}
+--- /dev/null
++++ b/carrier/roombroker/mux_policy_other.go
+@@ -0,0 +1,6 @@
++//go:build !linux
++
++package roombroker
++
++func muxCreditPolicy() (bool, error) { return false, nil }
++func muxCountersEnabled() bool       { return false }
+--- a/carrier/sessiondiag/report.go
++++ b/carrier/sessiondiag/report.go
+@@ -15,6 +15,8 @@
+ )
+ 
+ type Report struct {
++	MuxProfile         string                 `json:"mux_profile,omitempty"`
++	MuxWindow          int                    `json:"mux_window,omitempty"`
+ 	Trace              *sessiontrace.Snapshot `json:"lifecycle,omitempty"`
+ 	CorrelationStatus  string                 `json:"correlation_status"`
+ 	SessionTag         string                 `json:"session_tag"`
+@@ -100,7 +102,7 @@
+ }
+ 
+ func Capture(setupID string, err error, terminalAt time.Time, reliable reliablestream.Stats, media telemost.Stats, mux tcpforward.MuxStats) Report {
+-	report := Report{TerminalReason: Reason(err), ObservedAtMS: time.Now().UnixMilli(),
++	report := Report{MuxProfile: mux.Profile, MuxWindow: mux.Window, TerminalReason: Reason(err), ObservedAtMS: time.Now().UnixMilli(),
+ 		ReliableTerminal: choice(reliable.Terminal, "", "closed", "recovery_exhausted", "protocol_violation", "remote_reset", "cancelled", "carrier_closed"),
+ 		SignalingFailure: "NONE", ICEFailure: "NONE", EvidenceDropped: media.EvidenceDropped,
+ 		SubscriberState: choice(media.SubscriberState, "new", "connecting", "connected", "disconnected", "failed", "closed"),
+--- a/carrier/tcpforward/mux.go
++++ b/carrier/tcpforward/mux.go
+@@ -24,6 +24,8 @@
+ const LeaseRenewalHost = "lease-renewal.family-connect.invalid"
+ 
+ type MuxStats struct {
++	Window             int
++	Profile            string
+ 	Destination        DestinationStats
+ 	ActiveSockets      int
+ 	ActiveStreams      int
+@@ -56,6 +58,7 @@
+ }
+ 
+ type Mux struct {
++	window        int
+ 	mu            sync.Mutex
+ 	ctx           context.Context
+ 	cancel        context.CancelFunc
+@@ -106,7 +109,11 @@
+ 	if err := session.ClaimTCP(server); err != nil {
+ 		return nil, err
+ 	}
+-	return newMux(ctx, session, server, config), nil
++	window, err := session.MuxWindow()
++	if err != nil {
++		return nil, err
++	}
++	return newMuxWindow(ctx, session, server, config, window), nil
+ }
+ 
+ func validateMuxConfig(config MuxConfig) error {
+@@ -123,12 +130,22 @@
+ }
+ 
+ func newMux(parent context.Context, endpoint familysession.PacketEndpoint, server bool, config MuxConfig) *Mux {
++	return newMuxWindow(parent, endpoint, server, config, MuxWindow)
++}
++
++func newMuxWindow(parent context.Context, endpoint familysession.PacketEndpoint, server bool, config MuxConfig, window int) *Mux {
+ 	if config.MaxStreams == 0 {
+ 		config.MaxStreams = 16
+ 	}
+ 	ctx, cancel := context.WithCancel(parent)
+ 	mux := &Mux{ctx: ctx, cancel: cancel, endpoint: endpoint, server: server, config: config, streams: make(map[uint32]*MuxStream), nextID: 1, changed: make(chan struct{}), done: make(chan struct{}), jobs: make(chan struct{}, config.MaxStreams), lookup: net.DefaultResolver, dns: make(map[uint32]*dnsCall), dnsNext: 1, dnsJobs: make(chan struct{}, MuxMaxDNS)}
+ 	mux.leaseJobs = make(chan struct{}, 1)
++	mux.window = window
++	mux.stats.Window = window
++	mux.stats.Profile = "LEGACY64"
++	if window == 131072 {
++		mux.stats.Profile = "CREDIT128"
++	}
+ 	if batch, ok := endpoint.(interface {
+ 		SendBatchContext(context.Context, [][]byte) error
+ 	}); ok {
+@@ -159,7 +176,7 @@
+ 			mux.fail(err)
+ 			break
+ 		}
+-		frame, err := decodeMux(encoded)
++		frame, err := decodeMuxWindow(encoded, mux.window)
+ 		if err != nil {
+ 			mux.fail(err)
+ 			break
+@@ -455,7 +472,7 @@
+ 		} else {
+ 			stream.receiveCredit -= len(frame.payload)
+ 			for _, value := range frame.payload {
+-				stream.receive[(stream.head+stream.used)%MuxWindow] = value
++				stream.receive[(stream.head+stream.used)%len(stream.receive)] = value
+ 				stream.used++
+ 			}
+ 			stream.received += uint64(len(frame.payload))
+@@ -464,7 +481,7 @@
+ 		}
+ 	case muxWindowUpdate:
+ 		credit := int(binary.BigEndian.Uint32(frame.payload))
+-		if !stream.opened || credit > MuxWindow-stream.sendCredit {
++		if !stream.opened || credit > len(stream.receive)-stream.sendCredit {
+ 			invalid = true
+ 		} else {
+ 			stream.sendCredit += credit
+--- /dev/null
++++ b/carrier/tcpforward/mux_profile_test.go
+@@ -0,0 +1,82 @@
++package tcpforward
++
++import (
++	"bytes"
++	"context"
++	"encoding/binary"
++	"io"
++	"testing"
++)
++
++func TestMux128RingCreditAndWrap(test *testing.T) {
++	ctx, cancel := context.WithCancel(context.Background())
++	defer cancel()
++	mux := &Mux{window: 131072, ctx: ctx, cancel: cancel, streams: make(map[uint32]*MuxStream), changed: make(chan struct{})}
++	stream := mux.makeStreamLocked(1)
++	stream.opened = true
++	payload := bytes.Repeat([]byte{37}, MaxData)
++	for index := 0; index < 8; index++ {
++		mux.dispatchLocked(muxFrame{kind: dataFrame, id: 1, payload: payload})
++	}
++	if stream.used != 131072 || stream.receiveCredit != 0 || stream.creditPending != 0 {
++		test.Fatal("ring credit not conserved")
++	}
++	buffer := make([]byte, 3*MaxData)
++	if _, err := io.ReadFull(stream, buffer); err != nil || !bytes.Equal(buffer, bytes.Repeat([]byte{37}, len(buffer))) {
++		test.Fatal("initial read", err)
++	}
++	frame, ok := mux.pickLocked(false)
++	if !ok || frame.kind != muxWindowUpdate || binary.BigEndian.Uint32(frame.payload) != uint32(len(buffer)) {
++		test.Fatal("freed capacity not returned")
++	}
++	for index := 0; index < 3; index++ {
++		mux.dispatchLocked(muxFrame{kind: dataFrame, id: 1, payload: payload})
++	}
++	buffer = make([]byte, 131072)
++	if _, err := io.ReadFull(stream, buffer); err != nil || !bytes.Equal(buffer, bytes.Repeat([]byte{37}, len(buffer))) {
++		test.Fatal("wrapped read", err)
++	}
++	if stream.used != 0 || stream.receiveCredit != 131072 || stream.creditPending != 131072 {
++		test.Fatal("full conservation")
++	}
++	frame, ok = mux.pickLocked(false)
++	if !ok {
++		test.Fatal("missing update")
++	}
++	if _, err := decodeMuxWindow(frame.encode(), 131072); err != nil {
++		test.Fatal(err)
++	}
++	if _, err := decodeMux(frame.encode()); err == nil {
++		test.Fatal("legacy accepted excess credit")
++	}
++	stream.sendCredit = 0
++	mux.dispatchLocked(frame)
++	if stream.sendCredit != 131072 {
++		test.Fatal("wrong send capacity")
++	}
++	mux.dispatchLocked(frame)
++	if stream.terminal == nil || mux.stats.ProtocolErrors != 1 {
++		test.Fatal("credit overflow accepted")
++	}
++}
++
++func TestMux128DataOverflowAndInvalidUpdate(test *testing.T) {
++	for _, value := range []uint32{0, 131073, 0xffffffff} {
++		payload := make([]byte, 4)
++		binary.BigEndian.PutUint32(payload, value)
++		if _, err := decodeMuxWindow((muxFrame{kind: muxWindowUpdate, id: 1, payload: payload}).encode(), 131072); err == nil {
++			test.Fatal(value)
++		}
++	}
++	ctx, cancel := context.WithCancel(context.Background())
++	defer cancel()
++	mux := &Mux{window: 131072, ctx: ctx, cancel: cancel, streams: make(map[uint32]*MuxStream), changed: make(chan struct{})}
++	stream := mux.makeStreamLocked(1)
++	stream.opened = true
++	for index := 0; index < 9; index++ {
++		mux.dispatchLocked(muxFrame{kind: dataFrame, id: 1, payload: make([]byte, MaxData)})
++	}
++	if stream.terminal == nil || mux.stats.ProtocolErrors != 1 {
++		test.Fatal("receive overflow accepted")
++	}
++}
+--- a/carrier/tcpforward/mux_protocol.go
++++ b/carrier/tcpforward/mux_protocol.go
+@@ -37,7 +37,14 @@
+ }
+ 
+ func decodeMux(encoded []byte) (muxFrame, error) {
++	return decodeMuxWindow(encoded, MuxWindow)
++}
++
++func decodeMuxWindow(encoded []byte, window int) (muxFrame, error) {
+ 	var frame muxFrame
++	if window != MuxWindow && window != 131072 {
++		return frame, ErrProtocol
++	}
+ 	if len(encoded) < headerSize || len(encoded) > headerSize+MaxData || encoded[0] != 2 || binary.BigEndian.Uint32(encoded[6:10]) != uint32(len(encoded)-headerSize) {
+ 		return frame, ErrProtocol
+ 	}
+@@ -65,7 +72,7 @@
+ 			return frame, ErrProtocol
+ 		}
+ 	case muxWindowUpdate:
+-		if len(frame.payload) != 4 || binary.BigEndian.Uint32(frame.payload) == 0 || binary.BigEndian.Uint32(frame.payload) > MuxWindow {
++		if len(frame.payload) != 4 || binary.BigEndian.Uint32(frame.payload) == 0 || binary.BigEndian.Uint32(frame.payload) > uint32(window) {
+ 			return frame, ErrProtocol
+ 		}
+ 	case openOK, finFrame, resetFrame, closeFrame:
+--- a/carrier/tcpforward/mux_stream.go
++++ b/carrier/tcpforward/mux_stream.go
+@@ -56,7 +56,11 @@
+ 
+ func (mux *Mux) makeStreamLocked(id uint32) *MuxStream {
+ 	ctx, cancel := context.WithCancel(mux.ctx)
+-	stream := &MuxStream{mux: mux, id: id, ctx: ctx, cancel: cancel, receive: make([]byte, MuxWindow), receiveCredit: MuxWindow, sendCredit: MuxWindow, queuedAt: time.Now()}
++	window := mux.window
++	if window == 0 {
++		window = MuxWindow
++	}
++	stream := &MuxStream{mux: mux, id: id, ctx: ctx, cancel: cancel, receive: make([]byte, window), receiveCredit: window, sendCredit: window, queuedAt: time.Now()}
+ 	mux.streams[id] = stream
+ 	mux.order = append(mux.order, id)
+ 	mux.stats.Opened++
+@@ -177,10 +181,10 @@
+ 		}
+ 		if stream.used > 0 {
+ 			count := min(len(buffer), stream.used)
+-			first := min(count, MuxWindow-stream.head)
++			first := min(count, len(stream.receive)-stream.head)
+ 			copy(buffer, stream.receive[stream.head:stream.head+first])
+ 			copy(buffer[first:count], stream.receive[:count-first])
+-			stream.head = (stream.head + count) % MuxWindow
++			stream.head = (stream.head + count) % len(stream.receive)
+ 			stream.used -= count
+ 			stream.receiveCredit += count
+ 			stream.creditPending += count
+--- a/carrier/wholedevice/session.go
++++ b/carrier/wholedevice/session.go
+@@ -374,7 +374,7 @@
+ 	stopHandshake := context.AfterFunc(connect, func() { carrier.Close() })
+ 	defer stopHandshake()
+ 	trace.Add("FAMILY_TLS", "STARTED", "NONE")
+-	secured, err := familysession.Open(ctx, carrier, raw, false)
++	secured, err := familysession.OpenMux(ctx, carrier, raw, false, true)
+ 	if err != nil {
+ 		startupdiag.Failure(ctx, "DEDICATED_AUTH", err)
+ 		trace.Add("FAMILY_TLS", "FAILED", "FAMILY_TLS_ERROR")
+--- a/clients/android/app/build.gradle
++++ b/clients/android/app/build.gradle
+@@ -113,7 +113,7 @@
+     }
+     applicationVariants.all { variant ->
+         if (variant.buildType.name == 'privateBeta') {
+-            variant.outputs.all { versionCodeOverride = 94; versionNameOverride = '0.1.18-beta94-stability' }
++            variant.outputs.all { versionCodeOverride = 95; versionNameOverride = '0.1.18-beta95-mux-profile' }
+         }
+         if (variant.buildType.name == "friends") {
+             variant.outputs.all { versionCodeOverride = 83; versionNameOverride = "0.1.18-research83-bootstrap" }

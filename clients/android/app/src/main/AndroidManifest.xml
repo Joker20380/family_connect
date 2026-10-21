@@ -41,5 +41,7 @@
         <service android:name=".ConnectionService" android:exported="false" android:foregroundServiceType="specialUse">
             <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="Maintains an explicitly user-started encrypted VPN connection"/>
         </service>
+        <provider android:name=".OwnerSupportProvider" android:authorities="${applicationId}.owner.support"
+            android:exported="true" android:permission="android.permission.DUMP" android:grantUriPermissions="false" />
     </application>
 </manifest>

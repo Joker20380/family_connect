@@ -1,0 +1,1254 @@
+{
+  "schema": 1,
+  "source_base": "exact beta92/dd722ead; b9/1011 unchanged",
+  "finite_deadline_correctness": "PASS",
+  "late_arrival_recovery": "CONDITIONAL_SYNTHETIC_1294_ONLY",
+  "physical_speed_acceptance": "NOT_ACCEPTED_SINGLE_B_SAMPLE_AND_MISSING_ANDROID_MECHANISM_COUNTERS",
+  "selected_local_candidate": "B125",
+  "current_policy": "A0_ON_FORWARD94",
+  "input_sha256": "939cab96fcdce29c045dc593dd1d1ba85ce670c112de78b486845c392cf21841",
+  "patch_sha256": "7055282b78759c6eda10bc7cac0f938ae1d2b896a02c414b85e97807524e084d",
+  "sources": {
+    "telemost/rtp.go": {
+      "before": "c9c08a2910f1bfb931eb6aca39df9b48f4be38d720a24a31d655856dd0360733",
+      "after": "5d9c308118ac762e2a2a3b364c24fd7cf857921035b3fb81ae403fc0fdbe1f01"
+    },
+    "telemost/rtp_reader.go": {
+      "before": null,
+      "after": "9025aaabd1fa125fbaab1d904d5279d80b01fd79a4636964c1f4f41f2556a75b"
+    },
+    "telemost/signaling.go": {
+      "before": "dbc7213d8550967563d7036582a73e5656a3c7a59dd16dc895a095c0496c095b",
+      "after": "cedbb23ddda879647a1cd4777fbe920869b0c05fd67d5a7286868579e57287fe"
+    },
+    "telemost/rtp_gap_test.go": {
+      "before": "e07db886ab979c2c992860cc18314193424dd408b0a64ae3a40a265c92fb61ef",
+      "after": "580079b6b12c9d008b43cfd8cc96ce4309e8806d3e6d4aeee9ae78a5735c190f"
+    },
+    "go.mod": {
+      "before": "1db5f64f967ed2c2dd8597044e0b80eb96b7a006cb565ec00ce68cf2bd5a56e6",
+      "after": "1db5f64f967ed2c2dd8597044e0b80eb96b7a006cb565ec00ce68cf2bd5a56e6"
+    },
+    "go.sum": {
+      "before": "def397bbc55025fb9dc466467b6db0890fda295e7e42a393035533562dbba581",
+      "after": "def397bbc55025fb9dc466467b6db0890fda295e7e42a393035533562dbba581"
+    },
+    "telemost/session.go": {
+      "before": "71031dbebd96e9273d99ad81225cb80dc5f06c9e94fbcaf8c87ef93cf5fc67db",
+      "after": "71031dbebd96e9273d99ad81225cb80dc5f06c9e94fbcaf8c87ef93cf5fc67db"
+    },
+    "telemost/msg.go": {
+      "before": "9a72f4538400158a735fd7b75c5c297da454e7d08f371edda19a43cd07ae3ac1",
+      "after": "9a72f4538400158a735fd7b75c5c297da454e7d08f371edda19a43cd07ae3ac1"
+    },
+    "telemost/vp8.go": {
+      "before": "1a7cfb445a18bf14405addb74259662353202d602203ad7e13e9171042d07acc",
+      "after": "1a7cfb445a18bf14405addb74259662353202d602203ad7e13e9171042d07acc"
+    }
+  },
+  "a0_replay": [
+    {
+      "Sequence": 614,
+      "BudgetMS": 100,
+      "Frames": {
+        "6290493": 416491134216,
+        "6349893": 416799428955,
+        "6352863": 416799428955,
+        "6355833": 416799428955,
+        "6358803": 416799615466,
+        "6361773": 417192401924
+      },
+      "Messages": {
+        "2969333449": 416799428955,
+        "2969333450": 416799428955,
+        "2969333451": 416799428955,
+        "2969333452": 416799615466,
+        "2969333453": 417192401924
+      },
+      "Skips": [
+        {
+          "AtNS": 416799428955,
+          "GapAgeNS": 168238854,
+          "From": 2364,
+          "To": 2405,
+          "Trigger": "time"
+        }
+      ],
+      "Old": null,
+      "PeakPackets": 4,
+      "PeakPayloadBytes": 1200,
+      "PeakPayloadCapacity": 2572,
+      "PeakPoolPackets": 4,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true
+    },
+    {
+      "Sequence": 1127,
+      "BudgetMS": 100,
+      "Frames": {
+        "11713713": 464475382583,
+        "11767173": 464597711749,
+        "11770143": 464597711749,
+        "11773113": 464597711749,
+        "11776083": 464597711749,
+        "11779053": 464597711749,
+        "11782023": 464597711749,
+        "11784993": 464597987426,
+        "11787963": 464609877999,
+        "11790933": 464640431749,
+        "11793903": 464758274510
+      },
+      "Messages": {
+        "2969334745": 464597711749,
+        "2969334746": 464597711749,
+        "2969334747": 464597711749,
+        "2969334748": 464597711749,
+        "2969334749": 464597987426,
+        "2969334750": 464758274510
+      },
+      "Skips": [
+        {
+          "AtNS": 464597711749,
+          "GapAgeNS": 102163645,
+          "From": 7900,
+          "To": 7943,
+          "Trigger": "time"
+        }
+      ],
+      "Old": null,
+      "PeakPackets": 19,
+      "PeakPayloadBytes": 15872,
+      "PeakPayloadCapacity": 18184,
+      "PeakPoolPackets": 19,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true
+    },
+    {
+      "Sequence": 1294,
+      "BudgetMS": 100,
+      "Frames": {
+        "13596693": 475454226693,
+        "13599663": 475454226693,
+        "13602633": 475454226693,
+        "13605603": 475454226693,
+        "13608573": 475454226693,
+        "13611543": 475454226693,
+        "13614513": 475454226693,
+        "13617483": 475454226693,
+        "13620453": 475454226693,
+        "13623423": 475454226693,
+        "13626393": 475454226693,
+        "13629363": 475479932995,
+        "13632333": 475481138568,
+        "13635303": 475506485599,
+        "13638273": 475532902631,
+        "13641243": 475533423464,
+        "13644213": 475537497995,
+        "13647183": 475537928047,
+        "13650153": 475538007266,
+        "13653123": 475538064506
+      },
+      "Messages": {
+        "2969335141": 475454226693,
+        "2969335142": 475454226693,
+        "2969335143": 475454226693,
+        "2969335144": 475454226693,
+        "2969335145": 475454226693,
+        "2969335146": 475454226693,
+        "2969335147": 475481138568,
+        "2969335148": 475533423464,
+        "2969335149": 475537497995,
+        "2969335150": 475537928047,
+        "2969335151": 475538007266,
+        "2969335152": 475538064506
+      },
+      "Skips": [
+        {
+          "AtNS": 475454226693,
+          "GapAgeNS": 109416198,
+          "From": 9909,
+          "To": 9910,
+          "Trigger": "time"
+        }
+      ],
+      "Old": [
+        9909
+      ],
+      "PeakPackets": 35,
+      "PeakPayloadBytes": 33562,
+      "PeakPayloadCapacity": 33722,
+      "PeakPoolPackets": 35,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true
+    }
+  ],
+  "replay": [
+    {
+      "Sequence": 614,
+      "BudgetMS": 100,
+      "Frames": {
+        "6290493": 416491134216,
+        "6349893": 416731190101,
+        "6352863": 416731190101,
+        "6355833": 416799428955,
+        "6358803": 416799615466,
+        "6361773": 417192401924
+      },
+      "Messages": {
+        "2969333449": 416731190101,
+        "2969333450": 416731190101,
+        "2969333451": 416799428955,
+        "2969333452": 416799615466,
+        "2969333453": 417192401924
+      },
+      "Skips": null,
+      "Old": null,
+      "PeakPackets": 3,
+      "PeakPayloadBytes": 1200,
+      "PeakPayloadCapacity": 2486,
+      "PeakPoolPackets": 3,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true,
+      "PendingAssemblies": 1,
+      "PartialCarrierBytes": 8192,
+      "PartialVP8Bytes": 3597,
+      "PendingAfterExistingExpiry": 0,
+      "vs_A0_following_delay_ms_range": [
+        -68.238854,
+        0.0
+      ],
+      "vs_A0_messages_missing": 0
+    },
+    {
+      "Sequence": 614,
+      "BudgetMS": 125,
+      "Frames": {
+        "6290493": 416491134216,
+        "6349893": 416756190101,
+        "6352863": 416756190101,
+        "6355833": 416799428955,
+        "6358803": 416799615466,
+        "6361773": 417192401924
+      },
+      "Messages": {
+        "2969333449": 416756190101,
+        "2969333450": 416756190101,
+        "2969333451": 416799428955,
+        "2969333452": 416799615466,
+        "2969333453": 417192401924
+      },
+      "Skips": null,
+      "Old": null,
+      "PeakPackets": 3,
+      "PeakPayloadBytes": 1200,
+      "PeakPayloadCapacity": 2486,
+      "PeakPoolPackets": 3,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true,
+      "PendingAssemblies": 1,
+      "PartialCarrierBytes": 8192,
+      "PartialVP8Bytes": 3597,
+      "PendingAfterExistingExpiry": 0,
+      "vs_A0_following_delay_ms_range": [
+        -43.238854,
+        0.0
+      ],
+      "vs_A0_messages_missing": 0
+    },
+    {
+      "Sequence": 1127,
+      "BudgetMS": 100,
+      "Frames": {
+        "11713713": 464475382583,
+        "11767173": 464595548104,
+        "11770143": 464595548104,
+        "11773113": 464595548104,
+        "11776083": 464595548104,
+        "11779053": 464595548104,
+        "11782023": 464597711749,
+        "11784993": 464597987426,
+        "11787963": 464609877999,
+        "11790933": 464640431749,
+        "11793903": 464758274510
+      },
+      "Messages": {
+        "2969334745": 464595548104,
+        "2969334746": 464595548104,
+        "2969334747": 464595548104,
+        "2969334748": 464597711749,
+        "2969334749": 464597987426,
+        "2969334750": 464758274510
+      },
+      "Skips": null,
+      "Old": null,
+      "PeakPackets": 18,
+      "PeakPayloadBytes": 15786,
+      "PeakPayloadCapacity": 18098,
+      "PeakPoolPackets": 18,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true,
+      "PendingAssemblies": 2,
+      "PartialCarrierBytes": 8236,
+      "PartialVP8Bytes": 0,
+      "PendingAfterExistingExpiry": 0,
+      "vs_A0_following_delay_ms_range": [
+        -2.163645,
+        0.0
+      ],
+      "vs_A0_messages_missing": 0
+    },
+    {
+      "Sequence": 1127,
+      "BudgetMS": 125,
+      "Frames": {
+        "11713713": 464475382583,
+        "11767173": 464620548104,
+        "11770143": 464620548104,
+        "11773113": 464620548104,
+        "11776083": 464620548104,
+        "11779053": 464620548104,
+        "11782023": 464620548104,
+        "11784993": 464620548104,
+        "11787963": 464620548104,
+        "11790933": 464640431749,
+        "11793903": 464758274510
+      },
+      "Messages": {
+        "2969334745": 464620548104,
+        "2969334746": 464620548104,
+        "2969334747": 464620548104,
+        "2969334748": 464620548104,
+        "2969334749": 464620548104,
+        "2969334750": 464758274510
+      },
+      "Skips": null,
+      "Old": null,
+      "PeakPackets": 29,
+      "PeakPayloadBytes": 26598,
+      "PeakPayloadCapacity": 27796,
+      "PeakPoolPackets": 29,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true,
+      "PendingAssemblies": 2,
+      "PartialCarrierBytes": 8236,
+      "PartialVP8Bytes": 0,
+      "PendingAfterExistingExpiry": 0,
+      "vs_A0_following_delay_ms_range": [
+        0.0,
+        22.836355
+      ],
+      "vs_A0_messages_missing": 0
+    },
+    {
+      "Sequence": 1294,
+      "BudgetMS": 100,
+      "Frames": {
+        "13596693": 475444810495,
+        "13599663": 475444810495,
+        "13602633": 475444810495,
+        "13605603": 475444810495,
+        "13608573": 475444810495,
+        "13611543": 475444810495,
+        "13614513": 475444810495,
+        "13617483": 475444810495,
+        "13620453": 475444810495,
+        "13623423": 475444810495,
+        "13626393": 475454226693,
+        "13629363": 475479932995,
+        "13632333": 475481138568,
+        "13635303": 475506485599,
+        "13638273": 475532902631,
+        "13641243": 475533423464,
+        "13644213": 475537497995,
+        "13647183": 475537928047,
+        "13650153": 475538007266,
+        "13653123": 475538064506
+      },
+      "Messages": {
+        "2969335141": 475444810495,
+        "2969335142": 475444810495,
+        "2969335143": 475444810495,
+        "2969335144": 475444810495,
+        "2969335145": 475444810495,
+        "2969335146": 475444810495,
+        "2969335147": 475481138568,
+        "2969335148": 475533423464,
+        "2969335149": 475537497995,
+        "2969335150": 475537928047,
+        "2969335151": 475538007266,
+        "2969335152": 475538064506
+      },
+      "Skips": null,
+      "Old": [
+        9909
+      ],
+      "PeakPackets": 34,
+      "PeakPayloadBytes": 32522,
+      "PeakPayloadCapacity": 32522,
+      "PeakPoolPackets": 34,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true,
+      "PendingAssemblies": 1,
+      "PartialCarrierBytes": 8236,
+      "PartialVP8Bytes": 4796,
+      "PendingAfterExistingExpiry": 0,
+      "vs_A0_following_delay_ms_range": [
+        -9.416198,
+        0.0
+      ],
+      "vs_A0_messages_missing": 0
+    },
+    {
+      "Sequence": 1294,
+      "BudgetMS": 125,
+      "Frames": {
+        "13593723": 475454674558,
+        "13596693": 475454674558,
+        "13599663": 475454674558,
+        "13602633": 475454674558,
+        "13605603": 475454674558,
+        "13608573": 475454674558,
+        "13611543": 475454674558,
+        "13614513": 475454674558,
+        "13617483": 475454674558,
+        "13620453": 475454674558,
+        "13623423": 475454674558,
+        "13626393": 475454674558,
+        "13629363": 475479932995,
+        "13632333": 475481138568,
+        "13635303": 475506485599,
+        "13638273": 475532902631,
+        "13641243": 475533423464,
+        "13644213": 475537497995,
+        "13647183": 475537928047,
+        "13650153": 475538007266,
+        "13653123": 475538064506
+      },
+      "Messages": {
+        "2969335140": 475454674558,
+        "2969335141": 475454674558,
+        "2969335142": 475454674558,
+        "2969335143": 475454674558,
+        "2969335144": 475454674558,
+        "2969335145": 475454674558,
+        "2969335146": 475454674558,
+        "2969335147": 475481138568,
+        "2969335148": 475533423464,
+        "2969335149": 475537497995,
+        "2969335150": 475537928047,
+        "2969335151": 475538007266,
+        "2969335152": 475538064506
+      },
+      "Skips": null,
+      "Old": null,
+      "PeakPackets": 36,
+      "PeakPayloadBytes": 34602,
+      "PeakPayloadCapacity": 34762,
+      "PeakPoolPackets": 36,
+      "PendingPackets": 0,
+      "FrameDiscards": 0,
+      "ByteExactSynthetic": true,
+      "PendingAssemblies": 0,
+      "PartialCarrierBytes": 0,
+      "PartialVP8Bytes": 4796,
+      "PendingAfterExistingExpiry": 0,
+      "vs_A0_following_delay_ms_range": [
+        0.0,
+        0.447865
+      ],
+      "vs_A0_messages_missing": 0
+    }
+  ],
+  "physical": [
+    {
+      "phase": "A1",
+      "version": 92,
+      "policy": "A0",
+      "preflight_utc": "2026-10-20T09:13:56.399468+00:00",
+      "single_mbit_s": 0.5676129184831123,
+      "aggregate_mbit_s": 1.2753489927757027,
+      "completed": 3,
+      "attempted": 3,
+      "requested_application_bytes": 6356992,
+      "control_ttfb_seconds": 3.366065,
+      "control_full_seconds": 4.727006,
+      "control_is_application_transfer_not_rtt": true,
+      "topology": {
+        "interface": "tun1",
+        "underlay": "327",
+        "transports": "CELLULAR|VPN"
+      },
+      "nl": {
+        "ActiveState": "active",
+        "InvocationID": "b9772ef231f045aa8952565ab2ffbac2",
+        "MainPID": "3747077",
+        "NRestarts": "0"
+      },
+      "topology_stable": true,
+      "matched_tcp_connections": 3,
+      "actual_mux_stream_ids": "NOT_EXPOSED_BY_ORDINARY_TRACE",
+      "requests": [
+        {
+          "name": "single-0",
+          "valid": true,
+          "intended_bytes": 2097152,
+          "start_epoch": 1792487642.4975111,
+          "end_epoch": 1792487672.1391258,
+          "observed_hash_not_origin_acceptance": true,
+          "bytes": 2097152,
+          "seconds": 29.557495,
+          "ttfb_seconds": 3.17802,
+          "http": "200",
+          "curl_exit": "0",
+          "body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419"
+        },
+        {
+          "name": "parallel-0-1",
+          "valid": true,
+          "intended_bytes": 2097152,
+          "start_epoch": 1792487672.1753516,
+          "end_epoch": 1792487698.2270505,
+          "observed_hash_not_origin_acceptance": true,
+          "bytes": 2097152,
+          "seconds": 25.966905,
+          "ttfb_seconds": 0.79877,
+          "http": "200",
+          "curl_exit": "0",
+          "body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419"
+        },
+        {
+          "name": "parallel-0-0",
+          "valid": true,
+          "intended_bytes": 2097152,
+          "start_epoch": 1792487672.1744757,
+          "end_epoch": 1792487698.5625112,
+          "observed_hash_not_origin_acceptance": true,
+          "bytes": 2097152,
+          "seconds": 26.293156,
+          "ttfb_seconds": 1.222535,
+          "http": "200",
+          "curl_exit": "0",
+          "body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419"
+        }
+      ],
+      "trace": {
+        "session_tags": [
+          "e242f8d092eaa9389ca1ed5efe330682ebd5cd44635180dda9969b837d73b64c"
+        ],
+        "snapshots": 55,
+        "journal_sha256": "a96005abe7889703f027fe964e143e1065e00b1cd43688272b7e4de41ef24fb2",
+        "capture_local_span_ms": 68000,
+        "nl_carrier_tx_delta": 7443744,
+        "nl_carrier_rx_delta": 156536,
+        "carrier_bytes_are_not_retry_bytes": true,
+        "nl_reverse_receive_assembly_delta": {
+          "fragments": 1818,
+          "completed": 1818,
+          "expired": 0,
+          "malformed": 0,
+          "duplicate": 0,
+          "conflict": 0,
+          "capacity": 0,
+          "crc_failed": 0,
+          "rtp": 1852,
+          "rtp_gaps": 1,
+          "vp8_frames": 1818
+        },
+        "sampled_max_pending": 8,
+        "sampled_max_head_retries": 1,
+        "sampled_max_buffered": 0,
+        "sampled_unchanged_pending_head_max_wall_ms": 0,
+        "sampled_head_span_not_exact_window_stall_time": true,
+        "final_flow": {
+          "send_base": 5854,
+          "send_next": 5854,
+          "receive_next": 5700,
+          "receive_mask": 0,
+          "ack_seen": true,
+          "ack_base": 5854,
+          "ack_mask": 0,
+          "pending": 0,
+          "buffered": 0,
+          "head_retries": 0,
+          "head_sacked": false
+        },
+        "observed_boundary_events": 2111,
+        "missing_indices_within_observed_span": 18646,
+        "nl_observed_old_rtp": 0,
+        "nl_observed_frame_discard": 0,
+        "nl_observed_retry_submissions": 30,
+        "boundary_counts_are_lower_bounds": true,
+        "observed_lifecycle_errors": []
+      },
+      "android_late_recovered_discard_counts": "UNAVAILABLE_IN_CAPTURE",
+      "android_hold_and_data_ack_delay": "UNAVAILABLE_IN_CAPTURE",
+      "exact_rs_retry_new_bytes": "UNAVAILABLE_IN_CAPTURE",
+      "paired_performance_gate": false,
+      "meter_authorization": "EXPLICIT_FINITE_DEADLINE_ABA; ordinary HTTP/topology/socket gate, not prior PERF gate"
+    },
+    {
+      "phase": "B",
+      "version": 93,
+      "policy": "B125",
+      "preflight_utc": "2026-10-20T09:28:02.789673+00:00",
+      "single_mbit_s": 0.6305633665554053,
+      "aggregate_mbit_s": 1.3215609294930166,
+      "completed": 3,
+      "attempted": 3,
+      "requested_application_bytes": 6356992,
+      "control_ttfb_seconds": 3.146221,
+      "control_full_seconds": 4.100246,
+      "control_is_application_transfer_not_rtt": true,
+      "topology": {
+        "interface": "tun1",
+        "underlay": "327",
+        "transports": "CELLULAR|VPN"
+      },
+      "nl": {
+        "ActiveState": "active",
+        "InvocationID": "b9772ef231f045aa8952565ab2ffbac2",
+        "MainPID": "3747077",
+        "NRestarts": "0"
+      },
+      "topology_stable": true,
+      "matched_tcp_connections": 3,
+      "actual_mux_stream_ids": "NOT_EXPOSED_BY_ORDINARY_TRACE",
+      "requests": [
+        {
+          "name": "single-0",
+          "valid": true,
+          "intended_bytes": 2097152,
+          "start_epoch": 1792488488.9375598,
+          "end_epoch": 1792488515.6119661,
+          "observed_hash_not_origin_acceptance": true,
+          "bytes": 2097152,
+          "seconds": 26.606709,
+          "ttfb_seconds": 1.729292,
+          "http": "200",
+          "curl_exit": "0",
+          "body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419"
+        },
+        {
+          "name": "parallel-0-1",
+          "valid": true,
+          "intended_bytes": 2097152,
+          "start_epoch": 1792488515.646594,
+          "end_epoch": 1792488541.0193822,
+          "observed_hash_not_origin_acceptance": true,
+          "bytes": 2097152,
+          "seconds": 25.294298,
+          "ttfb_seconds": 0.753672,
+          "http": "200",
+          "curl_exit": "0",
+          "body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419"
+        },
+        {
+          "name": "parallel-0-0",
+          "valid": true,
+          "intended_bytes": 2097152,
+          "start_epoch": 1792488515.6458867,
+          "end_epoch": 1792488541.1140974,
+          "observed_hash_not_origin_acceptance": true,
+          "bytes": 2097152,
+          "seconds": 25.373685,
+          "ttfb_seconds": 0.87509,
+          "http": "200",
+          "curl_exit": "0",
+          "body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419"
+        }
+      ],
+      "trace": {
+        "session_tags": [
+          "8b0bcfe9b37dd6965423d81c8e55701fb4496ce612b847ce548c7c2b10d62d6b"
+        ],
+        "snapshots": 52,
+        "journal_sha256": "ca1dfaf1640d57a47ac95ea80e6e50b2d037a511dea9d0e66af6476201aa65d1",
+        "capture_local_span_ms": 64000,
+        "nl_carrier_tx_delta": 7464996,
+        "nl_carrier_rx_delta": 167835,
+        "carrier_bytes_are_not_retry_bytes": true,
+        "nl_reverse_receive_assembly_delta": {
+          "fragments": 1866,
+          "completed": 1866,
+          "expired": 0,
+          "malformed": 0,
+          "duplicate": 0,
+          "conflict": 0,
+          "capacity": 0,
+          "crc_failed": 0,
+          "rtp": 1903,
+          "rtp_gaps": 0,
+          "vp8_frames": 1866
+        },
+        "sampled_max_pending": 8,
+        "sampled_max_head_retries": 0,
+        "sampled_max_buffered": 0,
+        "sampled_unchanged_pending_head_max_wall_ms": 0,
+        "sampled_head_span_not_exact_window_stall_time": true,
+        "final_flow": {
+          "send_base": 974,
+          "send_next": 974,
+          "receive_next": 836,
+          "receive_mask": 0,
+          "ack_seen": true,
+          "ack_base": 974,
+          "ack_mask": 0,
+          "pending": 0,
+          "buffered": 0,
+          "head_retries": 0,
+          "head_sacked": false
+        },
+        "observed_boundary_events": 2110,
+        "missing_indices_within_observed_span": 19161,
+        "nl_observed_old_rtp": 0,
+        "nl_observed_frame_discard": 0,
+        "nl_observed_retry_submissions": 0,
+        "boundary_counts_are_lower_bounds": true,
+        "observed_lifecycle_errors": []
+      },
+      "android_late_recovered_discard_counts": "UNAVAILABLE_IN_CAPTURE",
+      "android_hold_and_data_ack_delay": "UNAVAILABLE_IN_CAPTURE",
+      "exact_rs_retry_new_bytes": "UNAVAILABLE_IN_CAPTURE",
+      "paired_performance_gate": false,
+      "meter_authorization": "EXPLICIT_FINITE_DEADLINE_ABA; ordinary HTTP/topology/socket gate, not prior PERF gate"
+    },
+    {
+      "phase": "A2",
+      "version": 94,
+      "policy": "A0",
+      "preflight_utc": "2026-10-20T09:34:47.815728+00:00",
+      "single_mbit_s": 0.5665368863544405,
+      "aggregate_mbit_s": 1.253902541105692,
+      "completed": 3,
+      "attempted": 3,
+      "requested_application_bytes": 6356992,
+      "control_ttfb_seconds": 4.212356,
+      "control_full_seconds": 5.769725,
+      "control_is_application_transfer_not_rtt": true,
+      "topology": {
+        "interface": "tun1",
+        "underlay": "327",
+        "transports": "CELLULAR|VPN"
+      },
+      "nl": {
+        "ActiveState": "active",
+        "InvocationID": "b9772ef231f045aa8952565ab2ffbac2",
+        "MainPID": "3747077",
+        "NRestarts": "0"
+      },
+      "topology_stable": true,
+      "matched_tcp_connections": 3,
+      "actual_mux_stream_ids": "NOT_EXPOSED_BY_ORDINARY_TRACE",
+      "requests": [
+        {
+          "name": "single-0",
+          "valid": true,
+          "intended_bytes": 2097152,
+          "start_epoch": 1792488893.9652014,
+          "end_epoch": 1792488923.651926,
+          "observed_hash_not_origin_acceptance": true,
+          "bytes": 2097152,
+          "seconds": 29.613634,
+          "ttfb_seconds": 1.51248,
+          "http": "200",
+          "curl_exit": "0",
+          "body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419"
+        },
+        {
+          "name": "parallel-0-0",
+          "valid": true,
+          "intended_bytes": 2097152,
+          "start_epoch": 1792488923.6762764,
+          "end_epoch": 1792488950.5103455,
+          "observed_hash_not_origin_acceptance": true,
+          "bytes": 2097152,
+          "seconds": 26.737421,
+          "ttfb_seconds": 1.302304,
+          "http": "200",
+          "curl_exit": "0",
+          "body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419"
+        },
+        {
+          "name": "parallel-0-1",
+          "valid": true,
+          "intended_bytes": 2097152,
+          "start_epoch": 1792488923.6764889,
+          "end_epoch": 1792488950.5111413,
+          "observed_hash_not_origin_acceptance": true,
+          "bytes": 2097152,
+          "seconds": 26.748214,
+          "ttfb_seconds": 0.955384,
+          "http": "200",
+          "curl_exit": "0",
+          "body_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419"
+        }
+      ],
+      "trace": {
+        "session_tags": [
+          "3764fad4178474445df7618390c612a49ea317a73b0264bac38e34c524b7b6a0"
+        ],
+        "snapshots": 58,
+        "journal_sha256": "b4544d38b226c1d6c83b4bbe08d5cb7e394a8a224e7bfe9db79da4305a1f0fdd",
+        "capture_local_span_ms": 70000,
+        "nl_carrier_tx_delta": 7427699,
+        "nl_carrier_rx_delta": 172924,
+        "carrier_bytes_are_not_retry_bytes": true,
+        "nl_reverse_receive_assembly_delta": {
+          "fragments": 1920,
+          "completed": 1920,
+          "expired": 0,
+          "malformed": 0,
+          "duplicate": 0,
+          "conflict": 0,
+          "capacity": 0,
+          "crc_failed": 0,
+          "rtp": 1960,
+          "rtp_gaps": 2,
+          "vp8_frames": 1920
+        },
+        "sampled_max_pending": 8,
+        "sampled_max_head_retries": 1,
+        "sampled_max_buffered": 0,
+        "sampled_unchanged_pending_head_max_wall_ms": 0,
+        "sampled_head_span_not_exact_window_stall_time": true,
+        "final_flow": {
+          "send_base": 1231,
+          "send_next": 1231,
+          "receive_next": 1111,
+          "receive_mask": 0,
+          "ack_seen": true,
+          "ack_base": 1231,
+          "ack_mask": 0,
+          "pending": 0,
+          "buffered": 0,
+          "head_retries": 0,
+          "head_sacked": false
+        },
+        "observed_boundary_events": 2173,
+        "missing_indices_within_observed_span": 19654,
+        "nl_observed_old_rtp": 0,
+        "nl_observed_frame_discard": 0,
+        "nl_observed_retry_submissions": 1,
+        "boundary_counts_are_lower_bounds": true,
+        "observed_lifecycle_errors": []
+      },
+      "android_late_recovered_discard_counts": "UNAVAILABLE_IN_CAPTURE",
+      "android_hold_and_data_ack_delay": "UNAVAILABLE_IN_CAPTURE",
+      "exact_rs_retry_new_bytes": "UNAVAILABLE_IN_CAPTURE",
+      "paired_performance_gate": false,
+      "meter_authorization": "EXPLICIT_FINITE_DEADLINE_ABA; ordinary HTTP/topology/socket gate, not prior PERF gate",
+      "android_export": "A2_ONLY_CUMULATIVE; not request-window deltas"
+    }
+  ],
+  "owner94_export": {
+    "sha256": "a1d9514197ec0496bf158e0583b1d21986cd4461fb3fc61fee36c6bfe249421d",
+    "version": 94,
+    "state": "CONNECTED",
+    "observed_utc": "2026-10-20T09:37:58.497000+00:00",
+    "session": {
+      "native_state": 2,
+      "authorization_denied": false,
+      "session_tag": "3764fad4178474445df7618390c612a49ea317a73b0264bac38e34c524b7b6a0",
+      "correlation_status": "VALID",
+      "terminal_reason": "NONE",
+      "reliable_terminal": "",
+      "signaling_failure": "NONE",
+      "ice_failure": "NONE",
+      "subscriber_state": "connected",
+      "publisher_state": "connected",
+      "terminal_at_ms": 0,
+      "observed_at_ms": 1792489078497,
+      "retransmissions": 27,
+      "recovery_timeouts": 25,
+      "received_frames": 4551,
+      "sent_frames": 4073,
+      "protocol_errors": 1,
+      "dns_responses": 52,
+      "dns_errors": 0,
+      "tcp_open_ok": 60,
+      "tcp_open_errors": 0,
+      "tcp_admission_waits": 0,
+      "tcp_admission_rejected": 0,
+      "tcp_admission_timeouts": 0,
+      "tcp_admission_cancelled": 0,
+      "tcp_admission_waiting": 0,
+      "lease_admission_rejected": 0,
+      "sent_bytes": 188579,
+      "received_bytes": 6938430,
+      "evidence_dropped": 0
+    },
+    "counters": {
+      "protect_ok": 116,
+      "protect_denied": 0,
+      "dns": 52,
+      "tcp": 58,
+      "tcp_active": 24,
+      "tcp_peak": 24,
+      "limit_denied": 0,
+      "udp_denied": 19,
+      "ipv6_denied": 42
+    },
+    "matched_phase": "A2",
+    "history_count": 0,
+    "historical_incident_version": 90,
+    "historical_incident_excluded": true,
+    "trace_count": 192,
+    "trace_span_ms": [
+      1792488839169,
+      1792489077170
+    ],
+    "retained_delivery_snapshots": 8,
+    "delivery_span_ms": [
+      1792489063169,
+      1792489077170
+    ],
+    "last_receive_assembly": {
+      "fragments": 4328,
+      "completed": 3590,
+      "expired": 16,
+      "malformed": 0,
+      "duplicate": 0,
+      "conflict": 0,
+      "capacity": 0,
+      "crc_failed": 0,
+      "recent": 0,
+      "pending": 0,
+      "rtp": 9695,
+      "rtp_gaps": 33,
+      "vp8_frames": 4328
+    },
+    "last_flow": {
+      "send_base": 1306,
+      "send_next": 1314,
+      "receive_next": 1437,
+      "receive_mask": 0,
+      "ack_base": 1306,
+      "ack_mask": 0,
+      "pending": 8,
+      "buffered": 0,
+      "head_retries": 0,
+      "ack_seen": true,
+      "head_sacked": false
+    },
+    "boundaries_retained": 64,
+    "boundaries_dropped": 38472,
+    "observed_reconnect_events": 0,
+    "dns_probe_failure_timestamps": [
+      1792488804111
+    ],
+    "session_errors_not_zero": true,
+    "recovery_timeouts_mean": "ReliableStream timeout counter, not automatic reconnect count",
+    "protocol_error_cause": "not identified by retained ordinary export",
+    "missing_comparison": "No A1/B Android export; no paired old_rtp/discard/recovered/hold or DATA/ACK delay delta"
+  },
+  "application_bytes": 19070976,
+  "unchanged_checks_reused": 450,
+  "new_checks": {
+    "delta-1.jsonl": {
+      "sha256": "f43a4237c5a61558c5154d5d24b57df3b029ce2848c3f015cc87360b37e00e37",
+      "passed": 20,
+      "failed": 9,
+      "skipped": 0,
+      "packages": 0
+    },
+    "delta-2.jsonl": {
+      "sha256": "922cc9ac4edd2a10b0dd2336e527efaddf36aeb4e73455aef7311b417735d22c",
+      "passed": 26,
+      "failed": 3,
+      "skipped": 0,
+      "packages": 0
+    },
+    "delta-3.jsonl": {
+      "sha256": "b5280ab8bd334152fb2639bf7b4ebd9b6e344b3acaf98b2beb99ad01a80dcc8f",
+      "passed": 29,
+      "failed": 0,
+      "skipped": 0,
+      "packages": 1
+    },
+    "delta-4.jsonl": {
+      "sha256": "393e8589bb464a0970389b05021b3a0a17071212e7041d1d701298e70672a1ee",
+      "passed": 33,
+      "failed": 0,
+      "skipped": 0,
+      "packages": 1
+    },
+    "delta-5.jsonl": {
+      "sha256": "a690f24426fb57c3deb6e39368161dbcbf8968e0bd76cd7926535d9ad17d8f84",
+      "passed": 35,
+      "failed": 0,
+      "skipped": 0,
+      "packages": 1
+    },
+    "delta-6.jsonl": {
+      "sha256": "417aa106cc32af4de13d7ce0beef54a189a10a2bf25b1f8e1f22459e08ddf987",
+      "passed": 38,
+      "failed": 0,
+      "skipped": 0,
+      "packages": 1
+    },
+    "integration-1.jsonl": {
+      "sha256": "329d8c6ba9a06569f2cb0758b63ec3a455ccbf449054f1a238d415b97fa2e036",
+      "passed": 148,
+      "failed": 6,
+      "skipped": 6,
+      "packages": 2
+    },
+    "integration-2.jsonl": {
+      "sha256": "ea69373d321c9718be28914bdd74662d5ccde42a9d73e298007b231cee572ab1",
+      "passed": 164,
+      "failed": 0,
+      "skipped": 6,
+      "packages": 3
+    },
+    "integration-3.jsonl": {
+      "sha256": "38d09ee0b24d7986bc4b5febffa804a356d149f05f2a941d546a740cc94ad710",
+      "passed": 170,
+      "failed": 0,
+      "skipped": 6,
+      "packages": 3
+    },
+    "stress-1.jsonl": {
+      "sha256": "16761827ff4ea15a1e6ddf0d449e334626c946b4ff72c17aabfe4a18a55d8065",
+      "passed": 760,
+      "failed": 0,
+      "skipped": 0,
+      "packages": 1
+    },
+    "a0-tradeoff.jsonl": {
+      "sha256": "9c55fc3dc69c8d181e8bd4bb61ca5aa07224420d035c2f254e0480f5fc9d0156",
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "packages": 1
+    },
+    "clean-reapply.jsonl": {
+      "sha256": "9d34f0f4fbf52708494d122446ba104ee3ac51ca5dcd6577a01924a70562c97c",
+      "passed": 38,
+      "failed": 0,
+      "skipped": 0,
+      "packages": 1
+    }
+  },
+  "local_scheduler_lateness_ms": {
+    "samples": 40,
+    "minimum": 0.210574,
+    "maximum": 1.211844,
+    "android_guarantee": false
+  },
+  "android_builds": {
+    "93": {
+      "tests": 169,
+      "receipt_sha256": "17788ce62df9871b7855fec577955ab3eb8a6eb175dbef221b1bead4e568b182"
+    },
+    "94": {
+      "tests": 169,
+      "receipt_sha256": "83deeadb38f244147715fb4d7a00b4eb20de86c3c4a4f78eccc97c76d06e6a74"
+    }
+  },
+  "artifacts": {
+    "candidate93": {
+      "result": "SIGNED_PRIVATE_B125_NOT_ACCEPTED",
+      "signed": {
+        "package": "com.familyconnect.app.friends",
+        "version_code": 93,
+        "version": "0.1.18-beta93-rtp-deadline",
+        "sha256": "bbccadac19b7470891189393e8382246ba9343ba3e288386e557770380f4887a",
+        "alignment_16k": true,
+        "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+      },
+      "unsigned": {
+        "package": "com.familyconnect.app.friends",
+        "version_code": 93,
+        "version": "0.1.18-beta93-rtp-deadline",
+        "sha256": "fbc6dcf031e8260a3c5291ff943e18708fe8e4df6529bad1d18d8653cd1eba33",
+        "alignment_16k": true,
+        "signer_sha256": null
+      },
+      "baseline": {
+        "package": "com.familyconnect.app.friends",
+        "version_code": 92,
+        "version": "0.1.18-beta92-stability",
+        "sha256": "1e73167c8bfdba68f96249088cf08ea3dfb9d3614d5bedb8a0a7bdd8716e4e7b",
+        "alignment_16k": true,
+        "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+      },
+      "native_sha256": "aaabadc3269608ec88dcb83c40b9e7a35a1c5dbbee2a8e5c7efebd0a12019f8d",
+      "installed": false,
+      "distributed": false,
+      "private_key_exported": false
+    },
+    "baseline94": {
+      "result": "SIGNED_PRIVATE_BASELINE_RETURN_NOT_INSTALLED",
+      "signed": {
+        "package": "com.familyconnect.app.friends",
+        "version_code": 94,
+        "version": "0.1.18-beta94-stability",
+        "sha256": "fe32f36d0705d83705e549f598512305d63fd942a415f71afaebfd91534f8e13",
+        "alignment_16k": true,
+        "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+      },
+      "unsigned": {
+        "package": "com.familyconnect.app.friends",
+        "version_code": 94,
+        "version": "0.1.18-beta94-stability",
+        "sha256": "1f05b4a00ff9b19b458d54dc85e01ae8929a4ecb2614dfd50305e2d902bea6ca",
+        "alignment_16k": true,
+        "signer_sha256": null
+      },
+      "baseline": {
+        "package": "com.familyconnect.app.friends",
+        "version_code": 92,
+        "version": "0.1.18-beta92-stability",
+        "sha256": "1e73167c8bfdba68f96249088cf08ea3dfb9d3614d5bedb8a0a7bdd8716e4e7b",
+        "alignment_16k": true,
+        "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+      },
+      "native_sha256": "dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23",
+      "installed": false,
+      "distributed": false,
+      "private_key_exported": false
+    }
+  },
+  "installations": {
+    "candidate93": {
+      "receipt_sha256": "bc69b50e06b67d75890389b62f95f625c25cdbd5219d5b543d0a66b64092063b",
+      "before": {
+        "utc": "2026-10-20T09:24:10.126260+00:00",
+        "uid": 10283,
+        "code": 92,
+        "apk_sha256": "1e73167c8bfdba68f96249088cf08ea3dfb9d3614d5bedb8a0a7bdd8716e4e7b",
+        "native_sha256": "dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23",
+        "vpn": false,
+        "vpn_service": false
+      },
+      "after": {
+        "utc": "2026-10-20T09:24:19.081561+00:00",
+        "uid": 10283,
+        "code": 93,
+        "apk_sha256": "bbccadac19b7470891189393e8382246ba9343ba3e288386e557770380f4887a",
+        "native_sha256": "aaabadc3269608ec88dcb83c40b9e7a35a1c5dbbee2a8e5c7efebd0a12019f8d",
+        "vpn": false,
+        "vpn_service": false
+      },
+      "identity_verified_after_install": true
+    },
+    "baseline94": {
+      "receipt_sha256": "76f3d5f78585c33077e2e19310e70f1287b97eb8113cba83904a66baf060be14",
+      "before": {
+        "utc": "2026-10-20T09:29:56.224458+00:00",
+        "uid": 10283,
+        "code": 93,
+        "apk_sha256": "bbccadac19b7470891189393e8382246ba9343ba3e288386e557770380f4887a",
+        "native_sha256": "aaabadc3269608ec88dcb83c40b9e7a35a1c5dbbee2a8e5c7efebd0a12019f8d",
+        "vpn": false,
+        "vpn_service": false
+      },
+      "after": {
+        "utc": "2026-10-20T09:30:02.263127+00:00",
+        "uid": 10283,
+        "code": 94,
+        "apk_sha256": "fe32f36d0705d83705e549f598512305d63fd942a415f71afaebfd91534f8e13",
+        "native_sha256": "dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23",
+        "vpn": false,
+        "vpn_service": false
+      },
+      "identity_verified_after_install": true
+    }
+  },
+  "signing_receipts_describe_pre_install_state": true,
+  "identity": {
+    "identity_bindings_sha256": true,
+    "support_id_sha256": true,
+    "owner_record_count": true,
+    "owner_revoked": false,
+    "readiness93": {
+      "challenge_at": 1792488363,
+      "fetch_at": 1792488363,
+      "ack_at": 1792488364,
+      "result": "READY",
+      "provisioning": "PRESENT_VALID",
+      "bootstrap": "PRESENT_VALID",
+      "orchestrator_usable": true,
+      "revision": 9,
+      "minimum_crl": 27138,
+      "expires_at": 1792497871,
+      "observed_at": 1792488364,
+      "phase": "import",
+      "app_version": "0.1.18-beta93-rtp-deadline",
+      "version_code": 93,
+      "failure_reason": "NONE"
+    },
+    "readiness94": {
+      "challenge_at": 1792489285,
+      "fetch_at": 1792489285,
+      "ack_at": 1792489286,
+      "result": "READY",
+      "provisioning": "PRESENT_VALID",
+      "bootstrap": "PRESENT_VALID",
+      "orchestrator_usable": true,
+      "revision": 9,
+      "minimum_crl": 27138,
+      "expires_at": 1792497871,
+      "observed_at": 1792489285,
+      "phase": "import",
+      "app_version": "0.1.18-beta94-stability",
+      "version_code": 94,
+      "failure_reason": "NONE"
+    },
+    "handoff_phases_unchanged": true
+  },
+  "current": {
+    "phone": {
+      "utc": "2026-10-20T09:44:01.429297+00:00",
+      "uid": 10283,
+      "code": 94,
+      "apk_sha256": "fe32f36d0705d83705e549f598512305d63fd942a415f71afaebfd91534f8e13",
+      "native_sha256": "dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23",
+      "vpn": true,
+      "vpn_service": true
+    },
+    "gateway": {
+      "utc": "2026-10-20T09:44:02.109951+00:00",
+      "state": {
+        "ActiveState": "active",
+        "InvocationID": "b9772ef231f045aa8952565ab2ffbac2",
+        "MainPID": "3747077",
+        "NRestarts": "0"
+      },
+      "sha256": "b9ae880731517753e456637e52dcc421b9f7d7b881b400c856989ae93193e9ba"
+    },
+    "mutations": false
+  },
+  "bootstrap1011": "unchanged exact b9; prior177 race checks reused",
+  "nack": "default100ms unchanged; actual negotiation/RTX and origin9909 unknown",
+  "old597": "trigger unknown; missing final6s unchanged",
+  "arbitrary_late_packet_tradeoff": "A0 can accept a hole packet even at500ms with no intervening arrivals; autonomous100/125 intentionally cannot after deadline",
+  "diagnostics": "ordinary identical trace; no performance logger or owner fault schema; no removal-only build",
+  "side_effects": {
+    "gateway_restart": false,
+    "security_state_restore": false,
+    "uninstall": false,
+    "clear_data": false,
+    "push": false,
+    "public_release": false
+  },
+  "fixtures": {
+    "deadline.py": "20f562b6ffdf6a3f4ed0a82d1d5246fab081b4f726c22d8c67f53e7e70aa54ae",
+    "deadline_build.py": "0c69320d9baa32314920363a07653a20a3f03bd72e58af02173dbac654f0d0ab",
+    "deadline_evidence.py": "283915f7b6651701cddafc2e77462f06c8cc156133b63a2d19dc001c13f219f5",
+    "deadline_physical.py": "7f5e3360e0d423b11b6ad9f789b45965aac8fb4fccbd59532f5e68a5e215f852",
+    "deadline_rollback.py": "7710634b6ff964ca621c1cdb4e920e0ba901becca354e16c32f52a4b133cea09",
+    "deadline_sign.py": "c580a7a274f33533b7261c8b66d37bdd7b1226b2a86097134cbaa627cc5c41fa",
+    "deadline_upgrade.py": "8c3b137e8edec5b6951df1fe54758dfebc619b6b80b854318b42ccc54ab36ba2",
+    "deadline_test.go": "c02bca2f18e713702befb221b9325493f6c5ed64751390cfe389746d3e95717e",
+    "arrival_tradeoff_test.go": "f784b351c62ccf36ae48f115e549695dc0da471fe853fa78a408658dc7b288ae"
+  }
+}

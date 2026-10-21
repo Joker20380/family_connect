@@ -3,7 +3,7 @@
 Every subsequent configuration request requires a fresh single-use device proof.
 No entitlement expiry/payment condition. Operator revocation remains explicit.
 """
-import base64,hashlib,json,os,secrets,sqlite3,time,uuid
+import base64,hashlib,json,os,re,secrets,sqlite3,time,uuid
 from contextlib import contextmanager
 from pathlib import Path
 from device_identity.device import _decode,verify_transport_key_proof
@@ -47,7 +47,7 @@ CREATE TABLE challenges(nonce TEXT PRIMARY KEY, device TEXT NOT NULL, public TEX
   key=_decode(public,64);_decode(wg,32)
   return hashlib.sha256(key).hexdigest()[:32]
  def challenge(self,public_identity,wireguard_public_key,purpose,invitation=''):
-  if purpose not in ('activate','status','support','ru','nl','refer','notices-role','notices-publish','notices-list','notices-edit'):raise Rejected()
+  if purpose not in ('activate','status','support','ru','nl','refer','notices-role','notices-publish','notices-list','notices-edit') and not (isinstance(purpose,str) and re.fullmatch(r'diagnostics:[0-9a-f]{64}',purpose)):raise Rejected()
   device=self.binding(public_identity,wireguard_public_key);now=int(self.clock());invite=None
   with self.db() as db:
    row=db.execute('SELECT * FROM devices WHERE device=?',(device,)).fetchone()

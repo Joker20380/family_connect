@@ -1,0 +1,569 @@
+*** Begin Patch
+*** Update File: cmd/bootstrap-broker/main.go
+@@
+ 		defer output.Unlock()
+ 		_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": "session_terminal", "utc": time.Now().UTC(), "diagnostic": report})
+ 	}
++	profileDiagnostic := func(report sessiondiag.Report) {
++		output.Lock()
++		defer output.Unlock()
++		_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": "session_profile", "utc": time.Now().UTC(), "diagnostic": report})
++	}
+ 	observer.stage("BROKER")
+-	broker, err := roombroker.New(provider, roombroker.TelemostGateway{CredentialsPath: *path, Event: emit, Diagnostic: diagnostic, Services: pinnedChatServices(*chatServices), AllowInternet: true}, roombroker.DefaultLimits(), func(state roombroker.State, code roombroker.Code) {
++	broker, err := roombroker.New(provider, roombroker.TelemostGateway{CredentialsPath: *path, Event: emit, Diagnostic: diagnostic, ProfileDiagnostic: profileDiagnostic, Services: pinnedChatServices(*chatServices), AllowInternet: true}, roombroker.DefaultLimits(), func(state roombroker.State, code roombroker.Code) {
+ 		output.Lock()
+ 		defer output.Unlock()
+ 		_ = json.NewEncoder(os.Stdout).Encode(map[string]any{"event": string(state), "utc": time.Now().UTC(), "reason": brokerReason(code)})
+*** Update File: familysession/session.go
+@@
+ 	return openReliable(ctx, endpoint, raw, server, reliablestream.DefaultConfig(), credit128)
+ }
+ 
++func OpenMuxReliable(ctx context.Context, endpoint PacketEndpoint, raw []byte, server, credit128 bool, reliability reliablestream.Config) (*Session, error) {
++	return openReliable(ctx, endpoint, raw, server, reliability, credit128)
++}
++
+ func openReliable(ctx context.Context, endpoint PacketEndpoint, raw []byte, server bool, reliability reliablestream.Config, credit128 bool) (*Session, error) {
+ 	config, expiry, err := configuration(raw, server, credit128)
+ 	if err != nil {
+*** Update File: reliablestream/engine.go
+@@
+ 	Depth    int     `json:"depth"`
+ }
+ 
++type Limits struct {
++	LocalSend            int  `json:"local_send"`
++	LocalReceive         int  `json:"local_receive"`
++	PeerReceive          int  `json:"peer_receive"`
++	EffectiveSend        int  `json:"effective_send"`
++	LocalWriteCompletion bool `json:"local_write_completion"`
++}
++
+ type Stats struct {
++	Limits             Limits
+ 	Performance        *sessiontrace.WindowPerformance `json:",omitempty"`
+ 	Flow               sessiontrace.Flow
+ 	DataSent           uint64
+*** Update File: reliablestream/stream.go
+@@
+ 	}
+ 	ctx, cancel := context.WithCancel(ctx)
+ 	stream := &Stream{endpoint: endpoint, state: newEngine(config, local, time.Now()), sendGate: make(chan struct{}, 1), requests: make(chan request), output: make(chan []byte), done: make(chan struct{}), ready: make(chan struct{}), cancel: cancel}
++	stream.state.stats.Limits.LocalWriteCompletion = localwrite.Enabled(ctx)
+ 	stream.bindDiagnosticAllocation(ctx)
+ 	go stream.run(ctx)
+ 	return stream, nil
+@@
+ 	stream.mu.Lock()
+ 	defer stream.mu.Unlock()
+ 	stats := stream.state.stats
++	stats.Limits.LocalSend = stream.state.config.SendWindow
++	stats.Limits.LocalReceive = stream.state.config.ReceiveWindow
++	stats.Limits.PeerReceive = stream.state.remoteWindow
++	stats.Limits.EffectiveSend = min(stream.state.config.SendWindow, stream.state.remoteWindow)
+ 	stats.Performance = stream.state.perfSnapshot(time.Now())
+ 	if stats.Terminal == "" {
+ 		stats.Flow = stream.state.flow()
+*** Update File: roombroker/gateway.go
+@@
+ 	"crypto/tls"
+ 	"encoding/json"
+ 	"net/netip"
++	"time"
+ 
+ 	"github.com/Joker20380/family_connect/carrier/familysession"
+ 	"github.com/Joker20380/family_connect/carrier/localwrite"
+ 	"github.com/Joker20380/family_connect/carrier/sessiondiag"
++	"github.com/Joker20380/family_connect/carrier/sessionprofile"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ 	"github.com/Joker20380/family_connect/carrier/tcpforward"
+ 	"github.com/Joker20380/family_connect/carrier/telemost"
+ )
+ 
+ type TelemostGateway struct {
+-	CredentialsPath string
+-	Event           func(string)
+-	Diagnostic      func(sessiondiag.Report)
+-	Services        map[string]netip.AddrPort
+-	AllowInternet   bool
++	CredentialsPath   string
++	Event             func(string)
++	Diagnostic        func(sessiondiag.Report)
++	ProfileDiagnostic func(sessiondiag.Report)
++	Services          map[string]netip.AddrPort
++	AllowInternet     bool
+ }
+ 
+ const DedicatedMaxStreams = tcpforward.MuxMaxStreams
+ 
+ type telemostGateway struct {
+-	credit128       bool
+-	session         *telemost.Session
+-	credentials     []byte
+-	setupID         string
+-	identity        Identity
+-	event           func(string)
+-	diagnostic      func(sessiondiag.Report)
+-	services        map[string]netip.AddrPort
+-	allowInternet   bool
+-	credentialsPath string
++	profile           sessionprofile.Profile
++	credit128         bool
++	session           *telemost.Session
++	credentials       []byte
++	setupID           string
++	identity          Identity
++	event             func(string)
++	diagnostic        func(sessiondiag.Report)
++	profileDiagnostic func(sessiondiag.Report)
++	services          map[string]netip.AddrPort
++	allowInternet     bool
++	credentialsPath   string
+ }
+ 
+ func (starter TelemostGateway) Start(lifetime, ready context.Context, room Room, id string, identity Identity) (Gateway, error) {
+ 	credit128, err := muxCreditPolicy()
+ 	if err != nil {
+ 		return nil, err
++	}
++	profile, err := speedPolicy(identity)
++	if err != nil {
++		return nil, err
++	}
++	if profile != sessionprofile.P0 {
++		credit128 = true
+ 	}
+ 	raw, err := LoadCredentials(starter.CredentialsPath)
+ 	if err != nil {
+@@
+ 	for name, destination := range starter.Services {
+ 		services[name] = destination
+ 	}
+-	return &telemostGateway{credit128, session, raw, id, identity, event, starter.Diagnostic, services, starter.AllowInternet, starter.CredentialsPath}, nil
++	return &telemostGateway{profile, credit128, session, raw, id, identity, event, starter.Diagnostic, starter.ProfileDiagnostic, services, starter.AllowInternet, starter.CredentialsPath}, nil
+ }
+ 
+ func bindingMessage(id string, nonce []byte) []byte {
+@@
+ 	if gateway.session.PacketPacingSnapshot() != nil {
+ 		ctx = localwrite.WithCompletion(ctx)
+ 	}
++	ctx = gateway.profile.LocalWrite(ctx)
+ 	trace := sessiontrace.From(ctx)
+ 	trace.Add("FAMILY_TLS", "STARTED", "NONE")
+-	secured, err := familysession.OpenMux(ctx, gateway.session, gateway.credentials, true, gateway.credit128)
++	secured, err := familysession.OpenMuxReliable(ctx, gateway.session, gateway.credentials, true, gateway.credit128, gateway.profile.Reliable())
+ 	clear(gateway.credentials)
+ 	if err != nil {
+ 		trace.Add("FAMILY_TLS", "FAILED", "FAMILY_TLS_ERROR")
+@@
+ 	if err != nil {
+ 		trace.Add("GATEWAY_SESSION", "FAILED", "UNKNOWN_INTERNAL")
+ 		return Code("mux_start_failed")
++	}
++	if gateway.profileDiagnostic != nil {
++		report := sessiondiag.Capture(gateway.setupID, nil, time.Time{}, secured.ReliabilityStats(), gateway.session.Stats(), mux.Stats())
++		report.SpeedProfile = gateway.profile.Name()
++		gateway.profileDiagnostic(report)
+ 	}
+ 	stopSample := sessiondiag.Sample(ctx, trace, func() (uint64, uint64) { stats := gateway.session.Stats(); return stats.BytesSent, stats.BytesReceived },
+ 		func() *sessiontrace.Delivery {
+@@
+ 		report := sessiondiag.Capture(gateway.setupID, failure, failedAt, secured.ReliabilityStats(), gateway.session.Stats(), mux.Stats())
+ 		snapshot := trace.Snapshot()
+ 		report.Trace = &snapshot
++		report.SpeedProfile = gateway.profile.Name()
+ 		gateway.diagnostic(report)
+ 	}
+ 	return err
+*** Add File: roombroker/speed_policy_linux.go
++package roombroker
++
++import (
++	"crypto/sha256"
++	"encoding/hex"
++	"github.com/Joker20380/family_connect/carrier/sessionprofile"
++)
++
++func speedPolicy(identity Identity) (sessionprofile.Profile, error) {
++	value, err := muxOperatorValue("speed-profile")
++	if err != nil {
++		return sessionprofile.P0, err
++	}
++	profile, err := sessionprofile.Parse(value)
++	if err != nil {
++		return sessionprofile.P0, Code("speed_profile_configuration")
++	}
++	if profile == sessionprofile.P0 {
++		return profile, nil
++	}
++	target, err := muxOperatorValue("speed-target")
++	if err != nil {
++		return sessionprofile.P0, err
++	}
++	decoded, err := hex.DecodeString(target)
++	if err != nil || len(decoded) != 16 {
++		return sessionprofile.P0, Code("speed_profile_configuration")
++	}
++	keyHash := sha256.Sum256(identity.PublicKey[:])
++	if target != hex.EncodeToString(keyHash[:16]) {
++		return sessionprofile.P0, nil
++	}
++	pacing, err := muxOperatorValue("rtp-pacing")
++	if err != nil || (pacing != "" && pacing != "OFF") {
++		return sessionprofile.P0, Code("speed_profile_configuration")
++	}
++	return profile, nil
++}
+*** Add File: roombroker/speed_policy_other.go
++//go:build !linux
++
++package roombroker
++
++import "github.com/Joker20380/family_connect/carrier/sessionprofile"
++
++func speedPolicy(identity Identity) (sessionprofile.Profile, error) { return sessionprofile.P0, nil }
+*** Add File: roombroker/speed_policy_test.go
++package roombroker
++
++import (
++    "crypto/sha256"
++    "encoding/hex"
++    "os"
++    "path/filepath"
++    "testing"
++    "github.com/Joker20380/family_connect/carrier/sessionprofile"
++)
++
++func TestSpeedOwnerScopeAndP0Return(test *testing.T) {
++    directory := test.TempDir()
++    if err:=os.Chmod(directory,0700);err!=nil { test.Fatal(err) }
++    test.Setenv("FC_DIAGNOSTIC_CONTROL_DIR",directory)
++    var owner, other Identity
++    owner.PublicKey[0]=42;other.PublicKey[0]=43
++    hash:=sha256.Sum256(owner.PublicKey[:])
++    put:=func(name,value string) { test.Helper();if err:=os.WriteFile(filepath.Join(directory,name),[]byte(value),0600);err!=nil {test.Fatal(err)} }
++    put("speed-target",hex.EncodeToString(hash[:16]));put("rtp-pacing","OFF")
++    for _, mode:=range []string{"P0","P1","P2","P0"} {
++        put("speed-profile",mode)
++        expected,_:=sessionprofile.Parse(mode)
++        actual,err:=speedPolicy(owner);if err!=nil || actual!=expected {test.Fatal(mode,actual,err)}
++        actual,err=speedPolicy(other);if err!=nil || actual!=sessionprofile.P0 {test.Fatal("other user changed",actual,err)}
++    }
++    put("speed-profile","P2");put("rtp-pacing","FIXED4M")
++    if _,err:=speedPolicy(owner);err==nil {test.Fatal("hidden pacing permitted")}
++    put("rtp-pacing","OFF");put("speed-target","bad")
++    if _,err:=speedPolicy(owner);err==nil {test.Fatal("unscoped profile permitted")}
++    put("speed-profile","unknown")
++    if _,err:=speedPolicy(owner);err==nil {test.Fatal("unknown accepted")}
++}
+*** Update File: sessiondiag/report.go
+@@
+ )
+ 
+ type Report struct {
++	SpeedProfile       string                 `json:"speed_profile,omitempty"`
++	ReliableLimits     reliablestream.Limits  `json:"reliable_limits"`
++	RetryBytes         uint64                 `json:"retry_bytes"`
+ 	MuxProfile         string                 `json:"mux_profile,omitempty"`
+ 	MuxWindow          int                    `json:"mux_window,omitempty"`
+ 	Trace              *sessiontrace.Snapshot `json:"lifecycle,omitempty"`
+@@
+ }
+ 
+ func Capture(setupID string, err error, terminalAt time.Time, reliable reliablestream.Stats, media telemost.Stats, mux tcpforward.MuxStats) Report {
+-	report := Report{MuxProfile: mux.Profile, MuxWindow: mux.Window, TerminalReason: Reason(err), ObservedAtMS: time.Now().UnixMilli(),
++	report := Report{ReliableLimits: reliable.Limits, RetryBytes: reliable.RetransmittedBytes, MuxProfile: mux.Profile, MuxWindow: mux.Window, TerminalReason: Reason(err), ObservedAtMS: time.Now().UnixMilli(),
+ 		ReliableTerminal: choice(reliable.Terminal, "", "closed", "recovery_exhausted", "protocol_violation", "remote_reset", "cancelled", "carrier_closed"),
+ 		SignalingFailure: "NONE", ICEFailure: "NONE", EvidenceDropped: media.EvidenceDropped,
+ 		SubscriberState: choice(media.SubscriberState, "new", "connecting", "connected", "disconnected", "failed", "closed"),
+*** Add File: sessionprofile/profile.go
++package sessionprofile
++
++import (
++	"context"
++	"errors"
++	"github.com/Joker20380/family_connect/carrier/localwrite"
++	"github.com/Joker20380/family_connect/carrier/reliablestream"
++)
++
++type Profile uint8
++
++const (
++	P0 Profile = iota
++	P1
++	P2
++)
++
++type key struct{}
++
++func Parse(value string) (Profile, error) {
++	switch value {
++	case "", "P0":
++		return P0, nil
++	case "P1":
++		return P1, nil
++	case "P2":
++		return P2, nil
++	}
++	return P0, errors.New("invalid session profile")
++}
++func (profile Profile) Name() string { return [...]string{"P0", "P1", "P2"}[profile] }
++func With(ctx context.Context, profile Profile) context.Context {
++	return context.WithValue(ctx, key{}, profile)
++}
++func From(ctx context.Context) Profile { profile, _ := ctx.Value(key{}).(Profile); return profile }
++func (profile Profile) Reliable() reliablestream.Config {
++	config := reliablestream.DefaultConfig()
++	if profile == P1 || profile == P2 {
++		config.SendWindow, config.ReceiveWindow = 32, 32
++	}
++	return config
++}
++func (profile Profile) LocalWrite(ctx context.Context) context.Context {
++	if profile == P2 {
++		return localwrite.WithCompletion(ctx)
++	}
++	return ctx
++}
+*** Add File: tcpforward/speed_integration_test.go
++package tcpforward
++
++import (
++	"bytes"
++	"context"
++	"crypto/sha256"
++	"encoding/binary"
++	"encoding/json"
++	"fmt"
++	"io"
++	"sync"
++	"sync/atomic"
++	"testing"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/familysession"
++	"github.com/Joker20380/family_connect/carrier/localwrite"
++	"github.com/Joker20380/family_connect/carrier/sessionprofile"
++)
++
++type speedFaultEndpoint struct {
++	*lossyEndpoint
++	faults     atomic.Bool
++	count      int
++	ackDropped bool
++	held       []byte
++}
++
++func (endpoint *speedFaultEndpoint) SendContext(ctx context.Context, payload []byte) error {
++	completion, err := localwrite.Register(ctx, 1)
++	if err != nil {
++		return err
++	}
++	if !completion.Begin() {
++		return nil
++	}
++	defer func() { completion.Complete(err) }()
++	if endpoint.faults.Load() && len(payload) >= 64 {
++		if payload[4] == 3 && !endpoint.ackDropped {
++			endpoint.ackDropped = true
++			return nil
++		}
++		if payload[4] == 2 {
++			endpoint.count++
++			if endpoint.count <= 3 {
++				return nil
++			}
++			if endpoint.count == 4 {
++				endpoint.held = bytes.Clone(payload)
++				return nil
++			}
++			if endpoint.count == 5 {
++				if err = endpoint.lossyEndpoint.SendContext(ctx, payload); err != nil {
++					return err
++				}
++				if err = endpoint.lossyEndpoint.SendContext(ctx, endpoint.held); err != nil {
++					return err
++				}
++				endpoint.held = nil
++			}
++		}
++	}
++	err = endpoint.lossyEndpoint.SendContext(ctx, payload)
++	return err
++}
++
++func speedPair(test *testing.T, ctx context.Context, profile sessionprofile.Profile) (*familysession.Session, *familysession.Session) {
++	test.Helper()
++	clientJSON, serverJSON := testCredentials(test)
++	forward, reverse, closed := make(chan []byte, 64), make(chan []byte, 64), make(chan struct{})
++	once := &sync.Once{}
++	left := &speedFaultEndpoint{lossyEndpoint: &lossyEndpoint{incoming: reverse, outgoing: forward, closed: closed, once: once, seen: make(map[uint64]int)}}
++	right := &speedFaultEndpoint{lossyEndpoint: &lossyEndpoint{incoming: forward, outgoing: reverse, closed: closed, once: once, seen: make(map[uint64]int)}}
++	config := profile.Reliable()
++	type result struct {
++		session *familysession.Session
++		err     error
++	}
++	ready := make(chan result, 1)
++	go func() {
++		session, err := familysession.OpenMuxReliable(profile.LocalWrite(ctx), right, serverJSON, true, profile != sessionprofile.P0, config)
++		ready <- result{session, err}
++	}()
++	client, err := familysession.OpenMuxReliable(profile.LocalWrite(ctx), left, clientJSON, false, true, config)
++	if err != nil {
++		test.Fatal(err)
++	}
++	server := <-ready
++	if server.err != nil {
++		test.Fatal(server.err)
++	}
++	test.Cleanup(func() { client.Close(); server.session.Close() })
++	left.faults.Store(true)
++	right.faults.Store(true)
++	return client, server.session
++}
++
++func TestSpeedProfilesIntegrated(test *testing.T) {
++	for _, profile := range []sessionprofile.Profile{sessionprofile.P0, sessionprofile.P1, sessionprofile.P2} {
++		test.Run(profile.Name(), func(test *testing.T) {
++			test.Parallel()
++			ctx, cancel := context.WithTimeout(context.Background(), 40*time.Second)
++			defer cancel()
++			port := muxFixture(test, muxEcho)
++			clientTLS, serverTLS := speedPair(test, ctx, profile)
++			client, err := NewMux(ctx, clientTLS, false, MuxConfig{MaxStreams: 32})
++			if err != nil {
++				test.Fatal(err)
++			}
++			server, err := NewMux(ctx, serverTLS, true, MuxConfig{MaxStreams: 32, Policy: Policy{TestOnlyLoopbackPort: port}})
++			if err != nil {
++				test.Fatal(err)
++			}
++			defer func() {
++				client.Close()
++				server.Close()
++				if client.Stats().RetainedBytes != 0 || server.Stats().RetainedBytes != 0 {
++					test.Error("retained after close")
++				}
++			}()
++			expected := profile.Reliable()
++			for _, secured := range []*familysession.Session{clientTLS, serverTLS} {
++				limits := secured.ReliabilityStats().Limits
++				if limits.LocalSend != expected.SendWindow || limits.LocalReceive != expected.ReceiveWindow || limits.PeerReceive != expected.ReceiveWindow || limits.EffectiveSend != expected.SendWindow || limits.LocalWriteCompletion != (profile == sessionprofile.P2) {
++					test.Fatal(limits)
++				}
++			}
++			window := 65536
++			if profile != sessionprofile.P0 {
++				window = 131072
++			}
++			if client.Stats().Window != window || server.Stats().Window != window {
++				test.Fatal("negotiated window")
++			}
++			streams := make([]*MuxStream, 32)
++			for index := range streams {
++				streams[index] = muxOpen(test, ctx, client, port)
++			}
++			streams[31].Reset()
++			results := make(chan error, 31)
++			for index, stream := range streams[:31] {
++				go func() {
++					payload := bytes.Repeat([]byte{byte(index + 1)}, 192<<10)
++					if index >= 2 {
++						payload = payload[:1024]
++					}
++					writing := make(chan error, 1)
++					go func() {
++						_, failure := stream.Write(payload)
++						if failure == nil {
++							failure = stream.CloseWrite()
++						}
++						writing <- failure
++					}()
++					if index == 0 {
++						time.Sleep(200 * time.Millisecond)
++					}
++					body := make([]byte, len(payload))
++					_, failure := io.ReadFull(stream, body)
++					if sent := <-writing; failure == nil {
++						failure = sent
++					}
++					if failure == nil && sha256.Sum256(body) != sha256.Sum256(payload) {
++						failure = fmt.Errorf("body mismatch")
++					}
++					if failure == nil {
++						tail := make([]byte, 1)
++						count, end := stream.Read(tail)
++						if count != 0 || end != io.EOF {
++							failure = fmt.Errorf("missing FIN: %v", end)
++						}
++					}
++					stream.Close()
++					results <- failure
++				}()
++			}
++			for range 31 {
++				if err := <-results; err != nil {
++					test.Fatal(err)
++				}
++			}
++			if client.Stats().ProtocolErrors != 0 || server.Stats().ProtocolErrors != 0 {
++				test.Fatal("protocol error")
++			}
++			for _, stats := range []struct {
++				name    string
++				session *familysession.Session
++			}{{"client", clientTLS}, {"server", serverTLS}} {
++				value := stats.session.ReliabilityStats()
++				if value.MaxBufferedBytes > expected.ReceiveWindow*expected.Payload || value.SendHighWater > expected.SendWindow {
++					test.Fatal("unbounded RS", value)
++				}
++			}
++			record, _ := json.Marshal(map[string]any{"profile": profile.Name(), "client": clientTLS.ReliabilityStats().Limits, "server": serverTLS.ReliabilityStats().Limits, "mux": window, "streams": 32, "reset_isolated": true, "sha256": true, "rs_client_retries": clientTLS.ReliabilityStats().Retransmissions, "rs_server_retries": serverTLS.ReliabilityStats().Retransmissions, "scope": "post-handshake RS-message burst3/reorder/duplicate/ACK-loss; not RTP loss"})
++			test.Log(string(record))
++		})
++	}
++}
++
++func TestSpeedWireOPENBounds(test *testing.T) {
++	config := sessionprofile.P1.Reliable()
++	if config.Payload != 16384 || config.SendWindow != 32 || config.ReceiveWindow != 32 || config.MaxRetries != 8 || config.RTO != time.Second {
++		test.Fatal(config)
++	}
++	raw := make([]byte, 64)
++	binary.BigEndian.PutUint16(raw[60:], uint16(config.ReceiveWindow))
++	if binary.BigEndian.Uint16(raw[60:]) != 32 {
++		test.Fatal("OPEN window")
++	}
++}
+*** Update File: telemost/queue_retry_test.go
+@@
+ 	"time"
+ 
+ 	"github.com/Joker20380/family_connect/carrier/localwrite"
+-	"github.com/Joker20380/family_connect/carrier/packetpace"
+ 	"github.com/Joker20380/family_connect/carrier/reliablestream"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ 	"github.com/pion/interceptor"
+@@
+ 			point.peer.receive([]*rtp.Packet{(&rtp.Packet{Header: *header, Payload: payload}).Clone()})
+ 			return header.MarshalSize() + len(payload), nil
+ 		}))
+-		if os.Getenv("FC_PACKET_PACER") == "1" && point == left {
+-			pace := packetpace.New(ctx, true)
+-			point.cfg.PacketPacing = pace
+-			writer = pace.BindLocalStream(&interceptor.StreamInfo{SSRC: 1, MimeType: "video/VP8"}, writer)
+-		}
+ 		if _, err := point.track.Bind(lossTrackContext{writer: lossTrackWriter{writer}}); err != nil {
+ 			test.Fatal(err)
+ 		}
+ 		point.startWorker(point.writerLoop)
+ 	}
+ 	config := reliablestream.DefaultConfig()
++	config.SendWindow, config.ReceiveWindow = 32, 32
+ 	config.RTO, config.MaxAge = 30*time.Millisecond, 2*time.Second
+ 	counted := &countedQueueEndpoint{Session: left.Session}
+ 	sender, err := reliablestream.New(ctx, counted, config)
+*** End Patch

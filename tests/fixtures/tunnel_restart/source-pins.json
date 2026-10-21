@@ -1,0 +1,29 @@
+{
+  "gateway": {
+    "patch": "gateway.patch",
+    "sha256": "f5f98ba1d38279ac284ffd06ffd0f8075c9b0a45f4fc4a691f2d0ea4a41dc492",
+    "inputs": {
+      "carrier/cmd/bootstrap-broker/main.go": "5a0d3ff13dc9c39954b61987f92e954e1b0f4f59f55531df8f11efc6cbfb4b65",
+      "carrier/cmd/bootstrap-broker/seed_recovery.go": null,
+      "carrier/cmd/bootstrap-broker/seed_recovery_test.go": null
+    },
+    "outputs": {
+      "carrier/cmd/bootstrap-broker/main.go": "56c3c971c0d986d82b99b5ffd605519bfeab2590bd6ed18e71f51d803f1cf1c7",
+      "carrier/cmd/bootstrap-broker/seed_recovery.go": "58d4c59e865d002bec57dd624be2ad0117588bae8fbbd593db27226c9d2fbb64",
+      "carrier/cmd/bootstrap-broker/seed_recovery_test.go": "1cc4a8809b6b5e680eb7d6a169ef1109c23163b53638bea2d9912249f7e0c411"
+    },
+    "accepted_inventory": "aeeb6755bd235160127cfed67da4a870ae340cfebe89fc6d0f937908607d9483",
+    "candidate_inventory": "4722b7353ba93209657f66b45c47874915362f1fbe732845ec61745abdb673e6"
+  },
+  "android": {
+    "patch": "android.patch",
+    "sha256": "0d6e28510133ccb9f8fae2fd36a77f4d02a3d1fca9ee293f9435f9015f67bb67",
+    "inputs": {
+      "clients/android/app/build.gradle": "1f17df937aa2274983fe34866b272b5f343970839a7397ff6587c2272a2669ef"
+    },
+    "outputs": {
+      "clients/android/app/build.gradle": "899ff62f61099f577cea913ed438053ed9bd9b1bfa125878d779532298fd67e0"
+    },
+    "ancestry": "sealed beta88 recovery, normal upgrade over beta89; no extended performance instrumentation"
+  }
+}

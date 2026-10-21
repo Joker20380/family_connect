@@ -1,5 +1,19 @@
 # MESH throughput — two-sided observation continuation
 
+Follow-up20.10: [receive-path localization](2026-10-20-mesh-receive-path.md) uses
+saved **beta90** evidence to identify DATA597 retry2's Android frame discard and
+partial-assembly capacity signal. New paired91/b9 observation localizes614/1127/1294
+RTP gaps/late arrivals before local frame discard. Current capacity=0, prompt
+consume/ACK controls; no functional speed candidate accepted. Ordinary92 trace-off
+return is installed; b9/1011 ancestry preserved. Historical negatives are not
+retroactively accepted.
+
+Follow-up19.10: [recurrent-closure diagnosis and beta90](2026-10-19-tunnel-restart-fix.md)
+supersedes only the current runtime/installed-version state. Normal90 removes
+extended Android trace; a separate exact-base seed1011 gateway containment is
+deployed. The A/B/A measurements and both rejected speed patches below remain
+historical negatives, not retroactively accepted fixes.
+
 ## Result —19 October2026 UTC
 
 **PARTIAL: two-sided localization delivered; one minimal speed candidate tested

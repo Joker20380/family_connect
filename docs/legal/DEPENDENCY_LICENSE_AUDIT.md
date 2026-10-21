@@ -1,5 +1,27 @@
 # Dependency and repository licensing audit — 2026-09-25
 
+## Isolated carrier FEC laboratory — 2026-10-21
+
+The `carrier-fec-20261021` lab copy adds `github.com/klauspost/reedsolomon v1.12.4`
+and its `github.com/klauspost/cpuid/v2 v2.2.8` dependency, both MIT. This is not a
+change to product `carrier/go.mod`, APK dependencies or a distribution approval.
+The installed parent graph has no erasure-code implementation; no custom
+cryptography or copied Reed–Solomon implementation is introduced. Coding uses
+the library's systematic, shortened 1..8-source/2-repair API, one worker, with
+local exhaustive one/two-erasure tests for the full 8+2 group. CRC is explicitly
+not authentication; Family TLS remains unchanged.
+
+Go proxy/sumdb verification and `go mod verify` pass. Pinned sums:
+reedsolomon `h1:5aDr3ZGoJbgu/8+j45KtUJxzYm8k08JGtB9Wx1VQ4OA=`;
+cpuid/v2 `h1:+StwCXwm9PdpiEkPyzBXIy+M9KUb4ODm0Zarf1kS5BM=`.
+`go mod tidy` also resolves test-only `github.com/pion/transport/v3 v3.1.1`;
+it is not a new linked production transport. Original complete MIT notices are
+retained in the lab source `licenses/lab-fec-dependencies.txt`; that file and all
+inherited notices accompany the temporary private NL binary transfer. No public
+release, source push, product install or APK is performed by this task.
+
+[Experiment and packetization evidence](../releases/2026-10-20-mesh-capacity.md#carrier-fragmentation-and-fec--21-october-2026).
+
 Scope: Home Gateway technology selection and requested proprietary source-available
 notice. No executable code or new dependencies introduced in this change.
 This is a technical provenance/terms review, not an opinion that all historical
@@ -225,3 +247,15 @@ diagnostic APK assets, with patch/binary hashes. No public distribution is made;
 any future distribution must supply corresponding modified MPL source and retain
 all applicable transitive notices, rather than treating this note as a waiver.
 Provider API permission/quotas and license permission remain separate matters.
+
+## QUIC media laboratory — 2026-10-21
+
+The isolated `tests/fixtures/quic_carrier/module` pins quic-go `v0.54.1` (MIT,
+Go1.23 minimum; tested Go1.26.1). Its license is retained under the fixture's
+`licenses/`; the source capsule carries full notices for quic-go, go.uber.org/mock
+v0.5.0 (Apache-2.0), and golang.org/x/mod v0.18.0, x/sync v0.8.0, x/tools v0.22.0
+(BSD-3-Clause). Exact transitive hashes are in the isolated go.sum; existing
+x/net/x/sys/x/crypto pins and production carrier dependencies are unchanged.
+No custom cryptography or QUIC library modifications. Dependency verification
+passed; notices accompany the disposable NL laboratory binary. This is neither
+product dependency admission nor permission for new provider use or distribution.

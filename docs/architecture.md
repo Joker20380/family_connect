@@ -156,6 +156,16 @@ at most15min. Single-seed rotation/death can invalidate liveness before expiry;
 no hours-long offline guarantee. [Implementation and historical BLOCKED audit](releases/2026-10-01-5n-prov1-production-restricted-provisioning.ru.md).
 [API/schema, controlled deployment and rollback](../deploy/friends/restricted/README.md).
 
+Current-source clarification20.10: those timings describe the original checkpoint.
+Exact installed94/95 performs a single-flight required refresh on Connect and selects
+validated cache only after a recognized availability failure; native directory bounds
+and actual material expiries are determined by that sealed source/runtime, not this
+historical15minute example. A reproduced RNS Python-exception classification defect
+can prevent cache selection without deleting it. The client-only96 candidate preserves
+typed network availability and all security checks; it is signed and installed on
+owner, with post-update Connect and tester cellular acceptance pending. Server code
+is unchanged. [Evidence and bootstrap dependencies](releases/2026-10-20-volgograd-mobile-bootstrap.md).
+
 ## Current product decision — resilient family connectivity
 
 Authoritative rebaseline, **30 September 2026**. [STATUS](STATUS.md) records

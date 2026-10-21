@@ -1,0 +1,5 @@
+--- a/clients/android/app/build.gradle
++++ b/clients/android/app/build.gradle
+@@ -116 +116 @@
+-            variant.outputs.all { versionCodeOverride = 90; versionNameOverride = '0.1.18-beta90-stability' }
++            variant.outputs.all { versionCodeOverride = 92; versionNameOverride = '0.1.18-beta92-stability' }

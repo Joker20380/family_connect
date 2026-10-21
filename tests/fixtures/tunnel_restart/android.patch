@@ -1,0 +1,11 @@
+--- a/clients/android/app/build.gradle
++++ b/clients/android/app/build.gradle
+@@ -113,7 +113,7 @@
+     }
+     applicationVariants.all { variant ->
+         if (variant.buildType.name == 'privateBeta') {
+-            variant.outputs.all { versionCodeOverride = 88; versionNameOverride = '0.1.18-beta88-recovery' }
++            variant.outputs.all { versionCodeOverride = 90; versionNameOverride = '0.1.18-beta90-stability' }
+         }
+         if (variant.buildType.name == "friends") {
+             variant.outputs.all { versionCodeOverride = 83; versionNameOverride = "0.1.18-research83-bootstrap" }

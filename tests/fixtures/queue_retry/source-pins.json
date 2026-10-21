@@ -1,0 +1,244 @@
+{
+  "base_gateway_sha256": "b9ae880731517753e456637e52dcc421b9f7d7b881b400c856989ae93193e9ba",
+  "base_source_inventory": "4722b7353ba93209657f66b45c47874915362f1fbe732845ec61745abdb673e6",
+  "patches": {
+    "observation": {
+      "patch_sha256": "b784e78d531137434b61bdfc3736af795c45140144d56551a57718b54e0eb90b",
+      "changes": {
+        "familysession/batch.go": {
+          "input_sha256": "01cae11ff7bd0c67918d969350d0340d82ed0a1d215b260792b5c5c345727cf4",
+          "output_sha256": "dc769acdd98043b8a48536be3fd8ee45019e14df58cf48ea1273753f16d56e20"
+        },
+        "familysession/session.go": {
+          "input_sha256": "51bddca0c1cb2966c4d5aeb1ebd5e360cbeede5a5508e14d79a88d3d29a09619",
+          "output_sha256": "d468dcf69321d5857277b976403de77b94b7f0461c7098fd589ecab6d4ecc9da"
+        },
+        "reliablestream/engine.go": {
+          "input_sha256": "635b938ee243b55c4b5385bd82ae42069b1c213ebb9aae04ebf8b9135e7b558e",
+          "output_sha256": "7c319ed0db4654a89e8281f55e6fa00661d11937d44eef1be10877624f3aac14"
+        },
+        "reliablestream/performance.go": {
+          "input_sha256": null,
+          "output_sha256": "fefb8be95bc59afbd8f7680e966a6d212d9aa1781b1465a3ed216ddb190af4a5"
+        },
+        "reliablestream/performance_common_test.go": {
+          "input_sha256": null,
+          "output_sha256": "e0a585c5c93a9917da5ccb22882121cea989434f7cede4990c7de058a40d3ef5"
+        },
+        "reliablestream/performance_test.go": {
+          "input_sha256": null,
+          "output_sha256": "0532e6f75f2207575f3d50b8fa37a3eb4882f169e0ce0eeb96e845a91e2d1576"
+        },
+        "reliablestream/receive_default.go": {
+          "input_sha256": "c10d1813fdb5258ae183527fbe8024c510c689f3de0f77b073eabc857ee75067",
+          "output_sha256": "4676586bc4d1bcd9acb9072eb0b57d3105857c30c14cdda9e8ac8a3700ada9f2"
+        },
+        "reliablestream/receive_diagnostic.go": {
+          "input_sha256": "9fe191f632a91fd100ebba199d0931f06172f87b8d199c3033a5f6fb471fdcb4",
+          "output_sha256": "c565c6886b03e969ae417a87019edb098701235e8b799e14cde04feb95e3f6e8"
+        },
+        "reliablestream/stream.go": {
+          "input_sha256": "d3e3df02613f4a644d9831e68045efa8fdbed72ecb26cc6f112d2528ad6382c8",
+          "output_sha256": "4563de7fbdb930ddc6742f61abe886ce26ec7fdc2013a8830cb32c5b181cea1d"
+        },
+        "reliablestream/transport_adapter_test.go": {
+          "input_sha256": null,
+          "output_sha256": "898f8263508e791e691864c0dabe0aae1ab5dac998a479397b3dc6fd2f6f7d63"
+        },
+        "reliablestream/transport_trace.go": {
+          "input_sha256": null,
+          "output_sha256": "c3f3d344c1245119227cb6887ad2e35bc18fa1ada7fb4ed6dcbd8b5e7b528c3c"
+        },
+        "reliablestream/transport_trace_test.go": {
+          "input_sha256": null,
+          "output_sha256": "916eec35456263cbffac5f8b30b61dae20738bd6a3e9ab04fa19b1551042253d"
+        },
+        "roombroker/gateway.go": {
+          "input_sha256": "e1b68d98b1a92931794d6e637b1295d550ea1914598d8e9fecb21124f6031ea1",
+          "output_sha256": "e8368f31ae200d8e75b34091dd37b654252889fe159cc5c4fd2de1ce4d868a27"
+        },
+        "roombroker/performance_disabled.go": {
+          "input_sha256": null,
+          "output_sha256": "d0c5c8222e135370e9bac52b43f93fb3e3bd81aaacbd138bb37d19c17b330ac9"
+        },
+        "roombroker/performance_enabled.go": {
+          "input_sha256": null,
+          "output_sha256": "8135ee1e2d7117031612dbe242c33d2f3a4a2d9c7d1b318345a0d7ea4137c713"
+        },
+        "sessiondiag/report.go": {
+          "input_sha256": "cf3184422cc6d935cf4ae8003c8a0734ac00d92dbc6caf11d631e539342671a5",
+          "output_sha256": "6d9e06dab722097c27693d3460bb2dd59b5d6192dfca0f876bf33c1d0c8d28ce"
+        },
+        "sessiontrace/boundary.go": {
+          "input_sha256": "a2359a00f369c985c80e845632755cf3d59f462b92f26da0cb3658a2e13e51e5",
+          "output_sha256": "2fd825baff0aec347f119e8ba32946cbb9f80b6fc56a4f6bcf3ee5ffdff9ecc0"
+        },
+        "sessiontrace/performance.go": {
+          "input_sha256": null,
+          "output_sha256": "6bb65aec633030638b6347df53262ca2fe3d2b79559de71d0221f492414233d3"
+        },
+        "sessiontrace/performance_disabled.go": {
+          "input_sha256": null,
+          "output_sha256": "7e1e764b8eb76c183329fc117008153d9e8f9057ac95043600175292a900ba8f"
+        },
+        "sessiontrace/performance_enabled.go": {
+          "input_sha256": null,
+          "output_sha256": "1abb48ebade66d1cfbcfc34f719bcaac9e9f8428d075dc888296ed2ded3c85e2"
+        },
+        "sessiontrace/performance_export.go": {
+          "input_sha256": null,
+          "output_sha256": "4b54014e74ab6681cb88d4f5b912a54a6ba067d456c34ca41c5c6c6b2ac8ac50"
+        },
+        "sessiontrace/performance_test.go": {
+          "input_sha256": null,
+          "output_sha256": "155b61852559c7c3bbfcf0aa50b9af4cfd7f1d69c8230b21a486db44adc37fb9"
+        },
+        "sessiontrace/receiver_default.go": {
+          "input_sha256": "32f466695288a51d6071caff959e2735126ea92506182bb2a296f164c7b59ccd",
+          "output_sha256": "dcce9f2b5bbf57e14a4baa8084239ad2765fd923647047ed9d186a9336c39501"
+        },
+        "sessiontrace/receiver_performance.go": {
+          "input_sha256": null,
+          "output_sha256": "d7d00a521c11e9ea77bef55db8611157696ed7b6f53335bc8bf4d6f12e719991"
+        },
+        "sessiontrace/receiver_performance_disabled.go": {
+          "input_sha256": null,
+          "output_sha256": "ba3691aba953552acaa42c41dc29e2c7c7a3f29049b7b6571d42004335ab456a"
+        },
+        "sessiontrace/schema_default.go": {
+          "input_sha256": "56fbf8cdacc63062aafc85d742c8c1a40b9d47cf99e229f314e69462efe46c98",
+          "output_sha256": "51258962399b1df50fefce844f07259aab6b5bc088b1f6b84b213e1fd71321d5"
+        },
+        "sessiontrace/schema_default_test.go": {
+          "input_sha256": "e8645ee7f614111005303f629284a3c5ae1926cd0780904be744b6f307a26c8b",
+          "output_sha256": "f64a9c72cf4c4d7750710a6b90c3a557b9005a95d7d21fd8cfea7cf80b8c6e5a"
+        },
+        "sessiontrace/schema_diagnostic.go": {
+          "input_sha256": "ee8fe985d858d84d69209d22da7687cdb60f20c6f0262827ddedb98f947216e3",
+          "output_sha256": "175da2269398e1907ccfe6853d6510ca48010df143cc78a2a83eefe31b037c28"
+        },
+        "sessiontrace/trace.go": {
+          "input_sha256": "38f8e6213c7c1b12aca79dcfccfbab77f4a1fd694218d85f0568ce07abd3bc20",
+          "output_sha256": "681be020c0bd1cbf4e4dc480ad5f53381836a970d56db63cca74b7a0202464a2"
+        },
+        "sessiontrace/transport_trace.go": {
+          "input_sha256": null,
+          "output_sha256": "050ff154fb6c41545740867fad341f8ddfc33ab38cde3f53198130db3d987038"
+        },
+        "tcpforward/mesh_performance_test.go": {
+          "input_sha256": null,
+          "output_sha256": "67a9f301b65d684bf29bb8649855a7b4ce2292a07166ca52b293a0ccb9fa11c3"
+        },
+        "tcpforward/mux.go": {
+          "input_sha256": "d0bac7c60954c0d0857ee2a9aabdb6bd002beebfa3069f5ae62292fd23384366",
+          "output_sha256": "4855561a4ed739adca71e2cf5476e31adba58eebcd0e60509bf26093dd05e9fd"
+        },
+        "tcpforward/mux_stream.go": {
+          "input_sha256": "ee085c590d88acdf686d21f369dace15f5d9d33d16d6d7bddbe235358bcdf20b",
+          "output_sha256": "0c49ff17acbfc0411985106fa2b45709e9ee4fcec2027cd75d1cbeaf5125fb57"
+        },
+        "tcpforward/performance.go": {
+          "input_sha256": null,
+          "output_sha256": "a045355b57f8c1a7140161ecbaae273e60e27278667e486c7c29ac4fb4470db3"
+        },
+        "tcpforward/performance_test.go": {
+          "input_sha256": null,
+          "output_sha256": "e9aa63e8affd7fc7a3f4079c23406ed8401e98bbfadb4b98f9c96c2d77c5c6fd"
+        },
+        "telemost/receive_default.go": {
+          "input_sha256": "ce572532f9b9819d98bda257b0fe0db71f6f9b42b062cbb66c084ba0b00d6748",
+          "output_sha256": "82b4118391e06b642d94c87e37d3eba9cf963b66c35016997be6703e3b4f5ec4"
+        },
+        "telemost/receive_diagnostic.go": {
+          "input_sha256": "ea62f156d25cc9658f1bec78500ce4445e0dd00f959f7668a6e90af997031349",
+          "output_sha256": "cdb0eba8e72db3e63dea8ba8bb39d63b94c4065236aa2624d8401204fe3fafda"
+        },
+        "telemost/session.go": {
+          "input_sha256": "e4608a9488768f61b798fd00d4f74cb6397ce6b5977dcdc62b9266c8448b8339",
+          "output_sha256": "e8abf226de13a1fff1bf33358a30aac8c2328379bf6590c6a699176d54cfac86"
+        },
+        "wholedevice/session.go": {
+          "input_sha256": "425b602c9e543af2752b78329db9c588907b3b7b94d84885fbe3cbd32bf1d66e",
+          "output_sha256": "9740e5715f5cb09a737834a4ef38f3fd37346cbb824134e41dbc2c4280459834"
+        }
+      },
+      "fresh_application": "PASS"
+    },
+    "completion": {
+      "patch_sha256": "715f0248a60fc16be3defaee3ede6efbd22a7044bae2519a8e7deda77090aa14",
+      "changes": {
+        "localwrite/write.go": {
+          "input_sha256": null,
+          "output_sha256": "74c5ff1b3f9170a295e5797080c658f54697719ea03de7cfb4c4397b50680d41"
+        },
+        "localwrite/write_test.go": {
+          "input_sha256": null,
+          "output_sha256": "660f6c24d6b1cf29c07abb5e42b6dc77e4771b8755133f4999567f08dc795dfb"
+        },
+        "reliablestream/local_write_test.go": {
+          "input_sha256": null,
+          "output_sha256": "24ff61d5a19a715c5502224a3dcf859565d82edd890a9da57ffe7b769484c989"
+        },
+        "reliablestream/stream.go": {
+          "input_sha256": "d3e3df02613f4a644d9831e68045efa8fdbed72ecb26cc6f112d2528ad6382c8",
+          "output_sha256": "b9986b1e038514df990cd4bf62d3cd4db1a56deb195f6eefb61fcd4cbf85df04"
+        },
+        "telemost/boundary.go": {
+          "input_sha256": "57233f63fee83b6624d658091a6b08dbd3214747375674d025b9580cb2b259fd",
+          "output_sha256": "9db4ca905becb14c80acb3cdc44ed5bfb1d851c5c801229f3e37010feecdf38a"
+        },
+        "telemost/head_loss_test.go": {
+          "input_sha256": "3fca0ebcc8645b886bc39a2dc5dc61f7d9725135cadcb67278b1c620f71cfb60",
+          "output_sha256": "c8ff603c1b0bfddeb907d32cf35fee1496c970ee49b5d132dcd95c5f56c7a664"
+        },
+        "telemost/session.go": {
+          "input_sha256": "e4608a9488768f61b798fd00d4f74cb6397ce6b5977dcdc62b9266c8448b8339",
+          "output_sha256": "6b887c308adce8b3013385906e26ec0754cb151a7f80ec0054d389d2cc298d94"
+        },
+        "telemost/signaling.go": {
+          "input_sha256": "dbc7213d8550967563d7036582a73e5656a3c7a59dd16dc895a095c0496c095b",
+          "output_sha256": "f6307ceaa6c34db14a87631bbf4fab4c1ec0e10a438dbb3113c4e02d0631ddee"
+        }
+      },
+      "fresh_application": "PASS"
+    },
+    "completion-observed": {
+      "patch_sha256": "5729bcdecb28ee7d8b888ca47ab1dfc59c46ce1f5d43cd2370215b0427b91e35",
+      "changes": {
+        "localwrite/write.go": {
+          "input_sha256": null,
+          "output_sha256": "74c5ff1b3f9170a295e5797080c658f54697719ea03de7cfb4c4397b50680d41"
+        },
+        "localwrite/write_test.go": {
+          "input_sha256": null,
+          "output_sha256": "660f6c24d6b1cf29c07abb5e42b6dc77e4771b8755133f4999567f08dc795dfb"
+        },
+        "reliablestream/local_write_test.go": {
+          "input_sha256": null,
+          "output_sha256": "24ff61d5a19a715c5502224a3dcf859565d82edd890a9da57ffe7b769484c989"
+        },
+        "reliablestream/stream.go": {
+          "input_sha256": "4563de7fbdb930ddc6742f61abe886ce26ec7fdc2013a8830cb32c5b181cea1d",
+          "output_sha256": "8cf483a91320f22b46f769d47f311361d62c58fa2d7e2b933936506c7d67072c"
+        },
+        "telemost/boundary.go": {
+          "input_sha256": "57233f63fee83b6624d658091a6b08dbd3214747375674d025b9580cb2b259fd",
+          "output_sha256": "9db4ca905becb14c80acb3cdc44ed5bfb1d851c5c801229f3e37010feecdf38a"
+        },
+        "telemost/head_loss_test.go": {
+          "input_sha256": "3fca0ebcc8645b886bc39a2dc5dc61f7d9725135cadcb67278b1c620f71cfb60",
+          "output_sha256": "c8ff603c1b0bfddeb907d32cf35fee1496c970ee49b5d132dcd95c5f56c7a664"
+        },
+        "telemost/session.go": {
+          "input_sha256": "e8abf226de13a1fff1bf33358a30aac8c2328379bf6590c6a699176d54cfac86",
+          "output_sha256": "0989255d76806929b14cd77d55fd122010289ba599d6e28989830d1fd963d686"
+        },
+        "telemost/signaling.go": {
+          "input_sha256": "dbc7213d8550967563d7036582a73e5656a3c7a59dd16dc895a095c0496c095b",
+          "output_sha256": "f6307ceaa6c34db14a87631bbf4fab4c1ec0e10a438dbb3113c4e02d0631ddee"
+        }
+      },
+      "fresh_application": "PASS"
+    }
+  }
+}

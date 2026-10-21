@@ -1,0 +1,139 @@
+--- a/clients/android/app/build.gradle
++++ b/clients/android/app/build.gradle
+@@ -113,7 +113,7 @@
+     }
+     applicationVariants.all { variant ->
+         if (variant.buildType.name == 'privateBeta') {
+-            variant.outputs.all { versionCodeOverride = 98; versionNameOverride = '0.1.18-beta98-support' }
++            variant.outputs.all { versionCodeOverride = 99; versionNameOverride = '0.1.18-beta99-support' }
+         }
+         if (variant.buildType.name == "friends") {
+             variant.outputs.all { versionCodeOverride = 83; versionNameOverride = "0.1.18-research83-bootstrap" }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java
+@@ -22,6 +22,7 @@
+     private ReadinessFetchTrace fetchTrace;
+     static final class Denied extends FriendsReadinessProtocol.AuthorizationFailure {}
+     static final class Conflict extends Exception {}
++    static final class SupportRateLimited extends IOException {}
+     FriendsAccessAndroid(Context context){this(context,false);}
+     FriendsAccessAndroid(Context context,boolean direct){this.context=context;this.direct=direct;}
+     FriendsAccessAndroid(Context context,long deadline){this(context,true);this.deadline=deadline;}
+@@ -72,7 +73,7 @@
+             byte[] raw=FriendsReadinessProtocol.wireBytes(body);require(raw.length<=((path.equals("/friends/notices/device/publish")||path.equals("/friends/notices/device/edit"))?32768:8192));connection.setFixedLengthStreamingMode(raw.length);
+             if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.CONNECT_TLS_WRITE);
+             try(OutputStream out=connection.getOutputStream()){out.write(raw);}finally{Arrays.fill(raw,(byte)0);}
+-            connection.setReadTimeout(remaining(15000));int status=connection.getResponseCode();if(fetchTrace!=null)fetchTrace.status(status);if(path.equals("/friends/restricted-readiness/challenge"))FriendsReadinessProtocol.challengeStatus(status);if(status==409)throw new Conflict();if((status==400&&!path.startsWith("/friends/restricted-readiness"))||status==401||status==403)throw new Denied();if(path.equals("/friends/restricted-readiness")&&(status==429||status>=500&&status<=599))throw new FriendsReadinessProtocol.Unavailable();if(status!=200)throw new IOException("Test access unavailable");
++            connection.setReadTimeout(remaining(15000));int status=connection.getResponseCode();if(path.equals("/friends/device/diagnostics")&&status==429)throw new SupportRateLimited();if(fetchTrace!=null)fetchTrace.status(status);if(path.equals("/friends/restricted-readiness/challenge"))FriendsReadinessProtocol.challengeStatus(status);if(status==409)throw new Conflict();if((status==400&&!path.startsWith("/friends/restricted-readiness"))||status==401||status==403)throw new Denied();if(path.equals("/friends/restricted-readiness")&&(status==429||status>=500&&status<=599))throw new FriendsReadinessProtocol.Unavailable();if(status!=200)throw new IOException("Test access unavailable");
+             ByteArrayOutputStream bytes=new ByteArrayOutputStream();long deadline=System.nanoTime()+20_000_000_000L;
+             if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.READ_BODY);
+             try(InputStream input=connection.getInputStream()){byte[] buffer=new byte[1024];while(true){connection.setReadTimeout(remaining(15000));int count=input.read(buffer);if(count==-1)break;
+--- a/clients/android/app/src/main/java/com/familyconnect/app/SupportAutomation.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/SupportAutomation.java
+@@ -11,8 +11,7 @@
+     interface Host { String command(String method,String argument); }
+     static final SupportAccess ACCESS=new SupportAccess();
+     private static Host host;
+-    private static long nextUpload;
+-    private static boolean uploading;
++    private static final SupportUploadSchedule UPLOAD=new SupportUploadSchedule();
+     private static volatile String uploadState="OFF";
+     private static volatile FriendsAccessAndroid request;
+     private static final Handler MAIN=new Handler(Looper.getMainLooper());
+@@ -54,16 +53,20 @@
+     }
+     static synchronized void tick(Context supplied){
+         Context context=supplied.getApplicationContext();long now=SystemClock.elapsedRealtime();
+-        if(!consented(context)||uploading||now<nextUpload)return;
+-        uploading=true;nextUpload=now+60000;uploadState="SENDING";
++        if(!UPLOAD.start(now,consented(context)))return;
++        uploadState="SENDING";
+         new Thread(()->{
++            boolean success=false;
+             try{
+                 JsonObject report=SupportSnapshot.project(Diagnostics.supportSnapshot(context),BuildConfig.VERSION_CODE,System.currentTimeMillis());
+                 FriendsAccessAndroid client=new FriendsAccessAndroid(context);request=client;
+                 if(!consented(context)){uploadState="OFF";return;}
+-                client.supportDiagnostics(report);uploadState="STORED";
+-            }catch(Exception failure){uploadState="UNAVAILABLE";synchronized(SupportAutomation.class){nextUpload=SystemClock.elapsedRealtime()+300000;}}
+-            finally{request=null;synchronized(SupportAutomation.class){uploading=false;}}
++                client.supportDiagnostics(report);success=true;uploadState="STORED";
++            }catch(FriendsAccessAndroid.SupportRateLimited failure){uploadState="RATE_LIMITED";}
++            catch(FriendsAccessAndroid.Denied failure){uploadState="AUTH_REJECTED";}
++            catch(java.net.SocketTimeoutException failure){uploadState="TIMEOUT";}
++            catch(Exception failure){uploadState="UNAVAILABLE";}
++            finally{request=null;UPLOAD.finish(SystemClock.elapsedRealtime(),success);}
+         },"support-upload").start();
+     }
+ }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/SupportUploadSchedule.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/SupportUploadSchedule.java
+@@ -0,0 +1,17 @@
++package com.familyconnect.app;
++
++final class SupportUploadSchedule {
++    private boolean running;
++    private long next;
++
++    synchronized boolean start(long now, boolean consented) {
++        if (!consented || running || now < next) return false;
++        running = true;
++        return true;
++    }
++
++    synchronized void finish(long now, boolean success) {
++        next = now + (success ? 60000 : 300000);
++        running = false;
++    }
++}
+--- a/clients/android/app/src/test/java/com/familyconnect/app/SupportUploadScheduleTest.java
++++ b/clients/android/app/src/test/java/com/familyconnect/app/SupportUploadScheduleTest.java
+@@ -0,0 +1,48 @@
++package com.familyconnect.app;
++
++import org.junit.Test;
++import static org.junit.Assert.*;
++
++public class SupportUploadScheduleTest {
++    @Test public void startsOnlyWithConsent() {
++        SupportUploadSchedule schedule = new SupportUploadSchedule();
++        assertFalse(schedule.start(0, false));
++        assertTrue(schedule.start(0, true));
++    }
++
++    @Test public void singleWorkerWithoutQueuedTicks() {
++        SupportUploadSchedule schedule = new SupportUploadSchedule();
++        assertTrue(schedule.start(1000, true));
++        assertFalse(schedule.start(120000, true));
++        schedule.finish(120000, true);
++        assertFalse(schedule.start(120001, true));
++    }
++
++    @Test public void latencyVariationCannotShortenServerInterval() {
++        SupportUploadSchedule schedule = new SupportUploadSchedule();
++        assertTrue(schedule.start(0, true));
++        long firstStored = 14000;
++        schedule.finish(15000, true);
++        assertTrue(60000 - firstStored < 60000);
++        assertFalse(schedule.start(60000, true));
++        assertFalse(schedule.start(74999, true));
++        assertTrue(schedule.start(75000, true));
++        assertTrue(75000 - firstStored >= 60000);
++    }
++
++    @Test public void failureBackoffStartsAtCompletion() {
++        SupportUploadSchedule schedule = new SupportUploadSchedule();
++        assertTrue(schedule.start(0, true));
++        schedule.finish(15000, false);
++        assertFalse(schedule.start(314999, true));
++        assertTrue(schedule.start(315000, true));
++    }
++
++    @Test public void revokedConsentCannotStartAfterCooldown() {
++        SupportUploadSchedule schedule = new SupportUploadSchedule();
++        assertTrue(schedule.start(0, true));
++        schedule.finish(1000, true);
++        assertFalse(schedule.start(61000, false));
++        assertTrue(schedule.start(61000, true));
++    }
++}

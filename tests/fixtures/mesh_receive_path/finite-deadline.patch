@@ -1,0 +1,206 @@
+--- a/telemost/rtp.go
++++ b/telemost/rtp.go
+@@ -31,13 +31,16 @@
+ 	nextSeq    uint16
+ 	started    bool
+ 	gapSince   time.Time
++	gapBudget  time.Duration
++	now        func() time.Time
+ }
+ 
+ func newReorderBuffer() *reorderBuffer {
+-	return &reorderBuffer{pkts: make(map[uint16]*rtp.Packet, reorderWindow)}
++	return &reorderBuffer{pkts: make(map[uint16]*rtp.Packet, reorderWindow), gapBudget: 125 * time.Millisecond, now: time.Now}
+ }
+ 
+ func (b *reorderBuffer) push(pkt *rtp.Packet, deliver func(*rtp.Packet)) {
++	b.expire(deliver)
+ 	if len(pkt.Payload) > 2048 {
+ 		b.drop(pkt, "malformed")
+ 		return
+@@ -64,14 +67,35 @@
+ 		b.recycle(old)
+ 	}
+ 	b.pkts[pkt.SequenceNumber] = b.clone(pkt)
+-	if len(b.pkts) >= reorderWindow || (!b.gapSince.IsZero() && time.Since(b.gapSince) > 100*time.Millisecond) {
++	if len(b.pkts) >= reorderWindow {
+ 		b.skipToOldest()
+ 	}
+ 	b.drain(deliver)
+ 	if len(b.pkts) == 0 {
+ 		b.gapSince = time.Time{}
+ 	} else if b.gapSince.IsZero() || b.nextSeq != previousNext {
+-		b.gapSince = time.Now()
++		b.gapSince = b.now()
++	}
++}
++
++func (b *reorderBuffer) deadline() time.Time {
++	if b.gapSince.IsZero() {
++		return time.Time{}
++	}
++	return b.gapSince.Add(b.gapBudget)
++}
++
++func (b *reorderBuffer) expire(deliver func(*rtp.Packet)) {
++	deadline := b.deadline()
++	if deadline.IsZero() || b.now().Before(deadline) {
++		return
++	}
++	b.skipToOldest()
++	b.drain(deliver)
++	if len(b.pkts) == 0 {
++		b.gapSince = time.Time{}
++	} else {
++		b.gapSince = b.now()
+ 	}
+ }
+ 
+--- /dev/null
++++ b/telemost/rtp_reader.go
+@@ -0,0 +1,56 @@
++package telemost
++
++import (
++	"errors"
++	"net"
++	"time"
++
++	"github.com/pion/interceptor"
++	"github.com/pion/rtp"
++)
++
++type rtpTrackReader interface {
++	Read([]byte) (int, interceptor.Attributes, error)
++	SetReadDeadline(time.Time) error
++}
++
++func readReorderedRTP(track rtpTrackReader, reorder *reorderBuffer, closed <-chan struct{}, received, deliver func(*rtp.Packet)) error {
++	defer track.SetReadDeadline(time.Time{})
++	buffer := make([]byte, 65536)
++	var applied time.Time
++	initialized := false
++	for {
++		select {
++		case <-closed:
++			return ErrClosed
++		default:
++		}
++		reorder.expire(deliver)
++		due := reorder.deadline()
++		if !initialized || !due.Equal(applied) {
++			if err := track.SetReadDeadline(due); err != nil {
++				return err
++			}
++			applied, initialized = due, true
++		}
++		length, _, err := track.Read(buffer)
++		select {
++		case <-closed:
++			return ErrClosed
++		default:
++		}
++		if err != nil {
++			var timeout net.Error
++			if errors.As(err, &timeout) && timeout.Timeout() && !due.IsZero() && !reorder.now().Before(due) {
++				continue
++			}
++			return err
++		}
++		packet := &rtp.Packet{}
++		if packet.Unmarshal(buffer[:length]) != nil {
++			continue
++		}
++		received(packet)
++		reorder.push(packet, deliver)
++	}
++}
+--- a/telemost/signaling.go
++++ b/telemost/signaling.go
+@@ -744,17 +744,7 @@
+ 	defer correlated.flush("incomplete")
+ 	reorder.mediaTrack, state.mediaTrack = observer.track, observer.track
+ 	defer observer.flush("incomplete")
+-	buf := make([]byte, 65536)
+-	for {
+-		n, _, err := track.Read(buf)
+-		if err != nil {
+-			s.traceCarrierReadEnd("SUBSCRIBER", err)
+-			return
+-		}
+-		pkt := &rtp.Packet{}
+-		if pkt.Unmarshal(buf[:n]) != nil {
+-			continue
+-		}
++	err := readReorderedRTP(track, reorder, s.closeCh, func(pkt *rtp.Packet) {
+ 		observer.packet(&pkt.Header, pkt.Payload, "ok")
+ 		s.statsMu.Lock()
+ 		s.mediaStats.RTPReceived++
+@@ -762,31 +752,31 @@
+ 			s.mediaStats.EmptyRTP++
+ 		}
+ 		s.statsMu.Unlock()
+-		reorder.push(pkt, func(ordered *rtp.Packet) {
+-			correlated.packet(&ordered.Header, ordered.Payload, "ok")
++	}, func(ordered *rtp.Packet) {
++		correlated.packet(&ordered.Header, ordered.Payload, "ok")
++		s.statsMu.Lock()
++		if state.haveLastSeq && ordered.SequenceNumber != state.lastSeq+1 {
++			s.mediaStats.SequenceGaps++
++		}
++		s.statsMu.Unlock()
++		frame := state.process(ordered)
++		if frame == nil {
++			return
++		}
++		s.statsMu.Lock()
++		s.mediaStats.FramesReceived++
++		s.statsMu.Unlock()
++		if frag, ok := decodeVP8Frame(frame); ok {
++			point := fragmentBoundary(frag)
++			point.Stage, point.Direction, point.Result = "vp8_reassembled", "rx", "ok"
++			point.FrameKnown, point.Timestamp, point.LastRTP = true, ordered.Timestamp, ordered.SequenceNumber
++			point.MediaTrack = observer.track
++			s.cfg.Trace.Boundary(point)
+ 			s.statsMu.Lock()
+-			if state.haveLastSeq && ordered.SequenceNumber != state.lastSeq+1 {
+-				s.mediaStats.SequenceGaps++
+-			}
++			s.mediaStats.BinaryFrames++
+ 			s.statsMu.Unlock()
+-			frame := state.process(ordered)
+-			if frame == nil {
+-				return
+-			}
+-			s.statsMu.Lock()
+-			s.mediaStats.FramesReceived++
+-			s.statsMu.Unlock()
+-			if frag, ok := decodeVP8Frame(frame); ok {
+-				point := fragmentBoundary(frag)
+-				point.Stage, point.Direction, point.Result = "vp8_reassembled", "rx", "ok"
+-				point.FrameKnown, point.Timestamp, point.LastRTP = true, ordered.Timestamp, ordered.SequenceNumber
+-				point.MediaTrack = observer.track
+-				s.cfg.Trace.Boundary(point)
+-				s.statsMu.Lock()
+-				s.mediaStats.BinaryFrames++
+-				s.statsMu.Unlock()
+-				s.reassembler.ingest(frag)
+-			}
+-		})
+-	}
+-}
++			s.reassembler.ingest(frag)
++		}
++	})
++	s.traceCarrierReadEnd("SUBSCRIBER", err)
++}
+--- a/telemost/rtp_gap_test.go
++++ b/telemost/rtp_gap_test.go
+@@ -33,6 +33,7 @@
+ 			push(4)
+ 			buffer.gapSince = time.Now().Add(-time.Second)
+ 			if scenario.heal {
++				buffer.gapSince = time.Now().Add(-buffer.gapBudget / 2)
+ 				push(1)
+ 			} else {
+ 				push(5)

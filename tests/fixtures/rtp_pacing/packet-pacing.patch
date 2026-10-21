@@ -1,0 +1,1982 @@
+--- /dev/null
++++ b/localwrite/scope.go
+@@ -0,0 +1,10 @@
++package localwrite
++
++import "context"
++
++type scopeKey struct{}
++
++func WithCompletion(ctx context.Context) context.Context {
++	return context.WithValue(ctx, scopeKey{}, true)
++}
++func Enabled(ctx context.Context) bool { enabled, _ := ctx.Value(scopeKey{}).(bool); return enabled }
+--- /dev/null
++++ b/localwrite/write.go
+@@ -0,0 +1,96 @@
++package localwrite
++
++import (
++	"context"
++	"errors"
++	"sync"
++	"sync/atomic"
++)
++
++type key struct{}
++
++type Write struct {
++	ctx        context.Context
++	obsolete   <-chan struct{}
++	registered atomic.Bool
++	state      atomic.Uint32
++	remaining  atomic.Int32
++	done       chan error
++	once       sync.Once
++}
++
++func Observe(ctx context.Context, obsolete <-chan struct{}) (context.Context, *Write) {
++	write := &Write{ctx: ctx, obsolete: obsolete, done: make(chan error, 1)}
++	return context.WithValue(ctx, key{}, write), write
++}
++
++func Register(ctx context.Context, fragments int) (*Write, error) {
++	write, _ := ctx.Value(key{}).(*Write)
++	if write == nil {
++		return nil, nil
++	}
++	if fragments < 1 || !write.registered.CompareAndSwap(false, true) {
++		return nil, errors.New("local write: repeated registration")
++	}
++	write.remaining.Store(int32(fragments))
++	return write, nil
++}
++
++func (write *Write) finish(err error) { write.once.Do(func() { write.done <- err }) }
++
++func (write *Write) Begin() bool {
++	if write == nil {
++		return true
++	}
++	if write.state.Load() == 0 {
++		select {
++		case <-write.obsolete:
++			if write.state.CompareAndSwap(0, 2) {
++				write.finish(nil)
++			}
++		case <-write.ctx.Done():
++			if write.state.CompareAndSwap(0, 2) {
++				write.finish(write.ctx.Err())
++			}
++		default:
++			write.state.CompareAndSwap(0, 1)
++		}
++	}
++	return write.state.Load() == 1
++}
++
++func (write *Write) Complete(err error) {
++	if write == nil {
++		return
++	}
++	if err != nil {
++		write.finish(err)
++		return
++	}
++	if write.remaining.Add(-1) == 0 {
++		write.finish(nil)
++	}
++}
++
++func (write *Write) Wait() error {
++	if !write.registered.Load() {
++		return nil
++	}
++	select {
++	case err := <-write.done:
++		return err
++	case <-write.ctx.Done():
++		write.state.CompareAndSwap(0, 2)
++		return write.ctx.Err()
++	case <-write.obsolete:
++		if write.state.CompareAndSwap(0, 2) {
++			return nil
++		}
++		select {
++		case err := <-write.done:
++			return err
++		case <-write.ctx.Done():
++			return write.ctx.Err()
++		}
++	}
++}
+--- /dev/null
++++ b/localwrite/write_test.go
+@@ -0,0 +1,90 @@
++package localwrite
++
++import (
++	"context"
++	"errors"
++	"testing"
++	"time"
++)
++
++func TestCompletionAndCancellation(test *testing.T) {
++	for _, mode := range []string{"complete", "obsolete_queued", "obsolete_partial", "deadline_queued", "deadline_partial", "error", "late", "legacy"} {
++		test.Run(mode, func(test *testing.T) {
++			ctx, cancel := context.WithCancel(context.Background())
++			defer cancel()
++			obsolete := make(chan struct{})
++			observed, completion := Observe(ctx, obsolete)
++			if mode == "legacy" {
++				if completion.Wait() != nil {
++					test.Fatal("legacy")
++				}
++				return
++			}
++			registered, err := Register(observed, 2)
++			if err != nil {
++				test.Fatal(err)
++			}
++			if _, err = Register(observed, 2); err == nil {
++				test.Fatal("reused completion")
++			}
++			if mode == "obsolete_queued" {
++				close(obsolete)
++				if completion.Wait() != nil || registered.Begin() {
++					test.Fatal("obsolete wrote")
++				}
++				return
++			}
++			if mode == "deadline_queued" {
++				cancel()
++				if !errors.Is(completion.Wait(), context.Canceled) || registered.Begin() {
++					test.Fatal("cancelled wrote")
++				}
++				return
++			}
++			if !registered.Begin() {
++				test.Fatal("not writing")
++			}
++			registered.Complete(nil)
++			done := make(chan error, 1)
++			go func() { done <- completion.Wait() }()
++			select {
++			case <-done:
++				test.Fatal("completed partial message")
++			case <-time.After(time.Millisecond):
++			}
++			if mode == "obsolete_partial" {
++				close(obsolete)
++				if !registered.Begin() {
++					test.Fatal("partial aborted")
++				}
++			}
++			if mode == "deadline_partial" || mode == "late" {
++				cancel()
++				if !errors.Is(<-done, context.Canceled) {
++					test.Fatal("deadline ignored")
++				}
++				freshCtx, fresh := Observe(context.Background(), nil)
++				next, _ := Register(freshCtx, 1)
++				registered.Complete(nil)
++				next.Begin()
++				next.Complete(nil)
++				if fresh.Wait() != nil {
++					test.Fatal("late completion changed fresh generation")
++				}
++				return
++			}
++			failure := errors.New("write failed")
++			if mode == "error" {
++				registered.Complete(failure)
++				if !errors.Is(<-done, failure) {
++					test.Fatal("error lost")
++				}
++				return
++			}
++			registered.Complete(nil)
++			if <-done != nil {
++				test.Fatal("completion failed")
++			}
++		})
++	}
++}
+--- /dev/null
++++ b/packetpace/model_test.go
+@@ -0,0 +1,140 @@
++package packetpace
++
++import (
++	"context"
++	"encoding/json"
++	"testing"
++	"time"
++
++	"github.com/pion/interceptor"
++	"github.com/pion/rtp"
++	"github.com/pion/rtp/codecs"
++)
++
++func TestPacingEqualOfferedBudgetModel(test *testing.T) {
++	for _, scenario := range []string{"sufficient", "two_packet_queue", "reorder", "slow_consumer"} {
++		for _, paced := range []bool{false, true} {
++			pace, clock := fakePacer(paced)
++			start := *clock
++			linkRate := 1000000
++			capacity := 64
++			if scenario == "two_packet_queue" {
++				linkRate = 500000
++				capacity = 2
++			}
++			var queued []time.Time
++			var linkFinish, consumerFinish time.Time
++			var consumerQueue []time.Time
++			dropped, complete, totalPackets, maxQueue, maxConsumer := 0, 0, 0, 0, 0
++			frameOK := true
++			var lastDelivery time.Time
++			writer := pace.BindLocalStream(&interceptor.StreamInfo{SSRC: 1}, interceptor.RTPWriterFunc(func(header *rtp.Header, payload []byte, _ interceptor.Attributes) (int, error) {
++				size := header.MarshalSize() + len(payload)
++				totalPackets++
++				for len(queued) > 0 && !queued[0].After(*clock) {
++					queued = queued[1:]
++				}
++				if len(queued) >= capacity {
++					dropped++
++					frameOK = false
++				} else {
++					if linkFinish.Before(*clock) {
++						linkFinish = *clock
++					}
++					linkFinish = linkFinish.Add(time.Duration(size) * time.Second / time.Duration(linkRate))
++					queued = append(queued, linkFinish)
++					maxQueue = max(maxQueue, len(queued))
++				}
++				if header.Marker {
++					if frameOK {
++						complete++
++						lastDelivery = linkFinish.Add(20 * time.Millisecond)
++						if scenario == "reorder" {
++							lastDelivery = lastDelivery.Add(3 * time.Millisecond)
++						}
++						if scenario == "slow_consumer" {
++							if consumerFinish.Before(lastDelivery) {
++								consumerFinish = lastDelivery
++							}
++							consumerFinish = consumerFinish.Add(100 * time.Millisecond)
++							consumerQueue = append(consumerQueue, consumerFinish)
++							maxConsumer = max(maxConsumer, len(consumerQueue))
++							lastDelivery = consumerFinish
++						}
++					}
++					frameOK = true
++				}
++				return size, nil
++			}))
++			packetizer := rtp.NewPacketizer(1200, 96, 1, &codecs.VP8Payloader{EnablePictureID: true}, rtp.NewFixedSequencer(65520), 90000)
++			interval := 75 * time.Millisecond
++			if scenario == "slow_consumer" {
++				interval = 100 * time.Millisecond
++			}
++			for frame := 0; frame < 64; frame++ {
++				arrival := start.Add(time.Duration(frame) * interval)
++				if clock.Before(arrival) {
++					*clock = arrival
++				}
++				for len(consumerQueue) > 0 && !consumerQueue[0].After(*clock) {
++					consumerQueue = consumerQueue[1:]
++				}
++				if len(consumerQueue) >= 2 {
++					*clock = consumerQueue[0]
++					consumerQueue = consumerQueue[1:]
++				}
++				for _, packet := range packetizer.Packetize(make([]byte, 8233), 2970) {
++					if _, err := writer.Write(&packet.Header, packet.Payload, nil); err != nil {
++						test.Fatal(err)
++					}
++				}
++			}
++			snapshot := pace.Snapshot()
++			var lastUseful any
++			if !lastDelivery.IsZero() {
++				lastUseful = lastDelivery.Sub(start).Nanoseconds()
++			}
++			encoded, _ := json.Marshal(map[string]any{"scenario": scenario, "paced": paced, "input_frames": 64, "packets": totalPackets, "rtp_bytes": snapshot.RTPBytes, "complete_frames": complete, "dropped_packets": dropped, "link_queue_max_packets": maxQueue, "consumer_queue_max_frames": maxConsumer, "input_interval_ns": int64(interval), "offered_budget_interval_ns": int64(64 * interval), "last_useful_ns": lastUseful, "source_end_ns": clock.Sub(start).Nanoseconds(), "pacing": snapshot})
++			test.Log(string(encoded))
++			if scenario != "two_packet_queue" || paced {
++				if complete != 64 || dropped != 0 {
++					test.Fatal("unexpected delivery regression")
++				}
++			} else if dropped == 0 {
++				test.Fatal("burst fixture ineffective")
++			}
++			if maxQueue > capacity || maxConsumer > 2 {
++				test.Fatal("unbounded model")
++			}
++			pace.Close()
++		}
++	}
++}
++
++func BenchmarkPacingObservation(b *testing.B) {
++	for _, observed := range []bool{false, true} {
++		name := "plain"
++		if observed {
++			name = "bounded_histograms"
++		}
++		b.Run(name, func(b *testing.B) {
++			var writer interceptor.RTPWriter = interceptor.RTPWriterFunc(func(header *rtp.Header, payload []byte, _ interceptor.Attributes) (int, error) {
++				return header.MarshalSize() + len(payload), nil
++			})
++			if observed {
++				pace := New(context.Background(), false)
++				defer pace.Close()
++				writer = pace.BindLocalStream(&interceptor.StreamInfo{SSRC: 1}, writer)
++			}
++			header := &rtp.Header{SSRC: 1, Marker: true}
++			payload := make([]byte, 1188)
++			b.ReportAllocs()
++			b.ResetTimer()
++			for index := 0; index < b.N; index++ {
++				if _, err := writer.Write(header, payload, nil); err != nil {
++					b.Fatal(err)
++				}
++			}
++		})
++	}
++}
+--- /dev/null
++++ b/packetpace/pacer.go
+@@ -0,0 +1,299 @@
++package packetpace
++
++import (
++	"context"
++	"errors"
++	"io"
++	"sync"
++	"time"
++
++	"github.com/pion/interceptor"
++	"github.com/pion/rtcp"
++	"github.com/pion/rtp"
++)
++
++const FixedBytesPerSecond = 500000
++const MaxPacket = 1500
++const MaxPending = 16
++const MaxWait = time.Second
++
++var ErrCapacity = errors.New("packet pacing: capacity")
++
++type Histogram struct {
++	Count   [9]uint64
++	MaxNS   int64
++	TotalNS int64
++}
++
++func (histogram *Histogram) add(duration time.Duration) {
++	index := 0
++	for index < 8 && duration > [...]time.Duration{10 * time.Microsecond, 50 * time.Microsecond, 100 * time.Microsecond, 500 * time.Microsecond, time.Millisecond, 5 * time.Millisecond, 20 * time.Millisecond, 100 * time.Millisecond}[index] {
++		index++
++	}
++	histogram.Count[index]++
++	histogram.TotalNS += int64(duration)
++	histogram.MaxNS = max(histogram.MaxNS, int64(duration))
++}
++
++type Snapshot struct {
++	RateBytesPerSecond                                               int
++	ElapsedNS                                                        int64
++	Packets, RTPBytes, LocalWriteBytes, RTXPackets, Errors, Rejected uint64
++	Pending, PendingBytes, MaxPending, MaxPendingBytes               int
++	Spacing, Wait, SchedulerLate, CarrierQueueAge                    Histogram
++	CarrierQueueFramesMax                                            int
++	Bins                                                             [3]struct{ PeakPackets, PeakBytes uint64 }
++	FramePackets                                                     [9]uint64
++	RTCP                                                             [6]uint64
++	RTCPBytes                                                        uint64
++	NACK, TWCC, REMB                                                 bool
++	RTCPWrittenBytes, RTCPWrittenPackets                             uint64
++}
++
++type Pacer struct {
++	interceptor.NoOp
++	ctx         context.Context
++	cancel      context.CancelFunc
++	rate        int
++	permit      chan struct{}
++	slots       chan struct{}
++	now         func() time.Time
++	wait        func(context.Context, time.Duration) error
++	next        time.Time
++	mu          sync.Mutex
++	stats       Snapshot
++	start, last time.Time
++	bins        [3]struct {
++		index          int64
++		packets, bytes uint64
++	}
++	frameTimestamp, frameSSRC uint32
++	framePackets              int
++	streams                   map[uint32]streamLifetime
++}
++
++type streamLifetime struct {
++	info   *interceptor.StreamInfo
++	cancel context.CancelFunc
++}
++
++func New(ctx context.Context, paced bool) *Pacer {
++	lifetime, cancel := context.WithCancel(ctx)
++	pace := &Pacer{ctx: lifetime, cancel: cancel, permit: make(chan struct{}, 1), slots: make(chan struct{}, MaxPending), now: time.Now, streams: make(map[uint32]streamLifetime)}
++	if paced {
++		pace.rate = FixedBytesPerSecond
++	}
++	pace.permit <- struct{}{}
++	pace.wait = func(ctx context.Context, delay time.Duration) error {
++		if delay <= 0 {
++			return ctx.Err()
++		}
++		timer := time.NewTimer(delay)
++		defer timer.Stop()
++		select {
++		case <-ctx.Done():
++			return ctx.Err()
++		case <-timer.C:
++			return nil
++		}
++	}
++	pace.start = pace.now()
++	pace.stats.RateBytesPerSecond = pace.rate
++	return pace
++}
++
++func (pace *Pacer) NewInterceptor(string) (interceptor.Interceptor, error) { return pace, nil }
++func (pace *Pacer) Close() error                                           { pace.cancel(); return nil }
++
++func (pace *Pacer) BindLocalStream(info *interceptor.StreamInfo, writer interceptor.RTPWriter) interceptor.RTPWriter {
++	lifetime, cancel := context.WithCancel(pace.ctx)
++	pace.mu.Lock()
++	if old := pace.streams[info.SSRC]; old.cancel != nil {
++		old.cancel()
++	}
++	pace.streams[info.SSRC] = streamLifetime{info, cancel}
++	for _, feedback := range info.RTCPFeedback {
++		switch feedback.Type {
++		case "nack":
++			pace.stats.NACK = true
++		case "transport-cc":
++			pace.stats.TWCC = true
++		case "goog-remb":
++			pace.stats.REMB = true
++		}
++	}
++	pace.mu.Unlock()
++	return interceptor.RTPWriterFunc(func(header *rtp.Header, payload []byte, attributes interceptor.Attributes) (count int, err error) {
++		defer func() {
++			if err != nil {
++				pace.mu.Lock()
++				pace.stats.Errors++
++				pace.mu.Unlock()
++			}
++		}()
++		size := header.MarshalSize() + len(payload)
++		if size > MaxPacket || header.Padding {
++			return 0, ErrCapacity
++		}
++		select {
++		case pace.slots <- struct{}{}:
++		default:
++			pace.mu.Lock()
++			pace.stats.Rejected++
++			pace.mu.Unlock()
++			return 0, ErrCapacity
++		}
++		pace.mu.Lock()
++		pace.stats.Pending++
++		pace.stats.PendingBytes += size
++		pace.stats.MaxPending = max(pace.stats.MaxPending, pace.stats.Pending)
++		pace.stats.MaxPendingBytes = max(pace.stats.MaxPendingBytes, pace.stats.PendingBytes)
++		pace.mu.Unlock()
++		defer func() {
++			<-pace.slots
++			pace.mu.Lock()
++			pace.stats.Pending--
++			pace.stats.PendingBytes -= size
++			pace.mu.Unlock()
++		}()
++		ctx, end := context.WithTimeout(lifetime, MaxWait)
++		defer end()
++		started := pace.now()
++		select {
++		case <-ctx.Done():
++			return 0, ctx.Err()
++		case <-pace.permit:
++		}
++		defer func() { pace.permit <- struct{}{} }()
++		if err := ctx.Err(); err != nil {
++			return 0, err
++		}
++		if err := pace.wait(ctx, pace.next.Sub(pace.now())); err != nil {
++			return 0, err
++		}
++		if err := ctx.Err(); err != nil {
++			return 0, err
++		}
++		waking := pace.now()
++		count, err = writer.Write(header, payload, attributes)
++		if err == nil && count < size {
++			err = io.ErrShortWrite
++		}
++		written := pace.now()
++		pace.mu.Lock()
++		pace.stats.Wait.add(waking.Sub(started))
++		if waking.After(pace.next) && pace.next.After(started) {
++			pace.stats.SchedulerLate.add(waking.Sub(pace.next))
++		}
++		if err == nil {
++			pace.stats.Packets++
++			pace.stats.RTPBytes += uint64(size)
++			pace.stats.LocalWriteBytes += uint64(count)
++			if info.SSRCRetransmission != 0 && header.SSRC == info.SSRCRetransmission {
++				pace.stats.RTXPackets++
++			}
++			if !pace.last.IsZero() {
++				pace.stats.Spacing.add(written.Sub(pace.last))
++			}
++			pace.last = written
++			for index, width := range [...]time.Duration{time.Millisecond, 5 * time.Millisecond, 20 * time.Millisecond} {
++				bucket := &pace.bins[index]
++				position := int64(written.Sub(pace.start) / width)
++				if bucket.index != position {
++					bucket.index = position
++					bucket.packets = 0
++					bucket.bytes = 0
++				}
++				bucket.packets++
++				bucket.bytes += uint64(size)
++				pace.stats.Bins[index].PeakPackets = max(pace.stats.Bins[index].PeakPackets, bucket.packets)
++				pace.stats.Bins[index].PeakBytes = max(pace.stats.Bins[index].PeakBytes, bucket.bytes)
++			}
++			if pace.frameTimestamp != header.Timestamp || pace.frameSSRC != header.SSRC {
++				pace.framePackets = 0
++			}
++			pace.frameTimestamp, pace.frameSSRC = header.Timestamp, header.SSRC
++			pace.framePackets++
++			if header.Marker {
++				pace.stats.FramePackets[min(8, pace.framePackets)]++
++				pace.framePackets = 0
++			}
++		}
++		pace.mu.Unlock()
++		if pace.rate > 0 {
++			pace.next = written.Add(time.Duration(size) * time.Second / time.Duration(pace.rate))
++		}
++		return count, err
++	})
++}
++
++func (pace *Pacer) UnbindLocalStream(info *interceptor.StreamInfo) {
++	pace.mu.Lock()
++	defer pace.mu.Unlock()
++	if old := pace.streams[info.SSRC]; old.cancel != nil && old.info == info {
++		old.cancel()
++		delete(pace.streams, info.SSRC)
++	}
++}
++
++func (pace *Pacer) ObserveCarrierQueue(queued time.Time, depth int) {
++	if queued.IsZero() {
++		return
++	}
++	pace.mu.Lock()
++	defer pace.mu.Unlock()
++	pace.stats.CarrierQueueAge.add(pace.now().Sub(queued))
++	pace.stats.CarrierQueueFramesMax = max(pace.stats.CarrierQueueFramesMax, depth)
++}
++
++func (pace *Pacer) Snapshot() Snapshot {
++	pace.mu.Lock()
++	defer pace.mu.Unlock()
++	result := pace.stats
++	result.ElapsedNS = int64(pace.now().Sub(pace.start))
++	return result
++}
++
++func (pace *Pacer) BindRTCPReader(reader interceptor.RTCPReader) interceptor.RTCPReader {
++	return interceptor.RTCPReaderFunc(func(buffer []byte, attributes interceptor.Attributes) (int, interceptor.Attributes, error) {
++		count, attributes, err := reader.Read(buffer, attributes)
++		if err == nil {
++			packets, parseErr := rtcp.Unmarshal(buffer[:count])
++			if parseErr == nil {
++				pace.mu.Lock()
++				pace.stats.RTCPBytes += uint64(count)
++				for _, packet := range packets {
++					index := 5
++					switch packet.(type) {
++					case *rtcp.ReceiverReport:
++						index = 0
++					case *rtcp.TransportLayerNack:
++						index = 1
++					case *rtcp.TransportLayerCC:
++						index = 2
++					case *rtcp.ReceiverEstimatedMaximumBitrate:
++						index = 3
++					case *rtcp.PictureLossIndication:
++						index = 4
++					}
++					pace.stats.RTCP[index]++
++				}
++				pace.mu.Unlock()
++			}
++		}
++		return count, attributes, err
++	})
++}
++
++func (pace *Pacer) BindRTCPWriter(writer interceptor.RTCPWriter) interceptor.RTCPWriter {
++	return interceptor.RTCPWriterFunc(func(packets []rtcp.Packet, attributes interceptor.Attributes) (int, error) {
++		count, err := writer.Write(packets, attributes)
++		if err == nil && count > 0 {
++			pace.mu.Lock()
++			pace.stats.RTCPWrittenBytes += uint64(count)
++			pace.stats.RTCPWrittenPackets += uint64(len(packets))
++			pace.mu.Unlock()
++		}
++		return count, err
++	})
++}
+--- /dev/null
++++ b/packetpace/pacer_test.go
+@@ -0,0 +1,252 @@
++package packetpace
++
++import (
++	"bytes"
++	"context"
++	"errors"
++	"io"
++	"testing"
++	"time"
++
++	"github.com/pion/interceptor"
++	"github.com/pion/interceptor/pkg/nack"
++	"github.com/pion/rtcp"
++	"github.com/pion/rtp"
++)
++
++func fakePacer(paced bool) (*Pacer, *time.Time) {
++	pace := New(context.Background(), paced)
++	now := time.Unix(100, 0)
++	pace.now = func() time.Time { return now }
++	pace.start = now
++	pace.wait = func(ctx context.Context, delay time.Duration) error {
++		if delay > 0 {
++			now = now.Add(delay)
++		}
++		return ctx.Err()
++	}
++	return pace, &now
++}
++
++func TestPacingExactIdlePartialAndTimestampWrap(test *testing.T) {
++	pace, clock := fakePacer(true)
++	defer pace.Close()
++	var arrivals []time.Time
++	var copied [][]byte
++	writer := pace.BindLocalStream(&interceptor.StreamInfo{SSRC: 1}, interceptor.RTPWriterFunc(func(header *rtp.Header, payload []byte, _ interceptor.Attributes) (int, error) {
++		arrivals = append(arrivals, *clock)
++		copied = append(copied, bytes.Clone(payload))
++		return header.MarshalSize() + len(payload) + 10, nil
++	}))
++	payload := bytes.Repeat([]byte{77}, 1188)
++	for index := 0; index < 5; index++ {
++		if index == 3 {
++			*clock = clock.Add(10 * time.Second)
++		}
++		if _, err := writer.Write(&rtp.Header{Version: 2, SSRC: 1, SequenceNumber: uint16(65534 + index), Timestamp: uint32(uint64(4294967294) + uint64(index)), Marker: true}, payload, nil); err != nil {
++			test.Fatal(err)
++		}
++	}
++	payload[0] = 0
++	for _, data := range copied {
++		if data[0] != 77 {
++			test.Fatal("payload ownership")
++		}
++	}
++	for _, index := range []int{1, 2, 4} {
++		if arrivals[index].Sub(arrivals[index-1]) != 2400*time.Microsecond {
++			test.Fatal("spacing or idle credit", arrivals)
++		}
++	}
++	if pace.Snapshot().Packets != 5 || pace.Snapshot().LocalWriteBytes != 6050 {
++		test.Fatal(pace.Snapshot())
++	}
++	short := pace.BindLocalStream(&interceptor.StreamInfo{SSRC: 2}, interceptor.RTPWriterFunc(func(*rtp.Header, []byte, interceptor.Attributes) (int, error) { return 1, nil }))
++	if _, err := short.Write(&rtp.Header{}, payload, nil); !errors.Is(err, io.ErrShortWrite) {
++		test.Fatal(err)
++	}
++	if pace.Snapshot().Packets != 5 {
++		test.Fatal("partial recorded as success")
++	}
++}
++
++func TestPacingBoundedCloseSlowWriter(test *testing.T) {
++	pace := New(context.Background(), true)
++	entered, release := make(chan struct{}), make(chan struct{})
++	writer := pace.BindLocalStream(&interceptor.StreamInfo{SSRC: 1}, interceptor.RTPWriterFunc(func(header *rtp.Header, payload []byte, _ interceptor.Attributes) (int, error) {
++		close(entered)
++		<-release
++		return header.MarshalSize() + len(payload), nil
++	}))
++	results := make(chan error, MaxPending)
++	go func() { _, err := writer.Write(&rtp.Header{SSRC: 1}, make([]byte, 1188), nil); results <- err }()
++	<-entered
++	for index := 1; index < MaxPending; index++ {
++		go func() { _, err := writer.Write(&rtp.Header{SSRC: 1}, make([]byte, 1188), nil); results <- err }()
++	}
++	deadline := time.After(2 * time.Second)
++	for pace.Snapshot().Pending != MaxPending {
++		select {
++		case <-deadline:
++			test.Fatal("not admitted")
++		case <-time.After(time.Millisecond):
++		}
++	}
++	if _, err := writer.Write(&rtp.Header{}, make([]byte, 1188), nil); !errors.Is(err, ErrCapacity) {
++		test.Fatal(err)
++	}
++	pace.Close()
++	for index := 1; index < MaxPending; index++ {
++		select {
++		case err := <-results:
++			if !errors.Is(err, context.Canceled) {
++				test.Fatal(err)
++			}
++		case <-time.After(time.Second):
++			test.Fatal("close did not release waiter")
++		}
++	}
++	close(release)
++	if err := <-results; err != nil {
++		test.Fatal(err)
++	}
++	if snapshot := pace.Snapshot(); snapshot.Pending != 0 || snapshot.MaxPendingBytes > MaxPending*MaxPacket {
++		test.Fatal(snapshot)
++	}
++	pace.Close()
++}
++
++func TestPacingCancelUnbindAndDeadline(test *testing.T) {
++	for _, operation := range []string{"cancel", "unbind", "deadline"} {
++		test.Run(operation, func(test *testing.T) {
++			ctx, cancel := context.WithCancel(context.Background())
++			defer cancel()
++			pace := New(ctx, true)
++			defer pace.Close()
++			pace.next = time.Now().Add(10 * time.Second)
++			info := &interceptor.StreamInfo{SSRC: 3}
++			called := false
++			writer := pace.BindLocalStream(info, interceptor.RTPWriterFunc(func(*rtp.Header, []byte, interceptor.Attributes) (int, error) { called = true; return 0, nil }))
++			switch operation {
++			case "cancel":
++				cancel()
++			case "unbind":
++				pace.UnbindLocalStream(info)
++			}
++			started := time.Now()
++			if _, err := writer.Write(&rtp.Header{}, []byte{1}, nil); err == nil {
++				test.Fatal("cancel lost")
++			}
++			if called || time.Since(started) > 2*time.Second {
++				test.Fatal("unbounded wait or late callback")
++			}
++		})
++	}
++}
++
++func TestPacingNACKRetransmissionAndRTCPIndependent(test *testing.T) {
++	pace := New(context.Background(), true)
++	defer pace.Close()
++	factory, err := nack.NewResponderInterceptor()
++	if err != nil {
++		test.Fatal(err)
++	}
++	responder, err := factory.NewInterceptor("")
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer responder.Close()
++	chain := interceptor.NewChain([]interceptor.Interceptor{pace, responder})
++	info := &interceptor.StreamInfo{SSRC: 42, MimeType: "video/VP8", RTCPFeedback: []interceptor.RTCPFeedback{{Type: "nack"}}}
++	written := make(chan uint16, 3)
++	writer := chain.BindLocalStream(info, interceptor.RTPWriterFunc(func(header *rtp.Header, payload []byte, _ interceptor.Attributes) (int, error) {
++		written <- header.SequenceNumber
++		return header.MarshalSize() + len(payload), nil
++	}))
++	if _, err := writer.Write(&rtp.Header{SSRC: 42, SequenceNumber: 7}, make([]byte, 1188), nil); err != nil {
++		test.Fatal(err)
++	}
++	<-written
++	feedback, _ := rtcp.Marshal([]rtcp.Packet{&rtcp.TransportLayerNack{MediaSSRC: 42, Nacks: []rtcp.NackPair{{PacketID: 7}}}})
++	reader := chain.BindRTCPReader(interceptor.RTCPReaderFunc(func(buffer []byte, attributes interceptor.Attributes) (int, interceptor.Attributes, error) {
++		return copy(buffer, feedback), attributes, nil
++	}))
++	if _, _, err := reader.Read(make([]byte, 1500), nil); err != nil {
++		test.Fatal(err)
++	}
++	select {
++	case seq := <-written:
++		if seq != 7 {
++			test.Fatal(seq)
++		}
++	case <-time.After(time.Second):
++		test.Fatal("NACK bypass or starvation")
++	}
++	chain.UnbindLocalStream(info)
++	pace.permit <- <-pace.permit
++	snapshot := pace.Snapshot()
++	if snapshot.Packets != 2 || snapshot.RTCP[1] != 1 || !snapshot.NACK || snapshot.Spacing.MaxNS < 2400000 {
++		test.Fatal(snapshot)
++	}
++}
++
++func TestPacingReplacementRejectsOldWriterNotNew(test *testing.T) {
++	pace, _ := fakePacer(true)
++	defer pace.Close()
++	sink := interceptor.RTPWriterFunc(func(header *rtp.Header, payload []byte, _ interceptor.Attributes) (int, error) {
++		return header.MarshalSize() + len(payload), nil
++	})
++	oldInfo, newInfo := &interceptor.StreamInfo{SSRC: 7}, &interceptor.StreamInfo{SSRC: 7}
++	oldWriter := pace.BindLocalStream(oldInfo, sink)
++	newWriter := pace.BindLocalStream(newInfo, sink)
++	pace.UnbindLocalStream(oldInfo)
++	if _, err := oldWriter.Write(&rtp.Header{}, []byte{1}, nil); !errors.Is(err, context.Canceled) {
++		test.Fatal(err)
++	}
++	if _, err := newWriter.Write(&rtp.Header{}, []byte{2}, nil); err != nil {
++		test.Fatal(err)
++	}
++	pace.UnbindLocalStream(newInfo)
++	if _, err := newWriter.Write(&rtp.Header{}, []byte{2}, nil); !errors.Is(err, context.Canceled) {
++		test.Fatal(err)
++	}
++}
++
++func TestPacingRTCPWhileRTPBlocked(test *testing.T) {
++	pace := New(context.Background(), true)
++	defer pace.Close()
++	<-pace.permit
++	blocked := make(chan error, 1)
++	writer := pace.BindLocalStream(&interceptor.StreamInfo{SSRC: 1}, interceptor.RTPWriterFunc(func(*rtp.Header, []byte, interceptor.Attributes) (int, error) {
++		test.Error("unexpected write")
++		return 0, nil
++	}))
++	go func() { _, err := writer.Write(&rtp.Header{}, []byte{1}, nil); blocked <- err }()
++	feedback, _ := rtcp.Marshal([]rtcp.Packet{&rtcp.ReceiverReport{SSRC: 2}})
++	rtcpWriter := pace.BindRTCPWriter(interceptor.RTCPWriterFunc(func(packets []rtcp.Packet, _ interceptor.Attributes) (int, error) { return 20, nil }))
++	if _, err := rtcpWriter.Write([]rtcp.Packet{&rtcp.SenderReport{}}, nil); err != nil {
++		test.Fatal(err)
++	}
++	if pace.Snapshot().RTCPWrittenBytes != 20 {
++		test.Fatal("outbound control blocked")
++	}
++	reader := pace.BindRTCPReader(interceptor.RTCPReaderFunc(func(buffer []byte, attrs interceptor.Attributes) (int, interceptor.Attributes, error) {
++		return copy(buffer, feedback), attrs, nil
++	}))
++	if _, _, err := reader.Read(make([]byte, 1500), nil); err != nil {
++		test.Fatal(err)
++	}
++	if pace.Snapshot().RTCP[0] != 1 {
++		test.Fatal("feedback blocked")
++	}
++	pace.Close()
++	select {
++	case err := <-blocked:
++		if !errors.Is(err, context.Canceled) {
++			test.Fatal(err)
++		}
++	case <-time.After(time.Second):
++		test.Fatal("RTP wait leaked")
++	}
++	pace.permit <- struct{}{}
++}
+--- /dev/null
++++ b/reliablestream/local_deadline_test.go
+@@ -0,0 +1,70 @@
++package reliablestream
++
++import (
++	"context"
++	"errors"
++	"testing"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/localwrite"
++)
++
++type stalledLocalEndpoint struct {
++	*testEndpoint
++	started chan *localwrite.Write
++}
++
++func (endpoint *stalledLocalEndpoint) SendContext(ctx context.Context, data []byte) error {
++	packet, err := decode(data)
++	if err != nil || packet.kind != dataFrame {
++		return endpoint.testEndpoint.SendContext(ctx, data)
++	}
++	write, err := localwrite.Register(ctx, 2)
++	if err != nil {
++		return err
++	}
++	if write.Begin() {
++		write.Complete(nil)
++		endpoint.started <- write
++	}
++	return nil
++}
++
++func TestLocalCompletionDeadlinesRepeatedGenerations(test *testing.T) {
++	var previous *localwrite.Write
++	for generation := 0; generation < 3; generation++ {
++		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
++		left, right := endpoints()
++		point := &stalledLocalEndpoint{testEndpoint: left, started: make(chan *localwrite.Write, 1)}
++		config := DefaultConfig()
++		config.RTO, config.MaxAge = 20*time.Millisecond, 150*time.Millisecond
++		sender, err := New(localwrite.WithCompletion(ctx), point, config)
++		if err != nil {
++			test.Fatal(err)
++		}
++		receiver, err := New(ctx, right, config)
++		if err != nil {
++			test.Fatal(err)
++		}
++		if previous != nil {
++			previous.Complete(nil)
++		}
++		began := time.Now()
++		err = sender.SendContext(ctx, []byte("partial local write never completes"))
++		if !errors.Is(err, context.DeadlineExceeded) || time.Since(began) > 500*time.Millisecond {
++			test.Fatal("local write did not fail within its finite deadline", err)
++		}
++		if sender.Stats().Retransmissions != 0 {
++			test.Fatal("local queue consumed retry budget")
++		}
++		select {
++		case previous = <-point.started:
++		case <-ctx.Done():
++			test.Fatal("partial write not reached")
++		}
++		sender.Close()
++		receiver.Close()
++		cancel()
++	}
++	previous.Complete(nil)
++}
+--- /dev/null
++++ b/reliablestream/local_write_test.go
+@@ -0,0 +1,121 @@
++package reliablestream
++
++import (
++	"bytes"
++	"context"
++	"sync"
++	"testing"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/localwrite"
++)
++
++type localEndpoint struct {
++	*testEndpoint
++	mu       sync.Mutex
++	attempts map[uint64]int
++	retry    chan *localwrite.Write
++}
++
++func (endpoint *localEndpoint) SendContext(ctx context.Context, data []byte) error {
++	packet, err := decode(data)
++	if err != nil || packet.kind != dataFrame {
++		return endpoint.testEndpoint.SendContext(ctx, data)
++	}
++	endpoint.mu.Lock()
++	endpoint.attempts[packet.seq]++
++	attempt := endpoint.attempts[packet.seq]
++	endpoint.mu.Unlock()
++	write, err := localwrite.Register(ctx, 1)
++	if err != nil {
++		return err
++	}
++	if packet.seq == 0 && attempt == 2 {
++		endpoint.retry <- write
++		return nil
++	}
++	if write.Begin() {
++		err = endpoint.testEndpoint.SendContext(ctx, data)
++		write.Complete(err)
++	}
++	return err
++}
++
++func TestACKReleasesWhileRetryWaitsForLocalWrite(test *testing.T) {
++	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
++	defer cancel()
++	ctx = localwrite.WithCompletion(ctx)
++	left, right := endpoints()
++	point := &localEndpoint{testEndpoint: left, attempts: make(map[uint64]int), retry: make(chan *localwrite.Write, 1)}
++	var mutex sync.Mutex
++	var held []byte
++	hold := true
++	right.drop = func(raw []byte) bool {
++		packet, _ := decode(raw)
++		mutex.Lock()
++		defer mutex.Unlock()
++		if packet.kind == ackFrame && hold {
++			if packet.ack > 0 {
++				held = bytes.Clone(raw)
++			}
++			return true
++		}
++		return false
++	}
++	config := DefaultConfig()
++	config.RTO = 30 * time.Millisecond
++	config.MaxAge = time.Second
++	sender, err := New(ctx, point, config)
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer sender.Close()
++	receiver, err := New(ctx, right, config)
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer receiver.Close()
++	if err = sender.SendContext(ctx, []byte("first")); err != nil {
++		test.Fatal(err)
++	}
++	if data, err := receiver.Recv(ctx); err != nil || string(data) != "first" {
++		test.Fatal("first delivery", err)
++	}
++	var queued *localwrite.Write
++	select {
++	case queued = <-point.retry:
++	case <-ctx.Done():
++		test.Fatal("no real sent-DATA retry")
++	}
++	mutex.Lock()
++	ack := bytes.Clone(held)
++	hold = false
++	mutex.Unlock()
++	if len(ack) == 0 {
++		test.Fatal("no actual cumulative ACK")
++	}
++	left.in <- ack
++	deadline := time.Now().Add(200 * time.Millisecond)
++	for sender.Stats().Flow.SendBase != 1 && time.Now().Before(deadline) {
++		time.Sleep(time.Millisecond)
++	}
++	if sender.Stats().Flow.SendBase != 1 {
++		test.Fatal("ACK blocked by local writer")
++	}
++	if queued.Begin() {
++		test.Fatal("ACKed queued retry still starts")
++	}
++	for index := 0; index < 12; index++ {
++		payload := bytes.Repeat([]byte{byte(index + 1)}, config.Payload)
++		if err = sender.SendContext(ctx, payload); err != nil {
++			test.Fatal(err)
++		}
++		data, err := receiver.Recv(ctx)
++		if err != nil || !bytes.Equal(data, payload) {
++			test.Fatal("subsequent byte-exact delivery", err)
++		}
++	}
++	if sender.Stats().Retransmissions != 1 {
++		test.Fatal("unexpected retry copies", sender.Stats().Retransmissions)
++	}
++}
+--- a/reliablestream/stream.go
++++ b/reliablestream/stream.go
+@@ -7,6 +7,7 @@
+ 	"sync"
+ 	"time"
+ 
++	"github.com/Joker20380/family_connect/carrier/localwrite"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ )
+ 
+@@ -152,11 +153,15 @@
+ }
+ 
+ func (stream *Stream) run(ctx context.Context) {
++	completionEnabled := localwrite.Enabled(ctx)
+ 	type queuedFrame struct {
+ 		submitted time.Time
+ 		packet    frame
+ 		attempt   uint32
+ 		done      chan error
++		block     *pending
++		obsolete  chan struct{}
++		queued    time.Time
+ 	}
+ 	type writeResult struct {
+ 		job queuedFrame
+@@ -233,7 +238,11 @@
+ 	}()
+ 	transmit := func(job queuedFrame) error {
+ 		packet := job.packet
+-		sendContext, cancel := context.WithTimeout(ctx, min(stream.state.config.MaxAge, 2*time.Second))
++		deadline := time.Now().Add(min(stream.state.config.MaxAge, 2*time.Second))
++		if completionEnabled {
++			deadline = job.queued.Add(min(stream.state.config.MaxAge, 2*time.Second))
++		}
++		sendContext, cancel := context.WithDeadline(ctx, deadline)
+ 		point := sessiontrace.Boundary{Direction: "tx", Result: "ok"}
+ 		if packet.kind == dataFrame {
+ 			sendContext = sessiontrace.WithAttempt(sendContext, packet.seq, job.attempt)
+@@ -248,6 +257,10 @@
+ 			sendContext = sessiontrace.WithACKObservation(sendContext, packet.observation, packet.ack, packet.bits)
+ 			point.Stage, point.ACKBase, point.ACKMask = "ack_generated", packet.ack, packet.bits
+ 			sessiontrace.From(ctx).Boundary(point)
++		}
++		var completion *localwrite.Write
++		if completionEnabled {
++			sendContext, completion = localwrite.Observe(sendContext, job.obsolete)
+ 		}
+ 		err := stream.endpoint.SendContext(sendContext, encode(packet))
+ 		if sessiontrace.PerformanceEnabled && packet.kind == dataFrame {
+@@ -266,6 +279,9 @@
+ 				stream.state.perf.SubmissionToEnqueue.Add(now.Sub(job.submitted))
+ 			}
+ 			stream.mu.Unlock()
++		}
++		if err == nil && completionEnabled {
++			err = completion.Wait()
+ 		}
+ 		if packet.kind == ackFrame {
+ 			point.Stage = "ack_sent"
+@@ -300,9 +316,13 @@
+ 		}
+ 	}()
+ 	pending := make([]queuedFrame, 0, MaxWindow+2)
++	var activeData map[uint64]queuedFrame
++	if completionEnabled {
++		activeData = make(map[uint64]queuedFrame)
++	}
+ 	queue := func(packets []frame, done chan error) error {
+ 		for _, packet := range packets {
+-			job := queuedFrame{packet: packet, done: done}
++			job := queuedFrame{packet: packet, done: done, queued: time.Now()}
+ 			if packet.kind == dataFrame {
+ 				stream.mu.Lock()
+ 				if state := stream.state.sent[packet.seq]; state != nil {
+@@ -310,8 +330,13 @@
+ 					if sessiontrace.PerformanceEnabled {
+ 						job.submitted = state.first
+ 					}
++					job.block = state
+ 				}
+ 				stream.mu.Unlock()
++				if completionEnabled {
++					job.obsolete = make(chan struct{})
++					activeData[packet.seq] = job
++				}
+ 			}
+ 			coalesced := false
+ 			if packet.kind == ackFrame || packet.kind == openFrame {
+@@ -339,6 +364,20 @@
+ 	defer ticker.Stop()
+ 	ready := false
+ 	for {
++		for len(pending) > 0 && pending[0].obsolete != nil {
++			select {
++			case <-pending[0].obsolete:
++				if pending[0].done != nil {
++					pending[0].done <- nil
++				}
++				copy(pending, pending[1:])
++				pending[len(pending)-1] = queuedFrame{}
++				pending = pending[:len(pending)-1]
++				continue
++			default:
++			}
++			break
++		}
+ 		stream.mu.Lock()
+ 		if sessiontrace.PerformanceEnabled {
+ 			stream.state.perfAdvance(time.Now())
+@@ -386,6 +425,14 @@
+ 		case result := <-written:
+ 			busy = false
+ 			err = result.err
++			if completionEnabled && result.job.packet.kind == dataFrame {
++				stream.mu.Lock()
++				if block := stream.state.sent[result.job.packet.seq]; err == nil && block != nil && block == result.job.block && block.retries == int(result.job.attempt) && !block.sacked {
++					block.last = time.Now()
++				}
++				stream.mu.Unlock()
++				delete(activeData, result.job.packet.seq)
++			}
+ 			if result.job.done != nil {
+ 				result.job.done <- err
+ 			}
+@@ -424,6 +471,12 @@
+ 					duplicates, stale, previousBase := stream.state.stats.Duplicates, stream.state.stats.Stale, stream.state.base
+ 					before := stream.state.receiveObservation()
+ 					packets, err = stream.state.input(packet, time.Now())
++					for sequence, job := range activeData {
++						if block := stream.state.sent[sequence]; block != job.block || block == nil || block.sacked {
++							close(job.obsolete)
++							delete(activeData, sequence)
++						}
++					}
+ 					after := stream.state.receiveObservation()
+ 					advanced := stream.state.base > previousBase
+ 					currentBase := stream.state.base
+--- a/roombroker/gateway.go
++++ b/roombroker/gateway.go
+@@ -9,6 +9,7 @@
+ 	"net/netip"
+ 
+ 	"github.com/Joker20380/family_connect/carrier/familysession"
++	"github.com/Joker20380/family_connect/carrier/localwrite"
+ 	"github.com/Joker20380/family_connect/carrier/sessiondiag"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ 	"github.com/Joker20380/family_connect/carrier/tcpforward"
+@@ -47,8 +48,16 @@
+ 	if err != nil {
+ 		return nil, err
+ 	}
+-	session, err := telemost.New(lifetime, telemost.Config{RoomURL: room.JoinURL, DisplayName: "Family gateway", Mode: telemost.ModeVP8})
++	pace, err := packetPacingPolicy(lifetime, identity)
+ 	if err != nil {
++		clear(raw)
++		return nil, err
++	}
++	session, err := telemost.New(lifetime, telemost.Config{RoomURL: room.JoinURL, DisplayName: "Family gateway", Mode: telemost.ModeVP8, PacketPacing: pace})
++	if err != nil {
++		if pace != nil {
++			_ = pace.Close()
++		}
+ 		clear(raw)
+ 		return nil, Code("gateway_configuration")
+ 	}
+@@ -101,6 +110,9 @@
+ }
+ 
+ func (gateway *telemostGateway) Run(ctx context.Context, active func() error) error {
++	if gateway.session.PacketPacingSnapshot() != nil {
++		ctx = localwrite.WithCompletion(ctx)
++	}
+ 	trace := sessiontrace.From(ctx)
+ 	trace.Add("FAMILY_TLS", "STARTED", "NONE")
+ 	secured, err := familysession.OpenMux(ctx, gateway.session, gateway.credentials, true, gateway.credit128)
+@@ -131,7 +143,7 @@
+ 			media := gateway.session.Stats()
+ 			delivery := sessiondiag.Delivery(reliable, media)
+ 			if sessiontrace.PerformanceEnabled && muxCountersEnabled() {
+-				recordPerformance(trace, &sessiontrace.TransportPerformance{Window: reliable.Performance, Mux: mux.PerformanceSnapshot(), Media: trace.PerformanceSnapshot(), CarrierQueueFrames: media.SendQueueDepth, CarrierAcceptedBytes: media.BytesSent, CarrierAcceptedMessages: media.MessagesSent})
++				recordPerformance(trace, &sessiontrace.TransportPerformance{Window: reliable.Performance, Mux: mux.PerformanceSnapshot(), Media: trace.PerformanceSnapshot(), CarrierQueueFrames: media.SendQueueDepth, CarrierAcceptedBytes: media.BytesSent, CarrierAcceptedMessages: media.MessagesSent, PacketPacing: gateway.session.PacketPacingSnapshot()})
+ 			}
+ 			return delivery
+ 		})
+--- /dev/null
++++ b/roombroker/pacing_default.go
+@@ -0,0 +1,10 @@
++//go:build !linux
++
++package roombroker
++
++import (
++	"context"
++	"github.com/Joker20380/family_connect/carrier/packetpace"
++)
++
++func packetPacingPolicy(context.Context, Identity) (*packetpace.Pacer, error) { return nil, nil }
+--- /dev/null
++++ b/roombroker/pacing_export_test.go
+@@ -0,0 +1,54 @@
++package roombroker
++
++import (
++	"context"
++	"encoding/json"
++	"github.com/Joker20380/family_connect/carrier/packetpace"
++	"github.com/Joker20380/family_connect/carrier/sessiontrace"
++	"github.com/pion/interceptor"
++	"github.com/pion/rtp"
++	"io"
++	"os"
++	"strings"
++	"testing"
++)
++
++func TestPacingExistingExportBothModes(test *testing.T) {
++	for _, paced := range []bool{false, true} {
++		pace := packetpace.New(context.Background(), paced)
++		writer := pace.BindLocalStream(&interceptor.StreamInfo{SSRC: 1}, interceptor.RTPWriterFunc(func(header *rtp.Header, payload []byte, _ interceptor.Attributes) (int, error) {
++			return header.MarshalSize() + len(payload), nil
++		}))
++		if _, err := writer.Write(&rtp.Header{}, []byte("payload-never-exported"), nil); err != nil {
++			test.Fatal(err)
++		}
++		snapshot := pace.Snapshot()
++		pace.Close()
++		reader, output, err := os.Pipe()
++		if err != nil {
++			test.Fatal(err)
++		}
++		raw := make(chan []byte, 1)
++		go func() { encoded, _ := io.ReadAll(reader); reader.Close(); raw <- encoded }()
++		previous := os.Stdout
++		os.Stdout = output
++		recordPerformance(sessiontrace.New(strings.Repeat("1", 64), nil), &sessiontrace.TransportPerformance{Window: &sessiontrace.WindowPerformance{}, Mux: &sessiontrace.MuxPerformance{}, PacketPacing: &snapshot})
++		os.Stdout = previous
++		output.Close()
++		encoded := <-raw
++		if strings.Contains(string(encoded), "payload-never-exported") || len(encoded) > 16384 {
++			test.Fatal("privacy/bounds")
++		}
++		var record struct {
++			Performance struct {
++				PacketPacing packetpace.Snapshot `json:"PacketPacing"`
++			} `json:"performance"`
++		}
++		if err := json.Unmarshal(encoded, &record); err != nil {
++			test.Fatal(err)
++		}
++		if record.Performance.PacketPacing.Packets != 1 || (record.Performance.PacketPacing.RateBytesPerSecond == 500000) != paced {
++			test.Fatal("lost bounded counters")
++		}
++	}
++}
+--- /dev/null
++++ b/roombroker/pacing_linux.go
+@@ -0,0 +1,34 @@
++package roombroker
++
++import (
++	"context"
++	"crypto/sha256"
++	"encoding/hex"
++	"github.com/Joker20380/family_connect/carrier/packetpace"
++)
++
++func packetPacingPolicy(ctx context.Context, identity Identity) (*packetpace.Pacer, error) {
++	mode, err := muxOperatorValue("rtp-pacing")
++	if err != nil {
++		return nil, err
++	}
++	if mode == "" || mode == "OFF" {
++		return nil, nil
++	}
++	if mode != "OBSERVE" && mode != "FIXED4M" {
++		return nil, Code("pacing_configuration")
++	}
++	target, err := muxOperatorValue("rtp-pacing-target")
++	if err != nil {
++		return nil, err
++	}
++	decoded, err := hex.DecodeString(target)
++	if err != nil || len(decoded) != 16 {
++		return nil, Code("pacing_configuration")
++	}
++	keyHash := sha256.Sum256(identity.PublicKey[:])
++	if target != hex.EncodeToString(keyHash[:16]) {
++		return nil, nil
++	}
++	return packetpace.New(ctx, mode == "FIXED4M"), nil
++}
+--- /dev/null
++++ b/roombroker/pacing_linux_test.go
+@@ -0,0 +1,66 @@
++package roombroker
++
++import (
++	"context"
++	"crypto/sha256"
++	"encoding/hex"
++	"os"
++	"path/filepath"
++	"testing"
++)
++
++func TestPacingOperatorScopeAndLifetime(test *testing.T) {
++	directory := test.TempDir()
++	if err := os.Chmod(directory, 0700); err != nil {
++		test.Fatal(err)
++	}
++	test.Setenv("FC_DIAGNOSTIC_CONTROL_DIR", directory)
++	identity := Identity{PublicKey: [32]byte{1}}
++	digest := sha256.Sum256(identity.PublicKey[:])
++	write := func(name, value string) {
++		test.Helper()
++		if err := os.WriteFile(filepath.Join(directory, name), []byte(value), 0600); err != nil {
++			test.Fatal(err)
++		}
++	}
++	write("rtp-pacing-target", hex.EncodeToString(digest[:16]))
++	for _, mode := range []string{"OFF", "OBSERVE", "FIXED4M"} {
++		write("rtp-pacing", mode)
++		pace, err := packetPacingPolicy(context.Background(), identity)
++		if err != nil {
++			test.Fatal(err)
++		}
++		if mode == "OFF" {
++			if pace != nil {
++				test.Fatal("unexpected pacer")
++			}
++			continue
++		}
++		defer pace.Close()
++		if (pace.Snapshot().RateBytesPerSecond == 500000) != (mode == "FIXED4M") {
++			test.Fatal("wrong mode")
++		}
++		write("rtp-pacing", "OFF")
++		if (pace.Snapshot().RateBytesPerSecond == 500000) != (mode == "FIXED4M") {
++			test.Fatal("live reinterpretation")
++		}
++	}
++	write("rtp-pacing", "FIXED4M")
++	if pace, err := packetPacingPolicy(context.Background(), Identity{PublicKey: [32]byte{2}}); err != nil || pace != nil {
++		test.Fatal("other user changed", err)
++	}
++	write("rtp-pacing", "UNKNOWN")
++	if _, err := packetPacingPolicy(context.Background(), identity); err == nil {
++		test.Fatal("unknown accepted")
++	}
++	write("rtp-pacing", "FIXED4M")
++	write("rtp-pacing-target", "invalid")
++	if _, err := packetPacingPolicy(context.Background(), identity); err == nil {
++		test.Fatal("bad selector")
++	}
++	write("rtp-pacing-target", hex.EncodeToString(digest[:16]))
++	os.Chmod(filepath.Join(directory, "rtp-pacing"), 0644)
++	if _, err := packetPacingPolicy(context.Background(), identity); err == nil {
++		test.Fatal("unsafe permission")
++	}
++}
+--- a/sessiontrace/performance.go
++++ b/sessiontrace/performance.go
+@@ -1,6 +1,9 @@
+ package sessiontrace
+ 
+-import "time"
++import (
++	"github.com/Joker20380/family_connect/carrier/packetpace"
++	"time"
++)
+ 
+ type SizeHistogram struct {
+ 	Count [7]uint64
+@@ -119,6 +122,7 @@
+ }
+ 
+ type TransportPerformance struct {
++	PacketPacing            *packetpace.Snapshot `json:",omitempty"`
+ 	CarrierQueueFrames      int
+ 	CarrierAcceptedBytes    uint64
+ 	CarrierAcceptedMessages uint64
+--- a/telemost/boundary.go
++++ b/telemost/boundary.go
+@@ -4,7 +4,9 @@
+ 	"encoding/binary"
+ 	"sync"
+ 	"sync/atomic"
++	"time"
+ 
++	"github.com/Joker20380/family_connect/carrier/localwrite"
+ 	"github.com/Joker20380/family_connect/carrier/reliablestream"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ 	"github.com/pion/interceptor"
+@@ -13,8 +15,10 @@
+ )
+ 
+ type outboundFrame struct {
+-	data  []byte
+-	point sessiontrace.Boundary
++	queuedAt time.Time
++	data     []byte
++	point    sessiontrace.Boundary
++	local    *localwrite.Write
+ }
+ 
+ func fragmentBoundary(data []byte) sessiontrace.Boundary {
+--- a/telemost/head_loss_test.go
++++ b/telemost/head_loss_test.go
+@@ -164,10 +164,15 @@
+ 	message := point.msgID.Load()
+ 	for len(point.sendQueue) > 0 {
+ 		frame := <-point.sendQueue
++		if !frame.local.Begin() {
++			continue
++		}
+ 		if isHead && point.fault == "carrier" && len(point.attempts) == 0 {
++			frame.local.Complete(nil)
+ 			continue
+ 		}
+ 		point.writeVP8Sample(frame.data, frame.point)
++		frame.local.Complete(nil)
+ 	}
+ 	packets := point.packets
+ 	if point.fault == "reorder" && isHead {
+--- /dev/null
++++ b/telemost/pacing.go
+@@ -0,0 +1,27 @@
++package telemost
++
++import (
++	"github.com/Joker20380/family_connect/carrier/packetpace"
++	"github.com/pion/interceptor"
++)
++
++type pacedBoundaryFactory struct {
++	boundary *boundaryFactory
++	pace     *packetpace.Pacer
++}
++
++func (factory *pacedBoundaryFactory) NewInterceptor(id string) (interceptor.Interceptor, error) {
++	boundary, err := factory.boundary.NewInterceptor(id)
++	if err != nil {
++		return nil, err
++	}
++	return interceptor.NewChain([]interceptor.Interceptor{boundary, factory.pace}), nil
++}
++
++func (session *Session) PacketPacingSnapshot() *packetpace.Snapshot {
++	if session.cfg.PacketPacing == nil {
++		return nil
++	}
++	snapshot := session.cfg.PacketPacing.Snapshot()
++	return &snapshot
++}
+--- /dev/null
++++ b/telemost/pacing_test.go
+@@ -0,0 +1,139 @@
++package telemost
++
++import (
++	"bytes"
++	"context"
++	"encoding/json"
++	"fmt"
++	"testing"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/localwrite"
++	"github.com/Joker20380/family_connect/carrier/packetpace"
++	"github.com/Joker20380/family_connect/carrier/reliablestream"
++	"github.com/pion/interceptor"
++	"github.com/pion/rtp"
++)
++
++func TestPacingBoundPionRSByteExact(test *testing.T) {
++	for _, fault := range []string{"none", "loss", "reorder", "slow"} {
++		test.Run(fault, func(test *testing.T) {
++			ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
++			defer cancel()
++			ctx = localwrite.WithCompletion(ctx)
++			left, right := headLossPair(test, ctx, 0, "none")
++			defer left.Close()
++			defer right.Close()
++			for _, point := range []*headLossEndpoint{left, right} {
++				if err := point.track.Unbind(lossTrackContext{}); err != nil {
++					test.Fatal(err)
++				}
++				pace := packetpace.New(ctx, point == left)
++				point.cfg.PacketPacing = pace
++				factory := &pacedBoundaryFactory{boundary: &boundaryFactory{trace: point.cfg.Trace, writes: &point.rtpWrites}, pace: pace}
++				observer, _ := factory.NewInterceptor("")
++				var pending *rtp.Packet
++				dropped := false
++				writer := observer.BindLocalStream(&interceptor.StreamInfo{SSRC: 1, MimeType: "video/VP8"}, interceptor.RTPWriterFunc(func(header *rtp.Header, payload []byte, _ interceptor.Attributes) (int, error) {
++					packet := (&rtp.Packet{Header: *header, Payload: payload}).Clone()
++					if point == left && fault == "loss" && len(payload) > 1000 && !dropped {
++						dropped = true
++						return header.MarshalSize() + len(payload), nil
++					}
++					if point == left && fault == "reorder" {
++						if pending == nil && !header.Marker {
++							pending = packet
++							return header.MarshalSize() + len(payload), nil
++						}
++						point.peer.receive([]*rtp.Packet{packet})
++						if pending != nil {
++							point.peer.receive([]*rtp.Packet{pending})
++							pending = nil
++						}
++					} else {
++						point.peer.receive([]*rtp.Packet{packet})
++					}
++					return header.MarshalSize() + len(payload), nil
++				}))
++				if _, err := point.track.Bind(lossTrackContext{writer: lossTrackWriter{writer}}); err != nil {
++					test.Fatal(err)
++				}
++				point.startWorker(point.writerLoop)
++			}
++			config := reliablestream.DefaultConfig()
++			sender, err := reliablestream.New(ctx, left.Session, config)
++			if err != nil {
++				test.Fatal(err)
++			}
++			defer sender.Close()
++			receiver, err := reliablestream.New(ctx, right.Session, config)
++			if err != nil {
++				test.Fatal(err)
++			}
++			defer receiver.Close()
++			sent := make(chan error, 1)
++			go func() {
++				for index := 0; index < 12; index++ {
++					if err := sender.SendContext(ctx, bytes.Repeat([]byte{byte(index)}, config.Payload)); err != nil {
++						sent <- err
++						return
++					}
++				}
++				sent <- nil
++			}()
++			for index := 0; index < 12; index++ {
++				if fault == "slow" {
++					timer := time.NewTimer(80 * time.Millisecond)
++					select {
++					case <-ctx.Done():
++						timer.Stop()
++						test.Fatal(ctx.Err())
++					case <-timer.C:
++					}
++				}
++				data, err := receiver.Recv(ctx)
++				if err != nil || !bytes.Equal(data, bytes.Repeat([]byte{byte(index)}, config.Payload)) {
++					test.Fatal(index, err, "byte mismatch")
++				}
++			}
++			if err := <-sent; err != nil {
++				test.Fatal(err)
++			}
++			test.Log(fmt.Sprintf("fault=%s bytes=%d retries=%d queue=%d", fault, 12*config.Payload, sender.Stats().Retransmissions, len(left.sendQueue)))
++		})
++	}
++}
++
++func TestPacingActualWriteSampleBurst(test *testing.T) {
++	for _, paced := range []bool{false, true} {
++		ctx, cancel := context.WithCancel(context.Background())
++		left, right := headLossPair(test, ctx, 0, "none")
++		if err := left.track.Unbind(lossTrackContext{}); err != nil {
++			test.Fatal(err)
++		}
++		pace := packetpace.New(ctx, paced)
++		observer, _ := (&pacedBoundaryFactory{boundary: &boundaryFactory{trace: left.cfg.Trace, writes: &left.rtpWrites}, pace: pace}).NewInterceptor("")
++		writer := observer.BindLocalStream(&interceptor.StreamInfo{SSRC: 1, MimeType: "video/VP8"}, interceptor.RTPWriterFunc(func(header *rtp.Header, payload []byte, _ interceptor.Attributes) (int, error) {
++			return header.MarshalSize() + len(payload), nil
++		}))
++		if _, err := left.track.Bind(lossTrackContext{writer: lossTrackWriter{writer}}); err != nil {
++			test.Fatal(err)
++		}
++		start := time.Now()
++		for index := 0; index < 32; index++ {
++			due := start.Add(time.Duration(index) * 70 * time.Millisecond)
++			if delay := time.Until(due); delay > 0 {
++				time.Sleep(delay)
++			}
++			frames, _ := encodeFragments(1, uint32(index+1), make([]byte, 8192))
++			left.writeVP8Sample(encodeVP8DataFrame(frames[0]))
++			time.Sleep(vp8SendInterval)
++		}
++		encoded, _ := json.Marshal(map[string]any{"paced": paced, "scope": "actual_bound_pion_local_sink_not_network", "snapshot": pace.Snapshot()})
++		test.Log(string(encoded))
++		pace.Close()
++		left.Close()
++		right.Close()
++		cancel()
++	}
++}
+--- /dev/null
++++ b/telemost/queue_retry_test.go
+@@ -0,0 +1,122 @@
++package telemost
++
++import (
++	"bytes"
++	"context"
++	"encoding/json"
++	"os"
++	"sync/atomic"
++	"testing"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/localwrite"
++	"github.com/Joker20380/family_connect/carrier/packetpace"
++	"github.com/Joker20380/family_connect/carrier/reliablestream"
++	"github.com/Joker20380/family_connect/carrier/sessiontrace"
++	"github.com/pion/interceptor"
++	"github.com/pion/rtp"
++)
++
++type countedQueueEndpoint struct {
++	*Session
++	attempts atomic.Uint64
++}
++
++func (endpoint *countedQueueEndpoint) SendContext(ctx context.Context, data []byte) error {
++	point := sessiontrace.AttemptFrom(ctx)
++	if point.DataKnown && point.DataSequence == 1 {
++		endpoint.attempts.Add(1)
++	}
++	return endpoint.Session.SendContext(ctx, data)
++}
++
++func TestQueueRetryHeldLocalWriter(test *testing.T) {
++	ctx, cancel := context.WithTimeout(context.Background(), 4*time.Second)
++	defer cancel()
++	if os.Getenv("FC_QUEUE_COMPLETION_EXPECTED") == "1" {
++		ctx = localwrite.WithCompletion(ctx)
++	}
++	left, right := headLossPair(test, ctx, 0, "none")
++	defer left.Close()
++	defer right.Close()
++	var hold atomic.Bool
++	release := make(chan struct{})
++	var writes atomic.Uint64
++	for _, point := range []*headLossEndpoint{left, right} {
++		if err := point.track.Unbind(lossTrackContext{}); err != nil {
++			test.Fatal(err)
++		}
++		boundary, _ := (&boundaryFactory{trace: point.cfg.Trace, writes: &point.rtpWrites}).NewInterceptor("")
++		writer := boundary.BindLocalStream(&interceptor.StreamInfo{MimeType: "video/VP8"}, interceptor.RTPWriterFunc(func(header *rtp.Header, payload []byte, _ interceptor.Attributes) (int, error) {
++			if point == left && hold.Load() {
++				select {
++				case <-release:
++				case <-ctx.Done():
++					return 0, ctx.Err()
++				}
++			}
++			if point == left {
++				writes.Add(1)
++			}
++			point.peer.receive([]*rtp.Packet{(&rtp.Packet{Header: *header, Payload: payload}).Clone()})
++			return header.MarshalSize() + len(payload), nil
++		}))
++		if os.Getenv("FC_PACKET_PACER") == "1" && point == left {
++			pace := packetpace.New(ctx, true)
++			point.cfg.PacketPacing = pace
++			writer = pace.BindLocalStream(&interceptor.StreamInfo{SSRC: 1, MimeType: "video/VP8"}, writer)
++		}
++		if _, err := point.track.Bind(lossTrackContext{writer: lossTrackWriter{writer}}); err != nil {
++			test.Fatal(err)
++		}
++		point.startWorker(point.writerLoop)
++	}
++	config := reliablestream.DefaultConfig()
++	config.RTO, config.MaxAge = 30*time.Millisecond, 2*time.Second
++	counted := &countedQueueEndpoint{Session: left.Session}
++	sender, err := reliablestream.New(ctx, counted, config)
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer sender.Close()
++	receiver, err := reliablestream.New(ctx, right.Session, config)
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer receiver.Close()
++	if err := sender.SendContext(ctx, []byte("warmup")); err != nil {
++		test.Fatal(err)
++	}
++	if _, err := receiver.Recv(ctx); err != nil {
++		test.Fatal(err)
++	}
++	time.Sleep(30 * time.Millisecond)
++	hold.Store(true)
++	initialWrites := writes.Load()
++	started := time.Now()
++	sent := make(chan error, 1)
++	go func() { sent <- sender.SendContext(ctx, bytes.Repeat([]byte{42}, config.Payload)) }()
++	time.Sleep(340 * time.Millisecond)
++	stats := sender.Stats()
++	queued := len(left.sendQueue)
++	written := writes.Load() - initialWrites
++	attempts := counted.attempts.Load()
++	close(release)
++	data, receiveErr := receiver.Recv(ctx)
++	sendErr := <-sent
++	result := map[string]any{"pending_attempts_before_first_write": attempts, "queued_fragments": queued, "new_data_blocks": stats.DataSent, "retries_before_first_local_write": stats.Retransmissions,
++		"rtp_writes_before_release": written, "queue_hold_ms": 340, "goodput_before_release": 0, "terminal": stats.Terminal,
++		"byte_exact": receiveErr == nil && bytes.Equal(data, bytes.Repeat([]byte{42}, config.Payload)), "send_ok": sendErr == nil,
++		"seconds": time.Since(started).Seconds()}
++	encoded, _ := json.Marshal(result)
++	test.Log(string(encoded))
++	if written != 0 {
++		test.Fatal("writer hold ineffective")
++	}
++	if os.Getenv("FC_QUEUE_COMPLETION_EXPECTED") == "1" && (attempts != 1 || stats.Retransmissions != 0 || stats.Terminal != "" || receiveErr != nil || sendErr != nil || !bytes.Equal(data, bytes.Repeat([]byte{42}, config.Payload))) {
++		test.Fatal("completion regression")
++	}
++	if os.Getenv("FC_QUEUE_COMPLETION_EXPECTED") == "0" && (attempts <= 1 || stats.Retransmissions == 0 || stats.Terminal != "recovery_exhausted") {
++		test.Fatal("baseline accumulation not reproduced")
++	}
++}
+--- a/telemost/session.go
++++ b/telemost/session.go
+@@ -13,6 +13,8 @@
+ 	"sync/atomic"
+ 	"time"
+ 
++	"github.com/Joker20380/family_connect/carrier/localwrite"
++	"github.com/Joker20380/family_connect/carrier/packetpace"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ 	"github.com/Joker20380/family_connect/carrier/underlay"
+ 	"github.com/gorilla/websocket"
+@@ -69,12 +71,13 @@
+ 
+ // Config configures a Telemost carrier session.
+ type Config struct {
+-	Trace       *sessiontrace.Recorder
+-	RoomURL     string
+-	DisplayName string
+-	Mode        Mode
+-	HTTPClient  *http.Client
+-	Underlay    *underlay.Network
++	PacketPacing *packetpace.Pacer
++	Trace        *sessiontrace.Recorder
++	RoomURL      string
++	DisplayName  string
++	Mode         Mode
++	HTTPClient   *http.Client
++	Underlay     *underlay.Network
+ 	// Timeouts, zero means default.
+ 	ConnectTimeout time.Duration
+ 	MaxVideoTracks int
+@@ -380,6 +383,10 @@
+ 	if err != nil {
+ 		return err
+ 	}
++	local, err := localwrite.Register(ctx, len(frames))
++	if err != nil {
++		return err
++	}
+ 	for _, frag := range frames {
+ 		out := frag
+ 		if s.mode == ModeVP8 {
+@@ -392,8 +399,12 @@
+ 			point.DataKnown, point.DataSequence, point.AttemptKnown, point.Attempt = attempt.DataKnown, attempt.DataSequence, true, attempt.Attempt
+ 		}
+ 		point.Stage, point.Direction, point.Result = "carrier_queued", "tx", "ok"
++		var queuedAt time.Time
++		if s.cfg.PacketPacing != nil {
++			queuedAt = time.Now()
++		}
+ 		select {
+-		case s.sendQueue <- outboundFrame{data: out, point: point}:
++		case s.sendQueue <- outboundFrame{data: out, point: point, local: local, queuedAt: queuedAt}:
+ 			s.cfg.Trace.Boundary(point)
+ 			s.statsMu.Lock()
+ 			s.queued = advanceFragment(s.queued, frag)
+@@ -481,6 +492,9 @@
+ 	s.cfg.Trace.Add("LOCAL_CLOSE", "STARTED", "NONE")
+ 	defer s.cfg.Trace.Add("CLEANUP", "COMPLETED", "NONE")
+ 	s.signalClosedAt(ErrClosed, source)
++	if s.cfg.PacketPacing != nil {
++		_ = s.cfg.PacketPacing.Close()
++	}
+ 	s.cleanupOnce.Do(func() {
+ 		s.initMu.Lock()
+ 		defer s.initMu.Unlock()
+@@ -557,6 +571,13 @@
+ 	sub.OnDataChannel(s.onSubscriberDataChannel)
+ 	s.pcSub.Store(sub)
+ 
++	if s.cfg.PacketPacing != nil {
++		api, err = diagnosticWebRTCAPI(s.cfg.Underlay, &pacedBoundaryFactory{boundary: &boundaryFactory{trace: s.cfg.Trace, writes: &s.rtpWrites}, pace: s.cfg.PacketPacing})
++		if err != nil {
++			_ = sub.Close()
++			return err
++		}
++	}
+ 	pub, err := api.NewPeerConnection(config)
+ 	if err != nil {
+ 		_ = sub.Close()
+--- a/telemost/signaling.go
++++ b/telemost/signaling.go
+@@ -600,7 +600,22 @@
+ 				if !ok {
+ 					return
+ 				}
+-				s.writeVP8Sample(frame.data, frame.point)
++				if s.cfg.PacketPacing != nil {
++					s.cfg.PacketPacing.ObserveCarrierQueue(frame.queuedAt, len(s.sendQueue)+1)
++				}
++				if !frame.local.Begin() {
++					continue
++				}
++				written := s.writeVP8Sample(frame.data, frame.point)
++				if written {
++					frame.local.Complete(nil)
++				} else {
++					frame.local.Complete(ErrClosed)
++				}
++				if frame.local != nil && !written {
++					s.signalClosedAt(ErrClosed, "VP8_WRITE")
++					return
++				}
+ 				time.Sleep(vp8SendInterval)
+ 			}
+ 		}
+@@ -614,7 +629,16 @@
+ 			if !ok {
+ 				return
+ 			}
+-			if !s.writeDCMessage(frame.data) {
++			if !frame.local.Begin() {
++				continue
++			}
++			written := s.writeDCMessage(frame.data)
++			if written {
++				frame.local.Complete(nil)
++			} else {
++				frame.local.Complete(ErrClosed)
++			}
++			if !written {
+ 				s.signalClosedAt(errors.New("telemost: data channel write failed"), "DATA_CHANNEL_WRITE")
+ 				return
+ 			}
+@@ -622,7 +646,7 @@
+ 	}
+ }
+ 
+-func (s *Session) writeVP8Sample(data []byte, queued ...sessiontrace.Boundary) {
++func (s *Session) writeVP8Sample(data []byte, queued ...sessiontrace.Boundary) bool {
+ 	point := sessiontrace.Boundary{Stage: "carrier_written", Direction: "tx", Result: "no_rtp"}
+ 	if fragment, valid := decodeVP8Frame(data); valid {
+ 		point = s.cfg.Trace.MessageAttempt(fragmentBoundary(fragment))
+@@ -636,14 +660,14 @@
+ 	}
+ 	if s.track == nil {
+ 		s.cfg.Trace.Boundary(point)
+-		return
++		return false
+ 	}
+ 	before := s.rtpWrites.Load()
+ 	if err := s.track.WriteSample(media.Sample{Data: data, Duration: vp8FrameDuration}); err != nil {
+ 		point.Result = "write_error"
+ 		s.cfg.Trace.Boundary(point)
+ 		s.signalClosedAt(errors.New("telemost: VP8 write failed"), "VP8_WRITE")
+-		return
++		return false
+ 	}
+ 	if s.rtpWrites.Load() != before {
+ 		point.Result = "ok"
+@@ -655,6 +679,7 @@
+ 		s.written = advanceFragment(s.written, fragment)
+ 	}
+ 	s.statsMu.Unlock()
++	return point.Result == "ok"
+ }
+ 
+ func (s *Session) writeDCMessage(data []byte) bool {

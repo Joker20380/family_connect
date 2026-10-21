@@ -1,0 +1,1425 @@
+--- a/carrier/familysession/session.go
++++ b/carrier/familysession/session.go
+@@ -274,6 +274,10 @@
+ 	return openReliable(ctx, endpoint, raw, server, reliablestream.DefaultConfig(), credit128)
+ }
+ 
++func OpenMuxReliable(ctx context.Context, endpoint PacketEndpoint, raw []byte, server, credit128 bool, reliability reliablestream.Config) (*Session, error) {
++	return openReliable(ctx, endpoint, raw, server, reliability, credit128)
++}
++
+ func openReliable(ctx context.Context, endpoint PacketEndpoint, raw []byte, server bool, reliability reliablestream.Config, credit128 bool) (*Session, error) {
+ 	config, expiry, err := configuration(raw, server, credit128)
+ 	if err != nil {
+--- /dev/null
++++ b/carrier/localwrite/scope.go
+@@ -0,0 +1,10 @@
++package localwrite
++
++import "context"
++
++type scopeKey struct{}
++
++func WithCompletion(ctx context.Context) context.Context {
++	return context.WithValue(ctx, scopeKey{}, true)
++}
++func Enabled(ctx context.Context) bool { enabled, _ := ctx.Value(scopeKey{}).(bool); return enabled }
+--- /dev/null
++++ b/carrier/localwrite/write.go
+@@ -0,0 +1,96 @@
++package localwrite
++
++import (
++	"context"
++	"errors"
++	"sync"
++	"sync/atomic"
++)
++
++type key struct{}
++
++type Write struct {
++	ctx        context.Context
++	obsolete   <-chan struct{}
++	registered atomic.Bool
++	state      atomic.Uint32
++	remaining  atomic.Int32
++	done       chan error
++	once       sync.Once
++}
++
++func Observe(ctx context.Context, obsolete <-chan struct{}) (context.Context, *Write) {
++	write := &Write{ctx: ctx, obsolete: obsolete, done: make(chan error, 1)}
++	return context.WithValue(ctx, key{}, write), write
++}
++
++func Register(ctx context.Context, fragments int) (*Write, error) {
++	write, _ := ctx.Value(key{}).(*Write)
++	if write == nil {
++		return nil, nil
++	}
++	if fragments < 1 || !write.registered.CompareAndSwap(false, true) {
++		return nil, errors.New("local write: repeated registration")
++	}
++	write.remaining.Store(int32(fragments))
++	return write, nil
++}
++
++func (write *Write) finish(err error) { write.once.Do(func() { write.done <- err }) }
++
++func (write *Write) Begin() bool {
++	if write == nil {
++		return true
++	}
++	if write.state.Load() == 0 {
++		select {
++		case <-write.obsolete:
++			if write.state.CompareAndSwap(0, 2) {
++				write.finish(nil)
++			}
++		case <-write.ctx.Done():
++			if write.state.CompareAndSwap(0, 2) {
++				write.finish(write.ctx.Err())
++			}
++		default:
++			write.state.CompareAndSwap(0, 1)
++		}
++	}
++	return write.state.Load() == 1
++}
++
++func (write *Write) Complete(err error) {
++	if write == nil {
++		return
++	}
++	if err != nil {
++		write.finish(err)
++		return
++	}
++	if write.remaining.Add(-1) == 0 {
++		write.finish(nil)
++	}
++}
++
++func (write *Write) Wait() error {
++	if !write.registered.Load() {
++		return nil
++	}
++	select {
++	case err := <-write.done:
++		return err
++	case <-write.ctx.Done():
++		write.state.CompareAndSwap(0, 2)
++		return write.ctx.Err()
++	case <-write.obsolete:
++		if write.state.CompareAndSwap(0, 2) {
++			return nil
++		}
++		select {
++		case err := <-write.done:
++			return err
++		case <-write.ctx.Done():
++			return write.ctx.Err()
++		}
++	}
++}
+--- /dev/null
++++ b/carrier/localwrite/write_test.go
+@@ -0,0 +1,90 @@
++package localwrite
++
++import (
++	"context"
++	"errors"
++	"testing"
++	"time"
++)
++
++func TestCompletionAndCancellation(test *testing.T) {
++	for _, mode := range []string{"complete", "obsolete_queued", "obsolete_partial", "deadline_queued", "deadline_partial", "error", "late", "legacy"} {
++		test.Run(mode, func(test *testing.T) {
++			ctx, cancel := context.WithCancel(context.Background())
++			defer cancel()
++			obsolete := make(chan struct{})
++			observed, completion := Observe(ctx, obsolete)
++			if mode == "legacy" {
++				if completion.Wait() != nil {
++					test.Fatal("legacy")
++				}
++				return
++			}
++			registered, err := Register(observed, 2)
++			if err != nil {
++				test.Fatal(err)
++			}
++			if _, err = Register(observed, 2); err == nil {
++				test.Fatal("reused completion")
++			}
++			if mode == "obsolete_queued" {
++				close(obsolete)
++				if completion.Wait() != nil || registered.Begin() {
++					test.Fatal("obsolete wrote")
++				}
++				return
++			}
++			if mode == "deadline_queued" {
++				cancel()
++				if !errors.Is(completion.Wait(), context.Canceled) || registered.Begin() {
++					test.Fatal("cancelled wrote")
++				}
++				return
++			}
++			if !registered.Begin() {
++				test.Fatal("not writing")
++			}
++			registered.Complete(nil)
++			done := make(chan error, 1)
++			go func() { done <- completion.Wait() }()
++			select {
++			case <-done:
++				test.Fatal("completed partial message")
++			case <-time.After(time.Millisecond):
++			}
++			if mode == "obsolete_partial" {
++				close(obsolete)
++				if !registered.Begin() {
++					test.Fatal("partial aborted")
++				}
++			}
++			if mode == "deadline_partial" || mode == "late" {
++				cancel()
++				if !errors.Is(<-done, context.Canceled) {
++					test.Fatal("deadline ignored")
++				}
++				freshCtx, fresh := Observe(context.Background(), nil)
++				next, _ := Register(freshCtx, 1)
++				registered.Complete(nil)
++				next.Begin()
++				next.Complete(nil)
++				if fresh.Wait() != nil {
++					test.Fatal("late completion changed fresh generation")
++				}
++				return
++			}
++			failure := errors.New("write failed")
++			if mode == "error" {
++				registered.Complete(failure)
++				if !errors.Is(<-done, failure) {
++					test.Fatal("error lost")
++				}
++				return
++			}
++			registered.Complete(nil)
++			if <-done != nil {
++				test.Fatal("completion failed")
++			}
++		})
++	}
++}
+--- a/carrier/reliablestream/engine.go
++++ b/carrier/reliablestream/engine.go
+@@ -16,7 +16,16 @@
+ 	Depth    int     `json:"depth"`
+ }
+ 
++type Limits struct {
++	LocalSend            int  `json:"local_send"`
++	LocalReceive         int  `json:"local_receive"`
++	PeerReceive          int  `json:"peer_receive"`
++	EffectiveSend        int  `json:"effective_send"`
++	LocalWriteCompletion bool `json:"local_write_completion"`
++}
++
+ type Stats struct {
++	Limits             Limits
+ 	Flow               sessiontrace.Flow
+ 	DataSent           uint64
+ 	DataReceived       uint64
+--- /dev/null
++++ b/carrier/reliablestream/local_deadline_test.go
+@@ -0,0 +1,70 @@
++package reliablestream
++
++import (
++	"context"
++	"errors"
++	"testing"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/localwrite"
++)
++
++type stalledLocalEndpoint struct {
++	*testEndpoint
++	started chan *localwrite.Write
++}
++
++func (endpoint *stalledLocalEndpoint) SendContext(ctx context.Context, data []byte) error {
++	packet, err := decode(data)
++	if err != nil || packet.kind != dataFrame {
++		return endpoint.testEndpoint.SendContext(ctx, data)
++	}
++	write, err := localwrite.Register(ctx, 2)
++	if err != nil {
++		return err
++	}
++	if write.Begin() {
++		write.Complete(nil)
++		endpoint.started <- write
++	}
++	return nil
++}
++
++func TestLocalCompletionDeadlinesRepeatedGenerations(test *testing.T) {
++	var previous *localwrite.Write
++	for generation := 0; generation < 3; generation++ {
++		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
++		left, right := endpoints()
++		point := &stalledLocalEndpoint{testEndpoint: left, started: make(chan *localwrite.Write, 1)}
++		config := DefaultConfig()
++		config.RTO, config.MaxAge = 20*time.Millisecond, 150*time.Millisecond
++		sender, err := New(localwrite.WithCompletion(ctx), point, config)
++		if err != nil {
++			test.Fatal(err)
++		}
++		receiver, err := New(ctx, right, config)
++		if err != nil {
++			test.Fatal(err)
++		}
++		if previous != nil {
++			previous.Complete(nil)
++		}
++		began := time.Now()
++		err = sender.SendContext(ctx, []byte("partial local write never completes"))
++		if !errors.Is(err, context.DeadlineExceeded) || time.Since(began) > 500*time.Millisecond {
++			test.Fatal("local write did not fail within its finite deadline", err)
++		}
++		if sender.Stats().Retransmissions != 0 {
++			test.Fatal("local queue consumed retry budget")
++		}
++		select {
++		case previous = <-point.started:
++		case <-ctx.Done():
++			test.Fatal("partial write not reached")
++		}
++		sender.Close()
++		receiver.Close()
++		cancel()
++	}
++	previous.Complete(nil)
++}
+--- /dev/null
++++ b/carrier/reliablestream/local_write_test.go
+@@ -0,0 +1,121 @@
++package reliablestream
++
++import (
++	"bytes"
++	"context"
++	"sync"
++	"testing"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/localwrite"
++)
++
++type localEndpoint struct {
++	*testEndpoint
++	mu       sync.Mutex
++	attempts map[uint64]int
++	retry    chan *localwrite.Write
++}
++
++func (endpoint *localEndpoint) SendContext(ctx context.Context, data []byte) error {
++	packet, err := decode(data)
++	if err != nil || packet.kind != dataFrame {
++		return endpoint.testEndpoint.SendContext(ctx, data)
++	}
++	endpoint.mu.Lock()
++	endpoint.attempts[packet.seq]++
++	attempt := endpoint.attempts[packet.seq]
++	endpoint.mu.Unlock()
++	write, err := localwrite.Register(ctx, 1)
++	if err != nil {
++		return err
++	}
++	if packet.seq == 0 && attempt == 2 {
++		endpoint.retry <- write
++		return nil
++	}
++	if write.Begin() {
++		err = endpoint.testEndpoint.SendContext(ctx, data)
++		write.Complete(err)
++	}
++	return err
++}
++
++func TestACKReleasesWhileRetryWaitsForLocalWrite(test *testing.T) {
++	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
++	defer cancel()
++	ctx = localwrite.WithCompletion(ctx)
++	left, right := endpoints()
++	point := &localEndpoint{testEndpoint: left, attempts: make(map[uint64]int), retry: make(chan *localwrite.Write, 1)}
++	var mutex sync.Mutex
++	var held []byte
++	hold := true
++	right.drop = func(raw []byte) bool {
++		packet, _ := decode(raw)
++		mutex.Lock()
++		defer mutex.Unlock()
++		if packet.kind == ackFrame && hold {
++			if packet.ack > 0 {
++				held = bytes.Clone(raw)
++			}
++			return true
++		}
++		return false
++	}
++	config := DefaultConfig()
++	config.RTO = 30 * time.Millisecond
++	config.MaxAge = time.Second
++	sender, err := New(ctx, point, config)
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer sender.Close()
++	receiver, err := New(ctx, right, config)
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer receiver.Close()
++	if err = sender.SendContext(ctx, []byte("first")); err != nil {
++		test.Fatal(err)
++	}
++	if data, err := receiver.Recv(ctx); err != nil || string(data) != "first" {
++		test.Fatal("first delivery", err)
++	}
++	var queued *localwrite.Write
++	select {
++	case queued = <-point.retry:
++	case <-ctx.Done():
++		test.Fatal("no real sent-DATA retry")
++	}
++	mutex.Lock()
++	ack := bytes.Clone(held)
++	hold = false
++	mutex.Unlock()
++	if len(ack) == 0 {
++		test.Fatal("no actual cumulative ACK")
++	}
++	left.in <- ack
++	deadline := time.Now().Add(200 * time.Millisecond)
++	for sender.Stats().Flow.SendBase != 1 && time.Now().Before(deadline) {
++		time.Sleep(time.Millisecond)
++	}
++	if sender.Stats().Flow.SendBase != 1 {
++		test.Fatal("ACK blocked by local writer")
++	}
++	if queued.Begin() {
++		test.Fatal("ACKed queued retry still starts")
++	}
++	for index := 0; index < 12; index++ {
++		payload := bytes.Repeat([]byte{byte(index + 1)}, config.Payload)
++		if err = sender.SendContext(ctx, payload); err != nil {
++			test.Fatal(err)
++		}
++		data, err := receiver.Recv(ctx)
++		if err != nil || !bytes.Equal(data, payload) {
++			test.Fatal("subsequent byte-exact delivery", err)
++		}
++	}
++	if sender.Stats().Retransmissions != 1 {
++		test.Fatal("unexpected retry copies", sender.Stats().Retransmissions)
++	}
++}
+--- a/carrier/reliablestream/stream.go
++++ b/carrier/reliablestream/stream.go
+@@ -7,6 +7,7 @@
+ 	"sync"
+ 	"time"
+ 
++	"github.com/Joker20380/family_connect/carrier/localwrite"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ )
+ 
+@@ -50,6 +51,7 @@
+ 	}
+ 	ctx, cancel := context.WithCancel(ctx)
+ 	stream := &Stream{endpoint: endpoint, state: newEngine(config, local, time.Now()), sendGate: make(chan struct{}, 1), requests: make(chan request), output: make(chan []byte), done: make(chan struct{}), ready: make(chan struct{}), cancel: cancel}
++	stream.state.stats.Limits.LocalWriteCompletion = localwrite.Enabled(ctx)
+ 	stream.bindDiagnosticAllocation(ctx)
+ 	go stream.run(ctx)
+ 	return stream, nil
+@@ -59,6 +61,10 @@
+ 	stream.mu.Lock()
+ 	defer stream.mu.Unlock()
+ 	stats := stream.state.stats
++	stats.Limits.LocalSend = stream.state.config.SendWindow
++	stats.Limits.LocalReceive = stream.state.config.ReceiveWindow
++	stats.Limits.PeerReceive = stream.state.remoteWindow
++	stats.Limits.EffectiveSend = min(stream.state.config.SendWindow, stream.state.remoteWindow)
+ 	if stats.Terminal == "" {
+ 		stats.Flow = stream.state.flow()
+ 	}
+@@ -145,10 +151,14 @@
+ }
+ 
+ func (stream *Stream) run(ctx context.Context) {
++	completionEnabled := localwrite.Enabled(ctx)
+ 	type queuedFrame struct {
+-		packet  frame
+-		attempt uint32
+-		done    chan error
++		packet   frame
++		attempt  uint32
++		done     chan error
++		block    *pending
++		obsolete chan struct{}
++		queued   time.Time
+ 	}
+ 	type writeResult struct {
+ 		job queuedFrame
+@@ -217,7 +227,11 @@
+ 	}()
+ 	transmit := func(job queuedFrame) error {
+ 		packet := job.packet
+-		sendContext, cancel := context.WithTimeout(ctx, min(stream.state.config.MaxAge, 2*time.Second))
++		deadline := time.Now().Add(min(stream.state.config.MaxAge, 2*time.Second))
++		if completionEnabled {
++			deadline = job.queued.Add(min(stream.state.config.MaxAge, 2*time.Second))
++		}
++		sendContext, cancel := context.WithDeadline(ctx, deadline)
+ 		point := sessiontrace.Boundary{Direction: "tx", Result: "ok"}
+ 		if packet.kind == dataFrame {
+ 			sendContext = sessiontrace.WithAttempt(sendContext, packet.seq, job.attempt)
+@@ -233,7 +247,14 @@
+ 			point.Stage, point.ACKBase, point.ACKMask = "ack_generated", packet.ack, packet.bits
+ 			sessiontrace.From(ctx).Boundary(point)
+ 		}
++		var completion *localwrite.Write
++		if completionEnabled {
++			sendContext, completion = localwrite.Observe(sendContext, job.obsolete)
++		}
+ 		err := stream.endpoint.SendContext(sendContext, encode(packet))
++		if err == nil && completionEnabled {
++			err = completion.Wait()
++		}
+ 		if packet.kind == ackFrame {
+ 			point.Stage = "ack_sent"
+ 			if err != nil {
+@@ -267,15 +288,24 @@
+ 		}
+ 	}()
+ 	pending := make([]queuedFrame, 0, MaxWindow+2)
++	var activeData map[uint64]queuedFrame
++	if completionEnabled {
++		activeData = make(map[uint64]queuedFrame)
++	}
+ 	queue := func(packets []frame, done chan error) error {
+ 		for _, packet := range packets {
+-			job := queuedFrame{packet: packet, done: done}
++			job := queuedFrame{packet: packet, done: done, queued: time.Now()}
+ 			if packet.kind == dataFrame {
+ 				stream.mu.Lock()
+ 				if state := stream.state.sent[packet.seq]; state != nil {
+ 					job.attempt = uint32(state.retries)
++					job.block = state
+ 				}
+ 				stream.mu.Unlock()
++				if completionEnabled {
++					job.obsolete = make(chan struct{})
++					activeData[packet.seq] = job
++				}
+ 			}
+ 			coalesced := false
+ 			if packet.kind == ackFrame || packet.kind == openFrame {
+@@ -303,6 +333,20 @@
+ 	defer ticker.Stop()
+ 	ready := false
+ 	for {
++		for len(pending) > 0 && pending[0].obsolete != nil {
++			select {
++			case <-pending[0].obsolete:
++				if pending[0].done != nil {
++					pending[0].done <- nil
++				}
++				copy(pending, pending[1:])
++				pending[len(pending)-1] = queuedFrame{}
++				pending = pending[:len(pending)-1]
++				continue
++			default:
++			}
++			break
++		}
+ 		stream.mu.Lock()
+ 		if !ready && stream.state.remote != (epoch{}) {
+ 			close(stream.ready)
+@@ -341,6 +385,14 @@
+ 		case result := <-written:
+ 			busy = false
+ 			err = result.err
++			if completionEnabled && result.job.packet.kind == dataFrame {
++				stream.mu.Lock()
++				if block := stream.state.sent[result.job.packet.seq]; err == nil && block != nil && block == result.job.block && block.retries == int(result.job.attempt) && !block.sacked {
++					block.last = time.Now()
++				}
++				stream.mu.Unlock()
++				delete(activeData, result.job.packet.seq)
++			}
+ 			if result.job.done != nil {
+ 				result.job.done <- err
+ 			}
+@@ -375,6 +427,12 @@
+ 					duplicates, stale, previousBase := stream.state.stats.Duplicates, stream.state.stats.Stale, stream.state.base
+ 					before := stream.state.receiveObservation()
+ 					packets, err = stream.state.input(packet, time.Now())
++					for sequence, job := range activeData {
++						if block := stream.state.sent[sequence]; block != job.block || block == nil || block.sacked {
++							close(job.obsolete)
++							delete(activeData, sequence)
++						}
++					}
+ 					after := stream.state.receiveObservation()
+ 					advanced := stream.state.base > previousBase
+ 					currentBase := stream.state.base
+--- a/carrier/sessiondiag/report.go
++++ b/carrier/sessiondiag/report.go
+@@ -15,6 +15,9 @@
+ )
+ 
+ type Report struct {
++	SpeedProfile       string                 `json:"speed_profile,omitempty"`
++	ReliableLimits     reliablestream.Limits  `json:"reliable_limits"`
++	RetryBytes         uint64                 `json:"retry_bytes"`
+ 	MuxProfile         string                 `json:"mux_profile,omitempty"`
+ 	MuxWindow          int                    `json:"mux_window,omitempty"`
+ 	Trace              *sessiontrace.Snapshot `json:"lifecycle,omitempty"`
+@@ -102,7 +105,7 @@
+ }
+ 
+ func Capture(setupID string, err error, terminalAt time.Time, reliable reliablestream.Stats, media telemost.Stats, mux tcpforward.MuxStats) Report {
+-	report := Report{MuxProfile: mux.Profile, MuxWindow: mux.Window, TerminalReason: Reason(err), ObservedAtMS: time.Now().UnixMilli(),
++	report := Report{ReliableLimits: reliable.Limits, RetryBytes: reliable.RetransmittedBytes, MuxProfile: mux.Profile, MuxWindow: mux.Window, TerminalReason: Reason(err), ObservedAtMS: time.Now().UnixMilli(),
+ 		ReliableTerminal: choice(reliable.Terminal, "", "closed", "recovery_exhausted", "protocol_violation", "remote_reset", "cancelled", "carrier_closed"),
+ 		SignalingFailure: "NONE", ICEFailure: "NONE", EvidenceDropped: media.EvidenceDropped,
+ 		SubscriberState: choice(media.SubscriberState, "new", "connecting", "connected", "disconnected", "failed", "closed"),
+--- /dev/null
++++ b/carrier/sessionprofile/profile.go
+@@ -0,0 +1,48 @@
++package sessionprofile
++
++import (
++	"context"
++	"errors"
++	"github.com/Joker20380/family_connect/carrier/localwrite"
++	"github.com/Joker20380/family_connect/carrier/reliablestream"
++)
++
++type Profile uint8
++
++const (
++	P0 Profile = iota
++	P1
++	P2
++)
++
++type key struct{}
++
++func Parse(value string) (Profile, error) {
++	switch value {
++	case "", "P0":
++		return P0, nil
++	case "P1":
++		return P1, nil
++	case "P2":
++		return P2, nil
++	}
++	return P0, errors.New("invalid session profile")
++}
++func (profile Profile) Name() string { return [...]string{"P0", "P1", "P2"}[profile] }
++func With(ctx context.Context, profile Profile) context.Context {
++	return context.WithValue(ctx, key{}, profile)
++}
++func From(ctx context.Context) Profile { profile, _ := ctx.Value(key{}).(Profile); return profile }
++func (profile Profile) Reliable() reliablestream.Config {
++	config := reliablestream.DefaultConfig()
++	if profile == P1 || profile == P2 {
++		config.SendWindow, config.ReceiveWindow = 32, 32
++	}
++	return config
++}
++func (profile Profile) LocalWrite(ctx context.Context) context.Context {
++	if profile == P2 {
++		return localwrite.WithCompletion(ctx)
++	}
++	return ctx
++}
+--- /dev/null
++++ b/carrier/tcpforward/speed_integration_test.go
+@@ -0,0 +1,210 @@
++package tcpforward
++
++import (
++	"bytes"
++	"context"
++	"crypto/sha256"
++	"encoding/binary"
++	"encoding/json"
++	"fmt"
++	"io"
++	"sync"
++	"sync/atomic"
++	"testing"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/familysession"
++	"github.com/Joker20380/family_connect/carrier/localwrite"
++	"github.com/Joker20380/family_connect/carrier/sessionprofile"
++)
++
++type speedFaultEndpoint struct {
++	*lossyEndpoint
++	faults     atomic.Bool
++	count      int
++	ackDropped bool
++	held       []byte
++}
++
++func (endpoint *speedFaultEndpoint) SendContext(ctx context.Context, payload []byte) error {
++	completion, err := localwrite.Register(ctx, 1)
++	if err != nil {
++		return err
++	}
++	if !completion.Begin() {
++		return nil
++	}
++	defer func() { completion.Complete(err) }()
++	if endpoint.faults.Load() && len(payload) >= 64 {
++		if payload[4] == 3 && !endpoint.ackDropped {
++			endpoint.ackDropped = true
++			return nil
++		}
++		if payload[4] == 2 {
++			endpoint.count++
++			if endpoint.count <= 3 {
++				return nil
++			}
++			if endpoint.count == 4 {
++				endpoint.held = bytes.Clone(payload)
++				return nil
++			}
++			if endpoint.count == 5 {
++				if err = endpoint.lossyEndpoint.SendContext(ctx, payload); err != nil {
++					return err
++				}
++				if err = endpoint.lossyEndpoint.SendContext(ctx, endpoint.held); err != nil {
++					return err
++				}
++				endpoint.held = nil
++			}
++		}
++	}
++	err = endpoint.lossyEndpoint.SendContext(ctx, payload)
++	return err
++}
++
++func speedPair(test *testing.T, ctx context.Context, profile sessionprofile.Profile) (*familysession.Session, *familysession.Session) {
++	test.Helper()
++	clientJSON, serverJSON := testCredentials(test)
++	forward, reverse, closed := make(chan []byte, 64), make(chan []byte, 64), make(chan struct{})
++	once := &sync.Once{}
++	left := &speedFaultEndpoint{lossyEndpoint: &lossyEndpoint{incoming: reverse, outgoing: forward, closed: closed, once: once, seen: make(map[uint64]int)}}
++	right := &speedFaultEndpoint{lossyEndpoint: &lossyEndpoint{incoming: forward, outgoing: reverse, closed: closed, once: once, seen: make(map[uint64]int)}}
++	config := profile.Reliable()
++	type result struct {
++		session *familysession.Session
++		err     error
++	}
++	ready := make(chan result, 1)
++	go func() {
++		session, err := familysession.OpenMuxReliable(profile.LocalWrite(ctx), right, serverJSON, true, profile != sessionprofile.P0, config)
++		ready <- result{session, err}
++	}()
++	client, err := familysession.OpenMuxReliable(profile.LocalWrite(ctx), left, clientJSON, false, true, config)
++	if err != nil {
++		test.Fatal(err)
++	}
++	server := <-ready
++	if server.err != nil {
++		test.Fatal(server.err)
++	}
++	test.Cleanup(func() { client.Close(); server.session.Close() })
++	left.faults.Store(true)
++	right.faults.Store(true)
++	return client, server.session
++}
++
++func TestSpeedProfilesIntegrated(test *testing.T) {
++	for _, profile := range []sessionprofile.Profile{sessionprofile.P0, sessionprofile.P1, sessionprofile.P2} {
++		test.Run(profile.Name(), func(test *testing.T) {
++			test.Parallel()
++			ctx, cancel := context.WithTimeout(context.Background(), 40*time.Second)
++			defer cancel()
++			port := muxFixture(test, muxEcho)
++			clientTLS, serverTLS := speedPair(test, ctx, profile)
++			client, err := NewMux(ctx, clientTLS, false, MuxConfig{MaxStreams: 32})
++			if err != nil {
++				test.Fatal(err)
++			}
++			server, err := NewMux(ctx, serverTLS, true, MuxConfig{MaxStreams: 32, Policy: Policy{TestOnlyLoopbackPort: port}})
++			if err != nil {
++				test.Fatal(err)
++			}
++			defer func() {
++				client.Close()
++				server.Close()
++				if client.Stats().RetainedBytes != 0 || server.Stats().RetainedBytes != 0 {
++					test.Error("retained after close")
++				}
++			}()
++			expected := profile.Reliable()
++			for _, secured := range []*familysession.Session{clientTLS, serverTLS} {
++				limits := secured.ReliabilityStats().Limits
++				if limits.LocalSend != expected.SendWindow || limits.LocalReceive != expected.ReceiveWindow || limits.PeerReceive != expected.ReceiveWindow || limits.EffectiveSend != expected.SendWindow || limits.LocalWriteCompletion != (profile == sessionprofile.P2) {
++					test.Fatal(limits)
++				}
++			}
++			window := 65536
++			if profile != sessionprofile.P0 {
++				window = 131072
++			}
++			if client.Stats().Window != window || server.Stats().Window != window {
++				test.Fatal("negotiated window")
++			}
++			streams := make([]*MuxStream, 32)
++			for index := range streams {
++				streams[index] = muxOpen(test, ctx, client, port)
++			}
++			streams[31].Reset()
++			results := make(chan error, 31)
++			for index, stream := range streams[:31] {
++				go func() {
++					payload := bytes.Repeat([]byte{byte(index + 1)}, 192<<10)
++					if index >= 2 {
++						payload = payload[:1024]
++					}
++					writing := make(chan error, 1)
++					go func() {
++						_, failure := stream.Write(payload)
++						if failure == nil {
++							failure = stream.CloseWrite()
++						}
++						writing <- failure
++					}()
++					if index == 0 {
++						time.Sleep(200 * time.Millisecond)
++					}
++					body := make([]byte, len(payload))
++					_, failure := io.ReadFull(stream, body)
++					if sent := <-writing; failure == nil {
++						failure = sent
++					}
++					if failure == nil && sha256.Sum256(body) != sha256.Sum256(payload) {
++						failure = fmt.Errorf("body mismatch")
++					}
++					if failure == nil {
++						tail := make([]byte, 1)
++						count, end := stream.Read(tail)
++						if count != 0 || end != io.EOF {
++							failure = fmt.Errorf("missing FIN: %v", end)
++						}
++					}
++					stream.Close()
++					results <- failure
++				}()
++			}
++			for range 31 {
++				if err := <-results; err != nil {
++					test.Fatal(err)
++				}
++			}
++			if client.Stats().ProtocolErrors != 0 || server.Stats().ProtocolErrors != 0 {
++				test.Fatal("protocol error")
++			}
++			for _, stats := range []struct {
++				name    string
++				session *familysession.Session
++			}{{"client", clientTLS}, {"server", serverTLS}} {
++				value := stats.session.ReliabilityStats()
++				if value.MaxBufferedBytes > expected.ReceiveWindow*expected.Payload || value.SendHighWater > expected.SendWindow {
++					test.Fatal("unbounded RS", value)
++				}
++			}
++			record, _ := json.Marshal(map[string]any{"profile": profile.Name(), "client": clientTLS.ReliabilityStats().Limits, "server": serverTLS.ReliabilityStats().Limits, "mux": window, "streams": 32, "reset_isolated": true, "sha256": true, "rs_client_retries": clientTLS.ReliabilityStats().Retransmissions, "rs_server_retries": serverTLS.ReliabilityStats().Retransmissions, "scope": "post-handshake RS-message burst3/reorder/duplicate/ACK-loss; not RTP loss"})
++			test.Log(string(record))
++		})
++	}
++}
++
++func TestSpeedWireOPENBounds(test *testing.T) {
++	config := sessionprofile.P1.Reliable()
++	if config.Payload != 16384 || config.SendWindow != 32 || config.ReceiveWindow != 32 || config.MaxRetries != 8 || config.RTO != time.Second {
++		test.Fatal(config)
++	}
++	raw := make([]byte, 64)
++	binary.BigEndian.PutUint16(raw[60:], uint16(config.ReceiveWindow))
++	if binary.BigEndian.Uint16(raw[60:]) != 32 {
++		test.Fatal("OPEN window")
++	}
++}
+--- a/carrier/telemost/boundary.go
++++ b/carrier/telemost/boundary.go
+@@ -5,6 +5,7 @@
+ 	"sync"
+ 	"sync/atomic"
+ 
++	"github.com/Joker20380/family_connect/carrier/localwrite"
+ 	"github.com/Joker20380/family_connect/carrier/reliablestream"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ 	"github.com/pion/interceptor"
+@@ -15,6 +16,7 @@
+ type outboundFrame struct {
+ 	data  []byte
+ 	point sessiontrace.Boundary
++	local *localwrite.Write
+ }
+ 
+ func fragmentBoundary(data []byte) sessiontrace.Boundary {
+--- a/carrier/telemost/head_loss_test.go
++++ b/carrier/telemost/head_loss_test.go
+@@ -164,10 +164,15 @@
+ 	message := point.msgID.Load()
+ 	for len(point.sendQueue) > 0 {
+ 		frame := <-point.sendQueue
++		if !frame.local.Begin() {
++			continue
++		}
+ 		if isHead && point.fault == "carrier" && len(point.attempts) == 0 {
++			frame.local.Complete(nil)
+ 			continue
+ 		}
+ 		point.writeVP8Sample(frame.data, frame.point)
++		frame.local.Complete(nil)
+ 	}
+ 	packets := point.packets
+ 	if point.fault == "reorder" && isHead {
+--- /dev/null
++++ b/carrier/telemost/queue_retry_test.go
+@@ -0,0 +1,117 @@
++package telemost
++
++import (
++	"bytes"
++	"context"
++	"encoding/json"
++	"os"
++	"sync/atomic"
++	"testing"
++	"time"
++
++	"github.com/Joker20380/family_connect/carrier/localwrite"
++	"github.com/Joker20380/family_connect/carrier/reliablestream"
++	"github.com/Joker20380/family_connect/carrier/sessiontrace"
++	"github.com/pion/interceptor"
++	"github.com/pion/rtp"
++)
++
++type countedQueueEndpoint struct {
++	*Session
++	attempts atomic.Uint64
++}
++
++func (endpoint *countedQueueEndpoint) SendContext(ctx context.Context, data []byte) error {
++	point := sessiontrace.AttemptFrom(ctx)
++	if point.DataKnown && point.DataSequence == 1 {
++		endpoint.attempts.Add(1)
++	}
++	return endpoint.Session.SendContext(ctx, data)
++}
++
++func TestQueueRetryHeldLocalWriter(test *testing.T) {
++	ctx, cancel := context.WithTimeout(context.Background(), 4*time.Second)
++	defer cancel()
++	if os.Getenv("FC_QUEUE_COMPLETION_EXPECTED") == "1" {
++		ctx = localwrite.WithCompletion(ctx)
++	}
++	left, right := headLossPair(test, ctx, 0, "none")
++	defer left.Close()
++	defer right.Close()
++	var hold atomic.Bool
++	release := make(chan struct{})
++	var writes atomic.Uint64
++	for _, point := range []*headLossEndpoint{left, right} {
++		if err := point.track.Unbind(lossTrackContext{}); err != nil {
++			test.Fatal(err)
++		}
++		boundary, _ := (&boundaryFactory{trace: point.cfg.Trace, writes: &point.rtpWrites}).NewInterceptor("")
++		writer := boundary.BindLocalStream(&interceptor.StreamInfo{MimeType: "video/VP8"}, interceptor.RTPWriterFunc(func(header *rtp.Header, payload []byte, _ interceptor.Attributes) (int, error) {
++			if point == left && hold.Load() {
++				select {
++				case <-release:
++				case <-ctx.Done():
++					return 0, ctx.Err()
++				}
++			}
++			if point == left {
++				writes.Add(1)
++			}
++			point.peer.receive([]*rtp.Packet{(&rtp.Packet{Header: *header, Payload: payload}).Clone()})
++			return header.MarshalSize() + len(payload), nil
++		}))
++		if _, err := point.track.Bind(lossTrackContext{writer: lossTrackWriter{writer}}); err != nil {
++			test.Fatal(err)
++		}
++		point.startWorker(point.writerLoop)
++	}
++	config := reliablestream.DefaultConfig()
++	config.SendWindow, config.ReceiveWindow = 32, 32
++	config.RTO, config.MaxAge = 30*time.Millisecond, 2*time.Second
++	counted := &countedQueueEndpoint{Session: left.Session}
++	sender, err := reliablestream.New(ctx, counted, config)
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer sender.Close()
++	receiver, err := reliablestream.New(ctx, right.Session, config)
++	if err != nil {
++		test.Fatal(err)
++	}
++	defer receiver.Close()
++	if err := sender.SendContext(ctx, []byte("warmup")); err != nil {
++		test.Fatal(err)
++	}
++	if _, err := receiver.Recv(ctx); err != nil {
++		test.Fatal(err)
++	}
++	time.Sleep(30 * time.Millisecond)
++	hold.Store(true)
++	initialWrites := writes.Load()
++	started := time.Now()
++	sent := make(chan error, 1)
++	go func() { sent <- sender.SendContext(ctx, bytes.Repeat([]byte{42}, config.Payload)) }()
++	time.Sleep(340 * time.Millisecond)
++	stats := sender.Stats()
++	queued := len(left.sendQueue)
++	written := writes.Load() - initialWrites
++	attempts := counted.attempts.Load()
++	close(release)
++	data, receiveErr := receiver.Recv(ctx)
++	sendErr := <-sent
++	result := map[string]any{"pending_attempts_before_first_write": attempts, "queued_fragments": queued, "new_data_blocks": stats.DataSent, "retries_before_first_local_write": stats.Retransmissions,
++		"rtp_writes_before_release": written, "queue_hold_ms": 340, "goodput_before_release": 0, "terminal": stats.Terminal,
++		"byte_exact": receiveErr == nil && bytes.Equal(data, bytes.Repeat([]byte{42}, config.Payload)), "send_ok": sendErr == nil,
++		"seconds": time.Since(started).Seconds()}
++	encoded, _ := json.Marshal(result)
++	test.Log(string(encoded))
++	if written != 0 {
++		test.Fatal("writer hold ineffective")
++	}
++	if os.Getenv("FC_QUEUE_COMPLETION_EXPECTED") == "1" && (attempts != 1 || stats.Retransmissions != 0 || stats.Terminal != "" || receiveErr != nil || sendErr != nil || !bytes.Equal(data, bytes.Repeat([]byte{42}, config.Payload))) {
++		test.Fatal("completion regression")
++	}
++	if os.Getenv("FC_QUEUE_COMPLETION_EXPECTED") == "0" && (attempts <= 1 || stats.Retransmissions == 0 || stats.Terminal != "recovery_exhausted") {
++		test.Fatal("baseline accumulation not reproduced")
++	}
++}
+--- a/carrier/telemost/session.go
++++ b/carrier/telemost/session.go
+@@ -13,6 +13,7 @@
+ 	"sync/atomic"
+ 	"time"
+ 
++	"github.com/Joker20380/family_connect/carrier/localwrite"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ 	"github.com/Joker20380/family_connect/carrier/underlay"
+ 	"github.com/gorilla/websocket"
+@@ -378,6 +379,10 @@
+ 	if err != nil {
+ 		return err
+ 	}
++	local, err := localwrite.Register(ctx, len(frames))
++	if err != nil {
++		return err
++	}
+ 	for _, frag := range frames {
+ 		out := frag
+ 		if s.mode == ModeVP8 {
+@@ -391,7 +396,7 @@
+ 		}
+ 		point.Stage, point.Direction, point.Result = "carrier_queued", "tx", "ok"
+ 		select {
+-		case s.sendQueue <- outboundFrame{data: out, point: point}:
++		case s.sendQueue <- outboundFrame{data: out, point: point, local: local}:
+ 			s.cfg.Trace.Boundary(point)
+ 			s.statsMu.Lock()
+ 			s.queued = advanceFragment(s.queued, frag)
+--- a/carrier/telemost/signaling.go
++++ b/carrier/telemost/signaling.go
+@@ -600,7 +600,19 @@
+ 				if !ok {
+ 					return
+ 				}
+-				s.writeVP8Sample(frame.data, frame.point)
++				if !frame.local.Begin() {
++					continue
++				}
++				written := s.writeVP8Sample(frame.data, frame.point)
++				if written {
++					frame.local.Complete(nil)
++				} else {
++					frame.local.Complete(ErrClosed)
++				}
++				if frame.local != nil && !written {
++					s.signalClosedAt(ErrClosed, "VP8_WRITE")
++					return
++				}
+ 				time.Sleep(vp8SendInterval)
+ 			}
+ 		}
+@@ -614,7 +626,16 @@
+ 			if !ok {
+ 				return
+ 			}
+-			if !s.writeDCMessage(frame.data) {
++			if !frame.local.Begin() {
++				continue
++			}
++			written := s.writeDCMessage(frame.data)
++			if written {
++				frame.local.Complete(nil)
++			} else {
++				frame.local.Complete(ErrClosed)
++			}
++			if !written {
+ 				s.signalClosedAt(errors.New("telemost: data channel write failed"), "DATA_CHANNEL_WRITE")
+ 				return
+ 			}
+@@ -622,7 +643,7 @@
+ 	}
+ }
+ 
+-func (s *Session) writeVP8Sample(data []byte, queued ...sessiontrace.Boundary) {
++func (s *Session) writeVP8Sample(data []byte, queued ...sessiontrace.Boundary) bool {
+ 	point := sessiontrace.Boundary{Stage: "carrier_written", Direction: "tx", Result: "no_rtp"}
+ 	if fragment, valid := decodeVP8Frame(data); valid {
+ 		point = s.cfg.Trace.MessageAttempt(fragmentBoundary(fragment))
+@@ -636,14 +657,14 @@
+ 	}
+ 	if s.track == nil {
+ 		s.cfg.Trace.Boundary(point)
+-		return
++		return false
+ 	}
+ 	before := s.rtpWrites.Load()
+ 	if err := s.track.WriteSample(media.Sample{Data: data, Duration: vp8FrameDuration}); err != nil {
+ 		point.Result = "write_error"
+ 		s.cfg.Trace.Boundary(point)
+ 		s.signalClosedAt(errors.New("telemost: VP8 write failed"), "VP8_WRITE")
+-		return
++		return false
+ 	}
+ 	if s.rtpWrites.Load() != before {
+ 		point.Result = "ok"
+@@ -655,6 +676,7 @@
+ 		s.written = advanceFragment(s.written, fragment)
+ 	}
+ 	s.statsMu.Unlock()
++	return point.Result == "ok"
+ }
+ 
+ func (s *Session) writeDCMessage(data []byte) bool {
+--- a/carrier/wholedevice/session.go
++++ b/carrier/wholedevice/session.go
+@@ -16,6 +16,7 @@
+ 	"github.com/Joker20380/family_connect/carrier/familysession"
+ 	"github.com/Joker20380/family_connect/carrier/roombroker"
+ 	"github.com/Joker20380/family_connect/carrier/sessiondiag"
++	"github.com/Joker20380/family_connect/carrier/sessionprofile"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ 	"github.com/Joker20380/family_connect/carrier/startupdiag"
+ 	"github.com/Joker20380/family_connect/carrier/tcpforward"
+@@ -374,7 +375,8 @@
+ 	stopHandshake := context.AfterFunc(connect, func() { carrier.Close() })
+ 	defer stopHandshake()
+ 	trace.Add("FAMILY_TLS", "STARTED", "NONE")
+-	secured, err := familysession.OpenMux(ctx, carrier, raw, false, true)
++	profile := sessionprofile.From(ctx)
++	secured, err := familysession.OpenMuxReliable(profile.LocalWrite(ctx), carrier, raw, false, true, profile.Reliable())
+ 	if err != nil {
+ 		startupdiag.Failure(ctx, "DEDICATED_AUTH", err)
+ 		trace.Add("FAMILY_TLS", "FAILED", "FAMILY_TLS_ERROR")
+@@ -417,6 +419,7 @@
+ 		report := sessiondiag.Capture(descriptor.SetupID, failure, failedAt, secured.ReliabilityStats(), carrier.Stats(), mux.Stats())
+ 		snapshot := trace.Snapshot()
+ 		report.Trace = &snapshot
++		report.SpeedProfile = profile.Name()
+ 		return report
+ 	}
+ 	session.metrics = func() map[string]any {
+--- a/clients/android/app/build.gradle
++++ b/clients/android/app/build.gradle
+@@ -113,7 +113,7 @@
+     }
+     applicationVariants.all { variant ->
+         if (variant.buildType.name == 'privateBeta') {
+-            variant.outputs.all { versionCodeOverride = 96; versionNameOverride = '0.1.18-beta96-bootstrap' }
++            variant.outputs.all { versionCodeOverride = 97; versionNameOverride = '0.1.18-beta97-speed' }
+         }
+         if (variant.buildType.name == "friends") {
+             variant.outputs.all { versionCodeOverride = 83; versionNameOverride = "0.1.18-research83-bootstrap" }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java
+@@ -107,6 +107,7 @@
+             safe.add("lifecycle",lifecycle);
+         }
+         if(same&&restrictedSession.has("terminal_observed_at_ms")){restrictedSession=safe;return;}
++        SpeedReceipt.project(source,safe);
+         enumField(source,safe,"terminal_reason","NONE","CANCELLED","DEADLINE","EOF","IO_CLOSED","FAMILY_REJECTED","MUX_PROTOCOL","RELIABLE_PROTOCOL","RELIABLE_EXHAUSTED","REMOTE_RESET","RELIABLE_CLOSED","NETWORK_TIMEOUT","NETWORK_ERROR","UNKNOWN");
+         enumField(source,safe,"reliable_terminal","","closed","recovery_exhausted","protocol_violation","remote_reset","cancelled","carrier_closed","UNKNOWN");
+         enumField(source,safe,"signaling_failure","NONE","UNKNOWN","read_error","read_timeout","invalid_json","close_code_1000","close_code_1001","close_code_1002","close_code_1003","close_code_1006","close_code_1007","close_code_1008","close_code_1009","close_code_1010","close_code_1011","close_code_1012","close_code_1013","close_code_1015");
+--- a/clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java
+@@ -19,7 +19,7 @@
+     private static final String[][] TRANSPORTS={{"auto","Auto"},{"awg","AWG 3.1"},{"tcp","TCP REALITY"},{"telemost",TransportPresentation.MESH}};
+     private final Handler handler=new Handler(Looper.getMainLooper());
+     private final ExecutorService worker=Executors.newSingleThreadExecutor();
+-    private TextView status,detail,routeCaption,routeStatus,routeDetail,messageRoute;private Button check,activate;private TerminalToggle connect;private Spinner countries,transports;
++    private TextView status,detail,routeCaption,routeStatus,routeDetail,messageRoute;private Button check,activate,speedButton;private TerminalToggle connect;private Spinner countries,transports;
+     private boolean busy,reconnect,initializing=true;
+     private ConnectionTerminalView vpnTerminal,chatTerminal;
+     private LinearLayout connectionWorkspace;
+@@ -186,6 +186,15 @@
+             motion=checked;toggle.setMotion(motion);getPreferences(MODE_PRIVATE).edit().putBoolean("motion",motion).apply();dial.setMotion(motion);connect.setMotion(motion);
+         });
+         RadioSettings.attach(panel);
++        speedButton=TerminalUi.button(panel,R.string.mesh_speed_profile,()->{
++            if(!SpeedProfile.canSelect(ConnectionService.status,busy))return;
++            new android.app.AlertDialog.Builder(this).setTitle(R.string.mesh_speed_profile)
++                .setSingleChoiceItems(new String[]{"P0 · RS8/16 · legacy", "P1 · RS32/32 · CREDIT128", "P2 · P1 + Q1"},SpeedProfile.read(this),(dialog,index)->{
++                    if(SpeedProfile.canSelect(ConnectionService.status,busy))SpeedProfile.save(this,index);
++                    dialog.dismiss();render();
++                }).setNegativeButton(android.R.string.cancel,null).show();
++        });
++        TerminalUi.label(panel,getString(R.string.mesh_speed_hint),13,TerminalUi.MUTED);
+         String selectedLanguage=AppLanguage.selected(this);
+         String languageName=selectedLanguage.equals("ru")?"Русский":selectedLanguage.equals("en")?"English":getString(R.string.language_system);
+         TerminalUi.label(panel,getString(R.string.language),12,TerminalUi.AMBER);
+@@ -237,6 +246,7 @@
+     private void render(){
+         if(vpnTerminal!=null)vpnTerminal.refresh();if(chatTerminal!=null)chatTerminal.refresh();
+         if(connect==null)return;String value=ConnectionService.status;boolean on=value.equals("on"),off=value.equals("off");
++        if(speedButton!=null){speedButton.setEnabled(SpeedProfile.canSelect(value,busy));speedButton.setText(getString(R.string.mesh_speed_profile)+": P"+SpeedProfile.read(this));}
+         homeBrand.connection(value,motion);
+         String actual=ConnectionService.activeTransport;
+         text(homeActiveTransport,!on?"—":actual.equals("awg")?"AWG 3.1":actual.equals("tcp")?"TCP":actual.equals("restricted")||actual.equals("telemost")?TransportPresentation.MESH:"—");
+--- a/clients/android/app/src/main/java/com/familyconnect/app/NativeRestricted.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/NativeRestricted.java
+@@ -11,7 +11,7 @@
+     static native String readiness(String directory);
+     static native boolean validateDelivery(byte[] response, byte[] publicIdentity, byte[] anchor);
+     static native int validationCode(byte[] response, byte[] publicIdentity, byte[] anchor);
+-    static native long beginReady(byte[] response, byte[] identity, byte[] anchor, String resolver, long budgetMillis, VpnService protector);
++    static native long beginReady(byte[] response, byte[] identity, byte[] anchor, String resolver, long budgetMillis, VpnService protector, int speedProfile);
+     static native boolean stop(long handle);
+     static native long chatAcquire(byte[] response, byte[] identity, byte[] anchor, String resolver, Object protector);
+     static native int chatState(long handle);
+--- a/clients/android/app/src/main/java/com/familyconnect/app/RestrictedTunnelEngine.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/RestrictedTunnelEngine.java
+@@ -76,7 +76,7 @@
+                 Diagnostics.readiness(context,response!=null);
+                 if(response==null)throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.BOOTSTRAP_UNAVAILABLE);
+                 byte[] full=identity.material(),material=java.util.Arrays.copyOf(full,64);java.util.Arrays.fill(full,(byte)0);
+-                try{checkAccess();handle=NativeRestricted.beginReady(response,material,ControlTrust.anchor(context),resolver,deadline-SystemClock.elapsedRealtime(),service);}
++                try{checkAccess();handle=NativeRestricted.beginReady(response,material,ControlTrust.anchor(context),resolver,deadline-SystemClock.elapsedRealtime(),service,SpeedProfile.read(context));}
+                 finally{java.util.Arrays.fill(material,(byte)0);java.util.Arrays.fill(response,(byte)0);}
+             }
+         } else {
+--- /dev/null
++++ b/clients/android/app/src/main/java/com/familyconnect/app/SpeedProfile.java
+@@ -0,0 +1,18 @@
++package com.familyconnect.app;
++
++import android.content.Context;
++
++final class SpeedProfile {
++    static boolean canSelect(String status,boolean busy) { return !busy&&"off".equals(status); }
++    static int checked(int value) {
++        if(value<0||value>2)throw new IllegalArgumentException("Invalid speed profile");
++        return value;
++    }
++    static int read(Context context) {
++        return checked(context.getSharedPreferences("mesh-session-profile",Context.MODE_PRIVATE).getInt("next",0));
++    }
++    static void save(Context context,int value) {
++        if(!context.getSharedPreferences("mesh-session-profile",Context.MODE_PRIVATE).edit().putInt("next",checked(value)).commit())
++            throw new IllegalStateException("Profile not saved");
++    }
++}
+--- /dev/null
++++ b/clients/android/app/src/main/java/com/familyconnect/app/SpeedReceipt.java
+@@ -0,0 +1,40 @@
++package com.familyconnect.app;
++
++import com.google.gson.JsonElement;
++import com.google.gson.JsonObject;
++
++final class SpeedReceipt {
++    static void project(JsonObject source,JsonObject safe) {
++        JsonElement profile=source.get("speed_profile"),mux=source.get("mux_profile");
++        if(profile!=null&&profile.isJsonPrimitive()&&profile.getAsJsonPrimitive().isString()) {
++            String value=profile.getAsString();
++            if(value.equals("P0")||value.equals("P1")||value.equals("P2"))safe.addProperty("speed_profile",value);
++        }
++        if(mux!=null&&mux.isJsonPrimitive()&&mux.getAsJsonPrimitive().isString()) {
++            String value=mux.getAsString();
++            long window=number(source,"mux_window",131072);
++            if(value.equals("LEGACY64")&&window==65536||value.equals("CREDIT128")&&window==131072) {
++                safe.addProperty("mux_profile",value);safe.addProperty("mux_window",window);
++            }
++        }
++        JsonElement raw=source.get("reliable_limits");
++        if(raw!=null&&raw.isJsonObject()) {
++            JsonObject limits=raw.getAsJsonObject(),receipt=new JsonObject();
++            long send=number(limits,"local_send",32),receive=number(limits,"local_receive",32),peer=number(limits,"peer_receive",32),effective=number(limits,"effective_send",32);
++            JsonElement completion=limits.get("local_write_completion");
++            if(send>0&&receive>0&&peer>=0&&effective==Math.min(send,peer)&&completion!=null&&completion.isJsonPrimitive()&&completion.getAsJsonPrimitive().isBoolean()) {
++                receipt.addProperty("local_send",send);receipt.addProperty("local_receive",receive);receipt.addProperty("peer_receive",peer);receipt.addProperty("effective_send",effective);
++                receipt.addProperty("local_write_completion",completion.getAsBoolean());safe.add("reliable_limits",receipt);
++            }
++        }
++        long retry=number(source,"retry_bytes",9007199254740991L);
++        if(retry>=0)safe.addProperty("retry_bytes",retry);
++    }
++    private static long number(JsonObject source,String field,long maximum) {
++        JsonElement value=source.get(field);
++        if(value!=null&&value.isJsonPrimitive()&&value.getAsJsonPrimitive().isNumber()) {
++            try {long count=value.getAsBigDecimal().longValueExact();if(count>=0&&count<=maximum)return count;}catch(ArithmeticException|NumberFormatException ignored){}
++        }
++        return -1;
++    }
++}
+--- /dev/null
++++ b/clients/android/app/src/main/res/values-ru/speed_profile.xml
+@@ -0,0 +1,4 @@
++<resources>
++    <string name="mesh_speed_profile">MESH owner-тест · новая сессия</string>
++    <string name="mesh_speed_hint">Нужен согласованный профиль шлюза. Выбор не подтверждает фактические лимиты. Менять после отключения; P0 возвращает исходное поведение.</string>
++</resources>
+--- /dev/null
++++ b/clients/android/app/src/main/res/values/speed_profile.xml
+@@ -0,0 +1,4 @@
++<resources>
++    <string name="mesh_speed_profile">MESH owner test · next session</string>
++    <string name="mesh_speed_hint">Operator-matched gateway required. Selection is not proof of applied limits. Disconnect before changing; P0 restores default behavior.</string>
++</resources>
+--- /dev/null
++++ b/clients/android/app/src/test/java/com/familyconnect/app/SpeedProfileTest.java
+@@ -0,0 +1,13 @@
++package com.familyconnect.app;
++import org.junit.Test;
++import static org.junit.Assert.*;
++public class SpeedProfileTest {
++    @Test public void selectionRequiresIdleDisconnected() {
++        assertTrue(SpeedProfile.canSelect("off",false));
++        assertFalse(SpeedProfile.canSelect("off",true));
++        for(String state:new String[]{"on","connecting","recovering","failed",null})assertFalse(SpeedProfile.canSelect(state,false));
++    }
++    @Test public void finiteProfiles() { for(int profile=0;profile<3;profile++)assertEquals(profile,SpeedProfile.checked(profile)); }
++    @Test(expected=IllegalArgumentException.class) public void rejectsNegative() { SpeedProfile.checked(-1); }
++    @Test(expected=IllegalArgumentException.class) public void rejectsUnknown() { SpeedProfile.checked(3); }
++}
+--- /dev/null
++++ b/clients/android/app/src/test/java/com/familyconnect/app/SpeedReceiptTest.java
+@@ -0,0 +1,12 @@
++package com.familyconnect.app;
++import com.google.gson.JsonObject;
++import com.google.gson.JsonParser;
++import org.junit.Test;
++import static org.junit.Assert.*;
++
++public class SpeedReceiptTest {
++    private JsonObject source() {return JsonParser.parseString("{\"speed_profile\":\"P2\",\"mux_profile\":\"CREDIT128\",\"mux_window\":131072,\"retry_bytes\":16384,\"secret\":\"never\",\"reliable_limits\":{\"local_send\":32,\"local_receive\":32,\"peer_receive\":16,\"effective_send\":16,\"local_write_completion\":true}}").getAsJsonObject();}
++    @Test public void mixedPairShowsRealLimits() {JsonObject safe=new JsonObject();SpeedReceipt.project(source(),safe);assertEquals(16,safe.getAsJsonObject("reliable_limits").get("effective_send").getAsInt());assertFalse(safe.has("secret"));assertEquals(5,safe.size());}
++    @Test public void noAssumedPeerWindow() {JsonObject value=source(),safe=new JsonObject();value.getAsJsonObject("reliable_limits").addProperty("effective_send",32);SpeedReceipt.project(value,safe);assertFalse(safe.has("reliable_limits"));}
++    @Test public void malformedIsOmitted() {JsonObject value=source(),safe=new JsonObject();value.addProperty("speed_profile","key-secret");value.addProperty("mux_window",65536);value.addProperty("retry_bytes",-1);value.getAsJsonObject("reliable_limits").addProperty("local_receive",33);SpeedReceipt.project(value,safe);assertEquals(0,safe.size());}
++}
+--- a/pilot/android-restricted/native/bridge.c
++++ b/pilot/android-restricted/native/bridge.c
+@@ -22,7 +22,7 @@
+  if(raw&&public&&root)result=fcRestrictedValidationCode((struct text){(char*)raw,(*env)->GetArrayLength(env,response)},(struct text){(char*)public,(*env)->GetArrayLength(env,identity)},(struct text){(char*)root,(*env)->GetArrayLength(env,anchor)});
+  if(raw)(*env)->ReleaseByteArrayElements(env,response,raw,JNI_ABORT);if(public)(*env)->ReleaseByteArrayElements(env,identity,public,JNI_ABORT);if(root)(*env)->ReleaseByteArrayElements(env,anchor,root,JNI_ABORT);return result;
+ }
+-extern int64_t fcRestrictedBeginReady(struct text,struct text,struct text,struct text,int64_t,uintptr_t);
++extern int64_t fcRestrictedBeginReady(struct text,struct text,struct text,struct text,int64_t,uintptr_t,int32_t);
+ JNIEXPORT jboolean JNICALL Java_com_familyconnect_app_NativeRestricted_validateDelivery(JNIEnv *env,jclass cls,jbyteArray response,jbyteArray identity,jbyteArray anchor){
+  if(!response||!identity||!anchor)return 0;
+  jbyte *raw=(*env)->GetByteArrayElements(env,response,NULL),*public=(*env)->GetByteArrayElements(env,identity,NULL),*root=(*env)->GetByteArrayElements(env,anchor,NULL);
+@@ -30,11 +30,11 @@
+  if(raw&&public&&root)result=fcRestrictedValidateDelivery((struct text){(char*)raw,(*env)->GetArrayLength(env,response)},(struct text){(char*)public,(*env)->GetArrayLength(env,identity)},(struct text){(char*)root,(*env)->GetArrayLength(env,anchor)});
+  if(raw)(*env)->ReleaseByteArrayElements(env,response,raw,JNI_ABORT);if(public)(*env)->ReleaseByteArrayElements(env,identity,public,JNI_ABORT);if(root)(*env)->ReleaseByteArrayElements(env,anchor,root,JNI_ABORT);return result!=0;
+ }
+-JNIEXPORT jlong JNICALL Java_com_familyconnect_app_NativeRestricted_beginReady(JNIEnv *env,jclass cls,jbyteArray response,jbyteArray identity,jbyteArray anchor,jstring resolver,jlong budget,jobject service){
++JNIEXPORT jlong JNICALL Java_com_familyconnect_app_NativeRestricted_beginReady(JNIEnv *env,jclass cls,jbyteArray response,jbyteArray identity,jbyteArray anchor,jstring resolver,jlong budget,jobject service,jint speed){
+  if(!response||!identity||!anchor||!resolver||!service)return 0;
+  jbyte *raw=(*env)->GetByteArrayElements(env,response,NULL),*secret=(*env)->GetByteArrayElements(env,identity,NULL),*root=(*env)->GetByteArrayElements(env,anchor,NULL);
+  const char *dns=(*env)->GetStringUTFChars(env,resolver,NULL);int64_t result=0;
+- if(raw&&secret&&root&&dns){jobject owner=(*env)->NewGlobalRef(env,service);if(owner)result=fcRestrictedBeginReady((struct text){(char*)raw,(*env)->GetArrayLength(env,response)},(struct text){(char*)secret,(*env)->GetArrayLength(env,identity)},(struct text){(char*)root,(*env)->GetArrayLength(env,anchor)},(struct text){dns,(*env)->GetStringUTFLength(env,resolver)},budget,(uintptr_t)owner);}
++ if(raw&&secret&&root&&dns){jobject owner=(*env)->NewGlobalRef(env,service);if(owner)result=fcRestrictedBeginReady((struct text){(char*)raw,(*env)->GetArrayLength(env,response)},(struct text){(char*)secret,(*env)->GetArrayLength(env,identity)},(struct text){(char*)root,(*env)->GetArrayLength(env,anchor)},(struct text){dns,(*env)->GetStringUTFLength(env,resolver)},budget,(uintptr_t)owner,(int32_t)speed);}
+  if(secret){volatile jbyte *wipe=secret;jsize length=(*env)->GetArrayLength(env,identity);for(jsize index=0;index<length;index++)wipe[index]=0;}
+  if(raw)(*env)->ReleaseByteArrayElements(env,response,raw,JNI_ABORT);if(secret)(*env)->ReleaseByteArrayElements(env,identity,secret,JNI_ABORT);if(root)(*env)->ReleaseByteArrayElements(env,anchor,root,JNI_ABORT);if(dns)(*env)->ReleaseStringUTFChars(env,resolver,dns);return result;
+ }
+--- a/pilot/android-restricted/native/main.go
++++ b/pilot/android-restricted/native/main.go
+@@ -21,6 +21,7 @@
+ 	"github.com/Joker20380/family_connect/carrier/familysession"
+ 	"github.com/Joker20380/family_connect/carrier/restrictedowner"
+ 	"github.com/Joker20380/family_connect/carrier/roombroker"
++	"github.com/Joker20380/family_connect/carrier/sessionprofile"
+ 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+ 	"github.com/Joker20380/family_connect/carrier/startupdiag"
+ 	"github.com/Joker20380/family_connect/carrier/underlay"
+@@ -80,7 +81,7 @@
+ 
+ //export fcRestrictedBegin
+ func fcRestrictedBegin(directory, control, resolver string, budget int64, owner C.uintptr_t) int64 {
+-	return begin(directory, control, resolver, nil, nil, budget, owner)
++	return begin(directory, control, resolver, nil, nil, budget, owner, sessionprofile.P0)
+ }
+ 
+ //export fcRestrictedValidationCode
+@@ -98,7 +99,11 @@
+ }
+ 
+ //export fcRestrictedBeginReady
+-func fcRestrictedBeginReady(response, identity, anchor, resolver string, budget int64, owner C.uintptr_t) int64 {
++func fcRestrictedBeginReady(response, identity, anchor, resolver string, budget int64, owner C.uintptr_t, speed int32) int64 {
++	if speed < 0 || speed > 2 {
++		C.fcRestrictedRelease(owner)
++		return 0
++	}
+ 	material := []byte(identity)
+ 	defer clear(material)
+ 	profile, directory, err := wholedevice.DeliveryMaterial([]byte(response), material, []byte(anchor), time.Now())
+@@ -106,10 +111,10 @@
+ 		C.fcRestrictedRelease(owner)
+ 		return 0
+ 	}
+-	return begin("/", "provisioned", resolver, profile, directory, budget, owner)
+-}
+-
+-func begin(directory, control, resolver string, profile, seed []byte, budget int64, owner C.uintptr_t) int64 {
++	return begin("/", "provisioned", resolver, profile, directory, budget, owner, sessionprofile.Profile(speed))
++}
++
++func begin(directory, control, resolver string, profile, seed []byte, budget int64, owner C.uintptr_t, speed sessionprofile.Profile) int64 {
+ 	directory, control, resolver = strings.Clone(directory), strings.Clone(control), strings.Clone(resolver)
+ 	ownerMu.Lock()
+ 	defer ownerMu.Unlock()
+@@ -126,6 +131,7 @@
+ 		C.fcRestrictedRelease(owner)
+ 		return 0
+ 	}
++	ctx = sessionprofile.With(ctx, speed)
+ 	ctx = startupdiag.Start(ctx, sequence+1)
+ 	stopBudget := startupdiag.StartBudget(ctx, time.Duration(budget)*time.Millisecond, cancel)
+ 	ctx = sessiontrace.Watch(ctx)

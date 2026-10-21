@@ -1,0 +1,984 @@
+{
+  "schema": "family_connect_rtp_late_arrival_replay_v1",
+  "utc": "2026-10-20T08:37:49.828693+00:00",
+  "pins": {
+    "baseline_apk": "1e73167c8bfdba68f96249088cf08ea3dfb9d3614d5bedb8a0a7bdd8716e4e7b",
+    "baseline_native": "dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23",
+    "baseline_gateway": "b9ae880731517753e456637e52dcc421b9f7d7b881b400c856989ae93193e9ba",
+    "source_inventory_sha256": "4e32a3e0bbc32556a8b6850cc842e091f3bb950999ccc063ed00383ccff5c7ed",
+    "exact_native_source": {
+      "go.mod": "1db5f64f967ed2c2dd8597044e0b80eb96b7a006cb565ec00ce68cf2bd5a56e6",
+      "go.sum": "def397bbc55025fb9dc466467b6db0890fda295e7e42a393035533562dbba581",
+      "telemost/rtp.go": "c9c08a2910f1bfb931eb6aca39df9b48f4be38d720a24a31d655856dd0360733",
+      "telemost/session.go": "71031dbebd96e9273d99ad81225cb80dc5f06c9e94fbcaf8c87ef93cf5fc67db",
+      "telemost/signaling.go": "dbc7213d8550967563d7036582a73e5656a3c7a59dd16dc895a095c0496c095b",
+      "telemost/msg.go": "9a72f4538400158a735fd7b75c5c297da454e7d08f371edda19a43cd07ae3ac1",
+      "telemost/vp8.go": "1a7cfb445a18bf14405addb74259662353202d602203ad7e13e9171042d07acc"
+    },
+    "dependencies": {
+      "gopath/pkg/mod/github.com/pion/interceptor@v0.1.45/pkg/nack/generator_interceptor.go": "24b85ae4cd95faa9fd03f6d4bd9f11fb49f1c7ce278a6b6d39f9599da1efdf50",
+      "gopath/pkg/mod/github.com/pion/webrtc/v4@v4.2.15/interceptor.go": "ff6a8624cb18b34c3a239b6805c7082373c7af2a797452dfae7c3b3e3d7e898c"
+    },
+    "fixture": {
+      "late-arrival-input.json": "939cab96fcdce29c045dc593dd1d1ba85ce670c112de78b486845c392cf21841",
+      "late_arrival.py": "780b58e82bba0a870bd48cfe1c1eaabf10a888f1181c28c18133dac0b43f713a",
+      "late_arrival_test.go": "8230f6c3b040061250f7cccad679b7eb4a6be56e558a87c25fbd76d83938c5a5",
+      "late_arrival_evidence.py": "8dc45be6b33b37a6bf917e3d45d7aa5188c4432aea12887d9fee9bcaa21eea87"
+    },
+    "replay_rtp_sha256": "2a82915349b86d7550f8dae9583d9fac65c09bcbbda14be93648764aab48e1ed"
+  },
+  "source": "EXACT92_NATIVE_BUILD_SOURCE_VERIFIED_NOT_MAIN",
+  "RTP_SKIP_TRIGGER": {
+    "DATA614": "TIME; next2364 to2405; no window/track transition",
+    "DATA1127": "TIME; next7900 to7943; no window/track transition",
+    "DATA1294": "TIME; next9909 to9910; queued age109.444271ms; late after109.864063ms",
+    "DATA597": "NOT_IDENTIFIABLE_FROM_AGGREGATE_WALL_BOUNDARIES; final6s still missing"
+  },
+  "NACK_NEGOTIATION_AND_TIMING": {
+    "interceptor": "v0.1.45",
+    "webrtc": "v4.2.15",
+    "default_interval_ms": 100,
+    "overrides": false,
+    "duplicate_generator_added": false,
+    "frequency_changed": false,
+    "retry_limits_changed": false,
+    "actual_track_negotiation": "NOT_SAVED",
+    "late_packet_source": "UNKNOWN_NOT_PROVEN_NACK_OR_RTX",
+    "scan": {
+      "owner-beta90-export.json": {
+        "sha256": "65a482a02f53c4f8e5ef542e1340f5c00f0c9570571bee918437e1f82f9ee0f3",
+        "counts": {
+          "a=rtcp-fb": 0,
+          "a=rtpmap": 0,
+          "NackCount": 0,
+          "NACK": 0,
+          "RTX": 0,
+          "TransportLayerNack": 0
+        }
+      },
+      "owner-beta91-export.json": {
+        "sha256": "c3dc2a3052886d25de97f8a0a1aacbfe0dfe55f272769c1162bf119004ff1b3b",
+        "counts": {
+          "a=rtcp-fb": 0,
+          "a=rtpmap": 0,
+          "NackCount": 0,
+          "NACK": 0,
+          "RTX": 0,
+          "TransportLayerNack": 0
+        }
+      },
+      "baseline/capture/Android-raw.jsonl": {
+        "sha256": "e89f03010270b86796d969d5e5164df988b23b754f66c5987daf3ed5b7435846",
+        "counts": {
+          "a=rtcp-fb": 0,
+          "a=rtpmap": 0,
+          "NackCount": 0,
+          "NACK": 0,
+          "RTX": 0,
+          "TransportLayerNack": 0
+        }
+      },
+      "baseline/capture/NL-raw.jsonl": {
+        "sha256": "f3ed4e8d1a1739c7cb9e59cccf50d5619661bda5ac5160d9037f9c516b0628d9",
+        "counts": {
+          "a=rtcp-fb": 0,
+          "a=rtpmap": 0,
+          "NackCount": 0,
+          "NACK": 0,
+          "RTX": 0,
+          "TransportLayerNack": 0
+        }
+      },
+      "normal92/physical-baseline.json": {
+        "sha256": "8c83da76282bb4dd0c524a0c6b9ba1eebff3e4f10415a8b7be50d2510d198b1e",
+        "counts": {
+          "a=rtcp-fb": 0,
+          "a=rtpmap": 0,
+          "NackCount": 0,
+          "NACK": 0,
+          "RTX": 0,
+          "TransportLayerNack": 0
+        }
+      }
+    }
+  },
+  "REPLAY_RESULTS": [
+    {
+      "Sequence": 614,
+      "BudgetMS": 100,
+      "Frames": {
+        "6290493": 416491134216,
+        "6349893": 416799428955,
+        "6352863": 416799428955,
+        "6355833": 416799428955,
+        "6358803": 416799615466,
+        "6361773": 417192401924
+      },
+      "Messages": {
+        "2969333449": 416799428955,
+        "2969333450": 416799428955,
+        "2969333451": 416799428955,
+        "2969333452": 416799615466,
+        "2969333453": 417192401924
+      },
+      "Skips": [
+        {
+          "AtNS": 416799428955,
+          "GapAgeNS": 168238854,
+          "From": 2364,
+          "To": 2405,
+          "Trigger": "time"
+        }
+      ],
+      "Old": null,
+      "PeakPackets": 4,
+      "PeakPayloadBytes": 1200,
+      "PeakPayloadCapacity": 2572,
+      "PeakPoolPackets": 4,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 0,
+      "MaxFollowingDelayNS": 0,
+      "BaselineMessagesNotYetReleased": 0
+    },
+    {
+      "Sequence": 614,
+      "BudgetMS": 110,
+      "Frames": {
+        "6290493": 416491134216,
+        "6349893": 416799428955,
+        "6352863": 416799428955,
+        "6355833": 416799428955,
+        "6358803": 416799615466,
+        "6361773": 417192401924
+      },
+      "Messages": {
+        "2969333449": 416799428955,
+        "2969333450": 416799428955,
+        "2969333451": 416799428955,
+        "2969333452": 416799615466,
+        "2969333453": 417192401924
+      },
+      "Skips": [
+        {
+          "AtNS": 416799428955,
+          "GapAgeNS": 168238854,
+          "From": 2364,
+          "To": 2405,
+          "Trigger": "time"
+        }
+      ],
+      "Old": null,
+      "PeakPackets": 4,
+      "PeakPayloadBytes": 1200,
+      "PeakPayloadCapacity": 2572,
+      "PeakPoolPackets": 4,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 0,
+      "MaxFollowingDelayNS": 0,
+      "BaselineMessagesNotYetReleased": 0
+    },
+    {
+      "Sequence": 614,
+      "BudgetMS": 125,
+      "Frames": {
+        "6290493": 416491134216,
+        "6349893": 416799428955,
+        "6352863": 416799428955,
+        "6355833": 416799428955,
+        "6358803": 416799615466,
+        "6361773": 417192401924
+      },
+      "Messages": {
+        "2969333449": 416799428955,
+        "2969333450": 416799428955,
+        "2969333451": 416799428955,
+        "2969333452": 416799615466,
+        "2969333453": 417192401924
+      },
+      "Skips": [
+        {
+          "AtNS": 416799428955,
+          "GapAgeNS": 168238854,
+          "From": 2364,
+          "To": 2405,
+          "Trigger": "time"
+        }
+      ],
+      "Old": null,
+      "PeakPackets": 4,
+      "PeakPayloadBytes": 1200,
+      "PeakPayloadCapacity": 2572,
+      "PeakPoolPackets": 4,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 0,
+      "MaxFollowingDelayNS": 0,
+      "BaselineMessagesNotYetReleased": 0
+    },
+    {
+      "Sequence": 614,
+      "BudgetMS": 200,
+      "Frames": {
+        "6290493": 416491134216,
+        "6349893": 417192401924,
+        "6352863": 417192401924,
+        "6355833": 417192401924,
+        "6358803": 417192401924,
+        "6361773": 417192401924
+      },
+      "Messages": {
+        "2969333449": 417192401924,
+        "2969333450": 417192401924,
+        "2969333451": 417192401924,
+        "2969333452": 417192401924,
+        "2969333453": 417192401924
+      },
+      "Skips": [
+        {
+          "AtNS": 417192401924,
+          "GapAgeNS": 561211823,
+          "From": 2364,
+          "To": 2405,
+          "Trigger": "time"
+        }
+      ],
+      "Old": null,
+      "PeakPackets": 6,
+      "PeakPayloadBytes": 1200,
+      "PeakPayloadCapacity": 2744,
+      "PeakPoolPackets": 6,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 4,
+      "MaxFollowingDelayNS": 392972969,
+      "BaselineMessagesNotYetReleased": 0
+    },
+    {
+      "Sequence": 614,
+      "BudgetMS": 350,
+      "Frames": {
+        "6290493": 416491134216,
+        "6349893": 417192401924,
+        "6352863": 417192401924,
+        "6355833": 417192401924,
+        "6358803": 417192401924,
+        "6361773": 417192401924
+      },
+      "Messages": {
+        "2969333449": 417192401924,
+        "2969333450": 417192401924,
+        "2969333451": 417192401924,
+        "2969333452": 417192401924,
+        "2969333453": 417192401924
+      },
+      "Skips": [
+        {
+          "AtNS": 417192401924,
+          "GapAgeNS": 561211823,
+          "From": 2364,
+          "To": 2405,
+          "Trigger": "time"
+        }
+      ],
+      "Old": null,
+      "PeakPackets": 6,
+      "PeakPayloadBytes": 1200,
+      "PeakPayloadCapacity": 2744,
+      "PeakPoolPackets": 6,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 4,
+      "MaxFollowingDelayNS": 392972969,
+      "BaselineMessagesNotYetReleased": 0
+    },
+    {
+      "Sequence": 614,
+      "BudgetMS": 500,
+      "Frames": {
+        "6290493": 416491134216,
+        "6349893": 417192401924,
+        "6352863": 417192401924,
+        "6355833": 417192401924,
+        "6358803": 417192401924,
+        "6361773": 417192401924
+      },
+      "Messages": {
+        "2969333449": 417192401924,
+        "2969333450": 417192401924,
+        "2969333451": 417192401924,
+        "2969333452": 417192401924,
+        "2969333453": 417192401924
+      },
+      "Skips": [
+        {
+          "AtNS": 417192401924,
+          "GapAgeNS": 561211823,
+          "From": 2364,
+          "To": 2405,
+          "Trigger": "time"
+        }
+      ],
+      "Old": null,
+      "PeakPackets": 6,
+      "PeakPayloadBytes": 1200,
+      "PeakPayloadCapacity": 2744,
+      "PeakPoolPackets": 6,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 4,
+      "MaxFollowingDelayNS": 392972969,
+      "BaselineMessagesNotYetReleased": 0
+    },
+    {
+      "Sequence": 1127,
+      "BudgetMS": 100,
+      "Frames": {
+        "11713713": 464475382583,
+        "11767173": 464597711749,
+        "11770143": 464597711749,
+        "11773113": 464597711749,
+        "11776083": 464597711749,
+        "11779053": 464597711749,
+        "11782023": 464597711749,
+        "11784993": 464597987426,
+        "11787963": 464609877999,
+        "11790933": 464640431749,
+        "11793903": 464758274510
+      },
+      "Messages": {
+        "2969334745": 464597711749,
+        "2969334746": 464597711749,
+        "2969334747": 464597711749,
+        "2969334748": 464597711749,
+        "2969334749": 464597987426,
+        "2969334750": 464758274510
+      },
+      "Skips": [
+        {
+          "AtNS": 464597711749,
+          "GapAgeNS": 102163645,
+          "From": 7900,
+          "To": 7943,
+          "Trigger": "time"
+        }
+      ],
+      "Old": null,
+      "PeakPackets": 19,
+      "PeakPayloadBytes": 15872,
+      "PeakPayloadCapacity": 18184,
+      "PeakPoolPackets": 19,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 0,
+      "MaxFollowingDelayNS": 0,
+      "BaselineMessagesNotYetReleased": 0
+    },
+    {
+      "Sequence": 1127,
+      "BudgetMS": 110,
+      "Frames": {
+        "11713713": 464475382583,
+        "11767173": 464609877999,
+        "11770143": 464609877999,
+        "11773113": 464609877999,
+        "11776083": 464609877999,
+        "11779053": 464609877999,
+        "11782023": 464609877999,
+        "11784993": 464609877999,
+        "11787963": 464609877999,
+        "11790933": 464640431749,
+        "11793903": 464758274510
+      },
+      "Messages": {
+        "2969334745": 464609877999,
+        "2969334746": 464609877999,
+        "2969334747": 464609877999,
+        "2969334748": 464609877999,
+        "2969334749": 464609877999,
+        "2969334750": 464758274510
+      },
+      "Skips": [
+        {
+          "AtNS": 464609877999,
+          "GapAgeNS": 114329895,
+          "From": 7900,
+          "To": 7943,
+          "Trigger": "time"
+        }
+      ],
+      "Old": null,
+      "PeakPackets": 27,
+      "PeakPayloadBytes": 24198,
+      "PeakPayloadCapacity": 25556,
+      "PeakPoolPackets": 27,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 5,
+      "MaxFollowingDelayNS": 12166250,
+      "BaselineMessagesNotYetReleased": 0
+    },
+    {
+      "Sequence": 1127,
+      "BudgetMS": 125,
+      "Frames": {
+        "11713713": 464475382583,
+        "11767173": 464622612947,
+        "11770143": 464622612947,
+        "11773113": 464622612947,
+        "11776083": 464622612947,
+        "11779053": 464622612947,
+        "11782023": 464622612947,
+        "11784993": 464622612947,
+        "11787963": 464622612947,
+        "11790933": 464640431749,
+        "11793903": 464758274510
+      },
+      "Messages": {
+        "2969334745": 464622612947,
+        "2969334746": 464622612947,
+        "2969334747": 464622612947,
+        "2969334748": 464622612947,
+        "2969334749": 464622612947,
+        "2969334750": 464758274510
+      },
+      "Skips": [
+        {
+          "AtNS": 464622612947,
+          "GapAgeNS": 127064843,
+          "From": 7900,
+          "To": 7943,
+          "Trigger": "time"
+        }
+      ],
+      "Old": null,
+      "PeakPackets": 30,
+      "PeakPayloadBytes": 27798,
+      "PeakPayloadCapacity": 28996,
+      "PeakPoolPackets": 30,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 5,
+      "MaxFollowingDelayNS": 24901198,
+      "BaselineMessagesNotYetReleased": 0
+    },
+    {
+      "Sequence": 1127,
+      "BudgetMS": 200,
+      "Frames": {
+        "11713713": 464475382583,
+        "11767173": 464758274510,
+        "11770143": 464758274510,
+        "11773113": 464758274510,
+        "11776083": 464758274510,
+        "11779053": 464758274510,
+        "11782023": 464758274510,
+        "11784993": 464758274510,
+        "11787963": 464758274510,
+        "11790933": 464758274510,
+        "11793903": 464758274510
+      },
+      "Messages": {
+        "2969334745": 464758274510,
+        "2969334746": 464758274510,
+        "2969334747": 464758274510,
+        "2969334748": 464758274510,
+        "2969334749": 464758274510,
+        "2969334750": 464758274510
+      },
+      "Skips": [
+        {
+          "AtNS": 464758274510,
+          "GapAgeNS": 262726406,
+          "From": 7900,
+          "To": 7943,
+          "Trigger": "time"
+        }
+      ],
+      "Old": null,
+      "PeakPackets": 35,
+      "PeakPayloadBytes": 32524,
+      "PeakPayloadCapacity": 33722,
+      "PeakPoolPackets": 35,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 5,
+      "MaxFollowingDelayNS": 160562761,
+      "BaselineMessagesNotYetReleased": 0
+    },
+    {
+      "Sequence": 1127,
+      "BudgetMS": 350,
+      "Frames": {
+        "11713713": 464475382583
+      },
+      "Messages": {},
+      "Skips": null,
+      "Old": null,
+      "PeakPackets": 35,
+      "PeakPayloadBytes": 32524,
+      "PeakPayloadCapacity": 33722,
+      "PeakPoolPackets": 35,
+      "PendingPackets": 35,
+      "FrameDiscards": 0,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 0,
+      "MaxFollowingDelayNS": null,
+      "BaselineMessagesNotYetReleased": 6
+    },
+    {
+      "Sequence": 1127,
+      "BudgetMS": 500,
+      "Frames": {
+        "11713713": 464475382583
+      },
+      "Messages": {},
+      "Skips": null,
+      "Old": null,
+      "PeakPackets": 35,
+      "PeakPayloadBytes": 32524,
+      "PeakPayloadCapacity": 33722,
+      "PeakPoolPackets": 35,
+      "PendingPackets": 35,
+      "FrameDiscards": 0,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 0,
+      "MaxFollowingDelayNS": null,
+      "BaselineMessagesNotYetReleased": 6
+    },
+    {
+      "Sequence": 1294,
+      "BudgetMS": 100,
+      "Frames": {
+        "13596693": 475454226693,
+        "13599663": 475454226693,
+        "13602633": 475454226693,
+        "13605603": 475454226693,
+        "13608573": 475454226693,
+        "13611543": 475454226693,
+        "13614513": 475454226693,
+        "13617483": 475454226693,
+        "13620453": 475454226693,
+        "13623423": 475454226693,
+        "13626393": 475454226693,
+        "13629363": 475479932995,
+        "13632333": 475481138568,
+        "13635303": 475506485599,
+        "13638273": 475532902631,
+        "13641243": 475533423464,
+        "13644213": 475537497995,
+        "13647183": 475537928047,
+        "13650153": 475538007266,
+        "13653123": 475538064506
+      },
+      "Messages": {
+        "2969335141": 475454226693,
+        "2969335142": 475454226693,
+        "2969335143": 475454226693,
+        "2969335144": 475454226693,
+        "2969335145": 475454226693,
+        "2969335146": 475454226693,
+        "2969335147": 475481138568,
+        "2969335148": 475533423464,
+        "2969335149": 475537497995,
+        "2969335150": 475537928047,
+        "2969335151": 475538007266,
+        "2969335152": 475538064506
+      },
+      "Skips": [
+        {
+          "AtNS": 475454226693,
+          "GapAgeNS": 109416198,
+          "From": 9909,
+          "To": 9910,
+          "Trigger": "time"
+        }
+      ],
+      "Old": [
+        9909
+      ],
+      "PeakPackets": 35,
+      "PeakPayloadBytes": 33562,
+      "PeakPayloadCapacity": 33722,
+      "PeakPoolPackets": 35,
+      "PendingPackets": 0,
+      "FrameDiscards": 1,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 0,
+      "MaxFollowingDelayNS": 0,
+      "BaselineMessagesNotYetReleased": 0
+    },
+    {
+      "Sequence": 1294,
+      "BudgetMS": 110,
+      "Frames": {
+        "13593723": 475454674558,
+        "13596693": 475454674558,
+        "13599663": 475454674558,
+        "13602633": 475454674558,
+        "13605603": 475454674558,
+        "13608573": 475454674558,
+        "13611543": 475454674558,
+        "13614513": 475454674558,
+        "13617483": 475454674558,
+        "13620453": 475454674558,
+        "13623423": 475454674558,
+        "13626393": 475454674558,
+        "13629363": 475479932995,
+        "13632333": 475481138568,
+        "13635303": 475506485599,
+        "13638273": 475532902631,
+        "13641243": 475533423464,
+        "13644213": 475537497995,
+        "13647183": 475537928047,
+        "13650153": 475538007266,
+        "13653123": 475538064506
+      },
+      "Messages": {
+        "2969335140": 475454674558,
+        "2969335141": 475454674558,
+        "2969335142": 475454674558,
+        "2969335143": 475454674558,
+        "2969335144": 475454674558,
+        "2969335145": 475454674558,
+        "2969335146": 475454674558,
+        "2969335147": 475481138568,
+        "2969335148": 475533423464,
+        "2969335149": 475537497995,
+        "2969335150": 475537928047,
+        "2969335151": 475538007266,
+        "2969335152": 475538064506
+      },
+      "Skips": null,
+      "Old": null,
+      "PeakPackets": 36,
+      "PeakPayloadBytes": 34602,
+      "PeakPayloadCapacity": 34762,
+      "PeakPoolPackets": 36,
+      "PendingPackets": 0,
+      "FrameDiscards": 0,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 6,
+      "MaxFollowingDelayNS": 447865,
+      "BaselineMessagesNotYetReleased": 0
+    },
+    {
+      "Sequence": 1294,
+      "BudgetMS": 125,
+      "Frames": {
+        "13593723": 475454674558,
+        "13596693": 475454674558,
+        "13599663": 475454674558,
+        "13602633": 475454674558,
+        "13605603": 475454674558,
+        "13608573": 475454674558,
+        "13611543": 475454674558,
+        "13614513": 475454674558,
+        "13617483": 475454674558,
+        "13620453": 475454674558,
+        "13623423": 475454674558,
+        "13626393": 475454674558,
+        "13629363": 475479932995,
+        "13632333": 475481138568,
+        "13635303": 475506485599,
+        "13638273": 475532902631,
+        "13641243": 475533423464,
+        "13644213": 475537497995,
+        "13647183": 475537928047,
+        "13650153": 475538007266,
+        "13653123": 475538064506
+      },
+      "Messages": {
+        "2969335140": 475454674558,
+        "2969335141": 475454674558,
+        "2969335142": 475454674558,
+        "2969335143": 475454674558,
+        "2969335144": 475454674558,
+        "2969335145": 475454674558,
+        "2969335146": 475454674558,
+        "2969335147": 475481138568,
+        "2969335148": 475533423464,
+        "2969335149": 475537497995,
+        "2969335150": 475537928047,
+        "2969335151": 475538007266,
+        "2969335152": 475538064506
+      },
+      "Skips": null,
+      "Old": null,
+      "PeakPackets": 36,
+      "PeakPayloadBytes": 34602,
+      "PeakPayloadCapacity": 34762,
+      "PeakPoolPackets": 36,
+      "PendingPackets": 0,
+      "FrameDiscards": 0,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 6,
+      "MaxFollowingDelayNS": 447865,
+      "BaselineMessagesNotYetReleased": 0
+    },
+    {
+      "Sequence": 1294,
+      "BudgetMS": 200,
+      "Frames": {
+        "13593723": 475454674558,
+        "13596693": 475454674558,
+        "13599663": 475454674558,
+        "13602633": 475454674558,
+        "13605603": 475454674558,
+        "13608573": 475454674558,
+        "13611543": 475454674558,
+        "13614513": 475454674558,
+        "13617483": 475454674558,
+        "13620453": 475454674558,
+        "13623423": 475454674558,
+        "13626393": 475454674558,
+        "13629363": 475479932995,
+        "13632333": 475481138568,
+        "13635303": 475506485599,
+        "13638273": 475532902631,
+        "13641243": 475533423464,
+        "13644213": 475537497995,
+        "13647183": 475537928047,
+        "13650153": 475538007266,
+        "13653123": 475538064506
+      },
+      "Messages": {
+        "2969335140": 475454674558,
+        "2969335141": 475454674558,
+        "2969335142": 475454674558,
+        "2969335143": 475454674558,
+        "2969335144": 475454674558,
+        "2969335145": 475454674558,
+        "2969335146": 475454674558,
+        "2969335147": 475481138568,
+        "2969335148": 475533423464,
+        "2969335149": 475537497995,
+        "2969335150": 475537928047,
+        "2969335151": 475538007266,
+        "2969335152": 475538064506
+      },
+      "Skips": null,
+      "Old": null,
+      "PeakPackets": 36,
+      "PeakPayloadBytes": 34602,
+      "PeakPayloadCapacity": 34762,
+      "PeakPoolPackets": 36,
+      "PendingPackets": 0,
+      "FrameDiscards": 0,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 6,
+      "MaxFollowingDelayNS": 447865,
+      "BaselineMessagesNotYetReleased": 0
+    },
+    {
+      "Sequence": 1294,
+      "BudgetMS": 350,
+      "Frames": {
+        "13593723": 475454674558,
+        "13596693": 475454674558,
+        "13599663": 475454674558,
+        "13602633": 475454674558,
+        "13605603": 475454674558,
+        "13608573": 475454674558,
+        "13611543": 475454674558,
+        "13614513": 475454674558,
+        "13617483": 475454674558,
+        "13620453": 475454674558,
+        "13623423": 475454674558,
+        "13626393": 475454674558,
+        "13629363": 475479932995,
+        "13632333": 475481138568,
+        "13635303": 475506485599,
+        "13638273": 475532902631,
+        "13641243": 475533423464,
+        "13644213": 475537497995,
+        "13647183": 475537928047,
+        "13650153": 475538007266,
+        "13653123": 475538064506
+      },
+      "Messages": {
+        "2969335140": 475454674558,
+        "2969335141": 475454674558,
+        "2969335142": 475454674558,
+        "2969335143": 475454674558,
+        "2969335144": 475454674558,
+        "2969335145": 475454674558,
+        "2969335146": 475454674558,
+        "2969335147": 475481138568,
+        "2969335148": 475533423464,
+        "2969335149": 475537497995,
+        "2969335150": 475537928047,
+        "2969335151": 475538007266,
+        "2969335152": 475538064506
+      },
+      "Skips": null,
+      "Old": null,
+      "PeakPackets": 36,
+      "PeakPayloadBytes": 34602,
+      "PeakPayloadCapacity": 34762,
+      "PeakPoolPackets": 36,
+      "PendingPackets": 0,
+      "FrameDiscards": 0,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 6,
+      "MaxFollowingDelayNS": 447865,
+      "BaselineMessagesNotYetReleased": 0
+    },
+    {
+      "Sequence": 1294,
+      "BudgetMS": 500,
+      "Frames": {
+        "13593723": 475454674558,
+        "13596693": 475454674558,
+        "13599663": 475454674558,
+        "13602633": 475454674558,
+        "13605603": 475454674558,
+        "13608573": 475454674558,
+        "13611543": 475454674558,
+        "13614513": 475454674558,
+        "13617483": 475454674558,
+        "13620453": 475454674558,
+        "13623423": 475454674558,
+        "13626393": 475454674558,
+        "13629363": 475479932995,
+        "13632333": 475481138568,
+        "13635303": 475506485599,
+        "13638273": 475532902631,
+        "13641243": 475533423464,
+        "13644213": 475537497995,
+        "13647183": 475537928047,
+        "13650153": 475538007266,
+        "13653123": 475538064506
+      },
+      "Messages": {
+        "2969335140": 475454674558,
+        "2969335141": 475454674558,
+        "2969335142": 475454674558,
+        "2969335143": 475454674558,
+        "2969335144": 475454674558,
+        "2969335145": 475454674558,
+        "2969335146": 475454674558,
+        "2969335147": 475481138568,
+        "2969335148": 475533423464,
+        "2969335149": 475537497995,
+        "2969335150": 475537928047,
+        "2969335151": 475538007266,
+        "2969335152": 475538064506
+      },
+      "Skips": null,
+      "Old": null,
+      "PeakPackets": 36,
+      "PeakPayloadBytes": 34602,
+      "PeakPayloadCapacity": 34762,
+      "PeakPoolPackets": 36,
+      "PendingPackets": 0,
+      "FrameDiscards": 0,
+      "ByteExactSynthetic": true,
+      "FollowingMessagesDelayed": 6,
+      "MaxFollowingDelayNS": 447865,
+      "BaselineMessagesNotYetReleased": 0
+    }
+  ],
+  "CHOSEN_RECEIVER_POLICY": "KEEP_BASELINE100_ARRIVAL_DRIVEN; no shipping candidate passes finite-silence hold requirement",
+  "smaller_budget_hypothesis": "125ms conditionally recovers1294 with +24.901198ms max following delay near1127; not validated as bounded live policy",
+  "PHYSICAL_GOODPUT_AND_LATENCY": {
+    "comparison": "NOT_RUN",
+    "new_application_bytes": 0,
+    "speed_acceptance": false
+  },
+  "RECOVERY_AND_IDENTITY_PRESERVED": {
+    "runtime_mutations": false,
+    "enrollment": false,
+    "recovery_source_changed": false,
+    "credentials_floors_revocations_policy_written": false,
+    "identity_proof": "NO_MUTATION; previous92 identity evidence retained, no new identity audit claimed"
+  },
+  "CURRENT_APK_AND_GATEWAY": {
+    "phone": {
+      "utc": "2026-10-20T08:37:44.656416+00:00",
+      "uid": 10283,
+      "code": 92,
+      "apk_sha256": "1e73167c8bfdba68f96249088cf08ea3dfb9d3614d5bedb8a0a7bdd8716e4e7b",
+      "native_sha256": "dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23",
+      "vpn": true,
+      "vpn_service": true
+    },
+    "gateway": {
+      "utc": "2026-10-20T08:37:45.518882+00:00",
+      "state": {
+        "ActiveState": "active",
+        "InvocationID": "b9772ef231f045aa8952565ab2ffbac2",
+        "MainPID": "3747077",
+        "NRestarts": "0"
+      },
+      "sha256": "b9ae880731517753e456637e52dcc421b9f7d7b881b400c856989ae93193e9ba"
+    },
+    "mutations": false
+  },
+  "REMAINING_LIMITATION": [
+    "No payload capture or full1294 reader prefix; synthetic seeded state and reconstructed enqueue times",
+    "614 and1127 no selected missing RTP returns in retained interval; later fate unknown",
+    "597 lacks process-local per-arrival timestamps and final6s",
+    "Deadline service would be a separate functional change requiring serialized ownership and close/cancel/arrival race checks",
+    "No physical A/B/A, no matched retry/new-byte or RS-stall deltas; tester/whitelists not tested"
+  ],
+  "tests": {
+    "replay-5.jsonl": {
+      "sha256": "91dd489c3336295f124b7a9a0983f91412bd1a64f47f2a46e07cbbdd13a64b63",
+      "passed": 50,
+      "failed": 0,
+      "skipped": 0,
+      "packages": 1
+    },
+    "android92-2.jsonl": {
+      "sha256": "76a762403ac455276a7736acfdf72299724ab2bff1ffe7231d9a627aa0075178",
+      "passed": 223,
+      "failed": 0,
+      "skipped": 6,
+      "packages": 5
+    },
+    "gateway-b9-2.jsonl": {
+      "sha256": "6049d4104b73cffc3dd547b809082b610ab2f1067486337e6872c94a0e726256",
+      "passed": 177,
+      "failed": 0,
+      "skipped": 6,
+      "packages": 3
+    }
+  },
+  "retained_failures": {
+    "replay-1.jsonl": {
+      "sha256": "f4a2b20c441e2fb015b20b1de8a64ec9720a74e52e1ddc4b3aeae2baa8b5de10",
+      "passed": 33,
+      "failed": 1,
+      "skipped": 0,
+      "packages": 0
+    },
+    "android92-1.jsonl": {
+      "sha256": "3c932a1ff06e4434806db0fa370ad639d4f72b60a75c4ce1b9482e29af314a01",
+      "passed": 210,
+      "failed": 3,
+      "skipped": 6,
+      "packages": 4
+    },
+    "gateway-b9-1.jsonl": {
+      "sha256": "fc0d279ef02eacf851570cdbb82598f60691a139d6cc327197c2a174b3231ce8",
+      "passed": 170,
+      "failed": 7,
+      "skipped": 6,
+      "packages": 2
+    }
+  },
+  "pushed": false,
+  "public_release": false
+}

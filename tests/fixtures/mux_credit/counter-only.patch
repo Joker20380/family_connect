@@ -1,0 +1,143 @@
+--- a/sessiontrace/performance.go
++++ b/sessiontrace/performance.go
+@@ -92,18 +92,28 @@
+ 	HandedDATA        SizeHistogram
+ 	CreditUpdates     uint64
+ 	CreditBytes       uint64
++	CreditIncrements  SizeHistogram
++	CreditIntervals   DurationHistogram
++	CreditPending     int
++	ReceiveBuffered   int
++	ReturnQueueDelay  DurationHistogram
++	CreditReturns     uint64
+ 	ZeroCreditReadyNS uint64
+ 	QueueReadyNS      uint64
+ 	Closed            bool
+ }
+ 
+ type MuxPerformance struct {
+-	HandedDATA    SizeHistogram
+-	Streams       []MuxStreamPerformance
+-	Retired       [64]MuxStreamPerformance
+-	RetiredCount  uint64
+-	Batches       SizeHistogram
+-	BatchMessages uint64
++	ProtocolErrors    uint64
++	ActiveStreams     int
++	RetainedBytes     int
++	RetainedHighWater int
++	HandedDATA        SizeHistogram
++	Streams           []MuxStreamPerformance
++	Retired           [64]MuxStreamPerformance
++	RetiredCount      uint64
++	Batches           SizeHistogram
++	BatchMessages     uint64
+ }
+ 
+ type TransportPerformance struct {
+--- a/tcpforward/mux_stream.go
++++ b/tcpforward/mux_stream.go
+@@ -15,6 +15,8 @@
+ type MuxStream struct {
+ 	perf             sessiontrace.MuxStreamPerformance
+ 	perfAt           time.Time
++	creditAt         time.Time
++	creditPendingAt  time.Time
+ 	mux              *Mux
+ 	id               uint32
+ 	ctx              context.Context
+@@ -187,6 +189,9 @@
+ 			stream.head = (stream.head + count) % MuxWindow
+ 			stream.used -= count
+ 			stream.receiveCredit += count
++			if sessiontrace.PerformanceEnabled && stream.creditPending == 0 {
++				stream.creditPendingAt = time.Now()
++			}
+ 			stream.creditPending += count
+ 			mux.signalLocked()
+ 			return count, nil
+--- a/tcpforward/mux.go
++++ b/tcpforward/mux.go
+@@ -280,6 +280,10 @@
+ 			continue
+ 		}
+ 		if !dataOnly && stream.creditPending > 0 && stream.terminal == nil {
++			if sessiontrace.PerformanceEnabled {
++				stream.perf.ReturnQueueDelay.Add(time.Since(stream.creditPendingAt))
++				stream.perf.CreditReturns++
++			}
+ 			credit := make([]byte, 4)
+ 			binary.BigEndian.PutUint32(credit, uint32(stream.creditPending))
+ 			stream.creditPending = 0
+@@ -505,6 +509,12 @@
+ 			if sessiontrace.PerformanceEnabled {
+ 				stream.perf.CreditUpdates++
+ 				stream.perf.CreditBytes += uint64(credit)
++				stream.perf.CreditIncrements.Add(credit)
++				now := time.Now()
++				if !stream.creditAt.IsZero() {
++					stream.perf.CreditIntervals.Add(now.Sub(stream.creditAt))
++				}
++				stream.creditAt = now
+ 			}
+ 			stream.sendCredit += credit
+ 		}
+--- a/tcpforward/performance.go
++++ b/tcpforward/performance.go
+@@ -28,6 +28,7 @@
+ 	stream.perfAdvance(now)
+ 	value := stream.perf
+ 	value.ID, value.Credit = stream.id, stream.sendCredit
++	value.CreditPending, value.ReceiveBuffered = stream.creditPending, stream.used
+ 	value.QueuedBytes = 0
+ 	for _, frame := range stream.send {
+ 		if frame.kind == dataFrame {
+@@ -47,6 +48,9 @@
+ 		mux.perf = &sessiontrace.MuxPerformance{}
+ 	}
+ 	value := *mux.perf
++	value.ProtocolErrors = mux.stats.ProtocolErrors
++	value.ActiveStreams = mux.stats.ActiveStreams
++	value.RetainedBytes, value.RetainedHighWater = mux.stats.RetainedBytes, mux.stats.RetainedHighWater
+ 	now := time.Now()
+ 	for _, id := range mux.order {
+ 		if stream := mux.streams[id]; stream != nil {
+--- a/roombroker/performance_enabled.go
++++ b/roombroker/performance_enabled.go
+@@ -10,11 +10,31 @@
+ )
+ 
+ func recordPerformance(trace *sessiontrace.Recorder, value *sessiontrace.TransportPerformance) {
++	window := struct {
++		*sessiontrace.WindowPerformance
++		Events []sessiontrace.WindowEvent `json:"Events,omitempty"`
++	}{WindowPerformance: value.Window}
++	retired := []sessiontrace.MuxStreamPerformance{}
++	for _, stream := range value.Mux.Retired {
++		if stream.ID != 0 {
++			retired = append(retired, stream)
++		}
++	}
++	mux := struct {
++		*sessiontrace.MuxPerformance
++		Retired []sessiontrace.MuxStreamPerformance
++	}{value.Mux, retired}
++	compact := struct {
++		*sessiontrace.TransportPerformance
++		Window any
++		Mux    any
++		Media  any `json:"Media,omitempty"`
++	}{TransportPerformance: value, Window: window, Mux: mux}
+ 	record := struct {
+-		Event       string                             `json:"event"`
+-		SessionTag  string                             `json:"session_tag"`
+-		NodeNS      int64                              `json:"node_ns"`
+-		Performance *sessiontrace.TransportPerformance `json:"performance"`
+-	}{"restricted_performance_v1", trace.PerformanceTag(), sessiontrace.PerformanceTime(time.Now()), value}
++		Event       string `json:"event"`
++		SessionTag  string `json:"session_tag"`
++		NodeNS      int64  `json:"node_ns"`
++		Performance any    `json:"performance"`
++	}{"restricted_performance_v1", trace.PerformanceTag(), sessiontrace.PerformanceTime(time.Now()), compact}
+ 	_ = json.NewEncoder(os.Stdout).Encode(record)
+ }

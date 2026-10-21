@@ -1,0 +1,263 @@
+{
+  "schema": 1,
+  "date": "2026-10-21",
+  "scope": "owner support automation, not speed admission",
+  "android": {
+    "version_code": 99,
+    "version": "0.1.18-beta99-support",
+    "installed": true,
+    "public_or_tester_distribution": false,
+    "apk_path": "state-client-build/support-cadence99-20261021/delivery/FamilyConnect-0.1.18-beta99-support.apk",
+    "sha256": "fae38b81f39b4f813d172f07380b3fd6265b0c3bee3a99ff1d7539d4f1213b0e",
+    "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+    "native_sha256": "3f700aef7952c67de69de1de7cd6878287ed51d6b97be28c464d304a4cfb6673",
+    "native_identical_to98": true,
+    "source_inventory": "0f43aca53270cf0a63ef5b83a78e09aa8119e39a54321cc5fae15db4c329f939",
+    "update_interval_utc": [
+      "2026-10-21T15:34:02.833862+00:00",
+      "2026-10-21T15:34:11.403954+00:00"
+    ]
+  },
+  "tests": {
+    "jvm": 198,
+    "python": 41,
+    "native": "unchanged98; prior focused race retained"
+  },
+  "android_final": {
+    "state": "CONNECTED",
+    "restricted_readiness": "READY",
+    "vpn_capture_open": true,
+    "network_class": "CELLULAR"
+  },
+  "session": {
+    "session_tag": "eaab12508331f0e5077d17701be855d26edd462ddb640032db441243e38528e1",
+    "speed_profile": "P0",
+    "mux_profile": "LEGACY64",
+    "mux_window": 65536,
+    "reliable_limits": {
+      "local_send": 8,
+      "local_receive": 16,
+      "peer_receive": 16,
+      "effective_send": 8,
+      "local_write_completion": false
+    },
+    "protocol_errors": 0,
+    "protocol_error_reasons": {
+      "open_replay": 0,
+      "unknown_stream": 0,
+      "open_state": 0,
+      "data_state": 0,
+      "credit_state": 0,
+      "fin_state": 0,
+      "close_state": 0,
+      "frame_kind": 0,
+      "dns_replay": 0,
+      "dns_role": 0,
+      "dns_unmatched": 0
+    },
+    "terminal_reason": "NONE",
+    "retransmissions": 17,
+    "retry_bytes": 4150
+  },
+  "gateway_startup": {
+    "session_tag": "eaab12508331f0e5077d17701be855d26edd462ddb640032db441243e38528e1",
+    "speed_profile": "P0",
+    "mux_profile": "LEGACY64",
+    "mux_window": 65536,
+    "reliable_limits": {
+      "local_send": 8,
+      "local_receive": 16,
+      "peer_receive": 16,
+      "effective_send": 8,
+      "local_write_completion": false
+    },
+    "protocol_errors": 0,
+    "terminal_reason": "NONE",
+    "retransmissions": 2,
+    "retry_bytes": 2419
+  },
+  "gateway_final": {
+    "state": {
+      "ActiveState": "active",
+      "InvocationID": "a5b5909d10ea4997950bd9d3788b59b7",
+      "MainPID": "775194",
+      "NRestarts": "0",
+      "ExecMainStartTimestamp": "Wed 2026-10-21 17:11:33 MSK"
+    },
+    "sha256": "ae527cbd0b93a5d34d10af1a5424cdf8254d79e253c9994a57520408614ce1dd",
+    "profile_sha256": "738e5f52d6e9676743272827fc8f41fdfcb4581d28619202d6537f62e63566e2",
+    "operator": {
+      "rtp-pacing": "OFF",
+      "mux-profile": "LEGACY64",
+      "mux-counters": "OFF",
+      "speed-profile": "P0"
+    }
+  },
+  "identity_preserved": true,
+  "online": {
+    "result": "THREE_MATCHED_REPORTS",
+    "reports": [
+      {
+        "stored_at": 1792597096,
+        "sampled_at_ms": 1792597090389,
+        "metrics": {
+          "state": "CONNECTING",
+          "network": "CELLULAR",
+          "readiness": "READY",
+          "vpn_capture_open": true,
+          "speed_profile": "P0",
+          "mux_profile": "LEGACY64",
+          "terminal_reason": "NONE",
+          "session_tag": "eaab12508331f0e5077d17701be855d26edd462ddb640032db441243e38528e1",
+          "protocol_errors": 0,
+          "retransmissions": 4,
+          "retry_bytes": 2631,
+          "sent_bytes": 0,
+          "received_bytes": 0,
+          "recovery_timeouts": 4,
+          "mux_window": 65536,
+          "observed_at_ms": 1792597090356,
+          "send_window": 8,
+          "receive_window": 16,
+          "peer_receive_window": 16,
+          "effective_send_window": 8,
+          "open_replay": 0,
+          "unknown_stream": 0,
+          "open_state": 0,
+          "data_state": 0,
+          "credit_state": 0,
+          "fin_state": 0,
+          "close_state": 0,
+          "frame_kind": 0,
+          "dns_replay": 0,
+          "dns_role": 0,
+          "dns_unmatched": 0
+        }
+      },
+      {
+        "stored_at": 1792597158,
+        "sampled_at_ms": 1792597156854,
+        "metrics": {
+          "state": "CONNECTED",
+          "network": "CELLULAR",
+          "readiness": "READY",
+          "vpn_capture_open": true,
+          "speed_profile": "P0",
+          "mux_profile": "LEGACY64",
+          "terminal_reason": "NONE",
+          "session_tag": "eaab12508331f0e5077d17701be855d26edd462ddb640032db441243e38528e1",
+          "protocol_errors": 0,
+          "retransmissions": 14,
+          "retry_bytes": 4006,
+          "sent_bytes": 10917,
+          "received_bytes": 31091,
+          "recovery_timeouts": 14,
+          "mux_window": 65536,
+          "observed_at_ms": 1792597156828,
+          "send_window": 8,
+          "receive_window": 16,
+          "peer_receive_window": 16,
+          "effective_send_window": 8,
+          "open_replay": 0,
+          "unknown_stream": 0,
+          "open_state": 0,
+          "data_state": 0,
+          "credit_state": 0,
+          "fin_state": 0,
+          "close_state": 0,
+          "frame_kind": 0,
+          "dns_replay": 0,
+          "dns_role": 0,
+          "dns_unmatched": 0
+        }
+      },
+      {
+        "stored_at": 1792597227,
+        "sampled_at_ms": 1792597225127,
+        "metrics": {
+          "state": "CONNECTED",
+          "network": "CELLULAR",
+          "readiness": "READY",
+          "vpn_capture_open": true,
+          "speed_profile": "P0",
+          "mux_profile": "LEGACY64",
+          "terminal_reason": "NONE",
+          "session_tag": "eaab12508331f0e5077d17701be855d26edd462ddb640032db441243e38528e1",
+          "protocol_errors": 0,
+          "retransmissions": 15,
+          "retry_bytes": 4054,
+          "sent_bytes": 17012,
+          "received_bytes": 47965,
+          "recovery_timeouts": 15,
+          "mux_window": 65536,
+          "observed_at_ms": 1792597225091,
+          "send_window": 8,
+          "receive_window": 16,
+          "peer_receive_window": 16,
+          "effective_send_window": 8,
+          "open_replay": 0,
+          "unknown_stream": 0,
+          "open_state": 0,
+          "data_state": 0,
+          "credit_state": 0,
+          "fin_state": 0,
+          "close_state": 0,
+          "frame_kind": 0,
+          "dns_replay": 0,
+          "dns_role": 0,
+          "dns_unmatched": 0
+        }
+      }
+    ],
+    "intervals_seconds": [
+      62,
+      69
+    ],
+    "scope": "bounded read-only polling; no injected traffic or upload trigger; missing intervals are unknown"
+  },
+  "resource_sample": {
+    "scope": "point-in-time readback outside measured load; not phase peak or comparable to missing earlier phone samples",
+    "memory": [
+      "** MEMINFO in pid 5670 [com.familyconnect.app.friends] **",
+      "TOTAL PSS:   160514            TOTAL RSS:   274628       TOTAL SWAP PSS:      107"
+    ],
+    "cpu": [
+      "CPU usage from 385787ms to 85752ms ago (2026-10-21 17:35:00.451 to 2026-10-21 17:40:00.486) with 99% awake:",
+      "19% 5670/com.familyconnect.app.friends: 16% user + 3.2% kernel / faults: 112536 minor 1 major"
+    ]
+  },
+  "safety": {
+    "no_new_bulk_speed_load": true,
+    "no_task_gateway_restart": true,
+    "no_security_state_change": true,
+    "http_unchanged_since98": true,
+    "other_clients_not_enrolled": true,
+    "no_push_or_public_release": true
+  },
+  "limits": [
+    "98 UNAVAILABLE cause unknown; cooldown bug proven locally, not retroactively attributed",
+    "unknown_stream branch is not proof of frame provenance, harm or historical17 cause",
+    "short observation, not all-day availability or automatic network-loss recovery",
+    "online relies on live native statistics; desktop uploaders not shipped",
+    "USB one-hour/process-local consent; online separate seven-day opt-in"
+  ],
+  "evidence_sha256": {
+    "state-client-build/support-cadence99-20261021/build/receipt.json": "412fac920068cd32cf2d313678a13d9d911e45e447a7d360d0818d8715c3d33c",
+    "state-client-build/support-cadence99-20261021/build/source-inventory.json": "9e6009288cb247e80248b4a1f259880f5bafeebf0300d8fdfd5e611c1bc88823",
+    "state-client-build/support-cadence99-20261021/delivery/signing-receipt.json": "5e1362f0602f39bd3764562d24354f3bb08f7b65b5219ec637615ff071a9ea56",
+    "state-client-build/support-cadence99-20261021/install-intent.json": "00bf38d2acd9a0cea50eaa9f3c36bce94a4ec77b1cc55e2c5d7ec638c223498d",
+    "state-client-build/support-cadence99-20261021/install-receipt.json": "670e0ca95740df020ee705927c27b79cb0308b8ee48932871deebedeec49a3cc",
+    "state-client-build/support-cadence99-20261021/control-profile.json": "52f3cfb2e8ff82c7772da1083797f4812e0b62e1f98e49ef1b7738aac5b57748",
+    "state-client-build/support-cadence99-20261021/control-connect.json": "d31d2e0258bb63d79b16e7be69d36431a8dd3d13e13ee39a29c807e4c44bfae0",
+    "state-client-build/support-cadence99-20261021/verification-connected.json": "9cfa1e61ed59997c16b3533dcd652136d3c6d55c4a7a92600bf90dad731ba79c",
+    "state-client-build/support-cadence99-20261021/online-repeat-summary.json": "069e56fc416b79cd98b6144111eb37f73bde018975716ba299ac86be5b32231e",
+    "state-client-build/support-cadence99-20261021/owner-final.json": "a529fbd37cfa1ec0bd767cb5d3267770e3faff032ac2f03893165f87a69174b2",
+    "state-client-build/support-cadence99-20261021/final99-readback.json": "ac6ba887d31143f4f36e27eae587272dbb177fb5675e0130a220a8d885fec802",
+    "state-client-build/support-cadence99-20261021/final-python-tests.log": "e8b7595502add04de260cd8092a7472cfd245a59152af58cee69cab85edc43b5",
+    "state-client-build/support-automation-20261021/verification-p0.json": "63bb4e80974f6a2f8ae1ed23b22bf9d21b14aa35f1a4f3c14a765d463e441b03",
+    "state-client-build/support-automation-20261021/verification-p0-startup.json": "297e524ac9b6efecf287c3c1f8872278aeb0f4dd371ac7a4814dd94cf018cb19",
+    "state-client-build/support-automation-20261021/owner-followup.json": "5c16a4cf29412af8d2898d008fe315ee12d5f94c2203c05a4e633ec7cf9af723",
+    "state-client-build/support-automation-20261021/owner-later.json": "2928b37d357e5290541d37e31bdfeb67e049598c58e313778b4611d2c2e081aa",
+    "state-client-build/support-automation-20261021/online-http-statuses.json": "22f319623788d3ba2acfc122aafad1eaad6c8912f4fc929598bbaf06a44acda4"
+  }
+}

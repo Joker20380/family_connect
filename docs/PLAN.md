@@ -15,7 +15,718 @@ No product priority, acceptance, release or deployment gate changes.
 
 ## Current engineering priority / Текущий critical path
 
-### Current owner throughput continuation19.10 — completed comparison, no accepted fix
+### GitHub source checkpoint — authorized21.10
+
+- Preserve accumulated implementation, replay fixtures and redacted evidence in
+  `main`; the owner's explicit push request supersedes earlier no-push scope only.
+- Keep runtime state, signing material, APKs and raw diagnostics private. No tag,
+  release-prefix commit, product deployment or tester distribution is authorized
+  by this checkpoint. Existing support99/P0 remains the last verified owner state.
+- Local pre-push focused Python checks:58 passed,14 skipped; do not claim full CI
+  acceptance. Verify the remote branch SHA after push; no force push.
+- After this source checkpoint, the unresolved protocol-error lifecycle and
+  constrained P0/P1 recheck remain separate work, not another architecture sweep.
+
+### Owner support automation98→99 — authorized follow-up,21.10
+
+- DONE: exact97 source delta,193 JVM/focused Go race/38 Python tests; same-key signed98
+  installed owner-only. No speed or protocol-behavior change. Existing17-error
+  historical result remains unresolved; new bounded counters identify the branch.
+- DONE: authenticated opt-in support upload on exact existing HTTP runtime; initial
+  real Android98 report received. Explicit consent, fixed privacy schema, one latest
+  report/device, bounded rate/retention. No network remote-command API.
+- DONE: USB status/snapshot/P0/connect and10-snapshot bounded collection on98; same
+  session verified at both ends8/16/peer16/effective8/LEGACY64/Q0, READY/capturetrue.
+  Authenticated online report matches. New2 errors classify as unknown_stream,
+  provenance/harm and historical17 cause remain unknown; no counter suppression.
+- DONE:99 same-key installed15:34UTC, unchanged native/carrier/security sources;
+ 198 JVM/41 pinned Python tests PASS. Upload success interval starts after completion,
+  fixing a locally reproduced46s server interval despite60s client start cadence.
+ 98 online UNAVAILABLE cause still unknown; do not assert it was a429.
+- DONE: user renewed USB grant; automated P0 connect26.663s, both-end sessioneaab1250…
+  actual8/16/peer16/effective8/LEGACY64/Q0. At15:41 CONNECTED/READY/capturetrue,
+  protocol_errors0 in this session. Three real online99 reports62/69s apart; watcher
+  closed, opt-in app uploader remains. READY99/identity bindings preserved. No speed
+  load or gateway restart. Historical errors are not resolved by this short zero.
+- KEEP: media gateway/renewal/identity/floors unchanged by this follow-up; P0 default,
+  no tester transport change. HTTP restart and owner update are explicitly recorded.
+- PENDING: broader opt-in Android delivery and desktop integration/OS acceptance;
+  no claim all clients already updated or whole-day background telemetry. Keep
+  standard rollback, no downgrade/data clearing. See
+  [support automation report](releases/2026-10-21-owner-support-automation.md).
+
+### Android consolidated owner candidate — cycle closed with limitations,21.10
+
+- DONE: exact96/734 source replay, protected same-key signed97 installed, approved
+  shared gateway transition12:30UTC. Current97/ae527cbd…, bootstrap96/1011 retained.
+  P0/P1/P2 implemented; global default P0 and other users unchanged. No experimental
+  pacing/packing/timebase/FEC/QUIC inclusion, no public distribution or push.
+- LOCAL:7/7 old/new and bounded concurrent/head/recovery/security gates;190 JVM.
+  Q1 reproducer9→1 attempts,8→0 early retries. Known baseline bootstrap assertions
+  remain non-green; all failures/unused UI build and operator helper corrections saved.
+- MEASURED: original96 P0, new97 P0a/P1a/P2a/P2b/P1b,15/15 each; P0b13/15.
+  All seven phases attempted,103/105 complete,52.08203125MiB complete plus1.569685MiB
+  partial. Full56.08203125/64MiB reservation retained; no automatic repeat.
+  Single0.811277→0.661693, aggregate1.591011→1.192411Mbit/s:15% review triggered.
+  Integration audit finds same P0 protocol/Mux/window/cadence/recovery settings;
+  live cause unresolved, original/new equivalence NOT_ESTABLISHED. Keep all data,
+  no clean acceptance or threshold adjustment. New P0 Android0 post-bulk→4 later, server terminal3/RS exhaustion;
+  excluded from clean acceptance. P1a1.400435/2.290405Mbit/s, Android post0→0;
+  first positive observation, not repeated/clean admission. Later P1 gateway3/RS
+  exhaustion excludes clean acceptance. P2a1.348109/2.291969Mbit/s,24.89/14.64s;
+  Android1 error before load becomes10 at post snapshot13:26:48; +9 in664.356s
+  includes load/background, exact stage/branch unknown. Not clean acceptance or
+  nine failed downloads. Later P2a gateway terminal1/RS exhaustion retained;
+  no proven Q1 causality. P2b1.245062/2.545860Mbit/s,26.95/13.18s, all15 bodies.
+- P2b LATE: Android2 after post0, gateway whole-session1/RS exhaustion13:45:30UTC;
+  excluded from clean acceptance, not lost HTTP bodies. Q1 speed effect both orders:
+  single−3.736%/−5.974%, aggregate+0.068%/−1.442%; no added gain/admission.
+- P1b: Android post0→1 over831.678s, later gateway terminal3/exhaustion14:08:30UTC;
+  no clean acceptance, completed bodies retained. P0b actual8/16/peer16/effective8/
+  LEGACY64/Q0, single0.654210Mbit/s/51.29s and12/12 small complete, parallel two
+  truncated responses/curl18 then TUN-route assertion. Stop, do not replay load.
+- EXTERNAL EVENT: scheduled renewal COMMITTED, gateway stop14:11:24/restart14:11:33
+  during P0b parallel; same binary, new PID775194/invocationa5b5909d…/profile738e5f52….
+  Exact archived comparison changes certificate/revocations only. No forced renewal,
+  timer disable, rollback or task restart. New server P0 sessiond0ca9226…14:12:41UTC.
+- RESULT: raw windows single2.116×/2.024×, cumulative2.037×/1.903×; reverse aggregate
+  unavailable, no partial-body denominator. New P0b single−19.36% versus original;
+  original/new consistency and clean admission remain unproven.
+- CLOSED: final `(14)` confirms current P0 both ends8/16/peer16/effective8/LEGACY64,
+  Android CONNECTED/READY/capture open. New-session Android errors17, cause unknown;
+  not interrupted P0b's counter or17 failed downloads. P0b history0→0 errors but
+  RS exhaustion/IO_CLOSED, server0/cancelled at renewal: failed parallel retained.
+  No more owner actions, exports, load, profiles or rollout. Nine local helper
+  tests pass; original meter and all failures retained. Post-renewal route/DNS/HTTPS
+  not actively retested. Keep P0; a separate decision is needed before fixing the
+  unresolved error path, not another automatic speed/research matrix.
+- RECOVERY: local lease/expiry/revocation passed; ordinary lease extension observed
+  during P0a, not proof of automatic network-loss recovery or overnight stability.
+  Bounded phase collectors closed. Android point readback saved (not phase CPU/peak); full wire accounting
+  remains unknown. External11:41 event unexplained; approved12:30 deployment separate.
+  [Report/remaining gates](releases/2026-10-21-android-speed-candidate.md),
+  [fixture](../tests/fixtures/speed_candidate/README.md).
+
+VPN monitoring21.10 08:48UTC: unchanged registrations, five recent NL AWG
+peers, zero Friends TCP connections. No capacity emergency or priority change;
+previous worker-health/registration-difference follow-ups remain unverified.
+[Read-only snapshot](releases/2026-10-21-vpn-health-snapshot.md).
+
+### QUIC over existing media — bounded experiment closed,21.10
+
+- DONE: pinned isolated quic-go0.54.1 native streams over datagram PacketConn/L;
+ 1200B maximum, no RS/TCP/direct UDP below, mutual ephemeral lab authentication.
+  Existing Mux-over-one-stream QS diagnostic implemented, not a product API.
+- PASS: adapter/race/byte-exact/Initial/Handshake/burst/reverse-loss/slow reader,
+  independent versus shared stream gap, isolated reset, stream caps, Pion and
+  terminal LabDrain; lifetime2→2 goroutines and exact source reconstruction.
+- MEASURED: original2ms/frame control and one common bounded1MiB/s normalization;
+  no candidate-only clock/Q1/FEC/packing or larger flow-control profile.11 live
+  sessions, all attempts retained, six clean and seven full delivery proofs.
+- NO SPEED ADMISSION: main A1G/QN1/QN2/A2 has RS exhaustion, post-delivery
+  controller timeout, publisher disconnect, then clean A2 respectively. A2
+  1.080/1.813Mbit/s versus QN1's delivered0.469/0.524; no repeatable clean2× gain.
+  Lower observed QN small-response latency is separate from speed/stability.
+- HARNESS FIXES SAVED: incomplete JSONL tail; common both-media-ready gate;
+  bounded proof-only fetch before finish. Failed logs and separate operator/source
+  deltas preserved, no increasing transport timeouts or retries to hide failure.
+- CLOSED:52.613525MiB source reservation/49.288901MiB media; local tests separate;
+  all owned resources/identities cleaned, final production readback stable at the
+  explicitly recorded new epoch. No renewal/reset/deployment/Android/push action.
+- REMAINING LIMITS: separate SFUs, inherited33ms nominal timebase, carrier loss/
+  delay/disconnection, shared Reno response and incomplete RS retry timing. No
+  CPU saturation or flow-control evidence justifies another sweep. A failed full
+  matrix is not proof QUIC generally has no value. No more live work in this task.
+- PRODUCT ADMISSION NOT DONE: Family device/gateway identity and role binding,
+  claims, revocations/floors/leases, resource policy and safe legacy compatibility
+  remain future independent work. Any further experiment needs a new scoped
+  decision; do not automatically restart windows/flush/FEC/congestion tuning.
+  [Report/evidence](releases/2026-10-20-mesh-capacity.md#quic-over-existing-media--21-october-2026),
+  [lab ADR](adr/2026-10-21-quic-media-lab.md).
+
+### Fragmentation then FEC — closed; separate QUIC replacement next,21.10
+
+Historical handoff: its then-next QUIC task is completed in the section above.
+
+- DONE: L/S/SF implemented on pinned local P baseline, effective32/32/Mux128,
+  packingOFF/Q0; independently assembled1024B FCF2 parts and shortened8+2 FEC.
+  Fixed2ms/frame/33ms clock retained, common media budget includes parity.
+- PASS: bounds/invalid/duplicate/expiry/cancel/close/race, full-length geometry,
+  real Pion/RS, two-erasure recovery, ordinary RS fallback and strict LabDrain.
+- COMPLETE:12 isolated physical sessions; raw18/20 and19/20 partial smokes
+  preserved, R8/8 all modes, six exact P phases in forward/reverse order.
+- NEGATIVE: S below L in both P contrasts; SF single below S, aggregate sign
+  changes.2 symbols recovered per SF phase,90 groups beyond r; extra wire/queue
+  cost, no repeated useful P speed gain.72 small probes are not p99/non-regression.
+- CLOSED: all processes/stages/profiles removed, production96/1011/A0/LEGACY64
+  unchanged. No APK, deployment, public release, push, renewal action or migration.
+- NO MORE SWEEP: do not continue fragment-size/k/r/flush/window selection here.
+  Next independently authorized stage is QUIC **instead of** the common
+  ReliableStream, not on top of it. No QUIC implementation in this task.
+- LIMITATIONS retained: exact negotiated SRTP tag unavailable (safe bound16B),
+  incomplete causal RS retry timing, per-phase SFU/background changes; no product
+  admission. Q1 remains a separate correctness candidate, inactive in all modes.
+  [Report/evidence](releases/2026-10-20-mesh-capacity.md#carrier-fragmentation-and-fec--21-october-2026).
+
+### P-stack × packing — interaction closed; next fragmentation/FEC,21.10
+
+Historical handoff: fragmentation/FEC is now completed in the section above;
+the then-next actions below are retained as provenance, not a new work request.
+
+- DONE: exact local v3 packing base, unchanged product-lineage plaintext batching;
+  A/B/C/D at32/32 with authenticated64/128, no new ALPN/default.16/16 race local
+  delay/fault/single/parallel/slow/control cases; fixed terminal-drain guard kept.
+- FOUND:64KiB ready-source credit-return limitation while RS has space;128 OFF
+  shifts pressure into RS/queue, packing shifts it back, without consistent extra
+  application gain. Shared Mux lock is released before I/O, batch has no fill wait.
+  No proven writer defect; no speculative scheduling patch.
+- CLOSED: A/B/C/D/D/C physical contrast, six clean phases, one retained excluded
+  post-delivery controller failure. Same c97d4192… binary throughout; two-end
+  exact-byte/SHA256/stream/ACK/ciphertext completion before final close. Errors0
+  through teardown;57.345MiB source/86.307MiB media, all owned resources removed.
+- RESULT: D−C single+11.385/+0.713%, aggregate−4.782/−0.374%; no repeatable material
+  packing addition. Main combined gain comes from credit, not proof all components
+  are necessary. Six idle/six loaded probes per phase do not establish p99 or
+  non-regression. T gains/P8 one-pair result remain separate; no T/window rerun.
+- RETRY: old2.2s local stall amplifies bytes, not counts. Saved Q1 correctness
+  candidate independently passes9→1 attempt/8→0 retry and generation/ACK/deadline/
+  loss tests; no new patch or Q1 activation in A/B/C/D. Genuine large-block retry
+  wire cost remains; live post-ACK timing unresolved due bounded-ring gaps.
+- EXTERNAL: historical same bootstrap service change bounded23:03:29–23:09:45UTC;
+  whole profile hashes cover credentials/identity/floors, not transport settings.
+  Cause/changed fields unknown, no renewal inference. New epoch stable before/
+  after every phase and final; no production restart/reset/rollback or timer action.
+- NEXT AGREED STAGE: carrier fragmentation without FEC, then bounded FEC with
+  equal total media budget including parity, delay and burst faults. QUIC over
+  carrier datagrams only if needed. Do not restart flush/credit/RTO tuning or
+  automatically extend the closed matrix. No further live work in this task.
+- PRODUCT GATES REMAIN SEPARATE: RS32/Mux128/B2/Q1, small-response latency,
+  Android/security/lifecycle admission. Production96/1011/A0/OFF/Q0/LEGACY64 and
+  public/invitation artifacts unchanged. No APK, deployment, push or migration.
+  [Decision/evidence](releases/2026-10-20-mesh-capacity.md#p-stack-bottleneck-and-packing-interaction--21-october2026).
+
+### TLS→RS packing — laboratory complete; next explicit product gates,21.10
+
+Historical handoff: its P/credit/retry follow-up is completed in the section above;
+the earlier measurements and then-open gates below are retained as provenance.
+
+- DONE: copied64KiB FIFO +16KiB worker before RS DATA allocation; A/B0/B2 local
+  TLS,8/16 and32/32, legacy peer, deadlines/failures/faults/close/race checks pass.
+  B2 uses max2ms intentional oldest-tail delay, not network timeout; ALPN unchanged.
+- DONE: T8 A/B, T32 A/B/B/A, P32 A/B/B/A, P8 plus strict-drain repair pair.
+  All16 attempts retained;106.260309MiB source/130.582132MiB media; budget CLOSED,
+ 32 peers/collectors/stages/ephemeral identities removed, no further load pending.
+- RESULT: T8 +94.731%; T32 +119.942/+86.390%; materially better RS slot use.
+  P32 single+5.898/−4.237%, aggregate+0.681/−7.131%: no repeatable application gain.
+  Final clean P8 single+9.489%, aggregate+35.981%, ONE pair; not product acceptance.
+- WARNINGS retained: P32A1 fixture error/P8A missing-DATA failure; P32B1/P8Ar late
+  shutdown recovery exhaustion. Fixed LabDrain terminal-reset false success and
+  common pre-abort drain; v3 P8 both-end ACK counts and ProtocolErrors0 verified.
+- GATE still open: local B2 RTT +4.472ms; sparse live small controls do not establish
+  non-regression. Post-enqueue2.2s stall amplifies retry BYTES (not attempt count)
+ 65936→262144 at8,361856→1048576 at32; no queue-retry fix included.
+- NEXT separately authorized: instrument ready-data versus Mux64 credit/writer waits,
+  repeat representative P single/parallel with enough idle/loaded small responses
+  and strict final drain/ACK/protocol gates; predefine a latency threshold. Resolve
+  or explicitly bound pre-write retry-byte amplification in its OWN experiment.
+- CONDITIONAL integration, not rollout: only after gates, per-session policy before
+  TLS, default OFF, old peer/FRS1/ALPN and RS8 preserved; formal admission-stop/drain/
+  error/net.Conn contract. RS32 independent admission; Android/revocation/expiry
+  tests require separate authorization. No new UI/API, APK, push or deployment.
+- READBACK: binary734b6ca6…/OFF/Q0/LEGACY64 unchanged, each phase and A/B pair stable.
+  Unexplained process/profile change between v2/v3 is retained, not reverted; do
+  not claim whole-run profile equality or attribute v2/v3 variation only to code.
+- Keep phase3 timebase fix separate. FEC/new fragmentation only with remaining
+  evidence after these gates; QUIC later. No Mux128/new pacing/hosting change.
+
+### MESH capacity phase3 — completed; next TLS→RS block formation,20–21.10
+
+- DONE:14 isolated NL→previous Linux sessions, C phase control and A/B/B/A, matched
+  R32 A/B/B/A and P/RS32 A/B/B/A.63.586765/128MiB source,88.475942/256MiB media.
+  All28 peers/collectors/units/stages/ephemeral identities removed; budget closed.
+- RESULT: real transient~2s missing groups, coupled to actual keepalive phase;
+  incomplete input is before valid-RTP reader, not a proven local assembly reset.
+  Exact SFU versus lower-path drop cause remains limited by missing internal/STUN
+  event evidence; ICE consent also has a2s timer. Do not infer causality from export.
+- RESULT: B monotonic clock corrects backwards RTP/SR mapping but does not fix C
+  delivery (134/133/133/133 of151). R32 B/A+15.423/+0.469%; P single+3.652/−3.954%,
+  parallel+3.770/−6.659%. Both P endpoints stay ProtocolErrors0,20/20 bodies exact.
+  No repeatable application speedup; B and RS32 are laboratory work, not admission.
+- DONE: local fault/race/wrap/idle/rebind and OFF32 checks; byte-exact short-record
+  proof in both TLS directions.16384+12 plaintext →16406/34 ciphertext →16384/22/34
+  RS blocks. No new packing, read-alignment, pacer, packetization or Mux128 patch.
+- NEXT, separate authorization/budget: test TLS→RS block formation with bounded
+  buffering/flush, exact ciphertext order/integrity and small-control latency. Use
+  one known A0/OFF/Q0/Mux64 baseline, retain RS32 lab option, measure T then P;
+  do not assume a below-Mux gain is single-flow application acceleration.
+- LATER, only if remaining evidence justifies it: fragmentation without FEC, then
+  bounded FEC at equal total wire budget; QUIC-over-carrier-datagrams after that if
+  needed. Never over RS or one re-collapsed Mux stream; Family admission remains
+  mandatory, no plaintext application fallback. No Android rollout or migration.
+- CLOSED: production734b6ca6…/PID47501/profileabda003f… equal fresh preflight and
+  final readback; pre-existing process/profile change was not rolled back. Source,
+  raw evidence, failed local checks and passing retests retained in
+  `state-client-build/mesh-capacity-phase3-20261020/`; one [report](releases/2026-10-20-mesh-capacity.md).
+
+### MESH capacity phases1–2 — completed laboratory findings,20.10
+
+- DONE:19 NL→previous Linux sessions, C/R/T/P, effective RS8/16/32, reverse/mixed
+  controls and long20MiB source transfer.99.907039/128MiB source,139.464942/256MiB
+  outgoing-media charge; all38 peers closed, owned processes/stages/identities gone.
+  beta96-bootstrap/A0/OFF/Q0/LEGACY64/gateway734b6ca6… unchanged; no product action.
+- RESULT: C0.5 and1 incomplete; matched R8 reliable. Repeated4MiB R32~3.64 versus
+  R8~1.26–1.33Mbit/s; long R32=5.593455Mbit/s over29.935790s, full delivery.
+  T/mixed small-record shapes consume window slots; no pure TLS CPU attribution.
+- LIMIT: first P816 has late-detected ProtocolErrors0→1 after echo, body checks5/5;
+  excluded from clean P comparison. Missing inherited operator stop gate repaired,
+  original/evidence retained, not called a clean matrix. Clean P32→P8 return is
+  one pair: single0.764793→0.584762, aggregate1.367101→1.124276Mbit/s; not R's~3x.
+- DONE locally: exact baseline inventory, RS defaults/OPEN contract, four pairs
+  8/16,8/32,16/32,32/32, fault/slow-consumer/close checks and actual VP8 framing.
+  32 send slots do not themselves exceed16 incomplete assemblies; deliberately
+  overlapping32 incomplete messages does hit capacity. Do not lift caps together.
+- CLOSED: no additional load/phone/deployment pending. Source, binaryd0cb384d…,
+  raw evidence and calculations in `state-client-build/mesh-capacity-20261020/`;
+  [consolidated report](releases/2026-10-20-mesh-capacity.md). Raw>1Mbit/s, exact
+  SFU discard attribution and product Android/window32 admission remain untested;
+  P816 error cause remains unexported. No RU/CPU migration is indicated.
+- SUPERSEDED handoff: phase3 media comparison is complete in the current section
+  above. Phases1–2 changed no timestamp or packetization; their raw results and
+  excluded P816 history remain intact. Next is a separate TLS→RS formation test,
+  not another window matrix or continued load on either closed budget.
+- NEXT SEPARATE phase4: control fragmentation without FEC, then the same variant
+  with bounded FEC at equal total sending budget including parity, group delay and
+  burst losses. Do not assume SFU supports arbitrary FEC.
+- NEXT SEPARATE phase5: QUIC over carrier datagrams, never over ReliableStream;
+  validate MTU, datagram boundaries/queues and lower carrier HOL. Independent flows
+  must not all be remultiplexed into one QUIC stream. Prototype is not production
+  admission: compatible Family identity/authorization/revocation integration remains
+  mandatory; no application plaintext fallback or combined “fast build”.
+
+### Same transport / different host — completed; no automatic product change
+
+- DONE: same isolated Linux harness on authorized NL/RU, A/B/B/A;20/20 byte-exact,
+  Mux64 errors0,32.750217MiB. No transport changes, phone interaction or production load path.
+- RESULT: repeatable bounded RU download gain, single+17.57/+25.65%, aggregate
+  +22.24/+19.56%; latency not universally improved. Four different SFUs and background
+  load prevent host-only attribution; no Android/TUN or product-admission acceptance.
+- CLOSED: peers/units/stages/test identities removed, collectors OFF, production96/A0/
+  LEGACY64/OFF and gateway734b6ca6… unchanged during comparison. Pre-task PID/credential
+  change explicitly preserved; no rollback to stale state. Provider room metadata
+  deletion not confirmed, but no serving test peer remains.
+- NEXT DECISION ONLY: separately scoped product Android A/B with explicit safe gateway
+  authorization/selection/return procedure. No automatic migration, key copy, directory
+  change, third host, new tuning or further series. [Report](releases/2026-10-20-mesh-host-comparison.md).
+
+### RTP packet pacing — CLOSED / NOT_ACCEPTED; OFF/Q0 return confirmed
+
+- DONE: A1/B1/B2/A2,16/16 requests,32.25MiB. A2 new341/OBSERVE/65536, same96/A0/
+  gateway734b6ca6…/PID/credentials. Actual rates, streams, exact counter intervals saved.
+- DECISION: NOT_ACCEPTED fixed4M owner pacing. B/A single−3.84%/−7.99%, aggregate
+  +5.90%/−14.98%, control latency−39.09%/+7.54%. Local smoothing not useful acceptance.
+  Background/media differences and B2/A2 pre-load TUN transitions remain explicit.
+- DONE: all collectors joined/export OFF; errors1→1 each, no measured transfer/write
+  error. Q1 completion prerequisite was common A/B and is not independently adopted.
+- DONE: manual return, new VPN342/tag7e12971a…; actual authenticated LEGACY64/65536
+  plus exact Android/NL ALPN mapping and absent PacketPacing establish OFF/Q0.
+  Same96/A0/gateway/PID/credentials verified17:58:33UTC. Protocol errors1→1 in
+  passive observation; initial cause unknown. tun0→tun1, same VPN/underlay retained.
+- CLOSED: `manual-return-result.json`; protected OFF/Q0 and128 OFF, export OFF,
+  local/remote/phone workers absent. No more measurement bytes or manual action.
+- STOP SPEED WORK: no bulk/control requests, more phases/rates, build/install/restart
+  or source/security change. Exact compatible rollback remains available, not invoked.
+  The separate same-code/IPv4 placement comparison is now documented above; no
+  purchase/migration. [Final pacing decision](releases/2026-10-20-rtp-packet-pacing.md).
+
+#### Historical B2 / A2 preparation
+
+- DONE: B2 new VPN340/tag e2d021e8…, actual FIXED4M/65536; same96/gateway/process/
+  credentials.4/4 complete, single0.622509/aggregate1.111810Mbit/s, control4.974325s.
+  Errors1→1, no local write/admission errors. B2 is not a paired gain without A2.
+- DONE: exact counter normalization, background/retry/queue evidence, final closed
+  streams and readback saved. Pre-load tun0→tun1 at same VPN/underlay retained as
+  a limitation; existing in-load checks stayed tun1/same tag. No extra diagnostic run.
+- DONE: collector joined/export OFF. Existing protected mechanism prepares OBSERVE
+  only for NEXT owner A2; current B2 stays FIXED4M. LEGACY64/128 OFF unchanged.
+- NEXT MANUAL: Disconnect→Connect, reply connected; verify NEW OBSERVE/rate0 and
+  65536 before A2 only. Same Q1 prerequisite as A1, no packet cap; no gateway restart.
+- Remaining A2/final decision;24.1875/64MiB used, planned A2 adds8.0625MiB. Preserve
+  all failures/conditions; no extra pairs/rates or acceptance from smoothing alone.
+  [Three saved phases and continuation](releases/2026-10-20-rtp-packet-pacing.md).
+
+#### Historical B1 / B2 preparation
+
+- DONE: B1 new VPN339/cellular327/tag0dc4f581…, actual FIXED4M/rate500000 and
+  LEGACY64/65536; unchanged96/gateway734b6ca6…/PID4079583/credentials.4/4 complete.
+- DONE: first pair single0.676945→0.650966Mbit/s(−3.84%), aggregate1.133596→
+  1.200516(+5.90%), control5.958610→3.629614s. Errors1→1, no observed reconnect.
+  Local bursts smaller, queue age higher; different background/media, INCONCLUSIVE.
+- DONE: B1 exact bracket-normalized credit/RS/retries/background, final closed/empty
+  streams, readback and receipts saved. Counters OFF, collector joined, no wait.
+- NEXT MANUAL: Disconnect→Connect, reply connected. Existing FIXED4M setting stays
+  unchanged for new B2; verify NEW session/65536/rate500000 before B2 only.
+- Remaining B2/A2;16.125/64MiB used. No extra phases/rates, new build/deployment or
+  security changes. Safe OFF/new session if serious regression; no automatic restart.
+  [First pair and continuation](releases/2026-10-20-rtp-packet-pacing.md).
+
+#### Historical A1 / B1 preparation
+
+- DONE: new VPN338/cellular327, actual owner OBSERVE/LEGACY64/65536 verified;
+  same96/A0/new gateway/process. A1 only:4/4 complete, single0.676945,
+  aggregate1.133596Mbit/s, control5.958610s. Errors1→1, no observed reconnect.
+- DONE: matching counter brackets, credit/RS overlaps, background handed bytes,
+  real stream sets/socket counts, live local burst/RTCP metrics saved. No speed
+  acceptance from A1 alone; Android per-frame receiver counters remain unavailable.
+- DONE: counters OFF, no collector/wait; protected FIXED4M prepared for NEXT
+  owner session only. Current last observed A1 remains OBSERVE; Mux64 unchanged.
+- NEXT MANUAL: Disconnect→Connect, reply connected. Confirm new65536/rate500000
+  and session tag, then B1 same meter/order/counters; no repeated A1 or new deployment.
+- Remaining B1/B2/A2,8.0625/64MiB used. No infinite repeats, window/receiver retuning
+  or attribution of the pre-load error to FIXED4M. Safe OFF/new session if regression.
+  [Receipts and exact results](releases/2026-10-20-rtp-packet-pacing.md).
+
+#### Historical deployment / A1 preparation
+
+- DONE: owner says no tester active; one serialized ordinary restart16:54:26UTC
+  loads734b6ca6… with exact272bbc… rollback. Fresh TLS/CRL/runtime directory PASS;
+  current credentials, unit/argv, Android96/native/UID preserved. No new APK.
+- DONE: failed initial SSH attempt reconciled as pre-mutation; direct-RU retry used
+  unchanged lock/barrier checks, separate receipt; no blind replay or extra restart.
+- DONE: protected existing-owner selector prepares OBSERVE only for next session;
+  LEGACY64/128 OFF, counters OFF, no collector/background wait,0/64MiB.
+- NEXT MANUAL: owner Disconnect→Connect and replies connected. Then verify NEW
+  session/actual65536 both sides/OBSERVE before A1. Current VPN337 is not that proof.
+- THEN: bounded A1/B1/B2/A2 on same96 and gateway, existing meter/counters, matching
+  window/receiver, failed requests/background retained. No new implementation.
+  OFF/new session returns Q0 without downgrade; binary rollback only if necessary.
+  [Continuation receipt and limits](releases/2026-10-20-rtp-packet-pacing.md).
+
+#### Historical local preparation checkpoint
+
+- DONE: exact96/compatible272bbc… inventory + runtime, source-path analysis;
+  no active packet pacer/GCC; actual session RTCP feedback still not saved.
+- DONE: fixed4Mbit/s synchronous bounded pacer inside NACK responder; same completion
+  correctness prerequisite in OBSERVE/FIXED4M, default OFF retains accepted behavior.
+  Equal-budget local burst/model, byte-exact/loss/close/race/exporter checks PASS.
+- DONE: built734b6ca6… and sealed source patch; no APK, deployment, restart, security
+  mutation or measurement traffic. Final runtime same96/A0/current gateway/1011,
+  LEGACY64 preference,128/counters OFF. No background wait/collector.
+- At that checkpoint NEXT EXTERNAL ACTION was: tester's current96 bootstrap diagnostic attempt finishes,
+  then owner authorizes one ordinary shared gateway switch. Do not interrupt it.
+- THEN: fresh credentials/hash guard, one load, owner-selected new-session modes;
+  manual reconnect + actual profile/mode/counter proof, A/B then B/A within64MiB.
+  A=OBSERVE is common correctness control, not exact old completion policy; report
+  incremental pacing effect separately. Physical result currently INCONCLUSIVE/NOT_RUN.
+- Rollback: OFF for next session/manual reconnect; exact272bbc… binary if needed,
+  coordinated, never old b9. No RTP/Mux retuning, new hosting, push or public release.
+  [Local result and exact artifacts](releases/2026-10-20-rtp-packet-pacing.md).
+
+VPN monitoring refresh20.10 16:09UTC: registrations unchanged; three recent
+Amsterdam AWG peers, no Friends TCP connections, no observed capacity emergency.
+Existing diagnostic follow-ups remain; no deployment/restart or priority change.
+
+### Volgograd mobile bootstrap — owner96 installed; manual Connect and tester field
+
+- DONE: hash-verified exports19/20, deduplicated device/session scope and bounded
+  Friends API receipt correlation. Exact historical transport exception remains unknown.
+- DONE: actual94/95 code classification defect reproduced and narrow typed RNS
+  availability/cache fix built atop95; bounded JSON diagnostics tested end-to-end.
+- PASS:175 JVM/6 Python,8 focused native tests/subtests with race and actual Java network-selector stub scenarios;
+  exact95 native reused. No Mux experiments or protocol/window changes.
+- DONE: protected same-key signing; signed96 SHA07a90f03… verified. Fresh disconnected
+  owner95→96 update14:48:37UTC preserves package/UID and all12 native libraries;
+  fresh server identity/Support ID bindings unchanged, no uninstall/data clearing.
+- NEXT: ordinary owner manual Connect and fresh96 READY/device proof; no background
+  dialog/collector. Owner requests signed96 for one targeted tester cellular attempt
+  and JSON export after ordinary in-place94→96 update; receipt/installation not confirmed.
+- NOT_RUN: owner post-update Connect/recovery, tester FIELD. Last negotiated LEGACY64;
+  no active VPN after update. Compatible gateway1011 unchanged,128 OFF, no public release.
+- Boundary: no historical operator-blocking claim; missing/expired credentials still
+  need authenticated readiness issuance, not an unlimited cached descriptor.
+
+### Mux64/128 closed — INCONCLUSIVE; LEGACY64 return confirmed
+
+- DONE: B3 actual131072 both endpoint contracts, same new gateway process as A3;
+  4/4 complete,0→0 load errors, no observed reconnect. All six phases24/24 complete.
+- DONE: all three pairs, per-request full/TTFB/body timings, exact stream wait
+  intervals/normalizations, background bytes and resources saved. No lifetime/request
+  counter comparison, no overlapping Mux/RS sums, no guessed parallel-ID mapping.
+- RESULT: single B/A +24.93/+89.32/+3.65%, aggregate +8.68/+21.30/−13.61%; control
+  latency +34.03/−14.77/+23.28%. Credit relief is repeatable; balanced owner throughput/
+  latency benefit is INCONCLUSIVE, not accepted. Background/media/retry limits retained.
+- DONE: owner's ordinary reconnect created VPN336/tag`b502c9dd…`; actual authenticated
+  LEGACY64/65536 both endpoint contracts confirmed13:39:52UTC. Same95/A0/compatible
+  gateway/1011, next-session128 OFF, counters OFF and collector audits empty.
+  Return errors1→1, exact establishment unknown; no measurement traffic added.
+  No forced close, reinterpretation, downgrade or credential/authority change.
+- CLOSED: final receipt `manual-return64-result.json`; no remaining manual action,
+  measured phases, new window values, transport patches or speed roadmap.
+- CLOSED measurement budget48.5625/64MiB; no automatic extra traffic. Compatibility
+  implementation/artifacts kept, tester94 unchanged, no95 distribution or push.
+
+### Historical A3 completed20.10 13:12UTC — stop for B3 manual reconnect
+
+- DONE: manual VPN334; external gateway process/credential refresh before bulk
+  recorded, same compatible binary/1011. Recovered authenticated owner tag`5f0136db…`,
+  actual LEGACY64/65536 with common ALPN/pinned native/server mapping.
+- DONE: A3 only,4/4 complete; single0.703447/aggregate1.224168Mbit/s; control4.454774s.
+  Errors first observed/pre-control/pre-bulk/post-load1/1/1/1, establishment unknown.
+  No load reconnect/failure; pre-bulk interruption is not excluded from evidence.
+- DONE: exact per-stream wait brackets, normalized Mux/RS deltas, background bytes,
+  CPU/memory and all measured streams closed empty saved; prior phases not repeated.
+- DONE: counters OFF/collector ended; next-session CREDIT128 prepared via existing
+  protected mechanism. Last active owner64, no new128 agreement claimed. Same APK/
+  native/gateway; no task-initiated restart, credential/identity/floors mutation.
+- NEXT AFTER OWNER REPLY ONLY: fresh B3 session/profile131072 both sides, current
+  PID/invocation and protocol_errors before control/bulk; same quiet phone conditions,
+  control64KiB →single4MiB →parallel2×2MiB. No load on profile/scope mismatch.
+- THEN: stop collectors, final three-pair bounded-owner decision; no extra pairs,
+  fleet enablement, transport tuning or automatic manual-input substitute.
+- STOP NOW: no background wait.40.5/64MiB spent, projected48.5625 after B3/control.
+  Latest receipts `manual-a3-result.json`, `b-three-preparation.json`; final gate must
+  recheck current credential validity, never replay pre-refresh credentials.
+
+### Historical A3 prepared20.10 12:57UTC — stop for owner manual reconnect
+
+- DONE: unchanged95/A0/compatible gateway/1011 readback; active A2 VPN333/tag
+  `adb95897…`, LEGACY64/65536, current protocol_errors2. No new A3 session yet.
+- DONE: existing next-session LEGACY64 setting verified without rewriting profile;
+  counters OFF, no load/collector/wait/code/build/install/deployment/restart.
+- DONE: saved A1/B1/B2/A2 wait deltas normalized to exact server snapshot intervals;
+  no overlapping Mux/RS sums, no lifetime/request-local comparison or background
+  attribution from stream count alone. Same meter/parser pins retained.
+- NEXT AFTER OWNER REPLY ONLY: verify fresh owner64 session and both endpoint
+  limits, retain establishment/first observed/pre-load/post-load errors, then A3
+  control64KiB →single4MiB →parallel2×2MiB. Missing establishment snapshot is unknown,
+  not zero. Preserve quiet phone conditions for B3 without forced app/service stops.
+- THEN: save A3, stop collectors, prepare128 for next session and ask separate manual
+  reconnect. B3 only after next reply; final three-pair bounded-owner decision.
+- STOP NOW: no background wait.32.4375/64MiB spent; projected48.5625 after A3/B3
+  plus controls. Private checkpoint `mux-profile-20261020/a-three-preparation.json`.
+
+### Historical A2 completed20.10 12:44UTC — stop, no next phase authorized then
+
+- DONE: new owner VPN333 and actual LEGACY64/65536 identified using startup/TLS
+  events plus bounded Mux counters; shared ALPN/exact source pins bind both sides.
+- DONE: A2 only,4/4 requests,0.424single/0.999aggregateMbit/s, errors2→2; no observed
+  reconnect. Both A1/B1 and B2/A2 comparisons saved, including credit/RS overlap,
+  body/setup timing, higher A2 background stream counts/retries and memory caveats.
+- DONE: counters OFF and collection stopped; transport profile inode/mtime unchanged,
+  exact95/A0/compatible gateway/1011/identity preserved. Current policy LEGACY64.
+- STOP: no next profile/phase preparation, input injection or background waiting.
+  A3/B3 remain unmeasured; require a separately agreed manual step before continuing.
+ 32.4375/64MiB spent,31.5625MiB remain. No final speed acceptance from these two pairs.
+
+### Historical B2 completed20.10 12:28UTC — A2 prepared
+
+- DONE: owner manual reconnect to independent VPN332/CREDIT128, bounded owner-tag
+  scope, exact95/A0/compatible gateway retained. Existing meter/parser pins match.
+- DONE: B2 control +single4MiB +2×2MiB,4/4 complete;0.804/1.211Mbit/s, errors0→0.
+  Single resembles B1; A2 is not run, so no second paired gain or acceptance claim.
+- DONE: counters OFF, new-session operator preference LEGACY64 for A2; active owner
+  remains128. No reboot/restart/input injection, identity/credentials/floors changes.
+- NEXT: owner ordinary Disconnect→Connect, reply connected; fresh owner64 profile,
+  session and counter baseline before **A2 only**. Then A3/B3 remain in manual steps.
+ 24.375/64MiB spent,39.625MiB remain; no background collector or waiting loop.
+
+### Historical B1 completed20.10 12:20UTC — first pair only
+
+- DONE: manual owner reconnect, new VPN331 and actual CREDIT128/131072 tag verified;
+  exact95/A0/compatible gateway unchanged, no build/install/old-new test repeats.
+- DONE: B1m control +single4MiB +2×2MiB,4/4 complete, no retries. Single0.808,
+  aggregate1.300Mbit/s versus A1 0.647/1.196. Different media sessions; not acceptance.
+- DONE: selected owner counters only, five local attribution tests PASS. Zero-credit
+  single45.552→0.055s; shared RS remains. ProtocolErrors1→1 during B1; initial1
+  unexplained and separate from old64 errors5. Control latency and RSS increased.
+- DONE: counters OFF, no collector/manual wait, same gateway PID/invocation/1011,
+  credentials/identity/floors untouched. Owner/current next-session policy128.
+- NEXT: owner ordinary Disconnect→Connect, reply connected; uniquely verify fresh
+  B2 owner tag before one phase. B2/A2 then A3/B3 remain,16.3125/64MiB spent.
+  Never inject input, automatically repeat requests or infer stable radio from327.
+
+### Historical B1 preparation20.10 12:10UTC — DONE
+
+- Verified95/compatible gateway unchanged; active owner A1 tag remains LEGACY64,
+  protocol_errors5 saved separately from any future128 session.
+- Prepared CREDIT128 only for next connection, counters OFF; existing collector
+  inputs/phase B1m recorded, no collector or background wait running, no HTTP traffic.
+- User now performs ordinary Disconnect→Connect and replies “подключил”. Only then
+  read new session/profile/counters and uniquely identify owner among other peers;
+  no bulk or success claim on preparation alone. No implementation/build repeats.
+
+### Earlier negotiated Mux128 checkpoint — implementation done, UI step pending then
+
+- DONE: split dataplane ALPN from existing certificate authorization contract;
+  bind credit, ring, limits and stats to immutable64/128 profile.
+- DONE: actual old/new compatibility matrix and affected race/JVM validation;
+  retain A0, RS/RTP/wire payload limits and bootstrap1011.
+- DONE: existing-key95 signing/install, compatible gateway legacy-first rollout;
+  fresh READY, identity preserved; actual94/new and95/new legacy smoke pass.
+- PARTIAL: A1 single4MiB0.647Mbit/s,2×2MiB1.196aggregate,3/3 bulk. Total8.25MiB
+  with4 controls. B preflight stopped before traffic, not physical rejection.
+- BLOCKED: MIUI denies INJECT_EVENTS; user-operated ordinary Disconnect/Connect
+  required at profile boundaries.120s passive wait saw no restart. No bypass or
+  repeated bulk. Later second media tag requires exact owner-session attribution.
+- DONE:128 OFF and counters OFF, owner95/A0 LEGACY64; compatible gateway retains
+  b9/1011. Final11:57:56UTC readback and3.522s control pass, samePID/NRestarts0.
+- REMAINING: finish three paired comparisons only after ordinary UI action is
+  available; retain64 unless gain/correctness accepted. New legacy ProtocolErrors
+  smoke0→1/A1 stable1/later3 remain unattributed, not automatically credit failures.
+- DONE: exact patches/hashes, memory bounds and incomplete physical table saved
+  in Mux report/ADR. Tester94 unchanged; no new tuning branch/public distribution.
+
+### Historical Single-flow / Mux credit20.10 — finished at compatibility boundary
+
+- DONE: verify exact94/A0/b9 sources;64KiB each direction, immediate Read credit,
+  existing control priority. No demonstrated unnecessary coalescing timer.
+- DONE: bounded server-only counters, same-session24MiB1/2/4 then4/2/1 matrix,
+  actual Mux/socket IDs;14/14 complete. Single0.587/0.851, aggregate2-flow
+ 1.059/0.979,4-flow1.322/1.132. No fixed single0.57 cap or functional speedup claim.
+- DONE: matched64/128/256KiB FamilyTLS+Mux+RS, byte-exact/race/slow/loss/close
+  checks.128 improves fast single model;256 adds memory without single benefit.
+- DECISION: no functional production candidate. Local credit gate observed with
+  spare senderRS capacity, but Android/reverse-RS causal timing remains unknown.
+  Current OpenRequest/openOK/ALPN have no safe window capability. Preserve legacy64;
+  future128 requires explicit authenticated session agreement before ring/credit
+  changes, with fail-closed auth/protocol errors, not implicit downgrade.
+- DONE: restore exact b9/1011 at10:24:47UTC, PID3832764; readiness and phone64KiB
+  control pass.94 unchanged;28.0625MiB task total. No security/identity mutation,
+  public release/push, new RTP budget/PERF-3B/pacing/hosting investigation.
+- REMAINING: no physical single-flow fix accepted; compatibility delta above is
+  specific prerequisite, not an automatically started new tuning task. User reports
+  a version was already sent to tester; exact sent artifact/installation/whitelist results remain unverified and
+  are independent of this completed owner-device experiment.
+[Completed report and artifacts](releases/2026-10-20-mesh-mux-credit.md).
+
+### RTP finite deadline20.10 — finished; retain94/A0, not speed-accepted
+
+- DONE: serialized monotonic read deadline; A100/B125 replay and negative cases,
+  bounded packet ownership, cancellation/close and real Pion integration.
+- DONE:38 delta/760 repeated race/170 affected integration PASS;6 opt-in skips;
+  clean patch38 and A0 tradeoff8 PASS,450 unchanged checks reused. Both builds
+ 169 JVM checks PASS; implementation and repaired failures preserved.
+- DONE: fresh A1/B/A2, one6MiB cell per phase;9/9 bulk +3/3 controls complete,
+ 18.1875MiB total, no retry series. Single0.568/0.631/0.567, aggregate
+ 1.275/1.322/1.254Mbit/s; positive difference, not repeatable speed acceptance.
+- DONE:92→93 B125→94 A0, ordinary same-key forward updates/owner UI, no protected
+  input bypass. Final09:44 readback94/VPN/exact native, unchanged b9/1011/PID.
+  Identity/key/Support ID and fresh94 READY preserved; no downgrade/data clear.
+- DECISION: keep94/A0; candidate93 is archived, not accepted/distributed. Autonomous
+  B125 rescues only conditional1294 and costs25ms per genuine gap versus A100.
+  Do not resume budget search or claim arbitrary late packets are always improved.
+- LIMITS: no paired Android A1/B loss/recovery/hold or exact RS retry-byte metrics;
+  actual Mux IDs unavailable, sessions differ.94 export is A2 only, old incident90
+  excluded;1 cumulative Mux error and transient failed DNS probe retained. No
+  broader fault/overnight/whitelist conclusion. No external blocker remains for
+  this completed experiment; no further test/deployment automatically scheduled.
+[Final evidence, versions and rollback](releases/2026-10-20-mesh-receive-path.md).
+
+### Historical RTP late-arrival20.10 08UTC checkpoint — superseded above
+
+- DONE: preserve/reverify installed92 `1e73167c…`, native `dd722ead…`, exact
+  b9 `b9ae8807…`/1011 and source inventories; no dirty-work overwrite or rollout.
+- DONE: exact-source offline100/200/350/500ms sweep plus110/125ms check; fresh
+ 614/1127/1294 skip on time, not distance/count/epoch.597 trigger/tail remain
+  unknown. NACK100ms default verified in native/dependencies; actual negotiated
+  feedback and origin of the late packet remain unobserved, not zero/blocked.
+- DONE: structural conditional recovery of1294, no recovery of614/1127 in saved
+  arrivals; quantify delayed complete messages and buffer bytes, synthetic-only
+  payload/seeded1294 prefix.450 race checks PASS,12 live opt-in skips; failures
+  repaired/preserved. Previous rejected performance patches remain separate.
+- THEN UNFINISHED:125ms was only the smaller local hypothesis. Constant-only budget
+  changes do not provide a finite silence bound. Implement/validate serialized
+  deadline servicing separately at100 and125 on the same replay, including
+  close/arrival/cancellation races, before selecting a safe physical candidate.
+- THEN NOT_RUN (now completed above): owner Android-TUN HTTP1.1 A/B/A (single2MiB +2×2MiB),
+  same-route/session/underlay/Mux attribution and mechanism+latency counters.
+  Existing stricter150s/request and32MiB/variant,64MiB overall caps remain.
+  Tester is not a dependency; no speed gain/physical rejection claimed from replay.
+- At that checkpoint: ordinary92 + exactb9,100ms/256, all recovery/security state. No
+  version/installation/signing change, no push, public distribution or hosting
+  branch. Earlier placement suggestion below is **not** the current next action.
+[Current findings and remaining work](releases/2026-10-20-mesh-receive-path.md).
+
+### Receive-path20.10 — bounded localization complete; stable pair restored
+
+- Exact90/b9 and archived A1 inputs preserved; owner beta90 export now inspected.
+- DATA597 retry2 reaches Android; its fragment1 VP8 is discarded and late RTP is
+  rejected. Local partial-assembly retention/capacity amplification reproduced.
+- No evidence yet that the entire terminal head failure is caused by capacity;
+  archive ends before the final six seconds. Do not turn absence into packet loss.
+- Paired JNI/export/capture gate PASS; initial TUN change classified as startup,
+  separate from the older unexplained gap. Stable second gate before bulk.
+- One6MiB cell completes3/3; concrete614/1127/1294 forward gaps/late RTP → VP8 discard,
+  controls649/741 promptly consume/ACK and release NL slots. Capacity cumulative0.
+- Cleanup candidate locally validated only: no current capacity bottleneck or
+  physical speed acceptance; do not deploy it merely because the patch is small.
+- Normal92 installed91→92, exact90 recovery/native/ordinary UI,169 checks PASS;
+  exactb9/1011 restored, trace OFF, final identity/READY and HTTPS control PASS.
+- Preserve the measured168ms arrival-driven gap wait (~68ms overshoot) separately:
+  no established contribution to average throughput, no timer/speed claim.
+- Freeze one next IPv4 placement comparison with identical92/b9 code and method;
+  no node selected/purchase/migration or silent country change in this task.
+- Keep baseline1011, unchanged security history/recovery, three separate rejected
+  performance candidates and the earlier unexplained TUN gap. No new sender tuning.
+[Current receive-path report](releases/2026-10-20-mesh-receive-path.md).
+
+Read-only VPN snapshot20.10: no capacity emergency. Follow up the existing RU
+peer-worker unhealthy status and NL39 AWG versus38 TCP registrations without
+assuming an access failure. At that historical snapshot preserve MESH A/B/A; actual executable
+at22:12UTC19.10 is observation A79d9c8c. No restart or rollout authorized by this
+diagnostic request. Later22:13 restoration/current readback is documented above.
+[Details](releases/2026-10-20-vpn-health-snapshot.md).
+
+### Queue/retry19–20.10 — bounded comparison complete, candidate not accepted
+
+- Preserve installed90/current1011 b9 source/runtime: DONE; old4b is not fallback.
+- Reproduce locally: DONE,9 pending attempts/eight retries before first RTP write.
+- One compatible local-completion candidate: DONE, affected race suites PASS;
+  ACK event loop stays responsive, partial-message/cancel/bounds checks retained.
+- Owner A1/B/A2 measured with small export gates; B pre-READY DNS failure and
+  A1 failed parallel bodies retained. A2 completes both cycles; B parallel is
+  better once, worse once. No repeatable speed acceptance; candidate not shipped.
+- Exactb9/current1011 restored22:13:17UTC; temporary server counters removed.
+  Strict TLS/current publication and unchanged90 APK/native/PID/UID verified.
+  New22:02 renewal materials/floors preserved; no APK upgrade or downgrade.
+- Do not tune RTO/windows/credit/pacing or resurrect rejected patches. Physical A1
+  head failure follows successful local writes, not proven local queue congestion.
+  Next distinguishing evidence is a bounded receiver-side observation of the same
+  natural repeated head on the owner, with this unchanged pair; not another blind
+  retry/credit/window change. No new experiment is left running.
+- Final phone control PASS22:21:08: DNS/HTTPS/NL exit/current-PID attribution;
+  prior pre-READY DNS/no-TUN gates retained. No owner action remains. The temporary
+  TUN absence has no established initiator; do not infer manual Disconnect or a
+  new regression from it. Successful small transfer is not overnight acceptance.
+  [Current measured report](releases/2026-10-20-mesh-queue-retry.md).
+
+### Recurrent closures19.10 — proven containment implemented, bounded acceptance
+
+- Preserve89 export and first-cause chain: DONE. Real dedicated retry exhaustion,
+  Android signaling close and whole-gateway seed1011 cascade separated. No
+  demonstrated failed-health series; do not rewrite client recovery/ICE blindly.
+- Exact-base seed1011 bounded recovery built/race-tested and deployed17:50UTC;
+  ordinary90 installed over89 with same signer/package/data. Extended performance
+  trace removed, not blamed without matched overhead evidence. No rejected
+  read-alignment/SACK-hole change, admission migration or canary revival.
+- Local regression PASS; current TLS/runtime/publication PASS. Five-minute
+  passive phone TUN/gateway-PID continuity observed, no natural1011 during it.
+  Small Android-TUN DNS/full HTTPS control and same-identity/key/Support ID READY
+  PASS; final18:11 runtime/publication readback PASS. These are separate from
+  recurrent-loss acceptance; a quiet first connection does not prove a stable night.
+- Remaining causal evidence: natural1011 under useful dedicated transfer, whether
+  transfer survives seed replacement, and repeat real-loss recovery. Independent
+  media/ACK and Android signaling loss locations remain unknown. Do not induce
+  production faults or extend observation indefinitely to force a failure.
+- Separate scheduled-renewal committed-state I/O failure reconciled forward;
+  retain its first cause, current credentials/floors and enabled normal schedule.
+  Do not replay the one-operation repair as a general recovery bundle.
+- Next hosting comparison has pinned unchanged IPv4 pair and probe limits only;
+  no purchase, routing/country migration, IPv6 investigation or production switch.
+  No push/public release/mass distribution. Rollback preserves current security
+  history; Android requires a new code>=91, never88/89 downgrade.
+  [Results and remaining physical limits](releases/2026-10-19-tunnel-restart-fix.md).
+
+### Earlier owner throughput continuation19.10 — completed comparison, no accepted fix
 
 - Exact-base receiver/JNI/export/sender trace and small physical gate complete;
   A1/B/A2 comparison retained. Local source checkpoint8da6fd5, no push.

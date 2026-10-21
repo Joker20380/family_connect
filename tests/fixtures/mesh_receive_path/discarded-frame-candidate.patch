@@ -1,0 +1,102 @@
+--- a/telemost/msg.go
++++ b/telemost/msg.go
+@@ -183,6 +183,45 @@
+ 	r.mu.Lock()
+ 	r.metrics.Malformed++
+ 	r.mu.Unlock()
++}
++
++func (r *reassembler) discardFrame(frame []byte) {
++	data, valid := decodeVP8Frame(frame)
++	if !valid {
++		return
++	}
++	sender, message := binary.BigEndian.Uint32(data), binary.BigEndian.Uint32(data[4:])
++	sequence, total := binary.BigEndian.Uint32(data[8:]), binary.BigEndian.Uint32(data[12:])
++	length, checksum := binary.BigEndian.Uint32(data[16:]), binary.BigEndian.Uint32(data[20:])
++	if sender == r.selfID || length > MaxMessageSize || total == 0 || sequence >= total || total != max(uint32(1), (length+maxFragmentPayload-1)/maxFragmentPayload) {
++		return
++	}
++	r.mu.Lock()
++	defer r.mu.Unlock()
++	r.pruneLocked(r.now())
++	key := [2]uint32{sender, message}
++	if _, exists := r.recent[key]; exists {
++		return
++	}
++	builder := r.builds[key]
++	point := fragmentBoundary(data)
++	point.Stage, point.Direction, point.Result = "carrier_message_completed", "rx", "frame_discard"
++	deadline := r.now().Add(reassemblyTimeout)
++	if builder != nil {
++		if builder.total != total || builder.length != length || builder.checksum != checksum {
++			return
++		}
++		if _, received := builder.received[sequence]; received {
++			return
++		}
++		deadline = builder.deadline
++		point.DataKnown, point.DataSequence = builder.diagnostic.DataKnown, builder.diagnostic.DataSequence
++	} else if len(r.recent)+len(r.builds) >= maxRecentMessages {
++		return
++	}
++	delete(r.builds, key)
++	r.recent[key] = deadline
++	r.trace.Boundary(point)
+ }
+ 
+ func (r *reassembler) delivery() *sessiontrace.Delivery {
+--- a/telemost/rtp.go
++++ b/telemost/rtp.go
+@@ -155,6 +155,7 @@
+ // vp8FrameState reassembles a VP8 frame from its RTP packets. It returns the
+ // assembled frame payload when complete, or nil otherwise.
+ type vp8FrameState struct {
++	onDiscard   func([]byte)
+ 	mediaTrack  uint32
+ 	trace       *sessiontrace.Recorder
+ 	vp8Pkt      codecs.VP8Packet
+@@ -167,6 +168,7 @@
+ 
+ func (st *vp8FrameState) process(pkt *rtp.Packet) []byte {
+ 	if st.frameValid && (st.haveLastSeq && pkt.SequenceNumber != st.lastSeq+1 || st.timestamp != pkt.Timestamp) {
++		st.discardFrame()
+ 		reason := "timestamp"
+ 		if st.haveLastSeq && pkt.SequenceNumber != st.lastSeq+1 {
+ 			reason = "sequence_gap"
+@@ -183,6 +185,7 @@
+ 
+ 	payload, err := st.vp8Pkt.Unmarshal(pkt.Payload)
+ 	if err != nil {
++		st.discardFrame()
+ 		st.observeDiscard("malformed")
+ 		st.frameValid = false
+ 		st.frameBuf = st.frameBuf[:0]
+@@ -201,6 +204,7 @@
+ 		return nil
+ 	}
+ 	if len(st.frameBuf)+len(payload) > maxAssembledFrameSize {
++		st.discardFrame()
+ 		st.observeDiscard("oversize")
+ 		st.frameValid = false
+ 		st.frameBuf = st.frameBuf[:0]
+@@ -218,3 +222,9 @@
+ 	}
+ 	return nil
+ }
++
++func (st *vp8FrameState) discardFrame() {
++	if st.frameValid && st.onDiscard != nil {
++		st.onDiscard(st.frameBuf)
++	}
++}
+--- a/telemost/signaling.go
++++ b/telemost/signaling.go
+@@ -738,6 +738,7 @@
+ 	reorder := newReorderBuffer()
+ 	reorder.trace = s.cfg.Trace
+ 	state.trace = s.cfg.Trace
++	state.onDiscard = s.reassembler.discardFrame
+ 	observer := rtpBoundary{trace: s.cfg.Trace, stage: "rtp_received", direction: "rx"}
+ 	observer.track = s.rxTracks.Add(1)
+ 	correlated := rtpBoundary{trace: s.cfg.Trace, stage: "rtp_correlated", direction: "rx", correlationOnly: true, track: observer.track}

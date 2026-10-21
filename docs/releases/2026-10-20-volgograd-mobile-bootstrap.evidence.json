@@ -1,0 +1,425 @@
+{
+  "schema": 1,
+  "support_id": "FC-ZMVK-MM7C",
+  "inputs": {
+    "19": {
+      "path": "/mnt/data/joker/\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0438/FamilyConnect-diagnostics(19).json",
+      "sha256": "6d95570be64d8bf4875049ac6992e842de33f38386f9dda26da03e1ad4d81f8f"
+    },
+    "20": {
+      "path": "/mnt/data/joker/\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0438/FamilyConnect-diagnostics(20).json",
+      "sha256": "95ce765751371aebacda3c66cac90a1cdba7f4a5345446810f65c3b1fc7ead47"
+    }
+  },
+  "scopes": [
+    {
+      "export": 19,
+      "scope": "ring",
+      "app_version": "0.1.18-beta94-stability",
+      "version_code": 94,
+      "os_api": 34,
+      "device_support_id": "FC-ZMVK-MM7C",
+      "network_class": "WIFI",
+      "connection_id": "5791e739-3b90-4404-abc9-8bc6fc129ddd",
+      "restricted_readiness": "READY",
+      "bootstrap_directory": "USABLE"
+    },
+    {
+      "export": 19,
+      "scope": "incident",
+      "app_version": "0.1.18-beta94-stability",
+      "version_code": 94,
+      "os_api": 34,
+      "device_support_id": "FC-ZMVK-MM7C",
+      "network_class": "CELLULAR",
+      "connection_id": "51808e19-2fad-45e7-8b51-e7be099d6080",
+      "restricted_readiness": "NOT_READY",
+      "bootstrap_directory": "NOT_USABLE"
+    },
+    {
+      "export": 20,
+      "scope": "ring",
+      "app_version": "0.1.18-beta94-stability",
+      "version_code": 94,
+      "os_api": 34,
+      "device_support_id": "FC-ZMVK-MM7C",
+      "network_class": "CELLULAR",
+      "connection_id": "b624ca0b-8aed-4414-9746-ebd568f03cb1",
+      "restricted_readiness": "NOT_READY",
+      "bootstrap_directory": "NOT_USABLE"
+    },
+    {
+      "export": 20,
+      "scope": "incident",
+      "app_version": "0.1.18-beta94-stability",
+      "version_code": 94,
+      "os_api": 34,
+      "device_support_id": "FC-ZMVK-MM7C",
+      "network_class": "CELLULAR",
+      "connection_id": "b624ca0b-8aed-4414-9746-ebd568f03cb1",
+      "restricted_readiness": "NOT_READY",
+      "bootstrap_directory": "NOT_USABLE"
+    }
+  ],
+  "deduplicated_events": 274,
+  "historical_exact_cause": "NOT_ESTABLISHED",
+  "historical_stage": "FETCH_FAILED_FROM_RESTRICTED_BOOTSTRAP_REFRESH_EXCEPTION_BEFORE_NATIVE_BEGIN_READY",
+  "historical_missing": "Transport exception/stage/route and cache validator/fingerprint at failed selection absent in94 export",
+  "server_receipts": [
+    {
+      "correlation": "8d83abd3b1644ab7b3d78fea311968db",
+      "challenge_at": 1792497178,
+      "fetch_id": "d7f1b23ac2c14838b3713727d23e81a9",
+      "fetch_at": 1792497178,
+      "revision": 1,
+      "minimum_crl": 27139,
+      "expires": 1792506911,
+      "ack_at": 1792497179,
+      "ack": {
+        "result": "READY",
+        "observed_at": 1792497177,
+        "phase": "import",
+        "expires_at": 1792506911,
+        "version_code": 94,
+        "failure_reason": "NONE"
+      }
+    },
+    {
+      "correlation": "45e6ffec7bec469788df2b46bb53f992",
+      "challenge_at": 1792497176,
+      "fetch_id": "abf886e34bb848139d998eed8b7cb0dc",
+      "fetch_at": 1792497176,
+      "revision": 1,
+      "minimum_crl": 27139,
+      "expires": 1792506911,
+      "ack_at": 1792497177,
+      "ack": {
+        "result": "READY",
+        "observed_at": 1792497175,
+        "phase": "import",
+        "expires_at": 1792506911,
+        "version_code": 94,
+        "failure_reason": "NONE"
+      }
+    },
+    {
+      "correlation": "99643622bddc4e278b1cb6e5a6106ee6",
+      "challenge_at": 1792497111,
+      "fetch_id": "f6ec0bca14f5476d89f96e5426259261",
+      "fetch_at": 1792497111,
+      "revision": 1,
+      "minimum_crl": 27139,
+      "expires": 1792506911,
+      "ack_at": 1792497112,
+      "ack": {
+        "result": "READY",
+        "observed_at": 1792497110,
+        "phase": "import",
+        "expires_at": 1792506911,
+        "version_code": 94,
+        "failure_reason": "NONE"
+      }
+    },
+    {
+      "correlation": "db46dc6dda63406a948921b9f78405eb",
+      "challenge_at": 1792495499,
+      "fetch_id": "a32b59e877f7422086d96043a3167cfa",
+      "fetch_at": 1792495500,
+      "revision": 1,
+      "minimum_crl": 27139,
+      "expires": 1792506911,
+      "ack_at": 1792495501,
+      "ack": {
+        "result": "READY",
+        "observed_at": 1792495499,
+        "phase": "import",
+        "expires_at": 1792506911,
+        "version_code": 94,
+        "failure_reason": "NONE"
+      }
+    },
+    {
+      "correlation": "bd40ddbc4fdd45dbb331324ef7af6da7",
+      "challenge_at": 1792495161,
+      "fetch_id": "8503a903597e44f5853cdd35ad49b0aa",
+      "fetch_at": 1792495161,
+      "revision": 1,
+      "minimum_crl": 27139,
+      "expires": 1792506911,
+      "ack_at": 1792495162,
+      "ack": {
+        "result": "READY",
+        "observed_at": 1792495160,
+        "phase": "import",
+        "expires_at": 1792506911,
+        "version_code": 94,
+        "failure_reason": "NONE"
+      }
+    },
+    {
+      "correlation": "edb93011fcd347f99f1ceb33b1d0749c",
+      "challenge_at": 1792495143,
+      "fetch_id": "07f5545f3a394b8b87929990a143be94",
+      "fetch_at": 1792495143,
+      "revision": 1,
+      "minimum_crl": 27139,
+      "expires": 1792506911,
+      "ack_at": 1792495144,
+      "ack": {
+        "result": "READY",
+        "observed_at": 1792495142,
+        "phase": "import",
+        "expires_at": 1792506911,
+        "version_code": 94,
+        "failure_reason": "NONE"
+      }
+    },
+    {
+      "correlation": "2cf29eccc7b5479f9a12770c2d44376f",
+      "challenge_at": 1792495096,
+      "fetch_id": "fe383ba2a91f476aa822239219d3ef32",
+      "fetch_at": 1792495097,
+      "revision": 1,
+      "minimum_crl": 27139,
+      "expires": 1792506911,
+      "ack_at": 1792495098,
+      "ack": {
+        "result": "READY",
+        "observed_at": 1792495096,
+        "phase": "import",
+        "expires_at": 1792506911,
+        "version_code": 94,
+        "failure_reason": "NONE"
+      }
+    },
+    {
+      "correlation": "4a6c27d10ae348a3a5a970bdf554b9a6",
+      "challenge_at": 1792494395,
+      "fetch_id": "3582a32a2e464343bd57cb5039f6d750",
+      "fetch_at": 1792494395,
+      "revision": 1,
+      "minimum_crl": 27139,
+      "expires": 1792506911,
+      "ack_at": 1792494397,
+      "ack": {
+        "result": "READY",
+        "observed_at": 1792494395,
+        "phase": "import",
+        "expires_at": 1792506911,
+        "version_code": 94,
+        "failure_reason": "NONE"
+      }
+    },
+    {
+      "correlation": "a476ff8a1bdc4679b63574fa0f33f785",
+      "challenge_at": 1792494392,
+      "fetch_id": "20b51aafcb8b422ca66848efd1ebc795",
+      "fetch_at": 1792494392,
+      "revision": 1,
+      "minimum_crl": 27139,
+      "expires": 1792506911,
+      "ack_at": 1792494393,
+      "ack": {
+        "result": "READY",
+        "observed_at": 1792494391,
+        "phase": "import",
+        "expires_at": 1792506911,
+        "version_code": 94,
+        "failure_reason": "NONE"
+      }
+    },
+    {
+      "correlation": "8475f54c59984e2580b4b91e4985d9a8",
+      "challenge_at": 1792493313,
+      "fetch_id": "0e2bf4f1829a4d8bb9f9131ca2ca3566",
+      "fetch_at": 1792493313,
+      "revision": 1,
+      "minimum_crl": 27139,
+      "expires": 1792506911,
+      "ack_at": 1792493314,
+      "ack": {
+        "result": "READY",
+        "observed_at": 1792493312,
+        "phase": "import",
+        "expires_at": 1792506911,
+        "version_code": 94,
+        "failure_reason": "NONE"
+      }
+    },
+    {
+      "correlation": "6c5f9b3b3ea14f5ca46cf1f40fd8dd99",
+      "challenge_at": 1792493187,
+      "fetch_id": "93e3d38830f246a9a4751341145bbe79",
+      "fetch_at": 1792493188,
+      "revision": 1,
+      "minimum_crl": 27139,
+      "expires": 1792506911,
+      "ack_at": 1792493188,
+      "ack": {
+        "result": "READY",
+        "observed_at": 1792493187,
+        "phase": "import",
+        "expires_at": 1792506911,
+        "version_code": 94,
+        "failure_reason": "NONE"
+      }
+    },
+    {
+      "correlation": "ba7e82fc6daa43a783f5a695697f6b58",
+      "challenge_at": 1792492865,
+      "fetch_id": "6863614478414a44bddb18e5ab60d352",
+      "fetch_at": 1792492865,
+      "revision": 1,
+      "minimum_crl": 27139,
+      "expires": 1792506911,
+      "ack_at": 1792492867,
+      "ack": {
+        "result": "READY",
+        "observed_at": 1792492864,
+        "phase": "import",
+        "expires_at": 1792506911,
+        "version_code": 94,
+        "failure_reason": "NONE"
+      }
+    },
+    {
+      "correlation": "c153dce9a59244d8a54939eb7570028f",
+      "challenge_at": 1792424335,
+      "fetch_id": "dd7d093baa564eaa832145174c27a02b",
+      "fetch_at": 1792424336,
+      "revision": 1,
+      "minimum_crl": 27131,
+      "expires": 1792434701,
+      "ack_at": 1792424336,
+      "ack": {
+        "result": "NATIVE_VALIDATION_FAILED",
+        "observed_at": 1792424334,
+        "phase": "import",
+        "expires_at": 0,
+        "version_code": 60,
+        "failure_reason": "NATIVE_VALIDATION_FAILED"
+      }
+    },
+    {
+      "correlation": "fa1a29cb98984449a34d08c16dc698ee",
+      "challenge_at": 1792421605,
+      "fetch_id": "495302a05abd4c2d97c373c4be41dbc2",
+      "fetch_at": 1792421605,
+      "revision": 1,
+      "minimum_crl": 27131,
+      "expires": 1792434701,
+      "ack_at": 1792421606,
+      "ack": {
+        "result": "NATIVE_VALIDATION_FAILED",
+        "observed_at": 1792421604,
+        "phase": "import",
+        "expires_at": 0,
+        "version_code": 60,
+        "failure_reason": "NATIVE_VALIDATION_FAILED"
+      }
+    }
+  ],
+  "server_journal": {
+    "window_utc": [
+      "2026-10-20T11:24:40Z",
+      "2026-10-20T11:53:10Z"
+    ],
+    "journal_records": 0,
+    "times_usec": [],
+    "request_status_counts": {},
+    "matching_primary_window": [],
+    "current_api_sha256": "e986f98e70ff7f1abc2678566dd360bb6555583f2e1744ea985c63699bcb3ef7",
+    "source_sha256": {
+      "control/friends/restricted.py": "3f8613a92d1b26e6dc4d7d9e2f05ff6e87d4a8e3482580db0a7745058b48ae09",
+      "control/friends/readiness_receipts.py": "16e4556af6d914e7411b3563bef44efebd2a8ba2d7dda1d0faa4f4e100ceb660",
+      "control/friends/support_ids.py": "cab3cef66085ac11253d3ce8a41d636769f040841fe839a96e03e536939aa169"
+    },
+    "limitation": "Current API process started13:05UTC after incident; journal coverage and masked pre-HTTP failures do not establish reachability or operator blocking."
+  },
+  "baseline94_and95_identical": {
+    "clients/android/app/src/main/java/com/familyconnect/app/FriendsRestricted.java": "302ec057411b9fdb78076ca1759bdbbe8d8114fb10d50541ad13989d462c1fac",
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedBootstrap.java": "06b78bbc5cf86c8e347cfaee7ca826ff330457dcf0090a5450cd856daa00d10d",
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedCache.java": "c1a54325ac6b6dc642349c6acfd5821fb930da027478e0f4b5816a48a6ccc420",
+    "clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java": "ffb631fe0c07a3c9db04bfc669405f0fea70fbfbfdd915475941019dfecc0235",
+    "clients/android/app/src/main/java/com/familyconnect/app/FriendsReadinessProtocol.java": "169a6e8c412533d6f434bdec76ab987881d92fb4e98437a40a4bf897ad97eb82",
+    "clients/android/app/src/main/java/com/familyconnect/app/ReadinessBootstrapRoute.java": "100ee7171b0264899b696d4cd4838a44cc43a92c3def24665eecf8acda26cbfc",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlRnsAndroid.java": "d51475c6e66b33bda3cb0288fc171b2067a7ae064d2623c6fa1783729fcb5954",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatNetworkAndroid.java": "7fe705f607315cbaadb686647802b277d32126da6a54b3fa8037827a1dbde9d4",
+    "clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java": "f5358c267aab7f3edb73d28cc39baf04dd377e62cc30839625116013fd24b455",
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedTunnelEngine.java": "c7adec7bf8e40c269e7669047c17bb509a562fe1a018aadf623cd83948c5298f",
+    "clients/android/app/src/main/python/fc_rns_transport.py": "6dc08e65f7b60d77a1f8a6a4d05afdaadbaad547382a1c7c966365957a517c4b"
+  },
+  "local_defect": "Python RNS socket availability error becomes generic PyException; challenge wraps INTERNAL with availability=false; valid cache not selected",
+  "fix": "Typed availability only for failed socket bind/connect and explicit RNS wait deadline; existing validator chooses unexpired cache. Trust/auth/protocol/cancel remain terminal; no proof replay.",
+  "diagnostics": "Bounded operation/stage/error/status/network generation, original connection scope, cache source/age/fingerprint/expiry/bundle validation and document expiry checks in ring and incident JSON",
+  "jvm_tests": 175,
+  "python_bridge_tests": 6,
+  "network_fixture": "PASS_ACTUAL_JAVA_METHOD_WITH_ANDROID_STUBS_NOT_PHYSICAL",
+  "native_security_recovery": "PASS_8_FOCUSED_NATIVE_TESTS_PLUS_SUBTESTS_WITH_RACE; unchanged native95, previous1011 checks retained; Java recovery tests rerun",
+  "native_focused_log_sha256": "8e214b0df3e62f1cf135f3a14ba38818c87a3ea59b7c7b14c591e5113d845b61",
+  "unsigned": {
+    "package": "com.familyconnect.app.friends",
+    "version_code": 96,
+    "version": "0.1.18-beta96-bootstrap",
+    "sha256": "2324906936da9d63d482e811b650fd16acc82b8c351b086342adf16f0d6e95bc",
+    "alignment_16k": true,
+    "signer_sha256": null
+  },
+  "patch_sha256": "094779d617dcbb4ee4856daf7b0844277aad681f2119d9b5492f704384aad185",
+  "native_sha256": "66a9d18d04ff71100df0144228db05decb970aea71b6d277ec321b1c6c240c63",
+  "owner_validation": "INSTALLED96_UID_PRESERVED_POST_UPDATE_READY_CONNECT_NOT_RUN",
+  "tester_cellular_validation": "NOT_RUN",
+  "signing": "SIGNED_PRIVATE_BOOTSTRAP_FIELD_NOT_RUN",
+  "signed": {
+    "package": "com.familyconnect.app.friends",
+    "version_code": 96,
+    "version": "0.1.18-beta96-bootstrap",
+    "sha256": "07a90f03269e1df683289bc1fbe7fa7e88647c5629f71db1f784d6566aa9228d",
+    "alignment_16k": true,
+    "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+  },
+  "signed_apk": "state-client-build/mobile-bootstrap-20261020/delivery/FamilyConnect-0.1.18-beta96-bootstrap.apk",
+  "signing_receipt_sha256": "3bacc8b9458c48735bc7080035c8ef460f17baffff0c59decd311a78046e9fc6",
+  "private_tester_handoff": "OWNER_REQUESTED_FILE_HANDOFF_NOT_CONFIRMED_RECEIVED_OR_INSTALLED",
+  "installation": "OWNER_IN_PLACE95_TO96_VERIFIED",
+  "public_release": false,
+  "pushed": false,
+  "current_gateway_sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+  "current_profile": "LEGACY64",
+  "credit128": false,
+  "remaining_dependency": "Missing/expired/revoked/invalid cache still needs approved authenticated readiness refresh (direct HTTPS or existing RNS); seed cannot issue expired credentials. Live seed liveness not guaranteed by cached directory.",
+  "repaired_local_failures": [
+    "Initial RU query used Product DB instead of Friends DB; no writes",
+    "Read-only receipt query corrected challenge_id to actual correlation column",
+    "Gradle sandbox loopback blocked; rerun outside sandbox",
+    "Exact source verifier required baseline95 Git metadata/work-tree binding; gate preserved",
+    "Negative auth fixture corrected to actual challengeStatus401/403 ChallengeFailure shape; full suite rerun"
+  ],
+  "upgrade": {
+    "exit": 0,
+    "stdout": "Performing Streamed Install\nSuccess\n",
+    "stderr": "",
+    "before": {
+      "utc": "2026-10-20T14:48:29.381521+00:00",
+      "uid": 10283,
+      "code": 95,
+      "apk_sha256": "e36a24601d459ea13553d9236486befe514dca496d8b2933290e6867d97c4159",
+      "native_sha256": "66a9d18d04ff71100df0144228db05decb970aea71b6d277ec321b1c6c240c63",
+      "vpn": false,
+      "vpn_service": false
+    },
+    "after": {
+      "utc": "2026-10-20T14:48:37.959491+00:00",
+      "uid": 10283,
+      "code": 96,
+      "apk_sha256": "07a90f03269e1df683289bc1fbe7fa7e88647c5629f71db1f784d6566aa9228d",
+      "native_sha256": "66a9d18d04ff71100df0144228db05decb970aea71b6d277ec321b1c6c240c63",
+      "vpn": false,
+      "vpn_service": false
+    },
+    "uninstall": false,
+    "data_cleared": false,
+    "identity_proof_pending": true
+  },
+  "owner_identity": "FRESH_SERVER_BINDINGS_AND_SUPPORT_UNCHANGED_DEVICE_PROOF_PENDING"
+}

@@ -52,6 +52,9 @@ final class Diagnostics {
         if(raw.length>DiagnosticRing.RECORD_LIMIT)throw new IOException("Diagnostic bound");FileOutputStream output=file.startWrite();
         try{output.write(raw);file.finishWrite(output);}catch(IOException failure){file.failWrite(output);throw failure;}
     }
+    static JsonObject supportSnapshot(Context context){
+        Diagnostics store=get(context);synchronized(store){store.network();return store.ring.snapshot();}
+    }
     static void share(android.app.Activity activity){
         new android.app.AlertDialog.Builder(activity).setTitle(R.string.diagnostics_send).setMessage(R.string.diagnostics_privacy)
             .setNegativeButton(android.R.string.cancel,null).setPositiveButton(R.string.diagnostics_send,(dialog,which)->{

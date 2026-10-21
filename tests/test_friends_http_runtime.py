@@ -129,6 +129,22 @@ def test_support_route_requires_device_proof_and_returns_only_alias(runtime):
         assert request(number, '/friends/device/support', body=dict(device_support_id=value['device_support_id']))[0] == 403
 
 
+def test_online_diagnostic_route_binds_proof_to_safe_report(runtime):
+    from test_online_diagnostics import report
+    with running(runtime):
+        raw = report()
+        device = runtime['canary']
+        status, body = request(runtime['backend'], '/friends/challenge', body=dict(
+            public_identity=device.public_identity, wireguard_public_key=device.wireguard_public_key,
+            purpose='diagnostics:'+hashlib.sha256(raw.encode()).hexdigest(), invitation=''))
+        assert status == 200
+        proof = device.prove_transport_key(json.loads(body)['challenge'])
+        status, body = request(runtime['backend'], '/friends/device/diagnostics', body=dict(proof=proof, report=raw))
+        assert status == 200 and json.loads(body)['report_id'] == 'a'*32
+        assert request(runtime['backend'], '/friends/device/diagnostics', body=dict(proof=proof, report=raw))[0] == 403
+        assert request(runtime['backend'], '/friends/device/diagnostics', body={})[0] == 403
+
+
 @contextlib.contextmanager
 def ingress(runtime, enabled, tls=False):
     executable = os.environ.get('FC_TEST_NGINX')

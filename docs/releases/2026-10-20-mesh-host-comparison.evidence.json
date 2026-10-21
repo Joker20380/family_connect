@@ -1,0 +1,2176 @@
+{
+  "schema": 1,
+  "utc": "2026-10-20T18:54:50.451771+00:00",
+  "decision": "REPEATABLE_B_ADVANTAGE_ON_ISOLATED_LINUX_HARNESS",
+  "host_only_attribution": "INCONCLUSIVE_DIFFERENT_SFU_ASSIGNMENTS",
+  "second_host_available": true,
+  "hosts": {
+    "A": "186.246.45.246 NL",
+    "B": "185.251.89.19 RU, city unverified"
+  },
+  "implementation": {
+    "binary_sha256": "6496b6666f316b23426ecc86a449388535907e644bcda3d346f011c592779411",
+    "base_inventory_sha256": "faf60996252fdb09ddf4890dbe82c04d5a0212418b488d6459003a3898ea720b",
+    "harness_patch_sha256": "20f2922a01be544c60483c384362eb561bf9f86e439b709f140d9b0584f619dd",
+    "go": "go1.26.1 linux/amd64",
+    "pion_interceptor": "v0.1.45",
+    "pion_webrtc": "v4.2.15",
+    "flags": [
+      "-p=1",
+      "-trimpath",
+      "-buildvcs=false",
+      "-tags=fc_perf_diagnostic"
+    ],
+    "transport_changes": [],
+    "policy": "OFF/Q0 A0 LEGACY64/65536 UDP4 VP8",
+    "test_stack": "Linux CLI -> Mux64 -> Family TLS -> ReliableStream -> VP8/RTP -> Telemost SFU -> matching test server peer -> bounded loopback fixture",
+    "excluded": [
+      "Android",
+      "TUN",
+      "product bootstrap/admission",
+      "external destination HTTP/TLS",
+      "mobile radio"
+    ],
+    "test_only_changes": [
+      "cmd/telemost-binary/main.go",
+      "cmd/telemost-binary/mux.go",
+      "cmd/telemost-binary/host_compare.go",
+      "telemost/performance.go"
+    ]
+  },
+  "phases": {
+    "A1": {
+      "host": "186.246.45.246",
+      "status": "COMPLETE",
+      "requests": [
+        {
+          "name": "control_echo",
+          "operation": "E",
+          "size": 65536,
+          "received": 65536,
+          "sha256": "7e340a656f5ffcd1e15dcbf9c09978eccc9b24ba90b463884e28fc1f0a5cb81a",
+          "passed": true,
+          "error": "",
+          "start_ns": 1378,
+          "end_ns": 4430894058,
+          "full_seconds": 4.43089268,
+          "open_seconds": 1.065391065,
+          "first_byte_seconds": 2.727499306,
+          "body_seconds": 1.703393374,
+          "stream": {
+            "ID": 1,
+            "State": "remote-half-closed",
+            "Sent": 65541,
+            "Received": 65536,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 16340,
+            "ReceiveHighWater": 16340
+          },
+          "goodput_mbit_s": null,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "single",
+          "operation": "D",
+          "size": 4194304,
+          "received": 4194304,
+          "sha256": "70d1d2a245e130fe843df98783941d7f770618d4a70489bc7e9ca518089467f8",
+          "passed": true,
+          "error": "",
+          "start_ns": 4435941265,
+          "end_ns": 64920907236,
+          "full_seconds": 60.484965971,
+          "open_seconds": 1.256949142,
+          "first_byte_seconds": 2.23132409,
+          "body_seconds": 58.253641881,
+          "stream": {
+            "ID": 3,
+            "State": "remote-half-closed",
+            "Sent": 5,
+            "Received": 4194304,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 5,
+            "ReceiveHighWater": 24320
+          },
+          "goodput_mbit_s": 0.554756565723918,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "parallel_1",
+          "operation": "D",
+          "size": 2097152,
+          "received": 2097152,
+          "sha256": "88931b91ee539c9df54481f73ddd68df637a00e54916f404632f88c37fd4d186",
+          "passed": true,
+          "error": "",
+          "start_ns": 64936583487,
+          "end_ns": 100819267123,
+          "full_seconds": 35.882683636,
+          "open_seconds": 0.895989862,
+          "first_byte_seconds": 1.7024515660000001,
+          "body_seconds": 34.18023207,
+          "stream": {
+            "ID": 5,
+            "State": "remote-half-closed",
+            "Sent": 5,
+            "Received": 2097152,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 5,
+            "ReceiveHighWater": 16428
+          },
+          "goodput_mbit_s": 0.467557448327748,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "parallel_0",
+          "operation": "D",
+          "size": 2097152,
+          "received": 2097152,
+          "sha256": "88931b91ee539c9df54481f73ddd68df637a00e54916f404632f88c37fd4d186",
+          "passed": true,
+          "error": "",
+          "start_ns": 64936617901,
+          "end_ns": 102157312120,
+          "full_seconds": 37.220694219,
+          "open_seconds": 1.637586267,
+          "first_byte_seconds": 3.045844071,
+          "body_seconds": 34.174850148,
+          "stream": {
+            "ID": 7,
+            "State": "remote-half-closed",
+            "Sent": 5,
+            "Received": 2097152,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 5,
+            "ReceiveHighWater": 22868
+          },
+          "goodput_mbit_s": 0.450749679769158,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "reverse_control",
+          "operation": "U",
+          "size": 65536,
+          "received": 32,
+          "sha256": "c0dfb5be2ba28f67ae3badf41bf98b5bee6e512fc1a4b02cc3c87bf6a4587b6c",
+          "passed": true,
+          "error": "",
+          "start_ns": 102166385312,
+          "end_ns": 103692190030,
+          "full_seconds": 1.5258047179999998,
+          "open_seconds": 0.479812267,
+          "first_byte_seconds": 1.5258043460000001,
+          "body_seconds": 3.72e-07,
+          "stream": {
+            "ID": 9,
+            "State": "remote-half-closed",
+            "Sent": 65541,
+            "Received": 32,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 16340,
+            "ReceiveHighWater": 32
+          },
+          "goodput_mbit_s": null,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        }
+      ],
+      "aggregate": {
+        "seconds": 37.220728633,
+        "received": 4194304,
+        "mbit_s": 0.9014985260189278,
+        "complete": true
+      },
+      "endpoints": {
+        "client": {
+          "media": {
+            "publisher": {
+              "local_ip": "172.17.0.1",
+              "local_port": 33596,
+              "local_type": "host",
+              "remote_ip": "37.140.143.183",
+              "remote_port": 22805,
+              "remote_type": "host",
+              "protocol": "udp",
+              "candidate_pair_id": "candidate:y3Yxuh90AdxMZonAQGdHobmvJy5FGMYr-candidate:mI0eakBX3sqv5htOLKKRAOopFO4TLV33",
+              "observed_utc": "2026-10-20T18:41:19.889840921Z",
+              "candidate_pair_rtt_s": 0.079245297,
+              "scope": "ICE peer-to-SFU segment, not end-to-end Family RTT"
+            },
+            "subscriber": {
+              "local_ip": "192.168.129.37",
+              "local_port": 51311,
+              "local_type": "host",
+              "remote_ip": "37.140.143.183",
+              "remote_port": 21080,
+              "remote_type": "host",
+              "protocol": "udp",
+              "candidate_pair_id": "candidate:jw8B2oQTutLV+sE4yUoDG9085BpVFTwL-candidate:burmr5CTDWVbNMR0tzj1lPu+7jNdSe4E",
+              "observed_utc": "2026-10-20T18:41:19.889840921Z",
+              "candidate_pair_rtt_s": 0.051125951,
+              "scope": "ICE peer-to-SFU segment, not end-to-end Family RTT"
+            }
+          },
+          "setup_ms": 1972,
+          "protocol_errors_first_last": [
+            0,
+            0
+          ],
+          "mux_profile": "LEGACY64",
+          "mux_window": 65536,
+          "max_rss_kib": 45400,
+          "cpu_user_s": 2.781917,
+          "cpu_system_s": 1.459047,
+          "resource_scope": {
+            "interval_s": 110.0628712369944,
+            "busy_fraction": 0.10242863295188877,
+            "steal_fraction": 0.0,
+            "load_first_last": [
+              [
+                1.75244140625,
+                1.90771484375,
+                1.62255859375
+              ],
+              [
+                1.46240234375,
+                1.73876953125,
+                1.59326171875
+              ]
+            ],
+            "cgroup_cpu_first_last": [
+              "usage_usec 4438287912\nuser_usec 4065991803\nsystem_usec 372296109\nnice_usec 4000\ncore_sched.force_idle_usec 0\n",
+              "usage_usec 4450603432\nuser_usec 4076334092\nsystem_usec 374269340\nnice_usec 4000\ncore_sched.force_idle_usec 0\n"
+            ],
+            "memory_events_first_last": [
+              "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+              "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n"
+            ],
+            "scope": "whole host CPU/load/network; process RUSAGE separately; local cgroup may include other applications"
+          },
+          "network_counters": {
+            "lo": {
+              "receive_bytes": 60844,
+              "transmit_bytes": 60844
+            },
+            "wlp0s20f3": {
+              "receive_bytes": 23708120,
+              "transmit_bytes": 2346983
+            },
+            "br-042858c9dc50": {
+              "receive_bytes": 728,
+              "transmit_bytes": 40992
+            },
+            "docker0": {
+              "receive_bytes": 0,
+              "transmit_bytes": 0
+            },
+            "veth9eaf2b4": {
+              "receive_bytes": 0,
+              "transmit_bytes": 62820
+            }
+          },
+          "network_scope": "Whole endpoint interfaces, includes test/SSH/other traffic; not an isolated background byte estimate",
+          "counter_bracket": {
+            "first_utc": "2026-10-20T18:39:40.626110416Z",
+            "last_utc": "2026-10-20T18:41:19.889840921Z",
+            "seconds": 99.26373,
+            "retry_bytes": 483,
+            "retries": 9,
+            "new_data_bytes": 119168,
+            "wait_seconds": {
+              "FullNS": 28.075133228,
+              "ReadyFullNS": 12.021865065,
+              "WindowOnlyBlockedNS": 12.017815466,
+              "HeadSACKedBlockedNS": 1.32109537,
+              "HeadUnconfirmedLaterSACKedBlockedNS": 0.0
+            },
+            "wait_fraction": {
+              "FullNS": 0.2828337523484157,
+              "ReadyFullNS": 0.12111034982263916,
+              "WindowOnlyBlockedNS": 0.1210695534612693,
+              "HeadSACKedBlockedNS": 0.013308943457998205,
+              "HeadUnconfirmedLaterSACKedBlockedNS": 0.0
+            },
+            "scope": "Same endpoint first/last transport snapshot bracket including close tail, not request-local; own UTC sample interval, no cross-machine subtraction. Overlapping waits are not summed."
+          },
+          "stream_credit_wait_seconds": {
+            "1": 0.000214707,
+            "3": 0.0,
+            "5": 0.0,
+            "7": 0.0
+          },
+          "stream_credit_scope": "Per-Mux-stream lifetime, not divided by unrelated request interval; retired ring sampling may omit late-retiring streams",
+          "media_counters": {
+            "SamplesWritten": 3066,
+            "RTPReceived": 9717,
+            "EmptyRTP": 0,
+            "SequenceGaps": 49,
+            "FramesReceived": 3246,
+            "BinaryFrames": 3191
+          },
+          "evidence_dropped": 0,
+          "reconnect_count": 0,
+          "close_states": [
+            "closed",
+            "closed"
+          ]
+        },
+        "server": {
+          "media": {
+            "publisher": {
+              "local_ip": "186.246.45.246",
+              "local_port": 57821,
+              "local_type": "host",
+              "remote_ip": "37.140.143.183",
+              "remote_port": 22680,
+              "remote_type": "host",
+              "protocol": "udp",
+              "candidate_pair_id": "candidate:5cU+lVKhwnSKPrEPEjHskq1rLnOoTNUD-candidate:u1t9bKLeO1b78U822xqVwMuckvmNavW8",
+              "observed_utc": "2026-10-20T18:41:21.805621012Z",
+              "candidate_pair_rtt_s": 0.0407066,
+              "scope": "ICE peer-to-SFU segment, not end-to-end Family RTT"
+            },
+            "subscriber": {
+              "local_ip": "186.246.45.246",
+              "local_port": 40270,
+              "local_type": "host",
+              "remote_ip": "37.140.143.183",
+              "remote_port": 21441,
+              "remote_type": "host",
+              "protocol": "udp",
+              "candidate_pair_id": "candidate:+ddzAlld9nfy4k6xAv2m39Z4kLlwrxKY-candidate:M2KqoT3BhP8aY6Iz42xsFuBxdGvpb8FK",
+              "observed_utc": "2026-10-20T18:41:21.805621012Z",
+              "candidate_pair_rtt_s": 0.042593144,
+              "scope": "ICE peer-to-SFU segment, not end-to-end Family RTT"
+            }
+          },
+          "setup_ms": 2039,
+          "protocol_errors_first_last": [
+            0,
+            0
+          ],
+          "mux_profile": "LEGACY64",
+          "mux_window": 65536,
+          "max_rss_kib": 41592,
+          "cpu_user_s": 2.729123,
+          "cpu_system_s": 2.784178,
+          "resource_scope": {
+            "interval_s": 120.22271941090003,
+            "busy_fraction": 0.24991408934707904,
+            "steal_fraction": 0.004896907216494845,
+            "load_first_last": [
+              [
+                0.48193359375,
+                0.45166015625,
+                0.45166015625
+              ],
+              [
+                0.78515625,
+                0.6123046875,
+                0.5107421875
+              ]
+            ],
+            "cgroup_cpu_first_last": [
+              "usage_usec 51101\nuser_usec 33158\nsystem_usec 17943\nnice_usec 34000\ncore_sched.force_idle_usec 0\nnr_periods 1\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+              "usage_usec 5630300\nuser_usec 2836585\nsystem_usec 2793715\nnice_usec 1207620\ncore_sched.force_idle_usec 0\nnr_periods 1201\nnr_throttled 1\nthrottled_usec 8869\nnr_bursts 0\nburst_usec 0\n"
+            ],
+            "memory_events_first_last": [
+              "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+              "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n"
+            ],
+            "scope": "whole host CPU/load/network; process RUSAGE separately; local cgroup may include other applications"
+          },
+          "network_counters": {
+            "lo": {
+              "receive_bytes": 9412117,
+              "transmit_bytes": 9412117
+            },
+            "ens3": {
+              "receive_bytes": 75296546,
+              "transmit_bytes": 59173435
+            },
+            "fcams": {
+              "receive_bytes": 0,
+              "transmit_bytes": 0
+            },
+            "fcawg31": {
+              "receive_bytes": 0,
+              "transmit_bytes": 0
+            },
+            "fcopen31": {
+              "receive_bytes": 1700990,
+              "transmit_bytes": 41522384
+            }
+          },
+          "network_scope": "Whole endpoint interfaces, includes test/SSH/other traffic; not an isolated background byte estimate",
+          "counter_bracket": {
+            "first_utc": "2026-10-20T18:39:41.817828463Z",
+            "last_utc": "2026-10-20T18:41:26.533786168Z",
+            "seconds": 104.715958,
+            "retry_bytes": 1782028,
+            "retries": 234,
+            "new_data_bytes": 8443130,
+            "wait_seconds": {
+              "FullNS": 91.43981851,
+              "ReadyFullNS": 88.617085573,
+              "WindowOnlyBlockedNS": 88.563860748,
+              "HeadSACKedBlockedNS": 3.580543062,
+              "HeadUnconfirmedLaterSACKedBlockedNS": 40.68036952
+            },
+            "wait_fraction": {
+              "FullNS": 0.8732176093924481,
+              "ReadyFullNS": 0.8462615179722655,
+              "WindowOnlyBlockedNS": 0.8457532399025561,
+              "HeadSACKedBlockedNS": 0.034192907464973006,
+              "HeadUnconfirmedLaterSACKedBlockedNS": 0.38848300007912834
+            },
+            "scope": "Same endpoint first/last transport snapshot bracket including close tail, not request-local; own UTC sample interval, no cross-machine subtraction. Overlapping waits are not summed."
+          },
+          "stream_credit_wait_seconds": {
+            "1": 1.402e-06,
+            "3": 34.757371043,
+            "5": 19.947123126,
+            "7": 16.158726766
+          },
+          "stream_credit_scope": "Per-Mux-stream lifetime, not divided by unrelated request interval; retired ring sampling may omit late-retiring streams",
+          "media_counters": {
+            "SamplesWritten": 3853,
+            "RTPReceived": 3160,
+            "EmptyRTP": 0,
+            "SequenceGaps": 1,
+            "FramesReceived": 3062,
+            "BinaryFrames": 3007
+          },
+          "evidence_dropped": 0,
+          "reconnect_count": 0,
+          "close_states": [
+            "closed",
+            "closed"
+          ]
+        }
+      },
+      "cleanup": {
+        "owned_peer_pids": [],
+        "stage_removed": true,
+        "participant_leave": "CLI SIGTERM/context cancellation closes WebSocket and both peer connections; no provider conference-delete API used"
+      },
+      "server_exit": {
+        "exit": 1,
+        "terminated": false,
+        "stopped": true,
+        "seconds": 122.22726108832285
+      },
+      "server_exit_reason": "io: read/write on closed pipe during normal controlled teardown, after all request results; not hidden or counted as a body failure"
+    },
+    "B1": {
+      "host": "185.251.89.19",
+      "status": "COMPLETE",
+      "requests": [
+        {
+          "name": "control_echo",
+          "operation": "E",
+          "size": 65536,
+          "received": 65536,
+          "sha256": "7e340a656f5ffcd1e15dcbf9c09978eccc9b24ba90b463884e28fc1f0a5cb81a",
+          "passed": true,
+          "error": "",
+          "start_ns": 990,
+          "end_ns": 4485579479,
+          "full_seconds": 4.485578489,
+          "open_seconds": 0.968288322,
+          "first_byte_seconds": 3.783611542,
+          "body_seconds": 0.701966947,
+          "stream": {
+            "ID": 1,
+            "State": "remote-half-closed",
+            "Sent": 65541,
+            "Received": 65536,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 16340,
+            "ReceiveHighWater": 16384
+          },
+          "goodput_mbit_s": null,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "single",
+          "operation": "D",
+          "size": 4194304,
+          "received": 4194304,
+          "sha256": "70d1d2a245e130fe843df98783941d7f770618d4a70489bc7e9ca518089467f8",
+          "passed": true,
+          "error": "",
+          "start_ns": 4490455693,
+          "end_ns": 55938321895,
+          "full_seconds": 51.447866202,
+          "open_seconds": 1.215782546,
+          "first_byte_seconds": 2.312622821,
+          "body_seconds": 49.135243381,
+          "stream": {
+            "ID": 3,
+            "State": "remote-half-closed",
+            "Sent": 5,
+            "Received": 4194304,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 5,
+            "ReceiveHighWater": 16384
+          },
+          "goodput_mbit_s": 0.6522025980291403,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "parallel_0",
+          "operation": "D",
+          "size": 2097152,
+          "received": 2097152,
+          "sha256": "88931b91ee539c9df54481f73ddd68df637a00e54916f404632f88c37fd4d186",
+          "passed": true,
+          "error": "",
+          "start_ns": 55960355046,
+          "end_ns": 86208729353,
+          "full_seconds": 30.248374307,
+          "open_seconds": 0.630499072,
+          "first_byte_seconds": 0.802323314,
+          "body_seconds": 29.446050993,
+          "stream": {
+            "ID": 7,
+            "State": "remote-half-closed",
+            "Sent": 5,
+            "Received": 2097152,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 5,
+            "ReceiveHighWater": 27136
+          },
+          "goodput_mbit_s": 0.5546485186186505,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "parallel_1",
+          "operation": "D",
+          "size": 2097152,
+          "received": 2097152,
+          "sha256": "88931b91ee539c9df54481f73ddd68df637a00e54916f404632f88c37fd4d186",
+          "passed": true,
+          "error": "",
+          "start_ns": 55960330386,
+          "end_ns": 86410065084,
+          "full_seconds": 30.449734698,
+          "open_seconds": 0.630574965,
+          "first_byte_seconds": 1.194893726,
+          "body_seconds": 29.254840972,
+          "stream": {
+            "ID": 5,
+            "State": "remote-half-closed",
+            "Sent": 5,
+            "Received": 2097152,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 5,
+            "ReceiveHighWater": 25088
+          },
+          "goodput_mbit_s": 0.5509806954443501,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "reverse_control",
+          "operation": "U",
+          "size": 65536,
+          "received": 32,
+          "sha256": "c0dfb5be2ba28f67ae3badf41bf98b5bee6e512fc1a4b02cc3c87bf6a4587b6c",
+          "passed": true,
+          "error": "",
+          "start_ns": 86421353065,
+          "end_ns": 89703976688,
+          "full_seconds": 3.282623623,
+          "open_seconds": 1.461826619,
+          "first_byte_seconds": 3.28262249,
+          "body_seconds": 1.133e-06,
+          "stream": {
+            "ID": 9,
+            "State": "remote-half-closed",
+            "Sent": 65541,
+            "Received": 32,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 16340,
+            "ReceiveHighWater": 32
+          },
+          "goodput_mbit_s": null,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        }
+      ],
+      "aggregate": {
+        "seconds": 30.449734698,
+        "received": 4194304,
+        "mbit_s": 1.1019613908887003,
+        "complete": true
+      },
+      "endpoints": {
+        "client": {
+          "media": {
+            "publisher": {
+              "local_ip": "192.168.129.37",
+              "local_port": 48702,
+              "local_type": "host",
+              "remote_ip": "5.255.254.22",
+              "remote_port": 22966,
+              "remote_type": "host",
+              "protocol": "udp",
+              "candidate_pair_id": "candidate:OrQiNYUfEfGd5T2WWZusCBqmTgOgm6Sx-candidate:+241v4/9eXNzMaqF0wAgHIZPcKDjiT18",
+              "observed_utc": "2026-10-20T18:43:29.648918271Z",
+              "candidate_pair_rtt_s": 0.422947429,
+              "scope": "ICE peer-to-SFU segment, not end-to-end Family RTT"
+            },
+            "subscriber": {
+              "local_ip": "192.168.129.37",
+              "local_port": 40155,
+              "local_type": "host",
+              "remote_ip": "5.255.254.22",
+              "remote_port": 22367,
+              "remote_type": "host",
+              "protocol": "udp",
+              "candidate_pair_id": "candidate:P7mN1/2BYWBoVziMOJkqvqO3Xss4c5SM-candidate:qGCavjhNlZu7/Ycztp5ZuZX2HFI2DC8z",
+              "observed_utc": "2026-10-20T18:43:29.648918271Z",
+              "candidate_pair_rtt_s": 0.350003098,
+              "scope": "ICE peer-to-SFU segment, not end-to-end Family RTT"
+            }
+          },
+          "setup_ms": 2243,
+          "protocol_errors_first_last": [
+            0,
+            0
+          ],
+          "mux_profile": "LEGACY64",
+          "mux_window": 65536,
+          "max_rss_kib": 48852,
+          "cpu_user_s": 2.551454,
+          "cpu_system_s": 1.242042,
+          "resource_scope": {
+            "interval_s": 98.08003797999118,
+            "busy_fraction": 0.09943238098519368,
+            "steal_fraction": 0.0,
+            "load_first_last": [
+              [
+                1.3193359375,
+                1.68212890625,
+                1.5791015625
+              ],
+              [
+                0.6767578125,
+                1.39697265625,
+                1.4873046875
+              ]
+            ],
+            "cgroup_cpu_first_last": [
+              "usage_usec 4456806033\nuser_usec 4082041615\nsystem_usec 374764417\nnice_usec 4000\ncore_sched.force_idle_usec 0\n",
+              "usage_usec 4467592023\nuser_usec 4090993456\nsystem_usec 376598567\nnice_usec 4000\ncore_sched.force_idle_usec 0\n"
+            ],
+            "memory_events_first_last": [
+              "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+              "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n"
+            ],
+            "scope": "whole host CPU/load/network; process RUSAGE separately; local cgroup may include other applications"
+          },
+          "network_counters": {
+            "lo": {
+              "receive_bytes": 49092,
+              "transmit_bytes": 49092
+            },
+            "wlp0s20f3": {
+              "receive_bytes": 23640809,
+              "transmit_bytes": 2232816
+            },
+            "br-042858c9dc50": {
+              "receive_bytes": 672,
+              "transmit_bytes": 34160
+            },
+            "docker0": {
+              "receive_bytes": 0,
+              "transmit_bytes": 0
+            },
+            "veth9eaf2b4": {
+              "receive_bytes": 0,
+              "transmit_bytes": 52448
+            }
+          },
+          "network_scope": "Whole endpoint interfaces, includes test/SSH/other traffic; not an isolated background byte estimate",
+          "counter_bracket": {
+            "first_utc": "2026-10-20T18:42:04.423194297Z",
+            "last_utc": "2026-10-20T18:43:29.648918271Z",
+            "seconds": 85.225724,
+            "retry_bytes": 16772,
+            "retries": 4,
+            "new_data_bytes": 118626,
+            "wait_seconds": {
+              "FullNS": 22.441669525,
+              "ReadyFullNS": 11.147233484,
+              "WindowOnlyBlockedNS": 11.14338063,
+              "HeadSACKedBlockedNS": 0.516834721,
+              "HeadUnconfirmedLaterSACKedBlockedNS": 0.084968386
+            },
+            "wait_fraction": {
+              "FullNS": 0.2633203740809523,
+              "ReadyFullNS": 0.13079658301289407,
+              "WindowOnlyBlockedNS": 0.13075137537112622,
+              "HeadSACKedBlockedNS": 0.006064304258653175,
+              "HeadUnconfirmedLaterSACKedBlockedNS": 0.000996980512597347
+            },
+            "scope": "Same endpoint first/last transport snapshot bracket including close tail, not request-local; own UTC sample interval, no cross-machine subtraction. Overlapping waits are not summed."
+          },
+          "stream_credit_wait_seconds": {
+            "1": 1.828e-06,
+            "3": 0.0,
+            "7": 0.0,
+            "5": 0.0
+          },
+          "stream_credit_scope": "Per-Mux-stream lifetime, not divided by unrelated request interval; retired ring sampling may omit late-retiring streams",
+          "media_counters": {
+            "SamplesWritten": 2995,
+            "RTPReceived": 9595,
+            "EmptyRTP": 0,
+            "SequenceGaps": 42,
+            "FramesReceived": 3175,
+            "BinaryFrames": 3126
+          },
+          "evidence_dropped": 0,
+          "reconnect_count": 0,
+          "close_states": [
+            "closed",
+            "closed"
+          ]
+        },
+        "server": {
+          "media": {
+            "publisher": {
+              "local_ip": "185.251.89.19",
+              "local_port": 40053,
+              "local_type": "host",
+              "remote_ip": "5.255.254.22",
+              "remote_port": 22866,
+              "remote_type": "host",
+              "protocol": "udp",
+              "candidate_pair_id": "candidate:3NNpERZxZ3+z67xgtlOuxCmA0XDXPfev-candidate:yjTIcYUVzO+/qBFMe5ZOx/Aq2ixIcv40",
+              "observed_utc": "2026-10-20T18:43:30.564639773Z",
+              "candidate_pair_rtt_s": 0.011799589,
+              "scope": "ICE peer-to-SFU segment, not end-to-end Family RTT"
+            },
+            "subscriber": {
+              "local_ip": "185.251.89.19",
+              "local_port": 57512,
+              "local_type": "host",
+              "remote_ip": "5.255.254.22",
+              "remote_port": 21544,
+              "remote_type": "host",
+              "protocol": "udp",
+              "candidate_pair_id": "candidate:jyT3l+rZhaDIFjFqOaTqQJIVmeTeD3KP-candidate:NNJSDKRJn59feMMgnvJJSfFYovpZcF7p",
+              "observed_utc": "2026-10-20T18:43:30.564639773Z",
+              "candidate_pair_rtt_s": 0.011621174,
+              "scope": "ICE peer-to-SFU segment, not end-to-end Family RTT"
+            }
+          },
+          "setup_ms": 2188,
+          "protocol_errors_first_last": [
+            0,
+            0
+          ],
+          "mux_profile": "LEGACY64",
+          "mux_window": 65536,
+          "max_rss_kib": 51032,
+          "cpu_user_s": 5.205495,
+          "cpu_system_s": 3.085628,
+          "resource_scope": {
+            "interval_s": 106.10342979058623,
+            "busy_fraction": 0.28343611485835424,
+            "steal_fraction": 0.0024571208325303525,
+            "load_first_last": [
+              [
+                1.01318359375,
+                0.79638671875,
+                0.8017578125
+              ],
+              [
+                1.3125,
+                0.9716796875,
+                0.86474609375
+              ]
+            ],
+            "cgroup_cpu_first_last": [
+              "usage_usec 126862\nuser_usec 75920\nsystem_usec 50941\nnice_usec 73938\ncore_sched.force_idle_usec 0\nnr_periods 3\nnr_throttled 1\nthrottled_usec 39941\nnr_bursts 0\nburst_usec 0\n",
+              "usage_usec 8397411\nuser_usec 5287718\nsystem_usec 3109693\nnice_usec 3889233\ncore_sched.force_idle_usec 0\nnr_periods 1062\nnr_throttled 7\nthrottled_usec 348225\nnr_bursts 0\nburst_usec 0\n"
+            ],
+            "memory_events_first_last": [
+              "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+              "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n"
+            ],
+            "scope": "whole host CPU/load/network; process RUSAGE separately; local cgroup may include other applications"
+          },
+          "network_counters": {
+            "lo": {
+              "receive_bytes": 9410059,
+              "transmit_bytes": 9410059
+            },
+            "ens3": {
+              "receive_bytes": 6884294,
+              "transmit_bytes": 12010815
+            },
+            "br-10387ee1fe69": {
+              "receive_bytes": 8748,
+              "transmit_bytes": 11146
+            },
+            "docker0": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "veth84ea5dd": {
+              "receive_bytes": 0,
+              "transmit_bytes": 1404
+            },
+            "br-1ce3135e8b70": {
+              "receive_bytes": 0,
+              "transmit_bytes": 0
+            },
+            "br-453ee5521b67": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "br-5ae9504531a0": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "br-2b576de5cc0b": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "veth4d3166d": {
+              "receive_bytes": 9566,
+              "transmit_bytes": 42240
+            },
+            "vetha0d935b": {
+              "receive_bytes": 9975,
+              "transmit_bytes": 44208
+            },
+            "veth5ba6db6": {
+              "receive_bytes": 9975,
+              "transmit_bytes": 44208
+            },
+            "veth26081ca": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "vethded9791": {
+              "receive_bytes": 130332,
+              "transmit_bytes": 29624
+            },
+            "br-00ced2dd039e": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "br-f7a4e24037b0": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "br-047156ee1edd": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "veth7aafd08": {
+              "receive_bytes": 130200,
+              "transmit_bytes": 29558
+            },
+            "vethfdbc3d9": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "veth5b99e45": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "veth06e2de6": {
+              "receive_bytes": 9975,
+              "transmit_bytes": 44208
+            },
+            "vethb73dc22": {
+              "receive_bytes": 9975,
+              "transmit_bytes": 44208
+            },
+            "veth1b98be6": {
+              "receive_bytes": 9500,
+              "transmit_bytes": 42108
+            },
+            "vethff0babf": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "br-05bd21e2106d": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "veth8927256": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "br-da162ee6e3d0": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "veth5da4724": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "br-7c35c41f1ce8": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "veth78e36e7": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "br-99d2f023faa9": {
+              "receive_bytes": 0,
+              "transmit_bytes": 0
+            },
+            "vethd81c7d5": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "fcopen31": {
+              "receive_bytes": 0,
+              "transmit_bytes": 80
+            }
+          },
+          "network_scope": "Whole endpoint interfaces, includes test/SSH/other traffic; not an isolated background byte estimate",
+          "counter_bracket": {
+            "first_utc": "2026-10-20T18:42:05.576434845Z",
+            "last_utc": "2026-10-20T18:43:34.588454131Z",
+            "seconds": 89.01202,
+            "retry_bytes": 1523832,
+            "retries": 202,
+            "new_data_bytes": 8441876,
+            "wait_seconds": {
+              "FullNS": 76.519124972,
+              "ReadyFullNS": 73.161437913,
+              "WindowOnlyBlockedNS": 73.097773036,
+              "HeadSACKedBlockedNS": 4.501476009,
+              "HeadUnconfirmedLaterSACKedBlockedNS": 30.433109664
+            },
+            "wait_fraction": {
+              "FullNS": 0.8596493481666857,
+              "ReadyFullNS": 0.8219276218312986,
+              "WindowOnlyBlockedNS": 0.8212123827321299,
+              "HeadSACKedBlockedNS": 0.05057155212296047,
+              "HeadUnconfirmedLaterSACKedBlockedNS": 0.34189887684831777
+            },
+            "scope": "Same endpoint first/last transport snapshot bracket including close tail, not request-local; own UTC sample interval, no cross-machine subtraction. Overlapping waits are not summed."
+          },
+          "stream_credit_wait_seconds": {
+            "1": 1.614e-06,
+            "3": 35.119502038,
+            "7": 15.109739715,
+            "5": 11.669235803,
+            "9": 0.0
+          },
+          "stream_credit_scope": "Per-Mux-stream lifetime, not divided by unrelated request interval; retired ring sampling may omit late-retiring streams",
+          "media_counters": {
+            "SamplesWritten": 3726,
+            "RTPReceived": 3097,
+            "EmptyRTP": 0,
+            "SequenceGaps": 5,
+            "FramesReceived": 2984,
+            "BinaryFrames": 2935
+          },
+          "evidence_dropped": 79,
+          "reconnect_count": 0,
+          "close_states": [
+            "closed",
+            "closed"
+          ]
+        }
+      },
+      "cleanup": {
+        "owned_peer_pids": [],
+        "stage_removed": true,
+        "participant_leave": "CLI SIGTERM/context cancellation closes WebSocket and both peer connections; no provider conference-delete API used"
+      },
+      "server_exit": {
+        "exit": 1,
+        "terminated": false,
+        "stopped": true,
+        "seconds": 108.10862006153911
+      },
+      "server_exit_reason": "io: read/write on closed pipe during normal controlled teardown, after all request results; not hidden or counted as a body failure"
+    },
+    "B2": {
+      "host": "185.251.89.19",
+      "status": "COMPLETE",
+      "requests": [
+        {
+          "name": "control_echo",
+          "operation": "E",
+          "size": 65536,
+          "received": 65536,
+          "sha256": "7e340a656f5ffcd1e15dcbf9c09978eccc9b24ba90b463884e28fc1f0a5cb81a",
+          "passed": true,
+          "error": "",
+          "start_ns": 1534,
+          "end_ns": 4290257551,
+          "full_seconds": 4.290256017,
+          "open_seconds": 1.865644998,
+          "first_byte_seconds": 3.571240218,
+          "body_seconds": 0.719015799,
+          "stream": {
+            "ID": 1,
+            "State": "remote-half-closed",
+            "Sent": 65541,
+            "Received": 65536,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 16340,
+            "ReceiveHighWater": 16384
+          },
+          "goodput_mbit_s": null,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "single",
+          "operation": "D",
+          "size": 4194304,
+          "received": 4194304,
+          "sha256": "70d1d2a245e130fe843df98783941d7f770618d4a70489bc7e9ca518089467f8",
+          "passed": true,
+          "error": "",
+          "start_ns": 4294488257,
+          "end_ns": 49315309063,
+          "full_seconds": 45.020820806,
+          "open_seconds": 1.616976949,
+          "first_byte_seconds": 1.9752532280000001,
+          "body_seconds": 43.045567578,
+          "stream": {
+            "ID": 3,
+            "State": "remote-half-closed",
+            "Sent": 5,
+            "Received": 4194304,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 5,
+            "ReceiveHighWater": 16384
+          },
+          "goodput_mbit_s": 0.745309201371294,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "parallel_1",
+          "operation": "D",
+          "size": 2097152,
+          "received": 2097152,
+          "sha256": "88931b91ee539c9df54481f73ddd68df637a00e54916f404632f88c37fd4d186",
+          "passed": true,
+          "error": "",
+          "start_ns": 49330998716,
+          "end_ns": 76972798092,
+          "full_seconds": 27.641799376,
+          "open_seconds": 0.431845139,
+          "first_byte_seconds": 0.90486148,
+          "body_seconds": 26.736937896,
+          "stream": {
+            "ID": 5,
+            "State": "remote-half-closed",
+            "Sent": 5,
+            "Received": 2097152,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 5,
+            "ReceiveHighWater": 25468
+          },
+          "goodput_mbit_s": 0.6069509358557469,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "parallel_0",
+          "operation": "D",
+          "size": 2097152,
+          "received": 2097152,
+          "sha256": "88931b91ee539c9df54481f73ddd68df637a00e54916f404632f88c37fd4d186",
+          "passed": true,
+          "error": "",
+          "start_ns": 49331018885,
+          "end_ns": 77241270383,
+          "full_seconds": 27.910251498,
+          "open_seconds": 0.78019829,
+          "first_byte_seconds": 1.193821429,
+          "body_seconds": 26.716430069,
+          "stream": {
+            "ID": 7,
+            "State": "remote-half-closed",
+            "Sent": 5,
+            "Received": 2097152,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 5,
+            "ReceiveHighWater": 16384
+          },
+          "goodput_mbit_s": 0.6011130355167966,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "reverse_control",
+          "operation": "U",
+          "size": 65536,
+          "received": 32,
+          "sha256": "c0dfb5be2ba28f67ae3badf41bf98b5bee6e512fc1a4b02cc3c87bf6a4587b6c",
+          "passed": true,
+          "error": "",
+          "start_ns": 77250262931,
+          "end_ns": 78956440721,
+          "full_seconds": 1.70617779,
+          "open_seconds": 0.559764143,
+          "first_byte_seconds": 1.706177423,
+          "body_seconds": 3.67e-07,
+          "stream": {
+            "ID": 9,
+            "State": "remote-half-closed",
+            "Sent": 65541,
+            "Received": 32,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 16340,
+            "ReceiveHighWater": 32
+          },
+          "goodput_mbit_s": null,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        }
+      ],
+      "aggregate": {
+        "seconds": 27.910271667,
+        "received": 4194304,
+        "mbit_s": 1.202225202260336,
+        "complete": true
+      },
+      "endpoints": {
+        "client": {
+          "media": {
+            "publisher": {
+              "local_ip": "192.168.129.37",
+              "local_port": 54394,
+              "local_type": "host",
+              "remote_ip": "5.255.254.131",
+              "remote_port": 22594,
+              "remote_type": "host",
+              "protocol": "udp",
+              "candidate_pair_id": "candidate:a/Utx3PzosFV9PU+8+u+rtRx67CVQwg4-candidate:s6g+ZYs6bG2wKiH5j9vGlP1wNm1Ux2O7",
+              "observed_utc": "2026-10-20T18:45:26.931359915Z",
+              "candidate_pair_rtt_s": 0.16779126,
+              "scope": "ICE peer-to-SFU segment, not end-to-end Family RTT"
+            },
+            "subscriber": {
+              "local_ip": "192.168.129.37",
+              "local_port": 40402,
+              "local_type": "host",
+              "remote_ip": "5.255.254.131",
+              "remote_port": 21284,
+              "remote_type": "host",
+              "protocol": "udp",
+              "candidate_pair_id": "candidate:nONL4YGmzCSLrxEJkq3ZfP3LSixl+UB6-candidate:TPXv/y+7INQi4hNUSjdE10Y+SVlNiP1h",
+              "observed_utc": "2026-10-20T18:45:26.931359915Z",
+              "candidate_pair_rtt_s": 0.080952406,
+              "scope": "ICE peer-to-SFU segment, not end-to-end Family RTT"
+            }
+          },
+          "setup_ms": 1949,
+          "protocol_errors_first_last": [
+            0,
+            0
+          ],
+          "mux_profile": "LEGACY64",
+          "mux_window": 65536,
+          "max_rss_kib": 47932,
+          "cpu_user_s": 2.3687139999999998,
+          "cpu_system_s": 1.219348,
+          "resource_scope": {
+            "interval_s": 84.05954983798438,
+            "busy_fraction": 0.0858328977524024,
+            "steal_fraction": 0.0,
+            "load_first_last": [
+              [
+                1.3486328125,
+                1.48046875,
+                1.5107421875
+              ],
+              [
+                1.59619140625,
+                1.537109375,
+                1.5302734375
+              ]
+            ],
+            "cgroup_cpu_first_last": [
+              "usage_usec 4473437446\nuser_usec 4096364051\nsystem_usec 377073394\nnice_usec 4000\ncore_sched.force_idle_usec 0\n",
+              "usage_usec 4483018082\nuser_usec 4104296247\nsystem_usec 378721835\nnice_usec 4000\ncore_sched.force_idle_usec 0\n"
+            ],
+            "memory_events_first_last": [
+              "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+              "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n"
+            ],
+            "scope": "whole host CPU/load/network; process RUSAGE separately; local cgroup may include other applications"
+          },
+          "network_counters": {
+            "lo": {
+              "receive_bytes": 36661,
+              "transmit_bytes": 36661
+            },
+            "wlp0s20f3": {
+              "receive_bytes": 23228632,
+              "transmit_bytes": 1825424
+            },
+            "br-042858c9dc50": {
+              "receive_bytes": 392,
+              "transmit_bytes": 34160
+            },
+            "docker0": {
+              "receive_bytes": 0,
+              "transmit_bytes": 0
+            },
+            "veth9eaf2b4": {
+              "receive_bytes": 0,
+              "transmit_bytes": 52028
+            }
+          },
+          "network_scope": "Whole endpoint interfaces, includes test/SSH/other traffic; not an isolated background byte estimate",
+          "counter_bracket": {
+            "first_utc": "2026-10-20T18:44:12.260842549Z",
+            "last_utc": "2026-10-20T18:45:26.931359915Z",
+            "seconds": 74.670517,
+            "retry_bytes": 1138,
+            "retries": 21,
+            "new_data_bytes": 118172,
+            "wait_seconds": {
+              "FullNS": 26.661130544,
+              "ReadyFullNS": 13.840514371,
+              "WindowOnlyBlockedNS": 13.83412246,
+              "HeadSACKedBlockedNS": 0.923288526,
+              "HeadUnconfirmedLaterSACKedBlockedNS": 2.317106055
+            },
+            "wait_fraction": {
+              "FullNS": 0.35705030064275567,
+              "ReadyFullNS": 0.18535447358694462,
+              "WindowOnlyBlockedNS": 0.18526887205026316,
+              "HeadSACKedBlockedNS": 0.012364833713418644,
+              "HeadUnconfirmedLaterSACKedBlockedNS": 0.031031070201375462
+            },
+            "scope": "Same endpoint first/last transport snapshot bracket including close tail, not request-local; own UTC sample interval, no cross-machine subtraction. Overlapping waits are not summed."
+          },
+          "stream_credit_wait_seconds": {
+            "1": 3.774e-06,
+            "3": 0.0,
+            "5": 0.0,
+            "7": 0.0
+          },
+          "stream_credit_scope": "Per-Mux-stream lifetime, not divided by unrelated request interval; retired ring sampling may omit late-retiring streams",
+          "media_counters": {
+            "SamplesWritten": 3014,
+            "RTPReceived": 9621,
+            "EmptyRTP": 0,
+            "SequenceGaps": 32,
+            "FramesReceived": 3237,
+            "BinaryFrames": 3194
+          },
+          "evidence_dropped": 0,
+          "reconnect_count": 0,
+          "close_states": [
+            "closed",
+            "closed"
+          ]
+        },
+        "server": {
+          "media": {
+            "publisher": {
+              "local_ip": "185.251.89.19",
+              "local_port": 54415,
+              "local_type": "host",
+              "remote_ip": "5.255.254.131",
+              "remote_port": 22689,
+              "remote_type": "host",
+              "protocol": "udp",
+              "candidate_pair_id": "candidate:1hGwSI5R9q2Ot/KYsMFDfv3uGwWxW1y3-candidate:gOc2AVypJDDE58O/Priz8ComoSM44Gqo",
+              "observed_utc": "2026-10-20T18:45:29.273805526Z",
+              "candidate_pair_rtt_s": 0.012257688,
+              "scope": "ICE peer-to-SFU segment, not end-to-end Family RTT"
+            },
+            "subscriber": {
+              "local_ip": "185.251.89.19",
+              "local_port": 40541,
+              "local_type": "host",
+              "remote_ip": "5.255.254.131",
+              "remote_port": 21177,
+              "remote_type": "host",
+              "protocol": "udp",
+              "candidate_pair_id": "candidate:bwCx0E1xgHX5BVQ08LLwQXlAR7au7DBI-candidate:F2GATn+B/CF4fbroKTQ8rnNsuzazOo+M",
+              "observed_utc": "2026-10-20T18:45:29.273805526Z",
+              "candidate_pair_rtt_s": 0.012129999,
+              "scope": "ICE peer-to-SFU segment, not end-to-end Family RTT"
+            }
+          },
+          "setup_ms": 1600,
+          "protocol_errors_first_last": [
+            0,
+            0
+          ],
+          "mux_profile": "LEGACY64",
+          "mux_window": 65536,
+          "max_rss_kib": 50628,
+          "cpu_user_s": 4.5667290000000005,
+          "cpu_system_s": 2.807127,
+          "resource_scope": {
+            "interval_s": 90.09211311861873,
+            "busy_fraction": 0.32034465726359695,
+            "steal_fraction": 0.005378409527468306,
+            "load_first_last": [
+              [
+                1.53662109375,
+                1.03955078125,
+                0.8896484375
+              ],
+              [
+                0.9140625,
+                0.966796875,
+                0.88134765625
+              ]
+            ],
+            "cgroup_cpu_first_last": [
+              "usage_usec 124306\nuser_usec 72957\nsystem_usec 51348\nnice_usec 74973\ncore_sched.force_idle_usec 0\nnr_periods 2\nnr_throttled 1\nthrottled_usec 33244\nnr_bursts 0\nburst_usec 0\n",
+              "usage_usec 7398516\nuser_usec 4566204\nsystem_usec 2832312\nnice_usec 7772114\ncore_sched.force_idle_usec 0\nnr_periods 902\nnr_throttled 7\nthrottled_usec 337001\nnr_bursts 0\nburst_usec 0\n"
+            ],
+            "memory_events_first_last": [
+              "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+              "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n"
+            ],
+            "scope": "whole host CPU/load/network; process RUSAGE separately; local cgroup may include other applications"
+          },
+          "network_counters": {
+            "lo": {
+              "receive_bytes": 9636144,
+              "transmit_bytes": 9636144
+            },
+            "ens3": {
+              "receive_bytes": 5880702,
+              "transmit_bytes": 11332211
+            },
+            "br-10387ee1fe69": {
+              "receive_bytes": 8908,
+              "transmit_bytes": 11020
+            },
+            "docker0": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "veth84ea5dd": {
+              "receive_bytes": 0,
+              "transmit_bytes": 948
+            },
+            "br-1ce3135e8b70": {
+              "receive_bytes": 0,
+              "transmit_bytes": 0
+            },
+            "br-453ee5521b67": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "br-5ae9504531a0": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "br-2b576de5cc0b": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "veth4d3166d": {
+              "receive_bytes": 8550,
+              "transmit_bytes": 37908
+            },
+            "vetha0d935b": {
+              "receive_bytes": 8141,
+              "transmit_bytes": 35940
+            },
+            "veth5ba6db6": {
+              "receive_bytes": 8075,
+              "transmit_bytes": 35808
+            },
+            "veth26081ca": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "vethded9791": {
+              "receive_bytes": 109332,
+              "transmit_bytes": 24874
+            },
+            "br-00ced2dd039e": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "br-f7a4e24037b0": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "br-047156ee1edd": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "veth7aafd08": {
+              "receive_bytes": 111300,
+              "transmit_bytes": 25283
+            },
+            "vethfdbc3d9": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "veth5b99e45": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "veth06e2de6": {
+              "receive_bytes": 8075,
+              "transmit_bytes": 35808
+            },
+            "vethb73dc22": {
+              "receive_bytes": 8550,
+              "transmit_bytes": 37908
+            },
+            "veth1b98be6": {
+              "receive_bytes": 8550,
+              "transmit_bytes": 37908
+            },
+            "vethff0babf": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "br-05bd21e2106d": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "veth8927256": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "br-da162ee6e3d0": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "veth5da4724": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "br-7c35c41f1ce8": {
+              "receive_bytes": 100,
+              "transmit_bytes": 300
+            },
+            "veth78e36e7": {
+              "receive_bytes": 142,
+              "transmit_bytes": 300
+            },
+            "br-99d2f023faa9": {
+              "receive_bytes": 0,
+              "transmit_bytes": 0
+            },
+            "vethd81c7d5": {
+              "receive_bytes": 0,
+              "transmit_bytes": 108
+            },
+            "fcopen31": {
+              "receive_bytes": 0,
+              "transmit_bytes": 80
+            }
+          },
+          "network_scope": "Whole endpoint interfaces, includes test/SSH/other traffic; not an isolated background byte estimate",
+          "counter_bracket": {
+            "first_utc": "2026-10-20T18:44:14.277250664Z",
+            "last_utc": "2026-10-20T18:45:29.356761868Z",
+            "seconds": 75.079511,
+            "retry_bytes": 955152,
+            "retries": 131,
+            "new_data_bytes": 8376182,
+            "wait_seconds": {
+              "FullNS": 66.14563042,
+              "ReadyFullNS": 64.087550303,
+              "WindowOnlyBlockedNS": 64.038743034,
+              "HeadSACKedBlockedNS": 5.586015451,
+              "HeadUnconfirmedLaterSACKedBlockedNS": 23.163187121
+            },
+            "wait_fraction": {
+              "FullNS": 0.881007741512861,
+              "ReadyFullNS": 0.8535957340345491,
+              "WindowOnlyBlockedNS": 0.852945659622104,
+              "HeadSACKedBlockedNS": 0.07440132969166514,
+              "HeadUnconfirmedLaterSACKedBlockedNS": 0.308515423348988
+            },
+            "scope": "Same endpoint first/last transport snapshot bracket including close tail, not request-local; own UTC sample interval, no cross-machine subtraction. Overlapping waits are not summed."
+          },
+          "stream_credit_wait_seconds": {
+            "1": 3.6361e-05,
+            "3": 30.884137852,
+            "5": 16.307951684,
+            "7": 14.86632434,
+            "9": 0.0
+          },
+          "stream_credit_scope": "Per-Mux-stream lifetime, not divided by unrelated request interval; retired ring sampling may omit late-retiring streams",
+          "media_counters": {
+            "SamplesWritten": 3565,
+            "RTPReceived": 3098,
+            "EmptyRTP": 0,
+            "SequenceGaps": 8,
+            "FramesReceived": 3000,
+            "BinaryFrames": 2958
+          },
+          "evidence_dropped": 91,
+          "reconnect_count": 0,
+          "close_states": [
+            "closed",
+            "closed"
+          ]
+        }
+      },
+      "cleanup": {
+        "owned_peer_pids": [],
+        "stage_removed": true,
+        "participant_leave": "CLI SIGTERM/context cancellation closes WebSocket and both peer connections; no provider conference-delete API used"
+      },
+      "server_exit": {
+        "exit": 1,
+        "terminated": true,
+        "stopped": true,
+        "seconds": 92.1291161030531
+      },
+      "server_exit_reason": "io: read/write on closed pipe during normal controlled teardown, after all request results; not hidden or counted as a body failure"
+    },
+    "A2": {
+      "host": "186.246.45.246",
+      "status": "COMPLETE",
+      "requests": [
+        {
+          "name": "control_echo",
+          "operation": "E",
+          "size": 65536,
+          "received": 65536,
+          "sha256": "7e340a656f5ffcd1e15dcbf9c09978eccc9b24ba90b463884e28fc1f0a5cb81a",
+          "passed": true,
+          "error": "",
+          "start_ns": 1603,
+          "end_ns": 5619671013,
+          "full_seconds": 5.61966941,
+          "open_seconds": 1.094279674,
+          "first_byte_seconds": 4.773155538,
+          "body_seconds": 0.846513872,
+          "stream": {
+            "ID": 1,
+            "State": "remote-half-closed",
+            "Sent": 65541,
+            "Received": 65536,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 16340,
+            "ReceiveHighWater": 16384
+          },
+          "goodput_mbit_s": null,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "single",
+          "operation": "D",
+          "size": 4194304,
+          "received": 4194304,
+          "sha256": "70d1d2a245e130fe843df98783941d7f770618d4a70489bc7e9ca518089467f8",
+          "passed": true,
+          "error": "",
+          "start_ns": 5623792491,
+          "end_ns": 62192540471,
+          "full_seconds": 56.56874798,
+          "open_seconds": 1.340239175,
+          "first_byte_seconds": 1.829400289,
+          "body_seconds": 54.739347691,
+          "stream": {
+            "ID": 3,
+            "State": "remote-half-closed",
+            "Sent": 5,
+            "Received": 4194304,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 5,
+            "ReceiveHighWater": 20436
+          },
+          "goodput_mbit_s": 0.5931620054922064,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "parallel_1",
+          "operation": "D",
+          "size": 2097152,
+          "received": 2097152,
+          "sha256": "88931b91ee539c9df54481f73ddd68df637a00e54916f404632f88c37fd4d186",
+          "passed": true,
+          "error": "",
+          "start_ns": 62209275015,
+          "end_ns": 95578890412,
+          "full_seconds": 33.369615397,
+          "open_seconds": 0.142661616,
+          "first_byte_seconds": 1.115816135,
+          "body_seconds": 32.253799262,
+          "stream": {
+            "ID": 5,
+            "State": "remote-half-closed",
+            "Sent": 5,
+            "Received": 2097152,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 5,
+            "ReceiveHighWater": 16384
+          },
+          "goodput_mbit_s": 0.5027692348383587,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "parallel_0",
+          "operation": "D",
+          "size": 2097152,
+          "received": 2097152,
+          "sha256": "88931b91ee539c9df54481f73ddd68df637a00e54916f404632f88c37fd4d186",
+          "passed": true,
+          "error": "",
+          "start_ns": 62209307201,
+          "end_ns": 95579129378,
+          "full_seconds": 33.369822177,
+          "open_seconds": 0.563988143,
+          "first_byte_seconds": 1.5669326,
+          "body_seconds": 31.802889577,
+          "stream": {
+            "ID": 7,
+            "State": "remote-half-closed",
+            "Sent": 5,
+            "Received": 2097152,
+            "LocalFIN": 0,
+            "RemoteFIN": 1,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 5,
+            "ReceiveHighWater": 16384
+          },
+          "goodput_mbit_s": 0.5027661193700822,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        },
+        {
+          "name": "reverse_control",
+          "operation": "U",
+          "size": 65536,
+          "received": 32,
+          "sha256": "c0dfb5be2ba28f67ae3badf41bf98b5bee6e512fc1a4b02cc3c87bf6a4587b6c",
+          "passed": true,
+          "error": "",
+          "start_ns": 95590817398,
+          "end_ns": 97238902049,
+          "full_seconds": 1.648084651,
+          "open_seconds": 0.773140583,
+          "first_byte_seconds": 1.648084255,
+          "body_seconds": 3.96e-07,
+          "stream": {
+            "ID": 9,
+            "State": "open",
+            "Sent": 65541,
+            "Received": 32,
+            "LocalFIN": 0,
+            "RemoteFIN": 0,
+            "ReceiveBuffered": 0,
+            "SendCredit": 65536,
+            "SendHighWater": 16340,
+            "ReceiveHighWater": 32
+          },
+          "goodput_mbit_s": null,
+          "protocol_errors_before_after": [
+            0,
+            0
+          ]
+        }
+      ],
+      "aggregate": {
+        "seconds": 33.369854363,
+        "received": 4194304,
+        "mbit_s": 1.005531268880953,
+        "complete": true
+      },
+      "endpoints": {
+        "client": {
+          "media": {
+            "publisher": {
+              "local_ip": "192.168.129.37",
+              "local_port": 56127,
+              "local_type": "host",
+              "remote_ip": "37.9.73.8",
+              "remote_port": 22831,
+              "remote_type": "host",
+              "protocol": "udp",
+              "candidate_pair_id": "candidate:mv1M4GqIz2NABvPirWTkua9lG+gc38oS-candidate:dme//tutkyHkBPGDn/p96vROOWQMKozW",
+              "observed_utc": "2026-10-20T18:47:36.244638621Z",
+              "candidate_pair_rtt_s": 0.086121158,
+              "scope": "ICE peer-to-SFU segment, not end-to-end Family RTT"
+            },
+            "subscriber": {
+              "local_ip": "192.168.129.37",
+              "local_port": 56088,
+              "local_type": "host",
+              "remote_ip": "37.9.73.8",
+              "remote_port": 21314,
+              "remote_type": "host",
+              "protocol": "udp",
+              "candidate_pair_id": "candidate:j2wKrkcxnuvfm7VtCt5ZeVCteieqgsWP-candidate:tTNLlTZsTiXcql6FhxOA6xG1Tr7BPKuX",
+              "observed_utc": "2026-10-20T18:47:36.244638621Z",
+              "candidate_pair_rtt_s": 0.15707399,
+              "scope": "ICE peer-to-SFU segment, not end-to-end Family RTT"
+            }
+          },
+          "setup_ms": 2399,
+          "protocol_errors_first_last": [
+            0,
+            0
+          ],
+          "mux_profile": "LEGACY64",
+          "mux_window": 65536,
+          "max_rss_kib": 48404,
+          "cpu_user_s": 2.656765,
+          "cpu_system_s": 1.474761,
+          "resource_scope": {
+            "interval_s": 104.08237336299499,
+            "busy_fraction": 0.09229306196761818,
+            "steal_fraction": 0.0,
+            "load_first_last": [
+              [
+                1.98583984375,
+                1.638671875,
+                1.56494140625
+              ],
+              [
+                1.24072265625,
+                1.4970703125,
+                1.5224609375
+              ]
+            ],
+            "cgroup_cpu_first_last": [
+              "usage_usec 4488770536\nuser_usec 4109538967\nsystem_usec 379231569\nnice_usec 4000\ncore_sched.force_idle_usec 0\n",
+              "usage_usec 4500881636\nuser_usec 4119661612\nsystem_usec 381220023\nnice_usec 4000\ncore_sched.force_idle_usec 0\n"
+            ],
+            "memory_events_first_last": [
+              "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+              "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n"
+            ],
+            "scope": "whole host CPU/load/network; process RUSAGE separately; local cgroup may include other applications"
+          },
+          "network_counters": {
+            "lo": {
+              "receive_bytes": 42757,
+              "transmit_bytes": 42757
+            },
+            "wlp0s20f3": {
+              "receive_bytes": 22857083,
+              "transmit_bytes": 2114938
+            },
+            "br-042858c9dc50": {
+              "receive_bytes": 672,
+              "transmit_bytes": 34160
+            },
+            "docker0": {
+              "receive_bytes": 0,
+              "transmit_bytes": 0
+            },
+            "veth9eaf2b4": {
+              "receive_bytes": 0,
+              "transmit_bytes": 52448
+            }
+          },
+          "network_scope": "Whole endpoint interfaces, includes test/SSH/other traffic; not an isolated background byte estimate",
+          "counter_bracket": {
+            "first_utc": "2026-10-20T18:46:03.963854216Z",
+            "last_utc": "2026-10-20T18:47:36.244638621Z",
+            "seconds": 92.280784,
+            "retry_bytes": 192,
+            "retries": 4,
+            "new_data_bytes": 120484,
+            "wait_seconds": {
+              "FullNS": 30.958167652,
+              "ReadyFullNS": 15.646341496,
+              "WindowOnlyBlockedNS": 15.640239476,
+              "HeadSACKedBlockedNS": 0.832106894,
+              "HeadUnconfirmedLaterSACKedBlockedNS": 0.0
+            },
+            "wait_fraction": {
+              "FullNS": 0.33547794362041833,
+              "ReadyFullNS": 0.16955145825375736,
+              "WindowOnlyBlockedNS": 0.16948533376136032,
+              "HeadSACKedBlockedNS": 0.009017119902232302,
+              "HeadUnconfirmedLaterSACKedBlockedNS": 0.0
+            },
+            "scope": "Same endpoint first/last transport snapshot bracket including close tail, not request-local; own UTC sample interval, no cross-machine subtraction. Overlapping waits are not summed."
+          },
+          "stream_credit_wait_seconds": {
+            "1": 1.337e-06,
+            "3": 0.0,
+            "5": 0.0,
+            "7": 0.0
+          },
+          "stream_credit_scope": "Per-Mux-stream lifetime, not divided by unrelated request interval; retired ring sampling may omit late-retiring streams",
+          "media_counters": {
+            "SamplesWritten": 3058,
+            "RTPReceived": 9581,
+            "EmptyRTP": 0,
+            "SequenceGaps": 45,
+            "FramesReceived": 3193,
+            "BinaryFrames": 3141
+          },
+          "evidence_dropped": 0,
+          "reconnect_count": 0,
+          "close_states": [
+            "closed",
+            "closed"
+          ]
+        },
+        "server": {
+          "media": {
+            "publisher": {
+              "local_ip": "186.246.45.246",
+              "local_port": 51091,
+              "local_type": "host",
+              "remote_ip": "37.9.73.8",
+              "remote_port": 22537,
+              "remote_type": "host",
+              "protocol": "udp",
+              "candidate_pair_id": "candidate:dTAV5OZxmV3Rk9fMROJeKsgDuwoYHnMy-candidate:qwHk+fNwwQNoY31M1JBqBtnusUQaLODV",
+              "observed_utc": "2026-10-20T18:47:34.407565144Z",
+              "candidate_pair_rtt_s": 0.061306941,
+              "scope": "ICE peer-to-SFU segment, not end-to-end Family RTT"
+            },
+            "subscriber": {
+              "local_ip": "186.246.45.246",
+              "local_port": 58416,
+              "local_type": "host",
+              "remote_ip": "37.9.73.8",
+              "remote_port": 21372,
+              "remote_type": "host",
+              "protocol": "udp",
+              "candidate_pair_id": "candidate:3oEDa9oVdwbN2ShN9S+Q6xQHFeN8qDZz-candidate:5/Lpv+xa0p0Okm98JhuPhLt1IMfHU63/",
+              "observed_utc": "2026-10-20T18:47:34.407565144Z",
+              "candidate_pair_rtt_s": 0.049474186,
+              "scope": "ICE peer-to-SFU segment, not end-to-end Family RTT"
+            }
+          },
+          "setup_ms": 1688,
+          "protocol_errors_first_last": [
+            0,
+            0
+          ],
+          "mux_profile": "LEGACY64",
+          "mux_window": 65536,
+          "max_rss_kib": 41896,
+          "cpu_user_s": 2.315173,
+          "cpu_system_s": 2.388235,
+          "resource_scope": {
+            "interval_s": 110.0810678419657,
+            "busy_fraction": 0.2455470737913486,
+            "steal_fraction": 0.004452926208651399,
+            "load_first_last": [
+              [
+                0.861328125,
+                0.78369140625,
+                0.607421875
+              ],
+              [
+                0.54931640625,
+                0.771484375,
+                0.62646484375
+              ]
+            ],
+            "cgroup_cpu_first_last": [
+              "usage_usec 50483\nuser_usec 28794\nsystem_usec 21688\nnice_usec 26880\ncore_sched.force_idle_usec 0\nnr_periods 1\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+              "usage_usec 4798544\nuser_usec 2374401\nsystem_usec 2424142\nnice_usec 2037010\ncore_sched.force_idle_usec 0\nnr_periods 1101\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n"
+            ],
+            "memory_events_first_last": [
+              "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+              "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n"
+            ],
+            "scope": "whole host CPU/load/network; process RUSAGE separately; local cgroup may include other applications"
+          },
+          "network_counters": {
+            "lo": {
+              "receive_bytes": 9418053,
+              "transmit_bytes": 9418053
+            },
+            "ens3": {
+              "receive_bytes": 44348685,
+              "transmit_bytes": 28727001
+            },
+            "fcams": {
+              "receive_bytes": 0,
+              "transmit_bytes": 0
+            },
+            "fcawg31": {
+              "receive_bytes": 0,
+              "transmit_bytes": 0
+            },
+            "fcopen31": {
+              "receive_bytes": 1742147,
+              "transmit_bytes": 13348462
+            }
+          },
+          "network_scope": "Whole endpoint interfaces, includes test/SSH/other traffic; not an isolated background byte estimate",
+          "counter_bracket": {
+            "first_utc": "2026-10-20T18:46:04.408298316Z",
+            "last_utc": "2026-10-20T18:47:39.206558215Z",
+            "seconds": 94.79826,
+            "retry_bytes": 1531224,
+            "retries": 210,
+            "new_data_bytes": 8443064,
+            "wait_seconds": {
+              "FullNS": 84.93340215,
+              "ReadyFullNS": 82.841164016,
+              "WindowOnlyBlockedNS": 82.79264067,
+              "HeadSACKedBlockedNS": 4.769308325,
+              "HeadUnconfirmedLaterSACKedBlockedNS": 34.63887933
+            },
+            "wait_fraction": {
+              "FullNS": 0.8959384080467301,
+              "ReadyFullNS": 0.8738679804460545,
+              "WindowOnlyBlockedNS": 0.8733561214098233,
+              "HeadSACKedBlockedNS": 0.05031008295932858,
+              "HeadUnconfirmedLaterSACKedBlockedNS": 0.36539572909882523
+            },
+            "scope": "Same endpoint first/last transport snapshot bracket including close tail, not request-local; own UTC sample interval, no cross-machine subtraction. Overlapping waits are not summed."
+          },
+          "stream_credit_wait_seconds": {
+            "1": 1.362e-06,
+            "3": 40.681638075
+          },
+          "stream_credit_scope": "Per-Mux-stream lifetime, not divided by unrelated request interval; retired ring sampling may omit late-retiring streams",
+          "media_counters": {
+            "SamplesWritten": 3784,
+            "RTPReceived": 3145,
+            "EmptyRTP": 0,
+            "SequenceGaps": 4,
+            "FramesReceived": 3035,
+            "BinaryFrames": 2983
+          },
+          "evidence_dropped": 0,
+          "reconnect_count": 0,
+          "close_states": [
+            "closed",
+            "closed"
+          ]
+        }
+      },
+      "cleanup": {
+        "owned_peer_pids": [],
+        "stage_removed": true,
+        "participant_leave": "CLI SIGTERM/context cancellation closes WebSocket and both peer connections; no provider conference-delete API used"
+      },
+      "server_exit": {
+        "exit": 1,
+        "terminated": false,
+        "stopped": true,
+        "seconds": 112.08377426397055
+      },
+      "server_exit_reason": "io: read/write on closed pipe during normal controlled teardown, after all request results; not hidden or counted as a body failure"
+    }
+  },
+  "pairs": [
+    {
+      "control": "A1",
+      "alternative": "B1",
+      "single_gain_percent": 17.565548264951513,
+      "aggregate_gain_percent": 22.23662702534064,
+      "echo_control_change_percent": 1.2341939412533698,
+      "reverse_control_change_percent": 115.14048188963591
+    },
+    {
+      "control": "A2",
+      "alternative": "B2",
+      "single_gain_percent": 25.650192438208453,
+      "aggregate_gain_percent": 19.561195108162256,
+      "echo_control_change_percent": -23.65643414244897,
+      "reverse_control_change_percent": 3.5248880550371675
+    }
+  ],
+  "application_bytes": 34341092,
+  "application_limit_bytes": 67108864,
+  "body_integrity": {
+    "payload_sha256": {
+      "65536": "7e340a656f5ffcd1e15dcbf9c09978eccc9b24ba90b463884e28fc1f0a5cb81a",
+      "2097152": "88931b91ee539c9df54481f73ddd68df637a00e54916f404632f88c37fd4d186",
+      "4194304": "70d1d2a245e130fe843df98783941d7f770618d4a70489bc7e9ca518089467f8"
+    },
+    "payload_bytes": 4194304,
+    "zlib_ratio": 1.0003066062927246,
+    "all20_byte_exact": true,
+    "all_protocol_counters_zero": true,
+    "sealed_source": "UNCHANGED",
+    "kit_path": "state-client-build/host-compare-20261020/host-compare-kit.tar.gz",
+    "kit_sha256": "7febd1212d51126703cf6eb03432df528c2cb32df7b60951a1a7870f2c91f0c3",
+    "kit_contains_credentials": false
+  },
+  "production_before": {
+    "ActiveState": "active",
+    "InvocationID": "c24eee95c3fe49aba878a6c9988d9d20",
+    "MainPID": "4126720",
+    "binary": "734b6ca6eb42be0367b703b657be87c624f3500ae408bbd771309ffaeb86128e",
+    "profile": "b3097a837942f19754662a47429371c3d77ec1d2075335148ad787f768e17713",
+    "flags": {
+      "rtp-pacing": "OFF",
+      "mux-profile": "LEGACY64",
+      "mux-counters": "OFF"
+    }
+  },
+  "production_after": {
+    "ActiveState": "active",
+    "InvocationID": "c24eee95c3fe49aba878a6c9988d9d20",
+    "MainPID": "4126720",
+    "binary": "734b6ca6eb42be0367b703b657be87c624f3500ae408bbd771309ffaeb86128e",
+    "profile": "b3097a837942f19754662a47429371c3d77ec1d2075335148ad787f768e17713",
+    "flags": {
+      "rtp-pacing": "OFF",
+      "mux-profile": "LEGACY64",
+      "mux-counters": "OFF"
+    }
+  },
+  "production_unchanged_during_experiment": true,
+  "pre_task_process_change": {
+    "previous_pid": 4079583,
+    "observed_pid": 4126720,
+    "current_start_utc": "2026-10-20T18:07:08Z",
+    "binary_unchanged": true,
+    "credentials_changed_before_test": true,
+    "cause": "not established by this comparison; not performed by this task"
+  },
+  "owner": {
+    "code": 96,
+    "apk_sha256": "07a90f03269e1df683289bc1fbe7fa7e88647c5629f71db1f784d6566aa9228d",
+    "pid": "30172",
+    "uid": 10283,
+    "apk_native_sha256": "66a9d18d04ff71100df0144228db05decb970aea71b6d277ec321b1c6c240c63"
+  },
+  "owner_vpn": "342",
+  "operator_flags": {
+    "rtp-pacing": "OFF",
+    "mux-profile": "LEGACY64",
+    "mux-counters": "OFF"
+  },
+  "collectors_stopped": true,
+  "temporary_test_credentials_removed": true,
+  "room_lifecycle": "Both peers report publisher/subscriber closed; no owned workers/stages remain. Existing provider abstraction has no delete-conference method; provider metadata deletion is not claimed.",
+  "next_decision": "Prepare a separately authorized product Android comparison; no migration, country change, production credentials copy or automatic deployment",
+  "pacing_result_unchanged": "NOT_ACCEPTED for tested fixed4M candidate only",
+  "local_validation": [
+    "focused existing CLI + bounded fixture race tests PASS outside sandbox",
+    "initial sandbox socket denial retained",
+    "minimal issuer venv missing pydantic repaired with existing complete venv, no dependency upgrade",
+    "20/20 synthetic requests byte-exact; all Mux counters zero",
+    "source and binary hashes verified; postflight owned-process cleanup PASS"
+  ],
+  "limitations": [
+    "Four independent media sessions assigned four SFU IPs; host versus path cannot be separated",
+    "A1 client publisher nominated docker bridge address, routed by main table over the same Wi-Fi, not a VPN; ICE source selection is recorded",
+    "Echo64KiB and acknowledged upload controls are not pure RTT; reverse-control latency worsened in B1",
+    "Whole-host background byte counters not separable from test/admin traffic",
+    "Bounded event ring omitted79/91 server events in B1/B2; missing events are not zero loss",
+    "No Android/mobile-field speed acceptance; no assertion of a defective provider or service ceiling"
+  ]
+}

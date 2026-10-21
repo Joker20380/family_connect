@@ -1,0 +1,635 @@
+--- a/carrier/sessiondiag/report.go
++++ b/carrier/sessiondiag/report.go
+@@ -15,40 +15,41 @@
+ )
+ 
+ type Report struct {
+-	SpeedProfile       string                 `json:"speed_profile,omitempty"`
+-	ReliableLimits     reliablestream.Limits  `json:"reliable_limits"`
+-	RetryBytes         uint64                 `json:"retry_bytes"`
+-	MuxProfile         string                 `json:"mux_profile,omitempty"`
+-	MuxWindow          int                    `json:"mux_window,omitempty"`
+-	Trace              *sessiontrace.Snapshot `json:"lifecycle,omitempty"`
+-	CorrelationStatus  string                 `json:"correlation_status"`
+-	SessionTag         string                 `json:"session_tag"`
+-	TerminalReason     string                 `json:"terminal_reason"`
+-	TerminalAtMS       int64                  `json:"terminal_at_ms"`
+-	ObservedAtMS       int64                  `json:"observed_at_ms"`
+-	ReliableTerminal   string                 `json:"reliable_terminal"`
+-	SignalingFailure   string                 `json:"signaling_failure"`
+-	ICEFailure         string                 `json:"ice_failure"`
+-	EvidenceDropped    uint64                 `json:"evidence_dropped"`
+-	SubscriberState    string                 `json:"subscriber_state"`
+-	PublisherState     string                 `json:"publisher_state"`
+-	Retransmissions    uint64                 `json:"retransmissions"`
+-	RecoveryTimeouts   uint64                 `json:"recovery_timeouts"`
+-	ReceivedFrames     uint64                 `json:"received_frames"`
+-	SentFrames         uint64                 `json:"sent_frames"`
+-	ProtocolErrors     uint64                 `json:"protocol_errors"`
+-	DNSResponses       uint64                 `json:"dns_responses"`
+-	DNSErrors          uint64                 `json:"dns_errors"`
+-	OpenOK             uint64                 `json:"tcp_open_ok"`
+-	OpenErrors         uint64                 `json:"tcp_open_errors"`
+-	AdmissionWaits     uint64                 `json:"tcp_admission_waits"`
+-	AdmissionRejected  uint64                 `json:"tcp_admission_rejected"`
+-	AdmissionTimeouts  uint64                 `json:"tcp_admission_timeouts"`
+-	AdmissionCancelled uint64                 `json:"tcp_admission_cancelled"`
+-	AdmissionWaiting   int                    `json:"tcp_admission_waiting"`
+-	LeaseRejected      uint64                 `json:"lease_admission_rejected"`
+-	SentBytes          uint64                 `json:"sent_bytes"`
+-	ReceivedBytes      uint64                 `json:"received_bytes"`
++	ProtocolErrorReasons tcpforward.ProtocolErrorCounts `json:"protocol_error_reasons"`
++	SpeedProfile         string                         `json:"speed_profile,omitempty"`
++	ReliableLimits       reliablestream.Limits          `json:"reliable_limits"`
++	RetryBytes           uint64                         `json:"retry_bytes"`
++	MuxProfile           string                         `json:"mux_profile,omitempty"`
++	MuxWindow            int                            `json:"mux_window,omitempty"`
++	Trace                *sessiontrace.Snapshot         `json:"lifecycle,omitempty"`
++	CorrelationStatus    string                         `json:"correlation_status"`
++	SessionTag           string                         `json:"session_tag"`
++	TerminalReason       string                         `json:"terminal_reason"`
++	TerminalAtMS         int64                          `json:"terminal_at_ms"`
++	ObservedAtMS         int64                          `json:"observed_at_ms"`
++	ReliableTerminal     string                         `json:"reliable_terminal"`
++	SignalingFailure     string                         `json:"signaling_failure"`
++	ICEFailure           string                         `json:"ice_failure"`
++	EvidenceDropped      uint64                         `json:"evidence_dropped"`
++	SubscriberState      string                         `json:"subscriber_state"`
++	PublisherState       string                         `json:"publisher_state"`
++	Retransmissions      uint64                         `json:"retransmissions"`
++	RecoveryTimeouts     uint64                         `json:"recovery_timeouts"`
++	ReceivedFrames       uint64                         `json:"received_frames"`
++	SentFrames           uint64                         `json:"sent_frames"`
++	ProtocolErrors       uint64                         `json:"protocol_errors"`
++	DNSResponses         uint64                         `json:"dns_responses"`
++	DNSErrors            uint64                         `json:"dns_errors"`
++	OpenOK               uint64                         `json:"tcp_open_ok"`
++	OpenErrors           uint64                         `json:"tcp_open_errors"`
++	AdmissionWaits       uint64                         `json:"tcp_admission_waits"`
++	AdmissionRejected    uint64                         `json:"tcp_admission_rejected"`
++	AdmissionTimeouts    uint64                         `json:"tcp_admission_timeouts"`
++	AdmissionCancelled   uint64                         `json:"tcp_admission_cancelled"`
++	AdmissionWaiting     int                            `json:"tcp_admission_waiting"`
++	LeaseRejected        uint64                         `json:"lease_admission_rejected"`
++	SentBytes            uint64                         `json:"sent_bytes"`
++	ReceivedBytes        uint64                         `json:"received_bytes"`
+ }
+ 
+ func Delivery(reliable reliablestream.Stats, media telemost.Stats) *sessiontrace.Delivery {
+@@ -112,7 +113,7 @@
+ 		PublisherState:  choice(media.PublisherState, "new", "connecting", "connected", "disconnected", "failed", "closed"),
+ 		Retransmissions: reliable.Retransmissions, RecoveryTimeouts: reliable.Timeouts,
+ 		ReceivedFrames: media.Media.FramesReceived, SentFrames: media.Media.SamplesWritten,
+-		ProtocolErrors: mux.ProtocolErrors, DNSResponses: mux.DNSResponses, DNSErrors: mux.DNSErrors,
++		ProtocolErrorReasons: mux.ProtocolErrorReasons, ProtocolErrors: mux.ProtocolErrors, DNSResponses: mux.DNSResponses, DNSErrors: mux.DNSErrors,
+ 		OpenOK: mux.OpenOK, OpenErrors: mux.OpenErrors, SentBytes: mux.SentBytes, ReceivedBytes: mux.ReceivedBytes,
+ 		AdmissionWaits: mux.AdmissionWaits, AdmissionRejected: mux.AdmissionRejected,
+ 		AdmissionTimeouts: mux.AdmissionTimeouts, AdmissionCancelled: mux.AdmissionCancelled,
+--- a/carrier/tcpforward/mux.go
++++ b/carrier/tcpforward/mux.go
+@@ -23,38 +23,58 @@
+ 
+ const LeaseRenewalHost = "lease-renewal.family-connect.invalid"
+ 
++type ProtocolErrorCounts struct {
++	OpenReplay    uint64 `json:"open_replay"`
++	UnknownStream uint64 `json:"unknown_stream"`
++	OpenState     uint64 `json:"open_state"`
++	DataState     uint64 `json:"data_state"`
++	CreditState   uint64 `json:"credit_state"`
++	FINState      uint64 `json:"fin_state"`
++	CloseState    uint64 `json:"close_state"`
++	FrameKind     uint64 `json:"frame_kind"`
++	DNSReplay     uint64 `json:"dns_replay"`
++	DNSRole       uint64 `json:"dns_role"`
++	DNSUnmatched  uint64 `json:"dns_unmatched"`
++}
++
++func (mux *Mux) protocolErrorLocked(counter *uint64) {
++	mux.stats.ProtocolErrors++
++	*counter++
++}
++
+ type MuxStats struct {
+-	Window             int
+-	Profile            string
+-	Destination        DestinationStats
+-	ActiveSockets      int
+-	ActiveStreams      int
+-	MaxActiveStreams   int
+-	Opened             uint64
+-	OpenOK             uint64
+-	OpenErrors         uint64
+-	AdmissionWaits     uint64
+-	AdmissionRejected  uint64
+-	AdmissionTimeouts  uint64
+-	AdmissionCancelled uint64
+-	AdmissionWaiting   int
+-	LeaseRejected      uint64
+-	Resets             uint64
+-	ProtocolErrors     uint64
+-	SentBytes          uint64
+-	ReceivedBytes      uint64
+-	FlowStalls         uint64
+-	RetainedBytes      int
+-	RetainedHighWater  int
+-	SendHighWater      int
+-	ReceiveHighWater   int
+-	QueueHighWater     int
+-	SchedulerFrames    uint64
+-	SchedulerWaitMaxMS float64
+-	DNSRequests        uint64
+-	DNSResponses       uint64
+-	DNSErrors          uint64
+-	DNSTimeouts        uint64
++	ProtocolErrorReasons ProtocolErrorCounts
++	Window               int
++	Profile              string
++	Destination          DestinationStats
++	ActiveSockets        int
++	ActiveStreams        int
++	MaxActiveStreams     int
++	Opened               uint64
++	OpenOK               uint64
++	OpenErrors           uint64
++	AdmissionWaits       uint64
++	AdmissionRejected    uint64
++	AdmissionTimeouts    uint64
++	AdmissionCancelled   uint64
++	AdmissionWaiting     int
++	LeaseRejected        uint64
++	Resets               uint64
++	ProtocolErrors       uint64
++	SentBytes            uint64
++	ReceivedBytes        uint64
++	FlowStalls           uint64
++	RetainedBytes        int
++	RetainedHighWater    int
++	SendHighWater        int
++	ReceiveHighWater     int
++	QueueHighWater       int
++	SchedulerFrames      uint64
++	SchedulerWaitMaxMS   float64
++	DNSRequests          uint64
++	DNSResponses         uint64
++	DNSErrors            uint64
++	DNSTimeouts          uint64
+ }
+ 
+ type Mux struct {
+@@ -417,7 +437,7 @@
+ 	stream := mux.streams[frame.id]
+ 	if frame.kind == openFrame && mux.server && stream == nil {
+ 		if frame.id <= mux.lastID {
+-			mux.stats.ProtocolErrors++
++			mux.protocolErrorLocked(&mux.stats.ProtocolErrorReasons.OpenReplay)
+ 			return
+ 		}
+ 		mux.lastID = frame.id
+@@ -442,15 +462,17 @@
+ 		return
+ 	}
+ 	if stream == nil {
+-		mux.stats.ProtocolErrors++
++		mux.protocolErrorLocked(&mux.stats.ProtocolErrorReasons.UnknownStream)
+ 		return
+ 	}
+ 	if stream.terminal != nil {
+ 		return
+ 	}
+ 	invalid := false
++	reason := &mux.stats.ProtocolErrorReasons.FrameKind
+ 	switch frame.kind {
+ 	case openOK:
++		reason = &mux.stats.ProtocolErrorReasons.OpenState
+ 		if mux.server || stream.opened {
+ 			invalid = true
+ 		} else {
+@@ -458,6 +480,7 @@
+ 			mux.stats.OpenOK++
+ 		}
+ 	case openError:
++		reason = &mux.stats.ProtocolErrorReasons.OpenState
+ 		var failure OpenError
+ 		if mux.server || stream.opened || decodeJSON(frame.payload, &failure) != nil || (!validError(failure.Code) && failure.Code != "stream_limit") {
+ 			invalid = true
+@@ -467,6 +490,7 @@
+ 			mux.removeLocked(frame.id)
+ 		}
+ 	case dataFrame:
++		reason = &mux.stats.ProtocolErrorReasons.DataState
+ 		if !stream.opened || stream.remoteFIN || len(frame.payload) > stream.receiveCredit {
+ 			invalid = true
+ 		} else {
+@@ -480,6 +504,7 @@
+ 			mux.stats.ReceivedBytes += uint64(len(frame.payload))
+ 		}
+ 	case muxWindowUpdate:
++		reason = &mux.stats.ProtocolErrorReasons.CreditState
+ 		credit := int(binary.BigEndian.Uint32(frame.payload))
+ 		if !stream.opened || credit > len(stream.receive)-stream.sendCredit {
+ 			invalid = true
+@@ -487,6 +512,7 @@
+ 			stream.sendCredit += credit
+ 		}
+ 	case finFrame:
++		reason = &mux.stats.ProtocolErrorReasons.FINState
+ 		if !stream.opened || stream.remoteFIN {
+ 			invalid = true
+ 		} else {
+@@ -494,6 +520,7 @@
+ 			stream.remoteFINCount++
+ 		}
+ 	case closeFrame:
++		reason = &mux.stats.ProtocolErrorReasons.CloseState
+ 		if !stream.localFIN || !stream.remoteFIN {
+ 			invalid = true
+ 		} else if !mux.server && stream.closing {
+@@ -510,7 +537,7 @@
+ 		invalid = true
+ 	}
+ 	if invalid {
+-		mux.stats.ProtocolErrors++
++		mux.protocolErrorLocked(reason)
+ 		stream.resetLocked(ErrProtocol)
+ 	}
+ }
+--- a/carrier/tcpforward/mux_dns.go
++++ b/carrier/tcpforward/mux_dns.go
+@@ -113,7 +113,7 @@
+ 			}
+ 		case muxDNSQuery:
+ 			if id <= mux.dnsLast {
+-				mux.stats.ProtocolErrors++
++				mux.protocolErrorLocked(&mux.stats.ProtocolErrorReasons.DNSReplay)
+ 				return
+ 			}
+ 			mux.dnsLast = id
+@@ -131,12 +131,12 @@
+ 			mux.workers.Add(1)
+ 			go mux.resolveDNS(id, call)
+ 		default:
+-			mux.stats.ProtocolErrors++
++			mux.protocolErrorLocked(&mux.stats.ProtocolErrorReasons.DNSRole)
+ 		}
+ 		return
+ 	}
+ 	if call == nil || call.done {
+-		mux.stats.ProtocolErrors++
++		mux.protocolErrorLocked(&mux.stats.ProtocolErrorReasons.DNSUnmatched)
+ 		return
+ 	}
+ 	if frame.kind == muxDNSResponse && matchesDNS(call.query, payload) {
+--- a/carrier/tcpforward/protocol_reasons_test.go
++++ b/carrier/tcpforward/protocol_reasons_test.go
+@@ -0,0 +1,36 @@
++package tcpforward
++
++import (
++	"context"
++	"encoding/json"
++	"testing"
++)
++
++func TestSupportReasonPreservesLateFrameCounter(test *testing.T) {
++	ctx, cancel := context.WithCancel(context.Background())
++	defer cancel()
++	mux := &Mux{window: 65536, ctx: ctx, cancel: cancel, streams: make(map[uint32]*MuxStream), changed: make(chan struct{})}
++	stream := mux.makeStreamLocked(1)
++	stream.opened = true
++	mux.dispatchLocked(muxFrame{kind: resetFrame, id: 1})
++	mux.dispatchLocked(muxFrame{kind: dataFrame, id: 1, payload: []byte{1}})
++	mux.dnsFrameLocked(dnsFrame(muxDNSError, 17, nil))
++	if mux.stats.ProtocolErrors != 2 || mux.stats.ProtocolErrorReasons.UnknownStream != 1 || mux.stats.ProtocolErrorReasons.DNSUnmatched != 1 {
++		test.Fatal("existing late-frame semantics/counters changed")
++	}
++	raw, err := json.Marshal(mux.stats.ProtocolErrorReasons)
++	if err != nil || len(raw) > 256 {
++		test.Fatal("bounded fixed reasons", err)
++	}
++}
++
++func TestSupportInvalidDataReasonKeepsReset(test *testing.T) {
++	ctx, cancel := context.WithCancel(context.Background())
++	defer cancel()
++	mux := &Mux{window: 131072, ctx: ctx, cancel: cancel, streams: make(map[uint32]*MuxStream), changed: make(chan struct{})}
++	stream := mux.makeStreamLocked(1)
++	mux.dispatchLocked(muxFrame{kind: dataFrame, id: 1, payload: []byte{1}})
++	if stream.terminal != ErrProtocol || mux.stats.ProtocolErrors != 1 || mux.stats.ProtocolErrorReasons.DataState != 1 {
++		test.Fatal("must reset invalid DATA, not hide error")
++	}
++}
+--- a/clients/android/app/build.gradle
++++ b/clients/android/app/build.gradle
+@@ -113,7 +113,7 @@
+     }
+     applicationVariants.all { variant ->
+         if (variant.buildType.name == 'privateBeta') {
+-            variant.outputs.all { versionCodeOverride = 97; versionNameOverride = '0.1.18-beta97-speed' }
++            variant.outputs.all { versionCodeOverride = 98; versionNameOverride = '0.1.18-beta98-support' }
+         }
+         if (variant.buildType.name == "friends") {
+             variant.outputs.all { versionCodeOverride = 83; versionNameOverride = "0.1.18-research83-bootstrap" }
+--- a/clients/android/app/src/main/AndroidManifest.xml
++++ b/clients/android/app/src/main/AndroidManifest.xml
+@@ -41,5 +41,7 @@
+         <service android:name=".ConnectionService" android:exported="false" android:foregroundServiceType="specialUse">
+             <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="Maintains an explicitly user-started encrypted VPN connection"/>
+         </service>
++        <provider android:name=".OwnerSupportProvider" android:authorities="${applicationId}.owner.support"
++            android:exported="true" android:permission="android.permission.DUMP" android:grantUriPermissions="false" />
+     </application>
+ </manifest>
+--- a/clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java
+@@ -108,6 +108,9 @@
+         }
+         if(same&&restrictedSession.has("terminal_observed_at_ms")){restrictedSession=safe;return;}
+         SpeedReceipt.project(source,safe);
++        JsonObject reasons=SupportSnapshot.object(source,"protocol_error_reasons"),safeReasons=new JsonObject();
++        for(String reason:SupportSnapshot.REASONS)SupportSnapshot.number(reasons,safeReasons,reason);
++        if(safeReasons.size()>0)safe.add("protocol_error_reasons",safeReasons);
+         enumField(source,safe,"terminal_reason","NONE","CANCELLED","DEADLINE","EOF","IO_CLOSED","FAMILY_REJECTED","MUX_PROTOCOL","RELIABLE_PROTOCOL","RELIABLE_EXHAUSTED","REMOTE_RESET","RELIABLE_CLOSED","NETWORK_TIMEOUT","NETWORK_ERROR","UNKNOWN");
+         enumField(source,safe,"reliable_terminal","","closed","recovery_exhausted","protocol_violation","remote_reset","cancelled","carrier_closed","UNKNOWN");
+         enumField(source,safe,"signaling_failure","NONE","UNKNOWN","read_error","read_timeout","invalid_json","close_code_1000","close_code_1001","close_code_1002","close_code_1003","close_code_1006","close_code_1007","close_code_1008","close_code_1009","close_code_1010","close_code_1011","close_code_1012","close_code_1013","close_code_1015");
+--- a/clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java
+@@ -41,7 +41,7 @@
+             JsonObject safeInput=diagnostic==null?new JsonObject():JsonParser.parseString(diagnostic.toString()).getAsJsonObject();
+             store.ring.restricted(safeInput,stats.optInt("state",-1),stats.optBoolean("authorization_denied",false),System.currentTimeMillis());
+             store.save(false);
+-        }}catch(Exception ignored){}
++        }SupportAutomation.tick(context);}catch(Exception ignored){}
+     }
+     static void nativePacket(DiagnosticRing ring,String packet){
+         try{JsonObject source=JsonParser.parseString(packet).getAsJsonObject();
+@@ -69,6 +69,9 @@
+         if(raw.length>DiagnosticRing.RECORD_LIMIT)throw new IOException("Diagnostic bound");FileOutputStream output=file.startWrite();
+         try{output.write(raw);file.finishWrite(output);}catch(IOException failure){file.failWrite(output);throw failure;}
+     }
++    static JsonObject supportSnapshot(Context context){
++        Diagnostics store=get(context);synchronized(store){store.network();return store.ring.snapshot();}
++    }
+     static void share(android.app.Activity activity){
+         new android.app.AlertDialog.Builder(activity).setTitle(R.string.diagnostics_send).setMessage(R.string.diagnostics_privacy)
+             .setNegativeButton(android.R.string.cancel,null).setPositiveButton(R.string.diagnostics_send,(dialog,which)->{
+--- a/clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java
+@@ -61,7 +61,7 @@
+     }
+     private JsonObject directPostObserved(String path,JsonObject body,String requestId)throws Exception{
+         remaining(5000);
+-        require(path.matches("/friends/(challenge|activate|restricted-readiness(/(challenge|ack-challenge|ack))?|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/(status|support)|notices/device/(role|publish|list|edit))"));
++        require(path.matches("/friends/(challenge|activate|restricted-readiness(/(challenge|ack-challenge|ack))?|configuration/(ru|nl)|chat/(challenge|register)|referral/(issue|claim)|device/(status|support|diagnostics)|notices/device/(role|publish|list|edit))"));
+         boolean viaVpn=ReadinessBootstrapRoute.allowed(path)&&"on".equals(ConnectionService.status)&&"ok".equals(ConnectionService.healthStatus);
+         if(fetchTrace!=null){fetchTrace.request(path,direct&&!viaVpn?ReadinessFetchTrace.Route.HTTPS_UNDERLAY:ReadinessFetchTrace.Route.HTTPS_VPN);fetchTrace.stage(ReadinessFetchTrace.Stage.OPEN_NETWORK);}
+         HttpsURLConnection connection=direct&&!viaVpn?new ChatNetworkAndroid(context).openHttps("https://185.251.89.19:8443"+path,fetchTrace):(HttpsURLConnection)new URL("https://185.251.89.19:8443"+path).openConnection();
+@@ -170,6 +170,18 @@
+             require(result.get("revoked").isJsonPrimitive()&&result.get("revoked").getAsJsonPrimitive().isBoolean());
+             require(result.get("active").isJsonPrimitive()&&result.get("active").getAsJsonPrimitive().isBoolean());
+             return result.get("active").getAsBoolean()?text(result.get("device")):"";
++        }
++    }
++    void supportDiagnostics(JsonObject report)throws Exception{
++        deadline=android.os.SystemClock.elapsedRealtime()+15000;
++        String raw=report.toString();byte[] encoded=raw.getBytes(StandardCharsets.UTF_8);require(encoded.length<=4096);
++        byte[] digest=java.security.MessageDigest.getInstance("SHA-256").digest(encoded);StringBuilder hash=new StringBuilder();
++        for(byte value:digest)hash.append(String.format(java.util.Locale.ROOT,"%02x",value&255));
++        try(ControlIdentity identity=identity(false)){
++            JsonObject request=new JsonObject();request.add("proof",proof(identity,"diagnostics:"+hash,""));request.addProperty("report",raw);
++            JsonObject result=post("/friends/device/diagnostics",request);fields(result,"schema report_id stored_at");
++            require(integer(result.get("schema"),1)==1&&text(result.get("report_id")).equals(text(report.get("report_id"))));
++            integer(result.get("stored_at"),1);
+         }
+     }
+     String supportId() throws Exception {
+--- a/clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java
+@@ -210,6 +210,7 @@
+         DeviceSupport.attach(this,panel,worker);
+         TerminalUi.label(panel,getString(R.string.product_version,TerminalUi.version(this)),12,TerminalUi.MUTED);
+         appUpdate.attach(panel);
++        SupportAutomation.controls(this,panel);
+         TerminalUi.button(panel,R.string.diagnostics_send,()->Diagnostics.share(this));
+         TerminalUi.label(panel,getString(R.string.friends_hint),12,TerminalUi.MUTED);
+         attach(panel,activate);
+@@ -318,6 +319,16 @@
+             });
+         });
+     }
++    private String supportCommand(String method,String argument){
++        if(busy)return "BUSY";
++        if("disconnect".equals(method)){reconnect=false;if("off".equals(ConnectionService.status))return "ALREADY_OFF";disconnect();return "DISCONNECT_REQUESTED";}
++        if(!"off".equals(ConnectionService.status))return "DISCONNECT_FIRST";
++        if("profile".equals(method)){SpeedProfile.save(this,Integer.parseInt(argument.substring(1)));render();return "NEXT_SESSION_"+argument;}
++        if(!"telemost".equals(transport))return "SELECT_MESH_IN_APP_FIRST";
++        if(VpnService.prepare(this)!=null)return "VPN_PERMISSION_REQUIRED";
++        if(Build.VERSION.SDK_INT>=33&&checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=android.content.pm.PackageManager.PERMISSION_GRANTED)return "NOTIFICATION_PERMISSION_REQUIRED";
++        prepareConnect();return "CONNECT_REQUESTED";
++    }
+     private void disconnect(){startService(new Intent(this,ConnectionService.class).setAction("disconnect"));}
+     private void toggle(){
+         if(busy)return;if(!ConnectionService.status.equals("off")){reconnect=false;disconnect();return;}
+@@ -408,7 +419,7 @@
+         row.addView(load,new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT));
+         row.setMinimumHeight(TerminalUi.dp(c,48));row.setPadding(TerminalUi.dp(c,12),TerminalUi.dp(c,6),TerminalUi.dp(c,12),TerminalUi.dp(c,6));return row;
+     }
+-    @Override protected void onResume(){super.onResume();if(getPreferences(MODE_PRIVATE).getBoolean("activated",false)){ChatNotifications.request(this);ChatDeliveryService.start(this);}if(dashboardLocation!=null&&dashboardLocation.permitted())dashboardLocation.start();if(appUpdate!=null){appUpdate.render();appUpdate.onForeground(this::showSettings);}loadResumed=true;handler.post(loadRefresh);handler.post(restrictedRefresh);handler.post(refresh);if(routeLocation!=null&&routeLocation.permitted())routeLocation.start();}
+-    @Override protected void onPause(){if(dashboardLocation!=null)dashboardLocation.stop();loadResumed=false;handler.removeCallbacks(loadRefresh);handler.removeCallbacks(restrictedRefresh);handler.removeCallbacks(refresh);if(telemetry!=null)telemetry.pause();if(routeLocation!=null)routeLocation.stop();super.onPause();}
++    @Override protected void onResume(){super.onResume();SupportAutomation.attach(this::supportCommand);if(getPreferences(MODE_PRIVATE).getBoolean("activated",false)){ChatNotifications.request(this);ChatDeliveryService.start(this);}if(dashboardLocation!=null&&dashboardLocation.permitted())dashboardLocation.start();if(appUpdate!=null){appUpdate.render();appUpdate.onForeground(this::showSettings);}loadResumed=true;handler.post(loadRefresh);handler.post(restrictedRefresh);handler.post(refresh);if(routeLocation!=null&&routeLocation.permitted())routeLocation.start();}
++    @Override protected void onPause(){SupportAutomation.detach();if(dashboardLocation!=null)dashboardLocation.stop();loadResumed=false;handler.removeCallbacks(loadRefresh);handler.removeCallbacks(restrictedRefresh);handler.removeCallbacks(refresh);if(telemetry!=null)telemetry.pause();if(routeLocation!=null)routeLocation.stop();super.onPause();}
+     @Override protected void onDestroy(){handler.removeCallbacks(refresh);handler.removeCallbacks(restrictedRefresh);if(routeLocation!=null)routeLocation.stop();loadResumed=false;handler.removeCallbacks(loadRefresh);loadWorker.shutdownNow();if(appUpdate!=null)appUpdate.close();worker.shutdownNow();super.onDestroy();}
+ }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/OwnerSupportProvider.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/OwnerSupportProvider.java
+@@ -0,0 +1,36 @@
++package com.familyconnect.app;
++
++import android.content.*;
++import android.database.Cursor;
++import android.net.Uri;
++import android.os.*;
++import java.io.*;
++
++public final class OwnerSupportProvider extends ContentProvider {
++    private void authorize(){if(!SupportAutomation.ACCESS.allows(Binder.getCallingUid(),SystemClock.elapsedRealtime()))throw new SecurityException("Owner USB support disabled");}
++    @Override public boolean onCreate(){return true;}
++    @Override public Bundle call(String method,String argument,Bundle extras){
++        authorize();long token=Binder.clearCallingIdentity();
++        try{return SupportAutomation.command(getContext(),method,argument);}finally{Binder.restoreCallingIdentity(token);}
++    }
++    @Override public ParcelFileDescriptor openFile(Uri uri,String mode)throws FileNotFoundException{
++        authorize();if(!"r".equals(mode)||!"/snapshot".equals(uri.getPath())||uri.getQuery()!=null||uri.getFragment()!=null)throw new FileNotFoundException();
++        long token=Binder.clearCallingIdentity();
++        try{
++            byte[] raw=Diagnostics.supportSnapshot(getContext()).toString().getBytes(java.nio.charset.StandardCharsets.UTF_8);
++            if(raw.length>DiagnosticRing.RECORD_LIMIT)throw new FileNotFoundException("Snapshot bound");
++            File file=new File(getContext().getCacheDir(),"owner-support-snapshot.json");
++            synchronized(OwnerSupportProvider.class){
++                if(file.exists()&&!file.delete())throw new IOException("Snapshot cleanup");
++                try(FileOutputStream output=new FileOutputStream(file)){output.write(raw);}
++                ParcelFileDescriptor descriptor=ParcelFileDescriptor.open(file,ParcelFileDescriptor.MODE_READ_ONLY);
++                if(!file.delete()){descriptor.close();throw new IOException("Snapshot unlink");}return descriptor;
++            }
++        }catch(IOException failure){throw new FileNotFoundException("Snapshot unavailable");}finally{Binder.restoreCallingIdentity(token);}
++    }
++    @Override public String getType(Uri uri){authorize();return "application/json";}
++    @Override public Cursor query(Uri uri,String[] projection,String selection,String[] args,String order){authorize();return null;}
++    @Override public Uri insert(Uri uri,ContentValues values){throw new UnsupportedOperationException();}
++    @Override public int update(Uri uri,ContentValues values,String selection,String[] args){throw new UnsupportedOperationException();}
++    @Override public int delete(Uri uri,String selection,String[] args){throw new UnsupportedOperationException();}
++}
+--- a/clients/android/app/src/main/java/com/familyconnect/app/SupportAccess.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/SupportAccess.java
+@@ -0,0 +1,9 @@
++package com.familyconnect.app;
++
++final class SupportAccess {
++    private long until;
++    synchronized void enable(long now){until=now+3600000;}
++    synchronized void disable(){until=0;}
++    synchronized boolean active(long now){return now>=0&&until>now;}
++    synchronized boolean allows(int uid,long now){return uid==2000&&active(now);}
++}
+--- a/clients/android/app/src/main/java/com/familyconnect/app/SupportAutomation.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/SupportAutomation.java
+@@ -0,0 +1,69 @@
++package com.familyconnect.app;
++
++import android.app.Activity;
++import android.content.*;
++import android.os.*;
++import android.widget.*;
++import com.google.gson.*;
++import java.util.concurrent.*;
++
++final class SupportAutomation {
++    interface Host { String command(String method,String argument); }
++    static final SupportAccess ACCESS=new SupportAccess();
++    private static Host host;
++    private static long nextUpload;
++    private static boolean uploading;
++    private static volatile String uploadState="OFF";
++    private static volatile FriendsAccessAndroid request;
++    private static final Handler MAIN=new Handler(Looper.getMainLooper());
++    static void attach(Host current){host=current;}
++    static void detach(){host=null;}
++    static void controls(Activity activity,LinearLayout panel){
++        Button usb=new Button(activity);usb.setText("USB: разрешить поддержку на 1 час / allow support for 1 hour");panel.addView(usb);
++        usb.setOnClickListener(view->{
++            if(ACCESS.active(SystemClock.elapsedRealtime())){ACCESS.disable();Toast.makeText(activity,"USB support OFF",Toast.LENGTH_SHORT).show();return;}
++            new android.app.AlertDialog.Builder(activity).setTitle("USB support")
++                .setMessage("Только доверенный ADB-компьютер: диагностика, подключение/отключение и P0/P1/P2 для новой сессии. Не root. На 1 час, до перезапуска приложения; повторное нажатие отключает.\nTrusted USB ADB only; no network remote control.")
++                .setNegativeButton(android.R.string.cancel,null).setPositiveButton(android.R.string.ok,(dialog,which)->{ACCESS.enable(SystemClock.elapsedRealtime());Toast.makeText(activity,"USB support ON · 1h",Toast.LENGTH_LONG).show();}).show();
++        });
++        Switch online=new Switch(activity);online.setText("Онлайн-диагностика (7 дней) / Online diagnostics (7 days)");online.setChecked(consented(activity));panel.addView(online);
++        online.setOnCheckedChangeListener((button,checked)->{
++            if(!checked){activity.getSharedPreferences("support-upload",Context.MODE_PRIVATE).edit().remove("until").commit();FriendsAccessAndroid active=request;if(active!=null)active.cancel();uploadState="OFF";return;}
++            new android.app.AlertDialog.Builder(activity).setTitle("Online diagnostics")
++                .setMessage("Раз в минуту: версия, состояние VPN, случайный ID сессии и счётчики ошибок/байтов. Без сайтов, IP, сообщений, ключей и полных журналов. Привязка к Support ID. Только последний снимок, сервер до 7 дней; выключить здесь в любой момент. Не включает удалённое управление.\nLatest technical snapshot only; no traffic content. Opt-in expires in 7 days.")
++                .setNegativeButton(android.R.string.cancel,(dialog,which)->online.setChecked(false)).setOnCancelListener(dialog->online.setChecked(false))
++                .setPositiveButton(android.R.string.ok,(dialog,which)->{activity.getSharedPreferences("support-upload",Context.MODE_PRIVATE).edit().putLong("until",System.currentTimeMillis()+7L*86400000).commit();tick(activity);}).show();
++        });
++        TextView status=new TextView(activity);status.setText("Upload: "+uploadState+" · no VPN fallback");panel.addView(status);
++    }
++    static boolean consented(Context context){long remaining=context.getSharedPreferences("support-upload",Context.MODE_PRIVATE).getLong("until",0)-System.currentTimeMillis();return remaining>0&&remaining<=7L*86400000;}
++    static Bundle command(Context context,String method,String argument){
++        if(!java.util.Arrays.asList("status","connect","disconnect","profile","disable").contains(method))throw new IllegalArgumentException("Unsupported support operation");
++        if("profile".equals(method)&&!java.util.Arrays.asList("P0","P1","P2").contains(argument))throw new IllegalArgumentException("Profile required");
++        if(!"profile".equals(method)&&argument!=null)throw new IllegalArgumentException("Unexpected argument");
++        Bundle result=new Bundle();
++        if("disable".equals(method)){ACCESS.disable();result.putString("result","DISABLED");return result;}
++        if("status".equals(method)){result.putString("result",ConnectionService.status);result.putString("upload",uploadState);return result;}
++        FutureTask<String> task=new FutureTask<>(()->{
++            if(!ACCESS.active(SystemClock.elapsedRealtime()))return "DISABLED";
++            return host==null?"FOREGROUND_REQUIRED":host.command(method,argument);
++        });MAIN.post(task);
++        try{result.putString("result",task.get(3,TimeUnit.SECONDS));}
++        catch(Exception failure){task.cancel(false);result.putString("result","UNKNOWN_READ_STATUS_BEFORE_RETRY");}
++        return result;
++    }
++    static synchronized void tick(Context supplied){
++        Context context=supplied.getApplicationContext();long now=SystemClock.elapsedRealtime();
++        if(!consented(context)||uploading||now<nextUpload)return;
++        uploading=true;nextUpload=now+60000;uploadState="SENDING";
++        new Thread(()->{
++            try{
++                JsonObject report=SupportSnapshot.project(Diagnostics.supportSnapshot(context),BuildConfig.VERSION_CODE,System.currentTimeMillis());
++                FriendsAccessAndroid client=new FriendsAccessAndroid(context);request=client;
++                if(!consented(context)){uploadState="OFF";return;}
++                client.supportDiagnostics(report);uploadState="STORED";
++            }catch(Exception failure){uploadState="UNAVAILABLE";synchronized(SupportAutomation.class){nextUpload=SystemClock.elapsedRealtime()+300000;}}
++            finally{request=null;synchronized(SupportAutomation.class){uploading=false;}}
++        },"support-upload").start();
++    }
++}
+--- a/clients/android/app/src/main/java/com/familyconnect/app/SupportSnapshot.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/SupportSnapshot.java
+@@ -0,0 +1,39 @@
++package com.familyconnect.app;
++
++import com.google.gson.*;
++import java.util.*;
++
++final class SupportSnapshot {
++    static final String[] COUNTERS={"protocol_errors","retransmissions","retry_bytes","sent_bytes","received_bytes","recovery_timeouts","mux_window","observed_at_ms"};
++    static final String[] REASONS={"open_replay","unknown_stream","open_state","data_state","credit_state","fin_state","close_state","frame_kind","dns_replay","dns_role","dns_unmatched"};
++    static void number(JsonObject input,JsonObject output,String name){
++        try{JsonElement value=input.get(name);if(value!=null&&value.isJsonPrimitive()&&value.getAsJsonPrimitive().isNumber()){
++            long count=value.getAsBigDecimal().longValueExact();if(count>=0&&count<=9007199254740991L)output.addProperty(name,count);
++        }}catch(ArithmeticException|NumberFormatException ignored){}
++    }
++    static JsonObject object(JsonObject source,String name){JsonElement value=source.get(name);return value!=null&&value.isJsonObject()?value.getAsJsonObject():new JsonObject();}
++    static void choice(JsonObject source,JsonObject target,String from,String to,String... allowed){
++        JsonElement value=source.get(from);String text=value!=null&&value.isJsonPrimitive()&&value.getAsJsonPrimitive().isString()?value.getAsString():"";
++        target.addProperty(to,Arrays.asList(allowed).contains(text)?text:"UNKNOWN");
++    }
++    static JsonObject project(JsonObject ring,int version,long now){
++        JsonObject result=new JsonObject(),metrics=new JsonObject();
++        result.addProperty("schema",1);result.addProperty("report_id",UUID.randomUUID().toString().replace("-",""));
++        result.addProperty("platform","android");result.addProperty("version_code",version);result.addProperty("sampled_at_ms",now);result.addProperty("consent",true);
++        choice(ring,metrics,"state","state","DISCONNECTED","CONNECTING","CONNECTED","RESTORING","FAILED","STOPPING");
++        choice(ring,metrics,"network_class","network","WIFI","CELLULAR","ETHERNET","VPN","NONE");
++        choice(ring,metrics,"restricted_readiness","readiness","READY","NOT_READY");
++        JsonElement vpn=ring.get("vpn_capture_open");if(vpn!=null&&vpn.isJsonPrimitive()&&vpn.getAsJsonPrimitive().isBoolean())metrics.add("vpn_capture_open",vpn);
++        JsonObject session=object(ring,"restricted_session");
++        choice(session,metrics,"speed_profile","speed_profile","P0","P1","P2");
++        choice(session,metrics,"mux_profile","mux_profile","LEGACY64","CREDIT128");
++        choice(session,metrics,"terminal_reason","terminal_reason","NONE","CANCELLED","REMOTE_RESET","RELIABLE_EXHAUSTED","IO_CLOSED","MUX_PROTOCOL","RELIABLE_PROTOCOL","FAMILY_REJECTED","DEADLINE","NETWORK_TIMEOUT");
++        JsonElement tag=session.get("session_tag");if(tag!=null&&tag.isJsonPrimitive()&&tag.getAsJsonPrimitive().isString()&&tag.getAsString().matches("[0-9a-f]{32}|[0-9a-f]{64}"))metrics.add("session_tag",tag);
++        for(String key:COUNTERS)number(session,metrics,key);
++        JsonObject limits=object(session,"reliable_limits");
++        String[][] names={{"local_send","send_window"},{"local_receive","receive_window"},{"peer_receive","peer_receive_window"},{"effective_send","effective_send_window"}};
++        for(String[] pair:names){JsonObject selected=new JsonObject();number(limits,selected,pair[0]);if(selected.has(pair[0]))metrics.add(pair[1],selected.get(pair[0]));}
++        JsonObject reasons=object(session,"protocol_error_reasons");for(String key:REASONS)number(reasons,metrics,key);
++        result.add("metrics",metrics);return result;
++    }
++}
+--- a/clients/android/app/src/test/java/com/familyconnect/app/SupportSnapshotTest.java
++++ b/clients/android/app/src/test/java/com/familyconnect/app/SupportSnapshotTest.java
+@@ -0,0 +1,25 @@
++package com.familyconnect.app;
++
++import com.google.gson.*;
++import org.junit.Test;
++import static org.junit.Assert.*;
++
++public class SupportSnapshotTest {
++    @Test public void projectionDropsTrafficAndSecrets(){
++        JsonObject ring=JsonParser.parseString("{\"private_key\":\"SECRET\",\"network_class\":\"WIFI\",\"events\":[\"private.example\"],\"restricted_session\":{\"protocol_errors\":17,\"session_tag\":\""+"a".repeat(64)+"\",\"error\":\"SECRET\"}}").getAsJsonObject();
++        JsonObject report=SupportSnapshot.project(ring,98,123);
++        assertEquals(17,report.getAsJsonObject("metrics").get("protocol_errors").getAsInt());
++        assertFalse(report.toString().contains("SECRET"));assertFalse(report.toString().contains("private.example"));
++        assertEquals("WIFI",report.getAsJsonObject("metrics").get("network").getAsString());
++    }
++    @Test public void badTypesAndBoundsOmitted(){
++        JsonObject ring=JsonParser.parseString("{\"restricted_session\":{\"protocol_errors\":true,\"retry_bytes\":-1,\"received_bytes\":9007199254740992,\"sent_bytes\":1.5,\"session_tag\":\"https://room\"}}").getAsJsonObject();
++        JsonObject metrics=SupportSnapshot.project(ring,98,1).getAsJsonObject("metrics");
++        for(String key:new String[]{"protocol_errors","retry_bytes","received_bytes","sent_bytes","session_tag"})assertFalse(metrics.has(key));
++    }
++    @Test public void usbPermissionExpiresAndCannotBeGrantedByCaller(){
++        SupportAccess access=new SupportAccess();assertFalse(access.allows(2000,1));access.enable(100);
++        assertTrue(access.allows(2000,101));assertFalse(access.allows(10001,101));assertFalse(access.allows(0,101));
++        assertFalse(access.allows(2000,3600100));access.disable();assertFalse(access.allows(2000,102));
++    }
++}

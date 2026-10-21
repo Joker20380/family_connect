@@ -1,0 +1,4936 @@
+{
+  "source_seals": {
+    "functional": {
+      "path": "tests/fixtures/mux_profile/complete-functional.patch",
+      "sha256": "fce936ae1d6db5007aa4b3634d77b5dca61b9ad00668f0fcf7ddf52d25f63d01",
+      "changed": {
+        "familysession/mux_profile.go": "bf4cf82bca51b1c9ba72cafa8056962ea87a12361eac3f0656d036e45f112b10",
+        "familysession/mux_profile_test.go": "14aa00b706d8d9860b687c65a7c867f06d3ccdc0e3134abe3a1a31fcbbe48787",
+        "familysession/mux_revocation_test.go": "8c4d6630007f755e063ca4e7429fd0a5068af35bcd982288eb2f5342b0c84ddb",
+        "familysession/session.go": "c348f4dc8109f5b756c74b16fbd72e4dca301a6bd2b5f586dc3597d63cd8144e",
+        "roombroker/control.go": "782bb9cd43ff2c4668efcbfef5aebdef8b29e2f8bb4b9cd5686754baebbc7732",
+        "roombroker/gateway.go": "1554a0f247a50e77ec4ba35760de77eda0db64255734fee0deb8fc13143f393f",
+        "roombroker/lease_mux_test.go": "e18be62134df3a108bd860029aabebc137895cfb41abf7737b74e3b5e8f1cd42",
+        "roombroker/mux_policy_linux.go": "3d96b69be0a8f2db067b333d4150f2935d676b6ca086c84082183d17959155f6",
+        "roombroker/mux_policy_linux_test.go": "a8765c6f65e0fea2af21bee91247e56d15a18f1a0406f2f1fdbee60f282f522b",
+        "roombroker/mux_policy_other.go": "a6a3c7808ba4317ef3e2f80335ba6012c1b0c665b29de17cc741a4541244dbbe",
+        "sessiondiag/report.go": "6546a2356961a28d8999fece1c1b655768193b8c23297b5246d81947e2618b3d",
+        "tcpforward/mux.go": "f34e48633d51db5b1874317d489c8b836bf431bb8235c9fb1dda164fc117cdf4",
+        "tcpforward/mux_profile_integration_test.go": "f275fb59eb88e1879db63404421f22a1483b17ecd009faad2b123cca7596aa54",
+        "tcpforward/mux_profile_loss_test.go": "605ef1cd04a5ff07e6a500b041f3c8d5b9ca3886b7cc243a9f05d5ae250f9562",
+        "tcpforward/mux_profile_test.go": "dd32c282e46ec898124a3400b61a7dcca09d91e244ad6b88a10fbb3a1c9f47e8",
+        "tcpforward/mux_protocol.go": "3199d0a8851a833b222938f63980918f493ba1086d6d150bae4a0b49d8950e2d",
+        "tcpforward/mux_stream.go": "bdfa7e2f2bb4827ecb49645b84133cabcb5d321b582846ec694e5b1beed571ef"
+      }
+    },
+    "gateway": {
+      "path": "tests/fixtures/mux_profile/complete-gateway.patch",
+      "sha256": "6f8695ffefc22372ccdba1ee050b13518339ff8de6c95f9c9de8f97b11a56dc3",
+      "changed": {
+        "familysession/batch.go": "dc769acdd98043b8a48536be3fd8ee45019e14df58cf48ea1273753f16d56e20",
+        "familysession/mux_profile.go": "bf4cf82bca51b1c9ba72cafa8056962ea87a12361eac3f0656d036e45f112b10",
+        "familysession/mux_profile_test.go": "14aa00b706d8d9860b687c65a7c867f06d3ccdc0e3134abe3a1a31fcbbe48787",
+        "familysession/session.go": "4dab2e666c6bc6f4232307eaee0bccc0340db200ccd4edc47291120aabb2f74f",
+        "reliablestream/engine.go": "3c4be107fc7798746f4cd8195d3980bdfed39dd3b64265264176971f9298bb0a",
+        "reliablestream/performance.go": "b9fefaa8b517ab3a2c55333cf76a50b496362e8d645b6f32a2a3b3901c9e0bf3",
+        "reliablestream/performance_common_test.go": "e0a585c5c93a9917da5ccb22882121cea989434f7cede4990c7de058a40d3ef5",
+        "reliablestream/performance_test.go": "0532e6f75f2207575f3d50b8fa37a3eb4882f169e0ce0eeb96e845a91e2d1576",
+        "reliablestream/stream.go": "5fcdb8a5283d74d1c292d9b16e8197ae791d2836ccad54a757d3c4dbf61bb1d6",
+        "roombroker/compact_export_test.go": "857fd3fea8e8fc7ef80e598eb36445421a67dd1b63ec8bfcb06a771c81f388b9",
+        "roombroker/control.go": "782bb9cd43ff2c4668efcbfef5aebdef8b29e2f8bb4b9cd5686754baebbc7732",
+        "roombroker/gateway.go": "dbc864c8a7a0677dccd0510a7401b1a995e00bd59d8cf42fe524d04e42b6e424",
+        "roombroker/mux_policy_linux.go": "3d96b69be0a8f2db067b333d4150f2935d676b6ca086c84082183d17959155f6",
+        "roombroker/mux_policy_linux_test.go": "a8765c6f65e0fea2af21bee91247e56d15a18f1a0406f2f1fdbee60f282f522b",
+        "roombroker/mux_policy_other.go": "a6a3c7808ba4317ef3e2f80335ba6012c1b0c665b29de17cc741a4541244dbbe",
+        "roombroker/performance_disabled.go": "d0c5c8222e135370e9bac52b43f93fb3e3bd81aaacbd138bb37d19c17b330ac9",
+        "roombroker/performance_enabled.go": "322d586806d4c5cf81c5723f07c65c62f4da7aaa6565afd81127ba79caf0df72",
+        "sessiondiag/report.go": "6546a2356961a28d8999fece1c1b655768193b8c23297b5246d81947e2618b3d",
+        "sessiontrace/boundary.go": "b7bccc9b75d3f35e382a53df7246ae13b63218506306edc440b8a4c60dfaa264",
+        "sessiontrace/performance.go": "d4ee9d503450edf9c3718c39504b643745c0df6d94f3873205745d5821979eed",
+        "sessiontrace/performance_disabled.go": "7e1e764b8eb76c183329fc117008153d9e8f9057ac95043600175292a900ba8f",
+        "sessiontrace/performance_enabled.go": "1abb48ebade66d1cfbcfc34f719bcaac9e9f8428d075dc888296ed2ded3c85e2",
+        "sessiontrace/performance_test.go": "155b61852559c7c3bbfcf0aa50b9af4cfd7f1d69c8230b21a486db44adc37fb9",
+        "sessiontrace/trace.go": "720ee6554ada1595bc8800faa0593f5ca0df0e01a026862fe3c840f9b9c8ab68",
+        "tcpforward/credit_counters_test.go": "968f61fc27b1cbbfa1bb1a373ca2792c5e3c2f832e55c8ac8450bb0fdaae7e7b",
+        "tcpforward/mesh_performance_test.go": "67a9f301b65d684bf29bb8649855a7b4ce2292a07166ca52b293a0ccb9fa11c3",
+        "tcpforward/mux.go": "882175c53d5b2b679d620360f6fbaaa90ed2bf16a01bd60cc9692c71a200ea34",
+        "tcpforward/mux_profile_test.go": "dd32c282e46ec898124a3400b61a7dcca09d91e244ad6b88a10fbb3a1c9f47e8",
+        "tcpforward/mux_protocol.go": "3199d0a8851a833b222938f63980918f493ba1086d6d150bae4a0b49d8950e2d",
+        "tcpforward/mux_stream.go": "1948e68d21d6f35078fcc699cd638d0aab7d2eb343f9664ed1d4f56bab5bf98b",
+        "tcpforward/performance.go": "12146046d3582c289cf9d5708045a3179d7c5401e7fc6f2e6d6448b7ac4b58d2",
+        "tcpforward/performance_test.go": "e9aa63e8affd7fc7a3f4079c23406ed8401e98bbfadb4b98f9c96c2d77c5c6fd"
+      }
+    },
+    "android": {
+      "path": "tests/fixtures/mux_profile/complete-android.patch",
+      "sha256": "ab8ff13d6c996002b913d157ad54e0158726e495e82e81bc0ad7dc0768721b55",
+      "changed": {
+        "carrier/familysession/mux_profile.go": "bf4cf82bca51b1c9ba72cafa8056962ea87a12361eac3f0656d036e45f112b10",
+        "carrier/familysession/mux_profile_test.go": "14aa00b706d8d9860b687c65a7c867f06d3ccdc0e3134abe3a1a31fcbbe48787",
+        "carrier/familysession/session.go": "cb76239c28ab22e80864b6fb43ccd7d9ab2d7f56a3f2b40ef58ad8b67e1134ec",
+        "carrier/roombroker/control.go": "782bb9cd43ff2c4668efcbfef5aebdef8b29e2f8bb4b9cd5686754baebbc7732",
+        "carrier/roombroker/gateway.go": "1554a0f247a50e77ec4ba35760de77eda0db64255734fee0deb8fc13143f393f",
+        "carrier/roombroker/mux_policy_linux.go": "3d96b69be0a8f2db067b333d4150f2935d676b6ca086c84082183d17959155f6",
+        "carrier/roombroker/mux_policy_linux_test.go": "a8765c6f65e0fea2af21bee91247e56d15a18f1a0406f2f1fdbee60f282f522b",
+        "carrier/roombroker/mux_policy_other.go": "a6a3c7808ba4317ef3e2f80335ba6012c1b0c665b29de17cc741a4541244dbbe",
+        "carrier/sessiondiag/report.go": "6546a2356961a28d8999fece1c1b655768193b8c23297b5246d81947e2618b3d",
+        "carrier/tcpforward/mux.go": "f34e48633d51db5b1874317d489c8b836bf431bb8235c9fb1dda164fc117cdf4",
+        "carrier/tcpforward/mux_profile_test.go": "dd32c282e46ec898124a3400b61a7dcca09d91e244ad6b88a10fbb3a1c9f47e8",
+        "carrier/tcpforward/mux_protocol.go": "3199d0a8851a833b222938f63980918f493ba1086d6d150bae4a0b49d8950e2d",
+        "carrier/tcpforward/mux_stream.go": "bdfa7e2f2bb4827ecb49645b84133cabcb5d321b582846ec694e5b1beed571ef",
+        "carrier/wholedevice/session.go": "ef42b6ee8f236a94b7d1fbde7df01a2e52a508269793eccb05c492d70201ca88",
+        "clients/android/app/build.gradle": "702d5dd5eff1ca566290e6ca62d770d73314bf0c8fc86cb86d8c3885b619539a"
+      }
+    },
+    "artifacts": {
+      "gateway-negotiated": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+      "negotiated-build.json": "324c6af155168099bd5a8183f4774e793d178350c7d85bcb7a5313ed036e308e",
+      "build/source-inventory.json": "f31cf6267fdafa772ed3b5c6e08ee21f3e70b25c74fa9a8164a97d67194844fe",
+      "delivery/FamilyConnect-0.1.18-beta95-mux-profile.apk": "e36a24601d459ea13553d9236486befe514dca496d8b2933290e6867d97c4159",
+      "delivery/signing-receipt.json": "0d33d107b28dda005ac64e850d1efcf0b3fad371028d3a4ee014ef2852cf77ad"
+    },
+    "tests": {
+      "delta-1.jsonl": {
+        "pass": 16
+      },
+      "lease-profile-fixture-race.jsonl": {
+        "pass": 34
+      },
+      "suite-2.jsonl": {
+        "pass": 471,
+        "skip": 16
+      },
+      "observed-1.jsonl": {
+        "pass": 483,
+        "skip": 17
+      },
+      "suite-1.jsonl": {
+        "pass": 346,
+        "skip": 16,
+        "fail": 56
+      },
+      "delta-2.jsonl": {
+        "pass": 15
+      },
+      "delta-3.jsonl": {
+        "pass": 28
+      },
+      "lease-profile-race.jsonl": {
+        "skip": 2
+      }
+    },
+    "compatibility": [
+      {
+        "case": "old-old",
+        "client_exit": 0,
+        "server_exit": 0,
+        "profile": "family-connect-5n3-test-v1"
+      },
+      {
+        "case": "old-new",
+        "client_exit": 0,
+        "server_exit": 0,
+        "profile": "family-connect-5n3-test-v1"
+      },
+      {
+        "case": "new-old",
+        "client_exit": 0,
+        "server_exit": 0,
+        "profile": "family-connect-5n3-test-v1"
+      },
+      {
+        "case": "new-new",
+        "client_exit": 0,
+        "server_exit": 0,
+        "profile": "family-connect-mux-credit128-v1"
+      },
+      {
+        "case": "forced-legacy",
+        "client_exit": 0,
+        "server_exit": 0,
+        "profile": "family-connect-5n3-test-v1"
+      }
+    ],
+    "compatibility_binaries": {
+      "old-client.test": "b9d51ad92fef3c657784533e3a6eaa7f56476f666ea87d70bd03a81f7e9e88f5",
+      "old-server.test": "15ee928d7a6067a796bc3a809f816a76b029f5c30217b75f7acb9599c293fc22",
+      "new.test": "4883d0e20049ce2aa7ed0c09069d4ae3578e3e467f20ed3e4ab00963f9190bb8"
+    }
+  },
+  "phases": [
+    {
+      "phase": "legacy94",
+      "status": "MEASURED",
+      "summary": {
+        "cells": [
+          {
+            "cell": 0,
+            "flows": 1,
+            "bytes": 65536,
+            "wall_seconds": 5.910000000149012,
+            "aggregate_mbit_s": 0.08871201353414229,
+            "completed": 1
+          }
+        ],
+        "requests": 1,
+        "completed": 1,
+        "bytes": 65536,
+        "final_topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        }
+      },
+      "preflight": {
+        "gateway": {
+          "ActiveState": "active",
+          "InvocationID": "e4d547a4c0fb41c3adae78c341329331",
+          "MainPID": "3878280",
+          "NRestarts": "0"
+        },
+        "topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        },
+        "sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+        "utc": "2026-10-20T11:39:35.952242+00:00"
+      },
+      "journal_errors": [],
+      "session_tags": [
+        "bd50305406a90ff96dca37e5d07b96d563ae5c259a19456550d3d7894c8f8329"
+      ],
+      "cells": [
+        {
+          "cell": 0,
+          "flows": 1,
+          "bytes": 65536,
+          "wall_seconds": 5.910000000149012,
+          "aggregate_mbit_s": 0.08871201353414229,
+          "completed": 1,
+          "kind": "control",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 65536,
+              "body_bytes": 65536,
+              "ttfb_s": 3.707896,
+              "full_s": 5.876608,
+              "body_s": 2.168712,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 45,
+              "Credit": 65536,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  3,
+                  1,
+                  5,
+                  5,
+                  0,
+                  3,
+                  0
+                ],
+                "Bytes": [
+                  132,
+                  549,
+                  7037,
+                  14432,
+                  0,
+                  49020,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  3,
+                  1,
+                  5,
+                  5,
+                  0,
+                  3,
+                  0
+                ],
+                "Bytes": [
+                  132,
+                  549,
+                  7037,
+                  14432,
+                  0,
+                  49020,
+                  0
+                ]
+              },
+              "CreditUpdates": 17,
+              "CreditBytes": 71170,
+              "CreditIncrements": {
+                "Count": [
+                  3,
+                  1,
+                  5,
+                  5,
+                  0,
+                  3,
+                  0
+                ],
+                "Bytes": [
+                  132,
+                  549,
+                  7037,
+                  14432,
+                  0,
+                  49020,
+                  0
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  0,
+                  0,
+                  6,
+                  5,
+                  2,
+                  2,
+                  0,
+                  1,
+                  0
+                ],
+                "TotalNS": 2555038774,
+                "MaxNS": 1177877669
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  4,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 218834,
+                "MaxNS": 82205
+              },
+              "CreditReturns": 4,
+              "ZeroCreditReadyNS": 0,
+              "QueueReadyNS": 405655370,
+              "Closed": false
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 507526350,
+            "WindowOnlyBlockedNS": 507306624,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 0,
+            "HeadSACKedBlockedNS": 8423,
+            "ReleasedBytes": 77569,
+            "NewDATA": 77569,
+            "RetryDATA": 35318
+          },
+          "socket_max": 1
+        }
+      ],
+      "observed_session_tags": [
+        "bd50305406a90ff96dca37e5d07b96d563ae5c259a19456550d3d7894c8f8329"
+      ],
+      "observed_errors_by_session": {
+        "bd50305406a90ff96dca37e5d07b96d563ae5c259a19456550d3d7894c8f8329": [
+          0,
+          0
+        ]
+      },
+      "owner_scope": null,
+      "process_resource_scope": "all gateway sessions, not only owner",
+      "profile": "LEGACY64",
+      "window": 65536,
+      "protocol_errors": [
+        0,
+        0
+      ],
+      "mux_retained_high_water": 674596,
+      "rss_max_kib": 38796,
+      "errors_by_session": {
+        "bd50305406a90ff96dca37e5d07b96d563ae5c259a19456550d3d7894c8f8329": [
+          0,
+          0
+        ]
+      },
+      "cpu_percent_one_core": 6.1585733220767915,
+      "joint_samples": {
+        "ready_zero": 0,
+        "rs_free_idle": 0,
+        "rs_full": 0,
+        "total": 9
+      }
+    },
+    {
+      "phase": "smoke95",
+      "status": "MEASURED",
+      "summary": {
+        "cells": [
+          {
+            "cell": 0,
+            "flows": 1,
+            "bytes": 65536,
+            "wall_seconds": 4.320000000065193,
+            "aggregate_mbit_s": 0.12136296296113148,
+            "completed": 1
+          }
+        ],
+        "requests": 1,
+        "completed": 1,
+        "bytes": 65536,
+        "final_topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        }
+      },
+      "preflight": {
+        "gateway": {
+          "ActiveState": "active",
+          "InvocationID": "e4d547a4c0fb41c3adae78c341329331",
+          "MainPID": "3878280",
+          "NRestarts": "0"
+        },
+        "topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        },
+        "sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+        "utc": "2026-10-20T11:41:32.790734+00:00"
+      },
+      "journal_errors": [],
+      "session_tags": [
+        "d0a19cfb7d0ffb14f2117cb1dfe232604d91c6170de51cd41b61000205f6c4f0"
+      ],
+      "cells": [
+        {
+          "cell": 0,
+          "flows": 1,
+          "bytes": 65536,
+          "wall_seconds": 4.320000000065193,
+          "aggregate_mbit_s": 0.12136296296113148,
+          "completed": 1,
+          "kind": "control",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 65536,
+              "body_bytes": 65536,
+              "ttfb_s": 3.172937,
+              "full_s": 4.304723,
+              "body_s": 1.131786,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 13,
+              "Credit": 65536,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  2,
+                  0,
+                  3,
+                  6,
+                  3,
+                  2,
+                  0
+                ],
+                "Bytes": [
+                  88,
+                  0,
+                  4173,
+                  17753,
+                  16442,
+                  32680,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  2,
+                  0,
+                  3,
+                  6,
+                  3,
+                  2,
+                  0
+                ],
+                "Bytes": [
+                  88,
+                  0,
+                  4173,
+                  17753,
+                  16442,
+                  32680,
+                  0
+                ]
+              },
+              "CreditUpdates": 16,
+              "CreditBytes": 71136,
+              "CreditIncrements": {
+                "Count": [
+                  2,
+                  0,
+                  3,
+                  6,
+                  3,
+                  2,
+                  0
+                ],
+                "Bytes": [
+                  88,
+                  0,
+                  4173,
+                  17753,
+                  16442,
+                  32680,
+                  0
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  1,
+                  0,
+                  1,
+                  8,
+                  3,
+                  2,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 1476351907,
+                "MaxNS": 415515364
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  4,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 193617,
+                "MaxNS": 60924
+              },
+              "CreditReturns": 4,
+              "ZeroCreditReadyNS": 0,
+              "QueueReadyNS": 450676579,
+              "Closed": true
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 629621667,
+            "WindowOnlyBlockedNS": 629357624,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 0,
+            "HeadSACKedBlockedNS": 75333391,
+            "ReleasedBytes": 77808,
+            "NewDATA": 77808,
+            "RetryDATA": 924
+          },
+          "socket_max": 1
+        }
+      ],
+      "observed_session_tags": [
+        "d0a19cfb7d0ffb14f2117cb1dfe232604d91c6170de51cd41b61000205f6c4f0"
+      ],
+      "observed_errors_by_session": {
+        "d0a19cfb7d0ffb14f2117cb1dfe232604d91c6170de51cd41b61000205f6c4f0": [
+          0,
+          1
+        ]
+      },
+      "owner_scope": null,
+      "process_resource_scope": "all gateway sessions, not only owner",
+      "profile": "LEGACY64",
+      "window": 65536,
+      "protocol_errors": [
+        0,
+        1
+      ],
+      "mux_retained_high_water": 409556,
+      "rss_max_kib": 35912,
+      "errors_by_session": {
+        "d0a19cfb7d0ffb14f2117cb1dfe232604d91c6170de51cd41b61000205f6c4f0": [
+          0,
+          1
+        ]
+      },
+      "cpu_percent_one_core": 5.97341137070034,
+      "joint_samples": {
+        "ready_zero": 0,
+        "rs_free_idle": 0,
+        "rs_full": 0,
+        "total": 9
+      }
+    },
+    {
+      "phase": "A1",
+      "status": "MEASURED",
+      "summary": {
+        "cells": [
+          {
+            "cell": 0,
+            "flows": 1,
+            "bytes": 65536,
+            "wall_seconds": 4.96999999997206,
+            "aggregate_mbit_s": 0.10549054326015037,
+            "completed": 1
+          },
+          {
+            "cell": 1,
+            "flows": 1,
+            "bytes": 4194304,
+            "wall_seconds": 51.860000000102445,
+            "aggregate_mbit_s": 0.6470195140750813,
+            "completed": 1
+          },
+          {
+            "cell": 2,
+            "flows": 2,
+            "bytes": 4194304,
+            "wall_seconds": 28.06000000005588,
+            "aggregate_mbit_s": 1.1958101211665424,
+            "completed": 2
+          }
+        ],
+        "requests": 4,
+        "completed": 4,
+        "bytes": 8454144,
+        "final_topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        }
+      },
+      "preflight": {
+        "gateway": {
+          "ActiveState": "active",
+          "InvocationID": "e4d547a4c0fb41c3adae78c341329331",
+          "MainPID": "3878280",
+          "NRestarts": "0"
+        },
+        "topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        },
+        "sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+        "utc": "2026-10-20T11:42:32.021524+00:00"
+      },
+      "journal_errors": [],
+      "session_tags": [
+        "d0a19cfb7d0ffb14f2117cb1dfe232604d91c6170de51cd41b61000205f6c4f0"
+      ],
+      "cells": [
+        {
+          "cell": 0,
+          "flows": 1,
+          "bytes": 65536,
+          "wall_seconds": 4.96999999997206,
+          "aggregate_mbit_s": 0.10549054326015037,
+          "completed": 1,
+          "kind": "control",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 65536,
+              "body_bytes": 65536,
+              "ttfb_s": 2.775929,
+              "full_s": 4.943254,
+              "body_s": 2.1673249999999995,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 25,
+              "Credit": 65536,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  2,
+                  0,
+                  5,
+                  5,
+                  1,
+                  3,
+                  0
+                ],
+                "Bytes": [
+                  88,
+                  0,
+                  7550,
+                  14375,
+                  4173,
+                  44949,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  2,
+                  0,
+                  5,
+                  5,
+                  1,
+                  3,
+                  0
+                ],
+                "Bytes": [
+                  88,
+                  0,
+                  7550,
+                  14375,
+                  4173,
+                  44949,
+                  0
+                ]
+              },
+              "CreditUpdates": 15,
+              "CreditBytes": 71135,
+              "CreditIncrements": {
+                "Count": [
+                  1,
+                  0,
+                  5,
+                  5,
+                  1,
+                  3,
+                  0
+                ],
+                "Bytes": [
+                  44,
+                  0,
+                  7550,
+                  14375,
+                  4173,
+                  44993,
+                  0
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  2,
+                  0,
+                  0,
+                  8,
+                  2,
+                  0,
+                  0,
+                  2,
+                  0
+                ],
+                "TotalNS": 3147596016,
+                "MaxNS": 1352974521
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  4,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 193736,
+                "MaxNS": 56537
+              },
+              "CreditReturns": 4,
+              "ZeroCreditReadyNS": 0,
+              "QueueReadyNS": 345260696,
+              "Closed": true
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 466719995,
+            "WindowOnlyBlockedNS": 466463425,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 0,
+            "HeadSACKedBlockedNS": 70580390,
+            "ReleasedBytes": 72494,
+            "NewDATA": 72494,
+            "RetryDATA": 28785
+          },
+          "socket_max": 1
+        },
+        {
+          "cell": 1,
+          "flows": 1,
+          "bytes": 4194304,
+          "wall_seconds": 51.860000000102445,
+          "aggregate_mbit_s": 0.6470195140750813,
+          "completed": 1,
+          "kind": "single",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 4194304,
+              "body_bytes": 4194304,
+              "ttfb_s": 2.649338,
+              "full_s": 51.841938,
+              "body_s": 49.1926,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 27,
+              "Credit": 65536,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  245,
+                  0,
+                  10,
+                  15,
+                  16,
+                  250,
+                  0
+                ],
+                "Bytes": [
+                  10780,
+                  0,
+                  13910,
+                  42099,
+                  93982,
+                  4045338,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  245,
+                  0,
+                  10,
+                  15,
+                  16,
+                  250,
+                  0
+                ],
+                "Bytes": [
+                  10780,
+                  0,
+                  13910,
+                  42099,
+                  93982,
+                  4045338,
+                  0
+                ]
+              },
+              "CreditUpdates": 431,
+              "CreditBytes": 4206109,
+              "CreditIncrements": {
+                "Count": [
+                  153,
+                  0,
+                  8,
+                  14,
+                  13,
+                  233,
+                  10
+                ],
+                "Bytes": [
+                  6732,
+                  0,
+                  11128,
+                  39317,
+                  76603,
+                  3777241,
+                  295088
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  61,
+                  30,
+                  57,
+                  86,
+                  155,
+                  17,
+                  15,
+                  9,
+                  0
+                ],
+                "TotalNS": 50103151141,
+                "MaxNS": 1356563038
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 143879,
+                "MaxNS": 59531
+              },
+              "CreditReturns": 3,
+              "ZeroCreditReadyNS": 45551867512,
+              "QueueReadyNS": 7683666653,
+              "Closed": true
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 16238158865,
+            "WindowOnlyBlockedNS": 16230798843,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 7479823300,
+            "HeadSACKedBlockedNS": 1911090678,
+            "ReleasedBytes": 4378348,
+            "NewDATA": 4446848,
+            "RetryDATA": 677106
+          },
+          "socket_max": 1
+        },
+        {
+          "cell": 2,
+          "flows": 2,
+          "bytes": 4194304,
+          "wall_seconds": 28.06000000005588,
+          "aggregate_mbit_s": 1.1958101211665424,
+          "completed": 2,
+          "kind": "parallel",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 2097152,
+              "body_bytes": 2097152,
+              "ttfb_s": 0.690164,
+              "full_s": 27.820742,
+              "body_s": 27.130578,
+              "connections": 1
+            },
+            {
+              "valid": true,
+              "intended_bytes": 2097152,
+              "body_bytes": 2097152,
+              "ttfb_s": 1.086425,
+              "full_s": 28.03076,
+              "body_s": 26.944335000000002,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 39,
+              "Credit": 65536,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  85,
+                  2,
+                  9,
+                  19,
+                  30,
+                  127,
+                  0
+                ],
+                "Bytes": [
+                  4097,
+                  1478,
+                  13005,
+                  58792,
+                  195263,
+                  1833524,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  85,
+                  2,
+                  9,
+                  19,
+                  30,
+                  127,
+                  0
+                ],
+                "Bytes": [
+                  4097,
+                  1478,
+                  13005,
+                  58792,
+                  195263,
+                  1833524,
+                  0
+                ]
+              },
+              "CreditUpdates": 240,
+              "CreditBytes": 2106159,
+              "CreditIncrements": {
+                "Count": [
+                  62,
+                  2,
+                  8,
+                  18,
+                  26,
+                  120,
+                  4
+                ],
+                "Bytes": [
+                  3129,
+                  1478,
+                  11614,
+                  55248,
+                  168267,
+                  1760928,
+                  105495
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  37,
+                  7,
+                  25,
+                  68,
+                  77,
+                  11,
+                  13,
+                  1,
+                  0
+                ],
+                "TotalNS": 27331948643,
+                "MaxNS": 1010904870
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 140554,
+                "MaxNS": 55514
+              },
+              "CreditReturns": 3,
+              "ZeroCreditReadyNS": 17423607894,
+              "QueueReadyNS": 20082301225,
+              "Closed": true
+            },
+            {
+              "ID": 41,
+              "Credit": 65536,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  91,
+                  0,
+                  1,
+                  6,
+                  35,
+                  128,
+                  0
+                ],
+                "Bytes": [
+                  4004,
+                  0,
+                  1857,
+                  18027,
+                  157527,
+                  1924702,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  91,
+                  0,
+                  1,
+                  6,
+                  35,
+                  128,
+                  0
+                ],
+                "Bytes": [
+                  4004,
+                  0,
+                  1857,
+                  18027,
+                  157527,
+                  1924702,
+                  0
+                ]
+              },
+              "CreditUpdates": 233,
+              "CreditBytes": 2106117,
+              "CreditIncrements": {
+                "Count": [
+                  67,
+                  0,
+                  1,
+                  6,
+                  31,
+                  124,
+                  4
+                ],
+                "Bytes": [
+                  2948,
+                  0,
+                  1857,
+                  17983,
+                  140723,
+                  1864434,
+                  78172
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  31,
+                  8,
+                  28,
+                  67,
+                  74,
+                  10,
+                  10,
+                  4,
+                  0
+                ],
+                "TotalNS": 28019017999,
+                "MaxNS": 1539918902
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  2,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 46161030,
+                "MaxNS": 46053286
+              },
+              "CreditReturns": 3,
+              "ZeroCreditReadyNS": 17974398290,
+              "QueueReadyNS": 19467490954,
+              "Closed": true
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 25346622503,
+            "WindowOnlyBlockedNS": 25325997148,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 10186015774,
+            "HeadSACKedBlockedNS": 1756175804,
+            "ReleasedBytes": 4309653,
+            "NewDATA": 4260413,
+            "RetryDATA": 405438
+          },
+          "socket_max": 2
+        }
+      ],
+      "observed_session_tags": [
+        "d0a19cfb7d0ffb14f2117cb1dfe232604d91c6170de51cd41b61000205f6c4f0"
+      ],
+      "observed_errors_by_session": {
+        "d0a19cfb7d0ffb14f2117cb1dfe232604d91c6170de51cd41b61000205f6c4f0": [
+          1,
+          1
+        ]
+      },
+      "owner_scope": null,
+      "process_resource_scope": "all gateway sessions, not only owner",
+      "profile": "LEGACY64",
+      "window": 65536,
+      "protocol_errors": [
+        1,
+        1
+      ],
+      "mux_retained_high_water": 658198,
+      "rss_max_kib": 44028,
+      "errors_by_session": {
+        "d0a19cfb7d0ffb14f2117cb1dfe232604d91c6170de51cd41b61000205f6c4f0": [
+          1,
+          1
+        ]
+      },
+      "cpu_percent_one_core": 6.55365963727225,
+      "joint_samples": {
+        "ready_zero": 37,
+        "rs_free_idle": 8,
+        "rs_full": 29,
+        "total": 49
+      }
+    },
+    {
+      "phase": "B1",
+      "status": "PREFLIGHT_STOP_NO_TRAFFIC",
+      "summary": {
+        "cells": [],
+        "requests": 0,
+        "completed": 0,
+        "bytes": 0,
+        "final_topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        }
+      },
+      "preflight": {
+        "gateway": {
+          "ActiveState": "active",
+          "InvocationID": "e4d547a4c0fb41c3adae78c341329331",
+          "MainPID": "3878280",
+          "NRestarts": "0"
+        },
+        "topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        },
+        "sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+        "utc": "2026-10-20T11:46:12.191174+00:00"
+      },
+      "journal_errors": [],
+      "session_tags": [
+        "d0a19cfb7d0ffb14f2117cb1dfe232604d91c6170de51cd41b61000205f6c4f0"
+      ],
+      "cells": [],
+      "observed_session_tags": [
+        "d0a19cfb7d0ffb14f2117cb1dfe232604d91c6170de51cd41b61000205f6c4f0"
+      ],
+      "observed_errors_by_session": {
+        "d0a19cfb7d0ffb14f2117cb1dfe232604d91c6170de51cd41b61000205f6c4f0": [
+          1,
+          1
+        ]
+      },
+      "owner_scope": null,
+      "process_resource_scope": "all gateway sessions, not only owner",
+      "profile": "LEGACY64",
+      "window": 65536,
+      "protocol_errors": [
+        1,
+        1
+      ],
+      "mux_retained_high_water": 856946,
+      "rss_max_kib": 43628,
+      "errors_by_session": {
+        "d0a19cfb7d0ffb14f2117cb1dfe232604d91c6170de51cd41b61000205f6c4f0": [
+          1,
+          1
+        ]
+      },
+      "cpu_percent_one_core": 5.952541848376896,
+      "joint_samples": {
+        "ready_zero": 0,
+        "rs_free_idle": 0,
+        "rs_full": 0,
+        "total": 4
+      }
+    },
+    {
+      "phase": "B1m",
+      "status": "MEASURED",
+      "summary": {
+        "cells": [
+          {
+            "cell": 0,
+            "flows": 1,
+            "bytes": 65536,
+            "wall_seconds": 6.649999999906868,
+            "aggregate_mbit_s": 0.07884030075298384,
+            "completed": 1
+          },
+          {
+            "cell": 1,
+            "flows": 1,
+            "bytes": 4194304,
+            "wall_seconds": 41.51000000000931,
+            "aggregate_mbit_s": 0.8083457480123457,
+            "completed": 1
+          },
+          {
+            "cell": 2,
+            "flows": 2,
+            "bytes": 4194304,
+            "wall_seconds": 25.819999999832362,
+            "aggregate_mbit_s": 1.2995519752214506,
+            "completed": 2
+          }
+        ],
+        "requests": 4,
+        "completed": 4,
+        "bytes": 8454144,
+        "final_topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        }
+      },
+      "preflight": {
+        "gateway": {
+          "ActiveState": "active",
+          "InvocationID": "e4d547a4c0fb41c3adae78c341329331",
+          "MainPID": "3878280",
+          "NRestarts": "0"
+        },
+        "topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        },
+        "sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+        "utc": "2026-10-20T12:19:18.574591+00:00"
+      },
+      "journal_errors": [],
+      "session_tags": [
+        "071df71c98ae270148b014fd5e4e534ddc23a1c26fb1308a1874e8018919b1e8"
+      ],
+      "cells": [
+        {
+          "cell": 0,
+          "flows": 1,
+          "bytes": 65536,
+          "wall_seconds": 6.649999999906868,
+          "aggregate_mbit_s": 0.07884030075298384,
+          "completed": 1,
+          "kind": "control",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 65536,
+              "body_bytes": 65536,
+              "ttfb_s": 4.661478,
+              "full_s": 6.625675,
+              "body_s": 1.9641970000000004,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 71,
+              "Credit": 131072,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  1,
+                  0,
+                  1,
+                  5,
+                  5,
+                  2,
+                  0
+                ],
+                "Bytes": [
+                  44,
+                  0,
+                  1391,
+                  14238,
+                  29010,
+                  26476,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  1,
+                  0,
+                  1,
+                  5,
+                  5,
+                  2,
+                  0
+                ],
+                "Bytes": [
+                  44,
+                  0,
+                  1391,
+                  14238,
+                  29010,
+                  26476,
+                  0
+                ]
+              },
+              "CreditUpdates": 14,
+              "CreditBytes": 71159,
+              "CreditIncrements": {
+                "Count": [
+                  1,
+                  0,
+                  1,
+                  5,
+                  5,
+                  2,
+                  0
+                ],
+                "Bytes": [
+                  44,
+                  0,
+                  1391,
+                  14238,
+                  29010,
+                  26476,
+                  0
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  0,
+                  0,
+                  1,
+                  5,
+                  5,
+                  1,
+                  0,
+                  1,
+                  0
+                ],
+                "TotalNS": 2351941264,
+                "MaxNS": 1099923470
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  4,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 204201,
+                "MaxNS": 85199
+              },
+              "CreditReturns": 4,
+              "ZeroCreditReadyNS": 0,
+              "QueueReadyNS": 278309817,
+              "Closed": false
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 499937085,
+            "WindowOnlyBlockedNS": 499804009,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 0,
+            "HeadSACKedBlockedNS": 6905189,
+            "ReleasedBytes": 72125,
+            "NewDATA": 72173,
+            "RetryDATA": 25550
+          },
+          "socket_max": 1
+        },
+        {
+          "cell": 1,
+          "flows": 1,
+          "bytes": 4194304,
+          "wall_seconds": 41.51000000000931,
+          "aggregate_mbit_s": 0.8083457480123457,
+          "completed": 1,
+          "kind": "single",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 4194304,
+              "body_bytes": 4194304,
+              "ttfb_s": 1.594841,
+              "full_s": 41.478868,
+              "body_s": 39.884026999999996,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 73,
+              "Credit": 131072,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  255,
+                  0,
+                  6,
+                  2,
+                  3,
+                  255,
+                  0
+                ],
+                "Bytes": [
+                  11220,
+                  0,
+                  8812,
+                  5620,
+                  13785,
+                  4166700,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  255,
+                  0,
+                  6,
+                  2,
+                  3,
+                  255,
+                  0
+                ],
+                "Bytes": [
+                  11220,
+                  0,
+                  8812,
+                  5620,
+                  13785,
+                  4166700,
+                  0
+                ]
+              },
+              "CreditUpdates": 393,
+              "CreditBytes": 4206137,
+              "CreditIncrements": {
+                "Count": [
+                  128,
+                  0,
+                  6,
+                  2,
+                  3,
+                  247,
+                  7
+                ],
+                "Bytes": [
+                  5632,
+                  0,
+                  8812,
+                  5620,
+                  13785,
+                  4040952,
+                  131336
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  27,
+                  3,
+                  68,
+                  162,
+                  101,
+                  11,
+                  17,
+                  3,
+                  0
+                ],
+                "TotalNS": 40091147013,
+                "MaxNS": 1028043032
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  4,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 112771,
+                "MaxNS": 40061
+              },
+              "CreditReturns": 4,
+              "ZeroCreditReadyNS": 55200301,
+              "QueueReadyNS": 38473465213,
+              "Closed": true
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 38546957165,
+            "WindowOnlyBlockedNS": 38525635656,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 17936199796,
+            "HeadSACKedBlockedNS": 1301321376,
+            "ReleasedBytes": 4294586,
+            "NewDATA": 4248437,
+            "RetryDATA": 730502
+          },
+          "socket_max": 1
+        },
+        {
+          "cell": 2,
+          "flows": 2,
+          "bytes": 4194304,
+          "wall_seconds": 25.819999999832362,
+          "aggregate_mbit_s": 1.2995519752214506,
+          "completed": 2,
+          "kind": "parallel",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 2097152,
+              "body_bytes": 2097152,
+              "ttfb_s": 0.681424,
+              "full_s": 25.37778,
+              "body_s": 24.696356,
+              "connections": 1
+            },
+            {
+              "valid": true,
+              "intended_bytes": 2097152,
+              "body_bytes": 2097152,
+              "ttfb_s": 1.144128,
+              "full_s": 25.79319,
+              "body_s": 24.649062,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 81,
+              "Credit": 131072,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  127,
+                  0,
+                  6,
+                  3,
+                  2,
+                  127,
+                  0
+                ],
+                "Bytes": [
+                  5588,
+                  0,
+                  8162,
+                  8401,
+                  8812,
+                  2075180,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  127,
+                  0,
+                  6,
+                  3,
+                  2,
+                  127,
+                  0
+                ],
+                "Bytes": [
+                  5588,
+                  0,
+                  8162,
+                  8401,
+                  8812,
+                  2075180,
+                  0
+                ]
+              },
+              "CreditUpdates": 218,
+              "CreditBytes": 2106143,
+              "CreditIncrements": {
+                "Count": [
+                  84,
+                  0,
+                  4,
+                  2,
+                  3,
+                  120,
+                  5
+                ],
+                "Bytes": [
+                  3696,
+                  0,
+                  5424,
+                  5619,
+                  14376,
+                  1962208,
+                  114820
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  12,
+                  1,
+                  19,
+                  105,
+                  64,
+                  3,
+                  11,
+                  2,
+                  0
+                ],
+                "TotalNS": 24900167279,
+                "MaxNS": 1046254725
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  3,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 7276165,
+                "MaxNS": 7188030
+              },
+              "CreditReturns": 4,
+              "ZeroCreditReadyNS": 0,
+              "QueueReadyNS": 23504659176,
+              "Closed": true
+            },
+            {
+              "ID": 83,
+              "Credit": 131072,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  129,
+                  0,
+                  2,
+                  2,
+                  0,
+                  128,
+                  0
+                ],
+                "Bytes": [
+                  5761,
+                  0,
+                  2782,
+                  6087,
+                  0,
+                  2091520,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  129,
+                  0,
+                  2,
+                  2,
+                  0,
+                  128,
+                  0
+                ],
+                "Bytes": [
+                  5761,
+                  0,
+                  2782,
+                  6087,
+                  0,
+                  2091520,
+                  0
+                ]
+              },
+              "CreditUpdates": 224,
+              "CreditBytes": 2106150,
+              "CreditIncrements": {
+                "Count": [
+                  93,
+                  0,
+                  2,
+                  2,
+                  0,
+                  125,
+                  2
+                ],
+                "Bytes": [
+                  4177,
+                  0,
+                  2782,
+                  6087,
+                  0,
+                  2043908,
+                  49196
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  25,
+                  0,
+                  14,
+                  104,
+                  62,
+                  5,
+                  10,
+                  3,
+                  0
+                ],
+                "TotalNS": 25135074014,
+                "MaxNS": 1110245395
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 193566,
+                "MaxNS": 111390
+              },
+              "CreditReturns": 3,
+              "ZeroCreditReadyNS": 44033990,
+              "QueueReadyNS": 24689137691,
+              "Closed": false
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 25226233948,
+            "WindowOnlyBlockedNS": 25209454328,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 11494404525,
+            "HeadSACKedBlockedNS": 1803127732,
+            "ReleasedBytes": 4365593,
+            "NewDATA": 4299841,
+            "RetryDATA": 493456
+          },
+          "socket_max": 2
+        }
+      ],
+      "observed_session_tags": [
+        "071df71c98ae270148b014fd5e4e534ddc23a1c26fb1308a1874e8018919b1e8"
+      ],
+      "observed_errors_by_session": {
+        "071df71c98ae270148b014fd5e4e534ddc23a1c26fb1308a1874e8018919b1e8": [
+          1,
+          1
+        ]
+      },
+      "owner_scope": {
+        "phase": "B1m",
+        "session_tag": "071df71c98ae270148b014fd5e4e534ddc23a1c26fb1308a1874e8018919b1e8",
+        "profile": "CREDIT128",
+        "window": 131072,
+        "protocol_errors_before_bulk": 1,
+        "vpn_network": "331",
+        "vpn_created": "2026-10-20T12:13:30.642Z",
+        "gateway_pid": "3878280",
+        "gateway_invocation": "e4d547a4c0fb41c3adae78c341329331",
+        "topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        },
+        "attribution": "Owner reported manual reconnect; owner VPN330 replaced by331; old owner tag absent; only new tag is CREDIT128; known peer remains LEGACY64. Validate fresh target counters and actual bulk stream IDs.",
+        "pair_readback": "b-one-connected-readback.json",
+        "session_readback": "b-one-connected-sessions.json",
+        "phone_apk_sha256": "e36a24601d459ea13553d9236486befe514dca496d8b2933290e6867d97c4159",
+        "gateway_sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4"
+      },
+      "process_resource_scope": "all gateway sessions, not only owner",
+      "profile": "CREDIT128",
+      "window": 131072,
+      "protocol_errors": [
+        1,
+        1
+      ],
+      "mux_retained_high_water": 1081434,
+      "rss_max_kib": 59484,
+      "errors_by_session": {
+        "071df71c98ae270148b014fd5e4e534ddc23a1c26fb1308a1874e8018919b1e8": [
+          1,
+          1
+        ]
+      },
+      "cpu_percent_one_core": 6.608158792493586,
+      "joint_samples": {
+        "ready_zero": 0,
+        "rs_free_idle": 0,
+        "rs_full": 0,
+        "total": 44
+      }
+    },
+    {
+      "phase": "B2",
+      "status": "MEASURED",
+      "summary": {
+        "cells": [
+          {
+            "cell": 0,
+            "flows": 1,
+            "bytes": 65536,
+            "wall_seconds": 4.319999999832362,
+            "aggregate_mbit_s": 0.12136296296767247,
+            "completed": 1
+          },
+          {
+            "cell": 1,
+            "flows": 1,
+            "bytes": 4194304,
+            "wall_seconds": 41.76000000000931,
+            "aggregate_mbit_s": 0.8035065134097824,
+            "completed": 1
+          },
+          {
+            "cell": 2,
+            "flows": 2,
+            "bytes": 4194304,
+            "wall_seconds": 27.699999999953434,
+            "aggregate_mbit_s": 1.2113513357421086,
+            "completed": 2
+          }
+        ],
+        "requests": 4,
+        "completed": 4,
+        "bytes": 8454144,
+        "final_topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        }
+      },
+      "preflight": {
+        "gateway": {
+          "ActiveState": "active",
+          "InvocationID": "e4d547a4c0fb41c3adae78c341329331",
+          "MainPID": "3878280",
+          "NRestarts": "0"
+        },
+        "topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        },
+        "sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+        "utc": "2026-10-20T12:26:51.623677+00:00"
+      },
+      "journal_errors": [],
+      "session_tags": [
+        "bd2fcaffb74066bf6b8dfde06d8f5de451a4050b88c4ff6a5db19140cd630e1c"
+      ],
+      "cells": [
+        {
+          "cell": 0,
+          "flows": 1,
+          "bytes": 65536,
+          "wall_seconds": 4.319999999832362,
+          "aggregate_mbit_s": 0.12136296296767247,
+          "completed": 1,
+          "kind": "control",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 65536,
+              "body_bytes": 65536,
+              "ttfb_s": 2.387177,
+              "full_s": 4.298021,
+              "body_s": 1.9108440000000004,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 25,
+              "Credit": 131072,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  3,
+                  0,
+                  7,
+                  4,
+                  0,
+                  3,
+                  0
+                ],
+                "Bytes": [
+                  132,
+                  0,
+                  9737,
+                  12252,
+                  0,
+                  49020,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  3,
+                  0,
+                  7,
+                  4,
+                  0,
+                  3,
+                  0
+                ],
+                "Bytes": [
+                  132,
+                  0,
+                  9737,
+                  12252,
+                  0,
+                  49020,
+                  0
+                ]
+              },
+              "CreditUpdates": 17,
+              "CreditBytes": 71141,
+              "CreditIncrements": {
+                "Count": [
+                  3,
+                  0,
+                  7,
+                  4,
+                  0,
+                  3,
+                  0
+                ],
+                "Bytes": [
+                  132,
+                  0,
+                  9693,
+                  12252,
+                  0,
+                  49064,
+                  0
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  3,
+                  0,
+                  0,
+                  6,
+                  4,
+                  1,
+                  2,
+                  0,
+                  0
+                ],
+                "TotalNS": 2465000072,
+                "MaxNS": 800163674
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  4,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 264622,
+                "MaxNS": 112221
+              },
+              "CreditReturns": 4,
+              "ZeroCreditReadyNS": 0,
+              "QueueReadyNS": 1316074355,
+              "Closed": false
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 1402559071,
+            "WindowOnlyBlockedNS": 1402105117,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 853999011,
+            "HeadSACKedBlockedNS": 102830446,
+            "ReleasedBytes": 77542,
+            "NewDATA": 73762,
+            "RetryDATA": 7175
+          },
+          "socket_max": 1
+        },
+        {
+          "cell": 1,
+          "flows": 1,
+          "bytes": 4194304,
+          "wall_seconds": 41.76000000000931,
+          "aggregate_mbit_s": 0.8035065134097824,
+          "completed": 1,
+          "kind": "single",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 4194304,
+              "body_bytes": 4194304,
+              "ttfb_s": 2.205978,
+              "full_s": 41.739897,
+              "body_s": 39.533919,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 27,
+              "Credit": 131072,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  254,
+                  0,
+                  3,
+                  6,
+                  2,
+                  255,
+                  0
+                ],
+                "Bytes": [
+                  11176,
+                  0,
+                  4173,
+                  17713,
+                  8346,
+                  4164816,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  254,
+                  0,
+                  3,
+                  6,
+                  2,
+                  255,
+                  0
+                ],
+                "Bytes": [
+                  11176,
+                  0,
+                  4173,
+                  17713,
+                  8346,
+                  4164816,
+                  0
+                ]
+              },
+              "CreditUpdates": 397,
+              "CreditBytes": 4206224,
+              "CreditIncrements": {
+                "Count": [
+                  137,
+                  0,
+                  3,
+                  6,
+                  2,
+                  242,
+                  7
+                ],
+                "Bytes": [
+                  6028,
+                  0,
+                  4173,
+                  17713,
+                  8346,
+                  3956752,
+                  213212
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  44,
+                  6,
+                  64,
+                  142,
+                  106,
+                  17,
+                  17,
+                  0,
+                  0
+                ],
+                "TotalNS": 39854948487,
+                "MaxNS": 987017537
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  4,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 222270,
+                "MaxNS": 100343
+              },
+              "CreditReturns": 4,
+              "ZeroCreditReadyNS": 486611358,
+              "QueueReadyNS": 38768957018,
+              "Closed": true
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 39494137199,
+            "WindowOnlyBlockedNS": 39471468314,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 17434159461,
+            "HeadSACKedBlockedNS": 1652983770,
+            "ReleasedBytes": 4304951,
+            "NewDATA": 4307268,
+            "RetryDATA": 662246
+          },
+          "socket_max": 1
+        },
+        {
+          "cell": 2,
+          "flows": 2,
+          "bytes": 4194304,
+          "wall_seconds": 27.699999999953434,
+          "aggregate_mbit_s": 1.2113513357421086,
+          "completed": 2,
+          "kind": "parallel",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 2097152,
+              "body_bytes": 2097152,
+              "ttfb_s": 0.739781,
+              "full_s": 27.407213,
+              "body_s": 26.667431999999998,
+              "connections": 1
+            },
+            {
+              "valid": true,
+              "intended_bytes": 2097152,
+              "body_bytes": 2097152,
+              "ttfb_s": 1.086397,
+              "full_s": 27.672009,
+              "body_s": 26.585611999999998,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 37,
+              "Credit": 131072,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  126,
+                  0,
+                  5,
+                  5,
+                  0,
+                  128,
+                  0
+                ],
+                "Bytes": [
+                  5544,
+                  0,
+                  6955,
+                  14432,
+                  0,
+                  2079236,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  126,
+                  0,
+                  5,
+                  5,
+                  0,
+                  128,
+                  0
+                ],
+                "Bytes": [
+                  5544,
+                  0,
+                  6955,
+                  14432,
+                  0,
+                  2079236,
+                  0
+                ]
+              },
+              "CreditUpdates": 220,
+              "CreditBytes": 2106167,
+              "CreditIncrements": {
+                "Count": [
+                  84,
+                  0,
+                  3,
+                  6,
+                  0,
+                  126,
+                  1
+                ],
+                "Bytes": [
+                  3696,
+                  0,
+                  4173,
+                  17214,
+                  0,
+                  2048316,
+                  32768
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  15,
+                  1,
+                  24,
+                  83,
+                  77,
+                  6,
+                  13,
+                  0,
+                  0
+                ],
+                "TotalNS": 26980396403,
+                "MaxNS": 954975737
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 140263,
+                "MaxNS": 61773
+              },
+              "CreditReturns": 3,
+              "ZeroCreditReadyNS": 0,
+              "QueueReadyNS": 26405357052,
+              "Closed": false
+            },
+            {
+              "ID": 39,
+              "Credit": 131072,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  126,
+                  0,
+                  0,
+                  1,
+                  2,
+                  128,
+                  0
+                ],
+                "Bytes": [
+                  5544,
+                  0,
+                  0,
+                  2838,
+                  10749,
+                  2087018,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  126,
+                  0,
+                  0,
+                  1,
+                  2,
+                  128,
+                  0
+                ],
+                "Bytes": [
+                  5544,
+                  0,
+                  0,
+                  2838,
+                  10749,
+                  2087018,
+                  0
+                ]
+              },
+              "CreditUpdates": 228,
+              "CreditBytes": 2106149,
+              "CreditIncrements": {
+                "Count": [
+                  98,
+                  0,
+                  0,
+                  1,
+                  2,
+                  125,
+                  2
+                ],
+                "Bytes": [
+                  4312,
+                  0,
+                  0,
+                  2838,
+                  10749,
+                  2039054,
+                  49196
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  24,
+                  0,
+                  23,
+                  90,
+                  67,
+                  9,
+                  12,
+                  2,
+                  0
+                ],
+                "TotalNS": 27066639902,
+                "MaxNS": 1047122788
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 241167,
+                "MaxNS": 127564
+              },
+              "CreditReturns": 3,
+              "ZeroCreditReadyNS": 0,
+              "QueueReadyNS": 26580945090,
+              "Closed": false
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 27238741907,
+            "WindowOnlyBlockedNS": 27222316627,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 12499993532,
+            "HeadSACKedBlockedNS": 1333246227,
+            "ReleasedBytes": 4401615,
+            "NewDATA": 4335911,
+            "RetryDATA": 669383
+          },
+          "socket_max": 2
+        }
+      ],
+      "observed_session_tags": [
+        "bd2fcaffb74066bf6b8dfde06d8f5de451a4050b88c4ff6a5db19140cd630e1c",
+        "cec488d2eae944f03fdf49c10211c429f6454da682c8df0e6dcb59510c52c711"
+      ],
+      "observed_errors_by_session": {
+        "bd2fcaffb74066bf6b8dfde06d8f5de451a4050b88c4ff6a5db19140cd630e1c": [
+          0,
+          0
+        ],
+        "cec488d2eae944f03fdf49c10211c429f6454da682c8df0e6dcb59510c52c711": [
+          0,
+          0
+        ]
+      },
+      "owner_scope": {
+        "phase": "B2",
+        "session_tag": "bd2fcaffb74066bf6b8dfde06d8f5de451a4050b88c4ff6a5db19140cd630e1c",
+        "profile": "CREDIT128",
+        "window": 131072,
+        "protocol_errors_before_bulk": 0,
+        "vpn_network": "332",
+        "vpn_created": "2026-10-20T12:24:49.757Z",
+        "gateway_pid": "3878280",
+        "gateway_invocation": "e4d547a4c0fb41c3adae78c341329331",
+        "topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        },
+        "attribution": "Owner reported manual reconnect; owner VPN331 replaced by332; old B1 owner tag absent; unique CREDIT128 tag; other current tag is LEGACY64. Validate fresh target counters and actual bulk stream IDs.",
+        "pair_readback": "b-two-connected-readback.json",
+        "session_readback": "b-two-connected-sessions.json",
+        "phone_apk_sha256": "e36a24601d459ea13553d9236486befe514dca496d8b2933290e6867d97c4159",
+        "gateway_sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4"
+      },
+      "process_resource_scope": "all gateway sessions, not only owner",
+      "profile": "CREDIT128",
+      "window": 131072,
+      "protocol_errors": [
+        0,
+        0
+      ],
+      "mux_retained_high_water": 1179736,
+      "rss_max_kib": 63636,
+      "errors_by_session": {
+        "bd2fcaffb74066bf6b8dfde06d8f5de451a4050b88c4ff6a5db19140cd630e1c": [
+          0,
+          0
+        ]
+      },
+      "cpu_percent_one_core": 8.409523566833665,
+      "joint_samples": {
+        "ready_zero": 0,
+        "rs_free_idle": 0,
+        "rs_full": 0,
+        "total": 43
+      }
+    },
+    {
+      "phase": "A2",
+      "status": "MEASURED",
+      "summary": {
+        "cells": [
+          {
+            "cell": 0,
+            "flows": 1,
+            "bytes": 65536,
+            "wall_seconds": 5.070000000065193,
+            "aggregate_mbit_s": 0.10340986193160917,
+            "completed": 1
+          },
+          {
+            "cell": 1,
+            "flows": 1,
+            "bytes": 4194304,
+            "wall_seconds": 79.06000000005588,
+            "aggregate_mbit_s": 0.4244173033136388,
+            "completed": 1
+          },
+          {
+            "cell": 2,
+            "flows": 2,
+            "bytes": 4194304,
+            "wall_seconds": 33.5999999998603,
+            "aggregate_mbit_s": 0.9986438095279615,
+            "completed": 2
+          }
+        ],
+        "requests": 4,
+        "completed": 4,
+        "bytes": 8454144,
+        "final_topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        }
+      },
+      "preflight": {
+        "gateway": {
+          "ActiveState": "active",
+          "InvocationID": "e4d547a4c0fb41c3adae78c341329331",
+          "MainPID": "3878280",
+          "NRestarts": "0"
+        },
+        "topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        },
+        "sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+        "utc": "2026-10-20T12:42:01.704030+00:00"
+      },
+      "journal_errors": [],
+      "session_tags": [
+        "adb95897842128552c7ef30d97d6c2cd59e9a838dd8bb6c4ddc3917667b9cc95"
+      ],
+      "cells": [
+        {
+          "cell": 0,
+          "flows": 1,
+          "bytes": 65536,
+          "wall_seconds": 5.070000000065193,
+          "aggregate_mbit_s": 0.10340986193160917,
+          "completed": 1,
+          "kind": "control",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 65536,
+              "body_bytes": 65536,
+              "ttfb_s": 3.88159,
+              "full_s": 5.042774,
+              "body_s": 1.1611839999999995,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 109,
+              "Credit": 65536,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  2,
+                  0,
+                  8,
+                  4,
+                  0,
+                  3,
+                  0
+                ],
+                "Bytes": [
+                  88,
+                  0,
+                  11594,
+                  11183,
+                  0,
+                  48269,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  2,
+                  0,
+                  8,
+                  4,
+                  0,
+                  3,
+                  0
+                ],
+                "Bytes": [
+                  88,
+                  0,
+                  11594,
+                  11183,
+                  0,
+                  48269,
+                  0
+                ]
+              },
+              "CreditUpdates": 17,
+              "CreditBytes": 71134,
+              "CreditIncrements": {
+                "Count": [
+                  2,
+                  0,
+                  8,
+                  4,
+                  0,
+                  3,
+                  0
+                ],
+                "Bytes": [
+                  88,
+                  0,
+                  11594,
+                  11183,
+                  0,
+                  48269,
+                  0
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  0,
+                  0,
+                  2,
+                  9,
+                  3,
+                  1,
+                  1,
+                  0,
+                  0
+                ],
+                "TotalNS": 1878041785,
+                "MaxNS": 751777955
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  2,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 84419,
+                "MaxNS": 45790
+              },
+              "CreditReturns": 2,
+              "ZeroCreditReadyNS": 0,
+              "QueueReadyNS": 366402067,
+              "Closed": false
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 501386762,
+            "WindowOnlyBlockedNS": 501048038,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 0,
+            "HeadSACKedBlockedNS": 45900,
+            "ReleasedBytes": 72140,
+            "NewDATA": 72140,
+            "RetryDATA": 0
+          },
+          "socket_max": 1
+        },
+        {
+          "cell": 1,
+          "flows": 1,
+          "bytes": 4194304,
+          "wall_seconds": 79.06000000005588,
+          "aggregate_mbit_s": 0.4244173033136388,
+          "completed": 1,
+          "kind": "single",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 4194304,
+              "body_bytes": 4194304,
+              "ttfb_s": 3.034492,
+              "full_s": 79.041733,
+              "body_s": 76.007241,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 111,
+              "Credit": 65536,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  255,
+                  0,
+                  1,
+                  2,
+                  2,
+                  256,
+                  0
+                ],
+                "Bytes": [
+                  11220,
+                  0,
+                  1547,
+                  5619,
+                  12060,
+                  4175663,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  255,
+                  0,
+                  1,
+                  2,
+                  2,
+                  256,
+                  0
+                ],
+                "Bytes": [
+                  11220,
+                  0,
+                  1547,
+                  5619,
+                  12060,
+                  4175663,
+                  0
+                ]
+              },
+              "CreditUpdates": 389,
+              "CreditBytes": 4206109,
+              "CreditIncrements": {
+                "Count": [
+                  147,
+                  0,
+                  1,
+                  1,
+                  0,
+                  220,
+                  20
+                ],
+                "Bytes": [
+                  6468,
+                  0,
+                  1547,
+                  2837,
+                  0,
+                  3597880,
+                  597377
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  81,
+                  4,
+                  50,
+                  55,
+                  116,
+                  40,
+                  17,
+                  25,
+                  0
+                ],
+                "TotalNS": 77369433229,
+                "MaxNS": 3773440628
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  4,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 227796,
+                "MaxNS": 102296
+              },
+              "CreditReturns": 4,
+              "ZeroCreditReadyNS": 70728291518,
+              "QueueReadyNS": 8101106461,
+              "Closed": true
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 39682466971,
+            "WindowOnlyBlockedNS": 39664876467,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 20713202450,
+            "HeadSACKedBlockedNS": 3272730582,
+            "ReleasedBytes": 4567750,
+            "NewDATA": 4567746,
+            "RetryDATA": 1045442
+          },
+          "socket_max": 1
+        },
+        {
+          "cell": 2,
+          "flows": 2,
+          "bytes": 4194304,
+          "wall_seconds": 33.5999999998603,
+          "aggregate_mbit_s": 0.9986438095279615,
+          "completed": 2,
+          "kind": "parallel",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 2097152,
+              "body_bytes": 2097152,
+              "ttfb_s": 1.727158,
+              "full_s": 31.987272,
+              "body_s": 30.260114,
+              "connections": 1
+            },
+            {
+              "valid": true,
+              "intended_bytes": 2097152,
+              "body_bytes": 2097152,
+              "ttfb_s": 3.437013,
+              "full_s": 33.563924,
+              "body_s": 30.126911,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 145,
+              "Credit": 65536,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  116,
+                  0,
+                  0,
+                  4,
+                  20,
+                  124,
+                  0
+                ],
+                "Bytes": [
+                  5104,
+                  0,
+                  0,
+                  10935,
+                  110891,
+                  1979218,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  116,
+                  0,
+                  0,
+                  4,
+                  20,
+                  124,
+                  0
+                ],
+                "Bytes": [
+                  5104,
+                  0,
+                  0,
+                  10935,
+                  110891,
+                  1979218,
+                  0
+                ]
+              },
+              "CreditUpdates": 229,
+              "CreditBytes": 2106148,
+              "CreditIncrements": {
+                "Count": [
+                  83,
+                  0,
+                  0,
+                  4,
+                  17,
+                  122,
+                  3
+                ],
+                "Bytes": [
+                  3652,
+                  0,
+                  0,
+                  10935,
+                  92341,
+                  1949936,
+                  49284
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  46,
+                  3,
+                  19,
+                  56,
+                  74,
+                  14,
+                  9,
+                  7,
+                  0
+                ],
+                "TotalNS": 31635588750,
+                "MaxNS": 1439959274
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 155971,
+                "MaxNS": 54654
+              },
+              "CreditReturns": 3,
+              "ZeroCreditReadyNS": 20307436111,
+              "QueueReadyNS": 20559087704,
+              "Closed": true
+            },
+            {
+              "ID": 147,
+              "Credit": 65536,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  126,
+                  0,
+                  8,
+                  3,
+                  1,
+                  128,
+                  0
+                ],
+                "Bytes": [
+                  6095,
+                  0,
+                  11033,
+                  9335,
+                  6464,
+                  2073215,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  126,
+                  0,
+                  8,
+                  3,
+                  1,
+                  128,
+                  0
+                ],
+                "Bytes": [
+                  6095,
+                  0,
+                  11033,
+                  9335,
+                  6464,
+                  2073215,
+                  0
+                ]
+              },
+              "CreditUpdates": 225,
+              "CreditBytes": 2106142,
+              "CreditIncrements": {
+                "Count": [
+                  90,
+                  0,
+                  6,
+                  3,
+                  1,
+                  120,
+                  5
+                ],
+                "Bytes": [
+                  4378,
+                  0,
+                  8212,
+                  9335,
+                  6464,
+                  1946593,
+                  131160
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  42,
+                  2,
+                  21,
+                  67,
+                  65,
+                  12,
+                  5,
+                  10,
+                  0
+                ],
+                "TotalNS": 32304182419,
+                "MaxNS": 2122748187
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  4,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 269592,
+                "MaxNS": 103018
+              },
+              "CreditReturns": 4,
+              "ZeroCreditReadyNS": 17880387465,
+              "QueueReadyNS": 21373982336,
+              "Closed": false
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 27941976966,
+            "WindowOnlyBlockedNS": 27925819934,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 10121337380,
+            "HeadSACKedBlockedNS": 2029143195,
+            "ReleasedBytes": 4312669,
+            "NewDATA": 4246781,
+            "RetryDATA": 543037
+          },
+          "socket_max": 2
+        }
+      ],
+      "observed_session_tags": [
+        "0f6b0ccd3f4a4335b160385a8ece99e9d4d4c11acfd5cafd5fb6a7597757030a",
+        "adb95897842128552c7ef30d97d6c2cd59e9a838dd8bb6c4ddc3917667b9cc95"
+      ],
+      "observed_errors_by_session": {
+        "0f6b0ccd3f4a4335b160385a8ece99e9d4d4c11acfd5cafd5fb6a7597757030a": [
+          0,
+          0
+        ],
+        "adb95897842128552c7ef30d97d6c2cd59e9a838dd8bb6c4ddc3917667b9cc95": [
+          2,
+          2
+        ]
+      },
+      "owner_scope": {
+        "phase": "A2",
+        "session_tag": "adb95897842128552c7ef30d97d6c2cd59e9a838dd8bb6c4ddc3917667b9cc95",
+        "profile": "LEGACY64",
+        "window": 65536,
+        "protocol_errors_before_bulk": 2,
+        "vpn_network": "333",
+        "vpn_created": "2026-10-20T12:34:54.829Z",
+        "gateway_pid": "3878280",
+        "gateway_invocation": "e4d547a4c0fb41c3adae78c341329331",
+        "topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        },
+        "attribution": "Manual owner VPN332 replaced by333; prior B2 owner tag closed; unique new AUTHORIZED/FAMILY_TLS-established tag in the recorded post-TUN startup interval. Other LEGACY64 tag excluded. Validate actual measured streams.",
+        "pair_readback": "a-two-connected-readback.json",
+        "session_readback": "a-two-connected-sessions.json",
+        "startup_attribution": "a-two-startup-complete-attribution.json",
+        "phone_apk_sha256": "e36a24601d459ea13553d9236486befe514dca496d8b2933290e6867d97c4159",
+        "gateway_sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+        "both_sides_window": {
+          "android": 65536,
+          "nl": 65536,
+          "basis": "Observed established authenticated Family TLS session + actual server Mux LEGACY64/65536 + exact installed native and server source pins: shared TLS NegotiatedProtocol maps to65536 at both endpoints, used for receive ring and initial send/receive credits. Not an independent Android live counter read; not inferred from CONNECTED or configured preference."
+        }
+      },
+      "process_resource_scope": "all gateway sessions, not only owner",
+      "profile": "LEGACY64",
+      "window": 65536,
+      "protocol_errors": [
+        2,
+        2
+      ],
+      "mux_retained_high_water": 1376300,
+      "rss_max_kib": 67936,
+      "errors_by_session": {
+        "adb95897842128552c7ef30d97d6c2cd59e9a838dd8bb6c4ddc3917667b9cc95": [
+          2,
+          2
+        ]
+      },
+      "cpu_percent_one_core": 8.57033666013175,
+      "joint_samples": {
+        "ready_zero": 47,
+        "rs_free_idle": 11,
+        "rs_full": 36,
+        "total": 65
+      }
+    },
+    {
+      "phase": "A3",
+      "status": "MEASURED",
+      "summary": {
+        "cells": [
+          {
+            "cell": 0,
+            "flows": 1,
+            "bytes": 65536,
+            "wall_seconds": 4.489999999990687,
+            "aggregate_mbit_s": 0.11676792873075446,
+            "completed": 1
+          },
+          {
+            "cell": 1,
+            "flows": 1,
+            "bytes": 4194304,
+            "wall_seconds": 47.699999999953434,
+            "aggregate_mbit_s": 0.7034472117407287,
+            "completed": 1
+          },
+          {
+            "cell": 2,
+            "flows": 2,
+            "bytes": 4194304,
+            "wall_seconds": 27.40999999991618,
+            "aggregate_mbit_s": 1.2241675301022477,
+            "completed": 2
+          }
+        ],
+        "requests": 4,
+        "completed": 4,
+        "bytes": 8454144,
+        "final_topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        }
+      },
+      "preflight": {
+        "gateway": {
+          "ActiveState": "active",
+          "InvocationID": "17ec5abfcbc84a9d913e844193e0d931",
+          "MainPID": "3937546",
+          "NRestarts": "0"
+        },
+        "topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        },
+        "sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+        "utc": "2026-10-20T13:10:21.524546+00:00"
+      },
+      "journal_errors": [],
+      "session_tags": [
+        "5f0136db0c1a4af481c9517596e1822beebe284e319b50d27c768b3b1553b39a"
+      ],
+      "cells": [
+        {
+          "cell": 0,
+          "flows": 1,
+          "bytes": 65536,
+          "wall_seconds": 4.489999999990687,
+          "aggregate_mbit_s": 0.11676792873075446,
+          "completed": 1,
+          "kind": "control",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 65536,
+              "body_bytes": 65536,
+              "ttfb_s": 3.47433,
+              "full_s": 4.454774,
+              "body_s": 0.9804439999999994,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 49,
+              "Credit": 65536,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  0,
+                  0,
+                  1,
+                  5,
+                  4,
+                  4,
+                  0
+                ],
+                "Bytes": [
+                  0,
+                  0,
+                  1391,
+                  13945,
+                  18549,
+                  37250,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  0,
+                  0,
+                  1,
+                  5,
+                  4,
+                  4,
+                  0
+                ],
+                "Bytes": [
+                  0,
+                  0,
+                  1391,
+                  13945,
+                  18549,
+                  37250,
+                  0
+                ]
+              },
+              "CreditUpdates": 14,
+              "CreditBytes": 71135,
+              "CreditIncrements": {
+                "Count": [
+                  0,
+                  0,
+                  1,
+                  5,
+                  4,
+                  4,
+                  0
+                ],
+                "Bytes": [
+                  0,
+                  0,
+                  1391,
+                  13945,
+                  18549,
+                  37250,
+                  0
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  0,
+                  0,
+                  1,
+                  6,
+                  4,
+                  1,
+                  0,
+                  1,
+                  0
+                ],
+                "TotalNS": 1935169627,
+                "MaxNS": 1005558796
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 318885,
+                "MaxNS": 193555
+              },
+              "CreditReturns": 3,
+              "ZeroCreditReadyNS": 74032717,
+              "QueueReadyNS": 245977688,
+              "Closed": true
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 365561985,
+            "WindowOnlyBlockedNS": 365401479,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 0,
+            "HeadSACKedBlockedNS": 17415,
+            "ReleasedBytes": 72279,
+            "NewDATA": 72279,
+            "RetryDATA": 0
+          },
+          "socket_max": 1
+        },
+        {
+          "cell": 1,
+          "flows": 1,
+          "bytes": 4194304,
+          "wall_seconds": 47.699999999953434,
+          "aggregate_mbit_s": 0.7034472117407287,
+          "completed": 1,
+          "kind": "single",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 4194304,
+              "body_bytes": 4194304,
+              "ttfb_s": 2.762366,
+              "full_s": 47.67535,
+              "body_s": 44.912984,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 51,
+              "Credit": 65536,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  202,
+                  7,
+                  12,
+                  51,
+                  41,
+                  250,
+                  0
+                ],
+                "Bytes": [
+                  9257,
+                  4948,
+                  18456,
+                  152184,
+                  213079,
+                  3808216,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  202,
+                  7,
+                  12,
+                  51,
+                  41,
+                  250,
+                  0
+                ],
+                "Bytes": [
+                  9257,
+                  4948,
+                  18456,
+                  152184,
+                  213079,
+                  3808216,
+                  0
+                ]
+              },
+              "CreditUpdates": 474,
+              "CreditBytes": 4206140,
+              "CreditIncrements": {
+                "Count": [
+                  125,
+                  6,
+                  9,
+                  47,
+                  40,
+                  243,
+                  4
+                ],
+                "Bytes": [
+                  5560,
+                  3956,
+                  13584,
+                  142078,
+                  206458,
+                  3703476,
+                  131028
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  67,
+                  6,
+                  77,
+                  177,
+                  113,
+                  12,
+                  16,
+                  5,
+                  0
+                ],
+                "TotalNS": 45857158171,
+                "MaxNS": 2025525628
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 144290,
+                "MaxNS": 55574
+              },
+              "CreditReturns": 3,
+              "ZeroCreditReadyNS": 38065180242,
+              "QueueReadyNS": 12559870726,
+              "Closed": true
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 17929617949,
+            "WindowOnlyBlockedNS": 17919572036,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 7403870323,
+            "HeadSACKedBlockedNS": 603238802,
+            "ReleasedBytes": 4348898,
+            "NewDATA": 4409263,
+            "RetryDATA": 576762
+          },
+          "socket_max": 1
+        },
+        {
+          "cell": 2,
+          "flows": 2,
+          "bytes": 4194304,
+          "wall_seconds": 27.40999999991618,
+          "aggregate_mbit_s": 1.2241675301022477,
+          "completed": 2,
+          "kind": "parallel",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 2097152,
+              "body_bytes": 2097152,
+              "ttfb_s": 0.753513,
+              "full_s": 27.130556,
+              "body_s": 26.377042999999997,
+              "connections": 1
+            },
+            {
+              "valid": true,
+              "intended_bytes": 2097152,
+              "body_bytes": 2097152,
+              "ttfb_s": 0.897959,
+              "full_s": 27.382714,
+              "body_s": 26.484755,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 59,
+              "Credit": 65536,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  113,
+                  0,
+                  23,
+                  3,
+                  2,
+                  127,
+                  0
+                ],
+                "Bytes": [
+                  4972,
+                  0,
+                  37397,
+                  8403,
+                  9086,
+                  2046291,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  113,
+                  0,
+                  23,
+                  3,
+                  2,
+                  127,
+                  0
+                ],
+                "Bytes": [
+                  4972,
+                  0,
+                  37397,
+                  8403,
+                  9086,
+                  2046291,
+                  0
+                ]
+              },
+              "CreditUpdates": 219,
+              "CreditBytes": 2106149,
+              "CreditIncrements": {
+                "Count": [
+                  71,
+                  0,
+                  17,
+                  3,
+                  3,
+                  122,
+                  3
+                ],
+                "Bytes": [
+                  3124,
+                  0,
+                  28231,
+                  8403,
+                  14650,
+                  1971622,
+                  80119
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  17,
+                  0,
+                  24,
+                  94,
+                  64,
+                  7,
+                  9,
+                  3,
+                  0
+                ],
+                "TotalNS": 26624756510,
+                "MaxNS": 1598429095
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 131211,
+                "MaxNS": 51949
+              },
+              "CreditReturns": 3,
+              "ZeroCreditReadyNS": 15697080530,
+              "QueueReadyNS": 22539005735,
+              "Closed": true
+            },
+            {
+              "ID": 61,
+              "Credit": 65536,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  123,
+                  0,
+                  4,
+                  6,
+                  0,
+                  128,
+                  0
+                ],
+                "Bytes": [
+                  5412,
+                  0,
+                  6496,
+                  18738,
+                  0,
+                  2075500,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  123,
+                  0,
+                  4,
+                  6,
+                  0,
+                  128,
+                  0
+                ],
+                "Bytes": [
+                  5412,
+                  0,
+                  6496,
+                  18738,
+                  0,
+                  2075500,
+                  0
+                ]
+              },
+              "CreditUpdates": 223,
+              "CreditBytes": 2106146,
+              "CreditIncrements": {
+                "Count": [
+                  87,
+                  0,
+                  2,
+                  7,
+                  0,
+                  124,
+                  3
+                ],
+                "Bytes": [
+                  3828,
+                  0,
+                  3248,
+                  21986,
+                  0,
+                  2011416,
+                  65668
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  16,
+                  3,
+                  34,
+                  83,
+                  66,
+                  7,
+                  8,
+                  5,
+                  0
+                ],
+                "TotalNS": 26809847040,
+                "MaxNS": 1478989117
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  3,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 32680112,
+                "MaxNS": 32566049
+              },
+              "CreditReturns": 4,
+              "ZeroCreditReadyNS": 13862904537,
+              "QueueReadyNS": 23286744673,
+              "Closed": true
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 26434783287,
+            "WindowOnlyBlockedNS": 26416367151,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 12247308433,
+            "HeadSACKedBlockedNS": 1581198877,
+            "ReleasedBytes": 4277806,
+            "NewDATA": 4250456,
+            "RetryDATA": 588273
+          },
+          "socket_max": 2
+        }
+      ],
+      "observed_session_tags": [
+        "5f0136db0c1a4af481c9517596e1822beebe284e319b50d27c768b3b1553b39a"
+      ],
+      "observed_errors_by_session": {
+        "5f0136db0c1a4af481c9517596e1822beebe284e319b50d27c768b3b1553b39a": [
+          1,
+          1
+        ]
+      },
+      "owner_scope": {
+        "phase": "A3",
+        "session_tag": "5f0136db0c1a4af481c9517596e1822beebe284e319b50d27c768b3b1553b39a",
+        "profile": "LEGACY64",
+        "window": 65536,
+        "protocol_errors_before_bulk": 1,
+        "vpn_network": "334",
+        "vpn_created": "2026-10-20T13:03:57.855Z",
+        "gateway_pid": "3937546",
+        "gateway_invocation": "17ec5abfcbc84a9d913e844193e0d931",
+        "topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        },
+        "attribution": "Owner VPN334 after manual reconnect; external gateway process/credential refresh before bulk, one observed authenticated session in new invocation and current Mux64 snapshots. Meter revalidates owner VPN/tag/process. Same binary; pre-bulk recovery retained.",
+        "pair_readback": "a-three-recheck-readback.json",
+        "session_readback": "a-three-bounded-session-readback.json",
+        "startup_attribution": "a-three-bounded-session-readback.json",
+        "phone_apk_sha256": "e36a24601d459ea13553d9236486befe514dca496d8b2933290e6867d97c4159",
+        "gateway_sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+        "both_sides_window": {
+          "android": 65536,
+          "nl": 65536,
+          "basis": "Observed established authenticated Family TLS session + actual server Mux LEGACY64/65536 + exact installed native and server source pins: shared TLS NegotiatedProtocol maps to65536 at both endpoints, used for receive ring and initial send/receive credits. Not an independent Android live counter read; not inferred from CONNECTED or configured preference."
+        }
+      },
+      "process_resource_scope": "all gateway sessions, not only owner",
+      "profile": "LEGACY64",
+      "window": 65536,
+      "protocol_errors": [
+        1,
+        1
+      ],
+      "mux_retained_high_water": 737280,
+      "rss_max_kib": 45100,
+      "errors_by_session": {
+        "5f0136db0c1a4af481c9517596e1822beebe284e319b50d27c768b3b1553b39a": [
+          1,
+          1
+        ]
+      },
+      "cpu_percent_one_core": 6.660062125218273,
+      "joint_samples": {
+        "ready_zero": 29,
+        "rs_free_idle": 5,
+        "rs_full": 24,
+        "total": 46
+      }
+    },
+    {
+      "phase": "B3",
+      "status": "MEASURED",
+      "summary": {
+        "cells": [
+          {
+            "cell": 0,
+            "flows": 1,
+            "bytes": 65536,
+            "wall_seconds": 5.510000000009313,
+            "aggregate_mbit_s": 0.09515208711417675,
+            "completed": 1
+          },
+          {
+            "cell": 1,
+            "flows": 1,
+            "bytes": 4194304,
+            "wall_seconds": 46.02000000001863,
+            "aggregate_mbit_s": 0.7291271621031382,
+            "completed": 1
+          },
+          {
+            "cell": 2,
+            "flows": 2,
+            "bytes": 4194304,
+            "wall_seconds": 31.729999999981374,
+            "aggregate_mbit_s": 1.0574986448162527,
+            "completed": 2
+          }
+        ],
+        "requests": 4,
+        "completed": 4,
+        "bytes": 8454144,
+        "final_topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        }
+      },
+      "preflight": {
+        "gateway": {
+          "ActiveState": "active",
+          "InvocationID": "17ec5abfcbc84a9d913e844193e0d931",
+          "MainPID": "3937546",
+          "NRestarts": "0"
+        },
+        "topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        },
+        "sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+        "utc": "2026-10-20T13:20:16.569989+00:00"
+      },
+      "journal_errors": [],
+      "session_tags": [
+        "791977aa5b4ffcf25d56644eee24b95f1af35fff3ca5a1a650065989285f21fc"
+      ],
+      "cells": [
+        {
+          "cell": 0,
+          "flows": 1,
+          "bytes": 65536,
+          "wall_seconds": 5.510000000009313,
+          "aggregate_mbit_s": 0.09515208711417675,
+          "completed": 1,
+          "kind": "control",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 65536,
+              "body_bytes": 65536,
+              "ttfb_s": 4.10853,
+              "full_s": 5.491793,
+              "body_s": 1.3832630000000004,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 37,
+              "Credit": 131072,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  2,
+                  0,
+                  6,
+                  4,
+                  1,
+                  3,
+                  0
+                ],
+                "Bytes": [
+                  88,
+                  0,
+                  8584,
+                  11242,
+                  4344,
+                  46886,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  2,
+                  0,
+                  6,
+                  4,
+                  1,
+                  3,
+                  0
+                ],
+                "Bytes": [
+                  88,
+                  0,
+                  8584,
+                  11242,
+                  4344,
+                  46886,
+                  0
+                ]
+              },
+              "CreditUpdates": 13,
+              "CreditBytes": 71144,
+              "CreditIncrements": {
+                "Count": [
+                  0,
+                  0,
+                  4,
+                  5,
+                  1,
+                  3,
+                  0
+                ],
+                "Bytes": [
+                  0,
+                  0,
+                  6087,
+                  13739,
+                  4344,
+                  46974,
+                  0
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  3,
+                  0,
+                  0,
+                  6,
+                  1,
+                  0,
+                  2,
+                  0,
+                  0
+                ],
+                "TotalNS": 2001375402,
+                "MaxNS": 928864433
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  4,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 379298,
+                "MaxNS": 248709
+              },
+              "CreditReturns": 4,
+              "ZeroCreditReadyNS": 0,
+              "QueueReadyNS": 203750607,
+              "Closed": false
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 633684050,
+            "WindowOnlyBlockedNS": 633364591,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 168738938,
+            "HeadSACKedBlockedNS": 32217589,
+            "ReleasedBytes": 72286,
+            "NewDATA": 76201,
+            "RetryDATA": 2940
+          },
+          "socket_max": 1
+        },
+        {
+          "cell": 1,
+          "flows": 1,
+          "bytes": 4194304,
+          "wall_seconds": 46.02000000001863,
+          "aggregate_mbit_s": 0.7291271621031382,
+          "completed": 1,
+          "kind": "single",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 4194304,
+              "body_bytes": 4194304,
+              "ttfb_s": 1.908631,
+              "full_s": 45.99942,
+              "body_s": 44.090789,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 41,
+              "Credit": 131072,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  255,
+                  0,
+                  4,
+                  8,
+                  0,
+                  255,
+                  0
+                ],
+                "Bytes": [
+                  11220,
+                  0,
+                  5522,
+                  22778,
+                  0,
+                  4166700,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  255,
+                  0,
+                  4,
+                  8,
+                  0,
+                  255,
+                  0
+                ],
+                "Bytes": [
+                  11220,
+                  0,
+                  5522,
+                  22778,
+                  0,
+                  4166700,
+                  0
+                ]
+              },
+              "CreditUpdates": 367,
+              "CreditBytes": 4206220,
+              "CreditIncrements": {
+                "Count": [
+                  115,
+                  0,
+                  4,
+                  8,
+                  0,
+                  228,
+                  12
+                ],
+                "Bytes": [
+                  5060,
+                  0,
+                  5522,
+                  22778,
+                  0,
+                  3730184,
+                  442676
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  34,
+                  7,
+                  63,
+                  123,
+                  101,
+                  18,
+                  14,
+                  6,
+                  0
+                ],
+                "TotalNS": 44436892161,
+                "MaxNS": 2191919386
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 111291,
+                "MaxNS": 41303
+              },
+              "CreditReturns": 3,
+              "ZeroCreditReadyNS": 1409007130,
+              "QueueReadyNS": 42074510793,
+              "Closed": false
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 44167291790,
+            "WindowOnlyBlockedNS": 44138189022,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 21803470107,
+            "HeadSACKedBlockedNS": 1018289896,
+            "ReleasedBytes": 4314561,
+            "NewDATA": 4302607,
+            "RetryDATA": 746974
+          },
+          "socket_max": 1
+        },
+        {
+          "cell": 2,
+          "flows": 2,
+          "bytes": 4194304,
+          "wall_seconds": 31.729999999981374,
+          "aggregate_mbit_s": 1.0574986448162527,
+          "completed": 2,
+          "kind": "parallel",
+          "requests": [
+            {
+              "valid": true,
+              "intended_bytes": 2097152,
+              "body_bytes": 2097152,
+              "ttfb_s": 0.993168,
+              "full_s": 30.692122,
+              "body_s": 29.698954,
+              "connections": 1
+            },
+            {
+              "valid": true,
+              "intended_bytes": 2097152,
+              "body_bytes": 2097152,
+              "ttfb_s": 1.118651,
+              "full_s": 31.696371,
+              "body_s": 30.57772,
+              "connections": 1
+            }
+          ],
+          "mux_streams": [
+            {
+              "ID": 47,
+              "Credit": 131072,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  128,
+                  0,
+                  9,
+                  4,
+                  0,
+                  127,
+                  0
+                ],
+                "Bytes": [
+                  6066,
+                  0,
+                  12790,
+                  12130,
+                  0,
+                  2075180,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  128,
+                  0,
+                  9,
+                  4,
+                  0,
+                  127,
+                  0
+                ],
+                "Bytes": [
+                  6066,
+                  0,
+                  12790,
+                  12130,
+                  0,
+                  2075180,
+                  0
+                ]
+              },
+              "CreditUpdates": 204,
+              "CreditBytes": 2106166,
+              "CreditIncrements": {
+                "Count": [
+                  71,
+                  0,
+                  5,
+                  4,
+                  1,
+                  112,
+                  11
+                ],
+                "Bytes": [
+                  3558,
+                  0,
+                  7421,
+                  12130,
+                  4173,
+                  1831664,
+                  247220
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  11,
+                  7,
+                  22,
+                  67,
+                  68,
+                  11,
+                  10,
+                  7,
+                  0
+                ],
+                "TotalNS": 30021047231,
+                "MaxNS": 1500106174
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  3,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 114575,
+                "MaxNS": 53401
+              },
+              "CreditReturns": 3,
+              "ZeroCreditReadyNS": 0,
+              "QueueReadyNS": 29337906662,
+              "Closed": true
+            },
+            {
+              "ID": 49,
+              "Credit": 131072,
+              "QueuedBytes": 0,
+              "ReadyBytes": 0,
+              "QueuedDATA": {
+                "Count": [
+                  127,
+                  0,
+                  3,
+                  2,
+                  0,
+                  128,
+                  0
+                ],
+                "Bytes": [
+                  5588,
+                  0,
+                  5112,
+                  4926,
+                  0,
+                  2090492,
+                  0
+                ]
+              },
+              "HandedDATA": {
+                "Count": [
+                  127,
+                  0,
+                  3,
+                  2,
+                  0,
+                  128,
+                  0
+                ],
+                "Bytes": [
+                  5588,
+                  0,
+                  5112,
+                  4926,
+                  0,
+                  2090492,
+                  0
+                ]
+              },
+              "CreditUpdates": 205,
+              "CreditBytes": 2106118,
+              "CreditIncrements": {
+                "Count": [
+                  79,
+                  0,
+                  3,
+                  2,
+                  0,
+                  111,
+                  10
+                ],
+                "Bytes": [
+                  3476,
+                  0,
+                  5112,
+                  4926,
+                  0,
+                  1815104,
+                  277500
+                ]
+              },
+              "CreditIntervals": {
+                "Count": [
+                  15,
+                  10,
+                  21,
+                  71,
+                  56,
+                  13,
+                  13,
+                  5,
+                  0
+                ],
+                "TotalNS": 30872275580,
+                "MaxNS": 1384865191
+              },
+              "CreditPending": 0,
+              "ReceiveBuffered": 0,
+              "ReturnQueueDelay": {
+                "Count": [
+                  3,
+                  0,
+                  0,
+                  1,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
+                ],
+                "TotalNS": 78582897,
+                "MaxNS": 78428934
+              },
+              "CreditReturns": 4,
+              "ZeroCreditReadyNS": 0,
+              "QueueReadyNS": 29375913524,
+              "Closed": true
+            }
+          ],
+          "mux_attribution_complete": true,
+          "rs_scope": "whole session bracket includes background and edges",
+          "rs_delta": {
+            "ReadyFullNS": 29554101003,
+            "WindowOnlyBlockedNS": 29534215669,
+            "HeadUnconfirmedLaterSACKedBlockedNS": 15829097996,
+            "HeadSACKedBlockedNS": 1307254341,
+            "ReleasedBytes": 4244680,
+            "NewDATA": 4244680,
+            "RetryDATA": 576689
+          },
+          "socket_max": 2
+        }
+      ],
+      "observed_session_tags": [
+        "791977aa5b4ffcf25d56644eee24b95f1af35fff3ca5a1a650065989285f21fc"
+      ],
+      "observed_errors_by_session": {
+        "791977aa5b4ffcf25d56644eee24b95f1af35fff3ca5a1a650065989285f21fc": [
+          0,
+          0
+        ]
+      },
+      "owner_scope": {
+        "phase": "B3",
+        "session_tag": "791977aa5b4ffcf25d56644eee24b95f1af35fff3ca5a1a650065989285f21fc",
+        "profile": "CREDIT128",
+        "window": 131072,
+        "protocol_errors_before_bulk": 0,
+        "vpn_network": "335",
+        "vpn_created": "2026-10-20T13:17:14.891Z",
+        "gateway_pid": "3937546",
+        "gateway_invocation": "17ec5abfcbc84a9d913e844193e0d931",
+        "topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        },
+        "attribution": "Manual owner reconnect from VPN334; unique fresh authenticated Family TLS startup, actual current CREDIT128/131072 counters; same gateway PID/invocation/credential profile as completed A3. Meter revalidates owner VPN/tag/process.",
+        "pair_readback": "b-three-connected-readback.json",
+        "session_readback": "b-three-bounded-session-readback.json",
+        "startup_attribution": "b-three-bounded-session-readback.json",
+        "phone_apk_sha256": "e36a24601d459ea13553d9236486befe514dca496d8b2933290e6867d97c4159",
+        "gateway_sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+        "both_sides_window": {
+          "android": 131072,
+          "nl": 131072,
+          "basis": "Observed established authenticated Family TLS session + actual server Mux CREDIT128/131072 + exact installed native and server source pins: shared TLS NegotiatedProtocol maps to131072 at both endpoints, used for receive ring and initial send/receive credits. Not an independent Android live counter read; not inferred from CONNECTED or configured preference."
+        }
+      },
+      "process_resource_scope": "all gateway sessions, not only owner",
+      "profile": "CREDIT128",
+      "window": 131072,
+      "protocol_errors": [
+        0,
+        0
+      ],
+      "mux_retained_high_water": 1179648,
+      "rss_max_kib": 50072,
+      "errors_by_session": {
+        "791977aa5b4ffcf25d56644eee24b95f1af35fff3ca5a1a650065989285f21fc": [
+          0,
+          0
+        ]
+      },
+      "cpu_percent_one_core": 6.715861443207731,
+      "joint_samples": {
+        "ready_zero": 1,
+        "rs_free_idle": 0,
+        "rs_full": 1,
+        "total": 48
+      }
+    },
+    {
+      "phase": "return95",
+      "status": "PREFLIGHT_STOP_NO_TRAFFIC",
+      "summary": {
+        "cells": [],
+        "requests": 0,
+        "completed": 0,
+        "bytes": 0,
+        "final_topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        }
+      },
+      "preflight": {
+        "gateway": {
+          "ActiveState": "active",
+          "InvocationID": "e4d547a4c0fb41c3adae78c341329331",
+          "MainPID": "3878280",
+          "NRestarts": "0"
+        },
+        "topology": {
+          "interface": "tun1",
+          "underlay": "327",
+          "transports": "CELLULAR|VPN"
+        },
+        "sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+        "utc": "2026-10-20T11:55:52.835408+00:00"
+      },
+      "journal_errors": [],
+      "session_tags": [
+        "31c81ec68fc2134e805cac32c64b0e0a67a26b155f66e4404f930e9e8f510c5d",
+        "d0a19cfb7d0ffb14f2117cb1dfe232604d91c6170de51cd41b61000205f6c4f0"
+      ],
+      "cells": [],
+      "observed_session_tags": [
+        "31c81ec68fc2134e805cac32c64b0e0a67a26b155f66e4404f930e9e8f510c5d",
+        "d0a19cfb7d0ffb14f2117cb1dfe232604d91c6170de51cd41b61000205f6c4f0"
+      ],
+      "observed_errors_by_session": {
+        "31c81ec68fc2134e805cac32c64b0e0a67a26b155f66e4404f930e9e8f510c5d": [
+          0,
+          0
+        ],
+        "d0a19cfb7d0ffb14f2117cb1dfe232604d91c6170de51cd41b61000205f6c4f0": [
+          3,
+          3
+        ]
+      },
+      "owner_scope": null,
+      "process_resource_scope": "all gateway sessions, not only owner",
+      "profile": "LEGACY64",
+      "window": 65536,
+      "protocol_errors": null,
+      "mux_retained_high_water": 3226137,
+      "rss_max_kib": 62156,
+      "errors_by_session": {
+        "31c81ec68fc2134e805cac32c64b0e0a67a26b155f66e4404f930e9e8f510c5d": [
+          0,
+          0
+        ],
+        "d0a19cfb7d0ffb14f2117cb1dfe232604d91c6170de51cd41b61000205f6c4f0": [
+          3,
+          3
+        ]
+      },
+      "cpu_percent_one_core": 8.532922794957699,
+      "joint_samples": {
+        "ready_zero": 0,
+        "rs_free_idle": 0,
+        "rs_full": 0,
+        "total": 8
+      }
+    }
+  ],
+  "application_bytes": 50921472,
+  "reserved_bytes": 50921472,
+  "limit_bytes": 67108864,
+  "per_request_limit_seconds": 150,
+  "synthetic_byte_exact_not_physical_origin_integrity": true,
+  "off_control": {
+    "valid": true,
+    "bytes": 65536,
+    "seconds": 3.521822,
+    "before": {
+      "interface": "tun1",
+      "underlay": "327",
+      "transports": "CELLULAR|VPN"
+    },
+    "after": {
+      "interface": "tun1",
+      "underlay": "327",
+      "transports": "CELLULAR|VPN"
+    },
+    "counters_off": true,
+    "session_attribution": false
+  },
+  "final_runtime": {
+    "utc": "2026-10-20T13:39:52.287282+00:00",
+    "gateway": {
+      "state": {
+        "ActiveState": "active",
+        "InvocationID": "17ec5abfcbc84a9d913e844193e0d931",
+        "MainPID": "3937546",
+        "NRestarts": "0",
+        "ExecMainStartTimestamp": "Tue 2026-10-20 16:05:48 MSK"
+      },
+      "sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+      "leaf_expiry": "2026-10-20T17:05:36+00:00",
+      "profile_sha256": "daf1f087d9041152b9c8e2208f7a5aee3457ce761a8160e69f8f48736a6657d4",
+      "operator_profile": "LEGACY64",
+      "bounded_counters": "OFF",
+      "resources": [
+        "MemoryCurrent=52543488",
+        "MemoryPeak=57102336",
+        "TasksCurrent=7",
+        "MemoryHigh=infinity",
+        "MemoryMax=infinity",
+        "TasksMax=357"
+      ]
+    },
+    "phone": {
+      "code": 95,
+      "apk_sha256": "e36a24601d459ea13553d9236486befe514dca496d8b2933290e6867d97c4159",
+      "pid": "9374",
+      "uid": 10283,
+      "apk_native_sha256": "66a9d18d04ff71100df0144228db05decb970aea71b6d277ec321b1c6c240c63"
+    }
+  },
+  "decision": {
+    "result": "INCONCLUSIVE",
+    "negotiation_and_legacy_compatibility": "PASS_REUSED_ACTUAL_OLD_NEW_MATRIX",
+    "credit128_correctness": "LOCAL_PASS_BOUNDED_PHYSICAL_24_OF_24_HTTP_COMPLETE_NO_LOAD_PROTOCOL_ERROR_INCREMENT",
+    "physical_single_flow_gain": "POSITIVE_DIRECTION_THREE_OF_THREE_BUT_VARIABLE_CONFOUNDED_MAGNITUDE",
+    "aggregate_latency_memory_and_failures": "MIXED_AGGREGATE_CONTROL_REGRESSION_IN_FINAL_PAIR_NO_NEW_LOAD_FAILURES_EXPECTED_RING_COST",
+    "credit128_enabled": false,
+    "credit128_scope": "New session and future-session policy verified LEGACY64; old B3 ended through owner manual reconnect. No reinterpretation, downgrade, server rollback or fleet rollout.",
+    "required_action": "None. Return confirmed and experiment closed; no further load, build, deployment or tuning requested.",
+    "tester_version": 94,
+    "remaining_phases": [],
+    "manual_return_pending": false,
+    "rationale": [
+      "Single gains +24.93%, +89.32%, +3.65%; first two comparisons have unequal background/ACK/retry conditions. Do not claim the full gain is caused by window.",
+      "Final pair removes most credit stalls but yields only1.68s less single phone-wall time, with aggregate\u221213.61% and control full latency+23.28%. Balanced owner improvement is not established.",
+      "Shared RS remains occupied/head-blocked and retries remain; lowering credit stalls alone is not overall speed acceptance.",
+      "No fourth/fifth pair, universal-network proof requirement, new window value or further transport tuning is introduced."
+    ]
+  },
+  "manual_continuation": {
+    "utc": "2026-10-20T13:39:52.287282+00:00",
+    "phase": "RETURN64_READBACK_ONLY",
+    "status": "EXPERIMENT_CLOSED_LEGACY64_RETURN_CONFIRMED",
+    "final_readback": "return-legacy-closed-readback.json",
+    "final_active_readback": "return-legacy-session-readback.json",
+    "final_counters_off_receipt": "policy-Return64retryoff.json",
+    "previous_continuation": "manual-b3-result.json",
+    "owner_scope": {
+      "session_tag": "b502c9dda1ab4368704aa7bebe24669a6cb42bae29285f4915a3cc868a4728e2",
+      "vpn_network": "336",
+      "vpn_created": "2026-10-20T13:34:19.180Z",
+      "profile": "LEGACY64",
+      "window": 65536,
+      "both_sides_window": {
+        "android": 65536,
+        "nl": 65536,
+        "basis": "Observed established authenticated Family TLS session + actual server Mux LEGACY64/65536 + exact installed native and server source pins: shared TLS NegotiatedProtocol maps to65536 at both endpoints, used for receive ring and initial send/receive credits. Not an independent Android live counter read; not inferred from CONNECTED or configured preference."
+      },
+      "profile_proof": "return-legacy-profile-proof.json",
+      "gateway_pid": "3937546",
+      "gateway_invocation": "17ec5abfcbc84a9d913e844193e0d931",
+      "protocol_errors_first": 1,
+      "protocol_errors_last": 1,
+      "first_observed_epoch": 1792503540.882739,
+      "last_observed_epoch": 1792503550.883117,
+      "application_measurement_bytes": 0,
+      "measurement_started": false
+    },
+    "profile_proof": "return-legacy-profile-proof.json",
+    "pair_comparisons": [
+      {
+        "order": [
+          "A1",
+          "B1m"
+        ],
+        "legacy_phase": "A1",
+        "credit128_phase": "B1m",
+        "cells": [
+          {
+            "kind": "control",
+            "legacy_common_mbit_s": 0.10549054326015037,
+            "credit128_common_mbit_s": 0.07884030075298384,
+            "relative_gain_percent": -25.2631578941103,
+            "legacy_control_or_single_full_s": 4.943254,
+            "credit128_control_or_single_full_s": 6.625675,
+            "legacy_credit_stall_fraction": [
+              0.0
+            ],
+            "credit128_credit_stall_fraction": [
+              0.0
+            ]
+          },
+          {
+            "kind": "single",
+            "legacy_common_mbit_s": 0.6470195140750813,
+            "credit128_common_mbit_s": 0.8083457480123457,
+            "relative_gain_percent": 24.933750903615536,
+            "legacy_control_or_single_full_s": 51.841938,
+            "credit128_control_or_single_full_s": 41.478868,
+            "legacy_credit_stall_fraction": [
+              0.8435526726432783
+            ],
+            "credit128_credit_stall_fraction": [
+              0.0012548850435106138
+            ]
+          },
+          {
+            "kind": "parallel",
+            "legacy_common_mbit_s": 1.1958101211665424,
+            "credit128_common_mbit_s": 1.2995519752214506,
+            "relative_gain_percent": 8.67544539209164,
+            "legacy_control_or_single_full_s": null,
+            "credit128_control_or_single_full_s": null,
+            "legacy_credit_stall_fraction": [
+              0.5807743503437264,
+              0.5991336325520124
+            ],
+            "credit128_credit_stall_fraction": [
+              0.0,
+              0.0015726425624563761
+            ]
+          }
+        ]
+      },
+      {
+        "order": [
+          "B2",
+          "A2"
+        ],
+        "legacy_phase": "A2",
+        "credit128_phase": "B2",
+        "cells": [
+          {
+            "kind": "control",
+            "legacy_common_mbit_s": 0.10340986193160917,
+            "credit128_common_mbit_s": 0.12136296296767247,
+            "relative_gain_percent": 17.3611111171744,
+            "legacy_control_or_single_full_s": 5.042774,
+            "credit128_control_or_single_full_s": 4.298021,
+            "legacy_credit_stall_fraction": [
+              0.0
+            ],
+            "credit128_credit_stall_fraction": [
+              0.0
+            ]
+          },
+          {
+            "kind": "single",
+            "legacy_common_mbit_s": 0.4244173033136388,
+            "credit128_common_mbit_s": 0.8035065134097824,
+            "relative_gain_percent": 89.31992337173908,
+            "legacy_control_or_single_full_s": 79.041733,
+            "credit128_control_or_single_full_s": 41.739897,
+            "legacy_credit_stall_fraction": [
+              0.8625420540129615
+            ],
+            "credit128_credit_stall_fraction": [
+              0.011059296520331113
+            ]
+          },
+          {
+            "kind": "parallel",
+            "legacy_common_mbit_s": 0.9986438095279615,
+            "credit128_common_mbit_s": 1.2113513357421086,
+            "relative_gain_percent": 21.299638988869283,
+            "legacy_control_or_single_full_s": null,
+            "credit128_control_or_single_full_s": null,
+            "legacy_credit_stall_fraction": [
+              0.5640948016392299,
+              0.49667686088832763
+            ],
+            "credit128_credit_stall_fraction": [
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      },
+      {
+        "order": [
+          "A3",
+          "B3"
+        ],
+        "legacy_phase": "A3",
+        "credit128_phase": "B3",
+        "cells": [
+          {
+            "kind": "control",
+            "legacy_common_mbit_s": 0.11676792873075446,
+            "credit128_common_mbit_s": 0.09515208711417675,
+            "relative_gain_percent": -18.511796733519105,
+            "legacy_control_or_single_full_s": 4.454774,
+            "credit128_control_or_single_full_s": 5.491793,
+            "legacy_credit_stall_fraction": [
+              0.009254290010455168
+            ],
+            "credit128_credit_stall_fraction": [
+              0.0
+            ]
+          },
+          {
+            "kind": "single",
+            "legacy_common_mbit_s": 0.7034472117407287,
+            "credit128_common_mbit_s": 0.7291271621031382,
+            "relative_gain_percent": 3.6505867012910143,
+            "legacy_control_or_single_full_s": 47.67535,
+            "credit128_control_or_single_full_s": 45.99942,
+            "legacy_credit_stall_fraction": [
+              0.7623724131953705
+            ],
+            "credit128_credit_stall_fraction": [
+              0.029354227730900056
+            ]
+          },
+          {
+            "kind": "parallel",
+            "legacy_common_mbit_s": 1.2241675301022477,
+            "credit128_common_mbit_s": 1.0574986448162527,
+            "relative_gain_percent": -13.61487551234708,
+            "legacy_control_or_single_full_s": null,
+            "credit128_control_or_single_full_s": null,
+            "legacy_credit_stall_fraction": [
+              0.5232362572565489,
+              0.4620970294942298
+            ],
+            "credit128_credit_stall_fraction": [
+              0.0,
+              0.0
+            ]
+          }
+        ]
+      }
+    ],
+    "six_phase_evidence": "final-three-pair-comparison.json",
+    "b3_normalized": "B3/normalized.json",
+    "phase_application_bytes": 0,
+    "experiment_application_and_reserved_bytes": 50921472,
+    "limit_bytes": 67108864,
+    "no_http_retries": true,
+    "background_tasks_left": false,
+    "counters": "OFF",
+    "active_profile": "LEGACY64",
+    "active_window": 65536,
+    "active_profile_last_observed_epoch": 1792503550.883117,
+    "next_session_profile": "LEGACY64",
+    "next_phase": null,
+    "manual_legacy_return_pending": false,
+    "transport_settings_changed": false,
+    "task_changed_identity_credentials_floors_registration": false,
+    "unchanged_meter_and_analysis_pins": "manual-b1-analysis-tools.json",
+    "source_seals": "final-source-seals.json",
+    "decision": {
+      "result": "INCONCLUSIVE",
+      "negotiation_and_legacy_compatibility": "PASS_REUSED_ACTUAL_OLD_NEW_MATRIX",
+      "credit128_correctness": "LOCAL_PASS_BOUNDED_PHYSICAL_24_OF_24_HTTP_COMPLETE_NO_LOAD_PROTOCOL_ERROR_INCREMENT",
+      "physical_single_flow_gain": "POSITIVE_DIRECTION_THREE_OF_THREE_BUT_VARIABLE_CONFOUNDED_MAGNITUDE",
+      "aggregate_latency_memory_and_failures": "MIXED_AGGREGATE_CONTROL_REGRESSION_IN_FINAL_PAIR_NO_NEW_LOAD_FAILURES_EXPECTED_RING_COST",
+      "credit128_enabled": false,
+      "credit128_scope": "New session and future-session policy verified LEGACY64; old B3 ended through owner manual reconnect. No reinterpretation, downgrade, server rollback or fleet rollout.",
+      "required_action": "None. Return confirmed and experiment closed; no further load, build, deployment or tuning requested.",
+      "tester_version": 94,
+      "remaining_phases": [],
+      "manual_return_pending": false,
+      "rationale": [
+        "Single gains +24.93%, +89.32%, +3.65%; first two comparisons have unequal background/ACK/retry conditions. Do not claim the full gain is caused by window.",
+        "Final pair removes most credit stalls but yields only1.68s less single phone-wall time, with aggregate\u221213.61% and control full latency+23.28%. Balanced owner improvement is not established.",
+        "Shared RS remains occupied/head-blocked and retries remain; lowering credit stalls alone is not overall speed acceptance.",
+        "No fourth/fifth pair, universal-network proof requirement, new window value or further transport tuning is introduced."
+      ]
+    },
+    "limitations": [
+      "Snapshot brackets use existing journal/host wall-time alignment; cross-clock offset was not independently measured. Server node_ns denominator is process-local monotonic.",
+      "Snapshot brackets contain background and boundary time; normalized fractions are not exact request-local time shares.",
+      "Parallel HTTP request-to-Mux-ID one-to-one mapping is not established by equal sizes; retain both HTTP rows and the unordered attributed Mux-ID set.",
+      "Background DATA is the difference of total owner-Mux HandedDATA and identified measurement stream deltas over the same bracket, not every layer of background traffic.",
+      "Gateway process/credentials changed externally before A3; A3/B3 use the same new process. Different media sessions and radio/ACK conditions remain.",
+      "Historical protocol_errors before-load values are retained; exact establishment snapshots may be missing. No session counter reset or cross-session subtraction.",
+      "No one-to-one parallel HTTP/Mux-ID assignment from equal body sizes. Both HTTP and stream rows are retained.",
+      "Six phases only; no extra measurements or statistical population confidence claim.",
+      "Control requests measure application latency, not RTT. Sampled gateway RSS includes all sessions and does not establish a global memory cap.",
+      "Exact-at-establishment protocol_error snapshots are unavailable; first-observed cumulative errors and pre/post load increments are retained, including pre-A3 interruption and old unknown scope.",
+      "Synthetic/local byte-exact tests are not physical origin-byte-exact acceptance; successful measured bodies are full length with locally observed hashes.",
+      "Return-only session protocol_errors first/last1/1, exact establishment sample unavailable; no application request was run and no origin/cause is inferred. This is not B3 counter growth."
+    ],
+    "working_profile": "LEGACY64",
+    "compatibility": "PASS",
+    "speed_effect": "INCONCLUSIVE",
+    "temporary_collector_audit": {
+      "remote": "return-legacy-session-readback.json",
+      "local": "return-legacy-local-collector-audit.json"
+    },
+    "return_readback_protocol_errors": [
+      1,
+      1
+    ],
+    "b3_health_reference": "manual-b3-result.json",
+    "return_readback_only": true,
+    "return_attempt_repairs": [
+      "Initial readback label containing64 rejected locally before network access; rerun with allowed letters/hyphens",
+      "One-off projection quoting failed, counters OFF in finally; corrected helper compiled locally and retried, no meter/transport code changes"
+    ],
+    "final_binaries": {
+      "phone": {
+        "code": 95,
+        "apk_sha256": "e36a24601d459ea13553d9236486befe514dca496d8b2933290e6867d97c4159",
+        "pid": "9374",
+        "uid": 10283,
+        "apk_native_sha256": "66a9d18d04ff71100df0144228db05decb970aea71b6d277ec321b1c6c240c63"
+      },
+      "gateway_sha256": "272bbc3fed90bbcf740a58f812e93511c976c114e2190f2c8711b55fa0dfb0c4",
+      "gateway_state": {
+        "ActiveState": "active",
+        "InvocationID": "17ec5abfcbc84a9d913e844193e0d931",
+        "MainPID": "3937546",
+        "NRestarts": "0",
+        "ExecMainStartTimestamp": "Tue 2026-10-20 16:05:48 MSK"
+      },
+      "native_policy": "A0",
+      "bootstrap1011": "Preserved by exact unchanged compatible executable"
+    }
+  }
+}

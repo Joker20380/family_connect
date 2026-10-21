@@ -1,0 +1,273 @@
+{
+  "schema": "family_connect_mesh_receive_path_v1",
+  "source_checkpoint": "dddc3347db5b02896c123488f2e5e0292ff2b7a7",
+  "source_state": "LOCAL_EXACT_BASE_OVERLAYS_NOT_MAIN_RUNTIME",
+  "pushed": false,
+  "public_release": false,
+  "SOURCE_AND_RUNTIME_BASELINE": {
+    "initial_apk_sha256": "68cbcccfb5adf8656e8203436126330e780de099670ee2031d71019baadc3e9a",
+    "initial_native_sha256": "dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23",
+    "gateway_sha256": "b9ae880731517753e456637e52dcc421b9f7d7b881b400c856989ae93193e9ba",
+    "gateway_inventory": "4722b7353ba93209657f66b45c47874915362f1fbe732845ec61745abdb673e6"
+  },
+  "DATA_HEAD": {
+    "saved_session": "2219e060af8bc8a0532e29b7e55e5e2bda5eb68f592264d98400d174de714b5c",
+    "sequence": 597,
+    "attempt": 2,
+    "sender": 752154365,
+    "message": 4260144682,
+    "nl_local_fragments_written": 3,
+    "android": "fragments0/2 assembled; fragment1 gap-discard; late5981 old_rtp",
+    "covering_ack_received": false,
+    "last_ack": {
+      "base": 597,
+      "mask": 220
+    },
+    "terminal_suffix": "FINAL_SIX_SECONDS_AND_LATER_ANDROID_ATTEMPTS_NOT_CAPTURED"
+  },
+  "CLASSIFICATION": {
+    "current": "FORWARD_RTP_GAP_AND_LATE_ARRIVAL_THEN_LOCAL_FRAME_DISCARD",
+    "session": "fc2fd498cf36cb207c231cf2b7d61efbf166b1f408d9749594a006a9634d7ff4",
+    "damaged_data": [
+      614,
+      1127,
+      1294
+    ],
+    "prompt_consume_ack_controls": [
+      649,
+      741
+    ],
+    "current_capacity_events": 0,
+    "local_deadline_overshoot_ms": 68.25,
+    "overshoot_scope": "buffered unidentified/control frames near614; not a complete available head614",
+    "average_throughput_cause": "NOT_UNIQUELY_ESTABLISHED",
+    "specific_network_actor": "NOT_ATTRIBUTED"
+  },
+  "CORRELATION_COMPLETENESS": {
+    "small_gate_logical_data": 57,
+    "bulk_logical_data": 260,
+    "snapshot_counts": {
+      "NL": 41,
+      "Android": 15
+    },
+    "parser_errors": {
+      "NL": 0,
+      "Android": 0
+    },
+    "android_receive_coverage": [
+      {
+        "node": "Android",
+        "session": "fc2fd498cf36cb207c231cf2b7d61efbf166b1f408d9749594a006a9634d7ff4",
+        "origin": "5cda84b35fb001f0ff3bbb882309d14a",
+        "count": 71460,
+        "observed": 3746,
+        "missing": 67714,
+        "prefix_unobserved": 27553,
+        "interior_missing": 40161,
+        "first": 27554,
+        "last": 71460
+      }
+    ],
+    "absence_is_not_loss": true,
+    "ack_token_is_shared": false,
+    "cross_node_latency_computed": false
+  },
+  "TARGETED_CHANGE": {
+    "observation": "VERIFIED_NATIVE_JNI_EXPORT_CAPTURE_CORRELATION_THEN_REMOVED",
+    "discarded_frame_cleanup": "LOCAL_CORRECTNESS_VALIDATED_NOT_BUILT_OR_DEPLOYED",
+    "gap_timer": "UNCHANGED_NOT_SHIPPED_AS_SPEED_FIX",
+    "functional_candidate_live": false,
+    "accepted_speed_fix": false,
+    "rejected_previous": [
+      "read-alignment",
+      "SACK-hole",
+      "queue-retry"
+    ]
+  },
+  "THROUGHPUT_BEFORE_AFTER": {
+    "baseline": [
+      {
+        "name": "single-0",
+        "valid": true,
+        "bytes": "2097152",
+        "ttfb_s": "5.339693",
+        "full_s": "37.072815",
+        "mbit_s": 0.4525476686893078,
+        "observed_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419"
+      },
+      {
+        "name": "parallel-0-0",
+        "valid": true,
+        "bytes": "2097152",
+        "ttfb_s": "0.823221",
+        "full_s": "29.452626",
+        "mbit_s": 0.5696339606526087,
+        "observed_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419"
+      },
+      {
+        "name": "parallel-0-1",
+        "valid": true,
+        "bytes": "2097152",
+        "ttfb_s": "1.137066",
+        "full_s": "29.616801",
+        "mbit_s": 0.5664763051215423,
+        "observed_sha256": "c72cdb288c75ffdf478ce2e5b855b428491f9d9298deca11457e14c2e2c41419"
+      }
+    ],
+    "parallel": [
+      {
+        "cell": 0,
+        "wall_seconds": 29.62999999988824,
+        "bytes": 4194304,
+        "aggregate_mbit_s": 1.1324479244052166
+      }
+    ],
+    "successes": 3,
+    "attempts": 3,
+    "after": "NOT_RUN_NO_JUSTIFIED_FUNCTIONAL_CANDIDATE",
+    "mode": "HTTP1.1_FRESH_IDENTITY_PHONE_BODY_READ",
+    "mux_streams": [
+      {
+        "stream": 97,
+        "observed_handed_bytes": 2106148,
+        "zero_credit_ready_ns": 28842434646,
+        "queue_ready_ns": 5181515065
+      },
+      {
+        "stream": 107,
+        "observed_handed_bytes": 2039079,
+        "zero_credit_ready_ns": 20461042629,
+        "queue_ready_ns": 17658822734
+      },
+      {
+        "stream": 109,
+        "observed_handed_bytes": 1973149,
+        "zero_credit_ready_ns": 15515345495,
+        "queue_ready_ns": 19734292842
+      }
+    ],
+    "network": "CELLULAR_UNDERLAY_321",
+    "new_actual_bytes": 6422738,
+    "new_requested_bound_bytes": 6426624,
+    "observed_hash_is_origin_digest": false
+  },
+  "TUN_CHANGE": {
+    "first_small_gate": false,
+    "classification": "INITIAL_BLOCKING_TO_WORKING_TUN",
+    "first_gate_preserved": true,
+    "older_unexplained_tun_gap": "RETAINED_SEPARATELY"
+  },
+  "RECOVERY_PRESERVED": {
+    "source": "EXACT_ACCEPTED90_NATIVE_AND_JAVA",
+    "normal_jvm_tests": 169,
+    "new_production_faults": false,
+    "natural_session_close_in_bulk": false,
+    "overnight_acceptance": false,
+    "bootstrap1011_preserved": true
+  },
+  "IDENTITY_PRESERVED": {
+    "id_key_bindings_and_support_id": true,
+    "uid": 10283,
+    "ready": "READY",
+    "uninstall": false,
+    "data_clear": false,
+    "reenrollment": false
+  },
+  "APK_OR_SERVER_ARTIFACT": {
+    "final_apk": {
+      "package": "com.familyconnect.app.friends",
+      "version_code": 92,
+      "version": "0.1.18-beta92-stability",
+      "sha256": "1e73167c8bfdba68f96249088cf08ea3dfb9d3614d5bedb8a0a7bdd8716e4e7b",
+      "alignment_16k": true,
+      "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+    },
+    "path": "state-client-build/mesh-receive-path-20261020/normal92/delivery/FamilyConnect-0.1.18-beta92-stability.apk",
+    "native_sha256": "dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23",
+    "source_inventory": "5ed7d2363bed681b4f073989841703dbfd7953f8b81fa8aa0f1e8b7acbca4c67",
+    "installed_utc": "2026-10-19T23:23:16.841525+00:00",
+    "final_gateway_sha256": "b9ae880731517753e456637e52dcc421b9f7d7b881b400c856989ae93193e9ba",
+    "gateway_pid": "3437300",
+    "gateway_invocation": "eb82442af5b84f52b4ac18d88af984b6",
+    "gateway_readiness_utc": "2026-10-19T23:25:09.449275+00:00",
+    "extended_performance_trace": false,
+    "observation_apk": {
+      "package": "com.familyconnect.app.friends",
+      "version_code": 91,
+      "version": "0.1.18-beta91-receive-trace",
+      "sha256": "6f4724ce31ec3ed99a209e8fb673bb6c0d15b0433df60850292aec8bd65cf490",
+      "alignment_16k": true,
+      "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+    },
+    "observation_gateway_sha256": "cdbc59746ca1433e955a356ed227934e0aed48c31de824b41c7351a1e18d5c13"
+  },
+  "VALIDATION": {
+    "default": {
+      "sha256": "71799a35c4d9152c93c9c0ba533d13835855615129b068d50f5459a7240c1035",
+      "passed": 392,
+      "skipped": 9
+    },
+    "observation": {
+      "sha256": "946d47b0fb5c0a03e18788dccbff06aeff506122fd2857d15a556668763bf801",
+      "passed": 402,
+      "skipped": 8
+    },
+    "candidate_local": {
+      "sha256": "22c325ab68a78210773fb564e7104e894d7e991f8dab1c1cb09e46d6b16a79c3",
+      "passed": 171,
+      "skipped": 5
+    },
+    "normal_build_failure_preserved": [
+      {
+        "path": "normal92/android-build/gradle-1792451844466521004.log",
+        "sha256": "db0ef974a5febd9023aed246b5019b8d4d9b5783eb3a22bdbf355220073486b5"
+      }
+    ],
+    "final_control": {
+      "utc_start": "2026-10-19T23:26:36.110936+00:00",
+      "purpose": "beta92 trace-off and exact b9/1011 production control; no speed or overnight acceptance",
+      "phone_uid": 2000,
+      "vpn_uid_range": "0-99999",
+      "vpn_interface": "tun1",
+      "vpn_dns_matches_mesh": true,
+      "curl_exit": 0,
+      "http_status": "200",
+      "http_version": "1.1",
+      "tls_verify": "0",
+      "body_bytes": 210,
+      "observed_body_sha256": "0c1b403da82724372d3a1c56682ff743401bcd6b7867d71b0f19f91987e8d054",
+      "expected_nl_exit_observed": true,
+      "encoding": [
+        "identity"
+      ],
+      "matching_production_pid_socket_samples": 20,
+      "sampler_exit": 0,
+      "times_seconds": {
+        "time_namelookup": 0.57158,
+        "time_connect": 0.573145,
+        "time_appconnect": 2.34391,
+        "time_starttransfer": 3.005508,
+        "time_total": 3.005787
+      },
+      "control_pass": true,
+      "phone_temporary_files_removed": true
+    }
+  },
+  "SPB_IPV6_SEPARATE_STATUS": "NOT_RUN",
+  "AMSTERDAM_IPV6": "DEFERRED_BY_OWNER",
+  "NEXT_HOST_COMPARISON_INPUTS": {
+    "apk_sha256": "1e73167c8bfdba68f96249088cf08ea3dfb9d3614d5bedb8a0a7bdd8716e4e7b",
+    "native_sha256": "dd722eada0da7c890a8d71a72099cba5d0bbac1ce73377bbdbc8e7b85d820c23",
+    "gateway_sha256": "b9ae880731517753e456637e52dcc421b9f7d7b881b400c856989ae93193e9ba",
+    "endpoint": "https://speed.cloudflare.com/__down?bytes=2097152",
+    "method": "bounded same-code IPv4 A/B/A, single2MiB then parallel2x2MiB, all failures retained",
+    "placement": "NOT_SELECTED_NO_PURCHASE_OR_PRODUCTION_MIGRATION"
+  },
+  "FINAL_RESULT": "RECEIVER_BOUNDARIES_LOCALIZED_NO_ACCEPTED_SPEED_FIX_STABLE92_B9_RESTORED",
+  "local_evidence_sha256": {
+    "owner-beta90-export.json": "65a482a02f53c4f8e5ef542e1340f5c00f0c9570571bee918437e1f82f9ee0f3",
+    "owner-beta91-export.json": "c3dc2a3052886d25de97f8a0a1aacbfe0dfe55f272769c1162bf119004ff1b3b",
+    "saved-head597.json": "ea9b27e924e4243608a9b70b77ba04b755dbf75375f510ed58d6b18f68cf1b17",
+    "physical-receiver-summary.json": "ea6af2fdde149dc374177aaad57349efa7667270b5a69568acd37ab36875ef62"
+  }
+}
