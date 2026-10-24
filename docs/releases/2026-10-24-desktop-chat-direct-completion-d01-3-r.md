@@ -1,6 +1,6 @@
 # D01.3-R — DIRECT public completion/admission
 
-Date: **2026-10-24**. Bounded checkpoint; local PASS, mandatory new-source CI pending.
+Date: **2026-10-24**. Bounded **source gate PASS, review pending**, not overall CI PASS.
 **STOP. NEXT — review D01.3-R.** D01 remains open; D02.1-R PARTIAL/NOT_RUN.
 
 Entry: clean current `main` = remote `68e4029f58d54384471576c623b08e89752f2c94`.
@@ -35,6 +35,8 @@ old DirectHost (read-only file overlay, no checkout rollback) gives the same
 ConnectionResetError104/accounting: **1 failed / 0.65s**. This is a changed-fixture
 red verification, not a rerun to obtain a green result. Corrected host: **5 passed /
 6.26s** for all DIRECT completion cases; production code unchanged by follow-up.
+Final red log SHA256: `94c6dac8369958e4b49bb75e3ffac0a9e7af403d83c6fe73c5c1cddafe0d601e`;
+final green: `80040e0157f2bbede83783449516147b605f7b313a5ac49ad63b117f6d4b44d8`.
 This does **not** establish the exact cause/schedule of historical Client Linux
 BrokenPipeError on `dac0f6b45be6ed8703d3de93ff5fdbc67462eabe`.
 
@@ -64,19 +66,41 @@ FDs and thread sets including DIRECT disconnect monitors and mailbox writers.
   mesh_chat/host/service/status, mesh_service, Auto mesh/platform, chat_service,
   ChatHTTP terminal/no-replay and messenger resilient/client tests.
 - Mandatory Client Linux desktop pytest, authenticated15, combined3, Auto/DIRECT
-  kernel, root→UID and full CI gates remain enabled and unchanged. New-source
-  SHA/jobs/results will be recorded separately after ordinary commit/push; NOT_RUN
-  here until observed. Old green results are not assigned to new source.
+  kernel, root→UID and full CI gates remain enabled and unchanged. Final-source
+  receipts below are separate from old evidence; no counts copied between jobs.
 - Historical54 residual failures and voice holding-state failure remain separate;
   no fixes, disabled tests or reruns to obtain green in this scope.
 
 Source/tests/docs form one logical checkpoint. Content/local-link checks,
-`git diff --check` and staged secret/artifact review precede commit. Logs and
+`git diff --check` and staged secret/artifact review PASS;175 reference pins PASS. Logs and
 worker binaries stay outside Git. No version/install/deployment changes; rollback
 is an ordinary source revert, not a catalog/server operation. Identity/WG keys,
 activation/Support ID/history/settings/signed floors/Android106/reference pins stay
 unchanged. L03/install/live/publication/Windows/fleet/iOS **NOT_RUN**.
 
-Production commit: `050f06baef8b94e81d1bd4becb7f4fc38d1a6744`, ordinary push and
-remote SHA confirmed. A test-only follow-up makes post-close event publication
-explicit before dependent admission; final source/CI receipts follow separately.
+## Final source / CI receipt
+
+Production commit: `050f06baef8b94e81d1bd4becb7f4fc38d1a6744`. Final source/tests:
+`b910edbd108fc5e146792b6db966d6f8daf53b1a`; ordinary push/remote SHA confirmed.
+The latter only strengthens test event publication. Client Linux/control jobs on
+the intermediate050f06b were cancelled by normal push concurrency, not reported as
+PASS or manually rerun. Acceptance below belongs exclusively to **b910edb**.
+
+| Gate | Run / job | Observed result |
+|---|---|---|
+| Client Linux | [40134155274 / 120992056110](https://github.com/Joker20380/family_connect/actions/runs/40134155274/job/120992056110) | Whole Linux job PASS, including targeted dependencies and **Mandatory desktop pytest**; step/job status confirmed, aggregate count not asserted. |
+| Native isolated-linux | [40134155291 / 120991993095](https://github.com/Joker20380/family_connect/actions/runs/40134155291/job/120991993095) | PASS: unchanged15 authenticated, combined3 Manual/Auto, root→UID/process, Auto/DIRECT kernel, packet ingress/drain race. |
+| Native Linux protocol | 40134155291 / 120991993102 | PASS, including concurrent cancellation and signed floors. |
+| Control full suite | [40134155352 / 120992050732](https://github.com/Joker20380/family_connect/actions/runs/40134155352/job/120992050732) | **3061 passed / 54 failed / 138 skipped**, errors0,184.57s. |
+| phase0/tests full suite | [40134155354 / 120991993149](https://github.com/Joker20380/family_connect/actions/runs/40134155354/job/120991993149) | **3061 / 54 / 138**, errors0,204.25s. |
+| Dockerfile.control full suite | [40134155354 / 120991992977](https://github.com/Joker20380/family_connect/actions/runs/40134155354/job/120991992977) | **3059 / 54 / 140**, errors0,189.43s; failover steps subsequently skipped. |
+| Voice | 40134155309 / 120991992785 | PASS; historical holding-state failure retained in D01.3 evidence, no voice fix. |
+| AWG / TCP | 40134155307 / 120991992919; 40134155475 / 120991993693 | PASS, existing gates only; TCP release jobs skipped. |
+
+The Auto workflow's Windows protocol job120991992962 failed; not a Linux source
+gate PASS for the entire matrix. No Windows investigation, modification or rerun
+in this checkpoint. Historical residual failures remain out of scope; overall D01
+is open. No release, deployment or installed acceptance follows from CI packaging.
+Parallel uncommitted VPN-health documentation in STATUS/PLAN is preserved and
+excluded from this checkpoint's receipt commit. That documentation receipt does
+not change tested source; its exact remote SHA is reported after ordinary push.

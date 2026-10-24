@@ -1,6 +1,7 @@
 # Текущее состояние / Current state
 
-Срез **D01.3-R**, 24.10.2026: завершается DIRECT completion/admission contract.
+Срез **D01.3-R**, 24.10.2026: DIRECT completion/admission contract исправлен;
+**source gate PASS, review pending**.
 Review D01.3 принял ChatBridge и Host/ServiceHost; D01.3 **PARTIAL по review**
 из-за оставшегося close→active.pop окна DirectHost. Только эта коррекция;
 **NEXT — review D01.3-R**, без автоматического L03.
@@ -14,11 +15,16 @@ actual DirectHost/DirectBridge/Authority, Unix IPC и барьер после ф
 Cancel/deadline/shutdown bounded; descriptors/handlers/DIRECT monitors учтены;
 synthetic socketpair backing не заменяет native/installed acceptance.
 Зависимые DIRECT/public IPC/error/lifecycle **326 PASS**, root→UID/process **13 PASS**.
-Production source `050f06baef8b94e81d1bd4becb7f4fc38d1a6744` pushed/remote-verified;
-CI запущен. Follow-up только публикует post-close Event до следующего тестового
-open: **5 PASS**, прежний DirectHost через read-only overlay снова red1 без rollback.
-Итоговые SHA/jobs mandatory Client Linux будут зафиксированы после завершения;
-пока **CI pending**, не общий PASS.
+Production source `050f06baef8b94e81d1bd4becb7f4fc38d1a6744`; final test source
+`b910edbd108fc5e146792b6db966d6f8daf53b1a` pushed/remote-verified. Follow-up только
+согласует post-close Event с EOF observer: **5 PASS**, old-host overlay red1 без rollback.
+На финальном source Client Linux **40134155274/120992056110 PASS**, включая
+mandatory desktop pytest. Isolated-linux **40134155291/120991993095 PASS**:
+прежние15 authenticated, combined3, root→UID/process, Auto/DIRECT kernel и race.
+Full suites отдельно: control **3061/54/138**, phase0/tests **3061/54/138**,
+Docker **3059/54/140**, errors0 (passed/failed/skipped). Voice/AWG/TCP PASS;
+Windows protocol job того же Auto workflow FAIL, вне scope/без разбора и перезапуска.
+Это не общий CI PASS. Точные SHA/jobs в отчёте; прежние54 failures/voice не исправлялись.
 Принятые L01/L01-R, локальные L02/L02.2, D03/D04/D05/native semantics сохранены.
 D01 открыт, D02.1-R PARTIAL/NOT_RUN. Версии/identity/keys/history/settings/floors/
 reference pins неизменны. L03/install/live/publication/Windows/fleet/iOS NOT_RUN.
