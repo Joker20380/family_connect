@@ -78,6 +78,9 @@ Build metadata says `linux-demand-host-source-partial`, not installed capability
   the affected lifecycle subset was also rechecked (**93 passed**) after fencing
   the watcher against an old generation and serializing admission FD operations.
   Root/process plus L01-R root→UID: **13 passed** (7 + 6) in disposable netns.
+  Additional real-worker material/configuration and Auto platform selection:
+  **82 passed** (separate from the 354), including the default native subprocess
+  adapter affected by inherited-descriptor support.
   CI source SHA is recorded in the receipt below.
 - Unit/source: service API and real duplex AF_UNIX FD with synthetic native lane;
   concurrent requests share one generation; revocation/expiry/material rejection;
@@ -118,9 +121,26 @@ Local sealed Linux worker (Go1.26.1, unchanged native105/Android106 reference):
 
 ## CI / source receipt
 
-Source commit and exact CI runs will be attached after the ordinary source push.
+Source/tests/docs checkpoint **`383ef3606aaa4dbd29f0c7c0f755e6faec6e309f`** was
+ordinarily pushed to `main`; remote SHA verified equal. The local native build's
+source manifest was recomputed against that committed tree and matches exactly.
+Results below are for that exact SHA, not the later documentation receipt:
+
+| Gate | Observed result |
+|---|---|
+| [Auto bridge run40115518564](https://github.com/Joker20380/family_connect/actions/runs/40115518564), [isolated-linux job120935872792](https://github.com/Joker20380/family_connect/actions/runs/40115518564/job/120935872792) | **PASS**. Existing protocol matrix, new L02 host/native/process checks, L01-R root→UID, Auto and DIRECT kernel gates all retained. No authenticated cross-process MESH success claim. |
+| [Client Linux job120935873108](https://github.com/Joker20380/family_connect/actions/runs/40115518559/job/120935873108) | **PASS**, mandatory Linux build/smoke checks; not a complete L03 package or installed acceptance. |
+| [AWG job120935872744](https://github.com/Joker20380/family_connect/actions/runs/40115518554/job/120935872744), [TCP job120935872740](https://github.com/Joker20380/family_connect/actions/runs/40115518585/job/120935872740) | **PASS**, release jobs skipped. |
+| [Linux voice job120935872765](https://github.com/Joker20380/family_connect/actions/runs/40115518527/job/120935872765) | **PASS** on this SHA only. Previous GTK failures were not investigated, repaired or declared flaky. |
+| [Control job120935872858](https://github.com/Joker20380/family_connect/actions/runs/40115518556/job/120935872858) | **FAIL**, mandatory full pytest: 3015 passed / 54 failed / 120 skipped, 7 subtests passed, exit1. No blanket claim that every failure has the old cause. |
+| [phase0/tests job120935872823](https://github.com/Joker20380/family_connect/actions/runs/40115518548/job/120935872823) | **FAIL**, mandatory full pytest: 3015 passed / 54 failed / 120 skipped, 7 subtests passed, exit1. |
+| [phase0/Docker job120935872627](https://github.com/Joker20380/family_connect/actions/runs/40115518548/job/120935872627) | **FAIL** at Dockerfile.control full pytest: 3013 passed / 54 failed / 122 skipped, 7 subtests passed, exit1; downstream failover checks not reached. |
+
 Local evidence is under `/tmp/fc-l02/evidence`, not published private state.
 No full local pytest rerun is claimed. CI failures remain separate from targeted PASS.
+The source CI results are recorded without rerunning failed suites to obscure their
+outcome. Remaining non-Linux Client-build jobs do not change the recorded Linux
+job result and are not Windows/Android feature acceptance for L02.
 
 ## Remaining gates / rollout
 

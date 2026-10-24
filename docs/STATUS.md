@@ -9,6 +9,12 @@ demand SERVICE_ONLY host, межпроцессный flock admission, manual/Aut
 API/mailbox OFF→ON→OFF через реальные Linux services ещё не доказан: положительные
 host fixtures используют synthetic lane; отдельный process gate — реальные idle workers.
 Это не L02 DONE, не установленная функция и не разрешение начать L03.
+Source `383ef3606aaa4dbd29f0c7c0f755e6faec6e309f` pushed/remote-verified.
+Локально 354 + 82 адресных Python/native и 13 root/process/UID PASS; Go/race и
+DIRECT/Auto isolated kernel PASS. CI Auto/new gates/Client Linux/AWG/TCP/voice PASS;
+полные control и phase0/tests FAIL (каждый 3015 passed / 54 failed / 120 skipped),
+Docker FAIL (3013 passed / 54 failed / 122 skipped). Точные CI jobs/статусы —
+в [L02](releases/2026-10-24-linux-chat-mesh-l02.md), не перенос с прежнего SHA.
 
 Принятое evidence L01-R (точные SHA не заменяются новым checkpoint):
 [L01-R](releases/2026-10-24-linux-chat-direct-l01-r.md): runtime0711 при unit umask0077,
@@ -114,7 +120,7 @@ failover проверки не выполнены. Runtime/fixtures/collection p
 |---|---|
 | SOURCE | L01/L01-R review accepted; L02 PARTIAL source integration, review L02 pending; не новая поставка. |
 | LOCAL TESTS | L02: адресные Python/native и отдельные 13 root/process/UID PASS; Go/race, DIRECT/Auto isolated kernel PASS. Точные counts/границы — в [L02](releases/2026-10-24-linux-chat-mesh-l02.md). Combined authenticated MESH handoff, полный pytest и installed/live локально NOT_RUN. |
-| CI | L01-R `4fab7b6`: Client Linux/Auto/root→UID/kernel/AWG/TCP/voice PASS; control/phase0/Docker FAIL. Точные jobs/counts — в [коррекции](releases/2026-10-24-linux-chat-direct-l01-r.md); прежние SHA — в [L01](releases/2026-10-24-linux-chat-direct-l01.md). D01 открыт; старые GTK failures не объявлены исправленными. |
+| CI | L02 `383ef3606aaa4dbd29f0c7c0f755e6faec6e309f`: Client Linux/Auto/new process gates/root→UID/kernel/AWG/TCP/voice PASS; control/phase0/Docker full FAIL. [Точные jobs и remaining full gates](releases/2026-10-24-linux-chat-mesh-l02.md). L01/L01-R evidence остаётся на прежних SHA; D01 открыт, старые GTK failures не объявлены исправленными. |
 | BUILT | Linux native-r18, Windows native-r14 cross-build, unsigned Linux system/native/RNS component-r18. **Полный parity installer: 0/2.** |
 | INSTALLED | **Завершённая установленная приёмка: 0/2.** Полный кандидат не принят на Linux/Windows; Windows runtime NOT_RUN. |
 | PUBLISHED | Parity-кандидаты не опубликованы. Linux0.2.11 / Windows0.2.15 не менялись; существующие публичные каталоги/ссылки в D00 не изменялись и заново не проверялись. |
