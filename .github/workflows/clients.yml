@@ -209,7 +209,7 @@ jobs:
       - name: Targeted desktop dependency regressions
         run: '"$RUNNER_TEMP/fc-desktop-env/bin/python" -m pytest -q clients/desktop/tests/test_chat_host_registration.py clients/desktop/tests/test_mesh_chat_host.py clients/desktop/tests/test_support_service.py clients/desktop/tests/test_chat_service.py -rs'
       - name: Mandatory desktop pytest
-        run: '"$RUNNER_TEMP/fc-desktop-env/bin/python" -m pytest -q clients/desktop/tests -rs'
+        run: '"$RUNNER_TEMP/fc-desktop-env/bin/python" -m pytest -q clients/desktop/tests -ra --tb=short'
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a "$RUNNER_TEMP/fc-desktop-env/bin/python" clients/desktop/app.py --smoke
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a -s "-screen 0 2560x2160x24" "$RUNNER_TEMP/fc-desktop-env/bin/python" clients/desktop/layout_check.py
       - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a "$RUNNER_TEMP/fc-desktop-env/bin/python" clients/desktop/map_check.py

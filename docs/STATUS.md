@@ -5,7 +5,8 @@
 `664342a6566792a4ea621274a369bcd6b6012143`. D01.1 меняет только три CI jobs/helper и документы.
 **Разрешена только D01.1; D01.2/D02/продукт не начинать.**
 [D01.1](releases/2026-10-24-desktop-ci-d01-1.md): локальные реальные импорты PASS,
-адресные 59 passed; полный desktop 877 passed / 64 существующих skips / 0 failures/errors. CI ещё PENDING.
+адресные 59 passed; локальный desktop 877 passed / 64 skips / 0 failures/errors.
+На pushed `b3a54f2` imports/адресные CI PASS, полный suite FAIL (включая локальную RNS capsule): D01.1 PARTIAL, уточнение второго AWG/TCP failure.
 
 ## Цель и порядок работы
 
@@ -39,7 +40,7 @@
 |---|---|
 | SOURCE | Последний завершённый продуктовый checkpoint — phase22; сохранён в baseline выше. D00 — документация. |
 | LOCAL TESTS | Phase22: 1218 PASS в описанном локальном наборе, без failures/errors/skips; существующий GI warning. Шесть Linux native packages: race PASS. Не полный pytest и не CI. |
-| CI | D01.1: Python3.12/system GI + изолированный venv для трёх desktop jobs; LOCAL PASS, CI PENDING. [Исходные failures](PLAN.md#ci-evidence), [результаты D01.1](releases/2026-10-24-desktop-ci-d01-1.md). Общий CI PASS не заявлен. |
+| CI | D01.1 PARTIAL: три import/адресных gates PASS, полный desktop FAIL; дальнейшие job checks SKIPPED. [Результаты и остаточные failures](releases/2026-10-24-desktop-ci-d01-1.md). Общий CI PASS не заявлен. |
 | BUILT | Linux native-r18, Windows native-r14 cross-build, unsigned Linux system/native/RNS component-r18. **Полный parity installer: 0/2.** |
 | INSTALLED | **Завершённая установленная приёмка: 0/2.** Полный кандидат не принят на Linux/Windows; Windows runtime NOT_RUN. |
 | PUBLISHED | Parity-кандидаты не опубликованы. Linux0.2.11 / Windows0.2.15 не менялись; существующие публичные каталоги/ссылки в D00 не изменялись и заново не проверялись. |

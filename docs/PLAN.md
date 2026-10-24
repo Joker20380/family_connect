@@ -22,7 +22,7 @@ D00 — организация документации; следующие ст
 |---|---|---|---|---|
 | D00 | Компактное состояние и последовательный план | phase22 / baseline | DONE | Новый сеанс читает STATUS + выбранный ID; история сохранена побайтно, ссылки и diff проверены; commit/push с remote SHA отражён в итоговом ответе. |
 | D01 | Зависимости Linux/desktop CI | D00 | IN_PROGRESS | DONE только после D01.1 и D01.2; необходимые httpx/LXMF/GI доступны без скрытия обязательных тестов. |
-| D01.1 | Client builds/linux, AmneziaWG pilot, TCP pilot | D00 | IN_PROGRESS | Python3.12: реальные httpx/LXMF/RNS/GI и ChatOwner/ChatBridge/chat_daemon; адресные и полный desktop pytest PASS в трёх jobs на pushed SHA. Остальные этапы отдельно. |
+| D01.1 | Client builds/linux, AmneziaWG pilot, TCP pilot | D00 | PARTIAL | Python3.12 imports/адресные CI PASS; полный desktop FAIL, включая локальную RNS capsule. DONE требует полного desktop PASS на pushed SHA; второй AWG/TCP failure уточняется. |
 | D01.2 | Linux control, phase0, Dockerfile.control test-stage | D01.1 | QUEUED | Исправлены зависимости соответствующих Python3.13/test-stage окружений; обязательные suites сохранены, результаты на pushed SHA; fixture scope остаётся D02. |
 | D02 | Сбор и импорты исследовательских fixtures | D01 | QUEUED | Устранены owner_handoff/prepare import errors; обязательные проверки имеют явный воспроизводимый запуск; границы архивных экспериментов задокументированы. |
 | D03 | Окончательные ошибки ChatHTTP | D02 | QUEUED | HTTP400/401/403/409, TLS и установленный invalid_response сохраняются при ошибке teardown; разрешённый transient fallback продолжает работать. |
