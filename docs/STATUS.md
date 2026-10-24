@@ -12,7 +12,10 @@ Legacy gateway_id неизвестен; assignment только после fresh
 applied только после guard.ready. Refresh не вызывает configure/apply/close; IPC не расширен.
 Clean export: provider/model/platform/native/catalog 162 PASS, ownership/service/chat 213 PASS,
 0 failures/errors/skips. Native normal-stdio проверен с синтетическими материалами;
-installed/live/F-01 и dynamic fleet не приняты. CI нового D05 SHA ещё не проверен.
+installed/live/F-01 и dynamic fleet не приняты. Code `c53265d` pushed/remote-verified:
+Auto bridge Linux/AWG/TCP PASS, desktop pytest Linux PASS (job ещё IN_PROGRESS).
+Control/phase0: каждый 2930 passed / 54 failed / 0 errors / 107 skipped, exit1;
+Docker: 2929 passed / 53 failed / 0 errors / 109 skipped. Voice GTK pointer/keyboard gate FAIL отдельно от D05.
 D04 evidence уточнён: на `b41e1ad` одинаковый набор 54 failures в control/phase0/Docker;
 docs-only phase0 `3f9854a` завершился FAILURE отдельно от code SHA. D01 остаётся открыт.
 Review коррекции D02.1-R и [fleet-документации `1725656`](releases/2026-10-24-desktop-fleet-boundary.md)
@@ -78,12 +81,12 @@ failover проверки не выполнены. Runtime/fixtures/collection p
 |---|---|
 | SOURCE | D05 — внутренняя Linux selection/provider/application модель поверх принятых D03/D04, не новая поставка. |
 | LOCAL TESTS | D05: 162 provider/model/native + 213 ownership/service/chat PASS, 0 failures/errors/skips. Полный pytest и installed/live acceptance локально NOT_RUN. |
-| CI | D05 code SHA ещё не проверен; [evidence](releases/2026-10-24-desktop-provider-d05.md). Общий D01/CI PASS не заявлен. |
+| CI | D05 `c53265d`: Linux Auto bridge/AWG/TCP PASS, Client/Linux desktop pytest PASS (job IN_PROGRESS); control/phase0 full FAIL по 54, Docker 53 failures, voice GTK FAIL. [Evidence](releases/2026-10-24-desktop-provider-d05.md). D01 открыт. |
 | BUILT | Linux native-r18, Windows native-r14 cross-build, unsigned Linux system/native/RNS component-r18. **Полный parity installer: 0/2.** |
 | INSTALLED | **Завершённая установленная приёмка: 0/2.** Полный кандидат не принят на Linux/Windows; Windows runtime NOT_RUN. |
 | PUBLISHED | Parity-кандидаты не опубликованы. Linux0.2.11 / Windows0.2.15 не менялись; существующие публичные каталоги/ссылки в D00 не изменялись и заново не проверялись. |
 
-## Последний завершённый checkpoint: phase22
+## Продуктовый baseline: phase22
 
 [Phase22, 24.10 08:53 CEST и остановка 08:55](releases/2026-10-23-desktop-parity106.md#linux-user-chat-admission-and-existing-exit-handoff-2410-phase22).
 Linux ChatOwner подключён к **EXISTING_EXIT** через отдельный UID/device-bound root

@@ -2,7 +2,7 @@
 
 Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN.md).
 STATUS/PLAN define the current bounded task and next review gate, not an automatic
-continuation. Product implementation last finalized at phase22.
+continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
 
 [Desktop parity with accepted106 — active, not released](releases/2026-10-23-desktop-parity106.md):

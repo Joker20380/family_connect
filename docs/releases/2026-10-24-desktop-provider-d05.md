@@ -78,7 +78,34 @@ python -m pytest -q clients/desktop/tests/test_auto_service.py clients/desktop/t
 
 ## CI и передача
 
-Code SHA/фактический CI будут записаны после обычного push; сейчас NOT_RUN.
+Code **`c53265d257b94c7e59e42fe45908f3e2b030eaf1`** pushed/remote-verified обычным
+push в `main`. Tested source/test bytes совпадают с commit. Следующий docs-only checkpoint
+записывает эти результаты, не наследует CI PASS от code SHA.
+
+| Job на code SHA | Фактический результат |
+|---|---|
+| [Control](https://github.com/Joker20380/family_connect/actions/runs/40094649612/job/120874250998) | FAIL: 2930 passed / 54 failed / 0 errors / 107 skipped; GUI/render/package/extracted gates skipped |
+| [Phase0/tests](https://github.com/Joker20380/family_connect/actions/runs/40094649648/job/120874251235) | FAIL: 2930 passed / 54 failed / 0 errors / 107 skipped; cargo skipped |
+| [Docker tests-stage/failover](https://github.com/Joker20380/family_connect/actions/runs/40094649648/job/120874251378) | FAIL: 2929 passed / 53 failed / 0 errors / 109 skipped; tests-passed/runtime image не созданы, provision/failover/auth/offline/revocation skipped |
+| [Client/Linux](https://github.com/Joker20380/family_connect/actions/runs/40094649694/job/120874251704) | Job IN_PROGRESS по API; desktop pytest, GUI/layout, package/extracted smoke и upload steps success. Job/workflow PASS не предполагается |
+| [AWG](https://github.com/Joker20380/family_connect/actions/runs/40094649601/job/120874251292) / [TCP build](https://github.com/Joker20380/family_connect/actions/runs/40094649607/job/120874251021) | PASS; существующие gates сохранены, TCP release jobs skipped |
+| [Auto bridge / Ubuntu protocol](https://github.com/Joker20380/family_connect/actions/runs/40094649633/job/120874251449) / [isolated-linux](https://github.com/Joker20380/family_connect/actions/runs/40094649633/job/120874251196) | PASS, включая actual native configuration regression и isolated kernel guard |
+| [Linux voice](https://github.com/Joker20380/family_connect/actions/runs/40094649611/job/120874251163) | FAIL: `chat_voice_check.py:124`, после Return ожидание `voice.state == 'locked'`; `voice operation did not reach expected state`. Actual codec/mailbox gates PASS |
+
+Control/phase0/Docker full pytest exit1, по 7 passed subtests / 2 warnings. Docker root
+22 PASS, адресные dependency tests 59 PASS; full suite от non-root runner.
+Artifact `12560417892` / `phase0-failover/build.log`: Auto-тестов в FAILED list нет;
+53 failed case IDs совпадают с D04 Docker за исключением
+`test_readiness_adapter_packaging.py::test_exact_candidate_mode_with_local_fixture_only`,
+который на этом запуске не упал. Его код не менялся, устранение socket failure D05 не заявляется.
+Дополнительный native
+three-gateway case использует прежний fixture gate и входит в skip без FC_TEST_MESH_WORKER
+в full suites; с реальным worker локально и в Auto bridge native gate он проходит.
+Остаточные capsule/HTTP/nginx/expiry/privacy/socket groups не чинятся этим checkpoint.
+Voice GTK failure записан отдельно, не скрыт retry или изменением gate; его причина не
+исследуется в D05. Android/Windows jobs не ожидались. Installed/live acceptance не следует
+из автоматических synthetic/native/packaged smoke. Общий D01 остаётся открыт.
+
 Workflows, обязательные suites/команды и release-fixture policy не менялись.
 Остальные 54 CI failures не включены в scope и не подавлялись.
 Уточнение D04: на `b41e1ad` набор 54 failures одинаков в Control/Phase0/Docker;
