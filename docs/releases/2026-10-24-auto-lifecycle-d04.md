@@ -49,6 +49,14 @@ callback fencing не требуется на этом пути. Старый ge
 `bash scripts/ci_python313_env.sh /tmp/test-venv` — strict imports PASS,
 executable `/tmp/test-venv/bin/python`, Python3.13.15, существующие D01 locks.
 В экспорт скопированы только изменённые source/test; baseline run использовал старый source.
+Для воспроизведения до исправления в этот экспорт помещён
+`git show 64ecba67825b3036425b5d7a4afa64002cec235d:clients/linux/auto_service.py`,
+затем выполнен следующий адресный выбор (после него возвращены исправленные bytes):
+
+```sh
+python -m pytest -q clients/desktop/tests/test_auto_service.py --tb=short \
+  -k 'disconnected_is_not_published or start_reaps_finished or repeated_stop_after_owner or completed_stop_can_retry or owner_tail or lifecycle_failure or real_coordinator_callback'
+```
 
 ```sh
 python -m pytest -q clients/desktop/tests/test_auto_service.py --tb=short -rs
@@ -67,11 +75,37 @@ persistence/unexpected native exit, generation ownership и late CONNECTED по�
 
 ## CI и границы приёмки
 
-Новый code SHA и его CI будут зафиксированы после обычного push; сейчас NOT_RUN.
-Обязательные workflow/pytest команды не менялись, прежние CI counts не приписываются D04.
-Полные suites локально не повторялись. Прочие capsule/HTTP/nginx/expiry/privacy/socket
-failures не исправлялись и не подавлялись. Это не protected DIRECT/service-only,
-полный native runtime, упаковка, installed/live delivery или OS acceptance.
+Code **`b41e1ad8e6b49b89881cd06747addd8f2ce76fb5`** обычным push отправлен в `main`,
+`git ls-remote origin refs/heads/main` подтвердил этот SHA. Tested source/test bytes совпадают
+с commit; прежние test functions/assertions сохранены (AST comparison). Следующий
+docs-only checkpoint записывает эти результаты, не получает CI PASS от code SHA автоматически.
+
+| Job на code SHA | Результат | Последующие этапы |
+|---|---|---|
+| [control](https://github.com/Joker20380/family_connect/actions/runs/40090712538/job/120862614779) | FAIL: 2919 passed / 54 failed / 0 errors / 106 skipped | GUI/render, упаковка, extracted-package/recovery skipped |
+| [phase0/tests](https://github.com/Joker20380/family_connect/actions/runs/40090712491/job/120862614474) | FAIL: 2919 passed / 54 failed / 0 errors / 106 skipped | cargo skipped |
+| [Docker tests-stage / failover](https://github.com/Joker20380/family_connect/actions/runs/40090712491/job/120862614633) | FAIL: 2917 passed / 54 failed / 0 errors / 108 skipped | tests-passed/runtime image не созданы; provision/failover/auth/offline/revocation skipped |
+| [Client builds / linux](https://github.com/Joker20380/family_connect/actions/runs/40090712498/job/120862614999) | PASS, включая обязательный desktop pytest | GUI/layout, сборка и extracted DEB/AppImage smoke PASS |
+| [AmneziaWG / awg](https://github.com/Joker20380/family_connect/actions/runs/40090712573/job/120862614785) | PASS | Существующие этапы job сохранены |
+| [TCP / build](https://github.com/Joker20380/family_connect/actions/runs/40090712508/job/120862614778) | PASS | Изолированные routing/component checks PASS; release jobs skipped |
+| [Linux voice](https://github.com/Joker20380/family_connect/actions/runs/40090712519/job/120862614561) | PASS | Не новая полная аудиоприёмка |
+| [Auto bridge / Ubuntu protocol](https://github.com/Joker20380/family_connect/actions/runs/40090712514/job/120862614679) | PASS | Protocol/controller, race/cancel, signed floors |
+| [Auto bridge / isolated-linux](https://github.com/Joker20380/family_connect/actions/runs/40090712514/job/120862614776) | PASS | Service/runtime/ownership pytest, native compatibility и root guard в isolated kernel |
+
+Control/phase0 dependency imports и адресные gates PASS. Docker root 22 passed,
+адресные 59 passed, full suite от non-root runner: exit1, 7 passed subtests, 2 warnings;
+те же exit1/subtests/warnings в control/phase0. Artifact `12558373440`,
+`phase0-failover/build.log`: в FAILED list нет Auto-тестов. Остаточные группы —
+приватные mobile-bootstrap/owner-deadline/tunnel-restart capsules; HTTP/nginx contract;
+expiry, private-storage/evidence validation и socket address-in-use. В Docker дополнительно
+виден `test_device_identity.py::test_unsafe_directory_rejected`; это не D04 scope.
+Counts сняты с этого SHA, а не перенесены из D03. Несвязанные Android/Windows jobs
+не ожидались; PASS отдельных Linux jobs не равен PASS всего workflow/общего D01.
+
+Обязательные workflow/pytest команды не менялись. Полные suites локально не повторялись.
+Остаточные failures не исправлялись и не подавлялись. Автоматические native/package CI
+checks не заменяют protected DIRECT/service-only, полный parity installer, installed/live
+delivery или OS acceptance; локальный детерминированный transport/runtime синтетический.
 Версии Linux0.2.11/Windows0.2.15, каталоги, deployment и установки не менялись;
 runtime rollout/rollback не выполнялся. Новые IPC/сетевые полномочия не добавлены.
 NEXT — review D04. После отчёта STOP; D05 и последующие задачи не начинать.

@@ -12,7 +12,10 @@ native skips, 0 failures/errors. DISCONNECTED публикуется тольк�
 start сам убирает завершённый поток, повторный stop не теряет завершение, fatal сохраняется.
 Coordinator callback/process close завершаются до передачи владения. Это синтетическая
 локальная проверка, не установленный native/live PASS; причина прошлого AWG assertion не доказана.
-CI нового code SHA ещё не проверен; результаты прежнего D03 на D04 не переносятся.
+Code `b41e1ad` pushed/remote-verified: Linux desktop, AWG, TCP, Linux voice и Linux Auto
+bridge jobs PASS. Control/phase0 full suites: каждый 2919 passed / 54 failed / 0 errors /
+106 skipped; Docker: 2917 / 54 / 0 / 108. Последующие control GUI/package, phase0 cargo
+и failover gates skipped. Общий D01/CI остаётся открыт; результаты относятся только к этому code SHA.
 Review коррекции D02.1-R и [fleet-документации `1725656`](releases/2026-10-24-desktop-fleet-boundary.md)
 завершён. [Граница desktop/fleet](desktop-architecture.md#desktop-fleet-boundary) сохраняется:
 D05 QUEUED после D03/D04; реализация и проверки D05/fleet NOT_RUN.
@@ -76,7 +79,7 @@ failover проверки не выполнены. Runtime/fixtures/collection p
 |---|---|
 | SOURCE | D04 — узкое исправление Auto owner completion/admission поверх принятого D03, не новая поставка. |
 | LOCAL TESTS | D04: service 55 PASS; platform/policy/guard/intent/mesh/normal/Friends-owner 180 PASS, 6 прежних native skips. Полный pytest и installed/live acceptance локально NOT_RUN. |
-| CI | Новый D04 code SHA ещё не проверен; [evidence](releases/2026-10-24-auto-lifecycle-d04.md). Общий D01/CI PASS не заявлен. |
+| CI | D04 `b41e1ad`: desktop Linux/AWG/TCP/voice и Auto bridge Linux PASS; control/phase0/Docker full suites FAIL, по 54 residual failures без collection errors. [Evidence](releases/2026-10-24-auto-lifecycle-d04.md). Общий D01/CI PASS не заявлен. |
 | BUILT | Linux native-r18, Windows native-r14 cross-build, unsigned Linux system/native/RNS component-r18. **Полный parity installer: 0/2.** |
 | INSTALLED | **Завершённая установленная приёмка: 0/2.** Полный кандидат не принят на Linux/Windows; Windows runtime NOT_RUN. |
 | PUBLISHED | Parity-кандидаты не опубликованы. Linux0.2.11 / Windows0.2.15 не менялись; существующие публичные каталоги/ссылки в D00 не изменялись и заново не проверялись. |
