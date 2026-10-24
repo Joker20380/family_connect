@@ -15,6 +15,10 @@ import threading
 import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+if __name__ == '__main__':
+    from system_runtime import configure, shared_gate
+    RUNTIME_GATE = shared_gate()
+    configure()
 import auto_ipc
 from auto_configuration import NormalOwner
 from auto_guard import DIRECTORY, Guard

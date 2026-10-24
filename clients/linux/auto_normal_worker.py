@@ -10,6 +10,10 @@ import stat
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+if __name__ == '__main__':
+    from system_runtime import configure, shared_gate
+    RUNTIME_GATE = shared_gate()
+    configure()
 from auto_guard import DIRECTORY, candidate, integer, objects, policy
 from auto_normal import unlink_durable
 from auto_policy import require

@@ -16,12 +16,15 @@ SPEC.loader.exec_module(installer)
 def bundle(path):
     payload = {name: ('synthetic public ' + name).encode() for name in set(installer.FILES) |
                {'compat/awg-helper.py', 'compat/tcp-helper.py', 'install.py', 'README.txt', 'licenses/example/LICENSE'}}
+    payload['python-runtime.json'] = b'{"files":{}}'
     for name, raw in payload.items():
         target = path / name
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(raw)
-    manifest = dict(schema=1, architecture='amd64', source_digest='a' * 64, signing='unsigned-private-component',
-                    sha256={name: hashlib.sha256(raw).hexdigest() for name, raw in payload.items()})
+    manifest = dict(schema=2, architecture='amd64', source_digest='a' * 64, signing='unsigned-private-component',
+                    sha256={name: hashlib.sha256(raw).hexdigest() for name, raw in payload.items()},
+                    sizes={name: len(raw) for name, raw in payload.items()})
+    manifest['build_id'] = hashlib.sha256(json.dumps(manifest, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
     (path / 'manifest.json').write_text(json.dumps(manifest))
     return payload, manifest
 
@@ -29,7 +32,7 @@ def bundle(path):
 def test_bounded_component_inventory_and_checksum(tmp_path):
     payload, manifest = bundle(tmp_path)
     assert installer.verify(tmp_path) == (manifest, payload)
-    (tmp_path / 'lib/helper').write_bytes(b'modified')
+    (tmp_path / 'lib/helper').write_bytes(b'x' * len(payload['lib/helper']))
     with pytest.raises(ValueError, match='checksum'):
         installer.verify(tmp_path)
 
@@ -65,6 +68,7 @@ def filesystem(tmp_path, monkeypatch):
     capability = root / 'capabilities.json'
     monkeypatch.setattr(installer, 'ROOT', root)
     monkeypatch.setattr(installer, 'BACKUPS', backups)
+    monkeypatch.setattr(installer, 'CONFIG_DIRECTORIES', (tmp_path / 'config/awg', tmp_path / 'config/tcp'))
     monkeypatch.setattr(installer, 'CAPABILITY', capability)
     monkeypatch.setattr(installer, 'AUTO_CAPABILITY', root / 'auto-capabilities.json')
     monkeypatch.setattr(installer, 'directory', lambda path: path.mkdir(parents=True, exist_ok=True))
@@ -85,6 +89,9 @@ def filesystem(tmp_path, monkeypatch):
             return SimpleNamespace(stdout='systemd 255\n')
         assert not capability.exists()
         if args[0] == '/usr/bin/python3':
+            if args[-1] == '--check':
+                assert args == ('/usr/bin/python3', '-I', '-S', str(root / 'system_runtime.py'), '--check')
+                return SimpleNamespace(stdout='{"runtime":2,"imports":"PASS"}')
             assert args == ('/usr/bin/python3', '-I', '-S', str(root / 'rns/fc-rns.pyz'), '--version')
             return SimpleNamespace(stdout=json.dumps(dict(rns_protocol=1, rns='1.5.1', pyserial='3.5', crypto_provider='internal')))
         if args[-1] == '--version':
@@ -112,12 +119,12 @@ def test_install_updates_existing_helpers_but_not_user_identity(filesystem, tmp_
     assert (awg / 'helper').read_bytes() == payload['compat/awg-helper.py']
     assert (awg / 'backend.py').read_bytes() == payload['lib/backend.py']
     assert (awg / 'awg_lifecycle.py').read_bytes() == payload['lib/awg_lifecycle.py']
-    assert not (tmp_path / 'system/tcp').exists()
+    assert (tmp_path / 'system/tcp/helper').read_bytes() == payload['compat/tcp-helper.py']
     assert identity.read_bytes() == b'synthetic private state never read by installer'
     assert json.loads((root / 'capabilities.json').read_bytes())['materials_protocol'] == 1
-    assert len(operations) == 4 and operations[3] == ('systemctl', 'daemon-reload')
+    assert len(operations) == 5 and operations[4] == ('systemctl', 'daemon-reload')
     assert json.loads((root / 'capabilities.json').read_bytes())['intent_protocol'] == 1
-    assert json.loads((root / 'auto-capabilities.json').read_bytes()) == dict(schema=1,service_protocol=1,catalog_protocol=1,source_digest='a'*64)
+    assert json.loads((root / 'auto-capabilities.json').read_bytes()) == dict(schema=2,service_protocol=1,catalog_protocol=1,source_digest='a'*64,build_id=None)
     record = json.loads((backup / 'restore.json').read_bytes())
     assert len(record['previous']) == 1
     assert (backup / record['previous'][0]['file']).read_bytes() == b'old helper'
@@ -175,6 +182,51 @@ def test_unsupported_service_manager_rejected_before_any_install(filesystem, tmp
     with pytest.raises(ValueError, match='systemd254'):
         installer.apply(payload, 'a' * 64)
     assert not list(root.iterdir())
+
+
+def test_python_readback_failure_rolls_back_without_capabilities(filesystem, tmp_path, monkeypatch):
+    root, operations = filesystem
+    payload, _ = bundle(tmp_path / 'bundle')
+    helper = root / 'lib_helper'
+    helper.write_bytes(b'previous helper')
+    original = installer.command
+    def command(*args):
+        if args[-1] == '--check':
+            return SimpleNamespace(stdout='{}')
+        return original(*args)
+    monkeypatch.setattr(installer, 'command', command)
+    with pytest.raises(ValueError, match='Python runtime'):
+        installer.apply(payload, 'a' * 64)
+    assert helper.read_bytes() == b'previous helper'
+    assert not (root / 'capabilities.json').exists()
+    assert operations[-1] == ('systemctl', 'daemon-reload')
+
+
+def test_manifest_binds_sizes_and_entire_payload_build_id(tmp_path):
+    _, manifest = bundle(tmp_path)
+    manifest['sizes']['lib/helper'] += 1
+    (tmp_path / 'manifest.json').write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match='build ID'):
+        installer.verify(tmp_path)
+
+
+def test_unlisted_payload_member_is_not_ignored(tmp_path):
+    bundle(tmp_path)
+    (tmp_path / 'extra.py').write_bytes(b'not part of the reviewed payload')
+    with pytest.raises(ValueError, match='Unexpected bundle members'):
+        installer.verify(tmp_path)
+
+
+def test_new_system_directories_do_not_inherit_private_caller_umask(tmp_path, monkeypatch):
+    monkeypatch.setattr(installer, 'trusted', lambda path, directory=False: path.lstat())
+    before = os.umask(0o077)
+    try:
+        directory = tmp_path / 'system/vendor/module'
+        installer.directory(directory)
+        assert directory.stat().st_mode & 0o777 == 0o755
+        assert directory.parent.stat().st_mode & 0o777 == 0o755
+    finally:
+        os.umask(before)
 
 
 @pytest.mark.parametrize('name', ['guard.json', 'normal.json', 'awg'])

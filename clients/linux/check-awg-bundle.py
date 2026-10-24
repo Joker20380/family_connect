@@ -17,4 +17,23 @@ def check(root):
         if hashlib.sha256((root/name).read_bytes()).hexdigest()!=digest:
             raise ValueError('AWG bundle integrity mismatch')
 
-if __name__=='__main__':check(sys.argv[1])
+
+def adapt_quick(raw):
+    text = raw.decode()
+    old='[[ $proto == -4 ]] && cmd sysctl -q net.ipv4.conf.all.src_valid_mark=1'
+    new='if [[ $proto == -4 && $(sysctl -n net.ipv4.conf.all.src_valid_mark) != 1 ]]; then cmd sysctl -q net.ipv4.conf.all.src_valid_mark=1; fi'
+    if text.count(old)!=1:raise ValueError('Unexpected awg-quick source')
+    text=text.replace(old,new)
+    old='\n\tlocal ret\n\tif ! cmd ip link add "$INTERFACE" type amneziawg; then\n\t\tret=$?\n\t\t[[ -e /sys/module/amneziawg ]] || ! command -v "${WG_QUICK_USERSPACE_IMPLEMENTATION:-amneziawg-go}" >/dev/null && exit $ret\n\t\techo "[!] Missing WireGuard (Amnezia VPN) kernel module. Falling back to slow userspace implementation." >&2\n\t\tcmd "${WG_QUICK_USERSPACE_IMPLEMENTATION:-amneziawg-go}" "$INTERFACE"\n\tfi'
+    new='\n\tcmd "${WG_QUICK_USERSPACE_IMPLEMENTATION:-amneziawg-go}" "$INTERFACE"'
+    if text.count(old)!=1:raise ValueError('Unexpected awg-quick interface creation')
+    text=text.replace(old,new)
+    return text.encode()
+
+
+if __name__ == '__main__':
+    if len(sys.argv) == 3 and sys.argv[1] == '--adapt':
+        path = Path(sys.argv[2])
+        path.write_bytes(adapt_quick(path.read_bytes()))
+    else:
+        check(sys.argv[1])

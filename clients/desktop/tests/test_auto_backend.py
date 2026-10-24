@@ -188,8 +188,8 @@ def test_component_requires_its_own_marker_and_matching_native_digest(tmp_path,m
     monkeypatch.setattr(backend,'_mesh_trusted',lambda path,directory=False:path.lstat())
     for name in backend.AUTO_FILES:(tmp_path/name).write_text('')
     backend.AUTO_UNIT.write_text('')
-    (tmp_path/'capabilities.json').write_text(json.dumps(dict(source_digest='a'*64)))
-    marker=dict(schema=1,service_protocol=1,catalog_protocol=1,source_digest='a'*64)
+    (tmp_path/'capabilities.json').write_text(json.dumps(dict(source_digest='a'*64,build_id='b'*64)))
+    marker=dict(schema=2,service_protocol=1,catalog_protocol=1,source_digest='a'*64,build_id='b'*64)
     (tmp_path/'auto-capabilities.json').write_text(json.dumps(marker))
     assert backend.auto_component_available()
     marker['source_digest']='b'*64

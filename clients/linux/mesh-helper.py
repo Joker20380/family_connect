@@ -12,6 +12,10 @@ import threading
 import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+if __name__ == '__main__':
+    from system_runtime import configure, shared_gate
+    RUNTIME_GATE = shared_gate()
+    configure()
 import mesh_ipc as ipc
 from mesh_service import Supervisor
 from mesh_ownership import Ownership
@@ -178,6 +182,18 @@ def main():
     if action in ("serve", "cleanup") and not os.environ.get("PKEXEC_UID"):
         return (serve if action == "serve" else cleanup)(owner(argument))
     uid = owner(os.environ.get("PKEXEC_UID", ""))
+    if action == 'chat-up':
+        if argument != 'fcchat0':
+            raise ValueError('Invalid chat setup')
+        import pwd
+        from backend import system_component_status
+        pwd.getpwuid(uid)
+        if system_component_status() != 'READY':
+            raise ValueError('Verified chat system component required')
+        for kind in ('direct', 'mesh'):
+            command('systemctl', 'start', 'family-connect-chat-' + kind + '@' + str(uid) + '.service')
+        print(json.dumps({'chat_services': 'ready', 'vpn_started': False}))
+        return
     if action in ('auto-up', 'auto-down'):
         from auto_intent import AutoIntent
         from auto_service import DIRECTORY, command_gate, manage_unit

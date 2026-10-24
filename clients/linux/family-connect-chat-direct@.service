@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 -I /usr/local/lib/family-connect-mesh/chat_direct_host.py %i
+ExecStart=/usr/bin/python3 -I -S /usr/local/lib/family-connect-mesh/chat_direct_host.py %i
 TimeoutStopSec=30
 KillMode=control-group
 Restart=on-failure

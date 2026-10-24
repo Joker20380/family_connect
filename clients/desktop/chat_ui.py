@@ -465,6 +465,8 @@ class ChatPane(Gtk.Box):
     def notification_settings(self):
         def display(settings):
             self.clear('notifications', self.t('chat_notifications'))
+            if self.owner_factory is None:
+                self.button(self.words('Подготовить защищённый доступ чатов (без VPN)', 'Prepare protected chat access (no VPN)'), self.prepare_services)
             self.delivery_switches = {}
             for field, operation, label in (
                     ('background', 'background_delivery', self.t('chat_background_hint')),
@@ -502,6 +504,12 @@ class ChatPane(Gtk.Box):
                                  'System notifications contain no message text, audio or contact name.'))
             self.button(self.t('chat_contacts'), self.contacts)
         self.submit(lambda: self.owner.invoke('delivery_settings'), display)
+
+    def prepare_services(self):
+        from backend import prepare_chat_services
+        self.submit(prepare_chat_services, lambda _: self.notice.set_text(self.words(
+            'Службы чатов готовы. VPN не включён; настройки фоновой доставки сохранены.',
+            'Chat services are ready. VPN is unchanged; background delivery settings are preserved.')))
 
     def settings_changed(self):
         self.refresh_notifications()

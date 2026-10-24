@@ -16,8 +16,10 @@ import time
 from types import SimpleNamespace
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'desktop'))
+if __name__ == '__main__':
+    from system_runtime import configure, shared_gate
+    RUNTIME_GATE = shared_gate()
+    configure()
 from auto_platform import Underlying
 from auto_policy import Failure
 from auto_normal_worker import trusted

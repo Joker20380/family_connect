@@ -1,6 +1,31 @@
 # Linux: AppImage и DEB вместо tar.gz preview
 
+## L03.1 — отдельный system/runtime checkpoint,25.10
+
+[L03.1](releases/2026-10-25-linux-system-runtime-l03-1.md) объединяет manual MESH,
+Auto, DIRECT/service-only hosts и units, root-owned `update.pub`, изолированный
+Python3.12 runtime и штатные AWG3.1/Xray26.3.27 binaries/helpers/notices.
+Manifest schema2 связывает весь состав и build ID; native digest отдельно не
+является capability. Новый consumer отказывает старому schema1 host.
+Installer удерживает startup/lifecycle/ownership locks, временно маскирует только
+фиксированные templates, не останавливает живых owners и не стирает sticky cleanup.
+Readback native/RNS/imports предшествует публикации capabilities; собственные файлы
+имеют root-owned backup/rollback. Существующие безопасные файлы/пользовательские
+identity/history/settings не переносятся и не удаляются.
+
+Явное действие в настройках чата через существующий polkit/session подготавливает
+только DIRECT и service-only hosts для подтверждённого UID. Не меняет VPN intent,
+не включает VPN/boot autostart и не меняет фоновые настройки. После reboot нужен
+повтор этого setup. GUI и chat daemon остаются обычным пользователем.
+
+Это внутренний неподписанный system/runtime-компонент для Python3.12/amd64,
+не полный desktop installer. L03.2 (AppImage/DEB) **не начат**, зависит от review
+L03.1; parent L03 открыт. Legacy six-file archive/updater и публичные версии не
+менялись. [Воспроизводимый isolated gate](../tests/fixtures/linux_system_runtime/README.md).
+
 ## Parity106 — отдельная незавершённая поставка,23.10
+
+Ниже — исторический pre-L03.1 состав, не текущий NEXT.
 
 Последний внутренний компонент — `mesh-system-r18` (24.10,phase22),98 файлов,
 22 root-модуля и4 общих модуля. Добавлен UID/device-bound chat-only endpoint для

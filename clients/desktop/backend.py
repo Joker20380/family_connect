@@ -1,4 +1,5 @@
 import ctypes
+import hashlib
 import json
 import math
 import urllib.request
@@ -921,6 +922,7 @@ def connection_operation(*, owner=None, mutate=False, expected=None):
 _SESSION_HELPERS = {kind: '/usr/local/lib/family-connect-'+kind+'/helper'
                     for kind in ('awg', 'tcp', 'mesh')}
 _SESSION_HELPERS['auto'] = _SESSION_HELPERS['mesh']
+_SESSION_HELPERS['chat'] = _SESSION_HELPERS['mesh']
 
 
 def _session_line(stream, deadline):
@@ -945,6 +947,10 @@ def _session_request(request):
     kind, action, ident, data = (request[k] for k in ('kind', 'action', 'ident', 'data'))
     if kind not in _SESSION_HELPERS or action not in ('import', 'up', 'down'):
         raise ValueError('Invalid session operation')
+    if kind == 'chat':
+        if action != 'up' or ident != 'fcchat0' or data is not None:
+            raise ValueError('Invalid chat setup operation')
+        return [_SESSION_HELPERS[kind], 'chat-up', 'fcchat0'], None
     if kind == 'mesh':
         if action not in ('up', 'down') or ident != 'fcmesh0' or data is not None:
             raise ValueError('Invalid MESH session operation')
@@ -1494,7 +1500,10 @@ MESH_ROOT = Path('/usr/local/lib/family-connect-mesh')
 MESH_RUN = Path('/run/family-connect-mesh')
 MESH_FILES = ('helper', 'fc-mesh', 'mesh_ipc.py', 'mesh_chat.py', 'mesh_chat_host.py', 'provisioning/chat_bridge_protocol.py', 'mesh_materials.py', 'mesh_network.py', 'mesh_intent.py',
               'mesh_service.py', 'mesh_system.py', 'backend.py', 'profile_config.py',
-              'authorization-session-v1', 'capabilities.json', 'rns/fc-rns.pyz', 'rns/build.json')
+              'authorization-session-v1', 'capabilities.json', 'rns/fc-rns.pyz', 'rns/build.json',
+              'installed.json', 'python-runtime.json', 'system_runtime.py', 'chat_direct_host.py',
+              'mesh_chat_service.py', 'mesh_ownership.py', 'update.pub', 'provisioning/chat_direct.py',
+              'provisioning/chat_bridge.py', 'provisioning/friends.py', 'device_identity/device.py', 'messenger/codec.py')
 
 
 def mesh_presentation(status):
@@ -1551,8 +1560,14 @@ def _mesh_trusted(path, directory=False):
     return info
 
 
-def mesh_component_available():
+def system_component_status():
     try:
+        for kind in ('awg', 'tcp'):
+            config = Path('/etc/family-connect') / kind
+            for directory in (config, *config.parents):
+                _mesh_trusted(directory, directory=True)
+            if stat.S_IMODE(config.lstat().st_mode) != 0o755:
+                return 'NORMAL_CONFIGURATION_UNAVAILABLE'
         for parent in (MESH_ROOT, *MESH_ROOT.parents):
             _mesh_trusted(parent, directory=True)
         for name in MESH_FILES:
@@ -1560,18 +1575,68 @@ def mesh_component_available():
                 _mesh_trusted((MESH_ROOT / name).parent, directory=True)
             _mesh_trusted(MESH_ROOT / name)
         if not all(os.access(MESH_ROOT / name, os.X_OK) for name in ('helper', 'fc-mesh')):
-            return False
+            return 'EXECUTABLE_UNAVAILABLE'
         with (MESH_ROOT / 'capabilities.json').open('rb') as source:
             raw = source.read(2049)
         if len(raw) > 2048:
-            return False
+            return 'CAPABILITY_OVERSIZED'
         value = json.loads(raw)
-        return (type(value) is dict and set(value) == {'schema', 'bridge_protocol', 'materials_protocol', 'intent_protocol', 'core_reference', 'source_digest', 'profiles'} and
-                all(type(value.get(key)) is int and value[key] == 1 for key in ('schema', 'bridge_protocol', 'materials_protocol', 'intent_protocol')) and
+        compatible = (type(value) is dict and value.get('schema') == 2 and value.get('runtime_contract') == 2 and value.get('chat_setup_protocol') == 1 and
+                all(type(value.get(key)) is int and value[key] == 1 for key in ('bridge_protocol', 'materials_protocol', 'intent_protocol')) and
                 value['core_reference'] == 'android106-native105' and value['profiles'] == ['P0', 'P1'] and
                 isinstance(value['source_digest'], str) and re.fullmatch('[a-f0-9]{64}', value['source_digest']) is not None)
-    except (OSError, ValueError, BackendError):
-        return False
+        if not compatible:
+            return 'RUNTIME_CONTRACT_MISMATCH'
+        with (MESH_ROOT / 'installed.json').open('rb') as source:
+            inventory_raw = source.read(1048577)
+        if len(inventory_raw) > 1048576 or hashlib.sha256(inventory_raw).hexdigest() != value['installed_sha256']:
+            return 'INSTALLED_MANIFEST_MISMATCH'
+        inventory = json.loads(inventory_raw)
+        if inventory['schema'] != 2 or inventory['build_id'] != value['build_id'] or inventory['source_digest'] != value['source_digest']:
+            return 'BUILD_ID_MISMATCH'
+        files = inventory['files']
+        required = {str(MESH_ROOT / name) for name in MESH_FILES if name not in ('installed.json', 'capabilities.json', 'authorization-session-v1')}
+        required.update('/etc/systemd/system/family-connect-' + name + '@.service' for name in ('mesh', 'auto', 'chat-direct', 'chat-mesh'))
+        required.add('/etc/systemd/system/family-connect-tcp@.service')
+        for kind, names in {'awg': ('awg', 'amneziawg-go', 'awg-quick', 'awg31.json', 'LICENSE-go', 'LICENSE-tools', 'awg_lifecycle.py'),
+                            'tcp': ('xray', 'LICENSE')}.items():
+            required.update('/usr/local/lib/family-connect-' + kind + '/' + name
+                            for name in (*names, 'helper', 'backend.py', 'profile_config.py', 'authorization-session-v1'))
+        if not required <= set(files) or not any(str(MESH_ROOT / 'vendor') + '/' in name for name in files):
+            return 'RUNTIME_INCOMPLETE'
+        for name, expected in files.items():
+            path = Path(name)
+            allowed = path.is_relative_to(MESH_ROOT) or (path.parent == Path('/etc/systemd/system') and name in required)
+            allowed = allowed or name in required
+            if not allowed or '..' in path.parts:
+                return 'INSTALLED_PATH_INVALID'
+            for parent in path.parents:
+                _mesh_trusted(parent, directory=True)
+            info = _mesh_trusted(path)
+            if info.st_size != expected['size'] or stat.S_IMODE(info.st_mode) != expected['mode']:
+                return 'INSTALLED_FILE_METADATA_MISMATCH'
+            if hashlib.sha256(path.read_bytes()).hexdigest() != expected['sha256']:
+                return 'INSTALLED_FILE_HASH_MISMATCH'
+        vendor = {str(path) for path in (MESH_ROOT / 'vendor').rglob('*') if path.is_symlink() or not path.is_dir()}
+        if vendor != {name for name in files if name.startswith(str(MESH_ROOT / 'vendor') + '/')}:
+            return 'PYTHON_RUNTIME_MEMBERS_MISMATCH'
+        return 'READY'
+    except FileNotFoundError:
+        return 'RUNTIME_INCOMPLETE'
+    except (OSError, ValueError, TypeError, KeyError, BackendError):
+        return 'UNSAFE_RUNTIME'
+
+
+def mesh_component_available():
+    return system_component_status() == 'READY'
+
+
+def prepare_chat_services():
+    state = system_component_status()
+    if state != 'READY':
+        raise BackendError('Verified chat system component required: ' + state)
+    with authorization_operation():
+        return _operation_local.authorization.call('chat', 'up', 'fcchat0', None)
 
 
 def _mesh_protocol():
@@ -1765,9 +1830,9 @@ def auto_component_available():
             return False
         value = json.loads(raw)
         base = json.loads((MESH_ROOT/'capabilities.json').read_bytes())
-        return (type(value) is dict and set(value) == {'schema', 'service_protocol', 'catalog_protocol', 'source_digest'} and
-                all(type(value[key]) is int and value[key] == 1 for key in ('schema', 'service_protocol', 'catalog_protocol')) and
-                value['source_digest'] == base['source_digest'])
+        return (type(value) is dict and set(value) == {'schema', 'service_protocol', 'catalog_protocol', 'source_digest', 'build_id'} and
+                value['schema'] == 2 and all(type(value[key]) is int and value[key] == 1 for key in ('service_protocol', 'catalog_protocol')) and
+                value['source_digest'] == base['source_digest'] and value['build_id'] == base['build_id'])
     except (OSError, ValueError, BackendError):
         return False
 
