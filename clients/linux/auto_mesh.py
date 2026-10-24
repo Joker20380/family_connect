@@ -6,7 +6,7 @@ import time
 from auto_guard import candidate
 from auto_policy import Failure, require
 import mesh_ipc as ipc
-from mesh_materials import MaterialsError
+from mesh_materials import MaterialsError, NativeMaterials
 from mesh_service import NativeWorker, PacketSession, SessionFailure, TRANSIENT
 
 
@@ -31,11 +31,15 @@ def rejection(error):
 
 
 class MeshCandidate:
-    def __init__(self, network, materials_owner, materials, worker_factory=NativeWorker):
+    def __init__(self, network, materials_owner, materials, worker_factory=NativeWorker, ownership=None):
         ipc.validate_request(dict(schema=1, id=1, action='start', materials=materials))
         self.network, self.materials_owner = network, materials_owner
         self.materials = copy.deepcopy(materials)
         self.worker_factory, self.session = worker_factory, None
+        self.ownership = ownership
+        if ownership is not None:
+            self.worker_factory = lambda: worker_factory(ownership)
+            self.materials_owner.native = NativeMaterials(ownership)
         self.lock = threading.Lock()
         self.view_lock = threading.Lock()
         self.view = dict(attempt=0, native={}, readiness={})
@@ -61,6 +65,8 @@ class MeshCandidate:
             self.attempt += 1
             self.pending_cleanup = True
             try:
+                if self.ownership is not None:
+                    self.ownership.acquire(context.cancel, context.deadline)
                 self.network.prepare()
                 context.check()
                 underlying = self.network.underlying()
@@ -108,6 +114,8 @@ class MeshCandidate:
                 self.network.cleanup()
                 context.check()
                 require(not self.network.owns_journal)
+                if self.ownership is not None and self.ownership.active:
+                    self.ownership.finish()
                 self.pending_cleanup = False
 
     def release(self, context):

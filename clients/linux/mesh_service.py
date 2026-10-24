@@ -9,7 +9,7 @@ import time
 import mesh_ipc as ipc
 from mesh_chat import ChatLane
 from mesh_chat_host import Binding
-from mesh_materials import MaterialsError
+from mesh_materials import MaterialsError, NativeMaterials
 from mesh_system import ENV
 
 WORKER = "/usr/local/lib/family-connect-mesh/fc-mesh"
@@ -20,11 +20,12 @@ TRANSIENT = frozenset(("DEADLINE", "NETWORK_TIMEOUT", "NETWORK_ERROR", "EOF", "I
 
 
 class NativeWorker:
-    def __init__(self):
+    def __init__(self, ownership=None):
         parent, child = socket.socketpair(socket.AF_UNIX, socket.SOCK_STREAM)
+        inherited = (child.fileno(),) if ownership is None else (child.fileno(), ownership.descriptor)
         try:
             self.process = subprocess.Popen([WORKER, "--stdio-chat-fd", str(child.fileno())], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                            stderr=subprocess.DEVNULL, env=ENV, bufsize=0, close_fds=True, pass_fds=(child.fileno(),))
+                                            stderr=subprocess.DEVNULL, env=ENV, bufsize=0, close_fds=True, pass_fds=inherited)
         except BaseException:
             parent.close()
             raise
@@ -51,9 +52,11 @@ class NativeWorker:
 
     def close(self):
         self.chat.close()
+        graceful = True
         try:
             self.call("stop")
         except (OSError, ValueError, EOFError, TimeoutError):
+            graceful = False
             try:
                 self.process.terminate()
             except ProcessLookupError:
@@ -64,8 +67,12 @@ class NativeWorker:
             try:
                 self.process.wait(timeout=2)
             except subprocess.TimeoutExpired:
+                graceful = False
                 self.process.kill()
                 self.process.wait(timeout=2)
+        self.chat.reader.join(2)
+        if not graceful or self.process.returncode != 0 or self.chat.reader.is_alive():
+            raise SessionFailure('CLEANUP_PENDING')
 
 
 class SessionFailure(RuntimeError):
@@ -160,16 +167,14 @@ class PacketSession:
         if self.chat_binding is not None:
             self.chat_binding.close()
         self.reply = None
-        try:
-            self.network.detach()
-        finally:
-            if self.worker is not None:
-                worker, self.worker = self.worker, None
-                worker.close()
+        if self.worker is not None:
+            self.worker.close()
+            self.worker = None
+        self.network.detach()
 
 
 class Supervisor:
-    def __init__(self, network, materials_owner):
+    def __init__(self, network, materials_owner, ownership=None):
         self.network = network
         self.materials_owner = materials_owner
         self.lock = threading.Lock()
@@ -185,6 +190,10 @@ class Supervisor:
         self.snapshot = {}
         self.started_at = time.monotonic()
         self.worker_factory = NativeWorker
+        self.ownership = ownership
+        if ownership is not None:
+            self.worker_factory = lambda: NativeWorker(ownership)
+            self.materials_owner.native = NativeMaterials(ownership)
         self.restarted = False
         self.session = None
 
@@ -249,6 +258,8 @@ class Supervisor:
         try:
             if self.cancel.is_set():
                 return
+            if self.ownership is not None:
+                self.ownership.acquire(self.cancel, time.monotonic() + 30)
             self.network.prepare()
             prepared = True
             while not self.cancel.is_set():
@@ -277,6 +288,10 @@ class Supervisor:
             materials.clear()
             try:
                 self.network.cleanup()
+                if self.ownership is not None and self.ownership.active:
+                    if self.session is not None:
+                        raise SessionFailure('CLEANUP_PENDING')
+                    self.ownership.finish()
             except (OSError, ValueError, RuntimeError, subprocess.SubprocessError):
                 self.transition("FAILED", "CLEANUP_PENDING")
             else:

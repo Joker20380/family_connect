@@ -120,6 +120,38 @@ def test_same_packet_session_requires_routes_and_native_health(setup):
         current.prepare(Context(1000))
 
 
+@pytest.mark.parametrize('cleanup_fails', [False, True])
+def test_process_reservation_spans_native_drain_and_network_cleanup(cleanup_fails):
+    network, owner = Network(), Materials()
+    class Gate:
+        active = False
+        def acquire(self, cancel, deadline):
+            assert not network.actions
+            self.active = True
+            network.actions.append('reserve')
+        def finish(self):
+            assert self.active and not network.owns_journal and network.actions[-1] == 'cleanup'
+            self.active = False
+            network.actions.append('release')
+    gate = Gate()
+    class OwnedWorker(Worker):
+        def close(self):
+            assert gate.active
+            network.actions.append('native-drained')
+            super().close()
+    current = MeshCandidate(network, owner, materials(), lambda passed: OwnedWorker(network), ownership=gate)
+    assert current.open(Context(2000)) == (7, False)
+    network.cleanup_fails = cleanup_fails
+    if cleanup_fails:
+        with pytest.raises(RuntimeError):
+            current.close(Context(2000))
+        assert gate.active and current.pending_cleanup
+        network.cleanup_fails = False
+    current.close(Context(2000))
+    assert network.actions.index('native-drained') < network.actions.index('detach') < network.actions.index('cleanup')
+    assert network.actions[-1] == 'release' and not gate.active
+
+
 def test_new_attempt_only_after_owner_closes_previous_no_local_retries(setup):
     current, network, owner, workers = setup
     current.open(Context(2000))

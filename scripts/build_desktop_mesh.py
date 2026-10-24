@@ -120,7 +120,8 @@ def main():
         manifest["chat_integration"] = {"vpn_ownership": "integrated",
                                         "private_worker_ipc": "inherited-unix-stream-v1" if args.os == "linux" else "NOT_INTEGRATED",
                                         "desktop_api_mailbox_ipc": "linux-existing-exit-host-source" if args.os == "linux" else "NOT_INTEGRATED",
-                                        "service_only_host": "NOT_INTEGRATED",
+                                        "service_only_host": "linux-demand-host-source-partial" if args.os == "linux" else "NOT_INTEGRATED",
+                                        "process_ownership": "linux-flock-drain-source" if args.os == "linux" else "NOT_INTEGRATED",
                                         "protected_underlying_direct": "linux-fixed-chat-host-source" if args.os == "linux" else "NOT_INTEGRATED"}
         (args.out / "build.json").write_text(json.dumps(manifest, indent=2) + "\n")
         print(json.dumps(manifest, indent=2))

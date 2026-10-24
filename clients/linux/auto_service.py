@@ -142,8 +142,10 @@ class Runtime:
             for path, receipts in ((STATE, False), (MESH_STATE, False), (MESH_STATE, True)):
                 self.stores.append(CacheStore(path, record['uid'], receipt=receipts))
             material = selection['materials']
+            from mesh_ownership import Ownership
             mesh = MeshCandidate(mesh_network(self.guard), MaterialOwner(self.stores[1], self.stores[2]),
-                                 {key: material[key] for key in ('identity', 'wireguard_public', 'anchor', 'profile')})
+                                 {key: material[key] for key in ('identity', 'wireguard_public', 'anchor', 'profile')},
+                                 ownership=Ownership('vpn'))
             self.platform = Platform(self.guard, NormalOwner(self.stores[0]), mesh, material,
                                      hints=HintStore(STATE / (str(record['uid']) + '.hint.json'), record['uid']),
                                      preferred=selection['preferred'])

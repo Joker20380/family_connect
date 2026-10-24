@@ -136,7 +136,8 @@ def enroll(integration):
 
 @pytest.mark.parametrize('expired', [False, True])
 @pytest.mark.parametrize('changed_node', [False, True])
-def test_direct_exit_registration_provenance_and_recovery(integration, tmp_path, monkeypatch, expired, changed_node):
+@pytest.mark.parametrize('route', ['EXISTING_EXIT', 'SERVICE_ONLY'])
+def test_direct_exit_registration_provenance_and_recovery(integration, tmp_path, monkeypatch, expired, changed_node, route):
     from messenger.local import LocalChat
     from messenger.mailbox import Mailbox
     from provisioning.chat_bridge import ChatBridge
@@ -150,6 +151,8 @@ def test_direct_exit_registration_provenance_and_recovery(integration, tmp_path,
                 self.requests.append(values)
                 return integration.api.request(values['path'], base64.b64decode(values['data']))
             result = super().call(action, **values)
+            if action == 'acquire':
+                result['route'] = route
             if action == 'open':
                 self.peers[-1].sendall(b'EXIT')
             return result
@@ -157,13 +160,20 @@ def test_direct_exit_registration_provenance_and_recovery(integration, tmp_path,
     lane = ExitLane()
     start = dict(readiness={'device': integration.api.device.reference}, identity='private-synthetic-test-key',
                  anchor='synthetic-anchor', resolver='1.1.1.1:53', underlying_index=2)
-    binding = Binding(lane, start, threading.Event())
+    binding = Binding(lane, start, threading.Event(), route)
     binding.ready.set()
     host = Host(tmp_path / 'exit.sock', os.getuid(), lambda: binding)
     host.start()
     bridge = ChatBridge(integration.api.device.reference, _paths=[host.endpoint], _root_uid=os.getuid())
+    bridge.ROUTE = route
+    integration.fallback.route = route
     integration.fallback.request = bridge.request
     integration.fallback.open_mailbox = bridge.open_mailbox
+    if route == 'SERVICE_ONLY':
+        def unavailable_exit(*args):
+            raise wire.BridgeError('UNAVAILABLE')
+        integration.fallback.open_mailbox = unavailable_exit
+        integration.fallback.open_service_mailbox = bridge.open_mailbox
     monkeypatch.setattr(RNS.Transport, 'owner', SimpleNamespace(is_connected_to_shared_instance=False), raising=False)
     monkeypatch.setattr(LocalChat, 'request_sync', lambda _: None)
     monkeypatch.setattr(LocalChat, 'delivery_update', lambda *args, **kwargs: None)
@@ -205,7 +215,7 @@ def test_direct_exit_registration_provenance_and_recovery(integration, tmp_path,
         owner.tick(online=True, visible=True)
         assert owner.delivery_error is None and owner.node == integration.api.node
         assert integration.host.authority.response == old_response
-        assert owner.carrier.exchange() == 'EXISTING_EXIT'
+        assert owner.carrier.exchange() == route
         assert integration.direct.authority is None
         assert owner.carrier.host == integration.api.node['host'] and owner.carrier.port == integration.api.node['port']
         assert owner.carrier.expires == integration.api.node['expires_at']
@@ -365,7 +375,7 @@ def test_direct_unavailable_preserves_existing_exit_not_system():
     fallback = SimpleNamespace(request=lambda *args: (used.append('EXISTING_EXIT') or (200, b'{}')))
     with ChatHTTP(DirectHTTP(SimpleNamespace(request=unavailable)), fallback).stream('POST', wire.PATHS[0], json={}) as response:
         assert response.json() == {}
-    assert used == ['EXISTING_EXIT'] and ProtectedMailbox.ROUTES == ('DIRECT', 'EXISTING_EXIT')
+        assert used == ['EXISTING_EXIT'] and ProtectedMailbox.ROUTES == ('DIRECT', 'EXISTING_EXIT', 'SERVICE_ONLY')
 
 
 def test_cancelled_late_open_is_closed_without_descriptor(integration):

@@ -119,6 +119,18 @@ def validate(request):
     return request
 
 
+def validate_service(request):
+    if request.get('action') != 'prepare':
+        return validate(request)
+    if set(request) != {'schema', 'id', 'action', 'device', 'budget_ms', 'identity', 'wireguard_public'}:
+        raise ValueError('Invalid chat material')
+    validate({key: ('probe' if key == 'action' else value) for key, value in request.items()
+              if key not in ('identity', 'wireguard_public')})
+    if len(payload(request['identity'], 64)) != 64 or len(payload(request['wireguard_public'], 32)) != 32:
+        raise ValueError('Invalid chat material')
+    return request
+
+
 def send_socket(connection, channel):
     descriptors = array.array('i', [channel.fileno()])
     if connection.sendmsg([b'F'], [(socket.SOL_SOCKET, socket.SCM_RIGHTS, descriptors)]) != 1:

@@ -94,7 +94,7 @@ def test_malformed_response_closes_only_lane(lane, change):
         reply = dict(schema=1, id=request['id'], ok=True, route='EXISTING_EXIT')
         reply.update(change)
         ipc.send(peer.fileno(), reply, chat.MAX_FRAME, time.monotonic() + 4)
-        with pytest.raises(chat.ChatError, match='UNAVAILABLE'):
+        with pytest.raises(chat.ChatError, match='DENIED'):
             pending.result(2)
     assert instance.closed.is_set()
 

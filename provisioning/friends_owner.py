@@ -69,6 +69,11 @@ class FriendsOwner:
         finally:
             material.clear()
 
+    def chat_materials(self):
+        device = self._device(False)
+        return dict(identity=base64.b64encode(device._identity.get_private_key()).decode('ascii'),
+                    wireguard_public=device.wireguard_public_key)
+
     def connect_auto(self, country, driver, profile="P0"):
         if country not in ('ru', 'nl') or profile not in ('P0', 'P1'):
             raise ValueError('Unsupported Auto selection')

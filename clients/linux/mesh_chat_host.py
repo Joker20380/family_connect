@@ -23,7 +23,10 @@ class Cancellation:
 
 
 class Binding:
-    def __init__(self, lane, start, cancelled):
+    def __init__(self, lane, start, cancelled, route='EXISTING_EXIT'):
+        if route not in ('EXISTING_EXIT', 'SERVICE_ONLY'):
+            raise ValueError('Invalid chat route')
+        self.route = route
         self.lane = lane
         self.lock = threading.Lock()
         self.closed, self.ready = threading.Event(), threading.Event()
@@ -48,7 +51,8 @@ class Binding:
             result = self.lane.call('acquire', acquire=material, budget_ms=budget, cancel=cancel)
         finally:
             material.clear()
-        if result.get('route') != 'EXISTING_EXIT' or cancel.is_set():
+        allowed = ('SERVICE_ONLY', 'CONNECTING') if self.route == 'SERVICE_ONLY' else ('EXISTING_EXIT',)
+        if result.get('route') not in allowed or cancel.is_set():
             self.release(result['lease'])
             raise wire.BridgeError()
         return result['lease']
@@ -75,6 +79,11 @@ def remove_endpoint(endpoint, uid):
 
 
 class Host:
+    validate = staticmethod(wire.validate)
+
+    def binding(self, request, cancel, deadline):
+        return self.provider()
+
     def __init__(self, endpoint, uid, provider):
         self.endpoint, self.uid, self.provider = Path(endpoint), uid, provider
         self.stop = threading.Event()
@@ -123,31 +132,32 @@ class Host:
             if mesh_ipc.peer_uid(connection) != self.uid:
                 return
             request = wire.read(connection, time.monotonic() + 4)
-            wire.validate(request)
-            binding = self.provider()
+            self.validate(request)
+            deadline = time.monotonic() + request['budget_ms'] / 1000
+            cancel = Cancellation(self.stop, lost)
+            monitor = threading.Thread(target=self._monitor, args=(connection, lost, monitor_stop), name='fc-chat-disconnect', daemon=False)
+            monitor.start()
+            binding = self.binding(request, cancel, deadline)
             if binding is None:
                 raise wire.BridgeError()
             binding.probe(request['device'])
-            if request['action'] == 'probe':
-                wire.write(connection, dict(schema=1, id=request['id'], ok=True, route='EXISTING_EXIT'))
+            if request['action'] in ('probe', 'prepare'):
+                wire.write(connection, dict(schema=1, id=request['id'], ok=True, route=binding.route))
                 return
             cancel = Cancellation(self.stop, lost, binding.closed, binding.cancelled)
-            deadline = time.monotonic() + request['budget_ms'] / 1000
-            monitor = threading.Thread(target=self._monitor, args=(connection, lost, monitor_stop), name='fc-chat-disconnect', daemon=False)
-            monitor.start()
             lease = binding.acquire(request['device'], cancel, self._budget(deadline))
             if request['action'] == 'request':
                 result = binding.lane.call('request', lease=lease, path=request['path'], data=request['data'],
                                            budget_ms=self._budget(deadline), cancel=cancel)
                 if cancel.is_set():
                     raise wire.BridgeError('CANCELLED')
-                wire.write(connection, dict(schema=1, id=request['id'], ok=True, route='EXISTING_EXIT',
+                wire.write(connection, dict(schema=1, id=request['id'], ok=True, route=binding.route,
                                            status=result['status'], data=base64.b64encode(result.get('data', b'')).decode()))
             else:
                 opened = binding.lane.call('open', lease=lease, budget_ms=self._budget(deadline), cancel=cancel)
                 monitor_stop.set()
                 monitor.join(1)
-                self._mailbox(connection, request['id'], binding, opened['stream'], cancel, deadline)
+                self._mailbox(connection, request['id'], binding, opened['stream'], cancel, deadline, route=binding.route)
         except (OSError, ValueError, ChatError, RecursionError) as error:
             code = getattr(error, 'code', 'UNAVAILABLE')
             if type(request.get('id')) is int:

@@ -116,7 +116,7 @@ class ExistingExitMailbox(SystemMailbox):
         try:
             return self.bridge.open_mailbox(deadline, cancel)
         except BridgeError as error:
-            if error.code in ('DENIED', 'CONFLICT'):
+            if error.code in ('DENIED', 'CONFLICT', 'INVALID_RESPONSE'):
                 raise MailboxError('access_denied') from None
             if error.code == 'CANCELLED':
                 raise MailboxError('cancelled') from None
@@ -128,16 +128,44 @@ class _DirectDeadline(Exception):
 
 
 class ProtectedMailbox(ExistingExitMailbox):
-    ROUTES = ('DIRECT', 'EXISTING_EXIT')
+    ROUTES = ('DIRECT', 'EXISTING_EXIT', 'SERVICE_ONLY')
 
     def __init__(self, chat, node, runtime, direct, bridge, *, registration_route='DIRECT'):
         if registration_route not in self.ROUTES:
             raise ValueError('invalid_registration_route')
         self.direct, self.bridge = direct, bridge
         routes = (('EXISTING_EXIT', self._existing),)
+        if hasattr(bridge, 'open_service_mailbox'):
+            routes = (*routes, ('SERVICE_ONLY', self._service))
         if registration_route == 'DIRECT':
             routes = (('DIRECT', self._direct), *routes)
         SystemMailbox.__init__(self, chat, node, runtime, _routes=routes)
+
+    def _existing(self, deadline, cancel):
+        from .chat_bridge_protocol import BridgeError
+        try:
+            return self.bridge.open_mailbox(deadline, cancel)
+        except BridgeError as error:
+            if error.code in ('DENIED', 'CONFLICT', 'INVALID_RESPONSE'):
+                raise MailboxError('access_denied') from None
+            if error.code == 'DEADLINE':
+                raise _DirectDeadline() from None
+            if error.code == 'CANCELLED':
+                raise MailboxError('cancelled') from None
+            raise MailboxError('unavailable') from None
+
+    def _service(self, deadline, cancel):
+        from .chat_bridge_protocol import BridgeError
+        try:
+            return self.bridge.open_service_mailbox(deadline, cancel)
+        except BridgeError as error:
+            if error.code in ('DENIED', 'CONFLICT', 'INVALID_RESPONSE'):
+                raise MailboxError('access_denied') from None
+            if error.code == 'DEADLINE':
+                raise _DirectDeadline() from None
+            if error.code == 'CANCELLED':
+                raise MailboxError('cancelled') from None
+            raise MailboxError('unavailable') from None
 
     def exchange(self, *, timeout=12, cancel=None):
         try:

@@ -159,6 +159,33 @@ class FakeWorker:
         self.calls.append("close")
 
 
+def test_manual_process_reservation_released_after_worker_and_network_cleanup(monkeypatch):
+    network = FakeNetwork()
+    class Gate:
+        active = False
+        def acquire(self, cancel, deadline):
+            assert not network.operations
+            self.active = True
+            network.operations.append('reserve')
+        def finish(self):
+            assert network.operations[-1] == 'cleanup' and self.active
+            self.active = False
+            network.operations.append('release')
+    gate = Gate()
+    class OwnedWorker(FakeWorker):
+        def close(self):
+            assert gate.active
+            network.operations.append('native-drained')
+            super().close()
+    monkeypatch.setattr(service, 'NativeWorker', lambda passed: OwnedWorker(network))
+    owner = service.Supervisor(network, FakeMaterials(), gate)
+    assert owner.start(materials())
+    wait_for(lambda: owner.state == 'CONNECTED')
+    assert owner.stop()
+    assert network.operations.index('native-drained') < network.operations.index('detach') < network.operations.index('cleanup')
+    assert network.operations[-1] == 'release' and not gate.active
+
+
 def test_connected_only_after_verified_routes_and_disconnect_cancels():
     network = FakeNetwork()
     supervisor = service.Supervisor(network, FakeMaterials())

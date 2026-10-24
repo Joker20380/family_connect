@@ -123,6 +123,20 @@ def test_authenticated_api_keeps_private_material_inside_parent(bridge):
     assert 'identity' not in lane.requests[0]
 
 
+def test_complete_exit_error_response_never_replays_on_service_only(bridge):
+    client, _, _, lane = bridge
+    original = lane.call
+    def reply(action, **values):
+        result = original(action, **values)
+        if action == 'request':
+            result['status'] = 503
+        return result
+    lane.call = reply
+    client.configure(lambda: pytest.fail('completed EXIT response replayed through service-only'))
+    assert client.request('/friends/chat/challenge', body(), 2)[0] == 503
+    assert len(lane.requests) == 1 and client.route == 'EXISTING_EXIT'
+
+
 def test_mailbox_fd_is_real_duplex_and_preserves_half_close(bridge):
     client, _, _, lane = bridge
     channel = client.open_mailbox(time.monotonic() + 5, threading.Event())

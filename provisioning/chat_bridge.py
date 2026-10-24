@@ -18,6 +18,13 @@ from . import chat_bridge_protocol as wire
 from .friends import FriendsError
 
 
+class RoutedReply(tuple):
+    def __new__(cls, status, data, route):
+        value = super().__new__(cls, (status, data))
+        value.route = route
+        return value
+
+
 class ChatBridge:
     ROUTE = 'EXISTING_EXIT'
     validate = staticmethod(wire.validate)
@@ -30,6 +37,12 @@ class ChatBridge:
         self.lock = threading.Lock()
         self.closed = False
         self.connections = set()
+        self.materials = None
+        self.service_path = Path('/run/family-connect-chat-mesh') / (str(os.getuid()) + '.chat.sock')
+        self.route = None
+
+    def configure(self, materials):
+        self.materials = materials
 
     @contextmanager
     def _connection(self, path, deadline, cancel=None):
@@ -69,7 +82,7 @@ class ChatBridge:
                 monitor.start()
             yield connection
         except OSError as error:
-            if (self.closed or (cancel is not None and cancel.is_set())) and getattr(error, 'code', None) not in ('DENIED', 'CONFLICT'):
+            if (self.closed or (cancel is not None and cancel.is_set())) and getattr(error, 'code', None) not in ('DENIED', 'CONFLICT', 'INVALID_RESPONSE', 'DEADLINE'):
                 raise wire.BridgeError('CANCELLED') from None
             raise
         finally:
@@ -80,12 +93,12 @@ class ChatBridge:
                 self.connections.discard(connection)
             connection.close()
 
-    def _request(self, connection, action, deadline, **fields):
+    def _request(self, connection, action, deadline, *, _route=None, **fields):
         remaining = min(30000, int((deadline - time.monotonic()) * 1000))
         if remaining <= 0:
             raise wire.BridgeError('DEADLINE')
         request = dict(schema=1, id=1, action=action, device=self.device, budget_ms=remaining, **fields)
-        self.validate(request)
+        (wire.validate_service if action == 'prepare' else self.validate)(request)
         wire.write(connection, request)
         reply = wire.read(connection, deadline + 4)
         if (type(reply.get('schema')) is not int or reply['schema'] != 1 or type(reply.get('id')) is not int or
@@ -96,7 +109,7 @@ class ChatBridge:
                 raise wire.BridgeError('DENIED')
             raise wire.BridgeError(reply['error'])
         expected = {'schema', 'id', 'ok', 'route'} | ({'status', 'data'} if action == 'request' else set())
-        if set(reply) != expected or reply['route'] != self.ROUTE:
+        if set(reply) != expected or reply['route'] != (_route or self.ROUTE):
             raise wire.BridgeError('DENIED')
         return reply
 
@@ -118,14 +131,46 @@ class ChatBridge:
             raise wire.BridgeError()
         return selected
 
+    def _service(self, deadline, cancel=None):
+        if self.materials is None:
+            raise wire.BridgeError()
+        material = self.materials()
+        try:
+            with self._connection(self.service_path, deadline, cancel) as connection:
+                self._request(connection, 'prepare', deadline, _route='SERVICE_ONLY', **material)
+        except (ConnectionError, TimeoutError, FileNotFoundError):
+            raise wire.BridgeError() from None
+        finally:
+            material.clear()
+        return self.service_path
+
     def request(self, path, body, timeout):
+        self.route = None
         deadline = time.monotonic() + min(30, timeout)
-        selected = self._select(deadline)
+        route = self.ROUTE
+        try:
+            selected = self._select(deadline)
+        except wire.BridgeError as error:
+            if error.code != 'UNAVAILABLE':
+                raise
+            selected, route = self._service(deadline), 'SERVICE_ONLY'
         with self._connection(selected, deadline) as connection:
-            reply = self._request(connection, 'request', deadline, path=path, data=base64.b64encode(body).decode())
+            reply = self._request(connection, 'request', deadline, _route=route, path=path, data=base64.b64encode(body).decode())
         if type(reply.get('status')) is not int or not 100 <= reply['status'] <= 599:
             raise wire.BridgeError('DENIED')
-        return reply['status'], wire.payload(reply['data'], 16384)
+        data = wire.payload(reply['data'], 16384)
+        self.route = route
+        return RoutedReply(reply['status'], data, route)
+
+    def open_service_mailbox(self, deadline, cancel):
+        selected = self._service(deadline, cancel)
+        with self._connection(selected, deadline, cancel) as connection:
+            self._request(connection, 'open', deadline, _route='SERVICE_ONLY')
+            channel = wire.receive_socket(connection)
+        if cancel.is_set():
+            channel.close()
+            raise wire.BridgeError('CANCELLED')
+        return channel
 
     def open_mailbox(self, deadline, cancel):
         if cancel.is_set():
@@ -215,11 +260,15 @@ class ChatHTTP:
         route = 'DIRECT'
         if status != 200:
             try:
-                status, data = self.bridge.request(path, raw, self.deadline - time.monotonic())
+                reply = self.bridge.request(path, raw, self.deadline - time.monotonic())
+                status, data = reply
                 body = bytearray(data)
-                route = 'EXISTING_EXIT'
+                route = getattr(reply, 'route', None) or getattr(self.bridge, 'route', None) or 'EXISTING_EXIT'
+                if route not in ('EXISTING_EXIT', 'SERVICE_ONLY'):
+                    raise FriendsError('invalid_response')
             except wire.BridgeError as error:
-                raise FriendsError('access_rejected' if error.code in ('DENIED', 'CONFLICT') else
+                raise FriendsError('access_rejected' if error.code in ('DENIED', 'CONFLICT', 'INVALID_RESPONSE') else
+                                   'timeout' if error.code == 'DEADLINE' else
                                    'cancelled' if error.code == 'CANCELLED' else 'service_unavailable') from None
         if status in (400, 401, 403, 409):
             raise FriendsError('access_rejected')

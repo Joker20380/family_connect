@@ -14,7 +14,7 @@ import tempfile
 
 ROOT = Path('/usr/local/lib/family-connect-mesh')
 BACKUPS = Path('/var/backups/family-connect')
-MODULES = ('backend.py', 'profile_config.py', 'mesh_ipc.py', 'mesh_chat.py', 'mesh_chat_host.py', 'mesh_materials.py', 'mesh_network.py', 'mesh_intent.py', 'mesh_service.py', 'mesh_system.py',
+MODULES = ('backend.py', 'profile_config.py', 'mesh_ipc.py', 'mesh_chat.py', 'mesh_chat_host.py', 'mesh_materials.py', 'mesh_network.py', 'mesh_intent.py', 'mesh_service.py', 'mesh_system.py', 'mesh_ownership.py',
            'auto_guard.py', 'auto_policy.py', 'auto_mesh.py', 'auto_configuration.py', 'auto_normal.py', 'auto_normal_worker.py',
            'auto_platform.py', 'auto_runtime.py', 'auto_ipc.py', 'auto_intent.py', 'auto_service.py', 'awg_lifecycle.py')
 COMMON = ('provisioning/__init__.py', 'provisioning/friends_catalog.py', 'provisioning/chat_bridge_protocol.py', 'clients/desktop/profile_config.py')

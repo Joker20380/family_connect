@@ -1,8 +1,16 @@
 # Текущее состояние / Current state
 
-Срез L01-R, 24.10.2026. Вход: чистая актуальная `main`, HEAD = проверенный `origin/main`
-`968e71d437d2e5fa03c7ebe17db8f2648433bfe3`; checkout не откатывался.
-**L01 не принят. Коррекция L01-R выполнена локально; NEXT — review L01-R.**
+Срез L02, 24.10.2026. Вход: чистая актуальная `main`, HEAD = проверенный `origin/main`
+`b3301d07cb6e06f3c032b31a99f39e9535d3b21d`; checkout не откатывался.
+**Review L01/L01-R принят пользователем в Linux source/native/root→UID/isolated-kernel scope.**
+**L02 PARTIAL; NEXT — review L02.** [Отчёт](releases/2026-10-24-linux-chat-mesh-l02.md):
+demand SERVICE_ONLY host, межпроцессный flock admission, manual/Auto drain→cleanup
+и происхождение регистрации подключены в source. Полный authenticated native
+API/mailbox OFF→ON→OFF через реальные Linux services ещё не доказан: положительные
+host fixtures используют synthetic lane; отдельный process gate — реальные idle workers.
+Это не L02 DONE, не установленная функция и не разрешение начать L03.
+
+Принятое evidence L01-R (точные SHA не заменяются новым checkpoint):
 [L01-R](releases/2026-10-24-linux-chat-direct-l01-r.md): runtime0711 при unit umask0077,
 проверенный registration route без импорта EXIT response в root authority, настоящий
 TCP/TLS fatal alert остаётся DENIED до ChatHTTP, без fallback. Before/after записаны.
@@ -104,8 +112,8 @@ failover проверки не выполнены. Runtime/fixtures/collection p
 
 | Уровень | Подтверждённое состояние |
 |---|---|
-| SOURCE | L01-R — три review-коррекции fixed protected DIRECT; L01 не принят, review L01-R pending; не новая поставка. |
-| LOCAL TESTS | L01-R: 145 chat/native + 49 mailbox/owner + 6 root/UID PASS; Go/race и synthetic-peer DIRECT kernel PASS. Полный pytest и installed/live локально NOT_RUN. |
+| SOURCE | L01/L01-R review accepted; L02 PARTIAL source integration, review L02 pending; не новая поставка. |
+| LOCAL TESTS | L02: адресные Python/native и отдельные 13 root/process/UID PASS; Go/race, DIRECT/Auto isolated kernel PASS. Точные counts/границы — в [L02](releases/2026-10-24-linux-chat-mesh-l02.md). Combined authenticated MESH handoff, полный pytest и installed/live локально NOT_RUN. |
 | CI | L01-R `4fab7b6`: Client Linux/Auto/root→UID/kernel/AWG/TCP/voice PASS; control/phase0/Docker FAIL. Точные jobs/counts — в [коррекции](releases/2026-10-24-linux-chat-direct-l01-r.md); прежние SHA — в [L01](releases/2026-10-24-linux-chat-direct-l01.md). D01 открыт; старые GTK failures не объявлены исправленными. |
 | BUILT | Linux native-r18, Windows native-r14 cross-build, unsigned Linux system/native/RNS component-r18. **Полный parity installer: 0/2.** |
 | INSTALLED | **Завершённая установленная приёмка: 0/2.** Полный кандидат не принят на Linux/Windows; Windows runtime NOT_RUN. |
@@ -152,12 +160,12 @@ D00 ничего не устанавливает: runtime rollback не нуже
 ## Блокеры / оставшаяся реализация
 
 - D01.1/D01.2 PARTIAL, dependency gates приняты; review D02.1 collection/import isolation и D02.2 public-reference принят. D02.1-R historical replay PARTIAL/NOT_RUN. Остальные CI failures требуют отдельной оценки, не расширяют L01 автоматически. Общий D01/CI acceptance открыт до полного PASS.
-- D03/D04/D05 review accepted; NEXT review L01-R. W01/W02, L07/W09, L08/W12 и installed/live gates не закрыты.
+- D03/D04/D05 и L01/L01-R review accepted; NEXT review L02 (PARTIAL). W01/W02, L07/W09, L08/W12 и installed/live gates не закрыты.
 - D03: [исправление и детерминированные регрессии](releases/2026-10-24-chat-http-terminal-d03.md)
   сохраняют HTTP/TLS/invalid_response/timeout/cancellation при ошибке teardown.
   Это локальная логика с synthetic transport, НЕ installed/live delivery PASS;
   review D03/D04 принят; D05 не расширяет fixed chat DIRECT/service-only scope.
-- L01 — local protected DIRECT source/native/kernel; L02 service-only/handoff не начат.
+- L01 — accepted protected DIRECT source/native/root→UID/kernel; L02 source/IPC/process gates PARTIAL, combined authenticated native MESH handoff ещё не доказан.
   L03–L08: полный Linux bundle, installed VPN/messenger/recovery/visual/upgrade остаются gates.
 - W01–W12: Windows native↔broker, Auto/recovery и продуктовые функции, затем полный installer,
   installed runtime и upgrade. Cross-build/Wine/headless не заменяют Windows TUN/driver acceptance.
@@ -199,4 +207,4 @@ D00 ничего не устанавливает: runtime rollback не нуже
 [STATUS до D00](STATUS.history-2026-10-24.md) и [PLAN до D00](PLAN.history-2026-10-24.md)
 сохранены целиком; старые NEXT/ACTIVE/checkpoints — история, не параллельные задания.
 [Отчёт D00](releases/2026-10-24-desktop-parity106-d00.md) фиксирует сохранность и границы.
-**После отчёта L01-R остановиться. NEXT — review L01-R; L02 и прочие задачи автоматически не начинать.**
+**После отчёта L02 остановиться. NEXT — review L02; L03 и прочие задачи автоматически не начинать.**

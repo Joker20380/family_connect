@@ -13,7 +13,9 @@ Restricted chat now has a private multiplexed Linux parent/native lane sharing t
 VPN worker's existing owner; bounded duplex mailbox/API calls do not use the4s VPN
 control queue. See [bridge IPC bounds](adr/003-desktop-mesh-bridge.md#accepted-restricted-chat-adaptation).
 Authenticated user/root existing-exit admission and the L01 protected DIRECT source
-path now exist; service-only orchestration remains L02. No new GUI route selector is
+path now exist and L01/L01-R review is accepted in source/native/root→UID/kernel scope.
+L02 demand service-only/process admission is a PARTIAL source integration, not an
+authenticated cross-process MESH handoff acceptance. No new GUI route selector is
 introduced. Windows's native shared code builds, but its broker endpoint remains absent.
 
 Linux AWG now journals exact platform resources before setup and reconciles them
@@ -370,6 +372,35 @@ and activation belong to L03; installed VPN and messenger acceptance to L04/L05.
 The new user Python dependency is included in the existing bundle source list,
 without a version/installer/catalog change. L02 service-only/handoff, Windows and
 live gateway delivery are not accepted by this checkpoint.
+
+### L02: service-only and process admission (PARTIAL)
+
+`mesh_chat_service` owns only a demand chat worker and verified Friends material,
+not a VPN PacketSession or the user's connection intent. Root pins the trust anchor,
+profile and resolver; public preparation cannot supply endpoint/key/command/path or
+network overrides. Existing native refresh/inspect, cache floors/readback and
+DeliveryMaterial validation are reused. A SERVICE_ONLY registration carries its
+actual trusted route to ChatOwner/ProtectedMailbox, never root DIRECT authority.
+
+The Go coordinator remains process-local. `mesh_ownership` supplies the missing
+cross-process admission: root-only reservation and transport flock, inherited by
+the worker; an unconfirmed-cleanup marker survives owner FD loss. Manual Supervisor
+and Auto MeshCandidate reserve before bootstrap, cancel/drain the old generation,
+and retain admission through native process exit and network cleanup. A chat host
+observing VPN reservation closes its binding/worker before releasing admission.
+Late generation results cannot republish the closed binding. A matching verified
+VPN context can then be borrowed through the existing root endpoint/native owner;
+country matching is never used. After VPN cleanup, a new authorized chat request
+may prepare service-only again. Cleanup uncertainty deliberately blocks replacement.
+
+The source service unit is not enabled or included as a complete chat component;
+L03 must supply a coherent gated bundle, packaged anchor/dependencies and recovery
+policy. Do not combine this service with an older ungated VPN owner. See the
+[L02 report](releases/2026-10-24-linux-chat-mesh-l02.md) for precise evidence: positive
+host/IPC tests have synthetic MESH lanes, and real process tests use idle native
+workers. The combined authenticated API/mailbox OFF→ON→OFF Linux process gate is
+still missing. Neither those tests nor root→UID nor prior kernel gates imply
+installed/live completion. NEXT review L02, not automatic L03.
 
 GTK's bounded session client exposes profile/contact verification, rename, text queue,
 edit, history, unread counts and stored-recipient receipts. Controls use accepted

@@ -5,7 +5,7 @@ import ssl
 import httpx
 import pytest
 
-from provisioning.chat_bridge import ChatHTTP
+from provisioning.chat_bridge import ChatHTTP, RoutedReply
 from provisioning.chat_bridge_protocol import BridgeError
 from provisioning.friends import FriendsClient, FriendsError
 
@@ -20,6 +20,19 @@ class Bridge:
         if self.error is not None:
             raise self.error
         return 200, b'{"fallback":true}'
+
+
+def test_operation_route_does_not_read_a_later_bridge_snapshot():
+    class InterleavedBridge:
+        route = 'EXISTING_EXIT'
+        def request(self, path, body, timeout):
+            return RoutedReply(200, b'{}', 'SERVICE_ONLY')
+    def unavailable(request):
+        raise httpx.ConnectError('synthetic unavailable direct')
+    with httpx.Client(base_url='https://185.251.89.19:8443', transport=httpx.MockTransport(unavailable)) as direct:
+        http = ChatHTTP(direct, InterleavedBridge())
+        with http.stream('POST', '/friends/chat/challenge', json={}):
+            assert http.route == 'SERVICE_ONLY'
 
 
 def invoke(handler, bridge, *, cancelled=None):

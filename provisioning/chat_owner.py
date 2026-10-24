@@ -82,6 +82,8 @@ class ChatOwner:
             self.local._chat.durable_delivery = True
             if self.restricted_factory is not None:
                 self.restricted = self.restricted_factory(self.device.reference)
+                if hasattr(self.restricted, 'configure') and hasattr(self.friends, 'chat_materials'):
+                    self.restricted.configure(self.friends.chat_materials)
             if self.direct_factory is not None:
                 self.direct = self.direct_factory(self.device.reference)
             return self.local.profile()
@@ -239,7 +241,7 @@ class ChatOwner:
                 registration_route = None
                 if self.direct is not None:
                     registration_route = http.route
-                    if registration_route not in ('DIRECT', 'EXISTING_EXIT'):
+                    if registration_route not in ('DIRECT', 'EXISTING_EXIT', 'SERVICE_ONLY'):
                         raise LocalError('delivery_unavailable')
                     self.direct.bind(result if registration_route == 'DIRECT' else None)
                 unchanged = (self.carrier is not None and self.node is not None and

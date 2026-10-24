@@ -80,6 +80,7 @@ class ChatLane:
         self.lock = threading.Lock()
         self.writer = threading.Lock()
         self.closed = threading.Event()
+        self.failure = 'UNAVAILABLE'
         self.pending = {}
         self.identifier = 0
         self.reader = threading.Thread(target=self._read, name='fc-chat-native', daemon=True)
@@ -96,7 +97,7 @@ class ChatLane:
         try:
             with self.lock:
                 if self.closed.is_set():
-                    raise ChatError('UNAVAILABLE')
+                    raise ChatError(self.failure)
                 jobs = sum(item.action not in CONTROL for item in self.pending.values())
                 controls = len(self.pending) - jobs
                 if (action in CONTROL and controls >= 4) or (action not in CONTROL and jobs >= MAX_JOBS):
@@ -132,7 +133,7 @@ class ChatLane:
                 raise ChatError('UNAVAILABLE')
         reply = pending.reply
         if reply is None:
-            raise ChatError('UNAVAILABLE')
+            raise ChatError(self.failure)
         if cancelled and reply['ok']:
             if action in ('acquire', 'open'):
                 self.call('release' if action == 'acquire' else 'close', **{'lease' if action == 'acquire' else 'stream': identifier})
@@ -157,7 +158,9 @@ class ChatLane:
                     pending.reply = checked_reply(reply, identifier, pending.action)
                     del self.pending[identifier]
                     pending.ready.set()
-        except (OSError, ValueError, EOFError, TimeoutError):
+        except ValueError:
+            self.failure = 'DENIED'
+        except (OSError, EOFError, TimeoutError):
             pass
         finally:
             self.close()

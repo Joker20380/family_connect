@@ -2,7 +2,10 @@
 
 ## Scope and result
 
-**Local corrections complete; L01 NOT ACCEPTED. NEXT — review L01-R.**
+**Review L01/L01-R accepted by the user at L02 entry, in Linux source/native/root→UID/isolated-kernel scope.**
+The original correction checkpoint awaited review; its exact before/after and CI
+SHA evidence below is unchanged. Current queue: [L02](2026-10-24-linux-chat-mesh-l02.md),
+not installed/live acceptance.
 Entry: clean current `main`, HEAD and verified remote
 `968e71d437d2e5fa03c7ebe17db8f2648433bfe3`. No checkout rollback or other work removed.
 D03/D04/D05 remain accepted dependencies. D01 remains open; D02.1-R PARTIAL/NOT_RUN.

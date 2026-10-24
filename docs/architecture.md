@@ -405,7 +405,10 @@ protected state → platform VPN adapter → transport/gateway.
   and optional106 support collection survive GUI exit without a root GUI or new
   identity. Support control is independent of the chat keyring/command queue.
   UID/device-bound chat-only admission can now borrow an existing Linux MESH exit;
-  protected DIRECT and service-only orchestration remain incomplete. Root keys and
+  protected DIRECT is accepted in source/native/root→UID/isolated-kernel scope.
+  [L02 service-only orchestration](releases/2026-10-24-linux-chat-mesh-l02.md) is a
+  PARTIAL source integration; authenticated cross-process MESH handoff still needs
+  combined proof. Root trust anchors and
   network overrides are not part of the user-facing API.
   Private D-Bus/systemd checks do not replace installed package/upgrade acceptance.
 

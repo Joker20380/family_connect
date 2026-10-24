@@ -17,6 +17,7 @@ import (
 	"math/big"
 	"net/url"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -26,6 +27,46 @@ import (
 	"github.com/Joker20380/family_connect/carrier/restrictedowner"
 	"github.com/Joker20380/family_connect/carrier/wholedevice"
 )
+
+func TestOwnerCloseWaitsForLateServiceOpenCleanup(test *testing.T) {
+	var owner Owner
+	opening, resume, cleaned := make(chan struct{}), make(chan struct{}), make(chan struct{})
+	unblock := sync.OnceFunc(func() { close(resume) })
+	defer unblock()
+	client, err := owner.acquire(time.Now().Add(time.Minute), [32]byte{1}, func(parent context.Context) (restrictedowner.Session, func(), error) {
+		close(opening)
+		<-parent.Done()
+		<-resume
+		return nil, func() { close(cleaned) }, parent.Err()
+	}, func() {})
+	if err != nil {
+		test.Fatal(err)
+	}
+	<-opening
+	drained := make(chan struct{})
+	go func() { owner.Close(); close(drained) }()
+	select {
+	case <-client.lease.Context().Done():
+	case <-time.After(3 * time.Second):
+		test.Fatal("owner failed to cancel service generation")
+	}
+	select {
+	case <-drained:
+		test.Fatal("owner acknowledged shutdown before late open cleanup")
+	default:
+	}
+	unblock()
+	select {
+	case <-drained:
+	case <-time.After(3 * time.Second):
+		test.Fatal("cleanup failed to drain")
+	}
+	select {
+	case <-cleaned:
+	default:
+		test.Fatal("underlay cleanup missing")
+	}
+}
 
 func signedConfig(test *testing.T, now time.Time, revoked bool) Config {
 	test.Helper()

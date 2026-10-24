@@ -21,8 +21,11 @@ API/mailbox requests through an existing MESH exit. [L01 protected DIRECT](relea
 now connects the Linux ChatOwner to independent fixed root admission and native protected sockets;
 local synthetic-peer kernel acceptance is separate from installed/live gates.
 [L01-R review corrections](releases/2026-10-24-linux-chat-direct-l01-r.md) cover unit umask,
-registration provenance and real TCP/TLS fatal alerts; L01 is not accepted, NEXT review L01-R.
-Linux service-only orchestration and Windows broker IPC remain NOT_INTEGRATED;
+registration provenance and real TCP/TLS fatal alerts; L01/L01-R review is accepted
+in Linux source/native/root→UID/isolated-kernel scope.
+[L02 service-only/ownership](releases/2026-10-24-linux-chat-mesh-l02.md) is PARTIAL:
+source demand host and process admission exist, but combined authenticated native
+Linux OFF→ON→OFF evidence is missing. NEXT review L02. Windows broker IPC remains NOT_INTEGRATED;
 installed restricted-message acceptance is NOT_RUN, not a completed fallback.
 [Shared Auto policy and accepted-Java trace checks](../carrier/desktopauto/README.md)
 are implemented locally and included in the native worker's bounded private-pipe

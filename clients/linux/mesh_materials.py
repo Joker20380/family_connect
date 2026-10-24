@@ -101,6 +101,9 @@ class NativeMaterials:
     OPTION = '--materials-stdio'
     MAX_REQUEST = ipc.MAX_REQUEST
 
+    def __init__(self, ownership=None):
+        self.ownership = ownership
+
     def __call__(self, request, cancel, deadline):
         if cancel.is_set():
             raise MaterialsError("CANCELLED")
@@ -108,8 +111,10 @@ class NativeMaterials:
             return self._exchange(request, cancel, deadline, scratch)
 
     def _exchange(self, request, cancel, deadline, scratch):
+        inherited = () if self.ownership is None else (self.ownership.descriptor,)
         process = subprocess.Popen([WORKER, self.OPTION], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                   stderr=subprocess.DEVNULL, env={**ENV, "TMPDIR": scratch}, bufsize=0, close_fds=True, start_new_session=True)
+                                   stderr=subprocess.DEVNULL, env={**ENV, "TMPDIR": scratch}, bufsize=0, close_fds=True,
+                                   start_new_session=True, pass_fds=inherited)
         try:
             ipc.send(process.stdin.fileno(), request, self.MAX_REQUEST, min(deadline, time.monotonic() + 4), cancel)
             process.stdin.close()

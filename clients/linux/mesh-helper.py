@@ -14,6 +14,7 @@ import time
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import mesh_ipc as ipc
 from mesh_service import Supervisor
+from mesh_ownership import Ownership
 from mesh_materials import CacheStore, MaterialOwner
 from mesh_intent import Intent, Notifier
 from mesh_system import Network, command
@@ -64,7 +65,7 @@ def serve(uid):
     endpoint = RUN / (str(uid) + ".sock")
     storage = CacheStore("/var/lib/family-connect-mesh", uid)
     receipts = CacheStore("/var/lib/family-connect-mesh", uid, receipt=True)
-    supervisor = Supervisor(Network(RUN / "active.json", uid, retain=intent.desired, resuming=recovered is not None), MaterialOwner(storage, receipts))
+    supervisor = Supervisor(Network(RUN / "active.json", uid, retain=intent.desired, resuming=recovered is not None), MaterialOwner(storage, receipts), Ownership('vpn'))
     stopping = threading.Event()
     signal.signal(signal.SIGTERM, lambda *_: stopping.set())
     signal.signal(signal.SIGINT, lambda *_: stopping.set())

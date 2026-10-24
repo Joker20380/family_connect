@@ -122,5 +122,10 @@ func (owner *Owner) Close() error {
 	for _, client := range clients {
 		client.Close()
 	}
+	reservation, err := owner.coordinator.ReserveVPN(context.Background())
+	if err == nil {
+		defer reservation.Release()
+		return reservation.Wait(context.Background())
+	}
 	return nil
 }
