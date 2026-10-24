@@ -10,8 +10,11 @@ UID/device/chat-key/sequence/expiry и AF_UNIX relay ограничены; VPN o
 Локально: 141 chat/admission/D03/package + 49 mailbox/owner PASS; Go/race и isolated
 kernel с synthetic TLS peer PASS. Installed/live, L02 и полные установщики NOT_RUN.
 `bff34eb` CI: Client Linux/Auto protocol/AWG/TCP PASS; full control/phase0/Docker и voice FAIL.
-Новый kernel gate FAIL; отдельная коррекция harness переносит test-worker из `/opt`
-под trusted `/root`, не ослабляя root admission. Evidence — в отчёте; старые counts не переносятся.
+Первый новый kernel gate FAIL; harness-only `edc79c2` переносит test-worker из writable
+`/opt` под trusted `/root`, не ослабляя admission: Auto bridge/isolated DIRECT kernel CI **PASS**.
+На `edc79c2` phase0/tests FAIL; Docker: 2976 passed / 53 failed / 109 skipped,
+exit1; другие filtered jobs NOT_RUN.
+Evidence и разные SHA — в отчёте; старые counts не переносятся.
 [D03](releases/2026-10-24-chat-http-terminal-d03.md) и [D04](releases/2026-10-24-auto-lifecycle-d04.md) review accepted; D02.1 collection/import
 isolation и D02.2 public-reference приняты. Dependency-части D01.1/D01.2 приняты;
 их PARTIAL и общая CI-приёмка D01 не закрыты.

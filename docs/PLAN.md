@@ -99,7 +99,7 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 
 | ID | Результат | Зависимость | Статус | Критерий завершения |
 |---|---|---|---|---|
-| L01 | Защищённый DIRECT для чатов | D03, D04; D05 review принят | DONE (local Linux source/native/kernel; review pending) | [Evidence](releases/2026-10-24-linux-chat-direct-l01.md): реальный ChatOwner → UID/device root admission → protected native socket; fixed API, root-authorized mailbox, expiry/cancel/relay; 141 + 49 Python PASS, Go/race и isolated kernel PASS. Нет SYSTEM fallback или общего пользовательского bypass; installed/live — L04/L05. |
+| L01 | Защищённый DIRECT для чатов | D03, D04; D05 review принят | DONE (local Linux source/native/kernel; review pending) | [Evidence](releases/2026-10-24-linux-chat-direct-l01.md): реальный ChatOwner → UID/device root admission → protected native socket; fixed API, root-authorized mailbox, expiry/cancel/relay; 141 + 49 Python PASS, Go/race и isolated kernel PASS; Auto/kernel CI `edc79c2` PASS. Нет SYSTEM fallback или общего пользовательского bypass; общий CI остаётся открыт, installed/live — L04/L05. |
 | L02 | MESH service-only и передача владения | L01 | QUEUED | Чаты работают при VPN OFF; OFF→ON→OFF сохраняет одно активное владение; проверены drain, expiry, отмена и поздние результаты. |
 | L03 | Полный внутренний Linux-кандидат | L02, D05 | QUEUED | Согласованы GUI, пользовательские службы, root-helper, native/RNS, зависимости и установка; capabilities соответствуют точному составу реально интегрированного пакета. |
 | L04 | Установленный Linux VPN | L03 | QUEUED | На установленном кандидате подтверждены реальные AWG/TCP/MESH/Auto, P0/P1, DNS/HTTPS и передачи, применённый target/profile и заявленные capabilities; не CLI/echo/SOCKS или model fixture. |

@@ -23,7 +23,7 @@ IPv4, so this path performs no DNS. Root-selected Underlying is checked before/a
 operations and during lifetime. No ordinary-socket retry exists. Fixed HTTP bounds,
 identity encoding, no redirects/proxy environment, TLS/HTTP/invalid-response/deadline
 terminal errors and D03 no-replay rules remain. Existing-exit profile binding is unchanged.
-Mailbox uses the existing0600 socket admission and CLOEXEC AF_UNIX descriptor relay,
+Mailbox uses the existing 0600 socket admission and CLOEXEC AF_UNIX descriptor relay,
 bounded duplex/half-close, four-operation capacity, cancellation and child/thread/FD cleanup.
 Replacement/expiry/shutdown cancel only DIRECT work, never the VPN owner.
 
@@ -75,20 +75,49 @@ its required paths/lock filter is updated. Mandatory full suites are not weakene
 
 ## CI and limits
 
-Initial code `bff34ebbb19501261eb19ac6ba4e325d31f3b180` pushed and remote verified.
-Client Linux, Auto protocol/Ubuntu, AWG and TCP PASS; control/phase0/Docker and voice
-remain FAIL. Control on this SHA: **2977 passed / 54 failed / 0 errors / 107 skipped**,
-exit1; subsequent GUI/package acceptance skipped. Other old counts are not transferred.
-The new isolated DIRECT gate also FAILed:
-[run40099764860/job120889322393](https://github.com/Joker20380/family_connect/actions/runs/40099764860/job/120889322393),
-`('registration', False)`; prior mandatory Auto kernel checks passed.
+Initial product code `bff34ebbb19501261eb19ac6ba4e325d31f3b180` pushed and remote verified:
+
+| Gate on bff34eb | Actual result |
+|---|---|
+| [Client Linux](https://github.com/Joker20380/family_connect/actions/runs/40099764878/job/120889323177) | PASS, including mandatory desktop and subsequent steps. |
+| [AWG](https://github.com/Joker20380/family_connect/actions/runs/40099764881/job/120889322281), [TCP](https://github.com/Joker20380/family_connect/actions/runs/40099764875/job/120889322227) | PASS. |
+| [Auto bridge](https://github.com/Joker20380/family_connect/actions/runs/40099764860/job/120889322393) | Protocol/Ubuntu PASS; prior mandatory Auto kernel PASS; new DIRECT kernel FAIL: `('registration', False)`. |
+| [Control](https://github.com/Joker20380/family_connect/actions/runs/40099764889/job/120889322477) | 2977 passed / 54 failed / 0 errors / 107 skipped, exit1. Subsequent GUI/package acceptance skipped. |
+| [phase0/tests](https://github.com/Joker20380/family_connect/actions/runs/40099764865/job/120889322156) | Full pytest FAIL; cargo skipped. No older counts attributed to this job. |
+| [phase0/Docker](https://github.com/Joker20380/family_connect/actions/runs/40099764865/job/120889322067) | Build/tests-stage FAIL; provision/failover/auth/offline/revocation not run. |
+| [Voice](https://github.com/Joker20380/family_connect/actions/runs/40099764863/job/120889322171) | FAIL at real GTK/synthetic microphone step; cause not reclassified or repaired in L01. |
 
 Harness follow-up: keep the worker under root-owned non-writable ancestors in
 `/root/fc-chat-direct-test`, not assume `/opt` is trusted on every runner. Controlled
 Python3.12 reproduction: `/opt` mode0777 gives `ProtocolError` before native networking;
 the same image with the worker under `/root` passes. Production `trusted()` is not
 weakened. The fixture now records safe action/error categories and `/opt` ownership/mode
-for diagnostics; no request/response/identity bytes. CI for this follow-up is separate.
+for diagnostics; no request/response/identity bytes.
+
+Follow-up code/harness `edc79c2631ef75b85452e6cf605706eed1f9e08a` pushed and remote
+verified; product/native sources unchanged from bff34eb:
+
+- [Auto bridge run40100690072](https://github.com/Joker20380/family_connect/actions/runs/40100690072)
+  **PASS**, including [isolated-linux job120892040344](https://github.com/Joker20380/family_connect/actions/runs/40100690072/job/120892040344).
+  Artifact12562377847 contains both original Auto kernel PASS (18 checks) and DIRECT
+  kernel PASS: API/mailbox protected, VPN OFF, guarded underlying, unmarked route
+  UNREACHABLE, real owner proofs, encrypted reopen, revocation and interface-change
+  closure. It also records runner `/opt` mode0777, matching the controlled refusal;
+  host network unchanged, no VPN owner, live=false. Root admission was not weakened.
+- [phase0/tests job120892040164](https://github.com/Joker20380/family_connect/actions/runs/40100690073/job/120892040164)
+  **FAIL** at full pytest; cargo skipped.
+- [phase0/Docker job120892040305](https://github.com/Joker20380/family_connect/actions/runs/40100690073/job/120892040305)
+  **FAIL**: 2976 passed / 53 failed / 0 errors / 109 skipped, 7 subtests passed,
+  exit1 in non-root full pytest. Artifact12562434516 `build.log` confirms counts;
+  `/tmp/tests-passed` is not created and downstream provision/failover/auth/offline/
+  revocation are skipped. No DIRECT/ChatHTTP cases appear in the failure summary.
+- Client Linux/control/AWG/TCP/voice are **NOT_RUN (path-filtered)** on the harness-only
+  SHA. Their bff34eb results above remain evidence for that SHA, not new executions.
+
+The final evidence checkpoint changes documentation only; its commit/remote SHA is
+reported in the handoff. Any resulting phase0 run is separate, not an additional L01
+product/kernel acceptance. No full suites were manually repeated.
+
 D05 `c53265d`: Client Linux job120874251704 is now verified completed **PASS**.
 Voice GTK Return gate remains **FAIL, cause unknown**, not declared flaky/fixed.
 Previous D01 residual failures remain separate; no count is predicted for L01.
