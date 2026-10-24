@@ -1,7 +1,13 @@
 """No counter rewriting: fresh complete lifecycle evidence gates owner acceptance."""
 import argparse
+import importlib.util
 import json
-from prepare import WORK
+from pathlib import Path
+
+spec = importlib.util.spec_from_file_location('fc_lifecycle101_prepare', Path(__file__).with_name('prepare.py'))
+inputs = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(inputs)
+WORK = inputs.WORK
 
 
 def classify(diagnostic):

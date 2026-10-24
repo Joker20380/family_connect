@@ -1,12 +1,17 @@
 """Run bounded synthetic carrier tests on a copy of exact current sources."""
 
 import json
+import importlib.util
 import os
+from pathlib import Path
 import shutil
 import subprocess
 import sys
 
-from prepare import ROOT, WORK, digest
+spec = importlib.util.spec_from_file_location('fc_queue_retry_prepare', Path(__file__).with_name('prepare.py'))
+inputs = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(inputs)
+ROOT, WORK = inputs.ROOT, inputs.WORK
 
 
 def main():

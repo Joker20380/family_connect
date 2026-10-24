@@ -1,9 +1,12 @@
 # Текущее состояние / Current state
 
-Срез D01.2, 24.10.2026. Вход: `main`, чистая рабочая копия, HEAD = проверенный `origin/main`
-`a522a33379726903bdba0be9e4d589016f0e3390`; продуктовый baseline —
-`664342a6566792a4ea621274a369bcd6b6012143`. Dependency-часть D01.1 принята review,
-сам D01.1 остаётся PARTIAL. **Разрешён только D01.2; D02/D03/D04/iOS не начинать.**
+Срез D02.1, 24.10.2026. Вход: `main`, чистая рабочая копия, HEAD = проверенный `origin/main`
+`01f67d4a7daac22c0d35753c8b9a13e15d4feb1d`; продуктовый baseline —
+`664342a6566792a4ea621274a369bcd6b6012143`. Dependency-части D01.1/D01.2 приняты review;
+их PARTIAL и общая CI-приёмка D01 не закрыты. **Разрешён только D02.1.**
+[D02.1](releases/2026-10-24-fixture-boundaries-d02-1.md): чистый export — collection
+2977 + 9 errors → 2996 / 0 errors; адресные helpers/import/runner — 75 passed, CI ожидается.
+Шесть исторических overlay-файлов сохранены и отделены от ordinary suite; D02.2 не начат.
 [D01.2 PARTIAL](releases/2026-10-24-control-ci-d01-2.md): на pushed `07b52e3` Python3.13
 strict imports и адресные gates PASS в control/phase0/tests/Docker tests-stage;
 Docker root 22 passed, адресные 59 passed. Каждый полный suite прерван: 9 collection
@@ -91,7 +94,7 @@ D00 ничего не устанавливает: runtime rollback не нуже
 
 ## Блокеры / оставшаяся реализация
 
-- D01.1 PARTIAL, dependency gates приняты; D01.2 PARTIAL: окружения подготовлены и проверены в CI, full suite блокируют 9 fixture collection errors. D02 допускается после проверки результата D01.2, не после полного зелёного CI. Общий D01/CI acceptance остаётся открыт до обязательного полного PASS.
+- D01.1/D01.2 PARTIAL, dependency gates приняты; D02.1 устраняет collection/import boundaries. D02.2 отдельно отвечает за RNS/reference checks и accepted pins без локальной capsule. Общий D01/CI acceptance остаётся открыт до обязательного полного PASS.
 - D04 QUEUED: наблюдается возможная публикация DISCONNECTED до cleanup и отказ start при несброшенном self.thread; причина конкретного CI failure не доказана. Требуется отдельное детерминированное воспроизведение с one-owner/cleanup/generation fencing, до Linux-интеграции.
 - D03: `provisioning/chat_bridge.py`, `ChatHTTP.stream`: синтетический вызов фактического
   метода direct400/401/403/409 + TransportError при закрытии даёт `fallback_calls=1`.
@@ -140,4 +143,4 @@ D00 ничего не устанавливает: runtime rollback не нуже
 [STATUS до D00](STATUS.history-2026-10-24.md) и [PLAN до D00](PLAN.history-2026-10-24.md)
 сохранены целиком; старые NEXT/ACTIVE/checkpoints — история, не параллельные задания.
 [Отчёт D00](releases/2026-10-24-desktop-parity106-d00.md) фиксирует сохранность и границы.
-**После отчёта D01.2 остановиться. NEXT: D02 после проверки D01.2; только отдельной задачей.**
+**После отчёта D02.1 остановиться. NEXT: D02.2 после проверки D02.1; только отдельной задачей.**

@@ -1,6 +1,6 @@
 import copy
 import pytest
-from classify import classify
+from .classify import classify
 
 
 def incident(kind=6,known=True):

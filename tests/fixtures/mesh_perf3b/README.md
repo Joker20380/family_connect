@@ -1,5 +1,46 @@
 # MESH-PERF-3B fixtures and task-scoped operator evidence
 
+## D02.1: explicit local historical suite
+
+Ordinary pytest excludes **only** the six files below, not this directory. They
+require the historical overlay API, absent from current `control/friends`.
+`test_canary_environment.py`, `test_canary_prestart.py`, `test_timing_preflight.py`
+remain ordinary tests. Explicit direct pytest of an overlay file fails BLOCKED;
+use `run_history.py`, never seal/stage/deploy/readback helpers.
+
+`historical-suite.json` pins every input file to public source commit
+`76df691961aa88a46b73e7a355687fa6f9a3c457`. The required sealed owner API is SHA256
+`78a69db8f4e48ee89cf132ea279287dbfc71bdf8d9ae69c205bcaa0e19932a46`, already containing
+`api-overlay.patch` over original API `12ca0c72a89ff20c1b3c70a1182a2d5d98d4d78d25e7a079bb4d75bdf34060ed`.
+Provenance: existing `docs/releases/2026-10-18-mesh-perf-3b-evidence.json` and
+`build_successor_api.py`; neither is executed or modified. The runner checks the
+archive, owner/restricted members, historical fixture helper, tests and overlays
+against manifest hashes **before** starting Python. No reconstruction from main.
+
+| File | Exact inputs beyond sealed owner API | Per-file command suffix |
+|---|---|---|
+| `test_owner_handoff.py` | historical `tests/test_friends_restricted.py` | `--test test_owner_handoff.py` |
+| `test_cleaned_allocation.py` | same helper and `test_owner_handoff.py` | `--test test_cleaned_allocation.py` |
+| `test_live_operator.py` | historical `live_operator.py` | `--test test_live_operator.py` |
+| `test_successor_lifecycle.py` | owner tests/helper + `successor_owner_handoff.py` overlay | `--test test_successor_lifecycle.py` |
+| `test_successor_migration.py` | lifecycle inputs + `successor_migrate.py` | `--test test_successor_migration.py` |
+| `test_successor_operator.py` | lifecycle inputs + `successor_live_operator.py` | `--test test_successor_operator.py` |
+
+With an explicitly supplied preserved archive (never auto-discovered in state):
+
+```sh
+mkdir -p /tmp/fc-mesh-history-inputs
+git archive 76df691961aa88a46b73e7a355687fa6f9a3c457 tests/test_friends_restricted.py tests/fixtures/mesh_perf3b | tar -x -C /tmp/fc-mesh-history-inputs
+python tests/fixtures/mesh_perf3b/run_history.py --source-root /tmp/fc-mesh-history-inputs --api-archive /explicit/preserved/friends-http-owner-candidate.pyz
+```
+
+Append one table suffix for a single file; no suffix means the exact six-file set.
+Use the prepared CI/test Python. Missing or mismatched inputs yield BLOCKED/NOT_RUN,
+exit 2, never a skip/PASS. Verified bytes are copied into a disposable tree; a fresh
+isolated Python checks API import origins and runs only those tests, propagating
+pytest's exit code. No current product imports, inherited FC/SSH/PYTHONPATH or
+historical live commands are used. The six tests/assertions remain byte-identical.
+
 **Do not replay the closed live operation.** Current result and remaining gate:
 `docs/releases/2026-10-18-mesh-perf-3b.md`.
 

@@ -1,0 +1,56 @@
+{
+  "source_commit": "76df691961aa88a46b73e7a355687fa6f9a3c457",
+  "original_api_sha256": "12ca0c72a89ff20c1b3c70a1182a2d5d98d4d78d25e7a079bb4d75bdf34060ed",
+  "api_sha256": "78a69db8f4e48ee89cf132ea279287dbfc71bdf8d9ae69c205bcaa0e19932a46",
+  "api_modules": {
+    "control/friends/restricted.py": "84dec393f6d50ac5dc9647d42bb3025dabd46fa8640ff2150488446f760fd06d",
+    "control/friends/owner_handoff.py": "87650da2d3b43a33512a547470a0bc4258df3a20f452ac651d3fa2d7365aeede"
+  },
+  "tests": {
+    "test_owner_handoff.py": [
+      "sealed-owner-api",
+      "baseline-fixtures"
+    ],
+    "test_cleaned_allocation.py": [
+      "sealed-owner-api",
+      "baseline-fixtures",
+      "test_owner_handoff.py"
+    ],
+    "test_live_operator.py": [
+      "sealed-owner-api",
+      "live_operator.py"
+    ],
+    "test_successor_lifecycle.py": [
+      "sealed-owner-api",
+      "baseline-fixtures",
+      "test_owner_handoff.py",
+      "successor_owner_handoff.py"
+    ],
+    "test_successor_migration.py": [
+      "sealed-owner-api",
+      "test_successor_lifecycle.py",
+      "successor_owner_handoff.py",
+      "successor_migrate.py"
+    ],
+    "test_successor_operator.py": [
+      "sealed-owner-api",
+      "test_successor_lifecycle.py",
+      "successor_owner_handoff.py",
+      "successor_live_operator.py"
+    ]
+  },
+  "files": {
+    "tests/fixtures/mesh_perf3b/test_owner_handoff.py": "6109e9b6afbe50f8afc5951c6567795cd7fe995cf3554501fe8943540fff1905",
+    "tests/fixtures/mesh_perf3b/test_cleaned_allocation.py": "4f69fc7e68279fb80addeda2c62f8d2743c044dd504464e9adc9479543c89168",
+    "tests/fixtures/mesh_perf3b/test_live_operator.py": "c91996f59d7827969ba13192a2f246a512f147d83e7c5ed2772c60dc7ce2ffba",
+    "tests/fixtures/mesh_perf3b/test_successor_lifecycle.py": "69de30e4596556106c77606a655dd8c207fe43e6872927bb5f2cf7aef61b6059",
+    "tests/fixtures/mesh_perf3b/test_successor_migration.py": "fce13b05d0e612ba8891bd2e05cc7c76f6e2843e4a236c7a0f55c1f23b9617fc",
+    "tests/fixtures/mesh_perf3b/test_successor_operator.py": "795a9ec9fb87b067f75af956fb02b698b41eacd1175e94ba0c8af2f3c532949c",
+    "tests/fixtures/mesh_perf3b/api-overlay.patch": "dea4e0b7c36111caa5476517d8bb5793a1ddc12ec3e225749f1a773ca578020c",
+    "tests/fixtures/mesh_perf3b/live_operator.py": "8c87ba6fa1df52349ca8460beb88bc532bf6f92311f4dd0f3c3998d034c29137",
+    "tests/fixtures/mesh_perf3b/successor_owner_handoff.py": "f139a75a005c5c677828ba4c5e3b07206db950a4908e6e1e51c8e4120fed8c7d",
+    "tests/fixtures/mesh_perf3b/successor_migrate.py": "1e36cadea68a2315de8557c0829b9a16c746d494340ae640496e0676a7bfc0cb",
+    "tests/fixtures/mesh_perf3b/successor_live_operator.py": "8ad69206fae75e06951c35d4e364368f122078a4532bd6f9d8dc9635c0928980",
+    "tests/test_friends_restricted.py": "d079a34ad84b47d66f3fbc949c2fd24e7075fa1cd6a35af5ffa05b073346bd78"
+  }
+}

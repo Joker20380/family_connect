@@ -1,6 +1,6 @@
 import unittest
 
-from session_scope import select_session
+from .session_scope import select_session
 
 
 class SessionScopeTests(unittest.TestCase):

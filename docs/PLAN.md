@@ -6,9 +6,9 @@
 а не отдельные реализации продукта. [Текущий срез](STATUS.md) — источник текущего состояния.
 Продуктовый checkpoint: phase22, source baseline `664342a6566792a4ea621274a369bcd6b6012143`.
 D00 — организация документации; следующие строки являются очередью, не разрешением на автозапуск.
-**Разрешена только D01.2: dependency-часть D01.1 принята техническим review; после отчёта остановиться.**
+**Разрешена только D02.1: dependency-часть D01.2 принята review; после отчёта остановиться.**
 
-Порядок по умолчанию: D01.1 → D01.2 → D02 → D03 → D04 → Linux → Windows → R01.
+Порядок по умолчанию: D01.1 → D01.2 → D02.1 → D02.2 → D03 → D04 → Linux → Windows → R01.
 Зависимости в таблицах — необходимые результаты, а не требование заново выполнять завершённые фазы.
 Каждый ID — отдельный ограниченный пользовательский результат, отдельные проверки и commit/push.
 `DONE` = выполнен указанный критерий, `NEXT` = ещё не начат, `QUEUED` = не начат как отдельная задача.
@@ -24,7 +24,9 @@ D00 — организация документации; следующие ст
 | D01 | Зависимости Linux/desktop CI | D00 | IN_PROGRESS | Dependency gates D01.1/D01.2 отдельно от общей CI-приёмки; закрытие требует полного PASS обязательных suites после устранения остаточных blockers, без скрытия тестов. |
 | D01.1 | Client builds/linux, AmneziaWG pilot, TCP pilot | D00 | PARTIAL | Dependency gates `26f71d6` приняты review; реальные Python3.12 imports/адресные CI PASS. Полный desktop FAIL: RNS capsule, AWG Auto lifecycle assertion; PARTIAL сохранён. |
 | D01.2 | Linux control, phase0, Dockerfile.control test-stage | принята dependency-часть D01.1 | PARTIAL | На pushed `07b52e3` Python3.13 imports/адресные gates PASS ×3; Docker root 22 passed. Каждый full suite: 9 owner_handoff/prepare collection errors, exit 2 (D02); обязательные gates сохранены. |
-| D02 | Сбор и импорты исследовательских fixtures | подготовлены окружения D01.1/D01.2 | QUEUED | Устранены owner_handoff/prepare import errors и зависимость CI от локальной RNS capsule; явный воспроизводимый запуск, границы архивных опытов. Не ждёт полного зелёного CI, который сам должен разблокировать. |
+| D02 | Сбор и импорты исследовательских fixtures | dependency-части D01.1/D01.2 приняты | IN_PROGRESS | D02.1 и D02.2 завершены; не ждёт полного зелёного CI, который сам должен разблокировать. Общая CI-приёмка D01 остаётся отдельным обязательным gate. |
+| D02.1 | Девять collection errors, историческая overlay-suite, изоляция импортов | окружения D01.1/D01.2 готовы | IN_PROGRESS | Чистый export собирает обычный suite без девяти ошибок; независимые helpers и оба порядка импортов PASS; шесть исторических файлов запускаются отдельно только с точными входами, отсутствие/несовпадение BLOCKED; evidence на pushed SHA. |
+| D02.2 | RNS/reference checks без локальной capsule в обычном CI | проверка D02.1 | QUEUED | `clients/desktop/tests/test_rns_worker.py` и `tests/test_desktop_reference.py::test_readiness_semantic_port_uses_exact_accepted_sources` используют воспроизводимые принятые входы/pins из `clients/shared/desktop-readiness106.json`, без приватной capsule; сейчас не выполнять. |
 | D03 | Окончательные ошибки ChatHTTP | D02 | QUEUED | HTTP400/401/403/409, TLS и установленный invalid_response сохраняются при ошибке teardown; разрешённый transient fallback продолжает работать. |
 | D04 | Auto stop/start lifecycle | D02 | QUEUED | Детерминированное воспроизведение и исправление с одним владельцем, завершённой cleanup и generation fencing; до дальнейшей Linux-интеграции. |
 
@@ -43,6 +45,7 @@ D00 — организация документации; следующие ст
 
 D01.1: [итог PARTIAL, точные failures и CI](releases/2026-10-24-desktop-ci-d01-1.md).
 D01.2: [окружение и evidence](releases/2026-10-24-control-ci-d01-2.md).
+D02.1: [границы collection/imports и evidence](releases/2026-10-24-fixture-boundaries-d02-1.md).
 D01 сначала читает соответствующие workflows/lockfiles и эти ошибки; не переносит
 лабораторный каталог целиком и не отключает обязательные suites ради зелёного CI.
 D02 явно отделяет поддерживаемые проверки от архивных опытов; их source push не делает их release core.
@@ -178,4 +181,4 @@ Django7.1 (servers/access/payments) зависит от backend/fencing и recov
 [Полный прежний PLAN](PLAN.history-2026-10-24.md), [STATUS](STATUS.history-2026-10-24.md),
 [phase22](releases/2026-10-23-desktop-parity106.md#linux-user-chat-admission-and-existing-exit-handoff-2410-phase22),
 [отчёт D00](releases/2026-10-24-desktop-parity106-d00.md).
-**После D01.2 остановиться. NEXT: D02 после проверки результата D01.2; без автозапуска D02/D03/D04/iOS.**
+**После D02.1 остановиться. NEXT: D02.2 после проверки результата D02.1; без автозапуска D02.2/D03/D04/iOS.**

@@ -3,11 +3,17 @@
 import ast
 import collections
 import datetime
+import importlib.util
 import json
+from pathlib import Path
 import re
 import statistics
 import sys
-from prepare import ROOT, WORK, digest
+
+spec = importlib.util.spec_from_file_location('fc_speed_candidate_prepare', Path(__file__).with_name('prepare.py'))
+inputs = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(inputs)
+ROOT, WORK, digest = inputs.ROOT, inputs.WORK, inputs.digest
 
 
 def body_accounting(requests, cells):

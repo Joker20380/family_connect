@@ -1,6 +1,7 @@
 """Bind an owner-provided export to fresh readbacks; never infer applied limits."""
 
 import ast
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -9,7 +10,11 @@ import shutil
 import subprocess
 import sys
 import time
-from prepare import ROOT, WORK, digest
+
+spec = importlib.util.spec_from_file_location('fc_speed_candidate_prepare', Path(__file__).with_name('prepare.py'))
+inputs = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(inputs)
+ROOT, WORK, digest = inputs.ROOT, inputs.WORK, inputs.digest
 
 
 def validate_export(document, profile):
