@@ -49,7 +49,9 @@ The root/UID test starts the real main function under the unit's parsed umask in
 a disposable container `/run` directory; it is **not systemd/full installed acceptance**.
 
 Prepared D01 image: Python3.13.15, control/provisioning/device_identity lockfiles,
-messenger `--no-deps --require-hashes`, unchanged from L01. Non-root suites:
+messenger `--no-deps --require-hashes`, unchanged from L01.
+Strict real imports, including GI/GTK4/Adw, were rechecked **PASS** in that venv.
+Reproduction (first two Python suites non-root):
 
 ```sh
 python -m pytest -q clients/desktop/tests/test_chat_direct.py tests/test_chat_bridge_http.py \
@@ -86,8 +88,29 @@ python -m pytest -q clients/desktop/tests/test_chat_direct_runtime.py
 
 ## CI provenance and remaining gates
 
-New source CI is pending the code push; no historical result is attributed to it.
-The exact source SHA and observed runs will be recorded after the push.
+Source/tests/docs code checkpoint **`4fab7b66d27d8a0a5306a6a923c120f023389218`**
+committed, ordinarily pushed to main and remote SHA verified. Results on that exact SHA:
+
+| Gate | Observed result |
+|---|---|
+| [Client Linux job120922466610](https://github.com/Joker20380/family_connect/actions/runs/40110984730/job/120922466610) | **PASS**, mandatory desktop tests and following packaging/smoke steps. Not L03 full integration/installed acceptance. |
+| [Auto bridge run40110984744](https://github.com/Joker20380/family_connect/actions/runs/40110984744) | **PASS**: both existing protocol-matrix jobs; [isolated-linux job120922466551](https://github.com/Joker20380/family_connect/actions/runs/40110984744/job/120922466551) includes regression, new actual root→UID step, original Auto kernel and extended DIRECT kernel. |
+| [AWG job120922466438](https://github.com/Joker20380/family_connect/actions/runs/40110984785/job/120922466438), [TCP job120922466689](https://github.com/Joker20380/family_connect/actions/runs/40110984793/job/120922466689) | **PASS**; release jobs skipped. |
+| [Control job120922466801](https://github.com/Joker20380/family_connect/actions/runs/40110984779/job/120922466801) | **FAIL** at full regression pytest; no previous SHA's counts are attributed here. |
+| [phase0/tests job120922466556](https://github.com/Joker20380/family_connect/actions/runs/40110984721/job/120922466556) | **FAIL** at mandatory full pytest; not closed by targeted PASS. |
+| [phase0/Docker job120922466200](https://github.com/Joker20380/family_connect/actions/runs/40110984721/job/120922466200) | **FAIL**: 2980 passed / 53 failed / 0 errors / 115 skipped, 7 subtests passed, exit1; downstream failover gates not run. |
+| [Voice job120922466695](https://github.com/Joker20380/family_connect/actions/runs/40110984821/job/120922466695) | **PASS on this SHA**, including GTK/synthetic microphone. No voice fix in L01-R; earlier failures remain unexplained, not declared flaky or retrospectively passed. |
+
+Downloaded Auto artifact12565983259 confirms original18-check kernel PASS and
+DIRECT kernel PASS with `fatal_tls_native_denied=true`, `fatal_tls_no_fallback=true`,
+`host_network_changed=false`, `live=false`. CI Go1.26.0 is distinct from local Go1.26.1;
+both carry native source manifest `547c698c5c8c35c849acaa5b7c8d5a18eaa46d66af8d0faf12f3c2346592ec08`.
+Docker artifact12566896733/build.log confirms the above count and failure to create
+`/tmp/tests-passed`; no DIRECT/ChatHTTP cases appear in its failure summary.
+Other automatically triggered platform jobs are not Windows/Android acceptance
+for this checkpoint. The final evidence-only commit does not change product/test code;
+any docs-only phase0 run belongs to its own SHA, not this source CI result.
+
 Entry docs-only SHA968e71d ran [phase0/40101235791](https://github.com/Joker20380/family_connect/actions/runs/40101235791):
 FAILURE, separate from product/native evidence.
 [L01's positive evidence](2026-10-24-linux-chat-direct-l01.md) remains:

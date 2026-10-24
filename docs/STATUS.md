@@ -8,7 +8,11 @@
 TCP/TLS fatal alert остаётся DENIED до ChatHTTP, без fallback. Before/after записаны.
 Локально: 145 Python/native + 49 mailbox/owner, 6 root→UID checks, шесть Go/race
 packages и isolated DIRECT kernel PASS. Root→UID не является installed acceptance.
-Новый source CI ещё не получен; обязательные suites/negative gates сохранены.
+Source `4fab7b66d27d8a0a5306a6a923c120f023389218` pushed/remote-verified:
+Client Linux, Auto/protocol/root→UID/оба kernel gates, AWG/TCP PASS. Текущий voice job
+PASS, но прежние GTK failures не исследовались и не объявлены исправленными/flaky.
+Control/phase0 full pytest FAIL; Docker: 2980 passed / 53 failed / 115 skipped, exit1.
+Обязательные suites/negative gates сохранены; точные jobs и SHA — в отчёте L01-R.
 D01 открыт, D02.1-R PARTIAL; full-suite/GTK voice failures вне scope.
 
 Историческое положительное evidence L01 ниже сохранено только для своих SHA:
@@ -102,7 +106,7 @@ failover проверки не выполнены. Runtime/fixtures/collection p
 |---|---|
 | SOURCE | L01-R — три review-коррекции fixed protected DIRECT; L01 не принят, review L01-R pending; не новая поставка. |
 | LOCAL TESTS | L01-R: 145 chat/native + 49 mailbox/owner + 6 root/UID PASS; Go/race и synthetic-peer DIRECT kernel PASS. Полный pytest и installed/live локально NOT_RUN. |
-| CI | Новый L01-R CI pending; точные исторические SHA — в [L01](releases/2026-10-24-linux-chat-direct-l01.md) и [коррекции](releases/2026-10-24-linux-chat-direct-l01-r.md). D01 открыт; старые full-suite/GTK failures не объявлены исправленными. |
+| CI | L01-R `4fab7b6`: Client Linux/Auto/root→UID/kernel/AWG/TCP/voice PASS; control/phase0/Docker FAIL. Точные jobs/counts — в [коррекции](releases/2026-10-24-linux-chat-direct-l01-r.md); прежние SHA — в [L01](releases/2026-10-24-linux-chat-direct-l01.md). D01 открыт; старые GTK failures не объявлены исправленными. |
 | BUILT | Linux native-r18, Windows native-r14 cross-build, unsigned Linux system/native/RNS component-r18. **Полный parity installer: 0/2.** |
 | INSTALLED | **Завершённая установленная приёмка: 0/2.** Полный кандидат не принят на Linux/Windows; Windows runtime NOT_RUN. |
 | PUBLISHED | Parity-кандидаты не опубликованы. Linux0.2.11 / Windows0.2.15 не менялись; существующие публичные каталоги/ссылки в D00 не изменялись и заново не проверялись. |
