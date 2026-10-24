@@ -101,9 +101,10 @@ pumps bounded16KiB chunks through the existing native lane, preserving half-clos
 Caller cancellation, session retirement and shutdown dispose only chat resources.
 Read-only probes precede a mutation; ambiguous dual owners fail closed, and a lost
 mutation reply is not replayed. Direct HTTP TLS/auth/conflict rejection is terminal.
-The existing SYSTEM route remains first; it is not protected-underlying DIRECT.
-Linux service-only orchestration, protected DIRECT and Windows admission are still
-missing. No installed/live restricted-message acceptance is inferred from local
+Phase22 used SYSTEM first, not protected-underlying DIRECT. [L01](../desktop-architecture.md#linux-protected-chat-direct)
+now connects the Linux daemon to independent root DIRECT admission and native protection;
+SYSTEM remains only in standalone/legacy consumers. Linux service-only orchestration
+and Windows admission remain missing. No installed/live acceptance is inferred from local
 Unix-socket, disposable-identity proof and byte-exact forwarding tests.
 
 The continuing parity report records actual private D-Bus, Secret Service,

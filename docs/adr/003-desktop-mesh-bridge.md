@@ -157,8 +157,9 @@ transport process/coordinator is created. The child checks stream type and peer 
 This private channel is not a public GUI authorization boundary. A separate Linux
 host endpoint now binds the user's UID/device to validated active readiness; the
 ordinary-user ChatOwner can borrow only an existing exit. Its fixed32KiB/4-operation
-API and real SCM_RIGHTS mailbox handoff are described in ADR004. Existing SYSTEM
-mailbox remains first, not a protected-underlying DIRECT claim. Windows advertises
+API and real SCM_RIGHTS mailbox handoff are described in ADR004. Phase22 used SYSTEM
+first; [L01](../desktop-architecture.md#linux-protected-chat-direct) now adds a separate protected
+DIRECT root/native source path without extending this VPN-owned lane. Windows advertises
 its endpoint as NOT_INTEGRATED; Linux service-only orchestration is still absent.
 
 `clients/mesh/chatipc` uses strict length-framed JSON, monotonic request IDs and
@@ -192,9 +193,9 @@ not a cancellation or retryable failure. Stream cancellation, deadlines, half-cl
 and replaced-timer fences affect only that stream/lease. No routes or TUN are
 created by the chat adapter. Local tests exercise real loopback HTTPS and stream
 bytes with synthetic authenticated-session data; they are not media/provider,
-installed Linux or Windows acceptance. Linux existing-exit public admission is now
-wired; protected-underlying DIRECT, service-only orchestration and the Windows
-endpoint remain the next integration work.
+installed Linux or Windows acceptance. Linux existing-exit public admission and the
+separate L01 DIRECT source path are wired; service-only orchestration and the Windows
+endpoint remain subsequent integration work.
 
 ## Rejected alternatives
 

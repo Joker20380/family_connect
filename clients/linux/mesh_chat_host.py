@@ -185,7 +185,7 @@ class Host:
                 lost.set()
                 return
 
-    def _mailbox(self, control, identifier, binding, stream, cancel, deadline):
+    def _mailbox(self, control, identifier, binding, stream, cancel, deadline, route='EXISTING_EXIT'):
         local, remote = socket.socketpair()
         stopped = threading.Event()
         cancelled = Cancellation(cancel, stopped)
@@ -216,7 +216,7 @@ class Host:
                     stopped.set()
 
         try:
-            wire.write(control, dict(schema=1, id=identifier, ok=True, route='EXISTING_EXIT'))
+            wire.write(control, dict(schema=1, id=identifier, ok=True, route=route))
             wire.send_socket(control, remote)
             remote.close()
             writer = threading.Thread(target=upload, name='fc-chat-mailbox-write', daemon=False)

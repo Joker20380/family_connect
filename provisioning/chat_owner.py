@@ -8,14 +8,16 @@ import time
 
 from messenger.local import LocalChat, LocalError, contact_card
 from .chat_keyring import ChatKeyring, KeyringUnavailable
-from .chat_transport import initialize, SystemMailbox, ExistingExitMailbox
+from .chat_transport import initialize, SystemMailbox, ExistingExitMailbox, ProtectedMailbox
 from .chat_events import fetch_events, notification_batches
 from .friends import FriendsClient, FriendsError
 
 
 class ChatOwner:
     def __init__(self, directory, friends, *, keyring=None, runtime_factory=initialize,
-                 mailbox_factory=SystemMailbox, events_fetcher=fetch_events, restricted_factory=None):
+                 mailbox_factory=SystemMailbox, events_fetcher=fetch_events, restricted_factory=None, direct_factory=None):
+        if direct_factory is not None and restricted_factory is None:
+            raise ValueError('Protected chat requires an explicit existing-exit boundary')
         self.directory = Path(directory)
         self.friends = friends
         self.keyring = keyring or ChatKeyring()
@@ -29,6 +31,7 @@ class ChatOwner:
         self.next_events = 0
         self.events_error = False
         self.restricted_factory, self.restricted = restricted_factory, None
+        self.direct_factory, self.direct = direct_factory, None
 
     def open(self, *, create=False):
         if self.local is not None:
@@ -78,6 +81,8 @@ class ChatOwner:
             self.local._chat.durable_delivery = True
             if self.restricted_factory is not None:
                 self.restricted = self.restricted_factory(self.device.reference)
+            if self.direct_factory is not None:
+                self.direct = self.direct_factory(self.device.reference)
             return self.local.profile()
         except Exception as failure:
             self.close()
@@ -222,11 +227,16 @@ class ChatOwner:
                 with self.friends.http_factory() as http:
                     if self.restricted is not None:
                         from .chat_bridge import ChatHTTP
+                        if self.direct is not None:
+                            from .chat_direct import DirectHTTP
+                            http = DirectHTTP(self.direct)
                         http = ChatHTTP(http, self.restricted)
                     result = FriendsClient(http, self.device).register_chat(self.local)
                 if result['status'] != 'active' or 'node' not in result:
                     raise LocalError('delivery_unavailable')
                 node = result['node']
+                if self.direct is not None:
+                    self.direct.bind(result)
                 unchanged = (self.carrier is not None and self.node is not None and
                              all(self.node[field] == node[field] for field in ('host', 'port', 'public_key')))
                 if unchanged:
@@ -237,7 +247,9 @@ class ChatOwner:
                         self.carrier.close()
                         self.carrier = None
                     self.node = None
-                    if self.restricted is not None and self.mailbox_factory is SystemMailbox:
+                    if self.direct is not None and self.mailbox_factory is SystemMailbox:
+                        self.carrier = self.local.attach_carrier(lambda chat: ProtectedMailbox(chat, node, self.runtime, self.direct, self.restricted))
+                    elif self.restricted is not None and self.mailbox_factory is SystemMailbox:
                         self.carrier = self.local.attach_carrier(lambda chat: ExistingExitMailbox(chat, node, self.runtime, self.restricted))
                     else:
                         self.carrier = self.local.attach_carrier(lambda chat: self.mailbox_factory(chat, node, self.runtime))
@@ -270,6 +282,9 @@ class ChatOwner:
         return state
 
     def close(self):
+        if self.direct is not None:
+            self.direct.close()
+            self.direct = None
         if self.restricted is not None:
             self.restricted.close()
             self.restricted = None
@@ -279,6 +294,8 @@ class ChatOwner:
         if self.carrier is not None:
             self.carrier.close()
             self.carrier = None
+        self.node = None
+        self.next_enrollment = 0
         if self.lock is not None:
             os.close(self.lock)
             self.lock = None

@@ -34,7 +34,7 @@ PROVISIONING = (
     'relay.py', 'reticulum.py', 'runtime.py', 'transaction.py',
     'friends.py', 'friends_application.py', 'friends_catalog.py',
     'friends_owner.py', 'friends_store.py', 'support.py', 'support_client.py', 'requirements.lock',
-    'chat_owner.py', 'chat_keyring.py', 'chat_transport.py', 'chat_bridge.py', 'chat_bridge_protocol.py', 'chat_audio.py', 'chat_events.py', 'chat_rpc.py', 'chat_client.py', 'chat_admin.py',
+    'chat_owner.py', 'chat_keyring.py', 'chat_transport.py', 'chat_bridge.py', 'chat_bridge_protocol.py', 'chat_direct.py', 'chat_audio.py', 'chat_events.py', 'chat_rpc.py', 'chat_client.py', 'chat_admin.py',
 )
 MESSENGER = ('__init__.py', 'admission.py', 'chat.py', 'codec.py', 'delivery.py', 'local.py',
              'mailbox.py', 'notices.py', 'routed.py', 'service_events.py', 'store.py')

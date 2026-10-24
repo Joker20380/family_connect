@@ -19,6 +19,8 @@ from .friends import FriendsError
 
 
 class ChatBridge:
+    ROUTE = 'EXISTING_EXIT'
+    validate = staticmethod(wire.validate)
     def __init__(self, device, *, _paths=None, _root_uid=0):
         if type(device) is not str or not re.fullmatch('[0-9a-f]{32}', device):
             raise ValueError('Invalid device reference')
@@ -67,7 +69,7 @@ class ChatBridge:
                 monitor.start()
             yield connection
         except OSError as error:
-            if cancel is not None and cancel.is_set() and getattr(error, 'code', None) not in ('DENIED', 'CONFLICT'):
+            if (self.closed or (cancel is not None and cancel.is_set())) and getattr(error, 'code', None) not in ('DENIED', 'CONFLICT'):
                 raise wire.BridgeError('CANCELLED') from None
             raise
         finally:
@@ -83,7 +85,7 @@ class ChatBridge:
         if remaining <= 0:
             raise wire.BridgeError('DEADLINE')
         request = dict(schema=1, id=1, action=action, device=self.device, budget_ms=remaining, **fields)
-        wire.validate(request)
+        self.validate(request)
         wire.write(connection, request)
         reply = wire.read(connection, deadline + 4)
         if (type(reply.get('schema')) is not int or reply['schema'] != 1 or type(reply.get('id')) is not int or
@@ -94,7 +96,7 @@ class ChatBridge:
                 raise wire.BridgeError('DENIED')
             raise wire.BridgeError(reply['error'])
         expected = {'schema', 'id', 'ok', 'route'} | ({'status', 'data'} if action == 'request' else set())
-        if set(reply) != expected or reply['route'] != 'EXISTING_EXIT':
+        if set(reply) != expected or reply['route'] != self.ROUTE:
             raise wire.BridgeError('DENIED')
         return reply
 

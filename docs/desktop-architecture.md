@@ -12,9 +12,9 @@ copied. See [the parity report](releases/2026-10-23-desktop-parity106.md).
 Restricted chat now has a private multiplexed Linux parent/native lane sharing the
 VPN worker's existing owner; bounded duplex mailbox/API calls do not use the4s VPN
 control queue. See [bridge IPC bounds](adr/003-desktop-mesh-bridge.md#accepted-restricted-chat-adaptation).
-This is not yet the authenticated unprivileged ChatOwner→root-service handoff or
-direct/existing-exit/service-only orchestration. No new chat route is advertised by
-GTK. Windows's native shared code builds, but its broker endpoint remains absent.
+Authenticated user/root existing-exit admission and the L01 protected DIRECT source
+path now exist; service-only orchestration remains L02. No new GUI route selector is
+introduced. Windows's native shared code builds, but its broker endpoint remains absent.
 
 Linux AWG now journals exact platform resources before setup and reconciles them
 after userspace TUN death; the inherited broad `awg-quick` policy-rule deletion
@@ -335,12 +335,41 @@ The32-byte storage key is in the user's Secret Service, not a file beside SQLite
 not derived by new cryptography and not copied from Android. Keyring requests have
 a15s cancellation bound. No root GUI or server policy change is needed.
 
-`chat_transport.py` uses the accepted RNS/LXMF mailbox over the normal OS route.
-The existing authenticated Friends chat registration supplies the pinned node
-and≤120s lease. Refresh transient failures may retain a still-valid lease; rejected
-or invalid replies stop it. The GUI supplies no host, port, key or route operation.
-There is no privileged underlay exemption, custom crypto or claim that SYSTEM is
-restricted service-only delivery. That latter adapter remains a required gap.
+`chat_transport.py` retains SYSTEM for existing standalone consumers, but the Linux
+daemon now creates DirectBridge + ProtectedMailbox: DIRECT, then authenticated
+EXISTING_EXIT on permitted transient failure, never ordinary OS-route fallback.
+The RNS/LXMF framing, public node identity and encrypted store remain unchanged.
+
+<a id="linux-protected-chat-direct"></a>
+### L01: fixed protected DIRECT (source/native/kernel, not installed/live)
+
+`chat_direct_host.py` / `family-connect-chat-direct@.service` have an independent
+per-UID lifetime: no Auto/MESH owner, TUN or route is created. The root-owned0711
+directory contains a0600 UID-owned Unix endpoint; peer UID/device and exact bounded
+messages admit only challenge/register or an authority-digest mailbox open.
+No public request can choose origin, endpoint, resolver/interface, keys, commands or paths.
+Root accepts mailbox authority only from the fixed HTTPS registration, matching
+device/chat-public and positive bounded sequence/expiry (≤120s). Pending/denied,
+expired, changed or equivocal authority cannot authorize a privileged open.
+The digest selects that root-retained result; it is not a new server identity or grant.
+
+The private root/native `--chat-direct-fd` adapter reuses `underlay.Network` and
+`platform.Native.Protect`: bind/mark before connect, literal IPv4 destinations
+(no DNS), strict HTTP bounds/identity encoding/no redirects/proxy environment.
+Python reuses `Underlying` and rejects/cancels changed paths; protection failure
+never opens an ordinary socket. API terminal/deadline/cancel and complete-response
+no-replay semantics survive cleanup. User mailbox receives only the existing
+CLOEXEC AF_UNIX proxy, with bounded duplex/half-close, capacity and expiry/cancel cleanup.
+Fresh registration replaces the authority event; late cancelled results do not
+publish it. Existing-exit native profile binding and VPN resources are untouched.
+
+[L01 evidence](releases/2026-10-24-linux-chat-direct-l01.md): real owner/proofs,
+disposable encrypted-store reopen, local TLS peer, native/kernel bind/mark and
+guarded route verified. Full root/user component installation/dependency closure
+and activation belong to L03; installed VPN and messenger acceptance to L04/L05.
+The new user Python dependency is included in the existing bundle source list,
+without a version/installer/catalog change. L02 service-only/handoff, Windows and
+live gateway delivery are not accepted by this checkpoint.
 
 GTK's bounded session client exposes profile/contact verification, rename, text queue,
 edit, history, unread counts and stored-recipient receipts. Controls use accepted
@@ -432,7 +461,7 @@ remain open; four local GTK scales do not close those gates.
 <a id="desktop-fleet-boundary"></a>
 ## Desktop fleet boundary / D05
 
-**Статус: минимальная внутренняя Linux-граница D05 реализована; review pending.**
+**Статус: минимальная внутренняя Linux-граница D05 реализована; review accepted.**
 [D05 evidence](releases/2026-10-24-desktop-provider-d05.md). Это подготовка Linux/Windows
 parity106, не заявление поддержки dynamic fleet или завершения Windows-интеграции.
 Единственная очередь — [PLAN / D05](PLAN.md#d05), после D03/D04. D05 не зависит от

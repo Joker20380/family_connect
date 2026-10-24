@@ -22,6 +22,7 @@ def test_new_chat_runtime_closure_and_legacy_shape(tmp_path):
     assert (bundle / 'provisioning/chat_events.py').is_file()
     assert (bundle / 'provisioning/chat_bridge.py').is_file()
     assert (bundle / 'provisioning/chat_bridge_protocol.py').is_file()
+    assert (bundle / 'provisioning/chat_direct.py').is_file()
     assert (bundle / 'provisioning/support.py').is_file()
     assert (bundle / 'provisioning/support_client.py').is_file()
     assert (bundle / 'clients/desktop/support_daemon.py').is_file()
@@ -34,6 +35,7 @@ def test_new_chat_runtime_closure_and_legacy_shape(tmp_path):
               'sys.path.insert(0,str(Path(sys.argv[1])/"clients/desktop"));'
               'from provisioning.chat_owner import ChatOwner;'
               'from provisioning.chat_bridge import ChatBridge;'
+              'from provisioning.chat_direct import DirectBridge;'
               'from provisioning.chat_transport import ExistingExitMailbox;'
               'from provisioning.support_client import SupportClient;'
               'import support_daemon;from support_daemon import SupportSession;'
@@ -42,6 +44,8 @@ def test_new_chat_runtime_closure_and_legacy_shape(tmp_path):
               'assert ChatOwner.__module__=="provisioning.chat_owner";'
               'assert Path(sys.modules[ChatBridge.__module__].__file__).is_relative_to(sys.argv[1]);'
               'assert ExistingExitMailbox.ROUTES==("SYSTEM","EXISTING_EXIT");'
+              'assert DirectBridge.ROUTE=="DIRECT";'
+              'assert Path(sys.modules[DirectBridge.__module__].__file__).is_relative_to(sys.argv[1]);'
               'assert support_daemon.version_info(sys.argv[1])==("0.2.11",2011);'
               'assert Path(support_daemon.__file__).is_relative_to(sys.argv[1]);'
               'assert Path(sys.modules[SupportClient.__module__].__file__).is_relative_to(sys.argv[1]);'

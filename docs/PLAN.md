@@ -6,9 +6,9 @@
 а не отдельные реализации продукта. [Текущий срез](STATUS.md) — источник текущего состояния.
 Продуктовый checkpoint: phase22, source baseline `664342a6566792a4ea621274a369bcd6b6012143`.
 D00 — организация документации; следующие строки являются очередью, не разрешением на автозапуск.
-**D05 выполнен в локальном Linux model/provider scope; NEXT — review D05. Review D03/D04, D02.1 collection/import isolation и D02.2 public-reference принят.
+**L01 выполнен в локальном Linux source/native/kernel scope; NEXT — review L01. Review D03/D04/D05, D02.1 collection/import isolation и D02.2 public-reference принят.
 Review D02.1-R и fleet-документации `1725656` принят;
-D02.1-R остаётся PARTIAL/NOT_RUN; дальнейшие Linux/Windows задачи не начинаются.**
+D02.1-R остаётся PARTIAL/NOT_RUN; L02 и дальнейшие Linux/Windows задачи не начинаются.**
 
 Порядок по умолчанию: D01.1 → D01.2 → D02.1 / принятый review D02.1-R → D02.2 / review → D03 → D04 → D05 → Linux → Windows → R01.
 Зависимости в таблицах — необходимые результаты, а не требование заново выполнять завершённые фазы.
@@ -32,7 +32,7 @@ D02.1-R остаётся PARTIAL/NOT_RUN; дальнейшие Linux/Windows з�
 | D02.2 | RNS/reference checks без локальной capsule в обычном CI | review коррекции D02.1-R принят | DONE (review accepted) | [Evidence `da8670e`](releases/2026-10-24-rns-reference-d02-2.md): public mappings, прежние pins, APK/inventory linkage, строгий --capsule. Clean export: 49 passed/1 прежний skip, collection 3051/0 errors; real capsule 2073 PASS. CI control/phase0/Docker: 55/54/54 residual failures, 0 errors; полные команды сохранены. |
 | D03 | Окончательные ошибки ChatHTTP | приняты D02.1 collection/import isolation и D02.2 | DONE (review accepted) | [Evidence `290d430`](releases/2026-10-24-chat-http-terminal-d03.md): до 15 failed/18 passed, после 33 passed; зависимые 63+24 passed. Terminal-причина сохранена при cleanup, полный 200/consumer error без повторов, transient fallback сохранён. CI control/phase0/Docker: 54/54/53 residual failures, 0 errors; общий D01 открыт. |
 | D04 | Auto stop/start lifecycle | приняты D03, D02.1 collection/import isolation и D02.2 | DONE (review accepted) | [Evidence `b41e1ad`](releases/2026-10-24-auto-lifecycle-d04.md): прежний Controller 8 failed/1 passed; service 55 PASS, зависимые 180 PASS/6 прежних skips. Публикация завершения owner и admission согласованы, fatal не сбрасывается; callback/process close до передачи владения. Linux desktop/Auto bridge CI PASS; одинаковые 54 residual failures в control/phase0/Docker. Docs-only `3f9854a` phase0 FAILURE отдельно. |
-| D05 | Минимальная внутренняя модель выбора/назначения/активной сессии и граница существующего provider | review D03/D04 принят | DONE (local Linux boundary; review pending) | [Evidence `c53265d`](releases/2026-10-24-desktop-provider-d05.md): модель используется NormalOwner/Platform/GuardedHost; 162 provider/model/native + 213 ownership/service/chat PASS. [Критерии](desktop-architecture.md#desktop-fleet-acceptance): stable ID 2×NL+DE, refresh без apply, fencing, signed legacy rejection, безопасные metadata. Linux Auto CI PASS; общий CI остаётся красным. Не Windows-интеграция/production fleet/F-01. |
+| D05 | Минимальная внутренняя модель выбора/назначения/активной сессии и граница существующего provider | review D03/D04 принят | DONE (local Linux boundary; review accepted) | [Evidence `c53265d`](releases/2026-10-24-desktop-provider-d05.md): модель используется NormalOwner/Platform/GuardedHost; 162 provider/model/native + 213 ownership/service/chat PASS. [Критерии](desktop-architecture.md#desktop-fleet-acceptance): stable ID 2×NL+DE, refresh без apply, fencing, signed legacy rejection, безопасные metadata. Linux Auto CI PASS; общий CI остаётся красным. Не Windows-интеграция/production fleet/F-01. |
 
 <a id="ci-evidence"></a>
 ### D01/D02: наблюдавшиеся ошибки после baseline push
@@ -86,7 +86,7 @@ terminal callback и process close до Runtime.dispose/передачи вла�
 ### D05: локальная подготовка к расширяемому парку, не fleet-приёмка
 
 [Основной контракт](desktop-architecture.md#desktop-fleet-boundary) — **минимальная Linux-граница реализована;
-NEXT review D05**. После принятых D03/D04, без зависимости от production fleet,
+review D05 принят**. После принятых D03/D04, без зависимости от production fleet,
 новых VPS или F-01 live. D05 задаёт общую модель/provider boundary; W01/W02 используют
 её при продуктовой Windows-интеграции, обратной зависимости D05 → W01/W02 нет.
 Модельные/отрицательные проверки выполняются адресно в D05; миграция — L08/W12,
@@ -99,7 +99,7 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 
 | ID | Результат | Зависимость | Статус | Критерий завершения |
 |---|---|---|---|---|
-| L01 | Защищённый DIRECT для чатов | D03, D04 | QUEUED | Фиксированные chat API/mailbox используют корректный underlying-маршрут с действующей авторизацией; отсутствует общий пользовательский bypass. |
+| L01 | Защищённый DIRECT для чатов | D03, D04; D05 review принят | DONE (local Linux source/native/kernel; review pending) | [Evidence](releases/2026-10-24-linux-chat-direct-l01.md): реальный ChatOwner → UID/device root admission → protected native socket; fixed API, root-authorized mailbox, expiry/cancel/relay; 141 + 49 Python PASS, Go/race и isolated kernel PASS. Нет SYSTEM fallback или общего пользовательского bypass; installed/live — L04/L05. |
 | L02 | MESH service-only и передача владения | L01 | QUEUED | Чаты работают при VPN OFF; OFF→ON→OFF сохраняет одно активное владение; проверены drain, expiry, отмена и поздние результаты. |
 | L03 | Полный внутренний Linux-кандидат | L02, D05 | QUEUED | Согласованы GUI, пользовательские службы, root-helper, native/RNS, зависимости и установка; capabilities соответствуют точному составу реально интегрированного пакета. |
 | L04 | Установленный Linux VPN | L03 | QUEUED | На установленном кандидате подтверждены реальные AWG/TCP/MESH/Auto, P0/P1, DNS/HTTPS и передачи, применённый target/profile и заявленные capabilities; не CLI/echo/SOCKS или model fixture. |
@@ -108,7 +108,8 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 | L07 | Linux visual parity | L03, L06 | QUEUED | Реальные окна: согласованные экраны/состояния, список вариантов и отдельные selected-next/active state по D05, RU/EN, DPI100/125/150/200%, resize/focus/Tab/Enter/Escape; сопоставление с точным Android-эталоном без изменения Android106. |
 | L08 | Linux updater и сохранение данных | L03, L07 | QUEUED | Переход со старого поддерживаемого клиента на полный bundle и совместимая миграция настроек выбора D05; identity/WG keys, активация, Support ID, история, настройки, ссылки и signed floors/счётчики сохранены. |
 
-Phase22 уже подключила Linux ChatOwner к EXISTING_EXIT. SYSTEM пока не protected DIRECT.
+Phase22 подключила Linux ChatOwner к EXISTING_EXIT. L01 добавляет protected DIRECT;
+старый SYSTEM не переименован в DIRECT и не используется fallback этого нового пути.
 Общий Go service-only есть, но host lifecycle ещё не завершён. Одно активное владение
 не означает вечный PID: текущий worker имеет собственный жизненный цикл.
 Полный внутренний пакет L03 обязателен перед закрытием L04–L08; system-only component-r18 недостаточен.
@@ -208,5 +209,5 @@ Django7.1 (servers/access/payments) зависит от backend/fencing и recov
 [Полный прежний PLAN](PLAN.history-2026-10-24.md), [STATUS](STATUS.history-2026-10-24.md),
 [phase22](releases/2026-10-23-desktop-parity106.md#linux-user-chat-admission-and-existing-exit-handoff-2410-phase22),
 [отчёт D00](releases/2026-10-24-desktop-parity106-d00.md).
-**После отчёта D05 остановиться. NEXT — review D05;
+**После отчёта L01 остановиться. NEXT — review L01;
 без автоматического перехода к Linux/Windows/iOS или live-операциям.**

@@ -12,6 +12,7 @@ import (
 	"github.com/Joker20380/family_connect/carrier/restrictedchat"
 	"github.com/Joker20380/family_connect/desktopbridge/automatic"
 	"github.com/Joker20380/family_connect/desktopbridge/chatipc"
+	"github.com/Joker20380/family_connect/desktopbridge/direct"
 	"github.com/Joker20380/family_connect/desktopbridge/materials"
 	"github.com/Joker20380/family_connect/desktopbridge/normal"
 	"github.com/Joker20380/family_connect/desktopbridge/platform"
@@ -29,7 +30,8 @@ func main() {
 		return
 	}
 	chatMode := len(os.Args) == 3 && os.Args[1] == "--stdio-chat-fd"
-	if !chatMode && (len(os.Args) != 2 || (os.Args[1] != "--stdio" && os.Args[1] != "--materials-stdio" && os.Args[1] != "--auto-stdio" && os.Args[1] != "--normal-stdio")) {
+	directMode := len(os.Args) == 3 && os.Args[1] == "--chat-direct-fd" && runtime.GOOS == "linux" && os.Geteuid() == 0
+	if !directMode && !chatMode && (len(os.Args) != 2 || (os.Args[1] != "--stdio" && os.Args[1] != "--materials-stdio" && os.Args[1] != "--auto-stdio" && os.Args[1] != "--normal-stdio")) {
 		fmt.Fprintln(os.Stderr, "Service-owned Family Connect MESH worker; use the desktop application.")
 		os.Exit(64)
 	}
@@ -37,7 +39,13 @@ func main() {
 	defer cancel()
 	go func() { <-ctx.Done(); os.Stdin.Close() }()
 	var err error
-	if chatMode {
+	if directMode {
+		connection, openError := inheritedChat(os.Args[2])
+		err = openError
+		if err == nil {
+			err = direct.Serve(ctx, connection, platform.Native{})
+		}
+	} else if chatMode {
 		connection, openError := inheritedChat(os.Args[2])
 		err = openError
 		if err == nil {

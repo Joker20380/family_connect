@@ -12,7 +12,7 @@ import time
 
 MAX_FRAME = 32 * 1024
 PATHS = ('/friends/chat/challenge', '/friends/chat/register')
-ERRORS = ('DENIED', 'CONFLICT', 'UNAVAILABLE', 'DEADLINE', 'CANCELLED')
+ERRORS = ('DENIED', 'CONFLICT', 'UNAVAILABLE', 'DEADLINE', 'CANCELLED', 'INVALID_RESPONSE')
 
 
 class BridgeError(OSError):

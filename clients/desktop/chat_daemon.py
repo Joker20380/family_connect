@@ -296,8 +296,9 @@ def main():
         return 2
     root = Path.home() / '.local/share/family-connect'
     from provisioning.chat_bridge import ChatBridge
+    from provisioning.chat_direct import DirectBridge
     owner = ChatOwner(root / 'chat', FriendsOwner(root / 'friends-identity', Path(__file__).with_name('update.pub')),
-                      restricted_factory=ChatBridge)
+                      restricted_factory=ChatBridge, direct_factory=DirectBridge)
     try:
         from support_daemon import SupportCollector, SupportSession, version_info
         try:
