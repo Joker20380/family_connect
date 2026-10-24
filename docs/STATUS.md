@@ -14,8 +14,11 @@ actual DirectHost/DirectBridge/Authority, Unix IPC и барьер после ф
 Cancel/deadline/shutdown bounded; descriptors/handlers/DIRECT monitors учтены;
 synthetic socketpair backing не заменяет native/installed acceptance.
 Зависимые DIRECT/public IPC/error/lifecycle **326 PASS**, root→UID/process **13 PASS**.
-Новый source SHA/обязательный Client Linux CI
-будут зафиксированы после push; до этого CI **NOT_RUN**, не общий PASS.
+Production source `050f06baef8b94e81d1bd4becb7f4fc38d1a6744` pushed/remote-verified;
+CI запущен. Follow-up только публикует post-close Event до следующего тестового
+open: **5 PASS**, прежний DirectHost через read-only overlay снова red1 без rollback.
+Итоговые SHA/jobs mandatory Client Linux будут зафиксированы после завершения;
+пока **CI pending**, не общий PASS.
 Принятые L01/L01-R, локальные L02/L02.2, D03/D04/D05/native semantics сохранены.
 D01 открыт, D02.1-R PARTIAL/NOT_RUN. Версии/identity/keys/history/settings/floors/
 reference pins неизменны. L03/install/live/publication/Windows/fleet/iOS NOT_RUN.

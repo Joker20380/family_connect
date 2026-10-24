@@ -24,10 +24,17 @@ probe handler **after real socket.close**, assert fd=-1 and actual client EOF, t
 observe the dependent open's admission attempt. A lock observer retains the same
 underlying mutex and distinguishes acquire from waiting; proof is the actual
 public exchange, not just lock state. No sleeps/retry or repeated-until-green runs.
+The EOF observer also waits for publication of the post-close event before the
+dependent open, so socket.close releasing the GIL cannot race the test's observer.
 
 Before the product edit: **1 failed / 0.56s**, ConnectionResetError104 after EOF,
 active4, native opens3, API sends2 (challenge/register only). Red log SHA256:
 `491dfe788a7be64f10e5235e3ea7ac1c76212a86fca1c91b4a8aab8e55462ed7`.
+After the observer-publication strengthening, the final test against that same
+old DirectHost (read-only file overlay, no checkout rollback) gives the same
+ConnectionResetError104/accounting: **1 failed / 0.65s**. This is a changed-fixture
+red verification, not a rerun to obtain a green result. Corrected host: **5 passed /
+6.26s** for all DIRECT completion cases; production code unchanged by follow-up.
 This does **not** establish the exact cause/schedule of historical Client Linux
 BrokenPipeError on `dac0f6b45be6ed8703d3de93ff5fdbc67462eabe`.
 
@@ -69,3 +76,7 @@ worker binaries stay outside Git. No version/install/deployment changes; rollbac
 is an ordinary source revert, not a catalog/server operation. Identity/WG keys,
 activation/Support ID/history/settings/signed floors/Android106/reference pins stay
 unchanged. L03/install/live/publication/Windows/fleet/iOS **NOT_RUN**.
+
+Production commit: `050f06baef8b94e81d1bd4becb7f4fc38d1a6744`, ordinary push and
+remote SHA confirmed. A test-only follow-up makes post-close event publication
+explicit before dependent admission; final source/CI receipts follow separately.

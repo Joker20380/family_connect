@@ -104,6 +104,7 @@ def held_closed_probe(setup, monkeypatch):
 
     def complete(*args):
         original_complete(*args)
+        assert state.closed.wait(3)
         state.eof.set()
 
     def request(connection, action, *args, **kwargs):
