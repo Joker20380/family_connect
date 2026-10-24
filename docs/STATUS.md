@@ -4,9 +4,12 @@
 `01f67d4a7daac22c0d35753c8b9a13e15d4feb1d`; продуктовый baseline —
 `664342a6566792a4ea621274a369bcd6b6012143`. Dependency-части D01.1/D01.2 приняты review;
 их PARTIAL и общая CI-приёмка D01 не закрыты. **Разрешён только D02.1.**
-[D02.1](releases/2026-10-24-fixture-boundaries-d02-1.md): чистый export — collection
-2977 + 9 errors → 2996 / 0 errors; адресные helpers/import/runner — 75 passed, CI ожидается.
-Шесть исторических overlay-файлов сохранены и отделены от ordinary suite; D02.2 не начат.
+[D02.1 DONE](releases/2026-10-24-fixture-boundaries-d02-1.md), code `6a0a982`: чистый export —
+collection 2977 + 9 errors → 2996 / 0 errors; helpers/import/runner — 75 passed.
+В трёх CI окружениях collection errors = 0; полный pytest остаётся FAIL (56 failures):
+control/phase0 2834 passed, 106 skipped; Docker 2832 passed, 108 skipped. Остались capsule/
+reference, nginx contract, expiry, privacy и socket failures; не исправлялись.
+Шесть исторических overlay-файлов сохранены и отделены; D02.2 не начат.
 [D01.2 PARTIAL](releases/2026-10-24-control-ci-d01-2.md): на pushed `07b52e3` Python3.13
 strict imports и адресные gates PASS в control/phase0/tests/Docker tests-stage;
 Docker root 22 passed, адресные 59 passed. Каждый полный suite прерван: 9 collection
@@ -94,7 +97,7 @@ D00 ничего не устанавливает: runtime rollback не нуже
 
 ## Блокеры / оставшаяся реализация
 
-- D01.1/D01.2 PARTIAL, dependency gates приняты; D02.1 устраняет collection/import boundaries. D02.2 отдельно отвечает за RNS/reference checks и accepted pins без локальной capsule. Общий D01/CI acceptance остаётся открыт до обязательного полного PASS.
+- D01.1/D01.2 PARTIAL, dependency gates приняты; D02.1 DONE только по collection/import isolation. D02.2 отдельно отвечает за два RNS/reference checks и accepted pins без capsule. Другие выявленные 54 failures требуют отдельной оценки, не расширяют D02.1/D02.2 автоматически. Общий D01/CI acceptance открыт до полного PASS.
 - D04 QUEUED: наблюдается возможная публикация DISCONNECTED до cleanup и отказ start при несброшенном self.thread; причина конкретного CI failure не доказана. Требуется отдельное детерминированное воспроизведение с one-owner/cleanup/generation fencing, до Linux-интеграции.
 - D03: `provisioning/chat_bridge.py`, `ChatHTTP.stream`: синтетический вызов фактического
   метода direct400/401/403/409 + TransportError при закрытии даёт `fallback_calls=1`.

@@ -1,8 +1,11 @@
 # D02.1 — collection/import boundaries, 24.10.2026
 
-Статус: IN_PROGRESS, CI на code SHA ожидается. Вход: чистая `main`, HEAD и remote
+Статус: **DONE по collection/import isolation; полный CI FAIL**. Вход: чистая `main`, HEAD и remote
 `01f67d4a7daac22c0d35753c8b9a13e15d4feb1d`; релевантной дельты не было.
 Dependency-часть D01.2 принята review, общая CI-приёмка D01/D01.1/D01.2 не закрывается.
+Code SHA: `6a0a982661a188128b34568c6e4146a494459548`, обычный push и подтверждённый
+`origin/main` перед чтением CI. Следующий docs-only commit только фиксирует evidence;
+его SHA не подменяет проверенный code SHA.
 
 ## Ограниченное изменение состава
 
@@ -53,7 +56,49 @@ Python3.13.15, неизменённый `scripts/ci_python313_env.sh`; зави�
 export/historical pins/provenance, root/non-root Docker, marker/runtime COPY, полный
 pytest и последующие GUI/package/cargo/failover gates не изменены. Новые helper/runner
 пути находятся под существующим `tests/**` filter. Продукт и accepted pins неизменны.
-CI evidence PENDING; remaining RNS/Auto/ChatHTTP failures не исправляются этим шагом.
+Функции CLI/helpers дополнительно сопоставлены по AST с baseline: тела неизменны.
+
+## CI на pushed code SHA 6a0a982
+
+Полные команды через `scripts/ci_release_fixtures.py run ... -- python -m pytest -q`
+сохранены (в workflows оба Python явно указывают на D01.2 venv). Все три окружения
+завершили collection и обработали 2996 cases (включая skips), не остановившись на import error.
+
+| Окружение | Passed | Failed | Errors | Skipped | Full pytest / job |
+|---|---:|---:|---:|---:|---|
+| [control/linux-control](https://github.com/Joker20380/family_connect/actions/runs/40079929587/job/120831170422) | 2834 | 56 | 0 | 106 | exit1, FAIL; 164.38s |
+| [phase0/tests](https://github.com/Joker20380/family_connect/actions/runs/40079929634/job/120831170549) | 2834 | 56 | 0 | 106 | exit1, FAIL; 138.37s |
+| [Docker tests-stage / phase0/failover](https://github.com/Joker20380/family_connect/actions/runs/40079929634/job/120831170445) | 2832 | 56 | 0 | 108 | pytest exit1, build FAIL; 147.44s |
+
+В каждом full run дополнительно 7 subtests passed и 2 existing deprecation warnings.
+D01.2 strict imports/четыре desktop-файла PASS; Docker root gate 22 passed и desktop
+адресные 59 passed. CI native/systemd/audio skips сохранены, новых skips нет.
+
+Остаточные failures (полная разбивка прочитана в Docker
+[build.log artifact](https://github.com/Joker20380/family_connect/actions/runs/40079929634/artifacts/12555335023)):
+
+- **2 D02.2:** `test_rns_worker_matches_exact_accepted_provider_and_transport_source`
+  и `test_readiness_semantic_port_uses_exact_accepted_sources`: нет accepted capsule
+  `rns-relay.json` / `fc_rns_transport.py`; pins не изменены.
+- **19 других fixture/capsule:** mobile_bootstrap/test_transport_bridge (6),
+  owner_disconnect/test_deadline_bridge (12, включая inherited cases),
+  tunnel_restart/test_health (1); отсутствуют historical fc_rns_transport.py/VpnHealth.java.
+- **29 nginx contract:** test_friends_http_runtime (13), test_http_candidate_preflight (9),
+  test_http_transition (7): literal location-route assertion `count(...) == 1` получает 0.
+- **2 expiry:** test_native_authority_compat, обе проверки exact expiry расходятся на 4s.
+- **3 privacy:** test_device_identity, test_friends_http_evidence, test_product_registration —
+  ожидаемые ValueError/RuntimeError не подняты; **1 socket:**
+  test_readiness_adapter_packaging::test_exact_candidate_mode_with_local_fixture_only,
+  `OSError [Errno 98] Address already in use`.
+
+Это отдельные остаточные gates, не разрешение чинить продукт/окружения/другие fixtures
+или расширять D02.2. В Docker failure list нет затронутых независимых helpers и новых
+14 regressions. Auto assertion в этом run не наблюдался; D04 не закрывается.
+Control job/workflow FAIL: GUI/package/extracted checks и uploads SKIPPED.
+Phase0/tests FAIL: cargo SKIPPED. Docker marker не создан, runtime COPY заблокирован;
+provision/failover/auth/offline/revocation SKIPPED, build.log upload и compose down PASS.
+Phase0 workflow FAIL. Прочитаны только статусы нужного SHA, failure tails и build artifact;
+несвязанные jobs не ожидались, повторные full workflow logs не скачивались.
 
 Source-only; Linux0.2.11 / Windows0.2.15 / Android beta106-recovery без изменений.
 Нет deployment/installation/release; отмена только обычным revert, не runtime rollback.
