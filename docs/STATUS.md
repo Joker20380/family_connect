@@ -3,10 +3,11 @@
 Срез D01.1, 24.10.2026. Вход: `main`, чистая рабочая копия, HEAD = проверенный `origin/main`
 `6ede7a45fd4078dc0fc3fbf8df63b937b2ad3331` (D00); продуктовый baseline —
 `664342a6566792a4ea621274a369bcd6b6012143`. D01.1 меняет только три CI jobs/helper и документы.
-**Разрешена только D01.1; D01.2/D02/продукт не начинать.**
+**D01.1 — PARTIAL, ограниченный проход завершён; D01.2/D02/продукт не начинать.**
 [D01.1](releases/2026-10-24-desktop-ci-d01-1.md): локальные реальные импорты PASS,
 адресные 59 passed; локальный desktop 877 passed / 64 skips / 0 failures/errors.
-На pushed `b3a54f2` imports/адресные CI PASS, полный suite FAIL (включая локальную RNS capsule): D01.1 PARTIAL, уточнение второго AWG/TCP failure.
+На pushed `26f71d6` imports/адресные CI PASS; полный suite FAIL: отсутствующая RNS capsule,
+в AWG также Auto lifecycle assertion. Подробности и точные counts — в отчёте; продукт/fixtures не исправлялись.
 
 ## Цель и порядок работы
 
@@ -38,7 +39,7 @@
 
 | Уровень | Подтверждённое состояние |
 |---|---|
-| SOURCE | Последний завершённый продуктовый checkpoint — phase22; сохранён в baseline выше. D00 — документация. |
+| SOURCE | Последний продуктовый checkpoint — phase22, baseline выше. D00 — документация; D01.1 — CI-only `b3a54f2` + `26f71d6`, оба pushed/remote-verified. |
 | LOCAL TESTS | Phase22: 1218 PASS в описанном локальном наборе, без failures/errors/skips; существующий GI warning. Шесть Linux native packages: race PASS. Не полный pytest и не CI. |
 | CI | D01.1 PARTIAL: три import/адресных gates PASS, полный desktop FAIL; дальнейшие job checks SKIPPED. [Результаты и остаточные failures](releases/2026-10-24-desktop-ci-d01-1.md). Общий CI PASS не заявлен. |
 | BUILT | Linux native-r18, Windows native-r14 cross-build, unsigned Linux system/native/RNS component-r18. **Полный parity installer: 0/2.** |
@@ -85,7 +86,7 @@ D00 ничего не устанавливает: runtime rollback не нуже
 
 ## Блокеры / оставшаяся реализация
 
-- D01.1: зависимости Client builds/linux, AWG и TCP — проверка в процессе. D01.2 (Linux control/phase0/Dockerfile.control test-stage) ещё не начат; D02 отдельно отвечает за fixtures owner_handoff/prepare. Общий D01 открыт.
+- D01.1 PARTIAL: dependency collection errors устранены; полный desktop блокируют RNS capsule fixture и AWG Auto lifecycle assertion. D01.2 (Linux control/phase0/Dockerfile.control test-stage) не начат; D02 отдельно отвечает за исследовательские fixtures/импорты. Общий D01 открыт.
 - D03: `provisioning/chat_bridge.py`, `ChatHTTP.stream`: синтетический вызов фактического
   метода direct400/401/403/409 + TransportError при закрытии даёт `fallback_calls=1`.
   Это сообщённое воспроизведение логики, НЕ проверка установленного клиента и не новый запуск D00.
@@ -133,4 +134,4 @@ D00 ничего не устанавливает: runtime rollback не нуже
 [STATUS до D00](STATUS.history-2026-10-24.md) и [PLAN до D00](PLAN.history-2026-10-24.md)
 сохранены целиком; старые NEXT/ACTIVE/checkpoints — история, не параллельные задания.
 [Отчёт D00](releases/2026-10-24-desktop-parity106-d00.md) фиксирует сохранность и границы.
-**После D01.1 остановиться. NEXT: D01.2, если D01.1 принят; только отдельной задачей.**
+**Остановка после отчёта D01.1 PARTIAL. NEXT: D01.2, если D01.1 принят; только отдельной задачей.**
