@@ -306,8 +306,8 @@ class DirectHost(Host):
             if monitor is not None:
                 monitor.join(1)
             request.clear()
-            connection.close()
             with self.lock:
+                connection.close()
                 self.active.pop(connection, None)
 
     def close(self):

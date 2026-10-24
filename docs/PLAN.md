@@ -6,7 +6,7 @@
 а не отдельные реализации продукта. [Текущий срез](STATUS.md) — источник текущего состояния.
 Продуктовый checkpoint: phase22, source baseline `664342a6566792a4ea621274a369bcd6b6012143`.
 D00 — организация документации; следующие строки являются очередью, не разрешением на автозапуск.
-**L01/L01-R review принят в Linux source/native/root→UID/isolated-kernel scope. Review L02.2 принят: локальный критерий L02 authenticated OFF→ON→OFF через Manual и Auto/MESH выполнен. L02.1-R atomic RetainChat/terminal recovery и L02.1-R2 status classification приняты. Только D01.3 public chat completion/admission перед L03; NEXT — review D01.3. Review D03/D04/D05, D02.1 collection/import isolation и D02.2 public-reference принят.
+**L01/L01-R review принят в Linux source/native/root→UID/isolated-kernel scope. Review L02.2 принят: локальный критерий L02 authenticated OFF→ON→OFF через Manual и Auto/MESH выполнен. L02.1-R atomic RetainChat/terminal recovery и L02.1-R2 status classification приняты. D01.3 ChatBridge/Host/ServiceHost приняты; D01.3 PARTIAL до DIRECT correction. Только D01.3-R DIRECT completion/admission; NEXT — review D01.3-R. Review D03/D04/D05, D02.1 collection/import isolation и D02.2 public-reference принят.
 Review D02.1-R и fleet-документации `1725656` принят;
 D02.1-R остаётся PARTIAL/NOT_RUN; L03 и дальнейшие Linux/Windows задачи не начинаются.**
 
@@ -26,7 +26,8 @@ D02.1-R остаётся PARTIAL/NOT_RUN; L03 и дальнейшие Linux/Wind
 | D01 | Зависимости Linux/desktop CI | D00 | IN_PROGRESS | Dependency gates D01.1/D01.2 отдельно от общей CI-приёмки; закрытие требует полного PASS обязательных suites после устранения остаточных blockers, без скрытия тестов. |
 | D01.1 | Client builds/linux, AmneziaWG pilot, TCP pilot | D00 | PARTIAL | Dependency gates `26f71d6` приняты review; реальные Python3.12 imports/адресные CI PASS. Полный desktop FAIL: RNS capsule, AWG Auto lifecycle assertion; PARTIAL сохранён. |
 | D01.2 | Linux control, phase0, Dockerfile.control test-stage | принята dependency-часть D01.1 | PARTIAL | На pushed `07b52e3` Python3.13 imports/адресные gates PASS ×3; Docker root 22 passed. Каждый full suite: 9 owner_handoff/prepare collection errors, exit 2 (D02); обязательные gates сохранены. |
-| D01.3 | Public chat probe/prepare completion и следующий admission | L02.2/local L02 review принят; D03/D04/D05, L01/L01-R сохранены | CHECKPOINT (source gate PASS, review pending) | [Отчёт](releases/2026-10-24-desktop-chat-admission-d01-3.md): actual Host/ServiceHost/ChatBridge и Unix IPC, event-barrier red2/green; EOF после cleanup сериализован с admission, bounded client wait без open/HTTP retry. Public4/native caps и drain/accounting сохранены. 266 адресных + финальные24, прежние15/combined3/root→UID PASS. Production `23e3c5513ab9c37e919f228066c0e23f733a997e`: Client Linux и isolated gates PASS. Финальный test source `f258c17007102634fead9894bcfe9a82f6db44cf`: mandatory desktop pytest 40132223364/120986275264 PASS; общий D01 открыт. STOP перед review D01.3. |
+| D01.3 | Public chat probe/prepare completion и следующий admission | L02.2/local L02 review принят; D03/D04/D05, L01/L01-R сохранены | PARTIAL (Host/ServiceHost/ChatBridge accepted; DIRECT correction D01.3-R) | [Отчёт](releases/2026-10-24-desktop-chat-admission-d01-3.md): actual Host/ServiceHost/ChatBridge и Unix IPC, event-barrier red2/green; EOF после cleanup сериализован с admission, bounded client wait без open/HTTP retry. Public4/native caps и drain/accounting сохранены. 266 адресных + финальные24, прежние15/combined3/root→UID PASS. Production `23e3c5513ab9c37e919f228066c0e23f733a997e`: Client Linux и isolated gates PASS. Финальный test source `f258c17007102634fead9894bcfe9a82f6db44cf`: mandatory desktop pytest 40132223364/120986275264 PASS; общий D01 открыт. |
+| D01.3-R | DIRECT close/active removal под admission lock | D01.3 accepted subset; без переработки native | CHECKPOINT (local PASS; CI pending) | [Отчёт](releases/2026-10-24-desktop-chat-direct-completion-d01-3-r.md): actual DirectHost/DirectBridge/Authority и Unix IPC, барьер после close/EOF; red1/green30, зависимые326/root→UID13 PASS. Четвёртый open ждёт lock, пятый отклонён; cancel/deadline/shutdown/accounting/no replay. Mandatory Client Linux desktop pytest на новом source обязателен; до CI не PASS. STOP перед review D01.3-R. |
 | D02 | Сбор и импорты исследовательских fixtures | dependency-части D01.1/D01.2 приняты | IN_PROGRESS | Review D02.1 collection/import isolation и D02.2 принят; зависимости D03 готовы. D02.1-R PARTIAL/NOT_RUN. Не ждёт полного зелёного CI, который сам должен разблокировать; общая CI-приёмка D01 остаётся отдельным gate. |
 | D02.1 | Девять collection errors, историческая overlay-suite, изоляция импортов | окружения D01.1/D01.2 готовы | DONE (collection/import isolation) | Review подтвердил границы; `6a0a982`: clean collection 2996/0 errors, helpers/import/runner 75 PASS; три CI full suites с 56 residual failures. Историческая воспроизводимость отдельно в D02.1-R. |
 | D02.1-R | Комплектность исторического runner | review D02.1 | PARTIAL | Коррекция принята review. Vector/original API, явные retained inputs, preflight до pytest; 110 адресных PASS. Historical suite NOT_RUN: нет anchored pins delivery-check, Java runtime/classes и 3 JARs; полный replay не обеспечен и в D02.2 не выполняется. |
@@ -116,7 +117,7 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 
 Phase22 подключила Linux ChatOwner к EXISTING_EXIT. L01 добавляет protected DIRECT;
 старый SYSTEM не переименован в DIRECT и не используется fallback этого нового пути.
-Локальный host lifecycle принят по L02.2; public admission корректируется в D01.3. Одно активное владение
+Локальный host lifecycle принят по L02.2; DIRECT public admission завершается в D01.3-R. Одно активное владение
 не означает вечный PID: текущий worker имеет собственный жизненный цикл.
 Полный внутренний пакет L03 обязателен перед закрытием L04–L08; system-only component-r18 недостаточен.
 
@@ -245,5 +246,5 @@ Django7.1 (servers/access/payments) зависит от backend/fencing и recov
 [Полный прежний PLAN](PLAN.history-2026-10-24.md), [STATUS](STATUS.history-2026-10-24.md),
 [phase22](releases/2026-10-23-desktop-parity106.md#linux-user-chat-admission-and-existing-exit-handoff-2410-phase22),
 [отчёт D00](releases/2026-10-24-desktop-parity106-d00.md).
-**После отчёта D01.3 остановиться. NEXT — review D01.3;
+**После отчёта D01.3-R остановиться. NEXT — review D01.3-R;
 без автоматического перехода к Linux/Windows/iOS или live-операциям.**

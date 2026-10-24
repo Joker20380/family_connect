@@ -405,7 +405,7 @@ OFF→ON→OFF with owned TUN, real private resolver/readback, native health and
 publication. Real broker binding/renewal extends the paired TLS/Mux fixture;
 external rendezvous/media, room provider and DNS/fixed-service backing endpoints
 remain local test replacements. Mailbox is a byte relay, not L05 LXMF/node.
-No installed/live/F-01 claim follows. NEXT review D01.3, not automatic L03.
+No installed/live/F-01 claim follows. NEXT review D01.3-R, not automatic L03.
 
 The public Host/ServiceHost cap stays at four live operations/mailboxes. A successful
 probe/prepare reply is not yet a free slot: ChatBridge waits for EOF of that control
@@ -417,6 +417,13 @@ connections earlier but also stops admission. Terminal replies stay typed withou
 waiting for EOF; trailing bytes fail DENIED. This is not a reservation against other
 clients, a retry or an HTTP/open replay. The [D01.3 report](releases/2026-10-24-desktop-chat-admission-d01-3.md)
 separates real public Unix IPC evidence from its synthetic native lane.
+
+DirectBridge inherits that EOF wait. [D01.3-R](releases/2026-10-24-desktop-chat-direct-completion-d01-3-r.md)
+also serializes DirectHost's final close/active removal under its admission lock,
+after native/mailbox and DIRECT monitor cleanup. Its real Authority/Unix IPC test
+holds the handler after actual close and client EOF: the dependent fourth open
+waits for the lock, not a retry, while a fifth live mailbox still fails. Controlled
+socketpairs replace only native backing; no endpoint/trust/native semantics change.
 
 ServiceOwner retains one generation lease while authorized demand remains; each
 operation atomically retains that specific native generation. Terminal status

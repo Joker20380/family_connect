@@ -1,5 +1,28 @@
 # Текущее состояние / Current state
 
+Срез **D01.3-R**, 24.10.2026: завершается DIRECT completion/admission contract.
+Review D01.3 принял ChatBridge и Host/ServiceHost; D01.3 **PARTIAL по review**
+из-за оставшегося close→active.pop окна DirectHost. Только эта коррекция;
+**NEXT — review D01.3-R**, без автоматического L03.
+Вход: чистая актуальная `main` = remote `68e4029f58d54384471576c623b08e89752f2c94`.
+[Отчёт D01.3-R](releases/2026-10-24-desktop-chat-direct-completion-d01-3-r.md):
+actual DirectHost/DirectBridge/Authority, Unix IPC и барьер после фактического close/EOF.
+До: **1 failed**, active4/native opens3/API sends2, dependent open ConnectionResetError.
+После: close и active.pop под одним admission lock после прежнего cleanup;
+четвёртый mailbox проходит, пятый отклонён, закрытие возвращает capacity.
+**30 PASS**: пять новых DIRECT + прежние24 completion + исходный bounded-mailbox.
+Cancel/deadline/shutdown bounded; descriptors/handlers/DIRECT monitors учтены;
+synthetic socketpair backing не заменяет native/installed acceptance.
+Зависимые DIRECT/public IPC/error/lifecycle **326 PASS**, root→UID/process **13 PASS**.
+Новый source SHA/обязательный Client Linux CI
+будут зафиксированы после push; до этого CI **NOT_RUN**, не общий PASS.
+Принятые L01/L01-R, локальные L02/L02.2, D03/D04/D05/native semantics сохранены.
+D01 открыт, D02.1-R PARTIAL/NOT_RUN. Версии/identity/keys/history/settings/floors/
+reference pins неизменны. L03/install/live/publication/Windows/fleet/iOS NOT_RUN.
+**STOP. NEXT — review D01.3-R.**
+
+### Предыдущий checkpoint D01.3 (evidence до DIRECT review correction)
+
 Срез **D01.3**, 24.10.2026: public chat IPC completion/admission race исправлена;
 **source gate PASS, review pending. NEXT — review D01.3.**
 Вход: чистая актуальная `main` = remote `d448e99b55e594522c02234ac2a87575603a6bbb`.
