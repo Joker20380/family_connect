@@ -15,8 +15,11 @@ open до cleanup, **2 failed**, ConnectionResetError. Это та же выяв
 deadline, максимум4s; EOF/removal сериализованы с admission. Caps4/native caps,
 handler/monitor accounting, typed errors/cancellation и no-replay сохранены.
 Локально **266 passed** (24 новых + зависимые Python/IPC/error/lifecycle).
-Обязательный Client Linux desktop pytest и остальные CI gates ожидаются на новом
-source; до результата D01.3 не DONE. Исторические54 residual failures и voice
+Source `23e3c5513ab9c37e919f228066c0e23f733a997e` pushed/remote-verified:
+Client Linux (включая mandatory desktop pytest) и isolated-linux PASS; локально
+прежние15 authenticated, combined3 и13 root→UID/process PASS. Follow-up публикует
+тестовый handler до ответа (24 PASS); его CI проверяется отдельно.
+До финального CI D01.3 не DONE. Исторические54 residual failures и voice
 holding-state failure не исправляются в этом scope. Прежние15 authenticated,
 combined3, root→UID/process, Auto/DIRECT и full suites не отключены.
 Identity/history/settings/keys/floors/reference pins и установленный baseline

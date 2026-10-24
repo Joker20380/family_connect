@@ -58,10 +58,12 @@ def held_reply(public, monkeypatch):
     original_recv, original_request = socket.socket.recv, public.client._request
 
     def write(connection, value):
-        original_write(connection, value)
-        if (threading.current_thread().name == 'fc-chat-operation' and value.get('ok') is True
-                and state.handler is None):
+        held = (threading.current_thread().name == 'fc-chat-operation' and value.get('ok') is True
+                and state.handler is None)
+        if held:
             state.handler = threading.current_thread()
+        original_write(connection, value)
+        if held:
             assert release.wait(8)
 
     def read(connection, deadline):

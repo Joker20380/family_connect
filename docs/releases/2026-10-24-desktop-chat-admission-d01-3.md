@@ -46,6 +46,10 @@ The original failing test and every assertion remain unchanged.
 - Host shutdown stops admission before early socket shutdown and joins handlers;
   held cleanup stays tracked. Client completion is not a capacity reservation
   against unrelated demand, and no open/request/HTTP retry is introduced.
+- Both sides of the completion contract are tested together; wire schema1 and
+  response fields stay unchanged. An older client does not wait, and an older
+  host does not serialize EOF/removal: mixed versions are not claimed race-free.
+  This is a source checkpoint, not an installed mixed-version upgrade acceptance.
 - Public4, native CONTROL4/MAX_JOBS, generation pin/refcount, UID/device/profile,
   native drain ordering and VPN publication are unchanged. No SYSTEM fallback.
 
@@ -65,9 +69,51 @@ Local locked Python3.13: initial addressed Host/ServiceHost/status/error set
 **121 passed / 14.62s**; final24 regressions plus lane/manual/Auto/mailbox/error
 dependencies **266 passed / 38.89s**. Native code is unchanged; existing standard
 and authenticated workers from L02.2 are reused, not newly claimed builds.
-Original15 authenticated and mandatory CI results will be recorded separately.
-Client Linux mandatory desktop pytest must PASS on the new source before D01.3
-can be complete. Full CI remains enabled; no reruns merely to obtain green.
+On source **`23e3c5513ab9c37e919f228066c0e23f733a997e`**, ordinarily pushed and
+remote-verified: original15 authenticated **15 passed / 109.34s**, combined3
+**3 passed / 79.20s** (Manual/Auto real OFF→ON→OFF plus CONTROL release), actual
+root→UID/process **13 passed / 0.86s**. `scripts.verify_desktop_reference`:
+**175 pins PASS**. No native source/pin/Coordinator changes or new native build.
+The original failing test file is byte-for-byte unchanged from entry.
+
+Reproduction: `python -m pytest -q clients/desktop/tests/test_chat_public_completion.py`
+inside the locked Linux test environment (all24 cases). The broader266 selection
+adds `test_mesh_chat{,_host,_service,_status}.py`, `test_mesh_service.py`,
+`test_auto_mesh.py`, `test_auto_platform.py`, `test_chat_service.py`,
+`tests/test_chat_bridge_http.py`, `messenger/tests/test_resilient.py` and
+`messenger/tests/test_chat_client.py`. Existing native fixtures use the documented
+[lifetime](../../tests/fixtures/mesh_lifetime/README.md) and
+[combined](../../tests/fixtures/mesh_combined/README.md) runners, unchanged.
+
+| Local evidence | SHA256 |
+|---|---|
+|266 addressed/dependent|`a121b6a7ad81316e97cf89aadc7dcc1e04a33539868b6687ed1a7e3b4b501502`|
+|15 authenticated|`48fa770bd69badc414df51087d9b24690f7fc35c3d6401053a1cbf6f017c99ca`|
+|13 root→UID/process|`65d9d40c8e08cc3c0b019401fa3b2477b38093bee9d8e9b249852f5fa9a5580b`|
+|combined3|`273bae942acd37d85a57b0b8555757593c23746821364b52d21bc081fc562e24`|
+
+Follow-up only hardens the new test barrier: publish the held handler before
+sending response bytes, so the cancellation assertions cannot overtake that
+publication. **24 passed / 6.23s**, log SHA256
+`79cc04e9231e8d69d6328e3da67fa59232c6a84328e2b015dc8316e4cc41742d`.
+No production changes follow `23e3c55`. This is an explicit test-ordering change,
+not a retry to obtain green; final follow-up source/CI is recorded separately.
+
+CI for production source **`23e3c5513ab9c37e919f228066c0e23f733a997e`**:
+
+| Suite | Exact run/job | Result |
+|---|---|---|
+|Client Linux, including mandatory desktop pytest|[40131682971 / 120984525484](https://github.com/Joker20380/family_connect/actions/runs/40131682971/job/120984525484)|PASS; both pytest steps and whole Linux job success|
+|isolated-linux|[40131682996 / 120984525274](https://github.com/Joker20380/family_connect/actions/runs/40131682996/job/120984525274)|PASS; original15, combined3, root→UID/process, Auto/DIRECT kernel and native race retained|
+|native protocol Linux|40131682996 / 120984525228|PASS|
+|phase0/tests|[40131682943 / 120984525008](https://github.com/Joker20380/family_connect/actions/runs/40131682943/job/120984525008)|3056 passed / 54 failed / 138 skipped, errors0, 183.37s|
+|control|40131682940 / 120984524983|IN_PROGRESS at20:58UTC; not PASS|
+|Docker|40131682943 / 120984524829|IN_PROGRESS at20:58UTC; not PASS|
+|voice|40131683016 / 120984525157|PASS, without a voice code change or rerun; earlier holding failure remains separately recorded|
+|AWG / TCP|40131682989 / 120984524985; 40131682949 / 120984525214|PASS; TCP release jobs skipped|
+
+Client Linux mandatory desktop pytest must also PASS on the follow-up source
+before final completion. Full CI remains enabled; no overall CI PASS is claimed.
 
 Previous source `dac0f6b45be6ed8703d3de93ff5fdbc67462eabe`, separate results:
 control **3032/54/138**, phase0/tests **3032/54/138**, Docker **3030/54/140**
