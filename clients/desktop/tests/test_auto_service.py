@@ -4,6 +4,7 @@ from contextlib import nullcontext
 import json
 import os
 from pathlib import Path
+from queue import Queue
 import socket
 import stat
 import sys
@@ -106,6 +107,250 @@ def owner(intent):
     try:
         yield controller, runtimes, cleanups
     finally:
+        controller.shutdown()
+
+
+class ControlledRuntime(Runtime):
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.started, self.disposing, self.disposed = (threading.Event() for _ in range(3))
+        self.allow_dispose = threading.Event()
+        self.allow_dispose.set()
+        self.dispose_error = False
+
+    def start(self):
+        super().start()
+        self.started.set()
+
+    def dispose(self):
+        self.disposing.set()
+        assert self.allow_dispose.wait(3)
+        super().dispose()
+        if self.dispose_error:
+            raise OSError('synthetic dispose failure')
+        self.disposed.set()
+
+
+@pytest.fixture
+def lifecycle(intent):
+    runtimes, created, cleanups = [], Queue(), []
+    def factory(*args):
+        runtime = ControlledRuntime(*args)
+        runtimes.append(runtime)
+        created.put(runtime)
+        return runtime
+    controller = service.Controller(intent, factory, lambda record, keep: cleanups.append((record, keep)), gate=nullcontext)
+    try:
+        yield controller, created, runtimes, cleanups
+    finally:
+        for runtime in runtimes:
+            runtime.allow_dispose.set()
+        if controller.fatal:
+            with pytest.raises(ValueError):
+                controller.shutdown()
+        else:
+            controller.shutdown()
+
+
+def started_runtime(controller, created):
+    assert controller.start(selection())
+    runtime = created.get(timeout=3)
+    assert runtime.started.wait(3)
+    return runtime
+
+
+def joined(thread):
+    thread.join(timeout=3)
+    assert not thread.is_alive()
+
+
+def test_disconnected_is_not_published_during_final_dispose(lifecycle):
+    controller, created, runtimes, _ = lifecycle
+    runtime = started_runtime(controller, created)
+    runtime.allow_dispose.clear()
+    thread, previous = controller.thread, controller.record['generation']
+    assert controller.stop(previous)
+    assert runtime.disposing.wait(3)
+    assert not controller.desired and not controller.intent.desired()
+    assert controller.status()['state'] == 'DISCONNECTING'
+    assert controller.thread is thread and thread.is_alive()
+    assert not controller.start(selection()) and len(runtimes) == 1
+    runtime.allow_dispose.set()
+    joined(thread)
+    assert runtime.disposed.is_set()
+    assert controller.status()['state'] == 'DISCONNECTED'
+    current = started_runtime(controller, created)
+    assert controller.record['generation'] != previous
+    assert not controller.stop(previous)
+    assert controller.desired and controller.intent.desired()
+    assert current.calls == ['start'] and not current.disposing.is_set()
+
+
+def test_start_reaps_finished_owner_without_status_or_retry(lifecycle):
+    controller, created, runtimes, _ = lifecycle
+    runtime = started_runtime(controller, created)
+    thread, previous = controller.thread, controller.record['generation']
+    assert controller.stop(previous)
+    joined(thread)
+    assert runtime.disposed.is_set()
+    started_runtime(controller, created)
+    assert len(runtimes) == 2 and controller.record['generation'] != previous
+    assert controller.thread is not thread
+
+
+def test_repeated_stop_after_owner_exit_is_idempotent_without_status(lifecycle):
+    controller, created, runtimes, cleanups = lifecycle
+    runtime = started_runtime(controller, created)
+    thread, previous = controller.thread, controller.record['generation']
+    assert controller.stop(previous)
+    joined(thread)
+    assert controller.stop(previous)
+    assert controller.thread is None and controller.status()['state'] == 'DISCONNECTED'
+    assert runtime.calls == ['start', 'release', 'dispose'] and not cleanups
+    started_runtime(controller, created)
+    assert len(runtimes) == 2
+
+
+def test_completed_stop_can_retry_failed_revocation_write_without_repeating_cleanup(lifecycle, monkeypatch):
+    controller, created, _, cleanups = lifecycle
+    runtime = started_runtime(controller, created)
+    thread, previous = controller.thread, controller.record['generation']
+    original = mesh_intent.private_write
+    def rejected(*args):
+        raise OSError('synthetic persistence failure')
+    monkeypatch.setattr(mesh_intent, 'private_write', rejected)
+    with pytest.raises(OSError):
+        controller.stop(previous)
+    assert not controller.desired and controller.cancel.is_set()
+    joined(thread)
+    assert controller.intent.desired()
+    monkeypatch.setattr(mesh_intent, 'private_write', original)
+    assert controller.stop(previous)
+    assert not controller.intent.desired()
+    assert controller.thread is None and controller.status()['state'] == 'DISCONNECTED'
+    assert runtime.calls == ['start', 'release', 'dispose'] and not cleanups
+    started_runtime(controller, created)
+
+
+def test_owner_tail_and_repeated_stop_cannot_strand_disconnecting(lifecycle, monkeypatch):
+    controller, created, runtimes, _ = lifecycle
+    returned, allow_exit = threading.Event(), threading.Event()
+    original = controller.run
+    def held_run(value):
+        original(value)
+        returned.set()
+        assert allow_exit.wait(3)
+    monkeypatch.setattr(controller, 'run', held_run)
+    runtime = started_runtime(controller, created)
+    thread, previous = controller.thread, controller.record['generation']
+    try:
+        assert controller.stop(previous)
+        assert returned.wait(3) and runtime.disposed.is_set()
+        assert controller.status()['state'] == 'DISCONNECTING'
+        assert controller.thread is thread and thread.is_alive()
+        assert not controller.start(selection()) and len(runtimes) == 1
+        assert controller.stop(previous)
+    finally:
+        allow_exit.set()
+    joined(thread)
+    assert controller.stop(previous)
+    assert controller.status()['state'] == 'DISCONNECTED'
+    assert controller.thread is None
+    started_runtime(controller, created)
+
+
+@pytest.mark.parametrize('failure', ['close', 'dispose', 'cleanup'])
+def test_lifecycle_failure_is_not_reset_by_stop_or_reap(lifecycle, monkeypatch, failure):
+    controller, created, runtimes, _ = lifecycle
+    def rejected(*args):
+        raise OSError('synthetic cleanup failure')
+    if failure == 'cleanup':
+        controller.intent.begin(selection())
+        controller.record, controller.desired = controller.intent.read(), True
+        controller.recover(None)
+        monkeypatch.setattr(controller, 'cleanup', rejected)
+    else:
+        runtime = started_runtime(controller, created)
+        if failure == 'close':
+            runtime.coordinator.close = rejected
+        else:
+            runtime.dispose_error = True
+    previous = controller.record['generation']
+    assert controller.stop(previous)
+    joined(controller.thread)
+    assert controller.status()['state'] == 'FAILED' and controller.fatal
+    assert not controller.start(selection())
+    assert controller.stop(previous)
+    if controller.thread is not None:
+        joined(controller.thread)
+    status = controller.status()
+    assert status['state'] == 'FAILED' and status['reason'] == 'INTERNAL' and controller.fatal
+    assert not controller.start(selection())
+    assert len(runtimes) == (0 if failure == 'cleanup' else 1)
+
+
+def test_real_coordinator_callback_and_process_close_finish_before_owner_handoff(intent):
+    callback_entered, allow_callback, disconnect_sent = (threading.Event() for _ in range(3))
+    process_closing, allow_close, disposed = (threading.Event() for _ in range(3))
+    created, callbacks, runtimes = Queue(), [], []
+    class Process:
+        def __init__(self, host):
+            self.generation = host.generation
+        def submit(self, action, *args, **kwargs):
+            if action == 'disconnect':
+                disconnect_sent.set()
+            value = dict(generation=self.generation, state='DISCONNECTED' if action == 'disconnect' else 'FAILED',
+                         desired_connected=False, retry_at_ms=0, events=[], events_dropped=0)
+            done = threading.Event()
+            done.set()
+            return SimpleNamespace(done=done, wait=lambda timeout: dict(ok=True, snapshot=value))
+        def close(self):
+            process_closing.set()
+            assert allow_close.wait(3)
+    def factory(record, value, terminal):
+        if runtimes:
+            runtime = ControlledRuntime(record, value, terminal)
+        else:
+            def held_terminal():
+                callback_entered.set()
+                assert allow_callback.wait(3)
+                terminal()
+                callbacks.append(record['generation'])
+            runtime = service.Runtime.__new__(service.Runtime)
+            runtime.guard, runtime.stores = SimpleNamespace(close=disposed.set), []
+            runtime.preferred = runtime.last = ''
+            runtime.platform = SimpleNamespace(underlying=SimpleNamespace(read=lambda context: None),
+                cancel_health=lambda: None, snapshot=lambda: {}, mesh=SimpleNamespace(snapshot=lambda: {}))
+            runtime.coordinator = service.Coordinator(runtime.guard, runtime.platform, 1,
+                process_factory=Process, terminal=held_terminal, guard_prepared=True)
+        runtimes.append(runtime)
+        created.put(runtime)
+        return runtime
+    controller = service.Controller(intent, factory, gate=nullcontext)
+    try:
+        assert controller.start(selection())
+        runtime = created.get(timeout=3)
+        assert callback_entered.wait(3)
+        thread, previous = controller.thread, controller.record['generation']
+        assert controller.stop(previous) and disconnect_sent.wait(3)
+        assert controller.status()['state'] == 'DISCONNECTING'
+        assert not controller.desired and not intent.desired()
+        assert not controller.start(selection()) and not disposed.is_set()
+        allow_callback.set()
+        assert process_closing.wait(3)
+        assert runtime.coordinator.thread.is_alive() and not disposed.is_set()
+        assert controller.status()['state'] == 'DISCONNECTING'
+        assert not controller.start(selection())
+        allow_close.set()
+        joined(thread)
+        assert disposed.is_set() and not runtime.coordinator.thread.is_alive()
+        assert callbacks == [previous]
+        current = started_runtime(controller, created)
+        assert not controller.stop(previous) and controller.desired and intent.desired()
+        assert current.calls == ['start'] and callbacks == [previous]
+    finally:
+        allow_callback.set()
+        allow_close.set()
         controller.shutdown()
 
 

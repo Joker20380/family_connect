@@ -211,7 +211,8 @@ class Controller:
 
     def start(self, selection):
         with self.lock, self.gate():
-            if self.stopping or self.state != 'DISCONNECTED' or self.thread is not None or self.desired:
+            self.reap()
+            if self.stopping or self.fatal or self.state != 'DISCONNECTED' or self.thread is not None or self.desired:
                 return False
             try:
                 self.intent.begin(selection)
@@ -224,12 +225,17 @@ class Controller:
 
     def stop(self, generation):
         with self.lock:
+            self.reap()
             if self.record is None or generation != self.record['generation']:
                 return False
+            if self.state == 'DISCONNECTED' and self.thread is None and not self.desired and not self.fatal:
+                self.terminal()
+                return True
             try:
                 self.terminal()
             finally:
-                self.state = 'DISCONNECTING'
+                if not self.fatal:
+                    self.state = 'DISCONNECTING'
                 self.cancel.set()
                 if self.thread is None:
                     self.thread = threading.Thread(target=self.run, args=(None,), name='fc-auto-cleanup', daemon=False)
@@ -263,7 +269,6 @@ class Controller:
                 if not self.desired:
                     self.intent.notifier.remove()
                     self.intent.close()
-                    self.state, self.reason = 'DISCONNECTED', ''
         except Exception:
             with self.lock:
                 self.state, self.reason, self.fatal = 'FAILED', 'INTERNAL', True
@@ -290,10 +295,12 @@ class Controller:
             if self.thread is not None and not self.thread.is_alive():
                 self.thread.join()
                 self.thread = None
+                if not self.fatal and not self.desired:
+                    self.state, self.reason = 'DISCONNECTED', ''
 
     def status(self):
-        self.reap()
         with self.lock:
+            self.reap()
             status = dict(state=self.state, reason=self.reason, generation=self.record['generation'] if self.record else '',
                           desired_connected=self.desired, requested_profile=self.requested, controller=None)
             if self.runtime is not None and not self.fatal:
