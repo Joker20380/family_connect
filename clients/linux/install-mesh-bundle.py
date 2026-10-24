@@ -192,20 +192,23 @@ def acquire():
             if not stat.S_ISREG(info.st_mode) or info.st_uid != 0 or info.st_nlink != 1 or stat.S_IMODE(info.st_mode) != 0o600:
                 raise ValueError('Unsafe component lock')
             fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        for name in ('/run/family-connect-mesh/active.json', '/run/family-connect-tcp/active', '/run/family-connect-awg/active.json',
+                     '/run/family-connect-auto/guard.json', '/run/family-connect-auto/normal.json', '/run/family-connect-auto/mesh.json'):
+            if Path(name).exists() or Path(name).is_symlink():
+                raise ValueError('Finish VPN cleanup before system-component installation')
         owner = Path('/run/family-connect-mesh-owner')
-        if owner.exists() or owner.is_symlink():
-            directory(owner)
-            for name in ('vpn.lock', 'transport.lock'):
-                path = owner / name
-                descriptor = os.open(path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK, 0o600)
-                descriptors.append(descriptor)
-                info = os.fstat(descriptor)
-                if (not stat.S_ISREG(info.st_mode) or info.st_uid != 0 or info.st_nlink != 1 or
-                        stat.S_IMODE(info.st_mode) != 0o600):
-                    raise ValueError('Unsafe MESH ownership lock')
-                fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                if name == 'transport.lock' and info.st_size:
-                    raise ValueError('MESH cleanup is unconfirmed; retain the sticky marker')
+        directory(owner)
+        for name in ('vpn.lock', 'transport.lock'):
+            path = owner / name
+            descriptor = os.open(path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW | os.O_NONBLOCK, 0o600)
+            descriptors.append(descriptor)
+            info = os.fstat(descriptor)
+            if (not stat.S_ISREG(info.st_mode) or info.st_uid != 0 or info.st_nlink != 1 or
+                    stat.S_IMODE(info.st_mode) != 0o600):
+                raise ValueError('Unsafe MESH ownership lock')
+            fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            if name == 'transport.lock' and os.fstat(descriptor).st_size:
+                raise ValueError('MESH cleanup is unconfirmed; retain the sticky marker')
         for kind in ('direct', 'mesh'):
             runtime = Path('/run/family-connect-chat-' + kind)
             if not (runtime.exists() or runtime.is_symlink()):

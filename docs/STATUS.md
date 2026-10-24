@@ -1,13 +1,14 @@
 # Текущее состояние / Current state
 
-Срез **L03.1**, 25.10.2026: внутренний system/runtime build-7 собран; review pending.
+Срез **L03.1**, 25.10.2026: внутренний system/runtime build-8 собран; review pending.
 D01.3/D01.3-R приняты в public completion/admission scope; L01/L01-R,
 локальные L02/L02.2, D03/D04/D05 и native границы сохранены. D01 открыт,
 D02.1-R PARTIAL/NOT_RUN. [Отчёт L03.1](releases/2026-10-25-linux-system-runtime-l03-1.md).
 758 payload files: manual/Auto/chat, native/RNS/Python3.12, anchor, AWG3.1/TCP.
-94 адресных PASS; desktop1117 PASS/24 SKIP. Exact disposable systemd255 smoke PASS:
+95 адресных PASS (также umask077); desktop1118 PASS/24 SKIP. Disposable systemd255 PASS:
 imports, реальный polkit/UID IPC, idle units, install exclusion, rollback/capabilities.
-Source CI отдельно; это не общий CI/live/installed-workstation PASS.
+Первый source CI: Client Linux PASS; выявленные harness/umask исправлены, повтор CI pending.
+Full CI отдельно (прежние54 failures не исправляются); не live/workstation PASS.
 Родительский L03 не завершён: L03.2 AppImage/DEB зависит от review L03.1.
 Ни public versions/catalogs, ни установка на рабочую машину не разрешены.
 **STOP. NEXT — review L03.1.**

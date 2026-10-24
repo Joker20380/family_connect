@@ -18,12 +18,12 @@ activation and messaging remain L04/L05; migration L08 and visual L07 not starte
 
 ## Exact internal artifact
 
-`FamilyConnect-MESH-system-amd64.tar.gz`, internal build **L03.1/build-7**;
+`FamilyConnect-MESH-system-amd64.tar.gz`, internal build **L03.1/build-8**;
 not signed, not a desktop installer, not publicly distributed.
 
-- Build/source ID: `1cadeee74b8877ded664b1b84e7f39539faaccdae3ba47d42b8ea9c8de496433`.
-- Archive SHA256: `c21265ff36ed0b2f07e2e8762889bf0826e782250a75f032b9a14c93d994a858`.
-- Size: **49,247,762 bytes**,759 regular archive members including the manifest.
+- Build/source ID: `63fbbc03627497ac88bfad0536939e472ff3424b9647786124914a1732b2541b`.
+- Archive SHA256: `9b5f5ee475b5df5b9277937697727cb918ceed7dfe5b63641ced8902adfd78e1`.
+- Size: **49,247,763 bytes**,759 regular archive members including the manifest.
 - Manifest schema2 binds758 payload members, exact sizes/SHA256, architecture,
   signing status and native source digest; build ID covers all those fields.
   `installed.json` binds the actual fixed destinations/modes/bytes, including
@@ -139,7 +139,9 @@ this fixture rule is not in the shipped archive. No test trust switch is shipped
 - Live owner refuses installation without changing either service PID. Held MESH
   ownership and sticky cleanup refuse installation; marker bytes are preserved.
 - Real systemd start **and** direct executable start cannot enter a held install
-  transaction; installation completes after release. No mock systemctl/readback.
+  transaction; old-source MESH chat admission also returns `VPN_RESERVED` under
+  the real reservation locks. Installation completes after release. No mock
+  systemctl/readback. Ownership directory/locks are reserved even on a fresh host.
 - Separate negative bundle with invalid Python syntax fails real installed import
   readback; previous source, manifest and capabilities are restored. Synthetic
   identity/history/settings and unrelated safe files survive. Production payload
@@ -150,14 +152,42 @@ this fixture rule is not in the shipped archive. No test trust switch is shipped
   checks do not request VPN materials or a VPN session. Actual AWG/TCP/MESH traffic,
   registration, Telemost, P1 grants and installed message delivery remain L04/L05.
 
-Local targeted packaging/installer/authorization/backend checks: **94 PASS**.
-Desktop full suite with the standard native artifact: **1117 PASS /24 SKIP**
-(before final directory/capability hardening, followed by the94 targeted checks).
-Final exact archive **build-7 system smoke PASS**, including caller umask077 and
-manual/Auto idle units: `system-smoke-7.log`, all listed checks and archive/normal-binary
-metadata. Root backup in that disposable system was `mesh-bundle-udlkqwzz`.
-`build-and-targeted-7.log` records94 PASS; `desktop-full-2.log` records1117/24.
-Source CI is pending the source checkpoint push; no combined CI PASS claimed.
+Local targeted packaging/installer/authorization/backend checks: **95 PASS**,
+also under caller umask077 (`targeted-umask077-final.log`). Desktop full suite on
+source `512980c`, with the standard native artifact: **1118 PASS /24 SKIP**
+(`desktop-final-source.log`); the later sticky-race regression adds one targeted
+root-only check. Final exact archive **build-8 system smoke PASS**, including
+umask077 and manual/Auto idle units: `system-smoke-8.log`, all listed checks and
+archive/normal-binary metadata. Root backup: `mesh-bundle-3ydxf2o0`.
+
+Build-7/source `512980c9389608cca890ff8cbd865860e5e11f65` was pushed and remote
+verified. Its Client Linux job **40138981148/121006466574 PASS**. Isolated-linux
+**40138981120/121006466424** passed native/root→UID/Auto/authenticated/combined/race
+steps but failed final DIRECT source harness import after product checkout
+fallbacks were removed. The fixture now explicitly adds desktop source imports;
+the installed product still has no checkout fallback. Full control
+**40138981164/121006466316**: **3071 passed /58 failed /139 skipped**, errors0.
+Four new failures came from the mocked directory fixture inheriting a previous
+test's umask077; its modes now match the real installer. The other54 failures
+remain outside scope. These initial regressions are recorded, not counted PASS;
+follow-up source CI is pending. Initial Docker/failover build
+**40138981154/121006466988** also fails its full suite:3070/57/141
+(passed/failed/skipped), not an installed-component smoke result.
+AWG/TCP/voice source jobs PASS. No combined CI PASS is claimed.
+
+Fixed DIRECT kernel harness with the standard worker, copied root-owned0700 as
+in CI, passes in a disposable empty network namespace (`direct-kernel-root-owned.log`):
+protected API/mailbox, fatal TLS DENIED/no fallback, encrypted reopen/revocation,
+interface change and VPN_OFF. An initial local invocation incorrectly supplied
+a user-owned0775 native mount and correctly failed the existing trust boundary;
+only the fixture placement was corrected, not the trust check.
+
+A separate deterministic targeted regression found a sticky marker written
+between pre-flock stat and flock. Old installer reproducer `sticky-red.log`
+fails as expected; the installer now checks size again **after** acquiring the
+lock. This mocked race regression is distinct from the real kernel ownership
+and sticky-refusal checks in system smoke. Prior build-7 and its evidence remain
+local; build-8 supersedes it, never a replacement public release.
 
 Initial failed attempts retained: first full desktop invocation lacked GI and
 failed collection (fixed only by test-image dependencies); first smoke imported

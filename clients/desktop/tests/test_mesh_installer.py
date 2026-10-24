@@ -71,7 +71,10 @@ def filesystem(tmp_path, monkeypatch):
     monkeypatch.setattr(installer, 'CONFIG_DIRECTORIES', (tmp_path / 'config/awg', tmp_path / 'config/tcp'))
     monkeypatch.setattr(installer, 'CAPABILITY', capability)
     monkeypatch.setattr(installer, 'AUTO_CAPABILITY', root / 'auto-capabilities.json')
-    monkeypatch.setattr(installer, 'directory', lambda path: path.mkdir(parents=True, exist_ok=True))
+    def directory(path):
+        path.mkdir(parents=True, exist_ok=True)
+        path.chmod(0o755)
+    monkeypatch.setattr(installer, 'directory', directory)
     def trusted(path, directory=False):
         assert path.is_relative_to(tmp_path) and not path.is_symlink()
         return path.lstat()
@@ -227,6 +230,26 @@ def test_new_system_directories_do_not_inherit_private_caller_umask(tmp_path, mo
         assert directory.parent.stat().st_mode & 0o777 == 0o755
     finally:
         os.umask(before)
+
+
+@pytest.mark.skipif(os.geteuid() != 0, reason='Root-owned isolated ownership locks')
+def test_sticky_marker_written_between_stat_and_flock_is_not_missed(tmp_path, monkeypatch):
+    monkeypatch.setattr(installer, 'LOCKS', ())
+    monkeypatch.setattr(installer, 'Path', lambda path: tmp_path / str(path).lstrip('/'))
+    monkeypatch.setattr(installer, 'directory', lambda path: path.mkdir(parents=True, exist_ok=True))
+    marker = tmp_path / 'run/family-connect-mesh-owner/transport.lock'
+    marker.parent.mkdir(parents=True)
+    marker.touch(mode=0o600)
+    original = installer.fcntl.flock
+    def flock(descriptor, flags):
+        if Path('/proc/self/fd/' + str(descriptor)).resolve() == marker:
+            marker.write_bytes(b'late synthetic cleanup marker')
+        return original(descriptor, flags)
+    monkeypatch.setattr(installer.fcntl, 'flock', flock)
+    monkeypatch.setattr(installer, 'command', lambda *args: pytest.fail('Sticky ownership must fail before system commands'))
+    with pytest.raises(ValueError, match='cleanup is unconfirmed'):
+        installer.acquire()
+    assert marker.read_bytes() == b'late synthetic cleanup marker'
 
 
 @pytest.mark.parametrize('name', ['guard.json', 'normal.json', 'awg'])

@@ -211,6 +211,10 @@ finally:
     assert process.stdout.readline().strip() == 'BARRIER_HELD'
     assert run('systemctl', 'start', UNITS[0], ok=False).returncode != 0
     assert run('/usr/bin/python3', '-I', '-S', str(ROOT / 'chat_direct_host.py'), '1000', ok=False).returncode != 0
+    legacy = python('import threading,time;from mesh_ownership import Ownership,OwnershipError\n'
+                    'try: Ownership("chat").acquire(threading.Event(),time.monotonic()+2)\n'
+                    'except OwnershipError as error: print(str(error))')
+    assert legacy == 'VPN_RESERVED'
     output, error = process.communicate('\n', timeout=90)
     assert process.returncode == 0, (output, error)
     record('concurrent_unit_and_direct_exec_excluded')

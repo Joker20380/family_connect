@@ -18,7 +18,8 @@ from types import SimpleNamespace
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT / 'clients/linux'), str(ROOT / 'clients/desktop/tests')]
+sys.path[:0] = [str(ROOT), str(ROOT / 'clients/linux'), str(ROOT / 'clients/desktop'),
+                str(ROOT / 'clients/desktop/tests')]
 
 
 def peer(directory):
