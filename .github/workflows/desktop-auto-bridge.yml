@@ -71,10 +71,10 @@ jobs:
         run: |
           set -euo pipefail
           parent_netns="$(stat -Lc %i /proc/self/ns/net)"
-          sudo install -d -m 700 /opt/fc-chat-direct-test
-          trap 'sudo rm -rf /opt/fc-chat-direct-test' EXIT
-          sudo install -m 700 "$RUNNER_TEMP/auto-native/fc-mesh" /opt/fc-chat-direct-test/fc-mesh
-          sudo timeout --signal=TERM --kill-after=3s 90s unshare --net -- "$(command -v python)" scripts/check_chat_direct_underlay.py --host-netns "$parent_netns" --worker /opt/fc-chat-direct-test/fc-mesh | tee desktop-chat-direct-kernel.json
+          sudo install -d -m 700 /root/fc-chat-direct-test
+          trap 'sudo rm -rf /root/fc-chat-direct-test' EXIT
+          sudo install -m 700 "$RUNNER_TEMP/auto-native/fc-mesh" /root/fc-chat-direct-test/fc-mesh
+          sudo timeout --signal=TERM --kill-after=3s 90s unshare --net -- "$(command -v python)" scripts/check_chat_direct_underlay.py --host-netns "$parent_netns" --worker /root/fc-chat-direct-test/fc-mesh | tee desktop-chat-direct-kernel.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

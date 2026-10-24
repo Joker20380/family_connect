@@ -1,6 +1,6 @@
 """Synthetic TLS/proofs and real DIRECT sockets in an empty disposable netns only."""
 import argparse
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager
 from datetime import datetime, timedelta, timezone
 import ipaddress
 import json
@@ -125,6 +125,17 @@ def run(worker, host_netns):
                 raise RuntimeError('Synthetic peer not ready')
             threading.Event().wait(.05)
         host = DirectHost(directory / 'chat.sock', os.getuid(), Native(worker))
+        native_operation, diagnostics = host.native.operation, []
+        @contextmanager
+        def observed_operation(*args, **fields):
+            try:
+                with native_operation(*args, **fields) as result:
+                    diagnostics.append((fields['action'], result[0].get('status', 'OPEN')))
+                    yield result
+            except Exception as error:
+                diagnostics.append((fields['action'], type(error).__name__, getattr(error, 'code', 'FAILED')))
+                raise
+        host.native.operation = observed_operation
         host.start()
         cleanup.callback(host.close)
         direct = DirectBridge(api.device.reference, _paths=[host.endpoint])
@@ -146,7 +157,7 @@ def run(worker, host_netns):
             owner.node = None
             owner.next_enrollment = 0
             owner.tick(online=True, visible=True)
-            assert owner.delivery_error is None and isinstance(owner.carrier, ProtectedMailbox), ('registration', guarded)
+            assert owner.delivery_error is None and isinstance(owner.carrier, ProtectedMailbox), ('registration', guarded, diagnostics, host.authority.response is not None)
             owner.local.delivery_update(online=False, foreground=False)
             owner.local.detach_carrier()
             with owner.carrier._direct(time.monotonic()+5, threading.Event()) as channel:
@@ -174,7 +185,9 @@ def run(worker, host_netns):
     print(json.dumps(dict(result='PASS', scope='isolated-kernel-synthetic-TLS-peer', protected_api=True, protected_mailbox=True,
         vpn_off=True, guarded_underlying=True, unmarked_route='UNREACHABLE', real_owner_proofs=True,
         encrypted_reopen=True, revocation=True, interface_change_closed=True, vpn_owner_created=False,
-        fixture_rpf='disabled only inside disposable test netns', host_network_changed=False, live=False)))
+        fixture_rpf='disabled only inside disposable test netns',
+        opt_uid=Path('/opt').stat().st_uid, opt_mode=oct(Path('/opt').stat().st_mode & 0o777),
+        host_network_changed=False, live=False)))
 
 
 if __name__ == '__main__':

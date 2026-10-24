@@ -75,8 +75,20 @@ its required paths/lock filter is updated. Mandatory full suites are not weakene
 
 ## CI and limits
 
-New code-SHA CI: **NOT_RUN before this source checkpoint is pushed**; results will
-be recorded against its exact SHA, not inherited from earlier runs.
+Initial code `bff34ebbb19501261eb19ac6ba4e325d31f3b180` pushed and remote verified.
+Client Linux, Auto protocol/Ubuntu, AWG and TCP PASS; control/phase0/Docker and voice
+remain FAIL. Control on this SHA: **2977 passed / 54 failed / 0 errors / 107 skipped**,
+exit1; subsequent GUI/package acceptance skipped. Other old counts are not transferred.
+The new isolated DIRECT gate also FAILed:
+[run40099764860/job120889322393](https://github.com/Joker20380/family_connect/actions/runs/40099764860/job/120889322393),
+`('registration', False)`; prior mandatory Auto kernel checks passed.
+
+Harness follow-up: keep the worker under root-owned non-writable ancestors in
+`/root/fc-chat-direct-test`, not assume `/opt` is trusted on every runner. Controlled
+Python3.12 reproduction: `/opt` mode0777 gives `ProtocolError` before native networking;
+the same image with the worker under `/root` passes. Production `trusted()` is not
+weakened. The fixture now records safe action/error categories and `/opt` ownership/mode
+for diagnostics; no request/response/identity bytes. CI for this follow-up is separate.
 D05 `c53265d`: Client Linux job120874251704 is now verified completed **PASS**.
 Voice GTK Return gate remains **FAIL, cause unknown**, not declared flaky/fixed.
 Previous D01 residual failures remain separate; no count is predicted for L01.
