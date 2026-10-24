@@ -6,9 +6,9 @@
 а не отдельные реализации продукта. [Текущий срез](STATUS.md) — источник текущего состояния.
 Продуктовый checkpoint: phase22, source baseline `664342a6566792a4ea621274a369bcd6b6012143`.
 D00 — организация документации; следующие строки являются очередью, не разрешением на автозапуск.
-**D01.1: ограниченный проход завершён с PARTIAL. После отчёта остановиться.**
+**Разрешена только D01.2: dependency-часть D01.1 принята техническим review; после отчёта остановиться.**
 
-Порядок по умолчанию: D01.1 → D01.2 → D02 → D03 → Linux → Windows → R01.
+Порядок по умолчанию: D01.1 → D01.2 → D02 → D03 → D04 → Linux → Windows → R01.
 Зависимости в таблицах — необходимые результаты, а не требование заново выполнять завершённые фазы.
 Каждый ID — отдельный ограниченный пользовательский результат, отдельные проверки и commit/push.
 `DONE` = выполнен указанный критерий, `NEXT` = ещё не начат, `QUEUED` = не начат как отдельная задача.
@@ -21,11 +21,12 @@ D00 — организация документации; следующие ст
 | ID | Результат | Зависимость | Статус | Критерий завершения |
 |---|---|---|---|---|
 | D00 | Компактное состояние и последовательный план | phase22 / baseline | DONE | Новый сеанс читает STATUS + выбранный ID; история сохранена побайтно, ссылки и diff проверены; commit/push с remote SHA отражён в итоговом ответе. |
-| D01 | Зависимости Linux/desktop CI | D00 | IN_PROGRESS | DONE только после D01.1 и D01.2; необходимые httpx/LXMF/GI доступны без скрытия обязательных тестов. |
-| D01.1 | Client builds/linux, AmneziaWG pilot, TCP pilot | D00 | PARTIAL | На `26f71d6` реальные Python3.12 imports/адресные CI PASS; полный desktop FAIL: RNS capsule, AWG Auto lifecycle assertion. DONE требует полного desktop PASS в трёх jobs на pushed SHA; тесты не отключены. |
-| D01.2 | Linux control, phase0, Dockerfile.control test-stage | D01.1 | QUEUED | Исправлены зависимости соответствующих Python3.13/test-stage окружений; обязательные suites сохранены, результаты на pushed SHA; fixture scope остаётся D02. |
-| D02 | Сбор и импорты исследовательских fixtures | D01 | QUEUED | Устранены owner_handoff/prepare import errors; обязательные проверки имеют явный воспроизводимый запуск; границы архивных экспериментов задокументированы. |
+| D01 | Зависимости Linux/desktop CI | D00 | IN_PROGRESS | Dependency gates D01.1/D01.2 отдельно от общей CI-приёмки; закрытие требует полного PASS обязательных suites после устранения остаточных blockers, без скрытия тестов. |
+| D01.1 | Client builds/linux, AmneziaWG pilot, TCP pilot | D00 | PARTIAL | Dependency gates `26f71d6` приняты review; реальные Python3.12 imports/адресные CI PASS. Полный desktop FAIL: RNS capsule, AWG Auto lifecycle assertion; PARTIAL сохранён. |
+| D01.2 | Linux control, phase0, Dockerfile.control test-stage | принята dependency-часть D01.1 | IN_PROGRESS | Реальные Python3.13 imports/адресные проверки в трёх окружениях; полные suites/fixtures/root/non-root/marker gates сохранены, результаты на pushed SHA. |
+| D02 | Сбор и импорты исследовательских fixtures | подготовлены окружения D01.1/D01.2 | QUEUED | Устранены owner_handoff/prepare import errors и зависимость CI от локальной RNS capsule; явный воспроизводимый запуск, границы архивных опытов. Не ждёт полного зелёного CI, который сам должен разблокировать. |
 | D03 | Окончательные ошибки ChatHTTP | D02 | QUEUED | HTTP400/401/403/409, TLS и установленный invalid_response сохраняются при ошибке teardown; разрешённый transient fallback продолжает работать. |
+| D04 | Auto stop/start lifecycle | D02 | QUEUED | Детерминированное воспроизведение и исправление с одним владельцем, завершённой cleanup и generation fencing; до дальнейшей Linux-интеграции. |
 
 <a id="ci-evidence"></a>
 ### D01/D02: наблюдавшиеся ошибки после baseline push
@@ -41,6 +42,7 @@ D00 — организация документации; следующие ст
 - [phase0](https://github.com/Joker20380/family_connect/actions/runs/40073089270).
 
 D01.1: [итог PARTIAL, точные failures и CI](releases/2026-10-24-desktop-ci-d01-1.md).
+D01.2: [окружение и evidence](releases/2026-10-24-control-ci-d01-2.md).
 D01 сначала читает соответствующие workflows/lockfiles и эти ошибки; не переносит
 лабораторный каталог целиком и не отключает обязательные suites ради зелёного CI.
 D02 явно отделяет поддерживаемые проверки от архивных опытов; их source push не делает их release core.
@@ -57,11 +59,17 @@ D02 явно отделяет поддерживаемые проверки от
 Проверить сохранение первой окончательной причины (HTTP/TLS/invalid_response) при teardown,
 отсутствие слабого fallback после отказа авторизации и разрешённый transient fallback.
 
+### D04: наблюдение, не доказанная причина CI
+
+`clients/linux/auto_service.py`: DISCONNECTED может публиковаться до завершения cleanup,
+а `start` отклоняется при несброшенном `self.thread`. Связь с конкретным CI assertion
+из D01.1 пока не доказана. В D01.2 только фиксируем; D04 не выполняется.
+
 ## Linux: интеграция, полный кандидат, затем установленная приёмка
 
 | ID | Результат | Зависимость | Статус | Критерий завершения |
 |---|---|---|---|---|
-| L01 | Защищённый DIRECT для чатов | D03 | QUEUED | Фиксированные chat API/mailbox используют корректный underlying-маршрут с действующей авторизацией; отсутствует общий пользовательский bypass. |
+| L01 | Защищённый DIRECT для чатов | D03, D04 | QUEUED | Фиксированные chat API/mailbox используют корректный underlying-маршрут с действующей авторизацией; отсутствует общий пользовательский bypass. |
 | L02 | MESH service-only и передача владения | L01 | QUEUED | Чаты работают при VPN OFF; OFF→ON→OFF сохраняет одно активное владение; проверены drain, expiry, отмена и поздние результаты. |
 | L03 | Полный внутренний Linux-кандидат | L02 | QUEUED | Согласованы GUI, пользовательские службы, root-helper, native/RNS, зависимости и установка; зафиксирован точный состав полного пакета. |
 | L04 | Установленный Linux VPN | L03 | QUEUED | На установленном кандидате подтверждены реальные AWG/TCP/MESH/Auto, P0/P1, DNS/HTTPS и передачи; не CLI/echo/SOCKS smoke. |
@@ -170,4 +178,4 @@ Django7.1 (servers/access/payments) зависит от backend/fencing и recov
 [Полный прежний PLAN](PLAN.history-2026-10-24.md), [STATUS](STATUS.history-2026-10-24.md),
 [phase22](releases/2026-10-23-desktop-parity106.md#linux-user-chat-admission-and-existing-exit-handoff-2410-phase22),
 [отчёт D00](releases/2026-10-24-desktop-parity106-d00.md).
-**После D01.1 остановиться. NEXT: D01.2 только после принятия D01.1 и отдельного запроса.**
+**После D01.2 остановиться. NEXT: D02 после проверки результата D01.2; без автозапуска D02/D03/D04/iOS.**

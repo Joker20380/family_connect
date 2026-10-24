@@ -1,9 +1,11 @@
 # Текущее состояние / Current state
 
-Срез D01.1, 24.10.2026. Вход: `main`, чистая рабочая копия, HEAD = проверенный `origin/main`
-`6ede7a45fd4078dc0fc3fbf8df63b937b2ad3331` (D00); продуктовый baseline —
-`664342a6566792a4ea621274a369bcd6b6012143`. D01.1 меняет только три CI jobs/helper и документы.
-**D01.1 — PARTIAL, ограниченный проход завершён; D01.2/D02/продукт не начинать.**
+Срез D01.2, 24.10.2026. Вход: `main`, чистая рабочая копия, HEAD = проверенный `origin/main`
+`a522a33379726903bdba0be9e4d589016f0e3390`; продуктовый baseline —
+`664342a6566792a4ea621274a369bcd6b6012143`. Dependency-часть D01.1 принята review,
+сам D01.1 остаётся PARTIAL. **Разрешён только D01.2; D02/D03/D04/iOS не начинать.**
+[D01.2](releases/2026-10-24-control-ci-d01-2.md): Python3.13 test-only GI и зависимости,
+проверки в процессе; общий CI PASS не заявлен.
 [D01.1](releases/2026-10-24-desktop-ci-d01-1.md): локальные реальные импорты PASS,
 адресные 59 passed; локальный desktop 877 passed / 64 skips / 0 failures/errors.
 На pushed `26f71d6` imports/адресные CI PASS; полный suite FAIL: отсутствующая RNS capsule,
@@ -86,7 +88,8 @@ D00 ничего не устанавливает: runtime rollback не нуже
 
 ## Блокеры / оставшаяся реализация
 
-- D01.1 PARTIAL: dependency collection errors устранены; полный desktop блокируют RNS capsule fixture и AWG Auto lifecycle assertion. D01.2 (Linux control/phase0/Dockerfile.control test-stage) не начат; D02 отдельно отвечает за исследовательские fixtures/импорты. Общий D01 открыт.
+- D01.1 PARTIAL, dependency gates приняты; D01.2 (Linux control/phase0/Dockerfile.control tests-stage) в работе. D02 допускается после подготовки окружений, не после полного зелёного CI. Общий D01/CI acceptance остаётся открыт до обязательного полного PASS.
+- D04 QUEUED: наблюдается возможная публикация DISCONNECTED до cleanup и отказ start при несброшенном self.thread; причина конкретного CI failure не доказана. Требуется отдельное детерминированное воспроизведение с one-owner/cleanup/generation fencing, до Linux-интеграции.
 - D03: `provisioning/chat_bridge.py`, `ChatHTTP.stream`: синтетический вызов фактического
   метода direct400/401/403/409 + TransportError при закрытии даёт `fallback_calls=1`.
   Это сообщённое воспроизведение логики, НЕ проверка установленного клиента и не новый запуск D00.
@@ -134,4 +137,4 @@ D00 ничего не устанавливает: runtime rollback не нуже
 [STATUS до D00](STATUS.history-2026-10-24.md) и [PLAN до D00](PLAN.history-2026-10-24.md)
 сохранены целиком; старые NEXT/ACTIVE/checkpoints — история, не параллельные задания.
 [Отчёт D00](releases/2026-10-24-desktop-parity106-d00.md) фиксирует сохранность и границы.
-**Остановка после отчёта D01.1 PARTIAL. NEXT: D01.2, если D01.1 принят; только отдельной задачей.**
+**После отчёта D01.2 остановиться. NEXT: D02 после проверки D01.2; только отдельной задачей.**
