@@ -115,6 +115,12 @@ Phase22 подключила Linux ChatOwner к EXISTING_EXIT. L01 добавл�
 Общий Go service-only есть, но host lifecycle ещё не завершён. Одно активное владение
 не означает вечный PID: текущий worker имеет собственный жизненный цикл.
 Полный внутренний пакет L03 обязателен перед закрытием L04–L08; system-only component-r18 недостаточен.
+
+L02.1 source `a2b105de49391928d4bb9c15c4d5ee2305085918` pushed/remote-verified:
+600 адресных Python/native/process checks, Go/race и isolated kernel PASS.
+CI18:07UTC: новый authenticated service-only gate и прежние Auto/root→UID/DIRECT,
+Client Linux/AWG/TCP/voice PASS; mandatory control/phase0 full/Docker IN_PROGRESS,
+не общее CI acceptance. Точные jobs/ограничения — в отчёте L02.1.
 Linux updater пока принимает legacy six-file archive; не объявлять полный bundle обновляемым до L08.
 
 ## Windows: платформенная и продуктовая интеграция

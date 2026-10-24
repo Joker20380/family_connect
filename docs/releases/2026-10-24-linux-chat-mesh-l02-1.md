@@ -107,10 +107,31 @@ Local production worker: Go1.26.1, source manifest
 `0c177e578d50418376734f574042b62ad1a4bf02523c90896c184ea0b8493f37`.
 Xray revision `d2758a023cd7f4174a5a5fa4ff66e487d4342ba0`, patch SHA256
 `eaeb30fd1e2aa52272d7f3a2a06bcad7b983ca9866a87fbd0a614eede6048872` unchanged.
-Source/remote and exact CI receipts are appended after the ordinary source push;
-until then no CI result is claimed for this checkpoint. Mandatory full suites,
-root→UID and existing Auto/DIRECT CI gates are retained; the isolated fixture gate
-is additive, never a replacement or skip for failures.
+Source/tests/docs **`a2b105de49391928d4bb9c15c4d5ee2305085918`** committed and
+ordinarily pushed to `main`; remote SHA verified equal. The source manifest above
+was checked against the staged source and remains the exact committed build input.
+Staged diff/secret/build-output review, links and `git diff --check` PASS.
+There are **600** disjoint local Python/native/process checks (556+24+13+7), plus
+the Go suites/kernel gates; old L02 counts are not carried forward.
+
+CI observation **2026-10-24 18:07 UTC**, for that exact source SHA, not the later
+documentation receipt:
+
+| Job | Observed state |
+|---|---|
+| [Auto isolated-linux120946024703](https://github.com/Joker20380/family_connect/actions/runs/40118925875/job/120946024703) | **PASS**: new authenticated fixture gate, previous native compatibility, root→UID/process, Auto and DIRECT kernel gates all successful |
+| [Auto protocol run40118925875](https://github.com/Joker20380/family_connect/actions/runs/40118925875) | **PASS**, existing Linux/Windows protocol matrix; not Windows feature acceptance |
+| [Client Linux120946024652](https://github.com/Joker20380/family_connect/actions/runs/40118925841/job/120946024652) | **PASS**, not L03/installed acceptance |
+| [AWG120946024093](https://github.com/Joker20380/family_connect/actions/runs/40118925800/job/120946024093), [TCP120946024097](https://github.com/Joker20380/family_connect/actions/runs/40118925790/job/120946024097) | **PASS**, no release/deployment performed |
+| [Voice120946024250](https://github.com/Joker20380/family_connect/actions/runs/40118925849/job/120946024250) | **PASS** on this SHA; historical GTK failures not investigated or relabeled |
+| [Control120946023979](https://github.com/Joker20380/family_connect/actions/runs/40118925785/job/120946023979) | **IN_PROGRESS**, full result not yet known; not PASS/NOT_RUN |
+| [phase0/tests120946023803](https://github.com/Joker20380/family_connect/actions/runs/40118925751/job/120946023803) | **IN_PROGRESS**, mandatory full suite retained |
+| [phase0/failover120946023909](https://github.com/Joker20380/family_connect/actions/runs/40118925751/job/120946023909) | **IN_PROGRESS**, mandatory Docker test-stage/failover retained |
+
+Non-Linux Client builds were still running at this observation; no Windows/Android
+feature acceptance is claimed. No full suite was disabled, hidden or retried to
+obscure a failure. D01 remains open; prior full-suite failures are not declared fixed.
+The next review must reconcile the three running mandatory jobs at these exact IDs.
 
 Versions unchanged: public Linux0.2.11, Windows0.2.15, accepted Android106/native105;
 no installer/catalog/invitation-page changes, installation, deployment, live,

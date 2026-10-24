@@ -18,6 +18,11 @@ mailbox peer — байтовый relay, не установленный LXMF/no
 generic packet/DNS/owned-TUN health и broker lease lifecycle. Это не требование
 live/private capsule. D01 открыт; D02.1-R PARTIAL/NOT_RUN; L01/L01-R/D03/D04/D05
 сохранены. Версии/установка/публикация не менялись; L03 не начат.
+Source `a2b105de49391928d4bb9c15c4d5ee2305085918` committed/pushed, remote SHA
+проверен равным. CI срез **18:07 UTC**: новый authenticated gate, Auto/protocol,
+root→UID/оба kernel gates, Client Linux, AWG/TCP, voice PASS. Mandatory control,
+phase0/tests и phase0/Docker ещё **IN_PROGRESS**, не PASS; прежние failures не
+объявляются исправленными. Точные source jobs — в отчёте L02.1.
 
 ### Предыдущий checkpoint L02 (историческое evidence)
 
