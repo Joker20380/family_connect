@@ -3,26 +3,24 @@
 Срез D03, 24.10.2026. Вход: чистая `main`, HEAD = проверенный `origin/main`
 `e3a0190893b0384980dc62b216951634e9319005`; продуктовый baseline до D03 —
 `664342a6566792a4ea621274a369bcd6b6012143`. Dependency-части D01.1/D01.2 приняты review;
-их PARTIAL и общая CI-приёмка D01 не закрыты. **Разрешён только D03.**
+их PARTIAL и общая CI-приёмка D01 не закрыты. **D03 выполнен в локальном scope; NEXT — review D03.**
 Review D02.1 collection/import isolation и D02.2 public-reference принят; это необходимые
 зависимости D03, не заявление о завершении исторического replay D02.1-R.
 [D03](releases/2026-10-24-chat-http-terminal-d03.md): фактический ChatHTTP/FriendsClient
 с управляемым stream, до исправления 15 failed / 18 passed, после — 33 passed;
-зависимые Friends/bridge/chat-owner — 63 passed, без skips/errors. Первая terminal-причина
+зависимые Friends/bridge/chat-owner — 63 passed, owner/mailbox — 24 passed, без skips/errors. Первая terminal-причина
 сохраняется до teardown, close выполняется, полный 200 не повторяется из-за transport cleanup.
-Новый CI ещё не получен; результаты D02.2 ниже относятся только к `da8670e`.
+Code `290d430` pushed/remote-verified. Полный CI control и phase0/tests: каждый
+2910 passed / 54 failed / 0 errors / 106 skipped, exit1; Docker — 2909 / 53 / 0 / 108.
+Последующие GUI/package/cargo/failover gates skipped. Linux voice job PASS;
+общий CI PASS не заявляется, D04/прочие failures не исправлялись.
 Review коррекции D02.1-R и [fleet-документации `1725656`](releases/2026-10-24-desktop-fleet-boundary.md)
 завершён. [Граница desktop/fleet](desktop-architecture.md#desktop-fleet-boundary) сохраняется:
 D05 QUEUED после D03/D04; реализация и проверки D05/fleet NOT_RUN.
-[D02.2](releases/2026-10-24-rns-reference-d02-2.md): две RNS/reference проверки используют
-точные публичные bytes по прежним accepted pins, без capsule fallback. Clean export:
-49 passed / 1 прежний skip, collection 3051/0 errors; public verifier PASS, настоящий
-`--capsule` PASS (2073 files + APK/native hashes). Code `da8670e` pushed/remote-verified:
-полные CI suites без collection errors, но FAIL — control 55 failed / 2890 passed /
-106 skipped; phase0/tests 54 / 2891 / 106; Docker tests-stage 54 / 2889 / 108.
-Client Linux: 1 Auto failure / 882 passed / 62 skipped; AWG и TCP jobs PASS.
-Остальные capsule/nginx/expiry/privacy/socket failures и Auto не исправлялись;
-последующие control GUI/package, phase0 cargo и Docker failover gates не выполнены.
+[D02.2 DONE, review принят](releases/2026-10-24-rns-reference-d02-2.md): public mappings
+с прежними accepted pins; clean export 49 passed / 1 прежний skip, collection 3051/0 errors;
+public verifier и настоящий `--capsule` (2073 files + APK/native hashes) PASS.
+Исторические CI counts `da8670e` сохранены в отчёте, не переносятся на D03.
 NEXT — review D03; после отчёта остановиться, без автоматического перехода к D04.
 [D02.1-R PARTIAL, коррекция принята review](releases/2026-10-24-historical-runner-d02-1-r.md): bootstrap vector и original API
 добавлены; retained inputs явно перечислены, preflight/snapshot fail-closed. Чистая collection
@@ -79,8 +77,8 @@ failover проверки не выполнены. Runtime/fixtures/collection p
 | Уровень | Подтверждённое состояние |
 |---|---|
 | SOURCE | Phase22 baseline выше; D03 — узкое исправление ChatHTTP terminal/cleanup, не новая поставка. D00 — документация; D01.1 — CI-only `b3a54f2` + `26f71d6`, оба pushed/remote-verified. |
-| LOCAL TESTS | Phase22: 1218 PASS в описанном локальном наборе, без failures/errors/skips; существующий GI warning. Шесть Linux native packages: race PASS. Не полный pytest и не CI. |
-| CI | D01.1 PARTIAL: три import/адресных gates PASS, полный desktop FAIL; дальнейшие job checks SKIPPED. [Результаты и остаточные failures](releases/2026-10-24-desktop-ci-d01-1.md). Общий CI PASS не заявлен. |
+| LOCAL TESTS | D03: 33 HTTP + 63 Friends/bridge/chat-owner + 24 owner/mailbox PASS, без failures/errors/skips. Synthetic transport, не полный pytest и не installed/live acceptance. |
+| CI | D03 `290d430`: control/phase0 full suites FAIL на остаточных 54 failures каждый, без collection errors. [Фактические результаты](releases/2026-10-24-chat-http-terminal-d03.md). Общий D01/CI PASS не заявлен. |
 | BUILT | Linux native-r18, Windows native-r14 cross-build, unsigned Linux system/native/RNS component-r18. **Полный parity installer: 0/2.** |
 | INSTALLED | **Завершённая установленная приёмка: 0/2.** Полный кандидат не принят на Linux/Windows; Windows runtime NOT_RUN. |
 | PUBLISHED | Parity-кандидаты не опубликованы. Linux0.2.11 / Windows0.2.15 не менялись; существующие публичные каталоги/ссылки в D00 не изменялись и заново не проверялись. |
