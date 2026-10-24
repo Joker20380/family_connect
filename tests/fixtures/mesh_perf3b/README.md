@@ -8,38 +8,81 @@ require the historical overlay API, absent from current `control/friends`.
 remain ordinary tests. Explicit direct pytest of an overlay file fails BLOCKED;
 use `run_history.py`, never seal/stage/deploy/readback helpers.
 
-`historical-suite.json` pins every input file to public source commit
+`historical-suite.json` pins the public source files to commit
 `76df691961aa88a46b73e7a355687fa6f9a3c457`. The required sealed owner API is SHA256
 `78a69db8f4e48ee89cf132ea279287dbfc71bdf8d9ae69c205bcaa0e19932a46`, already containing
 `api-overlay.patch` over original API `12ca0c72a89ff20c1b3c70a1182a2d5d98d4d78d25e7a079bb4d75bdf34060ed`.
 Provenance: existing `docs/releases/2026-10-18-mesh-perf-3b-evidence.json` and
 `build_successor_api.py`; neither is executed or modified. The runner checks the
-archive, owner/restricted members, historical fixture helper, tests and overlays
-against manifest hashes **before** starting Python. No reconstruction from main.
+archive, owner/restricted members, historical fixture helper, tests, overlays and
+`tests/vectors/bootstrap-timestamps.json` (SHA256
+`a542d50e3b3645b9cd1813619ffb075fd3777d2a2473bd079d05ef83a8b2aca2`)
+before starting Python. No reconstruction from main. The vector is read at helper
+import, not just by the helper's own tests.
 
 | File | Exact inputs beyond sealed owner API | Per-file command suffix |
 |---|---|---|
-| `test_owner_handoff.py` | historical `tests/test_friends_restricted.py` | `--test test_owner_handoff.py` |
+| `test_owner_handoff.py` | historical `tests/test_friends_restricted.py` + bootstrap vector | `--test test_owner_handoff.py` |
 | `test_cleaned_allocation.py` | same helper and `test_owner_handoff.py` | `--test test_cleaned_allocation.py` |
 | `test_live_operator.py` | historical `live_operator.py` | `--test test_live_operator.py` |
-| `test_successor_lifecycle.py` | owner tests/helper + `successor_owner_handoff.py` overlay | `--test test_successor_lifecycle.py` |
-| `test_successor_migration.py` | lifecycle inputs + `successor_migrate.py` | `--test test_successor_migration.py` |
-| `test_successor_operator.py` | lifecycle inputs + `successor_live_operator.py` | `--test test_successor_operator.py` |
+| `test_successor_lifecycle.py` | owner tests/helper/vector + successor overlay; original API, delivery-check, Java runtime/classes/three JARs | `--test test_successor_lifecycle.py` |
+| `test_successor_migration.py` | lifecycle Python sources + `successor_migrate.py`; original API for database default | `--test test_successor_migration.py` |
+| `test_successor_operator.py` | lifecycle Python sources + `successor_live_operator.py`; runtime files supplied by disposable fixtures | `--test test_successor_operator.py` |
 
-With an explicitly supplied preserved archive (never auto-discovered in state):
+All thirteen public files are checked/copied for every selection. Retained inputs
+are required only by the files in `retained_inputs.*.required_by`; importing a
+lifecycle fixture does not execute its native/Java test. The baseline helper's Go
+test is not collected by this runner, so it does not require a Go source checkout.
+Operator tests replace systemctl/process/root access with their existing disposable
+fixtures; no live command or real material/database/receipt is an input.
+
+Preparation and **attempt** of the full six-file set (explicit local paths, never
+auto-discovered in state):
 
 ```sh
 mkdir -p /tmp/fc-mesh-history-inputs
-git archive 76df691961aa88a46b73e7a355687fa6f9a3c457 tests/test_friends_restricted.py tests/fixtures/mesh_perf3b | tar -x -C /tmp/fc-mesh-history-inputs
-python tests/fixtures/mesh_perf3b/run_history.py --source-root /tmp/fc-mesh-history-inputs --api-archive /explicit/preserved/friends-http-owner-candidate.pyz
+git archive 76df691961aa88a46b73e7a355687fa6f9a3c457 tests/test_friends_restricted.py tests/vectors/bootstrap-timestamps.json tests/fixtures/mesh_perf3b | tar -x -C /tmp/fc-mesh-history-inputs
+python tests/fixtures/mesh_perf3b/run_history.py \
+  --source-root /tmp/fc-mesh-history-inputs \
+  --api-archive /explicit/preserved/friends-http-owner-candidate.pyz \
+  --original-api /explicit/preserved/deployed-api.pyz \
+  --delivery-check /explicit/preserved/delivery-check \
+  --java-runtime /explicit/preserved/jdk \
+  --java-classes /explicit/preserved/java-floors-final-classes \
+  --gson-jar /explicit/preserved/gson-2.13.2.jar \
+  --junit-jar /explicit/preserved/junit-4.13.2.jar \
+  --hamcrest-jar /explicit/preserved/hamcrest-core-1.3.jar
 ```
 
 Append one table suffix for a single file; no suffix means the exact six-file set.
-Use the prepared CI/test Python. Missing or mismatched inputs yield BLOCKED/NOT_RUN,
-exit 2, never a skip/PASS. Verified bytes are copied into a disposable tree; a fresh
-isolated Python checks API import origins and runs only those tests, propagating
-pytest's exit code. No current product imports, inherited FC/SSH/PYTHONPATH or
-historical live commands are used. The six tests/assertions remain byte-identical.
+Use the prepared CI/test Python. Missing, mismatched, unpinned or unusable inputs
+yield BLOCKED/NOT_RUN, exit 2, before pytest, never a skip/PASS or partial run.
+Verified bytes and execute modes are copied into a disposable tree at the exact
+test paths. Java classes retain package directories, runtime retains bin/lib, and
+each JAR is the sole match of the unchanged versioned cache glob. Tree inventories
+must cover exactly all files (symlinks are rejected). API/helper imports are checked
+in isolated Python; native invalid-input and Java `--dry-run` probes check usability
+without executing the test main. Only after preflight does a separate Python run
+pytest, retaining its exit code. No inherited FC/SSH/PYTHONPATH or live commands.
+
+### D02.1-R: unresolved retained provenance — historical suite NOT_RUN
+
+Original API `12ca0c72…` is pinned and now included. **Six retained input pins remain
+unresolved**, explicitly `null` in the manifest; supplying an arbitrary existing
+file cannot bless it. The existing pinned `native-validator.json` records a build
+command and exit/log, not the delivery-check output hash. Pinned
+`java-floors-final.json` records source/log hashes, not compiled classes, runtime or
+JARs. The local JDK download metadata is not an anchored retained-tree inventory;
+Gson2.13.2/JUnit4.13.2/Hamcrest1.3 versions alone do not pin bytes. Both receipts
+match the existing public evidence hashes; neither is rewritten. Before a full
+run, recover independently anchored artifact pins/inventories for those six
+inputs and review them. Do not rebuild from main, recompile classes, or hash local
+files into new acceptance pins. Full historical replay is **not yet ensured**.
+
+Regression coverage uses real pinned public sources/vector in an actual snapshot
+and separate Python reader, plus explicitly synthetic executable/runtime/class/JAR
+inputs. It checks fail-closed behavior, paths, modes and byte snapshots, not the
+historical artifacts' behavior. Six historical tests/assertions remain byte-identical.
 
 **Do not replay the closed live operation.** Current result and remaining gate:
 `docs/releases/2026-10-18-mesh-perf-3b.md`.

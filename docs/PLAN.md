@@ -6,7 +6,7 @@
 а не отдельные реализации продукта. [Текущий срез](STATUS.md) — источник текущего состояния.
 Продуктовый checkpoint: phase22, source baseline `664342a6566792a4ea621274a369bcd6b6012143`.
 D00 — организация документации; следующие строки являются очередью, не разрешением на автозапуск.
-**Разрешена только D02.1: dependency-часть D01.2 принята review; после отчёта остановиться.**
+**Разрешена только D02.1-R: collection/import isolation D02.1 принято review; после отчёта остановиться.**
 
 Порядок по умолчанию: D01.1 → D01.2 → D02.1 → D02.2 → D03 → D04 → Linux → Windows → R01.
 Зависимости в таблицах — необходимые результаты, а не требование заново выполнять завершённые фазы.
@@ -25,8 +25,9 @@ D00 — организация документации; следующие ст
 | D01.1 | Client builds/linux, AmneziaWG pilot, TCP pilot | D00 | PARTIAL | Dependency gates `26f71d6` приняты review; реальные Python3.12 imports/адресные CI PASS. Полный desktop FAIL: RNS capsule, AWG Auto lifecycle assertion; PARTIAL сохранён. |
 | D01.2 | Linux control, phase0, Dockerfile.control test-stage | принята dependency-часть D01.1 | PARTIAL | На pushed `07b52e3` Python3.13 imports/адресные gates PASS ×3; Docker root 22 passed. Каждый full suite: 9 owner_handoff/prepare collection errors, exit 2 (D02); обязательные gates сохранены. |
 | D02 | Сбор и импорты исследовательских fixtures | dependency-части D01.1/D01.2 приняты | IN_PROGRESS | D02.1 и D02.2 завершены; не ждёт полного зелёного CI, который сам должен разблокировать. Общая CI-приёмка D01 остаётся отдельным обязательным gate. |
-| D02.1 | Девять collection errors, историческая overlay-suite, изоляция импортов | окружения D01.1/D01.2 готовы | DONE | `6a0a982`: clean collection 2996/0 errors, helpers/import/runner 75 PASS; три CI full suites без collection errors, но с 56 residual failures. Шесть исторических файлов сохранены, отдельный pinned runner; missing/mismatched inputs BLOCKED, live operations не запускались. |
-| D02.2 | RNS/reference checks без локальной capsule в обычном CI | проверка D02.1 | QUEUED | `clients/desktop/tests/test_rns_worker.py` и `tests/test_desktop_reference.py::test_readiness_semantic_port_uses_exact_accepted_sources` используют воспроизводимые принятые входы/pins из `clients/shared/desktop-readiness106.json`, без приватной capsule; сейчас не выполнять. |
+| D02.1 | Девять collection errors, историческая overlay-suite, изоляция импортов | окружения D01.1/D01.2 готовы | DONE (collection/import isolation) | Review подтвердил границы; `6a0a982`: clean collection 2996/0 errors, helpers/import/runner 75 PASS; три CI full suites с 56 residual failures. Историческая воспроизводимость отдельно в D02.1-R. |
+| D02.1-R | Комплектность исторического runner | review D02.1 | PARTIAL | Vector/original API, явные retained inputs, проверенные bytes/modes/Java layout, preflight до pytest; 110 адресных PASS, collection 3031/0 errors. Historical suite NOT_RUN: нет anchored pins delivery-check, Java runtime/classes и 3 JARs; полный replay не обеспечен. |
+| D02.2 | RNS/reference checks без локальной capsule в обычном CI | проверка коррекции D02.1-R | QUEUED | `clients/desktop/tests/test_rns_worker.py` и `tests/test_desktop_reference.py::test_readiness_semantic_port_uses_exact_accepted_sources` используют воспроизводимые принятые входы/pins из `clients/shared/desktop-readiness106.json`, без приватной capsule; сейчас не выполнять. |
 | D03 | Окончательные ошибки ChatHTTP | D02 | QUEUED | HTTP400/401/403/409, TLS и установленный invalid_response сохраняются при ошибке teardown; разрешённый transient fallback продолжает работать. |
 | D04 | Auto stop/start lifecycle | D02 | QUEUED | Детерминированное воспроизведение и исправление с одним владельцем, завершённой cleanup и generation fencing; до дальнейшей Linux-интеграции. |
 
@@ -46,6 +47,7 @@ D00 — организация документации; следующие ст
 D01.1: [итог PARTIAL, точные failures и CI](releases/2026-10-24-desktop-ci-d01-1.md).
 D01.2: [окружение и evidence](releases/2026-10-24-control-ci-d01-2.md).
 D02.1: [границы collection/imports и evidence](releases/2026-10-24-fixture-boundaries-d02-1.md).
+D02.1-R: [комплектность runner и незакрытые pins](releases/2026-10-24-historical-runner-d02-1-r.md).
 D01 сначала читает соответствующие workflows/lockfiles и эти ошибки; не переносит
 лабораторный каталог целиком и не отключает обязательные suites ради зелёного CI.
 D02 явно отделяет поддерживаемые проверки от архивных опытов; их source push не делает их release core.

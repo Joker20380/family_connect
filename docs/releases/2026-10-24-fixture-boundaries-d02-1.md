@@ -1,5 +1,9 @@
 # D02.1 — collection/import boundaries, 24.10.2026
 
+Review подтвердил collection/import isolation. Комплектность historical runner не была
+обеспечена этим checkpoint: пропущенные входы и их отдельная коррекция —
+[D02.1-R](2026-10-24-historical-runner-d02-1-r.md). Прежние CI результаты ниже относятся только к `6a0a982`.
+
 Статус: **DONE по collection/import isolation; полный CI FAIL**. Вход: чистая `main`, HEAD и remote
 `01f67d4a7daac22c0d35753c8b9a13e15d4feb1d`; релевантной дельты не было.
 Dependency-часть D01.2 принята review, общая CI-приёмка D01/D01.1/D01.2 не закрывается.

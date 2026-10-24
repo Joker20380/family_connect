@@ -6,6 +6,80 @@
     "control/friends/restricted.py": "84dec393f6d50ac5dc9647d42bb3025dabd46fa8640ff2150488446f760fd06d",
     "control/friends/owner_handoff.py": "87650da2d3b43a33512a547470a0bc4258df3a20f452ac651d3fa2d7365aeede"
   },
+  "retained_inputs": {
+    "original-api": {
+      "required_by": ["test_successor_lifecycle.py", "test_successor_migration.py"],
+      "destination": "state-client-build/field65-export16/warm-start-collector-rebase-1/preservation/deployed-api.pyz",
+      "sha256": "12ca0c72a89ff20c1b3c70a1182a2d5d98d4d78d25e7a079bb4d75bdf34060ed",
+      "provenance": "2026-10-18-mesh-perf-3b-evidence.json: api_baseline_sha256",
+      "kind": "zip",
+      "members": ["friends_http.py", "control/friends/restricted.py"]
+    },
+    "delivery-check": {
+      "required_by": ["test_successor_lifecycle.py"],
+      "destination": "state-client-build/mesh-perf-3b/delivery-check",
+      "sha256": null,
+      "provenance": "UNRESOLVED: pinned native-validator.json records command/exit/log, not output binary hash",
+      "kind": "executable"
+    },
+    "java-runtime": {
+      "required_by": ["test_successor_lifecycle.py"],
+      "destination": "state-client-build/field65-export16/diag-source-freeze-1/resume-tools/jdk",
+      "files": null,
+      "provenance": "UNRESOLVED: local jdk-metadata.json is not an anchored inventory of the retained runtime",
+      "kind": "tree",
+      "required_files": ["bin/java", "lib/modules", "lib/server/libjvm.so", "lib/libjli.so", "release"],
+      "executables": ["bin/java"]
+    },
+    "java-classes": {
+      "required_by": ["test_successor_lifecycle.py"],
+      "destination": "state-client-build/mesh-perf-3b/java-floors-final-classes",
+      "files": null,
+      "provenance": "UNRESOLVED: pinned java-floors-final.json hashes sources/log, not compiled classes",
+      "kind": "classes",
+      "required_files": [
+        "com/familyconnect/app/FloorRoundtrip.class",
+        "com/familyconnect/app/FloorRoundtrip$Memory.class",
+        "com/familyconnect/app/RestrictedCache.class",
+        "com/familyconnect/app/RestrictedCache$Storage.class",
+        "com/familyconnect/app/RestrictedCache$Validator.class",
+        "com/familyconnect/app/RestrictedCache$DetailedValidator.class",
+        "com/familyconnect/app/RestrictedCache$ImportFailure.class",
+        "com/familyconnect/app/RestrictedCache$PersistenceFailure.class",
+        "com/familyconnect/app/RestrictedCache$1.class",
+        "com/familyconnect/app/ControlJson.class",
+        "com/familyconnect/app/ControlJson$TokenNumber.class",
+        "com/familyconnect/app/ControlJson$1.class",
+        "com/familyconnect/app/ReadinessImportResult.class",
+        "com/familyconnect/app/ReadinessImportResult$Code.class",
+        "com/familyconnect/app/OwnerPrewarmReceipt.class"
+      ]
+    },
+    "gson-jar": {
+      "required_by": ["test_successor_lifecycle.py"],
+      "destination": "state-client-build/field65-export16/diag-source-freeze-1/resume-tools/gradle-home/caches/modules-2/files-2.1/com.google.code.gson/gson/2.13.2/verified/gson-2.13.2.jar",
+      "sha256": null,
+      "provenance": "UNRESOLVED: historical check_floors.py pins version, not retained JAR bytes",
+      "kind": "zip",
+      "members": ["com/google/gson/JsonArray.class", "com/google/gson/JsonObject.class"]
+    },
+    "junit-jar": {
+      "required_by": ["test_successor_lifecycle.py"],
+      "destination": "state-client-build/field65-export16/diag-source-freeze-1/resume-tools/gradle-home/caches/modules-2/files-2.1/junit/junit/4.13.2/verified/junit-4.13.2.jar",
+      "sha256": null,
+      "provenance": "UNRESOLVED: historical check_floors.py pins version, not retained JAR bytes",
+      "kind": "zip",
+      "members": ["org/junit/runner/JUnitCore.class"]
+    },
+    "hamcrest-jar": {
+      "required_by": ["test_successor_lifecycle.py"],
+      "destination": "state-client-build/field65-export16/diag-source-freeze-1/resume-tools/gradle-home/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/verified/hamcrest-core-1.3.jar",
+      "sha256": null,
+      "provenance": "UNRESOLVED: historical check_floors.py pins version, not retained JAR bytes",
+      "kind": "zip",
+      "members": ["org/hamcrest/Matcher.class"]
+    }
+  },
   "tests": {
     "test_owner_handoff.py": [
       "sealed-owner-api",
@@ -51,6 +125,7 @@
     "tests/fixtures/mesh_perf3b/successor_owner_handoff.py": "f139a75a005c5c677828ba4c5e3b07206db950a4908e6e1e51c8e4120fed8c7d",
     "tests/fixtures/mesh_perf3b/successor_migrate.py": "1e36cadea68a2315de8557c0829b9a16c746d494340ae640496e0676a7bfc0cb",
     "tests/fixtures/mesh_perf3b/successor_live_operator.py": "8ad69206fae75e06951c35d4e364368f122078a4532bd6f9d8dc9635c0928980",
-    "tests/test_friends_restricted.py": "d079a34ad84b47d66f3fbc949c2fd24e7075fa1cd6a35af5ffa05b073346bd78"
+    "tests/test_friends_restricted.py": "d079a34ad84b47d66f3fbc949c2fd24e7075fa1cd6a35af5ffa05b073346bd78",
+    "tests/vectors/bootstrap-timestamps.json": "a542d50e3b3645b9cd1813619ffb075fd3777d2a2473bd079d05ef83a8b2aca2"
   }
 }

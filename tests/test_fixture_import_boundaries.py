@@ -170,7 +170,7 @@ def test_historical_input_validation_fails_closed(synthetic_inputs, change):
 
 def test_historical_run_uses_snapshots_and_isolated_child(synthetic_inputs, monkeypatch):
     manifest, source, archive = synthetic_inputs
-    sources, raw = runner.verified_inputs(manifest, source, archive)
+    sources, raw, retained = runner.verified_inputs(manifest, source, archive)
     (source / 'fixture.py').write_bytes(b'changed after verification')
     archive.write_bytes(b'changed after verification')
     manifest.update(source_commit='synthetic', tests={'test_fixture.py': []})
@@ -181,11 +181,192 @@ def test_historical_run_uses_snapshots_and_isolated_child(synthetic_inputs, monk
         assert command[:4] == [sys.executable, '-I', '-B', '-c']
         assert cwd != ROOT and (cwd / 'fixture.py').read_bytes() == b'fixture'
         assert (cwd / 'state-client-build/mesh-perf-3b/api/control/module.py').read_bytes() == b'module'
-        assert command[-1] == str(cwd / runner.TEST_DIRECTORY / 'test_fixture.py')
         assert 'PYTHONPATH' not in env and 'PYTEST_ADDOPTS' not in env
         assert not any(key.startswith(('FC_', 'SSH_')) for key in env)
+        if command[-1] == runner.IMPORT_PREFLIGHT:
+            return SimpleNamespace(returncode=0)
+        assert command[-1] == str(cwd / runner.TEST_DIRECTORY / 'test_fixture.py')
         return SimpleNamespace(returncode=7)
 
     monkeypatch.setattr(runner.subprocess, 'run', child)
     assert runner.run(manifest, sources, raw, ['test_fixture.py']) == 7
+    assert len(calls) == 2
+
+
+@pytest.fixture
+def complete_snapshot_inputs(tmp_path, synthetic_inputs):
+    api_manifest, source, archive = synthetic_inputs
+    manifest = json.loads(runner.MANIFEST.read_text())
+    manifest.update(api_sha256=api_manifest['api_sha256'], api_modules=api_manifest['api_modules'])
+    for name in manifest['files']:
+        target = source / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes((ROOT / name).read_bytes())
+    paths = {}
+    for name, entry in manifest['retained_inputs'].items():
+        path = tmp_path / name
+        paths[name] = path
+        if entry['kind'] in ('tree', 'classes'):
+            entry['files'] = {}
+            for relative in entry['required_files']:
+                target = path / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                raw = b'\xca\xfe\xba\xbe synthetic class' if entry['kind'] == 'classes' else b'synthetic runtime'
+                if relative == 'bin/java':
+                    raw = b'#!/bin/sh\ntest "$1" = --dry-run && test -f "${0%/bin/java}/lib/modules" && test -f "${0%/bin/java}/lib/server/libjvm.so"\n'
+                target.write_bytes(raw)
+                target.chmod(0o755 if relative in entry.get('executables', ()) else 0o644)
+                entry['files'][relative] = hashlib.sha256(raw).hexdigest()
+        else:
+            if entry['kind'] == 'zip':
+                with zipfile.ZipFile(path, 'w') as package:
+                    for member in entry['members']:
+                        package.writestr(member, b'synthetic member')
+            else:
+                path.write_bytes(b'#!/bin/sh\necho "delivery compatibility failed" >&2\nexit 1\n')
+                path.chmod(0o755)
+            entry['sha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
+    return manifest, source, archive, paths
+
+
+@pytest.mark.parametrize('name', ['original-api', 'delivery-check', 'java-runtime', 'java-classes',
+                                 'gson-jar', 'junit-jar', 'hamcrest-jar', 'bootstrap-vector'])
+@pytest.mark.parametrize('change', ['missing', 'changed', 'unpinned'])
+def test_complete_preflight_blocks_each_input_before_pytest(complete_snapshot_inputs, monkeypatch, tmp_path,
+                                                          name, change, capsys):
+    manifest, source, archive, paths = complete_snapshot_inputs
+    if name == 'bootstrap-vector':
+        relative = 'tests/vectors/bootstrap-timestamps.json'
+        target = source / relative
+        pins, key = manifest['files'], relative
+    else:
+        entry = manifest['retained_inputs'][name]
+        target = paths[name]
+        pins, key = entry, 'sha256'
+        if entry['kind'] in ('tree', 'classes'):
+            relative = entry['required_files'][0]
+            target /= relative
+            pins, key = entry['files'], relative
+    if change == 'missing':
+        target.unlink()
+    elif change == 'changed':
+        target.write_bytes(b'changed')
+    else:
+        pins[key] = None
+    manifest_path = tmp_path / 'manifest.json'
+    manifest_path.write_text(json.dumps(manifest))
+    monkeypatch.setattr(runner, 'MANIFEST', manifest_path)
+    def forbidden(*args, **kwargs):
+        pytest.fail('incomplete inputs reached subprocess/pytest')
+    monkeypatch.setattr(runner.subprocess, 'run', forbidden)
+    arguments = ['--source-root', str(source), '--api-archive', str(archive)]
+    for label, path in paths.items():
+        arguments.extend(['--' + label, str(path)])
+    assert runner.main(arguments) == 2
+    assert 'BLOCKED/NOT_RUN:' in capsys.readouterr().err
+
+
+def test_snapshot_contains_real_public_sources_vector_and_retained_layout(complete_snapshot_inputs, tmp_path):
+    manifest, source, archive, paths = complete_snapshot_inputs
+    sources, raw, retained = runner.verified_inputs(manifest, source, archive, paths)
+    root = tmp_path / 'snapshot'
+    root.mkdir()
+    vector = 'tests/vectors/bootstrap-timestamps.json'
+    (source / vector).write_bytes(b'changed after validation')
+    paths['delivery-check'].write_bytes(b'changed after validation')
+    runner.write_snapshot(root, sources, raw, retained)
+    for name, expected in manifest['files'].items():
+        assert hashlib.sha256((root / name).read_bytes()).hexdigest() == expected
+    for name, (data, mode) in retained.items():
+        assert (root / name).read_bytes() == data
+        assert (root / name).stat().st_mode & 0o777 == mode
+    check = '''
+import ast, json
+from pathlib import Path
+__file__ = str(Path.cwd() / 'tests/test_friends_restricted.py')
+tree = ast.parse(Path(__file__).read_text())
+assignment, = [node for node in tree.body if isinstance(node, ast.Assign)
+               and any(isinstance(target, ast.Name) and target.id == 'TIME_CONTRACT' for target in node.targets)]
+exec(compile(ast.Module(body=[assignment], type_ignores=[]), __file__, 'exec'))
+assert TIME_CONTRACT['valid'] and TIME_CONTRACT['invalid']
+tools = Path('state-client-build/field65-export16/diag-source-freeze-1/resume-tools')
+for library in ('com.google.code.gson/gson/2.13.2', 'junit/junit/4.13.2', 'org.hamcrest/hamcrest-core/1.3'):
+    jar, = (tools / 'gradle-home/caches/modules-2/files-2.1' / library).glob('*/*.jar')
+    assert jar.is_file()
+'''
+    result = subprocess.run([sys.executable, '-I', '-B', '-c', check], cwd=root, capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+    runner.retained_preflight(manifest, root, {'HOME': str(root)}, retained)
+
+
+@pytest.mark.parametrize('name', ['delivery-check', 'java-runtime'])
+def test_missing_execute_permission_blocks_preflight(complete_snapshot_inputs, name):
+    manifest, source, archive, paths = complete_snapshot_inputs
+    target = paths[name] / 'bin/java' if name == 'java-runtime' else paths[name]
+    target.chmod(0o644)
+    with pytest.raises(ValueError, match='NOT_EXECUTABLE'):
+        runner.verified_inputs(manifest, source, archive, paths)
+
+
+@pytest.mark.parametrize('change', ['extra', 'symlink', 'incomplete-pin'])
+def test_java_tree_inventory_is_exact(complete_snapshot_inputs, change):
+    manifest, source, archive, paths = complete_snapshot_inputs
+    tree = paths['java-runtime']
+    if change == 'extra':
+        (tree / 'extra').write_bytes(b'unverified')
+    elif change == 'symlink':
+        (tree / 'extra').symlink_to(tree / 'bin/java')
+    else:
+        relative = 'lib/modules'
+        (tree / relative).unlink()
+        del manifest['retained_inputs']['java-runtime']['files'][relative]
+    with pytest.raises(ValueError, match='INVENTORY|UNSAFE_TREE'):
+        runner.verified_inputs(manifest, source, archive, paths)
+
+
+@pytest.mark.parametrize('name', ['delivery-check', 'java-runtime'])
+def test_unusable_executable_blocks_before_pytest(complete_snapshot_inputs, tmp_path, monkeypatch, name, capsys):
+    manifest, source, archive, paths = complete_snapshot_inputs
+    sources, raw, retained = runner.verified_inputs(manifest, source, archive, paths)
+    entry = manifest['retained_inputs'][name]
+    destination = entry['destination'] + ('/bin/java' if name == 'java-runtime' else '')
+    retained[destination] = (b'#!/bin/sh\nexit 42\n', 0o755)
+    monkeypatch.setattr(runner, 'IMPORT_PREFLIGHT', 'print("synthetic import probe")')
+    monkeypatch.setattr(runner, 'CHILD', 'raise AssertionError("pytest must not start")')
+    assert runner.run(manifest, sources, raw, list(manifest['tests']), retained) == 2
+    assert 'BLOCKED/NOT_RUN:' in capsys.readouterr().err
+
+
+def test_retained_requirements_follow_selected_files(complete_snapshot_inputs):
+    manifest, source, archive, paths = complete_snapshot_inputs
+    assert runner.verified_retained(manifest, {}, ['test_successor_operator.py']) == {}
+    retained = runner.verified_retained(manifest, {'original-api': paths['original-api']},
+                                      ['test_successor_migration.py'])
+    assert set(retained) == {manifest['retained_inputs']['original-api']['destination']}
+    with pytest.raises(ValueError, match='MISSING_INPUT: --delivery-check'):
+        runner.verified_retained(manifest, {'original-api': paths['original-api']},
+                                 ['test_successor_lifecycle.py'])
+
+
+def test_real_unresolved_pins_cannot_be_replaced_by_found_bytes(complete_snapshot_inputs):
+    manifest, _, _, paths = complete_snapshot_inputs
+    real = json.loads(runner.MANIFEST.read_text())
+    manifest['retained_inputs'] = real['retained_inputs']
+    with pytest.raises(ValueError) as failure:
+        runner.verified_retained(manifest, paths, list(manifest['tests']))
+    for name in ('delivery-check', 'java-runtime', 'java-classes', 'gson-jar', 'junit-jar', 'hamcrest-jar'):
+        assert 'UNPINNED_INPUT: ' + name in str(failure.value)
+
+
+def test_import_preflight_failure_never_launches_pytest(synthetic_inputs, monkeypatch, capsys):
+    manifest, source, archive = synthetic_inputs
+    sources, raw, retained = runner.verified_inputs(manifest, source, archive)
+    calls = []
+    def child(command, **kwargs):
+        calls.append(command)
+        assert command[-1] == runner.IMPORT_PREFLIGHT
+        return SimpleNamespace(returncode=1)
+    monkeypatch.setattr(runner.subprocess, 'run', child)
+    assert runner.run(manifest, sources, raw, ['test_owner_handoff.py'], retained) == 2
     assert len(calls) == 1
+    assert 'BLOCKED/NOT_RUN: HISTORICAL_PYTHON_IMPORTS' in capsys.readouterr().err
