@@ -1,7 +1,7 @@
 # Текущее состояние / Current state
 
 Срез **D01.3**, 24.10.2026: public chat IPC completion/admission race исправлена;
-**checkpoint, CI pending. NEXT — review D01.3.**
+**source gate PASS, review pending. NEXT — review D01.3.**
 Вход: чистая актуальная `main` = remote `d448e99b55e594522c02234ac2a87575603a6bbb`.
 Review L02.2 принят в local source/native scope; исходный локальный критерий
 L02 (authenticated OFF→ON/publication→EXISTING_EXIT→OFF через Manual и Auto) выполнен.
@@ -17,10 +17,15 @@ handler/monitor accounting, typed errors/cancellation и no-replay сохран�
 Локально **266 passed** (24 новых + зависимые Python/IPC/error/lifecycle).
 Source `23e3c5513ab9c37e919f228066c0e23f733a997e` pushed/remote-verified:
 Client Linux (включая mandatory desktop pytest) и isolated-linux PASS; локально
-прежние15 authenticated, combined3 и13 root→UID/process PASS. Follow-up публикует
-тестовый handler до ответа (24 PASS); его CI проверяется отдельно.
-До финального CI D01.3 не DONE. Исторические54 residual failures и voice
-holding-state failure не исправляются в этом scope. Прежние15 authenticated,
+прежние15 authenticated, combined3 и13 root→UID/process PASS. Follow-up
+`f258c17007102634fead9894bcfe9a82f6db44cf` публикует тестовый handler до ответа
+(24 PASS); mandatory desktop pytest **40132223364/120986275264 PASS** на этом SHA.
+Весь Client Linux job PASS. Завершившиеся full suites на `f258c17`: control
+**3056/54/138**, phase0/tests **3056/54/138**, Docker **3054/54/140**, errors0
+(passed/failed/skipped); точные jobs в отчёте, не общий CI PASS. Voice PASS без
+изменений voice-кода; прежний holding-state failure сохранён отдельным результатом.
+Production-код после `23e3c55` не менялся. Общий D01 остаётся открыт;
+54 residual failures и voice failure не исправлялись в этом scope. Прежние15 authenticated,
 combined3, root→UID/process, Auto/DIRECT и full suites не отключены.
 Identity/history/settings/keys/floors/reference pins и установленный baseline
 не менялись. L03/установка/live/publication/Windows/fleet/iOS NOT_RUN.

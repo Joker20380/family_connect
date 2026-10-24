@@ -1,6 +1,6 @@
 # D01.3 — public chat completion/admission
 
-Date: **2026-10-24**. Bounded source checkpoint, **CI pending**.
+Date: **2026-10-24**. Bounded source gate **PASS, review pending**, not overall CI PASS.
 **STOP. NEXT — review D01.3.** D01 remains open; D02.1-R PARTIAL/NOT_RUN.
 
 Entry: clean current `main` and remote
@@ -107,20 +107,39 @@ CI for production source **`23e3c5513ab9c37e919f228066c0e23f733a997e`**:
 |isolated-linux|[40131682996 / 120984525274](https://github.com/Joker20380/family_connect/actions/runs/40131682996/job/120984525274)|PASS; original15, combined3, root→UID/process, Auto/DIRECT kernel and native race retained|
 |native protocol Linux|40131682996 / 120984525228|PASS|
 |phase0/tests|[40131682943 / 120984525008](https://github.com/Joker20380/family_connect/actions/runs/40131682943/job/120984525008)|3056 passed / 54 failed / 138 skipped, errors0, 183.37s|
-|control|40131682940 / 120984524983|IN_PROGRESS at20:58UTC; not PASS|
-|Docker|40131682943 / 120984524829|IN_PROGRESS at20:58UTC; not PASS|
+|control|40131682940 / 120984524983|CANCELLED by normal follow-up source push/concurrency; not PASS, no completed counts assigned|
+|Docker|[40131682943 / 120984524829](https://github.com/Joker20380/family_connect/actions/runs/40131682943/job/120984524829)|3055 passed / 53 failed / 140 skipped, errors0, 231.97s; not PASS|
 |voice|40131683016 / 120984525157|PASS, without a voice code change or rerun; earlier holding failure remains separately recorded|
 |AWG / TCP|40131682989 / 120984524985; 40131682949 / 120984525214|PASS; TCP release jobs skipped|
 
-Client Linux mandatory desktop pytest must also PASS on the follow-up source
-before final completion. Full CI remains enabled; no overall CI PASS is claimed.
+Final test source **`f258c17007102634fead9894bcfe9a82f6db44cf`**, ordinarily
+pushed/remote-verified; production code is identical to `23e3c55`:
+
+| Suite | Exact run/job | Result |
+|---|---|---|
+|Client Linux mandatory desktop pytest|[40132223364 / 120986275264](https://github.com/Joker20380/family_connect/actions/runs/40132223364/job/120986275264)|PASS; targeted dependency pytest and whole Linux job also PASS|
+|phase0/tests|[40132223360 / 120986183353](https://github.com/Joker20380/family_connect/actions/runs/40132223360/job/120986183353)|3056 passed / 54 failed / 138 skipped, errors0, 179.32s|
+|Docker|[40132223360 / 120986183157](https://github.com/Joker20380/family_connect/actions/runs/40132223360/job/120986183157)|3054 passed / 54 failed / 140 skipped, errors0, 210.10s|
+|control|[40132223328 / 120986241855](https://github.com/Joker20380/family_connect/actions/runs/40132223328/job/120986241855)|3056 passed / 54 failed / 138 skipped, errors0, 194.13s|
+|voice|40132223337 / 120986183119|PASS; no voice changes|
+
+The test-only follow-up does not match the unchanged native workflow path filter;
+native/15/combined3/root→UID/Auto/DIRECT/race PASS remains tied to `23e3c55`, not
+relabelled as a new native run. All full-suite commands/filters are unchanged.
+No rerun API was used. Mandatory desktop pytest passed on the final test source;
+the unrelated full-suite failures are not a D01.3 acceptance or an overall PASS.
 
 Previous source `dac0f6b45be6ed8703d3de93ff5fdbc67462eabe`, separate results:
 control **3032/54/138**, phase0/tests **3032/54/138**, Docker **3030/54/140**
 (passed/failed/skipped), errors0; Client Linux **1003/1/94**; voice pointer/holding
 failure. Isolated-linux15+combined3/root→UID/Auto/DIRECT/race and AWG/TCP PASS.
 These54 residual failures and voice failure are out of scope, not fixed/disabled.
-New source SHA/jobs and content/link/diff checks: pending source commit and CI.
+Content/local links and `git diff --check` PASS; staged source/tests/docs inspected
+for secrets and accidental output. Logs/worker binaries/private state stay outside
+Git. The final documentation receipt does not change the tested source. Remote
+receipt SHA is reported after its ordinary non-force push, not guessed in advance.
+All final-source full-suite counts above were read from their own completed logs;
+no counts copied between jobs. Their residual failures are not changed here.
 
 No version/install/deployment change; rollback is an ordinary source revert,
 not a catalog or server operation. Identity/WG keys/activation/Support ID/history/
