@@ -1,0 +1,69 @@
+name: Desktop Auto native bridge
+on:
+  workflow_dispatch:
+  push:
+    paths: ['clients/mesh/**', 'carrier/desktopauto/**', 'carrier/desktopmesh/**', 'clients/linux/auto_*.py', 'clients/linux/mesh_service.py', 'clients/linux/mesh_intent.py', 'clients/linux/family-connect-auto@.service', 'clients/linux/mesh_system.py', 'clients/desktop/backend.py', 'clients/desktop/tests/test_auto_*.py', 'provisioning/friends_catalog.py', 'provisioning/friends_owner.py', 'tests/test_friends_auto_owner.py', 'scripts/check_desktop_auto_policy.py', '.github/workflows/desktop-auto-bridge.yml']
+  pull_request:
+    paths: ['clients/mesh/**', 'carrier/desktopauto/**', 'carrier/desktopmesh/**', 'clients/linux/auto_*.py', 'clients/linux/mesh_service.py', 'clients/linux/mesh_intent.py', 'clients/linux/family-connect-auto@.service', 'clients/linux/mesh_system.py', 'clients/desktop/backend.py', 'clients/desktop/tests/test_auto_*.py', 'provisioning/friends_catalog.py', 'provisioning/friends_owner.py', 'tests/test_friends_auto_owner.py', 'scripts/check_desktop_auto_policy.py', '.github/workflows/desktop-auto-bridge.yml']
+permissions:
+  contents: read
+jobs:
+  protocol:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.0'
+          cache-dependency-path: clients/mesh/go.sum
+      - name: Bounded protocol and controller integration
+        working-directory: clients/mesh
+        run: go test -count=5 -timeout=90s ./automatic ./normal
+      - name: Concurrent cancellation checks
+        if: runner.os == 'Linux'
+        working-directory: clients/mesh
+        run: go test -race -count=5 -timeout=90s ./automatic ./normal
+      - name: Protected configuration and signed floors
+        working-directory: carrier
+        run: go test -count=3 -timeout=90s ./desktopmesh
+  isolated-linux:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.0'
+          cache-dependency-path: clients/mesh/go.sum
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: sudo apt-get update && sudo apt-get install -y nftables iproute2
+      - run: python -m pip install -r control/requirements.lock -r device_identity/requirements.lock -r provisioning/requirements.lock
+      - run: python -m pytest -q clients/desktop/tests/test_auto_policy.py clients/desktop/tests/test_auto_guard.py clients/desktop/tests/test_auto_mesh.py clients/desktop/tests/test_auto_normal.py clients/desktop/tests/test_auto_platform.py clients/desktop/tests/test_auto_configuration.py clients/desktop/tests/test_auto_service.py clients/desktop/tests/test_mesh_intent.py clients/desktop/tests/test_mesh_service.py clients/desktop/tests/test_mesh_materials.py clients/desktop/tests/test_mesh_installer.py tests/test_friends_auto_owner.py tests/test_friends_catalog.py
+      - name: Build from the pinned packet boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          git init "$RUNNER_TEMP/auto-xray"
+          git -C "$RUNNER_TEMP/auto-xray" remote add origin https://github.com/XTLS/Xray-core.git
+          git -C "$RUNNER_TEMP/auto-xray" fetch --depth=1 origin d2758a023cd7f4174a5a5fa4ff66e487d4342ba0
+          python -m scripts.build_desktop_mesh --go "$(command -v go)" --xray "$RUNNER_TEMP/auto-xray" --out "$RUNNER_TEMP/auto-native" --os linux --test
+      - name: Native signed configuration compatibility
+        shell: bash
+        run: FC_TEST_MESH_WORKER="$RUNNER_TEMP/auto-native/fc-mesh" python -m pytest -q clients/desktop/tests/test_auto_configuration_native.py clients/desktop/tests/test_auto_platform.py
+      - name: Actual native process and root guard in an isolated kernel
+        shell: bash
+        run: |
+          set -euo pipefail
+          parent_netns="$(stat -Lc %i /proc/self/ns/net)"
+          sudo timeout --signal=TERM --kill-after=3s 60s unshare --net -- /usr/bin/python3 scripts/check_desktop_auto_policy.py --host-netns "$parent_netns" --worker "$RUNNER_TEMP/auto-native/fc-mesh" | tee desktop-auto-native-kernel.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: desktop-auto-native-linux
+          path: desktop-auto-native-kernel.json

@@ -13,6 +13,8 @@ import (
 
 type Policy struct {
 	TestOnlyLoopbackPort int
+	Services             map[string]netip.AddrPort
+	ServicesOnly         bool
 	Metrics              *DestinationMetrics
 	localAddresses       []netip.Addr
 }
@@ -101,6 +103,16 @@ func connect(ctx context.Context, request OpenRequest, policy Policy, lookup res
 	}
 	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
+	if strings.HasSuffix(request.Host, ".family-connect.invalid") {
+		target, allowed := policy.Services[request.Host]
+		if !allowed || request.Port != 1 {
+			return nil, &OpenError{Code: "policy_rejected"}
+		}
+		return dial(ctx, "tcp", target.String())
+	}
+	if policy.ServicesOnly {
+		return nil, &OpenError{Code: "policy_rejected"}
+	}
 	var addresses []netip.Addr
 	if literal, err := netip.ParseAddr(request.Host); err == nil {
 		addresses = []netip.Addr{literal}

@@ -28,6 +28,9 @@ func TestCorrelationNoDefaultEndpoint(test *testing.T) {
 	if New(strings.Repeat("a", 64), nil).CorrelationCommand(`{"operation":"prearm"}`, "client") != `{"error":"disabled"}` {
 		test.Fatal("default command enabled")
 	}
+	if recorder.CorrelationCommand(`{"operation":"targeted_arm"}`, "client") != `{"error":"disabled"}` {
+		test.Fatal("targeted control enabled in public build")
+	}
 	directory := test.TempDir()
 	test.Setenv("FC_DIAGNOSTIC_CONTROL_DIR", directory)
 	StartDiagnosticControl(context.Background(), New(strings.Repeat("a", 64), nil), "gateway")

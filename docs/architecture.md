@@ -401,6 +401,13 @@ protected state → platform VPN adapter → transport/gateway.
   in these dated documents are superseded where STATUS has newer runtime evidence.
 - [Android source](../clients/android/), [Linux source](../clients/desktop/),
   [Windows source](../clients/windows/).
+- [Linux user-session owner](adr/004-linux-chat-session-owner.md): encrypted chat
+  and optional106 support collection survive GUI exit without a root GUI or new
+  identity. Support control is independent of the chat keyring/command queue.
+  UID/device-bound chat-only admission can now borrow an existing Linux MESH exit;
+  protected DIRECT and service-only orchestration remain incomplete. Root keys and
+  network overrides are not part of the user-facing API.
+  Private D-Bus/systemd checks do not replace installed package/upgrade acceptance.
 
 Android friends currently exposes AWG 3.1 and TCP REALITY options. Desktop releases
 have their own capabilities and activation; see STATUS for current versions. Do not infer identical feature support

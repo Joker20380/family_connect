@@ -15,6 +15,461 @@ No product priority, acceptance, release or deployment gate changes.
 
 ## Current engineering priority / Текущий critical path
 
+Laptop thermal follow-up23.10: owning parity session stopped `fc-parity106`
+PID1088092 after the100°C incident. Bounded replacement check now confirms actual
+guest NVIDIA GTX1650Ti rendering with KVM; offline106 screenshot obtained, then
+the entire emulator cgroup stopped. Keep emulator checks in the development path:
+`-gpu host`, explicit NVIDIA PRIME/Vulkan selection,2 guest cores,150% CPU quota,
+180s maximum lifetime and85°C CPU/80°C GPU stop guards for this reference harness.
+Do not leave it running after capture or silently substitute software rendering.
+See the thermal report for measured results and exact evidence.
+
+Read-only operations follow-up23.10: investigate RU SSH banner timeouts and legacy
+Docker peer-worker unhealthy status; obtain RU AWG activity counters when SSH is
+available. Do not restart services merely for diagnostics. NL6 recent AWG peers;
+52 registered devices globally are not52 concurrent users. Engineering priority
+unchanged. [Snapshot](releases/2026-10-23-vpn-health.md).
+
+### Desktop parity with accepted106 — owner's step-by-step checkpoint24.10
+
+Source checkpoint authorized separately24.10: commit/push the current safe project
+tree and persistent AGENTS.md workflow rule; this does not resume the backlog below.
+Subsequent agreed logical changes must be committed and pushed immediately after
+their relevant checks. Push/CI/release/installed acceptance remain separate states.
+
+PAUSED at the owner's explicit request24.10,08:55 CEST, after completing phase22
+implementation, final regression, component builds/readback and evidence. The next
+items below are backlog, not authorization for automatic continuation. Wait for the
+owner's next instruction to agree the next bounded step. Full objective remains
+unchanged and incomplete; no full-installer or target-OS gate is marked complete.
+
+Phase22,24.10,08:53 CEST: Linux UID/device-bound user-service admission now connects
+ChatOwner API/mailbox calls to the existing MESH owner. Bounded real Unix socket/FD,
+duplex/cancel/cleanup and real disposable-identity proof/revocation/resume checks
+pass; final1218 Python regressions PASS. Linux-r18 native race tests, Windows-r14
+cross-build,98-member internal component-r18 and175/2073 reference checks PASS.
+NEXT: protected-underlying DIRECT and service-only chat without a VPN, with a single
+native owner and explicit handoff into VPN reservation; no duplicate conflicting
+worker, unvalidated cache or weak authorization fallback. Then installed Linux
+MESH/P1/DNS/HTTPS/recovery/identity-safe upgrade, Windows broker/WinForms/target-OS
+acceptance, complete visual comparison, full-bundle updater and private packages.
+Existing SYSTEM remains honest OS routing, not protected DIRECT. Stage3/6,
+full installers0/2, installed-OS acceptances0/2. No user/server/Android/publication
+change; no new GUI comparison or live restricted-message acceptance in phase22.
+
+Phase21,24.10,08:21 CEST: bounded separate Linux parent/native chat IPC is implemented,
+sharing the existing VPN coordinator. Duplex, cancel/lease/stream limits and late
+completion cleanup pass Go race tests;1176 Python checks pass, including the real
+new native process and control surviving a closed/malformed chat channel. Linux-r17,
+Windows-r13 cross-build and unsigned internal component-r17 pass source/readback
+checks. Windows endpoint remains NOT_INTEGRATED; these are not full installers.
+NEXT: authenticate unprivileged ChatOwner admission to the root service, obtain
+validated identity-bound material there, and connect direct/existing-exit/service-only
+orchestration without a second conflicting worker or weak authorization fallback.
+Then installed Linux MESH/P1/recovery/identity-safe upgrade, Windows broker/WinForms,
+full visual acceptance and private installers. Stage3/6, full installers0/2 and
+installed-OS acceptances0/2. Versions/Android/server policies/publication unchanged.
+
+Phase20,24.10: accepted restricted-chat native bridge is now shared Go code with
+strict API/mailbox bounds, validated material,8 leases and ownership handoff.
+Native VPN worker uses the same coordinator; Linux-r16/Windows-r12 build from a
+matching290-file inventory. Four common packages pass race checks (110 distinct
+test/subtest names repeated3 times), native worker checks and1158 Python checks
+PASS. Component-r16 is internal/unsigned, not a complete client installer.
+NEXT: bounded authenticated Linux host IPC for API/mailbox, existing-exit/service-only
+reuse and direct-first eligibility, without general destination access or fallback
+after TLS/authorization/conflict. Connect the existing session chat owner only after
+this backend exists. Then installed Linux MESH/P1/interface/sleep/recovery/upgrade,
+Windows broker/WinForms/runtime and full private packages. No new UI capability;
+stage3/6 and0/2 full installers/installed-OS acceptances. Android, policies, versions
+and rollout unchanged; explicit remaining boundaries are in phase20.
+
+Phase19,24.10,07:18 CEST: independent user-service support ownership now passes
+final1157 regressions,28 subsequent targeted package/owner checks, actual private
+GTK/D-Bus/systemd restart/revoke and Secret Service/RNS chat lifecycle regression.
+Component-r15 and bundled GUI imports/version are checked separately; this is not
+installed Type=dbus or a complete installer. NEXT: restricted chat API/mailbox via
+the accepted authenticated native transport (including existing-exit/service-only
+ownership), without direct-route bypass or fallback after authorization failure.
+Then installed Linux MESH/P1, interface/sleep/recovery and identity-safe upgrade;
+Windows broker/WinForms and full private installers remain mandatory. Stage3/6,
+full installers0/2, completed installed-OS acceptances0/2. Versions and deployment
+unchanged; no rollout/rollback. Source/thermal/runtime receipts are in phase19.
+
+Owner checkpoint24.10,07:07 CEST: independent non-root support ownership is now
+implemented and the private GTK/D-Bus/systemd fixture passes GUI-close collection,
+restart/consent/identity continuity, revision fencing, revoke and idle exit.
+This uses synthetic VPN/local HTTP, not installed production Type=dbus acceptance.
+Next rerun regression after the final collector-history change, verify package
+closure, then restricted chat and installed Linux MESH/P1/recovery/upgrade.
+Windows broker/WinForms integration, final visual checks and full private packages
+remain mandatory. Stage3/6; full parity installers0/2, installed-OS acceptances0/2.
+Last broad1130 PASS and targeted133 PASS overlap; neither measures completion.
+Versions, deployments and public catalogs unchanged; no rollout/rollback action.
+
+Phase18,24.10: native106 JSON fidelity and explicit online-consent GTK workflow are
+implemented locally;41 native/54 online accepted-Java vectors match,1130 local
+regressions and175/2073 integrity checks PASS. Final real X11/Xvfb export/consent
+checks produce32 RU/EN captures with compact focus at four fixture scales. Internal
+component-r14 built/read back; no full installer or live upload. Earlier Wayland
+captures must not be labelled Xvfb/DPI evidence. NEXT: move upload scheduling/consent
+ownership from the GTK process to the independent non-root service for background
+parity; retain one uploader, cancellation, proof binding and no activation/route
+fallback. Then restricted carrier and authorized installed Linux MESH/P1, underlying
+interface/sleep/recovery and identity-preserving upgrade. Windows broker/WinForms,
+physical acceptance where available and full AppImage/DEB/Windows packages still
+mandatory. Stage3/6; full installers0/2, completed installed-OS acceptance0/2.
+
+Owner progress readback24.10,06:20 CEST: native106 Linux diagnostic projections
+now pass980 local regressions and41 exact accepted-Java comparison vectors. Fresh
+GTK export verification did not run: its command could not locate `xvfb-run`.
+Next repair the bounded GUI test launch, verify real JSON saving, package the new
+sources, then finish opt-in support/restricted-chat and installed Linux acceptance.
+Do not count component-r13 as containing these newer changes. Windows integration,
+full visual acceptance and complete private installers still follow; stage3/6,
+full installers0/2, completed installed-OS acceptance0/2, no overall percentage.
+
+Phase17,24.10,05:47 CEST: AWG absent-TUN teardown and owned routing/DNS/nft lifecycle
+are implemented.925 local checks and175/2073 reference integrity PASS. Real installed
+helper/engine inside an isolated namespace passes AWG3.1 disconnect, daemon crash,
+fresh session, resolver/rule/firewall restoration and foreign-resource preservation;
+AWG2 isolated smoke PASS. Component-r13 built/read back, not a full installer or
+host installation. Preserve fail-closed unresolved ownership; do not delete journals
+to continue. Next complete Linux diagnostics/consent/restricted chat plus authorized
+installed root handoffs, MESH/P1, interface/sleep/automatic recovery and identity-safe
+upgrade. Windows broker/WinForms integration, real visual acceptance and full private
+AppImage/DEB/Windows packages still mandatory. Physical Windows NOT_RUN;0/2 full
+parity installers or completed installed-OS acceptance. Stage3/6 remains open.
+
+Previous GTK Auto/floor checkpoint24.10: root/user signed-floor synchronization, authorized
+client and GTK state/cancel/actual-transport integration now exist;879 local checks
+PASS, four RU/EN GTK scales and manual-MESH regression PASS. Internal component-r12
+is built, not installed or a complete GUI installer. Auto is exposed only for the
+verified separate capability marker; source UI integration is not installed VPN
+acceptance. Next verify installed helper handoffs, userspace AWG crash cleanup,
+route/DNS/IPv6 containment, MESH/P1 recovery and identity-preserving upgrade.
+Do not promote synthetic UI/network tests to installed PASS. Windows broker/WinForms,
+remaining diagnostics/consent/chat, actual visual comparisons and complete private
+AppImage/DEB/Windows installers remain mandatory; physical Windows NOT_RUN.
+No new version, installation, server permission or public rollout is implied.
+
+Owner checkpoint24.10,03:47 CEST: root host/coordinator, capability filtering and
+physical network change handling now have776 passing local regressions; native
+Linux r15/Windows r11 workers are built, not installed. Next wire durable Auto
+intent/service and authenticated GUI IPC, synchronize root/user signed floors,
+then perform actual installed Linux handoffs/recovery/upgrade. Component-r9 remains
+unassembled; no full parity installers or physical OS acceptance. Windows product
+integration, visual comparisons and full private packages still follow. Stage3/6
+is a work location, not a50% completion claim. No version/publication change.
+
+Normal configuration/AWG-TCP continuation24.10: protected native fetch,
+shared profile/floor validation, existing identity handoff and single-attempt
+helper adapters now pass744 combined local tests; r14/r10 workers and component-r8
+are built/verified, not installed. Next connect real capability selection and
+underlying-network discovery to the product root Auto coordinator, serialize all
+normal/MESH handoffs and recovery intent, synchronize root/user high-water floors,
+and expose only authenticated bounded GUI IPC. Preserve the inherited helper lease
+and fail-closed journal cleanup; do not enable Auto on component tests alone.
+Then complete installed Linux MESH/P1/normal/recovery/upgrade and diagnostics/
+consent/restricted chat; Windows broker/WinForms integration, actual visual checks
+and complete private AppImage/DEB/Windows installers remain mandatory. Versions,
+Android, active sessions, server rights and public rollout remain unchanged.
+
+Owner checkpoint24.10,02:56 CEST: stage3/6;0/2 complete parity installers or
+installed OS acceptance. Protected normal native configuration/floor/profile code
+has targeted Go/Python checks, but latest owner-handoff/native-vector tests and
+new worker builds are pending. Next finish those checks, then actual AWG/TCP
+candidate ownership and root Auto coordinator/authorized GUI integration. Do not
+equate authenticated configuration with a ready VPN or enable an incomplete Auto.
+Windows product integration, visual/installed acceptance and full packages remain
+mandatory; unchanged versions/publication mean no new rollout/rollback operation.
+
+Auto IPC/MESH continuation24.10: native typed policy IPC, root-parent guard wiring
+and shared single-attempt MESH adapter are implemented.560 desktop/reference
+regressions PASS/no skips, exact source integrity PASS,18 actual isolated kernel
+policy checks PASS with synthetic transport callbacks. Linux r13/Windows r9 worker
+builds and unsigned Linux component-r6 are built, not installed or product-accepted.
+Next implement the root Auto coordinator's protected normal configuration and
+capability selection, real AWG/TCP handoffs, durable ownership and authorized GUI
+IPC. Reuse the now-available MESH attempt; never nest the manual reconnect loop.
+Do not enable Auto before real host integration. Installed MESH/P1/network/sleep/
+upgrade, complete diagnostics/consent/restricted chat, Windows broker/WinForms,
+visual acceptance and full private packages remain required in the original goal.
+
+Owner progress readback24.10,02:13 CEST: Linux native r12 build and recorded IPC
+unit checks succeeded, but native policy IPC plus guarded-host source is not yet
+the actual root Auto coordinator. Next validate exact IPC field/cancellation rules
+and the native+kernel integration fixture, then wire real protected configuration,
+capability/readiness and existing transport helpers before enabling GTK Auto.
+Windows broker/frontend, complete diagnostics, installed MESH/P1/recovery/upgrade,
+visual acceptance and full private installers remain required. No release or
+installation is implied by r12; do not derive progress percent from test counts.
+
+Linux Auto guard continuation24.10: root-internal nftables containment is now
+implemented,214 Python checks and two repeated44-check real isolated kernel/TUN
+runs PASS. Journal uncertainty, name/index reuse, root-only bypass, ordinary
+DNS/IPv6/forward blocking and cleanup are covered. It adds no routing rules and
+does not weaken the existing manual helpers. Next integrate it with a root Auto
+coordinator using the shared Go policy, authenticated bounded IPC and existing
+helper ownership/cleanup. Implement underlying configuration/media/DNS sockets
+and actual capability/readiness checks before enabling GTK Auto. Do not mistake
+firewall state for authenticated VPN health or package this as a complete VPN.
+Installed/network/sleep/identity-upgrade gates, full diagnostics/consent/restricted
+chat, Windows integration and complete private packages remain mandatory.
+
+Auto policy continuation24.10: shared Go controller,21 race-tested cases (5 repeats),
+17-scenario/160-record exact Java comparison and Windows policy test cross-build
+are complete locally. Next concrete implementation is the privileged Linux Auto
+host/IPC: keep a cross-transport guard through configuration/handoff/failure,
+allow only service-owned underlying sockets, filter real capabilities, require
+TUN/routes/DNS/health before ready, then connect GTK. Current helper chaining is
+insufficient: MESH's routing namespace is exclusive and other helpers clean up
+independently. Do not remove protection or add an active Auto selector prematurely.
+Next Windows host/broker must reuse the same policy, not a new C# state machine.
+Full diagnostics/consent, restricted-only chat, installed acceptance and private
+packages remain required. No new blocker/permission gate is inferred from this work.
+
+Announcement continuation24.10: final-r5 passed166 targeted tests,175/2073 source
+checks and four actual GTK/private-D-Bus runs. Regressions-r3 successfully completed
+the notification/text/voice/MESH/support checks missed by r2; original failure is
+retained. Role/revocation/conflict/retry and bounded uncompressed responses are
+covered. Source/package closure and CI checks include both announcement modules.
+Next Linux work: real Auto orchestration/capabilities, full diagnostics and online
+consent, restricted service-only chat and installed service/upgrade/TUN acceptance.
+Do not expand this into announcement features absent from106 or grant real roles.
+Windows integration/full private packages remain mandatory subsequent stages.
+
+Owner progress control24.10: announcement API/GTK local implementation now passes
+156 targeted tests,175/2073 source checks and four rendered announcement scenarios.
+The final-r2 batch is NOT a full PASS: fix the regression command that produced
+`chat__check.py`, then run the missed notification/text/voice/MESH/support checks.
+Exact Android announcement comparison and installed acceptance remain open.
+No product changes were made during this readback; stage remains3 (Linux).
+
+Owner control22:45 CEST: visible NVIDIA/KVM reference check completed and stopped;
+unchanged offline106 home captured, no software-renderer fallback. No new product
+completion claim: continue Linux background delivery/notifications and exact UI,
+remaining transport/diagnostics and installed gates, then Windows and full packages.
+Keep the existing workload/time/thermal guards for subsequent emulator checks.
+
+Owner control22:03 CEST rechecked existing evidence only; no new implementation
+or acceptance is claimed. Current stage remains3 (Linux), not Windows integration
+or package delivery; do not equate stage count/test totals with completion percent.
+
+1. DONE: exact APK/native/capsule verification and complete functional gap matrix;
+   reference-derived tokens/strings pinned. Exact APK now runs in an isolated offline
+   emulator; off/settings/route/empty-chat captures exist. GPU-backed recapture now
+   verified; emulator stopped. Connected-state references remain open.
+2. DONE shared-core/worker baseline: Linux/Windows amd64 native builds, exact pinned
+   packet dependency/patch, private IPC; Linux packet/IPC race and6 process checks.
+   DONE shared readiness proof/cache/floors + receipt wire; exact106 source mapping.
+   Latest Linux/Windows workersd1a40ff5… built; health102 scheduling/TUN probe implemented.
+   DONE Linux receipt persistence/restart revalidation + separate bounded ACK exchange;
+   local failure/cancel/durability/native-process tests PASS, live server ACK NOT_RUN.
+   DONE local RNS integration: exact accepted channel, fixed-provider restricted worker,
+   Go IPC, race tests, actual local four-path/max-response/cancel exchange and
+   reproducible runtime package. Linux component installer verifies both runtimes
+   before capability publication and rolls back a mismatch. New kernel-binding
+   check awaits local admin authentication; installed/live RNS remains open.
+   Collector, Windows embedded runtime and protected receipt owner/broker remain open.
+3. IN PROGRESS Linux helper: native preparation→atomic cache→crypto readback before
+   packet start; backend/identity adapter and offline component installer source.
+   Latest desktop452 tests (includes11 native offline and actual packaged RNS checks), current
+   desktopmesh/bridge race PASS; earlier full carrier race18 packages PASS.
+   Isolated TUN/mark/IPv6/crash checks remain valid prior-phase evidence. Next actual
+   GTK private-backend connection/cancel/profile integration now implemented, with
+   real rendered tests (synthetic network states). Next actual helper install/upgrade,
+   remaining GTK functionality including messenger/support;
+   DONE local restart-intent/guard regression and exact component-r5 archive verification;
+   installed root-service/network recovery still open. DONE GTK Support ID refresh/copy
+   and explicit bounded JSON saving, local authenticated identity/cache/reference46 tests
+   and rendered RU/EN/DPI checks. Next complete native diagnostic projection/physical
+   collection, actual Auto, messenger background/notifications and opt-in online support.
+   DONE local contacts/text stage21:56: accepted messenger closure pinned and tested;
+   Secret Service-backed encrypted owner, GTK verification/card/copy/rename/text/edit/
+   history, actual local RNS recipient-storage ACK and rendered RU/EN/DPI scenarios.
+   Broad611 PASS/13 gated skips, then explicit478 PASS/no skips; latest focused checks17 PASS.
+   Actual private keyring restart retains the key; pending registration does not
+   disable the composer or local queue. Installed/live/upgrade gates remain open.
+   DONE Linux voice implementation: actual GStreamer Opus/Codec2 recording, bounded
+   memory, preview/pause/seek, explicit encrypted queue, per-contact Radio confirmation
+   and real local RNS voice/recipient-storage ACK. Captures use synthetic input/silent
+   output, never the user's microphone; hardware/Android pair acceptance still open.
+   Final voice-final-r6:34 targeted PASS, four actual X11 input/DPI checks plus text
+   regression clean,47 screenshots; prior related497/native tests PASS separately.
+   DONE local notification/service-history stage23:10: typed session-D-Bus ACK/action
+   adapter, content-free previews, encrypted preferences, real local hidden-UI mailbox
+   receipt/reopen, revision/read/daemon-replacement fences and Linux public feed/cache.
+   Related167 PASS, final50 focused PASS; four final GTK/D-Bus scales and text/voice
+   regressions PASS,44 PNGs. Final UI run peak65°C under50% CPU quota; no emulator.
+   DONE local independent-owner stage: non-root user-systemd process, bounded same-UID
+   D-Bus RPC, encrypted crash/replay fence and paged summaries; GUI close → actual
+   local RNS receipt/notification, SIGKILL → same identity/history, interrupted send
+   → no duplicate on replay, background off → idle exit. Final r5 targeted75,
+   source175/2073, systemd/Secret Service/RNS and GTK MESH/support regressions PASS;
+   four-scale GTK/text/voice regression PASS. Final phase65 PNGs across explicit
+   fixture scopes. Window fit now waits for a painted frame and preserves outer
+   geometry; prior failing receipts are retained. Production Type=dbus/package
+   activation and old-service/new-bundle update handoff remain open.
+   DONE local announcement-admin UI/API and final regression batch; exact Android
+   screenshot comparison/installed acceptance remain open. Remaining messenger work:
+   real host popup/installed acceptance, exact accepted
+   thread/composer/profile placement, physical audio/Android interoperability and restricted
+   service-only carrier. Normal SYSTEM-route delivery is not their substitute.
+   Complete full-bundle/legacy-updater transition before claiming installation.
+   Test system TUN/underlying routing, lifecycle, identity and bounded32MiB live path.
+4. THEN: Windows WinForms/broker counterpart, native UI/service tests and physical
+   Windows TUN if available; cross-build does not satisfy that gate.
+5. THEN: actual screenshots/DPI/RU/EN comparisons, private AppImage/DEB/compatible
+   archive + Windows installer, in-place upgrades and exact hashes. No publication
+   or Android rebuild, no automatic server grants/restarts or user-policy changes.
+   [Continuing report](releases/2026-10-23-desktop-parity106.md).
+
+Separate policy boundary, not a packaging blocker: existing Linux FC-3Y3W-EBZE is
+registered/non-revoked but absent from P1; current gateway group is capped at three
+Android members. Prepare a bounded exact-desktop expansion only after explicit
+operator approval, preserving those members. Windows identity/runtime still to locate.
+
+The Android tester handoff below is independent; it does not gate local desktop work.
+
+### Closed three-device handoff READY —23.10
+
+- DONE: owner confirmed exact three Support IDs; read-only bindings/revocation
+  verified. No new grant/enrollment or global entitlement/profile change.
+- DONE: bounded P1 group policy tested and deployed as gatewaya515 under existing
+  renewal locks; TLS/crypto/publication PASS, exact policy readback PASS.
+- DONE: unchanged106 auto-reconnected to new gateway; Wi-Fi/TUN/both-end P1 and
+  full1KiB HTTPS PASS3.422s. USB consent renewal only, no Connect/reinstall.
+- DONE: Volgograd export21 proves current96 cellular MESH activity, with owner-
+  relayed whitelist success. Keep94 incident and96 errors; cold bootstrap/106 P1
+  in the field remain unproven. Do not relabel the old result as106 acceptance.
+- READY: same signed106 and RU/EN instructions; static65/96 update paths checked,
+  owner105→106 physical preservation already passed. PRIVATE_FIELD_READY=YES.
+- NEXT EXTERNAL: owner sends the file manually to the agreed testers; one mobile
+  MESH/P1 attempt and ordinary JSON, operator/time/allowance or UNKNOWN. No mandatory
+  Wi-Fi warmup, no speed matrix or new research version. Krasnodar current version
+  and physical tester106 updates are field readbacks, not facts inferred from old65.
+- BUDGET:8,408,064/33,554,432 bytes in the existing allocation; collectors ended.
+  [Current receipt and boundaries](releases/2026-10-23-tester-p1-cohort.md).
+
+The previous owner-only phases below are retained as dated history.
+
+### Reboot continuation23.10 — supersedes the22.10 manual gate
+
+- DONE: installed105/UID/APK/native verified; Wi-Fi398, VPN off. USB grant active,
+  full snapshot unavailable. Available logs/history preserved before changes.
+- DONE: recover unfinished106, final219 JVM tests and recorded overflow acceptance;
+  exact four-file diagnostic-only source delta,12 unchanged native libraries.
+- DONE:106 signed with existing vault/key and installed04:38:17UTC, same UID/native;
+  fresh JSON/FC-4D8Q-REEG verified, USB active. No reinstall/consent toggle required.
+- DONE: ordinary Wi-Fi Connect retains real TUN and both-end P1/RS32/CREDIT128.
+- DONE:106 Wi-Fi19/19 complete, single1.189/parallel2.276Mbit/s; finite small/idle
+  checks, raw expected crossed RESET retained, no actual/unclassified violations.
+- DONE: ordinary Disconnect45s/Connect preserves both-end P1; full1KiB HTTPS PASS.
+- DONE: owner performed the explained Wi-Fi loss/return; JSON retained before
+  probing. New automatic MESH/P1 session, both-end RS32/CREDIT128 and full1KiB
+  HTTPS200 PASS3.733s; no Connect command or observed mobile/AWG/TCP fallback.
+  Wi-Fi creation→CONNECTED106.578s, not an instant recovery/overnight guarantee.
+  Raw expected crossings8→8, actual/unclassified0. No new bulk/speed matrix.
+- SERVER: current3a08 is single-target P1, not tester-ready. Resolve agreed tester
+  membership/product policy separately, never global enablement or new enrollment.
+- NEXT EXTERNAL: confirm whether current P1 cohort is owner + FC-ZMVK-MM7C +
+  FC-YHQB-9VJN. Historical service admission/handoff does not settle current P1
+  membership. Then minimally extend normal authenticated profile policy, preserve
+  owner/legacy P0 and separate diagnostics, and verify before any group enablement.
+- BUDGET/DELIVERY: same22.10 allocation8,407,040/33,554,432 bytes, not another budget.106 is the sole
+  successor candidate,105 retained; no public release/push/catalog/invitation changes.
+  FIELD_WHITELIST_VALIDATION=NOT_RUN, PRIVATE_FIELD_READY=NO.
+  [Readback and next gate](releases/2026-10-23-wifi-resume.md).
+
+### Wi-Fi baseline → reviewed fixes → private tester APK —22.10
+
+- CONTEXT, owner message: «22 октября 2026 года владелец сообщил: пакет мобильного
+  трафика закончился, оператор ограничил скорость; на Wi-Fi приложение работает
+  нормально». Rate/onset/manual-check version UNKNOWN; not an instrumental PASS
+  or explanation of all historical/tester failures. Preserve original failures.
+- DONE:105 already installed per12:13UTC receipt, not merely signed. Existing
+  online19:42UTC owner report shows105/WIFI/TUN/RS32/CREDIT128. Signed artifact and
+  exact source/native provenance verified; no rebuild, re-sign or reinstall.
+- DONE: fresh seven Go race packages,12 bridge tests and gateway policy/lifecycle/
+  seed tests PASS; paired gateway online-session P1 confirmed. Renewal active and
+  certificate/CRL valid at read; observed external restart retained, cause unknown.
+- DONE USB20:04–20:28UTC: actual105/package/signer/UID/all12 native hashes match.
+  First capture Wi-Fi/TUN; latest status off/no owner VPN, cause/intent UNKNOWN.
+- DONE: owner export15 preserved;105/Support ID match, retained ring ends19:43UTC,
+  not a fresh connected baseline. Local105 replay proves aggregate record overflow
+  with two additional valid contexts, despite individual component limits.
+- BLOCKING NEXT ACTION: normal in-app **USB: разрешить поддержку на 1 час** consent.
+  Latest protected status now says disabled (distinct from earlier active-consent
+  `Snapshot unavailable`); no owner VPN in21:10 system readback. Do not clear history,
+  silently reconnect, bypass permissions or treat a stale export as current state.
+- NEXT diagnostic correctness gate: verify live state after consent and resolve the
+  demonstrated aggregate record-budget failure minimally if needed for fresh export;
+  do not enlarge limits or delete errors/history to pass. No new APK number yet,
+  no changes to transport/window/retry parameters or automatic whole-roadmap audit.
+- NEXT: test the actually installed configuration on confirmed Wi-Fi, recording
+  whether its upstream is the throttled SIM/UNKNOWN. Existing meter/endpoint:
+  DNS/full small HTTPS, single4MiB, parallel2×2MiB, small requests before/during/after,
+  bounded idle. Separate phases on network change; no mobile bulk or speed sweep.
+- KEEP:102 health correction,103 deadline/cancel/security,104 bounded750ms reorder,
+  105 minimal queue-pressure drain subject to fresh owner acceptance. Do not enlarge
+  retries/windows/buffers or enable Q1/packing/FEC/QUIC. Existing2.3× is historical,
+  not a new guarantee; unknown historical events stay unknown.
+- NEXT: reuse lifecycle regressions; ordinary Disconnect must cancel recovery,
+  Connect retain P1; explain one short manual Wi-Fi outage/return with mobile fallback
+  excluded, then prove automatic transfer without Connect. No shared-gateway outage.
+- SERVER BOUNDARY: current P1 policy is one identity target. Android has a persistent
+  normal UI selector, not a USB-only requirement, but APK alone cannot enable tester
+  P1. Resolve only the already agreed closed group through normal negotiation;
+  never replace target with a global switch, new enrollment or temporary grant.
+- DELIVERY: existing signed105 is the single candidate. Static88/94/104 update
+  metadata verified; physical tester upgrade/current installed inventory and detail-
+  collector OFF remain open. No data reset/downgrade. Owner distributes only after
+  bounded gates; field whitelist NOT_RUN is separate and is not itself a release veto.
+- BUDGET: new separate ≤32MiB intentional Wi-Fi traffic, used0; old ledger retains
+  25,204,736 reserved bytes. Count failed/repeated requests; carrier/media separately.
+  No public release, push, messages, purchases, hosting migration or security bypass.
+  [Live evidence](releases/2026-10-22-owner-disconnections.md).
+
+The lifecycle101 items below retain the earlier planning history; private final
+receipts and22 October readback, not the old P0 text, establish the starting state.
+
+### Close P1 lifecycle acceptance101 (authorized continuation)
+
+- DONE: exact100/f631 readback; contract review and327 historical snapshots.
+  Additional293 WU /305 DATA+FIN sequences located; missing credit/origin details
+  are not inferred. Eight historical incomplete classifications stay unresolved.
+- DONE:101 installed owner-only; bounded incident context independent of bulk ring,
+  narrow expected/violation/unclassified annotations; raw counters and dataplane
+  unchanged.203 JVM, Go race and P0/P1 cancellation/worker checks pass.
+- DONE: observer gateway3a0804cd, guarded empty-session transition, rollbackf631,
+  readiness PASS; external preceding exit1 retained separately.
+- NOW: one short P0 and one P1 control, then comparable15min periodic P1, drained
+  Disconnect/ordinary persistent Connect. Existing ledger36.080078125MiB before
+  continuation; ≤24MiB extra, no full matrix repetition or experimental components.
+- DECIDE: complete fresh lifecycle provenance and preserved bodies/speed →
+  ACCEPTED_BOUNDED_ON_OWNER and persistent owner P1; otherwise P0+smoke and exact
+  unresolved mechanism. No other-client profile change, release, push or Q1.
+
+### Owner P1 acceptance — measured21.10; not admitted, owner P0
+
+- DONE: exact entry readback, external service restart and mixed-pair evidence;
+  installed bounded observation100,202 JVM/Go race, both-end P0/TUN HTTPS smoke.
+- DONE: one real late RESET of an already reset/removed stream; deterministic
+  crossed-reset/neighbor regression and Go race pass, raw counters unchanged.
+  Other historical errors remain unclassified; no transport behavior fix justified.
+- DONE: same-code P0/P1/P1/P0,60/60 bodies, both-end Mux errors0; single2.303×/2.284×,
+  aggregate2.294×/2.318×; no paired small median/max regression>20%.64MiB ledger.
+  Client native cleanup confirmed; actual post-Disconnect server exhaustion retained.
+- DONE:15min periodic P1,35/35 bodies; ordinary Disconnect/Connect without rewriting
+  P1 confirms persistence and32/128. Android9/gateway3 new events not all classified;
+  not clean acceptance, not evidence of lost meter bodies. Owner restored P0 +smoke.
+- REMAINS: complete bounded provenance for the missed burst before a new same-code
+  acceptance. No unproven transport patch/parameter sweep, no automatic budget
+  extension;36.080078125/64MiB requested,98/98 bodies. Old96 regression still open.
+  No claim of two failed transport-fix cycles or automatic olcRTC start. No fleet rollout.
+  [Current report](releases/2026-10-21-p1-owner-acceptance.md).
+
 ### GitHub source checkpoint — authorized21.10
 
 - Preserve accumulated implementation, replay fixtures and redacted evidence in

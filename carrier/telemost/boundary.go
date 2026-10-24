@@ -5,6 +5,7 @@ import (
 	"sync"
 	"sync/atomic"
 
+	"github.com/Joker20380/family_connect/carrier/localwrite"
 	"github.com/Joker20380/family_connect/carrier/reliablestream"
 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"github.com/pion/interceptor"
@@ -15,6 +16,7 @@ import (
 type outboundFrame struct {
 	data  []byte
 	point sessiontrace.Boundary
+	local *localwrite.Write
 }
 
 func fragmentBoundary(data []byte) sessiontrace.Boundary {

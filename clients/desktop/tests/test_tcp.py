@@ -54,7 +54,7 @@ def chain(monkeypatch):
 def test_both_udp_blocked_reach_tcp_after_cleanup(chain):
     driver,events,live=chain
     driver.connect('wg-id')
-    assert events==[('wg','up'),('wg','down'),('awg','up'),('awg','down'),('tcp','up')]
+    assert events==[('awg','down'),('wg','up'),('wg','down'),('awg','up'),('awg','down'),('tcp','up')]
     assert live=={'tcp'} and driver.healthy('wg-id')
     driver.disconnect('fcawg12345678')
     assert not live
@@ -69,24 +69,31 @@ def test_cancelled_authorization_never_tries_next_transport(chain,monkeypatch):
     def denied(*args):raise backend.AuthorizationError('cancelled')
     monkeypatch.setattr(driver,'_awg',denied)
     with pytest.raises(backend.AuthorizationError):driver.connect('wg-id')
-    assert events==[('wg','up'),('wg','down')]
+    assert events==[]
 
 def test_failed_cleanup_never_starts_next_transport(chain,monkeypatch):
     driver,events,live=chain
     def failed(*args):raise backend.BackendError('cleanup failed')
     monkeypatch.setattr(driver,'_stop',failed)
     with pytest.raises(backend.BackendError):driver.connect('wg-id')
-    assert events==[('wg','up')]
+    assert events==[]
 
 def test_explicit_tcp_skips_udp(chain):
     driver,events,live=chain;driver.connect('fctcp12345678')
-    assert events==[('tcp','up')]
+    assert events==[('awg','down'),('tcp','up')]
 
 def test_explicit_tcp_replaces_healthy_wg(chain,monkeypatch):
     driver,events,live=chain;live.add('wg')
     monkeypatch.setattr(driver,'_check',lambda _:None)
     driver.connect('fctcp12345678')
-    assert events==[('wg','down'),('tcp','up')]
+    assert events==[('awg','down'),('wg','down'),('tcp','up')]
+
+
+def test_disconnect_cleans_awg_even_when_userspace_tun_has_disappeared(chain):
+    driver, events, live = chain
+    assert not live
+    driver.disconnect('wg-id')
+    assert events == [('awg', 'down')]
 
 
 def test_wg_health_uses_paired_awg_endpoint_when_tcp_gateway_differs(chain,monkeypatch):
@@ -137,12 +144,12 @@ def test_final_tcp_self_stopped_failure_does_not_prompt_cleanup(chain,monkeypatc
         raise backend.BackendError('root start failed and stopped service')
     monkeypatch.setattr(driver,'_tcp',failed)
     with pytest.raises(backend.BackendError):driver.connect('fctcp12345678')
-    assert events==[('tcp','up')]
+    assert events==[('awg','down'),('tcp','up')]
 
 
 def test_final_live_tcp_failure_still_requires_cleanup(chain,monkeypatch):
     driver,events,live=chain
     monkeypatch.setattr(driver,'_check',lambda _: (_ for _ in ()).throw(backend.BackendError('probe failed')))
     with pytest.raises(backend.BackendError):driver.connect('fctcp12345678')
-    assert events==[('tcp','up'),('tcp','down')]
+    assert events==[('awg','down'),('tcp','up'),('tcp','down')]
     assert not live

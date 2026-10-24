@@ -87,6 +87,9 @@ func connectionAuthorizer(path string, state *tls.ConnectionState, httpControl b
 		}
 		defer clear(raw)
 		config, _, err := familysession.Configuration(raw, true)
+		if !httpControl {
+			config, _, err = familysession.MuxConfiguration(raw, true, true)
+		}
 		if err != nil {
 			return Identity{}, Code("unauthorized")
 		}

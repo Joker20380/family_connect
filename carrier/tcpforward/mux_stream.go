@@ -7,9 +7,12 @@ import (
 	"io"
 	"sync"
 	"time"
+
+	"github.com/Joker20380/family_connect/carrier/familysession"
 )
 
 type MuxStream struct {
+	life             MuxLifeStream
 	mux              *Mux
 	id               uint32
 	ctx              context.Context
@@ -17,6 +20,7 @@ type MuxStream struct {
 	stop             func() bool
 	writeMu          sync.Mutex
 	opened           bool
+	lease            bool
 	localFIN         bool
 	remoteFIN        bool
 	closeRequested   bool
@@ -53,8 +57,13 @@ type MuxStreamStats struct {
 
 func (mux *Mux) makeStreamLocked(id uint32) *MuxStream {
 	ctx, cancel := context.WithCancel(mux.ctx)
-	stream := &MuxStream{mux: mux, id: id, ctx: ctx, cancel: cancel, receive: make([]byte, MuxWindow), receiveCredit: MuxWindow, sendCredit: MuxWindow, queuedAt: time.Now()}
+	window := mux.window
+	if window == 0 {
+		window = MuxWindow
+	}
+	stream := &MuxStream{mux: mux, id: id, ctx: ctx, cancel: cancel, receive: make([]byte, window), receiveCredit: window, sendCredit: window, queuedAt: time.Now()}
 	mux.streams[id] = stream
+	mux.lifeLocked("create", id, 0, "new")
 	mux.order = append(mux.order, id)
 	mux.stats.Opened++
 	return stream
@@ -64,28 +73,30 @@ func (mux *Mux) OpenTCP(ctx context.Context, request OpenRequest) (*MuxStream, e
 	if err := validate(request); err != nil {
 		return nil, err
 	}
+	deadline := time.NewTimer(40 * time.Second)
+	defer deadline.Stop()
 	mux.mu.Lock()
 	if mux.server || mux.ctx.Err() != nil || ctx.Err() != nil {
 		mux.mu.Unlock()
 		return nil, ErrReset
 	}
-	if len(mux.streams) >= mux.config.MaxStreams {
+	lease := leaseRequest(request)
+	if err := mux.admitLocked(ctx, lease, deadline.C); err != nil {
 		mux.mu.Unlock()
-		return nil, ErrStreamLimit
+		return nil, err
 	}
 	if mux.nextID > muxMaxID {
 		mux.mu.Unlock()
 		return nil, ErrIDExhausted
 	}
 	stream := mux.makeStreamLocked(mux.nextID)
+	stream.lease = lease
 	mux.nextID += 2
 	payload, _ := json.Marshal(request)
 	mux.controlLocked(muxFrame{openFrame, stream.id, payload})
 	stream.stop = context.AfterFunc(ctx, func() { stream.Reset() })
 	mux.measureLocked()
 	mux.signalLocked()
-	deadline := time.NewTimer(40 * time.Second)
-	defer deadline.Stop()
 	for !stream.opened && stream.terminal == nil && mux.ctx.Err() == nil {
 		changed := mux.changed
 		mux.mu.Unlock()
@@ -137,6 +148,7 @@ func (stream *MuxStream) finishLocked(err error) {
 	if stream.terminal != nil {
 		return
 	}
+	stream.mux.lifeLocked("finish", stream.id, 0, lifeReason(err))
 	stream.terminal = err
 	stream.cancel()
 	if stream.stop != nil {
@@ -150,8 +162,10 @@ func (stream *MuxStream) resetLocked(err error) {
 	if stream.terminal != nil {
 		return
 	}
+	stream.life.LocalAbort = true
 	stream.finishLocked(err)
 	stream.send = []muxFrame{{resetFrame, stream.id, nil}}
+	stream.mux.lifeLocked("enqueue", stream.id, resetFrame, "control")
 	stream.mux.stats.Resets++
 	stream.mux.signalLocked()
 }
@@ -172,10 +186,10 @@ func (stream *MuxStream) Read(buffer []byte) (int, error) {
 		}
 		if stream.used > 0 {
 			count := min(len(buffer), stream.used)
-			first := min(count, MuxWindow-stream.head)
+			first := min(count, len(stream.receive)-stream.head)
 			copy(buffer, stream.receive[stream.head:stream.head+first])
 			copy(buffer[first:count], stream.receive[:count-first])
-			stream.head = (stream.head + count) % MuxWindow
+			stream.head = (stream.head + count) % len(stream.receive)
 			stream.used -= count
 			stream.receiveCredit += count
 			stream.creditPending += count
@@ -210,11 +224,16 @@ func (stream *MuxStream) Write(payload []byte) (int, error) {
 			return total, io.ErrClosedPipe
 		}
 		if stream.opened && len(stream.send) == 0 && stream.sendCredit > 0 {
-			count := min(len(payload), MaxData, stream.sendCredit)
+			chunk := MaxData
+			if mux.batchSend != nil {
+				chunk = min(chunk, familysession.MaxBatchPlaintext-familysession.BatchMessageHeaderSize-headerSize)
+			}
+			count := min(len(payload), chunk, stream.sendCredit)
 			stream.sendCredit -= count
 			stream.sendHighWater = max(stream.sendHighWater, count)
 			stream.send = append(stream.send, muxFrame{dataFrame, stream.id, bytes.Clone(payload[:count])})
 			stream.queuedAt = time.Now()
+			mux.lifeLocked("enqueue", stream.id, dataFrame, "data")
 			stream.sent += uint64(count)
 			mux.stats.SentBytes += uint64(count)
 			mux.stats.SendHighWater = max(mux.stats.SendHighWater, count)
@@ -254,6 +273,7 @@ func (stream *MuxStream) CloseWrite() error {
 	stream.localFIN = true
 	stream.localFINCount++
 	stream.send = append(stream.send, muxFrame{finFrame, stream.id, nil})
+	mux.lifeLocked("enqueue", stream.id, finFrame, "control")
 	mux.signalLocked()
 	return nil
 }
@@ -276,6 +296,7 @@ func (stream *MuxStream) Close() error {
 		if !stream.closing {
 			stream.closing = true
 			stream.send = append(stream.send, muxFrame{closeFrame, stream.id, nil})
+			mux.lifeLocked("enqueue", stream.id, closeFrame, "control")
 		}
 		mux.signalLocked()
 		timer := time.NewTimer(10 * time.Second)

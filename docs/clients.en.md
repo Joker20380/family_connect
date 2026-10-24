@@ -1,13 +1,122 @@
 # Client installation
 
+## Desktop parity106 — development only
+
+Native worker binaries now exist for both amd64 platforms; they are internal
+service components, **not user installers**. Do not replace an installed app with
+these files. Linux isolated TUN/routing checks do not prove live MESH connectivity.
+
+Development code now also persists bounded readiness receipts and performs the
+independent authenticated ACK. This has local tests, not installed/live acceptance;
+it does not enroll this computer or grant P1 access. Existing identities stay unchanged.
+
+The development RNS bootstrap adapter now uses the accepted channel with a bundled,
+isolated RNS1.5.1 runtime. Local actual-link tests cover its request/response and
+cancellation paths; they do not prove a live desktop VPN or authorize P1. Windows
+still needs its embedded Python runtime and broker integration; users should not
+install Python or move these components manually to work around that unfinished work.
+
+An unsigned offline Linux system-component installer now exists for development,
+but has not been installed/accepted and is not an end-user app installer. Its exact
+archive/hash and RU/EN instructions are in the report; do not use it as a public update.
+No new application installer is available yet. Keep existing installations and their own
+Device Identity; do not copy phone keys, delete data or reenroll for this work.
+Current download links are unchanged. A future private candidate must pass actual
+OS/TUN, UI and in-place-upgrade checks before handoff; public publication requires
+a separate decision. [Feature matrix and exact gates](releases/2026-10-23-desktop-parity106.md).
+
+The development GTK tree now connects manual MESH through its privileged service,
+only when the verified system component is installed. Settings show selected and
+actually negotiated profiles separately; Disconnect cancels service recovery.
+Closing the window explains that MESH continues in that service. This is code and
+synthetic-state UI-test coverage, not installed/live-VPN acceptance or an invitation
+to replace the stable app. Android reference captures use only a fresh offline emulator.
+
+### Support controls in the development build
+
+Development GTK settings now includes **About / Diagnostics**. **Refresh Support
+ID** asks the existing authenticated service for this computer's ID; **Copy Support
+ID** copies only that ID, never a key. A failed refresh keeps the valid saved ID.
+**Send diagnostics** first explains privacy, then **Save JSON** opens the OS save
+dialog. Share that file with your chosen recipient yourself; nothing is uploaded
+automatically. Export does not require shell/root access or disconnect the VPN.
+It includes bounded public connection/session/startup information and omission
+counts, not browsing history, messages, destinations or credentials. These controls
+are source-tested/rendered development functionality, not a published0.2.11 update.
+Windows counterparts, installed collection and full diagnostic parity remain open.
+
+### Messaging in the development tree
+
+The GTK **Messenger** page now uses the shared encrypted store rather than a
+placeholder. Activate this computer first, then choose **Start messaging**. Its
+separate chat identity is not copied from Android. The32-byte history key is saved
+in the user's Secret Service; unlocking that keyring may be required. Missing or
+damaged history/key material produces an error, never an automatic account reset.
+Do not delete the keyring entry or the application chat directory to update.
+
+Use **Add contact**, paste the entire public key and independently compare the
+full fingerprint before saving. Contacts can be renamed; text can be queued and
+edited, and encrypted history survives reopening. **Accepted by relay** does not
+mean the recipient has stored the message; that has a separate verified receipt.
+The Linux mailbox first follows normal OS routing (SYSTEM), including an existing
+VPN, and never opens privileged bypass routes. The matching new root component also
+allows bounded chat-only use of an existing authenticated MESH exit (EXISTING_EXIT),
+bound to this computer and user. Authentication/conflict rejection is terminal.
+This is locally tested source, not installed/live acceptance. Protected-underlying
+DIRECT, service-only delivery without VPN, installed background-service acceptance
+and complete UI parity are still unfinished.
+These are development sources, not a published installer or a live-server PASS.
+
+**EXIT messenger** in Chats opens background/notification preferences, stored in
+the encrypted history. With background delivery enabled, an unprivileged user-session
+service continues after the GUI quits; it is not the root VPN helper. Disable
+background delivery here to stop delivery without an open, focused chat. After
+closing the GUI with background disabled, the idle service exits within about36s.
+The service does not start a new chat or bypass a locked/missing keyring. It starts
+on application use, not as a new system-wide boot service. An existing chat resumes on app launch,
+without replacing its keys or creating another identity on failure. System
+notifications contain no message text/audio/contact name. Clicking opens the
+verified conversation; viewing it in a focused window marks displayed messages
+read. Failed/unavailable notification service leaves the pending flag unchanged.
+The notification daemon's acknowledgement does not prove a popup was visible
+(for example, Do Not Disturb can hide it). OS notification settings still apply.
+**EXIT · service notices** shows Linux-targeted public announcements and retained
+cached notices when refresh fails, including kind, revision, validity and author.
+An announcement cannot execute a command or install an update. In the local Linux
+candidate, the **⋮** menu opens announcement administration. The server must
+authorize this computer's existing identity for every list, publish or edit;
+ordinary users cannot grant themselves access. Compose a title and body, choose
+**Preview announcement**, then explicitly publish. New announcements target all
+three platforms for30 days. Editing retains the author, audience and expiry.
+A revision conflict requires reopening the latest version. If a reply is lost,
+retrying the same preview uses the same operation identity, not another announcement.
+No real role was granted or public announcement sent during development.
+Physical desktop notification-daemon/installed-package checks and exact Android
+administration-screen comparison remain separate from local API/D-Bus/GTK tests.
+If a send loses its service reply, check the conversation history before sending
+again: the message may already be saved. The client does not silently retry an
+ambiguous mutation. Normal updates must retain both the chat directory and vault.
+
+Voice: hold the microphone control to record, slide left to cancel or up to lock;
+keyboard activation starts locked recording. Stop/release opens a preview, not an
+automatic send. Listen, pause/seek, then choose **Send**. Escape or leaving the
+conversation cancels unsent audio. Limit60 seconds; no temporary audio file is
+written. **Voice profile** defaults to Opus; Codec2 modes require explicit
+per-contact support confirmation, independent of identity trust or VPN/P1 access.
+The choice is stored in encrypted history. Linux requires system GStreamer audio
+plugins and Codec2; an unavailable audio runtime reports an error, not a fake send.
+Tests use a synthetic microphone and silent sink. Physical microphone/headphone
+behavior and interoperability with a real Android installation remain NOT_RUN.
+
 ## Media transport name: MESH
 
 The local candidate on the approved Android UI84 shows Auto / AWG 3.1 / TCP
 REALITY / **MESH**. It names the existing media transport, not a new protocol or
 a guaranteed bypass. Stored `telemost` selection, Device Identity and activation
 do not migrate. The candidate is unsigned, not installed or published; download
-links below are unchanged. Windows/Linux lack product media integration and do
-not receive an inert MESH option. [Status and limits](releases/2026-10-18-mesh-product-integration.md).
+links below are unchanged. That18-Oct report predates the current GTK/service work;
+installed desktop releases still lack accepted product MESH. The development GTK
+option is capability-gated, not an inert public button. [Historical status](releases/2026-10-18-mesh-product-integration.md).
 
 **Private owner build, not a public release (12 Oct):** research84/code84 was
 installed in place at11:47:34UTC, retaining package/signer/UID and data. SHA256

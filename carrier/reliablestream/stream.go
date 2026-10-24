@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/Joker20380/family_connect/carrier/localwrite"
 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 )
 
@@ -50,6 +51,8 @@ func New(ctx context.Context, endpoint Endpoint, config Config) (*Stream, error)
 	}
 	ctx, cancel := context.WithCancel(ctx)
 	stream := &Stream{endpoint: endpoint, state: newEngine(config, local, time.Now()), sendGate: make(chan struct{}, 1), requests: make(chan request), output: make(chan []byte), done: make(chan struct{}), ready: make(chan struct{}), cancel: cancel}
+	stream.state.stats.Limits.LocalWriteCompletion = localwrite.Enabled(ctx)
+	stream.bindDiagnosticAllocation(ctx)
 	go stream.run(ctx)
 	return stream, nil
 }
@@ -58,6 +61,10 @@ func (stream *Stream) Stats() Stats {
 	stream.mu.Lock()
 	defer stream.mu.Unlock()
 	stats := stream.state.stats
+	stats.Limits.LocalSend = stream.state.config.SendWindow
+	stats.Limits.LocalReceive = stream.state.config.ReceiveWindow
+	stats.Limits.PeerReceive = stream.state.remoteWindow
+	stats.Limits.EffectiveSend = min(stream.state.config.SendWindow, stream.state.remoteWindow)
 	if stats.Terminal == "" {
 		stats.Flow = stream.state.flow()
 	}
@@ -144,6 +151,22 @@ func (stream *Stream) Close() error {
 }
 
 func (stream *Stream) run(ctx context.Context) {
+	completionEnabled := localwrite.Enabled(ctx)
+	type queuedFrame struct {
+		packet   frame
+		attempt  uint32
+		done     chan error
+		block    *pending
+		obsolete chan struct{}
+		queued   time.Time
+	}
+	type writeResult struct {
+		job queuedFrame
+		err error
+	}
+	outgoing := make(chan queuedFrame)
+	written := make(chan writeResult, 1)
+	writerDone := make(chan struct{})
 	incoming := make(chan received, 1)
 	readerDone := make(chan struct{})
 	go func() {
@@ -190,64 +213,147 @@ func (stream *Stream) run(ctx context.Context) {
 		if errors.Is(terminal, ErrExhausted) {
 			sessiontrace.From(ctx).Record(failureTrace)
 		}
+		stream.cancel()
+		<-writerDone
 		if packet.target != (epoch{}) && terminal != ErrReset {
 			resetContext, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
 			_ = stream.endpoint.SendContext(resetContext, encode(packet))
 			cancel()
 		}
-		stream.cancel()
 		stream.endpoint.Close()
 		<-readerDone
 		stream.err = terminal
 		close(stream.done)
 	}()
-	transmit := func(packets []frame) error {
-		for _, packet := range packets {
-			sendContext, cancel := context.WithTimeout(ctx, min(stream.state.config.MaxAge, 2*time.Second))
-			point := sessiontrace.Boundary{Direction: "tx", Result: "ok"}
-			if packet.kind == dataFrame {
-				stream.mu.Lock()
-				attempt := uint32(stream.state.sent[packet.seq].retries)
-				stream.mu.Unlock()
-				sendContext = sessiontrace.WithAttempt(sendContext, packet.seq, attempt)
-				point = sessiontrace.AttemptFrom(sendContext)
-				point.Direction, point.Stage, point.Result = "tx", "reliable_send", "ok"
-				sessiontrace.From(ctx).Boundary(point)
-				if sessiontrace.From(ctx).DropDiagnostic(point) {
-					cancel()
-					continue
-				}
-			} else if packet.kind == ackFrame {
-				sendContext = sessiontrace.WithACKObservation(sendContext, packet.observation, packet.ack, packet.bits)
-				point.Stage, point.ACKBase, point.ACKMask = "ack_generated", packet.ack, packet.bits
-				sessiontrace.From(ctx).Boundary(point)
+	transmit := func(job queuedFrame) error {
+		packet := job.packet
+		deadline := time.Now().Add(min(stream.state.config.MaxAge, 2*time.Second))
+		if completionEnabled {
+			deadline = job.queued.Add(min(stream.state.config.MaxAge, 2*time.Second))
+		}
+		sendContext, cancel := context.WithDeadline(ctx, deadline)
+		point := sessiontrace.Boundary{Direction: "tx", Result: "ok"}
+		if packet.kind == dataFrame {
+			sendContext = sessiontrace.WithAttempt(sendContext, packet.seq, job.attempt)
+			point = sessiontrace.AttemptFrom(sendContext)
+			point.Direction, point.Stage, point.Result = "tx", "reliable_send", "ok"
+			sessiontrace.From(ctx).Boundary(point)
+			if sessiontrace.From(ctx).DropDiagnostic(point) {
+				cancel()
+				return nil
 			}
-			err := stream.endpoint.SendContext(sendContext, encode(packet))
-			if packet.kind == ackFrame {
-				point.Stage = "ack_sent"
-				if err != nil {
-					point.Result = "write_error"
-				}
-				sessiontrace.From(ctx).Boundary(point)
-			}
-			cancel()
+		} else if packet.kind == ackFrame {
+			sendContext = sessiontrace.WithACKObservation(sendContext, packet.observation, packet.ack, packet.bits)
+			point.Stage, point.ACKBase, point.ACKMask = "ack_generated", packet.ack, packet.bits
+			sessiontrace.From(ctx).Boundary(point)
+		}
+		var completion *localwrite.Write
+		if completionEnabled {
+			sendContext, completion = localwrite.Observe(sendContext, job.obsolete)
+		}
+		err := stream.endpoint.SendContext(sendContext, encode(packet))
+		if err == nil && completionEnabled {
+			err = completion.Wait()
+		}
+		if packet.kind == ackFrame {
+			point.Stage = "ack_sent"
 			if err != nil {
-				return err
+				point.Result = "write_error"
 			}
+			sessiontrace.From(ctx).Boundary(point)
+		}
+		cancel()
+		if err != nil {
+			return err
 		}
 		return nil
 	}
+	go func() {
+		defer close(writerDone)
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case job := <-outgoing:
+				err := transmit(job)
+				select {
+				case written <- writeResult{job: job, err: err}:
+				case <-ctx.Done():
+					return
+				}
+				if err != nil {
+					return
+				}
+			}
+		}
+	}()
+	pending := make([]queuedFrame, 0, MaxWindow+2)
+	var activeData map[uint64]queuedFrame
+	if completionEnabled {
+		activeData = make(map[uint64]queuedFrame)
+	}
+	queue := func(packets []frame, done chan error) error {
+		for _, packet := range packets {
+			job := queuedFrame{packet: packet, done: done, queued: time.Now()}
+			if packet.kind == dataFrame {
+				stream.mu.Lock()
+				if state := stream.state.sent[packet.seq]; state != nil {
+					job.attempt = uint32(state.retries)
+					job.block = state
+				}
+				stream.mu.Unlock()
+				if completionEnabled {
+					job.obsolete = make(chan struct{})
+					activeData[packet.seq] = job
+				}
+			}
+			coalesced := false
+			if packet.kind == ackFrame || packet.kind == openFrame {
+				for index := range pending {
+					previous := pending[index].packet
+					if previous.kind == packet.kind && previous.target == packet.target {
+						pending[index] = job
+						coalesced = true
+						break
+					}
+				}
+			}
+			if coalesced {
+				continue
+			}
+			if len(pending) == cap(pending) {
+				return ErrBackpressure
+			}
+			pending = append(pending, job)
+		}
+		return nil
+	}
+	busy := false
 	ticker := time.NewTicker(min(stream.state.config.RTO/4, 100*time.Millisecond))
 	defer ticker.Stop()
 	ready := false
 	for {
+		for len(pending) > 0 && pending[0].obsolete != nil {
+			select {
+			case <-pending[0].obsolete:
+				if pending[0].done != nil {
+					pending[0].done <- nil
+				}
+				copy(pending, pending[1:])
+				pending[len(pending)-1] = queuedFrame{}
+				pending = pending[:len(pending)-1]
+				continue
+			default:
+			}
+			break
+		}
 		stream.mu.Lock()
 		if !ready && stream.state.remote != (epoch{}) {
 			close(stream.ready)
 			ready = true
 		}
 		var writes chan request
-		if stream.state.writable() {
+		if !busy && len(pending) == 0 && stream.state.writable() {
 			writes = stream.requests
 		}
 		var reads chan []byte
@@ -258,19 +364,49 @@ func (stream *Stream) run(ctx context.Context) {
 		stream.mu.Unlock()
 		var packets []frame
 		var err error
+		var dispatch chan queuedFrame
+		var next queuedFrame
+		var tick <-chan time.Time
+		if !busy && len(pending) > 0 {
+			dispatch, next = outgoing, pending[0]
+		}
+		if !busy && len(pending) == 0 {
+			tick = ticker.C
+		}
 		select {
 		case <-ctx.Done():
 			terminal = ctx.Err()
 			return
+		case dispatch <- next:
+			copy(pending, pending[1:])
+			pending[len(pending)-1] = queuedFrame{}
+			pending = pending[:len(pending)-1]
+			busy = true
+		case result := <-written:
+			busy = false
+			err = result.err
+			if completionEnabled && result.job.packet.kind == dataFrame {
+				stream.mu.Lock()
+				if block := stream.state.sent[result.job.packet.seq]; err == nil && block != nil && block == result.job.block && block.retries == int(result.job.attempt) && !block.sacked {
+					block.last = time.Now()
+				}
+				stream.mu.Unlock()
+				delete(activeData, result.job.packet.seq)
+			}
+			if result.job.done != nil {
+				result.job.done <- err
+			}
 		case op := <-writes:
 			stream.mu.Lock()
 			packet, sendErr := stream.state.send(op.data, time.Now())
 			stream.mu.Unlock()
 			err = sendErr
 			if err == nil {
-				err = transmit([]frame{packet})
+				err = queue([]frame{packet}, op.done)
 			}
-			op.done <- err
+			if err != nil {
+				op.done <- err
+			}
 		case reads <- data:
 			stream.mu.Lock()
 			consumed := stream.state.receive
@@ -291,6 +427,12 @@ func (stream *Stream) run(ctx context.Context) {
 					duplicates, stale, previousBase := stream.state.stats.Duplicates, stream.state.stats.Stale, stream.state.base
 					before := stream.state.receiveObservation()
 					packets, err = stream.state.input(packet, time.Now())
+					for sequence, job := range activeData {
+						if block := stream.state.sent[sequence]; block != job.block || block == nil || block.sacked {
+							close(job.obsolete)
+							delete(activeData, sequence)
+						}
+					}
 					after := stream.state.receiveObservation()
 					advanced := stream.state.base > previousBase
 					currentBase := stream.state.base
@@ -319,13 +461,13 @@ func (stream *Stream) run(ctx context.Context) {
 					}
 				}
 			}
-		case now := <-ticker.C:
+		case now := <-tick:
 			stream.mu.Lock()
 			packets, err = stream.state.tick(now)
 			stream.mu.Unlock()
 		}
 		if err == nil {
-			err = transmit(packets)
+			err = queue(packets, nil)
 		}
 		if err != nil {
 			terminal = err

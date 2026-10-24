@@ -183,7 +183,7 @@ class Mailbox:
         token,raw=self.chat.store.begin_attempt(message_id)
         try:
             recipient=raw[:16]
-            public=self.chat.contacts()[recipient]
+            public=self.chat.delivery_contacts()[recipient]
             unpack(raw,recipient=public,contacts={self.chat.address:self.chat.public})
             blob=self.chat.store.relay_blob(message_id,
                 lambda:recipient+identity(public).encrypt(raw[16:]))

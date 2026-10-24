@@ -2,11 +2,60 @@
 
 # Family Connect
 
+The accepted restricted-chat API/mailbox adapter now exists in shared Go and the
+native VPN worker uses its coordinator. Linux now has a separate bounded private
+parent/native chat IPC lane. UID/device-bound user-service admission now connects
+API/mailbox requests to an existing MESH exit, with local socket/proof/cancellation
+checks. Protected-underlying DIRECT, Linux service-only orchestration and the
+Windows broker endpoint are **not integrated yet**. Installed restricted messaging
+is NOT_RUN; this is not a completed parity release.
+
+**Desktop parity106 is in progress, not released.** The accepted Android capsule
+is pinned; both native workers build. Shared readiness and Linux atomic-cache/backend
+integration pass targeted tests; health102 and GTK MESH/cancel/profile wiring now exist.
+Linux native JSON projection and explicit seven-day online support consent are now
+implemented/tested locally; no production uploads occurred. The independent user
+service now owns collection after GUI exit; real private D-Bus/systemd restart and
+revoke checks pass. Installed service/upgrade and Windows support remain open.
+[RU/EN guide and limits](docs/clients/DESKTOP_DIAGNOSTICS106.md).
+Exact APK emulator and real GTK screenshots are retained; remaining visual differences
+are explicit. An unsigned offline system-component bundle exists.
+RNS bootstrap now has a bounded native adapter and a locally wire-tested packaged runtime;
+installed/live acceptance and the Windows runtime package remain outstanding.
+Linux/Windows MESH, messenger, UI and installed-package acceptance are not complete.
+GTK now has actual encrypted contacts/text/history controls and a locally tested
+RNS mailbox path, with a Secret Service storage key. Linux voice now has bounded
+Opus/Codec2 recording, preview and explicit send with local synthetic-audio checks;
+notification acknowledgement/navigation and service notices now have local GTK/D-Bus checks.
+An unprivileged user-session chat service now continues enabled delivery after Quit;
+isolated real systemd/Secret Service/RNS checks cover crash recovery without replacing identity.
+Linux announcement administration now uses this computer's authenticated proof,
+explicit preview and server-side role/revision checks; local API/GTK tests pass.
+No production role has been granted and no announcement has been published.
+The shared Auto policy matches17 accepted-Java scenarios and now runs in the native
+worker over bounded private IPC. Linux guard/cancellation checks use real isolated
+kernel/TUN resources. A single-attempt MESH adapter shares the manual packet path;
+protected normal configuration and AWG/TCP attempts now reuse the native signer
+and existing helper engines. Linux now has the root Auto coordinator/capability
+host, UID-bound command socket and memory-only systemd recovery intent. Local
+checks cover explicit cancellation and manager restart/revocation, not installed
+VPN acceptance. GTK now uses the authorized Auto client, synchronizes the signed
+root/user catalog floor and shows Auto separately from its actual AWG/TCP/MESH
+transport. The option requires a verified installed Auto capability, not a label
+over TCP. Installed handoffs and Windows broker remain incomplete; no full parity
+installer or public update is delivered by these internal components.
+AWG teardown now retains an ownership journal after TUN death; real isolated
+AWG3.1 checks cover daemon crash, resolver/routing/firewall restoration and preserving
+foreign rules. This is not installed-host MESH/P1 or automatic-recovery acceptance.
+Hardware audio/Android interoperability, installed service/upgrade acceptance,
+restricted service-only delivery and the Windows messenger counterpart remain open.
+[Full feature/status matrix](docs/releases/2026-10-23-desktop-parity106.md).
+
 **MESH (Media Encapsulated Secure Hop)** is Family Connect's secure media
 transport. Its current carrier is VP8/RTP and its current media provider is
 Telemost; the product name does not depend on that provider. It is not a
 decentralized or multi-hop mesh network. Naming integration is a local Android
-candidate; desktop media integration is not implemented. See the
+candidate; desktop media integration remains incomplete. See the
 [transport model and limits](carrier/README.md#mesh-product-contract) and
 [current status](docs/STATUS.md); no new release is implied.
 

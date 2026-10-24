@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "reference": "android106-native105",
+  "source_inventory_sha256": "8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c",
+  "accepted_sources": {
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatActivity.java": "1c5a15bd62b0b57367e7f214503efa8523e775a65e5599de3151db6b927300fa",
+    "clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java": "b9c30b6f1c33dd135d06e0caef8650d8eded7aba8fd474428354b468ec30d270",
+    "clients/android/app/src/main/res/values/strings.xml": "0982299f670f909f34786997d9f8e1aff5cae7f8a5094a611ff58fd89a40152b",
+    "clients/android/app/src/main/res/values-ru/strings.xml": "79fcda7d30c65cbefc2735fe4069f07922e178664ed7bee30782b310ca8f13d8",
+    "control/friends/notices.py": "3f2c88c7984fa9d0a4d8857d342057b31ba1445f3aa8eea2df9007d35f67c3a7",
+    "scripts/service_notices.py": "80df5a26b7121d40f6f180f17bbfe96e2e4d2b734c8230c78bafb6ee2ba31167",
+    "messenger/service_events.py": "8535cd7c3086537b159b966ac6c582380d776726e9fdda2bf2016fea834f78ee"
+  },
+  "actions": [
+    "list",
+    "publish",
+    "edit"
+  ],
+  "authorization": "fresh existing computer proof; server-owned administrator role; no cached-role grant",
+  "publication": {
+    "kind": "information",
+    "platforms": [
+      "android",
+      "windows",
+      "linux"
+    ],
+    "days": 30
+  },
+  "bounds": {
+    "title_utf16_units": 160,
+    "body_utf16_units": 4000,
+    "list_page": 50,
+    "list_response_bytes": 1048576,
+    "challenge_response_bytes": 16384,
+    "write_response_bytes": 16384,
+    "write_request_bytes": 32768
+  },
+  "edit_fields": [
+    "id",
+    "revision",
+    "request_id",
+    "title",
+    "body"
+  ],
+  "retained_fields": [
+    "author",
+    "created",
+    "expires",
+    "platforms",
+    "kind"
+  ],
+  "ui_order": [
+    "service notices: toolbar menu",
+    "permission-checked published list",
+    "compose",
+    "explicit preview",
+    "publish or save changes"
+  ],
+  "limits": [
+    "No production publication/role change performed",
+    "Archived list entries are retained; public feed filtering must not hide them",
+    "Installed UI and Android screenshot comparison remain required"
+  ]
+}

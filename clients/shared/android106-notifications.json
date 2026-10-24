@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "reference": "android106-native105",
+  "source_inventory_sha256": "8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c",
+  "accepted_sources": {
+    "clients/android/app/src/main/java/com/familyconnect/app/TerminalToggle.java": "7e5a569a93939920bf77c4991cffd11ef573514f1367fb58bd3a9de34f9d336e",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatRuntime.java": "8a30cad5a6e978d6dd91670c1746c509bfe45b1631d4f739ba369e249d33a74c",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatNotifications.java": "b6270d6617266798fe40dc8bfce3e6e156803bc8ffbfd40829039de701a32051",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatDeliveryService.java": "e15de691059fcac43af03eef8a706dce93b640424380badc853e60f352d67b01",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatActivity.java": "1c5a15bd62b0b57367e7f214503efa8523e775a65e5599de3151db6b927300fa",
+    "messenger/service_events.py": "8535cd7c3086537b159b966ac6c582380d776726e9fdda2bf2016fea834f78ee",
+    "messenger/notices.py": "31241b050755b8ce9e0523c99032a528e11306f0742bcbd205375a2d1b440890",
+    "messenger/store.py": "ffb7be9d5c8e4d304a53ec7a9b775e7b768fb692656dd25f32343208a54d6076"
+  },
+  "polling": {
+    "runtime_seconds": 6,
+    "feed_seconds": 30,
+    "mailbox_seconds": 15,
+    "mailbox_error_seconds": 60,
+    "enrollment_retry_seconds": 60
+  },
+  "notification_contract": [
+    "group unread by peer",
+    "no personal message preview",
+    "suppress visible conversation",
+    "persist notified only after OS API acceptance",
+    "retain read and notified flags across restart",
+    "suppress old signed service-notice notification",
+    "separate platform-filtered public HTTPS feed from signed LXMF authority"
+  ],
+  "desktop_adaptations": [
+    "Session D-Bus Notify reply is acceptance, not proof a popup was displayed.",
+    "No private lock-screen visibility API: omit contact name and service body/title as well as personal message contents.",
+    "Action maps an opaque daemon notification ID to an already verified peer; never execute links or commands.",
+    "Fence delayed acknowledgements across service-event revisions, cancellation and notification daemon replacement.",
+    "One unprivileged systemd user-session chat owner persists after GUI Quit when encrypted background delivery is enabled.",
+    "Bounded session D-Bus commands keep the storage key in the owner; encrypted mutation tickets fence uncertain replies across crashes.",
+    "Isolated Secret Service/systemd/RNS restart checks are not installed-service or host-popup acceptance."
+  ]
+}

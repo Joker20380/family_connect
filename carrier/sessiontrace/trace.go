@@ -23,6 +23,10 @@ type Event struct {
 	CloseCode             int       `json:"close_code,omitempty"`
 	CloseReason           string    `json:"close_reason,omitempty"`
 	BrokerReason          string    `json:"broker_reason,omitempty"`
+	CloseSource           string    `json:"close_source,omitempty"`
+	LeaseDeadlineMS       int64     `json:"lease_deadline_ms,omitempty"`
+	LeaseAction           string    `json:"lease_action,omitempty"`
+	LeaseSequence         uint64    `json:"lease_sequence,omitempty"`
 	HeartbeatKind         string    `json:"heartbeat_kind,omitempty"`
 	TX                    uint64    `json:"tx"`
 	RX                    uint64    `json:"rx"`
@@ -74,6 +78,7 @@ func Allowed(value, choices string) bool {
 
 const Stages = "AUTHORIZED|ROOM_CREATION|DESCRIPTOR|GATEWAY_JOIN|SIGNALING|WEBSOCKET|ICE|PEER_CONNECTION|CARRIER|CARRIER_ACTIVITY|FAMILY_TLS|GATEWAY_SESSION|HEARTBEAT|LIVENESS|LOCAL_CLOSE|REMOTE_CLOSE|RECOVERY|CLEANUP"
 const States = "STARTED|ESTABLISHED|ISSUED|TX|RX|FAILED|CLOSED|COMPLETED|ATTEMPTED|NOT_ATTEMPTED|new|checking|connecting|connected|completed|disconnected|failed|closed"
+const CloseSources = "UNKNOWN|UPPER_CLOSE|PARENT_CANCELLED|PARENT_DEADLINE|RECEIVE_QUEUE_FULL|SUBSCRIBER_DISCONNECTED|PUBLISHER_DISCONNECTED|SIGNAL_WRITE|SIGNAL_READ|CONFERENCE_ENDED|SUBSCRIBER_NEGOTIATION|SUBSCRIBER_ICE_CONFIG|PUBLISHER_ICE_CONFIG|PUBLISHER_ANSWER|PUBLISHER_NEGOTIATION|ICE_PENDING_LIMIT|REMOTE_ICE|QUEUED_ICE|HEARTBEAT_WRITE|DATA_CHANNEL_WRITE|VP8_WRITE|RELIABLE_EXHAUSTION|BROKER_LIFETIME|BROKER_UNUSED|BROKER_AUTHORIZATION|FAMILY_CONTRACT|FAMILY_CONTEXT|FAMILY_WRITE|FAMILY_READ|FAMILY_UPPER_CLOSE|FAMILY_CREDENTIAL_EXPIRY"
 const Reasons = "NONE|SIGNAL_WS_CLOSE|ICE_DISCONNECTED|ICE_FAILED|PEER_CONNECTION_FAILED|CARRIER_EOF|CARRIER_ERROR|FAMILY_TLS_EOF|FAMILY_TLS_ERROR|GATEWAY_CLOSE|HEARTBEAT_TIMEOUT|REMOTE_CLOSE|RECOVERY_CLEANUP_FAILED|RECOVERY_DESCRIPTOR_FAILED|RECOVERY_JOIN_FAILED|RECOVERY_CARRIER_FAILED|RELIABLE_HANDSHAKE_TIMEOUT|RELIABLE_FRAME_TIMEOUT|RELIABLE_RETRY_EXHAUSTED|UNKNOWN_INTERNAL"
 const BrokerReasons = "cancelled|lifetime_expired|authorization_changed|unused_expired|gateway_session_failed|gateway_failed|gateway_ready_timeout|provider_failure|provider_response|provider_cancelled|provider_timeout|provider_transport|provider_request|provider_bad_request|provider_unauthorized|provider_forbidden|provider_rate_limited|provider_unavailable|provider_status|provider_body|provider_json|provider_id|provider_join_url|unknown"
 
@@ -99,12 +104,29 @@ func (recorder *Recorder) Record(event Event) {
 	if event.BrokerReason != "" && !Allowed(event.BrokerReason, BrokerReasons) {
 		event.BrokerReason = "unknown"
 	}
+	if event.CloseSource != "" && !Allowed(event.CloseSource, CloseSources) {
+		event.CloseSource = "UNKNOWN"
+	}
+	if event.LeaseDeadlineMS < 0 || event.LeaseDeadlineMS > 9007199254740991 {
+		event.LeaseDeadlineMS = 0
+	}
+	if !Allowed(event.LeaseAction, "offer|request|accepted|applied|confirmed") {
+		event.LeaseAction = ""
+		event.LeaseSequence = 0
+	}
+	if event.LeaseSequence > 9007199254740991 {
+		event.LeaseSequence = 0
+	}
 	if !Allowed(event.HeartbeatKind, "APPLICATION|WEBSOCKET") {
 		event.HeartbeatKind = ""
 	}
 	recorder.sequence++
 	event = cloneEvent(event)
 	event.Sequence, event.TimestampMS, event.SessionTag = recorder.sequence, time.Now().UnixMilli(), recorder.value.SessionTag
+	if event.CloseSource != "" && recorder.value.FirstClose == nil {
+		first := cloneEvent(event)
+		recorder.value.FirstClose = &first
+	}
 	if event.Stage == "LOCAL_CLOSE" {
 		recorder.closing = true
 	}
@@ -168,6 +190,10 @@ func (recorder *Recorder) Snapshot() Snapshot {
 	if value.FirstFailure != nil {
 		first := cloneEvent(*value.FirstFailure)
 		value.FirstFailure = &first
+	}
+	if value.FirstClose != nil {
+		first := cloneEvent(*value.FirstClose)
+		value.FirstClose = &first
 	}
 	return value
 }

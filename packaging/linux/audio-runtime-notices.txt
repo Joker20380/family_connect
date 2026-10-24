@@ -1,0 +1,22 @@
+Linux voice runtime dependency boundary
+
+Family Connect does not implement Opus or Codec2. Its Linux adapter dynamically
+uses the installed GStreamer plugins and the public Codec2 shared-library API.
+No Android library or Sideband/LXST implementation is copied into desktop binaries.
+
+Codec2 1.2.0: https://github.com/drowe67/codec2/tree/06d4c11e699b0351765f10398abb4f663a984f36
+LGPL-2.1, with upstream KissFFT BSD notices where applicable.
+GStreamer core/base/good: https://gstreamer.freedesktop.org/ (LGPL-2.1-or-later;
+retain the exact selected distribution packages' complete copyright files).
+Opus: https://opus-codec.org/ (BSD-3-Clause and accompanying patent grant).
+
+The current DEB source declares system runtime dependencies rather than bundling
+their binaries. System package copyright/source information remains available
+under /usr/share/doc for libcodec2, libopus and GStreamer packages. Modification
+and replacement of these dynamically linked libraries is not prohibited.
+
+This notice is not a substitute for full upstream licenses, corresponding source
+or a distribution audit. Before bundling any audio shared library/plugin in an
+AppImage or Windows installer, record its exact version/digest, ship its full
+notices and corresponding-source/rebuild/replacement materials as required.
+No installer containing bundled audio libraries is released by this source change.

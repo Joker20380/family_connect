@@ -148,7 +148,7 @@ def serve(ident,profile):
                 try:process.wait(timeout=5)
                 except subprocess.TimeoutExpired:process.kill();process.wait()
 
-def main():
+def execute():
     if sys.argv[1:] == ['session']:
         from backend import privileged_session
         return privileged_session()
@@ -201,6 +201,13 @@ def main():
             raise
     finally:
         if lock is not None:os.close(lock)
+
+def main():
+    if sys.argv[1:2] == ['up']:
+        from backend import privileged_transport_start
+        with privileged_transport_start('tcp'):
+            return execute()
+    return execute()
 
 if __name__=='__main__':
     try:main()

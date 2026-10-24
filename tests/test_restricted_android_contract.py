@@ -62,5 +62,6 @@ def test_dedicated_gateway_and_whole_device_use_same_bounded_stream_limit():
     gateway = (ROOT / 'carrier/roombroker/gateway.go').read_text()
     client = (ROOT / 'carrier/wholedevice/session.go').read_text()
     assert 'const DedicatedMaxStreams = tcpforward.MuxMaxStreams' in gateway
-    assert 'MuxConfig{MaxStreams: DedicatedMaxStreams}' in gateway
-    assert 'MuxConfig{MaxStreams: roombroker.DedicatedMaxStreams}' in client
+    assert 'MuxConfig{MaxStreams: DedicatedMaxStreams,' in gateway
+    assert 'MuxConfig{MaxStreams: roombroker.DedicatedMaxStreams,' in client
+    assert 'WaitForSlot: true, Lifecycle: true' in client

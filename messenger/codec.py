@@ -15,6 +15,16 @@ import RNS.vendor.umsgpack as msgpack
 MAX_TEXT = 4096
 MAX_PACKED = 131584
 MAX_AUDIO = 131072
+RADIO_FRAMES = {LXMF.AM_CODEC2_1600: (8, 40), LXMF.AM_CODEC2_2400: (6, 20), LXMF.AM_CODEC2_3200: (8, 20)}
+
+
+def radio_duration(raw, mode):
+    if type(mode) is not int or mode not in RADIO_FRAMES or type(raw) is not bytes:
+        raise ValueError('Unsupported audio mode')
+    size, millis = RADIO_FRAMES[mode]
+    if not raw or len(raw) % size or len(raw) // size * millis > 60000:
+        raise ValueError('Invalid Codec2 frames')
+    return len(raw) // size * millis
 # Shared closed-ingress path: native clients do not import the server's spool.
 PUT_PATH = '/family_connect/chat/v1/put'
 
@@ -156,18 +166,38 @@ def parse_fields(fields,text):
     if not fields:return {}
     if set(fields)=={LXMF.FIELD_CUSTOM_DATA}:
         edit=fields[LXMF.FIELD_CUSTOM_DATA]
+        if type(edit) is dict and edit.get('type') in ('service', 'stored'):
+            if type(edit.get('fc')) is not int or edit['fc'] != 1 or text:
+                raise ValueError('Invalid delivery fields')
+            if edit['type'] == 'service':
+                from .notices import validate_notice
+                if set(edit) != {'fc', 'type', 'event'}:
+                    raise ValueError('Invalid service fields')
+                return dict(kind='service', event=validate_notice(edit['event']))
+            target = edit.get('target')
+            if (set(edit) != {'fc', 'type', 'target'} or type(target) is not str
+                    or len(target) != 64 or bytes.fromhex(target).hex() != target):
+                raise ValueError('Invalid stored receipt')
+            return dict(kind='stored', target=target)
         if type(edit) is not dict or set(edit)!={'fc','type','target','revision'} or type(edit['fc']) is not int or edit['fc']!=1 or edit['type']!='edit':raise ValueError('Unsupported operation')
         target=edit['target']
         if type(target) is not str or len(target)!=64 or bytes.fromhex(target).hex()!=target or type(edit['revision']) is not int or not 1<=edit['revision']<=1000000 or not text:raise ValueError('Invalid edit')
         return dict(kind='edit',target=target,revision=edit['revision'])
     if set(fields)=={LXMF.FIELD_AUDIO}:
         audio=fields[LXMF.FIELD_AUDIO]
-        if type(audio) is not list or len(audio)!=2 or audio[0]!=LXMF.AM_OPUS_OGG or text:raise ValueError('Unsupported audio')
-        duration=opus_duration(audio[1]);return dict(kind='audio',audio=base64.b64encode(audio[1]).decode(),duration_ms=duration)
+        if type(audio) is not list or len(audio)!=2 or type(audio[0]) is not int or text:raise ValueError('Unsupported audio')
+        duration=opus_duration(audio[1]) if audio[0]==LXMF.AM_OPUS_OGG else radio_duration(audio[1],audio[0])
+        result=dict(kind='audio',audio=base64.b64encode(audio[1]).decode(),duration_ms=duration)
+        if audio[0]!=LXMF.AM_OPUS_OGG:result['audio_mode']=audio[0]
+        return result
     raise ValueError('Unsupported fields')
 
 
 def fields_for(message):
+    if message.get('kind') == 'service':
+        return {LXMF.FIELD_CUSTOM_DATA: dict(fc=1, type='service', event=message['event'])}
+    if message.get('kind') == 'stored':
+        return {LXMF.FIELD_CUSTOM_DATA: dict(fc=1, type='stored', target=message['target'])}
     if message.get('kind')=='edit':return {LXMF.FIELD_CUSTOM_DATA:dict(fc=1,type='edit',target=message['target'],revision=message['revision'])}
-    if message.get('kind')=='audio':return {LXMF.FIELD_AUDIO:[LXMF.AM_OPUS_OGG,base64.b64decode(message['audio'],validate=True)]}
+    if message.get('kind')=='audio':return {LXMF.FIELD_AUDIO:[message.get('audio_mode',LXMF.AM_OPUS_OGG),base64.b64decode(message['audio'],validate=True)]}
     return {}

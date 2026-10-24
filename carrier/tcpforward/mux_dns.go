@@ -113,7 +113,7 @@ func (mux *Mux) dnsFrameLocked(frame muxFrame) {
 			}
 		case muxDNSQuery:
 			if id <= mux.dnsLast {
-				mux.stats.ProtocolErrors++
+				mux.protocolErrorLocked(&mux.stats.ProtocolErrorReasons.DNSReplay)
 				return
 			}
 			mux.dnsLast = id
@@ -131,12 +131,12 @@ func (mux *Mux) dnsFrameLocked(frame muxFrame) {
 			mux.workers.Add(1)
 			go mux.resolveDNS(id, call)
 		default:
-			mux.stats.ProtocolErrors++
+			mux.protocolErrorLocked(&mux.stats.ProtocolErrorReasons.DNSRole)
 		}
 		return
 	}
 	if call == nil || call.done {
-		mux.stats.ProtocolErrors++
+		mux.protocolErrorLocked(&mux.stats.ProtocolErrorReasons.DNSUnmatched)
 		return
 	}
 	if frame.kind == muxDNSResponse && matchesDNS(call.query, payload) {

@@ -1,0 +1,912 @@
+{
+  "schema": 1,
+  "reference": {
+    "version": "0.1.18-beta106-recovery",
+    "version_code": 106,
+    "apk": "state-client-build/owner-diagnostic106-20261022/delivery/FamilyConnect-0.1.18-beta106-recovery.apk",
+    "apk_sha256": "242855c43e889e708234ce2f687fa02d37bccb1eee408904f09216b6abd8f020",
+    "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+    "restricted_native_sha256": "37ba4fac656811dd979688a274f45aed85a3aa567f1fafb3987a81c020fa91f1",
+    "source": "state-client-build/owner-diagnostic106-20261022/android-source",
+    "source_inventory": "state-client-build/owner-diagnostic106-20261022/build/complete-source-inventory.json",
+    "source_inventory_sha256": "8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c",
+    "source_count": 2073,
+    "native_source_inventory_sha256": "1a6f52a91dc2482f67992f28a2b46dcdf2c3c0bc56f8f0665a0dd469943584af",
+    "native_build_metadata_sha256": "f50ee0ee2b8a4ad464de65ad159de366fcb9e31d445b0c7c28f2fc8cb3ecbeb2"
+  },
+  "scope": "Default Go dependency closure of wholedevice + restrictedowner, linux/windows amd64, including same-package tests. No commands, Android app, lab fixtures or build-tag experiments imported.",
+  "build_tags": [],
+  "prohibited_desktop_modes": [
+    "P2",
+    "Q1",
+    "TLS_PACKING",
+    "FEC",
+    "QUIC",
+    "FIXED4M",
+    "fc_owner_diagnostic",
+    "fc_messenger_lab"
+  ],
+  "shared_sources": {
+    "carrier/bootstrap/auth_test.go": {
+      "sha256": "496203b992667b038977a8c6dc3c3a1f33acc78ba4931db93f5f704e8f18f32f",
+      "before_sha256": "496203b992667b038977a8c6dc3c3a1f33acc78ba4931db93f5f704e8f18f32f"
+    },
+    "carrier/bootstrap/carrier.go": {
+      "sha256": "f46f5d0b6cab633def4956bd424189f13006eb17b4549b343ef0ec59df2e8958",
+      "before_sha256": "ed207694e8362a21e4222cbb50aa3d538c02dcf31e2d332c8fe8795900384ed8"
+    },
+    "carrier/bootstrap/carrier_test.go": {
+      "sha256": "a8ac365a74fe90398f6f730b40ed89c1a40b8ef047204aaaae5fe47a17a236a6",
+      "before_sha256": "a8ac365a74fe90398f6f730b40ed89c1a40b8ef047204aaaae5fe47a17a236a6"
+    },
+    "carrier/bootstrap/diagnostic.go": {
+      "sha256": "73765ea87ed556e765dbf72be68644157b4dc7382d88485baebc3ef31e286c1f",
+      "before_sha256": "73765ea87ed556e765dbf72be68644157b4dc7382d88485baebc3ef31e286c1f"
+    },
+    "carrier/bootstrap/diagnostic_test.go": {
+      "sha256": "29880efa960301051f911b18bfcc075a7466f082502ee755dfd9a63abe95e5b9",
+      "before_sha256": "29880efa960301051f911b18bfcc075a7466f082502ee755dfd9a63abe95e5b9"
+    },
+    "carrier/bootstrap/directory.go": {
+      "sha256": "79ab44cd607742080b53a78d46f8a0732dc201af9db15407aa2092731e110de5",
+      "before_sha256": "79ab44cd607742080b53a78d46f8a0732dc201af9db15407aa2092731e110de5"
+    },
+    "carrier/bootstrap/directory_test.go": {
+      "sha256": "5ed97b52198e07a7b8b169e4c05955f15fe3f5d91d2d7c2aaaa8a1607d93137c",
+      "before_sha256": "5ed97b52198e07a7b8b169e4c05955f15fe3f5d91d2d7c2aaaa8a1607d93137c"
+    },
+    "carrier/bootstrap/localize_primary_error_test.go": {
+      "sha256": "4a7bc4d0c70d54e1887c8b9cb82195fe8a70100a78f436f4b8dc71d68738b666",
+      "before_sha256": null
+    },
+    "carrier/bootstrap/negative_boundary_test.go": {
+      "sha256": "63735ba4ad001fba530ec0bf917453fcdae75a99ce3b26069591e0a1ad81d1ee",
+      "before_sha256": null
+    },
+    "carrier/bootstrap/protocol.go": {
+      "sha256": "a99e2f18f96c26b5a913f9ba656f5eca085a3958dc999ae571dfe0707d8f7c19",
+      "before_sha256": "f37a19b94c8b24fa1d823ce84fad12dd8213b1c6c099b679bcc7d79c529e789b"
+    },
+    "carrier/bootstrap/protocol_test.go": {
+      "sha256": "d5cc9e67f04eb1a86c1db48c9ebb89e0942abac48555c54d4db366cc3c87c10d",
+      "before_sha256": "d5cc9e67f04eb1a86c1db48c9ebb89e0942abac48555c54d4db366cc3c87c10d"
+    },
+    "carrier/bootstrap/seed.go": {
+      "sha256": "5952af726f016861fc8a49730714415ed220f51e76de60be2252247117af3df4",
+      "before_sha256": "3a01e7d43123c973f9384fb2b3b8263dd02be7851650ee4accb729e374cf2be3"
+    },
+    "carrier/bootstrap/seed_overlap.go": {
+      "sha256": "17c5776c5842e621e5b997e20294cfc30ca70c8b1217f69b97cd80ab9648a5dd",
+      "before_sha256": null
+    },
+    "carrier/bootstrap/seed_overlap_test.go": {
+      "sha256": "b712302e9375733cf55e970dc69a5a70b03e5ffad8af3b43150c9a0757721942",
+      "before_sha256": null
+    },
+    "carrier/bootstrap/seed_test.go": {
+      "sha256": "f0983057f5c911bd7e9d4c1712ab0ac8ba97dfaca39c261767fa047fa6d8da81",
+      "before_sha256": "f0983057f5c911bd7e9d4c1712ab0ac8ba97dfaca39c261767fa047fa6d8da81"
+    },
+    "carrier/bootstrap/timestamp_test.go": {
+      "sha256": "d0d6fc04052145a145b684a7cf6c3cd01925b568ac9113a2057c1b0dd69511b7",
+      "before_sha256": "d0d6fc04052145a145b684a7cf6c3cd01925b568ac9113a2057c1b0dd69511b7"
+    },
+    "carrier/familysession/batch.go": {
+      "sha256": "01cae11ff7bd0c67918d969350d0340d82ed0a1d215b260792b5c5c345727cf4",
+      "before_sha256": null
+    },
+    "carrier/familysession/batch_test.go": {
+      "sha256": "5f9a5d9f905ca5f980a672bed981dbe49a3289a7d2f2d18496cbc53489d8115c",
+      "before_sha256": null
+    },
+    "carrier/familysession/close_source_test.go": {
+      "sha256": "80da82310bbdf5a7995380d70b4004b456f37c443e28d5907891df189cd85195",
+      "before_sha256": null
+    },
+    "carrier/familysession/mux_profile.go": {
+      "sha256": "bf4cf82bca51b1c9ba72cafa8056962ea87a12361eac3f0656d036e45f112b10",
+      "before_sha256": null
+    },
+    "carrier/familysession/mux_profile_test.go": {
+      "sha256": "14aa00b706d8d9860b687c65a7c867f06d3ccdc0e3134abe3a1a31fcbbe48787",
+      "before_sha256": null
+    },
+    "carrier/familysession/receive_observer.go": {
+      "sha256": "5988fe2a03ea0fabc0b72a5e5842735bb8658644ead169ffbdd49bfb36ba8445",
+      "before_sha256": null
+    },
+    "carrier/familysession/session.go": {
+      "sha256": "519bed818397c72b0b665442c7addace605db51710014e8d8ca5f87f90b0fc03",
+      "before_sha256": "786b05fcf5969406ca8d9096a0ad24321f12e4b1beff173d94a8e14b51d315d9"
+    },
+    "carrier/familysession/session_test.go": {
+      "sha256": "0260e3190ef36f4095ea2f15027349b55a2ca3cd6b4ff43136e090463830d8f0",
+      "before_sha256": "0260e3190ef36f4095ea2f15027349b55a2ca3cd6b4ff43136e090463830d8f0"
+    },
+    "carrier/familysession/trace_test.go": {
+      "sha256": "04c5691d5dd0aa4398576f8c2db33875934d887ca324cd16c0dabfcd3b9ed860",
+      "before_sha256": "04c5691d5dd0aa4398576f8c2db33875934d887ca324cd16c0dabfcd3b9ed860"
+    },
+    "carrier/go.mod": {
+      "sha256": "1db5f64f967ed2c2dd8597044e0b80eb96b7a006cb565ec00ce68cf2bd5a56e6",
+      "before_sha256": "1db5f64f967ed2c2dd8597044e0b80eb96b7a006cb565ec00ce68cf2bd5a56e6"
+    },
+    "carrier/go.sum": {
+      "sha256": "def397bbc55025fb9dc466467b6db0890fda295e7e42a393035533562dbba581",
+      "before_sha256": "def397bbc55025fb9dc466467b6db0890fda295e7e42a393035533562dbba581"
+    },
+    "carrier/localwrite/scope.go": {
+      "sha256": "e1f6904c3a1d561bf244d03e33265375e18d5c0e7db8660ab36e82485d87ea10",
+      "before_sha256": null
+    },
+    "carrier/localwrite/write.go": {
+      "sha256": "74c5ff1b3f9170a295e5797080c658f54697719ea03de7cfb4c4397b50680d41",
+      "before_sha256": null
+    },
+    "carrier/localwrite/write_test.go": {
+      "sha256": "660f6c24d6b1cf29c07abb5e42b6dc77e4771b8755133f4999567f08dc795dfb",
+      "before_sha256": null
+    },
+    "carrier/reliablestream/ack_proof_test.go": {
+      "sha256": "4a46181c183fc43099f692759da339b6ab43ffadaf8757d631d9c6f8a8a3d8bf",
+      "before_sha256": "4a46181c183fc43099f692759da339b6ab43ffadaf8757d631d9c6f8a8a3d8bf"
+    },
+    "carrier/reliablestream/diagnostic.go": {
+      "sha256": "a9cbcd01af396c14e74a0b67924f623c5574d77d87b2febec317f9cf52e99f4f",
+      "before_sha256": "a9cbcd01af396c14e74a0b67924f623c5574d77d87b2febec317f9cf52e99f4f"
+    },
+    "carrier/reliablestream/diagnostic_test.go": {
+      "sha256": "8691a7a7b11d8f643f6a70193660b081d5d9bfbe06925d0393eb9289201d6aba",
+      "before_sha256": "8691a7a7b11d8f643f6a70193660b081d5d9bfbe06925d0393eb9289201d6aba"
+    },
+    "carrier/reliablestream/engine.go": {
+      "sha256": "d1511f712f65383bf5746b3173479c1e597ede2cd11d189ee371427e003f73e9",
+      "before_sha256": "209310f9e87a23859892af0418bb195bb0fdd32c2593fdaa0a75d48e75a620a0"
+    },
+    "carrier/reliablestream/engine_test.go": {
+      "sha256": "522021ee68de8152273b3db178b22b4e1367d8d54ccb2ed4a1d32e2abaf5cd0a",
+      "before_sha256": "522021ee68de8152273b3db178b22b4e1367d8d54ccb2ed4a1d32e2abaf5cd0a"
+    },
+    "carrier/reliablestream/fast_recovery_test.go": {
+      "sha256": "49dc24c23eb3c256d8943aab2694aa2f513cd8daa664cf23707cd54396ed5f6e",
+      "before_sha256": null
+    },
+    "carrier/reliablestream/forensics_bytes_test.go": {
+      "sha256": "c5c921b7e59564803c1e5bceac5f436e6edacab6918c648f39f3d38839cc1cc3",
+      "before_sha256": "c5c921b7e59564803c1e5bceac5f436e6edacab6918c648f39f3d38839cc1cc3"
+    },
+    "carrier/reliablestream/head_loss_test.go": {
+      "sha256": "e9f15c0470fa775ad1398bcf4ae9c7ab19e7baa8d8292826d023e820de8af141",
+      "before_sha256": "e9f15c0470fa775ad1398bcf4ae9c7ab19e7baa8d8292826d023e820de8af141"
+    },
+    "carrier/reliablestream/local_deadline_test.go": {
+      "sha256": "44eaa6edbc9051747470a5e6769684072b49a0827caf4730299a75eb06328570",
+      "before_sha256": null
+    },
+    "carrier/reliablestream/local_write_test.go": {
+      "sha256": "a5f6cc11d7db9646379c33920368a47a372f3e748d3ac1518c9b373d574d5833",
+      "before_sha256": null
+    },
+    "carrier/reliablestream/protocol.go": {
+      "sha256": "ff5c4226caa63a49d62dac11d6079726ce78b296c3a9e843100a0ba634064bba",
+      "before_sha256": "7c0a9e002b4d92203e8a188be30917c3df477e40adf8fc673a2ad903503527c1"
+    },
+    "carrier/reliablestream/receive_default.go": {
+      "sha256": "c10d1813fdb5258ae183527fbe8024c510c689f3de0f77b073eabc857ee75067",
+      "before_sha256": "c10d1813fdb5258ae183527fbe8024c510c689f3de0f77b073eabc857ee75067"
+    },
+    "carrier/reliablestream/stream.go": {
+      "sha256": "c1b4e4985c972b462ac931e78bf12cda6a67679f46195b338ff62e5be155b497",
+      "before_sha256": "e84f9aaf22db3adbd6c866d271dd78ce1c1c1790da85859e8ee3b2049a4d2ccb"
+    },
+    "carrier/reliablestream/stream_test.go": {
+      "sha256": "ca0fe426f7a78a95726fb3604b2ca09e4ac836ef6adcf2c69925167c3c72de8b",
+      "before_sha256": "ca0fe426f7a78a95726fb3604b2ca09e4ac836ef6adcf2c69925167c3c72de8b"
+    },
+    "carrier/reliablestream/target_default.go": {
+      "sha256": "05549f98b65e4a5baddeea291cc5a6884ebf412364e108114d763452f503cd6b",
+      "before_sha256": null
+    },
+    "carrier/reliablestream/throughput_comparison_test.go": {
+      "sha256": "7f989b72753a5563da5fc48fb25567a154c4315078abc27f811a584f10310501",
+      "before_sha256": null
+    },
+    "carrier/reliablestream/trace_test.go": {
+      "sha256": "8bdcef9f57420820bf78203785621634e0bdff4d606da9596942ba78fe150e7e",
+      "before_sha256": "8bdcef9f57420820bf78203785621634e0bdff4d606da9596942ba78fe150e7e"
+    },
+    "carrier/restrictedowner/owner.go": {
+      "sha256": "8d4204a1af49254541dc464e59305c10ba348505703d5add2264c3efd2911995",
+      "before_sha256": null
+    },
+    "carrier/restrictedowner/owner_test.go": {
+      "sha256": "bf3e45dc0fdab8540eab7652237475ba7aed3bf15477af9aa9a0b70f6ccb157b",
+      "before_sha256": null
+    },
+    "carrier/roombroker/binding_test.go": {
+      "sha256": "389e29bf75ca0f208d35fcea269f66e89c67b73c320662c3afcf640edaf895b6",
+      "before_sha256": "389e29bf75ca0f208d35fcea269f66e89c67b73c320662c3afcf640edaf895b6"
+    },
+    "carrier/roombroker/broker.go": {
+      "sha256": "5694d2aad6dba91a11c6c63232c1f9ae6081dae4d27c6c3e00a1aa7214352a71",
+      "before_sha256": "643a781b00fd1f6fc2593fad1ca72aece719f57ba7cc4c13f7bfc9eeb6cc3c63"
+    },
+    "carrier/roombroker/broker_test.go": {
+      "sha256": "69c896dc20f7dd1c9b6d94a62c648cf99e9c810c78385d44901e88d729c911f6",
+      "before_sha256": "69c896dc20f7dd1c9b6d94a62c648cf99e9c810c78385d44901e88d729c911f6"
+    },
+    "carrier/roombroker/control.go": {
+      "sha256": "782bb9cd43ff2c4668efcbfef5aebdef8b29e2f8bb4b9cd5686754baebbc7732",
+      "before_sha256": "7c961e05502eb9f604425218d30cceb07824eff294bac1339fb52327063fc378"
+    },
+    "carrier/roombroker/control_test.go": {
+      "sha256": "42642a39cfbb6dd1f4649cf5dbe9729cd25cf40921b7e574027b90aaabd5d8f5",
+      "before_sha256": "42642a39cfbb6dd1f4649cf5dbe9729cd25cf40921b7e574027b90aaabd5d8f5"
+    },
+    "carrier/roombroker/gateway.go": {
+      "sha256": "1554a0f247a50e77ec4ba35760de77eda0db64255734fee0deb8fc13143f393f",
+      "before_sha256": "770bd7ae91c0b0d4e446d462edac59a058561b66f4acbbc8fe4b4871535c8b2a"
+    },
+    "carrier/roombroker/lease.go": {
+      "sha256": "1ce798a57d8a887c234fb725b1f5f4875ea0e8c3c0d9351f1017abc777ebf856",
+      "before_sha256": null
+    },
+    "carrier/roombroker/lease_control.go": {
+      "sha256": "1653be99655c50e1aa274ef090c95fc755b9e27e701e11671421ccf20120391f",
+      "before_sha256": null
+    },
+    "carrier/roombroker/lease_mux_test.go": {
+      "sha256": "bad50d81cb351ce12ca45eeed6e8e8e22837db69705a9607e833e6e4571e32d6",
+      "before_sha256": null
+    },
+    "carrier/roombroker/lease_scheduler_test.go": {
+      "sha256": "dae4589eec08aed4c300fbc5db6e13f9fc6d2a43f9ffe8f4a37afbae1bb5328d",
+      "before_sha256": null
+    },
+    "carrier/roombroker/lease_test.go": {
+      "sha256": "74ffa0c46ffebdb9ab7f9c3c4d388ff017008724653b78e14e52f84cfde7ee8d",
+      "before_sha256": null
+    },
+    "carrier/roombroker/lifetime_contract_test.go": {
+      "sha256": "7f457436ad8029a3b04394b48959377d358213f68989b19fab20aeda2ce9c3e3",
+      "before_sha256": null
+    },
+    "carrier/roombroker/mux_policy_linux.go": {
+      "sha256": "3d96b69be0a8f2db067b333d4150f2935d676b6ca086c84082183d17959155f6",
+      "before_sha256": null
+    },
+    "carrier/roombroker/mux_policy_linux_test.go": {
+      "sha256": "a8765c6f65e0fea2af21bee91247e56d15a18f1a0406f2f1fdbee60f282f522b",
+      "before_sha256": null
+    },
+    "carrier/roombroker/mux_policy_other.go": {
+      "sha256": "a6a3c7808ba4317ef3e2f80335ba6012c1b0c665b29de17cc741a4541244dbbe",
+      "before_sha256": null
+    },
+    "carrier/roombroker/ownership.go": {
+      "sha256": "49a879222dd13c5209b2b467ecd1e56bb156dbc153c092e4fb30771174a45f8b",
+      "before_sha256": null
+    },
+    "carrier/roombroker/ownership_test.go": {
+      "sha256": "6ab81c4aa4f2c8676b4b99c367b75d8b95e3e4a0ec68bae5033024dedeafc458",
+      "before_sha256": null
+    },
+    "carrier/roombroker/provider.go": {
+      "sha256": "76dee527ba2ca915a9770cf63dcd69136b761e84aeb06b57db22e540dc60fba2",
+      "before_sha256": "76dee527ba2ca915a9770cf63dcd69136b761e84aeb06b57db22e540dc60fba2"
+    },
+    "carrier/roombroker/provider_test.go": {
+      "sha256": "0d5e0984ed83d0a09f1edcc14cb153e41cc70d0b36db06b48bf83fc5af6b18b2",
+      "before_sha256": "0d5e0984ed83d0a09f1edcc14cb153e41cc70d0b36db06b48bf83fc5af6b18b2"
+    },
+    "carrier/roombroker/trace.go": {
+      "sha256": "b379b8ef82319a7813c025c4c7e4bf188ed9ec7cedd65e8d67fb60ea9b5e18ed",
+      "before_sha256": "630483283d97d8695f64114f85ad7d7b02fa363e7026a844f129c2b695be51e0"
+    },
+    "carrier/roombroker/trace_test.go": {
+      "sha256": "2ae9ac4f3814faf90302136f670d511c47537969b902232bcf73794329d64e0b",
+      "before_sha256": "2ae9ac4f3814faf90302136f670d511c47537969b902232bcf73794329d64e0b"
+    },
+    "carrier/sessiondiag/endpoint.go": {
+      "sha256": "b2f93903da5ad1c0d40696fc6a97a040c3368ff4dc53f5bb917c5bff6c9a54d3",
+      "before_sha256": "b2f93903da5ad1c0d40696fc6a97a040c3368ff4dc53f5bb917c5bff6c9a54d3"
+    },
+    "carrier/sessiondiag/endpoint_test.go": {
+      "sha256": "c9efb58a4884b53b23c43dc6a05267ed8aa2f78e439278938700fb9add815dc0",
+      "before_sha256": "c9efb58a4884b53b23c43dc6a05267ed8aa2f78e439278938700fb9add815dc0"
+    },
+    "carrier/sessiondiag/report.go": {
+      "sha256": "a05d59173a0ba850cf566c379e02f4b318a174374e22e76168346b75dcb3165e",
+      "before_sha256": "bcb821fdd14e07acea7fad4600b5dfff88c854e5beffed5f158555d88dfe8915"
+    },
+    "carrier/sessiondiag/report_test.go": {
+      "sha256": "aecb5662073d5573bbcbec4339cc61d824dc8c68186a54a905accf9127b03b6f",
+      "before_sha256": "5b166333ba4162275f1f592898aebf48b2e6dd83fc3269e0685593b179c03dc5"
+    },
+    "carrier/sessionprofile/profile.go": {
+      "sha256": "eb57bd4d2b27a0f383d120a9e2019ff8f04554297a37841e576d7d5f84cfb045",
+      "before_sha256": null
+    },
+    "carrier/sessiontrace/boundary.go": {
+      "sha256": "a2359a00f369c985c80e845632755cf3d59f462b92f26da0cb3658a2e13e51e5",
+      "before_sha256": "a2359a00f369c985c80e845632755cf3d59f462b92f26da0cb3658a2e13e51e5"
+    },
+    "carrier/sessiontrace/boundary_test.go": {
+      "sha256": "7e4b22e469908776f76d92dfc1eef0622099676767dca650e2b29b312e5cb7cf",
+      "before_sha256": "7e4b22e469908776f76d92dfc1eef0622099676767dca650e2b29b312e5cb7cf"
+    },
+    "carrier/sessiontrace/close_source_test.go": {
+      "sha256": "94b4702df1f4b7741d8ab4cba157c2f4d0a95f4be726d0c6c25f2b11deb7f457",
+      "before_sha256": null
+    },
+    "carrier/sessiontrace/correlation_disabled.go": {
+      "sha256": "d52ca5f689884cbb7fa3962f4cc96fa788327d52c789c799288518a229eb7d93",
+      "before_sha256": "d52ca5f689884cbb7fa3962f4cc96fa788327d52c789c799288518a229eb7d93"
+    },
+    "carrier/sessiontrace/delivery.go": {
+      "sha256": "bec25c21a9f036d01545c2192850bc8de50fced54e091079c4b54781dc8c80cb",
+      "before_sha256": "bec25c21a9f036d01545c2192850bc8de50fced54e091079c4b54781dc8c80cb"
+    },
+    "carrier/sessiontrace/delivery_test.go": {
+      "sha256": "6c74300b0a2d5e9841540c0eb339d0fd21703e9d91590600149d584fff225ebb",
+      "before_sha256": "6c74300b0a2d5e9841540c0eb339d0fd21703e9d91590600149d584fff225ebb"
+    },
+    "carrier/sessiontrace/fault_disabled.go": {
+      "sha256": "4a4fd9306a78f10cc0f9cc7c7f0c8229e04cd32350c643e5351935ae1b6ebd1b",
+      "before_sha256": "4a4fd9306a78f10cc0f9cc7c7f0c8229e04cd32350c643e5351935ae1b6ebd1b"
+    },
+    "carrier/sessiontrace/fault_disabled_test.go": {
+      "sha256": "d98723cd1ed6f5c4e14cb91013882a19a1311b9f15431d174b3c396a9207fe48",
+      "before_sha256": "d98723cd1ed6f5c4e14cb91013882a19a1311b9f15431d174b3c396a9207fe48"
+    },
+    "carrier/sessiontrace/fault_receipt.go": {
+      "sha256": "44de47eeb717d8035ebe152f990a2cee903a87254c95686ab990d5ebf7e3c7d6",
+      "before_sha256": "44de47eeb717d8035ebe152f990a2cee903a87254c95686ab990d5ebf7e3c7d6"
+    },
+    "carrier/sessiontrace/forensics_default.go": {
+      "sha256": "f5a03569ecdc3d8ae2a43f0dffd85b989939a922da2271ef199a096ed3fae195",
+      "before_sha256": "f5a03569ecdc3d8ae2a43f0dffd85b989939a922da2271ef199a096ed3fae195"
+    },
+    "carrier/sessiontrace/lease_test.go": {
+      "sha256": "481b89c32143612e9ce1da03735e60617cbc498536a2749dfcd6696373bd32a8",
+      "before_sha256": null
+    },
+    "carrier/sessiontrace/receiver_default.go": {
+      "sha256": "32f466695288a51d6071caff959e2735126ea92506182bb2a296f164c7b59ccd",
+      "before_sha256": "32f466695288a51d6071caff959e2735126ea92506182bb2a296f164c7b59ccd"
+    },
+    "carrier/sessiontrace/schema_default.go": {
+      "sha256": "56fbf8cdacc63062aafc85d742c8c1a40b9d47cf99e229f314e69462efe46c98",
+      "before_sha256": "f2b83a92857139d772edccc387d9be416827df1dd3c0351d195140ed42a036d9"
+    },
+    "carrier/sessiontrace/schema_default_test.go": {
+      "sha256": "e8645ee7f614111005303f629284a3c5ae1926cd0780904be744b6f307a26c8b",
+      "before_sha256": "13d57fd8eb45ea1c7dbddd54dcb4bbfaa0ed03c40bc83990c60b9bcfbb6f3df4"
+    },
+    "carrier/sessiontrace/trace.go": {
+      "sha256": "38f8e6213c7c1b12aca79dcfccfbab77f4a1fd694218d85f0568ce07abd3bc20",
+      "before_sha256": "00ebb8f46a3e5b3916bcf599c200fbd57687ef043e9a0f23ba6f52d1e1d643bd"
+    },
+    "carrier/sessiontrace/trace_test.go": {
+      "sha256": "c3a37c1539d93b211eec1964cfc39d2db2e067e563b5233a082bb4871e2990ca",
+      "before_sha256": "c3a37c1539d93b211eec1964cfc39d2db2e067e563b5233a082bb4871e2990ca"
+    },
+    "carrier/sessiontrace/watch_disabled_test.go": {
+      "sha256": "1e5f37c838525a3b7d30827c7944a567a2b4a25fdf8a0404aa45cb6df48c6d03",
+      "before_sha256": "e2879fe063216d354694b38f02490012e04372425edd0d39ffb44fcf38da11fd"
+    },
+    "carrier/sessiontrace/watch_target.go": {
+      "sha256": "60728c0f21d21df9c69799809daccc1d02819999542746e1df2dd165bad3d380",
+      "before_sha256": "60728c0f21d21df9c69799809daccc1d02819999542746e1df2dd165bad3d380"
+    },
+    "carrier/startupdiag/bootstrap_test.go": {
+      "sha256": "f4bd4a84cee89aed54a339e42575274cdd4670952e4286df63e00c7d0fbdf3c7",
+      "before_sha256": null
+    },
+    "carrier/startupdiag/enabled.go": {
+      "sha256": "86f2874879cdfcdcddc0b41943fc36c663f3f12fd0418b93d9780a7a5e06cf45",
+      "before_sha256": null
+    },
+    "carrier/startupdiag/enabled_test.go": {
+      "sha256": "32ff47fa523acc3d7df0739b05e418a4c48ee3663c0240748d09191bb0dd811b",
+      "before_sha256": null
+    },
+    "carrier/startupdiag/error.go": {
+      "sha256": "7526938f060f375eeb708277ea5f277f8f1ac2f42fd4a029f60de4c36d7e8dc7",
+      "before_sha256": null
+    },
+    "carrier/startupdiag/error_test.go": {
+      "sha256": "302dae26277cb2c3e46aa7959c9c937c05728fa876e310acecc21fa1e982062e",
+      "before_sha256": null
+    },
+    "carrier/startupdiag/fidelity_test.go": {
+      "sha256": "349e5aa9f62b94fff9ee7f6823e3ed25b4d0302a6570a32dee7e187d6d6d34f3",
+      "before_sha256": null
+    },
+    "carrier/startupdiag/public_result_test.go": {
+      "sha256": "846c763f52245ce69ac3134178155d9f48a355267d7467691f5ce92d2a842d88",
+      "before_sha256": null
+    },
+    "carrier/startupdiag/result.go": {
+      "sha256": "4802c80fcfb5299de29349156c757c55f06c888872b535eda527b7f12e6ff70c",
+      "before_sha256": null
+    },
+    "carrier/startupdiag/stop.go": {
+      "sha256": "ef517c0b97e17cfa53c276b0a8464ca87333d40a63319c85b2dee3be380fbee8",
+      "before_sha256": null
+    },
+    "carrier/tcpforward/admission.go": {
+      "sha256": "e66ff964da8a643ce9862601bfb58a2b3a92b4cd514194044cbacc297e93b3a5",
+      "before_sha256": null
+    },
+    "carrier/tcpforward/admission_test.go": {
+      "sha256": "ea131a60d5a24bf9dc759bb9f80346719ffdfedc7b59ab087b0436d4c28f09f1",
+      "before_sha256": null
+    },
+    "carrier/tcpforward/batch_test.go": {
+      "sha256": "9cd3b8c60b99def676093d85e408de28d6c64c85e33f60f62827ace37692760c",
+      "before_sha256": null
+    },
+    "carrier/tcpforward/client.go": {
+      "sha256": "1cd20ffa5938af1c2702bb1be69d5ead3d35caf7c1cafb85a7308f143d6a16d0",
+      "before_sha256": "1cd20ffa5938af1c2702bb1be69d5ead3d35caf7c1cafb85a7308f143d6a16d0"
+    },
+    "carrier/tcpforward/destination.go": {
+      "sha256": "fcada0a21f47ff938b8f85170557463540877d78d54b8c119e062ea3b9ea67ab",
+      "before_sha256": "809d3936cb353a6a944c6e3c683689ccf81149dd03e208783a5108ca9a7be1e9"
+    },
+    "carrier/tcpforward/destination_test.go": {
+      "sha256": "547b7ed6bafb3c3777a4a6fee59247cb17386bce8507a9176724fd116d5ebc11",
+      "before_sha256": "547b7ed6bafb3c3777a4a6fee59247cb17386bce8507a9176724fd116d5ebc11"
+    },
+    "carrier/tcpforward/dns_containment_test.go": {
+      "sha256": "72d4ad4efd99293fefd8d71b9da84f887bcc8870abf5f424a66bc8b5e8d83ae2",
+      "before_sha256": "72d4ad4efd99293fefd8d71b9da84f887bcc8870abf5f424a66bc8b5e8d83ae2"
+    },
+    "carrier/tcpforward/forward_test.go": {
+      "sha256": "5c9d64d882da74897a22a69e93d08dd4469d02e3b2a39b89599cfc3ab98942b9",
+      "before_sha256": "5c9d64d882da74897a22a69e93d08dd4469d02e3b2a39b89599cfc3ab98942b9"
+    },
+    "carrier/tcpforward/gateway.go": {
+      "sha256": "a25938d0a7f763976c6bc7d5c6caeb9bb95d6aee9f805e375bd0899fb78a7057",
+      "before_sha256": "a25938d0a7f763976c6bc7d5c6caeb9bb95d6aee9f805e375bd0899fb78a7057"
+    },
+    "carrier/tcpforward/integration_test.go": {
+      "sha256": "be7b9c36f7c92318645754e9b103e81922dc8b526741cd97bd712f852a045688",
+      "before_sha256": "be7b9c36f7c92318645754e9b103e81922dc8b526741cd97bd712f852a045688"
+    },
+    "carrier/tcpforward/lifecycle101_pair_test.go": {
+      "sha256": "68847f5218ad0c7658413fd682f7951d79db08391f0b403b7be85aa2d359b57f",
+      "before_sha256": null
+    },
+    "carrier/tcpforward/lifecycle101_test.go": {
+      "sha256": "c4a257b033772bfebd24b6bd58c99727ed3b451de4b0462f3f5bee4c132baed7",
+      "before_sha256": null
+    },
+    "carrier/tcpforward/mux.go": {
+      "sha256": "51fed6af0070aed210fd8f0157cb2ee5858fb365648570a2fc887a81c54ac9fe",
+      "before_sha256": "c43b65602f9e00915f1359015ce635a301f3365a7e9c21ff88332e22068a92f3"
+    },
+    "carrier/tcpforward/mux_bounds_test.go": {
+      "sha256": "55c68dc3e9021321694f180c72c851e2a32f60589ce3509d321a5eaa5d094bf1",
+      "before_sha256": "55c68dc3e9021321694f180c72c851e2a32f60589ce3509d321a5eaa5d094bf1"
+    },
+    "carrier/tcpforward/mux_diagnostic_test.go": {
+      "sha256": "e0db709cd5d4f4082461c795045b96e638db5d1c7f5111b7edc5322a11f1f5d7",
+      "before_sha256": "e0db709cd5d4f4082461c795045b96e638db5d1c7f5111b7edc5322a11f1f5d7"
+    },
+    "carrier/tcpforward/mux_dns.go": {
+      "sha256": "2052fa4d4f64a8ff63a13e5b5eb4c1a7b5c2b581e9117a7001a1ac6679058f37",
+      "before_sha256": "9f965d58066c6d9c605f9518a2dc2b44b67c08583aeb66f19cd5231f85ff90f9"
+    },
+    "carrier/tcpforward/mux_integration_test.go": {
+      "sha256": "27d87019ed11f88fb6b3f88c28bba05d74ea83ad78f098ccddc17addf054b6dd",
+      "before_sha256": "27d87019ed11f88fb6b3f88c28bba05d74ea83ad78f098ccddc17addf054b6dd"
+    },
+    "carrier/tcpforward/mux_lifecycle.go": {
+      "sha256": "295b47115b56048401bd20428080c660fa8405938ecdabad05162c92c8fcec60",
+      "before_sha256": null
+    },
+    "carrier/tcpforward/mux_lifecycle_test.go": {
+      "sha256": "e18f38134620717a33a2267e4acfab03a4d6e5ff514adac1fd1b50ba95dcaf90",
+      "before_sha256": null
+    },
+    "carrier/tcpforward/mux_profile_test.go": {
+      "sha256": "dd32c282e46ec898124a3400b61a7dcca09d91e244ad6b88a10fbb3a1c9f47e8",
+      "before_sha256": null
+    },
+    "carrier/tcpforward/mux_protocol.go": {
+      "sha256": "3199d0a8851a833b222938f63980918f493ba1086d6d150bae4a0b49d8950e2d",
+      "before_sha256": "2c821657cb7ed4e3fb6f356081ba1b426b55b316a627e68a12d289a849366d42"
+    },
+    "carrier/tcpforward/mux_stream.go": {
+      "sha256": "8573ea24124f8d6d3fc519e72edafe4862415aaaa44701d46e6ee0d27aaa5076",
+      "before_sha256": "7ae48a711ec1c4410b4cd6e1d3cc2edb3332698708c383398ee072357cc184b8"
+    },
+    "carrier/tcpforward/mux_test.go": {
+      "sha256": "1eae8164d4e59523b311ef82c4ca2ef354f8db8f80153ebddff5d4e7e0a04480",
+      "before_sha256": "1eae8164d4e59523b311ef82c4ca2ef354f8db8f80153ebddff5d4e7e0a04480"
+    },
+    "carrier/tcpforward/owner_crossed_reset_test.go": {
+      "sha256": "95e74fa6730d9ac47b4bc3c94c4f9e15c3f865ff68438259da10cf00af187bbd",
+      "before_sha256": null
+    },
+    "carrier/tcpforward/owner_late_control_test.go": {
+      "sha256": "890aaf220aa0d2dbf130380ac02dad0ef67705176d513678e1c6ce45b97b7b00",
+      "before_sha256": null
+    },
+    "carrier/tcpforward/owner_late_eof_test.go": {
+      "sha256": "9858df9fe6b22f2a3ef7daf52fbb46965934f3e37548726d9092ebe043b5016f",
+      "before_sha256": null
+    },
+    "carrier/tcpforward/policy.go": {
+      "sha256": "d5a613b067d6a8e7f9e72f949e22efa541dc9fe91c87c2d7fa5a30cd1ae12efd",
+      "before_sha256": "701dde89284621b3b2d6a3d9eb6ec8d5d425788dd5652e7cc62e92852935afc4"
+    },
+    "carrier/tcpforward/protocol.go": {
+      "sha256": "ad7d351228f2aa68e3dfc4aebaef069a71c60aad4c419d3ebe988db33dd283b9",
+      "before_sha256": "ad7d351228f2aa68e3dfc4aebaef069a71c60aad4c419d3ebe988db33dd283b9"
+    },
+    "carrier/tcpforward/protocol_reasons_test.go": {
+      "sha256": "d4293d0b8d81c73c93c2dbe5974a6258f93ea5e052190a5f602a252a2eac92ed",
+      "before_sha256": null
+    },
+    "carrier/tcpforward/services_test.go": {
+      "sha256": "f32bc3ee202568941741e0a1c3ed912e3617b395a51fd47bf6e19c0a168d312e",
+      "before_sha256": null
+    },
+    "carrier/tcpforward/speed_integration_test.go": {
+      "sha256": "c4bbcd994a044b26e607e306d42c3106457d7f64ea71b317d9e2bbdc5f3832cd",
+      "before_sha256": null
+    },
+    "carrier/telemost/auth.go": {
+      "sha256": "e1455d0a9ea609a5cf06e612dec128cf69b3a5e8651674e965e6be3c121d214b",
+      "before_sha256": "e1455d0a9ea609a5cf06e612dec128cf69b3a5e8651674e965e6be3c121d214b"
+    },
+    "carrier/telemost/boundary.go": {
+      "sha256": "9db4ca905becb14c80acb3cdc44ed5bfb1d851c5c801229f3e37010feecdf38a",
+      "before_sha256": "57233f63fee83b6624d658091a6b08dbd3214747375674d025b9580cb2b259fd"
+    },
+    "carrier/telemost/close_source_test.go": {
+      "sha256": "778c1d10e4680ed5fb6ce3ebf53a0810f2de2416b9c9876a78288ad5af10674f",
+      "before_sha256": null
+    },
+    "carrier/telemost/delivery_test.go": {
+      "sha256": "b1bc10673188e01134b554a37cb99fe9b332e53aa73658367d366a00e8850ca3",
+      "before_sha256": "b1bc10673188e01134b554a37cb99fe9b332e53aa73658367d366a00e8850ca3"
+    },
+    "carrier/telemost/evidence.go": {
+      "sha256": "080e868b8d6b75edf22d54be03f4b6fda0ae27940c49e7429b7ced046bf14246",
+      "before_sha256": "080e868b8d6b75edf22d54be03f4b6fda0ae27940c49e7429b7ced046bf14246"
+    },
+    "carrier/telemost/evidence_test.go": {
+      "sha256": "4ad1b33e7e771cce667514fdf6a74d924ca494e1cf000668d40511abd3f41b45",
+      "before_sha256": "4ad1b33e7e771cce667514fdf6a74d924ca494e1cf000668d40511abd3f41b45"
+    },
+    "carrier/telemost/family_replay_live_test.go": {
+      "sha256": "ba02f9de03c481e5337a216537c64e405340acfa0a1d02a279801ab452ef2f30",
+      "before_sha256": "ba02f9de03c481e5337a216537c64e405340acfa0a1d02a279801ab452ef2f30"
+    },
+    "carrier/telemost/forensics_bytes_test.go": {
+      "sha256": "0ad0cca4bfac014d90cc3d943d9eed3d16d1e5b1a5557ae8211a99cc1fee2110",
+      "before_sha256": "0ad0cca4bfac014d90cc3d943d9eed3d16d1e5b1a5557ae8211a99cc1fee2110"
+    },
+    "carrier/telemost/framing_test.go": {
+      "sha256": "37fcc04b06964155a81a79b43612b2167b48cc6d60b5ed56bc26513538574de7",
+      "before_sha256": "37fcc04b06964155a81a79b43612b2167b48cc6d60b5ed56bc26513538574de7"
+    },
+    "carrier/telemost/head_loss_test.go": {
+      "sha256": "dc3108a0f822b7944374b66a27866c1db7c2ea46092da3e247493533cf88ec30",
+      "before_sha256": "3fca0ebcc8645b886bc39a2dc5dc61f7d9725135cadcb67278b1c620f71cfb60"
+    },
+    "carrier/telemost/live_test.go": {
+      "sha256": "6f361a8c3b1d118fa42b77cd928763765bf4e4660ac272c5ab98a1171db12d5b",
+      "before_sha256": "6f361a8c3b1d118fa42b77cd928763765bf4e4660ac272c5ab98a1171db12d5b"
+    },
+    "carrier/telemost/local_process_test.go": {
+      "sha256": "393e0eb9f9fbf6595a60d170aa0206e7f81c5e00e702e0323febb20f136d1391",
+      "before_sha256": "393e0eb9f9fbf6595a60d170aa0206e7f81c5e00e702e0323febb20f136d1391"
+    },
+    "carrier/telemost/messenger_local_test.go": {
+      "sha256": "922ae0ac1a63e12dd57c6599105ca93237dd17ea06940cb8f4b193dbaf05ae1c",
+      "before_sha256": null
+    },
+    "carrier/telemost/msg.go": {
+      "sha256": "9a72f4538400158a735fd7b75c5c297da454e7d08f371edda19a43cd07ae3ac1",
+      "before_sha256": "9a72f4538400158a735fd7b75c5c297da454e7d08f371edda19a43cd07ae3ac1"
+    },
+    "carrier/telemost/owner_late_frame_test.go": {
+      "sha256": "fcb378f96fb0270cbc9bcc42b8e6bdb37dec8282505764bdab40efb7e150c5fb",
+      "before_sha256": null
+    },
+    "carrier/telemost/performance.go": {
+      "sha256": "f864ca739e609e47e7cecec817268d3c24b85d52f4d4df105765f96471168cf5",
+      "before_sha256": "f864ca739e609e47e7cecec817268d3c24b85d52f4d4df105765f96471168cf5"
+    },
+    "carrier/telemost/performance_test.go": {
+      "sha256": "1f667ea54b06991baf49f86012bf77bf85e72626d80682e15d3c6dee39aab7ba",
+      "before_sha256": "1f667ea54b06991baf49f86012bf77bf85e72626d80682e15d3c6dee39aab7ba"
+    },
+    "carrier/telemost/queue_retry_test.go": {
+      "sha256": "854f35059d32299e44da1563c47e31f93dde02521555410e0a93a2c6d893367c",
+      "before_sha256": null
+    },
+    "carrier/telemost/receive_burst_test.go": {
+      "sha256": "eda3774a6f3a07356f7ad0af7c2f74eb5c8958728da9124bbaa66f6f49042ba1",
+      "before_sha256": null
+    },
+    "carrier/telemost/receive_default.go": {
+      "sha256": "ce572532f9b9819d98bda257b0fe0db71f6f9b42b062cbb66c084ba0b00d6748",
+      "before_sha256": "ce572532f9b9819d98bda257b0fe0db71f6f9b42b062cbb66c084ba0b00d6748"
+    },
+    "carrier/telemost/receive_stall_test.go": {
+      "sha256": "db8a35f3158e7fac34183c30b96ea373431956777f2871c3c90ba34ba43fc7f8",
+      "before_sha256": null
+    },
+    "carrier/telemost/reliable_framing_test.go": {
+      "sha256": "6f7adc56975e12bbb6af643d9610c4c33263838f0c232cfc9b1766c6df9b9098",
+      "before_sha256": "6f7adc56975e12bbb6af643d9610c4c33263838f0c232cfc9b1766c6df9b9098"
+    },
+    "carrier/telemost/reliable_live_test.go": {
+      "sha256": "b5cba6c7a25dacb65d9aaf24f55aad0b44b05dfeae514bcbe77f59d061ca99ad",
+      "before_sha256": "b5cba6c7a25dacb65d9aaf24f55aad0b44b05dfeae514bcbe77f59d061ca99ad"
+    },
+    "carrier/telemost/rtp.go": {
+      "sha256": "994d466bcdd158b38f037488bbb8633ebf7b104f66fcb96f29d0cd5f6bdbe333",
+      "before_sha256": "c9c08a2910f1bfb931eb6aca39df9b48f4be38d720a24a31d655856dd0360733"
+    },
+    "carrier/telemost/rtp_gap_test.go": {
+      "sha256": "e07db886ab979c2c992860cc18314193424dd408b0a64ae3a40a265c92fb61ef",
+      "before_sha256": "e07db886ab979c2c992860cc18314193424dd408b0a64ae3a40a265c92fb61ef"
+    },
+    "carrier/telemost/session.go": {
+      "sha256": "0b6daf4a58367efdfe875adc7c7aae1b4cbf954a972975a5d4f74e50122153da",
+      "before_sha256": "a2b4fb26c90c0e29a04953f4a564db7c67d46c0a8ee771c6a767e4541d5c2436"
+    },
+    "carrier/telemost/session_test.go": {
+      "sha256": "f18f2f7182184aba5c58aa3448a0a354c60ddc46dc3e59f33ed793f886c5ded0",
+      "before_sha256": "f18f2f7182184aba5c58aa3448a0a354c60ddc46dc3e59f33ed793f886c5ded0"
+    },
+    "carrier/telemost/signaling.go": {
+      "sha256": "f6307ceaa6c34db14a87631bbf4fab4c1ec0e10a438dbb3113c4e02d0631ddee",
+      "before_sha256": "bb7f1e97c02e8aabc1fe54266c2b4ebc5ee964b5c9365277283897e786186166"
+    },
+    "carrier/telemost/trace.go": {
+      "sha256": "add7ec28f14c4df249b8bda28f3019ad984a43ffba7dd8c23d0aa032e46ba51e",
+      "before_sha256": "add7ec28f14c4df249b8bda28f3019ad984a43ffba7dd8c23d0aa032e46ba51e"
+    },
+    "carrier/telemost/trace_test.go": {
+      "sha256": "ce7895476853a9e8b8695cc2f90e9205dcb52a1425950aa6f772fd1cdb8f9ebc",
+      "before_sha256": "ce7895476853a9e8b8695cc2f90e9205dcb52a1425950aa6f772fd1cdb8f9ebc"
+    },
+    "carrier/telemost/underlay_test.go": {
+      "sha256": "043e40470859f24964081a9da5b1acf976acc737925c8759d74ca566711948a4",
+      "before_sha256": "043e40470859f24964081a9da5b1acf976acc737925c8759d74ca566711948a4"
+    },
+    "carrier/telemost/vp8.go": {
+      "sha256": "1a7cfb445a18bf14405addb74259662353202d602203ad7e13e9171042d07acc",
+      "before_sha256": "1a7cfb445a18bf14405addb74259662353202d602203ad7e13e9171042d07acc"
+    },
+    "carrier/underlay/network.go": {
+      "sha256": "c22ba2f7e7a1b14efb640f169f02437cc30a04bc9c8edac3745d11fe42254bf9",
+      "before_sha256": "c22ba2f7e7a1b14efb640f169f02437cc30a04bc9c8edac3745d11fe42254bf9"
+    },
+    "carrier/underlay/network_test.go": {
+      "sha256": "766692e9adbed725ff35fe1000bedf4bdac41999d116aedb0c6289f3f614ac87",
+      "before_sha256": "766692e9adbed725ff35fe1000bedf4bdac41999d116aedb0c6289f3f614ac87"
+    },
+    "carrier/wholedevice/provisioning.go": {
+      "sha256": "d170a09a18354f190caae7198f53357414b4e7989cf434cbf49ac0a1a54515b4",
+      "before_sha256": "d170a09a18354f190caae7198f53357414b4e7989cf434cbf49ac0a1a54515b4"
+    },
+    "carrier/wholedevice/provisioning_test.go": {
+      "sha256": "7cce8189a5d3871b950940b4eab82d3c10bfd8b9c79fde9f29a1f8a3e839f5e9",
+      "before_sha256": "9223dbc9e59be6ee395ba63f36bf3c5410b6eef29dd697867e1753d166c05c1e"
+    },
+    "carrier/wholedevice/readiness.go": {
+      "sha256": "5a1729c622fecac4b9f3f0a25b23725453a11e9598f0d809bce642ddb26c8aea",
+      "before_sha256": "5a1729c622fecac4b9f3f0a25b23725453a11e9598f0d809bce642ddb26c8aea"
+    },
+    "carrier/wholedevice/readiness_test.go": {
+      "sha256": "7229f12ce3c30c94c718fd1ab16d6b5155eca4ba8ad585e60a999f0c6ac3bca3",
+      "before_sha256": "7229f12ce3c30c94c718fd1ab16d6b5155eca4ba8ad585e60a999f0c6ac3bca3"
+    },
+    "carrier/wholedevice/service.go": {
+      "sha256": "27239790f017970a2025bdcf10aa032ce4f0189d88fddc909fbc016def8ef3a2",
+      "before_sha256": null
+    },
+    "carrier/wholedevice/service_test.go": {
+      "sha256": "bdeff184c3693e1a38b8461080c9ec06649c49853234a90c409db2f70087c0cf",
+      "before_sha256": null
+    },
+    "carrier/wholedevice/session.go": {
+      "sha256": "1f2743688af5881cc3c66f2bfb31909b64f87f0a8212c8fc2a5714bd9680f2f0",
+      "before_sha256": "b845d2296eb30b0521add540cc5017301ea174f5726c4d68f49e0e7ad1f85f1d"
+    },
+    "carrier/wholedevice/session_test.go": {
+      "sha256": "c05094c352ce69429a3b88246816bb08286dbe2ed026ba41398431cb83038850",
+      "before_sha256": "f884e7b18fff69ff25d48a84503c936903f004131edac95fb6ee034f4e552952"
+    }
+  },
+  "android_ui_and_handlers": {
+    "clients/android/app/src/main/java/com/familyconnect/app/AndroidUpdateManifest.java": "a664d63f73676652cd6cd17e6442751ea953e9cc7ec91656d2c24145b62b5d18",
+    "clients/android/app/src/main/java/com/familyconnect/app/AppLanguage.java": "8b81ad89527f4a17087956afbee9afd0ac9f3117151b512dffaf2cd461cb5fee",
+    "clients/android/app/src/main/java/com/familyconnect/app/AppUpdate.java": "59d8d42fa383d029d0bd5b237f123477b026b80fa5a66e5f4d399003db9008f1",
+    "clients/android/app/src/main/java/com/familyconnect/app/AppUpdateUi.java": "2ad0d2165ecaeb3e522b3285e6ad252b93832ec461a3948e104adb4d1552b4f1",
+    "clients/android/app/src/main/java/com/familyconnect/app/AutomaticConnection.java": "7ef7014438a33b9e471f1496da2c8d79af953a74b69be6f86b928730f1491088",
+    "clients/android/app/src/main/java/com/familyconnect/app/AutomaticNormalEngine.java": "ca253187526f6215eedd182401713448d8ddd28899b5b150046149fe7ad52ed5",
+    "clients/android/app/src/main/java/com/familyconnect/app/AutomaticVpnOwner.java": "1a397a3a6dca5838d56ff470f43300f489ac22c958c96ac0bf10d317186ccc11",
+    "clients/android/app/src/main/java/com/familyconnect/app/AwgParameters.java": "d0b25dd10ee8e8e506aaf97cda66b62682b356c9ed8bb5cca9c778624eeb762f",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatActivity.java": "1c5a15bd62b0b57367e7f214503efa8523e775a65e5599de3151db6b927300fa",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatAudio.java": "caf59980f5415f8dac762c03a459d5b9235ae8d3e104a6133d6cd39b0d6315bb",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatCarrier.java": "0f6bd99e072a8aae1ba2cd33aaad1ac50f9c134e929b07bd2f0b538ed17e4424",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatDeliveryService.java": "e15de691059fcac43af03eef8a706dce93b640424380badc853e60f352d67b01",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatGifContour.java": "a790f9105bbc8cb800803cd832c99f680863e8baca956348ebf0224ac2a3395a",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatKeyEnvelope.java": "370a0e6419dbb87fb3a861569ce5082fbb288461098dfcadae19458e8759c731",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatKeyVault.java": "620c8527ebba2519944c3106052b29d2a75070c55355a5bb096325cf0ae6559f",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatLocalAndroid.java": "b1176eb43446289918e1b6c7c1789c70bf59bb16ec9a34d743e8e52deffc7fac",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatNetworkAndroid.java": "9afe103b1002012c9dd110c42c59262029815fd631c06f207b8841cea090a6bf",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatNotifications.java": "b6270d6617266798fe40dc8bfce3e6e156803bc8ffbfd40829039de701a32051",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatPollPolicy.java": "6588806b186a87b4f4362ea7a658b70646cd3f5121d7bf9ec0e6863d9c58e747",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatRestartReceiver.java": "aa1513d17b3c6296918f696c27a6c7188917184c54a141a95217dd27f470b127",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatRuntime.java": "8a30cad5a6e978d6dd91670c1746c509bfe45b1631d4f739ba369e249d33a74c",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatSmileyTextView.java": "d65f5fc443001d0f8f8690446d9c9c5a0fd11e5128fb86a7e1eeb7cbfd68f521",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatSmileys.java": "61341d9df916766da008bdaebdf92e0a66c76a50b6fbee570fd3041f453dc142",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatStoreCipher.java": "8eade0617865ebab0073861333aa13a3a599904d85addfe28c7d66d30fcb308d",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatThreadView.java": "a02c2f36ee8f8a91df929748c6535b9af6ce757a463ea086e078be14951d5328",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatVoiceView.java": "8f64d430ad9828f231ae20794c2575d2a27d409d27d75111d086ec491b161398",
+    "clients/android/app/src/main/java/com/familyconnect/app/CompactHome.java": "c3f8d529effe2425ddf42c2d98ab52f3e4fb1d3a67dfdb961d7837643e181bfb",
+    "clients/android/app/src/main/java/com/familyconnect/app/ConnectionResume.java": "07d956ab36478441fe5857baf866b9edb74e8f68bd445474b3b288bf30c08d08",
+    "clients/android/app/src/main/java/com/familyconnect/app/ConnectionService.java": "7401663833dd11189023854ec7e9902fddbcf79e55c821948a1411e6c3aedff2",
+    "clients/android/app/src/main/java/com/familyconnect/app/ConnectionTerminal.java": "20a6f50aed1e1a9963bed1fa2cc19e989a0a92d49370b1e50459d9934338ac2a",
+    "clients/android/app/src/main/java/com/familyconnect/app/ConnectionTerminalView.java": "9cc7242192907acc01547d9de383f04dee9fa87ad23749867d198f4448f22159",
+    "clients/android/app/src/main/java/com/familyconnect/app/ConnectivityOrchestrator.java": "e9017006ee88bfabc587cd4f6ced1d27c5eb854914ff4cacf9d44adfb82c3220",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlApplication.java": "87be61d2d5b2c8f6fc3544a89d09fde9c12af6d0cb0b83e3a9d0f09393103522",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlCarrier.java": "ea092acdea42cc7abb66b077d68f34526bc4cf2dfe9954b2699263ec9b3e97fd",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlEnrollment.java": "d192a0eccf97489d53164087a84c71e461e618925461608c571088177e83029e",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlEnrollmentAndroid.java": "eaf5a03f703544d643b04b6a35d4f19e71d2cd5ba9992e3ac9841215b0951eee",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlEnrollmentEnvelope.java": "15ca0b55b4c92629744a1b851a124a23d992c3e95affa0659a1dcba4b418d1ca",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlEnrollmentHttp.java": "04ead02e9101d2798d9cddedc8ac32cae11a63870743c76a3c11edb931a87f0c",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlEnrollmentVault.java": "7f79adbf5f1be3589617128da733762d4c6c6f7353b7cdf1eae46c7d5d8e6cdb",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlFriendsCatalog.java": "c476bc2237947606c641d79a547082bb4a83e5577571e83e8069b3c3077e967b",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlHealthRetry.java": "469b2954ff5f5f80603348010e2445451d368c312b8f556fac975865ba11adc4",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlIdentity.java": "10d52b743b02266676564cbeb19b055d95c24eea988bd5138e44b304ddb2c671",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlIdentityEnvelope.java": "50941d0101d4f609c2c781462857ca4908c6ab69b425b1a2dc4ddfc9593162ed",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlIdentityVault.java": "12a0c21fa049794ca41fd4fc2dc9c79dca717fde0ca521e9eb78487aa1bc674a",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlIntake.java": "81d295c9c2dc30b59babd78cdfc5b1f176c61bc18338c759c7cfe5150f3e0647",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlJournal.java": "5b040cf380427b97ea5251346aef20847e961a508ac6880f32ff31d23a12e3f3",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlJournalEnvelope.java": "3bd7f02ef1c49210fbeacef1bafa98640b7e9bfba281330ec041763d2170b1b3",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlJournalVault.java": "0683f305c0ed09cf36a05b1c28bac9bd123685b83f619efe4aabedc55bfc8393",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlJson.java": "4232fc1591c12bf7089aef42ac55a7362c022c6362299b450cd2ef3b07e03fba",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlMutationGate.java": "cc8bb8d10ac983bd0b1b69ecbda0366e61f667d587da36adb1eedaf24f652c85",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlOperations.java": "5c5869e06cb83df8ddaacfb8839720a4d824ec7057a2514f1aff11e2bb236e2f",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlProfiles.java": "e73a5a0599c293318ff81a86d502739b227b5279ea9293dde2ba84759ad00b65",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlProtocol.java": "7604fbd8a5ad6f5e1ebc77cb8a7be88b631d8de83d8a6b4c4bb98ef1394426ec",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlRnsAndroid.java": "ff492d601d543c1d4a86d0553a35e5c6e432fc49f586122350e24e50821c1127",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlSelection.java": "bfd330a3b331512f9b2066f20ee22f62055aeb09632ec71dc0dd9e8ca07d55a6",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlStartup.java": "ce6933718a29d947264f457eae10f831f27385535d81cf8bb9ec8a1d296e8fd5",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlStatePresence.java": "3f6c37bb1197058021fa80751c839dfe9024ecfcfb334471c7459e9918459af1",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlTrafficHealth.java": "f7289785a219c0ac765e141a05dd27a23ab022719014bde69898d178ed384d8d",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlTransaction.java": "2d666c05196fe349307420ec5afc43ae2f06c05f526b7a91b341bb629232bd42",
+    "clients/android/app/src/main/java/com/familyconnect/app/ControlTrust.java": "1d1cc09a61f41b669a77910b7370cb902a920281c6ded7c864dc852069fe6dab",
+    "clients/android/app/src/main/java/com/familyconnect/app/DeviceSupport.java": "40e1f9597b687f771b23418b507eca17631c77a78397b231f337f1895f293a6d",
+    "clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRecordBudget.java": "6066a2bb670e82a8053d55164c31fd9837d4c7db5a0aa531cbd9b24b8c0dc2f3",
+    "clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java": "cb55956ff808247634ed09df72a70c6b3711dea4bc64d06156a08e11af267a36",
+    "clients/android/app/src/main/java/com/familyconnect/app/Diagnostics.java": "44d2f3b329450304b4f944e51780add4ee86e09c5c23ded8d80bd4cb4d5ad7c7",
+    "clients/android/app/src/main/java/com/familyconnect/app/DiagnosticsProvider.java": "10a7773069bcac78d62f7fa7af29146882a146a74058ccfd5ea5e529cd67cfae",
+    "clients/android/app/src/main/java/com/familyconnect/app/FamilyApplication.java": "f77f180a5c12c52ac962ea2fde58882f23c7c22d3466a7ac10ed0143ea12c50c",
+    "clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java": "b9c30b6f1c33dd135d06e0caef8650d8eded7aba8fd474428354b468ec30d270",
+    "clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java": "c9c952cf09e193ee6025146a8cb5cc82d524bb538264daa4ce7040fd9f3741a7",
+    "clients/android/app/src/main/java/com/familyconnect/app/FriendsConfigurationVault.java": "d4f74a74180f00cc8644628d4700b61e13da0371174140c0de9383a233bf74f1",
+    "clients/android/app/src/main/java/com/familyconnect/app/FriendsIdentityVault.java": "5a99173963eb04be4e3e302d563795075eccc75c35caa1c565175dbe0817a7e9",
+    "clients/android/app/src/main/java/com/familyconnect/app/FriendsReadiness.java": "b5390b88266e2c458d6a567d3847bda05c5e0899c021d88e31fa43c6c28dfb0b",
+    "clients/android/app/src/main/java/com/familyconnect/app/FriendsReadinessProtocol.java": "169a6e8c412533d6f434bdec76ab987881d92fb4e98437a40a4bf897ad97eb82",
+    "clients/android/app/src/main/java/com/familyconnect/app/FriendsRestricted.java": "396d0d3f3d3a115e93b93b0db8d8e7ea52f965c7e174bcae8dab4afc00ed8159",
+    "clients/android/app/src/main/java/com/familyconnect/app/HomeBrand.java": "867bb062dcf835c17e305522889af183f394756f2d77bc773abef4f0b980bd4d",
+    "clients/android/app/src/main/java/com/familyconnect/app/LiveNetworkPanel.java": "8813b5f50b6093e26f9351e04908e69855a8e3f5d75b93df75faa6823a3c5cad",
+    "clients/android/app/src/main/java/com/familyconnect/app/LocalizedActivity.java": "cbaafff9acb58388f468493cce406f830aab4c374f79c1b231c797ec314b0169",
+    "clients/android/app/src/main/java/com/familyconnect/app/MainActivity.java": "7b31df6344f0230bb6aa40575c9148b03277203e8b3ab6ec31c5a7e9634febcb",
+    "clients/android/app/src/main/java/com/familyconnect/app/MuxLifecycle.java": "c0590f5a27b893aa1f8bddc7bbb8054e1fe90b391948b496b09e33f7feb4e707",
+    "clients/android/app/src/main/java/com/familyconnect/app/NativeRestricted.java": "885e0b4c9a629688054170117a35cb7c27c1c397aedd9e21b5ee750f15905c82",
+    "clients/android/app/src/main/java/com/familyconnect/app/NativeTcp.java": "716e23aa7e46992258d4b4ac67fe6245df315747e832e6f5050ec730cfe228cb",
+    "clients/android/app/src/main/java/com/familyconnect/app/OwnerPrewarmReceipt.java": "a9c304cc99297e7efddcad283f07fe3bbc1ba28a4d4fa5672469d609bcd02af1",
+    "clients/android/app/src/main/java/com/familyconnect/app/OwnerSupportProvider.java": "7e350b671b4a369b04a07c476dc9b09fa88937d43e59f20100b062a6a95c9029",
+    "clients/android/app/src/main/java/com/familyconnect/app/ProfileStore.java": "85c11c8e7d5706b998b9edf39620e49e78c06ac328e1a5921b1e091a77503eab",
+    "clients/android/app/src/main/java/com/familyconnect/app/ProfileValidator.java": "0cd1e8fb5b624b38465e55cf86e73c0f54e60d9e287d2a406ef70be5efef1708",
+    "clients/android/app/src/main/java/com/familyconnect/app/PythonRuntimeAndroid.java": "5b5e8a481315dc5f169085934ef9e8464703cc80941f8288034109497f0685d9",
+    "clients/android/app/src/main/java/com/familyconnect/app/RadioCodec.java": "d4c8a0cdac24786b49b12fb4052511e445df5e264d3e7a369020366f018008f1",
+    "clients/android/app/src/main/java/com/familyconnect/app/RadioSettings.java": "cfc7a5eb2d5593b17cc3eace75f45730d7bfd8501a4f28339ed87435c7d4f293",
+    "clients/android/app/src/main/java/com/familyconnect/app/ReadinessBootstrapRoute.java": "100ee7171b0264899b696d4cd4838a44cc43a92c3def24665eecf8acda26cbfc",
+    "clients/android/app/src/main/java/com/familyconnect/app/ReadinessFetchTrace.java": "b07624732d94f9387073cad3119e6f4f60b910ec9475d217f1720955ecce4eaf",
+    "clients/android/app/src/main/java/com/familyconnect/app/ReadinessImportResult.java": "f05ed2100e6919eef46b3f1c4a1a9888c0776d5274733cbc72d619967c8dbdde",
+    "clients/android/app/src/main/java/com/familyconnect/app/ReadinessProduct.java": "6c60e10a3e61c32a893d8f2e48cc00ca40a68e003275c427c886fd96fb9cb9ff",
+    "clients/android/app/src/main/java/com/familyconnect/app/ReadinessReceiptStore.java": "ba0f0474ca905f9e3e120330166d0c22105ee101ead3bf10671e83cfa16f51a6",
+    "clients/android/app/src/main/java/com/familyconnect/app/ReadinessStop.java": "2b047064bad33975cd4c1927a8609a0443f647050dde4963a5ab3e0a1cd0d68f",
+    "clients/android/app/src/main/java/com/familyconnect/app/ReadinessSummary.java": "5895721849ce5360f4d0c7fbae24f65805cc12dc7104d340f9aa170695898a13",
+    "clients/android/app/src/main/java/com/familyconnect/app/ReferralActivity.java": "54f06885ee5b359c4398dcadc86205a07cc28870ac8df3142ada3920e1d53fd2",
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedBootstrap.java": "06b78bbc5cf86c8e347cfaee7ca826ff330457dcf0090a5450cd856daa00d10d",
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedCache.java": "bb60d59c4e28c748cdf657001ec89f6bb5784c36a5c9cd691fd68a55f497a466",
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedDelivery.java": "293e3a6f378da0afb1b4f71a47019f25d5772600683a7cec31884a24637e6ff3",
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedHealthPolicy.java": "898ca156f21b2bad125899f563d952cd81193d756432daf86ae1e3f55612d7ed",
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedRecovery.java": "69192cfc47d496d7d062163831fd8d4c6c6efb6e001bb792b1a63c0249ddd774",
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedStartup.java": "14e0d7e20efe0e44b7ec360c4d2ff2cecd7fd3350e25e19e7d2b4664d1cd538f",
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedTrace.java": "c37ab2b84b87f5a10db8574e5d0a363cb5134d8d458b9e19b061e924ec814d81",
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedTunnelEngine.java": "7a1d9a1c8d04b235af34d280c84abad0c147b0bbee7dbdc3ce66ba5d4a3f1a54",
+    "clients/android/app/src/main/java/com/familyconnect/app/RestrictedVault.java": "6753b686078d5715050ab919c1c4309b0c205e04f631fe8cccebb2bba5125c02",
+    "clients/android/app/src/main/java/com/familyconnect/app/RouteLocation.java": "31a8dffe5c34e2a09d4debcaf82d6940b43dd38e45d9a445208b513466818d1e",
+    "clients/android/app/src/main/java/com/familyconnect/app/RouteMapView.java": "795633613331c2de5e21887ff2bafe4739c868bd9763538a7e34b9f04cb0bea8",
+    "clients/android/app/src/main/java/com/familyconnect/app/ServerLoad.java": "31eebf73e3622142c8ab43dd1fb9517d1087f977746f45ee12c120c084f9faf7",
+    "clients/android/app/src/main/java/com/familyconnect/app/SpeedProfile.java": "dec1fdbd71fd8e6a3b17907dfc777ff24bc5d2548302418b42f9cda17eb5eb07",
+    "clients/android/app/src/main/java/com/familyconnect/app/SpeedReceipt.java": "d5b7db493c7301a7e78c874486baa369ca4410ff3b6ecabb12136be7cfbe6a44",
+    "clients/android/app/src/main/java/com/familyconnect/app/SupportAccess.java": "800f981c5e9e144959e6ccfe27eec5f07c9ec9a4a89db1532de08774eea703e3",
+    "clients/android/app/src/main/java/com/familyconnect/app/SupportAutomation.java": "ad8f67ed37fa5e0fc9fb0af2a568b3ae60fe165f89ed316862edc2d602535fa5",
+    "clients/android/app/src/main/java/com/familyconnect/app/SupportId.java": "1c6e9d49abacf18ab565f03b8ffe35f58e6e14f6b8a2fab7b3391516bac6de1b",
+    "clients/android/app/src/main/java/com/familyconnect/app/SupportSnapshot.java": "bf1056f544cc8edf20cee794c581e8beb377e6ad73d3694bfe3a850e8e189795",
+    "clients/android/app/src/main/java/com/familyconnect/app/SupportUploadSchedule.java": "8fed8b0af0fe26b1b711ff605d638df4b73473ad6fbc371334ecf24fef2f8923",
+    "clients/android/app/src/main/java/com/familyconnect/app/TcpProfile.java": "d8a6473f7bbe471e2bb377a29ff5ce449633514434fd32182efd21e46a431fdd",
+    "clients/android/app/src/main/java/com/familyconnect/app/TcpTunnelEngine.java": "88ee689bf2ccb84c0841a3cfa8fbc940d7ef91e23a706094be3af93835d1a150",
+    "clients/android/app/src/main/java/com/familyconnect/app/TcpVpnService.java": "0323d94af8fe6034ed4ad234d13fd02603b6d13c3ddb9103a1726b0234789eca",
+    "clients/android/app/src/main/java/com/familyconnect/app/TerminalToggle.java": "7e5a569a93939920bf77c4991cffd11ef573514f1367fb58bd3a9de34f9d336e",
+    "clients/android/app/src/main/java/com/familyconnect/app/TerminalUi.java": "44618736a4ac4f92896ef21f5bba50002059b25438e50d1ff4e87976de78891b",
+    "clients/android/app/src/main/java/com/familyconnect/app/Transport.java": "ae9122f029a965075e7e48595f9ff2a95d237cc83f7c2da7b40b7bed65855913",
+    "clients/android/app/src/main/java/com/familyconnect/app/TransportPresentation.java": "ad5b21e8a0ad470d382614931a69f919678393aea71945c0a6bc6b0d2c016c61",
+    "clients/android/app/src/main/java/com/familyconnect/app/TunnelEngine.java": "fd3be7bfc8446596a3dadc354b29b93d7c03244ba5598435ca053e8264cd4a74",
+    "clients/android/app/src/main/java/com/familyconnect/app/Ui60Presentation.java": "f8b8b2e110a0986ff48fdeea0d599eb983aed3014381c3bae41662bc8c73de52",
+    "clients/android/app/src/main/java/com/familyconnect/app/UpdateApkProvider.java": "a75ad9ab232cfeada0f836b5596ada830c42cead0e96cdfe477ffda0e35bdb8e",
+    "clients/android/app/src/main/java/com/familyconnect/app/VoiceGesture.java": "d9be1e1ab6f9c7f11db3ef9b2f4f96e78b03ea3f49ba9e19da0e27a5302c8a70",
+    "clients/android/app/src/main/java/com/familyconnect/app/VoiceHoldButton.java": "c6ed05d2cd8ce8415cc9cbcecc305e37e77ad9a710511f0763a32b25fdbc7522",
+    "clients/android/app/src/main/java/com/familyconnect/app/VpnHealth.java": "bbab99f2cfbc527c19e378c37b78f7ec53be96bdafb2bcd2915666ce8013f19b",
+    "clients/android/app/src/main/res/drawable/ic_brand.xml": "f2499e4816f587809bff00bd87fca86140dc3f3e9ba8092acf88d977fce4cdcd",
+    "clients/android/app/src/main/res/drawable/ic_flag_nl.xml": "70e5ddfd142fdcfbbef4f2de508804184b0a911e078dcc80b0ddd05edf0619dc",
+    "clients/android/app/src/main/res/drawable/ic_flag_ru.xml": "92471d7d2f378b04f07bc2d73a8dcc67db07583a86efa067302097dd6eb1ed87",
+    "clients/android/app/src/main/res/drawable/ic_launcher_foreground.xml": "0dbe0a46781ff632ecdc120b6acbdee4b1609c28ae745d22b7419258ddc6ac75",
+    "clients/android/app/src/main/res/drawable/ic_launcher_monochrome.xml": "fd1742c53c9c8ab2f83f72e718bb711736ee505c2f2e7c021fa7b5fba008b309",
+    "clients/android/app/src/main/res/drawable/ic_shield.xml": "47fb9af5f40cc0496ca88b7f9c7067c6010b2f5a667ab5b968d2fef6ac58cd99",
+    "clients/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml": "ebdaa93159153e11032653b8dc7471e9fa3cf965e9f2c776fd7fdc6a269594c0",
+    "clients/android/app/src/main/res/mipmap-anydpi-v33/ic_launcher.xml": "d44ecb7db3101529b7b00301ed08a285a021edb6c101013325941c5cda2f56d3",
+    "clients/android/app/src/main/res/values-ru/connection_terminal.xml": "aa7933696fc990f10776b8e25dd26a6ce9349ad89f24a1acd4cfd3622103b169",
+    "clients/android/app/src/main/res/values-ru/connectivity.xml": "a66502b772e961a0f19f37ccd9d4fbc567e2704bee5a00e43604e38132450909",
+    "clients/android/app/src/main/res/values-ru/exit_radio.xml": "e2c11b0f7b77fd5acd17145459cd1be652308d5c2ca6c101b8cf7afb93adf478",
+    "clients/android/app/src/main/res/values-ru/readiness.xml": "da0abe124e1c9a542911171104cb4bddc8296616dbf7fd29af1aee954741d359",
+    "clients/android/app/src/main/res/values-ru/speed_profile.xml": "d0b93f712f76bbe18cec535a4cd9d74c81e9729bd177ce858ee72ae126b55d6a",
+    "clients/android/app/src/main/res/values-ru/strings.xml": "79fcda7d30c65cbefc2735fe4069f07922e178664ed7bee30782b310ca8f13d8",
+    "clients/android/app/src/main/res/values-ru/ui60.xml": "561722a6b3d97c5ceed689f4f851e7b8d6c4b1fb2f3ff35bc1444467a8aa710f",
+    "clients/android/app/src/main/res/values/colors.xml": "90ba885b82288c0fbca3b4d58fd70116cdab5bc465c7c12bd5aa908518c3dbbf",
+    "clients/android/app/src/main/res/values/connection_terminal.xml": "5acaa9891a40c9c91bf268bd7b8038fd5c0017a374082df918cc695e21753925",
+    "clients/android/app/src/main/res/values/connectivity.xml": "472be27eb671a431df00adb7d43cccd0f5e47bbcd0270d33bbf1d335583f5375",
+    "clients/android/app/src/main/res/values/exit_radio.xml": "806e289f0c2200a2bbf2aba832372f2e5923858698f671d901c67f675bf99826",
+    "clients/android/app/src/main/res/values/exit_theme.xml": "e684985580544517288c1afbddd4259f0b2d7b419d5afcb9b006736eb514c45a",
+    "clients/android/app/src/main/res/values/readiness.xml": "bb721b423efccaeb0dfda1bb913676bc30e5f71aba7cd09b88ddc3ce19a8248f",
+    "clients/android/app/src/main/res/values/speed_profile.xml": "4ed94f80a5a8ab6091d231f86ffe1421ac4165c0f517ccc0f12c243432390985",
+    "clients/android/app/src/main/res/values/strings.xml": "0982299f670f909f34786997d9f8e1aff5cae7f8a5094a611ff58fd89a40152b",
+    "clients/android/app/src/main/res/values/ui60.xml": "366cdc1d4ddfc24419c6f4e5aa3d0a8ea64403e93cfa35dea90c8595cad4d4ff",
+    "clients/android/app/src/main/res/xml/extraction_rules.xml": "064bbe935d58b8483c8397390ebe615ca123c844f517c9f08fef055f01c49367"
+  },
+  "desktop_adaptations": {
+    "carrier/bootstrap/directory.go": {
+      "sha256": "4b515dfa3739bb876566d4fd7240908769bb3408521c4939587b8ce4ad36595b",
+      "reason": "Move unchanged Unix lock implementation to platform file. Windows in-memory provisioned path compiles; Unix plaintext cache is explicitly unavailable on Windows (broker DPAPI remains authoritative)."
+    }
+  },
+  "desktop_test_changes": {
+    "carrier/telemost/mesh_performance_test.go": {
+      "sha256": "8d32aced655bdd0705b4c19256868162bf39fd5f5114e1f8270cc583bfbaf480",
+      "reason": "Root-only regression test, absent from accepted capsule: arrival-driven gap waits beyond accepted104/105 750ms deadline instead of obsolete150ms. Production source stays identical.",
+      "before_sha256": "65636092111d013f5f7e5ffac4c9522d52ab266c48a2733eaf5592f3b0dae411"
+    }
+  },
+  "desktop_platform_sources": {
+    "carrier/bootstrap/cache_lock_unix.go": {
+      "sha256": "0044ddebfe5069a2e7359b5074ec23f92f3405452f766b2374d73c9653c91415",
+      "reason": "Platform split for desktop compilation; no weakening of Unix mode/no-follow/flock checks and no Windows plaintext fallback."
+    },
+    "carrier/bootstrap/cache_lock_windows.go": {
+      "sha256": "b65e0806dd2a49d321f8ba16c2ef4fab2196a30545f23febc73e8344a6e7f939",
+      "reason": "Platform split for desktop compilation; no weakening of Unix mode/no-follow/flock checks and no Windows plaintext fallback."
+    },
+    "carrier/bootstrap/cache_lock_windows_test.go": {
+      "sha256": "cedac45dc3f87f3c0b655b7619c41184bbdf7f74f92846e860cb915ee94321db",
+      "reason": "Platform split for desktop compilation; no weakening of Unix mode/no-follow/flock checks and no Windows plaintext fallback."
+    }
+  }
+}

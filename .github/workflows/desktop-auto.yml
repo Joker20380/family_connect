@@ -1,0 +1,35 @@
+name: Desktop Auto policy
+on:
+  workflow_dispatch:
+  push:
+    paths: ['carrier/desktopauto/**', 'clients/shared/android106-auto.json', '.github/workflows/desktop-auto.yml']
+  pull_request:
+    paths: ['carrier/desktopauto/**', 'clients/shared/android106-auto.json', '.github/workflows/desktop-auto.yml']
+permissions:
+  contents: read
+jobs:
+  policy:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26.0'
+          cache-dependency-path: carrier/go.sum
+      - name: Source-backed state transitions (no networking or driver)
+        shell: bash
+        working-directory: carrier
+        run: go test -count=1 -json ./desktopauto | tee ../desktop-auto-policy.jsonl
+      - name: Concurrent cancellation and snapshot race checks
+        if: runner.os == 'Linux'
+        working-directory: carrier
+        run: go test -race -count=5 ./desktopauto
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: desktop-auto-policy-${{ matrix.os }}
+          path: desktop-auto-policy.jsonl

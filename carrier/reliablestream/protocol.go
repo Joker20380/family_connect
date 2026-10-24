@@ -22,6 +22,7 @@ var ErrProtocol = errors.New("reliable stream: protocol violation")
 var ErrExhausted = errors.New("reliable stream: recovery exhausted")
 var ErrReset = errors.New("reliable stream: remote reset")
 var ErrClosed = errors.New("reliable stream: closed")
+var ErrBackpressure = errors.New("reliable stream: transmit backlog full")
 
 type Config struct {
 	Payload       int

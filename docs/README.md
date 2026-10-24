@@ -1,5 +1,62 @@
 # Documentation
 
+[Desktop parity with accepted106 — active, not released](releases/2026-10-23-desktop-parity106.md):
+full feature matrix, exact source manifest, both native worker builds, Linux
+isolated kernel TUN/routing evidence and explicit remaining
+Linux/Windows UI/MESH/messenger/package gates. [Architecture](desktop-architecture.md)
+and [shared bridge ADR](adr/003-desktop-mesh-bridge.md),
+[Linux session chat owner](adr/004-linux-chat-session-owner.md).
+[Accepted restricted-chat core contract](../clients/shared/android106-chat.json)
+now has a shared Go API/mailbox adapter, native VPN ownership and a bounded separate
+Linux parent/native IPC lane. UID/device-bound user-service admission now forwards
+API/mailbox requests through an existing MESH exit. Protected-underlying DIRECT,
+Linux service-only orchestration and Windows broker IPC remain NOT_INTEGRATED;
+installed restricted-message acceptance is NOT_RUN, not a completed fallback.
+[Shared Auto policy and accepted-Java trace checks](../carrier/desktopauto/README.md)
+are implemented locally and included in the native worker's bounded private-pipe
+[Auto protocol](../clients/mesh/automatic/README.md). Linux guarded-parent IPC and
+single-attempt MESH source exist. [Protected normal configuration and AWG/TCP
+helper adapters](clients/DESKTOP_AUTO_NORMAL.md) now join the root coordinator and
+authorized GTK Auto client, with local tests and private components. Installed
+VPN/upgrade acceptance and Windows broker remain open.
+[Private-candidate Auto user/support notes, RU/EN](clients/DESKTOP_AUTO_USER.md).
+No public links changed.
+Phase17 adds isolated installed-AWG3.1 crash/teardown checks and strict resource
+ownership, with925 local regressions and internal component-r13. Host and Windows
+acceptance remain open; the component is not a complete desktop installer.
+[Linux Auto traffic guard](clients/DESKTOP_AUTO_GUARD.md) now has isolated real
+kernel/nftables/TUN checks; coordinator, installed and Windows gates stay open.
+
+[Closed P1 cohort and Volgograd field result,23.10](releases/2026-10-23-tester-p1-cohort.md):
+**PRIVATE_FIELD_READY** for the confirmed three devices. Unchanged signed106;
+gatewaya515 exact-group policy deployed, post-deploy owner Wi-Fi/P1/small HTTPS PASS.
+Export21 and tester testimony establish a positive cellular MESH result on96,
+not106/P1/cold-bootstrap acceptance. RU/EN handoff instructions and rollback ready;
+owner distributes manually, no public release. Earlier checkpoints follow.
+
+[Reboot continuation / signed106,23.10](releases/2026-10-23-wifi-resume.md): actual105
+Wi-Fi/off, consent active but full JSON blocked; diagnostic106 final219 tests/replay
+PASS, same native transport, signed/installed same-key. Fresh JSON/Support ID and
+ordinary both-end P1/TUN verified; body/recovery and tester policy still separate.
+Fresh Wi-Fi19/19 bodies, ordinary Disconnect/Connect and automatic Wi-Fi-loss return
+pass. New P1 session and one full1KiB HTTPS verified; Wi-Fi creation→CONNECTED106.578s.
+Same32MiB budget used8,407,040 bytes; next boundary is closed tester P1 membership/
+single-target server policy, not another owner outage or bulk series. No rollout.
+
+[Owner Wi-Fi rebaseline and beta105 reconciliation,22.10](releases/2026-10-22-owner-disconnections.md):
+owner reports exhausted mobile allowance/throttling; retained105 install receipt
+and online Wi-Fi/P1 readback supersede the paused summary. Signed APK verified;
+USB verifies installed105; received normal export15 is stale19:43UTC history.
+Aggregate record overflow reproduced locally; latest USB consent now disabled.
+Normal consent/live readback, diagnostic correctness, body/recovery and tester P1 remain open.
+The following older summary is retained as a historical checkpoint:
+fresh101/P1 readback, RS failures retained before/after102, separate health and
+deadline-bridge corrections;213 JVM/12 bridge checks for103. NOT_PRIVATE_FIELD_READY;
+actual HTTPS, controlled network return and tester P1 delivery remain gates.
+[RU/EN candidate instructions](clients/OWNER_RECOVERY_CANDIDATE.md).
+
+[New owner P1 acceptance,21.10](releases/2026-10-21-p1-owner-acceptance.md): exact99→100 bounded lifecycle observation installed, P0/TUN smoke verified; P1 acceptance still pending. Separate new budget/criteria, no other-user rollout.
+
 [Owner support automation98→99,21.10](releases/2026-10-21-owner-support-automation.md): owner-only99 installed, unchanged native; automated P0 restore verified at both ends, real online99 reports62/69s apart after completion-based cooldown fix. Owner CONNECTED/READY, current-session errors0; historical errors unresolved. No speed/fleet rollout. [Replay/operator instructions](../tests/fixtures/support_automation/README.md).
 
 [Android consolidated speed candidate,21.10](releases/2026-10-21-android-speed-candidate.md):

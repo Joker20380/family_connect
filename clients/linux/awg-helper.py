@@ -11,6 +11,7 @@ import stat
 import subprocess
 import sys
 import time
+from types import SimpleNamespace
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from profile_config import parse, validate, AWG_FIELDS, MAX_PROFILE
@@ -21,8 +22,8 @@ BIN = '/usr/local/lib/family-connect-awg'
 ENV = {'PATH': BIN+':/usr/sbin:/usr/bin:/sbin:/bin', 'LANG':'C', 'HOME':'/root',
        'WG_QUICK_USERSPACE_IMPLEMENTATION':BIN+'/amneziawg-go'}
 
-def command(*args, timeout=30):
-    p = subprocess.run(args, capture_output=True, text=True, env=ENV, timeout=timeout)
+def command(*args, timeout=30, environment=None):
+    p = subprocess.run(args, capture_output=True, text=True, env=ENV if environment is None else environment, timeout=timeout)
     if p.returncode: raise RuntimeError('AWG operation failed: '+Path(args[0]).name+'; exit='+str(p.returncode))
     return p.stdout.strip()
 
@@ -72,7 +73,7 @@ def healthy(ident, expected):
     if not any(0<=time.time()-int(line.split()[1])<180 for line in stamps.splitlines()):
         raise RuntimeError('AWG handshake unavailable')
 
-def main():
+def execute():
     if sys.argv[1:] == ['session']:
         from backend import privileged_session
         return privileged_session()
@@ -110,19 +111,32 @@ def main():
         if len(sys.argv)!=3 or action not in ('up','down'): raise ValueError('Invalid operation')
         validate(quick_flags(read(config,private=True),native=False),allow_awg=True,allow_awg31=supports_awg31())
         active=Path('/sys/class/net',ident).exists()
+        from awg_lifecycle import Owner
+        owner=Owner(SimpleNamespace(command=command,read=read,BIN=BIN,ENV=ENV),ident)
         if action=='down':
-            if active: command(BIN+'/awg-quick','down',str(config))
+            owner.cleanup()
             return
         for other in ROOT.glob('*.json'):
             if other.stem!=ident and Path('/sys/class/net',other.stem).exists():
                 raise ValueError('Another AWG tunnel is active')
         try:
-            if not active: command(BIN+'/awg-quick','up',str(config))
+            if active:
+                if not owner.load():raise ValueError('Disconnect the legacy AWG session before upgrading')
+                owner.verify()
+            else:
+                owner.cleanup();owner.prepare();owner.quick(config)
             healthy(ident,meta['endpoint'])
         except Exception:
-            if Path('/sys/class/net',ident).exists(): command(BIN+'/awg-quick','down',str(config))
+            owner.cleanup()
             raise
     finally: os.close(lock)
+
+def main():
+    if sys.argv[1:2] == ['up']:
+        from backend import privileged_transport_start
+        with privileged_transport_start('awg'):
+            return execute()
+    return execute()
 
 if __name__=='__main__':
     try: main()

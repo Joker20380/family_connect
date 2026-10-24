@@ -48,7 +48,7 @@ func TestMeshGapDeadlineRequiresArrival(test *testing.T) {
 	}
 	push(100)
 	push(102)
-	time.Sleep(150 * time.Millisecond)
+	time.Sleep(reorderGapTimeout + 50*time.Millisecond)
 	if delivered != 1 || len(buffer.pkts) != 1 {
 		test.Fatal("fixture expected an arrival-driven deadline")
 	}

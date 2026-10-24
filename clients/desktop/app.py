@@ -1,6 +1,14 @@
 """Native Linux GTK 4 client. Keys and network operations stay in the backend."""
 APP_VERSION='0.2.11'
 TRANSPORTS=(('awg','AWG 3.1'),('tcp','TCP REALITY'))
+STATE_LABELS={'DISCONNECTED':('VPN выключен','VPN is off'),'CONNECTING':('Подключение…','Connecting…'),
+    'CONNECTED':('Туннель включён','Tunnel is on'),'RESTORING':('Восстанавливаем соединение…','Restoring connection…'),
+    'STOPPING':('Отключение…','Disconnecting…'),'FAILED':('Не удалось подключиться','Unable to connect')}
+DIAGNOSTIC_MESSAGES=(('Support ID скопирован','Support ID copied'),
+    ('JSON сохранён. Передайте файл выбранному получателю.','JSON saved. Share the file with your chosen recipient.'),
+    ('Не удалось обновить Support ID. Сохранённый ID не изменён.','Support ID refresh failed. The saved ID is unchanged.'),
+    ('Не удалось экспортировать диагностику. Подключение не изменилось.','Diagnostics could not be exported. Your connection is unchanged.'))
+NAV_LABELS={'status':('СТАТУС','STATUS'),'messenger':('ЧАТЫ','MESSENGER'),'route':('ПУТЬ','ROUTE'),'settings':('ОПЦИИ','SETTINGS')}
 ICON_PNG='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'
 WORDS={'title': ('Связь для вашей семьи', 'Connectivity for your family'), 'unknown': ('Статус недоступен', 'Status unavailable'), 'off': ('Готов к подключению', 'Ready to connect'), 'on': ('Туннель включён', 'Tunnel is on'), 'connect': ('Подключить', 'Connect'), 'disconnect': ('Отключить', 'Disconnect'), 'import': ('Добавить профиль', 'Add profile'), 'check': ('Проверить внешний IP', 'Check public IP'), 'empty': ('Добавьте профиль вашего устройства', 'Add this device’s profile'), 'hint': ('Прямое подключение', 'Direct connection'), 'pending': ('Выполняется…', 'Working…'), 'error': ('Не удалось выполнить действие. Проверьте профиль, системный VPN и разрешения.', 'Operation failed. Check the profile, system VPN and permissions.'), 'retry': ('Повторить проверку', 'Retry setup'), 'install': ('Установить WireGuard', 'Install WireGuard'), 'system': ('Linux: нужен NetworkManager. Windows: официальный WireGuard и запуск от администратора.', 'Linux: NetworkManager required. Windows: official WireGuard and administrator rights required.'), 'quality': ('Включённый туннель не подтверждает доступность интернета.', 'An active tunnel does not confirm Internet connectivity.'), 'closing': ('Закрытие окна не отключает VPN. Продолжить?', 'Closing this window keeps the VPN running. Continue?'), 'checks': ('Проверка обращается к Cloudflare через текущее соединение.', 'This check contacts Cloudflare over the current connection.')}
 import base64
@@ -18,7 +26,7 @@ import gi
 gi.require_version('Gtk','4.0')
 gi.require_version('Adw','1')
 from gi.repository import Gtk, Adw, Gdk, Gio, GLib, Pango, Graphene, GdkPixbuf
-from backend import backend, BackendError, AuthorizationError, RecoveryPolicy, ConnectionBusy, StaleConnection, ConnectionSnapshot
+from backend import backend, BackendError, AuthorizationError, RecoveryPolicy, ConnectionBusy, StaleConnection, ConnectionSnapshot, mesh_presentation, auto_presentation, DesktopDiagnostics
 
 
 # Natural Earth public-domain land, identical to Android maps/land.json.
@@ -31,13 +39,13 @@ class RouteMap(Gtk.DrawingArea):
     def __init__(self,compact=False):
         super().__init__()
         self.compact=compact;self.region='ru'
-        self.set_content_height(200);self.set_hexpand(True)
+        self.set_content_height(140 if compact else 250);self.set_hexpand(True)
         self.set_tooltip_text('Карта мира / World map')
         self.layer=None;self.layer_key=None;self.tick=0;self.phase=0
         self.set_draw_func(self.draw_map)
         self.connect('map',self.start_motion);self.connect('unmap',self.stop_motion)
     def update(self,region):
-        if region in ('nl','ru') and region!=self.region:self.region=region;self.queue_draw()
+        if region in ('nl','ru',None) and region!=self.region:self.region=region;self.queue_draw()
     def start_motion(self,*_):
         if not self.tick and self.get_settings().get_property('gtk-enable-animations'):
             self.tick=self.add_tick_callback(self.animate)
@@ -74,7 +82,7 @@ class RouteMap(Gtk.DrawingArea):
         scale=self.get_scale_factor();key=(width,height,scale)
         if key!=self.layer_key:self.layer=self.land_layer(*key);self.layer_key=key
         cr.save();cr.rectangle(0,0,width,height);cr.clip()
-        cr.set_source_rgb(3/255,17/255,14/255);cr.paint()
+        cr.set_source_rgb(7/255,18/255,17/255);cr.paint()
         cr.set_source_rgba(70/255,139/255,117/255,45/255);cr.set_line_width(.4)
         for x in range(0,width,16):cr.move_to(x,0);cr.line_to(x,height)
         for y in range(0,height,16):cr.move_to(0,y);cr.line_to(width,y)
@@ -84,7 +92,7 @@ class RouteMap(Gtk.DrawingArea):
         for code,lon,lat in self.NODES:
             if self.compact and code!=self.region:continue
             x=(lon+180)/360*width;y=(85-lat)/145*height
-            cr.set_source_rgb(*( (255/255,173/255,70/255) if code==self.region else (152/255,247/255,216/255) ))
+            cr.set_source_rgb(*( (219/255,182/255,116/255) if code==self.region else (168/255,223/255,206/255) ))
             cr.new_sub_path();cr.arc(x,y,radius,0,2*math.pi);cr.fill()
             if not self.compact:cr.move_to(x+8*scale,y-8*scale);cr.show_text(code.upper())
         cr.set_source_rgb(70/255,139/255,117/255);cr.set_line_width(1)
@@ -92,29 +100,62 @@ class RouteMap(Gtk.DrawingArea):
 
 CSS='''
  .fc-gauge, .fc-gauge:hover, .fc-gauge:active { background: transparent; border: none; box-shadow: none; padding: 0; }
- .fc-shell { background: #03110e; }
+ .fc-shell { background: #071211; }
 .fc-window progressbar.fc-server-load trough { min-height: 5px; background: #102e24; border: 1px solid #347766; border-radius: 0; }
-.fc-window progressbar.fc-server-load progress { min-height: 5px; background: #98f7d8; border: none; border-radius: 0; }
-.fc-window progressbar.fc-server-load.warning progress { background: #ffad46; }
+.fc-window progressbar.fc-server-load progress { min-height: 5px; background: #a8dfce; border: none; border-radius: 0; }
+.fc-window progressbar.fc-server-load.warning progress { background: #dbb674; }
 .fc-window progressbar.fc-server-load.critical progress { background: #ef8474; }
-window.fc-window { background: #03110e; color: #dafff2; font-family: monospace; }
-.fc-window headerbar { background: #03110e; box-shadow: none; }
+window.fc-window { background: #071211; color: #e2eee8; font-family: sans-serif; }
+.fc-window headerbar { background: #071211; box-shadow: none; }
 .fc-brand { font-size: 17px; font-weight: 700; }
-.fc-caption, .fc-note { color: #99c4b5; font-size: 12px; }
+.fc-caption, .fc-note { color: #a4bab2; font-size: 12px; }
+.fc-support-title { color: #dbb674; font-size: 16px; margin-top: 8px; margin-bottom: 8px; }
+.fc-support-id { color: #e2eee8; font-size: 14px; }
+.fc-chat { font-size: 14px; }
+.fc-chat-title { font-size: 20px; font-weight: 400; }
+.fc-chat-key-caption { color: #a4bab2; font-size: 12px; }
+.fc-chat-key-value { font-size: 13px; }
+.fc-chat-amber { color: #dbb674; }
+.fc-announcements { font-size: 15px; }
+.fc-announcements > label.fc-caption { font-size: 11px; }
+.fc-chat-notice-title { color: #a8dfce; font-size: 18px; }
+.fc-chat-notice-section { color: #dbb674; font-size: 16px; }
+.fc-chat-notice-hint { color: #a4bab2; font-size: 13px; }
+.fc-chat-notice-hint.fc-chat-amber { color: #dbb674; }
+.fc-chat-placeholder { color: #a4bab2; font-size: 16px; }
+.fc-announcements entry { font-size: 16px; }
+.fc-window .fc-chat-toolbar button.fc-action, .fc-window .fc-announcements button.fc-action { color: #a8dfce; font-size: 14px; }
+.fc-chat-editor { border: 1px solid #416861; border-radius: 0; padding: 8px; font-size: 16px; }
+.fc-chat-editor text { background: #102321; color: #e2eee8; }
+.fc-chat-editor:focus-within { outline: 1px solid #a8dfce; outline-offset: -3px; }
+.fc-chat entry { border-radius: 0; background: #102321; color: #e2eee8; border: 1px solid #416861; min-height: 46px; }
+.fc-chat entry:focus-within { outline: 1px solid #a8dfce; outline-offset: -3px; }
+.fc-chat-menu > button { background: transparent; border: none; box-shadow: none; min-width: 32px; min-height: 32px; }
+.fc-voice-profile > button { border-radius: 0; background: #102321; color: #e2eee8; border: 1px solid #416861; min-height: 46px; box-shadow: none; }
+.fc-voice-profile > button:focus-visible { outline: 1px solid #a8dfce; outline-offset: -4px; }
+.fc-chat scale highlight { background: #82d8ba; }
+.fc-chat-toggle { border: 1px solid #416861; background: #102321; min-height: 46px; padding: 0 12px; }
+.fc-chat-toggle switch { min-width: 49px; min-height: 29px; border: 1px solid #dbb674; border-radius: 16px; background: alpha(#dbb674, 0.14); color: #dbb674; box-shadow: none; }
+.fc-chat-toggle switch:checked { border-color: #a8dfce; background: alpha(#a8dfce, 0.14); color: #a8dfce; }
+.fc-chat-toggle switch slider { min-width: 25px; min-height: 25px; margin: 1px; border: none; border-radius: 50%; background: #dbb674; box-shadow: none; }
+.fc-chat-toggle switch:checked slider { background: #a8dfce; }
+.fc-chat-toggle switch:focus-visible { outline: 1px solid #a8dfce; outline-offset: 3px; }
 .fc-card { background: transparent; border: none; padding: 0; }
 .fc-status { font-size: 16px; font-weight: 400; }
 .fc-window button.fc-action label { font-weight: 400; }
-.fc-window button.fc-action:focus-visible { outline: 1px solid #98f7d8; outline-offset: -4px; }
-.fc-dot { color: #ffad46; }
-.fc-dot.connected { color: #98f7d8; }
-.fc-window button.fc-action { background: transparent; background-image: none; border: none; box-shadow: none; min-height: 46px; padding: 0; color: #dafff2; }
+.fc-window button.fc-action:focus-visible { outline: 1px solid #a8dfce; outline-offset: -4px; }
+.fc-dot { color: #dbb674; }
+.fc-dot.connected { color: #a8dfce; }
+.fc-window button.fc-action { background: transparent; background-image: none; border: none; box-shadow: none; min-height: 46px; padding: 0; color: #e2eee8; }
 .fc-window button.fc-action:disabled { color: #75988a; }
-.fc-window dropdown > button { background: #072018; color: #dafff2; border: 1px solid #438e79; padding: 10px 14px; border-radius: 0; }
+.fc-window dropdown > button { background: #102321; color: #e2eee8; border: 1px solid #416861; padding: 10px 14px; border-radius: 0; }
+.fc-window .fc-telemetry dropdown > button { background: transparent; border: none; padding: 8px 2px; }
+.fc-window .fc-telemetry dropdown label { font-weight: 400; }
 .fc-flag { min-width: 22px; min-height: 14px; border: 1px solid #438e79; }
 .fc-flag-nl { background-image: linear-gradient(to bottom, #ae1c28 0 33.3%, #ffffff 33.3% 66.6%, #21468b 66.6% 100%); }
 .fc-flag-ru { background-image: linear-gradient(to bottom, #ffffff 0 33.3%, #0039a6 33.3% 66.6%, #d52b1e 66.6% 100%); }
-.fc-detail { color: #ffad46; }
-.fc-window button.fc-nav { padding: 0; min-height: 58px; font-size: 9px; }
+.fc-detail { color: #dbb674; }
+.fc-window button.fc-nav { padding: 0; min-height: 58px; font-size: 9px; font-family: monospace; }
 '''
 
 
@@ -123,14 +164,13 @@ def terminal_texture(svg):
     return Gdk.Texture.new_for_pixbuf(loader.get_pixbuf())
 
 
-def terminal_frame(snapshot,widget,fill='#072018',stroke='#438e79',extra=''):
+def terminal_frame(snapshot,widget,fill='#102321',stroke='#416861',extra=''):
     w,h=widget.get_width(),widget.get_height()
     if min(w,h)<4:return
-    c=min(6,w/5,h/4)
     scale=widget.get_scale_factor()
     key=(w,h,scale,fill,stroke,extra)
     if getattr(widget,'terminal_key',None)!=key:
-        svg=f'<svg xmlns="http://www.w3.org/2000/svg" width="{w*scale}" height="{h*scale}" viewBox="0 0 {w} {h}"><path d="M{c},1 H{w-c} L{w-1},{c} V{h-c} L{w-c},{h-1} H{c} L1,{h-c} V{c} Z" fill="{fill}" stroke="{stroke}" stroke-width=".8"/>{extra}</svg>'
+        svg=f'<svg xmlns="http://www.w3.org/2000/svg" width="{w*scale}" height="{h*scale}" viewBox="0 0 {w} {h}"><rect x=".5" y=".5" width="{w-1}" height="{h-1}" fill="{fill}" stroke="{stroke}" stroke-width="1"/>{extra}</svg>'
         widget.terminal_cache=terminal_texture(svg);widget.terminal_key=key
     snapshot.append_texture(widget.terminal_cache,Graphene.Rect().init(0,0,w,h))
 
@@ -150,21 +190,22 @@ class TerminalButton(Gtk.Button):
                 child.set_xalign(0);child.set_margin_end(90)
     def do_snapshot(self,snapshot):
         selected=self.has_css_class('selected') or self.has_css_class('connected')
-        stroke='#ffad46' if self.has_css_class('selected') else '#438e79'
-        fill='#103d2e' if self.get_state_flags() & Gtk.StateFlags.PRELIGHT else '#072018'
+        stroke='#dbb674' if self.has_css_class('selected') else '#416861'
+        fill='#16332f' if self.get_state_flags() & Gtk.StateFlags.PRELIGHT else '#102321'
         extra=''
         if self.has_css_class('fc-primary'):
             w,h=self.get_width(),self.get_height();x=w-78;y=h/2
-            color='#98f7d8' if selected else '#ffad46'
+            color='#a8dfce' if selected else '#dbb674'
             if not self.get_sensitive():color='#75988a'
             extra=f'<rect x="{x}" y="{y-13}" width="62" height="26" rx="13" fill="#17392d" stroke="{color}"/><circle cx="{x+(48 if selected else 14)}" cy="{y}" r="10" fill="{color}"/>'
         if self.has_css_class('fc-nav'):
-            color='#ffad46' if self.has_css_class('selected') else '#98f7d8'
-            fill='#072018' if self.has_css_class('selected') else '#03110e'
+            color='#dbb674' if self.has_css_class('selected') else '#a8dfce'
+            fill='#102321' if self.has_css_class('selected') else '#071211'
             icons={
                 'status':'<path d="M1 13 H6 L9 4 L13 21 L16 10 L19 13 H23"/>',
                 'messenger':'<path d="M4 3 H20 Q22 3 22 5 V16 Q22 18 20 18 H12 L6 23 V18 H4 Q2 18 2 16 V5 Q2 3 4 3Z"/>',
                 'stats':'<path d="M4 18 L9 12 L14 15 L20 7"/><path d="M3 19 H21 V4"/>',
+                'route':'<circle cx="12" cy="3" r="2"/><circle cx="3" cy="20" r="2"/><circle cx="12" cy="17" r="2"/><circle cx="22" cy="21" r="2"/><path d="M11 5 L4 18 M12 5 V15 M13 5 L21 19"/>',
                 'settings':'<circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M12 2 V6 M12 18 V22 M2 12 H6 M18 12 H22 M5 5 L8 8 M16 16 L19 19 M5 19 L8 16 M16 8 L19 5"/>'}
             extra=f'<g transform="translate({self.get_width()/2-10.5} 9) scale(.875)" fill="none" stroke="{color}" stroke-width="1.2">{icons.get(getattr(self,"nav_page",""),"")}</g>'
         terminal_frame(snapshot,self,fill,stroke,extra)
@@ -181,18 +222,18 @@ class TerminalHeader(Gtk.Box):
     def __init__(self):
         super().__init__();self.set_size_request(-1,72)
     def do_snapshot(self,snapshot):
-        w=self.get_width();size=min(27,max(15,(w-90)/8.8))
+        w=self.get_width();size=32 if w>=220 else 18
         logo='<g transform="translate(17 12) scale(.46)"><path fill-rule="evenodd" fill="#98f7d8" d="M50 3 L90 25 L90 77 L50 99 L10 77 L10 25 Z M50 12 L18 30 L18 73 L50 91 L82 73 L82 30 Z"/><path fill="#8debcd" d="M23 36 L50 20 L50 99 L23 81 Z"/><path fill="#c1ffe9" d="M55 50 H60 V65 H55 Z"/><path fill="#255e4e" d="M50 12 L82 30 V36 L50 19 Z"/></g>'
-        text=f'<text x="77" y="33" fill="#dafff2" font-family="monospace" font-weight="400" font-size="{size}">family_connect</text><text x="78" y="54" fill="#98f7d8" font-family="monospace" font-size="9">SECURE NETWORK TERMINAL</text><path d="M78 40 H205 M78 60 H205" stroke="#438e79" opacity=".25"/><path d="M8 28 v5 M8 37 v5 M8 46 v5" stroke="#ffad46" stroke-width="2"/>'
-        terminal_frame(snapshot,self,'#03110e','#98f7d8',logo+text)
+        text=f'<text x="76" y="35" fill="#e2eee8" font-family="monospace" font-weight="400" font-size="{size}">EXIT</text><text x="76" y="53" fill="#a8dfce" font-family="monospace" font-size="9">PERSONAL COMMUNICATIONS</text><path d="M76 40 H203 M76 58 H203" stroke="#416861" opacity=".25"/><path d="M8 26 v4 M8 33 v4 M8 40 v4" stroke="#dbb674" stroke-width="3"/>'
+        terminal_frame(snapshot,self,'#071211','#416861',logo+text)
 
 
 class TerminalGauge(Gtk.Button):
     """Interactive segmented dial using the accepted Android geometry."""
     def __init__(self):
-        super().__init__();self.set_size_request(-1,230);self.add_css_class('fc-gauge')
+        super().__init__();self.set_size_request(-1,180);self.add_css_class('fc-gauge')
         self.connected=False;self.pending=False;self.ru=True;self.phase=0;self.timer=0
-        self.area=Gtk.DrawingArea();self.area.set_content_height(230);self.area.set_draw_func(self.draw)
+        self.area=Gtk.DrawingArea();self.area.set_content_height(180);self.area.set_draw_func(self.draw)
         self.set_child(self.area);self.connect('map',lambda *_:self.motion());self.connect('unmap',lambda *_:self.stop())
     def do_contains(self,x,y):
         return (x-self.get_width()/2)**2+(y-self.get_height()/2)**2<=(min(self.get_width(),self.get_height())*.48)**2
@@ -215,7 +256,7 @@ class TerminalGauge(Gtk.Button):
         if changed:self.area.queue_draw()
     def draw(self,widget,c,w,h):
         import math,cairo
-        x,y=w/2,h/2;r=min(w,h)*.385;mint=(112/255,244/255,198/255);amber=(1,173/255,70/255)
+        x,y=w/2,h/2;r=min(w,h)*.385;mint=(168/255,223/255,206/255);amber=(219/255,182/255,116/255)
         accent=mint if self.connected else amber;phase=self.phase if self.connected or self.pending else 0
         def ink(color,alpha=1):c.set_source_rgba(*color,alpha*(1 if self.get_sensitive() else .5))
         def arc(radius,start,sweep,width,color=accent,alpha=1):
@@ -248,11 +289,14 @@ class TerminalGauge(Gtk.Button):
             ink(color);c.select_font_face('monospace',cairo.FONT_SLANT_NORMAL,cairo.FONT_WEIGHT_BOLD if bold else cairo.FONT_WEIGHT_NORMAL);c.set_font_size(size)
             e=c.text_extents(value);c.move_to(x-e.width/2-e.x_bearing,baseline);c.show_text(value)
         text('ON' if self.connected else '…' if self.pending else 'OFF',min(30,r*.29),y+r*.20,accent,True)
-        label=('ОТКЛЮЧИТЬ' if self.connected else 'ПОДКЛЮЧИТЬ') if self.ru else ('DISCONNECT' if self.connected else 'CONNECT')
+        disconnect=self.connected or self.pending
+        label=('ОТКЛЮЧИТЬ' if disconnect else 'ПОДКЛЮЧИТЬ') if self.ru else ('DISCONNECT' if disconnect else 'CONNECT')
         text(label,min(11,r*.115),y+r*.39,accent)
 
 
-def translated(key,ru):return WORDS[key][0 if ru else 1]
+def translated(key,ru):
+    if key in ('on','off'):return STATE_LABELS['CONNECTED' if key=='on' else 'DISCONNECTED'][0 if ru else 1]
+    return WORDS[key][0 if ru else 1]
 
 
 class TerminalTelemetry(TerminalCard):
@@ -260,7 +304,10 @@ class TerminalTelemetry(TerminalCard):
     def __init__(self,country,protocol,enabled):
         super().__init__(orientation=Gtk.Orientation.VERTICAL,spacing=8)
         self.enabled=enabled;self.last=None;self.samples=[];self.last_sample=0;self.ru=False
+        self.country=country
+        self.mesh_route=Gtk.Label(xalign=0,wrap=True);self.mesh_route.add_css_class('fc-caption');self.mesh_route.set_visible(False)
         self.add_css_class('fc-card')
+        self.add_css_class('fc-telemetry')
         top=Gtk.Box(spacing=12,homogeneous=True);self.append(top)
         self.network_title=Gtk.Label(xalign=0);self.battery_title=Gtk.Label(xalign=0)
         self.network=Gtk.Label(label='—',xalign=0);self.battery=Gtk.Label(label='—',xalign=0)
@@ -274,13 +321,16 @@ class TerminalTelemetry(TerminalCard):
         for label in (self.traffic_title,self.connection_title,self.rate,self.state):label.add_css_class('fc-caption')
         left.append(self.traffic_title);left.append(self.rate)
         self.graph=Gtk.DrawingArea();self.graph.set_content_height(60);self.graph.set_hexpand(True);self.graph.set_vexpand(True);self.graph.set_draw_func(self.draw);left.append(self.graph)
-        right.append(self.connection_title);right.append(country);right.append(protocol);right.append(self.state)
+        right.append(self.connection_title);right.append(country);right.append(self.mesh_route);right.append(protocol);right.append(self.state)
         row.append(left);row.append(right)
         for widget in (top,row):
             widget.set_margin_start(12);widget.set_margin_end(12)
         top.set_margin_top(12);row.set_margin_bottom(12)
-    def connection(self,ru,state):
+    def connection(self,ru,state,mesh=False):
         self.ru=ru
+        self.country.set_visible(not mesh);self.mesh_route.set_visible(mesh)
+        self.mesh_route.set_text('Шлюз MESH' if ru else 'MESH gateway')
+        self.mesh_route.set_tooltip_text('Маршрут назначается подписанным каталогом. Страна для AWG/TCP здесь не применяется.' if ru else 'Assigned by the signed directory. The AWG/TCP country preference does not apply here.')
         for label,text in ((self.network_title,'СЕТЬ' if ru else 'NETWORK'),(self.battery_title,'БАТАРЕЯ' if ru else 'BATTERY'),(self.traffic_title,'СЕТЕВОЙ ТРАФИК' if ru else 'NETWORK TRAFFIC'),(self.connection_title,'СОЕДИНЕНИЕ' if ru else 'CONNECTION'),(self.state,state)):
             if label.get_text()!=text:label.set_text(text)
     def sample(self):
@@ -294,12 +344,12 @@ class TerminalTelemetry(TerminalCard):
             self.battery.set_text(str(capacities[0])+'%' if capacities and 0<=capacities[0]<=100 else '—')
         except (OSError,ValueError):self.battery.set_text('—')
         try:
-            names=[name for name in ('fcawg','fctcp') if Path('/sys/class/net',name).exists()]
+            names=[name for name in ('fcmesh0','fcawg','fctcp') if Path('/sys/class/net',name).exists()]
             if not names:
                 names=[line.split()[0] for line in Path('/proc/net/route').read_text().splitlines()[1:] if len(line.split())>3 and line.split()[1]=='00000000' and int(line.split()[3],16)&1]
             name=names[0];interface=Path('/sys/class/net')/name
             rx=int((interface/'statistics/rx_bytes').read_text());tx=int((interface/'statistics/tx_bytes').read_text());now=time.monotonic()
-            self.network.set_text('VPN' if name in ('fcawg','fctcp') else 'Wi-Fi' if (interface/'wireless').exists() else 'Ethernet')
+            self.network.set_text('VPN' if name in ('fcmesh0','fcawg','fctcp') else 'Wi-Fi' if (interface/'wireless').exists() else 'Ethernet')
             if self.last and self.last[0]==name and rx>=self.last[2] and tx>=self.last[3] and now>self.last[1]:
                 down=(rx-self.last[2])/(now-self.last[1])/1024;up=(tx-self.last[3])/(now-self.last[1])/1024
                 self.rate.set_text(f'↓ {down:.1f} ↑ {up:.1f} KiB/s');self.samples=(self.samples+[down+up])[-48:]
@@ -410,6 +460,10 @@ class StatsPanel(TerminalCard):
 class App:
     def __init__(self,application=None,smoke=False,invitation=""):
         self.pending_invitation=invitation
+        self.diagnostics=DesktopDiagnostics(APP_VERSION,None if smoke else Path(os.environ.get('XDG_STATE_HOME',str(Path.home()/'.local/state')))/'family-connect/diagnostics/snapshot.json')
+        self.support_id=None;self.support_busy=False;self.diagnostic_busy=False;self.friends_owner=None
+        self.support_upload=None;self.support_consent_busy=False;self.support_syncing=False
+        self.connection_action=None;self.file_chooser=None
         self.ru=bool(locale.getlocale()[0] and locale.getlocale()[0].lower().startswith('ru'))
         self.language_path=None if smoke else Path(os.environ.get('XDG_CONFIG_HOME',str(Path.home()/'.config')))/'family-connect'/'ui-language'
         if self.language_path:
@@ -421,8 +475,11 @@ class App:
         self.driver=None;self.items=[];self.selected_id=None;self.active=None;self.busy=False;self.initializing=False
         self.closed=False;self.revision=0;self.polling=False;self.poll_error=False
         self.recovery=RecoveryPolicy();self.operation_generation=None
+        self.mesh_state=None;self.auto_state=None;self.service_starting=False;self.service_cancel_requested=False
+        self.mesh_identity_available=False
+        self.transports=TRANSPORTS;self.route_options={}
         self.all_loads={};self.country_name_labels={'nl':[],'ru':[]};self.country_load_labels={'nl':[],'ru':[]}
-        self.detail_text='';self.update_plan=None;self.updater=None;self.render_source=0;self.fit_source=0;self.fitted_height=None
+        self.detail_text='';self.update_plan=None;self.updater=None;self.render_source=0;self.fit_source=0;self.fit_clock=None;self.fitted_height=None
         self.render_count=0;self.widget_changes=0;self.rendering=False
         self.load_pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
         self.pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
@@ -431,18 +488,20 @@ class App:
         self.window.add_css_class('fc-window');self.window.set_default_size(390,-1)
         self.window.set_icon_name('com.familyconnect.Client')
         self.window.connect('close-request',self.on_close)
+        keys=Gtk.EventControllerKey();keys.connect('key-pressed',self.key_pressed);self.window.add_controller(keys)
         Adw.StyleManager.get_default().set_color_scheme(Adw.ColorScheme.FORCE_DARK)
         provider=Gtk.CssProvider();provider.load_from_data(CSS.encode())
         Gtk.StyleContext.add_provider_for_display(self.window.get_display(),provider,Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.provider=provider
         shell=Gtk.Box(orientation=Gtk.Orientation.VERTICAL);shell.add_css_class("fc-shell")
+        outer=Gtk.Box(orientation=Gtk.Orientation.VERTICAL);outer.add_css_class('fc-shell')
         header=Adw.HeaderBar();brand=Gtk.Box(spacing=9)
         texture=Gdk.Texture.new_from_bytes(GLib.Bytes.new(base64.b64decode(ICON_PNG)))
         icon=Gtk.Image.new_from_paintable(texture);icon.set_pixel_size(28);brand.append(icon)
         name=Gtk.Label(label='family_connect');name.add_css_class('fc-brand');brand.append(name)
-        header.set_title_widget(Gtk.Label(label=''));shell.append(header)
+        header.set_title_widget(Gtk.Label(label=''));outer.append(header)
         brand_header=TerminalHeader();brand_header.set_margin_start(12);brand_header.set_margin_end(12);shell.append(brand_header)
-        self.body=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=10)
+        self.body=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=8)
         for side in ('top','bottom','start','end'):getattr(self.body,'set_margin_'+side)(12)
         self.body.set_margin_top(0)
         self.subtitle=self.label('fc-caption')
@@ -462,11 +521,20 @@ class App:
         self.protocol=Gtk.DropDown.new_from_strings([label for _,label in TRANSPORTS])
         self.country.set_hexpand(True);self.protocol.set_hexpand(True)
         self.selectors=TerminalTelemetry(self.country,self.protocol,not smoke);self.body.append(self.selectors)
+        self.mesh_profile=Gtk.DropDown.new_from_strings(['P0 · RS8/16 · LEGACY64','P1 · RS32/32 · CREDIT128'])
+        self.mesh_profile.set_tooltip_text('MESH · P0 / P1');self.body.append(self.mesh_profile)
+        self.mesh_profile_details=self.label('fc-caption');self.body.append(self.mesh_profile_details)
         if self.route_path:
             try:
-                saved=json.loads(self.route_path.read_text());self.country.set_selected(1 if saved.get('country')=='ru' else 0);self.protocol.set_selected(1 if saved.get('transport')=='tcp' else 0)
+                with self.route_path.open('rb') as source:raw=source.read(8193)
+                if len(raw)>8192:raise ValueError('Route settings too large')
+                saved=json.loads(raw)
+                if not isinstance(saved,dict):raise ValueError('Invalid route settings')
+                self.route_options=saved;self.country.set_selected(1 if saved.get('country')=='ru' else 0);self.protocol.set_selected(1 if saved.get('transport')=='tcp' else 0)
+                self.mesh_profile.set_selected(1 if saved.get('mesh_profile')=='P1' else 0)
             except (OSError,ValueError):pass
         self.country.connect('notify::selected',self.route_changed);self.protocol.connect('notify::selected',self.route_changed)
+        self.mesh_profile.connect('notify::selected',self.route_changed)
         self.friends_button=self.button('fc-secondary',self.open_friends) if self.friends_owner_class else None
         self.toggle=self.button('fc-primary',self.toggle_vpn)
         self.gauge.connect('clicked',lambda *_:self.toggle.emit('clicked') if self.toggle.get_sensitive() else None)
@@ -497,17 +565,42 @@ class App:
         self.page='status';self.confirmation=None;self.friends_window=None;self.friends_next_page='settings';self.exit_after_friends=False
         self.language_button=TerminalButton(label='RU / EN');self.language_button.add_css_class('fc-action');self.language_button.connect('clicked',lambda _:self.language());self.body.append(self.language_button)
         self.version_label=Gtk.Label(label='v'+APP_VERSION,xalign=0);self.version_label.add_css_class('fc-caption');self.body.append(self.version_label)
-        self.messenger_note=Gtk.Label(label='',xalign=0,wrap=True);self.body.append(self.messenger_note)
+        self.chat_pane=None;self.chat_closed=False;self.chat_smoke=smoke
+        try:
+            from chat_ui import ChatPane
+            self.chat_pane=ChatPane(TerminalButton,show_chat=lambda:(self.present(),self.select_page('messenger')),
+                                    show_settings=lambda:self.select_page('settings'),layout_changed=self.request_fit)
+            if not smoke:GLib.idle_add(self.chat_pane.resume_existing)
+        except ImportError:pass
+        self.messenger_note=self.chat_pane or Gtk.Label(label='',xalign=0,wrap=True);self.body.append(self.messenger_note)
         self.dashboard_map=RouteMap(compact=True);self.body.append(self.dashboard_map)
+        self.route_map=RouteMap();self.body.append(self.route_map)
+        self.route_note=self.label('fc-caption');self.body.append(self.route_note)
         self.stats=StatsPanel();self.body.append(self.stats)
-        self.pages={'status':[self.card,self.choose,self.selectors,self.note,self.dashboard_map,self.check], 'stats':[self.stats],
-            'settings':[self.add,self.update_button,self.tcp_button,self.language_button,self.version_label]+([self.friends_button] if self.friends_button else []), 'messenger':[self.messenger_note]}
+        self.stats_button=self.button('fc-quiet',lambda:self.select_page('stats'))
+        self.support_title=self.label('fc-support-title');self.body.append(self.support_title)
+        self.support_label=self.label('fc-support-id');self.body.append(self.support_label)
+        self.support_copy=self.button('fc-secondary',self.copy_support)
+        self.support_refresh=self.button('fc-secondary',self.refresh_support)
+        self.support_online_row=Gtk.Box(spacing=12)
+        self.support_online_row.add_css_class('fc-chat-toggle')
+        self.support_online_label=Gtk.Label(xalign=0,wrap=True,hexpand=True)
+        self.support_online=Gtk.Switch(valign=Gtk.Align.CENTER)
+        self.support_online.connect('state-set',self.support_online_changed)
+        self.support_online_row.append(self.support_online_label);self.support_online_row.append(self.support_online)
+        self.body.append(self.support_online_row)
+        self.support_upload_label=self.label('fc-caption');self.body.append(self.support_upload_label)
+        self.diagnostic_button=self.button('fc-secondary',self.export_diagnostics)
+        self.pages={'status':[self.card,self.choose,self.selectors,self.note,self.dashboard_map], 'route':[self.route_map,self.route_note,self.check], 'stats':[self.stats],
+            'settings':[self.add,self.mesh_profile,self.mesh_profile_details,self.update_button,self.tcp_button,self.language_button,self.version_label,self.stats_button]+([self.friends_button] if self.friends_button else [])+[self.support_title,self.support_label,self.support_copy,self.support_refresh,self.support_online_row,self.support_upload_label,self.diagnostic_button], 'messenger':[self.messenger_note]}
         footer=Gtk.Box(spacing=2);footer.set_homogeneous(True);footer.set_margin_start(12);footer.set_margin_end(12);footer.set_margin_bottom(12)
         self.nav={}
-        for page in ('status','messenger','stats','settings'):
+        for page in ('status','messenger','route','settings'):
             button=TerminalButton();button.nav_page=page;button.add_css_class('fc-action');button.add_css_class('fc-nav');button.set_hexpand(True)
             button.connect('clicked',lambda _,p=page:self.select_page(p));footer.append(button);self.nav[page]=button
-        shell.append(footer);self.window.set_content(shell)
+        shell.append(footer);clamp=Adw.Clamp();clamp.set_maximum_size(560);clamp.set_tightening_threshold(400);clamp.set_child(shell)
+        if hasattr(clamp,'set_unit'):clamp.set_unit(Adw.LengthUnit.PX)
+        clamp.set_vexpand(True);outer.append(clamp);self.window.set_content(outer)
         self.last_profiles=None
         if not smoke:self.register_icon();self.submit(self.initialize,'initialized')
         if self.render_source:GLib.source_remove(self.render_source);self.render_source=0
@@ -527,6 +620,8 @@ class App:
         self.language_button.set_label('Язык: Русский → English' if self.ru else 'Language: English → Русский')
         if not self.closed and not self.render_source:self.render_source=GLib.idle_add(self.render)
     def render(self):
+        for messages in DIAGNOSTIC_MESSAGES:
+            if self.detail_text in messages:self.detail_text=messages[0 if self.ru else 1];break
         if self.friends_button:self.friends_button.set_label("Устройство и доступ" if self.ru else "Device and access");self.friends_button.set_sensitive(not self.busy)
         self.render_source=0
         if self.closed:return GLib.SOURCE_REMOVE
@@ -534,10 +629,19 @@ class App:
         try:
             self.set_value(self.subtitle,'label',self.t('title'))
             text=('Проверяем подключение' if self.ru else 'Checking connection') if self.initializing else self.t('unknown' if self.active is None else ('on' if self.active else 'off'))
+            mesh=self.managed_view()
+            if self.managed_state() is not None and (self.transport_id() in ('auto','mesh') or mesh['owned']):
+                text=STATE_LABELS[mesh['state']][0 if self.ru else 1]
             self.set_value(self.status,'label',text)
             self.set_value(self.hint,'label',self.country_label('nl' if self.country.get_selected()==0 else 'ru')+' · '+self.transport_label())
             connected=self.active is True
-            self.gauge.update(connected,self.busy or self.initializing,self.ru,not self.busy and (self.friends_registered or bool(self.items)) and self.active is not None)
+            available=(self.mesh_identity_available or self.friends_registered) if self.transport_id() in ('auto','mesh') else self.friends_registered or bool(self.items)
+            can_toggle=(not self.busy and available and self.active is not None) or self.service_starting
+            if mesh['owned']:can_toggle=not self.busy or self.service_starting
+            if self.service_cancel_requested or mesh['state']=='STOPPING':can_toggle=False
+            self.gauge.update(connected,self.busy or self.initializing or mesh['pending'],self.ru,can_toggle)
+            if mesh['owned'] or self.service_starting:
+                self.gauge.set_tooltip_text(self.t('disconnect'));self.gauge.update_property([Gtk.AccessibleProperty.LABEL],[self.t('disconnect')])
             if self.toggle.has_css_class('connected')!=connected:
                 (self.toggle.add_css_class if connected else self.toggle.remove_css_class)('connected');self.toggle.queue_draw()
             if self.dot.has_css_class('connected')!=connected:
@@ -555,22 +659,32 @@ class App:
             self.set_value(self.tcp_button,'sensitive',not self.busy and self.active is False)
             self.set_value(self.choose,'sensitive',bool(self.items) and not self.busy)
             for widget,text,enabled in (
-                (self.toggle,self.t('disconnect' if connected else 'connect'),not self.busy and (self.friends_registered or bool(self.items)) and self.active is not None),
+                (self.toggle,self.t('disconnect' if connected or mesh['owned'] or self.service_starting else 'connect'),can_toggle),
                 (self.add,self.t('import'),not self.busy and self.driver is not None),
                 (self.check,self.t('check'),connected and not self.busy),
                 (self.retry,self.t('retry'),not self.busy),
                 (self.update_button,('Установить обновление' if self.ru else 'Install update') if self.update_plan else ('Проверить обновления' if self.ru else 'Check for updates'),not self.busy)):
                 self.set_value(widget,'label',text);self.set_value(widget,'sensitive',enabled)
-            self.country.set_sensitive(not self.busy and not connected);self.protocol.set_sensitive(not self.busy and not connected)
+            route_enabled=not self.busy and not connected and not mesh['owned']
+            self.country.set_sensitive(route_enabled and self.transport_id()!='mesh');self.protocol.set_sensitive(route_enabled)
+            self.mesh_profile.set_sensitive(route_enabled and any(key in ('auto','mesh') for key,_ in self.transports))
+            selected='P1' if self.mesh_profile.get_selected()==1 else 'P0'
+            session_profile=mesh['selected_profile'] if mesh['owned'] else None
+            self.mesh_profile_details.set_text(('MESH · выбран: ' if self.ru else 'MESH · selected: ')+selected+'\n'+
+                (('Текущая сессия: ' if self.ru else 'Current session: ')+session_profile+'\n' if session_profile else '')+
+                ('Согласовано: ' if self.ru else 'Negotiated: ')+(mesh['effective'] or '—'))
             self.set_value(self.note,'label',('Личный ключ сохранён на устройстве.' if self.ru else 'Your personal key is stored on this device.') if self.friends_registered else self.t('quality'));self.set_value(self.detail,'label',self.detail_text)
             self.set_value(self.detail,'visible',bool(self.detail_text));self.set_value(self.retry,'visible',self.driver is None and not self.initializing)
             self.render_server_load()
-            self.selectors.connection(self.ru,self.status.get_text())
+            self.refresh_country_labels()
+            actual=mesh.get('transport')
+            self.selectors.connection(self.ru,self.transport_label()+(' → '+actual if actual else '')+' · '+self.status.get_text(),self.transport_id()=='mesh' or actual=='MESH')
             self.stats.set_state(connected)
             self.stats.localize(self.ru)
             self.apply_page()
+            self.diagnostic_snapshot()
         finally:self.rendering=False
-        if before!=self.widget_changes and not self.fit_source:self.fit_source=GLib.idle_add(self.fit_height)
+        if before!=self.widget_changes:self.request_fit()
         return GLib.SOURCE_REMOVE
     def load_key(self):
         return ("country:"+("ru" if self.country.get_selected()==1 else "nl")) if self.friends_registered else self.selected_id
@@ -578,10 +692,51 @@ class App:
         return (('Нидерланды' if self.ru else 'Netherlands') if code=='nl' else ('Россия' if self.ru else 'Russia'))
     def transport_label(self):
         index=self.protocol.get_selected()
-        return TRANSPORTS[index][1] if 0<=index<len(TRANSPORTS) else TRANSPORTS[0][1]
+        return self.transports[index][1] if 0<=index<len(self.transports) else self.transports[0][1]
     def transport_id(self):
         index=self.protocol.get_selected()
-        return TRANSPORTS[index][0] if 0<=index<len(TRANSPORTS) else TRANSPORTS[0][0]
+        return self.transports[index][0] if 0<=index<len(self.transports) else self.transports[0][0]
+    def mesh_view(self):
+        return mesh_presentation(self.mesh_state or {'state':'DISCONNECTED','desired_connected':False})
+    def managed_transport(self):
+        automatic=auto_presentation(self.auto_state or {'state':'DISCONNECTED','desired_connected':False})
+        return 'auto' if automatic['owned'] or self.transport_id()=='auto' else 'mesh'
+    def managed_state(self):
+        return self.auto_state if self.managed_transport()=='auto' else self.mesh_state
+    def managed_view(self):
+        return auto_presentation(self.auto_state or {'state':'DISCONNECTED','desired_connected':False}) if self.managed_transport()=='auto' else self.mesh_view()
+    def configure_transports(self):
+        selected=self.route_options.get('transport',self.transport_id())
+        available=self.driver is not None and getattr(self.driver,'mesh_available',lambda:False)()
+        self.transports=TRANSPORTS+((('mesh','MESH'),) if available and self.friends_owner_class else ())
+        if self.driver is not None and getattr(self.driver,'auto_available',lambda:False)() and self.friends_owner_class:
+            self.transports=(('auto','Auto'),)+self.transports
+        self.rendering=True
+        try:
+            self.protocol.set_model(Gtk.StringList.new([label for _,label in self.transports]))
+            self.protocol.set_selected(next((index for index,item in enumerate(self.transports) if item[0]==selected),0))
+        finally:self.rendering=False
+    def accept_mesh_state(self,state):
+        self.mesh_state=state;mesh=self.mesh_view();self.recovery.stop()
+        if mesh['owned']:
+            self.selected_id='fcmesh0'
+            self.rendering=True
+            try:
+                for index,item in enumerate(self.transports):
+                    if item[0]=='mesh':self.protocol.set_selected(index)
+            finally:self.rendering=False
+        if self.transport_id()=='mesh' or self.selected_id=='fcmesh0':self.active=mesh['connected']
+    def accept_auto_state(self,state):
+        previous=self.auto_state or {};self.auto_state=state;view=auto_presentation(state)
+        if self.detail_text.startswith('IP: ') and (not view['connected'] or previous.get('generation')!=state.get('generation')):self.detail_text=''
+        if view['owned']:
+            self.recovery.stop();self.selected_id='fcauto0'
+            self.rendering=True
+            try:
+                for index,item in enumerate(self.transports):
+                    if item[0]=='auto':self.protocol.set_selected(index)
+            finally:self.rendering=False
+        if self.transport_id()=='auto' or self.selected_id=='fcauto0':self.active=view['connected']
     def load_text(self,code,sample):
         if sample is None:return 'Нет данных' if self.ru else 'No data'
         value=sample.get('percent')
@@ -595,9 +750,11 @@ class App:
         def setup(_factory,item):
             row=Gtk.Box(spacing=8)
             flag=Gtk.Box();flag.set_size_request(22,14);flag.set_valign(Gtk.Align.CENTER)
-            name=Gtk.Label(xalign=0);name.set_hexpand(True)
+            name=Gtk.Label(xalign=0);name.set_hexpand(True);name.set_ellipsize(Pango.EllipsizeMode.END);name.set_max_width_chars(10)
             load=Gtk.Label(xalign=1);load.add_css_class('fc-caption')
-            row.append(flag);row.append(name);row.append(load);item.set_child(row)
+            row.append(flag);row.append(name);row.append(load);load.set_visible(False);item.set_child(row)
+        def popup_setup(_factory,item):
+            setup(_factory,item);item.get_child().get_last_child().set_visible(True)
         def bind(_factory,item):
             code=item.get_item().get_string();row=item.get_child()
             flag=row.get_first_child();name=flag.get_next_sibling();load=name.get_next_sibling()
@@ -612,11 +769,15 @@ class App:
             if name in self.country_name_labels[code]:self.country_name_labels[code].remove(name)
             if load in self.country_load_labels[code]:self.country_load_labels[code].remove(load)
         factory.connect('setup',setup);factory.connect('bind',bind);factory.connect('unbind',unbind)
-        dropdown.set_factory(factory);return dropdown
+        popup=Gtk.SignalListItemFactory();popup.connect('setup',popup_setup);popup.connect('bind',bind);popup.connect('unbind',unbind)
+        dropdown.set_factory(factory);dropdown.set_list_factory(popup);return dropdown
     def refresh_country_labels(self):
         for code in ('nl','ru'):
-            for name in list(self.country_name_labels[code]):name.set_text(self.country_label(code))
-            for load in list(self.country_load_labels[code]):load.set_text(self.load_text(code,self.all_loads.get(code)))
+            for name in list(self.country_name_labels[code]):
+                if name.get_text()!=self.country_label(code):name.set_text(self.country_label(code))
+            for load in list(self.country_load_labels[code]):
+                text=self.load_text(code,self.all_loads.get(code))
+                if load.get_text()!=text:load.set_text(text)
     def render_server_load(self):
         sample=self.load_sample
         if sample and (self.load_ident!=self.load_key() or not -15<=time.time()-sample['observed_at']<=45):
@@ -672,11 +833,20 @@ class App:
         country=ident.split(':')[1] if ident.startswith('country:') else None
         self.load_sample=self.all_loads.get(country) if country else None
         self.load_ident=ident;self.refresh_country_labels();self.stats.set_servers(self.all_loads);self.render_server_load();return GLib.SOURCE_REMOVE
+    def request_fit(self):
+        if self.closed or self.fit_source:return
+        self.fit_clock=self.window.get_frame_clock()
+        if self.fit_clock is None:self.fit_source=GLib.idle_add(self.fit_height)
+        else:
+            self.fit_source=self.fit_clock.connect('after-paint',lambda *_:self.fit_height())
+            self.fit_clock.request_phase(Gdk.FrameClockPhase.AFTER_PAINT)
     def fit_height(self):
+        if self.fit_clock is not None:
+            self.fit_clock.disconnect(self.fit_source);self.fit_clock=None
         self.fit_source=0
         if self.closed:return GLib.SOURCE_REMOVE
-        width=max(390,self.window.get_width())
-        _,natural,_,_=self.window.get_content().measure(Gtk.Orientation.VERTICAL,width)
+        width=max(320,self.window.get_default_size()[0])
+        _,natural,_,_=self.window.measure(Gtk.Orientation.VERTICAL,width)
         if natural!=self.fitted_height:
             self.fitted_height=natural;self.window.set_default_size(width,natural)
         return GLib.SOURCE_REMOVE
@@ -684,21 +854,46 @@ class App:
         if self.confirmation is not None:self.scroll.set_child(self.body);self.confirmation=None
         if self.friends_window is not None:
             self.friends_next_page=page;self.friends_window.request_close();return
-        self.page=page;self.paint()
+        self.page=page;self.scroll.get_vadjustment().set_value(0);self.paint()
+        if self.chat_pane is not None and not self.chat_smoke:self.chat_pane.activate(page=='messenger',self.ru)
+    def open_chat(self,peer):
+        import re
+        if not re.fullmatch('(?:[0-9a-f]{32}|service)',peer):return
+        self.pending_chat=peer;self.present();self.select_page('messenger')
+        deadline=time.monotonic()+30
+        def ready():
+            if self.closed or self.pending_chat!=peer or time.monotonic()>=deadline:return GLib.SOURCE_REMOVE
+            pane=self.chat_pane
+            if pane is None:return GLib.SOURCE_REMOVE
+            if pane.busy:return GLib.SOURCE_CONTINUE
+            if not pane.opened:return GLib.SOURCE_REMOVE
+            self.pending_chat=None;pane.notification_open(peer);return GLib.SOURCE_REMOVE
+        GLib.timeout_add(100,ready)
     def apply_page(self):
+        self.paint_support_upload()
+        self.support_title.set_text('О приложении / Диагностика' if self.ru else 'About / Diagnostics')
+        self.support_label.set_text('Support ID: '+self.support_id if self.support_id else ('Support ID недоступен. Подключитесь к Интернету и обновите.' if self.ru else 'Support ID unavailable. Connect to the Internet and refresh.'))
+        self.support_copy.set_label('Копировать Support ID' if self.ru else 'Copy Support ID');self.support_copy.set_sensitive(bool(self.support_id))
+        self.support_refresh.set_label('Обновить Support ID' if self.ru else 'Refresh Support ID');self.support_refresh.set_sensitive(self.friends_owner is not None and not self.support_busy)
+        self.diagnostic_button.set_label('Отправить диагностику' if self.ru else 'Send diagnostics');self.diagnostic_button.set_sensitive(not self.diagnostic_busy)
         for page,widgets in self.pages.items():
             for widget in widgets:
                 visible=page==self.page and (widget is not self.tcp_button or self.friends_owner_class is not None or '--awg-pilot' in sys.argv)
+                if widget is self.choose and (self.friends_registered or self.transport_id() in ('auto','mesh')):visible=False
+                if widget is self.note and self.friends_registered:visible=False
                 self.set_value(widget,'visible',visible)
-        names={'status':('СТАТУС','STATUS'),'messenger':('МЕССЕНДЖЕР','MESSENGER'),'stats':('СТАТИСТИКА','STATISTICS'),'settings':('НАСТРОЙКИ','SETTINGS')}
+        self.hint.set_visible(False)
+        self.stats_button.set_label('Статистика' if self.ru else 'Statistics')
+        self.route_note.set_text('Карта шлюзов. Местоположение этого компьютера не определяется.' if self.ru else 'Gateway map. This computer’s location is not collected.')
         for page,button in self.nav.items():
-            self.set_value(button,'label',names[page][0 if self.ru else 1])
-            selected=page==('settings' if self.friends_window is not None else self.page)
+            self.set_value(button,'label',NAV_LABELS[page][0 if self.ru else 1])
+            selected=page==('settings' if self.friends_window is not None or self.page=='stats' else self.page)
             if button.has_css_class('selected')!=selected:
                 (button.add_css_class if selected else button.remove_css_class)('selected');button.queue_draw()
-        region='ru' if self.country.get_selected()==1 else 'nl'
+        region=None if self.transport_id()=='mesh' or self.managed_view().get('transport')=='MESH' else 'ru' if self.country.get_selected()==1 else 'nl'
         self.dashboard_map.update(region)
-        self.set_value(self.messenger_note,'label','Мессенджер пока доступен в Android. Версия для компьютера в разработке.' if self.ru else 'Messaging is currently available on Android. Desktop messaging is in development.')
+        self.route_map.update(region)
+        if self.chat_pane is None:self.set_value(self.messenger_note,'label','Компоненты мессенджера не установлены.' if self.ru else 'Messaging components are not installed.')
 
     def open_friends(self):
         if self.busy or not self.friends_owner_class:return
@@ -719,6 +914,7 @@ class App:
 
     def language(self):
         self.ru=not self.ru
+        if self.chat_pane is not None and not self.chat_smoke:self.chat_pane.activate(self.page=='messenger',self.ru)
         index=self.country.get_selected()
         self.refresh_country_labels()
         self.country.set_selected(index)
@@ -730,6 +926,8 @@ class App:
         self.paint()
     def set_detail(self,text):self.detail_text=text;self.paint()
     def selected(self):
+        if self.transport_id()=='auto':return 'fcauto0'
+        if self.transport_id()=='mesh':return 'fcmesh0'
         return self.selected_id
     def selection_changed(self,*_):
         if not self.rendering:
@@ -740,24 +938,53 @@ class App:
         driver=backend()
         if self.friends_owner_class:
             owner=self.friends_owner_class(Path.home()/'.local/share/family-connect/friends-identity',Path(__file__).with_name('update.pub'))
+            self.friends_owner=owner
+            self.support_id=getattr(owner,'cached_support_id',lambda:None)();self.diagnostics.support(self.support_id)
             owner.recover(driver)
             try:owner.register(self.pending_invitation);self.pending_invitation="";self.friends_registered=True;self.registration_error=''
             except Exception:
                 self.registration_error='Откройте ссылку приглашения и нажмите «Открыть приложение». Если доступ отозван, обратитесь к владельцу.' if self.ru else 'Open your invitation link and choose Open app. If access was revoked, contact the owner.'
+            self.mesh_identity_available=getattr(owner,'has_existing_identity',lambda:False)()
+            if self.mesh_identity_available:
+                try:
+                    from provisioning.support_client import SupportClient
+                    self.support_upload=SupportClient()
+                except ImportError:self.support_upload=None
+                if self.closed and self.support_upload is not None:self.support_upload.close()
         items=driver.profiles()
         active_ids=[ident for ident,_ in items if driver.active(ident)]
         # Keep the selected connection last for the existing UI result contract.
         if active_ids:items=sorted(items,key=lambda item:item[0]==active_ids[0])
         active=bool(active_ids)
+        if getattr(driver,'auto_available',lambda:False)():return driver,items,active,driver.mesh_status(),driver.auto_status()
+        if getattr(driver,'mesh_available',lambda:False)():return driver,items,active,driver.mesh_status()
         return driver,items,active
     def submit(self,fn,kind='profiles'):
         if self.busy or self.closed:return
         self.busy=True;self.revision+=1
+        if kind=='recovered':self.connection_action='RESTORING'
         if kind=='initialized':self.initializing=True
         self.paint();revision=self.revision;future=self.pool.submit(fn)
         future.add_done_callback(lambda f:GLib.idle_add(self.complete,kind,f,revision,None))
     def complete(self,kind,future,revision,ident):
         if self.closed:return GLib.SOURCE_REMOVE
+        if kind=='auto-poll':
+            self.polling=False
+            if revision!=self.revision or self.busy:return GLib.SOURCE_REMOVE
+            try:self.accept_auto_state(future.result());self.poll_error=False
+            except ConnectionBusy:return GLib.SOURCE_REMOVE
+            except Exception:
+                self.auto_state=dict(self.auto_state or {},state='FAILED',reason='SERVICE_UNAVAILABLE')
+                self.active=None;self.poll_error=True
+            self.paint();return GLib.SOURCE_REMOVE
+        if kind=='mesh-poll':
+            self.polling=False
+            if revision!=self.revision or self.busy:return GLib.SOURCE_REMOVE
+            try:self.accept_mesh_state(future.result());self.poll_error=False
+            except Exception:
+                self.mesh_state={'state':'FAILED','desired_connected':self.mesh_view()['owned'],'reason':'SERVICE_UNAVAILABLE'}
+                self.active=None;self.poll_error=True
+            self.paint();return GLib.SOURCE_REMOVE
         if kind in ('poll','health'):
             try:observed=future.result()
             except ConnectionBusy:
@@ -820,10 +1047,26 @@ class App:
             if error:self.detail_text=self.t('error')
             elif self.poll_error:self.detail_text=''
             self.poll_error=error;self.paint();return GLib.SOURCE_REMOVE
-        self.busy=False
+        self.busy=False;self.connection_action=None
         try:
             result=future.result()
-            if kind=='initialized':self.driver,self.items,self.active=result;self.selected_id=self.items[-1][0] if self.items else None;self.initializing=False;self.detail_text=self.registration_error or ('' if self.items or self.friends_registered else self.t('empty'))
+            if kind=='initialized':
+                self.driver,self.items,self.active=result[:3];self.selected_id=self.items[-1][0] if self.items else None;self.initializing=False;self.detail_text=self.registration_error or ('' if self.items or self.friends_registered else self.t('empty'))
+                self.configure_transports()
+                if len(result)>3:self.accept_mesh_state(result[3])
+                if len(result)>4:self.accept_auto_state(result[4])
+            elif kind=='auto-started':
+                self.service_starting=False;self.accept_auto_state(result);self.detail_text=''
+                if self.service_cancel_requested:
+                    self.stop_auto();return GLib.SOURCE_REMOVE
+            elif kind=='auto-stopped':
+                self.service_cancel_requested=False;self.accept_auto_state(result);self.detail_text=''
+            elif kind=='mesh-started':
+                self.service_starting=False;self.accept_mesh_state(result);self.detail_text=''
+                if self.service_cancel_requested:
+                    self.stop_mesh();return GLib.SOURCE_REMOVE
+            elif kind=='mesh-stopped':
+                self.service_cancel_requested=False;self.accept_mesh_state(result);self.detail_text=''
             elif kind=='profiles':self.items=result;self.active=None;self.detail_text='' if result else self.t('empty')
             elif kind=='connected':
                 self.active=result
@@ -842,6 +1085,22 @@ class App:
             elif kind=='update_installed':
                 subprocess.Popen([sys.executable,str(result)],start_new_session=True);self.close(True);return GLib.SOURCE_REMOVE
         except Exception as exc:
+            if kind in ('auto-started','auto-stopped'):
+                cancelled=self.service_cancel_requested
+                self.service_starting=False;self.service_cancel_requested=False
+                self.auto_state=dict(self.auto_state or {},state='FAILED',reason='OPERATION_FAILED')
+                if kind=='auto-started' and cancelled:
+                    self.stop_auto();return GLib.SOURCE_REMOVE
+                self.active=None;self.detail_text=self.t('error');self.paint();self.refresh()
+                return GLib.SOURCE_REMOVE
+            if kind in ('mesh-started','mesh-stopped'):
+                cancelled=self.service_cancel_requested
+                self.service_starting=False;self.service_cancel_requested=False
+                self.mesh_state={'state':'FAILED','desired_connected':True,'reason':'OPERATION_FAILED'}
+                if kind=='mesh-started' and cancelled:
+                    self.stop_mesh();return GLib.SOURCE_REMOVE
+                self.active=None;self.detail_text=self.t('error');self.paint();self.refresh()
+                return GLib.SOURCE_REMOVE
             if kind=='recovered':
                 if isinstance(exc,(AuthorizationError,ConnectionBusy,StaleConnection)):self.recovery.stop()
                 else:self.recovery.recovered(False)
@@ -859,10 +1118,16 @@ class App:
         return GLib.SOURCE_REMOVE
     def refresh(self):
         if self.closed:return GLib.SOURCE_REMOVE
+        if self.support_upload is not None:
+            self.support_upload.tick();self.paint_support_upload()
         ident=self.selected()
         if self.busy or self.polling or self.driver is None or not ident:return GLib.SOURCE_CONTINUE
         self.polling=True;revision=self.revision;driver=self.driver
-        if self.recovery.due(ident):
+        if hasattr(driver,'auto_status') and self.managed_transport()=='auto':
+            kind='auto-poll';future=self.poll_pool.submit(driver.auto_status)
+        elif hasattr(driver,'mesh_status') and (self.transport_id()=='mesh' or self.mesh_view()['owned']):
+            kind='mesh-poll';future=self.poll_pool.submit(driver.mesh_status)
+        elif self.recovery.due(ident):
             kind='health'
             future=self.poll_pool.submit(lambda:driver.poll_state(ident,True) if hasattr(driver,'poll_state') else (driver.active(ident),driver.healthy(ident)))
         else:
@@ -870,18 +1135,64 @@ class App:
         future.add_done_callback(lambda f:GLib.idle_add(self.complete,kind,f,revision,ident))
         return GLib.SOURCE_CONTINUE
     def route_changed(self,*_):
+        if self.rendering:return
         self.revision+=1;self.load_next=0
+        self.route_options.update(country='ru' if self.country.get_selected()==1 else 'nl',transport=self.transport_id(),
+                                  mesh_profile='P1' if self.mesh_profile.get_selected()==1 else 'P0')
         if self.route_path:
             try:
+                from updates import atomic
                 self.route_path.parent.mkdir(parents=True,exist_ok=True)
-                pending=self.route_path.with_suffix('.pending');pending.write_text(json.dumps({'country':'ru' if self.country.get_selected()==1 else 'nl','transport':self.transport_id()}));pending.replace(self.route_path)
+                atomic(self.route_path,json.dumps(self.route_options).encode('utf-8'))
             except OSError:pass
         self.paint()
+    def stop_auto(self):
+        self.connection_action='STOPPING';self.recovery.stop();self.service_cancel_requested=False
+        generation=(self.auto_state or {}).get('generation','');driver=self.driver
+        self.auto_state=dict(self.auto_state or {},state='DISCONNECTING',desired_connected=False)
+        def action():
+            current=driver.auto_status() if not generation else None
+            if current is not None and current['state']=='DISCONNECTED' and not current['desired_connected']:return current
+            if current is not None and not current.get('generation'):current=driver.resolve_auto_status()
+            if current is not None and current['state']=='DISCONNECTED' and not current['desired_connected']:return current
+            return driver.stop_auto(generation or current['generation'])
+        self.submit(action,'auto-stopped')
+    def stop_mesh(self):
+        self.connection_action='STOPPING'
+        self.recovery.stop();self.service_cancel_requested=False
+        self.mesh_state={'state':'STOPPING','desired_connected':False};driver=self.driver
+        def action():
+            driver.disconnect('fcmesh0');return driver.mesh_status()
+        self.submit(action,'mesh-stopped')
     def toggle_vpn(self):
         ident=self.selected();active=self.active
+        if self.service_starting:
+            self.service_cancel_requested=True;self.paint();return
+        if self.managed_view()['owned']:
+            if not self.busy:(self.stop_auto if self.managed_transport()=='auto' else self.stop_mesh)()
+            return
         if self.busy or active is None:return
         self.recovery.stop();driver=self.driver
+        if not active and self.transport_id()=='auto':
+            if not (self.mesh_identity_available or self.friends_registered) or not self.friends_owner_class:return
+            profile='P1' if self.mesh_profile.get_selected()==1 else 'P0';country='ru' if self.country.get_selected()==1 else 'nl'
+            owner=self.friends_owner_class(Path.home()/'.local/share/family-connect/friends-identity',Path(__file__).with_name('update.pub'))
+            self.service_starting=True;self.service_cancel_requested=False
+            self.auto_state={'state':'CONNECTING','desired_connected':True,'requested_profile':profile,'generation':''}
+            def start():
+                owner.connect_auto(country,driver,profile);return driver.auto_status()
+            self.submit(start,'auto-started');return
+        if not active and self.transport_id()=='mesh':
+            if not (self.mesh_identity_available or self.friends_registered) or not self.friends_owner_class:return
+            profile='P1' if self.mesh_profile.get_selected()==1 else 'P0'
+            owner=self.friends_owner_class(Path.home()/'.local/share/family-connect/friends-identity',Path(__file__).with_name('update.pub'))
+            self.service_starting=True;self.service_cancel_requested=False
+            self.mesh_state={'state':'CONNECTING','desired_connected':True}
+            def start():
+                owner.connect_mesh(driver,profile);return driver.mesh_status()
+            self.submit(start,'mesh-started');return
         if not active and self.friends_registered and self.friends_owner_class:
+            self.connection_action='CONNECTING'
             country='ru' if self.country.get_selected()==1 else 'nl';transport=self.transport_id()
             owner=self.friends_owner_class(Path.home()/'.local/share/family-connect/friends-identity',Path(__file__).with_name('update.pub'))
             def action():
@@ -891,6 +1202,7 @@ class App:
                 return driver,items,bool(active_ids)
             self.submit(action,'initialized');return
         if not ident:return
+        self.connection_action='STOPPING' if active else 'CONNECTING'
         def action():
             (driver.disconnect if active else driver.connect)(ident);return driver.active(ident)
         self.submit(action,'state' if active else 'connected')
@@ -906,19 +1218,118 @@ class App:
                 self.submit(action)
         self.file_chooser=chooser;chooser.set_modal(True)
         chooser.connect('response',response);chooser.show()
+    def copy_support(self):
+        if self.support_id:
+            self.window.get_clipboard().set(self.support_id)
+            self.set_detail('Support ID скопирован' if self.ru else 'Support ID copied')
+    def refresh_support(self):
+        if self.support_busy or self.friends_owner is None:return
+        self.support_busy=True;self.paint()
+        future=self.load_pool.submit(self.friends_owner.refresh_support_id,'linux-'+APP_VERSION,2011)
+        def complete():
+            if self.closed:return GLib.SOURCE_REMOVE
+            self.support_busy=False
+            try:self.support_id=future.result();self.diagnostics.support(self.support_id)
+            except Exception:self.set_detail('Не удалось обновить Support ID. Сохранённый ID не изменён.' if self.ru else 'Support ID refresh failed. The saved ID is unchanged.')
+            self.paint();return GLib.SOURCE_REMOVE
+        future.add_done_callback(lambda _:GLib.idle_add(complete))
+    def diagnostic_snapshot(self):
+        mesh=self.managed_view()
+        state=mesh['state'] if self.transport_id() in ('auto','mesh') or mesh['owned'] else (self.connection_action or ('CONNECTED' if self.active else 'DISCONNECTED'))
+        if self.service_starting:state='STOPPING' if self.service_cancel_requested else 'CONNECTING'
+        changed=self.diagnostics.sample(state,self.transport_id(),'P1' if self.mesh_profile.get_selected()==1 else 'P0',self.managed_state())
+        self.diagnostics.support(self.support_id)
+        if changed and self.diagnostics.storage is not None and not self.closed:self.load_pool.submit(self.diagnostics.persist)
+    def online_snapshot(self):
+        return json.loads(self.diagnostics.export(self.diagnostics.environment()))['ring']
+    def paint_support_upload(self):
+        status=self.support_upload.status() if self.support_upload is not None else dict(enabled=False,until=0,state='OFF')
+        self.support_online_label.set_text('Онлайн-диагностика (7 дней)' if self.ru else 'Online diagnostics (7 days)')
+        self.support_online.update_property([Gtk.AccessibleProperty.LABEL],[self.support_online_label.get_text()])
+        self.support_syncing=True
+        try:self.support_online.set_active(status['enabled'])
+        finally:self.support_syncing=False
+        self.support_online.set_sensitive(self.support_upload is not None and status.get('available',True) and not self.support_consent_busy)
+        states={'OFF':('выключено','off'),'WAITING':('ожидание','waiting'),'SENDING':('отправка','sending'),
+            'STORED':('снимок сохранён','snapshot stored'),'RATE_LIMITED':('ограничение частоты','rate limited'),
+            'AUTH_REJECTED':('доступ отклонён','access rejected'),'TIMEOUT':('время ожидания истекло','timeout'),
+            'UNAVAILABLE':('недоступно','unavailable')}
+        text=states.get(status['state'],states['UNAVAILABLE'])[0 if self.ru else 1]
+        expiry=(' · '+('до ' if self.ru else 'until ')+time.strftime('%Y-%m-%d %H:%M',time.localtime(status['until']))) if status['enabled'] else ''
+        self.support_upload_label.set_text(('Отправка: ' if self.ru else 'Upload: ')+text+expiry+('\nБез обхода VPN' if self.ru else '\nNo VPN fallback'))
+        if status.get('storage_error'):
+            self.support_upload_label.set_text(self.support_upload_label.get_text()+('\nНе удалось сохранить согласие; проверьте после перезапуска.' if self.ru else '\nConsent could not be saved; check after restart.'))
+    def support_online_changed(self,widget,enabled):
+        if self.support_syncing:return False
+        if self.support_upload is None or self.support_consent_busy or self.confirmation is not None:return True
+        if not enabled:
+            self.support_upload.cancel();self.change_support_consent(False);return True
+        text=('Раз в минуту: версия, состояние VPN, случайный ID сессии и счётчики ошибок/байтов. Без сайтов, IP, сообщений, ключей и полных журналов. Привязка к Support ID. Только последний снимок, сервер до 7 дней; выключить здесь в любой момент. Согласие действует 7 дней. Не включает удалённое управление.' if self.ru else 'Once per minute: app version, VPN state, random session ID and error/byte counters. No sites, IP addresses, messages, keys or full logs. Linked to Support ID. Only the latest snapshot is retained on the server for up to 7 days. Consent expires in 7 days; turn it off here at any time. No remote control.')
+        self.confirm(text,'Разрешить на 7 дней' if self.ru else 'Allow for 7 days',lambda:self.change_support_consent(True))
+        return True
+    def change_support_consent(self,enabled):
+        if self.support_upload is None or self.support_consent_busy or self.closed:return
+        self.support_consent_busy=True;self.paint_support_upload()
+        uploader=self.support_upload
+        future=self.load_pool.submit(uploader.enable if enabled else uploader.disable)
+        def complete():
+            if self.closed:return GLib.SOURCE_REMOVE
+            self.support_consent_busy=False
+            try:future.result();uploader.tick()
+            except Exception:
+                uploader.cancel()
+                self.set_detail('Не удалось подтвердить изменение согласия. Проверьте состояние службы перед повтором.' if self.ru else 'Consent change could not be confirmed. Check service state before retrying.')
+            self.paint();return GLib.SOURCE_REMOVE
+        future.add_done_callback(lambda _:GLib.idle_add(complete))
+    def export_diagnostics(self):
+        if self.diagnostic_busy or self.file_chooser is not None or self.confirmation is not None:return
+        text=('В файл войдут недавние состояния подключения, коды ошибок, версии и Support ID. История сайтов, сообщения, адреса и ключи не включаются. Этот экспорт ничего не отправляет автоматически. Сохраните JSON и передайте выбранному получателю.' if self.ru else 'The file contains recent connection states, failure codes, versions and Support ID. No browsing history, messages, destinations or credentials are included. This export does not upload anything. Save the JSON and share it with someone you choose.')
+        self.confirm(text,'Сохранить JSON' if self.ru else 'Save JSON',self.choose_diagnostic_file)
+    def choose_diagnostic_file(self):
+        chooser=Gtk.FileChooserNative(title='Сохранить диагностику' if self.ru else 'Save diagnostics',transient_for=self.window,action=Gtk.FileChooserAction.SAVE,accept_label='Сохранить' if self.ru else 'Save',cancel_label='Отмена' if self.ru else 'Cancel')
+        chooser.set_current_name('FamilyConnect-diagnostics-'+time.strftime('%Y%m%d-%H%M%S')+'.json')
+        filter_=Gtk.FileFilter();filter_.set_name('JSON');filter_.add_pattern('*.json');chooser.add_filter(filter_)
+        def response(dialog,result):
+            selected=dialog.get_file() if result==Gtk.ResponseType.ACCEPT else None
+            dialog.destroy();self.file_chooser=None
+            if selected and selected.get_path():self.save_diagnostics(selected.get_path())
+        self.file_chooser=chooser;chooser.set_modal(True);chooser.connect('response',response);chooser.show()
+    def save_diagnostics(self,path):
+        if self.diagnostic_busy:return
+        self.diagnostic_snapshot();self.diagnostic_busy=True;self.paint()
+        def save():
+            self.diagnostics.persist()
+            self.diagnostics.save_export(path,self.diagnostics.export(self.diagnostics.environment()))
+        future=self.load_pool.submit(save)
+        def complete():
+            if self.closed:return GLib.SOURCE_REMOVE
+            self.diagnostic_busy=False
+            try:
+                future.result();self.set_detail('JSON сохранён. Передайте файл выбранному получателю.' if self.ru else 'JSON saved. Share the file with your chosen recipient.')
+            except Exception:self.set_detail('Не удалось экспортировать диагностику. Подключение не изменилось.' if self.ru else 'Diagnostics could not be exported. Your connection is unchanged.')
+            self.paint();return GLib.SOURCE_REMOVE
+        future.add_done_callback(lambda _:GLib.idle_add(complete))
     def check_ip(self):
         ident=self.selected();driver=self.driver
         if self.busy or not ident or not self.active:return
         self.detail_text=self.t('checks')
         def action():
+            if ident=='fcauto0':return driver.check_auto_ip()
+            if ident=='fcmesh0':return driver.check_mesh_ip()
             if not driver.active(ident):raise RuntimeError('Tunnel is down')
             with urllib.request.urlopen('https://www.cloudflare.com/cdn-cgi/trace',timeout=10) as response:
                 values=dict(line.split('=',1) for line in response.read(4096).decode().splitlines() if '=' in line)
             if not driver.active(ident):raise RuntimeError('Tunnel changed')
             return 'IP: '+values.get('ip','?')+' · '+values.get('loc','?')
         self.submit(action,'ip')
+    def key_pressed(self,controller,keyval,keycode,modifiers):
+        if keyval!=Gdk.KEY_Escape:return False
+        if self.confirmation is not None:self.confirmation.cancel_button.emit('clicked');return True
+        if self.page!='status':self.select_page('status');return True
+        return False
     def confirm(self,text,action,accepted):
         panel=Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=12)
+        for edge in ('start','end','top','bottom'):getattr(panel,'set_margin_'+edge)(12)
         label=Gtk.Label(label=text,wrap=True,xalign=0);panel.append(label)
         cancel=TerminalButton(label='Отмена' if self.ru else 'Cancel')
         accept=TerminalButton(label=action)
@@ -954,20 +1365,31 @@ class App:
         if self.friends_window is not None:
             self.exit_after_friends=True;self.friends_window.request_close();return True
         if self.busy:return True
-        if self.active:
+        if self.active or self.managed_view()['owned']:
             message=self.t('closing')
-            if self.recovery.identity:message+='\n'+('Автовосстановление работает только при открытом приложении.' if self.ru else 'Automatic recovery runs only while the app is open.')
+            if self.managed_view()['owned']:
+                message+='\n'+self.transport_label()+(' продолжает работать в системной службе. Откройте приложение для отключения.' if self.ru else ' continues in the system service. Reopen the app to disconnect.')
+            elif self.recovery.identity:message+='\n'+('Автовосстановление работает только при открытом приложении.' if self.ru else 'Automatic recovery runs only while the app is open.')
             self.confirm(message,'Закрыть окно' if self.ru else 'Close window',lambda:self.close(True));return True
         self.close(True);return True
     def close(self,confirmed=False):
         if self.closed or self.busy:return False
-        if self.active and not confirmed:return self.on_close()
+        if (self.active or self.managed_view()['owned']) and not confirmed:return self.on_close()
+        if self.chat_pane is not None and not self.chat_closed:
+            def after_chat():
+                self.chat_closed=True;self.close(True)
+            self.chat_pane.request_close(after_chat);return False
         self.recovery.stop()
         self.closed=True
+        if self.support_upload is not None:self.support_upload.close()
+        if self.file_chooser is not None:self.file_chooser.destroy();self.file_chooser=None
         if self.load_source:GLib.source_remove(self.load_source);self.load_source=0
         self.load_pool.shutdown(wait=False,cancel_futures=True)
         if self.render_source:GLib.source_remove(self.render_source);self.render_source=0
-        if self.fit_source:GLib.source_remove(self.fit_source);self.fit_source=0
+        if self.fit_source:
+            if self.fit_clock is not None:self.fit_clock.disconnect(self.fit_source);self.fit_clock=None
+            else:GLib.source_remove(self.fit_source)
+            self.fit_source=0
         GLib.source_remove(self.poll_source)
         self.pool.shutdown(wait=False,cancel_futures=True);self.poll_pool.shutdown(wait=False,cancel_futures=True)
         Gtk.StyleContext.remove_provider_for_display(self.window.get_display(),self.provider)
@@ -1007,6 +1429,11 @@ def main():
         import re
         if len(files)!=1:return
         uri=files[0].get_uri()
+        if re.fullmatch('familyconnect://chat/(?:[0-9a-f]{32}|service)',uri):
+            app=getattr(application,'client',None)
+            if app is None or app.closed:
+                app=App(application);application.client=app
+            app.open_chat(uri.rsplit('/',1)[-1]);return
         if not re.fullmatch('familyconnect://invite/[0-9a-f]{64}',uri):return
         token=uri.split('/')[-1];app=getattr(application,'client',None)
         if app is None or app.closed:

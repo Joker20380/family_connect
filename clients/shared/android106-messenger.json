@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "reference": "android106-native105",
+  "source_inventory_sha256": "8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c",
+  "accepted_modules": {
+    "messenger/chat.py": "70da531f18645dda519a7eabbac9a505ac626ced19c023bf60f2ea796896c8d8",
+    "messenger/codec.py": "2e876b5c0978f10d935e35af141aeafacb631e7dd3b69c71d47934fc7af3d6ed",
+    "messenger/local.py": "5b12f81ca3f4636647781e6150a16599ae97f4de19fad49a57795b4a63c96ca1",
+    "messenger/mailbox.py": "aef9ba09e76775d6b77d2ef33091a88d01cca03efd58aab3226e5ad1d3426e16",
+    "messenger/store.py": "ffb7be9d5c8e4d304a53ec7a9b775e7b768fb692656dd25f32343208a54d6076",
+    "messenger/notices.py": "31241b050755b8ce9e0523c99032a528e11306f0742bcbd205375a2d1b440890",
+    "messenger/routed.py": "33e75c8463fadd669e4e9ee8b352054a349fac3beb6a9c225f595bf1305216bb",
+    "messenger/tests/test_resilient.py": "c4dd07adfa063c4eab35cac5ad05bb3cd91d3faaf7bed63273c894f860bb1046",
+    "messenger/__init__.py": "5276c4dec78953223d5bc4296242b30411baf74ae2e5de55471a7485effbf415",
+    "messenger/admission.py": "73fbab8d4437bf0dc304f2608b290c9814f3af5c86a08c950995919f7f0fe913",
+    "messenger/delivery.py": "69f9ce7e202b9ac7d2720aec8c2f08792a09220ccfb650f580c6a34e6eefde08",
+    "messenger/service_events.py": "8535cd7c3086537b159b966ac6c582380d776726e9fdda2bf2016fea834f78ee"
+  },
+  "local_adaptations": {
+    "messenger/routed.py": {
+      "sha256": "21ce1899e9e6362ed88b310d642cbd6ee956373f82d83c316d95bb60f57c4163",
+      "reason": "Trusted platform subclass can use SYSTEM routing without falsely claiming a protected DIRECT or service-only path. Default Android route order is unchanged.",
+      "patch": "clients/shared/android106-messenger.patch"
+    }
+  },
+  "ui_resources": {
+    "clients/android/app/src/main/res/values/strings.xml": "0982299f670f909f34786997d9f8e1aff5cae7f8a5094a611ff58fd89a40152b",
+    "clients/android/app/src/main/res/values-ru/strings.xml": "79fcda7d30c65cbefc2735fe4069f07922e178664ed7bee30782b310ca8f13d8"
+  }
+}

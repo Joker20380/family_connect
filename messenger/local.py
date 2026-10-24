@@ -42,7 +42,7 @@ def contact_card(public):
 
 
 class LocalChat:
-    def __init__(self, directory, key=None, *, create, cipher=None):
+    def __init__(self, directory, key=None, *, create, cipher=None, platform='android', version=0):
         if type(create) is not bool:
             raise LocalError('invalid_input')
         self._lock = threading.RLock()
@@ -51,7 +51,7 @@ class LocalChat:
         self._closing = False
         try:
             self._store = Store(directory, key, create=create, cipher=cipher)
-            self._chat = Chat(self._store, create_identity=create)
+            self._chat = Chat(self._store, create_identity=create, platform=platform, version=version)
             # Detect damaged encrypted records before exposing a usable account.
             self._store.contacts()
             self._store.messages()
@@ -172,13 +172,32 @@ class LocalChat:
             if self._delivery is not None:self._delivery.request_sync()
             return ident
 
+    def queue_radio(self, address, audio, mode, confirmed):
+        recipient = _hex(address, 16)
+        if confirmed is not True or type(audio) is not str or len(audio) > 32000:
+            raise LocalError('invalid_input')
+        try:
+            raw = base64.b64decode(audio, validate=True)
+            codec.radio_duration(raw, mode)
+        except (ValueError, TypeError):
+            raise LocalError('invalid_input') from None
+        with self._lock:
+            self._require_open()
+            if recipient not in self._chat.contacts():
+                raise LocalError('unverified_contact')
+            import LXMF
+            ident = self._chat.queue(recipient, '', fields={LXMF.FIELD_AUDIO: [mode, raw]})
+            if self._delivery is not None:
+                self._delivery.request_sync()
+            return ident
+
     def audio(self, message_id):
         _hex(message_id,32)
         with self._lock:
             self._require_open()
             message=next((m for m in self._store.messages() if m['id']==message_id and m.get('kind')=='audio'),None)
             if message is None:raise LocalError('invalid_input')
-            return dict(audio=message['audio'],duration_ms=message['duration_ms'])
+            return dict(audio=message['audio'],duration_ms=message['duration_ms'],mode=message.get('audio_mode',16))
 
     def history(self, address, *, offset=0, limit=50):
         _hex(address, 16)
@@ -274,6 +293,14 @@ class LocalChat:
             if self._delivery is None:
                 raise LocalError('delivery_unavailable')
             return self._delivery.request_sync()
+
+    def detach_carrier(self):
+        with self._lock:
+            self._require_open()
+            if self._delivery is not None:
+                if not self._delivery.close():
+                    raise LocalError('close_pending')
+                self._delivery = None
 
     def delivery_state(self):
         from dataclasses import asdict

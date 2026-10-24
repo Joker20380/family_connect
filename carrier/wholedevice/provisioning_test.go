@@ -25,6 +25,11 @@ import (
 func deliveryFixture(test *testing.T) (ReadinessDelivery, []byte, []byte, []byte, time.Time) {
 	test.Helper()
 	now := time.Now().UTC().Truncate(time.Second)
+	return deliveryFixtureAt(test, now, false)
+}
+
+func deliveryFixtureAt(test *testing.T, now time.Time, revoked bool) (ReadinessDelivery, []byte, []byte, []byte, time.Time) {
+	test.Helper()
 	root, rootPrivate, _ := ed25519.GenerateKey(rand.Reader)
 	issuerPublic, issuerPrivate, _ := ed25519.GenerateKey(rand.Reader)
 	publicSigning, privateSigning, _ := ed25519.GenerateKey(rand.Reader)
@@ -48,7 +53,11 @@ func deliveryFixture(test *testing.T) (ReadinessDelivery, []byte, []byte, []byte
 	if err != nil {
 		test.Fatal(err)
 	}
-	crlBytes, err := x509.CreateRevocationList(rand.Reader, &x509.RevocationList{Number: big.NewInt(1), ThisUpdate: now.Add(-time.Second), NextUpdate: now.Add(30 * time.Minute)}, ca, issuerPrivate)
+	crl := &x509.RevocationList{Number: big.NewInt(1), ThisUpdate: now.Add(-time.Second), NextUpdate: now.Add(30 * time.Minute)}
+	if revoked {
+		crl.RevokedCertificateEntries = []x509.RevocationListEntry{{SerialNumber: leaf.SerialNumber, RevocationTime: now.Add(-time.Second)}}
+	}
+	crlBytes, err := x509.CreateRevocationList(rand.Reader, crl, ca, issuerPrivate)
 	if err != nil {
 		test.Fatal(err)
 	}
@@ -56,6 +65,24 @@ func deliveryFixture(test *testing.T) (ReadinessDelivery, []byte, []byte, []byte
 	signature := ed25519.Sign(rootPrivate, append([]byte("family-connect/restricted-issuer/v1\x00"), payload...))
 	directory, _ := json.Marshal(bootstrap.Directory{Version: 1, Family: family, IssuedAt: now, ExpiresAt: now.Add(30 * time.Minute), Seeds: []bootstrap.Seed{{Transport: "telemost-webrtc", JoinURL: "https://telemost.yandex.ru/j/test-only", Gateway: gateway}}})
 	return ReadinessDelivery{Version: 1, Device: hex.EncodeToString(ref[:16]), Challenge: base64.StdEncoding.EncodeToString(make([]byte, 32)), IssuedAt: now.Unix(), ExpiresAt: now.Add(30 * time.Minute).Unix(), Revision: 1, Issuer: issuerEnvelope{base64.StdEncoding.EncodeToString(payload), base64.StdEncoding.EncodeToString(signature)}, Certificate: string(pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: leafBytes})), Revocations: string(pem.EncodeToMemory(&pem.Block{Type: "X509 CRL", Bytes: crlBytes})), MinimumCRL: 1, Directory: directory}, public, identity, root, now
+}
+
+func TestCachedBootstrapCryptoDeadlinesAndRevocation(test *testing.T) {
+	now := time.Date(2026, 10, 11, 12, 0, 0, 0, time.UTC)
+	for _, revoked := range []bool{false, true} {
+		delivery, public, _, root, _ := deliveryFixtureAt(test, now, revoked)
+		raw, err := json.Marshal(delivery)
+		if err != nil {
+			test.Fatal(err)
+		}
+		for _, offset := range []time.Duration{0, 29 * time.Minute, 30 * time.Minute, 31 * time.Minute} {
+			_, _, err := ValidateDelivery(raw, public, root, now.Add(offset))
+			permitted := !revoked && offset < 30*time.Minute
+			if (err == nil) != permitted {
+				test.Fatalf("cached authorization revoked=%t offset=%s accepted=%t", revoked, offset, err == nil)
+			}
+		}
+	}
 }
 
 func TestProductionDeliveryToExistingFamilyMaterial(test *testing.T) {

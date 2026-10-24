@@ -164,10 +164,15 @@ func (point *headLossEndpoint) SendContext(ctx context.Context, data []byte) err
 	message := point.msgID.Load()
 	for len(point.sendQueue) > 0 {
 		frame := <-point.sendQueue
+		if !frame.local.Begin() {
+			continue
+		}
 		if isHead && point.fault == "carrier" && len(point.attempts) == 0 {
+			frame.local.Complete(nil)
 			continue
 		}
 		point.writeVP8Sample(frame.data, frame.point)
+		frame.local.Complete(nil)
 	}
 	packets := point.packets
 	if point.fault == "reorder" && isHead {
@@ -196,7 +201,7 @@ func (point *headLossEndpoint) SendContext(ctx context.Context, data []byte) err
 	point.peer.receive(packets)
 	if isHead && len(point.attempts) == 1 && (point.fault == "frame" || point.fault == "late_rtp") {
 		point.peer.receiveMu.Lock()
-		point.peer.reorder.gapSince = time.Now().Add(-101 * time.Millisecond)
+		point.peer.reorder.gapSince = time.Now().Add(-reorderGapTimeout - time.Millisecond)
 		point.peer.receiveMu.Unlock()
 	}
 	if isHead && len(point.attempts) > 1 && point.late != nil {

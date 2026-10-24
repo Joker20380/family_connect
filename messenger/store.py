@@ -13,6 +13,7 @@ import sqlite3
 import stat
 import threading
 import uuid
+import time
 
 class Store:
     def __init__(self, directory, key=None, *, create=None, cipher=None):
@@ -106,19 +107,80 @@ class Store:
         # Only callers that verified/created the signed message may insert it.
         if type(raw) is not bytes or not 96 < len(raw) <= 131584:
             raise ValueError('Invalid packed message')
-        ident = 'message:' + message['id']
         with self._lock, self._db:
-            if self._get(ident) is not None:
-                return False
-            if self._db.execute("SELECT count(*) FROM records WHERE id LIKE 'message:%'").fetchone()[0] >= 1000:
-                raise ValueError('Pilot history quota reached')
-            if not outgoing and message.get('kind')=='edit':
-                original=next((m for m in self.visible_messages() if m['id']==message['target']),None)
-                if original is not None and not original['outgoing'] and original['peer']==message['peer'] and message['revision']>original.get('revision',0):
-                    state=self._get('inbox') or {};state[message['target']]={'read':False,'notified':False};self._put('inbox',state)
-            self._put(ident, dict(message, packed=raw.hex(), outgoing=outgoing,
-                                 status='queued' if outgoing else 'received', attempt=None))
-            return True
+            return self._add(message, raw, outgoing=outgoing)
+
+    def _add(self, message, raw, *, outgoing):
+        ident = 'message:' + message['id']
+        if self._get(ident) is not None:
+            return False
+        if self._db.execute("SELECT count(*) FROM records WHERE id LIKE 'message:%'").fetchone()[0] >= 1000:
+            raise ValueError('Pilot history quota reached')
+        if not outgoing and message.get('kind')=='edit':
+            original=next((m for m in self.visible_messages() if m['id']==message['target']),None)
+            if original is not None and not original['outgoing'] and original['peer']==message['peer'] and message['revision']>original.get('revision',0):
+                state=self._get('inbox') or {};state[message['target']]={'read':False,'notified':False};self._put('inbox',state)
+        self._put(ident, dict(message, packed=raw.hex(), outgoing=outgoing,
+                             status='queued' if outgoing else 'received', attempt=None))
+        return True
+
+    def pin_service_publisher(self, address, public):
+        with self._lock, self._db:
+            publishers = self._get('service-publishers') or {}
+            if address not in publishers and len(publishers) >= 4:
+                raise ValueError('Publisher quota reached')
+            publishers[address] = public
+            self._put('service-publishers', publishers)
+
+    def service_publishers(self):
+        with self._lock:
+            return self._get('service-publishers') or {}
+
+    def commit_received(self, message, raw, receipt_factory):
+        with self._lock, self._db:
+            existing = self._get('message:' + message['id'])
+            if message.get('kind') == 'service':
+                event = message['event']
+                ident = 'notice:' + message['peer'] + ':' + event['event_id']
+                previous = self._get(ident)
+                if previous is not None:
+                    if event['revision'] < previous['revision']:
+                        raise ValueError('Stale service revision')
+                    if event['revision'] == previous['revision'] and event != previous['signed_event']:
+                        raise ValueError('Conflicting service revision')
+                elif self._db.execute("SELECT count(*) FROM records WHERE id LIKE 'notice:%'").fetchone()[0] >= 1000:
+                    raise ValueError('Service history quota reached')
+                if previous is None or event['revision'] > previous['revision']:
+                    self._put(ident, dict(event, id='lxmf:' + ident[7:], author=message['peer'],
+                                         publisher=message['peer'], lxmf_id=message['id'], signed_event=event,
+                                         read=False, notified=False,
+                                         notification_suppressed=time.time() - event['created'] > 86400))
+            added = self._add(message, raw, outgoing=False)
+            if receipt_factory is not None:
+                if existing is not None and existing.get('receipt_id'):
+                    receipt = self._get('message:' + existing['receipt_id'])
+                    if receipt['status'] != 'sending':
+                        receipt.update(status='queued', attempt=None)
+                        self._put('message:' + receipt['id'], receipt)
+                else:
+                    receipt, packed = receipt_factory()
+                    self._add(receipt, packed, outgoing=True)
+                    saved = self._get('message:' + message['id'])
+                    saved['receipt_id'] = receipt['id']
+                    self._put('message:' + message['id'], saved)
+            return added
+
+    def accept_stored_receipt(self, receipt):
+        with self._lock, self._db:
+            ident = 'message:' + receipt['target']
+            message = self._get(ident)
+            if (message is None or not message['outgoing'] or message['peer'] != receipt['peer']
+                    or message.get('kind') == 'stored'):
+                raise ValueError('Unrelated storage receipt')
+            changed = message['status'] != 'recipient_stored'
+            message.update(status='recipient_stored', attempt=None)
+            self._put(ident, message)
+            return changed
 
     def contacts(self):
         with self._lock:
@@ -150,7 +212,7 @@ class Store:
                 "SELECT id FROM records WHERE id LIKE 'message:%' ORDER BY rowid").fetchall()]
 
     def visible_messages(self):
-        messages=self.messages();visible=[dict(m) for m in messages if m.get('kind')!='edit'];known={m['id']:m for m in visible}
+        messages=self.messages();visible=[dict(m) for m in messages if m.get('kind') not in ('edit', 'stored', 'service')];known={m['id']:m for m in visible}
         for edit in messages:
             if edit.get('kind')!='edit':continue
             original=known.get(edit['target'])
@@ -209,28 +271,46 @@ class Store:
                         events.append(value);known[event['id']] = value
                 if len(events) > 1000: raise ValueError('Service history quota reached')
                 self._put('service-events', events)
-            return events
+            notices = [self._get(row[0]) for row in self._db.execute(
+                "SELECT id FROM records WHERE id LIKE 'notice:%' ORDER BY rowid").fetchall()]
+            return [event for event in events + notices if event['expires'] > time.time()]
 
     def service_mark(self, ids, flag):
         if flag not in ('read', 'notified') or type(ids) is not list or len(ids) > 1000 or any(type(i) is not str for i in ids):
             raise ValueError('Invalid service update')
         with self._lock, self._db:
-            events = self.service_events()
+            events = self._get('service-events') or []
             for event in events:
                 if event['id'] in ids:
                     event[flag] = True
                     if flag == 'read': event['notified'] = True
             self._put('service-events', events)
+            for row in self._db.execute("SELECT id FROM records WHERE id LIKE 'notice:%'").fetchall():
+                event = self._get(row[0])
+                if event['id'] in ids:
+                    event[flag] = True
+                    if flag == 'read': event['notified'] = True
+                    self._put(row[0], event)
 
     def pending_outbox(self):
-        """Stable IDs only; never automatically resend a relay-accepted message.
+        """Stable IDs; opt-in durable delivery retries relay acceptance on a timer.
 
         A sending record from a previous owner epoch can retry its original bytes.
         A current-epoch attempt belongs to the existing in-flight worker.
+        Legacy records keep their relay-only behavior. Expiry retains history.
         """
-        with self._lock:
-            return [message['id'] for message in self.messages()
+        with self._lock, self._db:
+            now = time.time()
+            messages = self.messages()
+            for message in messages:
+                if (message.get('require_stored') and now >= message['expires_at']
+                        and message['status'] not in ('recipient_stored', 'delivered', 'expired')):
+                    message.update(status='expired', attempt=None)
+                    self._put('message:' + message['id'], message)
+            return [message['id'] for message in messages
                     if message['outgoing'] and (message['status'] == 'queued'
+                    or (message['status'] == 'relayed' and message.get('require_stored')
+                        and now >= message.get('retry_at', 0))
                     or (message['status'] == 'sending'
                         and not (message['attempt'] or '').startswith(self.epoch + ':')))]
 
@@ -238,7 +318,7 @@ class Store:
         with self._lock, self._db:
             ident = 'message:' + message_id
             message = self._get(ident)
-            if message is None or not message['outgoing'] or message['status'] == 'delivered':
+            if message is None or not message['outgoing'] or message['status'] in ('delivered', 'recipient_stored', 'expired'):
                 raise ValueError('Message is not pending')
             if message['status'] == 'sending' and message['attempt'].startswith(self.epoch + ':'):
                 raise ValueError('Message is already in flight')
@@ -272,6 +352,9 @@ class Store:
                     or not token.startswith(self.epoch + ':')):
                 return False
             message.update(status='delivered' if delivered else 'relayed' if relayed else 'queued', attempt=None)
+            if relayed and message.get('require_stored'):
+                message['relay_attempts'] = min(message.get('relay_attempts', 0) + 1, 7)
+                message['retry_at'] = time.time() + min(3600, 60 * 2 ** (message['relay_attempts'] - 1))
             self._put(ident, message)
             return True
 

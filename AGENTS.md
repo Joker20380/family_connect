@@ -29,6 +29,29 @@ with this directory as the project root so these instructions are loaded.
 User instructions take precedence. Continue authorized work; do not ask again merely
 because a runbook describes a deployment step. Respect actual sandbox permissions.
 
+## Commit and push policy
+
+Owner instruction,2026-10-24: commit and push every completed logical change
+immediately, including its source, tests and documentation. Do not accumulate
+finished work locally until the end of a long session. This is standing permission
+to commit and push; do not ask again for each step. A later explicit local-only or
+no-push instruction takes precedence. A development pause still allows a separately
+requested source checkpoint; it does not resume implementation.
+
+Before committing, inspect the staged diff and check for secrets, private user data
+and accidental build output. Keep state directories, source capsules, raw private
+evidence, keys/profiles, product databases, backups and release-signing secrets out
+of Git. Preserve them locally; never force-add ignored files to satisfy "everything".
+Commit safe sources/tests/docs and sanitized manifests/checksums, not private state.
+
+Use the existing agreed branch/upstream and ordinary non-force pushes. Preserve
+other work; never reset/clean or rewrite published history to make a push succeed.
+Label incomplete work as a checkpoint, not a release or acceptance PASS. A source
+push does not authorize deployment, release tags, public installers/catalog changes
+or server policy changes. Verify the remote branch SHA after pushing and report the
+commit and outcome. If authentication/network or a divergent remote blocks pushing,
+retain the local commit and report the exact blocker; do not claim it was pushed.
+
 After every version change, update documentation in the same task: STATUS, PLAN,
 the dated release report, and applicable RU/EN guides/download links/checksums.
 Distinguish built, installed, publicly distributed and invitation-page versions;

@@ -57,7 +57,7 @@ func (s *Session) writeJSON(v any) error {
 	_ = s.ws.SetWriteDeadline(time.Now().Add(wsWriteTimeout))
 	if err := s.ws.WriteJSON(v); err != nil {
 		s.cfg.Trace.Record(sessiontrace.Event{Stage: "WEBSOCKET", State: "FAILED", Reason: "SIGNAL_WS_CLOSE", CloseReason: "WRITE_ERROR"})
-		s.signalClosed(errors.New("telemost: signaling write failed"))
+		s.signalClosedAt(errors.New("telemost: signaling write failed"), "SIGNAL_WRITE")
 		return errors.New("telemost: signaling write failed")
 	}
 	return nil
@@ -118,7 +118,7 @@ func (s *Session) signalingLoop() {
 		if err := conn.ReadJSON(&msg); err != nil {
 			if !s.closed.Load() {
 				s.recordSignalingReadFailure(err)
-				s.signalClosed(errors.New("telemost: signaling closed or invalid JSON"))
+				s.signalClosedAt(errors.New("telemost: signaling closed or invalid JSON"), "SIGNAL_READ")
 			}
 			return
 		}
@@ -138,12 +138,12 @@ func (s *Session) signalingLoop() {
 		}
 		if isEndMessage(msg) {
 			s.cfg.Trace.Add("REMOTE_CLOSE", "CLOSED", "REMOTE_CLOSE")
-			s.signalClosed(fmt.Errorf("telemost: conference ended"))
+			s.signalClosedAt(fmt.Errorf("telemost: conference ended"), "CONFERENCE_ENDED")
 			return
 		}
 		if offer, ok := msg["subscriberSdpOffer"].(map[string]any); ok {
 			if err := s.handleSubscriberOffer(offer, uid, !pubOfferSent); err != nil {
-				s.signalClosed(errors.New("telemost: subscriber negotiation failed"))
+				s.signalClosedAt(errors.New("telemost: subscriber negotiation failed"), "SUBSCRIBER_NEGOTIATION")
 				return
 			}
 			pubOfferSent = true
@@ -166,6 +166,10 @@ func (s *Session) wsConn() *websocket.Conn {
 }
 
 func (s *Session) signalClosed(err error) {
+	s.signalClosedAt(err, "UNKNOWN")
+}
+
+func (s *Session) signalClosedAt(err error, source string) {
 	s.closeOnce.Do(func() {
 		reason := "CARRIER_ERROR"
 		if errors.Is(err, io.EOF) {
@@ -174,7 +178,7 @@ func (s *Session) signalClosed(err error) {
 		if errors.Is(err, ErrClosed) {
 			reason = "NONE"
 		}
-		s.cfg.Trace.Add("CARRIER", "CLOSED", reason)
+		s.cfg.Trace.Record(sessiontrace.Event{Stage: "CARRIER", State: "CLOSED", Reason: reason, CloseSource: source})
 		s.errMu.Lock()
 		s.connectErr = err
 		s.errMu.Unlock()
@@ -231,12 +235,12 @@ func (s *Session) applyServerHello(serverHello map[string]any) {
 	}
 	if sub := s.pcSub.Load(); sub != nil {
 		if err := sub.SetConfiguration(cfg); err != nil {
-			s.signalClosed(errors.New("telemost: invalid subscriber ICE configuration"))
+			s.signalClosedAt(errors.New("telemost: invalid subscriber ICE configuration"), "SUBSCRIBER_ICE_CONFIG")
 		}
 	}
 	if pub := s.pcPub.Load(); pub != nil {
 		if err := pub.SetConfiguration(cfg); err != nil {
-			s.signalClosed(errors.New("telemost: invalid publisher ICE configuration"))
+			s.signalClosedAt(errors.New("telemost: invalid publisher ICE configuration"), "PUBLISHER_ICE_CONFIG")
 		}
 	}
 	if !s.closed.Load() {
@@ -329,11 +333,11 @@ func (s *Session) handlePublisherAnswer(answer map[string]any) {
 	}
 	sdp, _ := answer["sdp"].(string)
 	if sdp == "" || len(sdp) > 256*1024 || strings.Count(sdp, "\nm=") > 32 {
-		s.signalClosed(errors.New("telemost: empty publisher answer"))
+		s.signalClosedAt(errors.New("telemost: empty publisher answer"), "PUBLISHER_ANSWER")
 		return
 	}
 	if err := pub.SetRemoteDescription(webrtc.SessionDescription{Type: webrtc.SDPTypeAnswer, SDP: sdp}); err != nil {
-		s.signalClosed(errors.New("telemost: publisher negotiation failed"))
+		s.signalClosedAt(errors.New("telemost: publisher negotiation failed"), "PUBLISHER_NEGOTIATION")
 		return
 	}
 	s.flushICE("PUBLISHER")
@@ -448,14 +452,14 @@ func (s *Session) handleRemoteICE(cand map[string]any) {
 	}
 	if peer.RemoteDescription() == nil {
 		if len(s.pendingICE[target]) >= 128 {
-			s.signalClosed(errors.New("telemost: too many pending ICE candidates"))
+			s.signalClosedAt(errors.New("telemost: too many pending ICE candidates"), "ICE_PENDING_LIMIT")
 			return
 		}
 		s.pendingICE[target] = append(s.pendingICE[target], init)
 		return
 	}
 	if err := peer.AddICECandidate(init); err != nil {
-		s.signalClosed(errors.New("telemost: invalid remote ICE"))
+		s.signalClosedAt(errors.New("telemost: invalid remote ICE"), "REMOTE_ICE")
 	}
 }
 
@@ -476,7 +480,7 @@ func (s *Session) flushICE(target string) {
 	}
 	for _, candidate := range s.pendingICE[target] {
 		if err := peer.AddICECandidate(candidate); err != nil {
-			s.signalClosed(errors.New("telemost: invalid queued ICE"))
+			s.signalClosedAt(errors.New("telemost: invalid queued ICE"), "QUEUED_ICE")
 			break
 		}
 	}
@@ -507,7 +511,7 @@ func (s *Session) heartbeatLoop() {
 			}
 			if err := connection.WriteControl(websocket.PingMessage, nil, time.Now().Add(time.Second)); err != nil {
 				s.cfg.Trace.Record(sessiontrace.Event{Stage: "WEBSOCKET", State: "FAILED", Reason: "SIGNAL_WS_CLOSE", CloseReason: "WRITE_ERROR"})
-				s.signalClosed(errors.New("telemost: signaling heartbeat failed"))
+				s.signalClosedAt(errors.New("telemost: signaling heartbeat failed"), "HEARTBEAT_WRITE")
 				return
 			}
 			s.cfg.Trace.Record(sessiontrace.Event{Stage: "HEARTBEAT", State: "TX", Reason: "NONE", HeartbeatKind: "WEBSOCKET"})
@@ -596,7 +600,19 @@ func (s *Session) writerLoop() {
 				if !ok {
 					return
 				}
-				s.writeVP8Sample(frame.data, frame.point)
+				if !frame.local.Begin() {
+					continue
+				}
+				written := s.writeVP8Sample(frame.data, frame.point)
+				if written {
+					frame.local.Complete(nil)
+				} else {
+					frame.local.Complete(ErrClosed)
+				}
+				if frame.local != nil && !written {
+					s.signalClosedAt(ErrClosed, "VP8_WRITE")
+					return
+				}
 				time.Sleep(vp8SendInterval)
 			}
 		}
@@ -610,15 +626,24 @@ func (s *Session) writerLoop() {
 			if !ok {
 				return
 			}
-			if !s.writeDCMessage(frame.data) {
-				s.signalClosed(errors.New("telemost: data channel write failed"))
+			if !frame.local.Begin() {
+				continue
+			}
+			written := s.writeDCMessage(frame.data)
+			if written {
+				frame.local.Complete(nil)
+			} else {
+				frame.local.Complete(ErrClosed)
+			}
+			if !written {
+				s.signalClosedAt(errors.New("telemost: data channel write failed"), "DATA_CHANNEL_WRITE")
 				return
 			}
 		}
 	}
 }
 
-func (s *Session) writeVP8Sample(data []byte, queued ...sessiontrace.Boundary) {
+func (s *Session) writeVP8Sample(data []byte, queued ...sessiontrace.Boundary) bool {
 	point := sessiontrace.Boundary{Stage: "carrier_written", Direction: "tx", Result: "no_rtp"}
 	if fragment, valid := decodeVP8Frame(data); valid {
 		point = s.cfg.Trace.MessageAttempt(fragmentBoundary(fragment))
@@ -632,14 +657,14 @@ func (s *Session) writeVP8Sample(data []byte, queued ...sessiontrace.Boundary) {
 	}
 	if s.track == nil {
 		s.cfg.Trace.Boundary(point)
-		return
+		return false
 	}
 	before := s.rtpWrites.Load()
 	if err := s.track.WriteSample(media.Sample{Data: data, Duration: vp8FrameDuration}); err != nil {
 		point.Result = "write_error"
 		s.cfg.Trace.Boundary(point)
-		s.signalClosed(errors.New("telemost: VP8 write failed"))
-		return
+		s.signalClosedAt(errors.New("telemost: VP8 write failed"), "VP8_WRITE")
+		return false
 	}
 	if s.rtpWrites.Load() != before {
 		point.Result = "ok"
@@ -651,6 +676,7 @@ func (s *Session) writeVP8Sample(data []byte, queued ...sessiontrace.Boundary) {
 		s.written = advanceFragment(s.written, fragment)
 	}
 	s.statsMu.Unlock()
+	return point.Result == "ok"
 }
 
 func (s *Session) writeDCMessage(data []byte) bool {

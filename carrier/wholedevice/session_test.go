@@ -172,7 +172,7 @@ func TestFlowLimitAndParentCancellation(test *testing.T) {
 	session := Attach(ctx, plane, nil)
 	defer session.Close()
 	var applications []net.Conn
-	for index := 0; index < 32; index++ {
+	for index := 0; index < cap(session.tcpSlots); index++ {
 		app, engine := net.Pipe()
 		applications = append(applications, app)
 		go session.Handle(engine, "tcp", "1.1.1.1", 443)
@@ -192,7 +192,7 @@ func TestFlowLimitAndParentCancellation(test *testing.T) {
 		test.Fatal("flow limit")
 	}
 	app.Close()
-	if plane.calls.Load() != 32 {
+	if int(plane.calls.Load()) != cap(session.tcpSlots) {
 		test.Fatal("extra outbound")
 	}
 	cancel()
@@ -200,7 +200,7 @@ func TestFlowLimitAndParentCancellation(test *testing.T) {
 	for _, app := range applications {
 		app.Close()
 	}
-	if session.Counters.Active.Load() != 0 || session.Counters.Peak.Load() != 32 {
+	if session.Counters.Active.Load() != 0 || session.Counters.Peak.Load() != int64(cap(session.tcpSlots)) {
 		test.Fatal("unbounded cleanup", session.Snapshot())
 	}
 	if _, err := Open(context.Background(), "unused", "unused", nil, func(string) {}); err == nil {

@@ -31,8 +31,12 @@ func TestPublicSchemaGolden(test *testing.T) {
 	if err := json.Unmarshal(raw, &expected); err != nil {
 		test.Fatal(err)
 	}
+	expected["Event"] = append(expected["Event"], "close_source,omitempty", "lease_deadline_ms,omitempty", "lease_action,omitempty", "lease_sequence,omitempty")
+	expected["Snapshot"] = append(expected["Snapshot"], "first_close,omitempty")
+	sort.Strings(expected["Event"])
+	sort.Strings(expected["Snapshot"])
 	if !reflect.DeepEqual(actual, expected) {
-		test.Fatalf("public schema differs from sealed beta66: got %v want %v", actual, expected)
+		test.Fatalf("public schema differs from beta66 plus bounded closure/lease metadata: got %v want %v", actual, expected)
 	}
 }
 

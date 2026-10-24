@@ -17,6 +17,10 @@ if VENDOR.is_dir():
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(DESKTOP))
 
+if sys.argv[1:] == ['--chat-service']:
+    runpy.run_path(str(DESKTOP / 'chat_daemon.py'), run_name='__main__')
+    raise SystemExit(0)
+
 # Fail with a clear message instead of a raw GTK/GI traceback. GTK 4,
 # libadwaita and GI are host/system dependencies and are not bundled.
 try:

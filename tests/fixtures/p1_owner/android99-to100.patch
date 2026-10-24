@@ -1,0 +1,528 @@
+--- a/carrier/sessiondiag/report.go
++++ b/carrier/sessiondiag/report.go
+@@ -15,6 +15,7 @@
+ )
+ 
+ type Report struct {
++	MuxLifecycle         *tcpforward.MuxLifecycle       `json:"mux_lifecycle,omitempty"`
+ 	ProtocolErrorReasons tcpforward.ProtocolErrorCounts `json:"protocol_error_reasons"`
+ 	SpeedProfile         string                         `json:"speed_profile,omitempty"`
+ 	ReliableLimits       reliablestream.Limits          `json:"reliable_limits"`
+@@ -106,7 +107,7 @@
+ }
+ 
+ func Capture(setupID string, err error, terminalAt time.Time, reliable reliablestream.Stats, media telemost.Stats, mux tcpforward.MuxStats) Report {
+-	report := Report{ReliableLimits: reliable.Limits, RetryBytes: reliable.RetransmittedBytes, MuxProfile: mux.Profile, MuxWindow: mux.Window, TerminalReason: Reason(err), ObservedAtMS: time.Now().UnixMilli(),
++	report := Report{MuxLifecycle: mux.Lifecycle, ReliableLimits: reliable.Limits, RetryBytes: reliable.RetransmittedBytes, MuxProfile: mux.Profile, MuxWindow: mux.Window, TerminalReason: Reason(err), ObservedAtMS: time.Now().UnixMilli(),
+ 		ReliableTerminal: choice(reliable.Terminal, "", "closed", "recovery_exhausted", "protocol_violation", "remote_reset", "cancelled", "carrier_closed"),
+ 		SignalingFailure: "NONE", ICEFailure: "NONE", EvidenceDropped: media.EvidenceDropped,
+ 		SubscriberState: choice(media.SubscriberState, "new", "connecting", "connected", "disconnected", "failed", "closed"),
+--- a/carrier/tcpforward/mux.go
++++ b/carrier/tcpforward/mux.go
+@@ -14,6 +14,7 @@
+ )
+ 
+ type MuxConfig struct {
++	Lifecycle    bool
+ 	MaxStreams   int
+ 	WaitForSlot  bool
+ 	Policy       Policy
+@@ -43,6 +44,7 @@
+ }
+ 
+ type MuxStats struct {
++	Lifecycle            *MuxLifecycle
+ 	ProtocolErrorReasons ProtocolErrorCounts
+ 	Window               int
+ 	Profile              string
+@@ -78,6 +80,7 @@
+ }
+ 
+ type Mux struct {
++	life          muxLifeBuffer
+ 	window        int
+ 	mu            sync.Mutex
+ 	ctx           context.Context
+@@ -233,6 +236,7 @@
+ func (mux *Mux) fail(err error) {
+ 	mux.mu.Lock()
+ 	if mux.err == nil {
++		mux.lifeLocked("failure", 0, 0, lifeReason(err))
+ 		mux.err = err
+ 		mux.failureAt = time.Now()
+ 	}
+@@ -247,8 +251,16 @@
+ 	mux.mu.Unlock()
+ }
+ 
+-func (mux *Mux) Close() error { mux.cancel(); mux.endpoint.Close(); <-mux.done; return nil }
+-func (mux *Mux) Wait() error  { <-mux.done; mux.mu.Lock(); defer mux.mu.Unlock(); return mux.err }
++func (mux *Mux) Close() error {
++	mux.mu.Lock()
++	mux.lifeLocked("close", 0, 0, "caller")
++	mux.mu.Unlock()
++	mux.cancel()
++	mux.endpoint.Close()
++	<-mux.done
++	return nil
++}
++func (mux *Mux) Wait() error { <-mux.done; mux.mu.Lock(); defer mux.mu.Unlock(); return mux.err }
+ func (mux *Mux) Terminal() (error, time.Time) {
+ 	mux.mu.Lock()
+ 	defer mux.mu.Unlock()
+@@ -258,7 +270,9 @@
+ 	mux.mu.Lock()
+ 	defer mux.mu.Unlock()
+ 	mux.measureLocked()
+-	return mux.stats
++	stats := mux.stats
++	stats.Lifecycle = mux.lifeSnapshotLocked()
++	return stats
+ }
+ 
+ func (mux *Mux) measureLocked() {
+@@ -287,6 +301,7 @@
+ }
+ 
+ func (mux *Mux) controlLocked(frame muxFrame) {
++	mux.lifeLocked("enqueue", frame.id, frame.kind, "control")
+ 	if mux.ctx.Err() != nil {
+ 		return
+ 	}
+@@ -382,6 +397,9 @@
+ 				budget += cost
+ 			}
+ 		}
++		for _, current := range frames {
++			mux.lifeLocked("send_start", current.id, current.kind, "batch")
++		}
+ 		changed := mux.changed
+ 		mux.mu.Unlock()
+ 		if !ok {
+@@ -408,6 +426,7 @@
+ 		mux.mu.Lock()
+ 		mux.stats.SchedulerFrames += uint64(len(frames))
+ 		for _, current := range frames {
++			mux.lifeLocked("send_done", current.id, current.kind, "local")
+ 			terminal := current.kind == resetFrame || current.kind == closeFrame || current.kind == openError
+ 			if stream := mux.streams[current.id]; terminal && stream != nil && stream.terminal != nil && len(stream.send) == 0 {
+ 				mux.removeLocked(current.id)
+@@ -420,6 +439,7 @@
+ }
+ 
+ func (mux *Mux) removeLocked(id uint32) {
++	mux.lifeLocked("remove", id, 0, "terminal")
+ 	delete(mux.streams, id)
+ 	for index, current := range mux.order {
+ 		if current == id {
+@@ -430,6 +450,7 @@
+ }
+ 
+ func (mux *Mux) dispatchLocked(frame muxFrame) {
++	mux.lifeLocked("receive", frame.id, frame.kind, "wire")
+ 	if frame.id == 0 {
+ 		mux.dnsFrameLocked(frame)
+ 		return
+@@ -462,6 +483,7 @@
+ 		return
+ 	}
+ 	if stream == nil {
++		mux.lifeLocked("unknown", frame.id, frame.kind, "missing")
+ 		mux.protocolErrorLocked(&mux.stats.ProtocolErrorReasons.UnknownStream)
+ 		return
+ 	}
+@@ -477,6 +499,7 @@
+ 			invalid = true
+ 		} else {
+ 			stream.opened = true
++			mux.lifeLocked("opened", stream.id, openOK, "peer")
+ 			mux.stats.OpenOK++
+ 		}
+ 	case openError:
+@@ -563,6 +586,7 @@
+ 		}
+ 		mux.leaseOpen = true
+ 		stream.opened = true
++		mux.lifeLocked("opened", stream.id, openOK, "lease")
+ 		stream.send = append(stream.send, muxFrame{openOK, stream.id, nil})
+ 		mux.stats.OpenOK++
+ 		mux.signalLocked()
+@@ -594,6 +618,7 @@
+ 		return
+ 	}
+ 	stream.opened = true
++	mux.lifeLocked("opened", stream.id, openOK, "socket")
+ 	mux.stats.ActiveSockets++
+ 	stream.send = append(stream.send, muxFrame{openOK, stream.id, nil})
+ 	mux.stats.OpenOK++
+--- a/carrier/tcpforward/mux_lifecycle.go
++++ b/carrier/tcpforward/mux_lifecycle.go
+@@ -0,0 +1,153 @@
++package tcpforward
++
++import (
++	"context"
++	"errors"
++	"io"
++	"time"
++)
++
++type MuxLifeEvent struct {
++	Index  uint64 `json:"index"`
++	At     int64  `json:"at"`
++	ID     uint32 `json:"id"`
++	Kind   byte   `json:"kind"`
++	Stage  string `json:"stage"`
++	Reason string `json:"reason"`
++}
++
++type MuxLifeStream struct {
++	ID            uint32 `json:"id"`
++	Created       int64  `json:"created"`
++	Opened        int64  `json:"opened"`
++	Finished      int64  `json:"finished"`
++	Removed       int64  `json:"removed"`
++	Reason        string `json:"reason"`
++	Sent          uint64 `json:"sent"`
++	Received      uint64 `json:"received"`
++	Used          int    `json:"used"`
++	SendCredit    int    `json:"send_credit"`
++	ReceiveCredit int    `json:"receive_credit"`
++	LocalFIN      bool   `json:"local_fin"`
++	RemoteFIN     bool   `json:"remote_fin"`
++}
++
++type MuxLifeIncident struct {
++	Event     MuxLifeEvent  `json:"event"`
++	Known     bool          `json:"known"`
++	Stream    MuxLifeStream `json:"stream"`
++	FailureAt int64         `json:"failure_at"`
++	Cancelled bool          `json:"cancelled"`
++}
++
++type MuxLifecycle struct {
++	Events        []MuxLifeEvent   `json:"events"`
++	Dropped       uint64           `json:"dropped"`
++	FirstUnknown  *MuxLifeIncident `json:"first_unknown,omitempty"`
++	FailureAt     int64            `json:"failure_at"`
++	FailureReason string           `json:"failure_reason"`
++	CloseAt       int64            `json:"close_at"`
++}
++
++type muxLifeBuffer struct {
++	events        [32]MuxLifeEvent
++	count         uint64
++	removed       [64]MuxLifeStream
++	removedCount  uint64
++	first         *MuxLifeIncident
++	failureAt     int64
++	failureReason string
++	closeAt       int64
++}
++
++func lifeReason(err error) string {
++	switch {
++	case err == nil:
++		return "none"
++	case errors.Is(err, io.EOF):
++		return "eof"
++	case errors.Is(err, ErrReset):
++		return "reset"
++	case errors.Is(err, ErrProtocol):
++		return "protocol"
++	case errors.Is(err, context.Canceled):
++		return "cancelled"
++	case errors.Is(err, context.DeadlineExceeded):
++		return "deadline"
++	case errors.Is(err, io.ErrClosedPipe):
++		return "closed_pipe"
++	default:
++		return "other"
++	}
++}
++
++func (mux *Mux) lifeLocked(stage string, id uint32, kind byte, reason string) {
++	if !mux.config.Lifecycle {
++		return
++	}
++	buffer := &mux.life
++	buffer.count++
++	event := MuxLifeEvent{buffer.count, time.Now().UnixMilli(), id, kind, stage, reason}
++	buffer.events[(buffer.count-1)%32] = event
++	stream := mux.streams[id]
++	if stream != nil {
++		if stage == "create" {
++			stream.life.ID = id
++			stream.life.Created = event.At
++		}
++		if stage == "opened" {
++			stream.life.Opened = event.At
++		}
++		if stage == "finish" {
++			stream.life.Finished = event.At
++			stream.life.Reason = reason
++			stream.life.Sent, stream.life.Received, stream.life.Used = stream.sent, stream.received, stream.used
++			stream.life.SendCredit, stream.life.ReceiveCredit = stream.sendCredit, stream.receiveCredit
++			stream.life.LocalFIN, stream.life.RemoteFIN = stream.localFIN, stream.remoteFIN
++		}
++		if stage == "remove" {
++			stream.life.Removed = event.At
++			buffer.removed[buffer.removedCount%64] = stream.life
++			buffer.removedCount++
++		}
++	}
++	if stage == "failure" && buffer.failureAt == 0 {
++		buffer.failureAt = event.At
++		buffer.failureReason = reason
++	}
++	if stage == "close" && buffer.closeAt == 0 {
++		buffer.closeAt = event.At
++	}
++	if stage == "unknown" && buffer.first == nil {
++		incident := &MuxLifeIncident{Event: event, FailureAt: buffer.failureAt, Cancelled: mux.ctx.Err() != nil}
++		for _, retired := range buffer.removed {
++			if retired.ID == id && retired.Created != 0 {
++				incident.Known = true
++				incident.Stream = retired
++				break
++			}
++		}
++		buffer.first = incident
++	}
++}
++
++func (mux *Mux) lifeSnapshotLocked() *MuxLifecycle {
++	if !mux.config.Lifecycle {
++		return nil
++	}
++	buffer := &mux.life
++	snapshot := &MuxLifecycle{FailureAt: buffer.failureAt, FailureReason: buffer.failureReason, CloseAt: buffer.closeAt}
++	start := uint64(0)
++	if buffer.count > 32 {
++		start = buffer.count - 32
++		snapshot.Dropped = start
++	}
++	for index := start; index < buffer.count; index++ {
++		snapshot.Events = append(snapshot.Events, buffer.events[index%32])
++	}
++	if buffer.first != nil {
++		incident := *buffer.first
++		snapshot.FirstUnknown = &incident
++	}
++	return snapshot
++}
+--- a/carrier/tcpforward/mux_lifecycle_test.go
++++ b/carrier/tcpforward/mux_lifecycle_test.go
+@@ -0,0 +1,66 @@
++package tcpforward
++
++import (
++	"context"
++	"encoding/json"
++	"testing"
++)
++
++func TestLifeUnknownAfterResetAndNeverKnown(test *testing.T) {
++	ctx, cancel := context.WithCancel(context.Background())
++	defer cancel()
++	mux := &Mux{window: 131072, ctx: ctx, cancel: cancel, config: MuxConfig{Lifecycle: true}, streams: make(map[uint32]*MuxStream), changed: make(chan struct{})}
++	stream := mux.makeStreamLocked(1)
++	stream.opened = true
++	mux.lifeLocked("opened", 1, openOK, "peer")
++	neighbor := mux.makeStreamLocked(3)
++	neighbor.opened = true
++	mux.dispatchLocked(muxFrame{kind: resetFrame, id: 1})
++	mux.dispatchLocked(muxFrame{kind: dataFrame, id: 1, payload: []byte{42}})
++	snapshot := mux.lifeSnapshotLocked()
++	incident := snapshot.FirstUnknown
++	if incident == nil || !incident.Known || incident.Stream.ID != 1 || incident.Stream.Reason != "reset" || incident.Stream.Created == 0 || incident.Stream.Opened == 0 || incident.Stream.Removed < incident.Stream.Finished || incident.FailureAt != 0 || incident.Cancelled {
++		test.Fatal("lost provenance", incident)
++	}
++	if mux.stats.ProtocolErrors != 1 || neighbor.terminal != nil {
++		test.Fatal("observation changed behavior")
++	}
++	incident.Stream.ID = 99
++	if mux.lifeSnapshotLocked().FirstUnknown.Stream.ID != 1 {
++		test.Fatal("aliased incident")
++	}
++	mux.life.first = nil
++	mux.dispatchLocked(muxFrame{kind: dataFrame, id: 101, payload: []byte{42}})
++	if mux.lifeSnapshotLocked().FirstUnknown.Known {
++		test.Fatal("invented stream history")
++	}
++}
++
++func TestLifeBoundsAndFailureOrder(test *testing.T) {
++	ctx, cancel := context.WithCancel(context.Background())
++	defer cancel()
++	mux := &Mux{ctx: ctx, cancel: cancel, config: MuxConfig{Lifecycle: true}, streams: make(map[uint32]*MuxStream), changed: make(chan struct{})}
++	for index := uint32(1); index < 10000; index++ {
++		stream := mux.makeStreamLocked(index)
++		stream.finishLocked(ErrReset)
++		mux.removeLocked(index)
++	}
++	mux.lifeLocked("failure", 0, 0, "closed_pipe")
++	mux.dispatchLocked(muxFrame{kind: dataFrame, id: 9999, payload: []byte{1}})
++	snapshot := mux.lifeSnapshotLocked()
++	if len(snapshot.Events) != 32 || snapshot.Dropped == 0 || snapshot.FirstUnknown.FailureAt == 0 || len(mux.streams) != 0 {
++		test.Fatal("unbounded or missing failure")
++	}
++	raw, err := json.Marshal(snapshot)
++	if err != nil || len(raw) > 8192 {
++		test.Fatal("export bound", len(raw), err)
++	}
++	snapshot.Events[0].Stage = "modified"
++	if mux.lifeSnapshotLocked().Events[0].Stage == "modified" {
++		test.Fatal("aliased ring")
++	}
++	mux.config.Lifecycle = false
++	if mux.lifeSnapshotLocked() != nil {
++		test.Fatal("disabled observer exported")
++	}
++}
+--- a/carrier/tcpforward/mux_stream.go
++++ b/carrier/tcpforward/mux_stream.go
+@@ -12,6 +12,7 @@
+ )
+ 
+ type MuxStream struct {
++	life             MuxLifeStream
+ 	mux              *Mux
+ 	id               uint32
+ 	ctx              context.Context
+@@ -62,6 +63,7 @@
+ 	}
+ 	stream := &MuxStream{mux: mux, id: id, ctx: ctx, cancel: cancel, receive: make([]byte, window), receiveCredit: window, sendCredit: window, queuedAt: time.Now()}
+ 	mux.streams[id] = stream
++	mux.lifeLocked("create", id, 0, "new")
+ 	mux.order = append(mux.order, id)
+ 	mux.stats.Opened++
+ 	return stream
+@@ -146,6 +148,7 @@
+ 	if stream.terminal != nil {
+ 		return
+ 	}
++	stream.mux.lifeLocked("finish", stream.id, 0, lifeReason(err))
+ 	stream.terminal = err
+ 	stream.cancel()
+ 	if stream.stop != nil {
+@@ -228,6 +231,7 @@
+ 			stream.sendHighWater = max(stream.sendHighWater, count)
+ 			stream.send = append(stream.send, muxFrame{dataFrame, stream.id, bytes.Clone(payload[:count])})
+ 			stream.queuedAt = time.Now()
++			mux.lifeLocked("enqueue", stream.id, dataFrame, "data")
+ 			stream.sent += uint64(count)
+ 			mux.stats.SentBytes += uint64(count)
+ 			mux.stats.SendHighWater = max(mux.stats.SendHighWater, count)
+--- a/carrier/wholedevice/session.go
++++ b/carrier/wholedevice/session.go
+@@ -393,7 +393,7 @@
+ 		trace.Add("GATEWAY_SESSION", "FAILED", "GATEWAY_CLOSE")
+ 		return nil, err
+ 	}
+-	mux, err := tcpforward.NewMux(ctx, secured, false, tcpforward.MuxConfig{MaxStreams: roombroker.DedicatedMaxStreams, WaitForSlot: true})
++	mux, err := tcpforward.NewMux(ctx, secured, false, tcpforward.MuxConfig{MaxStreams: roombroker.DedicatedMaxStreams, WaitForSlot: true, Lifecycle: true})
+ 	if err != nil {
+ 		startupdiag.Failure(ctx, "DEDICATED_MUX", err)
+ 		trace.Add("GATEWAY_SESSION", "FAILED", "UNKNOWN_INTERNAL")
+--- a/clients/android/app/build.gradle
++++ b/clients/android/app/build.gradle
+@@ -113,7 +113,7 @@
+     }
+     applicationVariants.all { variant ->
+         if (variant.buildType.name == 'privateBeta') {
+-            variant.outputs.all { versionCodeOverride = 99; versionNameOverride = '0.1.18-beta99-support' }
++            variant.outputs.all { versionCodeOverride = 100; versionNameOverride = '0.1.18-beta100-lifecycle' }
+         }
+         if (variant.buildType.name == "friends") {
+             variant.outputs.all { versionCodeOverride = 83; versionNameOverride = "0.1.18-research83-bootstrap" }
+--- a/clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java
+@@ -108,6 +108,7 @@
+         }
+         if(same&&restrictedSession.has("terminal_observed_at_ms")){restrictedSession=safe;return;}
+         SpeedReceipt.project(source,safe);
++ MuxLifecycle.project(source,safe);
+         JsonObject reasons=SupportSnapshot.object(source,"protocol_error_reasons"),safeReasons=new JsonObject();
+         for(String reason:SupportSnapshot.REASONS)SupportSnapshot.number(reasons,safeReasons,reason);
+         if(safeReasons.size()>0)safe.add("protocol_error_reasons",safeReasons);
+--- a/clients/android/app/src/main/java/com/familyconnect/app/MuxLifecycle.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/MuxLifecycle.java
+@@ -0,0 +1,48 @@
++package com.familyconnect.app;
++
++import com.google.gson.*;
++
++final class MuxLifecycle {
++    static void project(JsonObject source,JsonObject safe){
++        JsonObject raw=object(source,"mux_lifecycle");
++        if(raw==null)return;
++        JsonObject result=new JsonObject();
++        numbers(raw,result,"dropped","failure_at","close_at");
++        choice(raw,result,"failure_reason","none","eof","reset","protocol","cancelled","deadline","closed_pipe","other","");
++        JsonArray events=new JsonArray();
++        if(raw.has("events")&&raw.get("events").isJsonArray()){
++            JsonArray list=raw.getAsJsonArray("events");
++            for(int index=Math.max(0,list.size()-32);index<list.size();index++){
++                if(list.get(index).isJsonObject())events.add(event(list.get(index).getAsJsonObject()));
++            }
++        }
++        result.add("events",events);
++        JsonObject incident=object(raw,"first_unknown");
++        if(incident!=null){
++            JsonObject selected=new JsonObject();
++            numbers(incident,selected,"failure_at");
++            bools(incident,selected,"known","cancelled");
++            JsonObject first=object(incident,"event");if(first!=null)selected.add("event",event(first));
++            JsonObject stream=object(incident,"stream");
++            if(stream!=null){
++                JsonObject record=new JsonObject();
++                numbers(stream,record,"id","created","opened","finished","removed","sent","received","used","send_credit","receive_credit");
++                bools(stream,record,"local_fin","remote_fin");
++                choice(stream,record,"reason","none","eof","reset","protocol","cancelled","deadline","closed_pipe","other","");
++                selected.add("stream",record);
++            }
++            result.add("first_unknown",selected);
++        }
++        if(result.toString().length()<=8192)safe.add("mux_lifecycle",result);
++    }
++    static JsonObject event(JsonObject raw){
++        JsonObject result=new JsonObject();numbers(raw,result,"index","at","id","kind");
++        choice(raw,result,"stage","create","opened","enqueue","send_start","send_done","receive","finish","remove","unknown","failure","close");
++        choice(raw,result,"reason","new","peer","lease","socket","control","data","batch","local","wire","terminal","missing","caller","none","eof","reset","protocol","cancelled","deadline","closed_pipe","other");
++        return result;
++    }
++    static JsonObject object(JsonObject raw,String key){return raw.has(key)&&raw.get(key).isJsonObject()?raw.getAsJsonObject(key):null;}
++    static void numbers(JsonObject raw,JsonObject result,String...keys){for(String key:keys)try{JsonElement value=raw.get(key);if(value!=null&&value.isJsonPrimitive()&&value.getAsJsonPrimitive().isNumber()){long number=value.getAsLong();if(number>=0)result.addProperty(key,number);}}catch(RuntimeException ignored){}}
++    static void bools(JsonObject raw,JsonObject result,String...keys){for(String key:keys){JsonElement value=raw.get(key);if(value!=null&&value.isJsonPrimitive()&&value.getAsJsonPrimitive().isBoolean())result.addProperty(key,value.getAsBoolean());}}
++    static void choice(JsonObject raw,JsonObject result,String key,String...allowed){try{String value=raw.get(key).getAsString();for(String item:allowed)if(item.equals(value)){result.addProperty(key,value);return;}}catch(RuntimeException ignored){}}
++}
+--- a/clients/android/app/src/test/java/com/familyconnect/app/MuxLifecycleTest.java
++++ b/clients/android/app/src/test/java/com/familyconnect/app/MuxLifecycleTest.java
+@@ -0,0 +1,26 @@
++package com.familyconnect.app;
++
++import com.google.gson.*;
++import org.junit.Test;
++import static org.junit.Assert.*;
++
++public class MuxLifecycleTest {
++    @Test public void boundsAndPayloadExclusion(){
++        JsonObject source=new JsonObject(),raw=new JsonObject();JsonArray events=new JsonArray();
++        for(int index=0;index<1000;index++){JsonObject event=new JsonObject();event.addProperty("index",index);event.addProperty("stage","receive");event.addProperty("payload","private content");events.add(event);}
++        raw.add("events",events);source.add("mux_lifecycle",raw);JsonObject safe=new JsonObject();MuxLifecycle.project(source,safe);
++        JsonObject output=safe.getAsJsonObject("mux_lifecycle");assertEquals(32,output.getAsJsonArray("events").size());assertFalse(output.toString().contains("private"));assertTrue(output.toString().length()<8192);
++    }
++    @Test public void preservesUnknownAndDoesNotReclassify(){
++        JsonObject source=JsonParser.parseString("{\"mux_lifecycle\":{\"first_unknown\":{\"known\":false,\"cancelled\":true,\"failure_at\":99,\"event\":{\"id\":7,\"kind\":4,\"stage\":\"unknown\"},\"stream\":{\"id\":0}}}}").getAsJsonObject();
++        JsonObject safe=new JsonObject();safe.addProperty("protocol_errors",17);MuxLifecycle.project(source,safe);
++        assertEquals(17,safe.get("protocol_errors").getAsInt());assertFalse(safe.getAsJsonObject("mux_lifecycle").getAsJsonObject("first_unknown").get("known").getAsBoolean());
++    }
++    @Test public void rejectsMalformedFields(){
++        JsonObject source=JsonParser.parseString("{\"mux_lifecycle\":{\"failure_at\":-1,\"failure_reason\":\"secret\",\"events\":[null,5,{\"id\":-2,\"stage\":\"secret\",\"reason\":\"secret\"}]}}").getAsJsonObject();
++        JsonObject safe=new JsonObject();MuxLifecycle.project(source,safe);String output=safe.toString();assertFalse(output.contains("secret"));assertFalse(output.contains("-1"));assertFalse(output.contains("-2"));
++    }
++    @Test public void absentObserverStaysAbsent(){
++        JsonObject safe=new JsonObject();MuxLifecycle.project(new JsonObject(),safe);assertFalse(safe.has("mux_lifecycle"));
++    }
++}

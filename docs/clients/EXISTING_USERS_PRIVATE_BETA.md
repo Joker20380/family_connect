@@ -2,6 +2,129 @@
 
 ## Current status / Статус
 
+###23 October / closed group READY — актуальная передача
+
+RU: **PRIVATE_FIELD_READY** для FC-4D8Q-REEG + FC-ZMVK-MM7C + FC-YHQB-9VJN.
+Прежний подписанный106, без новой установки owner. Серверная политика P1 для
+трёх устройств включена и проверена; после штатного gateway restart owner106
+восстановил P1, малый HTTPS PASS. Раздаёт владелец, без публичного выпуска.
+Волгоградский отчёт21 подтверждает **beta96/CELLULAR/MESH** и передачу; владелец
+передал точное сообщение тестировщика об успехе в белых списках. Это положительный
+полевой результат96, не проверка106/P1 или холодного bootstrap. Старый incident94
+и ненулевые счётчики96 сохранены. Краснодар/106 P1 ещё не проверены в поле.
+EN: the unchanged signed106 is ready for manual private handoff to the exact three.
+Server policy, post-deploy owner P1/body, prior Wi-Fi/recovery and static65/96 upgrade
+paths pass. The positive Volgograd96 field result is separate from future106/P1
+acceptance. Install in place, select ordinary P1 while disconnected, make one mobile
+MESH attempt without a mandatory Wi-Fi warmup and return JSON regardless of outcome.
+[Current report/file/rollback](../releases/2026-10-23-tester-p1-cohort.md) ·
+[Exact RU/EN steps and checksum](OWNER_RECOVERY_CANDIDATE.md).
+
+The owner-only paragraphs below are earlier dated checkpoints, not the current gate.
+
+###23 October / earlier signed106 installed owner-only
+
+RU: readback105 сохранён до изменений; свежий JSON был недоступен при активном
+USB-допуске. Завершён узкий diagnostic106:219 JVM/replay PASS,12 native-библиотек
+неизменны. Подписан прежним ключом, установлен поверх105 без удаления данных;
+UID10283/Support ID сохранены, свежий JSON работает. Обычный Connect сохраняет
+Android P1 на Wi-Fi; полная передача и автоматическое recovery — отдельные gates.
+EN: same-signer106 is signed and installed over105 on the owner, not distributed.
+Fresh diagnostics/identity and ordinary Wi-Fi P1 Connect are verified. No global
+profile change; tester P1 still single-owner, whitelist NOT_RUN. PRIVATE_FIELD_READY
+remains NO pending group policy. Public versions unchanged.
+Follow-up: bounded106 Wi-Fi19/19 bodies, ordinary Disconnect/Connect and small
+HTTPS pass. RU: после ручного отключения/возврата Wi-Fi новая MESH/P1-сессия
+восстановилась без Connect; полный1КиБ HTTPS PASS3,733с. Восстановление заняло
+106,578с от появления Wi-Fi, не мгновенно. EN: automatic Wi-Fi return independently
+passes with both-end P1 and a full small response; this is not merely explicit
+Connect or overnight stability. Next: confirm the current closed P1 cohort and
+extend the single-owner server policy; no global switch/new enrollment. Historical
+tester IDs FC-ZMVK-MM7C/FC-YHQB-9VJN do not establish current cohort/versions.
+[Current evidence/next action](../releases/2026-10-23-wifi-resume.md).
+
+The following dated checkpoints are historical, not the current owner installation.
+
+### Wi-Fi correction / reconciled beta105 —22.10
+
+RU: владелец22.10 сообщил об исчерпании мобильного пакета/ограничении оператора и
+нормальной работе на Wi-Fi. Это сообщение, не новая инструментальная приёмка;
+скорость/начало/версия той ручной проверки неизвестны. Старые отказы не удалены,
+инциденты Волгограда/Краснодара этим не объяснены. Readback receipts подтверждает
+104→105 установку12:13UTC, а штатный online19:42UTC —105/Wi-Fi/TUN/P1. Подписанный105
+перепроверен без пересборки. USB уже подключён: установленный APK/signer/UID/native
+совпали. Штатный USB JSON недоступен, хотя допуск действует; последний status off.
+Полученный затем JSON15 содержит старый снимок19:43UTC; общий budget записи
+воспроизводимо переполняется локально. В21:10 USB-допуск уже отключён — нужен
+штатный диалог на1час, затем свежий readback до передачи/recovery. Новый APK не создан.
+Серверный P1 остаётся owner-targeted. **Не PRIVATE_FIELD_READY.**
+
+EN: owner reports exhausted mobile data/throttling and normal Wi-Fi operation;
+do not reclassify historical failures as PASS or generalize to testers. Existing105
+is signed and installed per receipt, with later reduced online Wi-Fi/P1 evidence.
+USB now verifies installed bytes; snapshot export fails despite active consent and
+latest VPN status is off. Owner body/recovery awaits normal JSON; tester P1 policy is
+not ready. Static88/94/104 update metadata is verified, not physical tester migration.
+No automatic/public distribution, catalog or invitation changes.
+
+Follow-up: normal export15 arrived but contains a stale19:43UTC ring. Local105 replay
+reproduces aggregate record overflow; no fix shipped. Latest USB status explicitly
+denies consent; normal one-hour consent is the next manual gate, not another export.
+
+[Exact APK/hash and RU/EN preflight/field instructions](OWNER_RECOVERY_CANDIDATE.md)
+· [Delivery receipt](../releases/2026-10-22-private-field-delivery-receipt.json).
+The headings below retain historical release checkpoints, not current readiness.
+
+### Owner recovery102→103,22.10 — not a tester rollout
+
+RU:102 установлен владельцу поверх101 с прежним signer/UID/Support ID; P1 на обоих
+концах сохранён. Обрывы RS продолжаются, два HTTPS-контроля не прошли. Исправлен
+отдельный DNS-health механизм;103 собран с узким исправлением дедлайна служебного
+refresh (213 JVM/12 bridge PASS).103 подписан и установлен поверх102; APK`0d274fe5…`,
+подробные receipts в [отчёте](../releases/2026-10-22-owner-disconnections.md).
+**Не рассылать как PRIVATE_FIELD_READY:** текущая server policy P1 только owner,
+проверка Волгограда/Краснодара NOT_RUN. Публичные каталоги/страница приглашения
+не менялись. [APK, checksum и RU/EN инструкция](OWNER_RECOVERY_CANDIDATE.md).
+
+EN: owner-only recovery candidate, not an accelerated tester rollout. Same identity,
+signer and native libraries; primary RS loss unresolved.103 is signed/installed;
+physical acceptance awaits renewed USB permission. Whitelist field validation
+remains NOT_RUN. Existing public artifacts/catalog/invitation versions are unchanged.
+
+### Owner-only101 lifecycle continuation / Продолжение владельцу101
+
+RU:101 `0.1.18-beta101-lifecycle` установлен поверх100, прежний signer/UID/данные.
+Улучшена только ограниченная история и классификация lifecycle; сырые счётчики,
+транспорт, Q0, окна и восстановление не изменены.203 JVM и Go race PASS. USB-допуск
+обновлён владельцем. Повторяемое ускорение P1 сохраняется как доказанный результат;
+новая адресная lifecycle-приёмка продолжается. Это не массовый выпуск.
+
+EN:101 installed owner-only over100, same signer/UID/data. Bounded incident retention
+and contract classification only; raw counters/dataplane unchanged.203 JVM and Go
+race pass. Owner renewed USB access. Confirmed P1 speed evidence is preserved;
+fresh bounded lifecycle acceptance is in progress, not a public/fleet release.
+
+Private APK:`state-client-build/p1-lifecycle-101-20261021/delivery/FamilyConnect-0.1.18-beta101-lifecycle.apk`.
+SHA256:`3c023e39d95e29fe0561dc462e28f1e643b9e14558cf49700d58df528b2963d9`.
+Invitation/catalog/download URLs unchanged; no publication or tester delivery.
+
+### Owner-only100 lifecycle,21.10 / Наблюдение100 владельцу
+
+RU:100 `0.1.18-beta100-lifecycle` установлен поверх99 тем же ключом/UID, без удаления
+данных. Новая P0/P1/P1/P0 серия дала2,30×/2,28× single, все60 тел получены.
+Но15мин P1 имеет не полностью разобранные9/3 события Android/gateway: P1 не принят.
+Владелец возвращён в P0, TUN DNS/HTTPS smoke проверен. Другим пользователям не рассылать.
+
+EN:100 is installed owner-only over99, same signer/UID and preserved data. Bounded
+lifecycle observation; repeated single speed2.30×/2.28×,60/60 matrix bodies.
+P1 not admitted:15min event provenance incomplete. Owner restored P0 with TUN
+DNS/HTTPS smoke verified; no fleet delivery.
+
+Private APK:`state-client-build/p1-owner-acceptance-20261021/delivery/FamilyConnect-0.1.18-beta100-lifecycle.apk`.
+SHA256:`1eb04cc6082f6a03380b99e8a47053d51efd8e6098c0c135075ac030228061e0`.
+[Acceptance status and limits](../releases/2026-10-21-p1-owner-acceptance.md).
+Public invitation/catalog links are unchanged.
+
 ### Owner-only99 support timing,21.10 / Исправление интервала99
 
 RU:99 `0.1.18-beta99-support` установлен владельцу поверх98 тем же ключом/UID.

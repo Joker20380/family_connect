@@ -10,7 +10,6 @@ import json
 import re
 import uuid
 from dataclasses import dataclass
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 from clients.desktop import profile_config
 
 DOMAIN = b'family-connect/invited-test/v1\0'
@@ -66,6 +65,7 @@ def verify(reply, anchor, device, country, wireguard_key, *, floor=0, previous_h
     The owner must atomically persist the verified response/floor before apply. This
     function does not provide offline fallback or turn an access rejection into success.
     """
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
     try:
         require(type(floor) is int and 0 <= floor <= MAX_SEQUENCE)
         require(country in ('ru', 'nl') and type(anchor) is bytes and len(anchor) == 32)
@@ -77,39 +77,87 @@ def verify(reply, anchor, device, country, wireguard_key, *, floor=0, previous_h
         raw = base64.b64decode(e['payload'], validate=True)
         require(0 < len(raw) <= 8192 and base64.b64encode(raw).decode() == e['payload'])
         Ed25519PublicKey.from_public_bytes(anchor).verify(key(e['signature'], 64), DOMAIN + raw)
-        value = parse(raw.decode("utf-8")); fields(value, 'schema sequence access gateways')
-        require(type(value['schema']) is int and value['schema'] == 2 and value['access'] == 'invite-test')
-        sequence = value['sequence']
-        require(type(sequence) is int and max(1, floor) <= sequence <= MAX_SEQUENCE)
-        digest = hashlib.sha256(raw).hexdigest()
-        if previous_hash is not None:
-            require(type(previous_hash) is str and re.fullmatch('[0-9a-f]{64}', previous_hash))
-            require(sequence != floor or digest == previous_hash)
-        gateways = value['gateways']
-        require(type(gateways) is list and len(gateways) == 2)
-        profiles = {}
-        sample = base64.b64encode(bytes([1])*32).decode()
-        for gateway in gateways:
-            fields(gateway, 'country tcp awg')
-            region = gateway['country']; require(type(region) is str and region in ('ru', 'nl') and region not in profiles)
-            tcp = gateway['tcp']; fields(tcp, 'type server port id public_key server_name short_id')
-            require(tcp['id'] == 'DEVICE_CREDENTIAL')
-            parsed = profile_config.parse_tcp(json.dumps({**tcp, 'id': '11111111-1111-4111-8111-111111111111'}))
-            ip = ipaddress.IPv4Address(parsed['server'])
-            require(not ip.is_loopback and 0 < int(str(ip).split('.')[0]) < 224)
-            require(any(base64.urlsafe_b64decode(parsed['public_key']+'=')))
-            awg = gateway['awg']; require(type(awg) is str and len(awg.encode()) <= 8192)
-            require(awg.count('LOCAL_DEVICE_KEY') == awg.count('ASSIGNED_ADDRESS') == 1)
-            require(re.search(r'(?m)^PrivateKey = LOCAL_DEVICE_KEY$', awg) and re.search(r'(?m)^Address = ASSIGNED_ADDRESS$', awg))
-            normalized = awg.replace('LOCAL_DEVICE_KEY', sample).replace('ASSIGNED_ADDRESS', '10.83.0.2/32')
-            parts = profile_config.parse(normalized, allow_awg=True, allow_awg31=True)
-            require({'HeaderProtectionKey', 'ContentPaddingAddition'} <= set(parts['Interface']))
-            face = parts['Interface']
-            require(int(face['Jc']) >= 1 and int(face['Jmin']) >= 1 and int(face['Jmax']) >= 1)
-            host = parts['Peer']['Endpoint'].rsplit(':', 1)[0]
-            endpoint = ipaddress.IPv4Address(host)
-            require(str(endpoint) == host and not endpoint.is_loopback and 0 < int(host.split('.')[0]) < 224)
-            profiles[region] = (tcp, awg)
+        return _verified_profile(reply, raw, device, country, wireguard_key, floor=floor, previous_hash=previous_hash)
+    except Exception:
+        raise ValueError('Invalid Friends configuration') from None
+
+
+def _catalog(raw, floor, previous_hash):
+    require(type(raw) is bytes and 0 < len(raw) <= 8192)
+    require(type(floor) is int and 0 <= floor <= MAX_SEQUENCE)
+    value = parse(raw.decode("utf-8")); fields(value, 'schema sequence access gateways')
+    require(type(value['schema']) is int and value['schema'] == 2 and value['access'] == 'invite-test')
+    sequence = value['sequence']
+    require(type(sequence) is int and max(1, floor) <= sequence <= MAX_SEQUENCE)
+    digest = hashlib.sha256(raw).hexdigest()
+    if previous_hash is not None:
+        require(type(previous_hash) is str and re.fullmatch('[0-9a-f]{64}', previous_hash))
+        require(sequence != floor or digest == previous_hash)
+    gateways = value['gateways']
+    require(type(gateways) is list and len(gateways) == 2)
+    profiles = {}
+    sample = base64.b64encode(bytes([1])*32).decode()
+    for gateway in gateways:
+        fields(gateway, 'country tcp awg')
+        region = gateway['country']; require(type(region) is str and region in ('ru', 'nl') and region not in profiles)
+        tcp = gateway['tcp']; fields(tcp, 'type server port id public_key server_name short_id')
+        require(tcp['id'] == 'DEVICE_CREDENTIAL')
+        parsed = profile_config.parse_tcp(json.dumps({**tcp, 'id': '11111111-1111-4111-8111-111111111111'}))
+        ip = ipaddress.IPv4Address(parsed['server'])
+        require(not ip.is_loopback and 0 < int(str(ip).split('.')[0]) < 224)
+        require(any(base64.urlsafe_b64decode(parsed['public_key']+'=')))
+        awg = gateway['awg']; require(type(awg) is str and len(awg.encode()) <= 8192)
+        require(awg.count('LOCAL_DEVICE_KEY') == awg.count('ASSIGNED_ADDRESS') == 1)
+        require(re.search(r'(?m)^PrivateKey = LOCAL_DEVICE_KEY$', awg) and re.search(r'(?m)^Address = ASSIGNED_ADDRESS$', awg))
+        normalized = awg.replace('LOCAL_DEVICE_KEY', sample).replace('ASSIGNED_ADDRESS', '10.83.0.2/32')
+        parts = profile_config.parse(normalized, allow_awg=True, allow_awg31=True)
+        require({'HeaderProtectionKey', 'ContentPaddingAddition'} <= set(parts['Interface']))
+        face = parts['Interface']
+        require(int(face['Jc']) >= 1 and int(face['Jmin']) >= 1 and int(face['Jmax']) >= 1)
+        host = parts['Peer']['Endpoint'].rsplit(':', 1)[0]
+        endpoint = ipaddress.IPv4Address(host)
+        require(str(endpoint) == host and not endpoint.is_loopback and 0 < int(host.split('.')[0]) < 224)
+        profiles[region] = (tcp, awg)
+    return sequence, digest, profiles
+
+
+@dataclass(frozen=True)
+class FriendsCatalogFloor:
+    sequence: int
+    catalog_hash: str
+
+
+def verify_catalog(envelope, anchor, *, floor=0, previous_hash=None):
+    """Verify only a public common template/floor, never a device authorization."""
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
+    try:
+        require(type(anchor) is bytes and len(anchor) == 32)
+        fields(envelope, 'payload signature')
+        require(len(json.dumps(envelope).encode()) <= 16384)
+        require(type(envelope['payload']) is str)
+        raw = base64.b64decode(envelope['payload'], validate=True)
+        require(0 < len(raw) <= 8192 and base64.b64encode(raw).decode() == envelope['payload'])
+        Ed25519PublicKey.from_public_bytes(anchor).verify(key(envelope['signature'], 64), DOMAIN + raw)
+        sequence, digest, _profiles = _catalog(raw, floor, previous_hash)
+        return FriendsCatalogFloor(sequence, digest)
+    except Exception:
+        raise ValueError('Invalid Friends catalog floor') from None
+
+
+def _verified_profile(reply, raw, device, country, wireguard_key, *, floor=0, previous_hash=None):
+    """Internal profile validation after signature/authentication, never an access check.
+
+    Call only from verify() or the root native-response owner after its fixed worker
+    authenticates the response/catalog/floors. There is no offline authorization here.
+    """
+    try:
+        require(type(floor) is int and 0 <= floor <= MAX_SEQUENCE and country in ('ru', 'nl'))
+        fields(reply, 'device country address tcp_id catalog')
+        require(reply['device'] == device and reply['country'] == country)
+        fields(reply['catalog'], 'payload signature')
+        require(type(raw) is bytes and 0 < len(raw) <= 8192)
+        require(reply['catalog']['payload'] == base64.b64encode(raw).decode())
+        sequence, digest, profiles = _catalog(raw, floor, previous_hash)
         address = reply['address']; require(type(address) is str)
         ip = ipaddress.IPv4Interface(address)
         network = ipaddress.IPv4Network('10.84.0.0/16' if country == 'ru' else '10.83.0.0/16')

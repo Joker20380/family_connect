@@ -49,6 +49,15 @@ func canonicalHost(host string) string {
 }
 
 func gatewayPolicy(policy Policy) (Policy, error) {
+	services := make(map[string]netip.AddrPort)
+	for name, target := range policy.Services {
+		if (name != "chat-mailbox.family-connect.invalid" && name != "chat-api.family-connect.invalid") ||
+			!target.IsValid() || target.Port() == 0 || target.Addr().IsUnspecified() || target.Addr().IsMulticast() || target.Addr().Zone() != "" {
+			return policy, ErrProtocol
+		}
+		services[name] = target
+	}
+	policy.Services = services
 	addresses, err := net.InterfaceAddrs()
 	if err != nil {
 		return policy, ErrProtocol

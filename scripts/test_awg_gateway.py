@@ -3,19 +3,39 @@ import base64
 import json
 import os
 from pathlib import Path
+import re
 import secrets
+import signal
+import socket
 import subprocess
 import tempfile
 import time
 
 IMAGE=os.environ.get('FC_AWG_TEST_IMAGE','family-connect-amneziawg:2-pilot1')
+LIMITS=['--cpus','.25','--memory','256m','--pids-limit','64','--cap-drop','ALL']
+CAPABILITIES=[item for name in ('NET_ADMIN','CHOWN','FOWNER','SETUID','SETGID') for item in ('--cap-add',name)]
+
+def interrupted(signum, frame):
+    raise SystemExit('Isolated AWG check interrupted')
 
 def run(*args,input=None):
     p=subprocess.run(args,input=input,capture_output=True,text=True,timeout=30)
-    if p.returncode:raise RuntimeError('Isolated AWG test command failed')
+    if p.returncode:
+        if '/check_awg_cleanup.py' in args:
+            print(p.stdout,flush=True)
+            print(p.stderr,flush=True)
+        raise RuntimeError('Isolated AWG test command failed')
+    if args[:2]==('docker','logs'):
+        return p.stdout+p.stderr
     return p.stdout.strip()
 
 def main():
+    endpoint=json.loads(run('docker','context','inspect','--format','{{json .Endpoints}}'))
+    if endpoint['docker']['Host']!='unix:///var/run/docker.sock' or run('docker','info','--format','{{.Name}}')!=socket.gethostname():
+        raise RuntimeError('Local Docker host required')
+    signal.signal(signal.SIGTERM,interrupted)
+    signal.signal(signal.SIGINT,interrupted)
+    host_netns=str(os.stat('/proc/self/ns/net').st_ino)
     modern=os.environ.get('FC_AWG_TEST_PROTOCOL')=='3.1'
     client_address='10.78.42.254' if modern else '10.78.0.2'
     prefix='fc-awg-test-'+secrets.token_hex(4)
@@ -24,8 +44,8 @@ def main():
     with tempfile.TemporaryDirectory(prefix=prefix) as directory:
         folder=Path(directory)
         def pair():
-            private=run('docker','run','--rm','--network','none','--entrypoint','awg',IMAGE,'genkey')
-            public=run('docker','run','--rm','-i','--network','none','--entrypoint','awg',IMAGE,'pubkey',input=private)
+            private=run('docker','run','--rm',*LIMITS,'--network','none','--entrypoint','timeout',IMAGE,'-k','1','5','awg','genkey')
+            public=run('docker','run','--rm','-i',*LIMITS,'--network','none','--entrypoint','timeout',IMAGE,'-k','1','5','awg','pubkey',input=private)
             return private,public
         server_key,server_pub=pair();client_key,client_pub=pair()
         params='Jc = 4\nJmin = 40\nJmax = 100\nS1 = 32\nS2 = 64\nS3 = 16\nS4 = 8\nH1 = 1000-1100\nH2 = 2000-2100\nH3 = 3000-3100\nH4 = 4000-4100\n'
@@ -36,19 +56,26 @@ def main():
         with os.fdopen(fd,'w') as f:f.write(config)
         run('docker','network','create','--internal',prefix)
         try:
-            run('docker','run','-d','--name',server,'--network',prefix,'--cap-add','NET_ADMIN',
-                '--device','/dev/net/tun','-v',str(folder)+':/keys:ro',IMAGE)
             containers.append(server)
+            run('docker','run','-d','--name',server,'--label','fc.awg.check='+prefix,'--network',prefix,*LIMITS,*CAPABILITIES,
+                '--cap-add','DAC_OVERRIDE','--device','/dev/net/tun','-v',str(folder)+':/keys:ro','--entrypoint','timeout',IMAGE,
+                '-k','2','150','/usr/local/bin/family-connect-awg')
             for _ in range(15):
                 try:run('docker','exec',server,'awg','show','awg0','public-key');break
                 except RuntimeError:time.sleep(0.5)
-            else:raise RuntimeError('AWG server did not start')
+            else:
+                diagnostic=run('docker','logs',server)
+                print(re.sub(r'[A-Za-z0-9+/]{40,}={0,2}','[redacted]',diagnostic)[-3000:],flush=True)
+                raise RuntimeError('AWG server did not start')
             if modern:run('docker','exec',server,'ip','route','add',client_address+'/32','dev','awg0')
             address=json.loads(run('docker','inspect',server))[0]['NetworkSettings']['Networks'][prefix]['IPAddress']
-            run('docker','run','-d','--name',client,'--network',prefix,'--cap-add','NET_ADMIN',
-                '--device','/dev/net/tun','--sysctl','net.ipv4.conf.all.src_valid_mark=1',
-                '-v',str(Path(__file__).resolve().parents[1])+':/source:ro','--entrypoint','sleep',IMAGE,'180')
             containers.append(client)
+            source=Path(__file__).resolve().parents[1]
+            run('docker','run','-d','--name',client,'--label','fc.awg.check='+prefix,'--network',prefix,*LIMITS,*CAPABILITIES,
+                '--device','/dev/net/tun','--sysctl','net.ipv4.conf.all.src_valid_mark=1',
+                '-v',str(source/'clients')+':/source/clients:ro',
+                '-v',str(source/'scripts/check_awg_cleanup.py')+':/check_awg_cleanup.py:ro',
+                '--entrypoint','timeout',IMAGE,'-k','2','150','sleep','145')
             config='[Interface]\nPrivateKey = '+client_key+'\n'+params+'[Peer]\nPublicKey = '+server_pub+'\nEndpoint = '+address+':51821\nAllowedIPs = 10.78.0.1/32\n'
             run('docker','exec','-i',client,'python3','-c',
                 "import os,sys;fd=os.open('/tmp/client.conf',os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600);os.write(fd,sys.stdin.buffer.read());os.close(fd)",input=config)
@@ -113,13 +140,7 @@ m.healthy=healthy
 sys.argv=['helper','up',sys.argv[1]]
 m.main()
 """
-                run('docker','exec',client,'python3','-c',code,ident)
-                try:run('docker','exec',client,'sh','/source/clients/linux/install-awg.sh','/source','/opt/awg31')
-                except RuntimeError:pass
-                else:raise AssertionError('Installer changed an active AWG tunnel')
-                assigned=json.loads(run('docker','exec',client,'ip','-j','address','show','dev',ident))
-                assert any(a['local']==client_address for a in assigned[0]['addr_info'])
-                run('docker','exec',client,helper,'down',ident)
+                print(run('docker','exec',client,'python3','/check_awg_cleanup.py',ident,host_netns,client_address),flush=True)
                 assert run('docker','exec',client,'ip','route','show','table','all')==baseline
                 bad=profile.replace('HeaderProtectionKey = '+params.split('HeaderProtectionKey = ')[1].split('\n')[0],
                                     'HeaderProtectionKey = '+base64.b64encode(secrets.token_bytes(32)).decode())
@@ -132,7 +153,10 @@ m.main()
                 print('PASS: installed Linux helper import, full-pool address, userspace up, bound HTTP, wrong-key rejection and route cleanup.')
             print('PASS: isolated AWG '+('3.1 /16 allocation' if modern else '2')+' handshake and bound HTTP transfer; no host routes or published ports.')
         finally:
-            for name in reversed(containers):run('docker','rm','-f',name)
+            for name in reversed(containers):
+                observed=subprocess.run(['docker','inspect','--format','{{index .Config.Labels "fc.awg.check"}}',name],capture_output=True,text=True,timeout=3)
+                if observed.returncode==0 and observed.stdout.strip()==prefix:
+                    run('docker','rm','-f',name)
             run('docker','network','rm',prefix)
 
 if __name__=='__main__':main()

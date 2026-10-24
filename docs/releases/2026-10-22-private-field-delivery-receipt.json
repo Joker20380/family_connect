@@ -1,0 +1,1116 @@
+{
+  "schema": 1,
+  "recorded_utc": "2026-10-23T06:03:37.023092+00:00",
+  "result": "PRIVATE_FIELD_READY",
+  "network_correction": {
+    "source": "owner message, 2026-10-22",
+    "instrumental_test": false,
+    "text": "22 октября 2026 года владелец сообщил: пакет мобильного трафика закончился, оператор ограничил скорость; на Wi-Fi приложение работает нормально",
+    "throttle_rate": "UNKNOWN",
+    "throttle_start": "UNKNOWN",
+    "manual_wifi_check_version": "UNKNOWN",
+    "wifi_upstream_independent": "UNKNOWN",
+    "historical_failures_preserved": true
+  },
+  "gates": {
+    "OWNER_WIFI_ACCEPTANCE": "PASS_BOUNDED106_WIFI_UPSTREAM_INDEPENDENCE_UNKNOWN",
+    "RECOVERY_ACCEPTANCE": "PASS_BOUNDED106_EXPLICIT_CANCEL_AND_AUTOMATIC_WIFI_RETURN_FULL_SMALL_HTTPS",
+    "SIGNED_APK_READY": "YES106_SAME_SIGNER_INSTALLED_OWNER",
+    "TESTER_P1_POLICY_READY": "YES_EXACT_THREE_CONFIRMED_SERVER_POLICY",
+    "FIELD_WHITELIST_VALIDATION": "POSITIVE_REPORTED_VOLGOGRAD96_WITH_CELLULAR_MESH_DIAGNOSTICS",
+    "PRIVATE_FIELD_READY": true,
+    "FIELD_106_P1_VALIDATION": "NOT_RUN"
+  },
+  "artifact": {
+    "package": "com.familyconnect.app.friends",
+    "version_code": 106,
+    "version": "0.1.18-beta106-recovery",
+    "sha256": "242855c43e889e708234ce2f687fa02d37bccb1eee408904f09216b6abd8f020",
+    "alignment_16k": true,
+    "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+    "path": "state-client-build/owner-diagnostic106-20261022/delivery/FamilyConnect-0.1.18-beta106-recovery.apk",
+    "min_android_api": 31,
+    "android": "12+",
+    "abi": "arm64-v8a",
+    "native_sha256": "37ba4fac656811dd979688a274f45aed85a3aa567f1fafb3987a81c020fa91f1",
+    "size_bytes": 56093664,
+    "private_ru_en_instructions": "state-client-build/owner-diagnostic106-20261022/delivery/PRIVATE_TEST_README.txt"
+  },
+  "provenance": {
+    "source_files_verified": 2073,
+    "exact_source_delta": {
+      "clients/android/app/build.gradle": {
+        "before": "8a9887306bae9cfe8fc729b1d6ee05fc0a68b5647356e4fe641f7d03db10f132",
+        "after": "257f581bf701fb2fa4b6d49c7c797cdfbe6320288020f1c7d0d8004143a70feb"
+      },
+      "clients/android/app/src/test/java/com/familyconnect/app/DiagnosticRecordBudgetTest.java": {
+        "before": null,
+        "after": "6dfaffb073f38854b78adddabbeca67b68f908a0007d05f182530fedfb97e3ea"
+      },
+      "clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRing.java": {
+        "before": "3092a4f222646417e0b1b964069d4a982bc61f0d292a25eca69f194e8e4eb91f",
+        "after": "cb55956ff808247634ed09df72a70c6b3711dea4bc64d06156a08e11af267a36"
+      },
+      "clients/android/app/src/main/java/com/familyconnect/app/DiagnosticRecordBudget.java": {
+        "before": null,
+        "after": "6066a2bb670e82a8053d55164c31fd9837d4c7db5a0aa531cbd9b24b8c0dc2f3"
+      }
+    },
+    "native_libraries_verified": 12,
+    "native_identical_to105": true,
+    "complete_source_inventory_sha256": "8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c",
+    "build_receipt_sha256": "b2a218544af3e08aedffd34d25ced693291e0bc836549ab8a69130a6204940e5",
+    "signed_unsigned_payload_verified": true
+  },
+  "fixes_retained": [
+    "beta102 payload-progress DNS health",
+    "beta103 deadline versus explicit cancellation with strict cache security",
+    "beta104 bounded 750ms reorder",
+    "beta105 drain complete queued frames under pressure",
+    "beta106 bounded serialized diagnostic copy; counters/first causes/history memory preserved"
+  ],
+  "historical_install": {
+    "from_code": 104,
+    "to_code": 105,
+    "utc": "2026-10-22T12:13:29.844208+00:00",
+    "same_uid": 10283,
+    "method": "adb install -r",
+    "signer_verified": true,
+    "after_install_vpn": false,
+    "current_full_identity_readback": "PENDING"
+  },
+  "upgrade_checks": [
+    {
+      "from_code": 88,
+      "to_code": 106,
+      "observed": {
+        "package": "com.familyconnect.app.friends",
+        "version_code": 88,
+        "version": "0.1.18-beta88-recovery",
+        "sha256": "968a61724f4e71ac0335e330960eb9b54e5ede59bae81df0b6e8499e4ce6c2ce",
+        "alignment_16k": true,
+        "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+      },
+      "status": "STATIC_PACKAGE_SIGNER_INCREASING_CODE_PASS",
+      "physical_upgrade": "NOT_RUN_DIRECT_TO106"
+    },
+    {
+      "from_code": 94,
+      "to_code": 106,
+      "observed": {
+        "package": "com.familyconnect.app.friends",
+        "version_code": 94,
+        "version": "0.1.18-beta94-stability",
+        "sha256": "fe32f36d0705d83705e549f598512305d63fd942a415f71afaebfd91534f8e13",
+        "alignment_16k": true,
+        "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+      },
+      "status": "STATIC_PACKAGE_SIGNER_INCREASING_CODE_PASS",
+      "physical_upgrade": "NOT_RUN_DIRECT_TO106"
+    },
+    {
+      "from_code": 104,
+      "to_code": 106,
+      "observed": {
+        "package": "com.familyconnect.app.friends",
+        "version_code": 104,
+        "version": "0.1.18-beta104-recovery",
+        "sha256": "828ffe3534e22a61cecacd261f0875d5333682522d9533cb854cb11309436c1a",
+        "alignment_16k": true,
+        "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+      },
+      "status": "STATIC_PACKAGE_SIGNER_INCREASING_CODE_PASS",
+      "physical_upgrade": "NOT_RUN_DIRECT_TO106"
+    },
+    {
+      "from_code": 105,
+      "to_code": 106,
+      "observed": {
+        "package": "com.familyconnect.app.friends",
+        "version_code": 105,
+        "version": "0.1.18-beta105-recovery",
+        "sha256": "91ba2d6e4cb6d3c789e4921df96b79ea196d42bc602bc72ea727fa1489aef2a3",
+        "alignment_16k": true,
+        "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+      },
+      "status": "STATIC_PACKAGE_SIGNER_INCREASING_CODE_PASS",
+      "physical_upgrade": "PASS_OWNER_SAME_UID_SUPPORT_ID"
+    },
+    {
+      "from_code": 65,
+      "to_code": 106,
+      "observed": {
+        "path": "/mnt/data/PycharmProjects/family_connect/state-client-build/field65-direct-delivery/FamilyConnect-Test-0.1.18-beta65.apk",
+        "package": "com.familyconnect.app.friends",
+        "version_code": 65,
+        "version": "0.1.18-beta65",
+        "sha256": "dfbdb5352b8c707fb77ff3d7392d8217f898aa8e999b6a0f52fad8172185778e",
+        "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+        "min_sdk": 26,
+        "abi": "'arm64-v8a'"
+      },
+      "status": "STATIC_SAME_PACKAGE_SIGNER_INCREASING_CODE_PASS",
+      "physical_upgrade": "NOT_OBSERVED",
+      "installed_version_evidence": "STALE_SERVER_OBSERVATION_20261005_NOT_CURRENT_INSTALL_PROOF",
+      "candidate_min_api": 31
+    },
+    {
+      "from_code": 96,
+      "to_code": 106,
+      "observed": {
+        "path": "/mnt/data/PycharmProjects/family_connect/state-client-build/mobile-bootstrap-20261020/delivery/FamilyConnect-0.1.18-beta96-bootstrap.apk",
+        "min_sdk": 31,
+        "abi": "arm64-v8a",
+        "package": "com.familyconnect.app.friends",
+        "version_code": 96,
+        "version": "0.1.18-beta96-bootstrap",
+        "sha256": "07a90f03269e1df683289bc1fbe7fa7e88647c5629f71db1f784d6566aa9228d",
+        "alignment_16k": true,
+        "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+      },
+      "status": "STATIC_SAME_PACKAGE_SIGNER_INCREASING_CODE_PASS",
+      "physical_upgrade": "NOT_OBSERVED",
+      "installed_version_evidence": "USER_SUPPLIED_RING_20261022",
+      "candidate_min_api": 31
+    }
+  ],
+  "online_sample": {
+    "stored_at_utc": "2026-10-22T19:42:25+00:00",
+    "version_code": 105,
+    "metrics": {
+      "network": "WIFI",
+      "state": "CONNECTED",
+      "readiness": "READY",
+      "vpn_capture_open": true,
+      "speed_profile": "P1",
+      "mux_profile": "CREDIT128",
+      "mux_window": 131072,
+      "send_window": 32,
+      "receive_window": 32,
+      "peer_receive_window": 32,
+      "effective_send_window": 32,
+      "sent_bytes": 70088,
+      "received_bytes": 562101,
+      "retransmissions": 55,
+      "recovery_timeouts": 53,
+      "terminal_reason": "NONE"
+    },
+    "scope": "EXISTING_OPT_IN_REDUCED_REPORT_NOT_ACTIVE_BENCHMARK",
+    "gateway_session_correlated": true
+  },
+  "gateway": {
+    "binary_sha256": "a515539af72844cb5af4f918a229c85e23cff874f0f6ac369649df3839273c85",
+    "config_sha256": "f8188a9763c091984166788f1dd0456cadeeb730fa43b9557f59fe3bb63ed5f7",
+    "state": {
+      "ActiveState": "active",
+      "InvocationID": "35a4b1e34b244265a3b9c46a2c99d936",
+      "MainPID": "2249749",
+      "Result": "success",
+      "NRestarts": "0",
+      "ExecMainStartTimestamp": "Fri 2026-10-23 08:43:09 MSK",
+      "ExecMainExitTimestamp": "",
+      "ExecMainStatus": "0"
+    },
+    "speed_profile": "P1",
+    "single_target": false,
+    "group_policy_changed": true,
+    "owner_both_end_p1_confirmed": true,
+    "renewal": "ACTUAL_RU_TIMERS_ACTIVE_SUCCESS",
+    "certificate_crl_not_after_utc": "2026-10-23T07:48:57Z",
+    "cohort_support_ids": [
+      "FC-4D8Q-REEG",
+      "FC-ZMVK-MM7C",
+      "FC-YHQB-9VJN"
+    ],
+    "group_policy_sha256": "1cb942471c3d1349a4551b7acb922adc75e788549201a0cbabb764b72b858103",
+    "group_applied_utc": "2026-10-23T05:44:52.992962+00:00",
+    "shared_restarts_this_phase": 1,
+    "diagnostic_target_still_owner_only": true,
+    "rollback_binary_sha256": "3a0804cd3da63135dce387d1dff9afdc4588562186abea2e5d00da1d9f5c31ae",
+    "post_deploy_tls_readiness": "TLS_RUNTIME_BINDING_MATERIALS_PUBLICATION_PASS",
+    "source_inventory_sha256": "862676f51502adb09293bb70d8af2de3f0a3191389d40353fd25bb80537513c2",
+    "legacy_negotiation": "COMPATIBLE_EXISTING_CONTRACT_NOT_AUTOMATIC_RS32_FOR_OLD_CLIENTS"
+  },
+  "validations": {
+    "jvm_tests": 219,
+    "recorded_budget_replay": {
+      "result": "BOUNDED_EXPORT_PASS",
+      "expanded_bytes": 262837,
+      "bounded_bytes": 262098,
+      "current_session_unchanged": true,
+      "events_unchanged": true,
+      "record_budget": {
+        "limit_bytes": 262144,
+        "untrimmed_bytes": 262837,
+        "omitted_detail_items": {
+          "restricted_history[0].lifecycle.trace": 4
+        }
+      }
+    },
+    "platform_ci": "NOT_RUN_FOR_PRIVATE106",
+    "native_regressions": "REUSED_IDENTICAL105_BYTES",
+    "finite_explicit_disconnect_seconds": 45,
+    "ordinary_connect_p1": true,
+    "post_connect_full_https": true,
+    "bulk_bodies_complete": true,
+    "body_hashes": "OBSERVED_NOT_INDEPENDENT_ORIGIN_DIGEST",
+    "meter_monitor_stopped": true,
+    "night_stability": "NOT_TESTED",
+    "automatic_wifi_return": true,
+    "automatic_return_full_https": true,
+    "automatic_return_without_connect_command": true,
+    "wifi_creation_to_connected_ms": 106578,
+    "cohort_policy_race": "PASS",
+    "cohort_gateway_five_package_race": "PASS_INITIAL_BOOTSTRAP_FIXTURE_FAILURE_RETAINED_RETRY_PASS",
+    "cohort_baseline_reproduced_byte_identical": true,
+    "post_deploy_owner_full_https": true,
+    "post_consent_normal_json": true
+  },
+  "traffic": {
+    "scope": "SAME_20261022_WIFI_CONTINUATION_NOT_NEW_ALLOCATION",
+    "limit_bytes": 33554432,
+    "reserved_bytes": 8408064,
+    "intentionally_requested_bytes": 8408064,
+    "previous_reservations_unchanged_bytes": 25204736,
+    "carrier_media_bytes": "NOT_MEASURED_SEPARATE",
+    "refunds_allowed": false,
+    "remaining_bytes": 25146368
+  },
+  "boundaries": {
+    "built_in_this_continuation": true,
+    "signed_in_this_continuation": false,
+    "installed_in_this_continuation": false,
+    "production_mutation": true,
+    "distributed": false,
+    "public_release": false,
+    "public_artifact_verification": "NOT_PERFORMED_NO_PUBLIC_ROLLOUT_CLAIM",
+    "catalog_invitation_changes": false,
+    "push": false,
+    "new_enrollment": false,
+    "known_local_temporary_collectors": 0,
+    "phone_detailed_collectors": "NO_TEMPORARY_COLLECTORS_NATIVE_PERFORMANCE_TAGS_EMPTY_STANDARD_BOUNDED_RING_RETAINED",
+    "scope": "COHORT_POLICY_PHASE_20261023_AFTER_OWNER106_ACCEPTANCE",
+    "gateway_built_this_phase": true,
+    "apk_built_this_phase": false,
+    "production_scope": "ONE_GUARDED_GATEWAY_RESTART_AND_EXACT_THREE_P1_POLICY"
+  },
+  "next_action": "Owner manually sends unchanged signed106 and RU/EN instructions to the two agreed testers. Select ordinary P1 while disconnected, one mobile MESH attempt with Wi-Fi off, small response and normal JSON regardless of result; no prerequisite Wi-Fi warmup or USB activation.",
+  "remaining": [
+    "Physical tester106 in-place upgrades and retained identity readback NOT_OBSERVED",
+    "Actual106/P1 whitelist field attempts NOT_RUN; positive Volgograd96 is a separate result",
+    "Krasnodar field result and currently installed version not yet established;65 server record is stale",
+    "Cold or expired-cache bootstrap under the field restrictions remains unproven",
+    "Wi-Fi upstream independence and overnight stability not claimed; not mandatory private-field gates"
+  ],
+  "rollback": "No uninstall/downgrade/data reset. Preserve evidence; higher-code same-signer exact-parent correction if needed. No automatic P0.",
+  "evidence_sha256": {
+    "state-client-build/owner-wifi-resume-20261022/artifact-verification-3/artifact-readback.json": "acbbb3fc64633e3bb5aaf6b12049256fc247dfedfea4733e8ef18dc1f7048b0c",
+    "state-client-build/owner-wifi-resume-20261022/support-renewal-readback/online-support.json": "b4704d4c222b946679e9d29e8982951e5f234a9b0eec6280f784cd6eebdc10cc",
+    "state-client-build/owner-disconnections-20261022/raw-gateway-wifi-resume-restart/runtime.json": "a1c970286329bd232d5d0a171ce7dcbc69410c8047ad835e638aa8c26c1bf54f",
+    "state-client-build/owner-wifi-resume-20261022/renewal-session/gateway.json": "f6eeec6c7a78c83e4326c4610ab1251afe03c7fbddbe90f1de4b6c1546474a65",
+    "state-client-build/owner-wifi-resume-20261022/local-checks-host/receipt.json": "7d522a57e9405310a1822f041ecbc6d741be4a3c538b0591ef0feffce8309633",
+    "state-client-build/owner-wifi-resume-20261022/support-renewal-readback/manifest.json": "4f4df4427bf77e517e5504e15c9ce423fe8832166f295fe10b43c91110bb7381",
+    "state-client-build/owner-wifi-resume-20261022/renewal-session/manifest.json": "c0d88ffc92b8a480f236af35f5d1ef74d197e5a304d7f073a984e4e4c37b2119",
+    "state-client-build/owner-wifi-resume-20261022/traffic-ledger.json": "22b6287ed84b41ecbba74965e9fb44a8e3501b3148b6313a8dddb01056b5bc8e",
+    "state-client-build/owner-wifi-resume-20261022/usb-readback-2004/receipt.json": "24e899ddcb96f4828e06cddfb1e47e21d4e897d1015de16e13a48e2f76de3b3d",
+    "state-client-build/owner-wifi-resume-20261022/usb-readback-2004/manifest.json": "e2888922b1d89c7afd82586b5c2b205cd162c2b9e0c827fbc5170d97011a378a",
+    "state-client-build/owner-wifi-resume-20261022/usb-current-state/manifest.json": "26e9b0c4dab25025b2f53721a10cdf3a718ea624b0c85dec4762dd898adbb597",
+    "state-client-build/owner-wifi-resume-20261022/export15-readback/owner-export.json": "758586f2ccba84c00e8b12d6d0e54e0e60d7fb64ed03a2edbad659a7cfc9ddb5",
+    "state-client-build/owner-wifi-resume-20261022/export15-readback/acquisition.json": "2b430f11ddcbfa0a53d6825d8dda642b6b6b4ce4042190895867f9c475502404",
+    "state-client-build/owner-wifi-resume-20261022/export15-readback/replay-receipt.json": "d4f15193beac56163c220f3fba4e3ffb086334c9ad3f2cfbf5e26519538b67b9",
+    "state-client-build/owner-wifi-resume-20261022/export15-device-readback/manifest.json": "40f0a46d03459bb9854179b73ece95832ec924593c79eed588f3762ffaa69744",
+    "state-client-build/owner-wifi-resume-20261022/export15-device-readback/summary-corrected.json": "1e947c32f38a9076016372c79cb00509397c2628f1ae21ce75bc251e41a48fdd",
+    "state-client-build/owner-diagnostic106-20261022/build/receipt.json": "b2a218544af3e08aedffd34d25ced693291e0bc836549ab8a69130a6204940e5",
+    "state-client-build/owner-diagnostic106-20261022/delivery/signing-receipt.json": "363c0d45c386c8e88a733e5aff661ca02c622b50cade6f86151834e4876959b0",
+    "state-client-build/owner-diagnostic106-20261022/install-receipt.json": "1476ed1c549ea6be1933fc7526a6322a4ea4f84a517b85003c95cae0f285580f",
+    "state-client-build/owner-wifi-resume-20261023/candidate-verification/receipt.json": "3a6ba7af12b2cfb6e60119608eaef80acabebc6d404cafb33b0e51a8b4558f2b",
+    "state-client-build/owner-wifi-resume-20261023/baseline106-r1/gate.json": "0ed995db74f72631710c527125529f1dbb73b3fa2fb9570cd4b36df57ce18ce4",
+    "state-client-build/owner-wifi-resume-20261023/baseline106-r1/summary.json": "5f9d5711ac61490c596d56d69f1875413415a385b67578af104bbdf78b28bbd5",
+    "state-client-build/owner-wifi-resume-20261023/reconnect106/gate.json": "8dd68f6a29a9243ec9311071c38ebd285de6d8a59bcbd3dce2a78f16bacbd376",
+    "state-client-build/owner-wifi-resume-20261023/reconnect106/summary.json": "16955d37c8f3e3e9b6a157fb7594da3e250ed3bbc88d86c800bf4a2c6e1b834c",
+    "state-client-build/owner-wifi-resume-20261023/postinstall106/receipt.json": "62c0dad700435d23d68f8945600e5acabf6dac32f8c7b4640c3a187d42bee55c",
+    "state-client-build/owner-disconnections-20261022/explicit-intent-check-106/disconnect-result.json": "7a8d6e24793c133bad4cdb80adaaf3e6963b33d52f4aa8a5e450dde46c1ca249",
+    "state-client-build/owner-disconnections-20261022/explicit-intent-check-106/reconnect-result.json": "e14339072cca4e90e7ae245ce82050288444b332d6b9a10bcd9ba51e334485de",
+    "state-client-build/owner-wifi-resume-20261023/before-manual-outage106.json": "78a64af2b441317d1c345574d10db8c5acfb9549143b9f37634a037d001c7f66",
+    "state-client-build/owner-disconnections-20261022/raw-entry-20261023T051103Z/acquisition-manifest.json": "49a230f7d75e67676bb1b219567eaa4f3f9016d2ec79ac77e1d62b64e60c1a88",
+    "state-client-build/owner-disconnections-20261022/raw-entry-20261023T051103Z/diagnostic.json": "0275d6448e9099445026e40e806ab264a0d186b01ec515da80ed827e775a269e",
+    "state-client-build/owner-disconnections-20261022/raw-entry-20261023T051103Z/connectivity.txt": "3a1372da4a6bdee0fe27632cedf1f771b093423879dbe8c72faabc0e17e0af42",
+    "state-client-build/owner-wifi-resume-20261023/manual-return-latest.json": "c1e937be0010b3147174b92d0a26e99daad1e68bddf4a216085ce7825b05c15d",
+    "state-client-build/owner-disconnections-20261022/raw-gateway-wifi106-recovered-session/acquisition-manifest.json": "009de915c1b6b5cad24480fcb0e381a20d2d513d59a03a51d31ddf52edd5b8f0",
+    "state-client-build/owner-disconnections-20261022/raw-gateway-wifi106-recovered-session/runtime.json": "e86663bfcae33e63153ed014683b13542cfef8aeef32829c89d0087b57ba07e9",
+    "state-client-build/owner-wifi-resume-20261023/traffic-reservations/automatic-return106.json": "7caa700b865b49340858ded8b0075c8b46cfa9ef28523d7bc528c1813d76b305",
+    "state-client-build/owner-wifi-resume-20261023/automatic-return106/before-small-reconnect.json": "c30907d1ca14ed54b43dee62f0eb5e1acb6502122a36eb09ad69c1ba247d88bb",
+    "state-client-build/owner-wifi-resume-20261023/automatic-return106/gate.json": "14b00530032781eccd58a627bf7027217bbc7ef245a9dcd000fd01e46eed9da6",
+    "state-client-build/owner-wifi-resume-20261023/automatic-return106/gateway-analysis.json": "d2715f95f01c8c2325a90d7ae22b89f9212fb95b2ddfe026a6c8d38b77131df5",
+    "state-client-build/owner-wifi-resume-20261023/automatic-return106/gateway-provenance.json": "be5554c03049199bfa79a45c11df32852e57b14a67822f041940b2cfefc7a656",
+    "state-client-build/owner-wifi-resume-20261023/automatic-return106/monitor-000.json": "f74d57d4d5d0953d7dc70c081e990a6be7c65aade8e432d356275b909eb98fe6",
+    "state-client-build/owner-wifi-resume-20261023/automatic-return106/monitor-001.json": "1d742790d1321138e6f8b2e87d06b65ee43fa6171653b755db597c0cc2e7fe58",
+    "state-client-build/owner-wifi-resume-20261023/automatic-return106/phone-after.json": "0245ac6b372b1cc01194bdcb431ee0deb526529ed539b2c47a8895bff97c25e2",
+    "state-client-build/owner-wifi-resume-20261023/automatic-return106/phone-before.json": "73f2df45833d3421b25c27c3265a26e72fb063f228901a3f1cba888dc91d7bde",
+    "state-client-build/owner-wifi-resume-20261023/automatic-return106/requests.jsonl": "63912484ccc906bfaa4cc5c23ef33572b4fd08861f94758ef93397474a91f048",
+    "state-client-build/owner-wifi-resume-20261023/automatic-return106/small-reconnect.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "state-client-build/owner-wifi-resume-20261023/automatic-return106/small-reconnect.stdout": "095b23c982434aee747bdb2180f6f3498af60baa763f080c305c8455ca2ef254",
+    "state-client-build/owner-wifi-resume-20261023/automatic-return106/summary.json": "7959134ef6c67f35d0a3ccad095dd94761169a3246e9d95450347769f4cc8f3c",
+    "state-client-build/owner-wifi-resume-20261023/automatic-return106/acceptance-receipt.json": "67896525642d7079099115d2b087b9df94d54d12b5ebe6dac69380352210f4c5",
+    "state-client-build/tester-p1-cohort-20261023/field-volgograd/original.json": "04ca8b2de73538272617245bb134eeb795fe9b5e7db0de400926b9b64d1d7904",
+    "state-client-build/tester-p1-cohort-20261023/field-volgograd/gateway-correlation.json": "c771b3473b9b84137ec9a569411e50fb39962ffff85f4d6b76a90fc8be41be5f",
+    "state-client-build/tester-p1-cohort-20261023/cohort-identity-readback.json": "9fe53f32d0bd1052394e1eba1c83a9b8512aacdfca7c4ead152d342a30fb2e71",
+    "state-client-build/tester-p1-cohort-20261023/gateway-build.json": "f196fa7f1d0838e4f9c9aa977223d91bf4c68e13e9e2079486d2de5d0ca34525",
+    "state-client-build/tester-p1-cohort-20261023/source-inventory.json": "862676f51502adb09293bb70d8af2de3f0a3191389d40353fd25bb80537513c2",
+    "state-client-build/tester-p1-cohort-20261023/parent-source-inventory.json": "fe0901ccfcb954ff32b4be9157d3758a6232dbede9a87fb177d3616e4b87f10c",
+    "state-client-build/tester-p1-cohort-20261023/policy-tests.log": "4a8def15c50e1fa8c2c3effe6ec4673ad451f0e40045f9a711dbfb5b73b53305",
+    "state-client-build/tester-p1-cohort-20261023/regression-tests.log": "84672c0c587fc5babfaf618fe86e79a335a1203a6fec5f555b597630819179a5",
+    "state-client-build/tester-p1-cohort-20261023/bootstrap-fixture-retry.log": "f9b146acf338b6fa70f68dadf9ab7bb90c9e50a3b19c91d621c3d6a09669d31e",
+    "state-client-build/tester-p1-cohort-20261023/test-fixture.json": "a64bf1b7d9f1279aad73acc0bbaf7a6878807597959b9d50e49d1cf3e633b18f",
+    "state-client-build/tester-p1-cohort-20261023/policy-apply.json": "c3bcae4b4f0a86bd6cae3edce23d2fe7a4c2243d494f5e5fc9fc38e575c709ea",
+    "state-client-build/tester-p1-cohort-20261023/policy-readback.json": "83608bceb057d27cecab3da86001481f4db3b6369f2e1a1a9f5c4859c78f4d91",
+    "state-client-build/tester-p1-cohort-20261023/owner-before.json": "0195c255c258b08662fecb6e31e87cab94702c13ed87e84b7e4eb41ef200f3dd",
+    "state-client-build/tester-p1-cohort-20261023/owner-after-consent.json": "3e359e52cee446fef4ad6b3db0e10a8fa12dc4fc9de8a1c2728f23719b39ab43",
+    "state-client-build/tester-p1-cohort-20261023/owner-support-status.json": "038dc898b1bedf147e4587bf20cef1ebc57dfeb4c6833ddaf4d8ec3621394a6e",
+    "state-client-build/tester-p1-cohort-20261023/tester-upgrade-check.json": "7b0f0a0434bb89f92f0407f5b0c812c18f53b81effba7f7a837dcddb6bfb3b36",
+    "state-client-build/tester-p1-cohort-20261023/transitions/prepared.json": "4d4036bb67efcc2cf1e13c566b7578d4c2878e53f275c59ec5e39cc9b35d1f28",
+    "state-client-build/tester-p1-cohort-20261023/transitions/receipts/candidate-ready-readiness.json": "21fda7e6cc20f0decaa940f32a4ce5c0175ddf16c98bfed64f405e539887a88a",
+    "state-client-build/tester-p1-cohort-20261023/transitions/private/deploy-NL.jsonl": "315e17bdedcc9d406b42bd05c44fd3cf9cfbd0e66180484a5bb6899ef15bfd7d",
+    "state-client-build/tester-p1-cohort-20261023/transitions/private/deploy-RU.jsonl": "c871e814a4ddd1b98f027b71b029eff91e8ce3527c01bed095794e241c8cd235",
+    "state-client-build/owner-wifi-resume-20261023/cohort106-postdeploy/before-small-reconnect.json": "36f6d003300c7e9e56f7ce3f91508067ec4e6ae280ecca123f5a131b04565632",
+    "state-client-build/owner-wifi-resume-20261023/cohort106-postdeploy/gate.json": "0dc6f8f919a208e509e961e99a3feab5d2002910e755c889aab9f0ab966a21a4",
+    "state-client-build/owner-wifi-resume-20261023/cohort106-postdeploy/gateway-analysis.json": "812b9340a2614b4c5b5e12c439a1e796a6e748086770848c226dfeae1c8de0f0",
+    "state-client-build/owner-wifi-resume-20261023/cohort106-postdeploy/gateway-provenance.json": "8ce942798aedd42c92b9ba4a511994b562da69b1a361226214e0fb832f4a43e5",
+    "state-client-build/owner-wifi-resume-20261023/cohort106-postdeploy/monitor-000.json": "b36a449f0683bdbe834452466301e59c3af7dc5e2ae9f99fe29d2670d38b85f4",
+    "state-client-build/owner-wifi-resume-20261023/cohort106-postdeploy/monitor-001.json": "1274c99ecfac4f579501fa7c085a068d2faffab86309781b21f6880a7681696d",
+    "state-client-build/owner-wifi-resume-20261023/cohort106-postdeploy/phone-after.json": "c6b8bc83cf60a940a580569727e0d759277a2657f3b17802bc1fdfeaca5da24e",
+    "state-client-build/owner-wifi-resume-20261023/cohort106-postdeploy/phone-before.json": "15d24204f06b5c390a1a79a1e7c49eba2b1ba621d83f64714d3de4bfc2c6b567",
+    "state-client-build/owner-wifi-resume-20261023/cohort106-postdeploy/requests.jsonl": "37e260c5745f7136945aa7744f27433421c67603c39cfd88358d7e6a1845a477",
+    "state-client-build/owner-wifi-resume-20261023/cohort106-postdeploy/small-reconnect.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "state-client-build/owner-wifi-resume-20261023/cohort106-postdeploy/small-reconnect.stdout": "f878ba6275c7d59e076cb872fd9d876b31e1987e67f00fd22dc07a5759628158",
+    "state-client-build/owner-wifi-resume-20261023/cohort106-postdeploy/summary.json": "c636e42469aa696321daf501073d0352579021d4c363c39b179e94e0bc297045",
+    "state-client-build/owner-wifi-resume-20261023/traffic-reservations/baseline106-r1.json": "26119942015ebfc0d3fc4f268d23c6c5ac94e7e6825d060107f57dbaa57ec31f",
+    "state-client-build/owner-wifi-resume-20261023/traffic-reservations/cohort106-postdeploy.json": "ddec0cb05ebd6e598bf24272c3dbb86e87af59e0d5fd0c9bf730065a4476f597",
+    "state-client-build/owner-wifi-resume-20261023/traffic-reservations/reconnect106.json": "cfcd0482a0d4653964fc981365d3e6265ab09f9717755ccd6f45a9041ea35f1d",
+    "state-client-build/owner-disconnections-20261022/raw-gateway-cohort-entry/acquisition-manifest.json": "83e33d3515f6f37ba4432ce56e2c0312f869b8c953ba06355b7248ec4f853869",
+    "state-client-build/owner-disconnections-20261022/raw-gateway-cohort-after-deploy/acquisition-manifest.json": "f352f7df7e39bbef975a45097faf4247b5c1152d42d874f82cf43efd1e40813b",
+    "state-client-build/owner-disconnections-20261022/raw-gateway-volgograd21-historical/acquisition-manifest.json": "9006ebf1aa0f71a0ecf4faf2867d43bebf6de0304507428fec0607e61c0accc7",
+    "state-client-build/tester-p1-cohort-20261023/field-volgograd/reconciliation.json": "a3e7de632558541ba7e1c1126a30d60388d07138b76e5b37a04198bce265a87d",
+    "state-client-build/owner-diagnostic106-20261022/delivery/PRIVATE_TEST_README.txt": "6b852440ea41ffc6ec54a683cc33a4e3d3bc41db8dda9d08a040a731d2d09675"
+  },
+  "usb_followup": {
+    "recorded_utc": "2026-10-22T20:30:50.971969+00:00",
+    "serial": "31ce63ba",
+    "model": "Redmi Note 9 Pro",
+    "version_code": 105,
+    "uid": 10283,
+    "installed_apk_signer_all_native_hashes_match": true,
+    "normal_support_status_authorized": true,
+    "normal_snapshot_attempts": 2,
+    "normal_snapshot_error": "FileNotFoundException: Snapshot unavailable",
+    "snapshot_underlying_io_cause": "UNKNOWN",
+    "current_support_id_settings_readback": "PENDING",
+    "initial_phase": "20:05UTC Wi-Fi underlying398, MESH-address owner TUN present",
+    "later_phase": "20:27/20:28UTC status off, no owner VPN network or ConnectionService, route wlan0",
+    "transition_origin": "UNKNOWN",
+    "intentional_app_traffic_bytes": 0,
+    "connect_disconnect_sent": false,
+    "install_sign_build_performed": false,
+    "active_continuous_collectors_started": 0
+  },
+  "normal_export_followup": {
+    "recorded_utc": "2026-10-22T21:14:07.271942+00:00",
+    "file_sha256": "758586f2ccba84c00e8b12d6d0e54e0e60d7fb64ed03a2edbad659a7cfc9ddb5",
+    "file_bytes": 496940,
+    "records": {
+      "ring": {
+        "version_code": 105,
+        "support_id": "FC-4D8Q-REEG",
+        "state": "CONNECTED",
+        "network": "WIFI",
+        "vpn_capture_open": true,
+        "record_bytes": 261081,
+        "latest_retained_event_utc": "2026-10-22T19:43:11.845000+00:00",
+        "session_observed_utc": "2026-10-22T19:43:11.901000+00:00",
+        "history_records": 4,
+        "event_count": 128
+      },
+      "incident": {
+        "version_code": 105,
+        "support_id": "FC-4D8Q-REEG",
+        "state": "FAILED",
+        "network": "WIFI",
+        "vpn_capture_open": true,
+        "record_bytes": 235838,
+        "latest_retained_event_utc": "2026-10-22T19:33:17.334000+00:00",
+        "session_observed_utc": null,
+        "history_records": 4,
+        "event_count": 128
+      }
+    },
+    "fresh_current_state": false,
+    "local_record_budget_replay": {
+      "result": "REPRODUCED_RECORD_OVERFLOW_WITHIN_COMPONENT_BUDGET",
+      "baseline_bytes": 261081,
+      "expanded_bytes": 262837,
+      "record_limit": 262144,
+      "incidents_before": 5,
+      "incidents_after": 7,
+      "synthetic_added_contexts": 2,
+      "live_phone_memory_read": false,
+      "original_export_unmodified": true
+    },
+    "product_fix_shipped": false,
+    "current_system_readback": {
+      "utc": "2026-10-22T21:10:59+0000",
+      "usb_support_disabled": true,
+      "version_code": "105",
+      "uid": "10283",
+      "owner_vpn_network_count": 0,
+      "shell_route_interfaces": [
+        "wlan0"
+      ],
+      "intentional_application_bytes": 0,
+      "control_commands_sent": false,
+      "status_authorized": false,
+      "classification_basis": "both retained stdout and stderr; ADB exit0 is not authorization",
+      "supersedes_summary_sha256": "6aaf50c6568a579ddd34e06b015313e2368151bbb2498f3b8a88da1d1baf94f2"
+    },
+    "all_original_evidence_preserved": true,
+    "measurement_requests": 0,
+    "control_commands_sent": false
+  },
+  "retained_20261022_checkpoint": {
+    "recorded_utc": "2026-10-22T20:02:26.572963+00:00",
+    "artifact": {
+      "path": "state-client-build/owner-pressure105-20261022/delivery/FamilyConnect-0.1.18-beta105-recovery.apk",
+      "package": "com.familyconnect.app.friends",
+      "version_code": 105,
+      "version": "0.1.18-beta105-recovery",
+      "sha256": "91ba2d6e4cb6d3c789e4921df96b79ea196d42bc602bc72ea727fa1489aef2a3",
+      "alignment_16k": true,
+      "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+      "min_android_api": 31,
+      "android": "12+",
+      "abi": "arm64-v8a",
+      "size_bytes": 56093664,
+      "native_sha256": "37ba4fac656811dd979688a274f45aed85a3aa567f1fafb3987a81c020fa91f1"
+    },
+    "gates": {
+      "OWNER_WIFI_ACCEPTANCE": "BLOCKED_USB_CONSENT_AND_STALE_DIAGNOSTICS",
+      "RECOVERY_ACCEPTANCE": "CONTROLLED_OWNER_NETWORK_RETURN_NOT_RUN",
+      "SIGNED_APK_READY": "YES_EXISTING_BYTES_VERIFIED",
+      "TESTER_P1_POLICY_READY": "NO_SINGLE_OWNER_TARGET",
+      "FIELD_WHITELIST_VALIDATION": "NOT_RUN",
+      "PRIVATE_FIELD_READY": false
+    },
+    "provenance": {
+      "source_files_verified": 2071,
+      "native_libraries_verified": 12,
+      "complete_source_inventory_sha256": "1a6f52a91dc2482f67992f28a2b46dcdf2c3c0bc56f8f0665a0dd469943584af",
+      "canonical_source_delta_sha256": "8334544f973c997a3d0ee0796c41e6d4c736d8ac13ca14bb82c03cc9b060d7d1",
+      "runner_wrapper_sha256": "6cc361a4dbeebb265efd0097fdcd30ebbf7a5291bbdeee48a19ca32b5a917aeb",
+      "generated_runner_sha256": "9f5a9a21ae021d4780b20345c84a25ab955b6384f14d07e17945429e106f8934",
+      "generated_runner_reconstructed": true,
+      "signed_unsigned_payload_identical": true
+    },
+    "gateway": {
+      "binary_sha256": "3a0804cd3da63135dce387d1dff9afdc4588562186abea2e5d00da1d9f5c31ae",
+      "config_sha256": "fa9d8344189241a1f55bcc00ebde078cd6d5e740f37eeb7df09e030718a013e0",
+      "state": {
+        "ActiveState": "active",
+        "InvocationID": "6dd00e9a5c00452496cb71ec66d00e85",
+        "MainPID": "1862598",
+        "Result": "success",
+        "NRestarts": "1",
+        "ExecMainStartTimestamp": "Thu 2026-10-22 22:38:47 MSK",
+        "ExecMainExitTimestamp": "",
+        "ExecMainStatus": "0"
+      },
+      "speed_profile": "P1_SINGLE_TARGET",
+      "base_mux": "LEGACY64",
+      "effective_matched_session_mux": "CREDIT128",
+      "pacing": "OFF",
+      "counters": "OFF",
+      "external_restart_trigger": "UNKNOWN_NOT_CHANGED_BY_TASK",
+      "validity_at_read": {
+        "certificate": {
+          "exit": 0,
+          "dates": "notBefore=Oct 22 17:46:54 2026 GMT\nnotAfter=Oct 22 21:46:54 2026 GMT\n"
+        },
+        "revocations": {
+          "exit": 0,
+          "dates": "lastUpdate=Oct 22 17:46:54 2026 GMT\nnextUpdate=Oct 22 21:46:54 2026 GMT\n"
+        }
+      }
+    },
+    "traffic": {
+      "new_limit_bytes": 33554432,
+      "intentional_application_bytes": 0,
+      "reserved_bytes": 0,
+      "historical_reserved_bytes_unchanged": 25204736,
+      "carrier_media_bytes": "NOT_MEASURED"
+    },
+    "upgrade_checks": [
+      {
+        "artifact": "state-client-build/beta87-product-fix-20261019/delivery/FamilyConnect-0.1.18-beta88-recovery.apk",
+        "metadata": {
+          "package": "com.familyconnect.app.friends",
+          "version_code": 88,
+          "version": "0.1.18-beta88-recovery",
+          "sha256": "968a61724f4e71ac0335e330960eb9b54e5ede59bae81df0b6e8499e4ce6c2ce",
+          "alignment_16k": true,
+          "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+        },
+        "status": "STATIC_PACKAGE_SIGNER_CODE_MATCH",
+        "physical_upgrade": "NOT_RUN"
+      },
+      {
+        "artifact": "state-client-build/rtp-deadline-20261020/normal94/delivery/FamilyConnect-0.1.18-beta94-stability.apk",
+        "metadata": {
+          "package": "com.familyconnect.app.friends",
+          "version_code": 94,
+          "version": "0.1.18-beta94-stability",
+          "sha256": "fe32f36d0705d83705e549f598512305d63fd942a415f71afaebfd91534f8e13",
+          "alignment_16k": true,
+          "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+        },
+        "status": "STATIC_PACKAGE_SIGNER_CODE_MATCH",
+        "physical_upgrade": "NOT_RUN"
+      },
+      {
+        "artifact": "state-client-build/owner-reorder104-20261022/delivery/FamilyConnect-0.1.18-beta104-recovery.apk",
+        "metadata": {
+          "package": "com.familyconnect.app.friends",
+          "version_code": 104,
+          "version": "0.1.18-beta104-recovery",
+          "sha256": "828ffe3534e22a61cecacd261f0875d5333682522d9533cb854cb11309436c1a",
+          "alignment_16k": true,
+          "signer_sha256": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a"
+        },
+        "status": "STATIC_PACKAGE_SIGNER_CODE_MATCH",
+        "physical_upgrade": "RETAINED_RECEIPT"
+      }
+    ],
+    "validations": {
+      "fresh_local": [
+        {
+          "name": "go-race",
+          "exit": 0,
+          "log_sha256": "1ab675f4ce3c3d51e16199d849bd81bf23cc313ac2857b5c12fd15d8f04a33ce"
+        },
+        {
+          "name": "deadline-bridge",
+          "exit": 0,
+          "log_sha256": "f4d3ac6800b863502d43d93d11c3082f5da393146c12a3280bf5f03bb5f1b956"
+        },
+        {
+          "name": "gateway-policy",
+          "exit": 0,
+          "log_sha256": "59d64eb34e88e118ae6948a48370eae5122e5955896671c45728c57390c08d34"
+        }
+      ],
+      "jvm_retained_build_tests": 213,
+      "jvm_fresh_run": false,
+      "full_platform_ci": "NOT_RUN",
+      "shaped_bandwidth_benchmark": "NOT_RUN",
+      "physical_tester_upgrade": "NOT_RUN",
+      "overnight": "NOT_RUN"
+    },
+    "remaining": [
+      "fresh live state/settings readback after USB consent; normal full export received but stale; reproduced aggregate diagnostic record-budget defect remains unfixed",
+      "verify Wi-Fi upstream and no mobile/fallback phase; bounded full HTTPS/single4MiB/parallel2x2MiB and idle",
+      "explicit Disconnect cancellation and ordinary Connect P1; explained manual Wi-Fi loss/return with automatic transfer",
+      "normal closed tester-group P1 policy, exact tester version inventory and applicable upgrade proof",
+      "disable temporary phone detail collectors while preserving normal JSON export"
+    ],
+    "next_action": "В настройках приложения включить USB: разрешить поддержку на 1 час и подтвердить штатный диалог. Сейчас провайдер явно сообщает отключённый допуск."
+  },
+  "current_install": {
+    "exit": 0,
+    "stdout": "Performing Streamed Install\nSuccess\n",
+    "stderr": "",
+    "before": {
+      "utc": "2026-10-23T04:38:11.855624+00:00",
+      "uid": 10283,
+      "code": 105,
+      "apk_sha256": "91ba2d6e4cb6d3c789e4921df96b79ea196d42bc602bc72ea727fa1489aef2a3",
+      "native_sha256": "37ba4fac656811dd979688a274f45aed85a3aa567f1fafb3987a81c020fa91f1",
+      "vpn": false,
+      "vpn_service": false
+    },
+    "identity_profile_verification": "PENDING_FRESH_APP_JSON",
+    "uninstall": false,
+    "clear_data": false,
+    "after": {
+      "utc": "2026-10-23T04:38:17.912376+00:00",
+      "uid": 10283,
+      "code": 106,
+      "apk_sha256": "242855c43e889e708234ce2f687fa02d37bccb1eee408904f09216b6abd8f020",
+      "native_sha256": "37ba4fac656811dd979688a274f45aed85a3aa567f1fafb3987a81c020fa91f1",
+      "vpn": false,
+      "vpn_service": false
+    }
+  },
+  "owner_106_acceptance": {
+    "baseline": {
+      "utc": "2026-10-23T04:51:34.404188+00:00",
+      "cells": [
+        {
+          "flows": 1,
+          "seconds": 28.209999999962747,
+          "bytes": 4194304,
+          "mbit_s": 1.1894516838016418
+        },
+        {
+          "flows": 2,
+          "seconds": 14.739999999990687,
+          "bytes": 4194304,
+          "mbit_s": 2.2764200814125646
+        }
+      ],
+      "attempts": 19,
+      "completed": 19,
+      "reserved_bytes": 8404992,
+      "actual_requested": 8404992,
+      "failure": null,
+      "monitor_stopped": true,
+      "network_change_recorded": false
+    },
+    "reconnect_probe": {
+      "utc": "2026-10-23T05:02:08.290120+00:00",
+      "mode": "probe",
+      "cells": [],
+      "attempts": 1,
+      "completed": 1,
+      "reserved_bytes": 1024,
+      "actual_requested": 1024,
+      "failure": null,
+      "monitor_stopped": true,
+      "network_change_recorded": false
+    },
+    "support_id": "FC-4D8Q-REEG",
+    "wifi_network": 398,
+    "wifi_upstream_independent": "UNKNOWN",
+    "android_protocol_errors_before": 0,
+    "android_protocol_errors_after": 1,
+    "classification": "expected crossed_reset on already removed stream33; counters retained",
+    "actual_violations": 0,
+    "unclassified": 0,
+    "diagnostic_incidents_dropped": 0,
+    "tcp_open_errors_before": 1,
+    "tcp_open_errors_after": 1,
+    "dns_errors_after": 0,
+    "arbitrary_site_required_for_mesh_startup": false,
+    "automatic_recovery_proved": true,
+    "normal_export_working": true,
+    "usb_consent_active": true,
+    "controlled_outage_started": true,
+    "automatic_return_probe": {
+      "utc": "2026-10-23T05:17:06.416339+00:00",
+      "mode": "probe",
+      "cells": [],
+      "attempts": 1,
+      "completed": 1,
+      "reserved_bytes": 1024,
+      "actual_requested": 1024,
+      "failure": null,
+      "monitor_stopped": true,
+      "network_change_recorded": false
+    },
+    "automatic_return_receipt": "state-client-build/owner-wifi-resume-20261023/automatic-return106/acceptance-receipt.json"
+  },
+  "latest_pre_manual_readback": {
+    "observed_utc": "2026-10-23T05:07:02.197000+00:00",
+    "state": "CONNECTED",
+    "network": "WIFI",
+    "session_tag": "34dfb9269cbdc6d44db36fdf419030a1656c93ce3702770ab190245b885dcf18",
+    "raw_protocol_errors": 6,
+    "expected_crossings": 6,
+    "actual_violations": 0,
+    "unclassified": 0,
+    "new_application_requests": 0,
+    "controlled_outage_started": false
+  },
+  "automatic_recovery": {
+    "result": "PASS_BOUNDED_AUTOMATIC_WIFI_RETURN",
+    "network_loss_utc": "2026-10-23T05:10:18.471000+00:00",
+    "wifi_created_utc": "2026-10-23T05:10:54.786Z",
+    "connected_utc": "2026-10-23T05:12:41.364000+00:00",
+    "network_loss_to_connected_ms": 142893,
+    "wifi_creation_to_connected_ms": 106578,
+    "native_startup_ms": 39892,
+    "session_tag": "4dca57cfaac40e9270181617b7532620ae0762b23b001be5203b498277c7da09",
+    "topology": {
+      "interface": "tun1",
+      "underlay": "422",
+      "transports": "WIFI|VPN"
+    },
+    "both_end_profile": {
+      "speed_profile": "P1",
+      "mux_profile": "CREDIT128",
+      "mux_window": 131072,
+      "reliable_limits": {
+        "local_send": 32,
+        "local_receive": 32,
+        "peer_receive": 32,
+        "effective_send": 32,
+        "local_write_completion": false
+      }
+    },
+    "android_before_after": {
+      "protocol_errors": [
+        8,
+        8
+      ],
+      "dns_errors": [
+        0,
+        0
+      ],
+      "dns_responses": [
+        32,
+        34
+      ],
+      "tcp_open_errors": [
+        1,
+        1
+      ],
+      "terminal_reason": [
+        "NONE",
+        "NONE"
+      ]
+    },
+    "android_lifecycle_before_after": {
+      "expected_crossings": [
+        8,
+        8
+      ],
+      "actual_violations": [
+        0,
+        0
+      ],
+      "unclassified": [
+        0,
+        0
+      ],
+      "incident_dropped": [
+        0,
+        0
+      ]
+    },
+    "https": {
+      "http_code": "200",
+      "ssl_verify_result": "0",
+      "size_download": "1024",
+      "time_total": "3.733008",
+      "BODY_BYTES": "1024",
+      "BODY_SHA256": "35ae5091b37e8f0f306833ef57a635f9dc06738d7f4e563a610eec2adb26fe28"
+    },
+    "endpoint_reported_egress": "186.246.45.246",
+    "limitations": [
+      "Wi-Fi upstream independence UNKNOWN",
+      "No continuous observation of every instant while Wi-Fi was off",
+      "No independent origin digest for random endpoint body",
+      "No claim of preserving old TCP operations or replaying interrupted requests",
+      "No overnight or arbitrary-low-bandwidth guarantee",
+      "Tester P1 policy and field whitelist validation remain separate"
+    ]
+  },
+  "tester_policy_preparation": {
+    "state": "APPLIED_AND_READBACK_VERIFIED_EXACT_THREE",
+    "historical_tester_ids": [
+      "FC-ZMVK-MM7C",
+      "FC-YHQB-9VJN"
+    ],
+    "historical_service_entitlement_is_p1_authorization": false,
+    "current_policy": "EXACT_THREE_P1_AUTHENTICATED_IDENTITY_GROUP",
+    "required_delta": "Bounded confirmed identity group in existing authenticated speed policy, not a new enrollment/grant/API",
+    "preserve": [
+      "Owner P1",
+      "Nonselected P0; legacy clients retain compatible negotiated limits",
+      "Normal persistent Android selector, no USB prerequisite",
+      "Separate owner diagnostic filter",
+      "Security materials/floors/renewal"
+    ],
+    "implementation_or_deployment_performed": true,
+    "cohort_confirmation": "OWNER_EXPLICIT_CONFIRMATION_20261023_OWNER_PLUS_TWO_EXISTING_TESTERS"
+  },
+  "pre_cohort_checkpoint": {
+    "recorded_utc": "2026-10-23T05:24:35.432899+00:00",
+    "result": "BLOCKED_TESTER_P1_POLICY_NOT_PRIVATE_FIELD_READY",
+    "gates": {
+      "OWNER_WIFI_ACCEPTANCE": "PASS_BOUNDED106_WIFI_UPSTREAM_INDEPENDENCE_UNKNOWN",
+      "RECOVERY_ACCEPTANCE": "PASS_BOUNDED106_EXPLICIT_CANCEL_AND_AUTOMATIC_WIFI_RETURN_FULL_SMALL_HTTPS",
+      "SIGNED_APK_READY": "YES106_SAME_SIGNER_INSTALLED_OWNER",
+      "TESTER_P1_POLICY_READY": "NO_SINGLE_OWNER_TARGET",
+      "FIELD_WHITELIST_VALIDATION": "NOT_RUN",
+      "PRIVATE_FIELD_READY": false
+    },
+    "gateway": {
+      "binary_sha256": "3a0804cd3da63135dce387d1dff9afdc4588562186abea2e5d00da1d9f5c31ae",
+      "config_sha256": "f8188a9763c091984166788f1dd0456cadeeb730fa43b9557f59fe3bb63ed5f7",
+      "state": {
+        "ActiveState": "active",
+        "InvocationID": "2582a81628ed48e18c8cf018b8b88e9b",
+        "MainPID": "2170469",
+        "Result": "success",
+        "NRestarts": "0",
+        "ExecMainStartTimestamp": "Fri 2026-10-23 06:49:10 MSK",
+        "ExecMainExitTimestamp": "",
+        "ExecMainStatus": "0"
+      },
+      "speed_profile": "P1",
+      "single_target": true,
+      "group_policy_changed": false,
+      "owner_both_end_p1_confirmed": true,
+      "renewal": "ACTUAL_RU_TIMERS_ACTIVE_SUCCESS",
+      "certificate_crl_not_after_utc": "2026-10-23T07:48:57Z"
+    },
+    "boundaries": {
+      "built_in_this_continuation": false,
+      "signed_in_this_continuation": false,
+      "installed_in_this_continuation": false,
+      "production_mutation": false,
+      "distributed": false,
+      "public_release": false,
+      "public_artifact_verification": "NOT_PERFORMED_NO_PUBLIC_ROLLOUT_CLAIM",
+      "catalog_invitation_changes": false,
+      "push": false,
+      "new_enrollment": false,
+      "known_local_temporary_collectors": 0,
+      "phone_detailed_collectors": "READBACK_PENDING"
+    },
+    "next_action": "Confirm current closed P1 cohort: owner FC-4D8Q-REEG plus historical testers FC-ZMVK-MM7C and FC-YHQB-9VJN, or name the actual subset; do not repeat owner outage/load",
+    "remaining": [
+      "Agreed tester group P1 policy; current server policy only owner",
+      "Actual supported tester installation inventory and physical direct upgrades",
+      "Real mobile whitelist field attempt remains NOT_RUN",
+      "Confirm known Wi-Fi upstream source without assuming independence"
+    ],
+    "tester_policy_preparation": {
+      "state": "COHORT_CONFIRMATION_REQUIRED_NO_SERVER_WRITE",
+      "historical_tester_ids": [
+        "FC-ZMVK-MM7C",
+        "FC-YHQB-9VJN"
+      ],
+      "historical_service_entitlement_is_p1_authorization": false,
+      "current_policy": "SINGLE_OWNER_IDENTITY_TARGET",
+      "required_delta": "Bounded confirmed identity group in existing authenticated speed policy, not a new enrollment/grant/API",
+      "preserve": [
+        "Owner P1",
+        "Unselected/legacy P0",
+        "Normal persistent Android selector, no USB prerequisite",
+        "Separate diagnostic filter",
+        "Security materials/floors/renewal"
+      ],
+      "implementation_or_deployment_performed": false
+    }
+  },
+  "field_volgograd21": {
+    "schema": 1,
+    "result": "POSITIVE_REPORTED_VOLGOGRAD96_WITH_CELLULAR_MESH_DIAGNOSTICS",
+    "reconciled_utc": "2026-10-23T06:03:37.023092+00:00",
+    "source_sha256": "04ca8b2de73538272617245bb134eeb795fe9b5e7db0de400926b9b64d1d7904",
+    "source_bytes": 113531,
+    "whitelist_conditions_source": "TESTER_TESTIMONY_RELAYED_BY_OWNER_20261023_ABOUT_20261022",
+    "device_support_id": "FC-ZMVK-MM7C",
+    "app_version": "0.1.18-beta96-bootstrap",
+    "version_code": 96,
+    "os_api": 34,
+    "network_class": "CELLULAR",
+    "state": "CONNECTED",
+    "vpn_capture_open": true,
+    "transport_outcomes": {
+      "restricted": "SUCCESS"
+    },
+    "session_tag": "28bb86544b7e0c6969ec24ffdb01a2c016d547ec6434802b0b24738b64e90b90",
+    "native_observed_utc": "2026-10-22T16:55:00.657000+00:00",
+    "native_counters": {
+      "sent_bytes": 326675,
+      "received_bytes": 1618354,
+      "dns_responses": 40,
+      "dns_errors": 0,
+      "tcp_open_ok": 82,
+      "tcp_open_errors": 5,
+      "protocol_errors": 7,
+      "recovery_timeouts": 44
+    },
+    "terminal_reason": "NONE",
+    "refresh_result": "FETCH_FAILED",
+    "selected_source": "CACHE",
+    "validated_cache_age_seconds": 63,
+    "validated_cache_expires_utc": "2026-10-22T19:16:23+00:00",
+    "retained_dns_probe_failed_utc": "2026-10-22T16:54:35.514Z",
+    "incident": {
+      "version_code": 94,
+      "state": "FAILED",
+      "transport_outcomes": {
+        "restricted": "BOOTSTRAP_UNAVAILABLE"
+      },
+      "separate_historical_incident": true
+    },
+    "operator": "UNKNOWN",
+    "allowance_and_throttling": "UNKNOWN",
+    "speed_profile": "NOT_EXPORTED_BY96",
+    "cold_or_expired_cache_bootstrap_proven": false,
+    "application_full_body_digest_verified": false,
+    "field106_p1": "NOT_RUN",
+    "krasnodar": "NOT_RUN",
+    "historical_gateway_correlation": "NO_ROWS_IN_SELECTED_CURRENT_JOURNAL_NOT_EXHAUSTIVE_ABSENCE"
+  },
+  "cohort_server_build": {
+    "binary": "/mnt/data/PycharmProjects/family_connect/state-client-build/tester-p1-cohort-20261023/gateway-group",
+    "sha256": "a515539af72844cb5af4f918a229c85e23cff874f0f6ac369649df3839273c85",
+    "parent_sha256": "3a0804cd3da63135dce387d1dff9afdc4588562186abea2e5d00da1d9f5c31ae",
+    "baseline_reproduced": true,
+    "source_inventory_sha256": "862676f51502adb09293bb70d8af2de3f0a3191389d40353fd25bb80537513c2",
+    "changed_files": [
+      "roombroker/mux_policy_linux.go",
+      "roombroker/speed_policy_linux.go",
+      "roombroker/speed_group_test.go"
+    ],
+    "policy_tests_sha256": "4a8def15c50e1fa8c2c3effe6ec4673ad451f0e40045f9a711dbfb5b73b53305",
+    "regression_tests_sha256": "84672c0c587fc5babfaf618fe86e79a335a1203a6fec5f555b597630819179a5",
+    "initial_bootstrap_failure": "FIXTURE_UNAVAILABLE_NO_CODE_FAILURE",
+    "bootstrap_retry_sha256": "f9b146acf338b6fa70f68dadf9ab7bb90c9e50a3b19c91d621c3d6a09669d31e",
+    "all_five_packages_pass": true,
+    "deployed": true,
+    "build_receipt_deployed_false_is_build_time_state": true
+  },
+  "post_cohort_owner_acceptance": {
+    "summary": {
+      "utc": "2026-10-23T05:47:29.419048+00:00",
+      "mode": "probe",
+      "cells": [],
+      "attempts": 1,
+      "completed": 1,
+      "reserved_bytes": 1024,
+      "actual_requested": 1024,
+      "failure": null,
+      "monitor_stopped": true,
+      "network_change_recorded": false
+    },
+    "gate": {
+      "utc": "2026-10-23T05:47:21.677923+00:00",
+      "tag": "f7b99af5a2538b0cd8a8fd1cab9599bfbb50819e431ef5e828617d28530cb2f4",
+      "topology": {
+        "interface": "tun1",
+        "underlay": "422",
+        "transports": "WIFI|VPN"
+      },
+      "profile": {
+        "mux_lifecycle": {
+          "events": null,
+          "dropped": 0,
+          "failure_at": 0,
+          "failure_reason": "",
+          "close_at": 0,
+          "incidents": null,
+          "incident_dropped": 0,
+          "expected_crossings": 0,
+          "actual_violations": 0,
+          "unclassified": 0
+        },
+        "speed_profile": "P1",
+        "reliable_limits": {
+          "local_send": 32,
+          "local_receive": 32,
+          "peer_receive": 32,
+          "effective_send": 32,
+          "local_write_completion": false
+        },
+        "retry_bytes": 66,
+        "mux_profile": "CREDIT128",
+        "mux_window": 131072,
+        "correlation_status": "VALID",
+        "session_tag": "f7b99af5a2538b0cd8a8fd1cab9599bfbb50819e431ef5e828617d28530cb2f4",
+        "terminal_reason": "NONE",
+        "terminal_at_ms": 0,
+        "observed_at_ms": 1792734225789,
+        "reliable_terminal": "",
+        "signaling_failure": "NONE",
+        "ice_failure": "NONE",
+        "evidence_dropped": 0,
+        "subscriber_state": "connected",
+        "publisher_state": "connected",
+        "retransmissions": 1,
+        "recovery_timeouts": 1,
+        "received_frames": 18,
+        "sent_frames": 26,
+        "protocol_errors": 0,
+        "dns_responses": 0,
+        "dns_errors": 0,
+        "tcp_open_ok": 0,
+        "tcp_open_errors": 0,
+        "tcp_admission_waits": 0,
+        "tcp_admission_rejected": 0,
+        "tcp_admission_timeouts": 0,
+        "tcp_admission_cancelled": 0,
+        "tcp_admission_waiting": 0,
+        "lease_admission_rejected": 0,
+        "sent_bytes": 0,
+        "received_bytes": 0
+      },
+      "gateway": "a515539af72844cb5af4f918a229c85e23cff874f0f6ac369649df3839273c85",
+      "invocation": "35a4b1e34b244265a3b9c46a2c99d936",
+      "apk": "242855c43e889e708234ce2f687fa02d37bccb1eee408904f09216b6abd8f020",
+      "wifi_upstream_independence": "UNKNOWN",
+      "tariff_state": "OWNER_REPORTED_MOBILE_THROTTLING_20261022",
+      "meter_sha256": "17e76fb9f3d8c46b5e7e4b5c55fa0f8098b59aef63e0e66c94cbce81b2c2a5ef"
+    },
+    "before": {
+      "protocol_errors": 2,
+      "dns_responses": 33,
+      "dns_errors": 0,
+      "tcp_open_ok": 34,
+      "tcp_open_errors": 0,
+      "terminal_reason": "NONE",
+      "mux": {
+        "expected_crossings": 2,
+        "actual_violations": 0,
+        "unclassified": 0,
+        "incident_dropped": 0,
+        "dropped": 1720
+      }
+    },
+    "after": {
+      "protocol_errors": 2,
+      "dns_responses": 34,
+      "dns_errors": 0,
+      "tcp_open_ok": 35,
+      "tcp_open_errors": 0,
+      "terminal_reason": "NONE",
+      "mux": {
+        "expected_crossings": 2,
+        "actual_violations": 0,
+        "unclassified": 0,
+        "incident_dropped": 0,
+        "dropped": 1751
+      }
+    },
+    "https": {
+      "valid": true,
+      "intended_bytes": 1024,
+      "metrics": {
+        "BEGIN": "1981030.42",
+        "http_code": "200",
+        "http_version": "1.1",
+        "ssl_verify_result": "0",
+        "remote_ip": "162.159.140.220",
+        "local_port": "47203",
+        "num_connects": "1",
+        "size_download": "1024",
+        "time_namelookup": "0.293454",
+        "time_connect": "0.297832",
+        "time_appconnect": "2.368233",
+        "time_starttransfer": "3.421273",
+        "time_total": "3.421557",
+        "END": "1981033.87",
+        "CURL_EXIT": "0",
+        "BODY_BYTES": "1024",
+        "BODY_SHA256": "35ae5091b37e8f0f306833ef57a635f9dc06738d7f4e563a610eec2adb26fe28"
+      },
+      "observed_hash_not_origin_acceptance": true
+    },
+    "connect_disconnect_profile_commands": 0,
+    "usb_consent": "INITIAL_SNAPSHOT_UNAVAILABLE_OWNER_CONFIRMED_EXPIRED_HOUR_REENABLED_FRESH_JSON_PASS",
+    "standard_bounded_lifecycle_ring_evictions_not_data_loss": true,
+    "source_of_internet_independence": "UNKNOWN"
+  },
+  "gateway_cohort_rollback": "Only for demonstrated need after evidence/fresh guards, coordinate one restart using state-client-build/tester-p1-cohort-20261023/transitions/operate.py rollback --shared-restart-approved. Restores exact3a08 executable only, not old credentials/config/DB/floors. Old binary ignores group file and retains owner-only P1. No rollback performed; Android remains106, no automatic P0."
+}

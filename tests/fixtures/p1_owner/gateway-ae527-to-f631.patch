@@ -1,0 +1,548 @@
+--- a/roombroker/gateway.go
++++ b/roombroker/gateway.go
+@@ -141,7 +141,7 @@
+ 		trace.Add("GATEWAY_SESSION", "FAILED", "GATEWAY_CLOSE")
+ 		return err
+ 	}
+-	config := tcpforward.MuxConfig{MaxStreams: DedicatedMaxStreams, Policy: tcpforward.Policy{Services: gateway.services, ServicesOnly: len(gateway.services) > 0 && !gateway.allowInternet}}
++	config := tcpforward.MuxConfig{Lifecycle: lifecyclePolicy(gateway.identity), MaxStreams: DedicatedMaxStreams, Policy: tcpforward.Policy{Services: gateway.services, ServicesOnly: len(gateway.services) > 0 && !gateway.allowInternet}}
+ 	if binding, ok := ctx.Value(leaseKey{}).(*leaseBinding); ok {
+ 		config.LeaseRenewal = binding.handler(SessionAuthorizer(gateway.credentialsPath, secured.ConnectionState()), secured.SecurityDeadline())
+ 	}
+--- a/roombroker/lifecycle_policy_test.go
++++ b/roombroker/lifecycle_policy_test.go
+@@ -0,0 +1,30 @@
++package roombroker
++
++import (
++	"crypto/sha256"
++	"encoding/hex"
++	"os"
++	"path/filepath"
++	"testing"
++)
++
++func TestLifecycleOnlyExistingOwnerTarget(test *testing.T) {
++	directory := test.TempDir()
++	os.Chmod(directory, 0700)
++	test.Setenv("FC_DIAGNOSTIC_CONTROL_DIR", directory)
++	var owner, other Identity
++	owner.PublicKey[0] = 1
++	other.PublicKey[0] = 2
++	hash := sha256.Sum256(owner.PublicKey[:])
++	path := filepath.Join(directory, "speed-target")
++	if err := os.WriteFile(path, []byte(hex.EncodeToString(hash[:16])), 0600); err != nil {
++		test.Fatal(err)
++	}
++	if !lifecyclePolicy(owner) || lifecyclePolicy(other) {
++		test.Fatal("observer escaped owner scope")
++	}
++	os.Chmod(path, 0644)
++	if lifecyclePolicy(owner) {
++		test.Fatal("unsafe operator file accepted")
++	}
++}
+--- a/roombroker/speed_policy_linux.go
++++ b/roombroker/speed_policy_linux.go
+@@ -36,3 +36,9 @@
+ 	}
+ 	return profile, nil
+ }
++
++func lifecyclePolicy(identity Identity) bool {
++	target, err := muxOperatorValue("speed-target")
++	keyHash := sha256.Sum256(identity.PublicKey[:])
++	return err == nil && target == hex.EncodeToString(keyHash[:16])
++}
+--- a/roombroker/speed_policy_other.go
++++ b/roombroker/speed_policy_other.go
+@@ -5,3 +5,5 @@
+ import "github.com/Joker20380/family_connect/carrier/sessionprofile"
+ 
+ func speedPolicy(identity Identity) (sessionprofile.Profile, error) { return sessionprofile.P0, nil }
++
++func lifecyclePolicy(identity Identity) bool { return false }
+--- a/sessiondiag/report.go
++++ b/sessiondiag/report.go
+@@ -15,40 +15,41 @@
+ )
+ 
+ type Report struct {
+-	SpeedProfile       string                 `json:"speed_profile,omitempty"`
+-	ReliableLimits     reliablestream.Limits  `json:"reliable_limits"`
+-	RetryBytes         uint64                 `json:"retry_bytes"`
+-	MuxProfile         string                 `json:"mux_profile,omitempty"`
+-	MuxWindow          int                    `json:"mux_window,omitempty"`
+-	Trace              *sessiontrace.Snapshot `json:"lifecycle,omitempty"`
+-	CorrelationStatus  string                 `json:"correlation_status"`
+-	SessionTag         string                 `json:"session_tag"`
+-	TerminalReason     string                 `json:"terminal_reason"`
+-	TerminalAtMS       int64                  `json:"terminal_at_ms"`
+-	ObservedAtMS       int64                  `json:"observed_at_ms"`
+-	ReliableTerminal   string                 `json:"reliable_terminal"`
+-	SignalingFailure   string                 `json:"signaling_failure"`
+-	ICEFailure         string                 `json:"ice_failure"`
+-	EvidenceDropped    uint64                 `json:"evidence_dropped"`
+-	SubscriberState    string                 `json:"subscriber_state"`
+-	PublisherState     string                 `json:"publisher_state"`
+-	Retransmissions    uint64                 `json:"retransmissions"`
+-	RecoveryTimeouts   uint64                 `json:"recovery_timeouts"`
+-	ReceivedFrames     uint64                 `json:"received_frames"`
+-	SentFrames         uint64                 `json:"sent_frames"`
+-	ProtocolErrors     uint64                 `json:"protocol_errors"`
+-	DNSResponses       uint64                 `json:"dns_responses"`
+-	DNSErrors          uint64                 `json:"dns_errors"`
+-	OpenOK             uint64                 `json:"tcp_open_ok"`
+-	OpenErrors         uint64                 `json:"tcp_open_errors"`
+-	AdmissionWaits     uint64                 `json:"tcp_admission_waits"`
+-	AdmissionRejected  uint64                 `json:"tcp_admission_rejected"`
+-	AdmissionTimeouts  uint64                 `json:"tcp_admission_timeouts"`
+-	AdmissionCancelled uint64                 `json:"tcp_admission_cancelled"`
+-	AdmissionWaiting   int                    `json:"tcp_admission_waiting"`
+-	LeaseRejected      uint64                 `json:"lease_admission_rejected"`
+-	SentBytes          uint64                 `json:"sent_bytes"`
+-	ReceivedBytes      uint64                 `json:"received_bytes"`
++	MuxLifecycle       *tcpforward.MuxLifecycle `json:"mux_lifecycle,omitempty"`
++	SpeedProfile       string                   `json:"speed_profile,omitempty"`
++	ReliableLimits     reliablestream.Limits    `json:"reliable_limits"`
++	RetryBytes         uint64                   `json:"retry_bytes"`
++	MuxProfile         string                   `json:"mux_profile,omitempty"`
++	MuxWindow          int                      `json:"mux_window,omitempty"`
++	Trace              *sessiontrace.Snapshot   `json:"lifecycle,omitempty"`
++	CorrelationStatus  string                   `json:"correlation_status"`
++	SessionTag         string                   `json:"session_tag"`
++	TerminalReason     string                   `json:"terminal_reason"`
++	TerminalAtMS       int64                    `json:"terminal_at_ms"`
++	ObservedAtMS       int64                    `json:"observed_at_ms"`
++	ReliableTerminal   string                   `json:"reliable_terminal"`
++	SignalingFailure   string                   `json:"signaling_failure"`
++	ICEFailure         string                   `json:"ice_failure"`
++	EvidenceDropped    uint64                   `json:"evidence_dropped"`
++	SubscriberState    string                   `json:"subscriber_state"`
++	PublisherState     string                   `json:"publisher_state"`
++	Retransmissions    uint64                   `json:"retransmissions"`
++	RecoveryTimeouts   uint64                   `json:"recovery_timeouts"`
++	ReceivedFrames     uint64                   `json:"received_frames"`
++	SentFrames         uint64                   `json:"sent_frames"`
++	ProtocolErrors     uint64                   `json:"protocol_errors"`
++	DNSResponses       uint64                   `json:"dns_responses"`
++	DNSErrors          uint64                   `json:"dns_errors"`
++	OpenOK             uint64                   `json:"tcp_open_ok"`
++	OpenErrors         uint64                   `json:"tcp_open_errors"`
++	AdmissionWaits     uint64                   `json:"tcp_admission_waits"`
++	AdmissionRejected  uint64                   `json:"tcp_admission_rejected"`
++	AdmissionTimeouts  uint64                   `json:"tcp_admission_timeouts"`
++	AdmissionCancelled uint64                   `json:"tcp_admission_cancelled"`
++	AdmissionWaiting   int                      `json:"tcp_admission_waiting"`
++	LeaseRejected      uint64                   `json:"lease_admission_rejected"`
++	SentBytes          uint64                   `json:"sent_bytes"`
++	ReceivedBytes      uint64                   `json:"received_bytes"`
+ }
+ 
+ func Delivery(reliable reliablestream.Stats, media telemost.Stats) *sessiontrace.Delivery {
+@@ -105,7 +106,7 @@
+ }
+ 
+ func Capture(setupID string, err error, terminalAt time.Time, reliable reliablestream.Stats, media telemost.Stats, mux tcpforward.MuxStats) Report {
+-	report := Report{ReliableLimits: reliable.Limits, RetryBytes: reliable.RetransmittedBytes, MuxProfile: mux.Profile, MuxWindow: mux.Window, TerminalReason: Reason(err), ObservedAtMS: time.Now().UnixMilli(),
++	report := Report{MuxLifecycle: mux.Lifecycle, ReliableLimits: reliable.Limits, RetryBytes: reliable.RetransmittedBytes, MuxProfile: mux.Profile, MuxWindow: mux.Window, TerminalReason: Reason(err), ObservedAtMS: time.Now().UnixMilli(),
+ 		ReliableTerminal: choice(reliable.Terminal, "", "closed", "recovery_exhausted", "protocol_violation", "remote_reset", "cancelled", "carrier_closed"),
+ 		SignalingFailure: "NONE", ICEFailure: "NONE", EvidenceDropped: media.EvidenceDropped,
+ 		SubscriberState: choice(media.SubscriberState, "new", "connecting", "connected", "disconnected", "failed", "closed"),
+--- a/tcpforward/mux.go
++++ b/tcpforward/mux.go
+@@ -15,6 +15,7 @@
+ )
+ 
+ type MuxConfig struct {
++	Lifecycle    bool
+ 	MaxStreams   int
+ 	WaitForSlot  bool
+ 	Policy       Policy
+@@ -25,6 +26,7 @@
+ const LeaseRenewalHost = "lease-renewal.family-connect.invalid"
+ 
+ type MuxStats struct {
++	Lifecycle          *MuxLifecycle
+ 	Window             int
+ 	Profile            string
+ 	Destination        DestinationStats
+@@ -59,6 +61,7 @@
+ }
+ 
+ type Mux struct {
++	life          muxLifeBuffer
+ 	window        int
+ 	perf          *sessiontrace.MuxPerformance
+ 	mu            sync.Mutex
+@@ -218,6 +221,7 @@
+ func (mux *Mux) fail(err error) {
+ 	mux.mu.Lock()
+ 	if mux.err == nil {
++		mux.lifeLocked("failure", 0, 0, lifeReason(err))
+ 		mux.err = err
+ 		mux.failureAt = time.Now()
+ 	}
+@@ -232,8 +236,16 @@
+ 	mux.mu.Unlock()
+ }
+ 
+-func (mux *Mux) Close() error { mux.cancel(); mux.endpoint.Close(); <-mux.done; return nil }
+-func (mux *Mux) Wait() error  { <-mux.done; mux.mu.Lock(); defer mux.mu.Unlock(); return mux.err }
++func (mux *Mux) Close() error {
++	mux.mu.Lock()
++	mux.lifeLocked("close", 0, 0, "caller")
++	mux.mu.Unlock()
++	mux.cancel()
++	mux.endpoint.Close()
++	<-mux.done
++	return nil
++}
++func (mux *Mux) Wait() error { <-mux.done; mux.mu.Lock(); defer mux.mu.Unlock(); return mux.err }
+ func (mux *Mux) Terminal() (error, time.Time) {
+ 	mux.mu.Lock()
+ 	defer mux.mu.Unlock()
+@@ -243,7 +255,9 @@
+ 	mux.mu.Lock()
+ 	defer mux.mu.Unlock()
+ 	mux.measureLocked()
+-	return mux.stats
++	stats := mux.stats
++	stats.Lifecycle = mux.lifeSnapshotLocked()
++	return stats
+ }
+ 
+ func (mux *Mux) measureLocked() {
+@@ -272,6 +286,7 @@
+ }
+ 
+ func (mux *Mux) controlLocked(frame muxFrame) {
++	mux.lifeLocked("enqueue", frame.id, frame.kind, "control")
+ 	if mux.ctx.Err() != nil {
+ 		return
+ 	}
+@@ -372,6 +387,9 @@
+ 				budget += cost
+ 			}
+ 		}
++		for _, current := range frames {
++			mux.lifeLocked("send_start", current.id, current.kind, "batch")
++		}
+ 		changed := mux.changed
+ 		if sessiontrace.PerformanceEnabled && ok {
+ 			if mux.perf == nil {
+@@ -415,6 +433,7 @@
+ 					stream.perf.HandedDATA.Add(len(current.payload))
+ 				}
+ 			}
++			mux.lifeLocked("send_done", current.id, current.kind, "local")
+ 			terminal := current.kind == resetFrame || current.kind == closeFrame || current.kind == openError
+ 			if stream := mux.streams[current.id]; terminal && stream != nil && stream.terminal != nil && len(stream.send) == 0 {
+ 				mux.removeLocked(current.id)
+@@ -438,6 +457,7 @@
+ 			mux.perf.RetiredCount++
+ 		}
+ 	}
++	mux.lifeLocked("remove", id, 0, "terminal")
+ 	delete(mux.streams, id)
+ 	for index, current := range mux.order {
+ 		if current == id {
+@@ -448,6 +468,7 @@
+ }
+ 
+ func (mux *Mux) dispatchLocked(frame muxFrame) {
++	mux.lifeLocked("receive", frame.id, frame.kind, "wire")
+ 	if frame.id == 0 {
+ 		mux.dnsFrameLocked(frame)
+ 		return
+@@ -480,6 +501,7 @@
+ 		return
+ 	}
+ 	if stream == nil {
++		mux.lifeLocked("unknown", frame.id, frame.kind, "missing")
+ 		mux.stats.ProtocolErrors++
+ 		return
+ 	}
+@@ -493,6 +515,7 @@
+ 			invalid = true
+ 		} else {
+ 			stream.opened = true
++			mux.lifeLocked("opened", stream.id, openOK, "peer")
+ 			mux.stats.OpenOK++
+ 		}
+ 	case openError:
+@@ -585,6 +608,7 @@
+ 		}
+ 		mux.leaseOpen = true
+ 		stream.opened = true
++		mux.lifeLocked("opened", stream.id, openOK, "lease")
+ 		stream.send = append(stream.send, muxFrame{openOK, stream.id, nil})
+ 		mux.stats.OpenOK++
+ 		mux.signalLocked()
+@@ -616,6 +640,7 @@
+ 		return
+ 	}
+ 	stream.opened = true
++	mux.lifeLocked("opened", stream.id, openOK, "socket")
+ 	mux.stats.ActiveSockets++
+ 	stream.send = append(stream.send, muxFrame{openOK, stream.id, nil})
+ 	mux.stats.OpenOK++
+--- a/tcpforward/mux_lifecycle.go
++++ b/tcpforward/mux_lifecycle.go
+@@ -0,0 +1,153 @@
++package tcpforward
++
++import (
++	"context"
++	"errors"
++	"io"
++	"time"
++)
++
++type MuxLifeEvent struct {
++	Index  uint64 `json:"index"`
++	At     int64  `json:"at"`
++	ID     uint32 `json:"id"`
++	Kind   byte   `json:"kind"`
++	Stage  string `json:"stage"`
++	Reason string `json:"reason"`
++}
++
++type MuxLifeStream struct {
++	ID            uint32 `json:"id"`
++	Created       int64  `json:"created"`
++	Opened        int64  `json:"opened"`
++	Finished      int64  `json:"finished"`
++	Removed       int64  `json:"removed"`
++	Reason        string `json:"reason"`
++	Sent          uint64 `json:"sent"`
++	Received      uint64 `json:"received"`
++	Used          int    `json:"used"`
++	SendCredit    int    `json:"send_credit"`
++	ReceiveCredit int    `json:"receive_credit"`
++	LocalFIN      bool   `json:"local_fin"`
++	RemoteFIN     bool   `json:"remote_fin"`
++}
++
++type MuxLifeIncident struct {
++	Event     MuxLifeEvent  `json:"event"`
++	Known     bool          `json:"known"`
++	Stream    MuxLifeStream `json:"stream"`
++	FailureAt int64         `json:"failure_at"`
++	Cancelled bool          `json:"cancelled"`
++}
++
++type MuxLifecycle struct {
++	Events        []MuxLifeEvent   `json:"events"`
++	Dropped       uint64           `json:"dropped"`
++	FirstUnknown  *MuxLifeIncident `json:"first_unknown,omitempty"`
++	FailureAt     int64            `json:"failure_at"`
++	FailureReason string           `json:"failure_reason"`
++	CloseAt       int64            `json:"close_at"`
++}
++
++type muxLifeBuffer struct {
++	events        [32]MuxLifeEvent
++	count         uint64
++	removed       [64]MuxLifeStream
++	removedCount  uint64
++	first         *MuxLifeIncident
++	failureAt     int64
++	failureReason string
++	closeAt       int64
++}
++
++func lifeReason(err error) string {
++	switch {
++	case err == nil:
++		return "none"
++	case errors.Is(err, io.EOF):
++		return "eof"
++	case errors.Is(err, ErrReset):
++		return "reset"
++	case errors.Is(err, ErrProtocol):
++		return "protocol"
++	case errors.Is(err, context.Canceled):
++		return "cancelled"
++	case errors.Is(err, context.DeadlineExceeded):
++		return "deadline"
++	case errors.Is(err, io.ErrClosedPipe):
++		return "closed_pipe"
++	default:
++		return "other"
++	}
++}
++
++func (mux *Mux) lifeLocked(stage string, id uint32, kind byte, reason string) {
++	if !mux.config.Lifecycle {
++		return
++	}
++	buffer := &mux.life
++	buffer.count++
++	event := MuxLifeEvent{buffer.count, time.Now().UnixMilli(), id, kind, stage, reason}
++	buffer.events[(buffer.count-1)%32] = event
++	stream := mux.streams[id]
++	if stream != nil {
++		if stage == "create" {
++			stream.life.ID = id
++			stream.life.Created = event.At
++		}
++		if stage == "opened" {
++			stream.life.Opened = event.At
++		}
++		if stage == "finish" {
++			stream.life.Finished = event.At
++			stream.life.Reason = reason
++			stream.life.Sent, stream.life.Received, stream.life.Used = stream.sent, stream.received, stream.used
++			stream.life.SendCredit, stream.life.ReceiveCredit = stream.sendCredit, stream.receiveCredit
++			stream.life.LocalFIN, stream.life.RemoteFIN = stream.localFIN, stream.remoteFIN
++		}
++		if stage == "remove" {
++			stream.life.Removed = event.At
++			buffer.removed[buffer.removedCount%64] = stream.life
++			buffer.removedCount++
++		}
++	}
++	if stage == "failure" && buffer.failureAt == 0 {
++		buffer.failureAt = event.At
++		buffer.failureReason = reason
++	}
++	if stage == "close" && buffer.closeAt == 0 {
++		buffer.closeAt = event.At
++	}
++	if stage == "unknown" && buffer.first == nil {
++		incident := &MuxLifeIncident{Event: event, FailureAt: buffer.failureAt, Cancelled: mux.ctx.Err() != nil}
++		for _, retired := range buffer.removed {
++			if retired.ID == id && retired.Created != 0 {
++				incident.Known = true
++				incident.Stream = retired
++				break
++			}
++		}
++		buffer.first = incident
++	}
++}
++
++func (mux *Mux) lifeSnapshotLocked() *MuxLifecycle {
++	if !mux.config.Lifecycle {
++		return nil
++	}
++	buffer := &mux.life
++	snapshot := &MuxLifecycle{FailureAt: buffer.failureAt, FailureReason: buffer.failureReason, CloseAt: buffer.closeAt}
++	start := uint64(0)
++	if buffer.count > 32 {
++		start = buffer.count - 32
++		snapshot.Dropped = start
++	}
++	for index := start; index < buffer.count; index++ {
++		snapshot.Events = append(snapshot.Events, buffer.events[index%32])
++	}
++	if buffer.first != nil {
++		incident := *buffer.first
++		snapshot.FirstUnknown = &incident
++	}
++	return snapshot
++}
+--- a/tcpforward/mux_lifecycle_test.go
++++ b/tcpforward/mux_lifecycle_test.go
+@@ -0,0 +1,66 @@
++package tcpforward
++
++import (
++	"context"
++	"encoding/json"
++	"testing"
++)
++
++func TestLifeUnknownAfterResetAndNeverKnown(test *testing.T) {
++	ctx, cancel := context.WithCancel(context.Background())
++	defer cancel()
++	mux := &Mux{window: 131072, ctx: ctx, cancel: cancel, config: MuxConfig{Lifecycle: true}, streams: make(map[uint32]*MuxStream), changed: make(chan struct{})}
++	stream := mux.makeStreamLocked(1)
++	stream.opened = true
++	mux.lifeLocked("opened", 1, openOK, "peer")
++	neighbor := mux.makeStreamLocked(3)
++	neighbor.opened = true
++	mux.dispatchLocked(muxFrame{kind: resetFrame, id: 1})
++	mux.dispatchLocked(muxFrame{kind: dataFrame, id: 1, payload: []byte{42}})
++	snapshot := mux.lifeSnapshotLocked()
++	incident := snapshot.FirstUnknown
++	if incident == nil || !incident.Known || incident.Stream.ID != 1 || incident.Stream.Reason != "reset" || incident.Stream.Created == 0 || incident.Stream.Opened == 0 || incident.Stream.Removed < incident.Stream.Finished || incident.FailureAt != 0 || incident.Cancelled {
++		test.Fatal("lost provenance", incident)
++	}
++	if mux.stats.ProtocolErrors != 1 || neighbor.terminal != nil {
++		test.Fatal("observation changed behavior")
++	}
++	incident.Stream.ID = 99
++	if mux.lifeSnapshotLocked().FirstUnknown.Stream.ID != 1 {
++		test.Fatal("aliased incident")
++	}
++	mux.life.first = nil
++	mux.dispatchLocked(muxFrame{kind: dataFrame, id: 101, payload: []byte{42}})
++	if mux.lifeSnapshotLocked().FirstUnknown.Known {
++		test.Fatal("invented stream history")
++	}
++}
++
++func TestLifeBoundsAndFailureOrder(test *testing.T) {
++	ctx, cancel := context.WithCancel(context.Background())
++	defer cancel()
++	mux := &Mux{ctx: ctx, cancel: cancel, config: MuxConfig{Lifecycle: true}, streams: make(map[uint32]*MuxStream), changed: make(chan struct{})}
++	for index := uint32(1); index < 10000; index++ {
++		stream := mux.makeStreamLocked(index)
++		stream.finishLocked(ErrReset)
++		mux.removeLocked(index)
++	}
++	mux.lifeLocked("failure", 0, 0, "closed_pipe")
++	mux.dispatchLocked(muxFrame{kind: dataFrame, id: 9999, payload: []byte{1}})
++	snapshot := mux.lifeSnapshotLocked()
++	if len(snapshot.Events) != 32 || snapshot.Dropped == 0 || snapshot.FirstUnknown.FailureAt == 0 || len(mux.streams) != 0 {
++		test.Fatal("unbounded or missing failure")
++	}
++	raw, err := json.Marshal(snapshot)
++	if err != nil || len(raw) > 8192 {
++		test.Fatal("export bound", len(raw), err)
++	}
++	snapshot.Events[0].Stage = "modified"
++	if mux.lifeSnapshotLocked().Events[0].Stage == "modified" {
++		test.Fatal("aliased ring")
++	}
++	mux.config.Lifecycle = false
++	if mux.lifeSnapshotLocked() != nil {
++		test.Fatal("disabled observer exported")
++	}
++}
+--- a/tcpforward/mux_stream.go
++++ b/tcpforward/mux_stream.go
+@@ -13,6 +13,7 @@
+ )
+ 
+ type MuxStream struct {
++	life             MuxLifeStream
+ 	perf             sessiontrace.MuxStreamPerformance
+ 	perfAt           time.Time
+ 	creditAt         time.Time
+@@ -67,6 +68,7 @@
+ 	}
+ 	stream := &MuxStream{mux: mux, id: id, ctx: ctx, cancel: cancel, receive: make([]byte, window), receiveCredit: window, sendCredit: window, queuedAt: time.Now()}
+ 	mux.streams[id] = stream
++	mux.lifeLocked("create", id, 0, "new")
+ 	mux.order = append(mux.order, id)
+ 	mux.stats.Opened++
+ 	return stream
+@@ -152,6 +154,7 @@
+ 		return
+ 	}
+ 	stream.perfAdvance(time.Now())
++	stream.mux.lifeLocked("finish", stream.id, 0, lifeReason(err))
+ 	stream.terminal = err
+ 	stream.cancel()
+ 	if stream.stop != nil {
+@@ -247,6 +250,7 @@
+ 			stream.sendHighWater = max(stream.sendHighWater, count)
+ 			stream.send = append(stream.send, muxFrame{dataFrame, stream.id, bytes.Clone(payload[:count])})
+ 			stream.queuedAt = time.Now()
++			mux.lifeLocked("enqueue", stream.id, dataFrame, "data")
+ 			stream.sent += uint64(count)
+ 			mux.stats.SentBytes += uint64(count)
+ 			mux.stats.SendHighWater = max(mux.stats.SendHighWater, count)

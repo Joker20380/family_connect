@@ -1,0 +1,112 @@
+{
+  "schema": 1,
+  "reference": "android106-native105",
+  "source_inventory_sha256": "8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c",
+  "accepted_sources": {
+    "clients/android/app/src/main/java/com/familyconnect/app/ConnectivityOrchestrator.java": "e9017006ee88bfabc587cd4f6ced1d27c5eb854914ff4cacf9d44adfb82c3220",
+    "clients/android/app/src/main/java/com/familyconnect/app/AutomaticConnection.java": "7ef7014438a33b9e471f1496da2c8d79af953a74b69be6f86b928730f1491088",
+    "clients/android/app/src/main/java/com/familyconnect/app/AutomaticVpnOwner.java": "1a397a3a6dca5838d56ff470f43300f489ac22c958c96ac0bf10d317186ccc11",
+    "clients/android/app/src/main/java/com/familyconnect/app/AutomaticNormalEngine.java": "ca253187526f6215eedd182401713448d8ddd28899b5b150046149fe7ad52ed5",
+    "clients/android/app/src/main/java/com/familyconnect/app/Transport.java": "ae9122f029a965075e7e48595f9ff2a95d237cc83f7c2da7b40b7bed65855913",
+    "clients/android/app/src/test/java/com/familyconnect/app/ConnectivityOrchestratorTest.java": "0783642a8c7e8156a78e2c24aeef8711007a2ef551045ca82004efbb6b6b80ca"
+  },
+  "desktop_source": "carrier/desktopauto/controller.go",
+  "scope": "shared native policy with Linux normal/MESH adapters, capability host, root service and UID-bound IPC; memory-only manager recovery, authorized user client, root/user signed-floor synchronization and GTK Auto; locally tested, installed acceptance and Windows product integration remain open",
+  "platform_components": {
+    "policy_ipc": {
+      "source": "clients/mesh/automatic",
+      "linux_parent": "clients/linux/auto_policy.py",
+      "kernel_check": "scripts/check_desktop_auto_policy.py",
+      "schema": 1,
+      "max_frame_bytes": 32768,
+      "scope": "private parent/child pipes, not GUI/service authorization"
+    },
+    "linux_mesh_candidate": {
+      "source": "clients/linux/auto_mesh.py",
+      "shared_packet_lifecycle": "clients/linux/mesh_service.py",
+      "scope": "real materials/native/TUN adapter with no recovery loop; called by the native-policy root host, not yet installed-accepted"
+    },
+    "linux_guard": {
+      "source": "clients/linux/auto_guard.py",
+      "kernel_check": "scripts/check_desktop_auto_guard.py",
+      "scope": "owned nftables traffic containment across real host attempts; installed VPN acceptance remains open"
+    },
+    "linux_host": {
+      "source": "clients/linux/auto_platform.py",
+      "coordinator": "clients/linux/auto_runtime.py",
+      "normal_configuration": "clients/linux/auto_configuration.py",
+      "normal_candidate": "clients/linux/auto_normal.py",
+      "scope": "capabilities, physical network fingerprint and existing normal/MESH adapters; native controller tests use synthetic OS operations"
+    },
+    "linux_service": {
+      "source": "clients/linux/auto_service.py",
+      "protocol": "clients/linux/auto_ipc.py",
+      "intent": "clients/linux/auto_intent.py",
+      "unit": "clients/linux/family-connect-auto@.service",
+      "max_request_bytes": 32768,
+      "client": "clients/desktop/backend.py:LinuxAuto",
+      "ui": "clients/desktop/app.py",
+      "user_floor": "provisioning/friends_store.py",
+      "scope": "UID/generation-bound commands, systemd-held credentials, signed catalog readback and authorized GUI launch; Auto requires the verified separate capability marker; not installed-accepted"
+    }
+  },
+  "parameters_ms": {
+    "configure": 30000,
+    "normal": 20000,
+    "restricted": 200000,
+    "connect": 300000,
+    "recovery_initial": 30000,
+    "recovery_maximum": 120000,
+    "bootstrap_cooldown": 300000,
+    "stable_traffic": 120000,
+    "jitter_maximum": 5000
+  },
+  "bounds": {
+    "events": 128,
+    "immediate_restorations": 1,
+    "temporary_bootstrap_recoveries": 2,
+    "normal_candidate_types": 3
+  },
+  "candidate_order": [
+    "last successful configured normal",
+    "preferred configured normal",
+    "remaining configured normals in order",
+    "restricted"
+  ],
+  "terminal_failures": [
+    "CANCELLED",
+    "AUTH",
+    "CONFIGURATION",
+    "INTERNAL"
+  ],
+  "host_requirements": [
+    "Install and verify fail-closed ownership before configuration and attempts",
+    "Configure returns only real supported and authorized normal capabilities; transient refresh/cache semantics stay in host",
+    "Open returns only after platform TUN/routes/DNS and health are verified, never just process spawn",
+    "CloseCandidate blocks user traffic before cleanup and never releases the guard",
+    "Release restores only owned resources after explicit Disconnect",
+    "Only privileged service/broker sockets may use underlying-network bypass",
+    "Use generation from the owning session for every late callback; no cross-session cleanup",
+    "Cooperate with cancellation/deadlines; use existing platform cleanup timeout (0 < timeout <= 60s)"
+  ],
+  "desktop_adaptations": [
+    "Serialized transitions and concurrent cancellation; stale generation rejection",
+    "Context deadlines supplement host monotonic deadlines; no per-candidate goroutine",
+    "128 sanitized events with dropped-event counter and first reason",
+    "Go TLS validation errors remain terminal even inside network-error wrappers",
+    "Cleanup watchdog supplied by platform, not a recovery timer change"
+  ],
+  "not_implemented": [
+    "Linux authorized GUI launch/activation and root/user signed-floor synchronization",
+    "Windows broker host and authenticated IPC",
+    "GUI Auto activation",
+    "installed/network/sleep/recovery/upgrade acceptance"
+  ],
+  "reference_trace": {
+    "path": "carrier/desktopauto/testdata/android106-traces.json",
+    "sha256": "e0cc90b40b419d1bb1e2459d50c206b06633925020076154f206710edf819fae",
+    "scenarios": 17,
+    "records": 160,
+    "producer": "scripts/check_desktop_auto_reference.py; unchanged accepted Java controller/Transport"
+  }
+}

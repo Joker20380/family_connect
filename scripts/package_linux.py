@@ -25,7 +25,7 @@ PACKAGING = ROOT / 'packaging' / 'linux'
 
 DESKTOP_RUNTIME = (
     'app.py', 'backend.py', 'profile_config.py', 'updates.py', 'update.pub',
-    'friends_qr.py', 'friends_ui.py',
+    'friends_qr.py', 'friends_ui.py', 'chat_ui.py', 'chat_strings.py', 'chat_voice.py', 'chat_notifications.py', 'chat_daemon.py', 'chat_announcements.py', 'support_daemon.py',
 )
 DEVICE_IDENTITY = ('__init__.py', 'device.py', 'friends.py')
 PROVISIONING = (
@@ -33,8 +33,11 @@ PROVISIONING = (
     'configuration.py', 'control_route.py', 'envelope.py', 'models.py',
     'relay.py', 'reticulum.py', 'runtime.py', 'transaction.py',
     'friends.py', 'friends_application.py', 'friends_catalog.py',
-    'friends_owner.py', 'friends_store.py', 'requirements.lock',
+    'friends_owner.py', 'friends_store.py', 'support.py', 'support_client.py', 'requirements.lock',
+    'chat_owner.py', 'chat_keyring.py', 'chat_transport.py', 'chat_bridge.py', 'chat_bridge_protocol.py', 'chat_audio.py', 'chat_events.py', 'chat_rpc.py', 'chat_client.py', 'chat_admin.py',
 )
+MESSENGER = ('__init__.py', 'admission.py', 'chat.py', 'codec.py', 'delivery.py', 'local.py',
+             'mailbox.py', 'notices.py', 'routed.py', 'service_events.py', 'store.py')
 LEGACY_TAR = ('app.py', 'backend.py', 'profile_config.py', 'updates.py', 'update.pub', 'install-linux.sh')
 
 FORBIDDEN_NAMES = ('.env', 'state-v2', 'state-product', 'friends-identity', '__pycache__')
@@ -78,10 +81,17 @@ def assemble_bundle(destination):
     desktop = ROOT / 'clients' / 'desktop'
     for name in DESKTOP_RUNTIME:
         safe_copy(desktop / name, destination / 'clients' / 'desktop' / name)
+    safe_copy(ROOT/'VERSION', destination/'VERSION')
     for name in DEVICE_IDENTITY:
         safe_copy(ROOT / 'device_identity' / name, destination / 'device_identity' / name)
     for name in PROVISIONING:
         safe_copy(ROOT / 'provisioning' / name, destination / 'provisioning' / name)
+    for name in MESSENGER:
+        safe_copy(ROOT / 'messenger' / name, destination / 'messenger' / name)
+    for name in ('Reticulum', 'LXMF', 'PySerial'):
+        safe_copy(ROOT / 'clients/android/app/src/main/assets/control-licenses' / (name + '.txt'),
+                  destination / 'licenses' / (name + '.txt'))
+    safe_copy(PACKAGING / 'audio-runtime-notices.txt', destination / 'licenses/audio-runtime-notices.txt')
     safe_copy(PACKAGING / 'launcher.py', destination / 'launcher.py')
 
 
@@ -91,19 +101,23 @@ def vendor_pip(destination):
          '--target', str(destination), '-r', str(ROOT / 'provisioning' / 'requirements.lock')],
         check=True,
     )
+    subprocess.run([sys.executable, '-m', 'pip', 'install', '--no-compile', '--no-deps', '--require-hashes',
+                    '--target', str(destination), '-r', str(ROOT / 'messenger/requirements.lock')], check=True)
 
 
 def vendor_from_site(site, destination):
     """Offline local fallback: copy exactly the locked distributions via RECORD."""
     lock = {}
-    for line in (ROOT / 'provisioning' / 'requirements.lock').read_text().splitlines():
+    lines = ((ROOT / 'provisioning/requirements.lock').read_text() + '\n' +
+             (ROOT / 'messenger/requirements.lock').read_text()).splitlines()
+    for line in lines:
         line = line.split('#', 1)[0].strip()
         if not line:
             continue
         name, sep, spec = line.partition('==')
         if not sep:
             fail('unsupported requirement pin: ' + line)
-        lock[name.strip().lower()] = spec.strip()
+        lock[name.strip().lower()] = spec.split()[0]
     site = Path(site)
     destination.mkdir(parents=True, exist_ok=True)
     copied = set()
@@ -111,13 +125,16 @@ def vendor_from_site(site, destination):
         metadata = meta / 'METADATA'
         if not metadata.is_file():
             continue
-        name = None
+        name = version = None
         for line in metadata.read_text(errors='replace').splitlines():
             if line.startswith('Name:'):
                 name = line.split(':', 1)[1].strip()
-                break
+            if line.startswith('Version:'):
+                version = line.split(':', 1)[1].strip()
         if name is None or name.lower() not in lock:
             continue
+        if version != lock[name.lower()]:
+            fail('vendored version does not match lock: ' + name)
         record = meta / 'RECORD'
         if not record.is_file():
             continue
@@ -211,7 +228,7 @@ def build_deb(bundle, version, output):
         'Architecture: amd64\n'
         'Maintainer: Family Connect <maintainers@family-connect.invalid>\n'
         f'Installed-Size: {installed_size(staging / "usr")}\n'
-        'Depends: python3 (>= 3.10), python3-gi, python3-gi-cairo, gir1.2-gtk-4.0, gir1.2-adw-1, librsvg2-common, network-manager, libqrencode4, libzbar0\n'
+        'Depends: python3 (>= 3.10), python3-gi, python3-gi-cairo, gir1.2-gtk-4.0, gir1.2-adw-1, gir1.2-secret-1, gir1.2-gstreamer-1.0, gir1.2-gst-plugins-base-1.0, gstreamer1.0-plugins-base, gstreamer1.0-plugins-good, gstreamer1.0-pulseaudio, libcodec2-1.2, librsvg2-common, network-manager, libqrencode4, libzbar0, systemd, dbus-user-session\n'
         'Section: net\n'
         'Priority: optional\n'
         'Homepage: https://github.com/Joker20380/family_connect\n'

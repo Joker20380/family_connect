@@ -1,5 +1,13 @@
 # Client updates
 
+Desktop parity106 development note (23 October): the full Linux bundle now includes
+an independent user-session chat owner. The six-file legacy updater is unchanged and
+cannot yet deliver the full new runtime. Before a candidate release, implement and
+test old-unit shutdown/new-bundle activation while preserving the chat directory,
+Secret Service entry and previous runtime. Restarting the GUI alone does not upgrade
+an already running chat service. No new catalog, signature or installer is issued.
+See [package gates](linux-appimage-deb.ru.md) and [ADR004](adr/004-linux-chat-session-owner.md).
+
 Android beta60/code60 is published03.10 after owner/hosted acceptance. The exact
 accepted APK is unchanged; beta59 remains unpublished. Support IDs do not grant access.
 Policy: optional, minimum_supported_version1, mandatory_after0; no legacy shutdown.
@@ -71,3 +79,37 @@ optional. GitHub may briefly cache an older catalog; check again later. Updates 
 the device key and activation. A separate `.fcactivation` file is needed only when
 activation must be restored after reinstalling; ordinary updates do not need a new
 grant. The operator verifies the current device code before issuing a restoration grant.
+
+## Desktop parity106 packaging gate (23 October2026)
+
+The new development chat store/keyring entry is independent of versioned program
+files and must survive upgrades. Never delete or regenerate either after a failed
+open. Full bundle assembly includes messenger/LXMF/libsecret integration; the
+six-file legacy archive alone does not deliver that runtime. Its verified
+transition to a full bundle and installed identity/history-preserving upgrade are
+still release gates, not implemented update compatibility claims.
+
+No new desktop release/catalog is authorized by source consolidation. Keep the
+six-file Linux updater contract and existing Windows broker/service upgrade paths.
+Before preparing any signed catalog: native platform CI, exact artifact digest,
+installed-package and identity-preserving upgrade acceptance; then offline signing
+with an increasing sequence. Do not publish/link this development tree. The owner
+requires a separate publication decision. [Current gaps](releases/2026-10-23-desktop-parity106.md).
+
+The new `fc-mesh[.exe]` development binaries are internal components, not signed
+application updates. The Linux setup must update the shared startup exclusion in
+all installed MESH/AWG/TCP helper copies atomically, while preserving user state.
+No catalog sequence/version is changed for these incomplete component builds.
+An offline component bundle now implements that transaction and own-file rollback;
+its capability marker appears only after verification/reload. It also verifies the
+bundled isolated RNS runtime before advertising readiness; a mismatch rolls back
+its own installed files. It has no update
+signature and has not passed installed-package acceptance. Root-owned cache is
+separate from user identity; ordinary app updates must not delete either store.
+
+Component r5 adds the `intent_protocol:1` capability and checks systemd254+ before
+writing any files. It does not enable services automatically. Its memfd recovery
+data is volatile, not an identity migration. Preserve user `support.json` and the
+private diagnostic state directory during later application upgrades. The packager
+now unpacks the exact tar and verifies every manifest payload before issuing its
+delivery receipt. This proves archive integrity, not installation/upgrade acceptance.

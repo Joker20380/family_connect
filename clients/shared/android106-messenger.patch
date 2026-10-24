@@ -1,0 +1,15 @@
+--- android106/messenger/routed.py
++++ desktop/messenger/routed.py
+@@ -18,9 +18,11 @@
+ 
+ 
+ class RoutedMailbox(Mailbox):
++    ROUTES = ('DIRECT', 'EXISTING_EXIT', 'SERVICE_ONLY')
++
+     def __init__(self, chat, source, node_public, runtime, routes, session_lock):
+         super().__init__(chat, source, node_public)
+-        order = ('DIRECT', 'EXISTING_EXIT', 'SERVICE_ONLY')
++        order = self.ROUTES
+         if (not routes or len(routes) > 3 or any(name not in order or not callable(connect) for name, connect in routes)
+                 or [order.index(name) for name, _ in routes] != sorted(set(order.index(name) for name, _ in routes))):
+             raise ValueError('Invalid chat routes')

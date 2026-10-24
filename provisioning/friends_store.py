@@ -11,11 +11,13 @@ from contextlib import contextmanager
 
 from device_identity.device import _private_directory, _read_key, _create_key, _FRIENDS_MARKER
 from device_identity.friends import _exists
-from .friends_catalog import parse, fields, verify, require
+from .friends_catalog import parse, fields, verify, verify_catalog, require
 
 _NAME = 'friends.configuration.json'
 _MARKER = b'FC-FRIENDS-CONFIGURATION-1\n'
 _LIMIT = 65536
+_FLOOR = 'friends.catalog-floor.json'
+_FLOOR_MARKER = b'FC-FRIENDS-CATALOG-FLOOR-1\n'
 
 
 class FriendsConfigurationStore:
@@ -56,6 +58,68 @@ class FriendsConfigurationStore:
         return verify(reply, self.anchor, self.device.reference, country,
                       self.device._wireguard_key.private_bytes_raw(), floor=floor, previous_hash=previous_hash)
 
+    def _catalog_floor(self, directory):
+        exists, marked = _exists(directory, _FLOOR), _exists(directory, _FLOOR+'.initialized')
+        require(exists or not marked)
+        if marked:
+            require(_read_key(directory, _FLOOR+'.initialized', len(_FLOOR_MARKER)) == _FLOOR_MARKER)
+        if not exists:
+            return None
+        size = os.stat(_FLOOR, dir_fd=directory, follow_symlinks=False).st_size
+        require(0 < size <= 16384)
+        record = parse(_read_key(directory, _FLOOR, size).decode('utf-8'))
+        fields(record, 'schema device catalog')
+        require(type(record['schema']) is int and record['schema'] == 1 and record['device'] == self.device.reference)
+        verify_catalog(record['catalog'], self.anchor)
+        if not marked:
+            _create_key(directory, _FLOOR+'.initialized', _FLOOR_MARKER)
+        return record['catalog']
+
+    def _current(self, directory, additional=None):
+        cache = self._read(directory)
+        entries = [(reply['catalog'], self._verify(reply, country)) for country, reply in cache.items()]
+        saved = self._catalog_floor(directory)
+        for envelope in (saved, additional):
+            if envelope is not None:
+                entries.append((envelope, verify_catalog(envelope, self.anchor)))
+        floor = max((entry.sequence for _, entry in entries), default=0)
+        highest = [(envelope, entry) for envelope, entry in entries if entry.sequence == floor]
+        require(len({entry.catalog_hash for _, entry in highest}) <= 1)
+        return cache, highest[0] if highest else (None, None), saved
+
+    def signed_floors(self):
+        with self._locked() as directory:
+            cache, (envelope, _floor), saved = self._current(directory)
+            return [envelope] if saved is not None else [reply['catalog'] for reply in cache.values()]
+
+    def merge_catalog_floor(self, envelope):
+        """Persist a verified public high-water mark, without changing device profiles."""
+        import json
+        if envelope is None:
+            return
+        with self._locked() as directory:
+            _cache, (highest, floor), saved = self._current(directory, envelope)
+            if highest is None or saved == highest:
+                return
+            raw = json.dumps(dict(schema=1, device=self.device.reference, catalog=highest),
+                             separators=(',', ':'), allow_nan=False).encode()
+            require(len(raw) <= 16384)
+            temporary = '.friends-floor-'+secrets.token_hex(16)
+            descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600, dir_fd=directory)
+            try:
+                with os.fdopen(descriptor, 'wb') as output:
+                    output.write(raw)
+                    output.flush()
+                    os.fsync(output.fileno())
+                os.replace(temporary, _FLOOR, src_dir_fd=directory, dst_dir_fd=directory)
+                os.fsync(directory)
+            finally:
+                if _exists(directory, temporary):
+                    os.unlink(temporary, dir_fd=directory)
+            checked = self._catalog_floor(directory)
+            readback = verify_catalog(checked, self.anchor)
+            require(checked == highest and (readback.sequence, readback.catalog_hash) == (floor.sequence, floor.catalog_hash))
+
     def accept(self, country, fetch):
         """fetch(floor, hash) -> response; serialize verification, fetch and durable save.
 
@@ -64,12 +128,9 @@ class FriendsConfigurationStore:
         """
         require(country in ('ru', 'nl'))
         with self._locked() as directory:
-            cache = self._read(directory)
-            prior = [self._verify(reply, region) for region, reply in cache.items()]
-            floor = max((p.sequence for p in prior), default=0)
-            hashes = {p.catalog_hash for p in prior if p.sequence == floor}
-            require(len(hashes) <= 1)
-            previous = next(iter(hashes), None)
+            cache, (_envelope, accepted_floor), _saved = self._current(directory)
+            floor = accepted_floor.sequence if accepted_floor else 0
+            previous = accepted_floor.catalog_hash if accepted_floor else None
             response = fetch(floor, previous)
             accepted = self._verify(response, country, floor, previous)
             cache[country] = response

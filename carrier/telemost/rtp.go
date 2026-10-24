@@ -10,6 +10,7 @@ import (
 // reorderWindow bounds how many out-of-order RTP packets are held before a gap
 // is treated as lost and skipped.
 const reorderWindow = 256
+const reorderGapTimeout = 750 * time.Millisecond
 
 // maxAssembledFrameSize bounds one reassembled VP8 frame. It sits above the
 // largest legitimate carrier frame so a peer cannot grow the buffer without
@@ -52,19 +53,20 @@ func (b *reorderBuffer) push(pkt *rtp.Packet, deliver func(*rtp.Packet)) {
 	}
 	previousNext := b.nextSeq
 	if uint16(pkt.SequenceNumber-b.nextSeq) >= reorderWindow {
-		for sequence, queued := range b.pkts {
-			b.drop(queued, "window")
-			b.recycle(queued)
-			delete(b.pkts, sequence)
+		for len(b.pkts) > 0 && uint16(pkt.SequenceNumber-b.nextSeq) >= reorderWindow {
+			b.skipToOldest()
+			b.drain(deliver)
 		}
-		b.nextSeq = pkt.SequenceNumber
+		if uint16(pkt.SequenceNumber-b.nextSeq) >= reorderWindow {
+			b.nextSeq = pkt.SequenceNumber
+		}
 	}
 	if old := b.pkts[pkt.SequenceNumber]; old != nil {
 		b.drop(old, "duplicate")
 		b.recycle(old)
 	}
 	b.pkts[pkt.SequenceNumber] = b.clone(pkt)
-	if len(b.pkts) >= reorderWindow || (!b.gapSince.IsZero() && time.Since(b.gapSince) > 100*time.Millisecond) {
+	if len(b.pkts) >= reorderWindow || (!b.gapSince.IsZero() && time.Since(b.gapSince) > reorderGapTimeout) {
 		b.skipToOldest()
 	}
 	b.drain(deliver)

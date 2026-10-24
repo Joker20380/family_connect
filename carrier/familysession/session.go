@@ -45,6 +45,14 @@ type Credentials struct {
 }
 
 func Configuration(raw []byte, server bool) (*tls.Config, time.Time, error) {
+	return configuration(raw, server, false)
+}
+
+func MuxConfiguration(raw []byte, server, credit128 bool) (*tls.Config, time.Time, error) {
+	return configuration(raw, server, credit128)
+}
+
+func configuration(raw []byte, server, credit128 bool) (*tls.Config, time.Time, error) {
 	if len(raw) > 48<<10 {
 		return nil, time.Time{}, ErrRejected
 	}
@@ -94,8 +102,12 @@ func Configuration(raw []byte, server bool) (*tls.Config, time.Time, error) {
 	if server {
 		config.ClientAuth = tls.RequireAndVerifyClientCert
 	}
+	if credit128 {
+		config.NextProtos = []string{MuxCredit128Protocol, Protocol}
+	}
 	config.VerifyConnection = func(state tls.ConnectionState) error {
-		if state.Version != tls.VersionTLS13 || state.NegotiatedProtocol != Protocol || state.DidResume || len(state.PeerCertificates) != 1 || len(state.VerifiedChains) == 0 {
+		allowed := state.NegotiatedProtocol == Protocol || credit128 && state.NegotiatedProtocol == MuxCredit128Protocol
+		if state.Version != tls.VersionTLS13 || !allowed || state.DidResume || len(state.PeerCertificates) != 1 || len(state.VerifiedChains) == 0 {
 			return ErrRejected
 		}
 		peer := state.PeerCertificates[0]
@@ -255,7 +267,19 @@ func Open(ctx context.Context, endpoint PacketEndpoint, raw []byte, server bool)
 }
 
 func OpenReliable(ctx context.Context, endpoint PacketEndpoint, raw []byte, server bool, reliability reliablestream.Config) (*Session, error) {
-	config, expiry, err := Configuration(raw, server)
+	return openReliable(ctx, endpoint, raw, server, reliability, false)
+}
+
+func OpenMux(ctx context.Context, endpoint PacketEndpoint, raw []byte, server, credit128 bool) (*Session, error) {
+	return openReliable(ctx, endpoint, raw, server, reliablestream.DefaultConfig(), credit128)
+}
+
+func OpenMuxReliable(ctx context.Context, endpoint PacketEndpoint, raw []byte, server, credit128 bool, reliability reliablestream.Config) (*Session, error) {
+	return openReliable(ctx, endpoint, raw, server, reliability, credit128)
+}
+
+func openReliable(ctx context.Context, endpoint PacketEndpoint, raw []byte, server bool, reliability reliablestream.Config, credit128 bool) (*Session, error) {
+	config, expiry, err := configuration(raw, server, credit128)
 	if err != nil {
 		return nil, err
 	}
@@ -287,11 +311,14 @@ func (session *Session) ConnectionState() tls.ConnectionState {
 	return session.connection.ConnectionState()
 }
 
+func (session *Session) SecurityDeadline() time.Time { return session.expiry }
+
 func (session *Session) SendContext(ctx context.Context, payload []byte) (failure error) {
 	defer func() { traceFailure(ctx, session.trace, failure) }()
 	session.sendMu.Lock()
 	defer session.sendMu.Unlock()
 	if len(payload) > MaxPayload || session.sendSequence == ^uint64(0) || !time.Now().Before(session.expiry) || ctx.Err() != nil {
+		session.traceStop(ctx, "FAMILY_CONTRACT")
 		session.stream.stop()
 		return ErrRejected
 	}
@@ -300,13 +327,14 @@ func (session *Session) SendContext(ctx context.Context, payload []byte) (failur
 		deadline = minTime(deadline, bound)
 	}
 	session.connection.SetWriteDeadline(deadline)
-	stop := context.AfterFunc(ctx, session.stream.stop)
+	stop := context.AfterFunc(ctx, func() { session.traceStop(ctx, "FAMILY_CONTEXT"); session.stream.stop() })
 	defer stop()
 	message := make([]byte, 12+len(payload))
 	binary.BigEndian.PutUint32(message, uint32(len(payload)))
 	binary.BigEndian.PutUint64(message[4:], session.sendSequence)
 	copy(message[12:], payload)
 	if _, err := session.connection.Write(message); err != nil {
+		session.traceStop(ctx, "FAMILY_WRITE")
 		session.stream.stop()
 		return err
 	}
@@ -319,6 +347,8 @@ func (session *Session) Recv(ctx context.Context) (data []byte, failure error) {
 	session.recvMu.Lock()
 	defer session.recvMu.Unlock()
 	if session.recvSequence == ^uint64(0) || !time.Now().Before(session.expiry) || ctx.Err() != nil {
+		observeReceive(ctx, ErrRejected)
+		session.traceStop(ctx, "FAMILY_CONTRACT")
 		session.stream.stop()
 		return nil, ErrRejected
 	}
@@ -327,20 +357,26 @@ func (session *Session) Recv(ctx context.Context) (data []byte, failure error) {
 		deadline = minTime(deadline, bound)
 	}
 	session.connection.SetReadDeadline(deadline)
-	stop := context.AfterFunc(ctx, session.stream.stop)
+	stop := context.AfterFunc(ctx, func() { session.traceStop(ctx, "FAMILY_CONTEXT"); session.stream.stop() })
 	defer stop()
 	header := make([]byte, 12)
 	if _, err := io.ReadFull(session.connection, header); err != nil {
+		observeReceive(ctx, err)
+		session.traceStop(ctx, "FAMILY_READ")
 		session.stream.stop()
 		return nil, err
 	}
 	length := binary.BigEndian.Uint32(header)
 	if length > MaxPayload || binary.BigEndian.Uint64(header[4:]) != session.recvSequence {
+		observeReceive(ctx, ErrRejected)
+		session.traceStop(ctx, "FAMILY_CONTRACT")
 		session.stream.stop()
 		return nil, ErrRejected
 	}
 	payload := make([]byte, length)
 	if _, err := io.ReadFull(session.connection, payload); err != nil {
+		observeReceive(ctx, err)
+		session.traceStop(ctx, "FAMILY_READ")
 		session.stream.stop()
 		return nil, err
 	}
@@ -349,8 +385,20 @@ func (session *Session) Recv(ctx context.Context) (data []byte, failure error) {
 }
 
 func (session *Session) Close() error {
+	session.trace.Record(sessiontrace.Event{Stage: "LOCAL_CLOSE", State: "STARTED", Reason: "NONE", CloseSource: "FAMILY_UPPER_CLOSE"})
 	session.stream.Close()
 	return session.connection.Close()
+}
+
+func (session *Session) traceStop(ctx context.Context, source string) {
+	if !time.Now().Before(session.expiry) {
+		source = "FAMILY_CREDENTIAL_EXPIRY"
+	} else if context.Cause(ctx) == context.DeadlineExceeded {
+		source = "PARENT_DEADLINE"
+	} else if ctx.Err() != nil {
+		source = "PARENT_CANCELLED"
+	}
+	session.trace.Record(sessiontrace.Event{Stage: "FAMILY_TLS", State: "CLOSED", Reason: "NONE", CloseSource: source})
 }
 
 func traceFailure(ctx context.Context, trace *sessiontrace.Recorder, err error) {

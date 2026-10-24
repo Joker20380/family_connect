@@ -1,0 +1,35 @@
+name: Linux Auto traffic guard
+on:
+  workflow_dispatch:
+  push:
+    paths: ['clients/linux/auto_guard.py', 'clients/linux/mesh_system.py', 'clients/desktop/tests/test_auto_guard.py', 'scripts/check_desktop_auto_guard.py', '.github/workflows/desktop-auto-guard.yml']
+  pull_request:
+    paths: ['clients/linux/auto_guard.py', 'clients/linux/mesh_system.py', 'clients/desktop/tests/test_auto_guard.py', 'scripts/check_desktop_auto_guard.py', '.github/workflows/desktop-auto-guard.yml']
+permissions:
+  contents: read
+jobs:
+  isolated-kernel:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: sudo apt-get update && sudo apt-get install -y nftables iproute2
+      - run: python -m pip install pytest==9.1.1
+      - run: python -m pytest -q clients/desktop/tests/test_auto_guard.py clients/desktop/tests/test_mesh_network.py
+      - name: Real kernel guard and packet isolation (no live VPN)
+        shell: bash
+        run: |
+          set -euo pipefail
+          parent_netns="$(stat -Lc %i /proc/self/ns/net)"
+          sudo timeout --signal=TERM --kill-after=3s 60s unshare --net -- /bin/sh -ec '
+            sysctl -qw net.ipv4.ip_forward=1
+            exec /usr/bin/python3 scripts/check_desktop_auto_guard.py --host-netns "$1"
+          ' isolated "$parent_netns" | tee desktop-auto-guard-kernel.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: desktop-auto-guard-linux
+          path: desktop-auto-guard-kernel.json

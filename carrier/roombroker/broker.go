@@ -61,21 +61,29 @@ func DefaultLimits() Limits {
 }
 
 type setup struct {
-	id        string
-	identity  Identity
-	authorize Authorize
-	state     State
-	ctx       context.Context
-	cancel    context.CancelFunc
-	deadline  time.Time
-	started   bool
-	claimed   bool
-	done      chan struct{}
+	exchange    string
+	created     time.Time
+	id          string
+	identity    Identity
+	authorize   Authorize
+	state       State
+	ctx         context.Context
+	cancel      context.CancelFunc
+	deadline    time.Time
+	started     bool
+	claimed     bool
+	done        chan struct{}
+	lease       *leaseLifetime
+	renewal     uint64
+	lastLease   LeaseReceipt
+	lastRequest LeaseReceipt
 }
 
 type Broker struct {
+	ownership *ownershipCapture
 	traceSink func(sessiontrace.Event) bool
 	mu        sync.Mutex
+	publishMu sync.Mutex
 	provider  RoomProvider
 	gateway   GatewayStarter
 	limits    Limits
@@ -83,6 +91,8 @@ type Broker struct {
 	closed    bool
 	workers   sync.WaitGroup
 	event     func(State, Code)
+	pending   []func()
+	newLease  func(time.Duration) *leaseLifetime
 }
 
 func New(provider RoomProvider, gateway GatewayStarter, limits Limits, event func(State, Code), traces ...func(sessiontrace.Event) bool) (*Broker, error) {
@@ -95,7 +105,7 @@ func New(provider RoomProvider, gateway GatewayStarter, limits Limits, event fun
 	if event == nil {
 		event = func(State, Code) {}
 	}
-	broker := &Broker{provider: provider, gateway: gateway, limits: limits, setups: make(map[string]*setup), event: event}
+	broker := &Broker{provider: provider, gateway: gateway, limits: limits, setups: make(map[string]*setup), event: event, newLease: newLeaseLifetime}
 	if len(traces) > 0 {
 		broker.traceSink = traces[0]
 	}
@@ -123,26 +133,36 @@ func (broker *Broker) Challenge(ctx context.Context, authorize Authorize) (strin
 		return "", Code("entropy_unavailable")
 	}
 	broker.mu.Lock()
-	defer broker.mu.Unlock()
+	defer broker.unlock()
 	if broker.closed {
+		broker.ownershipLocked(ctx, nil, nil, "reject", "closed")
 		return "", Code("closed")
 	}
 	if len(broker.setups) >= broker.limits.Outstanding {
+		broker.ownershipLocked(ctx, nil, nil, "reject", "outstanding_limit")
 		return "", Code("outstanding_limit")
 	}
 	for _, current := range broker.setups {
 		if current.identity == identity {
+			broker.ownershipLocked(ctx, current, &identity, "busy", "device_busy")
 			return "", Code("device_busy")
 		}
 	}
-	lifetime, cancel := context.WithTimeout(context.Background(), broker.limits.Lifetime)
+	lease := broker.newLease(broker.limits.Lifetime)
+	lifetime, cancel := context.Context(lease), lease.cancel
 	trace := sessiontrace.New(hex.EncodeToString(nonce[:]), broker.traceSink)
-	sessiontrace.StartDiagnosticControl(lifetime, trace, "gateway")
+	broker.pending = append(broker.pending, func() { sessiontrace.StartDiagnosticControl(lifetime, trace, "gateway") })
 	lifetime = sessiontrace.With(lifetime, trace)
-	trace.Add("AUTHORIZED", "ESTABLISHED", "NONE")
+	leaseDeadline := lease.deadline()
+	broker.pending = append(broker.pending, func() {
+		trace.Record(sessiontrace.Event{Stage: "AUTHORIZED", State: "ESTABLISHED", Reason: "NONE", LeaseDeadlineMS: leaseDeadline.UnixMilli()})
+	})
 	current := &setup{id: hex.EncodeToString(nonce[:]), identity: identity, authorize: authorize, state: Authorized,
-		ctx: lifetime, cancel: cancel, deadline: time.Now().Add(broker.limits.Unused), done: make(chan struct{})}
+		ctx: lifetime, cancel: cancel, deadline: time.Now().Add(broker.limits.Unused), done: make(chan struct{}), lease: lease}
+	current.ctx = context.WithValue(current.ctx, leaseKey{}, &leaseBinding{broker: broker, current: current})
 	broker.setups[current.id] = current
+	current.exchange, current.created = exchangeTag(ctx), time.Now()
+	broker.ownershipLocked(ctx, current, &identity, "grant", "acquired")
 	broker.workers.Add(1)
 	go broker.monitor(current)
 	return current.id, nil
@@ -186,14 +206,21 @@ func (broker *Broker) ChallengeAfterCleanup(ctx context.Context, authorize Autho
 			}
 		}
 		waitable := pending == nil || pending.state == Active || pending.started && terminal(pending.state)
-		broker.mu.Unlock()
+		if pending != nil && waitable {
+			broker.ownershipLocked(ctx, pending, &identity, "wait", "device_busy")
+		}
+		broker.unlock()
 		if !waitable {
 			return "", err
 		}
 		if pending == nil {
 			continue
 		}
-		if err := waitForCleanup(ctx, pending.done, broker.limits.Recheck, check); err != nil {
+		err = waitForCleanup(ctx, pending.done, broker.limits.Recheck, check)
+		broker.mu.Lock()
+		broker.ownershipLocked(ctx, pending, &identity, "wait_end", ownershipReason(err))
+		broker.unlock()
+		if err != nil {
 			return "", err
 		}
 	}
@@ -242,14 +269,15 @@ func (broker *Broker) monitor(current *setup) {
 			if !started {
 				delete(broker.setups, current.id)
 				close(current.done)
+				broker.ownershipLocked(current.ctx, current, nil, "release", "monitor_unstarted")
 			}
-			broker.mu.Unlock()
+			broker.unlock()
 			return
 		case <-ticker.C:
 			identity, err := authorized(current.ctx, current.authorize)
 			broker.mu.Lock()
 			stale := current.state != Active && time.Now().After(current.deadline)
-			broker.mu.Unlock()
+			broker.unlock()
 			if err != nil || identity != current.identity {
 				broker.terminate(current, Failed, "authorization_changed")
 			} else if stale {
@@ -266,20 +294,16 @@ func (broker *Broker) terminate(current *setup, state State, code Code) {
 		broker.emit(current, state, code)
 	}
 	current.cancel()
-	broker.mu.Unlock()
+	broker.unlock()
 }
 
 func terminal(state State) bool {
 	return state == Closed || state == Failed || state == Expired || state == Cancelled
 }
 
-func (broker *Broker) lookup(ctx context.Context, id string, authorize Authorize) (*setup, error) {
-	identity, err := authorized(ctx, authorize)
-	if err != nil {
-		return nil, err
-	}
+func (broker *Broker) lookup(ctx context.Context, id string, identity Identity) (*setup, error) {
 	current := broker.setups[id]
-	if current == nil || current.identity != identity || current.ctx.Err() != nil || terminal(current.state) ||
+	if ctx.Err() != nil || current == nil || current.identity != identity || current.ctx.Err() != nil || terminal(current.state) ||
 		(current.state != Active && !time.Now().Before(current.deadline)) {
 		return nil, Code("stale_or_unbound_setup")
 	}
@@ -287,14 +311,18 @@ func (broker *Broker) lookup(ctx context.Context, id string, authorize Authorize
 }
 
 func (broker *Broker) Create(ctx context.Context, id string, authorize Authorize) (Descriptor, error) {
-	broker.mu.Lock()
-	current, err := broker.lookup(ctx, id, authorize)
+	identity, err := authorized(ctx, authorize)
 	if err != nil {
-		broker.mu.Unlock()
+		return Descriptor{}, err
+	}
+	broker.mu.Lock()
+	current, err := broker.lookup(ctx, id, identity)
+	if err != nil {
+		broker.unlock()
 		return Descriptor{}, err
 	}
 	if current.state != Authorized {
-		broker.mu.Unlock()
+		broker.unlock()
 		return Descriptor{}, Code("setup_replayed")
 	}
 	current.started = true
@@ -302,7 +330,7 @@ func (broker *Broker) Create(ctx context.Context, id string, authorize Authorize
 	broker.emit(current, Creating, "")
 	current.deadline = time.Now().Add(broker.limits.Create + broker.limits.Ready + broker.limits.Unused)
 	broker.workers.Add(1)
-	broker.mu.Unlock()
+	broker.unlock()
 	stop := context.AfterFunc(ctx, current.cancel)
 	defer stop()
 	owned := true
@@ -351,7 +379,7 @@ func (broker *Broker) Create(ctx context.Context, id string, authorize Authorize
 		broker.terminate(current, Failed, code)
 		return Descriptor{}, code
 	}
-	identity, err := authorized(ctx, authorize)
+	identity, err = authorized(ctx, authorize)
 	if err != nil || identity != current.identity || current.ctx.Err() != nil {
 		_ = gateway.Close()
 		broker.terminate(current, Failed, "authorization_changed")
@@ -359,7 +387,7 @@ func (broker *Broker) Create(ctx context.Context, id string, authorize Authorize
 	}
 	broker.mu.Lock()
 	if terminal(current.state) {
-		broker.mu.Unlock()
+		broker.unlock()
 		_ = gateway.Close()
 		return Descriptor{}, Code("cancelled")
 	}
@@ -369,12 +397,23 @@ func (broker *Broker) Create(ctx context.Context, id string, authorize Authorize
 	descriptor := Descriptor{"telemost-webrtc", id, room.JoinURL, current.deadline}
 	current.state = ClientIssued
 	broker.emit(current, ClientIssued, "")
-	broker.mu.Unlock()
+	broker.unlock()
 	owned = false
 	go func() {
 		defer broker.finish(current)
-		defer gateway.Close()
+		defer func() {
+			broker.mu.Lock()
+			broker.ownershipLocked(current.ctx, current, nil, "gateway_close_begin", "worker_cleanup")
+			broker.unlock()
+			_ = gateway.Close()
+			broker.mu.Lock()
+			broker.ownershipLocked(current.ctx, current, nil, "gateway_close_end", "worker_cleanup")
+			broker.unlock()
+		}()
 		err := gateway.Run(current.ctx, func() error { return broker.activate(current) })
+		broker.mu.Lock()
+		broker.ownershipLocked(current.ctx, current, nil, "gateway_run_end", ownershipReason(err))
+		broker.unlock()
 		if err != nil {
 			broker.terminate(current, Failed, "gateway_session_failed")
 		} else {
@@ -386,7 +425,7 @@ func (broker *Broker) Create(ctx context.Context, id string, authorize Authorize
 
 func (broker *Broker) transition(current *setup, state State) {
 	broker.mu.Lock()
-	defer broker.mu.Unlock()
+	defer broker.unlock()
 	if !terminal(current.state) {
 		current.state = state
 		broker.emit(current, state, "")
@@ -394,9 +433,13 @@ func (broker *Broker) transition(current *setup, state State) {
 }
 
 func (broker *Broker) Claim(ctx context.Context, id string, authorize Authorize) error {
+	identity, err := authorized(ctx, authorize)
+	if err != nil {
+		return err
+	}
 	broker.mu.Lock()
-	defer broker.mu.Unlock()
-	current, err := broker.lookup(ctx, id, authorize)
+	defer broker.unlock()
+	current, err := broker.lookup(ctx, id, identity)
 	if err != nil {
 		return err
 	}
@@ -404,13 +447,14 @@ func (broker *Broker) Claim(ctx context.Context, id string, authorize Authorize)
 		return Code("descriptor_replayed")
 	}
 	current.claimed = true
+	broker.ownershipLocked(ctx, current, nil, "claim", "descriptor_claimed")
 	return nil
 }
 
 func (broker *Broker) activate(current *setup) error {
 	identity, err := authorized(current.ctx, current.authorize)
 	broker.mu.Lock()
-	defer broker.mu.Unlock()
+	defer broker.unlock()
 	if err != nil || identity != current.identity || current.ctx.Err() != nil || current.state != ClientIssued || !current.claimed ||
 		!time.Now().Before(current.deadline) {
 		return Code("stale_or_unbound_setup")
@@ -421,9 +465,13 @@ func (broker *Broker) activate(current *setup) error {
 }
 
 func (broker *Broker) Cancel(ctx context.Context, id string, authorize Authorize) error {
+	identity, err := authorized(ctx, authorize)
+	if err != nil {
+		return err
+	}
 	broker.mu.Lock()
-	current, err := broker.lookup(ctx, id, authorize)
-	broker.mu.Unlock()
+	current, err := broker.lookup(ctx, id, identity)
+	broker.unlock()
 	if err != nil {
 		return err
 	}
@@ -435,9 +483,12 @@ func (broker *Broker) finish(current *setup) {
 	sessiontrace.From(current.ctx).Add("CLEANUP", "COMPLETED", "NONE")
 	current.cancel()
 	broker.mu.Lock()
-	delete(broker.setups, current.id)
-	close(current.done)
-	broker.mu.Unlock()
+	if broker.setups[current.id] == current {
+		delete(broker.setups, current.id)
+		close(current.done)
+	}
+	broker.ownershipLocked(current.ctx, current, nil, "release", "worker_finished")
+	broker.unlock()
 	broker.workers.Done()
 }
 
@@ -445,9 +496,10 @@ func (broker *Broker) Close() {
 	broker.mu.Lock()
 	broker.closed = true
 	for _, current := range broker.setups {
-		sessiontrace.From(current.ctx).Add("LOCAL_CLOSE", "STARTED", "NONE")
+		trace := sessiontrace.From(current.ctx)
+		broker.pending = append(broker.pending, func() { trace.Add("LOCAL_CLOSE", "STARTED", "NONE") })
 		current.cancel()
 	}
-	broker.mu.Unlock()
+	broker.unlock()
 	broker.workers.Wait()
 }

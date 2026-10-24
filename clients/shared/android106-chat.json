@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "reference": "Android beta106-recovery / native105",
+  "source_inventory_sha256": "8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c",
+  "accepted_sources": {
+    "pilot/android-restricted/native/chat.go": "4f6a63b7d6f305442b73ef7adf880dbf54ae58e4baaaa9cca4370b369b578b45",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatCarrier.java": "0f6bd99e072a8aae1ba2cd33aaad1ac50f9c134e929b07bd2f0b538ed17e4424",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatRuntime.java": "8a30cad5a6e978d6dd91670c1746c509bfe45b1631d4f739ba369e249d33a74c",
+    "clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java": "b9c30b6f1c33dd135d06e0caef8650d8eded7aba8fd474428354b468ec30d270",
+    "carrier/restrictedowner/owner.go": "8d4204a1af49254541dc464e59305c10ba348505703d5add2264c3efd2911995",
+    "carrier/wholedevice/service.go": "27239790f017970a2025bdcf10aa032ce4f0189d88fddc909fbc016def8ef3a2"
+  },
+  "implementation": [
+    "carrier/restrictedchat/owner.go",
+    "carrier/restrictedchat/client.go",
+    "carrier/restrictedchat/stream.go",
+    "carrier/desktopmesh/session.go",
+    "clients/mesh/worker/server.go",
+    "clients/mesh/chatipc/protocol.go",
+    "clients/mesh/chatipc/server.go",
+    "clients/linux/mesh_chat.py",
+    "clients/linux/mesh_chat_host.py",
+    "provisioning/chat_bridge_protocol.py",
+    "provisioning/chat_bridge.py",
+    "provisioning/chat_owner.py",
+    "provisioning/chat_transport.py"
+  ],
+  "services": ["chat-api", "chat-mailbox"],
+  "api_origin": "https://185.251.89.19:8443",
+  "api_paths": ["/friends/chat/challenge", "/friends/chat/register"],
+  "api_method": "POST",
+  "request_bytes": 8192,
+  "response_bytes": 16384,
+  "maximum_duration_ms": 30000,
+  "maximum_leases": 8,
+  "maximum_session_service_streams": 4,
+  "private_ipc": {
+    "schema": 1,
+    "frame_bytes": 98304,
+    "mailbox_chunk_bytes": 16384,
+    "maximum_jobs": 12,
+    "maximum_stream_handles": 4,
+    "control_reply_deadline_ms": 4000,
+    "linux_endpoint": "inherited same-EUID Unix stream; separate from VPN stdin/stdout",
+    "windows_endpoint": "NOT_INTEGRATED",
+    "public_client_authorization": "Separate Linux UID/device-bound host admission; never expose the inherited lane to the GUI"
+  },
+  "linux_public_ipc": {
+    "schema": 1,
+    "frame_bytes": 32768,
+    "maximum_operations": 4,
+    "socket_mode": "0600",
+    "peer_authorization": "SO_PEERCRED UID; root-owned parent; client verifies root peer",
+    "device_binding": "Validated active readiness device must match the computer reference and API public-identity hash",
+    "mailbox": "One CLOEXEC AF_UNIX stream passed with SCM_RIGHTS; bounded duplex forwarding to native chat-mailbox",
+    "allowed_route": "EXISTING_EXIT",
+    "cancellation": "Disconnect, binding retirement, service stop, deadline or caller cancellation close chat-owned resources only"
+  },
+  "tls_minimum": "1.2",
+  "authorization_statuses": [400, 401, 403],
+  "conflict_status": 409,
+  "redirects": false,
+  "proxy_environment": false,
+  "ownership": "Existing exit only with matching validated profile; otherwise separate authenticated service-only session; VPN reservation drains previous service-only work before publication",
+  "fresh_service_profile": "P0 default, matching accepted native chat acquisition; never a P1 entitlement grant",
+  "desktop_adaptations": [
+    "Portable net.Conn replaces Android JNI/socketpair; shared transport/crypto/owner remain unchanged",
+    "Java authorization/conflict classification is applied before reading an error body",
+    "Header memory is also bounded to16384 bytes",
+    "HTTP operation cancellation is separate from transport socket teardown so TLS denial is not reclassified",
+    "Deadline callbacks are fenced against replaced timers; cancellation never closes a borrowed VPN"
+  ],
+  "integration": {
+    "shared_go_adapter": "implemented; native VPN worker owns the shared coordinator and publishes/drains its validated session",
+    "linux_service_ipc": "UID/device-bound user-service admission and ChatOwner existing-exit API/mailbox routing implemented; local socket/proof/lifecycle checks only",
+    "windows_broker_ipc": "NOT_INTEGRATED",
+    "installed_restricted_messaging": "NOT_RUN",
+    "system_route_mailbox": "Existing OS-routing path retained as SYSTEM, not advertised as protected-underlying DIRECT",
+    "protected_underlying_direct": "NOT_INTEGRATED",
+    "linux_service_only_orchestration": "NOT_INTEGRATED",
+    "native_delivery": "Linux host passes existing-exit traffic through the native private lane; Windows endpoint and Linux service-only orchestration remain NOT_INTEGRATED. Prior binaries do not support this endpoint"
+  }
+}

@@ -1,5 +1,103 @@
 # Linux: AppImage и DEB вместо tar.gz preview
 
+## Parity106 — отдельная незавершённая поставка,23.10
+
+Последний внутренний компонент — `mesh-system-r18` (24.10,phase22),98 файлов,
+22 root-модуля и4 общих модуля. Добавлен UID/device-bound chat-only endpoint для
+пользовательской службы через действующий MESH. Для GUI нужны соответствующие
+`chat_bridge.py` и `chat_bridge_protocol.py` в полном bundle; обновление только
+native/helper не обновляет GUI. Service-only без VPN и защищённый underlying DIRECT
+ещё отсутствуют. SHA256 и точные readback-проверки находятся в phase22 общего отчёта.
+Компонент не установлен, не подписан и не является AppImage/DEB/готовым клиентом.
+
+Новые native workers и Linux service source находятся в разработке; собранный
+`fc-mesh` не заменяет AppImage и не устанавливает systemd/polkit-helper. Будущий
+setup должен атомарно обновить mesh-helper, его зависимости и AWG/TCP helper copies
+с общим startup-lock, сохранить backup и все user identity/config/history.
+GUI остаётся непривилегированным; установка helper — явное действие setup.
+Такой offline component setup уже собран как `mesh-system-r13`, с атомарными файлами,
+совместным lock, backup/rollback и последней публикацией capability marker.
+Он неподписан, ещё не установлен и не заменяет AppImage/DEB. Сам GTK GUI в этот
+компонент не входит; source-клиент Auto требует соответствующего обновления GUI.
+Два capability marker публикуются последними после проверки; устаревший компонент
+не активирует новый Auto. Точный SHA256 и readback — в phase17 отчёта. Обновление
+доставляет `awg_lifecycle.py` также рядом с существующим AWG helper; при сохранённом
+журнале незавершённой AWG-очистки setup отказывает даже без TUN. Не удаляйте этот
+журнал и не сбрасывайте чужие routes/firewall для обхода проверки. Изолированная
+установка helper в сетевом namespace не заменяет приёмку точного AppImage/DEB.
+AppImage — primary, DEB — secondary, six-file archive/updater остаётся совместимым.
+Сначала реальные UI/OS/DNS/upgrade проверки точных файлов, затем закрытая поставка;
+public catalog/landing не переключать автоматически. Native SHA256, проверки и
+недостающие шаги — в [едином отчёте](releases/2026-10-23-desktop-parity106.md).
+
+В компонент включён изолированный RNS1.5.1 runtime; его источники/лицензии и exact106
+канал проверяются отдельно от native worker. Воспроизводимая сборка разработчика:
+`python -m scripts.build_desktop_rns --out <fresh-runtime-dir>` в окружении с
+зафиксированными RNS1.5.1/pyserial3.5. Затем `scripts/package_mesh_component.py`
+получает `--native <verified-native-build> --rns <fresh-runtime-dir> --out <fresh-delivery>`.
+Это не инструкция для обычного пользователя устанавливать Python/Go вручную.
+Штатный root-helper использует `/usr/bin/python3 -I -S`; установка проверяет
+native metadata и RNS runtime до capability marker. Сбой проверки откатывает свои
+файлы, не читает и не меняет пользовательскую identity. Для закрытой поставки
+AppImage/DEB ещё обязательны установленная приёмка и upgrade проверка.
+
+Текущий `scripts/package_linux.py` дополнительно включает GTK chat UI, закрытый
+список модулей общего messenger/owner, LXMF1.1.1 из существующего hash lock и
+полные Reticulum/LXMF/PySerial notices. DEB требует `gir1.2-secret-1`; нужен рабочий
+Secret Service пользователя, обычно предоставляемый окружением рабочего стола.
+При отсутствии/блокировке хранилища приложение сообщает ошибку, не записывает ключ
+истории plaintext и не создаёт замену identity. AppImage должен проверяться на
+доступность этой системной службы наряду с существующими GTK/GI prerequisites.
+Это изменение сборочного workflow, не новый опубликованный пакет и не доказанное
+обновление старой установки. Старый шестифайловый архив остаётся шестифайловым;
+сам по себе он не доставляет новый messenger runtime. До закрытой поставки нужно
+завершить его совместимый переход через полный bundle и проверить upgrade.
+
+Голосовые исходники входят в полный bundle. DEB дополнительно объявляет
+GStreamer GI/base/good/PulseAudio и Codec2 shared-library dependencies. Это не
+ручная инструкция устанавливать development runtime; setup должен штатно
+разрешать зависимости. AppImage bundling этих библиотек ещё не выполнен.
+`audio-runtime-notices.txt` фиксирует LGPL/BSD-границы, но не заменяет полные
+лицензии и соответствующие исходники будущих bundled библиотек. Synthetic audio
+и Xvfb-проверки не заменяют установку точного пакета и проверку микрофона/выхода.
+
+Полный bundle также включает `chat_notifications.py` и `chat_events.py`. Нужна
+стандартная пользовательская session-D-Bus служба `org.freedesktop.Notifications`;
+приложение не устанавливает свой системный daemon и не обращается к root-helper
+для сообщений. Отсутствие службы не теряет непрочитанные сообщения. Проверка
+изолированного D-Bus с тестовым сервером не заменяет показ уведомления из точного
+установленного AppImage/DEB в целевом desktop session.
+
+Полный bundle включает `chat_daemon.py`, `chat_client.py`, `chat_rpc.py`.
+Launcher принимает отдельный `--chat-service` без создания GTK-окна. GUI запускает
+фиксированную transient-службу `family-connect-chat.service` через `systemd --user`,
+Type=dbus, имя `com.familyconnect.Chat1`; root/SCM-права для чата не нужны.
+DEB объявляет `systemd` и `dbus-user-session` как зависимости; отсутствие рабочего
+user manager приводит к явной ошибке службы, не запуску второго владельца в GUI.
+AppImage-служба повторно открывает исходный AppImage, а не зависимый от GUI FUSE mount.
+Уведомление запускает окно в отдельной пользовательской unit, чтобы остановка чата
+не завершала GUI вместе с его cgroup. Это исходники workflow, не установленный пакет.
+При установочной приёмке проверить user manager, Secret Service, session D-Bus,
+закрытие GUI, новое окно по уведомлению, отключение фона и остановку после logout.
+Изолированный тест использует Type=exec: реальный user manager не наблюдает имя
+на отдельной тестовой шине. Production Type=dbus ещё требует пакетной приёмки.
+Upgrade должен завершать старую chat unit после проверки нового bundle, перед
+удалением старого runtime; дождаться освобождения store lock и сохранить старый
+bundle для отката. Этот handoff и переход шестифайлового updater ещё не реализованы.
+Не удалять `~/.local/share/family-connect/chat` или Secret Service при откате.
+
+Полный bundle также содержит `provisioning/chat_admin.py` и
+`clients/desktop/chat_announcements.py`; исходный manifest
+`clients/shared/android106-announcements.json` фиксирует принятую семантику.
+Операции идут через существующую D-Bus chat-службу и proof компьютера, а не
+root-helper; установщик не выдаёт операторскую роль и не публикует объявления.
+Список ограничен50 записями/страницу и1MiB ответа, запрос публикации/правки32KiB;
+сжатые ответы отклоняются до распаковки. Проверки используют отдельные синтетические
+identity/сервер и не заменяют приёмку точного установленного bundle.
+
+
+## Опубликованная основа0.2.11 (историческая приёмка)
+
 Статус: реализовано, собрано, проверено (CI + чистая Ubuntu 24.04) и опубликовано
 на HTTPS release infrastructure; invitation landing переключена на AppImage как
 основной Linux download (`.deb` и `.tar.gz` — secondary).

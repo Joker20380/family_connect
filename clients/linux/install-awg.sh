@@ -18,6 +18,9 @@ python3 "$source_dir/clients/linux/check-awg-bundle.py" "$binary_dir"
 for interface in /sys/class/net/fcawg*; do
  if [ -e "$interface" ]; then echo 'Disconnect AWG before updating its helper.' >&2; exit 1; fi
 done
+if [ -e /run/family-connect-awg/active.json ] || [ -L /run/family-connect-awg/active.json ]; then
+ echo 'Finish AWG cleanup before updating its helper.' >&2; exit 1
+fi
 destination=/usr/local/lib/family-connect-awg
 install -d -m 755 "$destination" /etc/family-connect/awg
 for name in awg amneziawg-go awg-quick; do
@@ -40,6 +43,7 @@ text=text.replace(old,new)
 path.write_text(text)
 PY
 install -o root -g root -m 755 "$source_dir/clients/linux/awg-helper.py" "$destination/helper"
+install -o root -g root -m 644 "$source_dir/clients/linux/awg_lifecycle.py" "$destination/awg_lifecycle.py"
 install -o root -g root -m 644 "$source_dir/clients/desktop/profile_config.py" "$destination/profile_config.py"
 install -o root -g root -m 644 "$source_dir/clients/desktop/backend.py" "$destination/backend.py"
 for name in LICENSE-go LICENSE-tools; do

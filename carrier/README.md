@@ -1,5 +1,11 @@
 # MESH — Family Connect media transport and carrier implementation
 
+Desktop automatic-policy work: [`desktopauto`](desktopauto/README.md) shares the
+accepted106 candidate ordering, deadlines, failure classes and bounded recovery
+between Linux and Windows. It is currently a tested library, not a wired desktop
+Auto VPN. Platform fail-closed host/IPC integration remains required; no existing
+worker, manual transport or Android binary is changed by adding the package.
+
 ## MESH product contract
 
 **MESH (Media Encapsulated Secure Hop)** is Family Connect's secure media

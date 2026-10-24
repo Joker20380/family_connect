@@ -15,29 +15,42 @@ import (
 )
 
 type Report struct {
-	Trace             *sessiontrace.Snapshot `json:"lifecycle,omitempty"`
-	CorrelationStatus string                 `json:"correlation_status"`
-	SessionTag        string                 `json:"session_tag"`
-	TerminalReason    string                 `json:"terminal_reason"`
-	TerminalAtMS      int64                  `json:"terminal_at_ms"`
-	ObservedAtMS      int64                  `json:"observed_at_ms"`
-	ReliableTerminal  string                 `json:"reliable_terminal"`
-	SignalingFailure  string                 `json:"signaling_failure"`
-	ICEFailure        string                 `json:"ice_failure"`
-	EvidenceDropped   uint64                 `json:"evidence_dropped"`
-	SubscriberState   string                 `json:"subscriber_state"`
-	PublisherState    string                 `json:"publisher_state"`
-	Retransmissions   uint64                 `json:"retransmissions"`
-	RecoveryTimeouts  uint64                 `json:"recovery_timeouts"`
-	ReceivedFrames    uint64                 `json:"received_frames"`
-	SentFrames        uint64                 `json:"sent_frames"`
-	ProtocolErrors    uint64                 `json:"protocol_errors"`
-	DNSResponses      uint64                 `json:"dns_responses"`
-	DNSErrors         uint64                 `json:"dns_errors"`
-	OpenOK            uint64                 `json:"tcp_open_ok"`
-	OpenErrors        uint64                 `json:"tcp_open_errors"`
-	SentBytes         uint64                 `json:"sent_bytes"`
-	ReceivedBytes     uint64                 `json:"received_bytes"`
+	MuxLifecycle         *tcpforward.MuxLifecycle       `json:"mux_lifecycle,omitempty"`
+	ProtocolErrorReasons tcpforward.ProtocolErrorCounts `json:"protocol_error_reasons"`
+	SpeedProfile         string                         `json:"speed_profile,omitempty"`
+	ReliableLimits       reliablestream.Limits          `json:"reliable_limits"`
+	RetryBytes           uint64                         `json:"retry_bytes"`
+	MuxProfile           string                         `json:"mux_profile,omitempty"`
+	MuxWindow            int                            `json:"mux_window,omitempty"`
+	Trace                *sessiontrace.Snapshot         `json:"lifecycle,omitempty"`
+	CorrelationStatus    string                         `json:"correlation_status"`
+	SessionTag           string                         `json:"session_tag"`
+	TerminalReason       string                         `json:"terminal_reason"`
+	TerminalAtMS         int64                          `json:"terminal_at_ms"`
+	ObservedAtMS         int64                          `json:"observed_at_ms"`
+	ReliableTerminal     string                         `json:"reliable_terminal"`
+	SignalingFailure     string                         `json:"signaling_failure"`
+	ICEFailure           string                         `json:"ice_failure"`
+	EvidenceDropped      uint64                         `json:"evidence_dropped"`
+	SubscriberState      string                         `json:"subscriber_state"`
+	PublisherState       string                         `json:"publisher_state"`
+	Retransmissions      uint64                         `json:"retransmissions"`
+	RecoveryTimeouts     uint64                         `json:"recovery_timeouts"`
+	ReceivedFrames       uint64                         `json:"received_frames"`
+	SentFrames           uint64                         `json:"sent_frames"`
+	ProtocolErrors       uint64                         `json:"protocol_errors"`
+	DNSResponses         uint64                         `json:"dns_responses"`
+	DNSErrors            uint64                         `json:"dns_errors"`
+	OpenOK               uint64                         `json:"tcp_open_ok"`
+	OpenErrors           uint64                         `json:"tcp_open_errors"`
+	AdmissionWaits       uint64                         `json:"tcp_admission_waits"`
+	AdmissionRejected    uint64                         `json:"tcp_admission_rejected"`
+	AdmissionTimeouts    uint64                         `json:"tcp_admission_timeouts"`
+	AdmissionCancelled   uint64                         `json:"tcp_admission_cancelled"`
+	AdmissionWaiting     int                            `json:"tcp_admission_waiting"`
+	LeaseRejected        uint64                         `json:"lease_admission_rejected"`
+	SentBytes            uint64                         `json:"sent_bytes"`
+	ReceivedBytes        uint64                         `json:"received_bytes"`
 }
 
 func Delivery(reliable reliablestream.Stats, media telemost.Stats) *sessiontrace.Delivery {
@@ -94,15 +107,18 @@ func choice(value string, allowed ...string) string {
 }
 
 func Capture(setupID string, err error, terminalAt time.Time, reliable reliablestream.Stats, media telemost.Stats, mux tcpforward.MuxStats) Report {
-	report := Report{TerminalReason: Reason(err), ObservedAtMS: time.Now().UnixMilli(),
+	report := Report{MuxLifecycle: mux.Lifecycle, ReliableLimits: reliable.Limits, RetryBytes: reliable.RetransmittedBytes, MuxProfile: mux.Profile, MuxWindow: mux.Window, TerminalReason: Reason(err), ObservedAtMS: time.Now().UnixMilli(),
 		ReliableTerminal: choice(reliable.Terminal, "", "closed", "recovery_exhausted", "protocol_violation", "remote_reset", "cancelled", "carrier_closed"),
 		SignalingFailure: "NONE", ICEFailure: "NONE", EvidenceDropped: media.EvidenceDropped,
 		SubscriberState: choice(media.SubscriberState, "new", "connecting", "connected", "disconnected", "failed", "closed"),
 		PublisherState:  choice(media.PublisherState, "new", "connecting", "connected", "disconnected", "failed", "closed"),
 		Retransmissions: reliable.Retransmissions, RecoveryTimeouts: reliable.Timeouts,
 		ReceivedFrames: media.Media.FramesReceived, SentFrames: media.Media.SamplesWritten,
-		ProtocolErrors: mux.ProtocolErrors, DNSResponses: mux.DNSResponses, DNSErrors: mux.DNSErrors,
-		OpenOK: mux.OpenOK, OpenErrors: mux.OpenErrors, SentBytes: mux.SentBytes, ReceivedBytes: mux.ReceivedBytes}
+		ProtocolErrorReasons: mux.ProtocolErrorReasons, ProtocolErrors: mux.ProtocolErrors, DNSResponses: mux.DNSResponses, DNSErrors: mux.DNSErrors,
+		OpenOK: mux.OpenOK, OpenErrors: mux.OpenErrors, SentBytes: mux.SentBytes, ReceivedBytes: mux.ReceivedBytes,
+		AdmissionWaits: mux.AdmissionWaits, AdmissionRejected: mux.AdmissionRejected,
+		AdmissionTimeouts: mux.AdmissionTimeouts, AdmissionCancelled: mux.AdmissionCancelled,
+		AdmissionWaiting: mux.AdmissionWaiting, LeaseRejected: mux.LeaseRejected}
 	if !terminalAt.IsZero() {
 		report.TerminalAtMS = terminalAt.UnixMilli()
 	}

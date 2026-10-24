@@ -16,7 +16,9 @@ import (
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
 	"github.com/Joker20380/family_connect/carrier/sessiondiag"
+	"github.com/Joker20380/family_connect/carrier/sessionprofile"
 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
+	"github.com/Joker20380/family_connect/carrier/startupdiag"
 	"github.com/Joker20380/family_connect/carrier/tcpforward"
 	"github.com/Joker20380/family_connect/carrier/telemost"
 	"github.com/Joker20380/family_connect/carrier/underlay"
@@ -66,6 +68,7 @@ type Session struct {
 	closeOnce    sync.Once
 	tcpSlots     chan struct{}
 	dnsSlots     chan struct{}
+	serviceSlots chan struct{}
 	metrics      func() map[string]any
 	diagnostic   func() sessiondiag.Report
 	terminal     string
@@ -75,7 +78,7 @@ type Session struct {
 func Attach(parent context.Context, plane DataPlane, closeCarrier func()) *Session {
 	ctx, cancel := context.WithCancel(parent)
 	session := &Session{ctx: ctx, cancel: cancel, plane: plane, closeCarrier: closeCarrier,
-		tcpSlots: make(chan struct{}, 32), dnsSlots: make(chan struct{}, 16)}
+		tcpSlots: make(chan struct{}, tcpforward.MuxMaxStreams+tcpforward.MuxMaxPendingOpens), dnsSlots: make(chan struct{}, 16), serviceSlots: make(chan struct{}, 4)}
 	go func() {
 		reason := sessiondiag.Reason(plane.Wait())
 		session.mu.Lock()
@@ -128,7 +131,7 @@ func (session *Session) Handle(connection net.Conn, protocol, host string, port 
 		return
 	}
 	slots := session.tcpSlots
-	if protocol == "udp" {
+	if protocol == "udp" || port == 53 {
 		slots = session.dnsSlots
 	}
 	session.mu.Lock()
@@ -305,11 +308,13 @@ func OpenCached(ctx context.Context, path, cachePath string, network *underlay.N
 	}
 	raw, cache, err := profile(path, cachePath)
 	if err != nil {
+		startupdiag.Failure(ctx, "PROFILE", err)
 		return nil, err
 	}
 	defer clear(raw)
 	directory, err := cache.Load(time.Now())
 	if err != nil {
+		startupdiag.Failure(ctx, "DIRECTORY", err)
 		return nil, err
 	}
 	return openDirectory(ctx, raw, directory, network, event)
@@ -321,10 +326,12 @@ func OpenProvisioned(ctx context.Context, raw, directoryRaw []byte, network *und
 	}
 	var credentials familysession.Credentials
 	if json.Unmarshal(raw, &credentials) != nil {
+		startupdiag.Failure(ctx, "PROFILE", ErrClosed)
 		return nil, ErrClosed
 	}
 	directory, err := bootstrap.ParseDirectory(directoryRaw, credentials.Family, credentials.Gateway, time.Now())
 	if err != nil {
+		startupdiag.Failure(ctx, "DIRECTORY", err)
 		return nil, err
 	}
 	return openDirectory(ctx, raw, directory, network, event)
@@ -348,6 +355,7 @@ func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Director
 	trace.Add("GATEWAY_JOIN", "STARTED", "NONE")
 	carrier, err := telemost.New(ctx, telemost.Config{RoomURL: descriptor.JoinURL, DisplayName: "Family restricted device", Mode: telemost.ModeVP8, Underlay: network})
 	if err != nil {
+		startupdiag.Failure(ctx, "DEDICATED_CREATE", err)
 		return nil, err
 	}
 	success := false
@@ -359,6 +367,7 @@ func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Director
 	connect, finish := context.WithTimeout(ctx, 45*time.Second)
 	defer finish()
 	if err = carrier.Connect(connect); err != nil {
+		startupdiag.Failure(ctx, "DEDICATED_CONNECT", err)
 		trace.Add("GATEWAY_JOIN", "FAILED", "RECOVERY_JOIN_FAILED")
 		return nil, err
 	}
@@ -366,8 +375,10 @@ func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Director
 	stopHandshake := context.AfterFunc(connect, func() { carrier.Close() })
 	defer stopHandshake()
 	trace.Add("FAMILY_TLS", "STARTED", "NONE")
-	secured, err := familysession.Open(ctx, carrier, raw, false)
+	profile := sessionprofile.From(ctx)
+	secured, err := familysession.OpenMuxReliable(profile.LocalWrite(ctx), carrier, raw, false, true, profile.Reliable())
 	if err != nil {
+		startupdiag.Failure(ctx, "DEDICATED_AUTH", err)
 		trace.Add("FAMILY_TLS", "FAILED", "FAMILY_TLS_ERROR")
 		return nil, err
 	}
@@ -378,11 +389,13 @@ func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Director
 		}
 	}()
 	if err = roombroker.BindClient(connect, secured, descriptor, raw); err != nil {
+		startupdiag.Failure(ctx, "DEDICATED_BIND", err)
 		trace.Add("GATEWAY_SESSION", "FAILED", "GATEWAY_CLOSE")
 		return nil, err
 	}
-	mux, err := tcpforward.NewMux(ctx, secured, false, tcpforward.MuxConfig{MaxStreams: roombroker.DedicatedMaxStreams})
+	mux, err := tcpforward.NewMux(ctx, secured, false, tcpforward.MuxConfig{MaxStreams: roombroker.DedicatedMaxStreams, WaitForSlot: true, Lifecycle: true})
 	if err != nil {
+		startupdiag.Failure(ctx, "DEDICATED_MUX", err)
 		trace.Add("GATEWAY_SESSION", "FAILED", "UNKNOWN_INTERNAL")
 		return nil, err
 	}
@@ -400,11 +413,13 @@ func openDirectory(ctx context.Context, raw []byte, directory bootstrap.Director
 		carrier.Close()
 		trace.Add("CLEANUP", "COMPLETED", "NONE")
 	})
+	go roombroker.MaintainLease(session.ctx, mux, descriptor.SetupID, session.Close)
 	session.diagnostic = func() sessiondiag.Report {
 		failure, failedAt := mux.Terminal()
 		report := sessiondiag.Capture(descriptor.SetupID, failure, failedAt, secured.ReliabilityStats(), carrier.Stats(), mux.Stats())
 		snapshot := trace.Snapshot()
 		report.Trace = &snapshot
+		report.SpeedProfile = profile.Name()
 		return report
 	}
 	session.metrics = func() map[string]any {

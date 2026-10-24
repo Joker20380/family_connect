@@ -15,11 +15,15 @@ import (
 type SeedConnector func(lifetime, ready context.Context, room roombroker.Room) (familysession.PacketEndpoint, error)
 
 type SeedManager struct {
-	mu        sync.Mutex
-	directory *Directory
-	running   bool
-	Event     func(string)
-	Publish   func(Directory) error
+	mu          sync.Mutex
+	directory   *Directory
+	running     bool
+	Event       func(string)
+	Publish     func(Directory) error
+	RotateAfter time.Duration
+	now         func() time.Time
+	lifetime    func(context.Context, time.Duration) (context.Context, context.CancelFunc)
+	after       func(time.Duration, func()) seedTimer
 }
 
 func TelemostSeed(lifetime, ready context.Context, room roombroker.Room) (familysession.PacketEndpoint, error) {
@@ -38,6 +42,9 @@ func (manager *SeedManager) Run(ctx context.Context, provider roombroker.RoomPro
 	if provider == nil || connect == nil || exchange == nil || ttl <= 0 || ttl > MaxAge || !hexID(family, 16) || !hexID(gateway, 16) {
 		return roombroker.Code("seed_configuration")
 	}
+	if manager.RotateAfter != 0 {
+		return manager.runOverlap(ctx, provider, connect, family, gateway, ttl, exchange)
+	}
 	manager.mu.Lock()
 	if manager.running {
 		manager.mu.Unlock()
@@ -53,7 +60,7 @@ func (manager *SeedManager) Run(ctx context.Context, provider roombroker.RoomPro
 	if err != nil || creationErr != nil || !roombroker.ValidJoinURL(room.JoinURL) || room.ID == "" {
 		return roombroker.Code("seed_creation_failed")
 	}
-	lifetime, stop := context.WithTimeout(ctx, ttl)
+	lifetime, stop := manager.withLifetime(ctx, ttl)
 	defer stop()
 	ready, cancel := context.WithTimeout(lifetime, ConnectTimeout)
 	carrier, err := connect(lifetime, ready, room)
@@ -66,7 +73,7 @@ func (manager *SeedManager) Run(ctx context.Context, provider roombroker.RoomPro
 		return roombroker.Code("seed_not_ready")
 	}
 	defer carrier.Close()
-	now := time.Now().UTC()
+	now := manager.timeNow().UTC()
 	expires, _ := lifetime.Deadline()
 	manager.mu.Lock()
 	manager.directory = &Directory{1, family, now, expires.UTC(), []Seed{{"telemost-webrtc", room.JoinURL, gateway}}}
@@ -97,11 +104,16 @@ func (manager *SeedManager) Handler(path string) http.Handler {
 			return
 		}
 		manager.mu.Lock()
-		defer manager.mu.Unlock()
-		if manager.directory == nil || manager.directory.Family != identity.Family || !time.Now().Before(manager.directory.ExpiresAt) {
+		var directory *Directory
+		if manager.directory != nil {
+			copy := *manager.directory
+			directory = &copy
+		}
+		manager.mu.Unlock()
+		if directory == nil || directory.Family != identity.Family || !manager.timeNow().Before(directory.ExpiresAt) {
 			writer.WriteHeader(http.StatusServiceUnavailable)
 			return
 		}
-		_ = json.NewEncoder(writer).Encode(manager.directory)
+		_ = json.NewEncoder(writer).Encode(directory)
 	})
 }

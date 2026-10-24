@@ -1,5 +1,33 @@
 # Dependency and repository licensing audit — 2026-09-25
 
+## Desktop restricted-chat adaptation — 2026-10-24
+
+The portable API/mailbox adapter derives from this project's accepted native105
+chat bridge and beta106 callers, with six exact source hashes recorded in
+`clients/shared/android106-chat.json`. It uses Go standard-library HTTP/TLS/net
+and the already pinned project carrier/ownership/service code. No new third-party
+dependency, Android binary, Python/C# cryptographic implementation or experimental
+transport is introduced. Existing native notices and source obligations remain;
+this statement is not installed-client or Windows-runtime release approval.
+
+## Linux voice adapter — 2026-10-23
+
+Accepted106's audio JNI uses unmodified Codec2 1.2.0, commit
+`06d4c11e699b0351765f10398abb4f663a984f36` (LGPL-2.1, upstream KissFFT BSD notices).
+Linux now dynamically calls the public C API via ctypes, with the same mode IDs,
+frame sizes, padding and peak normalization. There is no Python codec rewrite,
+Android binary reuse, or Sideband/LXST implementation copy. Opus/Ogg uses fixed
+GStreamer pipelines and the system libopus implementation (BSD-3-Clause plus
+its patent grant); GStreamer core/base/good are LGPL libraries/plugins.
+
+Actual local runtime: Codec2 package1.2.0-4, libopus1.6.1-1, GStreamer core1.28.2-1,
+base1.28.2-1ubuntu0.1, good1.28.2-2ubuntu0.4. System-package full copyright files
+were inspected; no such shared libraries are copied into an installer here.
+DEB dependencies and `packaging/linux/audio-runtime-notices.txt` record the boundary.
+Future AppImage/Windows bundling still requires exact binary/source manifests,
+full notices and LGPL source/rebuild/replacement obligations. This is not a claim
+that a new installer or the repository's wider dependency graph is release-cleared.
+
 ## Isolated carrier FEC laboratory — 2026-10-21
 
 The `carrier-fec-20261021` lab copy adds `github.com/klauspost/reedsolomon v1.12.4`
@@ -127,6 +155,7 @@ git ls-files '*LICENSE*' '*COPYING*' '*NOTICE*'
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Official Python `rns` | 1.5.1, existing lock and Android Gradle pin | Reticulum License | Existing identity/control; selected Home Gateway wire implementation | Yes, existing Android; no new artifact here; Windows worker proposed | No modification introduced here | Yes, complete copyright/permission text | Custom use restrictions; not MIT/public-domain implementation. Verify actual wheel and bundled notices before Windows packaging. |
 | pyserial | 3.5, existing pin | BSD-3-Clause, retained Android notice | Existing RNS runtime dependency | Yes, existing Android | No change here | Yes | No new dependency decision; retain notice. |
+| LXMF | 1.1.1, existing messenger hash lock | Reticulum License; installed wheel metadata verified | Existing accepted messaging core, now Linux adapter | Existing Android; Linux bundling workflow updated, no publication | No upstream modification | Complete2020–2025 Mark Qvist notice copied into Linux bundle licenses | Custom restrictions remain; not MIT. Exact wheel installed using the existing hash lock. |
 | Chaquopy | Existing Gradle plugin/runtime configuration; no version change | MIT for plugin, separate runtime dependency notices | Existing Android Python embedding | Yes, existing Android | No change here | Yes | Audit full runtime package when adding Home Gateway packaging. |
 | rns-vpn-rs | Upstream manifest 0.1.0, master inspected; not pinned for inclusion | MIT | PoC reference only | No | No | Not applicable to this codebase: no copied portions | Mutable reference URL is not an approved build input. Record immutable SHA before any adoption. |
 | Reticulum-rs / riptun / Rust dependency tree | Not selected or added | Not audited for inclusion | Evaluated only as dependencies of the reference project | No | No | N/A | STOP for inclusion until version-specific licensing and reference-stack wire compatibility are verified. |
@@ -155,6 +184,18 @@ Reference Python is selected because existing identity and Android embedding
 already use it; no alternative wire implementation is needed. Windows packaging,
 secure worker IPC and lifecycle remain implementation work. Recheck installed
 distribution metadata, hashes and transitive notices before a new release.
+
+Desktop106 continuation23.10: the private Linux component now packages the
+unmodified official RNS1.5.1 and pyserial3.5 source distributions in a bounded
+isolated runtime. Build verification checks their installed RECORD hashes and
+records every packaged source hash; the exact106 channel is pinned separately.
+Complete accepted-version Reticulum/PySerial notices are retained in
+`clients/rns/licenses/` and both the runtime and component archive. RNS's existing
+internal crypto provider is selected by isolation from external site-packages;
+no new crypto implementation or additional crypto dependency is introduced.
+The actual local RNS link has been exercised with this provider. This is not a
+comprehensive audit of other existing dependencies, a Windows runtime package,
+or authorization to publish the unsigned component.
 
 [rns-vpn-rs license](https://github.com/BeechatNetworkSystemsLtd/rns-vpn-rs/blob/master/LICENSE):
 MIT, Copyright (c) 2025 Beechat Network Systems Ltd. No files/portions imported,

@@ -37,6 +37,7 @@ type Snapshot struct {
 	CorrelationStatus string        `json:"correlation_status"`
 	Events            []Event       `json:"trace"`
 	FirstFailure      *Event        `json:"first_failure,omitempty"`
+	FirstClose        *Event        `json:"first_close,omitempty"`
 	Dropped           uint64        `json:"trace_dropped"`
 	ExportDropped     uint64        `json:"export_dropped"`
 }

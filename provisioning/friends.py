@@ -5,6 +5,7 @@ The owner persists keys before using it, owns cancellation and keeps calls off t
 thread. Server challenge consumption remains the authorization boundary.
 """
 import ipaddress
+import hashlib
 import json
 import re
 import time
@@ -18,12 +19,20 @@ class FriendsClient:
     LIMIT = 65536
     AUDIENCE = 'family-connect/enrollment/v1'
 
-    def __init__(self, http_client, device, *, clock=time.time):
+    def __init__(self, http_client, device, *, clock=time.time, cancelled=None, deadline=None):
         if http_client.base_url.scheme != 'https':
             raise ValueError('friends enrollment requires HTTPS')
         self.http = http_client
         self.device = device
         self.clock = clock
+        self.cancelled = cancelled
+        self.deadline = deadline
+
+    def _check_request(self):
+        if self.cancelled is not None and self.cancelled():
+            raise FriendsError('cancelled')
+        if self.deadline is not None and time.monotonic() >= self.deadline:
+            raise FriendsError('timeout')
 
     @classmethod
     def from_linux_store(cls, http_client, path, *, create=False, clock=time.time):
@@ -59,19 +68,30 @@ class FriendsClient:
     def _constant(_):
         raise ValueError("non-finite JSON number")
 
-    def _post(self, path, body):
+    def _post(self, path, body, *, limit=None, notice_conflict=False, identity_encoding=False, rate_limit=False):
         deadline = time.monotonic() + 15
         try:
-            with self.http.stream('POST', path, json=body, follow_redirects=False) as response:
+            self._check_request()
+            headers = {'Accept-Encoding': 'identity'} if identity_encoding else None
+            options = {} if self.deadline is None else dict(timeout=max(.001, self.deadline-time.monotonic()))
+            with self.http.stream('POST', path, json=body, follow_redirects=False, headers=headers, **options) as response:
+                self._check_request()
+                if response.status_code == 429 and rate_limit:
+                    raise FriendsError('rate_limited')
+                if response.status_code == 409 and notice_conflict:
+                    raise FriendsError('notice_conflict')
                 if response.status_code in (401, 403, 409):
                     raise FriendsError('access_rejected')
                 if response.status_code != 200:
                     raise FriendsError('service_unavailable')
+                if identity_encoding and response.headers.get('Content-Encoding', '').strip().lower() not in ('', 'identity'):
+                    raise FriendsError('invalid_response')
                 raw = bytearray()
                 for chunk in response.iter_bytes():
+                    self._check_request()
                     if time.monotonic() > deadline:
                         raise FriendsError('service_unavailable')
-                    if len(raw) + len(chunk) > self.LIMIT:
+                    if len(raw) + len(chunk) > (self.LIMIT if limit is None else limit):
                         raise FriendsError('invalid_response')
                     raw.extend(chunk)
             return json.loads(raw, object_pairs_hook=self._object,
@@ -80,7 +100,12 @@ class FriendsClient:
             raise
         except (ValueError, UnicodeError, RecursionError):
             raise FriendsError('invalid_response') from None
-        except Exception:
+        except Exception as failure:
+            self._check_request()
+            if self.deadline is not None:
+                from httpx import TimeoutException
+                if isinstance(failure, TimeoutException):
+                    raise FriendsError('timeout') from None
             raise FriendsError('service_unavailable') from None
 
     def _challenge(self, path, body, *, chat_public=None):
@@ -161,6 +186,34 @@ class FriendsClient:
             if type(response[key]) is not bool:
                 raise FriendsError('invalid_response')
         return response
+
+    def support_diagnostics(self, report):
+        from .support import SupportSnapshot
+        raw = SupportSnapshot.encode(report)
+        response = self._post('/friends/device/diagnostics', dict(
+            proof=self._proof('diagnostics:' + hashlib.sha256(raw.encode()).hexdigest()), report=raw),
+            limit=1024, identity_encoding=True, rate_limit=True)
+        self._fields(response, 'schema report_id stored_at')
+        if type(response['schema']) is not int or response['schema'] != 1 or response['report_id'] != report['report_id']:
+            raise FriendsError('invalid_response')
+        self._integer(response['stored_at'], 1)
+        if response['stored_at'] > SupportSnapshot.MAX_NUMBER:
+            raise FriendsError('invalid_response')
+        return response
+
+    def support_id(self, platform, version, version_code):
+        if (platform not in ('linux', 'windows') or type(version) is not str or
+                not re.fullmatch(r'[0-9A-Za-z][0-9A-Za-z.+_-]{0,63}', version) or
+                type(version_code) is not int or not 1 <= version_code <= 2147483647):
+            raise FriendsError('invalid_input')
+        response = self._post('/friends/device/support', dict(proof=self._proof('support'),
+            platform=platform, app_version=version, version_code=version_code))
+        self._fields(response, 'schema device_support_id')
+        if (type(response['schema']) is not int or response['schema'] != 1 or
+                not isinstance(response['device_support_id'], str) or not re.fullmatch(
+                    r'FC-[23456789ABCDEFGHJKMNPQRSTVWXYZ]{4}-[23456789ABCDEFGHJKMNPQRSTVWXYZ]{4}', response['device_support_id'])):
+            raise FriendsError('invalid_response')
+        return response['device_support_id']
 
     def configuration(self, country, anchor, *, floor=0, previous_hash=None):
         """Fetch and verify; the owner must persist the response before VPN apply.

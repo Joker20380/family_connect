@@ -1,0 +1,525 @@
+--- a/tcpforward/lifecycle101_test.go
++++ b/tcpforward/lifecycle101_test.go
+@@ -0,0 +1,188 @@
++package tcpforward
++
++import (
++	"bytes"
++	"context"
++	"encoding/binary"
++	"encoding/json"
++	"io"
++	"testing"
++	"time"
++	"unsafe"
++)
++
++func lifecycleMux(test *testing.T, window int) *Mux {
++	ctx, cancel := context.WithCancel(context.Background())
++	test.Cleanup(cancel)
++	return &Mux{window: window, ctx: ctx, cancel: cancel, config: MuxConfig{Lifecycle: true}, streams: make(map[uint32]*MuxStream), changed: make(chan struct{})}
++}
++
++func lifecycleRetire(mux *Mux, id uint32) *MuxStream {
++	stream := mux.makeStreamLocked(id)
++	stream.opened = true
++	mux.lifeLocked("opened", id, openOK, "peer")
++	stream.sendCredit -= 24
++	stream.resetLocked(ErrReset)
++	stream.send = nil
++	mux.lifeLocked("send_done", id, resetFrame, "local")
++	mux.removeLocked(id)
++	return stream
++}
++
++func lifecycleCredit(id uint32, credit int) muxFrame {
++	payload := make([]byte, 4)
++	binary.BigEndian.PutUint32(payload, uint32(credit))
++	return muxFrame{muxWindowUpdate, id, payload}
++}
++
++func TestLifecycle101CrossingContract(test *testing.T) {
++	for _, window := range []int{65536, 131072} {
++		mux := lifecycleMux(test, window)
++		retired := lifecycleRetire(mux, 47)
++		neighbor := mux.makeStreamLocked(49)
++		neighbor.opened = true
++		for _, frame := range []muxFrame{lifecycleCredit(47, 24), {dataFrame, 47, []byte("in flight")}, {finFrame, 47, nil}, {resetFrame, 47, nil}} {
++			mux.dispatchLocked(frame)
++		}
++		snapshot := mux.lifeSnapshotLocked()
++		if snapshot.Expected != 4 || snapshot.Violations != 0 || snapshot.Unclassified != 0 || mux.stats.ProtocolErrors != 4 {
++			test.Fatalf("unexpected classification %+v", snapshot)
++		}
++		if retired.receive != nil || retired.send != nil || retired.used != 0 || mux.streams[47] != nil {
++			test.Fatal("resurrected resources")
++		}
++		mux.dispatchLocked(muxFrame{dataFrame, 49, []byte("neighbor")})
++		output := make([]byte, 8)
++		count, err := neighbor.Read(output)
++		if err != nil || !bytes.Equal(output[:count], []byte("neighbor")) {
++			test.Fatal("neighbor")
++		}
++		mux.dispatchLocked(muxFrame{resetFrame, 47, nil})
++		if mux.lifeSnapshotLocked().Violations != 1 {
++			test.Fatal("duplicate after ordered terminal hidden")
++		}
++	}
++}
++
++func TestLifecycle101NegativeContract(test *testing.T) {
++	for _, window := range []int{65536, 131072} {
++		for _, name := range []string{"credit", "fin", "data_fin", "close", "malformed", "peer_reset", "protocol"} {
++			test.Run(name, func(test *testing.T) {
++				mux := lifecycleMux(test, window)
++				lifecycleRetire(mux, 7)
++				record := &mux.life.removed[0]
++				frame := muxFrame{finFrame, 7, nil}
++				switch name {
++				case "credit":
++					frame = lifecycleCredit(7, 25)
++				case "fin":
++					record.RemoteFIN = true
++				case "data_fin":
++					record.RemoteFIN = true
++					frame = muxFrame{dataFrame, 7, []byte("bad")}
++				case "close":
++					frame = muxFrame{closeFrame, 7, nil}
++				case "malformed":
++					frame = muxFrame{resetFrame, 7, []byte("bad")}
++				case "peer_reset":
++					record.PeerTerminal = true
++				case "protocol":
++					record.Reason = "protocol"
++				}
++				mux.dispatchLocked(frame)
++				if mux.lifeSnapshotLocked().Violations != 1 || mux.stats.ProtocolErrors != 1 {
++					test.Fatal("violation waived")
++				}
++			})
++		}
++	}
++}
++
++func TestLifecycle101GracefulTailAndAbort(test *testing.T) {
++	for _, window := range []int{65536, 131072} {
++		mux := lifecycleMux(test, window)
++		stream := mux.makeStreamLocked(51)
++		stream.opened = true
++		mux.lifeLocked("opened", 51, openOK, "peer")
++		mux.dispatchLocked(muxFrame{dataFrame, 51, []byte("tail")})
++		mux.dispatchLocked(muxFrame{finFrame, 51, nil})
++		if err := stream.CloseWrite(); err != nil {
++			test.Fatal(err)
++		}
++		if stream.terminal != nil || stream.used != 4 {
++			test.Fatal("half-close discarded tail")
++		}
++		output, err := io.ReadAll(stream)
++		if err != nil || string(output) != "tail" {
++			test.Fatal("tail", err)
++		}
++		stream.finishLocked(io.EOF)
++		mux.removeLocked(51)
++		mux.dispatchLocked(muxFrame{resetFrame, 51, nil})
++		if mux.lifeSnapshotLocked().Expected != 1 {
++			test.Fatal("crossed final reset")
++		}
++		mux.dispatchLocked(muxFrame{dataFrame, 51, []byte("bad")})
++		if mux.lifeSnapshotLocked().Violations != 1 {
++			test.Fatal("DATA after graceful close")
++		}
++	}
++}
++
++func TestLifecycle101BoundsExpiryAndGeneration(test *testing.T) {
++	mux := lifecycleMux(test, 131072)
++	for index := uint32(1); index < 2001; index += 2 {
++		lifecycleRetire(mux, index)
++		mux.dispatchLocked(muxFrame{resetFrame, index, nil})
++	}
++	snapshot := mux.lifeSnapshotLocked()
++	if len(snapshot.Incidents) != 32 || snapshot.IncidentDropped != 968 || snapshot.Expected != 1000 {
++		test.Fatal("incident bounds")
++	}
++	if snapshot.Incidents[0].Stream.ID != 1 {
++		test.Fatal("first context evicted by bulk")
++	}
++	snapshot.Incidents[0].Stream.SendDone[6] = 0
++	if mux.lifeSnapshotLocked().Incidents[0].Stream.SendDone[6] == 0 {
++		test.Fatal("aliased snapshot")
++	}
++	encoded, err := json.Marshal(mux.lifeSnapshotLocked())
++	if err != nil || len(encoded) > 98304 || unsafe.Sizeof(mux.life) > 128*1024 {
++		test.Fatal("export/memory bound", len(encoded), unsafe.Sizeof(mux.life))
++	}
++	fresh := lifecycleMux(test, 131072)
++	fresh.dispatchLocked(muxFrame{resetFrame, 1999, nil})
++	if fresh.lifeSnapshotLocked().Unclassified != 1 || fresh.stats.ProtocolErrors != 1 {
++		test.Fatal("old session blessed")
++	}
++	lifecycleRetire(fresh, 7)
++	fresh.life.removed[0].Removed = time.Now().Add(-61 * time.Second).UnixMilli()
++	fresh.dispatchLocked(muxFrame{resetFrame, 7, nil})
++	if fresh.lifeSnapshotLocked().Unclassified != 2 {
++		test.Fatal("expiry waived")
++	}
++}
++
++func TestLifecycle101LiveViolationAndPendingAbort(test *testing.T) {
++	for _, window := range []int{65536, 131072} {
++		mux := lifecycleMux(test, window)
++		stream := mux.makeStreamLocked(1)
++		stream.opened = true
++		mux.lifeLocked("opened", 1, openOK, "peer")
++		mux.dispatchLocked(lifecycleCredit(1, 1))
++		if mux.lifeSnapshotLocked().Violations != 1 || stream.terminal != ErrProtocol {
++			test.Fatal("live credit overflow")
++		}
++		stream = mux.makeStreamLocked(3)
++		stream.opened = true
++		mux.lifeLocked("opened", 3, openOK, "peer")
++		stream.resetLocked(ErrReset)
++		mux.dispatchLocked(muxFrame{finFrame, 3, nil})
++		if mux.lifeSnapshotLocked().Expected != 1 || len(stream.send) != 1 || stream.send[0].kind != resetFrame {
++			test.Fatal("pending reset crossing")
++		}
++		if count, err := stream.Write([]byte("late worker")); count != 0 || err != ErrReset {
++			test.Fatal("late worker resurrected stream")
++		}
++	}
++}
+--- a/tcpforward/mux.go
++++ b/tcpforward/mux.go
+@@ -319,6 +319,7 @@
+ 			credit := make([]byte, 4)
+ 			binary.BigEndian.PutUint32(credit, uint32(stream.creditPending))
+ 			stream.creditPending = 0
++			mux.lifeLocked("enqueue", id, muxWindowUpdate, "control")
+ 			return muxFrame{muxWindowUpdate, id, credit}, true
+ 		}
+ 		if len(stream.send) == 0 {
+@@ -502,10 +503,12 @@
+ 	}
+ 	if stream == nil {
+ 		mux.lifeLocked("unknown", frame.id, frame.kind, "missing")
++		mux.lifeFrameLocked(frame, false)
+ 		mux.stats.ProtocolErrors++
+ 		return
+ 	}
+ 	if stream.terminal != nil {
++		mux.lifeFrameLocked(frame, false)
+ 		return
+ 	}
+ 	invalid := false
+@@ -575,6 +578,7 @@
+ 			stream.closeRequested = true
+ 		}
+ 	case resetFrame:
++		stream.life.PeerTerminal = true
+ 		mux.stats.Resets++
+ 		stream.finishLocked(ErrReset)
+ 		mux.removeLocked(frame.id)
+@@ -582,6 +586,7 @@
+ 		invalid = true
+ 	}
+ 	if invalid {
++		mux.lifeFrameLocked(frame, true)
+ 		mux.stats.ProtocolErrors++
+ 		stream.resetLocked(ErrProtocol)
+ 	}
+--- a/tcpforward/mux_lifecycle.go
++++ b/tcpforward/mux_lifecycle.go
+@@ -2,6 +2,7 @@
+ 
+ import (
+ 	"context"
++	"encoding/binary"
+ 	"errors"
+ 	"io"
+ 	"time"
+@@ -17,19 +18,26 @@
+ }
+ 
+ type MuxLifeStream struct {
+-	ID            uint32 `json:"id"`
+-	Created       int64  `json:"created"`
+-	Opened        int64  `json:"opened"`
+-	Finished      int64  `json:"finished"`
+-	Removed       int64  `json:"removed"`
+-	Reason        string `json:"reason"`
+-	Sent          uint64 `json:"sent"`
+-	Received      uint64 `json:"received"`
+-	Used          int    `json:"used"`
+-	SendCredit    int    `json:"send_credit"`
+-	ReceiveCredit int    `json:"receive_credit"`
+-	LocalFIN      bool   `json:"local_fin"`
+-	RemoteFIN     bool   `json:"remote_fin"`
++	ID            uint32   `json:"id"`
++	Created       int64    `json:"created"`
++	Opened        int64    `json:"opened"`
++	Finished      int64    `json:"finished"`
++	Removed       int64    `json:"removed"`
++	Reason        string   `json:"reason"`
++	Sent          uint64   `json:"sent"`
++	Received      uint64   `json:"received"`
++	Used          int      `json:"used"`
++	SendCredit    int      `json:"send_credit"`
++	ReceiveCredit int      `json:"receive_credit"`
++	LocalFIN      bool     `json:"local_fin"`
++	RemoteFIN     bool     `json:"remote_fin"`
++	LocalAbort    bool     `json:"local_abort"`
++	PeerTerminal  bool     `json:"peer_terminal"`
++	PeerClose     bool     `json:"peer_close"`
++	Enqueued      [9]int64 `json:"enqueued"`
++	SendStarted   [9]int64 `json:"send_started"`
++	SendDone      [9]int64 `json:"send_done"`
++	ReceiveAt     [9]int64 `json:"receive_at"`
+ }
+ 
+ type MuxLifeIncident struct {
+@@ -38,15 +46,24 @@
+ 	Stream    MuxLifeStream `json:"stream"`
+ 	FailureAt int64         `json:"failure_at"`
+ 	Cancelled bool          `json:"cancelled"`
++	Class     string        `json:"class,omitempty"`
++	Detail    string        `json:"detail,omitempty"`
++	Bytes     int           `json:"bytes"`
++	Credit    int           `json:"credit"`
+ }
+ 
+ type MuxLifecycle struct {
+-	Events        []MuxLifeEvent   `json:"events"`
+-	Dropped       uint64           `json:"dropped"`
+-	FirstUnknown  *MuxLifeIncident `json:"first_unknown,omitempty"`
+-	FailureAt     int64            `json:"failure_at"`
+-	FailureReason string           `json:"failure_reason"`
+-	CloseAt       int64            `json:"close_at"`
++	Events          []MuxLifeEvent    `json:"events"`
++	Dropped         uint64            `json:"dropped"`
++	FirstUnknown    *MuxLifeIncident  `json:"first_unknown,omitempty"`
++	FailureAt       int64             `json:"failure_at"`
++	FailureReason   string            `json:"failure_reason"`
++	CloseAt         int64             `json:"close_at"`
++	Incidents       []MuxLifeIncident `json:"incidents"`
++	IncidentDropped uint64            `json:"incident_dropped"`
++	Expected        uint64            `json:"expected_crossings"`
++	Violations      uint64            `json:"actual_violations"`
++	Unclassified    uint64            `json:"unclassified"`
+ }
+ 
+ type muxLifeBuffer struct {
+@@ -58,6 +75,11 @@
+ 	failureAt     int64
+ 	failureReason string
+ 	closeAt       int64
++	incidents     [32]MuxLifeIncident
++	incidentCount uint64
++	expected      uint64
++	violations    uint64
++	unclassified  uint64
+ }
+ 
+ func lifeReason(err error) string {
+@@ -91,6 +113,18 @@
+ 	buffer.events[(buffer.count-1)%32] = event
+ 	stream := mux.streams[id]
+ 	if stream != nil {
++		if kind < 9 {
++			switch stage {
++			case "enqueue":
++				stream.life.Enqueued[kind] = event.At
++			case "send_start":
++				stream.life.SendStarted[kind] = event.At
++			case "send_done":
++				stream.life.SendDone[kind] = event.At
++			case "receive":
++				stream.life.ReceiveAt[kind] = event.At
++			}
++		}
+ 		if stage == "create" {
+ 			stream.life.ID = id
+ 			stream.life.Created = event.At
+@@ -129,6 +163,138 @@
+ 		}
+ 		buffer.first = incident
+ 	}
++	if stream == nil && (stage == "send_start" || stage == "send_done") && kind < 9 {
++		for index := range buffer.removed {
++			retired := &buffer.removed[index]
++			if retired.ID == id {
++				if stage == "send_start" {
++					retired.SendStarted[kind] = event.At
++				} else {
++					retired.SendDone[kind] = event.At
++				}
++				break
++			}
++		}
++	}
++}
++
++func (mux *Mux) lifeFrameLocked(frame muxFrame, liveViolation bool) {
++	if !mux.config.Lifecycle {
++		return
++	}
++	buffer := &mux.life
++	now := time.Now().UnixMilli()
++	incident := MuxLifeIncident{Event: MuxLifeEvent{buffer.count, now, frame.id, frame.kind, "unknown", "missing"}, FailureAt: buffer.failureAt, Cancelled: mux.ctx.Err() != nil, Bytes: len(frame.payload)}
++	if frame.kind == muxWindowUpdate && len(frame.payload) == 4 {
++		incident.Credit = int(binary.BigEndian.Uint32(frame.payload))
++	}
++	var retired *MuxLifeStream
++	if stream := mux.streams[frame.id]; stream != nil {
++		retired = &stream.life
++		if liveViolation {
++			incident.Event.Stage = "violation"
++		}
++	} else {
++		for index := range buffer.removed {
++			candidate := &buffer.removed[index]
++			if candidate.ID == frame.id && candidate.Created != 0 && now-candidate.Removed <= 60000 {
++				retired = candidate
++				break
++			}
++		}
++	}
++	if retired != nil {
++		incident.Known = true
++		incident.Stream = *retired
++	}
++	incident.Class, incident.Detail = "unclassified", "no_retained_history"
++	if liveViolation {
++		incident.Class, incident.Detail = "violation", "live_state"
++	} else if incident.Cancelled || incident.FailureAt != 0 {
++		incident.Detail = "after_session_failure"
++	} else if retired != nil {
++		incident.Class, incident.Detail = mux.lifeClassifyLocked(frame, retired)
++	}
++	switch incident.Class {
++	case "expected":
++		buffer.expected++
++	case "violation":
++		buffer.violations++
++	default:
++		buffer.unclassified++
++	}
++	if buffer.incidentCount < 32 {
++		buffer.incidents[buffer.incidentCount] = incident
++	}
++	buffer.incidentCount++
++	if buffer.first == nil && !liveViolation {
++		copy := incident
++		buffer.first = &copy
++	}
++}
++
++func (mux *Mux) lifeClassifyLocked(frame muxFrame, retired *MuxLifeStream) (string, string) {
++	if _, err := decodeMuxWindow(frame.encode(), mux.window); err != nil {
++		return "violation", "malformed"
++	}
++	if retired.PeerTerminal {
++		return "violation", "after_peer_terminal"
++	}
++	if frame.kind == resetFrame && ((retired.LocalAbort && retired.Reason == "reset") || (retired.Reason == "eof" && retired.LocalFIN && retired.RemoteFIN && retired.Used == 0)) {
++		retired.PeerTerminal = true
++		return "expected", "crossed_reset"
++	}
++	if !retired.LocalAbort || retired.Reason != "reset" {
++		return "violation", "not_local_abort"
++	}
++	if retired.PeerClose {
++		return "violation", "after_peer_terminal"
++	}
++	if frame.kind == openOK && retired.Opened == 0 && !mux.server {
++		retired.Opened = time.Now().UnixMilli()
++		return "expected", "cancelled_open"
++	}
++	if frame.kind == openError && retired.Opened == 0 && !mux.server {
++		var failure OpenError
++		if decodeJSON(frame.payload, &failure) == nil && (validError(failure.Code) || failure.Code == "stream_limit") {
++			retired.PeerTerminal = true
++			return "expected", "cancelled_open"
++		}
++	}
++	if retired.Opened == 0 {
++		return "violation", "not_opened"
++	}
++	switch frame.kind {
++	case dataFrame:
++		if retired.RemoteFIN {
++			return "violation", "data_after_fin"
++		}
++		if len(frame.payload) > retired.ReceiveCredit {
++			return "violation", "credit_overflow"
++		}
++		retired.ReceiveCredit -= len(frame.payload)
++		return "expected", "inflight_data_on_abort"
++	case muxWindowUpdate:
++		credit := int(binary.BigEndian.Uint32(frame.payload))
++		if credit > mux.window-retired.SendCredit {
++			return "violation", "credit_overflow"
++		}
++		retired.SendCredit += credit
++		return "expected", "inflight_credit_on_abort"
++	case finFrame:
++		if retired.RemoteFIN {
++			return "violation", "duplicate_fin"
++		}
++		retired.RemoteFIN = true
++		return "expected", "inflight_fin_on_abort"
++	case closeFrame:
++		if !retired.LocalFIN || !retired.RemoteFIN {
++			return "violation", "close_before_fin"
++		}
++		retired.PeerClose = true
++		return "expected", "crossed_close"
++	}
++	return "violation", "terminal_state"
+ }
+ 
+ func (mux *Mux) lifeSnapshotLocked() *MuxLifecycle {
+@@ -136,7 +302,13 @@
+ 		return nil
+ 	}
+ 	buffer := &mux.life
+-	snapshot := &MuxLifecycle{FailureAt: buffer.failureAt, FailureReason: buffer.failureReason, CloseAt: buffer.closeAt}
++	snapshot := &MuxLifecycle{FailureAt: buffer.failureAt, FailureReason: buffer.failureReason, CloseAt: buffer.closeAt, Expected: buffer.expected, Violations: buffer.violations, Unclassified: buffer.unclassified}
++	for index := uint64(0); index < min(buffer.incidentCount, 32); index++ {
++		snapshot.Incidents = append(snapshot.Incidents, buffer.incidents[index])
++	}
++	if buffer.incidentCount > 32 {
++		snapshot.IncidentDropped = buffer.incidentCount - 32
++	}
+ 	start := uint64(0)
+ 	if buffer.count > 32 {
+ 		start = buffer.count - 32
+--- a/tcpforward/mux_stream.go
++++ b/tcpforward/mux_stream.go
+@@ -168,8 +168,10 @@
+ 	if stream.terminal != nil {
+ 		return
+ 	}
++	stream.life.LocalAbort = true
+ 	stream.finishLocked(err)
+ 	stream.send = []muxFrame{{resetFrame, stream.id, nil}}
++	stream.mux.lifeLocked("enqueue", stream.id, resetFrame, "control")
+ 	stream.mux.stats.Resets++
+ 	stream.mux.signalLocked()
+ }
+@@ -291,6 +293,7 @@
+ 	stream.localFIN = true
+ 	stream.localFINCount++
+ 	stream.send = append(stream.send, muxFrame{finFrame, stream.id, nil})
++	mux.lifeLocked("enqueue", stream.id, finFrame, "control")
+ 	mux.signalLocked()
+ 	return nil
+ }
+@@ -313,6 +316,7 @@
+ 		if !stream.closing {
+ 			stream.closing = true
+ 			stream.send = append(stream.send, muxFrame{closeFrame, stream.id, nil})
++			mux.lifeLocked("enqueue", stream.id, closeFrame, "control")
+ 		}
+ 		mux.signalLocked()
+ 		timer := time.NewTimer(10 * time.Second)

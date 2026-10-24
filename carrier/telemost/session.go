@@ -13,6 +13,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/Joker20380/family_connect/carrier/localwrite"
 	"github.com/Joker20380/family_connect/carrier/sessiontrace"
 	"github.com/Joker20380/family_connect/carrier/underlay"
 	"github.com/gorilla/websocket"
@@ -42,7 +43,8 @@ const (
 	// amount crosses this threshold, providing simple backpressure.
 	dcBufferedHighWaterMark = 1 << 20
 
-	sendQueueSize = 256
+	sendQueueSize    = 256
+	receiveQueueSize = 64
 )
 
 // Mode selects the carrier transport.
@@ -211,12 +213,19 @@ func New(ctx context.Context, cfg Config) (*Session, error) {
 	s.subSequence.Store(1)
 	s.ctx, s.cancel = context.WithCancel(ctx)
 	s.cleanupDone = make(chan struct{})
-	s.recvQueue = make(chan receiveMessage, 16)
+	s.recvQueue = make(chan receiveMessage, receiveQueueSize)
 	s.pendingICE = make(map[string][]webrtc.ICECandidateInit)
 	s.reassembler = newReassembler(s.senderID, s.deliver)
 	s.reassembler.trace = cfg.Trace
 	s.configureReceiveObservation()
-	go func() { <-s.ctx.Done(); _ = s.Close() }()
+	go func() {
+		<-s.ctx.Done()
+		source := "PARENT_CANCELLED"
+		if errors.Is(context.Cause(s.ctx), context.DeadlineExceeded) {
+			source = "PARENT_DEADLINE"
+		}
+		_ = s.closeFrom(source)
+	}()
 	return s, nil
 }
 
@@ -233,7 +242,7 @@ func (s *Session) deliverObserved(payload []byte, point sessiontrace.Boundary) {
 	case s.recvQueue <- packReceive(payload, point):
 	case <-s.closeCh:
 	default:
-		s.signalClosed(errors.New("telemost: receive queue full"))
+		s.signalClosedAt(errors.New("telemost: receive queue full"), "RECEIVE_QUEUE_FULL")
 	}
 }
 
@@ -370,6 +379,10 @@ func (s *Session) SendContext(ctx context.Context, payload []byte) error {
 	if err != nil {
 		return err
 	}
+	local, err := localwrite.Register(ctx, len(frames))
+	if err != nil {
+		return err
+	}
 	for _, frag := range frames {
 		out := frag
 		if s.mode == ModeVP8 {
@@ -383,7 +396,7 @@ func (s *Session) SendContext(ctx context.Context, payload []byte) error {
 		}
 		point.Stage, point.Direction, point.Result = "carrier_queued", "tx", "ok"
 		select {
-		case s.sendQueue <- outboundFrame{data: out, point: point}:
+		case s.sendQueue <- outboundFrame{data: out, point: point, local: local}:
 			s.cfg.Trace.Boundary(point)
 			s.statsMu.Lock()
 			s.queued = advanceFragment(s.queued, frag)
@@ -464,9 +477,13 @@ func (s *Session) Stats() Stats {
 
 // Close tears down the session. It is idempotent.
 func (s *Session) Close() error {
+	return s.closeFrom("UPPER_CLOSE")
+}
+
+func (s *Session) closeFrom(source string) error {
 	s.cfg.Trace.Add("LOCAL_CLOSE", "STARTED", "NONE")
 	defer s.cfg.Trace.Add("CLEANUP", "COMPLETED", "NONE")
-	s.signalClosed(ErrClosed)
+	s.signalClosedAt(ErrClosed, source)
 	s.cleanupOnce.Do(func() {
 		s.initMu.Lock()
 		defer s.initMu.Unlock()
@@ -706,7 +723,7 @@ func (s *Session) onSubscriberState(state webrtc.PeerConnectionState) {
 		s.subReady.Store(false)
 		if !s.closed.Load() {
 			s.disconnects.Add(1)
-			s.signalClosed(errors.New("telemost: subscriber disconnected"))
+			s.signalClosedAt(errors.New("telemost: subscriber disconnected"), "SUBSCRIBER_DISCONNECTED")
 		}
 	}
 }
@@ -724,7 +741,7 @@ func (s *Session) onPublisherState(state webrtc.PeerConnectionState) {
 		s.pubReady.Store(false)
 		if !s.closed.Load() {
 			s.disconnects.Add(1)
-			s.signalClosed(errors.New("telemost: publisher disconnected"))
+			s.signalClosedAt(errors.New("telemost: publisher disconnected"), "PUBLISHER_DISCONNECTED")
 		}
 	}
 }

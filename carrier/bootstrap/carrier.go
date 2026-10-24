@@ -10,6 +10,7 @@ import (
 
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/roombroker"
+	"github.com/Joker20380/family_connect/carrier/startupdiag"
 )
 
 const envelopeSize = 69
@@ -107,10 +108,12 @@ func connectLease(ctx context.Context, carrier familysession.PacketEndpoint) (*l
 	nextOpen := time.Time{}
 	for {
 		if ctx.Err() != nil {
+			startupdiag.Failure(ctx, "SEED_ADMISSION", ctx.Err())
 			return nil, roombroker.Code("seed_busy_or_unavailable")
 		}
 		if !time.Now().Before(nextOpen) {
 			if err := carrier.SendContext(ctx, encodePacket(packet{kind: 'O', client: session.client})); err != nil {
+				startupdiag.Failure(ctx, "SEED_ADMISSION", err)
 				return nil, roombroker.Code("seed_unavailable")
 			}
 			nextOpen = time.Now().Add(time.Second)
@@ -122,6 +125,7 @@ func connectLease(ctx context.Context, carrier familysession.PacketEndpoint) (*l
 			continue
 		}
 		if err != nil {
+			startupdiag.Failure(ctx, "SEED_ADMISSION", err)
 			return nil, roombroker.Code("seed_busy_or_unavailable")
 		}
 		message, ok := decodePacket(raw)

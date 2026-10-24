@@ -17,6 +17,14 @@ import (
 	"github.com/Joker20380/family_connect/carrier/telemost"
 )
 
+func TestAdmissionCountersCaptured(test *testing.T) {
+	report := Capture("fixture", nil, time.Time{}, reliablestream.Stats{}, telemost.Stats{}, tcpforward.MuxStats{
+		AdmissionWaits: 9, AdmissionRejected: 8, AdmissionTimeouts: 7, AdmissionCancelled: 6, AdmissionWaiting: 5, LeaseRejected: 4})
+	if report.AdmissionWaits != 9 || report.AdmissionRejected != 8 || report.AdmissionTimeouts != 7 || report.AdmissionCancelled != 6 || report.AdmissionWaiting != 5 || report.LeaseRejected != 4 {
+		test.Fatal(report)
+	}
+}
+
 func TestReasonTypedAndNeverRaw(test *testing.T) {
 	for _, row := range []struct {
 		err  error

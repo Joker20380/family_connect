@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "reference": "android106-native105",
+  "source_inventory_sha256": "8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c",
+  "accepted_sources": {
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatAudio.java": "caf59980f5415f8dac762c03a459d5b9235ae8d3e104a6133d6cd39b0d6315bb",
+    "clients/android/app/src/main/java/com/familyconnect/app/RadioCodec.java": "d4c8a0cdac24786b49b12fb4052511e445df5e264d3e7a369020366f018008f1",
+    "clients/android/app/src/main/java/com/familyconnect/app/RadioSettings.java": "cfc7a5eb2d5593b17cc3eace75f45730d7bfd8501a4f28339ed87435c7d4f293",
+    "clients/android/app/src/main/java/com/familyconnect/app/VoiceGesture.java": "d9be1e1ab6f9c7f11db3ef9b2f4f96e78b03ea3f49ba9e19da0e27a5302c8a70",
+    "clients/android/app/src/main/java/com/familyconnect/app/VoiceHoldButton.java": "c6ed05d2cd8ce8415cc9cbcecc305e37e77ad9a710511f0763a32b25fdbc7522",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatVoiceView.java": "8f64d430ad9828f231ae20794c2575d2a27d409d27d75111d086ec491b161398",
+    "clients/android/app/src/main/java/com/familyconnect/app/ChatActivity.java": "1c5a15bd62b0b57367e7f214503efa8523e775a65e5599de3151db6b927300fa",
+    "clients/android/audio/native/radio.c": "519eae9e967e8d3b79ca03595c465906a27148f8bdde30d5d4b98fbd0fbffe46",
+    "clients/android/audio/assets/audio-licenses/INTEGRATION.txt": "0274fa096ddfa44a0162641bd7d383c56cdac8b6ae1eac4f101dd3f3c199f6a5"
+  },
+  "codec2": {
+    "version": "1.2.0",
+    "commit": "06d4c11e699b0351765f10398abb4f663a984f36",
+    "linkage": "system shared library via public C API; no codec implementation copied"
+  },
+  "limits": {
+    "max_bytes": 131072,
+    "max_millis": 60000,
+    "min_record_millis": 400,
+    "hold_delay_millis": 180,
+    "cancel_left_pixels": 80,
+    "lock_up_pixels": 64
+  },
+  "modes": {
+    "16": {
+      "codec": "Opus/Ogg",
+      "rate": 16000,
+      "channels": 1,
+      "bitrate": 12000
+    },
+    "7": {
+      "codec": "Codec2",
+      "rate": 8000,
+      "channels": 1,
+      "bitrate": 1600,
+      "samples": 320,
+      "bytes": 8,
+      "library_mode": 2
+    },
+    "8": {
+      "codec": "Codec2",
+      "rate": 8000,
+      "channels": 1,
+      "bitrate": 2400,
+      "samples": 160,
+      "bytes": 6,
+      "library_mode": 1
+    },
+    "9": {
+      "codec": "Codec2",
+      "rate": 8000,
+      "channels": 1,
+      "bitrate": 3200,
+      "samples": 160,
+      "bytes": 8,
+      "library_mode": 0
+    }
+  },
+  "linux_adaptation": [
+    "GStreamer fixed app-owned pipelines, bounded PCM memory; no Android binary",
+    "Explicit send after preview; navigation cancels unsent audio",
+    "Per-contact Codec2 confirmation and selected mode in encrypted existing Store record",
+    "DeviceMonitor stops output on sink removal/change; hardware acceptance separate"
+  ],
+  "acceptance": {
+    "android_changed": false,
+    "hardware_microphone": "NOT_RUN",
+    "physical_android_interop": "NOT_RUN",
+    "windows": "NOT_IMPLEMENTED"
+  }
+}

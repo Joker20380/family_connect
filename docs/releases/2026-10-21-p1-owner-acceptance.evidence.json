@@ -1,0 +1,831 @@
+{
+  "schema": 1,
+  "decision": "P1_NOT_ACCEPTED_OWNER_RESTORED_P0",
+  "goal_accelerated_profile_left_on_phone": false,
+  "installed": {
+    "version": "0.1.18-beta100-lifecycle",
+    "version_code": 100,
+    "apk_sha256": "1eb04cc6082f6a03380b99e8a47053d51efd8e6098c0c135075ac030228061e0",
+    "native_sha256": "da6be2bbee9d65dff074aef09c4dd795b7d6c3f4270545853968486ee134c35e",
+    "gateway_sha256": "f631bd997ffc3a58a3216f8657062bef3edb1dcf38ec340c94dd26d3c625763e",
+    "gateway_profile_sha256": "362e5c0895c5e1cb308edf054855f782a5a9734fc1860b04f5913892cbce8765"
+  },
+  "phases": [
+    {
+      "phase": "p0a",
+      "profile": "P0",
+      "single": {
+        "flows": 1,
+        "seconds": 55.31000000005588,
+        "bytes": 4194304,
+        "mbit_s": 0.6066612185855379,
+        "completed": 1
+      },
+      "aggregate": {
+        "flows": 2,
+        "seconds": 32.800000000046566,
+        "bytes": 4194304,
+        "mbit_s": 1.0230009756083038,
+        "completed": 2
+      },
+      "completed": 15,
+      "attempts": 15,
+      "idle": {
+        "count": 6,
+        "median_seconds": 3.177507,
+        "max_seconds": 4.159206,
+        "ttfb_median_seconds": 2.9749980000000003,
+        "ttfb_max_seconds": 4.158299,
+        "p99_not_estimated": true
+      },
+      "loaded": {
+        "count": 6,
+        "median_seconds": 2.887313,
+        "max_seconds": 4.253728,
+        "ttfb_median_seconds": 2.886914,
+        "ttfb_max_seconds": 4.061589,
+        "p99_not_estimated": true
+      },
+      "both_limits": {
+        "local_send": 8,
+        "local_receive": 16,
+        "peer_receive": 16,
+        "effective_send": 8,
+        "local_write_completion": false
+      },
+      "mux_window": 65536,
+      "resources": {
+        "gateway_cpu_percent_one_core": 8.17899178541394,
+        "gateway_rss_max_kib": 55636,
+        "samples": 123
+      },
+      "retry_bytes": {
+        "android": 2601,
+        "gateway": 1612692,
+        "scope": "whole session including background and gateway cleanup"
+      },
+      "android_raw_protocol_errors": 0,
+      "gateway_raw_protocol_errors": 0
+    },
+    {
+      "phase": "p1a",
+      "profile": "P1",
+      "single": {
+        "flows": 1,
+        "seconds": 24.020000000018626,
+        "bytes": 4194304,
+        "mbit_s": 1.3969372189830966,
+        "completed": 1
+      },
+      "aggregate": {
+        "flows": 2,
+        "seconds": 14.299999999813735,
+        "bytes": 4194304,
+        "mbit_s": 2.34646377625434,
+        "completed": 2
+      },
+      "completed": 15,
+      "attempts": 15,
+      "idle": {
+        "count": 6,
+        "median_seconds": 2.4387695,
+        "max_seconds": 4.785608,
+        "ttfb_median_seconds": 2.410699,
+        "ttfb_max_seconds": 4.70224,
+        "p99_not_estimated": true
+      },
+      "loaded": {
+        "count": 6,
+        "median_seconds": 2.080711,
+        "max_seconds": 3.45941,
+        "ttfb_median_seconds": 2.0799465,
+        "ttfb_max_seconds": 3.447683,
+        "p99_not_estimated": true
+      },
+      "both_limits": {
+        "local_send": 32,
+        "local_receive": 32,
+        "peer_receive": 32,
+        "effective_send": 32,
+        "local_write_completion": false
+      },
+      "mux_window": 131072,
+      "resources": {
+        "gateway_cpu_percent_one_core": 8.943904486349565,
+        "gateway_rss_max_kib": 60060,
+        "samples": 72
+      },
+      "retry_bytes": {
+        "android": 3513,
+        "gateway": 1904150,
+        "scope": "whole session including background and gateway cleanup"
+      },
+      "android_raw_protocol_errors": 0,
+      "gateway_raw_protocol_errors": 0
+    },
+    {
+      "phase": "p1b",
+      "profile": "P1",
+      "single": {
+        "flows": 1,
+        "seconds": 23.25,
+        "bytes": 4194304,
+        "mbit_s": 1.443201376344086,
+        "completed": 1
+      },
+      "aggregate": {
+        "flows": 2,
+        "seconds": 14.979999999981374,
+        "bytes": 4194304,
+        "mbit_s": 2.2399487316449744,
+        "completed": 2
+      },
+      "completed": 15,
+      "attempts": 15,
+      "idle": {
+        "count": 6,
+        "median_seconds": 2.5051755,
+        "max_seconds": 3.131048,
+        "ttfb_median_seconds": 2.5048225000000004,
+        "ttfb_max_seconds": 3.130064,
+        "p99_not_estimated": true
+      },
+      "loaded": {
+        "count": 6,
+        "median_seconds": 2.112316,
+        "max_seconds": 3.588815,
+        "ttfb_median_seconds": 2.1115875,
+        "ttfb_max_seconds": 3.58852,
+        "p99_not_estimated": true
+      },
+      "both_limits": {
+        "local_send": 32,
+        "local_receive": 32,
+        "peer_receive": 32,
+        "effective_send": 32,
+        "local_write_completion": false
+      },
+      "mux_window": 131072,
+      "resources": {
+        "gateway_cpu_percent_one_core": 6.417327317428042,
+        "gateway_rss_max_kib": 52144,
+        "samples": 72
+      },
+      "retry_bytes": {
+        "android": 1089,
+        "gateway": 1553310,
+        "scope": "whole session including background and gateway cleanup"
+      },
+      "android_raw_protocol_errors": 0,
+      "gateway_raw_protocol_errors": 0
+    },
+    {
+      "phase": "p0b",
+      "profile": "P0",
+      "single": {
+        "flows": 1,
+        "seconds": 53.110000000102445,
+        "bytes": 4194304,
+        "mbit_s": 0.6317912257566424,
+        "completed": 1
+      },
+      "aggregate": {
+        "flows": 2,
+        "seconds": 34.72999999998137,
+        "bytes": 4194304,
+        "mbit_s": 0.9661512237264035,
+        "completed": 2
+      },
+      "completed": 15,
+      "attempts": 15,
+      "idle": {
+        "count": 6,
+        "median_seconds": 2.705708,
+        "max_seconds": 3.319537,
+        "ttfb_median_seconds": 2.705085,
+        "ttfb_max_seconds": 3.254145,
+        "p99_not_estimated": true
+      },
+      "loaded": {
+        "count": 6,
+        "median_seconds": 3.001595,
+        "max_seconds": 4.096787,
+        "ttfb_median_seconds": 2.981538,
+        "ttfb_max_seconds": 4.096302,
+        "p99_not_estimated": true
+      },
+      "both_limits": {
+        "local_send": 8,
+        "local_receive": 16,
+        "peer_receive": 16,
+        "effective_send": 8,
+        "local_write_completion": false
+      },
+      "mux_window": 65536,
+      "resources": {
+        "gateway_cpu_percent_one_core": 6.2954119031875635,
+        "gateway_rss_max_kib": 50140,
+        "samples": 122
+      },
+      "retry_bytes": {
+        "android": 5702,
+        "gateway": 1374910,
+        "scope": "whole session including background and gateway cleanup"
+      },
+      "android_raw_protocol_errors": 0,
+      "gateway_raw_protocol_errors": 0
+    }
+  ],
+  "contrasts": [
+    {
+      "baseline": "p0a",
+      "candidate": "p1a",
+      "single_ratio": 2.302664446295295,
+      "aggregate_ratio": 2.2937062937394264,
+      "single_pass": true,
+      "aggregate_pass": true,
+      "small_ratios": {
+        "idle": {
+          "median_seconds": 0.7675103469480948,
+          "max_seconds": 1.1506061493467743
+        },
+        "loaded": {
+          "median_seconds": 0.7206392240813518,
+          "max_seconds": 0.813265446215649
+        }
+      },
+      "latency_review_required": false
+    },
+    {
+      "baseline": "p0b",
+      "candidate": "p1b",
+      "single_ratio": 2.2843010752732233,
+      "aggregate_ratio": 2.3184245660897567,
+      "single_pass": true,
+      "aggregate_pass": true,
+      "small_ratios": {
+        "idle": {
+          "median_seconds": 0.9258853874845328,
+          "max_seconds": 0.9432182861646067
+        },
+        "loaded": {
+          "median_seconds": 0.7037311829210803,
+          "max_seconds": 0.8760072222451399
+        }
+      },
+      "latency_review_required": false
+    }
+  ],
+  "active": {
+    "duration_seconds": 917.8030155260058,
+    "attempts": 35,
+    "complete": 35,
+    "requested_bytes": 4226048,
+    "small_count": 31,
+    "small_median_seconds": 2.90924,
+    "small_max_seconds": 5.155503,
+    "workload": "31x1KiB nominal30s intervals;4x1MiB nominal0/300/600/900s;not sustained saturation",
+    "android_raw_protocol_errors": 14,
+    "gateway_raw_protocol_errors": 3,
+    "clean_acceptance": false,
+    "reason": "NOT_ALL_NEW_UNKNOWN_STREAM_EVENTS_HAVE_COMPLETE_LIFECYCLE_EVIDENCE",
+    "measured_transfer_failure": false,
+    "native_cleanup": "cleanup_completed",
+    "gateway_terminal_before_disconnect": false,
+    "gateway_terminal": "recovery_exhausted",
+    "post_disconnect_terminal_confirmation_seconds": 21.254068613052368
+  },
+  "ordinary_p1_reconnect": {
+    "no_profile_rewrite": true,
+    "seconds": 31.67757797241211,
+    "both_limits": {
+      "local_send": 32,
+      "local_receive": 32,
+      "peer_receive": 32,
+      "effective_send": 32,
+      "local_write_completion": false
+    },
+    "mux_window": 131072,
+    "https_probe_complete": true
+  },
+  "final_owner": {
+    "profile": "P0",
+    "state": "CONNECTED",
+    "capture": true,
+    "readiness": "READY",
+    "both_limits": {
+      "local_send": 8,
+      "local_receive": 16,
+      "peer_receive": 16,
+      "effective_send": 8,
+      "local_write_completion": false
+    },
+    "mux_window": 65536,
+    "https_probe_complete": true,
+    "transport": "MESH"
+  },
+  "attempts": [
+    {
+      "label": "active",
+      "profile": "P1",
+      "mode": "active",
+      "requested_bound": 4226048,
+      "actual_requested": 4226048,
+      "attempts": 35,
+      "complete": 35,
+      "failure": null
+    },
+    {
+      "label": "final",
+      "profile": "P1",
+      "mode": "probe",
+      "requested_bound": 1024,
+      "actual_requested": 1024,
+      "attempts": 1,
+      "complete": 1,
+      "failure": null
+    },
+    {
+      "label": "p0a",
+      "profile": "P0",
+      "mode": "phase",
+      "requested_bound": 8400896,
+      "actual_requested": 8400896,
+      "attempts": 15,
+      "complete": 15,
+      "failure": null
+    },
+    {
+      "label": "p0b",
+      "profile": "P0",
+      "mode": "phase",
+      "requested_bound": 8400896,
+      "actual_requested": 8400896,
+      "attempts": 15,
+      "complete": 15,
+      "failure": null
+    },
+    {
+      "label": "p1a",
+      "profile": "P1",
+      "mode": "phase",
+      "requested_bound": 8400896,
+      "actual_requested": 8400896,
+      "attempts": 15,
+      "complete": 15,
+      "failure": null
+    },
+    {
+      "label": "p1b",
+      "profile": "P1",
+      "mode": "phase",
+      "requested_bound": 8400896,
+      "actual_requested": 8400896,
+      "attempts": 15,
+      "complete": 15,
+      "failure": null
+    },
+    {
+      "label": "probe100a",
+      "profile": "P0",
+      "mode": "probe",
+      "requested_bound": 1024,
+      "actual_requested": 1024,
+      "attempts": 1,
+      "complete": 1,
+      "failure": null
+    },
+    {
+      "label": "restore",
+      "profile": "P0",
+      "mode": "probe",
+      "requested_bound": 1024,
+      "actual_requested": 1024,
+      "attempts": 1,
+      "complete": 1,
+      "failure": null
+    }
+  ],
+  "requested_total": 37832704,
+  "cap_bytes": 67108864,
+  "tests": {
+    "jvm": 202,
+    "python_focused": 13,
+    "go_race": [
+      "tcpforward",
+      "sessiondiag",
+      "wholedevice",
+      "reliablestream",
+      "familysession"
+    ],
+    "full_platform_ci": "NOT_RUN"
+  },
+  "invariants": {
+    "runtime_transport_patch": false,
+    "q1": false,
+    "packing": false,
+    "fec": false,
+    "quic": false,
+    "others_profiles_changed": false,
+    "public_release": false,
+    "push": false,
+    "authority_identity_keys_floors_preserved": true,
+    "renewal_preserved": true
+  },
+  "limitations": [
+    "Historical96/newP0 regression unresolved",
+    "Android final counters are pre-stop; native stop success separately observed",
+    "Gateway recovery_exhausted after drained Disconnect retained, not relabeled as normal",
+    "Some lifecycle burst events lost in bounded32-event history",
+    "No forced network-loss auto-recovery or overnight claim",
+    "Random HTTP bodies: observed hash, not independent origin hash",
+    "Additional late USB snapshot unavailable; guard not bypassed. Last complete profile/smoke17:20; OS/binary/P0 operator readback unchanged17:26:51"
+  ],
+  "historical_top_level_scope": "Original beta100 decision and measurements remain unchanged",
+  "latest_decision": "ACCEPTED_BOUNDED_ON_OWNER",
+  "continuation101": {
+    "decision": "ACCEPTED_BOUNDED_ON_OWNER",
+    "speed_evidence": "SPEED_GAIN_CONFIRMED_BOUNDED",
+    "historical_incomplete": "HISTORICAL_UNRESOLVED_8",
+    "scope": "owner only; no fleet/public admission",
+    "functional_transport_fix": false,
+    "q1": false,
+    "installed": {
+      "code": 101,
+      "version": "0.1.18-beta101-lifecycle",
+      "uid": 10283,
+      "apk_sha256": "3c023e39d95e29fe0561dc462e28f1e643b9e14558cf49700d58df528b2963d9",
+      "native_sha256": "97d0bf793f8c4bb9975f32579f19369df0e7201786609ab9f46decdea3fec263",
+      "gateway_sha256": "3a0804cd3da63135dce387d1dff9afdc4588562186abea2e5d00da1d9f5c31ae",
+      "gateway_profile_sha256": "362e5c0895c5e1cb308edf054855f782a5a9734fc1860b04f5913892cbce8765",
+      "source_inventory_sha256": "d52974253bbdc1dd5f471cf1fda070ba706b0d576634b69f5d69c058d043f57e",
+      "scope": "installed owner APK and loaded shared gateway; other profiles unchanged"
+    },
+    "phases": [
+      {
+        "profile": "P0",
+        "single": {
+          "flows": 1,
+          "seconds": 55.12000000011176,
+          "bytes": 4194304,
+          "mbit_s": 0.608752394773802,
+          "completed": 1
+        },
+        "aggregate": {
+          "flows": 2,
+          "seconds": 32.8499999998603,
+          "bytes": 4194304,
+          "mbit_s": 1.0214438965035828,
+          "completed": 2
+        },
+        "completed": 15,
+        "attempts": 15,
+        "requested": 8400896,
+        "idle": {
+          "count": 6,
+          "median_seconds": 2.9248065,
+          "max_seconds": 4.2584,
+          "ttfb_median_seconds": 2.924322,
+          "ttfb_max_seconds": 4.258029,
+          "p99_not_estimated": true
+        },
+        "loaded": {
+          "count": 6,
+          "median_seconds": 2.7125250000000003,
+          "max_seconds": 3.239952,
+          "ttfb_median_seconds": 2.712102,
+          "ttfb_max_seconds": 3.147782,
+          "p99_not_estimated": true
+        },
+        "both_limits": {
+          "local_send": 8,
+          "local_receive": 16,
+          "peer_receive": 16,
+          "effective_send": 8,
+          "local_write_completion": false
+        },
+        "mux_window": 65536,
+        "stable_session": true,
+        "network": "CELLULAR",
+        "resources": {
+          "gateway_cpu_percent_one_core": 6.164087408663572,
+          "gateway_rss_max_kib": 42932,
+          "samples": 119
+        },
+        "retry_bytes": {
+          "android": 4537,
+          "gateway": 1183311,
+          "scope": "whole session including background and gateway cleanup"
+        },
+        "label": "l101-p0",
+        "lifecycle": {
+          "android": {
+            "raw_protocol_errors": 1,
+            "expected_crossings": 1,
+            "expected_raw": 1,
+            "actual_violations": 0,
+            "unclassified": 0,
+            "incident_dropped": 0,
+            "complete": true,
+            "clean": true,
+            "raw_counter_not_rewritten": true
+          },
+          "gateway": {
+            "raw_protocol_errors": 1,
+            "expected_crossings": 1,
+            "expected_raw": 1,
+            "actual_violations": 0,
+            "unclassified": 0,
+            "incident_dropped": 0,
+            "complete": true,
+            "clean": true,
+            "raw_counter_not_rewritten": true
+          }
+        }
+      },
+      {
+        "profile": "P1",
+        "single": {
+          "flows": 1,
+          "seconds": 23.820000000065193,
+          "bytes": 4194304,
+          "mbit_s": 1.4086663308105862,
+          "completed": 1
+        },
+        "aggregate": {
+          "flows": 2,
+          "seconds": 14.209999999962747,
+          "bytes": 4194304,
+          "mbit_s": 2.3613252639048534,
+          "completed": 2
+        },
+        "completed": 15,
+        "attempts": 15,
+        "requested": 8400896,
+        "idle": {
+          "count": 6,
+          "median_seconds": 3.031146,
+          "max_seconds": 3.404048,
+          "ttfb_median_seconds": 2.7138635,
+          "ttfb_max_seconds": 3.403612,
+          "p99_not_estimated": true
+        },
+        "loaded": {
+          "count": 6,
+          "median_seconds": 2.0430764999999997,
+          "max_seconds": 2.472709,
+          "ttfb_median_seconds": 2.0426655,
+          "ttfb_max_seconds": 2.472455,
+          "p99_not_estimated": true
+        },
+        "both_limits": {
+          "local_send": 32,
+          "local_receive": 32,
+          "peer_receive": 32,
+          "effective_send": 32,
+          "local_write_completion": false
+        },
+        "mux_window": 131072,
+        "stable_session": true,
+        "network": "CELLULAR",
+        "resources": {
+          "gateway_cpu_percent_one_core": 6.619080986006823,
+          "gateway_rss_max_kib": 45460,
+          "samples": 70
+        },
+        "retry_bytes": {
+          "android": 3169,
+          "gateway": 1544733,
+          "scope": "whole session including background and gateway cleanup"
+        },
+        "label": "l101-p1",
+        "lifecycle": {
+          "android": {
+            "raw_protocol_errors": 0,
+            "expected_crossings": 0,
+            "expected_raw": 0,
+            "actual_violations": 0,
+            "unclassified": 0,
+            "incident_dropped": 0,
+            "complete": true,
+            "clean": true,
+            "raw_counter_not_rewritten": true
+          },
+          "gateway": {
+            "raw_protocol_errors": 0,
+            "expected_crossings": 0,
+            "expected_raw": 0,
+            "actual_violations": 0,
+            "unclassified": 0,
+            "incident_dropped": 0,
+            "complete": true,
+            "clean": true,
+            "raw_counter_not_rewritten": true
+          }
+        }
+      }
+    ],
+    "fresh_ratios": {
+      "single": 2.3140218303929845,
+      "aggregate": 2.3117522871179745
+    },
+    "fresh_small_ratios": {
+      "idle": {
+        "median_seconds": 1.0363577898230192,
+        "max_seconds": 0.7993725342851775
+      },
+      "loaded": {
+        "median_seconds": 0.753200984322725,
+        "max_seconds": 0.7631930966878522
+      }
+    },
+    "active": {
+      "attempts": 35,
+      "completed": 35,
+      "duration_seconds": 912.0088520350109,
+      "requested_bound": 1080320,
+      "actual_requested": 1080320,
+      "failure": null,
+      "stable_session": true,
+      "monitor_samples": 254,
+      "requested_cadence_seconds": 30,
+      "small_count": 31,
+      "small_median_seconds": 2.95501,
+      "small_max_seconds": 4.502096,
+      "bulk_count": 4,
+      "bulk_each_bytes": 262144,
+      "bulk_offsets_seconds": [
+        4.626230955123901,
+        301.43140506744385,
+        602.0070357322693,
+        900.9291727542877
+      ],
+      "bulk_durations_seconds": [
+        2.73567,
+        5.518993,
+        5.412115,
+        4.070669
+      ],
+      "request_span_seconds": 905.0534861087799,
+      "sum_http_seconds": 107.59470999999999,
+      "continuous_saturation": false,
+      "resources": {
+        "gateway_cpu_percent_one_core": 5.241866933487958,
+        "gateway_rss_max_kib": 47976,
+        "samples": 866
+      },
+      "lifecycle": {
+        "android": {
+          "raw_protocol_errors": 2,
+          "expected_crossings": 2,
+          "expected_raw": 2,
+          "actual_violations": 0,
+          "unclassified": 0,
+          "incident_dropped": 0,
+          "complete": true,
+          "clean": true,
+          "raw_counter_not_rewritten": true
+        },
+        "gateway": {
+          "raw_protocol_errors": 2,
+          "expected_crossings": 2,
+          "expected_raw": 2,
+          "actual_violations": 0,
+          "unclassified": 0,
+          "incident_dropped": 0,
+          "complete": true,
+          "clean": true,
+          "raw_counter_not_rewritten": true
+        }
+      }
+    },
+    "event_sequences": [
+      {
+        "phase": "l101-p0",
+        "stream": 1,
+        "events": [
+          "android crossed_reset",
+          "gateway crossed_reset"
+        ],
+        "raw_events": 2,
+        "contract": "both local abort; peer RESET crosses removed state; counters preserved"
+      },
+      {
+        "phase": "l101-active",
+        "stream": 3,
+        "events": [
+          "android inflight_credit_on_abort 24 bytes",
+          "android crossed_reset",
+          "gateway crossed_reset"
+        ],
+        "raw_events": 3,
+        "contract": "remote FIN already received on Android; outstanding credit24; bounded credit crossing before ordered RESET"
+      },
+      {
+        "phase": "l101-active",
+        "stream": 67,
+        "events": [
+          "gateway crossed_close",
+          "android peer RESET while still tracked"
+        ],
+        "raw_events": 1,
+        "contract": "gateway locally aborted after both FIN; zero used bytes; valid CLOSE crosses removal; Android complete prior send history not retained"
+      }
+    ],
+    "close_results": [
+      {
+        "label": "l101-p0",
+        "seconds": 21.124027252197266,
+        "android_cleanup_after_disconnect_seconds": 0.7895753383636475,
+        "gateway_terminal_after_disconnect_seconds": 11.147611379623413,
+        "reliable_terminal": "recovery_exhausted",
+        "terminal_before_disconnect": false,
+        "remote_reset_receipt_proven": false
+      },
+      {
+        "label": "l101-p1",
+        "seconds": 20.505499601364136,
+        "android_cleanup_after_disconnect_seconds": 0.8095440864562988,
+        "gateway_terminal_after_disconnect_seconds": 10.346492052078247,
+        "reliable_terminal": "recovery_exhausted",
+        "terminal_before_disconnect": false,
+        "remote_reset_receipt_proven": false
+      },
+      {
+        "label": "l101-active",
+        "seconds": 18.304587364196777,
+        "android_cleanup_after_disconnect_seconds": 0.8322417736053467,
+        "gateway_terminal_after_disconnect_seconds": 10.120738744735718,
+        "reliable_terminal": "recovery_exhausted",
+        "terminal_before_disconnect": false,
+        "remote_reset_receipt_proven": false
+      }
+    ],
+    "final_owner": {
+      "observed_at": "2026-10-21T18:53:35.084144+00:00",
+      "profile": "P1",
+      "connected": true,
+      "ready": true,
+      "tun": true,
+      "both_limits": {
+        "local_send": 32,
+        "local_receive": 32,
+        "peer_receive": 32,
+        "effective_send": 32,
+        "local_write_completion": false
+      },
+      "mux_window": 131072,
+      "ordinary_connect_seconds": 28.18197751045227,
+      "ordinary_connect_without_profile_write": true,
+      "dns_responses": 8,
+      "dns_errors": 0,
+      "https_probe_bytes": 1024,
+      "https_probe_complete": true,
+      "android_raw_errors": 0,
+      "android_incident_dropped": 0,
+      "gateway_session_start_errors": 0,
+      "gateway_terminal_not_expected_for_retained_active_session": true
+    },
+    "budget": {
+      "cumulative_requested_bytes": 55715840,
+      "cumulative_mib": 53.134765625,
+      "continuation_requested_bytes": 17883136,
+      "continuation_mib": 17.0546875,
+      "total_remaining_bytes": 11393024,
+      "continuation_remaining_bytes": 7282688,
+      "failed_requests_not_refunded": true
+    },
+    "requests": {
+      "new_attempts": 66,
+      "new_completed": 66,
+      "cumulative_attempts": 164,
+      "cumulative_completed": 164,
+      "background_connections_not_equivalent_to_meter_requests": true
+    },
+    "validation": {
+      "selected_jvm_tests": 203,
+      "python_checks": 6,
+      "go_race_packages": [
+        "tcpforward",
+        "sessiondiag",
+        "wholedevice",
+        "reliablestream",
+        "familysession"
+      ],
+      "recorded_wu_reset_and_close_reproducers": "P0/P1, Android/gateway exact source, race count5 PASS; post-build test-only additions",
+      "full_platform_ci": "NOT_RUN",
+      "source_inventory_137_files_unchanged": true
+    },
+    "limitations": [
+      "Historical eight cases unresolved; no retroactive classification",
+      "Old beta96/P0 regression remains general-release gate",
+      "Observed body SHA is not an independent origin checksum for random endpoint",
+      "Resource-close marker is unscoped; bounded temporal correlation only",
+      "Android teardown counters use final pre-stop snapshot; cleanup completion separate",
+      "Post-Disconnect recovery_exhausted remains actual terminal event, not clean remote RESET",
+      "No overnight/field or automatic network-loss recovery acceptance",
+      "No fleet/public release; Q0 only; no new experimental transport components",
+      "Normal bounded event ring rolls over; incident context is separately retained with zero incident/projection overflow"
+    ]
+  }
+}

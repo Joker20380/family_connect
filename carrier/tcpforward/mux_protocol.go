@@ -6,7 +6,8 @@ import (
 )
 
 const MuxWindow = 64 << 10
-const MuxMaxStreams = 32
+const MuxMaxStreams = 64
+const MuxMaxPendingOpens = 32
 const muxMaxID = 1<<31 - 1
 const muxWindowUpdate byte = 8
 const muxDNSQuery byte = 9
@@ -36,7 +37,14 @@ func (frame muxFrame) encode() []byte {
 }
 
 func decodeMux(encoded []byte) (muxFrame, error) {
+	return decodeMuxWindow(encoded, MuxWindow)
+}
+
+func decodeMuxWindow(encoded []byte, window int) (muxFrame, error) {
 	var frame muxFrame
+	if window != MuxWindow && window != 131072 {
+		return frame, ErrProtocol
+	}
 	if len(encoded) < headerSize || len(encoded) > headerSize+MaxData || encoded[0] != 2 || binary.BigEndian.Uint32(encoded[6:10]) != uint32(len(encoded)-headerSize) {
 		return frame, ErrProtocol
 	}
@@ -64,7 +72,7 @@ func decodeMux(encoded []byte) (muxFrame, error) {
 			return frame, ErrProtocol
 		}
 	case muxWindowUpdate:
-		if len(frame.payload) != 4 || binary.BigEndian.Uint32(frame.payload) == 0 || binary.BigEndian.Uint32(frame.payload) > MuxWindow {
+		if len(frame.payload) != 4 || binary.BigEndian.Uint32(frame.payload) == 0 || binary.BigEndian.Uint32(frame.payload) > uint32(window) {
 			return frame, ErrProtocol
 		}
 	case openOK, finFrame, resetFrame, closeFrame:

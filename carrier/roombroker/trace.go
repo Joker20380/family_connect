@@ -6,6 +6,11 @@ import (
 )
 
 func (broker *Broker) emit(current *setup, state State, code Code) {
+	reasonCode := string(code)
+	if reasonCode != "" && !sessiontrace.Allowed(reasonCode, sessiontrace.BrokerReasons) {
+		reasonCode = "unknown"
+	}
+	broker.ownershipLocked(current.ctx, current, nil, "transition", reasonCode)
 	trace := sessiontrace.From(current.ctx)
 	stage, result, reason := "GATEWAY_SESSION", "CLOSED", "NONE"
 	switch state {
@@ -31,6 +36,16 @@ func (broker *Broker) emit(current *setup, state State, code Code) {
 			stage, reason = "GATEWAY_JOIN", "RECOVERY_JOIN_FAILED"
 		}
 	}
-	trace.Record(sessiontrace.Event{Stage: stage, State: result, Reason: reason, BrokerReason: string(code)})
-	broker.event(state, code)
+	source := ""
+	switch code {
+	case "lifetime_expired":
+		source = "BROKER_LIFETIME"
+	case "unused_expired":
+		source = "BROKER_UNUSED"
+	case "authorization_changed":
+		source = "BROKER_AUTHORIZATION"
+	}
+	deadline := current.lease.deadline()
+	event := sessiontrace.Event{Stage: stage, State: result, Reason: reason, BrokerReason: string(code), CloseSource: source, LeaseDeadlineMS: deadline.UnixMilli()}
+	broker.pending = append(broker.pending, func() { trace.Record(event); broker.event(state, code) })
 }

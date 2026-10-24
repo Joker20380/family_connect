@@ -6,6 +6,7 @@ import (
 	"crypto/rand"
 	"crypto/tls"
 	"encoding/json"
+	"net/netip"
 
 	"github.com/Joker20380/family_connect/carrier/familysession"
 	"github.com/Joker20380/family_connect/carrier/sessiondiag"
@@ -18,20 +19,30 @@ type TelemostGateway struct {
 	CredentialsPath string
 	Event           func(string)
 	Diagnostic      func(sessiondiag.Report)
+	Services        map[string]netip.AddrPort
+	AllowInternet   bool
 }
 
 const DedicatedMaxStreams = tcpforward.MuxMaxStreams
 
 type telemostGateway struct {
-	session     *telemost.Session
-	credentials []byte
-	setupID     string
-	identity    Identity
-	event       func(string)
-	diagnostic  func(sessiondiag.Report)
+	credit128       bool
+	session         *telemost.Session
+	credentials     []byte
+	setupID         string
+	identity        Identity
+	event           func(string)
+	diagnostic      func(sessiondiag.Report)
+	services        map[string]netip.AddrPort
+	allowInternet   bool
+	credentialsPath string
 }
 
 func (starter TelemostGateway) Start(lifetime, ready context.Context, room Room, id string, identity Identity) (Gateway, error) {
+	credit128, err := muxCreditPolicy()
+	if err != nil {
+		return nil, err
+	}
 	raw, err := LoadCredentials(starter.CredentialsPath)
 	if err != nil {
 		return nil, err
@@ -50,7 +61,11 @@ func (starter TelemostGateway) Start(lifetime, ready context.Context, room Room,
 	if event == nil {
 		event = func(string) {}
 	}
-	return &telemostGateway{session, raw, id, identity, event, starter.Diagnostic}, nil
+	services := make(map[string]netip.AddrPort, len(starter.Services))
+	for name, destination := range starter.Services {
+		services[name] = destination
+	}
+	return &telemostGateway{credit128, session, raw, id, identity, event, starter.Diagnostic, services, starter.AllowInternet, starter.CredentialsPath}, nil
 }
 
 func bindingMessage(id string, nonce []byte) []byte {
@@ -88,7 +103,7 @@ func BindClient(ctx context.Context, session *familysession.Session, descriptor 
 func (gateway *telemostGateway) Run(ctx context.Context, active func() error) error {
 	trace := sessiontrace.From(ctx)
 	trace.Add("FAMILY_TLS", "STARTED", "NONE")
-	secured, err := familysession.Open(ctx, gateway.session, gateway.credentials, true)
+	secured, err := familysession.OpenMux(ctx, gateway.session, gateway.credentials, true, gateway.credit128)
 	clear(gateway.credentials)
 	if err != nil {
 		trace.Add("FAMILY_TLS", "FAILED", "FAMILY_TLS_ERROR")
@@ -101,7 +116,11 @@ func (gateway *telemostGateway) Run(ctx context.Context, active func() error) er
 		trace.Add("GATEWAY_SESSION", "FAILED", "GATEWAY_CLOSE")
 		return err
 	}
-	mux, err := tcpforward.NewMux(ctx, secured, true, tcpforward.MuxConfig{MaxStreams: DedicatedMaxStreams})
+	config := tcpforward.MuxConfig{MaxStreams: DedicatedMaxStreams, Policy: tcpforward.Policy{Services: gateway.services, ServicesOnly: len(gateway.services) > 0 && !gateway.allowInternet}}
+	if binding, ok := ctx.Value(leaseKey{}).(*leaseBinding); ok {
+		config.LeaseRenewal = binding.handler(SessionAuthorizer(gateway.credentialsPath, secured.ConnectionState()), secured.SecurityDeadline())
+	}
+	mux, err := tcpforward.NewMux(ctx, secured, true, config)
 	if err != nil {
 		trace.Add("GATEWAY_SESSION", "FAILED", "UNKNOWN_INTERNAL")
 		return Code("mux_start_failed")

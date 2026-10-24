@@ -16,7 +16,16 @@ type Event struct {
 	Depth    int     `json:"depth"`
 }
 
+type Limits struct {
+	LocalSend            int  `json:"local_send"`
+	LocalReceive         int  `json:"local_receive"`
+	PeerReceive          int  `json:"peer_receive"`
+	EffectiveSend        int  `json:"effective_send"`
+	LocalWriteCompletion bool `json:"local_write_completion"`
+}
+
 type Stats struct {
+	Limits             Limits
 	Flow               sessiontrace.Flow
 	DataSent           uint64
 	DataReceived       uint64
@@ -267,7 +276,7 @@ func (state *engine) exhausted(reason string, block *pending, now time.Time) err
 		}
 		return uint64(max(0, now.Sub(since).Milliseconds()))
 	}
-	state.failureTrace = sessiontrace.Event{Stage: "CARRIER", State: "FAILED", Reason: reason,
+	state.failureTrace = sessiontrace.Event{Stage: "CARRIER", State: "FAILED", Reason: reason, CloseSource: "RELIABLE_EXHAUSTION",
 		ReliablePending: uint64(len(state.sent)), ReliableACKReceived: state.stats.ACKReceived,
 		ReliableACKAgeMS: age(state.lastACK), ReliableProgressAgeMS: age(state.lastProgress)}
 	flow := state.flow()
@@ -295,6 +304,19 @@ func (state *engine) flow() sessiontrace.Flow {
 	return value
 }
 
+func (state *engine) fastRetransmit(sequence uint64, block *pending, now time.Time) bool {
+	if sequence != state.base || block.retries != 0 || now.Sub(block.last) < state.config.RTO/4 {
+		return false
+	}
+	confirmed := 0
+	for later := sequence + 1; later < state.next; later++ {
+		if state.sent[later].sacked {
+			confirmed++
+		}
+	}
+	return confirmed >= 3
+}
+
 func (state *engine) tick(now time.Time) ([]frame, error) {
 	if state.remote == (epoch{}) {
 		if now.Sub(state.started) >= state.config.MaxAge {
@@ -316,10 +338,13 @@ func (state *engine) tick(now time.Time) ([]frame, error) {
 		if now.Sub(block.first) >= state.config.MaxAge {
 			return nil, state.exhausted("RELIABLE_FRAME_TIMEOUT", block, now)
 		}
-		if block.sacked || now.Sub(block.last) < state.config.RTO {
+		timedOut := now.Sub(block.last) >= state.config.RTO
+		if block.sacked || (!timedOut && !state.fastRetransmit(seq, block, now)) {
 			continue
 		}
-		state.stats.Timeouts++
+		if timedOut {
+			state.stats.Timeouts++
+		}
 		if block.retries >= state.config.MaxRetries {
 			return nil, state.exhausted("RELIABLE_RETRY_EXHAUSTED", block, now)
 		}
