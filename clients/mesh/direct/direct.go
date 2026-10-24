@@ -65,13 +65,13 @@ func failure(ctx context.Context, err error) string {
 	var hostname x509.HostnameError
 	var invalid x509.CertificateInvalidError
 	var operation *net.OpError
-	if errors.As(err, &verification) || errors.As(err, &record) || errors.As(err, &alert) || errors.As(err, &authority) || errors.As(err, &hostname) || errors.As(err, &invalid) || (errors.As(err, &operation) && operation.Net == "tls") {
+	if errors.As(err, &verification) || errors.As(err, &record) || errors.As(err, &alert) || errors.As(err, &authority) || errors.As(err, &hostname) || errors.As(err, &invalid) || (errors.As(err, &operation) && (operation.Net == "tls" || operation.Op == "remote error")) {
 		return "DENIED"
 	}
-	if errors.Is(ctx.Err(), context.Canceled) {
+	if errors.Is(err, context.Canceled) || errors.Is(ctx.Err(), context.Canceled) {
 		return "CANCELLED"
 	}
-	if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+	if errors.Is(err, context.DeadlineExceeded) || errors.Is(ctx.Err(), context.DeadlineExceeded) {
 		return "DEADLINE"
 	}
 	return "UNAVAILABLE"

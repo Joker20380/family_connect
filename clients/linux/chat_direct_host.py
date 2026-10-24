@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import signal
 import socket
+import stat
 import subprocess
 import sys
 import threading
@@ -314,15 +315,34 @@ class DirectHost(Host):
         super().close()
 
 
+def prepare_runtime(directory):
+    for parent in reversed(directory.parents):
+        trusted(parent, True)
+    directory.mkdir(mode=0o711, exist_ok=True)
+    expected = trusted(directory, True)
+    descriptor = os.open(directory, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        actual = os.fstat(descriptor)
+        if (actual.st_dev, actual.st_ino) != (expected.st_dev, expected.st_ino):
+            raise ValueError('Unsafe chat runtime')
+        os.fchmod(descriptor, 0o711)
+    finally:
+        os.close(descriptor)
+
+
 def main():
     if len(sys.argv) != 2 or os.geteuid() != 0 or not sys.argv[1].isdigit() or not 0 < int(sys.argv[1]) < 2**31:
         raise SystemExit('Root chat service requires one desktop UID')
     uid = int(sys.argv[1])
     directory = Path('/run/family-connect-chat-direct')
-    directory.mkdir(mode=0o711, exist_ok=True)
-    trusted(directory, True)
+    prepare_runtime(directory)
     descriptor = os.open(directory / (str(uid) + '.lock'), os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW, 0o600)
-    trusted(directory / (str(uid) + '.lock'))
+    expected = trusted(directory / (str(uid) + '.lock'))
+    actual = os.fstat(descriptor)
+    if ((actual.st_dev, actual.st_ino) != (expected.st_dev, expected.st_ino) or
+            stat.S_IMODE(actual.st_mode) != 0o600):
+        os.close(descriptor)
+        raise ValueError('Unsafe chat lock')
     fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
     host = DirectHost(directory / (str(uid) + '.chat.sock'), uid)
     stopping = threading.Event()

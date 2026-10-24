@@ -26,6 +26,7 @@ class ChatOwner:
         self.local = self.carrier = self.runtime = self.device = None
         self.lock = None
         self.node = None
+        self.registration_route = None
         self.next_enrollment = self.next_sync = 0
         self.delivery_error = None
         self.next_events = 0
@@ -235,9 +236,14 @@ class ChatOwner:
                 if result['status'] != 'active' or 'node' not in result:
                     raise LocalError('delivery_unavailable')
                 node = result['node']
+                registration_route = None
                 if self.direct is not None:
-                    self.direct.bind(result)
+                    registration_route = http.route
+                    if registration_route not in ('DIRECT', 'EXISTING_EXIT'):
+                        raise LocalError('delivery_unavailable')
+                    self.direct.bind(result if registration_route == 'DIRECT' else None)
                 unchanged = (self.carrier is not None and self.node is not None and
+                             self.registration_route == registration_route and
                              all(self.node[field] == node[field] for field in ('host', 'port', 'public_key')))
                 if unchanged:
                     self.carrier.expires = node['expires_at']
@@ -248,12 +254,13 @@ class ChatOwner:
                         self.carrier = None
                     self.node = None
                     if self.direct is not None and self.mailbox_factory is SystemMailbox:
-                        self.carrier = self.local.attach_carrier(lambda chat: ProtectedMailbox(chat, node, self.runtime, self.direct, self.restricted))
+                        self.carrier = self.local.attach_carrier(lambda chat: ProtectedMailbox(chat, node, self.runtime, self.direct, self.restricted, registration_route=registration_route))
                     elif self.restricted is not None and self.mailbox_factory is SystemMailbox:
                         self.carrier = self.local.attach_carrier(lambda chat: ExistingExitMailbox(chat, node, self.runtime, self.restricted))
                     else:
                         self.carrier = self.local.attach_carrier(lambda chat: self.mailbox_factory(chat, node, self.runtime))
                 self.node = node
+                self.registration_route = registration_route
                 self.delivery_error = None
             except (FriendsError, LocalError, OSError, ValueError) as failure:
                 self.delivery_error = 'delivery_unavailable'
@@ -295,6 +302,7 @@ class ChatOwner:
             self.carrier.close()
             self.carrier = None
         self.node = None
+        self.registration_route = None
         self.next_enrollment = 0
         if self.lock is not None:
             os.close(self.lock)

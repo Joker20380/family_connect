@@ -130,9 +130,14 @@ class _DirectDeadline(Exception):
 class ProtectedMailbox(ExistingExitMailbox):
     ROUTES = ('DIRECT', 'EXISTING_EXIT')
 
-    def __init__(self, chat, node, runtime, direct, bridge):
+    def __init__(self, chat, node, runtime, direct, bridge, *, registration_route='DIRECT'):
+        if registration_route not in self.ROUTES:
+            raise ValueError('invalid_registration_route')
         self.direct, self.bridge = direct, bridge
-        SystemMailbox.__init__(self, chat, node, runtime, _routes=(('DIRECT', self._direct), ('EXISTING_EXIT', self._existing)))
+        routes = (('EXISTING_EXIT', self._existing),)
+        if registration_route == 'DIRECT':
+            routes = (('DIRECT', self._direct), *routes)
+        SystemMailbox.__init__(self, chat, node, runtime, _routes=routes)
 
     def exchange(self, *, timeout=12, cancel=None):
         try:

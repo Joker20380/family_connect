@@ -1,8 +1,17 @@
 # Текущее состояние / Current state
 
-Срез L01, 24.10.2026. Вход: чистая `main`, HEAD = проверенный `origin/main`
-`a1d79001be2a20dd72cb5f75607843218bbaa428`; phase22 baseline — `664342a`.
-**L01 выполнен в локальном Linux source/native/kernel scope; NEXT — review L01.**
+Срез L01-R, 24.10.2026. Вход: чистая актуальная `main`, HEAD = проверенный `origin/main`
+`968e71d437d2e5fa03c7ebe17db8f2648433bfe3`; checkout не откатывался.
+**L01 не принят. Коррекция L01-R выполнена локально; NEXT — review L01-R.**
+[L01-R](releases/2026-10-24-linux-chat-direct-l01-r.md): runtime0711 при unit umask0077,
+проверенный registration route без импорта EXIT response в root authority, настоящий
+TCP/TLS fatal alert остаётся DENIED до ChatHTTP, без fallback. Before/after записаны.
+Локально: 145 Python/native + 49 mailbox/owner, 6 root→UID checks, шесть Go/race
+packages и isolated DIRECT kernel PASS. Root→UID не является installed acceptance.
+Новый source CI ещё не получен; обязательные suites/negative gates сохранены.
+D01 открыт, D02.1-R PARTIAL; full-suite/GTK voice failures вне scope.
+
+Историческое положительное evidence L01 ниже сохранено только для своих SHA:
 [L01](releases/2026-10-24-linux-chat-direct-l01.md): ChatOwner/daemon используют отдельный
 root DIRECT endpoint, fixed chat API и mailbox только из root-проверенной регистрации.
 Native underlay bind/mark до connect; SYSTEM fallback отсутствует в этом пути.
@@ -91,9 +100,9 @@ failover проверки не выполнены. Runtime/fixtures/collection p
 
 | Уровень | Подтверждённое состояние |
 |---|---|
-| SOURCE | L01 — protected DIRECT для fixed chat API/mailbox поверх принятых D03/D04/D05; не новая поставка. |
-| LOCAL TESTS | L01: 141 chat/admission/D03/package + 49 mailbox/owner PASS; Go/race и synthetic-peer kernel PASS. Полный pytest и installed/live локально NOT_RUN. |
-| CI | Новые L01 results — в [отчёте](releases/2026-10-24-linux-chat-direct-l01.md). D05 `c53265d`: Client/Linux/Auto/AWG/TCP PASS; control/phase0 по 54, Docker 53 failures; GTK Return FAIL. D01 открыт. |
+| SOURCE | L01-R — три review-коррекции fixed protected DIRECT; L01 не принят, review L01-R pending; не новая поставка. |
+| LOCAL TESTS | L01-R: 145 chat/native + 49 mailbox/owner + 6 root/UID PASS; Go/race и synthetic-peer DIRECT kernel PASS. Полный pytest и installed/live локально NOT_RUN. |
+| CI | Новый L01-R CI pending; точные исторические SHA — в [L01](releases/2026-10-24-linux-chat-direct-l01.md) и [коррекции](releases/2026-10-24-linux-chat-direct-l01-r.md). D01 открыт; старые full-suite/GTK failures не объявлены исправленными. |
 | BUILT | Linux native-r18, Windows native-r14 cross-build, unsigned Linux system/native/RNS component-r18. **Полный parity installer: 0/2.** |
 | INSTALLED | **Завершённая установленная приёмка: 0/2.** Полный кандидат не принят на Linux/Windows; Windows runtime NOT_RUN. |
 | PUBLISHED | Parity-кандидаты не опубликованы. Linux0.2.11 / Windows0.2.15 не менялись; существующие публичные каталоги/ссылки в D00 не изменялись и заново не проверялись. |
@@ -139,7 +148,7 @@ D00 ничего не устанавливает: runtime rollback не нуже
 ## Блокеры / оставшаяся реализация
 
 - D01.1/D01.2 PARTIAL, dependency gates приняты; review D02.1 collection/import isolation и D02.2 public-reference принят. D02.1-R historical replay PARTIAL/NOT_RUN. Остальные CI failures требуют отдельной оценки, не расширяют L01 автоматически. Общий D01/CI acceptance открыт до полного PASS.
-- D03/D04/D05 review accepted; NEXT review L01. W01/W02, L07/W09, L08/W12 и installed/live gates не закрыты.
+- D03/D04/D05 review accepted; NEXT review L01-R. W01/W02, L07/W09, L08/W12 и installed/live gates не закрыты.
 - D03: [исправление и детерминированные регрессии](releases/2026-10-24-chat-http-terminal-d03.md)
   сохраняют HTTP/TLS/invalid_response/timeout/cancellation при ошибке teardown.
   Это локальная логика с synthetic transport, НЕ installed/live delivery PASS;
@@ -186,4 +195,4 @@ D00 ничего не устанавливает: runtime rollback не нуже
 [STATUS до D00](STATUS.history-2026-10-24.md) и [PLAN до D00](PLAN.history-2026-10-24.md)
 сохранены целиком; старые NEXT/ACTIVE/checkpoints — история, не параллельные задания.
 [Отчёт D00](releases/2026-10-24-desktop-parity106-d00.md) фиксирует сохранность и границы.
-**После отчёта L01 остановиться. NEXT — review L01; L02 и прочие задачи автоматически не начинать.**
+**После отчёта L01-R остановиться. NEXT — review L01-R; L02 и прочие задачи автоматически не начинать.**

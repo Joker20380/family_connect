@@ -52,6 +52,14 @@ def peer(directory):
     server = ThreadingHTTPServer(('185.251.89.19', 8443), Handler)
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     context.load_cert_chain(directory / 'cert.pem', directory / 'key.pem')
+    def service_actions():
+        if (directory / 'require-client').exists():
+            context.verify_mode = ssl.CERT_REQUIRED
+            (directory / 'client-required').touch()
+        else:
+            context.verify_mode = ssl.CERT_NONE
+            (directory / 'client-required').unlink(missing_ok=True)
+    server.service_actions = service_actions
     server.socket = context.wrap_socket(server.socket, server_side=True)
     mailbox = socket.socket()
     mailbox.bind(('192.0.2.1', 4242))
@@ -173,6 +181,27 @@ def run(worker, host_netns):
             command('link', 'set', 'eth0', 'name', 'eth-new')
             assert channel.recv(1) == b''
             command('link', 'set', 'eth-new', 'name', 'eth0')
+        from provisioning.chat_bridge import ChatHTTP
+        from provisioning.chat_direct import DirectHTTP
+        from provisioning.friends import FriendsError
+        (directory / 'require-client').touch()
+        deadline = time.monotonic() + 5
+        while not (directory / 'client-required').exists():
+            assert time.monotonic() < deadline
+            time.sleep(.05)
+        try:
+            with ChatHTTP(DirectHTTP(direct), fallback).stream('POST', wire.PATHS[0], json=dict(
+                    public_identity=api.device.public_identity, wireguard_public_key=api.device.wireguard_public_key,
+                    chat_public=profile['public'])):
+                raise AssertionError('fatal TLS accepted')
+        except FriendsError as error:
+            assert str(error) == 'access_rejected'
+        assert diagnostics[-1] == ('request', 'BridgeError', 'DENIED'), diagnostics[-1]
+        (directory / 'require-client').unlink()
+        deadline = time.monotonic() + 5
+        while (directory / 'client-required').exists():
+            assert time.monotonic() < deadline
+            time.sleep(.05)
         with api.access.db() as database:
             assert database.execute('SELECT COUNT(*) FROM chat_challenges WHERE used=1').fetchone()[0] == 2
             database.execute('UPDATE devices SET revoked=1')
@@ -187,7 +216,7 @@ def run(worker, host_netns):
         encrypted_reopen=True, revocation=True, interface_change_closed=True, vpn_owner_created=False,
         fixture_rpf='disabled only inside disposable test netns',
         opt_uid=Path('/opt').stat().st_uid, opt_mode=oct(Path('/opt').stat().st_mode & 0o777),
-        host_network_changed=False, live=False)))
+        fatal_tls_native_denied=True, fatal_tls_no_fallback=True, host_network_changed=False, live=False)))
 
 
 if __name__ == '__main__':

@@ -58,7 +58,7 @@ class DirectBridge(ChatBridge):
         self.authority = None
 
     def bind(self, response):
-        self.authority = authority_digest(response)
+        self.authority = None if response is None else authority_digest(response)
 
     def open_mailbox(self, deadline, cancel):
         if self.authority is None:

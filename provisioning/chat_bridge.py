@@ -165,9 +165,11 @@ class ChatHTTP:
         self.direct, self.bridge = direct, bridge
         self.base_url = direct.base_url
         self.deadline = time.monotonic() + 60
+        self.route = None
 
     @contextmanager
     def stream(self, method, path, *, json, **options):
+        self.route = None
         if method != 'POST' or path not in wire.PATHS:
             raise FriendsError('invalid_input')
         raw = json_module.dumps(json, separators=(',', ':'), allow_nan=False).encode()
@@ -210,13 +212,17 @@ class ChatHTTP:
                 raise FriendsError('access_rejected') from None
             if not complete:
                 status = None
+        route = 'DIRECT'
         if status != 200:
             try:
                 status, data = self.bridge.request(path, raw, self.deadline - time.monotonic())
                 body = bytearray(data)
+                route = 'EXISTING_EXIT'
             except wire.BridgeError as error:
                 raise FriendsError('access_rejected' if error.code in ('DENIED', 'CONFLICT') else
                                    'cancelled' if error.code == 'CANCELLED' else 'service_unavailable') from None
         if status in (400, 401, 403, 409):
             raise FriendsError('access_rejected')
+        if status == 200:
+            self.route = route
         yield httpx.Response(status, content=bytes(body), request=httpx.Request('POST', self.base_url.join(path)))

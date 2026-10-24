@@ -134,6 +134,104 @@ def enroll(integration):
     return profile
 
 
+@pytest.mark.parametrize('expired', [False, True])
+@pytest.mark.parametrize('changed_node', [False, True])
+def test_direct_exit_registration_provenance_and_recovery(integration, tmp_path, monkeypatch, expired, changed_node):
+    from messenger.local import LocalChat
+    from messenger.mailbox import Mailbox
+    from provisioning.chat_bridge import ChatBridge
+    from provisioning.chat_transport import SystemMailbox
+    from mesh_chat_host import Binding, Host
+    from test_mesh_chat_host import Lane
+
+    class ExitLane(Lane):
+        def call(self, action, **values):
+            if action == 'request':
+                self.requests.append(values)
+                return integration.api.request(values['path'], base64.b64decode(values['data']))
+            result = super().call(action, **values)
+            if action == 'open':
+                self.peers[-1].sendall(b'EXIT')
+            return result
+
+    lane = ExitLane()
+    start = dict(readiness={'device': integration.api.device.reference}, identity='private-synthetic-test-key',
+                 anchor='synthetic-anchor', resolver='1.1.1.1:53', underlying_index=2)
+    binding = Binding(lane, start, threading.Event())
+    binding.ready.set()
+    host = Host(tmp_path / 'exit.sock', os.getuid(), lambda: binding)
+    host.start()
+    bridge = ChatBridge(integration.api.device.reference, _paths=[host.endpoint], _root_uid=os.getuid())
+    integration.fallback.request = bridge.request
+    integration.fallback.open_mailbox = bridge.open_mailbox
+    monkeypatch.setattr(RNS.Transport, 'owner', SimpleNamespace(is_connected_to_shared_instance=False), raising=False)
+    monkeypatch.setattr(LocalChat, 'request_sync', lambda _: None)
+    monkeypatch.setattr(LocalChat, 'delivery_update', lambda *args, **kwargs: None)
+
+    def exchange(mailbox, *, timeout, cancel):
+        route, connect = mailbox._selected
+        with connect(time.monotonic() + timeout, cancel) as channel:
+            if route == 'DIRECT':
+                channel.sendall(b'direct')
+            assert channel.recv(32) == (b'DIRECT' if route == 'DIRECT' else b'EXIT')
+        return route
+
+    monkeypatch.setattr(Mailbox, 'exchange', exchange)
+    owner = integration.owner
+    owner.mailbox_factory = SystemMailbox
+    try:
+        enroll(integration)
+        assert isinstance(owner.carrier, ProtectedMailbox)
+        assert owner.carrier.exchange() == 'DIRECT'
+        old_response = copy.deepcopy(integration.host.authority.response)
+        old_digest = integration.direct.authority
+        original = integration.native.operation
+
+        @contextmanager
+        def unavailable_api(cancel, deadline, **fields):
+            if fields['action'] == 'request':
+                raise wire.BridgeError('UNAVAILABLE')
+            with original(cancel, deadline, **fields) as result:
+                yield result
+
+        integration.native.operation = unavailable_api
+        if expired:
+            integration.host.authority.clock = lambda: old_response['node']['expires_at']
+        integration.api.node = dict(integration.api.node, sequence=2, expires_at=int(time.time()) + 110)
+        if changed_node:
+            integration.api.node.update(host='192.0.2.11', port=4243, public_key=RNS.Identity().get_public_key().hex())
+        owner.node['expires_at'] = int(time.time()) + 10
+        owner.next_enrollment = 0
+        owner.tick(online=True, visible=True)
+        assert owner.delivery_error is None and owner.node == integration.api.node
+        assert integration.host.authority.response == old_response
+        assert owner.carrier.exchange() == 'EXISTING_EXIT'
+        assert integration.direct.authority is None
+        assert owner.carrier.host == integration.api.node['host'] and owner.carrier.port == integration.api.node['port']
+        assert owner.carrier.expires == integration.api.node['expires_at']
+        assert owner.carrier.node.get_public_key().hex() == integration.api.node['public_key']
+        if expired:
+            with pytest.raises(wire.BridgeError, match='DENIED'):
+                integration.host.authority.acquire(integration.api.device.reference, old_digest)
+        integration.native.operation = original
+        integration.host.authority.clock = time.time
+        integration.api.node = dict(integration.api.node, sequence=3, expires_at=int(time.time()) + 115)
+        owner.node['expires_at'] = int(time.time()) + 10
+        owner.next_enrollment = 0
+        owner.tick(online=True, visible=True)
+        assert owner.delivery_error is None and owner.carrier.exchange() == 'DIRECT'
+        assert integration.direct.authority == authority_digest(integration.host.authority.response)
+        assert integration.host.authority.response['node']['sequence'] == 3
+        assert [entry['path'] for entry in lane.requests] == list(wire.PATHS)
+        assert binding.material == start
+    finally:
+        bridge.close()
+        binding.close()
+        host.close()
+        for peer in lane.peers:
+            peer.close()
+
+
 def test_owner_proofs_direct_registration_proxy_half_close_and_encrypted_reopen(integration):
     profile = enroll(integration)
     with integration.direct.open_mailbox(time.monotonic() + 4, threading.Event()) as channel:

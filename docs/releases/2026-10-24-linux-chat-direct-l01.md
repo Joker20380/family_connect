@@ -2,7 +2,10 @@
 
 ## Result and scope
 
-**DONE in local Linux source/native/kernel scope; NEXT review L01.** Entry: clean
+**Historical local evidence; L01 NOT ACCEPTED after review.** The three defects
+and their bounded correction are tracked in [L01-R](2026-10-24-linux-chat-direct-l01-r.md).
+All positive results below retain their original SHA; they are not L01-R results.
+Entry: clean
 `main`, HEAD/remote `a1d79001be2a20dd72cb5f75607843218bbaa428`. D03/D04/D05 reviews
 accepted. D01/general CI stays open; D02.1-R stays PARTIAL/NOT_RUN. No deployment,
 version/catalog, server grant, identity/WG key, accepted pin or private state change.

@@ -86,6 +86,52 @@ func TestTLSAndExplicitDeadlineAreTerminal(test *testing.T) {
 	}
 }
 
+func TestRealTCPFatalTLSAlert(test *testing.T) {
+	for _, version := range []uint16{tls.VersionTLS12, tls.VersionTLS13} {
+		test.Run(tls.VersionName(version), func(test *testing.T) {
+			var requests, dials atomic.Int32
+			server := httptest.NewUnstartedServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { requests.Add(1) }))
+			server.TLS = &tls.Config{ClientAuth: tls.RequireAnyClientCert, MinVersion: version, MaxVersion: version}
+			server.StartTLS()
+			defer server.Close()
+			roots := x509.NewCertPool()
+			roots.AddCert(server.Certificate())
+			dial := func(ctx context.Context, network, address string) (net.Conn, error) {
+				dials.Add(1)
+				return (&net.Dialer{}).DialContext(ctx, network, server.Listener.Addr().String())
+			}
+			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+			defer cancel()
+			command := Command{Action: "request", Index: 2, Name: "eth0", Budget: 2000, Path: "/friends/chat/challenge", Data: []byte("{}")}
+			reply := Request(ctx, command, dial, &tls.Config{RootCAs: roots, ServerName: "example.com", MinVersion: version, MaxVersion: version})
+			if reply.Code != "DENIED" || requests.Load() != 0 || dials.Load() != 1 {
+				test.Fatalf("fatal TLS reply=%s requests=%d dials=%d", reply.Code, requests.Load(), dials.Load())
+			}
+		})
+	}
+}
+
+func TestTransportAndFirstTerminalClassification(test *testing.T) {
+	for _, scenario := range []struct {
+		failure error
+		code    string
+	}{
+		{&net.OpError{Op: "read", Net: "tcp", Err: io.EOF}, "UNAVAILABLE"},
+		{&net.OpError{Op: "dial", Net: "tcp", Err: errors.New("connection refused")}, "UNAVAILABLE"},
+		{context.Canceled, "CANCELLED"},
+		{context.DeadlineExceeded, "DEADLINE"},
+	} {
+		if code := failure(context.Background(), scenario.failure); code != scenario.code {
+			test.Fatalf("got %s want %s", code, scenario.code)
+		}
+	}
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	if code := failure(ctx, &net.OpError{Op: "remote error", Err: tls.AlertError(40)}); code != "DENIED" {
+		test.Fatal(code)
+	}
+}
+
 type deniedProtector struct{ called atomic.Int32 }
 
 func (protector *deniedProtector) Protect(net.Interface, int) bool {

@@ -6,7 +6,7 @@
 а не отдельные реализации продукта. [Текущий срез](STATUS.md) — источник текущего состояния.
 Продуктовый checkpoint: phase22, source baseline `664342a6566792a4ea621274a369bcd6b6012143`.
 D00 — организация документации; следующие строки являются очередью, не разрешением на автозапуск.
-**L01 выполнен в локальном Linux source/native/kernel scope; NEXT — review L01. Review D03/D04/D05, D02.1 collection/import isolation и D02.2 public-reference принят.
+**L01 не принят; три review-коррекции L01-R выполнены локально. NEXT — review L01-R. Review D03/D04/D05, D02.1 collection/import isolation и D02.2 public-reference принят.
 Review D02.1-R и fleet-документации `1725656` принят;
 D02.1-R остаётся PARTIAL/NOT_RUN; L02 и дальнейшие Linux/Windows задачи не начинаются.**
 
@@ -99,7 +99,8 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 
 | ID | Результат | Зависимость | Статус | Критерий завершения |
 |---|---|---|---|---|
-| L01 | Защищённый DIRECT для чатов | D03, D04; D05 review принят | DONE (local Linux source/native/kernel; review pending) | [Evidence](releases/2026-10-24-linux-chat-direct-l01.md): реальный ChatOwner → UID/device root admission → protected native socket; fixed API, root-authorized mailbox, expiry/cancel/relay; 141 + 49 Python PASS, Go/race и isolated kernel PASS; Auto/kernel CI `edc79c2` PASS. Нет SYSTEM fallback или общего пользовательского bypass; общий CI остаётся открыт, installed/live — L04/L05. |
+| L01 | Защищённый DIRECT для чатов | D03, D04; D05 review принят | NOT ACCEPTED (коррекция L01-R) | [Историческое evidence](releases/2026-10-24-linux-chat-direct-l01.md) сохранено: 141 + 49 Python PASS, Go/race и isolated kernel PASS; Auto/kernel CI `edc79c2` PASS только на этом SHA. Review выявил runtime umask, registration provenance и TCP/TLS alert defects; принятие требует review L01-R. |
+| L01-R | Исправления review protected Linux chat DIRECT | L01 review; принятые D03/D04/D05 | DONE (local corrections; review pending) | [Before/after](releases/2026-10-24-linux-chat-direct-l01-r.md): unit umask0077 + настоящий UID, DIRECT→EXIT registration→ProtectedMailbox→DIRECT с expiry/metadata, real TCP/TLS fatal без fallback. 145 + 49 Python/native, 6 root/UID, Go/race и isolated DIRECT kernel PASS; новый CI pending. Ни установка, ни live, ни закрытие D01/D02.1-R. |
 | L02 | MESH service-only и передача владения | L01 | QUEUED | Чаты работают при VPN OFF; OFF→ON→OFF сохраняет одно активное владение; проверены drain, expiry, отмена и поздние результаты. |
 | L03 | Полный внутренний Linux-кандидат | L02, D05 | QUEUED | Согласованы GUI, пользовательские службы, root-helper, native/RNS, зависимости и установка; capabilities соответствуют точному составу реально интегрированного пакета. |
 | L04 | Установленный Linux VPN | L03 | QUEUED | На установленном кандидате подтверждены реальные AWG/TCP/MESH/Auto, P0/P1, DNS/HTTPS и передачи, применённый target/profile и заявленные capabilities; не CLI/echo/SOCKS или model fixture. |
@@ -209,5 +210,5 @@ Django7.1 (servers/access/payments) зависит от backend/fencing и recov
 [Полный прежний PLAN](PLAN.history-2026-10-24.md), [STATUS](STATUS.history-2026-10-24.md),
 [phase22](releases/2026-10-23-desktop-parity106.md#linux-user-chat-admission-and-existing-exit-handoff-2410-phase22),
 [отчёт D00](releases/2026-10-24-desktop-parity106-d00.md).
-**После отчёта L01 остановиться. NEXT — review L01;
+**После отчёта L01-R остановиться. NEXT — review L01-R;
 без автоматического перехода к Linux/Windows/iOS или live-операциям.**
