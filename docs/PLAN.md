@@ -6,7 +6,8 @@
 а не отдельные реализации продукта. [Текущий срез](STATUS.md) — источник текущего состояния.
 Продуктовый checkpoint: phase22, source baseline `664342a6566792a4ea621274a369bcd6b6012143`.
 D00 — организация документации; следующие строки являются очередью, не разрешением на автозапуск.
-**D02.2 выполнен; NEXT — review D02.2. Review D02.1-R и fleet-документации `1725656` принят;
+**Разрешён только D03. Review D02.1 collection/import isolation и D02.2 public-reference принят.
+Review D02.1-R и fleet-документации `1725656` принят;
 D02.1-R остаётся PARTIAL/NOT_RUN, D05 QUEUED и не начинается.**
 
 Порядок по умолчанию: D01.1 → D01.2 → D02.1 / принятый review D02.1-R → D02.2 / review → D03 → D04 → D05 → Linux → Windows → R01.
@@ -25,11 +26,11 @@ D02.1-R остаётся PARTIAL/NOT_RUN, D05 QUEUED и не начинаетс�
 | D01 | Зависимости Linux/desktop CI | D00 | IN_PROGRESS | Dependency gates D01.1/D01.2 отдельно от общей CI-приёмки; закрытие требует полного PASS обязательных suites после устранения остаточных blockers, без скрытия тестов. |
 | D01.1 | Client builds/linux, AmneziaWG pilot, TCP pilot | D00 | PARTIAL | Dependency gates `26f71d6` приняты review; реальные Python3.12 imports/адресные CI PASS. Полный desktop FAIL: RNS capsule, AWG Auto lifecycle assertion; PARTIAL сохранён. |
 | D01.2 | Linux control, phase0, Dockerfile.control test-stage | принята dependency-часть D01.1 | PARTIAL | На pushed `07b52e3` Python3.13 imports/адресные gates PASS ×3; Docker root 22 passed. Каждый full suite: 9 owner_handoff/prepare collection errors, exit 2 (D02); обязательные gates сохранены. |
-| D02 | Сбор и импорты исследовательских fixtures | dependency-части D01.1/D01.2 приняты | IN_PROGRESS | D02.1 collection/import isolation подтверждено; D02.2 выполнен, ожидает review. D02.1-R PARTIAL/NOT_RUN. Не ждёт полного зелёного CI, который сам должен разблокировать; общая CI-приёмка D01 остаётся отдельным gate. |
+| D02 | Сбор и импорты исследовательских fixtures | dependency-части D01.1/D01.2 приняты | IN_PROGRESS | Review D02.1 collection/import isolation и D02.2 принят; зависимости D03 готовы. D02.1-R PARTIAL/NOT_RUN. Не ждёт полного зелёного CI, который сам должен разблокировать; общая CI-приёмка D01 остаётся отдельным gate. |
 | D02.1 | Девять collection errors, историческая overlay-suite, изоляция импортов | окружения D01.1/D01.2 готовы | DONE (collection/import isolation) | Review подтвердил границы; `6a0a982`: clean collection 2996/0 errors, helpers/import/runner 75 PASS; три CI full suites с 56 residual failures. Историческая воспроизводимость отдельно в D02.1-R. |
 | D02.1-R | Комплектность исторического runner | review D02.1 | PARTIAL | Коррекция принята review. Vector/original API, явные retained inputs, preflight до pytest; 110 адресных PASS. Historical suite NOT_RUN: нет anchored pins delivery-check, Java runtime/classes и 3 JARs; полный replay не обеспечен и в D02.2 не выполняется. |
-| D02.2 | RNS/reference checks без локальной capsule в обычном CI | review коррекции D02.1-R принят | DONE (review pending) | [Evidence `da8670e`](releases/2026-10-24-rns-reference-d02-2.md): public mappings, прежние pins, APK/inventory linkage, строгий --capsule. Clean export: 49 passed/1 прежний skip, collection 3051/0 errors; real capsule 2073 PASS. CI control/phase0/Docker: 55/54/54 residual failures, 0 errors; полные команды сохранены. |
-| D03 | Окончательные ошибки ChatHTTP | D02 | QUEUED | HTTP400/401/403/409, TLS и установленный invalid_response сохраняются при ошибке teardown; разрешённый transient fallback продолжает работать. |
+| D02.2 | RNS/reference checks без локальной capsule в обычном CI | review коррекции D02.1-R принят | DONE (review accepted) | [Evidence `da8670e`](releases/2026-10-24-rns-reference-d02-2.md): public mappings, прежние pins, APK/inventory linkage, строгий --capsule. Clean export: 49 passed/1 прежний skip, collection 3051/0 errors; real capsule 2073 PASS. CI control/phase0/Docker: 55/54/54 residual failures, 0 errors; полные команды сохранены. |
+| D03 | Окончательные ошибки ChatHTTP | приняты D02.1 collection/import isolation и D02.2 | IN_PROGRESS | [Evidence](releases/2026-10-24-chat-http-terminal-d03.md): до исправления 15 failed/18 passed, после 33 passed; зависимые 63 passed. HTTP/TLS/invalid_response/timeout/cancellation сохраняются при cleanup, полный 200/consumer error не запускают повтор; transient fallback сохранён. Остаются CI pushed SHA и отдельный review. |
 | D04 | Auto stop/start lifecycle | D02 | QUEUED | Детерминированное воспроизведение и исправление с одним владельцем, завершённой cleanup и generation fencing; до дальнейшей Linux-интеграции. |
 | D05 | Минимальная внутренняя модель выбора/назначения/активной сессии и граница существующего provider | D03, D04 | QUEUED | [Адресные критерии](desktop-architecture.md#desktop-fleet-acceptance): разные сущности, устойчивый ID на fixture 2×NL+DE, refresh без apply/reconnect, stale callback отклонён, строгий legacy RU/NL и реальные capabilities. Не production fleet/F-01 live. |
 
@@ -60,12 +61,14 @@ D02 явно отделяет поддерживаемые проверки от
 
 [provisioning/chat_bridge.py](../provisioning/chat_bridge.py), `ChatHTTP.stream`;
 [tests/test_chat_bridge_http.py](../tests/test_chat_bridge_http.py).
-Сообщённое синтетическое воспроизведение фактического метода:
-`direct400/401/403/409 + TransportError при закрытии → fallback_calls=1`.
-Это проверка логики с synthetic transport, не установленного клиента; D00 её не перезапускает.
-Не переписывать прошлые phase22 PASS как доказательство отсутствия этого дефекта.
-Проверить сохранение первой окончательной причины (HTTP/TLS/invalid_response) при teardown,
-отсутствие слабого fallback после отказа авторизации и разрешённый transient fallback.
+[Детерминированное воспроизведение и исправление](releases/2026-10-24-chat-http-terminal-d03.md):
+фактические ChatHTTP/FriendsClient, независимо управляемые read/close и clock без sleeps.
+До исправления 15 failures, включая HTTP400/401/403/409 → ошибочный fallback;
+после — первая terminal-причина сохранена независимо от cause cleanup, close выполняется.
+Полный 200 и исключение потребителя после единственного yield не повторяют запрос.
+Transient ConnectError/ReadTimeout/503, partial-read fallback и BridgeError mapping сохранены.
+Это synthetic transport, не installed/live/protected DIRECT/service-only acceptance.
+Открытый historical replay D02.1-R не выдаётся за завершённый; D04/D05 не выполняются.
 
 ### D04: наблюдение, не доказанная причина CI
 
@@ -198,5 +201,5 @@ Django7.1 (servers/access/payments) зависит от backend/fencing и recov
 [Полный прежний PLAN](PLAN.history-2026-10-24.md), [STATUS](STATUS.history-2026-10-24.md),
 [phase22](releases/2026-10-23-desktop-parity106.md#linux-user-chat-admission-and-existing-exit-handoff-2410-phase22),
 [отчёт D00](releases/2026-10-24-desktop-parity106-d00.md).
-**После отчёта D02.2 остановиться. NEXT — review D02.2;
-без автоматического перехода к D03/D04/D05/Linux/Windows/iOS или live-операциям.**
+**После отчёта D03 остановиться. NEXT — review D03;
+без автоматического перехода к D04/D05/Linux/Windows/iOS или live-операциям.**

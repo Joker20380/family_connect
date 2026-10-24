@@ -175,25 +175,39 @@ class ChatHTTP:
         if remaining <= 0:
             raise FriendsError('timeout')
         status, body = None, bytearray()
+        terminal_error, complete = None, False
         try:
             with self.direct.stream('POST', path, content=raw, headers={'Content-Type': 'application/json', 'Accept-Encoding': 'identity'},
                                     timeout=min(12, remaining), follow_redirects=False) as response:
-                status = response.status_code
-                if status in (400, 401, 403, 409):
-                    raise FriendsError('access_rejected')
-                if status == 200:
-                    if response.headers.get('Content-Encoding', '').strip().lower() not in ('', 'identity'):
-                        raise FriendsError('invalid_response')
-                    for chunk in response.iter_bytes():
-                        if len(body) + len(chunk) > 16384:
+                try:
+                    status = response.status_code
+                    if status in (400, 401, 403, 409):
+                        raise FriendsError('access_rejected')
+                    if status == 200:
+                        if response.headers.get('Content-Encoding', '').strip().lower() not in ('', 'identity'):
                             raise FriendsError('invalid_response')
-                        if time.monotonic() >= self.deadline:
-                            raise FriendsError('timeout')
-                        body.extend(chunk)
-        except (httpx.TransportError, ssl.SSLError) as error:
+                        for chunk in response.stream:
+                            if len(body) + len(chunk) > 16384:
+                                raise FriendsError('invalid_response')
+                            if time.monotonic() >= self.deadline:
+                                raise FriendsError('timeout')
+                            body.extend(chunk)
+                        complete = True
+                except BaseException as error:
+                    if not isinstance(error, (httpx.TransportError, ssl.SSLError)):
+                        terminal_error = error
+                    elif tls_failure(error):
+                        terminal_error = FriendsError('access_rejected')
+                    raise
+        except BaseException as error:
+            if terminal_error is not None:
+                raise terminal_error from None
+            if not isinstance(error, (httpx.TransportError, ssl.SSLError)):
+                raise
             if tls_failure(error):
                 raise FriendsError('access_rejected') from None
-            status = None
+            if not complete:
+                status = None
         if status != 200:
             try:
                 status, data = self.bridge.request(path, raw, self.deadline - time.monotonic())

@@ -1,9 +1,16 @@
 # Текущее состояние / Current state
 
-Срез D02.2, 24.10.2026. Вход: чистая `main`, HEAD = проверенный `origin/main`
-`17256565148028da9fd660a6e31ad6be387248dd`; продуктовый baseline —
+Срез D03, 24.10.2026. Вход: чистая `main`, HEAD = проверенный `origin/main`
+`e3a0190893b0384980dc62b216951634e9319005`; продуктовый baseline до D03 —
 `664342a6566792a4ea621274a369bcd6b6012143`. Dependency-части D01.1/D01.2 приняты review;
-их PARTIAL и общая CI-приёмка D01 не закрыты. **D02.2 выполнен, NEXT — его review.**
+их PARTIAL и общая CI-приёмка D01 не закрыты. **Разрешён только D03.**
+Review D02.1 collection/import isolation и D02.2 public-reference принят; это необходимые
+зависимости D03, не заявление о завершении исторического replay D02.1-R.
+[D03](releases/2026-10-24-chat-http-terminal-d03.md): фактический ChatHTTP/FriendsClient
+с управляемым stream, до исправления 15 failed / 18 passed, после — 33 passed;
+зависимые Friends/bridge/chat-owner — 63 passed, без skips/errors. Первая terminal-причина
+сохраняется до teardown, close выполняется, полный 200 не повторяется из-за transport cleanup.
+Новый CI ещё не получен; результаты D02.2 ниже относятся только к `da8670e`.
 Review коррекции D02.1-R и [fleet-документации `1725656`](releases/2026-10-24-desktop-fleet-boundary.md)
 завершён. [Граница desktop/fleet](desktop-architecture.md#desktop-fleet-boundary) сохраняется:
 D05 QUEUED после D03/D04; реализация и проверки D05/fleet NOT_RUN.
@@ -16,7 +23,7 @@ D05 QUEUED после D03/D04; реализация и проверки D05/flee
 Client Linux: 1 Auto failure / 882 passed / 62 skipped; AWG и TCP jobs PASS.
 Остальные capsule/nginx/expiry/privacy/socket failures и Auto не исправлялись;
 последующие control GUI/package, phase0 cargo и Docker failover gates не выполнены.
-NEXT — review D02.2; после отчёта остановиться, без автоматического перехода.
+NEXT — review D03; после отчёта остановиться, без автоматического перехода к D04.
 [D02.1-R PARTIAL, коррекция принята review](releases/2026-10-24-historical-runner-d02-1-r.md): bootstrap vector и original API
 добавлены; retained inputs явно перечислены, preflight/snapshot fail-closed. Чистая collection
 3031/0 errors, адресные 110 passed. Полный исторический запуск **NOT_RUN**: у delivery-check,
@@ -71,7 +78,7 @@ failover проверки не выполнены. Runtime/fixtures/collection p
 
 | Уровень | Подтверждённое состояние |
 |---|---|
-| SOURCE | Последний продуктовый checkpoint — phase22, baseline выше. D00 — документация; D01.1 — CI-only `b3a54f2` + `26f71d6`, оба pushed/remote-verified. |
+| SOURCE | Phase22 baseline выше; D03 — узкое исправление ChatHTTP terminal/cleanup, не новая поставка. D00 — документация; D01.1 — CI-only `b3a54f2` + `26f71d6`, оба pushed/remote-verified. |
 | LOCAL TESTS | Phase22: 1218 PASS в описанном локальном наборе, без failures/errors/skips; существующий GI warning. Шесть Linux native packages: race PASS. Не полный pytest и не CI. |
 | CI | D01.1 PARTIAL: три import/адресных gates PASS, полный desktop FAIL; дальнейшие job checks SKIPPED. [Результаты и остаточные failures](releases/2026-10-24-desktop-ci-d01-1.md). Общий CI PASS не заявлен. |
 | BUILT | Linux native-r18, Windows native-r14 cross-build, unsigned Linux system/native/RNS component-r18. **Полный parity installer: 0/2.** |
@@ -118,13 +125,12 @@ D00 ничего не устанавливает: runtime rollback не нуже
 
 ## Блокеры / оставшаяся реализация
 
-- D01.1/D01.2 PARTIAL, dependency gates приняты; D02.1 DONE только по collection/import isolation. D02.2 отдельно отвечает за два RNS/reference checks и accepted pins без capsule. Другие выявленные 54 failures требуют отдельной оценки, не расширяют D02.1/D02.2 автоматически. Общий D01/CI acceptance открыт до полного PASS.
+- D01.1/D01.2 PARTIAL, dependency gates приняты; review D02.1 collection/import isolation и D02.2 public-reference принят. D02.1-R historical replay PARTIAL/NOT_RUN. Остальные CI failures требуют отдельной оценки, не расширяют D03 автоматически. Общий D01/CI acceptance открыт до полного PASS.
 - D04 QUEUED: наблюдается возможная публикация DISCONNECTED до cleanup и отказ start при несброшенном self.thread; причина конкретного CI failure не доказана. Требуется отдельное детерминированное воспроизведение с one-owner/cleanup/generation fencing, до Linux-интеграции.
-- D03: `provisioning/chat_bridge.py`, `ChatHTTP.stream`: синтетический вызов фактического
-  метода direct400/401/403/409 + TransportError при закрытии даёт `fallback_calls=1`.
-  Это сообщённое воспроизведение логики, НЕ проверка установленного клиента и не новый запуск D00.
-  Историческое общее утверждение phase22 о terminal errors недостаточно для этого случая;
-  исправление/адресные тесты: [D03](PLAN.md#d03), [tests](../tests/test_chat_bridge_http.py).
+- D03: [исправление и детерминированные регрессии](releases/2026-10-24-chat-http-terminal-d03.md)
+  сохраняют HTTP/TLS/invalid_response/timeout/cancellation при ошибке teardown.
+  Это локальная логика с synthetic transport, НЕ installed/live delivery PASS;
+  необходим отдельный review D03, без автоматического старта D04/D05.
 - L01/L02: protected DIRECT и host service-only/handoff; L03–L08: полный Linux bundle,
   installed VPN/messenger/recovery/visual/upgrade. Текущий existing-exit не закрывает эти задачи.
 - W01–W12: Windows native↔broker, Auto/recovery и продуктовые функции, затем полный installer,
@@ -167,4 +173,4 @@ D00 ничего не устанавливает: runtime rollback не нуже
 [STATUS до D00](STATUS.history-2026-10-24.md) и [PLAN до D00](PLAN.history-2026-10-24.md)
 сохранены целиком; старые NEXT/ACTIVE/checkpoints — история, не параллельные задания.
 [Отчёт D00](releases/2026-10-24-desktop-parity106-d00.md) фиксирует сохранность и границы.
-**После отчёта D02.1 остановиться. NEXT: D02.2 после проверки D02.1; только отдельной задачей.**
+**После отчёта D03 остановиться. NEXT — review D03; D04/D05 автоматически не начинать.**
