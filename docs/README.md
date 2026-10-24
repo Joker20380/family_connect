@@ -1,5 +1,10 @@
 # Documentation
 
+Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN.md).
+D00 is the documentation checkpoint; the only next separate task is D01, not an
+automatic continuation. Product implementation last finalized at phase22.
+Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
+
 [Desktop parity with accepted106 — active, not released](releases/2026-10-23-desktop-parity106.md):
 full feature matrix, exact source manifest, both native worker builds, Linux
 isolated kernel TUN/routing evidence and explicit remaining

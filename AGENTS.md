@@ -1,9 +1,11 @@
 # Family Connect — session entry point
 
 Before starting work, read `docs/STATUS.md` and the **current-priority section** of
-`docs/PLAN.md`. Use `docs/README.md` to locate a runbook. These are the current state
-and next actions; `docs/implementation-log.*.md` and dated release reports are
-historical evidence and are not required reading for every task.
+`docs/PLAN.md`, then the selected task ID, its dependencies and completion gate.
+Use `docs/README.md` to locate only the relevant runbook/source/evidence. STATUS and
+PLAN are the current state and queue; `*.history-*.md`, implementation logs and
+dated release checkpoints are historical evidence, not simultaneous active NEXTs.
+A queued task is not permission to start it automatically after the selected task.
 
 ## Documentation routing
 
@@ -11,6 +13,8 @@ Always read:
 
 - `docs/STATUS.md`
 - current-priority section of `docs/PLAN.md` (`Current engineering priority / Текущий critical path`)
+- the selected PLAN task and its applicable gates; read history only to resolve a
+  specific question or contradiction, not the entire checkpoint feed
 
 Additional documents only for the area being touched:
 
@@ -74,7 +78,13 @@ Use `scripts/sign_update.py` only after release assets have passed platform CI a
 have been downloaded and checked. Update sequence must increase; never replace an
 already published version/tag with different binaries.
 
-Python checks: `python -m pytest -q` using control and identity lockfiles. TestClient
+Choose checks by the changed risk and mandatory gate, starting with relevant tests.
+Do not rerun the entire historical suite after every small change without a concrete
+reason. Keep full/release gates where required; this rule does not authorize hiding
+mandatory tests. For documentation-only tasks, verify content, links and whitespace.
+
+Python checks: `python -m pytest -q` using control and identity lockfiles and the
+relevant test selection. TestClient
 may stall in the local sandbox; request the normal outside-sandbox test execution if
 that known restriction recurs. Linux layout check needs a display/Xvfb. Windows UI
 must pass Windows CI; a Linux cross-build alone is not a runtime validation.

@@ -1,5 +1,17 @@
 # Linux + Windows parity with accepted Android106
 
+## Current entry point — D00, 24 October2026
+
+Read [current STATUS](../STATUS.md) and [the selected PLAN task](../PLAN.md) first.
+The last finalized product checkpoint is [phase22, 24.10 08:53 CEST](#linux-user-chat-admission-and-existing-exit-handoff-2410-phase22),
+followed by the owner's stop at08:55. D00 is documentation only; NEXT is D01 as a
+separately authorized task, not automatic continuation. [D00 preservation report](2026-10-24-desktop-parity106-d00.md).
+Everything below is historical evidence: intermediate NEXTs/checkpoints are not
+concurrent assignments, and results/hashes retain their original source and scope.
+The1218 PASS are a local phase22 suite, not later CI success; see [CI observations](../PLAN.md#ci-evidence).
+The subsequently reported ChatHTTP teardown/fallback defect is tracked as [D03](../PLAN.md#d03),
+not silently covered by older terminal-error claims. No new runtime/visual acceptance is claimed here.
+
 ## Owner progress readback —24.10,07:07 CEST
 
 Readback only: stage3/6, Linux integration; no measured overall percentage.
