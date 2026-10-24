@@ -18,12 +18,12 @@ activation and messaging remain L04/L05; migration L08 and visual L07 not starte
 
 ## Exact internal artifact
 
-`FamilyConnect-MESH-system-amd64.tar.gz`, internal build **L03.1/build-8**;
+`FamilyConnect-MESH-system-amd64.tar.gz`, internal build **L03.1/build-9**;
 not signed, not a desktop installer, not publicly distributed.
 
-- Build/source ID: `63fbbc03627497ac88bfad0536939e472ff3424b9647786124914a1732b2541b`.
-- Archive SHA256: `9b5f5ee475b5df5b9277937697727cb918ceed7dfe5b63641ced8902adfd78e1`.
-- Size: **49,247,763 bytes**,759 regular archive members including the manifest.
+- Build/source ID: `8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da`.
+- Archive SHA256: `bdd7e04b8ca78a232acccd881004cfb3b6c96b13dc3c608d0b919f53f40f02d9`.
+- Size: **49,247,776 bytes**,759 regular archive members including the manifest.
 - Manifest schema2 binds758 payload members, exact sizes/SHA256, architecture,
   signing status and native source digest; build ID covers all those fields.
   `installed.json` binds the actual fixed destinations/modes/bytes, including
@@ -146,19 +146,31 @@ this fixture rule is not in the shipped archive. No test trust switch is shipped
   readback; previous source, manifest and capabilities are restored. Synthetic
   identity/history/settings and unrelated safe files survive. Production payload
   is unchanged; the negative fixture is not a released/test-overlay worker.
+  Rollback re-masks/reloads the fixed templates **before** restoring old sources
+  that might lack shared startup admission. Templates remain masked until all
+  non-unit files are restored. The smoke pauses at this actual re-mask boundary
+  using a profiler barrier, not a mocked command/result: real systemd rejects
+  both chat starts; after release, real failed readback completes its rollback.
 - Capabilities reject changed size, changed hash, missing module, old schema with
   the same native, and extra vendor symlink; restoring exact bytes returns READY.
 - AWG/Xray installed version readback PASS; TCP unit loads. Manual/Auto idle-start
   checks do not request VPN materials or a VPN session. Actual AWG/TCP/MESH traffic,
   registration, Telemost, P1 grants and installed message delivery remain L04/L05.
 
-Local targeted packaging/installer/authorization/backend checks: **95 PASS**,
-also under caller umask077 (`targeted-umask077-final.log`). Desktop full suite on
-source `512980c`, with the standard native artifact: **1118 PASS /24 SKIP**
-(`desktop-final-source.log`); the later sticky-race regression adds one targeted
-root-only check. Final exact archive **build-8 system smoke PASS**, including
-umask077 and manual/Auto idle units: `system-smoke-8.log`, all listed checks and
-archive/normal-binary metadata. Root backup: `mesh-bundle-3ydxf2o0`.
+Final targeted selection under umask077: **94 PASS** (`build-and-targeted-9.log`):
+`test_mesh_installer.py`, `test_system_runtime.py`, `test_auto_backend.py`,
+`test_authorization.py`, `test_rns_package.py`. Earlier build-8 selection had95
+PASS (`targeted-umask077-final.log`). Desktop full suite on source `748473d`,
+with the standard native artifact: **1119 PASS /24 SKIP**
+(`desktop-final-followup.log`); final rollback regression adds one more check,
+with final desktop/CI rerun pending. Exact archive **build-9 system smoke PASS**,
+including umask077 and manual/Auto idle units: `system-smoke-9.log`, all listed
+checks and archive/normal-binary metadata. Root backup: `mesh-bundle-_oqo33i7`.
+Source `748473db4f69815ad53120c290f78a9f58799271` is pushed/remote-verified;
+the subsequent rollback fence is a separate bounded source checkpoint.
+Auto/native CI path filters now include the installer/runtime/fixture, and its
+existing root→UID step also runs the installer/runtime regressions. No gate is
+removed or weakened; no release/signing workflow is changed.
 
 Build-7/source `512980c9389608cca890ff8cbd865860e5e11f65` was pushed and remote
 verified. Its Client Linux job **40138981148/121006466574 PASS**. Isolated-linux
@@ -187,7 +199,7 @@ between pre-flock stat and flock. Old installer reproducer `sticky-red.log`
 fails as expected; the installer now checks size again **after** acquiring the
 lock. This mocked race regression is distinct from the real kernel ownership
 and sticky-refusal checks in system smoke. Prior build-7 and its evidence remain
-local; build-8 supersedes it, never a replacement public release.
+local; build-9 supersedes the earlier internal builds, never a replacement public release.
 
 Initial failed attempts retained: first full desktop invocation lacked GI and
 failed collection (fixed only by test-image dependencies); first smoke imported

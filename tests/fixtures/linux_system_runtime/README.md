@@ -59,6 +59,8 @@ materials; this is not a fabricated successful MESH connection.
 
 Negatives include a separate intentionally invalid Python module (fresh hash
 manifest) whose **real** installed import fails, triggering own-file rollback;
+the profiler pauses after actual rollback re-masking so real unit starts can be
+checked before old source restoration (no replaced systemctl/readback results);
 live owner, held lock, sticky marker, concurrent unit and executable start;
 missing/modified files, old capability schema with unchanged native, and an
 unlisted vendor symlink. Synthetic marker cleanup occurs only in the fixture

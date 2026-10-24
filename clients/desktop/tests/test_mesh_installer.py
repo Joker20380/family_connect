@@ -159,6 +159,36 @@ def test_partial_install_restores_only_own_previous_files(filesystem, tmp_path, 
     assert operations == [('systemctl', '--version'), ('systemctl', 'daemon-reload')]
 
 
+def test_rollback_remasks_units_before_restoring_legacy_sources(filesystem, tmp_path, monkeypatch):
+    root, operations = filesystem
+    payload, _ = bundle(tmp_path / 'bundle')
+    unit, _ = installer.target('systemd/family-connect-chat-direct@.service')
+    masks = {unit: (b'old unit', 0o644)}
+    installer.mask_services(masks)
+    helper = root / 'lib_helper'
+    helper.write_bytes(b'old helper without startup gate')
+    original_atomic, original_command = installer.atomic, installer.command
+    restored = []
+    def command(*args):
+        if args[-1] == '--check':
+            raise ValueError('real readback failure simulated only in unit test')
+        return original_command(*args)
+    def atomic(path, raw, mode):
+        if path == helper and raw == b'old helper without startup gate':
+            assert unit.is_symlink() and os.readlink(unit) == '/dev/null'
+            assert operations[-1] == ('systemctl', 'daemon-reload')
+            restored.append(path)
+        original_atomic(path, raw, mode)
+    monkeypatch.setattr(installer, 'command', command)
+    monkeypatch.setattr(installer, 'atomic', atomic)
+    with pytest.raises(ValueError, match='readback failure'):
+        installer.apply(payload, 'a' * 64, masked=masks)
+    assert restored == [helper]
+    assert unit.is_symlink() and os.readlink(unit) == '/dev/null'
+    assert not (root / 'capabilities.json').exists()
+    assert not (root / 'bin_fc-mesh').exists()
+
+
 def test_rns_runtime_mismatch_rolls_back_before_advertising_capability(filesystem, tmp_path, monkeypatch):
     root, operations = filesystem
     payload, _ = bundle(tmp_path / 'bundle')

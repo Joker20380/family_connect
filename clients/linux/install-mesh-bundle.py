@@ -245,6 +245,15 @@ def idle_services():
         raise ValueError('Live Family Connect service owner; installation refused')
 
 
+def mask_services(paths):
+    for path in paths:
+        temporary = path.with_name('.fc-install-mask-' + path.name)
+        os.symlink('/dev/null', temporary)
+        os.replace(temporary, path)
+        sync_directory(path.parent)
+    command('systemctl', 'daemon-reload')
+
+
 @contextmanager
 def service_barrier():
     originals = {}
@@ -271,12 +280,7 @@ def service_barrier():
         atomic(saved / 'restore.json', json.dumps({str(path): None if value is None else
             dict(file=path.name, mode=value[1], sha256=hashlib.sha256(value[0]).hexdigest())
             for path, value in originals.items()}).encode(), 0o600)
-        for path in originals:
-            temporary = path.with_name('.fc-install-mask-' + path.name)
-            os.symlink('/dev/null', temporary)
-            os.replace(temporary, path)
-            sync_directory(path.parent)
-        command('systemctl', 'daemon-reload')
+        mask_services(originals)
         idle_services()
         yield originals
     finally:
@@ -403,7 +407,11 @@ def apply(payload, source_digest, build_id=None, masked=None):
         atomic(AUTO_CAPABILITY, *destinations[AUTO_CAPABILITY])
         return backup
     except Exception:
+        if masked is not None:
+            mask_services(masked)
         for path in reversed(changed):
+            if masked is not None and path in masked:
+                continue
             if path in previous:
                 atomic(path, *previous[path])
             elif path.exists():

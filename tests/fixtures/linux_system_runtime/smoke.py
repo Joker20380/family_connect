@@ -223,7 +223,22 @@ finally:
     shutil.copytree(bundle, negative)
     (negative / 'lib/mesh_chat_service.py').write_bytes(b'def invalid syntax\n')
     reseal(negative)
-    assert run('/usr/bin/python3', '-I', '-S', str(negative / 'install.py'), ok=False).returncode != 0
+    rollback_wrapper = wrapper.replace("print('BARRIER_HELD',flush=True);sys.stdin.readline()", 'pass')
+    rollback_wrapper = rollback_wrapper.replace('locks=module.acquire()', '''count=0
+def barrier(frame,event,arg):
+    global count
+    if event=='return' and frame.f_code is module.mask_services.__code__:
+        count+=1
+        if count==2:
+            print('ROLLBACK_MASKED',flush=True);sys.stdin.readline()
+sys.setprofile(barrier)
+locks=module.acquire()''')
+    process = subprocess.Popen(['/usr/bin/python3', '-I', '-S', '-c', rollback_wrapper, str(negative / 'install.py')],
+                               stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=ENV)
+    assert process.stdout.readline().strip() == 'ROLLBACK_MASKED'
+    assert all(run('systemctl', 'start', unit, ok=False).returncode != 0 for unit in UNITS)
+    output, error = process.communicate('\n', timeout=90)
+    assert process.returncode != 0 and 'CalledProcessError' in error, (output, error)
     assert all(path.read_bytes() == raw for path, raw in snapshot.items())
     assert python('import backend;print(backend.system_component_status())') == 'READY'
     record('actual_failed_import_readback_rollback')
