@@ -1,17 +1,21 @@
 # Текущее состояние / Current state
 
-Срез D02.1-R, 24.10.2026. Вход: `main`, чистая рабочая копия, HEAD = проверенный `origin/main`
-`2ee2b06d536d1302f84f9e6ce54fd16f7350ceeb`; продуктовый baseline —
+Документационный desktop/fleet checkpoint, 24.10.2026. Вход: чистая `main`, HEAD = `origin/main`
+`a0bbcfcadef10f443c5a143aa270bfca86c115d5`; продуктовый baseline —
 `664342a6566792a4ea621274a369bcd6b6012143`. Dependency-части D01.1/D01.2 приняты review;
-их PARTIAL и общая CI-приёмка D01 не закрыты. **Разрешён только D02.1-R.**
+их PARTIAL и общая CI-приёмка D01 не закрыты. **Сейчас разрешена только документация.**
+[Граница desktop/fleet](desktop-architecture.md#desktop-fleet-boundary) закреплена как планируемая;
+D05 QUEUED после D03/D04, без зависимости от production fleet/F-01. Реализация и проверки
+D05/fleet NOT_RUN. [Отчёт](releases/2026-10-24-desktop-fleet-boundary.md). NEXT основной очереди —
+D02.2 после проверки коррекции D02.1-R; автоматический переход не разрешён.
 [D02.1-R PARTIAL](releases/2026-10-24-historical-runner-d02-1-r.md): bootstrap vector и original API
 добавлены; retained inputs явно перечислены, preflight/snapshot fail-closed. Чистая collection
 3031/0 errors, адресные 110 passed. Полный исторический запуск **NOT_RUN**: у delivery-check,
 Java runtime/classes и трёх JARs нет подтверждённых artifact pins; существование файлов не PASS.
 Collection/import isolation D02.1 подтверждено review. Комплектность исторического replay ещё
 не закрыта. Новые полные suites вручную не запускались; старые CI counts ниже — только `6a0a982`.
-Code `85b29da` pushed/remote-verified; control/phase0/tests/Docker build запущены,
-на момент чтения IN_PROGRESS, новые full pytest counts ещё недоступны (ссылки в отчёте).
+Code `85b29da` pushed/remote-verified; по отчёту D02.1-R control/phase0/tests/Docker build
+были IN_PROGRESS без full pytest counts; в документационном checkpoint CI не перепроверялся.
 [D02.1 DONE](releases/2026-10-24-fixture-boundaries-d02-1.md), code `6a0a982`: чистый export —
 collection 2977 + 9 errors → 2996 / 0 errors; helpers/import/runner — 75 passed.
 В трёх CI окружениях collection errors = 0; полный pytest остаётся FAIL (56 failures):

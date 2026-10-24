@@ -1,8 +1,8 @@
 # Documentation
 
 Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN.md).
-D00 is the documentation checkpoint; the only next separate task is D01, not an
-automatic continuation. Product implementation last finalized at phase22.
+STATUS/PLAN define the current bounded task and next review gate, not an automatic
+continuation. Product implementation last finalized at phase22.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
 
 [Desktop parity with accepted106 — active, not released](releases/2026-10-23-desktop-parity106.md):
@@ -11,6 +11,9 @@ isolated kernel TUN/routing evidence and explicit remaining
 Linux/Windows UI/MESH/messenger/package gates. [Architecture](desktop-architecture.md)
 and [shared bridge ADR](adr/003-desktop-mesh-bridge.md),
 [Linux session chat owner](adr/004-linux-chat-session-owner.md).
+[Planned desktop/fleet boundary — D05, not implemented](desktop-architecture.md#desktop-fleet-boundary):
+separate target/assignment/active session, strict legacy provider and later platform gates;
+[documentation checkpoint](releases/2026-10-24-desktop-fleet-boundary.md).
 [Accepted restricted-chat core contract](../clients/shared/android106-chat.json)
 now has a shared Go API/mailbox adapter, native VPN ownership and a bounded separate
 Linux parent/native IPC lane. UID/device-bound user-service admission now forwards
