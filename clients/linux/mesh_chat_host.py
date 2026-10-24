@@ -33,6 +33,7 @@ class Binding:
         self.cancelled = cancelled
         self.device = start['readiness'].get('device', '')
         self.generation_lease = None
+        self.failure = None
         self.material = copy.deepcopy({key: start[key] for key in ('identity', 'anchor', 'readiness', 'resolver', 'underlying_index')})
 
     def close(self):
@@ -42,9 +43,11 @@ class Binding:
             self.material.clear()
 
     def acquire(self, device, cancel, budget):
+        self.probe(device)
         with self.lock:
             if device != self.device:
                 raise wire.BridgeError('DENIED')
+            self._raise_failure()
             if not self.ready.is_set() or self.closed.is_set() or self.cancelled.is_set():
                 raise wire.BridgeError()
             material = copy.deepcopy(self.material)
@@ -52,35 +55,70 @@ class Binding:
         try:
             values = {} if generation is None else dict(generation=generation)
             result = self.lane.call('acquire', acquire=material, budget_ms=budget, cancel=cancel, **values)
-        except ChatError:
-            self.native_alive()
+        except ChatError as error:
+            try:
+                self.native_alive()
+            except ChatError:
+                pass
+            if error.code in ('UNAVAILABLE', 'CANCELLED', 'BUSY_OR_UNAVAILABLE'):
+                self._raise_failure()
             raise
         finally:
             material.clear()
         allowed = ('SERVICE_ONLY', 'CONNECTING') if self.route == 'SERVICE_ONLY' else ('EXISTING_EXIT',)
-        if (result.get('route') not in allowed or cancel.is_set() or self.closed.is_set() or
-                self.cancelled.is_set() or not self.native_alive()):
+        try:
+            self._raise_failure()
+            if (result.get('route') not in allowed or cancel.is_set() or self.closed.is_set() or
+                    self.cancelled.is_set()):
+                raise wire.BridgeError()
+        except BaseException:
             self.release(result['lease'])
-            raise wire.BridgeError()
+            raise
         return result['lease']
 
+    def _raise_failure(self):
+        if self.failure not in (None, 'UNAVAILABLE'):
+            raise ChatError(self.failure)
+
+    def _fence(self, code):
+        with self.lock:
+            if self.failure in (None, 'UNAVAILABLE'):
+                self.failure = code
+            self.closed.set()
+            self.ready.clear()
+            self.cancelled.set()
+
     def native_alive(self):
+        self._raise_failure()
+        if self.closed.is_set() or self.cancelled.is_set():
+            return False
         if self.generation_lease is None:
             return True
         try:
             result = self.lane.call('route', lease=self.generation_lease)
             if result.get('route') in ('CONNECTING', 'SERVICE_ONLY'):
-                return True
-        except (OSError, ValueError, ChatError):
-            pass
-        self.closed.set()
-        self.ready.clear()
-        self.cancelled.set()
+                self._raise_failure()
+                return not (self.closed.is_set() or self.cancelled.is_set())
+        except ChatError as error:
+            if error.code == 'BUSY_OR_UNAVAILABLE':
+                raise
+            self._fence(error.code)
+            if error.code != 'UNAVAILABLE':
+                raise
+            return False
+        except ValueError:
+            self._fence('DENIED')
+            raise ChatError('DENIED') from None
+        except OSError:
+            self._fence('UNAVAILABLE')
+            return False
+        self._fence('UNAVAILABLE')
         return False
 
     def probe(self, device):
         if device != self.device:
             raise wire.BridgeError('DENIED')
+        self._raise_failure()
         if not self.ready.is_set() or self.closed.is_set() or self.cancelled.is_set() or not self.native_alive():
             raise wire.BridgeError()
 
@@ -181,6 +219,9 @@ class Host:
                 self._mailbox(connection, request['id'], binding, opened['stream'], cancel, deadline, route=binding.route)
         except (OSError, ValueError, ChatError, RecursionError) as error:
             code = getattr(error, 'code', 'UNAVAILABLE')
+            if (binding is not None and code in ('UNAVAILABLE', 'CANCELLED', 'BUSY_OR_UNAVAILABLE') and
+                    binding.failure in ('DENIED', 'CONFLICT', 'DEADLINE', 'CANCELLED')):
+                code = binding.failure
             if type(request.get('id')) is int:
                 try:
                     wire.write(connection, dict(schema=1, id=request['id'], ok=False, error=code if code in wire.ERRORS else 'UNAVAILABLE'))

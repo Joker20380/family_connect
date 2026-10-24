@@ -156,6 +156,15 @@ or release acceptance. The next review can reconcile these exact job IDs.
 
 ## Trust boundary and remaining work
 
+Final CI reconciliation (recorded in [L02.1-R2](2026-10-24-linux-chat-mesh-l02-1-r2.md))
+for this exact source `6556a902c723a3ef73486733f090cea6f388d099`: control
+**3015 passed / 54 failed / 133 skipped**; phase0/tests **3015 / 54 / 133**;
+Docker **3014 / 53 / 135**, **errors0**. isolated-linux with **13 authenticated**,
+Client Linux, AWG/TCP and voice **PASS**. This supersedes the historical IN_PROGRESS
+snapshot above; it does not remove full-suite failures or transfer results to R2.
+Review of atomic RetainChat and both terminal-generation fixes is now accepted;
+status-check classification is the separate R2 checkpoint. Parent L02 stays PARTIAL.
+
 Fixture still replaces external readiness refresh with a pre-issued validated
 cache; external rendezvous/Telemost signaling/ICE/media, room broker and lease
 maintenance with bounded paired carrier channels; remote fixed services with

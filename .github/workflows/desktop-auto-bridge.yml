@@ -66,7 +66,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          FC_TEST_MESH_WORKER="$RUNNER_TEMP/auto-native/fc-mesh" python -m pytest -q clients/desktop/tests/test_mesh_chat.py clients/desktop/tests/test_mesh_chat_service.py
+          FC_TEST_MESH_WORKER="$RUNNER_TEMP/auto-native/fc-mesh" python -m pytest -q clients/desktop/tests/test_mesh_chat.py clients/desktop/tests/test_mesh_chat_service.py clients/desktop/tests/test_mesh_chat_status.py
           sudo env FC_TEST_MESH_WORKER="$RUNNER_TEMP/auto-native/fc-mesh" "$(command -v python)" -m pytest -q clients/desktop/tests/test_mesh_ownership.py
       - name: Actual native process and root guard in an isolated kernel
         shell: bash
@@ -85,7 +85,7 @@ jobs:
             ip addr add 192.0.2.1/24 dev eth0
             ip link set eth0 up
             ip route add default via 192.0.2.2
-            FC_L021_WORKER="$1" "$2" -m pytest -q clients/desktop/tests/test_mesh_chat_lifetime_native.py clients/desktop/tests/test_mesh_chat_terminal_native.py
+            FC_L021_WORKER="$1" "$2" -m pytest -q clients/desktop/tests/test_mesh_chat_lifetime_native.py clients/desktop/tests/test_mesh_chat_terminal_native.py clients/desktop/tests/test_mesh_chat_status_native.py
           ' -- "$RUNNER_TEMP/l021-fixture/fc-mesh-fixture" "$(command -v python)"
       - name: Fixed protected chat in an isolated kernel (synthetic TLS peer)
         shell: bash

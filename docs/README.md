@@ -29,7 +29,9 @@ Linux OFF→ON→OFF evidence is missing. [L02.1 lifetime checkpoint](releases/2
 adds a generation lease and authenticated service-only fixture, not VPN publication
 acceptance. [L02.1-R terminal-generation recovery](releases/2026-10-24-linux-chat-mesh-l02-1-r.md)
 adds native generation-pinned operations and authenticated failure/recovery barriers.
-NEXT review L02.1-R; parent L02 PARTIAL. Windows broker IPC remains NOT_INTEGRATED;
+Its atomic pin/terminal recovery review is accepted. [L02.1-R2 status classification](releases/2026-10-24-linux-chat-mesh-l02-1-r2.md)
+separates CONTROL contention from terminal evidence and preserves DENIED to the UI.
+NEXT review L02.1-R2; parent L02 PARTIAL. Windows broker IPC remains NOT_INTEGRATED;
 installed restricted-message acceptance is NOT_RUN, not a completed fallback.
 [Shared Auto policy and accepted-Java trace checks](../carrier/desktopauto/README.md)
 are implemented locally and included in the native worker's bounded private-pipe

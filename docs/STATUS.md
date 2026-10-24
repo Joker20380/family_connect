@@ -1,5 +1,33 @@
 # Текущее состояние / Current state
 
+Срез **L02.1-R2**, 24.10.2026: native status classification исправлена;
+**review pending; родительский L02 PARTIAL. NEXT — review L02.1-R2.**
+Вход: чистая актуальная `main` = remote
+`323d49b09af57a809ba467f27e9c4650a97d7844`; checkout не откатывался.
+[Текущий отчёт](releases/2026-10-24-linux-chat-mesh-l02-1-r2.md): настоящий
+CONTROL4 limiter воспроизвёл отмену исправного поколения; malformed native route
+терял DENIED до ChatBridge/ChatHTTP. Теперь BUSY — ограниченный отказ/перенос
+проверки watcher, не healthy и не terminal; после освобождения очереди тот же
+authenticated transport/lease. DENIED сохраняется до `access_rejected`, без HTTP
+send/replay; terminal/protocol failure закрывает допуск и запускает прежний cleanup.
+Review L02.1-R atomic RetainChat и обоих terminal-generation исправлений принят;
+generation pin/refcount/drain→worker exit→flock ordering и IPC caps не менялись.
+Локально 117 адресных Python/IPC, 66 dependent error/lifecycle, 13 root→UID/process
+и 15 authenticated (включая прежние 13) PASS; native Go/race и 175 reference pins
+PASS. Новые source/remote SHA и CI receipt — отдельно в текущем отчёте.
+Завершившийся CI **предыдущего** source `6556a902c723a3ef73486733f090cea6f388d099`:
+control **3015 passed / 54 failed / 133 skipped**, phase0/tests **3015 / 54 / 133**,
+Docker **3014 / 53 / 135**, errors0; isolated-linux с13 authenticated,
+Client Linux, AWG/TCP и voice PASS. Это не общее CI acceptance.
+Mandatory suites и Auto/DIRECT kernel gates сохранены; full suites/неизменённые
+kernel scripts локально NOT_RERUN. Посторонние failures не исправлялись.
+Combined VPN publication→EXISTING_EXIT→OFF **NOT_RUN**, отдельный этап, не расширен.
+D01 открыт; D02.1-R PARTIAL/NOT_RUN; L01/L01-R/D03/D04/D05 сохранены.
+Identity/history/settings/keys/floors/reference pins и версии не менялись;
+установка/live/publication/L03/Windows/fleet/iOS NOT_RUN. **STOP перед review L02.1-R2.**
+
+### Предыдущий checkpoint L02.1-R (историческое evidence)
+
 Срез **L02.1-R**, 24.10.2026: terminal native generation fencing/recovery исправлен;
 **review pending; родительский L02 PARTIAL. NEXT — review L02.1-R.**
 Вход: чистая актуальная `main` = remote

@@ -15,6 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from auto_platform import Underlying
 from auto_policy import Failure
 from mesh_chat_host import Binding, Cancellation, Host
+from mesh_chat import ChatError
 from mesh_materials import CacheStore, MaterialOwner, MaterialsError, NativeMaterials
 from mesh_ownership import Ownership, OwnershipError, locked_file, prepare_runtime
 from mesh_service import NativeWorker
@@ -115,6 +116,10 @@ class ServiceOwner:
             self.touched = time.monotonic()
             context.check()
             return self.current
+        except ChatError as error:
+            if error.code != 'BUSY_OR_UNAVAILABLE' or self.generation_lease is None:
+                self.cancel.set()
+            raise
         except MaterialsError as error:
             self.cancel.set()
             code = error.code
@@ -135,6 +140,8 @@ class ServiceOwner:
 
     def binding(self):
         with self.lock:
+            if self.current is not None:
+                self.current._raise_failure()
             if self.failed or self.cancel.is_set() or self.stopped.is_set():
                 return None
             if self.current is not None and not self.current.native_alive():
@@ -177,7 +184,11 @@ class ServiceOwner:
                     cancel.set()
                 with self.lock:
                     if self.gate is gate and self.cancel is cancel and self.current is not None:
-                        self.current.native_alive()
+                        try:
+                            self.current.native_alive()
+                        except ChatError as error:
+                            if error.code != 'BUSY_OR_UNAVAILABLE':
+                                cancel.set()
                     if (self.gate is gate and self.cancel is cancel and self.current is not None and
                             self.current.material['readiness']['expires_at'] <= time.time()):
                         cancel.set()
