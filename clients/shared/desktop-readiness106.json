@@ -2,6 +2,7 @@
   "schema": 1,
   "reference": "android106-native105",
   "apk_sha256": "242855c43e889e708234ce2f687fa02d37bccb1eee408904f09216b6abd8f020",
+  "source_inventory_sha256": "8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c",
   "source_files": {
     "clients/android/app/src/main/java/com/familyconnect/app/FriendsReadinessProtocol.java": "169a6e8c412533d6f434bdec76ab987881d92fb4e98437a40a4bf897ad97eb82",
     "clients/android/app/src/main/java/com/familyconnect/app/RestrictedCache.java": "bb60d59c4e28c748cdf657001ec89f6bb5784c36a5c9cd691fd68a55f497a466",

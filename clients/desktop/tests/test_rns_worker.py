@@ -11,6 +11,8 @@ import time
 
 import pytest
 
+from scripts.verify_desktop_reference import READINESS_MANIFEST, RNS_PUBLIC_SOURCES
+
 ROOT = Path(__file__).resolve().parents[3]
 SPEC = importlib.util.spec_from_file_location("fc_desktop_rns_worker", ROOT / "clients/rns/worker.py")
 relay = importlib.util.module_from_spec(SPEC)
@@ -28,12 +30,33 @@ def frame(value):
 
 
 def test_rns_worker_matches_exact_accepted_provider_and_transport_source():
-    capsule = ROOT / "state-client-build/owner-diagnostic106-20261022/android-source/clients/android/app/src/main"
-    expected = json.loads((capsule / "assets/rns-relay.json").read_text())
+    contract = json.loads((ROOT / READINESS_MANIFEST).read_text())
+    assert set(contract['rns_source_files']) == set(RNS_PUBLIC_SOURCES)
+    sources = {}
+    for accepted, public in RNS_PUBLIC_SOURCES.items():
+        raw = (ROOT / public).read_bytes()
+        assert hashlib.sha256(raw).hexdigest() == contract['rns_source_files'][accepted], public
+        sources[accepted] = raw
+    expected = json.loads(sources['clients/android/app/src/main/assets/rns-relay.json'])
     assert dict(host=relay.HOST, port=relay.PORT, provider_public=relay.PROVIDER) == expected
     assert len(base64.b64decode(relay.PROVIDER, validate=True)) == 64
-    actual = (ROOT / "clients/rns/fc_rns_transport.py").read_bytes()
-    assert hashlib.sha256(actual).hexdigest() == "70593713d1d915904d10cf0cac0eb21ca41b11b4dedcdb7973d0da236579ada0"
+
+
+@pytest.mark.parametrize('public', RNS_PUBLIC_SOURCES.values())
+@pytest.mark.parametrize('change', ['missing', 'changed'])
+def test_rns_reference_requires_exact_public_bytes_before_json(tmp_path, monkeypatch, public, change):
+    for name in (str(READINESS_MANIFEST), *RNS_PUBLIC_SOURCES.values()):
+        target = tmp_path / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes((ROOT / name).read_bytes())
+    target = tmp_path / public
+    if change == 'missing':
+        target.unlink()
+    else:
+        target.write_bytes(b'not JSON or accepted transport')
+    monkeypatch.setitem(globals(), 'ROOT', tmp_path)
+    with pytest.raises(FileNotFoundError if change == 'missing' else AssertionError):
+        test_rns_worker_matches_exact_accepted_provider_and_transport_source()
 
 
 @pytest.mark.parametrize("change", [{"schema": True}, {"id": 2}, {"underlying_index": 0}, {"budget_ms": 200001},

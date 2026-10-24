@@ -7,6 +7,11 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = Path("clients/shared/android106-reference.json")
+READINESS_MANIFEST = Path("clients/shared/desktop-readiness106.json")
+RNS_PUBLIC_SOURCES = {
+    "clients/android/app/src/main/assets/rns-relay.json": "clients/android/app/src/main/assets/rns-relay.json",
+    "clients/android/app/src/main/python/fc_rns_transport.py": "clients/rns/fc_rns_transport.py",
+}
 
 
 def digest(path):
@@ -45,6 +50,15 @@ def verify(root=ROOT, capsule=False):
         check(local_path(root, name), entry["sha256"], name)
     for name, entry in manifest.get("desktop_platform_sources", {}).items():
         check(local_path(root, name), entry["sha256"], name)
+    readiness = json.loads((root / READINESS_MANIFEST).read_text())
+    if readiness['apk_sha256'] != manifest['reference']['apk_sha256']:
+        failures.append('readiness_apk')
+    if readiness['source_inventory_sha256'] != manifest['reference']['source_inventory_sha256']:
+        failures.append('readiness_inventory')
+    if set(readiness['rns_source_files']) != set(RNS_PUBLIC_SOURCES):
+        failures.append('readiness_rns_sources')
+    for accepted, public in RNS_PUBLIC_SOURCES.items():
+        check(local_path(root, public), readiness['rns_source_files'].get(accepted), 'readiness_public/' + public)
     source_count = None
     if capsule:
         reference = manifest["reference"]
@@ -61,6 +75,9 @@ def verify(root=ROOT, capsule=False):
             for name, expected in manifest["android_ui_and_handlers"].items():
                 if inventory.get(name) != expected:
                     failures.append("android_reference/" + name)
+            for name, expected in readiness['rns_source_files'].items():
+                if inventory.get(name) != expected:
+                    failures.append('readiness_reference/' + name)
             voice = json.loads((root / 'clients/shared/android106-voice.json').read_text())
             chat = json.loads((root / 'clients/shared/android106-chat.json').read_text())
             if chat['source_inventory_sha256'] != reference['source_inventory_sha256']:

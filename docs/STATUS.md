@@ -1,14 +1,18 @@
 # Текущее состояние / Current state
 
-Документационный desktop/fleet checkpoint, 24.10.2026. Вход: чистая `main`, HEAD = `origin/main`
-`a0bbcfcadef10f443c5a143aa270bfca86c115d5`; продуктовый baseline —
+Срез D02.2, 24.10.2026. Вход: чистая `main`, HEAD = проверенный `origin/main`
+`17256565148028da9fd660a6e31ad6be387248dd`; продуктовый baseline —
 `664342a6566792a4ea621274a369bcd6b6012143`. Dependency-части D01.1/D01.2 приняты review;
-их PARTIAL и общая CI-приёмка D01 не закрыты. **Сейчас разрешена только документация.**
-[Граница desktop/fleet](desktop-architecture.md#desktop-fleet-boundary) закреплена как планируемая;
-D05 QUEUED после D03/D04, без зависимости от production fleet/F-01. Реализация и проверки
-D05/fleet NOT_RUN. [Отчёт](releases/2026-10-24-desktop-fleet-boundary.md). NEXT основной очереди —
-D02.2 после проверки коррекции D02.1-R; автоматический переход не разрешён.
-[D02.1-R PARTIAL](releases/2026-10-24-historical-runner-d02-1-r.md): bootstrap vector и original API
+их PARTIAL и общая CI-приёмка D01 не закрыты. **Разрешён только D02.2.**
+Review коррекции D02.1-R и [fleet-документации `1725656`](releases/2026-10-24-desktop-fleet-boundary.md)
+завершён. [Граница desktop/fleet](desktop-architecture.md#desktop-fleet-boundary) сохраняется:
+D05 QUEUED после D03/D04; реализация и проверки D05/fleet NOT_RUN.
+[D02.2](releases/2026-10-24-rns-reference-d02-2.md): две RNS/reference проверки используют
+точные публичные bytes по прежним accepted pins, без capsule fallback. Clean export:
+49 passed / 1 прежний skip, collection 3051/0 errors; public verifier PASS, настоящий
+`--capsule` PASS (2073 files + APK/native hashes). CI нового code SHA ещё не получен.
+NEXT — review D02.2; после отчёта остановиться, без автоматического перехода.
+[D02.1-R PARTIAL, коррекция принята review](releases/2026-10-24-historical-runner-d02-1-r.md): bootstrap vector и original API
 добавлены; retained inputs явно перечислены, preflight/snapshot fail-closed. Чистая collection
 3031/0 errors, адресные 110 passed. Полный исторический запуск **NOT_RUN**: у delivery-check,
 Java runtime/classes и трёх JARs нет подтверждённых artifact pins; существование файлов не PASS.
@@ -21,7 +25,7 @@ collection 2977 + 9 errors → 2996 / 0 errors; helpers/import/runner — 75 pas
 В трёх CI окружениях collection errors = 0; полный pytest остаётся FAIL (56 failures):
 control/phase0 2834 passed, 106 skipped; Docker 2832 passed, 108 skipped. Остались capsule/
 reference, nginx contract, expiry, privacy и socket failures; не исправлялись.
-Шесть исторических overlay-файлов сохранены и отделены; D02.2 не начат.
+Шесть исторических overlay-файлов сохранены и отделены; исторический runner в D02.2 не менялся.
 [D01.2 PARTIAL](releases/2026-10-24-control-ci-d01-2.md): на pushed `07b52e3` Python3.13
 strict imports и адресные gates PASS в control/phase0/tests/Docker tests-stage;
 Docker root 22 passed, адресные 59 passed. Каждый полный suite прерван: 9 collection
