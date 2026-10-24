@@ -14,7 +14,10 @@ Review L02.1-R atomic RetainChat и обоих terminal-generation исправ�
 generation pin/refcount/drain→worker exit→flock ordering и IPC caps не менялись.
 Локально 117 адресных Python/IPC, 66 dependent error/lifecycle, 13 root→UID/process
 и 15 authenticated (включая прежние 13) PASS; native Go/race и 175 reference pins
-PASS. Новые source/remote SHA и CI receipt — отдельно в текущем отчёте.
+PASS. R2 source **`89e20a3437b2ba1b02f7d1649487579678158373`** committed/pushed,
+remote SHA проверен равным. CI19:17UTC: Auto/isolated-linux, Client Linux,
+control/phase0/Docker, AWG/TCP/voice IN_PROGRESS, не общий PASS;
+точные новые jobs — отдельно в текущем отчёте.
 Завершившийся CI **предыдущего** source `6556a902c723a3ef73486733f090cea6f388d099`:
 control **3015 passed / 54 failed / 133 skipped**, phase0/tests **3015 / 54 / 133**,
 Docker **3014 / 53 / 135**, errors0; isolated-linux с13 authenticated,

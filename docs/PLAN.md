@@ -132,8 +132,9 @@ L02.1-R source **`6556a902c723a3ef73486733f090cea6f388d099`** pushed/remote-veri
 CI: control 3015 passed/54 failed/133 skipped; phase0/tests 3015/54/133;
 Docker 3014/53/135, errors0; isolated-linux с13 authenticated, Client Linux,
 AWG/TCP и voice PASS. Эти результаты не переносятся на R2.
-L02.1-R2: 211 distinct local Python/native/process checks, native/race/reference PASS;
-новые source/remote SHA и CI отдельно в [отчёте R2](releases/2026-10-24-linux-chat-mesh-l02-1-r2.md).
+L02.1-R2 source **`89e20a3437b2ba1b02f7d1649487579678158373`** pushed/remote-verified:
+211 distinct local Python/native/process checks, native/race/reference PASS;
+новый CI19:17UTC IN_PROGRESS, jobs отдельно в [отчёте R2](releases/2026-10-24-linux-chat-mesh-l02-1-r2.md).
 Mandatory full suites и Auto/DIRECT/root→UID gates сохранены; L02 PARTIAL.
 Linux updater пока принимает legacy six-file archive; не объявлять полный bundle обновляемым до L08.
 

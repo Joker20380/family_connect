@@ -125,11 +125,30 @@ represented as PASS. These counts must not be attributed to the new R2 source.
 
 ## R2 source / CI receipt
 
-Source/tests/docs commit, ordinary push and verified remote SHA are recorded in
-the post-push receipt. New CI is reported separately, never inferred from prior CI.
+Source/tests/docs **`89e20a3437b2ba1b02f7d1649487579678158373`** ordinarily committed
+and pushed to existing `main`; remote branch SHA verified equal. All R2 local
+results above refer to this source. Documentation-only receipt commits do not
+change the tested source. No native build, version or release was changed.
 Pre-commit content checks, **350 local documentation links** and
 `git diff --check` PASS. Staged files contain only source/tests/workflow/docs,
 not local binaries, synthetic runtime keys, product state or raw private logs.
+
+New-source CI observation **2026-10-24 19:17 UTC**, not prior-source results:
+
+| Job | Observed state |
+|---|---|
+| [Auto isolated-linux120963186437](https://github.com/Joker20380/family_connect/actions/runs/40124588213/job/120963186437) | IN_PROGRESS; root→UID/kernel/15 authenticated not yet CI PASS |
+| [Auto protocol40124588213](https://github.com/Joker20380/family_connect/actions/runs/40124588213) | Linux/Windows protocol jobs IN_PROGRESS, not Windows feature acceptance |
+| [Client Linux120963186543](https://github.com/Joker20380/family_connect/actions/runs/40124588212/job/120963186543) | IN_PROGRESS, not installed |
+| [Control120963186558](https://github.com/Joker20380/family_connect/actions/runs/40124588227/job/120963186558) | IN_PROGRESS, full suite retained |
+| [phase0/tests120963186536](https://github.com/Joker20380/family_connect/actions/runs/40124588219/job/120963186536) | IN_PROGRESS, full suite retained |
+| [phase0/Docker120963186307](https://github.com/Joker20380/family_connect/actions/runs/40124588219/job/120963186307) | IN_PROGRESS, Docker/failover retained |
+| [AWG120963186495](https://github.com/Joker20380/family_connect/actions/runs/40124588222/job/120963186495), [TCP120963186500](https://github.com/Joker20380/family_connect/actions/runs/40124588218/job/120963186500), [voice120963186475](https://github.com/Joker20380/family_connect/actions/runs/40124588221/job/120963186475) | IN_PROGRESS |
+
+Public metadata receipt: `/tmp/fc-l021-r2/ci-source-initial.json`. No new full-suite
+counts are available at this observation; none are inferred from local subsets.
+This checkpoint is not overall CI/release acceptance. Reconcile these exact
+source/job IDs in review, without starting the separate combined VPN gate.
 
 ## Boundaries and rollback
 
