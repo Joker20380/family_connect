@@ -147,8 +147,40 @@ These failures remain D01 work, not overall CI acceptance or L02.2 counts.
 
 ## Source / current CI receipt
 
-Source commit, ordinary push/remote verification and new CI jobs are recorded in
-the post-push receipt for this checkpoint, separately from the R2 results above.
+Source **`dac0f6b45be6ed8703d3de93ff5fdbc67462eabe`** committed and ordinarily
+pushed to `origin/main`; `git ls-remote` verified exactly that SHA. The later
+documentation-only receipt does not change the tested source or reference pins.
+New jobs below are explicitly tied to this SHA, not R2. Observed **20:29 UTC**:
+
+| Suite | Exact run/job | Result for `dac0f6b` |
+|---|---|---|
+| isolated-linux | [40129362252 / 120977564710](https://github.com/Joker20380/family_connect/actions/runs/40129362252/job/120977564710) | **PASS**, including original15, both kernel gates, root→UID, new combined3 and packet/IPC/worker race |
+| Combined step in that job | 20:25:04–20:26:47 UTC | **3 passed / 79.04s**; artifact confirms separate manual/Auto opens3, terminal revocation/expiry and CONTROL release |
+| Auto native protocol Linux | 40129362252 / 120977564921 | PASS |
+| control | [40129362283 / 120977564782](https://github.com/Joker20380/family_connect/actions/runs/40129362283/job/120977564782) | **3032 passed / 54 failed / 138 skipped**, 189.46s, errors0 |
+| phase0/tests | [40129362257 / 120977564701](https://github.com/Joker20380/family_connect/actions/runs/40129362257/job/120977564701) | **3032 / 54 / 138**, 190.13s, errors0; own completed log |
+| phase0/Docker | [40129362257 / 120977564979](https://github.com/Joker20380/family_connect/actions/runs/40129362257/job/120977564979) | **3030 / 54 / 140**, 168.70s, errors0 |
+| Client Linux | [40129362261 / 120977564976](https://github.com/Joker20380/family_connect/actions/runs/40129362261/job/120977564976) | **1003 passed / 1 failed / 94 skipped**, 31.32s |
+| Linux voice | [40129362281 / 120977564642](https://github.com/Joker20380/family_connect/actions/runs/40129362281/job/120977564642) | FAIL, pointer/holding-state check |
+| AWG / TCP / readiness golden | 40129362290/120977564709; 40129362271/120977564799; 40129362266/120977564679 | PASS; existing jobs, no expansion of AWG/TCP scope |
+
+The combined CI artifact **12574381917** was downloaded and its actual log read:
+ZIP SHA256 `8739edc7f5160e6923ba011f7e01b84f5a772a8731bc3d270f827b3cb42a67cc`.
+It contains the combined log and both isolated-kernel JSON receipts, not an installer.
+
+**Not overall CI PASS.** Client Linux failed
+`test_public_admission_is_bounded_to_four_live_mailboxes` with BrokenPipeError;
+that existing test uses its own fake Lane, not the changed ChatLane capacity code.
+Its underlying cause is **not established**; the local addressed selection passed.
+Voice failed `chat_voice_check.py:pointer_checks`, waiting for `voice.state ==
+'holding'`; cause likewise not established. These observed failures are not hidden,
+disabled, automatically retried into green, or fixed outside this checkpoint.
+Mandatory full-suite failures remain open D01 work. Automatic unchanged platform
+matrix jobs are not Windows/Android product acceptance for this task.
+
+Content/link checks cover STATUS, PLAN, architecture, index, this report and both
+fixture READMEs; Python AST, shell syntax, `git diff --check` and staged
+privacy/build-output inspection PASS. Only safe source/tests/docs are committed.
 
 ## Limits / rollout
 

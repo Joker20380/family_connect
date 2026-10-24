@@ -15,7 +15,13 @@ profile mismatch, active-mailbox cancellation, signed expiry/revocation, DENIED/
 caps/reference pins и порядок drain→worker exit→admission сохранены.
 Локально 242 адресных Python, 13 root→UID/process, прежние15 authenticated,
 combined gate, native/race, оба Auto/DIRECT kernel gates и 175 pins PASS.
-Новые source/CI SHA/jobs фиксируются отдельно в текущем отчёте.
+Source **`dac0f6b45be6ed8703d3de93ff5fdbc67462eabe`** pushed/remote-verified.
+CI20:29UTC: isolated-linux **40129362252/120977564710 PASS**, включая прежние15,
+новый combined **3 passed / 79.04s**, оба kernel gates и native race. AWG/TCP PASS.
+Control **3032/54/138**, phase0/tests **3032/54/138**, Docker **3030/54/140**,
+errors0. Client Linux **1003/1/94**: bounded-mailbox BrokenPipeError;
+voice: pointer/holding-state failure. Причины этих двух failures не установлены,
+тесты не отключались/не исправлялись; не общий CI PASS. Точные jobs в отчёте.
 Завершившийся R2 source `89e20a3437b2ba1b02f7d1649487579678158373`:
 control **3030/54/135**, phase0/tests **3030/54/135**, Docker **3028/54/137**
 (passed/failed/skipped), errors0; phase0/tests перепроверен по собственному логу.

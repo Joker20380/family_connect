@@ -140,6 +140,12 @@ Docker **3028/54/137** (passed/failed/skipped), errors0; phase0/tests переп
 по собственному логу. Isolated-linux с15 authenticated, Client Linux, AWG/TCP/voice
 PASS. Точные R2 jobs и новые L02.2 source/jobs разделены в
 [отчёте L02.2](releases/2026-10-24-linux-chat-mesh-l02-2.md).
+L02.2 source **`dac0f6b45be6ed8703d3de93ff5fdbc67462eabe`** pushed/remote-verified:
+isolated-linux **40129362252/120977564710 PASS**, включая original15, combined3,
+root→UID, оба kernel gates и race. Новый CI: control **3032/54/138**,
+phase0/tests **3032/54/138**, Docker **3030/54/140**, errors0; AWG/TCP PASS.
+Client Linux **1003/1/94** (bounded-mailbox BrokenPipeError) и voice pointer/holding
+FAIL, причины не установлены; не общий CI PASS. Никаких unrelated fixes или bypass.
 Mandatory full suites и Auto/DIRECT/root→UID gates сохранены; L02 PARTIAL.
 Linux updater пока принимает legacy six-file archive; не объявлять полный bundle обновляемым до L08.
 
