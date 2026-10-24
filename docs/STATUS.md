@@ -4,8 +4,11 @@
 `a522a33379726903bdba0be9e4d589016f0e3390`; продуктовый baseline —
 `664342a6566792a4ea621274a369bcd6b6012143`. Dependency-часть D01.1 принята review,
 сам D01.1 остаётся PARTIAL. **Разрешён только D01.2; D02/D03/D04/iOS не начинать.**
-[D01.2](releases/2026-10-24-control-ci-d01-2.md): Python3.13 test-only GI и зависимости,
-проверки в процессе; общий CI PASS не заявлен.
+[D01.2 PARTIAL](releases/2026-10-24-control-ci-d01-2.md): на pushed `07b52e3` Python3.13
+strict imports и адресные gates PASS в control/phase0/tests/Docker tests-stage;
+Docker root 22 passed, адресные 59 passed. Каждый полный suite прерван: 9 collection
+errors owner_handoff/prepare, exit 2 (D02). Общий CI FAIL; последующие GUI/package/cargo/
+failover проверки не выполнены. Runtime/fixtures/collection policy не менялись.
 [D01.1](releases/2026-10-24-desktop-ci-d01-1.md): локальные реальные импорты PASS,
 адресные 59 passed; локальный desktop 877 passed / 64 skips / 0 failures/errors.
 На pushed `26f71d6` imports/адресные CI PASS; полный suite FAIL: отсутствующая RNS capsule,
@@ -88,7 +91,7 @@ D00 ничего не устанавливает: runtime rollback не нуже
 
 ## Блокеры / оставшаяся реализация
 
-- D01.1 PARTIAL, dependency gates приняты; D01.2 (Linux control/phase0/Dockerfile.control tests-stage) в работе. D02 допускается после подготовки окружений, не после полного зелёного CI. Общий D01/CI acceptance остаётся открыт до обязательного полного PASS.
+- D01.1 PARTIAL, dependency gates приняты; D01.2 PARTIAL: окружения подготовлены и проверены в CI, full suite блокируют 9 fixture collection errors. D02 допускается после проверки результата D01.2, не после полного зелёного CI. Общий D01/CI acceptance остаётся открыт до обязательного полного PASS.
 - D04 QUEUED: наблюдается возможная публикация DISCONNECTED до cleanup и отказ start при несброшенном self.thread; причина конкретного CI failure не доказана. Требуется отдельное детерминированное воспроизведение с one-owner/cleanup/generation fencing, до Linux-интеграции.
 - D03: `provisioning/chat_bridge.py`, `ChatHTTP.stream`: синтетический вызов фактического
   метода direct400/401/403/409 + TransportError при закрытии даёт `fallback_calls=1`.
