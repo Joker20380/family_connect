@@ -160,14 +160,15 @@ this fixture rule is not in the shipped archive. No test trust switch is shipped
 Final targeted selection under umask077: **94 PASS** (`build-and-targeted-9.log`):
 `test_mesh_installer.py`, `test_system_runtime.py`, `test_auto_backend.py`,
 `test_authorization.py`, `test_rns_package.py`. Earlier build-8 selection had95
-PASS (`targeted-umask077-final.log`). Desktop full suite on source `748473d`,
-with the standard native artifact: **1119 PASS /24 SKIP**
-(`desktop-final-followup.log`); final rollback regression adds one more check,
-with final desktop/CI rerun pending. Exact archive **build-9 system smoke PASS**,
+PASS (`targeted-umask077-final.log`). Final desktop full suite with the standard
+native artifact: **1120 PASS /24 SKIP** (`desktop-build-9.log`), including the
+rollback-fence regression. Exact archive **build-9 system smoke PASS**,
 including umask077 and manual/Auto idle units: `system-smoke-9.log`, all listed
 checks and archive/normal-binary metadata. Root backup: `mesh-bundle-_oqo33i7`.
-Source `748473db4f69815ad53120c290f78a9f58799271` is pushed/remote-verified;
-the subsequent rollback fence is a separate bounded source checkpoint.
+Final production/test source **`f826dbdfb562541bde95d2fcbecc1d944d15da3d`** is
+pushed/remote-verified. All50 repository-backed payload members match that
+checkout; all759 extracted archive members match the manifest/build output.
+The disposable system was stopped and removed after preserving receipts.
 Auto/native CI path filters now include the installer/runtime/fixture, and its
 existing root→UID step also runs the installer/runtime regressions. No gate is
 removed or weakened; no release/signing workflow is changed.
@@ -182,10 +183,14 @@ the installed product still has no checkout fallback. Full control
 Four new failures came from the mocked directory fixture inheriting a previous
 test's umask077; its modes now match the real installer. The other54 failures
 remain outside scope. These initial regressions are recorded, not counted PASS;
-follow-up source CI is pending. Initial Docker/failover build
+follow-up results are recorded under final source CI receipts. Initial Docker/failover build
 **40138981154/121006466988** also fails its full suite:3070/57/141
 (passed/failed/skipped), not an installed-component smoke result.
 AWG/TCP/voice source jobs PASS. No combined CI PASS is claimed.
+
+Intermediate source `748473d` voice **40139825439/121009021066 FAIL**: existing
+pointer check waits for `voice.state == 'locked'`, then times out. It is retained
+as an out-of-scope observation, not hidden by the earlier passing voice run.
 
 Fixed DIRECT kernel harness with the standard worker, copied root-owned0700 as
 in CI, passes in a disposable empty network namespace (`direct-kernel-root-owned.log`):
@@ -211,3 +216,36 @@ Mandatory source desktop/native/root→UID/Auto/DIRECT and control/phase0/Docker
 remain enabled. The prior54 full-suite failures and Windows/voice observations
 are not hidden, repaired or reclassified as PASS. Parent L03 and full Linux
 candidate remain incomplete; **STOP. NEXT — review L03.1**.
+
+## Final source CI receipts
+
+Source: `f826dbdfb562541bde95d2fcbecc1d944d15da3d`; documentation-only receipts do
+not change the exact build-9 payload.
+
+- Client Linux **40140296882/121010712843 PASS**, including mandatory desktop
+  pytest, source UI smoke and the existing legacy packaging gate. Its existing
+  preview AppImage/DEB builds do **not** integrate this new system/runtime payload
+  and do not mean L03.2 was started/completed or a full candidate distributed.
+- Control **40140296814/121010429551 FAIL**: **3076 passed /54 failed /140 skipped**,
+  errors0,7 subtests PASS. No new installer failures remain. The residual HTTP,
+  identity/expiry, storage and readiness observations are outside this task.
+- Isolated native/root→UID/Auto/DIRECT **40140296827/121010429501 PASS**, including
+  authenticated lifetime, combined manual/Auto OFF→ON→OFF, packet races, DIRECT
+  kernel, native/config/UID/ownership and expanded root installer/runtime checks.
+- Phase0 **40140296797/121010429297 FAIL**: **3076 passed /54 failed /140 skipped**,
+  errors0,7 subtests PASS. Docker/failover **40140296797/121010429642 FAIL** at its
+  full-suite build gate: **3074 passed /54 failed /142 skipped**, errors0,
+  7 subtests PASS; subsequent failover runtime steps were skipped, not passed.
+
+Thus all three final full suites retain54 failures; **no overall CI PASS**.
+The earlier four installer-fixture regressions and DIRECT source-harness import
+failure are absent in the final gates. Remaining D01/D02.1-R, voice/Windows,
+L03.2, live L04/L05, visual L07 and migration L08 scopes are not closed here.
+Review evidence: [Client Linux](https://github.com/Joker20380/family_connect/actions/runs/40140296882/job/121010712843),
+[isolated native](https://github.com/Joker20380/family_connect/actions/runs/40140296827/job/121010429501),
+[control](https://github.com/Joker20380/family_connect/actions/runs/40140296814/job/121010429551),
+[phase0](https://github.com/Joker20380/family_connect/actions/runs/40140296797).
+
+Public GitHub REST polling hit its unauthenticated rate limit; final observations
+use the authorized GitHub connector. No workflow was suppressed or manually
+rerun to hide a failure; no release/deployment was requested.

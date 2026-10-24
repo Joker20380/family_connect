@@ -5,11 +5,11 @@ D01.3/D01.3-R приняты в public completion/admission scope; L01/L01-R,
 локальные L02/L02.2, D03/D04/D05 и native границы сохранены. D01 открыт,
 D02.1-R PARTIAL/NOT_RUN. [Отчёт L03.1](releases/2026-10-25-linux-system-runtime-l03-1.md).
 758 payload files: manual/Auto/chat, native/RNS/Python3.12, anchor, AWG3.1/TCP.
-94 финальных адресных PASS (umask077); desktop1119/24 до последнего fence. Systemd255 PASS:
+94 финальных адресных PASS (umask077); desktop1120 PASS/24 SKIP. Systemd255 PASS:
 imports, реальный polkit/UID IPC, idle units, install exclusion, rollback/capabilities.
 Rollback повторно маскирует службы до восстановления old source; actual start refusal PASS.
-Первый source CI: Client Linux PASS; harness/umask исправлены, финальный CI pending.
-Full CI отдельно (прежние54 failures не исправляются); не live/workstation PASS.
+Source `f826dbd`: Client Linux и isolated native/root→UID/Auto/DIRECT CI PASS.
+Control/phase0/Docker: по54 failures, errors0; voice observation сохранён. Не общий CI PASS.
 Родительский L03 не завершён: L03.2 AppImage/DEB зависит от review L03.1.
 Ни public versions/catalogs, ни установка на рабочую машину не разрешены.
 **STOP. NEXT — review L03.1.**
