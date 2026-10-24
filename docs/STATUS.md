@@ -1,5 +1,31 @@
 # Текущее состояние / Current state
 
+Срез **L02.1-R**, 24.10.2026: terminal native generation fencing/recovery исправлен;
+**review pending; родительский L02 PARTIAL. NEXT — review L02.1-R.**
+Вход: чистая актуальная `main` = remote
+`878d2918ce4ba014bd7fe73a1f223753ce18748b`; checkout не откатывался.
+[Текущий отчёт](releases/2026-10-24-linux-chat-mesh-l02-1-r.md): оба actual-native
+отказа воспроизведены до исправления; после peer/Mux failure и asynchronous
+bootstrap failure новый demand восстанавливает authenticated challenge/register/
+duplex fixed-mailbox на одном новом транспорте, без idle45s/readiness expiry.
+Проверяется native route; operation acquire атомарно удерживает только указанное
+поколение через `RetainChat`, а не создаёт новое владение за старой lease.
+Accepted Coordinator/refcount и все 175 Android106/reference pins не изменены.
+Локально 580 Python/native/owner/mailbox, 13 root→UID/process и 13 authenticated
+проверок PASS; Go/race и Auto/DIRECT isolated-kernel PASS. Точные source SHA,
+повторные проверки и CI receipt фиксируются в текущем отчёте отдельно от L02.1.
+Законченный CI L02.1 `a2b105de49391928d4bb9c15c4d5ee2305085918`: control
+**3015 passed / 54 failed / 127 skipped**, phase0/tests **3014 / 55 / 127**,
+Docker **3013 / 54 / 129**, errors0. Дополнительный phase0 failure:
+`test_ui_unavailable_server_ack_is_authoritative`, причина не установлена.
+Mandatory suites сохранены; эти failures не исправлялись в L02.1-R.
+Combined VPN publication→EXISTING_EXIT→OFF **NOT_RUN**, отдельный следующий этап,
+не начат. D01 открыт; D02.1-R PARTIAL/NOT_RUN. L01/L01-R, D03/D04/D05 сохранены.
+Identity/history/settings/keys/floors и версии не менялись; installation/live/
+publication/L03/Windows/fleet/iOS не выполнялись. **STOP перед review L02.1-R.**
+
+### Предыдущий checkpoint L02.1 (историческое evidence)
+
 Срез **L02.1**, 24.10.2026: lifetime исправлен; **комбинированная приёмка PARTIAL**.
 Вход: чистая актуальная `main`, remote проверен
 `9b7418e2675d1e30787f491f8c924467835e7b05`; checkout не откатывался.
@@ -239,4 +265,4 @@ D00 ничего не устанавливает: runtime rollback не нуже
 [STATUS до D00](STATUS.history-2026-10-24.md) и [PLAN до D00](PLAN.history-2026-10-24.md)
 сохранены целиком; старые NEXT/ACTIVE/checkpoints — история, не параллельные задания.
 [Отчёт D00](releases/2026-10-24-desktop-parity106-d00.md) фиксирует сохранность и границы.
-**После отчёта L02 остановиться. NEXT — review L02; L03 и прочие задачи автоматически не начинать.**
+**После отчёта L02.1-R остановиться. NEXT — review L02.1-R; L03 и прочие задачи автоматически не начинать.**

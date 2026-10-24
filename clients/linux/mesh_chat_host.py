@@ -32,6 +32,7 @@ class Binding:
         self.closed, self.ready = threading.Event(), threading.Event()
         self.cancelled = cancelled
         self.device = start['readiness'].get('device', '')
+        self.generation_lease = None
         self.material = copy.deepcopy({key: start[key] for key in ('identity', 'anchor', 'readiness', 'resolver', 'underlying_index')})
 
     def close(self):
@@ -47,20 +48,40 @@ class Binding:
             if not self.ready.is_set() or self.closed.is_set() or self.cancelled.is_set():
                 raise wire.BridgeError()
             material = copy.deepcopy(self.material)
+            generation = self.generation_lease
         try:
-            result = self.lane.call('acquire', acquire=material, budget_ms=budget, cancel=cancel)
+            values = {} if generation is None else dict(generation=generation)
+            result = self.lane.call('acquire', acquire=material, budget_ms=budget, cancel=cancel, **values)
+        except ChatError:
+            self.native_alive()
+            raise
         finally:
             material.clear()
         allowed = ('SERVICE_ONLY', 'CONNECTING') if self.route == 'SERVICE_ONLY' else ('EXISTING_EXIT',)
-        if result.get('route') not in allowed or cancel.is_set():
+        if (result.get('route') not in allowed or cancel.is_set() or self.closed.is_set() or
+                self.cancelled.is_set() or not self.native_alive()):
             self.release(result['lease'])
             raise wire.BridgeError()
         return result['lease']
 
+    def native_alive(self):
+        if self.generation_lease is None:
+            return True
+        try:
+            result = self.lane.call('route', lease=self.generation_lease)
+            if result.get('route') in ('CONNECTING', 'SERVICE_ONLY'):
+                return True
+        except (OSError, ValueError, ChatError):
+            pass
+        self.closed.set()
+        self.ready.clear()
+        self.cancelled.set()
+        return False
+
     def probe(self, device):
         if device != self.device:
             raise wire.BridgeError('DENIED')
-        if not self.ready.is_set() or self.closed.is_set() or self.cancelled.is_set():
+        if not self.ready.is_set() or self.closed.is_set() or self.cancelled.is_set() or not self.native_alive():
             raise wire.BridgeError()
 
     def release(self, lease):

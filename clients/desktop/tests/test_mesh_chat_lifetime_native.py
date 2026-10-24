@@ -49,13 +49,32 @@ class Events(socketserver.ThreadingTCPServer):
     def __init__(self):
         self.events = queue.Queue()
         self.cleanup = threading.Event()
+        self.bootstrap = threading.Event()
+        self.bootstrap.set()
+        self.peer = threading.Event()
+        self.peer.set()
+        self.fail_bootstrap = self.fail_peer = False
+        self.history = []
         class Handler(socketserver.StreamRequestHandler):
             def handle(connection):
                 kind = json.loads(connection.rfile.readline())['event']
-                self.events.put(kind)
+                self.history.append(kind)
+                quiet = ((kind == 'bootstrap' and self.bootstrap.is_set()) or
+                         (kind == 'peer_control' and self.peer.is_set()) or
+                         (kind == 'terminal' and not self.fail_peer) or
+                         (kind == 'drained' and not (self.fail_peer or self.fail_bootstrap)))
+                if not quiet:
+                    self.events.put(kind)
+                result = 1
                 if kind == 'cleanup_entered':
                     self.cleanup.wait(12)
-                connection.wfile.write(b'\x01')
+                if kind == 'bootstrap':
+                    self.bootstrap.wait(12)
+                    result = 0 if self.fail_bootstrap else 1
+                if kind == 'peer_control':
+                    self.peer.wait(12)
+                    result = 0 if self.fail_peer else 1
+                connection.wfile.write(bytes([result]))
         super().__init__(('127.0.0.1', 0), Handler)
         self.thread = threading.Thread(target=self.serve_forever)
         self.thread.start()
@@ -72,6 +91,8 @@ class Events(socketserver.ThreadingTCPServer):
 
     def close(self):
         self.cleanup.set()
+        self.bootstrap.set()
+        self.peer.set()
         self.shutdown()
         self.server_close()
         self.thread.join(3)
@@ -84,11 +105,13 @@ def authenticated(tmp_path, monkeypatch, request):
     response = service.fetch(proof(service, device))
     chat = ChatAccess(service.access)
     chat.initialize()
+    api_calls = []
     class API(BaseHTTPRequestHandler):
         def log_message(self, *args):
             pass
 
         def do_POST(self):
+            api_calls.append(self.path)
             body = json.loads(self.rfile.read(int(self.headers['Content-Length'])))
             try:
                 result = chat.challenge(**body) if self.path == wire.PATHS[0] else chat.register(**body)
@@ -174,9 +197,12 @@ def authenticated(tmp_path, monkeypatch, request):
                                   wireguard_public=device.wireguard_public_key))
     try:
         yield SimpleNamespace(owner=owner, host=host, bridge=bridge, events=events, workers=workers,
-                              device=device, access=service.access, directory=directory)
+                              device=device, access=service.access, directory=directory,
+                              chat_identity=RNS.Identity(), api_calls=api_calls)
     finally:
         events.cleanup.set()
+        events.bootstrap.set()
+        events.peer.set()
         bridge.close()
         host.close()
         if owner.failed:
@@ -279,14 +305,21 @@ def test_authenticated_requests_retain_actual_native_generation(authenticated, t
         assert not (fixture.directory / 'transport.lock').read_bytes()
 
 
-def test_unconfirmed_authenticated_cleanup_retains_admission(authenticated):
+@pytest.mark.parametrize('failure', ['cancel', 'peer'])
+def test_unconfirmed_authenticated_cleanup_retains_admission(authenticated, failure):
     fixture = authenticated
+    if failure == 'peer':
+        fixture.events.peer.clear()
     identity = RNS.Identity()
     body = dict(public_identity=fixture.device.public_identity, wireguard_public_key=fixture.device.wireguard_public_key,
                 chat_public=identity.get_public_key().hex())
     assert fixture.bridge.request(wire.PATHS[0], json.dumps(body).encode(), 10)[0] == 200
     fixture.events.until('authenticated')
-    fixture.owner.cancel.set()
+    if failure == 'peer':
+        fixture.events.fail_peer = True
+        fixture.events.peer.set()
+    else:
+        fixture.owner.cancel.set()
     fixture.events.until('cleanup_entered')
     fixture.owner.watcher.join(8)
     assert fixture.owner.failed and fixture.owner.gate.active

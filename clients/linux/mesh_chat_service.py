@@ -111,6 +111,7 @@ class ServiceOwner:
             self.fingerprint = hashlib.sha256((request['identity'] + request['wireguard_public']).encode('ascii')).digest()
             self.current.ready.set()
             self.generation_lease = self.current.acquire(request['device'], cancel, Host._budget(deadline))
+            self.current.generation_lease = self.generation_lease
             self.touched = time.monotonic()
             context.check()
             return self.current
@@ -135,6 +136,8 @@ class ServiceOwner:
     def binding(self):
         with self.lock:
             if self.failed or self.cancel.is_set() or self.stopped.is_set():
+                return None
+            if self.current is not None and not self.current.native_alive():
                 return None
             self.touched = time.monotonic()
             return self.current
@@ -173,6 +176,8 @@ class ServiceOwner:
                 if gate.preempted() or (self.touched and time.monotonic() - self.touched > 45):
                     cancel.set()
                 with self.lock:
+                    if self.gate is gate and self.cancel is cancel and self.current is not None:
+                        self.current.native_alive()
                     if (self.gate is gate and self.cancel is cancel and self.current is not None and
                             self.current.material['readiness']['expires_at'] <= time.time()):
                         cancel.set()

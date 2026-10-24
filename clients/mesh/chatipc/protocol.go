@@ -35,17 +35,18 @@ func (material *Acquisition) erase() {
 }
 
 type Request struct {
-	Schema   int          `json:"schema"`
-	ID       uint64       `json:"id"`
-	Action   string       `json:"action"`
-	Acquire  *Acquisition `json:"acquire,omitempty"`
-	Lease    uint64       `json:"lease,omitempty"`
-	Stream   uint64       `json:"stream,omitempty"`
-	BudgetMS int64        `json:"budget_ms,omitempty"`
-	Path     string       `json:"path,omitempty"`
-	Data     []byte       `json:"data,omitempty"`
-	Size     int          `json:"size,omitempty"`
-	Target   uint64       `json:"target,omitempty"`
+	Schema     int          `json:"schema"`
+	ID         uint64       `json:"id"`
+	Action     string       `json:"action"`
+	Acquire    *Acquisition `json:"acquire,omitempty"`
+	Lease      uint64       `json:"lease,omitempty"`
+	Generation uint64       `json:"generation,omitempty"`
+	Stream     uint64       `json:"stream,omitempty"`
+	BudgetMS   int64        `json:"budget_ms,omitempty"`
+	Path       string       `json:"path,omitempty"`
+	Data       []byte       `json:"data,omitempty"`
+	Size       int          `json:"size,omitempty"`
+	Target     uint64       `json:"target,omitempty"`
 }
 
 func (request Request) erase()                     { request.Acquire.erase(); clear(request.Data) }
@@ -90,6 +91,7 @@ func (request Request) valid() bool {
 			return false
 		}
 		remaining.Acquire = nil
+		remaining.Generation = 0
 	case "route", "release", "open", "request":
 		if request.Lease == 0 {
 			return false
@@ -126,7 +128,7 @@ func (request Request) valid() bool {
 	default:
 		return false
 	}
-	return remaining.Acquire == nil && remaining.Lease == 0 && remaining.Stream == 0 && remaining.BudgetMS == 0 && remaining.Path == "" && len(remaining.Data) == 0 && remaining.Size == 0 && remaining.Target == 0
+	return remaining.Acquire == nil && remaining.Generation == 0 && remaining.Lease == 0 && remaining.Stream == 0 && remaining.BudgetMS == 0 && remaining.Path == "" && len(remaining.Data) == 0 && remaining.Size == 0 && remaining.Target == 0
 }
 
 type Reply struct {

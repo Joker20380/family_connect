@@ -74,6 +74,8 @@ class Materials:
 
 class ServiceLane(Lane):
     def call(self, action, **values):
+        if action == 'route':
+            return dict(route='CONNECTING' if values['lease'] in self.leases else 'UNAVAILABLE')
         result = super().call(action, **values)
         if action == 'acquire':
             result['route'] = 'CONNECTING'

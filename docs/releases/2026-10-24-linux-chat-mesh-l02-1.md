@@ -131,7 +131,13 @@ documentation receipt:
 Non-Linux Client builds were still running at this observation; no Windows/Android
 feature acceptance is claimed. No full suite was disabled, hidden or retried to
 obscure a failure. D01 remains open; prior full-suite failures are not declared fixed.
-The next review must reconcile the three running mandatory jobs at these exact IDs.
+Completion receipt for source `a2b105de49391928d4bb9c15c4d5ee2305085918`:
+control **3015 passed / 54 failed / 127 skipped**; phase0/tests **3014 / 55 / 127**;
+Docker **3013 / 54 / 129**; errors0 in all three. The additional phase0 failure is
+`test_ui_unavailable_server_ack_is_authoritative`; its cause is not established.
+These final FAIL results supersede the IN_PROGRESS observations above, without
+relabelling earlier evidence. [L02.1-R](2026-10-24-linux-chat-mesh-l02-1-r.md)
+records the separate current source/results; no unrelated full-suite fixes here.
 
 Versions unchanged: public Linux0.2.11, Windows0.2.15, accepted Android106/native105;
 no installer/catalog/invitation-page changes, installation, deployment, live,

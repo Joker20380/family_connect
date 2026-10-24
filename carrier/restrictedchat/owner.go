@@ -43,6 +43,17 @@ func (owner *Owner) ReserveVPN(ctx context.Context) (*restrictedowner.VPN, error
 }
 
 func (owner *Owner) Acquire(config Config, protect func(int) bool) (*Client, error) {
+	return owner.acquireMaterial(config, protect, nil)
+}
+
+func (owner *Owner) AcquireGeneration(config Config, protect func(int) bool, generation *Client) (*Client, error) {
+	if generation == nil {
+		return nil, ErrUnavailable
+	}
+	return owner.acquireMaterial(config, protect, generation)
+}
+
+func (owner *Owner) acquireMaterial(config Config, protect func(int) bool, generation *Client) (*Client, error) {
 	if protect == nil || len(config.Readiness) == 0 || len(config.Readiness) > wholedevice.MaxReadiness || len(config.Identity) != 64 || len(config.Anchor) != 32 {
 		return nil, ErrDenied
 	}
@@ -59,9 +70,9 @@ func (owner *Owner) Acquire(config Config, protect func(int) bool) (*Client, err
 		return nil, ErrDenied
 	}
 	resolver := config.Resolver
-	return owner.acquire(time.Unix(header.ExpiresAt, 0), sha256.Sum256(profile), func(parent context.Context) (restrictedowner.Session, func(), error) {
+	return owner.acquireGeneration(time.Unix(header.ExpiresAt, 0), sha256.Sum256(profile), func(parent context.Context) (restrictedowner.Session, func(), error) {
 		return openSession(parent, profile, directory, resolver, protect)
-	}, func() { clear(profile); clear(directory) })
+	}, func() { clear(profile); clear(directory) }, generation)
 }
 
 func openSession(parent context.Context, profile, directory []byte, resolver string, protect func(int) bool) (restrictedowner.Session, func(), error) {
@@ -82,13 +93,28 @@ func openSession(parent context.Context, profile, directory []byte, resolver str
 }
 
 func (owner *Owner) acquire(expiry time.Time, profile [32]byte, open restrictedowner.OpenChat, dispose func()) (*Client, error) {
+	return owner.acquireGeneration(expiry, profile, open, dispose, nil)
+}
+
+func (owner *Owner) acquireGeneration(expiry time.Time, profile [32]byte, open restrictedowner.OpenChat, dispose func(), generation *Client) (*Client, error) {
 	owner.mu.Lock()
 	defer owner.mu.Unlock()
 	if owner.closed || owner.active >= MaxLeases {
 		dispose()
 		return nil, ErrUnavailable
 	}
-	lease, err := owner.coordinator.AcquireChat(expiry, profile, open, dispose)
+	var lease *restrictedowner.Chat
+	var err error
+	if generation != nil {
+		if _, present := owner.clients[generation]; !present {
+			dispose()
+			return nil, ErrUnavailable
+		}
+		lease, err = owner.coordinator.RetainChat(generation.lease, expiry, profile)
+		dispose()
+	} else {
+		lease, err = owner.coordinator.AcquireChat(expiry, profile, open, dispose)
+	}
 	if err != nil {
 		return nil, ErrUnavailable
 	}

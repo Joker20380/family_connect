@@ -12,6 +12,13 @@ address and default route (no external connectivity is required). Set
 `FC_L021_WORKER` to the fixture binary. The CI workflow contains the exact recipe.
 Optional `FC_L021_SERVICE_SOURCE` loads an observed old ServiceOwner source for a
 red run; it is only consumed by the test. Current production code never reads it.
+Also run `clients/desktop/tests/test_mesh_chat_terminal_native.py` for L02.1-R.
+The fixture-only acknowledged bootstrap barrier can return an opening error, and
+the peer control barrier can close the authenticated peer Mux. Neither failure
+uses the Python owner's cancellation event. Native terminal/drained observations,
+lease accounting and transport-open counts distinguish a dead generation from
+an idle process. The IPC-boundary tests hold acquisition before dispatch and hold
+late acquisition/HTTP results after native completion; cleanup remains explicit.
 
 ## What is real
 
@@ -57,4 +64,6 @@ has local Pion+FamilyTLS+Mux but exports a TCP proxy rather than native acquisit
 `familysession/session_test.go` provides paired authenticated endpoints;
 `roombroker/lease_mux_test.go` covers broker clocks/renewals but not Linux owners.
 None alone closes the combined gate. This fixture uses the authenticated-pair
-pattern without importing private state or changing the accepted coordinator.
+pattern without importing private state or changing the accepted coordinator's
+refcount semantics. L02.1-R adds a separate `RetainChat` operation: under the same
+coordinator lock it retains only the specified live generation, never bootstraps.

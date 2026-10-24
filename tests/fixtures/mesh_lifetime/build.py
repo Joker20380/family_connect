@@ -39,7 +39,25 @@ def build(go, output, xray_source):
         owner_text = owner_text.replace(operation, operation + '\n wholedevice.L021Event(fmt.Sprintf("leases:%d", owner.active))')
     owner_replacement = output / 'owner.go'
     owner_replacement.write_text(owner_text)
-    overlay.write_text(json.dumps({'Replace': {str(source): str(replacement), str(owner): str(owner_replacement)}}))
+    coordinator = ROOT / 'carrier/restrictedowner/owner.go'
+    coordinator_text = coordinator.read_text().replace('import (', 'import (\n "net"\n "os"\n "encoding/json"\n "io"', 1)
+    coordinator_text = coordinator_text.replace('close(owned.done)\n\tmanager.mu.Unlock()',
+        'close(owned.done)\n\tmanager.mu.Unlock()\n l021Drained()')
+    coordinator_text += '''
+func l021Drained() {
+ connection, err := net.DialTimeout("tcp", os.Getenv("FC_L021_EVENTS"), time.Second)
+ if err != nil { panic(err) }
+ defer connection.Close()
+ connection.SetDeadline(time.Now().Add(15*time.Second))
+ json.NewEncoder(connection).Encode(map[string]string{"event":"drained"})
+ var reply [1]byte
+ if _, err := io.ReadFull(connection, reply[:]); err != nil { panic(err) }
+}
+'''
+    coordinator_replacement = output / 'coordinator.go'
+    coordinator_replacement.write_text(coordinator_text)
+    overlay.write_text(json.dumps({'Replace': {str(source): str(replacement), str(owner): str(owner_replacement),
+                                               str(coordinator): str(coordinator_replacement)}}))
     module = output / 'fixture.mod'
     module.write_text((ROOT / 'clients/mesh/go.mod').read_text().replace('../../carrier', str(ROOT / 'carrier')))
     with module.open('a') as destination:

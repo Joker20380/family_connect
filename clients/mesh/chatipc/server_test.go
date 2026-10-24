@@ -63,6 +63,10 @@ type harness struct {
 }
 
 func launch(test *testing.T, acquire func(*Acquisition) (client, error)) *harness {
+	return launchPinned(test, func(material *Acquisition, generation client) (client, error) { return acquire(material) })
+}
+
+func launchPinned(test *testing.T, acquire func(*Acquisition, client) (client, error)) *harness {
 	test.Helper()
 	local, remote := net.Pipe()
 	remote.SetDeadline(time.Now().Add(5 * time.Second))
@@ -155,6 +159,42 @@ func TestNativeAcquisitionDenialKeepsIPCAlive(test *testing.T) {
 
 func acquisition() Request {
 	return Request{Action: "acquire", BudgetMS: 30000, Acquire: &Acquisition{Readiness: json.RawMessage(`{}`), Identity: make([]byte, 64), Anchor: make([]byte, 32), Resolver: "1.1.1.1:53", UnderlyingIndex: 1}}
+}
+
+func TestPinnedLeaseAdmission(test *testing.T) {
+	generation := &fakeClient{peers: make(chan net.Conn, 1)}
+	operation := &fakeClient{peers: make(chan net.Conn, 1)}
+	var calls atomic.Int32
+	current := launchPinned(test, func(material *Acquisition, parent client) (client, error) {
+		if calls.Add(1) == 1 {
+			if parent != nil {
+				test.Error("initial generation unexpectedly pinned")
+			}
+			return generation, nil
+		}
+		if parent != generation {
+			test.Error("operation lost its generation identity")
+		}
+		return operation, nil
+	})
+	lease := current.call(acquisition()).Lease
+	pinned := acquisition()
+	pinned.Generation = lease
+	reply := current.call(pinned)
+	if !reply.OK || reply.Lease == lease {
+		test.Fatal("operation needs a distinct lease")
+	}
+	current.call(Request{Action: "release", Lease: reply.Lease})
+	current.call(Request{Action: "release", Lease: lease})
+	if reply = current.call(pinned); reply.OK || calls.Load() != 2 {
+		test.Fatal("released pin reached acquire")
+	}
+	if reply = current.call(Request{Action: "route", Lease: lease}); reply.OK {
+		test.Fatal("released generation survived")
+	}
+	if (Request{Schema: 1, ID: 1, Action: "route", Lease: lease, Generation: lease}).valid() {
+		test.Fatal("pin accepted outside acquisition")
+	}
 }
 
 func TestProtocolShapeAndPrivacy(test *testing.T) {

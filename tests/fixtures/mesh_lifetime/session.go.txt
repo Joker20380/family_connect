@@ -1,4 +1,10 @@
 func L021Event(kind string) {
+	if l021Control(kind) != 1 {
+		panic("fixture barrier")
+	}
+}
+
+func l021Control(kind string) byte {
 	connection, err := net.DialTimeout("tcp", os.Getenv("FC_L021_EVENTS"), time.Second)
 	if err != nil {
 		panic(err)
@@ -9,9 +15,10 @@ func L021Event(kind string) {
 		panic(err)
 	}
 	var reply [1]byte
-	if _, err := io.ReadFull(connection, reply[:]); err != nil || reply[0] != 1 {
+	if _, err := io.ReadFull(connection, reply[:]); err != nil {
 		panic("fixture barrier")
 	}
+	return reply[0]
 }
 
 type l021Packet struct {
@@ -44,6 +51,9 @@ func (packet *l021Packet) Close() error { packet.once.Do(func() { close(packet.d
 
 func l021Open(ctx context.Context, raw []byte) (*Session, error) {
 	L021Event("open")
+	if l021Control("bootstrap") == 0 {
+		return nil, ErrClosed
+	}
 	var settings struct {
 		Gateway json.RawMessage `json:"gateway"`
 		API     string          `json:"api"`
@@ -103,7 +113,13 @@ func l021Open(ctx context.Context, raw []byte) (*Session, error) {
 		return nil, err
 	}
 	L021Event("authenticated")
-	return Attach(ctx, muxPlane{mux}, func() {
+	go func() {
+		if l021Control("peer_control") == 0 {
+			remote.mux.Close()
+			L021Event("peer_closed")
+		}
+	}()
+	session := Attach(ctx, muxPlane{mux}, func() {
 		L021Event("cleanup_entered")
 		remote.mux.Close()
 		secured.Close()
@@ -111,5 +127,7 @@ func l021Open(ctx context.Context, raw []byte) (*Session, error) {
 		left.Close()
 		right.Close()
 		L021Event("cleaned")
-	}), nil
+	})
+	go func() { <-session.ctx.Done(); L021Event("terminal") }()
+	return session, nil
 }

@@ -41,7 +41,7 @@ type server struct {
 	ctx                           context.Context
 	cancel                        context.CancelFunc
 	connection                    net.Conn
-	acquire                       func(*Acquisition) (client, error)
+	acquire                       func(*Acquisition, client) (client, error)
 	mu                            sync.Mutex
 	writer                        sync.Mutex
 	wait                          sync.WaitGroup
@@ -55,12 +55,19 @@ func Serve(parent context.Context, connection net.Conn, owner *restrictedchat.Ow
 	if parent == nil || connection == nil || owner == nil || platform == nil {
 		return worker.ErrProtocol
 	}
-	return serve(parent, connection, func(material *Acquisition) (client, error) {
+	return serve(parent, connection, func(material *Acquisition, generation client) (client, error) {
 		underlying, err := net.InterfaceByIndex(material.UnderlyingIndex)
 		if err != nil || underlying.Flags&net.FlagUp == 0 || underlying.Flags&net.FlagLoopback != 0 || strings.EqualFold(underlying.Name, worker.InterfaceName) {
 			return nil, restrictedchat.ErrUnavailable
 		}
-		acquired, err := owner.Acquire(restrictedchat.Config{Readiness: material.Readiness, Identity: material.Identity, Anchor: material.Anchor, Resolver: material.Resolver}, func(descriptor int) bool { return platform.Protect(*underlying, descriptor) })
+		config := restrictedchat.Config{Readiness: material.Readiness, Identity: material.Identity, Anchor: material.Anchor, Resolver: material.Resolver}
+		protect := func(descriptor int) bool { return platform.Protect(*underlying, descriptor) }
+		var acquired *restrictedchat.Client
+		if generation != nil {
+			acquired, err = owner.AcquireGeneration(config, protect, generation.(*restrictedchat.Client))
+		} else {
+			acquired, err = owner.Acquire(config, protect)
+		}
 		if err != nil {
 			return nil, err
 		}
@@ -68,7 +75,7 @@ func Serve(parent context.Context, connection net.Conn, owner *restrictedchat.Ow
 	})
 }
 
-func serve(parent context.Context, connection net.Conn, acquire func(*Acquisition) (client, error)) error {
+func serve(parent context.Context, connection net.Conn, acquire func(*Acquisition, client) (client, error)) error {
 	ctx, cancel := context.WithCancel(parent)
 	server := &server{ctx: ctx, cancel: cancel, connection: connection, acquire: acquire,
 		leases: make(map[uint64]client), streams: make(map[uint64]*stream), jobs: make(map[uint64]*job)}
@@ -130,7 +137,7 @@ func (server *server) handle(request Request) {
 		if current := server.leases[request.Lease]; current != nil {
 			delete(server.leases, request.Lease)
 			for _, pending := range server.jobs {
-				if pending.request.Lease == request.Lease || (pending.stream != nil && pending.stream.lease == request.Lease) {
+				if pending.request.Lease == request.Lease || pending.request.Generation == request.Lease || (pending.stream != nil && pending.stream.lease == request.Lease) {
 					pending.cancel()
 				}
 			}
@@ -161,6 +168,12 @@ func (server *server) start(request Request) bool {
 	current := &job{request: request}
 	switch request.Action {
 	case "acquire":
+		if request.Generation != 0 {
+			current.client = server.leases[request.Generation]
+			if current.client == nil {
+				return false
+			}
+		}
 		if len(server.leases)+server.pendingLeases >= restrictedchat.MaxLeases {
 			return false
 		}
@@ -219,7 +232,7 @@ func (server *server) run(ctx context.Context, current *job) {
 	defer stopIO()
 	switch request.Action {
 	case "acquire":
-		acquired, err = server.acquire(request.Acquire)
+		acquired, err = server.acquire(request.Acquire, current.client)
 	case "open":
 		opened, err = current.client.OpenMailbox(ctx, time.Duration(request.BudgetMS)*time.Millisecond)
 	case "request":
