@@ -1,5 +1,6 @@
 """Fresh authenticated normal configuration; only signed floors are persisted."""
 import base64
+from dataclasses import asdict, dataclass
 import hashlib
 import json
 import re
@@ -9,6 +10,102 @@ from auto_policy import Failure, require, number
 import mesh_ipc as ipc
 from mesh_materials import NativeMaterials, MaterialsError, _bytes
 from provisioning.friends_catalog import _verified_profile
+
+
+@dataclass(frozen=True)
+class Target:
+    provider: str
+    reference: str
+    country: str
+    load: int | None = None
+
+    def __post_init__(self):
+        for value in (self.provider, self.reference):
+            require(isinstance(value, str) and re.fullmatch('[a-z0-9][a-z0-9_.:-]{0,63}', value))
+        require(isinstance(self.country, str) and re.fullmatch('[a-z]{2}', self.country))
+        require(self.load is None or number(self.load, 0, 100))
+
+
+@dataclass(frozen=True)
+class Preference:
+    provider: str
+    target_reference: str
+    transport: str
+    requested_profile: str
+
+    def __post_init__(self):
+        for value in (self.provider, self.target_reference):
+            require(isinstance(value, str) and re.fullmatch('[a-z0-9][a-z0-9_.:-]{0,63}', value))
+        require(self.transport in ('', 'awg', 'tcp') and self.requested_profile in ('P0', 'P1'))
+
+
+class TargetChoices:
+    def __init__(self, targets, preference):
+        self.selected_next = preference
+        self.refresh(targets)
+        self.select(preference)
+
+    def refresh(self, targets):
+        values = tuple(targets)
+        require(0 < len(values) <= 256 and all(isinstance(target, Target) for target in values))
+        require(len({(target.provider, target.reference) for target in values}) == len(values))
+        self.targets = values
+
+    def select(self, preference):
+        require(isinstance(preference, Preference))
+        require(any((target.provider, target.reference) == (preference.provider, preference.target_reference)
+                    for target in self.targets))
+        self.selected_next = preference
+
+    def snapshot(self):
+        return dict(targets=[asdict(target) for target in self.targets], selected_next=asdict(self.selected_next),
+                    available=any((target.provider, target.reference) ==
+                                  (self.selected_next.provider, self.selected_next.target_reference) for target in self.targets))
+
+
+LEGACY_TARGETS = (Target('friends-legacy-v1', 'legacy-ru', 'ru'), Target('friends-legacy-v1', 'legacy-nl', 'nl'))
+
+
+def legacy_target(country):
+    require(country in ('ru', 'nl'))
+    return next(target for target in LEGACY_TARGETS if target.country == country)
+
+
+@dataclass(frozen=True)
+class Assignment:
+    target: Target
+    owner_generation: str
+    requested_profile: str
+    sequence: int
+    catalog_hash: str
+    gateway_id: str | None = None
+
+    def __post_init__(self):
+        require(isinstance(self.target, Target))
+        require(isinstance(self.owner_generation, str) and re.fullmatch('[a-f0-9]{32}', self.owner_generation))
+        require(self.requested_profile in ('P0', 'P1') and number(self.sequence, 1))
+        require(isinstance(self.catalog_hash, str) and re.fullmatch('[a-f0-9]{64}', self.catalog_hash))
+        require(self.gateway_id is None if self.target.provider == 'friends-legacy-v1' else
+                self.gateway_id is None or isinstance(self.gateway_id, str) and re.fullmatch('[a-zA-Z0-9_-]{1,64}', self.gateway_id))
+
+
+@dataclass(frozen=True)
+class AppliedSession:
+    owner_generation: str
+    transport: str
+    requested_profile: str
+    interface: str
+    assignment: Assignment | None
+
+    def __post_init__(self):
+        require(isinstance(self.owner_generation, str) and re.fullmatch('[a-f0-9]{32}', self.owner_generation))
+        require(self.transport in ('awg', 'tcp', 'restricted') and self.requested_profile in ('P0', 'P1'))
+        require(isinstance(self.interface, str) and re.fullmatch('[a-zA-Z0-9_.-]{1,15}', self.interface))
+        if self.transport == 'restricted':
+            require(self.assignment is None)
+        else:
+            require(isinstance(self.assignment, Assignment) and self.assignment.owner_generation == self.owner_generation and
+                    self.assignment.requested_profile == self.requested_profile)
 
 
 class NativeConfiguration(NativeMaterials):
@@ -42,8 +139,19 @@ class NormalOwner:
     def __init__(self, storage, native=None):
         self.storage, self.native = storage, native or NativeConfiguration()
         self.summary = dict(stage='IDLE', code='NONE', durable=False)
+        self._resolved, self._assignment = None, None
+
+    def assignment(self, profile, generation, requested_profile):
+        require(profile is not None and profile is self._resolved)
+        require(isinstance(generation, str) and re.fullmatch('[a-f0-9]{32}', generation))
+        require(requested_profile in ('P0', 'P1'))
+        if self._assignment is None:
+            self._assignment = Assignment(legacy_target(profile.country), generation, requested_profile, profile.sequence, profile.catalog_hash)
+        require(self._assignment.owner_generation == generation and self._assignment.requested_profile == requested_profile)
+        return self._assignment
 
     def validate(self, material, context):
+        self._resolved, self._assignment = None, None
         request, reply = {}, {}
         try:
             context.check()
@@ -70,6 +178,7 @@ class NormalOwner:
             reply.clear()
 
     def resolve(self, material, country, private, seeds, underlying, context):
+        self._resolved, self._assignment = None, None
         request, reply, inspected = {}, {}, {}
         try:
             context.check()
@@ -104,6 +213,7 @@ class NormalOwner:
             require(checked == profile and inspected['public'] == reply['public'] and inspected['catalog'] == reply['catalog'])
             self.summary = dict(stage='VERIFIED_READBACK', code='READY_FOR_PLATFORM', durable=True,
                                 sequence=profile.sequence, country=country)
+            self._resolved = profile
             return profile
         except MaterialsError as error:
             category = 'CANCELLED' if error.code == 'CANCELLED' else 'NETWORK' if error.code == 'DEADLINE' else 'INTERNAL'

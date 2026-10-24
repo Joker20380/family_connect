@@ -432,8 +432,9 @@ remain open; four local GTK scales do not close those gates.
 <a id="desktop-fleet-boundary"></a>
 ## Desktop fleet boundary / D05
 
-**Статус: планируемая граница; реализация D05 ещё не выполнена.** Это контракт
-подготовки Linux/Windows parity106, не заявление поддержки dynamic fleet.
+**Статус: минимальная внутренняя Linux-граница D05 реализована; review pending.**
+[D05 evidence](releases/2026-10-24-desktop-provider-d05.md). Это подготовка Linux/Windows
+parity106, не заявление поддержки dynamic fleet или завершения Windows-интеграции.
 Единственная очередь — [PLAN / D05](PLAN.md#d05), после D03/D04. D05 не зависит от
 production fleet, новых VPS или F-01 live; W01/W02 используют её модель, а не являются
 предварительным условием D05. [Серверный fleet-контракт](stage5-fleet-contract.ru.md)
@@ -487,14 +488,14 @@ wire schema или IPC, расширением RU/NL либо принятием
 Произвольные endpoints, server keys, команды и пути не становятся доверенными
 параметрами privileged service. Это не утверждение об отсутствии передачи материалов:
 действующая авторизованная, ограниченная и проверяемая передача материалов через IPC
-сохраняется; данный документационный checkpoint её не переделывает.
+сохраняется; D05 не меняет wire/IPC schemas и её проверки.
 
 Refresh списка/нагрузки не вызывает apply/reconnect и не меняет работающую сессию.
 `Platform.configure()` **не безопасный обработчик refresh**: участвует в lifecycle,
 вызывает закрытие normal candidate и подготовку конфигурации. Изменение подключения
 идёт только через существующего owner с отменой, завершённой cleanup и generation
 fencing; поздний результат старой generation не применяется. D03 сохраняет окончательные
-ошибки, D04 проверяет stop/start и cleanup; наличие текущих guards не закрывает D04.
+ошибки; review D04 stop/start/cleanup принят, его гарантии сохранены.
 UI показывает фактическую активную сессию отдельно от выбора для следующего подключения.
 
 Для MESH и заимствования VPN чатами сохраняется проверенный native profile context.
@@ -511,12 +512,37 @@ accepted reference pins и действующие пользовательски
 
 | Платформа | Уже имеющаяся граница и оставшийся gate |
 |---|---|
-| Linux | Есть native normal fetch/inspect, storage write/readback, transport adapters и owner/guard hooks. Это не установленная fleet-приёмка и не завершение D04/D05; target-модель и её интеграция ещё требуются. |
+| Linux | D05 использует target/assignment/applied модель в NormalOwner/Platform и hook после guard.ready. Native normal fetch/inspect, storage readback и transport owners сохранены; internal snapshot не расширяет IPC. Это не установленная fleet-приёмка. |
 | Windows | Есть FriendsOwner/broker, существующая identity/vault и проверки Friends-конфигурации. Общий Go Auto интегрируется в W02, broker/native — W01. Linux readback не доказывает эквивалентный Windows runtime/readback; нужна собственная проверка на Windows. |
 
 Capabilities объявляются только по реально интегрированным и согласованно упакованным
 компонентам. Наличие общей библиотеки, fixture или cross-build не означает наличие
 функции в установленном клиенте.
+
+### Реализованная Linux-граница D05
+
+В `auto_configuration.py` находятся `Target`, `Preference`, `TargetChoices`, `Assignment`
+и `AppliedSession`. Legacy references `friends-legacy-v1:legacy-ru/legacy-nl` — только
+локальные варианты. `NormalOwner.assignment()` принимает лишь объект, возвращённый
+его успешным resolve после durable floor/readback/native inspect; offline verified/validate
+такого права не дают. Assignment закреплён за owner generation, gateway_id остаётся None.
+
+`Platform` фиксирует connection preference при создании существующего Runtime; configure
+получает страну через строгий legacy target mapping, prepare требует assignment текущего
+владельца. `GuardedHost` публикует applied metadata через `Platform.applied()` только
+после open, проверки cancellation и guard.ready. Это подтверждение платформенного
+применения, не самостоятельный признак CONNECTED/успешного live delivery: состояние
+политики остаётся у существующего Coordinator. Ошибки/отмена/close/release снимают metadata.
+
+`refresh_targets()` и `select_next()` меняют только память модели, не вызывают configure,
+fetch, apply/reconnect/close или запись floors. `selection_snapshot()` — отдельный внутренний
+read-only снимок без credentials/keys/profile bytes; существующий IPC snapshot не расширен.
+В D05 нет GUI-команды или нового persistent формата: применение следующего выбора к новому
+подключению через действующего owner, UI и миграция остаются L07/W09 и L08/W12.
+Для MESH applied не подставляет normal assignment: точный native profile context и
+правила chat borrowing остаются у существующего MeshCandidate, без равенства по стране/ID.
+Новый provider/wire version требует отдельной интеграции; model-only варианты не добавляют
+capabilities, `dynamic_fleet=False`. Windows использует эти понятия в W01/W02, не Linux evidence.
 
 <a id="desktop-fleet-acceptance"></a>
 ### Проверяемый результат D05 и последующие gates
@@ -541,7 +567,10 @@ broker/native/Auto — W01/W02. Список вариантов и selected-next
 settings остаётся обязательной L08/W12. Полная установленная приёмка и точное описание
 поддерживаемых возможностей — L04/W11/R01, не результат модельных тестов D05.
 
-Все проверки D05 в этом checkpoint **NOT_RUN**. Локальная подготовка D05 не является
+Адресные критерии D05 проверены в Linux source: 162 model/provider/platform/native/catalog
+и 213 ownership/service/chat PASS, без skips/errors; native --normal-stdio использует
+реальный worker и синтетические подписанные материалы. Installed/live/F-01 **NOT_RUN**.
+Локальная подготовка D05 не является
 F-01 live; dynamic fleet нельзя объявлять поддерживаемым до соответствующих интеграции
 и приёмки. Серверные leases/renewal, production fleet/F-01, новый signing workflow,
 новые VPS, Telemost multi-gateway и Django остаются отдельными задачами. Их проверки

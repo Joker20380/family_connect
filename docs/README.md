@@ -11,9 +11,9 @@ isolated kernel TUN/routing evidence and explicit remaining
 Linux/Windows UI/MESH/messenger/package gates. [Architecture](desktop-architecture.md)
 and [shared bridge ADR](adr/003-desktop-mesh-bridge.md),
 [Linux session chat owner](adr/004-linux-chat-session-owner.md).
-[Planned desktop/fleet boundary — D05, not implemented](desktop-architecture.md#desktop-fleet-boundary):
-separate target/assignment/active session, strict legacy provider and later platform gates;
-[documentation checkpoint](releases/2026-10-24-desktop-fleet-boundary.md).
+[Desktop/provider boundary — D05 Linux source, review pending](desktop-architecture.md#desktop-fleet-boundary):
+separate target/assignment/applied session, strict legacy provider and later platform gates;
+[D05 evidence](releases/2026-10-24-desktop-provider-d05.md), not dynamic fleet acceptance.
 [Accepted restricted-chat core contract](../clients/shared/android106-chat.json)
 now has a shared Go API/mailbox adapter, native VPN ownership and a bounded separate
 Linux parent/native IPC lane. UID/device-bound user-service admission now forwards

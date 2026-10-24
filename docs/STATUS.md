@@ -1,28 +1,27 @@
 # Текущее состояние / Current state
 
-Срез D04, 24.10.2026. Вход: чистая `main`, HEAD = проверенный `origin/main`
-`64ecba67825b3036425b5d7a4afa64002cec235d`; phase22 baseline — `664342a`.
-**D04 выполнен в локальном lifecycle scope; NEXT — review D04.**
-[D03 review accepted](releases/2026-10-24-chat-http-terminal-d03.md), D02.1 collection/import
+Срез D05, 24.10.2026. Вход: чистая `main`, HEAD = проверенный `origin/main`
+`3f9854a681beaf35dcb05bdfdc5d7a87b2beb72c`; phase22 baseline — `664342a`.
+**D05 выполнен в локальном Linux model/provider scope; NEXT — review D05.**
+[D03](releases/2026-10-24-chat-http-terminal-d03.md) и [D04](releases/2026-10-24-auto-lifecycle-d04.md) review accepted; D02.1 collection/import
 isolation и D02.2 public-reference приняты. Dependency-части D01.1/D01.2 приняты;
 их PARTIAL и общая CI-приёмка D01 не закрыты.
-[D04](releases/2026-10-24-auto-lifecycle-d04.md): на прежнем настоящем Controller
-8 failed / 1 passed; после исправления service 55 passed, зависимые 180 passed / 6 прежних
-native skips, 0 failures/errors. DISCONNECTED публикуется только после завершения owner;
-start сам убирает завершённый поток, повторный stop не теряет завершение, fatal сохраняется.
-Coordinator callback/process close завершаются до передачи владения. Это синтетическая
-локальная проверка, не установленный native/live PASS; причина прошлого AWG assertion не доказана.
-Code `b41e1ad` pushed/remote-verified: Linux desktop, AWG, TCP, Linux voice и Linux Auto
-bridge jobs PASS. Control/phase0 full suites: каждый 2919 passed / 54 failed / 0 errors /
-106 skipped; Docker: 2917 / 54 / 0 / 108. Последующие control GUI/package, phase0 cargo
-и failover gates skipped. Общий D01/CI остаётся открыт; результаты относятся только к этому code SHA.
+[D05](releases/2026-10-24-desktop-provider-d05.md): target/selected-next, проверенное
+assignment и applied metadata используются Linux NormalOwner/Platform/GuardedHost.
+Legacy gateway_id неизвестен; assignment только после fresh fetch/floor/readback/inspect,
+applied только после guard.ready. Refresh не вызывает configure/apply/close; IPC не расширен.
+Clean export: provider/model/platform/native/catalog 162 PASS, ownership/service/chat 213 PASS,
+0 failures/errors/skips. Native normal-stdio проверен с синтетическими материалами;
+installed/live/F-01 и dynamic fleet не приняты. CI нового D05 SHA ещё не проверен.
+D04 evidence уточнён: на `b41e1ad` одинаковый набор 54 failures в control/phase0/Docker;
+docs-only phase0 `3f9854a` завершился FAILURE отдельно от code SHA. D01 остаётся открыт.
 Review коррекции D02.1-R и [fleet-документации `1725656`](releases/2026-10-24-desktop-fleet-boundary.md)
 завершён. [Граница desktop/fleet](desktop-architecture.md#desktop-fleet-boundary) сохраняется:
-D05 QUEUED после D03/D04; реализация и проверки D05/fleet NOT_RUN.
+D05 реализует только внутреннюю Linux-границу; W01/W02, UI/миграция и fleet gates остаются отдельными.
 [D02.2 DONE, review принят](releases/2026-10-24-rns-reference-d02-2.md): public mappings
 с прежними accepted pins; clean export 49 passed / 1 прежний skip, collection 3051/0 errors;
 public verifier и настоящий `--capsule` (2073 files + APK/native hashes) PASS.
-Исторические CI counts `da8670e` сохранены в отчёте, не переносятся на D04.
+Исторические CI counts `da8670e` сохранены в отчёте, не переносятся на D05.
 [D02.1-R PARTIAL, коррекция принята review](releases/2026-10-24-historical-runner-d02-1-r.md): bootstrap vector и original API
 добавлены; retained inputs явно перечислены, preflight/snapshot fail-closed. Чистая collection
 3031/0 errors, адресные 110 passed. Полный исторический запуск **NOT_RUN**: у delivery-check,
@@ -77,9 +76,9 @@ failover проверки не выполнены. Runtime/fixtures/collection p
 
 | Уровень | Подтверждённое состояние |
 |---|---|
-| SOURCE | D04 — узкое исправление Auto owner completion/admission поверх принятого D03, не новая поставка. |
-| LOCAL TESTS | D04: service 55 PASS; platform/policy/guard/intent/mesh/normal/Friends-owner 180 PASS, 6 прежних native skips. Полный pytest и installed/live acceptance локально NOT_RUN. |
-| CI | D04 `b41e1ad`: desktop Linux/AWG/TCP/voice и Auto bridge Linux PASS; control/phase0/Docker full suites FAIL, по 54 residual failures без collection errors. [Evidence](releases/2026-10-24-auto-lifecycle-d04.md). Общий D01/CI PASS не заявлен. |
+| SOURCE | D05 — внутренняя Linux selection/provider/application модель поверх принятых D03/D04, не новая поставка. |
+| LOCAL TESTS | D05: 162 provider/model/native + 213 ownership/service/chat PASS, 0 failures/errors/skips. Полный pytest и installed/live acceptance локально NOT_RUN. |
+| CI | D05 code SHA ещё не проверен; [evidence](releases/2026-10-24-desktop-provider-d05.md). Общий D01/CI PASS не заявлен. |
 | BUILT | Linux native-r18, Windows native-r14 cross-build, unsigned Linux system/native/RNS component-r18. **Полный parity installer: 0/2.** |
 | INSTALLED | **Завершённая установленная приёмка: 0/2.** Полный кандидат не принят на Linux/Windows; Windows runtime NOT_RUN. |
 | PUBLISHED | Parity-кандидаты не опубликованы. Linux0.2.11 / Windows0.2.15 не менялись; существующие публичные каталоги/ссылки в D00 не изменялись и заново не проверялись. |
@@ -124,12 +123,12 @@ D00 ничего не устанавливает: runtime rollback не нуже
 
 ## Блокеры / оставшаяся реализация
 
-- D01.1/D01.2 PARTIAL, dependency gates приняты; review D02.1 collection/import isolation и D02.2 public-reference принят. D02.1-R historical replay PARTIAL/NOT_RUN. Остальные CI failures требуют отдельной оценки, не расширяют D04 автоматически. Общий D01/CI acceptance открыт до полного PASS.
-- D04: ранний DISCONNECTED/неубранный owner/повторный stop воспроизведены и исправлены адресно; причина конкретного прошлого CI failure не доказана. NEXT — review D04 до Linux-интеграции.
+- D01.1/D01.2 PARTIAL, dependency gates приняты; review D02.1 collection/import isolation и D02.2 public-reference принят. D02.1-R historical replay PARTIAL/NOT_RUN. Остальные CI failures требуют отдельной оценки, не расширяют D05 автоматически. Общий D01/CI acceptance открыт до полного PASS.
+- D04 review accepted; D05 — минимальная Linux модель и provider boundary, NEXT review D05. W01/W02, L07/W09, L08/W12 и installed/live gates не закрыты.
 - D03: [исправление и детерминированные регрессии](releases/2026-10-24-chat-http-terminal-d03.md)
   сохраняют HTTP/TLS/invalid_response/timeout/cancellation при ошибке teardown.
   Это локальная логика с synthetic transport, НЕ installed/live delivery PASS;
-  review D03 принят. D04 — локальный lifecycle checkpoint, NEXT review D04; D05 QUEUED.
+  review D03/D04 принят; D05 не расширяет fixed chat DIRECT/service-only scope.
 - L01/L02: protected DIRECT и host service-only/handoff; L03–L08: полный Linux bundle,
   installed VPN/messenger/recovery/visual/upgrade. Текущий existing-exit не закрывает эти задачи.
 - W01–W12: Windows native↔broker, Auto/recovery и продуктовые функции, затем полный installer,
@@ -172,4 +171,4 @@ D00 ничего не устанавливает: runtime rollback не нуже
 [STATUS до D00](STATUS.history-2026-10-24.md) и [PLAN до D00](PLAN.history-2026-10-24.md)
 сохранены целиком; старые NEXT/ACTIVE/checkpoints — история, не параллельные задания.
 [Отчёт D00](releases/2026-10-24-desktop-parity106-d00.md) фиксирует сохранность и границы.
-**После отчёта D04 остановиться. NEXT — review D04; D05 автоматически не начинать.**
+**После отчёта D05 остановиться. NEXT — review D05; Linux/Windows задачи автоматически не начинать.**

@@ -6,9 +6,9 @@
 а не отдельные реализации продукта. [Текущий срез](STATUS.md) — источник текущего состояния.
 Продуктовый checkpoint: phase22, source baseline `664342a6566792a4ea621274a369bcd6b6012143`.
 D00 — организация документации; следующие строки являются очередью, не разрешением на автозапуск.
-**D04 выполнен в локальном lifecycle scope; NEXT — review D04. Review D03, D02.1 collection/import isolation и D02.2 public-reference принят.
+**D05 выполнен в локальном Linux model/provider scope; NEXT — review D05. Review D03/D04, D02.1 collection/import isolation и D02.2 public-reference принят.
 Review D02.1-R и fleet-документации `1725656` принят;
-D02.1-R остаётся PARTIAL/NOT_RUN, D05 QUEUED и не начинается.**
+D02.1-R остаётся PARTIAL/NOT_RUN; дальнейшие Linux/Windows задачи не начинаются.**
 
 Порядок по умолчанию: D01.1 → D01.2 → D02.1 / принятый review D02.1-R → D02.2 / review → D03 → D04 → D05 → Linux → Windows → R01.
 Зависимости в таблицах — необходимые результаты, а не требование заново выполнять завершённые фазы.
@@ -31,8 +31,8 @@ D02.1-R остаётся PARTIAL/NOT_RUN, D05 QUEUED и не начинаетс�
 | D02.1-R | Комплектность исторического runner | review D02.1 | PARTIAL | Коррекция принята review. Vector/original API, явные retained inputs, preflight до pytest; 110 адресных PASS. Historical suite NOT_RUN: нет anchored pins delivery-check, Java runtime/classes и 3 JARs; полный replay не обеспечен и в D02.2 не выполняется. |
 | D02.2 | RNS/reference checks без локальной capsule в обычном CI | review коррекции D02.1-R принят | DONE (review accepted) | [Evidence `da8670e`](releases/2026-10-24-rns-reference-d02-2.md): public mappings, прежние pins, APK/inventory linkage, строгий --capsule. Clean export: 49 passed/1 прежний skip, collection 3051/0 errors; real capsule 2073 PASS. CI control/phase0/Docker: 55/54/54 residual failures, 0 errors; полные команды сохранены. |
 | D03 | Окончательные ошибки ChatHTTP | приняты D02.1 collection/import isolation и D02.2 | DONE (review accepted) | [Evidence `290d430`](releases/2026-10-24-chat-http-terminal-d03.md): до 15 failed/18 passed, после 33 passed; зависимые 63+24 passed. Terminal-причина сохранена при cleanup, полный 200/consumer error без повторов, transient fallback сохранён. CI control/phase0/Docker: 54/54/53 residual failures, 0 errors; общий D01 открыт. |
-| D04 | Auto stop/start lifecycle | приняты D03, D02.1 collection/import isolation и D02.2 | DONE (local lifecycle; review pending) | [Evidence `b41e1ad`](releases/2026-10-24-auto-lifecycle-d04.md): прежний Controller 8 failed/1 passed; service 55 PASS, зависимые 180 PASS/6 прежних skips. Публикация завершения owner и admission согласованы, fatal не сбрасывается; callback/process close до передачи владения. Linux desktop/Auto bridge CI PASS; control/phase0/Docker по 54 residual failures. |
-| D05 | Минимальная внутренняя модель выбора/назначения/активной сессии и граница существующего provider | D03, D04 | QUEUED | [Адресные критерии](desktop-architecture.md#desktop-fleet-acceptance): разные сущности, устойчивый ID на fixture 2×NL+DE, refresh без apply/reconnect, stale callback отклонён, строгий legacy RU/NL и реальные capabilities. Не production fleet/F-01 live. |
+| D04 | Auto stop/start lifecycle | приняты D03, D02.1 collection/import isolation и D02.2 | DONE (review accepted) | [Evidence `b41e1ad`](releases/2026-10-24-auto-lifecycle-d04.md): прежний Controller 8 failed/1 passed; service 55 PASS, зависимые 180 PASS/6 прежних skips. Публикация завершения owner и admission согласованы, fatal не сбрасывается; callback/process close до передачи владения. Linux desktop/Auto bridge CI PASS; одинаковые 54 residual failures в control/phase0/Docker. Docs-only `3f9854a` phase0 FAILURE отдельно. |
+| D05 | Минимальная внутренняя модель выбора/назначения/активной сессии и граница существующего provider | review D03/D04 принят | DONE (local Linux boundary; review pending) | [Evidence](releases/2026-10-24-desktop-provider-d05.md): модель используется NormalOwner/Platform/GuardedHost; 162 provider/model/native + 213 ownership/service/chat PASS. [Критерии](desktop-architecture.md#desktop-fleet-acceptance): stable ID 2×NL+DE, refresh без apply, fencing, signed legacy rejection, безопасные metadata. Не Windows-интеграция/production fleet/F-01. |
 
 <a id="ci-evidence"></a>
 ### D01/D02: наблюдавшиеся ошибки после baseline push
@@ -80,19 +80,20 @@ Revocation до cleanup, retry записи journal без повторного 
 старые generation и поздний CONNECTED покрыты адресно. Реальный Coordinator завершает
 terminal callback и process close до Runtime.dispose/передачи владения; native process
 в этом тесте синтетический. [До/после и ограничения](releases/2026-10-24-auto-lifecycle-d04.md).
-Связь с конкретным прошлым CI assertion из D01.1 не доказана; D05 не начинается.
+Связь с конкретным прошлым CI assertion из D01.1 не доказана; review D04 принят.
 
 <a id="d05"></a>
 ### D05: локальная подготовка к расширяемому парку, не fleet-приёмка
 
-[Основной контракт](desktop-architecture.md#desktop-fleet-boundary) — **планируемая граница;
-реализация ещё не выполнена**. После D03/D04, без зависимости от production fleet,
+[Основной контракт](desktop-architecture.md#desktop-fleet-boundary) — **минимальная Linux-граница реализована;
+NEXT review D05**. После принятых D03/D04, без зависимости от production fleet,
 новых VPS или F-01 live. D05 задаёт общую модель/provider boundary; W01/W02 используют
 её при продуктовой Windows-интеграции, обратной зависимости D05 → W01/W02 нет.
 Модельные/отрицательные проверки выполняются адресно в D05; миграция — L08/W12,
 полная установленная приёмка — L04/W11/R01. UI/model fixture не доверенный assignment.
 L01/L02/W04 не расширяются за пределы fixed chat DIRECT/service-only.
-Документационный checkpoint не закрывает D01/D02/D05 или fleet; проверки D05/F-01 NOT_RUN.
+Адресные model/provider/native проверки D05 выполнены; F-01/installed/live NOT_RUN.
+Это не закрывает D01/D02 и не разрешает автоматически начинать Linux/Windows-интеграцию.
 
 ## Linux: интеграция, полный кандидат, затем установленная приёмка
 
@@ -207,5 +208,5 @@ Django7.1 (servers/access/payments) зависит от backend/fencing и recov
 [Полный прежний PLAN](PLAN.history-2026-10-24.md), [STATUS](STATUS.history-2026-10-24.md),
 [phase22](releases/2026-10-23-desktop-parity106.md#linux-user-chat-admission-and-existing-exit-handoff-2410-phase22),
 [отчёт D00](releases/2026-10-24-desktop-parity106-d00.md).
-**После отчёта D04 остановиться. NEXT — review D04;
-без автоматического перехода к D05/Linux/Windows/iOS или live-операциям.**
+**После отчёта D05 остановиться. NEXT — review D05;
+без автоматического перехода к Linux/Windows/iOS или live-операциям.**

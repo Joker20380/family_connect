@@ -145,7 +145,8 @@ class Runtime:
             mesh = MeshCandidate(mesh_network(self.guard), MaterialOwner(self.stores[1], self.stores[2]),
                                  {key: material[key] for key in ('identity', 'wireguard_public', 'anchor', 'profile')})
             self.platform = Platform(self.guard, NormalOwner(self.stores[0]), mesh, material,
-                                     hints=HintStore(STATE / (str(record['uid']) + '.hint.json'), record['uid']))
+                                     hints=HintStore(STATE / (str(record['uid']) + '.hint.json'), record['uid']),
+                                     preferred=selection['preferred'])
             self.preferred, self.last = selection['preferred'], self.platform.hints.last(material['country'])
             self.coordinator = Coordinator(self.guard, self.platform, record['recoveries'] + 1,
                                            terminal=terminal, guard_prepared=True)

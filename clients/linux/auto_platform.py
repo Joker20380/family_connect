@@ -2,6 +2,7 @@
 import base64
 import copy
 from contextlib import contextmanager
+from dataclasses import asdict
 import ipaddress
 import json
 import os
@@ -11,6 +12,7 @@ import threading
 import time
 
 from auto_policy import Failure, require
+from auto_configuration import AppliedSession, LEGACY_TARGETS, Preference, TargetChoices, legacy_target
 from auto_guard import System
 from auto_mesh import rejection
 from auto_normal import NormalCandidate
@@ -146,7 +148,7 @@ class HintStore:
 
 
 class Platform:
-    def __init__(self, guard, normal_owner, mesh, material, *, normal=None, underlying=None, capabilities=None, hints=None):
+    def __init__(self, guard, normal_owner, mesh, material, *, normal=None, underlying=None, capabilities=None, hints=None, preferred=''):
         self.guard, self.normal_owner, self.mesh = guard, normal_owner, mesh
         self.material = copy.deepcopy(material)
         self.normal = normal or NormalCandidate(guard)
@@ -156,6 +158,11 @@ class Platform:
         self.health_stopping = threading.Event()
         self.configuration, self.selected, self.path = None, '', None
         self.allowed, self.released = [], False
+        self.generation = guard.generation
+        target = legacy_target(material['country'])
+        self.connection = Preference(target.provider, target.reference, preferred, material['profile'])
+        self.choices = TargetChoices(LEGACY_TARGETS, self.connection)
+        self.assignment, self.active, self.active_context = None, None, None
         self.view = dict(configuration='IDLE', first_reason='', selected='', underlying_index=0, capabilities=[], interface='', attempt=0)
 
     @contextmanager
@@ -164,6 +171,7 @@ class Platform:
             context.check()
         try:
             context.check()
+            require(self.guard.generation == self.generation)
             require(allow_released or not self.released)
             yield
         finally:
@@ -176,6 +184,7 @@ class Platform:
     def failed(self, error):
         failure = rejection(error)
         with self.view_lock:
+            self.active, self.active_context = None, None
             if not self.view['first_reason']:
                 self.view['first_reason'] = failure.category
         return failure
@@ -183,11 +192,14 @@ class Platform:
     def cancel_health(self):
         self.health_stopping.set()
         with self.view_lock:
+            self.active, self.active_context = None, None
             if self.health_context is not None:
                 self.health_context.cancel.set()
 
     def configure(self, context):
         with self.serialized(context):
+            with self.view_lock:
+                self.assignment, self.active, self.active_context = None, None, None
             self.normal.close(context)
             network = self.mesh.network
             if os.path.lexists(network.journal):
@@ -199,9 +211,17 @@ class Platform:
                 self.normal_owner.validate(self.material, context)
                 self.path = self.underlying.read(context)
                 private = base64.b64decode(self.material['wireguard_private'], validate=True)
-                self.configuration = self.normal_owner.resolve(self.material, self.material['country'], private,
+                target = next(target for target in LEGACY_TARGETS if
+                              (target.provider, target.reference) == (self.connection.provider, self.connection.target_reference))
+                require(target.country == self.material['country'] and self.connection.requested_profile == self.material['profile'])
+                self.configuration = self.normal_owner.resolve(self.material, target.country, private,
                     self.material['normal_floors'], self.path['index'], context)
                 self.allowed = self.capabilities(self.configuration, context)
+                context.check()
+                require(self.guard.generation == self.generation)
+                assignment = self.normal_owner.assignment(self.configuration, self.generation, self.connection.requested_profile)
+                with self.view_lock:
+                    self.assignment = assignment
                 self.capture(configuration='READY', capabilities=list(self.allowed), underlying_index=self.path['index'])
             except Exception as error:
                 failure = self.failed(error)
@@ -215,7 +235,8 @@ class Platform:
         with self.serialized(context):
             require(not self.selected and selected in ('awg', 'tcp', 'restricted'))
             if selected != 'restricted':
-                require(selected in self.allowed and self.configuration is not None)
+                require(selected in self.allowed and self.configuration is not None and self.assignment is not None)
+                require(self.assignment.owner_generation == self.generation)
             self.path = self.underlying.read(context)
             self.selected = selected
             self.health_stopping.clear()
@@ -265,6 +286,33 @@ class Platform:
             self.material.clear()
             self.allowed.clear()
             self.released = True
+            with self.view_lock:
+                self.assignment, self.active, self.active_context = None, None, None
+
+    def applied(self, context, selected):
+        with self.serialized(context):
+            require(self.selected == selected and self.guard.record['current']['mode'] == 'ready')
+            with self.view_lock:
+                context.check()
+                require(not self.health_stopping.is_set())
+                self.active = AppliedSession(self.generation, selected, self.connection.requested_profile,
+                                             self.view['interface'], None if selected == 'restricted' else self.assignment)
+                self.active_context = context
+
+    def refresh_targets(self, targets):
+        with self.view_lock:
+            self.choices.refresh(targets)
+
+    def select_next(self, preference):
+        with self.view_lock:
+            self.choices.select(preference)
+
+    def selection_snapshot(self):
+        with self.view_lock:
+            active = self.active if self.active_context is not None and not self.active_context.cancel.is_set() else None
+            return dict(**self.choices.snapshot(), connection=asdict(self.connection),
+                        assignment=asdict(self.assignment) if self.assignment else None,
+                        applied=asdict(active) if active else None, dynamic_fleet=False)
 
     def remember(self, context, selected):
         with self.serialized(context):

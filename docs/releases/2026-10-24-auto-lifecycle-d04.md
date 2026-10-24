@@ -97,10 +97,15 @@ Control/phase0 dependency imports и адресные gates PASS. Docker root 22
 те же exit1/subtests/warnings в control/phase0. Artifact `12558373440`,
 `phase0-failover/build.log`: в FAILED list нет Auto-тестов. Остаточные группы —
 приватные mobile-bootstrap/owner-deadline/tunnel-restart capsules; HTTP/nginx contract;
-expiry, private-storage/evidence validation и socket address-in-use. В Docker дополнительно
-виден `test_device_identity.py::test_unsafe_directory_rejected`; это не D04 scope.
+expiry, private-storage/evidence validation и socket address-in-use, включая
+`test_device_identity.py::test_unsafe_directory_rejected`. Уточнение review: на `b41e1ad`
+набор 54 failures одинаков в control/phase0/Docker; это не отдельный Docker-only failure.
 Counts сняты с этого SHA, а не перенесены из D03. Несвязанные Android/Windows jobs
 не ожидались; PASS отдельных Linux jobs не равен PASS всего workflow/общего D01.
+
+Review D04 принят перед D05. Docs-only SHA `3f9854a681beaf35dcb05bdfdc5d7a87b2beb72c`:
+[phase0](https://github.com/Joker20380/family_connect/actions/runs/40091312005) завершился
+**FAILURE**; проверено отдельно при входе D05, не IN_PROGRESS и не результат code SHA.
 
 Обязательные workflow/pytest команды не менялись. Полные suites локально не повторялись.
 Остаточные failures не исправлялись и не подавлялись. Автоматические native/package CI

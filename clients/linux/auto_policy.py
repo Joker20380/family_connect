@@ -121,13 +121,25 @@ class GuardedHost:
             return result
         if action == 'open':
             selected = request['candidate']
-            plan = self.platform.prepare(context, selected)
-            context.check()
-            require(isinstance(plan, dict) and plan.get('kind') == {'restricted': 'mesh', 'wg': 'wg', 'awg': 'awg', 'tcp': 'tcp'}.get(selected))
-            self.guard.prepare(plan)
-            index, ipv6 = self.platform.open(context, selected)
-            context.check()
-            self.guard.ready(index, ipv6)
+            try:
+                plan = self.platform.prepare(context, selected)
+                context.check()
+                require(isinstance(plan, dict) and plan.get('kind') == {'restricted': 'mesh', 'wg': 'wg', 'awg': 'awg', 'tcp': 'tcp'}.get(selected))
+                self.guard.prepare(plan)
+                index, ipv6 = self.platform.open(context, selected)
+                context.check()
+                self.guard.ready(index, ipv6)
+                context.check()
+                applied = getattr(self.platform, 'applied', None)
+                if applied is not None:
+                    applied(context, selected)
+                context.check()
+                return []
+            except Exception:
+                cancel_health = getattr(self.platform, 'cancel_health', None)
+                if cancel_health is not None:
+                    cancel_health()
+                raise
         elif action == 'close':
             if self.guard.record is not None:
                 self.guard.block()

@@ -18,6 +18,7 @@ sys.path.insert(0, str(ROOT / 'clients/linux'))
 import mesh_materials
 from auto_configuration import NativeConfiguration, NormalOwner, verified
 from auto_policy import Context, Failure
+from provisioning import friends_catalog
 
 FIXTURE = json.loads((ROOT / 'tests/fixtures/desktop-friends-catalog-v2.json').read_text())
 DOMAIN = b'family-connect/invited-test/v1\0'
@@ -27,6 +28,45 @@ SIGNER = Ed25519PrivateKey.from_private_bytes(b'n' * 32)
 
 def signed(payload):
     return dict(payload=base64.b64encode(payload).decode(), signature=base64.b64encode(SIGNER.sign(DOMAIN + payload)).decode())
+
+
+def three_gateway_catalog():
+    payload = json.loads(base64.b64decode(FIXTURE['vectors'][0]['reply']['catalog']['payload']))
+    original = next(gateway for gateway in payload['gateways'] if gateway['country'] == 'nl')
+    payload['gateways'] = [copy.deepcopy(original) for _ in range(3)]
+    payload['gateways'][2]['country'] = 'de'
+    payload['sequence'] = 3
+    return signed(json.dumps(payload, separators=(',', ':')).encode())
+
+
+def test_signed_three_gateway_model_catalog_reaches_legacy_list_rejection(monkeypatch):
+    envelope = three_gateway_catalog()
+    anchor = SIGNER.public_key().public_bytes_raw()
+    raw = base64.b64decode(envelope['payload'])
+    assert len(raw) <= 8192
+    Ed25519PublicKey.from_public_bytes(anchor).verify(base64.b64decode(envelope['signature']), DOMAIN + raw)
+    inspected = []
+    original = friends_catalog._catalog
+    def checked(payload, floor, previous_hash):
+        inspected.append(json.loads(payload)['gateways'])
+        return original(payload, floor, previous_hash)
+    monkeypatch.setattr(friends_catalog, '_catalog', checked)
+    with pytest.raises(ValueError, match='Invalid Friends catalog floor'):
+        friends_catalog.verify_catalog(envelope, anchor)
+    assert len(inspected) == 1 and [gateway['country'] for gateway in inspected[0]] == ['nl', 'nl', 'de']
+
+
+def test_native_rejects_valid_signature_with_three_legacy_gateways(native):
+    response = copy.deepcopy(FIXTURE['vectors'][0]['reply'])
+    response['device'] = hashlib.sha256(PUBLIC).hexdigest()[:32]
+    response['catalog'] = signed(base64.b64decode(response['catalog']['payload']))
+    request = dict(schema=1, id=1, action='inspect', public=base64.b64encode(PUBLIC).decode(),
+                   anchor=base64.b64encode(SIGNER.public_key().public_bytes_raw()).decode(), country='nl',
+                   response=response, floors=[response['catalog']])
+    assert native(request, threading.Event(), time.monotonic() + 5)['ok']
+    response['catalog'] = three_gateway_catalog()
+    reply = native(request, threading.Event(), time.monotonic() + 5)
+    assert reply == dict(schema=1, id=1, ok=False, code='CONFIGURATION')
 
 
 @pytest.fixture

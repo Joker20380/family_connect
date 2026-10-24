@@ -20,7 +20,7 @@ from auto_policy import Context, Failure
 from auto_platform import Capabilities, HintStore, Platform, Underlying
 from auto_runtime import Coordinator
 from auto_guard import candidate, policy
-from auto_configuration import verified
+from auto_configuration import Assignment, legacy_target, verified
 from test_auto_configuration import response, PRIVATE
 
 
@@ -81,6 +81,8 @@ def platform(tmp_path):
             if self.error:
                 raise Failure(self.error)
             return SimpleNamespace(awg='synthetic', tcp='synthetic')
+        def assignment(self, profile, generation, requested_profile):
+            return Assignment(legacy_target('nl'), generation, requested_profile, 2, '0'*64)
     class Attempt:
         kind, error, selected = 'mesh', None, ''
         journal = tmp_path / 'mesh.json'
