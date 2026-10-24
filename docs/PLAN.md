@@ -126,6 +126,10 @@ phase0/tests 3014/55/127, Docker 3013/54/129, errors0. Дополнительн�
 Это не общее CI acceptance. Новые L02.1-R результаты и SHA отдельно в
 [текущем отчёте](releases/2026-10-24-linux-chat-mesh-l02-1-r.md); mandatory suites
 не отключены, посторонние failures не исправлялись.
+L02.1-R source **`6556a902c723a3ef73486733f090cea6f388d099`** pushed/remote-verified:
+606 distinct local checks, native/race/reference и isolated kernel PASS. CI18:42UTC:
+Client Linux/Auto protocol/TCP/readiness PASS; isolated-linux и mandatory
+control/phase0/Docker ещё IN_PROGRESS. Точные jobs — в текущем отчёте; L02 PARTIAL.
 Linux updater пока принимает legacy six-file archive; не объявлять полный bundle обновляемым до L08.
 
 ## Windows: платформенная и продуктовая интеграция

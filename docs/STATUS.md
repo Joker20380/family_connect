@@ -14,6 +14,10 @@ Accepted Coordinator/refcount и все 175 Android106/reference pins не из�
 Локально 580 Python/native/owner/mailbox, 13 root→UID/process и 13 authenticated
 проверок PASS; Go/race и Auto/DIRECT isolated-kernel PASS. Точные source SHA,
 повторные проверки и CI receipt фиксируются в текущем отчёте отдельно от L02.1.
+Source **`6556a902c723a3ef73486733f090cea6f388d099`** committed/pushed,
+remote SHA проверен равным. CI **18:42 UTC**: Client Linux, Auto protocol matrix,
+TCP и readiness golden PASS; isolated-linux/authenticated gate, control,
+phase0/tests/Docker, AWG и voice ещё IN_PROGRESS, не общее CI acceptance.
 Законченный CI L02.1 `a2b105de49391928d4bb9c15c4d5ee2305085918`: control
 **3015 passed / 54 failed / 127 skipped**, phase0/tests **3014 / 55 / 127**,
 Docker **3013 / 54 / 129**, errors0. Дополнительный phase0 failure:

@@ -126,6 +126,34 @@ failures are not fixed, disabled or represented as PASS in this checkpoint.
 The current source/remote SHA and new CI observation are recorded in the receipt
 below after ordinary source commit/push, separately from those final counts.
 
+### Current source receipt
+
+Source/tests/docs **`6556a902c723a3ef73486733f090cea6f388d099`** ordinarily committed
+and pushed to existing `main`; remote SHA verified equal. The standard worker's
+entire source inventory matches the committed files, including the new Go tests.
+Staged diff/privacy/build-output review, 347 local documentation link checks,
+content checks and `git diff --check` PASS. Documentation-only receipt commits do
+not change the source under test. Full control/phase0/Docker suites were NOT_RUN
+locally; the retained authoritative CI runs below are still in progress.
+
+CI observation **2026-10-24 18:42 UTC**, strictly for the new source above:
+
+| Job | Observed result |
+|---|---|
+| [Client Linux120954546137](https://github.com/Joker20380/family_connect/actions/runs/40121722550/job/120954546137) | PASS; not installed or L03 acceptance |
+| [Auto protocol matrix40121722541](https://github.com/Joker20380/family_connect/actions/runs/40121722541) | Linux/Windows protocol jobs PASS; not Windows feature acceptance |
+| [Auto isolated-linux120954545992](https://github.com/Joker20380/family_connect/actions/runs/40121722541/job/120954545992) | IN_PROGRESS; native build/root→UID/kernel/authenticated gate not declared CI PASS |
+| [TCP120954545806](https://github.com/Joker20380/family_connect/actions/runs/40121722518/job/120954545806) | PASS; release jobs skipped |
+| [Readiness golden120954546091](https://github.com/Joker20380/family_connect/actions/runs/40121722586/job/120954546091) | PASS |
+| [Control120954545931](https://github.com/Joker20380/family_connect/actions/runs/40121722521/job/120954545931) | IN_PROGRESS, full suite retained |
+| [phase0/tests120954545787](https://github.com/Joker20380/family_connect/actions/runs/40121722540/job/120954545787) | IN_PROGRESS, full suite retained |
+| [phase0/Docker120954545947](https://github.com/Joker20380/family_connect/actions/runs/40121722540/job/120954545947) | IN_PROGRESS, Docker/failover retained |
+| [AWG120954545917](https://github.com/Joker20380/family_connect/actions/runs/40121722554/job/120954545917), [voice120954545639](https://github.com/Joker20380/family_connect/actions/runs/40121722493/job/120954545639) | IN_PROGRESS |
+
+Raw public CI metadata/checksum receipts remain locally in `/tmp/fc-l021-r/`.
+No running suite is relabelled PASS; this is a source checkpoint, not overall CI
+or release acceptance. The next review can reconcile these exact job IDs.
+
 ## Trust boundary and remaining work
 
 Fixture still replaces external readiness refresh with a pre-issued validated
