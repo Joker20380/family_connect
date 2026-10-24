@@ -2,9 +2,9 @@ name: Desktop Auto native bridge
 on:
   workflow_dispatch:
   push:
-    paths: ['clients/mesh/**', 'carrier/desktopauto/**', 'carrier/desktopmesh/**', 'clients/linux/auto_*.py', 'clients/linux/mesh_service.py', 'clients/linux/mesh_intent.py', 'clients/linux/family-connect-auto@.service', 'clients/linux/mesh_system.py', 'clients/desktop/backend.py', 'clients/desktop/tests/test_auto_*.py', 'provisioning/friends_catalog.py', 'provisioning/friends_owner.py', 'tests/test_friends_auto_owner.py', 'scripts/check_desktop_auto_policy.py', 'scripts/check_chat_direct_underlay.py', 'clients/linux/chat_direct_host.py', 'clients/linux/mesh_*.py', 'carrier/restrictedchat/**', 'carrier/restrictedowner/**', 'clients/desktop/tests/test_mesh_chat*.py', 'tests/fixtures/mesh_lifetime/**', 'clients/desktop/tests/test_mesh_ownership.py', 'clients/linux/family-connect-chat-mesh@.service', 'clients/linux/family-connect-chat-direct@.service', 'clients/desktop/tests/test_chat_direct*.py', 'provisioning/chat_*.py', 'messenger/requirements.lock', '.github/workflows/desktop-auto-bridge.yml']
+    paths: ['clients/mesh/**', 'carrier/desktopauto/**', 'carrier/desktopmesh/**', 'clients/linux/auto_*.py', 'clients/linux/mesh_service.py', 'clients/linux/mesh_intent.py', 'clients/linux/family-connect-auto@.service', 'clients/linux/mesh_system.py', 'clients/desktop/backend.py', 'clients/desktop/tests/test_auto_*.py', 'provisioning/friends_catalog.py', 'provisioning/friends_owner.py', 'tests/test_friends_auto_owner.py', 'scripts/check_desktop_auto_policy.py', 'scripts/check_chat_direct_underlay.py', 'clients/linux/chat_direct_host.py', 'clients/linux/mesh_*.py', 'carrier/restrictedchat/**', 'carrier/restrictedowner/**', 'clients/desktop/tests/test_mesh_chat*.py', 'tests/fixtures/mesh_lifetime/**', 'tests/fixtures/mesh_combined/**', 'clients/desktop/tests/test_mesh_ownership.py', 'clients/linux/family-connect-chat-mesh@.service', 'clients/linux/family-connect-chat-direct@.service', 'clients/desktop/tests/test_chat_direct*.py', 'provisioning/chat_*.py', 'messenger/requirements.lock', '.github/workflows/desktop-auto-bridge.yml']
   pull_request:
-    paths: ['clients/mesh/**', 'carrier/desktopauto/**', 'carrier/desktopmesh/**', 'clients/linux/auto_*.py', 'clients/linux/mesh_service.py', 'clients/linux/mesh_intent.py', 'clients/linux/family-connect-auto@.service', 'clients/linux/mesh_system.py', 'clients/desktop/backend.py', 'clients/desktop/tests/test_auto_*.py', 'provisioning/friends_catalog.py', 'provisioning/friends_owner.py', 'tests/test_friends_auto_owner.py', 'scripts/check_desktop_auto_policy.py', 'scripts/check_chat_direct_underlay.py', 'clients/linux/chat_direct_host.py', 'clients/linux/mesh_*.py', 'carrier/restrictedchat/**', 'carrier/restrictedowner/**', 'clients/desktop/tests/test_mesh_chat*.py', 'tests/fixtures/mesh_lifetime/**', 'clients/desktop/tests/test_mesh_ownership.py', 'clients/linux/family-connect-chat-mesh@.service', 'clients/linux/family-connect-chat-direct@.service', 'clients/desktop/tests/test_chat_direct*.py', 'provisioning/chat_*.py', 'messenger/requirements.lock', '.github/workflows/desktop-auto-bridge.yml']
+    paths: ['clients/mesh/**', 'carrier/desktopauto/**', 'carrier/desktopmesh/**', 'clients/linux/auto_*.py', 'clients/linux/mesh_service.py', 'clients/linux/mesh_intent.py', 'clients/linux/family-connect-auto@.service', 'clients/linux/mesh_system.py', 'clients/desktop/backend.py', 'clients/desktop/tests/test_auto_*.py', 'provisioning/friends_catalog.py', 'provisioning/friends_owner.py', 'tests/test_friends_auto_owner.py', 'scripts/check_desktop_auto_policy.py', 'scripts/check_chat_direct_underlay.py', 'clients/linux/chat_direct_host.py', 'clients/linux/mesh_*.py', 'carrier/restrictedchat/**', 'carrier/restrictedowner/**', 'clients/desktop/tests/test_mesh_chat*.py', 'tests/fixtures/mesh_lifetime/**', 'tests/fixtures/mesh_combined/**', 'clients/desktop/tests/test_mesh_ownership.py', 'clients/linux/family-connect-chat-mesh@.service', 'clients/linux/family-connect-chat-direct@.service', 'clients/desktop/tests/test_chat_direct*.py', 'provisioning/chat_*.py', 'messenger/requirements.lock', '.github/workflows/desktop-auto-bridge.yml']
 permissions:
   contents: read
 jobs:
@@ -87,6 +87,15 @@ jobs:
             ip route add default via 192.0.2.2
             FC_L021_WORKER="$1" "$2" -m pytest -q clients/desktop/tests/test_mesh_chat_lifetime_native.py clients/desktop/tests/test_mesh_chat_terminal_native.py clients/desktop/tests/test_mesh_chat_status_native.py
           ' -- "$RUNNER_TEMP/l021-fixture/fc-mesh-fixture" "$(command -v python)"
+      - name: Authenticated manual and Auto MESH OFF-ON-OFF in disposable system
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash tests/fixtures/mesh_combined/check.sh "$RUNNER_TEMP/l021-fixture" | tee desktop-chat-combined.log
+      - name: Packet ingress initialization and drain race checks
+        working-directory: clients/mesh
+        shell: bash
+        run: go test -race -count=3 -timeout=90s -modfile="$RUNNER_TEMP/l021-fixture/fixture.mod" -ldflags=-checklinkname=0 ./platform ./chatipc ./worker
       - name: Fixed protected chat in an isolated kernel (synthetic TLS peer)
         shell: bash
         run: |
@@ -103,3 +112,4 @@ jobs:
           path: |
             desktop-auto-native-kernel.json
             desktop-chat-direct-kernel.json
+            desktop-chat-combined.log

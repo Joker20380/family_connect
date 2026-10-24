@@ -48,15 +48,15 @@ kernel routes. No TUN is created in this service-only gate.
   authentication and cleanup using acknowledged loopback event barriers. Cleanup
   is held explicitly, not with a scheduling sleep. No PID-only success criterion.
 
-## Remaining combined interface
+## Legacy fixture boundary and L02.2 extension
 
-This peer implements only fixed chat API/mailbox policy. It does not implement
-the generic packet/DNS path needed by native `platform.Attach` / owned-TUN
-`platform.Probe` and health checks. Consequently Linux Supervisor publication,
-verified-profile EXISTING_EXIT borrowing and OFF→ON→OFF are **NOT_RUN**, not PASS.
-Extend the isolated peer to serve that packet/DNS path and broker lease lifecycle,
-then drive the actual Linux VPN owner. Do not stub publication, Attach or Probe,
-or infer this gate needs production/live access or a private capsule.
+The original fixture branch implements only fixed chat API/mailbox policy, not
+owned-TUN Probe or broker lease lifecycle. Its 15 regressions remain unchanged in
+scope. The optional test-only `gateway_path` branch now serves actual lifecycle
+Mux/BindClient/MaintainLease and DNS for the separate
+[L02.2 disposable system gate](../mesh_combined/README.md). That gate drives real
+manual and Auto owners; the original tests alone still do not prove publication
+or OFF→ON→OFF. Neither branch requires live access or a private capsule.
 
 The candidate public components were inspected: `telemost/local_process_test.go`
 has real two-process Pion SDP/media but no FamilyTLS/owner; `messenger_local_test.go`

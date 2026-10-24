@@ -1,5 +1,33 @@
 # Текущее состояние / Current state
 
+Срез **L02.2**, 24.10.2026: локальная authenticated цепочка
+**SERVICE_ONLY → VPN CONNECTED/publication → EXISTING_EXIT → новый SERVICE_ONLY**
+прошла отдельно через настоящий manual Supervisor и Auto/MESH.
+**Review pending; родительский L02 PARTIAL. NEXT — review L02.2.**
+Вход: чистая актуальная `main` = remote `9d472e96b6854f26053ca8d797d2c73aad18b0ef`.
+Review L02.1-R2 принят. [Текущий отчёт](releases/2026-10-24-linux-chat-mesh-l02-2.md):
+UID1000 IPC, настоящие native owners/FamilyTLS/Mux, TUN, private D-Bus/resolved,
+kernel route/DNS readback, native health/publication, broker bind/renewal и cleanup.
+На каждом участке challenge/register/duplex fixed-mailbox; три последовательных
+transport opens, generation/operation lease accounting, held cleanup/late acquire,
+profile mismatch, active-mailbox cancellation, signed expiry/revocation, DENIED/no replay.
+Исправлены потеря release при CONTROL4 и выявленная race-инициализация packet RX;
+caps/reference pins и порядок drain→worker exit→admission сохранены.
+Локально 242 адресных Python, 13 root→UID/process, прежние15 authenticated,
+combined gate, native/race, оба Auto/DIRECT kernel gates и 175 pins PASS.
+Новые source/CI SHA/jobs фиксируются отдельно в текущем отчёте.
+Завершившийся R2 source `89e20a3437b2ba1b02f7d1649487579678158373`:
+control **3030/54/135**, phase0/tests **3030/54/135**, Docker **3028/54/137**
+(passed/failed/skipped), errors0; phase0/tests перепроверен по собственному логу.
+Isolated-linux с15 authenticated, Client Linux, AWG/TCP/voice PASS; не общий CI PASS.
+Внешние rendezvous/media и room provider заменены fixture; mailbox — byte relay,
+не LXMF/node (L05), не live Telemost/installed/F-01. Сеть/DNS рабочего хоста не менялись.
+D01 открыт; D02.1-R PARTIAL/NOT_RUN; L01/L01-R/D03/D04/D05 сохранены.
+Identity/history/settings/keys/floors, версии и установленный baseline не менялись.
+L03/установка/live/publication/Windows/fleet/iOS NOT_RUN. **STOP перед review L02.2.**
+
+### Предыдущий checkpoint L02.1-R2 (историческое evidence)
+
 Срез **L02.1-R2**, 24.10.2026: native status classification исправлена;
 **review pending; родительский L02 PARTIAL. NEXT — review L02.1-R2.**
 Вход: чистая актуальная `main` = remote

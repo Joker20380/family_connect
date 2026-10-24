@@ -14,8 +14,9 @@ VPN worker's existing owner; bounded duplex mailbox/API calls do not use the4s V
 control queue. See [bridge IPC bounds](adr/003-desktop-mesh-bridge.md#accepted-restricted-chat-adaptation).
 Authenticated user/root existing-exit admission and the L01 protected DIRECT source
 path now exist and L01/L01-R review is accepted in source/native/root→UID/kernel scope.
-L02 demand service-only/process admission is a PARTIAL source integration, not an
-authenticated cross-process MESH handoff acceptance. No new GUI route selector is
+L02 remains PARTIAL pending review; L02.2 now supplies local authenticated
+cross-process handoff evidence for both manual and Auto/MESH owners, not live or
+installed acceptance. No new GUI route selector is
 introduced. Windows's native shared code builds, but its broker endpoint remains absent.
 
 Linux AWG now journals exact platform resources before setup and reconciles them
@@ -396,11 +397,30 @@ may prepare service-only again. Cleanup uncertainty deliberately blocks replacem
 The source service unit is not enabled or included as a complete chat component;
 L03 must supply a coherent gated bundle, packaged anchor/dependencies and recovery
 policy. Do not combine this service with an older ungated VPN owner. See the
-[L02 report](releases/2026-10-24-linux-chat-mesh-l02.md) for precise evidence: positive
-host/IPC tests have synthetic MESH lanes, and real process tests use idle native
-workers. The combined authenticated API/mailbox OFF→ON→OFF Linux process gate is
-still missing. Neither those tests nor root→UID nor prior kernel gates imply
-installed/live completion. NEXT review L02, not automatic L03.
+[original L02 report](releases/2026-10-24-linux-chat-mesh-l02.md) for its earlier
+synthetic-lane/idle-process limitations. The
+[L02.2 gate](releases/2026-10-24-linux-chat-mesh-l02-2.md) now drives actual manual
+Supervisor and Auto Coordinator/Guard/Platform/MeshCandidate through authenticated
+OFF→ON→OFF with owned TUN, real private resolver/readback, native health and VPN
+publication. Real broker binding/renewal extends the paired TLS/Mux fixture;
+external rendezvous/media, room provider and DNS/fixed-service backing endpoints
+remain local test replacements. Mailbox is a byte relay, not L05 LXMF/node.
+No installed/live/F-01 claim follows. NEXT review L02.2, not automatic L03.
+
+ServiceOwner retains one generation lease while authorized demand remains; each
+operation atomically retains that specific native generation. Terminal status
+fences admission and drains before replacement. Local CONTROL contention is
+unknown availability, not terminal or proven healthy status; watcher defers it.
+Protocol DENIED remains typed through cleanup. Release now waits for CONTROL
+capacity within the existing4s submit deadline (still four CONTROL slots); a
+timeout closes the lane fail-closed rather than silently losing a lease. A closed
+lane/process alone never proves native cleanup or permits flock handoff.
+
+Owned-TUN ingress is fenced during packet-stack initialization: incoming packets
+are dropped until the actual Xray Start installs handlers, without buffering or
+changing the accepted reference patch. Close fences/drains ingress before stack
+teardown. This fixes the actual fdbased RX/handler-initialization race exposed by
+the combined race-built gate; Attach/Probe/CONNECTED are not simulated.
 
 GTK's bounded session client exposes profile/contact verification, rename, text queue,
 edit, history, unread counts and stored-recipient receipts. Controls use accepted

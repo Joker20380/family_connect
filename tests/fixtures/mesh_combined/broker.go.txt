@@ -1,0 +1,82 @@
+type l022Provider struct{}
+
+func (l022Provider) CreateRoom(context.Context) (Room, error) {
+	return Room{ID: "local-fixture", JoinURL: "https://telemost.yandex.ru/j/local-fixture"}, nil
+}
+
+type L022Peer struct {
+	Secured *familysession.Session
+	Mux *tcpforward.Mux
+	Err error
+}
+
+type l022Gateway struct {
+	endpoint familysession.PacketEndpoint
+	raw []byte
+	path string
+	config tcpforward.MuxConfig
+	setupID string
+	identity Identity
+	ready chan L022Peer
+	event func(string)
+}
+
+func (gateway *l022Gateway) Start(_ context.Context, _ context.Context, _ Room, identifier string, identity Identity) (Gateway, error) {
+	gateway.setupID, gateway.identity = identifier, identity
+	return gateway, nil
+}
+
+func (gateway *l022Gateway) Close() error { return gateway.endpoint.Close() }
+
+func (gateway *l022Gateway) Run(ctx context.Context, active func() error) error {
+	secured, err := familysession.OpenMux(ctx, gateway.endpoint, gateway.raw, true, true)
+	if err != nil { gateway.ready <- L022Peer{Err: err}; return err }
+	defer secured.Close()
+	if err = bindGateway(ctx, secured, gateway.setupID, gateway.identity, active); err != nil {
+		gateway.ready <- L022Peer{Err: err}; return err
+	}
+	gateway.event("broker_bound")
+	binding := ctx.Value(leaseKey{}).(*leaseBinding)
+	handler := binding.handler(SessionAuthorizer(gateway.path, secured.ConnectionState()), secured.SecurityDeadline())
+	gateway.config.LeaseRenewal = func(parent context.Context, stream *tcpforward.MuxStream) {
+		handler(parent, stream)
+		binding.broker.mu.Lock()
+		sequence := binding.current.renewal
+		binding.broker.mu.Unlock()
+		if sequence > 0 { gateway.event("broker_extended") } else { gateway.event("broker_offer") }
+	}
+	mux, err := tcpforward.NewMux(ctx, secured, true, gateway.config)
+	gateway.ready <- L022Peer{secured, mux, err}
+	if err != nil { return err }
+	defer func() {
+		mux.Close()
+		stats := mux.Stats()
+		if stats.ActiveSockets != 0 || stats.ActiveStreams != 0 || stats.RetainedBytes != 0 { panic("fixture gateway resources") }
+		gateway.event("broker_drained")
+	}()
+	return mux.Wait()
+}
+
+func L022Broker(ctx context.Context, endpoint familysession.PacketEndpoint, clientRaw, serverRaw []byte, path string,
+	config tcpforward.MuxConfig, event func(string)) (*Broker, Descriptor, <-chan L022Peer, error) {
+	var credentials familysession.Credentials
+	if err := json.Unmarshal(clientRaw, &credentials); err != nil { return nil, Descriptor{}, nil, err }
+	certificate, err := tls.X509KeyPair([]byte(credentials.Certificate), []byte(credentials.PrivateKey))
+	if err != nil { return nil, Descriptor{}, nil, err }
+	configuration, _, err := familysession.Configuration(clientRaw, false)
+	if err != nil { return nil, Descriptor{}, nil, err }
+	identity := Identity{Family: credentials.Family, Device: configuration.Certificates[0].Leaf.Subject.SerialNumber}
+	copy(identity.PublicKey[:], certificate.PrivateKey.(ed25519.PrivateKey).Public().(ed25519.PublicKey))
+	authorize := func(context.Context) (Identity, error) { return identity, nil }
+	gateway := &l022Gateway{endpoint: endpoint, raw: serverRaw, path: path, config: config, ready: make(chan L022Peer, 1), event: event}
+	limits := DefaultLimits()
+	limits.Lifetime = 8 * time.Second
+	broker, err := New(l022Provider{}, gateway, limits, nil)
+	if err != nil { return nil, Descriptor{}, nil, err }
+	identifier, err := broker.Challenge(ctx, authorize)
+	if err != nil { broker.Close(); return nil, Descriptor{}, nil, err }
+	descriptor, err := broker.Create(ctx, identifier, authorize)
+	if err == nil { err = broker.Claim(ctx, identifier, authorize) }
+	if err != nil { broker.Close(); return nil, Descriptor{}, nil, err }
+	return broker, descriptor, gateway.ready, nil
+}

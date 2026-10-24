@@ -56,8 +56,12 @@ func l021Drained() {
 '''
     coordinator_replacement = output / 'coordinator.go'
     coordinator_replacement.write_text(coordinator_text)
+    gateway = ROOT / 'carrier/roombroker/gateway.go'
+    gateway_text = gateway.read_text().replace('import (', 'import (\n "time"', 1)
+    gateway_replacement = output / 'gateway.go'
+    gateway_replacement.write_text(gateway_text + '\n' + (ROOT / 'tests/fixtures/mesh_combined/broker.go.txt').read_text())
     overlay.write_text(json.dumps({'Replace': {str(source): str(replacement), str(owner): str(owner_replacement),
-                                               str(coordinator): str(coordinator_replacement)}}))
+                                               str(coordinator): str(coordinator_replacement), str(gateway): str(gateway_replacement)}}))
     module = output / 'fixture.mod'
     module.write_text((ROOT / 'clients/mesh/go.mod').read_text().replace('../../carrier', str(ROOT / 'carrier')))
     with module.open('a') as destination:

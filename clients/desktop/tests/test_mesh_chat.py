@@ -35,6 +35,31 @@ def respond(peer, request, **fields):
     ipc.send(peer.fileno(), dict(schema=1, id=request['id'], ok=True, **fields), chat.MAX_FRAME, time.monotonic() + 4)
 
 
+@pytest.mark.parametrize('close_early', [False, True])
+def test_release_capacity_is_bounded_and_close_wakes_waiter(lane, monkeypatch, close_early):
+    instance, peer = lane
+    for lease in range(1, 5):
+        instance._submit('route', dict(lease=lease))
+        assert read(peer)['action'] == 'route'
+    waiting = threading.Event()
+    original = instance.capacity.wait
+    def wait(timeout):
+        waiting.set()
+        return original(timeout)
+    monkeypatch.setattr(instance.capacity, 'wait', wait)
+    started = time.monotonic()
+    with ThreadPoolExecutor(1) as executor:
+        release = executor.submit(instance.call, 'release', lease=1)
+        assert waiting.wait(1)
+        assert len(instance.pending) == 4 and not release.done()
+        if close_early:
+            instance.close()
+        with pytest.raises(chat.ChatError, match='UNAVAILABLE'):
+            release.result(5)
+    assert instance.closed.is_set() and not instance.pending
+    assert time.monotonic() - started < (2 if close_early else 5)
+
+
 def test_out_of_order_mailbox_is_duplex(lane):
     instance, peer = lane
     with ThreadPoolExecutor(2) as pool:

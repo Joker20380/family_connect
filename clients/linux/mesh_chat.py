@@ -78,6 +78,7 @@ class ChatLane:
             raise ValueError('Private stream socket required')
         self.connection = connection
         self.lock = threading.Lock()
+        self.capacity = threading.Condition(self.lock)
         self.writer = threading.Lock()
         self.closed = threading.Event()
         self.failure = 'UNAVAILABLE'
@@ -95,7 +96,12 @@ class ChatLane:
             self.close()
             raise ChatError('UNAVAILABLE')
         try:
-            with self.lock:
+            with self.capacity:
+                while action == 'release' and not self.closed.is_set() and sum(item.action in CONTROL for item in self.pending.values()) >= 4:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise TimeoutError('Chat release capacity deadline')
+                    self.capacity.wait(remaining)
                 if self.closed.is_set():
                     raise ChatError(self.failure)
                 jobs = sum(item.action not in CONTROL for item in self.pending.values())
@@ -110,6 +116,9 @@ class ChatLane:
             except (OSError, ValueError, EOFError, TimeoutError):
                 self.close()
                 raise ChatError('UNAVAILABLE') from None
+        except TimeoutError:
+            self.close()
+            raise ChatError('UNAVAILABLE') from None
         finally:
             self.writer.release()
         return identifier, pending
@@ -158,6 +167,7 @@ class ChatLane:
                     pending.reply = checked_reply(reply, identifier, pending.action)
                     del self.pending[identifier]
                     pending.ready.set()
+                    self.capacity.notify_all()
         except ValueError:
             self.failure = 'DENIED'
         except (OSError, EOFError, TimeoutError):
@@ -175,6 +185,7 @@ class ChatLane:
             for pending in self.pending.values():
                 pending.ready.set()
             self.pending.clear()
+            self.capacity.notify_all()
         try:
             self.connection.shutdown(socket.SHUT_RDWR)
         except OSError:

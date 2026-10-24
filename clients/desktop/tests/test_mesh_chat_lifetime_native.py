@@ -198,7 +198,7 @@ def authenticated(tmp_path, monkeypatch, request):
     try:
         yield SimpleNamespace(owner=owner, host=host, bridge=bridge, events=events, workers=workers,
                               device=device, access=service.access, directory=directory,
-                              chat_identity=RNS.Identity(), api_calls=api_calls)
+                              chat_identity=RNS.Identity(), api_calls=api_calls, authority=service, settings=settings)
     finally:
         events.cleanup.set()
         events.bootstrap.set()

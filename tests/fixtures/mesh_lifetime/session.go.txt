@@ -58,6 +58,7 @@ func l021Open(ctx context.Context, raw []byte) (*Session, error) {
 		Gateway json.RawMessage `json:"gateway"`
 		API     string          `json:"api"`
 		Mailbox string          `json:"mailbox"`
+		GatewayPath string      `json:"gateway_path"`
 	}
 	encoded, err := os.ReadFile(os.Getenv("FC_L021_FIXTURE"))
 	if err != nil {
@@ -85,27 +86,39 @@ func l021Open(ctx context.Context, raw []byte) (*Session, error) {
 		err     error
 	}
 	peer := make(chan result, 1)
-	go func() {
+	config := tcpforward.MuxConfig{MaxStreams: roombroker.DedicatedMaxStreams,
+		Policy: tcpforward.Policy{Services: map[string]netip.AddrPort{"chat-api.family-connect.invalid": api, "chat-mailbox.family-connect.invalid": mailbox}}}
+	var broker *roombroker.Broker
+	var descriptor roombroker.Descriptor
+	if settings.GatewayPath != "" {
+		config.Lifecycle, config.DNSUpstream = true, "127.0.0.2:53"
+		var ready <-chan roombroker.L022Peer
+		broker, descriptor, ready, err = roombroker.L022Broker(ctx, right, raw, settings.Gateway, settings.GatewayPath, config, L021Event)
+		if err != nil { return nil, err }
+		go func() { remote := <-ready; peer <- result{remote.Secured, remote.Mux, remote.Err} }()
+	} else { go func() {
 		secured, err := familysession.OpenMux(ctx, right, settings.Gateway, true, true)
 		var mux *tcpforward.Mux
 		if err == nil {
-			mux, err = tcpforward.NewMux(ctx, secured, true, tcpforward.MuxConfig{MaxStreams: roombroker.DedicatedMaxStreams,
-				Policy: tcpforward.Policy{Services: map[string]netip.AddrPort{"chat-api.family-connect.invalid": api, "chat-mailbox.family-connect.invalid": mailbox}}})
+			mux, err = tcpforward.NewMux(ctx, secured, true, config)
 		}
 		peer <- result{secured, mux, err}
-	}()
+	}() }
 	secured, err := familysession.OpenMux(ctx, left, raw, false, true)
 	if err != nil {
 		left.Close()
 		right.Close()
 		return nil, err
 	}
+	if broker != nil {
+		if err = roombroker.BindClient(ctx, secured, descriptor, raw); err != nil { secured.Close(); broker.Close(); return nil, err }
+	}
 	remote := <-peer
 	if remote.err != nil {
 		secured.Close()
 		return nil, remote.err
 	}
-	mux, err := tcpforward.NewMux(ctx, secured, false, tcpforward.MuxConfig{MaxStreams: roombroker.DedicatedMaxStreams, WaitForSlot: true})
+	mux, err := tcpforward.NewMux(ctx, secured, false, tcpforward.MuxConfig{Lifecycle: broker != nil, MaxStreams: roombroker.DedicatedMaxStreams, WaitForSlot: true})
 	if err != nil {
 		remote.mux.Close()
 		remote.secured.Close()
@@ -126,8 +139,10 @@ func l021Open(ctx context.Context, raw []byte) (*Session, error) {
 		remote.secured.Close()
 		left.Close()
 		right.Close()
+		if broker != nil { broker.Close() }
 		L021Event("cleaned")
 	})
+	if broker != nil { go roombroker.MaintainLease(session.ctx, mux, descriptor.SetupID, session.Close) }
 	go func() { <-session.ctx.Done(); L021Event("terminal") }()
 	return session, nil
 }
