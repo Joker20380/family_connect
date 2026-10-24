@@ -235,8 +235,8 @@ class Host:
             if lease is not None:
                 binding.release(lease)
             request.clear()
-            connection.close()
             with self.lock:
+                connection.close()
                 self.active.pop(connection, None)
 
     @staticmethod

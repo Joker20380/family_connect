@@ -23,7 +23,7 @@ local synthetic-peer kernel acceptance is separate from installed/live gates.
 [L01-R review corrections](releases/2026-10-24-linux-chat-direct-l01-r.md) cover unit umask,
 registration provenance and real TCP/TLS fatal alerts; L01/L01-R review is accepted
 in Linux source/native/root→UID/isolated-kernel scope.
-[L02 service-only/ownership](releases/2026-10-24-linux-chat-mesh-l02.md) is PARTIAL:
+[Initial L02 service-only/ownership](releases/2026-10-24-linux-chat-mesh-l02.md) was PARTIAL:
 source demand host and process admission exist. [L02.1 lifetime checkpoint](releases/2026-10-24-linux-chat-mesh-l02-1.md)
 adds a generation lease and authenticated service-only fixture, not VPN publication
 acceptance. [L02.1-R terminal-generation recovery](releases/2026-10-24-linux-chat-mesh-l02-1-r.md)
@@ -33,7 +33,8 @@ separates CONTROL contention from terminal evidence and preserves DENIED to the 
 R2 review is accepted. [L02.2 combined gate](releases/2026-10-24-linux-chat-mesh-l02-2.md)
 adds local authenticated OFF→ON→OFF through real manual and Auto owners,
 TUN/private DNS/publication, broker leases and bounded release accounting.
-NEXT review L02.2; parent L02 PARTIAL. Windows broker IPC remains NOT_INTEGRATED;
+L02.2/local L02 review is accepted. [D01.3 public IPC completion](releases/2026-10-24-desktop-chat-admission-d01-3.md)
+is the bounded current checkpoint; NEXT review D01.3. Windows broker IPC remains NOT_INTEGRATED;
 installed restricted-message acceptance is NOT_RUN, not a completed fallback.
 [Shared Auto policy and accepted-Java trace checks](../carrier/desktopauto/README.md)
 are implemented locally and included in the native worker's bounded private-pipe

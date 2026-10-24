@@ -1,5 +1,30 @@
 # Текущее состояние / Current state
 
+Срез **D01.3**, 24.10.2026: public chat IPC completion/admission race исправлена;
+**checkpoint, CI pending. NEXT — review D01.3.**
+Вход: чистая актуальная `main` = remote `d448e99b55e594522c02234ac2a87575603a6bbb`.
+Review L02.2 принят в local source/native scope; исходный локальный критерий
+L02 (authenticated OFF→ON/publication→EXISTING_EXIT→OFF через Manual и Auto) выполнен.
+Это не installed/live/F-01 и не общий CI PASS. D01 открыт, D02.1-R PARTIAL/NOT_RUN.
+[Отчёт D01.3](releases/2026-10-24-desktop-chat-admission-d01-3.md): actual Host/
+ServiceHost/ChatBridge, Unix IPC и event barriers; synthetic native lane только
+для адресного public admission evidence. До: probe и prepare допускают следующий
+open до cleanup, **2 failed**, ConnectionResetError. Это та же выявленная гонка,
+но точная причинность исторического CI BrokenPipeError не установлена.
+После: EOF управляющего обмена ждёт завершения cleanup в пределах исходного
+deadline, максимум4s; EOF/removal сериализованы с admission. Caps4/native caps,
+handler/monitor accounting, typed errors/cancellation и no-replay сохранены.
+Локально **266 passed** (24 новых + зависимые Python/IPC/error/lifecycle).
+Обязательный Client Linux desktop pytest и остальные CI gates ожидаются на новом
+source; до результата D01.3 не DONE. Исторические54 residual failures и voice
+holding-state failure не исправляются в этом scope. Прежние15 authenticated,
+combined3, root→UID/process, Auto/DIRECT и full suites не отключены.
+Identity/history/settings/keys/floors/reference pins и установленный baseline
+не менялись. L03/установка/live/publication/Windows/fleet/iOS NOT_RUN.
+**STOP. NEXT — review D01.3.**
+
+### Предыдущий checkpoint L02.2 (evidence до принятия review)
+
 Срез **L02.2**, 24.10.2026: локальная authenticated цепочка
 **SERVICE_ONLY → VPN CONNECTED/publication → EXISTING_EXIT → новый SERVICE_ONLY**
 прошла отдельно через настоящий manual Supervisor и Auto/MESH.

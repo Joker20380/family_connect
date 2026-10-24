@@ -6,7 +6,7 @@
 а не отдельные реализации продукта. [Текущий срез](STATUS.md) — источник текущего состояния.
 Продуктовый checkpoint: phase22, source baseline `664342a6566792a4ea621274a369bcd6b6012143`.
 D00 — организация документации; следующие строки являются очередью, не разрешением на автозапуск.
-**L01/L01-R review принят в Linux source/native/root→UID/isolated-kernel scope. L02 PARTIAL; L02.1-R atomic RetainChat/terminal recovery и L02.1-R2 status classification review приняты. L02.2 local authenticated OFF→ON→OFF прошёл manual и Auto/MESH; NEXT — review L02.2. Review D03/D04/D05, D02.1 collection/import isolation и D02.2 public-reference принят.
+**L01/L01-R review принят в Linux source/native/root→UID/isolated-kernel scope. Review L02.2 принят: локальный критерий L02 authenticated OFF→ON→OFF через Manual и Auto/MESH выполнен. L02.1-R atomic RetainChat/terminal recovery и L02.1-R2 status classification приняты. Только D01.3 public chat completion/admission перед L03; NEXT — review D01.3. Review D03/D04/D05, D02.1 collection/import isolation и D02.2 public-reference принят.
 Review D02.1-R и fleet-документации `1725656` принят;
 D02.1-R остаётся PARTIAL/NOT_RUN; L03 и дальнейшие Linux/Windows задачи не начинаются.**
 
@@ -26,6 +26,7 @@ D02.1-R остаётся PARTIAL/NOT_RUN; L03 и дальнейшие Linux/Wind
 | D01 | Зависимости Linux/desktop CI | D00 | IN_PROGRESS | Dependency gates D01.1/D01.2 отдельно от общей CI-приёмки; закрытие требует полного PASS обязательных suites после устранения остаточных blockers, без скрытия тестов. |
 | D01.1 | Client builds/linux, AmneziaWG pilot, TCP pilot | D00 | PARTIAL | Dependency gates `26f71d6` приняты review; реальные Python3.12 imports/адресные CI PASS. Полный desktop FAIL: RNS capsule, AWG Auto lifecycle assertion; PARTIAL сохранён. |
 | D01.2 | Linux control, phase0, Dockerfile.control test-stage | принята dependency-часть D01.1 | PARTIAL | На pushed `07b52e3` Python3.13 imports/адресные gates PASS ×3; Docker root 22 passed. Каждый full suite: 9 owner_handoff/prepare collection errors, exit 2 (D02); обязательные gates сохранены. |
+| D01.3 | Public chat probe/prepare completion и следующий admission | L02.2/local L02 review принят; D03/D04/D05, L01/L01-R сохранены | CHECKPOINT (CI pending) | [Отчёт](releases/2026-10-24-desktop-chat-admission-d01-3.md): actual Host/ServiceHost/ChatBridge и Unix IPC, event-barrier red2/green; EOF после cleanup сериализован с admission, bounded client wait без open/HTTP retry. Public4/native caps и drain/accounting сохранены. 266 адресных PASS; обязательный Client Linux desktop pytest на новом source pending, общий D01 открыт. STOP перед review D01.3. |
 | D02 | Сбор и импорты исследовательских fixtures | dependency-части D01.1/D01.2 приняты | IN_PROGRESS | Review D02.1 collection/import isolation и D02.2 принят; зависимости D03 готовы. D02.1-R PARTIAL/NOT_RUN. Не ждёт полного зелёного CI, который сам должен разблокировать; общая CI-приёмка D01 остаётся отдельным gate. |
 | D02.1 | Девять collection errors, историческая overlay-suite, изоляция импортов | окружения D01.1/D01.2 готовы | DONE (collection/import isolation) | Review подтвердил границы; `6a0a982`: clean collection 2996/0 errors, helpers/import/runner 75 PASS; три CI full suites с 56 residual failures. Историческая воспроизводимость отдельно в D02.1-R. |
 | D02.1-R | Комплектность исторического runner | review D02.1 | PARTIAL | Коррекция принята review. Vector/original API, явные retained inputs, preflight до pytest; 110 адресных PASS. Historical suite NOT_RUN: нет anchored pins delivery-check, Java runtime/classes и 3 JARs; полный replay не обеспечен и в D02.2 не выполняется. |
@@ -101,11 +102,11 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 |---|---|---|---|---|
 | L01 | Защищённый DIRECT для чатов | D03, D04; D05 review принят | DONE (review L01-R accepted) | Linux source/native/root→UID/isolated-kernel, не installed/live. [Исходное evidence](releases/2026-10-24-linux-chat-direct-l01.md) и [коррекция](releases/2026-10-24-linux-chat-direct-l01-r.md) сохранены с точными SHA; runtime umask, provenance и real TLS fatal исправлены и приняты. |
 | L01-R | Исправления review protected Linux chat DIRECT | L01 review; принятые D03/D04/D05 | DONE (review accepted) | [Before/after и точные CI jobs](releases/2026-10-24-linux-chat-direct-l01-r.md): unit umask0077 + настоящий UID, DIRECT→EXIT registration→ProtectedMailbox→DIRECT с expiry/metadata, real TCP/TLS fatal без fallback. 145 + 49 Python/native, 6 root/UID, Go/race и оба isolated kernel gates PASS. Source `4fab7b6`: Client Linux/Auto/root→UID/kernel/AWG/TCP/voice CI PASS, control/phase0/Docker FAIL. Ни установка, ни live, ни закрытие D01/D02.1-R. |
-| L02 | MESH service-only и передача владения | L01 (принят) | PARTIAL (review pending) | [Source/IPC/process checkpoint](releases/2026-10-24-linux-chat-mesh-l02.md): demand host, flock admission manual/Auto, cleanup barrier и actual registration route. Source/CI `383ef3606aaa4dbd29f0c7c0f755e6faec6e309f`: адресные gates PASS, mandatory full suites FAIL. До DONE нужен успешный authenticated native API/mailbox OFF→ON→OFF через реальные Linux owners, включая drain, expiry, отмену и поздние результаты. Synthetic lane и отдельные idle worker processes это не заменяют. |
+| L02 | MESH service-only и передача владения | L01 (принят) | DONE (local source/native, review accepted) | [Начальный checkpoint](releases/2026-10-24-linux-chat-mesh-l02.md), source `383ef3606aaa4dbd29f0c7c0f755e6faec6e309f`, был PARTIAL. [L02.2](releases/2026-10-24-linux-chat-mesh-l02-2.md), source `dac0f6b45be6ed8703d3de93ff5fdbc67462eabe`, выполнил исходный authenticated API/mailbox OFF→ON/publication→EXISTING_EXIT→OFF через реальные Manual/Auto owners, drain/expiry/cancel/late results. Не installed/live/F-01; full-suite D01 остаётся открыт. |
 | L02.1 | Lifetime поколения и комбинированная native/process приёмка | L02 partial; L01/L01-R, D03/D04/D05 приняты | PARTIAL (review pending) | [Отчёт](releases/2026-10-24-linux-chat-mesh-l02-1.md): bounded generation lease и typed-nil IPC исправлены; red/green на actual native owner, authenticated service-only/API/duplex-byte-mailbox/cleanup. Полный Linux VPN publication→EXISTING_EXIT→OFF NOT_RUN: fixture не реализует generic packet/DNS/TUN health и broker lease lifecycle. Native negative/isolated process gates не подменяют combined gate. L02 не закрывается. |
 | L02.1-R | Terminal native generation: fencing и recovery | L02.1; L01/L01-R, D03/D04/D05 сохранены | REVIEW ACCEPTED (bounded scope) | [Отчёт](releases/2026-10-24-linux-chat-mesh-l02-1-r.md): peer/Mux failure и async bootstrap failure red/green на actual native owner; atomic generation pin закрывает acquire/use race; late HTTP/acquire, held/sticky cleanup, concurrent demand/VPN reservation проверены. Review RetainChat и terminal fixes принят; status-result correction выделена в L02.1-R2. Combined gate не закрыт, L02 PARTIAL. |
 | L02.1-R2 | Классификация native status и сохранение typed errors | L02.1-R review принят | REVIEW ACCEPTED (bounded scope) | [Отчёт](releases/2026-10-24-linux-chat-mesh-l02-1-r2.md): actual CONTROL4 contention и malformed IPC red/green. BUSY не отменяет healthy generation; DENIED до ChatBridge/ChatHTTP без replay. Atomic pin/refcount/cleanup/caps сохранены; прежние15 authenticated остаются обязательными. |
-| L02.2 | Комбинированная local authenticated MESH OFF→ON→OFF приёмка | L02 partial; L02.1-R2 принят | CHECKPOINT (review pending) | [Отчёт](releases/2026-10-24-linux-chat-mesh-l02-2.md): manual Supervisor и Auto/MESH отдельно; реальные UID IPC/native owner, TUN/private DNS/readback/health/publication, EXISTING_EXIT и новый SERVICE_ONLY; API/duplex byte-mailbox на каждом участке. Broker bind/renewal, lease/open/resource accounting, held cleanup/late result/profile mismatch/expiry/revocation/DENIED-no-replay; исправлены release CONTROL4 и packet RX initialization race. Bounded CI gate сохраняет прежние15 и обязательные suites. Не live/installed/LXMF/F-01. L02 PARTIAL; STOP перед review L02.2. |
+| L02.2 | Комбинированная local authenticated MESH OFF→ON→OFF приёмка | L02 partial; L02.1-R2 принят | DONE (review accepted, local source/native) | [Отчёт](releases/2026-10-24-linux-chat-mesh-l02-2.md): manual Supervisor и Auto/MESH отдельно; реальные UID IPC/native owner, TUN/private DNS/readback/health/publication, EXISTING_EXIT и новый SERVICE_ONLY; API/duplex byte-mailbox на каждом участке. Broker bind/renewal, lease/open/resource accounting, held cleanup/late result/profile mismatch/expiry/revocation/DENIED-no-replay; release CONTROL4 и packet RX fence приняты. Bounded CI gate сохраняет прежние15 и обязательные suites. Не live/installed/LXMF/F-01; исходный локальный L02 выполнен. |
 | L03 | Полный внутренний Linux-кандидат | L02, D05 | QUEUED | Согласованы GUI, пользовательские службы, root-helper, native/RNS, зависимости и установка; capabilities соответствуют точному составу реально интегрированного пакета. |
 | L04 | Установленный Linux VPN | L03 | QUEUED | На установленном кандидате подтверждены реальные AWG/TCP/MESH/Auto, P0/P1, DNS/HTTPS и передачи, применённый target/profile и заявленные capabilities; не CLI/echo/SOCKS или model fixture. |
 | L05 | Установленный Linux-мессенджер | L03, L04 | QUEUED | DIRECT/MESH-доставка без VPN и с VPN, контакты/текст/голос, история и фоновые события подтверждены на реальных компонентах. |
@@ -115,7 +116,7 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 
 Phase22 подключила Linux ChatOwner к EXISTING_EXIT. L01 добавляет protected DIRECT;
 старый SYSTEM не переименован в DIRECT и не используется fallback этого нового пути.
-Общий Go service-only есть, но host lifecycle ещё не завершён. Одно активное владение
+Локальный host lifecycle принят по L02.2; public admission корректируется в D01.3. Одно активное владение
 не означает вечный PID: текущий worker имеет собственный жизненный цикл.
 Полный внутренний пакет L03 обязателен перед закрытием L04–L08; system-only component-r18 недостаточен.
 
@@ -146,7 +147,8 @@ root→UID, оба kernel gates и race. Новый CI: control **3032/54/138**,
 phase0/tests **3032/54/138**, Docker **3030/54/140**, errors0; AWG/TCP PASS.
 Client Linux **1003/1/94** (bounded-mailbox BrokenPipeError) и voice pointer/holding
 FAIL, причины не установлены; не общий CI PASS. Никаких unrelated fixes или bypass.
-Mandatory full suites и Auto/DIRECT/root→UID gates сохранены; L02 PARTIAL.
+Mandatory full suites и Auto/DIRECT/root→UID gates сохранены; локальный L02 принят review.
+Новый D01.3 source/CI учитывается отдельно в [отчёте](releases/2026-10-24-desktop-chat-admission-d01-3.md).
 Linux updater пока принимает legacy six-file archive; не объявлять полный bundle обновляемым до L08.
 
 ## Windows: платформенная и продуктовая интеграция
@@ -243,5 +245,5 @@ Django7.1 (servers/access/payments) зависит от backend/fencing и recov
 [Полный прежний PLAN](PLAN.history-2026-10-24.md), [STATUS](STATUS.history-2026-10-24.md),
 [phase22](releases/2026-10-23-desktop-parity106.md#linux-user-chat-admission-and-existing-exit-handoff-2410-phase22),
 [отчёт D00](releases/2026-10-24-desktop-parity106-d00.md).
-**После отчёта L02.2 остановиться. NEXT — review L02.2;
+**После отчёта D01.3 остановиться. NEXT — review D01.3;
 без автоматического перехода к Linux/Windows/iOS или live-операциям.**

@@ -113,12 +113,29 @@ class ChatBridge:
             raise wire.BridgeError('DENIED')
         return reply
 
+    def _complete_control(self, connection, deadline, cancel):
+        if self.closed or (cancel is not None and cancel.is_set()):
+            raise wire.BridgeError('CANCELLED')
+        remaining = min(4, deadline - time.monotonic())
+        if remaining <= 0:
+            raise wire.BridgeError('DEADLINE')
+        connection.settimeout(remaining)
+        try:
+            trailing = connection.recv(1)
+        except TimeoutError:
+            raise wire.BridgeError('DEADLINE') from None
+        if trailing:
+            raise wire.BridgeError('DENIED')
+        if self.closed or (cancel is not None and cancel.is_set()):
+            raise wire.BridgeError('CANCELLED')
+
     def _select(self, deadline, cancel=None):
         selected = None
         for path in self.paths:
             try:
                 with self._connection(path, deadline, cancel) as connection:
                     self._request(connection, 'probe', deadline)
+                    self._complete_control(connection, deadline, cancel)
                 if selected is not None:
                     raise wire.BridgeError('DENIED')
                 selected = path
@@ -138,6 +155,7 @@ class ChatBridge:
         try:
             with self._connection(self.service_path, deadline, cancel) as connection:
                 self._request(connection, 'prepare', deadline, _route='SERVICE_ONLY', **material)
+                self._complete_control(connection, deadline, cancel)
         except (ConnectionError, TimeoutError, FileNotFoundError):
             raise wire.BridgeError() from None
         finally:

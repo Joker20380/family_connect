@@ -14,7 +14,7 @@ VPN worker's existing owner; bounded duplex mailbox/API calls do not use the4s V
 control queue. See [bridge IPC bounds](adr/003-desktop-mesh-bridge.md#accepted-restricted-chat-adaptation).
 Authenticated user/root existing-exit admission and the L01 protected DIRECT source
 path now exist and L01/L01-R review is accepted in source/native/root→UID/kernel scope.
-L02 remains PARTIAL pending review; L02.2 now supplies local authenticated
+L02.2/local L02 review is accepted: local authenticated
 cross-process handoff evidence for both manual and Auto/MESH owners, not live or
 installed acceptance. No new GUI route selector is
 introduced. Windows's native shared code builds, but its broker endpoint remains absent.
@@ -374,7 +374,7 @@ The new user Python dependency is included in the existing bundle source list,
 without a version/installer/catalog change. L02 service-only/handoff, Windows and
 live gateway delivery are not accepted by this checkpoint.
 
-### L02: service-only and process admission (PARTIAL)
+### L02: service-only and process admission (local review accepted)
 
 `mesh_chat_service` owns only a demand chat worker and verified Friends material,
 not a VPN PacketSession or the user's connection intent. Root pins the trust anchor,
@@ -405,7 +405,18 @@ OFF→ON→OFF with owned TUN, real private resolver/readback, native health and
 publication. Real broker binding/renewal extends the paired TLS/Mux fixture;
 external rendezvous/media, room provider and DNS/fixed-service backing endpoints
 remain local test replacements. Mailbox is a byte relay, not L05 LXMF/node.
-No installed/live/F-01 claim follows. NEXT review L02.2, not automatic L03.
+No installed/live/F-01 claim follows. NEXT review D01.3, not automatic L03.
+
+The public Host/ServiceHost cap stays at four live operations/mailboxes. A successful
+probe/prepare reply is not yet a free slot: ChatBridge waits for EOF of that control
+exchange, bounded by the original deadline and at most4s, with cancellation/close.
+Host finishes monitor/lease cleanup first, then closes the control connection and
+removes its active entry under the same admission lock. A dependent accept cannot
+observe EOF yet charge the retired operation against capacity. Shutdown may close
+connections earlier but also stops admission. Terminal replies stay typed without
+waiting for EOF; trailing bytes fail DENIED. This is not a reservation against other
+clients, a retry or an HTTP/open replay. The [D01.3 report](releases/2026-10-24-desktop-chat-admission-d01-3.md)
+separates real public Unix IPC evidence from its synthetic native lane.
 
 ServiceOwner retains one generation lease while authorized demand remains; each
 operation atomically retains that specific native generation. Terminal status
