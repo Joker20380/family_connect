@@ -57,8 +57,20 @@ evidence, но первый фиксирует команду/exit/log, втор
 
 ## CI и поставка
 
-До push автоматический CI этой коррекции NOT_RUN; результаты pushed SHA фиксируются
-отдельно. Полные suites вручную не запускались. Прежние 56 failures относятся только
+Code commit `85b29dabbff6fb7387c3be0aceb24ca7de4e4848` отправлен обычным push;
+`git ls-remote origin refs/heads/main` подтвердил этот SHA. Последующий docs-only
+checkpoint фиксирует наблюдение CI, не меняет код и не наследует его CI результат.
+
+На этом code SHA автоматические jobs запущены, на момент чтения **IN_PROGRESS**:
+
+| Job | Наблюдаемый этап | Полный pytest |
+|---|---|---|
+| [control/linux-control](https://github.com/Joker20380/family_connect/actions/runs/40081991236/job/120837270620) | Local HTTP contract proxy | PENDING, результат недоступен |
+| [phase0/tests](https://github.com/Joker20380/family_connect/actions/runs/40081991254/job/120837271446) | Check public source inventory | PENDING, результат недоступен |
+| [phase0/failover, Docker tests-stage](https://github.com/Joker20380/family_connect/actions/runs/40081991254/job/120837271333) | Build isolated failover stack | результат tests-stage ещё недоступен |
+
+Новый CI PASS/FAIL и counts не предполагаются; прочие jobs не ожидались. Полные
+suites вручную не запускались. Прежние 56 failures относятся только
 к `6a0a982`: 2 RNS/reference (D02.2), ещё 54 — 19 capsule fixtures, 29 nginx assertions,
 2 expiry, 3 privacy, 1 socket. D03 ChatHTTP и D04 Auto остаются отдельными задачами;
 причина прежнего Auto failure не доказана. Общий D01 и CI-приёмка не закрыты.

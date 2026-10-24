@@ -10,6 +10,8 @@
 Java runtime/classes и трёх JARs нет подтверждённых artifact pins; существование файлов не PASS.
 Collection/import isolation D02.1 подтверждено review. Комплектность исторического replay ещё
 не закрыта. Новые полные suites вручную не запускались; старые CI counts ниже — только `6a0a982`.
+Code `85b29da` pushed/remote-verified; control/phase0/tests/Docker build запущены,
+на момент чтения IN_PROGRESS, новые full pytest counts ещё недоступны (ссылки в отчёте).
 [D02.1 DONE](releases/2026-10-24-fixture-boundaries-d02-1.md), code `6a0a982`: чистый export —
 collection 2977 + 9 errors → 2996 / 0 errors; helpers/import/runner — 75 passed.
 В трёх CI окружениях collection errors = 0; полный pytest остаётся FAIL (56 failures):
