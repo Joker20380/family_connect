@@ -1,5 +1,26 @@
 # Текущее состояние / Current state
 
+Срез **L02.1**, 24.10.2026: lifetime исправлен; **комбинированная приёмка PARTIAL**.
+Вход: чистая актуальная `main`, remote проверен
+`9b7418e2675d1e30787f491f8c924467835e7b05`; checkout не откатывался.
+**Родительский L02 остаётся PARTIAL. NEXT — review L02.1.**
+[Отчёт L02.1](releases/2026-10-24-linux-chat-mesh-l02-1.md): отдельная native lease
+поколения плюс operation leases; idle45s/expiry/preemption/cancel/shutdown сохраняют
+drain→worker exit→flock release. Исправлена typed-nil ошибка native IPC при отказе
+Acquire. Старый host: authenticated challenge200 → leases0 → удержанный cleanup →
+register UNAVAILABLE; новый: challenge/register/duplex fixed-mailbox, один transport.
+Локально 556 Python/native + 24 owner/mailbox, 13 root→UID/process; native/race и 7
+authenticated fixture checks; точные результаты и ограничения — в отчёте.
+Fixture изолирован Go overlay: реальные native owner/IPC/FamilyTLS/Mux и Linux
+lifecycle, но внешние rendezvous/carrier/broker и readiness-fetch заменены;
+mailbox peer — байтовый relay, не установленный LXMF/node.
+Полный VPN ON/publication/EXISTING_EXIT/OFF gate **NOT_RUN**: peer ещё не обслуживает
+generic packet/DNS/owned-TUN health и broker lease lifecycle. Это не требование
+live/private capsule. D01 открыт; D02.1-R PARTIAL/NOT_RUN; L01/L01-R/D03/D04/D05
+сохранены. Версии/установка/публикация не менялись; L03 не начат.
+
+### Предыдущий checkpoint L02 (историческое evidence)
+
 Срез L02, 24.10.2026. Вход: чистая актуальная `main`, HEAD = проверенный `origin/main`
 `b3301d07cb6e06f3c032b31a99f39e9535d3b21d`; checkout не откатывался.
 **Review L01/L01-R принят пользователем в Linux source/native/root→UID/isolated-kernel scope.**

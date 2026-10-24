@@ -1,0 +1,115 @@
+func L021Event(kind string) {
+	connection, err := net.DialTimeout("tcp", os.Getenv("FC_L021_EVENTS"), time.Second)
+	if err != nil {
+		panic(err)
+	}
+	defer connection.Close()
+	connection.SetDeadline(time.Now().Add(15 * time.Second))
+	if err := json.NewEncoder(connection).Encode(map[string]any{"event": kind}); err != nil {
+		panic(err)
+	}
+	var reply [1]byte
+	if _, err := io.ReadFull(connection, reply[:]); err != nil || reply[0] != 1 {
+		panic("fixture barrier")
+	}
+}
+
+type l021Packet struct {
+	incoming, outgoing chan []byte
+	done               chan struct{}
+	once               sync.Once
+}
+
+func (packet *l021Packet) SendContext(ctx context.Context, data []byte) error {
+	select {
+	case packet.outgoing <- bytes.Clone(data):
+		return nil
+	case <-ctx.Done():
+		return ctx.Err()
+	case <-packet.done:
+		return io.EOF
+	}
+}
+func (packet *l021Packet) Recv(ctx context.Context) ([]byte, error) {
+	select {
+	case data := <-packet.incoming:
+		return data, nil
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	case <-packet.done:
+		return nil, io.EOF
+	}
+}
+func (packet *l021Packet) Close() error { packet.once.Do(func() { close(packet.done) }); return nil }
+
+func l021Open(ctx context.Context, raw []byte) (*Session, error) {
+	L021Event("open")
+	var settings struct {
+		Gateway json.RawMessage `json:"gateway"`
+		API     string          `json:"api"`
+		Mailbox string          `json:"mailbox"`
+	}
+	encoded, err := os.ReadFile(os.Getenv("FC_L021_FIXTURE"))
+	if err != nil {
+		return nil, err
+	}
+	defer clear(encoded)
+	if err = json.Unmarshal(encoded, &settings); err != nil {
+		return nil, err
+	}
+	defer clear(settings.Gateway)
+	api, err := netip.ParseAddrPort(settings.API)
+	if err != nil || !api.Addr().IsLoopback() {
+		return nil, ErrClosed
+	}
+	mailbox, err := netip.ParseAddrPort(settings.Mailbox)
+	if err != nil || !mailbox.Addr().IsLoopback() {
+		return nil, ErrClosed
+	}
+	forward, reverse := make(chan []byte, 16), make(chan []byte, 16)
+	left := &l021Packet{incoming: reverse, outgoing: forward, done: make(chan struct{})}
+	right := &l021Packet{incoming: forward, outgoing: reverse, done: make(chan struct{})}
+	type result struct {
+		secured *familysession.Session
+		mux     *tcpforward.Mux
+		err     error
+	}
+	peer := make(chan result, 1)
+	go func() {
+		secured, err := familysession.OpenMux(ctx, right, settings.Gateway, true, true)
+		var mux *tcpforward.Mux
+		if err == nil {
+			mux, err = tcpforward.NewMux(ctx, secured, true, tcpforward.MuxConfig{MaxStreams: roombroker.DedicatedMaxStreams,
+				Policy: tcpforward.Policy{Services: map[string]netip.AddrPort{"chat-api.family-connect.invalid": api, "chat-mailbox.family-connect.invalid": mailbox}}})
+		}
+		peer <- result{secured, mux, err}
+	}()
+	secured, err := familysession.OpenMux(ctx, left, raw, false, true)
+	if err != nil {
+		left.Close()
+		right.Close()
+		return nil, err
+	}
+	remote := <-peer
+	if remote.err != nil {
+		secured.Close()
+		return nil, remote.err
+	}
+	mux, err := tcpforward.NewMux(ctx, secured, false, tcpforward.MuxConfig{MaxStreams: roombroker.DedicatedMaxStreams, WaitForSlot: true})
+	if err != nil {
+		remote.mux.Close()
+		remote.secured.Close()
+		secured.Close()
+		return nil, err
+	}
+	L021Event("authenticated")
+	return Attach(ctx, muxPlane{mux}, func() {
+		L021Event("cleanup_entered")
+		remote.mux.Close()
+		secured.Close()
+		remote.secured.Close()
+		left.Close()
+		right.Close()
+		L021Event("cleaned")
+	}), nil
+}

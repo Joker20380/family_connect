@@ -114,6 +114,45 @@ func (current *harness) call(request Request) Reply {
 	return reply
 }
 
+func TestNativeAcquisitionDenialKeepsIPCAlive(test *testing.T) {
+	interfaces, err := net.Interfaces()
+	if err != nil {
+		test.Fatal(err)
+	}
+	index := 0
+	for _, candidate := range interfaces {
+		if candidate.Flags&net.FlagUp != 0 && candidate.Flags&net.FlagLoopback == 0 {
+			index = candidate.Index
+			break
+		}
+	}
+	if index == 0 {
+		test.Skip("requires an up non-loopback interface")
+	}
+	var owner restrictedchat.Owner
+	defer owner.Close()
+	local, remote := net.Pipe()
+	remote.SetDeadline(time.Now().Add(5 * time.Second))
+	current := &harness{connection: remote, done: make(chan error, 1), test: test}
+	go func() { current.done <- Serve(context.Background(), local, &owner, unusedPlatform{}) }()
+	defer func() {
+		remote.Close()
+		select {
+		case <-current.done:
+		case <-time.After(2 * time.Second):
+			test.Error("native denial leaked IPC server")
+		}
+	}()
+	for range 2 {
+		reply := current.call(Request{Action: "acquire", BudgetMS: 1000, Acquire: &Acquisition{
+			Readiness: json.RawMessage(`{}`), Identity: make([]byte, 64), Anchor: make([]byte, 32),
+			Resolver: "1.1.1.1:53", UnderlyingIndex: index}})
+		if reply.OK || reply.Error != "DENIED" {
+			test.Fatal("invalid native material did not fail closed", reply.Error)
+		}
+	}
+}
+
 func acquisition() Request {
 	return Request{Action: "acquire", BudgetMS: 30000, Acquire: &Acquisition{Readiness: json.RawMessage(`{}`), Identity: make([]byte, 64), Anchor: make([]byte, 32), Resolver: "1.1.1.1:53", UnderlyingIndex: 1}}
 }

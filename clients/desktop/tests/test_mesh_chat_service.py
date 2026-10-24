@@ -139,7 +139,7 @@ def test_service_api_and_real_mailbox_fd_without_packet_owner(service):
         service.workers[0].chat.peers[0].sendall(b'mailbox')
         assert channel.recv(7) == b'mailbox'
     service.workers[0].chat.peers[0].close()
-    wait(lambda: not service.workers[0].chat.leases and not service.workers[0].chat.streams)
+    wait(lambda: service.workers[0].chat.leases == {service.owner.generation_lease} and not service.workers[0].chat.streams)
     assert len(service.materials.calls) == 1
     assert service.materials.calls[0]['profile'] == 'P0'
 
@@ -162,7 +162,7 @@ def test_concurrent_api_requests_share_one_generation(service):
         replies = list(pool.map(lambda _: service.bridge.request(wire.PATHS[0], body(), 5), range(3)))
     assert all(reply[0] == 200 for reply in replies)
     assert len(service.workers) == len(service.gates) == len(service.materials.calls) == 1
-    wait(lambda: not service.workers[0].chat.leases)
+    wait(lambda: service.workers[0].chat.leases == {service.owner.generation_lease})
 
 
 @pytest.mark.parametrize('change', ['underlying', 'expiry', 'shutdown'])

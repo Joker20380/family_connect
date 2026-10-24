@@ -60,7 +60,11 @@ func Serve(parent context.Context, connection net.Conn, owner *restrictedchat.Ow
 		if err != nil || underlying.Flags&net.FlagUp == 0 || underlying.Flags&net.FlagLoopback != 0 || strings.EqualFold(underlying.Name, worker.InterfaceName) {
 			return nil, restrictedchat.ErrUnavailable
 		}
-		return owner.Acquire(restrictedchat.Config{Readiness: material.Readiness, Identity: material.Identity, Anchor: material.Anchor, Resolver: material.Resolver}, func(descriptor int) bool { return platform.Protect(*underlying, descriptor) })
+		acquired, err := owner.Acquire(restrictedchat.Config{Readiness: material.Readiness, Identity: material.Identity, Anchor: material.Anchor, Resolver: material.Resolver}, func(descriptor int) bool { return platform.Protect(*underlying, descriptor) })
+		if err != nil {
+			return nil, err
+		}
+		return acquired, nil
 	})
 }
 

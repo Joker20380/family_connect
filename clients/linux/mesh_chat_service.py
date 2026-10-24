@@ -57,6 +57,7 @@ class ServiceOwner:
         self.cancel = threading.Event()
         self.stopped = threading.Event()
         self.gate = self.worker = self.current = None
+        self.generation_lease = None
         self.network = None
         self.fingerprint = None
         self.touched = 0
@@ -109,6 +110,7 @@ class ServiceOwner:
             self.current = Binding(self.worker.chat, start, self.cancel, 'SERVICE_ONLY')
             self.fingerprint = hashlib.sha256((request['identity'] + request['wireguard_public']).encode('ascii')).digest()
             self.current.ready.set()
+            self.generation_lease = self.current.acquire(request['device'], cancel, Host._budget(deadline))
             self.touched = time.monotonic()
             context.check()
             return self.current
@@ -142,8 +144,12 @@ class ServiceOwner:
             self._cleanup_locked()
 
     def _cleanup_locked(self):
+        self.cancel.set()
         if self.current is not None:
             self.current.close()
+            if self.generation_lease is not None:
+                self.current.release(self.generation_lease)
+                self.generation_lease = None
             self.current = None
         if self.worker is not None:
             self.worker.close()
@@ -166,6 +172,10 @@ class ServiceOwner:
             try:
                 if gate.preempted() or (self.touched and time.monotonic() - self.touched > 45):
                     cancel.set()
+                with self.lock:
+                    if (self.gate is gate and self.cancel is cancel and self.current is not None and
+                            self.current.material['readiness']['expires_at'] <= time.time()):
+                        cancel.set()
                 if network is not None and not cancel.is_set():
                     current = self.underlying.read(Context(cancel, time.monotonic() + 2))
                     if network != current:

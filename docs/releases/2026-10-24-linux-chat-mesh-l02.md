@@ -1,5 +1,9 @@
 # L02 — Linux chat MESH service-only / ownership, 24.10.2026
 
+Historical checkpoint preserved below. Current continuation is
+[L02.1](2026-10-24-linux-chat-mesh-l02-1.md); L02 remains PARTIAL and the current
+NEXT is **review L02.1**, not the older NEXT in this receipt.
+
 ## Result and entry
 
 **PARTIAL — source integration and bounded checks, not L02 acceptance. NEXT — review L02.**
