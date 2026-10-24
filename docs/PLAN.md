@@ -6,9 +6,9 @@
 а не отдельные реализации продукта. [Текущий срез](STATUS.md) — источник текущего состояния.
 Продуктовый checkpoint: phase22, source baseline `664342a6566792a4ea621274a369bcd6b6012143`.
 D00 — организация документации; следующие строки являются очередью, не разрешением на автозапуск.
-**Единственная следующая задача: D01. После завершения D00 остановиться.**
+**Текущая разрешённая задача: только D01.1. После отчёта остановиться.**
 
-Порядок по умолчанию: D01 → D02 → D03 → Linux → Windows → R01.
+Порядок по умолчанию: D01.1 → D01.2 → D02 → D03 → Linux → Windows → R01.
 Зависимости в таблицах — необходимые результаты, а не требование заново выполнять завершённые фазы.
 Каждый ID — отдельный ограниченный пользовательский результат, отдельные проверки и commit/push.
 `DONE` = выполнен указанный критерий, `NEXT` = ещё не начат, `QUEUED` = не начат как отдельная задача.
@@ -21,7 +21,9 @@ D00 — организация документации; следующие ст
 | ID | Результат | Зависимость | Статус | Критерий завершения |
 |---|---|---|---|---|
 | D00 | Компактное состояние и последовательный план | phase22 / baseline | DONE | Новый сеанс читает STATUS + выбранный ID; история сохранена побайтно, ссылки и diff проверены; commit/push с remote SHA отражён в итоговом ответе. |
-| D01 | Зависимости Linux/desktop CI | D00 | NEXT | В предназначенных окружениях доступны необходимые httpx/LXMF/GI; устранены соответствующие collection errors без скрытия обязательных тестов. |
+| D01 | Зависимости Linux/desktop CI | D00 | IN_PROGRESS | DONE только после D01.1 и D01.2; необходимые httpx/LXMF/GI доступны без скрытия обязательных тестов. |
+| D01.1 | Client builds/linux, AmneziaWG pilot, TCP pilot | D00 | IN_PROGRESS | Python3.12: реальные httpx/LXMF/RNS/GI и ChatOwner/ChatBridge/chat_daemon; адресные и полный desktop pytest PASS в трёх jobs на pushed SHA. Остальные этапы отдельно. |
+| D01.2 | Linux control, phase0, Dockerfile.control test-stage | D01.1 | QUEUED | Исправлены зависимости соответствующих Python3.13/test-stage окружений; обязательные suites сохранены, результаты на pushed SHA; fixture scope остаётся D02. |
 | D02 | Сбор и импорты исследовательских fixtures | D01 | QUEUED | Устранены owner_handoff/prepare import errors; обязательные проверки имеют явный воспроизводимый запуск; границы архивных экспериментов задокументированы. |
 | D03 | Окончательные ошибки ChatHTTP | D02 | QUEUED | HTTP400/401/403/409, TLS и установленный invalid_response сохраняются при ошибке teardown; разрешённый transient fallback продолжает работать. |
 
@@ -38,6 +40,7 @@ D00 — организация документации; следующие ст
 - [Linux control](https://github.com/Joker20380/family_connect/actions/runs/40073089380/job/120810561183).
 - [phase0](https://github.com/Joker20380/family_connect/actions/runs/40073089270).
 
+D01.1: [отчёт и текущая проверка](releases/2026-10-24-desktop-ci-d01-1.md).
 D01 сначала читает соответствующие workflows/lockfiles и эти ошибки; не переносит
 лабораторный каталог целиком и не отключает обязательные suites ради зелёного CI.
 D02 явно отделяет поддерживаемые проверки от архивных опытов; их source push не делает их release core.
@@ -167,4 +170,4 @@ Django7.1 (servers/access/payments) зависит от backend/fencing и recov
 [Полный прежний PLAN](PLAN.history-2026-10-24.md), [STATUS](STATUS.history-2026-10-24.md),
 [phase22](releases/2026-10-23-desktop-parity106.md#linux-user-chat-admission-and-existing-exit-handoff-2410-phase22),
 [отчёт D00](releases/2026-10-24-desktop-parity106-d00.md).
-**NEXT: D01. D00 не запускает D01 автоматически.**
+**После D01.1 остановиться. NEXT: D01.2 только после принятия D01.1 и отдельного запроса.**

@@ -1,21 +1,22 @@
 name: TCP pilot
 on:
   push:
-    paths: ['pilot/tcp/**', 'compose.tcp.yaml', 'clients/linux/*tcp*', 'clients/desktop/**', 'scripts/*tcp*', '.github/workflows/tcp.yml']
+    paths: ['pilot/tcp/**', 'compose.tcp.yaml', 'clients/linux/*tcp*', 'clients/desktop/**', 'scripts/*tcp*', 'scripts/ci_desktop_env.sh', 'control/requirements.lock', 'provisioning/requirements.lock', 'device_identity/requirements.lock', 'messenger/requirements.lock', '.github/workflows/tcp.yml']
   pull_request:
-    paths: ['pilot/tcp/**', 'compose.tcp.yaml', 'clients/linux/*tcp*', 'clients/desktop/**', 'scripts/*tcp*', '.github/workflows/tcp.yml']
+    paths: ['pilot/tcp/**', 'compose.tcp.yaml', 'clients/linux/*tcp*', 'clients/desktop/**', 'scripts/*tcp*', 'scripts/ci_desktop_env.sh', 'control/requirements.lock', 'provisioning/requirements.lock', 'device_identity/requirements.lock', 'messenger/requirements.lock', '.github/workflows/tcp.yml']
 permissions:
   contents: read
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - run: python -m pip install pytest cryptography
-      - run: python -m pytest -q clients/desktop/tests
+      - name: Prepare Python 3.12 and verify real desktop imports
+        run: bash scripts/ci_desktop_env.sh "$RUNNER_TEMP/fc-desktop-env"
+      - name: Targeted desktop dependency regressions
+        run: '"$RUNNER_TEMP/fc-desktop-env/bin/python" -m pytest -q clients/desktop/tests/test_chat_host_registration.py clients/desktop/tests/test_mesh_chat_host.py clients/desktop/tests/test_support_service.py clients/desktop/tests/test_chat_service.py -rs'
+      - name: Mandatory desktop pytest
+        run: '"$RUNNER_TEMP/fc-desktop-env/bin/python" -m pytest -q clients/desktop/tests -rs'
       - run: docker build -f pilot/tcp/Dockerfile -t family-connect-xray:26.3.27-pilot1 .
       - run: docker compose -f compose.tcp.yaml config --quiet
       - name: Verify TCP routing in an isolated network namespace
@@ -28,7 +29,7 @@ jobs:
         run: |
           version=0.1.0
           if [[ "$GITHUB_REF" == refs/tags/tcp-setup-v* ]]; then version="${GITHUB_REF_NAME#tcp-setup-v}"; fi
-          python3 scripts/package_tcp_setup.py --version "$version" --output "$RUNNER_TEMP/FamilyConnect-TCP-Setup.tar.gz"
+          "$RUNNER_TEMP/fc-desktop-env/bin/python" scripts/package_tcp_setup.py --version "$version" --output "$RUNNER_TEMP/FamilyConnect-TCP-Setup.tar.gz"
       - uses: actions/upload-artifact@v4
         with:
           name: FamilyConnect-TCP-Setup-unsigned-pilot
@@ -39,7 +40,7 @@ jobs:
           tcp_container=$(docker create family-connect-xray:26.3.27-pilot1)
           trap 'docker rm "$tcp_container" >/dev/null' EXIT
           docker cp "$tcp_container:/usr/local/bin/xray" "$RUNNER_TEMP/xray"
-          python3 scripts/package_tcp.py --xray "$RUNNER_TEMP/xray" --output artifacts/tcp/FamilyConnect-TCP-amd64.tar.gz
+          "$RUNNER_TEMP/fc-desktop-env/bin/python" scripts/package_tcp.py --xray "$RUNNER_TEMP/xray" --output artifacts/tcp/FamilyConnect-TCP-amd64.tar.gz
       - name: Verify isolated component install and rollback (systemd stub)
         run: >-
           docker run --rm --network none --user 0 --device /dev/net/tun

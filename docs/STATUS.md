@@ -1,9 +1,11 @@
 # Текущее состояние / Current state
 
-Срез D00, 24.10.2026. Проверены `main`, чистая исходная рабочая копия и `origin/main`:
-`664342a6566792a4ea621274a369bcd6b6012143` — исходный source checkpoint.
-D00 меняет только навигацию и документы, не продукт или его версии.
-**Следующая отдельная задача: D01. Не начинать её автоматически после D00.**
+Срез D01.1, 24.10.2026. Вход: `main`, чистая рабочая копия, HEAD = проверенный `origin/main`
+`6ede7a45fd4078dc0fc3fbf8df63b937b2ad3331` (D00); продуктовый baseline —
+`664342a6566792a4ea621274a369bcd6b6012143`. D01.1 меняет только три CI jobs/helper и документы.
+**Разрешена только D01.1; D01.2/D02/продукт не начинать.**
+[D01.1](releases/2026-10-24-desktop-ci-d01-1.md): локальные реальные импорты PASS,
+адресные 59 passed; полный desktop 877 passed / 64 существующих skips / 0 failures/errors. CI ещё PENDING.
 
 ## Цель и порядок работы
 
@@ -37,7 +39,7 @@ D00 меняет только навигацию и документы, не п�
 |---|---|
 | SOURCE | Последний завершённый продуктовый checkpoint — phase22; сохранён в baseline выше. D00 — документация. |
 | LOCAL TESTS | Phase22: 1218 PASS в описанном локальном наборе, без failures/errors/skips; существующий GI warning. Шесть Linux native packages: race PASS. Не полный pytest и не CI. |
-| CI | После baseline push наблюдались отдельные dependency/collection failures; [точные runs/jobs](PLAN.md#ci-evidence). CI PASS не заявлен; новый push может запустить CI, но не подтверждает результат. |
+| CI | D01.1: Python3.12/system GI + изолированный venv для трёх desktop jobs; LOCAL PASS, CI PENDING. [Исходные failures](PLAN.md#ci-evidence), [результаты D01.1](releases/2026-10-24-desktop-ci-d01-1.md). Общий CI PASS не заявлен. |
 | BUILT | Linux native-r18, Windows native-r14 cross-build, unsigned Linux system/native/RNS component-r18. **Полный parity installer: 0/2.** |
 | INSTALLED | **Завершённая установленная приёмка: 0/2.** Полный кандидат не принят на Linux/Windows; Windows runtime NOT_RUN. |
 | PUBLISHED | Parity-кандидаты не опубликованы. Linux0.2.11 / Windows0.2.15 не менялись; существующие публичные каталоги/ссылки в D00 не изменялись и заново не проверялись. |
@@ -82,7 +84,7 @@ D00 ничего не устанавливает: runtime rollback не нуже
 
 ## Блокеры / оставшаяся реализация
 
-- D01/D02: httpx/LXMF/GI и imports owner_handoff/prepare; локальные 1218 PASS не отменяют CI failures.
+- D01.1: зависимости Client builds/linux, AWG и TCP — проверка в процессе. D01.2 (Linux control/phase0/Dockerfile.control test-stage) ещё не начат; D02 отдельно отвечает за fixtures owner_handoff/prepare. Общий D01 открыт.
 - D03: `provisioning/chat_bridge.py`, `ChatHTTP.stream`: синтетический вызов фактического
   метода direct400/401/403/409 + TransportError при закрытии даёт `fallback_calls=1`.
   Это сообщённое воспроизведение логики, НЕ проверка установленного клиента и не новый запуск D00.
@@ -130,4 +132,4 @@ D00 ничего не устанавливает: runtime rollback не нуже
 [STATUS до D00](STATUS.history-2026-10-24.md) и [PLAN до D00](PLAN.history-2026-10-24.md)
 сохранены целиком; старые NEXT/ACTIVE/checkpoints — история, не параллельные задания.
 [Отчёт D00](releases/2026-10-24-desktop-parity106-d00.md) фиксирует сохранность и границы.
-**NEXT: D01 — зависимости Linux/desktop CI, только отдельной задачей.**
+**После D01.1 остановиться. NEXT: D01.2, если D01.1 принят; только отдельной задачей.**

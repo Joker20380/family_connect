@@ -3,9 +3,9 @@ on:
   push:
     branches: ['**']
     tags: ['v*', 'diag-owner-*']
-    paths: ['clients/**', 'carrier/**', 'pilot/android-restricted/**', '.github/workflows/clients.yml', 'scripts/ci_release_fixtures.py', 'scripts/package_desktop.py', 'scripts/package_linux.py', 'packaging/**', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
+    paths: ['clients/**', 'carrier/**', 'pilot/android-restricted/**', '.github/workflows/clients.yml', 'scripts/ci_desktop_env.sh', 'control/requirements.lock', 'provisioning/requirements.lock', 'device_identity/requirements.lock', 'messenger/requirements.lock', 'scripts/ci_release_fixtures.py', 'scripts/package_desktop.py', 'scripts/package_linux.py', 'packaging/**', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
   pull_request:
-    paths: ['clients/**', 'carrier/**', 'pilot/android-restricted/**', '.github/workflows/clients.yml', 'scripts/ci_release_fixtures.py', 'scripts/package_desktop.py', 'scripts/package_linux.py', 'packaging/**', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
+    paths: ['clients/**', 'carrier/**', 'pilot/android-restricted/**', '.github/workflows/clients.yml', 'scripts/ci_desktop_env.sh', 'control/requirements.lock', 'provisioning/requirements.lock', 'device_identity/requirements.lock', 'messenger/requirements.lock', 'scripts/ci_release_fixtures.py', 'scripts/package_desktop.py', 'scripts/package_linux.py', 'packaging/**', 'VERSION', 'pilot/windows-tcp/build.ps1', 'pilot/windows-awg/**', 'pilot/android-awg/**', 'pilot/awg31/patches/**', 'pilot/android-tcp/**']
   workflow_dispatch:
 concurrency:
   group: family-connect-clients-${{ github.ref }}
@@ -200,30 +200,31 @@ jobs:
           name: windows-upgrade-lifecycle
           path: upgrade-service.jsonl
   linux:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - run: sudo apt-get update && sudo apt-get install -y python3-gi python3-gi-cairo gir1.2-gtk-4.0 gir1.2-adw-1 libqrencode4 libzbar0 python3-cryptography xvfb dbus-x11
-      - run: python -m pip install pytest==9.1.1 cryptography==46.0.7
-      - run: python -m pytest clients/desktop/tests -q
-      - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/app.py --smoke
-      - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a -s "-screen 0 2560x2160x24" /usr/bin/python3 clients/desktop/layout_check.py
-      - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/map_check.py
+      - name: Prepare Python 3.12 and verify real desktop imports
+        run: bash scripts/ci_desktop_env.sh "$RUNNER_TEMP/fc-desktop-env"
+      - run: sudo apt-get install -y libqrencode4 libzbar0 python3-cryptography xvfb dbus-x11
+      - name: Targeted desktop dependency regressions
+        run: '"$RUNNER_TEMP/fc-desktop-env/bin/python" -m pytest -q clients/desktop/tests/test_chat_host_registration.py clients/desktop/tests/test_mesh_chat_host.py clients/desktop/tests/test_support_service.py clients/desktop/tests/test_chat_service.py -rs'
+      - name: Mandatory desktop pytest
+        run: '"$RUNNER_TEMP/fc-desktop-env/bin/python" -m pytest -q clients/desktop/tests -rs'
+      - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a "$RUNNER_TEMP/fc-desktop-env/bin/python" clients/desktop/app.py --smoke
+      - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a -s "-screen 0 2560x2160x24" "$RUNNER_TEMP/fc-desktop-env/bin/python" clients/desktop/layout_check.py
+      - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a "$RUNNER_TEMP/fc-desktop-env/bin/python" clients/desktop/map_check.py
       - name: Check invitation delivery to existing Linux instance
-        run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/link_ui_check.py
+        run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a "$RUNNER_TEMP/fc-desktop-env/bin/python" clients/desktop/link_ui_check.py
       - name: Check Friends invitation window
-        run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/friends_ui_check.py
-      - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/recovery_check.py
-      - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a /usr/bin/python3 clients/desktop/tcp_install_check.py
+        run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a "$RUNNER_TEMP/fc-desktop-env/bin/python" clients/desktop/friends_ui_check.py
+      - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a "$RUNNER_TEMP/fc-desktop-env/bin/python" clients/desktop/recovery_check.py
+      - run: GSK_RENDERER=cairo GTK_A11Y=none dbus-run-session -- xvfb-run -a "$RUNNER_TEMP/fc-desktop-env/bin/python" clients/desktop/tcp_install_check.py
       - name: Install appimagetool
         run: |
           curl -fsSL https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage -o /tmp/appimagetool
           chmod +x /tmp/appimagetool
       - name: Build Linux AppImage, DEB and legacy archive
-        run: APPIMAGE_EXTRACT_AND_RUN=1 python3 scripts/package_linux.py --appimagetool /tmp/appimagetool
+        run: APPIMAGE_EXTRACT_AND_RUN=1 "$RUNNER_TEMP/fc-desktop-env/bin/python" scripts/package_linux.py --appimagetool /tmp/appimagetool
       - name: Verify DEB metadata, desktop integration and content audit
         run: |
           dpkg-deb --info artifacts/clients/FamilyConnect_*_amd64.deb
