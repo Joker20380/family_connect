@@ -3,21 +3,26 @@
 Срез D02.2, 24.10.2026. Вход: чистая `main`, HEAD = проверенный `origin/main`
 `17256565148028da9fd660a6e31ad6be387248dd`; продуктовый baseline —
 `664342a6566792a4ea621274a369bcd6b6012143`. Dependency-части D01.1/D01.2 приняты review;
-их PARTIAL и общая CI-приёмка D01 не закрыты. **Разрешён только D02.2.**
+их PARTIAL и общая CI-приёмка D01 не закрыты. **D02.2 выполнен, NEXT — его review.**
 Review коррекции D02.1-R и [fleet-документации `1725656`](releases/2026-10-24-desktop-fleet-boundary.md)
 завершён. [Граница desktop/fleet](desktop-architecture.md#desktop-fleet-boundary) сохраняется:
 D05 QUEUED после D03/D04; реализация и проверки D05/fleet NOT_RUN.
 [D02.2](releases/2026-10-24-rns-reference-d02-2.md): две RNS/reference проверки используют
 точные публичные bytes по прежним accepted pins, без capsule fallback. Clean export:
 49 passed / 1 прежний skip, collection 3051/0 errors; public verifier PASS, настоящий
-`--capsule` PASS (2073 files + APK/native hashes). CI нового code SHA ещё не получен.
+`--capsule` PASS (2073 files + APK/native hashes). Code `da8670e` pushed/remote-verified:
+полные CI suites без collection errors, но FAIL — control 55 failed / 2890 passed /
+106 skipped; phase0/tests 54 / 2891 / 106; Docker tests-stage 54 / 2889 / 108.
+Client Linux: 1 Auto failure / 882 passed / 62 skipped; AWG и TCP jobs PASS.
+Остальные capsule/nginx/expiry/privacy/socket failures и Auto не исправлялись;
+последующие control GUI/package, phase0 cargo и Docker failover gates не выполнены.
 NEXT — review D02.2; после отчёта остановиться, без автоматического перехода.
 [D02.1-R PARTIAL, коррекция принята review](releases/2026-10-24-historical-runner-d02-1-r.md): bootstrap vector и original API
 добавлены; retained inputs явно перечислены, preflight/snapshot fail-closed. Чистая collection
 3031/0 errors, адресные 110 passed. Полный исторический запуск **NOT_RUN**: у delivery-check,
 Java runtime/classes и трёх JARs нет подтверждённых artifact pins; существование файлов не PASS.
 Collection/import isolation D02.1 подтверждено review. Комплектность исторического replay ещё
-не закрыта. Новые полные suites вручную не запускались; старые CI counts ниже — только `6a0a982`.
+не закрыта. Полные suites локально не запускались; старые CI counts ниже — только `6a0a982`.
 Code `85b29da` pushed/remote-verified; по отчёту D02.1-R control/phase0/tests/Docker build
 были IN_PROGRESS без full pytest counts; в документационном checkpoint CI не перепроверялся.
 [D02.1 DONE](releases/2026-10-24-fixture-boundaries-d02-1.md), code `6a0a982`: чистый export —

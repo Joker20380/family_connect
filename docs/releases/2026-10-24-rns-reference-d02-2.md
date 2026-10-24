@@ -4,6 +4,10 @@
 Review D02.1-R и fleet-документации уже принят; повторной работы по ним нет.
 D02.1-R остаётся PARTIAL, historical suite NOT_RUN из-за неподтверждённых artifact pins.
 D05 QUEUED после D03/D04; контракт сохранён, реализация не начата. D01/общий CI открыт.
+**D02.2 DONE в заданном scope; NEXT — отдельный review.** Code checkpoint
+`da8670e4aa4e20c0fc52634666da197ed3ec9d6d` отправлен обычным push;
+`git ls-remote origin refs/heads/main` подтвердил тот же SHA. Последующий docs-only
+checkpoint фиксирует этот evidence, не получает автоматически результаты CI code SHA.
 
 ## Изменение и граница доказательств
 
@@ -54,8 +58,34 @@ Public PASS не заменяет capsule/APK/native verification и не док
 
 ## CI и ограничения
 
-CI нового code SHA ещё не получен; после push результаты фиксируются отдельно.
-Старые 56 failures не переносим на новый commit и не предсказываем новый count.
+Все результаты таблицы — фактически завершённые jobs на **`da8670e`**, не прошлые counts.
+Strict imports и адресные D01 gates PASS; полный pytest сохраняет exit1 при остаточных
+failures. Collection errors нет; Docker root gate — 22 passed, адресный — 59 passed.
+
+| Окружение / evidence | Полный pytest: passed / failed / errors / skipped | Не выполнено после отказа |
+|---|---|---|
+| [control](https://github.com/Joker20380/family_connect/actions/runs/40084625695/job/120844903532) | 2890 / 55 / 0 / 106 | GTK render/interaction, package build, extracted artifacts/recovery, uploads |
+| [phase0/tests](https://github.com/Joker20380/family_connect/actions/runs/40084625730/job/120844903468) | 2891 / 54 / 0 / 106 | cargo test |
+| [Docker tests-stage / failover](https://github.com/Joker20380/family_connect/actions/runs/40084625730/job/120844903680) | 2889 / 54 / 0 / 108 | `/tmp/tests-passed`, runtime image, provision/failover/auth/offline/revocation |
+
+У каждого полного suite также 7 passed subtests / 2 warnings. В Docker build.log
+(`phase0-failover`, artifact12556841832) два изменённых файла не входят в FAILED list;
+все 3051 cases учтены, полный suite выполнен от runner. Маркер и runtime COPY gate
+сохранены: неуспешные тесты не выдают пригодный runtime image.
+
+Оставшиеся 54 failures Docker: mobile_bootstrap/owner_disconnect/tunnel_restart — 19
+(отсутствующие отдельные historical capsule sources); HTTP evidence/runtime/preflight/
+transition — 30; native expiry — 2; private storage — 2; readiness socket — 1.
+Control дополнительно падает на Auto stop/start generation assertion (D04);
+причина гонки здесь не доказывалась и не исправлялась.
+
+[Client builds/Linux](https://github.com/Joker20380/family_connect/actions/runs/40084625812/job/120844903897):
+imports/адресный gate PASS; desktop **882 passed / 1 failed / 0 errors / 62 skipped**,
+тот же Auto assertion, GUI/package gates skipped. [AWG](https://github.com/Joker20380/family_connect/actions/runs/40084625713/job/120844903467)
+и [TCP](https://github.com/Joker20380/family_connect/actions/runs/40084625739/job/120844903405):
+imports, адресные, полный desktop pytest и jobs **PASS**. Несвязанные Android/Windows
+jobs не ожидались; общий Client builds workflow не объявляется PASS.
+
 Обязательные full suites, D01 environments, release-fixture policy/export/historical pins
 и следующие job gates сохранены. Локально полный исторический pytest не запускался.
 Остальные capsule/nginx/expiry/privacy/socket группы, D03 ChatHTTP и D04 Auto не исправлялись.
