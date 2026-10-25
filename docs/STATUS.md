@@ -1,10 +1,13 @@
 # Текущее состояние / Current state
 
-Срез **L03.2**, 25.10.2026: ACTIVE, только внутренний AppImage/DEB candidate.
+Срез **L03.2**, 25.10.2026: CHECKPOINT, local candidate gate PASS, review pending.
+Внутренние AppImage/DEB0.2.12~l03.2.1 source `22868e1`: exact payload/install/
+polkit/background/removal и rollback/barrier на Ubuntu24.04/systemd255 PASS.
+Desktop1145 PASS/24 SKIP; адресные61 PASS. CI continuation ещё проверяется.
 L03.1 REVIEW ACCEPTED / DONE: product source `f826dbd`, неизменный build-9;
 continuation `1b285c6` повторно проверила те же bytes. Parent L03 IN_PROGRESS.
 [Отчёт L03.2](releases/2026-10-25-linux-candidate-l03-2.md). L04/L05 не начаты.
-**NEXT — review L03.2 после package/install gate; публикация не разрешена.**
+**STOP. NEXT — review L03.2; публикация не разрешена.**
 
 ### Принятый checkpoint L03.1
 
@@ -20,9 +23,9 @@ Source `f826dbd`: Client Linux и isolated native/root→UID/Auto/DIRECT CI PASS
 После обрыва25.10: неизменный build-9 повторно проверен в disposable systemd255;
 package/system smoke и94 адресных PASS; исходники/публичная поставка не менялись.
 Control/phase0/Docker: по54 failures, errors0; voice observation сохранён. Не общий CI PASS.
-Родительский L03 не завершён: L03.2 AppImage/DEB зависит от review L03.1.
+Родительский L03 не завершён до review L03.2; зависимость от review L03.1 выполнена.
 Ни public versions/catalogs, ни установка на рабочую машину не разрешены.
-**STOP. NEXT — review L03.1.**
+Review L03.1 принят; это предыдущий, не активный NEXT.
 
 ### Предыдущий checkpoint D01.3-R (review принят 25.10)
 

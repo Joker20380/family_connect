@@ -2,7 +2,7 @@
 
 ## L03.2 — внутренний полный candidate,25.10
 
-L03.1 принят; только L03.2 ACTIVE, parent L03 IN_PROGRESS до review. Source VERSION
+L03.1 принят; L03.2 CHECKPOINT (local candidate gate PASS), parent L03 IN_PROGRESS до review. Source VERSION
 и опубликованный Linux остаются0.2.11; внутренний candidate — **0.2.12~l03.2.1**.
 [Точные артефакты/evidence](releases/2026-10-25-linux-candidate-l03-2.md).
 Оба формата включают GUI/user daemon/vendor и exact embedded system/runtime;
