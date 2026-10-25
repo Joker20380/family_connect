@@ -1,0 +1,982 @@
+{
+  "appimage_runtime": {
+    "gui_pid": 14088,
+    "original_appimage": true,
+    "same_home": true,
+    "uid": 1000
+  },
+  "baseline": {
+    "active_units": [],
+    "installed_build_id": "8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da",
+    "ip6tables-save": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "iptables-save": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "journals": {},
+    "links": [
+      {
+        "ifindex": 1,
+        "ifname": "lo",
+        "kind": "loopback",
+        "mtu": 65536
+      },
+      {
+        "ifindex": 2,
+        "ifname": "enp0s2",
+        "kind": "ether",
+        "mtu": 1500
+      }
+    ],
+    "nft": {
+      "sha256": "1e47755e172a6a44762e36599be900147c8c7300a070f6da91047c8ac0e9a3b7",
+      "tables": []
+    },
+    "owned_processes": [],
+    "public_ip_sha256": "3f53078c747ff27aa70f8906808e6030259e94412c4b964d6b12f1ac45d8444b",
+    "resolved_default-route": {
+      "lines": 4,
+      "sha256": "22435734e9ce5980ede783aeb84e171fed08c7bc2ec42c41de766c88b8059ba2"
+    },
+    "resolved_dns": {
+      "lines": 2,
+      "sha256": "245e479270291e8a55a96441c050dff9bba29a7c43bf31cd338a3c9cb8510615"
+    },
+    "resolved_domain": {
+      "lines": 2,
+      "sha256": "48318eadcea25a1a7135fc404378603a256ac802e8634989f27ec61e444d2e9c"
+    },
+    "route4": {
+      "count": 9,
+      "sha256": "5523cf1329312f704e72f305d021ff623dec93644c2a7bd6877e11f4349db47d"
+    },
+    "route4_owned_count": 0,
+    "route6": {
+      "count": 7,
+      "sha256": "c04233b29658fa921cc603d8aa912bfd923fd08a4e7157c5d64091a0ccc42171"
+    },
+    "route6_owned_count": 0,
+    "rule4": {
+      "count": 3,
+      "sha256": "c88a415e55c2b1d6ac4dd37c5ec360cbf3f5880a44aa1ecf71598f1d3ce4cbe2"
+    },
+    "rule4_owned_count": 0,
+    "rule6": {
+      "count": 2,
+      "sha256": "2f96b65baa9d426a3ede66b897f348316d82682e230b117f1ed363f7a5ebec41"
+    },
+    "rule6_owned_count": 0,
+    "tunnels": []
+  },
+  "candidate_id": "9d4b13cc106296264805402b42538b9fa94505433b1bbd239c82145966e22b81",
+  "checkpoint": "L04.1-LIVE-1",
+  "cleanup_after_lock_release": {
+    "authentication_submissions": 1,
+    "operation": "post-failure-cleanup-after-lock-release",
+    "tunnel_removed": true
+  },
+  "cleanup_first_attempt": {
+    "authentication_submissions": 0,
+    "operation": "post-failure-cleanup-only",
+    "tunnel_removed": false
+  },
+  "coherence": {
+    "confirmed_gui_exit_preserved_owner": true,
+    "reopened_disconnect": "FAILED: Connection settings are being updated",
+    "second_ui_preserved_owner": true
+  },
+  "environment": {
+    "gui": "UID1000, GTK4/libadwaita, Xvfb/Openbox, real polkit GNOME agent, unlocked Secret Service",
+    "installed_file_count": 763,
+    "kernel": "6.8.0-147-generic",
+    "os": "Ubuntu24.04",
+    "system_build": "8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da",
+    "versions": {
+      "family-connect": "0.2.12~l03.2.1",
+      "gnome-keyring": "46.1-2ubuntu0.2",
+      "iproute2": "6.1.0-1ubuntu6.4",
+      "iptables": "1.8.10-3ubuntu2",
+      "libadwaita-1-0": "1.5.0-1ubuntu2",
+      "libgtk-4-1": "4.14.5+ds-0ubuntu0.10",
+      "network-manager": "1.46.0-1ubuntu2.8",
+      "nftables": "1.0.9-1ubuntu0.1",
+      "pkexec": "124-2ubuntu1.24.04.4",
+      "polkitd": "124-2ubuntu1.24.04.4",
+      "systemd": "255.4-1ubuntu8.18",
+      "systemd-resolved": "255.4-1ubuntu8.18"
+    },
+    "vm": "QEMU KVM q35/2CPU/4GiB, LUKS qcow2 overlay, user-mode NAT"
+  },
+  "final_owner_markers": {
+    "active_markers_absent": true,
+    "mesh_reservation_transport_locks_free": true,
+    "sticky_cleanup_absent": true
+  },
+  "final_product_inventory": {
+    "active_units": [
+      "family-connect-auto@1000.service"
+    ],
+    "installed_build_id": "8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da",
+    "ip6tables-save": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "iptables-save": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "journals": {},
+    "links": [
+      {
+        "ifindex": 1,
+        "ifname": "lo",
+        "kind": "loopback",
+        "mtu": 65536
+      },
+      {
+        "ifindex": 2,
+        "ifname": "enp0s2",
+        "kind": "ether",
+        "mtu": 1500
+      }
+    ],
+    "nft": {
+      "sha256": "1e47755e172a6a44762e36599be900147c8c7300a070f6da91047c8ac0e9a3b7",
+      "tables": []
+    },
+    "owned_processes": [
+      {
+        "executable": "python3.12",
+        "pid": 9296,
+        "uid": 0
+      }
+    ],
+    "public_ip_sha256": "3f53078c747ff27aa70f8906808e6030259e94412c4b964d6b12f1ac45d8444b",
+    "resolved_default-route": {
+      "lines": 4,
+      "sha256": "22435734e9ce5980ede783aeb84e171fed08c7bc2ec42c41de766c88b8059ba2"
+    },
+    "resolved_dns": {
+      "lines": 2,
+      "sha256": "245e479270291e8a55a96441c050dff9bba29a7c43bf31cd338a3c9cb8510615"
+    },
+    "resolved_domain": {
+      "lines": 2,
+      "sha256": "48318eadcea25a1a7135fc404378603a256ac802e8634989f27ec61e444d2e9c"
+    },
+    "route4": {
+      "count": 9,
+      "sha256": "5523cf1329312f704e72f305d021ff623dec93644c2a7bd6877e11f4349db47d"
+    },
+    "route4_owned_count": 0,
+    "route6": {
+      "count": 7,
+      "sha256": "c04233b29658fa921cc603d8aa912bfd923fd08a4e7157c5d64091a0ccc42171"
+    },
+    "route6_owned_count": 0,
+    "rule4": {
+      "count": 3,
+      "sha256": "c88a415e55c2b1d6ac4dd37c5ec360cbf3f5880a44aa1ecf71598f1d3ce4cbe2"
+    },
+    "rule4_owned_count": 0,
+    "rule6": {
+      "count": 2,
+      "sha256": "2f96b65baa9d426a3ede66b897f348316d82682e230b117f1ed363f7a5ebec41"
+    },
+    "rule6_owned_count": 0,
+    "tunnels": []
+  },
+  "final_server_unchanged": true,
+  "final_state": {
+    "cache_sha256": "d05447cea81d06e7d2a7266e70a53e5787b6ec9ff84c398b3be00e154f239049",
+    "country_cache": [
+      "nl"
+    ],
+    "create": false,
+    "floor_readback": "PASS",
+    "identity_owner_mode": "1000:0700/0600",
+    "idle_catalog_host_disconnected": true,
+    "pending_control": null,
+    "public_identity_sha256": "d07d33a81728ff70aec350ae59785990c194d90ecd44574b0da28439189532de",
+    "signed_assignment": "PASS",
+    "support_id": "FC-3YSQ-BE2D"
+  },
+  "first_failure": {
+    "actual_owner_at_failure": "CONNECTED",
+    "actual_transport": "awg",
+    "classification": "FIRST_PRODUCT_FAILURE_STOP",
+    "connection_id": "8f95480c-a232-4245-9da9-07d8daf97080",
+    "device_support_id": "FC-3YSQ-BE2D",
+    "first_failure": "NONE",
+    "generation": "8f11d345f0f8c988959c5a81baa70209",
+    "reconnected_after_failure": false,
+    "selected_transport": "awg",
+    "state": "CONNECTED",
+    "ui_error": "Operation failed. Check the profile, system VPN and permissions. Connection settings are being updated"
+  },
+  "fixture_idle_host_stop_restored_full_baseline": true,
+  "guest_destruction": {
+    "encrypted_overlay_and_key_deleted": true,
+    "ephemeral_guest_credentials_and_seed_deleted": true,
+    "guest_poweroff": true,
+    "guest_ssh_closed": true,
+    "original_protected_state_retained": true,
+    "product_cleanup_verified_before_poweroff": true,
+    "qemu_exited": true,
+    "temporary_guest_state_copies_deleted": true
+  },
+  "input_main": "2d3dc50fd66bb71d1a59c4d13a5331480bef0a30",
+  "product_source": "cf66532c72548767f8ff4aa31faa7588b07eab54",
+  "result": "PARTIAL / first product failure / review pending",
+  "server_baseline": {
+    "gateway": {
+      "assigned_address_sha256": "4aba226c8f65cd276ddf5fa67ce3fbf2d81cbe405d5a9b878e9619c10168c6a9",
+      "clients_count": 46,
+      "country": "nl",
+      "foreign_clients_sha256": "9f1f63aea086d69f79d80d93e3eff650481178f5df1f2a79ecb9176e05d56c5c",
+      "foreign_live_sha256": "ca693eb9ea86ba183f5cbf3587a5d56fcfaa3b9b69d1a7ce2b04cb52245140f9",
+      "foreign_peers_sha256": "fa4cf90864acea6cbdc359d580f3d24144168d0ded382e2f033ceef191b92b21",
+      "foreign_runtime_sha256": "9f1f63aea086d69f79d80d93e3eff650481178f5df1f2a79ecb9176e05d56c5c",
+      "global_config_sha256": "c7ff070de3a33838d27caefadfadcfc870edd872fb6f8935931ecb88ade3dccb",
+      "helper_sha256": "8e536367a391661f003d0725afc13f69c45a9e43bb1763b61fd21ce0b998035a",
+      "immutable": {
+        "/opt/apps/family_connect/friends-awg/amneziawg-go": "e7f00e47d6df853ade5dcd2fe79240f01ff897d75088c768316a444c27c87e0f",
+        "/opt/apps/family_connect/friends-awg/awg": "906d6795af1dd4adee7b11bf1e7fa133d4795c8a8d6e2099b34a026f810a3278",
+        "/opt/apps/family_connect/friends-awg/server.conf": "5ba473fceb421f0b45ec338b41016dbfd095f2fd1df11c73177433a3b828cefc",
+        "/opt/apps/family_connect/friends-awg/settings.json": "c87966f8a8a05268f88594dfafacc98b8c0d15e345806a251bcef5a60349559d",
+        "/opt/apps/family_connect/friends-tcp/xray": "4f7a4436f86798bbb5c875014e352021a1673710a45e170ccc507c5f59341940"
+      },
+      "live_clients_count": 46,
+      "live_peers_count": 46,
+      "network": {
+        "addresses": "12f5b54ca8b98954dc02330bb0750782b49f93e4836bacc89b0e3b67afd6022a",
+        "routes": "7f834e0ef665be209154b6405c0e0e59ee2a69d02a21243f8dce1cac034d99f0",
+        "rules": "e79a76eff86a78de4ce5d38c6277dbafbab227656214e1e116d9ac63597dbb9d"
+      },
+      "peers_count": 46,
+      "registration_lock": "available",
+      "row_sha256": "25fc0e7096fc653718202dc30b0c580b8ab87eac11a700cba03a7c021bc35b0c",
+      "server_json_sha256": "107d6b9b21b6b699693e95ece553302b8f1b56ac3ccf5872789eb536fc0bc9bd",
+      "services_sha256": "b207689166bd0f5a615002de0b6ddcdfd8210d3a0bf2293ae8afee330eb3fd93",
+      "target_clients": 1,
+      "target_live_clients": 1,
+      "target_live_peers": 1,
+      "target_peer_rows": 1,
+      "tcp_email_sha256": "b80335fa461b5cf2450177134101905a1f592a25bc5f4331618039ff8088c5c4",
+      "tcp_uuid_sha256": "f3848f2dee8e7cf738b20c2013be7be7bd3fc07c5a3cfc3a2896ab53a272a52b",
+      "wireguard_public_sha256": "9a1b3cc0107d71dfa88cabdcfe519b10e9ba0ad6017956859fe8b66f6cc16bd4"
+    },
+    "registry": {
+      "active": true,
+      "archive_sha256": "21d64558e542ff6ad80fb9b13799fbcb333167ffb5a79ec841e7c94dc65d71fa",
+      "bound_invites": 1,
+      "catalog_sha256": "9a9f6e0d930766555bddf54ac5c17b388cf8abf5fe5badcac1d6dc817e1ec5d2",
+      "counts": {
+        "devices": 54,
+        "invites": 108
+      },
+      "foreign_sha256": "a67aed86ca6f1d7f54ba04a65e25737aa597fd216a87a6273e1b4ba45f2a7b7d",
+      "service_sha256": "402550ebccfb872ccc873292f5309c58b68ecc94aab9340043f03c9525d73921"
+    }
+  },
+  "sessions": [
+    {
+      "cleanup_after_first_failure": false,
+      "connect": {
+        "actual_transport": "awg",
+        "authentication_submissions": 1,
+        "connection_id": "88ccd0b2-42a4-487a-8930-733c958bacf9",
+        "device_support_id": "FC-3YSQ-BE2D",
+        "first_failure": "NONE",
+        "result": "PASS",
+        "selected_transport": "awg",
+        "state": "CONNECTED"
+      },
+      "connected_inventory": {
+        "active_units": [
+          "family-connect-auto@1000.service"
+        ],
+        "installed_build_id": "8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da",
+        "ip6tables-save": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "iptables-save": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "journals": {
+          "/run/family-connect-awg/active.json": {
+            "generation": "866fc3fd977bc3230e40beedcd9e57bc",
+            "index": 3,
+            "ready": true
+          }
+        },
+        "links": [
+          {
+            "ifindex": 1,
+            "ifname": "lo",
+            "kind": "loopback",
+            "mtu": 65536
+          },
+          {
+            "ifindex": 2,
+            "ifname": "enp0s2",
+            "kind": "ether",
+            "mtu": 1500
+          },
+          {
+            "ifindex": 3,
+            "ifname": "fcawge26e8134",
+            "kind": "tun",
+            "mtu": 1280
+          }
+        ],
+        "nft": {
+          "sha256": "51e1e2af204e54b7c3c47656651512ebe25f6881f53f6d642a1f5cd34ad4532c",
+          "tables": [
+            "wg-quick-fcawge26e8134",
+            "wg-quick-fcawge26e8134"
+          ]
+        },
+        "owned_processes": [
+          {
+            "executable": "python3.12",
+            "pid": 9296,
+            "uid": 0
+          },
+          {
+            "executable": "amneziawg-go",
+            "pid": 9339,
+            "uid": 0
+          }
+        ],
+        "public_ip_sha256": "9e873c4c9e4f0a2356811cce0215504451108ce64fae1d466c1b41e13622b086",
+        "resolved_default-route": {
+          "lines": 5,
+          "sha256": "05cce0a2754e1555b531ecb36a150b76b7beb7b6cd3d885c17889e62127cae85"
+        },
+        "resolved_dns": {
+          "lines": 3,
+          "sha256": "a0814a8e54b5e44c8c6de7a311a9c77139fea62cc8434d8b087d5361b09fc0d2"
+        },
+        "resolved_domain": {
+          "lines": 3,
+          "sha256": "b7678792372dfc057f275ed14f2e90300524d594db2bb4716e4d04b65b3ca398"
+        },
+        "route4": {
+          "count": 12,
+          "sha256": "7067c5e1a625eeddf6dc6db78f6e8d6a0c5548723d8c01a5a17b742f443dcb38"
+        },
+        "route4_owned_count": 2,
+        "route6": {
+          "count": 12,
+          "sha256": "f634f2fd6cb7a1b3d7307baa5e33355d79090105108db7f6b38992bb5ed19bdb"
+        },
+        "route6_owned_count": 2,
+        "rule4": {
+          "count": 5,
+          "sha256": "30494879f1fe1a526d8ca180441abae4abb3edcdaed398fa6c4333f4f205eb9a"
+        },
+        "rule4_owned_count": 1,
+        "rule6": {
+          "count": 4,
+          "sha256": "c4fca1d927e9b064a0e3262d32921a9d089b3c0533a1b9b11de2bfc3c685ceca"
+        },
+        "rule6_owned_count": 1,
+        "tunnels": [
+          "fcawge26e8134"
+        ]
+      },
+      "disconnect": {
+        "actual_transport": "none",
+        "authentication_submissions": 1,
+        "connection_id": "88ccd0b2-42a4-487a-8930-733c958bacf9",
+        "device_support_id": "FC-3YSQ-BE2D",
+        "first_failure": "NONE",
+        "result": "PASS",
+        "selected_transport": "awg",
+        "state": "DISCONNECTED"
+      },
+      "format": "DEB",
+      "label": "awg-1",
+      "network_baseline_restored": true,
+      "server_readback_equal_baseline": true,
+      "traffic": {
+        "dns": "PASS",
+        "download_bytes": 65536,
+        "handshake_present": true,
+        "https": "PASS",
+        "interface": "fcawge26e8134",
+        "public_ip_sha256": "9e873c4c9e4f0a2356811cce0215504451108ce64fae1d466c1b41e13622b086",
+        "route_through_tun": true,
+        "transport": "awg",
+        "tunnel_byte_delta": {
+          "rx_bytes": 83369,
+          "tx_bytes": 71994
+        },
+        "upload_bytes": 65536,
+        "upload_status": "200"
+      },
+      "transport": "awg"
+    },
+    {
+      "cleanup_after_first_failure": false,
+      "connect": {
+        "actual_transport": "awg",
+        "authentication_submissions": 1,
+        "connection_id": "570afadd-07e3-49d2-9836-20fe79964d00",
+        "device_support_id": "FC-3YSQ-BE2D",
+        "first_failure": "NONE",
+        "result": "PASS",
+        "selected_transport": "awg",
+        "state": "CONNECTED"
+      },
+      "connected_inventory": {
+        "active_units": [
+          "family-connect-auto@1000.service"
+        ],
+        "installed_build_id": "8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da",
+        "ip6tables-save": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "iptables-save": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "journals": {
+          "/run/family-connect-awg/active.json": {
+            "generation": "e1ae4431508cd950b8a5f0a08334151e",
+            "index": 4,
+            "ready": true
+          }
+        },
+        "links": [
+          {
+            "ifindex": 1,
+            "ifname": "lo",
+            "kind": "loopback",
+            "mtu": 65536
+          },
+          {
+            "ifindex": 2,
+            "ifname": "enp0s2",
+            "kind": "ether",
+            "mtu": 1500
+          },
+          {
+            "ifindex": 4,
+            "ifname": "fcawg76a8121c",
+            "kind": "tun",
+            "mtu": 1280
+          }
+        ],
+        "nft": {
+          "sha256": "765c0de336b7266a8f2e2099b39e76fdfeb9de4d330aa968714544793f29cc02",
+          "tables": [
+            "wg-quick-fcawg76a8121c",
+            "wg-quick-fcawg76a8121c"
+          ]
+        },
+        "owned_processes": [
+          {
+            "executable": "python3.12",
+            "pid": 9296,
+            "uid": 0
+          },
+          {
+            "executable": "amneziawg-go",
+            "pid": 10506,
+            "uid": 0
+          }
+        ],
+        "public_ip_sha256": "9e873c4c9e4f0a2356811cce0215504451108ce64fae1d466c1b41e13622b086",
+        "resolved_default-route": {
+          "lines": 5,
+          "sha256": "2393b5f57abab3a7c5175da11a89d4eb04c9d82ac66b4aba28343063537f89cd"
+        },
+        "resolved_dns": {
+          "lines": 3,
+          "sha256": "93e96b19c13d3170c9ebf3c583c68aea67a2348588508bda765405b10cba7086"
+        },
+        "resolved_domain": {
+          "lines": 3,
+          "sha256": "6f402c14b15b70cda9a80c8f24c4fd7fbc463f5d477fb31a475f3c91e777d44a"
+        },
+        "route4": {
+          "count": 12,
+          "sha256": "fdcc9fe6c2dd4aafb5e3bb2b82395bbc0ded038ffd5a3563a1adeeca4878b77a"
+        },
+        "route4_owned_count": 2,
+        "route6": {
+          "count": 12,
+          "sha256": "78878e8a34b305848919e6bb5cf05809fe63c5ca9d08e47cba193dbbc0302075"
+        },
+        "route6_owned_count": 2,
+        "rule4": {
+          "count": 5,
+          "sha256": "30494879f1fe1a526d8ca180441abae4abb3edcdaed398fa6c4333f4f205eb9a"
+        },
+        "rule4_owned_count": 1,
+        "rule6": {
+          "count": 4,
+          "sha256": "c4fca1d927e9b064a0e3262d32921a9d089b3c0533a1b9b11de2bfc3c685ceca"
+        },
+        "rule6_owned_count": 1,
+        "tunnels": [
+          "fcawg76a8121c"
+        ]
+      },
+      "disconnect": {
+        "actual_transport": "none",
+        "authentication_submissions": 1,
+        "connection_id": "570afadd-07e3-49d2-9836-20fe79964d00",
+        "device_support_id": "FC-3YSQ-BE2D",
+        "first_failure": "NONE",
+        "result": "PASS",
+        "selected_transport": "awg",
+        "state": "DISCONNECTED"
+      },
+      "format": "DEB",
+      "label": "awg-2",
+      "network_baseline_restored": true,
+      "server_readback_equal_baseline": true,
+      "traffic": {
+        "dns": "PASS",
+        "download_bytes": 65536,
+        "handshake_present": true,
+        "https": "PASS",
+        "interface": "fcawg76a8121c",
+        "public_ip_sha256": "9e873c4c9e4f0a2356811cce0215504451108ce64fae1d466c1b41e13622b086",
+        "route_through_tun": true,
+        "transport": "awg",
+        "tunnel_byte_delta": {
+          "rx_bytes": 83702,
+          "tx_bytes": 71918
+        },
+        "upload_bytes": 65536,
+        "upload_status": "200"
+      },
+      "transport": "awg"
+    },
+    {
+      "cleanup_after_first_failure": false,
+      "connect": {
+        "actual_transport": "tcp",
+        "authentication_submissions": 1,
+        "connection_id": "503c1ea7-1c75-400e-973d-7fc70ebdd2cd",
+        "device_support_id": "FC-3YSQ-BE2D",
+        "first_failure": "NONE",
+        "result": "PASS",
+        "selected_transport": "tcp",
+        "state": "CONNECTED"
+      },
+      "connected_inventory": {
+        "active_units": [
+          "family-connect-auto@1000.service",
+          "family-connect-tcp@fctcp49345951.service"
+        ],
+        "installed_build_id": "8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da",
+        "ip6tables-save": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "iptables-save": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "journals": {
+          "/run/family-connect-tcp/fctcp49345951.json": {}
+        },
+        "links": [
+          {
+            "ifindex": 1,
+            "ifname": "lo",
+            "kind": "loopback",
+            "mtu": 65536
+          },
+          {
+            "ifindex": 2,
+            "ifname": "enp0s2",
+            "kind": "ether",
+            "mtu": 1500
+          },
+          {
+            "ifindex": 5,
+            "ifname": "fctcp49345951",
+            "kind": "tun",
+            "mtu": 1280
+          }
+        ],
+        "nft": {
+          "sha256": "1e47755e172a6a44762e36599be900147c8c7300a070f6da91047c8ac0e9a3b7",
+          "tables": []
+        },
+        "owned_processes": [
+          {
+            "executable": "python3.12",
+            "pid": 9296,
+            "uid": 0
+          },
+          {
+            "executable": "python3.12",
+            "pid": 12359,
+            "uid": 0
+          },
+          {
+            "executable": "xray",
+            "pid": 12364,
+            "uid": 0
+          }
+        ],
+        "public_ip_sha256": "9e873c4c9e4f0a2356811cce0215504451108ce64fae1d466c1b41e13622b086",
+        "resolved_default-route": {
+          "lines": 5,
+          "sha256": "a461220c7e969098fea4bcb1e8141eb191ad44f79c606a06499715f81dc7a310"
+        },
+        "resolved_dns": {
+          "lines": 3,
+          "sha256": "ebdb42376a8214d939b8663b99ec635a552bab6d990e3334fe5f6a8d08adb9bf"
+        },
+        "resolved_domain": {
+          "lines": 3,
+          "sha256": "f3b1d92e7226507a8fa0e4d322cb9d0ca88c50e1ac750527bf6fa270c56a7307"
+        },
+        "route4": {
+          "count": 11,
+          "sha256": "a95c76424e51853e1656831ab857778ff1be8f940618ea7dd6022d7eb105a633"
+        },
+        "route4_owned_count": 1,
+        "route6": {
+          "count": 13,
+          "sha256": "884e56599bd718a7866fbc7eeb861997f9796d666784b12fdb98559f750e30e7"
+        },
+        "route6_owned_count": 1,
+        "rule4": {
+          "count": 7,
+          "sha256": "621c9480da7c42a171ad296119cb2fe8ba35c65d1d1a8230397c816f8dbe55a5"
+        },
+        "rule4_owned_count": 1,
+        "rule6": {
+          "count": 4,
+          "sha256": "6f5defe969780b48c8eecc77245eb0eb956f32247136df573ef4232dc21ef695"
+        },
+        "rule6_owned_count": 1,
+        "tunnels": [
+          "fctcp49345951"
+        ]
+      },
+      "disconnect": {
+        "actual_transport": "none",
+        "authentication_submissions": 1,
+        "connection_id": "503c1ea7-1c75-400e-973d-7fc70ebdd2cd",
+        "device_support_id": "FC-3YSQ-BE2D",
+        "first_failure": "NONE",
+        "result": "PASS",
+        "selected_transport": "tcp",
+        "state": "DISCONNECTED"
+      },
+      "format": "DEB",
+      "label": "tcp-1",
+      "network_baseline_restored": true,
+      "server_readback_equal_baseline": true,
+      "traffic": {
+        "dns": "PASS",
+        "download_bytes": 65536,
+        "https": "PASS",
+        "interface": "fctcp49345951",
+        "public_ip_sha256": "9e873c4c9e4f0a2356811cce0215504451108ce64fae1d466c1b41e13622b086",
+        "route_through_tun": true,
+        "transport": "tcp",
+        "tunnel_byte_delta": {
+          "rx_bytes": 84878,
+          "tx_bytes": 74282
+        },
+        "upload_bytes": 65536,
+        "upload_status": "200"
+      },
+      "transport": "tcp"
+    },
+    {
+      "cleanup_after_first_failure": false,
+      "connect": {
+        "actual_transport": "awg",
+        "authentication_submissions": 1,
+        "connection_id": "0fdf53f0-7c57-4902-86e6-206d69a9fa36",
+        "device_support_id": "FC-3YSQ-BE2D",
+        "first_failure": "NONE",
+        "result": "PASS",
+        "selected_transport": "awg",
+        "state": "CONNECTED"
+      },
+      "connected_inventory": {
+        "active_units": [
+          "family-connect-auto@1000.service"
+        ],
+        "installed_build_id": "8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da",
+        "ip6tables-save": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "iptables-save": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "journals": {
+          "/run/family-connect-awg/active.json": {
+            "generation": "592ad0d7cf78809513ea918924bd7e1d",
+            "index": 6,
+            "ready": true
+          }
+        },
+        "links": [
+          {
+            "ifindex": 1,
+            "ifname": "lo",
+            "kind": "loopback",
+            "mtu": 65536
+          },
+          {
+            "ifindex": 2,
+            "ifname": "enp0s2",
+            "kind": "ether",
+            "mtu": 1500
+          },
+          {
+            "ifindex": 6,
+            "ifname": "fcawg6774edd7",
+            "kind": "tun",
+            "mtu": 1280
+          }
+        ],
+        "nft": {
+          "sha256": "bc761474b36c95f4afc127d5bccab930fe5e005f0fd5dd9401f5457f4c6ac7db",
+          "tables": [
+            "wg-quick-fcawg6774edd7",
+            "wg-quick-fcawg6774edd7"
+          ]
+        },
+        "owned_processes": [
+          {
+            "executable": "python3.12",
+            "pid": 9296,
+            "uid": 0
+          },
+          {
+            "executable": "amneziawg-go",
+            "pid": 13249,
+            "uid": 0
+          }
+        ],
+        "public_ip_sha256": "9e873c4c9e4f0a2356811cce0215504451108ce64fae1d466c1b41e13622b086",
+        "resolved_default-route": {
+          "lines": 5,
+          "sha256": "3e3ee03016b49acb2d4e27314f88facf740b059018dc542654e1fda6209b14cb"
+        },
+        "resolved_dns": {
+          "lines": 3,
+          "sha256": "ea8ff499d10899a7b017d2d30eb629503c312f6c586beb55ca01e4ca3fdab170"
+        },
+        "resolved_domain": {
+          "lines": 3,
+          "sha256": "50871afbdbe0ee422b8f3f95055adeb5a75d48829d28dcfe94fd02572882b885"
+        },
+        "route4": {
+          "count": 12,
+          "sha256": "1b016c9e2e470882cbeffe73b6accb99fb80afbc82d6dbd403d0548d64c3cc12"
+        },
+        "route4_owned_count": 2,
+        "route6": {
+          "count": 12,
+          "sha256": "624a6aceac38ebbb24e1ec9f738750ed6264f10cafbe02ec92fbce7a120bb79a"
+        },
+        "route6_owned_count": 2,
+        "rule4": {
+          "count": 5,
+          "sha256": "30494879f1fe1a526d8ca180441abae4abb3edcdaed398fa6c4333f4f205eb9a"
+        },
+        "rule4_owned_count": 1,
+        "rule6": {
+          "count": 4,
+          "sha256": "c4fca1d927e9b064a0e3262d32921a9d089b3c0533a1b9b11de2bfc3c685ceca"
+        },
+        "rule6_owned_count": 1,
+        "tunnels": [
+          "fcawg6774edd7"
+        ]
+      },
+      "disconnect": {
+        "actual_transport": "none",
+        "authentication_submissions": 1,
+        "connection_id": "0fdf53f0-7c57-4902-86e6-206d69a9fa36",
+        "device_support_id": "FC-3YSQ-BE2D",
+        "first_failure": "NONE",
+        "result": "PASS",
+        "selected_transport": "awg",
+        "state": "DISCONNECTED"
+      },
+      "format": "DEB",
+      "label": "awg-3",
+      "network_baseline_restored": true,
+      "server_readback_equal_baseline": true,
+      "traffic": {
+        "dns": "PASS",
+        "download_bytes": 65536,
+        "handshake_present": true,
+        "https": "PASS",
+        "interface": "fcawg6774edd7",
+        "public_ip_sha256": "9e873c4c9e4f0a2356811cce0215504451108ce64fae1d466c1b41e13622b086",
+        "route_through_tun": true,
+        "transport": "awg",
+        "tunnel_byte_delta": {
+          "rx_bytes": 83749,
+          "tx_bytes": 71578
+        },
+        "upload_bytes": 65536,
+        "upload_status": "200"
+      },
+      "transport": "awg"
+    },
+    {
+      "cleanup_after_first_failure": true,
+      "connect": {
+        "actual_transport": "awg",
+        "authentication_submissions": 1,
+        "connection_id": "b8f3f5fd-0f7d-4e9b-94bf-135fdcd28e37",
+        "device_support_id": "FC-3YSQ-BE2D",
+        "first_failure": "NONE",
+        "result": "PASS",
+        "selected_transport": "awg",
+        "state": "CONNECTED"
+      },
+      "connected_inventory": {
+        "active_units": [
+          "family-connect-auto@1000.service"
+        ],
+        "installed_build_id": "8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da",
+        "ip6tables-save": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "iptables-save": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "journals": {
+          "/run/family-connect-awg/active.json": {
+            "generation": "8f11d345f0f8c988959c5a81baa70209",
+            "index": 7,
+            "ready": true
+          }
+        },
+        "links": [
+          {
+            "ifindex": 1,
+            "ifname": "lo",
+            "kind": "loopback",
+            "mtu": 65536
+          },
+          {
+            "ifindex": 2,
+            "ifname": "enp0s2",
+            "kind": "ether",
+            "mtu": 1500
+          },
+          {
+            "ifindex": 7,
+            "ifname": "fcawg8ee67225",
+            "kind": "tun",
+            "mtu": 1280
+          }
+        ],
+        "nft": {
+          "sha256": "f4c86fedc7acf052b0d6dd17d101f6166696021e2d51a1823c8a7554602e3e4c",
+          "tables": [
+            "wg-quick-fcawg8ee67225",
+            "wg-quick-fcawg8ee67225"
+          ]
+        },
+        "owned_processes": [
+          {
+            "executable": "python3.12",
+            "pid": 9296,
+            "uid": 0
+          },
+          {
+            "executable": "amneziawg-go",
+            "pid": 14533,
+            "uid": 0
+          }
+        ],
+        "public_ip_sha256": "9e873c4c9e4f0a2356811cce0215504451108ce64fae1d466c1b41e13622b086",
+        "resolved_default-route": {
+          "lines": 5,
+          "sha256": "f64c4d92a00c089154650c74fc5a5bbe94afee4647056075459d7ffc13ed2c8b"
+        },
+        "resolved_dns": {
+          "lines": 3,
+          "sha256": "697e2ef205b3aaf1855e35ea7cc1ad0dfb1a82db649b8b536f5ffec9eebc96d1"
+        },
+        "resolved_domain": {
+          "lines": 3,
+          "sha256": "50eb45a8896fb298028d08336feca31b92eed99082fc3dc9bf14f220492d4077"
+        },
+        "route4": {
+          "count": 12,
+          "sha256": "fe2da3fd370f0bad11ecd099091d3d1fec9228bd3f883fc76d87955155609023"
+        },
+        "route4_owned_count": 2,
+        "route6": {
+          "count": 12,
+          "sha256": "63746ad904da399c7520c0515b892fd41aed84770356a02fc502464b6f57032c"
+        },
+        "route6_owned_count": 2,
+        "rule4": {
+          "count": 5,
+          "sha256": "30494879f1fe1a526d8ca180441abae4abb3edcdaed398fa6c4333f4f205eb9a"
+        },
+        "rule4_owned_count": 1,
+        "rule6": {
+          "count": 4,
+          "sha256": "c4fca1d927e9b064a0e3262d32921a9d089b3c0533a1b9b11de2bfc3c685ceca"
+        },
+        "rule6_owned_count": 1,
+        "tunnels": [
+          "fcawg8ee67225"
+        ]
+      },
+      "disconnect": {
+        "actual_transport": "none",
+        "authentication_submissions": 0,
+        "connection_id": "8f95480c-a232-4245-9da9-07d8daf97080",
+        "device_support_id": "FC-3YSQ-BE2D",
+        "first_failure": "NONE",
+        "result": "FIRST_FAILURE_STOP",
+        "selected_transport": "awg",
+        "state": "DISCONNECTED",
+        "timeout": false,
+        "ui_failure": true
+      },
+      "format": "AppImage",
+      "label": "appimage-awg",
+      "network_baseline_restored": true,
+      "server_readback_equal_baseline": true,
+      "traffic": {
+        "dns": "PASS",
+        "download_bytes": 65536,
+        "handshake_present": true,
+        "https": "PASS",
+        "interface": "fcawg8ee67225",
+        "public_ip_sha256": "9e873c4c9e4f0a2356811cce0215504451108ce64fae1d466c1b41e13622b086",
+        "route_through_tun": true,
+        "transport": "awg",
+        "tunnel_byte_delta": {
+          "rx_bytes": 83370,
+          "tx_bytes": 72150
+        },
+        "upload_bytes": 65536,
+        "upload_status": "200"
+      },
+      "transport": "awg"
+    }
+  ],
+  "state_preservation": {
+    "files": 7,
+    "guest_original_state_files_byte_equal": true,
+    "original_protected_home_unchanged": true,
+    "owner_mode": "UID1000/0600",
+    "teardown_receipt_unchanged": true
+  },
+  "system_build_id": "8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da",
+  "tcp_invocation": "21e437ba49fb4512b376bbe75cd4f1ee"
+}

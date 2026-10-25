@@ -1,18 +1,20 @@
 # Текущее состояние / Current state
 
-Срез **L04.1-AUTH-PROVISION**,25.10.2026: **DONE / review pending**; L04.1-AUTH **DONE**.
+Срез **L04.1-LIVE-1**,25.10.2026: **PARTIAL / first failure, review pending**.
 L03.1/L03.2 **DONE (review accepted)**; parent L03 **DONE** в scope внутреннего
-Linux-кандидата. L04 **IN_PROGRESS**; L04.2 **QUEUED / NOT_RUN**.
-Существующая test identity **FC-3YSQ-BE2D**, active; новых identity/invite нет.
-Один разрешённый nl fetch, без retry: один AWG peer и один persisted/runtime Xray
-user; signed catalog/device binding/cache/floor и packaged Python3.12 resume PASS.
-State вне checkout, UID1000,0700/0600; private teardown receipt сохранён.
-Apply/connect/перенос state не выполнялись; будущий обязательный teardown:
-device-scoped gateway cleanup → readback → registry revoke (сейчас NOT_RUN).
-L04.1 остаётся **BLOCKED / live NOT_RUN**; final-2 не пересобран/не установлен.
+Linux-кандидата. AUTH/PROVISION **DONE, review accepted**. L04/L04.1 **IN_PROGRESS**;
+L04.1-LIVE-2 и L04.2 **QUEUED / NOT_RUN**. Exact final-2 не изменён.
+Реальная KVM Ubuntu24.04/systemd255: DEB/GUI/pkexec/READY PASS; AWG×3 и TCP×1,
+DNS/HTTPS/64KiB download+upload, reconnect/handoff и network cleanup PASS.
+Original AppImage AWG/traffic и single-owner/confirmed GUI close PASS; после reopen
+Disconnect отказал: «Connection settings are being updated», actual tunnel остался.
+STOP: без новых connect/исправлений. Cleanup-only GUI Disconnect после освобождения
+lock восстановил baseline; guest/временные secret copies уничтожены. FC-3YSQ-BE2D,
+nl bindings, исходный protected state/cache/floors и teardown receipt сохранены.
+Device-scoped gateway cleanup → readback → registry revoke остаётся NOT_RUN.
 D01 открыт:54 residual failures; D02.1-R PARTIAL/NOT_RUN; Windows/voice сохранены.
-[Отчёт provisioning и ограничения evidence](releases/2026-10-25-linux-test-provisioning-l04-1-auth.md).
-**STOP. NEXT — review L04.1-AUTH-PROVISION; без автоматического live/L04.2/L05.**
+[Отчёт LIVE-1 и точная граница отказа](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-1.md).
+**STOP. NEXT — review L04.1-LIVE-1; correction только отдельным source checkpoint.**
 
 ### Принятый checkpoint L03.1
 

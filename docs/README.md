@@ -39,14 +39,18 @@ are accepted in the public completion/admission scope.
 [L03.1 system/runtime component](releases/2026-10-25-linux-system-runtime-l03-1.md)
 and [L03.2 full internal candidate](releases/2026-10-25-linux-candidate-l03-2.md)
 are review accepted; parent L03 is DONE in that internal package scope.
-[L04.1 installed AWG/TCP](releases/2026-10-25-linux-installed-awg-tcp-l04-1.md)
-remains BLOCKED/live NOT_RUN. [L04.1-AUTH](releases/2026-10-25-linux-test-activation-l04-1-auth.md)
-created one dedicated active test identity; its activation subset is review accepted.
+[L04.1 initial blocked checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1.md)
+is historical. [L04.1-AUTH](releases/2026-10-25-linux-test-activation-l04-1-auth.md)
+created one dedicated active test identity; activation and
 [L04.1-AUTH-PROVISION](releases/2026-10-25-linux-test-provisioning-l04-1-auth.md)
-is DONE/review pending: one authorized nl fetch, exact AWG/Xray and verified cache
-readback, no apply or new identity/invite. AUTH is DONE; teardown remains a future gate.
-L04 remains IN_PROGRESS; L04.2 is QUEUED/NOT_RUN.
-NEXT review L04.1-AUTH-PROVISION. Windows broker IPC remains NOT_INTEGRATED;
+are DONE/review accepted. [L04.1-LIVE-1](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-1.md)
+is PARTIAL: exact DEB setup and real AWG/TCP transfers/cleanup pass in a disposable
+Ubuntu24.04 VM; original AppImage Disconnect against the retained owner fails after
+GUI reopen with connection-operation contention. No reconnect after failure; cleanup-only
+GUI Disconnect restores baseline, guest copies are destroyed, original test state is retained.
+L04/L04.1 remain IN_PROGRESS; LIVE-2/L04.2 and device teardown remain NOT_RUN.
+NEXT review L04.1-LIVE-1; any correction is a separate source checkpoint.
+Windows broker IPC remains NOT_INTEGRATED;
 installed restricted-message acceptance is NOT_RUN, not a completed fallback.
 [Shared Auto policy and accepted-Java trace checks](../carrier/desktopauto/README.md)
 are implemented locally and included in the native worker's bounded private-pipe
