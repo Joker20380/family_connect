@@ -14,7 +14,10 @@ FC-3YSQ-BE2D/nl сохраняются, новый issuance/provisioning/manual 
 L04/L04.1 IN_PROGRESS до LIVE-2 review; L04.2/L05/teardown NOT_RUN.
 [LIVE-2 checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md).
 D01/full suites54/54/53 failures и voice/Windows observations сохраняются.
-**L04.1-LIVE-2-R1 CHECKPOINT: source/package PASS, review pending.**
+**L04.1-LIVE-2-R1 final audit ACTIVE; review pending.**
+Same-generation recovery теперь не заменяет первую diagnostic category (41 PASS).
+Нужны новый system-build-2 и internal .4; .3/package PASS ниже — промежуточный,
+не финальный retest candidate. Control285de3e cancelled на apt, pytest NOT_RUN.
 Actual root/session AWG/TCP red→green: up1/start0, IDLE, generation2/pending null,
 poll/recover PASS; unknown outcome остаётся fail-closed до same-owner recovery.
 Internal0.2.12~l03.2.3, source285de3e, candidate7d00cce0…; новый systemb8140c68…

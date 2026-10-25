@@ -8,8 +8,8 @@ import subprocess
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-SYSTEM = dict(build_id='b8140c68e42f78506cd64c8c254c4db76cef14789bdeda471214e8348bf91c1c',
-              sha256='df5ddf2b7a8c6a10295a7358ba515ee2204b6ed6e32b5e0cc4239fd3faf5b7c7', size=49250908,
+SYSTEM = dict(build_id='8d7d78ec06fc897fa7e94d21f208b08b31d6c6c3e33eaad19a262705117c8f9d',
+              sha256='ddd74c2132a76ac833b587d9df6409d779ce6afcdaa45fafd23faa86d7817726', size=49250848,
               source_digest='cfcb7bae874765cfe6a66742fbeed55cb03399b7e32c13d5a5edcd212299df61')
 
 

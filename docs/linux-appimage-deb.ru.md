@@ -9,6 +9,9 @@ source285de3e/candidate7d00cce0…, authorization-session-v2, новый exact s
 отвергнут, matching reinstall возвращает READY. Exact DEB/AppImage и real systemd255
 package/coherence/rollback gates PASS; hashes/размеры в отчёте. .2 сохраняется только
 как historical evidence. Live retest NOT_RUN; общий CI не зелёный.
+Финальный аудит R1 потребовал сохранить первую diagnostic category через restart/
+failed recovery. Готовится новый **0.2.12~l03.2.4/system-build-2**; .3 остаётся
+промежуточным immutable artifact, его gate не переносится на новые bytes.
 Подтверждённый pre-start busy завершает IDLE; неизвестный outcome требует recovery
 тем же owner. Нельзя вручную стирать journal, повторять Connect или обходить lock.
 

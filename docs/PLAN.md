@@ -8,7 +8,9 @@
 D00 — организация документации; следующие строки являются очередью, не разрешением на автозапуск.
 L03.1/L03.2 **DONE (review accepted)**; parent **L03 DONE** в scope полного
 внутреннего Linux-кандидата. **L04.1-LIVE-2: PARTIAL / review accepted**, STOP на B1.
-**L04.1-LIVE-2-R1 CHECKPOINT: source/package PASS, review pending.**
+**L04.1-LIVE-2-R1 final audit ACTIVE; review pending.**
+First diagnostic category неизменна через recovery того же generation (41 PASS);
+новые system-build-2/.4 и повтор exact gates. .3 ниже — intermediate immutable.
 Authorization-v2 различает pre-start/unknown; actual AWG/TCP up1/start0,
 IDLE/generation2/pending null/poll PASS. Internal0.2.12~l03.2.3, candidate7d00cce0…,
 новый systemb8140c68…; exact system/package/rollback/coherence/mixed-build PASS.

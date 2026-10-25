@@ -386,8 +386,7 @@ class DesktopDiagnostics:
                 type(value['generation']) is not int or not 0 <= value['generation'] < 2**63):
             return False
         with self.lock:
-            if (self.normal_operation and self.normal_operation['generation'] == value['generation'] and
-                    value['category'] == 'PENDING_OPERATION'):
+            if self.normal_operation and self.normal_operation['generation'] == value['generation']:
                 return False
             self.normal_operation = dict(value)
             self.last_signature = None

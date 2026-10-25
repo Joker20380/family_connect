@@ -19,7 +19,7 @@
     "lib/auto_runtime.py": "784d03c98ffa792eff3b06be5e85d615386370524d6cf7b43fdb131f087c63e9",
     "lib/auto_service.py": "a88a92d8259c676cdeb9d4f6c32d7f24c1547299b0029ab737c1d6078e03bfde",
     "lib/awg_lifecycle.py": "8096dfe6a8986865b02ec919aa58a0aec05c5b3836c6335204e6d758bc062f83",
-    "lib/backend.py": "7a56f7fa166e6c5382fa4063cb478943d016c7025c1e30d82a010c0af6665fee",
+    "lib/backend.py": "7a39e76b5e725f232dfa3c28a586a2795f7fee87317b787087b97ec01a95233e",
     "lib/chat_direct_host.py": "7d230a832e170d3174f462613cdf4117fd00fc0b859a7970463fe84eb45d5347",
     "lib/clients/desktop/profile_config.py": "0c72f3353aa4be1ada9c6bfc6c29475ba3c1ae9f8ce2860dbfb0d5fd3a3ec83a",
     "lib/device_identity/__init__.py": "3cd56edaf5fbfde9c88df7078dc55be15bf23cfc830727ee410bc8f31dc9990f",

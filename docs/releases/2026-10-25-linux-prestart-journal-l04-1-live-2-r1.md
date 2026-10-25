@@ -1,6 +1,6 @@
 # L04.1-LIVE-2-R1 — pre-start refusal terminalization,25.10.2026
 
-**CHECKPOINT: source/package gates PASS, review pending; full CI not green.** Entry main
+**Final audit follow-up ACTIVE: immutable first failure across recovery; .4 rebuild.** Entry main
 `403b22f25722252633c8ca4c5c8cb80f4f0a3395`; affected product source
 `57f8eff8b291062d69248ac46413f8c9fc0f561d`.
 
@@ -185,4 +185,17 @@ physical-network recovery, cross-format upgrade and device teardown/revoke **NOT
 Original protected identity/assignment, server policy/registry/catalog/signing,
 public release and workstation network/services were not used or changed.
 
-STOP. NEXT — review L04.1-LIVE-2-R1.
+## Final audit — same-generation diagnostic recovery
+
+Before stopping, a separate audit found that a recovery error after restart could
+overwrite the persisted first failure category within the same generation. The
+collector now keeps the first bounded operation diagnostic immutable for that
+generation; a later generation can replace it. New restart/cleanup regression plus
+diagnostics/Friends selection: **41 PASS**. This does not clear pending or authorize
+cleanup. Because backend is also installed system code, a **new system-build-2**
+and internal **0.2.12~l03.2.4** are required; .3 and its green evidence above remain
+immutable intermediate artifacts, not the final retest candidate. Exact gates will
+be repeated, not transferred. Control285de3e job ended cancelled in apt prerequisites;
+its full suite is NOT_RUN, not PASS.
+
+STOP after final exact gates. NEXT — review L04.1-LIVE-2-R1.

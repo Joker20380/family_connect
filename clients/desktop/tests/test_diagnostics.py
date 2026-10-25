@@ -167,6 +167,22 @@ def test_missing_identity_does_not_manufacture_support_id():
     assert json.loads(collector.export())['ring']['device_support_id'] is None
 
 
+def test_same_generation_recovery_does_not_replace_first_failure(tmp_path):
+    directory = tmp_path/'private';directory.mkdir(mode=0o700)
+    storage = directory/'diagnostics.json'
+    first = dict(category='CHANNEL_LOST', phase='APPLYING', outcome='OUTCOME_UNKNOWN',
+                 cleanup_confirmed=False, generation=1, pending=True)
+    collector = DesktopDiagnostics('internal', storage=storage)
+    assert collector.operation_failure(first)
+    collector.sample('FAILED', 'awg');collector.persist()
+    restarted = DesktopDiagnostics('internal', storage=storage)
+    assert not restarted.operation_failure(dict(first, category='HELPER_FAILED'))
+    restarted.sample('FAILED', 'awg')
+    assert restarted.current['normal_operation'] == first
+    assert restarted.current['first_failure'] == 'CHANNEL_LOST'
+    assert restarted.operation_failure(dict(first, generation=3, category='HELPER_TIMEOUT'))
+
+
 def test_accepted_startup_and_trace_enumerations_remain_exportable():
     directory = Path(__file__).resolve().parents[3] / 'state-client-build/owner-diagnostic106-20261022/android-source/clients/android/app/src/main/java/com/familyconnect/app'
     if not directory.exists():
