@@ -1,19 +1,19 @@
 # Текущее состояние / Current state
 
-Срез **L04.1-LIVE-1-R**,25.10.2026: **source/package CHECKPOINT; review pending**.
-Детерминированный red:12 failures/30 PASS; actual backend/GTK GUI poll удерживал
-operation lock, один Disconnect получал ConnectionBusy без helper down.
-Короткий generation fence + unlocked read-only I/O + повторная проверка, включая
-ошибки чтения; stale callback игнорируется. Queued normal Disconnect отменяется
-при закрытии; выполняющаяся mutation не переигрывается. Адресные229 PASS/2 SKIP.
-Source `57f8eff`; новый internal **0.2.12~l03.2.2**, candidate `d9c0d07f…`,
-unchanged system build-9. Desktop1121 PASS/85 SKIP; exact artifact integrity и
-оба real offline systemd255/pkexec package gates PASS. Client Linux/AWG/TCP,
-isolated native/root→UID/Auto/DIRECT и standard candidate CI PASS. Control/phase0/
-Docker:54/54/53 failures, voice FAILURE — общий CI не зелёный. Live retest NOT_RUN;
-Product VERSION/public Linux0.2.11 неизменны.
-[Отчёт correction](releases/2026-10-25-linux-poll-disconnect-l04-1-live-1-r.md).
-**STOP. NEXT — review L04.1-LIVE-1-R.**
+Срез **L04.1-LIVE-1-RETEST**,25.10.2026: **PARTIAL; review pending**.
+Correction L04.1-LIVE-1-R **DONE / review accepted** в source/package scope.
+Exact **0.2.12~l03.2.2**, source `57f8eff`, candidate `d9c0d07f…`, build-9:
+новая KVM Ubuntu24.04/systemd255, DEB/setup/READY, AWG/TCP HTTPS и64KiB↓/↑ PASS.
+Каждый Disconnect: один click/down, generation +1, полный network/DNS/IP cleanup.
+Original AppImage close/reopen сохраняет owner; один Disconnect PASS, поздние polls
+25s не возвращают CONNECTED. Fresh nonce DNS доказан на actual TUN, но ответ
+NOERROR/NODATA (0 answers, resolvectl exit1), не требуемый success/NXDOMAIN:
+буквальный fresh-DNS gate не закрыт, полный RETEST DONE не заявляется.
+Identity/cache/floors и исходный protected state сохранены; VM/secret copies уничтожены.
+Source/public version, artifacts и серверные bindings не менялись. D01/full suites
+54/54/53 failures и voice observation сохраняются; CI заново не запускался.
+[Отчёт RETEST](releases/2026-10-25-linux-installed-awg-tcp-l04-1-retest.md).
+**STOP. NEXT — review L04.1-LIVE-1-RETEST.**
 
 Предыдущий **L04.1-LIVE-1 PARTIAL принят review**; final-2 больше не candidate
 для завершения L04.1. Его положительное live evidence ниже сохраняется исторически.

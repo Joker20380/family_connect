@@ -3,10 +3,15 @@
 ## L03.2 — внутренний полный candidate,25.10
 
 Correction [L04.1-LIVE-1-R](releases/2026-10-25-linux-poll-disconnect-l04-1-live-1-r.md)
-CHECKPOINT: новый internal **0.2.12~l03.2.2**, source57f8eff/candidate d9c0d07f…;
+DONE/review accepted (source/package): internal **0.2.12~l03.2.2**, source57f8eff/candidate d9c0d07f…;
 exact inventory и оба real systemd255/pkexec package gates PASS. Linux/AWG/TCP/native/
-package CI PASS; full suites54/54/53 failures, общий CI не зелёный. Review pending,
-live retest NOT_RUN. Final-2/0.2.12~l03.2.1
+package CI PASS; full suites54/54/53 failures, общий CI не зелёный.
+[Live RETEST](releases/2026-10-25-linux-installed-awg-tcp-l04-1-retest.md) PARTIAL:
+новая KVM, DEB/setup/AWG/TCP/traffic и AppImage close/reopen/single Disconnect PASS;
+fresh nonce DNS вернул NOERROR/NODATA, поэтому буквальный success/NXDOMAIN gate
+не закрыт. Cleanup/state сохранены; guest уничтожен, исходный test state оставлен.
+STOP/NEXT review RETEST, без автоматического LIVE-2/L04.2/L05/teardown.
+Final-2/0.2.12~l03.2.1
 retired для завершения L04.1 после принятого PARTIAL; не заменять его bytes/hash.
 Публичные version/catalog/download links не меняются.
 
@@ -23,7 +28,7 @@ DONE/review accepted: одна отдельная identity/nl assignment, без
 exact DEB/setup/реальные AWG/TCP/transfers/cleanup PASS в disposable Ubuntu24.04 VM;
 original AppImage AWG PASS, но Disconnect после GUI reopen отказал на operation lock.
 Остановлено без patch/rebuild; cleanup-only восстановил baseline, guest уничтожен.
-L04.1 IN_PROGRESS до correction/review и LIVE-2; обязательный device teardown NOT_RUN.
+L04.1 IN_PROGRESS до завершения positive gate, LIVE-2 и review; device teardown NOT_RUN.
 Оба формата включают GUI/user daemon/vendor и exact embedded system/runtime;
 candidate manifest связывает весь user inventory, source SHA, ABI и system build ID.
 Это integrity/provenance, не подпись и не разрешение доверять неизвестному пакету.
