@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**L04.1-LIVE-2-R2 IN_PROGRESS — source checkpoint,25.10.**
+На exact .4 review принимает P1/P2, B1/B2/C1/C2/D PASS; E FAIL/review accepted,
+F1/F2 NOT_RUN. E доказывает queued Future/busy/open/CONNECTING, не late VPN start:
+helper/TUN0, generation0/pending null; fixture отменил Future до освобождения worker.
+R2 явно отслеживает только normal Connect/Disconnect; успешный cancel снимает busy
+и fencing запрещает старый callback. Running/done-undelivered mutation блокирует Close.
+Deterministic prior-source overlay4 FAIL → targeted197 PASS. Новый internal .5,
+exact package/CI gates ещё не завершены; .4 immutable, system8d7d78ec… подлежит
+exact hash/contract verification без смены bytes. Private identity/gateway/live E/F
+не используются. L04.1 IN_PROGRESS; L04.2/L05/test-device teardown NOT_RUN.
+После source/package checkpoint STOP; NEXT — review L04.1-LIVE-2-R2.
+[R2 report](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md).
+
 Срез25.10.2026: **L04.1-LIVE-1-RETEST DONE / review accepted**.
 Review принимает fresh DNS matching request/reply на actual AWG/TCP TUN после flush,
 включая валидный terminal **NODATA**; positive installed gate завершён без повтора.
@@ -14,13 +27,13 @@ FC-3YSQ-BE2D/nl сохраняются, новый issuance/provisioning/manual 
 L04/L04.1 IN_PROGRESS до LIVE-2 review; L04.2/L05/teardown NOT_RUN.
 [LIVE-2 checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md).
 D01/full suites54/54/53 failures и voice/Windows observations сохраняются.
-**L04.1-LIVE-2-RESUME PARTIAL, STOP на E** (тот же ID). Exact .4 A/B1 review
+**L04.1-LIVE-2-RESUME PARTIAL / review accepted, STOP на E** (тот же ID). Exact .4 A/B1 review
 accepted; без повтора. P1/P2 continuity, B2, C1/C2 и D recovery PASS.
 E: один queued Connect + Close — GUI остаётся busy/open, Future не отменён;
 helper/TUN0, generation0/pending null. Только fixture cleanup, без повторного action.
 F1/F2 NOT_RUN. Сеть/state/server readback сохранены; KVM/secret copies уничтожены,
 original FC-3YSQ-BE2D/nl сохранён. Source/candidate immutable. L04.1 IN_PROGRESS;
-L04.2/L05/teardown NOT_RUN. NEXT review PARTIAL L04.1-LIVE-2.
+L04.2/L05/teardown NOT_RUN. Review E принят; correction только R2 выше.
 [Продолжение того же checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2-continuation.md).
 **L04.1-LIVE-2-R1 DONE / review accepted (source/system/package).**
 Final internal **0.2.12~l03.2.4**, source053c4e5, candidate42ea0699…,

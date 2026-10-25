@@ -56,10 +56,10 @@ curl -fsSL https://github.com/AppImage/appimagetool/releases/download/continuous
 chmod 755 "$work/appimagetool"
 sha256sum "$work/appimagetool"
 APPIMAGE_EXTRACT_AND_RUN=1 python -m scripts.package_linux --system-bundle "$system_archive" \
-  --standard-system-rebuild --internal-version '0.2.12~l03.2.4' --output artifacts/linux-candidate --appimagetool "$work/appimagetool"
+  --standard-system-rebuild --internal-version '0.2.12~l03.2.5' --output artifacts/linux-candidate --appimagetool "$work/appimagetool"
 python -B -m scripts.verify_linux_candidate artifacts/linux-candidate | tee artifacts/linux-candidate/integrity.log
-run_container fc-l032-deb tests/fixtures/linux_candidate/smoke.py deb '/artifacts/FamilyConnect_0.2.12~l03.2.4_amd64.deb' | tee artifacts/linux-candidate/deb-smoke.log
-run_container fc-l032-appimage tests/fixtures/linux_candidate/smoke.py appimage '/artifacts/FamilyConnect-0.2.12~l03.2.4-x86_64.AppImage' | tee artifacts/linux-candidate/appimage-smoke.log
+run_container fc-l032-deb tests/fixtures/linux_candidate/smoke.py deb '/artifacts/FamilyConnect_0.2.12~l03.2.5_amd64.deb' | tee artifacts/linux-candidate/deb-smoke.log
+run_container fc-l032-appimage tests/fixtures/linux_candidate/smoke.py appimage '/artifacts/FamilyConnect-0.2.12~l03.2.5-x86_64.AppImage' | tee artifacts/linux-candidate/appimage-smoke.log
 for transport in awg tcp; do
-  run_container "fc-r1-$transport" tests/fixtures/linux_candidate/smoke.py "prestart-$transport" '/artifacts/FamilyConnect_0.2.12~l03.2.4_amd64.deb' | tee "artifacts/linux-candidate/prestart-$transport.log"
+  run_container "fc-r1-$transport" tests/fixtures/linux_candidate/smoke.py "prestart-$transport" '/artifacts/FamilyConnect_0.2.12~l03.2.5_amd64.deb' | tee "artifacts/linux-candidate/prestart-$transport.log"
 done
