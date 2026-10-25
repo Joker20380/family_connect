@@ -2,12 +2,6 @@
 
 ## Current engineering priority / Текущий critical path
 
-Отдельный ops follow-up24.10: read-only VPN check завершён,53 registered/49
-non-revoked; NL8 recent AWG clients, RU0. Разобрать legacy Docker worker unhealthy
-и таймауты чтения journal без перезапуска; MESH/legacy pilot users отдельно не
-подсчитаны. Это не смена engineering priority и не разрешение на deployment.
-[Срез](releases/2026-10-24-vpn-health.md).
-
 Цель — тот же Family Connect на Linux/Windows, что принятая Android beta106-recovery,
 а не отдельные реализации продукта. [Текущий срез](STATUS.md) — источник текущего состояния.
 Продуктовый checkpoint: phase22, source baseline `664342a6566792a4ea621274a369bcd6b6012143`.

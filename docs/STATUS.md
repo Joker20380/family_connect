@@ -1,14 +1,5 @@
 # Текущее состояние / Current state
 
-Операционный read-only срез VPN24.10,21:26UTC и последующие короткие замеры:
-Friends registry53 устройства/49 non-revoked/4 revoked. AWG RU11 configured/0
-recent handshakes; NL45 configured/8 under3min/9 under15min. NL5s RX0.873,
-TX34.606Mbps. Friends AWG/TCP обоих серверов и NL bootstrap active; HTTPS status200.
-Legacy Docker peer-worker остаётся unhealthy (refused/timeout probes), host worker
-active. Journal error checks ограничены таймаутами: отсутствие ошибок не доказано.
-Версии/конфигурации/службы не менялись; текущий engineering review gate сохранён.
-[Отчёт и ограничения](releases/2026-10-24-vpn-health.md).
-
 Срез25.10.2026: **L04.1-LIVE-1-RETEST DONE / review accepted**.
 Review принимает fresh DNS matching request/reply на actual AWG/TCP TUN после flush,
 включая валидный terminal **NODATA**; positive installed gate завершён без повтора.
