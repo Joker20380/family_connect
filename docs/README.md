@@ -35,9 +35,14 @@ adds local authenticated OFF→ON→OFF through real manual and Auto owners,
 TUN/private DNS/publication, broker leases and bounded release accounting.
 L02.2/local L02 review is accepted. [D01.3 public IPC completion](releases/2026-10-24-desktop-chat-admission-d01-3.md)
 and its [D01.3-R correction](releases/2026-10-24-desktop-chat-direct-completion-d01-3-r.md)
-are accepted in the public completion/admission scope. Current bounded checkpoint:
-[L03.1 system/runtime component](releases/2026-10-25-linux-system-runtime-l03-1.md).
-NEXT review L03.1; AppImage/DEB L03.2 is not started. Windows broker IPC remains NOT_INTEGRATED;
+are accepted in the public completion/admission scope.
+[L03.1 system/runtime component](releases/2026-10-25-linux-system-runtime-l03-1.md)
+and [L03.2 full internal candidate](releases/2026-10-25-linux-candidate-l03-2.md)
+are review accepted; parent L03 is DONE in that internal package scope.
+[L04.1 installed AWG/TCP](releases/2026-10-25-linux-installed-awg-tcp-l04-1.md)
+is BLOCKED on confirmed authorized test credentials; exact final-2 integrity PASS
+is not live acceptance. L04 remains IN_PROGRESS; L04.2 is QUEUED/NOT_RUN.
+NEXT review L04.1. Windows broker IPC remains NOT_INTEGRATED;
 installed restricted-message acceptance is NOT_RUN, not a completed fallback.
 [Shared Auto policy and accepted-Java trace checks](../carrier/desktopauto/README.md)
 are implemented locally and included in the native worker's bounded private-pipe

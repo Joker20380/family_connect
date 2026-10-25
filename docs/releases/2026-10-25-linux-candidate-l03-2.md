@@ -1,5 +1,13 @@
 # L03.2 — full internal Linux candidate
 
+**Review decision,2026-10-25: L03.2 DONE / review accepted; L03.1 DONE and parent
+L03 DONE in full internal Linux candidate scope.** Accepted pair is final-2,
+candidate `9d4b13cc106296264805402b42538b9fa94505433b1bbd239c82145966e22b81`,
+product source `cf66532c72548767f8ff4aa31faa7588b07eab54`, embedded exact build-9.
+The separately identified CI rebuild is not a substitute. The checkpoint wording
+below records the pre-review handoff. Current task/evidence:
+[L04.1 installed AWG/TCP](2026-10-25-linux-installed-awg-tcp-l04-1.md), not L04.2/L05.
+
 Date: **2026-10-25**. **CHECKPOINT — candidate gate PASS, review pending**.
 Installed only in disposable containers; not published. CI continuation below.
 **Review artifact: final-2, product source `cf66532`, final-4 package smoke PASS.**

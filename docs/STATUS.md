@@ -1,14 +1,16 @@
 # Текущее состояние / Current state
 
-Срез **L03.2**, 25.10.2026: CHECKPOINT, candidate gate PASS, review pending.
-Внутренние AppImage/DEB0.2.12~l03.2.1 source `cf66532`: exact payload/install/
-polkit/background/removal и rollback/barrier на Ubuntu24.04/systemd255 PASS.
-Desktop1146 PASS/24 SKIP; адресные62 PASS; Client Linux/isolated native PASS.
-CI40184803906: standard-rebuild и final package gate PASS. Full suites по54 failures.
-L03.1 REVIEW ACCEPTED / DONE: product source `f826dbd`, неизменный build-9;
-continuation `1b285c6` повторно проверила те же bytes. Parent L03 IN_PROGRESS.
-[Отчёт L03.2](releases/2026-10-25-linux-candidate-l03-2.md). L04/L05 не начаты.
-**STOP. NEXT — review L03.2; публикация не разрешена.**
+Срез **L04.1**, 25.10.2026: **BLOCKED — authorized test activation not confirmed**.
+L03.1/L03.2 **DONE (review accepted)**; parent L03 **DONE** в scope внутреннего
+Linux-кандидата. L04 **IN_PROGRESS**; L04.2 **QUEUED / NOT_RUN**.
+Exact final-2 AppImage/DEB0.2.12~l03.2.1, source `cf66532`, candidate `9d4b13cc…`:
+размеры/SHA256,707 user members и embedded build-9/758 files проверены PASS.
+Разрешённая существующая Linux test identity с действующей AWG/TCP activation
+для disposable live gate не подтверждена; установка/GUI/setup/live sessions NOT_RUN.
+Личные/Android/Windows credentials не использованы; workstation/server не менялись.
+D01 открыт:54 residual failures; D02.1-R PARTIAL/NOT_RUN; Windows/voice сохранены.
+[Отчёт L04.1](releases/2026-10-25-linux-installed-awg-tcp-l04-1.md).
+**STOP. NEXT — review L04.1; без L04.2/L05/publication.**
 
 ### Принятый checkpoint L03.1
 
@@ -24,7 +26,7 @@ Source `f826dbd`: Client Linux и isolated native/root→UID/Auto/DIRECT CI PASS
 После обрыва25.10: неизменный build-9 повторно проверен в disposable systemd255;
 package/system smoke и94 адресных PASS; исходники/публичная поставка не менялись.
 Control/phase0/Docker: по54 failures, errors0; voice observation сохранён. Не общий CI PASS.
-Родительский L03 не завершён до review L03.2; зависимость от review L03.1 выполнена.
+Review L03.2 теперь принят; родительский L03 DONE только в scope внутреннего кандидата.
 Ни public versions/catalogs, ни установка на рабочую машину не разрешены.
 Review L03.1 принят; это предыдущий, не активный NEXT.
 

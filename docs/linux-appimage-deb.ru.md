@@ -2,9 +2,12 @@
 
 ## L03.2 — внутренний полный candidate,25.10
 
-L03.1 принят; L03.2 CHECKPOINT (candidate gate PASS), parent L03 IN_PROGRESS до review. Source VERSION
+L03.1/L03.2 приняты; parent L03 DONE в scope внутреннего кандидата. Source VERSION
 и опубликованный Linux остаются0.2.11; внутренний candidate — **0.2.12~l03.2.1**.
 [Точные артефакты/evidence](releases/2026-10-25-linux-candidate-l03-2.md).
+Для [L04.1](releases/2026-10-25-linux-installed-awg-tcp-l04-1.md) закреплён только
+final-2 candidate `9d4b13cc…`, не CI rebuild `f7f6e765…`. Integrity PASS;
+live AWG/TCP BLOCKED до подтверждения разрешённой existing test activation.
 Оба формата включают GUI/user daemon/vendor и exact embedded system/runtime;
 candidate manifest связывает весь user inventory, source SHA, ABI и system build ID.
 Это integrity/provenance, не подпись и не разрешение доверять неизвестному пакету.
@@ -53,8 +56,8 @@ identity/history/settings не переносятся и не удаляются
 повтор этого setup. GUI и chat daemon остаются обычным пользователем.
 
 Это внутренний неподписанный system/runtime-компонент для Python3.12/amd64,
-не полный desktop installer. L03.2 (AppImage/DEB) **не начат**, зависит от review
-L03.1; parent L03 открыт. Legacy six-file archive/updater и публичные версии не
+сам по себе не полный desktop installer. Теперь он включён в принятый L03.2
+состав выше; live gates L04/L05 остаются отдельными. Legacy six-file archive/updater и публичные версии не
 менялись. [Воспроизводимый isolated gate](../tests/fixtures/linux_system_runtime/README.md).
 
 ## Parity106 — отдельная незавершённая поставка,23.10

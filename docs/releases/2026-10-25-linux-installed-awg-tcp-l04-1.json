@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "task": "L04.1",
+  "date": "2026-10-25",
+  "status": "BLOCKED",
+  "blocker": "AUTHORIZED_LINUX_TEST_ACTIVATION_NOT_CONFIRMED",
+  "entry_source": "2cce01de4e6f7f1b65d0afc1098520dbce61c954",
+  "artifact_directory": "state-client-build/linux-candidate-l032-20261025/build-final-2",
+  "artifact_verification": {
+    "artifacts": {
+      "FamilyConnect-0.2.12~l03.2.1-x86_64.AppImage": {
+        "sha256": "914f02ff10f31485c5a6b68a8ff41f5b168aaffc8f7f8241723365c40a9109e5",
+        "size": 57924088
+      },
+      "FamilyConnect-Linux-0.2.12~l03.2.1.tar.gz": {
+        "sha256": "8a3847d88aa0b7098f94518c0e986bbaf3e00bcfcc4bc35f82a6817cae1e15ae",
+        "size": 112233
+      },
+      "FamilyConnect_0.2.12~l03.2.1_amd64.deb": {
+        "sha256": "df13422321f6c5865f1ca1060fe221fbe21954c6981ab05cb2d173e7aa6e04ac",
+        "size": 55951120
+      }
+    },
+    "candidate": "9d4b13cc106296264805402b42538b9fa94505433b1bbd239c82145966e22b81",
+    "legacy_members": 6,
+    "result": "PASS",
+    "source_commit": "cf66532c72548767f8ff4aa31faa7588b07eab54",
+    "source_dirty": false,
+    "system": {
+      "build_id": "8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da",
+      "installer_sha256": "ed8eac3d1b1c666b1d00433f09ec9a6eec578623249e0895adfa96ae3b53f9d5",
+      "sha256": "bdd7e04b8ca78a232acccd881004cfb3b6c96b13dc3c608d0b919f53f40f02d9",
+      "size": 49247776,
+      "source_digest": "cfcb7bae874765cfe6a66742fbeed55cb03399b7e32c13d5a5edcd212299df61"
+    },
+    "user_members": 707
+  },
+  "embedded_verification": {
+    "result": "PASS",
+    "candidate_id": "9d4b13cc106296264805402b42538b9fa94505433b1bbd239c82145966e22b81",
+    "source_commit": "cf66532c72548767f8ff4aa31faa7588b07eab54",
+    "system_build_id": "8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da",
+    "system_members": 758,
+    "system_archive_sha256": "bdd7e04b8ca78a232acccd881004cfb3b6c96b13dc3c608d0b919f53f40f02d9",
+    "installer_sha256": "ed8eac3d1b1c666b1d00433f09ec9a6eec578623249e0895adfa96ae3b53f9d5",
+    "python": "3.12.3",
+    "os_release": "PRETTY_NAME=\"Ubuntu 24.04.5 LTS\"",
+    "systemd_version": "systemd 255 (255.4-1ubuntu8.18)",
+    "network": "none",
+    "installed": false,
+    "live_vpn": "NOT_RUN"
+  },
+  "verification_image": "sha256:6705fc0e0b9a4c83fa3710e45f2b54a27c80cd49b27dbfe7db213d946f5b9dce",
+  "verification_is_live_systemd_gate": false,
+  "initial_host_verification": {
+    "python": "3.14.4",
+    "result": "REFUSED",
+    "reason": "Candidate runtime contract/ABI mismatch"
+  },
+  "installation": "NOT_RUN",
+  "explicit_setup": "NOT_RUN",
+  "awg": "NOT_RUN",
+  "tcp": "NOT_RUN",
+  "sessions_attempted": 0,
+  "session_evidence": [],
+  "installed_negative_tests": "NOT_RUN",
+  "cross_format_live_coherence": "NOT_RUN",
+  "ci_evidence_scope": "No new live run; previous CI remains L03 evidence only",
+  "source_rebuilt": false,
+  "server_changes": false,
+  "published": false,
+  "review_state": {
+    "L03.1": "DONE",
+    "L03.2": "DONE",
+    "L03": "DONE",
+    "L04": "IN_PROGRESS",
+    "L04.2": "QUEUED / NOT_RUN"
+  },
+  "next": "review L04.1"
+}
