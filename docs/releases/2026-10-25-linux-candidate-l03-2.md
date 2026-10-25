@@ -1,6 +1,6 @@
 # L03.2 — full internal Linux candidate
 
-Date: **2026-10-25**. **CHECKPOINT — local candidate gate PASS, review pending**.
+Date: **2026-10-25**. **CHECKPOINT — candidate gate PASS, review pending**.
 Installed only in disposable containers; not published. CI continuation below.
 **Review artifact: final-2, product source `cf66532`, final-4 package smoke PASS.**
 Entry: current main `1b285c6417676b3383c03c47620802a5f3d5ed6f` (remote verified).
@@ -238,5 +238,42 @@ Same removal/state/background/no-VPN assertions PASS. No workstation install.
 - Product22868e1 control [40183917906/121140566503](https://github.com/Joker20380/family_connect/actions/runs/40183917906/job/121140566503):3101 passed/**54 failed**/140 skipped; phase0 [40183917890/121140566198](https://github.com/Joker20380/family_connect/actions/runs/40183917890/job/121140566198):3101/**54**/140; Docker [40183917890/121140566353](https://github.com/Joker20380/family_connect/actions/runs/40183917890/job/121140566353):3099/**54**/142. Errors0. No failures suppressed/repaired in L03.2; D01 remains open.
 - AWG40183917944, TCP40183917914, voice40183917883 PASS on22868e1. Windows protocol observation atb910edb and historical voice observations remain separate; later green jobs do not erase those observations or grant Windows/L04/L05 acceptance.
 
-Final fixture CI088be48 run40184803906 is in progress at this checkpoint. The
-local final candidate gates are complete; do not call the whole CI green.
+### Final CI completion
+
+Final fixture/source **088be48**, [run40184803906/job121143223621](https://github.com/Joker20380/family_connect/actions/runs/40184803906/job/121143223621): **PASS**.
+Standard native/RNS/AWG/Xray builds, bounded packaging tests, actual L03.1
+system smoke (including failed-readback rollback/start fencing), user inventory,
+DEB and AppImage actual package gates all completed. CI archive12596245942 was
+downloaded; ZIP SHA256 `a81e9e3fe97edbb95ab5cd416bc5867751c10369a0b24c83d7057f156c14d5c8`
+and its artifact hashes/three real smoke PASS receipts independently checked.
+Local retained ZIP: `state-client-build/linux-candidate-l032-20261025/ci-088be48.zip`.
+
+This CI rebuild is **not build-9**. Its accepted-source system build ID is
+`391aab2ffea80a9c478ab662b5e93477763258c4028bacdff8ac4c20a2e26b3a`, system archive
+49247808 bytes / SHA256 `a80e57dbaac6bdcf4f7e0a0324f506e7aecc626ba653e4d1dd583bda25c061f5`.
+Native source digest, installer hash and accepted source inventory are unchanged;
+all new system bytes were revalidated before candidate testing. CI candidate
+identity `f7f6e7653a53f42faca3142b8f7aa6f9f54c281d701442f73f65a244a840e8a5`,
+`source_dirty=false`. It is a separately identified reproducibility/gate artifact,
+not a replacement for the local build-9-based review pair above.
+
+| CI088be48 artifact | Bytes | SHA256 |
+|---|---:|---|
+| AppImage0.2.12~l03.2.1 | 57928184 | `954e61dbe5069614531ef4c4c9cfa97e78c6a676f2541753bd734e7fcaa255a1` |
+| DEB0.2.12~l03.2.1 | 55985392 | `2fe4da1b7d7fe1694c112f206480dbaa7c2e21a48dbd846243d1cd8497ddd830` |
+| Legacy six-file archive | 112233 | `8a3847d88aa0b7098f94518c0e986bbaf3e00bcfcc4bc35f82a6817cae1e15ae` |
+
+Earlier final-product CI40184498190/job121142299048 failed on the already-recorded
+AppImage tampered-copy permission assertion; it is not hidden by this green run.
+Latest full suites088be48: control40184803896/job121143234639 **3102/54/140**;
+phase0/tests40184803868/job121143223476 **3102/54/140**; Docker/failover same run,
+job121143223341 **3100/54/142** (passed/failed/skipped), errors0. No general CI PASS.
+The priorcf66532 control run was cancelled by existing workflow concurrency;
+the completed088be48 full run is the later evidence, not a claimed cancelled PASS.
+
+All task commits use ordinary main pushes; final staged scope excludes the
+parallel ops hunks/report and all ignored artifacts/state. Whitespace, local
+links, staged secret/artifact review, artifact-to-report hashes and remote SHA
+are checked. Disposable candidate containers removed; evidence remains local.
+L03.1 DONE/review accepted; **L03.2 CHECKPOINT/candidate gate PASS/review pending**;
+parent **L03 IN_PROGRESS**. **STOP. NEXT — review L03.2**, no automatic L04/L05.

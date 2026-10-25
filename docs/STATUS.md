@@ -1,10 +1,10 @@
 # Текущее состояние / Current state
 
-Срез **L03.2**, 25.10.2026: CHECKPOINT, local candidate gate PASS, review pending.
+Срез **L03.2**, 25.10.2026: CHECKPOINT, candidate gate PASS, review pending.
 Внутренние AppImage/DEB0.2.12~l03.2.1 source `cf66532`: exact payload/install/
 polkit/background/removal и rollback/barrier на Ubuntu24.04/systemd255 PASS.
 Desktop1146 PASS/24 SKIP; адресные62 PASS; Client Linux/isolated native PASS.
-CI standard-rebuild PASS; final fixture CI ещё проверяется. Full suites по54 failures.
+CI40184803906: standard-rebuild и final package gate PASS. Full suites по54 failures.
 L03.1 REVIEW ACCEPTED / DONE: product source `f826dbd`, неизменный build-9;
 continuation `1b285c6` повторно проверила те же bytes. Parent L03 IN_PROGRESS.
 [Отчёт L03.2](releases/2026-10-25-linux-candidate-l03-2.md). L04/L05 не начаты.
