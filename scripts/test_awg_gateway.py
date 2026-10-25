@@ -106,19 +106,21 @@ helper='/usr/local/lib/family-connect-awg/helper'
 def start(uid):
  env=dict(os.environ,PKEXEC_UID=str(uid))
  p=subprocess.Popen([helper,'session'],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True,env=env)
- assert json.loads(p.stdout.readline())=={'ready':1}
+ assert json.loads(p.stdout.readline())=={'ready':2}
  return p
 def request(p,action,ident=None,data=None):
  p.stdin.write(json.dumps(dict(kind='awg',action=action,ident=ident,data=data))+'\\n');p.stdin.flush()
- return json.loads(p.stdout.readline())
+ reply=json.loads(p.stdout.readline())
+ assert set(reply)=={'schema','outcome','reason','value'} and reply['schema']==2
+ return reply
 p=start(1000)
-r=request(p,'import',data=profile);assert r['ok'];ident=r['value']
+r=request(p,'import',data=profile);assert r['outcome']=='OK' and r['reason']=='NONE';ident=r['value']
 assert json.load(open('/etc/family-connect/awg/'+ident+'.json'))['owner']==1000
-assert request(p,'down',ident)['ok']
+assert request(p,'down',ident)==dict(schema=2,outcome='OK',reason='NONE',value='')
 other=start(1001)
-assert request(other,'down',ident)['ok'] is False
+assert request(other,'down',ident)==dict(schema=2,outcome='OUTCOME_UNKNOWN',reason='HELPER_FAILED',value='')
 other.stdin.close();assert other.wait(timeout=5)==0
-assert request(p,'down',ident)['ok']
+assert request(p,'down',ident)==dict(schema=2,outcome='OK',reason='NONE',value='')
 p.stdin.close();assert p.wait(timeout=5)==0
 bad=start(1000)
 bad.stdin.write(json.dumps(dict(kind='awg',action='serve',ident=ident,data=None))+'\\n');bad.stdin.flush()

@@ -74,4 +74,11 @@ native/RNS/import readback, actual polkit/root→UID, owner/sticky/start barrier
 real import-readback failure/rollback, unchanged synthetic user state/network.
 Desktop pair/actual pre-start gates and CI results follow separately.
 
+Intermediate AWG CI `40216532502/121238763466` exposed the existing isolated
+gateway test's raw `ready:1`/`ok` assertions after the protocol change. The fixture
+now checks exact v2 OK/unknown envelopes, preserving cross-UID and forbidden-action
+denial. No transport implementation, candidate bytes or trust boundary changes in
+that test-only correction. Source native/root→UID/Auto/DIRECT isolated job
+`40216532591/121238763585` PASS, including both protocol OS jobs.
+
 STOP after package evidence. NEXT — review L04.1-LIVE-2-R1.
