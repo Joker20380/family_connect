@@ -1,16 +1,17 @@
 # Текущее состояние / Current state
 
-Срез **L04.1**, 25.10.2026: **BLOCKED — authorized test activation not confirmed**.
+Срез **L04.1-AUTH**,25.10.2026: **BLOCKED — gateway mutation boundary**.
 L03.1/L03.2 **DONE (review accepted)**; parent L03 **DONE** в scope внутреннего
 Linux-кандидата. L04 **IN_PROGRESS**; L04.2 **QUEUED / NOT_RUN**.
-Exact final-2 AppImage/DEB0.2.12~l03.2.1, source `cf66532`, candidate `9d4b13cc…`:
-размеры/SHA256,707 user members и embedded build-9/758 files проверены PASS.
-Разрешённая существующая Linux test identity с действующей AWG/TCP activation
-для disposable live gate не подтверждена; установка/GUI/setup/live sessions NOT_RUN.
-Личные/Android/Windows credentials не использованы; workstation/server не менялись.
+Ровно одна новая test identity/one-use activation: **FC-3YSQ-BE2D**, active;
+registry binding/replay rejection и packaged Python3.12 resume PASS.
+State вне checkout, UID1000,0700/0600. Личные identities не использованы.
+Штатный configuration fetch создаёт AWG peer и меняет Xray server.json; при
+запрете gateway changes не вызван. Verified device AWG/TCP assignment **NOT_RUN**.
+L04.1 остаётся **BLOCKED / live NOT_RUN**; final-2 не пересобран/не установлен.
 D01 открыт:54 residual failures; D02.1-R PARTIAL/NOT_RUN; Windows/voice сохранены.
-[Отчёт L04.1](releases/2026-10-25-linux-installed-awg-tcp-l04-1.md).
-**STOP. NEXT — review L04.1; без L04.2/L05/publication.**
+[Отчёт AUTH и защищённый путь](releases/2026-10-25-linux-test-activation-l04-1-auth.md).
+**STOP. NEXT — review L04.1-AUTH; без автоматического live/L04.2/L05.**
 
 ### Принятый checkpoint L03.1
 

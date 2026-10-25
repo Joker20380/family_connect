@@ -40,9 +40,11 @@ are accepted in the public completion/admission scope.
 and [L03.2 full internal candidate](releases/2026-10-25-linux-candidate-l03-2.md)
 are review accepted; parent L03 is DONE in that internal package scope.
 [L04.1 installed AWG/TCP](releases/2026-10-25-linux-installed-awg-tcp-l04-1.md)
-is BLOCKED on confirmed authorized test credentials; exact final-2 integrity PASS
-is not live acceptance. L04 remains IN_PROGRESS; L04.2 is QUEUED/NOT_RUN.
-NEXT review L04.1. Windows broker IPC remains NOT_INTEGRATED;
+remains BLOCKED/live NOT_RUN. [L04.1-AUTH](releases/2026-10-25-linux-test-activation-l04-1-auth.md)
+created one dedicated active test identity; registry/replay/resume PASS, but device
+AWG/TCP assignment fetch is blocked by its gateway mutation side effects.
+L04 remains IN_PROGRESS; L04.2 is QUEUED/NOT_RUN.
+NEXT review L04.1-AUTH. Windows broker IPC remains NOT_INTEGRATED;
 installed restricted-message acceptance is NOT_RUN, not a completed fallback.
 [Shared Auto policy and accepted-Java trace checks](../carrier/desktopauto/README.md)
 are implemented locally and included in the native worker's bounded private-pipe
