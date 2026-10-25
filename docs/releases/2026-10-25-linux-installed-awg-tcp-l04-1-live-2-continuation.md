@@ -1,6 +1,7 @@
 # L04.1-LIVE-2-RESUME — continuation,25.10.2026
 
-**ACTIVE, same checkpoint; no new task ID or architecture phase.** Entry main
+**PARTIAL — first new product defect at E; STOP.** Same checkpoint, no new task
+ID or architecture phase. P1/P2/B2/C1/C2/D PASS; F1/F2 NOT_RUN. Entry main
 `4abe406a7143d8f5353a1d1e1174f6ed05cd5dda`. Review accepts exact .4 A/B1 PASS.
 The registry start18:28:22UTC predates B1 Connect18:34:12UTC and is not a B1 blocker.
 [Earlier receipt](2026-10-25-linux-installed-awg-tcp-l04-1-live-2-resume.md) is retained
@@ -86,8 +87,57 @@ explicit setup and exact system READY PASS; only protected home copied.
 
 Accepted **B1** is not rerun: typed PRE_START_REJECTED, transport0, journal IDLE,
 pending null, network/user state preserved (review evidence).
-E/F1/F2 still NOT_RUN at this intermediate documentation checkpoint.
-Only sanitized docs/evidence committed; product/installed bytes untouched.
-L04.2/L05/device teardown/revoke/publication NOT_RUN.
 
-STOP. NEXT — review завершённого L04.1-LIVE-2.
+## First failure — E, queued Connect / Close
+
+Independent clean exact .4 DEB snapshot. A bounded fixture occupied the actual
+normal GUI executor with an Event wait, without modifying installed files or
+replacing product methods. The initial fixture lookup rejected the outer GTK
+application object before submitting work; corrected to the existing App wrapper
+before the only user action. The actual GUI received **one Connect, one Close**.
+
+Before and after Close: blocker running, one queued Future, `running=false`,
+`cancelled=false`; App `busy=true`, `closed=false`. The GUI remained alive/open
+instead of cancelling queued Connect and closing. Read-only localization:
+`App.on_close`/`App.close` only cancel the tracked queued **Disconnect**, not queued
+Connect. This is an observed close/cancellation defect, **not evidence that a late
+VPN connection actually started**.
+
+Coordination generation remained0, pending null; no application journal had been
+created. Diagnostics remained CONNECTING/actual none/first_failure NONE. Helper
+requests, successful transport starts, owners and TUNs all0. No fallback.
+At this first failure, F1/F2 and the product release-queue/reopen portion of E
+were stopped, not retried or marked PASS.
+
+Cleanup-only fixture cancelled that one still-queued Future before releasing its
+blocker, then terminated only the unprivileged GUI. This is **not product
+cancellation evidence**. A subsequent25s cleanup observation had helper/TUN0,
+generation0/null, unchanged network/DNS/firewall baseline and offline poll PASS.
+Identity/cache/floors unchanged; E preserved the source's absence of application
+preference files. No claim of a comprehensive settings migration/upgrade gate.
+Three immediate pre-action server reads and post-readback remained identical.
+
+## Final boundaries and cleanup
+
+- Final candidate readback still exact42ea0699…/system READY; no rebuild, repack,
+  installed patch, trust change or source fix. AppImage exact bytes were verified,
+  but its planned F-scenario was **NOT_RUN**, not inferred from DEB evidence.
+- All KVM guests shut down; seven encrypted base/scenario disks, encryption key,
+  guest credentials, seed, raw logs and screenshots deleted. Any idle catalog
+  host ended with fixture VM teardown, not claimed as product Disconnect behavior.
+- Original protected FC-3YSQ-BE2D/nl state passes unchanged read-only preflight.
+  Host route/rule/DNS readback unchanged. Target/foreign server bindings,
+  configuration/catalog and service identities unchanged in each action window;
+  no external service restart, assignment/policy/credential change or manual fetch.
+- Only sanitized documentation/JSON committed; no private state/operator receipt.
+  Full suites not rerun for this documentation-only installed QA checkpoint;
+  historical54/54/53 residual failures and voice/Windows observations stay open.
+  No general CI PASS claim. Parent L04.1 remains IN_PROGRESS.
+- A/B1 remain review accepted. L04.2/L05/device teardown/revoke/publication NOT_RUN.
+  A source correction requires a separate explicit checkpoint, not this continuation.
+
+Progress commits `950fc6c`, `8fd85b7`, `2047938`, `7e2931f`, `ea276f5` were ordinarily
+pushed and remote SHA checked. Final sanitized receipt is committed with this
+report; its own commit is identified by Git history (no self-referential SHA).
+
+STOP. NEXT — review L04.1-LIVE-2 (PARTIAL at E).

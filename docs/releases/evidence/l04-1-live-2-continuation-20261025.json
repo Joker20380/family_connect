@@ -33,10 +33,40 @@
     "user_members": 707
   },
   "checkpoint": "L04.1-LIVE-2-RESUME",
-  "cleanup": "PER_SCENARIO_PENDING_FINAL_GUEST_DESTRUCTION",
+  "cleanup": {
+    "device_teardown": "NOT_RUN",
+    "encrypted_disks_deleted": 7,
+    "guest_credentials_and_disk_key_deleted": true,
+    "guest_destroyed": true,
+    "host_network_unchanged": true,
+    "idle_catalog_shutdown": "fixture VM poweroff, not product disconnect acceptance",
+    "original_protected_state_preserved": true,
+    "raw_logs_screenshots_deleted": true,
+    "seed_deleted": true
+  },
   "continuation": true,
+  "documentation_commits": [
+    "950fc6cb70bba9540eb74c3e91fffd3c31d4cff9",
+    "8fd85b74dee75bbd01e3a8d71e5cc7930f844162",
+    "20479382e1308083d8f2453e1a08cdacba255ee8",
+    "7e2931f330afbd9707d5c71592c9851d3b293a7b",
+    "ea276f58954fe441fc058a5724c0351280fce197"
+  ],
   "entry_docs_commit": "950fc6cb70bba9540eb74c3e91fffd3c31d4cff9",
   "entry_main": "4abe406a7143d8f5353a1d1e1174f6ed05cd5dda",
+  "final_candidate_readback": {
+    "candidate": "42ea0699263f2527057a36082b2b95235c4ac452cc5e86eed6ec15ebd50898cf",
+    "system": "READY"
+  },
+  "fixture_source_sha256": {
+    "channel_fixture.py": "2cd3b46ee83959abbccbc1f30b5be836343be6cd039b5a9b301560f218a53e46",
+    "queue_cleanup.py": "6c59996b214c8556affcbcda04d25e52ba2d06242bf6b4a75063ca6ea1d65429",
+    "queue_fixture.py": "d1c9fbc6a6e7a6f3ae0cd296000160c0ccb247d802e95e253f0dd020b524a6e5",
+    "queue_probe.py": "f1a820eeb0cf5bc5a0f5cc0e8ba23fd86f90b0ac6c4cc6898d1df99f423542de",
+    "server.py": "c70a3fad9a56eb26d18693a0e6b62a0fb3a025add96c7089dacf1d8de72129b6",
+    "snapshot.py": "3048e52a87142fa92e1b39318e12af19f69e77f5a2262e4b968426f1cb9cdc4f",
+    "structure.py": "ecd193b97baf033e7ae7f70fd6ef87f677728f87a9861a2d2dfe31bf6ff21194"
+  },
   "gates": {
     "B2": {
       "action_start_utc": "2026-10-25T19:12:25Z",
@@ -83,6 +113,7 @@
         }
       ],
       "result": "PASS",
+      "server_observation_sha256": "37877794499503e2fe8d3b38dcde7129901b9aa11af78f83eef70e02d557c7e4",
       "server_readback": "PASS",
       "state_preserved": true,
       "terminal": {
@@ -149,6 +180,7 @@
         }
       ],
       "result": "PASS",
+      "server_observation_sha256": "37877794499503e2fe8d3b38dcde7129901b9aa11af78f83eef70e02d557c7e4",
       "server_readback": "PASS",
       "state_preserved": true,
       "terminal": {
@@ -216,6 +248,7 @@
         }
       ],
       "result": "PASS",
+      "server_observation_sha256": "37877794499503e2fe8d3b38dcde7129901b9aa11af78f83eef70e02d557c7e4",
       "server_readback": "PASS",
       "state_preserved": true,
       "terminal": {
@@ -294,6 +327,7 @@
         }
       ],
       "result": "PASS",
+      "server_observation_sha256": "37877794499503e2fe8d3b38dcde7129901b9aa11af78f83eef70e02d557c7e4",
       "server_readback": "PASS",
       "state_preserved": true,
       "terminal": {
@@ -312,6 +346,98 @@
         "state": "DISCONNECTED"
       },
       "transport": "awg"
+    },
+    "E": {
+      "action_start_utc": "2026-10-25T19:41:55Z",
+      "category": "GUI_CLOSE_REFUSED_QUEUED_CONNECT",
+      "cleanup_observation_seconds": 25,
+      "cleanup_only": {
+        "blocker_released": true,
+        "cleanup_only": true,
+        "queued_mutations_cancelled_by_fixture": 1
+      },
+      "close_action_utc": "2026-10-25T19:41:57Z",
+      "diagnostics": {
+        "actual_transport": "none",
+        "connection_id": "54a70982-4127-4ba2-b903-e6161d4949b5",
+        "first_failure": "NONE",
+        "normal_operation": null,
+        "selected_transport": "awg",
+        "state": "CONNECTING"
+      },
+      "failure_recorded_utc": "2026-10-25T19:42:13Z",
+      "fixture_scope": "One bounded Event wait occupied the actual installed App normal executor. No installed file or product method changed. One queued Connect and one ordinary Close. Initial fixture discovery error occurred before queue submission and before any user action.",
+      "generation_after": 0,
+      "generation_before": 0,
+      "helper_counts": {
+        "awg": {
+          "cleanup": 0,
+          "discard": 0,
+          "down": 0,
+          "import": 0,
+          "serve": 0,
+          "session": 0,
+          "up": 0
+        },
+        "tcp": {
+          "cleanup": 0,
+          "discard": 0,
+          "down": 0,
+          "import": 0,
+          "serve": 0,
+          "session": 0,
+          "up": 0
+        }
+      },
+      "late_mutation_after_fixture_cleanup": false,
+      "network_unchanged": true,
+      "observed_after_close": {
+        "blocker_running": true,
+        "busy": true,
+        "closed": false,
+        "queued": 1,
+        "queued_cancelled": [
+          false
+        ],
+        "queued_running": [
+          false
+        ]
+      },
+      "pending": false,
+      "phase": "IDLE_ABSENT",
+      "post_read_timestamp": "2026-10-25T19:42:44.576304+00:00",
+      "pre_read_timestamps": [
+        {
+          "completed_utc": "2026-10-25T19:41:30.984989+00:00",
+          "started_utc": "2026-10-25T19:41:27.721991+00:00"
+        },
+        {
+          "completed_utc": "2026-10-25T19:41:43.434352+00:00",
+          "started_utc": "2026-10-25T19:41:40.985347+00:00"
+        },
+        {
+          "completed_utc": "2026-10-25T19:41:55.804406+00:00",
+          "started_utc": "2026-10-25T19:41:53.435290+00:00"
+        }
+      ],
+      "product_cancel_release_reopen_gate": "NOT_RUN_AFTER_FIRST_FAILURE",
+      "queued_before_close": {
+        "blocker_running": true,
+        "busy": true,
+        "closed": false,
+        "queued": 1,
+        "queued_cancelled": [
+          false
+        ],
+        "queued_running": [
+          false
+        ]
+      },
+      "result": "FAIL",
+      "server_observation_sha256": "37877794499503e2fe8d3b38dcde7129901b9aa11af78f83eef70e02d557c7e4",
+      "server_readback": "PASS",
+      "settings_absence_preserved": true,
+      "state_preserved": true
     },
     "P1": {
       "action_start_utc": "2026-10-25T18:57:06Z",
@@ -460,6 +586,7 @@
           "peers": 0
         }
       },
+      "server_observation_sha256": "37877794499503e2fe8d3b38dcde7129901b9aa11af78f83eef70e02d557c7e4",
       "state_preserved": true,
       "traffic": {
         "after": {
@@ -627,6 +754,7 @@
           "peers": 0
         }
       },
+      "server_observation_sha256": "37877794499503e2fe8d3b38dcde7129901b9aa11af78f83eef70e02d557c7e4",
       "state_preserved": true,
       "traffic": {
         "after": {
@@ -669,7 +797,6 @@
     "uid": 1000
   },
   "not_run": [
-    "E",
     "F1",
     "F2",
     "L04.2",
@@ -677,5 +804,6 @@
     "device_teardown",
     "revoke"
   ],
-  "status": "ACTIVE"
+  "status": "PARTIAL",
+  "stop_reason": "First new product defect at E; F1/F2 NOT_RUN"
 }
