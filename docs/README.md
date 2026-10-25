@@ -4,11 +4,15 @@ Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN
 STATUS/PLAN define the current bounded task and next review gate, not an automatic
 continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
-[L04.1-LIVE-2-R2 queued Connect/Close](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md)
-is the current source/package correction: exact .4 E FAIL/review accepted,
-F1/F2 NOT_RUN, new .5 source/package PASS, review pending. Linux/AWG/TCP/package CI
-PASS, full suites54/54/54 failures retained. L04.1 remains IN_PROGRESS;
-no live/device teardown.
+[L04.1 final installed receipt](releases/2026-10-25-linux-installed-awg-tcp-l04-1-final.md)
+is the current LIVE-2 checkpoint: E/F1 PASS on exact .5; F2 local TCP/AppImage
+contract PASS, full gate PARTIAL after a registry-service continuity readback failure.
+Later assignment/configuration equality does not erase that observation. No replay
+or source correction; NEXT is final review L04.1. Parent remains IN_PROGRESS;
+L04.2/L05/device teardown NOT_RUN.
+[R2 queued Connect/Close](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md)
+is DONE/review accepted in source/package scope. Linux/AWG/TCP/package CI PASS,
+full suites54/54/54 failures retained; no new general CI PASS claim.
 
 [Desktop parity with accepted106 — active, not released](releases/2026-10-23-desktop-parity106.md):
 full feature matrix, exact source manifest, both native worker builds, Linux

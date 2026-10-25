@@ -1,6 +1,25 @@
 # Текущее состояние / Current state
 
-**L04.1-LIVE-2-R2 CHECKPOINT — source/package PASS, review pending,25.10.**
+**L04.1-LIVE-2 final installed checkpoint — PARTIAL / review pending,25.10.**
+R2 DONE/review accepted в source/package scope; exact .5 принят для live gate.
+P1/P2 и A/B1/B2/C1/C2/D на .4 не повторялись. **E PASS, F1 PASS**.
+E: один queued Connect/Close, product cancellation, helper/TUN0, generation0/null;
+worker release/cancelled callback inert, reopen DISCONNECTED.
+F1 и локальный F2: один normal up/down, actual AWG либо TCP/Xray + HTTPS200,
+Disconnect во время bounded transfer, полный network/DNS/firewall cleanup,
+journal IDLE/generation3/null, identity/cache/floors/settings сохранены;
+18/49 late poll callbacks без CONNECTED. F2 через original exact AppImage.
+**F2 в целом PARTIAL:** первый post-action readback застал registry inactive;
+read-only inspection показывает переход20:58:36→20:58:49UTC, причина не установлена.
+Поздний forensic read сохраняет assignment/bindings, target1/1+1/1, foreign/config/
+catalog; изменился только registry service identity. Это не отменяет первичный отказ.
+Новый GUI/TCP defect не установлен; повторов действий/source correction нет.
+Exact .5/candidate f0ee1760…/system8d7d78ec… неизменны. Guest-копии удалены,
+original protected state сохранён. L04.1 IN_PROGRESS; L04.2/L05/teardown NOT_RUN.
+STOP. NEXT — final review L04.1, включая ограничение server continuity F2.
+[Единый итоговый отчёт](releases/2026-10-25-linux-installed-awg-tcp-l04-1-final.md).
+
+**L04.1-LIVE-2-R2 DONE / review accepted — source/package scope.**
 На exact .4 review принимает P1/P2, B1/B2/C1/C2/D PASS; E FAIL/review accepted,
 F1/F2 NOT_RUN. E доказывает queued Future/busy/open/CONNECTING, не late VPN start:
 helper/TUN0, generation0/pending null; fixture отменил Future до освобождения worker.
@@ -12,12 +31,13 @@ systemd255/pkexec package gate PASS. System8d7d78ec… byte/contract verified un
 .4 immutable. Linux/AWG/TCP/package CI PASS; isolated root→UID/native179,
 Auto18/DIRECT/lifetime15/combined3 PASS. Full CI54/54/54 failures (Docker раньше53;
 дополнительный readiness-receipt assertion, причина не установлена), без fixes/retries.
-Общего CI PASS нет. Private identity/gateway/live E/F
-не используются. L04.1 IN_PROGRESS; L04.2/L05/test-device teardown NOT_RUN.
-Source/package checkpoint завершён. STOP; NEXT — review L04.1-LIVE-2-R2.
+Общего CI PASS нет. В самом R2 private identity/gateway/live E/F не использовались.
+Source/package checkpoint принят; последующий live checkpoint указан выше.
+L04.1 IN_PROGRESS; L04.2/L05/test-device teardown NOT_RUN.
 [R2 report](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md).
 
-Срез25.10.2026: **L04.1-LIVE-1-RETEST DONE / review accepted**.
+Исторические этапы25.10.2026 (текущий итог и NEXT выше):
+**L04.1-LIVE-1-RETEST DONE / review accepted**.
 Review принимает fresh DNS matching request/reply на actual AWG/TCP TUN после flush,
 включая валидный terminal **NODATA**; positive installed gate завершён без повтора.
 Exact **0.2.12~l03.2.2**, source `57f8eff`, candidate `d9c0d07f…`, system build-9

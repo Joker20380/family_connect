@@ -1,0 +1,411 @@
+{
+  "checkpoint": "L04.1-LIVE-2",
+  "result": "PARTIAL",
+  "review": "pending",
+  "entry_main": "9e9bf16db397a0ce8cf0b559cbe8a7278c95aef9",
+  "accepted_not_repeated": [
+    "P1",
+    "P2",
+    "A",
+    "B1",
+    "B2",
+    "C1",
+    "C2",
+    "D"
+  ],
+  "R2_review": "accepted in source/package scope",
+  "version": "0.2.12~l03.2.5",
+  "candidate": "f0ee17609cfc8dbaf48edfa0f33b417754f9674d578168fa4cbb1c47d51d3f95",
+  "candidate_source": "1c2beb6bc687c94d2a9312da0545b6e985749752",
+  "system_build": "8d7d78ec06fc897fa7e94d21f208b08b31d6c6c3e33eaad19a262705117c8f9d",
+  "system_source": "053c4e5f9532ca927f49a78f9c0ed17903375baf",
+  "inventory": {
+    "user_members": 707,
+    "legacy_members": 6,
+    "before": "PASS",
+    "after": "PASS"
+  },
+  "artifacts": {
+    "FamilyConnect-0.2.12~l03.2.5-x86_64.AppImage": {
+      "size": 57928184,
+      "sha256": "dd013ce6be2a93be817b38aac9632e5b51b00419fbbc4da154d7e0b8b0f9db32"
+    },
+    "FamilyConnect_0.2.12~l03.2.5_amd64.deb": {
+      "size": 55987676,
+      "sha256": "3b583fbdb69e726357d3b5d707629dd5dbe502078c1735cb9899de2dfb46d9ab"
+    }
+  },
+  "environment": {
+    "os": "Ubuntu 24.04.5 LTS",
+    "kernel": "6.8.0-147-generic",
+    "systemd": "255.4-1ubuntu8.18",
+    "qemu": "7.2.22",
+    "acceleration": "KVM",
+    "clean_scenarios": [
+      "E",
+      "F1",
+      "F2"
+    ],
+    "encrypted_disks": 4,
+    "uid": 1000,
+    "explicit_gui_pkexec_setup": "PASS",
+    "system_ready": true,
+    "home_only_streamed": true,
+    "new_product_credentials": false,
+    "new_assignments": false,
+    "operator_material_in_guest": false,
+    "product_methods_replaced": false,
+    "candidate_files_modified": false,
+    "fixture_scope": "external observation, GTK actions, bounded executor Event for E"
+  },
+  "E": {
+    "result": "PASS",
+    "transport": "awg",
+    "artifact": "DEB",
+    "connect_actions": 1,
+    "close_actions": 1,
+    "queued_before_close": true,
+    "cancelled_by_product": true,
+    "fixture_cancelled_future": false,
+    "closed": true,
+    "busy": false,
+    "connection_action": null,
+    "revisions": [
+      2,
+      3,
+      4,
+      4
+    ],
+    "helper_requests": 0,
+    "owner_count": 0,
+    "tun_count": 0,
+    "generation": 0,
+    "pending": false,
+    "journal": "ABSENT",
+    "worker_released": true,
+    "cancelled_callback_inert": true,
+    "late_connect": false,
+    "reopened": "DISCONNECTED",
+    "network_and_settings_unchanged": true,
+    "protected_files_preserved": true,
+    "server_readback": "PASS"
+  },
+  "scenarios": {
+    "F1": {
+      "result": "PASS",
+      "local_contract": "PASS",
+      "transport": "awg",
+      "artifact": "DEB",
+      "connect_actions": 1,
+      "disconnect_actions": 1,
+      "normal_helper_import": 1,
+      "normal_helper_up": 1,
+      "normal_helper_down": 1,
+      "auxiliary_catalog_host_setup": 1,
+      "auto_vpn_started": false,
+      "https_status": 200,
+      "expected_egress": true,
+      "actual_owner_and_tun": true,
+      "transfer": {
+        "bound_seconds": 60,
+        "requested_bytes": 524288,
+        "rate_limit_bytes_per_second": 8192,
+        "running_at_disconnect": true,
+        "bytes_at_disconnect": 4096,
+        "bytes_received": 162279,
+        "exit_code": 28,
+        "result": "bounded timeout; incomplete transfer after Disconnect, not a throughput or uniquely attributed timeout claim"
+      },
+      "gui_terminal": "DISCONNECTED",
+      "late_poll_callbacks": 18,
+      "late_connected": false,
+      "network_before": {
+        "addresses": {
+          "count": 2,
+          "sha256": "3e28e850c46c6630344058916744d36a6112ae07f6fe7adf6f3700648369eddd"
+        },
+        "default_route": {
+          "sha256": "22435734e9ce5980ede783aeb84e171fed08c7bc2ec42c41de766c88b8059ba2"
+        },
+        "dns": {
+          "sha256": "245e479270291e8a55a96441c050dff9bba29a7c43bf31cd338a3c9cb8510615"
+        },
+        "domains": {
+          "sha256": "48318eadcea25a1a7135fc404378603a256ac802e8634989f27ec61e444d2e9c"
+        },
+        "iptables4": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "iptables6": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "nft": {
+          "count": 1,
+          "sha256": "dc51ddbdcfa6c74b932a15527bc2494f1ee53a01ee5945c77af17227e418c238"
+        },
+        "routes4": {
+          "count": 9,
+          "sha256": "24ef7a1911fc9a3e8863be2feb57ea686c8d542aa299f410e0f39cbf0a1ae09e"
+        },
+        "routes6": {
+          "count": 7,
+          "sha256": "8ee4778d0dc29e44f94cba6e68e9f2956e35f4924475859fef367e3231d5685e"
+        },
+        "rules4": {
+          "count": 3,
+          "sha256": "cf8a115af828fff5d01edb191c0c1677911842afbc8de6fe3b239a53d7364496"
+        },
+        "rules6": {
+          "count": 2,
+          "sha256": "ce2879b57a51e385d31c167d4537c8217ab1b370ee4232dd8be374e6d6052733"
+        }
+      },
+      "network_after": {
+        "addresses": {
+          "count": 2,
+          "sha256": "3e28e850c46c6630344058916744d36a6112ae07f6fe7adf6f3700648369eddd"
+        },
+        "default_route": {
+          "sha256": "22435734e9ce5980ede783aeb84e171fed08c7bc2ec42c41de766c88b8059ba2"
+        },
+        "dns": {
+          "sha256": "245e479270291e8a55a96441c050dff9bba29a7c43bf31cd338a3c9cb8510615"
+        },
+        "domains": {
+          "sha256": "48318eadcea25a1a7135fc404378603a256ac802e8634989f27ec61e444d2e9c"
+        },
+        "iptables4": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "iptables6": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "nft": {
+          "count": 1,
+          "sha256": "dc51ddbdcfa6c74b932a15527bc2494f1ee53a01ee5945c77af17227e418c238"
+        },
+        "routes4": {
+          "count": 9,
+          "sha256": "24ef7a1911fc9a3e8863be2feb57ea686c8d542aa299f410e0f39cbf0a1ae09e"
+        },
+        "routes6": {
+          "count": 7,
+          "sha256": "8ee4778d0dc29e44f94cba6e68e9f2956e35f4924475859fef367e3231d5685e"
+        },
+        "rules4": {
+          "count": 3,
+          "sha256": "cf8a115af828fff5d01edb191c0c1677911842afbc8de6fe3b239a53d7364496"
+        },
+        "rules6": {
+          "count": 2,
+          "sha256": "ce2879b57a51e385d31c167d4537c8217ab1b370ee4232dd8be374e6d6052733"
+        }
+      },
+      "network_baseline_equal": true,
+      "owner_count": 0,
+      "tun_count": 0,
+      "transport_workers_after": 0,
+      "coordination": {
+        "generation": 3,
+        "pending": false
+      },
+      "journal_phase": "IDLE",
+      "protected_files_preserved": true,
+      "protected_file_count": 7,
+      "settings_unchanged": true,
+      "idle_catalog_host_after": true,
+      "idle_catalog_state": "DISCONNECTED",
+      "idle_catalog_desired": false,
+      "terminal_observed_utc": "2026-10-25T20:53:58.471783+00:00"
+    },
+    "F2": {
+      "result": "PARTIAL",
+      "local_contract": "PASS",
+      "transport": "tcp",
+      "artifact": "original AppImage",
+      "connect_actions": 1,
+      "disconnect_actions": 1,
+      "normal_helper_import": 1,
+      "normal_helper_up": 1,
+      "normal_helper_down": 1,
+      "auxiliary_catalog_host_setup": 1,
+      "auto_vpn_started": false,
+      "https_status": 200,
+      "expected_egress": true,
+      "actual_owner_and_tun": true,
+      "transfer": {
+        "bound_seconds": 60,
+        "requested_bytes": 524288,
+        "rate_limit_bytes_per_second": 8192,
+        "running_at_disconnect": true,
+        "bytes_at_disconnect": 8192,
+        "bytes_received": 90386,
+        "exit_code": 28,
+        "result": "bounded timeout; incomplete transfer after Disconnect, not a throughput or uniquely attributed timeout claim"
+      },
+      "gui_terminal": "DISCONNECTED",
+      "late_poll_callbacks": 49,
+      "late_connected": false,
+      "network_before": {
+        "addresses": {
+          "count": 2,
+          "sha256": "3e28e850c46c6630344058916744d36a6112ae07f6fe7adf6f3700648369eddd"
+        },
+        "default_route": {
+          "sha256": "22435734e9ce5980ede783aeb84e171fed08c7bc2ec42c41de766c88b8059ba2"
+        },
+        "dns": {
+          "sha256": "245e479270291e8a55a96441c050dff9bba29a7c43bf31cd338a3c9cb8510615"
+        },
+        "domains": {
+          "sha256": "48318eadcea25a1a7135fc404378603a256ac802e8634989f27ec61e444d2e9c"
+        },
+        "iptables4": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "iptables6": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "nft": {
+          "count": 1,
+          "sha256": "dc51ddbdcfa6c74b932a15527bc2494f1ee53a01ee5945c77af17227e418c238"
+        },
+        "routes4": {
+          "count": 9,
+          "sha256": "24ef7a1911fc9a3e8863be2feb57ea686c8d542aa299f410e0f39cbf0a1ae09e"
+        },
+        "routes6": {
+          "count": 7,
+          "sha256": "8ee4778d0dc29e44f94cba6e68e9f2956e35f4924475859fef367e3231d5685e"
+        },
+        "rules4": {
+          "count": 3,
+          "sha256": "cf8a115af828fff5d01edb191c0c1677911842afbc8de6fe3b239a53d7364496"
+        },
+        "rules6": {
+          "count": 2,
+          "sha256": "ce2879b57a51e385d31c167d4537c8217ab1b370ee4232dd8be374e6d6052733"
+        }
+      },
+      "network_after": {
+        "addresses": {
+          "count": 2,
+          "sha256": "3e28e850c46c6630344058916744d36a6112ae07f6fe7adf6f3700648369eddd"
+        },
+        "default_route": {
+          "sha256": "22435734e9ce5980ede783aeb84e171fed08c7bc2ec42c41de766c88b8059ba2"
+        },
+        "dns": {
+          "sha256": "245e479270291e8a55a96441c050dff9bba29a7c43bf31cd338a3c9cb8510615"
+        },
+        "domains": {
+          "sha256": "48318eadcea25a1a7135fc404378603a256ac802e8634989f27ec61e444d2e9c"
+        },
+        "iptables4": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "iptables6": {
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "nft": {
+          "count": 1,
+          "sha256": "dc51ddbdcfa6c74b932a15527bc2494f1ee53a01ee5945c77af17227e418c238"
+        },
+        "routes4": {
+          "count": 9,
+          "sha256": "24ef7a1911fc9a3e8863be2feb57ea686c8d542aa299f410e0f39cbf0a1ae09e"
+        },
+        "routes6": {
+          "count": 7,
+          "sha256": "8ee4778d0dc29e44f94cba6e68e9f2956e35f4924475859fef367e3231d5685e"
+        },
+        "rules4": {
+          "count": 3,
+          "sha256": "cf8a115af828fff5d01edb191c0c1677911842afbc8de6fe3b239a53d7364496"
+        },
+        "rules6": {
+          "count": 2,
+          "sha256": "ce2879b57a51e385d31c167d4537c8217ab1b370ee4232dd8be374e6d6052733"
+        }
+      },
+      "network_baseline_equal": true,
+      "owner_count": 0,
+      "tun_count": 0,
+      "transport_workers_after": 0,
+      "coordination": {
+        "generation": 3,
+        "pending": false
+      },
+      "journal_phase": "IDLE",
+      "protected_files_preserved": true,
+      "protected_file_count": 7,
+      "settings_unchanged": true,
+      "idle_catalog_host_after": true,
+      "idle_catalog_state": "DISCONNECTED",
+      "idle_catalog_desired": false,
+      "terminal_observed_utc": "2026-10-25T20:58:40.325061+00:00"
+    }
+  },
+  "server": {
+    "pre_reads": {
+      "E": [
+        "2026-10-25T20:47:24.027501+00:00",
+        "2026-10-25T20:47:51.295295+00:00",
+        "2026-10-25T20:48:44.405219+00:00"
+      ],
+      "F1": [
+        "2026-10-25T20:51:31.274930+00:00",
+        "2026-10-25T20:51:42.914239+00:00",
+        "2026-10-25T20:51:54.375270+00:00"
+      ],
+      "F2": [
+        "2026-10-25T20:57:06.311778+00:00",
+        "2026-10-25T20:57:17.797451+00:00",
+        "2026-10-25T20:57:29.720685+00:00"
+      ]
+    },
+    "E_post": "identical",
+    "F1_post": "identical",
+    "F2_first_post": "FAIL: registry service not active/running",
+    "F2_first_post_window_utc": "2026-10-25T20:58:40Z",
+    "registry_inactive_utc": "2026-10-25T20:58:36Z",
+    "registry_active_again_utc": "2026-10-25T20:58:49Z",
+    "registry_result_on_later_inspection": "success",
+    "transition_cause": "NOT_ESTABLISHED",
+    "bounded_unit_journal": "TIMEOUT; no retry",
+    "later_observation_utc": "2026-10-25T21:00:40.246649+00:00",
+    "later_changed_fields": [
+      "registry.service_sha256"
+    ],
+    "binding_unchanged": true,
+    "target_awg_rows": 1,
+    "target_awg_live_peers": 1,
+    "target_tcp_persisted_users": 1,
+    "target_tcp_runtime_users": 1,
+    "foreign_records_unchanged": true,
+    "global_configuration_unchanged": true,
+    "catalog_unchanged": true,
+    "registry_archive_unchanged": true,
+    "original_baseline_sha256": "270ccccbe73305fca2ad86ee91113c91b84335cc5b470493a67bcc158b456247",
+    "later_observation_sha256": "ab8a374e265c708972c00e485d36cc829385eabe5fdb8b1187c0610fcc360db8",
+    "user_action_repeated": false,
+    "later_readback_does_not_erase_failure": true,
+    "source_of_restart_not_attributed": true
+  },
+  "stop": {
+    "new_user_actions_after_readback_failure": 0,
+    "source_correction": "NOT_RUN",
+    "L04_2": "NOT_RUN",
+    "L05": "NOT_RUN",
+    "device_teardown": "NOT_RUN",
+    "publication": "NOT_RUN"
+  },
+  "cleanup": {
+    "guest_powered_off": true,
+    "transport_cleanup_verified": true,
+    "encrypted_disks_and_guest_secrets_deleted": true,
+    "original_protected_state_preserved": true,
+    "host_network_final_interval_unchanged": true
+  },
+  "next": "final review L04.1; no automatic F2 replay or source correction"
+}
