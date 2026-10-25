@@ -152,4 +152,14 @@ live acceptance; L04.2 MESH/Auto, L05, cleanup/revoke, public release/catalog/la
 gateway deployment/restart, policy/floors/trust/signing changes. RU provisioning —
 NOT_RUN; access/challenge handler использован штатно, без RU peer/configuration fetch.
 
+## Git checkpoint / delivery receipt
+
+Основной documentation checkpoint:
+`7b0ad85a9a46f412917f28b8423b9f32cf91c581`.
+Обычный push `main → origin/main` выполнен; последующий `git ls-remote` подтвердил
+тот же exact remote SHA `7b0ad85a9a46f412917f28b8423b9f32cf91c581`.
+Этот docs-only continuation фиксирует уже проверенный push, не новый product build
+и не второй provisioning. Параллельные ops STATUS/PLAN hunks и ops report сохранены
+в working tree, в checkpoint не включены. Секретные evidence/receipt/state вне Git.
+
 **STOP. NEXT — review L04.1-AUTH-PROVISION.**
