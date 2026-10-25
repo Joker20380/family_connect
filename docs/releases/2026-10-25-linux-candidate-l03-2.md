@@ -184,3 +184,10 @@ manifest is absent; the installed smoke also removes the manifest from a copy
 and verifies rejection before GUI launch. This corrects new L03.2 packaging,
 not the accepted L03.1 system contract. New final bytes/gates are required below;
 do not transfer the preceding artifact hashes or smoke receipts to the rebuild.
+
+The new AppImage negative fixture initially copied0700 extracted directories
+as root: rejection was EACCES, not the intended missing-manifest check. Retain
+`appimage-smoke-final-2.log` as FAIL. The tampered copy now belongs to the ordinary
+UID, asserts the exact hash/manifest error and tests wrong-UID polkit denial
+directly (not merely inability to traverse another user's home). Product bytes
+are unchanged by this fixture correction; repeat both exact package gates.

@@ -112,6 +112,8 @@ def main():
     run('systemctl', 'restart', 'polkit')
     assert run(*application, '--setup-system', '/tmp/other-installer', user=True, ok=False).returncode != 0
     assert run(*application, '--setup-system', user=True, uid=1001, ok=False).returncode != 0
+    denied = run('/usr/bin/pkexec', '/usr/bin/python3', '-I', '-S', '-c', root_source, user=True, uid=1001, ok=False)
+    assert denied.returncode == 126
     assert not SYSTEM.exists()
     receipt = json.loads(run(*application, '--setup-system', user=True).stdout)
     assert receipt['installed'] and not receipt['service_started']
@@ -124,13 +126,16 @@ def main():
     record('explicit_polkit_setup_reinstall_uid_path_and_cleanup', dict(build_id=contract['system']['build_id']))
     damaged = Path('/opt/tampered-user')
     shutil.copytree(root, damaged)
+    for member in (damaged, *damaged.rglob('*')):
+        os.chown(member, 1000, pwd.getpwuid(1000).pw_gid)
     candidate_record = (damaged / 'candidate.json').read_bytes()
     (damaged / 'candidate.json').unlink()
     refused = run('/usr/bin/python3', '-I', str(damaged / 'launcher.py'), '--smoke', user=True, ok=False)
     assert refused.returncode != 0 and 'candidate.json' in refused.stderr
     (damaged / 'candidate.json').write_bytes(candidate_record)
     (damaged / 'embedded/system.tar.gz').write_bytes(b'tampered')
-    assert run('/usr/bin/python3', '-I', str(damaged / 'launcher.py'), '--setup-system', user=True, ok=False).returncode != 0
+    refused = run('/usr/bin/python3', '-I', str(damaged / 'launcher.py'), '--setup-system', user=True, ok=False)
+    assert refused.returncode != 0 and 'Candidate member hash mismatch' in refused.stderr
     inventory_path, capability_path = SYSTEM / 'installed.json', SYSTEM / 'capabilities.json'
     original_inventory, original_capability = inventory_path.read_bytes(), capability_path.read_bytes()
     inventory, capability = json.loads(original_inventory), json.loads(original_capability)
