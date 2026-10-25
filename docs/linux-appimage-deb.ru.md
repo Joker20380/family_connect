@@ -3,10 +3,12 @@
 ## L03.2 — внутренний полный candidate,25.10
 
 [R1 source/package correction](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md)
-ACTIVE: новый internal **0.2.12~l03.2.3**, authorization-session-v2, новый exact
-system/runtime вместо build-9. Readback связывает inventory/build ID и auth protocol;
-смешанная пара отказывает. Сборка/установленные gates ещё не завершены этим source
-checkpoint; .2 сохраняется только как historical evidence. Live retest NOT_RUN.
+CHECKPOINT/source-package PASS, review pending: internal **0.2.12~l03.2.3**,
+source285de3e/candidate7d00cce0…, authorization-session-v2, новый exact systemb8140c68…
+вместо build-9. Readback связывает inventory/build ID/auth protocol; actual build-9
+отвергнут, matching reinstall возвращает READY. Exact DEB/AppImage и real systemd255
+package/coherence/rollback gates PASS; hashes/размеры в отчёте. .2 сохраняется только
+как historical evidence. Live retest NOT_RUN; общий CI не зелёный.
 Подтверждённый pre-start busy завершает IDLE; неизвестный outcome требует recovery
 тем же owner. Нельзя вручную стирать journal, повторять Connect или обходить lock.
 

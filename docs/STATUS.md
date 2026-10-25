@@ -14,13 +14,15 @@ FC-3YSQ-BE2D/nl сохраняются, новый issuance/provisioning/manual 
 L04/L04.1 IN_PROGRESS до LIVE-2 review; L04.2/L05/teardown NOT_RUN.
 [LIVE-2 checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md).
 D01/full suites54/54/53 failures и voice/Windows observations сохраняются.
-Выбран только **L04.1-LIVE-2-R1 ACTIVE**: actual root/session red→green,
-terminal pre-start refusal против unknown outcome, новый source/system/package checkpoint.
-Один helper up request допустим; дефект B1 — persistent APPLYING/pending.
-R1 source correction: strict authorization-v2 pre-start/unknown receipts,
-same-owner terminalization/recovery и bounded diagnostics;126 targeted PASS.
-Нужен новый system build (не build-9) и internal0.2.12~l03.2.3; package gate ACTIVE.
-Private test state/gateway не используются, live B1 retest и B2–F NOT_RUN.
+**L04.1-LIVE-2-R1 CHECKPOINT: source/package PASS, review pending.**
+Actual root/session AWG/TCP red→green: up1/start0, IDLE, generation2/pending null,
+poll/recover PASS; unknown outcome остаётся fail-closed до same-owner recovery.
+Internal0.2.12~l03.2.3, source285de3e, candidate7d00cce0…; новый systemb8140c68…
+(не build-9). Exact integrity, systemd255/pkexec/rollback, DEB/AppImage/coherence,
+actual old-build refusal/reinstall PASS. Live B1 retest/B2–F NOT_RUN.
+Linux/AWG/TCP/native/package CI PASS; local desktop1194 PASS/96 SKIP.
+Full suites красные (phase0 55, Docker54), control CI ещё на prerequisites;
+общего CI PASS нет. Private state/gateway не тронуты.
 [R1](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md).
 **Граница завершения — STOP; NEXT review L04.1-LIVE-2-R1.**
 

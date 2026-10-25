@@ -1,5 +1,7 @@
 """Run exact candidate gates only inside a disposable offline systemd255 container."""
 import hashlib
+import importlib.util
+import io
 import json
 import os
 from pathlib import Path
@@ -7,8 +9,11 @@ import pwd
 import shutil
 import subprocess
 import sys
+import tarfile
+import tempfile
 import time
 
+sys.dont_write_bytecode = True
 RESULTS = {}
 HOME = Path(pwd.getpwuid(1000).pw_dir)
 ENV = {'PATH': '/usr/sbin:/usr/bin:/sbin:/bin', 'LC_ALL': 'C', 'HOME': str(HOME),
@@ -47,6 +52,28 @@ def no_vpn():
     assert not Path('/run/family-connect-auto/normal.json').exists()
 
 
+def retained_old_system(root, application):
+    raw = Path('/evidence/build-9.tar.gz').read_bytes()
+    checksum = hashlib.sha256(raw).hexdigest()
+    assert checksum == 'bdd7e04b8ca78a232acccd881004cfb3b6c96b13dc3c608d0b919f53f40f02d9'
+    with tarfile.open(fileobj=io.BytesIO(raw), mode='r:gz') as archive:
+        manifest = json.load(archive.extractfile('FamilyConnect-MESH-system-amd64/manifest.json'))
+    assert manifest['build_id'] == '8708ba6d5e218f86b42d862dd5a66237e974a03d5434e8f1c30524b16720e2da'
+    spec = importlib.util.spec_from_file_location('verified_setup', root/'candidate_setup.py')
+    setup = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(setup)
+    expected = dict(size=len(raw), sha256=checksum, build_id=manifest['build_id'],
+                    source_digest=manifest['source_digest'], installer_sha256=manifest['sha256']['install.py'])
+    with tempfile.TemporaryDirectory(prefix='old-system-fixture-') as directory:
+        component = setup.extract_verified(raw, expected, Path(directory))
+        run('/usr/bin/python3', '-I', str(component/'install.py'))
+    assert json.loads((SYSTEM/'capabilities.json').read_text())['build_id'] == manifest['build_id']
+    status = json.loads(run(*application, '--candidate-status', user=True).stdout)
+    assert status['system'] != 'READY'
+    no_vpn()
+    record('actual_retained_build_9_mismatch', dict(build_id=manifest['build_id'], status=status['system']))
+
+
 def main():
     assert os.geteuid() == 0 and Path('/.dockerenv').exists()
     assert Path('/proc/1/comm').read_text().strip() == 'systemd'
@@ -56,6 +83,9 @@ def main():
     no_vpn()
     assert not SYSTEM.exists()
     mode, artifact = sys.argv[1:]
+    mixed = mode == 'deb-old-system'
+    if mixed:
+        mode = 'deb'
     prestart = mode.removeprefix('prestart-') if mode in ('prestart-awg', 'prestart-tcp') else None
     if prestart:
         mode = 'deb'
@@ -129,6 +159,8 @@ def main():
     denied = run('/usr/bin/pkexec', '/usr/bin/python3', '-I', '-S', '-c', root_source, user=True, uid=1001, ok=False)
     assert denied.returncode == 127 and 'Not authorized' in denied.stderr
     assert not SYSTEM.exists()
+    if mixed:
+        retained_old_system(root, application)
     receipt = json.loads(run(*application, '--setup-system', user=True).stdout)
     assert receipt['installed'] and not receipt['service_started']
     assert json.loads(run(*application, '--candidate-status', user=True).stdout)['system'] == 'READY'
@@ -221,6 +253,19 @@ def main():
             'from provisioning.chat_client import ChatClient;client=ChatClient();client.open();'
             'assert client.invoke("delivery_settings")["background"];client.close()', user=True)
         record('deb_remove_preserves_encrypted_state_and_independent_root_runtime')
+        peer = HOME / artifact.name.replace('FamilyConnect_', 'FamilyConnect-').replace('_amd64.deb', '-x86_64.AppImage')
+        shutil.copyfile(artifact.parent / peer.name, peer)
+        peer.chmod(0o755)
+        os.chown(peer, 1000, pwd.getpwuid(1000).pw_gid)
+        peer_application = [str(peer), '--appimage-extract-and-run']
+        assert json.loads(run(*peer_application, '--candidate-check', user=True).stdout) == check
+        assert json.loads(run(*peer_application, '--candidate-status', user=True).stdout) == dict(candidate=contract['build_id'], system='READY')
+        run(*peer_application, '--smoke', user=True)
+        assert (SYSTEM / 'installed.json').read_bytes() == original_inventory
+        run('/usr/bin/python3', '-I', '-c', prefix +
+            'from provisioning.chat_client import ChatClient;client=ChatClient();'
+            'assert client.invoke("delivery_settings")["background"];client.close()', user=True)
+        record('original_appimage_and_deb_same_uid_state_system_no_second_setup')
     else:
         record('appimage_owner_reopens_original_image_not_gui_mount')
         run(*application, '--remove-integration', user=True)

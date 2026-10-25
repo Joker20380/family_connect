@@ -8,6 +8,10 @@ generation0→1→2/pending null, unchanged cache and successful subsequent poll
 This is source/package evidence, not a live B1 retest. No protected test state is used.
 CI builds current committed system sources against the pinned native/RNS/normal
 builders; it does not silently reuse the earlier accepted build-9 protocol.
+Optional `deb-old-system` requires the retained exact build-9 archive mounted
+read-only at `/evidence/build-9.tar.gz`; its fixed hash is verified before actual
+installation. New client refusal then explicit matching setup are checked separately
+from the manifest-tamper fixture. No old artifact is downloaded or invented by CI.
 
 Only run `smoke.py` inside a new Ubuntu24.04/systemd255 Docker container, once
 per format. Never install on the workstation. Use `--network none`, private
