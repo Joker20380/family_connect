@@ -1,0 +1,187 @@
+{
+  "artifacts": {
+    "FamilyConnect-0.2.12~l03.2.5-x86_64.AppImage": {
+      "sha256": "dd013ce6be2a93be817b38aac9632e5b51b00419fbbc4da154d7e0b8b0f9db32",
+      "size": 57928184
+    },
+    "FamilyConnect-Linux-0.2.12~l03.2.5.tar.gz": {
+      "sha256": "d15c7bd1c96e64921f3f511133f67665f6360762b9945d4cda1ce37bafac804a",
+      "size": 114494
+    },
+    "FamilyConnect_0.2.12~l03.2.5_amd64.deb": {
+      "sha256": "3b583fbdb69e726357d3b5d707629dd5dbe502078c1735cb9899de2dfb46d9ab",
+      "size": 55987676
+    }
+  },
+  "authorization_protocol": 2,
+  "candidate_id": "f0ee17609cfc8dbaf48edfa0f33b417754f9674d578168fa4cbb1c47d51d3f95",
+  "ci": {
+    "awg": {
+      "job": 121276468197,
+      "result": "PASS",
+      "run": 40228994427
+    },
+    "client_linux": {
+      "job": 121276468428,
+      "result": "PASS",
+      "run": 40228994481
+    },
+    "control": {
+      "failed": 54,
+      "job": 121276468372,
+      "passed": 3165,
+      "run": 40228994415,
+      "skipped": 190,
+      "subtests": 7
+    },
+    "docker": {
+      "job": 121276468300,
+      "result": "IN_PROGRESS",
+      "run": 40228994539
+    },
+    "native_bridge": "not triggered by path filter; isolated gates run locally",
+    "package": {
+      "job": 121276467932,
+      "result": "IN_PROGRESS",
+      "run": 40228994396
+    },
+    "phase0": {
+      "job": 121276468155,
+      "result": "IN_PROGRESS",
+      "run": 40228994539
+    },
+    "source_commit": "1c2beb6bc687c94d2a9312da0545b6e985749752",
+    "tcp": {
+      "job": 121276468241,
+      "result": "PASS",
+      "run": 40228994413
+    }
+  },
+  "evidence_sha256": {
+    "appimage-smoke.log": "d6aa1f91d702feffef7a9ca6260905c331c477a229e909e56241c11a63f1d1f6",
+    "build.log": "1844c339e23f213fce579e5d95aa2c156aa87ae8b197ddf76b665a61cd19ba93",
+    "deb-smoke.log": "af2e2ee8a80e039e48691c3d7bbed4df41464daac93d6059ea67b7bd0d730333",
+    "desktop-full-supported.log": "0522e68a1cbdbd1d751f91e7699c197b3bc14f15d07a1f8df96d4ff17987a2b7",
+    "desktop-full.log": "74b2deb25157a18efe1afbf0ac30af0596a9f837c4c55f93d20bc0e72f95f82e",
+    "gui-contracts-supported.log": "2446b48a1268354f4ebd3025382e492a5284c34a310c392d83c31b4f5a73d298",
+    "gui-contracts.log": "a53f9b1fd0c4c5352f71925db8f71776e84e6f2658b2b1dab318b4426b04d91a",
+    "integrity.log": "42f87f733bdffe44998703020c45cf7afea3596136401b0cad477a8b0557d5ac",
+    "isolated-combined.log": "20e1382700838f41736473ba89fe59dbd4f2ba2594c0965c7a5e00a20302b15b",
+    "isolated-native-exec.log": "6f3439cb73b24bbc428338a5aaeb3eb2ae428514d05fb19b8b64f826b8944a7a",
+    "isolated-native.log": "a57a6fcf3ccb76102585d37c072c2beed68de593d2980a5259012ce0404182d5",
+    "red-initial.log": "a0b094ea3c7e9b3dcf95594ccc3dc548c9b9905bdf7607c7e4d9b2d77873c0a8",
+    "red-overlay.log": "3e746c3161ca394d51e01ebbd502ce0c7d3fafd0f59da60537e62050f1a2663c",
+    "system-unchanged.json": "f0bbfaccfbb065edd355db0239ecf8126f8ba75551efd48884a2378e0d530f24",
+    "targeted.log": "fb3cef4d992c98dcff65351bb461453ae9db75ffddd4afc84b1e8bbc867cad30"
+  },
+  "historical_4_unchanged": true,
+  "install_scope": "disposable offline Ubuntu24.04/systemd255 only",
+  "inventory": {
+    "legacy_members": 6,
+    "system_members": 759,
+    "system_reference_files": 113,
+    "user_members": 707
+  },
+  "live_E_F": "NOT_RUN",
+  "package": {
+    "appimage": {
+      "appimage_explicit_removal_preserves_state_and_root_runtime": true,
+      "appimage_owner_reopens_original_image_not_gui_mount": true,
+      "artifact": {
+        "file": "FamilyConnect-0.2.12~l03.2.5-x86_64.AppImage",
+        "mode": "appimage",
+        "sha256": "dd013ce6be2a93be817b38aac9632e5b51b00419fbbc4da154d7e0b8b0f9db32",
+        "size": 57928184
+      },
+      "clean_user_install_imports_gui_no_silent_system_setup": true,
+      "explicit_polkit_setup_reinstall_uid_path_and_cleanup": {
+        "build_id": "8d7d78ec06fc897fa7e94d21f208b08b31d6c6c3e33eaad19a262705117c8f9d"
+      },
+      "fixed_chat_prepare_without_vpn": true,
+      "real_user_dbus_background_owner_survives_gui_exit": true,
+      "result": "PASS",
+      "tampered_embedded_and_mixed_system_fail_closed": true
+    },
+    "deb": {
+      "artifact": {
+        "file": "FamilyConnect_0.2.12~l03.2.5_amd64.deb",
+        "mode": "deb",
+        "sha256": "3b583fbdb69e726357d3b5d707629dd5dbe502078c1735cb9899de2dfb46d9ab",
+        "size": 55987676
+      },
+      "clean_user_install_imports_gui_no_silent_system_setup": true,
+      "deb_remove_preserves_encrypted_state_and_independent_root_runtime": true,
+      "explicit_polkit_setup_reinstall_uid_path_and_cleanup": {
+        "build_id": "8d7d78ec06fc897fa7e94d21f208b08b31d6c6c3e33eaad19a262705117c8f9d"
+      },
+      "fixed_chat_prepare_without_vpn": true,
+      "original_appimage_and_deb_same_uid_state_system_no_second_setup": true,
+      "real_user_dbus_background_owner_survives_gui_exit": true,
+      "result": "PASS",
+      "tampered_embedded_and_mixed_system_fail_closed": true
+    }
+  },
+  "prior_app_source": "053c4e5f9532ca927f49a78f9c0ed17903375baf",
+  "product_scope": [
+    "clients/desktop/app.py"
+  ],
+  "published": false,
+  "python": [
+    3,
+    12
+  ],
+  "runtime_contract": 2,
+  "source_commit": "1c2beb6bc687c94d2a9312da0545b6e985749752",
+  "source_dirty": false,
+  "system": {
+    "build_id": "8d7d78ec06fc897fa7e94d21f208b08b31d6c6c3e33eaad19a262705117c8f9d",
+    "installer_sha256": "ce9acb1f363b0fafffb11c44097901a7871c28fbf0e6b9c2c5c3eaba9ef7bfb5",
+    "sha256": "ddd74c2132a76ac833b587d9df6409d779ce6afcdaa45fafd23faa86d7817726",
+    "size": 49250848,
+    "source_digest": "cfcb7bae874765cfe6a66742fbeed55cb03399b7e32c13d5a5edcd212299df61"
+  },
+  "system_source_commit": "053c4e5f9532ca927f49a78f9c0ed17903375baf",
+  "system_unchanged": true,
+  "task": "L04.1-LIVE-2-R2",
+  "tests": {
+    "authenticated_lifetime_status_terminal": {
+      "passed": 15
+    },
+    "auto_kernel": {
+      "passed": 18
+    },
+    "combined": {
+      "passed": 3
+    },
+    "desktop_full": {
+      "passed": 1191,
+      "skipped": 84
+    },
+    "direct_kernel": "PASS",
+    "first_friends_ui": "FAIL: missing QR support in slim image",
+    "first_native": {
+      "cause": "noexec /root tmpfs for native executable",
+      "failed": 50,
+      "passed": 129
+    },
+    "first_slim_full": {
+      "cause": "read-only /run",
+      "errors": 7,
+      "failed": 6,
+      "passed": 1129,
+      "skipped": 133
+    },
+    "real_GTK_cases": 50,
+    "red_overlay": {
+      "failed": 4
+    },
+    "root_uid_native": {
+      "passed": 179
+    },
+    "supported_friends_recovery_app": "PASS",
+    "targeted": {
+      "passed": 197
+    }
+  },
+  "version": "0.2.12~l03.2.5"
+}

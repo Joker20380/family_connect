@@ -1,6 +1,6 @@
 # L04.1-LIVE-2-R2 — queued normal Connect / Linux Close
 
-**IN_PROGRESS: source correction verified; exact candidate/package/CI pending.**
+**Source/exact-package/isolated gates PASS; final CI receipts in progress.**
 Entry main `912624211dbc176ea388efb6375fda984205db70`; affected app baseline
 `053c4e5f9532ca927f49a78f9c0ed17903375baf`. Only R2 is authorized.
 
@@ -47,7 +47,7 @@ manual-profile ownership, and generation/pending changes only after backend entr
 The non-connection cases also exclude profiles/IP/update/setup/recovery/Auto/MESH
 from this narrowly owned Future; support/load/poll keep their existing lanes.
 
-## Scope, tests and delivery in progress
+## Scope and source checks
 
 Product runtime diff: **only `clients/desktop/app.py`**. Tests extend
 `clients/desktop/tests/test_poll_disconnect_gui.py` (already in the real-GTK CI
@@ -68,19 +68,88 @@ The supported complete image with writable private `/run` and HOME runs Friends
 UI/application, recovery/normal presentation/stale selection/close and App smoke
 successfully. Full pytest completed there without excluding tests or failures.
 
-Planned reserved version **0.2.12~l03.2.5**, new candidate ID and all three new
-artifact hashes. Expected retained system build
-`8d7d78ec06fc897fa7e94d21f208b08b31d6c6c3e33eaad19a262705117c8f9d`
-requires exact archive/installer/source-contract verification first. Package gate
-must run original DEB/AppImage in disposable offline Ubuntu24.04/systemd255 with
-explicit pkexec, READY, no silent VPN, shared runtime, synthetic state preservation
-and tamper/mismatch refusal. No workstation install or public download/catalog,
-signature/tag/version change; public source VERSION remains0.2.11.
+Source checkpoint **`1c2beb6bc687c94d2a9312da0545b6e985749752`** committed and
+ordinarily pushed to main; remote SHA matched. Staged source/docs/CI-version diff,
+links and whitespace checked; public-source guard2925 index entries/0 blocked.
+Parallel ops STATUS/PLAN additions and both VPN-health reports remain uncommitted
+and outside this task's staged scope. No private state/capsules/build output in Git.
+
+## Exact new internal candidate
+
+Built from clean product sources at1c2beb6, not a repack of .4. Only builder's
+public AppImage runtime download used networking; installed gates were offline.
+Appimagetool SHA256 `95cbe7cce9717fce90c484e34052ee7c7f1d7635b33c12525b4776826a7d29b6`.
+
+| Identity/artifact | Exact value |
+| --- | --- |
+| Version | `0.2.12~l03.2.5` |
+| Candidate ID | `f0ee17609cfc8dbaf48edfa0f33b417754f9674d578168fa4cbb1c47d51d3f95` |
+| Source SHA | `1c2beb6bc687c94d2a9312da0545b6e985749752` |
+| AppImage | `FamilyConnect-0.2.12~l03.2.5-x86_64.AppImage`,57928184 bytes |
+| AppImage SHA256 | `dd013ce6be2a93be817b38aac9632e5b51b00419fbbc4da154d7e0b8b0f9db32` |
+| DEB | `FamilyConnect_0.2.12~l03.2.5_amd64.deb`,55987676 bytes |
+| DEB SHA256 | `3b583fbdb69e726357d3b5d707629dd5dbe502078c1735cb9899de2dfb46d9ab` |
+| Legacy six-file archive | `FamilyConnect-Linux-0.2.12~l03.2.5.tar.gz`,114494 bytes |
+| Legacy SHA256 | `d15c7bd1c96e64921f3f511133f67665f6360762b9945d4cda1ce37bafac804a` |
+| Unchanged system build | `8d7d78ec06fc897fa7e94d21f208b08b31d6c6c3e33eaad19a262705117c8f9d` |
+| System archive | 49250848 bytes, SHA256 `ddd74c2132a76ac833b587d9df6409d779ce6afcdaa45fafd23faa86d7817726` |
+| System installer SHA256 | `ce9acb1f363b0fafffb11c44097901a7871c28fbf0e6b9c2c5c3eaba9ef7bfb5` |
+| System source | `053c4e5f9532ca927f49a78f9c0ed17903375baf` |
+| Contracts/inventory | runtime2, authorization2, Python3.12;707 user/759 system archive members |
+
+Artifacts are local under ignored
+`state-client-build/linux-queued-connect-l041r2-20261025/build/`.
+All .4 artifact hashes/sizes, retained system archive/installer and113 pinned
+source-contract members verified; system/native/backend source diff from053c4e5
+is empty. Thus old system identity names **identical bytes**, not a rebuilt system.
+`verify_linux_candidate` exact extracted inventory/hash/shared-ID/six-file gate PASS.
+[Sanitized manifest/receipts](2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.evidence.json).
+
+## Actual package gate
+
+Original .5 DEB and AppImage each PASS in a fresh Ubuntu24.04/systemd255 container,
+private PID/cgroup/mount/network namespaces, `--network none`, private D-Bus,
+resolved and executable tmpfs. No protected identity or workstation services.
+Both real GTK launches/imports, explicit pkexec setup/reinstall, matching READY,
+wrong UID/path refusal, no silent VPN, tampered embedded payload/missing candidate,
+wrong build/schema/modified system-module rejection PASS. Synthetic encrypted state,
+background owner after GUI exit, uninstall/reinstall preservation and independent
+root runtime PASS. Original AppImage and DEB use the same UID/HOME/state/system
+without a second setup. Both disposable containers stopped and removed.
+This is installed **package** evidence, not live E/F or protected-device acceptance.
+No workstation install or public download/catalog/signature/tag change;
+public source VERSION stays0.2.11. Build-time delivery flags remain the original
+build receipt; this report separately records subsequent disposable installations.
+
+## Isolated normal/native boundaries
+
+Unchanged-source native/root→UID selection179 PASS; Auto real-kernel18 checks PASS;
+protected DIRECT synthetic-TLS-peer gate PASS (no fallback, no host network change).
+Authenticated combined Manual/Auto OFF→ON→OFF/terminal release3 PASS.
+Standard worker hash `a63cac0491887e6a2393a034442eb093f2e2b16ae140e710794eace3265eced8`
+and race fixture `12d32026aae224ac2e9d62f3a48955966e29ec8a0a3c5dc6d1d773530618bf40`
+match the retained L02.2 receipts; native/carrier/fixture source is unchanged.
+These are fresh local executions of existing isolated gates, not borrowed PASS.
+Native bridge CI path filter does not match app.py; no native CI run is claimed.
+The first local native invocation had129 PASS/50 FAIL because `/root` tmpfs was
+noexec (PermissionError launching worker). Its log is retained; corrected executable
+private tmpfs reruns the unchanged selection without relaxing a product check.
+Additional authenticated lifetime/status/terminal cases: **15 PASS**.
+
+## CI so far — exact1c2beb6
+
+Client Linux40228994481/121276468428, AWG40228994427/121276468197 and
+TCP40228994413/121276468241 PASS. TCP release jobs skipped. Control
+40228994415/121276468372 actually ran: **3165 PASS/54 FAIL/190 SKIP**, errors0,
+7 subtests passed. Phase0/Docker40228994539 and candidate40228994396 remain
+in progress; no success inferred. Current voice CI PASS is not resolution of
+historical voice/Windows observations. CI package rebuild has its own identity,
+not the exact local candidate hashes above.
 
 Existing control/phase0/Docker residual54/54/53 failures and voice/Windows
 observations remain open; mandatory suites are not disabled or repaired here.
-CI, exact candidate identities, package receipts, source SHA and final secret/link/
-staged-scope checks will be recorded in this report after they finish.
+Final CI and end-of-task secret/link/staged-scope checks will be recorded
+after they finish. Overall CI is **not green**.
 
 Rollback stays explicit matching system reinstall only when idle/cleanup confirmed;
 user uninstall preserves state and the independent root runtime. Historical .4 is

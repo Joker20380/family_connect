@@ -3,9 +3,10 @@
 ## L03.2 — внутренний полный candidate,25.10
 
 [R2 queued Connect/Close](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md)
-IN_PROGRESS: зарезервирован новый internal **0.2.12~l03.2.5**, только user-side GUI
-correction. Exact package/CI ещё не завершены; system8d7d78ec… можно сохранить
-только после byte/contract verification. Historical .4 не патчить/не пересобирать
+Source/package PASS: новый internal **0.2.12~l03.2.5**, source1c2beb6/candidate
+f0ee1760…; только user-side GUI correction. Оба exact offline systemd255/pkexec
+DEB/AppImage gate и integrity PASS; system8d7d78ec… byte/contract verified unchanged.
+Финальные CI ещё идут; hashes/размеры в R2 report. Historical .4 не патчить/не пересобирать
 под тем же именем. Live E/F NOT_RUN, L04.1 IN_PROGRESS; NEXT review R2.
 Public0.2.11/download links/catalog не меняются; internal candidate не опубликован.
 

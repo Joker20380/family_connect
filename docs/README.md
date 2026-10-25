@@ -6,7 +6,8 @@ continuation. Phase22 is the product baseline; D03–D05 source checkpoints are 
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
 [L04.1-LIVE-2-R2 queued Connect/Close](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md)
 is the current source/package correction: exact .4 E FAIL/review accepted,
-F1/F2 NOT_RUN, new .5 pending. L04.1 remains IN_PROGRESS; no live/device teardown.
+F1/F2 NOT_RUN, new .5 source/package PASS, final CI pending. L04.1 remains IN_PROGRESS;
+no live/device teardown.
 
 [Desktop parity with accepted106 — active, not released](releases/2026-10-23-desktop-parity106.md):
 full feature matrix, exact source manifest, both native worker builds, Linux

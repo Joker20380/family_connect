@@ -6,9 +6,11 @@ F1/F2 NOT_RUN. E доказывает queued Future/busy/open/CONNECTING, не l
 helper/TUN0, generation0/pending null; fixture отменил Future до освобождения worker.
 R2 явно отслеживает только normal Connect/Disconnect; успешный cancel снимает busy
 и fencing запрещает старый callback. Running/done-undelivered mutation блокирует Close.
-Deterministic prior-source overlay4 FAIL → targeted197 PASS. Новый internal .5,
-exact package/CI gates ещё не завершены; .4 immutable, system8d7d78ec… подлежит
-exact hash/contract verification без смены bytes. Private identity/gateway/live E/F
+Deterministic prior-source overlay4 FAIL → targeted197 PASS, full desktop1191/84.
+Новый internal .5/source1c2beb6/candidate f0ee1760…: exact integrity и оба offline
+systemd255/pkexec package gate PASS. System8d7d78ec… byte/contract verified unchanged;
+.4 immutable. Linux/AWG/TCP CI PASS, control54 failures; phase0/Docker/package CI
+ещё идут. Private identity/gateway/live E/F
 не используются. L04.1 IN_PROGRESS; L04.2/L05/test-device teardown NOT_RUN.
 После source/package checkpoint STOP; NEXT — review L04.1-LIVE-2-R2.
 [R2 report](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md).
