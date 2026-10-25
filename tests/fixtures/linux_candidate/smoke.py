@@ -124,6 +124,11 @@ def main():
     record('explicit_polkit_setup_reinstall_uid_path_and_cleanup', dict(build_id=contract['system']['build_id']))
     damaged = Path('/opt/tampered-user')
     shutil.copytree(root, damaged)
+    candidate_record = (damaged / 'candidate.json').read_bytes()
+    (damaged / 'candidate.json').unlink()
+    refused = run('/usr/bin/python3', '-I', str(damaged / 'launcher.py'), '--smoke', user=True, ok=False)
+    assert refused.returncode != 0 and 'candidate.json' in refused.stderr
+    (damaged / 'candidate.json').write_bytes(candidate_record)
     (damaged / 'embedded/system.tar.gz').write_bytes(b'tampered')
     assert run('/usr/bin/python3', '-I', str(damaged / 'launcher.py'), '--setup-system', user=True, ok=False).returncode != 0
     inventory_path, capability_path = SYSTEM / 'installed.json', SYSTEM / 'capabilities.json'

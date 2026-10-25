@@ -84,10 +84,10 @@ then RNS correctly rejected apt-provided pyserial without wheel RECORD. Separate
 the real-GI test environment from the existing L03.1 pure-wheel Docker builder.
 No dependency verification weakening and no change to accepted product bytes.
 
-## Exact final local artifacts
+## First committed artifact checkpoint (superseded)
 
 Product source **`22868e168cf7f134bcab08425523eccc05f3c394`**, `source_dirty=false`.
-Later CI/documentation commits do not change these product files or bytes.
+Retained evidence, superseded by the launcher fail-closed correction below.
 Directory: `state-client-build/linux-candidate-l032-20261025/build-final-1/`.
 Internal built/installed version **0.2.12~l03.2.1**, source/public VERSION **0.2.11**.
 Candidate identity: `076f23d3f91423414c6afe4ab60c97a8c31447fe93e5566d45f0a433521d48fb`.
@@ -174,3 +174,13 @@ other distro/Python/GTK combinations are not claimed accepted.
 No L03.1 product correction was necessary. Parent L03 remains IN_PROGRESS until
 review L03.2. D01/D02.1-R and the residual54/Windows/voice observations stay open.
 No public release/upload, catalog, landing, signing sequence or server mutation.
+
+## L03.2 launcher integrity correction
+
+Post-checkpoint review found a missing `candidate.json` allowed entry into the
+legacy launcher branch. New regression reproduced **1 failure** before the fix.
+Candidate companion files now require candidate verification even when the
+manifest is absent; the installed smoke also removes the manifest from a copy
+and verifies rejection before GUI launch. This corrects new L03.2 packaging,
+not the accepted L03.1 system contract. New final bytes/gates are required below;
+do not transfer the preceding artifact hashes or smoke receipts to the rebuild.

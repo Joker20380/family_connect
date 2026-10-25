@@ -4,6 +4,7 @@ import io
 import json
 import os
 from pathlib import Path
+import subprocess
 import sys
 import tarfile
 
@@ -48,6 +49,15 @@ def bundle(tmp_path, runtime):
 def test_exact_candidate_inventory(runtime, bundle):
     directory, record = bundle
     assert runtime.verify(directory) == record
+
+
+def test_missing_candidate_manifest_cannot_downgrade_launcher(tmp_path):
+    for name in ('launcher.py', 'candidate_runtime.py'):
+        (tmp_path / name).write_bytes((ROOT / 'packaging/linux' / name).read_bytes())
+    result = subprocess.run([sys.executable, '-I', str(tmp_path / 'launcher.py'), '--smoke'],
+                            capture_output=True, text=True, timeout=10)
+    assert result.returncode != 0
+    assert 'candidate.json' in result.stderr
 
 
 @pytest.mark.parametrize('change', ['changed', 'missing', 'extra', 'symlink', 'fifo', 'writable', 'hardlink', 'abi', 'build', 'system'])

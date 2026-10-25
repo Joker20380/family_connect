@@ -15,7 +15,8 @@ VENDOR = ROOT / 'vendor'
 DESKTOP = ROOT / 'clients' / 'desktop'
 
 sys.dont_write_bytecode = True
-if (ROOT / 'candidate.json').is_file():
+if any((ROOT / name).exists() or (ROOT / name).is_symlink()
+       for name in ('candidate.json', 'candidate_runtime.py', 'embedded')):
     library = sysconfig.get_path('stdlib')
     sys.path[:] = [str(DESKTOP), str(ROOT), str(VENDOR), library,
                    str(Path(library) / 'lib-dynload'), '/usr/lib/python3/dist-packages']
