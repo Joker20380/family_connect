@@ -71,3 +71,9 @@ continue to embed the exact accepted build-9. Ordinary Client Linux source
 previews now use0.2.12~ci.preview.1 on branch builds, not public0.2.11 filenames;
 they are not full L03.2 candidates. Release/tag and signing paths are unchanged.
 Existing full desktop/native/root→UID/Auto/DIRECT and full suites stay enabled.
+
+Source checkpoint `22868e168cf7f134bcab08425523eccc05f3c394` pushed.
+First candidate CI run40183917951/job121140566373:58 passed/2 skipped/1 failed
+before building. The new runner used hosted Python without real GI, not a
+product import failure. Reuse the existing `ci_desktop_env.sh` system-Python/GI
+environment; do not mock GI or skip the packaging import regression.
