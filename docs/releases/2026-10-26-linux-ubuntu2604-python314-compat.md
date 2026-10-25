@@ -70,6 +70,11 @@ The preliminary `.6` CI build is retained as failed evidence, not the owner-upgr
 candidate: run40237804085/job121303012680 verified a3.14 package with the runner's
 3.12 interpreter and correctly rejected `Candidate runtime contract/ABI mismatch`.
 The verifier now runs in the offline Ubuntu26.04 container; no ABI check is bypassed.
+Initial local exact-package setup was refused by the fixture's polkit rule:
+polkit127 resolves `program` to `/usr/bin/python3.14`, while retaining the original
+`command_line`. The fixture now recognizes that resolved system-interpreter path
+as well as `/usr/bin/python3`; exact full-command and UID checks remain unchanged.
+No production authorization/setup change or artifact-byte replacement is needed.
 Explicit target selects ABI3.14 and DEB `python3 >=3.14, <3.15`; candidate manifest
 records Ubuntu26.04 and `/usr/bin/python3`. New target requires an explicit standard
 system rebuild, rejects Python3.12 and frozen .5 version reuse. System/user vendor

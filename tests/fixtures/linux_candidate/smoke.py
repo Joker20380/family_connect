@@ -138,14 +138,16 @@ def main():
     expected_command = '/usr/bin/python3 -I -S -c ' + root_source
     rule = '''polkit.addRule(function(action, subject) {
         if (action.id === "org.freedesktop.policykit.exec") {
-            if (subject.user === USER && ((action.lookup("program") === "/usr/bin/python3" &&
+            if (subject.user === USER && (((action.lookup("program") === "/usr/bin/python3" ||
+                 action.lookup("program") === PYTHON_PROGRAM) &&
                  action.lookup("command_line") === COMMAND) ||
                  action.lookup("program") === "/usr/local/lib/family-connect-mesh/helper")) {
                 return polkit.Result.YES;
             }
             return polkit.Result.NO;
         }
-    });'''.replace('USER', json.dumps(pwd.getpwuid(1000).pw_name)).replace('COMMAND', json.dumps(expected_command))
+    });'''.replace('USER', json.dumps(pwd.getpwuid(1000).pw_name)).replace('COMMAND', json.dumps(expected_command)).replace(
+        'PYTHON_PROGRAM', json.dumps(str(Path('/usr/bin/python3').resolve())))
     Path('/etc/polkit-1/rules.d/00-fc-candidate-fixture.rules').write_text(rule)
     if prestart:
         session_rule = '''polkit.addRule(function(action, subject) {
