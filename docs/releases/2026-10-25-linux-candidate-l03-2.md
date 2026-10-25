@@ -2,6 +2,7 @@
 
 Date: **2026-10-25**. **CHECKPOINT — local candidate gate PASS, review pending**.
 Installed only in disposable containers; not published. CI continuation below.
+**Review artifact: final-2, product source `cf66532`, final-4 package smoke PASS.**
 Entry: current main `1b285c6417676b3383c03c47620802a5f3d5ed6f` (remote verified).
 Parallel ops STATUS/PLAN hunks and the VPN health report remain outside this task.
 
@@ -194,3 +195,48 @@ are unchanged by this fixture correction; repeat both exact package gates.
 The direct polkit-denial assertion initially expected cancellation126; actual
 polkit124 returns127/`Not authorized` for a policy denial. Preserve final-3 logs
 as fixture FAIL; assert the measured denial, not merely any nonzero result.
+
+## Final review artifact and repeat gates
+
+Product source **`cf66532c72548767f8ff4aa31faa7588b07eab54`**, `source_dirty=false`.
+Full candidate **`9d4b13cc106296264805402b42538b9fa94505433b1bbd239c82145966e22b81`**.
+Directory: `state-client-build/linux-candidate-l032-20261025/build-final-2/`.
+This is the review candidate, not the preceding final-1 checkpoint. Internal
+version remains0.2.12~l03.2.1 (never publicly distributed); exact build identity
+and hashes distinguish unpublished iterations, not filename/VERSION alone.
+
+| Final review artifact | Bytes | SHA256 |
+|---|---:|---|
+| `FamilyConnect-0.2.12~l03.2.1-x86_64.AppImage` | 57924088 | `914f02ff10f31485c5a6b68a8ff41f5b168aaffc8f7f8241723365c40a9109e5` |
+| `FamilyConnect_0.2.12~l03.2.1_amd64.deb` | 55951120 | `df13422321f6c5865f1ca1060fe221fbe21954c6981ab05cb2d173e7aa6e04ac` |
+| `FamilyConnect-Linux-0.2.12~l03.2.1.tar.gz` | 112233 | `8a3847d88aa0b7098f94518c0e986bbaf3e00bcfcc4bc35f82a6817cae1e15ae` |
+
+Same707-member user inventory shape; actual hashes resealed. Embedded build-9,
+archive hash/size and installer hash above are unchanged and reverified from
+both extracted final formats. Secret-content scan's only private-key-header
+match is the locked cryptography parser constant, not private key material.
+License/notices and exact no-extra-member audit PASS.
+
+**62 targeted PASS** (`targeted-3.log`); **1146 desktop PASS/24 SKIP**,60.84s
+(`desktop-final-2.log`); exact pair integrity PASS (`integrity-final-2.log`).
+Both fresh Ubuntu24.04/systemd255 full package gates **PASS** with final fixture
+`088be48b64aed596de57ae74cfbf61fc0fe07bf9`: `deb-smoke-final-4.log` and
+`appimage-smoke-final-4.log`. All rows of the installation table were repeated
+for these user artifacts, except unchanged-system rollback/ownership rows
+covered by `system-smoke-final-1.log` on the exact same embedded bytes.
+Added actual negative: missing user manifest cannot downgrade to legacy;
+corrupted readable embedded payload fails with a hash error; real wrong-UID
+pkexec returns127/Not authorized. No fixture-success mocks/trust bypass shipped.
+Same removal/state/background/no-VPN assertions PASS. No workstation install.
+
+## CI receipts (source scopes kept separate)
+
+- Product22868e1 Client Linux: [40183917943/121140566576](https://github.com/Joker20380/family_connect/actions/runs/40183917943/job/121140566576) PASS, including mandatory desktop and GUI/integration gates.
+- Final productcf66532 Client Linux: [40184498169/121142388736](https://github.com/Joker20380/family_connect/actions/runs/40184498169/job/121142388736) PASS; this is not inferred from the earlier product run.
+- Unchanged native/root→UID/Auto/DIRECT surfaces: [40183917928/121140566226](https://github.com/Joker20380/family_connect/actions/runs/40183917928/job/121140566226) isolated-linux PASS. Existing authenticated/combined/manual/Auto, kernel and race gates retained; neither overlay worker nor synthetic trust is in the candidate.
+- Standard accepted-source rebuild at CI178ccab: [40184208212/121141440044](https://github.com/Joker20380/family_connect/actions/runs/40184208212/job/121141440044) PASS, including real system smoke, exact candidate integrity and both package gates; internal artifact12595925670. This earlier fixture lacks the final missing-manifest/polkit-denial refinements; final fixture CI remains separately pending.
+- Product22868e1 control [40183917906/121140566503](https://github.com/Joker20380/family_connect/actions/runs/40183917906/job/121140566503):3101 passed/**54 failed**/140 skipped; phase0 [40183917890/121140566198](https://github.com/Joker20380/family_connect/actions/runs/40183917890/job/121140566198):3101/**54**/140; Docker [40183917890/121140566353](https://github.com/Joker20380/family_connect/actions/runs/40183917890/job/121140566353):3099/**54**/142. Errors0. No failures suppressed/repaired in L03.2; D01 remains open.
+- AWG40183917944, TCP40183917914, voice40183917883 PASS on22868e1. Windows protocol observation atb910edb and historical voice observations remain separate; later green jobs do not erase those observations or grant Windows/L04/L05 acceptance.
+
+Final fixture CI088be48 run40184803906 is in progress at this checkpoint. The
+local final candidate gates are complete; do not call the whole CI green.
