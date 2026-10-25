@@ -187,6 +187,45 @@ def test_recovery_sends_down_even_when_tun_is_already_absent(monkeypatch, kind):
     assert calls == [('down', 'fc'+kind+'12345678')]
 
 
+@pytest.mark.parametrize('kind', ['awg', 'tcp'])
+@pytest.mark.parametrize('unsafe', [None, 'owner', 'paired', 'marker', 'malformed', 'link', 'mode', 'hardlink'])
+def test_discard_requires_owned_unpaired_inactive_safe_files(tmp_path, monkeypatch, kind, unsafe):
+    identifier = 'fc'+kind+'12345678'
+    root = tmp_path/'etc/family-connect'/kind
+    root.mkdir(parents=True)
+    metadata, profile = root/(identifier+'.json'), root/(identifier+'.conf')
+    metadata.write_text(json.dumps(dict(id=identifier, owner=1001 if unsafe == 'owner' else 1000,
+                                       primary='paired' if unsafe == 'paired' else None)))
+    metadata.chmod(0o644)
+    profile.write_bytes(b'synthetic')
+    profile.chmod(0o644 if unsafe == 'mode' else 0o600)
+    if unsafe == 'hardlink':os.link(profile, root/'foreign')
+    if unsafe == 'link':
+        profile.rename(root/'foreign')
+        profile.symlink_to(root/'foreign')
+    if unsafe in ('marker', 'malformed'):
+        marker = tmp_path/('run/family-connect-'+kind)/('active.json' if kind == 'awg' else 'active')
+        marker.parent.mkdir(parents=True)
+        marker.write_text(json.dumps(dict(id=identifier) if unsafe == 'marker' else {}))
+        marker.chmod(0o600)
+    original_stat = os.fstat
+    def root_stat(descriptor):
+        values = list(original_stat(descriptor));values[4] = 0
+        return os.stat_result(values)
+    monkeypatch.setattr(backend.os, 'geteuid', lambda: 0)
+    monkeypatch.setattr(backend.os, 'fstat', root_stat)
+    monkeypatch.setattr(backend, 'Path', lambda *parts: tmp_path/str(Path(*parts)).lstrip('/'))
+    monkeypatch.setattr(backend, 'run', lambda *args: 'inactive')
+    if unsafe:
+        with pytest.raises((ValueError, backend.BackendError, OSError)):
+            backend.discard_inactive_profile(kind, identifier, 1000)
+        assert metadata.exists() and profile.exists()
+    else:
+        backend.discard_inactive_profile(kind, identifier, 1000)
+        assert not metadata.exists() and not profile.exists()
+        backend.discard_inactive_profile(kind, identifier, 1000)
+
+
 @pytest.mark.parametrize(('ident','reason'), [('fcawg11111111','CHANNEL_LOST'),('fcawg22222222','HELPER_TIMEOUT')])
 def test_real_pipe_loss_and_process_timeout_remain_unknown(session_process, ident, reason):
     calls, log = session_process

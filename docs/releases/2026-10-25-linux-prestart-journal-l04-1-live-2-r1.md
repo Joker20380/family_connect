@@ -63,4 +63,15 @@ checkpoint. System build-9 is NOT reused: root helpers, backend and authorizatio
 protocol changed. New internal version reserved: **0.2.12~l03.2.3**; public VERSION,
 catalogs and historical .2 artifacts unchanged.
 
+Source `ddbf880e4ce5488700aa633c28e2fdffd3a61971` pushed/remote verified.
+Full desktop + Friends + Linux chat selections: **1178 PASS/96 SKIP** in the
+locked Python3.12 test image with real GTK/Xvfb. Additional fixed-discard security
+cases (wrong owner, paired, active/malformed marker, mode/link/hardlink) plus auth
+suite: **44 PASS**. The root-gate wrapper explicitly forwards only its public
+namespace assertion across its sanitized environment; no credentials are forwarded.
+New exact system build `b8140c68…` real offline systemd255 smoke **PASS**:
+native/RNS/import readback, actual polkit/root→UID, owner/sticky/start barrier,
+real import-readback failure/rollback, unchanged synthetic user state/network.
+Desktop pair/actual pre-start gates and CI results follow separately.
+
 STOP after package evidence. NEXT — review L04.1-LIVE-2-R1.

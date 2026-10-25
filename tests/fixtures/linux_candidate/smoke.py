@@ -139,7 +139,8 @@ def main():
     assert not list(Path('/var/tmp').glob('family-connect-root-setup-*'))
     record('explicit_polkit_setup_reinstall_uid_path_and_cleanup', dict(build_id=contract['system']['build_id']))
     if prestart:
-        evidence = run('/usr/bin/env', 'FC_PRESTART_EXPECT=green', '/usr/bin/python3', '-I', '-S',
+        evidence = run('/usr/bin/env', 'FC_PRESTART_EXPECT=green',
+                       'FC_L032_HOST_NETNS='+os.environ['FC_L032_HOST_NETNS'], '/usr/bin/python3', '-I', '-S',
                        '/fixture/prestart.py', 'parent', prestart).stdout
         record('actual_prestart_terminalization', json.loads(evidence))
         no_vpn()
