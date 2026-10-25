@@ -191,3 +191,6 @@ as root: rejection was EACCES, not the intended missing-manifest check. Retain
 UID, asserts the exact hash/manifest error and tests wrong-UID polkit denial
 directly (not merely inability to traverse another user's home). Product bytes
 are unchanged by this fixture correction; repeat both exact package gates.
+The direct polkit-denial assertion initially expected cancellation126; actual
+polkit124 returns127/`Not authorized` for a policy denial. Preserve final-3 logs
+as fixture FAIL; assert the measured denial, not merely any nonzero result.

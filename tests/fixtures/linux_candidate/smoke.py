@@ -113,7 +113,7 @@ def main():
     assert run(*application, '--setup-system', '/tmp/other-installer', user=True, ok=False).returncode != 0
     assert run(*application, '--setup-system', user=True, uid=1001, ok=False).returncode != 0
     denied = run('/usr/bin/pkexec', '/usr/bin/python3', '-I', '-S', '-c', root_source, user=True, uid=1001, ok=False)
-    assert denied.returncode == 126
+    assert denied.returncode == 127 and 'Not authorized' in denied.stderr
     assert not SYSTEM.exists()
     receipt = json.loads(run(*application, '--setup-system', user=True).stdout)
     assert receipt['installed'] and not receipt['service_started']
