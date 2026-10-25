@@ -101,6 +101,73 @@
         "state": "DISCONNECTED"
       }
     },
+    "C1": {
+      "action_start_utc": "2026-10-25T19:20:47Z",
+      "first_failure_preserved": true,
+      "fixture_note": "The first reopen had no polkit agent in its new SSH login session: no approval and no down dispatched, pending preserved. Fixture agent/session binding repaired; authorized same-owner startup recovery issued down1/discard1 without any new Connect. Initial nft syntax rejection was corrected before the sole Connect; an incomplete pre-read was retained separately.",
+      "generation_before": 0,
+      "generation_recovered": 2,
+      "generation_refused": 1,
+      "helper_counts": {
+        "awg": {
+          "cleanup": 0,
+          "discard": 1,
+          "down": 1,
+          "import": 1,
+          "serve": 0,
+          "session": 3,
+          "up": 1
+        },
+        "tcp": {
+          "cleanup": 0,
+          "discard": 0,
+          "down": 0,
+          "import": 0,
+          "serve": 0,
+          "session": 0,
+          "up": 0
+        }
+      },
+      "network_restored": true,
+      "pending_recovered": false,
+      "phase_recovered": "IDLE",
+      "phase_refused": "APPLYING",
+      "poll_after_recovery": "PASS",
+      "post_read_timestamp": "2026-10-25T19:25:09.875253+00:00",
+      "pre_read_timestamps": [
+        {
+          "completed_utc": "2026-10-25T19:20:23.067436+00:00",
+          "started_utc": "2026-10-25T19:20:19.932560+00:00"
+        },
+        {
+          "completed_utc": "2026-10-25T19:20:35.329773+00:00",
+          "started_utc": "2026-10-25T19:20:33.068145+00:00"
+        },
+        {
+          "completed_utc": "2026-10-25T19:20:47.656674+00:00",
+          "started_utc": "2026-10-25T19:20:45.331100+00:00"
+        }
+      ],
+      "result": "PASS",
+      "server_readback": "PASS",
+      "state_preserved": true,
+      "terminal": {
+        "actual_transport": "none",
+        "connection_id": "05a54797-f7d6-4248-9e41-3febd6e474c9",
+        "first_failure": "HELPER_FAILED",
+        "normal_operation": {
+          "category": "HELPER_FAILED",
+          "cleanup_confirmed": false,
+          "generation": 1,
+          "outcome": "OUTCOME_UNKNOWN",
+          "pending": true,
+          "phase": "APPLYING"
+        },
+        "selected_transport": "awg",
+        "state": "DISCONNECTED"
+      },
+      "transport": "awg"
+    },
     "P1": {
       "action_start_utc": "2026-10-25T18:57:06Z",
       "actual": "awg",
@@ -457,7 +524,6 @@
     "uid": 1000
   },
   "not_run": [
-    "C1",
     "C2",
     "D",
     "E",

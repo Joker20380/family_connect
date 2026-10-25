@@ -57,7 +57,19 @@ explicit setup and exact system READY PASS; only protected home copied.
   that the original waiting PID survived. No second GUI action. State/network and
   three-pre/one-post server checks PASS. Physical operation lock remains free.
 
-C1/C2/D/E/F1/F2 still NOT_RUN at this intermediate documentation checkpoint.
+- **C1 AWG unavailable PASS:** one endpoint-only guest firewall drop fixture,
+  one Connect/up, no CONNECTED/fallback. HELPER_FAILED/OUTCOME_UNKNOWN correctly
+  retained APPLYING/generation1/pending with no remaining network owner/TUN.
+  Authorized same-owner startup recovery used down1/discard1, generation2,
+  IDLE/null; poll, network baseline, identity/cache/floors and server readback PASS.
+  Original HELPER_FAILED diagnostic retained (historical pending fields are not
+  the current coordination journal). The first reopen lacked a polkit agent in
+  its new SSH login session: no approval/down, pending correctly retained. After
+  repairing only fixture agent/session binding, startup recovery succeeded; no
+  repeated Connect. Initial nft syntax rejection was repaired before user action;
+  its incomplete server pre-read is not counted among the three final reads.
+
+C2/D/E/F1/F2 still NOT_RUN at this intermediate documentation checkpoint.
 Only sanitized docs/evidence committed; product/installed bytes untouched.
 L04.2/L05/device teardown/revoke/publication NOT_RUN.
 
