@@ -1,6 +1,6 @@
 # L04.1-LIVE-1-R — normal poll / Disconnect correction
 
-25.10.2026. **Source/package CHECKPOINT; CI pending**, не live acceptance и не public release.
+25.10.2026. **Source/package CHECKPOINT / review pending**, не live acceptance и не public release.
 Вход main/remote `96f90bdff72603efec27ebda8cf6a948c4202ad3`.
 LIVE-1 PARTIAL принят review. Exact final-2 `9d4b13cc…` неизменен, но больше не
 кандидат для завершения L04.1. Его [положительное evidence и first failure](2026-10-25-linux-installed-awg-tcp-l04-1-live-1.md)
@@ -45,11 +45,30 @@ operations/AWG/TCP/GUI/recovery/presentation/Friends/candidate: **229 PASS,2 SKI
 normal+health poll, consistent snapshot, stale callback, true owner error, queued
 window close и generation assertions. Полный desktop: **1121 PASS,85 SKIP**,
 9 warnings; skips включают отсутствующие в этом image native workers и отдельные
-systemd fixtures, не считаются native PASS. Обязательные CI gates ещё в работе.
+systemd fixtures, не считаются native PASS. Отдельные обязательные CI gates ниже.
 Новый real-GTK regression step добавлен в Client Linux, существующие gates не удалены.
 GTK `recovery_check.py` PASS: threshold/reconnect/explicit disconnect/stale selection/close.
 Control/phase0/Docker full suites и прежние54 residual failures остаются видимыми;
 Windows/voice observations не исправляются в этом scope.
+
+### Regression coverage
+
+Все новые concurrency tests используют Events/queues с bounded timeout, без sleeps,
+random retries или повторного Disconnect. Fixtures находятся в
+`clients/desktop/tests/test_operations.py` и `test_poll_disconnect_gui.py`.
+
+| Требование | Actual regression |
+|---|---|
+| Slow normal poll + один Disconnect | profiles/active barriers × AWG/TCP; down1, owner OFF |
+| Slow health poll + один Disconnect | curl barrier × AWG/TCP; down1 |
+| Late poll после mutation | StaleConnection, включая read exception; GUI не возвращает CONNECTED |
+| Poll без mutation | согласованный snapshot/health, generation не увеличивается |
+| Pending durable owner | decorated disconnect ConnectionBusy, down0; revalidation также refused |
+| Foreign process mutation | отдельный процесс держит actual lock; disconnect refused, down0 |
+| Два клика | actual toggle дважды, helper down1, STOPPING/busy suppresses poll |
+| Close queued work | оба close paths отменяют normal Disconnect future, down0 |
+| Reopened active GUI | actual initialize → refresh → toggle → complete; normal/health × AWG/TCP |
+| Generation contract | ровно +1 для mutation; прежние ownership/control bounded-wait assertions сохранены |
 
 ## Точный новый кандидат
 
@@ -99,7 +118,7 @@ Image `fc-l032-system:check` SHA256
   installed module fail closed; после восстановления readback READY.
 - Fixed idle DIRECT/service-only chat prepare без VPN, настоящий user D-Bus daemon,
   background owner переживает GUI exit; никакого gateway connect.
-- DEB reinstall/remove/reinstall сохраняет synthetic encrypted identity/history/settings,
+- DEB reinstall/remove/reinstall сохраняет synthetic identity/encrypted store/background setting,
   root inventory и backups; user service останавливается, dangling package unit удалён.
 - AppImage service reopen использует original image, не временный mount;
   explicit remove-integration сохраняет synthetic state и independent root runtime.
@@ -113,18 +132,43 @@ Host services/routes/DNS не менялись. Existing rollback fencing/backup
 не изменён; failure-injected rollback этого unchanged build не повторялся локально,
 его real L03.1 smoke сохраняется в mandatory CI standard-rebuild gate.
 
-## CI source57f8eff — pending
+## CI exact product source57f8eff
 
-Запущены существующие обязательные push workflows; результаты фиксируются отдельно
-от локальных bytes: Client builds40201296971, AWG40201297005, TCP40201297002,
-Auto native40201297010, internal candidate40201296910, control40201297046,
-phase0/Docker40201296976. Voice40201297057 уже FAILURE на прежнем
-`voice operation did not reach expected state` (job121192844607), вне correction scope.
-CI standard system rebuild получает собственный ID и не подменяет local build-9/pair.
-Общий CI PASS не заявляется.
+| Gate | Run/job evidence | Result |
+|---|---|---|
+| Client Linux | [40201296971 /121192844593](https://github.com/Joker20380/family_connect/actions/runs/40201296971/job/121192844593) | PASS: full desktop, новый real GTK race step, layout/Friends/recovery, packaged launch |
+| AWG | [40201297005 /121192844341](https://github.com/Joker20380/family_connect/actions/runs/40201297005/job/121192844341) | PASS: full desktop + isolated AWG2/3.1 |
+| TCP | [40201297002 /121192844984](https://github.com/Joker20380/family_connect/actions/runs/40201297002/job/121192844984) | PASS: full desktop + isolated routes + setup/package; старый component rollback использует stub и не считается real systemd gate |
+| Isolated native/root→UID/Auto/DIRECT | [40201297010 /121192844514](https://github.com/Joker20380/family_connect/actions/runs/40201297010/job/121192844514) | PASS: actual kernel/native/root guard, UID umask/runtime, chat/direct, existing synthetic lifetime/combined gates |
+| Protocol Linux / Windows | [40201297010](https://github.com/Joker20380/family_connect/actions/runs/40201297010) jobs121192844663 /121192844723 | PASS; не installed Windows acceptance |
+| Standard system rebuild + candidate integrity/package | [40201296910 /121192843831](https://github.com/Joker20380/family_connect/actions/runs/40201296910/job/121192843831) | PASS: standard accepted-source system rebuild, real L03.1 smoke/rollback, exact CI pair verification, both systemd255 package gates |
+| Control full suite | [40201297046 /121192844656](https://github.com/Joker20380/family_connect/actions/runs/40201297046/job/121192844656) | FAILURE:54 failed/3124 passed/154 skipped,7 subtests |
+| phase0 full suite | [40201296976 /121192844332](https://github.com/Joker20380/family_connect/actions/runs/40201296976/job/121192844332) | FAILURE:54 failed/3124 passed/154 skipped,7 subtests |
+| Docker full suite | [40201296976 /121192844475](https://github.com/Joker20380/family_connect/actions/runs/40201296976/job/121192844475) | FAILURE:53 failed/3123 passed/156 skipped,7 subtests; failover stages после build NOT_RUN |
+| Existing voice check | [40201297057 /121192844607](https://github.com/Joker20380/family_connect/actions/runs/40201297057/job/121192844607) | FAILURE: `voice operation did not reach expected state`, вне correction scope |
+
+Full suites выполнялись без отключений/xfail; D01 residual debt не исправлялся.
+Количество Docker53 не объявляется устранением прежних54: это другой environment,
+другие skips и существующие нестабильные tests. **Общий CI не зелёный.**
+CI standard rebuild и его pair — отдельные bytes/identity, artifact12601984617;
+это не local `d9c0d07f…`/build-9 и не замена exact пары в таблице выше.
+Дополнительные existing synthetic native gates не являются запуском L04.2/L05.
+
+## Checkpoint / ограничения
+
+Source57f8eff и package-documentation `da5d65a0a200ef00c1314313993336a2c37023c6`
+отправлены ordinary push; remote SHA каждого checkpoint проверен. Documentation
+continuation не меняет product source/artifact bytes. Финальный docs commit содержит
+CI receipts и статусы, не новый build. Staged allowlist/secret-pattern scan/local links/
+whitespace PASS; ops-hunks STATUS/PLAN и отдельный ops report оставлены вне commits.
+Build output и logs остаются только ignored local evidence, не в Git.
 
 Private FC_L04_TEST_STATE/receipt/credentials не открывались и не переносились;
 server operations/configuration fetch/connect NOT_RUN. Live retest нового кандидата
 NOT_RUN; device assignment сохранить. Никаких public release/catalog/landing/signing changes.
 
-**STOP после source/package gate. NEXT — review L04.1-LIVE-1-R.**
+L04.1-LIVE-1 остаётся historical PARTIAL; L04.1 IN_PROGRESS. Новый кандидат ещё
+не установлен с test identity и не проходил live AWG/TCP retest. Никакие прежние
+live PASS final-2 на него не переносятся. LIVE-2/L04.2/L05/teardown QUEUED/NOT_RUN.
+
+**STOP. NEXT — review L04.1-LIVE-1-R.**

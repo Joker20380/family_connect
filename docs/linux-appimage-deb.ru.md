@@ -4,7 +4,8 @@
 
 Correction [L04.1-LIVE-1-R](releases/2026-10-25-linux-poll-disconnect-l04-1-live-1-r.md)
 CHECKPOINT: новый internal **0.2.12~l03.2.2**, source57f8eff/candidate d9c0d07f…;
-exact inventory и оба real systemd255/pkexec package gates PASS, CI pending,
+exact inventory и оба real systemd255/pkexec package gates PASS. Linux/AWG/TCP/native/
+package CI PASS; full suites54/54/53 failures, общий CI не зелёный. Review pending,
 live retest NOT_RUN. Final-2/0.2.12~l03.2.1
 retired для завершения L04.1 после принятого PARTIAL; не заменять его bytes/hash.
 Публичные version/catalog/download links не меняются.
