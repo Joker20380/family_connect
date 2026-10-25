@@ -8,7 +8,10 @@
 D00 — организация документации; следующие строки являются очередью, не разрешением на автозапуск.
 L03.1/L03.2 **DONE (review accepted)**; parent **L03 DONE** в scope полного
 внутреннего Linux-кандидата. **L04.1-LIVE-2: PARTIAL / review accepted**, STOP на B1.
-**L04.1-LIVE-2-R1 CHECKPOINT: source/system/package PASS; review pending.**
+**L04.1-LIVE-2-RESUME ACTIVE**: exact .4; B1 → только после PASS B2–F.
+Gate A .4 inherited из R1; не повторять. Первый product failure завершает checkpoint.
+Product/candidate bytes immutable; только существующая FC-3YSQ-BE2D/nl в новой KVM.
+**L04.1-LIVE-2-R1 DONE / review accepted (source/system/package).**
 Final internal0.2.12~l03.2.4/source053c4e5/candidate42ea0699…/system8d7d78ec…,
 authorization2; .3 — immutable intermediate. Actual AWG/TCP up1/start0,
 IDLE/generation2/pending null/poll PASS; unknown outcome fail-closed, первая
@@ -47,7 +50,8 @@ LIVE-2: A actual installed tamper/reinstall PASS; B1 root lock не допуск
 но helper up1 и pending/APPLYING остаются после освобождения lock (generation0→1).
 Network/state сохранены; pending не очищен вручную, guest уничтожен. B2–F NOT_RUN
 по first-failure STOP. Никакого rebuild/source fix; [отчёт](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md).
-STOP после checkpoint; NEXT — review L04.1-LIVE-2-R1. B2–F/device teardown NOT_RUN.
+STOP после текущего checkpoint; NEXT — review L04.1-LIVE-2-RESUME.
+B2–F до entry B1 PASS/device teardown NOT_RUN.
 **L01/L01-R review принят в Linux source/native/root→UID/isolated-kernel scope. Review L02.2 принят: локальный критерий L02 authenticated OFF→ON→OFF через Manual и Auto/MESH выполнен. L02.1-R atomic RetainChat/terminal recovery и L02.1-R2 status classification приняты. D01.3/D01.3-R приняты в public completion/admission scope. L03.1/L03.2 и parent L03 приняты; correction L04.1-LIVE-1-R и RETEST приняты, NEXT только review LIVE-2 PARTIAL. Review D03/D04/D05, D02.1 collection/import isolation и D02.2 public-reference принят.
 Review D02.1-R и fleet-документации `1725656` принят;
 D02.1-R остаётся PARTIAL/NOT_RUN; D01 открыт. Дальнейшие L04.2/L05 и Windows задачи не начинаются.**
@@ -161,7 +165,8 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 | L04.1-LIVE-1-R | Poll/Disconnect race correction и новый internal candidate | LIVE-1 PARTIAL accepted; source/package only | DONE (review accepted; source/package scope) | [Report](releases/2026-10-25-linux-poll-disconnect-l04-1-live-1-r.md): deterministic red/green, generation fencing, pending/foreign fail-closed, stale callback/queued close. Source57f8eff, internal0.2.12~l03.2.2/d9c0d07f…; build-9 unchanged, exact pair integrity/real package gates PASS. Linux/AWG/TCP/native/package CI PASS; full suites54/54/53 failures, voice FAILURE. Live приёмка не входит в принятие source/package correction. |
 | L04.1-LIVE-1-RETEST | Короткая installed приёмка exact corrected candidate | accepted LIVE-1-R; существующая FC-3YSQ-BE2D/nl; новая KVM | DONE (review accepted) | [Report](releases/2026-10-25-linux-installed-awg-tcp-l04-1-retest.md): exact DEB/setup/READY, AWG/TCP/HTTPS/64KiB↓/↑, single Disconnect и AppImage close/reopen PASS. Review принимает matching fresh-DNS request/reply с valid terminal NODATA. Cleanup/state PASS; positive gate не повторять. |
 | L04.1-LIVE-2 | Bounded negative installed AWG/TCP gates | accepted RETEST; explicit owner authorization | PARTIAL (review accepted) | [Checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md): exact .2; A installed tamper/reinstall PASS. B1: up1/start0 допустимо, но pending/APPLYING после authoritative refusal — product defect. Network/state preserved, guest destroyed. B2–F NOT_RUN. |
-| L04.1-LIVE-2-R1 | Terminal pre-start refusal / unknown outcome; новый system/user candidate | review LIVE-2 PARTIAL accepted; source/package only | CHECKPOINT (source/system/package PASS; review pending) | [Report](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md): actual AWG/TCP red→green, same-owner terminalization/recovery, generation fencing; final .4/source053c4e5/candidate42ea0699…/system8d7d78ec…. Exact systemd/polkit/import/rollback, DEB/AppImage/coherence и actual old-build refusal PASS. Full CI не зелёный; live B1 retest/B2–F NOT_RUN. |
+| L04.1-LIVE-2-R1 | Terminal pre-start refusal / unknown outcome; новый system/user candidate | review LIVE-2 PARTIAL accepted; source/package only | DONE (review accepted; source/system/package) | [Report](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md): actual AWG/TCP red→green, same-owner terminalization/recovery, generation fencing; final .4/source053c4e5/candidate42ea0699…/system8d7d78ec…. Exact systemd/polkit/import/rollback, DEB/AppImage/coherence и actual old-build refusal PASS. Full CI не зелёный; live B1 retest/B2–F отдельно. |
+| L04.1-LIVE-2-RESUME | Installed negative B1→B2–F exact .4 | R1 review accepted; existing test identity/nl; fresh KVM | ACTIVE | [Report](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2-resume.md). Gate A inherited из exact .4 package gates; B1 первым, first product failure STOP. No source/candidate changes; L04.2/L05/teardown NOT_RUN. |
 | L04.1-AUTH-TEARDOWN | Обязательная очистка отдельного test device | после L04/L05 или завершения test campaign; отдельное разрешение/review | QUEUED / NOT_RUN | Device-scoped gateway cleanup → readback отсутствия только test peer/user при сохранении чужих ресурсов → registry revoke. Private receipt содержит exact binding hashes/row/address и read-only checks. Штатного unregister сейчас нет; не восстанавливать целиком старые DB/server.json и не начинать cleanup автоматически. |
 | L04.2 | Установленная приёмка MESH/Auto | review L04.1; отдельное разрешение | QUEUED / NOT_RUN | Оставшаяся часть parent L04: реальные installed MESH/Auto, применённые target/profile, P0/P1 в разрешённом scope, DNS/HTTPS/transfers и ownership/cleanup. Не начинается автоматически; нет новых grants/policy changes в L04.1. |
 | L05 | Установленный Linux-мессенджер | L03, L04 | QUEUED | DIRECT/MESH-доставка без VPN и с VPN, контакты/текст/голос, история и фоновые события подтверждены на реальных компонентах. |
