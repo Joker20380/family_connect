@@ -14,14 +14,14 @@ FC-3YSQ-BE2D/nl сохраняются, новый issuance/provisioning/manual 
 L04/L04.1 IN_PROGRESS до LIVE-2 review; L04.2/L05/teardown NOT_RUN.
 [LIVE-2 checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md).
 D01/full suites54/54/53 failures и voice/Windows observations сохраняются.
-**L04.1-LIVE-2-RESUME PARTIAL**: exact .4, real KVM/GUI/pkexec setup PASS.
-B1 local terminalization PASS: AWG up1/start0/discard1, TRANSPORT_BUSY/
-PRE_START_REJECTED, IDLE/generation2/pending null, poll/network/state cleanup PASS.
-Full entry gate BLOCKED: registry service изменился между baseline и Connect;
-server stability не объявлена PASS. B2–F NOT_RUN; нового product defect не установлено.
-Guest/secret copies уничтожены, FC-3YSQ-BE2D/nl сохранены. R1/Gate A .4 inherited.
-L04.1 IN_PROGRESS; L04.2/L05/teardown NOT_RUN; только sanitized docs/evidence.
-[Текущий checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2-resume.md).
+**L04.1-LIVE-2-RESUME продолжается, ACTIVE** (тот же ID). Review принимает
+exact .4 Gate A/B1 PASS; B1 не повторять. Registry start18:28:22 до Connect18:34:12
+не блокирует принятое B1. Следующий путь: короткий P1/P2 continuity → B2–F;
+первый новый product failure STOP. Перед live action три согласованных server
+readbacks ≥10s, firewall structure без counters/timestamps. FC-3YSQ-BE2D/nl;
+новая KVM, immutable .4, без manual fetch/new identity. L04.1 IN_PROGRESS;
+L04.2/L05/teardown NOT_RUN; только sanitized docs/evidence.
+[Продолжение того же checkpoint](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2-continuation.md).
 **L04.1-LIVE-2-R1 DONE / review accepted (source/system/package).**
 Final internal **0.2.12~l03.2.4**, source053c4e5, candidate42ea0699…,
 новый system8d7d78ec…/authorization2 (не build-9). .3 — intermediate immutable.
@@ -34,7 +34,7 @@ PASS; desktop1195 PASS/96 SKIP. Linux/AWG/TCP/package CI PASS; native/DIRECT
 В самом R1 live B1/B2–F NOT_RUN; private state/gateway не использовались.
 Последующий installed результат — RESUME выше, не перенос evidence между scopes.
 [R1](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md).
-**Граница завершения — STOP; NEXT review L04.1-LIVE-2-RESUME.**
+**Граница завершения — STOP; NEXT review завершённого L04.1-LIVE-2.**
 
 Предыдущий **L04.1-LIVE-1 PARTIAL принят review**; final-2 больше не candidate
 для завершения L04.1. Его положительное live evidence ниже сохраняется исторически.
