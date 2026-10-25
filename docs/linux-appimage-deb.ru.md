@@ -8,7 +8,10 @@ L03.1/L03.2 приняты; parent L03 DONE в scope внутреннего ка
 Для [L04.1](releases/2026-10-25-linux-installed-awg-tcp-l04-1.md) закреплён только
 final-2 candidate `9d4b13cc…`, не CI rebuild `f7f6e765…`. Integrity PASS;
 live AWG/TCP NOT_RUN. [L04.1-AUTH](releases/2026-10-25-linux-test-activation-l04-1-auth.md)
-создал отдельную active test identity; assignment fetch BLOCKED на запрете gateway changes.
+создал отдельную active test identity; subset review принят. Разрешённое продолжение
+[L04.1-AUTH-PROVISION](releases/2026-10-25-linux-test-provisioning-l04-1-auth.md)
+DONE/review pending: один nl assignment сохранён и проверен, без apply/new identity.
+AUTH DONE; live L04.1 остаётся BLOCKED до review, обязательный teardown NOT_RUN.
 Оба формата включают GUI/user daemon/vendor и exact embedded system/runtime;
 candidate manifest связывает весь user inventory, source SHA, ABI и system build ID.
 Это integrity/provenance, не подпись и не разрешение доверять неизвестному пакету.

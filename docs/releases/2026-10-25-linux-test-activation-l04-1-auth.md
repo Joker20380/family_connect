@@ -1,5 +1,10 @@
 # L04.1-AUTH — отдельная test identity и штатная activation
 
+Исторический checkpoint: identity/activation subset review принят. Отдельно
+разрешённое [L04.1-AUTH-PROVISION](2026-10-25-linux-test-provisioning-l04-1-auth.md)
+завершило nl assignment той же identity; итог AUTH DONE, live L04.1 NOT_RUN.
+Ниже сохранены исходные результаты и запреты на момент activation checkpoint.
+
 25.10.2026. **BLOCKED: activation PASS, device AWG/TCP assignment NOT_RUN**.
 Причина теперь не отсутствие operator credentials: штатный configuration fetch
 добавляет gateway AWG peer и меняет Xray configuration. При явном запрете таких

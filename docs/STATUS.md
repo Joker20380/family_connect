@@ -1,17 +1,18 @@
 # Текущее состояние / Current state
 
-Срез **L04.1-AUTH**,25.10.2026: **BLOCKED — gateway mutation boundary**.
+Срез **L04.1-AUTH-PROVISION**,25.10.2026: **DONE / review pending**; L04.1-AUTH **DONE**.
 L03.1/L03.2 **DONE (review accepted)**; parent L03 **DONE** в scope внутреннего
 Linux-кандидата. L04 **IN_PROGRESS**; L04.2 **QUEUED / NOT_RUN**.
-Ровно одна новая test identity/one-use activation: **FC-3YSQ-BE2D**, active;
-registry binding/replay rejection и packaged Python3.12 resume PASS.
-State вне checkout, UID1000,0700/0600. Личные identities не использованы.
-Штатный configuration fetch создаёт AWG peer и меняет Xray server.json; при
-запрете gateway changes не вызван. Verified device AWG/TCP assignment **NOT_RUN**.
+Существующая test identity **FC-3YSQ-BE2D**, active; новых identity/invite нет.
+Один разрешённый nl fetch, без retry: один AWG peer и один persisted/runtime Xray
+user; signed catalog/device binding/cache/floor и packaged Python3.12 resume PASS.
+State вне checkout, UID1000,0700/0600; private teardown receipt сохранён.
+Apply/connect/перенос state не выполнялись; будущий обязательный teardown:
+device-scoped gateway cleanup → readback → registry revoke (сейчас NOT_RUN).
 L04.1 остаётся **BLOCKED / live NOT_RUN**; final-2 не пересобран/не установлен.
 D01 открыт:54 residual failures; D02.1-R PARTIAL/NOT_RUN; Windows/voice сохранены.
-[Отчёт AUTH и защищённый путь](releases/2026-10-25-linux-test-activation-l04-1-auth.md).
-**STOP. NEXT — review L04.1-AUTH; без автоматического live/L04.2/L05.**
+[Отчёт provisioning и ограничения evidence](releases/2026-10-25-linux-test-provisioning-l04-1-auth.md).
+**STOP. NEXT — review L04.1-AUTH-PROVISION; без автоматического live/L04.2/L05.**
 
 ### Принятый checkpoint L03.1
 
