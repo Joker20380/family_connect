@@ -1,4 +1,4 @@
-"""Run exact candidate gates only inside a disposable offline systemd255 container."""
+"""Run exact candidate gates only inside a disposable offline Ubuntu system."""
 import hashlib
 import importlib.util
 import io
@@ -78,7 +78,12 @@ def main():
     assert os.geteuid() == 0 and Path('/.dockerenv').exists()
     assert Path('/proc/1/comm').read_text().strip() == 'systemd'
     assert os.environ['FC_L032_HOST_NETNS'] != str(Path('/proc/self/ns/net').stat().st_ino)
-    assert run('systemctl', '--version').stdout.startswith('systemd 255 ')
+    release = dict(line.split('=', 1) for line in Path('/etc/os-release').read_text().splitlines() if '=' in line)
+    platform = (release['ID'].strip('"'), release['VERSION_ID'].strip('"'))
+    systemd, python_abi = {('ubuntu', '24.04'): ('255', (3, 12)), ('ubuntu', '26.04'): ('259', (3, 14))}[platform]
+    assert run('systemctl', '--version').stdout.startswith('systemd ' + systemd + ' ')
+    assert sys.version_info[:2] == python_abi
+    record('platform', dict(distribution=platform, systemd=systemd, python=python_abi))
     wait(lambda: run('systemctl', 'is-active', 'dbus', 'systemd-resolved', ok=False).stdout.split() == ['active', 'active'])
     no_vpn()
     assert not SYSTEM.exists()

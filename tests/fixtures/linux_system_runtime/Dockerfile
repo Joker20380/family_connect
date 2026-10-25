@@ -1,4 +1,5 @@
-FROM ubuntu:24.04 AS system
+ARG BASE=ubuntu:24.04
+FROM ${BASE} AS system
 ENV container=docker
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends python3 python3-venv systemd systemd-sysv systemd-resolved dbus polkitd pkexec iproute2 nftables curl procps ca-certificates && rm -rf /var/lib/apt/lists/*
 STOPSIGNAL SIGRTMIN+3

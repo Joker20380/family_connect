@@ -13,7 +13,7 @@ git -C "$work/xray" fetch --depth=1 origin d2758a023cd7f4174a5a5fa4ff66e487d4342
   python -m scripts.build_desktop_mesh --go "$(command -v go)" --xray "$work/xray" --out "$work/native" --os linux --test
   tar -c tests/fixtures/linux_system_runtime/Dockerfile control/requirements.lock \
     device_identity/requirements.lock provisioning/requirements.lock messenger/requirements.lock | \
-    docker build --target builder -t fc-l032-builder:ci -f tests/fixtures/linux_system_runtime/Dockerfile -
+    docker build --build-arg BASE=ubuntu:26.04 --target builder -t fc-l032-builder:ci -f tests/fixtures/linux_system_runtime/Dockerfile -
   docker build -f pilot/awg31/Dockerfile -t fc-l032-awg:ci .
   docker build -f pilot/tcp/Dockerfile -t fc-l032-tcp:ci .
 )
@@ -28,7 +28,7 @@ docker run --rm --network none --read-only --tmpfs /tmp:exec \
     /opt/build-venv/bin/python -m scripts.build_desktop_rns --out /evidence/rns
     /opt/build-venv/bin/python -m scripts.package_mesh_component --native /evidence/native --rns /evidence/rns \
       --awg /evidence/normal/awg --tcp /evidence/normal/xray --out /evidence/system'
-docker build -f tests/fixtures/linux_candidate/Dockerfile -t fc-l032-system:ci tests/fixtures/linux_candidate
+docker build --build-arg BASE=ubuntu:26.04 -f tests/fixtures/linux_candidate/Dockerfile -t fc-l032-system:ci tests/fixtures/linux_candidate
 mkdir -p artifacts/linux-candidate
 system_archive="$work/system/FamilyConnect-MESH-system-amd64.tar.gz"
 run_container() (
@@ -56,10 +56,10 @@ curl -fsSL https://github.com/AppImage/appimagetool/releases/download/continuous
 chmod 755 "$work/appimagetool"
 sha256sum "$work/appimagetool"
 APPIMAGE_EXTRACT_AND_RUN=1 python -m scripts.package_linux --system-bundle "$system_archive" \
-  --standard-system-rebuild --internal-version '0.2.12~l03.2.5' --output artifacts/linux-candidate --appimagetool "$work/appimagetool"
+  --standard-system-rebuild --target-platform ubuntu26.04 --internal-version '0.2.12~l03.2.6' --output artifacts/linux-candidate --appimagetool "$work/appimagetool"
 python -B -m scripts.verify_linux_candidate artifacts/linux-candidate | tee artifacts/linux-candidate/integrity.log
-run_container fc-l032-deb tests/fixtures/linux_candidate/smoke.py deb '/artifacts/FamilyConnect_0.2.12~l03.2.5_amd64.deb' | tee artifacts/linux-candidate/deb-smoke.log
-run_container fc-l032-appimage tests/fixtures/linux_candidate/smoke.py appimage '/artifacts/FamilyConnect-0.2.12~l03.2.5-x86_64.AppImage' | tee artifacts/linux-candidate/appimage-smoke.log
+run_container fc-l032-deb tests/fixtures/linux_candidate/smoke.py deb '/artifacts/FamilyConnect_0.2.12~l03.2.6_amd64.deb' | tee artifacts/linux-candidate/deb-smoke.log
+run_container fc-l032-appimage tests/fixtures/linux_candidate/smoke.py appimage '/artifacts/FamilyConnect-0.2.12~l03.2.6-x86_64.AppImage' | tee artifacts/linux-candidate/appimage-smoke.log
 for transport in awg tcp; do
-  run_container "fc-r1-$transport" tests/fixtures/linux_candidate/smoke.py "prestart-$transport" '/artifacts/FamilyConnect_0.2.12~l03.2.5_amd64.deb' | tee "artifacts/linux-candidate/prestart-$transport.log"
+  run_container "fc-r1-$transport" tests/fixtures/linux_candidate/smoke.py "prestart-$transport" '/artifacts/FamilyConnect_0.2.12~l03.2.6_amd64.deb' | tee "artifacts/linux-candidate/prestart-$transport.log"
 done

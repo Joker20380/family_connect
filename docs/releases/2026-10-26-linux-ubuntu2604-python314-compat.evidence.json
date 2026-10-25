@@ -1,0 +1,174 @@
+{
+  "task": "U2604-COMPAT",
+  "result": "IN_PROGRESS",
+  "scope": "source/system/package only; no workstation install or live VPN",
+  "entry_source": "5c4f0f3e734c8a1da41f6ce33822fbd4b1b6cf13",
+  "probe": {
+    "result": "PASS",
+    "started_utc": "2026-10-25T21:48:03Z",
+    "source_changed_before_completion": false,
+    "os": "Ubuntu 26.04.1 LTS",
+    "python": "3.14.4",
+    "systemd": "259.9-0ubuntu0.1",
+    "base_image_digest": "sha256:c098726dd9b9733f3e885f8de0ef375206a311b0a317eadc40d347b1115fb944",
+    "lockfiles": {
+      "provisioning/requirements.lock": "837d0aa08e47bca06da94f07056f0e3fc46380f03c365ad4fd48ce9a3d601e7c",
+      "messenger/requirements.lock": "d20e0c6336cc571e2313827b4d0c14ef328e9e0cc724bdc24054f15a7182493b"
+    },
+    "archives": [
+      {
+        "name": "rns",
+        "version": "1.5.1",
+        "sha256": "913b34e4ddbeecab3286e3ec1077b19816ab4bc986fea90d6f628237b57f9550",
+        "file": "rns-1.5.1-py3-none-any.whl"
+      },
+      {
+        "name": "pyserial",
+        "version": "3.5",
+        "sha256": "c4451db6ba391ca6ca299fb3ec7bae67a5c55dde170964c7a14ceefec02f2cf0",
+        "file": "pyserial-3.5-py2.py3-none-any.whl"
+      },
+      {
+        "name": "cryptography",
+        "version": "46.0.7",
+        "sha256": "42a1e5f98abb6391717978baf9f90dc28a743b7d9be7f0751a6f56a75d14065b",
+        "file": "cryptography-46.0.7-cp311-abi3-manylinux_2_34_x86_64.whl"
+      },
+      {
+        "name": "cffi",
+        "version": "2.1.1",
+        "sha256": "b0431303acaea1089ad4b3e9ce4e6518193def1118d4073ca848635ee4ea2e96",
+        "file": "cffi-2.1.1-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
+      },
+      {
+        "name": "pycparser",
+        "version": "3.0",
+        "sha256": "b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992",
+        "file": "pycparser-3.0-py3-none-any.whl"
+      },
+      {
+        "name": "pydantic",
+        "version": "2.13.5",
+        "sha256": "346a034f080da3755d8e9cb5e00e8b07de1d39e4f6e2c87d8ab7cafa0b269a73",
+        "file": "pydantic-2.13.5-py3-none-any.whl"
+      },
+      {
+        "name": "pydantic_core",
+        "version": "2.46.5",
+        "sha256": "54d510bac3ee52247af28ed4bb18a1e799f040ac60fd2bf5ccd4c92f1fbe786f",
+        "file": "pydantic_core-2.46.5-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+      },
+      {
+        "name": "annotated-types",
+        "version": "0.8.0",
+        "sha256": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0",
+        "file": "annotated_types-0.8.0-py3-none-any.whl"
+      },
+      {
+        "name": "typing-inspection",
+        "version": "0.4.4",
+        "sha256": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147",
+        "file": "typing_inspection-0.4.4-py3-none-any.whl"
+      },
+      {
+        "name": "typing_extensions",
+        "version": "4.16.0",
+        "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+        "file": "typing_extensions-4.16.0-py3-none-any.whl"
+      },
+      {
+        "name": "httpx",
+        "version": "0.28.1",
+        "sha256": "d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad",
+        "file": "httpx-0.28.1-py3-none-any.whl"
+      },
+      {
+        "name": "httpcore",
+        "version": "1.0.9",
+        "sha256": "2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55",
+        "file": "httpcore-1.0.9-py3-none-any.whl"
+      },
+      {
+        "name": "h11",
+        "version": "0.16.0",
+        "sha256": "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86",
+        "file": "h11-0.16.0-py3-none-any.whl"
+      },
+      {
+        "name": "anyio",
+        "version": "4.15.1",
+        "sha256": "6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101",
+        "file": "anyio-4.15.1-py3-none-any.whl"
+      },
+      {
+        "name": "idna",
+        "version": "3.19",
+        "sha256": "815e7be7a7806d54abb586dc943addc79e8b2ee16915059658cbeff4b1b43bf4",
+        "file": "idna-3.19-py3-none-any.whl"
+      },
+      {
+        "name": "certifi",
+        "version": "2026.7.22",
+        "sha256": "62f22742b58a1a33014a2b6b706588a8d7e2a88ae7bd1a6ebe8c992928483775",
+        "file": "certifi-2026.7.22-py3-none-any.whl"
+      },
+      {
+        "name": "lxmf",
+        "version": "1.1.1",
+        "sha256": "3cdb4c5b3a4ec091ed538050228d8bd15db3ca4dfe7d69be3350ebc6c6d7e696",
+        "file": "lxmf-1.1.1-py3-none-any.whl"
+      }
+    ],
+    "runtime_record_members": 630,
+    "runtime_inventory_sha256": "761e5abb69ef1c2ba9766665982a47a410cf639f68c394e7865beb52e1796909",
+    "strict_imports": "PASS",
+    "pip_check": "PASS",
+    "platform_libraries": "GTK4/libadwaita/cairo/Secret Service D-Bus/GStreamer/codec2 PASS",
+    "unchanged_targeted_tests": {
+      "passed": 129,
+      "initial_runner_path_failure": {
+        "passed": 126,
+        "failed": 3,
+        "cause": "isolated pytest invocation lacked explicit public /source import path"
+      }
+    },
+    "packaging_targeted_tests": {
+      "passed": 136
+    }
+  },
+  "candidate": {
+    "version": "0.2.12~l03.2.6",
+    "target": "Ubuntu26.04/CPython3.14",
+    "result": "NOT_BUILT"
+  },
+  "full_desktop": {
+    "passed": 1199,
+    "skipped": 83,
+    "failed": 0,
+    "runtime": "Ubuntu26.04 CPython3.14 real GTK/Xvfb; isolated native gates remain separate"
+  },
+  "frozen_python312": {
+    "version": "0.2.12~l03.2.5",
+    "unchanged": true,
+    "manifest": "2026-10-25-linux-awg-tcp-beta-freeze.json"
+  },
+  "workstation": {
+    "changed": false,
+    "package": "0.2.11",
+    "system_python": "3.14.4",
+    "owner_upgrade": "BLOCKED: frozen Python3.12 ABI"
+  },
+  "remaining": {
+    "package_gates": "NOT_RUN",
+    "full_regressions": "PENDING",
+    "L04_2": "NOT_RUN",
+    "L05": "NOT_RUN",
+    "teardown": "NOT_RUN",
+    "live_VPN": "NOT_RUN",
+    "signing": "NOT_RUN",
+    "upload": "NOT_RUN",
+    "catalog_update": "NOT_RUN",
+    "publication": "NOT_RUN"
+  },
+  "next": "review U2604-COMPAT; no automatic owner upgrade"
+}

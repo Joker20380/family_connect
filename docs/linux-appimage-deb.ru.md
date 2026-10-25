@@ -2,6 +2,12 @@
 
 ## L03.2 — внутренний полный candidate,25.10
 
+**Ubuntu26.04/CPython3.14 — отдельный U2604-COMPAT checkpoint, не host upgrade.**
+[Отчёт](releases/2026-10-26-linux-ubuntu2604-python314-compat.md): exact-lock probe PASS,
+packaging для нового internal .6 в работе; candidate/system artifacts пока NOT_BUILT.
+Frozen .5 ниже привязан к3.12 и не изменён. Workstation upgrade BLOCKED на ABI;
+новые установленные/public/invitation версии не заявляются. NEXT — review U2604-COMPAT.
+
 **Linux AWG/TCP Beta freeze: exact 0.2.12~l03.2.5, internal/unpublished.**
 [Final installed review](releases/2026-10-25-linux-installed-awg-tcp-l04-1-final.md)
 принимает E/F1/F2; L04.1-LIVE-2 и L04.1 DONE в installed AWG/TCP scope.

@@ -4,6 +4,11 @@ Start with the compact [current STATUS](STATUS.md) and [selected PLAN task](PLAN
 STATUS/PLAN define the current bounded task and next review gate, not an automatic
 continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
+[Ubuntu26.04/Python3.14 compatibility](releases/2026-10-26-linux-ubuntu2604-python314-compat.md)
+is the current bounded task: unchanged exact-lock probe PASS, separate internal .6
+packaging in progress. LOCAL-OWNER-UPGRADE remains ABI-blocked; workstation untouched.
+Frozen .5 below remains immutable. NEXT is review U2604-COMPAT, not publication or upgrade.
+
 [L04.1 final installed receipt](releases/2026-10-25-linux-installed-awg-tcp-l04-1-final.md)
 closes LIVE-2 and L04.1 as DONE/review accepted in installed Linux AWG/TCP scope:
 E/F1/F2 accepted. [Single beta-freeze manifest](releases/2026-10-25-linux-awg-tcp-beta-freeze.json)

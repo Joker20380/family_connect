@@ -81,7 +81,12 @@ def main():
     assert Path('/proc/1/comm').read_text().strip() == 'systemd'
     assert os.environ['FC_L031_HOST_NETNS'] != str(Path('/proc/self/ns/net').stat().st_ino)
     assert [entry['ifname'] for entry in json.loads(run('ip', '-j', 'link').stdout)] == ['lo']
-    assert run('systemctl', '--version').stdout.startswith('systemd 255 ')
+    release = dict(line.split('=', 1) for line in Path('/etc/os-release').read_text().splitlines() if '=' in line)
+    platform = (release['ID'].strip('"'), release['VERSION_ID'].strip('"'))
+    systemd, python_abi = {('ubuntu', '24.04'): ('255', (3, 12)), ('ubuntu', '26.04'): ('259', (3, 14))}[platform]
+    assert run('systemctl', '--version').stdout.startswith('systemd ' + systemd + ' ')
+    assert sys.version_info[:2] == python_abi
+    record('platform', dict(distribution=platform, systemd=systemd, python=python_abi))
     for unit in ('dbus', 'systemd-resolved'):
         assert run('systemctl', 'is-active', unit).stdout.strip() == 'active'
     Path('/etc/resolv.conf').write_text('nameserver 127.0.0.53\n')

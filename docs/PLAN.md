@@ -2,6 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Текущий bounded task — U2604-COMPAT, IN_PROGRESS / source packaging checkpoint.**
+LOCAL-OWNER-UPGRADE **BLOCKED на ABI**: Ubuntu26.04/Python3.14.4 не поддерживается
+frozen .5/Python3.12. Workstation/launchers/private state unchanged.
+Read-only source probe в disposable Ubuntu26.04.1/systemd259/Python3.14.4 **PASS**:
+exact locks, RECORD630/strict imports17 distributions, platform libraries и129 tests.
+Только packaging/runtime metadata/tests для отдельного internal .6; новые artifacts,
+system/user IDs и full/package gates пока NOT_RUN. Старые .5 hashes/IDs immutable.
+[Report](releases/2026-10-26-linux-ubuntu2604-python314-compat.md).
+L04.1 DONE сохраняется; L04 только L04.2. Publication/L04.2/L05/teardown/live VPN NOT_RUN.
+**STOP после checkpoint. NEXT — review U2604-COMPAT**, без автоматического owner upgrade.
+
+### Frozen baseline — не текущая задача
+
 **L04.1-LIVE-2 DONE / review accepted; L04.1 DONE в installed Linux AWG/TCP scope.**
 Review принимает E/F1/F2; принятые P1/P2/A–D и клиентский F2 не повторять.
 Exact **0.2.12~l03.2.5** frozen как **Linux AWG/TCP Beta candidate**, internal/unpublished;
@@ -102,6 +115,8 @@ D02.1-R остаётся PARTIAL/NOT_RUN; D01 открыт. Дальнейшие
 
 | ID | Результат | Зависимость | Статус | Критерий завершения |
 |---|---|---|---|---|
+| U2604-COMPAT | Отдельный Ubuntu26.04/CPython3.14 source/system/package candidate | exact lock compatibility probe; explicit owner request; frozen .5 immutable | IN_PROGRESS (probe PASS; packaging checkpoint) | [Report](releases/2026-10-26-linux-ubuntu2604-python314-compat.md). New .6 candidate/system IDs, Python3.14 manifests/dependency range, exact user/system imports, DEB/AppImage and real pkexec/READY, rollback/tamper/mixed-build/barrier gates, regressions/full suites without suppression. Synthetic disposable state only; no workstation/private identity/gateway/live VPN. |
+| LOCAL-OWNER-UPGRADE | Установка совместимого candidate на workstation владельца | отдельный review U2604-COMPAT и разрешение владельца | BLOCKED (frozen .5 Python3.12 vs host Python3.14.4) | Пока никаких host changes. После отдельного review/разрешения: backup competing user launchers, exact DEB/setup, persistent close/reopen, один AWG и один TCP connect/disconnect. Это не повтор L04.1 и не publication. |
 | D00 | Компактное состояние и последовательный план | phase22 / baseline | DONE | Новый сеанс читает STATUS + выбранный ID; история сохранена побайтно, ссылки и diff проверены; commit/push с remote SHA отражён в итоговом ответе. |
 | D01 | Зависимости Linux/desktop CI | D00 | IN_PROGRESS | Dependency gates D01.1/D01.2 отдельно от общей CI-приёмки; закрытие требует полного PASS обязательных suites после устранения остаточных blockers, без скрытия тестов. |
 | D01.1 | Client builds/linux, AmneziaWG pilot, TCP pilot | D00 | PARTIAL | Dependency gates `26f71d6` приняты review; реальные Python3.12 imports/адресные CI PASS. Полный desktop FAIL: RNS capsule, AWG Auto lifecycle assertion; PARTIAL сохранён. |
@@ -344,5 +359,5 @@ Django7.1 (servers/access/payments) зависит от backend/fencing и recov
 [Полный прежний PLAN](PLAN.history-2026-10-24.md), [STATUS](STATUS.history-2026-10-24.md),
 [phase22](releases/2026-10-23-desktop-parity106.md#linux-user-chat-admission-and-existing-exit-handoff-2410-phase22),
 [отчёт D00](releases/2026-10-24-desktop-parity106-d00.md).
-**STOP. NEXT — решение владельца о signing и ограниченной публикации Linux AWG/TCP Beta.
-L04.2/L05/teardown NOT_RUN; без F2 replay, R3 или автоматического перехода к другим задачам.**
+**STOP. NEXT — review U2604-COMPAT. LOCAL-OWNER-UPGRADE отдельно после review/разрешения;
+L04.2/L05/teardown/signing/publication NOT_RUN; без F2 replay или R3.**

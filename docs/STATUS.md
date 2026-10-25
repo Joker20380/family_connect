@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**U2604-COMPAT — IN_PROGRESS / source packaging checkpoint.**
+LOCAL-OWNER-UPGRADE **BLOCKED на ABI**: workstation Ubuntu26.04/system Python3.14.4,
+frozen .5 требует3.12. До установки/backup/launcher migration не дошли; workstation unchanged.
+Новая disposable Ubuntu26.04.1/systemd259/Python3.14.4: exact provisioning/messenger
+locks,630 RECORD/hash-verified runtime members, strict imports всех17 distributions,
+GTK/Adw/cairo/Secret Service/GStreamer/codec2 и129 адресных tests **PASS** без source edits.
+Начальная test-runner ошибка3 imports из-за отсутствия explicit public source path
+сохранена; исправлен только invocation, все129 PASS. Pins/hashes не менялись.
+Packaging готовит отдельный **0.2.12~l03.2.6 / Ubuntu26.04 / Python3.14**;
+new artifact/system IDs ещё NOT_BUILT. Frozen .5/3.12 immutable, L04.1 не переоткрывается.
+Production VPN/GUI/helper/protocol/identity/cache logic не меняется. Private identity,
+activation/cache/gateway не использованы. Publication/L04.2/L05/teardown/live VPN **NOT_RUN**.
+[U2604-COMPAT report](releases/2026-10-26-linux-ubuntu2604-python314-compat.md).
+**STOP после checkpoint. NEXT — review U2604-COMPAT; owner upgrade не начинается автоматически.**
+
+### Frozen Linux AWG/TCP Beta baseline — сохранён, не активный NEXT
+
 **L04.1-LIVE-2 DONE / review accepted; L04.1 DONE — installed Linux AWG/TCP,25.10.**
 Владелец принял E, F1 и F2. P1/P2 и A–D на .4 не повторялись; E/F1/F2 на .5
 приняты без нового live-run. **Linux AWG/TCP Beta candidate frozen:
@@ -520,5 +537,5 @@ D00 ничего не устанавливает: runtime rollback не нуже
 [STATUS до D00](STATUS.history-2026-10-24.md) и [PLAN до D00](PLAN.history-2026-10-24.md)
 сохранены целиком; старые NEXT/ACTIVE/checkpoints — история, не параллельные задания.
 [Отчёт D00](releases/2026-10-24-desktop-parity106-d00.md) фиксирует сохранность и границы.
-**STOP. NEXT — решение владельца о signing и ограниченной публикации Linux AWG/TCP Beta.
-L04.2/L05/teardown и прочие задачи автоматически не начинать; F2 не повторять, R3 не создавать.**
+**STOP. NEXT — review U2604-COMPAT. LOCAL-OWNER-UPGRADE остаётся отдельным решением;
+L04.2/L05/teardown/signing/publication не начинать. Frozen F2 не повторять, R3 не создавать.**

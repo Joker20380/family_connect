@@ -11,6 +11,20 @@ ROOT = Path(__file__).resolve().parents[1]
 SYSTEM = dict(build_id='8d7d78ec06fc897fa7e94d21f208b08b31d6c6c3e33eaad19a262705117c8f9d',
               sha256='ddd74c2132a76ac833b587d9df6409d779ce6afcdaa45fafd23faa86d7817726', size=49250848,
               source_digest='cfcb7bae874765cfe6a66742fbeed55cb03399b7e32c13d5a5edcd212299df61')
+TARGETS = {'ubuntu24.04': [3, 12], 'ubuntu26.04': [3, 14]}
+
+
+def compatibility(target, python):
+    if target not in TARGETS or python != TARGETS[target]:
+        raise ValueError('Candidate target/Python ABI mismatch')
+    return dict(distribution='ubuntu', version=target.removeprefix('ubuntu'),
+                python=python, interpreter='/usr/bin/python3')
+
+
+def python_dependency(python):
+    if python not in TARGETS.values():
+        raise ValueError('Unsupported candidate Python ABI')
+    return f'python3 (>= {python[0]}.{python[1]}), python3 (<< {python[0]}.{python[1] + 1})'
 
 
 def load(name):
@@ -20,7 +34,9 @@ def load(name):
     return module
 
 
-def embed(bundle, archive, *, standard_rebuild=False):
+def embed(bundle, archive, *, standard_rebuild=False, target='ubuntu24.04'):
+    if target not in TARGETS or (target != 'ubuntu24.04' and not standard_rebuild):
+        raise ValueError('New platform requires an explicit standard system rebuild')
     raw = archive.read_bytes()
     if not standard_rebuild and (len(raw) != SYSTEM['size'] or hashlib.sha256(raw).hexdigest() != SYSTEM['sha256']):
         raise ValueError('Expected pinned internal system build, not a same-version replacement')
@@ -41,8 +57,7 @@ def embed(bundle, archive, *, standard_rebuild=False):
         runtime = json.loads((component / 'python-runtime.json').read_text())
         if json.loads((component / 'rns/build.json').read_text())['source_digest'] != reference['rns_source_digest']:
             raise ValueError('RNS source reference mismatch')
-        if runtime['python'] != [3, 12]:
-            raise ValueError('The accepted runtime requires Python3.12')
+        compatibility(target, runtime['python'])
         for lock in ('provisioning/requirements.lock', 'messenger/requirements.lock'):
             for line in (ROOT / lock).read_text().splitlines():
                 match = re.match(r'^([A-Za-z0-9_-]+)==([^ ]+)', line)
@@ -59,9 +74,12 @@ def embed(bundle, archive, *, standard_rebuild=False):
     return expected, runtime['python']
 
 
-def seal(bundle, version, system, python):
+def seal(bundle, version, system, python, *, target='ubuntu24.04'):
     if not re.fullmatch(r'0\.2\.12~l03\.2\.[1-9][0-9]*', version):
         raise ValueError('Explicit reserved internal Linux candidate version required')
+    platform = compatibility(target, python)
+    if target == 'ubuntu26.04' and int(version.rsplit('.', 1)[1]) <= 5:
+        raise ValueError('Ubuntu26.04 requires a new candidate version after the frozen .5')
     paths = ['clients/desktop', 'provisioning', 'messenger', 'device_identity', 'packaging',
              'scripts/package_linux.py', 'scripts/linux_candidate.py']
     dirty = bool(subprocess.check_output(['git', 'diff', 'HEAD', '--', *paths], cwd=ROOT))
@@ -83,6 +101,7 @@ def seal(bundle, version, system, python):
                   system_kind='pinned-internal-system' if system['sha256'] == SYSTEM['sha256'] else 'standard-source-rebuild',
                   source_commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
                   source_dirty=dirty, files=files, signing='unsigned-internal-candidate')
+    record['compatibility'] = platform
     record['build_id'] = hashlib.sha256(json.dumps(record, sort_keys=True, separators=(',', ':')).encode()).hexdigest()
     (bundle / 'candidate.json').write_text(json.dumps(record, sort_keys=True, indent=2) + '\n')
     (bundle / 'candidate.json').chmod(0o644)

@@ -180,3 +180,32 @@ def test_candidate_authorization_requires_matching_system(monkeypatch, kind, act
     session = backend._AuthorizationSession()
     with pytest.raises(backend.BackendError, match='CANDIDATE_SYSTEM_BUILD_MISMATCH'):
         session.call(kind, action, ident, data)
+
+
+@pytest.mark.parametrize('target,python,dependency', [
+    ('ubuntu24.04', [3, 12], 'python3 (>= 3.12), python3 (<< 3.13)'),
+    ('ubuntu26.04', [3, 14], 'python3 (>= 3.14), python3 (<< 3.15)'),
+])
+def test_candidate_target_abi_and_debian_dependency(target, python, dependency):
+    from scripts.linux_candidate import compatibility, python_dependency
+    assert compatibility(target, python) == dict(distribution='ubuntu', version=target.removeprefix('ubuntu'),
+                                                 python=python, interpreter='/usr/bin/python3')
+    assert python_dependency(python) == dependency
+
+
+@pytest.mark.parametrize('target,python', [('ubuntu26.04', [3, 12]), ('ubuntu24.04', [3, 14]),
+                                         ('ubuntu26.04', [3, 13]), ('unknown', [3, 14])])
+def test_candidate_rejects_wrong_target_abi(target, python):
+    from scripts.linux_candidate import compatibility
+    with pytest.raises(ValueError, match='target/Python ABI mismatch'):
+        compatibility(target, python)
+
+
+def test_python314_cannot_reuse_frozen_candidate_or_system(tmp_path):
+    from scripts.linux_candidate import embed, seal, python_dependency
+    with pytest.raises(ValueError, match='new candidate version'):
+        seal(tmp_path, '0.2.12~l03.2.5', {}, [3, 14], target='ubuntu26.04')
+    with pytest.raises(ValueError, match='explicit standard system rebuild'):
+        embed(tmp_path, tmp_path / 'not-read.tar.gz', target='ubuntu26.04')
+    with pytest.raises(ValueError, match='Unsupported candidate Python ABI'):
+        python_dependency([3, 13])
