@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "kind": "linux-awg-tcp-beta-freeze",
+  "date": "2026-10-25",
+  "name": "Linux AWG/TCP Beta candidate",
+  "status": "FROZEN",
+  "distribution": "internal/unpublished",
+  "review": {
+    "decision": "owner accepted E, F1 and F2",
+    "scope": "installed Linux AWG/TCP only",
+    "L04.1-LIVE-2": "DONE / review accepted",
+    "L04.1": "DONE / review accepted",
+    "L04": "IN_PROGRESS only because of L04.2",
+    "L04.2": "NOT_RUN",
+    "L05": "NOT_RUN",
+    "test_device_teardown": "NOT_RUN",
+    "client_F2_replay": "NOT_RUN; do not repeat",
+    "R3_created": false
+  },
+  "identity": {
+    "version": "0.2.12~l03.2.5",
+    "architecture": "x86_64 / amd64",
+    "candidate_id": "f0ee17609cfc8dbaf48edfa0f33b417754f9674d578168fa4cbb1c47d51d3f95",
+    "candidate_source_sha": "1c2beb6bc687c94d2a9312da0545b6e985749752",
+    "system_build_id": "8d7d78ec06fc897fa7e94d21f208b08b31d6c6c3e33eaad19a262705117c8f9d",
+    "system_source_sha": "053c4e5f9532ca927f49a78f9c0ed17903375baf",
+    "runtime_contract": 2,
+    "authorization_contract": 2,
+    "python_runtime": "3.12",
+    "user_inventory_members": 707,
+    "system_archive_members": 759,
+    "system_archive_size_bytes": 49250848,
+    "system_archive_sha256": "ddd74c2132a76ac833b587d9df6409d779ce6afcdaa45fafd23faa86d7817726",
+    "system_installer_sha256": "ce9acb1f363b0fafffb11c44097901a7871c28fbf0e6b9c2c5c3eaba9ef7bfb5"
+  },
+  "artifacts": [
+    {
+      "format": "AppImage",
+      "filename": "FamilyConnect-0.2.12~l03.2.5-x86_64.AppImage",
+      "size_bytes": 57928184,
+      "sha256": "dd013ce6be2a93be817b38aac9632e5b51b00419fbbc4da154d7e0b8b0f9db32"
+    },
+    {
+      "format": "DEB",
+      "filename": "FamilyConnect_0.2.12~l03.2.5_amd64.deb",
+      "size_bytes": 55987676,
+      "sha256": "3b583fbdb69e726357d3b5d707629dd5dbe502078c1735cb9899de2dfb46d9ab"
+    }
+  ],
+  "immutability": {
+    "rebuilt": false,
+    "repacked": false,
+    "artifact_bytes_changed": false,
+    "product_source_changed": false,
+    "freeze_verification": "local read-only size and SHA256 comparison with accepted receipts; no execution",
+    "ci_rebuild_is_not_this_candidate": true,
+    "historical_artifacts_retained_unchanged": true
+  },
+  "supported_functions": [
+    "activation",
+    "AWG",
+    "TCP",
+    "connect/disconnect",
+    "DNS/HTTPS",
+    "state preservation",
+    "diagnostics"
+  ],
+  "evidence_boundary": {
+    "activation": "accepted AUTH/PROVISION; existing authorized identity/assignment preserved, no new issuance",
+    "positive_AWG_TCP_DNS_HTTPS": "accepted RETEST on exact .2, including valid terminal DNS NODATA alongside positive/NXDOMAIN; not repeated in freeze",
+    "negative_prerequisites": "P1/P2 and A/B1/B2/C1/C2/D accepted on exact .4, not repeated on .5",
+    "final_exact_candidate": "E/F1/F2 on exact .5 accepted; F2 uses original AppImage with matching DEB-installed system",
+    "state_preservation": "identity, signed cache/floors and settings retained; full network/DNS/firewall cleanup in accepted client gates",
+    "diagnostics": "existing client state/first-failure and cleanup diagnostics within accepted AWG/TCP gates; not a new export or fleet acceptance",
+    "all_gates_rerun_on_0_2_12_l03_2_5": false,
+    "new_live_tests": "NOT_RUN"
+  },
+  "known_limitations": {
+    "excluded_from_beta_scope": [
+      "MESH/Auto installed acceptance (L04.2)",
+      "messenger installed acceptance (L05)"
+    ],
+    "full_parity_release": false,
+    "full_bundle_updater_acceptance_L08": "NOT_RUN; legacy six-file updater unchanged",
+    "general_CI_PASS": false,
+    "full_suite_residuals": {
+      "classification": "separate technical debt; not fixed or suppressed by beta freeze",
+      "control_failures": 54,
+      "phase0_failures": 54,
+      "docker_failures": 54,
+      "historical_docker_failures": 53,
+      "additional_docker_failure": "tests/test_readiness_receipts.py::test_ui_unavailable_server_ack_is_authoritative",
+      "additional_failure_cause": "NOT_ESTABLISHED",
+      "historical_voice_windows_observations": "remain open",
+      "rerun_in_freeze": false
+    }
+  },
+  "registry_operational_observation": {
+    "classification": "separate operational observation during F2",
+    "first_post_action_readback": "FAIL: registry service not active/running",
+    "inactive_utc": "2026-10-25T20:58:36Z",
+    "active_again_utc": "2026-10-25T20:58:49Z",
+    "cause": "UNKNOWN / NOT_ESTABLISHED",
+    "uninterrupted_continuity": "NOT_PROVEN",
+    "assignment_unchanged": true,
+    "configuration_unchanged": true,
+    "bindings_foreign_records_catalog_unchanged": true,
+    "only_changed_comparison_field": "registry.service_sha256",
+    "later_readback_erases_initial_failure": false,
+    "client_F2": "accepted; do not repeat",
+    "new_client_defect_established": false,
+    "server_operations_in_freeze": "NOT_RUN"
+  },
+  "installation_boundary": {
+    "accepted_environment": "Ubuntu 24.04.5 LTS x86_64 disposable KVM; kernel 6.8.0-147; systemd 255.4; ordinary UID; real GTK/libadwaita, TUN, NetworkManager/resolved and polkit",
+    "user_package": "exact DEB installed with apt or original AppImage launched as ordinary user; packaged Python 3.12 and documented host GTK/GI/Secret Service/media prerequisites",
+    "system_setup": "explicit GUI/pkexec setup of matching embedded system bytes; READY required, no silent VPN",
+    "shared_state": "DEB and original AppImage share the protected user state and matching system component",
+    "historical_guest": "removed after accepted tests; original protected state and future teardown receipt retained locally",
+    "workstation_installation": "NOT_RUN",
+    "new_installation_in_freeze": "NOT_RUN",
+    "public_and_invitation_metadata": "unchanged; last documented public Linux 0.2.11, not network-reverified in freeze"
+  },
+  "rollback_boundary": {
+    "performed_in_freeze": "NOT_RUN",
+    "allowed_path_after_separate_authorization": "reviewed matching full user/system pair; explicit root reinstall only while idle with confirmed cleanup",
+    "preserve": [
+      "identity and keys",
+      "activation and signed cache",
+      "signed floors",
+      "history and settings",
+      "independent root runtime and retained backups"
+    ],
+    "user_package_removal": "does not remove protected state or independently installed root runtime",
+    "forbidden_shortcuts": [
+      "manual deletion of journal, pending or lock markers",
+      "state reset or signed-floor downgrade",
+      "unmatched user/system rollback",
+      "automatic device revoke or gateway cleanup"
+    ],
+    "old_artifacts": "retained immutable as historical evidence, not automatically selected as rollback targets"
+  },
+  "release_actions": {
+    "signing": "NOT_RUN",
+    "upload": "NOT_RUN",
+    "release_tag": "NOT_RUN",
+    "catalog_update": "NOT_RUN",
+    "publication": "NOT_RUN",
+    "deployment": "NOT_RUN"
+  },
+  "evidence_paths_relative_to_manifest": [
+    "2026-10-25-linux-installed-awg-tcp-l04-1-final.md",
+    "evidence/l04-1-final-20261025.json",
+    "2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md",
+    "2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.evidence.json",
+    "2026-10-25-linux-installed-awg-tcp-l04-1-retest.md",
+    "2026-10-25-linux-installed-awg-tcp-l04-1-live-2-continuation.md",
+    "2026-10-25-linux-test-activation-l04-1-auth.md",
+    "2026-10-25-linux-test-provisioning-l04-1-auth.md",
+    "../linux-appimage-deb.ru.md"
+  ],
+  "stop": true,
+  "next": "owner decision on signing and limited Linux AWG/TCP Beta publication"
+}

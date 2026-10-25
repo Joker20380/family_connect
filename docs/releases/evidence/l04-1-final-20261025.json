@@ -1,7 +1,12 @@
 {
   "checkpoint": "L04.1-LIVE-2",
-  "result": "PARTIAL",
-  "review": "pending",
+  "result": "DONE",
+  "review": "accepted",
+  "review_scope": "installed Linux AWG/TCP",
+  "initial_checkpoint_result": "PARTIAL / review pending",
+  "L04_1": "DONE",
+  "L04": "IN_PROGRESS only because of L04.2",
+  "beta_freeze_manifest": "../2026-10-25-linux-awg-tcp-beta-freeze.json",
   "entry_main": "9e9bf16db397a0ce8cf0b559cbe8a7278c95aef9",
   "accepted_not_repeated": [
     "P1",
@@ -219,7 +224,9 @@
       "terminal_observed_utc": "2026-10-25T20:53:58.471783+00:00"
     },
     "F2": {
-      "result": "PARTIAL",
+      "result": "PASS",
+      "review": "accepted in client scope; registry observation retained separately",
+      "initial_checkpoint_result": "PARTIAL: first registry continuity readback failed",
       "local_contract": "PASS",
       "transport": "tcp",
       "artifact": "original AppImage",
@@ -372,6 +379,9 @@
     "registry_active_again_utc": "2026-10-25T20:58:49Z",
     "registry_result_on_later_inspection": "success",
     "transition_cause": "NOT_ESTABLISHED",
+    "classification": "separate operational observation; not a new client defect",
+    "uninterrupted_continuity": "NOT_PROVEN",
+    "assignment_unchanged": true,
     "bounded_unit_journal": "TIMEOUT; no retry",
     "later_observation_utc": "2026-10-25T21:00:40.246649+00:00",
     "later_changed_fields": [
@@ -395,9 +405,14 @@
   "stop": {
     "new_user_actions_after_readback_failure": 0,
     "source_correction": "NOT_RUN",
+    "R3_created": false,
+    "client_F2_replay": "NOT_RUN; do not repeat",
     "L04_2": "NOT_RUN",
     "L05": "NOT_RUN",
     "device_teardown": "NOT_RUN",
+    "signing": "NOT_RUN",
+    "upload": "NOT_RUN",
+    "catalog_update": "NOT_RUN",
     "publication": "NOT_RUN"
   },
   "cleanup": {
@@ -407,5 +422,5 @@
     "original_protected_state_preserved": true,
     "host_network_final_interval_unchanged": true
   },
-  "next": "final review L04.1; no automatic F2 replay or source correction"
+  "next": "owner decision on signing and limited Linux AWG/TCP Beta publication; STOP"
 }

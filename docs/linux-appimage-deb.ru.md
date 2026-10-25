@@ -2,13 +2,26 @@
 
 ## L03.2 — внутренний полный candidate,25.10
 
+**Linux AWG/TCP Beta freeze: exact 0.2.12~l03.2.5, internal/unpublished.**
+[Final installed review](releases/2026-10-25-linux-installed-awg-tcp-l04-1-final.md)
+принимает E/F1/F2; L04.1-LIVE-2 и L04.1 DONE в installed AWG/TCP scope.
+[Единый freeze manifest](releases/2026-10-25-linux-awg-tcp-beta-freeze.json) содержит
+exact IDs/hashes/размеры и installation/rollback boundary; artifact bytes не менялись.
+Registry restart F2 — отдельное operational observation: continuity NOT_PROVEN,
+причина неизвестна, assignment/configuration неизменны. F2 не повторять, R3 не создавать.
+Parent L04 IN_PROGRESS только из-за L04.2; L04.2/L05/teardown NOT_RUN.
+MESH/Auto и messenger вне beta scope. Signing/upload/catalog/publication NOT_RUN.
+**STOP. NEXT — решение владельца о signing и ограниченной публикации Linux AWG/TCP Beta.**
+
+Предыдущие package/live checkpoints ниже — исторические receipts, не текущие NEXTs.
+
 [R2 queued Connect/Close](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md)
 Source/package PASS: новый internal **0.2.12~l03.2.5**, source1c2beb6/candidate
 f0ee1760…; только user-side GUI correction. Оба exact offline systemd255/pkexec
 DEB/AppImage gate и integrity PASS; system8d7d78ec… byte/contract verified unchanged.
 Linux/AWG/TCP/package CI PASS; full CI54/54/54 failures сохранены, общего PASS нет.
 Hashes/размеры в R2 report. Historical .4 не патчить/не пересобирать
-под тем же именем. Live E/F NOT_RUN, L04.1 IN_PROGRESS; NEXT review R2.
+под тем же именем. В самом R2 live E/F NOT_RUN; subsequent final review указан выше.
 Public0.2.11/download links/catalog не меняются; internal candidate не опубликован.
 
 [R1 source/package correction](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md)
@@ -80,7 +93,8 @@ AppImage: сначала `--remove-integration`, затем удаление с�
 собственный menu entry и user owner, не удаляя данные/root runtime; общий icon остаётся.
 Legacy six-file updater сохранён, но не применяется к internal candidate: upgrade/
 миграция старого клиента — L08, не принята. Rollback — reviewed matching full pair
-с explicit root reinstall только при idle/confirmed cleanup; L04/L05 не выполнены.
+с explicit root reinstall только при idle/confirmed cleanup. L04.1 AWG/TCP принят;
+parent L04 открыт только из-за L04.2, L05 NOT_RUN. Freeze не выполняет install/rollback.
 
 Исторические версии/ограничения ниже не являются текущим составом L03.2.
 

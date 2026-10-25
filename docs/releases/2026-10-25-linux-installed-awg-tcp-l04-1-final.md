@@ -1,14 +1,21 @@
 # L04.1-LIVE-2 — final installed E/F checkpoint,25.10.2026
 
-**PARTIAL / review pending. E PASS; F1 PASS; F2 local contract PASS, full gate
-not accepted because its first server continuity readback failed.** No new
-architecture/task ID. R2 is DONE/review accepted in source/package scope.
+**DONE / review accepted — installed Linux AWG/TCP scope. Owner accepts E, F1
+and F2; L04.1 is DONE.** The initial PARTIAL/review-pending checkpoint is retained
+as history, not the current decision. Registry restart during F2 is a separate
+operational observation: uninterrupted continuity **NOT_PROVEN**, cause unknown,
+assignment/configuration unchanged. The first failed readback is not erased.
+No F2 replay or R3. R2 is DONE/review accepted in source/package scope.
 P1/P2 and A/B1/B2/C1/C2/D remain accepted on exact .4 and were **not repeated**.
-Parent L04.1 remains IN_PROGRESS. STOP. NEXT — final review L04.1.
+Parent L04 remains **IN_PROGRESS only because of L04.2**; L04.2/L05/teardown NOT_RUN.
+Exact **0.2.12~l03.2.5** is frozen as the **Linux AWG/TCP Beta candidate**,
+internal/unpublished, without changing any artifact bytes.
+**STOP. NEXT — owner decision on signing and limited Linux AWG/TCP Beta publication.**
 
 [Sanitized evidence](evidence/l04-1-final-20261025.json).
 [Accepted R2 source/package evidence](2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md).
 [Historical .4 continuation](2026-10-25-linux-installed-awg-tcp-l04-1-live-2-continuation.md).
+[Single beta-freeze manifest](2026-10-25-linux-awg-tcp-beta-freeze.json).
 
 ## Immutable candidate
 
@@ -100,7 +107,7 @@ exactly1/1/1 per scenario; no second Disconnect or helper termination occurred.
 | Network/DNS/firewall baseline equality | PASS | PASS |
 | Owner/TUN/transport workers after cleanup | 0/0/0 | 0/0/0 |
 | Identity/cache/signed floors/settings preservation | PASS | PASS |
-| Full scenario outcome | **PASS** | **PARTIAL: server readback limitation** |
+| Reviewed client scenario outcome | **PASS / accepted** | **PASS / accepted; separate registry observation** |
 
 Transfers were capped at60s, requested524288 bytes and rate-limited8192 bytes/s.
 Both were incomplete at the bound after Disconnect. These are bounded terminal
@@ -116,7 +123,7 @@ claimed as product transport cleanup. No journal/pending was manually cleared.
 F2's intentional TCP selection precedes its settings baseline; subsequent
 connection/disconnection preserved that baseline.
 
-## F2 first server readback failure — retained, not waived
+## F2 registry operational observation — retained independently of client acceptance
 
 Three F2 pre-action reads were consistent; the last completed at20:57:29UTC.
 TCP reached CONNECTED at20:58:27UTC. The single Disconnect was clicked at20:58:38
@@ -137,9 +144,12 @@ user remained1/1 and1/1. Foreign records, gateway configuration, network structu
 and gateway service identities were unchanged. The **only changed comparison
 field was registry.service_sha256**, reflecting the service instance transition.
 This later observation does **not** replace the failed first readback or establish
-uninterrupted server continuity. Full F2 and L04.1-LIVE-2 are therefore not marked
-PASS/DONE. Review must decide the effect of this limitation; no automatic replay
-or source correction is authorized.
+uninterrupted server continuity: **NOT_PROVEN**. The initial checkpoint was
+PARTIAL pending review. The owner now accepts F2 and closes L04.1-LIVE-2/L04.1
+in installed Linux AWG/TCP scope, retaining this observation separately rather
+than claiming continuous registry uptime. Cause remains unknown; assignment and
+configuration remain unchanged. Client F2 must not be repeated; no R3 or source
+correction is authorized.
 
 Only read-only terminal observation and safe guest cleanup followed the failure.
 TCP stayed disconnected through transfer termination and49 later poll callbacks;
@@ -155,7 +165,8 @@ read-only preflight passes. No device revoke or gateway record deletion occurred
 Host routing/DNS/rules were unchanged in the final readback interval; no host
 network/service configuration was modified during this task.
 
-Only sanitized documentation/JSON is committed. JSON validation,408 document links
+Initial live-checkpoint validation, before owner freeze: sanitized documentation/JSON
+only. JSON validation,408 document links
 with no errors, secret/known-credential scan (including all-ref history), staged
 five-file scope and whitespace checks PASS; public source guard2928/0 blocked.
 The ordinary push is followed by remote main SHA verification. Product source is unchanged,
@@ -164,11 +175,54 @@ R2's Linux/AWG/TCP/package CI PASS and full-suite54/54/54 failures (historical
 Docker53) remain as recorded; there is no new general CI PASS claim and no changes
 to voice/Windows observations.
 
-No rollout/rollback is performed: failed continuity is retained for review,
+No rollout/rollback is performed: failed continuity is retained as an operational observation,
 private VM copies are discarded, and immutable candidate/public versions stay
 unchanged. This report and its JSON are the one final receipt for this continuation;
 the documentation commit/push identity is available in Git history.
 
-**L04.1-LIVE-2 PARTIAL / review pending. L04.1 IN_PROGRESS.**
-L04.2, L05, test-device teardown and publication remain **NOT_RUN**.
-**STOP. NEXT — final review L04.1.**
+## Owner review and beta freeze — documentation-only closure,25.10
+
+Review accepts E/F1/F2; **L04.1-LIVE-2 DONE / review accepted** and **L04.1 DONE**
+only for installed Linux AWG/TCP. Parent **L04 IN_PROGRESS only because of L04.2**.
+L04.2, L05 and device teardown remain **NOT_RUN**, not waived or auto-started.
+No new R3. Existing full-suite54/54/54 residual failures (historical Docker53,
+additional readiness-receipt assertion of unknown cause) remain separate technical
+debt; D01/overall CI acceptance and historical voice/Windows observations stay open.
+
+The [single beta-freeze manifest](2026-10-25-linux-awg-tcp-beta-freeze.json) pins
+exact candidate/source/system IDs and AppImage/DEB hashes/sizes. Local read-only
+size/SHA256 verification matches the recorded bytes. No rebuild, repack, source
+change, new live test, server operation, installation or rollback occurs in freeze.
+Supported beta scope: activation, AWG, TCP, Connect/Disconnect, DNS/HTTPS,
+state preservation and diagnostics; **MESH/Auto and messenger are excluded**.
+Earlier accepted gates keep their original artifact/version provenance; freeze
+does not claim every gate was rerun on .5 or revalidate server health.
+
+Installation boundary: existing Ubuntu24.04 x86_64 disposable-guest acceptance,
+ordinary-user GUI and explicit pkexec setup of the matching embedded system.
+DEB and original AppImage share the same protected user state/system component.
+No workstation install or general-distribution acceptance. User-package removal
+preserves identity/history/settings, signed floors and the independent root runtime.
+Rollback is only an explicitly reviewed matching user/system pair, while idle with
+confirmed cleanup; no manual journal/lock deletion, state reset, floor downgrade
+or silent reinstall. Legacy six-file updater remains unchanged; L08 full-bundle
+upgrade is not accepted. Original protected state/teardown receipt stays local;
+the earlier disposable guest cleanup is not test-device teardown.
+
+Candidate remains **internal/unpublished**. Signing, upload, release tag, catalog
+update and publication are **NOT_RUN**. Last documented public Linux0.2.11 and
+invitation/download/catalog metadata are unchanged, not network-reverified here.
+Source documentation push is not signing, deployment or publication of the candidate.
+Parallel pre-existing ops edits/reports are preserved outside this commit.
+
+Freeze checks **PASS**: two JSON files and exact manifest/receipt/artifact consistency;
+425 links in the five staged Markdown documents, no missing local targets/anchors.
+Six external URLs are recognized, not fetched; no server/network health check.
+Staged scope is exactly seven sanitized docs/manifest files; public-source secret
+guard2929 index entries/0 blocked and added-content secret/private-data scan0 findings.
+Both working/staged `git diff --check` PASS; pre-existing ops changes are excluded.
+No product tests rerun.
+The documentation commit and ordinary push/remote SHA verification are recorded
+in Git and the closure handoff; no release acceptance is inferred from that push.
+
+**STOP. NEXT — решение владельца о signing и ограниченной публикации Linux AWG/TCP Beta.**

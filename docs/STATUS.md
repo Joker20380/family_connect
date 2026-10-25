@@ -1,23 +1,27 @@
 # Текущее состояние / Current state
 
-**L04.1-LIVE-2 final installed checkpoint — PARTIAL / review pending,25.10.**
-R2 DONE/review accepted в source/package scope; exact .5 принят для live gate.
-P1/P2 и A/B1/B2/C1/C2/D на .4 не повторялись. **E PASS, F1 PASS**.
-E: один queued Connect/Close, product cancellation, helper/TUN0, generation0/null;
-worker release/cancelled callback inert, reopen DISCONNECTED.
-F1 и локальный F2: один normal up/down, actual AWG либо TCP/Xray + HTTPS200,
-Disconnect во время bounded transfer, полный network/DNS/firewall cleanup,
-journal IDLE/generation3/null, identity/cache/floors/settings сохранены;
-18/49 late poll callbacks без CONNECTED. F2 через original exact AppImage.
-**F2 в целом PARTIAL:** первый post-action readback застал registry inactive;
-read-only inspection показывает переход20:58:36→20:58:49UTC, причина не установлена.
-Поздний forensic read сохраняет assignment/bindings, target1/1+1/1, foreign/config/
-catalog; изменился только registry service identity. Это не отменяет первичный отказ.
-Новый GUI/TCP defect не установлен; повторов действий/source correction нет.
-Exact .5/candidate f0ee1760…/system8d7d78ec… неизменны. Guest-копии удалены,
-original protected state сохранён. L04.1 IN_PROGRESS; L04.2/L05/teardown NOT_RUN.
-STOP. NEXT — final review L04.1, включая ограничение server continuity F2.
-[Единый итоговый отчёт](releases/2026-10-25-linux-installed-awg-tcp-l04-1-final.md).
+**L04.1-LIVE-2 DONE / review accepted; L04.1 DONE — installed Linux AWG/TCP,25.10.**
+Владелец принял E, F1 и F2. P1/P2 и A–D на .4 не повторялись; E/F1/F2 на .5
+приняты без нового live-run. **Linux AWG/TCP Beta candidate frozen:
+exact 0.2.12~l03.2.5**, candidate f0ee1760…/source1c2beb6/system8d7d78ec….
+AppImage/DEB bytes неизменны; hashes/размеры повторно сверены локально, без запуска.
+Candidate **internal/unpublished**, ранее установлен только в disposable guest;
+не установлен на workstation, public/invitation versions и каталоги не менялись.
+Поддерживаемый beta scope: activation, AWG/TCP, Connect/Disconnect, DNS/HTTPS,
+state preservation и diagnostics. MESH/Auto и messenger в него не входят.
+Registry restart F2 остаётся отдельным **operational observation**: первый readback
+FAIL сохранён, **uninterrupted continuity NOT_PROVEN**, причина неизвестна;
+assignment/configuration не изменились, registry service identity изменился.
+Клиентский F2 не повторять; R3 не создавать. Это не блокер принятого client scope.
+Parent **L04 IN_PROGRESS только из-за L04.2**; L04.2/L05/test-device teardown **NOT_RUN**.
+Full-suite residual54/54/54 failures (historical Docker53) — отдельный technical debt,
+общего CI PASS нет. Original protected state/teardown receipt сохранены.
+Signing/upload/catalog update/publication **NOT_RUN**; никаких новых live/source/server
+операций. [Итоговый отчёт](releases/2026-10-25-linux-installed-awg-tcp-l04-1-final.md),
+[единый beta-freeze manifest](releases/2026-10-25-linux-awg-tcp-beta-freeze.json).
+**STOP. NEXT — решение владельца о signing и ограниченной публикации Linux AWG/TCP Beta.**
+
+### Исторические checkpoints — не текущие статусы или NEXT
 
 **L04.1-LIVE-2-R2 DONE / review accepted — source/package scope.**
 На exact .4 review принимает P1/P2, B1/B2/C1/C2/D PASS; E FAIL/review accepted,
@@ -415,12 +419,12 @@ failover проверки не выполнены. Runtime/fixtures/collection p
 
 | Уровень | Подтверждённое состояние |
 |---|---|
-| SOURCE | L01/L01-R review accepted; L02 PARTIAL source integration, review L02 pending; не новая поставка. |
-| LOCAL TESTS | L02: адресные Python/native и отдельные 13 root/process/UID PASS; Go/race, DIRECT/Auto isolated kernel PASS. Точные counts/границы — в [L02](releases/2026-10-24-linux-chat-mesh-l02.md). Combined authenticated MESH handoff, полный pytest и installed/live локально NOT_RUN. |
-| CI | L02 `383ef3606aaa4dbd29f0c7c0f755e6faec6e309f`: Client Linux/Auto/new process gates/root→UID/kernel/AWG/TCP/voice PASS; control/phase0/Docker full FAIL. [Точные jobs и remaining full gates](releases/2026-10-24-linux-chat-mesh-l02.md). L01/L01-R evidence остаётся на прежних SHA; D01 открыт, старые GTK failures не объявлены исправленными. |
-| BUILT | Linux native-r18, Windows native-r14 cross-build, unsigned Linux system/native/RNS component-r18. **Полный parity installer: 0/2.** |
-| INSTALLED | **Завершённая установленная приёмка: 0/2.** Полный кандидат не принят на Linux/Windows; Windows runtime NOT_RUN. |
-| PUBLISHED | Parity-кандидаты не опубликованы. Linux0.2.11 / Windows0.2.15 не менялись; существующие публичные каталоги/ссылки в D00 не изменялись и заново не проверялись. |
+| SOURCE | Frozen Linux candidate source `1c2beb6`, system source `053c4e5`; R2 принят. Freeze не меняет product source. |
+| LOCAL TESTS | R2 targeted197 PASS, desktop1191 PASS/84 SKIP; isolated root→UID/native179, Auto18/DIRECT/lifetime15/combined3 PASS. Это прежние receipts, не новый запуск. |
+| CI | R2 Linux/AWG/TCP/package PASS; control/phase0/Docker54/54/54 failures — отдельный долг, не общий CI PASS. [Точные jobs](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md). |
+| BUILT | Exact internal Linux `0.2.12~l03.2.5` AppImage/DEB frozen без rebuild/repack; IDs/hashes в [manifest](releases/2026-10-25-linux-awg-tcp-beta-freeze.json). Не полный parity release. |
+| INSTALLED | L04.1 DONE/review accepted в installed Linux AWG/TCP scope; disposable guest удалён, workstation rollout NOT_RUN. L04 IN_PROGRESS только из-за L04.2; MESH/Auto/messenger NOT_RUN. Windows runtime не принят. |
+| PUBLISHED | Candidate internal/unpublished; signing/publication NOT_RUN. Последние документированные public Linux0.2.11 / Windows0.2.15 и invitation/download/catalog links не менялись; в freeze не перепроверялись по сети. |
 
 ## Продуктовый baseline: phase22
 
@@ -448,7 +452,13 @@ chat endpoint; fixed API/mailbox используют существующего
 
 ## Артефакты и ограничения обновления
 
-Все три файла находятся только в `state-client-build/desktop-parity106-20261024/`:
+Текущий Linux AWG/TCP Beta — exact .5 в [freeze manifest](releases/2026-10-25-linux-awg-tcp-beta-freeze.json).
+Ни установки, ни rollback в freeze нет; matching full pair/root reinstall допустим
+только отдельным решением при idle/confirmed cleanup, с сохранением state/floors.
+L08 upgrade не принят; legacy updater не объявляется full-bundle updater.
+
+Исторический phase22 component-r18 (не текущий beta candidate): все три файла в
+`state-client-build/desktop-parity106-20261024/`:
 `bridge-linux-r18/fc-mesh`, `bridge-windows-r14/fc-mesh.exe`,
 `mesh-system-r18/FamilyConnect-MESH-system-amd64.tar.gz`.
 [Точные SHA256, inventory и требования](releases/2026-10-23-desktop-parity106.md#internal-artifacts-and-upgrade-boundary).
@@ -463,13 +473,13 @@ D00 ничего не устанавливает: runtime rollback не нуже
 ## Блокеры / оставшаяся реализация
 
 - D01.1/D01.2 PARTIAL, dependency gates приняты; review D02.1 collection/import isolation и D02.2 public-reference принят. D02.1-R historical replay PARTIAL/NOT_RUN. Остальные CI failures требуют отдельной оценки, не расширяют L01 автоматически. Общий D01/CI acceptance открыт до полного PASS.
-- D03/D04/D05 и L01/L01-R review accepted; NEXT review L02 (PARTIAL). W01/W02, L07/W09, L08/W12 и installed/live gates не закрыты.
+- D03/D04/D05, L01/L01-R, local L02/L02.2 и L03 review accepted. W01/W02, L07/W09, L08/W12 не закрыты; очередь не запускается автоматически.
 - D03: [исправление и детерминированные регрессии](releases/2026-10-24-chat-http-terminal-d03.md)
   сохраняют HTTP/TLS/invalid_response/timeout/cancellation при ошибке teardown.
   Это локальная логика с synthetic transport, НЕ installed/live delivery PASS;
   review D03/D04 принят; D05 не расширяет fixed chat DIRECT/service-only scope.
-- L01 — accepted protected DIRECT source/native/root→UID/kernel; L02 source/IPC/process gates PARTIAL, combined authenticated native MESH handoff ещё не доказан.
-  L03–L08: полный Linux bundle, installed VPN/messenger/recovery/visual/upgrade остаются gates.
+- L04.1 DONE только в installed AWG/TCP scope. Parent L04 IN_PROGRESS только из-за L04.2;
+  L04.2 MESH/Auto, L05 messenger и test-device teardown NOT_RUN; recovery/visual/upgrade остаются gates.
 - W01–W12: Windows native↔broker, Auto/recovery и продуктовые функции, затем полный installer,
   installed runtime и upgrade. Cross-build/Wine/headless не заменяют Windows TUN/driver acceptance.
 - R01: конечные точные пакеты и проверки их установки/обновления; публикация отдельно.
@@ -510,4 +520,5 @@ D00 ничего не устанавливает: runtime rollback не нуже
 [STATUS до D00](STATUS.history-2026-10-24.md) и [PLAN до D00](PLAN.history-2026-10-24.md)
 сохранены целиком; старые NEXT/ACTIVE/checkpoints — история, не параллельные задания.
 [Отчёт D00](releases/2026-10-24-desktop-parity106-d00.md) фиксирует сохранность и границы.
-**После отчёта L02.1-R остановиться. NEXT — review L02.1-R; L03 и прочие задачи автоматически не начинать.**
+**STOP. NEXT — решение владельца о signing и ограниченной публикации Linux AWG/TCP Beta.
+L04.2/L05/teardown и прочие задачи автоматически не начинать; F2 не повторять, R3 не создавать.**

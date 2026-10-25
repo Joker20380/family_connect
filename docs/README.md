@@ -5,14 +5,19 @@ STATUS/PLAN define the current bounded task and next review gate, not an automat
 continuation. Phase22 is the product baseline; D03–D05 source checkpoints are not new releases.
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
 [L04.1 final installed receipt](releases/2026-10-25-linux-installed-awg-tcp-l04-1-final.md)
-is the current LIVE-2 checkpoint: E/F1 PASS on exact .5; F2 local TCP/AppImage
-contract PASS, full gate PARTIAL after a registry-service continuity readback failure.
-Later assignment/configuration equality does not erase that observation. No replay
-or source correction; NEXT is final review L04.1. Parent remains IN_PROGRESS;
-L04.2/L05/device teardown NOT_RUN.
+closes LIVE-2 and L04.1 as DONE/review accepted in installed Linux AWG/TCP scope:
+E/F1/F2 accepted. [Single beta-freeze manifest](releases/2026-10-25-linux-awg-tcp-beta-freeze.json)
+pins exact .5, internal/unpublished, unchanged bytes. Registry restart remains a
+separate operational observation: uninterrupted continuity NOT_PROVEN, cause unknown,
+assignment/configuration unchanged. No F2 replay or R3. Parent L04 remains IN_PROGRESS
+only because of L04.2; L04.2/L05/device teardown NOT_RUN. MESH/Auto and messenger
+are outside beta scope; signing/publication NOT_RUN. STOP; NEXT is the owner's
+decision on signing and limited Linux AWG/TCP Beta publication.
 [R2 queued Connect/Close](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md)
 is DONE/review accepted in source/package scope. Linux/AWG/TCP/package CI PASS,
 full suites54/54/54 failures retained; no new general CI PASS claim.
+
+The entries below describe historical scopes and receipts, not parallel current NEXTs.
 
 [Desktop parity with accepted106 — active, not released](releases/2026-10-23-desktop-parity106.md):
 full feature matrix, exact source manifest, both native worker builds, Linux
