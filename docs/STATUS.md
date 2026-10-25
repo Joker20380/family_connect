@@ -9,6 +9,8 @@ D02.1-R PARTIAL/NOT_RUN. [Отчёт L03.1](releases/2026-10-25-linux-system-run
 imports, реальный polkit/UID IPC, idle units, install exclusion, rollback/capabilities.
 Rollback повторно маскирует службы до восстановления old source; actual start refusal PASS.
 Source `f826dbd`: Client Linux и isolated native/root→UID/Auto/DIRECT CI PASS.
+После обрыва25.10: неизменный build-9 повторно проверен в disposable systemd255;
+package/system smoke и94 адресных PASS; исходники/публичная поставка не менялись.
 Control/phase0/Docker: по54 failures, errors0; voice observation сохранён. Не общий CI PASS.
 Родительский L03 не завершён: L03.2 AppImage/DEB зависит от review L03.1.
 Ни public versions/catalogs, ни установка на рабочую машину не разрешены.

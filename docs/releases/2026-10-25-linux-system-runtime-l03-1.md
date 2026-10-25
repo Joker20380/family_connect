@@ -249,3 +249,46 @@ Review evidence: [Client Linux](https://github.com/Joker20380/family_connect/act
 Public GitHub REST polling hit its unauthenticated rate limit; final observations
 use the authorized GitHub connector. No workflow was suppressed or manually
 rerun to hide a failure; no release/deployment was requested.
+
+## Continuation after interruption — 25.10
+
+Entry `main` and remote `refs/heads/main` both verified at
+`40f441f324ce83cf8eb447cb848d752cabce4729`. The implementation and final source CI
+receipts had already been committed/pushed; no unfinished product-source patch
+was found. This continuation revalidates the **same build-9 bytes**, not a new
+build, desktop installer, release, rollout or L03.1 review acceptance.
+
+- `resume-integrity.json`: extracted installer verification PASS,759 archive
+  members/758 payload members; archive size, SHA256 and build ID unchanged.
+  All51 checked repository-backed payload members match current source (the
+  previous50 plus Xray's license); all301 standard native source-inventory
+  entries match, as do the RNS archive inventory and application sources.
+- `system-smoke-9-resume.log`: actual package/system gate **PASS again**, using
+  image `sha256:d7cbf7cb04ed5640b3a380e62b570c18230896a9b3fe1cdc1631bd6c70a166da`,
+  real systemd255, private namespaces/D-Bus/resolver and `--network none`.
+  Only the exact archive and smoke fixture were mounted, both read-only; no
+  checkout, venv, host bus/resolver/cgroup mounts or production traffic.
+  Extracted/installed isolated imports, polkit UID setup, wrong-UID denial,
+  idle manual/Auto/chat units without VPN, live/sticky ownership refusal,
+  concurrent-start exclusion, real failed-readback rollback and capability
+  negatives all pass. Synthetic identity/history/settings/safe files survive.
+  The fresh disposable backup was `mesh-bundle-nl_r77el`; after retaining
+  receipts, only this run's container was stopped and removed.
+- `targeted-resume-exec.log`: **94 PASS**, same five-file selection under
+  umask077, separate read-only/no-network builder container. Initial runner
+  attempts are retained: wrong RNS test path collected no tests; default
+  Docker `/tmp` noexec yielded92 PASS/2 authorization-fixture failures because
+  those tests execute temporary synthetic helpers. Only the test runner's
+  tmpfs changed to `--tmpfs /tmp:exec`; no source or product hardening changed.
+- All receipts remain under the same ignored local evidence directory.
+  `disposable-environment-resume.txt` records the new isolation check;
+  local-link verification covered97 links. Workstation services, DNS,
+  connections, public versions/catalogs, signing and server policy unchanged.
+
+Prior full desktop1120/24 and mandatory source CI receipts above remain evidence
+for the unchanged source; the full suites were not unnecessarily rerun here.
+The54 residual full-suite failures and previous voice/Windows observations stay
+open, not hidden by the repeated targeted/system PASS. Parallel ops STATUS/PLAN
+hunks and the untracked VPN health report are preserved outside this checkpoint.
+L03.2, L04/L05, L07/L08, Windows/fleet/iOS remain outside this continuation.
+**STOP. NEXT — review L03.1.**

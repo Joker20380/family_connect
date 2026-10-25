@@ -117,6 +117,10 @@ L01/L02/W04 не расширяются за пределы fixed chat DIRECT/se
 | L07 | Linux visual parity | L03, L06 | QUEUED | Реальные окна: согласованные экраны/состояния, список вариантов и отдельные selected-next/active state по D05, RU/EN, DPI100/125/150/200%, resize/focus/Tab/Enter/Escape; сопоставление с точным Android-эталоном без изменения Android106. |
 | L08 | Linux updater и сохранение данных | L03, L07 | QUEUED | Переход со старого поддерживаемого клиента на полный bundle и совместимая миграция настроек выбора D05; identity/WG keys, активация, Support ID, история, настройки, ссылки и signed floors/счётчики сохранены. |
 
+Продолжение после обрыва25.10: неизменный L03.1/build-9 повторно прошёл hash/member/source
+verification, actual disposable systemd255 smoke и94 адресных проверки (umask077).
+Новый runtime/build не создавался; review L03.1 остаётся следующим gate, L03.2 NOT_RUN.
+
 Phase22 подключила Linux ChatOwner к EXISTING_EXIT. L01 добавляет protected DIRECT;
 старый SYSTEM не переименован в DIRECT и не используется fallback этого нового пути.
 Локальный host lifecycle принят по L02.2; DIRECT public admission завершается в D01.3-R. Одно активное владение
