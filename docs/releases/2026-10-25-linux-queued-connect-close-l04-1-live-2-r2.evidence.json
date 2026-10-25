@@ -15,6 +15,7 @@
   },
   "authorization_protocol": 2,
   "candidate_id": "f0ee17609cfc8dbaf48edfa0f33b417754f9674d578168fa4cbb1c47d51d3f95",
+  "checkpoint": "source/package PASS; review pending; overall CI not green",
   "ci": {
     "awg": {
       "job": 121276468197,
@@ -27,39 +28,62 @@
       "run": 40228994481
     },
     "control": {
+      "errors": 0,
       "failed": 54,
       "job": 121276468372,
       "passed": 3165,
+      "result": "FAIL",
       "run": 40228994415,
       "skipped": 190,
       "subtests": 7
     },
     "docker": {
+      "additional_observation": "test_ui_unavailable_server_ack_is_authoritative: observe returned False; no root cause established",
+      "artifact": 12612094100,
+      "errors": 0,
+      "failed": 54,
       "job": 121276468300,
-      "result": "IN_PROGRESS",
-      "run": 40228994539
+      "passed": 3163,
+      "result": "FAIL",
+      "run": 40228994539,
+      "skipped": 192,
+      "subtests": 7
     },
     "native_bridge": "not triggered by path filter; isolated gates run locally",
     "package": {
+      "artifact": 12612004320,
+      "artifact_zip_sha256": "b91871f3dffee27b23132cadc17175860ae43bfd7f298c08e2ac62c2d8000487",
       "job": 121276467932,
-      "result": "IN_PROGRESS",
+      "result": "PASS",
       "run": 40228994396
     },
     "phase0": {
+      "errors": 0,
+      "failed": 54,
       "job": 121276468155,
-      "result": "IN_PROGRESS",
-      "run": 40228994539
+      "passed": 3165,
+      "result": "FAIL",
+      "run": 40228994539,
+      "skipped": 190,
+      "subtests": 7
     },
     "source_commit": "1c2beb6bc687c94d2a9312da0545b6e985749752",
     "tcp": {
       "job": 121276468241,
       "result": "PASS",
       "run": 40228994413
+    },
+    "voice": {
+      "job": 121276468063,
+      "result": "PASS; historical observations not resolved",
+      "run": 40228994450
     }
   },
   "evidence_sha256": {
     "appimage-smoke.log": "d6aa1f91d702feffef7a9ca6260905c331c477a229e909e56241c11a63f1d1f6",
     "build.log": "1844c339e23f213fce579e5d95aa2c156aa87ae8b197ddf76b665a61cd19ba93",
+    "ci-failover.log": "76f2ae8193d67b1151832aa73839df876940ce7d1a7c7f8ea019542c84299e1c",
+    "ci-failover.zip": "44d68e48092a6dc2aed940b5192f8dfe52e73141826c7fdf833d59ca2c401ce0",
     "deb-smoke.log": "af2e2ee8a80e039e48691c3d7bbed4df41464daac93d6059ea67b7bd0d730333",
     "desktop-full-supported.log": "0522e68a1cbdbd1d751f91e7699c197b3bc14f15d07a1f8df96d4ff17987a2b7",
     "desktop-full.log": "74b2deb25157a18efe1afbf0ac30af0596a9f837c4c55f93d20bc0e72f95f82e",

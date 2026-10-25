@@ -6,12 +6,13 @@
 Source/package PASS: новый internal **0.2.12~l03.2.5**, source1c2beb6/candidate
 f0ee1760…; только user-side GUI correction. Оба exact offline systemd255/pkexec
 DEB/AppImage gate и integrity PASS; system8d7d78ec… byte/contract verified unchanged.
-Финальные CI ещё идут; hashes/размеры в R2 report. Historical .4 не патчить/не пересобирать
+Linux/AWG/TCP/package CI PASS; full CI54/54/54 failures сохранены, общего PASS нет.
+Hashes/размеры в R2 report. Historical .4 не патчить/не пересобирать
 под тем же именем. Live E/F NOT_RUN, L04.1 IN_PROGRESS; NEXT review R2.
 Public0.2.11/download links/catalog не меняются; internal candidate не опубликован.
 
 [R1 source/package correction](releases/2026-10-25-linux-prestart-journal-l04-1-live-2-r1.md)
-CHECKPOINT/source-system-package PASS, review pending: final **0.2.12~l03.2.4**,
+CHECKPOINT/source-system-package PASS, review accepted: final **0.2.12~l03.2.4**,
 source053c4e5/candidate42ea0699…, authorization-session-v2, новый exact system8d7d78ec…
 вместо build-9. Readback связывает inventory/build ID/auth protocol; actual build-9
 отвергнут, matching reinstall возвращает READY. Exact DEB/AppImage и real systemd255

@@ -6,7 +6,8 @@ continuation. Phase22 is the product baseline; D03–D05 source checkpoints are 
 Entries below are an evidence/runbook index; historical NEXTs are not current assignments.
 [L04.1-LIVE-2-R2 queued Connect/Close](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md)
 is the current source/package correction: exact .4 E FAIL/review accepted,
-F1/F2 NOT_RUN, new .5 source/package PASS, final CI pending. L04.1 remains IN_PROGRESS;
+F1/F2 NOT_RUN, new .5 source/package PASS, review pending. Linux/AWG/TCP/package CI
+PASS, full suites54/54/54 failures retained. L04.1 remains IN_PROGRESS;
 no live/device teardown.
 
 [Desktop parity with accepted106 — active, not released](releases/2026-10-23-desktop-parity106.md):
@@ -64,10 +65,12 @@ is DONE/review accepted: new KVM exact DEB/setup, AWG/TCP transfers, single Disc
 original AppImage close/reopen PASS. Fresh nonce DNS reaches the actual TUN but
 returns valid terminal NOERROR/NODATA, accepted by review alongside positive/NXDOMAIN.
 Cleanup and state preservation PASS; guest copies destroyed. No product changes.
-[LIVE-2](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md) is PARTIAL/review pending:
+[LIVE-2](releases/2026-10-25-linux-installed-awg-tcp-l04-1-live-2.md) is PARTIAL/review accepted:
 A installed tamper/reinstall PASS; B1 stops transport but leaves pending/APPLYING after
 root-lock release. First-failure STOP; B2–F NOT_RUN, no product changes/retries.
-Guest destroyed, original state retained. L04.2/L05/device teardown remain NOT_RUN.
+Guest destroyed, original state retained. Its later exact .4 continuation accepts
+P1/P2/B1/B2/C1/C2/D, stops at E FAIL/review accepted; F1/F2 NOT_RUN. R2 above is
+source/package only. L04.2/L05/device teardown remain NOT_RUN.
 Windows broker IPC remains NOT_INTEGRATED;
 installed restricted-message acceptance is NOT_RUN, not a completed fallback.
 [Shared Auto policy and accepted-Java trace checks](../carrier/desktopauto/README.md)

@@ -1,6 +1,7 @@
 # L04.1-LIVE-2-R2 — queued normal Connect / Linux Close
 
-**Source/exact-package/isolated gates PASS; final CI receipts in progress.**
+**CHECKPOINT: source/exact-package/isolated gates PASS; review pending.**
+Mandatory CI completed for product source1c2beb6; overall CI is **not green**.
 Entry main `912624211dbc176ea388efb6375fda984205db70`; affected app baseline
 `053c4e5f9532ca927f49a78f9c0ed17903375baf`. Only R2 is authorized.
 
@@ -15,6 +16,11 @@ Historical .4 artifacts are immutable; no private identity, gateway, live VPN,
 live E/F, L04.2/L05 or test-device teardown is used by R2.
 
 ## Deterministic red/green and contract
+
+GTK regression entry point in a supported synthetic test environment:
+`dbus-run-session -- xvfb-run -a python -m pytest -q clients/desktop/tests/test_poll_disconnect_gui.py`.
+The red run overlays only `git show 053c4e5:clients/desktop/app.py` read-only at
+the import path, while retaining the new tests; green removes that overlay.
 
 Real `App(smoke=True)`, its original single-worker `self.pool`, actual
 `toggle_vpn()` normal Friends AWG/TCP path. A synthetic Friends boundary invokes
@@ -136,23 +142,48 @@ noexec (PermissionError launching worker). Its log is retained; corrected execut
 private tmpfs reruns the unchanged selection without relaxing a product check.
 Additional authenticated lifetime/status/terminal cases: **15 PASS**.
 
-## CI so far — exact1c2beb6
+## Completed CI — exact1c2beb6
 
-Client Linux40228994481/121276468428, AWG40228994427/121276468197 and
-TCP40228994413/121276468241 PASS. TCP release jobs skipped. Control
-40228994415/121276468372 actually ran: **3165 PASS/54 FAIL/190 SKIP**, errors0,
-7 subtests passed. Phase0/Docker40228994539 and candidate40228994396 remain
-in progress; no success inferred. Current voice CI PASS is not resolution of
-historical voice/Windows observations. CI package rebuild has its own identity,
-not the exact local candidate hashes above.
+| Gate | Run/job | Result |
+| --- | --- | --- |
+| Client Linux | [40228994481/121276468428](https://github.com/Joker20380/family_connect/actions/runs/40228994481/job/121276468428) | PASS, including full desktop, actual GTK queue tests, layout/map/Friends/recovery and both extracted formats |
+| AWG | [40228994427/121276468197](https://github.com/Joker20380/family_connect/actions/runs/40228994427/job/121276468197) | PASS |
+| TCP | [40228994413/121276468241](https://github.com/Joker20380/family_connect/actions/runs/40228994413/job/121276468241) | PASS; release jobs skipped |
+| Standard-source system/package | [40228994396/121276467932](https://github.com/Joker20380/family_connect/actions/runs/40228994396/job/121276467932) | PASS, including actual isolated system/package and pre-start AWG/TCP gates |
+| Control full suite | [40228994415/121276468372](https://github.com/Joker20380/family_connect/actions/runs/40228994415/job/121276468372) | 3165 PASS/54 FAIL/190 SKIP |
+| Phase0 full suite | [40228994539/121276468155](https://github.com/Joker20380/family_connect/actions/runs/40228994539/job/121276468155) | 3165 PASS/54 FAIL/190 SKIP |
+| Docker full suite | [40228994539/121276468300](https://github.com/Joker20380/family_connect/actions/runs/40228994539/job/121276468300) | 3163 PASS/54 FAIL/192 SKIP |
+
+All three full suites actually ran; errors0,7 subtests passed in each. The extra34
+headless skips are the new display-required cases, executed separately in GTK CI.
+Control/phase0 retain the observed readiness-adapter local-port collision.
+Docker now has54 failures versus historical53; the additionally observed
+`tests/test_readiness_receipts.py::test_ui_unavailable_server_ack_is_authoritative`
+fails at line130 (`observe(...)` is False despite `ACK_RECEIVED`). Cause is not
+established; no fix, rerun, xfail or suppression. The preserved Docker artifact
+12612094100 has ZIP SHA256
+`44d68e48092a6dc2aed940b5192f8dfe52e73141826c7fdf833d59ca2c401ce0`.
+
+Current voice job121276468063 PASS is not resolution of historical voice/Windows
+observations. Native/Auto/DIRECT gates above were local, not an untriggered CI job.
+CI package artifact12612004320 (ZIP SHA256
+`b91871f3dffee27b23132cadc17175860ae43bfd7f298c08e2ac62c2d8000487`)
+is a separate standard system rebuild with its own identity, **not** the exact
+local candidate hashes above. No acceptance transfer or system-ID reuse for its
+new bytes. Automatic documentation-only CI is not a new product candidate.
 
 Existing control/phase0/Docker residual54/54/53 failures and voice/Windows
 observations remain open; mandatory suites are not disabled or repaired here.
-Final CI and end-of-task secret/link/staged-scope checks will be recorded
-after they finish. Overall CI is **not green**.
+Package/evidence commit `c32e728bdbc8cdd493a629c5c3de4bf540814cef` was also pushed
+normally and remote main matched. Final local artifact/system/.4 hashes rechecked,
+source scope unchanged, JSON/local links/shell syntax/whitespace/secret-pattern
+and staged-scope checks PASS; public-source guard2926 index entries/0 blocked.
+All task containers exited/removed; synthetic fixtures only. Parallel ops edits
+remain preserved outside these commits. Overall CI is **not green**.
 
 Rollback stays explicit matching system reinstall only when idle/cleanup confirmed;
 user uninstall preserves state and the independent root runtime. Historical .4 is
 retained as evidence, not rewritten or re-labelled. No deployment is authorized.
-L04.1 **IN_PROGRESS**. STOP after source/package checkpoint.
+No unfinished R2 source/package work remains; review is the next gate, not live
+E/F. L04.1 **IN_PROGRESS**. STOP after source/package checkpoint.
 NEXT — **review L04.1-LIVE-2-R2**.

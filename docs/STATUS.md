@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**L04.1-LIVE-2-R2 IN_PROGRESS — source checkpoint,25.10.**
+**L04.1-LIVE-2-R2 CHECKPOINT — source/package PASS, review pending,25.10.**
 На exact .4 review принимает P1/P2, B1/B2/C1/C2/D PASS; E FAIL/review accepted,
 F1/F2 NOT_RUN. E доказывает queued Future/busy/open/CONNECTING, не late VPN start:
 helper/TUN0, generation0/pending null; fixture отменил Future до освобождения worker.
@@ -9,10 +9,12 @@ R2 явно отслеживает только normal Connect/Disconnect; ус�
 Deterministic prior-source overlay4 FAIL → targeted197 PASS, full desktop1191/84.
 Новый internal .5/source1c2beb6/candidate f0ee1760…: exact integrity и оба offline
 systemd255/pkexec package gate PASS. System8d7d78ec… byte/contract verified unchanged;
-.4 immutable. Linux/AWG/TCP CI PASS, control54 failures; phase0/Docker/package CI
-ещё идут. Private identity/gateway/live E/F
+.4 immutable. Linux/AWG/TCP/package CI PASS; isolated root→UID/native179,
+Auto18/DIRECT/lifetime15/combined3 PASS. Full CI54/54/54 failures (Docker раньше53;
+дополнительный readiness-receipt assertion, причина не установлена), без fixes/retries.
+Общего CI PASS нет. Private identity/gateway/live E/F
 не используются. L04.1 IN_PROGRESS; L04.2/L05/test-device teardown NOT_RUN.
-После source/package checkpoint STOP; NEXT — review L04.1-LIVE-2-R2.
+Source/package checkpoint завершён. STOP; NEXT — review L04.1-LIVE-2-R2.
 [R2 report](releases/2026-10-25-linux-queued-connect-close-l04-1-live-2-r2.md).
 
 Срез25.10.2026: **L04.1-LIVE-1-RETEST DONE / review accepted**.
